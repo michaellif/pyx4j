@@ -18,10 +18,8 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.rpc.AbstractCrudService;
-import com.pyx4j.entity.security.DataModelPermission;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.rpc.shared.VoidSerializable;
-import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
 import com.propertyvista.crm.client.CrmSite;
@@ -36,15 +34,9 @@ import com.propertyvista.dto.MaintenanceRequestScheduleDTO;
 
 public class MaintenanceRequestViewerActivity extends CrmViewerActivity<MaintenanceRequestDTO> implements MaintenanceRequestViewerView.Presenter {
 
-    @SuppressWarnings("unchecked")
     public MaintenanceRequestViewerActivity(CrudAppPlace place) {
-        super(place, CrmSite.getViewFactory().getView(MaintenanceRequestViewerView.class), (AbstractCrudService<MaintenanceRequestDTO>) GWT
-                .create(MaintenanceCrudService.class));
-    }
-
-    @Override
-    public boolean canEdit() {
-        return super.canEdit() & SecurityController.check(DataModelPermission.permissionUpdate(MaintenanceRequestDTO.class));
+        super(MaintenanceRequestDTO.class, place, CrmSite.getViewFactory().getView(MaintenanceRequestViewerView.class), GWT
+                .<AbstractCrudService<MaintenanceRequestDTO>> create(MaintenanceCrudService.class));
     }
 
     @Override

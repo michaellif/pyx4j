@@ -26,6 +26,7 @@ import com.propertyvista.crm.rpc.services.billing.BillingCycleCrudService;
 public class BillingCycleViewerActivity extends CrmViewerActivity<BillingCycleDTO> implements BillingCycleView.Presenter {
 
     public BillingCycleViewerActivity(CrudAppPlace place) {
-        super(place,  CrmSite.getViewFactory().getView(BillingCycleView.class), GWT.<BillingCycleCrudService> create(BillingCycleCrudService.class));
+        super(BillingCycleDTO.class, place, CrmSite.getViewFactory().getView(BillingCycleView.class), GWT
+                .<BillingCycleCrudService> create(BillingCycleCrudService.class));
     }
 }

@@ -30,7 +30,8 @@ public class BoilerViewerActivity extends CrmViewerActivity<BoilerDTO> {
 
     @SuppressWarnings("unchecked")
     public BoilerViewerActivity(CrudAppPlace place) {
-        super(place, CrmSite.getViewFactory().getView(BoilerViewerView.class), (AbstractCrudService<BoilerDTO>) GWT.create(BoilerCrudService.class));
+        super(BoilerDTO.class, place, CrmSite.getViewFactory().getView(BoilerViewerView.class), (AbstractCrudService<BoilerDTO>) GWT
+                .create(BoilerCrudService.class));
     }
 
     @Override

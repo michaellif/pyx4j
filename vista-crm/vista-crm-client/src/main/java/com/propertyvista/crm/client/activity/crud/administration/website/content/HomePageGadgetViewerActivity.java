@@ -28,7 +28,8 @@ import com.propertyvista.domain.site.gadgets.HomePageGadget;
 public class HomePageGadgetViewerActivity extends CrmViewerActivity<HomePageGadget> implements HomePageGadgetViewer.Presenter {
 
     public HomePageGadgetViewerActivity(CrudAppPlace place) {
-        super(place,  CrmSite.getViewFactory().getView(HomePageGadgetViewer.class), GWT.<HomePageGadgetCrudService> create(HomePageGadgetCrudService.class));
+        super(HomePageGadget.class, place, CrmSite.getViewFactory().getView(HomePageGadgetViewer.class), GWT
+                .<HomePageGadgetCrudService> create(HomePageGadgetCrudService.class));
     }
 
     @Override

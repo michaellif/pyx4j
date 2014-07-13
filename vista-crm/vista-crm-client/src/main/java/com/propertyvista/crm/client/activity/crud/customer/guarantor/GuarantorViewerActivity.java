@@ -39,7 +39,8 @@ public class GuarantorViewerActivity extends CrmViewerActivity<GuarantorDTO> imp
     private LeaseParticipant<?> leaseParticipantId;
 
     public GuarantorViewerActivity(CrudAppPlace place) {
-        super(place, CrmSite.getViewFactory().getView(GuarantorViewerView.class), GWT.<GuarantorCrudService> create(GuarantorCrudService.class));
+        super(GuarantorDTO.class, place, CrmSite.getViewFactory().getView(GuarantorViewerView.class), GWT
+                .<GuarantorCrudService> create(GuarantorCrudService.class));
     }
 
     @Override

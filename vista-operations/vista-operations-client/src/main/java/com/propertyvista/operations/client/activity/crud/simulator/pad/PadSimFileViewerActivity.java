@@ -37,13 +37,12 @@ public class PadSimFileViewerActivity extends AdminViewerActivity<PadSimFile> im
 
     private final Presenter<PadSimBatch> batchLister;
 
-    @SuppressWarnings("unchecked")
     public PadSimFileViewerActivity(CrudAppPlace place) {
-        super(place, OperationsSite.getViewFactory().getView(PadSimFileViewerView.class), (AbstractCrudService<PadSimFile>) GWT
-                .create(PadSimFileCrudService.class));
+        super(PadSimFile.class, place, OperationsSite.getViewFactory().getView(PadSimFileViewerView.class), GWT
+                .<AbstractCrudService<PadSimFile>> create(PadSimFileCrudService.class));
 
-        batchLister = new ListerController<PadSimBatch>(PadSimBatch.class,
-                ((PadSimFileViewerView) getView()).getBatchListerView(), (AbstractCrudService<PadSimBatch>) GWT.create(PadSimBatchCrudService.class));
+        batchLister = new ListerController<PadSimBatch>(PadSimBatch.class, ((PadSimFileViewerView) getView()).getBatchListerView(),
+                GWT.<AbstractCrudService<PadSimBatch>> create(PadSimBatchCrudService.class));
     }
 
     @Override

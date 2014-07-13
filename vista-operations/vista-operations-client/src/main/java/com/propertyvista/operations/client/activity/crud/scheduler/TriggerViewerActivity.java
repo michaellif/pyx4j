@@ -37,7 +37,8 @@ public class TriggerViewerActivity extends AdminViewerActivity<TriggerDTO> imple
     private final Presenter<Run> runLister;
 
     public TriggerViewerActivity(CrudAppPlace place) {
-        super(place, OperationsSite.getViewFactory().getView(TriggerViewerView.class), GWT.<TriggerCrudService> create(TriggerCrudService.class));
+        super(TriggerDTO.class, place, OperationsSite.getViewFactory().getView(TriggerViewerView.class), GWT
+                .<TriggerCrudService> create(TriggerCrudService.class));
 
         runLister = new ListerController<Run>(Run.class, ((TriggerViewerView) getView()).getRunListerView(), GWT.<RunCrudService> create(RunCrudService.class));
     }

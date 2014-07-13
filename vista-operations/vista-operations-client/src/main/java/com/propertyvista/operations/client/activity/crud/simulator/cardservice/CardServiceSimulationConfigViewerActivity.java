@@ -27,7 +27,7 @@ public class CardServiceSimulationConfigViewerActivity extends AbstractViewerAct
         CardServiceSimulatorConfigViewerView.Presenter {
 
     public CardServiceSimulationConfigViewerActivity(CrudAppPlace place) {
-        super(place, OperationsSite.getViewFactory().getView(CardServiceSimulatorConfigViewerView.class), GWT
+        super(CardServiceSimulatorConfigDTO.class, place, OperationsSite.getViewFactory().getView(CardServiceSimulatorConfigViewerView.class), GWT
                 .<CardServiceSimulationConfigService> create(CardServiceSimulationConfigService.class));
     }
 

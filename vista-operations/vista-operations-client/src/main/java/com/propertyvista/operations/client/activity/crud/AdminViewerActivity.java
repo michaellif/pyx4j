@@ -26,8 +26,8 @@ public class AdminViewerActivity<E extends IEntity> extends AbstractViewerActivi
 
     private final CrudAppPlace place;
 
-    public AdminViewerActivity(CrudAppPlace place, IViewer<E> view, AbstractCrudService<E> service) {
-        super(place, view, service);
+    public AdminViewerActivity(Class<E> entityClass, CrudAppPlace place, IViewer<E> view, AbstractCrudService<E> service) {
+        super(entityClass, place, view, service);
 
         assert (place instanceof CrudAppPlace);
         this.place = place;

@@ -27,7 +27,7 @@ import com.propertyvista.dto.DepositLifecycleDTO;
 public class DepositLifecycleViewerActivity extends CrmViewerActivity<DepositLifecycleDTO> implements DepositLifecycleViewerView.Presenter {
 
     public DepositLifecycleViewerActivity(CrudAppPlace place) {
-        super(place,  CrmSite.getViewFactory().getView(DepositLifecycleViewerView.class), GWT
+        super(DepositLifecycleDTO.class, place, CrmSite.getViewFactory().getView(DepositLifecycleViewerView.class), GWT
                 .<AbstractCrudService<DepositLifecycleDTO>> create(DepositLifecycleCrudService.class));
     }
 }

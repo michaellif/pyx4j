@@ -27,10 +27,7 @@ import com.propertyvista.domain.policy.dto.DatesPolicyDTO;
 public class DatesPolicyViewerActivity extends CrmViewerActivity<DatesPolicyDTO> {
 
     public DatesPolicyViewerActivity(CrudAppPlace place) {
-        super(place,
-
-         CrmSite.getViewFactory().getView(DatesPolicyViewerView.class),
-
-        GWT.<AbstractCrudService<DatesPolicyDTO>> create(DatesPolicyCrudService.class));
+        super(DatesPolicyDTO.class, place, CrmSite.getViewFactory().getView(DatesPolicyViewerView.class), GWT
+                .<AbstractCrudService<DatesPolicyDTO>> create(DatesPolicyCrudService.class));
     }
 }

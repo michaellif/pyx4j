@@ -17,7 +17,6 @@ import com.google.gwt.core.client.GWT;
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.rpc.AbstractCrudService;
-import com.pyx4j.entity.security.DataModelPermission;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.rpc.shared.VoidSerializable;
 import com.pyx4j.security.client.ClientContext;
@@ -43,7 +42,8 @@ public class EmployeeViewerActivity extends CrmViewerActivity<EmployeeDTO> imple
     private EmployeeDTO entity;
 
     public EmployeeViewerActivity(CrudAppPlace place) {
-        super(place, CrmSite.getViewFactory().getView(EmployeeViewerView.class), GWT.<AbstractCrudService<EmployeeDTO>> create(EmployeeCrudService.class));
+        super(EmployeeDTO.class, place, CrmSite.getViewFactory().getView(EmployeeViewerView.class), GWT
+                .<AbstractCrudService<EmployeeDTO>> create(EmployeeCrudService.class));
     }
 
     @Override
@@ -51,7 +51,7 @@ public class EmployeeViewerActivity extends CrmViewerActivity<EmployeeDTO> imple
         if (ClientContext.getUserVisit().getPrincipalPrimaryKey().equals(entity.user().getPrimaryKey())) {
             return SecurityController.check(VistaCrmBehavior.AccountSelf);
         } else {
-            return SecurityController.check(DataModelPermission.permissionUpdate(EmployeeDTO.class));
+            return super.canEdit();
         }
     }
 

@@ -26,7 +26,7 @@ import com.propertyvista.domain.policy.dto.ProspectPortalPolicyDTO;
 public class ProspectPortalPolicyViewerActivity extends CrmViewerActivity<ProspectPortalPolicyDTO> {
 
     public ProspectPortalPolicyViewerActivity(CrudAppPlace place) {
-        super(place, CrmSite.getViewFactory().getView(ProspectPortalPolicyViewerView.class), GWT
+        super(ProspectPortalPolicyDTO.class, place, CrmSite.getViewFactory().getView(ProspectPortalPolicyViewerView.class), GWT
                 .<ProspectPortalPolicyCrudService> create(ProspectPortalPolicyCrudService.class));
     }
 }

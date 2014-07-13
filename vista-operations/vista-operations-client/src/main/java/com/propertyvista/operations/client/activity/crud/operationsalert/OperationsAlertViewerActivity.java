@@ -26,7 +26,7 @@ import com.propertyvista.operations.rpc.services.OperationsAlertCrudService;
 public class OperationsAlertViewerActivity extends AbstractViewerActivity<OperationsAlertDTO> {
 
     public OperationsAlertViewerActivity(CrudAppPlace place) {
-        super(place, OperationsSite.getViewFactory().getView(OperationsAlertViewerView.class), GWT
+        super(OperationsAlertDTO.class, place, OperationsSite.getViewFactory().getView(OperationsAlertViewerView.class), GWT
                 .<OperationsAlertCrudService> create(OperationsAlertCrudService.class));
     }
 }

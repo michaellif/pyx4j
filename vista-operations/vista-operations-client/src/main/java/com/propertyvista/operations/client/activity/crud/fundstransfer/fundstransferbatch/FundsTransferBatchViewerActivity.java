@@ -27,7 +27,7 @@ import com.propertyvista.operations.rpc.services.PadBatchCrudService;
 public class FundsTransferBatchViewerActivity extends AbstractViewerActivity<FundsTransferBatchDTO> implements FundsTransferBatchViewerView.Presenter {
 
     public FundsTransferBatchViewerActivity(CrudAppPlace place) {
-        super(place, OperationsSite.getViewFactory().getView(FundsTransferBatchViewerView.class), GWT
+        super(FundsTransferBatchDTO.class, place, OperationsSite.getViewFactory().getView(FundsTransferBatchViewerView.class), GWT
                 .<AbstractCrudService<FundsTransferBatchDTO>> create(PadBatchCrudService.class));
     }
 

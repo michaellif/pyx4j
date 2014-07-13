@@ -26,7 +26,7 @@ import com.propertyvista.domain.policy.dto.LeaseApplicationPolicyDTO;
 public class LeaseApplicationPolicyViewerActivity extends CrmViewerActivity<LeaseApplicationPolicyDTO> {
 
     public LeaseApplicationPolicyViewerActivity(CrudAppPlace place) {
-        super(place, CrmSite.getViewFactory().getView(LeaseApplicationPolicyViewerView.class), GWT
+        super(LeaseApplicationPolicyDTO.class, place, CrmSite.getViewFactory().getView(LeaseApplicationPolicyViewerView.class), GWT
                 .<LeaseApplicationPolicyCrudService> create(LeaseApplicationPolicyCrudService.class));
     }
 

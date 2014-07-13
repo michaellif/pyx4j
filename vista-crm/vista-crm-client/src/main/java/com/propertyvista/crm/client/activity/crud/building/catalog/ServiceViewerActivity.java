@@ -26,8 +26,8 @@ import com.propertyvista.domain.financial.offering.Service;
 
 public class ServiceViewerActivity extends CrmViewerActivity<Service> {
 
-    @SuppressWarnings("unchecked")
     public ServiceViewerActivity(CrudAppPlace place) {
-        super(place,  CrmSite.getViewFactory().getView(ServiceViewerView.class), (AbstractCrudService<Service>) GWT.create(ServiceCrudService.class));
+        super(Service.class, place, CrmSite.getViewFactory().getView(ServiceViewerView.class), GWT
+                .<AbstractCrudService<Service>> create(ServiceCrudService.class));
     }
 }

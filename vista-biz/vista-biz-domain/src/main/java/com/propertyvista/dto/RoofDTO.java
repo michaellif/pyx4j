@@ -14,12 +14,14 @@
 package com.propertyvista.dto;
 
 import com.pyx4j.entity.annotations.ExtendsBO;
+import com.pyx4j.entity.annotations.SecurityEnabled;
 import com.pyx4j.entity.annotations.Transient;
 
 import com.propertyvista.domain.property.asset.Roof;
 
 @Transient
 @ExtendsBO
+@SecurityEnabled
 public interface RoofDTO extends Roof {
 
 }

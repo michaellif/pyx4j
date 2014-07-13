@@ -30,9 +30,8 @@ public class ARCodeViewerActivity extends CrmViewerActivity<ARCode> {
 
     private boolean canEdit;
 
-    @SuppressWarnings("unchecked")
     public ARCodeViewerActivity(CrudAppPlace place) {
-        super(place,  CrmSite.getViewFactory().getView(ARCodeViewerView.class), (AbstractCrudService<ARCode>) GWT.create(ARCodeCrudService.class));
+        super(ARCode.class, place, CrmSite.getViewFactory().getView(ARCodeViewerView.class), GWT.<AbstractCrudService<ARCode>> create(ARCodeCrudService.class));
     }
 
     @Override
@@ -43,7 +42,7 @@ public class ARCodeViewerActivity extends CrmViewerActivity<ARCode> {
 
     @Override
     public boolean canEdit() {
-        return canEdit;
+        return super.canEdit() && canEdit;
     }
 
     @Override

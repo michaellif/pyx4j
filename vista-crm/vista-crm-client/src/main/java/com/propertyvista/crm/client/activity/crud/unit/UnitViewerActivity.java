@@ -18,10 +18,8 @@ import com.google.gwt.core.client.GWT;
 import com.pyx4j.commons.Key;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.core.EntityFactory;
-import com.pyx4j.entity.security.DataModelPermission;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.rpc.shared.VoidSerializable;
-import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.ui.prime.lister.ILister;
 import com.pyx4j.site.rpc.CrudAppPlace;
@@ -54,13 +52,13 @@ public class UnitViewerActivity extends CrmViewerActivity<AptUnitDTO> implements
     private AptUnitDTO currentValue;
 
     public UnitViewerActivity(CrudAppPlace place) {
-        super(place, CrmSite.getViewFactory().getView(UnitViewerView.class), GWT.<UnitCrudService> create(UnitCrudService.class));
+        super(AptUnitDTO.class, place, CrmSite.getViewFactory().getView(UnitViewerView.class), GWT.<UnitCrudService> create(UnitCrudService.class));
 
-        unitItemsLister = ListerControllerFactory.create(AptUnitItem.class,
-                ((UnitViewerView) getView()).getUnitItemsListerView(), GWT.<UnitItemCrudService> create(UnitItemCrudService.class));
+        unitItemsLister = ListerControllerFactory.create(AptUnitItem.class, ((UnitViewerView) getView()).getUnitItemsListerView(),
+                GWT.<UnitItemCrudService> create(UnitItemCrudService.class));
 
-        occupanciesLister = ListerControllerFactory.create(AptUnitOccupancySegment.class,
-                ((UnitViewerView) getView()).getOccupanciesListerView(), GWT.<UnitOccupancyCrudService> create(UnitOccupancyCrudService.class));
+        occupanciesLister = ListerControllerFactory.create(AptUnitOccupancySegment.class, ((UnitViewerView) getView()).getOccupanciesListerView(),
+                GWT.<UnitOccupancyCrudService> create(UnitOccupancyCrudService.class));
 
         occupancyManagerService = GWT.create(UnitOccupancyManagerService.class);
     }
@@ -110,11 +108,6 @@ public class UnitViewerActivity extends CrmViewerActivity<AptUnitDTO> implements
                 myView.setMinRenovationEndDate(result);
             }
         }, entityId);
-    }
-
-    @Override
-    public boolean canEdit() {
-        return SecurityController.check(DataModelPermission.permissionUpdate(AptUnitDTO.class));
     }
 
     @Override

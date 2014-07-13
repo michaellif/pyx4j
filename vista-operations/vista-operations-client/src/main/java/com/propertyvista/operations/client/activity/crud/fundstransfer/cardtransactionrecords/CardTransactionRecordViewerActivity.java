@@ -27,7 +27,7 @@ import com.propertyvista.operations.rpc.services.PmcCardTransactionRecordCrudSer
 public class CardTransactionRecordViewerActivity extends AbstractViewerActivity<CardTransactionRecord> implements CardTransactionRecordViewerView.Presenter {
 
     public CardTransactionRecordViewerActivity(CrudAppPlace place) {
-        super(place, OperationsSite.getViewFactory().getView(CardTransactionRecordViewerView.class), GWT
+        super(CardTransactionRecord.class, place, OperationsSite.getViewFactory().getView(CardTransactionRecordViewerView.class), GWT
                 .<AbstractCrudService<CardTransactionRecord>> create(PmcCardTransactionRecordCrudService.class));
     }
 

@@ -51,7 +51,7 @@ public class TenantViewerActivity extends CrmViewerActivity<TenantDTO> implement
     private TenantDTO currentValue;
 
     public TenantViewerActivity(CrudAppPlace place) {
-        super(place, CrmSite.getViewFactory().getView(TenantViewerView.class), GWT.<TenantCrudService> create(TenantCrudService.class));
+        super(TenantDTO.class, place, CrmSite.getViewFactory().getView(TenantViewerView.class), GWT.<TenantCrudService> create(TenantCrudService.class));
     }
 
     @Override

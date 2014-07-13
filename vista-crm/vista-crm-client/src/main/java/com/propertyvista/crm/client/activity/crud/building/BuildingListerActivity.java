@@ -17,8 +17,6 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.place.shared.Place;
 
 import com.pyx4j.entity.rpc.AbstractCrudService;
-import com.pyx4j.entity.security.DataModelPermission;
-import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.site.client.activity.AbstractListerActivity;
 
 import com.propertyvista.crm.client.CrmSite;
@@ -28,14 +26,9 @@ import com.propertyvista.dto.BuildingDTO;
 
 public class BuildingListerActivity extends AbstractListerActivity<BuildingDTO> {
 
-    @SuppressWarnings("unchecked")
     public BuildingListerActivity(Place place) {
-        super(BuildingDTO.class, place, CrmSite.getViewFactory().getView(BuildingListerView.class),
-                (AbstractCrudService<BuildingDTO>) GWT.create(BuildingCrudService.class));
+        super(BuildingDTO.class, place, CrmSite.getViewFactory().getView(BuildingListerView.class), GWT
+                .<AbstractCrudService<BuildingDTO>> create(BuildingCrudService.class));
     }
 
-    @Override
-    public boolean canCreateNewItem() {
-        return SecurityController.check(DataModelPermission.permissionCreate(BuildingDTO.class));
-    }
 }

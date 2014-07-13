@@ -27,10 +27,10 @@ import com.propertyvista.domain.communication.MessageCategory;
 import com.propertyvista.domain.security.VistaCrmBehavior;
 
 public class MessageCategoryViewActivity extends CrmViewerActivity<MessageCategory> implements MessageCategoryViewerView.Presenter {
-    public MessageCategoryViewActivity(CrudAppPlace place) {
 
-        super(place, CrmSite.getViewFactory().getView(MessageCategoryViewerView.class), (AbstractCrudService<MessageCategory>) GWT
-                .create(MessageCategoryCrudService.class));
+    public MessageCategoryViewActivity(CrudAppPlace place) {
+        super(MessageCategory.class, place, CrmSite.getViewFactory().getView(MessageCategoryViewerView.class), GWT
+                .<AbstractCrudService<MessageCategory>> create(MessageCategoryCrudService.class));
     }
 
     @Override

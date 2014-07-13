@@ -26,9 +26,8 @@ import com.propertyvista.domain.site.CityIntroPage;
 
 public class CityIntroPageEditorActivity extends CrmEditorActivity<CityIntroPage> implements CityIntroPageEditor.Presenter {
 
-    @SuppressWarnings("unchecked")
     public CityIntroPageEditorActivity(CrudAppPlace place) {
-        super(CityIntroPage.class,  place, CrmSite.getViewFactory().getView(CityIntroPageEditor.class),
-                (AbstractCrudService<CityIntroPage>) GWT.create(CityIntroPageCrudService.class));
+        super(CityIntroPage.class, place, CrmSite.getViewFactory().getView(CityIntroPageEditor.class), GWT
+                .<AbstractCrudService<CityIntroPage>> create(CityIntroPageCrudService.class));
     }
 }

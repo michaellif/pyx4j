@@ -27,6 +27,7 @@ import com.pyx4j.entity.annotations.Length;
 import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.annotations.ReadOnly;
+import com.pyx4j.entity.annotations.SecurityEnabled;
 import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.ToStringFormat;
 import com.pyx4j.entity.annotations.validator.NotNull;
@@ -37,6 +38,7 @@ import com.pyx4j.i18n.shared.I18nEnum;
 
 @ToStringFormat("{0}, {1}")
 @I18n(strategy = I18n.I18nStrategy.IgnoreThis)
+@SecurityEnabled
 public interface AptUnitItem extends IEntity {
 
     @I18n

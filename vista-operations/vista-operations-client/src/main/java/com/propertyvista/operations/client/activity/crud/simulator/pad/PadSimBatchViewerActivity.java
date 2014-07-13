@@ -28,7 +28,7 @@ public class PadSimBatchViewerActivity extends AdminViewerActivity<PadSimBatch> 
 
     @SuppressWarnings("unchecked")
     public PadSimBatchViewerActivity(CrudAppPlace place) {
-        super(place, OperationsSite.getViewFactory().getView(PadSimBatchViewerView.class), (AbstractCrudService<PadSimBatch>) GWT
+        super(PadSimBatch.class, place, OperationsSite.getViewFactory().getView(PadSimBatchViewerView.class), (AbstractCrudService<PadSimBatch>) GWT
                 .create(PadSimBatchCrudService.class));
     }
 }

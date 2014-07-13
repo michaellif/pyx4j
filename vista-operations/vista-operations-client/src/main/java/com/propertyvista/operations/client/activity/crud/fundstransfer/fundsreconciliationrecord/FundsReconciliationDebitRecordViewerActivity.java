@@ -28,7 +28,7 @@ public class FundsReconciliationDebitRecordViewerActivity extends AbstractViewer
         FundsReconciliationDebitRecordViewerView.Presenter {
 
     public FundsReconciliationDebitRecordViewerActivity(CrudAppPlace place) {
-        super(place, OperationsSite.getViewFactory().getView(FundsReconciliationDebitRecordViewerView.class), GWT
+        super(FundsReconciliationRecordRecordDTO.class, place, OperationsSite.getViewFactory().getView(FundsReconciliationDebitRecordViewerView.class), GWT
                 .<AbstractCrudService<FundsReconciliationRecordRecordDTO>> create(PadReconciliationDebitRecordCrudService.class));
     }
 

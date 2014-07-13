@@ -27,10 +27,7 @@ import com.propertyvista.domain.policy.dto.ARPolicyDTO;
 public class ARPolicyViewerActivity extends CrmViewerActivity<ARPolicyDTO> {
 
     public ARPolicyViewerActivity(CrudAppPlace place) {
-        super(place,
-
-         CrmSite.getViewFactory().getView(ARPolicyViewerView.class),
-
-        GWT.<AbstractCrudService<ARPolicyDTO>> create(ARPolicyCrudService.class));
+        super(ARPolicyDTO.class, place, CrmSite.getViewFactory().getView(ARPolicyViewerView.class), GWT
+                .<AbstractCrudService<ARPolicyDTO>> create(ARPolicyCrudService.class));
     }
 }

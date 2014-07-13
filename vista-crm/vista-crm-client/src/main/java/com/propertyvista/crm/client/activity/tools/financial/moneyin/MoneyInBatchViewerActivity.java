@@ -51,7 +51,7 @@ public class MoneyInBatchViewerActivity extends CrmViewerActivity<MoneyInBatchDT
     private boolean canCancel;
 
     public MoneyInBatchViewerActivity(CrudAppPlace place) {
-        super(place, CrmSite.getViewFactory().getView(MoneyInBatchViewerView.class), GWT
+        super(MoneyInBatchDTO.class, place, CrmSite.getViewFactory().getView(MoneyInBatchViewerView.class), GWT
                 .<AbstractCrudService<MoneyInBatchDTO>> create(MoneyInBatchCrudService.class));
 
     }

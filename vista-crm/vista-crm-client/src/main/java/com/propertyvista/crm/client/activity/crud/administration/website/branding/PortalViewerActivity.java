@@ -26,6 +26,7 @@ import com.propertyvista.dto.SiteDescriptorDTO;
 public class PortalViewerActivity extends CrmViewerActivity<SiteDescriptorDTO> implements PortalViewer.Presenter {
 
     public PortalViewerActivity(CrudAppPlace place) {
-        super(place,  CrmSite.getViewFactory().getView(PortalViewer.class), GWT.<SiteBrandingCrudService> create(SiteBrandingCrudService.class));
+        super(SiteDescriptorDTO.class, place, CrmSite.getViewFactory().getView(PortalViewer.class), GWT
+                .<SiteBrandingCrudService> create(SiteBrandingCrudService.class));
     }
 }

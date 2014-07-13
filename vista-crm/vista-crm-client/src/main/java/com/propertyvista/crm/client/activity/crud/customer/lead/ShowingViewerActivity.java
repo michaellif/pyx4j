@@ -26,8 +26,8 @@ import com.propertyvista.crm.rpc.services.customer.lead.ShowingCrudService;
 
 public class ShowingViewerActivity extends CrmViewerActivity<ShowingDTO> {
 
-    @SuppressWarnings("unchecked")
     public ShowingViewerActivity(CrudAppPlace place) {
-        super(place,  CrmSite.getViewFactory().getView(ShowingViewerView.class), (AbstractCrudService<ShowingDTO>) GWT.create(ShowingCrudService.class));
+        super(ShowingDTO.class, place, CrmSite.getViewFactory().getView(ShowingViewerView.class), GWT
+                .<AbstractCrudService<ShowingDTO>> create(ShowingCrudService.class));
     }
 }

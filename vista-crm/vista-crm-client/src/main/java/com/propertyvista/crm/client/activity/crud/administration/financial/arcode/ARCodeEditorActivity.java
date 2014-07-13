@@ -29,10 +29,8 @@ import com.propertyvista.shared.config.VistaFeatures;
 
 public class ARCodeEditorActivity extends CrmEditorActivity<ARCode> {
 
-    @SuppressWarnings("unchecked")
     public ARCodeEditorActivity(CrudAppPlace place) {
-        super(ARCode.class,  place, CrmSite.getViewFactory().getView(ARCodeEditorView.class),
-                (AbstractCrudService<ARCode>) GWT.create(ARCodeCrudService.class));
+        super(ARCode.class, place, CrmSite.getViewFactory().getView(ARCodeEditorView.class), GWT.<AbstractCrudService<ARCode>> create(ARCodeCrudService.class));
     }
 
     @Override

@@ -26,10 +26,8 @@ import com.propertyvista.dto.BoilerDTO;
 
 public class BoilerEditorActivity extends CrmEditorActivity<BoilerDTO> {
 
-    @SuppressWarnings("unchecked")
     public BoilerEditorActivity(CrudAppPlace place) {
-        super(BoilerDTO.class,  place, CrmSite.getViewFactory().getView(BoilerEditorView.class),
-                (AbstractCrudService<BoilerDTO>) GWT.create(BoilerCrudService.class));
-
+        super(BoilerDTO.class, place, CrmSite.getViewFactory().getView(BoilerEditorView.class), GWT
+                .<AbstractCrudService<BoilerDTO>> create(BoilerCrudService.class));
     }
 }

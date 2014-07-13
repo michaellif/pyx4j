@@ -33,7 +33,7 @@ import com.propertyvista.portal.rpc.DeploymentConsts;
 public class BillViewerActivity extends CrmViewerActivity<BillDataDTO> implements BillViewerView.Presenter {
 
     public BillViewerActivity(CrudAppPlace place) {
-        super(place, CrmSite.getViewFactory().getView(BillViewerView.class), GWT.<BillCrudService> create(BillCrudService.class));
+        super(BillDataDTO.class, place, CrmSite.getViewFactory().getView(BillViewerView.class), GWT.<BillCrudService> create(BillCrudService.class));
     }
 
     @Override

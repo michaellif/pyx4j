@@ -27,7 +27,8 @@ import com.propertyvista.domain.security.CrmRole;
 public class CrmRoleViewerActivity extends CrmViewerActivity<CrmRole> {
 
     public CrmRoleViewerActivity(CrudAppPlace place) {
-        super(place,  CrmSite.getViewFactory().getView(CrmRoleViewerView.class), GWT.<AbstractCrudService<CrmRole>> create(CrmRoleCrudService.class));
+        super(CrmRole.class, place, CrmSite.getViewFactory().getView(CrmRoleViewerView.class), GWT
+                .<AbstractCrudService<CrmRole>> create(CrmRoleCrudService.class));
     }
 
 }

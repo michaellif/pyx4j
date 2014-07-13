@@ -34,11 +34,12 @@ public class FundsReconciliationFileViewerActivity extends AbstractViewerActivit
     private final ILister.Presenter<?> summaryLister;
 
     public FundsReconciliationFileViewerActivity(CrudAppPlace place) {
-        super(place, OperationsSite.getViewFactory().getView(FundsReconciliationFileViewerView.class), GWT
+        super(FundsReconciliationFileDTO.class, place, OperationsSite.getViewFactory().getView(FundsReconciliationFileViewerView.class), GWT
                 .<AbstractCrudService<FundsReconciliationFileDTO>> create(PadReconciliationFileCrudService.class));
 
         summaryLister = new ListerController<FundsReconciliationSummaryDTO>(FundsReconciliationSummaryDTO.class,
-                ((FundsReconciliationFileViewerView) getView()).getSummaryListerView(), GWT.<FundsReconciliationSummaryCrudService> create(FundsReconciliationSummaryCrudService.class));
+                ((FundsReconciliationFileViewerView) getView()).getSummaryListerView(),
+                GWT.<FundsReconciliationSummaryCrudService> create(FundsReconciliationSummaryCrudService.class));
 
     }
 

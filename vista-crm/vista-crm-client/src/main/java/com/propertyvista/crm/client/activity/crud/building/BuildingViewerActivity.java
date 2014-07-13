@@ -23,7 +23,6 @@ import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.core.criterion.PropertyCriterion;
 import com.pyx4j.entity.rpc.AbstractCrudService;
-import com.pyx4j.entity.security.DataModelPermission;
 import com.pyx4j.entity.shared.AbstractIFileBlob;
 import com.pyx4j.entity.shared.IFile;
 import com.pyx4j.gwt.client.deferred.DeferredProcessDialog;
@@ -32,7 +31,6 @@ import com.pyx4j.gwt.rpc.deferred.DeferredProcessProgressResponse;
 import com.pyx4j.gwt.rpc.upload.UploadService;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
-import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.site.client.ReportDialog;
 import com.pyx4j.site.client.ui.prime.lister.ILister.Presenter;
 import com.pyx4j.site.rpc.CrudAppPlace;
@@ -111,37 +109,37 @@ public class BuildingViewerActivity extends CrmViewerActivity<BuildingDTO> imple
 
     private Key currentBuildingId;
 
-    @SuppressWarnings("unchecked")
     public BuildingViewerActivity(CrudAppPlace place) {
-        super(place, CrmSite.getViewFactory().getView(BuildingViewerView.class), (AbstractCrudService<BuildingDTO>) GWT.create(BuildingCrudService.class));
+        super(BuildingDTO.class, place, CrmSite.getViewFactory().getView(BuildingViewerView.class), GWT
+                .<AbstractCrudService<BuildingDTO>> create(BuildingCrudService.class));
 
-        floorplanLister = ListerControllerFactory.create(FloorplanDTO.class,
-                ((BuildingViewerView) getView()).getFloorplanListerView(), (AbstractCrudService<FloorplanDTO>) GWT.create(FloorplanCrudService.class));
+        floorplanLister = ListerControllerFactory.create(FloorplanDTO.class, ((BuildingViewerView) getView()).getFloorplanListerView(),
+                GWT.<AbstractCrudService<FloorplanDTO>> create(FloorplanCrudService.class));
 
-        unitLister = ListerControllerFactory.create(AptUnitDTO.class,
-                ((BuildingViewerView) getView()).getUnitListerView(), (AbstractCrudService<AptUnitDTO>) GWT.create(UnitCrudService.class));
+        unitLister = ListerControllerFactory.create(AptUnitDTO.class, ((BuildingViewerView) getView()).getUnitListerView(),
+                GWT.<AbstractCrudService<AptUnitDTO>> create(UnitCrudService.class));
 
-        elevatorLister = ListerControllerFactory.create(ElevatorDTO.class,
-                ((BuildingViewerView) getView()).getElevatorListerView(), (AbstractCrudService<ElevatorDTO>) GWT.create(ElevatorCrudService.class));
-        boilerLister = ListerControllerFactory.create(BoilerDTO.class,
-                ((BuildingViewerView) getView()).getBoilerListerView(), (AbstractCrudService<BoilerDTO>) GWT.create(BoilerCrudService.class));
-        roofLister = ListerControllerFactory.create(RoofDTO.class,
-                ((BuildingViewerView) getView()).getRoofListerView(), (AbstractCrudService<RoofDTO>) GWT.create(RoofCrudService.class));
+        elevatorLister = ListerControllerFactory.create(ElevatorDTO.class, ((BuildingViewerView) getView()).getElevatorListerView(),
+                GWT.<AbstractCrudService<ElevatorDTO>> create(ElevatorCrudService.class));
+        boilerLister = ListerControllerFactory.create(BoilerDTO.class, ((BuildingViewerView) getView()).getBoilerListerView(),
+                GWT.<AbstractCrudService<BoilerDTO>> create(BoilerCrudService.class));
+        roofLister = ListerControllerFactory.create(RoofDTO.class, ((BuildingViewerView) getView()).getRoofListerView(),
+                GWT.<AbstractCrudService<RoofDTO>> create(RoofCrudService.class));
 
-        parkingLister = ListerControllerFactory.create(ParkingDTO.class,
-                ((BuildingViewerView) getView()).getParkingListerView(), (AbstractCrudService<ParkingDTO>) GWT.create(ParkingCrudService.class));
-        lockerAreaLister = ListerControllerFactory.create(LockerAreaDTO.class,
-                ((BuildingViewerView) getView()).getLockerAreaListerView(), (AbstractCrudService<LockerAreaDTO>) GWT.create(LockerAreaCrudService.class));
+        parkingLister = ListerControllerFactory.create(ParkingDTO.class, ((BuildingViewerView) getView()).getParkingListerView(),
+                GWT.<AbstractCrudService<ParkingDTO>> create(ParkingCrudService.class));
+        lockerAreaLister = ListerControllerFactory.create(LockerAreaDTO.class, ((BuildingViewerView) getView()).getLockerAreaListerView(),
+                GWT.<AbstractCrudService<LockerAreaDTO>> create(LockerAreaCrudService.class));
 
-        serviceLister = ListerControllerFactory.create(Service.class,
-                ((BuildingViewerView) getView()).getServiceListerView(), (AbstractCrudService<Service>) GWT.create(ServiceCrudService.class));
-        featureLister = ListerControllerFactory.create(Feature.class,
-                ((BuildingViewerView) getView()).getFeatureListerView(), (AbstractCrudService<Feature>) GWT.create(FeatureCrudService.class));
-        concessionLister = ListerControllerFactory.create(Concession.class,
-                ((BuildingViewerView) getView()).getConcessionListerView(), (AbstractCrudService<Concession>) GWT.create(ConcessionCrudService.class));
+        serviceLister = ListerControllerFactory.create(Service.class, ((BuildingViewerView) getView()).getServiceListerView(),
+                GWT.<AbstractCrudService<Service>> create(ServiceCrudService.class));
+        featureLister = ListerControllerFactory.create(Feature.class, ((BuildingViewerView) getView()).getFeatureListerView(),
+                GWT.<AbstractCrudService<Feature>> create(FeatureCrudService.class));
+        concessionLister = ListerControllerFactory.create(Concession.class, ((BuildingViewerView) getView()).getConcessionListerView(),
+                GWT.<AbstractCrudService<Concession>> create(ConcessionCrudService.class));
 
-        billingCycleLister = ListerControllerFactory.create(BillingCycleDTO.class,
-                ((BuildingViewerView) getView()).getBillingCycleListerView(), (AbstractCrudService<BillingCycleDTO>) GWT.create(BillingCycleCrudService.class));
+        billingCycleLister = ListerControllerFactory.create(BillingCycleDTO.class, ((BuildingViewerView) getView()).getBillingCycleListerView(),
+                GWT.<AbstractCrudService<BillingCycleDTO>> create(BillingCycleCrudService.class));
     }
 
     @Override
@@ -160,11 +158,6 @@ public class BuildingViewerActivity extends CrmViewerActivity<BuildingDTO> imple
                     EntityFactory.createIdentityStub(BuildingDTO.class, currentBuildingId));
         }
         return communityEventtVisorController;
-    }
-
-    @Override
-    public boolean canEdit() {
-        return SecurityController.check(DataModelPermission.permissionUpdate(BuildingDTO.class));
     }
 
     @Override

@@ -26,6 +26,7 @@ import com.propertyvista.domain.policy.dto.DepositPolicyDTO;
 public class DepositPolicyViewerActivity extends CrmViewerActivity<DepositPolicyDTO> {
 
     public DepositPolicyViewerActivity(CrudAppPlace place) {
-        super(place,  CrmSite.getViewFactory().getView(DepositPolicyViewerView.class), GWT.<DepositPolicyCrudService> create(DepositPolicyCrudService.class));
+        super(DepositPolicyDTO.class, place, CrmSite.getViewFactory().getView(DepositPolicyViewerView.class), GWT
+                .<DepositPolicyCrudService> create(DepositPolicyCrudService.class));
     }
 }

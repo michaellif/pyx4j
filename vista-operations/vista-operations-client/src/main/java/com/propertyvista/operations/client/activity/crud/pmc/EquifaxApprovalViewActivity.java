@@ -30,7 +30,7 @@ import com.propertyvista.operations.rpc.services.EquifaxApprovalCrudService;
 public class EquifaxApprovalViewActivity extends AdminViewerActivity<EquifaxSetupRequestDTO> implements EquifaxApprovalView.Presenter {
 
     public EquifaxApprovalViewActivity(CrudAppPlace place) {
-        super(place, OperationsSite.getViewFactory().getView(EquifaxApprovalView.class), GWT
+        super(EquifaxSetupRequestDTO.class, place, OperationsSite.getViewFactory().getView(EquifaxApprovalView.class), GWT
                 .<AbstractCrudService<EquifaxSetupRequestDTO>> create(EquifaxApprovalCrudService.class));
     }
 

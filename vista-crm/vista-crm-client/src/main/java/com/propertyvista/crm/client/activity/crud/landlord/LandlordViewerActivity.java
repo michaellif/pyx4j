@@ -18,8 +18,6 @@ import java.util.List;
 import com.google.gwt.core.client.GWT;
 
 import com.pyx4j.entity.rpc.AbstractCrudService;
-import com.pyx4j.entity.security.DataModelPermission;
-import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
 import com.propertyvista.crm.client.CrmSite;
@@ -34,20 +32,14 @@ import com.propertyvista.dto.LandlordDTO;
 
 public class LandlordViewerActivity extends CrmViewerActivity<LandlordDTO> implements LandlordViewerView.Presenter {
 
-    @SuppressWarnings("unchecked")
     public LandlordViewerActivity(CrudAppPlace place) {
-        super(place, CrmSite.getViewFactory().getView(LandlordViewerView.class), (AbstractCrudService<LandlordDTO>) GWT.create(LandlordCrudService.class));
-
+        super(LandlordDTO.class, place, CrmSite.getViewFactory().getView(LandlordViewerView.class), GWT
+                .<AbstractCrudService<LandlordDTO>> create(LandlordCrudService.class));
     }
 
     @Override
     protected void onPopulateSuccess(LandlordDTO result) {
         super.onPopulateSuccess(result);
-    }
-
-    @Override
-    public boolean canEdit() {
-        return SecurityController.check(DataModelPermission.permissionUpdate(LandlordDTO.class));
     }
 
     @Override

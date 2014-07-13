@@ -26,9 +26,8 @@ import com.propertyvista.dto.LeaseParticipantScreeningTO;
 
 public class CustomerScreeningViewerActivity extends CrmViewerActivity<LeaseParticipantScreeningTO> {
 
-    @SuppressWarnings("unchecked")
     public CustomerScreeningViewerActivity(CrudAppPlace place) {
-        super(place, CrmSite.getViewFactory().getView(CustomerScreeningViewerView.class), (AbstractCrudService<LeaseParticipantScreeningTO>) GWT
-                .create(LeaseParticipantScreeningCrudService.class));
+        super(LeaseParticipantScreeningTO.class, place, CrmSite.getViewFactory().getView(CustomerScreeningViewerView.class), GWT
+                .<AbstractCrudService<LeaseParticipantScreeningTO>> create(LeaseParticipantScreeningCrudService.class));
     }
 }

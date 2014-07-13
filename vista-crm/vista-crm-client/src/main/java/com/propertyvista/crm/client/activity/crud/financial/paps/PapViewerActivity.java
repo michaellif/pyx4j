@@ -26,6 +26,7 @@ import com.propertyvista.crm.rpc.services.financial.AutoPayHistoryCrudService;
 public class PapViewerActivity extends CrmViewerActivity<AutoPayHistoryDTO> implements PapViewerView.Presenter {
 
     public PapViewerActivity(CrudAppPlace place) {
-        super(place, CrmSite.getViewFactory().getView(PapViewerView.class), GWT.<AutoPayHistoryCrudService> create(AutoPayHistoryCrudService.class));
+        super(AutoPayHistoryDTO.class, place, CrmSite.getViewFactory().getView(PapViewerView.class), GWT
+                .<AutoPayHistoryCrudService> create(AutoPayHistoryCrudService.class));
     }
 }

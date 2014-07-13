@@ -28,8 +28,8 @@ public class LegalTermsPolicyViewerActivity extends CrmViewerActivity<LegalTerms
 
     public LegalTermsPolicyViewerActivity(CrudAppPlace place) {
         // TODO take the view from pool
-        super(place, new LegalTermsPolicyViewerViewImpl(), (AbstractCrudService<LegalTermsPolicyDTO>) GWT
-                .create(LegalDocumentationPolicyCrudService.class));
+        super(LegalTermsPolicyDTO.class, place, new LegalTermsPolicyViewerViewImpl(), GWT
+                .<AbstractCrudService<LegalTermsPolicyDTO>> create(LegalDocumentationPolicyCrudService.class));
     }
 
 }

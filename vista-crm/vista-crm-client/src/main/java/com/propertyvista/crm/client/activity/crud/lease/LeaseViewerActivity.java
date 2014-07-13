@@ -84,10 +84,10 @@ public class LeaseViewerActivity extends LeaseViewerActivityBase<LeaseDTO> imple
     private final ILister.Presenter<MaintenanceRequestDTO> maintenanceLister;
 
     public LeaseViewerActivity(CrudAppPlace place) {
-        super(place, CrmSite.getViewFactory().getView(LeaseViewerView.class), GWT.<LeaseViewerCrudService> create(LeaseViewerCrudService.class));
+        super(LeaseDTO.class, place, CrmSite.getViewFactory().getView(LeaseViewerView.class), GWT.<LeaseViewerCrudService> create(LeaseViewerCrudService.class));
 
-        depositLister = new SecureListerController<DepositLifecycleDTO>(DepositLifecycleDTO.class,
-                ((LeaseViewerView) getView()).getDepositListerView(), GWT.<DepositLifecycleCrudService> create(DepositLifecycleCrudService.class));
+        depositLister = new SecureListerController<DepositLifecycleDTO>(DepositLifecycleDTO.class, ((LeaseViewerView) getView()).getDepositListerView(),
+                GWT.<DepositLifecycleCrudService> create(DepositLifecycleCrudService.class));
 
         billLister = new BillListerController(((LeaseViewerView) getView()).getBillListerView());
 

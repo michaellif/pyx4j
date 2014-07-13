@@ -36,7 +36,8 @@ public class LeaseTermViewerActivity extends CrmViewerActivity<LeaseTermDTO> imp
     private Key currentLeaseId;
 
     public LeaseTermViewerActivity(CrudAppPlace place) {
-        super(place, CrmSite.getViewFactory().getView(LeaseTermViewerView.class), GWT.<LeaseTermCrudService> create(LeaseTermCrudService.class));
+        super(LeaseTermDTO.class, place, CrmSite.getViewFactory().getView(LeaseTermViewerView.class), GWT
+                .<LeaseTermCrudService> create(LeaseTermCrudService.class));
     }
 
     @Override

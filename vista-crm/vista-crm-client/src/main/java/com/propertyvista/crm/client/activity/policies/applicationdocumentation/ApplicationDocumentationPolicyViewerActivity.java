@@ -29,8 +29,8 @@ public class ApplicationDocumentationPolicyViewerActivity extends CrmViewerActiv
 
     public ApplicationDocumentationPolicyViewerActivity(CrudAppPlace place) {
         // TODO take the view from pool
-        super(place, new ApplicationDocumentationPolicyViewerViewImpl(), (AbstractCrudService<ApplicationDocumentationPolicyDTO>) GWT
-                .create(ApplicationDocumentationPolicyCrudService.class));
+        super(ApplicationDocumentationPolicyDTO.class, place, new ApplicationDocumentationPolicyViewerViewImpl(), GWT
+                .<AbstractCrudService<ApplicationDocumentationPolicyDTO>> create(ApplicationDocumentationPolicyCrudService.class));
     }
 
 }

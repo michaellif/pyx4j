@@ -28,9 +28,9 @@ import com.propertyvista.domain.company.Portfolio;
 
 public class PortfolioViewerActivity extends CrmViewerActivity<Portfolio> {
 
-    @SuppressWarnings("unchecked")
     public PortfolioViewerActivity(CrudAppPlace place) {
-        super(place, CrmSite.getViewFactory().getView(PortfolioViewerView.class), (AbstractCrudService<Portfolio>) GWT.create(PortfolioCrudService.class));
+        super(Portfolio.class, place, CrmSite.getViewFactory().getView(PortfolioViewerView.class), GWT
+                .<AbstractCrudService<Portfolio>> create(PortfolioCrudService.class));
     }
 
     @Override

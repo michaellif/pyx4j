@@ -32,8 +32,8 @@ import com.propertyvista.dto.MessageDTO;
 public class MessageViewerActivity extends CrmViewerActivity<MessageDTO> implements MessageViewerView.Presenter {
 
     public MessageViewerActivity(CrudAppPlace place) {
-
-        super(place, CrmSite.getViewFactory().getView(MessageViewerView.class), (AbstractCrudService<MessageDTO>) GWT.create(MessageCrudService.class));
+        super(MessageDTO.class, place, CrmSite.getViewFactory().getView(MessageViewerView.class), GWT
+                .<AbstractCrudService<MessageDTO>> create(MessageCrudService.class));
     }
 
     @Override

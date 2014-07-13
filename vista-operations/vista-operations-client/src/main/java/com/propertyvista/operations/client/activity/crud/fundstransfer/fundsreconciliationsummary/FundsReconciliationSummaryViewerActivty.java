@@ -26,7 +26,7 @@ import com.propertyvista.operations.rpc.services.FundsReconciliationSummaryCrudS
 public class FundsReconciliationSummaryViewerActivty extends AbstractViewerActivity<FundsReconciliationSummaryDTO> {
 
     public FundsReconciliationSummaryViewerActivty(CrudAppPlace place) {
-        super(place, OperationsSite.getViewFactory().getView(FundsReconciliationSummaryViewerView.class), GWT
+        super(FundsReconciliationSummaryDTO.class, place, OperationsSite.getViewFactory().getView(FundsReconciliationSummaryViewerView.class), GWT
                 .<FundsReconciliationSummaryCrudService> create(FundsReconciliationSummaryCrudService.class));
     }
 

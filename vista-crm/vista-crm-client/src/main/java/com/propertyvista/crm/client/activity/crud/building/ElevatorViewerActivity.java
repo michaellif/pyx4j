@@ -16,8 +16,6 @@ package com.propertyvista.crm.client.activity.crud.building;
 import com.google.gwt.core.client.GWT;
 
 import com.pyx4j.entity.rpc.AbstractCrudService;
-import com.pyx4j.entity.security.DataModelPermission;
-import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
 import com.propertyvista.crm.client.CrmSite;
@@ -30,11 +28,8 @@ public class ElevatorViewerActivity extends CrmViewerActivity<ElevatorDTO> {
 
     @SuppressWarnings("unchecked")
     public ElevatorViewerActivity(CrudAppPlace place) {
-        super(place, CrmSite.getViewFactory().getView(ElevatorViewerView.class), (AbstractCrudService<ElevatorDTO>) GWT.create(ElevatorCrudService.class));
+        super(ElevatorDTO.class, place, CrmSite.getViewFactory().getView(ElevatorViewerView.class), (AbstractCrudService<ElevatorDTO>) GWT
+                .create(ElevatorCrudService.class));
     }
 
-    @Override
-    public boolean canEdit() {
-        return SecurityController.check(DataModelPermission.permissionUpdate(ElevatorDTO.class));
-    }
 }

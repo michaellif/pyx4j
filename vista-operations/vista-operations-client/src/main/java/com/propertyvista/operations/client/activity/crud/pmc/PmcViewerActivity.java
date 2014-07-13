@@ -48,10 +48,8 @@ public class PmcViewerActivity extends AdminViewerActivity<PmcDTO> implements Pm
 
     private static final I18n i18n = I18n.get(PmcViewerActivity.class);
 
-    @SuppressWarnings("unchecked")
     public PmcViewerActivity(CrudAppPlace place) {
-        super(place, OperationsSite.getViewFactory().getView(PmcViewerView.class), (AbstractCrudService<PmcDTO>) GWT.create(PmcCrudService.class));
-
+        super(PmcDTO.class, place, OperationsSite.getViewFactory().getView(PmcViewerView.class), GWT.<AbstractCrudService<PmcDTO>> create(PmcCrudService.class));
     }
 
     @Override

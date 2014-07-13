@@ -23,6 +23,7 @@ import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.OrderColumn;
 import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.annotations.ReadOnly;
+import com.pyx4j.entity.annotations.SecurityEnabled;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.IPrimitive;
@@ -32,6 +33,7 @@ import com.pyx4j.i18n.shared.I18nEnum;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.tenant.lease.Lease;
 
+@SecurityEnabled
 public interface AptUnitOccupancySegment extends IEntity {
 
     @I18n(context = "AptUnitOccupancySegment Status")

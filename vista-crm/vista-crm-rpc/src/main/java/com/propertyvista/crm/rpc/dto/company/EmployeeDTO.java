@@ -14,6 +14,7 @@
 package com.propertyvista.crm.rpc.dto.company;
 
 import com.pyx4j.entity.annotations.ExtendsBO;
+import com.pyx4j.entity.annotations.SecurityEnabled;
 import com.pyx4j.entity.annotations.Transient;
 
 import com.propertyvista.domain.company.Employee;
@@ -21,6 +22,7 @@ import com.propertyvista.domain.security.UserAuditingConfigurationDTO;
 
 @Transient
 @ExtendsBO(Employee.class)
+@SecurityEnabled
 public interface EmployeeDTO extends Employee {
 
     EmployeePrivilegesDTO privileges();

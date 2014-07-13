@@ -27,7 +27,8 @@ import com.propertyvista.domain.policy.dto.PetPolicyDTO;
 public class PetPolicyViewerActivity extends CrmViewerActivity<PetPolicyDTO> {
 
     public PetPolicyViewerActivity(CrudAppPlace place) {
-        super(place,  CrmSite.getViewFactory().getView(PetPolicyViewerView.class), GWT.<AbstractCrudService<PetPolicyDTO>> create(PetPolicyCrudService.class));
+        super(PetPolicyDTO.class, place, CrmSite.getViewFactory().getView(PetPolicyViewerView.class), GWT
+                .<AbstractCrudService<PetPolicyDTO>> create(PetPolicyCrudService.class));
     }
 
 }

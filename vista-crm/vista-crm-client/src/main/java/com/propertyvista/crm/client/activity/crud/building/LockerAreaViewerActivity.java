@@ -32,10 +32,11 @@ public class LockerAreaViewerActivity extends CrmViewerActivity<LockerAreaDTO> i
     private final ILister.Presenter<?> lockerLister;
 
     public LockerAreaViewerActivity(CrudAppPlace place) {
-        super(place,  CrmSite.getViewFactory().getView(LockerAreaViewerView.class), GWT.<LockerAreaCrudService> create(LockerAreaCrudService.class));
+        super(LockerAreaDTO.class, place, CrmSite.getViewFactory().getView(LockerAreaViewerView.class), GWT
+                .<LockerAreaCrudService> create(LockerAreaCrudService.class));
 
-        lockerLister = new ListerController<Locker>(Locker.class,
-                ((LockerAreaViewerView) getView()).getLockerView(), GWT.<LockerCrudService> create(LockerCrudService.class));
+        lockerLister = new ListerController<Locker>(Locker.class, ((LockerAreaViewerView) getView()).getLockerView(),
+                GWT.<LockerCrudService> create(LockerCrudService.class));
 
     }
 

@@ -30,21 +30,7 @@ public class CrmViewerActivity<E extends IEntity> extends AbstractViewerActivity
 
     private final CrudAppPlace place;
 
-    /**
-     * @deprecated Use one from super
-     */
-    @Deprecated
-    private Class<? extends IEntity> entityClass;
-
     private NotesAndAttachmentsVisorController notesAndAttachmentsController;
-
-    /**
-     * @deprecated Use constructor with entityClass
-     */
-    @Deprecated
-    public CrmViewerActivity(CrudAppPlace place, IViewer<E> view, AbstractCrudService<E> service) {
-        this(null, place, view, service);
-    }
 
     public CrmViewerActivity(Class<E> entityClass, CrudAppPlace place, IViewer<E> view, AbstractCrudService<E> service) {
         super(entityClass, place, view, service);
@@ -55,9 +41,6 @@ public class CrmViewerActivity<E extends IEntity> extends AbstractViewerActivity
     @Override
     protected void onPopulateSuccess(E result) {
         super.onPopulateSuccess(result);
-
-        entityClass = result.getEntityMeta().getBOClass();
-
         AppSite.getEventBus().fireEvent(new CrudNavigateEvent(place, result));
     }
 

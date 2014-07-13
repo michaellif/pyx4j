@@ -31,7 +31,8 @@ import com.propertyvista.operations.rpc.services.AdminUserService;
 public class AccountViewerActivity extends AbstractViewerActivity<OperationsUserDTO> implements AdminUserViewerView.Presenter {
 
     public AccountViewerActivity(CrudAppPlace place) {
-        super(place, OperationsSite.getViewFactory().getView(AdminUserViewerView.class), GWT.<AdminUserService> create(AdminUserService.class));
+        super(OperationsUserDTO.class, place, OperationsSite.getViewFactory().getView(AdminUserViewerView.class), GWT
+                .<AdminUserService> create(AdminUserService.class));
     }
 
     @Override
