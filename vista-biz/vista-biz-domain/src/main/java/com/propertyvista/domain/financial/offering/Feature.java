@@ -16,11 +16,13 @@ package com.propertyvista.domain.financial.offering;
 import java.util.Date;
 
 import com.pyx4j.entity.annotations.DiscriminatorValue;
+import com.pyx4j.entity.annotations.SecurityEnabled;
 import com.pyx4j.entity.annotations.Timestamp;
 import com.pyx4j.entity.core.IPrimitive;
 
 import com.propertyvista.domain.financial.offering.Feature.FeatureV;
 
+@SecurityEnabled
 @DiscriminatorValue("feature")
 public interface Feature extends Product<FeatureV> {
 

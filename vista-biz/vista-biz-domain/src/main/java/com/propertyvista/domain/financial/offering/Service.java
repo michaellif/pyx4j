@@ -17,12 +17,14 @@ import java.util.Date;
 
 import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.DiscriminatorValue;
+import com.pyx4j.entity.annotations.SecurityEnabled;
 import com.pyx4j.entity.annotations.Timestamp;
 import com.pyx4j.entity.core.IList;
 import com.pyx4j.entity.core.IPrimitive;
 
 import com.propertyvista.domain.financial.offering.Service.ServiceV;
 
+@SecurityEnabled
 @DiscriminatorValue("service")
 public interface Service extends Product<ServiceV> {
 
