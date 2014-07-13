@@ -260,18 +260,7 @@ public class EntityMetaWriter {
         writer.println(");");
 
         for (Annotation annotation : interfaceType.getAnnotations()) {
-            InvocationHandler h = Proxy.getInvocationHandler(annotation);
-            // This is com.google.gwt.dev.javac.AnnotationProxyFactory.AnnotationProxyInvocationHandler
-            Class<?> annotationClass;
-            try {
-                Field annotationClassFiled = h.getClass().getDeclaredField("annotationClass");
-                if (!annotationClassFiled.isAccessible()) {
-                    annotationClassFiled.setAccessible(true);
-                }
-                annotationClass = (Class<?>) annotationClassFiled.get(h);
-            } catch (Exception e) {
-                throw new Error("GWT implementation changed", e);
-            }
+            Class<? extends Annotation> annotationClass = getAnnotationClass(annotation);
             if (annotationClass.isAnnotationPresent(GwtAnnotation.class)) {
                 writer.print("super.addAnnotation(");
                 writer.print(annotationClass.getName());
@@ -532,9 +521,10 @@ public class EntityMetaWriter {
             }
 
             for (Annotation annotation : method.getAnnotations()) {
-                if (annotation.getClass().isAnnotationPresent(GwtAnnotation.class)) {
+                Class<? extends Annotation> annotationClass = getAnnotationClass(annotation);
+                if (annotationClass.isAnnotationPresent(GwtAnnotation.class)) {
                     writer.print("mm.addAnnotation(");
-                    writer.print(annotation.getClass().getName());
+                    writer.print(annotationClass.getName());
                     writer.print(".class");
                     writer.println(");");
                 }
@@ -550,6 +540,22 @@ public class EntityMetaWriter {
         writer.println("}");
 
         return validationErrors;
+    }
+
+    private static Class<? extends Annotation> getAnnotationClass(Annotation annotation) {
+        InvocationHandler h = Proxy.getInvocationHandler(annotation);
+        // This is com.google.gwt.dev.javac.AnnotationProxyFactory.AnnotationProxyInvocationHandler
+        try {
+            Field annotationClassFiled = h.getClass().getDeclaredField("annotationClass");
+            if (!annotationClassFiled.isAccessible()) {
+                annotationClassFiled.setAccessible(true);
+            }
+            @SuppressWarnings("unchecked")
+            Class<? extends Annotation> annotationClass = (Class<? extends Annotation>) annotationClassFiled.get(h);
+            return annotationClass;
+        } catch (Exception e) {
+            throw new Error("GWT implementation changed", e);
+        }
     }
 
     private static void writeDataParams(SourceWriter writer, MemberMetaData data, boolean indexed) {
