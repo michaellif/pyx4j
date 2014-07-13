@@ -30,8 +30,8 @@ public class EmployeeListerActivity extends AbstractListerActivity<EmployeeDTO> 
 
     @SuppressWarnings("unchecked")
     public EmployeeListerActivity(Place place) {
-        super(place, CrmSite.getViewFactory().getView(EmployeeListerView.class), (AbstractCrudService<EmployeeDTO>) GWT.create(EmployeeCrudService.class),
-                EmployeeDTO.class);
+        super(EmployeeDTO.class, place, CrmSite.getViewFactory().getView(EmployeeListerView.class),
+                (AbstractCrudService<EmployeeDTO>) GWT.create(EmployeeCrudService.class));
     }
 
     @Override

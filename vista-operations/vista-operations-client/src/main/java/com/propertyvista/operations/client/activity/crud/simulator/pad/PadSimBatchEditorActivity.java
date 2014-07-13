@@ -34,8 +34,8 @@ public class PadSimBatchEditorActivity extends AbstractEditorActivity<PadSimBatc
 
     @SuppressWarnings("unchecked")
     public PadSimBatchEditorActivity(CrudAppPlace place) {
-        super(place, OperationsSite.getViewFactory().getView(PadSimBatchEditorView.class), (AbstractCrudService<PadSimBatch>) GWT
-                .create(PadSimBatchCrudService.class), PadSimBatch.class);
+        super(PadSimBatch.class, place, OperationsSite.getViewFactory().getView(PadSimBatchEditorView.class), (AbstractCrudService<PadSimBatch>) GWT
+                        .create(PadSimBatchCrudService.class));
     }
 
     @Override

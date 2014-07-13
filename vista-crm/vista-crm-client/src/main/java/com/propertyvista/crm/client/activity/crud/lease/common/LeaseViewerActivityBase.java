@@ -57,8 +57,8 @@ public abstract class LeaseViewerActivityBase<DTO extends LeaseDTO> extends CrmV
     public LeaseViewerActivityBase(CrudAppPlace place, IViewer<DTO> view, AbstractCrudService<DTO> service) {
         super(place, view, service);
 
-        paymentLister = new SecureListerController<PaymentRecordDTO>(((LeaseViewerViewBase) getView()).getPaymentListerView(),
-                GWT.<PaymentRecordCrudService> create(PaymentRecordCrudService.class), PaymentRecordDTO.class) {
+        paymentLister = new SecureListerController<PaymentRecordDTO>(PaymentRecordDTO.class,
+                ((LeaseViewerViewBase) getView()).getPaymentListerView(), GWT.<PaymentRecordCrudService> create(PaymentRecordCrudService.class)) {
             @Override
             public boolean canCreateNewItem() {
                 return super.canCreateNewItem() && (currentValue.billingAccount().paymentAccepted().getValue() != BillingAccount.PaymentAccepted.DoNotAccept);

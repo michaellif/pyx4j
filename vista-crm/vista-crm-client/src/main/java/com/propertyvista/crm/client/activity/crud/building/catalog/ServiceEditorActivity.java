@@ -26,6 +26,6 @@ import com.propertyvista.domain.financial.offering.Service;
 public class ServiceEditorActivity extends CrmEditorActivity<Service> implements ServiceEditorView.Presenter {
 
     public ServiceEditorActivity(CrudAppPlace place) {
-        super(place,  CrmSite.getViewFactory().getView(ServiceEditorView.class), GWT.<ServiceCrudService> create(ServiceCrudService.class), Service.class);
+        super(Service.class,  place, CrmSite.getViewFactory().getView(ServiceEditorView.class), GWT.<ServiceCrudService> create(ServiceCrudService.class));
     }
 }

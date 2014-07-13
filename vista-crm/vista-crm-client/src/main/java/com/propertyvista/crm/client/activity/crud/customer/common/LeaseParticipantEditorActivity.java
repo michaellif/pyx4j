@@ -34,7 +34,7 @@ public abstract class LeaseParticipantEditorActivity<DTO extends LeaseParticipan
         extends CrmEditorActivity<DTO> implements LeaseParticipantEditorPresenter<DTO> {
 
     public LeaseParticipantEditorActivity(CrudAppPlace place, IEditor<DTO> view, CS service, Class<DTO> dtoClass) {
-        super(place, view, service, dtoClass);
+        super(dtoClass, place, view, service);
     }
 
     @SuppressWarnings("unchecked")

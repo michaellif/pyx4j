@@ -26,8 +26,8 @@ import com.propertyvista.crm.rpc.services.financial.MoneyInBatchCrudService;
 public class MoneyInBatchListerActivity extends AbstractListerActivity<MoneyInBatchDTO> {
 
     public MoneyInBatchListerActivity(Place place) {
-        super(place, CrmSite.getViewFactory().getView(MoneyInBatchListerView.class), GWT.<MoneyInBatchCrudService> create(MoneyInBatchCrudService.class),
-                MoneyInBatchDTO.class);
+        super(MoneyInBatchDTO.class, place, CrmSite.getViewFactory().getView(MoneyInBatchListerView.class),
+                GWT.<MoneyInBatchCrudService> create(MoneyInBatchCrudService.class));
     }
 
 }

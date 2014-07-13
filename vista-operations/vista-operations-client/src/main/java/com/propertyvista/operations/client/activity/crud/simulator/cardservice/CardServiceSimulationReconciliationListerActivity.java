@@ -31,9 +31,9 @@ public class CardServiceSimulationReconciliationListerActivity extends AbstractL
         CardServiceSimulationReconciliationListerView.Presenter {
 
     public CardServiceSimulationReconciliationListerActivity(Place place) {
-        super(place, OperationsSite.getViewFactory().getView(CardServiceSimulationReconciliationListerView.class), GWT
-                .<AbstractCrudService<CardServiceSimulationReconciliationRecord>> create(CardServiceSimulationReconciliationCrudService.class),
-                CardServiceSimulationReconciliationRecord.class);
+        super(CardServiceSimulationReconciliationRecord.class, place, OperationsSite.getViewFactory().getView(CardServiceSimulationReconciliationListerView.class),
+                GWT
+                        .<AbstractCrudService<CardServiceSimulationReconciliationRecord>> create(CardServiceSimulationReconciliationCrudService.class));
     }
 
     @Override

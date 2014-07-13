@@ -27,13 +27,13 @@ import com.propertyvista.domain.policy.dto.DatesPolicyDTO;
 public class DatesPolicyEditorActivity extends PolicyEditorActivityBase<DatesPolicyDTO> {
 
     public DatesPolicyEditorActivity(CrudAppPlace place) {
-        super(place,
+        super(DatesPolicyDTO.class,
 
-         CrmSite.getViewFactory().getView(DatesPolicyEditorView.class),
+         place,
 
-        GWT.<AbstractPolicyCrudService<DatesPolicyDTO>> create(DatesPolicyCrudService.class),
+        CrmSite.getViewFactory().getView(DatesPolicyEditorView.class),
 
-        DatesPolicyDTO.class);
+        GWT.<AbstractPolicyCrudService<DatesPolicyDTO>> create(DatesPolicyCrudService.class));
     }
 
 }

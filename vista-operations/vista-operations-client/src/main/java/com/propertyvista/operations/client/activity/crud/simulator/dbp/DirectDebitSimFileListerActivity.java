@@ -26,8 +26,8 @@ import com.propertyvista.operations.rpc.services.simulator.DirectDebitSimFileCru
 public class DirectDebitSimFileListerActivity extends AbstractListerActivity<DirectDebitSimFile> implements DirectDebitSimFileListerView.Presenter {
 
     public DirectDebitSimFileListerActivity(Place place) {
-        super(place, OperationsSite.getViewFactory().getView(DirectDebitSimFileListerView.class), GWT
-                .<DirectDebitSimFileCrudService> create(DirectDebitSimFileCrudService.class), DirectDebitSimFile.class);
+        super(DirectDebitSimFile.class, place, OperationsSite.getViewFactory().getView(DirectDebitSimFileListerView.class), GWT
+                        .<DirectDebitSimFileCrudService> create(DirectDebitSimFileCrudService.class));
     }
 
 }

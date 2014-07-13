@@ -29,8 +29,8 @@ import com.propertyvista.dto.PaymentRecordDTO;
 public class PaymentRecordListerActivity extends AbstractListerActivity<PaymentRecordDTO> {
 
     public PaymentRecordListerActivity(AppPlace place) {
-        super(place, CrmSite.getViewFactory().getView(PaymentRecordListerView.class), GWT.<PaymentRecordCrudService> create(PaymentRecordCrudService.class),
-                PaymentRecordDTO.class);
+        super(PaymentRecordDTO.class, place, CrmSite.getViewFactory().getView(PaymentRecordListerView.class),
+                GWT.<PaymentRecordCrudService> create(PaymentRecordCrudService.class));
 
     }
 

@@ -27,8 +27,8 @@ public class CardServiceSimulationConfigEditorActivity extends AbstractEditorAct
         CardServiceSimulatorConfigEditorView.Presenter {
 
     public CardServiceSimulationConfigEditorActivity(CrudAppPlace place) {
-        super(place, OperationsSite.getViewFactory().getView(CardServiceSimulatorConfigEditorView.class), GWT
-                .<CardServiceSimulationConfigService> create(CardServiceSimulationConfigService.class), CardServiceSimulatorConfigDTO.class);
+        super(CardServiceSimulatorConfigDTO.class, place, OperationsSite.getViewFactory().getView(CardServiceSimulatorConfigEditorView.class), GWT
+                        .<CardServiceSimulationConfigService> create(CardServiceSimulationConfigService.class));
     }
 
 }

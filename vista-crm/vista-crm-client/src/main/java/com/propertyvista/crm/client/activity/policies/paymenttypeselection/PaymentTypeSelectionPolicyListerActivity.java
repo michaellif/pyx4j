@@ -27,8 +27,8 @@ import com.propertyvista.domain.policy.dto.PaymentTypeSelectionPolicyDTO;
 public class PaymentTypeSelectionPolicyListerActivity extends AbstractListerActivity<PaymentTypeSelectionPolicyDTO> {
 
     public PaymentTypeSelectionPolicyListerActivity(Place place) {
-        super(place,  CrmSite.getViewFactory().getView(PaymentTypeSelectionPolicyListerView.class), GWT
-                .<AbstractListService<PaymentTypeSelectionPolicyDTO>> create(PaymentTypeSelectionPolicyCrudService.class), PaymentTypeSelectionPolicyDTO.class);
+        super(PaymentTypeSelectionPolicyDTO.class,  place, CrmSite.getViewFactory().getView(PaymentTypeSelectionPolicyListerView.class), GWT
+                        .<AbstractListService<PaymentTypeSelectionPolicyDTO>> create(PaymentTypeSelectionPolicyCrudService.class));
     }
 
 }

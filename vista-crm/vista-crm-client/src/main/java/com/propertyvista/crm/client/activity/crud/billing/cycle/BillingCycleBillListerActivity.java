@@ -44,8 +44,8 @@ public class BillingCycleBillListerActivity extends AbstractListerActivity<BillD
     private Bill.BillStatus billStatusValue;
 
     public BillingCycleBillListerActivity(AppPlace place) {
-        super(place, CrmSite.getViewFactory().getView(BillingCycleBillListerView.class), GWT
-                .<BillingCycleBillListService> create(BillingCycleBillListService.class), BillDataDTO.class);
+        super(BillDataDTO.class, place, CrmSite.getViewFactory().getView(BillingCycleBillListerView.class), GWT
+                        .<BillingCycleBillListService> create(BillingCycleBillListService.class));
 
         String val;
         if ((val = place.getFirstArg(CrmSiteMap.Finance.BillingCycle.ARG_BC_ID)) != null) {

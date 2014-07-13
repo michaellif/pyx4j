@@ -28,6 +28,6 @@ public class UnitEditorActivity extends CrmEditorActivity<AptUnitDTO> implements
 
     @SuppressWarnings("unchecked")
     public UnitEditorActivity(CrudAppPlace place) {
-        super(place,  CrmSite.getViewFactory().getView(UnitEditorView.class), (AbstractCrudService<AptUnitDTO>) GWT.create(UnitCrudService.class), AptUnitDTO.class);
+        super(AptUnitDTO.class,  place, CrmSite.getViewFactory().getView(UnitEditorView.class), (AbstractCrudService<AptUnitDTO>) GWT.create(UnitCrudService.class));
     }
 }

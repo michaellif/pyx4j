@@ -27,8 +27,8 @@ import com.propertyvista.dto.LandlordDTO;
 public class LandlordEditorActivity extends CrmEditorActivity<LandlordDTO> implements LandlordEditorView.Presenter {
 
     public LandlordEditorActivity(CrudAppPlace place) {
-        super(place, CrmSite.getViewFactory().getView(LandlordEditorView.class), GWT.<AbstractCrudService<LandlordDTO>> create(LandlordCrudService.class),
-                LandlordDTO.class);
+        super(LandlordDTO.class, place, CrmSite.getViewFactory().getView(LandlordEditorView.class),
+                GWT.<AbstractCrudService<LandlordDTO>> create(LandlordCrudService.class));
 
     }
 }

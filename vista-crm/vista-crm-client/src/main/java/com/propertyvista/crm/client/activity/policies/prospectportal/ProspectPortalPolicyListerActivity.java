@@ -26,8 +26,8 @@ import com.propertyvista.domain.policy.dto.ProspectPortalPolicyDTO;
 public class ProspectPortalPolicyListerActivity extends AbstractListerActivity<ProspectPortalPolicyDTO> {
 
     public ProspectPortalPolicyListerActivity(Place place) {
-        super(place, CrmSite.getViewFactory().getView(ProspectPortalPolicyListerView.class), GWT
-                .<ProspectPortalPolicyCrudService> create(ProspectPortalPolicyCrudService.class), ProspectPortalPolicyDTO.class);
+        super(ProspectPortalPolicyDTO.class, place, CrmSite.getViewFactory().getView(ProspectPortalPolicyListerView.class), GWT
+                        .<ProspectPortalPolicyCrudService> create(ProspectPortalPolicyCrudService.class));
     }
 
 }

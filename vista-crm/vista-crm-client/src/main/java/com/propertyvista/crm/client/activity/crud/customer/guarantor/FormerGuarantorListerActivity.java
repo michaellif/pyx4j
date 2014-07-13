@@ -26,8 +26,8 @@ import com.propertyvista.dto.GuarantorDTO;
 public class FormerGuarantorListerActivity extends AbstractListerActivity<GuarantorDTO> {
 
     public FormerGuarantorListerActivity(Place place) {
-        super(place, CrmSite.getViewFactory().getView(FormerGuarantorListerView.class), GWT
-                .<FormerGuarantorCrudService> create(FormerGuarantorCrudService.class), GuarantorDTO.class);
+        super(GuarantorDTO.class, place, CrmSite.getViewFactory().getView(FormerGuarantorListerView.class), GWT
+                        .<FormerGuarantorCrudService> create(FormerGuarantorCrudService.class));
     }
 
     @Override

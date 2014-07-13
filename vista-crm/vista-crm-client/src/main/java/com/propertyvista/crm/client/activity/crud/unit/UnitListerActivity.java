@@ -30,8 +30,8 @@ public class UnitListerActivity extends AbstractListerActivity<AptUnitDTO> {
 
     @SuppressWarnings("unchecked")
     public UnitListerActivity(Place place) {
-        super(place, CrmSite.getViewFactory().getView(UnitListerView.class), (AbstractCrudService<AptUnitDTO>) GWT.create(UnitCrudService.class),
-                AptUnitDTO.class);
+        super(AptUnitDTO.class, place, CrmSite.getViewFactory().getView(UnitListerView.class),
+                (AbstractCrudService<AptUnitDTO>) GWT.create(UnitCrudService.class));
     }
 
     @Override

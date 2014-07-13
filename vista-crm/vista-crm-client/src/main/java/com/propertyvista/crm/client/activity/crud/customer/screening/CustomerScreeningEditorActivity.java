@@ -28,7 +28,7 @@ public class CustomerScreeningEditorActivity extends CrmEditorActivity<LeasePart
 
     @SuppressWarnings("unchecked")
     public CustomerScreeningEditorActivity(CrudAppPlace place) {
-        super(place, CrmSite.getViewFactory().getView(CustomerScreeningEditorView.class), (AbstractCrudService<LeaseParticipantScreeningTO>) GWT
-                .create(LeaseParticipantScreeningCrudService.class), LeaseParticipantScreeningTO.class);
+        super(LeaseParticipantScreeningTO.class, place, CrmSite.getViewFactory().getView(CustomerScreeningEditorView.class), (AbstractCrudService<LeaseParticipantScreeningTO>) GWT
+                        .create(LeaseParticipantScreeningCrudService.class));
     }
 }

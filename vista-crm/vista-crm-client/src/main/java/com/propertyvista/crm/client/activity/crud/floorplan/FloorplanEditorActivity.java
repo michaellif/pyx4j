@@ -33,8 +33,8 @@ public class FloorplanEditorActivity extends CrmEditorActivity<FloorplanDTO> imp
 
     @SuppressWarnings("unchecked")
     public FloorplanEditorActivity(CrudAppPlace place) {
-        super(place, CrmSite.getViewFactory().getView(FloorplanEditorView.class), (AbstractCrudService<FloorplanDTO>) GWT.create(FloorplanCrudService.class),
-                FloorplanDTO.class);
+        super(FloorplanDTO.class, place, CrmSite.getViewFactory().getView(FloorplanEditorView.class),
+                (AbstractCrudService<FloorplanDTO>) GWT.create(FloorplanCrudService.class));
     }
 
     @Override

@@ -27,8 +27,8 @@ import com.propertyvista.operations.rpc.services.Vista2PmcService;
 public class VistaSystemDefaultsEditorActivity extends AbstractEditorActivity<VistaSystemDefaultsDTO> implements VistaSystemDefaultsEditorView.Presenter {
 
     public VistaSystemDefaultsEditorActivity(CrudAppPlace place) {
-        super(place, OperationsSite.getViewFactory().getView(VistaSystemDefaultsEditorView.class), GWT
-                .<AbstractCrudService<VistaSystemDefaultsDTO>> create(Vista2PmcService.class), VistaSystemDefaultsDTO.class);
+        super(VistaSystemDefaultsDTO.class, place, OperationsSite.getViewFactory().getView(VistaSystemDefaultsEditorView.class), GWT
+                        .<AbstractCrudService<VistaSystemDefaultsDTO>> create(Vista2PmcService.class));
     }
 
 }

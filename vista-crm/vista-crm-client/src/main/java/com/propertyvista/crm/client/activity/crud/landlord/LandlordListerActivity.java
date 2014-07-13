@@ -31,8 +31,8 @@ public class LandlordListerActivity extends AbstractListerActivity<LandlordDTO> 
 
     @SuppressWarnings("unchecked")
     public LandlordListerActivity(Place place) {
-        super(place, (ILister<LandlordDTO>) CrmSite.getViewFactory().getView(LandlordListerView.class), (AbstractCrudService<LandlordDTO>) GWT
-                .create(LandlordCrudService.class), LandlordDTO.class);
+        super(LandlordDTO.class, place, (ILister<LandlordDTO>) CrmSite.getViewFactory().getView(LandlordListerView.class), (AbstractCrudService<LandlordDTO>) GWT
+                        .create(LandlordCrudService.class));
     }
 
     @Override

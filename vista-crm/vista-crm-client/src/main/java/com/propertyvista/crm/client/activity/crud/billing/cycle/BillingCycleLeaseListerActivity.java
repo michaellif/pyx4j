@@ -35,8 +35,8 @@ public class BillingCycleLeaseListerActivity extends AbstractListerActivity<Leas
     private Key billingTypeId;
 
     public BillingCycleLeaseListerActivity(AppPlace place) {
-        super(place,  CrmSite.getViewFactory().getView(BillingCycleLeaseListerView.class), GWT
-                .<BillingCycleLeaseListService> create(BillingCycleLeaseListService.class), LeaseDTO.class);
+        super(LeaseDTO.class,  place, CrmSite.getViewFactory().getView(BillingCycleLeaseListerView.class), GWT
+                        .<BillingCycleLeaseListService> create(BillingCycleLeaseListService.class));
 
         String val;
         if ((val = place.getFirstArg(CrmSiteMap.Finance.BillingCycle.ARG_BC_ID)) != null) {

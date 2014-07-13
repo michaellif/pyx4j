@@ -30,8 +30,8 @@ import com.propertyvista.operations.rpc.services.FundsReconciliationSummaryCrudS
 public class FundsReconciliationSummaryListerActivity extends AbstractListerActivity<FundsReconciliationSummaryDTO> {
 
     public FundsReconciliationSummaryListerActivity(Place place) {
-        super(place, OperationsSite.getViewFactory().getView(FundsReconciliationSummaryListerView.class), GWT
-                .<AbstractCrudService<FundsReconciliationSummaryDTO>> create(FundsReconciliationSummaryCrudService.class), FundsReconciliationSummaryDTO.class);
+        super(FundsReconciliationSummaryDTO.class, place, OperationsSite.getViewFactory().getView(FundsReconciliationSummaryListerView.class), GWT
+                        .<AbstractCrudService<FundsReconciliationSummaryDTO>> create(FundsReconciliationSummaryCrudService.class));
     }
 
     @Override

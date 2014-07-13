@@ -27,13 +27,13 @@ import com.propertyvista.domain.policy.dto.ARPolicyDTO;
 public class ARPolicyListerActivity extends AbstractListerActivity<ARPolicyDTO> {
 
     public ARPolicyListerActivity(Place place) {
-        super(place,
+        super(ARPolicyDTO.class,
 
-         CrmSite.getViewFactory().getView(ARPolicyListerView.class),
+         place,
 
-        GWT.<AbstractListService<ARPolicyDTO>> create(ARPolicyCrudService.class),
+        CrmSite.getViewFactory().getView(ARPolicyListerView.class),
 
-        ARPolicyDTO.class);
+        GWT.<AbstractListService<ARPolicyDTO>> create(ARPolicyCrudService.class));
     }
 
 }

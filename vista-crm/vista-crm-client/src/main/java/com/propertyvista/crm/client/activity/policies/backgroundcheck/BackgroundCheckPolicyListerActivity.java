@@ -26,8 +26,8 @@ import com.propertyvista.domain.policy.dto.BackgroundCheckPolicyDTO;
 public class BackgroundCheckPolicyListerActivity extends AbstractListerActivity<BackgroundCheckPolicyDTO> {
 
     public BackgroundCheckPolicyListerActivity(Place place) {
-        super(place,  CrmSite.getViewFactory().getView(BackgroundCheckPolicyListerView.class), GWT
-                .<BackgroundCheckPolicyCrudService> create(BackgroundCheckPolicyCrudService.class), BackgroundCheckPolicyDTO.class);
+        super(BackgroundCheckPolicyDTO.class,  place, CrmSite.getViewFactory().getView(BackgroundCheckPolicyListerView.class), GWT
+                        .<BackgroundCheckPolicyCrudService> create(BackgroundCheckPolicyCrudService.class));
     }
 
 }

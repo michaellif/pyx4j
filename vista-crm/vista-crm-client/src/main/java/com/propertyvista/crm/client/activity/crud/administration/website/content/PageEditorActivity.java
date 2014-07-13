@@ -34,8 +34,8 @@ public class PageEditorActivity extends CrmEditorActivity<PageDescriptor> implem
     private PageDescriptorInitializationData.PageParent pageParentArg = null;
 
     public PageEditorActivity(CrudAppPlace place) {
-        super(place, CrmSite.getViewFactory().getView(PageEditor.class), GWT.<PageDescriptorCrudService> create(PageDescriptorCrudService.class),
-                PageDescriptor.class);
+        super(PageDescriptor.class, place, CrmSite.getViewFactory().getView(PageEditor.class),
+                GWT.<PageDescriptorCrudService> create(PageDescriptorCrudService.class));
 
         String val = place.getFirstArg(PageEditor.Presenter.URL_PARAM_PAGE_PARENT);
         if (val != null) {

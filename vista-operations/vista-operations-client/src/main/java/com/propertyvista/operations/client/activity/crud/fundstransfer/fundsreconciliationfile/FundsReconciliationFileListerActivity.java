@@ -27,7 +27,7 @@ import com.propertyvista.operations.rpc.services.PadReconciliationFileCrudServic
 public class FundsReconciliationFileListerActivity extends AbstractListerActivity<FundsReconciliationFileDTO> {
 
     public FundsReconciliationFileListerActivity(Place place) {
-        super(place, OperationsSite.getViewFactory().getView(FundsReconciliationFileListerView.class), GWT
-                .<AbstractCrudService<FundsReconciliationFileDTO>> create(PadReconciliationFileCrudService.class), FundsReconciliationFileDTO.class);
+        super(FundsReconciliationFileDTO.class, place, OperationsSite.getViewFactory().getView(FundsReconciliationFileListerView.class), GWT
+                        .<AbstractCrudService<FundsReconciliationFileDTO>> create(PadReconciliationFileCrudService.class));
     }
 }

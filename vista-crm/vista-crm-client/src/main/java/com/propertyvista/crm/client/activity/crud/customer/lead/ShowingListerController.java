@@ -27,7 +27,7 @@ import com.propertyvista.domain.tenant.lead.Appointment;
 public class ShowingListerController extends ListerController<ShowingDTO> {
 
     public ShowingListerController(ShowingListerView view) {
-        super(view, GWT.<ShowingCrudService> create(ShowingCrudService.class), ShowingDTO.class);
+        super(ShowingDTO.class, view, GWT.<ShowingCrudService> create(ShowingCrudService.class));
     }
 
     @Override

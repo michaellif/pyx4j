@@ -45,8 +45,8 @@ public class MaintenanceRequestVisorController extends AbstractVisorController {
     public MaintenanceRequestVisorController(IPane parentView, final Key buildingId, final Key tenantId) {
         super(parentView);
         visor = new MaintenanceRequestVisorView(this);
-        lister = new SecureListerController<MaintenanceRequestDTO>(visor.getLister(), GWT.<MaintenanceCrudService> create(MaintenanceCrudService.class),
-                MaintenanceRequestDTO.class) {
+        lister = new SecureListerController<MaintenanceRequestDTO>(MaintenanceRequestDTO.class, visor.getLister(),
+                GWT.<MaintenanceCrudService> create(MaintenanceCrudService.class)) {
             @Override
             public boolean canCreateNewItem() {
                 return super.canCreateNewItem() && MaintenanceRequestVisorController.this.canCreateNewItem();

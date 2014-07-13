@@ -30,8 +30,8 @@ import com.propertyvista.shared.config.VistaFeatures;
 public class MerchantAccountListerActivity extends AbstractListerActivity<MerchantAccount> {
 
     public MerchantAccountListerActivity(Place place) {
-        super(place, CrmSite.getViewFactory().getView(MerchantAccountListerView.class), GWT
-                .<AbstractListService<MerchantAccount>> create(MerchantAccountCrudService.class), MerchantAccount.class);
+        super(MerchantAccount.class, place, CrmSite.getViewFactory().getView(MerchantAccountListerView.class), GWT
+                        .<AbstractListService<MerchantAccount>> create(MerchantAccountCrudService.class));
     }
 
     @Override

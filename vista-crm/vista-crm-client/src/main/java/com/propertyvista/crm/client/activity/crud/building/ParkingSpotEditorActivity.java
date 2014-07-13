@@ -28,7 +28,7 @@ public class ParkingSpotEditorActivity extends CrmEditorActivity<ParkingSpot> {
 
     @SuppressWarnings("unchecked")
     public ParkingSpotEditorActivity(CrudAppPlace place) {
-        super(place,  CrmSite.getViewFactory().getView(ParkingSpotEditorView.class), (AbstractCrudService<ParkingSpot>) GWT.create(ParkingSpotCrudService.class),
-                ParkingSpot.class);
+        super(ParkingSpot.class,  place, CrmSite.getViewFactory().getView(ParkingSpotEditorView.class),
+                (AbstractCrudService<ParkingSpot>) GWT.create(ParkingSpotCrudService.class));
     }
 }

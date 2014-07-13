@@ -27,7 +27,7 @@ import com.propertyvista.domain.company.Portfolio;
 public class PortfolioEditorActivity extends CrmEditorActivity<Portfolio> {
 
     public PortfolioEditorActivity(CrudAppPlace place) {
-        super(place,  CrmSite.getViewFactory().getView(PortfolioEditorView.class), GWT.<AbstractCrudService<Portfolio>> create(PortfolioCrudService.class),
-                Portfolio.class);
+        super(Portfolio.class,  place, CrmSite.getViewFactory().getView(PortfolioEditorView.class),
+                GWT.<AbstractCrudService<Portfolio>> create(PortfolioCrudService.class));
     }
 }

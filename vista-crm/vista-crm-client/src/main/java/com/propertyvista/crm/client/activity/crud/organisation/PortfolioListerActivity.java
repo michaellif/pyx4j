@@ -30,8 +30,8 @@ public class PortfolioListerActivity extends AbstractListerActivity<Portfolio> {
 
     @SuppressWarnings("unchecked")
     public PortfolioListerActivity(Place place) {
-        super(place, CrmSite.getViewFactory().getView(PortfolioListerView.class), (AbstractCrudService<Portfolio>) GWT.create(PortfolioCrudService.class),
-                Portfolio.class);
+        super(Portfolio.class, place, CrmSite.getViewFactory().getView(PortfolioListerView.class),
+                (AbstractCrudService<Portfolio>) GWT.create(PortfolioCrudService.class));
     }
 
     @Override

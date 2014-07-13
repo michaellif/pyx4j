@@ -26,8 +26,8 @@ import com.propertyvista.domain.policy.dto.MaintenanceRequestPolicyDTO;
 public class MaintenanceRequestPolicyEditorActivity extends PolicyEditorActivityBase<MaintenanceRequestPolicyDTO> {
 
     public MaintenanceRequestPolicyEditorActivity(CrudAppPlace place) {
-        super(place, CrmSite.getViewFactory().getView(MaintenanceRequestPolicyEditorView.class), GWT
-                .<MaintenanceRequestPolicyCrudService> create(MaintenanceRequestPolicyCrudService.class), MaintenanceRequestPolicyDTO.class);
+        super(MaintenanceRequestPolicyDTO.class, place, CrmSite.getViewFactory().getView(MaintenanceRequestPolicyEditorView.class), GWT
+                        .<MaintenanceRequestPolicyCrudService> create(MaintenanceRequestPolicyCrudService.class));
 
     }
 

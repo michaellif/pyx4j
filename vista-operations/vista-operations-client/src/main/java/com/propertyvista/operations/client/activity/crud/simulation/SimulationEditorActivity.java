@@ -27,8 +27,8 @@ import com.propertyvista.operations.rpc.services.SimulationService;
 public class SimulationEditorActivity extends AbstractEditorActivity<SimulationDTO> implements SimulationEdtiorView.Presenter {
 
     public SimulationEditorActivity(CrudAppPlace place) {
-        super(place, OperationsSite.getViewFactory().getView(SimulationEdtiorView.class), GWT
-                .<AbstractCrudService<SimulationDTO>> create(SimulationService.class), SimulationDTO.class);
+        super(SimulationDTO.class, place, OperationsSite.getViewFactory().getView(SimulationEdtiorView.class), GWT
+                        .<AbstractCrudService<SimulationDTO>> create(SimulationService.class));
     }
 
 }

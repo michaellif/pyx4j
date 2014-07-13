@@ -33,8 +33,8 @@ import com.propertyvista.dto.MaintenanceRequestDTO;
 public class MaintenanceRequestEditorActivity extends CrmEditorActivity<MaintenanceRequestDTO> implements MaintenanceRequestEditorView.Presenter {
 
     public MaintenanceRequestEditorActivity(CrudAppPlace place) {
-        super(place, CrmSite.getViewFactory().getView(MaintenanceRequestEditorView.class), GWT
-                .<MaintenanceCrudService> create(MaintenanceCrudService.class), MaintenanceRequestDTO.class);
+        super(MaintenanceRequestDTO.class, place, CrmSite.getViewFactory().getView(MaintenanceRequestEditorView.class), GWT
+                        .<MaintenanceCrudService> create(MaintenanceCrudService.class));
     }
 
     @Override

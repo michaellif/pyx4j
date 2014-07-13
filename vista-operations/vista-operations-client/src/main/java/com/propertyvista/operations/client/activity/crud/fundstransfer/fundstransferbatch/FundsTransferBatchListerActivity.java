@@ -30,8 +30,8 @@ import com.propertyvista.operations.rpc.services.PadBatchCrudService;
 public class FundsTransferBatchListerActivity extends AbstractListerActivity<FundsTransferBatchDTO> {
 
     public FundsTransferBatchListerActivity(Place place) {
-        super(place, OperationsSite.getViewFactory().getView(FundsTransferBatchListerView.class), GWT
-                .<AbstractCrudService<FundsTransferBatchDTO>> create(PadBatchCrudService.class), FundsTransferBatchDTO.class);
+        super(FundsTransferBatchDTO.class, place, OperationsSite.getViewFactory().getView(FundsTransferBatchListerView.class), GWT
+                        .<AbstractCrudService<FundsTransferBatchDTO>> create(PadBatchCrudService.class));
     }
 
     @Override

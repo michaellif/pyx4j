@@ -86,16 +86,16 @@ public class LeaseViewerActivity extends LeaseViewerActivityBase<LeaseDTO> imple
     public LeaseViewerActivity(CrudAppPlace place) {
         super(place, CrmSite.getViewFactory().getView(LeaseViewerView.class), GWT.<LeaseViewerCrudService> create(LeaseViewerCrudService.class));
 
-        depositLister = new SecureListerController<DepositLifecycleDTO>(((LeaseViewerView) getView()).getDepositListerView(),
-                GWT.<DepositLifecycleCrudService> create(DepositLifecycleCrudService.class), DepositLifecycleDTO.class);
+        depositLister = new SecureListerController<DepositLifecycleDTO>(DepositLifecycleDTO.class,
+                ((LeaseViewerView) getView()).getDepositListerView(), GWT.<DepositLifecycleCrudService> create(DepositLifecycleCrudService.class));
 
         billLister = new BillListerController(((LeaseViewerView) getView()).getBillListerView());
 
-        leaseAdjustmentLister = new SecureListerController<LeaseAdjustment>(((LeaseViewerView) getView()).getLeaseAdjustmentListerView(),
-                GWT.<LeaseAdjustmentCrudService> create(LeaseAdjustmentCrudService.class), LeaseAdjustment.class);
+        leaseAdjustmentLister = new SecureListerController<LeaseAdjustment>(LeaseAdjustment.class,
+                ((LeaseViewerView) getView()).getLeaseAdjustmentListerView(), GWT.<LeaseAdjustmentCrudService> create(LeaseAdjustmentCrudService.class));
 
-        maintenanceLister = new SecureListerController<MaintenanceRequestDTO>(((LeaseViewerView) getView()).getMaintenanceListerView(),
-                GWT.<MaintenanceCrudService> create(MaintenanceCrudService.class), MaintenanceRequestDTO.class);
+        maintenanceLister = new SecureListerController<MaintenanceRequestDTO>(MaintenanceRequestDTO.class,
+                ((LeaseViewerView) getView()).getMaintenanceListerView(), GWT.<MaintenanceCrudService> create(MaintenanceCrudService.class));
     }
 
     @Override

@@ -27,8 +27,8 @@ import com.propertyvista.operations.rpc.services.PmcCardTransactionRecordCrudSer
 public class CardTransactionRecordListerActivity extends AbstractListerActivity<CardTransactionRecord> {
 
     public CardTransactionRecordListerActivity(Place place) {
-        super(place, OperationsSite.getViewFactory().getView(CardTransactionRecordListerView.class), GWT
-                .<AbstractCrudService<CardTransactionRecord>> create(PmcCardTransactionRecordCrudService.class), CardTransactionRecord.class);
+        super(CardTransactionRecord.class, place, OperationsSite.getViewFactory().getView(CardTransactionRecordListerView.class), GWT
+                        .<AbstractCrudService<CardTransactionRecord>> create(PmcCardTransactionRecordCrudService.class));
     }
 
 }

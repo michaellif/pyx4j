@@ -26,7 +26,7 @@ import com.propertyvista.domain.policy.dto.LeaseAgreementLegalPolicyDTO;
 public class LeaseAgreementLegalPolicyEditorActivity extends PolicyEditorActivityBase<LeaseAgreementLegalPolicyDTO> {
 
     public LeaseAgreementLegalPolicyEditorActivity(CrudAppPlace place) {
-        super(place, CrmSite.getViewFactory().getView(LeaseAgreementLegalPolicyEditorView.class), GWT
-                .<LeaseAgreementLegalPolicyCrudService> create(LeaseAgreementLegalPolicyCrudService.class), LeaseAgreementLegalPolicyDTO.class);
+        super(LeaseAgreementLegalPolicyDTO.class, place, CrmSite.getViewFactory().getView(LeaseAgreementLegalPolicyEditorView.class), GWT
+                        .<LeaseAgreementLegalPolicyCrudService> create(LeaseAgreementLegalPolicyCrudService.class));
     }
 }

@@ -30,7 +30,7 @@ import com.propertyvista.crm.rpc.services.billing.BillCrudService;
 public class BillListerController extends SecureListerController<BillDataDTO> implements BillListerPresenter {
 
     public BillListerController(ILister<BillDataDTO> view) {
-        super(view, GWT.<BillCrudService> create(BillCrudService.class), BillDataDTO.class);
+        super(BillDataDTO.class, view, GWT.<BillCrudService> create(BillCrudService.class));
     }
 
     @Override

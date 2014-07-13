@@ -29,8 +29,8 @@ public class CardServiceSimulationCardEditorActivity extends AbstractEditorActiv
         CardServiceSimulationCardEditorView.Presenter {
 
     public CardServiceSimulationCardEditorActivity(CrudAppPlace place) {
-        super(place, OperationsSite.getViewFactory().getView(CardServiceSimulationCardEditorView.class), GWT
-                .<CardServiceSimulationCardCrudService> create(CardServiceSimulationCardCrudService.class), CardServiceSimulationCard.class);
+        super(CardServiceSimulationCard.class, place, OperationsSite.getViewFactory().getView(CardServiceSimulationCardEditorView.class), GWT
+                        .<CardServiceSimulationCardCrudService> create(CardServiceSimulationCardCrudService.class));
     }
 
     @Override

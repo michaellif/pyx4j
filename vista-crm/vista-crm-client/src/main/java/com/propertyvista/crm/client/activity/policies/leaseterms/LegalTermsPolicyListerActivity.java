@@ -26,8 +26,8 @@ import com.propertyvista.domain.policy.dto.LegalTermsPolicyDTO;
 public class LegalTermsPolicyListerActivity extends AbstractListerActivity<LegalTermsPolicyDTO> {
 
     public LegalTermsPolicyListerActivity(Place place) {
-        super(place, CrmSite.getViewFactory().getView(LegalTermsPolicyListerView.class), GWT
-                .<LegalDocumentationPolicyCrudService> create(LegalDocumentationPolicyCrudService.class), LegalTermsPolicyDTO.class);
+        super(LegalTermsPolicyDTO.class, place, CrmSite.getViewFactory().getView(LegalTermsPolicyListerView.class), GWT
+                        .<LegalDocumentationPolicyCrudService> create(LegalDocumentationPolicyCrudService.class));
     }
 
 }

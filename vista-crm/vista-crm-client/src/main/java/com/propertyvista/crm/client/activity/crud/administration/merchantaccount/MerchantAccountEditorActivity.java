@@ -27,8 +27,8 @@ import com.propertyvista.domain.financial.MerchantAccount;
 public class MerchantAccountEditorActivity extends CrmEditorActivity<MerchantAccount> {
 
     public MerchantAccountEditorActivity(CrudAppPlace place) {
-        super(place,  CrmSite.getViewFactory().getView(MerchantAccountEditorView.class), GWT
-                .<AbstractCrudService<MerchantAccount>> create(MerchantAccountCrudService.class), MerchantAccount.class);
+        super(MerchantAccount.class,  place, CrmSite.getViewFactory().getView(MerchantAccountEditorView.class), GWT
+                        .<AbstractCrudService<MerchantAccount>> create(MerchantAccountCrudService.class));
     }
 
 }

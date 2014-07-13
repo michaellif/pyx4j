@@ -45,8 +45,8 @@ public class RunViewerActivity extends AdminViewerActivity<Run> implements RunVi
     public RunViewerActivity(CrudAppPlace place) {
         super(place, OperationsSite.getViewFactory().getView(RunViewerView.class), GWT.<RunCrudService> create(RunCrudService.class));
 
-        runDataLister = new ListerController<RunData>(((RunViewerView) getView()).getRunDataListerView(),
-                GWT.<RunDataCrudService> create(RunDataCrudService.class), RunData.class);
+        runDataLister = new ListerController<RunData>(RunData.class,
+                ((RunViewerView) getView()).getRunDataListerView(), GWT.<RunDataCrudService> create(RunDataCrudService.class));
 
         actionsCallback = new DefaultAsyncCallback<ExecutionStatusUpdateDTO>() {
             @Override

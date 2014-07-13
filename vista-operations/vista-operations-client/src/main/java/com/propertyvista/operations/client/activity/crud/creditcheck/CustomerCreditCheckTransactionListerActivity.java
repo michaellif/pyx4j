@@ -26,7 +26,7 @@ import com.propertyvista.operations.rpc.services.CustomerCreditCheckTransactionC
 public class CustomerCreditCheckTransactionListerActivity extends AbstractListerActivity<CustomerCreditCheckTransactionDTO> {
 
     public CustomerCreditCheckTransactionListerActivity(Place place) {
-        super(place, OperationsSite.getViewFactory().getView(CustomerCreditCheckTransactionListerView.class), GWT
-                .<CustomerCreditCheckTransactionCrudService> create(CustomerCreditCheckTransactionCrudService.class), CustomerCreditCheckTransactionDTO.class);
+        super(CustomerCreditCheckTransactionDTO.class, place, OperationsSite.getViewFactory().getView(CustomerCreditCheckTransactionListerView.class), GWT
+                        .<CustomerCreditCheckTransactionCrudService> create(CustomerCreditCheckTransactionCrudService.class));
     }
 }

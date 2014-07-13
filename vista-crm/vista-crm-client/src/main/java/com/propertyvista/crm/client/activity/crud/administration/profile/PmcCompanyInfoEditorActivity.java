@@ -26,7 +26,7 @@ import com.propertyvista.crm.rpc.services.admin.PmcCompanyInfoCrudService;
 public class PmcCompanyInfoEditorActivity extends CrmEditorActivity<PmcCompanyInfoDTO> implements PmcCompanyInfoEditorView.Presenter {
 
     public PmcCompanyInfoEditorActivity(CrudAppPlace place) {
-        super(place, CrmSite.getViewFactory().getView(PmcCompanyInfoEditorView.class), GWT.<PmcCompanyInfoCrudService> create(PmcCompanyInfoCrudService.class),
-                PmcCompanyInfoDTO.class);
+        super(PmcCompanyInfoDTO.class, place, CrmSite.getViewFactory().getView(PmcCompanyInfoEditorView.class),
+                GWT.<PmcCompanyInfoCrudService> create(PmcCompanyInfoCrudService.class));
     }
 }

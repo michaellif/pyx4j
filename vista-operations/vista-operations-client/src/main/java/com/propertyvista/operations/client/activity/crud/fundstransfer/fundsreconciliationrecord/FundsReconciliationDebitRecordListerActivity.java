@@ -31,9 +31,9 @@ import com.propertyvista.operations.rpc.services.PadReconciliationDebitRecordCru
 public class FundsReconciliationDebitRecordListerActivity extends AbstractListerActivity<FundsReconciliationRecordRecordDTO> {
 
     public FundsReconciliationDebitRecordListerActivity(Place place) {
-        super(place, OperationsSite.getViewFactory().getView(FundsReconciliationDebitRecordListerView.class), GWT
-                .<AbstractCrudService<FundsReconciliationRecordRecordDTO>> create(PadReconciliationDebitRecordCrudService.class),
-                FundsReconciliationRecordRecordDTO.class);
+        super(FundsReconciliationRecordRecordDTO.class, place, OperationsSite.getViewFactory().getView(FundsReconciliationDebitRecordListerView.class),
+                GWT
+                        .<AbstractCrudService<FundsReconciliationRecordRecordDTO>> create(PadReconciliationDebitRecordCrudService.class));
     }
 
     @Override

@@ -26,7 +26,7 @@ import com.propertyvista.dto.LeaseDTO;
 public class FormerLeaseListerActivity extends AbstractListerActivity<LeaseDTO> {
 
     public FormerLeaseListerActivity(Place place) {
-        super(place, CrmSite.getViewFactory().getView(FormerLeaseListerView.class), GWT.<LeaseViewerCrudService> create(LeaseViewerCrudService.class),
-                LeaseDTO.class);
+        super(LeaseDTO.class, place, CrmSite.getViewFactory().getView(FormerLeaseListerView.class),
+                GWT.<LeaseViewerCrudService> create(LeaseViewerCrudService.class));
     }
 }

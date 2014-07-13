@@ -27,9 +27,9 @@ import com.propertyvista.domain.policy.dto.PaymentTypeSelectionPolicyDTO;
 public class PaymentTypeSelectionPolicyEditorActivity extends PolicyEditorActivityBase<PaymentTypeSelectionPolicyDTO> {
 
     public PaymentTypeSelectionPolicyEditorActivity(CrudAppPlace place) {
-        super(place,  CrmSite.getViewFactory().getView(PaymentTypeSelectionPolicyEditorView.class), GWT
-                .<AbstractPolicyCrudService<PaymentTypeSelectionPolicyDTO>> create(PaymentTypeSelectionPolicyCrudService.class),
-                PaymentTypeSelectionPolicyDTO.class);
+        super(PaymentTypeSelectionPolicyDTO.class,  place, CrmSite.getViewFactory().getView(PaymentTypeSelectionPolicyEditorView.class),
+                GWT
+                        .<AbstractPolicyCrudService<PaymentTypeSelectionPolicyDTO>> create(PaymentTypeSelectionPolicyCrudService.class));
     }
 
 }

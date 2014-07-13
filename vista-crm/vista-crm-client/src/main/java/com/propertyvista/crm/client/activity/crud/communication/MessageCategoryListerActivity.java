@@ -32,8 +32,8 @@ import com.propertyvista.domain.security.VistaCrmBehavior;
 public class MessageCategoryListerActivity extends AbstractListerActivity<MessageCategory> {
 
     public MessageCategoryListerActivity(Place place) {
-        super(place, CrmSite.getViewFactory().getView(MessageCategoryListerView.class), (AbstractCrudService<MessageCategory>) GWT
-                .create(MessageCategoryCrudService.class), MessageCategory.class);
+        super(MessageCategory.class, place, CrmSite.getViewFactory().getView(MessageCategoryListerView.class), (AbstractCrudService<MessageCategory>) GWT
+                        .create(MessageCategoryCrudService.class));
     }
 
     @Override

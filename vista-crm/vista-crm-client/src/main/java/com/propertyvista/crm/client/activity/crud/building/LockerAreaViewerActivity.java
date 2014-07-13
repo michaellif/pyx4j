@@ -34,8 +34,8 @@ public class LockerAreaViewerActivity extends CrmViewerActivity<LockerAreaDTO> i
     public LockerAreaViewerActivity(CrudAppPlace place) {
         super(place,  CrmSite.getViewFactory().getView(LockerAreaViewerView.class), GWT.<LockerAreaCrudService> create(LockerAreaCrudService.class));
 
-        lockerLister = new ListerController<Locker>(((LockerAreaViewerView) getView()).getLockerView(),
-                GWT.<LockerCrudService> create(LockerCrudService.class), Locker.class);
+        lockerLister = new ListerController<Locker>(Locker.class,
+                ((LockerAreaViewerView) getView()).getLockerView(), GWT.<LockerCrudService> create(LockerCrudService.class));
 
     }
 

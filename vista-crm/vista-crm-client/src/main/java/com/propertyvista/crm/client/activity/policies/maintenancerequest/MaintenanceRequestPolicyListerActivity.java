@@ -26,8 +26,8 @@ import com.propertyvista.domain.policy.dto.MaintenanceRequestPolicyDTO;
 public class MaintenanceRequestPolicyListerActivity extends AbstractListerActivity<MaintenanceRequestPolicyDTO> {
 
     public MaintenanceRequestPolicyListerActivity(Place place) {
-        super(place, CrmSite.getViewFactory().getView(MaintenanceRequestPolicyListerView.class), GWT
-                .<MaintenanceRequestPolicyCrudService> create(MaintenanceRequestPolicyCrudService.class), MaintenanceRequestPolicyDTO.class);
+        super(MaintenanceRequestPolicyDTO.class, place, CrmSite.getViewFactory().getView(MaintenanceRequestPolicyListerView.class), GWT
+                        .<MaintenanceRequestPolicyCrudService> create(MaintenanceRequestPolicyCrudService.class));
     }
 
 }

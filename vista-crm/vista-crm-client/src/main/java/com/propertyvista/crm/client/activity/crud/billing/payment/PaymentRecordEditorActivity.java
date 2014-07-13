@@ -39,8 +39,8 @@ import com.propertyvista.dto.PaymentRecordDTO;
 public class PaymentRecordEditorActivity extends CrmEditorActivity<PaymentRecordDTO> implements PaymentRecordEditorView.Presenter {
 
     public PaymentRecordEditorActivity(CrudAppPlace place) {
-        super(place, CrmSite.getViewFactory().getView(PaymentRecordEditorView.class), GWT
-                .<AbstractCrudService<PaymentRecordDTO>> create(PaymentRecordCrudService.class), PaymentRecordDTO.class);
+        super(PaymentRecordDTO.class, place, CrmSite.getViewFactory().getView(PaymentRecordEditorView.class), GWT
+                        .<AbstractCrudService<PaymentRecordDTO>> create(PaymentRecordCrudService.class));
     }
 
     @Override

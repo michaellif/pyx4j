@@ -26,8 +26,8 @@ import com.propertyvista.operations.rpc.services.VistaTermsCrudService;
 public class VistaTermsEditorActivity extends AbstractEditorActivity<VistaTerms> {
 
     public VistaTermsEditorActivity(CrudAppPlace place) {
-        super(place, OperationsSite.getViewFactory().getView(VistaTermsEditorView.class), GWT.<VistaTermsCrudService> create(VistaTermsCrudService.class),
-                VistaTerms.class);
+        super(VistaTerms.class, place, OperationsSite.getViewFactory().getView(VistaTermsEditorView.class),
+                GWT.<VistaTermsCrudService> create(VistaTermsCrudService.class));
     }
 
 }

@@ -26,8 +26,8 @@ import com.propertyvista.domain.policy.dto.TenantInsurancePolicyDTO;
 public class TenantInsurancePolicyListerActivity extends AbstractListerActivity<TenantInsurancePolicyDTO> {
 
     public TenantInsurancePolicyListerActivity(Place place) {
-        super(place,  CrmSite.getViewFactory().getView(TenantInsurancePolicyListerView.class), GWT
-                .<TenantInsurancePolicyCrudService> create(TenantInsurancePolicyCrudService.class), TenantInsurancePolicyDTO.class);
+        super(TenantInsurancePolicyDTO.class,  place, CrmSite.getViewFactory().getView(TenantInsurancePolicyListerView.class), GWT
+                        .<TenantInsurancePolicyCrudService> create(TenantInsurancePolicyCrudService.class));
     }
 
 }

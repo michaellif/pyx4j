@@ -30,9 +30,9 @@ import com.propertyvista.operations.rpc.services.simulator.CardServiceSimulation
 public class CardServiceSimulationTransactionEditorActivity extends AbstractEditorActivity<CardServiceSimulationTransaction> {
 
     public CardServiceSimulationTransactionEditorActivity(CrudAppPlace place) {
-        super(place, OperationsSite.getViewFactory().getView(CardServiceSimulationTransactionEditorView.class), GWT
-                .<CardServiceSimulationTransactionCrudService> create(CardServiceSimulationTransactionCrudService.class),
-                CardServiceSimulationTransaction.class);
+        super(CardServiceSimulationTransaction.class, place, OperationsSite.getViewFactory().getView(CardServiceSimulationTransactionEditorView.class),
+                GWT
+                        .<CardServiceSimulationTransactionCrudService> create(CardServiceSimulationTransactionCrudService.class));
     }
 
     @Override

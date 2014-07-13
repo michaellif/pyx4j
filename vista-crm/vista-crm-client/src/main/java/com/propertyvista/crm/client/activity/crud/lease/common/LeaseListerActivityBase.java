@@ -26,7 +26,7 @@ import com.propertyvista.dto.LeaseDTO;
 public class LeaseListerActivityBase<DTO extends LeaseDTO> extends AbstractListerActivity<DTO> {
 
     public LeaseListerActivityBase(Place place, ILister<DTO> view, AbstractListService<DTO> service, Class<DTO> entityClass) {
-        super(place, view, service, entityClass);
+        super(entityClass, place, view, service);
     }
 
     @Override

@@ -27,8 +27,8 @@ import com.propertyvista.dto.AuditRecordDTO;
 public class CrmAuditRecordsListerActivity extends AbstractListerActivity<AuditRecordDTO> {
 
     public CrmAuditRecordsListerActivity(Place place) {
-        super(place, (ILister<AuditRecordDTO>)  CrmSite.getViewFactory().getView(CrmAuditRecordListerView.class), GWT
-                .<CrmAuditRecordsListerService> create(CrmAuditRecordsListerService.class), AuditRecordDTO.class);
+        super(AuditRecordDTO.class, place, (ILister<AuditRecordDTO>)  CrmSite.getViewFactory().getView(CrmAuditRecordListerView.class), GWT
+                        .<CrmAuditRecordsListerService> create(CrmAuditRecordsListerService.class));
     }
 
 }

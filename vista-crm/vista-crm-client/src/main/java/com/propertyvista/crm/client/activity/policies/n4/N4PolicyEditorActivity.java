@@ -30,8 +30,8 @@ import com.propertyvista.domain.policy.dto.N4PolicyDTO;
 public class N4PolicyEditorActivity extends PolicyEditorActivityBase<N4PolicyDTO> implements N4PolicyEditorView.Presenter {
 
     public N4PolicyEditorActivity(CrudAppPlace place) {
-        super(place, CrmSite.getViewFactory().getView(N4PolicyEditorView.class), GWT.<N4PolicyCrudService> create(N4PolicyCrudService.class),
-                N4PolicyDTO.class);
+        super(N4PolicyDTO.class, place, CrmSite.getViewFactory().getView(N4PolicyEditorView.class),
+                GWT.<N4PolicyCrudService> create(N4PolicyCrudService.class));
     }
 
     @Override

@@ -27,13 +27,13 @@ import com.propertyvista.domain.policy.dto.PetPolicyDTO;
 public class PetPolicyEditorActivity extends PolicyEditorActivityBase<PetPolicyDTO> {
 
     public PetPolicyEditorActivity(CrudAppPlace place) {
-        super(place,
+        super(PetPolicyDTO.class,
 
-         CrmSite.getViewFactory().getView(PetPolicyEditorView.class),
+         place,
 
-        GWT.<AbstractPolicyCrudService<PetPolicyDTO>> create(PetPolicyCrudService.class),
+        CrmSite.getViewFactory().getView(PetPolicyEditorView.class),
 
-        PetPolicyDTO.class);
+        GWT.<AbstractPolicyCrudService<PetPolicyDTO>> create(PetPolicyCrudService.class));
 
     }
 }

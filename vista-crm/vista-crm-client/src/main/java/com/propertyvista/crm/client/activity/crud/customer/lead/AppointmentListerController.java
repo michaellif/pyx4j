@@ -28,7 +28,7 @@ import com.propertyvista.domain.tenant.lead.Lead;
 public class AppointmentListerController extends ListerController<Appointment> {
 
     public AppointmentListerController(Place place, AppointmentListerView view) {
-        super(view, GWT.<AppointmentCrudService> create(AppointmentCrudService.class), Appointment.class);
+        super(Appointment.class, view, GWT.<AppointmentCrudService> create(AppointmentCrudService.class));
     }
 
     @Override

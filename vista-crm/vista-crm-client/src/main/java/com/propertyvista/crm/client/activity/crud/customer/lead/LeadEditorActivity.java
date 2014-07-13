@@ -30,7 +30,7 @@ public class LeadEditorActivity extends CrmEditorActivity<Lead> implements LeadE
 
     @SuppressWarnings("unchecked")
     public LeadEditorActivity(CrudAppPlace place) {
-        super(place, CrmSite.getViewFactory().getView(LeadEditorView.class), (AbstractCrudService<Lead>) GWT.create(LeadCrudService.class), Lead.class);
+        super(Lead.class, place, CrmSite.getViewFactory().getView(LeadEditorView.class), (AbstractCrudService<Lead>) GWT.create(LeadCrudService.class));
     }
 
     @Override

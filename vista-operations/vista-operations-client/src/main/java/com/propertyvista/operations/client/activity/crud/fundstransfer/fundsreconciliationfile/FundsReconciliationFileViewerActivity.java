@@ -37,8 +37,8 @@ public class FundsReconciliationFileViewerActivity extends AbstractViewerActivit
         super(place, OperationsSite.getViewFactory().getView(FundsReconciliationFileViewerView.class), GWT
                 .<AbstractCrudService<FundsReconciliationFileDTO>> create(PadReconciliationFileCrudService.class));
 
-        summaryLister = new ListerController<FundsReconciliationSummaryDTO>(((FundsReconciliationFileViewerView) getView()).getSummaryListerView(),
-                GWT.<FundsReconciliationSummaryCrudService> create(FundsReconciliationSummaryCrudService.class), FundsReconciliationSummaryDTO.class);
+        summaryLister = new ListerController<FundsReconciliationSummaryDTO>(FundsReconciliationSummaryDTO.class,
+                ((FundsReconciliationFileViewerView) getView()).getSummaryListerView(), GWT.<FundsReconciliationSummaryCrudService> create(FundsReconciliationSummaryCrudService.class));
 
     }
 

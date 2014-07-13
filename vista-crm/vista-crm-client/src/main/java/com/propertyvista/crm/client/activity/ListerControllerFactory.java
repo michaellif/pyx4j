@@ -27,7 +27,7 @@ public class ListerControllerFactory {
     @Deprecated
     public static <E extends IEntity> ListerController<E> create(ILister<E> view, AbstractListService<E> service, Class<E> entityClass,
             final VistaCrmBehavior... whoCanAdd) {
-        return new ListerController<E>(view, service, entityClass) {
+        return new ListerController<E>(entityClass, view, service) {
             @Override
             public boolean canCreateNewItem() {
                 return SecurityController.check(whoCanAdd);
@@ -35,7 +35,7 @@ public class ListerControllerFactory {
         };
     }
 
-    public static <E extends IEntity> ListerController<E> create(ILister<E> view, AbstractListService<E> service, final Class<E> entityClass) {
-        return new SecureListerController<E>(view, service, entityClass);
+    public static <E extends IEntity> ListerController<E> create(final Class<E> entityClass, ILister<E> view, AbstractListService<E> service) {
+        return new SecureListerController<E>(entityClass, view, service);
     }
 }

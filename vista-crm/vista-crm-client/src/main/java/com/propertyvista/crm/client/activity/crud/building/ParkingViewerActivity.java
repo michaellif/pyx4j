@@ -34,8 +34,8 @@ public class ParkingViewerActivity extends CrmViewerActivity<ParkingDTO> impleme
     public ParkingViewerActivity(CrudAppPlace place) {
         super(place,  CrmSite.getViewFactory().getView(ParkingViewerView.class), GWT.<ParkingCrudService> create(ParkingCrudService.class));
 
-        spotLister = new ListerController<ParkingSpot>(((ParkingViewerView) getView()).getSpotView(),
-                GWT.<ParkingSpotCrudService> create(ParkingSpotCrudService.class), ParkingSpot.class);
+        spotLister = new ListerController<ParkingSpot>(ParkingSpot.class,
+                ((ParkingViewerView) getView()).getSpotView(), GWT.<ParkingSpotCrudService> create(ParkingSpotCrudService.class));
 
     }
 

@@ -27,7 +27,7 @@ import com.propertyvista.operations.rpc.services.PadFileCrudService;
 public class FundsTransferFileListerActivity extends AbstractListerActivity<FundsTransferFileDTO> {
 
     public FundsTransferFileListerActivity(Place place) {
-        super(place, OperationsSite.getViewFactory().getView(FundsTransferFileListerView.class), GWT
-                .<AbstractCrudService<FundsTransferFileDTO>> create(PadFileCrudService.class), FundsTransferFileDTO.class);
+        super(FundsTransferFileDTO.class, place, OperationsSite.getViewFactory().getView(FundsTransferFileListerView.class), GWT
+                        .<AbstractCrudService<FundsTransferFileDTO>> create(PadFileCrudService.class));
     }
 }

@@ -27,7 +27,7 @@ public class ListerActivityFactory {
 
     public static <E extends IEntity> AbstractListerActivity<E> create(Place place, ILister<E> view, AbstractListService<E> service, Class<E> entityClass,
             final VistaCrmBehavior... whoCanAdd) {
-        return new AbstractListerActivity<E>(place, view, service, entityClass) {
+        return new AbstractListerActivity<E>(entityClass, place, view, service) {
             @Override
             public boolean canCreateNewItem() {
                 return SecurityController.check(whoCanAdd);

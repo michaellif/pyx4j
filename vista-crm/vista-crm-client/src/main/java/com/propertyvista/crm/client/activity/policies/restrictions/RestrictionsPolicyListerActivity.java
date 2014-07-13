@@ -26,8 +26,8 @@ import com.propertyvista.domain.policy.dto.RestrictionsPolicyDTO;
 public class RestrictionsPolicyListerActivity extends AbstractListerActivity<RestrictionsPolicyDTO> {
 
     public RestrictionsPolicyListerActivity(Place place) {
-        super(place,  CrmSite.getViewFactory().getView(RestrictionsPolicyListerView.class), GWT
-                .<RestrictionsPolicyCrudService> create(RestrictionsPolicyCrudService.class), RestrictionsPolicyDTO.class);
+        super(RestrictionsPolicyDTO.class,  place, CrmSite.getViewFactory().getView(RestrictionsPolicyListerView.class), GWT
+                        .<RestrictionsPolicyCrudService> create(RestrictionsPolicyCrudService.class));
     }
 
 }

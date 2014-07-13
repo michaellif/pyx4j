@@ -33,7 +33,7 @@ public class MessageEditorActivity extends CrmEditorActivity<MessageDTO> impleme
     private final Message place;
 
     public MessageEditorActivity(CrudAppPlace place) {
-        super(place, CrmSite.getViewFactory().getView(MessageEditorView.class), GWT.<MessageCrudService> create(MessageCrudService.class), MessageDTO.class);
+        super(MessageDTO.class, place, CrmSite.getViewFactory().getView(MessageEditorView.class), GWT.<MessageCrudService> create(MessageCrudService.class));
         this.place = (Message) place;
     }
 

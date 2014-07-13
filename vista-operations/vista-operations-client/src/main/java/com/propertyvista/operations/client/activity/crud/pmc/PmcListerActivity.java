@@ -36,7 +36,7 @@ public class PmcListerActivity extends AbstractListerActivity<PmcDTO> implements
 
     @SuppressWarnings("unchecked")
     public PmcListerActivity(Place place) {
-        super(place, OperationsSite.getViewFactory().getView(PmcListerView.class), (AbstractCrudService<PmcDTO>) GWT.create(PmcCrudService.class), PmcDTO.class);
+        super(PmcDTO.class, place, OperationsSite.getViewFactory().getView(PmcListerView.class), (AbstractCrudService<PmcDTO>) GWT.create(PmcCrudService.class));
 
     }
 

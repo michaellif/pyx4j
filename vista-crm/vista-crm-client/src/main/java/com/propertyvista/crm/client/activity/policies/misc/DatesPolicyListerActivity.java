@@ -27,13 +27,13 @@ import com.propertyvista.domain.policy.dto.DatesPolicyDTO;
 public class DatesPolicyListerActivity extends AbstractListerActivity<DatesPolicyDTO> {
 
     public DatesPolicyListerActivity(Place place) {
-        super(place,
+        super(DatesPolicyDTO.class,
 
-         CrmSite.getViewFactory().getView(DatesPolicyListerView.class),
+         place,
 
-        GWT.<AbstractListService<DatesPolicyDTO>> create(DatesPolicyCrudService.class),
+        CrmSite.getViewFactory().getView(DatesPolicyListerView.class),
 
-        DatesPolicyDTO.class);
+        GWT.<AbstractListService<DatesPolicyDTO>> create(DatesPolicyCrudService.class));
     }
 
 }

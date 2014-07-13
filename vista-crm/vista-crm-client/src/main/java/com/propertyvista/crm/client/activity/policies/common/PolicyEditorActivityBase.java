@@ -22,7 +22,7 @@ import com.propertyvista.domain.policy.framework.PolicyDTOBase;
 
 public abstract class PolicyEditorActivityBase<POLICY_DTO extends PolicyDTOBase> extends AbstractEditorActivity<POLICY_DTO> {
 
-    public PolicyEditorActivityBase(CrudAppPlace place, IEditor<POLICY_DTO> view, AbstractPolicyCrudService<POLICY_DTO> service, Class<POLICY_DTO> entityClass) {
-        super(place, view, service, entityClass);
+    public PolicyEditorActivityBase(Class<POLICY_DTO> entityClass, CrudAppPlace place, IEditor<POLICY_DTO> view, AbstractPolicyCrudService<POLICY_DTO> service) {
+        super(entityClass, place, view, service);
     }
 }

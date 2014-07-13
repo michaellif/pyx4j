@@ -31,8 +31,8 @@ public class ARCodeEditorActivity extends CrmEditorActivity<ARCode> {
 
     @SuppressWarnings("unchecked")
     public ARCodeEditorActivity(CrudAppPlace place) {
-        super(place,  CrmSite.getViewFactory().getView(ARCodeEditorView.class), (AbstractCrudService<ARCode>) GWT.create(ARCodeCrudService.class),
-                ARCode.class);
+        super(ARCode.class,  place, CrmSite.getViewFactory().getView(ARCodeEditorView.class),
+                (AbstractCrudService<ARCode>) GWT.create(ARCodeCrudService.class));
     }
 
     @Override

@@ -21,7 +21,7 @@ import com.pyx4j.site.rpc.CrudAppPlace;
 
 public class CrmWizardActivity<E extends IEntity> extends AbstractWizardActivity<E> {
 
-    public CrmWizardActivity(CrudAppPlace place, IWizard<E> view, AbstractCrudService<E> service, Class<E> entityClass) {
-        super(place, view, service, entityClass);
+    public CrmWizardActivity(Class<E> entityClass, CrudAppPlace place, IWizard<E> view, AbstractCrudService<E> service) {
+        super(entityClass, place, view, service);
     }
 }

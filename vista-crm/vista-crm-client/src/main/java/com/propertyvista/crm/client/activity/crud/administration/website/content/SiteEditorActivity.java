@@ -29,8 +29,8 @@ import com.propertyvista.dto.SiteDescriptorDTO;
 public class SiteEditorActivity extends CrmEditorActivity<SiteDescriptorDTO> implements SiteEditor.Presenter {
 
     public SiteEditorActivity(CrudAppPlace place) {
-        super(place,  CrmSite.getViewFactory().getView(SiteEditor.class), GWT.<SiteContentCrudService> create(SiteContentCrudService.class),
-                SiteDescriptorDTO.class);
+        super(SiteDescriptorDTO.class,  place, CrmSite.getViewFactory().getView(SiteEditor.class),
+                GWT.<SiteContentCrudService> create(SiteContentCrudService.class));
     }
 
     @Override

@@ -26,8 +26,8 @@ import com.propertyvista.operations.rpc.services.AdminUserService;
 public class AccountEditorActivity extends AbstractEditorActivity<OperationsUserDTO> {
 
     public AccountEditorActivity(CrudAppPlace place) {
-        super(place, OperationsSite.getViewFactory().getView(AdminUserEditorView.class), GWT.<AdminUserService> create(AdminUserService.class),
-                OperationsUserDTO.class);
+        super(OperationsUserDTO.class, place, OperationsSite.getViewFactory().getView(AdminUserEditorView.class),
+                GWT.<AdminUserService> create(AdminUserService.class));
     }
 
 }

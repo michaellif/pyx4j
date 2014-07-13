@@ -28,7 +28,7 @@ public class LockerAreaEditorActivity extends CrmEditorActivity<LockerAreaDTO> i
 
     @SuppressWarnings("unchecked")
     public LockerAreaEditorActivity(CrudAppPlace place) {
-        super(place, CrmSite.getViewFactory().getView(LockerAreaEditorView.class), (AbstractCrudService<LockerAreaDTO>) GWT
-                .create(LockerAreaCrudService.class), LockerAreaDTO.class);
+        super(LockerAreaDTO.class, place, CrmSite.getViewFactory().getView(LockerAreaEditorView.class), (AbstractCrudService<LockerAreaDTO>) GWT
+                        .create(LockerAreaCrudService.class));
     }
 }

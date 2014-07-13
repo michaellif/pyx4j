@@ -27,8 +27,8 @@ import com.propertyvista.operations.rpc.services.PmcDirectDebitRecordCrudService
 public class DirectDebitRecordListerActivity extends AbstractListerActivity<DirectDebitRecord> {
 
     public DirectDebitRecordListerActivity(Place place) {
-        super(place, OperationsSite.getViewFactory().getView(DirectDebitRecordListerView.class), GWT
-                .<AbstractCrudService<DirectDebitRecord>> create(PmcDirectDebitRecordCrudService.class), DirectDebitRecord.class);
+        super(DirectDebitRecord.class, place, OperationsSite.getViewFactory().getView(DirectDebitRecordListerView.class), GWT
+                        .<AbstractCrudService<DirectDebitRecord>> create(PmcDirectDebitRecordCrudService.class));
     }
 
 }

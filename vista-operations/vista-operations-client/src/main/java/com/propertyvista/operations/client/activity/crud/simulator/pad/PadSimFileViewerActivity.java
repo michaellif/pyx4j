@@ -42,8 +42,8 @@ public class PadSimFileViewerActivity extends AdminViewerActivity<PadSimFile> im
         super(place, OperationsSite.getViewFactory().getView(PadSimFileViewerView.class), (AbstractCrudService<PadSimFile>) GWT
                 .create(PadSimFileCrudService.class));
 
-        batchLister = new ListerController<PadSimBatch>(((PadSimFileViewerView) getView()).getBatchListerView(),
-                (AbstractCrudService<PadSimBatch>) GWT.create(PadSimBatchCrudService.class), PadSimBatch.class);
+        batchLister = new ListerController<PadSimBatch>(PadSimBatch.class,
+                ((PadSimFileViewerView) getView()).getBatchListerView(), (AbstractCrudService<PadSimBatch>) GWT.create(PadSimBatchCrudService.class));
     }
 
     @Override

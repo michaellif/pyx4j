@@ -21,7 +21,7 @@ import com.pyx4j.site.rpc.CrudAppPlace;
 
 public class CrmEditorActivity<E extends IEntity> extends AbstractEditorActivity<E> {
 
-    public CrmEditorActivity(CrudAppPlace place, IEditor<E> view, AbstractCrudService<E> service, Class<E> entityClass) {
-        super(place, view, service, entityClass);
+    public CrmEditorActivity(Class<E> entityClass, CrudAppPlace place, IEditor<E> view, AbstractCrudService<E> service) {
+        super(entityClass, place, view, service);
     }
 }

@@ -31,8 +31,8 @@ public class EmployeeEditorActivity extends CrmEditorActivity<EmployeeDTO> imple
 
     @SuppressWarnings("unchecked")
     public EmployeeEditorActivity(CrudAppPlace place) {
-        super(place, CrmSite.getViewFactory().getView(EmployeeEditorView.class), (AbstractCrudService<EmployeeDTO>) GWT.create(EmployeeCrudService.class),
-                EmployeeDTO.class);
+        super(EmployeeDTO.class, place, CrmSite.getViewFactory().getView(EmployeeEditorView.class),
+                (AbstractCrudService<EmployeeDTO>) GWT.create(EmployeeCrudService.class));
     }
 
     @Override

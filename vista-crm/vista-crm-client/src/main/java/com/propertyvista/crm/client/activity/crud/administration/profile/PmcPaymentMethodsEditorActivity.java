@@ -26,8 +26,8 @@ import com.propertyvista.crm.rpc.services.admin.PmcPaymentMethodsCrudService;
 public class PmcPaymentMethodsEditorActivity extends CrmEditorActivity<PmcPaymentMethodsDTO> implements PmcPaymentMethodsEditorView.Presenter {
 
     public PmcPaymentMethodsEditorActivity(CrudAppPlace place) {
-        super(place,  CrmSite.getViewFactory().getView(PmcPaymentMethodsEditorView.class), GWT
-                .<PmcPaymentMethodsCrudService> create(PmcPaymentMethodsCrudService.class), PmcPaymentMethodsDTO.class);
+        super(PmcPaymentMethodsDTO.class,  place, CrmSite.getViewFactory().getView(PmcPaymentMethodsEditorView.class), GWT
+                        .<PmcPaymentMethodsCrudService> create(PmcPaymentMethodsCrudService.class));
     }
 
 }

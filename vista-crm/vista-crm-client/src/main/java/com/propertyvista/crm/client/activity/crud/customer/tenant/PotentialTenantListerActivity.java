@@ -26,8 +26,8 @@ import com.propertyvista.dto.TenantDTO;
 public class PotentialTenantListerActivity extends AbstractListerActivity<TenantDTO> {
 
     public PotentialTenantListerActivity(Place place) {
-        super(place, CrmSite.getViewFactory().getView(PotentialTenantListerView.class), GWT.<TenantCrudService> create(TenantCrudService.class),
-                TenantDTO.class);
+        super(TenantDTO.class, place, CrmSite.getViewFactory().getView(PotentialTenantListerView.class),
+                GWT.<TenantCrudService> create(TenantCrudService.class));
     }
 
     @Override

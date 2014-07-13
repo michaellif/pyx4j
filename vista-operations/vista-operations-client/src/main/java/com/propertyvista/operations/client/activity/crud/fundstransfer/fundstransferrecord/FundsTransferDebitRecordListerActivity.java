@@ -30,8 +30,8 @@ import com.propertyvista.operations.rpc.services.PadDebitRecordCrudService;
 public class FundsTransferDebitRecordListerActivity extends AbstractListerActivity<FundsTransferRecordDTO> {
 
     public FundsTransferDebitRecordListerActivity(Place place) {
-        super(place, OperationsSite.getViewFactory().getView(FundsTransferDebitRecordListerView.class), GWT
-                .<AbstractCrudService<FundsTransferRecordDTO>> create(PadDebitRecordCrudService.class), FundsTransferRecordDTO.class);
+        super(FundsTransferRecordDTO.class, place, OperationsSite.getViewFactory().getView(FundsTransferDebitRecordListerView.class), GWT
+                        .<AbstractCrudService<FundsTransferRecordDTO>> create(PadDebitRecordCrudService.class));
     }
 
     @Override

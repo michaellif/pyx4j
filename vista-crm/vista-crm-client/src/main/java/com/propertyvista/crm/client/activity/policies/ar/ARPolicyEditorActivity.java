@@ -27,13 +27,13 @@ import com.propertyvista.domain.policy.dto.ARPolicyDTO;
 public class ARPolicyEditorActivity extends PolicyEditorActivityBase<ARPolicyDTO> {
 
     public ARPolicyEditorActivity(CrudAppPlace place) {
-        super(place,
+        super(ARPolicyDTO.class,
 
-         CrmSite.getViewFactory().getView(ARPolicyEditorView.class),
+         place,
 
-        GWT.<AbstractPolicyCrudService<ARPolicyDTO>> create(ARPolicyCrudService.class),
+        CrmSite.getViewFactory().getView(ARPolicyEditorView.class),
 
-        ARPolicyDTO.class);
+        GWT.<AbstractPolicyCrudService<ARPolicyDTO>> create(ARPolicyCrudService.class));
     }
 
 }

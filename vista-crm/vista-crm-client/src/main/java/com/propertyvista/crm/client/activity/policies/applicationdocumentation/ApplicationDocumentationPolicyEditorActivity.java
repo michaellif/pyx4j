@@ -28,9 +28,9 @@ public class ApplicationDocumentationPolicyEditorActivity extends PolicyEditorAc
         ApplicationDocumentationPolicyEditorView.Presenter {
 
     public ApplicationDocumentationPolicyEditorActivity(CrudAppPlace place) {
-        super(place,  CrmSite.getViewFactory().getView(ApplicationDocumentationPolicyEditorView.class), GWT
-                .<AbstractPolicyCrudService<ApplicationDocumentationPolicyDTO>> create(ApplicationDocumentationPolicyCrudService.class),
-                ApplicationDocumentationPolicyDTO.class);
+        super(ApplicationDocumentationPolicyDTO.class,  place, CrmSite.getViewFactory().getView(ApplicationDocumentationPolicyEditorView.class),
+                GWT
+                        .<AbstractPolicyCrudService<ApplicationDocumentationPolicyDTO>> create(ApplicationDocumentationPolicyCrudService.class));
     }
 
 }

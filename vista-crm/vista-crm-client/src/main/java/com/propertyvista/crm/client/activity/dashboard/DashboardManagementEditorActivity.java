@@ -31,8 +31,8 @@ import com.propertyvista.domain.dashboard.DashboardMetadata;
 public class DashboardManagementEditorActivity extends AbstractEditorActivity<DashboardMetadata> {
 
     public DashboardManagementEditorActivity(CrudAppPlace place) {
-        super(place, CrmSite.getViewFactory().getView(DashboardManagementEditorView.class), GWT
-                .<DashboardMetadataCrudService> create(DashboardMetadataCrudService.class), DashboardMetadata.class);
+        super(DashboardMetadata.class, place, CrmSite.getViewFactory().getView(DashboardManagementEditorView.class), GWT
+                        .<DashboardMetadataCrudService> create(DashboardMetadataCrudService.class));
 
     }
 

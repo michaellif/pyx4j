@@ -43,14 +43,14 @@ public class AggregatedTransferViewerActivity extends CrmViewerActivity<Aggregat
         super(place, CrmSite.getViewFactory().getView(AggregatedTransferViewerView.class), GWT
                 .<AggregatedTransferCrudService> create(AggregatedTransferCrudService.class));
 
-        paymentLister = new ListerController<PaymentRecordDTO>(((AggregatedTransferViewerView) getView()).getPaymentsListerView(),
-                GWT.<PaymentRecordListService> create(PaymentRecordListService.class), PaymentRecordDTO.class);
+        paymentLister = new ListerController<PaymentRecordDTO>(PaymentRecordDTO.class,
+                ((AggregatedTransferViewerView) getView()).getPaymentsListerView(), GWT.<PaymentRecordListService> create(PaymentRecordListService.class));
 
-        returnedPaymentLister = new ListerController<PaymentRecordDTO>(((AggregatedTransferViewerView) getView()).getReturnedPaymentsListerView(),
-                GWT.<PaymentRecordListService> create(PaymentRecordListService.class), PaymentRecordDTO.class);
+        returnedPaymentLister = new ListerController<PaymentRecordDTO>(PaymentRecordDTO.class,
+                ((AggregatedTransferViewerView) getView()).getReturnedPaymentsListerView(), GWT.<PaymentRecordListService> create(PaymentRecordListService.class));
 
-        rejectedBatchPaymentsLister = new ListerController<PaymentRecordDTO>(((AggregatedTransferViewerView) getView()).getRejectedBatchPaymentsListerView(),
-                GWT.<PaymentRecordListService> create(PaymentRecordListService.class), PaymentRecordDTO.class);
+        rejectedBatchPaymentsLister = new ListerController<PaymentRecordDTO>(PaymentRecordDTO.class,
+                ((AggregatedTransferViewerView) getView()).getRejectedBatchPaymentsListerView(), GWT.<PaymentRecordListService> create(PaymentRecordListService.class));
     }
 
     @Override

@@ -30,8 +30,8 @@ public class BuildingListerActivity extends AbstractListerActivity<BuildingDTO> 
 
     @SuppressWarnings("unchecked")
     public BuildingListerActivity(Place place) {
-        super(place, CrmSite.getViewFactory().getView(BuildingListerView.class), (AbstractCrudService<BuildingDTO>) GWT.create(BuildingCrudService.class),
-                BuildingDTO.class);
+        super(BuildingDTO.class, place, CrmSite.getViewFactory().getView(BuildingListerView.class),
+                (AbstractCrudService<BuildingDTO>) GWT.create(BuildingCrudService.class));
     }
 
     @Override

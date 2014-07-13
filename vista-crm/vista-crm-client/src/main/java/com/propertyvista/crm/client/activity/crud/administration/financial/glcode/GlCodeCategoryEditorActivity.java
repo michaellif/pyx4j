@@ -27,8 +27,8 @@ import com.propertyvista.domain.financial.GlCodeCategory;
 public class GlCodeCategoryEditorActivity extends CrmEditorActivity<GlCodeCategory> {
 
     public GlCodeCategoryEditorActivity(CrudAppPlace place) {
-        super(place,  CrmSite.getViewFactory().getView(GlCodeCategoryEditorView.class), GWT
-                .<AbstractCrudService<GlCodeCategory>> create(GlCodeCategoryCrudService.class), GlCodeCategory.class);
+        super(GlCodeCategory.class,  place, CrmSite.getViewFactory().getView(GlCodeCategoryEditorView.class), GWT
+                        .<AbstractCrudService<GlCodeCategory>> create(GlCodeCategoryCrudService.class));
     }
 
 }
