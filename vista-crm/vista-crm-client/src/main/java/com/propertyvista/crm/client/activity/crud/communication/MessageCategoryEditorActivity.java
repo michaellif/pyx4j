@@ -28,10 +28,10 @@ import com.propertyvista.crm.rpc.services.MessageCategoryCrudService;
 import com.propertyvista.domain.communication.MessageCategory;
 
 public class MessageCategoryEditorActivity extends CrmEditorActivity<MessageCategory> implements MessageCategoryEditorView.Presenter {
-    public MessageCategoryEditorActivity(CrudAppPlace place) {
 
-        super(MessageCategory.class, place, CrmSite.getViewFactory().getView(MessageCategoryEditorView.class), (AbstractCrudService<MessageCategory>) GWT
-                        .create(MessageCategoryCrudService.class));
+    public MessageCategoryEditorActivity(CrudAppPlace place) {
+        super(MessageCategory.class, place, CrmSite.getViewFactory().getView(MessageCategoryEditorView.class), GWT
+                .<AbstractCrudService<MessageCategory>> create(MessageCategoryCrudService.class));
     }
 
     @Override

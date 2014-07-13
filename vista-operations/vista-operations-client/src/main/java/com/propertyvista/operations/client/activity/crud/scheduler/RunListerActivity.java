@@ -26,9 +26,7 @@ import com.propertyvista.operations.rpc.services.scheduler.RunCrudService;
 
 public class RunListerActivity extends AbstractListerActivity<Run> {
 
-    @SuppressWarnings("unchecked")
     public RunListerActivity(Place place) {
-        super(Run.class, place, OperationsSite.getViewFactory().getView(RunListerView.class), (AbstractCrudService<Run>) GWT.create(RunCrudService.class));
-
+        super(Run.class, place, OperationsSite.getViewFactory().getView(RunListerView.class), GWT.<AbstractCrudService<Run>> create(RunCrudService.class));
     }
 }

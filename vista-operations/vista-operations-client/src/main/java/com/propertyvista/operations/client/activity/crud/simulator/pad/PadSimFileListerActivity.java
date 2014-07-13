@@ -27,10 +27,9 @@ import com.propertyvista.operations.rpc.services.simulator.PadSimFileCrudService
 
 public class PadSimFileListerActivity extends AbstractListerActivity<PadSimFile> implements PadSimFileListerView.Presenter {
 
-    @SuppressWarnings("unchecked")
     public PadSimFileListerActivity(Place place) {
-        super(PadSimFile.class, place, OperationsSite.getViewFactory().getView(PadSimFileListerView.class), (AbstractCrudService<PadSimFile>) GWT
-                        .create(PadSimFileCrudService.class));
+        super(PadSimFile.class, place, OperationsSite.getViewFactory().getView(PadSimFileListerView.class), GWT
+                .<AbstractCrudService<PadSimFile>> create(PadSimFileCrudService.class));
     }
 
     @Override

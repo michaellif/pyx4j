@@ -26,9 +26,8 @@ import com.propertyvista.operations.rpc.services.simulator.PadSimBatchCrudServic
 
 public class PadSimBatchViewerActivity extends AdminViewerActivity<PadSimBatch> implements PadSimBatchViewerView.Presenter {
 
-    @SuppressWarnings("unchecked")
     public PadSimBatchViewerActivity(CrudAppPlace place) {
-        super(PadSimBatch.class, place, OperationsSite.getViewFactory().getView(PadSimBatchViewerView.class), (AbstractCrudService<PadSimBatch>) GWT
-                .create(PadSimBatchCrudService.class));
+        super(PadSimBatch.class, place, OperationsSite.getViewFactory().getView(PadSimBatchViewerView.class), GWT
+                .<AbstractCrudService<PadSimBatch>> create(PadSimBatchCrudService.class));
     }
 }

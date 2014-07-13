@@ -27,13 +27,7 @@ import com.propertyvista.domain.property.vendor.Vendor;
 public class VendorEditorActivity extends CrmEditorActivity<Vendor> {
 
     public VendorEditorActivity(CrudAppPlace place) {
-        super(Vendor.class,
-
-         place,
-
-        CrmSite.getViewFactory().getView(VendorEditorView.class),
-
-        GWT.<AbstractCrudService<Vendor>> create(VendorCrudService.class));
+        super(Vendor.class, place, CrmSite.getViewFactory().getView(VendorEditorView.class), GWT.<AbstractCrudService<Vendor>> create(VendorCrudService.class));
     }
 
 }

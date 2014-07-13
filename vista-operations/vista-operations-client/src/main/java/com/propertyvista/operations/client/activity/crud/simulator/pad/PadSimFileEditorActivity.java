@@ -26,9 +26,8 @@ import com.propertyvista.operations.rpc.services.simulator.PadSimFileCrudService
 
 public class PadSimFileEditorActivity extends AbstractEditorActivity<PadSimFile> {
 
-    @SuppressWarnings("unchecked")
     public PadSimFileEditorActivity(CrudAppPlace place) {
-        super(PadSimFile.class, place, OperationsSite.getViewFactory().getView(PadSimFileEditorView.class), (AbstractCrudService<PadSimFile>) GWT
-                        .create(PadSimFileCrudService.class));
+        super(PadSimFile.class, place, OperationsSite.getViewFactory().getView(PadSimFileEditorView.class), GWT
+                .<AbstractCrudService<PadSimFile>> create(PadSimFileCrudService.class));
     }
 }

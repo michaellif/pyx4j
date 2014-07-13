@@ -29,8 +29,8 @@ import com.propertyvista.dto.MessageDTO;
 public class MessageListerActivity extends AbstractListerActivity<MessageDTO> {
 
     public MessageListerActivity(Place place) {
-        super(MessageDTO.class, place, CrmSite.getViewFactory().getView(MessageListerView.class),
-                (AbstractCrudService<MessageDTO>) GWT.create(MessageCrudService.class));
+        super(MessageDTO.class, place, CrmSite.getViewFactory().getView(MessageListerView.class), GWT
+                .<AbstractCrudService<MessageDTO>> create(MessageCrudService.class));
     }
 
     @Override

@@ -24,13 +24,10 @@ import com.propertyvista.crm.rpc.services.policies.policy.AbstractPolicyCrudServ
 import com.propertyvista.crm.rpc.services.policies.policy.LegalDocumentationPolicyCrudService;
 import com.propertyvista.domain.policy.dto.LegalTermsPolicyDTO;
 
-public class LegalTermsPolicyEditorActivity extends PolicyEditorActivityBase<LegalTermsPolicyDTO> implements
-        LegalTermsPolicyEditorView.Presenter {
+public class LegalTermsPolicyEditorActivity extends PolicyEditorActivityBase<LegalTermsPolicyDTO> implements LegalTermsPolicyEditorView.Presenter {
 
-    @SuppressWarnings("unchecked")
     public LegalTermsPolicyEditorActivity(CrudAppPlace place) {
-        super(LegalTermsPolicyDTO.class, place,
-                CrmSite.getViewFactory().getView(LegalTermsPolicyEditorView.class),
-                (AbstractPolicyCrudService<LegalTermsPolicyDTO>) GWT.create(LegalDocumentationPolicyCrudService.class));
+        super(LegalTermsPolicyDTO.class, place, CrmSite.getViewFactory().getView(LegalTermsPolicyEditorView.class), GWT
+                .<AbstractPolicyCrudService<LegalTermsPolicyDTO>> create(LegalDocumentationPolicyCrudService.class));
     }
 }

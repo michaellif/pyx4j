@@ -26,9 +26,8 @@ import com.propertyvista.operations.rpc.services.scheduler.TriggerCrudService;
 
 public class TriggerListerActivity extends AbstractListerActivity<TriggerDTO> {
 
-    @SuppressWarnings("unchecked")
     public TriggerListerActivity(Place place) {
-        super(TriggerDTO.class, place, OperationsSite.getViewFactory().getView(TriggerListerView.class), (AbstractCrudService<TriggerDTO>) GWT
-                        .create(TriggerCrudService.class));
+        super(TriggerDTO.class, place, OperationsSite.getViewFactory().getView(TriggerListerView.class), GWT
+                .<AbstractCrudService<TriggerDTO>> create(TriggerCrudService.class));
     }
 }
