@@ -69,16 +69,14 @@ public class FloorplanForm extends CrmEntityForm<FloorplanDTO> {
     public FloorplanForm(IForm<FloorplanDTO> view) {
         super(FloorplanDTO.class, view);
 
-        Tab tab = addTab(createGeneralTab(), i18n.tr("General"));
-        selectTab(tab);
-
+        selectTab(addTab(createGeneralTab(), i18n.tr("General")));
         marketingTab = addTab(createMarketingTab(), i18n.tr("Marketing"));
-    }
 
-    @Override
-    protected void onValueSet(boolean populate) {
-        super.onValueSet(populate);
+        // Tabs visibility/editability:  
         marketingTab.setTabVisible(SecurityController.check(DataModelPermission.permissionRead(Marketing.class)));
+        if (isEditable()) {
+            marketingTab.setTabEnabled(SecurityController.check(DataModelPermission.permissionUpdate(Marketing.class)));
+        }
     }
 
     private CFolder<FloorplanAmenity> createAmenitiesListEditor() {

@@ -25,6 +25,7 @@ import com.pyx4j.entity.annotations.Length;
 import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.annotations.ReadOnly;
+import com.pyx4j.entity.annotations.SecurityEnabled;
 import com.pyx4j.entity.annotations.Timestamp;
 import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.ToStringFormat;
@@ -52,6 +53,7 @@ import com.propertyvista.domain.financial.offering.Concession.ConcessionV;
  * 
  */
 
+@SecurityEnabled
 public interface Concession extends IVersionedEntity<ConcessionV> {
 
     @I18n(context = "Concession Type")

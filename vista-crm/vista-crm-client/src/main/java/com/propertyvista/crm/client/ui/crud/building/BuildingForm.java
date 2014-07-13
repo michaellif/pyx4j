@@ -72,6 +72,7 @@ import com.propertyvista.domain.MediaFile;
 import com.propertyvista.domain.financial.BuildingMerchantAccount;
 import com.propertyvista.domain.financial.MerchantAccount;
 import com.propertyvista.domain.financial.offering.Product;
+import com.propertyvista.domain.marketing.Marketing;
 import com.propertyvista.domain.marketing.MarketingContactEmail;
 import com.propertyvista.domain.marketing.MarketingContactPhone;
 import com.propertyvista.domain.marketing.MarketingContactUrl;
@@ -101,7 +102,11 @@ public class BuildingForm extends CrmEntityForm<BuildingDTO> {
 
     private final Tab floorplansTab, mechanicalsTab, addOnsTab, financialTab, billingCyclesTab;
 
-    private Tab unitsTab, catalogTab;
+    private final Tab unitsTab;
+
+    private final Tab catalogTab;
+
+    private final Tab marketingTab;
 
     private FormPanel ilsEmailProfilePanel;
 
@@ -109,31 +114,38 @@ public class BuildingForm extends CrmEntityForm<BuildingDTO> {
         super(BuildingDTO.class, view);
 
         selectTab(addTab(createGeneralTab(), i18n.tr("General")));
-
         addTab(createDetailsTab(), i18n.tr("Details"));
-
-        setTabEnabled(
-                floorplansTab = addTab(isEditable() ? new HTML() : ((BuildingViewerView) getParentView()).getFloorplanListerView().asWidget(),
-                        i18n.tr("Floorplans")), !isEditable());
-
-        setTabEnabled(unitsTab = addTab(isEditable() ? new HTML() : ((BuildingViewerView) getParentView()).getUnitListerView().asWidget(), i18n.tr("Units")),
-                !isEditable());
-
-        setTabEnabled(mechanicalsTab = addTab(createMachanicalsTab(), i18n.tr("Mechanicals")), !isEditable());
-
-        setTabEnabled(addOnsTab = addTab(createAddOnsTab(), i18n.tr("Add-Ons")), !isEditable());
-
+        floorplansTab = addTab(isEditable() ? new HTML() : ((BuildingViewerView) getParentView()).getFloorplanListerView().asWidget(), i18n.tr("Floorplans"));
+        unitsTab = addTab(isEditable() ? new HTML() : ((BuildingViewerView) getParentView()).getUnitListerView().asWidget(), i18n.tr("Units"));
+        mechanicalsTab = addTab(createMachanicalsTab(), i18n.tr("Mechanicals"));
+        addOnsTab = addTab(createAddOnsTab(), i18n.tr("Add-Ons"));
         financialTab = addTab(createFinancialTab(), i18n.tr("Financial"));
-
-        addTab(createMarketingTab(), i18n.tr("Marketing"));
-
-        setTabEnabled(catalogTab = addTab(createCatalogTab(), i18n.tr("Product Catalog")), !isEditable());
-
+        marketingTab = addTab(createMarketingTab(), i18n.tr("Marketing"));
+        catalogTab = addTab(createCatalogTab(), i18n.tr("Product Catalog"));
         addTab(createContactTab(), i18n.tr("Contacts"));
-
         billingCyclesTab = addTab(isEditable() ? new HTML() : ((BuildingViewerView) getParentView()).getBillingCycleListerView().asWidget(),
                 i18n.tr("Billing Cycles"));
-        setTabEnabled(billingCyclesTab, !isEditable());
+
+        // Tabs visibility/editability:  
+        floorplansTab.setTabVisible(SecurityController.check(DataModelPermission.permissionRead(FloorplanDTO.class)));
+        unitsTab.setTabVisible(SecurityController.check(DataModelPermission.permissionRead(AptUnitDTO.class)));
+        mechanicalsTab.setTabVisible(SecurityController.check(DataModelPermission.permissionRead(BuildingMechanical.class)));
+        addOnsTab.setTabVisible(SecurityController.check(DataModelPermission.permissionRead(BuildingAddOns.class)));
+        financialTab.setTabVisible(SecurityController.check(DataModelPermission.permissionRead(BuildingFinancial.class)));
+        marketingTab.setTabVisible(SecurityController.check(DataModelPermission.permissionRead(Marketing.class)));
+        billingCyclesTab.setTabVisible(SecurityController.check(DataModelPermission.permissionRead(BillingCycleDTO.class)));
+        catalogTab.setTabVisible(SecurityController.check(DataModelPermission.permissionRead(Product.class)));
+
+        if (isEditable()) {
+            floorplansTab.setTabEnabled(false);
+            unitsTab.setTabEnabled(false);
+            mechanicalsTab.setTabEnabled(false);
+            addOnsTab.setTabEnabled(false);
+            financialTab.setTabEnabled(SecurityController.check(DataModelPermission.permissionUpdate(BuildingFinancial.class)));
+            marketingTab.setTabEnabled(SecurityController.check(DataModelPermission.permissionUpdate(Marketing.class)));
+            billingCyclesTab.setTabEnabled(false);
+            catalogTab.setTabEnabled(false);
+        }
     }
 
     @Override
@@ -143,6 +155,8 @@ public class BuildingForm extends CrmEntityForm<BuildingDTO> {
         get(proto().complex()).setVisible(!getValue().complex().isNull());
         get(proto().externalId()).setVisible(!getValue().externalId().isNull());
         get(proto().suspended()).setEditable(SecurityController.check(VistaCrmBehavior.PropertyVistaSupport));
+
+        catalogTab.setTabVisible(catalogTab.isTabVisible() && !getValue().defaultProductCatalog().getValue(false));
 
         // tweak property code editing UI:
         if (isEditable()) {
@@ -163,25 +177,7 @@ public class BuildingForm extends CrmEntityForm<BuildingDTO> {
                     });
         }
 
-        floorplansTab.setTabVisible(SecurityController.check(DataModelPermission.permissionRead(FloorplanDTO.class)));
-
-        unitsTab.setTabVisible(SecurityController.check(DataModelPermission.permissionRead(AptUnitDTO.class)));
-
-        mechanicalsTab.setTabVisible(SecurityController.check(DataModelPermission.permissionRead(BuildingMechanical.class)));
-
-        addOnsTab.setTabVisible(SecurityController.check(DataModelPermission.permissionRead(BuildingAddOns.class)));
-
-        financialTab.setTabVisible(SecurityController.check(DataModelPermission.permissionRead(BuildingFinancial.class)));
-
-        billingCyclesTab.setTabVisible(SecurityController.check(DataModelPermission.permissionRead(BillingCycleDTO.class)));
-
-        if (catalogTab != null) {
-            catalogTab.setTabVisible(SecurityController.check(DataModelPermission.permissionRead(Product.class))
-                    && !getValue().defaultProductCatalog().getValue(false));
-        }
-
         fillMerchantAccountStatus(getValue().merchantAccount());
-        get(proto().merchantAccount()).setEditable(SecurityController.check(DataModelPermission.permissionUpdate(BuildingMerchantAccount.class)));
 
         ilsEmailProfilePanel.setVisible(getValue() != null && getValue().ilsEmailConfigured().getValue(false));
     }
@@ -340,6 +336,7 @@ public class BuildingForm extends CrmEntityForm<BuildingDTO> {
         formPanel.append(Location.Left, proto().merchantAccount()).decorate().componentWidth(180);
 
         // tweak:
+        get(proto().merchantAccount()).setEditable(SecurityController.check(DataModelPermission.permissionUpdate(BuildingMerchantAccount.class)));
         get(proto().merchantAccount()).addValueChangeHandler(new ValueChangeHandler<MerchantAccount>() {
             @Override
             public void onValueChange(ValueChangeEvent<MerchantAccount> event) {
