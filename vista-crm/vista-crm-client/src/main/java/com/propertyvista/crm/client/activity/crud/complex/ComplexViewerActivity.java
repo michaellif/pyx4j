@@ -18,8 +18,6 @@ import java.util.List;
 import com.google.gwt.core.client.GWT;
 
 import com.pyx4j.entity.rpc.AbstractCrudService;
-import com.pyx4j.entity.security.DataModelPermission;
-import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
 import com.propertyvista.crm.client.CrmSite;
@@ -36,18 +34,14 @@ public class ComplexViewerActivity extends CrmViewerActivity<ComplexDTO> impleme
 
     @SuppressWarnings("unchecked")
     public ComplexViewerActivity(CrudAppPlace place) {
-        super(place, CrmSite.getViewFactory().getView(ComplexViewerView.class), (AbstractCrudService<ComplexDTO>) GWT.create(ComplexCrudService.class));
+        super(ComplexDTO.class, place, CrmSite.getViewFactory().getView(ComplexViewerView.class), (AbstractCrudService<ComplexDTO>) GWT
+                .create(ComplexCrudService.class));
 
     }
 
     @Override
     protected void onPopulateSuccess(ComplexDTO result) {
         super.onPopulateSuccess(result);
-    }
-
-    @Override
-    public boolean canEdit() {
-        return SecurityController.check(DataModelPermission.permissionUpdate(ComplexDTO.class));
     }
 
     @Override
