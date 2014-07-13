@@ -290,8 +290,7 @@ public class EntityMetaImpl implements EntityMeta {
 
     @Override
     public boolean isAnnotationPresent(Class<? extends Annotation> annotationClass) {
-        // TODO Auto-generated method stub
-        return false;
+        return entityClass.isAnnotationPresent(annotationClass);
     }
 
     @Override

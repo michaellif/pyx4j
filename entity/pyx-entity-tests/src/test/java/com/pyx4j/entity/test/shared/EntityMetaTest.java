@@ -26,7 +26,9 @@ import com.pyx4j.entity.annotations.Indexed;
 import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.annotations.RpcTransient;
+import com.pyx4j.entity.annotations.SecurityEnabled;
 import com.pyx4j.entity.annotations.Transient;
+import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.ObjectClassType;
@@ -35,6 +37,7 @@ import com.pyx4j.entity.core.meta.EntityMeta;
 import com.pyx4j.entity.core.meta.MemberMeta;
 import com.pyx4j.entity.test.shared.domain.Department;
 import com.pyx4j.entity.test.shared.domain.Employee;
+import com.pyx4j.entity.test.shared.domain.EntityWithGwtAnnotations;
 import com.pyx4j.entity.test.shared.domain.Task;
 import com.pyx4j.entity.test.shared.domain.inherit.AddressExt;
 import com.pyx4j.entity.test.shared.domain.inherit.Base1Entity;
@@ -268,6 +271,12 @@ public class EntityMetaTest extends InitializerTestBase {
         root.reference().set(ent1);
 
         assertTrue("Abstract member equals", ent1.equals(root.reference()));
+    }
+
+    public void testGwtAnnotations() {
+        EntityWithGwtAnnotations ent1 = EntityFactory.create(EntityWithGwtAnnotations.class);
+        assertTrue("@NotNull present", ent1.testId().getMeta().isAnnotationPresent(NotNull.class));
+        assertTrue("@SecurityEnabled present", ent1.getEntityMeta().isAnnotationPresent(SecurityEnabled.class));
     }
 
 }
