@@ -418,26 +418,6 @@ public class VistaTheme extends Theme {
 
     }
 
-    protected void initSuggestBoxStyle() {
-        Style style = new Style(".gwt-SuggestBoxPopup");
-        style.addProperty("background-color", "white");
-        style.addProperty("padding", "2px");
-        style.addProperty("border-color", ThemeColor.foreground, 0.6);
-        style.addProperty("border-style", "solid");
-        style.addProperty("border-width", "1px");
-        style.addProperty("cursor", "pointer");
-        style.addProperty("cursor", "hand");
-        addStyle(style);
-
-        style = new Style(".gwt-SuggestBoxPopup .item");
-        addStyle(style);
-
-        style = new Style(".gwt-SuggestBoxPopup .item-selected");
-        style.addProperty("background-color", ThemeColor.foreground, 0.3);
-        addStyle(style);
-
-    }
-
     protected void initBannerStyle() {
         Style style = new Style(CSSClass.pyx4j_Banner);
         addStyle(style);

@@ -225,8 +225,7 @@ public class PortalTheme extends Theme {
                 style.addProperty("height", "auto");
                 addStyle(style);
 
-                style = new Style(".", StyleName.FormPanelActionWidget, " .", WidgetTheme.StyleName.Button, " .",
-                        WidgetTheme.StyleName.ButtonText);
+                style = new Style(".", StyleName.FormPanelActionWidget, " .", WidgetTheme.StyleName.Button, " .", WidgetTheme.StyleName.ButtonText);
                 style.addProperty("line-height", "normal");
                 addStyle(style);
             }
@@ -486,24 +485,6 @@ public class PortalTheme extends Theme {
         style.addProperty("z-index", "20");
         addStyle(style);
 
-        style = new Style(".gwt-SuggestBoxPopup");
-        style.addProperty("background-color", "white");
-        style.addProperty("padding", "2px");
-        style.addProperty("border-color", ThemeColor.foreground, 0.6);
-        style.addProperty("border-style", "solid");
-        style.addProperty("border-width", "1px");
-        style.addProperty("cursor", "pointer");
-        style.addProperty("cursor", "hand");
-        style.addProperty("max-width", "280px");
-        style.addProperty("overflow", "hidden !important");
-        addStyle(style);
-
-        style = new Style(".gwt-SuggestBoxPopup .item");
-        addStyle(style);
-
-        style = new Style(".gwt-SuggestBoxPopup .item-selected");
-        style.addProperty("background-color", ThemeColor.foreground, 0.3);
-        addStyle(style);
     }
 
     protected void initBodyStyles() {
