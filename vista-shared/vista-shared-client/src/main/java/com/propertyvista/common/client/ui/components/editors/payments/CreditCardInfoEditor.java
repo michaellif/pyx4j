@@ -102,13 +102,7 @@ public class CreditCardInfoEditor extends CForm<CreditCardInfo> {
             }
         }
 
-        updateVisibility(getValue());
-    }
-
-    private void updateVisibility(CreditCardInfo value) {
         if (isEditable()) {
-            cardEditor.setMandatory(false);
-            get(proto().securityCode()).setMandatory(false);
             ((CTextComponent<?, ?>) get(proto().securityCode())).setWatermark("XXX");
         }
     }
@@ -121,14 +115,6 @@ public class CreditCardInfoEditor extends CForm<CreditCardInfo> {
                 if (event.getPropertyName() == PropertyName.editable) {
                     get(proto().securityCode()).setVisible(isEditable());
                 }
-            }
-        });
-
-        cardEditor.addValueChangeHandler(new ValueChangeHandler<CreditCardNumberIdentity>() {
-            @Override
-            public void onValueChange(ValueChangeEvent<CreditCardNumberIdentity> event) {
-                cardEditor.setMandatory(true);
-                get(proto().securityCode()).setMandatory(true);
             }
         });
 
@@ -163,8 +149,6 @@ public class CreditCardInfoEditor extends CForm<CreditCardInfo> {
             public void onValueChange(ValueChangeEvent<CreditCardType> event) {
                 // imitate user input and revalidate
                 cardEditor.clear(true);
-//                cardEditor.onEditingStop();
-//                cardEditor.revalidate();
             }
         });
 
