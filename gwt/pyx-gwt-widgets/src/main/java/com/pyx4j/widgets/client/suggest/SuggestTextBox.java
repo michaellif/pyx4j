@@ -89,25 +89,9 @@ public class SuggestTextBox extends Composite implements WatermarkComponent, ITe
 
     private final ValueBoxBase<String> box;
 
-    private final Callback callback = new Callback() {
-        @Override
-        public void onSuggestionsReady(Request request, Response response) {
-            // If disabled while request was in-flight, drop it
-            if (!isEnabled()) {
-                return;
-            }
-            display.setMoreSuggestions(response.hasMoreSuggestions(), response.getMoreSuggestionsCount());
-            display.showSuggestions(SuggestTextBox.this, response.getSuggestions(), oracle.isDisplayStringHTML(), isAutoSelect(), suggestionCallback);
-        }
-    };
+    private final Callback callback;
 
-    private final SuggestionCallback suggestionCallback = new SuggestionCallback() {
-        @Override
-        public void onSuggestionSelected(Suggestion suggestion) {
-            box.setFocus(true);
-            setNewSelection(suggestion);
-        }
-    };
+    private final SuggestionCallback suggestionCallback;
 
     public SuggestTextBox() {
         this(new MultiWordSuggestOracle());
@@ -121,9 +105,30 @@ public class SuggestTextBox extends Composite implements WatermarkComponent, ITe
         this(oracle, box, new SuggestionDisplay());
     }
 
-    public SuggestTextBox(SuggestOracle oracle, ValueBoxBase<String> box, SuggestionDisplay suggestDisplay) {
+    public SuggestTextBox(final SuggestOracle oracle, final ValueBoxBase<String> box, SuggestionDisplay suggestDisplay) {
         this.box = box;
         this.display = suggestDisplay;
+
+        callback = new Callback() {
+            @Override
+            public void onSuggestionsReady(Request request, Response response) {
+                // If disabled while request was in-flight, drop it
+                if (!isEnabled()) {
+                    return;
+                }
+                display.setMoreSuggestions(response.hasMoreSuggestions(), response.getMoreSuggestionsCount());
+                display.showSuggestions(SuggestTextBox.this, response.getSuggestions(), oracle.isDisplayStringHTML(), isAutoSelect(), suggestionCallback);
+            }
+        };
+
+        suggestionCallback = new SuggestionCallback() {
+            @Override
+            public void onSuggestionSelected(Suggestion suggestion) {
+                box.setFocus(true);
+                setNewSelection(suggestion);
+            }
+        };
+
         initWidget(box);
 
         addEventsToTextBox();
