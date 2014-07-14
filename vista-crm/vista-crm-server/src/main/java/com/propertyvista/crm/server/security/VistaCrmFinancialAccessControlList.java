@@ -43,6 +43,8 @@ import com.propertyvista.domain.financial.BuildingMerchantAccount;
 import com.propertyvista.domain.financial.EftAggregatedTransfer;
 import com.propertyvista.domain.property.asset.building.BuildingFinancial;
 import com.propertyvista.domain.security.VistaCrmBehavior;
+import com.propertyvista.domain.tenant.lease.LeaseAdjustment;
+import com.propertyvista.dto.DepositLifecycleDTO;
 import com.propertyvista.dto.PaymentRecordDTO;
 import com.propertyvista.dto.TransactionHistoryDTO;
 
@@ -76,6 +78,9 @@ public class VistaCrmFinancialAccessControlList extends UIAclBuilder {
         grant(FinancialPayments, new IServiceExecutePermission(AutoPayHistoryCrudService.class));
         // See also VistaCrmLeasesAccessControlList
 
+        grant(FinancialPayments, LeaseAdjustment.class, READ);
+        grant(FinancialPayments, DepositLifecycleDTO.class, READ);
+
         // ------ Financial: Full
         grant(FinancialFull, VistaCrmBehavior.FinancialMoneyIN);
         grant(FinancialFull, VistaCrmBehavior.FinancialAggregatedTransfer);
@@ -85,5 +90,8 @@ public class VistaCrmFinancialAccessControlList extends UIAclBuilder {
         grant(FinancialFull, BillingCycleDTO.class, READ);
         grant(FinancialFull, BillDataDTO.class, READ | UPDATE);
         grant(FinancialFull, BuildingMerchantAccount.class, READ | UPDATE);
+
+        grant(FinancialFull, LeaseAdjustment.class, ALL);
+        grant(FinancialFull, DepositLifecycleDTO.class, ALL);
     }
 }
