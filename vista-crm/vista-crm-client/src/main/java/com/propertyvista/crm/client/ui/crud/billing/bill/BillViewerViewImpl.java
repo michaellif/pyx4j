@@ -17,7 +17,9 @@ import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.MenuItem;
 
 import com.pyx4j.commons.CommonsStringUtils;
+import com.pyx4j.entity.security.DataModelPermission;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.widgets.client.Button.SecureMenuItem;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 
 import com.propertyvista.crm.client.ui.components.boxes.ReasonBox;
@@ -54,16 +56,15 @@ public class BillViewerViewImpl extends CrmViewerViewImplBase<BillDataDTO> imple
         });
         addAction(printAction);
 
-        approveAction = new MenuItem(APPROVE, new Command() {
-
+        approveAction = new SecureMenuItem(APPROVE, new Command() {
             @Override
             public void execute() {
                 ((BillViewerView.Presenter) getPresenter()).confirm();
             }
-        });
+        }, DataModelPermission.permissionUpdate(BillDataDTO.class));
         addAction(approveAction);
 
-        rejectAction = new MenuItem(DECLINE, new Command() {
+        rejectAction = new SecureMenuItem(DECLINE, new Command() {
             @Override
             public void execute() {
                 new ReasonBox(DECLINE) {
@@ -78,7 +79,7 @@ public class BillViewerViewImpl extends CrmViewerViewImplBase<BillDataDTO> imple
                     }
                 }.show();
             }
-        });
+        }, DataModelPermission.permissionUpdate(BillDataDTO.class));
         addAction(rejectAction);
 
     }

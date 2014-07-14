@@ -25,6 +25,7 @@ import com.pyx4j.rpc.shared.IServiceExecutePermission;
 import com.pyx4j.security.server.UIAclBuilder;
 import com.pyx4j.security.shared.ActionPermission;
 
+import com.propertyvista.crm.rpc.dto.billing.BillDataDTO;
 import com.propertyvista.crm.rpc.dto.billing.BillingCycleDTO;
 import com.propertyvista.crm.rpc.dto.financial.AutoPayHistoryDTO;
 import com.propertyvista.crm.rpc.dto.financial.autopayreview.PapReviewDTO;
@@ -82,6 +83,7 @@ public class VistaCrmFinancialAccessControlList extends UIAclBuilder {
 
         grant(FinancialFull, BuildingFinancial.class, READ);
         grant(FinancialFull, BillingCycleDTO.class, READ);
+        grant(FinancialFull, BillDataDTO.class, READ | UPDATE);
         grant(FinancialFull, BuildingMerchantAccount.class, READ | UPDATE);
     }
 }

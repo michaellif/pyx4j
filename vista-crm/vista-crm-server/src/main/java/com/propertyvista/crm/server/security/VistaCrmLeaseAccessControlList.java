@@ -18,6 +18,7 @@ import static com.propertyvista.domain.security.VistaCrmBehavior.LeaseBasic;
 import static com.propertyvista.domain.security.VistaCrmBehavior.LeaseFull;
 import static com.pyx4j.entity.security.AbstractCRUDPermission.ALL;
 import static com.pyx4j.entity.security.AbstractCRUDPermission.READ;
+import static com.pyx4j.entity.security.AbstractCRUDPermission.UPDATE;
 
 import java.util.List;
 
@@ -96,7 +97,7 @@ public class VistaCrmLeaseAccessControlList extends UIAclBuilder {
         grant(LeaseFull, TransactionHistoryDTO.class, READ);
 
         grant(LeaseAdvanced, BillDataDTO.class, READ);
-        grant(LeaseFull, BillDataDTO.class, READ);
+        grant(LeaseFull, BillDataDTO.class, READ | UPDATE);
 
         // ---- Payment:
         grant(LeaseBasic, PaymentRecordDTO.class, READ);
