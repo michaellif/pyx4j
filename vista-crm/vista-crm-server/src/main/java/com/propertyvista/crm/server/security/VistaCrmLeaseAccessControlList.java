@@ -43,7 +43,6 @@ import com.propertyvista.dto.DepositLifecycleDTO;
 import com.propertyvista.dto.LeaseDTO;
 import com.propertyvista.dto.LeaseLegalStateDTO;
 import com.propertyvista.dto.LeaseTermDTO;
-import com.propertyvista.dto.PaymentRecordDTO;
 import com.propertyvista.dto.TransactionHistoryDTO;
 
 public class VistaCrmLeaseAccessControlList extends UIAclBuilder {
@@ -100,17 +99,14 @@ public class VistaCrmLeaseAccessControlList extends UIAclBuilder {
         grant(LeaseFull, BillDataDTO.class, READ | UPDATE);
 
         // ---- Payment:
-        grant(LeaseBasic, PaymentRecordDTO.class, READ);
         grant(LeaseBasic, PreauthorizedPaymentsDTO.class, READ);
         grant(LeaseBasic, AutoPayHistoryDTO.class, READ);
         grant(LeaseBasic, new IServiceExecutePermission(AutoPayHistoryCrudService.class));
 
-        grant(LeaseAdvanced, PaymentRecordDTO.class, READ);
         grant(LeaseAdvanced, PreauthorizedPaymentsDTO.class, READ);
         grant(LeaseAdvanced, AutoPayHistoryDTO.class, READ);
         grant(LeaseAdvanced, new IServiceExecutePermission(AutoPayHistoryCrudService.class));
 
-        grant(LeaseFull, PaymentRecordDTO.class, ALL);
         grant(LeaseFull, PreauthorizedPaymentsDTO.class, ALL);
         grant(LeaseFull, AutoPayHistoryDTO.class, READ);
         grant(LeaseFull, new IServiceExecutePermission(AutoPayHistoryCrudService.class));
