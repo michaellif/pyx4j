@@ -182,7 +182,6 @@ public class CrmTheme extends VistaTheme {
         initAddGadgetDialogStyles();
         initArrearsViewStyles();
 
-        initSuggestBoxStyle();
         initKeywordBoxStyles();
 
         initWizardPanelStyles();

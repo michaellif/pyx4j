@@ -137,8 +137,6 @@ public class OperationsTheme extends VistaTheme {
         initMenuBarStyles();
         initProgressBarStyles();
 
-        initSuggestBoxStyle();
-
         initOperationsStyle();
     }
 
