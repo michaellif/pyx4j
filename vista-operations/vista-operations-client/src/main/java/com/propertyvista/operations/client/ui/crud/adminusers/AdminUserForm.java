@@ -18,10 +18,10 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import com.pyx4j.forms.client.ui.CComponent;
-import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
+import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
+import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.security.client.ClientContext;
-import com.pyx4j.site.client.ui.prime.form.FieldDecoratorBuilder;
 import com.pyx4j.site.client.ui.prime.form.IForm;
 
 import com.propertyvista.operations.client.ui.crud.OperationsEntityForm;
@@ -59,27 +59,28 @@ public class AdminUserForm extends OperationsEntityForm<OperationsUserDTO> {
     }
 
     public void createTabs() {
-        TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel();
-        int row = -1;
-        content.setH1(++row, 0, 2, i18n.tr("General"));
-        content.setWidget(++row, 0, 2, inject(proto().name(), new FieldDecoratorBuilder(true).build()));
-        content.setWidget(++row, 0, 2, inject(proto().email(), new FieldDecoratorBuilder(true).build()));
+        FormPanel formPanel = new FormPanel(this);
 
-        content.setH1(++row, 0, 2, i18n.tr("Security"));
-        content.setWidget(++row, 0, 2, addVisibilityCondition(inject(proto().password(), new FieldDecoratorBuilder(true).build()), isNewUserCondition));
-        content.setWidget(++row, 0, 2, addVisibilityCondition(inject(proto().passwordConfirm(), new FieldDecoratorBuilder(true).build()), isNewUserCondition));
-        content.setWidget(++row, 0, 2, addVisibilityCondition(inject(proto().enabled(), new FieldDecoratorBuilder(true).build()), isSelfManagedUserCondition));
-        content.setWidget(++row, 0, 2, addVisibilityCondition(inject(proto().role(), new FieldDecoratorBuilder(true).build()), isSelfManagedUserCondition));
-        content.setWidget(
-                ++row,
-                0,
-                2,
-                addVisibilityCondition(inject(proto().changePassword(), new FieldDecoratorBuilder(true).build()), isSelfManagedUserCondition));
+        formPanel.h1(i18n.tr("General"));
+        formPanel.append(Location.Dual, proto().name()).decorate();
+        formPanel.append(Location.Dual, proto().email()).decorate();
 
-        content.setWidget(++row, 0, 2, inject(proto().credentialUpdated(), new FieldDecoratorBuilder(true).build()));
+        formPanel.h1(i18n.tr("Security"));
+        formPanel.append(Location.Dual, proto().password()).decorate();
+        formPanel.append(Location.Dual, proto().passwordConfirm()).decorate();
+        formPanel.append(Location.Dual, proto().enabled()).decorate();
+        formPanel.append(Location.Dual, proto().role()).decorate();
+        formPanel.append(Location.Dual, proto().changePassword()).decorate();
+        formPanel.append(Location.Dual, proto().credentialUpdated()).decorate();
+
+        conditionalVisibilityMap.put(get(proto().password()), isNewUserCondition);
+        conditionalVisibilityMap.put(get(proto().passwordConfirm()), isNewUserCondition);
+        conditionalVisibilityMap.put(get(proto().enabled()), isSelfManagedUserCondition);
+        conditionalVisibilityMap.put(get(proto().role()), isSelfManagedUserCondition);
+        conditionalVisibilityMap.put(get(proto().changePassword()), isSelfManagedUserCondition);
 
         setTabBarVisible(false);
-        selectTab(addTab(content, i18n.tr("General")));
+        selectTab(addTab(formPanel, i18n.tr("General")));
     }
 
     @Override

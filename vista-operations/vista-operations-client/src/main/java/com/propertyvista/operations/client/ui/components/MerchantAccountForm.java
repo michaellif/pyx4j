@@ -16,8 +16,8 @@ package com.propertyvista.operations.client.ui.components;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.forms.client.ui.CForm;
-import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
-import com.pyx4j.site.client.ui.prime.form.FieldDecoratorBuilder;
+import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
+import com.pyx4j.forms.client.ui.panels.FormPanel;
 
 import com.propertyvista.common.client.ui.validators.EcheckAccountNumberStringValidator;
 import com.propertyvista.common.client.ui.validators.EcheckBankIdValidator;
@@ -34,18 +34,18 @@ public class MerchantAccountForm extends CForm<AbstractMerchantAccount> {
 
     @Override
     protected IsWidget createContent() {
-        TwoColumnFlexFormPanel panel = new TwoColumnFlexFormPanel();
-        int row = -1;
+        FormPanel formPanel = new FormPanel(this);
 
-        panel.setWidget(++row, 0, inject(proto().merchantTerminalId(), new FieldDecoratorBuilder().build()));
-        panel.setWidget(row, 1, inject(proto().bankId(), new FieldDecoratorBuilder(5).build()));
+        formPanel.append(Location.Left, proto().merchantTerminalId()).decorate();
+        formPanel.append(Location.Right, proto().bankId()).decorate().componentWidth(60);
 
-        panel.setWidget(++row, 0, inject(proto().accountNumber(), new FieldDecoratorBuilder(15).build()));
-        panel.setWidget(row, 1, inject(proto().branchTransitNumber(), new FieldDecoratorBuilder(5).build()));
+        formPanel.append(Location.Left, proto().accountNumber()).decorate().componentWidth(180);
+        formPanel.append(Location.Right, proto().branchTransitNumber()).decorate().componentWidth(60);
 
-        panel.setWidget(++row, 0, 2, inject(proto().chargeDescription(), new FieldDecoratorBuilder(true).build()));
+        //panel.setWidget(++row, 0, 2, inject(proto().chargeDescription(), new FieldDecoratorBuilder(true).build()));
+        formPanel.append(Location.Dual, proto().chargeDescription()).decorate();
 
-        return panel;
+        return formPanel;
     }
 
     @Override
