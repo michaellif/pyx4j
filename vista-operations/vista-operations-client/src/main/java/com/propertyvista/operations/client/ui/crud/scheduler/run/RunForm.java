@@ -13,9 +13,9 @@
  */
 package com.propertyvista.operations.client.ui.crud.scheduler.run;
 
-import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
+import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
+import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.ui.prime.form.FieldDecoratorBuilder;
 import com.pyx4j.site.client.ui.prime.form.IForm;
 
 import com.propertyvista.operations.client.ui.components.OperationsEditorsComponentFactory;
@@ -33,41 +33,39 @@ public class RunForm extends OperationsEntityForm<Run> {
     public RunForm(IForm<Run> view) {
         super(Run.class, view);
 
-        TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel();
-        int row = -1;
+        FormPanel formPanel = new FormPanel(this);
 
-        content.setWidget(++row, 0,
-                inject(proto().trigger(), OperationsEditorsComponentFactory.createEntityHyperlink(TriggerDTO.class), new FieldDecoratorBuilder().build()));
+        formPanel.append(Location.Left, proto().trigger(), OperationsEditorsComponentFactory.createEntityHyperlink(TriggerDTO.class)).decorate();
 
-        content.setWidget(row, 1, inject(proto().created(), new FieldDecoratorBuilder(10).build()));
-        content.setWidget(++row, 0, inject(proto().trigger().triggerType(), new FieldDecoratorBuilder().build()));
-        content.setWidget(row, 1, inject(proto().forDate(), new FieldDecoratorBuilder(10).build()));
-        content.setWidget(++row, 0, inject(proto().startedBy(), new FieldDecoratorBuilder().build()));
-        content.setWidget(row, 1, inject(proto().started(), new FieldDecoratorBuilder(10).build()));
-        content.setWidget(++row, 0, inject(proto().status(), new FieldDecoratorBuilder(15).build()));
-        content.setWidget(row, 1, inject(proto().completed(), new FieldDecoratorBuilder(10).build()));
+        formPanel.append(Location.Right, proto().created()).decorate();
+        formPanel.append(Location.Left, proto().trigger().triggerType()).decorate();
+        formPanel.append(Location.Right, proto().forDate()).decorate().componentWidth(120);
+        formPanel.append(Location.Left, proto().startedBy()).decorate();
+        formPanel.append(Location.Right, proto().started()).decorate().componentWidth(120);
+        formPanel.append(Location.Left, proto().status()).decorate().componentWidth(180);
+        formPanel.append(Location.Right, proto().completed()).decorate().componentWidth(120);
 
-        content.setH2(++row, 0, 2, i18n.tr("Statistics"));
-        content.getFlexCellFormatter().setColSpan(row, 0, 2);
-        content.setWidget(++row, 0, inject(proto().executionReport().total(), new FieldDecoratorBuilder(10).build()));
-        content.setWidget(row, 1, inject(proto().executionReport().averageDuration(), new FieldDecoratorBuilder(10).build()));
-        content.setWidget(++row, 0, inject(proto().executionReport().processed(), new FieldDecoratorBuilder(10).build()));
-        content.setWidget(row, 1, inject(proto().executionReport().totalDuration(), new FieldDecoratorBuilder(10).build()));
-        content.setWidget(++row, 0, inject(proto().executionReport().failed(), new FieldDecoratorBuilder(10).build()));
-        content.setWidget(++row, 0, inject(proto().executionReport().erred(), new FieldDecoratorBuilder(10).build()));
+        formPanel.h2(i18n.tr("Statistics"));
+        //content.getFlexCellFormatter().setColSpan(row, 0, 2);
+        formPanel.append(Location.Left, proto().executionReport().total()).decorate().componentWidth(120);
+        formPanel.append(Location.Right, proto().executionReport().averageDuration()).decorate().componentWidth(120);
+        formPanel.append(Location.Left, proto().executionReport().processed()).decorate().componentWidth(120);
+        formPanel.append(Location.Right, proto().executionReport().totalDuration()).decorate().componentWidth(120);
+        formPanel.append(Location.Left, proto().executionReport().failed()).decorate().componentWidth(120);
+        formPanel.append(Location.Left, proto().executionReport().erred()).decorate().componentWidth(120);
 
-        content.setWidget(++row, 0, 2, inject(proto().executionReport().message(), new FieldDecoratorBuilder(true).build()));
-        content.setWidget(++row, 0, 2, inject(proto().errorMessage(), new FieldDecoratorBuilder(true).build()));
+        formPanel.append(Location.Dual, proto().executionReport().message()).decorate();
+        formPanel.append(Location.Dual, proto().errorMessage()).decorate();
 
         reportSectionLister = new ExecutionReportSectionLister();
-        content.setH4(++row, 0, 2, i18n.tr("Details"));
-        content.setWidget(++row, 0, 2, reportSectionLister);
+        formPanel.h4(i18n.tr("Details"));
+        formPanel.append(Location.Dual, reportSectionLister);
 
-        content.setH2(++row, 0, 2, i18n.tr("Data"));
-        content.setWidget(++row, 0, 2, ((RunViewerView) getParentView()).getRunDataListerView().asWidget());
+        formPanel.h2(i18n.tr("Data"));
+        formPanel.append(Location.Dual, ((RunViewerView) getParentView()).getRunDataListerView().asWidget());
 
         setTabBarVisible(false);
-        selectTab(addTab(content, i18n.tr("General")));
+        selectTab(addTab(formPanel, i18n.tr("General")));
 
     }
 

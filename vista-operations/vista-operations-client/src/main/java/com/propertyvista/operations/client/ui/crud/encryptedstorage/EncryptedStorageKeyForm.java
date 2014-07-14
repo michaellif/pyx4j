@@ -13,22 +13,18 @@
  */
 package com.propertyvista.operations.client.ui.crud.encryptedstorage;
 
-import com.google.gwt.dom.client.Style;
 import com.google.gwt.dom.client.Style.Display;
-import com.google.gwt.dom.client.Style.TextAlign;
-import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.IsWidget;
-import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.entity.shared.IFile;
 import com.pyx4j.forms.client.ui.CForm;
-import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
+import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
+import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.gwt.client.upload.UploadReceiver;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.ui.prime.form.FieldDecoratorBuilder;
 import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 
@@ -58,16 +54,9 @@ public class EncryptedStorageKeyForm extends CForm<EncryptedStorageKeyDTO> {
     @Override
     protected IsWidget createContent() {
         FlowPanel contentPanel = new FlowPanel();
-        Widget statusPanel = makeStatusPanel();
-        statusPanel.getElement().getStyle().setDisplay(Display.BLOCK);
-        statusPanel.getElement().getStyle().setFloat(Style.Float.LEFT);
-        statusPanel.getElement().getStyle().setWidth(40, Unit.EM);
 
-        Widget controlPanel = makeControlPanel();
-        controlPanel.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
-        controlPanel.getElement().getStyle().setFloat(Style.Float.RIGHT);
-        contentPanel.add(statusPanel);
-        contentPanel.add(controlPanel);
+        contentPanel.add(makeStatusPanel());
+        contentPanel.add(makeControlPanel());
 
         return contentPanel;
     }
@@ -85,25 +74,24 @@ public class EncryptedStorageKeyForm extends CForm<EncryptedStorageKeyDTO> {
                 && getValue().recordsCount().getValue() > 0);
     }
 
-    private Widget makeStatusPanel() {
-        TwoColumnFlexFormPanel statusPanel = new TwoColumnFlexFormPanel();
-        int row = -1;
-        statusPanel.setWidget(++row, 0, inject(proto().name(), new FieldDecoratorBuilder().componentWidth(15).build()));
-        statusPanel.setWidget(++row, 0, inject(proto().isCurrent(), new FieldDecoratorBuilder().componentWidth(5).build()));
-        statusPanel.setWidget(++row, 0, inject(proto().decryptionEnabled(), new FieldDecoratorBuilder().componentWidth(5).build()));
+    private IsWidget makeStatusPanel() {
+        FormPanel formPanel = new FormPanel(this);
 
-        row = -1;
-        statusPanel.setWidget(++row, 1, inject(proto().recordsCount(), new FieldDecoratorBuilder().build()));
-        statusPanel.setWidget(++row, 1, inject(proto().created(), new FieldDecoratorBuilder().build()));
-        statusPanel.setWidget(++row, 1, inject(proto().expired(), new FieldDecoratorBuilder().build()));
+        formPanel.append(Location.Left, proto().name()).decorate().componentWidth(180);
+        formPanel.append(Location.Left, proto().isCurrent()).decorate().componentWidth(60);
+        formPanel.append(Location.Left, proto().decryptionEnabled()).decorate().componentWidth(60);
 
-        statusPanel.setWidget(++row, 0, inject(proto().details(), new FieldDecoratorBuilder().build()));
-        return statusPanel;
+        formPanel.append(Location.Right, proto().recordsCount()).decorate();
+        formPanel.append(Location.Right, proto().created()).decorate();
+        formPanel.append(Location.Right, proto().expired()).decorate();
+
+        formPanel.append(Location.Left, proto().details()).decorate();
+
+        return formPanel;
     }
 
     private Widget makeControlPanel() {
         FlowPanel controlPanel = new FlowPanel();
-        controlPanel.getElement().getStyle().setTextAlign(TextAlign.LEFT);
 
         makeCurrent = new Button(i18n.tr("Set as CURRENT"), new Command() {
             @Override
@@ -118,7 +106,9 @@ public class EncryptedStorageKeyForm extends CForm<EncryptedStorageKeyDTO> {
             }
 
         });
-        controlPanel.add(new SimplePanel(makeCurrent));
+
+        makeCurrent.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
+        controlPanel.add(makeCurrent);
 
         decryptOnOff = new Button("", new Command() {
             @Override
@@ -142,7 +132,9 @@ public class EncryptedStorageKeyForm extends CForm<EncryptedStorageKeyDTO> {
             }
 
         });
-        controlPanel.add(new SimplePanel(decryptOnOff));
+
+        decryptOnOff.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
+        controlPanel.add(decryptOnOff);
 
         startKeyRotation = new Button(i18n.tr("Start Key Rotation"), new Command() {
             @Override
@@ -150,7 +142,9 @@ public class EncryptedStorageKeyForm extends CForm<EncryptedStorageKeyDTO> {
                 presenter.startKeyRotation(EncryptedStorageKeyForm.this.getValue());
             }
         });
-        controlPanel.add(new SimplePanel(startKeyRotation));
+
+        startKeyRotation.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
+        controlPanel.add(startKeyRotation);
 
         uploadEncryptedPrivateKey = new Button(i18n.tr("Upload Encrypted Private Key"), new Command() {
 
@@ -160,7 +154,9 @@ public class EncryptedStorageKeyForm extends CForm<EncryptedStorageKeyDTO> {
             }
 
         });
-        controlPanel.add(new SimplePanel(uploadEncryptedPrivateKey));
+
+        uploadEncryptedPrivateKey.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
+        controlPanel.add(uploadEncryptedPrivateKey);
 
         return controlPanel;
     }
