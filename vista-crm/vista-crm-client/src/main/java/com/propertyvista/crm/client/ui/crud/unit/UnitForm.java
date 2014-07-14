@@ -43,7 +43,6 @@ import com.pyx4j.site.client.ui.prime.form.IForm;
 import com.pyx4j.site.client.ui.prime.misc.CEntityCrudHyperlink;
 import com.pyx4j.site.client.ui.prime.misc.CEntitySelectorHyperlink;
 import com.pyx4j.site.rpc.AppPlace;
-import com.pyx4j.widgets.client.tabpanel.Tab;
 
 import com.propertyvista.common.client.ui.components.editors.InternationalAddressEditor;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
@@ -70,15 +69,12 @@ public class UnitForm extends CrmEntityForm<AptUnitDTO> {
         catalogMarketPricesPanel = new FormPanel(this);
 
         selectTab(addTab(createGeneralTab(), i18n.tr("General")));
-
-        Tab tab = addTab(isEditable() ? new HTML() : ((UnitViewerView) getParentView()).getUnitItemsListerView().asWidget(), i18n.tr("Details"));
-        setTabEnabled(tab, !isEditable());
-
+        addTab(isEditable() ? new HTML() : ((UnitViewerView) getParentView()).getUnitItemsListerView(), i18n.tr("Details")).setTabEnabled(
+                !isEditable());
         if (!VistaFeatures.instance().yardiIntegration()) {
-            tab = addTab(isEditable() ? new HTML() : ((UnitViewerView) getParentView()).getOccupanciesListerView().asWidget(), i18n.tr("Occupancy"));
-            setTabEnabled(tab, !isEditable());
+            addTab(isEditable() ? new HTML() : ((UnitViewerView) getParentView()).getOccupanciesListerView(), i18n.tr("Occupancy")).setTabEnabled(
+                    !isEditable());
         }
-
         addTab(createLegalAddresslTab(), i18n.tr("Legal Address"));
         // TODO Hided till further investigation:
         // addTab(createMarketingTab(), i18n.tr("Marketing"));

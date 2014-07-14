@@ -115,16 +115,15 @@ public class BuildingForm extends CrmEntityForm<BuildingDTO> {
 
         selectTab(addTab(createGeneralTab(), i18n.tr("General")));
         addTab(createDetailsTab(), i18n.tr("Details"));
-        floorplansTab = addTab(isEditable() ? new HTML() : ((BuildingViewerView) getParentView()).getFloorplanListerView().asWidget(), i18n.tr("Floorplans"));
-        unitsTab = addTab(isEditable() ? new HTML() : ((BuildingViewerView) getParentView()).getUnitListerView().asWidget(), i18n.tr("Units"));
+        floorplansTab = addTab(isEditable() ? new HTML() : ((BuildingViewerView) getParentView()).getFloorplanListerView(), i18n.tr("Floorplans"));
+        unitsTab = addTab(isEditable() ? new HTML() : ((BuildingViewerView) getParentView()).getUnitListerView(), i18n.tr("Units"));
         mechanicalsTab = addTab(createMachanicalsTab(), i18n.tr("Mechanicals"));
         addOnsTab = addTab(createAddOnsTab(), i18n.tr("Add-Ons"));
         financialTab = addTab(createFinancialTab(), i18n.tr("Financial"));
         marketingTab = addTab(createMarketingTab(), i18n.tr("Marketing"));
         catalogTab = addTab(createCatalogTab(), i18n.tr("Product Catalog"));
         addTab(createContactTab(), i18n.tr("Contacts"));
-        billingCyclesTab = addTab(isEditable() ? new HTML() : ((BuildingViewerView) getParentView()).getBillingCycleListerView().asWidget(),
-                i18n.tr("Billing Cycles"));
+        billingCyclesTab = addTab(isEditable() ? new HTML() : ((BuildingViewerView) getParentView()).getBillingCycleListerView(), i18n.tr("Billing Cycles"));
 
         // Tabs visibility/editability:  
         floorplansTab.setTabVisible(SecurityController.check(DataModelPermission.permissionRead(FloorplanDTO.class)));
