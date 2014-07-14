@@ -3,6 +3,7 @@ SELECT  'berkley' AS pmc, b.property_code,
         c.person_name_last_name AS last_name,
         ic.insurance_certificate_number,
         ip.status, ic.inception_date,
+        ip.cancellation_date,
         pm.id AS payment_method,
         ppd.expiry_date, b.suspended
 FROM    berkley.customer c
@@ -15,7 +16,6 @@ JOIN    berkley.lease l ON (l.id = lp.lease)
 JOIN    berkley.apt_unit a ON (a.id = l.unit)
 JOIN    berkley.building b ON (b.id = a.building)
 JOIN    _admin_.tenant_sure_subscribers t ON (t.certificate_number = ic.insurance_certificate_number)
-WHERE   ip.status = 'Active'
 AND NOT pm.is_deleted
 UNION
 SELECT  'cogir' AS pmc, b.property_code,
@@ -23,6 +23,7 @@ SELECT  'cogir' AS pmc, b.property_code,
         c.person_name_last_name AS last_name,
         ic.insurance_certificate_number,
         ip.status, ic.inception_date,
+        ip.cancellation_date,
         pm.id AS payment_method,
         ppd.expiry_date, b.suspended
 FROM    cogir.customer c
@@ -35,7 +36,6 @@ JOIN    cogir.lease l ON (l.id = lp.lease)
 JOIN    cogir.apt_unit a ON (a.id = l.unit)
 JOIN    cogir.building b ON (b.id = a.building)
 JOIN    _admin_.tenant_sure_subscribers t ON (t.certificate_number = ic.insurance_certificate_number)
-WHERE   ip.status = 'Active'
 AND NOT pm.is_deleted
 UNION
 SELECT  'dms' AS pmc, b.property_code,
@@ -43,6 +43,7 @@ SELECT  'dms' AS pmc, b.property_code,
         c.person_name_last_name AS last_name,
         ic.insurance_certificate_number,
         ip.status, ic.inception_date,
+        ip.cancellation_date,
         pm.id AS payment_method,
         ppd.expiry_date, b.suspended
 FROM    dms.customer c
@@ -55,7 +56,6 @@ JOIN    dms.lease l ON (l.id = lp.lease)
 JOIN    dms.apt_unit a ON (a.id = l.unit)
 JOIN    dms.building b ON (b.id = a.building)
 JOIN    _admin_.tenant_sure_subscribers t ON (t.certificate_number = ic.insurance_certificate_number)
-WHERE   ip.status = 'Active'
 AND NOT pm.is_deleted
 UNION
 SELECT  'greenwin' AS pmc, b.property_code,
@@ -63,6 +63,7 @@ SELECT  'greenwin' AS pmc, b.property_code,
         c.person_name_last_name AS last_name,
         ic.insurance_certificate_number,
         ip.status, ic.inception_date,
+        ip.cancellation_date,
         pm.id AS payment_method,
         ppd.expiry_date, b.suspended
 FROM    greenwin.customer c
@@ -75,7 +76,6 @@ JOIN    greenwin.lease l ON (l.id = lp.lease)
 JOIN    greenwin.apt_unit a ON (a.id = l.unit)
 JOIN    greenwin.building b ON (b.id = a.building)
 JOIN    _admin_.tenant_sure_subscribers t ON (t.certificate_number = ic.insurance_certificate_number)
-WHERE   ip.status = 'Active'
 AND NOT pm.is_deleted
 UNION
 SELECT  'larlyn' AS pmc, b.property_code,
@@ -83,6 +83,7 @@ SELECT  'larlyn' AS pmc, b.property_code,
         c.person_name_last_name AS last_name,
         ic.insurance_certificate_number,
         ip.status, ic.inception_date,
+        ip.cancellation_date,
         pm.id AS payment_method,
         ppd.expiry_date, b.suspended
 FROM    larlyn.customer c
@@ -95,7 +96,6 @@ JOIN    larlyn.lease l ON (l.id = lp.lease)
 JOIN    larlyn.apt_unit a ON (a.id = l.unit)
 JOIN    larlyn.building b ON (b.id = a.building)
 JOIN    _admin_.tenant_sure_subscribers t ON (t.certificate_number = ic.insurance_certificate_number)
-WHERE   ip.status = 'Active'
 AND NOT pm.is_deleted
 UNION
 SELECT  'metcap' AS pmc, b.property_code,
@@ -103,6 +103,7 @@ SELECT  'metcap' AS pmc, b.property_code,
         c.person_name_last_name AS last_name,
         ic.insurance_certificate_number,
         ip.status, ic.inception_date,
+        ip.cancellation_date,
         pm.id AS payment_method,
         ppd.expiry_date, b.suspended
 FROM    metcap.customer c
@@ -115,7 +116,6 @@ JOIN    metcap.lease l ON (l.id = lp.lease)
 JOIN    metcap.apt_unit a ON (a.id = l.unit)
 JOIN    metcap.building b ON (b.id = a.building)
 JOIN    _admin_.tenant_sure_subscribers t ON (t.certificate_number = ic.insurance_certificate_number)
-WHERE   ip.status = 'Active'
 AND NOT pm.is_deleted
 UNION
 SELECT  'ofm' AS pmc, b.property_code,
@@ -123,6 +123,7 @@ SELECT  'ofm' AS pmc, b.property_code,
         c.person_name_last_name AS last_name,
         ic.insurance_certificate_number,
         ip.status, ic.inception_date,
+        ip.cancellation_date,
         pm.id AS payment_method,
         ppd.expiry_date, b.suspended
 FROM    ofm.customer c
@@ -135,7 +136,6 @@ JOIN    ofm.lease l ON (l.id = lp.lease)
 JOIN    ofm.apt_unit a ON (a.id = l.unit)
 JOIN    ofm.building b ON (b.id = a.building)
 JOIN    _admin_.tenant_sure_subscribers t ON (t.certificate_number = ic.insurance_certificate_number)
-WHERE   ip.status = 'Active'
 AND NOT pm.is_deleted
 UNION
 SELECT  'realstar' AS pmc, b.property_code,
@@ -143,6 +143,7 @@ SELECT  'realstar' AS pmc, b.property_code,
         c.person_name_last_name AS last_name,
         ic.insurance_certificate_number,
         ip.status, ic.inception_date,
+        ip.cancellation_date,
         pm.id AS payment_method,
         ppd.expiry_date, b.suspended
 FROM    realstar.customer c
@@ -155,7 +156,6 @@ JOIN    realstar.lease l ON (l.id = lp.lease)
 JOIN    realstar.apt_unit a ON (a.id = l.unit)
 JOIN    realstar.building b ON (b.id = a.building)
 JOIN    _admin_.tenant_sure_subscribers t ON (t.certificate_number = ic.insurance_certificate_number)
-WHERE   ip.status = 'Active'
 AND NOT pm.is_deleted
 UNION
 SELECT  'sterling' AS pmc, b.property_code,
@@ -163,6 +163,7 @@ SELECT  'sterling' AS pmc, b.property_code,
         c.person_name_last_name AS last_name,
         ic.insurance_certificate_number,
         ip.status, ic.inception_date,
+        ip.cancellation_date,
         pm.id AS payment_method,
         ppd.expiry_date, b.suspended
 FROM    sterling.customer c
@@ -175,6 +176,5 @@ JOIN    sterling.lease l ON (l.id = lp.lease)
 JOIN    sterling.apt_unit a ON (a.id = l.unit)
 JOIN    sterling.building b ON (b.id = a.building)
 JOIN    _admin_.tenant_sure_subscribers t ON (t.certificate_number = ic.insurance_certificate_number)
-WHERE   ip.status = 'Active'
 AND NOT pm.is_deleted
 ORDER BY 1,6;
