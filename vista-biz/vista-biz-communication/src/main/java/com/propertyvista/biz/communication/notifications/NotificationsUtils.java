@@ -36,6 +36,13 @@ public class NotificationsUtils {
         return emails;
     }
 
+    public static List<Employee> getNotificationTraget(Notification.NotificationType notificationType) {
+        EntityQueryCriteria<Employee> criteria = EntityQueryCriteria.create(Employee.class);
+        criteria.eq(criteria.proto().notifications().$().type(), notificationType);
+
+        return Persistence.service().query(criteria);
+    }
+
     public static List<Employee> getNotificationTraget(Lease leaseId, Notification.NotificationType notificationType) {
         EntityQueryCriteria<Building> criteria = EntityQueryCriteria.create(Building.class);
         criteria.eq(criteria.proto().units().$().leases(), leaseId);

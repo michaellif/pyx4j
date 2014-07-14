@@ -37,6 +37,8 @@ public interface NotificationFacade {
 
     public void yardiUnableToPostPaymentBatch(Building batchBuilding, PaymentRecord firstPaymentRecord, String errorMessage);
 
+    public void yardiConfigurationError(String errorMessage);
+
     public void autoPaySetupCompleted(AutopayAgreement autopayAgreement);
 
     public void autoPayChanges(AutopayAgreement autopayAgreement);

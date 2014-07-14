@@ -191,6 +191,8 @@ public class YardiGuestManagementStubImpl extends AbstractYardiStub implements Y
             }
 
             return MarshallUtil.unmarshal(MarketingSources.class, xml);
+        } catch (YardiServiceException ye) {
+            throw ye;
         } catch (Throwable e) {
             throw new Error(e);
         }

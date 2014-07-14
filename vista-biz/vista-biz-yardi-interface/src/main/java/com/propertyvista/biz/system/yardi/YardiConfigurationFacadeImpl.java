@@ -24,6 +24,7 @@ import com.yardi.entity.guestcard40.PropertyMarketingSources;
 import com.pyx4j.config.server.ServerSideFactory;
 
 import com.propertyvista.biz.ExecutionMonitor;
+import com.propertyvista.biz.communication.NotificationFacade;
 import com.propertyvista.biz.system.YardiServiceException;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.settings.PmcYardiCredential;
@@ -91,14 +92,25 @@ public class YardiConfigurationFacadeImpl implements YardiConfigurationFacade {
         if (yc.propertyListCodes().isNull()) {
             propertyCodes.addAll(masterPropertyList);
         } else {
-            // validate and  convert property list codes into a list of property codes
+            // validate and convert property list codes into a list of property codes
             for (String propertyListCode : yc.propertyListCodes().getValue().trim().split("\\s*,\\s*")) {
-                for (PropertyMarketingSources sources : ilsStub.getYardiMarketingSources(yc, propertyListCode).getProperty()) {
-                    String propertyCode = sources.getPropertyCode();
-                    if (!masterPropertyList.contains(propertyCode)) {
-                        executionMonitor.addErredEvent("YardiConfig", "Property code not found in the properties configured for ILS: " + propertyCode);
+                List<PropertyMarketingSources> sourceList = null;
+                try {
+                    sourceList = ilsStub.getYardiMarketingSources(yc, propertyListCode).getProperty();
+                    for (PropertyMarketingSources sources : sourceList) {
+                        String propertyCode = sources.getPropertyCode();
+                        if (!masterPropertyList.contains(propertyCode)) {
+                            executionMonitor.addErredEvent("YardiConfig", "Property code not found in the properties configured for ILS: " + propertyCode);
+                        }
+                        propertyCodes.add(propertyCode);
                     }
-                    propertyCodes.add(propertyCode);
+                } catch (Throwable t) {
+                    // report configuration issues
+                    executionMonitor.addErredEvent("YardiConfig", t.getMessage());
+                    if (t instanceof YardiServiceException) {
+                        // send notification to Notification.YardiSynchronisation users
+                        ServerSideFactory.create(NotificationFacade.class).yardiConfigurationError(t.getMessage());
+                    }
                 }
             }
         }

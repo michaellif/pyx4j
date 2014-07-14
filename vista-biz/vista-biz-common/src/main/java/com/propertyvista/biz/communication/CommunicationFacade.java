@@ -116,4 +116,5 @@ public interface CommunicationFacade {
 
     MailMessage sendMaintenanceRequestEntryNotice(MaintenanceRequest request);
 
+    void sendYardiConfigurationNotification(List<String> sendTo, String message);
 }

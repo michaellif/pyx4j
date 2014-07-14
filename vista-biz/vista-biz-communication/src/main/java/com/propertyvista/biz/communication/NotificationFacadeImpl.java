@@ -27,6 +27,7 @@ import com.propertyvista.biz.communication.notifications.AutoPayReviewRequiredNo
 import com.propertyvista.biz.communication.notifications.NotificationsAggregator;
 import com.propertyvista.biz.communication.notifications.PostToYardiFailedNotification;
 import com.propertyvista.biz.communication.notifications.RejectPaymentNotification;
+import com.propertyvista.biz.communication.notifications.YardiConfigurationNotification;
 import com.propertyvista.biz.system.OperationsAlertFacade;
 import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.payment.AutopayAgreement;
@@ -135,6 +136,11 @@ public class NotificationFacadeImpl implements NotificationFacade {
     @Override
     public void autoPayCancellation(AutopayAgreement autopayAgreement) {
         ServerSideFactory.create(CommunicationFacade.class).sendTenantAutoPayCancellation(autopayAgreement);
+    }
+
+    @Override
+    public void yardiConfigurationError(String errorMessage) {
+        aggregateOrSend(new YardiConfigurationNotification(errorMessage));
     }
 
 }

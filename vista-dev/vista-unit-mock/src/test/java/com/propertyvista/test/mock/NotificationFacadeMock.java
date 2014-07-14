@@ -80,4 +80,8 @@ public class NotificationFacadeMock implements NotificationFacade {
 
     }
 
+    @Override
+    public void yardiConfigurationError(String errorMessage) {
+    }
+
 }

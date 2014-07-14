@@ -75,6 +75,18 @@ class MessageTemplatesCrmNotification {
         return email;
     }
 
+    public static MailMessage createYardiConfigurationNotificationEmail(String message) {
+        MailMessage email = new MailMessage();
+        email.setSender(getSender());
+        email.setSubject(i18n.tr("Yardi Configuration Notice"));
+
+        MessageTemplate template = new MessageTemplate();
+        template.setBodyTemplate(message);
+
+        email.setHtmlBody(template.getWrappedBody(wrapperTextResourceName));
+        return email;
+    }
+
     public static MailMessage createPaymentRejectedNotificationEmail(PaymentRecord paymentRecord, boolean applyNSF) {
         MailMessage email = new MailMessage();
         email.setSender(getSender());
