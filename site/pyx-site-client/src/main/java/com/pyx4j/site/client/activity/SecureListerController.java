@@ -21,14 +21,14 @@
 package com.pyx4j.site.client.activity;
 
 import com.pyx4j.entity.core.IEntity;
-import com.pyx4j.entity.rpc.AbstractListService;
+import com.pyx4j.entity.rpc.AbstractListCrudService;
 import com.pyx4j.entity.security.DataModelPermission;
 import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.site.client.ui.prime.lister.ILister;
 
 public class SecureListerController<E extends IEntity> extends ListerController<E> {
 
-    public SecureListerController(Class<E> entityClass, ILister<E> view, AbstractListService<E> service) {
+    public SecureListerController(Class<E> entityClass, ILister<E> view, AbstractListCrudService<E> service) {
         super(entityClass, view, service);
     }
 

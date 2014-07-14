@@ -30,7 +30,7 @@ import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.criterion.Criterion;
 import com.pyx4j.entity.rpc.AbstractCrudService.InitializationData;
-import com.pyx4j.entity.rpc.AbstractListService;
+import com.pyx4j.entity.rpc.AbstractListCrudService;
 import com.pyx4j.entity.security.DataModelPermission;
 import com.pyx4j.entity.shared.IntegrityConstraintUserRuntimeException;
 import com.pyx4j.gwt.commons.UnrecoverableClientError;
@@ -51,13 +51,13 @@ public class ListerController<E extends IEntity> implements ILister.Presenter<E>
 
     private final ListerDataSource<E> dataSource;
 
-    private final AbstractListService<E> service;
+    private final AbstractListCrudService<E> service;
 
     private Key parentId;
 
     private Class<? extends IEntity> parentClass;
 
-    public ListerController(Class<E> entityClass, ILister<E> view, AbstractListService<E> service) {
+    public ListerController(Class<E> entityClass, ILister<E> view, AbstractListCrudService<E> service) {
         // development correctness checks:
         assert (entityClass != null);
         assert (view != null);
@@ -74,7 +74,7 @@ public class ListerController<E extends IEntity> implements ILister.Presenter<E>
         return view;
     }
 
-    public AbstractListService<E> getService() {
+    public AbstractListCrudService<E> getService() {
         return service;
     }
 

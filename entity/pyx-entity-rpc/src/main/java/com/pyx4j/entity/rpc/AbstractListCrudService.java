@@ -27,7 +27,7 @@ import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.criterion.EntityListCriteria;
 import com.pyx4j.rpc.shared.IService;
 
-public interface AbstractListService<E extends IEntity> extends IService {
+public interface AbstractListCrudService<E extends IEntity> extends IService {
 
     public void list(AsyncCallback<EntitySearchResult<E>> callback, EntityListCriteria<E> criteria);
 

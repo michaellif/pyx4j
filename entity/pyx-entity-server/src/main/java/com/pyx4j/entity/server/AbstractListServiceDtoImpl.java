@@ -37,13 +37,13 @@ import com.pyx4j.entity.core.criterion.EntityListCriteria;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.entity.core.criterion.OrCriterion;
 import com.pyx4j.entity.core.criterion.PropertyCriterion;
-import com.pyx4j.entity.rpc.AbstractListService;
+import com.pyx4j.entity.rpc.AbstractListCrudService;
 import com.pyx4j.entity.rpc.EntitySearchResult;
 import com.pyx4j.entity.security.EntityPermission;
 import com.pyx4j.entity.shared.utils.EntityBinder;
 import com.pyx4j.security.shared.SecurityController;
 
-public abstract class AbstractListServiceDtoImpl<BO extends IEntity, TO extends IEntity> implements AbstractListService<TO> {
+public abstract class AbstractListServiceDtoImpl<BO extends IEntity, TO extends IEntity> implements AbstractListCrudService<TO> {
 
     protected Class<BO> boClass;
 

@@ -22,6 +22,6 @@ package com.pyx4j.entity.rpc;
 
 import com.pyx4j.entity.core.IVersionData;
 
-public interface AbstractVersionDataListService<E extends IVersionData<?>> extends AbstractListService<E> {
+public interface AbstractVersionDataListService<E extends IVersionData<?>> extends AbstractListCrudService<E> {
 
 }

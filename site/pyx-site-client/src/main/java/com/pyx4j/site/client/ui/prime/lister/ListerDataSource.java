@@ -30,7 +30,7 @@ import com.pyx4j.entity.core.criterion.EntityListCriteria;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.core.criterion.PropertyCriterion;
 import com.pyx4j.entity.core.criterion.PropertyCriterion.Restriction;
-import com.pyx4j.entity.rpc.AbstractListService;
+import com.pyx4j.entity.rpc.AbstractListCrudService;
 import com.pyx4j.entity.rpc.EntitySearchResult;
 import com.pyx4j.forms.client.ui.AsyncLoadingHandler;
 import com.pyx4j.forms.client.ui.EntityDataSource;
@@ -40,13 +40,13 @@ public class ListerDataSource<E extends IEntity> implements EntityDataSource<E> 
 
     private final Class<E> entityClass;
 
-    private final AbstractListService<E> service;
+    private final AbstractListCrudService<E> service;
 
     private Criterion parentFiltering;
 
     private List<Criterion> preDefinedFilters = new LinkedList<Criterion>();
 
-    public ListerDataSource(Class<E> entityClass, AbstractListService<E> service) {
+    public ListerDataSource(Class<E> entityClass, AbstractListCrudService<E> service) {
         this.entityClass = entityClass;
         this.service = service;
     }

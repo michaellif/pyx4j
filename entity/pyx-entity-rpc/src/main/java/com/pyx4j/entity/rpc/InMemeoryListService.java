@@ -38,7 +38,7 @@ import com.pyx4j.entity.core.criterion.EntityCriteriaFilter;
 import com.pyx4j.entity.core.criterion.EntityListCriteria;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
 
-public class InMemeoryListService<E extends IEntity> implements AbstractListService<E> {
+public class InMemeoryListService<E extends IEntity> implements AbstractListCrudService<E> {
 
     private final Collection<E> values;
 

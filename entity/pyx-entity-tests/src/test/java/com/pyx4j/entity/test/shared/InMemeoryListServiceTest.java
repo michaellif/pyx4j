@@ -30,7 +30,7 @@ import com.pyx4j.entity.core.criterion.Criterion;
 import com.pyx4j.entity.core.criterion.EntityCriteriaFilter;
 import com.pyx4j.entity.core.criterion.EntityListCriteria;
 import com.pyx4j.entity.core.criterion.PropertyCriterion;
-import com.pyx4j.entity.rpc.AbstractListService;
+import com.pyx4j.entity.rpc.AbstractListCrudService;
 import com.pyx4j.entity.rpc.EntitySearchResult;
 import com.pyx4j.entity.rpc.InMemeoryListService;
 import com.pyx4j.entity.test.shared.domain.Employee;
@@ -65,7 +65,7 @@ public class InMemeoryListServiceTest extends InitializerTestBase {
             emps.add(emp);
         }
 
-        AbstractListService<Employee> srv = new InMemeoryListService<Employee>(emps);
+        AbstractListCrudService<Employee> srv = new InMemeoryListService<Employee>(emps);
 
         EntityListCriteria<Employee> criteria = EntityListCriteria.create(Employee.class);
         criteria.setPageNumber(1);

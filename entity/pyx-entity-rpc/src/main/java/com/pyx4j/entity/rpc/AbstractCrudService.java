@@ -28,7 +28,7 @@ import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.rpc.shared.ServiceExecution;
 
-public interface AbstractCrudService<E extends IEntity> extends AbstractListService<E> {
+public interface AbstractCrudService<E extends IEntity> extends AbstractListCrudService<E> {
 
     public static enum RetrieveTarget {
 

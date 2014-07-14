@@ -39,7 +39,7 @@ import com.pyx4j.entity.core.criterion.EntityListCriteria;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria.VersionedCriteria;
 import com.pyx4j.entity.core.criterion.PropertyCriterion;
-import com.pyx4j.entity.rpc.AbstractListService;
+import com.pyx4j.entity.rpc.AbstractListCrudService;
 import com.pyx4j.forms.client.ui.CRadioGroupEnum;
 import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.forms.client.ui.datatable.DataTable.ItemSelectionHandler;
@@ -107,7 +107,7 @@ public abstract class EntitySelectorTableDialog<E extends IEntity> extends Abstr
 
     protected abstract List<ColumnDescriptor> defineColumnDescriptors();
 
-    protected abstract AbstractListService<E> getSelectService();
+    protected abstract AbstractListCrudService<E> getSelectService();
 
     protected List<Sort> getDefaultSorting() {
         return null;
