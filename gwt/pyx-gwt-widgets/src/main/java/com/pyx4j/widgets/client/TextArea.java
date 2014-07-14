@@ -35,12 +35,12 @@ public class TextArea extends com.google.gwt.user.client.ui.TextArea implements 
             watermark = new TextWatermark(this) {
 
                 @Override
-                String getText() {
+                public String getText() {
                     return TextArea.super.getText();
                 }
 
                 @Override
-                void setText(String text) {
+                public void setText(String text) {
                     TextArea.super.setText(text);
                 }
             };

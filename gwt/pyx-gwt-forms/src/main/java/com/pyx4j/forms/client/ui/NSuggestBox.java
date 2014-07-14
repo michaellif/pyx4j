@@ -24,9 +24,9 @@ import com.google.gwt.event.logical.shared.SelectionEvent;
 import com.google.gwt.event.logical.shared.SelectionHandler;
 import com.google.gwt.user.client.ui.MultiWordSuggestOracle;
 
-import com.pyx4j.widgets.client.SuggestBox;
+import com.pyx4j.widgets.client.suggest.SuggestTextBox;
 
-public class NSuggestBox<E> extends NTextFieldBase<E, SuggestBox, CSuggestBox<E>> {
+public class NSuggestBox<E> extends NTextFieldBase<E, SuggestTextBox, CSuggestBox<E>> {
 
     private final MultiWordSuggestOracle suggestOracle;
 
@@ -36,8 +36,8 @@ public class NSuggestBox<E> extends NTextFieldBase<E, SuggestBox, CSuggestBox<E>
     }
 
     @Override
-    protected SuggestBox createEditor() {
-        return new SuggestBox(suggestOracle);
+    protected SuggestTextBox createEditor() {
+        return new SuggestTextBox(suggestOracle);
     }
 
     @SuppressWarnings({ "rawtypes", "unchecked" })

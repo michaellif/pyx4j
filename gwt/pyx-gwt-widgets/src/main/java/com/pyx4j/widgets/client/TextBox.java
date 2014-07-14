@@ -35,12 +35,12 @@ public class TextBox extends com.google.gwt.user.client.ui.TextBox implements IT
             watermark = new TextWatermark(this) {
 
                 @Override
-                String getText() {
+                public String getText() {
                     return TextBox.super.getText();
                 }
 
                 @Override
-                void setText(String text) {
+                public void setText(String text) {
                     TextBox.super.setText(text);
                 }
             };

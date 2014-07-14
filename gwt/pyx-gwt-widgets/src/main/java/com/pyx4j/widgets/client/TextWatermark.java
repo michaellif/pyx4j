@@ -101,9 +101,9 @@ public abstract class TextWatermark {
         insideShowWatermark = false;
     }
 
-    abstract String getText();
+    public abstract String getText();
 
-    abstract void setText(String text);
+    public abstract void setText(String text);
 
     protected boolean isEmptyText() {
         return getText() == null || getText().isEmpty();

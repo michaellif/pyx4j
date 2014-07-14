@@ -31,8 +31,8 @@ import com.google.gwt.event.dom.client.FocusHandler;
 import com.google.gwt.event.logical.shared.SelectionEvent;
 import com.google.gwt.event.logical.shared.SelectionHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
-import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.ui.SuggestOracle;
+import com.google.gwt.user.client.ui.SuggestOracle.Suggestion;
 
 public class SuggestBox extends com.google.gwt.user.client.ui.SuggestBox implements WatermarkComponent, ITextWidget {
 
@@ -54,12 +54,12 @@ public class SuggestBox extends com.google.gwt.user.client.ui.SuggestBox impleme
             watermark = new TextWatermark(this) {
 
                 @Override
-                String getText() {
+                public String getText() {
                     return SuggestBox.super.getText();
                 }
 
                 @Override
-                void setText(String text) {
+                public void setText(String text) {
                     SuggestBox.super.setText(text);
                 }
             };
@@ -102,7 +102,7 @@ public class SuggestBox extends com.google.gwt.user.client.ui.SuggestBox impleme
     @Override
     public void setEnabled(boolean enabled) {
         this.enabled = enabled;
-        DOM.setElementPropertyBoolean(getElement(), "disabled", !enabled);
+        getElement().setPropertyBoolean("disabled", !enabled);
     }
 
     @Override
@@ -123,9 +123,9 @@ public class SuggestBox extends com.google.gwt.user.client.ui.SuggestBox impleme
 
     @Override
     public HandlerRegistration addChangeHandler(ChangeHandler handler) {
-        addSelectionHandler(new SelectionHandler() {
+        addSelectionHandler(new SelectionHandler<Suggestion>() {
             @Override
-            public void onSelection(SelectionEvent event) {
+            public void onSelection(SelectionEvent<Suggestion> event) {
                 NativeEvent nativeEvent = Document.get().createChangeEvent();
                 ChangeEvent.fireNativeEvent(nativeEvent, null);
             }

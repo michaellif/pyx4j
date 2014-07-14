@@ -35,12 +35,12 @@ public class PasswordTextBox extends com.google.gwt.user.client.ui.PasswordTextB
             watermark = new TextWatermark(this) {
 
                 @Override
-                String getText() {
+                public String getText() {
                     return PasswordTextBox.super.getText();
                 }
 
                 @Override
-                void setText(String text) {
+                public void setText(String text) {
                     PasswordTextBox.super.setText(text);
                 }
 
