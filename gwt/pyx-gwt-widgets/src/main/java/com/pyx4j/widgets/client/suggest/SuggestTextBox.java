@@ -26,9 +26,6 @@ import java.util.List;
 import com.google.gwt.core.client.Scheduler.ScheduledCommand;
 import com.google.gwt.dom.client.Document;
 import com.google.gwt.dom.client.NativeEvent;
-import com.google.gwt.editor.client.IsEditor;
-import com.google.gwt.editor.client.LeafValueEditor;
-import com.google.gwt.editor.client.adapters.TakesValueEditor;
 import com.google.gwt.event.dom.client.BlurEvent;
 import com.google.gwt.event.dom.client.BlurHandler;
 import com.google.gwt.event.dom.client.ChangeEvent;
@@ -74,11 +71,43 @@ import com.pyx4j.widgets.client.WatermarkComponent;
 import com.pyx4j.widgets.client.style.theme.WidgetTheme;
 
 public class SuggestTextBox extends Composite implements WatermarkComponent, ITextWidget, HasText, HasEnabled, HasAllKeyHandlers, HasValue<String>,
-        HasSelectionHandlers<Suggestion>, IsEditor<LeafValueEditor<String>> {
+        HasSelectionHandlers<Suggestion> {
 
     private boolean editable = true;
 
     private TextWatermark watermark;
+
+    private int limit = 20;
+
+    private boolean selectsFirstItem = true;
+
+    private SuggestOracle oracle;
+
+    private String currentText;
+
+    private final SuggestionDisplay display;
+
+    private final ValueBoxBase<String> box;
+
+    private final Callback callback = new Callback() {
+        @Override
+        public void onSuggestionsReady(Request request, Response response) {
+            // If disabled while request was in-flight, drop it
+            if (!isEnabled()) {
+                return;
+            }
+            display.setMoreSuggestions(response.hasMoreSuggestions(), response.getMoreSuggestionsCount());
+            display.showSuggestions(SuggestTextBox.this, response.getSuggestions(), oracle.isDisplayStringHTML(), isAutoSelectEnabled(), suggestionCallback);
+        }
+    };
+
+    private final SuggestionCallback suggestionCallback = new SuggestionCallback() {
+        @Override
+        public void onSuggestionSelected(Suggestion suggestion) {
+            box.setFocus(true);
+            setNewSelection(suggestion);
+        }
+    };
 
     public SuggestTextBox() {
         this(new MultiWordSuggestOracle());
@@ -108,40 +137,6 @@ public class SuggestTextBox extends Composite implements WatermarkComponent, ITe
 
     }
 
-    private int limit = 20;
-
-    private boolean selectsFirstItem = true;
-
-    private SuggestOracle oracle;
-
-    private String currentText;
-
-    private LeafValueEditor<String> editor;
-
-    private final SuggestionDisplay display;
-
-    private final ValueBoxBase<String> box;
-
-    private final Callback callback = new Callback() {
-        @Override
-        public void onSuggestionsReady(Request request, Response response) {
-            // If disabled while request was in-flight, drop it
-            if (!isEnabled()) {
-                return;
-            }
-            display.setMoreSuggestions(response.hasMoreSuggestions(), response.getMoreSuggestionsCount());
-            display.showSuggestions(SuggestTextBox.this, response.getSuggestions(), oracle.isDisplayStringHTML(), isAutoSelectEnabled(), suggestionCallback);
-        }
-    };
-
-    private final SuggestionCallback suggestionCallback = new SuggestionCallback() {
-        @Override
-        public void onSuggestionSelected(Suggestion suggestion) {
-            box.setFocus(true);
-            setNewSelection(suggestion);
-        }
-    };
-
     @Override
     public HandlerRegistration addKeyDownHandler(KeyDownHandler handler) {
         return addDomHandler(handler, KeyDownEvent.getType());
@@ -165,17 +160,6 @@ public class SuggestTextBox extends Composite implements WatermarkComponent, ITe
     @Override
     public HandlerRegistration addValueChangeHandler(ValueChangeHandler<String> handler) {
         return addHandler(handler, ValueChangeEvent.getType());
-    }
-
-    /**
-     * Returns a {@link TakesValueEditor} backed by the SuggestBox.
-     */
-    @Override
-    public LeafValueEditor<String> asEditor() {
-        if (editor == null) {
-            editor = TakesValueEditor.of(this);
-        }
-        return editor;
     }
 
     /**
