@@ -29,7 +29,6 @@ import com.pyx4j.commons.PersonalIdentityFormatter;
 import com.pyx4j.entity.shared.IPersonalIdentity;
 import com.pyx4j.forms.client.validators.RegexValidator;
 import com.pyx4j.forms.client.validators.TextBoxParserValidator;
-import com.pyx4j.forms.client.validators.ValidationResults;
 import com.pyx4j.i18n.shared.I18n;
 
 /**
@@ -80,8 +79,9 @@ public class CPersonalIdentityField<T extends IPersonalIdentity> extends CTextFi
     }
 
     @Override
-    public ValidationResults getValidationResults() {
-        return super.getValidationResults();
+    public boolean isValidatable() {
+        // see also if native editor has any user input
+        return super.isValidatable() || !getNativeComponent().getEditor().getText().isEmpty();
     }
 
     @Override
@@ -176,7 +176,7 @@ public class CPersonalIdentityField<T extends IPersonalIdentity> extends CTextFi
             } else {
                 // non-empty string could be either new user input or obfuscated value (formatted) of existing entity
                 if (!formatter.isValidInput(string)) {
-                    throw new ParseException(i18n.tr("Identity value is invalid for the given format."), 0);
+                    throw new ParseException(i18n.tr("Invalid value format."), 0);
                 }
                 // check if we are parsing user input or obfuscated value
                 boolean userInput = (value == null || value.obfuscatedNumber().isNull());

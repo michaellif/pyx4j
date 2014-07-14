@@ -29,9 +29,15 @@ public class NPersonalIdentityField<E extends IPersonalIdentity> extends NTextBo
             @Override
             public void onBlur(BlurEvent event) {
                 // this will re-format native value in case it's been changed
-                // as CComponent#update() only does that if value INSTANCE has changed (!?)
-                if (isEditable() && getCComponent().getValue() != null) {
-                    setNativeValue(getCComponent().getValue());
+                // as CComponent#update() will only do that if value is valid
+                if (isEditable()) {
+                    try {
+                        E nativeValue = getNativeValue();
+                        if (nativeValue != null && !nativeValue.isEmpty()) {
+                            setNativeValue(nativeValue);
+                        }
+                    } catch (Exception ignore) {
+                    }
                 }
             }
         });
