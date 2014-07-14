@@ -16,6 +16,7 @@ package com.propertyvista.crm.client.ui.crud.lease.common;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.forms.client.ui.CComponent;
@@ -28,7 +29,6 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.AppPlaceEntityMapper;
 import com.pyx4j.site.client.ui.prime.form.IForm;
 import com.pyx4j.site.client.ui.prime.misc.CEntityCrudHyperlink;
-import com.pyx4j.widgets.client.tabpanel.Tab;
 
 import com.propertyvista.common.client.resources.VistaImages;
 import com.propertyvista.common.client.ui.components.editors.dto.bill.BillForm;
@@ -54,8 +54,6 @@ public abstract class LeaseFormBase<DTO extends LeaseDTO> extends CrmEntityForm<
 
     protected static final I18n i18n = I18n.get(LeaseFormBase.class);
 
-    protected Tab chargesTab;
-
     protected LeaseFormBase(Class<DTO> clazz, IForm<DTO> view) {
         super(clazz, view);
         setEditable(false);
@@ -76,10 +74,6 @@ public abstract class LeaseFormBase<DTO extends LeaseDTO> extends CrmEntityForm<
     @Override
     protected void onValueSet(boolean populate) {
         super.onValueSet(populate);
-
-        if (chargesTab != null) {
-            setTabVisible(chargesTab, getValue().status().getValue().isDraft() && !getValue().billingPreview().isNull());
-        }
 
         get(proto().leaseId()).setVisible(false);
         get(proto().leaseApplication().applicationId()).setVisible(false);
@@ -120,7 +114,7 @@ public abstract class LeaseFormBase<DTO extends LeaseDTO> extends CrmEntityForm<
     public void onTenantInsuranceOwnerClicked(Tenant tenantId) {
     }
 
-    private IsWidget createDetailsTab() {
+    protected IsWidget createDetailsTab() {
         FormPanel formPanel = new FormPanel(this);
 
         formPanel.append(Location.Left, proto().unit(), new CEntityCrudHyperlink<AptUnit>(AppPlaceEntityMapper.resolvePlace(AptUnit.class))).decorate()
@@ -214,6 +208,10 @@ public abstract class LeaseFormBase<DTO extends LeaseDTO> extends CrmEntityForm<
     }
 
     protected IsWidget createChargesTab() {
+        if (VistaFeatures.instance().yardiIntegration()) {
+            return new HTML();
+        }
+
         FormPanel formPanel = new FormPanel(this);
         formPanel.append(Location.Dual, proto().billingPreview(), new BillForm(true));
         return formPanel;

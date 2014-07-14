@@ -39,18 +39,15 @@ import com.propertyvista.shared.config.VistaFeatures;
 
 public class LeaseForm extends LeaseFormBase<LeaseDTO> {
 
-    private final Tab depositsTab, adjustmentsTab, billsTab, paymentsTab, financialTab, maintenanceTab, communicationTab;
+    private final Tab depositsTab, adjustmentsTab, chargesTab, billsTab, paymentsTab, financialTab, maintenanceTab, communicationTab;
 
     public LeaseForm(IForm<LeaseDTO> view) {
         super(LeaseDTO.class, view);
 
-        createCommonContent();
-
+        selectTab(addTab(createDetailsTab(), i18n.tr("Details")));
         depositsTab = addTab(((LeaseViewerView) getParentView()).getDepositListerView().asWidget(), i18n.tr("Deposits"));
         adjustmentsTab = addTab(((LeaseViewerView) getParentView()).getLeaseAdjustmentListerView().asWidget(), i18n.tr("Adjustments"));
-        if (!VistaFeatures.instance().yardiIntegration()) {
-            chargesTab = addTab(createChargesTab(), i18n.tr("Charges"));
-        }
+        chargesTab = addTab(createChargesTab(), i18n.tr("Charges"));
         billsTab = addTab(((LeaseViewerView) getParentView()).getBillListerView().asWidget(), i18n.tr("Bills"));
         paymentsTab = addTab(((LeaseViewerView) getParentView()).getPaymentListerView().asWidget(), i18n.tr("Receipts"));
         financialTab = addTab(createFinancialTransactionHistoryTab().asWidget(), i18n.tr("Financial Summary"));
@@ -62,7 +59,7 @@ public class LeaseForm extends LeaseFormBase<LeaseDTO> {
     public void onReset() {
         super.onReset();
 
-        // Tabs visibility by permission:  
+        // Static Tabs visibility (by permission):  
         depositsTab.setTabVisible(SecurityController.check(DataModelPermission.permissionRead(DepositLifecycleDTO.class)));
         adjustmentsTab.setTabVisible(SecurityController.check(DataModelPermission.permissionRead(LeaseAdjustment.class)));
         billsTab.setTabVisible(SecurityController.check(DataModelPermission.permissionRead(BillDataDTO.class)));
@@ -74,6 +71,7 @@ public class LeaseForm extends LeaseFormBase<LeaseDTO> {
         if (VistaFeatures.instance().yardiIntegration()) {
             setTabVisible(depositsTab, false);
             setTabVisible(adjustmentsTab, false);
+            setTabVisible(chargesTab, false);
             setTabVisible(billsTab, false);
         }
     }
@@ -87,6 +85,7 @@ public class LeaseForm extends LeaseFormBase<LeaseDTO> {
         // dynamic tabs visibility management:
         setTabVisible(depositsTab, depositsTab.isTabVisible() && !getValue().status().getValue().isDraft());
         setTabVisible(adjustmentsTab, adjustmentsTab.isTabVisible() && !getValue().status().getValue().isDraft());
+        setTabVisible(chargesTab, chargesTab.isTabVisible() && getValue().status().getValue().isDraft() && !getValue().billingPreview().isNull());
         setTabVisible(billsTab, billsTab.isTabVisible() && !getValue().status().getValue().isDraft());
         setTabVisible(paymentsTab, paymentsTab.isTabVisible() && !getValue().status().getValue().isDraft());
         setTabVisible(financialTab, financialTab.isTabVisible() && !getValue().status().getValue().isDraft());

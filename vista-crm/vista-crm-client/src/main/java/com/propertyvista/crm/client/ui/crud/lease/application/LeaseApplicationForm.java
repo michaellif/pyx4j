@@ -47,17 +47,14 @@ public class LeaseApplicationForm extends LeaseFormBase<LeaseApplicationDTO> {
 
     private FormPanel onlineStatusPanel;
 
-    private final Tab paymentsTab, financialTab, applicationDocumentsTab;
+    private final Tab chargesTab, paymentsTab, financialTab, applicationDocumentsTab;
 
     public LeaseApplicationForm(IForm<LeaseApplicationDTO> view) {
         super(LeaseApplicationDTO.class, view);
 
-        createCommonContent();
-
+        selectTab(addTab(createDetailsTab(), i18n.tr("Details")));
         addTab(createInfoTab(), i18n.tr("Information"));
-        if (!VistaFeatures.instance().yardiIntegration()) {
-            chargesTab = addTab(createChargesTab(), i18n.tr("Potential Charges"));
-        }
+        chargesTab = addTab(createChargesTab(), i18n.tr("Potential Charges"));
         paymentsTab = addTab(((LeaseApplicationViewerView) getParentView()).getPaymentListerView().asWidget(), i18n.tr("Payments"));
         financialTab = addTab(createFinancialTab(), i18n.tr("Financial"));
         addTab(createApprovalTab(), i18n.tr("Approval"));
@@ -68,7 +65,8 @@ public class LeaseApplicationForm extends LeaseFormBase<LeaseApplicationDTO> {
     public void onReset() {
         super.onReset();
 
-        // Tabs visibility by permission:  
+        // Static Tabs visibility (by permission):  
+        chargesTab.setTabVisible(!VistaFeatures.instance().yardiIntegration());
         paymentsTab.setTabVisible(SecurityController.check(DataModelPermission.permissionRead(PaymentRecordDTO.class)));
         financialTab.setTabVisible(SecurityController.check(DataModelPermission.permissionRead(TenantFinancialDTO.class)));
         applicationDocumentsTab.setTabVisible(SecurityController.check(DataModelPermission.permissionRead(LeaseApplicationDocument.class)));
@@ -77,6 +75,9 @@ public class LeaseApplicationForm extends LeaseFormBase<LeaseApplicationDTO> {
     @Override
     protected void onValueSet(boolean populate) {
         super.onValueSet(populate);
+
+        // dynamic tabs visibility management:
+        setTabVisible(chargesTab, chargesTab.isTabVisible() && getValue().status().getValue().isDraft() && !getValue().billingPreview().isNull());
 
         get(proto().leaseApplication().applicationId()).setVisible(true);
         get(proto().leaseApplication().yardiApplicationId()).setVisible(VistaFeatures.instance().yardiIntegration());

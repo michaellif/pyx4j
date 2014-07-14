@@ -130,7 +130,7 @@ public class BuildingForm extends CrmEntityForm<BuildingDTO> {
     public void onReset() {
         super.onReset();
 
-        // Tabs visibility by permission:  
+        // Static Tabs visibility (by permission):  
         floorplansTab.setTabVisible(SecurityController.check(DataModelPermission.permissionRead(FloorplanDTO.class)));
         unitsTab.setTabVisible(SecurityController.check(DataModelPermission.permissionRead(AptUnitDTO.class)));
         mechanicalsTab.setTabVisible(SecurityController.check(DataModelPermission.permissionRead(BuildingMechanical.class)));
@@ -157,12 +157,12 @@ public class BuildingForm extends CrmEntityForm<BuildingDTO> {
     protected void onValueSet(boolean populate) {
         super.onValueSet(populate);
 
+        // dynamic tabs visibility management:
+        catalogTab.setTabVisible(catalogTab.isTabVisible() && !getValue().defaultProductCatalog().getValue(false));
+
         get(proto().complex()).setVisible(!getValue().complex().isNull());
         get(proto().externalId()).setVisible(!getValue().externalId().isNull());
         get(proto().suspended()).setEditable(SecurityController.check(VistaCrmBehavior.PropertyVistaSupport));
-
-        // dynamic tabs visibility management:
-        catalogTab.setTabVisible(catalogTab.isTabVisible() && !getValue().defaultProductCatalog().getValue(false));
 
         // tweak property code editing UI:
         if (isEditable()) {
