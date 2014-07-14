@@ -26,6 +26,8 @@ import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.Event;
 
+import com.pyx4j.widgets.client.style.theme.WidgetTheme;
+
 public class Anchor extends com.google.gwt.user.client.ui.Anchor implements IFocusWidget {
 
     public static final String DEFAULT_HREF = "javascript:;";
@@ -50,16 +52,16 @@ public class Anchor extends com.google.gwt.user.client.ui.Anchor implements IFoc
 
     public Anchor(String text, boolean asHTML, String href) {
         super(text, asHTML, href);
-        setStylePrimaryName(getElement(), DefaultWidgetsTheme.StyleName.Anchor.name());
+        setStylePrimaryName(getElement(), WidgetTheme.StyleName.Anchor.name());
     }
 
     @Override
     public void setEnabled(boolean enabled) {
         super.setEnabled(enabled);
         if (enabled) {
-            removeStyleDependentName(DefaultWidgetsTheme.StyleDependent.disabled.name());
+            removeStyleDependentName(WidgetTheme.StyleDependent.disabled.name());
         } else {
-            addStyleDependentName(DefaultWidgetsTheme.StyleDependent.disabled.name());
+            addStyleDependentName(WidgetTheme.StyleDependent.disabled.name());
         }
     }
 

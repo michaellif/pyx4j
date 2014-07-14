@@ -60,7 +60,6 @@ public class WindowsTheme extends Theme {
         initDatePickerStyle();
         initHyperlinkStyle();
         initPhotoalbomStyle();
-        initSuggestBoxStyle();
         initBannerStyle();
         initMultipleDatePicker();
     }
@@ -399,26 +398,6 @@ public class WindowsTheme extends Theme {
         style = new Style(CSSClass.pyx4j_Photoalbom_Caption);
         style.addProperty("color", "#333");
         style.addProperty("font-weight", "bold");
-        addStyle(style);
-
-    }
-
-    protected void initSuggestBoxStyle() {
-        Style style = new Style(".gwt-SuggestBoxPopup");
-        style.addProperty("background-color", "white");
-        style.addProperty("padding", "2px");
-        style.addProperty("border-color", ThemeColor.foreground, 0.4);
-        style.addProperty("border-style", "solid");
-        style.addProperty("border-width", "1px");
-        style.addProperty("cursor", "pointer");
-        style.addProperty("cursor", "hand");
-        addStyle(style);
-
-        style = new Style(".gwt-SuggestBoxPopup .item");
-        addStyle(style);
-
-        style = new Style(".gwt-SuggestBoxPopup .item-selected");
-        style.addProperty("background-color", "#ffc");
         addStyle(style);
 
     }

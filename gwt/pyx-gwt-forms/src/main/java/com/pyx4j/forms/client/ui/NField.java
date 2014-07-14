@@ -47,9 +47,9 @@ import com.google.gwt.user.client.ui.Widget;
 import com.pyx4j.commons.CompositeDebugId;
 import com.pyx4j.commons.IDebugId;
 import com.pyx4j.widgets.client.Button;
-import com.pyx4j.widgets.client.DefaultWidgetsTheme;
 import com.pyx4j.widgets.client.GroupFocusHandler;
 import com.pyx4j.widgets.client.IWidget;
+import com.pyx4j.widgets.client.style.theme.WidgetTheme;
 
 public abstract class NField<DATA_TYPE, EDITOR extends IWidget, CCOMP extends CField<DATA_TYPE, ?>, VIEWER extends Widget> extends NComponent<DATA_TYPE, CCOMP>
         implements INativeField<DATA_TYPE> {
@@ -197,9 +197,9 @@ public abstract class NField<DATA_TYPE, EDITOR extends IWidget, CCOMP extends CF
             editor.setEnabled(enabled);
             editorPanel.setEnabled(isEditable() && enabled);
             if (enabled) {
-                editor.removeStyleDependentName(DefaultWidgetsTheme.StyleDependent.disabled.name());
+                editor.removeStyleDependentName(WidgetTheme.StyleDependent.disabled.name());
             } else {
-                editor.addStyleDependentName(DefaultWidgetsTheme.StyleDependent.disabled.name());
+                editor.addStyleDependentName(WidgetTheme.StyleDependent.disabled.name());
             }
         }
     }
@@ -219,9 +219,9 @@ public abstract class NField<DATA_TYPE, EDITOR extends IWidget, CCOMP extends CF
             editor.setEditable(editable);
             editorPanel.setEnabled(isEnabled() && editable);
             if (editable) {
-                editor.removeStyleDependentName(DefaultWidgetsTheme.StyleDependent.readonly.name());
+                editor.removeStyleDependentName(WidgetTheme.StyleDependent.readonly.name());
             } else {
-                editor.addStyleDependentName(DefaultWidgetsTheme.StyleDependent.readonly.name());
+                editor.addStyleDependentName(WidgetTheme.StyleDependent.readonly.name());
             }
         }
     }
@@ -506,7 +506,7 @@ public abstract class NField<DATA_TYPE, EDITOR extends IWidget, CCOMP extends CF
             public Link() {
                 super(DOM.createAnchor());
                 AnchorElement.as(getElement()).setHref(DEFAULT_HREF);
-                setStylePrimaryName(DefaultWidgetsTheme.StyleName.Anchor.name());
+                setStylePrimaryName(WidgetTheme.StyleName.Anchor.name());
             }
         }
 

@@ -37,7 +37,7 @@ import com.google.gwt.user.client.ui.FocusPanel;
 import com.google.gwt.user.client.ui.SimplePanel;
 
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.widgets.client.DefaultWidgetsTheme.StyleName;
+import com.pyx4j.widgets.client.style.theme.WidgetTheme.StyleName;
 
 public class RateIt extends FocusPanel implements HasValueChangeHandlers<Integer> {
 

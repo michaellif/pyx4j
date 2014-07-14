@@ -20,13 +20,15 @@
  */
 package com.pyx4j.widgets.client;
 
+import com.pyx4j.widgets.client.style.theme.WidgetTheme;
+
 public class TextBox extends com.google.gwt.user.client.ui.TextBox implements ITextWidget, WatermarkComponent {
 
     private TextWatermark watermark;
 
     public TextBox() {
-        setStyleName(DefaultWidgetsTheme.StyleName.TextBox.name());
-        addStyleDependentName(DefaultWidgetsTheme.StyleDependent.singleLine.name());
+        setStyleName(WidgetTheme.StyleName.TextBox.name());
+        addStyleDependentName(WidgetTheme.StyleDependent.singleLine.name());
     }
 
     @Override

@@ -32,10 +32,10 @@ import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 
 import com.pyx4j.widgets.client.Button;
-import com.pyx4j.widgets.client.DefaultWidgetsTheme;
 import com.pyx4j.widgets.client.combobox.OptionsGrabber.Callback;
 import com.pyx4j.widgets.client.combobox.OptionsGrabber.Request;
 import com.pyx4j.widgets.client.combobox.OptionsGrabber.Response;
+import com.pyx4j.widgets.client.style.theme.WidgetTheme;
 
 public abstract class ComboBox<E> extends HorizontalPanel {
 
@@ -60,7 +60,7 @@ public abstract class ComboBox<E> extends HorizontalPanel {
 
         viewerPanel.asWidget().getElement().getStyle().setBorderStyle(BorderStyle.NONE);
 
-        setStyleName(DefaultWidgetsTheme.StyleName.TextBox.name());
+        setStyleName(WidgetTheme.StyleName.TextBox.name());
 
         pickerPopup = new PickerPopup<E>(this);
 

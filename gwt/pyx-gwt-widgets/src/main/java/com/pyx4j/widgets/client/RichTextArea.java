@@ -25,11 +25,13 @@ import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.BlurEvent;
 import com.google.gwt.event.shared.GwtEvent;
 
+import com.pyx4j.widgets.client.style.theme.WidgetTheme;
+
 public class RichTextArea extends com.google.gwt.user.client.ui.RichTextArea {
     private boolean ignoreBlur;
 
     public RichTextArea() {
-        setStyleName(DefaultWidgetsTheme.StyleName.TextBox.name());
+        setStyleName(WidgetTheme.StyleName.TextBox.name());
         getElement().getStyle().setBorderStyle(BorderStyle.SOLID);
         getElement().getStyle().setBorderWidth(1, Unit.PX);
         getElement().getStyle().setBackgroundColor("white");

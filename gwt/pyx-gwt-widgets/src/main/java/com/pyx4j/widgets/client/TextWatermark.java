@@ -26,6 +26,8 @@ import com.google.gwt.event.dom.client.FocusEvent;
 import com.google.gwt.event.dom.client.FocusHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
 
+import com.pyx4j.widgets.client.style.theme.WidgetTheme;
+
 public abstract class TextWatermark {
 
     private final WatermarkComponent component;
@@ -90,13 +92,13 @@ public abstract class TextWatermark {
         if (show) {
             if (isEmptyText() || getText().equals(watermark)) {
                 setText(watermark);
-                component.addStyleDependentName(DefaultWidgetsTheme.StyleDependent.watermark.name());
+                component.addStyleDependentName(WidgetTheme.StyleDependent.watermark.name());
             }
         } else {
             if (isShown()) {
                 setText(null);
             }
-            component.removeStyleDependentName(DefaultWidgetsTheme.StyleDependent.watermark.name());
+            component.removeStyleDependentName(WidgetTheme.StyleDependent.watermark.name());
         }
         insideShowWatermark = false;
     }

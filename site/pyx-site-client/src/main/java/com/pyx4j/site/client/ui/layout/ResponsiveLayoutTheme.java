@@ -27,7 +27,7 @@ import com.pyx4j.commons.css.Style;
 import com.pyx4j.commons.css.Theme;
 import com.pyx4j.commons.css.ThemeColor;
 import com.pyx4j.commons.css.ThemeId;
-import com.pyx4j.widgets.client.DefaultWidgetsTheme;
+import com.pyx4j.widgets.client.style.theme.WidgetTheme;
 
 public class ResponsiveLayoutTheme extends Theme {
 
@@ -63,7 +63,7 @@ public class ResponsiveLayoutTheme extends Theme {
         style.addProperty("margin", "-30px 0 0 10px");
         addStyle(style);
 
-        style = new Style(".", StyleName.ResponsiveLayoutOverlayActionsTabItem, ".", DefaultWidgetsTheme.StyleName.Button);
+        style = new Style(".", StyleName.ResponsiveLayoutOverlayActionsTabItem, ".", WidgetTheme.StyleName.Button);
         style.addProperty("margin", "0 4px 0 0");
         style.addProperty("line-height", "30px");
         style.addProperty("padding", "0 10px");
@@ -78,7 +78,7 @@ public class ResponsiveLayoutTheme extends Theme {
         style.addProperty("border-radius", "0px");
         addStyle(style);
 
-        style = new Style(".", StyleName.ResponsiveLayoutOverlayActionsCloseButton, ".", DefaultWidgetsTheme.StyleName.Button);
+        style = new Style(".", StyleName.ResponsiveLayoutOverlayActionsCloseButton, ".", WidgetTheme.StyleName.Button);
         style.addProperty("float", "right");
         style.addProperty("margin", "7px 10px 0 0");
         style.addProperty("height", "28px");
@@ -101,8 +101,8 @@ public class ResponsiveLayoutTheme extends Theme {
         style.addProperty("background-color", ThemeColor.foreground, 0.1);
         addStyle(style);
 
-        style = new Style(".", StyleName.ResponsiveLayoutOverlayActions, " .", DefaultWidgetsTheme.StyleName.ToolbarItem, "-", StyleDependent.selected, " .",
-                StyleName.ResponsiveLayoutOverlayActionsTabItem, ".", DefaultWidgetsTheme.StyleName.Button);
+        style = new Style(".", StyleName.ResponsiveLayoutOverlayActions, " .", WidgetTheme.StyleName.ToolbarItem, "-", StyleDependent.selected, " .",
+                StyleName.ResponsiveLayoutOverlayActionsTabItem, ".", WidgetTheme.StyleName.Button);
         style.addProperty("background-color", ThemeColor.object1, 1.0);
         addStyle(style);
 

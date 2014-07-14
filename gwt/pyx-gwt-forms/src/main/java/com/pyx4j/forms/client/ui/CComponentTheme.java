@@ -27,7 +27,7 @@ import com.pyx4j.commons.css.Style;
 import com.pyx4j.commons.css.Theme;
 import com.pyx4j.commons.css.ThemeColor;
 import com.pyx4j.commons.css.ThemeId;
-import com.pyx4j.widgets.client.DefaultWidgetsTheme;
+import com.pyx4j.widgets.client.style.theme.WidgetTheme;
 
 public class CComponentTheme extends Theme {
 
@@ -70,7 +70,7 @@ public class CComponentTheme extends Theme {
     }
 
     private void initViewerPanelStyle() {
-        Style style = new Style(".", StyleName.FieldViewerPanel, " .", DefaultWidgetsTheme.StyleName.Label);
+        Style style = new Style(".", StyleName.FieldViewerPanel, " .", WidgetTheme.StyleName.Label);
         style.addProperty("white-space", "normal");
         addStyle(style);
     }
@@ -82,14 +82,14 @@ public class CComponentTheme extends Theme {
         style.addProperty("display", "inline-block");
         addStyle(style);
 
-        style = new Style(".", StyleName.FieldEditorPanel, " .", DefaultWidgetsTheme.StyleName.Button);
+        style = new Style(".", StyleName.FieldEditorPanel, " .", WidgetTheme.StyleName.Button);
         style.addProperty("background", "transparent");
         style.addProperty("border", "none");
         style.addProperty("padding", "0");
         style.addProperty("height", "19px");
         addStyle(style);
 
-        style = new Style(".", StyleName.FieldViewerPanel, " .", DefaultWidgetsTheme.StyleName.Button);
+        style = new Style(".", StyleName.FieldViewerPanel, " .", WidgetTheme.StyleName.Button);
         style.addProperty("background", "transparent");
         style.addProperty("border", "none");
         style.addProperty("padding", "0");
@@ -134,7 +134,7 @@ public class CComponentTheme extends Theme {
     }
 
     private void initImageHolderStyle() {
-        Style style = new Style(".", StyleName.ImageEditorMenu, " .", DefaultWidgetsTheme.StyleName.Button);
+        Style style = new Style(".", StyleName.ImageEditorMenu, " .", WidgetTheme.StyleName.Button);
         style.addProperty("background", ThemeColor.foreground, 0.1);
         style.addProperty("border-radius", "0px");
         style.addProperty("border-width", "1px");

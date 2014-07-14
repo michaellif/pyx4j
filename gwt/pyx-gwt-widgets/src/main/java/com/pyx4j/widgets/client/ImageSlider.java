@@ -29,6 +29,7 @@ import com.google.gwt.user.client.ui.LayoutPanel;
 import com.pyx4j.gwt.shared.Dimension;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.ImageViewport.ScaleMode;
+import com.pyx4j.widgets.client.style.theme.WidgetTheme;
 
 public class ImageSlider extends LayoutPanel implements IWidget {
 
@@ -62,7 +63,7 @@ public class ImageSlider extends LayoutPanel implements IWidget {
 
     public ImageSlider(Dimension dimension, final ImageSliderDataProvider imageList) {
 
-        setStyleName(DefaultWidgetsTheme.StyleName.ImageSlider.name());
+        setStyleName(WidgetTheme.StyleName.ImageSlider.name());
 
         this.imageList = imageList;
         this.editable = false;
@@ -70,7 +71,7 @@ public class ImageSlider extends LayoutPanel implements IWidget {
         slideshow = new Slideshow(0, false);
 
         editButton = new Button(i18n.tr("Edit"));
-        editButton.setStyleName(DefaultWidgetsTheme.StyleName.ImageSliderEditAction.name());
+        editButton.setStyleName(WidgetTheme.StyleName.ImageSliderEditAction.name());
 
         add(slideshow);
         add(editButton);

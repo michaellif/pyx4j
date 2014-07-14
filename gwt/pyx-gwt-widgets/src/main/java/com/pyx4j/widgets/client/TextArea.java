@@ -20,12 +20,14 @@
  */
 package com.pyx4j.widgets.client;
 
+import com.pyx4j.widgets.client.style.theme.WidgetTheme;
+
 public class TextArea extends com.google.gwt.user.client.ui.TextArea implements WatermarkComponent, ITextWidget {
 
     private TextWatermark watermark;
 
     public TextArea() {
-        setStyleName(DefaultWidgetsTheme.StyleName.TextBox.name());
+        setStyleName(WidgetTheme.StyleName.TextBox.name());
         getElement().getStyle().setProperty("resize", "vertical");
     }
 

@@ -34,6 +34,8 @@ import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.ui.SuggestOracle;
 import com.google.gwt.user.client.ui.SuggestOracle.Suggestion;
 
+import com.pyx4j.widgets.client.style.theme.WidgetTheme;
+
 public class SuggestBox extends com.google.gwt.user.client.ui.SuggestBox implements WatermarkComponent, ITextWidget {
 
     private boolean enabled = true;
@@ -44,8 +46,8 @@ public class SuggestBox extends com.google.gwt.user.client.ui.SuggestBox impleme
 
     public SuggestBox(SuggestOracle suggestOracle) {
         super(suggestOracle, new TextBox());
-        setStyleName(DefaultWidgetsTheme.StyleName.TextBox.name());
-        addStyleDependentName(DefaultWidgetsTheme.StyleDependent.singleLine.name());
+        setStyleName(WidgetTheme.StyleName.TextBox.name());
+        addStyleDependentName(WidgetTheme.StyleDependent.singleLine.name());
     }
 
     @Override

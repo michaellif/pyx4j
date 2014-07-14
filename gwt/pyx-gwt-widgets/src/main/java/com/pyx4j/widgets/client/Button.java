@@ -48,6 +48,7 @@ import com.google.gwt.user.client.ui.SimplePanel;
 import com.pyx4j.security.shared.Permission;
 import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.widgets.client.images.ButtonImages;
+import com.pyx4j.widgets.client.style.theme.WidgetTheme;
 
 public class Button extends FocusPanel implements IFocusWidget {
 
@@ -108,7 +109,7 @@ public class Button extends FocusPanel implements IFocusWidget {
 
     protected Button(ButtonFacesHandler facesHandler, ImageResource imageResource, String text) {
 
-        setStylePrimaryName(getElement(), DefaultWidgetsTheme.StyleName.Button.name());
+        setStylePrimaryName(getElement(), WidgetTheme.StyleName.Button.name());
 
         buttonFacesHandler = facesHandler;
 
@@ -117,7 +118,7 @@ public class Button extends FocusPanel implements IFocusWidget {
         textLabel = new HTML();
         setTextLabel(text);
 
-        textLabel.setStyleName(DefaultWidgetsTheme.StyleName.ButtonText.name());
+        textLabel.setStyleName(WidgetTheme.StyleName.ButtonText.name());
 
         imageHolder = new SimplePanel();
         imageHolder.getElement().getStyle().setProperty("height", "100%");
@@ -304,14 +305,14 @@ public class Button extends FocusPanel implements IFocusWidget {
                 return;
             }
             if (enabled) {
-                button.removeStyleDependentName(DefaultWidgetsTheme.StyleDependent.disabled.name());
+                button.removeStyleDependentName(WidgetTheme.StyleDependent.disabled.name());
                 if (mouseOver) {
                     onMouseOver(null);
                 }
             } else {
-                button.addStyleDependentName(DefaultWidgetsTheme.StyleDependent.disabled.name());
-                button.removeStyleDependentName(DefaultWidgetsTheme.StyleDependent.active.name());
-                button.removeStyleDependentName(DefaultWidgetsTheme.StyleDependent.hover.name());
+                button.addStyleDependentName(WidgetTheme.StyleDependent.disabled.name());
+                button.removeStyleDependentName(WidgetTheme.StyleDependent.active.name());
+                button.removeStyleDependentName(WidgetTheme.StyleDependent.hover.name());
                 // IE8: fix for Buttons remain in Mouse Over position after they are clicked in filter
                 mouseOver = false;
             }
@@ -322,9 +323,9 @@ public class Button extends FocusPanel implements IFocusWidget {
                 return;
             }
             if (button.isEnabled() && active) {
-                button.addStyleDependentName(DefaultWidgetsTheme.StyleDependent.active.name());
+                button.addStyleDependentName(WidgetTheme.StyleDependent.active.name());
             } else {
-                button.removeStyleDependentName(DefaultWidgetsTheme.StyleDependent.active.name());
+                button.removeStyleDependentName(WidgetTheme.StyleDependent.active.name());
             }
         }
 
@@ -332,7 +333,7 @@ public class Button extends FocusPanel implements IFocusWidget {
         public void onMouseOver(MouseOverEvent event) {
             mouseOver = true;
             if (button.isEnabled()) {
-                button.addStyleDependentName(DefaultWidgetsTheme.StyleDependent.hover.name());
+                button.addStyleDependentName(WidgetTheme.StyleDependent.hover.name());
             }
         }
 
@@ -340,7 +341,7 @@ public class Button extends FocusPanel implements IFocusWidget {
         public void onMouseOut(MouseOutEvent event) {
             mouseOver = false;
             if (button.isEnabled()) {
-                button.removeStyleDependentName(DefaultWidgetsTheme.StyleDependent.hover.name());
+                button.removeStyleDependentName(WidgetTheme.StyleDependent.hover.name());
             }
         }
 
@@ -353,8 +354,8 @@ public class Button extends FocusPanel implements IFocusWidget {
         public void onMouseDown(MouseDownEvent event) {
             if (button.isEnabled()) {
                 if (!button.active) {
-                    button.removeStyleDependentName(DefaultWidgetsTheme.StyleDependent.hover.name());
-                    button.addStyleDependentName(DefaultWidgetsTheme.StyleDependent.active.name());
+                    button.removeStyleDependentName(WidgetTheme.StyleDependent.hover.name());
+                    button.addStyleDependentName(WidgetTheme.StyleDependent.active.name());
                 }
             }
         }
@@ -363,8 +364,8 @@ public class Button extends FocusPanel implements IFocusWidget {
         public void onMouseUp(MouseUpEvent event) {
             if (button.isEnabled()) {
                 if (!button.active) {
-                    button.removeStyleDependentName(DefaultWidgetsTheme.StyleDependent.active.name());
-                    button.addStyleDependentName(DefaultWidgetsTheme.StyleDependent.hover.name());
+                    button.removeStyleDependentName(WidgetTheme.StyleDependent.active.name());
+                    button.addStyleDependentName(WidgetTheme.StyleDependent.hover.name());
                 }
             }
         }
@@ -372,7 +373,7 @@ public class Button extends FocusPanel implements IFocusWidget {
         @Override
         public void onClick(ClickEvent event) {
             // fix for Buttons remain in Mouse Over position after they are clicked.
-            button.removeStyleDependentName(DefaultWidgetsTheme.StyleDependent.hover.name());
+            button.removeStyleDependentName(WidgetTheme.StyleDependent.hover.name());
 
         }
 

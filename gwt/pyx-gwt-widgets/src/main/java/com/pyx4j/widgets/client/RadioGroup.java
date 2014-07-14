@@ -42,6 +42,8 @@ import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
+import com.pyx4j.widgets.client.style.theme.WidgetTheme;
+
 public class RadioGroup<E> extends SimplePanel implements IFocusWidget, HasValueChangeHandlers<E> {
 
     public enum Layout {
@@ -86,7 +88,7 @@ public class RadioGroup<E> extends SimplePanel implements IFocusWidget, HasValue
 
         focusHandlerManager = new GroupFocusHandler(this);
 
-        setStyleName(DefaultWidgetsTheme.StyleName.RadioGroup.name());
+        setStyleName(WidgetTheme.StyleName.RadioGroup.name());
     }
 
     public void setOptions(List<E> options) {
@@ -95,7 +97,7 @@ public class RadioGroup<E> extends SimplePanel implements IFocusWidget, HasValue
 
         for (final E option : options) {
             OptionRadioButton button = new OptionRadioButton(groupName, format(option));
-            button.setStyleName(DefaultWidgetsTheme.StyleName.RadioGroupItem.name());
+            button.setStyleName(WidgetTheme.StyleName.RadioGroupItem.name());
             buttons.put(option, button);
             button.addValueChangeHandler(new ValueChangeHandler<Boolean>() {
 
@@ -166,9 +168,9 @@ public class RadioGroup<E> extends SimplePanel implements IFocusWidget, HasValue
             button.optionEnabled = enabled;
             button.setEnabled(enabled);
             if (enabled) {
-                button.removeStyleDependentName(DefaultWidgetsTheme.StyleDependent.disabled.name());
+                button.removeStyleDependentName(WidgetTheme.StyleDependent.disabled.name());
             } else {
-                button.addStyleDependentName(DefaultWidgetsTheme.StyleDependent.disabled.name());
+                button.addStyleDependentName(WidgetTheme.StyleDependent.disabled.name());
             }
         }
     }
@@ -176,9 +178,9 @@ public class RadioGroup<E> extends SimplePanel implements IFocusWidget, HasValue
     private void applySelectionStyles() {
         for (RadioButton button : buttons.values()) {
             if (button.getValue()) {
-                button.addStyleDependentName(DefaultWidgetsTheme.StyleDependent.active.name());
+                button.addStyleDependentName(WidgetTheme.StyleDependent.active.name());
             } else {
-                button.removeStyleDependentName(DefaultWidgetsTheme.StyleDependent.active.name());
+                button.removeStyleDependentName(WidgetTheme.StyleDependent.active.name());
             }
         }
     }

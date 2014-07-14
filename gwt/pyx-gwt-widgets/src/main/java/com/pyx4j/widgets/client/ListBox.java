@@ -20,6 +20,8 @@
  */
 package com.pyx4j.widgets.client;
 
+import com.pyx4j.widgets.client.style.theme.WidgetTheme;
+
 public class ListBox extends com.google.gwt.user.client.ui.ListBox implements IFocusWidget {
 
     private boolean enabled = true;
@@ -32,10 +34,10 @@ public class ListBox extends com.google.gwt.user.client.ui.ListBox implements IF
 
     public ListBox(boolean multipleSelect) {
         super(multipleSelect);
-        setStyleName(DefaultWidgetsTheme.StyleName.ListBox.name());
+        setStyleName(WidgetTheme.StyleName.ListBox.name());
 
         if (!multipleSelect) {
-            addStyleDependentName(DefaultWidgetsTheme.StyleDependent.singleLine.name());
+            addStyleDependentName(WidgetTheme.StyleDependent.singleLine.name());
         }
     }
 
@@ -53,7 +55,7 @@ public class ListBox extends com.google.gwt.user.client.ui.ListBox implements IF
     @Override
     public void setEditable(boolean editable) {
         this.editable = editable;
-        String readOnlyStyle = DefaultWidgetsTheme.StyleDependent.readonly.name();
+        String readOnlyStyle = WidgetTheme.StyleDependent.readonly.name();
         if (!editable) {
             addStyleDependentName(readOnlyStyle);
         } else {

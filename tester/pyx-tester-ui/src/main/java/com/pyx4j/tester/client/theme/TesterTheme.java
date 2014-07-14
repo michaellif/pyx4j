@@ -34,10 +34,10 @@ import com.pyx4j.forms.client.ui.folder.DefaultFolderTheme;
 import com.pyx4j.forms.client.ui.panels.FormPanelTheme;
 import com.pyx4j.forms.client.ui.panels.FlexFormPanelTheme;
 import com.pyx4j.site.client.ui.DefaultPaneTheme;
-import com.pyx4j.widgets.client.DefaultWidgetsTheme;
 import com.pyx4j.widgets.client.ImageFactory;
 import com.pyx4j.widgets.client.datepicker.DefaultDatePickerTheme;
 import com.pyx4j.widgets.client.dialog.DefaultDialogTheme;
+import com.pyx4j.widgets.client.style.theme.WidgetTheme;
 
 public class TesterTheme extends Theme {
 
@@ -60,7 +60,7 @@ public class TesterTheme extends Theme {
             }
         });
 
-        addTheme(new DefaultWidgetsTheme());
+        addTheme(new WidgetTheme());
 
         addTheme(new DefaultWidgetDecoratorTheme() {
             @Override

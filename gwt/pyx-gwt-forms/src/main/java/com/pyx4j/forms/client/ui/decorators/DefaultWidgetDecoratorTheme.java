@@ -28,7 +28,7 @@ import com.pyx4j.commons.css.Theme;
 import com.pyx4j.commons.css.ThemeColor;
 import com.pyx4j.commons.css.ThemeId;
 import com.pyx4j.forms.client.ui.CComponentTheme;
-import com.pyx4j.widgets.client.DefaultWidgetsTheme;
+import com.pyx4j.widgets.client.style.theme.WidgetTheme;
 
 public abstract class DefaultWidgetDecoratorTheme extends Theme {
 
@@ -139,14 +139,14 @@ public abstract class DefaultWidgetDecoratorTheme extends Theme {
         style = new Style(".", StyleName.WidgetDecoratorContent);
         addStyle(style);
 
-        style = new Style(".", StyleName.WidgetDecoratorContent, "-", StyleDependent.invalid, " .", DefaultWidgetsTheme.StyleName.TextBox);
+        style = new Style(".", StyleName.WidgetDecoratorContent, "-", StyleDependent.invalid, " .", WidgetTheme.StyleName.TextBox);
         style.addProperty("border-width", "1px");
         style.addProperty("border-style", "solid");
         style.addProperty("border-color", "#f79494");
         style.addProperty("background-color", "#f8d8d8");
         addStyle(style);
 
-        style = new Style(".", StyleName.WidgetDecoratorContent, "-", StyleDependent.invalid, " .", DefaultWidgetsTheme.StyleName.ListBox);
+        style = new Style(".", StyleName.WidgetDecoratorContent, "-", StyleDependent.invalid, " .", WidgetTheme.StyleName.ListBox);
         style.addProperty("border-width", "1px");
         style.addProperty("border-style", "solid");
         style.addProperty("border-color", "#f79494");

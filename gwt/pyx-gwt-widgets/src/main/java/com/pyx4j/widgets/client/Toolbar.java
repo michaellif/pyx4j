@@ -26,6 +26,8 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 
+import com.pyx4j.widgets.client.style.theme.WidgetTheme;
+
 /**
  * @author michaellif
  * 
@@ -36,7 +38,7 @@ public class Toolbar implements IsWidget {
 
     public Toolbar() {
         panel = new FlowPanel();
-        panel.setStyleName(DefaultWidgetsTheme.StyleName.Toolbar.name());
+        panel.setStyleName(WidgetTheme.StyleName.Toolbar.name());
     }
 
     public void addItem(IsWidget widget) {
@@ -45,7 +47,7 @@ public class Toolbar implements IsWidget {
 
     public void insertItem(IsWidget widget, int beforeIndex) {
         SimplePanel itemHolder = new SimplePanel();
-        itemHolder.setStyleName(DefaultWidgetsTheme.StyleName.ToolbarItem.name());
+        itemHolder.setStyleName(WidgetTheme.StyleName.ToolbarItem.name());
 
         itemHolder.setWidget(widget);
         panel.insert(itemHolder, beforeIndex);

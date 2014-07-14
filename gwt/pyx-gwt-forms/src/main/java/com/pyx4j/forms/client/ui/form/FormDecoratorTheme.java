@@ -25,7 +25,7 @@ import com.pyx4j.commons.css.IStyleName;
 import com.pyx4j.commons.css.Style;
 import com.pyx4j.commons.css.Theme;
 import com.pyx4j.commons.css.ThemeId;
-import com.pyx4j.widgets.client.DefaultWidgetsTheme;
+import com.pyx4j.widgets.client.style.theme.WidgetTheme;
 
 public class FormDecoratorTheme extends Theme {
 
@@ -71,7 +71,7 @@ public class FormDecoratorTheme extends Theme {
         style.addProperty("padding", "0 1em");
         addStyle(style);
 
-        style = new Style(".", StyleName.FormDecoratorHeader, " .", DefaultWidgetsTheme.StyleName.Toolbar);
+        style = new Style(".", StyleName.FormDecoratorHeader, " .", WidgetTheme.StyleName.Toolbar);
         style.addProperty("float", "right");
         style.addProperty("padding", "2px");
         addStyle(style);
@@ -84,7 +84,7 @@ public class FormDecoratorTheme extends Theme {
         style.addProperty("margin", "0.5em 0");
         addStyle(style);
 
-        style = new Style(".", StyleName.FormDecoratorFooter, " .", DefaultWidgetsTheme.StyleName.Toolbar);
+        style = new Style(".", StyleName.FormDecoratorFooter, " .", WidgetTheme.StyleName.Toolbar);
         style.addProperty("padding", "2px");
         addStyle(style);
     }

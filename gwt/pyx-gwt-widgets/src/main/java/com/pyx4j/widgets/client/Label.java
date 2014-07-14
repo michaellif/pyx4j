@@ -22,6 +22,8 @@ package com.pyx4j.widgets.client;
 
 import com.google.gwt.user.client.ui.HTML;
 
+import com.pyx4j.widgets.client.style.theme.WidgetTheme;
+
 public class Label extends HTML implements IWidget {
 
     public Label(String text) {
@@ -30,7 +32,7 @@ public class Label extends HTML implements IWidget {
     }
 
     public Label() {
-        setStyleName(DefaultWidgetsTheme.StyleName.Label.name());
+        setStyleName(WidgetTheme.StyleName.Label.name());
     }
 
     @Override
