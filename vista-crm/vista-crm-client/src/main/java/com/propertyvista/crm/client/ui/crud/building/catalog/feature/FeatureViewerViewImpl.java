@@ -31,6 +31,7 @@ public class FeatureViewerViewImpl extends CrmViewerViewImplBase<Feature> implem
     @Override
     public void populate(Feature value) {
         super.populate(value);
+
         setEditingVisible(!value.defaultCatalogItem().getValue(false));
     }
 }

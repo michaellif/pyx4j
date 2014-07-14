@@ -227,8 +227,8 @@ public class BuildingViewerViewImpl extends CrmViewerViewImplBase<BuildingDTO> i
 
     @Override
     public void populate(BuildingDTO value) {
-        value.getPrimaryKey();
         super.populate(value);
+
         populateDashboardsMenu(value.dashboards().iterator());
     }
 

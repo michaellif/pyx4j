@@ -119,6 +119,7 @@ public class MessageViewerViewImpl extends CrmViewerViewImplBase<MessageDTO> imp
     @Override
     public void populate(MessageDTO value) {
         super.populate(value);
+
         boolean invisible = MessageGroupCategory.Custom.equals(value.topic().category().getValue()) || ThreadStatus.Closed.equals(value.status().getValue())
                 || ThreadStatus.Cancelled.equals(value.status().getValue());
         setActionVisible(assignOwnershipAction, !invisible);

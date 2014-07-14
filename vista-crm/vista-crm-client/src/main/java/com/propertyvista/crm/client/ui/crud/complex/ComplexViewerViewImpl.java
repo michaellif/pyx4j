@@ -43,6 +43,7 @@ public class ComplexViewerViewImpl extends CrmViewerViewImplBase<ComplexDTO> imp
     @Override
     public void populate(ComplexDTO value) {
         super.populate(value);
+
         populateDashboardsMenu(value.dashboards().iterator());
     }
 

@@ -63,6 +63,7 @@ public class MoneyInBatchViewerViewImpl extends CrmViewerViewImplBase<MoneyInBat
     @Override
     public void populate(MoneyInBatchDTO value) {
         super.populate(value);
+
         postButton.setVisible(((MoneyInBatchViewerView.Presenter) getPresenter()).canPost());
         cancelBatchButton.setVisible(((MoneyInBatchViewerView.Presenter) getPresenter()).canCancel());
     }

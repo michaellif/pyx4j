@@ -93,8 +93,9 @@ public class BillViewerViewImpl extends CrmViewerViewImplBase<BillDataDTO> imple
 
     @Override
     public void populate(BillDataDTO value) {
+        super.populate(value);
+
         setActionVisible(approveAction, value.bill().billStatus().getValue() == BillStatus.Finished);
         setActionVisible(rejectAction, value.bill().billStatus().getValue() == BillStatus.Finished);
-        super.populate(value);
     }
 }
