@@ -79,6 +79,7 @@ BEGIN
             id                              BIGINT          NOT NULL,
             previous_claims                 INT,
             smoker                          BOOLEAN,
+            tmp_ins_id                      BIGINT,
                 CONSTRAINT tenant_sure_coverage_pk PRIMARY KEY(id)
         );
         
@@ -93,8 +94,24 @@ BEGIN
         ***     =====================================================================================================
         **/
         
+        -- tenant_sure_coverage
         
+        EXECUTE 'INSERT INTO '||v_schema_name||'.tenant_sure_coverage(id,previous_claims,smoker,tmp_ins_id) '
+                ||'(SELECT  nextval(''public.tenant_sure_coverage_seq'') AS id, 0 AS previous_claims, '
+                ||'CASE WHEN c.insurance_certificate_number = ''HIG-PNJ-C50-397'' THEN TRUE ELSE FALSE END AS smoker, '
+                ||'i.id AS  tmp_ins_id '
+                ||'FROM '||v_schema_name||'.insurance_policy i '
+                ||'JOIN '||v_schema_name||'.insurance_certificate c ON (i.id = c.insurance_policy) '
+                ||'WHERE    i.id_discriminator = ''TenantSureInsurancePolicy'') ';
+
+        -- insurance_policy
         
+        EXECUTE 'UPDATE '||v_schema_name||'.insurance_policy AS i '
+                ||'SET  coverage = c.id '
+                ||'FROM '||v_schema_name||'.tenant_sure_coverage c '
+                ||'WHERE c.tmp_ins_id = i.id ';
+                
+        SET CONSTRAINTS ALL IMMEDIATE;
         
         /**
         ***     ==========================================================================================================
@@ -104,7 +121,9 @@ BEGIN
         ***     ==========================================================================================================
         **/
         
+        -- tenant_sure_coverage
         
+        ALTER TABLE tenant_sure_coverage DROP COLUMN tmp_ins_id;
                  
         /**
         ***     ======================================================================================================
