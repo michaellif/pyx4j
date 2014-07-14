@@ -29,7 +29,7 @@ import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.SimplePanel;
 
 import com.pyx4j.forms.client.images.FolderImages;
-import com.pyx4j.forms.client.ui.decorators.DefaultWidgetDecoratorTheme;
+import com.pyx4j.forms.client.ui.decorators.WidgetDecoratorTheme;
 import com.pyx4j.widgets.client.images.WidgetsImages;
 
 public class DataTableCriteriaHeader extends HorizontalPanel {
@@ -61,7 +61,7 @@ public class DataTableCriteriaHeader extends HorizontalPanel {
         add(collapseImageHolder);
 
         caption = new Label("Search Criteria");
-        caption.setStyleName(DefaultWidgetDecoratorTheme.StyleName.EntityContainerDecoratorCollapsedCaption.name());
+        caption.setStyleName(WidgetDecoratorTheme.StyleName.EntityContainerDecoratorCollapsedCaption.name());
 
         add(caption);
         setCellVerticalAlignment(caption, HorizontalPanel.ALIGN_MIDDLE);

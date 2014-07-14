@@ -20,15 +20,15 @@
  */
 package com.pyx4j.forms.client.ui.decorators;
 
-import static com.pyx4j.forms.client.ui.decorators.DefaultWidgetDecoratorTheme.StyleName.WidgetDecorator;
-import static com.pyx4j.forms.client.ui.decorators.DefaultWidgetDecoratorTheme.StyleName.WidgetDecoratorContainerPanel;
-import static com.pyx4j.forms.client.ui.decorators.DefaultWidgetDecoratorTheme.StyleName.WidgetDecoratorContent;
-import static com.pyx4j.forms.client.ui.decorators.DefaultWidgetDecoratorTheme.StyleName.WidgetDecoratorContentHolder;
-import static com.pyx4j.forms.client.ui.decorators.DefaultWidgetDecoratorTheme.StyleName.WidgetDecoratorContentPanel;
-import static com.pyx4j.forms.client.ui.decorators.DefaultWidgetDecoratorTheme.StyleName.WidgetDecoratorInfoImage;
-import static com.pyx4j.forms.client.ui.decorators.DefaultWidgetDecoratorTheme.StyleName.WidgetDecoratorLabel;
-import static com.pyx4j.forms.client.ui.decorators.DefaultWidgetDecoratorTheme.StyleName.WidgetDecoratorLabelHolder;
-import static com.pyx4j.forms.client.ui.decorators.DefaultWidgetDecoratorTheme.StyleName.WidgetDecoratorMandatoryImage;
+import static com.pyx4j.forms.client.ui.decorators.WidgetDecoratorTheme.StyleName.WidgetDecorator;
+import static com.pyx4j.forms.client.ui.decorators.WidgetDecoratorTheme.StyleName.WidgetDecoratorContainerPanel;
+import static com.pyx4j.forms.client.ui.decorators.WidgetDecoratorTheme.StyleName.WidgetDecoratorContent;
+import static com.pyx4j.forms.client.ui.decorators.WidgetDecoratorTheme.StyleName.WidgetDecoratorContentHolder;
+import static com.pyx4j.forms.client.ui.decorators.WidgetDecoratorTheme.StyleName.WidgetDecoratorContentPanel;
+import static com.pyx4j.forms.client.ui.decorators.WidgetDecoratorTheme.StyleName.WidgetDecoratorInfoImage;
+import static com.pyx4j.forms.client.ui.decorators.WidgetDecoratorTheme.StyleName.WidgetDecoratorLabel;
+import static com.pyx4j.forms.client.ui.decorators.WidgetDecoratorTheme.StyleName.WidgetDecoratorLabelHolder;
+import static com.pyx4j.forms.client.ui.decorators.WidgetDecoratorTheme.StyleName.WidgetDecoratorMandatoryImage;
 
 import com.google.gwt.dom.client.Style.Display;
 import com.google.gwt.dom.client.Style.Position;
@@ -301,11 +301,11 @@ public class FieldDecorator extends FlowPanel implements IFieldDecorator, ILayou
     protected void renderValidationMessage() {
         if (!component.isValid() && !component.isEditingInProgress()) {
             validationLabel.setHTML(component.getValidationResults().getValidationMessage(true));
-            component.asWidget().addStyleDependentName(DefaultWidgetDecoratorTheme.StyleDependent.invalid.name());
+            component.asWidget().addStyleDependentName(WidgetDecoratorTheme.StyleDependent.invalid.name());
             validationLabel.setVisible(true);
         } else {
             validationLabel.setText(null);
-            component.asWidget().removeStyleDependentName(DefaultWidgetDecoratorTheme.StyleDependent.invalid.name());
+            component.asWidget().removeStyleDependentName(WidgetDecoratorTheme.StyleDependent.invalid.name());
             validationLabel.setVisible(false);
         }
 
@@ -326,11 +326,11 @@ public class FieldDecorator extends FlowPanel implements IFieldDecorator, ILayou
             labelHolder.getElement().getStyle().setVerticalAlign(VerticalAlign.MIDDLE);
             containerPanel.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
             containerPanel.getElement().getStyle().setVerticalAlign(VerticalAlign.TOP);
-            removeStyleDependentName(DefaultWidgetDecoratorTheme.StyleDependent.verticalAlign.name());
+            removeStyleDependentName(WidgetDecoratorTheme.StyleDependent.verticalAlign.name());
         } else {
             labelHolder.getElement().getStyle().setDisplay(Display.BLOCK);
             containerPanel.getElement().getStyle().setDisplay(Display.BLOCK);
-            addStyleDependentName(DefaultWidgetDecoratorTheme.StyleDependent.verticalAlign.name());
+            addStyleDependentName(WidgetDecoratorTheme.StyleDependent.verticalAlign.name());
         }
 
     }
@@ -341,16 +341,16 @@ public class FieldDecorator extends FlowPanel implements IFieldDecorator, ILayou
         }
         switch (builder.labelAlignment) {
         case left:
-            labelHolder.removeStyleDependentName(DefaultWidgetDecoratorTheme.StyleDependent.labelAlignCenter.name());
-            labelHolder.removeStyleDependentName(DefaultWidgetDecoratorTheme.StyleDependent.labelAlignRight.name());
+            labelHolder.removeStyleDependentName(WidgetDecoratorTheme.StyleDependent.labelAlignCenter.name());
+            labelHolder.removeStyleDependentName(WidgetDecoratorTheme.StyleDependent.labelAlignRight.name());
             break;
         case center:
-            labelHolder.addStyleDependentName(DefaultWidgetDecoratorTheme.StyleDependent.labelAlignCenter.name());
-            labelHolder.removeStyleDependentName(DefaultWidgetDecoratorTheme.StyleDependent.labelAlignRight.name());
+            labelHolder.addStyleDependentName(WidgetDecoratorTheme.StyleDependent.labelAlignCenter.name());
+            labelHolder.removeStyleDependentName(WidgetDecoratorTheme.StyleDependent.labelAlignRight.name());
             break;
         case right:
-            labelHolder.removeStyleDependentName(DefaultWidgetDecoratorTheme.StyleDependent.labelAlignCenter.name());
-            labelHolder.addStyleDependentName(DefaultWidgetDecoratorTheme.StyleDependent.labelAlignRight.name());
+            labelHolder.removeStyleDependentName(WidgetDecoratorTheme.StyleDependent.labelAlignCenter.name());
+            labelHolder.addStyleDependentName(WidgetDecoratorTheme.StyleDependent.labelAlignRight.name());
             break;
         }
 
@@ -402,10 +402,10 @@ public class FieldDecorator extends FlowPanel implements IFieldDecorator, ILayou
             return;
         }
         if (component.isViewable()) {
-            addStyleDependentName(DefaultWidgetDecoratorTheme.StyleDependent.viewable.name());
+            addStyleDependentName(WidgetDecoratorTheme.StyleDependent.viewable.name());
             mandatoryImageHolder.setVisible(false);
         } else {
-            removeStyleDependentName(DefaultWidgetDecoratorTheme.StyleDependent.viewable.name());
+            removeStyleDependentName(WidgetDecoratorTheme.StyleDependent.viewable.name());
             mandatoryImageHolder.setVisible(true);
         }
     }

@@ -64,7 +64,7 @@ public class DateGrid extends Grid {
         this.disabledDates = disabledDates;
         this.inMultiple = inMultiple;
 
-        setStyleName(DefaultDatePickerTheme.StyleName.DatePickerGrid.name());
+        setStyleName(DatePickerTheme.StyleName.DatePickerGrid.name());
         resize(CalendarModel.WEEKS_IN_MONTH + 1, CalendarModel.DAYS_IN_WEEK);
         drawCells();
     }

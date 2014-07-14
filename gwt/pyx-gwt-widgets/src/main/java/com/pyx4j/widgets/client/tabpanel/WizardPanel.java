@@ -24,7 +24,7 @@ public class WizardPanel extends TabPanel {
 
     public WizardPanel() {
         super();
-        addStyleName(DefaultTabTheme.StyleName.WizardPanel.name());
+        addStyleName(TabTheme.StyleName.WizardPanel.name());
     }
 
 }

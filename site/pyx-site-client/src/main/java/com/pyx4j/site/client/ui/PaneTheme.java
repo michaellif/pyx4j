@@ -28,34 +28,43 @@ import com.pyx4j.commons.css.ThemeColor;
 import com.pyx4j.commons.css.ThemeId;
 import com.pyx4j.widgets.client.style.theme.WidgetTheme;
 
-public class DefaultPaneTheme extends Theme {
+public class PaneTheme extends Theme {
 
     public static enum StyleName implements IStyleName {
-        //@formatter:off
-        Header, 
-        HeaderCaption, 
-        HeaderContainer, 
-        HeaderToolbar, 
-        HeaderBreadcrumbs, 
-        
-        FooterToolbar, 
-        
-        BreadcrumbsBar, 
-        BreadcrumbAnchor, 
-        
-        HighlightedButton, 
-        HighlightedAction,
-        
-        Lister, 
-        ListerFiltersPanel, 
-        ListerListPanel, 
 
-        Visor, 
+        Header,
+
+        HeaderCaption,
+
+        HeaderContainer,
+
+        HeaderToolbar,
+
+        HeaderBreadcrumbs,
+
+        FooterToolbar,
+
+        BreadcrumbsBar,
+
+        BreadcrumbAnchor,
+
+        HighlightedButton,
+
+        HighlightedAction,
+
+        Lister,
+
+        ListerFiltersPanel,
+
+        ListerListPanel,
+
+        Visor,
+
         VisorCloseButton
-        //@formatter:on
+
     }
 
-    public DefaultPaneTheme() {
+    public PaneTheme() {
         initStyles();
     }
 

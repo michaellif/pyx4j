@@ -20,7 +20,7 @@
  */
 package com.pyx4j.forms.client.ui.folder;
 
-import static com.pyx4j.forms.client.ui.folder.DefaultFolderTheme.StyleName.CFolderRowItemDecorator;
+import static com.pyx4j.forms.client.ui.folder.FolderTheme.StyleName.CFolderRowItemDecorator;
 
 import com.google.gwt.dom.client.Style.Display;
 import com.google.gwt.event.dom.client.MouseOutEvent;

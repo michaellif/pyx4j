@@ -30,9 +30,10 @@ import com.pyx4j.commons.css.ThemeId;
 import com.pyx4j.forms.client.ui.CComponentTheme;
 import com.pyx4j.widgets.client.style.theme.WidgetTheme;
 
-public abstract class DefaultWidgetDecoratorTheme extends Theme {
+public abstract class WidgetDecoratorTheme extends Theme {
 
     public static enum StyleName implements IStyleName {
+
         WidgetDecorator, WidgetDecoratorLabelHolder, WidgetDecoratorLabel, WidgetDecoratorMandatoryImage, WidgetDecoratorInfoImage,
 
         WidgetDecoratorContainerPanel, WidgetDecoratorContentPanel, WidgetDecoratorContent, WidgetDecoratorContentHolder,
@@ -44,7 +45,7 @@ public abstract class DefaultWidgetDecoratorTheme extends Theme {
         readOnly, noMandatoryStar, invalid, viewable, verticalAlign, labelAlignRight, labelAlignCenter, componentAlignRight, componentAlignCenter
     }
 
-    public DefaultWidgetDecoratorTheme() {
+    public WidgetDecoratorTheme() {
         initStyles();
     }
 

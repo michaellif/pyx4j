@@ -39,7 +39,7 @@ import com.pyx4j.site.client.AppSite;
 public class BreadcrumbsBar extends HorizontalPanel {
 
     public BreadcrumbsBar() {
-        setStyleName(DefaultPaneTheme.StyleName.BreadcrumbsBar.name());
+        setStyleName(PaneTheme.StyleName.BreadcrumbsBar.name());
     }
 
     public void populate(Vector<IEntity> breadcrumbTrail) {
@@ -74,7 +74,7 @@ public class BreadcrumbsBar extends HorizontalPanel {
         private final Label anchor;
 
         public BreadcrumbAnchor(final IEntity breadcrumb) {
-            setStyleName(DefaultPaneTheme.StyleName.BreadcrumbAnchor.name());
+            setStyleName(PaneTheme.StyleName.BreadcrumbAnchor.name());
 
             String label = !breadcrumb.getStringView().isEmpty() ? breadcrumb.getStringView() : breadcrumb.getEntityMeta().getCaption();
             anchor = new Label(label);

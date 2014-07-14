@@ -55,7 +55,7 @@ public class TabListDropDown extends DropDownPanel {
 
         showRelativeTo(trigger);
 
-        setStyleName(DefaultTabTheme.StyleName.TabList.name());
+        setStyleName(TabTheme.StyleName.TabList.name());
 
         itemsPanel = new FlowPanel();
         setWidget(itemsPanel);
@@ -70,7 +70,7 @@ public class TabListDropDown extends DropDownPanel {
                 continue;
             }
             final Label item = new Label(tab.getTabTitle(), false);
-            item.setStyleName(DefaultTabTheme.StyleName.TabListItem.name());
+            item.setStyleName(TabTheme.StyleName.TabListItem.name());
 
             item.getElement().getStyle().setPadding(2, Unit.PX);
             item.getElement().getStyle().setPaddingLeft(4, Unit.PX);
@@ -95,14 +95,14 @@ public class TabListDropDown extends DropDownPanel {
                 item.addDomHandler(new MouseOverHandler() {
                     @Override
                     public void onMouseOver(MouseOverEvent event) {
-                        item.addStyleDependentName(DefaultTabTheme.StyleDependent.hover.name());
+                        item.addStyleDependentName(TabTheme.StyleDependent.hover.name());
                     }
                 }, MouseOverEvent.getType());
 
                 item.addDomHandler(new MouseOutHandler() {
                     @Override
                     public void onMouseOut(MouseOutEvent event) {
-                        item.removeStyleDependentName(DefaultTabTheme.StyleDependent.hover.name());
+                        item.removeStyleDependentName(TabTheme.StyleDependent.hover.name());
                     }
                 }, MouseOutEvent.getType());
 

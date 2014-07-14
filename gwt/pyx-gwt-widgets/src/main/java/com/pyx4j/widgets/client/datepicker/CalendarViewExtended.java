@@ -129,11 +129,11 @@ public class CalendarViewExtended extends CalendarView {
             grid.setText(0, i, getModel().formatDayOfWeek(dayIdx));
 
             if (dayIdx == firstDayOfWeekend || dayIdx == lastDayOfWeekend) {
-                grid.getCellFormatter().addStyleName(0, i, DefaultDatePickerTheme.StyleName.DatePickerWeekendDayLabel.name());
+                grid.getCellFormatter().addStyleName(0, i, DatePickerTheme.StyleName.DatePickerWeekendDayLabel.name());
             }
         }
 
-        grid.getRowFormatter().setStyleName(0, DefaultDatePickerTheme.StyleName.DatePickerGridDaysRow.name());
+        grid.getRowFormatter().setStyleName(0, DatePickerTheme.StyleName.DatePickerGridDaysRow.name());
         initWidget(grid);
     }
 

@@ -76,7 +76,7 @@ public class MonthSelectorMultiple extends MonthSelectorExtended {
         // Set up backwards.
         backwards = new Image(resource.monthPrevious());
         backwards.ensureDebugId(DatePickerIDs.MonthSelectorButton_BackwardsYear.debugId());
-        backwards.addStyleName(DefaultDatePickerTheme.StyleDependent.middle.name());
+        backwards.addStyleName(DatePickerTheme.StyleDependent.middle.name());
         backwards.addClickHandler(new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
@@ -87,7 +87,7 @@ public class MonthSelectorMultiple extends MonthSelectorExtended {
 
         forwards = new Image(resource.monthNext());
         forwards.ensureDebugId(DatePickerIDs.MonthSelectorButton_ForwardYear.debugId());
-        forwards.addStyleName(DefaultDatePickerTheme.StyleDependent.middle.name());
+        forwards.addStyleName(DatePickerTheme.StyleDependent.middle.name());
         forwards.addClickHandler(new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
@@ -101,9 +101,9 @@ public class MonthSelectorMultiple extends MonthSelectorExtended {
         lblMonthYear = new Label();
         lblMonthYear.ensureDebugId(DatePickerIDs.MonthSelectorLabel_MonthYear.debugId());
         grid.setWidget(0, monthColumn, lblMonthYear);
-        grid.getCellFormatter().addStyleName(0, monthColumn, DefaultDatePickerTheme.StyleName.DatePickerMonthYearLabel.name());
+        grid.getCellFormatter().addStyleName(0, monthColumn, DatePickerTheme.StyleName.DatePickerMonthYearLabel.name());
 
-        grid.setStyleName(DefaultDatePickerTheme.StyleName.DatePickerMonthSelector.name());
+        grid.setStyleName(DatePickerTheme.StyleName.DatePickerMonthSelector.name());
         //grid.addStyleName(DefaultDatePickerTheme.StyleDependent.multiple.name());
         initWidget(grid);
     }

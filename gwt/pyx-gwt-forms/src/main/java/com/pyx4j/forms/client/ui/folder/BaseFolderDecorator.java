@@ -52,13 +52,13 @@ public abstract class BaseFolderDecorator<E extends IEntity> extends FlowPanel i
     public BaseFolderDecorator(FolderImages images, String title, boolean addable) {
         this.addable = addable;
         addButton = new Button(images.addButton().regular(), title);
-        addButton.addStyleName(DefaultFolderTheme.StyleName.CFolderAddButton.name());
+        addButton.addStyleName(FolderTheme.StyleName.CFolderAddButton.name());
 
         validationMessageHolder = new HTML();
         validationMessageHolder.setStyleName(CComponentTheme.StyleName.ValidationLabel.name());
 
         container = new SimplePanel();
-        container.setStyleName(DefaultFolderTheme.StyleName.CFolderContent.name());
+        container.setStyleName(FolderTheme.StyleName.CFolderContent.name());
 
     }
 

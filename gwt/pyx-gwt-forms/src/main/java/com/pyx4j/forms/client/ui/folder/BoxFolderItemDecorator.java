@@ -20,7 +20,7 @@
  */
 package com.pyx4j.forms.client.ui.folder;
 
-import static com.pyx4j.forms.client.ui.folder.DefaultFolderTheme.StyleName.CFolderBoxItem;
+import static com.pyx4j.forms.client.ui.folder.FolderTheme.StyleName.CFolderBoxItem;
 
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -44,7 +44,7 @@ import com.pyx4j.forms.client.events.PropertyChangeEvent.PropertyName;
 import com.pyx4j.forms.client.events.PropertyChangeHandler;
 import com.pyx4j.forms.client.images.FolderImages;
 import com.pyx4j.forms.client.ui.decorators.DecoratorDebugIds;
-import com.pyx4j.forms.client.ui.decorators.DefaultWidgetDecoratorTheme;
+import com.pyx4j.forms.client.ui.decorators.WidgetDecoratorTheme;
 import com.pyx4j.forms.client.ui.decorators.EntityContainerDecoratorToolbar;
 import com.pyx4j.gwt.commons.BrowserType;
 import com.pyx4j.widgets.client.CollapsablePanel;
@@ -78,7 +78,7 @@ public class BoxFolderItemDecorator<E extends IEntity> extends BaseFolderItemDec
     public BoxFolderItemDecorator(FolderImages images, String removeLabel) {
         super(images);
 
-        setStyleName(DefaultWidgetDecoratorTheme.StyleName.EntityContainerDecorator.name());
+        setStyleName(WidgetDecoratorTheme.StyleName.EntityContainerDecorator.name());
 
         collapsablePanel = new CollapsablePanel(images);
         setWidget(collapsablePanel);

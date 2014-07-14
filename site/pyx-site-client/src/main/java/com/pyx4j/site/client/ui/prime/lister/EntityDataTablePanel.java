@@ -52,7 +52,7 @@ import com.pyx4j.forms.client.ui.datatable.DataTable.SortChangeHandler;
 import com.pyx4j.forms.client.ui.datatable.DataTablePanel;
 import com.pyx4j.forms.client.ui.datatable.criteria.ICriteriaForm;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
-import com.pyx4j.site.client.ui.DefaultPaneTheme;
+import com.pyx4j.site.client.ui.PaneTheme;
 import com.pyx4j.site.client.ui.prime.lister.AbstractLister.ItemSelectionHandler;
 import com.pyx4j.site.client.ui.prime.misc.IMemento;
 import com.pyx4j.site.client.ui.prime.misc.MementoImpl;
@@ -97,7 +97,7 @@ public class EntityDataTablePanel<E extends IEntity> extends ScrollPanel {
 
     public EntityDataTablePanel(Class<E> clazz, ICriteriaForm<E> criteriaForm, boolean allowAddNew, boolean allowDelete) {
         this.clazz = clazz;
-        setStyleName(DefaultPaneTheme.StyleName.Lister.name());
+        setStyleName(PaneTheme.StyleName.Lister.name());
         setSize("100%", "100%");
         dataTablePanel = new DataTablePanel<E>(clazz, criteriaForm);
         dataTablePanel.getElement().getStyle().setPaddingBottom(40, Unit.PX);
@@ -153,7 +153,7 @@ public class EntityDataTablePanel<E extends IEntity> extends ScrollPanel {
 
         dataTablePanel.setPageSizeOptions(Arrays.asList(new Integer[] { PAGESIZE_SMALL, PAGESIZE_MEDIUM, PAGESIZE_LARGE }));
 
-        dataTablePanel.setStyleName(DefaultPaneTheme.StyleName.ListerListPanel.name());
+        dataTablePanel.setStyleName(PaneTheme.StyleName.ListerListPanel.name());
 
         setWidget(dataTablePanel);
 

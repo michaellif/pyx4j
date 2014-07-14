@@ -65,7 +65,7 @@ public class EntityContainerDecoratorToolbar<E extends IEntity> extends Horizont
     public EntityContainerDecoratorToolbar(WidgetsImages images) {
 
         setWidth("100%");
-        setStyleName(DefaultWidgetDecoratorTheme.StyleName.EntityContainerDecoratorToolbar.name());
+        setStyleName(WidgetDecoratorTheme.StyleName.EntityContainerDecoratorToolbar.name());
 
         captionFormatter = new IFormatter<E, String>() {
             @Override
@@ -80,7 +80,7 @@ public class EntityContainerDecoratorToolbar<E extends IEntity> extends Horizont
         captionHolder.getElement().getStyle().setLineHeight(2, Unit.EM);
 
         caption = new Label("");
-        caption.setStyleName(DefaultWidgetDecoratorTheme.StyleName.EntityContainerDecoratorCollapsedCaption.name());
+        caption.setStyleName(WidgetDecoratorTheme.StyleName.EntityContainerDecoratorCollapsedCaption.name());
 
         titleIcon = new Image();
         titleIcon.getElement().getStyle().setMarginTop(2, Unit.PX);

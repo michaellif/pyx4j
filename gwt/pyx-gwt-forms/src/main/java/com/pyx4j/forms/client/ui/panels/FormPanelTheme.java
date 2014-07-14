@@ -28,7 +28,7 @@ import com.pyx4j.commons.css.Theme;
 import com.pyx4j.commons.css.ThemeColor;
 import com.pyx4j.commons.css.ThemeId;
 import com.pyx4j.forms.client.ui.CComponentTheme;
-import com.pyx4j.forms.client.ui.decorators.DefaultWidgetDecoratorTheme;
+import com.pyx4j.forms.client.ui.decorators.WidgetDecoratorTheme;
 
 public abstract class FormPanelTheme extends Theme {
 
@@ -100,17 +100,17 @@ public abstract class FormPanelTheme extends Theme {
         addStyle(style);
 
         style = new Style(".", StyleName.FormPanelCell, "-", StyleDependent.left, ">.", CComponentTheme.StyleName.FieldPanel, " .",
-                DefaultWidgetDecoratorTheme.StyleName.WidgetDecoratorContainerPanel);
+                WidgetDecoratorTheme.StyleName.WidgetDecoratorContainerPanel);
         style.addProperty("width", getSingleColumnWidth() + "px");
         addStyle(style);
 
         style = new Style(".", StyleName.FormPanelCell, "-", StyleDependent.right, ">.", CComponentTheme.StyleName.FieldPanel, " .",
-                DefaultWidgetDecoratorTheme.StyleName.WidgetDecoratorContainerPanel);
+                WidgetDecoratorTheme.StyleName.WidgetDecoratorContainerPanel);
         style.addProperty("width", getSingleColumnWidth() + "px");
         addStyle(style);
 
         style = new Style(".", StyleName.FormPanelCell, "-", StyleDependent.dual, ">.", CComponentTheme.StyleName.FieldPanel, " .",
-                DefaultWidgetDecoratorTheme.StyleName.WidgetDecoratorContainerPanel);
+                WidgetDecoratorTheme.StyleName.WidgetDecoratorContainerPanel);
         style.addProperty("width", getDualColumnWidth() + "px");
         addStyle(style);
 
@@ -209,7 +209,7 @@ public abstract class FormPanelTheme extends Theme {
         addStyle(style);
 
         style = new Style(".", StyleName.FluidPanel, "-", StyleDependent.collapsed, " .", StyleName.FormPanelCell, "-", StyleDependent.dual, ">.",
-                CComponentTheme.StyleName.FieldPanel, " .", DefaultWidgetDecoratorTheme.StyleName.WidgetDecoratorContainerPanel);
+                CComponentTheme.StyleName.FieldPanel, " .", WidgetDecoratorTheme.StyleName.WidgetDecoratorContainerPanel);
         style.addProperty("width", getSingleColumnWidth() + "px");
         addStyle(style);
     }

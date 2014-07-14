@@ -80,7 +80,7 @@ public class DateCell extends Label {
 
     public void setDate(LogicalDate date) {
         this.date = new LogicalDate(date.getTime());
-        this.setStyleDependentName(DefaultDatePickerTheme.StyleDependent.empty.name(), false);
+        this.setStyleDependentName(DatePickerTheme.StyleDependent.empty.name(), false);
         redraw();
     }
 
@@ -90,7 +90,7 @@ public class DateCell extends Label {
 
     public final void setEnabled(boolean enabled) {
         this.enabled = enabled;
-        this.setStyleDependentName(DefaultDatePickerTheme.StyleDependent.disabled.name(), !enabled);
+        this.setStyleDependentName(DatePickerTheme.StyleDependent.disabled.name(), !enabled);
 
         if (!enabled) {
             removeOnClick();
@@ -98,16 +98,16 @@ public class DateCell extends Label {
     }
 
     public final void setSelected(boolean selected) {
-        this.setStyleDependentName(DefaultDatePickerTheme.StyleDependent.selected.name(), selected);
+        this.setStyleDependentName(DatePickerTheme.StyleDependent.selected.name(), selected);
         heighlight(false);
     }
 
     public final void setTodayDay(boolean istoday) {
-        this.setStyleDependentName(DefaultDatePickerTheme.StyleDependent.todayday.name(), istoday);
+        this.setStyleDependentName(DatePickerTheme.StyleDependent.todayday.name(), istoday);
     }
 
     public final void setOutOfDisplayMonth(boolean isoutofmonth) {
-        this.setStyleDependentName(DefaultDatePickerTheme.StyleDependent.outofmonth.name(), isoutofmonth);
+        this.setStyleDependentName(DatePickerTheme.StyleDependent.outofmonth.name(), isoutofmonth);
     }
 
     public final void setEmpty() {
@@ -119,7 +119,7 @@ public class DateCell extends Label {
         setEnabled(true);
         removeOnClick();
 
-        this.setStyleDependentName(DefaultDatePickerTheme.StyleDependent.empty.name(), true);
+        this.setStyleDependentName(DatePickerTheme.StyleDependent.empty.name(), true);
         redraw();
     }
 
@@ -139,7 +139,7 @@ public class DateCell extends Label {
     }
 
     private void heighlight(boolean isheighlighted) {
-        this.setStyleDependentName(DefaultDatePickerTheme.StyleDependent.heighlighted.name(), isheighlighted);
+        this.setStyleDependentName(DatePickerTheme.StyleDependent.heighlighted.name(), isheighlighted);
     }
 
     private void redraw() {

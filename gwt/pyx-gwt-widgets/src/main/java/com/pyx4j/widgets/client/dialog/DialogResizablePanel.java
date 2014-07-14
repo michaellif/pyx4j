@@ -115,7 +115,7 @@ public class DialogResizablePanel extends PopupPanel implements ProvidesResize, 
 
     public DialogResizablePanel(boolean autoHide, boolean modal) {
         super(autoHide, modal);
-        setStylePrimaryName(DefaultDialogTheme.StyleName.Dialog.name());
+        setStylePrimaryName(DialogTheme.StyleName.Dialog.name());
 
         getElement().getStyle().setProperty("zIndex", "20");
 
@@ -347,7 +347,7 @@ public class DialogResizablePanel extends PopupPanel implements ProvidesResize, 
 
         public CaptionPanel() {
             setWordWrap(false);
-            setStylePrimaryName(DefaultDialogTheme.StyleName.DialogCaption.name());
+            setStylePrimaryName(DialogTheme.StyleName.DialogCaption.name());
             getElement().getStyle().setHeight(1.5, Unit.EM);
             getElement().getStyle().setLineHeight(1.5, Unit.EM);
         }

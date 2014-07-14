@@ -146,7 +146,7 @@ public class Dialog implements ProvidesResize, IsWidget {
         popupPanel.getElement().getStyle().setProperty("zIndex", "20");
 
         container = new FlowPanel();
-        container.setStylePrimaryName(DefaultDialogTheme.StyleName.Dialog.name());
+        container.setStylePrimaryName(DialogTheme.StyleName.Dialog.name());
         container.getElement().getStyle().setProperty("cursor", "default");
 
         captionPanel = new CaptionPanel();
@@ -228,14 +228,14 @@ public class Dialog implements ProvidesResize, IsWidget {
 
     private FlowPanel createButtonsPanel() {
         FlowPanel buttonsPanel = new FlowPanel();
-        buttonsPanel.setStylePrimaryName(DefaultDialogTheme.StyleName.DialogButtonsPanel.name());
+        buttonsPanel.setStylePrimaryName(DialogTheme.StyleName.DialogButtonsPanel.name());
 
         Toolbar defaultButtonsToolbar = new Toolbar();
-        defaultButtonsToolbar.setStylePrimaryName(DefaultDialogTheme.StyleName.DialogDefaultButtonsToolbar.name());
+        defaultButtonsToolbar.setStylePrimaryName(DialogTheme.StyleName.DialogDefaultButtonsToolbar.name());
         buttonsPanel.add(defaultButtonsToolbar);
 
         Toolbar customButtonsToolbar = new Toolbar();
-        customButtonsToolbar.setStylePrimaryName(DefaultDialogTheme.StyleName.DialogCustomButtonsToolbar.name());
+        customButtonsToolbar.setStylePrimaryName(DialogTheme.StyleName.DialogCustomButtonsToolbar.name());
         buttonsPanel.add(customButtonsToolbar);
 
         ClickHandler buttonsHandler = new ButtonClickHandler();
@@ -608,7 +608,7 @@ public class Dialog implements ProvidesResize, IsWidget {
         private final SimplePanel optionsHolder;
 
         public ContentPanel() {
-            setStylePrimaryName(DefaultDialogTheme.StyleName.DialogContent.name());
+            setStylePrimaryName(DialogTheme.StyleName.DialogContent.name());
             setSize("100%", "100%");
 
             bodyHolder = new SimplePanel();
@@ -641,7 +641,7 @@ public class Dialog implements ProvidesResize, IsWidget {
 
         public CaptionPanel() {
             setWordWrap(false);
-            setStylePrimaryName(DefaultDialogTheme.StyleName.DialogCaption.name());
+            setStylePrimaryName(DialogTheme.StyleName.DialogCaption.name());
             getElement().getStyle().setHeight(1.5, Unit.EM);
             getElement().getStyle().setLineHeight(1.5, Unit.EM);
         }

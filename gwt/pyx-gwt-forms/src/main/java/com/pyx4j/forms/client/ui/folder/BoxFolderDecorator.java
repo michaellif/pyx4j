@@ -40,14 +40,14 @@ public class BoxFolderDecorator<E extends IEntity> extends BaseFolderDecorator<E
     public BoxFolderDecorator(FolderImages images, String title, boolean addable) {
         super(images, title, addable);
 
-        asWidget().setStyleName(DefaultFolderTheme.StyleName.CFolderBoxDecorator.name());
+        asWidget().setStyleName(FolderTheme.StyleName.CFolderBoxDecorator.name());
 
         add(getValidationMessageHolder());
 
         add(getContainer());
 
         SimplePanel addButtonHolder = new SimplePanel(getAddButton());
-        addButtonHolder.setStyleName(DefaultFolderTheme.StyleName.CFolderBoxDecoratorAddButtonHolder.name());
+        addButtonHolder.setStyleName(FolderTheme.StyleName.CFolderBoxDecoratorAddButtonHolder.name());
 
         add(addButtonHolder);
 

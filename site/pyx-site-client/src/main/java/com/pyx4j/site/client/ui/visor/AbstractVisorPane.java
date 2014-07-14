@@ -29,7 +29,7 @@ import com.google.gwt.event.dom.client.MouseOverHandler;
 import com.google.gwt.user.client.ui.Image;
 
 import com.pyx4j.site.client.ui.AbstractPane;
-import com.pyx4j.site.client.ui.DefaultPaneTheme;
+import com.pyx4j.site.client.ui.PaneTheme;
 import com.pyx4j.site.client.ui.IPane;
 import com.pyx4j.widgets.client.ImageFactory;
 
@@ -42,10 +42,10 @@ public abstract class AbstractVisorPane extends AbstractPane implements IVisor {
     public AbstractVisorPane(final Controller controller) {
         super();
         this.controller = controller;
-        setStyleName(DefaultPaneTheme.StyleName.Visor.name());
+        setStyleName(PaneTheme.StyleName.Visor.name());
 
         final Image closeImage = new Image(ImageFactory.getImages().closeTab());
-        closeImage.addStyleName(DefaultPaneTheme.StyleName.VisorCloseButton.name());
+        closeImage.addStyleName(PaneTheme.StyleName.VisorCloseButton.name());
 
         closeImage.addClickHandler(new ClickHandler() {
             @Override

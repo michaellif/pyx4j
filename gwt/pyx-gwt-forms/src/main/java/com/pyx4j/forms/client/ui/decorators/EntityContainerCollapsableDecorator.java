@@ -20,7 +20,7 @@
  */
 package com.pyx4j.forms.client.ui.decorators;
 
-import static com.pyx4j.forms.client.ui.folder.DefaultFolderTheme.StyleName.CFolderBoxItem;
+import static com.pyx4j.forms.client.ui.folder.FolderTheme.StyleName.CFolderBoxItem;
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
@@ -51,7 +51,7 @@ public class EntityContainerCollapsableDecorator<E extends IEntity> extends Coll
     public EntityContainerCollapsableDecorator(WidgetsImages images) {
         super(images);
 
-        setStyleName(DefaultWidgetDecoratorTheme.StyleName.EntityContainerDecorator.name());
+        setStyleName(WidgetDecoratorTheme.StyleName.EntityContainerDecorator.name());
 
         addToggleHandler(new ToggleHandler() {
 

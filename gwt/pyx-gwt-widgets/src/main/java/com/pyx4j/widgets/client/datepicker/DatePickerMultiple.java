@@ -32,6 +32,6 @@ public class DatePickerMultiple extends DatePickerExtended {
     public DatePickerMultiple(Date current, LogicalDate minDate, LogicalDate maxDate, ArrayList<LogicalDate> disabledDates) {
         super(new MonthSelectorMultiple(minDate, maxDate), disabledDates);
         this.setCurrentMonth(current);
-        this.setStyleDependentName(DefaultDatePickerTheme.StyleDependent.multiple.name(), true);
+        this.setStyleDependentName(DatePickerTheme.StyleDependent.multiple.name(), true);
     }
 }

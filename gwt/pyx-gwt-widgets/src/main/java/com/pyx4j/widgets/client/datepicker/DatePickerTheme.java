@@ -28,7 +28,7 @@ import com.pyx4j.commons.css.Theme;
 import com.pyx4j.commons.css.ThemeColor;
 import com.pyx4j.commons.css.ThemeId;
 
-public class DefaultDatePickerTheme extends Theme {
+public class DatePickerTheme extends Theme {
 
     public static enum StyleName implements IStyleName {
         DatePickerMultyMonth, DatePickerGrid, DatePickerMonthSelector, DatePickerGridDaysRow, DatePickerNavigation,
@@ -42,7 +42,7 @@ public class DefaultDatePickerTheme extends Theme {
         disabled, heighlighted, selected, todayday, outofmonth, empty, right, multiple, first, top, bottom, middle
     }
 
-    public DefaultDatePickerTheme() {
+    public DatePickerTheme() {
         initStyles();
     }
 

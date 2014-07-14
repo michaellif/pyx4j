@@ -28,7 +28,7 @@ import com.pyx4j.commons.css.Theme;
 import com.pyx4j.commons.css.ThemeColor;
 import com.pyx4j.commons.css.ThemeId;
 
-public class DefaultTabTheme extends Theme {
+public class TabTheme extends Theme {
 
     public static enum StyleName implements IStyleName {
         TabPanel, TabDeckPanel, TabBar, TabBarItem, TabBarItemLeft, TabBarItemRight, TabBarItemLabel, TabBarAction, TabBarItemImage, TabList, TabListItem, WizardPanel
@@ -38,7 +38,7 @@ public class DefaultTabTheme extends Theme {
         selected, disabled, hidden, hover, masked
     }
 
-    public DefaultTabTheme() {
+    public TabTheme() {
         initTabPanelStyles();
         initWizardPanelStyles();
     }

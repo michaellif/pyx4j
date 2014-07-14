@@ -7,13 +7,13 @@ import com.pyx4j.commons.css.Theme;
 import com.pyx4j.commons.css.ThemeColor;
 import com.pyx4j.commons.css.ThemeId;
 
-public class DefaultRichTextEditorTheme extends Theme {
+public class RichTextEditorTheme extends Theme {
 
     public static enum StyleName implements IStyleName {
         rtePushButton, rteToggleButton
     }
 
-    public DefaultRichTextEditorTheme() {
+    public RichTextEditorTheme() {
         initStyles();
     }
 

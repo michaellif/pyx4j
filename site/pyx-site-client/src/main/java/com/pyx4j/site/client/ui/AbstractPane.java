@@ -59,28 +59,28 @@ public abstract class AbstractPane extends DockLayoutPanel implements IPane {
 
         headerCaption = new FlowPanel();
         captionLabel = new Label();
-        captionLabel.setStyleName(DefaultPaneTheme.StyleName.HeaderCaption.name());
+        captionLabel.setStyleName(PaneTheme.StyleName.HeaderCaption.name());
         headerCaption.add(captionLabel);
-        headerCaption.setStyleName(DefaultPaneTheme.StyleName.Header.name());
+        headerCaption.setStyleName(PaneTheme.StyleName.Header.name());
         addNorth(headerCaption, TOOLBAR_DEFAULT_HEIGHT);
 
         headerContainer = new FlowPanel();
-        headerContainer.setStyleName(DefaultPaneTheme.StyleName.HeaderContainer.name());
+        headerContainer.setStyleName(PaneTheme.StyleName.HeaderContainer.name());
         addNorth(headerContainer, 0);
 
         headerToolbarHolder = new SimplePanel();
-        headerToolbarHolder.setStyleName(DefaultPaneTheme.StyleName.HeaderToolbar.name());
+        headerToolbarHolder.setStyleName(PaneTheme.StyleName.HeaderToolbar.name());
         headerToolbar = new Toolbar();
         headerToolbarHolder.setWidget(headerToolbar);
 
         headerContainer.add(headerToolbarHolder);
 
         headerBreadcrumbHolder = new SimplePanel();
-        headerBreadcrumbHolder.setStyleName(DefaultPaneTheme.StyleName.HeaderBreadcrumbs.name());
+        headerBreadcrumbHolder.setStyleName(PaneTheme.StyleName.HeaderBreadcrumbs.name());
         headerContainer.add(headerBreadcrumbHolder);
 
         footerToolbarHolder = new SimplePanel();
-        footerToolbarHolder.setStyleName(DefaultPaneTheme.StyleName.FooterToolbar.name());
+        footerToolbarHolder.setStyleName(PaneTheme.StyleName.FooterToolbar.name());
         footerToolbar = new Toolbar();
         footerToolbarHolder.setWidget(footerToolbar);
         addSouth(footerToolbarHolder, 0);

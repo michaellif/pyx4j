@@ -116,7 +116,7 @@ public class DatePickerComposite extends Composite implements HasHandlers {
             picker.ensureDebugId(new CompositeDebugId(DatePickerIDs.DatePicker, Integer.toString(i)).debugId());
         }
         if (numberOfMonths > 1) {
-            pickers.get(0).setStyleDependentName(DefaultDatePickerTheme.StyleDependent.first.name(), true);
+            pickers.get(0).setStyleDependentName(DatePickerTheme.StyleDependent.first.name(), true);
             tempMonthSelector = pickers.get(0).getMyMonthSelector();
             ((MonthSelectorMultiple) tempMonthSelector).setAsFirstCalendar();
             tempMonthSelector = pickers.get(pickers.size() - 1).getMyMonthSelector();

@@ -20,9 +20,9 @@
  */
 package com.pyx4j.forms.client.ui.folder;
 
-import static com.pyx4j.forms.client.ui.folder.DefaultFolderTheme.StyleName.CFolderTableDecorator;
-import static com.pyx4j.forms.client.ui.folder.DefaultFolderTheme.StyleName.CFolderTableHeader;
-import static com.pyx4j.forms.client.ui.folder.DefaultFolderTheme.StyleName.CFolderTableHeaderLabel;
+import static com.pyx4j.forms.client.ui.folder.FolderTheme.StyleName.CFolderTableDecorator;
+import static com.pyx4j.forms.client.ui.folder.FolderTheme.StyleName.CFolderTableHeader;
+import static com.pyx4j.forms.client.ui.folder.FolderTheme.StyleName.CFolderTableHeaderLabel;
 
 import java.util.ArrayList;
 import java.util.List;

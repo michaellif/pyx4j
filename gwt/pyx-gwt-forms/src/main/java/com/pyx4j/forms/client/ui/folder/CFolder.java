@@ -80,13 +80,13 @@ public abstract class CFolder<E extends IEntity> extends CContainer<CFolder<E>, 
 
     public CFolder(Class<E> rowClass) {
         this.rowClass = rowClass;
-        asWidget().setStyleName(DefaultFolderTheme.StyleName.CFolder.name());
+        asWidget().setStyleName(FolderTheme.StyleName.CFolder.name());
         itemsList = new ArrayList<CFolderItem<E>>();
 
         container = new FlowPanel();
 
         noDataNotificationHolder = new SimplePanel();
-        noDataNotificationHolder.setStyleName(DefaultFolderTheme.StyleName.CFolderNoDataMessage.name());
+        noDataNotificationHolder.setStyleName(FolderTheme.StyleName.CFolderNoDataMessage.name());
         noDataNotificationHolder.setWidget(new Label(i18n.tr("No Data")));
 
         if (rowClass != null) {

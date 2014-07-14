@@ -27,7 +27,7 @@ import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.SimplePanel;
 
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.ui.DefaultPaneTheme;
+import com.pyx4j.site.client.ui.PaneTheme;
 import com.pyx4j.widgets.client.Anchor;
 import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.Toolbar;
@@ -67,7 +67,7 @@ public abstract class ReportSettingsFormControlBar extends Composite {
         }));
 
         SimplePanel toolbarHolder = new SimplePanel();
-        toolbarHolder.setStyleName(DefaultPaneTheme.StyleName.FooterToolbar.name());
+        toolbarHolder.setStyleName(PaneTheme.StyleName.FooterToolbar.name());
         toolbarHolder.setWidget(controlPanelToolbar);
         initWidget(toolbarHolder);
     }

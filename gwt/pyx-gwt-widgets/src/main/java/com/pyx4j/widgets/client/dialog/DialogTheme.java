@@ -28,7 +28,7 @@ import com.pyx4j.commons.css.Theme;
 import com.pyx4j.commons.css.ThemeColor;
 import com.pyx4j.commons.css.ThemeId;
 
-public class DefaultDialogTheme extends Theme {
+public class DialogTheme extends Theme {
 
     public static enum StyleName implements IStyleName {
         Dialog, DialogCaption, DialogResizer, DialogContent,
@@ -40,7 +40,7 @@ public class DefaultDialogTheme extends Theme {
 
     }
 
-    public DefaultDialogTheme() {
+    public DialogTheme() {
         initStyles();
     }
 

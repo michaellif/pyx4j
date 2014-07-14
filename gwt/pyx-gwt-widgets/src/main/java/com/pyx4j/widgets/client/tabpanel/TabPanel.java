@@ -68,12 +68,12 @@ public class TabPanel extends LayoutPanel implements IndexedPanel.ForIsWidget, H
 
     public TabPanel() {
 
-        setStyleName(DefaultTabTheme.StyleName.TabPanel.name());
+        setStyleName(TabTheme.StyleName.TabPanel.name());
 
         tabBar = new TabBar(this);
 
         deckPanel = new DeckLayoutPanel();
-        deckPanel.setStyleName(DefaultTabTheme.StyleName.TabDeckPanel.name());
+        deckPanel.setStyleName(TabTheme.StyleName.TabDeckPanel.name());
 
         add(tabBar);
         add(deckPanel);
@@ -117,7 +117,7 @@ public class TabPanel extends LayoutPanel implements IndexedPanel.ForIsWidget, H
         tabs.remove(tab.getTabBarItem());
         tab.setTabPanel(null);
         if (deckPanel.getWidgetCount() == 0) {
-            deckPanel.removeStyleName(DefaultTabTheme.StyleName.TabDeckPanel.name());
+            deckPanel.removeStyleName(TabTheme.StyleName.TabDeckPanel.name());
         }
 
         CloseEvent.fire(this, tab);

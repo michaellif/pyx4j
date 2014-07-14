@@ -29,9 +29,10 @@ import com.pyx4j.commons.css.ThemeColor;
 import com.pyx4j.commons.css.ThemeId;
 import com.pyx4j.widgets.client.style.theme.WidgetTheme;
 
-public abstract class DefaultFolderTheme extends Theme {
+public abstract class FolderTheme extends Theme {
 
     public static enum StyleName implements IStyleName {
+
         CFolder, CFolderActionsBar, CFolderAddButton, CFolderContent,
 
         CFolderRemoveButton, CFolderUpButton, CFolderDownButton, CFolderCustomButton,
@@ -49,7 +50,7 @@ public abstract class DefaultFolderTheme extends Theme {
         hover, readOnly
     }
 
-    public DefaultFolderTheme() {
+    public FolderTheme() {
         initStyles();
     }
 

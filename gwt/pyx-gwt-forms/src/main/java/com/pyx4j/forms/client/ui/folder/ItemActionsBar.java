@@ -20,7 +20,7 @@
  */
 package com.pyx4j.forms.client.ui.folder;
 
-import static com.pyx4j.forms.client.ui.folder.DefaultFolderTheme.StyleName.CFolderActionsBar;
+import static com.pyx4j.forms.client.ui.folder.FolderTheme.StyleName.CFolderActionsBar;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -113,9 +113,9 @@ public class ItemActionsBar extends HorizontalPanel {
 
     public void setHover(boolean hover) {
         if (hover) {
-            addStyleDependentName(DefaultFolderTheme.StyleDependent.hover.name());
+            addStyleDependentName(FolderTheme.StyleDependent.hover.name());
         } else {
-            removeStyleDependentName(DefaultFolderTheme.StyleDependent.hover.name());
+            removeStyleDependentName(FolderTheme.StyleDependent.hover.name());
         }
 
     }

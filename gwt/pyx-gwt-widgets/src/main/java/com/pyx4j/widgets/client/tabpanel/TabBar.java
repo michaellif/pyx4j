@@ -65,7 +65,7 @@ public class TabBar extends DockLayoutPanel {
     public TabBar(TabPanel tabPanel) {
         super(Unit.PX);
 
-        setStyleName(DefaultTabTheme.StyleName.TabBar.name());
+        setStyleName(TabTheme.StyleName.TabBar.name());
 
         tabListAction = new TabListAction();
         tabListAction.setVisible(false);
@@ -291,7 +291,7 @@ public class TabBar extends DockLayoutPanel {
 
             setWidget(new Image(imageResource));
 
-            setStyleName(DefaultTabTheme.StyleName.TabBarAction.name());
+            setStyleName(TabTheme.StyleName.TabBarAction.name());
 
             addDomHandler(new MouseDownHandler() {
 
@@ -307,7 +307,7 @@ public class TabBar extends DockLayoutPanel {
 
         public void setEnabled(boolean enabled) {
             this.enabled = enabled;
-            String dependentSuffix = DefaultTabTheme.StyleDependent.disabled.name();
+            String dependentSuffix = TabTheme.StyleDependent.disabled.name();
             if (!enabled) {
                 addStyleDependentName(dependentSuffix);
             } else {

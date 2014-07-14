@@ -29,14 +29,14 @@ import com.pyx4j.commons.css.ThemeColor;
 import com.pyx4j.commons.css.ThemeId;
 import com.pyx4j.forms.client.ui.CComponentTheme;
 import com.pyx4j.forms.client.ui.datatable.DataTableTheme;
-import com.pyx4j.forms.client.ui.decorators.DefaultWidgetDecoratorTheme;
-import com.pyx4j.forms.client.ui.folder.DefaultFolderTheme;
-import com.pyx4j.forms.client.ui.panels.FormPanelTheme;
+import com.pyx4j.forms.client.ui.decorators.WidgetDecoratorTheme;
+import com.pyx4j.forms.client.ui.folder.FolderTheme;
 import com.pyx4j.forms.client.ui.panels.FlexFormPanelTheme;
-import com.pyx4j.site.client.ui.DefaultPaneTheme;
+import com.pyx4j.forms.client.ui.panels.FormPanelTheme;
+import com.pyx4j.site.client.ui.PaneTheme;
 import com.pyx4j.widgets.client.ImageFactory;
-import com.pyx4j.widgets.client.datepicker.DefaultDatePickerTheme;
-import com.pyx4j.widgets.client.dialog.DefaultDialogTheme;
+import com.pyx4j.widgets.client.datepicker.DatePickerTheme;
+import com.pyx4j.widgets.client.dialog.DialogTheme;
 import com.pyx4j.widgets.client.style.theme.WidgetTheme;
 
 public class TesterTheme extends Theme {
@@ -52,7 +52,7 @@ public class TesterTheme extends Theme {
 
     protected void initStyles() {
 
-        addTheme(new DefaultFolderTheme() {
+        addTheme(new FolderTheme() {
 
             @Override
             protected ThemeColor getBackgroundColor() {
@@ -62,7 +62,7 @@ public class TesterTheme extends Theme {
 
         addTheme(new WidgetTheme());
 
-        addTheme(new DefaultWidgetDecoratorTheme() {
+        addTheme(new WidgetDecoratorTheme() {
             @Override
             protected ThemeColor getBackgroundColor() {
                 return ThemeColor.object1;
@@ -94,13 +94,13 @@ public class TesterTheme extends Theme {
             }
         });
 
-        addTheme(new DefaultPaneTheme());
+        addTheme(new PaneTheme());
         addTheme(new DataTableTheme());
 
-        addTheme(new DefaultDatePickerTheme());
+        addTheme(new DatePickerTheme());
         addTheme(new CComponentTheme());
 
-        addTheme(new DefaultDialogTheme());
+        addTheme(new DialogTheme());
 
         initGeneralStyles();
         initBodyStyles();

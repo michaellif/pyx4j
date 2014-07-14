@@ -69,7 +69,7 @@ public class TabBarItem extends HorizontalPanel {
 
         sinkEvents(Event.ONCLICK);
 
-        setStyleName(DefaultTabTheme.StyleName.TabBarItem.name());
+        setStyleName(TabTheme.StyleName.TabBarItem.name());
 
         leftSubpanel = new HTML("&nbsp;");
         leftSubpanel.setWidth("8px");
@@ -134,12 +134,12 @@ public class TabBarItem extends HorizontalPanel {
         setCellWidth(leftSubpanel, "8px");
         setCellHeight(rightSubpanel, "100%");
 
-        leftSubpanel.setStyleName(DefaultTabTheme.StyleName.TabBarItemLeft.name());
-        rightSubpanel.setStyleName(DefaultTabTheme.StyleName.TabBarItemRight.name());
+        leftSubpanel.setStyleName(TabTheme.StyleName.TabBarItemLeft.name());
+        rightSubpanel.setStyleName(TabTheme.StyleName.TabBarItemRight.name());
         if (icon != null) {
-            icon.setStyleName(DefaultTabTheme.StyleName.TabBarItemImage.name());
+            icon.setStyleName(TabTheme.StyleName.TabBarItemImage.name());
         }
-        label.setStyleName(DefaultTabTheme.StyleName.TabBarItemLabel.name());
+        label.setStyleName(TabTheme.StyleName.TabBarItemLabel.name());
 
         addDomHandler(new ClickHandler() {
 
@@ -155,7 +155,7 @@ public class TabBarItem extends HorizontalPanel {
             @Override
             public void onMouseOver(MouseOverEvent event) {
                 if (!tab.isTabSelected() && tab.isTabEnabled()) {
-                    addStyleDependentName(DefaultTabTheme.StyleDependent.hover.name());
+                    addStyleDependentName(TabTheme.StyleDependent.hover.name());
                 }
             }
         }, MouseOverEvent.getType());
@@ -163,7 +163,7 @@ public class TabBarItem extends HorizontalPanel {
         addDomHandler(new MouseOutHandler() {
             @Override
             public void onMouseOut(MouseOutEvent event) {
-                removeStyleDependentName(DefaultTabTheme.StyleDependent.hover.name());
+                removeStyleDependentName(TabTheme.StyleDependent.hover.name());
             }
         }, MouseOutEvent.getType());
 
@@ -174,12 +174,12 @@ public class TabBarItem extends HorizontalPanel {
     }
 
     void onSelected(boolean selected) {
-        String dependentSuffix = DefaultTabTheme.StyleDependent.selected.name();
+        String dependentSuffix = TabTheme.StyleDependent.selected.name();
         if (selected) {
             addStyleDependentName(dependentSuffix);
             getWidget(0).addStyleDependentName(dependentSuffix);
             getWidget(1).addStyleDependentName(dependentSuffix);
-            removeStyleDependentName(DefaultTabTheme.StyleDependent.hover.name());
+            removeStyleDependentName(TabTheme.StyleDependent.hover.name());
         } else {
             removeStyleDependentName(dependentSuffix);
             getWidget(0).removeStyleDependentName(dependentSuffix);
@@ -188,7 +188,7 @@ public class TabBarItem extends HorizontalPanel {
     }
 
     void onEnabled(boolean enabled) {
-        String dependentSuffix = DefaultTabTheme.StyleDependent.disabled.name();
+        String dependentSuffix = TabTheme.StyleDependent.disabled.name();
         if (!enabled) {
             addStyleDependentName(dependentSuffix);
             getWidget(0).addStyleDependentName(dependentSuffix);
@@ -201,7 +201,7 @@ public class TabBarItem extends HorizontalPanel {
     }
 
     public void onVisible(boolean visible) {
-        String dependentSuffix = DefaultTabTheme.StyleDependent.hidden.name();
+        String dependentSuffix = TabTheme.StyleDependent.hidden.name();
         if (!visible) {
             addStyleDependentName(dependentSuffix);
         } else {
@@ -238,7 +238,7 @@ public class TabBarItem extends HorizontalPanel {
 
     void setTabMasked(boolean masked) {
         this.masked = masked;
-        String dependentSuffix = DefaultTabTheme.StyleDependent.masked.name();
+        String dependentSuffix = TabTheme.StyleDependent.masked.name();
         if (masked) {
             addStyleDependentName(dependentSuffix);
         } else {
