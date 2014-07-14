@@ -31,7 +31,7 @@ import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.view.client.HasData;
 
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.ui.DefaultPaneTheme;
+import com.pyx4j.site.client.ui.PaneTheme;
 import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.Toolbar;
 
@@ -216,7 +216,7 @@ public class N4CreateBatchViewImpl extends AbstractPrimePaneWithMessagesPopup im
         searchToolbar.addItem(searchButton);
 
         SimplePanel searchToolbarHolder = new SimplePanel();
-        searchToolbarHolder.setStyleName(DefaultPaneTheme.StyleName.HeaderToolbar.name());
+        searchToolbarHolder.setStyleName(PaneTheme.StyleName.HeaderToolbar.name());
         searchToolbarHolder.add(searchToolbar);
 
         searchBar.add(searchToolbarHolder);
@@ -235,7 +235,7 @@ public class N4CreateBatchViewImpl extends AbstractPrimePaneWithMessagesPopup im
         SimplePanel createBatchButtonHolder = new SimplePanel(); // this panel is to apply 'toolbar style' to the button
         createBatchButtonHolder.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
         createBatchButtonHolder.getElement().getStyle().setVerticalAlign(VerticalAlign.MIDDLE);
-        createBatchButtonHolder.setStyleName(DefaultPaneTheme.StyleName.HeaderToolbar.name());
+        createBatchButtonHolder.setStyleName(PaneTheme.StyleName.HeaderToolbar.name());
         createBatchButtonHolder.setWidget(createBatchButton);
         return createBatchButtonHolder;
     }

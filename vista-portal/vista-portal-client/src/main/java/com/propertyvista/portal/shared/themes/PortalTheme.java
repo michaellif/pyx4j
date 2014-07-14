@@ -20,15 +20,15 @@ import com.pyx4j.commons.css.ThemeColor;
 import com.pyx4j.commons.css.ThemeId;
 import com.pyx4j.forms.client.ui.CComponentTheme;
 import com.pyx4j.forms.client.ui.datatable.DataTableTheme;
-import com.pyx4j.forms.client.ui.decorators.DefaultWidgetDecoratorTheme;
-import com.pyx4j.forms.client.ui.folder.DefaultFolderTheme;
+import com.pyx4j.forms.client.ui.decorators.WidgetDecoratorTheme;
+import com.pyx4j.forms.client.ui.folder.FolderTheme;
 import com.pyx4j.forms.client.ui.form.FormDecoratorTheme;
 import com.pyx4j.forms.client.ui.panels.FlexFormPanelTheme;
 import com.pyx4j.forms.client.ui.panels.FormPanelTheme;
 import com.pyx4j.site.client.ui.devconsole.DevConsoleTheme;
 import com.pyx4j.site.client.ui.layout.frontoffice.FrontOfficeLayoutTheme;
-import com.pyx4j.widgets.client.datepicker.DefaultDatePickerTheme;
-import com.pyx4j.widgets.client.dialog.DefaultDialogTheme;
+import com.pyx4j.widgets.client.datepicker.DatePickerTheme;
+import com.pyx4j.widgets.client.dialog.DialogTheme;
 import com.pyx4j.widgets.client.style.theme.WidgetTheme;
 
 import com.propertyvista.common.client.theme.HorizontalAlignCenterMixin;
@@ -142,7 +142,7 @@ public class PortalTheme extends Theme {
             }
         });
 
-        addTheme(new DefaultWidgetDecoratorTheme() {
+        addTheme(new WidgetDecoratorTheme() {
             @Override
             protected ThemeColor getBackgroundColor() {
                 return ThemeColor.foreground;
@@ -237,7 +237,7 @@ public class PortalTheme extends Theme {
         addTheme(new DataTableTheme());
         addTheme(new CComponentTheme());
 
-        addTheme(new DefaultDatePickerTheme() {
+        addTheme(new DatePickerTheme() {
 
             @Override
             protected void initDatePickerStyle() {
@@ -263,7 +263,7 @@ public class PortalTheme extends Theme {
 
         });
 
-        addTheme(new DefaultFolderTheme() {
+        addTheme(new FolderTheme() {
             @Override
             protected ThemeColor getBackgroundColor() {
                 return ThemeColor.foreground;
@@ -288,7 +288,7 @@ public class PortalTheme extends Theme {
 
             }
         });
-        addTheme(new DefaultDialogTheme() {
+        addTheme(new DialogTheme() {
 
             @Override
             protected void initStyles() {

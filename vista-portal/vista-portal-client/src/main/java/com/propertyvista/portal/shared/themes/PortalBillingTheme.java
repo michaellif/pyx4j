@@ -14,7 +14,7 @@
 package com.propertyvista.portal.shared.themes;
 
 import com.pyx4j.commons.css.Style;
-import com.pyx4j.forms.client.ui.decorators.DefaultWidgetDecoratorTheme;
+import com.pyx4j.forms.client.ui.decorators.WidgetDecoratorTheme;
 
 import com.propertyvista.common.client.theme.BillingTheme;
 
@@ -80,11 +80,11 @@ public class PortalBillingTheme extends BillingTheme {
         style.addProperty("text-align", "left");
         addStyle(style);
 
-        style = new Style(".", StyleName.BillingBillTotal, " .", DefaultWidgetDecoratorTheme.StyleName.WidgetDecoratorLabel);
+        style = new Style(".", StyleName.BillingBillTotal, " .", WidgetDecoratorTheme.StyleName.WidgetDecoratorLabel);
         style.addProperty("color", "#666");
         addStyle(style);
 
-        style = new Style(".", StyleName.BillingBillTotal, " .", DefaultWidgetDecoratorTheme.StyleName.WidgetDecoratorContent);
+        style = new Style(".", StyleName.BillingBillTotal, " .", WidgetDecoratorTheme.StyleName.WidgetDecoratorContent);
         style.addProperty("color", "#666");
         style.addProperty("border-top", "2px solid #bbb");
         style.addProperty("padding-top", "4px");

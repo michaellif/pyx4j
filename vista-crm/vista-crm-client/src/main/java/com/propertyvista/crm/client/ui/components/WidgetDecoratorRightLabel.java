@@ -32,7 +32,7 @@ import com.pyx4j.forms.client.events.PropertyChangeEvent.PropertyName;
 import com.pyx4j.forms.client.events.PropertyChangeHandler;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CComponentTheme;
-import com.pyx4j.forms.client.ui.decorators.DefaultWidgetDecoratorTheme;
+import com.pyx4j.forms.client.ui.decorators.WidgetDecoratorTheme;
 import com.pyx4j.forms.client.ui.decorators.FieldDecorator.DebugIds;
 import com.pyx4j.forms.client.ui.decorators.IDecorator;
 import com.pyx4j.widgets.client.Label;
@@ -77,7 +77,7 @@ public class WidgetDecoratorRightLabel extends Composite implements IDecorator<C
         labelAndComponentHolder.add(componentHolder);
 
         label = new Label();
-        label.setStyleName(DefaultWidgetDecoratorTheme.StyleName.WidgetDecoratorLabel.name());
+        label.setStyleName(WidgetDecoratorTheme.StyleName.WidgetDecoratorLabel.name());
         label.getElement().getStyle().setFloat(Float.LEFT);
         label.getElement().getStyle().setWidth(labelWidth, Unit.EM);
         label.getElement().getStyle().setTextAlign(TextAlign.LEFT);
@@ -143,10 +143,10 @@ public class WidgetDecoratorRightLabel extends Composite implements IDecorator<C
     private void renderValidationMessage() {
         if (!component.isValid()) {
             validationLabel.setText(component.getValidationResults().getValidationMessage(false));
-            component.asWidget().addStyleDependentName(DefaultWidgetDecoratorTheme.StyleDependent.invalid.name());
+            component.asWidget().addStyleDependentName(WidgetDecoratorTheme.StyleDependent.invalid.name());
         } else {
             validationLabel.setText(null);
-            component.asWidget().removeStyleDependentName(DefaultWidgetDecoratorTheme.StyleDependent.invalid.name());
+            component.asWidget().removeStyleDependentName(WidgetDecoratorTheme.StyleDependent.invalid.name());
         }
 
         if (component.getDebugId() != null) {

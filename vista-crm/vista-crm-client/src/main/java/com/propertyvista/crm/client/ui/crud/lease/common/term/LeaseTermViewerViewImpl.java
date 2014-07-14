@@ -18,7 +18,7 @@ import com.google.gwt.user.client.Command;
 
 import com.pyx4j.entity.core.IVersionedEntity;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.ui.DefaultPaneTheme;
+import com.pyx4j.site.client.ui.PaneTheme;
 import com.pyx4j.widgets.client.Button;
 
 import com.propertyvista.common.client.PrintUtils;
@@ -64,7 +64,7 @@ public class LeaseTermViewerViewImpl extends CrmViewerViewImplBase<LeaseTermDTO>
                 ((LeaseTermViewerView.Presenter) getPresenter()).accept();
             }
         }));
-        offerAcceptButton.addStyleName(DefaultPaneTheme.StyleName.HighlightedButton.name());
+        offerAcceptButton.addStyleName(PaneTheme.StyleName.HighlightedButton.name());
     }
 
     @Override

@@ -13,7 +13,7 @@
  */
 package com.propertyvista.portal.shared.ui.util.decorators;
 
-import static com.pyx4j.forms.client.ui.decorators.DefaultWidgetDecoratorTheme.StyleName.WidgetDecoratorContent;
+import static com.pyx4j.forms.client.ui.decorators.WidgetDecoratorTheme.StyleName.WidgetDecoratorContent;
 
 import com.google.gwt.dom.client.Style.VerticalAlign;
 import com.google.gwt.user.client.ui.FlowPanel;
@@ -29,7 +29,7 @@ import com.pyx4j.forms.client.events.PropertyChangeHandler;
 import com.pyx4j.forms.client.ui.CComponentTheme;
 import com.pyx4j.forms.client.ui.CField;
 import com.pyx4j.forms.client.ui.CSignature;
-import com.pyx4j.forms.client.ui.decorators.DefaultWidgetDecoratorTheme;
+import com.pyx4j.forms.client.ui.decorators.WidgetDecoratorTheme;
 import com.pyx4j.forms.client.ui.decorators.FieldDecorator.DebugIds;
 import com.pyx4j.forms.client.ui.decorators.IFieldDecorator;
 
@@ -78,11 +78,11 @@ public class SignatureDecorator extends FlowPanel implements IFieldDecorator {
     protected void renderValidationMessage() {
         if (!component.isValid()) {
             validationLabel.setText(component.getValidationResults().getValidationMessage(false));
-            component.asWidget().addStyleDependentName(DefaultWidgetDecoratorTheme.StyleDependent.invalid.name());
+            component.asWidget().addStyleDependentName(WidgetDecoratorTheme.StyleDependent.invalid.name());
             validationLabel.setVisible(true);
         } else {
             validationLabel.setText(null);
-            component.asWidget().removeStyleDependentName(DefaultWidgetDecoratorTheme.StyleDependent.invalid.name());
+            component.asWidget().removeStyleDependentName(WidgetDecoratorTheme.StyleDependent.invalid.name());
             validationLabel.setVisible(false);
         }
 

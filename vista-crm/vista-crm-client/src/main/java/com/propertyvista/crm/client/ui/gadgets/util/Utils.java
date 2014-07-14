@@ -20,19 +20,19 @@ import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Widget;
 
-import com.pyx4j.forms.client.ui.decorators.DefaultWidgetDecoratorTheme;
+import com.pyx4j.forms.client.ui.decorators.WidgetDecoratorTheme;
 
 public class Utils {
 
     public static Widget label(String caption) {
 
         HTML label = new HTML(new SafeHtmlBuilder().appendEscaped(caption).toSafeHtml());
-        label.setStyleName(DefaultWidgetDecoratorTheme.StyleName.WidgetDecoratorLabel.name());
+        label.setStyleName(WidgetDecoratorTheme.StyleName.WidgetDecoratorLabel.name());
 
         FlowPanel labelHolder = new FlowPanel();
         labelHolder.add(label);
-        labelHolder.setStyleName(DefaultWidgetDecoratorTheme.StyleName.WidgetDecorator.name());
-        labelHolder.addStyleDependentName(DefaultWidgetDecoratorTheme.StyleDependent.readOnly.name());
+        labelHolder.setStyleName(WidgetDecoratorTheme.StyleName.WidgetDecorator.name());
+        labelHolder.addStyleDependentName(WidgetDecoratorTheme.StyleDependent.readOnly.name());
 
         return labelHolder;
     }

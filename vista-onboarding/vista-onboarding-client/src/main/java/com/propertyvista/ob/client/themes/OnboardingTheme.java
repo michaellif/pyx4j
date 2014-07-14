@@ -22,16 +22,16 @@ import com.pyx4j.commons.css.ThemeColor;
 import com.pyx4j.commons.css.ThemeId;
 import com.pyx4j.forms.client.ui.CComponentTheme;
 import com.pyx4j.forms.client.ui.datatable.DataTableTheme;
-import com.pyx4j.forms.client.ui.decorators.DefaultWidgetDecoratorTheme;
-import com.pyx4j.forms.client.ui.folder.DefaultFolderTheme;
+import com.pyx4j.forms.client.ui.decorators.WidgetDecoratorTheme;
+import com.pyx4j.forms.client.ui.folder.FolderTheme;
 import com.pyx4j.forms.client.ui.panels.FlexFormPanelTheme;
 import com.pyx4j.forms.client.ui.panels.FormPanelTheme;
-import com.pyx4j.site.client.ui.DefaultPaneTheme;
-import com.pyx4j.widgets.client.datepicker.DefaultDatePickerTheme;
-import com.pyx4j.widgets.client.dialog.DefaultDialogTheme;
-import com.pyx4j.widgets.client.richtext.DefaultRichTextEditorTheme;
+import com.pyx4j.site.client.ui.PaneTheme;
+import com.pyx4j.widgets.client.datepicker.DatePickerTheme;
+import com.pyx4j.widgets.client.dialog.DialogTheme;
+import com.pyx4j.widgets.client.richtext.RichTextEditorTheme;
 import com.pyx4j.widgets.client.style.theme.WidgetTheme;
-import com.pyx4j.widgets.client.tabpanel.DefaultTabTheme;
+import com.pyx4j.widgets.client.tabpanel.TabTheme;
 
 import com.propertyvista.ob.client.forms.PmcAccountCreationRequestForm;
 import com.propertyvista.ob.client.forms.StepStatusIndicator;
@@ -50,7 +50,7 @@ public class OnboardingTheme extends Theme {
     public OnboardingTheme() {
 
         addTheme(new WidgetTheme());
-        addTheme(new DefaultWidgetDecoratorTheme() {
+        addTheme(new WidgetDecoratorTheme() {
             @Override
             protected ThemeColor getBackgroundColor() {
                 return ThemeColor.foreground;
@@ -78,20 +78,20 @@ public class OnboardingTheme extends Theme {
                 return 650;
             }
         });
-        addTheme(new DefaultFolderTheme() {
+        addTheme(new FolderTheme() {
             @Override
             protected ThemeColor getBackgroundColor() {
                 return ThemeColor.background;
             }
         });
-        addTheme(new DefaultRichTextEditorTheme());
-        addTheme(new DefaultDatePickerTheme());
-        addTheme(new DefaultPaneTheme());
+        addTheme(new RichTextEditorTheme());
+        addTheme(new DatePickerTheme());
+        addTheme(new PaneTheme());
         addTheme(new DataTableTheme());
-        addTheme(new DefaultDialogTheme());
+        addTheme(new DialogTheme());
         addTheme(new CComponentTheme());
 
-        addTheme(new DefaultTabTheme());
+        addTheme(new TabTheme());
 
         initCommonStuff();
         initPmcAccountRequestFormLayoutAndStyles();

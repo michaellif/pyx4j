@@ -19,18 +19,18 @@ import com.pyx4j.commons.css.Style;
 import com.pyx4j.commons.css.ThemeColor;
 import com.pyx4j.forms.client.ui.CComponentTheme;
 import com.pyx4j.forms.client.ui.datatable.DataTableTheme;
-import com.pyx4j.forms.client.ui.decorators.DefaultWidgetDecoratorTheme;
-import com.pyx4j.forms.client.ui.folder.DefaultFolderTheme;
+import com.pyx4j.forms.client.ui.decorators.WidgetDecoratorTheme;
+import com.pyx4j.forms.client.ui.folder.FolderTheme;
 import com.pyx4j.forms.client.ui.panels.FlexFormPanelTheme;
 import com.pyx4j.forms.client.ui.panels.FormPanelTheme;
-import com.pyx4j.site.client.ui.DefaultPaneTheme;
+import com.pyx4j.site.client.ui.PaneTheme;
 import com.pyx4j.site.client.ui.devconsole.DevConsoleTheme;
 import com.pyx4j.site.client.ui.layout.backoffice.BackOfficeLayoutTheme;
 import com.pyx4j.site.client.ui.sidemenu.SideMenuTheme;
-import com.pyx4j.widgets.client.datepicker.DefaultDatePickerTheme;
-import com.pyx4j.widgets.client.dialog.DefaultDialogTheme;
+import com.pyx4j.widgets.client.datepicker.DatePickerTheme;
+import com.pyx4j.widgets.client.dialog.DialogTheme;
 import com.pyx4j.widgets.client.style.theme.WidgetTheme;
-import com.pyx4j.widgets.client.tabpanel.DefaultTabTheme;
+import com.pyx4j.widgets.client.tabpanel.TabTheme;
 
 import com.propertyvista.common.client.theme.DraggerMixin;
 import com.propertyvista.common.client.theme.HorizontalAlignCenterMixin;
@@ -63,7 +63,7 @@ public class OperationsTheme extends VistaTheme {
         addTheme(new HorizontalAlignCenterMixin());
 
         addTheme(new WidgetTheme());
-        addTheme(new DefaultWidgetDecoratorTheme() {
+        addTheme(new WidgetDecoratorTheme() {
             @Override
             protected ThemeColor getBackgroundColor() {
                 return ThemeColor.foreground;
@@ -91,20 +91,20 @@ public class OperationsTheme extends VistaTheme {
                 return 650;
             }
         });
-        addTheme(new DefaultFolderTheme() {
+        addTheme(new FolderTheme() {
             @Override
             protected ThemeColor getBackgroundColor() {
                 return ThemeColor.foreground;
             }
         });
 
-        addTheme(new DefaultDatePickerTheme());
-        addTheme(new DefaultPaneTheme());
+        addTheme(new DatePickerTheme());
+        addTheme(new PaneTheme());
         addTheme(new DataTableTheme());
-        addTheme(new DefaultDialogTheme());
+        addTheme(new DialogTheme());
         addTheme(new CComponentTheme());
 
-        addTheme(new DefaultTabTheme());
+        addTheme(new TabTheme());
 
         addTheme(new SiteViewTheme());
         addTheme(new DraggerMixin());

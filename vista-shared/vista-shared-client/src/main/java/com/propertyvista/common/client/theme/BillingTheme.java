@@ -18,7 +18,7 @@ import com.pyx4j.commons.css.IStyleName;
 import com.pyx4j.commons.css.Style;
 import com.pyx4j.commons.css.Theme;
 import com.pyx4j.commons.css.ThemeId;
-import com.pyx4j.forms.client.ui.decorators.DefaultWidgetDecoratorTheme;
+import com.pyx4j.forms.client.ui.decorators.WidgetDecoratorTheme;
 
 public class BillingTheme extends Theme {
 
@@ -101,11 +101,11 @@ public class BillingTheme extends Theme {
         style.addProperty("text-align", "right");
         addStyle(style);
 
-        style = new Style(".", StyleName.BillingBillTotal, " .", DefaultWidgetDecoratorTheme.StyleName.WidgetDecoratorLabel);
+        style = new Style(".", StyleName.BillingBillTotal, " .", WidgetDecoratorTheme.StyleName.WidgetDecoratorLabel);
         style.addProperty("color", "#666");
         addStyle(style);
 
-        style = new Style(".", StyleName.BillingBillTotal, " .", DefaultWidgetDecoratorTheme.StyleName.WidgetDecoratorContent);
+        style = new Style(".", StyleName.BillingBillTotal, " .", WidgetDecoratorTheme.StyleName.WidgetDecoratorContent);
         style.addProperty("color", "#666");
         style.addProperty("border-top", "2px solid #bbb");
         style.addProperty("padding-top", "4px");

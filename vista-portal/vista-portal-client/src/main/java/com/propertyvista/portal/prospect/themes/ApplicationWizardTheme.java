@@ -18,7 +18,7 @@ import com.pyx4j.commons.css.IStyleName;
 import com.pyx4j.commons.css.Style;
 import com.pyx4j.commons.css.Theme;
 import com.pyx4j.commons.css.ThemeId;
-import com.pyx4j.forms.client.ui.folder.DefaultFolderTheme;
+import com.pyx4j.forms.client.ui.folder.FolderTheme;
 
 public class ApplicationWizardTheme extends Theme {
 
@@ -27,13 +27,13 @@ public class ApplicationWizardTheme extends Theme {
     }
 
     public ApplicationWizardTheme() {
-        Style style = new Style(".", StyleName.SelectUnitToobar, " .", DefaultFolderTheme.StyleName.CFolderActionsBar);
+        Style style = new Style(".", StyleName.SelectUnitToobar, " .", FolderTheme.StyleName.CFolderActionsBar);
         style.addProperty("margin", "5px");
         style.addProperty("opacity", "0.8");
         addStyle(style);
 
-        style = new Style(".", StyleName.SelectUnitToobar, " .", DefaultFolderTheme.StyleName.CFolderActionsBar, "-",
-                DefaultFolderTheme.StyleDependent.hover);
+        style = new Style(".", StyleName.SelectUnitToobar, " .", FolderTheme.StyleName.CFolderActionsBar, "-",
+                FolderTheme.StyleDependent.hover);
         style.addProperty("opacity", "1");
         addStyle(style);
 

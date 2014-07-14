@@ -17,7 +17,7 @@ import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.forms.client.ui.CForm;
-import com.pyx4j.forms.client.ui.decorators.DefaultWidgetDecoratorTheme;
+import com.pyx4j.forms.client.ui.decorators.WidgetDecoratorTheme;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.i18n.shared.I18n;
@@ -50,11 +50,11 @@ public class BusinessInformationForm extends CForm<BusinessInformationDTO> {
 
         Label documentsLabel = new Label();
         documentsLabel.setText(isEditable() ? i18n.tr("Attach Documentation:") : i18n.tr("Attached Documentation:"));
-        documentsLabel.setStyleName(DefaultWidgetDecoratorTheme.StyleName.WidgetDecoratorLabel.name());
+        documentsLabel.setStyleName(WidgetDecoratorTheme.StyleName.WidgetDecoratorLabel.name());
         FlowPanel documentsDecorator = new FlowPanel();
-        documentsDecorator.setStyleName(DefaultWidgetDecoratorTheme.StyleName.WidgetDecorator.name());
+        documentsDecorator.setStyleName(WidgetDecoratorTheme.StyleName.WidgetDecorator.name());
         if (!isEditable()) {
-            documentsDecorator.addStyleDependentName(DefaultWidgetDecoratorTheme.StyleDependent.viewable.name());
+            documentsDecorator.addStyleDependentName(WidgetDecoratorTheme.StyleDependent.viewable.name());
         }
         documentsDecorator.add(documentsLabel);
         formPanel.append(Location.Dual, documentsDecorator);

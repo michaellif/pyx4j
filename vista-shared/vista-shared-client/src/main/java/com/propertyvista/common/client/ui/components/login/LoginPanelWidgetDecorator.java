@@ -13,7 +13,7 @@
  */
 package com.propertyvista.common.client.ui.components.login;
 
-import com.pyx4j.forms.client.ui.decorators.DefaultWidgetDecoratorTheme;
+import com.pyx4j.forms.client.ui.decorators.WidgetDecoratorTheme;
 import com.pyx4j.forms.client.ui.decorators.FieldDecorator;
 
 public class LoginPanelWidgetDecorator extends FieldDecorator {
@@ -24,6 +24,6 @@ public class LoginPanelWidgetDecorator extends FieldDecorator {
 
     public LoginPanelWidgetDecorator(double componentWidth) {
         super(new Builder().labelWidth(9 + "em").componentWidth(componentWidth + "em").labelAlignment(Builder.Alignment.left));
-        addStyleDependentName(DefaultWidgetDecoratorTheme.StyleDependent.noMandatoryStar.name());
+        addStyleDependentName(WidgetDecoratorTheme.StyleDependent.noMandatoryStar.name());
     }
 }
