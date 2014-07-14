@@ -19,6 +19,9 @@ import static com.propertyvista.domain.security.VistaCrmBehavior.LeaseFull;
 import static com.pyx4j.entity.security.AbstractCRUDPermission.ALL;
 import static com.pyx4j.entity.security.AbstractCRUDPermission.READ;
 
+import java.util.List;
+
+import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.rpc.shared.IServiceExecutePermission;
 import com.pyx4j.security.server.UIAclBuilder;
 import com.pyx4j.security.shared.ActionPermission;
@@ -60,14 +63,12 @@ public class VistaCrmLeaseAccessControlList extends UIAclBuilder {
 
         grant(LeaseFull, new ActionPermission(LeaseStateManagement.class));
 
-        // ---- Lease(Term) itself:
-        grant(LeaseBasic, LeaseDTO.class, READ);
-        grant(LeaseAdvanced, LeaseDTO.class, READ);
-        grant(LeaseFull, LeaseDTO.class, ALL);
-
-        grant(LeaseBasic, LeaseTermDTO.class, READ);
-        grant(LeaseAdvanced, LeaseTermDTO.class, READ);
-        grant(LeaseFull, LeaseTermDTO.class, ALL);
+        {// ---- Lease(Term) itself:
+            List<Class<? extends IEntity>> entities = entities(LeaseDTO.class, LeaseTermDTO.class);
+            grant(LeaseBasic, entities, READ);
+            grant(LeaseAdvanced, entities, READ);
+            grant(LeaseFull, entities, ALL);
+        }
 
         // ---- Legal/Documentation:
 

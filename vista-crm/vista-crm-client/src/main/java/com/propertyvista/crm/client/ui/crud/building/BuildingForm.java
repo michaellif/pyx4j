@@ -124,8 +124,13 @@ public class BuildingForm extends CrmEntityForm<BuildingDTO> {
         catalogTab = addTab(createCatalogTab(), i18n.tr("Product Catalog"));
         addTab(createContactTab(), i18n.tr("Contacts"));
         billingCyclesTab = addTab(isEditable() ? new HTML() : ((BuildingViewerView) getParentView()).getBillingCycleListerView(), i18n.tr("Billing Cycles"));
+    }
 
-        // Tabs visibility/editability:  
+    @Override
+    public void onReset() {
+        super.onReset();
+
+        // Tabs visibility by permission:  
         floorplansTab.setTabVisible(SecurityController.check(DataModelPermission.permissionRead(FloorplanDTO.class)));
         unitsTab.setTabVisible(SecurityController.check(DataModelPermission.permissionRead(AptUnitDTO.class)));
         mechanicalsTab.setTabVisible(SecurityController.check(DataModelPermission.permissionRead(BuildingMechanical.class)));
@@ -135,6 +140,7 @@ public class BuildingForm extends CrmEntityForm<BuildingDTO> {
         billingCyclesTab.setTabVisible(SecurityController.check(DataModelPermission.permissionRead(BillingCycleDTO.class)));
         catalogTab.setTabVisible(SecurityController.check(DataModelPermission.permissionRead(Product.class)));
 
+        // Tabs editability:
         if (isEditable()) {
             floorplansTab.setTabEnabled(false);
             unitsTab.setTabEnabled(false);
@@ -155,6 +161,7 @@ public class BuildingForm extends CrmEntityForm<BuildingDTO> {
         get(proto().externalId()).setVisible(!getValue().externalId().isNull());
         get(proto().suspended()).setEditable(SecurityController.check(VistaCrmBehavior.PropertyVistaSupport));
 
+        // dynamic tabs visibility management:
         catalogTab.setTabVisible(catalogTab.isTabVisible() && !getValue().defaultProductCatalog().getValue(false));
 
         // tweak property code editing UI:

@@ -38,6 +38,7 @@ import com.propertyvista.domain.customizations.CountryOfOperation;
 import com.propertyvista.domain.tenant.lease.LeaseApplication;
 import com.propertyvista.domain.tenant.prospect.LeaseApplicationDocument;
 import com.propertyvista.dto.LeaseApplicationDTO;
+import com.propertyvista.dto.PaymentRecordDTO;
 import com.propertyvista.dto.TenantFinancialDTO;
 import com.propertyvista.dto.TenantInfoDTO;
 import com.propertyvista.shared.config.VistaFeatures;
@@ -64,6 +65,16 @@ public class LeaseApplicationForm extends LeaseFormBase<LeaseApplicationDTO> {
     }
 
     @Override
+    public void onReset() {
+        super.onReset();
+
+        // Tabs visibility by permission:  
+        paymentsTab.setTabVisible(SecurityController.check(DataModelPermission.permissionRead(PaymentRecordDTO.class)));
+        financialTab.setTabVisible(SecurityController.check(DataModelPermission.permissionRead(TenantFinancialDTO.class)));
+        applicationDocumentsTab.setTabVisible(SecurityController.check(DataModelPermission.permissionRead(LeaseApplicationDocument.class)));
+    }
+
+    @Override
     protected void onValueSet(boolean populate) {
         super.onValueSet(populate);
 
@@ -80,10 +91,6 @@ public class LeaseApplicationForm extends LeaseFormBase<LeaseApplicationDTO> {
         get(proto().leaseApplication().decidedBy()).setVisible(status.isProcessed());
         get(proto().leaseApplication().decisionDate()).setVisible(status.isProcessed());
         get(proto().leaseApplication().decisionReason()).setVisible(status.isProcessed());
-
-        paymentsTab.setTabVisible(SecurityController.check(DataModelPermission.permissionRead(TenantFinancialDTO.class)));
-        financialTab.setTabVisible(SecurityController.check(DataModelPermission.permissionRead(TenantFinancialDTO.class)));
-        applicationDocumentsTab.setTabVisible(SecurityController.check(DataModelPermission.permissionRead(LeaseApplicationDocument.class)));
     }
 
     private IsWidget createInfoTab() {

@@ -29,11 +29,11 @@ import com.propertyvista.crm.client.ui.crud.lease.financial.TransactionHistoryVi
 import com.propertyvista.crm.client.ui.crud.lease.legal.LegalLetterFolder;
 import com.propertyvista.crm.rpc.dto.billing.BillDataDTO;
 import com.propertyvista.domain.legal.LegalLetter;
-import com.propertyvista.domain.security.VistaCrmBehavior;
 import com.propertyvista.domain.tenant.lease.LeaseAdjustment;
 import com.propertyvista.dto.DepositLifecycleDTO;
 import com.propertyvista.dto.LeaseDTO;
 import com.propertyvista.dto.MaintenanceRequestDTO;
+import com.propertyvista.dto.PaymentRecordDTO;
 import com.propertyvista.dto.TransactionHistoryDTO;
 import com.propertyvista.shared.config.VistaFeatures;
 
@@ -59,36 +59,37 @@ public class LeaseForm extends LeaseFormBase<LeaseDTO> {
     }
 
     @Override
-    protected void onValueSet(boolean populate) {
-        super.onValueSet(populate);
+    public void onReset() {
+        super.onReset();
 
-        get(proto().leaseId()).setVisible(true);
-
-        setTabVisible(depositsTab,
-                !getValue().status().getValue().isDraft() && SecurityController.check(DataModelPermission.permissionRead(DepositLifecycleDTO.class)));
-
-        setTabVisible(adjustmentsTab,
-                !getValue().status().getValue().isDraft() && SecurityController.check(DataModelPermission.permissionRead(LeaseAdjustment.class)));
-
-        setTabVisible(
-                billsTab,
-                !getValue().status().getValue().isDraft() && SecurityController.check(VistaCrmBehavior.Billing_OLD)
-                        && SecurityController.check(DataModelPermission.permissionRead(BillDataDTO.class)));
-
-        setTabVisible(paymentsTab, !getValue().status().getValue().isDraft());
-
-        setTabVisible(financialTab,
-                !getValue().status().getValue().isDraft() && SecurityController.check(DataModelPermission.permissionRead(TransactionHistoryDTO.class)));
-
-        setTabVisible(communicationTab, SecurityController.check(DataModelPermission.permissionRead(LegalLetter.class)));
-        setTabVisible(maintenanceTab, SecurityController.check(DataModelPermission.permissionRead(MaintenanceRequestDTO.class)));
-
+        // Tabs visibility by permission:  
+        depositsTab.setTabVisible(SecurityController.check(DataModelPermission.permissionRead(DepositLifecycleDTO.class)));
+        adjustmentsTab.setTabVisible(SecurityController.check(DataModelPermission.permissionRead(LeaseAdjustment.class)));
+        billsTab.setTabVisible(SecurityController.check(DataModelPermission.permissionRead(BillDataDTO.class)));
+        paymentsTab.setTabVisible(SecurityController.check(DataModelPermission.permissionRead(PaymentRecordDTO.class)));
+        financialTab.setTabVisible(SecurityController.check(DataModelPermission.permissionRead(TransactionHistoryDTO.class)));
+        communicationTab.setTabVisible(SecurityController.check(DataModelPermission.permissionRead(LegalLetter.class)));
+        maintenanceTab.setTabVisible(SecurityController.check(DataModelPermission.permissionRead(MaintenanceRequestDTO.class)));
         // Yardi mode overrides:
         if (VistaFeatures.instance().yardiIntegration()) {
             setTabVisible(depositsTab, false);
             setTabVisible(adjustmentsTab, false);
             setTabVisible(billsTab, false);
         }
+    }
+
+    @Override
+    protected void onValueSet(boolean populate) {
+        super.onValueSet(populate);
+
+        get(proto().leaseId()).setVisible(true);
+
+        // dynamic tabs visibility management:
+        setTabVisible(depositsTab, depositsTab.isTabVisible() && !getValue().status().getValue().isDraft());
+        setTabVisible(adjustmentsTab, adjustmentsTab.isTabVisible() && !getValue().status().getValue().isDraft());
+        setTabVisible(billsTab, billsTab.isTabVisible() && !getValue().status().getValue().isDraft());
+        setTabVisible(paymentsTab, paymentsTab.isTabVisible() && !getValue().status().getValue().isDraft());
+        setTabVisible(financialTab, financialTab.isTabVisible() && !getValue().status().getValue().isDraft());
     }
 
     private IsWidget createFinancialTransactionHistoryTab() {
