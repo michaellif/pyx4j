@@ -86,9 +86,7 @@ public class SuggestTextBox<E extends IEntity> extends Composite implements Wate
 
     private final SuggestionDisplay display;
 
-    private final TextBox box;
-
-    private final Callback callback;
+    private final InputTextBox box;
 
     private E value;
 
@@ -97,31 +95,12 @@ public class SuggestTextBox<E extends IEntity> extends Composite implements Wate
     }
 
     public SuggestTextBox(final SuggestOracle oracle) {
-        this.box = new TextBox();
+        this.box = new InputTextBox();
         this.display = new SuggestionDisplay();
-
-        callback = new Callback() {
-            @Override
-            public void onSuggestionsReady(Request request, Response response) {
-                // If disabled while request was in-flight, drop it
-                if (!isEnabled()) {
-                    return;
-                }
-                display.setMoreSuggestions(response.hasMoreSuggestions(), response.getMoreSuggestionsCount());
-                display.showSuggestions(SuggestTextBox.this, response.getSuggestions(), oracle.isDisplayStringHTML(), isAutoSelect());
-            }
-        };
-
-        initWidget(box);
-        addEventsToTextBox();
 
         setOracle(oracle);
 
-        setStyleName(WidgetTheme.StyleName.SuggestBox.name());
-        addStyleName(WidgetTheme.StyleName.TextBox.name());
-
-        addStyleDependentName(WidgetTheme.StyleDependent.singleLine.name());
-
+        initWidget(box);
     }
 
     @Override
@@ -313,6 +292,19 @@ public class SuggestTextBox<E extends IEntity> extends Composite implements Wate
     }
 
     void showSuggestions(String query) {
+
+        Callback callback = new Callback() {
+            @Override
+            public void onSuggestionsReady(Request request, Response response) {
+                // If disabled while request was in-flight, drop it
+                if (!isEnabled()) {
+                    return;
+                }
+                display.setMoreSuggestions(response.hasMoreSuggestions(), response.getMoreSuggestionsCount());
+                display.showSuggestions(response.getSuggestions(), oracle.isDisplayStringHTML(), isAutoSelect());
+            }
+        };
+
         if (query.length() == 0) {
             oracle.requestDefaultSuggestions(new Request(null, limit), callback);
         } else {
@@ -320,50 +312,58 @@ public class SuggestTextBox<E extends IEntity> extends Composite implements Wate
         }
     }
 
-    private void addEventsToTextBox() {
-        box.addKeyDownHandler(new KeyDownHandler() {
+    class InputTextBox extends TextBox {
+        public InputTextBox() {
 
-            @Override
-            public void onKeyDown(KeyDownEvent event) {
-                switch (event.getNativeKeyCode()) {
-                case KeyCodes.KEY_DOWN:
-                    display.moveSelectionDown();
-                    break;
-                case KeyCodes.KEY_UP:
-                    display.moveSelectionUp();
-                    break;
-                case KeyCodes.KEY_ENTER:
-                case KeyCodes.KEY_TAB:
-                    setNewSelection(display.getCurrentSelection());
-                    break;
+            addKeyDownHandler(new KeyDownHandler() {
+
+                @Override
+                public void onKeyDown(KeyDownEvent event) {
+                    switch (event.getNativeKeyCode()) {
+                    case KeyCodes.KEY_DOWN:
+                        display.moveSelectionDown();
+                        break;
+                    case KeyCodes.KEY_UP:
+                        display.moveSelectionUp();
+                        break;
+                    case KeyCodes.KEY_ENTER:
+                    case KeyCodes.KEY_TAB:
+                        setNewSelection(display.getCurrentSelection());
+                        break;
+                    }
                 }
-            }
-        });
+            });
 
-        box.addKeyUpHandler(new KeyUpHandler() {
+            addKeyUpHandler(new KeyUpHandler() {
 
-            @Override
-            public void onKeyUp(KeyUpEvent event) {
-                // After every user key input, refresh the popup's suggestions.
-                refreshSuggestions();
-            }
-        });
+                @Override
+                public void onKeyUp(KeyUpEvent event) {
+                    // After every user key input, refresh the popup's suggestions.
+                    refreshSuggestions();
+                }
+            });
 
-        box.addValueChangeHandler(new ValueChangeHandler<String>() {
+            addValueChangeHandler(new ValueChangeHandler<String>() {
 
-            @Override
-            public void onValueChange(ValueChangeEvent<String> event) {
-                delegateEvent(SuggestTextBox.this, event);
-            }
-        });
+                @Override
+                public void onValueChange(ValueChangeEvent<String> event) {
+                    delegateEvent(SuggestTextBox.this, event);
+                }
+            });
 
-        box.addBlurHandler(new BlurHandler() {
+            addBlurHandler(new BlurHandler() {
 
-            @Override
-            public void onBlur(BlurEvent event) {
-                // TODO Auto-generated method stub
-            }
-        });
+                @Override
+                public void onBlur(BlurEvent event) {
+                    // TODO Auto-generated method stub
+                }
+            });
+
+            setStyleName(WidgetTheme.StyleName.TextBox.name());
+            addStyleName(WidgetTheme.StyleName.SuggestBox.name());
+            addStyleDependentName(WidgetTheme.StyleDependent.singleLine.name());
+
+        }
     }
 
     private void fireSuggestionEvent(Suggestion selectedSuggestion) {
@@ -484,7 +484,7 @@ public class SuggestTextBox<E extends IEntity> extends Composite implements Wate
          * display for multiple {@link SuggestTextBox}, we need to switch the autoHide
          * partner.
          */
-        private SuggestTextBox lastSuggestBox = null;
+        private SuggestTextBox<E> lastSuggestBox = null;
 
         /**
          * Sub-classes making use of {@link decorateSuggestionList} to add
@@ -633,8 +633,7 @@ public class SuggestTextBox<E extends IEntity> extends Composite implements Wate
             }
         }
 
-        protected void showSuggestions(final SuggestTextBox suggestBox, Collection<? extends Suggestion> suggestions, boolean isDisplayStringHTML,
-                boolean isAutoSelectEnabled) {
+        protected void showSuggestions(Collection<? extends Suggestion> suggestions, boolean isDisplayStringHTML, boolean isAutoSelectEnabled) {
             // Hide the popup if there are no suggestions to display.
             boolean anySuggestions = (suggestions != null && suggestions.size() > 0);
             if (!anySuggestions && hideWhenEmpty) {
@@ -670,17 +669,17 @@ public class SuggestTextBox<E extends IEntity> extends Composite implements Wate
             }
 
             // Link the popup autoHide to the TextBox.
-            if (lastSuggestBox != suggestBox) {
+            if (lastSuggestBox != SuggestTextBox.this) {
                 // If the suggest box has changed, free the old one first.
                 if (lastSuggestBox != null) {
                     suggestionPopup.removeAutoHidePartner(lastSuggestBox.getElement());
                 }
-                lastSuggestBox = suggestBox;
-                suggestionPopup.addAutoHidePartner(suggestBox.getElement());
+                lastSuggestBox = SuggestTextBox.this;
+                suggestionPopup.addAutoHidePartner(SuggestTextBox.this.getElement());
             }
 
             // Show the popup under the TextBox.
-            suggestionPopup.showRelativeTo(positionRelativeTo != null ? positionRelativeTo : suggestBox);
+            suggestionPopup.showRelativeTo(positionRelativeTo != null ? positionRelativeTo : SuggestTextBox.this);
         }
 
         /**

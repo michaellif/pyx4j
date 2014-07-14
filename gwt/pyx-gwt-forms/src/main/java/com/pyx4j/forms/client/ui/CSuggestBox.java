@@ -26,11 +26,12 @@ import java.util.List;
 
 import com.google.gwt.event.shared.HandlerRegistration;
 
+import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.forms.client.events.HasOptionsChangeHandlers;
 import com.pyx4j.forms.client.events.OptionsChangeEvent;
 import com.pyx4j.forms.client.events.OptionsChangeHandler;
 
-public class CSuggestBox<E> extends CTextFieldBase<E, NSuggestBox<E>> implements HasOptionsChangeHandlers<List<E>> {
+public class CSuggestBox<E extends IEntity> extends CTextFieldBase<E, NSuggestBox<E>> implements HasOptionsChangeHandlers<List<E>> {
 
     private List<E> options = new ArrayList<E>();
 
