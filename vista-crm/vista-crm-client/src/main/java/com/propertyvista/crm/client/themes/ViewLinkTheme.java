@@ -19,7 +19,7 @@ import com.pyx4j.commons.css.Style;
 import com.pyx4j.commons.css.Theme;
 import com.pyx4j.commons.css.ThemeColor;
 import com.pyx4j.commons.css.ThemeId;
-import com.pyx4j.widgets.client.DefaultWidgetsTheme;
+import com.pyx4j.widgets.client.style.theme.WidgetTheme;
 
 public class ViewLinkTheme extends Theme {
     public static enum StyleName implements IStyleName {
@@ -28,7 +28,7 @@ public class ViewLinkTheme extends Theme {
 
     public ViewLinkTheme() {
 
-        Style style = new Style(".", StyleName.ViewLink, ".", DefaultWidgetsTheme.StyleName.Anchor);
+        Style style = new Style(".", StyleName.ViewLink, ".", WidgetTheme.StyleName.Anchor);
         style.addProperty("padding-left", "4px");
         style.addProperty("color", ThemeColor.object1, 0.8);
         style.addProperty("font-size", "0.8em");

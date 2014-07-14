@@ -20,7 +20,7 @@ import com.pyx4j.commons.css.Style;
 import com.pyx4j.commons.css.Theme;
 import com.pyx4j.commons.css.ThemeColor;
 import com.pyx4j.commons.css.ThemeId;
-import com.pyx4j.widgets.client.DefaultWidgetsTheme;
+import com.pyx4j.widgets.client.style.theme.WidgetTheme;
 
 public class NewPaymentMethodEditorTheme extends Theme {
 
@@ -74,7 +74,7 @@ public class NewPaymentMethodEditorTheme extends Theme {
         style.addProperty("width", "100px");
         addStyle(style);
 
-        style = new Style(".", StyleName.PaymentEditorButtons, " .", DefaultWidgetsTheme.StyleName.RadioGroupItem);
+        style = new Style(".", StyleName.PaymentEditorButtons, " .", WidgetTheme.StyleName.RadioGroupItem);
         style.addProperty("width", "100%");
         style.addProperty("padding-top", "3px");
         style.addProperty("height", "30px");
@@ -83,8 +83,8 @@ public class NewPaymentMethodEditorTheme extends Theme {
         style.addProperty("white-space", "nowrap");
         addStyle(style);
 
-        style = new Style(".", StyleName.PaymentEditorButtons, ".", DefaultWidgetsTheme.StyleName.RadioGroupItem, "-",
-                DefaultWidgetsTheme.StyleDependent.active);
+        style = new Style(".", StyleName.PaymentEditorButtons, ".", WidgetTheme.StyleName.RadioGroupItem, "-",
+                WidgetTheme.StyleDependent.active);
 //        style.addProperty("border-top", "1px solid #bbb");
 //        style.addProperty("border-bottom", "1px solid #bbb");
         style.addProperty("width", "130px");

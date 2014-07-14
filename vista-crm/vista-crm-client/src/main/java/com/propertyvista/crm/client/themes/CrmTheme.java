@@ -28,7 +28,6 @@ import com.pyx4j.site.client.ui.devconsole.DevConsoleTheme;
 import com.pyx4j.site.client.ui.layout.backoffice.BackOfficeLayoutTheme;
 import com.pyx4j.site.client.ui.reports.AbstractReport;
 import com.pyx4j.site.client.ui.sidemenu.SideMenuTheme;
-import com.pyx4j.widgets.client.DefaultWidgetsTheme;
 import com.pyx4j.widgets.client.dashboard.DashboardTheme;
 import com.pyx4j.widgets.client.datepicker.DefaultDatePickerTheme;
 import com.pyx4j.widgets.client.dialog.DefaultDialogTheme;
@@ -36,6 +35,7 @@ import com.pyx4j.widgets.client.richtext.DefaultRichTextEditorTheme;
 import com.pyx4j.widgets.client.selector.SelectedItemHolder;
 import com.pyx4j.widgets.client.selector.SuggestiveSelector;
 import com.pyx4j.widgets.client.selector.SuggestiveSelector;
+import com.pyx4j.widgets.client.style.theme.WidgetTheme;
 import com.pyx4j.widgets.client.tabpanel.DefaultTabTheme;
 
 import com.propertyvista.common.client.theme.BillingTheme;
@@ -93,7 +93,7 @@ public class CrmTheme extends VistaTheme {
     protected void initStyles() {
         addTheme(new HorizontalAlignCenterMixin());
 
-        addTheme(new DefaultWidgetsTheme());
+        addTheme(new WidgetTheme());
         addTheme(new DefaultWidgetDecoratorTheme() {
             @Override
             protected ThemeColor getBackgroundColor() {

@@ -27,10 +27,10 @@ import com.pyx4j.forms.client.ui.folder.DefaultFolderTheme;
 import com.pyx4j.forms.client.ui.panels.FlexFormPanelTheme;
 import com.pyx4j.forms.client.ui.panels.FormPanelTheme;
 import com.pyx4j.site.client.ui.DefaultPaneTheme;
-import com.pyx4j.widgets.client.DefaultWidgetsTheme;
 import com.pyx4j.widgets.client.datepicker.DefaultDatePickerTheme;
 import com.pyx4j.widgets.client.dialog.DefaultDialogTheme;
 import com.pyx4j.widgets.client.richtext.DefaultRichTextEditorTheme;
+import com.pyx4j.widgets.client.style.theme.WidgetTheme;
 import com.pyx4j.widgets.client.tabpanel.DefaultTabTheme;
 
 import com.propertyvista.ob.client.forms.PmcAccountCreationRequestForm;
@@ -49,7 +49,7 @@ public class OnboardingTheme extends Theme {
 
     public OnboardingTheme() {
 
-        addTheme(new DefaultWidgetsTheme());
+        addTheme(new WidgetTheme());
         addTheme(new DefaultWidgetDecoratorTheme() {
             @Override
             protected ThemeColor getBackgroundColor() {

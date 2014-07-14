@@ -19,7 +19,7 @@ import com.pyx4j.commons.css.Style;
 import com.pyx4j.commons.css.Theme;
 import com.pyx4j.commons.css.ThemeColor;
 import com.pyx4j.commons.css.ThemeId;
-import com.pyx4j.widgets.client.DefaultWidgetsTheme;
+import com.pyx4j.widgets.client.style.theme.WidgetTheme;
 
 public class DashboardTheme extends Theme {
 
@@ -55,7 +55,7 @@ public class DashboardTheme extends Theme {
         style.addProperty("font-size", "1.2em");
         addStyle(style);
 
-        style = new Style(".", StyleName.GadgetContainer, " .", DefaultWidgetsTheme.StyleName.Anchor);
+        style = new Style(".", StyleName.GadgetContainer, " .", WidgetTheme.StyleName.Anchor);
         style.addProperty("display", "inline-block");
         style.addProperty("color", ThemeColor.contrast2, 1);
         style.addProperty("font-size", "0.8em");
@@ -80,16 +80,16 @@ public class DashboardTheme extends Theme {
         style.addProperty("border-left-style", "solid");
         addStyle(style);
 
-        style = new Style(".", StyleName.Gadget, " .", DefaultWidgetsTheme.StyleName.Toolbar);
+        style = new Style(".", StyleName.Gadget, " .", WidgetTheme.StyleName.Toolbar);
         style.addProperty("white-space", "normal");
         style.addProperty("text-align", "center");
         style.addProperty("width", "100%");
         addStyle(style);
 
-        style = new Style(".", StyleName.Gadget, " .", DefaultWidgetsTheme.StyleName.ToolbarItem);
+        style = new Style(".", StyleName.Gadget, " .", WidgetTheme.StyleName.ToolbarItem);
         addStyle(style);
 
-        style = new Style(".", StyleName.GadgetToolbar, " .", DefaultWidgetsTheme.StyleName.Button);
+        style = new Style(".", StyleName.GadgetToolbar, " .", WidgetTheme.StyleName.Button);
         style.addProperty("width", "250px");
         style.addProperty("background", "none");
         style.addProperty("margin", "10px 10px 0 10px");

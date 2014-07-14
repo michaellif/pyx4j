@@ -20,7 +20,7 @@ import com.pyx4j.commons.css.Style;
 import com.pyx4j.commons.css.Theme;
 import com.pyx4j.commons.css.ThemeColor;
 import com.pyx4j.commons.css.ThemeId;
-import com.pyx4j.widgets.client.DefaultWidgetsTheme;
+import com.pyx4j.widgets.client.style.theme.WidgetTheme;
 
 public class SiteViewTheme extends Theme {
 
@@ -53,13 +53,13 @@ public class SiteViewTheme extends Theme {
         style.addProperty("font-size", "1.1em");
         addStyle(style);
 
-        style = new Style(".", StyleName.SiteViewHeader, " .", DefaultWidgetsTheme.StyleName.Toolbar);
+        style = new Style(".", StyleName.SiteViewHeader, " .", WidgetTheme.StyleName.Toolbar);
         style.addProperty("margin", "8px 10px 0 8px");
         style.addProperty("position", "absolute");
         style.addProperty("vertical-align", "top");
         addStyle(style);
 
-        style = new Style(".", StyleName.SiteViewHeader, " .", DefaultWidgetsTheme.StyleName.Button);
+        style = new Style(".", StyleName.SiteViewHeader, " .", WidgetTheme.StyleName.Button);
         style.addProperty("line-height", "30px");
         style.addProperty("height", "30px");
         style.addProperty("padding", "3px 15px 3px 3px");
@@ -68,7 +68,7 @@ public class SiteViewTheme extends Theme {
         style.addProperty("outline", "none");
         addStyle(style);
 
-        style = new Style(".", StyleName.SiteViewHeader, " .", DefaultWidgetsTheme.StyleName.Button, ":hover");
+        style = new Style(".", StyleName.SiteViewHeader, " .", WidgetTheme.StyleName.Button, ":hover");
         style.addProperty("text-decoration", "underline");
         addStyle(style);
 

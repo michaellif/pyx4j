@@ -27,9 +27,9 @@ import com.pyx4j.site.client.ui.DefaultPaneTheme;
 import com.pyx4j.site.client.ui.devconsole.DevConsoleTheme;
 import com.pyx4j.site.client.ui.layout.backoffice.BackOfficeLayoutTheme;
 import com.pyx4j.site.client.ui.sidemenu.SideMenuTheme;
-import com.pyx4j.widgets.client.DefaultWidgetsTheme;
 import com.pyx4j.widgets.client.datepicker.DefaultDatePickerTheme;
 import com.pyx4j.widgets.client.dialog.DefaultDialogTheme;
+import com.pyx4j.widgets.client.style.theme.WidgetTheme;
 import com.pyx4j.widgets.client.tabpanel.DefaultTabTheme;
 
 import com.propertyvista.common.client.theme.DraggerMixin;
@@ -62,7 +62,7 @@ public class OperationsTheme extends VistaTheme {
     protected void initStyles() {
         addTheme(new HorizontalAlignCenterMixin());
 
-        addTheme(new DefaultWidgetsTheme());
+        addTheme(new WidgetTheme());
         addTheme(new DefaultWidgetDecoratorTheme() {
             @Override
             protected ThemeColor getBackgroundColor() {

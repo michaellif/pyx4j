@@ -27,9 +27,9 @@ import com.pyx4j.forms.client.ui.panels.FlexFormPanelTheme;
 import com.pyx4j.forms.client.ui.panels.FormPanelTheme;
 import com.pyx4j.site.client.ui.devconsole.DevConsoleTheme;
 import com.pyx4j.site.client.ui.layout.frontoffice.FrontOfficeLayoutTheme;
-import com.pyx4j.widgets.client.DefaultWidgetsTheme;
 import com.pyx4j.widgets.client.datepicker.DefaultDatePickerTheme;
 import com.pyx4j.widgets.client.dialog.DefaultDialogTheme;
+import com.pyx4j.widgets.client.style.theme.WidgetTheme;
 
 import com.propertyvista.common.client.theme.HorizontalAlignCenterMixin;
 import com.propertyvista.common.client.theme.TransactionHistoryViewerTheme;
@@ -73,7 +73,7 @@ public class PortalTheme extends Theme {
 
         addTheme(new NavigationAnchorTheme());
 
-        addTheme(new DefaultWidgetsTheme() {
+        addTheme(new WidgetTheme() {
 
             @Override
             protected void initTextBoxStyle() {
@@ -95,7 +95,7 @@ public class PortalTheme extends Theme {
             protected void initButtonStyle() {
                 super.initButtonStyle();
 
-                Style style = new Style(" .", DefaultWidgetsTheme.StyleName.Button);
+                Style style = new Style(" .", WidgetTheme.StyleName.Button);
                 style.addProperty("height", "2.6em");
                 style.addGradient(ThemeColor.foreground, 1, ThemeColor.foreground, 0.95);
                 style.addProperty("background", ThemeColor.foreground, 0.7);
@@ -108,7 +108,7 @@ public class PortalTheme extends Theme {
                 style.addProperty("padding", "0 6px");
                 addStyle(style);
 
-                style = new Style(" .", DefaultWidgetsTheme.StyleName.ButtonText);
+                style = new Style(" .", WidgetTheme.StyleName.ButtonText);
                 style.addProperty("line-height", "2.6em");
                 addStyle(style);
 
@@ -118,7 +118,7 @@ public class PortalTheme extends Theme {
             protected void initToolbarStyle() {
                 super.initToolbarStyle();
 
-                Style style = new Style(".", DefaultWidgetsTheme.StyleName.ToolbarItem);
+                Style style = new Style(".", WidgetTheme.StyleName.ToolbarItem);
                 style.addProperty("text-align", "center");
                 style.addProperty("font-size", "0.9em");
                 addStyle(style);
@@ -221,12 +221,12 @@ public class PortalTheme extends Theme {
             @Override
             protected void initStyles() {
                 super.initStyles();
-                Style style = new Style(".", StyleName.FormPanelActionWidget, " .", DefaultWidgetsTheme.StyleName.Button);
+                Style style = new Style(".", StyleName.FormPanelActionWidget, " .", WidgetTheme.StyleName.Button);
                 style.addProperty("height", "auto");
                 addStyle(style);
 
-                style = new Style(".", StyleName.FormPanelActionWidget, " .", DefaultWidgetsTheme.StyleName.Button, " .",
-                        DefaultWidgetsTheme.StyleName.ButtonText);
+                style = new Style(".", StyleName.FormPanelActionWidget, " .", WidgetTheme.StyleName.Button, " .",
+                        WidgetTheme.StyleName.ButtonText);
                 style.addProperty("line-height", "normal");
                 addStyle(style);
             }
@@ -329,7 +329,7 @@ public class PortalTheme extends Theme {
                 style.addProperty("line-height", "40px");
                 addStyle(style);
 
-                style = new Style(".", StyleName.FormDecoratorHeader, " .", DefaultWidgetsTheme.StyleName.Toolbar);
+                style = new Style(".", StyleName.FormDecoratorHeader, " .", WidgetTheme.StyleName.Toolbar);
                 style.addProperty("float", "right");
                 addStyle(style);
             }
@@ -347,7 +347,7 @@ public class PortalTheme extends Theme {
                 style.addProperty("overflow", "hidden");
                 addStyle(style);
 
-                style = new Style(".", StyleName.FormDecoratorMain, " ." + DefaultWidgetsTheme.StyleName.Anchor);
+                style = new Style(".", StyleName.FormDecoratorMain, " ." + WidgetTheme.StyleName.Anchor);
                 style.addProperty("color", ThemeColor.contrast2, 1);
                 addStyle(style);
 
@@ -367,11 +367,11 @@ public class PortalTheme extends Theme {
                 style.addProperty("overflow", "hidden");
                 addStyle(style);
 
-                style = new Style(".", StyleName.FormDecoratorFooter, " .", DefaultWidgetsTheme.StyleName.Toolbar);
+                style = new Style(".", StyleName.FormDecoratorFooter, " .", WidgetTheme.StyleName.Toolbar);
                 style.addProperty("float", "right");
                 addStyle(style);
 
-                style = new Style(".", StyleName.FormDecoratorFooter, " .", DefaultWidgetsTheme.StyleName.ToolbarItem);
+                style = new Style(".", StyleName.FormDecoratorFooter, " .", WidgetTheme.StyleName.ToolbarItem);
                 style.addProperty("margin-left", "10px");
                 addStyle(style);
 
@@ -482,7 +482,7 @@ public class PortalTheme extends Theme {
         style.addProperty("list-style-position", "inside");
         addStyle(style);
 
-        style = new Style(".", DefaultWidgetsTheme.StyleName.DropDownPanel);
+        style = new Style(".", WidgetTheme.StyleName.DropDownPanel);
         style.addProperty("z-index", "20");
         addStyle(style);
 
