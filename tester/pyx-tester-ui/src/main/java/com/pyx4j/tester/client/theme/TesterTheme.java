@@ -116,7 +116,6 @@ public class TesterTheme extends Theme {
         initTreeStyle();
         initHyperlinkStyle();
         initPhotoalbomStyle();
-        initSuggestBoxStyle();
         initBannerStyle();
 
         initImageGalleryStyle();
@@ -555,26 +554,6 @@ public class TesterTheme extends Theme {
         style = new Style("." + imgGallery + "-" + imgFrame + ":hover");
         style.addProperty("border", "2px solid #ccc");
         addStyle(style);
-    }
-
-    protected void initSuggestBoxStyle() {
-        Style style = new Style(".gwt-SuggestBoxPopup");
-        style.addProperty("background-color", "white");
-        style.addProperty("padding", "2px");
-        style.addProperty("border-color", ThemeColor.foreground, 0.4);
-        style.addProperty("border-style", "solid");
-        style.addProperty("border-width", "1px");
-        style.addProperty("cursor", "pointer");
-        style.addProperty("cursor", "hand");
-        addStyle(style);
-
-        style = new Style(".gwt-SuggestBoxPopup .item");
-        addStyle(style);
-
-        style = new Style(".gwt-SuggestBoxPopup .item-selected");
-        style.addProperty("background-color", "#ffc");
-        addStyle(style);
-
     }
 
     protected void initBannerStyle() {
