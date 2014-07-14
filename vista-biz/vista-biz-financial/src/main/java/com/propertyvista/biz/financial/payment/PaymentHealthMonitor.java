@@ -162,5 +162,18 @@ class PaymentHealthMonitor {
                 executionMonitor.addFailedEvent("CardsAggregatedTransfer", instance.amount().getValue());
             }
         }
+
+        {
+            Date reportSince = DateUtils.addDays(forDate, -7);
+            EntityQueryCriteria<PaymentRecord> criteria = EntityQueryCriteria.create(PaymentRecord.class);
+            criteria.le(criteria.proto().lastStatusChangeDate(), reportSince);
+            criteria.eq(criteria.proto().paymentStatus(), PaymentRecord.PaymentStatus.Queued);
+            int count = Persistence.service().count(criteria);
+            if (count > 0) {
+                PaymentRecord instance = Persistence.service().retrieve(criteria);
+                ServerSideFactory.create(OperationsAlertFacade.class).record(instance, "There are Payment Records {0} Queued for a week", count);
+                executionMonitor.addFailedEvent("QueuedPaymentRecord", instance.amount().getValue());
+            }
+        }
     }
 }
