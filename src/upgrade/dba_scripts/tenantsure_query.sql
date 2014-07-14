@@ -1,4 +1,4 @@
-SELECT  'berkley' AS pmc,
+SELECT  'berkley' AS pmc, b.property_code,
         c.person_name_first_name AS first_name,
         c.person_name_last_name AS last_name,
         ic.insurance_certificate_number,
@@ -18,7 +18,7 @@ JOIN    _admin_.tenant_sure_subscribers t ON (t.certificate_number = ic.insuranc
 WHERE   ip.status = 'Active'
 AND NOT pm.is_deleted
 UNION
-SELECT  'cogir' AS pmc,
+SELECT  'cogir' AS pmc, b.property_code,
         c.person_name_first_name AS first_name,
         c.person_name_last_name AS last_name,
         ic.insurance_certificate_number,
@@ -38,7 +38,7 @@ JOIN    _admin_.tenant_sure_subscribers t ON (t.certificate_number = ic.insuranc
 WHERE   ip.status = 'Active'
 AND NOT pm.is_deleted
 UNION
-SELECT  'dms' AS pmc,
+SELECT  'dms' AS pmc, b.property_code,
         c.person_name_first_name AS first_name,
         c.person_name_last_name AS last_name,
         ic.insurance_certificate_number,
@@ -58,7 +58,7 @@ JOIN    _admin_.tenant_sure_subscribers t ON (t.certificate_number = ic.insuranc
 WHERE   ip.status = 'Active'
 AND NOT pm.is_deleted
 UNION
-SELECT  'greenwin' AS pmc,
+SELECT  'greenwin' AS pmc, b.property_code,
         c.person_name_first_name AS first_name,
         c.person_name_last_name AS last_name,
         ic.insurance_certificate_number,
@@ -78,7 +78,7 @@ JOIN    _admin_.tenant_sure_subscribers t ON (t.certificate_number = ic.insuranc
 WHERE   ip.status = 'Active'
 AND NOT pm.is_deleted
 UNION
-SELECT  'larlyn' AS pmc,
+SELECT  'larlyn' AS pmc, b.property_code,
         c.person_name_first_name AS first_name,
         c.person_name_last_name AS last_name,
         ic.insurance_certificate_number,
@@ -98,7 +98,7 @@ JOIN    _admin_.tenant_sure_subscribers t ON (t.certificate_number = ic.insuranc
 WHERE   ip.status = 'Active'
 AND NOT pm.is_deleted
 UNION
-SELECT  'metcap' AS pmc,
+SELECT  'metcap' AS pmc, b.property_code,
         c.person_name_first_name AS first_name,
         c.person_name_last_name AS last_name,
         ic.insurance_certificate_number,
@@ -118,7 +118,7 @@ JOIN    _admin_.tenant_sure_subscribers t ON (t.certificate_number = ic.insuranc
 WHERE   ip.status = 'Active'
 AND NOT pm.is_deleted
 UNION
-SELECT  'ofm' AS pmc,
+SELECT  'ofm' AS pmc, b.property_code,
         c.person_name_first_name AS first_name,
         c.person_name_last_name AS last_name,
         ic.insurance_certificate_number,
@@ -138,7 +138,7 @@ JOIN    _admin_.tenant_sure_subscribers t ON (t.certificate_number = ic.insuranc
 WHERE   ip.status = 'Active'
 AND NOT pm.is_deleted
 UNION
-SELECT  'realstar' AS pmc,
+SELECT  'realstar' AS pmc, b.property_code,
         c.person_name_first_name AS first_name,
         c.person_name_last_name AS last_name,
         ic.insurance_certificate_number,
@@ -158,7 +158,7 @@ JOIN    _admin_.tenant_sure_subscribers t ON (t.certificate_number = ic.insuranc
 WHERE   ip.status = 'Active'
 AND NOT pm.is_deleted
 UNION
-SELECT  'sterling' AS pmc,
+SELECT  'sterling' AS pmc, b.property_code,
         c.person_name_first_name AS first_name,
         c.person_name_last_name AS last_name,
         ic.insurance_certificate_number,
