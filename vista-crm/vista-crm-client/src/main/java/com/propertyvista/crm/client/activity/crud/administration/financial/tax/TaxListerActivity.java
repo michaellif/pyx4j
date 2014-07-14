@@ -16,7 +16,7 @@ package com.propertyvista.crm.client.activity.crud.administration.financial.tax;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.place.shared.Place;
 
-import com.pyx4j.entity.rpc.AbstractListService;
+import com.pyx4j.entity.rpc.AbstractListCrudService;
 import com.pyx4j.site.client.activity.AbstractListerActivity;
 
 import com.propertyvista.crm.client.CrmSite;
@@ -27,6 +27,6 @@ import com.propertyvista.domain.financial.tax.Tax;
 public class TaxListerActivity extends AbstractListerActivity<Tax> {
 
     public TaxListerActivity(Place place) {
-        super(Tax.class,  place, CrmSite.getViewFactory().getView(TaxListerView.class), GWT.<AbstractListService<Tax>> create(TaxCrudService.class));
+        super(Tax.class,  place, CrmSite.getViewFactory().getView(TaxListerView.class), GWT.<AbstractListCrudService<Tax>> create(TaxCrudService.class));
     }
 }

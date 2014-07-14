@@ -21,7 +21,7 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.Command;
 
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
-import com.pyx4j.entity.rpc.AbstractListService;
+import com.pyx4j.entity.rpc.AbstractListCrudService;
 import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.i18n.shared.I18n;
@@ -71,7 +71,7 @@ public class DashboardManagementViewerViewImpl extends CrmViewerViewImplBase<Das
         }
 
         @Override
-        protected AbstractListService<CrmUser> getSelectService() {
+        protected AbstractListCrudService<CrmUser> getSelectService() {
             return GWT.<SelectCrmUserListService> create(SelectCrmUserListService.class);
         }
 

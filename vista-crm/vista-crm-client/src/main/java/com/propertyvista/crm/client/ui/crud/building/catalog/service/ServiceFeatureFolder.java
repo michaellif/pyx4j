@@ -23,7 +23,7 @@ import com.google.gwt.user.client.Command;
 import com.pyx4j.entity.core.IObject;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.entity.core.criterion.PropertyCriterion;
-import com.pyx4j.entity.rpc.AbstractListService;
+import com.pyx4j.entity.rpc.AbstractListCrudService;
 import com.pyx4j.forms.client.ui.CEntityLabel;
 import com.pyx4j.forms.client.ui.CField;
 import com.pyx4j.forms.client.ui.CForm;
@@ -142,8 +142,8 @@ class ServiceFeatureFolder extends VistaTableFolder<Feature> {
         }
 
         @Override
-        protected AbstractListService<Feature> getSelectService() {
-            return GWT.<AbstractListService<Feature>> create(SelectFeatureListService.class);
+        protected AbstractListCrudService<Feature> getSelectService() {
+            return GWT.<AbstractListCrudService<Feature>> create(SelectFeatureListService.class);
         }
     }
 

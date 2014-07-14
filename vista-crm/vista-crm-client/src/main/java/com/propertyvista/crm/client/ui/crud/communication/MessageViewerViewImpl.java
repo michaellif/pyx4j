@@ -27,7 +27,7 @@ import com.google.gwt.user.client.ui.Widget;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.entity.core.criterion.PropertyCriterion;
-import com.pyx4j.entity.rpc.AbstractListService;
+import com.pyx4j.entity.rpc.AbstractListCrudService;
 import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
@@ -175,8 +175,8 @@ public class MessageViewerViewImpl extends CrmViewerViewImplBase<MessageDTO> imp
         }
 
         @Override
-        protected AbstractListService<Employee> getSelectService() {
-            return GWT.<AbstractListService<Employee>> create(SelectEmployeeListService.class);
+        protected AbstractListCrudService<Employee> getSelectService() {
+            return GWT.<AbstractListCrudService<Employee>> create(SelectEmployeeListService.class);
         }
     }
 

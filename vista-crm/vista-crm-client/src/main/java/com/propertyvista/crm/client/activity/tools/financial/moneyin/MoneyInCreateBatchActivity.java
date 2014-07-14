@@ -39,7 +39,7 @@ import com.pyx4j.entity.core.IList;
 import com.pyx4j.entity.core.IObject;
 import com.pyx4j.entity.core.Path;
 import com.pyx4j.entity.core.criterion.EntityListCriteria;
-import com.pyx4j.entity.rpc.AbstractListService;
+import com.pyx4j.entity.rpc.AbstractListCrudService;
 import com.pyx4j.entity.rpc.EntitySearchResult;
 import com.pyx4j.entity.rpc.InMemeoryListService;
 import com.pyx4j.gwt.client.deferred.DeferredProcessDialog;
@@ -128,7 +128,7 @@ public class MoneyInCreateBatchActivity extends AbstractActivity implements Mone
             }
         };
 
-        paymentDataSource = new ListerDataSource<>(MoneyInCandidateDTO.class, new AbstractListService<MoneyInCandidateDTO>() {
+        paymentDataSource = new ListerDataSource<>(MoneyInCandidateDTO.class, new AbstractListCrudService<MoneyInCandidateDTO>() {
             @Override
             public void list(AsyncCallback<EntitySearchResult<MoneyInCandidateDTO>> callback, EntityListCriteria<MoneyInCandidateDTO> criteria) {
                 new InMemeoryListService<>(searchResultsProvider.getList()).list(callback, criteria);

@@ -13,10 +13,10 @@
  */
 package com.propertyvista.crm.rpc.services;
 
-import com.pyx4j.entity.rpc.AbstractListService;
+import com.pyx4j.entity.rpc.AbstractListCrudService;
 
 import com.propertyvista.domain.security.VistaCrmBehaviorDTO;
 
-public interface CrmRoleBehaviorDTOListService extends AbstractListService<VistaCrmBehaviorDTO> {
+public interface CrmRoleBehaviorDTOListService extends AbstractListCrudService<VistaCrmBehaviorDTO> {
 
 }

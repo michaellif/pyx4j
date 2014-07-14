@@ -17,12 +17,12 @@ import java.util.Vector;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
-import com.pyx4j.entity.rpc.AbstractListService;
+import com.pyx4j.entity.rpc.AbstractListCrudService;
 import com.pyx4j.rpc.shared.VoidSerializable;
 
 import com.propertyvista.crm.rpc.dto.billing.BillDataDTO;
 
-public interface BillingCycleBillListService extends AbstractListService<BillDataDTO> {
+public interface BillingCycleBillListService extends AbstractListCrudService<BillDataDTO> {
 
     void confirm(AsyncCallback<VoidSerializable> callback, Vector<BillDataDTO> bills);
 

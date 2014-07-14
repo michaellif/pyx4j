@@ -21,7 +21,7 @@ import java.util.Set;
 import com.google.gwt.core.client.GWT;
 
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
-import com.pyx4j.entity.rpc.AbstractListService;
+import com.pyx4j.entity.rpc.AbstractListCrudService;
 import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.i18n.shared.I18n;
@@ -99,7 +99,7 @@ public abstract class BuildingSelectorDialog extends EntitySelectorTableVisorCon
     }
 
     @Override
-    protected AbstractListService<Building> getSelectService() {
-        return GWT.<AbstractListService<Building>> create(SelectBuildingListService.class);
+    protected AbstractListCrudService<Building> getSelectService() {
+        return GWT.<AbstractListCrudService<Building>> create(SelectBuildingListService.class);
     }
 }

@@ -22,7 +22,7 @@ import com.google.gwt.user.client.Command;
 
 import com.pyx4j.entity.core.IObject;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
-import com.pyx4j.entity.rpc.AbstractListService;
+import com.pyx4j.entity.rpc.AbstractListCrudService;
 import com.pyx4j.forms.client.ui.CEnumLabel;
 import com.pyx4j.forms.client.ui.CField;
 import com.pyx4j.forms.client.ui.CForm;
@@ -136,8 +136,8 @@ class ServiceConcessionFolder extends VistaTableFolder<Concession> {
         }
 
         @Override
-        protected AbstractListService<Concession> getSelectService() {
-            return GWT.<AbstractListService<Concession>> create(SelectConcessionListService.class);
+        protected AbstractListCrudService<Concession> getSelectService() {
+            return GWT.<AbstractListCrudService<Concession>> create(SelectConcessionListService.class);
         }
     }
 }

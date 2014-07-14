@@ -13,9 +13,9 @@
  */
 package com.propertyvista.crm.rpc.services.selections;
 
-import com.pyx4j.entity.rpc.AbstractListService;
+import com.pyx4j.entity.rpc.AbstractListCrudService;
 
 import com.propertyvista.domain.communication.SystemEndpoint;
 
-public interface SelectSystemEndpointListService extends AbstractListService<SystemEndpoint> {
+public interface SelectSystemEndpointListService extends AbstractListCrudService<SystemEndpoint> {
 }

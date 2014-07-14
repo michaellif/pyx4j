@@ -16,7 +16,7 @@ package com.propertyvista.crm.client.activity.crud.administration.merchantaccoun
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.place.shared.Place;
 
-import com.pyx4j.entity.rpc.AbstractListService;
+import com.pyx4j.entity.rpc.AbstractListCrudService;
 import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.site.client.activity.AbstractListerActivity;
 
@@ -31,7 +31,7 @@ public class MerchantAccountListerActivity extends AbstractListerActivity<Mercha
 
     public MerchantAccountListerActivity(Place place) {
         super(MerchantAccount.class, place, CrmSite.getViewFactory().getView(MerchantAccountListerView.class), GWT
-                        .<AbstractListService<MerchantAccount>> create(MerchantAccountCrudService.class));
+                        .<AbstractListCrudService<MerchantAccount>> create(MerchantAccountCrudService.class));
     }
 
     @Override

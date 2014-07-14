@@ -22,7 +22,7 @@ import com.google.gwt.core.client.GWT;
 
 import com.pyx4j.entity.core.IObject;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
-import com.pyx4j.entity.rpc.AbstractListService;
+import com.pyx4j.entity.rpc.AbstractListCrudService;
 import com.pyx4j.forms.client.ui.CField;
 import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.CLabel;
@@ -109,8 +109,8 @@ public class CrmRoleFolder extends VistaTableFolder<CrmRole> {
         }
 
         @Override
-        protected AbstractListService<CrmRole> getSelectService() {
-            return GWT.<AbstractListService<CrmRole>> create(SelectCrmRoleListService.class);
+        protected AbstractListCrudService<CrmRole> getSelectService() {
+            return GWT.<AbstractListCrudService<CrmRole>> create(SelectCrmRoleListService.class);
         }
     }
 }

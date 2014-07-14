@@ -23,7 +23,7 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
-import com.pyx4j.entity.rpc.AbstractListService;
+import com.pyx4j.entity.rpc.AbstractListCrudService;
 import com.pyx4j.forms.client.ui.CEntityLabel;
 import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
@@ -239,8 +239,8 @@ public class LeadForm extends CrmEntityForm<Lead> {
         }
 
         @Override
-        protected AbstractListService<Floorplan> getSelectService() {
-            return GWT.<AbstractListService<Floorplan>> create(SelectFloorplanListService.class);
+        protected AbstractListCrudService<Floorplan> getSelectService() {
+            return GWT.<AbstractListCrudService<Floorplan>> create(SelectFloorplanListService.class);
         }
     }
 }

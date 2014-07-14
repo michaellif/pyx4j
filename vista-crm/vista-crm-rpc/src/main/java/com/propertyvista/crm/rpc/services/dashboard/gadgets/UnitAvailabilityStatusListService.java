@@ -13,10 +13,10 @@
  */
 package com.propertyvista.crm.rpc.services.dashboard.gadgets;
 
-import com.pyx4j.entity.rpc.AbstractListService;
+import com.pyx4j.entity.rpc.AbstractListCrudService;
 
 import com.propertyvista.crm.rpc.dto.gadgets.UnitAvailabilityStatusDTO;
 
-public interface UnitAvailabilityStatusListService extends AbstractListService<UnitAvailabilityStatusDTO> {
+public interface UnitAvailabilityStatusListService extends AbstractListCrudService<UnitAvailabilityStatusDTO> {
 
 }

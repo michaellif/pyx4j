@@ -28,7 +28,7 @@ import com.pyx4j.entity.core.IObject;
 import com.pyx4j.entity.core.criterion.Criterion;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.entity.core.criterion.PropertyCriterion;
-import com.pyx4j.entity.rpc.AbstractListService;
+import com.pyx4j.entity.rpc.AbstractListCrudService;
 import com.pyx4j.forms.client.ui.CField;
 import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.CLabel;
@@ -125,8 +125,8 @@ public class PortfolioFolder extends VistaTableFolder<Portfolio> {
         }
 
         @Override
-        protected AbstractListService<Portfolio> getSelectService() {
-            return GWT.<AbstractListService<Portfolio>> create(SelectPortfolioListService.class);
+        protected AbstractListCrudService<Portfolio> getSelectService() {
+            return GWT.<AbstractListCrudService<Portfolio>> create(SelectPortfolioListService.class);
         }
 
         @Override

@@ -13,10 +13,10 @@
  */
 package com.propertyvista.crm.rpc.services.billing;
 
-import com.pyx4j.entity.rpc.AbstractListService;
+import com.pyx4j.entity.rpc.AbstractListCrudService;
 
 import com.propertyvista.dto.LeaseDTO;
 
-public interface BillingCycleLeaseListService extends AbstractListService<LeaseDTO> {
+public interface BillingCycleLeaseListService extends AbstractListCrudService<LeaseDTO> {
 
 }

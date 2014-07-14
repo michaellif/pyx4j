@@ -16,7 +16,7 @@ package com.propertyvista.crm.client.activity.policies.ar;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.place.shared.Place;
 
-import com.pyx4j.entity.rpc.AbstractListService;
+import com.pyx4j.entity.rpc.AbstractListCrudService;
 import com.pyx4j.site.client.activity.AbstractListerActivity;
 
 import com.propertyvista.crm.client.CrmSite;
@@ -33,7 +33,7 @@ public class ARPolicyListerActivity extends AbstractListerActivity<ARPolicyDTO> 
 
         CrmSite.getViewFactory().getView(ARPolicyListerView.class),
 
-        GWT.<AbstractListService<ARPolicyDTO>> create(ARPolicyCrudService.class));
+        GWT.<AbstractListCrudService<ARPolicyDTO>> create(ARPolicyCrudService.class));
     }
 
 }

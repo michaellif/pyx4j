@@ -13,9 +13,9 @@
  */
 package com.propertyvista.crm.rpc.services.selections;
 
-import com.pyx4j.entity.rpc.AbstractListService;
+import com.pyx4j.entity.rpc.AbstractListCrudService;
 
 import com.propertyvista.domain.financial.offering.Feature;
 
-public interface SelectFeatureListService extends AbstractListService<Feature> {
+public interface SelectFeatureListService extends AbstractListCrudService<Feature> {
 }

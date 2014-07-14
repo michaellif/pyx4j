@@ -13,10 +13,10 @@
  */
 package com.propertyvista.crm.rpc.services.financial;
 
-import com.pyx4j.entity.rpc.AbstractListService;
+import com.pyx4j.entity.rpc.AbstractListCrudService;
 
 import com.propertyvista.dto.PaymentRecordDTO;
 
-public interface PaymentRecordListService extends AbstractListService<PaymentRecordDTO> {
+public interface PaymentRecordListService extends AbstractListCrudService<PaymentRecordDTO> {
 
 }

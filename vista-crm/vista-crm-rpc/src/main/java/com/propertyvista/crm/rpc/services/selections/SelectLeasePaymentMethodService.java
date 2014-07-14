@@ -13,10 +13,10 @@
  */
 package com.propertyvista.crm.rpc.services.selections;
 
-import com.pyx4j.entity.rpc.AbstractListService;
+import com.pyx4j.entity.rpc.AbstractListCrudService;
 
 import com.propertyvista.domain.payment.LeasePaymentMethod;
 
-public interface SelectLeasePaymentMethodService extends AbstractListService<LeasePaymentMethod> {
+public interface SelectLeasePaymentMethodService extends AbstractListCrudService<LeasePaymentMethod> {
 
 }

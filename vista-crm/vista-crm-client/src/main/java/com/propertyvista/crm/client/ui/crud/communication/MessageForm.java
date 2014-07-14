@@ -30,7 +30,7 @@ import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.IObject;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
-import com.pyx4j.entity.rpc.AbstractListService;
+import com.pyx4j.entity.rpc.AbstractListCrudService;
 import com.pyx4j.forms.client.ui.CCheckBox;
 import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
@@ -262,8 +262,8 @@ public class MessageForm extends CrmEntityForm<MessageDTO> {
                     new CommunicationEndpointSelectorDialog<CrmUser>(MessageForm.this.getParentView(), CrmUser.class) {
 
                         @Override
-                        protected AbstractListService<CrmUser> getSelectService() {
-                            return GWT.<AbstractListService<CrmUser>> create(SelectCrmUserListService.class);
+                        protected AbstractListCrudService<CrmUser> getSelectService() {
+                            return GWT.<AbstractListCrudService<CrmUser>> create(SelectCrmUserListService.class);
                         }
                     }.show();
                 }
@@ -346,8 +346,8 @@ public class MessageForm extends CrmEntityForm<MessageDTO> {
             }
 
             @Override
-            protected AbstractListService<Portfolio> getSelectService() {
-                return GWT.<AbstractListService<Portfolio>> create(SelectPortfolioListService.class);
+            protected AbstractListCrudService<Portfolio> getSelectService() {
+                return GWT.<AbstractListCrudService<Portfolio>> create(SelectPortfolioListService.class);
             }
         }
 

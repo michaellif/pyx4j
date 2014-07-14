@@ -13,10 +13,10 @@
  */
 package com.propertyvista.crm.rpc.services.selections;
 
-import com.pyx4j.entity.rpc.AbstractListService;
+import com.pyx4j.entity.rpc.AbstractListCrudService;
 
 import com.propertyvista.domain.company.Employee;
 
-public interface SelectEmployeeListService extends AbstractListService<Employee> {
+public interface SelectEmployeeListService extends AbstractListCrudService<Employee> {
 
 }

@@ -18,12 +18,12 @@ import java.util.Vector;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.entity.core.criterion.EntityListCriteria;
-import com.pyx4j.entity.rpc.AbstractListService;
+import com.pyx4j.entity.rpc.AbstractListCrudService;
 
 import com.propertyvista.domain.communication.CommunicationEndpoint;
 import com.propertyvista.dto.CommunicationEndpointDTO;
 
-public interface SelectCommunicationEndpointListService extends AbstractListService<CommunicationEndpoint> {
+public interface SelectCommunicationEndpointListService extends AbstractListCrudService<CommunicationEndpoint> {
 
     void getEndpointForSelection(AsyncCallback<Vector<CommunicationEndpointDTO>> callback, EntityListCriteria<CommunicationEndpointDTO> criteria);
 

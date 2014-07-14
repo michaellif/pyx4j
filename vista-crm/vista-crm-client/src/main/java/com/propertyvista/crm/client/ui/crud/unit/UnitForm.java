@@ -27,7 +27,7 @@ import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
-import com.pyx4j.entity.rpc.AbstractListService;
+import com.pyx4j.entity.rpc.AbstractListCrudService;
 import com.pyx4j.forms.client.ui.CEntityLabel;
 import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
@@ -210,7 +210,7 @@ public class UnitForm extends CrmEntityForm<AptUnitDTO> {
         }
 
         @Override
-        protected AbstractListService<Floorplan> getSelectService() {
+        protected AbstractListCrudService<Floorplan> getSelectService() {
             return GWT.<SelectFloorplanListService> create(SelectFloorplanListService.class);
         }
     }

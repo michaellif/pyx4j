@@ -37,7 +37,7 @@ import com.pyx4j.entity.core.criterion.Criterion;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.entity.core.criterion.OrCriterion;
 import com.pyx4j.entity.core.criterion.PropertyCriterion;
-import com.pyx4j.entity.rpc.AbstractListService;
+import com.pyx4j.entity.rpc.AbstractListCrudService;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEnumLabel;
 import com.pyx4j.forms.client.ui.CForm;
@@ -540,8 +540,8 @@ public class LeaseTermForm extends CrmEntityForm<LeaseTermDTO> {
             }
 
             @Override
-            protected AbstractListService<BuildingUtility> getSelectService() {
-                return GWT.<AbstractListService<BuildingUtility>> create(SelectBuildingUtilityListService.class);
+            protected AbstractListCrudService<BuildingUtility> getSelectService() {
+                return GWT.<AbstractListCrudService<BuildingUtility>> create(SelectBuildingUtilityListService.class);
             }
         }
     }

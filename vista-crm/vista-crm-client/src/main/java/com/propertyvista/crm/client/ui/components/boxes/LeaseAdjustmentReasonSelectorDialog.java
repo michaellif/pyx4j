@@ -21,7 +21,7 @@ import java.util.Set;
 import com.google.gwt.core.client.GWT;
 
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
-import com.pyx4j.entity.rpc.AbstractListService;
+import com.pyx4j.entity.rpc.AbstractListCrudService;
 import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.i18n.shared.I18n;
@@ -70,7 +70,7 @@ public abstract class LeaseAdjustmentReasonSelectorDialog extends EntitySelector
     }
 
     @Override
-    protected AbstractListService<ARCode> getSelectService() {
-        return GWT.<AbstractListService<ARCode>> create(SelectLeaseAdjustmentReasonListService.class);
+    protected AbstractListCrudService<ARCode> getSelectService() {
+        return GWT.<AbstractListCrudService<ARCode>> create(SelectLeaseAdjustmentReasonListService.class);
     }
 }

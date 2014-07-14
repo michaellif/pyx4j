@@ -23,7 +23,7 @@ import com.google.gwt.core.client.GWT;
 
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
-import com.pyx4j.entity.rpc.AbstractListService;
+import com.pyx4j.entity.rpc.AbstractListCrudService;
 import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.forms.client.ui.folder.FolderColumnDescriptor;
@@ -83,8 +83,8 @@ public class PopulationFolder extends VistaTableFolder<TriggerPmc> {
             }
 
             @Override
-            protected AbstractListService<Pmc> getSelectService() {
-                return GWT.<AbstractListService<Pmc>> create(SelectPmcListService.class);
+            protected AbstractListCrudService<Pmc> getSelectService() {
+                return GWT.<AbstractListCrudService<Pmc>> create(SelectPmcListService.class);
             }
         }.show();
     }

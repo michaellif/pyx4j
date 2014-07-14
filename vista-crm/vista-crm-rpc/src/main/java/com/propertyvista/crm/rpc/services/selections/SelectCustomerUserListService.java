@@ -13,10 +13,10 @@
  */
 package com.propertyvista.crm.rpc.services.selections;
 
-import com.pyx4j.entity.rpc.AbstractListService;
+import com.pyx4j.entity.rpc.AbstractListCrudService;
 
 import com.propertyvista.domain.security.CustomerUser;
 
-public interface SelectCustomerUserListService extends AbstractListService<CustomerUser> {
+public interface SelectCustomerUserListService extends AbstractListCrudService<CustomerUser> {
 
 }

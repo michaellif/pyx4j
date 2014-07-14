@@ -25,7 +25,7 @@ import com.pyx4j.commons.Key;
 import com.pyx4j.entity.core.IObject;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.entity.core.criterion.PropertyCriterion;
-import com.pyx4j.entity.rpc.AbstractListService;
+import com.pyx4j.entity.rpc.AbstractListCrudService;
 import com.pyx4j.forms.client.ui.CEntityLabel;
 import com.pyx4j.forms.client.ui.CField;
 import com.pyx4j.forms.client.ui.CForm;
@@ -137,8 +137,8 @@ public class EmployeeFolder extends VistaTableFolder<Employee> {
         }
 
         @Override
-        protected AbstractListService<Employee> getSelectService() {
-            return GWT.<AbstractListService<Employee>> create(SelectEmployeeListService.class);
+        protected AbstractListCrudService<Employee> getSelectService() {
+            return GWT.<AbstractListCrudService<Employee>> create(SelectEmployeeListService.class);
         }
     }
 

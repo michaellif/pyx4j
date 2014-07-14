@@ -13,10 +13,10 @@
  */
 package com.propertyvista.crm.rpc.services.security;
 
-import com.pyx4j.entity.rpc.AbstractListService;
+import com.pyx4j.entity.rpc.AbstractListCrudService;
 
 import com.propertyvista.crm.rpc.dto.account.LoginAttemptDTO;
 
-public interface CrmLoginAttemptsListerService extends AbstractListService<LoginAttemptDTO> {
+public interface CrmLoginAttemptsListerService extends AbstractListCrudService<LoginAttemptDTO> {
 
 }

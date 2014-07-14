@@ -24,7 +24,7 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.IObject;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
-import com.pyx4j.entity.rpc.AbstractListService;
+import com.pyx4j.entity.rpc.AbstractListCrudService;
 import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
@@ -135,8 +135,8 @@ public class ProductTaxPolicyForm extends PolicyDTOTabPanelBasedForm<ProductTaxP
             }
 
             @Override
-            protected AbstractListService<ARCode> getSelectService() {
-                return GWT.<AbstractListService<ARCode>> create(SelectProductCodeListService.class);
+            protected AbstractListCrudService<ARCode> getSelectService() {
+                return GWT.<AbstractListCrudService<ARCode>> create(SelectProductCodeListService.class);
             }
         }
     }

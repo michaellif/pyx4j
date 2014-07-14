@@ -18,12 +18,12 @@ import java.util.Vector;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.entity.core.criterion.EntityListCriteria;
-import com.pyx4j.entity.rpc.AbstractListService;
+import com.pyx4j.entity.rpc.AbstractListCrudService;
 
 import com.propertyvista.crm.rpc.dto.selections.PortfolioForSelectionDTO;
 import com.propertyvista.domain.company.Portfolio;
 
-public interface SelectPortfolioListService extends AbstractListService<Portfolio> {
+public interface SelectPortfolioListService extends AbstractListCrudService<Portfolio> {
 
     void getPortfoliosForSelection(AsyncCallback<Vector<PortfolioForSelectionDTO>> callback, EntityListCriteria<Portfolio> criteria);
 

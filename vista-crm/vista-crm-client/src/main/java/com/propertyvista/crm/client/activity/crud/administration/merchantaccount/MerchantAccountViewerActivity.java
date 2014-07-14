@@ -18,7 +18,7 @@ import com.google.gwt.core.client.GWT;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.criterion.PropertyCriterion;
 import com.pyx4j.entity.rpc.AbstractCrudService;
-import com.pyx4j.entity.rpc.AbstractListService;
+import com.pyx4j.entity.rpc.AbstractListCrudService;
 import com.pyx4j.site.client.ui.prime.lister.ILister.Presenter;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
@@ -41,7 +41,7 @@ public class MerchantAccountViewerActivity extends CrmViewerActivity<MerchantAcc
                 .<AbstractCrudService<MerchantAccount>> create(MerchantAccountCrudService.class));
 
         buildingLister = ListerControllerFactory.create(((MerchantAccountViewerView) getView()).getBuildingListerView(),
-                GWT.<AbstractListService<Building>> create(SelectBuildingListService.class), Building.class, VistaCrmBehavior.PropertyManagement_OLD);
+                GWT.<AbstractListCrudService<Building>> create(SelectBuildingListService.class), Building.class, VistaCrmBehavior.PropertyManagement_OLD);
     }
 
     @Override

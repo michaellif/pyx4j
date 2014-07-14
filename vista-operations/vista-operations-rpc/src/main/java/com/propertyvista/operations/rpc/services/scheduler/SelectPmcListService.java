@@ -13,10 +13,10 @@
  */
 package com.propertyvista.operations.rpc.services.scheduler;
 
-import com.pyx4j.entity.rpc.AbstractListService;
+import com.pyx4j.entity.rpc.AbstractListCrudService;
 
 import com.propertyvista.domain.pmc.Pmc;
 
-public interface SelectPmcListService extends AbstractListService<Pmc> {
+public interface SelectPmcListService extends AbstractListCrudService<Pmc> {
 
 }

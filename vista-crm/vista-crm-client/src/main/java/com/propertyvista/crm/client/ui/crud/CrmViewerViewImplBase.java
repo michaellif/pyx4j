@@ -23,7 +23,7 @@ import com.google.gwt.user.client.ui.MenuItemSeparator;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.IVersionData;
 import com.pyx4j.entity.core.IVersionedEntity;
-import com.pyx4j.entity.rpc.AbstractListService;
+import com.pyx4j.entity.rpc.AbstractListCrudService;
 import com.pyx4j.entity.rpc.AbstractVersionDataListService;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
@@ -328,7 +328,7 @@ public class CrmViewerViewImplBase<E extends IEntity> extends AbstractViewer<E> 
                     }
 
                     @Override
-                    protected AbstractListService<V> getSelectService() {
+                    protected AbstractListCrudService<V> getSelectService() {
                         return entityVersionService;
                     }
                 }.show();
@@ -354,7 +354,7 @@ public class CrmViewerViewImplBase<E extends IEntity> extends AbstractViewer<E> 
                     }
 
                     @Override
-                    protected AbstractListService<V> getSelectService() {
+                    protected AbstractListCrudService<V> getSelectService() {
                         return entityVersionService;
                     }
                 }.show();

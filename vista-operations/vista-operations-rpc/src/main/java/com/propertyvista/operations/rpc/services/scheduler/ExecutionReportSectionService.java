@@ -13,10 +13,10 @@
  */
 package com.propertyvista.operations.rpc.services.scheduler;
 
-import com.pyx4j.entity.rpc.AbstractListService;
+import com.pyx4j.entity.rpc.AbstractListCrudService;
 
 import com.propertyvista.operations.domain.scheduler.ExecutionReportSection;
 
-public interface ExecutionReportSectionService extends AbstractListService<ExecutionReportSection> {
+public interface ExecutionReportSectionService extends AbstractListCrudService<ExecutionReportSection> {
 
 }

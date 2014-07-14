@@ -13,9 +13,9 @@
  */
 package com.propertyvista.crm.rpc.services.selections;
 
-import com.pyx4j.entity.rpc.AbstractListService;
+import com.pyx4j.entity.rpc.AbstractListCrudService;
 
 import com.propertyvista.domain.tenant.lease.LeaseTerm;
 
-public interface SelectLeaseTermListService extends AbstractListService<LeaseTerm> {
+public interface SelectLeaseTermListService extends AbstractListCrudService<LeaseTerm> {
 }

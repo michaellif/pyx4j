@@ -16,7 +16,7 @@ package com.propertyvista.operations.client.activity.crud.simulator.dbp;
 import com.google.gwt.core.shared.GWT;
 import com.google.gwt.place.shared.Place;
 
-import com.pyx4j.entity.rpc.AbstractListService;
+import com.pyx4j.entity.rpc.AbstractListCrudService;
 import com.pyx4j.site.client.activity.AbstractListerActivity;
 
 import com.propertyvista.operations.client.OperationsSite;
@@ -28,7 +28,7 @@ public class DirectDebitSimRecordListerActivity extends AbstractListerActivity<D
 
     public DirectDebitSimRecordListerActivity(Place place) {
         super(DirectDebitSimRecord.class, place, OperationsSite.getViewFactory().getView(DirectDebitSimRecordListerView.class), GWT
-                        .<AbstractListService<DirectDebitSimRecord>> create(DirectDebitSimRecordCrudService.class));
+                        .<AbstractListCrudService<DirectDebitSimRecord>> create(DirectDebitSimRecordCrudService.class));
     }
 
 }

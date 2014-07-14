@@ -27,7 +27,7 @@ import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.criterion.Criterion;
 import com.pyx4j.entity.core.criterion.EntityListCriteria;
-import com.pyx4j.entity.rpc.AbstractListService;
+import com.pyx4j.entity.rpc.AbstractListCrudService;
 import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.forms.client.ui.datatable.DataTable.ItemZoomInCommand;
 import com.pyx4j.site.client.AppPlaceEntityMapper;
@@ -52,7 +52,7 @@ public abstract class AbstractListerDetailsFactory<E extends IEntity, F extends 
 
     private final Class<E> dataClass;
 
-    private final AbstractListService<E> listerService;
+    private final AbstractListCrudService<E> listerService;
 
     private final Proxy<ListerUserSettings> listerSettingsProxy;
 
@@ -66,7 +66,7 @@ public abstract class AbstractListerDetailsFactory<E extends IEntity, F extends 
      * @param criteriaProvider
      *            provides filter criteria for the lister
      */
-    public AbstractListerDetailsFactory(Class<E> dataClass, List<ColumnDescriptor> defaultColumnDescriptors, AbstractListService<E> listerService,
+    public AbstractListerDetailsFactory(Class<E> dataClass, List<ColumnDescriptor> defaultColumnDescriptors, AbstractListCrudService<E> listerService,
             IFilterDataProvider<F> filterDataProvider, ICriteriaProvider<E, F> criteriaProvider, Proxy<ListerUserSettings> listerSettingsProxy) {
         this.panel = new SimplePanel();
         this.lister = new EntityDataTablePanel<E>(dataClass);

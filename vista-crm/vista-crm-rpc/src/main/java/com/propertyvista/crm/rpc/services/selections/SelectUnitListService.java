@@ -13,9 +13,9 @@
  */
 package com.propertyvista.crm.rpc.services.selections;
 
-import com.pyx4j.entity.rpc.AbstractListService;
+import com.pyx4j.entity.rpc.AbstractListCrudService;
 
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 
-public interface SelectUnitListService extends AbstractListService<AptUnit> {
+public interface SelectUnitListService extends AbstractListCrudService<AptUnit> {
 }

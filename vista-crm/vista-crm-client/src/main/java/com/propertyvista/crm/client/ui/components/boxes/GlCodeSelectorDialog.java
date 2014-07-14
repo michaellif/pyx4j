@@ -21,7 +21,7 @@ import java.util.Set;
 import com.google.gwt.core.client.GWT;
 
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
-import com.pyx4j.entity.rpc.AbstractListService;
+import com.pyx4j.entity.rpc.AbstractListCrudService;
 import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.i18n.shared.I18n;
@@ -70,7 +70,7 @@ public abstract class GlCodeSelectorDialog extends EntitySelectorTableVisorContr
     }
 
     @Override
-    protected AbstractListService<GlCode> getSelectService() {
-        return GWT.<AbstractListService<GlCode>> create(SelectGlCodeListService.class);
+    protected AbstractListCrudService<GlCode> getSelectService() {
+        return GWT.<AbstractListCrudService<GlCode>> create(SelectGlCodeListService.class);
     }
 }

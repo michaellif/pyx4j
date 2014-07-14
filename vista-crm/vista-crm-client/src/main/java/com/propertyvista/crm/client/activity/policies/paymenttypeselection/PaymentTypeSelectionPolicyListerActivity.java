@@ -16,7 +16,7 @@ package com.propertyvista.crm.client.activity.policies.paymenttypeselection;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.place.shared.Place;
 
-import com.pyx4j.entity.rpc.AbstractListService;
+import com.pyx4j.entity.rpc.AbstractListCrudService;
 import com.pyx4j.site.client.activity.AbstractListerActivity;
 
 import com.propertyvista.crm.client.CrmSite;
@@ -28,7 +28,7 @@ public class PaymentTypeSelectionPolicyListerActivity extends AbstractListerActi
 
     public PaymentTypeSelectionPolicyListerActivity(Place place) {
         super(PaymentTypeSelectionPolicyDTO.class,  place, CrmSite.getViewFactory().getView(PaymentTypeSelectionPolicyListerView.class), GWT
-                        .<AbstractListService<PaymentTypeSelectionPolicyDTO>> create(PaymentTypeSelectionPolicyCrudService.class));
+                        .<AbstractListCrudService<PaymentTypeSelectionPolicyDTO>> create(PaymentTypeSelectionPolicyCrudService.class));
     }
 
 }

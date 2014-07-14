@@ -22,7 +22,7 @@ import com.google.gwt.core.client.GWT;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.entity.core.criterion.PropertyCriterion;
-import com.pyx4j.entity.rpc.AbstractListService;
+import com.pyx4j.entity.rpc.AbstractListCrudService;
 import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.site.client.activity.EntitySelectorTableVisorController;
@@ -54,7 +54,7 @@ public abstract class ProductCodeSelectorDialog extends EntitySelectorTableVisor
     }
 
     @Override
-    protected AbstractListService<ARCode> getSelectService() {
-        return GWT.<AbstractListService<ARCode>> create(SelectProductCodeListService.class);
+    protected AbstractListCrudService<ARCode> getSelectService() {
+        return GWT.<AbstractListCrudService<ARCode>> create(SelectProductCodeListService.class);
     }
 }

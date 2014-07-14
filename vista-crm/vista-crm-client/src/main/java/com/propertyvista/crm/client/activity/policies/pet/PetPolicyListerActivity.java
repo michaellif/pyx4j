@@ -16,7 +16,7 @@ package com.propertyvista.crm.client.activity.policies.pet;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.place.shared.Place;
 
-import com.pyx4j.entity.rpc.AbstractListService;
+import com.pyx4j.entity.rpc.AbstractListCrudService;
 import com.pyx4j.site.client.activity.AbstractListerActivity;
 
 import com.propertyvista.crm.client.CrmSite;
@@ -28,7 +28,7 @@ public class PetPolicyListerActivity extends AbstractListerActivity<PetPolicyDTO
 
     public PetPolicyListerActivity(Place place) {
         super(PetPolicyDTO.class,  place, CrmSite.getViewFactory().getView(PetPolicyListerView.class),
-                GWT.<AbstractListService<PetPolicyDTO>> create(PetPolicyCrudService.class));
+                GWT.<AbstractListCrudService<PetPolicyDTO>> create(PetPolicyCrudService.class));
     }
 
 }

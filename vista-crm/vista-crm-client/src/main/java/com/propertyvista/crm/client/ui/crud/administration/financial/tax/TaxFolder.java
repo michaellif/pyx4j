@@ -22,7 +22,7 @@ import com.google.gwt.core.client.GWT;
 
 import com.pyx4j.entity.core.IObject;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
-import com.pyx4j.entity.rpc.AbstractListService;
+import com.pyx4j.entity.rpc.AbstractListCrudService;
 import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
@@ -107,8 +107,8 @@ public class TaxFolder extends VistaTableFolder<Tax> {
         }
 
         @Override
-        protected AbstractListService<Tax> getSelectService() {
-            return GWT.<AbstractListService<Tax>> create(SelectTaxListService.class);
+        protected AbstractListCrudService<Tax> getSelectService() {
+            return GWT.<AbstractListCrudService<Tax>> create(SelectTaxListService.class);
         }
 
     }

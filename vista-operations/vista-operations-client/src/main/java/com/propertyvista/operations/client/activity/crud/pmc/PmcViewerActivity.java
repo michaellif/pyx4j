@@ -18,7 +18,7 @@ import com.google.gwt.user.client.Window;
 
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.rpc.AbstractCrudService;
-import com.pyx4j.entity.rpc.AbstractListService;
+import com.pyx4j.entity.rpc.AbstractListCrudService;
 import com.pyx4j.gwt.client.deferred.DeferredProcessDialog;
 import com.pyx4j.gwt.rpc.deferred.DeferredProcessProgressResponse;
 import com.pyx4j.i18n.shared.I18n;
@@ -123,18 +123,18 @@ public class PmcViewerActivity extends AdminViewerActivity<PmcDTO> implements Pm
     @Override
     public ListerDataSource<PmcMerchantAccountDTO> getOnboardingMerchantAccountsSource() {
         return new ListerDataSource<PmcMerchantAccountDTO>(PmcMerchantAccountDTO.class,
-                GWT.<AbstractListService<PmcMerchantAccountDTO>> create(PmcMerchantAccountCrudService.class));
+                GWT.<AbstractListCrudService<PmcMerchantAccountDTO>> create(PmcMerchantAccountCrudService.class));
     }
 
     @Override
     public ListerDataSource<CardTransactionRecord> getCardTransactionRecordsSource() {
         return new ListerDataSource<CardTransactionRecord>(CardTransactionRecord.class,
-                GWT.<AbstractListService<CardTransactionRecord>> create(PmcCardTransactionRecordCrudService.class));
+                GWT.<AbstractListCrudService<CardTransactionRecord>> create(PmcCardTransactionRecordCrudService.class));
     }
 
     @Override
     public ListerDataSource<DirectDebitRecord> getDirectDebitRecordsSource() {
         return new ListerDataSource<DirectDebitRecord>(DirectDebitRecord.class,
-                GWT.<AbstractListService<DirectDebitRecord>> create(PmcDirectDebitRecordCrudService.class));
+                GWT.<AbstractListCrudService<DirectDebitRecord>> create(PmcDirectDebitRecordCrudService.class));
     }
 }

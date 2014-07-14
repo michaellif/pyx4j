@@ -13,10 +13,10 @@
  */
 package com.propertyvista.crm.rpc.services.dashboard.gadgets;
 
-import com.pyx4j.entity.rpc.AbstractListService;
+import com.pyx4j.entity.rpc.AbstractListCrudService;
 
 import com.propertyvista.domain.tenant.lead.Lead;
 
-public interface LeasesFromLeadListService extends AbstractListService<Lead>{
+public interface LeasesFromLeadListService extends AbstractListCrudService<Lead>{
 
 }

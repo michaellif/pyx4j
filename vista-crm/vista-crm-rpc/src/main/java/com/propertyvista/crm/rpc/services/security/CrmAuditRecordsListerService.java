@@ -13,10 +13,10 @@
  */
 package com.propertyvista.crm.rpc.services.security;
 
-import com.pyx4j.entity.rpc.AbstractListService;
+import com.pyx4j.entity.rpc.AbstractListCrudService;
 
 import com.propertyvista.dto.AuditRecordDTO;
 
-public interface CrmAuditRecordsListerService extends AbstractListService<AuditRecordDTO> {
+public interface CrmAuditRecordsListerService extends AbstractListCrudService<AuditRecordDTO> {
 
 }

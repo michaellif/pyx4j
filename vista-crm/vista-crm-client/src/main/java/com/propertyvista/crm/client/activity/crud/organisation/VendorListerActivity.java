@@ -16,7 +16,7 @@ package com.propertyvista.crm.client.activity.crud.organisation;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.place.shared.Place;
 
-import com.pyx4j.entity.rpc.AbstractListService;
+import com.pyx4j.entity.rpc.AbstractListCrudService;
 import com.pyx4j.site.client.activity.AbstractListerActivity;
 
 import com.propertyvista.crm.client.CrmSite;
@@ -27,6 +27,6 @@ import com.propertyvista.domain.property.vendor.Vendor;
 public class VendorListerActivity extends AbstractListerActivity<Vendor> {
 
     public VendorListerActivity(Place place) {
-        super(Vendor.class,  place, CrmSite.getViewFactory().getView(VendorListerView.class), GWT.<AbstractListService<Vendor>> create(VendorCrudService.class));
+        super(Vendor.class,  place, CrmSite.getViewFactory().getView(VendorListerView.class), GWT.<AbstractListCrudService<Vendor>> create(VendorCrudService.class));
     }
 }

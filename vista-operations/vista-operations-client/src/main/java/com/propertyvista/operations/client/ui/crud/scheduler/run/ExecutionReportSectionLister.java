@@ -22,7 +22,7 @@ import com.pyx4j.entity.core.ICollection;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.IList;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
-import com.pyx4j.entity.rpc.AbstractListService;
+import com.pyx4j.entity.rpc.AbstractListCrudService;
 import com.pyx4j.forms.client.ui.datatable.DataTable.ItemZoomInCommand;
 import com.pyx4j.forms.client.ui.datatable.DataTableModel;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
@@ -85,7 +85,7 @@ public class ExecutionReportSectionLister extends EntityDataTablePanel<Execution
         ));//@formatter:on
 
         setDataSource(new ListerDataSource<ExecutionReportSection>(ExecutionReportSection.class,
-                GWT.<AbstractListService<ExecutionReportSection>> create(ExecutionReportSectionService.class)));
+                GWT.<AbstractListCrudService<ExecutionReportSection>> create(ExecutionReportSectionService.class)));
 
         messageDialog = new OkDialog(i18n.tr("Execution Messages")) {
             @Override
@@ -107,7 +107,7 @@ public class ExecutionReportSectionLister extends EntityDataTablePanel<Execution
             ));//@formatter:on
 
             setDataSource(new ListerDataSource<ExecutionReportMessage>(ExecutionReportMessage.class,
-                    GWT.<AbstractListService<ExecutionReportMessage>> create(ExecutionReportMessageService.class)));
+                    GWT.<AbstractListCrudService<ExecutionReportMessage>> create(ExecutionReportMessageService.class)));
         }
 
         @Override
