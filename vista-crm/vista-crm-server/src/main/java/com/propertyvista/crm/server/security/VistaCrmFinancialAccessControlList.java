@@ -43,6 +43,7 @@ import com.propertyvista.domain.financial.EftAggregatedTransfer;
 import com.propertyvista.domain.property.asset.building.BuildingFinancial;
 import com.propertyvista.domain.security.VistaCrmBehavior;
 import com.propertyvista.dto.PaymentRecordDTO;
+import com.propertyvista.dto.TransactionHistoryDTO;
 
 public class VistaCrmFinancialAccessControlList extends UIAclBuilder {
 
@@ -63,11 +64,13 @@ public class VistaCrmFinancialAccessControlList extends UIAclBuilder {
         grant(FinancialAggregatedTransfer, new IServiceExecutePermission(AggregatedTransferCrudService.class));
 
         // ------ Financial: Payments
-        grant(FinancialPayments, new IServiceExecutePermission(AutoPayReviewService.class));
         grant(FinancialPayments, PapReviewDTO.class, ALL);
+        grant(FinancialPayments, new IServiceExecutePermission(AutoPayReviewService.class));
 
         grant(FinancialPayments, PaymentRecordDTO.class, ALL);
         grant(FinancialPayments, PreauthorizedPaymentsDTO.class, ALL);
+
+        grant(FinancialPayments, TransactionHistoryDTO.class, READ);
         grant(FinancialPayments, AutoPayHistoryDTO.class, READ);
         grant(FinancialPayments, new IServiceExecutePermission(AutoPayHistoryCrudService.class));
         // See also VistaCrmLeasesAccessControlList
