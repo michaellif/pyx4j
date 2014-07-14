@@ -79,7 +79,7 @@ public class SuggestTextBox extends Composite implements WatermarkComponent, ITe
 
     private int limit = 20;
 
-    private boolean selectsFirstItem = true;
+    private boolean autoSelect = true;
 
     private SuggestOracle oracle;
 
@@ -97,7 +97,7 @@ public class SuggestTextBox extends Composite implements WatermarkComponent, ITe
                 return;
             }
             display.setMoreSuggestions(response.hasMoreSuggestions(), response.getMoreSuggestionsCount());
-            display.showSuggestions(SuggestTextBox.this, response.getSuggestions(), oracle.isDisplayStringHTML(), isAutoSelectEnabled(), suggestionCallback);
+            display.showSuggestions(SuggestTextBox.this, response.getSuggestions(), oracle.isDisplayStringHTML(), isAutoSelect(), suggestionCallback);
         }
     };
 
@@ -118,7 +118,7 @@ public class SuggestTextBox extends Composite implements WatermarkComponent, ITe
     }
 
     public SuggestTextBox(SuggestOracle oracle, ValueBoxBase<String> box) {
-        this(oracle, box, new DefaultSuggestionDisplay());
+        this(oracle, box, new SuggestionDisplay());
     }
 
     public SuggestTextBox(SuggestOracle oracle, ValueBoxBase<String> box, SuggestionDisplay suggestDisplay) {
@@ -219,14 +219,20 @@ public class SuggestTextBox extends Composite implements WatermarkComponent, ITe
         return box;
     }
 
+    public boolean isAutoSelect() {
+        return autoSelect;
+    }
+
     /**
-     * Returns whether or not the first suggestion will be automatically selected.
-     * This behavior is on by default.
+     * Turns on or off the behavior that automatically selects the first suggested
+     * item. This behavior is on by default.
      * 
-     * @return true if the first suggestion will be automatically selected
+     * @param selectsFirstItem
+     *            Whether or not to automatically select the first
+     *            suggestion
      */
-    public boolean isAutoSelectEnabled() {
-        return selectsFirstItem;
+    public void setAutoSelect(boolean autoSelect) {
+        this.autoSelect = autoSelect;
     }
 
     /**
@@ -260,18 +266,6 @@ public class SuggestTextBox extends Composite implements WatermarkComponent, ITe
     @Override
     public void setAccessKey(char key) {
         box.setAccessKey(key);
-    }
-
-    /**
-     * Turns on or off the behavior that automatically selects the first suggested
-     * item. This behavior is on by default.
-     * 
-     * @param selectsFirstItem
-     *            Whether or not to automatically select the first
-     *            suggestion
-     */
-    public void setAutoSelectEnabled(boolean selectsFirstItem) {
-        this.selectsFirstItem = selectsFirstItem;
     }
 
     @Override
@@ -476,89 +470,13 @@ public class SuggestTextBox extends Composite implements WatermarkComponent, ITe
     }
 
     /**
-     * Used to display suggestions to the user.
-     */
-    public abstract static class SuggestionDisplay {
-
-        /**
-         * Get the currently selected {@link Suggestion} in the display.
-         * 
-         * @return the current suggestion, or null if none selected
-         */
-        protected abstract Suggestion getCurrentSelection();
-
-        /**
-         * Hide the list of suggestions from view.
-         */
-        protected abstract void hideSuggestions();
-
-        /**
-         * Highlight the suggestion directly below the current selection in the
-         * list.
-         */
-        protected abstract void moveSelectionDown();
-
-        /**
-         * Highlight the suggestion directly above the current selection in the
-         * list.
-         */
-        protected abstract void moveSelectionUp();
-
-        /**
-         * Set the debug id of widgets used in the SuggestionDisplay.
-         * 
-         * @param suggestBoxBaseID
-         *            the baseID of the {@link SuggestTextBox}
-         * @see UIObject#onEnsureDebugId(String)
-         */
-        protected void onEnsureDebugId(String suggestBoxBaseID) {
-        }
-
-        /**
-         * Accepts information about whether there were more suggestions matching
-         * than were provided to {@link #showSuggestions}.
-         * 
-         * @param hasMoreSuggestions
-         *            true if more matches were available
-         * @param numMoreSuggestions
-         *            number of more matches available. If the
-         *            specific number is unknown, 0 will be passed.
-         */
-        protected void setMoreSuggestions(boolean hasMoreSuggestions, int numMoreSuggestions) {
-            // Subclasses may optionally implement.
-        }
-
-        /**
-         * Update the list of visible suggestions.
-         * 
-         * Use care when using isDisplayStringHtml; it is an easy way to expose
-         * script-based security problems.
-         * 
-         * @param suggestBox
-         *            the suggest box where the suggestions originated
-         * @param suggestions
-         *            the suggestions to show
-         * @param isDisplayStringHTML
-         *            should the suggestions be displayed as HTML
-         * @param isAutoSelectEnabled
-         *            if true, the first item should be selected
-         *            automatically
-         * @param callback
-         *            the callback used when the user makes a suggestion
-         */
-        protected abstract void showSuggestions(SuggestTextBox suggestBox, Collection<? extends Suggestion> suggestions, boolean isDisplayStringHTML,
-                boolean isAutoSelectEnabled, SuggestionCallback callback);
-
-    }
-
-    /**
      * The callback used when a user selects a {@link Suggestion}.
      */
     public static interface SuggestionCallback {
         void onSuggestionSelected(Suggestion suggestion);
     }
 
-    public static class DefaultSuggestionDisplay extends SuggestionDisplay implements HasAnimation {
+    public static class SuggestionDisplay implements HasAnimation {
 
         private final SuggestionMenu suggestionMenu;
 
@@ -587,15 +505,14 @@ public class SuggestTextBox extends Composite implements WatermarkComponent, ITe
         private UIObject positionRelativeTo;
 
         /**
-         * Construct a new {@link DefaultSuggestionDisplay}.
+         * Construct a new {@link SuggestionDisplay}.
          */
-        public DefaultSuggestionDisplay() {
+        public SuggestionDisplay() {
             suggestionMenu = new SuggestionMenu(true);
             suggestionPopup = createPopup();
             suggestionPopup.setWidget(decorateSuggestionList(suggestionMenu));
         }
 
-        @Override
         public void hideSuggestions() {
             suggestionPopup.hide();
         }
@@ -688,7 +605,6 @@ public class SuggestTextBox extends Composite implements WatermarkComponent, ITe
             return suggestionList;
         }
 
-        @Override
         protected Suggestion getCurrentSelection() {
             if (!isSuggestionListShowing()) {
                 return null;
@@ -706,7 +622,6 @@ public class SuggestTextBox extends Composite implements WatermarkComponent, ITe
             return suggestionPopup;
         }
 
-        @Override
         protected void moveSelectionDown() {
             // Make sure that the menu is actually showing. These keystrokes
             // are only relevant when choosing a suggestion.
@@ -717,7 +632,6 @@ public class SuggestTextBox extends Composite implements WatermarkComponent, ITe
             }
         }
 
-        @Override
         protected void moveSelectionUp() {
             // Make sure that the menu is actually showing. These keystrokes
             // are only relevant when choosing a suggestion.
@@ -736,7 +650,6 @@ public class SuggestTextBox extends Composite implements WatermarkComponent, ITe
             }
         }
 
-        @Override
         protected void showSuggestions(final SuggestTextBox suggestBox, Collection<? extends Suggestion> suggestions, boolean isDisplayStringHTML,
                 boolean isAutoSelectEnabled, final SuggestionCallback callback) {
             // Hide the popup if there are no suggestions to display.
@@ -784,6 +697,30 @@ public class SuggestTextBox extends Composite implements WatermarkComponent, ITe
 
             // Show the popup under the TextBox.
             suggestionPopup.showRelativeTo(positionRelativeTo != null ? positionRelativeTo : suggestBox);
+        }
+
+        /**
+         * Set the debug id of widgets used in the SuggestionDisplay.
+         * 
+         * @param suggestBoxBaseID
+         *            the baseID of the {@link SuggestTextBox}
+         * @see UIObject#onEnsureDebugId(String)
+         */
+        protected void onEnsureDebugId(String suggestBoxBaseID) {
+        }
+
+        /**
+         * Accepts information about whether there were more suggestions matching
+         * than were provided to {@link #showSuggestions}.
+         * 
+         * @param hasMoreSuggestions
+         *            true if more matches were available
+         * @param numMoreSuggestions
+         *            number of more matches available. If the
+         *            specific number is unknown, 0 will be passed.
+         */
+        protected void setMoreSuggestions(boolean hasMoreSuggestions, int numMoreSuggestions) {
+            // Subclasses may optionally implement.
         }
 
     }
