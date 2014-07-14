@@ -49,7 +49,6 @@ import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HasAnimation;
 import com.google.gwt.user.client.ui.HasEnabled;
-import com.google.gwt.user.client.ui.HasText;
 import com.google.gwt.user.client.ui.HasValue;
 import com.google.gwt.user.client.ui.MenuBar;
 import com.google.gwt.user.client.ui.MenuItem;
@@ -63,14 +62,14 @@ import com.google.gwt.user.client.ui.SuggestOracle.Suggestion;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.UIObject;
 import com.google.gwt.user.client.ui.ValueBoxBase;
-import com.google.gwt.user.client.ui.Widget;
 
+import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.widgets.client.ITextWidget;
 import com.pyx4j.widgets.client.TextWatermark;
 import com.pyx4j.widgets.client.WatermarkComponent;
 import com.pyx4j.widgets.client.style.theme.WidgetTheme;
 
-public class SuggestTextBox extends Composite implements WatermarkComponent, ITextWidget, HasText, HasEnabled, HasAllKeyHandlers, HasValue<String>,
+public class SuggestTextBox<E extends IEntity> extends Composite implements WatermarkComponent, ITextWidget, HasEnabled, HasAllKeyHandlers, HasValue<E>,
         HasSelectionHandlers<Suggestion> {
 
     private boolean editable = true;
@@ -87,27 +86,19 @@ public class SuggestTextBox extends Composite implements WatermarkComponent, ITe
 
     private final SuggestionDisplay display;
 
-    private final ValueBoxBase<String> box;
+    private final TextBox box;
 
     private final Callback callback;
 
-    private final SuggestionCallback suggestionCallback;
+    private E value;
 
     public SuggestTextBox() {
         this(new MultiWordSuggestOracle());
     }
 
-    public SuggestTextBox(SuggestOracle suggestOracle) {
-        this(suggestOracle, new TextBox());
-    }
-
-    public SuggestTextBox(SuggestOracle oracle, ValueBoxBase<String> box) {
-        this(oracle, box, new SuggestionDisplay());
-    }
-
-    public SuggestTextBox(final SuggestOracle oracle, final ValueBoxBase<String> box, SuggestionDisplay suggestDisplay) {
-        this.box = box;
-        this.display = suggestDisplay;
+    public SuggestTextBox(final SuggestOracle oracle) {
+        this.box = new TextBox();
+        this.display = new SuggestionDisplay();
 
         callback = new Callback() {
             @Override
@@ -117,20 +108,11 @@ public class SuggestTextBox extends Composite implements WatermarkComponent, ITe
                     return;
                 }
                 display.setMoreSuggestions(response.hasMoreSuggestions(), response.getMoreSuggestionsCount());
-                display.showSuggestions(SuggestTextBox.this, response.getSuggestions(), oracle.isDisplayStringHTML(), isAutoSelect(), suggestionCallback);
-            }
-        };
-
-        suggestionCallback = new SuggestionCallback() {
-            @Override
-            public void onSuggestionSelected(Suggestion suggestion) {
-                box.setFocus(true);
-                setNewSelection(suggestion);
+                display.showSuggestions(SuggestTextBox.this, response.getSuggestions(), oracle.isDisplayStringHTML(), isAutoSelect());
             }
         };
 
         initWidget(box);
-
         addEventsToTextBox();
 
         setOracle(oracle);
@@ -163,7 +145,7 @@ public class SuggestTextBox extends Composite implements WatermarkComponent, ITe
     }
 
     @Override
-    public HandlerRegistration addValueChangeHandler(ValueChangeHandler<String> handler) {
+    public HandlerRegistration addValueChangeHandler(ValueChangeHandler<E> handler) {
         return addHandler(handler, ValueChangeEvent.getType());
     }
 
@@ -202,17 +184,25 @@ public class SuggestTextBox extends Composite implements WatermarkComponent, ITe
     }
 
     @Override
+    public E getValue() {
+        return value;
+    }
+
+    @Override
     public String getText() {
         if (watermark != null && watermark.isShown()) {
-            return null;
+            return "";
         } else {
             return box.getText();
         }
     }
 
     @Override
-    public String getValue() {
-        return box.getValue();
+    public void setText(String text) {
+        box.setText(text);
+        if (watermark != null) {
+            watermark.show();
+        }
     }
 
     /**
@@ -295,21 +285,15 @@ public class SuggestTextBox extends Composite implements WatermarkComponent, ITe
     }
 
     @Override
-    public void setText(String text) {
-        box.setText(text);
-        if (watermark != null) {
-            watermark.show();
-        }
+    public void setValue(E newValue) {
+        value = newValue;
+        box.setValue(newValue.getStringView());
     }
 
     @Override
-    public void setValue(String newValue) {
-        box.setValue(newValue);
-    }
-
-    @Override
-    public void setValue(String value, boolean fireEvents) {
-        box.setValue(value, fireEvents);
+    public void setValue(E newValue, boolean fireEvents) {
+        value = newValue;
+        box.setValue(newValue.getStringView(), fireEvents);
     }
 
     /**
@@ -337,7 +321,7 @@ public class SuggestTextBox extends Composite implements WatermarkComponent, ITe
     }
 
     private void addEventsToTextBox() {
-        class TextBoxEvents implements KeyDownHandler, KeyUpHandler, ValueChangeHandler<String> {
+        box.addKeyDownHandler(new KeyDownHandler() {
 
             @Override
             public void onKeyDown(KeyDownEvent event) {
@@ -350,32 +334,36 @@ public class SuggestTextBox extends Composite implements WatermarkComponent, ITe
                     break;
                 case KeyCodes.KEY_ENTER:
                 case KeyCodes.KEY_TAB:
-                    Suggestion suggestion = display.getCurrentSelection();
-                    if (suggestion == null) {
-                        display.hideSuggestions();
-                    } else {
-                        setNewSelection(suggestion);
-                    }
+                    setNewSelection(display.getCurrentSelection());
                     break;
                 }
             }
+        });
+
+        box.addKeyUpHandler(new KeyUpHandler() {
 
             @Override
             public void onKeyUp(KeyUpEvent event) {
                 // After every user key input, refresh the popup's suggestions.
                 refreshSuggestions();
             }
+        });
+
+        box.addValueChangeHandler(new ValueChangeHandler<String>() {
 
             @Override
             public void onValueChange(ValueChangeEvent<String> event) {
                 delegateEvent(SuggestTextBox.this, event);
             }
-        }
+        });
 
-        TextBoxEvents events = new TextBoxEvents();
-        box.addKeyDownHandler(events);
-        box.addKeyUpHandler(events);
-        box.addValueChangeHandler(events);
+        box.addBlurHandler(new BlurHandler() {
+
+            @Override
+            public void onBlur(BlurEvent event) {
+                // TODO Auto-generated method stub
+            }
+        });
     }
 
     private void fireSuggestionEvent(Suggestion selectedSuggestion) {
@@ -384,7 +372,7 @@ public class SuggestTextBox extends Composite implements WatermarkComponent, ITe
 
     private void refreshSuggestions() {
         // Get the raw text.
-        String text = getText();
+        String text = box.getText();
         if (text.equals(currentText)) {
             return;
         } else {
@@ -400,9 +388,12 @@ public class SuggestTextBox extends Composite implements WatermarkComponent, ITe
      *            the new suggestion
      */
     private void setNewSelection(Suggestion curSuggestion) {
-        assert curSuggestion != null : "suggestion cannot be null";
-        currentText = curSuggestion.getReplacementString();
-        setText(currentText);
+        if (curSuggestion == null) {
+            box.setText("");
+        } else {
+            currentText = curSuggestion.getReplacementString();
+            box.setText(currentText);
+        }
         display.hideSuggestions();
         fireSuggestionEvent(curSuggestion);
     }
@@ -481,7 +472,7 @@ public class SuggestTextBox extends Composite implements WatermarkComponent, ITe
         void onSuggestionSelected(Suggestion suggestion);
     }
 
-    public static class SuggestionDisplay implements HasAnimation {
+    class SuggestionDisplay implements HasAnimation {
 
         private final SuggestionMenu suggestionMenu;
 
@@ -515,7 +506,7 @@ public class SuggestTextBox extends Composite implements WatermarkComponent, ITe
         public SuggestionDisplay() {
             suggestionMenu = new SuggestionMenu(true);
             suggestionPopup = createPopup();
-            suggestionPopup.setWidget(decorateSuggestionList(suggestionMenu));
+            suggestionPopup.setWidget(suggestionMenu);
         }
 
         public void hideSuggestions() {
@@ -597,19 +588,6 @@ public class SuggestTextBox extends Composite implements WatermarkComponent, ITe
             return p;
         }
 
-        /**
-         * Wrap the list of suggestions before adding it to the popup. You can
-         * override this method if you want to wrap the suggestion list in a
-         * decorator.
-         * 
-         * @param suggestionList
-         *            the widget that contains the list of suggestions
-         * @return the suggestList, optionally inside of a wrapper
-         */
-        protected Widget decorateSuggestionList(Widget suggestionList) {
-            return suggestionList;
-        }
-
         protected Suggestion getCurrentSelection() {
             if (!isSuggestionListShowing()) {
                 return null;
@@ -656,7 +634,7 @@ public class SuggestTextBox extends Composite implements WatermarkComponent, ITe
         }
 
         protected void showSuggestions(final SuggestTextBox suggestBox, Collection<? extends Suggestion> suggestions, boolean isDisplayStringHTML,
-                boolean isAutoSelectEnabled, final SuggestionCallback callback) {
+                boolean isAutoSelectEnabled) {
             // Hide the popup if there are no suggestions to display.
             boolean anySuggestions = (suggestions != null && suggestions.size() > 0);
             if (!anySuggestions && hideWhenEmpty) {
@@ -678,7 +656,8 @@ public class SuggestTextBox extends Composite implements WatermarkComponent, ITe
                 menuItem.setScheduledCommand(new ScheduledCommand() {
                     @Override
                     public void execute() {
-                        callback.onSuggestionSelected(curSuggestion);
+                        box.setFocus(true);
+                        setNewSelection(curSuggestion);
                     }
                 });
 
