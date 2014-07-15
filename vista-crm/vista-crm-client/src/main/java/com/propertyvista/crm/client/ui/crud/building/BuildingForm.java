@@ -122,7 +122,13 @@ public class BuildingForm extends CrmEntityForm<BuildingDTO> {
         mechanicalsTab = addTab(createMachanicalsTab(), i18n.tr("Mechanicals"), DataModelPermission.permissionRead(BuildingMechanical.class));
         addOnsTab = addTab(createAddOnsTab(), i18n.tr("Add-Ons"), DataModelPermission.permissionRead(BuildingAddOns.class));
         financialTab = addTab(createFinancialTab(), i18n.tr("Financial"), DataModelPermission.permissionRead(BuildingFinancial.class));
+        if (isEditable()) {
+            financialTab.setPermitEnabledPermission(DataModelPermission.permissionUpdate(BuildingFinancial.class));
+        }
         marketingTab = addTab(createMarketingTab(), i18n.tr("Marketing"), DataModelPermission.permissionRead(Marketing.class));
+        if (isEditable()) {
+            marketingTab.setPermitEnabledPermission(DataModelPermission.permissionUpdate(Marketing.class));
+        }
         catalogTab = addTab(createCatalogTab(), i18n.tr("Product Catalog"), DataModelPermission.permissionRead(Product.class));
         addTab(createContactTab(), i18n.tr("Contacts"));
         billingCyclesTab = addTab(isEditable() ? new HTML() : ((BuildingViewerView) getParentView()).getBillingCycleListerView(), i18n.tr("Billing Cycles"),
@@ -138,8 +144,6 @@ public class BuildingForm extends CrmEntityForm<BuildingDTO> {
             unitsTab.setTabEnabled(false);
             mechanicalsTab.setTabEnabled(false);
             addOnsTab.setTabEnabled(false);
-            financialTab.setPermissionEnabled(DataModelPermission.permissionUpdate(BuildingFinancial.class));
-            marketingTab.setPermissionEnabled(DataModelPermission.permissionUpdate(Marketing.class));
             billingCyclesTab.setTabEnabled(false);
             catalogTab.setTabEnabled(false);
         }

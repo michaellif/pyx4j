@@ -72,7 +72,7 @@ public class FloorplanForm extends CrmEntityForm<FloorplanDTO> {
         marketingTab = addTab(createMarketingTab(), i18n.tr("Marketing"), DataModelPermission.permissionRead(Marketing.class));
 
         if (isEditable()) {
-            marketingTab.setPermissionEnabled(DataModelPermission.permissionUpdate(Marketing.class));
+            marketingTab.setPermitEnabledPermission(DataModelPermission.permissionUpdate(Marketing.class));
         }
     }
 
