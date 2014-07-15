@@ -54,9 +54,7 @@ import com.propertyvista.crm.client.ui.crud.lease.common.LeaseViewerViewImplBase
 import com.propertyvista.crm.rpc.dto.LeaseApplicationActionDTO;
 import com.propertyvista.crm.rpc.dto.LeaseApplicationActionDTO.Action;
 import com.propertyvista.crm.rpc.services.lease.LeaseApplicationDocumentUploadService;
-import com.propertyvista.crm.rpc.services.lease.ac.ApplicationDecisionApprove;
-import com.propertyvista.crm.rpc.services.lease.ac.ApplicationDecisionCancel;
-import com.propertyvista.crm.rpc.services.lease.ac.ApplicationDecisionDecline;
+import com.propertyvista.crm.rpc.services.lease.ac.ApplicationDecisionADC;
 import com.propertyvista.crm.rpc.services.lease.ac.ApplicationDecisionMoreInfo;
 import com.propertyvista.crm.rpc.services.lease.ac.ApplicationStartOnlineApplication;
 import com.propertyvista.crm.rpc.services.lease.ac.CreditCheckRun;
@@ -209,7 +207,7 @@ public class LeaseApplicationViewerViewImpl extends LeaseViewerViewImplBase<Leas
             public void execute() {
                 approveActionExecuter();
             }
-        }, new ActionPermission(ApplicationDecisionApprove.class));
+        }, new ActionPermission(ApplicationDecisionADC.class));
         addAction(approveAction);
 
         moreInfoAction = new SecureMenuItem(i18n.tr("More Info"), new Command() {
@@ -227,7 +225,7 @@ public class LeaseApplicationViewerViewImpl extends LeaseViewerViewImplBase<Leas
             public void execute() {
                 declineActionExecuter();
             }
-        }, new ActionPermission(ApplicationDecisionDecline.class));
+        }, new ActionPermission(ApplicationDecisionADC.class));
         addAction(declineAction);
 
         cancelAction = new SecureMenuItem(i18n.tr("Cancel"), new Command() {
@@ -235,7 +233,7 @@ public class LeaseApplicationViewerViewImpl extends LeaseViewerViewImplBase<Leas
             public void execute() {
                 cancelActionExecuter();
             }
-        }, new ActionPermission(ApplicationDecisionCancel.class));
+        }, new ActionPermission(ApplicationDecisionADC.class));
         addAction(cancelAction);
     }
 

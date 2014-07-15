@@ -27,9 +27,7 @@ import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.security.server.UIAclBuilder;
 import com.pyx4j.security.shared.ActionPermission;
 
-import com.propertyvista.crm.rpc.services.lease.ac.ApplicationDecisionApprove;
-import com.propertyvista.crm.rpc.services.lease.ac.ApplicationDecisionCancel;
-import com.propertyvista.crm.rpc.services.lease.ac.ApplicationDecisionDecline;
+import com.propertyvista.crm.rpc.services.lease.ac.ApplicationDecisionADC;
 import com.propertyvista.crm.rpc.services.lease.ac.ApplicationDecisionMoreInfo;
 import com.propertyvista.crm.rpc.services.lease.ac.ApplicationStartOnlineApplication;
 import com.propertyvista.domain.tenant.lead.Lead;
@@ -68,24 +66,16 @@ public class VistaCrmLeaseApllicationAccessControlList extends UIAclBuilder {
         }
 
         // Application Decisions:
-        grant(ApplicationFull, new ActionPermission(ApplicationDecisionApprove.class));
+        grant(ApplicationFull, new ActionPermission(ApplicationDecisionADC.class));
         grant(ApplicationFull, new ActionPermission(ApplicationDecisionMoreInfo.class));
-        grant(ApplicationFull, new ActionPermission(ApplicationDecisionDecline.class));
-        grant(ApplicationFull, new ActionPermission(ApplicationDecisionCancel.class));
 
-        grant(ApplicationDecisionRecommendationApprove, new ActionPermission(ApplicationDecisionApprove.class));
+        grant(ApplicationDecisionRecommendationApprove, new ActionPermission(ApplicationDecisionADC.class));
         grant(ApplicationDecisionRecommendationApprove, new ActionPermission(ApplicationDecisionMoreInfo.class));
-        grant(ApplicationDecisionRecommendationApprove, new ActionPermission(ApplicationDecisionDecline.class));
-        grant(ApplicationDecisionRecommendationApprove, new ActionPermission(ApplicationDecisionCancel.class));
 
-        grant(ApplicationDecisionRecommendationFurtherMoreInfo, new ActionPermission(ApplicationDecisionApprove.class));
+        grant(ApplicationDecisionRecommendationFurtherMoreInfo, new ActionPermission(ApplicationDecisionADC.class));
         grant(ApplicationDecisionRecommendationFurtherMoreInfo, new ActionPermission(ApplicationDecisionMoreInfo.class));
-        grant(ApplicationDecisionRecommendationFurtherMoreInfo, new ActionPermission(ApplicationDecisionDecline.class));
-        grant(ApplicationDecisionRecommendationFurtherMoreInfo, new ActionPermission(ApplicationDecisionCancel.class));
 
-        grant(ApplicationDecisionAll, new ActionPermission(ApplicationDecisionApprove.class));
+        grant(ApplicationDecisionAll, new ActionPermission(ApplicationDecisionADC.class));
         grant(ApplicationDecisionAll, new ActionPermission(ApplicationDecisionMoreInfo.class));
-        grant(ApplicationDecisionAll, new ActionPermission(ApplicationDecisionDecline.class));
-        grant(ApplicationDecisionAll, new ActionPermission(ApplicationDecisionCancel.class));
     }
 }

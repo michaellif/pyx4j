@@ -40,8 +40,7 @@ import com.propertyvista.biz.tenant.lease.LeaseFacade;
 import com.propertyvista.config.ThreadPoolNames;
 import com.propertyvista.crm.rpc.dto.LeaseApplicationActionDTO;
 import com.propertyvista.crm.rpc.services.lease.LeaseApplicationViewerCrudService;
-import com.propertyvista.crm.rpc.services.lease.ac.ApplicationDecisionApprove;
-import com.propertyvista.crm.rpc.services.lease.ac.ApplicationDecisionDecline;
+import com.propertyvista.crm.rpc.services.lease.ac.ApplicationDecisionADC;
 import com.propertyvista.crm.server.services.lease.common.LeaseViewerCrudServiceBaseImpl;
 import com.propertyvista.crm.server.util.CrmAppContext;
 import com.propertyvista.domain.company.Employee;
@@ -323,10 +322,10 @@ public class LeaseApplicationViewerCrudServiceImpl extends LeaseViewerCrudServic
 
         switch (actionDTO.action().getValue()) {
         case Approve:
-            SecurityController.assertPermission(new ActionPermission(ApplicationDecisionApprove.class));
+            SecurityController.assertPermission(new ActionPermission(ApplicationDecisionADC.class));
             break;
         case Decline:
-            SecurityController.assertPermission(new ActionPermission(ApplicationDecisionDecline.class));
+            SecurityController.assertPermission(new ActionPermission(ApplicationDecisionADC.class));
             break;
         default:
             break;

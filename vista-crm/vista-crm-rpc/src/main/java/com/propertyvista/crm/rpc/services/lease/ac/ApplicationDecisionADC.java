@@ -15,7 +15,7 @@ package com.propertyvista.crm.rpc.services.lease.ac;
 
 import com.pyx4j.security.annotations.ActionId;
 
-public class ApplicationDecisionCancel implements ActionId {
+public class ApplicationDecisionADC implements ActionId {
 
     private static final long serialVersionUID = 1L;
 
