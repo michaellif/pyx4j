@@ -68,9 +68,20 @@ public class VistaCrmLeaseApllicationAccessControlList extends UIAclBuilder {
         }
 
         // Application Decisions:
+        grant(ApplicationFull, new ActionPermission(ApplicationDecisionApprove.class));
+        grant(ApplicationFull, new ActionPermission(ApplicationDecisionMoreInfo.class));
+        grant(ApplicationFull, new ActionPermission(ApplicationDecisionDecline.class));
+        grant(ApplicationFull, new ActionPermission(ApplicationDecisionCancel.class));
 
         grant(ApplicationDecisionRecommendationApprove, new ActionPermission(ApplicationDecisionApprove.class));
+        grant(ApplicationDecisionRecommendationApprove, new ActionPermission(ApplicationDecisionMoreInfo.class));
+        grant(ApplicationDecisionRecommendationApprove, new ActionPermission(ApplicationDecisionDecline.class));
+        grant(ApplicationDecisionRecommendationApprove, new ActionPermission(ApplicationDecisionCancel.class));
+
+        grant(ApplicationDecisionRecommendationFurtherMoreInfo, new ActionPermission(ApplicationDecisionApprove.class));
         grant(ApplicationDecisionRecommendationFurtherMoreInfo, new ActionPermission(ApplicationDecisionMoreInfo.class));
+        grant(ApplicationDecisionRecommendationFurtherMoreInfo, new ActionPermission(ApplicationDecisionDecline.class));
+        grant(ApplicationDecisionRecommendationFurtherMoreInfo, new ActionPermission(ApplicationDecisionCancel.class));
 
         grant(ApplicationDecisionAll, new ActionPermission(ApplicationDecisionApprove.class));
         grant(ApplicationDecisionAll, new ActionPermission(ApplicationDecisionMoreInfo.class));
