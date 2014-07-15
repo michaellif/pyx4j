@@ -15,6 +15,7 @@ package com.propertyvista.crm.rpc.dto.billing;
 
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.ExtendsBO;
+import com.pyx4j.entity.annotations.SecurityEnabled;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.core.IPrimitive;
 
@@ -22,6 +23,7 @@ import com.propertyvista.domain.financial.billing.BillingCycle;
 
 @Transient
 @ExtendsBO
+@SecurityEnabled
 public interface BillingCycleDTO extends BillingCycle {
 
     // Statistics:

@@ -16,7 +16,9 @@ package com.propertyvista.crm.client.ui.crud.billing.adjustments;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.MenuItem;
 
+import com.pyx4j.entity.security.DataModelPermission;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.widgets.client.Button.SecureMenuItem;
 
 import com.propertyvista.crm.client.ui.crud.CrmViewerViewImplBase;
 import com.propertyvista.domain.tenant.lease.LeaseAdjustment;
@@ -31,12 +33,12 @@ public class LeaseAdjustmentViewerViewImpl extends CrmViewerViewImplBase<LeaseAd
     public LeaseAdjustmentViewerViewImpl() {
         setForm(new LeaseAdjustmentForm(this));
 
-        submitAction = new MenuItem(i18n.tr("Submit"), new Command() {
+        submitAction = new SecureMenuItem(i18n.tr("Submit"), new Command() {
             @Override
             public void execute() {
                 ((LeaseAdjustmentViewerView.Presenter) getPresenter()).submitAdjustment();
             }
-        });
+        }, DataModelPermission.permissionUpdate(LeaseAdjustment.class));
         addAction(submitAction);
     }
 

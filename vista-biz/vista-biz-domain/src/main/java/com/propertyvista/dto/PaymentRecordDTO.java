@@ -14,6 +14,7 @@
 package com.propertyvista.dto;
 
 import com.pyx4j.entity.annotations.ExtendsBO;
+import com.pyx4j.entity.annotations.SecurityEnabled;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.core.IList;
 import com.pyx4j.entity.core.IPrimitive;
@@ -23,6 +24,7 @@ import com.propertyvista.domain.tenant.lease.LeaseParticipant;
 import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
 
 @Transient
+@SecurityEnabled
 @ExtendsBO(PaymentRecord.class)
 public interface PaymentRecordDTO extends PaymentDataDTO, PaymentRecord {
 
