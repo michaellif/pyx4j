@@ -15,10 +15,10 @@ package com.propertyvista.operations.client.ui.crud.fundstransfer.fundstransferf
 
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.IList;
-import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
+import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
+import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.AppPlaceEntityMapper;
-import com.pyx4j.site.client.ui.prime.form.FieldDecoratorBuilder;
 import com.pyx4j.site.client.ui.prime.form.IForm;
 import com.pyx4j.site.client.ui.prime.misc.CEntityCollectionCrudHyperlink;
 import com.pyx4j.site.client.ui.prime.misc.CEntityCollectionCrudHyperlink.AppPlaceBuilder;
@@ -39,25 +39,24 @@ public class FundsTransferFileForm extends OperationsEntityForm<FundsTransferFil
     public FundsTransferFileForm(IForm<FundsTransferFileDTO> view) {
         super(FundsTransferFileDTO.class, view);
 
-        TwoColumnFlexFormPanel panel = new TwoColumnFlexFormPanel();
-        int row = -1;
+        FormPanel formPanel = new FormPanel(this);
 
-        panel.setWidget(++row, 0, 1, inject(proto().fileCreationNumber(), new FieldDecoratorBuilder().build()));
-        panel.setWidget(++row, 0, 1, inject(proto().fileName(), new FieldDecoratorBuilder().build()));
-        panel.setWidget(++row, 0, 1, inject(proto().companyId(), new FieldDecoratorBuilder().build()));
-        panel.setWidget(++row, 0, 1, inject(proto().status(), new FieldDecoratorBuilder().build()));
-        panel.setWidget(++row, 0, 1, inject(proto().fundsTransferType(), new FieldDecoratorBuilder().build()));
-        panel.setWidget(++row, 0, 1, inject(proto().sent(), new FieldDecoratorBuilder().build()));
-        panel.setWidget(++row, 0, 1, inject(proto().created(), new FieldDecoratorBuilder().build()));
-        panel.setWidget(++row, 0, 1, inject(proto().updated(), new FieldDecoratorBuilder().build()));
-        panel.setWidget(++row, 0, 1, inject(proto().acknowledged(), new FieldDecoratorBuilder().build()));
-        panel.setWidget(++row, 0, 1, inject(proto().recordsCount(), new FieldDecoratorBuilder().build()));
-        panel.setWidget(++row, 0, 1, inject(proto().fileAmount(), new FieldDecoratorBuilder().build()));
-        panel.setWidget(++row, 0, 1, inject(proto().acknowledgmentFileName(), new FieldDecoratorBuilder().build()));
-        panel.setWidget(++row, 0, 1, inject(proto().acknowledgmentRemoteFileDate(), new FieldDecoratorBuilder().build()));
-        panel.setWidget(++row, 0, 1, inject(proto().acknowledgmentStatusCode(), new FieldDecoratorBuilder().build()));
-        panel.setWidget(++row, 0, 1, inject(proto().acknowledgmentRejectReasonMessage(), new FieldDecoratorBuilder().build()));
-        panel.setWidget(++row, 0, 1, inject(proto().acknowledgmentStatus(), new FieldDecoratorBuilder().build()));
+        formPanel.append(Location.Left, proto().fileCreationNumber()).decorate();
+        formPanel.append(Location.Left, proto().fileName()).decorate();
+        formPanel.append(Location.Left, proto().companyId()).decorate();
+        formPanel.append(Location.Left, proto().status()).decorate();
+        formPanel.append(Location.Left, proto().fundsTransferType()).decorate();
+        formPanel.append(Location.Left, proto().sent()).decorate();
+        formPanel.append(Location.Left, proto().created()).decorate();
+        formPanel.append(Location.Left, proto().updated()).decorate();
+        formPanel.append(Location.Left, proto().acknowledged()).decorate();
+        formPanel.append(Location.Left, proto().recordsCount()).decorate();
+        formPanel.append(Location.Left, proto().fileAmount()).decorate();
+        formPanel.append(Location.Left, proto().acknowledgmentFileName()).decorate();
+        formPanel.append(Location.Left, proto().acknowledgmentRemoteFileDate()).decorate();
+        formPanel.append(Location.Left, proto().acknowledgmentStatusCode()).decorate();
+        formPanel.append(Location.Left, proto().acknowledgmentRejectReasonMessage()).decorate();
+        formPanel.append(Location.Left, proto().acknowledgmentStatus()).decorate();
 
         // TODO The mess with DTO and DBO here
         {
@@ -73,7 +72,7 @@ public class FundsTransferFileForm extends OperationsEntityForm<FundsTransferFil
             };
 
             CEntityCollectionCrudHyperlink<IList<FundsTransferRecord>> link = new CEntityCollectionCrudHyperlink<IList<FundsTransferRecord>>(appPlaceBuilder);
-            panel.setWidget(++row, 0, 1, inject(proto().debitRecords(), link, new FieldDecoratorBuilder().build()));
+            formPanel.append(Location.Left, proto().debitRecords(), link).decorate();
         }
 
         {
@@ -88,10 +87,10 @@ public class FundsTransferFileForm extends OperationsEntityForm<FundsTransferFil
             };
 
             CEntityCollectionCrudHyperlink<IList<FundsTransferBatch>> link = new CEntityCollectionCrudHyperlink<IList<FundsTransferBatch>>(appPlaceBuilder);
-            panel.setWidget(++row, 0, 1, inject(proto().batches(), link, new FieldDecoratorBuilder().build()));
+            formPanel.append(Location.Left, proto().batches(), link).decorate();
         }
 
-        selectTab(addTab(panel, i18n.tr("General")));
+        selectTab(addTab(formPanel, i18n.tr("General")));
         setTabBarVisible(false);
     }
 }

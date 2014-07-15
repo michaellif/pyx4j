@@ -13,10 +13,10 @@
  */
 package com.propertyvista.operations.client.ui.crud.fundstransfer.fundstransferbatch;
 
-import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
+import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
+import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.AppPlaceEntityMapper;
-import com.pyx4j.site.client.ui.prime.form.FieldDecoratorBuilder;
 import com.pyx4j.site.client.ui.prime.form.IForm;
 import com.pyx4j.site.client.ui.prime.misc.CEntityCrudHyperlink;
 
@@ -32,30 +32,25 @@ public class FundsTransferBatchForm extends OperationsEntityForm<FundsTransferBa
     public FundsTransferBatchForm(IForm<FundsTransferBatchDTO> view) {
         super(FundsTransferBatchDTO.class, view);
 
-        TwoColumnFlexFormPanel panel = new TwoColumnFlexFormPanel();
-        int row = -1;
+        FormPanel formPanel = new FormPanel(this);
 
-        panel.setWidget(++row, 0, 1, inject(proto().batchNumber(), new FieldDecoratorBuilder().build()));
+        formPanel.append(Location.Left, proto().batchNumber()).decorate();
 
-        panel.setWidget(++row, 0, 1, inject(proto().pmc().name(), new FieldDecoratorBuilder().customLabel("PMC:").build()));
-        panel.setWidget(++row, 0, 1, inject(proto().merchantTerminalId(), new FieldDecoratorBuilder().build()));
+        formPanel.append(Location.Left, proto().pmc().name()).decorate().customLabel("PMC:");
+        formPanel.append(Location.Left, proto().merchantTerminalId()).decorate();
 
-        panel.setWidget(
-                ++row,
-                0,
-                1,
-                inject(proto().padFile(), new CEntityCrudHyperlink<FundsTransferFile>(AppPlaceEntityMapper.resolvePlace(FundsTransferFileDTO.class)),
-                        new FieldDecoratorBuilder().build()));
+        formPanel.append(Location.Left, proto().padFile(),
+                new CEntityCrudHyperlink<FundsTransferFile>(AppPlaceEntityMapper.resolvePlace(FundsTransferFileDTO.class))).decorate();
 
-        panel.setWidget(++row, 0, 1, inject(proto().bankId(), new FieldDecoratorBuilder().build()));
-        panel.setWidget(++row, 0, 1, inject(proto().branchTransitNumber(), new FieldDecoratorBuilder().build()));
-        panel.setWidget(++row, 0, 1, inject(proto().accountNumber(), new FieldDecoratorBuilder().build()));
-        panel.setWidget(++row, 0, 1, inject(proto().chargeDescription(), new FieldDecoratorBuilder().build()));
-        panel.setWidget(++row, 0, 1, inject(proto().batchAmount(), new FieldDecoratorBuilder().build()));
-        panel.setWidget(++row, 0, 1, inject(proto().acknowledgmentStatusCode(), new FieldDecoratorBuilder().build()));
-        panel.setWidget(++row, 0, 1, inject(proto().processingStatus(), new FieldDecoratorBuilder().build()));
+        formPanel.append(Location.Left, proto().bankId()).decorate();
+        formPanel.append(Location.Left, proto().branchTransitNumber()).decorate();
+        formPanel.append(Location.Left, proto().accountNumber()).decorate();
+        formPanel.append(Location.Left, proto().chargeDescription()).decorate();
+        formPanel.append(Location.Left, proto().batchAmount()).decorate();
+        formPanel.append(Location.Left, proto().acknowledgmentStatusCode()).decorate();
+        formPanel.append(Location.Left, proto().processingStatus()).decorate();
 
-        selectTab(addTab(panel, i18n.tr("General")));
+        selectTab(addTab(formPanel, i18n.tr("General")));
         setTabBarVisible(false);
     }
 }

@@ -13,9 +13,9 @@
  */
 package com.propertyvista.operations.client.ui.crud.fundstransfer.cardtransactionrecords;
 
-import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
+import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
+import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.ui.prime.form.FieldDecoratorBuilder;
 import com.pyx4j.site.client.ui.prime.form.IForm;
 
 import com.propertyvista.operations.client.ui.crud.OperationsEntityForm;
@@ -28,23 +28,23 @@ public class CardTransactionRecordForm extends OperationsEntityForm<CardTransact
     public CardTransactionRecordForm(IForm<CardTransactionRecord> view) {
         super(CardTransactionRecord.class, view);
 
-        TwoColumnFlexFormPanel panel = new TwoColumnFlexFormPanel();
-        int row = -1;
+        FormPanel formPanel = new FormPanel(this);
 
-        panel.setWidget(++row, 0, 1, inject(proto().pmc().name(), new FieldDecoratorBuilder().customLabel("PMC:").build()));
-        panel.setWidget(++row, 0, 1, inject(proto().merchantTerminalId(), new FieldDecoratorBuilder().build()));
+        //formPanel.append(Location.Left, proto().pmc().name(), new FieldDecoratorBuilder().customLabel("PMC:").build()));
+        formPanel.append(Location.Left, proto().pmc().name()).decorate().customLabel("PMC:");
+        formPanel.append(Location.Left, proto().merchantTerminalId()).decorate();
 
-        panel.setWidget(++row, 0, 1, inject(proto().paymentTransactionId(), new FieldDecoratorBuilder().build()));
-        panel.setWidget(++row, 0, 1, inject(proto().cardType(), new FieldDecoratorBuilder().build()));
-        panel.setWidget(++row, 0, 1, inject(proto().amount(), new FieldDecoratorBuilder().build()));
-        panel.setWidget(++row, 0, 1, inject(proto().feeAmount(), new FieldDecoratorBuilder().build()));
+        formPanel.append(Location.Left, proto().paymentTransactionId()).decorate();
+        formPanel.append(Location.Left, proto().cardType()).decorate();
+        formPanel.append(Location.Left, proto().amount()).decorate();
+        formPanel.append(Location.Left, proto().feeAmount()).decorate();
 
-        panel.setWidget(++row, 0, 1, inject(proto().saleResponseCode(), new FieldDecoratorBuilder().build()));
-        panel.setWidget(++row, 0, 1, inject(proto().saleResponseText(), new FieldDecoratorBuilder().build()));
+        formPanel.append(Location.Left, proto().saleResponseCode()).decorate();
+        formPanel.append(Location.Left, proto().saleResponseText()).decorate();
 
-        panel.setWidget(++row, 0, 1, inject(proto().feeResponseCode(), new FieldDecoratorBuilder().build()));
+        formPanel.append(Location.Left, proto().feeResponseCode()).decorate();
 
-        selectTab(addTab(panel, i18n.tr("General")));
+        selectTab(addTab(formPanel, i18n.tr("General")));
         setTabBarVisible(false);
     }
 }

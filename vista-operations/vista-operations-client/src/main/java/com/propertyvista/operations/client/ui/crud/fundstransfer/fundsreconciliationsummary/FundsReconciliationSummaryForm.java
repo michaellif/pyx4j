@@ -16,11 +16,11 @@ package com.propertyvista.operations.client.ui.crud.fundstransfer.fundsreconcili
 import com.google.gwt.user.client.Command;
 
 import com.pyx4j.forms.client.ui.CLabel;
-import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
+import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
+import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.AppPlaceEntityMapper;
 import com.pyx4j.site.client.AppSite;
-import com.pyx4j.site.client.ui.prime.form.FieldDecoratorBuilder;
 import com.pyx4j.site.client.ui.prime.form.IForm;
 import com.pyx4j.site.client.ui.prime.misc.CEntityCrudHyperlink;
 import com.pyx4j.site.rpc.CrudAppPlace;
@@ -37,25 +37,20 @@ public class FundsReconciliationSummaryForm extends OperationsEntityForm<FundsRe
 
     public FundsReconciliationSummaryForm(IForm<FundsReconciliationSummaryDTO> view) {
         super(FundsReconciliationSummaryDTO.class, view);
-        TwoColumnFlexFormPanel panel = new TwoColumnFlexFormPanel();
-        int row = 0;
 
-        panel.setWidget(++row, 0, 1, inject(proto().merchantAccount().pmc().name(), new FieldDecoratorBuilder().customLabel("PMC:").build()));
-        panel.setWidget(
-                ++row,
-                0,
-                1,
-                inject(proto().reconciliationFile(),
-                        new CEntityCrudHyperlink<FundsReconciliationFile>(AppPlaceEntityMapper.resolvePlace(FundsReconciliationFileDTO.class)),
-                        new FieldDecoratorBuilder().build()));
+        FormPanel formPanel = new FormPanel(this);
 
-        panel.setWidget(++row, 0, 1, inject(proto().reconciliationFile().fundsTransferType(), new FieldDecoratorBuilder().build()));
+        formPanel.append(Location.Left, proto().merchantAccount().pmc().name()).decorate().customLabel("PMC:");
+        formPanel.append(Location.Left, proto().reconciliationFile(),
+                new CEntityCrudHyperlink<FundsReconciliationFile>(AppPlaceEntityMapper.resolvePlace(FundsReconciliationFileDTO.class))).decorate();
 
-        panel.setWidget(++row, 0, 2, inject(proto().paymentDate(), new FieldDecoratorBuilder().build()));
-        panel.setWidget(++row, 0, 2, inject(proto().merchantTerminalId(), new FieldDecoratorBuilder().build()));
-        panel.setWidget(++row, 0, 2, inject(proto().reconciliationStatus(), new FieldDecoratorBuilder().build()));
+        formPanel.append(Location.Left, proto().reconciliationFile().fundsTransferType()).decorate();
+
+        formPanel.append(Location.Dual, proto().paymentDate()).decorate();
+        formPanel.append(Location.Dual, proto().merchantTerminalId()).decorate();
+        formPanel.append(Location.Dual, proto().reconciliationStatus()).decorate();
         CLabel<Object> recordsCount;
-        panel.setWidget(++row, 0, 2, inject(proto().recordsCount(), recordsCount = new CLabel<>(), new FieldDecoratorBuilder().build()));
+        formPanel.append(Location.Dual, proto().recordsCount(), recordsCount = new CLabel<>()).decorate();
         recordsCount.setNavigationCommand(new Command() {
             @Override
             public void execute() {
@@ -64,29 +59,29 @@ public class FundsReconciliationSummaryForm extends OperationsEntityForm<FundsRe
             }
         });
 
-        panel.setWidget(++row, 0, 2, inject(proto().grossPaymentCount(), new FieldDecoratorBuilder().build()));
-        panel.setWidget(++row, 0, 2, inject(proto().grossPaymentAmount(), new FieldDecoratorBuilder().build()));
-        panel.setWidget(++row, 0, 2, inject(proto().grossPaymentFee(), new FieldDecoratorBuilder().build()));
+        formPanel.append(Location.Dual, proto().grossPaymentCount()).decorate();
+        formPanel.append(Location.Dual, proto().grossPaymentAmount()).decorate();
+        formPanel.append(Location.Dual, proto().grossPaymentFee()).decorate();
 
-        panel.setWidget(++row, 0, 2, inject(proto().rejectItemsCount(), new FieldDecoratorBuilder().build()));
-        panel.setWidget(++row, 0, 2, inject(proto().rejectItemsAmount(), new FieldDecoratorBuilder().build()));
-        panel.setWidget(++row, 0, 2, inject(proto().rejectItemsFee(), new FieldDecoratorBuilder().build()));
+        formPanel.append(Location.Dual, proto().rejectItemsCount()).decorate();
+        formPanel.append(Location.Dual, proto().rejectItemsAmount()).decorate();
+        formPanel.append(Location.Dual, proto().rejectItemsFee()).decorate();
 
-        panel.setWidget(++row, 0, 2, inject(proto().returnItemsCount(), new FieldDecoratorBuilder().build()));
-        panel.setWidget(++row, 0, 2, inject(proto().returnItemsAmount(), new FieldDecoratorBuilder().build()));
-        panel.setWidget(++row, 0, 2, inject(proto().returnItemsFee(), new FieldDecoratorBuilder().build()));
+        formPanel.append(Location.Dual, proto().returnItemsCount()).decorate();
+        formPanel.append(Location.Dual, proto().returnItemsAmount()).decorate();
+        formPanel.append(Location.Dual, proto().returnItemsFee()).decorate();
 
-        panel.setWidget(++row, 0, 2, inject(proto().netAmount(), new FieldDecoratorBuilder().build()));
+        formPanel.append(Location.Dual, proto().netAmount()).decorate();
 
         // TODO this is list now
         //panel.setWidget(++row, 0, 2, inject(proto().adjustments(), new FieldDecoratorBuilder().build()));
 
-        panel.setWidget(++row, 0, 2, inject(proto().previousBalance(), new FieldDecoratorBuilder().build()));
-        panel.setWidget(++row, 0, 2, inject(proto().merchantBalance(), new FieldDecoratorBuilder().build()));
-        panel.setWidget(++row, 0, 2, inject(proto().fundsReleased(), new FieldDecoratorBuilder().build()));
+        formPanel.append(Location.Dual, proto().previousBalance()).decorate();
+        formPanel.append(Location.Dual, proto().merchantBalance()).decorate();
+        formPanel.append(Location.Dual, proto().fundsReleased()).decorate();
 
-        panel.setWidget(++row, 0, 2, inject(proto().processingStatus(), new FieldDecoratorBuilder().build()));
+        formPanel.append(Location.Dual, proto().processingStatus()).decorate();
 
-        selectTab(addTab(panel, i18n.tr("General")));
+        selectTab(addTab(formPanel, i18n.tr("General")));
     }
 }

@@ -13,10 +13,10 @@
  */
 package com.propertyvista.operations.client.ui.crud.fundstransfer.fundsreconciliationrecord;
 
-import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
+import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
+import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.AppPlaceEntityMapper;
-import com.pyx4j.site.client.ui.prime.form.FieldDecoratorBuilder;
 import com.pyx4j.site.client.ui.prime.form.IForm;
 import com.pyx4j.site.client.ui.prime.misc.CEntityCrudHyperlink;
 
@@ -34,52 +34,39 @@ public class FundsReconciliationDebitRecordForm extends OperationsEntityForm<Fun
     public FundsReconciliationDebitRecordForm(IForm<FundsReconciliationRecordRecordDTO> view) {
         super(FundsReconciliationRecordRecordDTO.class, view);
 
-        TwoColumnFlexFormPanel panel = new TwoColumnFlexFormPanel();
-        int row = -1;
+        FormPanel formPanel = new FormPanel(this);
 
-        panel.setWidget(++row, 0, 1,
-                inject(proto().reconciliationSummary().merchantAccount().pmc().name(), new FieldDecoratorBuilder().customLabel("PMC:").build()));
-        panel.setWidget(
-                ++row,
-                0,
-                1,
-                inject(proto().reconciliationSummary().reconciliationFile(),
-                        new CEntityCrudHyperlink<FundsReconciliationFile>(AppPlaceEntityMapper.resolvePlace(FundsReconciliationFileDTO.class)),
-                        new FieldDecoratorBuilder().build()));
+        formPanel.append(Location.Left, proto().reconciliationSummary().merchantAccount().pmc().name()).decorate().customLabel("PMC:");
+        formPanel.append(Location.Left, proto().reconciliationSummary().reconciliationFile(),
+                new CEntityCrudHyperlink<FundsReconciliationFile>(AppPlaceEntityMapper.resolvePlace(FundsReconciliationFileDTO.class))).decorate();
 
-        panel.setWidget(++row, 0, 1, inject(proto().reconciliationSummary().reconciliationFile().fundsTransferType(), new FieldDecoratorBuilder().build()));
+        formPanel.append(Location.Left, proto().reconciliationSummary().reconciliationFile().fundsTransferType()).decorate();
 
-        panel.setWidget(++row, 0, 1, inject(proto().merchantTerminalId(), new FieldDecoratorBuilder().build()));
+        formPanel.append(Location.Left, proto().merchantTerminalId()).decorate();
 
-        panel.setWidget(
-                ++row,
-                0,
-                1,
-                inject(proto().reconciliationSummary(),
-                        new CEntityCrudHyperlink<FundsReconciliationSummary>(AppPlaceEntityMapper.resolvePlace(FundsReconciliationSummaryDTO.class)),
-                        new FieldDecoratorBuilder().build()));
+        formPanel.append(Location.Left, proto().reconciliationSummary(),
+                new CEntityCrudHyperlink<FundsReconciliationSummary>(AppPlaceEntityMapper.resolvePlace(FundsReconciliationSummaryDTO.class))).decorate();
+        formPanel.append(Location.Left, proto().paymentDate()).decorate();
+        formPanel.append(Location.Left, proto().clientId()).decorate();
+        formPanel.append(Location.Left, proto().transactionId()).decorate();
+        formPanel.append(Location.Left, proto().amount()).decorate();
+        formPanel.append(Location.Left, proto().reconciliationStatus()).decorate();
+        formPanel.append(Location.Left, proto().reasonCode()).decorate();
+        formPanel.append(Location.Left, proto().reasonText()).decorate();
+        formPanel.append(Location.Left, proto().fee()).decorate();
+        formPanel.append(Location.Left, proto().processingStatus()).decorate();
 
-        panel.setWidget(++row, 0, 1, inject(proto().paymentDate(), new FieldDecoratorBuilder().build()));
-        panel.setWidget(++row, 0, 1, inject(proto().clientId(), new FieldDecoratorBuilder().build()));
-        panel.setWidget(++row, 0, 1, inject(proto().transactionId(), new FieldDecoratorBuilder().build()));
-        panel.setWidget(++row, 0, 1, inject(proto().amount(), new FieldDecoratorBuilder().build()));
-        panel.setWidget(++row, 0, 1, inject(proto().reconciliationStatus(), new FieldDecoratorBuilder().build()));
-        panel.setWidget(++row, 0, 1, inject(proto().reasonCode(), new FieldDecoratorBuilder().build()));
-        panel.setWidget(++row, 0, 1, inject(proto().reasonText(), new FieldDecoratorBuilder().build()));
-        panel.setWidget(++row, 0, 1, inject(proto().fee(), new FieldDecoratorBuilder().build()));
-        panel.setWidget(++row, 0, 1, inject(proto().processingStatus(), new FieldDecoratorBuilder().build()));
+        formPanel.h1(i18n.tr("Funds Transfer Record"));
 
-        panel.setH1(++row, 0, 2, i18n.tr("Funds Transfer Record"));
+        formPanel.append(Location.Left, proto().debitRecord().bankId()).decorate();
+        formPanel.append(Location.Left, proto().debitRecord().branchTransitNumber()).decorate();
+        formPanel.append(Location.Left, proto().debitRecord().accountNumber()).decorate();
+        formPanel.append(Location.Left, proto().debitRecord().transactionId()).decorate();
+        formPanel.append(Location.Left, proto().debitRecord().acknowledgmentStatusCode()).decorate();
+        formPanel.append(Location.Left, proto().debitRecord().processed()).decorate();
+        formPanel.append(Location.Left, proto().debitRecord().processingStatus()).decorate();
 
-        panel.setWidget(++row, 0, 1, inject(proto().debitRecord().bankId(), new FieldDecoratorBuilder().build()));
-        panel.setWidget(++row, 0, 1, inject(proto().debitRecord().branchTransitNumber(), new FieldDecoratorBuilder().build()));
-        panel.setWidget(++row, 0, 1, inject(proto().debitRecord().accountNumber(), new FieldDecoratorBuilder().build()));
-        panel.setWidget(++row, 0, 1, inject(proto().debitRecord().transactionId(), new FieldDecoratorBuilder().build()));
-        panel.setWidget(++row, 0, 1, inject(proto().debitRecord().acknowledgmentStatusCode(), new FieldDecoratorBuilder().build()));
-        panel.setWidget(++row, 0, 1, inject(proto().debitRecord().processed(), new FieldDecoratorBuilder().build()));
-        panel.setWidget(++row, 0, 1, inject(proto().debitRecord().processingStatus(), new FieldDecoratorBuilder().build()));
-
-        selectTab(addTab(panel, i18n.tr("General")));
+        selectTab(addTab(formPanel, i18n.tr("General")));
         setTabBarVisible(false);
     }
 }
