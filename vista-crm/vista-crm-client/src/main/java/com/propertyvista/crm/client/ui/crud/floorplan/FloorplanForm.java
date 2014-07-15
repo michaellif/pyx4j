@@ -39,7 +39,6 @@ import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
-import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.site.client.ui.dialogs.SelectEnumDialog;
 import com.pyx4j.site.client.ui.prime.form.IForm;
 import com.pyx4j.widgets.client.tabpanel.Tab;
@@ -70,12 +69,10 @@ public class FloorplanForm extends CrmEntityForm<FloorplanDTO> {
         super(FloorplanDTO.class, view);
 
         selectTab(addTab(createGeneralTab(), i18n.tr("General")));
-        marketingTab = addTab(createMarketingTab(), i18n.tr("Marketing"));
+        marketingTab = addTab(createMarketingTab(), i18n.tr("Marketing"), DataModelPermission.permissionRead(Marketing.class));
 
-        // Tabs visibility/editability:  
-        marketingTab.setTabVisible(SecurityController.check(DataModelPermission.permissionRead(Marketing.class)));
         if (isEditable()) {
-            marketingTab.setTabEnabled(SecurityController.check(DataModelPermission.permissionUpdate(Marketing.class)));
+            marketingTab.setPermissionEnabled(DataModelPermission.permissionUpdate(Marketing.class));
         }
     }
 
