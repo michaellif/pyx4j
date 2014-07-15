@@ -15,7 +15,6 @@ package com.propertyvista.biz.system.yardi;
 
 import java.rmi.RemoteException;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
 
@@ -98,40 +97,48 @@ public class YardiConfigurationFacadeImpl implements YardiConfigurationFacade {
                 try {
                     sourceList = ilsStub.getYardiMarketingSources(yc, propertyListCode).getProperty();
                     for (PropertyMarketingSources sources : sourceList) {
-                        String propertyCode = sources.getPropertyCode();
-                        if (!masterPropertyList.contains(propertyCode)) {
-                            executionMonitor.addErredEvent("YardiConfig", "Property code not found in the properties configured for ILS: " + propertyCode);
-                        }
-                        propertyCodes.add(propertyCode);
+                        propertyCodes.add(sources.getPropertyCode());
                     }
                 } catch (Throwable t) {
+                    String error = "Error processing '" + propertyListCode + "': " + t.getMessage();
                     // report configuration issues
-                    executionMonitor.addErredEvent("YardiConfig", t.getMessage());
+                    executionMonitor.addErredEvent("YardiConfig", error);
                     if (t instanceof YardiServiceException) {
                         // send notification to Notification.YardiSynchronisation users
-                        ServerSideFactory.create(NotificationFacade.class).yardiConfigurationError(t.getMessage());
+                        ServerSideFactory.create(NotificationFacade.class).yardiConfigurationError(error);
                     }
                 }
             }
         }
 
-        // B&P sanity check - ensure selected properties available in B&P PropertyConfigurations
-        YardiResidentTransactionsStub bpStub = ServerSideFactory.create(YardiResidentTransactionsStub.class);
-        try {
-            List<String> bpPropertyList = new ArrayList<>();
-            for (com.propertyvista.yardi.beans.Property property : bpStub.getPropertyConfigurations(yc).getProperties()) {
-                bpPropertyList.add(property.getCode());
-            }
-
-            for (Iterator<String> it = propertyCodes.iterator(); it.hasNext();) {
-                String propertyCode = it.next();
-                if (!bpPropertyList.contains(propertyCode)) {
-                    executionMonitor.addErredEvent("YardiConfig", "Property code configured for ILS not found in the B&P property list: " + propertyCode);
-                    it.remove();
+        if (propertyCodes.size() > 0) {
+            // B&P sanity check - ensure selected properties available in B&P PropertyConfigurations
+            YardiResidentTransactionsStub bpStub = ServerSideFactory.create(YardiResidentTransactionsStub.class);
+            try {
+                List<String> bpPropertyList = new ArrayList<>();
+                for (com.propertyvista.yardi.beans.Property property : bpStub.getPropertyConfigurations(yc).getProperties()) {
+                    bpPropertyList.add(property.getCode());
                 }
+
+                List<String> bpMissingList = new ArrayList<>();
+                for (String propertyCode : propertyCodes) {
+                    if (!bpPropertyList.contains(propertyCode)) {
+                        bpMissingList.add(propertyCode);
+                    }
+                }
+
+                if (bpMissingList.size() > 0) {
+                    bpPropertyList.removeAll(bpMissingList);
+                    StringBuilder error = new StringBuilder("Properties not configured for B&P interface:");
+                    for (String code : bpMissingList) {
+                        error.append(" ").append(code);
+                    }
+                    executionMonitor.addErredEvent("YardiConfig", error.toString());
+                    ServerSideFactory.create(NotificationFacade.class).yardiConfigurationError(error.toString());
+                }
+            } catch (RemoteException e) {
+                throw new YardiServiceException(e);
             }
-        } catch (RemoteException e) {
-            throw new YardiServiceException(e);
         }
 
         return propertyCodes;
