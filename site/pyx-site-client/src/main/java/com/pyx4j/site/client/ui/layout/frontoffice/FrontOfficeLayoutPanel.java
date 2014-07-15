@@ -254,7 +254,7 @@ public class FrontOfficeLayoutPanel extends ResponsiveLayoutPanel {
         pageScroll.onResize();
     }
 
-    private void onScroll() {
+    protected void onScroll() {
         inlineMenuHolder.onPositionChange();
         inlineExtraHolder.onPositionChange();
 
@@ -265,7 +265,6 @@ public class FrontOfficeLayoutPanel extends ResponsiveLayoutPanel {
         } else if (stickyToolbarHolder.getWidget() == null) {
             stickyToolbarHolder.setDisplay();
         }
-
     }
 
     @Override
