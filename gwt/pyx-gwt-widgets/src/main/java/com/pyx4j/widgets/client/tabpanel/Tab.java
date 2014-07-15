@@ -57,6 +57,10 @@ public class Tab extends LayoutPanel {
         if (contentPane != null) {
             add(contentPane);
         }
+        // java varargs creates empty arrays,  so consider it as no permissions set
+        if (permissions.length == 0) {
+            permissions = null;
+        }
         this.permissionsVisible = permissions;
         setTabVisible(true);
     }
