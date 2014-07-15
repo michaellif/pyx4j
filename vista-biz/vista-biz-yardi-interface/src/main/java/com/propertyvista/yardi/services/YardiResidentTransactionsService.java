@@ -27,8 +27,6 @@ import java.util.Set;
 import java.util.concurrent.atomic.AtomicReference;
 
 import org.apache.axis2.AxisFault;
-import org.apache.commons.collections4.CollectionUtils;
-import org.apache.commons.collections4.Predicate;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -58,7 +56,6 @@ import com.pyx4j.entity.core.AttachLevel;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.server.Executable;
-import com.pyx4j.entity.server.IEntityPersistenceService.ICursorIterator;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.server.TransactionScopeOption;
 import com.pyx4j.entity.server.UnitOfWork;
@@ -169,23 +166,27 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
         // Find buildings that are no longer in the list and suspend them
         EntityQueryCriteria<Building> criteria = EntityQueryCriteria.create(Building.class);
         criteria.eq(criteria.proto().integrationSystemId(), yc.getPrimaryKey());
-        criteria.in(criteria.proto().suspended(), false);
-        ICursorIterator<Building> buildings = Persistence.service().query(null, criteria, AttachLevel.Attached);
-        try {
-            while (buildings.hasNext()) {
-                final Building building = buildings.next();
-                if (!CollectionUtils.exists(propertyCodes, new Predicate<String>() {
-                    @Override
-                    public boolean evaluate(String object) {
-                        return BuildingsMapper.getPropertyCode(object).equals(building.propertyCode().getValue());
+        for (Building building : Persistence.service().query(criteria)) {
+            String buildingCode = building.propertyCode().getValue();
+            boolean suspended = building.suspended().getValue(false);
+            boolean found = false;
+            for (Iterator<String> it = propertyCodes.iterator(); it.hasNext();) {
+                if (it.next().equalsIgnoreCase(buildingCode)) {
+                    found = true;
+                    if (suspended) {
+                        // suspended buildings should be excluded from ILS property configuration
+                        String error = "Suspended building '" + buildingCode + "' should be excluded from ILS property configuration.";
+                        executionMonitor.addInfoEvent("YardiConfig", error);
+                        ServerSideFactory.create(NotificationFacade.class).yardiConfigurationError(error);
+                        it.remove();
                     }
-                })) {
-                    suspendBuilding(building);
-                    executionMonitor.addInfoEvent("BuildingSuspended", building.propertyCode().getValue());
                 }
             }
-        } finally {
-            buildings.close();
+            if (!found && !suspended) {
+                // suspend existing buildings not configured for ILS
+                suspendBuilding(building);
+                executionMonitor.addInfoEvent("BuildingSuspended", buildingCode);
+            }
         }
 
         updateProperties(yc, propertyCodes, executionMonitor);
@@ -313,8 +314,10 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
             }
             Building building = MappingUtils.getBuilding(yardiInterfaceId, propertyCode);
             if (building != null) {
-                if (building.suspended().getValue()) {
-                    executionMonitor.addInfoEvent("skip suspended property code for transaction import", CompletionType.failed, propertyCode, null);
+                // this should not happen since Suspended buildings have been filtered earlier - see updateAll()
+                if (building.suspended().getValue(false)) {
+                    executionMonitor.addInfoEvent("YardiConfig", CompletionType.failed, "Suspended property excluded for transaction import: " + propertyCode,
+                            null);
                     continue;
                 }
             } else {
@@ -354,9 +357,10 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
             if (executionMonitor.isTerminationRequested()) {
                 break;
             }
-            if (building.suspended().getValue()) {
-                executionMonitor.addInfoEvent("skip suspended property code for charges import", CompletionType.failed, building.propertyCode().getValue(),
-                        null);
+            // this should not happen since Suspended buildings have been filtered earlier - see updateAll()
+            if (building.suspended().getValue(false)) {
+                executionMonitor.addInfoEvent("YardiConfig", CompletionType.failed, "Suspended property excluded for transaction import: "
+                        + building.propertyCode().getValue(), null);
             } else {
                 BillingCycle nextCycle = ServerSideFactory.create(PaymentMethodFacade.class).getNextAutopayBillingCycle(building, BillingPeriod.Monthly, 1);
                 try {
