@@ -20,6 +20,7 @@ import com.pyx4j.commons.IDebugId;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.security.DataModelPermission;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.security.shared.ActionPermission;
 import com.pyx4j.site.client.ui.prime.lister.ILister;
 import com.pyx4j.site.client.ui.prime.lister.ListerInternalViewImplBase;
 import com.pyx4j.widgets.client.Button.SecureMenuItem;
@@ -32,6 +33,7 @@ import com.propertyvista.crm.client.ui.crud.lease.common.LeaseDataDialog;
 import com.propertyvista.crm.client.ui.crud.unit.dialogs.MakePendingDialog;
 import com.propertyvista.crm.client.ui.crud.unit.dialogs.ScopeDialog;
 import com.propertyvista.crm.rpc.dto.occupancy.opconstraints.MakeVacantConstraintsDTO;
+import com.propertyvista.crm.rpc.services.building.ac.UpdateUnitAvailability;
 import com.propertyvista.domain.property.asset.unit.AptUnitItem;
 import com.propertyvista.domain.property.asset.unit.occupancy.AptUnitOccupancySegment;
 import com.propertyvista.domain.tenant.lease.Lease;
@@ -56,7 +58,7 @@ public class UnitViewerViewImpl extends CrmViewerViewImplBase<AptUnitDTO> implem
 
     private final MenuItem maintenanceAction;
 
-    private final MenuItem yardiImporttAvailability;
+    private final MenuItem yardiUpdateAvailability;
 
     private boolean canScopeOffMarket;
 
@@ -125,14 +127,14 @@ public class UnitViewerViewImpl extends CrmViewerViewImplBase<AptUnitDTO> implem
             addAction(makePendingAction);
         }
 
-        yardiImporttAvailability = new MenuItem(i18n.tr("Update Availability From Yardi"), new Command() {
+        yardiUpdateAvailability = new SecureMenuItem(i18n.tr("Update Availability From Yardi"), new Command() {
             @Override
             public void execute() {
                 ((UnitViewerView.Presenter) getPresenter()).updateAvailabilityFromYardi();
             }
-        });
+        }, new ActionPermission(UpdateUnitAvailability.class));
         if (VistaFeatures.instance().yardiIntegration()) {
-            addAction(yardiImporttAvailability);
+            addAction(yardiUpdateAvailability);
         }
 
         existingLeaseAction = new SecureMenuItem(i18n.tr("Create Current Lease..."), new Command() {

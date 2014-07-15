@@ -190,6 +190,7 @@ class VistaCrmBuildingAccessControlList extends UIAclBuilder {
             grant(BuildingMarketing, UpdateUnitAvailability.class);
             grant(BuildingMechanicals, UpdateUnitAvailability.class);
             grant(BuildingAdministrator, UpdateUnitAvailability.class);
+            grant(BuildingLeasing, UpdateUnitAvailability.class);
         }
 
         { // S
