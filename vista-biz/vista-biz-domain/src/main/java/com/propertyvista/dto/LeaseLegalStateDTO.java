@@ -13,11 +13,13 @@
  */
 package com.propertyvista.dto;
 
+import com.pyx4j.entity.annotations.SecurityEnabled;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.IList;
 
 @Transient
+@SecurityEnabled
 public interface LeaseLegalStateDTO extends IEntity {
 
     LegalStatusDTO current();

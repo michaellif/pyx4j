@@ -77,6 +77,7 @@ public class VistaCrmLeaseAccessControlList extends UIAclBuilder {
 
         grant(LeaseAdvanced, LeaseLegalStateDTO.class, READ);
         grant(LeaseFull, LeaseLegalStateDTO.class, ALL);
+        // See also VistaCrmLegalAccessControlList
 
         // TODO  this BAD  change this
         {
