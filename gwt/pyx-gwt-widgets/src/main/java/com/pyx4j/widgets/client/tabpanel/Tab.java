@@ -107,7 +107,7 @@ public class Tab extends LayoutPanel {
         return visible;
     }
 
-    public void setPermissionVisible(Permission... permission) {
+    public void setPermitVisiblePermission(Permission... permission) {
         this.permissionsVisible = permission;
         setTabVisible(isTabVisible());
     }
@@ -122,7 +122,7 @@ public class Tab extends LayoutPanel {
         return enabled;
     }
 
-    public void setPermissionEnabled(Permission... permission) {
+    public void setPermitEnabledPermission(Permission... permission) {
         this.permissionsEnabled = permission;
         setTabEnabled(isTabEnabled());
     }
