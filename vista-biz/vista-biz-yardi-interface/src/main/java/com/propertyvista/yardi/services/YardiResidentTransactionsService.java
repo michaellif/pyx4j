@@ -169,23 +169,20 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
         for (Building building : Persistence.service().query(criteria)) {
             String buildingCode = building.propertyCode().getValue();
             boolean suspended = building.suspended().getValue(false);
-            boolean found = false;
-            for (Iterator<String> it = propertyCodes.iterator(); it.hasNext();) {
-                if (it.next().equalsIgnoreCase(buildingCode)) {
-                    found = true;
-                    if (suspended) {
-                        // suspended buildings should be excluded from ILS property configuration
-                        String error = "Suspended building '" + buildingCode + "' should be excluded from ILS property configuration.";
-                        executionMonitor.addInfoEvent("YardiConfig", error);
-                        ServerSideFactory.create(NotificationFacade.class).yardiConfigurationError(error);
-                        it.remove();
-                    }
+            if (propertyCodes.contains(buildingCode)) {
+                if (suspended) {
+                    // suspended buildings should be excluded from ILS property configuration
+                    String error = "Suspended building '" + buildingCode + "' should be excluded from ILS property configuration.";
+                    executionMonitor.addInfoEvent("YardiConfig", error);
+                    ServerSideFactory.create(NotificationFacade.class).yardiConfigurationError(error);
+                    propertyCodes.remove(buildingCode);
                 }
-            }
-            if (!found && !suspended) {
-                // suspend existing buildings not configured for ILS
-                suspendBuilding(building);
-                executionMonitor.addInfoEvent("BuildingSuspended", buildingCode);
+            } else {
+                if (!suspended) {
+                    // suspend existing buildings not configured for ILS
+                    suspendBuilding(building);
+                    executionMonitor.addInfoEvent("BuildingSuspended", buildingCode);
+                }
             }
         }
 

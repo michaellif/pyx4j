@@ -27,6 +27,7 @@ import com.propertyvista.biz.communication.NotificationFacade;
 import com.propertyvista.biz.system.YardiServiceException;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.settings.PmcYardiCredential;
+import com.propertyvista.yardi.mappers.BuildingsMapper;
 import com.propertyvista.yardi.stubs.YardiGuestManagementStub;
 import com.propertyvista.yardi.stubs.YardiResidentTransactionsStub;
 
@@ -84,7 +85,7 @@ public class YardiConfigurationFacadeImpl implements YardiConfigurationFacade {
 
         YardiGuestManagementStub ilsStub = ServerSideFactory.create(YardiGuestManagementStub.class);
         for (com.propertyvista.yardi.beans.Property property : ilsStub.getPropertyConfigurations(yc).getProperties()) {
-            masterPropertyList.add(property.getCode());
+            masterPropertyList.add(BuildingsMapper.getPropertyCode(property.getCode())); // lower case
         }
 
         List<String> propertyCodes = new ArrayList<>();
@@ -97,7 +98,7 @@ public class YardiConfigurationFacadeImpl implements YardiConfigurationFacade {
                 try {
                     sourceList = ilsStub.getYardiMarketingSources(yc, propertyListCode).getProperty();
                     for (PropertyMarketingSources sources : sourceList) {
-                        propertyCodes.add(sources.getPropertyCode());
+                        propertyCodes.add(BuildingsMapper.getPropertyCode(sources.getPropertyCode()));
                     }
                 } catch (Throwable t) {
                     String error = "Error processing '" + propertyListCode + "': " + t.getMessage();
@@ -117,7 +118,7 @@ public class YardiConfigurationFacadeImpl implements YardiConfigurationFacade {
             try {
                 List<String> bpPropertyList = new ArrayList<>();
                 for (com.propertyvista.yardi.beans.Property property : bpStub.getPropertyConfigurations(yc).getProperties()) {
-                    bpPropertyList.add(property.getCode());
+                    bpPropertyList.add(BuildingsMapper.getPropertyCode(property.getCode()));
                 }
 
                 List<String> bpMissingList = new ArrayList<>();
