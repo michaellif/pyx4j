@@ -15,16 +15,16 @@ package com.propertyvista.operations.client.ui.crud.simulateddatapreload;
 
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.client.Command;
+import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
-import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.widgets.client.Button;
 
 import com.propertyvista.operations.client.activity.crud.simulateddatapreload.SimulatedDataPreloadActivity;
 
 public class SimulatedDataPreloadViewImpl implements SimulatedDataPreloadView {
 
-    private final TwoColumnFlexFormPanel viewPanel;
+    private final VerticalPanel viewPanel;
 
     private SimulatedDataPreloadActivity presenter;
 
@@ -33,17 +33,17 @@ public class SimulatedDataPreloadViewImpl implements SimulatedDataPreloadView {
     private Button maintenanceRequestsGenerationButton;
 
     public SimulatedDataPreloadViewImpl() {
-        viewPanel = new TwoColumnFlexFormPanel();
+        viewPanel = new VerticalPanel();
         viewPanel.setWidth("100%");
-        int row = -1;
-        viewPanel.setWidget(++row, 0, arrearsHistoryGenerationButton = new Button("Generate arrears snapshots history", new Command() {
+
+        viewPanel.add(arrearsHistoryGenerationButton = new Button("Generate arrears snapshots history", new Command() {
             @Override
             public void execute() {
                 presenter.generateArrearsSnapshotsHistory();
 
             }
         }));
-        viewPanel.setWidget(++row, 0, maintenanceRequestsGenerationButton = new Button("Generate maintenance requests", new Command() {
+        viewPanel.add(maintenanceRequestsGenerationButton = new Button("Generate maintenance requests", new Command() {
             @Override
             public void execute() {
                 presenter.generateMaintenanceRequests();

@@ -27,9 +27,9 @@ import com.pyx4j.forms.client.ui.CDatePicker;
 import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.folder.BoxFolderItemDecorator;
 import com.pyx4j.forms.client.ui.folder.IFolderItemDecorator;
-import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
+import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
+import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.ui.prime.form.FieldDecoratorBuilder;
 
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
 import com.propertyvista.operations.domain.scheduler.ScheduleType;
@@ -56,24 +56,23 @@ public class TriggerScheduleFolder extends VistaBoxFolder<TriggerSchedule> {
 
         @Override
         protected IsWidget createContent() {
-            TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel();
+            FormPanel formPanel = new FormPanel(this);
 
-            int row = -1;
-            content.setWidget(++row, 0, inject(proto().repeatType(), new FieldDecoratorBuilder(12).build()));
-            content.setWidget(row, 1, inject(proto().nextFireTime(), new FieldDecoratorBuilder(12).build()));
+            formPanel.append(Location.Left, proto().repeatType()).decorate().componentWidth(144);
+            formPanel.append(Location.Right, proto().nextFireTime()).decorate().componentWidth(144);
 
-            content.setWidget(++row, 0, inject(proto().repeatEvery(), new FieldDecoratorBuilder(12).build()));
-            content.setWidget(++row, 0, inject(proto().time(), new FieldDecoratorBuilder(12).build()));
+            formPanel.append(Location.Left, proto().repeatEvery()).decorate().componentWidth(144);
+            formPanel.append(Location.Left, proto().time()).decorate().componentWidth(144);
 
-            content.setWidget(++row, 0, inject(proto().startsOn(), new FieldDecoratorBuilder(12).build()));
-            content.setWidget(row, 1, inject(proto().endsOn(), new FieldDecoratorBuilder(12).build()));
+            formPanel.append(Location.Left, proto().startsOn()).decorate().componentWidth(144);
+            formPanel.append(Location.Right, proto().endsOn()).decorate().componentWidth(144);
 
             // fill ScheduleType types:
             if (get(proto().repeatType()) instanceof CComboBox) {
                 ((CComboBox<ScheduleType>) get(proto().repeatType())).setOptions(ScheduleType.uiSet());
             }
 
-            return content;
+            return formPanel;
         }
 
         @Override

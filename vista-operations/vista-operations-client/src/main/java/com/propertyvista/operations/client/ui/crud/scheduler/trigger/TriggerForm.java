@@ -17,9 +17,9 @@ import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.ui.HTML;
 
-import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
+import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
+import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.ui.prime.form.FieldDecoratorBuilder;
 import com.pyx4j.site.client.ui.prime.form.IForm;
 import com.pyx4j.widgets.client.tabpanel.Tab;
 
@@ -43,29 +43,28 @@ public class TriggerForm extends OperationsEntityForm<TriggerDTO> {
 
     }
 
-    private TwoColumnFlexFormPanel createDetailsTab() {
-        TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel();
+    private FormPanel createDetailsTab() {
+        FormPanel formPanel = new FormPanel(this);
 
-        int row = -1;
-        main.setWidget(++row, 0, inject(proto().name(), new FieldDecoratorBuilder().build()));
-        main.setWidget(++row, 0, inject(proto().triggerType(), new FieldDecoratorBuilder().build()));
-        main.setWidget(row, 1, inject(proto().populationType(), new FieldDecoratorBuilder(10).build()));
+        formPanel.append(Location.Left, proto().name()).decorate();
+        formPanel.append(Location.Left, proto().triggerType()).decorate();
+        formPanel.append(Location.Right, proto().populationType()).decorate().componentWidth(120);
 
-        main.setWidget(++row, 0, inject(proto().threads(), new FieldDecoratorBuilder(10).build()));
-        main.setWidget(row, 1, inject(proto().timeout(), new FieldDecoratorBuilder().build()));
+        formPanel.append(Location.Left, proto().threads()).decorate().componentWidth(120);
+        formPanel.append(Location.Right, proto().timeout()).decorate();
 
-        main.setWidget(++row, 0, 2, inject(proto().population(), new PopulationFolder(this)));
+        formPanel.append(Location.Dual, proto().population(), new PopulationFolder(this));
 
-        main.setH2(++row, 0, 2, i18n.tr("Schedules"));
-        main.setWidget(++row, 0, inject(proto().scheduleSuspended(), new FieldDecoratorBuilder(10).build()));
-        main.setWidget(++row, 0, inject(proto().nextScheduledFireTime(), new FieldDecoratorBuilder(10).build()));
-        main.setWidget(++row, 0, 2, inject(proto().schedules(), new TriggerScheduleFolder(isEditable())));
+        formPanel.h2(i18n.tr("Schedules"));
+        formPanel.append(Location.Left, proto().scheduleSuspended()).decorate().componentWidth(120);
+        formPanel.append(Location.Left, proto().nextScheduledFireTime()).decorate().componentWidth(120);
+        formPanel.append(Location.Dual, proto().schedules(), new TriggerScheduleFolder(isEditable()));
 
-        main.setWidget(++row, 0, inject(proto().sleepRetry(), new FieldDecoratorBuilder(10).build()));
-        main.setWidget(++row, 0, inject(proto().nextSleepRetryFireTime(), new FieldDecoratorBuilder(10).build()));
+        formPanel.append(Location.Left, proto().sleepRetry()).decorate().componentWidth(120);
+        formPanel.append(Location.Left, proto().nextSleepRetryFireTime()).decorate().componentWidth(120);
 
-        main.setH2(++row, 0, 2, i18n.tr("Notifications"));
-        main.setWidget(++row, 0, 2, inject(proto().notifications(), new NotificationFolder(isEditable())));
+        formPanel.h2(i18n.tr("Notifications"));
+        formPanel.append(Location.Dual, proto().notifications(), new NotificationFolder(isEditable()));
 
         // tweaks:
         get(proto().populationType()).addValueChangeHandler(new ValueChangeHandler<TriggerPmcSelectionType>() {
@@ -81,7 +80,7 @@ public class TriggerForm extends OperationsEntityForm<TriggerDTO> {
             }
         });
 
-        return main;
+        return formPanel;
     }
 
     @Override
@@ -92,9 +91,9 @@ public class TriggerForm extends OperationsEntityForm<TriggerDTO> {
                 !getValue().populationType().isNull() && getValue().populationType().getValue() != TriggerPmcSelectionType.allPmc
                         && getValue().populationType().getValue() != TriggerPmcSelectionType.none);
 
-        get(proto().triggerType()).setViewable(!getValue().triggerType().isNull());
+        get(proto().triggerType()).setEditable(getValue().triggerType().isNull());
 
-        get(proto().populationType()).setViewable(
-                !getValue().triggerType().isNull() && getValue().triggerType().getValue().hasOption(PmcProcessOptions.GlobalOnly));
+        get(proto().populationType()).setEditable(
+                getValue().triggerType().isNull() || !getValue().triggerType().getValue().hasOption(PmcProcessOptions.GlobalOnly));
     }
 }

@@ -13,9 +13,9 @@
  */
 package com.propertyvista.operations.client.ui.crud.systemdefaults;
 
-import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
+import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
+import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.ui.prime.form.FieldDecoratorBuilder;
 import com.pyx4j.site.client.ui.prime.form.IForm;
 
 import com.propertyvista.operations.client.ui.components.EquifaxFeeQuoteForm;
@@ -41,44 +41,44 @@ public class VistaSystemDefaultsForm extends OperationsEntityForm<VistaSystemDef
         addTab(makeTenantSureSettingsTab(), i18n.tr("TenantSure"));
     }
 
-    private TwoColumnFlexFormPanel makeEquifaxSettingsTab() {
-        TwoColumnFlexFormPanel panel = new TwoColumnFlexFormPanel();
-        int row = -1;
-        panel.setH1(++row, 0, 2, i18n.tr("Default Fees"));
-        panel.setWidget(++row, 0, 2, inject(proto().equifaxFees(), new EquifaxFeeQuoteForm(true)));
+    private FormPanel makeEquifaxSettingsTab() {
+        FormPanel formPanel = new FormPanel(this);
 
-        panel.setH1(++row, 0, 2, i18n.tr("Default  Usage Limits"));
-        panel.setWidget(++row, 0, 2, inject(proto().equifaxLimit().dailyReports(), new FieldDecoratorBuilder(6, true).build()));
-        panel.setWidget(++row, 0, 2, inject(proto().equifaxLimit().dailyRequests(), new FieldDecoratorBuilder(6, true).build()));
+        formPanel.h1(i18n.tr("Default Fees"));
+        formPanel.append(Location.Dual, proto().equifaxFees(), new EquifaxFeeQuoteForm(true));
 
-        return panel;
+        formPanel.h1(i18n.tr("Default  Usage Limits"));
+        formPanel.append(Location.Dual, proto().equifaxLimit().dailyReports()).decorate().componentWidth(72);
+        formPanel.append(Location.Dual, proto().equifaxLimit().dailyRequests()).decorate().componentWidth(72);
+
+        return formPanel;
     }
 
-    private TwoColumnFlexFormPanel makeMistaMerchantAccountTab() {
-        TwoColumnFlexFormPanel panel = new TwoColumnFlexFormPanel();
-        int row = -1;
-        panel.setH1(++row, 0, 2, i18n.tr("Vista Merchant Account, Payments BMO"));
-        panel.setWidget(++row, 0, 2, inject(proto().vistaMerchantAccountPayments(), new MerchantAccountForm()));
+    private FormPanel makeMistaMerchantAccountTab() {
+        FormPanel formPanel = new FormPanel(this);
 
-        panel.setH1(++row, 0, 2, i18n.tr("Vista Merchant Account, Equifax"));
-        panel.setWidget(++row, 0, 2, inject(proto().vistaMerchantAccountEquifax(), new MerchantAccountForm()));
-        return panel;
+        formPanel.h1(i18n.tr("Vista Merchant Account, Payments BMO"));
+        formPanel.append(Location.Dual, proto().vistaMerchantAccountPayments(), new MerchantAccountForm());
+
+        formPanel.h1(i18n.tr("Vista Merchant Account, Equifax"));
+        formPanel.append(Location.Dual, proto().vistaMerchantAccountEquifax(), new MerchantAccountForm());
+        return formPanel;
     }
 
-    private TwoColumnFlexFormPanel makePaymentSettingsTab() {
-        TwoColumnFlexFormPanel panel = new TwoColumnFlexFormPanel();
-        int row = -1;
-        panel.setH1(++row, 0, 2, i18n.tr("Default Fees"));
-        panel.setWidget(++row, 0, 2, inject(proto().paymentFees(), new PaymentFeesForm<DefaultPaymentFees>(DefaultPaymentFees.class)));
-        return panel;
+    private FormPanel makePaymentSettingsTab() {
+        FormPanel formPanel = new FormPanel(this);
+
+        formPanel.h1(i18n.tr("Default Fees"));
+        formPanel.append(Location.Dual, proto().paymentFees(), new PaymentFeesForm<DefaultPaymentFees>(DefaultPaymentFees.class));
+        return formPanel;
     }
 
-    private TwoColumnFlexFormPanel makeTenantSureSettingsTab() {
-        TwoColumnFlexFormPanel panel = new TwoColumnFlexFormPanel();
-        int row = -1;
-        panel.setH1(++row, 0, 2, i18n.tr("Merchant Account"));
-        panel.setWidget(++row, 0, 2, inject(proto().tenantSureMerchantAccount(), new MerchantAccountForm()));
-        return panel;
+    private FormPanel makeTenantSureSettingsTab() {
+        FormPanel formPanel = new FormPanel(this);
+
+        formPanel.h1(i18n.tr("Merchant Account"));
+        formPanel.append(Location.Dual, proto().tenantSureMerchantAccount(), new MerchantAccountForm());
+        return formPanel;
     }
 
 }

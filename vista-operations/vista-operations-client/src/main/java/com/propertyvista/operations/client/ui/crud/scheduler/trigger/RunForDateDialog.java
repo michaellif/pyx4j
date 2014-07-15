@@ -18,8 +18,8 @@ import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.forms.client.ui.CForm;
-import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
-import com.pyx4j.site.client.ui.prime.form.FieldDecoratorBuilder;
+import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
+import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.widgets.client.dialog.OkCancelDialog;
 
 import com.propertyvista.crm.rpc.dto.ScheduleDataDTO;
@@ -40,12 +40,12 @@ public abstract class RunForDateDialog extends OkCancelDialog {
         content = new CForm<ScheduleDataDTO>(ScheduleDataDTO.class) {
             @Override
             protected IsWidget createContent() {
-                TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel();
+                FormPanel formPanel = new FormPanel(this);
 
-                main.setWidget(1, 0, inject(proto().date(), new FieldDecoratorBuilder(10).labelWidth(7).build()));
+                formPanel.append(Location.Left, proto().date()).decorate().componentWidth(120).labelWidth(84);
 //                    main.setWidget(2, 0, inject(proto().time(), new DecoratorBuilder(10).labelWidth(7).build());
 
-                return main;
+                return formPanel;
             }
 
             @Override

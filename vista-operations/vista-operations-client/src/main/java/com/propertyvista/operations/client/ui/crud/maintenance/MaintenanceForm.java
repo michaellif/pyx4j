@@ -19,9 +19,9 @@ import java.util.EnumSet;
 
 import com.pyx4j.forms.client.ui.CBooleanLabel;
 import com.pyx4j.forms.client.ui.CComboBox;
-import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
+import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
+import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.ui.prime.form.FieldDecoratorBuilder;
 import com.pyx4j.site.client.ui.prime.form.IForm;
 
 import com.propertyvista.operations.client.ui.crud.OperationsEntityForm;
@@ -35,18 +35,17 @@ public class MaintenanceForm extends OperationsEntityForm<VistaSystemMaintenance
     public MaintenanceForm(IForm<VistaSystemMaintenanceState> view) {
         super(VistaSystemMaintenanceState.class, view);
 
-        TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel();
+        FormPanel formPanel = new FormPanel(this);
 
-        int row = -1;
-        content.setWidget(++row, 0, inject(proto().systemIdentification(), new FieldDecoratorBuilder(10).build()));
-        content.setWidget(row, 1, inject(proto().startDate(), new FieldDecoratorBuilder(10).build()));
-        content.setWidget(++row, 0, inject(proto().inEffect(), new CBooleanLabel(), new FieldDecoratorBuilder().build()));
-        content.setWidget(row, 1, inject(proto().startTime(), new FieldDecoratorBuilder(10).build()));
-        content.setWidget(++row, 0, inject(proto().type(), new FieldDecoratorBuilder(10).build()));
-        content.setWidget(row, 1, inject(proto().gracePeriod(), new FieldDecoratorBuilder(10).build()));
-        content.setWidget(++row, 0, inject(proto().externalConnections(), new FieldDecoratorBuilder(10).build()));
-        content.setWidget(row, 1, inject(proto().duration(), new FieldDecoratorBuilder(10).build()));
-        content.setWidget(++row, 0, 2, inject(proto().message(), new FieldDecoratorBuilder(true).build()));
+        formPanel.append(Location.Left, proto().systemIdentification()).decorate().componentWidth(120);
+        formPanel.append(Location.Right, proto().startDate()).decorate().componentWidth(120);
+        formPanel.append(Location.Left, proto().inEffect(), new CBooleanLabel()).decorate();
+        formPanel.append(Location.Right, proto().startTime()).decorate().componentWidth(120);
+        formPanel.append(Location.Left, proto().type()).decorate().componentWidth(120);
+        formPanel.append(Location.Right, proto().gracePeriod()).decorate().componentWidth(120);
+        formPanel.append(Location.Left, proto().externalConnections()).decorate().componentWidth(120);
+        formPanel.append(Location.Right, proto().duration()).decorate().componentWidth(120);
+        formPanel.append(Location.Dual, proto().message()).decorate();
 
         Collection<String> opt = new ArrayList<String>();
         for (VistaSystemIdentification i : EnumSet.allOf(VistaSystemIdentification.class)) {
@@ -54,17 +53,16 @@ public class MaintenanceForm extends OperationsEntityForm<VistaSystemMaintenance
         }
         ((CComboBox<String>) get(proto().systemIdentification())).setOptions(opt);
 
-        selectTab(addTab(content, i18n.tr("General")));
+        selectTab(addTab(formPanel, i18n.tr("General")));
 
-        TwoColumnFlexFormPanel tenantSureMaintenanceTab = new TwoColumnFlexFormPanel();
-        row = -1;
-        tenantSureMaintenanceTab.setWidget(++row, 0, 2, inject(proto().enableTenantSureMaintenance(), new FieldDecoratorBuilder(5, true).build()));
-        tenantSureMaintenanceTab.setWidget(++row, 0, 2, inject(proto().enableFundsTransferMaintenance(), new FieldDecoratorBuilder(5, true).build()));
-        tenantSureMaintenanceTab.setWidget(++row, 0, 2, inject(proto().enableCreditCardMaintenance(), new FieldDecoratorBuilder(5, true).build()));
-        tenantSureMaintenanceTab
-                .setWidget(++row, 0, 2, inject(proto().enableCreditCardConvenienceFeeMaintenance(), new FieldDecoratorBuilder(5, true).build()));
-        tenantSureMaintenanceTab.setWidget(++row, 0, 2, inject(proto().enableInteracMaintenance(), new FieldDecoratorBuilder(5, true).build()));
-        tenantSureMaintenanceTab.setWidget(++row, 0, 2, inject(proto().enableEquifaxMaintenance(), new FieldDecoratorBuilder(5, true).build()));
+        FormPanel tenantSureMaintenanceTab = new FormPanel(this);
+
+        tenantSureMaintenanceTab.append(Location.Dual, proto().enableTenantSureMaintenance()).decorate().componentWidth(60);
+        tenantSureMaintenanceTab.append(Location.Dual, proto().enableFundsTransferMaintenance()).decorate().componentWidth(60);
+        tenantSureMaintenanceTab.append(Location.Dual, proto().enableCreditCardMaintenance()).decorate().componentWidth(60);
+        tenantSureMaintenanceTab.append(Location.Dual, proto().enableCreditCardConvenienceFeeMaintenance()).decorate().componentWidth(60);
+        tenantSureMaintenanceTab.append(Location.Dual, proto().enableInteracMaintenance()).decorate().componentWidth(60);
+        tenantSureMaintenanceTab.append(Location.Dual, proto().enableEquifaxMaintenance()).decorate().componentWidth(60);
 
         addTab(tenantSureMaintenanceTab, i18n.tr("Vista Interfaces"));
 
