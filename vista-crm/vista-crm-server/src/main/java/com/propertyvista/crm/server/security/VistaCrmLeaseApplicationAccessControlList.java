@@ -20,6 +20,8 @@ import static com.propertyvista.domain.security.VistaCrmBehavior.ApplicationDeci
 import static com.propertyvista.domain.security.VistaCrmBehavior.ApplicationFull;
 import static com.propertyvista.domain.security.VistaCrmBehavior.ApplicationVerifyDoc;
 import static com.pyx4j.entity.security.AbstractCRUDPermission.ALL;
+import static com.pyx4j.entity.security.AbstractCRUDPermission.READ;
+import static com.pyx4j.entity.security.AbstractCRUDPermission.UPDATE;
 
 import java.util.List;
 
@@ -29,41 +31,42 @@ import com.pyx4j.security.shared.ActionPermission;
 
 import com.propertyvista.crm.rpc.services.lease.ac.ApplicationDecisionADC;
 import com.propertyvista.crm.rpc.services.lease.ac.ApplicationDecisionMoreInfo;
-import com.propertyvista.crm.rpc.services.lease.ac.ApplicationStartOnlineApplication;
+import com.propertyvista.crm.rpc.services.lease.ac.ApplicationDocumentSigning;
 import com.propertyvista.domain.tenant.lead.Lead;
 import com.propertyvista.domain.tenant.prospect.LeaseApplicationDocument;
 import com.propertyvista.dto.LeaseApplicationDTO;
 import com.propertyvista.dto.LeaseTermDTO;
 import com.propertyvista.dto.TenantFinancialDTO;
 
-public class VistaCrmLeaseApllicationAccessControlList extends UIAclBuilder {
+public class VistaCrmLeaseApplicationAccessControlList extends UIAclBuilder {
 
-    VistaCrmLeaseApllicationAccessControlList() {
+    VistaCrmLeaseApplicationAccessControlList() {
 
-        // Application: Basic
-        {
-            List<Class<? extends IEntity>> entities = entities(LeaseApplicationDTO.class, LeaseTermDTO.class, Lead.class);
-            grant(ApplicationBasic, entities, ALL);
-
-            grant(ApplicationBasic, new ActionPermission(ApplicationStartOnlineApplication.class));
-        }
-
-        // Application: Verify Doc
-        {
-            List<Class<? extends IEntity>> entities = entities(LeaseApplicationDTO.class, LeaseApplicationDocument.class);
-            grant(ApplicationVerifyDoc, entities, ALL);
-        }
-
-        // Application: Full
-        {
-            List<Class<? extends IEntity>> entities = entities(LeaseApplicationDTO.class, LeaseTermDTO.class, Lead.class, TenantFinancialDTO.class,
-                    LeaseApplicationDocument.class);
+        {// Lead:
+            List<Class<? extends IEntity>> entities = entities(Lead.class);
+            grant(ApplicationBasic, entities, READ | UPDATE);
             grant(ApplicationFull, entities, ALL);
-
-            grant(ApplicationFull, new ActionPermission(ApplicationStartOnlineApplication.class));
-
-            grant(ApplicationFull, ApplicationDecisionAll);
         }
+
+        {// Application(Term) itself:
+            List<Class<? extends IEntity>> entities = entities(LeaseApplicationDTO.class, LeaseTermDTO.class);
+            grant(ApplicationBasic, entities, ALL);
+            grant(ApplicationFull, entities, ALL);
+            grant(ApplicationVerifyDoc, entities, READ | UPDATE);
+        }
+
+        {// Financial:
+            List<Class<? extends IEntity>> entities = entities(TenantFinancialDTO.class);
+            grant(ApplicationFull, entities, READ);
+        }
+
+        // Application Documents:
+        grant(ApplicationFull, LeaseApplicationDocument.class, READ | UPDATE);
+        grant(ApplicationVerifyDoc, LeaseApplicationDocument.class, READ | UPDATE);
+        // signing Action:
+        grant(ApplicationBasic, new ActionPermission(ApplicationDocumentSigning.class));
+        grant(ApplicationFull, new ActionPermission(ApplicationDocumentSigning.class));
+        grant(ApplicationVerifyDoc, new ActionPermission(ApplicationDocumentSigning.class));
 
         // Application Decisions:
         grant(ApplicationFull, new ActionPermission(ApplicationDecisionADC.class));

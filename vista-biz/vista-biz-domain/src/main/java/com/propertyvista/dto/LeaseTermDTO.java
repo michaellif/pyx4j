@@ -20,6 +20,7 @@ import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.annotations.ExtendsBO;
 import com.pyx4j.entity.annotations.Format;
+import com.pyx4j.entity.annotations.SecurityEnabled;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.core.IList;
@@ -32,6 +33,7 @@ import com.propertyvista.domain.tenant.lease.LeaseTerm;
 
 @Transient
 @ExtendsBO
+@SecurityEnabled
 public interface LeaseTermDTO extends LeaseTerm {
 
     // newly created parent (lease/application):

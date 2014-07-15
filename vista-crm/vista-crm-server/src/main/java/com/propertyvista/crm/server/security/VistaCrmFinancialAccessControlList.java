@@ -46,6 +46,7 @@ import com.propertyvista.domain.security.VistaCrmBehavior;
 import com.propertyvista.domain.tenant.lease.LeaseAdjustment;
 import com.propertyvista.dto.DepositLifecycleDTO;
 import com.propertyvista.dto.PaymentRecordDTO;
+import com.propertyvista.dto.TenantFinancialDTO;
 import com.propertyvista.dto.TransactionHistoryDTO;
 
 public class VistaCrmFinancialAccessControlList extends UIAclBuilder {
@@ -81,6 +82,8 @@ public class VistaCrmFinancialAccessControlList extends UIAclBuilder {
         grant(FinancialPayments, LeaseAdjustment.class, READ);
         grant(FinancialPayments, DepositLifecycleDTO.class, READ);
 
+        grant(FinancialPayments, TenantFinancialDTO.class, READ);
+
         // ------ Financial: Full
         grant(FinancialFull, VistaCrmBehavior.FinancialMoneyIN);
         grant(FinancialFull, VistaCrmBehavior.FinancialAggregatedTransfer);
@@ -93,5 +96,7 @@ public class VistaCrmFinancialAccessControlList extends UIAclBuilder {
 
         grant(FinancialFull, LeaseAdjustment.class, ALL);
         grant(FinancialFull, DepositLifecycleDTO.class, ALL);
+
+        grant(FinancialFull, TenantFinancialDTO.class, READ);
     }
 }

@@ -31,8 +31,8 @@ public class VistaCrmCreditCheckAccessControlList extends UIAclBuilder {
         grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(CreditCheckStatusService.class));
 
         grant(VistaCrmBehavior.CreditCheckBasic, new ActionPermission(CreditCheckRun.class));
-
         grant(VistaCrmBehavior.CreditCheckFull, new ActionPermission(CreditCheckRun.class));
+
         grant(VistaCrmBehavior.CreditCheckFull, new ActionPermission(CreditCheckViewReport.class));
         grant(VistaCrmBehavior.CreditCheckFull, new IServiceExecutePermission(CustomerCreditCheckLongReportService.class));
     }

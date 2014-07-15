@@ -56,6 +56,7 @@ import com.propertyvista.crm.rpc.dto.LeaseApplicationActionDTO.Action;
 import com.propertyvista.crm.rpc.services.lease.LeaseApplicationDocumentUploadService;
 import com.propertyvista.crm.rpc.services.lease.ac.ApplicationDecisionADC;
 import com.propertyvista.crm.rpc.services.lease.ac.ApplicationDecisionMoreInfo;
+import com.propertyvista.crm.rpc.services.lease.ac.ApplicationDocumentSigning;
 import com.propertyvista.crm.rpc.services.lease.ac.ApplicationStartOnlineApplication;
 import com.propertyvista.crm.rpc.services.lease.ac.CreditCheckRun;
 import com.propertyvista.domain.customizations.CountryOfOperation;
@@ -128,7 +129,7 @@ public class LeaseApplicationViewerViewImpl extends LeaseViewerViewImplBase<Leas
         }));
 
         documentsButton.setMenu(applicationDocumentMenu);
-        documentsButton.setPermission(DataModelPermission.permissionRead(LeaseApplicationDocument.class));
+        documentsButton.setPermission(new ActionPermission(ApplicationDocumentSigning.class));
         addHeaderToolbarItem(documentsButton.asWidget());
 
         // ------------------------------------------------------------------------------------------------------------
@@ -138,7 +139,7 @@ public class LeaseApplicationViewerViewImpl extends LeaseViewerViewImplBase<Leas
             public void execute() {
                 ((LeaseViewerViewBase.Presenter) getPresenter()).editTerm(getForm().getValue().currentTerm());
             }
-        }, DataModelPermission.permissionUpdate(LeaseApplicationActionDTO.class));
+        }, DataModelPermission.permissionUpdate(LeaseApplicationDTO.class));
         addHeaderToolbarItem(editButton.asWidget());
 
         // Views:

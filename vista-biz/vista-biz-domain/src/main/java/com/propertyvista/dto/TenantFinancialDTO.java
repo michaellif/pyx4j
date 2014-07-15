@@ -18,6 +18,7 @@ import java.math.BigDecimal;
 import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.annotations.Format;
+import com.pyx4j.entity.annotations.SecurityEnabled;
 import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.ToStringFormat;
 import com.pyx4j.entity.annotations.Transient;
@@ -31,6 +32,7 @@ import com.propertyvista.domain.tenant.income.CustomerScreeningPersonalAsset;
 import com.propertyvista.domain.tenant.lease.LeaseTermGuarantor;
 
 @Transient
+@SecurityEnabled
 @ToStringFormat("{0}{1,choice,null#|!null#, ${1}}{2,choice,null#|!null#, {2}}{3,choice,null#|!null#, {3}}")
 public interface TenantFinancialDTO extends IEntity {
 

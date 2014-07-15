@@ -667,7 +667,7 @@ public class VistaCrmAccessControlList extends ServletContainerAclBuilder {
         merge(new VistaCrmFinancialAccessControlList());
         merge(new VistaCrmCreditCheckAccessControlList());
 
-        merge(new VistaCrmLeaseApllicationAccessControlList());
+        merge(new VistaCrmLeaseApplicationAccessControlList());
         merge(new VistaCrmLeaseAccessControlList());
         merge(new VistaCrmMaintenanceAccessControlList());
 
