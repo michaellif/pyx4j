@@ -18,11 +18,9 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.pyx4j.entity.core.IObject;
 import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.CRichTextArea;
-import com.pyx4j.forms.client.ui.panels.FormPanel;
-import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
+import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.ui.prime.form.FieldDecoratorBuilder;
 import com.pyx4j.site.client.ui.prime.form.IForm;
 
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
@@ -37,13 +35,12 @@ public class VistaTermsForm extends OperationsEntityForm<VistaTerms> {
     public VistaTermsForm(IForm<VistaTerms> view) {
         super(VistaTerms.class, view);
 
-        TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel();
+        FormPanel formPanel = new FormPanel(this);
 
-        int row = -1;
-        main.setWidget(++row, 0, 2, inject(proto().version().caption(), new FieldDecoratorBuilder(10, true).build()));
-        main.setWidget(++row, 0, 2, inject(proto().version().document(), new VistaTermsDocumentFolder()));
+        formPanel.append(Location.Dual, proto().version().caption()).decorate().componentWidth(160);
+        formPanel.append(Location.Dual, proto().version().document(), new VistaTermsDocumentFolder());
 
-        selectTab(addTab(main, i18n.tr("General")));
+        selectTab(addTab(formPanel, i18n.tr("General")));
         setTabBarVisible(false);
     }
 
