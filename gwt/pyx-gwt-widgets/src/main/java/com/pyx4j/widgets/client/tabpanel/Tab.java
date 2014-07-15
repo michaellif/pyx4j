@@ -41,7 +41,9 @@ public class Tab extends LayoutPanel {
 
     private boolean visible = true;
 
-    private final Permission[] permissions;
+    private Permission[] permissionsVisible;
+
+    private Permission[] permissionsEnabled;
 
     private String warning = null;
 
@@ -55,7 +57,7 @@ public class Tab extends LayoutPanel {
         if (contentPane != null) {
             add(contentPane);
         }
-        this.permissions = permissions;
+        this.permissionsVisible = permissions;
         setTabVisible(true);
     }
 
@@ -89,7 +91,7 @@ public class Tab extends LayoutPanel {
     }
 
     public void setTabVisible(boolean visible) {
-        visible = visible && SecurityController.check(permissions);
+        visible = visible && ((permissionsVisible == null) || SecurityController.check(permissionsVisible));
         this.visible = visible;
         tabBarItem.onVisible(visible);
         if (tabPanel != null) {
@@ -101,13 +103,24 @@ public class Tab extends LayoutPanel {
         return visible;
     }
 
+    public void setPermissionVisible(Permission... permission) {
+        this.permissionsVisible = permission;
+        setTabVisible(isTabVisible());
+    }
+
     public void setTabEnabled(boolean enabled) {
+        enabled = enabled && ((permissionsEnabled == null) || SecurityController.check(permissionsEnabled));
         this.enabled = enabled;
         tabBarItem.onEnabled(enabled);
     }
 
     public boolean isTabEnabled() {
         return enabled;
+    }
+
+    public void setPermissionEnabled(Permission... permission) {
+        this.permissionsEnabled = permission;
+        setTabEnabled(isTabEnabled());
     }
 
     public void setTabWarning(String message) {
