@@ -16,9 +16,9 @@ package com.propertyvista.operations.client.ui.crud.simulator.dbp;
 import com.google.gwt.user.client.Command;
 
 import com.pyx4j.forms.client.ui.CEntityLabel;
-import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
+import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
+import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.ui.prime.form.FieldDecoratorBuilder;
 import com.pyx4j.site.client.ui.prime.form.IForm;
 
 import com.propertyvista.operations.client.ui.crud.OperationsEntityForm;
@@ -32,13 +32,12 @@ public class DirectDebitSimRecordForm extends OperationsEntityForm<DirectDebitSi
     public DirectDebitSimRecordForm(IForm<DirectDebitSimRecord> view) {
         super(DirectDebitSimRecord.class, view);
 
-        TwoColumnFlexFormPanel formPanel = new TwoColumnFlexFormPanel();
-        int row = -1;
+        FormPanel formPanel = new FormPanel(this);
 
-        formPanel.setWidget(++row, 0, 2, inject(proto().accountNumber(), new FieldDecoratorBuilder(20, true).build()));
-        formPanel.setWidget(++row, 0, 2, inject(proto().amount(), new FieldDecoratorBuilder(20, true).build()));
-        formPanel.setWidget(++row, 0, 2, inject(proto().paymentReferenceNumber(), new FieldDecoratorBuilder(20, true).build()));
-        formPanel.setWidget(++row, 0, 2, inject(proto().customerName(), new FieldDecoratorBuilder(20, true).build()));
+        formPanel.append(Location.Dual, proto().accountNumber()).decorate().componentWidth(240);
+        formPanel.append(Location.Dual, proto().amount()).decorate().componentWidth(240);
+        formPanel.append(Location.Dual, proto().paymentReferenceNumber()).decorate().componentWidth(240);
+        formPanel.append(Location.Dual, proto().customerName()).decorate().componentWidth(240);
 
         CEntityLabel<DirectDebitSimFile> fileLink = new CEntityLabel<DirectDebitSimFile>();
         fileLink.setNavigationCommand(new Command() {
@@ -47,7 +46,7 @@ public class DirectDebitSimRecordForm extends OperationsEntityForm<DirectDebitSi
                 onGoToFile();
             }
         });
-        formPanel.setWidget(++row, 0, 2, inject(proto().file(), fileLink, new FieldDecoratorBuilder(true).build()));
+        formPanel.append(Location.Dual, proto().file(), fileLink).decorate();
 
         setTabBarVisible(false);
         selectTab(addTab(formPanel, i18n.tr("General")));
