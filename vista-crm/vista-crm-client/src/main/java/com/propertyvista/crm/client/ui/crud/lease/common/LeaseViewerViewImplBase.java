@@ -27,6 +27,7 @@ import com.pyx4j.entity.core.criterion.PropertyCriterion;
 import com.pyx4j.entity.security.DataModelPermission;
 import com.pyx4j.forms.client.ui.CIntegerField;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.security.shared.ActionPermission;
 import com.pyx4j.site.client.ui.prime.lister.ILister;
 import com.pyx4j.site.client.ui.prime.lister.ListerInternalViewImplBase;
 import com.pyx4j.widgets.client.Button;
@@ -39,6 +40,7 @@ import com.propertyvista.crm.client.ui.crud.CrmViewerViewImplBase;
 import com.propertyvista.crm.client.ui.crud.lease.LeaseViewerViewImpl;
 import com.propertyvista.crm.client.visor.paps.PreauthorizedPaymentsVisorController;
 import com.propertyvista.crm.rpc.dto.tenant.PreauthorizedPaymentsDTO;
+import com.propertyvista.crm.rpc.services.lease.ac.ReserveUnit;
 import com.propertyvista.domain.financial.BillingAccount;
 import com.propertyvista.domain.payment.AutopayAgreement;
 import com.propertyvista.domain.tenant.lease.Lease;
@@ -111,19 +113,19 @@ public class LeaseViewerViewImplBase<DTO extends LeaseDTO> extends CrmViewerView
 
         // Actions:
 
-        addAction(reserveUnit = new MenuItem(i18n.tr("Reserve Unit"), new Command() {
+        addAction(reserveUnit = new SecureMenuItem(i18n.tr("Reserve Unit"), new Command() {
             @Override
             public void execute() {
                 reserveUnitExecuter();
             }
-        }));
+        }, new ActionPermission(ReserveUnit.class)));
 
-        addAction(unreserveUnit = new MenuItem(i18n.tr("Release Unit"), new Command() {
+        addAction(unreserveUnit = new SecureMenuItem(i18n.tr("Release Unit"), new Command() {
             @Override
             public void execute() {
                 ((LeaseViewerViewBase.Presenter) getPresenter()).releaseUnit();
             }
-        }));
+        }, new ActionPermission(ReserveUnit.class)));
 
         newPaymentAction = new SecureMenuItem(i18n.tr("Make Payment"), new Command() {
             @Override

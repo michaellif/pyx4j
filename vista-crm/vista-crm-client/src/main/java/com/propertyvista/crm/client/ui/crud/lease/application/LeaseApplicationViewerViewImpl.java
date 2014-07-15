@@ -57,7 +57,7 @@ import com.propertyvista.crm.rpc.services.lease.LeaseApplicationDocumentUploadSe
 import com.propertyvista.crm.rpc.services.lease.ac.ApplicationDecisionADC;
 import com.propertyvista.crm.rpc.services.lease.ac.ApplicationDecisionMoreInfo;
 import com.propertyvista.crm.rpc.services.lease.ac.ApplicationDocumentSigning;
-import com.propertyvista.crm.rpc.services.lease.ac.ApplicationStartOnlineApplication;
+import com.propertyvista.crm.rpc.services.lease.ac.ApplicationOnlineApplication;
 import com.propertyvista.crm.rpc.services.lease.ac.CreditCheckRun;
 import com.propertyvista.domain.customizations.CountryOfOperation;
 import com.propertyvista.domain.pmc.PmcEquifaxStatus;
@@ -166,7 +166,7 @@ public class LeaseApplicationViewerViewImpl extends LeaseViewerViewImplBase<Leas
             public void execute() {
                 ((LeaseApplicationViewerView.Presenter) getPresenter()).startOnlineApplication();
             }
-        }, new ActionPermission(ApplicationStartOnlineApplication.class));
+        }, new ActionPermission(ApplicationOnlineApplication.class));
         if (VistaFeatures.instance().onlineApplication()) {
             addAction(createOnlineApplication);
         }
@@ -176,7 +176,7 @@ public class LeaseApplicationViewerViewImpl extends LeaseViewerViewImplBase<Leas
             public void execute() {
                 ((LeaseApplicationViewerView.Presenter) getPresenter()).cancelOnlineApplication();
             }
-        }, new ActionPermission(ApplicationStartOnlineApplication.class));
+        }, new ActionPermission(ApplicationOnlineApplication.class));
         if (VistaFeatures.instance().onlineApplication()) {
             addAction(cancelOnlineApplication);
         }
@@ -186,7 +186,7 @@ public class LeaseApplicationViewerViewImpl extends LeaseViewerViewImplBase<Leas
             public void execute() {
                 inviteActionExecuter();
             }
-        }, new ActionPermission(ApplicationStartOnlineApplication.class));
+        }, new ActionPermission(ApplicationOnlineApplication.class));
         if (VistaFeatures.instance().onlineApplication()) {
             addAction(inviteAction);
         }
