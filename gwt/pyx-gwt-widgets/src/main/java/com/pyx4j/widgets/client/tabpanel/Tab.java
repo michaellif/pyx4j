@@ -24,6 +24,9 @@ import com.google.gwt.resources.client.ImageResource;
 import com.google.gwt.user.client.ui.LayoutPanel;
 import com.google.gwt.user.client.ui.Widget;
 
+import com.pyx4j.security.shared.Permission;
+import com.pyx4j.security.shared.SecurityController;
+
 public class Tab extends LayoutPanel {
 
     private String tabTitle;
@@ -38,18 +41,22 @@ public class Tab extends LayoutPanel {
 
     private boolean visible = true;
 
+    private final Permission[] permissions;
+
     private String warning = null;
 
     public Tab(ImageResource tabImage, boolean closable) {
         this(null, null, tabImage, closable);
     }
 
-    public Tab(Widget contentPane, String tabTitle, ImageResource tabImage, boolean closable) {
+    public Tab(Widget contentPane, String tabTitle, ImageResource tabImage, boolean closable, Permission... permissions) {
         tabBarItem = new TabBarItem(this, tabImage, closable);
         setTabTitle(tabTitle);
         if (contentPane != null) {
             add(contentPane);
         }
+        this.permissions = permissions;
+        setTabVisible(true);
     }
 
     public void setContentPane(Widget contentPane) {
@@ -82,6 +89,7 @@ public class Tab extends LayoutPanel {
     }
 
     public void setTabVisible(boolean visible) {
+        visible = visible && SecurityController.check(permissions);
         this.visible = visible;
         tabBarItem.onVisible(visible);
         if (tabPanel != null) {

@@ -36,6 +36,7 @@ import com.pyx4j.forms.client.events.PropertyChangeHandler;
 import com.pyx4j.forms.client.ui.panels.FlexFormPanelTheme;
 import com.pyx4j.forms.client.validators.ValidatableWidget;
 import com.pyx4j.forms.client.validators.ValidationResults;
+import com.pyx4j.security.shared.Permission;
 import com.pyx4j.widgets.client.tabpanel.Tab;
 import com.pyx4j.widgets.client.tabpanel.TabPanel;
 
@@ -88,12 +89,12 @@ public class CTabbedEntityForm<E extends IEntity> extends CForm<E> {
         return tabPanel;
     }
 
-    public Tab addTab(IsWidget content, String tabTitle) {
+    public Tab addTab(IsWidget content, String tabTitle, Permission... permissions) {
         Tab tab = null;
         SimplePanel containerPanel = new SimplePanel(content.asWidget());
         containerPanel.setStyleName(CComponentTheme.StyleName.TabbedFormTab.name());
         ScrollPanel scroll = new ScrollPanel(containerPanel);
-        tab = new Tab(scroll, tabTitle, null, false);
+        tab = new Tab(scroll, tabTitle, null, false, permissions);
         tabPanel.addTab(tab);
         return tab;
     }
