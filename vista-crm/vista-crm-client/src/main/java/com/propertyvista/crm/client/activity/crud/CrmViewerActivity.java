@@ -56,7 +56,7 @@ public class CrmViewerActivity<E extends IEntity> extends AbstractViewerActivity
     }
 
     protected HasNotesAndAttachments createNotesParentId() {
-        IEntity reflectionCapableInstance = EntityFactory.createIdentityStub(entityClass, getEntityId());
+        IEntity reflectionCapableInstance = EntityFactory.createIdentityStub(EntityFactory.getEntityMeta(entityClass).getBOClass(), getEntityId());
         if (reflectionCapableInstance.isInstanceOf(HasNotesAndAttachments.class)) {
             return (HasNotesAndAttachments) reflectionCapableInstance;
         } else {
