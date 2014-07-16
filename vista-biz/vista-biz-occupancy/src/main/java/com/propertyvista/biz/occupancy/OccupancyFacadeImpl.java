@@ -319,7 +319,7 @@ public class OccupancyFacadeImpl implements OccupancyFacade {
         Lease lease = leaseId.duplicate();
         LogicalDate now = SystemDateManager.getLogicalDate();
         Persistence.ensureRetrieve(lease.unit(), AttachLevel.Attached);
-        List<AptUnitOccupancySegment> occupancy = AptUnitOccupancyManagerHelper.retrieveOccupancy(lease.unit().getPrimaryKey(), now);
+        List<AptUnitOccupancySegment> occupancy = AptUnitOccupancyManagerHelper.retrieveOccupancy(lease.unit().getPrimaryKey(), now, true);
         AptUnitOccupancySegment segmentToOccupy = null;
 
         Pair<Date, Lease> reservation = isReserved(lease.unit().getPrimaryKey());
@@ -350,7 +350,6 @@ public class OccupancyFacadeImpl implements OccupancyFacade {
             });
 
             new AvailabilityReportManager(lease.unit().getPrimaryKey()).generateUnitAvailablity(now);
-            return;
         } else {
             throw new IllegalStateException("'approveLease' operation failed: a 'reserved' or 'available' segment was not found");
         }
@@ -370,10 +369,8 @@ public class OccupancyFacadeImpl implements OccupancyFacade {
 
             EntityQueryCriteria<AptUnitOccupancySegment> prevCriteria = EntityQueryCriteria.create(AptUnitOccupancySegment.class);
             prevCriteria.eq(criteria.proto().status(), AptUnitOccupancySegment.Status.available);
-            prevCriteria.eq(criteria.proto().lease(), leaseId);
             prevCriteria.eq(criteria.proto().dateTo(), DateUtils.daysAdd(segment.dateFrom().getValue(), -1));
             AptUnitOccupancySegment prevSegment = Persistence.service().retrieve(prevCriteria);
-
             if (prevSegment != null) {
                 segment.dateFrom().setValue(prevSegment.dateFrom().getValue());
                 Persistence.service().delete(prevSegment);

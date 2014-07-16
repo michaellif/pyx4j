@@ -151,16 +151,37 @@ public class AptUnitOccupancyManagerHelper {
      * @return
      */
     public static List<AptUnitOccupancySegment> retrieveOccupancy(Key unitPk, LogicalDate dateContainedByTheFirstSegment) {
+        return retrieveOccupancy(unitPk, dateContainedByTheFirstSegment, false);
+    }
+
+    /**
+     * 
+     * @param unit
+     * @param dateContainedByTheFirstSegment
+     *            the first segment in the retrieved list must contain this date
+     * @param dateFromDescending
+     *            true for sorting by dateFrom in reverse order, false - ascending order
+     * @return
+     */
+    public static List<AptUnitOccupancySegment> retrieveOccupancy(Key unitPk, LogicalDate dateContainedByTheFirstSegment, boolean dateFromDescending) {
         EntityQueryCriteria<AptUnitOccupancySegment> criteria = new EntityQueryCriteria<AptUnitOccupancySegment>(AptUnitOccupancySegment.class);
+
         criteria.add(PropertyCriterion.eq(criteria.proto().unit().id(), unitPk));
         criteria.add(PropertyCriterion.ge(criteria.proto().dateTo(), dateContainedByTheFirstSegment));
-        criteria.asc(criteria.proto().dateFrom());
+        if (dateFromDescending) {
+            criteria.desc(criteria.proto().dateFrom());
+        } else {
+            criteria.asc(criteria.proto().dateFrom());
+        }
+
         return Persistence.service().query(criteria);
     }
 
     public static boolean isOccupancyListEmpty(Key unitPk) {
         EntityQueryCriteria<AptUnitOccupancySegment> criteria = new EntityQueryCriteria<AptUnitOccupancySegment>(AptUnitOccupancySegment.class);
+
         criteria.add(PropertyCriterion.eq(criteria.proto().unit().id(), unitPk));
+
         return !Persistence.service().exists(criteria);
     }
 
@@ -176,8 +197,8 @@ public class AptUnitOccupancyManagerHelper {
     }
 
     public static AptUnitOccupancySegment retrieveOccupancySegment(Key unitId, LogicalDate contained) {
-
         EntityQueryCriteria<AptUnitOccupancySegment> criteria = new EntityQueryCriteria<AptUnitOccupancySegment>(AptUnitOccupancySegment.class);
+
         criteria.add(PropertyCriterion.eq(criteria.proto().unit(), unitId));
         criteria.add(PropertyCriterion.le(criteria.proto().dateFrom(), contained));
         criteria.add(PropertyCriterion.ge(criteria.proto().dateTo(), contained));
@@ -198,9 +219,7 @@ public class AptUnitOccupancyManagerHelper {
     }
 
     public static interface SegmentPredicate {
-
         boolean isMergeApplicableTo(AptUnitOccupancySegment segment);
-
     }
 
     public static interface MergeHandler {
@@ -208,7 +227,5 @@ public class AptUnitOccupancyManagerHelper {
         boolean isMergeable(AptUnitOccupancySegment s1, AptUnitOccupancySegment s2);
 
         void onMerged(AptUnitOccupancySegment merged, AptUnitOccupancySegment s1, AptUnitOccupancySegment s2);
-
     }
-
 }
