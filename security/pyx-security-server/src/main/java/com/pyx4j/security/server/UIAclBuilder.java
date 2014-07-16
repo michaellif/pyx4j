@@ -25,6 +25,7 @@ import java.util.List;
 
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.security.DataModelPermission;
+import com.pyx4j.entity.security.InstanceAccess;
 import com.pyx4j.security.annotations.ActionId;
 import com.pyx4j.security.shared.ActionPermission;
 import com.pyx4j.security.shared.Behavior;
@@ -35,8 +36,16 @@ public class UIAclBuilder extends ServletContainerAclBuilder {
         grant(behavior, new ActionPermission(actionClass));
     }
 
+    protected void grant(Behavior behavior, Class<? extends ActionId> actionClass, InstanceAccess instanceAccess) {
+        grant(behavior, new ActionPermission(actionClass));
+    }
+
     protected void grant(Behavior behavior, Class<? extends IEntity> entityClass, int actions) {
         grant(behavior, DataModelPermission.create(entityClass, actions));
+    }
+
+    protected void grant(Behavior behavior, Class<? extends IEntity> entityClass, InstanceAccess instanceAccess, int actions) {
+        grant(behavior, DataModelPermission.create(entityClass, instanceAccess, actions));
     }
 
     protected void grant(Behavior behavior, Class<? extends IEntity> entityClass1, Class<? extends IEntity> entityClass2, int actions) {

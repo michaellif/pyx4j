@@ -26,6 +26,6 @@ import com.pyx4j.entity.core.IEntity;
 
 public interface InstanceAccess extends Serializable {
 
-    public boolean allow(IEntity entity);
+    public boolean allow(IEntity contextEntity);
 
 }

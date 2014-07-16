@@ -53,6 +53,8 @@ public abstract class AbstractViewerActivity<E extends IEntity> extends Abstract
 
     private int tabIndex;
 
+    private E populatedValue;
+
     public AbstractViewerActivity(Class<E> entityClass, CrudAppPlace place, IViewer<E> view, AbstractCrudService<E> service) {
         // development correctness checks:
         assert (view != null);
@@ -112,6 +114,7 @@ public abstract class AbstractViewerActivity<E extends IEntity> extends Abstract
     }
 
     protected void onDiscard() {
+        this.populatedValue = null;
         view.reset();
         view.setPresenter(null);
         view.hideVisor();
@@ -159,19 +162,19 @@ public abstract class AbstractViewerActivity<E extends IEntity> extends Abstract
         if (activeTab < 0) {
             activeTab = view.getActiveTab();
         }
+        populatedValue = result;
         view.populate(result);
         view.setActiveTab(activeTab);
     }
 
+    protected E getValue() {
+        return populatedValue;
+    }
+
     @Override
     public boolean canEdit() {
-        // TODO remove this if.
-        if (getEntityClass() == null) {
-            return true;
-        }
-
         if (EntityFactory.getEntityMeta(getEntityClass()).isAnnotationPresent(SecurityEnabled.class)) {
-            return SecurityController.check(DataModelPermission.permissionUpdate(getEntityClass()));
+            return SecurityController.check(DataModelPermission.permissionUpdate(getValue()));
         } else {
             return true;
         }
