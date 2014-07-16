@@ -592,6 +592,11 @@ public class MaintenanceRequestForm extends CrmEntityForm<MaintenanceRequestDTO>
         public boolean isValueEmpty() {
             return getValue() == null || getValue().isNull();
         }
+
+        @Override
+        protected String getDebugInfo() {
+            return "value=" + (getValue() == null ? "null" : getValue().getStringView()) + ";";
+        }
     }
 
     class StatusSelector extends CComboBox<MaintenanceRequestStatus> {
@@ -612,6 +617,11 @@ public class MaintenanceRequestForm extends CrmEntityForm<MaintenanceRequestDTO>
         @Override
         public boolean isValueEmpty() {
             return getValue() == null || getValue().isNull();
+        }
+
+        @Override
+        protected String getDebugInfo() {
+            return "value=" + (getValue() == null ? "null" : getValue().getStringView()) + ";";
         }
     }
 
