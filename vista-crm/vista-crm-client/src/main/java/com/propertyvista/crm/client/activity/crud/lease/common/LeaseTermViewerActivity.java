@@ -16,10 +16,8 @@ package com.propertyvista.crm.client.activity.crud.lease.common;
 import com.google.gwt.core.client.GWT;
 
 import com.pyx4j.commons.Key;
-import com.pyx4j.entity.security.DataModelPermission;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.rpc.shared.VoidSerializable;
-import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
 import com.propertyvista.crm.client.CrmSite;
@@ -38,11 +36,6 @@ public class LeaseTermViewerActivity extends CrmViewerActivity<LeaseTermDTO> imp
     public LeaseTermViewerActivity(CrudAppPlace place) {
         super(LeaseTermDTO.class, place, CrmSite.getViewFactory().getView(LeaseTermViewerView.class), GWT
                 .<LeaseTermCrudService> create(LeaseTermCrudService.class));
-    }
-
-    @Override
-    public boolean canEdit() {
-        return SecurityController.check(DataModelPermission.permissionUpdate(LeaseTermDTO.class));
     }
 
     @Override

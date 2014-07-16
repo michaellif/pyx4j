@@ -30,6 +30,7 @@ import com.pyx4j.security.shared.ActionPermission;
 import com.propertyvista.crm.rpc.dto.billing.BillDataDTO;
 import com.propertyvista.crm.rpc.dto.financial.AutoPayHistoryDTO;
 import com.propertyvista.crm.rpc.dto.tenant.PreauthorizedPaymentsDTO;
+import com.propertyvista.crm.rpc.security.LeaseTermEditOnLeaseInstanceAccess;
 import com.propertyvista.crm.rpc.services.financial.AutoPayHistoryCrudService;
 import com.propertyvista.crm.rpc.services.lease.ac.LeaseAgreementSigning;
 import com.propertyvista.crm.rpc.services.lease.ac.LeaseConfirmBill;
@@ -68,7 +69,8 @@ public class VistaCrmLeaseAccessControlList extends UIAclBuilder {
             List<Class<? extends IEntity>> entities = entities(LeaseDTO.class, LeaseTermDTO.class);
             grant(LeaseBasic, entities, READ);
             grant(LeaseAdvanced, entities, READ);
-            grant(LeaseFull, entities, ALL);
+            grant(LeaseFull, LeaseDTO.class, ALL);
+            grant(LeaseFull, LeaseTermDTO.class, new LeaseTermEditOnLeaseInstanceAccess(), ALL);
         }
 
         // ---- Legal/Documentation:

@@ -202,11 +202,11 @@ public class CrmViewerViewImplBase<E extends IEntity> extends AbstractViewer<E> 
         notesButton.setVisible(visible);
     }
 
-    public void setEditingVisible(boolean visible) {
+    public final void setEditingVisible(boolean visible) {
         if (editButton != null) {
-            editButton.setVisible(visible);
+            editButton.setVisible(visible && super.getPresenter().canEdit());
         } else if (editDraft != null) {
-            editDraft.setVisible(visible);
+            editDraft.setVisible(visible && super.getPresenter().canEdit());
         }
     }
 
@@ -269,7 +269,7 @@ public class CrmViewerViewImplBase<E extends IEntity> extends AbstractViewer<E> 
             setFinalizationVisible(((IVersionedEntity<?>) value).version().versionNumber().isNull());
         }
 
-        setEditingEnabled(super.getPresenter().canEdit());
+        setEditingVisible(true);
 
         viewsButton.setVisible(!viewsMenu.isMenuEmpty());
         actionsButton.setVisible(!actionsMenu.isMenuEmpty());

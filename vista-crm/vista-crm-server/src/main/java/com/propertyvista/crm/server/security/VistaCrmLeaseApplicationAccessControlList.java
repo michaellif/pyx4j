@@ -29,6 +29,7 @@ import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.security.server.UIAclBuilder;
 import com.pyx4j.security.shared.ActionPermission;
 
+import com.propertyvista.crm.rpc.security.LeaseTermEditOnApplicationInstanceAccess;
 import com.propertyvista.crm.rpc.services.lease.ac.ApplicationDecisionADC;
 import com.propertyvista.crm.rpc.services.lease.ac.ApplicationDecisionMoreInfo;
 import com.propertyvista.crm.rpc.services.lease.ac.ApplicationDocumentSigning;
@@ -51,10 +52,14 @@ public class VistaCrmLeaseApplicationAccessControlList extends UIAclBuilder {
         }
 
         {// Application(Term) itself:
-            List<Class<? extends IEntity>> entities = entities(LeaseApplicationDTO.class, LeaseTermDTO.class);
+            List<Class<? extends IEntity>> entities = entities(LeaseApplicationDTO.class);
             grant(ApplicationBasic, entities, ALL);
             grant(ApplicationFull, entities, ALL);
             grant(ApplicationVerifyDoc, entities, READ | UPDATE);
+
+            grant(ApplicationBasic, LeaseTermDTO.class, new LeaseTermEditOnApplicationInstanceAccess(), ALL);
+            grant(ApplicationFull, LeaseTermDTO.class, new LeaseTermEditOnApplicationInstanceAccess(), ALL);
+            grant(ApplicationVerifyDoc, LeaseTermDTO.class, new LeaseTermEditOnApplicationInstanceAccess(), READ | UPDATE);
         }
 
         {// Financial:
