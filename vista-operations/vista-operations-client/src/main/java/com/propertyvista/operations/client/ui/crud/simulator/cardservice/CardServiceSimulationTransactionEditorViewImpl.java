@@ -13,9 +13,8 @@
  */
 package com.propertyvista.operations.client.ui.crud.simulator.cardservice;
 
-import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
-import com.pyx4j.site.client.ui.prime.form.FieldDecoratorBuilder;
+import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.site.client.ui.prime.form.IForm;
 
 import com.propertyvista.operations.client.ui.components.OperationsEditorsComponentFactory;
@@ -35,14 +34,13 @@ public class CardServiceSimulationTransactionEditorViewImpl extends OperationsEd
 
             FormPanel formPanel = new FormPanel(this);
 
-            formPanel.append(Location.Left, inject(proto().card(), // 
-                    OperationsEditorsComponentFactory.createEntityHyperlink(CardServiceSimulationCard.class), new FieldDecoratorBuilder(18).build()));
+            formPanel.h1("Card Service Simulation");
+            formPanel.append(Location.Left, proto().card(), OperationsEditorsComponentFactory.createEntityHyperlink(CardServiceSimulationCard.class))
+                    .decorate().componentWidth(216);
 
             formPanel
-                    .append(Location.Left,
-                            inject(proto().merchant(), //
-                                    OperationsEditorsComponentFactory.createEntityHyperlink(CardServiceSimulationMerchantAccount.class),
-                                    new FieldDecoratorBuilder(18).build()));
+                    .append(Location.Left, proto().merchant(),
+                            OperationsEditorsComponentFactory.createEntityHyperlink(CardServiceSimulationMerchantAccount.class)).decorate().componentWidth(216);
 
             formPanel.append(Location.Left, proto().transactionType()).decorate();
             formPanel.append(Location.Left, proto().scheduledSimulatedResponce()).decorate();
@@ -55,6 +53,7 @@ public class CardServiceSimulationTransactionEditorViewImpl extends OperationsEd
             formPanel.append(Location.Left, proto().transactionDate()).decorate();
 
             selectTab(addTab(formPanel, "Card Service Simulation"));
+            setTabBarVisible(false);
         }
     }
 
