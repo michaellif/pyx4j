@@ -319,6 +319,10 @@ public class SuggestTextBox<E extends IEntity> extends Composite implements Wate
 
                 @Override
                 public void onKeyDown(KeyDownEvent event) {
+                    if (!display.isSuggestionListShowing()) {
+                        // ignore selection manipulation keys
+                        return;
+                    }
                     switch (event.getNativeKeyCode()) {
                     case KeyCodes.KEY_DOWN:
                         display.moveSelectionDown();
