@@ -23,6 +23,7 @@ import com.pyx4j.server.mail.MailMessage;
 import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.maintenance.MaintenanceRequest;
 import com.propertyvista.domain.payment.AutopayAgreement;
+import com.propertyvista.domain.person.Person;
 import com.propertyvista.domain.pmc.Pmc;
 import com.propertyvista.domain.security.CrmUser;
 import com.propertyvista.domain.security.OnboardingUser;
@@ -73,6 +74,8 @@ public interface CommunicationFacade {
     void sendTenantSurePaymentsResumedEmail(String tenantEmail);
 
     void sendTenantSureRenewalEmail(String tenantEmail, TenantSureInsurancePolicy policy);
+
+    void sendTenantSureCCExpiringEmail(Person tenant, String ccLastDigits, LogicalDate ccExpiry);
 
     void sendPaymentRejectedNotification(List<String> targetEmail, PaymentRecord paymentRecord, boolean applyNSF);
 

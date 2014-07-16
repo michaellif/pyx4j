@@ -41,6 +41,8 @@ public class PaymentsTenantSureProcess implements PmcProcess {
     public void executePmcJob(PmcProcessContext context) {
         ServerSideFactory.create(TenantSureProcessFacade.class).processPayments(context.getExecutionMonitor(),
                 DateUtils.daysAdd(new LogicalDate(context.getForDate()), -1));
+
+        ServerSideFactory.create(TenantSureProcessFacade.class).checkPaymentMethodAvailability(context.getExecutionMonitor(), context.getForDate());
     }
 
     @Override

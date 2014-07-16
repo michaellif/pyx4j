@@ -25,6 +25,7 @@ import com.pyx4j.site.rpc.AppPlaceInfo;
 
 import com.propertyvista.config.AbstractVistaServerSideConfiguration;
 import com.propertyvista.config.VistaDeployment;
+import com.propertyvista.domain.person.Person;
 import com.propertyvista.domain.security.common.VistaApplication;
 import com.propertyvista.domain.tenant.insurance.TenantSureInsurancePolicy;
 import com.propertyvista.portal.rpc.portal.resident.ResidentPortalSiteMap;
@@ -94,4 +95,20 @@ class MessageTemplatesTenantSure {
         return email;
     }
 
+    public static MailMessage createTenantSureCCExpiringEmail(Person tenant, String ccLastDigits, LogicalDate ccExpiry) {
+        MailMessage email = new MailMessage();
+        email.setSender(getTenantSureSender());
+        email.setSubject(i18n.tr("TenantSure Policy: Credit Card Expiring Notice"));
+
+        MessageTemplate template = new MessageTemplate("email/tenantsure/tenantsure-credit-card-expiring.html");
+
+        template.variable("${tenant}", tenant.name().getStringView());
+        template.variable("${expiryDate}", new SimpleDateFormat("MMMM yyyy").format(ccExpiry));
+        template.variable("${lastDigits}", ccLastDigits);
+        template.variable("${paymentMethodLink}", AppPlaceInfo.absoluteUrl(VistaDeployment.getBaseApplicationURL(VistaApplication.resident, true), true,
+                ResidentPortalSiteMap.ResidentServices.TenantInsurance.TenantSure.TenantSurePage.UpdateCreditCard.class));
+
+        email.setHtmlBody(template.getWrappedBody(wrapperTextResourceName));
+        return email;
+    }
 }

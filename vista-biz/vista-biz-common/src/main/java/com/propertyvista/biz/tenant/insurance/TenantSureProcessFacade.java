@@ -57,4 +57,7 @@ public interface TenantSureProcessFacade {
 
     void completeTenantSureBusinessReport(ReportTableFormatter formater);
 
+    // --
+
+    void checkPaymentMethodAvailability(ExecutionMonitor executionMonitor, Date runDate);
 }

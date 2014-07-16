@@ -245,4 +245,9 @@ public class TenantSureProcessFacadeImpl implements TenantSureProcessFacade {
         new TenantSureBusinessReport().completeReport(formatter);
     }
 
+    @Override
+    public void checkPaymentMethodAvailability(ExecutionMonitor executionMonitor, Date runDate) {
+        TenantSurePayments.checkPaymentMethodAvailability(executionMonitor, runDate);
+    }
+
 }

@@ -17,6 +17,7 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
+import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.concurrent.Callable;
 
@@ -38,6 +39,7 @@ import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.biz.ExecutionMonitor;
+import com.propertyvista.biz.communication.CommunicationFacade;
 import com.propertyvista.biz.financial.payment.CreditCardFacade;
 import com.propertyvista.biz.financial.payment.CreditCardFacade.ReferenceNumberPrefix;
 import com.propertyvista.biz.financial.payment.CreditCardTransactionResponse;
@@ -142,6 +144,49 @@ class TenantSurePayments {
         if (transaction.status().getValue() != TenantSureTransaction.TransactionStatus.Cleared) {
             throw new UserRuntimeException(i18n.tr("Credit Card payment failed"));
         }
+    }
+
+    static void checkPaymentMethodAvailability(ExecutionMonitor executionMonitor, Date runDate) {
+        Date testDate = DateUtils.addDays(runDate, 45);
+        // check if expiry date is before test date
+        EntityQueryCriteria<TenantSureInsurancePolicy> criteria = EntityQueryCriteria.create(TenantSureInsurancePolicy.class);
+        OrCriterion or = criteria.or();
+        or.right().gt(criteria.proto().certificate().expiryDate(), testDate);
+        or.left().isNull(criteria.proto().certificate().expiryDate());
+        criteria.eq(criteria.proto().status(), TenantSureStatus.Active);
+
+        ICursorIterator<TenantSureInsurancePolicy> iterator = Persistence.service().query(null, criteria, AttachLevel.Attached);
+        while (iterator.hasNext()) {
+            try {
+                TenantSureInsurancePolicy policy = iterator.next();
+                InsurancePaymentMethod pmntMethod = getPaymentMethod(policy.client().tenant());
+                CreditCardInfo ccInfo = (CreditCardInfo) pmntMethod.details().cast();
+                LogicalDate ccExpiry = ccInfo.expiryDate().getValue();
+                boolean ccExpired = testDate.after(ccExpiry);
+                if (pmntMethod.expirationNoteSent().getValue(false)) {
+                    if (!ccExpired) {
+                        // clear pmntMethod.expirationNoteSent() flag
+                        pmntMethod.expirationNoteSent().setValue(false);
+                        Persistence.service().persist(pmntMethod);
+                    }
+                } else {
+                    if (ccExpired) {
+                        // send notification and set the pmntMethod.expirationNoteSent() flag
+                        ServerSideFactory.create(CommunicationFacade.class).sendTenantSureCCExpiringEmail( //
+                                policy.client().tenant().customer().person(), //
+                                ccInfo.card().obfuscatedNumber().getValue(), //
+                                ccExpiry //
+                                );
+                        executionMonitor.addInfoEvent("CardExpiryCheck", "Notice sent to " + policy.client().tenant().customer().person().email().getValue());
+                        pmntMethod.expirationNoteSent().setValue(true);
+                        Persistence.service().persist(pmntMethod);
+                    }
+                }
+            } catch (Throwable t) {
+                executionMonitor.addErredEvent("CardExpiryCheck", t);
+            }
+        }
+        iterator.close();
     }
 
     static void processPayments(ExecutionMonitor executionMonitor, final LogicalDate dueDate) {

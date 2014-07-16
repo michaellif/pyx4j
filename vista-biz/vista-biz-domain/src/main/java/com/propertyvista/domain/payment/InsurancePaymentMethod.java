@@ -22,6 +22,7 @@ import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.annotations.validator.NotNull;
+import com.pyx4j.entity.core.IPrimitive;
 
 import com.propertyvista.domain.security.CustomerSignature;
 import com.propertyvista.domain.tenant.lease.Tenant;
@@ -41,4 +42,6 @@ public interface InsurancePaymentMethod extends PaymentMethod {
     @Caption(name = "I agree to the Terms")
     @MemberColumn(name = "signature")
     CustomerSignature preAuthorizedAgreementSignature();
+
+    IPrimitive<Boolean> expirationNoteSent();
 }

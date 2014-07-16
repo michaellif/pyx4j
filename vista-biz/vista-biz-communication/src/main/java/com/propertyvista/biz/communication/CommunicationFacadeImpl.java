@@ -38,6 +38,7 @@ import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.maintenance.MaintenanceRequest;
 import com.propertyvista.domain.maintenance.MaintenanceRequestPicture;
 import com.propertyvista.domain.payment.AutopayAgreement;
+import com.propertyvista.domain.person.Person;
 import com.propertyvista.domain.pmc.Pmc;
 import com.propertyvista.domain.security.CrmUser;
 import com.propertyvista.domain.security.CustomerUser;
@@ -191,6 +192,13 @@ public class CommunicationFacadeImpl implements CommunicationFacade {
     public void sendTenantSurePaymentsResumedEmail(String tenantEmail) {
         MailMessage m = MessageTemplatesTenantSure.createTenantSurePaymentsResumedEmail();
         m.setTo(tenantEmail);
+        Mail.queue(m, null, getTenantSureConfig());
+    }
+
+    @Override
+    public void sendTenantSureCCExpiringEmail(Person tenant, String ccLastDigits, LogicalDate ccExpiry) {
+        MailMessage m = MessageTemplatesTenantSure.createTenantSureCCExpiringEmail(tenant, ccLastDigits, ccExpiry);
+        m.setTo(tenant.email().getStringView());
         Mail.queue(m, null, getTenantSureConfig());
     }
 
