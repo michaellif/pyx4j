@@ -109,7 +109,17 @@ public class YardiARFacadeImpl extends AbstractYardiFacadeImpl implements YardiA
 
         Persistence.ensureRetrieve(reversal.billingAccount(), AttachLevel.Attached);
 
-        YardiResidentTransactionsService.getInstance().postReceiptReversal(getPmcYardiCredential(reversal.billingAccount().lease()), reversal);
+        if (!VistaTODO.VISTA_2693_Yardi_Plugin_V1_1_Upgrade_Completed) {
+            YardiResidentTransactionsService.getInstance().postReceiptReversal(getPmcYardiCredential(reversal.billingAccount().lease()), reversal);
+        } else {
+            try {
+                Persistence.ensureRetrieve(reversal.billingAccount().lease().unit().building(), AttachLevel.Attached);
+                YardiSystemBatchesService.getInstance().postReceiptReversal(getPmcYardiCredential(reversal.billingAccount().lease()), reversal,
+                        reversal.billingAccount().lease().unit().building().propertyCode().getValue(), null);
+            } catch (ARException e) {
+                throw new YardiServiceException(e);
+            }
+        }
     }
 
     @Override

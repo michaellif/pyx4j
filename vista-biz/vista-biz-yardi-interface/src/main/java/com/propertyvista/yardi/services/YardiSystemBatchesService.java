@@ -26,6 +26,7 @@ import com.propertyvista.biz.financial.ar.ARException;
 import com.propertyvista.biz.system.YardiPaymentBatchContext;
 import com.propertyvista.biz.system.YardiServiceException;
 import com.propertyvista.domain.financial.yardi.YardiReceipt;
+import com.propertyvista.domain.financial.yardi.YardiReceiptReversal;
 import com.propertyvista.domain.settings.PmcYardiCredential;
 import com.propertyvista.yardi.processors.YardiPaymentProcessor;
 import com.propertyvista.yardi.stubs.YardiSystemBatchesStub;
@@ -86,6 +87,39 @@ public class YardiSystemBatchesService extends YardiAbstractService {
         } finally {
             if (singleTrasactionBatch && !success) {
                 log.debug("Single transaction {} failed, call CancelReceiptBatch", receipt.id().getValue());
+                paymentBatchContext.cancelBatch();
+            }
+        }
+    }
+
+    public void postReceiptReversal(PmcYardiCredential yc, YardiReceiptReversal reversal, String propertyCode, YardiPaymentBatchContext paymentBatchContext)
+            throws YardiServiceException, RemoteException, ARException {
+        YardiSystemBatchesStub stub = ServerSideFactory.create(YardiSystemBatchesStub.class);
+
+        boolean singleTrasactionBatch = false;
+        if (paymentBatchContext == null) {
+            paymentBatchContext = new YardiPaymentBatchContext();
+            singleTrasactionBatch = true;
+        }
+
+        paymentBatchContext.ensureOpenBatch(yc, propertyCode);
+
+        boolean success = false;
+        try {
+
+            YardiPaymentProcessor paymentProcessor = new YardiPaymentProcessor();
+            ResidentTransactions residentTransactions = paymentProcessor.createTransactions(paymentProcessor.createTransactionForReversal(reversal));
+            stub.addReceiptsToBatch(yc, paymentBatchContext.getBatchId(), residentTransactions);
+
+            paymentBatchContext.incrementRecordCount();
+
+            if (singleTrasactionBatch) {
+                paymentBatchContext.postBatch();
+            }
+            success = true;
+        } finally {
+            if (singleTrasactionBatch && !success) {
+                log.debug("Single transaction {} failed, call CancelReceiptBatch", reversal.id().getValue());
                 paymentBatchContext.cancelBatch();
             }
         }
