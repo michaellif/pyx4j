@@ -30,15 +30,22 @@ public class TenantSureForm extends OperationsEntityForm<TenantSureDTO> {
 
         FormPanel formPanel = new FormPanel(this);
 
-        formPanel.append(Location.Left, proto().certificateNumber()).decorate();
-
         formPanel.append(Location.Left, proto().pmc().name()).decorate().customLabel("PMC:");
 
+        formPanel.append(Location.Left, proto().propertyCode()).decorate();
+        formPanel.append(Location.Left, proto().certificateNumber()).decorate();
+        formPanel.append(Location.Left, proto().policy().tenant().customer().person().name()).decorate();
+
+        formPanel.h3(i18n.tr("Status"));
         formPanel.append(Location.Left, proto().policy().status()).decorate();
         formPanel.append(Location.Left, proto().policy().cancellation()).decorate();
         formPanel.append(Location.Left, proto().policy().cancellationDate()).decorate();
+
+        formPanel.h3(i18n.tr("Coverage"));
         formPanel.append(Location.Left, proto().policy().certificate().inceptionDate()).decorate();
-        formPanel.append(Location.Left, proto().policy().tenant().customer().person().name()).decorate();
+        formPanel.append(Location.Left, proto().policy().certificate().expiryDate()).decorate();
+        formPanel.append(Location.Left, proto().policy().certificate().liabilityCoverage()).decorate();
+        formPanel.append(Location.Left, proto().policy().contentsCoverage()).decorate();
 
         selectTab(addTab(formPanel, i18n.tr("General")));
         setTabBarVisible(false);

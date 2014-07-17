@@ -13,6 +13,7 @@
  */
 package com.propertyvista.operations.rpc.dto;
 
+import com.pyx4j.entity.annotations.ExtendsBO;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.core.IPrimitive;
 
@@ -20,6 +21,7 @@ import com.propertyvista.domain.tenant.insurance.TenantSureInsurancePolicy;
 import com.propertyvista.operations.domain.tenantsure.TenantSureSubscribers;
 
 @Transient
+@ExtendsBO
 public interface TenantSureDTO extends TenantSureSubscribers {
 
     TenantSureInsurancePolicy policy();

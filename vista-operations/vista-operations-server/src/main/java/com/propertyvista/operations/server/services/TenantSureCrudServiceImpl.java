@@ -13,6 +13,8 @@
  */
 package com.propertyvista.operations.server.services;
 
+import java.util.concurrent.Callable;
+
 import com.pyx4j.entity.core.AttachLevel;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.server.AbstractCrudServiceDtoImpl;
@@ -22,6 +24,7 @@ import com.propertyvista.domain.tenant.insurance.TenantSureInsurancePolicy;
 import com.propertyvista.operations.domain.tenantsure.TenantSureSubscribers;
 import com.propertyvista.operations.rpc.dto.TenantSureDTO;
 import com.propertyvista.operations.rpc.services.TenantSureCrudService;
+import com.propertyvista.server.TaskRunner;
 
 public class TenantSureCrudServiceImpl extends AbstractCrudServiceDtoImpl<TenantSureSubscribers, TenantSureDTO> implements TenantSureCrudService {
 
@@ -37,25 +40,30 @@ public class TenantSureCrudServiceImpl extends AbstractCrudServiceDtoImpl<Tenant
     @Override
     protected void enhanceRetrieved(TenantSureSubscribers bo, TenantSureDTO dto, RetrieveTarget retrieveTarget) {
         Persistence.service().retrieve(dto.pmc());
-        fillPolicy(dto);
-
-        Persistence.ensureRetrieve(dto.policy().client().tenant().lease().unit().building(), AttachLevel.ToStringMembers);
-        dto.propertyCode().setValue(dto.policy().client().tenant().lease().unit().building().propertyCode().getValue());
+        fillPolicyData(dto);
     }
 
     @Override
     protected void enhanceListRetrieved(TenantSureSubscribers entity, TenantSureDTO dto) {
         Persistence.service().retrieve(dto.pmc());
-        fillPolicy(dto);
-
-        Persistence.ensureRetrieve(dto.policy().client().tenant().lease().unit().building(), AttachLevel.ToStringMembers);
-        dto.propertyCode().setValue(dto.policy().client().tenant().lease().unit().building().propertyCode().getValue());
+        fillPolicyData(dto);
     }
 
-    private void fillPolicy(TenantSureDTO dto) {
-        EntityQueryCriteria<TenantSureInsurancePolicy> criteria = EntityQueryCriteria.create(TenantSureInsurancePolicy.class);
-        criteria.eq(criteria.proto().certificate().insuranceCertificateNumber(), dto.certificateNumber());
-        dto.policy().set(Persistence.service().retrieve(criteria));
-        assert (!dto.policy().isNull());
+    private void fillPolicyData(final TenantSureDTO dto) {
+
+        TaskRunner.runInTargetNamespace(dto.pmc(), new Callable<Void>() {
+            @Override
+            public Void call() {
+                EntityQueryCriteria<TenantSureInsurancePolicy> criteria = EntityQueryCriteria.create(TenantSureInsurancePolicy.class);
+                criteria.eq(criteria.proto().certificate().insuranceCertificateNumber(), dto.certificateNumber());
+                dto.policy().set(Persistence.service().retrieve(criteria));
+                assert (!dto.policy().isNull());
+
+                Persistence.ensureRetrieve(dto.policy().tenant().lease().unit().building(), AttachLevel.Attached);
+                dto.propertyCode().setValue(dto.policy().tenant().lease().unit().building().propertyCode().getValue());
+
+                return null;
+            }
+        });
     }
 }
