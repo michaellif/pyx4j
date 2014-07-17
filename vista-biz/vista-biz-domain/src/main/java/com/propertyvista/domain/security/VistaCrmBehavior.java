@@ -75,6 +75,7 @@ public enum VistaCrmBehavior implements Behavior {
 
     Commandant_OLD,
 
+    @Deprecated
     MessageGroup_OLD,
 
     PropertyVistaSupport,
@@ -149,6 +150,10 @@ public enum VistaCrmBehavior implements Behavior {
     // --
 
     EmployeeBasic, EmployeeFull,
+
+    // --
+
+    CommunicationBasic, CommunicationFull,
 
     // --
 

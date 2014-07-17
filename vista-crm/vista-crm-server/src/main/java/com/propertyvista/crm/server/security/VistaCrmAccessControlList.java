@@ -31,9 +31,6 @@ import com.propertyvista.crm.rpc.services.FeedbackService;
 import com.propertyvista.crm.rpc.services.HomePageGadgetCrudService;
 import com.propertyvista.crm.rpc.services.MediaUploadBuildingService;
 import com.propertyvista.crm.rpc.services.MediaUploadFloorplanService;
-import com.propertyvista.crm.rpc.services.MessageAttachmentUploadService;
-import com.propertyvista.crm.rpc.services.MessageCategoryCrudService;
-import com.propertyvista.crm.rpc.services.MessageCrudService;
 import com.propertyvista.crm.rpc.services.NoteAttachmentUploadService;
 import com.propertyvista.crm.rpc.services.PageDescriptorCrudService;
 import com.propertyvista.crm.rpc.services.PmcDocumentFileUploadService;
@@ -149,7 +146,6 @@ import com.propertyvista.crm.rpc.services.security.CrmLoginAttemptsListerService
 import com.propertyvista.crm.rpc.services.security.CrmPasswordResetService;
 import com.propertyvista.crm.rpc.services.selections.SelectBuildingListService;
 import com.propertyvista.crm.rpc.services.selections.SelectBuildingUtilityListService;
-import com.propertyvista.crm.rpc.services.selections.SelectCommunicationEndpointListService;
 import com.propertyvista.crm.rpc.services.selections.SelectConcessionListService;
 import com.propertyvista.crm.rpc.services.selections.SelectCrmUserListService;
 import com.propertyvista.crm.rpc.services.selections.SelectCustomerListService;
@@ -199,16 +195,9 @@ import com.propertyvista.crm.server.security.access.LeaseDatasetAccessRule;
 import com.propertyvista.crm.server.security.access.LeaseParticipantDatasetAccessRule;
 import com.propertyvista.crm.server.security.access.LeaseTermParticipantDatasetAccessRule;
 import com.propertyvista.crm.server.security.access.MaintenanceRequestDatasetAccessRule;
-import com.propertyvista.crm.server.security.access.MessageAccessRule;
-import com.propertyvista.crm.server.security.access.MessageCategoryAccessRule;
 import com.propertyvista.crm.server.security.access.N4LegalLetterDatasetAccessRule;
 import com.propertyvista.crm.server.security.access.PaymentRecordDatasetAccessRule;
 import com.propertyvista.crm.server.security.access.UnitAvailabilityStatusDatasetAccessRule;
-import com.propertyvista.domain.communication.CommunicationThread;
-import com.propertyvista.domain.communication.Message;
-import com.propertyvista.domain.communication.MessageAttachment;
-import com.propertyvista.domain.communication.MessageCategory;
-import com.propertyvista.domain.communication.SystemEndpoint;
 import com.propertyvista.domain.company.Company;
 import com.propertyvista.domain.dashboard.DashboardMetadata;
 import com.propertyvista.domain.dashboard.gadgets.availability.UnitAvailabilityStatus;
@@ -477,19 +466,6 @@ public class VistaCrmAccessControlList extends ServletContainerAclBuilder {
         grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(PaymentRecordCrudService.class));
         grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(CreditCardValidationService.class));
 
-        // - Communication
-        grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(MessageCategoryCrudService.class));
-        grant(VistaBasicBehavior.CRM, new MessageCategoryAccessRule(), MessageCategory.class);
-        grant(VistaCrmBehavior.MessageGroup_OLD, new EntityPermission(MessageCategory.class, EntityPermission.ALL));
-        grant(VistaBasicBehavior.CRM, new EntityPermission(SystemEndpoint.class, EntityPermission.READ));
-        grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(MessageCrudService.class));
-        grant(VistaBasicBehavior.CRM, new MessageAccessRule(), Message.class);
-        grant(VistaBasicBehavior.CRM, new EntityPermission(Message.class, EntityPermission.ALL));
-        grant(VistaBasicBehavior.CRM, new EntityPermission(MessageAttachment.class, EntityPermission.ALL));
-        grant(VistaBasicBehavior.CRM, new EntityPermission(CommunicationThread.class, EntityPermission.ALL));
-        grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(MessageAttachmentUploadService.class));
-        grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(SelectCommunicationEndpointListService.class));
-
         grant(VistaCrmBehavior.Tenants_OLD, new IServiceExecutePermission(TenantPasswordChangeService.class));
 
         grant(VistaCrmBehavior.PropertyVistaSupport, new IServiceExecutePermission(TenantPadFileDownloadService.class));
@@ -668,7 +644,8 @@ public class VistaCrmAccessControlList extends ServletContainerAclBuilder {
         merge(new VistaCrmSupportAccessControlList());
 
         merge(new VistaCrmYardiAccessControlList());
-        merge(new VistaCrmYardiAccessControlList());
+
+        merge(new VistaCrmCommunicationAccessControlList());
 
         freeze();
     }

@@ -19,6 +19,7 @@ import com.google.gwt.user.client.ui.MenuItem;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.SimplePanel;
 
+import com.pyx4j.entity.security.DataModelPermission;
 import com.pyx4j.gwt.commons.layout.LayoutChangeEvent;
 import com.pyx4j.gwt.commons.layout.LayoutChangeHandler;
 import com.pyx4j.gwt.commons.layout.LayoutChangeRequestEvent;
@@ -37,6 +38,7 @@ import com.propertyvista.crm.client.CrmSite;
 import com.propertyvista.crm.client.resources.CrmImages;
 import com.propertyvista.crm.client.themes.CommunicationCrmTheme;
 import com.propertyvista.crm.rpc.CrmSiteMap;
+import com.propertyvista.dto.MessageDTO;
 import com.propertyvista.shared.i18n.CompiledLocale;
 
 public class HeaderViewImpl extends FlowPanel implements HeaderView {
@@ -191,6 +193,8 @@ public class HeaderViewImpl extends FlowPanel implements HeaderView {
                     }
                 }
             });
+            communicationButton.setPermission(DataModelPermission.permissionRead(MessageDTO.class));
+
             communicationButton.addStyleName(CommunicationCrmTheme.StyleName.AllertButton.name());
 
             exitAdminButton = new Button(i18n.tr("Exit Administration"), new Command() {

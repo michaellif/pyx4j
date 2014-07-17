@@ -20,6 +20,7 @@ import static com.propertyvista.domain.security.VistaCrmBehavior.PortfolioFull;
 import static com.pyx4j.entity.security.AbstractCRUDPermission.ALL;
 import static com.pyx4j.entity.security.AbstractCRUDPermission.READ;
 
+import com.pyx4j.entity.security.DataModelPermission;
 import com.pyx4j.entity.security.EntityPermission;
 import com.pyx4j.rpc.shared.IServiceExecutePermission;
 import com.pyx4j.security.server.UIAclBuilder;
@@ -28,6 +29,8 @@ import com.pyx4j.security.shared.ActionPermission;
 import com.propertyvista.crm.rpc.dto.company.EmployeeDTO;
 import com.propertyvista.crm.rpc.dto.company.EmployeePrivilegesDTO;
 import com.propertyvista.crm.rpc.dto.company.ac.CRMUserSecurityActions;
+import com.propertyvista.crm.rpc.dto.company.ac.EmployeeDirectoryList;
+import com.propertyvista.crm.rpc.security.EmployeeSelfInstanceAccess;
 import com.propertyvista.crm.rpc.services.organization.CrmUserService;
 import com.propertyvista.crm.rpc.services.organization.EmployeeCrudService;
 import com.propertyvista.crm.rpc.services.organization.ManagedCrmUserService;
@@ -53,10 +56,12 @@ public class VistaCrmEmployeeAccessControlList extends UIAclBuilder {
         // There are no UI Permissions, UI bound to  VistaCrmBehavior.AccountSelf
         //-- back-end
         {
+            grant(VistaBasicBehavior.CRM, DataModelPermission.create(EmployeeDTO.class, new EmployeeSelfInstanceAccess(), READ));
             // There are special  service for this, CrmUserService
         }
 
         // ------ Employee View and Management
+        grant(EmployeeFull, new ActionPermission(EmployeeDirectoryList.class));
         grant(EmployeeBasic, EmployeeDTO.class, READ);
         grant(EmployeeFull, EmployeeDTO.class, ALL);
         grant(EmployeeFull, EmployeePrivilegesDTO.class, ALL);
@@ -75,8 +80,6 @@ public class VistaCrmEmployeeAccessControlList extends UIAclBuilder {
         }
         grant(EmployeeFull, EmployeeBasic);
 
-        // grant(VistaCrmBehavior.EmployeeDefault, new ActionPermission(UpdateFromYardi.class));
-
         // ------ Portfolio Management
 
         grant(PortfolioBasic, Portfolio.class, READ);
@@ -91,5 +94,4 @@ public class VistaCrmEmployeeAccessControlList extends UIAclBuilder {
         grant(PortfolioFull, PortfolioBasic);
 
     }
-
 }

@@ -17,6 +17,7 @@ import javax.xml.bind.annotation.XmlType;
 
 import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.MemberColumn;
+import com.pyx4j.entity.annotations.SecurityEnabled;
 import com.pyx4j.entity.annotations.Table;
 import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.ToStringFormat;
@@ -33,6 +34,7 @@ import com.propertyvista.domain.security.CrmRole;
 
 @ToStringFormat("{0}")
 @Table(prefix = "communication")
+@SecurityEnabled
 public interface MessageCategory extends IEntity {
 
     @I18n(context = "MessageGroup")

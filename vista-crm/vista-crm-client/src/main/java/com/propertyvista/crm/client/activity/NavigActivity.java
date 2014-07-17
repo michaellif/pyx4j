@@ -23,9 +23,11 @@ import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.core.criterion.EntityListCriteria;
 import com.pyx4j.entity.rpc.EntitySearchResult;
+import com.pyx4j.entity.security.DataModelPermission;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.security.rpc.AuthenticationResponse;
+import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.rpc.AppPlace;
 
@@ -47,8 +49,6 @@ public class NavigActivity extends AbstractActivity implements NavigPresenter {
     private final NavigView view;
 
     private DashboardMetadataCrudService dashboardMetadataCrudService;
-
-    private MessageCategoryCrudService messageCategoryCrudService;
 
     private boolean isDashboardFolderUpdateRequired;
 
@@ -77,7 +77,6 @@ public class NavigActivity extends AbstractActivity implements NavigPresenter {
         previousUserPk = currentUserPk;
 
         dashboardMetadataCrudService = GWT.<DashboardMetadataCrudService> create(DashboardMetadataCrudService.class);
-        messageCategoryCrudService = GWT.<MessageCategoryCrudService> create(MessageCategoryCrudService.class);
         view.updateUserName(ClientContext.getUserVisit().getName());
         updateDashboardItems();
         updateMessageCategoryItems();
@@ -134,8 +133,8 @@ public class NavigActivity extends AbstractActivity implements NavigPresenter {
     }
 
     private void updateMessageCategoryItems() {
-        if (isCommunicationFolderUpdateRequired) {
-            messageCategoryCrudService.list(new DefaultAsyncCallback<EntitySearchResult<MessageCategory>>() {
+        if (isCommunicationFolderUpdateRequired && SecurityController.check(DataModelPermission.permissionRead(MessageCategory.class))) {
+            GWT.<MessageCategoryCrudService> create(MessageCategoryCrudService.class).list(new DefaultAsyncCallback<EntitySearchResult<MessageCategory>>() {
 
                 @Override
                 public void onSuccess(EntitySearchResult<MessageCategory> result) {

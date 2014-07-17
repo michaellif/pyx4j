@@ -49,11 +49,6 @@ public class CrmUserServiceImpl extends AbstractCrudServiceDtoImpl<Employee, Emp
     }
 
     @Override
-    protected void bind() {
-        bindCompleteObject();
-    }
-
-    @Override
     protected Key getBOKey(EmployeeDTO to) {
         return CrmAppContext.getCurrentUserEmployee().getPrimaryKey();
     }

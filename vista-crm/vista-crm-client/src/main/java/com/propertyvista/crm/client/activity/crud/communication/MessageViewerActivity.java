@@ -17,7 +17,6 @@ import com.google.gwt.core.client.GWT;
 
 import com.pyx4j.entity.rpc.AbstractCrudService;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
-import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
 import com.propertyvista.crm.client.CrmSite;
@@ -26,7 +25,6 @@ import com.propertyvista.crm.client.ui.crud.communication.MessageViewerView;
 import com.propertyvista.crm.rpc.services.MessageCrudService;
 import com.propertyvista.domain.communication.CommunicationThread.ThreadStatus;
 import com.propertyvista.domain.company.Employee;
-import com.propertyvista.domain.security.VistaCrmBehavior;
 import com.propertyvista.dto.MessageDTO;
 
 public class MessageViewerActivity extends CrmViewerActivity<MessageDTO> implements MessageViewerView.Presenter {
@@ -47,11 +45,6 @@ public class MessageViewerActivity extends CrmViewerActivity<MessageDTO> impleme
             }
         }, message, threadStatus);
 
-    }
-
-    @Override
-    public boolean canEdit() {
-        return super.canEdit() & SecurityController.check(VistaCrmBehavior.Maintenance_OLD);
     }
 
     @Override

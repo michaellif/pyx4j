@@ -22,7 +22,9 @@ import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
 import com.pyx4j.entity.core.criterion.EntityListCriteria;
 import com.pyx4j.entity.rpc.EntitySearchResult;
+import com.pyx4j.entity.security.DataModelPermission;
 import com.pyx4j.security.client.ClientContext;
+import com.pyx4j.security.shared.SecurityController;
 
 import com.propertyvista.crm.client.CrmSite;
 import com.propertyvista.crm.client.ui.crud.communication.CommunicationView;
@@ -41,8 +43,7 @@ public class CommunicationActivity extends AbstractActivity implements Communica
 
     @Override
     public void start(AcceptsOneWidget panel, EventBus eventBus) {
-
-        if (ClientContext.getUserVisit() == null || ClientContext.getUserVisit().getPrincipalPrimaryKey() == null) {
+        if (!SecurityController.check(DataModelPermission.permissionRead(MessageDTO.class))) {
             return;
         }
         panel.setWidget(view);

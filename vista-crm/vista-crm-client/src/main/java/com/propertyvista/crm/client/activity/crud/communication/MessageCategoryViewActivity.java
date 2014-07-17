@@ -16,7 +16,6 @@ package com.propertyvista.crm.client.activity.crud.communication;
 import com.google.gwt.core.client.GWT;
 
 import com.pyx4j.entity.rpc.AbstractCrudService;
-import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
 import com.propertyvista.crm.client.CrmSite;
@@ -24,18 +23,12 @@ import com.propertyvista.crm.client.activity.crud.CrmViewerActivity;
 import com.propertyvista.crm.client.ui.crud.communication.MessageCategoryViewerView;
 import com.propertyvista.crm.rpc.services.MessageCategoryCrudService;
 import com.propertyvista.domain.communication.MessageCategory;
-import com.propertyvista.domain.security.VistaCrmBehavior;
 
 public class MessageCategoryViewActivity extends CrmViewerActivity<MessageCategory> implements MessageCategoryViewerView.Presenter {
 
     public MessageCategoryViewActivity(CrudAppPlace place) {
         super(MessageCategory.class, place, CrmSite.getViewFactory().getView(MessageCategoryViewerView.class), GWT
                 .<AbstractCrudService<MessageCategory>> create(MessageCategoryCrudService.class));
-    }
-
-    @Override
-    public boolean canEdit() {
-        return super.canEdit() & SecurityController.check(VistaCrmBehavior.Maintenance_OLD);
     }
 
 }

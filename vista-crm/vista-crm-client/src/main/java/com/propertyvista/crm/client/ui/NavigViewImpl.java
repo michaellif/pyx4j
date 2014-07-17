@@ -28,6 +28,7 @@ import com.pyx4j.gwt.commons.layout.LayoutChangeEvent;
 import com.pyx4j.gwt.commons.layout.LayoutChangeHandler;
 import com.pyx4j.gwt.commons.layout.LayoutType;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.security.shared.ActionPermission;
 import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.ui.sidemenu.SideMenu;
@@ -41,7 +42,7 @@ import com.propertyvista.common.client.theme.SiteViewTheme;
 import com.propertyvista.crm.client.CrmSite;
 import com.propertyvista.crm.client.resources.CrmImages;
 import com.propertyvista.crm.rpc.CrmSiteMap;
-import com.propertyvista.crm.rpc.dto.company.EmployeeDTO;
+import com.propertyvista.crm.rpc.dto.company.ac.EmployeeDirectoryList;
 import com.propertyvista.crm.rpc.dto.financial.moneyin.batch.MoneyInBatchDTO;
 import com.propertyvista.domain.communication.MessageCategory;
 import com.propertyvista.domain.company.Portfolio;
@@ -57,6 +58,7 @@ import com.propertyvista.dto.LandlordDTO;
 import com.propertyvista.dto.LeaseApplicationDTO;
 import com.propertyvista.dto.LeaseDTO;
 import com.propertyvista.dto.MaintenanceRequestDTO;
+import com.propertyvista.dto.MessageDTO;
 import com.propertyvista.shared.config.VistaFeatures;
 import com.propertyvista.shared.i18n.CompiledLocale;
 
@@ -229,16 +231,15 @@ public class NavigViewImpl extends Composite implements NavigView {
             SideMenuList list = new SideMenuList();
             root.addMenuItem(new SideMenuItem(list, i18n.tr("Organization"), CrmImages.INSTANCE.organizationIcon()));
 
-            list.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Organization.Employee(), DataModelPermission.permissionRead(EmployeeDTO.class)));
+            list.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Organization.Employee(), new ActionPermission(EmployeeDirectoryList.class)));
             list.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Organization.Portfolio(), DataModelPermission.permissionRead(Portfolio.class)));
             if (!VistaFeatures.instance().yardiIntegration()) {
                 list.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Organization.Vendor()));
             }
-            if (SecurityController.check(VistaBasicBehavior.CRM)) {
-                list.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Communication.Message()));
-                communicationGroups = new SideMenuList();
-                list.addMenuItem(new SideMenuItem(communicationGroups, i18n.tr("Groups"), null));
-            }
+
+            list.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Communication.Message(), DataModelPermission.permissionRead(MessageDTO.class)));
+            communicationGroups = new SideMenuList();
+            list.addMenuItem(new SideMenuItem(communicationGroups, i18n.tr("Groups"), null, DataModelPermission.permissionRead(MessageCategory.class)));
         }
 
         {//Reports
