@@ -46,7 +46,7 @@ class TenantSureRenewal {
     }
 
     private void processRenewalOffer(ExecutionMonitor executionMonitor, LogicalDate runDate) {
-        LogicalDate renewalAniversary = new LogicalDate(DateUtils.addDays(DateUtils.addYears(runDate, -1), 30)); //30 before year
+        LogicalDate renewalAniversary = new LogicalDate(DateUtils.addDays(DateUtils.addYears(runDate, -1), 45)); //45 before year
         log.info("processing TenantSure Renewal offers for inceptionDate before {}", renewalAniversary);
 
         EntityQueryCriteria<TenantSureInsurancePolicy> criteria = EntityQueryCriteria.create(TenantSureInsurancePolicy.class);
