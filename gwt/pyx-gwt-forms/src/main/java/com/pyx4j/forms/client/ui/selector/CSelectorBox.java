@@ -18,7 +18,7 @@
  * @author Michael
  * @version $Id$
  */
-package com.pyx4j.forms.client.ui;
+package com.pyx4j.forms.client.ui.selector;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -26,21 +26,32 @@ import java.util.List;
 
 import com.google.gwt.event.shared.HandlerRegistration;
 
+import com.pyx4j.commons.IFormatter;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.forms.client.events.HasOptionsChangeHandlers;
 import com.pyx4j.forms.client.events.OptionsChangeEvent;
 import com.pyx4j.forms.client.events.OptionsChangeHandler;
+import com.pyx4j.forms.client.ui.CTextFieldBase;
 
-public class CSuggestBox<E extends IEntity> extends CTextFieldBase<E, NSuggestBox<E>> implements HasOptionsChangeHandlers<List<E>> {
+public class CSelectorBox<E extends IEntity> extends CTextFieldBase<E, NSelectorBox<E>> implements HasOptionsChangeHandlers<List<E>> {
 
     private List<E> options = new ArrayList<E>();
 
-    public CSuggestBox() {
+    public CSelectorBox() {
         super();
 
-        NSuggestBox<E> nativeTextField = new NSuggestBox<E>(this);
+        setFormatter(new IFormatter<E, String>() {
+
+            @Override
+            public String format(E value) {
+                return value.getStringView();
+            }
+        });
+
+        NSelectorBox<E> nativeTextField = new NSelectorBox<E>(this);
         setNativeComponent(nativeTextField);
         setOptions(options);
+
     }
 
     @Override
@@ -51,19 +62,8 @@ public class CSuggestBox<E extends IEntity> extends CTextFieldBase<E, NSuggestBo
     public void setOptions(Collection<E> opt) {
         this.options = new ArrayList<E>();
         this.options.addAll(opt);
-        getNativeComponent().refreshOptions();
-        OptionsChangeEvent.fire(this, getOptions());
-    }
-
-    public List<E> getOptions() {
-        return options;
-    }
-
-    public String getOptionName(E o) {
-        if (o == null) {
-            return "-- NULL --";
-        } else {
-            return o.toString();
+        if (getNativeComponent() != null) {
+            getNativeComponent().processOptions(options);
         }
     }
 

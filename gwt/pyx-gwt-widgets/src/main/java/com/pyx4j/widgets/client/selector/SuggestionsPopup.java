@@ -13,7 +13,6 @@
  */
 package com.pyx4j.widgets.client.selector;
 
-import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.BrowserEvents;
 import com.google.gwt.dom.client.NativeEvent;
 import com.google.gwt.dom.client.Style.FontWeight;
@@ -27,9 +26,6 @@ import com.google.gwt.event.dom.client.MouseOverHandler;
 import com.google.gwt.user.cellview.client.CellList;
 import com.google.gwt.user.cellview.client.HasKeyboardPagingPolicy.KeyboardPagingPolicy;
 import com.google.gwt.user.cellview.client.HasKeyboardSelectionPolicy.KeyboardSelectionPolicy;
-import com.google.gwt.user.cellview.client.SimplePager;
-import com.google.gwt.user.cellview.client.SimplePager.TextLocation;
-import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
@@ -50,8 +46,6 @@ public class SuggestionsPopup<DataType> extends PopupPanel {
     private final CellList<DataType> suggestionList;
 
     private SingleSelectionModel<DataType> selectionModel;
-
-    private SimplePager pager;
 
     int selectedIndex;
 

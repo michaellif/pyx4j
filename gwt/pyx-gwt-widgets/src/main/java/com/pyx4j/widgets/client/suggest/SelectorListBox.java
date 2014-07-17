@@ -20,6 +20,6 @@
  */
 package com.pyx4j.widgets.client.suggest;
 
-public class SuggestListBox {
+public class SelectorListBox {
 
 }
