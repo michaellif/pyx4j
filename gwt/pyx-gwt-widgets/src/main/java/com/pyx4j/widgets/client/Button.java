@@ -45,6 +45,8 @@ import com.google.gwt.user.client.ui.MenuBar;
 import com.google.gwt.user.client.ui.MenuItem;
 import com.google.gwt.user.client.ui.SimplePanel;
 
+import com.pyx4j.security.annotations.ActionId;
+import com.pyx4j.security.shared.ActionPermission;
 import com.pyx4j.security.shared.Permission;
 import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.widgets.client.images.ButtonImages;
@@ -83,6 +85,10 @@ public class Button extends FocusPanel implements IFocusWidget {
         this.setPermission(permission);
     }
 
+    public Button(String text, Class<? extends ActionId> actionId) {
+        this(text, new ActionPermission(actionId));
+    }
+
     public Button(ImageResource imageResource, Command command) {
         this(imageResource);
         this.command = command;
@@ -96,6 +102,10 @@ public class Button extends FocusPanel implements IFocusWidget {
     public Button(String text, Command command, Permission... permission) {
         this(text, command);
         this.setPermission(permission);
+    }
+
+    public Button(String text, Command command, Class<? extends ActionId> actionId) {
+        this(text, command, new ActionPermission(actionId));
     }
 
     public Button(ImageResource imageResource, String text, Command command) {
@@ -452,6 +462,10 @@ public class Button extends FocusPanel implements IFocusWidget {
             super(text, cmd);
             this.permissions = permissions;
             super.setVisible(SecurityController.check(permissions));
+        }
+
+        public SecureMenuItem(String tr, Command cmd, Class<? extends ActionId> actionId) {
+            this(tr, cmd, new ActionPermission(actionId));
         }
 
         @Override
