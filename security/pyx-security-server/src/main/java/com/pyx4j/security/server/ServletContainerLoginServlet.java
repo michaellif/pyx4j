@@ -35,7 +35,7 @@ import org.slf4j.LoggerFactory;
 import com.pyx4j.security.shared.Behavior;
 import com.pyx4j.security.shared.CoreBehavior;
 import com.pyx4j.security.shared.SecurityController;
-import com.pyx4j.server.contexts.Context;
+import com.pyx4j.server.contexts.ServerContext;
 import com.pyx4j.server.contexts.Lifecycle;
 
 @SuppressWarnings("serial")
@@ -52,10 +52,10 @@ public class ServletContainerLoginServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         if (request.getRequestURI().endsWith("login")) {
-            if (Context.getRequest().isUserInRole(ROLE_ADMIN)) {
+            if (ServerContext.getRequest().isUserInRole(ROLE_ADMIN)) {
                 createContainerSession(CoreBehavior.DEVELOPER);
                 log.info("login as admin");
-            } else if (Context.getRequest().isUserInRole(ROLE_USER)) {
+            } else if (ServerContext.getRequest().isUserInRole(ROLE_USER)) {
                 createContainerSession(CoreBehavior.USER);
                 log.info("login as user");
             } else {
@@ -72,15 +72,15 @@ public class ServletContainerLoginServlet extends HttpServlet {
             log.info("behavior {} already present", behavior);
             return;
         }
-        if (Context.getVisit() != null) {
+        if (ServerContext.getVisit() != null) {
             Set<Behavior> behaviours = new HashSet<Behavior>();
             behaviours.addAll(SecurityController.getBehaviors());
             behaviours.add(behavior);
-            Lifecycle.beginSession(Context.getVisit().getUserVisit(), behaviours);
+            Lifecycle.beginSession(ServerContext.getVisit().getUserVisit(), behaviours);
             log.info("behaviors {} set", behaviours);
         } else {
             Lifecycle.beginAnonymousSession();
         }
-        Context.getSession().setAttribute(ROLE_SESSION_ATTRIBUTE, behavior);
+        ServerContext.getSession().setAttribute(ROLE_SESSION_ATTRIBUTE, behavior);
     }
 }

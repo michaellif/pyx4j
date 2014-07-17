@@ -57,7 +57,7 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.server.ServicePolicy;
 import com.pyx4j.rpc.shared.IServiceExecutePermission;
 import com.pyx4j.security.shared.SecurityController;
-import com.pyx4j.server.contexts.Context;
+import com.pyx4j.server.contexts.ServerContext;
 import com.pyx4j.server.contexts.Visit;
 
 @SuppressWarnings("serial")
@@ -94,7 +94,7 @@ public abstract class AbstractUploadServlet extends HttpServlet {
         response.setContentType("text/plain");
         PrintWriter out = response.getWriter();
         out.print(UploadService.ResponsePrefix);
-        Visit v = Context.getVisit();
+        Visit v = ServerContext.getVisit();
         if ((v == null) || (!v.isUserLoggedIn())) {
             log.trace("no session");
             out.println(i18n.tr("No Session"));

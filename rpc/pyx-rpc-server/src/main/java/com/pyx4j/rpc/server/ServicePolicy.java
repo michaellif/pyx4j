@@ -36,7 +36,7 @@ import com.google.gwt.user.client.rpc.IncompatibleRemoteServiceException;
 import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.gwt.server.IOUtils;
-import com.pyx4j.server.contexts.Context;
+import com.pyx4j.server.contexts.ServerContext;
 
 public class ServicePolicy {
 
@@ -75,7 +75,7 @@ public class ServicePolicy {
                     }
                 }
             }
-            Context.getRequest().setAttribute(SERVICE_INTERFACE_CLASSNAMES_REQUEST_ATTRIBUTE, servicePolicy);
+            ServerContext.getRequest().setAttribute(SERVICE_INTERFACE_CLASSNAMES_REQUEST_ATTRIBUTE, servicePolicy);
         } catch (Throwable t) {
             log.error("unable to load service-manifest", t);
             throw new IncompatibleRemoteServiceException();
@@ -84,7 +84,7 @@ public class ServicePolicy {
 
     public static String decodeServiceInterfaceClassName(String serviceClassId) {
         @SuppressWarnings("unchecked")
-        Map<String, String> servicePolicy = (Map<String, String>) Context.getRequest().getAttribute(SERVICE_INTERFACE_CLASSNAMES_REQUEST_ATTRIBUTE);
+        Map<String, String> servicePolicy = (Map<String, String>) ServerContext.getRequest().getAttribute(SERVICE_INTERFACE_CLASSNAMES_REQUEST_ATTRIBUTE);
 
         String realServiceName = null;
         if (servicePolicy != null) {

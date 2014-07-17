@@ -23,7 +23,7 @@ package com.pyx4j.security.server;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 
-import com.pyx4j.server.contexts.Context;
+import com.pyx4j.server.contexts.ServerContext;
 
 public class ServletContainerHelper implements IContainerHelper {
 
@@ -37,7 +37,7 @@ public class ServletContainerHelper implements IContainerHelper {
     }
 
     public String getContextPath(String destinationURL) {
-        String contextPath = Context.getRequest().getContextPath();
+        String contextPath = ServerContext.getRequest().getContextPath();
         if (destinationURL.contains(contextPath)) {
             return contextPath;
         } else {

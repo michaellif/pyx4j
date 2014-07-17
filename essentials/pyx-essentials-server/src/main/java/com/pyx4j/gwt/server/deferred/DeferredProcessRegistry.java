@@ -26,7 +26,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.pyx4j.gwt.rpc.deferred.DeferredProcessProgressResponse;
-import com.pyx4j.server.contexts.Context;
+import com.pyx4j.server.contexts.ServerContext;
 import com.pyx4j.server.contexts.Lifecycle;
 
 public class DeferredProcessRegistry {
@@ -39,13 +39,13 @@ public class DeferredProcessRegistry {
 
     @SuppressWarnings("unchecked")
     private static synchronized HashMap<String, DeferredProcessInfo> getMap() {
-        if (Context.getSession() == null) {
+        if (ServerContext.getSession() == null) {
             Lifecycle.beginAnonymousSession();
         }
-        HashMap<String, DeferredProcessInfo> m = (HashMap<String, DeferredProcessInfo>) Context.getSession().getAttribute(DEFERRED_PROCESS_SESSION_ATTRIBUTE);
+        HashMap<String, DeferredProcessInfo> m = (HashMap<String, DeferredProcessInfo>) ServerContext.getSession().getAttribute(DEFERRED_PROCESS_SESSION_ATTRIBUTE);
         if (m == null) {
             m = new HashMap<String, DeferredProcessInfo>();
-            Context.getSession().setAttribute(DEFERRED_PROCESS_SESSION_ATTRIBUTE, m);
+            ServerContext.getSession().setAttribute(DEFERRED_PROCESS_SESSION_ATTRIBUTE, m);
         }
         return m;
     }
@@ -54,7 +54,7 @@ public class DeferredProcessRegistry {
      * This is required on GAE?
      */
     public static void saveMap() {
-        Context.getSession().setAttribute(DEFERRED_PROCESS_SESSION_ATTRIBUTE, getMap());
+        ServerContext.getSession().setAttribute(DEFERRED_PROCESS_SESSION_ATTRIBUTE, getMap());
     }
 
     /**

@@ -37,7 +37,7 @@ import com.pyx4j.config.server.ApplicationVersion;
 import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.config.server.SystemDateManager;
 import com.pyx4j.log4j.LoggerConfig;
-import com.pyx4j.server.contexts.Context;
+import com.pyx4j.server.contexts.ServerContext;
 
 @SuppressWarnings("serial")
 public class ConfigInfoServlet extends HttpServlet {
@@ -70,7 +70,7 @@ public class ConfigInfoServlet extends HttpServlet {
 
         b.append("ContextName              : ").append(LoggerConfig.getContextName()).append("\n");
         try {
-            b.append("ServerInfo               : ").append(Context.getRequest().getServletContext().getServerInfo()).append("\n");
+            b.append("ServerInfo               : ").append(ServerContext.getRequest().getServletContext().getServerInfo()).append("\n");
         } catch (NoSuchMethodError ignoreOldTomcat) {
         }
         b.append("System Date              : ").append(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS Z").format(SystemDateManager.getDate())).append("\n");

@@ -32,7 +32,7 @@ import com.pyx4j.commons.EqualsHelper;
 import com.pyx4j.entity.core.meta.MemberMeta;
 import com.pyx4j.entity.shared.IFile;
 import com.pyx4j.entity.shared.IHasFile;
-import com.pyx4j.server.contexts.Context;
+import com.pyx4j.server.contexts.ServerContext;
 
 public class FileUploadRegistry {
 
@@ -42,10 +42,10 @@ public class FileUploadRegistry {
 
     public static void register(IFile<?> file) {
         @SuppressWarnings("unchecked")
-        Map<String, IFile<?>> userUploadedFiles = (Map<String, IFile<?>>) Context.getVisit().getAttribute(SESSION_ATTRIBUTE);
+        Map<String, IFile<?>> userUploadedFiles = (Map<String, IFile<?>>) ServerContext.getVisit().getAttribute(SESSION_ATTRIBUTE);
         if (userUploadedFiles == null) {
             userUploadedFiles = new HashMap<String, IFile<?>>();
-            Context.getVisit().setAttribute(SESSION_ATTRIBUTE, (Serializable) userUploadedFiles);
+            ServerContext.getVisit().setAttribute(SESSION_ATTRIBUTE, (Serializable) userUploadedFiles);
         }
         file.accessKey().setValue(UUID.randomUUID().toString());
         userUploadedFiles.put(file.accessKey().getValue(), file);
@@ -53,7 +53,7 @@ public class FileUploadRegistry {
 
     @SuppressWarnings("unchecked")
     public static <T extends IFile<?>> T get(String accessKey) {
-        Map<String, IFile<?>> userUploadedFiles = (Map<String, IFile<?>>) Context.getVisit().getAttribute(SESSION_ATTRIBUTE);
+        Map<String, IFile<?>> userUploadedFiles = (Map<String, IFile<?>>) ServerContext.getVisit().getAttribute(SESSION_ATTRIBUTE);
         if (userUploadedFiles == null) {
             return null;
         } else {

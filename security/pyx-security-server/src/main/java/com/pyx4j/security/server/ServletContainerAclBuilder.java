@@ -25,13 +25,13 @@ import java.util.Set;
 
 import com.pyx4j.security.shared.Acl;
 import com.pyx4j.security.shared.Behavior;
-import com.pyx4j.server.contexts.Context;
+import com.pyx4j.server.contexts.ServerContext;
 
 public class ServletContainerAclBuilder extends ReflectionEnabledAclBuilder {
 
     @Override
     public Acl createAcl(Set<Behavior> behaviors) {
-        Behavior containerBehavior = (Behavior) Context.getSessionAttribute(ServletContainerLoginServlet.ROLE_SESSION_ATTRIBUTE);
+        Behavior containerBehavior = (Behavior) ServerContext.getSessionAttribute(ServletContainerLoginServlet.ROLE_SESSION_ATTRIBUTE);
         if (containerBehavior != null) {
             if (behaviors == null) {
                 behaviors = new HashSet<Behavior>();

@@ -45,7 +45,7 @@ public abstract class SecurityController {
             return GWT.create(SecurityController.class);
         } else {
             // Use Reflection to create Controller defined in module "pyx-security-server"
-            return SecurityControllerCreator.createSecurityController();
+            return SecurityControllerCreator.create();
         }
     }
 

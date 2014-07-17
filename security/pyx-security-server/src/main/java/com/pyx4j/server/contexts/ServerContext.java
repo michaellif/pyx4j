@@ -28,12 +28,13 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import com.pyx4j.gwt.server.ServletUtils;
+import com.pyx4j.security.shared.Context;
 import com.pyx4j.security.shared.UserVisit;
 
 /**
  * 
  */
-public class Context {
+public class ServerContext extends Context {
 
     static final String SESSION_VISIT = "visit";
 
@@ -69,7 +70,7 @@ public class Context {
     }
 
     public static boolean isUserLoggedIn() {
-        Visit v = Context.getVisit();
+        Visit v = ServerContext.getVisit();
         return (v != null) && (v.isUserLoggedIn());
     }
 
@@ -83,11 +84,12 @@ public class Context {
      * @param userVisitClass
      * @return
      */
+    @Override
     @SuppressWarnings("unchecked")
-    public static <E extends UserVisit> E getUserVisit(Class<E> userVisitClass) {
-        Visit v = Context.getVisit();
-        if ((v != null) && (v.isUserLoggedIn()) && (userVisitClass.isAssignableFrom(Context.getVisit().getUserVisit().getClass()))) {
-            return (E) Context.getVisit().getUserVisit();
+    protected <E extends UserVisit> E getUserVisit(Class<E> userVisitClass) {
+        Visit v = getVisit();
+        if ((v != null) && (v.isUserLoggedIn()) && (userVisitClass.isAssignableFrom(getVisit().getUserVisit().getClass()))) {
+            return (E) getVisit().getUserVisit();
         } else {
             return null;
         }

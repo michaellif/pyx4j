@@ -56,19 +56,19 @@ public class DevSession {
     }
 
     public static DevSession getSession() {
-        DevSession session = Context.getDevSession();
+        DevSession session = ServerContext.getDevSession();
         if (session != null) {
             return session;
         }
-        if (Context.getRequest() == null) {
+        if (ServerContext.getRequest() == null) {
             return new DevSession();
         }
-        session = (DevSession) Context.getRequest().getAttribute(DEV_SESSION_REQUEST_ATTRIBUTE);
+        session = (DevSession) ServerContext.getRequest().getAttribute(DEV_SESSION_REQUEST_ATTRIBUTE);
         if (session == null) {
             session = singleSession;
         }
         if (session == null) {
-            Cookie sessionCookie = Util.getCookie(Context.getRequest(), ServerSideConfiguration.instance().getDevelopmentSessionCookieName(), true);
+            Cookie sessionCookie = Util.getCookie(ServerContext.getRequest(), ServerSideConfiguration.instance().getDevelopmentSessionCookieName(), true);
             if (sessionCookie != null) {
                 session = sessions.get(sessionCookie.getValue());
                 if ((session != null && session.eol <= System.currentTimeMillis())) {
@@ -79,7 +79,7 @@ public class DevSession {
             if (session == null) {
                 session = new DevSession();
             }
-            Context.getRequest().setAttribute(DEV_SESSION_REQUEST_ATTRIBUTE, session);
+            ServerContext.getRequest().setAttribute(DEV_SESSION_REQUEST_ATTRIBUTE, session);
         }
 
         return session;
@@ -113,8 +113,8 @@ public class DevSession {
 
         String domain = ServerSideConfiguration.instance().getDevelopmentSessionCookieDomain();
         if (CommonsStringUtils.isEmpty(domain)) {
-            String host = Context.getRequestServerName();
-            if (Context.getRequest().getLocalAddr().equals(host)) {
+            String host = ServerContext.getRequestServerName();
+            if (ServerContext.getRequest().getLocalAddr().equals(host)) {
                 domain = host;
             } else {
                 String[] hostParts = host.split("\\.");
@@ -129,11 +129,11 @@ public class DevSession {
         }
         sessionCookie.setDomain(domain);
 
-        Context.getResponse().addCookie(sessionCookie);
+        ServerContext.getResponse().addCookie(sessionCookie);
         session.eol = System.currentTimeMillis() + sessionDuration * Consts.SEC2MILLISECONDS;
 
         sessions.put(session.id, session);
-        Context.getRequest().setAttribute(DEV_SESSION_REQUEST_ATTRIBUTE, session);
+        ServerContext.getRequest().setAttribute(DEV_SESSION_REQUEST_ATTRIBUTE, session);
 
         return session;
     }
@@ -147,7 +147,7 @@ public class DevSession {
             Cookie sessionCookie = new Cookie(ServerSideConfiguration.instance().getDevelopmentSessionCookieName(), "");
             sessionCookie.setPath("/");
             sessionCookie.setMaxAge(0);
-            Context.getResponse().addCookie(sessionCookie);
+            ServerContext.getResponse().addCookie(sessionCookie);
         }
     }
 

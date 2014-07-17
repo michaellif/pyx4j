@@ -25,8 +25,8 @@ import junit.framework.TestCase;
 import com.pyx4j.security.shared.CoreBehavior;
 import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.security.shared.UserVisit;
-import com.pyx4j.server.contexts.Context;
 import com.pyx4j.server.contexts.Lifecycle;
+import com.pyx4j.server.contexts.ServerContext;
 import com.pyx4j.unit.server.mock.TestLifecycle;
 
 public class ContextTest extends TestCase {
@@ -39,25 +39,25 @@ public class ContextTest extends TestCase {
     public void testSession() {
         TestLifecycle.beginRequest();
 
-        assertNull("No Session", Context.getSession());
-        assertNull("No Visit", Context.getVisit());
+        assertNull("No Session", ServerContext.getSession());
+        assertNull("No Visit", ServerContext.getVisit());
         Lifecycle.beginAnonymousSession();
-        assertNotNull("Has Session", Context.getSession());
-        assertNotNull("Has Visit", Context.getVisit());
+        assertNotNull("Has Session", ServerContext.getSession());
+        assertNotNull("Has Visit", ServerContext.getVisit());
         TestLifecycle.endRequest();
 
-        assertNull("No Session", Context.getSession());
+        assertNull("No Session", ServerContext.getSession());
 
         TestLifecycle.beginRequest();
-        assertNotNull("Has Session in request 2", Context.getSession());
-        assertNotNull("Has Visit in request 2", Context.getVisit());
+        assertNotNull("Has Session in request 2", ServerContext.getSession());
+        assertNotNull("Has Visit in request 2", ServerContext.getVisit());
 
     }
 
     public void testLifecycle() {
         TestLifecycle.testSession(new UserVisit(), CoreBehavior.USER);
 
-        assertNull("No Visit", Context.getVisit());
+        assertNull("No Visit", ServerContext.getVisit());
 
         TestLifecycle.beginRequest();
         try {

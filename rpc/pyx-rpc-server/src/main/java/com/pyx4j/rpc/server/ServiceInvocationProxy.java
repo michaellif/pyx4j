@@ -39,7 +39,7 @@ import com.pyx4j.rpc.shared.IService;
 import com.pyx4j.rpc.shared.IServiceExecutePermission;
 import com.pyx4j.rpc.shared.UnRecoverableRuntimeException;
 import com.pyx4j.security.shared.SecurityController;
-import com.pyx4j.server.contexts.Context;
+import com.pyx4j.server.contexts.ServerContext;
 
 class ServiceInvocationProxy implements java.lang.reflect.InvocationHandler {
 
@@ -90,7 +90,7 @@ class ServiceInvocationProxy implements java.lang.reflect.InvocationHandler {
             method.invoke(serviceInstance, methodArgs);
 
         } catch (InvocationTargetException e) {
-            log.error("Service call error\n{}\n for user:" + Context.getVisit(), Trace.clickableClassLocation(serviceImplClass), e.getCause());
+            log.error("Service call error\n{}\n for user:" + ServerContext.getVisit(), Trace.clickableClassLocation(serviceImplClass), e.getCause());
             callback.onFailure(e.getCause());
             return null;
         } catch (Throwable e) {

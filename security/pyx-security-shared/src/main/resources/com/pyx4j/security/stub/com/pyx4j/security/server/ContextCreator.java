@@ -1,6 +1,6 @@
 /*
  * Pyx4j framework
- * Copyright (C) 2008-2011 pyx4j.com.
+ * Copyright (C) 2008-2010 pyx4j.com.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -14,23 +14,17 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on Nov 29, 2011
+ * Created on Jan 13, 2010
  * @author vlads
  * @version $Id$
  */
-package com.pyx4j.server.contexts;
+package com.pyx4j.security.server;
 
-import com.pyx4j.commons.UserAgentDetection;
+import com.pyx4j.security.shared.Context;
 
-public class UserAgentInfo {
-
-    public static final UserAgentDetection get() {
-        UserAgentDetection d = (UserAgentDetection) ServerContext.getRequest().getAttribute(UserAgentDetection.class.getName());
-        if (d == null) {
-            d = new UserAgentDetection(ServerContext.getRequestHeader("User-Agent"));
-            ServerContext.getRequest().setAttribute(UserAgentDetection.class.getName(), d);
-        }
-        return d;
+public class ContextCreator {
+    
+    public static final Context create() {
+        throw new RuntimeException("build error");
     }
-
 }

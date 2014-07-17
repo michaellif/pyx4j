@@ -57,11 +57,12 @@ import com.pyx4j.security.rpc.AuthenticationService;
 import com.pyx4j.security.rpc.AuthorizationChangedSystemNotification;
 import com.pyx4j.security.rpc.SystemWallMessage;
 import com.pyx4j.security.rpc.UserVisitChangedSystemNotification;
+import com.pyx4j.security.shared.Context;
 import com.pyx4j.security.shared.CoreBehavior;
 import com.pyx4j.security.shared.UserVisit;
 import com.pyx4j.webstorage.client.HTML5Storage;
 
-public class ClientContext {
+public class ClientContext extends Context {
 
     public static String USER_VISIT_ATTRIBUTE = "UserVisit";
 
@@ -180,14 +181,9 @@ public class ClientContext {
         return userVisit;
     }
 
-    /**
-     * Convenience method to access custom UserVisit
-     * 
-     * @param userVisitClass
-     * @return
-     */
+    @Override
     @SuppressWarnings("unchecked")
-    public static <E extends UserVisit> E getUserVisit(Class<E> userVisitClass) {
+    protected <E extends UserVisit> E getUserVisit(Class<E> userVisitClass) {
         return (E) getUserVisit();
     }
 
@@ -532,4 +528,5 @@ public class ClientContext {
         };
         select(authenticationService).authenticate(rpcCallback, ClientContext.getClientSystemInfo(), request);
     }
+
 }

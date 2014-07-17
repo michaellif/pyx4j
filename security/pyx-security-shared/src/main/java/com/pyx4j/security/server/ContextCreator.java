@@ -20,11 +20,24 @@
  */
 package com.pyx4j.security.server;
 
-import com.pyx4j.security.shared.SecurityController;
+import com.pyx4j.security.shared.Context;
 
-public class SecurityControllerCreator {
-    
-    public static final SecurityController create() {
-        throw new RuntimeException("Security build error");
+/**
+ * Use reflection to work on server side.
+ * 
+ * N.B. This class in replaced in GWT mode using 'super-source'
+ */
+public final class ContextCreator {
+
+    private static final String SERVER_SIDE = "com.pyx4j.server.contexts.ServerContext";
+
+    @SuppressWarnings("unchecked")
+    public static final Context create() {
+        try {
+            Class<Context> klass = (Class<Context>) Class.forName(SERVER_SIDE);
+            return klass.newInstance();
+        } catch (Throwable e) {
+            throw new RuntimeException("Can't create " + SERVER_SIDE, e);
+        }
     }
 }

@@ -62,16 +62,16 @@ public class Lifecycle {
 
     public static void beginRequest(HttpServletRequest httprequest, HttpServletResponse httpresponse) {
         //long start = System.nanoTime();
-        Context.beginRequest(httprequest, httpresponse);
+        ServerContext.beginRequest(httprequest, httpresponse);
         HttpSession session = httprequest.getSession(false);
-        Context.setSession(session);
+        ServerContext.setSession(session);
         if (session != null) {
-            String namespace = (String) session.getAttribute(Context.NAMESPACE);
-            Visit visit = (Visit) session.getAttribute(Context.SESSION_VISIT);
+            String namespace = (String) session.getAttribute(ServerContext.NAMESPACE);
+            Visit visit = (Visit) session.getAttribute(ServerContext.SESSION_VISIT);
             if ((visit != null) && (!NamespaceManager.getNamespace().equals(namespace))) {
                 throw new RuntimeException("namespace access error");
             }
-            Context.setVisit(visit);
+            ServerContext.setVisit(visit);
             String clientAclTimeStamp = httprequest.getHeader(RemoteService.SESSION_ACL_TIMESTAMP_HEADER);
             if ((visit != null) && visit.isUserLoggedIn()) {
                 LoggerConfig.mdcPut(LoggerConfig.MDC_userID, visit.getUserVisit().toString());
@@ -82,18 +82,18 @@ public class Lifecycle {
                                 visit.getAclTimeStamp());
                         if (behaviours == null) {
                             endSession(session);
-                            Context.addResponseSystemNotification(new AuthorizationChangedSystemNotification(ChangeType.sessionTerminated));
+                            ServerContext.addResponseSystemNotification(new AuthorizationChangedSystemNotification(ChangeType.sessionTerminated));
                         } else {
                             Set<Behavior> assignedBehaviours = SecurityController.instance().getAllBehaviors(behaviours);
                             if (!EqualsHelper.equals(assignedBehaviours, visit.getAcl().getBehaviours())) {
                                 log.info("AuthorizationChanged {} -> {}", visit.getAcl().getBehaviours(), assignedBehaviours);
                                 visit.beginSession(visit.getUserVisit(), SecurityController.instance().authorize(behaviours));
                                 visit.setAclChanged(true);
-                                Context.addResponseSystemNotification(new AuthorizationChangedSystemNotification(ChangeType.behavioursChanged));
+                                ServerContext.addResponseSystemNotification(new AuthorizationChangedSystemNotification(ChangeType.behavioursChanged));
                             } else {
                                 if ((clientAclTimeStamp != null) && (visit.getAclTimeStamp() != Long.parseLong(clientAclTimeStamp))) {
                                     log.info("AuthorizationChanged client needs sync {}", visit.getAcl().getBehaviours());
-                                    Context.addResponseSystemNotification(new AuthorizationChangedSystemNotification(ChangeType.syncRequired));
+                                    ServerContext.addResponseSystemNotification(new AuthorizationChangedSystemNotification(ChangeType.syncRequired));
                                 }
                                 visit.aclRevalidated();
                             }
@@ -111,12 +111,12 @@ public class Lifecycle {
 
     public static void endRequest() {
         try {
-            if ((Context.getRequest() != null) && Context.getRequest().getAttribute(END_REQUEST_ATR) == null) {
+            if ((ServerContext.getRequest() != null) && ServerContext.getRequest().getAttribute(END_REQUEST_ATR) == null) {
                 endRpcRequest();
             }
-            HttpSession session = Context.getSession();
+            HttpSession session = ServerContext.getSession();
             if (session != null) {
-                Visit visit = Context.getVisit();
+                Visit visit = ServerContext.getVisit();
                 if ((visit != null) && (visit.isChanged())) {
 
                     // Cleanup transient fields since they are preserved in GAE development environment
@@ -124,16 +124,16 @@ public class Lifecycle {
                     visit.unChanged();
 
                     // Force object update in GAE session.
-                    session.setAttribute(Context.SESSION_VISIT, visit);
+                    session.setAttribute(ServerContext.SESSION_VISIT, visit);
                 }
             }
-            HttpServletRequest request = Context.getRequest();
+            HttpServletRequest request = ServerContext.getRequest();
             if ((request != null) && (request.getAttribute(END_SESSION_ATR) != null)) {
                 // Remove Session Cookie
                 Cookie c = new Cookie(ServerSideConfiguration.instance().getSessionCookieName(), "");
                 c.setPath("/");
                 c.setMaxAge(0);
-                Context.getResponse().addCookie(c);
+                ServerContext.getResponse().addCookie(c);
             }
         } finally {
             endContext();
@@ -151,7 +151,7 @@ public class Lifecycle {
     }
 
     public static void removeContext() {
-        Context.remove();
+        ServerContext.remove();
         NamespaceManager.remove();
         I18nManager.removeThreadLocale();
         LoggerConfig.mdcClear();
@@ -159,27 +159,27 @@ public class Lifecycle {
 
     public static void endRpcRequest() {
         try {
-            if (Context.getRequest().getAttribute(END_SESSION_ATR) != null) {
+            if (ServerContext.getRequest().getAttribute(END_SESSION_ATR) != null) {
                 // Remove Session Cookie
                 Cookie c = new Cookie(ServerSideConfiguration.instance().getSessionCookieName(), "");
                 c.setPath("/");
                 c.setMaxAge(0);
-                Context.getResponse().addCookie(c);
+                ServerContext.getResponse().addCookie(c);
             }
 
             for (LifecycleListener lifecycleListener : ServerSideConfiguration.instance().getLifecycleListeners()) {
                 lifecycleListener.onRequestEnd();
             }
         } finally {
-            Context.getRequest().setAttribute(END_REQUEST_ATR, Boolean.TRUE);
+            ServerContext.getRequest().setAttribute(END_REQUEST_ATR, Boolean.TRUE);
         }
     }
 
     public static void beginAnonymousSession() {
-        HttpSession session = Context.getSession();
+        HttpSession session = ServerContext.getSession();
         if (session == null) {
-            beginSession(Context.getRequest().getSession(true));
-            log.info("Anonymous Session {} starts", Context.getSession().getId());
+            beginSession(ServerContext.getRequest().getSession(true));
+            log.info("Anonymous Session {} starts", ServerContext.getSession().getId());
         }
         //Context.getVisit().beginAnonymousSession(JAASHelper.anonymousLogin());
     }
@@ -191,18 +191,18 @@ public class Lifecycle {
     public static void changeSessionAuthorization(Collection<Behavior> newBehaviours) {
         Set<Behavior> behaviors = new HashSet<Behavior>();
         behaviors.addAll(newBehaviours);
-        beginSession(Context.getVisit().getUserVisit(), behaviors);
-        Context.addResponseSystemNotification(new AuthorizationChangedSystemNotification(ChangeType.behavioursChanged));
+        beginSession(ServerContext.getVisit().getUserVisit(), behaviors);
+        ServerContext.addResponseSystemNotification(new AuthorizationChangedSystemNotification(ChangeType.behavioursChanged));
     }
 
     //TODO  Change the implementation to use Authorization functions
     public static String beginSession(UserVisit userVisit, Set<Behavior> behaviours) {
-        Visit currentVisit = Context.getVisit();
+        Visit currentVisit = ServerContext.getVisit();
         if ((currentVisit != null) && (userVisit != null) && (currentVisit.isUserLoggedIn())
                 && EqualsHelper.equals(userVisit.getPrincipalPrimaryKey(), currentVisit.getUserVisit().getPrincipalPrimaryKey())) {
             // The same user. No need to create new session, consider that behaviors are updated
         } else {
-            HttpSession session = Context.getSession();
+            HttpSession session = ServerContext.getSession();
             // Preserve some administration and debug session attributes
             Map<String, Object> keepAttributes = new HashMap<String, Object>();
             if (session != null) {
@@ -218,7 +218,7 @@ public class Lifecycle {
                 } catch (IllegalStateException e) {
                 }
             }
-            HttpSession newSession = Context.getRequest().getSession(true);
+            HttpSession newSession = ServerContext.getRequest().getSession(true);
             log.info("Session {} starts for {}", newSession.getId(), userVisit);
             for (Map.Entry<String, Object> me : keepAttributes.entrySet()) {
                 newSession.setAttribute(me.getKey(), me.getValue());
@@ -230,13 +230,13 @@ public class Lifecycle {
                 newSession.setAttribute("User", userVisit);
             }
         }
-        Context.getVisit().beginSession(userVisit, SecurityController.instance().authorize(behaviours));
-        Context.getRequest().removeAttribute(END_SESSION_ATR);
-        return Context.getVisit().getSessionToken();
+        ServerContext.getVisit().beginSession(userVisit, SecurityController.instance().authorize(behaviours));
+        ServerContext.getRequest().removeAttribute(END_SESSION_ATR);
+        return ServerContext.getVisit().getSessionToken();
     }
 
     public static String beginSession(HttpSession session) {
-        Context.setSession(session);
+        ServerContext.setSession(session);
         LoggerConfig.mdcPut(LoggerConfig.MDC_sessionNum, session.getId());
 
         if (ServerSideConfiguration.instance().getOverrideSessionMaxInactiveInterval() != null) {
@@ -249,16 +249,16 @@ public class Lifecycle {
         log.info("Session {} X-XSRF token {}", session.getId(), sessionToken);
 
         Visit visit = new Visit(sessionToken);
-        session.setAttribute(Context.SESSION_VISIT, visit);
-        Context.setVisit(visit);
-        session.setAttribute(Context.NAMESPACE, NamespaceManager.getNamespace());
+        session.setAttribute(ServerContext.SESSION_VISIT, visit);
+        ServerContext.setVisit(visit);
+        session.setAttribute(ServerContext.NAMESPACE, NamespaceManager.getNamespace());
 
         return sessionToken;
     }
 
     public static void inheritUserContext(InheritableUserContext inheritableUserContext) {
-        Context.setVisit(inheritableUserContext.abstractVisit);
-        Context.setDevSession(inheritableUserContext.devSession);
+        ServerContext.setVisit(inheritableUserContext.abstractVisit);
+        ServerContext.setDevSession(inheritableUserContext.devSession);
         NamespaceManager.setNamespace(inheritableUserContext.namespace);
         I18nManager.setThreadLocale(inheritableUserContext.locale);
         if (inheritableUserContext.sysDate != null) {
@@ -269,40 +269,40 @@ public class Lifecycle {
     public static void startElevatedUserContext() {
         Visit visit = new Visit(null);
         visit.beginSession(null, new AclCreatorAllowAll().createAcl(null));
-        visit.setAttribute("inheritableUserContext", Context.getInheritableUserContext());
-        Context.setVisit(visit);
+        visit.setAttribute("inheritableUserContext", ServerContext.getInheritableUserContext());
+        ServerContext.setVisit(visit);
     }
 
     public static void endElevatedUserContext() {
-        Visit visit = Context.getVisit();
+        Visit visit = ServerContext.getVisit();
         inheritUserContext((InheritableUserContext) visit.getAttribute("inheritableUserContext"));
     }
 
     public static Visit getVisitFromSession(HttpSession session) {
-        return (Visit) session.getAttribute(Context.SESSION_VISIT);
+        return (Visit) session.getAttribute(ServerContext.SESSION_VISIT);
     }
 
     public static String getNamespaceFromSession(HttpSession session) {
-        return (String) session.getAttribute(Context.NAMESPACE);
+        return (String) session.getAttribute(ServerContext.NAMESPACE);
     }
 
     public static void endSession() {
-        endSession(Context.getSession());
+        endSession(ServerContext.getSession());
     }
 
     public static void endSession(HttpSession session) {
-        if (Context.getVisit() != null) {
-            Context.getVisit().endSession();
+        if (ServerContext.getVisit() != null) {
+            ServerContext.getVisit().endSession();
         }
         if (session != null) {
-            Context.endSession();
+            ServerContext.endSession();
             try {
                 log.info("Session {} ends", session.getId());
                 session.invalidate();
             } catch (IllegalStateException e) {
                 // this method is called already
             }
-            Context.getRequest().setAttribute(END_SESSION_ATR, Boolean.TRUE);
+            ServerContext.getRequest().setAttribute(END_SESSION_ATR, Boolean.TRUE);
         }
     }
 

@@ -30,7 +30,7 @@ import org.slf4j.LoggerFactory;
 
 import com.pyx4j.commons.Consts;
 import com.pyx4j.gwt.shared.DownloadFormat;
-import com.pyx4j.server.contexts.Context;
+import com.pyx4j.server.contexts.ServerContext;
 
 public class Downloadable implements Serializable {
 
@@ -77,10 +77,10 @@ public class Downloadable implements Serializable {
     @SuppressWarnings("unchecked")
     public void save(String fileName) {
         synchronized (Downloadable.class) {
-            Map<String, Downloadable> map = (Map<String, Downloadable>) Context.getVisit().getAttribute(DOWNLOADABLE_LIST_SESSION_ATTRIBUTE);
+            Map<String, Downloadable> map = (Map<String, Downloadable>) ServerContext.getVisit().getAttribute(DOWNLOADABLE_LIST_SESSION_ATTRIBUTE);
             if (map == null) {
                 map = new HashMap<String, Downloadable>();
-                Context.getVisit().setAttribute(DOWNLOADABLE_LIST_SESSION_ATTRIBUTE, (Serializable) map);
+                ServerContext.getVisit().setAttribute(DOWNLOADABLE_LIST_SESSION_ATTRIBUTE, (Serializable) map);
             } else {
                 cleanOld(map);
             }
@@ -92,10 +92,10 @@ public class Downloadable implements Serializable {
     @SuppressWarnings("unchecked")
     public void remove() {
         synchronized (Downloadable.class) {
-            Map<String, Downloadable> map = (Map<String, Downloadable>) Context.getVisit().getAttribute(DOWNLOADABLE_LIST_SESSION_ATTRIBUTE);
+            Map<String, Downloadable> map = (Map<String, Downloadable>) ServerContext.getVisit().getAttribute(DOWNLOADABLE_LIST_SESSION_ATTRIBUTE);
             if (map != null) {
                 map.values().remove(this);
-                Context.getVisit().setAttribute(DOWNLOADABLE_LIST_SESSION_ATTRIBUTE, (Serializable) map);
+                ServerContext.getVisit().setAttribute(DOWNLOADABLE_LIST_SESSION_ATTRIBUTE, (Serializable) map);
             }
         }
     }
@@ -103,7 +103,7 @@ public class Downloadable implements Serializable {
     @SuppressWarnings("unchecked")
     public static void cancel(String fileName) {
         synchronized (Downloadable.class) {
-            Map<String, Downloadable> map = (Map<String, Downloadable>) Context.getVisit().getAttribute(DOWNLOADABLE_LIST_SESSION_ATTRIBUTE);
+            Map<String, Downloadable> map = (Map<String, Downloadable>) ServerContext.getVisit().getAttribute(DOWNLOADABLE_LIST_SESSION_ATTRIBUTE);
             if (map != null) {
                 try {
                     if (map.remove(fileName) != null) {
@@ -124,13 +124,13 @@ public class Downloadable implements Serializable {
                 iterator.remove();
             }
         }
-        Context.getVisit().setAttribute(DOWNLOADABLE_LIST_SESSION_ATTRIBUTE, (Serializable) map);
+        ServerContext.getVisit().setAttribute(DOWNLOADABLE_LIST_SESSION_ATTRIBUTE, (Serializable) map);
     }
 
     @SuppressWarnings("unchecked")
     public static Downloadable getDownloadable(String fileName) {
         synchronized (Downloadable.class) {
-            Map<String, Downloadable> map = (Map<String, Downloadable>) Context.getVisit().getAttribute(DOWNLOADABLE_LIST_SESSION_ATTRIBUTE);
+            Map<String, Downloadable> map = (Map<String, Downloadable>) ServerContext.getVisit().getAttribute(DOWNLOADABLE_LIST_SESSION_ATTRIBUTE);
             if (map == null) {
                 return null;
             } else {

@@ -25,7 +25,7 @@ import org.slf4j.LoggerFactory;
 
 import com.pyx4j.commons.UserRuntimeException;
 import com.pyx4j.config.server.ServerSideConfiguration;
-import com.pyx4j.server.contexts.Context;
+import com.pyx4j.server.contexts.ServerContext;
 import com.pyx4j.server.contexts.InheritableUserContext;
 import com.pyx4j.server.contexts.Lifecycle;
 
@@ -40,7 +40,7 @@ class DeferredProcessWorkThread extends Thread {
     DeferredProcessWorkThread(String name, DeferredProcessInfo info) {
         super(name + "Process");
         this.info = info;
-        inheritableUserContext = Context.getInheritableUserContext();
+        inheritableUserContext = ServerContext.getInheritableUserContext();
     }
 
     @Override

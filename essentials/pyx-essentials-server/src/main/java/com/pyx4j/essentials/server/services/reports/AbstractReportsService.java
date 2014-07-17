@@ -41,7 +41,7 @@ import com.pyx4j.gwt.server.deferred.DeferredProcessRegistry;
 import com.pyx4j.gwt.server.deferred.IDeferredProcess;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.shared.VoidSerializable;
-import com.pyx4j.server.contexts.Context;
+import com.pyx4j.server.contexts.ServerContext;
 import com.pyx4j.site.rpc.reports.IReportsService;
 import com.pyx4j.site.shared.domain.reports.ReportMetadata;
 
@@ -113,7 +113,7 @@ public abstract class AbstractReportsService<R extends ReportMetadata> implement
                                     return reportGenerator.generateReport(reportMetadata);
                                 }
                             });
-                    Context.getVisit().setAttribute(REPORT_SESSION_STORAGE_KEY, reportData);
+                    ServerContext.getVisit().setAttribute(REPORT_SESSION_STORAGE_KEY, reportData);
                     isReady = true;
                 } catch (Throwable error) {
                     this.error = error;
@@ -262,8 +262,8 @@ public abstract class AbstractReportsService<R extends ReportMetadata> implement
 
     @Override
     public void getReport(AsyncCallback<Serializable> callback) {
-        Serializable report = Context.getVisit().getAttribute(REPORT_SESSION_STORAGE_KEY);
-        Context.getVisit().removeAttribute(REPORT_SESSION_STORAGE_KEY);
+        Serializable report = ServerContext.getVisit().getAttribute(REPORT_SESSION_STORAGE_KEY);
+        ServerContext.getVisit().removeAttribute(REPORT_SESSION_STORAGE_KEY);
         callback.onSuccess(report);
     }
 

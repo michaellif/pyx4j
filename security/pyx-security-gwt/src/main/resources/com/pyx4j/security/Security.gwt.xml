@@ -12,5 +12,9 @@
         <when-type-is class="com.pyx4j.security.shared.SecurityController"/>
     </replace-with>
     
+    <replace-with class="com.pyx4j.security.client.ClientContext">
+        <when-type-is class="com.pyx4j.security.shared.Context"/>
+    </replace-with>
+        
 	<source path="client"/>
 </module>

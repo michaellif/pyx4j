@@ -35,7 +35,7 @@ import com.pyx4j.essentials.rpc.admin.SystemMaintenanceState;
 import com.pyx4j.essentials.server.admin.SystemMaintenance;
 import com.pyx4j.essentials.server.dev.bugs.MemoryLeakContextLifecycleListener;
 import com.pyx4j.i18n.server.CookieLocaleResolver;
-import com.pyx4j.server.contexts.Context;
+import com.pyx4j.server.contexts.ServerContext;
 import com.pyx4j.server.contexts.Visit;
 
 public class EssentialsServerSideConfiguration extends ServerSideConfiguration {
@@ -53,7 +53,7 @@ public class EssentialsServerSideConfiguration extends ServerSideConfiguration {
             @Override
             public void onRequestBegin() {
                 super.onRequestBegin();
-                Visit visit = Context.getVisit();
+                Visit visit = ServerContext.getVisit();
                 if ((visit != null) && (visit.isUserLoggedIn())) {
                     Persistence.service().setTransactionUserKey(visit.getUserVisit().getPrincipalPrimaryKey());
                 }

@@ -27,7 +27,7 @@ import com.pyx4j.security.shared.Acl;
 import com.pyx4j.security.shared.AclCreator;
 import com.pyx4j.security.shared.Behavior;
 import com.pyx4j.security.shared.SecurityController;
-import com.pyx4j.server.contexts.Context;
+import com.pyx4j.server.contexts.ServerContext;
 import com.pyx4j.server.contexts.Visit;
 
 public class SessionBaseSecurityController extends SecurityController {
@@ -65,7 +65,7 @@ public class SessionBaseSecurityController extends SecurityController {
 
     @Override
     public Acl getAcl() {
-        Visit v = Context.getVisit();
+        Visit v = ServerContext.getVisit();
         Acl userAcl = null;
         if (v != null) {
             userAcl = v.getAcl();

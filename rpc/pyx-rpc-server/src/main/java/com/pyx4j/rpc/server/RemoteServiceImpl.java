@@ -52,7 +52,7 @@ import com.pyx4j.security.rpc.UserVisitChangedSystemNotification;
 import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.security.shared.SecurityViolationException;
 import com.pyx4j.security.shared.UserVisit;
-import com.pyx4j.server.contexts.Context;
+import com.pyx4j.server.contexts.ServerContext;
 import com.pyx4j.server.contexts.Visit;
 
 public class RemoteServiceImpl implements RemoteService {
@@ -114,12 +114,12 @@ public class RemoteServiceImpl implements RemoteService {
                 }
                 throw new UnRecoverableRuntimeException("Fatal system error: " + e.getMessage());
             }
-            Visit visit = Context.getVisit();
+            Visit visit = ServerContext.getVisit();
             if ((!(serviceInstance instanceof IsIgnoreSessionTokenService)) && (!((Service) serviceInstance instanceof IServiceAdapter))) {
-                if ((visit != null) && (!CommonsStringUtils.equals(Context.getRequestHeader(RemoteService.SESSION_TOKEN_HEADER), visit.getSessionToken()))) {
+                if ((visit != null) && (!CommonsStringUtils.equals(ServerContext.getRequestHeader(RemoteService.SESSION_TOKEN_HEADER), visit.getSessionToken()))) {
                     logOnce = false;
-                    log.error("X-XSRF error, {} user {}", Context.getSessionId(), visit);
-                    log.error("X-XSRF tokens: session: {}, request: {}", visit.getSessionToken(), Context.getRequestHeader(RemoteService.SESSION_TOKEN_HEADER));
+                    log.error("X-XSRF error, {} user {}", ServerContext.getSessionId(), visit);
+                    log.error("X-XSRF tokens: session: {}, request: {}", visit.getSessionToken(), ServerContext.getRequestHeader(RemoteService.SESSION_TOKEN_HEADER));
                     throw new SecurityViolationException("Request requires authentication.");
                 }
             }
@@ -151,7 +151,7 @@ public class RemoteServiceImpl implements RemoteService {
 
                 // Ignores the case when user visit was created in this request.
                 if ((userVisit != null) && ((userVisit.isChanged() || (!String.valueOf(userVisit.hashCode()).equals(userVisitHashCode))))) {
-                    Context.addResponseSystemNotification(new UserVisitChangedSystemNotification(userVisit));
+                    ServerContext.addResponseSystemNotification(new UserVisitChangedSystemNotification(userVisit));
                 }
 
                 // make JVM hashCode available on GWT side
@@ -159,36 +159,36 @@ public class RemoteServiceImpl implements RemoteService {
                     visit.getUserVisit().createServerSideHashCode();
                 }
 
-                if (Context.getResponseSystemNotifications() != null) {
+                if (ServerContext.getResponseSystemNotifications() != null) {
                     if (!(returnValue instanceof SystemNotificationsWrapper)) {
                         returnValue = new SystemNotificationsWrapper(returnValue);
                     }
-                    log.debug("sending Notifications {}", Context.getResponseSystemNotifications());
-                    ((SystemNotificationsWrapper) returnValue).addSystemNotifications(Context.getResponseSystemNotifications());
+                    log.debug("sending Notifications {}", ServerContext.getResponseSystemNotifications());
+                    ((SystemNotificationsWrapper) returnValue).addSystemNotifications(ServerContext.getResponseSystemNotifications());
                 }
                 return returnValue;
             } catch (Throwable e) {
-                if ((e instanceof SecurityViolationException) && (Context.getVisit() == null)) {
-                    Context.addResponseSystemNotification(new AuthorizationChangedSystemNotification(ChangeType.sessionTerminated));
+                if ((e instanceof SecurityViolationException) && (ServerContext.getVisit() == null)) {
+                    ServerContext.addResponseSystemNotification(new AuthorizationChangedSystemNotification(ChangeType.sessionTerminated));
                 }
                 logOnce = false;
                 // Avoid duplicated log
                 if (!inService || !serviceInterfaceClassName.equals(IServiceAdapter.class.getName())) {
                     if (e instanceof IsWarningException) {
-                        log.warn("Service call exception for {}", Context.getVisit(), e);
+                        log.warn("Service call exception for {}", ServerContext.getVisit(), e);
                     } else {
-                        log.error("Service call error {} for {}", serviceInterfaceClassName, Context.getVisit(), e);
+                        log.error("Service call error {} for {}", serviceInterfaceClassName, ServerContext.getVisit(), e);
                     }
                 } else {
                     // Log SecurityViolationException
                     if (logStakTrace(e)) {
                         if (ApplicationMode.isDevelopment()) {
-                            log.error("Service call exception for {}", Context.getVisit(), e);
+                            log.error("Service call exception for {}", ServerContext.getVisit(), e);
                         } else {
-                            log.error("Service call exception for {} {}", Context.getVisit(), e.getMessage());
+                            log.error("Service call exception for {} {}", ServerContext.getVisit(), e.getMessage());
                         }
                     } else {
-                        log.warn("Service call exception for {} '{}'", Context.getVisit(), e.getMessage());
+                        log.warn("Service call exception for {} '{}'", ServerContext.getVisit(), e.getMessage());
                     }
                 }
                 if (e instanceof RuntimeExceptionSerializable) {
@@ -216,16 +216,16 @@ public class RemoteServiceImpl implements RemoteService {
             }
         } catch (RuntimeExceptionSerializable oe) {
             if (logOnce) {
-                log.error("Service call error {} for " + Context.getVisit(), serviceInterfaceClassName, oe);
+                log.error("Service call error {} for " + ServerContext.getVisit(), serviceInterfaceClassName, oe);
             }
-            if (Context.getResponseSystemNotifications() != null) {
-                throw new RuntimeExceptionNotificationsWrapper(oe, Context.getResponseSystemNotifications());
+            if (ServerContext.getResponseSystemNotifications() != null) {
+                throw new RuntimeExceptionNotificationsWrapper(oe, ServerContext.getResponseSystemNotifications());
             } else {
                 throw oe;
             }
         } catch (RuntimeException e) {
             if (logOnce) {
-                log.error("Service call error {} for " + Context.getVisit(), serviceInterfaceClassName, e);
+                log.error("Service call error {} for " + ServerContext.getVisit(), serviceInterfaceClassName, e);
             }
             if (isSerializable(e)) {
                 throw e;

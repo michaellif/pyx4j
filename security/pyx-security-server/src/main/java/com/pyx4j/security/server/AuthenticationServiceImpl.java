@@ -46,7 +46,7 @@ import com.pyx4j.security.rpc.PasswordRetrievalRequest;
 import com.pyx4j.security.shared.ActionPermission;
 import com.pyx4j.security.shared.Permission;
 import com.pyx4j.security.shared.SecurityController;
-import com.pyx4j.server.contexts.Context;
+import com.pyx4j.server.contexts.ServerContext;
 import com.pyx4j.server.contexts.Lifecycle;
 import com.pyx4j.server.contexts.Visit;
 
@@ -80,8 +80,8 @@ public abstract class AuthenticationServiceImpl implements AuthenticationService
 
     public AuthenticationResponse createAuthenticationResponse(String sessionToken) {
         AuthenticationResponse ar = new AuthenticationResponse();
-        if (Context.getSession() != null) {
-            ar.setMaxInactiveInterval(Context.getSession().getMaxInactiveInterval());
+        if (ServerContext.getSession() != null) {
+            ar.setMaxInactiveInterval(ServerContext.getSession().getMaxInactiveInterval());
             ar.setSessionCookieName(ServerSideConfiguration.instance().getSessionCookieName());
             log.debug("session maxInactiveInterval {} sec", ar.getMaxInactiveInterval());
             switch (ServerSideConfiguration.instance().getEnvironmentType()) {
@@ -99,7 +99,7 @@ public abstract class AuthenticationServiceImpl implements AuthenticationService
             ar.setBehaviors(SecurityController.getBehaviors());
             ar.setPermissions(filterClientPermissions(SecurityController.getPermissions()));
 
-            Visit visit = Context.getVisit();
+            Visit visit = ServerContext.getVisit();
             if (visit != null) {
                 if (EqualsHelper.equals(sessionToken, visit.getSessionToken())) {
                     ar.setUserVisit(visit.getUserVisit());
@@ -158,8 +158,8 @@ public abstract class AuthenticationServiceImpl implements AuthenticationService
         // Allow all RPC requests to complete before session is closed, TODO Consider moving the same to behavior change in session.
         // Visit is destroyed after endSession, keep the variable
         ReadWriteLock sessionGuardLock = null;
-        if (Context.getVisit() != null) {
-            sessionGuardLock = Context.getVisit().getSessionGuardLock();
+        if (ServerContext.getVisit() != null) {
+            sessionGuardLock = ServerContext.getVisit().getSessionGuardLock();
             try {
                 //This thread hold a read lock already,
                 sessionGuardLock.readLock().unlock();

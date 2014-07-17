@@ -38,14 +38,14 @@ import com.pyx4j.essentials.rpc.admin.NetworkSimulation;
 import com.pyx4j.essentials.server.dev.NetworkSimulationServiceFilter;
 import com.pyx4j.gwt.server.deferred.DeferredProcessRegistry;
 import com.pyx4j.rpc.shared.VoidSerializable;
-import com.pyx4j.server.contexts.Context;
+import com.pyx4j.server.contexts.ServerContext;
 
 public class AdminServicesImpl implements AdminServices {
 
     static long inactiveTime() {
         int sessionTimeoutSeconds = 0;
-        if (Context.getSession() != null) {
-            sessionTimeoutSeconds = Context.getSession().getMaxInactiveInterval();
+        if (ServerContext.getSession() != null) {
+            sessionTimeoutSeconds = ServerContext.getSession().getMaxInactiveInterval();
         }
         if (sessionTimeoutSeconds <= 0) {
             sessionTimeoutSeconds = 24 * Consts.HOURS2SEC;

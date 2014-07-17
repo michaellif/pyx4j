@@ -51,7 +51,7 @@ import com.pyx4j.security.annotations.AccessControl;
 import com.pyx4j.security.shared.ActionPermission;
 import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.security.shared.SecurityViolationException;
-import com.pyx4j.server.contexts.Context;
+import com.pyx4j.server.contexts.ServerContext;
 import com.pyx4j.server.contexts.Visit;
 
 public class IServiceAdapterImpl implements IServiceAdapter {
@@ -131,17 +131,17 @@ public class IServiceAdapterImpl implements IServiceAdapter {
             throw new UnRecoverableRuntimeException("Fatal system error: " + e.getMessage());
         }
 
-        Visit visit = Context.getVisit();
+        Visit visit = ServerContext.getVisit();
         if (visit == null) {
             return;
         }
         if ((serviceImplClass.getAnnotation(IgnoreSessionToken.class) != null) || (implMethod.getAnnotation(IgnoreSessionToken.class) != null)) {
             return;
         }
-        if (!CommonsStringUtils.equals(Context.getRequestHeader(RemoteService.SESSION_TOKEN_HEADER), visit.getSessionToken())) {
+        if (!CommonsStringUtils.equals(ServerContext.getRequestHeader(RemoteService.SESSION_TOKEN_HEADER), visit.getSessionToken())) {
             log.error("X-XSRF error, Srv {}.{}", serviceImplClass.getName(), method.getName());
-            log.error("X-XSRF error, {} user {}", Context.getSessionId(), visit);
-            log.error("X-XSRF tokens: session: {}, request: {}", visit.getSessionToken(), Context.getRequestHeader(RemoteService.SESSION_TOKEN_HEADER));
+            log.error("X-XSRF error, {} user {}", ServerContext.getSessionId(), visit);
+            log.error("X-XSRF tokens: session: {}, request: {}", visit.getSessionToken(), ServerContext.getRequestHeader(RemoteService.SESSION_TOKEN_HEADER));
             throw new SecurityViolationException("Request requires authentication.");
         }
     }
@@ -217,7 +217,7 @@ public class IServiceAdapterImpl implements IServiceAdapter {
             throw new UnRecoverableRuntimeException(i18n.tr("Fatal system error"));
         } catch (InvocationTargetException e) {
             if (RemoteServiceImpl.logStakTrace(e)) {
-                log.error("Service call error\n{}\n for user: {}", Trace.clickableClassLocation(serviceInstance.getClass()), Context.getVisit(), e.getCause());
+                log.error("Service call error\n{}\n for user: {}", Trace.clickableClassLocation(serviceInstance.getClass()), ServerContext.getVisit(), e.getCause());
             }
             if (e.getCause() instanceof RuntimeExceptionSerializable) {
                 if ((e.getCause() != null) && (e.getCause() != e)) {

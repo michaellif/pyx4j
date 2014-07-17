@@ -29,9 +29,9 @@ import javax.servlet.http.HttpServletResponse;
 import com.pyx4j.rpc.shared.RemoteService;
 import com.pyx4j.security.shared.Behavior;
 import com.pyx4j.security.shared.UserVisit;
-import com.pyx4j.server.contexts.Context;
 import com.pyx4j.server.contexts.Lifecycle;
 import com.pyx4j.server.contexts.NamespaceManager;
+import com.pyx4j.server.contexts.ServerContext;
 import com.pyx4j.server.contexts.Visit;
 
 public class TestLifecycle {
@@ -85,7 +85,7 @@ public class TestLifecycle {
             Lifecycle.beginSession(testContext.userVisit, testContext.behaviours);
         }
         //TODO create Client side Context
-        Visit visit = Context.getVisit();
+        Visit visit = ServerContext.getVisit();
         if (visit != null) {
             httprequest.setHeader(RemoteService.SESSION_TOKEN_HEADER, visit.getSessionToken());
         }
@@ -97,7 +97,7 @@ public class TestLifecycle {
     }
 
     public static void tearDown() {
-        if (Context.getRequest() != null) {
+        if (ServerContext.getRequest() != null) {
             endRequest();
         }
         threadLocalContext.remove();

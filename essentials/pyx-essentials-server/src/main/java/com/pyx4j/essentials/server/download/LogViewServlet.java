@@ -57,7 +57,7 @@ import com.pyx4j.commons.Consts;
 import com.pyx4j.commons.HtmlUtils;
 import com.pyx4j.gwt.server.DateUtils;
 import com.pyx4j.log4j.LoggerConfig;
-import com.pyx4j.server.contexts.Context;
+import com.pyx4j.server.contexts.ServerContext;
 
 @SuppressWarnings("serial")
 public class LogViewServlet extends HttpServlet {
@@ -100,7 +100,7 @@ public class LogViewServlet extends HttpServlet {
     }
 
     protected void authentication(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
-        if ((Context.getVisit() == null) || (!Context.getVisit().isUserLoggedIn())) {
+        if ((ServerContext.getVisit() == null) || (!ServerContext.getVisit().isUserLoggedIn())) {
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             throw new ServletException("Request requires authentication.");
         }

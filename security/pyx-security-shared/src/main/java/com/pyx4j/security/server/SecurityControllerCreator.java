@@ -32,7 +32,7 @@ public final class SecurityControllerCreator {
     private static final String SERVER_SIDE_SECURITY_CONTROLLER = "com.pyx4j.security.server.SessionBaseSecurityController";
 
     @SuppressWarnings("unchecked")
-    public static final SecurityController createSecurityController() {
+    public static final SecurityController create() {
         try {
             Class<SecurityController> klass = (Class<SecurityController>) Class.forName(SERVER_SIDE_SECURITY_CONTROLLER);
             return klass.newInstance();
