@@ -41,6 +41,8 @@ import com.google.gwt.user.client.ui.Widget;
 import com.pyx4j.gwt.commons.layout.LayoutChangeRequestEvent;
 import com.pyx4j.gwt.commons.layout.LayoutChangeRequestEvent.ChangeType;
 import com.pyx4j.gwt.commons.layout.LayoutType;
+import com.pyx4j.security.shared.Permission;
+import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.resources.SiteImages;
 import com.pyx4j.site.rpc.AppPlace;
@@ -74,7 +76,9 @@ public class SideMenuItem implements ISideMenuNode {
 
     private final HandlerRegistration toggleHandler;
 
-    public SideMenuItem(final Command command, String caption, final ButtonImages images) {
+    private Permission[] permission;
+
+    public SideMenuItem(final Command command, String caption, final ButtonImages images, Permission... permission) {
         super();
         this.command = command;
         this.images = images;
@@ -133,10 +137,15 @@ public class SideMenuItem implements ISideMenuNode {
         label.setStyleName(SideMenuTheme.StyleName.SideMenuLabel.name());
         itemPanel.add(label);
 
+        // java varargs creates empty arrays,  so consider it as no permissions set
+        if (permission == null || permission.length == 0) {
+            permission = null;
+        }
+        setPermission(permission);
     }
 
-    public SideMenuItem(SideMenuList submenu, String caption, ButtonImages images) {
-        this((Command) null, caption, images);
+    public SideMenuItem(SideMenuList submenu, String caption, ButtonImages images, Permission... permission) {
+        this((Command) null, caption, images, permission);
         this.submenu = submenu;
         if (submenu != null) {
             contentPanel.add(submenu);
@@ -217,7 +226,12 @@ public class SideMenuItem implements ISideMenuNode {
     }
 
     public void setVisible(boolean visible) {
-        contentPanel.setVisible(visible);
+        contentPanel.setVisible(visible && ((permission == null) || SecurityController.check(permission)));
+    }
+
+    public void setPermission(Permission... permission) {
+        this.permission = permission;
+        setVisible(contentPanel.isVisible());
     }
 
     void setIndentation(int indentation) {

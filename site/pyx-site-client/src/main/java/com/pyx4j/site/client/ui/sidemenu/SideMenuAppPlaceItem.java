@@ -34,35 +34,32 @@ public class SideMenuAppPlaceItem extends SideMenuItem {
     private final AppPlace appPlace;
 
     public SideMenuAppPlaceItem(final AppPlace appPlace) {
-        this(appPlace, null, null);
+        this(appPlace, null, null, (Permission[]) null);
     }
 
     public SideMenuAppPlaceItem(final AppPlace appPlace, Behavior... behaviors) {
-        this(appPlace, null, null);
+        this(appPlace, null, null, (Permission[]) null);
         if (!SecurityController.check(behaviors)) {
             setVisible(false);
         }
     }
 
     public SideMenuAppPlaceItem(final AppPlace appPlace, Permission... permission) {
-        this(appPlace, null, null);
-        if (!SecurityController.check(permission)) {
-            setVisible(false);
-        }
+        this(appPlace, null, null, permission);
     }
 
     public SideMenuAppPlaceItem(final AppPlace appPlace, ButtonImages images) {
         this(appPlace, null, images);
     }
 
-    public SideMenuAppPlaceItem(final AppPlace appPlace, String caption, ButtonImages images) {
+    public SideMenuAppPlaceItem(final AppPlace appPlace, String caption, ButtonImages images, Permission... permission) {
         super(new Command() {
 
             @Override
             public void execute() {
                 AppSite.getPlaceController().goTo(appPlace);
             }
-        }, caption == null ? AppSite.getHistoryMapper().getPlaceInfo(appPlace).getNavigLabel() : caption, images);
+        }, caption == null ? AppSite.getHistoryMapper().getPlaceInfo(appPlace).getNavigLabel() : caption, images, permission);
         this.appPlace = appPlace;
     }
 

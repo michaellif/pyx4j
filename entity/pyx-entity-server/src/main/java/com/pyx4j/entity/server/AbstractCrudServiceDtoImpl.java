@@ -126,6 +126,9 @@ public abstract class AbstractCrudServiceDtoImpl<BO extends IEntity, TO extends 
             retrievedSingle(bo, retrieveTarget);
         }
         TO to = binder.createTO(bo);
+        if (strictDataModelPermissions || toProto.getEntityMeta().isAnnotationPresent(SecurityEnabled.class)) {
+            SecurityController.assertPermission(DataModelPermission.permissionRead(to));
+        }
         enhanceRetrieved(bo, to, retrieveTarget);
         to.setPrimaryKey(getTOKey(bo, to));
         callback.onSuccess(to);
@@ -142,7 +145,7 @@ public abstract class AbstractCrudServiceDtoImpl<BO extends IEntity, TO extends 
     @Override
     public final void create(AsyncCallback<Key> callback, TO to) {
         if (strictDataModelPermissions || toProto.getEntityMeta().isAnnotationPresent(SecurityEnabled.class)) {
-            SecurityController.assertPermission(DataModelPermission.permissionCreate(toClass));
+            SecurityController.assertPermission(DataModelPermission.permissionCreate(to));
         }
         BO bo = binder.createBO(to);
         create(bo, to);
@@ -161,7 +164,7 @@ public abstract class AbstractCrudServiceDtoImpl<BO extends IEntity, TO extends 
     @Override
     public final void save(AsyncCallback<Key> callback, TO to) {
         if (strictDataModelPermissions || toProto.getEntityMeta().isAnnotationPresent(SecurityEnabled.class)) {
-            SecurityController.assertPermission(DataModelPermission.permissionUpdate(toClass));
+            SecurityController.assertPermission(DataModelPermission.permissionUpdate(to));
         }
         BO bo = retrieveForSave(to);
         retrievedSingle(bo, null);
