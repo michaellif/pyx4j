@@ -27,6 +27,7 @@ public class LeaseConverter extends CrudEntityBinder<Lease, LeaseIO> {
     @Override
     protected void bind() {
         bind(toProto.leaseId(), boProto.leaseId());
+        bind(toProto.status(), boProto.status());
     }
 
 }

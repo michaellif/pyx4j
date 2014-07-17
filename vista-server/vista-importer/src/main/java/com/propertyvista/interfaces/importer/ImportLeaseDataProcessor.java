@@ -55,14 +55,23 @@ public class ImportLeaseDataProcessor {
         if (context.ignoreEntityId) {
             lease = retriveLeaseByUnit(unit);
             if (lease == null) {
-                context.monitor.addErredEvent("Lease", "Lease for unit " + unit.info().number().getStringView() + " not found");
+                if (leaseIO.status().getValue() == Lease.Status.Approved) {
+                    context.monitor.addFailedEvent("Lease", "Lease for unit " + unit.info().number().getStringView() + " not found");
+                } else {
+                    context.monitor.addErredEvent("Lease", "Lease for unit " + unit.info().number().getStringView() + " not found");
+                }
                 return;
             }
         } else {
             lease = retrive(unit, leaseIO);
             if (lease == null) {
-                context.monitor.addErredEvent("Lease", "Lease " + leaseIO.leaseId().getStringView() + " not found for unit "
-                        + unit.info().number().getStringView());
+                if (leaseIO.status().getValue() == Lease.Status.Approved) {
+                    context.monitor.addFailedEvent("Lease", "Lease " + leaseIO.leaseId().getStringView() + " not found for unit "
+                            + unit.info().number().getStringView());
+                } else {
+                    context.monitor.addErredEvent("Lease", "Lease " + leaseIO.leaseId().getStringView() + " not found for unit "
+                            + unit.info().number().getStringView());
+                }
                 return;
             }
         }

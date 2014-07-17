@@ -19,11 +19,15 @@ import com.pyx4j.entity.core.IList;
 import com.pyx4j.entity.core.IPrimitive;
 import com.pyx4j.i18n.annotations.I18n;
 
+import com.propertyvista.domain.tenant.lease.Lease;
+
 @Transient
 @I18n(strategy = I18n.I18nStrategy.IgnoreAll)
 public interface LeaseIO extends IEntity {
 
     IPrimitive<String> leaseId();
+
+    IPrimitive<Lease.Status> status();
 
     IList<TenantIO> tenants();
 }
