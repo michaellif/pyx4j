@@ -159,15 +159,47 @@ public class AptUnitOccupancyManagerHelper {
      * @param unit
      * @param dateContainedByTheFirstSegment
      *            the first segment in the retrieved list must contain this date
+     * @param segStatus
+     *            desired segments status, null - any status
+     * @return
+     */
+    public static List<AptUnitOccupancySegment> retrieveOccupancy(Key unitPk, LogicalDate dateContainedByTheFirstSegment, Status segStatus) {
+        return retrieveOccupancy(unitPk, dateContainedByTheFirstSegment, segStatus, false);
+    }
+
+    /**
+     * 
+     * @param unit
+     * @param dateContainedByTheFirstSegment
+     *            the first segment in the retrieved list must contain this date
      * @param dateFromDescending
      *            true for sorting by dateFrom in reverse order, false - ascending order
      * @return
      */
     public static List<AptUnitOccupancySegment> retrieveOccupancy(Key unitPk, LogicalDate dateContainedByTheFirstSegment, boolean dateFromDescending) {
+        return retrieveOccupancy(unitPk, dateContainedByTheFirstSegment, null, false);
+    }
+
+    /**
+     * 
+     * @param unit
+     * @param dateContainedByTheFirstSegment
+     *            the first segment in the retrieved list must contain this date
+     * @param segStatus
+     *            desired segments status, null - any status
+     * @param dateFromDescending
+     *            true for sorting by dateFrom in reverse order, false - ascending order
+     * @return
+     */
+    public static List<AptUnitOccupancySegment> retrieveOccupancy(Key unitPk, LogicalDate dateContainedByTheFirstSegment, Status segStatus,
+            boolean dateFromDescending) {
         EntityQueryCriteria<AptUnitOccupancySegment> criteria = new EntityQueryCriteria<AptUnitOccupancySegment>(AptUnitOccupancySegment.class);
 
-        criteria.add(PropertyCriterion.eq(criteria.proto().unit().id(), unitPk));
-        criteria.add(PropertyCriterion.ge(criteria.proto().dateTo(), dateContainedByTheFirstSegment));
+        criteria.eq(criteria.proto().unit().id(), unitPk);
+        criteria.ge(criteria.proto().dateTo(), dateContainedByTheFirstSegment);
+        if (segStatus != null) {
+            criteria.eq(criteria.proto().status(), segStatus);
+        }
         if (dateFromDescending) {
             criteria.desc(criteria.proto().dateFrom());
         } else {

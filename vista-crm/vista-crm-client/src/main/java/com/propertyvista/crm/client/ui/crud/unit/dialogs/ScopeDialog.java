@@ -22,8 +22,8 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.forms.client.ui.CComboBox;
 import com.pyx4j.forms.client.ui.CForm;
-import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
+import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.forms.client.validators.AbstractComponentValidator;
 import com.pyx4j.forms.client.validators.BasicValidationError;
 import com.pyx4j.i18n.shared.I18n;
@@ -36,7 +36,7 @@ public class ScopeDialog extends OkCancelDialog {
 
     private final static I18n i18n = I18n.get(ScopeDialog.class);
 
-    private CForm<ScopingResultDTO> form;
+    private final CForm<ScopingResultDTO> form;
 
     private final Presenter presenter;
 
@@ -76,11 +76,12 @@ public class ScopeDialog extends OkCancelDialog {
                 get(proto().renovationEndsOn()).addComponentValidator(new AbstractComponentValidator<LogicalDate>() {
                     @Override
                     public BasicValidationError isValid() {
-                        if (getComponent().getValue().before(minRenoEndDay)) {
-                            return new BasicValidationError(getComponent(), i18n.tr("The minimal acceptable renovation date is {0}", minRenoEndDay));
-                        } else {
-                            return null;
+                        if (getComponent().getValue() != null) {
+                            if (getComponent().getValue().before(minRenoEndDay)) {
+                                return new BasicValidationError(getComponent(), i18n.tr("The minimal acceptable renovation date is {0}", minRenoEndDay));
+                            }
                         }
+                        return null;
                     }
                 });
                 formPanel.append(Location.Left, proto().offMarketType()).decorate();
