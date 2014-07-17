@@ -15,6 +15,7 @@ package com.propertyvista.crm.client.ui.crud.lease;
 
 import com.google.gwt.user.client.ui.IsWidget;
 
+import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.security.DataModelPermission;
 import com.pyx4j.forms.client.ui.CViewer;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
@@ -45,14 +46,19 @@ public class LeaseForm extends LeaseFormBase<LeaseDTO> {
         super(LeaseDTO.class, view);
 
         selectTab(addTab(createDetailsTab(), i18n.tr("Details")));
-        depositsTab = addTab(((LeaseViewerView) getParentView()).getDepositListerView().asWidget(), i18n.tr("Deposits"));
-        adjustmentsTab = addTab(((LeaseViewerView) getParentView()).getLeaseAdjustmentListerView().asWidget(), i18n.tr("Adjustments"));
+        depositsTab = addTab(getParentView().getDepositListerView().asWidget(), i18n.tr("Deposits"));
+        adjustmentsTab = addTab(getParentView().getLeaseAdjustmentListerView().asWidget(), i18n.tr("Adjustments"));
         chargesTab = addTab(createChargesTab(), i18n.tr("Charges"));
-        billsTab = addTab(((LeaseViewerView) getParentView()).getBillListerView().asWidget(), i18n.tr("Bills"));
-        paymentsTab = addTab(((LeaseViewerView) getParentView()).getPaymentListerView().asWidget(), i18n.tr("Receipts"));
+        billsTab = addTab(getParentView().getBillListerView().asWidget(), i18n.tr("Bills"), DataModelPermission.permissionRead(BillDataDTO.class));
+        paymentsTab = addTab(getParentView().getPaymentListerView().asWidget(), i18n.tr("Receipts"), DataModelPermission.permissionRead(PaymentRecordDTO.class));
         financialTab = addTab(createFinancialTransactionHistoryTab().asWidget(), i18n.tr("Financial Summary"));
         communicationTab = addTab(createCommunicationsTab(), i18n.tr("Documents/Communication"));
-        maintenanceTab = addTab(((LeaseViewerView) getParentView()).getMaintenanceListerView().asWidget(), i18n.tr("Maintenance"));
+        maintenanceTab = addTab(getParentView().getMaintenanceListerView().asWidget(), i18n.tr("Maintenance"));
+    }
+
+    @Override
+    public LeaseViewerView getParentView() {
+        return (LeaseViewerView) super.getParentView();
     }
 
     @Override
@@ -62,8 +68,6 @@ public class LeaseForm extends LeaseFormBase<LeaseDTO> {
         // Static Tabs visibility (by permission):  
         depositsTab.setTabVisible(SecurityController.check(DataModelPermission.permissionRead(DepositLifecycleDTO.class)));
         adjustmentsTab.setTabVisible(SecurityController.check(DataModelPermission.permissionRead(LeaseAdjustment.class)));
-        billsTab.setTabVisible(SecurityController.check(DataModelPermission.permissionRead(BillDataDTO.class)));
-        paymentsTab.setTabVisible(SecurityController.check(DataModelPermission.permissionRead(PaymentRecordDTO.class)));
         financialTab.setTabVisible(SecurityController.check(DataModelPermission.permissionRead(TransactionHistoryDTO.class)));
         communicationTab.setTabVisible(SecurityController.check(DataModelPermission.permissionRead(LegalLetter.class)));
         maintenanceTab.setTabVisible(SecurityController.check(DataModelPermission.permissionRead(MaintenanceRequestDTO.class)));

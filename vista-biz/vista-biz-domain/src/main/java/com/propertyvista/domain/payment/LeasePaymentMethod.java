@@ -20,12 +20,14 @@ import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.OrderColumn;
 import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.annotations.ReadOnly;
+import com.pyx4j.entity.annotations.SecurityEnabled;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.core.IPrimitive;
 
 import com.propertyvista.domain.tenant.Customer;
 
 @DiscriminatorValue("LeasePaymentMethod")
+@SecurityEnabled
 public interface LeasePaymentMethod extends PaymentMethod {
 
     @Detached

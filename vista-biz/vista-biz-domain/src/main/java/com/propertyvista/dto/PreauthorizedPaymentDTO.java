@@ -14,12 +14,14 @@
 package com.propertyvista.dto;
 
 import com.pyx4j.entity.annotations.Owned;
+import com.pyx4j.entity.annotations.SecurityEnabled;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.core.IList;
 
 import com.propertyvista.domain.payment.AutopayAgreement;
 
 @Transient
+@SecurityEnabled
 public interface PreauthorizedPaymentDTO extends AutopayAgreement {
 
     @Owned

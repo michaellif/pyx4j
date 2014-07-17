@@ -26,12 +26,14 @@ import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.IList;
 import com.pyx4j.entity.core.IObject;
+import com.pyx4j.entity.security.DataModelPermission;
 import com.pyx4j.forms.client.events.DevShortcutEvent;
 import com.pyx4j.forms.client.events.DevShortcutHandler;
 import com.pyx4j.forms.client.ui.CComboBox;
 import com.pyx4j.forms.client.ui.CEntityLabel;
 import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.CNumberLabel;
+import com.pyx4j.forms.client.ui.PermitViewAccessAdapter;
 import com.pyx4j.forms.client.ui.RevalidationTrigger;
 import com.pyx4j.forms.client.ui.folder.BoxFolderItemDecorator;
 import com.pyx4j.forms.client.ui.folder.IFolderItemDecorator;
@@ -50,6 +52,7 @@ import com.propertyvista.common.client.ui.components.folders.PapCoveredItemFolde
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
 import com.propertyvista.common.client.ui.validators.BirthdayDateValidator;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
+import com.propertyvista.crm.rpc.dto.tenant.PreauthorizedPaymentsDTO;
 import com.propertyvista.domain.payment.AutopayAgreement;
 import com.propertyvista.domain.policy.policies.domain.IdAssignmentItem.IdTarget;
 import com.propertyvista.domain.security.common.AbstractPmcUser;
@@ -220,6 +223,8 @@ public class TenantInLeaseFolder extends LeaseTermParticipantFolder<LeaseTermTen
 
             preauthorizedPaymentsPanel.h3(proto().leaseParticipant().preauthorizedPayments().getMeta().getCaption());
             preauthorizedPaymentsPanel.append(Location.Dual, inject(proto().leaseParticipant().preauthorizedPayments(), preauthorizedPayments));
+
+            preauthorizedPayments.addAccessAdapter(new PermitViewAccessAdapter(DataModelPermission.permissionRead(PreauthorizedPaymentsDTO.class)));
 
             formPanel.append(Location.Dual, preauthorizedPaymentsPanel);
 

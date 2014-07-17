@@ -23,6 +23,7 @@ import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.entity.core.IList;
 import com.pyx4j.entity.core.IObject;
+import com.pyx4j.entity.security.DataModelPermission;
 import com.pyx4j.entity.shared.utils.EntityGraph;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CDateLabel;
@@ -69,8 +70,8 @@ public class TenantForm extends LeaseParticipantForm<TenantDTO> {
 
         selectTab(addTab(createDetailsTab(), i18n.tr("Details")));
         addTab(createContactsTab(), i18n.tr("Emergency Contacts"));
-        addTab(createPaymentMethodsTab(), i18n.tr("Payment Methods"));
-        autoPaymentsTab = addTab(createPreauthorizedPaymentsTab(), i18n.tr("Auto Payments"));
+        addTab(createPaymentMethodsTab(), i18n.tr("Payment Methods"), DataModelPermission.permissionRead(LeasePaymentMethod.class));
+        autoPaymentsTab = addTab(createPreauthorizedPaymentsTab(), i18n.tr("Auto Payments"), DataModelPermission.permissionRead(PreauthorizedPaymentDTO.class));
         addTab(createTenantInsuranceTab(), i18n.tr("Insurance"));
     }
 

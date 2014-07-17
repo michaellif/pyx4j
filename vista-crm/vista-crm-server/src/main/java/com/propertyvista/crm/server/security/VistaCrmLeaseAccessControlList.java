@@ -27,11 +27,8 @@ import com.pyx4j.security.server.UIAclBuilder;
 import com.pyx4j.security.shared.ActionPermission;
 
 import com.propertyvista.crm.rpc.dto.billing.BillDataDTO;
-import com.propertyvista.crm.rpc.dto.financial.AutoPayHistoryDTO;
-import com.propertyvista.crm.rpc.dto.tenant.PreauthorizedPaymentsDTO;
 import com.propertyvista.crm.rpc.security.LeaseTermEditOnLeaseInstanceAccess;
 import com.propertyvista.crm.rpc.services.billing.BillCrudService;
-import com.propertyvista.crm.rpc.services.financial.AutoPayHistoryCrudService;
 import com.propertyvista.crm.rpc.services.lease.ac.LeaseAgreementSigning;
 import com.propertyvista.crm.rpc.services.lease.ac.LeaseConfirmBill;
 import com.propertyvista.crm.rpc.services.lease.ac.LeaseRunBill;
@@ -105,20 +102,6 @@ public class VistaCrmLeaseAccessControlList extends UIAclBuilder {
 
         grant(LeaseFull, new ActionPermission(LeaseRunBill.class));
         grant(LeaseFull, new ActionPermission(LeaseConfirmBill.class));
-
-        // ---- Payment:
-        grant(LeaseBasic, PreauthorizedPaymentsDTO.class, READ);
-        grant(LeaseBasic, AutoPayHistoryDTO.class, READ);
-        grant(LeaseBasic, new IServiceExecutePermission(AutoPayHistoryCrudService.class));
-
-        grant(LeaseAdvanced, PreauthorizedPaymentsDTO.class, READ);
-        grant(LeaseAdvanced, AutoPayHistoryDTO.class, READ);
-        grant(LeaseAdvanced, new IServiceExecutePermission(AutoPayHistoryCrudService.class));
-
-        grant(LeaseFull, PreauthorizedPaymentsDTO.class, ALL);
-        grant(LeaseFull, AutoPayHistoryDTO.class, READ);
-        grant(LeaseFull, new IServiceExecutePermission(AutoPayHistoryCrudService.class));
-        //See also VistaCrmFinancialAccessControlList
 
         // TODO Common action with Application - review
         grant(LeaseAdvanced, new ActionPermission(ReserveUnit.class));

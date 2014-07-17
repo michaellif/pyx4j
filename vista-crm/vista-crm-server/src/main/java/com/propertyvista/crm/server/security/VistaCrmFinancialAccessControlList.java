@@ -43,11 +43,13 @@ import com.propertyvista.crm.rpc.services.lease.ac.LeaseConfirmBill;
 import com.propertyvista.crm.rpc.services.lease.ac.LeaseRunBill;
 import com.propertyvista.domain.financial.AggregatedTransfer;
 import com.propertyvista.domain.financial.BuildingMerchantAccount;
+import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.domain.property.asset.building.BuildingFinancial;
 import com.propertyvista.domain.security.VistaCrmBehavior;
 import com.propertyvista.domain.tenant.lease.LeaseAdjustment;
 import com.propertyvista.dto.DepositLifecycleDTO;
 import com.propertyvista.dto.PaymentRecordDTO;
+import com.propertyvista.dto.PreauthorizedPaymentDTO;
 import com.propertyvista.dto.TenantFinancialDTO;
 import com.propertyvista.dto.TransactionHistoryDTO;
 
@@ -72,11 +74,15 @@ public class VistaCrmFinancialAccessControlList extends UIAclBuilder {
         grant(FinancialAggregatedTransfer, new IServiceExecutePermission(PaymentRecordListService.class));
 
         // ------ Financial: Payments
+
+        grant(FinancialPayments, LeasePaymentMethod.class, READ);
+        grant(FinancialPayments, PreauthorizedPaymentDTO.class, READ | UPDATE);
+        grant(FinancialPayments, PreauthorizedPaymentsDTO.class, READ);
+
         grant(FinancialPayments, PapReviewDTO.class, ALL);
         grant(FinancialPayments, new IServiceExecutePermission(AutoPayReviewService.class));
 
         grant(FinancialPayments, PaymentRecordDTO.class, ALL);
-        grant(FinancialPayments, PreauthorizedPaymentsDTO.class, ALL);
         grant(FinancialPayments, new IServiceExecutePermission(PaymentRecordListService.class));
 
         grant(FinancialPayments, TransactionHistoryDTO.class, READ);
@@ -89,6 +95,9 @@ public class VistaCrmFinancialAccessControlList extends UIAclBuilder {
 
         grant(FinancialPayments, TenantFinancialDTO.class, READ);
 
+        grant(FinancialPayments, AutoPayHistoryDTO.class, READ);
+        grant(FinancialPayments, new IServiceExecutePermission(AutoPayHistoryCrudService.class));
+
         // ------ Financial: Full
         grant(FinancialFull, VistaCrmBehavior.FinancialMoneyIN);
         grant(FinancialFull, VistaCrmBehavior.FinancialAggregatedTransfer);
@@ -99,6 +108,11 @@ public class VistaCrmFinancialAccessControlList extends UIAclBuilder {
         grant(FinancialFull, BillDataDTO.class, READ);
         grant(FinancialFull, new IServiceExecutePermission(BillCrudService.class));
         grant(FinancialFull, BuildingMerchantAccount.class, READ | UPDATE);
+
+        grant(FinancialPayments, LeasePaymentMethod.class, ALL);
+
+        grant(FinancialFull, PreauthorizedPaymentDTO.class, ALL);
+        grant(FinancialFull, PreauthorizedPaymentsDTO.class, READ);
 
         grant(FinancialFull, LeaseAdjustment.class, ALL);
         grant(FinancialFull, DepositLifecycleDTO.class, ALL);

@@ -26,6 +26,7 @@ import com.pyx4j.widgets.client.Button.SecureMenuItem;
 import com.pyx4j.widgets.client.dialog.OkDialog;
 
 import com.propertyvista.crm.client.ui.crud.CrmViewerViewImplBase;
+import com.propertyvista.crm.rpc.dto.financial.AutoPayHistoryDTO;
 import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
 import com.propertyvista.dto.MaintenanceRequestDTO;
 import com.propertyvista.dto.TenantDTO;
@@ -70,12 +71,12 @@ public class TenantViewerViewImpl extends CrmViewerViewImplBase<TenantDTO> imple
         }, DataModelPermission.permissionRead(MaintenanceRequestDTO.class));
         addView(maintenanceView);
 
-        deletedPapsView = new MenuItem(i18n.tr("Deleted AutoPayments"), new Command() {
+        deletedPapsView = new SecureMenuItem(i18n.tr("Deleted AutoPayments"), new Command() {
             @Override
             public void execute() {
                 ((TenantViewerView.Presenter) getPresenter()).viewDeletedPaps();
             }
-        });
+        }, DataModelPermission.permissionRead(AutoPayHistoryDTO.class));
         addView(deletedPapsView);
 
         registrationView = new MenuItem(i18n.tr("Portal Registration Information"), new Command() {
