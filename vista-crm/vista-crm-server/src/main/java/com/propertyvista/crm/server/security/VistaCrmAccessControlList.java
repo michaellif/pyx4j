@@ -52,7 +52,6 @@ import com.propertyvista.crm.rpc.services.admin.SiteGeneralCrudService;
 import com.propertyvista.crm.rpc.services.admin.SiteImageResourceCrudService;
 import com.propertyvista.crm.rpc.services.admin.SiteImageResourceUploadService;
 import com.propertyvista.crm.rpc.services.admin.TaxCrudService;
-import com.propertyvista.crm.rpc.services.billing.BillCrudService;
 import com.propertyvista.crm.rpc.services.billing.BillPreviewService;
 import com.propertyvista.crm.rpc.services.billing.BillPrintService;
 import com.propertyvista.crm.rpc.services.billing.BillingCycleBillListService;
@@ -219,7 +218,6 @@ import com.propertyvista.domain.financial.BillingAccount;
 import com.propertyvista.domain.financial.CardsAggregatedTransfer;
 import com.propertyvista.domain.financial.EftAggregatedTransfer;
 import com.propertyvista.domain.financial.PaymentRecord;
-import com.propertyvista.domain.financial.billing.Bill;
 import com.propertyvista.domain.financial.billing.BillingCycle;
 import com.propertyvista.domain.financial.billing.BuildingAgingBuckets;
 import com.propertyvista.domain.financial.billing.BuildingArrearsSnapshot;
@@ -504,8 +502,6 @@ public class VistaCrmAccessControlList extends ServletContainerAclBuilder {
         grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(InsuranceCertificateScanCrmUploadService.class));
 
 // - Billing
-        grant(VistaCrmBehavior.Billing_OLD, new EntityPermission(Bill.class, EntityPermission.READ));
-        grant(VistaCrmBehavior.Billing_OLD, new IServiceExecutePermission(BillCrudService.class));
         grant(VistaCrmBehavior.Billing_OLD, new IServiceExecutePermission(BillPrintService.class));
         grant(VistaCrmBehavior.Billing_OLD, new IServiceExecutePermission(BillingExecutionService.class));
         grant(VistaCrmBehavior.Billing_OLD, new IServiceExecutePermission(BillingCycleCrudService.class));

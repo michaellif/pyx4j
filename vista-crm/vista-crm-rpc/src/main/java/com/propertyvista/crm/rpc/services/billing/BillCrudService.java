@@ -20,15 +20,20 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.rpc.AbstractCrudService;
 import com.pyx4j.rpc.shared.VoidSerializable;
+import com.pyx4j.security.annotations.AccessControl;
 
 import com.propertyvista.crm.rpc.dto.billing.BillDataDTO;
+import com.propertyvista.crm.rpc.services.lease.ac.LeaseConfirmBill;
 
 public interface BillCrudService extends AbstractCrudService<BillDataDTO> {
 
+    @AccessControl(LeaseConfirmBill.class)
     void confirm(AsyncCallback<BillDataDTO> callback, Key entityId);
 
+    @AccessControl(LeaseConfirmBill.class)
     void confirm(AsyncCallback<VoidSerializable> callback, Vector<BillDataDTO> bills);
 
+    @AccessControl(LeaseConfirmBill.class)
     void reject(AsyncCallback<BillDataDTO> callback, Key entityId, String reason);
 
 }

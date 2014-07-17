@@ -31,6 +31,7 @@ import com.propertyvista.crm.rpc.dto.financial.AutoPayHistoryDTO;
 import com.propertyvista.crm.rpc.dto.financial.autopayreview.PapReviewDTO;
 import com.propertyvista.crm.rpc.dto.financial.moneyin.batch.MoneyInBatchDTO;
 import com.propertyvista.crm.rpc.dto.tenant.PreauthorizedPaymentsDTO;
+import com.propertyvista.crm.rpc.services.billing.BillCrudService;
 import com.propertyvista.crm.rpc.services.financial.AggregatedTransferCrudService;
 import com.propertyvista.crm.rpc.services.financial.AutoPayHistoryCrudService;
 import com.propertyvista.crm.rpc.services.financial.AutoPayReviewService;
@@ -95,7 +96,8 @@ public class VistaCrmFinancialAccessControlList extends UIAclBuilder {
 
         grant(FinancialFull, BuildingFinancial.class, READ);
         grant(FinancialFull, BillingCycleDTO.class, READ);
-        grant(FinancialFull, BillDataDTO.class, READ | UPDATE);
+        grant(FinancialFull, BillDataDTO.class, READ);
+        grant(FinancialFull, new IServiceExecutePermission(BillCrudService.class));
         grant(FinancialFull, BuildingMerchantAccount.class, READ | UPDATE);
 
         grant(FinancialFull, LeaseAdjustment.class, ALL);

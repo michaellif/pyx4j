@@ -18,7 +18,6 @@ import static com.propertyvista.domain.security.VistaCrmBehavior.LeaseBasic;
 import static com.propertyvista.domain.security.VistaCrmBehavior.LeaseFull;
 import static com.pyx4j.entity.security.AbstractCRUDPermission.ALL;
 import static com.pyx4j.entity.security.AbstractCRUDPermission.READ;
-import static com.pyx4j.entity.security.AbstractCRUDPermission.UPDATE;
 
 import java.util.List;
 
@@ -31,6 +30,7 @@ import com.propertyvista.crm.rpc.dto.billing.BillDataDTO;
 import com.propertyvista.crm.rpc.dto.financial.AutoPayHistoryDTO;
 import com.propertyvista.crm.rpc.dto.tenant.PreauthorizedPaymentsDTO;
 import com.propertyvista.crm.rpc.security.LeaseTermEditOnLeaseInstanceAccess;
+import com.propertyvista.crm.rpc.services.billing.BillCrudService;
 import com.propertyvista.crm.rpc.services.financial.AutoPayHistoryCrudService;
 import com.propertyvista.crm.rpc.services.lease.ac.LeaseAgreementSigning;
 import com.propertyvista.crm.rpc.services.lease.ac.LeaseConfirmBill;
@@ -59,9 +59,6 @@ public class VistaCrmLeaseAccessControlList extends UIAclBuilder {
 
         grant(LeaseAdvanced, new ActionPermission(LeaseAgreementSigning.class));
         grant(LeaseFull, new ActionPermission(LeaseAgreementSigning.class));
-
-        grant(LeaseFull, new ActionPermission(LeaseRunBill.class));
-        grant(LeaseFull, new ActionPermission(LeaseConfirmBill.class));
 
         grant(LeaseFull, new ActionPermission(LeaseStateManagement.class));
 
@@ -99,8 +96,15 @@ public class VistaCrmLeaseAccessControlList extends UIAclBuilder {
         grant(LeaseAdvanced, TransactionHistoryDTO.class, READ);
         grant(LeaseFull, TransactionHistoryDTO.class, READ);
 
+        // Bills
         grant(LeaseAdvanced, BillDataDTO.class, READ);
-        grant(LeaseFull, BillDataDTO.class, READ | UPDATE);
+        grant(LeaseFull, BillDataDTO.class, READ);
+
+        grant(LeaseAdvanced, new IServiceExecutePermission(BillCrudService.class));
+        grant(LeaseFull, new IServiceExecutePermission(BillCrudService.class));
+
+        grant(LeaseFull, new ActionPermission(LeaseRunBill.class));
+        grant(LeaseFull, new ActionPermission(LeaseConfirmBill.class));
 
         // ---- Payment:
         grant(LeaseBasic, PreauthorizedPaymentsDTO.class, READ);
