@@ -54,10 +54,6 @@ public class TransactionHistoryViewerYardi extends CViewer<TransactionHistoryDTO
     public TransactionHistoryViewerYardi(String chargeFormat, String paymentFormat) {
         this.chargeFormat = NumberFormat.getFormat(chargeFormat);
         this.paymentFormat = NumberFormat.getFormat(paymentFormat);
-    }
-
-    public TransactionHistoryViewerYardi(String moneyFormat) {
-        this(moneyFormat, moneyFormat);
         setFormatter(new IFormatter<TransactionHistoryDTO, IsWidget>() {
 
             @Override
@@ -79,17 +75,21 @@ public class TransactionHistoryViewerYardi extends CViewer<TransactionHistoryDTO
                     }
 
                     formPanel.h1(i18n.tr("Outstanding Charges"));
-                    formPanel.append(Location.Dual, renderLineItems(outstangingCharges, chargeFormat, i18n.tr("Due Date")));
+                    formPanel.append(Location.Dual, renderLineItems(outstangingCharges, TransactionHistoryViewerYardi.this.chargeFormat, i18n.tr("Due Date")));
 
                     formPanel.h1(i18n.tr("Account Credits"));
-                    formPanel.append(Location.Dual, renderLineItems(accountCredits, paymentFormat, null));
+                    formPanel.append(Location.Dual, renderLineItems(accountCredits, TransactionHistoryViewerYardi.this.paymentFormat, null));
 
                     formPanel.h1(i18n.tr("Unapplied Payments"));
-                    formPanel.append(Location.Dual, renderLineItems(unappliedPayments, paymentFormat, null));
+                    formPanel.append(Location.Dual, renderLineItems(unappliedPayments, TransactionHistoryViewerYardi.this.paymentFormat, null));
                 }
                 return formPanel;
             }
         });
+    }
+
+    public TransactionHistoryViewerYardi(String moneyFormat) {
+        this(moneyFormat, moneyFormat);
     }
 
     public TransactionHistoryViewerYardi() {
