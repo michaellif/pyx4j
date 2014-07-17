@@ -338,9 +338,14 @@ public class NImageSlider<E extends IHasFile<?>> extends NField<IList<E>, ImageS
 
             @Override
             public boolean onClickCustom2() {
-                NImageSlider.this.setNativeValue(getValue());
-                createViewer().reset();
-                return true;
+                ImageOrganizerFolder.this.setVisitedRecursive();
+                if (ImageOrganizerFolder.this.isValid()) {
+                    NImageSlider.this.setNativeValue(getValue());
+                    createViewer().reset();
+                    return true;
+                } else {
+                    return false;
+                }
             }
 
             @Override
