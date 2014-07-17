@@ -283,6 +283,6 @@ public class MaintenanceRequestCategoryChoice extends CComboBox<MaintenanceReque
 
     @Override
     protected String getDebugInfo() {
-        return "value=" + (getValue() == null ? "null" : getValue().name().getStringView()) + ";";
+        return "value=" + (getValue() == null ? "null" : (getValue().isValueDetached() ? "detached" : getValue().getStringView())) + ";";
     }
 }
