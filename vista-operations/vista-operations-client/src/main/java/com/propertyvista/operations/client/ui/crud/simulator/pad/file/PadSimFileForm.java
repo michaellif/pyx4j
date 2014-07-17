@@ -13,12 +13,12 @@
  */
 package com.propertyvista.operations.client.ui.crud.simulator.pad.file;
 
-import com.google.gwt.user.client.ui.Widget;
+import com.google.gwt.user.client.ui.IsWidget;
 
-import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
+import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
+import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.AppPlaceEntityMapper;
-import com.pyx4j.site.client.ui.prime.form.FieldDecoratorBuilder;
 import com.pyx4j.site.client.ui.prime.form.IForm;
 import com.pyx4j.site.client.ui.prime.misc.CEntityCrudHyperlink;
 
@@ -32,50 +32,42 @@ public class PadSimFileForm extends OperationsEntityForm<PadSimFile> {
     public PadSimFileForm(IForm<PadSimFile> view) {
         super(PadSimFile.class, view);
 
-        TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel();
-        int row = -1;
+        FormPanel formPanel = new FormPanel(this);
 
-        content.setH1(++row, 0, 1, i18n.tr("File Details"));
-        content.setWidget(++row, 0, createDetailsTab());
+        formPanel.h1(i18n.tr("File Details"));
+        formPanel.append(Location.Dual, createDetailsTab());
 
         if (!isEditable()) {
-            content.setH1(++row, 0, 1, i18n.tr("Batches"));
-            content.setWidget(++row, 0, ((PadSimFileViewerView) getParentView()).getBatchListerView().asWidget());
+            formPanel.h1(i18n.tr("Batches"));
+            formPanel.append(Location.Dual, ((PadSimFileViewerView) getParentView()).getBatchListerView().asWidget());
         }
-        selectTab(addTab(content, i18n.tr("General")));
+        selectTab(addTab(formPanel, i18n.tr("General")));
+        setTabBarVisible(false);
     }
 
-    private Widget createDetailsTab() {
-        TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel();
+    private IsWidget createDetailsTab() {
+        FormPanel formPanel = new FormPanel(this);
 
-        int row = -1;
-        main.setWidget(++row, 0, inject(proto().fileName(), new FieldDecoratorBuilder(25).build()));
-        main.setWidget(row, 1, inject(proto().fileCreationNumber(), new FieldDecoratorBuilder(10).build()));
+        formPanel.append(Location.Dual, proto().fileName()).decorate();
 
-        main.setWidget(++row, 0, inject(proto().fundsTransferType(), new FieldDecoratorBuilder(25).build()));
+        formPanel.append(Location.Left, proto().fundsTransferType()).decorate();
+        formPanel.append(Location.Left, proto().state()).decorate();
+        formPanel.append(Location.Left, proto().acknowledgmentStatusCode()).decorate().componentWidth(120);
+        formPanel.append(Location.Left, proto().recordsCount()).decorate().componentWidth(120);
+        formPanel.append(Location.Left, proto().batchRecordsCount()).decorate().componentWidth(120);
+        formPanel.append(Location.Left, proto().returnSent()).decorate().componentWidth(120);
 
-        main.setWidget(
-                ++row,
-                0,
-                inject(proto().originalFile(), new CEntityCrudHyperlink<PadSimFile>(AppPlaceEntityMapper.resolvePlace(PadSimFile.class)),
-                        new FieldDecoratorBuilder(35).build()));
-        main.setWidget(++row, 0, inject(proto().returnSent(), new FieldDecoratorBuilder(10).build()));
+        formPanel.append(Location.Right, proto().fileCreationNumber()).decorate().componentWidth(120);
+        formPanel.append(Location.Right, proto().originalFile(), new CEntityCrudHyperlink<PadSimFile>(AppPlaceEntityMapper.resolvePlace(PadSimFile.class)))
+                .decorate();
+        formPanel.append(Location.Right, proto().received()).decorate().componentWidth(120);
+        formPanel.append(Location.Right, proto().acknowledged()).decorate().componentWidth(120);
+        formPanel.append(Location.Right, proto().reconciliationSent()).decorate().componentWidth(120);
+        formPanel.append(Location.Right, proto().fileAmount()).decorate().componentWidth(120);
 
-        main.setWidget(++row, 0, inject(proto().state(), new FieldDecoratorBuilder(25).build()));
-        main.setWidget(row, 1, inject(proto().acknowledgmentStatusCode(), new FieldDecoratorBuilder(10).build()));
+        formPanel.append(Location.Dual, proto().acknowledgmentRejectReasonMessage()).decorate();
 
-        main.setWidget(++row, 0, inject(proto().received(), new FieldDecoratorBuilder(10).build()));
-        main.setWidget(row, 1, inject(proto().acknowledgmentRejectReasonMessage(), new FieldDecoratorBuilder(40).build()));
-
-        main.setWidget(++row, 0, inject(proto().acknowledged(), new FieldDecoratorBuilder(10).build()));
-        main.setWidget(row, 1, inject(proto().reconciliationSent(), new FieldDecoratorBuilder(10).build()));
-
-        main.setWidget(++row, 0, inject(proto().batchRecordsCount(), new FieldDecoratorBuilder(10).build()));
-        main.setWidget(row, 1, inject(proto().recordsCount(), new FieldDecoratorBuilder(10).build()));
-
-        main.setWidget(++row, 0, inject(proto().fileAmount(), new FieldDecoratorBuilder(10).build()));
-
-        return main;
+        return formPanel;
     }
 
     @Override

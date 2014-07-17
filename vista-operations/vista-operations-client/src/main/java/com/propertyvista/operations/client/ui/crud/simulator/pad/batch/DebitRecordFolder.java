@@ -19,9 +19,9 @@ import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.entity.core.IObject;
 import com.pyx4j.forms.client.ui.CForm;
-import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
+import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
+import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.ui.prime.form.FieldDecoratorBuilder;
 
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
 import com.propertyvista.operations.domain.eft.caledoneft.simulator.PadSimDebitRecord;
@@ -47,33 +47,24 @@ public class DebitRecordFolder extends VistaBoxFolder<PadSimDebitRecord> {
 
         @Override
         protected IsWidget createContent() {
-            TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel();
+            FormPanel formPanel = new FormPanel(this);
 
-            int row = -1;
-            content.setWidget(++row, 0, inject(proto().amount(), new FieldDecoratorBuilder(10).build()));
-            content.setWidget(++row, 0, inject(proto().clientId(), new FieldDecoratorBuilder(10).build()));
-            content.setWidget(++row, 0, inject(proto().transactionId(), new FieldDecoratorBuilder(10).build()));
+            formPanel.append(Location.Left, proto().amount()).decorate().componentWidth(120);
+            formPanel.append(Location.Left, proto().clientId()).decorate().componentWidth(120);
+            formPanel.append(Location.Left, proto().transactionId()).decorate().componentWidth(120);
 
-            content.setHTML(++row, 0, "<hr style='border-top: 1px dashed #000000'/>");
-            content.getFlexCellFormatter().setColSpan(row, 0, 2);
-            content.setWidget(++row, 0, inject(proto().acknowledgmentStatusCode(), new FieldDecoratorBuilder(10).build()));
+            formPanel.append(Location.Right, proto().bankId()).decorate().componentWidth(120);
+            formPanel.append(Location.Right, proto().branchTransitNumber()).decorate().componentWidth(120);
+            formPanel.append(Location.Right, proto().accountNumber()).decorate().componentWidth(120);
 
-            content.setHTML(++row, 0, "<hr style='border-top: 1px dashed #000000'/>");
-            content.getFlexCellFormatter().setColSpan(row, 0, 2);
+            formPanel.append(Location.Dual, proto().acknowledgmentStatusCode()).decorate().componentWidth(120);
 
-            content.setWidget(++row, 0, inject(proto().reconciliationStatus(), new FieldDecoratorBuilder(10).build()));
-            content.setWidget(++row, 0, inject(proto().reasonCode(), new FieldDecoratorBuilder(10).build()));
-            content.setWidget(++row, 0, inject(proto().fee(), new FieldDecoratorBuilder(10).build()));
+            formPanel.append(Location.Dual, proto().reconciliationStatus()).decorate().componentWidth(120);
+            formPanel.append(Location.Dual, proto().reasonCode()).decorate().componentWidth(120);
 
-            row = -1;
-            content.setWidget(++row, 1, inject(proto().bankId(), new FieldDecoratorBuilder(10).build()));
-            content.setWidget(++row, 1, inject(proto().branchTransitNumber(), new FieldDecoratorBuilder(10).build()));
-            content.setWidget(++row, 1, inject(proto().accountNumber(), new FieldDecoratorBuilder(10).build()));
-            ++row;
-            ++row;
-            ++row;
-            content.setWidget(++row, 1, inject(proto().paymentDate(), new FieldDecoratorBuilder(10).build()));
-            content.setWidget(++row, 1, inject(proto().reasonText(), new FieldDecoratorBuilder(10).build()));
+            formPanel.append(Location.Left, proto().fee()).decorate().componentWidth(120);
+            formPanel.append(Location.Right, proto().paymentDate()).decorate().componentWidth(120);
+            formPanel.append(Location.Right, proto().reasonText()).decorate().componentWidth(120);
 
             get(proto().acknowledgmentStatusCode()).addValueChangeHandler(new ValueChangeHandler<String>() {
 
@@ -84,7 +75,7 @@ public class DebitRecordFolder extends VistaBoxFolder<PadSimDebitRecord> {
 
             });
 
-            return content;
+            return formPanel;
         }
 
         @Override
