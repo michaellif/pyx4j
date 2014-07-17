@@ -20,6 +20,7 @@ import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.ExtendsBO;
 import com.pyx4j.entity.annotations.Format;
+import com.pyx4j.entity.annotations.SecurityEnabled;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.core.IList;
 import com.pyx4j.entity.core.IPrimitive;
@@ -30,6 +31,7 @@ import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
 import com.propertyvista.domain.tenant.lease.Tenant;
 
 @Transient
+@SecurityEnabled
 @ExtendsBO(Tenant.class)
 public interface TenantDTO extends LeaseParticipantDTO<LeaseTermTenant> {
 

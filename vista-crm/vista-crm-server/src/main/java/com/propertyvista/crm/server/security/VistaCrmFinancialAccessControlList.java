@@ -96,9 +96,6 @@ public class VistaCrmFinancialAccessControlList extends UIAclBuilder {
 
         grant(FinancialPayments, TenantFinancialDTO.class, READ);
 
-        grant(FinancialPayments, AutoPayHistoryDTO.class, READ);
-        grant(FinancialPayments, new IServiceExecutePermission(AutoPayHistoryCrudService.class));
-
         // ------ Financial: Full
         grant(FinancialFull, VistaCrmBehavior.FinancialMoneyIN);
         grant(FinancialFull, VistaCrmBehavior.FinancialAggregatedTransfer);

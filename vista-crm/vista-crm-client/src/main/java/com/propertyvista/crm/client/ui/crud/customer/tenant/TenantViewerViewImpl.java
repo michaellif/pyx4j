@@ -22,11 +22,13 @@ import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.security.shared.ActionPermission;
 import com.pyx4j.widgets.client.Button.SecureMenuItem;
 import com.pyx4j.widgets.client.dialog.OkDialog;
 
 import com.propertyvista.crm.client.ui.crud.CrmViewerViewImplBase;
 import com.propertyvista.crm.rpc.dto.financial.AutoPayHistoryDTO;
+import com.propertyvista.crm.rpc.services.customer.ac.TenantChangePassword;
 import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
 import com.propertyvista.dto.MaintenanceRequestDTO;
 import com.propertyvista.dto.TenantDTO;
@@ -79,22 +81,22 @@ public class TenantViewerViewImpl extends CrmViewerViewImplBase<TenantDTO> imple
         }, DataModelPermission.permissionRead(AutoPayHistoryDTO.class));
         addView(deletedPapsView);
 
-        registrationView = new MenuItem(i18n.tr("Portal Registration Information"), new Command() {
+        registrationView = new SecureMenuItem(i18n.tr("Portal Registration Information"), new Command() {
             @Override
             public void execute() {
                 ((TenantViewerView.Presenter) getPresenter()).retrievePortalRegistrationInformation();
             }
-        });
+        }, DataModelPermission.permissionRead(TenantPortalAccessInformationDTO.class));
         addView(registrationView);
 
         // Actions:
-        passwordAction = new MenuItem(i18n.tr("Change Password"), new Command() {
+        passwordAction = new SecureMenuItem(i18n.tr("Change Password"), new Command() {
             @Override
             public void execute() {
                 ((TenantViewerView.Presenter) getPresenter()).changePassword(getForm().getValue().customer().user().getPrimaryKey(), getForm().getValue()
                         .customer().person().getStringView());
             }
-        });
+        }, new ActionPermission(TenantChangePassword.class));
         addAction(passwordAction);
 
         screeningAction = new MenuItem(i18n.tr("Create Screening"), new Command() {

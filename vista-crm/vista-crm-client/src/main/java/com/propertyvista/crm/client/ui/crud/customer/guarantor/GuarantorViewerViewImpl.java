@@ -17,8 +17,11 @@ import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.MenuItem;
 
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.security.shared.ActionPermission;
+import com.pyx4j.widgets.client.Button.SecureMenuItem;
 
 import com.propertyvista.crm.client.ui.crud.CrmViewerViewImplBase;
+import com.propertyvista.crm.rpc.services.customer.ac.GuarantorChangePassword;
 import com.propertyvista.dto.GuarantorDTO;
 
 public class GuarantorViewerViewImpl extends CrmViewerViewImplBase<GuarantorDTO> implements GuarantorViewerView {
@@ -32,13 +35,13 @@ public class GuarantorViewerViewImpl extends CrmViewerViewImplBase<GuarantorDTO>
     public GuarantorViewerViewImpl() {
         setForm(new GuarantorForm(this));
 
-        passwordAction = new MenuItem(i18n.tr("Change Password"), new Command() {
+        passwordAction = new SecureMenuItem(i18n.tr("Change Password"), new Command() {
             @Override
             public void execute() {
                 ((GuarantorViewerView.Presenter) getPresenter()).goToChangePassword(getForm().getValue().customer().user().getPrimaryKey(), getForm()
                         .getValue().customer().person().getStringView());
             }
-        });
+        }, new ActionPermission(GuarantorChangePassword.class));
         addAction(passwordAction);
 
         screeningAction = new MenuItem(i18n.tr("Create Screening"), new Command() {
