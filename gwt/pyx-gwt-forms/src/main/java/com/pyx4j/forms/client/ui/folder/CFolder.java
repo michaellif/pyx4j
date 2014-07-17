@@ -38,10 +38,12 @@ import com.google.gwt.user.client.ui.SimplePanel;
 
 import com.pyx4j.commons.CompositeDebugId;
 import com.pyx4j.commons.IDebugId;
+import com.pyx4j.entity.annotations.SecurityEnabled;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.IList;
 import com.pyx4j.entity.core.IObject;
+import com.pyx4j.entity.security.DataModelPermission;
 import com.pyx4j.forms.client.events.PropertyChangeEvent;
 import com.pyx4j.forms.client.events.PropertyChangeEvent.PropertyName;
 import com.pyx4j.forms.client.events.PropertyChangeHandler;
@@ -50,6 +52,7 @@ import com.pyx4j.forms.client.ui.CContainer;
 import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
+import com.pyx4j.security.shared.SecurityController;
 
 /**
  * This component represents list of IEntities
@@ -76,10 +79,11 @@ public abstract class CFolder<E extends IEntity> extends CContainer<CFolder<E>, 
 
     private final E entityPrototype;
 
-    private final Class<E> rowClass;
+    private final Class<E> entityClass;
 
-    public CFolder(Class<E> rowClass) {
-        this.rowClass = rowClass;
+    public CFolder(Class<E> entityClass) {
+        assert (entityClass != null);
+        this.entityClass = entityClass;
         asWidget().setStyleName(FolderTheme.StyleName.CFolder.name());
         itemsList = new ArrayList<CFolderItem<E>>();
 
@@ -89,11 +93,7 @@ public abstract class CFolder<E extends IEntity> extends CContainer<CFolder<E>, 
         noDataNotificationHolder.setStyleName(FolderTheme.StyleName.CFolderNoDataMessage.name());
         noDataNotificationHolder.setWidget(new Label(i18n.tr("No Data")));
 
-        if (rowClass != null) {
-            entityPrototype = EntityFactory.getEntityPrototype(rowClass);
-        } else {
-            entityPrototype = null;
-        }
+        entityPrototype = EntityFactory.getEntityPrototype(entityClass);
 
         addPropertyChangeHandler(new PropertyChangeHandler() {
             @Override
@@ -122,8 +122,12 @@ public abstract class CFolder<E extends IEntity> extends CContainer<CFolder<E>, 
         calculateActionsState();
     }
 
-    public boolean isAddable() {
-        return addable;
+    public final boolean isAddable() {
+        if (EntityFactory.getEntityMeta(entityClass).isAnnotationPresent(SecurityEnabled.class)) {
+            return addable && SecurityController.check(DataModelPermission.permissionCreate(entityClass));
+        } else {
+            return addable;
+        }
     }
 
     public void setAddable(boolean addable) {
@@ -131,8 +135,12 @@ public abstract class CFolder<E extends IEntity> extends CContainer<CFolder<E>, 
         calculateActionsState();
     }
 
-    public boolean isRemovable() {
-        return removable;
+    public final boolean isRemovable() {
+        if (EntityFactory.getEntityMeta(entityClass).isAnnotationPresent(SecurityEnabled.class)) {
+            return removable && SecurityController.check(DataModelPermission.permissionDelete(entityClass));
+        } else {
+            return removable;
+        }
     }
 
     public void setRemovable(boolean removable) {
@@ -157,8 +165,12 @@ public abstract class CFolder<E extends IEntity> extends CContainer<CFolder<E>, 
     /**
      * This mainly use for columns creation when TableFolderDecorator is used
      */
-    public E proto() {
+    public final E proto() {
         return entityPrototype;
+    }
+
+    public final Class<E> getEntityClass() {
+        return entityClass;
     }
 
     @Override
@@ -174,7 +186,7 @@ public abstract class CFolder<E extends IEntity> extends CContainer<CFolder<E>, 
     protected abstract CForm<? extends E> createItemForm(IObject<?> member);
 
     protected CFolderItem<E> createItem(boolean first) {
-        return new CFolderItem<E>(rowClass) {
+        return new CFolderItem<E>(entityClass) {
             @Override
             public IFolderItemDecorator<E> createItemDecorator() {
                 return CFolder.this.createItemDecorator();
