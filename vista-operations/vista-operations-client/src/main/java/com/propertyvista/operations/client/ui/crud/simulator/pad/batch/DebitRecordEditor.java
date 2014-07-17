@@ -13,9 +13,9 @@
  */
 package com.propertyvista.operations.client.ui.crud.simulator.pad.batch;
 
-import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
+import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
+import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.ui.prime.form.FieldDecoratorBuilder;
 import com.pyx4j.site.client.ui.prime.form.IForm;
 
 import com.propertyvista.operations.client.ui.crud.OperationsEntityForm;
@@ -28,30 +28,25 @@ public class DebitRecordEditor extends OperationsEntityForm<PadSimDebitRecord> {
     public DebitRecordEditor(IForm<PadSimDebitRecord> view) {
         super(PadSimDebitRecord.class, view);
 
-        TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel();
+        FormPanel formPanel = new FormPanel(this);
 
-        int row = -1;
-        content.setWidget(++row, 0, inject(proto().amount(), new FieldDecoratorBuilder(10).build()));
-        content.setWidget(++row, 0, inject(proto().clientId(), new FieldDecoratorBuilder(10).build()));
-        content.setWidget(++row, 0, inject(proto().transactionId(), new FieldDecoratorBuilder(10).build()));
-        content.setHTML(++row, 0, "<hr style='border-top: 1px dashed #000000'/>");
-        content.getFlexCellFormatter().setColSpan(row, 0, 2);
-        content.setWidget(++row, 0, inject(proto().acknowledgmentStatusCode(), new FieldDecoratorBuilder(10).build()));
-        content.setWidget(++row, 0, inject(proto().reconciliationStatus(), new FieldDecoratorBuilder(10).build()));
-        content.setWidget(++row, 0, inject(proto().reasonCode(), new FieldDecoratorBuilder(10).build()));
-        content.setWidget(++row, 0, inject(proto().fee(), new FieldDecoratorBuilder(10).build()));
+        formPanel.append(Location.Left, proto().amount()).decorate().componentWidth(120);
+        formPanel.append(Location.Left, proto().clientId()).decorate().componentWidth(120);
+        formPanel.append(Location.Left, proto().transactionId()).decorate().componentWidth(120);
+        formPanel.append(Location.Right, proto().bankId()).decorate().componentWidth(120);
+        formPanel.append(Location.Right, proto().branchTransitNumber()).decorate().componentWidth(120);
+        formPanel.append(Location.Right, proto().accountNumber()).decorate().componentWidth(120);
 
-        row = -1;
-        content.setWidget(++row, 1, inject(proto().bankId(), new FieldDecoratorBuilder(10).build()));
-        content.setWidget(++row, 1, inject(proto().branchTransitNumber(), new FieldDecoratorBuilder(10).build()));
-        content.setWidget(++row, 1, inject(proto().accountNumber(), new FieldDecoratorBuilder(10).build()));
-        ++row;
-        ++row;
-        content.setWidget(++row, 1, inject(proto().paymentDate(), new FieldDecoratorBuilder(10).build()));
-        content.setWidget(++row, 1, inject(proto().reasonText(), new FieldDecoratorBuilder(10).build()));
+        formPanel.append(Location.Dual, proto().acknowledgmentStatusCode()).decorate().componentWidth(120);
+        formPanel.append(Location.Dual, proto().reconciliationStatus()).decorate().componentWidth(120);
 
-        content.setWidget(++row, 0, inject(proto().updated(), new FieldDecoratorBuilder().build()));
+        formPanel.append(Location.Left, proto().reasonCode()).decorate().componentWidth(120);
+        formPanel.append(Location.Left, proto().fee()).decorate().componentWidth(120);
+        formPanel.append(Location.Left, proto().updated()).decorate();
 
-        selectTab(addTab(content, i18n.tr("General")));
+        formPanel.append(Location.Right, proto().paymentDate()).decorate().componentWidth(120);
+        formPanel.append(Location.Right, proto().reasonText()).decorate().componentWidth(120);
+
+        selectTab(addTab(formPanel, i18n.tr("General")));
     }
 }

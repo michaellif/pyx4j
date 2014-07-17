@@ -60,7 +60,7 @@ public class DebitRecordFolder extends VistaBoxFolder<PadSimDebitRecord> {
             formPanel.append(Location.Dual, proto().acknowledgmentStatusCode()).decorate().componentWidth(120);
 
             formPanel.append(Location.Dual, proto().reconciliationStatus()).decorate().componentWidth(120);
-            formPanel.append(Location.Dual, proto().reasonCode()).decorate().componentWidth(120);
+            formPanel.append(Location.Left, proto().reasonCode()).decorate().componentWidth(120);
 
             formPanel.append(Location.Left, proto().fee()).decorate().componentWidth(120);
             formPanel.append(Location.Right, proto().paymentDate()).decorate().componentWidth(120);
