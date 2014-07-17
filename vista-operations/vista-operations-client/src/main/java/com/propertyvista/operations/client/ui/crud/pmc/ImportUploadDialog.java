@@ -73,7 +73,7 @@ public class ImportUploadDialog extends UploadDialogBase<ImportUploadDTO> {
     @Override
     protected ImportUploadDTO getUploadData() {
         ImportUploadDTO dto = form.getValue();
-        dto.setPrimaryKey(pmc.getPrimaryKey());
+        dto.pmcId().setPrimaryKey(pmc.getPrimaryKey());
         return dto;
     }
 

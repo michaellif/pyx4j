@@ -13,6 +13,8 @@
  */
 package com.propertyvista.interfaces.importer;
 
+import java.util.concurrent.Callable;
+
 import org.apache.commons.io.FilenameUtils;
 
 import com.pyx4j.commons.SimpleMessageFormat;
@@ -21,8 +23,10 @@ import com.pyx4j.gwt.shared.DownloadFormat;
 import com.pyx4j.server.contexts.Lifecycle;
 
 import com.propertyvista.crm.rpc.dto.ImportUploadDTO;
+import com.propertyvista.domain.pmc.Pmc;
 import com.propertyvista.interfaces.importer.model.ImportIO;
 import com.propertyvista.interfaces.importer.processor.ImportProcessor;
+import com.propertyvista.server.TaskRunner;
 import com.propertyvista.server.common.upload.AbstractUploadWithDownloadableResponceDeferredProcess;
 
 public class ImportUploadDeferredProcess extends AbstractUploadWithDownloadableResponceDeferredProcess<ImportUploadDTO> {
@@ -43,7 +47,19 @@ public class ImportUploadDeferredProcess extends AbstractUploadWithDownloadableR
         try {
             Lifecycle.startElevatedUserContext();
             Persistence.service().startBackgroundProcessTransaction();
-            executeImport();
+            if (getUploadInitiationData().pmcId().isNull()) {
+                executeImport();
+            } else {
+                Pmc pmc = Persistence.secureRetrieve(Pmc.class, getUploadInitiationData().pmcId().getPrimaryKey());
+                TaskRunner.runInTargetNamespace(pmc, new Callable<Void>() {
+                    @Override
+                    public Void call() {
+                        executeImport();
+                        return null;
+                    }
+                });
+            }
+
             if (status().isCanceled()) {
                 Persistence.service().rollback();
             } else {
@@ -73,6 +89,8 @@ public class ImportUploadDeferredProcess extends AbstractUploadWithDownloadableR
             String fileName = "processingResults.xlsx";
             getResponse().resultUrl().setValue(fileName);
             processingReport.createDownloadable(fileName);
+        } else {
+            getResponse().success().setValue(Boolean.TRUE);
         }
         status().setCompleted();
     }

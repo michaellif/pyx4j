@@ -20,6 +20,7 @@ import com.pyx4j.entity.core.IPrimitive;
 import com.pyx4j.i18n.annotations.I18n;
 import com.pyx4j.i18n.shared.I18nEnum;
 
+import com.propertyvista.domain.pmc.Pmc;
 import com.propertyvista.dto.ImportDataFormatType;
 
 @Transient
@@ -51,4 +52,6 @@ public interface ImportUploadDTO extends IEntity {
     IPrimitive<ImportDataFormatType> dataFormat();
 
     IPrimitive<Boolean> ignoreMissingMedia();
+
+    Pmc pmcId();
 }

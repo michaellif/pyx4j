@@ -51,6 +51,7 @@ public class UpdateUploadServiceImpl extends AbstractUploadWithDownloadableRespo
 
     @Override
     protected AbstractUploadWithDownloadableResponceDeferredProcess<ImportUploadDTO> createUploadDeferredProcess(ImportUploadDTO data) {
+        data.pmcId().set(null);
         return new ImportUploadDeferredProcess(data);
     }
 
