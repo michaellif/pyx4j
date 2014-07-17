@@ -16,7 +16,7 @@ package com.propertyvista.crm.server.security.access;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.core.criterion.PropertyCriterion;
 import com.pyx4j.entity.security.DatasetAccessRule;
-import com.pyx4j.server.contexts.Context;
+import com.pyx4j.server.contexts.ServerContext;
 
 import com.propertyvista.domain.tenant.Customer;
 
@@ -29,7 +29,7 @@ public class CustomerDatasetAccessRule implements DatasetAccessRule<Customer> {
 
         criteria.or()
 
-                .right(PropertyCriterion.eq(criteria.proto()._tenantInLease().$().lease().unit().building().userAccess(), Context.getVisit().getUserVisit()
+                .right(PropertyCriterion.eq(criteria.proto()._tenantInLease().$().lease().unit().building().userAccess(), ServerContext.getVisit().getUserVisit()
                         .getPrincipalPrimaryKey()))
 
                 .left(PropertyCriterion.notExists(criteria.proto()._tenantInLease()));

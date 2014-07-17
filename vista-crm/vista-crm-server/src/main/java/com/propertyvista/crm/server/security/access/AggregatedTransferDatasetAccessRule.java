@@ -16,7 +16,7 @@ package com.propertyvista.crm.server.security.access;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.core.criterion.PropertyCriterion;
 import com.pyx4j.entity.security.DatasetAccessRule;
-import com.pyx4j.server.contexts.Context;
+import com.pyx4j.server.contexts.ServerContext;
 
 import com.propertyvista.domain.financial.AggregatedTransfer;
 
@@ -25,7 +25,7 @@ public class AggregatedTransferDatasetAccessRule implements DatasetAccessRule<Ag
 
     @Override
     public void applyRule(EntityQueryCriteria<AggregatedTransfer> criteria) {
-        criteria.add(PropertyCriterion.eq(criteria.proto().merchantAccount()._buildings().$().userAccess(), Context.getVisit().getUserVisit()
+        criteria.add(PropertyCriterion.eq(criteria.proto().merchantAccount()._buildings().$().userAccess(), ServerContext.getVisit().getUserVisit()
                 .getPrincipalPrimaryKey()));
     }
 

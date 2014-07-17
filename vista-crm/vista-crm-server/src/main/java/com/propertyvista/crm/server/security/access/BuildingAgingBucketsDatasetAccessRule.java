@@ -15,7 +15,7 @@ package com.propertyvista.crm.server.security.access;
 
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.security.DatasetAccessRule;
-import com.pyx4j.server.contexts.Context;
+import com.pyx4j.server.contexts.ServerContext;
 
 import com.propertyvista.domain.financial.billing.BuildingAgingBuckets;
 
@@ -25,7 +25,7 @@ public class BuildingAgingBucketsDatasetAccessRule implements DatasetAccessRule<
 
     @Override
     public void applyRule(EntityQueryCriteria<BuildingAgingBuckets> criteria) {
-        criteria.eq(criteria.proto().arrearsSnapshot().building().userAccess(), Context.getVisit().getUserVisit().getPrincipalPrimaryKey());
+        criteria.eq(criteria.proto().arrearsSnapshot().building().userAccess(), ServerContext.getVisit().getUserVisit().getPrincipalPrimaryKey());
     }
 
 }

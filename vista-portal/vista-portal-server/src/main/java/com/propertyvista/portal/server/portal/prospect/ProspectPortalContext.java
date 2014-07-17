@@ -15,7 +15,7 @@ package com.propertyvista.portal.server.portal.prospect;
 
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.server.Persistence;
-import com.pyx4j.server.contexts.Context;
+import com.pyx4j.server.contexts.ServerContext;
 
 import com.propertyvista.domain.tenant.lease.Guarantor;
 import com.propertyvista.domain.tenant.lease.Lease;
@@ -30,11 +30,11 @@ import com.propertyvista.portal.server.portal.shared.PortalVistaContext;
 public class ProspectPortalContext extends PortalVistaContext {
 
     public static void setOnlineApplication(OnlineApplication application) {
-        Context.getUserVisit(ProspectUserVisit.class).setOnlineApplication(application);
+        ServerContext.visit(ProspectUserVisit.class).setOnlineApplication(application);
     }
 
     public static OnlineApplication getOnlineApplicationIdStub() {
-        return Context.getUserVisit(ProspectUserVisit.class).getOnlineApplication();
+        return ServerContext.visit(ProspectUserVisit.class).getOnlineApplication();
     }
 
     public static OnlineApplication getOnlineApplication() {

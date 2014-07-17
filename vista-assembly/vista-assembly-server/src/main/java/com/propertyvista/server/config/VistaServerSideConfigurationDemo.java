@@ -18,7 +18,7 @@ import javax.servlet.ServletContext;
 import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.log4j.LoggerConfig;
 import com.pyx4j.security.server.ThrottleConfig;
-import com.pyx4j.server.contexts.Context;
+import com.pyx4j.server.contexts.ServerContext;
 
 public class VistaServerSideConfigurationDemo extends VistaServerSideConfiguration {
 
@@ -42,9 +42,9 @@ public class VistaServerSideConfigurationDemo extends VistaServerSideConfigurati
 
     @Override
     public boolean isAppsContextlessDepoyment() {
-        if (Context.getRequest() != null) {
+        if (ServerContext.getRequest() != null) {
             // Default tomcat port
-            return Context.getRequest().getServerPort() != 8080;
+            return ServerContext.getRequest().getServerPort() != 8080;
         } else {
             return true;
         }
@@ -52,8 +52,8 @@ public class VistaServerSideConfigurationDemo extends VistaServerSideConfigurati
 
     @Override
     public String getApplicationURLNamespace(boolean secure) {
-        if (Context.getRequest() != null) {
-            String serverName = Context.getRequest().getServerName();
+        if (ServerContext.getRequest() != null) {
+            String serverName = ServerContext.getRequest().getServerName();
             String[] serverNameParts = serverName.split("\\.");
 
             String dnsBase = serverName;
@@ -67,7 +67,7 @@ public class VistaServerSideConfigurationDemo extends VistaServerSideConfigurati
             b.append(".");
             b.append(dnsBase);
 
-            b.append(":").append(Context.getRequest().getServerPort());
+            b.append(":").append(ServerContext.getRequest().getServerPort());
 
             b.append("/");
             b.append(LoggerConfig.getContextName()).append("/");

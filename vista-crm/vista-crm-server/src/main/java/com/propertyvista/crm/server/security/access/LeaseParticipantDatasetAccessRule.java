@@ -15,7 +15,7 @@ package com.propertyvista.crm.server.security.access;
 
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.security.DatasetAccessRule;
-import com.pyx4j.server.contexts.Context;
+import com.pyx4j.server.contexts.ServerContext;
 
 import com.propertyvista.domain.tenant.lease.LeaseParticipant;
 
@@ -25,6 +25,6 @@ public class LeaseParticipantDatasetAccessRule implements DatasetAccessRule<Leas
 
     @Override
     public void applyRule(EntityQueryCriteria<LeaseParticipant<?>> criteria) {
-        criteria.eq(criteria.proto().lease().unit().building().userAccess(), Context.getVisit().getUserVisit().getPrincipalPrimaryKey());
+        criteria.eq(criteria.proto().lease().unit().building().userAccess(), ServerContext.getVisit().getUserVisit().getPrincipalPrimaryKey());
     }
 }

@@ -18,7 +18,7 @@ import javax.servlet.http.HttpSessionEvent;
 import javax.servlet.http.HttpSessionListener;
 
 import com.pyx4j.config.server.ServerSideFactory;
-import com.pyx4j.server.contexts.Context;
+import com.pyx4j.server.contexts.ServerContext;
 import com.pyx4j.server.contexts.Lifecycle;
 import com.pyx4j.server.contexts.Visit;
 
@@ -35,7 +35,7 @@ public class AuditSessionListener implements HttpSessionListener {
     @Override
     public void sessionDestroyed(HttpSessionEvent se) {
         // To not record user logout
-        if (Context.getRequest() != null) {
+        if (ServerContext.getRequest() != null) {
             return;
         }
         HttpSession session = se.getSession();

@@ -19,7 +19,7 @@ import org.slf4j.LoggerFactory;
 import com.pyx4j.commons.Key;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.shared.UnRecoverableRuntimeException;
-import com.pyx4j.server.contexts.Context;
+import com.pyx4j.server.contexts.ServerContext;
 
 import com.propertyvista.domain.security.CrmUser;
 import com.propertyvista.domain.security.CustomerUser;
@@ -35,11 +35,11 @@ public class VistaContext {
     private static final I18n i18n = I18n.get(VistaContext.class);
 
     public static Key getCurrentUserPrimaryKey() {
-        if (!Context.isUserLoggedIn()) {
+        if (!ServerContext.isUserLoggedIn()) {
             log.trace("no session");
             throw new UnRecoverableRuntimeException(i18n.tr("No Session"));
         }
-        return Context.getVisit().getUserVisit().getPrincipalPrimaryKey();
+        return ServerContext.getVisit().getUserVisit().getPrincipalPrimaryKey();
     }
 
     public static AbstractUser getCurrentUser() {
@@ -53,10 +53,10 @@ public class VistaContext {
     }
 
     public static AbstractUser getCurrentUserIfAvalable() {
-        if (!Context.isUserLoggedIn()) {
+        if (!ServerContext.isUserLoggedIn()) {
             return null;
         } else {
-            return Context.getUserVisit(VistaUserVisit.class).getCurrentUser();
+            return ServerContext.visit(VistaUserVisit.class).getCurrentUser();
         }
     }
 

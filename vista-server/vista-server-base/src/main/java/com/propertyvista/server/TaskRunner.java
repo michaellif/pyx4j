@@ -27,7 +27,7 @@ import com.pyx4j.entity.server.Executable;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.server.TransactionScopeOption;
 import com.pyx4j.entity.server.UnitOfWork;
-import com.pyx4j.server.contexts.Context;
+import com.pyx4j.server.contexts.ServerContext;
 import com.pyx4j.server.contexts.InheritableUserContext;
 import com.pyx4j.server.contexts.Lifecycle;
 import com.pyx4j.server.contexts.NamespaceManager;
@@ -72,7 +72,7 @@ public class TaskRunner {
     }
 
     public static <T> T runAutonomousTransation(final String targetNamespace, final Callable<T> task) {
-        final InheritableUserContext inheritableUserContext = Context.getInheritableUserContext();
+        final InheritableUserContext inheritableUserContext = ServerContext.getInheritableUserContext();
         ExecutorService executorService = Executors.newSingleThreadExecutor();
         try {
             synchronized (task.getClass()) {

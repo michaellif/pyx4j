@@ -15,7 +15,7 @@ package com.propertyvista.crm.server.security.access;
 
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.security.DatasetAccessRule;
-import com.pyx4j.server.contexts.Context;
+import com.pyx4j.server.contexts.ServerContext;
 
 import com.propertyvista.domain.financial.billing.LeaseAgingBuckets;
 
@@ -25,7 +25,7 @@ public class LeaseAgingBucketsDatasetAccessRule implements DatasetAccessRule<Lea
 
     @Override
     public void applyRule(EntityQueryCriteria<LeaseAgingBuckets> criteria) {
-        criteria.eq(criteria.proto().arrearsSnapshot().billingAccount().lease().unit().building().userAccess(), Context.getVisit().getUserVisit()
+        criteria.eq(criteria.proto().arrearsSnapshot().billingAccount().lease().unit().building().userAccess(), ServerContext.getVisit().getUserVisit()
                 .getPrincipalPrimaryKey());
     }
 

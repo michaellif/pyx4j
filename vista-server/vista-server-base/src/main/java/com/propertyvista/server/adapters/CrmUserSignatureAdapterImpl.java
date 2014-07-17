@@ -15,7 +15,7 @@ package com.propertyvista.server.adapters;
 
 import com.pyx4j.commons.Validate;
 import com.pyx4j.config.server.SystemDateManager;
-import com.pyx4j.server.contexts.Context;
+import com.pyx4j.server.contexts.ServerContext;
 
 import com.propertyvista.biz.system.VistaContext;
 import com.propertyvista.domain.security.CrmUser;
@@ -31,7 +31,7 @@ public class CrmUserSignatureAdapterImpl implements CrmUserSignatureAdapter {
                 Validate.isEquals(CrmUser.class, VistaContext.getCurrentUser().getValueClass(), "Only CrmUser can sign CrmUserSignature");
                 newEntity.signingUser().set(VistaContext.getCurrentUser());
                 newEntity.signDate().setValue(SystemDateManager.getDate());
-                newEntity.ipAddress().setValue(Context.getRequestRemoteAddr());
+                newEntity.ipAddress().setValue(ServerContext.getRequestRemoteAddr());
             }
         } else {
             // Erase signature since it is set to non signed

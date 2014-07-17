@@ -20,7 +20,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.commons.UserRuntimeException;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.server.contexts.Context;
+import com.pyx4j.server.contexts.ServerContext;
 import com.pyx4j.server.contexts.Visit;
 
 import com.propertyvista.crm.rpc.services.FeedbackService;
@@ -35,11 +35,11 @@ public class FeedbackServiceImpl implements FeedbackService {
 
     @Override
     public void obtainSetsatisfactionLoginUrl(AsyncCallback<String> callback) {
-        Visit visit = Context.getVisit();
+        Visit visit = ServerContext.getVisit();
         String url;
         try {
             url = GetSatisfactionUrl.url(visit.getUserVisit().getEmail(), visit.getUserVisit().getName(),
-                    UserAccessUtils.getCrmUserUUID(visit.getUserVisit().getPrincipalPrimaryKey()), Context.getRequest().isSecure());
+                    UserAccessUtils.getCrmUserUUID(visit.getUserVisit().getPrincipalPrimaryKey()), ServerContext.getRequest().isSecure());
         } catch (Throwable e) {
             log.error("Error", e);
             throw new UserRuntimeException(i18n.tr("Feedback Service unavailable"));

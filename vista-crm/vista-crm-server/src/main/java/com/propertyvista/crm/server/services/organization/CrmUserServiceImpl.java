@@ -27,7 +27,7 @@ import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.security.shared.SecurityViolationException;
-import com.pyx4j.server.contexts.Context;
+import com.pyx4j.server.contexts.ServerContext;
 
 import com.propertyvista.biz.system.VistaContext;
 import com.propertyvista.crm.rpc.dto.company.EmployeeDTO;
@@ -99,7 +99,7 @@ public class CrmUserServiceImpl extends AbstractCrudServiceDtoImpl<Employee, Emp
         super.persist(bo, to);
 
         // Update name label in UI
-        Context.getVisit().getUserVisit().setName(bo.name().getStringView());
+        ServerContext.getVisit().getUserVisit().setName(bo.name().getStringView());
 
         return true;
     }

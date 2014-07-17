@@ -30,7 +30,7 @@ import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.essentials.server.admin.AdminServiceImpl;
 import com.pyx4j.essentials.server.dev.NetworkSimulationServiceFilter;
 import com.pyx4j.rpc.shared.VoidSerializable;
-import com.pyx4j.server.contexts.Context;
+import com.pyx4j.server.contexts.ServerContext;
 import com.pyx4j.server.contexts.DevSession;
 
 import com.propertyvista.config.AbstractVistaServerSideConfiguration;
@@ -67,13 +67,13 @@ public class SimulationServiceImpl extends AdminServiceImpl implements Simulatio
         if (ServerSideConfiguration.instance().getOverrideSessionMaxInactiveInterval() != null) {
             sessionDuration = ServerSideConfiguration.instance().getOverrideSessionMaxInactiveInterval();
         } else {
-            sessionDuration = Context.getRequest().getServletContext().getSessionCookieConfig().getMaxAge();
+            sessionDuration = ServerContext.getRequest().getServletContext().getSessionCookieConfig().getMaxAge();
         }
         if (sessionDuration > 0) {
             result.applicationSessionDuration().setValue(TimeUtils.durationFormatSeconds(sessionDuration));
         }
         result.containerSessionTimeout().setValue(
-                TimeUtils.durationFormatSeconds(Context.getRequest().getServletContext().getSessionCookieConfig().getMaxAge()));
+                TimeUtils.durationFormatSeconds(ServerContext.getRequest().getServletContext().getSessionCookieConfig().getMaxAge()));
 
         callback.onSuccess(result);
     }
@@ -103,7 +103,7 @@ public class SimulationServiceImpl extends AdminServiceImpl implements Simulatio
             if (sessionDuration < 10) {
                 throw new UserRuntimeException("Can't set session duration to less then 10 seconds");
             }
-            if (sessionDuration == Context.getRequest().getServletContext().getSessionCookieConfig().getMaxAge()) {
+            if (sessionDuration == ServerContext.getRequest().getServletContext().getSessionCookieConfig().getMaxAge()) {
                 ServerSideConfiguration.instance().setOverrideSessionMaxInactiveInterval(null);
             } else {
                 ServerSideConfiguration.instance().setOverrideSessionMaxInactiveInterval(sessionDuration);

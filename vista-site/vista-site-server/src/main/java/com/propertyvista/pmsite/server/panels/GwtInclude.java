@@ -19,7 +19,7 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.Model;
 
-import com.pyx4j.server.contexts.Context;
+import com.pyx4j.server.contexts.ServerContext;
 import com.pyx4j.server.contexts.Visit;
 
 import com.propertyvista.config.VistaDeployment;
@@ -44,7 +44,7 @@ public class GwtInclude extends Panel {
     }
 
     private String getAuthenticationToken() {
-        Visit visit = Context.getVisit();
+        Visit visit = ServerContext.getVisit();
         if (visit != null) {
             return visit.getSessionToken();
         } else {

@@ -24,7 +24,7 @@ import com.pyx4j.entity.server.TransactionScopeOption;
 import com.pyx4j.entity.server.UnitOfWork;
 import com.pyx4j.gwt.rpc.deferred.DeferredProcessProgressResponse;
 import com.pyx4j.gwt.server.deferred.AbstractDeferredProcess;
-import com.pyx4j.server.contexts.Context;
+import com.pyx4j.server.contexts.ServerContext;
 
 import com.propertyvista.biz.ExecutionMonitor;
 import com.propertyvista.crm.rpc.dto.legal.n4.LegalNoticeCandidateDTO;
@@ -60,7 +60,7 @@ public class N4CandidateSearchDeferredProcess extends AbstractDeferredProcess {
                             return searcher.legalNoticeCandidates();
                         }
                     });
-            Context.getVisit().setAttribute(SEARCH_RESULTS_KEY, candidates);
+            ServerContext.getVisit().setAttribute(SEARCH_RESULTS_KEY, candidates);
         } catch (Throwable caught) {
             log.error("got error while searching for N4 candidates", caught);
             error = caught;

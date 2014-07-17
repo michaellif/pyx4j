@@ -56,7 +56,7 @@ import com.pyx4j.i18n.annotations.Translate;
 import com.pyx4j.i18n.shared.I18nEnum;
 import com.pyx4j.quartz.SchedulerHelper;
 import com.pyx4j.security.shared.SecurityController;
-import com.pyx4j.server.contexts.Context;
+import com.pyx4j.server.contexts.ServerContext;
 import com.pyx4j.server.contexts.DevSession;
 import com.pyx4j.server.contexts.Lifecycle;
 import com.pyx4j.server.contexts.NamespaceManager;
@@ -218,7 +218,7 @@ public class DBResetServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse response) throws ServletException, IOException {
         long requestStart = System.currentTimeMillis();
-        log.debug("DBReset requested from ip:{}, {}", Context.getRequestRemoteAddr(),
+        log.debug("DBReset requested from ip:{}, {}", ServerContext.getRequestRemoteAddr(),
                 DevSession.getSession().getAttribute(DevelopmentSecurity.OPENID_USER_EMAIL_ATTRIBUTE));
         response.setDateHeader("Expires", System.currentTimeMillis());
         response.setHeader("Pragma", "no-cache");
@@ -230,7 +230,7 @@ public class DBResetServlet extends HttpServlet {
             synchronized (DBResetServlet.class) {
                 long start = System.currentTimeMillis();
                 if (start - requestStart > 10 * Consts.MIN2MSEC) {
-                    log.warn("Outdated DBReset request from ip:{}, {}", Context.getRequestRemoteAddr(),
+                    log.warn("Outdated DBReset request from ip:{}, {}", ServerContext.getRequestRemoteAddr(),
                             DevSession.getSession().getAttribute(DevelopmentSecurity.OPENID_USER_EMAIL_ATTRIBUTE));
                     response.sendError(HttpServletResponse.SC_BAD_REQUEST);
                     return;
@@ -243,7 +243,7 @@ public class DBResetServlet extends HttpServlet {
                             return;
                         }
                     }
-                    log.warn("DBReset started from ip:{}, {}", Context.getRequestRemoteAddr(),
+                    log.warn("DBReset started from ip:{}, {}", ServerContext.getRequestRemoteAddr(),
                             DevSession.getSession().getAttribute(DevelopmentSecurity.OPENID_USER_EMAIL_ATTRIBUTE));
                     ResetType type = null;
                     String tp = req.getParameter("type");
@@ -445,7 +445,7 @@ public class DBResetServlet extends HttpServlet {
                 } finally {
                     DataGenerator.cleanup();
                     CacheService.reset();
-                    log.warn("DBReset compleated from ip:{}, {}", Context.getRequestRemoteAddr(),
+                    log.warn("DBReset compleated from ip:{}, {}", ServerContext.getRequestRemoteAddr(),
                             DevSession.getSession().getAttribute(DevelopmentSecurity.OPENID_USER_EMAIL_ATTRIBUTE));
                 }
             }

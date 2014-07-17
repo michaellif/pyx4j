@@ -15,7 +15,7 @@ package com.propertyvista.crm.server.security.access;
 
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.security.DatasetAccessRule;
-import com.pyx4j.server.contexts.Context;
+import com.pyx4j.server.contexts.ServerContext;
 
 import com.propertyvista.domain.dashboard.gadgets.availability.UnitAvailabilityStatus;
 
@@ -25,7 +25,7 @@ public class UnitAvailabilityStatusDatasetAccessRule implements DatasetAccessRul
 
     @Override
     public void applyRule(EntityQueryCriteria<UnitAvailabilityStatus> criteria) {
-        criteria.eq(criteria.proto().unit().building().userAccess(), Context.getVisit().getUserVisit().getPrincipalPrimaryKey());
+        criteria.eq(criteria.proto().unit().building().userAccess(), ServerContext.getVisit().getUserVisit().getPrincipalPrimaryKey());
     }
 
 }

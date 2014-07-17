@@ -28,7 +28,7 @@ import com.pyx4j.entity.server.TransactionScopeOption;
 import com.pyx4j.entity.server.UnitOfWork;
 import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.security.shared.UserVisit;
-import com.pyx4j.server.contexts.Context;
+import com.pyx4j.server.contexts.ServerContext;
 import com.pyx4j.server.contexts.NamespaceManager;
 import com.pyx4j.server.contexts.Visit;
 
@@ -117,7 +117,7 @@ public class AuditFacadeImpl implements AuditFacade {
         AuditRecord record = EntityFactory.create(AuditRecord.class);
         record.namespace().setValue(NamespaceManager.getNamespace());
         record.remoteAddr().setValue(getRequestRemoteAddr());
-        record.sessionId().setValue(Context.getSessionId());
+        record.sessionId().setValue(ServerContext.getSessionId());
         record.event().setValue(eventType);
         record.details().setValue((format == null) ? null : truncDetails(SimpleMessageFormat.format(format, args)));
         if (entity != null) {
@@ -171,7 +171,7 @@ public class AuditFacadeImpl implements AuditFacade {
     }
 
     private AbstractUser getPrincipal() {
-        Visit visit = Context.getVisit();
+        Visit visit = ServerContext.getVisit();
         if (visit == null) {
             return null;
         } else {
@@ -179,25 +179,25 @@ public class AuditFacadeImpl implements AuditFacade {
             if (userVisit == null) {
                 return null;
             } else {
-                return Context.getUserVisit(VistaUserVisit.class).getCurrentUser();
+                return ServerContext.visit(VistaUserVisit.class).getCurrentUser();
             }
         }
     }
 
     private String getRequestRemoteAddr() {
-        if (Context.getRequest() == null) {
+        if (ServerContext.getRequest() == null) {
             return null;
         } else {
-            return Context.getRequestRemoteAddr();
+            return ServerContext.getRequestRemoteAddr();
         }
     }
 
     private String getLoginUserDetails() {
-        if (Context.getRequest() == null) {
+        if (ServerContext.getRequest() == null) {
             return null;
         } else {
             StringBuilder info = new StringBuilder();
-            info.append("User-Agent: ").append(Context.getRequest().getHeader("User-Agent"));
+            info.append("User-Agent: ").append(ServerContext.getRequest().getHeader("User-Agent"));
             return info.toString();
         }
     }

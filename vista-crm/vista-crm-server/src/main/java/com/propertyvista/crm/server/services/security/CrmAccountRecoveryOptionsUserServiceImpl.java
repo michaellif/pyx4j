@@ -33,7 +33,7 @@ import com.pyx4j.security.rpc.AuthenticationRequest;
 import com.pyx4j.security.rpc.AuthenticationResponse;
 import com.pyx4j.security.rpc.ChallengeVerificationRequired;
 import com.pyx4j.security.shared.SecurityController;
-import com.pyx4j.server.contexts.Context;
+import com.pyx4j.server.contexts.ServerContext;
 
 import com.propertyvista.biz.system.AuditFacade;
 import com.propertyvista.biz.system.VistaContext;
@@ -63,8 +63,8 @@ public class CrmAccountRecoveryOptionsUserServiceImpl implements CrmAccountRecov
             Persistence.service().retrieve(credential.user());
             AbstractAntiBot.assertLogin(LoginType.userLogin, credential.user().email().getValue(), null);
             if (!ServerSideFactory.create(PasswordEncryptorFacade.class).checkUserPassword(request.password().getValue(), credential.credential().getValue())) {
-                log.info("Invalid password for user {}", Context.getVisit().getUserVisit().getEmail());
-                if (AbstractAntiBot.authenticationFailed(LoginType.userLogin, Context.getVisit().getUserVisit().getEmail())) {
+                log.info("Invalid password for user {}", ServerContext.getVisit().getUserVisit().getEmail());
+                if (AbstractAntiBot.authenticationFailed(LoginType.userLogin, ServerContext.getVisit().getUserVisit().getEmail())) {
                     throw new ChallengeVerificationRequired(i18n.tr("Too Many Failed Log In Attempts"));
                 } else {
                     throw new UserRuntimeException(AbstractAntiBot.GENERIC_LOGIN_FAILED_MESSAGE);
@@ -92,8 +92,8 @@ public class CrmAccountRecoveryOptionsUserServiceImpl implements CrmAccountRecov
             Persistence.service().retrieve(credentials.user());
             AbstractAntiBot.assertLogin(LoginType.userLogin, credentials.user().email().getValue(), null);
             if (!ServerSideFactory.create(PasswordEncryptorFacade.class).checkUserPassword(request.password().getValue(), credentials.credential().getValue())) {
-                log.info("Invalid password for user {}", Context.getVisit().getUserVisit().getEmail());
-                if (AbstractAntiBot.authenticationFailed(LoginType.userLogin, Context.getVisit().getUserVisit().getEmail())) {
+                log.info("Invalid password for user {}", ServerContext.getVisit().getUserVisit().getEmail());
+                if (AbstractAntiBot.authenticationFailed(LoginType.userLogin, ServerContext.getVisit().getUserVisit().getEmail())) {
                     throw new ChallengeVerificationRequired(i18n.tr("Too Many Failed Log In Attempts"));
                 } else {
                     throw new UserRuntimeException(AbstractAntiBot.GENERIC_LOGIN_FAILED_MESSAGE);
@@ -114,7 +114,7 @@ public class CrmAccountRecoveryOptionsUserServiceImpl implements CrmAccountRecov
         ServerSideFactory.create(AuditFacade.class).credentialsUpdated(credentials.user());
         Persistence.service().persist(credentials);
         Persistence.service().commit();
-        log.info("AccountRecoveryOptions changed by user {} {}", Context.getVisit().getUserVisit().getEmail(), VistaContext.getCurrentUserPrimaryKey());
+        log.info("AccountRecoveryOptions changed by user {} {}", ServerContext.getVisit().getUserVisit().getEmail(), VistaContext.getCurrentUserPrimaryKey());
 
         if (SecurityController.check(VistaBasicBehavior.CRMSetupAccountRecoveryOptionsRequired)) {
             callback.onSuccess(new CrmAuthenticationServiceImpl().authenticate(credentials, null));

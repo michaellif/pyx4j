@@ -30,7 +30,7 @@ import com.pyx4j.rpc.shared.VoidSerializable;
 import com.pyx4j.security.rpc.AbstractPasswordChangeService;
 import com.pyx4j.security.rpc.ChallengeVerificationRequired;
 import com.pyx4j.security.rpc.PasswordChangeRequest;
-import com.pyx4j.server.contexts.Context;
+import com.pyx4j.server.contexts.ServerContext;
 
 import com.propertyvista.biz.system.AuditFacade;
 import com.propertyvista.biz.system.VistaContext;
@@ -63,8 +63,8 @@ public abstract class VistaUserSelfPasswordChangeServiceImpl<E extends AbstractU
         AbstractAntiBot.assertLogin(LoginType.userLogin, credential.user().email().getValue(), null);
         if (!ServerSideFactory.create(PasswordEncryptorFacade.class)
                 .checkUserPassword(request.currentPassword().getValue(), credential.credential().getValue())) {
-            log.info("Invalid password for user {}", Context.getVisit().getUserVisit().getEmail());
-            if (AbstractAntiBot.authenticationFailed(LoginType.userLogin, Context.getVisit().getUserVisit().getEmail())) {
+            log.info("Invalid password for user {}", ServerContext.getVisit().getUserVisit().getEmail());
+            if (AbstractAntiBot.authenticationFailed(LoginType.userLogin, ServerContext.getVisit().getUserVisit().getEmail())) {
                 throw new ChallengeVerificationRequired(i18n.tr("Too Many Failed Log In Attempts"));
             } else {
                 throw new UserRuntimeException(true, AbstractAntiBot.GENERIC_LOGIN_FAILED_MESSAGE);
@@ -82,7 +82,7 @@ public abstract class VistaUserSelfPasswordChangeServiceImpl<E extends AbstractU
 
         Persistence.service().persist(credential);
         Persistence.service().commit();
-        log.info("password changed by user {} {}", Context.getVisit().getUserVisit().getEmail(), VistaContext.getCurrentUserPrimaryKey());
+        log.info("password changed by user {} {}", ServerContext.getVisit().getUserVisit().getEmail(), VistaContext.getCurrentUserPrimaryKey());
         callback.onSuccess(null);
     }
 }

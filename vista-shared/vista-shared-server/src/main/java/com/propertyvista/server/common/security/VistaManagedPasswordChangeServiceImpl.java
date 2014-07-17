@@ -26,7 +26,7 @@ import com.pyx4j.rpc.shared.VoidSerializable;
 import com.pyx4j.security.rpc.AbstractPasswordChangeService;
 import com.pyx4j.security.rpc.PasswordChangeRequest;
 import com.pyx4j.security.shared.SecurityViolationException;
-import com.pyx4j.server.contexts.Context;
+import com.pyx4j.server.contexts.ServerContext;
 
 import com.propertyvista.biz.system.AuditFacade;
 import com.propertyvista.biz.system.VistaContext;
@@ -52,7 +52,7 @@ public abstract class VistaManagedPasswordChangeServiceImpl<E extends AbstractUs
     @Override
     public void changePassword(AsyncCallback<VoidSerializable> callback, PasswordChangeRequest request) {
         if (EntityFactory.getEntityPrototype(credentialClass).user().getValueClass().equals(VistaContext.getCurrentUser().getValueClass())) {
-            if (Context.getVisit().getUserVisit().getPrincipalPrimaryKey().equals(request.userPk().getValue())) {
+            if (ServerContext.getVisit().getUserVisit().getPrincipalPrimaryKey().equals(request.userPk().getValue())) {
                 throw new SecurityViolationException(i18n.tr("Permission denied"));
             }
         }
@@ -64,7 +64,7 @@ public abstract class VistaManagedPasswordChangeServiceImpl<E extends AbstractUs
         ServerSideFactory.create(AuditFacade.class).credentialsUpdated(credential.user());
         Persistence.service().persist(credential);
         Persistence.service().commit();
-        log.info("password changed by user {} for {}", Context.getVisit().getUserVisit().getEmail(), request.userPk());
+        log.info("password changed by user {} for {}", ServerContext.getVisit().getUserVisit().getEmail(), request.userPk());
         callback.onSuccess(null);
     }
 

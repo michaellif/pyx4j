@@ -16,7 +16,7 @@ package com.propertyvista.crm.server.security.access;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.core.criterion.PropertyCriterion;
 import com.pyx4j.entity.security.DatasetAccessRule;
-import com.pyx4j.server.contexts.Context;
+import com.pyx4j.server.contexts.ServerContext;
 
 import com.propertyvista.domain.tenant.lead.Lead;
 
@@ -26,7 +26,7 @@ public class LeadDatasetAccessRule implements DatasetAccessRule<Lead> {
 
     @Override
     public void applyRule(EntityQueryCriteria<Lead> criteria) {
-        criteria.add(PropertyCriterion.eq(criteria.proto().floorplan().building().userAccess(), Context.getVisit().getUserVisit().getPrincipalPrimaryKey()));
+        criteria.add(PropertyCriterion.eq(criteria.proto().floorplan().building().userAccess(), ServerContext.getVisit().getUserVisit().getPrincipalPrimaryKey()));
     }
 
 }

@@ -31,7 +31,7 @@ import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.gwt.server.deferred.DeferredProcessRegistry;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.server.contexts.Context;
+import com.pyx4j.server.contexts.ServerContext;
 
 import com.propertyvista.biz.ExecutionMonitor;
 import com.propertyvista.biz.policy.PolicyFacade;
@@ -56,19 +56,19 @@ public class N4CreateBatchServiceImpl implements N4CreateBatchService {
     @Override
     public void searchForItems(AsyncCallback<String> callback, N4CandidateSearchCriteriaDTO searchCriteria) {
         assertN4PolicyIsSet();
-        Context.getVisit().removeAttribute(N4CandidateSearchDeferredProcess.SEARCH_RESULTS_KEY);
+        ServerContext.getVisit().removeAttribute(N4CandidateSearchDeferredProcess.SEARCH_RESULTS_KEY);
         callback.onSuccess(DeferredProcessRegistry.fork(new N4CandidateSearchDeferredProcess(searchCriteria), ThreadPoolNames.IMPORTS));
     }
 
     @Override
     public void getFoundItems(AsyncCallback<Vector<LegalNoticeCandidateDTO>> callback) {
-        Vector<LegalNoticeCandidateDTO> results = (Vector<LegalNoticeCandidateDTO>) Context.getVisit().getAttribute(
+        Vector<LegalNoticeCandidateDTO> results = (Vector<LegalNoticeCandidateDTO>) ServerContext.getVisit().getAttribute(
                 N4CandidateSearchDeferredProcess.SEARCH_RESULTS_KEY);
         if (results != null) {
-            Context.getVisit().removeAttribute(N4CandidateSearchDeferredProcess.SEARCH_RESULTS_KEY);
+            ServerContext.getVisit().removeAttribute(N4CandidateSearchDeferredProcess.SEARCH_RESULTS_KEY);
             callback.onSuccess(results);
         } else {
-            throw new RuntimeException("Session for user (principal PK ='" + Context.getVisit().getUserVisit().getPrincipalPrimaryKey()
+            throw new RuntimeException("Session for user (principal PK ='" + ServerContext.getVisit().getUserVisit().getPrincipalPrimaryKey()
                     + "') doens't contain N4 candidate search results");
         }
     }

@@ -16,7 +16,7 @@ package com.propertyvista.crm.server.security.access;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.core.criterion.PropertyCriterion;
 import com.pyx4j.entity.security.DatasetAccessRule;
-import com.pyx4j.server.contexts.Context;
+import com.pyx4j.server.contexts.ServerContext;
 
 import com.propertyvista.domain.maintenance.MaintenanceRequest;
 
@@ -26,6 +26,6 @@ public class MaintenanceRequestDatasetAccessRule implements DatasetAccessRule<Ma
 
     @Override
     public void applyRule(EntityQueryCriteria<MaintenanceRequest> criteria) {
-        criteria.add(PropertyCriterion.eq(criteria.proto().building().userAccess(), Context.getVisit().getUserVisit().getPrincipalPrimaryKey()));
+        criteria.add(PropertyCriterion.eq(criteria.proto().building().userAccess(), ServerContext.getVisit().getUserVisit().getPrincipalPrimaryKey()));
     }
 }

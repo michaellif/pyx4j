@@ -21,7 +21,7 @@ import com.pyx4j.commons.Validate;
 import com.pyx4j.entity.server.AbstractCrudServiceImpl;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.rpc.shared.VoidSerializable;
-import com.pyx4j.server.contexts.Context;
+import com.pyx4j.server.contexts.ServerContext;
 
 import com.propertyvista.operations.domain.eft.dbp.DirectDebitRecord;
 import com.propertyvista.operations.domain.eft.dbp.DirectDebitRecordProcessingStatus;
@@ -55,7 +55,7 @@ public class PmcDirectDebitRecordCrudServiceImpl extends AbstractCrudServiceImpl
         DirectDebitRecord record = Persistence.service().retrieve(DirectDebitRecord.class, entityId.getPrimaryKey());
         Validate.isEquals(DirectDebitRecordProcessingStatus.Invalid, record.processingStatus().getValue(), "Can't Refund processed records");
         record.operationsNotes().setValue(
-                operationNotes + "\n" + new Date() + "\nby " + Context.getUserVisit(VistaUserVisit.class).getCurrentUser().getStringView());
+                operationNotes + "\n" + new Date() + "\nby " + ServerContext.visit(VistaUserVisit.class).getCurrentUser().getStringView());
         record.processingStatus().setValue(DirectDebitRecordProcessingStatus.Refunded);
         Persistence.service().persist(record);
         Persistence.service().commit();

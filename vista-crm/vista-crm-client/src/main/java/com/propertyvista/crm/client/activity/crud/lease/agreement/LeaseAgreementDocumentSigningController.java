@@ -114,7 +114,7 @@ public class LeaseAgreementDocumentSigningController implements IVisorEditor.Con
             @Override
             public void onSuccess(LeaseAgreementDocumentsDTO leaseAgreementDocuments) {
                 LeaseAgreementDocumentSigningController.this.visor.setParticipantsOptions(leaseTermParticipantOptions);
-                LeaseAgreementDocumentSigningController.this.visor.setUploader(ClientContext.getUserVisit(CrmUserVisit.class).getCurrentUser()
+                LeaseAgreementDocumentSigningController.this.visor.setUploader(ClientContext.visit(CrmUserVisit.class).getCurrentUser()
                         .duplicate(CrmUser.class));
 
                 boolean canBeSignedDigitally = true;

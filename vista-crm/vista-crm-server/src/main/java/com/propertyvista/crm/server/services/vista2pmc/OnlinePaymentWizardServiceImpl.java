@@ -25,7 +25,7 @@ import com.pyx4j.entity.core.criterion.EntityListCriteria;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.rpc.EntitySearchResult;
 import com.pyx4j.entity.server.Persistence;
-import com.pyx4j.server.contexts.Context;
+import com.pyx4j.server.contexts.ServerContext;
 
 import com.propertyvista.biz.communication.CommunicationFacade;
 import com.propertyvista.biz.system.VistaContext;
@@ -92,7 +92,7 @@ public class OnlinePaymentWizardServiceImpl implements OnlinePaymentWizardServic
     private void initTerms(AgreementDTO agreement, String termsContent) {
         agreement.terms().setValue(termsContent);
         agreement.agreementSignature().timestamp().setValue(new Date());
-        agreement.agreementSignature().ipAddress().setValue(Context.getRequestRemoteAddr());
+        agreement.agreementSignature().ipAddress().setValue(ServerContext.getRequestRemoteAddr());
     }
 
     @Override

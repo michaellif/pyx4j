@@ -411,7 +411,7 @@ public class PMSiteContentManager implements Serializable {
      * We want to build a relative! path from the current page down to the servlet root
      */
     public static String getPortalContextPath() {
-        return ServletUtils.getRelativeServletPath(com.pyx4j.server.contexts.Context.getRequest(), "/" + VistaApplication.site + "/");
+        return ServletUtils.getRelativeServletPath(com.pyx4j.server.contexts.ServerContext.getRequest(), "/" + VistaApplication.site + "/");
     }
 
     public static String getMediaImgUrl(long mediaId, ThumbnailSize size) {

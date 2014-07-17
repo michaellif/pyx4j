@@ -16,7 +16,7 @@ package com.propertyvista.crm.server.security.access;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.core.criterion.PropertyCriterion;
 import com.pyx4j.entity.security.DatasetAccessRule;
-import com.pyx4j.server.contexts.Context;
+import com.pyx4j.server.contexts.ServerContext;
 
 import com.propertyvista.domain.company.EmployeeSignature;
 
@@ -27,7 +27,7 @@ public class EmployeeSignatureDatasetAccessRule implements DatasetAccessRule<Emp
 
     @Override
     public void applyRule(EntityQueryCriteria<EmployeeSignature> criteria) {
-        criteria.add(PropertyCriterion.eq(criteria.proto().employee().user(), Context.getVisit().getUserVisit().getPrincipalPrimaryKey()));
+        criteria.add(PropertyCriterion.eq(criteria.proto().employee().user(), ServerContext.getVisit().getUserVisit().getPrincipalPrimaryKey()));
     }
 
 }

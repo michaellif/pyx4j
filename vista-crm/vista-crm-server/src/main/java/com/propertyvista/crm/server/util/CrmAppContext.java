@@ -16,7 +16,7 @@ package com.propertyvista.crm.server.util;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.core.criterion.PropertyCriterion;
 import com.pyx4j.entity.server.Persistence;
-import com.pyx4j.server.contexts.Context;
+import com.pyx4j.server.contexts.ServerContext;
 
 import com.propertyvista.biz.system.VistaContext;
 import com.propertyvista.crm.rpc.CrmUserVisit;
@@ -26,7 +26,7 @@ import com.propertyvista.domain.security.CrmUser;
 public class CrmAppContext extends VistaContext {
 
     public static CrmUser getCurrentUser() {
-        return Context.getUserVisit(CrmUserVisit.class).getCurrentUser();
+        return ServerContext.visit(CrmUserVisit.class).getCurrentUser();
     }
 
     public static Employee getCurrentUserEmployee() {

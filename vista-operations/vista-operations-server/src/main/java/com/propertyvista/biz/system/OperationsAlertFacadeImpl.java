@@ -26,7 +26,7 @@ import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.security.shared.UserVisit;
-import com.pyx4j.server.contexts.Context;
+import com.pyx4j.server.contexts.ServerContext;
 import com.pyx4j.server.contexts.NamespaceManager;
 import com.pyx4j.server.contexts.Visit;
 import com.pyx4j.server.mail.Mail;
@@ -99,7 +99,7 @@ public class OperationsAlertFacadeImpl implements OperationsAlertFacade {
     }
 
     private Key getPrincipalPrimaryKey() {
-        Visit visit = Context.getVisit();
+        Visit visit = ServerContext.getVisit();
         if (visit == null) {
             return null;
         } else {
@@ -113,14 +113,14 @@ public class OperationsAlertFacadeImpl implements OperationsAlertFacade {
     }
 
     private String getRequestRemoteAddr() {
-        if (Context.getRequest() == null) {
+        if (ServerContext.getRequest() == null) {
             return null;
         } else {
-            Object ip = Context.getRequest().getAttribute(VistaAntiBot.REQUEST_IP_REQUEST_ATR);
+            Object ip = ServerContext.getRequest().getAttribute(VistaAntiBot.REQUEST_IP_REQUEST_ATR);
             if (ip != null) {
                 return ip.toString();
             } else {
-                return Context.getRequestRemoteAddr();
+                return ServerContext.getRequestRemoteAddr();
             }
         }
     }

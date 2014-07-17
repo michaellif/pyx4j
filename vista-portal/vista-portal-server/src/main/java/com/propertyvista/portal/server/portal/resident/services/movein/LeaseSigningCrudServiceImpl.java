@@ -23,7 +23,7 @@ import com.pyx4j.entity.rpc.EntitySearchResult;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.security.rpc.AuthorizationChangedSystemNotification;
 import com.pyx4j.security.rpc.AuthorizationChangedSystemNotification.ChangeType;
-import com.pyx4j.server.contexts.Context;
+import com.pyx4j.server.contexts.ServerContext;
 
 import com.propertyvista.domain.policy.policies.domain.LeaseAgreementConfirmationTerm;
 import com.propertyvista.domain.policy.policies.domain.LeaseAgreementLegalTerm;
@@ -86,7 +86,7 @@ public class LeaseSigningCrudServiceImpl implements LeaseSigningCrudService {
         Persistence.service().commit();
 
         new ResidentAuthenticationServiceImpl().reAuthorize(ResidentPortalContext.getLeaseIdStub());
-        Context.addResponseSystemNotification(new AuthorizationChangedSystemNotification(ChangeType.behavioursChanged));
+        ServerContext.addResponseSystemNotification(new AuthorizationChangedSystemNotification(ChangeType.behavioursChanged));
         callback.onSuccess(null);
     }
 

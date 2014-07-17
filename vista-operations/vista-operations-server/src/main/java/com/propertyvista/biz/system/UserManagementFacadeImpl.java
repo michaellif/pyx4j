@@ -28,7 +28,7 @@ import com.pyx4j.essentials.server.AbstractAntiBot;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.security.rpc.PasswordChangeRequest;
 import com.pyx4j.security.shared.Behavior;
-import com.pyx4j.server.contexts.Context;
+import com.pyx4j.server.contexts.ServerContext;
 
 import com.propertyvista.biz.system.encryption.PasswordEncryptorFacade;
 import com.propertyvista.crm.rpc.dto.account.GlobalLoginResponseDTO;
@@ -65,7 +65,7 @@ public class UserManagementFacadeImpl implements UserManagementFacade {
         Persistence.service().persist(credential);
         Persistence.service().commit();
 
-        log.info("password changed by user {} {}", Context.getVisit().getUserVisit().getEmail(), VistaContext.getCurrentUserPrimaryKey());
+        log.info("password changed by user {} {}", ServerContext.getVisit().getUserVisit().getEmail(), VistaContext.getCurrentUserPrimaryKey());
     }
 
     @Override
@@ -78,7 +78,7 @@ public class UserManagementFacadeImpl implements UserManagementFacade {
         Persistence.service().persist(credential);
         Persistence.service().commit();
 
-        log.info("password changed by user {} for {}", Context.getVisit().getUserVisit().getEmail(), request.userPk());
+        log.info("password changed by user {} for {}", ServerContext.getVisit().getUserVisit().getEmail(), request.userPk());
     }
 
     @Override

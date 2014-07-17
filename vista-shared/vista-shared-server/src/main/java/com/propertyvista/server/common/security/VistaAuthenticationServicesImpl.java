@@ -59,7 +59,7 @@ import com.pyx4j.security.shared.AclRevalidator;
 import com.pyx4j.security.shared.Behavior;
 import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.security.shared.UserVisit;
-import com.pyx4j.server.contexts.Context;
+import com.pyx4j.server.contexts.ServerContext;
 import com.pyx4j.server.contexts.Lifecycle;
 
 import com.propertyvista.biz.system.AuditFacade;
@@ -125,7 +125,7 @@ public abstract class VistaAuthenticationServicesImpl<U extends AbstractUser, E 
     protected boolean isSessionValid() {
         boolean sessionValid = SecurityController.check(getVistaApplication())
                 && (SecurityController.check(getApplicationBehavior()) || SecurityController.check(getAccountSetupRequiredBehaviors()));
-        if ((!sessionValid) && (Context.getSession() != null)) {
+        if ((!sessionValid) && (ServerContext.getSession() != null)) {
             log.warn("sessionInvalid: {} {}", getVistaApplication(), SecurityController.check(getVistaApplication()));
             log.warn("sessionInvalid: {} {}", getApplicationBehavior(), SecurityController.check(getApplicationBehavior()));
             log.warn("sessionInvalid: {} {}", getAccountSetupRequiredBehaviors(), SecurityController.check(getAccountSetupRequiredBehaviors()));
@@ -157,7 +157,7 @@ public abstract class VistaAuthenticationServicesImpl<U extends AbstractUser, E 
             Lifecycle.endSession();
             throw new UserRuntimeException(AbstractAntiBot.GENERIC_LOGIN_FAILED_MESSAGE);
         }
-        log.info("authenticated {}; UserAgent {}", Context.getVisit().getUserVisit().getEmail(), clientSystemInfo.getUserAgent());
+        log.info("authenticated {}; UserAgent {}", ServerContext.getVisit().getUserVisit().getEmail(), clientSystemInfo.getUserAgent());
         callback.onSuccess(createAuthenticationResponse(sessionToken));
     }
 
@@ -437,7 +437,7 @@ public abstract class VistaAuthenticationServicesImpl<U extends AbstractUser, E 
         AuthenticationResponse ar = super.createAuthenticationResponse(sessionToken);
 
         String baseUrl = VistaDeployment.getBaseApplicationURL(getVistaApplication(), true);
-        String requestUrl = Context.getRequest().getRequestURL().toString();
+        String requestUrl = ServerContext.getRequest().getRequestURL().toString();
 
         SystemWallMessage systemWallMessage = null;
         VistaSystemIdentification systemId = VistaDeployment.getSystemIdentification();
@@ -500,13 +500,13 @@ public abstract class VistaAuthenticationServicesImpl<U extends AbstractUser, E 
         sessionCookie.setPath("/");
         sessionCookie.setMaxAge(Long.valueOf(180 * Consts.DAY2MSEC).intValue());
 
-        String host = Context.getRequestServerName();
+        String host = ServerContext.getRequestServerName();
         List<String> hostParts = new ArrayList<String>(Arrays.asList(host.split("\\.")));
         Collections.reverse(hostParts);
         if (hostParts.size() >= 2) {
             String domain = "." + hostParts.get(1) + "." + hostParts.get(0);
             sessionCookie.setDomain(domain);
         }
-        Context.getResponse().addCookie(sessionCookie);
+        ServerContext.getResponse().addCookie(sessionCookie);
     }
 }

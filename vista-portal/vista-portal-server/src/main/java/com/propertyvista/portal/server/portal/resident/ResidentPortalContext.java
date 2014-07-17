@@ -15,7 +15,7 @@ package com.propertyvista.portal.server.portal.resident;
 
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.server.Persistence;
-import com.pyx4j.server.contexts.Context;
+import com.pyx4j.server.contexts.ServerContext;
 
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.tenant.lease.Lease;
@@ -32,11 +32,11 @@ import com.propertyvista.portal.server.portal.shared.PortalVistaContext;
 public class ResidentPortalContext extends PortalVistaContext {
 
     public static void setLease(Lease lease) {
-        Context.getUserVisit(ResidentUserVisit.class).setLease(lease);
+        ServerContext.visit(ResidentUserVisit.class).setLease(lease);
     }
 
     public static Lease getLeaseIdStub() {
-        return Context.getUserVisit(ResidentUserVisit.class).getLease();
+        return ServerContext.visit(ResidentUserVisit.class).getLease();
     }
 
     public static Lease getLease() {

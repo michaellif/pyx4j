@@ -26,7 +26,7 @@ import com.pyx4j.entity.shared.utils.EntityDiff;
 import com.pyx4j.rpc.shared.VoidSerializable;
 import com.pyx4j.security.server.EmailValidator;
 import com.pyx4j.security.shared.SecurityController;
-import com.pyx4j.server.contexts.Context;
+import com.pyx4j.server.contexts.ServerContext;
 
 import com.propertyvista.biz.communication.CommunicationFacade;
 import com.propertyvista.biz.policy.IdAssignmentFacade;
@@ -140,8 +140,8 @@ public class EmployeeCrudServiceImpl extends AbstractCrudServiceDtoImpl<Employee
                 isNew = true;
             }
 
-            if (Context.getVisit().getUserVisit().getPrincipalPrimaryKey().equals(dbo.user().getPrimaryKey())) {
-                Context.getVisit().getUserVisit().setName(dbo.name().getStringView());
+            if (ServerContext.getVisit().getUserVisit().getPrincipalPrimaryKey().equals(dbo.user().getPrimaryKey())) {
+                ServerContext.getVisit().getUserVisit().setName(dbo.name().getStringView());
             }
 
             user.name().setValue(dbo.name().getStringView());

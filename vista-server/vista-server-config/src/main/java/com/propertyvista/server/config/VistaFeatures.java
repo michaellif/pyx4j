@@ -15,7 +15,7 @@ package com.propertyvista.server.config;
 
 import com.pyx4j.config.shared.ClientVersionMismatchError;
 import com.pyx4j.entity.core.EntityFactory;
-import com.pyx4j.server.contexts.Context;
+import com.pyx4j.server.contexts.ServerContext;
 import com.pyx4j.server.contexts.Lifecycle;
 import com.pyx4j.server.contexts.Visit;
 
@@ -35,7 +35,7 @@ public class VistaFeatures {
             if (pmc != null) {
 
                 // Fail safe on to terminate session on Feature changes
-                Visit visit = Context.getVisit();
+                Visit visit = ServerContext.getVisit();
                 if ((visit != null) && (visit.isUserLoggedIn())) {
                     Object hashCode = visit.getAttribute(PmcVistaFeatures.class.getName());
                     if (hashCode == null) {

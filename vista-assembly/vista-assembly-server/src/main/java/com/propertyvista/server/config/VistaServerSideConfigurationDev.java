@@ -19,7 +19,7 @@ import com.pyx4j.commons.Consts;
 import com.pyx4j.config.server.IPersistenceConfiguration;
 import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.security.server.ThrottleConfig;
-import com.pyx4j.server.contexts.Context;
+import com.pyx4j.server.contexts.ServerContext;
 
 import com.propertyvista.config.BankingSimulatorConfiguration;
 import com.propertyvista.misc.VistaTODO;
@@ -124,10 +124,10 @@ public class VistaServerSideConfigurationDev extends VistaServerSideConfiguratio
     @Override
     public String getApplicationURLNamespace(boolean secure) {
         String hostPrefix = ".dev";
-        if (Context.getRequest() != null) {
+        if (ServerContext.getRequest() != null) {
             // 192.168.179.1  -> .h.birchwoodsoftwaregroup.com
             // 10.0.2.2  -> .m.birchwoodsoftwaregroup.com
-            String serverName = Context.getRequest().getServerName();
+            String serverName = ServerContext.getRequest().getServerName();
             if (serverName.endsWith("m.birchwoodsoftwaregroup.com") || serverName.endsWith("m.pyx4j.com")) {
                 hostPrefix = ".m";
             } else if (serverName.endsWith("h.birchwoodsoftwaregroup.com") || serverName.endsWith("h.pyx4j.com")) {

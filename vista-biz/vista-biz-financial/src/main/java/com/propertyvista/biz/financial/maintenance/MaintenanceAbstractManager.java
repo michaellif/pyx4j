@@ -29,7 +29,7 @@ import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.core.criterion.PropertyCriterion;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.server.contexts.Context;
+import com.pyx4j.server.contexts.ServerContext;
 import com.pyx4j.server.mail.MailMessage;
 
 import com.propertyvista.biz.communication.CommunicationFacade;
@@ -194,7 +194,7 @@ public abstract class MaintenanceAbstractManager {
             record.newStatus().set(request.status());
             // try to resolve context user
             AbstractPmcUser user = null;
-            Key userKey = Context.getVisit().getUserVisit().getPrincipalPrimaryKey();
+            Key userKey = ServerContext.getVisit().getUserVisit().getPrincipalPrimaryKey();
             if (userKey != null) {
                 user = Persistence.service().retrieve(CrmUser.class, userKey);
                 if (user == null) {

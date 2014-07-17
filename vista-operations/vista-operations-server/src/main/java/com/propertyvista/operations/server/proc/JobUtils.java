@@ -33,7 +33,7 @@ import com.pyx4j.commons.UserRuntimeException;
 import com.pyx4j.entity.shared.utils.EntityGraph;
 import com.pyx4j.gwt.server.DateUtils;
 import com.pyx4j.quartz.SchedulerHelper;
-import com.pyx4j.server.contexts.Context;
+import com.pyx4j.server.contexts.ServerContext;
 
 import com.propertyvista.domain.pmc.Pmc;
 import com.propertyvista.operations.domain.scheduler.ScheduleType;
@@ -82,8 +82,8 @@ public class JobUtils {
             }
             TriggerBuilder<Trigger> tb = TriggerBuilder.newTrigger().forJob(jobDetail).startNow();
             tb.usingJobData(JobData.manualExecution.name(), Boolean.TRUE);
-            if (Context.isUserLoggedIn()) {
-                tb.usingJobData(JobData.startedBy.name(), new Long(Context.getVisit().getUserVisit().getPrincipalPrimaryKey().asLong()));
+            if (ServerContext.isUserLoggedIn()) {
+                tb.usingJobData(JobData.startedBy.name(), new Long(ServerContext.getVisit().getUserVisit().getPrincipalPrimaryKey().asLong()));
             }
             if (pmcId != null) {
                 tb.usingJobData(JobData.forPmc.name(), new Long(pmcId.getPrimaryKey().asLong()));

@@ -108,7 +108,7 @@ public class PmcAccountCreationProgressActivity extends AbstractActivity impleme
 
     @Override
     public void populate() {
-        OnboardingUserVisit visit = ClientContext.getUserVisit(OnboardingUserVisit.class);
+        OnboardingUserVisit visit = ClientContext.visit(OnboardingUserVisit.class);
         defferedCorrelationId = visit.accountCreationDeferredCorrelationId;
 
         view.init(PROGRESS_STEPS);

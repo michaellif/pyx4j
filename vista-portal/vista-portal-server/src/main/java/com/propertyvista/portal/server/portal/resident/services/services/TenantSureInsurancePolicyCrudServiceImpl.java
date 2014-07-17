@@ -40,7 +40,7 @@ import com.pyx4j.entity.server.UnitOfWork;
 import com.pyx4j.entity.shared.ISignature.SignatureFormat;
 import com.pyx4j.essentials.server.admin.SystemMaintenance;
 import com.pyx4j.rpc.shared.VoidSerializable;
-import com.pyx4j.server.contexts.Context;
+import com.pyx4j.server.contexts.ServerContext;
 import com.pyx4j.server.contexts.Visit;
 
 import com.propertyvista.biz.policy.PolicyFacade;
@@ -80,22 +80,22 @@ public class TenantSureInsurancePolicyCrudServiceImpl implements TenantSureInsur
         }
 
         public static void clear() {
-            Visit visit = Context.getVisit();
+            Visit visit = ServerContext.getVisit();
             synchronized (visit) {
-                Context.getVisit().removeAttribute(ServerSideQuteStorage.class.getName());
+                ServerContext.getVisit().removeAttribute(ServerSideQuteStorage.class.getName());
             }
         }
 
         @SuppressWarnings("unchecked")
         private static ConcurrentHashMap<String, TenantSureQuoteDTO> getQuoteStorage() {
-            Visit visit = Context.getVisit();
+            Visit visit = ServerContext.getVisit();
 
             ConcurrentHashMap<String, TenantSureQuoteDTO> storage;
             synchronized (visit) {
-                Serializable o = Context.getVisit().getAttribute(ServerSideQuteStorage.class.getName());
+                Serializable o = ServerContext.getVisit().getAttribute(ServerSideQuteStorage.class.getName());
                 if (o == null) {
                     storage = new ConcurrentHashMap<String, TenantSureQuoteDTO>();
-                    Context.getVisit().setAttribute(ServerSideQuteStorage.class.getName(), storage);
+                    ServerContext.getVisit().setAttribute(ServerSideQuteStorage.class.getName(), storage);
                 } else {
                     storage = (ConcurrentHashMap<String, TenantSureQuoteDTO>) o;
                 }

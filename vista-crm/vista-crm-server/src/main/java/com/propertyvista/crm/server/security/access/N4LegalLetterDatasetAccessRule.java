@@ -15,7 +15,7 @@ package com.propertyvista.crm.server.security.access;
 
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.security.DatasetAccessRule;
-import com.pyx4j.server.contexts.Context;
+import com.pyx4j.server.contexts.ServerContext;
 
 import com.propertyvista.domain.legal.n4.N4LegalLetter;
 
@@ -23,7 +23,7 @@ public class N4LegalLetterDatasetAccessRule implements DatasetAccessRule<N4Legal
 
     @Override
     public void applyRule(EntityQueryCriteria<N4LegalLetter> criteria) {
-        criteria.eq(criteria.proto().lease().unit().building().userAccess(), Context.getVisit().getUserVisit().getPrincipalPrimaryKey());
+        criteria.eq(criteria.proto().lease().unit().building().userAccess(), ServerContext.getVisit().getUserVisit().getPrincipalPrimaryKey());
     }
 
 }

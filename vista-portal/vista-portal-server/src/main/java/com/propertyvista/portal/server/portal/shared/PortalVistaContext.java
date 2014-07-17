@@ -16,7 +16,7 @@ package com.propertyvista.portal.server.portal.shared;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.core.criterion.PropertyCriterion;
 import com.pyx4j.entity.server.Persistence;
-import com.pyx4j.server.contexts.Context;
+import com.pyx4j.server.contexts.ServerContext;
 
 import com.propertyvista.biz.system.VistaContext;
 import com.propertyvista.domain.security.CustomerUser;
@@ -26,7 +26,7 @@ import com.propertyvista.portal.rpc.portal.CustomerUserVisit;
 public class PortalVistaContext extends VistaContext {
 
     public static CustomerUser getCustomerUserIdStub() {
-        return Context.getUserVisit(CustomerUserVisit.class).getCurrentUser();
+        return ServerContext.visit(CustomerUserVisit.class).getCurrentUser();
     }
 
     public static Customer getCustomer() {

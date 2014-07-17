@@ -30,7 +30,7 @@ import com.pyx4j.gwt.server.deferred.DeferredProcessRegistry;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.security.rpc.AuthenticationService;
 import com.pyx4j.security.server.EmailValidator;
-import com.pyx4j.server.contexts.Context;
+import com.pyx4j.server.contexts.ServerContext;
 import com.pyx4j.site.rpc.AppPlaceInfo;
 
 import com.propertyvista.biz.system.PmcFacade;
@@ -82,7 +82,7 @@ public class PmcRegistrationServiceImpl implements PmcRegistrationService {
             }
         });
 
-        OnboardingUserVisit visit = Context.getUserVisit(OnboardingUserVisit.class);
+        OnboardingUserVisit visit = ServerContext.visit(OnboardingUserVisit.class);
 
         TaskRunner.runInOperationsNamespace(new Callable<Void>() {
             @Override
@@ -127,7 +127,7 @@ public class PmcRegistrationServiceImpl implements PmcRegistrationService {
 
     @Override
     public void obtainCrmURL(AsyncCallback<OnboardingCrmURL> callback) {
-        final OnboardingUserVisit visit = Context.getUserVisit(OnboardingUserVisit.class);
+        final OnboardingUserVisit visit = ServerContext.visit(OnboardingUserVisit.class);
 
         Pmc pmc = TaskRunner.runInOperationsNamespace(new Callable<Pmc>() {
 

@@ -16,7 +16,7 @@ package com.propertyvista.crm.server.security.access;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.core.criterion.PropertyCriterion;
 import com.pyx4j.entity.security.DatasetAccessRule;
-import com.pyx4j.server.contexts.Context;
+import com.pyx4j.server.contexts.ServerContext;
 
 import com.propertyvista.domain.property.asset.building.Building;
 
@@ -26,7 +26,7 @@ public class BuildingDatasetAccessRule implements DatasetAccessRule<Building> {
 
     @Override
     public void applyRule(EntityQueryCriteria<Building> criteria) {
-        criteria.add(PropertyCriterion.eq(criteria.proto().userAccess(), Context.getVisit().getUserVisit().getPrincipalPrimaryKey()));
+        criteria.add(PropertyCriterion.eq(criteria.proto().userAccess(), ServerContext.getVisit().getUserVisit().getPrincipalPrimaryKey()));
     }
 
 }

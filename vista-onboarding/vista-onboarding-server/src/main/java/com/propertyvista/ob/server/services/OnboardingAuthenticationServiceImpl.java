@@ -30,7 +30,7 @@ import com.pyx4j.security.rpc.AuthenticationRequest;
 import com.pyx4j.security.rpc.AuthenticationResponse;
 import com.pyx4j.security.shared.AclRevalidator;
 import com.pyx4j.security.shared.Behavior;
-import com.pyx4j.server.contexts.Context;
+import com.pyx4j.server.contexts.ServerContext;
 import com.pyx4j.server.contexts.Lifecycle;
 
 import com.propertyvista.domain.pmc.Pmc;
@@ -79,7 +79,7 @@ public class OnboardingAuthenticationServiceImpl extends com.pyx4j.security.serv
         AuthenticationResponse ar = createAuthenticationResponse(sessionToken);
 
         // Case of application reload
-        final OnboardingUserVisit visit = Context.getUserVisit(OnboardingUserVisit.class);
+        final OnboardingUserVisit visit = ServerContext.visit(OnboardingUserVisit.class);
         if (visit != null) {
             TaskRunner.runInOperationsNamespace(new Callable<Void>() {
 

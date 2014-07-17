@@ -15,7 +15,7 @@ package com.propertyvista.crm.server.security.access;
 
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.security.DatasetAccessRule;
-import com.pyx4j.server.contexts.Context;
+import com.pyx4j.server.contexts.ServerContext;
 
 import com.propertyvista.domain.tenant.CustomerCreditCheck;
 
@@ -25,7 +25,7 @@ public class CustomerCreditCheckDatasetAccessRule implements DatasetAccessRule<C
 
     @Override
     public void applyRule(EntityQueryCriteria<CustomerCreditCheck> criteria) {
-        criteria.eq(criteria.proto().screening().screene()._tenantInLease().$().lease().unit().building().userAccess(), Context.getVisit().getUserVisit()
+        criteria.eq(criteria.proto().screening().screene()._tenantInLease().$().lease().unit().building().userAccess(), ServerContext.getVisit().getUserVisit()
                 .getPrincipalPrimaryKey());
     }
 

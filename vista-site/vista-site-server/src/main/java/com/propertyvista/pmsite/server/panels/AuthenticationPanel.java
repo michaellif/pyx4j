@@ -18,7 +18,7 @@ import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.Model;
 
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.server.contexts.Context;
+import com.pyx4j.server.contexts.ServerContext;
 import com.pyx4j.server.contexts.Lifecycle;
 import com.pyx4j.site.rpc.AppPlaceInfo;
 
@@ -38,7 +38,7 @@ public class AuthenticationPanel extends Panel {
 
             @Override
             public void onClick() {
-                if (Context.isUserLoggedIn()) {
+                if (ServerContext.isUserLoggedIn()) {
                     Lifecycle.endSession();
                     setResponsePage(getPage().getClass(), getPage().getPageParameters());
                 } else {
@@ -50,8 +50,8 @@ public class AuthenticationPanel extends Panel {
         PageLink greet = new PageLink("greeting", ResidentsPage.class);
         greet.setAnchor(AppPlaceInfo.getPlaceId(PortalSiteMap.PasswordChange.class));
 
-        if (Context.isUserLoggedIn()) {
-            greet.setText(i18n.tr("Welcome {0}", Context.getVisit().getUserVisit().getName()));
+        if (ServerContext.isUserLoggedIn()) {
+            greet.setText(i18n.tr("Welcome {0}", ServerContext.getVisit().getUserVisit().getName()));
             auth.setBody(new Model<String>(i18n.tr("Log Out")));
         } else {
             greet.setVisible(false);

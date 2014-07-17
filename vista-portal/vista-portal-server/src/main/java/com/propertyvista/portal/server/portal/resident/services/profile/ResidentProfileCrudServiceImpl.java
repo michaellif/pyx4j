@@ -23,7 +23,7 @@ import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.rpc.EntitySearchResult;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.security.server.EmailValidator;
-import com.pyx4j.server.contexts.Context;
+import com.pyx4j.server.contexts.ServerContext;
 
 import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.domain.tenant.EmergencyContact;
@@ -81,7 +81,7 @@ public class ResidentProfileCrudServiceImpl implements ResidentProfileCrudServic
         Persistence.service().commit();
 
         // Update name label in UI
-        Context.getVisit().getUserVisit().setName(customer.person().name().getStringView());
+        ServerContext.getVisit().getUserVisit().setName(customer.person().name().getStringView());
 
         callback.onSuccess(customer.getPrimaryKey());
     }

@@ -18,7 +18,7 @@ import org.slf4j.LoggerFactory;
 
 import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.essentials.server.ReCaptchaAntiBot;
-import com.pyx4j.server.contexts.Context;
+import com.pyx4j.server.contexts.ServerContext;
 
 import com.propertyvista.config.VistaDeployment;
 import com.propertyvista.domain.pmc.PmcDnsName.DnsNameTarget;
@@ -42,22 +42,22 @@ public class VistaAntiBot extends ReCaptchaAntiBot {
 
     @Override
     protected String getRequestRemoteAddr() {
-        Object ip = Context.getRequest().getAttribute(REQUEST_IP_REQUEST_ATR);
+        Object ip = ServerContext.getRequest().getAttribute(REQUEST_IP_REQUEST_ATR);
         if (ip != null) {
             return ip.toString();
         } else {
-            return Context.getRequestRemoteAddr();
+            return ServerContext.getRequestRemoteAddr();
         }
     }
 
     public static void setApiRequestDnsNameTarget(DnsNameTarget target) {
-        Context.getRequest().setAttribute(API_TARGET_REQUEST_ATR, target);
+        ServerContext.getRequest().setAttribute(API_TARGET_REQUEST_ATR, target);
     }
 
     public static String getRequestServerNameBase() {
-        DnsNameTarget target = (DnsNameTarget) Context.getRequest().getAttribute(API_TARGET_REQUEST_ATR);
+        DnsNameTarget target = (DnsNameTarget) ServerContext.getRequest().getAttribute(API_TARGET_REQUEST_ATR);
         if (target == null) {
-            String host = Context.getRequestServerName();
+            String host = ServerContext.getRequestServerName();
             String[] parts = host.split("\\.");
             if (parts.length >= 3) {
                 return parts[parts.length - 2] + "." + parts[parts.length - 1];

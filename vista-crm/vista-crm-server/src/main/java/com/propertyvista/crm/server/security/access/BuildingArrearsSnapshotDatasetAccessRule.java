@@ -15,7 +15,7 @@ package com.propertyvista.crm.server.security.access;
 
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.security.DatasetAccessRule;
-import com.pyx4j.server.contexts.Context;
+import com.pyx4j.server.contexts.ServerContext;
 
 import com.propertyvista.domain.financial.billing.BuildingArrearsSnapshot;
 
@@ -25,7 +25,7 @@ public class BuildingArrearsSnapshotDatasetAccessRule implements DatasetAccessRu
 
     @Override
     public void applyRule(EntityQueryCriteria<BuildingArrearsSnapshot> criteria) {
-        criteria.eq(criteria.proto().building().userAccess(), Context.getVisit().getUserVisit().getPrincipalPrimaryKey());
+        criteria.eq(criteria.proto().building().userAccess(), ServerContext.getVisit().getUserVisit().getPrincipalPrimaryKey());
     }
 
 }

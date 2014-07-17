@@ -35,7 +35,7 @@ import com.pyx4j.gwt.server.deferred.DeferredProcessRegistry;
 import com.pyx4j.rpc.shared.VoidSerializable;
 import com.pyx4j.security.server.EmailValidator;
 import com.pyx4j.security.shared.SecurityController;
-import com.pyx4j.server.contexts.Context;
+import com.pyx4j.server.contexts.ServerContext;
 
 import com.propertyvista.biz.system.AuditFacade;
 import com.propertyvista.biz.system.OperationsTriggerFacade;
@@ -264,7 +264,7 @@ public class PmcCrudServiceImpl extends AbstractCrudServiceDtoImpl<Pmc, PmcDTO> 
         Persistence.service().commit();
         CacheService.reset();
 
-        ServerSideFactory.create(AuditFacade.class).info("PMC {0} Cancelled by {1} ", pmc.namespace().getValue(), Context.getVisit().getUserVisit().getEmail());
+        ServerSideFactory.create(AuditFacade.class).info("PMC {0} Cancelled by {1} ", pmc.namespace().getValue(), ServerContext.getVisit().getUserVisit().getEmail());
 
         pmc = Persistence.service().retrieve(boClass, entityId);
         callback.onSuccess(null);
