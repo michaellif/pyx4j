@@ -69,11 +69,10 @@ public class UnitForm extends CrmEntityForm<AptUnitDTO> {
         catalogMarketPricesPanel = new FormPanel(this);
 
         selectTab(addTab(createGeneralTab(), i18n.tr("General")));
-        addTab(isEditable() ? new HTML() : ((UnitViewerView) getParentView()).getUnitItemsListerView(), i18n.tr("Details")).setTabEnabled(
-                !isEditable());
+        addTab(isEditable() ? new HTML() : ((UnitViewerView) getParentView()).getUnitItemsListerView(), i18n.tr("Details")).setTabEnabled(!isEditable());
         if (!VistaFeatures.instance().yardiIntegration()) {
-            addTab(isEditable() ? new HTML() : ((UnitViewerView) getParentView()).getOccupanciesListerView(), i18n.tr("Occupancy")).setTabEnabled(
-                    !isEditable());
+            addTab(isEditable() ? new HTML() : ((UnitViewerView) getParentView()).getOccupanciesListerView(), i18n.tr("Occupancy"))
+                    .setTabEnabled(!isEditable());
         }
         addTab(createLegalAddresslTab(), i18n.tr("Legal Address"));
         // TODO Hided till further investigation:
@@ -101,11 +100,13 @@ public class UnitForm extends CrmEntityForm<AptUnitDTO> {
     }
 
     private void updateSelectedLegalAddress() {
-        boolean ownedLegalAddress = getValue().info().legalAddressOverride().getValue(false);
-        get(proto().info().legalAddress()).setVisible(ownedLegalAddress);
-        unitLegalAddressLabel.setVisible(ownedLegalAddress);
-        get(proto().buildingLegalAddress()).setVisible(!ownedLegalAddress);
-        buildingLegalAddressLabel.setVisible(!ownedLegalAddress);
+        boolean customLegalAddress = getValue().info().legalAddressOverride().getValue(false);
+        // unit custom address visibility
+        get(proto().info().legalAddress()).setVisible(customLegalAddress);
+        unitLegalAddressLabel.setVisible(customLegalAddress);
+        // building legal address visibility is opposite to unit custom address above
+        get(proto().buildingLegalAddress()).setVisible(!customLegalAddress);
+        buildingLegalAddressLabel.setVisible(!customLegalAddress);
     }
 
     private IsWidget createGeneralTab() {
@@ -158,7 +159,7 @@ public class UnitForm extends CrmEntityForm<AptUnitDTO> {
 
         buildingLegalAddressLabel = formPanel.h1(proto().buildingLegalAddress().getMeta().getCaption());
         formPanel.append(Location.Dual, proto().buildingLegalAddress(), new InternationalAddressEditor());
-        get(proto().buildingLegalAddress()).setViewable(true);
+        get(proto().buildingLegalAddress()).setEditable(false);
 
         get(proto().info().legalAddressOverride()).addValueChangeHandler(new ValueChangeHandler<Boolean>() {
             @Override

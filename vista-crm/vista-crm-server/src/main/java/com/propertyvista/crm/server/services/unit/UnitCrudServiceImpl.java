@@ -22,8 +22,8 @@ import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.core.criterion.PropertyCriterion;
 import com.pyx4j.entity.server.AbstractCrudServiceDtoImpl;
-import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.server.CrudEntityBinder;
+import com.pyx4j.entity.server.Persistence;
 
 import com.propertyvista.biz.asset.BuildingFacade;
 import com.propertyvista.biz.occupancy.OccupancyFacade;
@@ -63,6 +63,7 @@ public class UnitCrudServiceImpl extends AbstractCrudServiceDtoImpl<AptUnit, Apt
         UnitInitializationdata initData = (UnitInitializationdata) initializationData;
         AptUnitDTO newUnit = EntityFactory.create(AptUnitDTO.class);
         newUnit.building().set(Persistence.service().retrieve(Building.class, initData.parent().getPrimaryKey()));
+        newUnit.buildingLegalAddress().set(newUnit.building().info().address());
         return newUnit;
     }
 
