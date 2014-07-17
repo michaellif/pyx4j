@@ -514,7 +514,6 @@ public class VistaCrmAccessControlList extends ServletContainerAclBuilder {
 
         grant(VistaCrmBehavior.Tenants_OLD, new IServiceExecutePermission(BillPreviewService.class));
 
-        grant(VistaCrmBehavior.AggregatedTransfer_OLD, new IServiceExecutePermission(PaymentRecordListService.class));
         grant(VistaCrmBehavior.Billing_OLD, new IServiceExecutePermission(PaymentRecordListService.class));
 
         grant(VistaCrmBehavior.Billing_OLD, new IServiceExecutePermission(RevealAccountNumberService.class));

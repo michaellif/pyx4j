@@ -26,6 +26,7 @@ import com.pyx4j.entity.annotations.JoinTable;
 import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.OrderBy;
 import com.pyx4j.entity.annotations.Owned;
+import com.pyx4j.entity.annotations.SecurityEnabled;
 import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.core.AttachLevel;
@@ -42,6 +43,7 @@ import com.propertyvista.domain.note.HasNotesAndAttachments;
 
 @AbstractEntity
 @Inheritance(strategy = Inheritance.InheritanceStrategy.SINGLE_TABLE)
+@SecurityEnabled
 public interface AggregatedTransfer extends IEntity, HasNotesAndAttachments {
 
     @I18n
