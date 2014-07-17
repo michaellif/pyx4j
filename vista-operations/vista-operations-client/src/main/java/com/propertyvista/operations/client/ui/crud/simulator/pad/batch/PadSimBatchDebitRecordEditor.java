@@ -21,11 +21,11 @@ import com.pyx4j.site.client.ui.prime.form.IForm;
 import com.propertyvista.operations.client.ui.crud.OperationsEntityForm;
 import com.propertyvista.operations.domain.eft.caledoneft.simulator.PadSimDebitRecord;
 
-public class DebitRecordEditor extends OperationsEntityForm<PadSimDebitRecord> {
+public class PadSimBatchDebitRecordEditor extends OperationsEntityForm<PadSimDebitRecord> {
 
-    private static final I18n i18n = I18n.get(DebitRecordEditor.class);
+    private static final I18n i18n = I18n.get(PadSimBatchDebitRecordEditor.class);
 
-    public DebitRecordEditor(IForm<PadSimDebitRecord> view) {
+    public PadSimBatchDebitRecordEditor(IForm<PadSimDebitRecord> view) {
         super(PadSimDebitRecord.class, view);
 
         FormPanel formPanel = new FormPanel(this);

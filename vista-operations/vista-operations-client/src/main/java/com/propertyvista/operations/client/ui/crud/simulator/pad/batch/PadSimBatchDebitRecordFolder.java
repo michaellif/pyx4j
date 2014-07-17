@@ -26,11 +26,11 @@ import com.pyx4j.i18n.shared.I18n;
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
 import com.propertyvista.operations.domain.eft.caledoneft.simulator.PadSimDebitRecord;
 
-public class DebitRecordFolder extends VistaBoxFolder<PadSimDebitRecord> {
+public class PadSimBatchDebitRecordFolder extends VistaBoxFolder<PadSimDebitRecord> {
 
     private static final I18n i18n = I18n.get(DebitRecordEditor.class);
 
-    public DebitRecordFolder(boolean modifyable) {
+    public PadSimBatchDebitRecordFolder(boolean modifyable) {
         super(PadSimDebitRecord.class, modifyable);
     }
 

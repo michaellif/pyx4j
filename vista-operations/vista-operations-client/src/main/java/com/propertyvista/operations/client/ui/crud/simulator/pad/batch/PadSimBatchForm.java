@@ -83,7 +83,7 @@ public class PadSimBatchForm extends OperationsEntityForm<PadSimBatch> {
         formPanel.append(Location.Right, proto().fundsReleased()).decorate().componentWidth(120);
 
         formPanel.h1(i18n.tr("Detail Debit Records"));
-        formPanel.append(Location.Dual, proto().records(), new DebitRecordFolder(isEditable()));
+        formPanel.append(Location.Dual, proto().records(), new PadSimBatchDebitRecordFolder(isEditable()));
 
         selectTab(addTab(formPanel, i18n.tr("General")));
         setTabBarVisible(false);
