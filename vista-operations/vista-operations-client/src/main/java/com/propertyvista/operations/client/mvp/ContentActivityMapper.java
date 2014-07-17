@@ -97,6 +97,8 @@ import com.propertyvista.operations.client.activity.crud.simulator.pad.PadSimFil
 import com.propertyvista.operations.client.activity.crud.simulator.pad.PadSimFileViewerActivity;
 import com.propertyvista.operations.client.activity.crud.systemdefaults.VistaSystemDefaultsEditorActivity;
 import com.propertyvista.operations.client.activity.crud.systemdefaults.VistaSystemDefaultsViewerActivity;
+import com.propertyvista.operations.client.activity.crud.tenantsure.TenantSureListerActivity;
+import com.propertyvista.operations.client.activity.crud.tenantsure.TenantSureViewerActivity;
 import com.propertyvista.operations.client.activity.login.LoginActivity;
 import com.propertyvista.operations.client.activity.login.LoginWithTokenActivity;
 import com.propertyvista.operations.client.activity.security.PasswordChangeActivity;
@@ -284,6 +286,16 @@ public class ContentActivityMapper implements AppActivityMapper {
 
                     } else if (place instanceof OperationsSiteMap.Administration.EncryptedStorage) {
                         activity = new EncryptedStorageActivity((AppPlace) place);
+
+                    } else if (place instanceof OperationsSiteMap.Administration.TenantSure) {
+                        switch (crudPlace.getType()) {
+                        case lister:
+                            activity = new TenantSureListerActivity(crudPlace);
+                            break;
+                        case viewer:
+                            activity = new TenantSureViewerActivity(crudPlace);
+                            break;
+                        }
 
 // - FundsTransfer:                        
 

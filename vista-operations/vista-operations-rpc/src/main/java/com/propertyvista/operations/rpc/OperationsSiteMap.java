@@ -270,6 +270,9 @@ public class OperationsSiteMap implements SiteMap {
 
         public static class OperationsAlert extends CrudAppPlace {
         }
+
+        public static class TenantSure extends CrudAppPlace {
+        }
     }
 
     public static class Simulator extends AppPlace {

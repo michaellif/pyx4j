@@ -31,6 +31,7 @@ import com.propertyvista.operations.domain.eft.dbp.simulator.DirectDebitSimRecor
 import com.propertyvista.operations.domain.scheduler.Run;
 import com.propertyvista.operations.domain.scheduler.RunData;
 import com.propertyvista.operations.domain.security.OperationsUser;
+import com.propertyvista.operations.domain.tenantsure.TenantSureSubscribers;
 import com.propertyvista.operations.rpc.OperationsSiteMap;
 import com.propertyvista.operations.rpc.dto.AuditRecordOperationsDTO;
 import com.propertyvista.operations.rpc.dto.FundsReconciliationFileDTO;
@@ -85,5 +86,7 @@ public class OperationsEntityMapper {
 
         register(DirectDebitSimRecord.class, OperationsSiteMap.Simulator.DirectBankingSimRecord.class, DEFAULT_IMAGE);
         register(DirectDebitSimFile.class, OperationsSiteMap.Simulator.DirectBankingSimFile.class, DEFAULT_IMAGE);
+
+        register(TenantSureSubscribers.class, OperationsSiteMap.Administration.TenantSure.class, DEFAULT_IMAGE);
     }
 }

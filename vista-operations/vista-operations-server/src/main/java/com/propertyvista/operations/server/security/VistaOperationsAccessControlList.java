@@ -23,6 +23,7 @@ import com.propertyvista.domain.pmc.PmcMerchantAccountIndex;
 import com.propertyvista.domain.pmc.payment.CustomerCreditCheckTransaction;
 import com.propertyvista.domain.security.VistaOperationsBehavior;
 import com.propertyvista.domain.security.common.VistaBasicBehavior;
+import com.propertyvista.domain.tenant.insurance.TenantSureInsurancePolicy;
 import com.propertyvista.operations.domain.eft.caledoneft.FundsReconciliationFile;
 import com.propertyvista.operations.domain.eft.caledoneft.FundsReconciliationRecordRecord;
 import com.propertyvista.operations.domain.eft.caledoneft.FundsReconciliationSummary;
@@ -49,6 +50,7 @@ import com.propertyvista.operations.domain.scheduler.Trigger;
 import com.propertyvista.operations.domain.security.AuditRecord;
 import com.propertyvista.operations.domain.security.OperationsUser;
 import com.propertyvista.operations.domain.security.OperationsUserCredential;
+import com.propertyvista.operations.domain.tenantsure.TenantSureSubscribers;
 import com.propertyvista.operations.domain.vista2pmc.OperationsAlert;
 import com.propertyvista.operations.rpc.services.AdminPasswordChangeManagedService;
 import com.propertyvista.operations.rpc.services.AdminPasswordChangeUserService;
@@ -79,6 +81,7 @@ import com.propertyvista.operations.rpc.services.PmcDataReportService;
 import com.propertyvista.operations.rpc.services.PmcDirectDebitRecordCrudService;
 import com.propertyvista.operations.rpc.services.PmcMerchantAccountCrudService;
 import com.propertyvista.operations.rpc.services.SimulationService;
+import com.propertyvista.operations.rpc.services.TenantSureCrudService;
 import com.propertyvista.operations.rpc.services.Vista2PmcService;
 import com.propertyvista.operations.rpc.services.VistaTermsCrudService;
 import com.propertyvista.operations.rpc.services.dev.PmcYardiCredentialService;
@@ -212,6 +215,10 @@ public class VistaOperationsAccessControlList extends ServletContainerAclBuilder
 
         grant(VistaOperationsBehavior.SystemAdmin, new IServiceExecutePermission(OperationsAlertCrudService.class));
         grant(VistaOperationsBehavior.SystemAdmin, new EntityPermission(OperationsAlert.class, EntityPermission.ALL));
+
+        grant(VistaOperationsBehavior.SystemAdmin, new IServiceExecutePermission(TenantSureCrudService.class));
+        grant(VistaOperationsBehavior.SystemAdmin, new EntityPermission(TenantSureSubscribers.class, EntityPermission.READ));
+        grant(VistaOperationsBehavior.SystemAdmin, new EntityPermission(TenantSureInsurancePolicy.class, EntityPermission.READ));
 
         grant(VistaOperationsBehavior.SystemAdmin, new IServiceExecutePermission(MerchantAccountFileUploadService.class));
 
