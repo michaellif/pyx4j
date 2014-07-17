@@ -25,5 +25,7 @@ public interface GuarantorViewerView extends IViewer<GuarantorDTO> {
         void goToCreateScreening();
 
         void goToChangePassword(Key guarantorPrincipalPk, String guarantorName);
+
+        void viewScreening();
     }
 }

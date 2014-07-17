@@ -28,6 +28,8 @@ public class GuarantorViewerViewImpl extends CrmViewerViewImplBase<GuarantorDTO>
 
     private final static I18n i18n = I18n.get(GuarantorViewerViewImpl.class);
 
+    private final MenuItem screeningView;
+
     private final MenuItem passwordAction;
 
     private final MenuItem screeningAction;
@@ -35,6 +37,16 @@ public class GuarantorViewerViewImpl extends CrmViewerViewImplBase<GuarantorDTO>
     public GuarantorViewerViewImpl() {
         setForm(new GuarantorForm(this));
 
+        // Views:
+        screeningView = new MenuItem(i18n.tr("Screening"), new Command() {
+            @Override
+            public void execute() {
+                ((GuarantorViewerView.Presenter) getPresenter()).viewScreening();
+            }
+        });
+        addView(screeningView);
+
+        // Actions:
         passwordAction = new SecureMenuItem(i18n.tr("Change Password"), new Command() {
             @Override
             public void execute() {
@@ -55,6 +67,7 @@ public class GuarantorViewerViewImpl extends CrmViewerViewImplBase<GuarantorDTO>
 
     @Override
     public void reset() {
+        setActionVisible(screeningView, false);
         setActionVisible(passwordAction, false);
         setActionVisible(screeningAction, false);
 
@@ -64,6 +77,9 @@ public class GuarantorViewerViewImpl extends CrmViewerViewImplBase<GuarantorDTO>
     @Override
     public void populate(GuarantorDTO value) {
         super.populate(value);
+
+        setViewVisible(screeningView, value.screening().getPrimaryKey() != null);
+        setActionVisible(screeningAction, value.screening().getPrimaryKey() == null);
 
         setActionVisible(screeningAction, value.screening().getPrimaryKey() == null);
 

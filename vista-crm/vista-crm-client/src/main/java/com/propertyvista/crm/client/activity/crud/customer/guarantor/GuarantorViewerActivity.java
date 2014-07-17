@@ -38,6 +38,8 @@ public class GuarantorViewerActivity extends CrmViewerActivity<GuarantorDTO> imp
 
     private LeaseParticipant<?> leaseParticipantId;
 
+    private GuarantorDTO currentValue;
+
     public GuarantorViewerActivity(CrudAppPlace place) {
         super(GuarantorDTO.class, place, CrmSite.getViewFactory().getView(GuarantorViewerView.class), GWT
                 .<GuarantorCrudService> create(GuarantorCrudService.class));
@@ -63,8 +65,16 @@ public class GuarantorViewerActivity extends CrmViewerActivity<GuarantorDTO> imp
     }
 
     @Override
+    public void viewScreening() {
+        AppSite.getPlaceController().goTo(new CrmSiteMap.Tenants.Screening().formViewerPlace(currentValue.screening().getPrimaryKey()));
+    }
+
+    @Override
     public void onPopulateSuccess(GuarantorDTO result) {
         super.onPopulateSuccess(result);
+
+        currentValue = result;
+
         leaseParticipantId = EntityFactory.createIdentityStub(Guarantor.class, result.getPrimaryKey());
     }
 
