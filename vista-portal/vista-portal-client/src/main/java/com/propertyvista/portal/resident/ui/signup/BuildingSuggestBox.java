@@ -13,81 +13,13 @@
  */
 package com.propertyvista.portal.resident.ui.signup;
 
-import java.text.ParseException;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-
-import com.google.gwt.user.client.ui.MultiWordSuggestOracle;
-import com.google.gwt.user.client.ui.SuggestOracle.Suggestion;
-
-import com.pyx4j.commons.IFormatter;
-import com.pyx4j.commons.IParser;
-import com.pyx4j.forms.client.ui.CSuggestBox;
-import com.pyx4j.forms.client.ui.NSuggestBox;
+import com.pyx4j.forms.client.ui.selector.CSelectorBox;
 
 import com.propertyvista.portal.rpc.portal.resident.dto.SelfRegistrationBuildingDTO;
 
-public class BuildingSuggestBox extends CSuggestBox<SelfRegistrationBuildingDTO> {
+public class BuildingSuggestBox extends CSelectorBox<SelfRegistrationBuildingDTO> {
 
     public BuildingSuggestBox() {
-        setFormatter(new BuildingSuggestFormatter());
-        setParser(new BuildingSuggestParser());
-    }
-
-    class BuildingSuggestFormatter implements IFormatter<SelfRegistrationBuildingDTO, String> {
-
-        @Override
-        public String format(SelfRegistrationBuildingDTO value) {
-            if (value == null) {
-                return "";
-            }
-            return value.address().getValue().trim();
-        }
-    }
-
-    class BuildingSuggestParser implements IParser<SelfRegistrationBuildingDTO> {
-
-        @Override
-        public SelfRegistrationBuildingDTO parse(String string) throws ParseException {
-            for (SelfRegistrationBuildingDTO option : getOptions()) {
-                if (getOptionName(option).equals(string.trim())) {
-                    return option;
-                }
-            }
-            return null;
-        }
-
-    }
-
-    @Override
-    public String getOptionName(SelfRegistrationBuildingDTO o) {
-        return o.address().getValue().trim();
-    }
-
-    @Override
-    public void setOptions(Collection<SelfRegistrationBuildingDTO> opt) {
-        super.setOptions(opt);
-        List<Suggestion> defaultSuggestions = new ArrayList<>();
-        for (final SelfRegistrationBuildingDTO option : opt) {
-            defaultSuggestions.add(new Suggestion() {
-                @Override
-                public String getDisplayString() {
-                    return option.address().getValue();
-                }
-
-                @Override
-                public String getReplacementString() {
-                    return option.address().getValue();
-                }
-
-            });
-        }
-
-        NSuggestBox<SelfRegistrationBuildingDTO> w = getNativeComponent();
-        if (w != null) {
-            ((MultiWordSuggestOracle) w.getEditor().getSuggestOracle()).setDefaultSuggestions(defaultSuggestions);
-        }
     }
 
     @Override
