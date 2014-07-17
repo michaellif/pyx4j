@@ -31,12 +31,16 @@ import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.forms.client.validators.AbstractComponentValidator;
 import com.pyx4j.forms.client.validators.BasicValidationError;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.widgets.client.Button.SecureMenuItem;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 import com.pyx4j.widgets.client.dialog.OkCancelDialog;
 
 import com.propertyvista.common.client.PrintUtils;
 import com.propertyvista.common.client.ui.validators.FutureDateIncludeTodayValidator;
 import com.propertyvista.crm.client.ui.crud.CrmViewerViewImplBase;
+import com.propertyvista.crm.rpc.services.maintenance.ac.Cancel;
+import com.propertyvista.crm.rpc.services.maintenance.ac.Resolve;
+import com.propertyvista.crm.rpc.services.maintenance.ac.Schedule;
 import com.propertyvista.domain.maintenance.MaintenanceRequestStatus.StatusPhase;
 import com.propertyvista.domain.maintenance.SurveyResponse;
 import com.propertyvista.dto.MaintenanceRequestDTO;
@@ -76,7 +80,7 @@ public class MaintenanceRequestViewerViewImpl extends CrmViewerViewImplBase<Main
         addAction(rateAction);
 
         transitionActions = new HashMap<StatusPhase, MenuItem>();
-        transitionActions.put(StatusPhase.Scheduled, new MenuItem(i18n.tr("Schedule..."), new Command() {
+        transitionActions.put(StatusPhase.Scheduled, new SecureMenuItem(i18n.tr("Schedule..."), new Command() {
             @Override
             public void execute() {
                 new ScheduleBox() {
@@ -91,8 +95,8 @@ public class MaintenanceRequestViewerViewImpl extends CrmViewerViewImplBase<Main
                     }
                 }.show();
             }
-        }));
-        transitionActions.put(StatusPhase.Resolved, new MenuItem(i18n.tr("Resolve"), new Command() {
+        }, Schedule.class));
+        transitionActions.put(StatusPhase.Resolved, new SecureMenuItem(i18n.tr("Resolve"), new Command() {
             @Override
             public void execute() {
                 new ResolutionBox(getForm().getValue()) {
@@ -107,8 +111,8 @@ public class MaintenanceRequestViewerViewImpl extends CrmViewerViewImplBase<Main
                     }
                 }.show();
             }
-        }));
-        transitionActions.put(StatusPhase.Cancelled, new MenuItem(i18n.tr("Cancel"), new Command() {
+        }, Resolve.class));
+        transitionActions.put(StatusPhase.Cancelled, new SecureMenuItem(i18n.tr("Cancel"), new Command() {
             @Override
             public void execute() {
                 MessageDialog.confirm(i18n.tr("Cancel"), i18n.tr("Do you really want to cancel the request?"), new Command() {
@@ -118,7 +122,7 @@ public class MaintenanceRequestViewerViewImpl extends CrmViewerViewImplBase<Main
                     }
                 });
             }
-        }));
+        }, Cancel.class));
 
         for (MenuItem action : transitionActions.values()) {
             addAction(action);

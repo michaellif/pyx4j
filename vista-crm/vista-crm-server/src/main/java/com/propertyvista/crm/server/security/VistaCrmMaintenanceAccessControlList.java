@@ -26,6 +26,7 @@ import com.pyx4j.security.shared.ActionPermission;
 
 import com.propertyvista.crm.rpc.services.maintenance.MaintenanceCrudService;
 import com.propertyvista.crm.rpc.services.maintenance.MaintenanceRequestPictureUploadService;
+import com.propertyvista.crm.rpc.services.maintenance.ac.Cancel;
 import com.propertyvista.crm.rpc.services.maintenance.ac.Resolve;
 import com.propertyvista.crm.rpc.services.maintenance.ac.Schedule;
 import com.propertyvista.dto.MaintenanceRequestDTO;
@@ -46,6 +47,7 @@ public class VistaCrmMaintenanceAccessControlList extends UIAclBuilder {
         grant(MaintenanceFull, MaintenanceRequestDTO.class, ALL);
         grant(MaintenanceFull, new ActionPermission(Schedule.class));
         grant(MaintenanceFull, new ActionPermission(Resolve.class));
+        grant(MaintenanceFull, new ActionPermission(Cancel.class));
         grant(MaintenanceFull, new IServiceExecutePermission(MaintenanceCrudService.class));
         grant(MaintenanceFull, new IServiceExecutePermission(MaintenanceRequestPictureUploadService.class));
 
