@@ -467,9 +467,6 @@ public class SelectorTextBox<E> extends Composite implements WatermarkComponent,
         }
 
         protected E getCurrentSelection() {
-            if (!isSuggestionListShowing()) {
-                return null;
-            }
             MenuItem item = suggestionMenu.getSelectedItem();
             return item == null ? null : ((SuggestionMenuItem) item).getSuggestion();
         }
