@@ -17,7 +17,6 @@ import com.google.gwt.core.client.GWT;
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.core.EntityFactory;
-import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.rpc.AppPlace;
 import com.pyx4j.site.rpc.CrudAppPlace;
@@ -29,7 +28,6 @@ import com.propertyvista.crm.client.ui.crud.customer.guarantor.GuarantorViewerVi
 import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.crm.rpc.services.customer.GuarantorCrudService;
 import com.propertyvista.crm.rpc.services.customer.screening.LeaseParticipantScreeningCrudService;
-import com.propertyvista.domain.security.VistaCrmBehavior;
 import com.propertyvista.domain.tenant.lease.Guarantor;
 import com.propertyvista.domain.tenant.lease.LeaseParticipant;
 import com.propertyvista.dto.GuarantorDTO;
@@ -43,6 +41,15 @@ public class GuarantorViewerActivity extends CrmViewerActivity<GuarantorDTO> imp
     public GuarantorViewerActivity(CrudAppPlace place) {
         super(GuarantorDTO.class, place, CrmSite.getViewFactory().getView(GuarantorViewerView.class), GWT
                 .<GuarantorCrudService> create(GuarantorCrudService.class));
+    }
+
+    @Override
+    public void onPopulateSuccess(GuarantorDTO result) {
+        super.onPopulateSuccess(result);
+    
+        currentValue = result;
+    
+        leaseParticipantId = EntityFactory.createIdentityStub(Guarantor.class, result.getPrimaryKey());
     }
 
     @Override
@@ -69,17 +76,4 @@ public class GuarantorViewerActivity extends CrmViewerActivity<GuarantorDTO> imp
         AppSite.getPlaceController().goTo(new CrmSiteMap.Tenants.Screening().formViewerPlace(currentValue.screening().getPrimaryKey()));
     }
 
-    @Override
-    public void onPopulateSuccess(GuarantorDTO result) {
-        super.onPopulateSuccess(result);
-
-        currentValue = result;
-
-        leaseParticipantId = EntityFactory.createIdentityStub(Guarantor.class, result.getPrimaryKey());
-    }
-
-    @Override
-    public boolean canEdit() {
-        return SecurityController.check(VistaCrmBehavior.Tenants_OLD);
-    }
 }

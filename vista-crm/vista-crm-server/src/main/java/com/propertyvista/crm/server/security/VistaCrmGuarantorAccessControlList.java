@@ -16,8 +16,8 @@ package com.propertyvista.crm.server.security;
 import static com.propertyvista.domain.security.VistaCrmBehavior.GuarantorAdvanced;
 import static com.propertyvista.domain.security.VistaCrmBehavior.GuarantorBasic;
 import static com.propertyvista.domain.security.VistaCrmBehavior.GuarantorFull;
-import static com.pyx4j.entity.security.AbstractCRUDPermission.ALL;
 import static com.pyx4j.entity.security.AbstractCRUDPermission.READ;
+import static com.pyx4j.entity.security.AbstractCRUDPermission.UPDATE;
 
 import java.util.List;
 
@@ -36,7 +36,7 @@ public class VistaCrmGuarantorAccessControlList extends UIAclBuilder {
 
             grant(GuarantorBasic, entities, READ);
             grant(GuarantorAdvanced, entities, READ);
-            grant(GuarantorFull, entities, ALL);
+            grant(GuarantorFull, entities, READ | UPDATE);
         }
 
         // Actions:

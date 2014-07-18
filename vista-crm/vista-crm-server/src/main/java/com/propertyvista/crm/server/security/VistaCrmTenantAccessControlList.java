@@ -17,7 +17,6 @@ import static com.propertyvista.domain.security.VistaCrmBehavior.TenantAdvanced;
 import static com.propertyvista.domain.security.VistaCrmBehavior.TenantBasic;
 import static com.propertyvista.domain.security.VistaCrmBehavior.TenantFinancial;
 import static com.propertyvista.domain.security.VistaCrmBehavior.TenantFull;
-import static com.pyx4j.entity.security.AbstractCRUDPermission.ALL;
 import static com.pyx4j.entity.security.AbstractCRUDPermission.READ;
 import static com.pyx4j.entity.security.AbstractCRUDPermission.UPDATE;
 
@@ -39,8 +38,8 @@ public class VistaCrmTenantAccessControlList extends UIAclBuilder {
 
             grant(TenantBasic, entities, READ);
             grant(TenantAdvanced, entities, READ);
-            grant(TenantFull, entities, ALL);
-            grant(TenantFinancial, entities, READ | UPDATE);
+            grant(TenantFull, entities, READ | UPDATE);
+            grant(TenantFinancial, entities, READ);
         }
 
         grant(TenantBasic, TenantPortalAccessInformationDTO.class, READ);

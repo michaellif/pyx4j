@@ -13,11 +13,13 @@
  */
 package com.propertyvista.dto;
 
+import com.pyx4j.entity.annotations.SecurityEnabled;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.IPrimitive;
 
 @Transient
+@SecurityEnabled
 public interface TenantPortalAccessInformationDTO extends IEntity {
 
     IPrimitive<String> leaseId();

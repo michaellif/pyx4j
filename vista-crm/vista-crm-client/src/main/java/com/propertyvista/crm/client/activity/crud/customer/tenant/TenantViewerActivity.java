@@ -18,7 +18,6 @@ import com.google.gwt.core.client.GWT;
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
-import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.site.client.AppPlaceEntityMapper;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.rpc.AppPlace;
@@ -35,7 +34,6 @@ import com.propertyvista.crm.rpc.services.customer.TenantCrudService;
 import com.propertyvista.crm.rpc.services.customer.screening.LeaseParticipantScreeningCrudService;
 import com.propertyvista.crm.rpc.services.maintenance.MaintenanceCrudService;
 import com.propertyvista.domain.payment.AutopayAgreement;
-import com.propertyvista.domain.security.VistaCrmBehavior;
 import com.propertyvista.domain.tenant.lease.Tenant;
 import com.propertyvista.dto.TenantDTO;
 import com.propertyvista.dto.TenantPortalAccessInformationDTO;
@@ -52,6 +50,15 @@ public class TenantViewerActivity extends CrmViewerActivity<TenantDTO> implement
 
     public TenantViewerActivity(CrudAppPlace place) {
         super(TenantDTO.class, place, CrmSite.getViewFactory().getView(TenantViewerView.class), GWT.<TenantCrudService> create(TenantCrudService.class));
+    }
+
+    @Override
+    public void onPopulateSuccess(TenantDTO result) {
+        super.onPopulateSuccess(result);
+    
+        currentValue = result;
+        currentTenantId = result.getPrimaryKey();
+        currentBuildingId = result.lease().unit().building().id().getValue();
     }
 
     @Override
@@ -91,20 +98,6 @@ public class TenantViewerActivity extends CrmViewerActivity<TenantDTO> implement
             passwordChangePlace.queryArg(PasswordChangeView.Presenter.PRINCIPAL_CLASS, PasswordChangeView.Presenter.PrincipalClass.TENANT.toString());
             AppSite.getPlaceController().goTo(passwordChangePlace);
         }
-    }
-
-    @Override
-    public void onPopulateSuccess(TenantDTO result) {
-        super.onPopulateSuccess(result);
-
-        currentValue = result;
-        currentTenantId = result.getPrimaryKey();
-        currentBuildingId = result.lease().unit().building().id().getValue();
-    }
-
-    @Override
-    public boolean canEdit() {
-        return SecurityController.check(VistaCrmBehavior.Tenants_OLD);
     }
 
     @Override
