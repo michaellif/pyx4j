@@ -24,6 +24,7 @@ import com.pyx4j.forms.client.ui.CEmailField;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.security.rpc.PasswordRetrievalRequest;
+import com.pyx4j.widgets.client.CaptchaComposite;
 
 import com.propertyvista.portal.shared.ui.CPortalEntityWizard;
 import com.propertyvista.portal.shared.ui.LoginFormPanel;
@@ -53,7 +54,7 @@ public class PasswordResetRequestWizard extends CPortalEntityWizard<PasswordRetr
 
         ((CEmailField) get(proto().email())).setWatermark(get(proto().email()).getTitle());
         ((CCaptcha) get(proto().captcha())).setWatermark(i18n.tr("Enter both security words above"));
-
+        get(proto().captcha()).setVisible(CaptchaComposite.isPublicKeySet());
         formPanel.br();
 
         return formPanel;
@@ -61,6 +62,7 @@ public class PasswordResetRequestWizard extends CPortalEntityWizard<PasswordRetr
 
     public void createNewCaptchaChallenge() {
         CCaptcha captcha = (CCaptcha) get(proto().captcha());
+        captcha.setVisible(true);
         captcha.createNewChallenge();
     }
 

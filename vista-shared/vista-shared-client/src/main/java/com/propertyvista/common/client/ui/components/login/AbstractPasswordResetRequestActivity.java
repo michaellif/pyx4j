@@ -58,6 +58,15 @@ public class AbstractPasswordResetRequestActivity extends AbstractActivity imple
     @Override
     public void start(AcceptsOneWidget panel, EventBus eventBus) {
         panel.setWidget(view);
+        if (!CaptchaComposite.isPublicKeySet()) {
+            ClientContext.getAuthenticationService().obtainRecaptchaPublicKey(new DefaultAsyncCallback<String>() {
+                @Override
+                public void onSuccess(String result) {
+                    CaptchaComposite.setPublicKey(result);
+                    view.createNewCaptchaChallenge();
+                }
+            });
+        }
     }
 
     @Override

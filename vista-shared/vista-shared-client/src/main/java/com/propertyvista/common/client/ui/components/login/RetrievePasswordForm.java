@@ -27,6 +27,7 @@ import com.pyx4j.forms.client.ui.CCaptcha;
 import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.security.rpc.PasswordRetrievalRequest;
+import com.pyx4j.widgets.client.CaptchaComposite;
 
 import com.propertyvista.common.client.theme.HorizontalAlignCenterMixin;
 
@@ -60,6 +61,7 @@ public class RetrievePasswordForm extends CForm<PasswordRetrievalRequest> {
         main.add(inject(proto().email(), new LoginPanelWidgetDecorator()));
         main.add(new HTML());
         main.add(inject(proto().captcha(), new LoginPanelWidgetDecorator(30)));
+        get(proto().captcha()).setVisible(CaptchaComposite.isPublicKeySet());
         main.add(passwordResetFailedMessage);
         passwordResetFailedMessage.getElement().getStyle().setMarginTop(1, Unit.EM);
         passwordResetFailedMessage.setVisible(false);
@@ -86,6 +88,7 @@ public class RetrievePasswordForm extends CForm<PasswordRetrievalRequest> {
 
     public void createNewCaptchaChallenge() {
         CCaptcha captcha = (CCaptcha) get(proto().captcha());
+        captcha.setVisible(true);
         captcha.createNewChallenge();
     }
 

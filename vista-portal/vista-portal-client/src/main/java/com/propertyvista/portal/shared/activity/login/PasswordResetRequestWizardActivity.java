@@ -49,7 +49,15 @@ public class PasswordResetRequestWizardActivity extends AbstractWizardActivity<P
     public void start(AcceptsOneWidget panel, EventBus eventBus) {
         super.start(panel, eventBus);
         getView().populate(EntityFactory.create(PasswordRetrievalRequest.class));
-        createNewCaptchaChallenge();
+        if (!CaptchaComposite.isPublicKeySet()) {
+            ClientContext.getAuthenticationService().obtainRecaptchaPublicKey(new DefaultAsyncCallback<String>() {
+                @Override
+                public void onSuccess(String result) {
+                    CaptchaComposite.setPublicKey(result);
+                    getView().createNewCaptchaChallenge();
+                }
+            });
+        }
     }
 
     @Override
@@ -77,7 +85,7 @@ public class PasswordResetRequestWizardActivity extends AbstractWizardActivity<P
 
         if (CaptchaComposite.isPublicKeySet()) {
             view.createNewCaptchaChallenge();
-            // view.displayPasswordResetFailedMessage();
+            //view.displayPasswordResetFailedMessage();
         } else {
             GWT.<AuthenticationService> create(ResidentAuthenticationService.class).obtainRecaptchaPublicKey(new DefaultAsyncCallback<String>() {
                 @Override
