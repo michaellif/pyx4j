@@ -49,6 +49,7 @@ public class TriggerForm extends OperationsEntityForm<TriggerDTO> {
         formPanel.append(Location.Left, proto().name()).decorate();
         formPanel.append(Location.Left, proto().triggerType()).decorate();
         formPanel.append(Location.Right, proto().populationType()).decorate().componentWidth(120);
+        formPanel.append(Location.Right, proto().options()).decorate();
 
         formPanel.append(Location.Left, proto().threads()).decorate().componentWidth(120);
         formPanel.append(Location.Right, proto().timeout()).decorate();

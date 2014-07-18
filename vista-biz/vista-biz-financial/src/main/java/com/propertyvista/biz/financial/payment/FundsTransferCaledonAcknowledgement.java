@@ -221,7 +221,7 @@ class FundsTransferCaledonAcknowledgement {
             criteria.isNull(criteria.proto().processingStatus());
             for (FundsTransferBatch padBatch : Persistence.service().query(criteria)) {
                 padBatch.processingStatus().setValue(FundsTransferBatchProcessingStatus.AcknowledgedReceived);
-                executionMonitor.addInfoEvent("Batch Acknowledged", null, padBatch.batchAmount().getValue());
+                executionMonitor.addInfoEvent("Batch Acknowledged", padBatch.batchAmount().getValue(), null);
                 Persistence.service().persist(padBatch);
             }
         }

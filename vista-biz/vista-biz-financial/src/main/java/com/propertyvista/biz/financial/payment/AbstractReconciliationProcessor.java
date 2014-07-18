@@ -159,7 +159,7 @@ abstract class AbstractReconciliationProcessor {
 
                 });
 
-                executionMonitor.addInfoEvent("AggregatedTransfer", null, summary.netAmount().getValue());
+                executionMonitor.addInfoEvent("AggregatedTransfer", summary.netAmount().getValue(), null);
 
             } catch (Throwable e) {
                 log.error("AggregatedTransfer {} creation failed", summary.id().getValue(), e);

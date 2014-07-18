@@ -176,7 +176,7 @@ class CardsReconciliationProcessor {
                 at.grossPaymentCount().setValue(at.grossPaymentCount().getValue() + 1);
                 at.grossPaymentAmount().setValue(at.grossPaymentAmount().getValue().add(paymentRecord.amount().getValue()));
 
-                executionMonitor.addInfoEvent("PaymentRecord", null, paymentRecord.amount().getValue());
+                executionMonitor.addInfoEvent("PaymentRecord", paymentRecord.amount().getValue(), null);
             }
         } finally {
             it.close();

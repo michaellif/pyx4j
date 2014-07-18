@@ -19,6 +19,7 @@ import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.Format;
+import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.ReadOnly;
 import com.pyx4j.entity.annotations.Table;
@@ -60,6 +61,7 @@ public interface Trigger extends IEntity {
     @Owned
     IList<TriggerPmc> population();
 
+    @MemberColumn(notNull = true)
     IPrimitive<Boolean> scheduleSuspended();
 
     @Owned

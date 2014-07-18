@@ -31,6 +31,7 @@ import org.apache.commons.lang.builder.ToStringStyle;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.pyx4j.commons.SimpleMessageFormat;
 import com.pyx4j.config.server.SystemDateManager;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.essentials.server.ExceptionMessagesExtractor;
@@ -144,13 +145,13 @@ public class ExecutionMonitor {
         }
     }
 
-    public void addEvent(String sectionName, CompletionType type, BigDecimal value, String message) {
+    public void addEvent(String sectionName, CompletionType type, BigDecimal value, String messageFormat, Object... args) {
         ReportSectionId id = new ReportSectionId(sectionName, type);
         ReportSection section = sections.get(id);
         if (section == null) {
             sections.put(id, section = new ReportSection());
         }
-
+        String message = SimpleMessageFormat.format(messageFormat, args);
         section.counter++;
         section.add(value);
         section.addMessage(message);
@@ -264,9 +265,9 @@ public class ExecutionMonitor {
         addEvent(sectionName, CompletionType.processed, message);
     }
 
-    public void addInfoEvent(String sectionName, String message, BigDecimal value) {
+    public void addInfoEvent(String sectionName, BigDecimal value, String messageFormat, Object... args) {
         setExcludedSectionsFromTotals(sectionName, true);
-        addEvent(sectionName, CompletionType.processed, value, message);
+        addEvent(sectionName, CompletionType.processed, value, messageFormat, args);
     }
 
     public void addInfoEvent(String sectionName, CompletionType type, String message, BigDecimal value) {
@@ -278,8 +279,8 @@ public class ExecutionMonitor {
         addEvent(sectionName, CompletionType.processed, null);
     }
 
-    public void addProcessedEvent(String sectionName, String message) {
-        addEvent(sectionName, CompletionType.processed, message);
+    public void addProcessedEvent(String sectionName, String messageFormat, Object... args) {
+        addEvent(sectionName, CompletionType.processed, null, messageFormat, args);
     }
 
     public void addProcessedEvent(String sectionName, BigDecimal value) {
@@ -290,8 +291,8 @@ public class ExecutionMonitor {
         addEvent(sectionName, CompletionType.processed, value, message);
     }
 
-    public void addFailedEvent(String sectionName, String message) {
-        addEvent(sectionName, CompletionType.failed, null, message);
+    public void addFailedEvent(String sectionName, String messageFormat, Object... args) {
+        addEvent(sectionName, CompletionType.failed, null, messageFormat, args);
     }
 
     public void addFailedEvent(String sectionName, BigDecimal value) {

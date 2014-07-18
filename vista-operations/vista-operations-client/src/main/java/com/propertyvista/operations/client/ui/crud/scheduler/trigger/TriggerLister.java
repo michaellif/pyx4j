@@ -30,6 +30,7 @@ public class TriggerLister extends AbstractLister<TriggerDTO> {
 
         DataTableModel<TriggerDTO> dataTableModel = new DataTableModel<TriggerDTO>(//@formatter:off
             new MemberColumnDescriptor.Builder(proto().triggerType()).build(),
+            new MemberColumnDescriptor.Builder(proto().options()).visible(false).sortable(false).searchable(false).build(),
             new MemberColumnDescriptor.Builder(proto().name()).build(),
             new MemberColumnDescriptor.Builder(proto().scheduleSuspended()).sortable(false).searchable(false).build(),
             new MemberColumnDescriptor.Builder(proto().schedule()).sortable(false).searchable(false).build(),

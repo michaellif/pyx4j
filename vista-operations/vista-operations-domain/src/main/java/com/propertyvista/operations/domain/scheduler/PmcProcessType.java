@@ -14,8 +14,11 @@
 package com.propertyvista.operations.domain.scheduler;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Collections;
+import java.util.EnumSet;
 import java.util.List;
 
 import com.pyx4j.i18n.annotations.I18n;
@@ -141,6 +144,20 @@ public enum PmcProcessType implements Serializable {
 
     public boolean hasOption(PmcProcessOptions option) {
         return options.contains(option);
+    }
+
+    public List<PmcProcessOptions> getOptions() {
+        return options;
+    }
+
+    public static Collection<PmcProcessType> requiredDaily() {
+        Collection<PmcProcessType> c = new ArrayList<>();
+        for (PmcProcessType t : EnumSet.allOf(PmcProcessType.class)) {
+            if (t.hasOption(PmcProcessOptions.RequiredDaily)) {
+                c.add(t);
+            }
+        }
+        return c;
     }
 
     public String getDescription() {

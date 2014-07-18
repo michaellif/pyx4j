@@ -68,6 +68,6 @@ public class YardiImportProcess implements PmcProcess {
     @Override
     public void complete(PmcProcessContext context) {
         log.info("Yardi Import batch job finished");
-        context.getExecutionMonitor().addInfoEvent("yardiTime", TimeUtils.durationFormat(yardiRequestsTimeTotal.longValue()), yardiRequestsTimeTotal);
+        context.getExecutionMonitor().addInfoEvent("yardiTime", yardiRequestsTimeTotal, TimeUtils.durationFormat(yardiRequestsTimeTotal.longValue()));
     }
 }

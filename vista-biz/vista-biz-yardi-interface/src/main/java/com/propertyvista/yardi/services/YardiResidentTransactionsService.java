@@ -489,8 +489,8 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
             AtomicReference<Long> maxRequestTime = new AtomicReference<>();
             long yardiTime = ServerSideFactory.create(YardiConfigurationFacade.class).stopYardiTimer(maxRequestTime);
 
-            executionMonitor.addInfoEvent("yardiTime", TimeUtils.durationFormat(yardiTime), new BigDecimal(yardiTime));
-            executionMonitor.addInfoEvent("yardiMaxRequestTime", TimeUtils.durationFormat(maxRequestTime.get()), new BigDecimal(maxRequestTime.get()));
+            executionMonitor.addInfoEvent("yardiTime", new BigDecimal(yardiTime), TimeUtils.durationFormat(yardiTime));
+            executionMonitor.addInfoEvent("yardiMaxRequestTime", new BigDecimal(maxRequestTime.get()), TimeUtils.durationFormat(maxRequestTime.get()));
 
             ServerSideFactory.create(NotificationFacade.class).aggregatedNotificationsSend();
         }

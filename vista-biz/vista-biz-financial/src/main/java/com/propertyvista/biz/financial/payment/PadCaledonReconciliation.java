@@ -64,7 +64,7 @@ class PadCaledonReconciliation {
             }
             summary.merchantAccount().set(macc);
             if (pmcCount.add(macc.pmc())) {
-                executionMonitor.addInfoEvent("Pmc", null, BigDecimal.ONE);
+                executionMonitor.addInfoEvent("Pmc", BigDecimal.ONE, null);
             }
 
             summary.processingStatus().setValue(false);

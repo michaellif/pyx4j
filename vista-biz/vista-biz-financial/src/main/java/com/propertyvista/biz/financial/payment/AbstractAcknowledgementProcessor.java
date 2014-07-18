@@ -180,7 +180,7 @@ abstract class AbstractAcknowledgementProcessor {
                     return null;
                 }
             });
-            executionMonitor.addInfoEvent("Batch Acknowledged", null, padBatch.batchAmount().getValue());
+            executionMonitor.addInfoEvent("Batch Acknowledged", padBatch.batchAmount().getValue(), null);
         }
 
     }

@@ -14,9 +14,12 @@
 package com.propertyvista.operations.rpc.dto;
 
 import com.pyx4j.entity.annotations.Caption;
+import com.pyx4j.entity.annotations.ReadOnly;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.core.IPrimitive;
+import com.pyx4j.entity.core.IPrimitiveSet;
 
+import com.propertyvista.operations.domain.scheduler.PmcProcessOptions;
 import com.propertyvista.operations.domain.scheduler.Trigger;
 
 @Transient
@@ -26,4 +29,7 @@ public interface TriggerDTO extends Trigger {
     IPrimitive<String> timeout();
 
     IPrimitive<String> schedule();
+
+    @ReadOnly
+    IPrimitiveSet<PmcProcessOptions> options();
 }

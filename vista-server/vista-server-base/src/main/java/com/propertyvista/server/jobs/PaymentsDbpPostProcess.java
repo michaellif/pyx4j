@@ -54,9 +54,9 @@ public class PaymentsDbpPostProcess implements PmcProcess {
                 ServerSideFactory.create(YardiConfigurationFacade.class).clearYardiCredentialCache();
                 AtomicReference<Long> maxRequestTime = new AtomicReference<>();
                 long yardiTime = ServerSideFactory.create(YardiConfigurationFacade.class).stopYardiTimer(maxRequestTime);
-                context.getExecutionMonitor().addInfoEvent("yardiTime", TimeUtils.durationFormat(yardiTime), new BigDecimal(yardiTime));
-                context.getExecutionMonitor().addInfoEvent("yardiMaxRequestTime", TimeUtils.durationFormat(maxRequestTime.get()),
-                        new BigDecimal(maxRequestTime.get()));
+                context.getExecutionMonitor().addInfoEvent("yardiTime", new BigDecimal(yardiTime), TimeUtils.durationFormat(yardiTime));
+                context.getExecutionMonitor().addInfoEvent("yardiMaxRequestTime", new BigDecimal(maxRequestTime.get()),
+                        TimeUtils.durationFormat(maxRequestTime.get()));
                 yardiRequestsTimeTotal += yardiTime;
             }
         }
@@ -65,7 +65,7 @@ public class PaymentsDbpPostProcess implements PmcProcess {
     @Override
     public void complete(PmcProcessContext context) {
         if (yardiRequestsTimeTotal != 0) {
-            context.getExecutionMonitor().addInfoEvent("yardiTime", TimeUtils.durationFormat(yardiRequestsTimeTotal), new BigDecimal(yardiRequestsTimeTotal));
+            context.getExecutionMonitor().addInfoEvent("yardiTime", new BigDecimal(yardiRequestsTimeTotal), TimeUtils.durationFormat(yardiRequestsTimeTotal));
         }
     }
 

@@ -46,25 +46,27 @@ public class TriggerCrudServiceImpl extends AbstractCrudServiceDtoImpl<Trigger, 
     protected TriggerDTO init(InitializationData initializationData) {
         TriggerDTO process = EntityFactory.create(TriggerDTO.class);
 
+        process.scheduleSuspended().setValue(false);
         process.created().setValue(SystemDateManager.getDate());
 
         return process;
     }
 
     @Override
-    protected void enhanceListRetrieved(Trigger entity, TriggerDTO dto) {
-        super.enhanceListRetrieved(entity, dto);
+    protected void enhanceListRetrieved(Trigger bo, TriggerDTO to) {
+        super.enhanceListRetrieved(bo, to);
 
+        to.options().addAll(bo.triggerType().getValue().getOptions());
         {
             StringBuilder b = new StringBuilder();
-            for (TriggerSchedule triggerSchedule : dto.schedules()) {
+            for (TriggerSchedule triggerSchedule : to.schedules()) {
                 if (b.length() > 0) {
                     b.append("; ");
                 }
                 b.append(triggerSchedule.repeatType().getStringView()).append(' ').append(triggerSchedule.time().getStringView());
             }
-            dto.schedule().setValue(b.toString());
-            JobUtils.getScheduleDetails(dto);
+            to.schedule().setValue(b.toString());
+            JobUtils.getScheduleDetails(to);
         }
     }
 
@@ -73,7 +75,7 @@ public class TriggerCrudServiceImpl extends AbstractCrudServiceDtoImpl<Trigger, 
         if (bo != null) {
             JobUtils.getScheduleDetails(to);
         }
-
+        to.options().addAll(bo.triggerType().getValue().getOptions());
         if (!bo.runTimeout().isNull()) {
             to.timeout().setValue(TimeUtils.durationFormatSeconds(bo.runTimeout().getValue()));
         }

@@ -25,8 +25,10 @@ import com.pyx4j.entity.server.Persistence;
 
 import com.propertyvista.biz.ExecutionMonitor;
 import com.propertyvista.biz.system.encryption.EncryptedStorageFacade;
+import com.propertyvista.operations.domain.scheduler.PmcProcessType;
 import com.propertyvista.operations.domain.scheduler.Run;
 import com.propertyvista.operations.domain.scheduler.RunStatus;
+import com.propertyvista.operations.domain.scheduler.Trigger;
 import com.propertyvista.operations.rpc.encryption.EncryptedStorageDTO;
 import com.propertyvista.operations.rpc.encryption.EncryptedStorageKeyDTO;
 
@@ -41,6 +43,7 @@ class SystemHealthMonitor {
     void healthMonitor(LogicalDate forDate) {
         verifyStuckProcesses();
         verifyEncryptedStorage();
+        verifyTriggerMisfire(forDate);
     }
 
     private void verifyStuckProcesses() {
@@ -70,6 +73,31 @@ class SystemHealthMonitor {
                         "Encrypted Storage Decryption not active for key {0}, affected records {1}\nAsk SecurityAdmin to activate ASAP", key.name(),
                         key.recordsCount());
             }
+        }
+    }
+
+    private void verifyTriggerMisfire(LogicalDate forDate) {
+        EntityQueryCriteria<Trigger> criteria = EntityQueryCriteria.create(Trigger.class);
+        criteria.eq(criteria.proto().scheduleSuspended(), false);
+        criteria.in(criteria.proto().triggerType(), PmcProcessType.requiredDaily());
+        for (Trigger trigger : Persistence.service().query(criteria)) {
+            Date verifyDay = DateUtils.addDays(forDate, -7);
+            while (verifyDay.before(forDate)) {
+                EntityQueryCriteria<Run> criteria2 = EntityQueryCriteria.create(Run.class);
+                criteria2.eq(criteria2.proto().status(), RunStatus.Completed);
+                criteria2.eq(criteria2.proto().forDate(), new LogicalDate(verifyDay));
+                criteria2.eq(criteria2.proto().trigger(), trigger);
+
+                if (!Persistence.service().exists(criteria2)) {
+                    executionMonitor.addFailedEvent("MissingTriggerRun", "Trigger {0} misfire occurred on {1,date,EEEE, MMMM d, yyyy}", trigger.name(),
+                            verifyDay);
+                    ServerSideFactory.create(OperationsAlertFacade.class).sendEmailAlert("MissingTriggerRun", //
+                            "Trigger {0} misfire occurred on {1,date,EEEE, MMMM d, yyyy}", trigger.name(), verifyDay);
+                }
+
+                verifyDay = DateUtils.addDays(verifyDay, 1);
+            }
+
         }
     }
 

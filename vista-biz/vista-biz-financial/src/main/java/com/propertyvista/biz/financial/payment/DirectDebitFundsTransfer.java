@@ -152,7 +152,7 @@ class DirectDebitFundsTransfer {
             transactionAmount = new BigDecimal("0.01");
             feeAmount = paymentRecord.amount().getValue().subtract(transactionAmount);
         }
-        executionMonitor.addInfoEvent("Fee amount", null, feeAmount);
+        executionMonitor.addInfoEvent("Fee amount", feeAmount, null);
         padRecord.amount().setValue(padRecord.amount().getValue().add(transactionAmount));
 
         Persistence.service().persist(padRecord);
