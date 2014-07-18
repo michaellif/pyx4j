@@ -32,6 +32,7 @@ import com.pyx4j.forms.client.events.HasOptionsChangeHandlers;
 import com.pyx4j.forms.client.events.OptionsChangeEvent;
 import com.pyx4j.forms.client.events.OptionsChangeHandler;
 import com.pyx4j.forms.client.ui.CTextFieldBase;
+import com.pyx4j.forms.client.ui.NotImplementedException;
 
 public class CSelectorBox<E extends IEntity> extends CTextFieldBase<E, NSelectorBox<E>> implements HasOptionsChangeHandlers<List<E>> {
 
@@ -40,7 +41,7 @@ public class CSelectorBox<E extends IEntity> extends CTextFieldBase<E, NSelector
     public CSelectorBox() {
         super();
 
-        setFormatter(new IFormatter<E, String>() {
+        super.setFormatter(new IFormatter<E, String>() {
 
             @Override
             public String format(E value) {
@@ -50,8 +51,12 @@ public class CSelectorBox<E extends IEntity> extends CTextFieldBase<E, NSelector
 
         NSelectorBox<E> nativeTextField = new NSelectorBox<E>(this);
         setNativeComponent(nativeTextField);
-        setOptions(options);
 
+    }
+
+    @Override
+    public void setFormatter(IFormatter<E, String> formatter) {
+        throw new NotImplementedException();
     }
 
     @Override
@@ -60,8 +65,7 @@ public class CSelectorBox<E extends IEntity> extends CTextFieldBase<E, NSelector
     }
 
     public void setOptions(Collection<E> opt) {
-        this.options = new ArrayList<E>();
-        this.options.addAll(opt);
+        this.options = new ArrayList<E>(opt);
         if (getNativeComponent() != null) {
             getNativeComponent().processOptions(options);
         }

@@ -57,7 +57,7 @@ public abstract class CTextFieldBase<DATA, WIDGET extends INativeTextComponent<D
 
     }
 
-    public final void setFormatter(IFormatter<DATA, String> formatter) {
+    public void setFormatter(IFormatter<DATA, String> formatter) {
         this.formatter = formatter;
     }
 
