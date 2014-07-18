@@ -296,6 +296,7 @@ public class PropertyManager {
                 Transactions origTransaction = getPaymentTransaction(rtCustomer, transaction.getPayment().getDetail().getDocumentNumber());
                 if (origTransaction != null) {
                     rtCustomer.getRTServiceTransactions().getTransactions().remove(origTransaction);
+                    // TODO: if reversal with NSF - add NSF charge
                     return;
                 }
             }
