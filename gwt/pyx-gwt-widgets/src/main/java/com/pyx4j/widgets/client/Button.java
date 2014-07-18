@@ -456,16 +456,20 @@ public class Button extends FocusPanel implements IFocusWidget {
 
     public static class SecureMenuItem extends MenuItem {
 
-        private final Permission[] permissions;
+        private Permission[] permissions;
 
         public SecureMenuItem(String text, ScheduledCommand cmd, Permission... permissions) {
             super(text, cmd);
-            this.permissions = permissions;
-            super.setVisible(SecurityController.check(permissions));
+            setPermission(permissions);
         }
 
         public SecureMenuItem(String tr, Command cmd, Class<? extends ActionId> actionId) {
             this(tr, cmd, new ActionPermission(actionId));
+        }
+
+        public void setPermission(Permission... permission) {
+            this.permissions = permission;
+            super.setVisible(SecurityController.check(permission));
         }
 
         @Override
