@@ -74,8 +74,6 @@ public class SelectorTextBox<E> extends Composite implements WatermarkComponent,
 
     private int limit = 20;
 
-    private boolean autoSelect = true;
-
     private final OptionsGrabber<E> optionsGrabber;
 
     private final SuggestionDisplay display;
@@ -168,31 +166,6 @@ public class SelectorTextBox<E> extends Composite implements WatermarkComponent,
         }
     }
 
-    /**
-     * Get the ValueBoxBase associated with this suggest box.
-     * 
-     * @return this suggest box's value box
-     */
-    public ValueBoxBase<String> getValueBox() {
-        return box;
-    }
-
-    public boolean isAutoSelect() {
-        return autoSelect;
-    }
-
-    /**
-     * Turns on or off the behavior that automatically selects the first suggested
-     * item. This behavior is on by default.
-     * 
-     * @param selectsFirstItem
-     *            Whether or not to automatically select the first
-     *            suggestion
-     */
-    public void setAutoSelect(boolean autoSelect) {
-        this.autoSelect = autoSelect;
-    }
-
     @Override
     public boolean isEnabled() {
         return box.isEnabled();
@@ -275,7 +248,7 @@ public class SelectorTextBox<E> extends Composite implements WatermarkComponent,
                 if (!isEnabled()) {
                     return;
                 }
-                display.showSuggestions(response.getOptions(), isAutoSelect());
+                display.showSuggestions(response.getOptions());
             }
         };
 
@@ -309,7 +282,6 @@ public class SelectorTextBox<E> extends Composite implements WatermarkComponent,
 
                 @Override
                 public void onKeyUp(KeyUpEvent event) {
-                    // After every user key input, refresh the popup's suggestions.
                     refreshSuggestions();
                 }
             });
@@ -322,11 +294,19 @@ public class SelectorTextBox<E> extends Composite implements WatermarkComponent,
                 }
             });
 
+            addFocusHandler(new FocusHandler() {
+
+                @Override
+                public void onFocus(FocusEvent event) {
+                    refreshSuggestions();
+                }
+            });
+
             addBlurHandler(new BlurHandler() {
 
                 @Override
                 public void onBlur(BlurEvent event) {
-                    // TODO Auto-generated method stub
+                    setNewSelection(display.getCurrentSelection());
                 }
             });
 
@@ -441,14 +421,6 @@ public class SelectorTextBox<E> extends Composite implements WatermarkComponent,
         private SelectorTextBox<E> lastSuggestBox = null;
 
         /**
-         * Sub-classes making use of {@link decorateSuggestionList} to add
-         * elements to the suggestion popup _may_ want those elements to show even
-         * when there are 0 suggestions. An example would be showing a "No
-         * matches" message.
-         */
-        private boolean hideWhenEmpty = true;
-
-        /**
          * Object to position the suggestion display next to, instead of the
          * associated suggest box.
          */
@@ -470,16 +442,6 @@ public class SelectorTextBox<E> extends Composite implements WatermarkComponent,
         @Override
         public boolean isAnimationEnabled() {
             return suggestionPopup.isAnimationEnabled();
-        }
-
-        /**
-         * Check whether or not the suggestion list is hidden when there are no
-         * suggestions to display.
-         * 
-         * @return true if hidden when empty, false if not
-         */
-        public boolean isSuggestionListHiddenWhenEmpty() {
-            return hideWhenEmpty;
         }
 
         /**
@@ -516,17 +478,6 @@ public class SelectorTextBox<E> extends Composite implements WatermarkComponent,
          */
         public void setPositionRelativeTo(UIObject uiObject) {
             positionRelativeTo = uiObject;
-        }
-
-        /**
-         * Set whether or not the suggestion list should be hidden when there are
-         * no suggestions to display. Defaults to true.
-         * 
-         * @param hideWhenEmpty
-         *            true to hide when empty, false not to
-         */
-        public void setSuggestionListHiddenWhenEmpty(boolean hideWhenEmpty) {
-            this.hideWhenEmpty = hideWhenEmpty;
         }
 
         /**
@@ -587,13 +538,9 @@ public class SelectorTextBox<E> extends Composite implements WatermarkComponent,
             }
         }
 
-        protected void showSuggestions(Collection<E> suggestions, boolean isAutoSelectEnabled) {
+        protected void showSuggestions(Collection<E> suggestions) {
             // Hide the popup if there are no suggestions to display.
             boolean anySuggestions = (suggestions != null && suggestions.size() > 0);
-            if (!anySuggestions && hideWhenEmpty) {
-                hideSuggestions();
-                return;
-            }
 
             // Hide the popup before we manipulate the menu within it. If we do not
             // do this, some browsers will redraw the popup as items are removed
@@ -607,7 +554,7 @@ public class SelectorTextBox<E> extends Composite implements WatermarkComponent,
                 suggestionMenu.addItem(new SuggestionMenuItem(curSuggestion));
             }
 
-            if (isAutoSelectEnabled && anySuggestions) {
+            if (anySuggestions) {
                 // Select the first item in the suggestion menu.
                 suggestionMenu.selectItem(0);
             }
@@ -622,8 +569,13 @@ public class SelectorTextBox<E> extends Composite implements WatermarkComponent,
                 suggestionPopup.addAutoHidePartner(SelectorTextBox.this.getElement());
             }
 
-            // Show the popup under the TextBox.
-            suggestionPopup.showRelativeTo(positionRelativeTo != null ? positionRelativeTo : SelectorTextBox.this);
+            if (anySuggestions) {
+                // Show the popup under the TextBox.
+                suggestionPopup.showRelativeTo(positionRelativeTo != null ? positionRelativeTo : SelectorTextBox.this);
+
+            } else {
+                suggestionPopup.hide();
+            }
         }
 
         /**
