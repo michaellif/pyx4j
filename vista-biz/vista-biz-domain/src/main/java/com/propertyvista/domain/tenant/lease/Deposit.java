@@ -38,7 +38,7 @@ import com.pyx4j.i18n.shared.I18nEnum;
 
 import com.propertyvista.domain.financial.ARCode;
 
-@ToStringFormat("{0}, ${1}")
+@ToStringFormat("{0}: ${1}")
 public interface Deposit extends IEntity {
 
     /*

@@ -19,15 +19,12 @@ import com.pyx4j.entity.core.IObject;
 import com.pyx4j.forms.client.ui.CDateLabel;
 import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
-import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.domain.tenant.lease.BillableItemAdjustment;
 import com.propertyvista.portal.shared.ui.PortalFormPanel;
 import com.propertyvista.portal.shared.ui.util.PortalBoxFolder;
 
 public class AdjustmentFolder extends PortalBoxFolder<BillableItemAdjustment> {
-
-    private static final I18n i18n = I18n.get(AdjustmentFolder.class);
 
     public AdjustmentFolder() {
         super(BillableItemAdjustment.class, false);
@@ -59,6 +56,7 @@ public class AdjustmentFolder extends PortalBoxFolder<BillableItemAdjustment> {
         @Override
         protected void onValueSet(boolean populate) {
             super.onValueSet(populate);
+
             get(proto().effectiveDate()).setVisible(!getValue().effectiveDate().isNull());
             get(proto().expirationDate()).setVisible(!getValue().expirationDate().isNull());
         }

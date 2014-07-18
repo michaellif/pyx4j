@@ -25,6 +25,7 @@ import com.pyx4j.entity.annotations.ReadOnly;
 import com.pyx4j.entity.annotations.Timestamp;
 import com.pyx4j.entity.annotations.Timestamp.Update;
 import com.pyx4j.entity.annotations.ToString;
+import com.pyx4j.entity.annotations.ToStringFormat;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.IPrimitive;
@@ -33,6 +34,7 @@ import com.pyx4j.entity.shared.IMoneyPercentAmount.ValueType;
 
 import com.propertyvista.domain.company.Employee;
 
+@ToStringFormat("{0}: {1}")
 public interface BillableItemAdjustment extends IEntity {
 
     @GeneratedValue(type = GeneratedValue.GenerationType.randomUUID)

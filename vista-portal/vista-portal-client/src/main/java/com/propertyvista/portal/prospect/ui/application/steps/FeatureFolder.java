@@ -85,6 +85,7 @@ public class FeatureFolder extends PortalBoxFolder<BillableItem> {
     @Override
     public BoxFolderItemDecorator<BillableItem> createItemDecorator() {
         BoxFolderItemDecorator<BillableItem> decor = super.createItemDecorator();
+
         decor.setCaptionFormatter(new IFormatter<BillableItem, String>() {
             @Override
             public String format(BillableItem value) {

@@ -15,13 +15,10 @@ package com.propertyvista.portal.prospect.ui.application.steps;
 
 import com.google.gwt.user.client.ui.IsWidget;
 
-import com.pyx4j.commons.IFormatter;
-import com.pyx4j.commons.SimpleMessageFormat;
 import com.pyx4j.entity.core.IObject;
 import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.forms.client.ui.CMoneyLabel;
-import com.pyx4j.forms.client.ui.folder.BoxFolderItemDecorator;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 
 import com.propertyvista.domain.tenant.lease.Deposit;
@@ -37,19 +34,6 @@ public class DepositFolder extends PortalBoxFolder<Deposit> {
     @Override
     protected CForm<Deposit> createItemForm(IObject<?> member) {
         return new DepositEditor();
-    }
-
-    @Override
-    public BoxFolderItemDecorator<Deposit> createItemDecorator() {
-        BoxFolderItemDecorator<Deposit> decor = super.createItemDecorator();
-        decor.setCaptionFormatter(new IFormatter<Deposit, String>() {
-            @Override
-            public String format(Deposit value) {
-                return SimpleMessageFormat.format("{0}, ${1}", (value.description().isNull() ? value.type() : value.description()), value.amount());
-            }
-        });
-
-        return decor;
     }
 
     private class DepositEditor extends CForm<Deposit> {
