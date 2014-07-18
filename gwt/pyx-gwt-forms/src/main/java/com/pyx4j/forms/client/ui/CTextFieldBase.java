@@ -44,17 +44,6 @@ public abstract class CTextFieldBase<DATA, WIDGET extends INativeTextComponent<D
     public CTextFieldBase() {
         super();
 
-        setFormatter(new IFormatter<DATA, String>() {
-            @Override
-            public String format(DATA value) {
-                if (value == null) {
-                    return null;
-                } else {
-                    return value.toString();
-                }
-            }
-        });
-
     }
 
     public void setFormatter(IFormatter<DATA, String> formatter) {
@@ -62,6 +51,18 @@ public abstract class CTextFieldBase<DATA, WIDGET extends INativeTextComponent<D
     }
 
     public final IFormatter<DATA, String> getFormatter() {
+        if (formatter == null) {
+            setFormatter(new IFormatter<DATA, String>() {
+                @Override
+                public String format(DATA value) {
+                    if (value == null) {
+                        return null;
+                    } else {
+                        return value.toString();
+                    }
+                }
+            });
+        }
         return formatter;
     }
 
