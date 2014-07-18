@@ -58,6 +58,7 @@ import com.propertyvista.crm.rpc.services.lease.ac.ApplicationDecisionADC;
 import com.propertyvista.crm.rpc.services.lease.ac.ApplicationDecisionMoreInfo;
 import com.propertyvista.crm.rpc.services.lease.ac.ApplicationDocumentSigning;
 import com.propertyvista.crm.rpc.services.lease.ac.ApplicationOnlineApplication;
+import com.propertyvista.crm.rpc.services.lease.ac.ApplicationReserveUnit;
 import com.propertyvista.crm.rpc.services.lease.ac.CreditCheckRun;
 import com.propertyvista.domain.customizations.CountryOfOperation;
 import com.propertyvista.domain.pmc.PmcEquifaxStatus;
@@ -160,6 +161,7 @@ public class LeaseApplicationViewerViewImpl extends LeaseViewerViewImplBase<Leas
         addView(viewParticipants);
 
         // Actions:
+        setUnitReservationPermission(new ActionPermission(ApplicationReserveUnit.class));
 
         createOnlineApplication = new SecureMenuItem(i18n.tr("Start Online Application"), new Command() {
             @Override

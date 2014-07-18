@@ -73,6 +73,7 @@ import com.propertyvista.crm.rpc.dto.occupancy.opconstraints.CancelMoveOutConstr
 import com.propertyvista.crm.rpc.services.lease.ac.LeaseAgreementSigning;
 import com.propertyvista.crm.rpc.services.lease.ac.LeaseCompletion;
 import com.propertyvista.crm.rpc.services.lease.ac.LeaseNotice;
+import com.propertyvista.crm.rpc.services.lease.ac.LeaseReserveUnit;
 import com.propertyvista.crm.rpc.services.lease.ac.LeaseRunBill;
 import com.propertyvista.crm.rpc.services.lease.ac.LeaseStateManagement;
 import com.propertyvista.crm.rpc.services.lease.ac.SendMail;
@@ -211,6 +212,8 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
         }, DataModelPermission.permissionRead(AutoPayHistoryDTO.class)));
 
         // Actions:
+        setUnitReservationPermission(new ActionPermission(LeaseReserveUnit.class));
+
         addAction(sendMailAction = new SecureMenuItem(i18n.tr("Send Mail..."), new Command() {
             @Override
             public void execute() {

@@ -34,7 +34,7 @@ import com.propertyvista.crm.rpc.services.lease.ac.ApplicationDecisionADC;
 import com.propertyvista.crm.rpc.services.lease.ac.ApplicationDecisionMoreInfo;
 import com.propertyvista.crm.rpc.services.lease.ac.ApplicationDocumentSigning;
 import com.propertyvista.crm.rpc.services.lease.ac.ApplicationOnlineApplication;
-import com.propertyvista.crm.rpc.services.lease.ac.ReserveUnit;
+import com.propertyvista.crm.rpc.services.lease.ac.ApplicationReserveUnit;
 import com.propertyvista.domain.tenant.lead.Lead;
 import com.propertyvista.domain.tenant.prospect.LeaseApplicationDocument;
 import com.propertyvista.dto.LeaseApplicationDTO;
@@ -91,9 +91,6 @@ public class VistaCrmLeaseApplicationAccessControlList extends UIAclBuilder {
         grant(ApplicationBasic, new ActionPermission(ApplicationOnlineApplication.class));
         grant(ApplicationFull, new ActionPermission(ApplicationOnlineApplication.class));
 
-        // TODO Common action with Lease - review
-        grant(ApplicationBasic, new ActionPermission(ReserveUnit.class));
-        grant(ApplicationFull, new ActionPermission(ReserveUnit.class));
-        // see VistaCrmLeaseAccessControlList
+        grant(ApplicationFull, new ActionPermission(ApplicationReserveUnit.class));
     }
 }

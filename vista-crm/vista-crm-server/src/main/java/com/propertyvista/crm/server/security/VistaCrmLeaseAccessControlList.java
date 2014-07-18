@@ -31,9 +31,9 @@ import com.propertyvista.crm.rpc.security.LeaseTermEditOnLeaseInstanceAccess;
 import com.propertyvista.crm.rpc.services.billing.BillCrudService;
 import com.propertyvista.crm.rpc.services.lease.ac.LeaseAgreementSigning;
 import com.propertyvista.crm.rpc.services.lease.ac.LeaseConfirmBill;
+import com.propertyvista.crm.rpc.services.lease.ac.LeaseReserveUnit;
 import com.propertyvista.crm.rpc.services.lease.ac.LeaseRunBill;
 import com.propertyvista.crm.rpc.services.lease.ac.LeaseStateManagement;
-import com.propertyvista.crm.rpc.services.lease.ac.ReserveUnit;
 import com.propertyvista.crm.rpc.services.lease.ac.SendMail;
 import com.propertyvista.domain.legal.LegalLetter;
 import com.propertyvista.domain.note.HasNotesAndAttachments;
@@ -103,10 +103,7 @@ public class VistaCrmLeaseAccessControlList extends UIAclBuilder {
         grant(LeaseFull, new ActionPermission(LeaseRunBill.class));
         grant(LeaseFull, new ActionPermission(LeaseConfirmBill.class));
 
-        // TODO Common action with Application - review
-        grant(LeaseAdvanced, new ActionPermission(ReserveUnit.class));
-        grant(LeaseFull, new ActionPermission(ReserveUnit.class));
-        // see VistaCrmLeaseApplicationAccessControlList
+        grant(LeaseFull, new ActionPermission(LeaseReserveUnit.class));
     }
 
 }

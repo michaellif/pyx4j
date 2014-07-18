@@ -27,7 +27,7 @@ import com.pyx4j.entity.core.criterion.PropertyCriterion;
 import com.pyx4j.entity.security.DataModelPermission;
 import com.pyx4j.forms.client.ui.CIntegerField;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.security.shared.ActionPermission;
+import com.pyx4j.security.shared.Permission;
 import com.pyx4j.site.client.ui.prime.lister.ILister;
 import com.pyx4j.site.client.ui.prime.lister.ListerInternalViewImplBase;
 import com.pyx4j.widgets.client.Button;
@@ -40,7 +40,6 @@ import com.propertyvista.crm.client.ui.crud.CrmViewerViewImplBase;
 import com.propertyvista.crm.client.ui.crud.lease.LeaseViewerViewImpl;
 import com.propertyvista.crm.client.visor.paps.PreauthorizedPaymentsVisorController;
 import com.propertyvista.crm.rpc.dto.tenant.PreauthorizedPaymentsDTO;
-import com.propertyvista.crm.rpc.services.lease.ac.ReserveUnit;
 import com.propertyvista.domain.financial.BillingAccount;
 import com.propertyvista.domain.payment.AutopayAgreement;
 import com.propertyvista.domain.tenant.lease.Lease;
@@ -65,11 +64,11 @@ public class LeaseViewerViewImplBase<DTO extends LeaseDTO> extends CrmViewerView
 
     private final MenuItem viewHistoricTerms;
 
-    private final MenuItem reserveUnit;
+    private final SecureMenuItem reserveUnit;
 
-    private final MenuItem unreserveUnit;
+    private final SecureMenuItem unreserveUnit;
 
-    protected final MenuItem newPaymentAction;
+    protected final SecureMenuItem newPaymentAction;
 
     public LeaseViewerViewImplBase() {
         super(true);
@@ -118,14 +117,14 @@ public class LeaseViewerViewImplBase<DTO extends LeaseDTO> extends CrmViewerView
             public void execute() {
                 reserveUnitExecuter();
             }
-        }, new ActionPermission(ReserveUnit.class)));
+        }));
 
         addAction(unreserveUnit = new SecureMenuItem(i18n.tr("Release Unit"), new Command() {
             @Override
             public void execute() {
                 ((LeaseViewerViewBase.Presenter) getPresenter()).releaseUnit();
             }
-        }, new ActionPermission(ReserveUnit.class)));
+        }));
 
         newPaymentAction = new SecureMenuItem(i18n.tr("Make Payment"), new Command() {
             @Override
@@ -163,6 +162,11 @@ public class LeaseViewerViewImplBase<DTO extends LeaseDTO> extends CrmViewerView
                 return false;
             }
         }.show();
+    }
+
+    protected void setUnitReservationPermission(Permission... permission) {
+        reserveUnit.setPermission(permission);
+        unreserveUnit.setPermission(permission);
     }
 
     @Override
