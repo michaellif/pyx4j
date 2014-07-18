@@ -17,6 +17,7 @@ import static com.propertyvista.domain.security.VistaCrmBehavior.PotentialTenant
 import static com.propertyvista.domain.security.VistaCrmBehavior.PotentialTenantBasic;
 import static com.propertyvista.domain.security.VistaCrmBehavior.PotentialTenantFull;
 import static com.propertyvista.domain.security.VistaCrmBehavior.PotentialTenantScreening;
+import static com.pyx4j.entity.security.AbstractCRUDPermission.ALL;
 import static com.pyx4j.entity.security.AbstractCRUDPermission.READ;
 import static com.pyx4j.entity.security.AbstractCRUDPermission.UPDATE;
 
@@ -24,19 +25,23 @@ import com.pyx4j.security.server.UIAclBuilder;
 import com.pyx4j.security.shared.ActionPermission;
 
 import com.propertyvista.crm.rpc.security.PotentialTenantInstanceAccess;
+import com.propertyvista.crm.rpc.security.PotentialTenantScreeningInstanceAccess;
 import com.propertyvista.crm.rpc.services.customer.ac.PotentialTenantListAction;
+import com.propertyvista.dto.LeaseParticipantScreeningTO;
 import com.propertyvista.dto.TenantDTO;
 
 public class VistaCrmPotentialTenantAccessControlList extends UIAclBuilder {
 
     public VistaCrmPotentialTenantAccessControlList() {
-        { // 
-            grant(PotentialTenantBasic, TenantDTO.class, new PotentialTenantInstanceAccess(), READ);
-            grant(PotentialTenantAdvanced, TenantDTO.class, new PotentialTenantInstanceAccess(), READ);
-            grant(PotentialTenantFull, TenantDTO.class, new PotentialTenantInstanceAccess(), READ | UPDATE);
+        grant(PotentialTenantBasic, TenantDTO.class, new PotentialTenantInstanceAccess(), READ);
+        grant(PotentialTenantAdvanced, TenantDTO.class, new PotentialTenantInstanceAccess(), READ);
+        grant(PotentialTenantFull, TenantDTO.class, new PotentialTenantInstanceAccess(), READ | UPDATE);
+        grant(PotentialTenantScreening, TenantDTO.class, new PotentialTenantInstanceAccess(), READ);
 
-            grant(PotentialTenantScreening, TenantDTO.class, new PotentialTenantInstanceAccess(), READ);
-        }
+        grant(PotentialTenantBasic, LeaseParticipantScreeningTO.class, new PotentialTenantScreeningInstanceAccess(), READ);
+        grant(PotentialTenantAdvanced, LeaseParticipantScreeningTO.class, new PotentialTenantScreeningInstanceAccess(), READ);
+        grant(PotentialTenantFull, LeaseParticipantScreeningTO.class, new PotentialTenantScreeningInstanceAccess(), ALL);
+        grant(PotentialTenantScreening, LeaseParticipantScreeningTO.class, new PotentialTenantScreeningInstanceAccess(), ALL);
 
 //        grant(PotentialTenantBasic, PotentialTenantPortalAccessInformationDTO.class, READ);
 //        grant(PotentialTenantAdvanced, PotentialTenantPortalAccessInformationDTO.class, READ);

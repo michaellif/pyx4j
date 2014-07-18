@@ -14,6 +14,7 @@
 package com.propertyvista.dto;
 
 import com.pyx4j.entity.annotations.ExtendsBO;
+import com.pyx4j.entity.annotations.SecurityEnabled;
 import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.core.IVersionData;
@@ -27,6 +28,7 @@ import com.propertyvista.dto.LeaseParticipantScreeningTO.LeaseParticipantScreeni
  * This is the view on CustomerScreening by LeaseParticipant id
  */
 @Transient
+@SecurityEnabled
 @ExtendsBO(LeaseParticipant.class)
 public interface LeaseParticipantScreeningTO extends IVersionedEntity<LeaseParticipantScreeningTOV> {
 
