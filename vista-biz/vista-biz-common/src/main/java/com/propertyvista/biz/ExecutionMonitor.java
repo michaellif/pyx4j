@@ -151,7 +151,7 @@ public class ExecutionMonitor {
         if (section == null) {
             sections.put(id, section = new ReportSection());
         }
-        String message = SimpleMessageFormat.format(messageFormat, args);
+        String message = (messageFormat == null) ? null : SimpleMessageFormat.format(messageFormat, args);
         section.counter++;
         section.add(value);
         section.addMessage(message);
