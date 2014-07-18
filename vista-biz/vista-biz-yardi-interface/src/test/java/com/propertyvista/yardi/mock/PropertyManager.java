@@ -289,7 +289,18 @@ public class PropertyManager {
     }
 
     void addTransaction(Transactions transaction) {
+        // For payment reversal transaction - remove the original payment; otherwise just add the transaction to the list
         RTCustomer rtCustomer = getExistingRTCustomer(transaction.getPayment().getDetail().getCustomerID());
+        try {
+            if (transaction.getPayment().getDetail().getReversal().getType() != null) {
+                Transactions origTransaction = getPaymentTransaction(rtCustomer, transaction.getPayment().getDetail().getDocumentNumber());
+                if (origTransaction != null) {
+                    rtCustomer.getRTServiceTransactions().getTransactions().remove(origTransaction);
+                    return;
+                }
+            }
+        } catch (NullPointerException ignore) {
+        }
         {
             RTServiceTransactions rtServiceTransactions = rtCustomer.getRTServiceTransactions();
             if (rtServiceTransactions == null) {
