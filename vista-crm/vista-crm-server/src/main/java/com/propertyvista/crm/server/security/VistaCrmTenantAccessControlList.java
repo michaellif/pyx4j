@@ -20,13 +20,12 @@ import static com.propertyvista.domain.security.VistaCrmBehavior.TenantFull;
 import static com.pyx4j.entity.security.AbstractCRUDPermission.READ;
 import static com.pyx4j.entity.security.AbstractCRUDPermission.UPDATE;
 
-import java.util.List;
-
-import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.security.server.UIAclBuilder;
 import com.pyx4j.security.shared.ActionPermission;
 
+import com.propertyvista.crm.rpc.security.TenantInstanceAccess;
 import com.propertyvista.crm.rpc.services.customer.ac.TenantChangePassword;
+import com.propertyvista.crm.rpc.services.customer.ac.TenantListAction;
 import com.propertyvista.dto.TenantDTO;
 import com.propertyvista.dto.TenantPortalAccessInformationDTO;
 
@@ -34,12 +33,10 @@ public class VistaCrmTenantAccessControlList extends UIAclBuilder {
 
     public VistaCrmTenantAccessControlList() {
         { // 
-            List<Class<? extends IEntity>> entities = entities(TenantDTO.class);
-
-            grant(TenantBasic, entities, READ);
-            grant(TenantAdvanced, entities, READ);
-            grant(TenantFull, entities, READ | UPDATE);
-            grant(TenantFinancial, entities, READ);
+            grant(TenantBasic, TenantDTO.class, new TenantInstanceAccess(), READ);
+            grant(TenantAdvanced, TenantDTO.class, new TenantInstanceAccess(), READ);
+            grant(TenantFull, TenantDTO.class, new TenantInstanceAccess(), READ | UPDATE);
+            grant(TenantFinancial, TenantDTO.class, new TenantInstanceAccess(), READ);
         }
 
         grant(TenantBasic, TenantPortalAccessInformationDTO.class, READ);
@@ -47,6 +44,11 @@ public class VistaCrmTenantAccessControlList extends UIAclBuilder {
         grant(TenantFull, TenantPortalAccessInformationDTO.class, READ);
 
         // Actions:
+        grant(TenantBasic, new ActionPermission(TenantListAction.class));
+        grant(TenantAdvanced, new ActionPermission(TenantListAction.class));
+        grant(TenantFull, new ActionPermission(TenantListAction.class));
+        grant(TenantFinancial, new ActionPermission(TenantListAction.class));
+
         grant(TenantBasic, new ActionPermission(TenantChangePassword.class));
         grant(TenantAdvanced, new ActionPermission(TenantChangePassword.class));
         grant(TenantFull, new ActionPermission(TenantChangePassword.class));
