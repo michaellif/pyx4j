@@ -41,7 +41,7 @@ public class TenantSureMonthlyPaymentSchedule implements ITenantSurePaymentSched
         BigDecimal firstPayment = annualGross.subtract(monthlyPayment.multiply(new BigDecimal("11.00")));
         quote.totalAnniversaryFirstMonthPayable().setValue(firstPayment);
 
-        firstPayment = firstPayment.add(underwritingFee).add(brokerFee);
+        firstPayment = firstPayment.add(underwritingFee).add(brokerFee).setScale(2);
 
         quote.annualPremium().setValue(annualPremium);
         quote.underwriterFee().setValue(underwritingFee);
