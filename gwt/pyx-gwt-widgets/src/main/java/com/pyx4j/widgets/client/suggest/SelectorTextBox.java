@@ -467,8 +467,8 @@ public class SelectorTextBox<E> extends Composite implements WatermarkComponent,
         }
 
         protected E getCurrentSelection() {
-            MenuItem item = suggestionMenu.getSelectedItem();
-            return item == null ? null : ((SuggestionMenuItem) item).getSuggestion();
+            SuggestionMenuItem item = suggestionMenu.getSelectedItem();
+            return item == null ? null : item.getSuggestion();
         }
 
         /**
@@ -571,7 +571,7 @@ public class SelectorTextBox<E> extends Composite implements WatermarkComponent,
      * Additional methods in SuggestionMenu provide information about the number
      * of items in the menu, and the index of the currently selected item.
      */
-    private static class SuggestionMenu extends MenuBar {
+    private class SuggestionMenu extends MenuBar {
 
         public SuggestionMenu(boolean vertical) {
             super(vertical);
@@ -616,18 +616,13 @@ public class SelectorTextBox<E> extends Composite implements WatermarkComponent,
             }
         }
 
+        @SuppressWarnings("unchecked")
         @Override
-        protected MenuItem getSelectedItem() {
-            return super.getSelectedItem();
+        protected SuggestionMenuItem getSelectedItem() {
+            return (SuggestionMenuItem) super.getSelectedItem();
         }
     }
 
-    /**
-     * Class for menu items in a SuggestionMenu. A SuggestionMenuItem differs from
-     * a MenuItem in that each item is backed by a Suggestion object. The text of
-     * each menu item is derived from the display string of a Suggestion object,
-     * and each item stores a reference to its Suggestion object.
-     */
     private class SuggestionMenuItem extends MenuItem {
 
         private static final String STYLENAME_DEFAULT = "item";
@@ -637,10 +632,6 @@ public class SelectorTextBox<E> extends Composite implements WatermarkComponent,
         public SuggestionMenuItem(final E suggestion) {
             super(formatter.format(suggestion), true, (MenuBar) null);
             this.suggestion = suggestion;
-            // Each suggestion should be placed in a single row in the suggestion
-            // menu. If the window is resized and the suggestion cannot fit on a
-            // single row, it should be clipped (instead of wrapping around and
-            // taking up a second row).
             getElement().getStyle().setProperty("whiteSpace", "nowrap");
             setStyleName(STYLENAME_DEFAULT);
 
