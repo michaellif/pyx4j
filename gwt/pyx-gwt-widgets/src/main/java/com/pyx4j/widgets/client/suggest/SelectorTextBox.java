@@ -351,14 +351,15 @@ public class SelectorTextBox<E> extends Composite implements WatermarkComponent,
      * @param curSuggestion
      *            the new suggestion
      */
-    private void setNewSelection(E curSuggestion) {
-        if (curSuggestion == null) {
+    private void setNewSelection(E value) {
+        this.value = value;
+        if (value == null) {
             box.setText("");
         } else {
-            box.setText(formatter.format(curSuggestion));
+            box.setText(formatter.format(value));
         }
         display.hideSuggestions();
-        fireSuggestionEvent(curSuggestion);
+        fireSuggestionEvent(value);
     }
 
     @Override
@@ -602,18 +603,8 @@ public class SelectorTextBox<E> extends Composite implements WatermarkComponent,
             }
 
             suggestionMenu.clearItems();
-
             for (final E curSuggestion : suggestions) {
-                final SuggestionMenuItem menuItem = new SuggestionMenuItem(curSuggestion);
-                menuItem.setScheduledCommand(new ScheduledCommand() {
-                    @Override
-                    public void execute() {
-                        box.setFocus(true);
-                        setNewSelection(curSuggestion);
-                    }
-                });
-
-                suggestionMenu.addItem(menuItem);
+                suggestionMenu.addItem(new SuggestionMenuItem(curSuggestion));
             }
 
             if (isAutoSelectEnabled && anySuggestions) {
@@ -719,26 +710,31 @@ public class SelectorTextBox<E> extends Composite implements WatermarkComponent,
 
         private static final String STYLENAME_DEFAULT = "item";
 
-        private E suggestion;
+        private final E suggestion;
 
-        public SuggestionMenuItem(E suggestion) {
+        public SuggestionMenuItem(final E suggestion) {
             super(formatter.format(suggestion), true, (MenuBar) null);
+            this.suggestion = suggestion;
             // Each suggestion should be placed in a single row in the suggestion
             // menu. If the window is resized and the suggestion cannot fit on a
             // single row, it should be clipped (instead of wrapping around and
             // taking up a second row).
             getElement().getStyle().setProperty("whiteSpace", "nowrap");
             setStyleName(STYLENAME_DEFAULT);
-            setSuggestion(suggestion);
+
+            setScheduledCommand(new ScheduledCommand() {
+                @Override
+                public void execute() {
+                    box.setFocus(true);
+                    setNewSelection(suggestion);
+                }
+            });
         }
 
         public E getSuggestion() {
             return suggestion;
         }
 
-        public void setSuggestion(E suggestion) {
-            this.suggestion = suggestion;
-        }
     }
 
 }
