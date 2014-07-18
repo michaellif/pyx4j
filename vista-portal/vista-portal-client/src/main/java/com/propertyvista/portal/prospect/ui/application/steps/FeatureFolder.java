@@ -96,7 +96,7 @@ public class FeatureFolder extends PortalBoxFolder<BillableItem> {
         return decor;
     }
 
-    class FeatureItemForm extends CForm<BillableItem> {
+    private class FeatureItemForm extends CForm<BillableItem> {
 
         private PortalFormPanel adjustmentPanel;
 
@@ -112,13 +112,14 @@ public class FeatureFolder extends PortalBoxFolder<BillableItem> {
         @Override
         protected IsWidget createContent() {
             PortalFormPanel formPanel = new PortalFormPanel(this);
+
             formPanel.append(Location.Left, proto().item().name(), new CLabel<String>()).decorate();
             formPanel.append(Location.Left, proto().agreedPrice(), new CMoneyLabel()).decorate().customLabel(i18n.tr("Monthly Price"));
             formPanel.append(Location.Left, proto().description(), new CLabel<String>()).decorate();
             formPanel.append(Location.Left, extraDataPanel);
 
             adjustmentPanel = new PortalFormPanel(this);
-            adjustmentPanel.h4(proto().deposits().getMeta().getCaption());
+            adjustmentPanel.h4(proto().adjustments().getMeta().getCaption());
             adjustmentPanel.append(Location.Left, proto().adjustments(), new AdjustmentFolder());
             formPanel.append(Location.Left, adjustmentPanel);
 

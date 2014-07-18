@@ -13,30 +13,54 @@
  */
 package com.propertyvista.portal.prospect.ui.application.steps;
 
-import java.util.Arrays;
-import java.util.List;
+import com.google.gwt.user.client.ui.IsWidget;
 
-import com.pyx4j.forms.client.ui.folder.FolderColumnDescriptor;
+import com.pyx4j.entity.core.IObject;
+import com.pyx4j.forms.client.ui.CDateLabel;
+import com.pyx4j.forms.client.ui.CForm;
+import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.i18n.shared.I18n;
 
-import com.propertyvista.common.client.ui.components.folders.VistaTableFolder;
 import com.propertyvista.domain.tenant.lease.BillableItemAdjustment;
+import com.propertyvista.portal.shared.ui.PortalFormPanel;
+import com.propertyvista.portal.shared.ui.util.PortalBoxFolder;
 
-public class AdjustmentFolder extends VistaTableFolder<BillableItemAdjustment> {
+public class AdjustmentFolder extends PortalBoxFolder<BillableItemAdjustment> {
 
     private static final I18n i18n = I18n.get(AdjustmentFolder.class);
 
     public AdjustmentFolder() {
-        super(BillableItemAdjustment.class, i18n.tr("Adjustment"), false);
+        super(BillableItemAdjustment.class, false);
     }
 
     @Override
-    public List<FolderColumnDescriptor> columns() {
-        return Arrays.asList(//@formatter:off
-                new FolderColumnDescriptor(proto().type(), "9em"),
-                new FolderColumnDescriptor(proto().value(), "5em"),
-                new FolderColumnDescriptor(proto().effectiveDate(), "9em"),
-                new FolderColumnDescriptor(proto().expirationDate(), "10em"));
-            //@formatter:on
+    protected CForm<BillableItemAdjustment> createItemForm(IObject<?> member) {
+        return new CAdjustmentViewer();
     }
+
+    private class CAdjustmentViewer extends CForm<BillableItemAdjustment> {
+
+        public CAdjustmentViewer() {
+            super(BillableItemAdjustment.class);
+            setEditable(false);
+        }
+
+        @Override
+        protected IsWidget createContent() {
+            PortalFormPanel formPanel = new PortalFormPanel(this);
+
+            formPanel.append(Location.Left, proto().value()).decorate();
+            formPanel.append(Location.Left, proto().effectiveDate(), new CDateLabel()).decorate();
+            formPanel.append(Location.Left, proto().expirationDate(), new CDateLabel()).decorate();
+
+            return formPanel;
+        }
+
+        @Override
+        protected void onValueSet(boolean populate) {
+            super.onValueSet(populate);
+            get(proto().effectiveDate()).setVisible(!getValue().effectiveDate().isNull());
+            get(proto().expirationDate()).setVisible(!getValue().expirationDate().isNull());
+        }
+    };
 }
