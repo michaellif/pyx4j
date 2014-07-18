@@ -42,11 +42,15 @@ import com.pyx4j.entity.server.CompensationHandler;
 import com.pyx4j.entity.server.ConnectionTarget;
 import com.pyx4j.entity.server.Executable;
 import com.pyx4j.entity.server.UnitOfWork;
+import com.pyx4j.entity.shared.IntegrityConstraintUserRuntimeException;
 import com.pyx4j.gwt.server.DateUtils;
+import com.pyx4j.i18n.shared.I18n;
 
 public class PersistenceContext {
 
     private static final Logger log = LoggerFactory.getLogger(PersistenceContext.class);
+
+    private static final I18n i18n = I18n.get(PersistenceContext.class);
 
     private final PersistenceContext suppressedPersistenceContext;
 
@@ -358,7 +362,11 @@ public class PersistenceContext {
                     connection.commit();
                     transactionStart = -1;
                 } catch (SQLException e) {
-                    throw new RuntimeException(e);
+                    if (connectionProvider.getDialect().isIntegrityConstraintException(e)) {
+                        throw new IntegrityConstraintUserRuntimeException(i18n.tr("Unable to update/delete record referenced by another records."), null);
+                    } else {
+                        throw new RuntimeException(e);
+                    }
                 }
             }
             transactionContexts.peek().fireCompletionHandlers();
