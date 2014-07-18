@@ -68,10 +68,18 @@ public class TenantForm extends LeaseParticipantForm<TenantDTO> {
     public TenantForm(IForm<TenantDTO> view) {
         super(TenantDTO.class, view);
 
+        Tab tab;
+
         selectTab(addTab(createDetailsTab(), i18n.tr("Details")));
         addTab(createContactsTab(), i18n.tr("Emergency Contacts"));
-        addTab(createPaymentMethodsTab(), i18n.tr("Payment Methods"), DataModelPermission.permissionRead(LeasePaymentMethod.class));
+        tab = addTab(createPaymentMethodsTab(), i18n.tr("Payment Methods"), DataModelPermission.permissionRead(LeasePaymentMethod.class));
+        if (isEditable()) {
+            tab.setPermitEnabledPermission(DataModelPermission.permissionUpdate(LeasePaymentMethod.class));
+        }
         autoPaymentsTab = addTab(createPreauthorizedPaymentsTab(), i18n.tr("Auto Payments"), DataModelPermission.permissionRead(PreauthorizedPaymentDTO.class));
+        if (isEditable()) {
+            autoPaymentsTab.setPermitEnabledPermission(DataModelPermission.permissionUpdate(PreauthorizedPaymentDTO.class));
+        }
         addTab(createTenantInsuranceTab(), i18n.tr("Insurance"));
     }
 

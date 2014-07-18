@@ -16,6 +16,7 @@ package com.propertyvista.crm.client.ui.crud.customer.guarantor;
 import com.pyx4j.entity.security.DataModelPermission;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.prime.form.IForm;
+import com.pyx4j.widgets.client.tabpanel.Tab;
 
 import com.propertyvista.crm.client.ui.crud.customer.common.LeaseParticipantForm;
 import com.propertyvista.domain.payment.LeasePaymentMethod;
@@ -28,7 +29,12 @@ public class GuarantorForm extends LeaseParticipantForm<GuarantorDTO> {
     public GuarantorForm(IForm<GuarantorDTO> view) {
         super(GuarantorDTO.class, view);
 
+        Tab tab;
+
         selectTab(addTab(createDetailsTab(), i18n.tr("Details")));
-        addTab(createPaymentMethodsTab(), i18n.tr("Payment Methods"), DataModelPermission.permissionRead(LeasePaymentMethod.class));
+        tab = addTab(createPaymentMethodsTab(), i18n.tr("Payment Methods"), DataModelPermission.permissionRead(LeasePaymentMethod.class));
+        if (isEditable()) {
+            tab.setPermitEnabledPermission(DataModelPermission.permissionUpdate(LeasePaymentMethod.class));
+        }
     }
 }
