@@ -98,6 +98,8 @@ public class FeatureFolder extends PortalBoxFolder<BillableItem> {
 
     class FeatureItemForm extends CForm<BillableItem> {
 
+        private PortalFormPanel adjustmentPanel;
+
         private PortalFormPanel depositPanel;
 
         private final SimplePanel extraDataPanel = new SimplePanel();
@@ -115,11 +117,15 @@ public class FeatureFolder extends PortalBoxFolder<BillableItem> {
             formPanel.append(Location.Left, proto().description(), new CLabel<String>()).decorate();
             formPanel.append(Location.Left, extraDataPanel);
 
-            depositPanel = new PortalFormPanel(this);
-            formPanel.append(Location.Left, depositPanel);
+            adjustmentPanel = new PortalFormPanel(this);
+            adjustmentPanel.h4(proto().deposits().getMeta().getCaption());
+            adjustmentPanel.append(Location.Left, proto().adjustments(), new AdjustmentFolder());
+            formPanel.append(Location.Left, adjustmentPanel);
 
+            depositPanel = new PortalFormPanel(this);
             depositPanel.h4(proto().deposits().getMeta().getCaption());
             depositPanel.append(Location.Left, proto().deposits(), new DepositFolder());
+            formPanel.append(Location.Left, depositPanel);
 
             return formPanel;
         }
@@ -132,6 +138,7 @@ public class FeatureFolder extends PortalBoxFolder<BillableItem> {
             CFolderItem<BillableItem> item = (CFolderItem<BillableItem>) getParent();
             item.setRemovable(!isMandatoryFeature(getValue().item().product()));
 
+            adjustmentPanel.setVisible(!getValue().adjustments().isEmpty());
             depositPanel.setVisible(!getValue().deposits().isEmpty());
 
             get(proto().description()).setVisible(!getValue().description().isNull());

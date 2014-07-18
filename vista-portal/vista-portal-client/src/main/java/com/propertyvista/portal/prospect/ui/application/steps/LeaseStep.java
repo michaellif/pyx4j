@@ -36,6 +36,8 @@ public class LeaseStep extends ApplicationWizardStep {
 
     private static final I18n i18n = I18n.get(LeaseStep.class);
 
+    private PortalFormPanel adjustmentPanel;
+
     private PortalFormPanel depositPanel;
 
     private PortalFormPanel featurePanel;
@@ -66,16 +68,21 @@ public class LeaseStep extends ApplicationWizardStep {
                 .customLabel(i18n.tr("Monthly Unit Rent"));
         formPanel.append(Location.Left, proto().leaseChargesData().selectedService().description(), new CLabel<String>()).decorate();
 
-        depositPanel = new PortalFormPanel(getWizard());
-        formPanel.append(Location.Left, depositPanel);
+        adjustmentPanel = new PortalFormPanel(getWizard());
+        adjustmentPanel.h4(i18n.tr("Unit Adjustments"));
+        adjustmentPanel.append(Location.Dual, proto().leaseChargesData().selectedService().adjustments(), new AdjustmentFolder());
+        formPanel.append(Location.Left, adjustmentPanel);
 
+        depositPanel = new PortalFormPanel(getWizard());
         depositPanel.h4(i18n.tr("Unit Deposits"));
         depositPanel.append(Location.Left, proto().leaseChargesData().selectedService().deposits(), new DepositFolder());
+        formPanel.append(Location.Left, depositPanel);
 
         featurePanel = new PortalFormPanel(getWizard());
-        formPanel.append(Location.Left, featurePanel);
         featurePanel.h3(i18n.tr("Features"));
         featurePanel.append(Location.Left, proto().leaseChargesData().selectedFeatures(), new FeatureFolder());
+        formPanel.append(Location.Left, featurePanel);
+
         get(proto().leaseChargesData().selectedFeatures()).setEditable(false);
 
         if (!SecurityController.check(PortalProspectBehavior.Applicant)) {
@@ -91,6 +98,7 @@ public class LeaseStep extends ApplicationWizardStep {
         // TODO Auto-generated method stub
         super.onValueSet(populate);
 
+        adjustmentPanel.setVisible(!getValue().leaseChargesData().selectedService().adjustments().isEmpty());
         depositPanel.setVisible(!getValue().leaseChargesData().selectedService().deposits().isEmpty());
         featurePanel.setVisible(!getValue().leaseChargesData().selectedFeatures().isEmpty());
 
