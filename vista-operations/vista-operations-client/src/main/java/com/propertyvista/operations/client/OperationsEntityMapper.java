@@ -41,6 +41,7 @@ import com.propertyvista.operations.rpc.dto.FundsTransferBatchDTO;
 import com.propertyvista.operations.rpc.dto.FundsTransferFileDTO;
 import com.propertyvista.operations.rpc.dto.FundsTransferRecordDTO;
 import com.propertyvista.operations.rpc.dto.OperationsAlertDTO;
+import com.propertyvista.operations.rpc.dto.OutgoingMailQueueDTO;
 import com.propertyvista.operations.rpc.dto.PmcDTO;
 import com.propertyvista.operations.rpc.dto.PmcMerchantAccountDTO;
 import com.propertyvista.operations.rpc.dto.TriggerDTO;
@@ -61,7 +62,6 @@ public class OperationsEntityMapper {
         register(RunData.class, OperationsSiteMap.Management.TriggerRunData.class, DEFAULT_IMAGE);
 
         register(CardTransactionRecord.class, OperationsSiteMap.FundsTransfer.CardTransactionRecord.class, DEFAULT_IMAGE);
-
         register(DirectDebitRecord.class, OperationsSiteMap.FundsTransfer.DirectDebitRecord.class, DEFAULT_IMAGE);
 
         register(FundsTransferFileDTO.class, OperationsSiteMap.FundsTransfer.FundsTransferFile.class, DEFAULT_IMAGE);
@@ -88,5 +88,6 @@ public class OperationsEntityMapper {
         register(DirectDebitSimFile.class, OperationsSiteMap.Simulator.DirectBankingSimFile.class, DEFAULT_IMAGE);
 
         register(TenantSureSubscribers.class, OperationsSiteMap.Administration.TenantSure.class, DEFAULT_IMAGE);
+        register(OutgoingMailQueueDTO.class, OperationsSiteMap.Administration.OutgoingMail.class, DEFAULT_IMAGE);
     }
 }

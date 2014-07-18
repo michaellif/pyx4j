@@ -58,6 +58,8 @@ import com.propertyvista.operations.client.activity.crud.maintenance.Maintenance
 import com.propertyvista.operations.client.activity.crud.operationsalert.OperationsAlertEditorActivity;
 import com.propertyvista.operations.client.activity.crud.operationsalert.OperationsAlertListerActivity;
 import com.propertyvista.operations.client.activity.crud.operationsalert.OperationsAlertViewerActivity;
+import com.propertyvista.operations.client.activity.crud.outgoingmail.OutgoingMailListerActivity;
+import com.propertyvista.operations.client.activity.crud.outgoingmail.OutgoingMailViewerActivity;
 import com.propertyvista.operations.client.activity.crud.pmc.EquifaxApprovalViewActivity;
 import com.propertyvista.operations.client.activity.crud.pmc.PmcEditorActivity;
 import com.propertyvista.operations.client.activity.crud.pmc.PmcListerActivity;
@@ -297,6 +299,15 @@ public class ContentActivityMapper implements AppActivityMapper {
                             break;
                         }
 
+                    } else if (place instanceof OperationsSiteMap.Administration.OutgoingMail) {
+                        switch (crudPlace.getType()) {
+                        case lister:
+                            activity = new OutgoingMailListerActivity(crudPlace);
+                            break;
+                        case viewer:
+                            activity = new OutgoingMailViewerActivity(crudPlace);
+                            break;
+                        }
 // - FundsTransfer:                        
 
                     } else if (place instanceof OperationsSiteMap.FundsTransfer.CardTransactionRecord) {

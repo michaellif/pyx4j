@@ -29,7 +29,7 @@ public class CustomerCreditCheckTransactionLister extends AbstractLister<Custome
     protected static final I18n i18n = I18n.get(CustomerCreditCheckTransactionLister.class);
 
     public CustomerCreditCheckTransactionLister() {
-        super(CustomerCreditCheckTransactionDTO.class, true);
+        super(CustomerCreditCheckTransactionDTO.class, false);
 
         setDataTableModel(new DataTableModel<CustomerCreditCheckTransactionDTO>( //@formatter:off
             new MemberColumnDescriptor.Builder(proto().pmc()).build(),

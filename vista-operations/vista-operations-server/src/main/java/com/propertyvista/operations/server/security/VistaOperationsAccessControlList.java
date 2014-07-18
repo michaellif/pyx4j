@@ -42,6 +42,10 @@ import com.propertyvista.operations.domain.eft.dbp.simulator.DirectDebitSimFile;
 import com.propertyvista.operations.domain.eft.dbp.simulator.DirectDebitSimRecord;
 import com.propertyvista.operations.domain.legal.LegalDocument;
 import com.propertyvista.operations.domain.legal.VistaTerms;
+import com.propertyvista.operations.domain.mail.DefaultOutgoingMailQueue;
+import com.propertyvista.operations.domain.mail.OperationsOutgoingMailQueue;
+import com.propertyvista.operations.domain.mail.OutgoingMailQueue;
+import com.propertyvista.operations.domain.mail.TenantSureOutgoingMailQueue;
 import com.propertyvista.operations.domain.scheduler.ExecutionReportMessage;
 import com.propertyvista.operations.domain.scheduler.ExecutionReportSection;
 import com.propertyvista.operations.domain.scheduler.Run;
@@ -70,6 +74,7 @@ import com.propertyvista.operations.rpc.services.MaintenanceCrudService;
 import com.propertyvista.operations.rpc.services.MerchantAccountFileUploadService;
 import com.propertyvista.operations.rpc.services.OperationsAlertCrudService;
 import com.propertyvista.operations.rpc.services.OperationsAuthenticationService;
+import com.propertyvista.operations.rpc.services.OutgoingMailCrudService;
 import com.propertyvista.operations.rpc.services.PadBatchCrudService;
 import com.propertyvista.operations.rpc.services.PadDebitRecordCrudService;
 import com.propertyvista.operations.rpc.services.PadFileCrudService;
@@ -219,6 +224,12 @@ public class VistaOperationsAccessControlList extends ServletContainerAclBuilder
         grant(VistaOperationsBehavior.SystemAdmin, new IServiceExecutePermission(TenantSureCrudService.class));
         grant(VistaOperationsBehavior.SystemAdmin, new EntityPermission(TenantSureSubscribers.class, EntityPermission.READ));
         grant(VistaOperationsBehavior.SystemAdmin, new EntityPermission(TenantSureInsurancePolicy.class, EntityPermission.READ));
+
+        grant(VistaOperationsBehavior.SystemAdmin, new IServiceExecutePermission(OutgoingMailCrudService.class));
+        grant(VistaOperationsBehavior.SystemAdmin, new EntityPermission(OutgoingMailQueue.class, EntityPermission.READ));
+        grant(VistaOperationsBehavior.SystemAdmin, new EntityPermission(DefaultOutgoingMailQueue.class, EntityPermission.READ));
+        grant(VistaOperationsBehavior.SystemAdmin, new EntityPermission(OperationsOutgoingMailQueue.class, EntityPermission.READ));
+        grant(VistaOperationsBehavior.SystemAdmin, new EntityPermission(TenantSureOutgoingMailQueue.class, EntityPermission.READ));
 
         grant(VistaOperationsBehavior.SystemAdmin, new IServiceExecutePermission(MerchantAccountFileUploadService.class));
 
