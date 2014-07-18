@@ -49,7 +49,6 @@ import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HasAnimation;
 import com.google.gwt.user.client.ui.HasEnabled;
-import com.google.gwt.user.client.ui.HasValue;
 import com.google.gwt.user.client.ui.MenuBar;
 import com.google.gwt.user.client.ui.MenuItem;
 import com.google.gwt.user.client.ui.PopupPanel;
@@ -57,7 +56,6 @@ import com.google.gwt.user.client.ui.SuggestOracle;
 import com.google.gwt.user.client.ui.SuggestOracle.Suggestion;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.UIObject;
-import com.google.gwt.user.client.ui.ValueBoxBase;
 
 import com.pyx4j.commons.IFormatter;
 import com.pyx4j.widgets.client.ITextWidget;
@@ -65,8 +63,7 @@ import com.pyx4j.widgets.client.TextWatermark;
 import com.pyx4j.widgets.client.WatermarkComponent;
 import com.pyx4j.widgets.client.style.theme.WidgetTheme;
 
-public class SelectorTextBox<E> extends Composite implements WatermarkComponent, ITextWidget, HasEnabled, HasAllKeyHandlers, HasValue<E>,
-        HasSelectionHandlers<E> {
+public class SelectorTextBox<E> extends Composite implements WatermarkComponent, ITextWidget, HasEnabled, HasAllKeyHandlers, HasSelectionHandlers<E> {
 
     private boolean editable = true;
 
@@ -114,11 +111,6 @@ public class SelectorTextBox<E> extends Composite implements WatermarkComponent,
         return addHandler(handler, SelectionEvent.getType());
     }
 
-    @Override
-    public HandlerRegistration addValueChangeHandler(ValueChangeHandler<E> handler) {
-        return addHandler(handler, ValueChangeEvent.getType());
-    }
-
     /**
      * Gets the limit for the number of suggestions that should be displayed for
      * this box. It is up to the current {@link SuggestOracle} to enforce this
@@ -144,9 +136,19 @@ public class SelectorTextBox<E> extends Composite implements WatermarkComponent,
         return box.getTabIndex();
     }
 
-    @Override
     public E getValue() {
         return value;
+    }
+
+    private void setValue(E value) {
+        this.value = value;
+        if (value == null) {
+            setText("");
+        } else {
+            setText(formatter.format(value));
+        }
+        display.hideSuggestions();
+        fireSuggestionEvent(value);
     }
 
     @Override
@@ -212,18 +214,6 @@ public class SelectorTextBox<E> extends Composite implements WatermarkComponent,
         box.setTabIndex(index);
     }
 
-    @Override
-    public void setValue(E newValue) {
-        value = newValue;
-        box.setValue(newValue.toString());
-    }
-
-    @Override
-    public void setValue(E newValue, boolean fireEvents) {
-        value = newValue;
-        box.setValue(newValue.toString(), fireEvents);
-    }
-
     /**
      * Show the current list of suggestions.
      */
@@ -272,7 +262,7 @@ public class SelectorTextBox<E> extends Composite implements WatermarkComponent,
                         break;
                     case KeyCodes.KEY_ENTER:
                     case KeyCodes.KEY_TAB:
-                        setNewSelection(display.getCurrentSelection());
+                        SelectorTextBox.this.setValue(display.getCurrentSelection());
                         break;
                     }
                 }
@@ -306,7 +296,7 @@ public class SelectorTextBox<E> extends Composite implements WatermarkComponent,
 
                 @Override
                 public void onBlur(BlurEvent event) {
-                    setNewSelection(display.getCurrentSelection());
+                    SelectorTextBox.this.setValue(display.getCurrentSelection());
                 }
             });
 
@@ -322,24 +312,7 @@ public class SelectorTextBox<E> extends Composite implements WatermarkComponent,
     }
 
     private void refreshSuggestions() {
-        showSuggestions(box.getText());
-    }
-
-    /**
-     * Set the new suggestion in the text box.
-     * 
-     * @param curSuggestion
-     *            the new suggestion
-     */
-    private void setNewSelection(E value) {
-        this.value = value;
-        if (value == null) {
-            box.setText("");
-        } else {
-            box.setText(formatter.format(value));
-        }
-        display.hideSuggestions();
-        fireSuggestionEvent(value);
+        showSuggestions(getText());
     }
 
     @Override
@@ -678,7 +651,7 @@ public class SelectorTextBox<E> extends Composite implements WatermarkComponent,
                 @Override
                 public void execute() {
                     box.setFocus(true);
-                    setNewSelection(suggestion);
+                    setValue(suggestion);
                 }
             });
         }
