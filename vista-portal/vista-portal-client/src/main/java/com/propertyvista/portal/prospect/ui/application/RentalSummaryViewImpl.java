@@ -22,7 +22,7 @@ public class RentalSummaryViewImpl extends FlowPanel implements RentalSummaryVie
 
     private final RentalSummaryGadget rentalSummaryGadget;
 
-    private final ChargesSummaryGadget chargesSummaryGadget;
+    private final RentChargesSummaryGadget chargesSummaryGadget;
 
     public RentalSummaryViewImpl() {
 
@@ -31,7 +31,7 @@ public class RentalSummaryViewImpl extends FlowPanel implements RentalSummaryVie
         rentalSummaryGadget = new RentalSummaryGadget();
         add(rentalSummaryGadget);
 
-        chargesSummaryGadget = new ChargesSummaryGadget();
+        chargesSummaryGadget = new RentChargesSummaryGadget();
         add(chargesSummaryGadget);
 
     }

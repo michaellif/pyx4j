@@ -26,9 +26,9 @@ import com.propertyvista.domain.tenant.lease.Deposit;
 import com.propertyvista.portal.prospect.themes.RentalSummaryTheme;
 import com.propertyvista.portal.rpc.portal.prospect.dto.OnlineApplicationDTO;
 
-public class ChargesSummaryGadget extends FlowPanel {
+public class RentChargesSummaryGadget extends FlowPanel {
 
-    private static final I18n i18n = I18n.get(ChargesSummaryGadget.class);
+    private static final I18n i18n = I18n.get(RentChargesSummaryGadget.class);
 
     private final InfoSection monthlySection;
 
@@ -36,7 +36,7 @@ public class ChargesSummaryGadget extends FlowPanel {
 
     private final InfoSection feeSection;
 
-    public ChargesSummaryGadget() {
+    public RentChargesSummaryGadget() {
         super();
 
         FlowPanel panel = new FlowPanel();
@@ -72,7 +72,7 @@ public class ChargesSummaryGadget extends FlowPanel {
                 contentBuilder.append(formatCharge(billableItem.agreedPrice().getValue(), billableItem.item().name().getStringView()));
             }
 
-            if (!onlineApplication.leaseChargesData().totalMonthlyCharge().isNull()) {
+            if (onlineApplication.leaseChargesData().totalMonthlyCharge().getValue().compareTo(BigDecimal.ZERO) > 0) {
                 contentBuilder.append(formatCharge(onlineApplication.leaseChargesData().totalMonthlyCharge().getValue(), onlineApplication.leaseChargesData()
                         .totalMonthlyCharge().getMeta().getCaption(), true));
             }
@@ -91,7 +91,7 @@ public class ChargesSummaryGadget extends FlowPanel {
                         .getStringView())));
             }
 
-            if (!onlineApplication.leaseChargesData().totalDeposits().isNull()) {
+            if (onlineApplication.leaseChargesData().totalDeposits().getValue().compareTo(BigDecimal.ZERO) > 0) {
                 contentBuilder.append(formatCharge(onlineApplication.leaseChargesData().totalDeposits().getValue(), onlineApplication.leaseChargesData()
                         .totalDeposits().getMeta().getCaption(), true));
             }

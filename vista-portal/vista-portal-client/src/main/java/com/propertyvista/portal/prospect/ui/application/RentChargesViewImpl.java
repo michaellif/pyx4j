@@ -20,13 +20,13 @@ import com.propertyvista.portal.shared.themes.PortalRootPaneTheme;
 
 public class RentChargesViewImpl extends FlowPanel implements RentChargesView {
 
-    private final ChargesSummaryGadget chargesSummaryGadget;
+    private final RentChargesSummaryGadget chargesSummaryGadget;
 
     public RentChargesViewImpl() {
 
         setStyleName(PortalRootPaneTheme.StyleName.ExtraGadget.name());
 
-        chargesSummaryGadget = new ChargesSummaryGadget();
+        chargesSummaryGadget = new RentChargesSummaryGadget();
         add(chargesSummaryGadget);
 
     }
