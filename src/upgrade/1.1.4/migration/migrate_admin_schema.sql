@@ -133,11 +133,24 @@ SET search_path = '_admin_';
         (
             id                      BIGINT              NOT NULL,
             owner                   BIGINT,
-            value                   BIGINT,
+            value                   NUMERIC(18,2),
                 CONSTRAINT cards_reconciliation_record$adjustments_pk PRIMARY KEY(id)
         );
         
         ALTER TABLE cards_reconciliation_record$adjustments OWNER TO vista;
+        
+        
+        -- cards_reconciliation_record$chargebacks
+        
+        CREATE TABLE cards_reconciliation_record$chargebacks
+        (
+            id                      BIGINT              NOT NULL,
+            owner                   BIGINT,
+            value                   NUMERIC(18,2),
+                CONSTRAINT cards_reconciliation_record$chargebacks_pk PRIMARY KEY(id)
+        );
+        
+        ALTER TABLE cards_reconciliation_record$chargebacks OWNER TO vista;
         
         -- dev_card_service_simulation_reconciliation_record
         
@@ -203,6 +216,12 @@ SET search_path = '_admin_';
         
         UPDATE  outgoing_mail_queue
         SET     priority = 0;
+        
+        -- scheduler_trigger
+        
+        UPDATE  scheduler_trigger
+        SET     schedule_suspended = FALSE
+        WHERE   schedule_suspended IS NULL;
         
         
         /**
@@ -317,16 +336,20 @@ SET search_path = '_admin_';
                         'Uganda', 'Ukraine', 'UnitedArabEmirates', 'UnitedKingdom', 'UnitedStates', 'Uruguay', 'Uzbekistan', 'Vanuatu', 'Vatican', 
                         'Venezuela', 'VietNam', 'VirginIslands', 'VirginIslandsGB', 'WallisFutuna', 'WesternSahara', 'Yemen', 'Zambia', 'Zimbabwe'));
                         
-    ALTER TABLE scheduler_trigger ADD CONSTRAINT scheduler_trigger_trigger_type_e_ck 
-        CHECK ((trigger_type) IN ('billing', 'cleanup', 'depositInterestAdjustment', 'depositRefund', 'equifaxRetention', 'ilsEmailFeed', 'ilsUpdate', 
-        'initializeFutureBillingCycles', 'leaseActivation', 'leaseCompletion', 'leaseRenewal', 'paymentsBmoReceive', 'paymentsDbpProcess', 
-        'paymentsDbpProcessAcknowledgment', 'paymentsDbpProcessReconciliation', 'paymentsDbpSend', 'paymentsIssue', 'paymentsLastMonthSuspend', 
-        'paymentsPadProcessAcknowledgment', 'paymentsPadProcessReconciliation', 'paymentsPadSend', 'paymentsProcessCardsReconciliation', 
-        'paymentsReceiveAcknowledgment', 'paymentsReceiveCardsReconciliation', 'paymentsReceiveReconciliation', 'paymentsScheduledCreditCards', 
-        'paymentsScheduledEcheck', 'paymentsTenantSure', 'tenantSureCancellation', 'tenantSureHQUpdate', 'tenantSureReports', 'tenantSureTransactionReports', 
-        'test', 'updateArrears', 'updatePaymentsSummary', 'vistaBusinessReport', 'vistaCaleonReport', 'vistaHeathMonitor', 'yardiARDateVerification', 
-        'yardiImportProcess'));
+        ALTER TABLE scheduler_trigger ADD CONSTRAINT scheduler_trigger_trigger_type_e_ck 
+            CHECK ((trigger_type) IN ('billing', 'cleanup', 'depositInterestAdjustment', 'depositRefund', 'equifaxRetention', 'ilsEmailFeed', 'ilsUpdate', 
+            'initializeFutureBillingCycles', 'leaseActivation', 'leaseCompletion', 'leaseRenewal', 'paymentsBmoReceive', 'paymentsDbpProcess', 
+            'paymentsDbpProcessAcknowledgment', 'paymentsDbpProcessReconciliation', 'paymentsDbpSend', 'paymentsIssue', 'paymentsLastMonthSuspend', 
+            'paymentsPadProcessAcknowledgment', 'paymentsPadProcessReconciliation', 'paymentsPadSend', 'paymentsProcessCardsReconciliation', 
+            'paymentsReceiveAcknowledgment', 'paymentsReceiveCardsReconciliation', 'paymentsReceiveReconciliation', 'paymentsScheduledCreditCards', 
+            'paymentsScheduledEcheck', 'paymentsTenantSure', 'tenantSureBusinessReport', 'tenantSureCancellation', 'tenantSureHQUpdate', 'tenantSureRenewal', 
+            'tenantSureReports', 'tenantSureTransactionReports', 'test', 'updateArrears', 'updatePaymentsSummary', 'vistaBusinessReport', 'vistaCaleonReport', 
+            'vistaHeathMonitor', 'yardiARDateVerification', 'yardiImportProcess'));
 
+
+        -- not null
+        
+        ALTER TABLE scheduler_trigger ALTER COLUMN schedule_suspended SET NOT NULL;
                 
         /**
         ***     ============================================================================================================
@@ -337,7 +360,7 @@ SET search_path = '_admin_';
         **/
         
         CREATE UNIQUE INDEX admin_pmc_merchant_account_index_terminal_id_conv_fee_idx ON admin_pmc_merchant_account_index USING btree (terminal_id_conv_fee);
-        CREATE UNIQUE INDEX admin_pmc_merchant_account_index_terminal_id_idx ON admin_pmc_merchant_account_index USING btree (terminal_id);
+        -- CREATE UNIQUE INDEX admin_pmc_merchant_account_index_terminal_id_idx ON admin_pmc_merchant_account_index USING btree (terminal_id);
         CREATE INDEX cards_reconciliation_record$adjustments_owner_idx ON cards_reconciliation_record$adjustments USING btree (owner);
         CREATE INDEX cards_reconciliation_record$chargebacks_owner_idx ON cards_reconciliation_record$chargebacks USING btree (owner);
         CREATE INDEX cards_reconciliation_record_merchant_account_idx ON cards_reconciliation_record USING btree (merchant_account);

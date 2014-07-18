@@ -220,12 +220,36 @@ BEGIN
         ALTER TABLE city_intro_page ADD COLUMN province VARCHAR(50);
         
         
+        -- communication_delivery_handle
+        
+        CREATE TABLE communication_delivery_handle
+        (
+            id                          BIGINT                  NOT NULL,
+            recipient                   BIGINT                  NOT NULL,
+            recipient_discriminator     VARCHAR(50)             NOT NULL,
+            star                        BOOLEAN,
+            is_read                     BOOLEAN,
+            message                     BIGINT                  NOT NULL,
+            generated_from_group        BOOLEAN,
+                    CONSTRAINT communication_delivery_handle_pk PRIMARY KEY(id)
+        );
+        
+        -- communication_message
+        
+        ALTER TABLE communication_message RENAME COLUMN is_high_importance TO high_importance;
+        
+        ALTER TABLE communication_delivery_handle OWNER TO vista;
+        
         -- concession_v
         
         ALTER TABLE concession_v    ADD COLUMN val_amount NUMERIC(18,2),
                                     ADD COLUMN val_percent NUMERIC(18,2);
         
-        -- country_policy_node
+        -- country renamed country_policy_node
+        
+        -- ALTER TABLE country RENAME TO country_policy_node;
+        
+        -- country_policy_node --  as new table 
         
         CREATE TABLE country_policy_node
         (
@@ -235,6 +259,7 @@ BEGIN
         );
         
         ALTER TABLE country_policy_node OWNER TO vista;
+        
         
         -- crm_role
         
@@ -879,6 +904,7 @@ BEGIN
                                 DROP COLUMN info_address_street_direction,
                                 DROP COLUMN info_address_street_number_suffix,
                                 DROP COLUMN info_address_street_type;
+                                -- DROP COLUMN property_manager;
                                 
         -- city 
         
@@ -889,6 +915,14 @@ BEGIN
         
         ALTER TABLE city_intro_page DROP COLUMN province_old;
         
+        
+        -- communication_message$to
+        
+        DROP TABLE communication_message$to;
+        
+        -- communication_message_attachment_blob
+        
+        DROP TABLE communication_message_attachment_blob;
         
         -- concession_v
         
@@ -1117,6 +1151,8 @@ BEGIN
         -- not null
         
         ALTER TABLE aggregated_transfer ALTER COLUMN id_discriminator SET NOT NULL;
+        ALTER TABLE communication_message ALTER COLUMN sender SET NOT NULL;
+        ALTER TABLE communication_message ALTER COLUMN sender_discriminator SET NOT NULL;
         
         /**
         ***     ====================================================================================================
