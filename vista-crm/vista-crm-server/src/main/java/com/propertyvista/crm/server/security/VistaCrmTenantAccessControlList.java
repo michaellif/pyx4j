@@ -36,6 +36,7 @@ public class VistaCrmTenantAccessControlList extends UIAclBuilder {
             grant(TenantBasic, TenantDTO.class, new TenantInstanceAccess(), READ);
             grant(TenantAdvanced, TenantDTO.class, new TenantInstanceAccess(), READ);
             grant(TenantFull, TenantDTO.class, new TenantInstanceAccess(), READ | UPDATE);
+
             grant(TenantFinancial, TenantDTO.class, new TenantInstanceAccess(), READ);
         }
 

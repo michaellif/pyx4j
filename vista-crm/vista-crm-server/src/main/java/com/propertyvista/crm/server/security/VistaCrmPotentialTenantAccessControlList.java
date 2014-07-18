@@ -20,9 +20,6 @@ import static com.propertyvista.domain.security.VistaCrmBehavior.PotentialTenant
 import static com.pyx4j.entity.security.AbstractCRUDPermission.READ;
 import static com.pyx4j.entity.security.AbstractCRUDPermission.UPDATE;
 
-import java.util.List;
-
-import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.security.server.UIAclBuilder;
 import com.pyx4j.security.shared.ActionPermission;
 
@@ -34,8 +31,6 @@ public class VistaCrmPotentialTenantAccessControlList extends UIAclBuilder {
 
     public VistaCrmPotentialTenantAccessControlList() {
         { // 
-            List<Class<? extends IEntity>> entities = entities(TenantDTO.class);
-
             grant(PotentialTenantBasic, TenantDTO.class, new PotentialTenantInstanceAccess(), READ);
             grant(PotentialTenantAdvanced, TenantDTO.class, new PotentialTenantInstanceAccess(), READ);
             grant(PotentialTenantFull, TenantDTO.class, new PotentialTenantInstanceAccess(), READ | UPDATE);
