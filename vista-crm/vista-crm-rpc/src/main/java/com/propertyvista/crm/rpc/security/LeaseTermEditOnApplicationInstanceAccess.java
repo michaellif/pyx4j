@@ -16,14 +16,15 @@ package com.propertyvista.crm.rpc.security;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.security.InstanceAccess;
 
+import com.propertyvista.domain.tenant.lease.Lease;
+import com.propertyvista.dto.LeaseTermDTO;
+
 public class LeaseTermEditOnApplicationInstanceAccess implements InstanceAccess {
 
     private static final long serialVersionUID = 1L;
 
     @Override
     public boolean allow(IEntity contextEntity) {
-//        return Lease.Status.Application == ((LeaseTermDTO) contextEntity).lease().status().getValue();
-        return true;
+        return Lease.Status.Application == ((LeaseTermDTO) contextEntity).lease().status().getValue();
     }
-
 }
