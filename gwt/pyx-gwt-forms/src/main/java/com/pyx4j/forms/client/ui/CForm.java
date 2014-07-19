@@ -160,6 +160,7 @@ public abstract class CForm<E extends IEntity> extends CContainer<CForm<E>, E, I
         CComponent<?, ?, ?> component = components.get(member.getPath());
         if (component != null) {
             binding.remove(component);
+            abandon(component);
         }
         components.remove(member.getPath());
     }
