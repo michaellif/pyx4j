@@ -22,6 +22,8 @@ package com.pyx4j.site.client.ui.sidemenu;
 
 import com.google.gwt.user.client.Command;
 
+import com.pyx4j.security.annotations.ActionId;
+import com.pyx4j.security.shared.ActionPermission;
 import com.pyx4j.security.shared.Behavior;
 import com.pyx4j.security.shared.Permission;
 import com.pyx4j.security.shared.SecurityController;
@@ -42,6 +44,10 @@ public class SideMenuAppPlaceItem extends SideMenuItem {
         if (!SecurityController.check(behaviors)) {
             setVisible(false);
         }
+    }
+
+    public SideMenuAppPlaceItem(final AppPlace appPlace, Class<? extends ActionId> actionClass) {
+        this(appPlace, null, (ButtonImages) null, new ActionPermission(actionClass));
     }
 
     public SideMenuAppPlaceItem(final AppPlace appPlace, Permission... permission) {
