@@ -17,6 +17,7 @@ import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.ui.HTML;
 
+import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.i18n.shared.I18n;
@@ -49,7 +50,7 @@ public class TriggerForm extends OperationsEntityForm<TriggerDTO> {
         formPanel.append(Location.Left, proto().name()).decorate();
         formPanel.append(Location.Left, proto().triggerType()).decorate();
         formPanel.append(Location.Right, proto().populationType()).decorate().componentWidth(120);
-        formPanel.append(Location.Right, proto().options()).decorate();
+        formPanel.append(Location.Right, proto().options(), new CLabel<>()).decorate();
 
         formPanel.append(Location.Left, proto().threads()).decorate().componentWidth(120);
         formPanel.append(Location.Right, proto().timeout()).decorate();
