@@ -28,7 +28,6 @@ import com.pyx4j.gwt.commons.layout.LayoutChangeEvent;
 import com.pyx4j.gwt.commons.layout.LayoutChangeHandler;
 import com.pyx4j.gwt.commons.layout.LayoutType;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.security.shared.ActionPermission;
 import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.ui.sidemenu.SideMenu;
@@ -180,7 +179,7 @@ public class NavigViewImpl extends Composite implements NavigView {
             root.addMenuItem(new SideMenuItem(list, i18n.tr("Tenants & Leases"), CrmImages.INSTANCE.tenantsIcon()));
 
             list.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Tenants.Lease(), DataModelPermission.permissionRead(LeaseDTO.class)));
-            list.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Tenants.Tenant(), new ActionPermission(TenantListAction.class)));
+            list.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Tenants.Tenant(), TenantListAction.class));
             list.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Tenants.Guarantor(), DataModelPermission.permissionRead(GuarantorDTO.class)));
             list.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Tenants.MaintenanceRequest(), DataModelPermission
                     .permissionRead(MaintenanceRequestDTO.class)));
@@ -197,7 +196,7 @@ public class NavigViewImpl extends Composite implements NavigView {
 
             list.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Marketing.Lead(), DataModelPermission.permissionRead(Lead.class)));
             list.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Tenants.LeaseApplication(), DataModelPermission.permissionRead(LeaseApplicationDTO.class)));
-            list.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Marketing.PotentialTenant(), new ActionPermission(PotentialTenantListAction.class)));
+            list.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Marketing.PotentialTenant(), PotentialTenantListAction.class));
         }
 
         {//LegalAndCollections
@@ -231,7 +230,7 @@ public class NavigViewImpl extends Composite implements NavigView {
             SideMenuList list = new SideMenuList();
             root.addMenuItem(new SideMenuItem(list, i18n.tr("Organization"), CrmImages.INSTANCE.organizationIcon()));
 
-            list.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Organization.Employee(), new ActionPermission(EmployeeDirectoryList.class)));
+            list.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Organization.Employee(), EmployeeDirectoryList.class));
             list.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Organization.Portfolio(), DataModelPermission.permissionRead(Portfolio.class)));
             if (!VistaFeatures.instance().yardiIntegration()) {
                 list.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Organization.Vendor()));
