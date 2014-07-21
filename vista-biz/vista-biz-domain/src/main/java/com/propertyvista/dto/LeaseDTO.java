@@ -51,6 +51,8 @@ public interface LeaseDTO extends Lease {
 
     IPrimitive<Boolean> isMoveOutWithinNextBillingCycle();
 
+    IPrimitive<Boolean> electronicPaymentsAllowed();
+
     IList<InsuranceCertificate> tenantInsuranceCertificates();
 
     @NotNull

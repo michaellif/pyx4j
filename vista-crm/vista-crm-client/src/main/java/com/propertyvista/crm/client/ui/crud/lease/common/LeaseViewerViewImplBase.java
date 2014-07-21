@@ -203,7 +203,10 @@ public class LeaseViewerViewImplBase<DTO extends LeaseDTO> extends CrmViewerView
 
     private void setupPapsMenu(DTO value) {
         papsMenu.clearItems();
-        if (value.status().getValue().isActive() && !value.isMoveOutWithinNextBillingCycle().getValue(false)) {
+
+        if (value.status().getValue().isActive() && value.electronicPaymentsAllowed().getValue(false)
+                && !value.isMoveOutWithinNextBillingCycle().getValue(false)) {
+
             for (final LeaseTermTenant tenant : value.currentTerm().version().tenants()) {
                 papsMenu.addItem(new MenuItem(tenant.getStringView(), new Command() {
                     @Override
@@ -218,9 +221,9 @@ public class LeaseViewerViewImplBase<DTO extends LeaseDTO> extends CrmViewerView
                     }
                 }));
             }
-
-            papsButton.setVisible(!papsMenu.getItems().isEmpty());
         }
+
+        papsButton.setVisible(!papsMenu.getItems().isEmpty());
     }
 
     @Override
