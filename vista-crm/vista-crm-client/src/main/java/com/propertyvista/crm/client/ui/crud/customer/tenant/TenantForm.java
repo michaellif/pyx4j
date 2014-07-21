@@ -63,18 +63,16 @@ public class TenantForm extends LeaseParticipantForm<TenantDTO> {
 
     private static final I18n i18n = I18n.get(TenantForm.class);
 
-    private final Tab autoPaymentsTab;
+    private final Tab paymentMethodsTab, autoPaymentsTab;
 
     public TenantForm(IForm<TenantDTO> view) {
         super(TenantDTO.class, view);
 
-        Tab tab;
-
         selectTab(addTab(createDetailsTab(), i18n.tr("Details")));
         addTab(createContactsTab(), i18n.tr("Emergency Contacts"));
-        tab = addTab(createPaymentMethodsTab(), i18n.tr("Payment Methods"), DataModelPermission.permissionRead(LeasePaymentMethod.class));
+        paymentMethodsTab = addTab(createPaymentMethodsTab(), i18n.tr("Payment Methods"), DataModelPermission.permissionRead(LeasePaymentMethod.class));
         if (isEditable()) {
-            tab.setPermitEnabledPermission(DataModelPermission.permissionUpdate(LeasePaymentMethod.class));
+            paymentMethodsTab.setPermitEnabledPermission(DataModelPermission.permissionUpdate(LeasePaymentMethod.class));
         }
         autoPaymentsTab = addTab(createPreauthorizedPaymentsTab(), i18n.tr("Auto Payments"), DataModelPermission.permissionRead(PreauthorizedPaymentDTO.class));
         if (isEditable()) {
@@ -97,6 +95,12 @@ public class TenantForm extends LeaseParticipantForm<TenantDTO> {
 
         setTabVisible(autoPaymentsTab, getValue().lease().status().getValue().isCurrent());
         get(proto().preauthorizedPayments()).setEditable(!getValue().isMoveOutWithinNextBillingCycle().getValue(false));
+
+        // disable any payment-related editing if no electronic payments allowed:
+        if (isEditable()) {
+            paymentMethodsTab.setTabEnabled(getValue().electronicPaymentsAllowed().getValue(false));
+//            autoPaymentsTab.setTabEnabled(getValue().electronicPaymentsAllowed().getValue(false));
+        }
 
         updateTenantInsuranceTabControls();
 

@@ -26,8 +26,8 @@ import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria.VersionedCriteria;
 import com.pyx4j.entity.core.criterion.PropertyCriterion;
 import com.pyx4j.entity.server.AbstractCrudServiceDtoImpl;
-import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.server.CrudEntityBinder;
+import com.pyx4j.entity.server.Persistence;
 
 import com.propertyvista.biz.financial.payment.PaymentFacade;
 import com.propertyvista.biz.financial.payment.PaymentMethodFacade;
@@ -109,26 +109,8 @@ public abstract class LeaseParticipantCrudServiceBaseImpl<BO extends LeasePartic
     protected boolean persist(BO bo, TO to) {
         ServerSideFactory.create(CustomerFacade.class).persistCustomer(bo.customer());
 
-        // delete payment methods removed in UI:
-        for (LeasePaymentMethod paymentMethod : ServerSideFactory.create(PaymentMethodFacade.class).retrieveLeasePaymentMethods(bo,
-                PaymentMethodUsage.InProfile, VistaApplication.crm)) {
-            if (!to.paymentMethods().contains(paymentMethod)) {
-                ServerSideFactory.create(PaymentMethodFacade.class).deleteLeasePaymentMethod(paymentMethod);
-            }
-        }
-
-        EntityQueryCriteria<Building> criteria = EntityQueryCriteria.create(Building.class);
-        criteria.add(PropertyCriterion.eq(criteria.proto().units().$().leases().$().currentTerm().versions(), to.leaseTermV()));
-        Building building = Persistence.service().retrieve(criteria);
-
-        // save new/edited ones:
-        Persistence.ensureRetrieve(bo.lease(), AttachLevel.Attached);
-        for (LeasePaymentMethod paymentMethod : to.paymentMethods()) {
-            paymentMethod.customer().set(bo.customer());
-            paymentMethod.isProfiledMethod().setValue(true);
-
-            ServerSideFactory.create(PaymentFacade.class).validatePaymentMethod(bo.lease().billingAccount(), paymentMethod, VistaApplication.crm);
-            ServerSideFactory.create(PaymentMethodFacade.class).persistLeasePaymentMethod(paymentMethod, building);
+        if (to.electronicPaymentsAllowed().getValue(false)) {
+            persistPaymentMethods(bo, to);
         }
 
         return super.persist(bo, to);
@@ -191,4 +173,31 @@ public abstract class LeaseParticipantCrudServiceBaseImpl<BO extends LeasePartic
 
         return term;
     }
+
+    protected boolean persistPaymentMethods(BO bo, TO to) {
+        // delete payment methods removed in UI:
+        for (LeasePaymentMethod paymentMethod : ServerSideFactory.create(PaymentMethodFacade.class).retrieveLeasePaymentMethods(bo,
+                PaymentMethodUsage.InProfile, VistaApplication.crm)) {
+            if (!to.paymentMethods().contains(paymentMethod)) {
+                ServerSideFactory.create(PaymentMethodFacade.class).deleteLeasePaymentMethod(paymentMethod);
+            }
+        }
+
+        EntityQueryCriteria<Building> criteria = EntityQueryCriteria.create(Building.class);
+        criteria.add(PropertyCriterion.eq(criteria.proto().units().$().leases().$().currentTerm().versions(), to.leaseTermV()));
+        Building building = Persistence.service().retrieve(criteria);
+
+        // save new/edited ones:
+        Persistence.ensureRetrieve(bo.lease(), AttachLevel.Attached);
+        for (LeasePaymentMethod paymentMethod : to.paymentMethods()) {
+            paymentMethod.customer().set(bo.customer());
+            paymentMethod.isProfiledMethod().setValue(true);
+
+            ServerSideFactory.create(PaymentFacade.class).validatePaymentMethod(bo.lease().billingAccount(), paymentMethod, VistaApplication.crm);
+            ServerSideFactory.create(PaymentMethodFacade.class).persistLeasePaymentMethod(paymentMethod, building);
+        }
+
+        return super.persist(bo, to);
+    }
+
 }
