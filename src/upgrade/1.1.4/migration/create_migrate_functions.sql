@@ -30,6 +30,7 @@ BEGIN
         ALTER TABLE apt_unit DROP CONSTRAINT apt_unit_info_legal_address_province_fk;
         ALTER TABLE building DROP CONSTRAINT building_info_address_country_fk;
         ALTER TABLE building DROP CONSTRAINT building_info_address_province_fk;
+        ALTER TABLE building DROP CONSTRAINT building_property_manager_fk;
         ALTER TABLE city_intro_page DROP CONSTRAINT city_intro_page_province_fk;
         ALTER TABLE city DROP CONSTRAINT city_province_fk;
         ALTER TABLE communication_message$to DROP CONSTRAINT communication_message$to_owner_fk;
@@ -65,18 +66,18 @@ BEGIN
         
         ALTER TABLE aggregated_transfer DROP CONSTRAINT aggregated_transfer_funds_transfer_type_e_ck;
         ALTER TABLE billable_item_adjustment DROP CONSTRAINT billable_item_adjustment_adjustment_type_e_ck;
-        -- ALTER TABLE communication_message DROP CONSTRAINT communication_message_sender_discriminator_d_ck;
-        -- ALTER TABLE communication_thread DROP CONSTRAINT communication_thread_responsible_discriminator_d_ck;
+        ALTER TABLE communication_message DROP CONSTRAINT communication_message_sender_discriminator_d_ck;
+        ALTER TABLE communication_thread DROP CONSTRAINT communication_thread_responsible_discriminator_d_ck;
         ALTER TABLE lease_adjustment DROP CONSTRAINT lease_adjustment_tax_type_e_ck;
         ALTER TABLE legal_letter DROP CONSTRAINT legal_letter_status_discriminator_d_ck;
         ALTER TABLE legal_status DROP CONSTRAINT legal_status_id_discriminator_ck;
-        -- ALTER TABLE marketing DROP CONSTRAINT marketing_marketing_address_street_direction_e_ck;
-        -- ALTER TABLE marketing DROP CONSTRAINT marketing_marketing_address_street_type_e_ck;
-        -- ALTER TABLE n4_policy DROP CONSTRAINT n4_policy_mailing_address_street_direction_e_ck;
-        -- ALTER TABLE n4_policy DROP CONSTRAINT n4_policy_mailing_address_street_type_e_ck;
+        ALTER TABLE marketing DROP CONSTRAINT marketing_marketing_address_street_direction_e_ck;
+        ALTER TABLE marketing DROP CONSTRAINT marketing_marketing_address_street_type_e_ck;
+        ALTER TABLE n4_policy DROP CONSTRAINT n4_policy_mailing_address_street_direction_e_ck;
+        ALTER TABLE n4_policy DROP CONSTRAINT n4_policy_mailing_address_street_type_e_ck;
         ALTER TABLE notes_and_attachments DROP CONSTRAINT notes_and_attachments_owner_discriminator_d_ck;
         ALTER TABLE notification DROP CONSTRAINT notification_tp_e_ck;
-        -- ALTER TABLE system_endpoint DROP CONSTRAINT system_endpoint_type_e_ck;
+        ALTER TABLE system_endpoint DROP CONSTRAINT system_endpoint_type_e_ck;
 
         
         /**
@@ -261,6 +262,55 @@ BEGIN
         ALTER TABLE country_policy_node OWNER TO vista;
         
         
+        -- communication_message_category
+        
+        CREATE TABLE communication_message_category
+        (
+            id                          BIGINT              NOT NULL,
+            topic                       VARCHAR(500),
+            category                    VARCHAR(50),
+            deleted                     BOOLEAN,
+                CONSTRAINT  communication_message_category_pk PRIMARY KEY(id)
+        );
+        
+        ALTER TABLE communication_message_category OWNER TO vista;
+        
+        -- communication_message_category$dispatchers
+        
+        CREATE TABLE communication_message_category$dispatchers
+        (
+            id                          BIGINT              NOT NULL,
+            owner                       BIGINT,
+            value                       BIGINT,
+            seq                         INT,
+                CONSTRAINT communication_message_category$dispatchers_pk PRIMARY KEY(id)
+        );
+        
+        ALTER TABLE communication_message_category$dispatchers OWNER TO vista; 
+        
+        -- communication_message_category$rls
+        
+        CREATE TABLE communication_message_category$rls
+        (
+            id                          BIGINT              NOT NULL,
+            owner                       BIGINT,
+            value                       BIGINT,
+            seq                         INT,
+                CONSTRAINT communication_message_category$rls_pk PRIMARY KEY(id)
+        );
+        
+        -- communication_thread
+        
+        ALTER TABLE communication_thread    ADD COLUMN owner BIGINT,
+                                            ADD COLUMN owner_discriminator VARCHAR(50),
+                                            ADD COLUMN status VARCHAR(50),
+                                            ADD COLUMN topic BIGINT,
+                                            ADD COLUMN allowed_reply BOOLEAN;
+                                            
+        ALTER TABLE communication_thread ALTER COLUMN subject TYPE VARCHAR(78);
+        
+        ALTER TABLE communication_message_category$rls OWNER TO vista;
+        
         -- crm_role
         
         ALTER TABLE crm_role ALTER COLUMN name TYPE VARCHAR(55);
@@ -341,6 +391,21 @@ BEGIN
         ALTER TABLE master_online_application RENAME COLUMN floorplan TO ils_floorplan;
         
         
+        -- message_attachment_blob
+        
+        CREATE TABLE message_attachment_blob
+        (
+            id                      BIGINT                  NOT NULL,
+            name                    VARCHAR(500),
+            content_type            VARCHAR(500),
+            updated                 TIMESTAMP,
+            created                 TIMESTAMP,
+            data                    BYTEA,
+                CONSTRAINT message_attachment_blob_pk PRIMARY KEY(id)
+        );
+        
+        ALTER TABLE message_attachment_blob OWNER TO vista;
+        
         -- n4_policy
         
         ALTER TABLE n4_policy RENAME COLUMN mailing_address_country TO mailing_address_country_old;
@@ -360,7 +425,8 @@ BEGIN
                                     ADD COLUMN billing_address_province VARCHAR(500),
                                     ADD COLUMN billing_address_street_name VARCHAR(500),
                                     ADD COLUMN billing_address_street_number VARCHAR(500),
-                                    ADD COLUMN billing_address_suite_number VARCHAR(500);
+                                    ADD COLUMN billing_address_suite_number VARCHAR(500),
+                                    ADD COLUMN expiration_note_sent BOOLEAN;
         
         -- payment_record
         
@@ -915,6 +981,9 @@ BEGIN
         
         ALTER TABLE city_intro_page DROP COLUMN province_old;
         
+        -- communication_message 
+        
+        ALTER TABLE communication_message DROP COLUMN is_read;
         
         -- communication_message$to
         
@@ -923,6 +992,12 @@ BEGIN
         -- communication_message_attachment_blob
         
         DROP TABLE communication_message_attachment_blob;
+        
+        -- communication_thread
+        
+        ALTER TABLE communication_thread    DROP COLUMN created,
+                                            DROP COLUMN responsible,
+                                            DROP COLUMN responsible_discriminator; 
         
         -- concession_v
         
@@ -1024,6 +1099,12 @@ BEGIN
         
         ALTER TABLE pt_vehicle  DROP COLUMN country_old,
                                 DROP COLUMN province_old;
+                                
+
+        -- system_endpoint
+        
+        ALTER TABLE system_endpoint DROP COLUMN email,
+                                    DROP COLUMN type;
                  
         /**
         ***     ======================================================================================================
@@ -1047,6 +1128,20 @@ BEGIN
             FOREIGN KEY(owner) REFERENCES aggregated_transfer(id)  DEFERRABLE INITIALLY DEFERRED;
         ALTER TABLE aggregated_transfer$chargebacks ADD CONSTRAINT aggregated_transfer$chargebacks_value_fk 
             FOREIGN KEY(value) REFERENCES aggregated_transfer_chargeback(id)  DEFERRABLE INITIALLY DEFERRED;
+        ALTER TABLE communication_delivery_handle ADD CONSTRAINT communication_delivery_handle_message_fk FOREIGN KEY(message) 
+            REFERENCES communication_message(id)  DEFERRABLE INITIALLY DEFERRED;
+        ALTER TABLE communication_message_attachment ADD CONSTRAINT communication_message_attachment_message_fk FOREIGN KEY(message) 
+            REFERENCES communication_message(id)  DEFERRABLE INITIALLY DEFERRED;
+        ALTER TABLE communication_message_category$dispatchers ADD CONSTRAINT communication_message_category$dispatchers_owner_fk FOREIGN KEY(owner) 
+            REFERENCES communication_message_category(id)  DEFERRABLE INITIALLY DEFERRED;
+        ALTER TABLE communication_message_category$dispatchers ADD CONSTRAINT communication_message_category$dispatchers_value_fk FOREIGN KEY(value) 
+            REFERENCES employee(id)  DEFERRABLE INITIALLY DEFERRED;
+        ALTER TABLE communication_message_category$rls ADD CONSTRAINT communication_message_category$rls_owner_fk FOREIGN KEY(owner) 
+            REFERENCES communication_message_category(id)  DEFERRABLE INITIALLY DEFERRED;
+        ALTER TABLE communication_message_category$rls ADD CONSTRAINT communication_message_category$rls_value_fk FOREIGN KEY(value) 
+            REFERENCES crm_role(id)  DEFERRABLE INITIALLY DEFERRED;
+        ALTER TABLE communication_thread ADD CONSTRAINT communication_thread_topic_fk FOREIGN KEY(topic) 
+            REFERENCES communication_message_category(id)  DEFERRABLE INITIALLY DEFERRED;
         ALTER TABLE master_online_application ADD CONSTRAINT master_online_application_ils_building_fk FOREIGN KEY(ils_building) 
             REFERENCES building(id)  DEFERRABLE INITIALLY DEFERRED;
         ALTER TABLE master_online_application ADD CONSTRAINT master_online_application_ils_floorplan_fk FOREIGN KEY(ils_floorplan) 
@@ -1129,6 +1224,39 @@ BEGIN
             'NorthCarolina', 'NorthDakota', 'NorthernMarianaIslands', 'NorthwestTerritories', 'NovaScotia', 'Nunavut', 'Ohio', 'Oklahoma', 'Ontario', 
             'Oregon', 'Pennsylvania', 'PrinceEdwardIsland', 'PuertoRico', 'Quebec', 'RhodeIsland', 'Saskatchewan', 'SouthCarolina', 'SouthDakota', 
             'Tennessee', 'Texas', 'Utah', 'Vermont', 'VirginIslands', 'Virginia', 'Washington', 'WestVirginia', 'Wisconsin', 'Wyoming', 'YukonTerritory'));
+        ALTER TABLE communication_delivery_handle ADD CONSTRAINT communication_delivery_handle_recipient_discriminator_d_ck 
+            CHECK ((recipient_discriminator) IN ('AptUnit', 'Building', 'CrmUser', 'CustomerUser', 'Portfolio', 'SystemEndpoint', 'Tenant'));
+        ALTER TABLE communication_message ADD CONSTRAINT communication_message_sender_discriminator_d_ck 
+            CHECK ((sender_discriminator) IN ('AptUnit', 'Building', 'CrmUser', 'CustomerUser', 'Portfolio', 'SystemEndpoint', 'Tenant'));
+        ALTER TABLE communication_message_category ADD CONSTRAINT communication_message_category_category_e_ck 
+            CHECK ((category) IN ('Custom', 'LandlordOriginated', 'TenantOriginated', 'VendorOriginated'));
+        ALTER TABLE communication_thread ADD CONSTRAINT communication_thread_owner_discriminator_d_ck 
+            CHECK ((owner_discriminator) IN ('AptUnit', 'Building', 'CrmUser', 'CustomerUser', 'Portfolio', 'SystemEndpoint', 'Tenant'));
+        ALTER TABLE communication_thread ADD CONSTRAINT communication_thread_status_e_ck 
+            CHECK ((status) IN ('Cancelled', 'Closed', 'New', 'Open', 'Resolved', 'Unassigned'));
+        ALTER TABLE country_policy_node ADD CONSTRAINT country_policy_node_country_e_ck 
+            CHECK ((country) IN ('Afghanistan', 'AlandIslands', 'Albania', 'Algeria', 'AmericanSamoa', 'Andorra', 'Angola', 'Anguilla', 'Antarctica', 
+            'Antigua', 'Argentina', 'Armenia', 'Aruba', 'Australia', 'Austria', 'Azerbaijan', 'Bahamas', 'Bahrain', 'Bangladesh', 'Barbados', 'Belarus', 
+            'Belgium', 'Belize', 'Benin', 'Bermuda', 'Bhutan', 'Bolivia', 'Bonaire', 'BosniaHerzegovina', 'Botswana', 'BouvetIsland', 'Brazil', 
+            'BruneiDarussalam', 'Bulgaria', 'BurkinaFaso', 'Burundi', 'CaboVerde', 'Cambodia', 'Cameroon', 'Canada', 'CaymanIslands', 
+            'CentralAfricanRepublic', 'Chad', 'Chile', 'China', 'ChristmasIsland', 'CocosIslands', 'Colombia', 'Comoros', 'Congo', 'CookIslands', 
+            'CostaRica', 'Croatia', 'Cuba', 'Curacao', 'Cyprus', 'CzechRepublic', 'Denmark', 'Djibouti', 'Dominica', 'DominicanRepublic', 'Ecuador', 
+            'Egypt', 'ElSalvador', 'EquatorialGuinea', 'Eritrea', 'Estonia', 'Ethiopia', 'FalklandIslands', 'FaroeIslands', 'Fiji', 'Finland', 'France', 
+            'FrenchGuiana', 'FrenchPolynesia', 'FrenchTerritories', 'Gabon', 'Gambia', 'Georgia', 'Germany', 'Ghana', 'Gibraltar', 'Greece', 'Greenland', 
+            'Grenada', 'Guadeloupe', 'Guam', 'Guatemala', 'Guernsey', 'Guinea', 'GuineaBissau', 'Guyana', 'Haiti', 'HeardIslands', 'Honduras', 'HongKong', 
+            'Hungary', 'Iceland', 'India', 'Indonesia', 'Iran', 'Iraq', 'Ireland', 'IsleOfMan', 'Israel', 'Italy', 'Jamaica', 'Japan', 'Jersey', 'Jordan', 
+            'Kazakhstan', 'Kenya', 'Kiribati', 'Kuwait', 'Kyrgyzstan', 'LaoRepublic', 'Latvia', 'Lebanon', 'Lesotho', 'Liberia', 'Libya', 'Liechtenstein', 
+            'Lithuania', 'Luxembourg', 'Macao', 'Macedonia', 'Madagascar', 'Malawi', 'Malaysia', 'Maldives', 'Mali', 'Malta', 'MarshallIslands', 
+            'Martinique', 'Mauritania', 'Mauritius', 'Mayotte', 'Mexico', 'Micronesia', 'Moldova', 'Monaco', 'Mongolia', 'Montenegro', 'Montserrat', 
+            'Morocco', 'Mozambique', 'Myanmar', 'Namibia', 'Nauru', 'Nepal', 'Netherlands', 'NewCaledonia', 'NewZealand', 'Nicaragua', 'Niger', 'Nigeria', 
+            'Niue', 'NorfolkIsland', 'NorthKorea', 'NorthernMarianaIslands', 'Norway', 'Oman', 'Pakistan', 'Palau', 'Palestine', 'Panama', 'PapuaNewGuinea', 
+            'Paraguay', 'Peru', 'Philippines', 'Pitcairn', 'Poland', 'Portugal', 'PuertoRico', 'Qatar', 'Reunion', 'Romania', 'RussianFederation', 'Rwanda', 
+            'SaintBarthelemy', 'SaintHelena', 'SaintKitts', 'SaintLucia', 'SaintMartin', 'SaintPierre', 'SaintVincent', 'Samoa', 'SanMarino', 'SaoTome', 
+            'SaudiArabia', 'Senegal', 'Serbia', 'Seychelles', 'SierraLeone', 'Singapore', 'SintMaartenDutch', 'Slovakia', 'Slovenia', 'SolomonIslands', 
+            'Somalia', 'SouthAfrica', 'SouthKorea', 'SouthSudan', 'Spain', 'SriLanka', 'Sudan', 'Suriname', 'Svalbard', 'Swaziland', 'Sweden', 'Switzerland', 
+            'Syria', 'Taiwan', 'Tajikistan', 'Tanzania', 'Thailand', 'TimorLeste', 'Togo', 'Tokelau', 'Tonga', 'Trinidad', 'Tunisia', 'Turkey', 'Turkmenistan', 
+            'TurksCaicos', 'Tuvalu', 'Uganda', 'Ukraine', 'UnitedArabEmirates', 'UnitedKingdom', 'UnitedStates', 'Uruguay', 'Uzbekistan', 'Vanuatu', 'Vatican', 
+            'Venezuela', 'VietNam', 'VirginIslands', 'VirginIslandsGB', 'WallisFutuna', 'WesternSahara', 'Yemen', 'Zambia', 'Zimbabwe'));
         ALTER TABLE lease_adjustment ADD CONSTRAINT lease_adjustment_tax_type_e_ck CHECK ((tax_type) IN ('Monetary', 'Percentage'));
         ALTER TABLE legal_letter ADD CONSTRAINT legal_letter_status_discriminator_d_ck CHECK ((status_discriminator) IN ('LegalStatus', 'LegalStatusN4'));
         ALTER TABLE legal_status ADD CONSTRAINT legal_status_id_discriminator_ck CHECK ((id_discriminator) IN ('LegalStatus', 'LegalStatusN4'));
@@ -1153,6 +1281,9 @@ BEGIN
         ALTER TABLE aggregated_transfer ALTER COLUMN id_discriminator SET NOT NULL;
         ALTER TABLE communication_message ALTER COLUMN sender SET NOT NULL;
         ALTER TABLE communication_message ALTER COLUMN sender_discriminator SET NOT NULL;
+        ALTER TABLE communication_thread ALTER COLUMN owner SET NOT NULL;
+        ALTER TABLE communication_thread ALTER COLUMN topic SET NOT NULL;
+        ALTER TABLE communication_thread ALTER COLUMN owner_discriminator SET NOT NULL;
         
         /**
         ***     ====================================================================================================
