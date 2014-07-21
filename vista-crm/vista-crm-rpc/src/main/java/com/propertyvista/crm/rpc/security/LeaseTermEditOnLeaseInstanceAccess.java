@@ -25,6 +25,6 @@ public class LeaseTermEditOnLeaseInstanceAccess implements InstanceAccess {
 
     @Override
     public boolean allow(IEntity contextEntity) {
-        return Lease.Status.present().contains(((LeaseTermDTO) contextEntity).lease().status());
+        return Lease.Status.present().contains(((LeaseTermDTO) contextEntity).lease().status().getValue());
     }
 }
