@@ -59,7 +59,7 @@ public class ForTypesAccessRule implements InstanceAccess {
     }
 
     @Override
-    public boolean allow(IEntity contextEntity) {
+    public boolean implies(IEntity contextEntity) {
         if (entityClasses == null) {
             initAfterSerialization();
         }

@@ -66,16 +66,16 @@ public class AclBuilderTest extends TestCase {
 
     public void testAccessControlPublic() {
         Acl acl = new AccessControlList().createAcl(null);
-        assertTrue(acl.checkPermission(new EntityPermission("Public", EntityPermission.READ)));
-        assertFalse(acl.checkPermission(new EntityPermission("Private", EntityPermission.READ)));
+        assertTrue(acl.checkPermission(null, new EntityPermission("Public", EntityPermission.READ)));
+        assertFalse(acl.checkPermission(null, new EntityPermission("Private", EntityPermission.READ)));
 
         assertNotNull(acl.getBehaviours());
         assertEquals(0, acl.getBehaviours().size());
 
-        assertTrue(acl.checkPermission(new ServiceExecutePermission("Read.Me")));
-        assertFalse(acl.checkPermission(new ServiceExecutePermission("Write.Me")));
+        assertTrue(acl.checkPermission(null, new ServiceExecutePermission("Read.Me")));
+        assertFalse(acl.checkPermission(null, new ServiceExecutePermission("Write.Me")));
 
-        assertFalse(acl.checkPermission(new UndefinedPermission()));
+        assertFalse(acl.checkPermission(null, new UndefinedPermission()));
     }
 
     public void testAccessControlEmployee() {
@@ -87,16 +87,16 @@ public class AclBuilderTest extends TestCase {
         assertNotNull(acl.getBehaviours());
         assertEquals(1, acl.getBehaviours().size());
 
-        assertTrue(acl.checkPermission(new EntityPermission("Public", EntityPermission.READ)));
-        assertFalse(acl.checkPermission(new EntityPermission("Private", EntityPermission.READ)));
+        assertTrue(acl.checkPermission(null, new EntityPermission("Public", EntityPermission.READ)));
+        assertFalse(acl.checkPermission(null, new EntityPermission("Private", EntityPermission.READ)));
 
-        assertTrue(acl.checkPermission(new ServiceExecutePermission("Read.Me")));
-        assertFalse(acl.checkPermission(new ServiceExecutePermission("Write.Me")));
+        assertTrue(acl.checkPermission(null, new ServiceExecutePermission("Read.Me")));
+        assertFalse(acl.checkPermission(null, new ServiceExecutePermission("Write.Me")));
 
-        assertTrue(acl.checkPermission(new ServiceExecutePermission("Emps.Do")));
-        assertFalse(acl.checkPermission(new ServiceExecutePermission("Admin.Do")));
-        assertFalse(acl.checkPermission(new ServiceExecutePermission("Emps.Reports.Do")));
+        assertTrue(acl.checkPermission(null, new ServiceExecutePermission("Emps.Do")));
+        assertFalse(acl.checkPermission(null, new ServiceExecutePermission("Admin.Do")));
+        assertFalse(acl.checkPermission(null, new ServiceExecutePermission("Emps.Reports.Do")));
 
-        assertFalse(acl.checkPermission(new UndefinedPermission()));
+        assertFalse(acl.checkPermission(null, new UndefinedPermission()));
     }
 }

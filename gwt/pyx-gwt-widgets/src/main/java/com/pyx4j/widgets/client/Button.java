@@ -46,13 +46,14 @@ import com.google.gwt.user.client.ui.MenuItem;
 import com.google.gwt.user.client.ui.SimplePanel;
 
 import com.pyx4j.security.annotations.ActionId;
+import com.pyx4j.security.shared.AccessControlContext;
 import com.pyx4j.security.shared.ActionPermission;
 import com.pyx4j.security.shared.Permission;
 import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.widgets.client.images.ButtonImages;
 import com.pyx4j.widgets.client.style.theme.WidgetTheme;
 
-public class Button extends FocusPanel implements IFocusWidget {
+public class Button extends FocusPanel implements IFocusWidget, HasSecureConcern {
 
     private final HTML textLabel;
 
@@ -402,6 +403,12 @@ public class Button extends FocusPanel implements IFocusWidget {
         return false;
     }
 
+    @Override
+    public void setSecurityContext(AccessControlContext context) {
+        // TODO Auto-generated method stub
+
+    }
+
     public static class ButtonMenuBar extends MenuBar {
 
         private final DropDownPanel popup;
@@ -454,9 +461,9 @@ public class Button extends FocusPanel implements IFocusWidget {
         }
     }
 
-    public static class SecureMenuItem extends MenuItem {
+    public static class SecureMenuItem extends MenuItem implements HasSecureConcern {
 
-        private Permission[] permissions;
+        private final SecureConcern visible = new SecureConcern();
 
         public SecureMenuItem(String text, ScheduledCommand cmd, Permission... permissions) {
             super(text, cmd);
@@ -468,14 +475,23 @@ public class Button extends FocusPanel implements IFocusWidget {
         }
 
         public void setPermission(Permission... permission) {
-            this.permissions = permission;
-            super.setVisible(SecurityController.check(permission));
+            visible.setPermission(permission);
         }
 
         @Override
         public void setVisible(boolean visible) {
-            super.setVisible(visible && SecurityController.check(permissions));
+            this.visible.setDecision(visible);
+            if (this.visible.hasDecision()) {
+                super.setVisible(this.visible.getDecision());
+            }
+        }
+
+        @Override
+        public void setSecurityContext(AccessControlContext context) {
+            visible.setContext(context);
+            super.setVisible(visible.getDecision());
         }
 
     }
+
 }

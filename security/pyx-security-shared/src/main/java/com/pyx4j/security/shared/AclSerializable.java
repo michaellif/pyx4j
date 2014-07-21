@@ -58,9 +58,13 @@ public class AclSerializable implements Acl, Serializable {
 
     @Override
     //TODO Optimize by Permission.class
-    public boolean checkPermission(Permission permission) {
+    public boolean checkPermission(AccessControlContext context, Permission permission) {
         for (Permission p : permissions) {
             if (p.implies(permission)) {
+                if ((p instanceof HasProtectionDomain) && (((HasProtectionDomain) p).getProtectionDomain() != null)
+                        && (context != null && !context.implies(((HasProtectionDomain) p).getProtectionDomain()))) {
+                    continue;
+                }
                 for (Restriction r : restrictions) {
                     if (r.implies(permission)) {
                         return false;

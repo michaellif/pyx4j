@@ -32,7 +32,7 @@ public interface Acl {
 
     public Collection<Permission> getPermissions();
 
-    public boolean checkPermission(Permission permission);
+    public boolean checkPermission(AccessControlContext context, Permission permission);
 
     public <T extends AccessRule> List<T> getAccessRules(Class<T> accessRuleInterfaceClass, Object subject);
 

@@ -99,9 +99,18 @@ public abstract class SecurityController {
         return controller.getAcl().getPermissions();
     }
 
-    public static boolean check(Permission... permissions) {
+    public final static boolean check(Permission... permissions) {
         for (Permission permission : permissions) {
-            if (controller.getAcl().checkPermission(permission)) {
+            if (controller.getAcl().checkPermission(null, permission)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public final static boolean check(AccessControlContext context, Permission... permissions) {
+        for (Permission permission : permissions) {
+            if (controller.getAcl().checkPermission(context, permission)) {
                 return true;
             }
         }

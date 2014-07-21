@@ -33,6 +33,7 @@ import com.google.web.bindery.event.shared.HandlerRegistration;
 import com.pyx4j.commons.EqualsHelper;
 import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.gwt.commons.ClientEventBus;
+import com.pyx4j.security.shared.AccessControlContext;
 import com.pyx4j.security.shared.AccessRule;
 import com.pyx4j.security.shared.Acl;
 import com.pyx4j.security.shared.Behavior;
@@ -61,7 +62,7 @@ public class ClientSecurityController extends SecurityController {
 
         //TODO Optimize by Permission.class
         @Override
-        public boolean checkPermission(Permission permission) {
+        public boolean checkPermission(AccessControlContext context, Permission permission) {
             for (Permission p : permissions) {
                 if (p.implies(permission)) {
                     return true;
@@ -104,7 +105,7 @@ public class ClientSecurityController extends SecurityController {
         }
 
         @Override
-        public boolean checkPermission(Permission permission) {
+        public boolean checkPermission(AccessControlContext context, Permission permission) {
             return true;
         }
 

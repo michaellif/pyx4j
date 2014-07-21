@@ -34,9 +34,10 @@ import com.pyx4j.entity.core.meta.EntityMeta;
 import com.pyx4j.entity.core.validator.Validator;
 import com.pyx4j.i18n.annotations.I18n;
 import com.pyx4j.i18n.annotations.I18n.I18nStrategy;
+import com.pyx4j.security.shared.AccessControlContext;
 
 @I18n(strategy = I18nStrategy.DerivedOnly)
-public interface IEntity extends IObject<Map<String, Serializable>>, Serializable, Printable {
+public interface IEntity extends IObject<Map<String, Serializable>>, Serializable, Printable, AccessControlContext {
 
     public static String PRIMARY_KEY = "id";
 

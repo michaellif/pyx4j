@@ -127,7 +127,7 @@ public class DataModelPermission<E extends IEntity> extends AbstractCRUDPermissi
                 if (this.instanceAccess == null) {
                     return true;
                 } else {
-                    return this.instanceAccess.allow(((DataModelPermission<?>) p).contextEntityInstance);
+                    return this.instanceAccess.implies(((DataModelPermission<?>) p).contextEntityInstance);
                 }
             } else {
                 return true;

@@ -23,19 +23,39 @@ package com.pyx4j.security.shared;
 import com.pyx4j.commons.GWTSerializable;
 import com.pyx4j.security.annotations.ActionId;
 
-public class ActionPermission extends BasicPermission {
+public class ActionPermission extends BasicPermission implements HasProtectionDomain {
 
     private static final long serialVersionUID = 1L;
+
+    private ProtectionDomain<?> protectionDomain;
 
     //TODO Make serializable using  ActionId class
 
     @GWTSerializable
     protected ActionPermission() {
         super("");
+        this.protectionDomain = null;
     }
 
     public ActionPermission(Class<? extends ActionId> actionClass) {
         super(actionClass.getName());
+        this.protectionDomain = null;
+    }
+
+    public ActionPermission(Class<? extends ActionId> actionClass, ProtectionDomain<?> protectionDomain) {
+        super(actionClass.getName());
+        this.protectionDomain = protectionDomain;
+    }
+
+    @Override
+    public ProtectionDomain<?> getProtectionDomain() {
+        return protectionDomain;
+    }
+
+    @GWTSerializable
+    @Deprecated
+    private void setProtectionDomain(ProtectionDomain<?> instanceAccess) {
+        this.protectionDomain = instanceAccess;
     }
 
 }

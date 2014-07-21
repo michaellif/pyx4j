@@ -58,8 +58,10 @@ import com.pyx4j.entity.core.impl.SetHandler.ElementsComparator;
 import com.pyx4j.entity.core.meta.EntityMeta;
 import com.pyx4j.entity.core.meta.MemberMeta;
 import com.pyx4j.entity.core.validator.Validator;
+import com.pyx4j.entity.security.InstanceAccess;
 import com.pyx4j.i18n.annotations.I18n;
 import com.pyx4j.i18n.annotations.I18n.I18nStrategy;
+import com.pyx4j.security.shared.ProtectionDomain;
 
 @I18n(strategy = I18nStrategy.IgnoreAll)
 public abstract class SharedEntityHandler extends ObjectHandler<Map<String, Serializable>> implements IEntity, IFullDebug, IHaveServiceCallMarker {
@@ -886,6 +888,11 @@ public abstract class SharedEntityHandler extends ObjectHandler<Map<String, Seri
     @Override
     public List<Validator> getValidators(Path memberPath) {
         return null;
+    }
+
+    @Override
+    public boolean implies(ProtectionDomain<?> domain) {
+        return ((InstanceAccess) domain).implies(this);
     }
 
     @Override

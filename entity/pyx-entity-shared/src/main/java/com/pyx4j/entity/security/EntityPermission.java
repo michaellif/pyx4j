@@ -23,9 +23,11 @@ package com.pyx4j.entity.security;
 import com.pyx4j.commons.GWTJava5Helper;
 import com.pyx4j.commons.GWTSerializable;
 import com.pyx4j.entity.core.IEntity;
+import com.pyx4j.security.shared.HasProtectionDomain;
 import com.pyx4j.security.shared.Permission;
+import com.pyx4j.security.shared.ProtectionDomain;
 
-public class EntityPermission extends AbstractCRUDPermission {
+public class EntityPermission extends AbstractCRUDPermission implements HasProtectionDomain {
 
     private static final long serialVersionUID = 7095635694477738182L;
 
@@ -115,7 +117,7 @@ public class EntityPermission extends AbstractCRUDPermission {
                 if (this.instanceAccess == null) {
                     return true;
                 } else {
-                    return this.instanceAccess.allow(((EntityPermission) p).entityInstance);
+                    return this.instanceAccess.implies(((EntityPermission) p).entityInstance);
                 }
             } else {
                 return true;
@@ -128,6 +130,11 @@ public class EntityPermission extends AbstractCRUDPermission {
     @Override
     public String toString() {
         return getPath() + ((instanceAccess != null) ? " " + GWTJava5Helper.getSimpleName(instanceAccess.getClass()) : "") + " " + getActions();
+    }
+
+    @Override
+    public ProtectionDomain<?> getProtectionDomain() {
+        return instanceAccess;
     }
 
 }
