@@ -11,7 +11,7 @@
  * @author michaellif
  * @version $Id$
  */
-package com.propertyvista.operations.client.ui.crud.simulator.pad.batch;
+package com.propertyvista.operations.client.ui.crud.simulator.pad.file;
 
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
@@ -26,11 +26,11 @@ import com.pyx4j.i18n.shared.I18n;
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
 import com.propertyvista.operations.domain.eft.caledoneft.simulator.PadSimDebitRecord;
 
-public class PadSimBatchDebitRecordFolder extends VistaBoxFolder<PadSimDebitRecord> {
+public class PadSimDebitRecordFolder extends VistaBoxFolder<PadSimDebitRecord> {
 
     private static final I18n i18n = I18n.get(DebitRecordEditor.class);
 
-    public PadSimBatchDebitRecordFolder(boolean modifyable) {
+    public PadSimDebitRecordFolder(boolean modifyable) {
         super(PadSimDebitRecord.class, modifyable);
     }
 

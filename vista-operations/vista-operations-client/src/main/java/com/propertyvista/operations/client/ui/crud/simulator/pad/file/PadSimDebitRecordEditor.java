@@ -11,7 +11,7 @@
  * @author Vlad
  * @version $Id$
  */
-package com.propertyvista.operations.client.ui.crud.simulator.pad.batch;
+package com.propertyvista.operations.client.ui.crud.simulator.pad.file;
 
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.forms.client.ui.panels.FormPanel;
@@ -21,11 +21,11 @@ import com.pyx4j.site.client.ui.prime.form.IForm;
 import com.propertyvista.operations.client.ui.crud.OperationsEntityForm;
 import com.propertyvista.operations.domain.eft.caledoneft.simulator.PadSimDebitRecord;
 
-public class PadSimBatchDebitRecordEditor extends OperationsEntityForm<PadSimDebitRecord> {
+public class PadSimDebitRecordEditor extends OperationsEntityForm<PadSimDebitRecord> {
 
-    private static final I18n i18n = I18n.get(PadSimBatchDebitRecordEditor.class);
+    private static final I18n i18n = I18n.get(PadSimDebitRecordEditor.class);
 
-    public PadSimBatchDebitRecordEditor(IForm<PadSimDebitRecord> view) {
+    public PadSimDebitRecordEditor(IForm<PadSimDebitRecord> view) {
         super(PadSimDebitRecord.class, view);
 
         FormPanel formPanel = new FormPanel(this);

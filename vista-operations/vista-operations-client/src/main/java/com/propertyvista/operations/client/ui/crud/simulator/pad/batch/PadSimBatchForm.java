@@ -21,6 +21,7 @@ import com.pyx4j.site.client.ui.prime.form.IForm;
 import com.pyx4j.site.client.ui.prime.misc.CEntityCrudHyperlink;
 
 import com.propertyvista.operations.client.ui.crud.OperationsEntityForm;
+import com.propertyvista.operations.client.ui.crud.simulator.pad.file.PadSimDebitRecordFolder;
 import com.propertyvista.operations.domain.eft.caledoneft.simulator.PadSimBatch;
 import com.propertyvista.operations.domain.eft.caledoneft.simulator.PadSimFile;
 
@@ -83,7 +84,7 @@ public class PadSimBatchForm extends OperationsEntityForm<PadSimBatch> {
         formPanel.append(Location.Right, proto().fundsReleased()).decorate().componentWidth(120);
 
         formPanel.h1(i18n.tr("Detail Debit Records"));
-        formPanel.append(Location.Dual, proto().records(), new PadSimBatchDebitRecordFolder(isEditable()));
+        formPanel.append(Location.Dual, proto().records(), new PadSimDebitRecordFolder(isEditable()));
 
         selectTab(addTab(formPanel, i18n.tr("General")));
         setTabBarVisible(false);
