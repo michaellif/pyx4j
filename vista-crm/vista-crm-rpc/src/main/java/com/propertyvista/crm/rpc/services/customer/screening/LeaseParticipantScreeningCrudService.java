@@ -20,7 +20,9 @@ import com.propertyvista.domain.tenant.lease.LeaseParticipant;
 import com.propertyvista.dto.LeaseParticipantScreeningTO;
 
 /**
- * Actual data is retried by LeaseParticipant id versioned part is CustomerScreening
+ * Actual data is retried by LeaseParticipant id versioned part is CustomerScreening.
+ * 
+ * This is Unique case where BO Key != TO Key.
  */
 public interface LeaseParticipantScreeningCrudService extends AbstractVersionedCrudService<LeaseParticipantScreeningTO> {
 

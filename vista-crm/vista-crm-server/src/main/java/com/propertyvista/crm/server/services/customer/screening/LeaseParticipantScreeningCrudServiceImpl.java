@@ -20,8 +20,8 @@ import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.core.criterion.PropertyCriterion;
 import com.pyx4j.entity.server.AbstractVersionedCrudServiceDtoImpl;
-import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.server.CrudEntityBinder;
+import com.pyx4j.entity.server.Persistence;
 
 import com.propertyvista.biz.tenant.ScreeningFacade;
 import com.propertyvista.biz.tenant.lease.LeaseFacade;
@@ -78,8 +78,14 @@ public class LeaseParticipantScreeningCrudServiceImpl extends AbstractVersionedC
         }
     }
 
-    private CustomerScreening retrivePersonScreeningDraftForEdit(Key leaseParticipantId) {
-        LeaseParticipant<?> leaseParticipant = Persistence.service().retrieve(LeaseParticipant.class, leaseParticipantId);
+    private void retriveSecurityAttributes(LeaseParticipantScreeningTO to) {
+        LeaseParticipant<?> leaseParticipant = Persistence.service().retrieve(LeaseParticipant.class, to.leaseParticipantId().getPrimaryKey());
+        Persistence.service().retrieve(leaseParticipant.lease());
+        to.leaseStatus().setValue(leaseParticipant.lease().status().getValue());
+    }
+
+    private CustomerScreening retrivePersonScreeningDraftForEdit(LeaseParticipant<?> leaseParticipantId) {
+        LeaseParticipant<?> leaseParticipant = Persistence.service().retrieve(LeaseParticipant.class, leaseParticipantId.getPrimaryKey());
 
         Building policyNode = ServerSideFactory.create(LeaseFacade.class).getLeasePolicyNode(leaseParticipant.lease());
 
@@ -99,8 +105,9 @@ public class LeaseParticipantScreeningCrudServiceImpl extends AbstractVersionedC
         CustomerScreeningInitializationData initData = (CustomerScreeningInitializationData) initializationData;
         LeaseParticipantScreeningTO to = EntityFactory.create(LeaseParticipantScreeningTO.class);
         to.leaseParticipantId().set(initData.leaseParticipantId());
+        retriveSecurityAttributes(to);
 
-        to.screening().set(retrivePersonScreeningDraftForEdit(initData.leaseParticipantId().getPrimaryKey()));
+        to.screening().set(retrivePersonScreeningDraftForEdit(initData.leaseParticipantId()));
         if (VistaTODO.VISTA_4498_Remove_Unnecessary_Validation_Screening_CRM) {
             to.screening().version().documents().clear();
         }
@@ -118,9 +125,12 @@ public class LeaseParticipantScreeningCrudServiceImpl extends AbstractVersionedC
 
     @Override
     protected void enhanceRetrieved(CustomerScreening bo, LeaseParticipantScreeningTO to, RetrieveTarget retrieveTarget) {
+        // BO Key is now TO Key. And TO is leaseParticipantId
+        to.leaseParticipantId().setPrimaryKey(to.getPrimaryKey().asCurrentKey());
+        retriveSecurityAttributes(to);
         // If Just created duplicate ForDraftEdit
         if (retrieveTarget == RetrieveTarget.Edit) {
-            to.screening().set(retrivePersonScreeningDraftForEdit(to.getPrimaryKey()));
+            to.screening().set(retrivePersonScreeningDraftForEdit(to.leaseParticipantId()));
             Persistence.service().retrieve(to.screening().screene(), AttachLevel.ToStringMembers, false);
         }
     }

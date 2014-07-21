@@ -24,6 +24,6 @@ public class PotentialTenantScreeningInstanceAccess implements InstanceAccess {
 
     @Override
     public boolean allow(IEntity contextEntity) {
-        return ((LeaseParticipantScreeningTO) contextEntity).leaseParticipantId().lease().status().getValue().isDraft();
+        return ((LeaseParticipantScreeningTO) contextEntity).leaseStatus().getValue().isDraft();
     }
 }

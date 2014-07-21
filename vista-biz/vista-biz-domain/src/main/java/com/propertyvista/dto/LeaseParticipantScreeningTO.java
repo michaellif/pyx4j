@@ -17,10 +17,12 @@ import com.pyx4j.entity.annotations.ExtendsBO;
 import com.pyx4j.entity.annotations.SecurityEnabled;
 import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.Transient;
+import com.pyx4j.entity.core.IPrimitive;
 import com.pyx4j.entity.core.IVersionData;
 import com.pyx4j.entity.core.IVersionedEntity;
 
 import com.propertyvista.domain.tenant.CustomerScreening;
+import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseParticipant;
 import com.propertyvista.dto.LeaseParticipantScreeningTO.LeaseParticipantScreeningTOV;
 
@@ -36,6 +38,8 @@ public interface LeaseParticipantScreeningTO extends IVersionedEntity<LeaseParti
     CustomerScreening screening();
 
     LeaseParticipant<?> leaseParticipantId();
+
+    IPrimitive<Lease.Status> leaseStatus();
 
     @Transient
     public interface LeaseParticipantScreeningTOV extends IVersionData<LeaseParticipantScreeningTO> {
