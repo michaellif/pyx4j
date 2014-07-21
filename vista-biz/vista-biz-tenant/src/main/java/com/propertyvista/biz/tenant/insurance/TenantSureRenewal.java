@@ -103,6 +103,8 @@ class TenantSureRenewal {
 
         Persistence.ensureRetrieve(newTenantSurePolicy.tenant(), AttachLevel.Attached);
 
+        ServerSideFactory.create(TenantSureFacade.class).sendQuote(newTenantSurePolicy.tenant(), newTenantSurePolicy.quoteId().getValue());
+
         ServerSideFactory.create(CommunicationFacade.class).sendTenantSureRenewalEmail(newTenantSurePolicy.tenant().customer().person().email().getValue(),
                 newTenantSurePolicy);
     }

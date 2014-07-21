@@ -81,6 +81,9 @@ class MessageTemplatesTenantSure {
         template.variable("${certificateNumber}", policy.renewalOf().certificate().insuranceCertificateNumber().getValue());
         template.variable("${inceptionDate}", dateFormat.format(policy.certificate().inceptionDate().getValue()));
 
+        template.variable("${tenantFirstName}", policy.tenant().customer().person().name().firstName());
+        template.variable("${tenantLastName}", policy.tenant().customer().person().name().lastName());
+
         template.variable("${annualPremium}", policy.annualPremium().getValue());
         template.variable("${underwriterFee}", policy.underwriterFee().getValue());
         template.variable("${brokerFee}", policy.brokerFee().getValue());
