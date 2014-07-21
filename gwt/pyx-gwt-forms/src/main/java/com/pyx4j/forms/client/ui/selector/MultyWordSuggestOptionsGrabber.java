@@ -53,7 +53,7 @@ public class MultyWordSuggestOptionsGrabber<E> implements OptionsGrabber<E> {
         int limit = request.getLimit();
 
         // Get candidates from search words.
-        List<E> candidates = trie.getCandidates(request.getQuery());
+        Collection<E> candidates = trie.getCandidates(request.getQuery());
 
         // Respect limit for number of choices.
         for (int i = candidates.size() - 1; i > limit; i--) {
@@ -61,7 +61,7 @@ public class MultyWordSuggestOptionsGrabber<E> implements OptionsGrabber<E> {
         }
 
         if (candidates != null) {
-            Collections.sort(candidates, comparator);
+            Collections.sort((List<E>) candidates, comparator);
         }
 
         Response<E> response = new Response<E>(candidates);
