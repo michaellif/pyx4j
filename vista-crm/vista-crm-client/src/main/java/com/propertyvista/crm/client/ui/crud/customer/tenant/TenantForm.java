@@ -93,13 +93,20 @@ public class TenantForm extends LeaseParticipantForm<TenantDTO> {
 //        setTabVisible(autoPaymentsTab, financialyEligible && !getValue().lease().status().getValue().isNoAutoPay());
 //        setTabVisible(insuranceTab, financialyEligible && (leaseStatus.isDraft() || leaseStatus.isCurrent()));
 
+        get(proto().paymentMethods()).setEditable(getValue().electronicPaymentsAllowed().getValue(false));
+
         setTabVisible(autoPaymentsTab, getValue().lease().status().getValue().isCurrent());
-        get(proto().preauthorizedPayments()).setEditable(!getValue().isMoveOutWithinNextBillingCycle().getValue(false));
+        get(proto().preauthorizedPayments()).setEditable(
+                getValue().electronicPaymentsAllowed().getValue(false) && !getValue().isMoveOutWithinNextBillingCycle().getValue(false));
 
         // disable any payment-related editing if no electronic payments allowed:
         if (isEditable()) {
-            paymentMethodsTab.setTabEnabled(getValue().electronicPaymentsAllowed().getValue(false));
-//            autoPaymentsTab.setTabEnabled(getValue().electronicPaymentsAllowed().getValue(false));
+            get(proto().paymentMethods()).setNote(null);
+            get(proto().preauthorizedPayments()).setNote(null);
+            if (!getValue().electronicPaymentsAllowed().getValue(false)) {
+                get(proto().paymentMethods()).setNote(i18n.tr("Merchant Account is not setup to receive Electronic Payments"), NoteStyle.Warn);
+                get(proto().preauthorizedPayments()).setNote(i18n.tr("Merchant Account is not setup to receive Electronic Payments"), NoteStyle.Warn);
+            }
         }
 
         updateTenantInsuranceTabControls();
