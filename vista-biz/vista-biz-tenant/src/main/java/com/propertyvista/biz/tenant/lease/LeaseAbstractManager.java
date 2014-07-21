@@ -143,6 +143,7 @@ public abstract class LeaseAbstractManager {
             lease.currentTerm().set(EntityFactory.create(LeaseTerm.class));
             lease.currentTerm().type().setValue(LeaseTerm.Type.FixedEx);
             lease.currentTerm().status().setValue(LeaseTerm.Status.Current);
+            lease.currentTerm().version().leaseProducts().serviceItem().agreedPrice().setValue(BigDecimal.ZERO);
         }
         lease.currentTerm().lease().set(lease);
 
@@ -217,6 +218,9 @@ public abstract class LeaseAbstractManager {
         // update service/features:
         if (serviceItem != null) {
             leaseTerm.version().leaseProducts().serviceItem().set(serviceItem);
+        } else {
+            leaseTerm.version().leaseProducts().serviceItem().clearValues();
+            leaseTerm.version().leaseProducts().serviceItem().agreedPrice().setValue(BigDecimal.ZERO);
         }
 
         leaseTerm.version().leaseProducts().featureItems().clear();
@@ -709,7 +713,7 @@ public abstract class LeaseAbstractManager {
     public void setLeaseAgreedPrice(Lease lease, BigDecimal price) {
         Persistence.ensureRetrieve(lease, AttachLevel.Attached);
 
-        lease.currentTerm().version().leaseProducts().serviceItem().agreedPrice().setValue(price);
+        lease.currentTerm().version().leaseProducts().serviceItem().agreedPrice().setValue(price == null ? BigDecimal.ZERO : price);
     }
 
     public boolean isMoveOutWithinNextBillingCycle(Lease leaseId) {

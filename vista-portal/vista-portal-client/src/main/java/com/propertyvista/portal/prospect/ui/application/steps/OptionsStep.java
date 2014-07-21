@@ -13,6 +13,7 @@
  */
 package com.propertyvista.portal.prospect.ui.application.steps;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import com.google.gwt.user.client.ui.IsWidget;
@@ -172,7 +173,7 @@ public class OptionsStep extends ApplicationWizardStep {
                             if (getMaxCount() < 0 || getValue().size() < getMaxCount()) {
                                 BillableItem newItem = EntityFactory.create(BillableItem.class);
                                 newItem.item().set(item);
-                                newItem.agreedPrice().setValue(item.price().getValue());
+                                newItem.agreedPrice().setValue(item.price().isNull() ? BigDecimal.ZERO : item.price().getValue());
                                 addItem(newItem);
                             }
                         }
