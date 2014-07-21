@@ -99,7 +99,7 @@ public class ApplicationStatusPageViewImpl extends FlowPanel implements Applicat
             switch (masterAppStatus.status().getValue()) {
             case Incomplete:
 
-                OnlineApplicationStatus userAppStatus = presenter.getUserApplicationStatus();
+                OnlineApplicationStatus userAppStatus = presenter.getUserApplicationStatus(masterAppStatus);
 
                 switch (userAppStatus.status().getValue()) {
                 case Incomplete:

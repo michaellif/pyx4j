@@ -36,8 +36,6 @@ public class ApplicationStatusPageActivity extends SecurityAwareActivity impleme
 
     private final ApplicationStatusPageView view;
 
-    private MasterOnlineApplicationStatus masterAppStatus;
-
     public ApplicationStatusPageActivity(AppPlace place) {
         this.view = ProspectPortalSite.getViewFactory().getView(ApplicationStatusPageView.class);
         this.view.setPresenter(this);
@@ -50,14 +48,12 @@ public class ApplicationStatusPageActivity extends SecurityAwareActivity impleme
         GWT.<ApplicationStatusService> create(ApplicationStatusService.class).retrieveMasterApplicationStatus(
                 new DefaultAsyncCallback<MasterOnlineApplicationStatus>() {
                     @Override
-                    public void onSuccess(MasterOnlineApplicationStatus result) {
-                        masterAppStatus = result;
-
-                        if (getUserApplicationStatus().status().getValue() == OnlineApplication.Status.Invited) {
+                    public void onSuccess(MasterOnlineApplicationStatus status) {
+                        if (getUserApplicationStatus(status).status().getValue() == OnlineApplication.Status.Invited) {
                             AppSite.getPlaceController().goTo(new ProspectPortalSiteMap.Application());
                         } else {
                             panel.setWidget(view);
-                            view.populate(result);
+                            view.populate(status);
                         }
                     }
                 });
@@ -74,8 +70,7 @@ public class ApplicationStatusPageActivity extends SecurityAwareActivity impleme
     }
 
     @Override
-    public OnlineApplicationStatus getUserApplicationStatus() {
-
+    public OnlineApplicationStatus getUserApplicationStatus(MasterOnlineApplicationStatus masterAppStatus) {
         for (OnlineApplicationStatus appStatus : masterAppStatus.individualApplications()) {
             if (ClientContext.getUserVisit().getPrincipalPrimaryKey().equals(appStatus.customer().user().getPrimaryKey())) {
                 return appStatus;

@@ -21,7 +21,7 @@ public interface ApplicationStatusPageView extends IViewerView<MasterOnlineAppli
 
     public interface ApplicationStatusPagePresenter extends IViewerPresenter<MasterOnlineApplicationStatus> {
 
-        public OnlineApplicationStatus getUserApplicationStatus();
+        public OnlineApplicationStatus getUserApplicationStatus(MasterOnlineApplicationStatus masterAppStatus);
 
     }
 
