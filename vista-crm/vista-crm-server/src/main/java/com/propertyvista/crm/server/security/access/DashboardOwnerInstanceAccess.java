@@ -24,7 +24,7 @@ public class DashboardOwnerInstanceAccess implements InstanceAccess {
     private static final long serialVersionUID = 7082392064409139166L;
 
     @Override
-    public boolean allow(IEntity entity) {//@formatter:off       
+    public boolean implies(IEntity entity) {//@formatter:off       
         return (entity instanceof DashboardMetadata)
                 && !((DashboardMetadata) entity).ownerUser().isNull()
                 && ((DashboardMetadata) entity).ownerUser().getPrimaryKey().equals(VistaContext.getCurrentUserPrimaryKey()); 

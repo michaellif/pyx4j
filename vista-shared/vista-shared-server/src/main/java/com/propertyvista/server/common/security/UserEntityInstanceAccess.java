@@ -25,7 +25,7 @@ public class UserEntityInstanceAccess implements InstanceAccess {
     private static final long serialVersionUID = -3642752850612488708L;
 
     @Override
-    public boolean allow(IEntity entity) {
+    public boolean implies(IEntity entity) {
         return (entity instanceof IUserEntity) && (EqualsHelper.equals(((IUserEntity) entity).user().getPrimaryKey(), VistaContext.getCurrentUserPrimaryKey()));
     }
 

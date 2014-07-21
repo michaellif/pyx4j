@@ -25,7 +25,7 @@ public class SharedUserEntityInstanceAccess implements InstanceAccess {
     private static final long serialVersionUID = -8216688423251918735L;
 
     @Override
-    public boolean allow(IEntity entity) {
+    public boolean implies(IEntity entity) {
 
         return (entity instanceof ISharedUserEntity)
                 && ((((ISharedUserEntity) entity).user().getPrimaryKey() == null) || EqualsHelper.equals(((ISharedUserEntity) entity).user().getPrimaryKey(),

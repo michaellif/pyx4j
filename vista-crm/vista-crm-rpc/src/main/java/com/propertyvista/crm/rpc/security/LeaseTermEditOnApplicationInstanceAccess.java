@@ -24,7 +24,7 @@ public class LeaseTermEditOnApplicationInstanceAccess implements InstanceAccess 
     private static final long serialVersionUID = 1L;
 
     @Override
-    public boolean allow(IEntity contextEntity) {
+    public boolean implies(IEntity contextEntity) {
         return Lease.Status.Application == ((LeaseTermDTO) contextEntity).lease().status().getValue();
     }
 }

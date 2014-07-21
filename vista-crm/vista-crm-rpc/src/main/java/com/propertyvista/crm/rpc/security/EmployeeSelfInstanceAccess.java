@@ -25,7 +25,7 @@ public class EmployeeSelfInstanceAccess implements InstanceAccess {
     private static final long serialVersionUID = 1L;
 
     @Override
-    public boolean allow(IEntity contextEntity) {
+    public boolean implies(IEntity contextEntity) {
         return ((Employee) contextEntity).user().equals(Context.visit(CrmUserVisit.class).getCurrentUser());
     }
 

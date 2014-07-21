@@ -25,7 +25,7 @@ public class DashboardUserInstanceAccess implements InstanceAccess {
     private static final long serialVersionUID = 7082392064409139166L;
 
     @Override
-    public boolean allow(IEntity entity) {//@formatter:off       
+    public boolean implies(IEntity entity) {//@formatter:off       
         return SecurityController.check(VistaCrmBehavior.DashboardManager_OLD) | ((entity instanceof DashboardMetadata) && ((DashboardMetadata) entity).isShared().getValue(false)); 
     }//@formatter:on
 }

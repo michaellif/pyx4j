@@ -27,6 +27,7 @@ import com.pyx4j.security.shared.ActionPermission;
 import com.propertyvista.crm.rpc.security.PotentialTenantInstanceAccess;
 import com.propertyvista.crm.rpc.security.PotentialTenantScreeningInstanceAccess;
 import com.propertyvista.crm.rpc.services.customer.ac.PotentialTenantListAction;
+import com.propertyvista.crm.rpc.services.customer.ac.TenantChangePassword;
 import com.propertyvista.dto.LeaseParticipantScreeningTO;
 import com.propertyvista.dto.TenantDTO;
 
@@ -53,8 +54,8 @@ public class VistaCrmPotentialTenantAccessControlList extends UIAclBuilder {
         grant(PotentialTenantFull, new ActionPermission(PotentialTenantListAction.class));
         grant(PotentialTenantScreening, new ActionPermission(PotentialTenantListAction.class));
 
-//        grant(PotentialTenantBasic, new ActionPermission(PotentialTenantChangePassword.class));
-//        grant(PotentialTenantAdvanced, new ActionPermission(PotentialTenantChangePassword.class));
-//        grant(PotentialTenantFull, new ActionPermission(PotentialTenantChangePassword.class));
+        grant(PotentialTenantBasic, TenantChangePassword.class, new PotentialTenantInstanceAccess());
+        grant(PotentialTenantAdvanced, new ActionPermission(TenantChangePassword.class, new PotentialTenantInstanceAccess()));
+        grant(PotentialTenantFull, new ActionPermission(TenantChangePassword.class, new PotentialTenantInstanceAccess()));
     }
 }

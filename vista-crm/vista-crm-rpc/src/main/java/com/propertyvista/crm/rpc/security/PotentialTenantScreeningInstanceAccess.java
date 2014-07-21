@@ -23,7 +23,7 @@ public class PotentialTenantScreeningInstanceAccess implements InstanceAccess {
     private static final long serialVersionUID = 1L;
 
     @Override
-    public boolean allow(IEntity contextEntity) {
+    public boolean implies(IEntity contextEntity) {
         return ((LeaseParticipantScreeningTO) contextEntity).leaseStatus().getValue().isDraft();
     }
 }

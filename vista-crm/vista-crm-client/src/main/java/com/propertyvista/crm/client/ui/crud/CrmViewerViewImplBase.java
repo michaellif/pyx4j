@@ -32,6 +32,7 @@ import com.pyx4j.site.client.ui.PaneTheme;
 import com.pyx4j.site.client.ui.prime.IPrimePane;
 import com.pyx4j.site.client.ui.prime.form.AbstractViewer;
 import com.pyx4j.widgets.client.Button;
+import com.pyx4j.widgets.client.Button.SecureMenuItem;
 
 import com.propertyvista.common.client.ui.components.versioning.VersionSelectorDialog;
 import com.propertyvista.crm.client.activity.crud.CrmViewerActivity;
@@ -137,6 +138,9 @@ public class CrmViewerViewImplBase<E extends IEntity> extends AbstractViewer<E> 
 
     public void addAction(MenuItem action) {
         actionsMenu.addItem(action);
+        if (action instanceof SecureMenuItem) {
+            addSecureConcern((SecureMenuItem) action);
+        }
     }
 
     public void removeAction(MenuItem action) {
@@ -267,6 +271,12 @@ public class CrmViewerViewImplBase<E extends IEntity> extends AbstractViewer<E> 
 
         if (value instanceof IVersionedEntity) {
             setFinalizationVisible(((IVersionedEntity<?>) value).version().versionNumber().isNull());
+        }
+
+        for (MenuItem a : actionsMenu.getItems()) {
+            if (a instanceof SecureMenuItem) {
+                ((SecureMenuItem) a).setSecurityContext(value);
+            }
         }
 
         setEditingVisible(true);
