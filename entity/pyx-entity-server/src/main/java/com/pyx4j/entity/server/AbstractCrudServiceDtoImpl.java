@@ -126,7 +126,11 @@ public abstract class AbstractCrudServiceDtoImpl<BO extends IEntity, TO extends 
             retrievedSingle(bo, retrieveTarget);
         }
         TO to = binder.createTO(bo);
+
+        // Allow  for TO to be calculated base on original input
         to.setPrimaryKey(toId);
+        to.setPrimaryKey(getTOKey(bo, to));
+
         enhanceRetrieved(bo, to, retrieveTarget);
         if (strictDataModelPermissions || toProto.getEntityMeta().isAnnotationPresent(SecurityEnabled.class)) {
             SecurityController.assertPermission(DataModelPermission.permissionRead(to));
