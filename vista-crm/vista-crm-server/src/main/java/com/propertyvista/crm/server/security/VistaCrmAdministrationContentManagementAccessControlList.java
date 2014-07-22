@@ -29,6 +29,7 @@ import com.propertyvista.crm.rpc.services.admin.SiteGeneralCrudService;
 import com.propertyvista.crm.rpc.services.admin.SiteImageResourceCrudService;
 import com.propertyvista.crm.rpc.services.admin.SiteImageResourceUploadService;
 import com.propertyvista.crm.rpc.services.admin.ac.CrmContentManagementAccess;
+import com.propertyvista.domain.site.AvailableLocale;
 import com.propertyvista.domain.site.SiteDescriptor;
 import com.propertyvista.domain.site.SiteImageResource;
 
@@ -48,6 +49,7 @@ class VistaCrmAdministrationContentManagementAccessControlList extends UIAclBuil
 
         grant(AdminContent, new EntityPermission(SiteDescriptor.class, READ | UPDATE));
         grant(AdminContent, new EntityPermission(SiteImageResource.class, READ));
+        grant(AdminContent, new EntityPermission(AvailableLocale.class, READ));
 
     }
 }

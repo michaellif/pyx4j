@@ -26,9 +26,7 @@ import com.pyx4j.rpc.shared.ServiceExecutePermission;
 import com.pyx4j.security.server.ServletContainerAclBuilder;
 
 import com.propertyvista.crm.rpc.CRMImpliedPermission;
-import com.propertyvista.crm.rpc.services.CityIntroPageCrudService;
 import com.propertyvista.crm.rpc.services.FeedbackService;
-import com.propertyvista.crm.rpc.services.HomePageGadgetCrudService;
 import com.propertyvista.crm.rpc.services.MediaUploadBuildingService;
 import com.propertyvista.crm.rpc.services.MediaUploadFloorplanService;
 import com.propertyvista.crm.rpc.services.NoteAttachmentUploadService;
@@ -36,11 +34,6 @@ import com.propertyvista.crm.rpc.services.PageDescriptorCrudService;
 import com.propertyvista.crm.rpc.services.PmcDocumentFileUploadService;
 import com.propertyvista.crm.rpc.services.PmcTermsOfServiceService;
 import com.propertyvista.crm.rpc.services.UpdateUploadService;
-import com.propertyvista.crm.rpc.services.admin.SiteBrandingCrudService;
-import com.propertyvista.crm.rpc.services.admin.SiteContentCrudService;
-import com.propertyvista.crm.rpc.services.admin.SiteGeneralCrudService;
-import com.propertyvista.crm.rpc.services.admin.SiteImageResourceCrudService;
-import com.propertyvista.crm.rpc.services.admin.SiteImageResourceUploadService;
 import com.propertyvista.crm.rpc.services.billing.BillPreviewService;
 import com.propertyvista.crm.rpc.services.billing.BillPrintService;
 import com.propertyvista.crm.rpc.services.billing.BillingCycleBillListService;
@@ -248,7 +241,7 @@ public class VistaCrmAccessControlList extends ServletContainerAclBuilder {
     // TODO Change this if you want to make it work temporary. Build will fail!
     private static final boolean allowAllDuringDevelopment = false;
 
-    private static final boolean allowAllEntityDuringDevelopment = false;
+    private static final boolean allowAllEntityDuringDevelopment = true;
 
     public VistaCrmAccessControlList() {
 
@@ -506,14 +499,6 @@ public class VistaCrmAccessControlList extends ServletContainerAclBuilder {
 
         grant(VistaBasicBehavior.CRM, new EntityPermission(EmailTemplatesPolicy.class, EntityPermission.ALL));
         grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(EmailTemplatesPolicyCrudService.class));
-
-        grant(VistaCrmBehavior.Marketing_OLD, new IServiceExecutePermission(SiteGeneralCrudService.class));
-        grant(VistaCrmBehavior.Marketing_OLD, new IServiceExecutePermission(SiteBrandingCrudService.class));
-        grant(VistaCrmBehavior.Marketing_OLD, new IServiceExecutePermission(SiteContentCrudService.class));
-        grant(VistaCrmBehavior.Marketing_OLD, new IServiceExecutePermission(SiteImageResourceCrudService.class));
-        grant(VistaCrmBehavior.Marketing_OLD, new IServiceExecutePermission(SiteImageResourceUploadService.class));
-        grant(VistaCrmBehavior.Marketing_OLD, new IServiceExecutePermission(CityIntroPageCrudService.class));
-        grant(VistaCrmBehavior.Marketing_OLD, new IServiceExecutePermission(HomePageGadgetCrudService.class));
 
         grant(VistaCrmBehavior.OrganizationPolicy_OLD, new IServiceExecutePermission(BackgroundCheckPolicyCrudService.class.getPackage().getName() + ".*"));
         grant(VistaCrmBehavior.OrganizationPolicy_OLD, new IServiceExecutePermission(EmailTemplateManagerService.class));
