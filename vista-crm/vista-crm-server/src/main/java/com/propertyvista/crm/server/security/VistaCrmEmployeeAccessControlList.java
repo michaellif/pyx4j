@@ -40,6 +40,7 @@ import com.propertyvista.crm.rpc.services.security.CrmAccountRecoveryOptionsUser
 import com.propertyvista.crm.rpc.services.security.CrmPasswordChangeUserService;
 import com.propertyvista.domain.company.Employee;
 import com.propertyvista.domain.company.Portfolio;
+import com.propertyvista.domain.security.CrmRole;
 import com.propertyvista.domain.security.common.VistaBasicBehavior;
 
 class VistaCrmEmployeeAccessControlList extends UIAclBuilder {
@@ -74,6 +75,7 @@ class VistaCrmEmployeeAccessControlList extends UIAclBuilder {
             grant(EmployeeBasic, new EntityPermission(Employee.class, READ));
 
             grant(EmployeeFull, new EntityPermission(Employee.class, ALL));
+            grant(EmployeeFull, new EntityPermission(CrmRole.class, READ));
             grant(EmployeeFull, new IServiceExecutePermission(SelectCrmRoleListService.class));
             grant(EmployeeFull, new IServiceExecutePermission(ManagedCrmUserService.class));
 

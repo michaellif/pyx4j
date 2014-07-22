@@ -35,11 +35,13 @@ import com.propertyvista.crm.rpc.CrmSiteMap.Administration.Settings;
 import com.propertyvista.crm.rpc.dto.admin.PmcCompanyInfoDTO;
 import com.propertyvista.crm.rpc.dto.admin.PmcPaymentMethodsDTO;
 import com.propertyvista.crm.rpc.dto.tenant.CustomerCreditCheckDTO;
+import com.propertyvista.crm.rpc.services.admin.ac.CrmContentManagementAccess;
 import com.propertyvista.crm.rpc.services.admin.ac.GlobalTenantSecurity;
 import com.propertyvista.domain.customizations.CountryOfOperation;
 import com.propertyvista.domain.financial.ARCode;
 import com.propertyvista.domain.financial.GlCodeCategory;
 import com.propertyvista.domain.financial.MerchantAccount;
+import com.propertyvista.domain.financial.tax.Tax;
 import com.propertyvista.domain.security.CrmRole;
 import com.propertyvista.domain.security.VistaCrmBehavior;
 import com.propertyvista.dto.AuditRecordDTO;
@@ -109,7 +111,7 @@ public class NavigAdministrationViewImpl extends Composite implements NavigAdmin
             if (!VistaFeatures.instance().yardiIntegration()) {
                 list.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Administration.Financial.GlCodeCategory(), DataModelPermission
                         .permissionRead(GlCodeCategory.class)));
-                list.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Administration.Financial.Tax()));
+                list.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Administration.Financial.Tax(), DataModelPermission.permissionRead(Tax.class)));
             }
             list.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Administration.Financial.MerchantAccount(), DataModelPermission
                     .permissionRead(MerchantAccount.class)));
@@ -120,9 +122,9 @@ public class NavigAdministrationViewImpl extends Composite implements NavigAdmin
             SideMenuList list = new SideMenuList();
             root.addMenuItem(new SideMenuItem(list, i18n.tr("Content Management"), null));
 
-            list.addMenuItem(new SideMenuAppPlaceItem(new ContentManagement.General()));
-            list.addMenuItem(new SideMenuAppPlaceItem(new ContentManagement.Website()));
-            list.addMenuItem(new SideMenuAppPlaceItem(new ContentManagement.Portal()));
+            list.addMenuItem(new SideMenuAppPlaceItem(new ContentManagement.General(), CrmContentManagementAccess.class));
+            list.addMenuItem(new SideMenuAppPlaceItem(new ContentManagement.Website(), CrmContentManagementAccess.class));
+            list.addMenuItem(new SideMenuAppPlaceItem(new ContentManagement.Portal(), CrmContentManagementAccess.class));
         }
 
         {//Policies

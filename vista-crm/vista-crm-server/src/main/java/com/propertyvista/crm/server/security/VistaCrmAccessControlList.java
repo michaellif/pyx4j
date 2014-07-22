@@ -248,7 +248,7 @@ public class VistaCrmAccessControlList extends ServletContainerAclBuilder {
     // TODO Change this if you want to make it work temporary. Build will fail!
     private static final boolean allowAllDuringDevelopment = false;
 
-    private static final boolean allowAllEntityDuringDevelopment = true;
+    private static final boolean allowAllEntityDuringDevelopment = false;
 
     public VistaCrmAccessControlList() {
 
