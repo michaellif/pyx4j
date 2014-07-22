@@ -18,7 +18,7 @@
  * @author arminea
  * @version $Id$
  */
-package com.pyx4j.forms.client.ui.selector;
+package com.pyx4j.test.forms.client.ui.selector;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -32,6 +32,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import com.pyx4j.commons.IFormatter;
+import com.pyx4j.forms.client.ui.selector.MultyWordSuggestTrie;
 
 public class MultyWordSuggestTrieTest {
 
