@@ -42,7 +42,7 @@ import com.propertyvista.domain.company.Employee;
 import com.propertyvista.domain.company.Portfolio;
 import com.propertyvista.domain.security.common.VistaBasicBehavior;
 
-public class VistaCrmEmployeeAccessControlList extends UIAclBuilder {
+class VistaCrmEmployeeAccessControlList extends UIAclBuilder {
 
     VistaCrmEmployeeAccessControlList() {
 

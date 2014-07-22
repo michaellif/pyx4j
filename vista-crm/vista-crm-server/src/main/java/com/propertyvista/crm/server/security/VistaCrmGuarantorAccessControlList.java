@@ -28,9 +28,9 @@ import com.pyx4j.security.shared.ActionPermission;
 import com.propertyvista.crm.rpc.services.customer.ac.GuarantorChangePassword;
 import com.propertyvista.dto.GuarantorDTO;
 
-public class VistaCrmGuarantorAccessControlList extends UIAclBuilder {
+class VistaCrmGuarantorAccessControlList extends UIAclBuilder {
 
-    public VistaCrmGuarantorAccessControlList() {
+    VistaCrmGuarantorAccessControlList() {
         { // 
             List<Class<? extends IEntity>> entities = entities(GuarantorDTO.class);
 

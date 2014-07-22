@@ -26,7 +26,7 @@ import com.propertyvista.crm.rpc.services.lease.ac.LeaseNotice;
 import com.propertyvista.domain.legal.LegalLetter;
 import com.propertyvista.dto.LeaseLegalStateDTO;
 
-public class VistaCrmLegalAccessControlList extends UIAclBuilder {
+class VistaCrmLegalAccessControlList extends UIAclBuilder {
 
     VistaCrmLegalAccessControlList() {
 

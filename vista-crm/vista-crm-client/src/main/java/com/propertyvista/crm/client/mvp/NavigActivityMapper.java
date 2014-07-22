@@ -23,7 +23,7 @@ import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.site.client.AppSite;
 
 import com.propertyvista.crm.client.activity.NavigActivity;
-import com.propertyvista.crm.client.activity.NavigSettingsActivity;
+import com.propertyvista.crm.client.activity.NavigAdministrationActivity;
 import com.propertyvista.crm.client.event.BoardUpdateEvent;
 import com.propertyvista.crm.client.event.BoardUpdateHandler;
 import com.propertyvista.crm.rpc.CrmSiteMap;
@@ -33,7 +33,7 @@ public class NavigActivityMapper implements ActivityMapper, BoardUpdateHandler {
 
     private static NavigActivity navigActivity;
 
-    private static NavigSettingsActivity navigSettingsActivity;
+    private static NavigAdministrationActivity navigSettingsActivity;
 
     public NavigActivityMapper() {
         AppSite.getEventBus().addHandler(BehaviorChangeEvent.getType(), new BehaviorChangeHandler() {
@@ -59,7 +59,7 @@ public class NavigActivityMapper implements ActivityMapper, BoardUpdateHandler {
         if (SecurityController.check(VistaBasicBehavior.CRM)) {
             if (place.getClass().getName().contains(CrmSiteMap.Administration.class.getName())) {
                 if (navigSettingsActivity == null) {
-                    navigSettingsActivity = new NavigSettingsActivity();
+                    navigSettingsActivity = new NavigAdministrationActivity();
                 }
                 navigSettingsActivity.withPlace(place);
                 return navigSettingsActivity;

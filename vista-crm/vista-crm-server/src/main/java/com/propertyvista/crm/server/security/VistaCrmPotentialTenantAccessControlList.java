@@ -31,9 +31,9 @@ import com.propertyvista.crm.rpc.services.customer.ac.TenantChangePassword;
 import com.propertyvista.dto.LeaseParticipantScreeningTO;
 import com.propertyvista.dto.TenantDTO;
 
-public class VistaCrmPotentialTenantAccessControlList extends UIAclBuilder {
+class VistaCrmPotentialTenantAccessControlList extends UIAclBuilder {
 
-    public VistaCrmPotentialTenantAccessControlList() {
+    VistaCrmPotentialTenantAccessControlList() {
         grant(PotentialTenantBasic, TenantDTO.class, new PotentialTenantInstanceAccess(), READ);
         grant(PotentialTenantAdvanced, TenantDTO.class, new PotentialTenantInstanceAccess(), READ);
         grant(PotentialTenantFull, TenantDTO.class, new PotentialTenantInstanceAccess(), READ | UPDATE);

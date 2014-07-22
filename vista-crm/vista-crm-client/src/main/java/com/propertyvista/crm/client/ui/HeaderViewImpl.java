@@ -38,6 +38,7 @@ import com.propertyvista.crm.client.CrmSite;
 import com.propertyvista.crm.client.resources.CrmImages;
 import com.propertyvista.crm.client.themes.CommunicationCrmTheme;
 import com.propertyvista.crm.rpc.CrmSiteMap;
+import com.propertyvista.crm.rpc.services.admin.ac.CrmAdministrationAccess;
 import com.propertyvista.dto.MessageDTO;
 import com.propertyvista.shared.i18n.CompiledLocale;
 
@@ -212,7 +213,7 @@ public class HeaderViewImpl extends FlowPanel implements HeaderView {
                 public void execute() {
                     AppSite.getPlaceController().goTo(new CrmSiteMap.Administration.Financial.ARCode());
                 }
-            });
+            }, CrmAdministrationAccess.class);
             adminButton.ensureDebugId("administration");
 
             languageButton = new Button("");

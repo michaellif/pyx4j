@@ -29,9 +29,9 @@ import com.propertyvista.crm.rpc.services.customer.ac.TenantListAction;
 import com.propertyvista.dto.TenantDTO;
 import com.propertyvista.dto.TenantPortalAccessInformationDTO;
 
-public class VistaCrmTenantAccessControlList extends UIAclBuilder {
+class VistaCrmTenantAccessControlList extends UIAclBuilder {
 
-    public VistaCrmTenantAccessControlList() {
+    VistaCrmTenantAccessControlList() {
         { // 
             grant(TenantBasic, TenantDTO.class, new TenantInstanceAccess(), READ);
             grant(TenantAdvanced, TenantDTO.class, new TenantInstanceAccess(), READ);

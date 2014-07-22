@@ -36,13 +36,13 @@ import com.propertyvista.domain.security.VistaCrmBehavior;
 import com.propertyvista.misc.VistaTODO;
 import com.propertyvista.shared.config.VistaFeatures;
 
-public class NavigSettingsViewImpl extends Composite implements NavigSettingsView {
+public class NavigAdministrationViewImpl extends Composite implements NavigAdministrationView {
 
-    private static final I18n i18n = I18n.get(NavigSettingsViewImpl.class);
+    private static final I18n i18n = I18n.get(NavigAdministrationViewImpl.class);
 
     private final SideMenu menu;
 
-    public NavigSettingsViewImpl() {
+    public NavigAdministrationViewImpl() {
 
         SideMenuList root = new SideMenuList();
         menu = new SideMenu(root);

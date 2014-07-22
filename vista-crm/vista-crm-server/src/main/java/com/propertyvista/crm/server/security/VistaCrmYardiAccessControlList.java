@@ -19,7 +19,7 @@ import com.pyx4j.security.shared.ActionPermission;
 import com.propertyvista.crm.rpc.services.lease.ac.UpdateFromYardi;
 import com.propertyvista.domain.security.VistaCrmBehavior;
 
-public class VistaCrmYardiAccessControlList extends UIAclBuilder {
+class VistaCrmYardiAccessControlList extends UIAclBuilder {
 
     VistaCrmYardiAccessControlList() {
 

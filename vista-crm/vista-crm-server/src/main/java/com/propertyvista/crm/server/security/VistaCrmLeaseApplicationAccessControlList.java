@@ -41,7 +41,7 @@ import com.propertyvista.dto.LeaseApplicationDTO;
 import com.propertyvista.dto.LeaseTermDTO;
 import com.propertyvista.dto.TenantFinancialDTO;
 
-public class VistaCrmLeaseApplicationAccessControlList extends UIAclBuilder {
+class VistaCrmLeaseApplicationAccessControlList extends UIAclBuilder {
 
     VistaCrmLeaseApplicationAccessControlList() {
 

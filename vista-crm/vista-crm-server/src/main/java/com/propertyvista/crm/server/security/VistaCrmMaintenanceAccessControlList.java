@@ -31,7 +31,7 @@ import com.propertyvista.crm.rpc.services.maintenance.ac.Resolve;
 import com.propertyvista.crm.rpc.services.maintenance.ac.Schedule;
 import com.propertyvista.dto.MaintenanceRequestDTO;
 
-public class VistaCrmMaintenanceAccessControlList extends UIAclBuilder {
+class VistaCrmMaintenanceAccessControlList extends UIAclBuilder {
 
     VistaCrmMaintenanceAccessControlList() {
 

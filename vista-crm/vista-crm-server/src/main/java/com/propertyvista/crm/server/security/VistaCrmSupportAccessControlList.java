@@ -20,7 +20,7 @@ import com.propertyvista.crm.rpc.services.lease.ac.PadFileDownload;
 import com.propertyvista.crm.rpc.services.lease.ac.PadFileUpload;
 import com.propertyvista.domain.security.VistaCrmBehavior;
 
-public class VistaCrmSupportAccessControlList extends UIAclBuilder {
+class VistaCrmSupportAccessControlList extends UIAclBuilder {
 
     VistaCrmSupportAccessControlList() {
 

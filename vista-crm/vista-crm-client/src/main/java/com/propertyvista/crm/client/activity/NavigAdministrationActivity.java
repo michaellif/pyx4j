@@ -21,15 +21,15 @@ import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.pyx4j.site.rpc.AppPlace;
 
 import com.propertyvista.crm.client.CrmSite;
-import com.propertyvista.crm.client.ui.NavigSettingsView;
-import com.propertyvista.crm.client.ui.NavigSettingsView.NavigSettingsPresenter;
+import com.propertyvista.crm.client.ui.NavigAdministrationView;
+import com.propertyvista.crm.client.ui.NavigAdministrationView.NavigAdministrationPresenter;
 
-public class NavigSettingsActivity extends AbstractActivity implements NavigSettingsPresenter {
+public class NavigAdministrationActivity extends AbstractActivity implements NavigAdministrationPresenter {
 
-    private final NavigSettingsView view;
+    private final NavigAdministrationView view;
 
-    public NavigSettingsActivity() {
-        view = CrmSite.getViewFactory().getView(NavigSettingsView.class);
+    public NavigAdministrationActivity() {
+        view = CrmSite.getViewFactory().getView(NavigAdministrationView.class);
     }
 
     public void withPlace(Place place) {

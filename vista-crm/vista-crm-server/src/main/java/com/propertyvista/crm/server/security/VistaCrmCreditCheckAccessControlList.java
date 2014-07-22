@@ -24,7 +24,7 @@ import com.propertyvista.crm.rpc.services.vista2pmc.CreditCheckStatusService;
 import com.propertyvista.domain.security.VistaCrmBehavior;
 import com.propertyvista.domain.security.common.VistaBasicBehavior;
 
-public class VistaCrmCreditCheckAccessControlList extends UIAclBuilder {
+class VistaCrmCreditCheckAccessControlList extends UIAclBuilder {
 
     VistaCrmCreditCheckAccessControlList() {
 

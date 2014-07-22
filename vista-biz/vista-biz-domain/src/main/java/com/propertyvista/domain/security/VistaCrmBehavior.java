@@ -173,6 +173,8 @@ public enum VistaCrmBehavior implements Behavior {
 
     // --
 
+    AdminGeneral, AdminFinancial, AdminContent,
+
     ;
 
     @Override

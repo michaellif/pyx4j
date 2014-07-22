@@ -630,6 +630,8 @@ public class VistaCrmAccessControlList extends ServletContainerAclBuilder {
 
         /***************** this is new List **************** */
 
+        merge(new VistaCrmAdministrationAccessControlList());
+
         merge(new VistaCrmBuildingAccessControlList());
 
         merge(new VistaCrmLegalAccessControlList());

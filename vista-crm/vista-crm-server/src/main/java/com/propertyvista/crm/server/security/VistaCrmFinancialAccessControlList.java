@@ -54,7 +54,7 @@ import com.propertyvista.dto.PreauthorizedPaymentDTO;
 import com.propertyvista.dto.TenantFinancialDTO;
 import com.propertyvista.dto.TransactionHistoryDTO;
 
-public class VistaCrmFinancialAccessControlList extends UIAclBuilder {
+class VistaCrmFinancialAccessControlList extends UIAclBuilder {
 
     VistaCrmFinancialAccessControlList() {
 
