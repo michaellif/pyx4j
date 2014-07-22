@@ -45,6 +45,7 @@ SET search_path = '_admin_';
         ***     ======================================================================================================
         **/
         
+        DROP INDEX admin_pmc_merchant_account_index_merchant_terminal_id_idx;
         DROP INDEX business_information_business_address_country_name_idx;
         DROP INDEX business_information_business_address_province_code_idx;
         DROP INDEX business_information_business_address_province_name_idx;
@@ -360,7 +361,7 @@ SET search_path = '_admin_';
         **/
         
         CREATE UNIQUE INDEX admin_pmc_merchant_account_index_terminal_id_conv_fee_idx ON admin_pmc_merchant_account_index USING btree (terminal_id_conv_fee);
-        -- CREATE UNIQUE INDEX admin_pmc_merchant_account_index_terminal_id_idx ON admin_pmc_merchant_account_index USING btree (terminal_id);
+        CREATE UNIQUE INDEX admin_pmc_merchant_account_index_terminal_id_idx ON admin_pmc_merchant_account_index USING btree (terminal_id);
         CREATE INDEX cards_reconciliation_record$adjustments_owner_idx ON cards_reconciliation_record$adjustments USING btree (owner);
         CREATE INDEX cards_reconciliation_record$chargebacks_owner_idx ON cards_reconciliation_record$chargebacks USING btree (owner);
         CREATE INDEX cards_reconciliation_record_merchant_account_idx ON cards_reconciliation_record USING btree (merchant_account);
