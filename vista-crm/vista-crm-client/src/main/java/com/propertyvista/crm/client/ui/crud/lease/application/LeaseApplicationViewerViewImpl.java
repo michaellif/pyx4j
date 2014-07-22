@@ -199,7 +199,7 @@ public class LeaseApplicationViewerViewImpl extends LeaseViewerViewImplBase<Leas
                 checkActionExecuter();
             }
         }, new ActionPermission(CreditCheckRun.class));
-        if (!VistaTODO.Equifax_Off_VISTA_478 && VistaFeatures.instance().countryOfOperation() == CountryOfOperation.Canada) {
+        if (VistaFeatures.instance().countryOfOperation() == CountryOfOperation.Canada) {
             addAction(creditCheckAction);
         }
 

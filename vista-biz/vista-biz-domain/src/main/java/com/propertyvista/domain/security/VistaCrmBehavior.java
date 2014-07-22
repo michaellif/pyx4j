@@ -57,6 +57,7 @@ public enum VistaCrmBehavior implements Behavior {
 
     AggregatedTransfer_OLD,
 
+    @Deprecated
     OrganizationPolicy_OLD,
 
     Contacts_OLD,

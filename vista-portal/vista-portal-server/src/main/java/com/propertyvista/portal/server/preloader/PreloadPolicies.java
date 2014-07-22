@@ -13,7 +13,6 @@
  */
 package com.propertyvista.portal.server.preloader;
 
-import com.propertyvista.misc.VistaTODO;
 import com.propertyvista.portal.server.preloader.policy.subpreloaders.ARPolicyPreloader;
 import com.propertyvista.portal.server.preloader.policy.subpreloaders.ApplicationDocumentationPolicyPreloader;
 import com.propertyvista.portal.server.preloader.policy.subpreloaders.AutoPayPolicyPreloader;
@@ -59,10 +58,7 @@ public class PreloadPolicies extends AbstractPoliciesPreloader {
         add(new LeaseApplicationPolicyPreloader());
         add(new LeaseAgreementPolicyPreloader());
         add(new LegalTermsPolicyPreloader());
-
-        if (!VistaTODO.Equifax_Off_VISTA_478) {
-            add(new BackgroundCheckPolicyPreloader());
-        }
+        add(new BackgroundCheckPolicyPreloader());
 
         if (isProduction) {
             add(new ProductTaxPolicyPreloader());
