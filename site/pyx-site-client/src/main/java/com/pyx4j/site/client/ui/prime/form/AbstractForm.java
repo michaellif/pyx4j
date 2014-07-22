@@ -26,6 +26,8 @@ import com.google.gwt.user.client.ui.LayoutPanel;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.ui.prime.AbstractPrimePane;
+import com.pyx4j.widgets.client.HasSecureConcern;
+import com.pyx4j.widgets.client.SecureConcernsHolder;
 
 public abstract class AbstractForm<E extends IEntity> extends AbstractPrimePane implements IForm<E> {
 
@@ -35,8 +37,11 @@ public abstract class AbstractForm<E extends IEntity> extends AbstractPrimePane 
 
     private String captionBase;
 
+    private final SecureConcernsHolder secureConcerns = new SecureConcernsHolder();
+
     public AbstractForm() {
         super();
+        secureConcerns.addAll(secureConcerns());
     }
 
     @Override
@@ -92,10 +97,15 @@ public abstract class AbstractForm<E extends IEntity> extends AbstractPrimePane 
         return form;
     }
 
+    protected void addSecureConcern(HasSecureConcern secureConcern) {
+        secureConcerns.addSecureConcern(secureConcern);
+    }
+
     @Override
     public void populate(E value) {
         assert (form != null);
         form.populate(value);
+        secureConcerns.setSecurityContext(value);
     }
 
     @Override
@@ -106,6 +116,7 @@ public abstract class AbstractForm<E extends IEntity> extends AbstractPrimePane 
         if (isVisorShown()) {
             hideVisor();
         }
+        secureConcerns.setSecurityContext(null);
     }
 
     @Override

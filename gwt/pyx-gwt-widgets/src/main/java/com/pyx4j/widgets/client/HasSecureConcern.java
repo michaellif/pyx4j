@@ -24,6 +24,7 @@ import com.pyx4j.security.shared.AccessControlContext;
 
 public interface HasSecureConcern {
 
+    // Force to Recalculate Permissions
     public void setSecurityContext(AccessControlContext context);
 
 }

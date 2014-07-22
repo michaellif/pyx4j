@@ -246,20 +246,25 @@ public class Button extends FocusPanel implements IFocusWidget, HasSecureConcern
 
     public void setPermission(Permission... permission) {
         visible.setPermission(permission);
+        setVisibleImpl();
+    }
+
+    private void setVisibleImpl() {
+        super.setVisible(this.visible.getDecision());
     }
 
     @Override
     public void setVisible(boolean visible) {
         this.visible.setDecision(visible);
         if (this.visible.hasDecision()) {
-            super.setVisible(this.visible.getDecision());
+            setVisibleImpl();
         }
     }
 
     @Override
     public void setSecurityContext(AccessControlContext context) {
         visible.setContext(context);
-        super.setVisible(visible.getDecision());
+        setVisibleImpl();
     }
 
     public boolean isActive() {
@@ -477,13 +482,18 @@ public class Button extends FocusPanel implements IFocusWidget, HasSecureConcern
 
         public void setPermission(Permission... permission) {
             visible.setPermission(permission);
+            setVisibleImpl();
+        }
+
+        private void setVisibleImpl() {
+            super.setVisible(this.visible.getDecision());
         }
 
         @Override
         public void setVisible(boolean visible) {
             this.visible.setDecision(visible);
             if (this.visible.hasDecision()) {
-                super.setVisible(this.visible.getDecision());
+                setVisibleImpl();
             }
         }
 

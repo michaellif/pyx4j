@@ -20,6 +20,9 @@
  */
 package com.pyx4j.site.client.ui;
 
+import java.util.Arrays;
+import java.util.Collection;
+
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.client.ui.DockLayoutPanel;
 import com.google.gwt.user.client.ui.FlowPanel;
@@ -30,6 +33,7 @@ import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.site.client.ui.visor.IVisor;
 import com.pyx4j.site.client.ui.visor.VisorHolder;
+import com.pyx4j.widgets.client.HasSecureConcern;
 import com.pyx4j.widgets.client.Toolbar;
 
 public abstract class AbstractPane extends DockLayoutPanel implements IPane {
@@ -87,6 +91,10 @@ public abstract class AbstractPane extends DockLayoutPanel implements IPane {
 
         contentHolder = new VisorHolder(this);
         contentHolder.setAnimationDuration(500);
+    }
+
+    protected Collection<HasSecureConcern> secureConcerns() {
+        return Arrays.<HasSecureConcern> asList(headerToolbar, footerToolbar);
     }
 
     protected FlowPanel getHeaderCaption() {

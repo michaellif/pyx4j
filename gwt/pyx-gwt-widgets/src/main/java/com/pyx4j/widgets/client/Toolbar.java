@@ -26,15 +26,14 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 
+import com.pyx4j.security.shared.AccessControlContext;
 import com.pyx4j.widgets.client.style.theme.WidgetTheme;
 
-/**
- * @author michaellif
- * 
- */
-public class Toolbar implements IsWidget {
+public class Toolbar implements IsWidget, HasSecureConcern {
 
     private final FlowPanel panel;
+
+    private final SecureConcernsHolder secureConcerns = new SecureConcernsHolder();
 
     public Toolbar() {
         panel = new FlowPanel();
@@ -51,6 +50,8 @@ public class Toolbar implements IsWidget {
 
         itemHolder.setWidget(widget);
         panel.insert(itemHolder, beforeIndex);
+
+        secureConcerns.add(widget);
     }
 
     public IsWidget getItem(int index) {
@@ -63,6 +64,12 @@ public class Toolbar implements IsWidget {
 
     public void clear() {
         panel.clear();
+        secureConcerns.clear();
+    }
+
+    @Override
+    public void setSecurityContext(AccessControlContext context) {
+        secureConcerns.setSecurityContext(context);
     }
 
     @Override

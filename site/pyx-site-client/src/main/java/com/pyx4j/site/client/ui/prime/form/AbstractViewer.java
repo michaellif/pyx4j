@@ -20,23 +20,15 @@
  */
 package com.pyx4j.site.client.ui.prime.form;
 
-import java.util.ArrayList;
-import java.util.Collection;
-
-import com.google.gwt.user.client.ui.Widget;
-
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.IVersionData;
 import com.pyx4j.entity.core.IVersionedEntity;
 import com.pyx4j.entity.shared.utils.VersionedEntityUtils;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.widgets.client.HasSecureConcern;
 
 public abstract class AbstractViewer<E extends IEntity> extends AbstractForm<E> implements IViewer<E> {
 
     private static final I18n i18n = I18n.get(AbstractViewer.class);
-
-    private final Collection<HasSecureConcern> secureConcerns = new ArrayList<>();
 
     public AbstractViewer() {
         super();
@@ -48,36 +40,8 @@ public abstract class AbstractViewer<E extends IEntity> extends AbstractForm<E> 
     }
 
     @Override
-    public void addHeaderToolbarItem(Widget widget) {
-        super.addHeaderToolbarItem(widget);
-        if (widget instanceof HasSecureConcern) {
-            addSecureConcern((HasSecureConcern) widget);
-        }
-    }
-
-    protected void addSecureConcern(HasSecureConcern secureConcern) {
-        secureConcerns.add(secureConcern);
-    }
-
-    protected Collection<HasSecureConcern> allSecureConcerns() {
-        return secureConcerns;
-    }
-
-    @Override
-    public void reset() {
-        super.reset();
-        for (HasSecureConcern sc : allSecureConcerns()) {
-            sc.setSecurityContext(null);
-        }
-    }
-
-    @Override
     public void populate(E value) {
         super.populate(value);
-
-        for (HasSecureConcern sc : allSecureConcerns()) {
-            sc.setSecurityContext(value);
-        }
 
         String caption = (getCaptionBase() + " " + value.getStringView());
         if (value instanceof IVersionedEntity) {
