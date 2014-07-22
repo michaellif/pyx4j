@@ -41,12 +41,12 @@ public class SecureConcern {
         setDecision(decision);
     }
 
-    public void setPermission(Permission... permission) {
+    public void setPermission(Permission... permissions) {
         // java varargs creates empty arrays,  so consider it as no permissions set
         if (permissions == null || permissions.length == 0) {
             this.permissions = null;
         } else {
-            this.permissions = permission;
+            this.permissions = permissions;
         }
         resetDecision();
     }
