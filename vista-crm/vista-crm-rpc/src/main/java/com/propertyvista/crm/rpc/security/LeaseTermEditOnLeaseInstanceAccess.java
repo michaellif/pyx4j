@@ -16,7 +16,6 @@ package com.propertyvista.crm.rpc.security;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.security.InstanceAccess;
 
-import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.dto.LeaseTermDTO;
 
 public class LeaseTermEditOnLeaseInstanceAccess implements InstanceAccess {
@@ -25,6 +24,6 @@ public class LeaseTermEditOnLeaseInstanceAccess implements InstanceAccess {
 
     @Override
     public boolean implies(IEntity contextEntity) {
-        return Lease.Status.present().contains(((LeaseTermDTO) contextEntity).lease().status().getValue());
+        return ((LeaseTermDTO) contextEntity).lease().status().getValue().isPresent();
     }
 }
