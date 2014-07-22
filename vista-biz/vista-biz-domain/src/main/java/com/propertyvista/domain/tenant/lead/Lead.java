@@ -21,6 +21,7 @@ import com.pyx4j.entity.annotations.Indexed;
 import com.pyx4j.entity.annotations.Length;
 import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.Owned;
+import com.pyx4j.entity.annotations.SecurityEnabled;
 import com.pyx4j.entity.annotations.Timestamp;
 import com.pyx4j.entity.annotations.Timestamp.Update;
 import com.pyx4j.entity.annotations.ToString;
@@ -41,6 +42,7 @@ import com.propertyvista.domain.financial.ARCode;
 import com.propertyvista.domain.property.asset.Floorplan;
 import com.propertyvista.domain.tenant.lease.Lease;
 
+@SecurityEnabled
 @I18nComment(value = "Potential customer", target = I18nComment.I18nCommentTarget.This)
 public interface Lead extends IEntity {
 
