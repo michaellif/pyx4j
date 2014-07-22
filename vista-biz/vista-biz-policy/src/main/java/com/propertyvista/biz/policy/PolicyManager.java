@@ -20,6 +20,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import com.pyx4j.entity.cache.CacheService;
+import com.pyx4j.entity.core.AttachLevel;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.core.criterion.PropertyCriterion;
 import com.pyx4j.entity.server.Persistence;
@@ -211,30 +212,30 @@ class PolicyManager {
             return Persistence.service().query(criteria);
 
         } else if (ProvincePolicyNode.class.equals(nodeClass)) {
+            Persistence.ensureRetrieve(node, AttachLevel.Attached);
+            String provName = ((ProvincePolicyNode) node.cast()).province().getValue().name;
+
+            List<PolicyNode> children = new ArrayList<PolicyNode>();
+
+            // for buildings that have parent Complexes - return the Complexes
             EntityQueryCriteria<Building> criteria = new EntityQueryCriteria<Building>(Building.class);
-            criteria.add(PropertyCriterion.eq(criteria.proto().info().address().province(), ((ProvincePolicyNode) node).province()));
-            criteria.add(PropertyCriterion.eq(criteria.proto().complexPrimary(), true));
-
-            List<Building> primaryBuildings = Persistence.service().query(criteria);
-
-            List<PolicyNode> children = new ArrayList<PolicyNode>(primaryBuildings.size());
-
-            for (Building building : primaryBuildings) {
+            criteria.eq(criteria.proto().info().address().province(), provName);
+            criteria.eq(criteria.proto().complexPrimary(), true);
+            for (Building building : Persistence.service().query(criteria)) {
                 children.add(building.complex());
             }
 
             // now add 'orphan' buildings that have no parent complex
-
             criteria = new EntityQueryCriteria<Building>(Building.class);
-            criteria.add(PropertyCriterion.eq(criteria.proto().info().address().province(), ((ProvincePolicyNode) node).province()));
-            criteria.add(PropertyCriterion.eq(criteria.proto().complex(), (Serializable) null)); // the casting here is only to choose the overloaded method
-
+            criteria.eq(criteria.proto().info().address().province(), provName);
+            criteria.eq(criteria.proto().complex(), (Serializable) null);
             children.addAll(Persistence.service().query(criteria));
 
             return children;
 
         } else if (CountryPolicyNode.class.equals(nodeClass)) {
-            List<ISOProvince> provList = ISOProvince.forCountry(((CountryPolicyNode) node).country().getValue());
+            Persistence.ensureRetrieve(node, AttachLevel.Attached);
+            List<ISOProvince> provList = ISOProvince.forCountry(((CountryPolicyNode) node.cast()).country().getValue());
             if (provList == null || provList.size() == 0) {
                 return null;
             }
