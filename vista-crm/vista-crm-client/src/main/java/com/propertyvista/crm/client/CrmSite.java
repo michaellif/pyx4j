@@ -25,6 +25,7 @@ import com.google.gwt.user.client.ui.RootLayoutPanel;
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.commons.Key;
 import com.pyx4j.commons.css.StyleManager;
+import com.pyx4j.entity.security.DataModelPermission;
 import com.pyx4j.essentials.client.SessionInactiveDialog;
 import com.pyx4j.gwt.commons.GoogleAnalytics;
 import com.pyx4j.gwt.commons.UncaughtHandler;
@@ -37,6 +38,7 @@ import com.pyx4j.security.client.SessionInactiveEvent;
 import com.pyx4j.security.client.SessionInactiveHandler;
 import com.pyx4j.security.client.SessionMonitor;
 import com.pyx4j.security.rpc.AuthenticationService;
+import com.pyx4j.security.shared.ActionPermission;
 import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.SingletonViewFactory;
@@ -57,8 +59,12 @@ import com.propertyvista.crm.client.themes.CrmTheme;
 import com.propertyvista.crm.client.ui.CrmRootPane;
 import com.propertyvista.crm.client.ui.HeaderViewImpl;
 import com.propertyvista.crm.rpc.CrmSiteMap;
+import com.propertyvista.crm.rpc.CrmSiteMap.Administration.ContentManagement;
+import com.propertyvista.crm.rpc.dto.admin.PmcCompanyInfoDTO;
+import com.propertyvista.crm.rpc.services.admin.ac.CrmContentManagementAccess;
 import com.propertyvista.crm.rpc.services.policies.CrmPolicyRetrieveService;
 import com.propertyvista.crm.rpc.services.pub.CrmAuthenticationService;
+import com.propertyvista.domain.financial.ARCode;
 import com.propertyvista.domain.security.common.VistaBasicBehavior;
 import com.propertyvista.portal.rpc.DeploymentConsts;
 import com.propertyvista.portal.rpc.portal.SiteDefinitionsDTO;
@@ -185,6 +191,18 @@ public class CrmSite extends VistaSite {
 
     static public AppPlace getSystemDashboardPlace() {
         return new CrmSiteMap.Dashboard.View().formPlace(new Key(-1));
+    }
+
+    static public AppPlace getAvalableAdministrationPlace() {
+        if (SecurityController.check(DataModelPermission.permissionRead(PmcCompanyInfoDTO.class))) {
+            return new CrmSiteMap.Administration.Profile.CompanyInfo().formViewerPlace(new Key(-1));
+        } else if (SecurityController.check(DataModelPermission.permissionRead(ARCode.class))) {
+            return new CrmSiteMap.Administration.Financial.ARCode();
+        } else if (SecurityController.check(new ActionPermission(CrmContentManagementAccess.class))) {
+            return new ContentManagement.General();
+        } else {
+            return AppPlace.NOWHERE;
+        }
     }
 
     /**
