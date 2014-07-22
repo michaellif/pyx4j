@@ -34,8 +34,11 @@ import com.propertyvista.crm.rpc.CrmSiteMap.Administration.Security;
 import com.propertyvista.crm.rpc.CrmSiteMap.Administration.Settings;
 import com.propertyvista.crm.rpc.dto.admin.PmcCompanyInfoDTO;
 import com.propertyvista.crm.rpc.dto.admin.PmcPaymentMethodsDTO;
+import com.propertyvista.crm.rpc.services.admin.ac.GlobalTenantSecurity;
 import com.propertyvista.domain.customizations.CountryOfOperation;
+import com.propertyvista.domain.security.CrmRole;
 import com.propertyvista.domain.security.VistaCrmBehavior;
+import com.propertyvista.dto.AuditRecordDTO;
 import com.propertyvista.misc.VistaTODO;
 import com.propertyvista.shared.config.VistaFeatures;
 
@@ -88,11 +91,10 @@ public class NavigAdministrationViewImpl extends Composite implements NavigAdmin
         {//Security
             SideMenuList list = new SideMenuList();
             root.addMenuItem(new SideMenuItem(list, i18n.tr("Security"), null));
-            if (SecurityController.check(VistaCrmBehavior.Organization_OLD)) {
-                list.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Administration.Security.AuditRecords()));
-            }
-            list.addMenuItem(new SideMenuAppPlaceItem(new Security.UserRole()));
-            list.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Administration.Security.TenantSecurity()));
+            list.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Administration.Security.AuditRecords(), DataModelPermission
+                    .permissionRead(AuditRecordDTO.class)));
+            list.addMenuItem(new SideMenuAppPlaceItem(new Security.UserRole(), DataModelPermission.permissionRead(CrmRole.class)));
+            list.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Administration.Security.TenantSecurity(), GlobalTenantSecurity.class));
         }
 
         {//Financial

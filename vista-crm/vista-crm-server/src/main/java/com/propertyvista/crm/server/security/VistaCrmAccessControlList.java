@@ -37,7 +37,6 @@ import com.propertyvista.crm.rpc.services.PmcDocumentFileUploadService;
 import com.propertyvista.crm.rpc.services.PmcTermsOfServiceService;
 import com.propertyvista.crm.rpc.services.UpdateUploadService;
 import com.propertyvista.crm.rpc.services.admin.ARCodeCrudService;
-import com.propertyvista.crm.rpc.services.admin.CrmRoleCrudService;
 import com.propertyvista.crm.rpc.services.admin.CustomerCreditCheckCrudService;
 import com.propertyvista.crm.rpc.services.admin.GlCodeCategoryCrudService;
 import com.propertyvista.crm.rpc.services.admin.MerchantAccountCrudService;
@@ -74,8 +73,6 @@ import com.propertyvista.crm.rpc.services.building.mech.RoofCrudService;
 import com.propertyvista.crm.rpc.services.customer.ActiveGuarantorCrudService;
 import com.propertyvista.crm.rpc.services.customer.ActiveTenantCrudService;
 import com.propertyvista.crm.rpc.services.customer.CustomerPictureCrmUploadService;
-import com.propertyvista.crm.rpc.services.customer.EmailToTenantsService;
-import com.propertyvista.crm.rpc.services.customer.ExportTenantsService;
 import com.propertyvista.crm.rpc.services.customer.FormerGuarantorCrudService;
 import com.propertyvista.crm.rpc.services.customer.FormerTenantCrudService;
 import com.propertyvista.crm.rpc.services.customer.GuarantorCrudService;
@@ -139,7 +136,6 @@ import com.propertyvista.crm.rpc.services.policies.policy.EmailTemplatesPolicyCr
 import com.propertyvista.crm.rpc.services.pub.CrmAuthenticationService;
 import com.propertyvista.crm.rpc.services.reports.CrmReportsService;
 import com.propertyvista.crm.rpc.services.reports.CrmReportsSettingsPersistenceService;
-import com.propertyvista.crm.rpc.services.security.CrmAuditRecordsListerService;
 import com.propertyvista.crm.rpc.services.security.CrmLoginAttemptsListerService;
 import com.propertyvista.crm.rpc.services.security.CrmPasswordResetService;
 import com.propertyvista.crm.rpc.services.selections.SelectBuildingListService;
@@ -250,7 +246,6 @@ import com.propertyvista.domain.tenant.lease.LeaseTerm;
 import com.propertyvista.domain.tenant.lease.LeaseTermGuarantor;
 import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
 import com.propertyvista.domain.tenant.lease.Tenant;
-import com.propertyvista.operations.domain.security.AuditRecord;
 import com.propertyvista.portal.rpc.shared.services.CreditCardValidationService;
 import com.propertyvista.shared.config.VistaDemo;
 
@@ -402,9 +397,6 @@ public class VistaCrmAccessControlList extends ServletContainerAclBuilder {
         grant(VistaBasicBehavior.CRM, new EntityPermission(Lead.class, EntityPermission.ALL));
         grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(LeadCrudService.class));
 
-        grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(ExportTenantsService.class));
-        grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(EmailToTenantsService.class));
-
         grant(VistaBasicBehavior.CRM, new EntityPermission(Appointment.class, EntityPermission.ALL));
         grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(AppointmentCrudService.class));
 
@@ -529,8 +521,6 @@ public class VistaCrmAccessControlList extends ServletContainerAclBuilder {
         grant(VistaCrmBehavior.Marketing_OLD, new IServiceExecutePermission(CityIntroPageCrudService.class));
         grant(VistaCrmBehavior.Marketing_OLD, new IServiceExecutePermission(HomePageGadgetCrudService.class));
 
-        grant(VistaCrmBehavior.Organization_OLD, new IServiceExecutePermission(CrmRoleCrudService.class));
-
         grant(VistaCrmBehavior.OrganizationFinancial_OLD, new IServiceExecutePermission(TaxCrudService.class));
 
         grant(VistaCrmBehavior.OrganizationPolicy_OLD, new IServiceExecutePermission(GlCodeCategoryCrudService.class));
@@ -554,9 +544,6 @@ public class VistaCrmAccessControlList extends ServletContainerAclBuilder {
 
         grant(VistaCrmBehavior.Equifax_OLD, new IServiceExecutePermission(CustomerCreditCheckCrudService.class));
         grant(VistaCrmBehavior.OrganizationFinancial_OLD, new IServiceExecutePermission(CustomerCreditCheckCrudService.class));
-
-        grant(VistaCrmBehavior.Organization_OLD, new IServiceExecutePermission(CrmAuditRecordsListerService.class));
-        grant(VistaCrmBehavior.Organization_OLD, new EntityPermission(AuditRecord.class, EntityPermission.READ));
 
 // - TenantInsurance:
         grant(VistaBasicBehavior.CRM, new EntityPermission(GeneralInsuranceCertificate.class, EntityPermission.ALL));

@@ -20,6 +20,7 @@ import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.annotations.Length;
 import com.pyx4j.entity.annotations.MemberColumn;
+import com.pyx4j.entity.annotations.SecurityEnabled;
 import com.pyx4j.entity.annotations.Timestamp;
 import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.Transient;
@@ -31,6 +32,7 @@ import com.pyx4j.entity.core.IPrimitiveSet;
 import com.pyx4j.entity.core.ISet;
 
 @Caption(name = "Role")
+@SecurityEnabled
 public interface CrmRole extends IEntity {
 
     @ToString
