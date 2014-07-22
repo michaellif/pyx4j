@@ -123,12 +123,15 @@ public class ReferenceDataManager {
 
                 @Override
                 public void onFailure(Throwable caught) {
-                    for (AsyncLoadingHandler handler : concurrentLoad.remove(originalCriteria)) {
-                        try {
-                            handler.onFailure(caught);
-                        } catch (Throwable e) {
-                            log.error("Internal error [UIRF]", e);
-                            UncaughtHandler.onUnrecoverableError(e, "UIRonF");
+                    List<AsyncLoadingHandler> callbacks = concurrentLoad.remove(originalCriteria);
+                    if (callbacks != null) {
+                        for (AsyncLoadingHandler handler : callbacks) {
+                            try {
+                                handler.onFailure(caught);
+                            } catch (Throwable e) {
+                                log.error("Internal error [UIRF]", e);
+                                UncaughtHandler.onUnrecoverableError(e, "UIRonF");
+                            }
                         }
                     }
                 }
