@@ -14,6 +14,7 @@
 package com.propertyvista.crm.rpc.dto.admin;
 
 import com.pyx4j.entity.annotations.ExtendsBO;
+import com.pyx4j.entity.annotations.SecurityEnabled;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.i18n.annotations.I18n;
 
@@ -22,6 +23,7 @@ import com.propertyvista.domain.settings.PmcCompanyInfo;
 @Transient
 @ExtendsBO
 @I18n(strategy = I18n.I18nStrategy.IgnoreThis)
+@SecurityEnabled
 public interface PmcCompanyInfoDTO extends PmcCompanyInfo {
 
 }

@@ -17,6 +17,7 @@ import com.google.gwt.user.client.ui.Composite;
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.config.shared.ApplicationMode;
+import com.pyx4j.entity.security.DataModelPermission;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.site.client.ui.sidemenu.SideMenu;
@@ -31,6 +32,8 @@ import com.propertyvista.crm.rpc.CrmSiteMap.Administration.ContentManagement;
 import com.propertyvista.crm.rpc.CrmSiteMap.Administration.Financial;
 import com.propertyvista.crm.rpc.CrmSiteMap.Administration.Security;
 import com.propertyvista.crm.rpc.CrmSiteMap.Administration.Settings;
+import com.propertyvista.crm.rpc.dto.admin.PmcCompanyInfoDTO;
+import com.propertyvista.crm.rpc.dto.admin.PmcPaymentMethodsDTO;
 import com.propertyvista.domain.customizations.CountryOfOperation;
 import com.propertyvista.domain.security.VistaCrmBehavior;
 import com.propertyvista.misc.VistaTODO;
@@ -53,12 +56,12 @@ public class NavigAdministrationViewImpl extends Composite implements NavigAdmin
         setHeight("100%");
 
         {//Profile
-            if (SecurityController.check(VistaCrmBehavior.PropertyVistaAccountOwner_OLD, VistaCrmBehavior.PropertyVistaSupport)) {
-                SideMenuList list = new SideMenuList();
-                root.addMenuItem(new SideMenuItem(list, i18n.tr("Profile"), null));
-                list.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Administration.Profile.CompanyInfo().formViewerPlace(new Key(-1))));
-                list.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Administration.Profile.PaymentMethods().formViewerPlace(new Key(-1))));
-            }
+            SideMenuList list = new SideMenuList();
+            root.addMenuItem(new SideMenuItem(list, i18n.tr("Profile"), null));
+            list.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Administration.Profile.CompanyInfo().formViewerPlace(new Key(-1)), DataModelPermission
+                    .permissionRead(PmcCompanyInfoDTO.class)));
+            list.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Administration.Profile.PaymentMethods().formViewerPlace(new Key(-1)), DataModelPermission
+                    .permissionRead(PmcPaymentMethodsDTO.class)));
         }
 
         {//Settings

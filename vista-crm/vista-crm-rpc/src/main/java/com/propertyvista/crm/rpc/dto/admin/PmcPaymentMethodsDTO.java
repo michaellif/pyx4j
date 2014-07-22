@@ -13,6 +13,7 @@
  */
 package com.propertyvista.crm.rpc.dto.admin;
 
+import com.pyx4j.entity.annotations.SecurityEnabled;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.IList;
@@ -20,6 +21,7 @@ import com.pyx4j.entity.core.IList;
 import com.propertyvista.domain.pmc.PmcPaymentMethod;
 
 @Transient
+@SecurityEnabled
 public interface PmcPaymentMethodsDTO extends IEntity {
 
     IList<PmcPaymentMethod> paymentMethods();

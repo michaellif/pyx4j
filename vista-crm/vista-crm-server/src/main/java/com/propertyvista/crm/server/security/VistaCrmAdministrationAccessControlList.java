@@ -16,9 +16,15 @@ package com.propertyvista.crm.server.security;
 import static com.propertyvista.domain.security.VistaCrmBehavior.AdminContent;
 import static com.propertyvista.domain.security.VistaCrmBehavior.AdminFinancial;
 import static com.propertyvista.domain.security.VistaCrmBehavior.AdminGeneral;
+import static com.pyx4j.entity.security.AbstractCRUDPermission.ALL;
 
+import com.pyx4j.rpc.shared.IServiceExecutePermission;
 import com.pyx4j.security.server.UIAclBuilder;
 
+import com.propertyvista.crm.rpc.dto.admin.PmcCompanyInfoDTO;
+import com.propertyvista.crm.rpc.dto.admin.PmcPaymentMethodsDTO;
+import com.propertyvista.crm.rpc.services.admin.PmcCompanyInfoCrudService;
+import com.propertyvista.crm.rpc.services.admin.PmcPaymentMethodsCrudService;
 import com.propertyvista.crm.rpc.services.admin.ac.CrmAdministrationAccess;
 
 class VistaCrmAdministrationAccessControlList extends UIAclBuilder {
@@ -27,6 +33,15 @@ class VistaCrmAdministrationAccessControlList extends UIAclBuilder {
         grant(AdminGeneral, CrmAdministrationAccess.class);
         grant(AdminFinancial, CrmAdministrationAccess.class);
         grant(AdminContent, CrmAdministrationAccess.class);
+
+        // Profile
+
+        grant(AdminGeneral, new IServiceExecutePermission(PmcCompanyInfoCrudService.class));
+        grant(AdminGeneral, PmcCompanyInfoDTO.class, ALL);
+
+        grant(AdminFinancial, new IServiceExecutePermission(PmcPaymentMethodsCrudService.class));
+        grant(AdminFinancial, PmcPaymentMethodsDTO.class, ALL);
+
     }
 
 }
