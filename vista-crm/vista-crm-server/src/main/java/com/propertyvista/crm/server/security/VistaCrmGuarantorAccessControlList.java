@@ -19,11 +19,7 @@ import static com.propertyvista.domain.security.VistaCrmBehavior.GuarantorFull;
 import static com.pyx4j.entity.security.AbstractCRUDPermission.READ;
 import static com.pyx4j.entity.security.AbstractCRUDPermission.UPDATE;
 
-import java.util.List;
-
-import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.security.server.UIAclBuilder;
-import com.pyx4j.security.shared.ActionPermission;
 
 import com.propertyvista.crm.rpc.services.customer.ac.GuarantorChangePassword;
 import com.propertyvista.dto.GuarantorDTO;
@@ -31,17 +27,14 @@ import com.propertyvista.dto.GuarantorDTO;
 class VistaCrmGuarantorAccessControlList extends UIAclBuilder {
 
     VistaCrmGuarantorAccessControlList() {
-        { // 
-            List<Class<? extends IEntity>> entities = entities(GuarantorDTO.class);
 
-            grant(GuarantorBasic, entities, READ);
-            grant(GuarantorAdvanced, entities, READ);
-            grant(GuarantorFull, entities, READ | UPDATE);
-        }
+        grant(GuarantorBasic, GuarantorDTO.class, READ);
+        grant(GuarantorAdvanced, GuarantorDTO.class, READ);
+        grant(GuarantorFull, GuarantorDTO.class, READ | UPDATE);
 
         // Actions:
-        grant(GuarantorBasic, new ActionPermission(GuarantorChangePassword.class));
-        grant(GuarantorAdvanced, new ActionPermission(GuarantorChangePassword.class));
-        grant(GuarantorFull, new ActionPermission(GuarantorChangePassword.class));
+        grant(GuarantorBasic, GuarantorChangePassword.class);
+        grant(GuarantorAdvanced, GuarantorChangePassword.class);
+        grant(GuarantorFull, GuarantorChangePassword.class);
     }
 }

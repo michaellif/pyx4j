@@ -22,7 +22,6 @@ import static com.pyx4j.entity.security.AbstractCRUDPermission.READ;
 import static com.pyx4j.entity.security.AbstractCRUDPermission.UPDATE;
 
 import com.pyx4j.security.server.UIAclBuilder;
-import com.pyx4j.security.shared.ActionPermission;
 
 import com.propertyvista.crm.rpc.security.PotentialTenantInstanceAccess;
 import com.propertyvista.crm.rpc.security.PotentialTenantScreeningInstanceAccess;
@@ -44,18 +43,14 @@ class VistaCrmPotentialTenantAccessControlList extends UIAclBuilder {
         grant(PotentialTenantFull, LeaseParticipantScreeningTO.class, new PotentialTenantScreeningInstanceAccess(), ALL);
         grant(PotentialTenantScreening, LeaseParticipantScreeningTO.class, new PotentialTenantScreeningInstanceAccess(), ALL);
 
-//        grant(PotentialTenantBasic, PotentialTenantPortalAccessInformationDTO.class, READ);
-//        grant(PotentialTenantAdvanced, PotentialTenantPortalAccessInformationDTO.class, READ);
-//        grant(PotentialTenantFull, PotentialTenantPortalAccessInformationDTO.class, READ);
-//
         // Actions:
-        grant(PotentialTenantBasic, new ActionPermission(PotentialTenantListAction.class));
-        grant(PotentialTenantAdvanced, new ActionPermission(PotentialTenantListAction.class));
-        grant(PotentialTenantFull, new ActionPermission(PotentialTenantListAction.class));
-        grant(PotentialTenantScreening, new ActionPermission(PotentialTenantListAction.class));
+        grant(PotentialTenantBasic, PotentialTenantListAction.class);
+        grant(PotentialTenantAdvanced, PotentialTenantListAction.class);
+        grant(PotentialTenantFull, PotentialTenantListAction.class);
+        grant(PotentialTenantScreening, PotentialTenantListAction.class);
 
         grant(PotentialTenantBasic, TenantChangePassword.class, new PotentialTenantInstanceAccess());
-        grant(PotentialTenantAdvanced, new ActionPermission(TenantChangePassword.class, new PotentialTenantInstanceAccess()));
-        grant(PotentialTenantFull, new ActionPermission(TenantChangePassword.class, new PotentialTenantInstanceAccess()));
+        grant(PotentialTenantAdvanced, TenantChangePassword.class, new PotentialTenantInstanceAccess());
+        grant(PotentialTenantFull, TenantChangePassword.class, new PotentialTenantInstanceAccess());
     }
 }

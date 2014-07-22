@@ -16,14 +16,14 @@ package com.propertyvista.crm.rpc.security;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.security.InstanceAccess;
 
-import com.propertyvista.domain.tenant.lease.LeaseParticipant;
+import com.propertyvista.dto.LeaseParticipantScreeningTO;
 
-public class TenantInstanceAccess implements InstanceAccess {
+public class TenantScreeningInstanceAccess implements InstanceAccess {
 
     private static final long serialVersionUID = 1L;
 
     @Override
     public boolean implies(IEntity contextEntity) {
-        return ((LeaseParticipant<?>) contextEntity).lease().status().getValue().isPresent();
+        return ((LeaseParticipantScreeningTO) contextEntity).leaseStatus().getValue().isPresent();
     }
 }

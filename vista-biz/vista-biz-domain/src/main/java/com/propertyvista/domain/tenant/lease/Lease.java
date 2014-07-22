@@ -139,6 +139,10 @@ public interface Lease extends IEntity, HasNotesAndAttachments {
             return draft().contains(this);
         }
 
+        public boolean isPresent() {
+            return present().contains(this);
+        }
+
         public boolean isActive() {
             return active().contains(this);
         }

@@ -17,38 +17,42 @@ import static com.propertyvista.domain.security.VistaCrmBehavior.TenantAdvanced;
 import static com.propertyvista.domain.security.VistaCrmBehavior.TenantBasic;
 import static com.propertyvista.domain.security.VistaCrmBehavior.TenantFinancial;
 import static com.propertyvista.domain.security.VistaCrmBehavior.TenantFull;
+import static com.pyx4j.entity.security.AbstractCRUDPermission.ALL;
 import static com.pyx4j.entity.security.AbstractCRUDPermission.READ;
 import static com.pyx4j.entity.security.AbstractCRUDPermission.UPDATE;
 
 import com.pyx4j.security.server.UIAclBuilder;
-import com.pyx4j.security.shared.ActionPermission;
 
 import com.propertyvista.crm.rpc.security.TenantInstanceAccess;
+import com.propertyvista.crm.rpc.security.TenantScreeningInstanceAccess;
 import com.propertyvista.crm.rpc.services.customer.ac.TenantChangePassword;
 import com.propertyvista.crm.rpc.services.customer.ac.TenantListAction;
+import com.propertyvista.dto.LeaseParticipantScreeningTO;
 import com.propertyvista.dto.TenantDTO;
 import com.propertyvista.dto.TenantPortalAccessInformationDTO;
 
 class VistaCrmTenantAccessControlList extends UIAclBuilder {
 
     VistaCrmTenantAccessControlList() {
-        { // 
-            grant(TenantBasic, TenantDTO.class, new TenantInstanceAccess(), READ);
-            grant(TenantAdvanced, TenantDTO.class, new TenantInstanceAccess(), READ);
-            grant(TenantFull, TenantDTO.class, new TenantInstanceAccess(), READ | UPDATE);
+        grant(TenantBasic, TenantDTO.class, new TenantInstanceAccess(), READ);
+        grant(TenantAdvanced, TenantDTO.class, new TenantInstanceAccess(), READ);
+        grant(TenantFull, TenantDTO.class, new TenantInstanceAccess(), READ | UPDATE);
+        grant(TenantFinancial, TenantDTO.class, new TenantInstanceAccess(), READ);
 
-            grant(TenantFinancial, TenantDTO.class, new TenantInstanceAccess(), READ);
-        }
+        grant(TenantBasic, LeaseParticipantScreeningTO.class, new TenantScreeningInstanceAccess(), READ);
+        grant(TenantAdvanced, LeaseParticipantScreeningTO.class, new TenantScreeningInstanceAccess(), READ);
+        grant(TenantFull, LeaseParticipantScreeningTO.class, new TenantScreeningInstanceAccess(), ALL);
+        grant(TenantFinancial, LeaseParticipantScreeningTO.class, new TenantScreeningInstanceAccess(), READ);
 
         grant(TenantBasic, TenantPortalAccessInformationDTO.class, READ);
         grant(TenantAdvanced, TenantPortalAccessInformationDTO.class, READ);
         grant(TenantFull, TenantPortalAccessInformationDTO.class, READ);
 
         // Actions:
-        grant(TenantBasic, new ActionPermission(TenantListAction.class));
-        grant(TenantAdvanced, new ActionPermission(TenantListAction.class));
-        grant(TenantFull, new ActionPermission(TenantListAction.class));
-        grant(TenantFinancial, new ActionPermission(TenantListAction.class));
+        grant(TenantBasic, TenantListAction.class);
+        grant(TenantAdvanced, TenantListAction.class);
+        grant(TenantFull, TenantListAction.class);
+        grant(TenantFinancial, TenantListAction.class);
 
         grant(TenantBasic, TenantChangePassword.class, new TenantInstanceAccess());
         grant(TenantAdvanced, TenantChangePassword.class, new TenantInstanceAccess());
