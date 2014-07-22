@@ -73,6 +73,7 @@ class VistaCrmAdministrationAccessControlList extends UIAclBuilder {
         grant(AdminGeneral, AuditRecordDTO.class, READ);
 
         grant(AdminGeneral, new IServiceExecutePermission(CrmRoleCrudService.class));
+        grant(AdminGeneral, new EntityPermission(CrmRole.class, ALL));
         grant(AdminGeneral, CrmRole.class, ALL);
 
         grant(AdminGeneral, GlobalTenantSecurity.class);
