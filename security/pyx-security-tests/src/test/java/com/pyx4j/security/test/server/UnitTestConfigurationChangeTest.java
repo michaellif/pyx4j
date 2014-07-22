@@ -67,8 +67,15 @@ public class UnitTestConfigurationChangeTest extends TestCase {
     }
 
     @Override
+    protected void setUp() throws Exception {
+        super.setUp();
+        ServerSideConfiguration.setInstance(null);
+    }
+
+    @Override
     protected void tearDown() throws Exception {
         TestLifecycle.tearDown();
+        ServerSideConfiguration.setInstance(null);
     }
 
     /**
