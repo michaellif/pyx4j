@@ -55,7 +55,7 @@ public interface CrmRole extends IEntity {
     ISet<CrmRole> roles();
 
     /**
-     * <b>Warning:</b> whenever this value is about to be used to implement some logic, if a role has {@link VistaCrmBehavior#Equifax_OLD} in
+     * <b>Warning:</b> whenever this value is about to be used to implement some logic, if a role has {@link VistaCrmBehavior#CreditCheckFull} in
      * {@link #behaviors()},
      * the value this member
      * holds should be IGNORED as treated as <code>true</code>.

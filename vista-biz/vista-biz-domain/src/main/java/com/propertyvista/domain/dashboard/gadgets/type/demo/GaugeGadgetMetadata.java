@@ -29,24 +29,7 @@ import com.propertyvista.domain.security.VistaCrmBehavior;
         description = "Demo of a gauge based gadget",
         keywords = {"Demo", "Chart" },
         allowedBehaviors = {
-                VistaCrmBehavior.PropertyManagement_OLD,
-                VistaCrmBehavior.Mechanicals_OLD,
-                VistaCrmBehavior.BuildingFinancial_OLD,
-                VistaCrmBehavior.Marketing_OLD,
-                VistaCrmBehavior.MarketingMedia_OLD,
-                VistaCrmBehavior.Tenants_OLD,
-                VistaCrmBehavior.Equifax_OLD,
-                VistaCrmBehavior.Emergency_OLD,
-                VistaCrmBehavior.ScreeningData_OLD,
-                VistaCrmBehavior.Occupancy_OLD,
-                VistaCrmBehavior.Maintenance_OLD,
-                VistaCrmBehavior.Organization_OLD,
-                VistaCrmBehavior.Contacts_OLD,
-                VistaCrmBehavior.ProductCatalog_OLD,
-                VistaCrmBehavior.Billing_OLD,
-                VistaCrmBehavior.Reports_OLD,
-                VistaCrmBehavior.PropertyVistaAccountOwner_OLD,
-                VistaCrmBehavior.PropertyVistaSupport
+                VistaCrmBehavior.AdminGeneral
         }
         
 )//@formatter:on

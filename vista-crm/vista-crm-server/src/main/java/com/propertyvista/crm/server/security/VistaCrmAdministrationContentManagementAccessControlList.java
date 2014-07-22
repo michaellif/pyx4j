@@ -23,6 +23,7 @@ import com.pyx4j.security.server.UIAclBuilder;
 
 import com.propertyvista.crm.rpc.services.CityIntroPageCrudService;
 import com.propertyvista.crm.rpc.services.HomePageGadgetCrudService;
+import com.propertyvista.crm.rpc.services.PageDescriptorCrudService;
 import com.propertyvista.crm.rpc.services.admin.SiteBrandingCrudService;
 import com.propertyvista.crm.rpc.services.admin.SiteContentCrudService;
 import com.propertyvista.crm.rpc.services.admin.SiteGeneralCrudService;
@@ -46,6 +47,7 @@ class VistaCrmAdministrationContentManagementAccessControlList extends UIAclBuil
         grant(AdminContent, new IServiceExecutePermission(SiteImageResourceUploadService.class));
         grant(AdminContent, new IServiceExecutePermission(CityIntroPageCrudService.class));
         grant(AdminContent, new IServiceExecutePermission(HomePageGadgetCrudService.class));
+        grant(AdminContent, new IServiceExecutePermission(PageDescriptorCrudService.class));
 
         grant(AdminContent, new EntityPermission(SiteDescriptor.class, READ | UPDATE));
         grant(AdminContent, new EntityPermission(SiteImageResource.class, READ));

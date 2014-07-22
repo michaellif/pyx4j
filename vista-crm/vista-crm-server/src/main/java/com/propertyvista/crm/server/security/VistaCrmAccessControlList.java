@@ -27,10 +27,7 @@ import com.pyx4j.security.server.ServletContainerAclBuilder;
 
 import com.propertyvista.crm.rpc.CRMImpliedPermission;
 import com.propertyvista.crm.rpc.services.FeedbackService;
-import com.propertyvista.crm.rpc.services.MediaUploadBuildingService;
-import com.propertyvista.crm.rpc.services.MediaUploadFloorplanService;
 import com.propertyvista.crm.rpc.services.NoteAttachmentUploadService;
-import com.propertyvista.crm.rpc.services.PageDescriptorCrudService;
 import com.propertyvista.crm.rpc.services.PmcDocumentFileUploadService;
 import com.propertyvista.crm.rpc.services.PmcTermsOfServiceService;
 import com.propertyvista.crm.rpc.services.UpdateUploadService;
@@ -305,7 +302,10 @@ public class VistaCrmAccessControlList extends ServletContainerAclBuilder {
         grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(ArrearsReportService.class));
         grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(UnitTurnoverAnalysisGadgetService.class));
         grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(UnitAvailabilitySummaryGadgetService.class));
+
         grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(UnitAvailabilityStatusListService.class));
+        grant(VistaBasicBehavior.CRM, new EntityPermission(UnitAvailabilityStatus.class, EntityPermission.READ));
+
         grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(CollectionsGadgetService.class));
         grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(DelinquentLeaseListService.class));
         grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(LeadsAndRentalsGadgetService.class));
@@ -484,11 +484,6 @@ public class VistaCrmAccessControlList extends ServletContainerAclBuilder {
         grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(SelectEmployeeListService.class));
         grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(EmployeeSignatureUploadService.class));
         grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(CrmLoginAttemptsListerService.class));
-
-// - Marketing-related:
-        grant(VistaCrmBehavior.Marketing_OLD, new IServiceExecutePermission(PageDescriptorCrudService.class));
-        grant(VistaCrmBehavior.Marketing_OLD, new IServiceExecutePermission(MediaUploadBuildingService.class));
-        grant(VistaCrmBehavior.Marketing_OLD, new IServiceExecutePermission(MediaUploadFloorplanService.class));
 
 // - Administration:
 

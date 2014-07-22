@@ -27,24 +27,29 @@ public enum VistaCrmBehavior implements Behavior {
 
     OAPI,
 
+    @Deprecated
     ILS_OLD,
 
     Mechanicals_OLD,
 
     BuildingFinancial_OLD,
 
+    @Deprecated
     Marketing_OLD,
 
     MarketingMedia_OLD,
 
     Tenants_OLD,
 
+    @Deprecated
     Equifax_OLD,
 
     Emergency_OLD,
 
+    @Deprecated
     ScreeningData_OLD,
 
+    @Deprecated
     Occupancy_OLD,
 
     @Deprecated

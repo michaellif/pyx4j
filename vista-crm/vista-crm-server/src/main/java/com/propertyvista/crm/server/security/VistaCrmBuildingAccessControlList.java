@@ -32,6 +32,8 @@ import com.pyx4j.rpc.shared.IServiceExecutePermission;
 import com.pyx4j.security.server.UIAclBuilder;
 
 import com.propertyvista.crm.rpc.dto.billing.BillingCycleDTO;
+import com.propertyvista.crm.rpc.services.MediaUploadBuildingService;
+import com.propertyvista.crm.rpc.services.MediaUploadFloorplanService;
 import com.propertyvista.crm.rpc.services.billing.BillingCycleCrudService;
 import com.propertyvista.crm.rpc.services.building.ac.CommunityEvents;
 import com.propertyvista.crm.rpc.services.building.ac.ImportExport;
@@ -120,6 +122,12 @@ class VistaCrmBuildingAccessControlList extends UIAclBuilder {
             grant(BuildingMechanicals, entities, READ);
             grant(BuildingAdministrator, entities, READ | UPDATE);
             grant(BuildingLeasing, entities, READ);
+
+            grant(BuildingMarketing, new IServiceExecutePermission(MediaUploadBuildingService.class));
+            grant(BuildingMarketing, new IServiceExecutePermission(MediaUploadFloorplanService.class));
+
+            grant(BuildingAdministrator, new IServiceExecutePermission(MediaUploadBuildingService.class));
+            grant(BuildingAdministrator, new IServiceExecutePermission(MediaUploadFloorplanService.class));
         }
         { // J
             List<Class<? extends IEntity>> entities = entities(AptUnitDTO.class, AptUnitItem.class, AptUnitOccupancySegment.class);
