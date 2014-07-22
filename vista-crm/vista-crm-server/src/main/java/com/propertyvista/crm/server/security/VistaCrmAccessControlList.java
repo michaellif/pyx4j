@@ -36,16 +36,11 @@ import com.propertyvista.crm.rpc.services.PageDescriptorCrudService;
 import com.propertyvista.crm.rpc.services.PmcDocumentFileUploadService;
 import com.propertyvista.crm.rpc.services.PmcTermsOfServiceService;
 import com.propertyvista.crm.rpc.services.UpdateUploadService;
-import com.propertyvista.crm.rpc.services.admin.ARCodeCrudService;
-import com.propertyvista.crm.rpc.services.admin.CustomerCreditCheckCrudService;
-import com.propertyvista.crm.rpc.services.admin.GlCodeCategoryCrudService;
-import com.propertyvista.crm.rpc.services.admin.MerchantAccountCrudService;
 import com.propertyvista.crm.rpc.services.admin.SiteBrandingCrudService;
 import com.propertyvista.crm.rpc.services.admin.SiteContentCrudService;
 import com.propertyvista.crm.rpc.services.admin.SiteGeneralCrudService;
 import com.propertyvista.crm.rpc.services.admin.SiteImageResourceCrudService;
 import com.propertyvista.crm.rpc.services.admin.SiteImageResourceUploadService;
-import com.propertyvista.crm.rpc.services.admin.TaxCrudService;
 import com.propertyvista.crm.rpc.services.billing.BillPreviewService;
 import com.propertyvista.crm.rpc.services.billing.BillPrintService;
 import com.propertyvista.crm.rpc.services.billing.BillingCycleBillListService;
@@ -147,7 +142,6 @@ import com.propertyvista.crm.rpc.services.selections.SelectCustomerUserListServi
 import com.propertyvista.crm.rpc.services.selections.SelectEmployeeListService;
 import com.propertyvista.crm.rpc.services.selections.SelectFeatureListService;
 import com.propertyvista.crm.rpc.services.selections.SelectFloorplanListService;
-import com.propertyvista.crm.rpc.services.selections.SelectGlCodeListService;
 import com.propertyvista.crm.rpc.services.selections.SelectLeaseAdjustmentReasonListService;
 import com.propertyvista.crm.rpc.services.selections.SelectLeaseTermListService;
 import com.propertyvista.crm.rpc.services.selections.SelectPortfolioListService;
@@ -343,7 +337,8 @@ public class VistaCrmAccessControlList extends ServletContainerAclBuilder {
         grant(VistaBasicBehavior.CRM, new EntityPermission(Building.class, EntityPermission.ALL));
         grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(BuildingCrudService.class));
 
-        grant(VistaCrmBehavior.Tenants_OLD, new IServiceExecutePermission(SelectBuildingListService.class));
+        //2014 ok
+        grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(SelectBuildingListService.class));
 
         grant(VistaBasicBehavior.CRM, new EntityPermission(Elevator.class, EntityPermission.ALL));
         grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(ElevatorCrudService.class));
@@ -506,7 +501,6 @@ public class VistaCrmAccessControlList extends ServletContainerAclBuilder {
         grant(VistaCrmBehavior.Marketing_OLD, new IServiceExecutePermission(MediaUploadFloorplanService.class));
 
 // - Administration:
-        grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(ARCodeCrudService.class));
 
         grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(SelectProductCodeListService.class));
 
@@ -521,17 +515,10 @@ public class VistaCrmAccessControlList extends ServletContainerAclBuilder {
         grant(VistaCrmBehavior.Marketing_OLD, new IServiceExecutePermission(CityIntroPageCrudService.class));
         grant(VistaCrmBehavior.Marketing_OLD, new IServiceExecutePermission(HomePageGadgetCrudService.class));
 
-        grant(VistaCrmBehavior.OrganizationFinancial_OLD, new IServiceExecutePermission(TaxCrudService.class));
-
-        grant(VistaCrmBehavior.OrganizationPolicy_OLD, new IServiceExecutePermission(GlCodeCategoryCrudService.class));
         grant(VistaCrmBehavior.OrganizationPolicy_OLD, new IServiceExecutePermission(BackgroundCheckPolicyCrudService.class.getPackage().getName() + ".*"));
         grant(VistaCrmBehavior.OrganizationPolicy_OLD, new IServiceExecutePermission(EmailTemplateManagerService.class));
 
         grant(VistaCrmBehavior.OrganizationPolicy_OLD, new IServiceExecutePermission(SelectTaxListService.class));
-        grant(VistaCrmBehavior.OrganizationPolicy_OLD, new IServiceExecutePermission(SelectGlCodeListService.class));
-
-        grant(VistaCrmBehavior.PropertyVistaAccountOwner_OLD, new IServiceExecutePermission(MerchantAccountCrudService.class));
-        grant(VistaCrmBehavior.OrganizationFinancial_OLD, new IServiceExecutePermission(MerchantAccountCrudService.class));
 
         grant(VistaCrmBehavior.PropertyVistaAccountOwner_OLD, new IServiceExecutePermission(CreditCheckStatusCrudService.class));
         grant(VistaCrmBehavior.PropertyVistaSupport, new IServiceExecutePermission(CreditCheckStatusCrudService.class));
@@ -541,9 +528,6 @@ public class VistaCrmAccessControlList extends ServletContainerAclBuilder {
 
         grant(VistaCrmBehavior.PropertyVistaAccountOwner_OLD, new IServiceExecutePermission(ILSConfigCrudService.class));
         grant(VistaCrmBehavior.PropertyVistaSupport, new IServiceExecutePermission(ILSConfigCrudService.class));
-
-        grant(VistaCrmBehavior.Equifax_OLD, new IServiceExecutePermission(CustomerCreditCheckCrudService.class));
-        grant(VistaCrmBehavior.OrganizationFinancial_OLD, new IServiceExecutePermission(CustomerCreditCheckCrudService.class));
 
 // - TenantInsurance:
         grant(VistaBasicBehavior.CRM, new EntityPermission(GeneralInsuranceCertificate.class, EntityPermission.ALL));
@@ -561,13 +545,6 @@ public class VistaCrmAccessControlList extends ServletContainerAclBuilder {
 // - Old services:
         grant(VistaBasicBehavior.CRM, new EntityPermission(CountryPolicyNode.class.getPackage().getName() + ".*", EntityPermission.READ));
         grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(ReferenceDataService.class));
-
-        // All other roles have everything the same
-//        for (VistaTenantBehavior b : VistaTenantBehavior.getCrmBehaviors()) {
-//            if (b != VistaBasicBehavior.CRM) {
-//                grant(b, VistaBasicBehavior.CRM);
-//            }
-//        }
 
         // Data Access
         grant(VistaDataAccessBehavior.BuildingsAssigned, new BuildingDatasetAccessRule(), Building.class);
@@ -613,6 +590,8 @@ public class VistaCrmAccessControlList extends ServletContainerAclBuilder {
         /***************** this is new List **************** */
 
         merge(new VistaCrmAdministrationAccessControlList());
+        merge(new VistaCrmAdministrationPoliciesAccessControlList());
+        merge(new VistaCrmAdministrationContentManagementAccessControlList());
 
         merge(new VistaCrmBuildingAccessControlList());
 

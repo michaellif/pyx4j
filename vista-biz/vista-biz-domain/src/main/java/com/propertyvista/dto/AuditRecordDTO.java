@@ -17,6 +17,7 @@ import java.util.Date;
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.annotations.Format;
+import com.pyx4j.entity.annotations.SecurityEnabled;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.IPrimitive;
@@ -25,6 +26,7 @@ import com.propertyvista.domain.security.AuditRecordEventType;
 import com.propertyvista.domain.security.common.VistaApplication;
 
 @Transient
+@SecurityEnabled
 public interface AuditRecordDTO extends IEntity {
 
     IPrimitive<String> userName();

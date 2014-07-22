@@ -26,6 +26,7 @@ import com.pyx4j.entity.annotations.Length;
 import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.ReadOnly;
 import com.pyx4j.entity.annotations.RpcTransient;
+import com.pyx4j.entity.annotations.SecurityEnabled;
 import com.pyx4j.entity.annotations.Timestamp;
 import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.ToStringFormat;
@@ -43,6 +44,7 @@ import com.propertyvista.domain.property.asset.building.Building;
 
 @ToStringFormat("{1}-{0}: {2} {3}")
 @DiscriminatorValue("MerchantAccount")
+@SecurityEnabled
 public interface MerchantAccount extends AbstractMerchantAccount, HasNotesAndAttachments {
 
     @EmbeddedEntity

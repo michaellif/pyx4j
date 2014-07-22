@@ -34,8 +34,12 @@ import com.propertyvista.crm.rpc.CrmSiteMap.Administration.Security;
 import com.propertyvista.crm.rpc.CrmSiteMap.Administration.Settings;
 import com.propertyvista.crm.rpc.dto.admin.PmcCompanyInfoDTO;
 import com.propertyvista.crm.rpc.dto.admin.PmcPaymentMethodsDTO;
+import com.propertyvista.crm.rpc.dto.tenant.CustomerCreditCheckDTO;
 import com.propertyvista.crm.rpc.services.admin.ac.GlobalTenantSecurity;
 import com.propertyvista.domain.customizations.CountryOfOperation;
+import com.propertyvista.domain.financial.ARCode;
+import com.propertyvista.domain.financial.GlCodeCategory;
+import com.propertyvista.domain.financial.MerchantAccount;
 import com.propertyvista.domain.security.CrmRole;
 import com.propertyvista.domain.security.VistaCrmBehavior;
 import com.propertyvista.dto.AuditRecordDTO;
@@ -101,15 +105,15 @@ public class NavigAdministrationViewImpl extends Composite implements NavigAdmin
             SideMenuList list = new SideMenuList();
             root.addMenuItem(new SideMenuItem(list, i18n.tr("Financial"), null));
 
-            list.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Administration.Financial.ARCode()));
+            list.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Administration.Financial.ARCode(), DataModelPermission.permissionRead(ARCode.class)));
             if (!VistaFeatures.instance().yardiIntegration()) {
-                list.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Administration.Financial.GlCodeCategory()));
+                list.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Administration.Financial.GlCodeCategory(), DataModelPermission
+                        .permissionRead(GlCodeCategory.class)));
                 list.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Administration.Financial.Tax()));
             }
-            if (SecurityController.check(VistaCrmBehavior.OrganizationFinancial_OLD, VistaCrmBehavior.PropertyVistaAccountOwner_OLD)) {
-                list.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Administration.Financial.MerchantAccount()));
-            }
-            list.addMenuItem(new SideMenuAppPlaceItem(new Financial.CustomerCreditCheck()));
+            list.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Administration.Financial.MerchantAccount(), DataModelPermission
+                    .permissionRead(MerchantAccount.class)));
+            list.addMenuItem(new SideMenuAppPlaceItem(new Financial.CustomerCreditCheck(), DataModelPermission.permissionRead(CustomerCreditCheckDTO.class)));
         }
 
         {//Content Management

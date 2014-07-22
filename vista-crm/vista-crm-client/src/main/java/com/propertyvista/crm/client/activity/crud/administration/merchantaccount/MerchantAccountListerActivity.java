@@ -17,26 +17,23 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.place.shared.Place;
 
 import com.pyx4j.entity.rpc.AbstractListCrudService;
-import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.site.client.activity.AbstractListerActivity;
 
 import com.propertyvista.crm.client.CrmSite;
 import com.propertyvista.crm.client.ui.crud.administration.merchantaccount.MerchantAccountListerView;
 import com.propertyvista.crm.rpc.services.admin.MerchantAccountCrudService;
 import com.propertyvista.domain.financial.MerchantAccount;
-import com.propertyvista.domain.security.VistaCrmBehavior;
 import com.propertyvista.shared.config.VistaFeatures;
 
 public class MerchantAccountListerActivity extends AbstractListerActivity<MerchantAccount> {
 
     public MerchantAccountListerActivity(Place place) {
         super(MerchantAccount.class, place, CrmSite.getViewFactory().getView(MerchantAccountListerView.class), GWT
-                        .<AbstractListCrudService<MerchantAccount>> create(MerchantAccountCrudService.class));
+                .<AbstractListCrudService<MerchantAccount>> create(MerchantAccountCrudService.class));
     }
 
     @Override
     public boolean canCreateNewItem() {
-        return VistaFeatures.instance().yardiIntegration()
-                && SecurityController.check(VistaCrmBehavior.PropertyVistaAccountOwner_OLD, VistaCrmBehavior.PropertyVistaSupport);
+        return VistaFeatures.instance().yardiIntegration() && super.canCreateNewItem();
     }
 }
