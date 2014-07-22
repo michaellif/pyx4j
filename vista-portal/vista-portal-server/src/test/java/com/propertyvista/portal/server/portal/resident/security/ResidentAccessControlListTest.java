@@ -66,7 +66,7 @@ public class ResidentAccessControlListTest {
             }
 
             IEntity ent = EntityFactory.create(entityClass);
-            if (SecurityController.check(EntityPermission.permissionRead(ent))) {
+            if (SecurityController.check(ent, EntityPermission.permissionRead(ent))) {
                 @SuppressWarnings("rawtypes")
                 List<DatasetAccessRule> rules = SecurityController.getAccessRules(DatasetAccessRule.class, entityClass);
                 if ((rules == null) || rules.size() == 0) {

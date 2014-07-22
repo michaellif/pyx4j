@@ -97,9 +97,8 @@ public class VistaAccessControlListTest {
             if ((application != null) && (ent instanceof IBoundToApplication)) {
                 ((IBoundToApplication) ent).application().set(application);
             }
-            Assert.assertEquals("Allow Read " + entityClass.getSimpleName(), expected, SecurityController.check(EntityPermission.permissionRead(ent)));
-            Assert.assertEquals("Allow Update " + entityClass.getSimpleName(), expected,
-                    SecurityController.check(EntityPermission.permissionUpdate(ent)));
+            Assert.assertEquals("Allow Read " + entityClass.getSimpleName(), expected, SecurityController.check(ent, EntityPermission.permissionRead(ent)));
+            Assert.assertEquals("Allow Update " + entityClass.getSimpleName(), expected, SecurityController.check(ent, EntityPermission.permissionUpdate(ent)));
 
         } catch (AssertionError error) {
             debuPermissions();

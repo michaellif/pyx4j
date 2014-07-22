@@ -273,12 +273,6 @@ public class CrmViewerViewImplBase<E extends IEntity> extends AbstractViewer<E> 
             setFinalizationVisible(((IVersionedEntity<?>) value).version().versionNumber().isNull());
         }
 
-        for (MenuItem a : actionsMenu.getItems()) {
-            if (a instanceof SecureMenuItem) {
-                ((SecureMenuItem) a).setSecurityContext(value);
-            }
-        }
-
         setEditingVisible(true);
 
         viewsButton.setVisible(!viewsMenu.isMenuEmpty());
