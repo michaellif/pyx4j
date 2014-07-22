@@ -26,6 +26,7 @@ import com.pyx4j.gwt.commons.layout.LayoutChangeRequestEvent;
 import com.pyx4j.gwt.commons.layout.LayoutChangeRequestEvent.ChangeType;
 import com.pyx4j.gwt.commons.layout.LayoutType;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.security.shared.Context;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.Button.ButtonMenuBar;
@@ -38,6 +39,7 @@ import com.propertyvista.crm.client.CrmSite;
 import com.propertyvista.crm.client.resources.CrmImages;
 import com.propertyvista.crm.client.themes.CommunicationCrmTheme;
 import com.propertyvista.crm.rpc.CrmSiteMap;
+import com.propertyvista.crm.rpc.CrmUserVisit;
 import com.propertyvista.crm.rpc.services.admin.ac.CrmAdministrationAccess;
 import com.propertyvista.dto.MessageDTO;
 import com.propertyvista.shared.i18n.CompiledLocale;
@@ -77,6 +79,8 @@ public class HeaderViewImpl extends FlowPanel implements HeaderView {
     private SimplePanel logoContainer;
 
     private Image logoImage;
+
+    private Toolbar rightToolbar;
 
     //TODO Misha How can I do this properly ?
     @Deprecated
@@ -142,11 +146,11 @@ public class HeaderViewImpl extends FlowPanel implements HeaderView {
         }
 
         {//Right Toolbar
-            Toolbar toolbar = new Toolbar();
-            toolbar.getElement().getStyle().setProperty("right", "0");
-            toolbar.getElement().getStyle().setProperty("top", "0");
+            rightToolbar = new Toolbar();
+            rightToolbar.getElement().getStyle().setProperty("right", "0");
+            rightToolbar.getElement().getStyle().setProperty("top", "0");
 
-            toolbar.addStyleName(SiteViewTheme.StyleName.SiteViewAction.name());
+            rightToolbar.addStyleName(SiteViewTheme.StyleName.SiteViewAction.name());
 
             userButton = new Button("");
 
@@ -223,12 +227,12 @@ public class HeaderViewImpl extends FlowPanel implements HeaderView {
 
             // from toolbar:
 
-            toolbar.addItem(exitAdminButton);
-            toolbar.addItem(adminButton);
-            toolbar.addItem(userButton);
-            toolbar.addItem(languageButton);
-            toolbar.addItem(communicationButton);
-            add(toolbar);
+            rightToolbar.addItem(exitAdminButton);
+            rightToolbar.addItem(adminButton);
+            rightToolbar.addItem(userButton);
+            rightToolbar.addItem(languageButton);
+            rightToolbar.addItem(communicationButton);
+            add(rightToolbar);
         }
 
         AppSite.getEventBus().addHandler(LayoutChangeEvent.TYPE, new LayoutChangeHandler() {
@@ -259,6 +263,8 @@ public class HeaderViewImpl extends FlowPanel implements HeaderView {
         userButton.setVisible(false);
         userButton.setTextLabel("");
 
+        rightToolbar.setSecurityContext(null);
+
         calculateActionsState();
     }
 
@@ -271,6 +277,8 @@ public class HeaderViewImpl extends FlowPanel implements HeaderView {
 
         userButton.setVisible(true);
         userButton.setTextLabel(userName);
+
+        rightToolbar.setSecurityContext(Context.visit(CrmUserVisit.class).getCurrentUser());
 
         calculateActionsState();
     }
