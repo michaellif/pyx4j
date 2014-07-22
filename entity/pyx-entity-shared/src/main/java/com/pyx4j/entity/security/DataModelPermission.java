@@ -24,9 +24,10 @@ import com.pyx4j.commons.GWTSerializable;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.IObject;
-import com.pyx4j.security.shared.Permission;
+import com.pyx4j.security.shared.HasProtectionDomain;
+import com.pyx4j.security.shared.ProtectionDomain;
 
-public class DataModelPermission<E extends IEntity> extends AbstractCRUDPermission {
+public class DataModelPermission<E extends IEntity> extends AbstractCRUDPermission implements HasProtectionDomain {
 
     private static final long serialVersionUID = 1L;
 
@@ -35,8 +36,6 @@ public class DataModelPermission<E extends IEntity> extends AbstractCRUDPermissi
     //Not final because of GWT
     @GWTSerializable
     private InstanceAccess instanceAccess;
-
-    private final transient IEntity contextEntityInstance;
 
     public static <T extends IEntity> DataModelPermission<T> permissionCreate(Class<T> entityClass) {
         return new DataModelPermission<T>(entityClass, null, CREATE);
@@ -54,40 +53,21 @@ public class DataModelPermission<E extends IEntity> extends AbstractCRUDPermissi
         return new DataModelPermission<T>(entityClass, null, DELETE);
     }
 
-    public static <T extends IEntity> DataModelPermission<T> permissionCreate(IEntity contextEntity) {
-        return new DataModelPermission<T>(contextEntity, CREATE);
-    }
-
-    public static <T extends IEntity> DataModelPermission<T> permissionRead(IEntity contextEntity) {
-        return new DataModelPermission<T>(contextEntity, READ);
-    }
-
-    public static <T extends IEntity> DataModelPermission<T> permissionUpdate(IEntity contextEntity) {
-        return new DataModelPermission<T>(contextEntity, UPDATE);
-    }
-
-    public static <T extends IEntity> DataModelPermission<T> permissionDelete(IEntity contextEntity) {
-        return new DataModelPermission<T>(contextEntity, DELETE);
-    }
-
     @GWTSerializable
     protected DataModelPermission() {
         this.entityPrototype = null;
         this.instanceAccess = null;
-        this.contextEntityInstance = null;
     }
 
     public DataModelPermission(Class<E> entityClass, InstanceAccess instanceAccess, int actions) {
         super(entityClass.getName(), actions);
         this.entityPrototype = EntityFactory.getEntityPrototype(entityClass);
         this.instanceAccess = instanceAccess;
-        this.contextEntityInstance = null;
     }
 
     public DataModelPermission(IEntity contextEntity, int actions) {
         super(contextEntity.getObjectClass().getName(), actions);
         this.entityPrototype = null;
-        this.contextEntityInstance = contextEntity;
         this.instanceAccess = null;
     }
 
@@ -121,20 +101,7 @@ public class DataModelPermission<E extends IEntity> extends AbstractCRUDPermissi
     }
 
     @Override
-    public boolean implies(Permission p) {
-        if (super.implies(p)) {
-            if (((DataModelPermission<?>) p).contextEntityInstance != null) {
-                if (this.instanceAccess == null) {
-                    return true;
-                } else {
-                    return this.instanceAccess.implies(((DataModelPermission<?>) p).contextEntityInstance);
-                }
-            } else {
-                return true;
-            }
-        } else {
-            return false;
-        }
+    public ProtectionDomain<?> getProtectionDomain() {
+        return instanceAccess;
     }
-
 }

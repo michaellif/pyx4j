@@ -43,18 +43,17 @@ import com.google.gwt.user.client.ui.HasWidgets;
 import com.google.gwt.user.client.ui.IndexedPanel;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.LayoutPanel;
-import com.google.gwt.user.client.ui.ProvidesResize;
-import com.google.gwt.user.client.ui.ResizeComposite;
 import com.google.gwt.user.client.ui.Widget;
 
-import com.pyx4j.commons.css.StyleManager;
+import com.pyx4j.security.shared.AccessControlContext;
+import com.pyx4j.widgets.client.HasSecureConcern;
 import com.pyx4j.widgets.client.event.shared.BeforeCloseEvent;
 import com.pyx4j.widgets.client.event.shared.BeforeCloseHandler;
 import com.pyx4j.widgets.client.event.shared.HasBeforeCloseHandlers;
 
 //TODO responsive tabs http://css-tricks.com/
 public class TabPanel extends LayoutPanel implements IndexedPanel.ForIsWidget, HasBeforeSelectionHandlers<Tab>, HasSelectionHandlers<Tab>,
-        HasCloseHandlers<Tab>, HasBeforeCloseHandlers<Tab>, HasWidgets.ForIsWidget {
+        HasCloseHandlers<Tab>, HasBeforeCloseHandlers<Tab>, HasWidgets.ForIsWidget, HasSecureConcern {
 
     private static final Logger log = LoggerFactory.getLogger(TabPanel.class);
 
@@ -157,10 +156,7 @@ public class TabPanel extends LayoutPanel implements IndexedPanel.ForIsWidget, H
     }
 
     public boolean selectTab(Tab tab) {
-
-        if (tab == null) {
-            throw new Error("Selected tab can't be null");
-        }
+        assert (tab != null) : "Selected tab can't be null";
 
         if (!isTabVisible(tab) || !isTabEnabled(tab)) {
             selectFirstEnabled();
@@ -182,6 +178,13 @@ public class TabPanel extends LayoutPanel implements IndexedPanel.ForIsWidget, H
         SelectionEvent.fire(this, selectedTab);
 
         return true;
+    }
+
+    @Override
+    public void setSecurityContext(AccessControlContext context) {
+        for (Tab tab : tabs.values()) {
+            tab.setSecurityContext(context);
+        }
     }
 
     protected void selectFirstEnabled() {

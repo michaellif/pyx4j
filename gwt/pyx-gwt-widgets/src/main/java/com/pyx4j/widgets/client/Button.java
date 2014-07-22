@@ -49,7 +49,6 @@ import com.pyx4j.security.annotations.ActionId;
 import com.pyx4j.security.shared.AccessControlContext;
 import com.pyx4j.security.shared.ActionPermission;
 import com.pyx4j.security.shared.Permission;
-import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.widgets.client.images.ButtonImages;
 import com.pyx4j.widgets.client.style.theme.WidgetTheme;
 
@@ -71,7 +70,7 @@ public class Button extends FocusPanel implements IFocusWidget, HasSecureConcern
 
     private boolean active = false;
 
-    private Permission[] permission;
+    private final SecureConcern visible = new SecureConcern();
 
     public Button(ImageResource imageResource) {
         this(imageResource, (String) null);
@@ -246,13 +245,21 @@ public class Button extends FocusPanel implements IFocusWidget, HasSecureConcern
     }
 
     public void setPermission(Permission... permission) {
-        this.permission = permission;
-        super.setVisible(SecurityController.check(permission));
+        visible.setPermission(permission);
     }
 
     @Override
     public void setVisible(boolean visible) {
-        super.setVisible(visible && ((permission == null) || SecurityController.check(permission)));
+        this.visible.setDecision(visible);
+        if (this.visible.hasDecision()) {
+            super.setVisible(this.visible.getDecision());
+        }
+    }
+
+    @Override
+    public void setSecurityContext(AccessControlContext context) {
+        visible.setContext(context);
+        super.setVisible(visible.getDecision());
     }
 
     public boolean isActive() {
@@ -290,6 +297,15 @@ public class Button extends FocusPanel implements IFocusWidget, HasSecureConcern
     @Override
     protected void onUnload() {
         buttonFacesHandler.onUnload();
+    }
+
+    @Override
+    public void setEditable(boolean editable) {
+    }
+
+    @Override
+    public boolean isEditable() {
+        return false;
     }
 
     static class ButtonFacesHandler implements MouseOverHandler, MouseOutHandler, MouseDownHandler, MouseUpHandler, ClickHandler {
@@ -391,21 +407,6 @@ public class Button extends FocusPanel implements IFocusWidget, HasSecureConcern
         public Button getButton() {
             return button;
         }
-
-    }
-
-    @Override
-    public void setEditable(boolean editable) {
-    }
-
-    @Override
-    public boolean isEditable() {
-        return false;
-    }
-
-    @Override
-    public void setSecurityContext(AccessControlContext context) {
-        // TODO Auto-generated method stub
 
     }
 

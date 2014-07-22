@@ -99,6 +99,15 @@ public abstract class SecurityController {
         return controller.getAcl().getPermissions();
     }
 
+    public final static boolean check(AccessControlContext context, Permission... permissions) {
+        for (Permission permission : permissions) {
+            if (controller.getAcl().checkPermission(context, permission)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     public final static boolean check(Permission... permissions) {
         for (Permission permission : permissions) {
             if (controller.getAcl().checkPermission(null, permission)) {
@@ -108,13 +117,15 @@ public abstract class SecurityController {
         return false;
     }
 
-    public final static boolean check(AccessControlContext context, Permission... permissions) {
-        for (Permission permission : permissions) {
-            if (controller.getAcl().checkPermission(context, permission)) {
-                return true;
+    public static void assertPermission(AccessControlContext context, Permission... permissions) throws SecurityViolationException {
+        if (!check(context, permissions)) {
+            log.warn("Permission denied {} to access {}", ConverterUtils.convertArray(permissions, " or "), context);
+            if (ApplicationMode.isDevelopment()) {
+                throw new SecurityViolationException("Permission denied " + ApplicationMode.DEV + ConverterUtils.convertArray(permissions, " or "));
+            } else {
+                throw new SecurityViolationException("Permission denied");
             }
         }
-        return false;
     }
 
     public static void assertPermission(Permission... permissions) throws SecurityViolationException {
@@ -131,4 +142,5 @@ public abstract class SecurityController {
     public static <T extends AccessRule> List<T> getAccessRules(Class<T> accessRuleClass, Object subject) {
         return controller.getAcl().getAccessRules(accessRuleClass, subject);
     }
+
 }

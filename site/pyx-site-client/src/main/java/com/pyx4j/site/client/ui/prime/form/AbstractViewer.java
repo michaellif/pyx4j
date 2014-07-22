@@ -64,6 +64,14 @@ public abstract class AbstractViewer<E extends IEntity> extends AbstractForm<E> 
     }
 
     @Override
+    public void reset() {
+        super.reset();
+        for (HasSecureConcern sc : allSecureConcerns()) {
+            sc.setSecurityContext(null);
+        }
+    }
+
+    @Override
     public void populate(E value) {
         super.populate(value);
 

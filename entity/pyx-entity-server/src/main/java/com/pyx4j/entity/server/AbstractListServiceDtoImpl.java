@@ -235,7 +235,7 @@ public abstract class AbstractListServiceDtoImpl<BO extends IEntity, TO extends 
         SecurityController.assertPermission(new EntityPermission(boClass, EntityPermission.DELETE));
         TO to = EntityFactory.createIdentityStub(toClass, entityId);
         BO bo = Persistence.service().retrieve(boClass, getBOKey(to));
-        SecurityController.assertPermission(EntityPermission.permissionDelete(bo));
+        SecurityController.assertPermission(bo, EntityPermission.permissionDelete(bo));
         delete(bo);
         Persistence.service().commit();
         callback.onSuccess(true);

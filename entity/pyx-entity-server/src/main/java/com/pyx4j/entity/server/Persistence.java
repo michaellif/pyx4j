@@ -75,7 +75,7 @@ public class Persistence {
             @Override
             public T next() {
                 T entity = unfiltered.next();
-                SecurityController.assertPermission(EntityPermission.permissionRead(entity));
+                SecurityController.assertPermission(entity, EntityPermission.permissionRead(entity));
                 return entity;
             }
 
@@ -123,7 +123,7 @@ public class Persistence {
         List<T> rc = service().query(criteria, attachLevel);
         Vector<T> v = new Vector<T>();
         for (T ent : rc) {
-            SecurityController.assertPermission(EntityPermission.permissionRead(ent));
+            SecurityController.assertPermission(ent, EntityPermission.permissionRead(ent));
             v.add(ent);
         }
         return v;
@@ -138,7 +138,7 @@ public class Persistence {
         applyDatasetAccessRule(criteria);
         T ent = service().retrieve(criteria);
         if (ent != null) {
-            SecurityController.assertPermission(EntityPermission.permissionRead(ent));
+            SecurityController.assertPermission(ent, EntityPermission.permissionRead(ent));
         }
         return ent;
     }
@@ -156,9 +156,9 @@ public class Persistence {
             throw new DatastoreReadOnlyRuntimeException(ServerSideConfiguration.instance().getApplicationMaintenanceMessage());
         }
         if (entity.getPrimaryKey() == null) {
-            SecurityController.assertPermission(EntityPermission.permissionCreate(entity));
+            SecurityController.assertPermission(entity, EntityPermission.permissionCreate(entity));
         } else {
-            SecurityController.assertPermission(EntityPermission.permissionUpdate(entity));
+            SecurityController.assertPermission(entity, EntityPermission.permissionUpdate(entity));
         }
 
         //TODO we should apply DatasetAccessRule

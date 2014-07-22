@@ -24,10 +24,12 @@ import com.google.gwt.resources.client.ImageResource;
 import com.google.gwt.user.client.ui.LayoutPanel;
 import com.google.gwt.user.client.ui.Widget;
 
+import com.pyx4j.security.shared.AccessControlContext;
 import com.pyx4j.security.shared.Permission;
-import com.pyx4j.security.shared.SecurityController;
+import com.pyx4j.widgets.client.HasSecureConcern;
+import com.pyx4j.widgets.client.SecureConcern;
 
-public class Tab extends LayoutPanel {
+public class Tab extends LayoutPanel implements HasSecureConcern {
 
     private String tabTitle;
 
@@ -35,15 +37,11 @@ public class Tab extends LayoutPanel {
 
     private TabPanel tabPanel;
 
-    private boolean enabled = true;
+    private final SecureConcern enabled = new SecureConcern();
 
     private boolean dirty = false;
 
-    private boolean visible = true;
-
-    private Permission[] permissionsVisible;
-
-    private Permission[] permissionsEnabled;
+    private final SecureConcern visible = new SecureConcern();
 
     private String warning = null;
 
@@ -57,11 +55,7 @@ public class Tab extends LayoutPanel {
         if (contentPane != null) {
             add(contentPane);
         }
-        // java varargs creates empty arrays,  so consider it as no permissions set
-        if (permissions == null || permissions.length == 0) {
-            permissions = null;
-        }
-        this.permissionsVisible = permissions;
+        visible.setPermission(permissions);
         setTabVisible(true);
     }
 
@@ -95,36 +89,55 @@ public class Tab extends LayoutPanel {
     }
 
     public void setTabVisible(boolean visible) {
-        visible = visible && ((permissionsVisible == null) || SecurityController.check(permissionsVisible));
-        this.visible = visible;
-        tabBarItem.onVisible(visible);
+        this.visible.setDecision(visible);
+        if (this.visible.hasDecision()) {
+            setTabVisibleImpl();
+        }
+    }
+
+    private void setTabVisibleImpl() {
+        super.setVisible(this.visible.getDecision());
+        tabBarItem.onVisible(this.visible.getDecision());
         if (tabPanel != null) {
             tabPanel.getTabBar().layout();
         }
     }
 
     public boolean isTabVisible() {
-        return visible;
+        return visible.getDecision2();
     }
 
     public void setPermitVisiblePermission(Permission... permission) {
-        this.permissionsVisible = permission;
-        setTabVisible(isTabVisible());
+        visible.setPermission(permission);
+        setTabVisibleImpl();
     }
 
     public void setTabEnabled(boolean enabled) {
-        enabled = enabled && ((permissionsEnabled == null) || SecurityController.check(permissionsEnabled));
-        this.enabled = enabled;
-        tabBarItem.onEnabled(enabled);
+        this.enabled.setDecision(enabled);
+        if (this.enabled.hasDecision()) {
+            setTabEnabledImpl();
+        }
+    }
+
+    private void setTabEnabledImpl() {
+        tabBarItem.onEnabled(this.enabled.getDecision());
     }
 
     public boolean isTabEnabled() {
-        return enabled;
+        return enabled.getDecision2();
     }
 
     public void setPermitEnabledPermission(Permission... permission) {
-        this.permissionsEnabled = permission;
-        setTabEnabled(isTabEnabled());
+        enabled.setPermission(permission);
+        setTabEnabledImpl();
+    }
+
+    @Override
+    public void setSecurityContext(AccessControlContext context) {
+        visible.setContext(context);
+        enabled.setContext(context);
+        setTabVisibleImpl();
+        setTabEnabledImpl();
     }
 
     public void setTabWarning(String message) {

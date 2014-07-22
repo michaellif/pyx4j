@@ -58,9 +58,9 @@ public class EntityServicesImpl {
                 throw new UserRuntimeException(ServerSideConfiguration.instance().getApplicationMaintenanceMessage());
             }
             if (request.getPrimaryKey() == null) {
-                SecurityController.assertPermission(EntityPermission.permissionCreate(request));
+                SecurityController.assertPermission(request, EntityPermission.permissionCreate(request));
             } else {
-                SecurityController.assertPermission(EntityPermission.permissionUpdate(request));
+                SecurityController.assertPermission(request, EntityPermission.permissionUpdate(request));
             }
             PersistenceServicesFactory.getPersistenceService().persist(request);
             return request;
@@ -85,9 +85,9 @@ public class EntityServicesImpl {
             }
             for (IEntity ent : request) {
                 if (ent.getPrimaryKey() == null) {
-                    SecurityController.assertPermission(EntityPermission.permissionCreate(ent));
+                    SecurityController.assertPermission(ent, EntityPermission.permissionCreate(ent));
                 } else {
-                    SecurityController.assertPermission(EntityPermission.permissionUpdate(ent));
+                    SecurityController.assertPermission(ent, EntityPermission.permissionUpdate(ent));
                 }
             }
             PersistenceServicesFactory.getPersistenceService().persist(request);
@@ -133,7 +133,7 @@ public class EntityServicesImpl {
 
         while (it.hasNext()) {
             T ent = it.next();
-            SecurityController.assertPermission(EntityPermission.permissionRead(ent));
+            SecurityController.assertPermission(ent, EntityPermission.permissionRead(ent));
             r.add(ent);
             if (System.nanoTime() > start + 20L * Consts.SEC2NANO) {
                 r.setQuotaExceeded(true);
@@ -219,7 +219,7 @@ public class EntityServicesImpl {
             }
             SecurityController.assertPermission(new EntityPermission(entity.getValueClass(), EntityPermission.DELETE));
             IEntity actualEntity = PersistenceServicesFactory.getPersistenceService().retrieve(entity.getEntityMeta().getEntityClass(), entity.getPrimaryKey());
-            SecurityController.assertPermission(EntityPermission.permissionRead(actualEntity));
+            SecurityController.assertPermission(actualEntity, EntityPermission.permissionRead(actualEntity));
             PersistenceServicesFactory.getPersistenceService().delete(entity);
             return null;
         }

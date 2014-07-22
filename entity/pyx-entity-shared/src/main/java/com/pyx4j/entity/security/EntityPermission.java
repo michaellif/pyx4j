@@ -24,7 +24,6 @@ import com.pyx4j.commons.GWTJava5Helper;
 import com.pyx4j.commons.GWTSerializable;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.security.shared.HasProtectionDomain;
-import com.pyx4j.security.shared.Permission;
 import com.pyx4j.security.shared.ProtectionDomain;
 
 public class EntityPermission extends AbstractCRUDPermission implements HasProtectionDomain {
@@ -32,8 +31,6 @@ public class EntityPermission extends AbstractCRUDPermission implements HasProte
     private static final long serialVersionUID = 7095635694477738182L;
 
     private final transient InstanceAccess instanceAccess;
-
-    private final transient IEntity entityInstance;
 
     public static EntityPermission permissionCreate(Class<? extends IEntity> entityClass) {
         return new EntityPermission(entityClass, CREATE);
@@ -70,71 +67,47 @@ public class EntityPermission extends AbstractCRUDPermission implements HasProte
     @GWTSerializable
     protected EntityPermission() {
         super();
-        this.entityInstance = null;
         this.instanceAccess = null;
     }
 
     public EntityPermission(String name, String actions) {
         super(name, actions);
-        this.entityInstance = null;
         this.instanceAccess = null;
     }
 
     public EntityPermission(Class<? extends IEntity> entityClass, int actions) {
         super(entityClass.getName(), actions);
-        this.entityInstance = null;
         this.instanceAccess = null;
     }
 
     public EntityPermission(String name, int actions) {
         super(name, actions);
-        this.entityInstance = null;
         this.instanceAccess = null;
     }
 
     public EntityPermission(IEntity entity, int actions) {
         super(entity.getObjectClass().getName(), actions);
-        this.entityInstance = entity;
         this.instanceAccess = null;
     }
 
     public EntityPermission(String name, InstanceAccess instanceAccess, int actions) {
         super(name, actions);
-        this.entityInstance = null;
         this.instanceAccess = instanceAccess;
     }
 
     public EntityPermission(Class<?> entityClass, InstanceAccess instanceAccess, int actions) {
         super(entityClass.getName(), actions);
-        this.entityInstance = null;
         this.instanceAccess = instanceAccess;
-    }
-
-    @Override
-    public boolean implies(Permission p) {
-        if (super.implies(p)) {
-            if (((EntityPermission) p).entityInstance != null) {
-                if (this.instanceAccess == null) {
-                    return true;
-                } else {
-                    return this.instanceAccess.implies(((EntityPermission) p).entityInstance);
-                }
-            } else {
-                return true;
-            }
-        } else {
-            return false;
-        }
-    }
-
-    @Override
-    public String toString() {
-        return getPath() + ((instanceAccess != null) ? " " + GWTJava5Helper.getSimpleName(instanceAccess.getClass()) : "") + " " + getActions();
     }
 
     @Override
     public ProtectionDomain<?> getProtectionDomain() {
         return instanceAccess;
+    }
+
+    @Override
+    public String toString() {
+        return getPath() + ((instanceAccess != null) ? " " + GWTJava5Helper.getSimpleName(instanceAccess.getClass()) : "") + " " + getActions();
     }
 
 }

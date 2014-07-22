@@ -37,6 +37,7 @@ import com.pyx4j.security.shared.AccessControlContext;
 import com.pyx4j.security.shared.AccessRule;
 import com.pyx4j.security.shared.Acl;
 import com.pyx4j.security.shared.Behavior;
+import com.pyx4j.security.shared.HasProtectionDomain;
 import com.pyx4j.security.shared.Permission;
 import com.pyx4j.security.shared.SecurityController;
 
@@ -65,7 +66,12 @@ public class ClientSecurityController extends SecurityController {
         public boolean checkPermission(AccessControlContext context, Permission permission) {
             for (Permission p : permissions) {
                 if (p.implies(permission)) {
-                    return true;
+                    if ((p instanceof HasProtectionDomain) && (((HasProtectionDomain) p).getProtectionDomain() != null)
+                            && (context != null && !context.implies(((HasProtectionDomain) p).getProtectionDomain()))) {
+                        continue;
+                    } else {
+                        return true;
+                    }
                 }
             }
             return false;

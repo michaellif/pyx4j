@@ -174,7 +174,7 @@ public abstract class AbstractViewerActivity<E extends IEntity> extends Abstract
     @Override
     public boolean canEdit() {
         if (EntityFactory.getEntityMeta(getEntityClass()).isAnnotationPresent(SecurityEnabled.class)) {
-            return SecurityController.check(DataModelPermission.permissionUpdate(getValue()));
+            return SecurityController.check(getValue(), DataModelPermission.permissionUpdate(getEntityClass()));
         } else {
             return true;
         }

@@ -123,6 +123,12 @@ public class CTabbedEntityForm<E extends IEntity> extends CForm<E> {
         return tabPanel.getSelectedIndex();
     }
 
+    @Override
+    protected void onValueSet(boolean populate) {
+        super.onValueSet(populate);
+        tabPanel.setSecurityContext(getValue());
+    }
+
     public Element getPrintableElement() {
         //Traverse tabs of TabPanel
         //for enabled - create Caption + body

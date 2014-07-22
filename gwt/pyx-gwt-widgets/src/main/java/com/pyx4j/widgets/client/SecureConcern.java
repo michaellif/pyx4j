@@ -29,20 +29,42 @@ public class SecureConcern {
     private Permission[] permissions;
 
     // User/Developer Decision.
-    boolean decision;
+    boolean decision = true;
 
     Boolean securityControllerDecision;
 
+    public SecureConcern() {
+
+    }
+
+    public SecureConcern(boolean decision) {
+        setDecision(decision);
+    }
+
     public void setPermission(Permission... permission) {
-        this.permissions = permission;
+        // java varargs creates empty arrays,  so consider it as no permissions set
+        if (permissions == null || permissions.length == 0) {
+            this.permissions = null;
+        } else {
+            this.permissions = permission;
+        }
+        resetDecision();
+    }
+
+    private void resetDecision() {
+        if (permissions == null) {
+            securityControllerDecision = true;
+        } else {
+            securityControllerDecision = null;
+        }
     }
 
     public void setContext(AccessControlContext context) {
-        securityControllerDecision = SecurityController.check(context, getPermissions());
-    }
-
-    protected Permission[] getPermissions() {
-        return permissions;
+        if ((context == null) || (permissions == null)) {
+            resetDecision();
+        } else {
+            securityControllerDecision = SecurityController.check(context, permissions);
+        }
     }
 
     public void setDecision(boolean decision) {
@@ -50,7 +72,20 @@ public class SecureConcern {
     }
 
     public boolean getDecision() {
-        return decision && securityControllerDecision;
+        // assert (securityControllerDecision != null) : "setSecurityContext() had not been called";
+        // return decision && securityControllerDecision;
+
+        if (securityControllerDecision == null) {
+            return false;
+        } else {
+            return decision && securityControllerDecision;
+        }
+    }
+
+    // TODO Bad function for bad selectTab in CTabbedEntityForm constructor
+    @Deprecated
+    public boolean getDecision2() {
+        return decision;
     }
 
     public boolean hasDecision() {
