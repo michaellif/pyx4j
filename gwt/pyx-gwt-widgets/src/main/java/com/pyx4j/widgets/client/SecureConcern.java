@@ -31,7 +31,8 @@ public class SecureConcern {
     // User/Developer Decision.
     boolean decision = true;
 
-    Boolean securityControllerDecision;
+    // This is true until permissions are set if any.
+    Boolean securityControllerDecision = true;
 
     public SecureConcern() {
 
