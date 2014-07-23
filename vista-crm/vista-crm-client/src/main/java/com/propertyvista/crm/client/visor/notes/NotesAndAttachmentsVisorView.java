@@ -46,6 +46,7 @@ import com.pyx4j.gwt.rpc.upload.UploadService;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.security.client.ClientContext;
+import com.pyx4j.security.shared.AccessControlContext;
 import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.site.client.ui.visor.AbstractVisorPane;
 import com.pyx4j.widgets.client.Anchor;
@@ -72,6 +73,8 @@ public class NotesAndAttachmentsVisorView extends AbstractVisorPane {
 
     private Class<? extends IEntity> permissionClass = null;
 
+    private AccessControlContext securityContext = null;
+
     public NotesAndAttachmentsVisorView(NotesAndAttachmentsVisorController controller) {
         super(controller);
 
@@ -86,17 +89,15 @@ public class NotesAndAttachmentsVisorView extends AbstractVisorPane {
         setContentPane(new ScrollPanel(contentPane));
     }
 
-    public void setPermissionClass(Class<? extends IEntity> permissionClass) {
+    public void setSecurityData(Class<? extends IEntity> permissionClass, AccessControlContext securityContext) {
         this.permissionClass = permissionClass;
+        this.securityContext = securityContext;
+
         form.updatePermission();
     }
 
     private boolean hasPermissionUpdate() {
-        return (permissionClass != null ? SecurityController.check(DataModelPermission.permissionUpdate(permissionClass)) : true);
-    }
-
-    private boolean hasPermissionCreate() {
-        return (permissionClass != null ? SecurityController.check(DataModelPermission.permissionCreate(permissionClass)) : true);
+        return (permissionClass != null ? SecurityController.check(securityContext, DataModelPermission.permissionUpdate(permissionClass)) : true);
     }
 
     public void populate(final Command onPopulate) {
@@ -148,7 +149,7 @@ public class NotesAndAttachmentsVisorView extends AbstractVisorPane {
             public void updatePermission() {
 //                inheritEditable(false);
                 setEditable(hasPermissionUpdate());
-                setAddable(hasPermissionCreate());
+                setAddable(hasPermissionUpdate());
 
                 for (int i = 0; i < getItemCount(); ++i) {
                     initItemActions(getItem(i));

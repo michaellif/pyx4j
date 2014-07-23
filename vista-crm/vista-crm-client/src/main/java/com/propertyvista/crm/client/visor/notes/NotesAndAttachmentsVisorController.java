@@ -22,6 +22,7 @@ import com.pyx4j.entity.core.criterion.EntityListCriteria;
 import com.pyx4j.entity.rpc.EntitySearchResult;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
+import com.pyx4j.security.shared.AccessControlContext;
 import com.pyx4j.site.client.activity.AbstractVisorController;
 import com.pyx4j.site.client.ui.IPane;
 
@@ -46,8 +47,8 @@ public class NotesAndAttachmentsVisorController extends AbstractVisorController 
         this.notesParentId = notesParentId;
     }
 
-    public void setPermissionClass(Class<? extends IEntity> permissionClass) {
-        visor.setPermissionClass(permissionClass);
+    public void setSecurityData(Class<? extends IEntity> permissionClass, AccessControlContext securityContext) {
+        visor.setSecurityData(permissionClass, securityContext);
     }
 
     @Override

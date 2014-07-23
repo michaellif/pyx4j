@@ -28,6 +28,7 @@ import com.pyx4j.entity.rpc.AbstractVersionDataListService;
 import com.pyx4j.entity.security.DataModelPermission;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
+import com.pyx4j.security.shared.AccessControlContext;
 import com.pyx4j.site.client.ui.BreadcrumbsBar;
 import com.pyx4j.site.client.ui.PaneTheme;
 import com.pyx4j.site.client.ui.prime.IPrimePane;
@@ -76,6 +77,8 @@ public class CrmViewerViewImplBase<E extends IEntity> extends AbstractViewer<E> 
 
     private Class<? extends IEntity> notesPermissionClass = null;
 
+    private AccessControlContext notesSecurityContexts = null;
+
     public CrmViewerViewImplBase() {
         this(false);
     }
@@ -89,10 +92,16 @@ public class CrmViewerViewImplBase<E extends IEntity> extends AbstractViewer<E> 
             @Override
             public void execute() {
                 NotesAndAttachmentsVisorController notesController = ((CrmViewerActivity<E>) getPresenter()).getNotesAndAttachmentsController();
-                notesController.setPermissionClass(notesPermissionClass);
+                notesController.setSecurityData(notesPermissionClass, notesSecurityContexts);
                 notesController.show();
             }
-        });
+        }) {
+            @Override
+            public void setSecurityContext(AccessControlContext context) {
+                super.setSecurityContext(context);
+                notesSecurityContexts = context;
+            }
+        };
         addHeaderToolbarItem(notesButton);
 
         // Edit button:
