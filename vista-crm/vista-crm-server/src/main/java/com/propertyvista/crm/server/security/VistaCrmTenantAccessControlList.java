@@ -15,7 +15,6 @@ package com.propertyvista.crm.server.security;
 
 import static com.propertyvista.domain.security.VistaCrmBehavior.TenantAdvanced;
 import static com.propertyvista.domain.security.VistaCrmBehavior.TenantBasic;
-import static com.propertyvista.domain.security.VistaCrmBehavior.TenantFinancial;
 import static com.propertyvista.domain.security.VistaCrmBehavior.TenantFull;
 import static com.pyx4j.entity.security.AbstractCRUDPermission.ALL;
 import static com.pyx4j.entity.security.AbstractCRUDPermission.READ;
@@ -37,12 +36,10 @@ class VistaCrmTenantAccessControlList extends UIAclBuilder {
         grant(TenantBasic, TenantDTO.class, new TenantInstanceAccess(), READ);
         grant(TenantAdvanced, TenantDTO.class, new TenantInstanceAccess(), READ);
         grant(TenantFull, TenantDTO.class, new TenantInstanceAccess(), READ | UPDATE);
-        grant(TenantFinancial, TenantDTO.class, new TenantInstanceAccess(), READ);
 
         grant(TenantBasic, LeaseParticipantScreeningTO.class, new TenantScreeningInstanceAccess(), READ);
         grant(TenantAdvanced, LeaseParticipantScreeningTO.class, new TenantScreeningInstanceAccess(), READ);
         grant(TenantFull, LeaseParticipantScreeningTO.class, new TenantScreeningInstanceAccess(), ALL);
-        grant(TenantFinancial, LeaseParticipantScreeningTO.class, new TenantScreeningInstanceAccess(), READ);
 
         grant(TenantBasic, TenantPortalAccessInformationDTO.class, READ);
         grant(TenantAdvanced, TenantPortalAccessInformationDTO.class, READ);
@@ -52,11 +49,9 @@ class VistaCrmTenantAccessControlList extends UIAclBuilder {
         grant(TenantBasic, TenantListAction.class);
         grant(TenantAdvanced, TenantListAction.class);
         grant(TenantFull, TenantListAction.class);
-        grant(TenantFinancial, TenantListAction.class);
 
         grant(TenantBasic, TenantChangePassword.class, new TenantInstanceAccess());
         grant(TenantAdvanced, TenantChangePassword.class, new TenantInstanceAccess());
         grant(TenantFull, TenantChangePassword.class, new TenantInstanceAccess());
-        grant(TenantFinancial, TenantChangePassword.class, new TenantInstanceAccess());
     }
 }

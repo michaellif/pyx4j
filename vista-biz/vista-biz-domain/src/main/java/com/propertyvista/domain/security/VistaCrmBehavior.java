@@ -135,7 +135,7 @@ public enum VistaCrmBehavior implements Behavior {
 
     // --
 
-    TenantBasic, TenantAdvanced, TenantFinancial, TenantFull,
+    TenantBasic, TenantAdvanced, TenantFull,
 
     // --
 
