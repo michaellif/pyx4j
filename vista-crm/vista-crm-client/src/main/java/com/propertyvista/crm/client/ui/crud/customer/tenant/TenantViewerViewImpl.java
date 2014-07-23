@@ -29,6 +29,7 @@ import com.propertyvista.crm.client.ui.crud.CrmViewerViewImplBase;
 import com.propertyvista.crm.rpc.dto.financial.AutoPayHistoryDTO;
 import com.propertyvista.crm.rpc.services.customer.ac.TenantChangePassword;
 import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
+import com.propertyvista.dto.LeaseParticipantScreeningTO;
 import com.propertyvista.dto.MaintenanceRequestDTO;
 import com.propertyvista.dto.TenantDTO;
 import com.propertyvista.dto.TenantPortalAccessInformationDTO;
@@ -56,12 +57,12 @@ public class TenantViewerViewImpl extends CrmViewerViewImplBase<TenantDTO> imple
         setForm(new TenantForm(this));
 
         // Views:
-        screeningView = new MenuItem(i18n.tr("Screening"), new Command() {
+        screeningView = new SecureMenuItem(i18n.tr("Screening"), new Command() {
             @Override
             public void execute() {
                 ((TenantViewerView.Presenter) getPresenter()).viewScreening();
             }
-        });
+        }, DataModelPermission.permissionRead(LeaseParticipantScreeningTO.class));
         addView(screeningView);
 
         maintenanceView = new SecureMenuItem(i18n.tr("Maintenance Requests"), new Command() {
@@ -98,12 +99,12 @@ public class TenantViewerViewImpl extends CrmViewerViewImplBase<TenantDTO> imple
         }, TenantChangePassword.class);
         addAction(passwordAction);
 
-        screeningAction = new MenuItem(i18n.tr("Create Screening"), new Command() {
+        screeningAction = new SecureMenuItem(i18n.tr("Create Screening"), new Command() {
             @Override
             public void execute() {
                 ((TenantViewerView.Presenter) getPresenter()).createScreening();
             }
-        });
+        }, DataModelPermission.permissionCreate(LeaseParticipantScreeningTO.class));
         addAction(screeningAction);
 
         maintenanceAction = new SecureMenuItem(i18n.tr("Create Maintenance Request"), new Command() {
