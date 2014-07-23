@@ -67,6 +67,7 @@ import com.propertyvista.crm.client.ui.crud.lease.common.LeaseViewerViewImplBase
 import com.propertyvista.crm.client.ui.crud.lease.financial.deposit.DepositLifecycleLister;
 import com.propertyvista.crm.client.ui.crud.maintenance.MaintenanceRequestLister;
 import com.propertyvista.crm.rpc.CrmSiteMap;
+import com.propertyvista.crm.rpc.VistaCrmDebugId;
 import com.propertyvista.crm.rpc.dto.billing.BillDataDTO;
 import com.propertyvista.crm.rpc.dto.financial.AutoPayHistoryDTO;
 import com.propertyvista.crm.rpc.dto.occupancy.opconstraints.CancelMoveOutConstraintsDTO;
@@ -237,6 +238,7 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
                 ((LeaseViewerView.Presenter) getPresenter()).createMaintenanceRequest();
             }
         }, DataModelPermission.permissionCreate(MaintenanceRequestDTO.class)));
+        maintenanceAction.ensureDebugId(VistaCrmDebugId.Maintenance.ActionCreateRequest.debugId());
 
         noticeAction = new SecureMenuItem(i18n.tr("Notice..."), new Command() {
             @Override

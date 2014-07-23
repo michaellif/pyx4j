@@ -36,6 +36,7 @@ import com.pyx4j.widgets.client.Button.SecureMenuItem;
 
 import com.propertyvista.common.client.ui.components.versioning.VersionSelectorDialog;
 import com.propertyvista.crm.client.activity.crud.CrmViewerActivity;
+import com.propertyvista.crm.rpc.VistaCrmDebugId;
 import com.propertyvista.crm.rpc.services.breadcrumbs.BreadcrumbsService;
 import com.propertyvista.domain.note.HasNotesAndAttachments;
 
@@ -95,11 +96,13 @@ public class CrmViewerViewImplBase<E extends IEntity> extends AbstractViewer<E> 
                     getPresenter().edit();
                 }
             });
+            editButton.ensureDebugId(VistaCrmDebugId.View.Edit.debugId());
             addHeaderToolbarItem(editButton);
         }
 
         // Views button:
         viewsButton = new Button(i18n.tr("Views"));
+        viewsButton.ensureDebugId(VistaCrmDebugId.View.Views.debugId());
         viewsMenu = viewsButton.createMenu();
         viewsButton.setMenu(viewsMenu);
         addHeaderToolbarItem(viewsButton);
@@ -107,6 +110,7 @@ public class CrmViewerViewImplBase<E extends IEntity> extends AbstractViewer<E> 
 
         // Actions button:
         actionsButton = new Button(i18n.tr("Actions"));
+        actionsButton.ensureDebugId(VistaCrmDebugId.View.Actions.debugId());
         actionsMenu = actionsButton.createMenu();
         actionsButton.setMenu(actionsMenu);
         addHeaderToolbarItem(actionsButton);

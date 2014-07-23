@@ -13,17 +13,45 @@
  */
 package com.propertyvista.crm.rpc;
 
+import com.pyx4j.commons.CompositeDebugId;
 import com.pyx4j.commons.IDebugId;
 
-public enum VistaCrmDebugId implements IDebugId {
+public interface VistaCrmDebugId {
 
-    MainNavigation_Prefix,
+    public enum View implements IDebugId {
 
-    BuildingDashboardSelector;
+        Edit,
 
-    @Override
-    public String debugId() {
-        return this.name();
+        Actions,
+
+        Views;
+
+        @Override
+        public String debugId() {
+            return new CompositeDebugId("View", this.name()).debugId();
+        }
+    }
+
+    public enum Payments implements IDebugId {
+
+        ActionAutoPayments,
+
+        ActionCreatePayment;
+
+        @Override
+        public String debugId() {
+            return new CompositeDebugId("Payments", this.name()).debugId();
+        }
+    }
+
+    public enum Maintenance implements IDebugId {
+
+        ActionCreateRequest;
+
+        @Override
+        public String debugId() {
+            return new CompositeDebugId("Maintenance", this.name()).debugId();
+        }
     }
 
 }

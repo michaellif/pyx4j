@@ -39,6 +39,7 @@ import com.propertyvista.crm.client.ui.components.boxes.LeaseTermSelectorDialog;
 import com.propertyvista.crm.client.ui.crud.CrmViewerViewImplBase;
 import com.propertyvista.crm.client.ui.crud.lease.LeaseViewerViewImpl;
 import com.propertyvista.crm.client.visor.paps.PreauthorizedPaymentsVisorController;
+import com.propertyvista.crm.rpc.VistaCrmDebugId;
 import com.propertyvista.crm.rpc.dto.tenant.PreauthorizedPaymentsDTO;
 import com.propertyvista.domain.financial.BillingAccount;
 import com.propertyvista.domain.payment.AutopayAgreement;
@@ -107,6 +108,7 @@ public class LeaseViewerViewImplBase<DTO extends LeaseDTO> extends CrmViewerView
         // ----------------------------------------------------------------------------------------
 
         papsButton = new Button(i18n.tr("Auto Payments"), DataModelPermission.permissionRead(PreauthorizedPaymentsDTO.class));
+        papsButton.ensureDebugId(VistaCrmDebugId.Payments.ActionAutoPayments.debugId());
         papsButton.setMenu(papsMenu = new ButtonMenuBar());
         addHeaderToolbarItem(papsButton.asWidget());
 
@@ -132,6 +134,7 @@ public class LeaseViewerViewImplBase<DTO extends LeaseDTO> extends CrmViewerView
                 ((LeaseViewerViewBase.Presenter) getPresenter()).newPayment();
             }
         }, DataModelPermission.permissionCreate(PaymentRecordDTO.class));
+        newPaymentAction.ensureDebugId(VistaCrmDebugId.Payments.ActionCreatePayment.debugId());
         addAction(newPaymentAction);
     }
 
