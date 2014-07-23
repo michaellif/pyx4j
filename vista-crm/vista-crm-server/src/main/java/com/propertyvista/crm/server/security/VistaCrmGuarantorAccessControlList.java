@@ -16,6 +16,7 @@ package com.propertyvista.crm.server.security;
 import static com.propertyvista.domain.security.VistaCrmBehavior.GuarantorAdvanced;
 import static com.propertyvista.domain.security.VistaCrmBehavior.GuarantorBasic;
 import static com.propertyvista.domain.security.VistaCrmBehavior.GuarantorFull;
+import static com.pyx4j.entity.security.AbstractCRUDPermission.ALL;
 import static com.pyx4j.entity.security.AbstractCRUDPermission.READ;
 import static com.pyx4j.entity.security.AbstractCRUDPermission.UPDATE;
 
@@ -24,6 +25,7 @@ import com.pyx4j.security.server.UIAclBuilder;
 import com.propertyvista.crm.rpc.services.customer.ac.FormerGuarantorListAction;
 import com.propertyvista.crm.rpc.services.customer.ac.GuarantorChangePassword;
 import com.propertyvista.dto.GuarantorDTO;
+import com.propertyvista.dto.LeaseParticipantScreeningTO;
 
 class VistaCrmGuarantorAccessControlList extends UIAclBuilder {
 
@@ -32,6 +34,8 @@ class VistaCrmGuarantorAccessControlList extends UIAclBuilder {
         grant(GuarantorBasic, GuarantorDTO.class, READ);
         grant(GuarantorAdvanced, GuarantorDTO.class, READ);
         grant(GuarantorFull, GuarantorDTO.class, READ | UPDATE);
+
+        grant(GuarantorFull, LeaseParticipantScreeningTO.class, ALL);
 
         // Actions:
 

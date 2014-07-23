@@ -16,6 +16,7 @@ package com.propertyvista.crm.client.ui.crud.customer.guarantor;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.MenuItem;
 
+import com.pyx4j.entity.security.DataModelPermission;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.security.shared.ActionPermission;
 import com.pyx4j.widgets.client.Button.SecureMenuItem;
@@ -23,6 +24,7 @@ import com.pyx4j.widgets.client.Button.SecureMenuItem;
 import com.propertyvista.crm.client.ui.crud.CrmViewerViewImplBase;
 import com.propertyvista.crm.rpc.services.customer.ac.GuarantorChangePassword;
 import com.propertyvista.dto.GuarantorDTO;
+import com.propertyvista.dto.LeaseParticipantScreeningTO;
 
 public class GuarantorViewerViewImpl extends CrmViewerViewImplBase<GuarantorDTO> implements GuarantorViewerView {
 
@@ -38,12 +40,12 @@ public class GuarantorViewerViewImpl extends CrmViewerViewImplBase<GuarantorDTO>
         setForm(new GuarantorForm(this));
 
         // Views:
-        screeningView = new MenuItem(i18n.tr("Screening"), new Command() {
+        screeningView = new SecureMenuItem(i18n.tr("Screening"), new Command() {
             @Override
             public void execute() {
                 ((GuarantorViewerView.Presenter) getPresenter()).viewScreening();
             }
-        });
+        }, DataModelPermission.permissionRead(LeaseParticipantScreeningTO.class));
         addView(screeningView);
 
         // Actions:
@@ -56,12 +58,12 @@ public class GuarantorViewerViewImpl extends CrmViewerViewImplBase<GuarantorDTO>
         }, new ActionPermission(GuarantorChangePassword.class));
         addAction(passwordAction);
 
-        screeningAction = new MenuItem(i18n.tr("Create Screening"), new Command() {
+        screeningAction = new SecureMenuItem(i18n.tr("Create Screening"), new Command() {
             @Override
             public void execute() {
                 ((GuarantorViewerView.Presenter) getPresenter()).goToCreateScreening();
             }
-        });
+        }, DataModelPermission.permissionCreate(LeaseParticipantScreeningTO.class));
         addAction(screeningAction);
     }
 
