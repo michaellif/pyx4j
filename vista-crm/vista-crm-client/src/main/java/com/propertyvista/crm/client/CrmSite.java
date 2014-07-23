@@ -55,6 +55,7 @@ import com.propertyvista.common.client.policy.ClientPolicyManager;
 import com.propertyvista.common.client.site.VistaBrowserRequirments;
 import com.propertyvista.common.client.site.VistaSite;
 import com.propertyvista.common.client.theme.VistaPalette;
+import com.propertyvista.crm.client.activity.CrmClientCommunicationManager;
 import com.propertyvista.crm.client.themes.CrmTheme;
 import com.propertyvista.crm.client.ui.CrmRootPane;
 import com.propertyvista.crm.client.ui.HeaderViewImpl;
@@ -144,6 +145,8 @@ public class CrmSite extends VistaSite {
             }
 
         });
+
+        CrmClientCommunicationManager.instance();
     }
 
     private void initSiteTheme() {
