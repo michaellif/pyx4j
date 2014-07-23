@@ -145,7 +145,7 @@ public class SideMenuItem implements ISideMenuNode {
         setPermission(permission);
     }
 
-    public SideMenuItem(SideMenuList submenu, String caption, ButtonImages images, Permission... permission) {
+    public SideMenuItem(SideMenuList submenu, String caption, ButtonImages images, IDebugId debugId, Permission... permission) {
         this((Command) null, caption, images, permission);
         this.submenu = submenu;
         if (submenu != null) {
@@ -169,7 +169,9 @@ public class SideMenuItem implements ISideMenuNode {
 
             setExpanded(false);
         }
-
+        if (debugId != null) {
+            setDebugId(debugId);
+        }
     }
 
     @Override
