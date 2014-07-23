@@ -24,11 +24,11 @@ import java.util.List;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.rpc.shared.IServiceExecutePermission;
 import com.pyx4j.security.server.UIAclBuilder;
-import com.pyx4j.security.shared.ActionPermission;
 
 import com.propertyvista.crm.rpc.dto.billing.BillDataDTO;
 import com.propertyvista.crm.rpc.security.LeaseTermEditOnLeaseInstanceAccess;
 import com.propertyvista.crm.rpc.services.billing.BillCrudService;
+import com.propertyvista.crm.rpc.services.lease.ac.FormerLeaseListAction;
 import com.propertyvista.crm.rpc.services.lease.ac.LeaseAgreementSigning;
 import com.propertyvista.crm.rpc.services.lease.ac.LeaseConfirmBill;
 import com.propertyvista.crm.rpc.services.lease.ac.LeaseRenew;
@@ -50,19 +50,23 @@ class VistaCrmLeaseAccessControlList extends UIAclBuilder {
 
         //  ---- Actions:
         // TODO move ? to proper section in this file
-        grant(LeaseBasic, new ActionPermission(SendMail.class));
-        grant(LeaseAdvanced, new ActionPermission(SendMail.class));
-        grant(LeaseFull, new ActionPermission(SendMail.class));
+        grant(LeaseBasic, SendMail.class);
+        grant(LeaseAdvanced, SendMail.class);
+        grant(LeaseFull, SendMail.class);
 
-        grant(LeaseAdvanced, new ActionPermission(LeaseAgreementSigning.class));
-        grant(LeaseFull, new ActionPermission(LeaseAgreementSigning.class));
+        grant(LeaseAdvanced, LeaseAgreementSigning.class);
+        grant(LeaseFull, LeaseAgreementSigning.class);
 
-        grant(LeaseFull, new ActionPermission(LeaseRunBill.class));
-        grant(LeaseFull, new ActionPermission(LeaseConfirmBill.class));
+        grant(LeaseFull, LeaseRunBill.class);
+        grant(LeaseFull, LeaseConfirmBill.class);
 
-        grant(LeaseFull, new ActionPermission(LeaseReserveUnit.class));
-        grant(LeaseFull, new ActionPermission(LeaseStateManagement.class));
-        grant(LeaseFull, new ActionPermission(LeaseRenew.class));
+        grant(LeaseFull, LeaseReserveUnit.class);
+        grant(LeaseFull, LeaseStateManagement.class);
+        grant(LeaseFull, LeaseRenew.class);
+
+        // access to former leases accordion menu
+        grant(LeaseAdvanced, FormerLeaseListAction.class);
+        grant(LeaseFull, FormerLeaseListAction.class);
 
         {// ---- Lease(Term) itself:
             List<Class<? extends IEntity>> entities = entities(LeaseDTO.class, LeaseTermDTO.class);
@@ -101,5 +105,4 @@ class VistaCrmLeaseAccessControlList extends UIAclBuilder {
         grant(LeaseFull, BillDataDTO.class, READ);
         grant(LeaseFull, new IServiceExecutePermission(BillCrudService.class));
     }
-
 }

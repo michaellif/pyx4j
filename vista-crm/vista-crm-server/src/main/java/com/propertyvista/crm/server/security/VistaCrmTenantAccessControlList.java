@@ -22,8 +22,11 @@ import static com.pyx4j.entity.security.AbstractCRUDPermission.UPDATE;
 
 import com.pyx4j.security.server.UIAclBuilder;
 
+import com.propertyvista.crm.rpc.security.FormerTenantInstanceAccess;
+import com.propertyvista.crm.rpc.security.FormerTenantScreeningInstanceAccess;
 import com.propertyvista.crm.rpc.security.TenantInstanceAccess;
 import com.propertyvista.crm.rpc.security.TenantScreeningInstanceAccess;
+import com.propertyvista.crm.rpc.services.customer.ac.FormerTenantListAction;
 import com.propertyvista.crm.rpc.services.customer.ac.TenantChangePassword;
 import com.propertyvista.crm.rpc.services.customer.ac.TenantListAction;
 import com.propertyvista.dto.LeaseParticipantScreeningTO;
@@ -53,5 +56,18 @@ class VistaCrmTenantAccessControlList extends UIAclBuilder {
         grant(TenantBasic, TenantChangePassword.class, new TenantInstanceAccess());
         grant(TenantAdvanced, TenantChangePassword.class, new TenantInstanceAccess());
         grant(TenantFull, TenantChangePassword.class, new TenantInstanceAccess());
+
+// --------------------------------------------------------------------------------------------------------------------
+
+        // Former Tenants:
+        grant(TenantAdvanced, TenantDTO.class, new FormerTenantInstanceAccess(), READ);
+        grant(TenantFull, TenantDTO.class, new FormerTenantInstanceAccess(), READ | UPDATE);
+
+        grant(TenantAdvanced, LeaseParticipantScreeningTO.class, new FormerTenantScreeningInstanceAccess(), READ);
+        grant(TenantFull, LeaseParticipantScreeningTO.class, new FormerTenantScreeningInstanceAccess(), READ | UPDATE);
+
+        // Actions:
+        grant(TenantAdvanced, FormerTenantListAction.class);
+        grant(TenantFull, FormerTenantListAction.class);
     }
 }

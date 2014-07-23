@@ -44,8 +44,11 @@ import com.propertyvista.crm.rpc.CrmMainNavigationDebugId;
 import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.crm.rpc.dto.company.ac.EmployeeDirectoryList;
 import com.propertyvista.crm.rpc.dto.financial.moneyin.batch.MoneyInBatchDTO;
+import com.propertyvista.crm.rpc.services.customer.ac.FormerGuarantorListAction;
+import com.propertyvista.crm.rpc.services.customer.ac.FormerTenantListAction;
 import com.propertyvista.crm.rpc.services.customer.ac.PotentialTenantListAction;
 import com.propertyvista.crm.rpc.services.customer.ac.TenantListAction;
+import com.propertyvista.crm.rpc.services.lease.ac.FormerLeaseListAction;
 import com.propertyvista.domain.communication.MessageCategory;
 import com.propertyvista.domain.company.Portfolio;
 import com.propertyvista.domain.dashboard.DashboardMetadata;
@@ -62,7 +65,6 @@ import com.propertyvista.dto.LeaseApplicationDTO;
 import com.propertyvista.dto.LeaseDTO;
 import com.propertyvista.dto.MaintenanceRequestDTO;
 import com.propertyvista.dto.MessageDTO;
-import com.propertyvista.dto.TenantDTO;
 import com.propertyvista.shared.config.VistaFeatures;
 import com.propertyvista.shared.i18n.CompiledLocale;
 
@@ -185,9 +187,9 @@ public class NavigViewImpl extends Composite implements NavigView {
             list.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Tenants.MaintenanceRequest(), DataModelPermission
                     .permissionRead(MaintenanceRequestDTO.class)));
             if (!VistaFeatures.instance().yardiIntegration()) {
-                list.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Tenants.FormerLease(), DataModelPermission.permissionRead(LeaseDTO.class)));
-                list.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Tenants.FormerTenant(), DataModelPermission.permissionRead(TenantDTO.class)));
-                list.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Tenants.FormerGuarantor(), DataModelPermission.permissionRead(GuarantorDTO.class)));
+                list.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Tenants.FormerLease(), FormerLeaseListAction.class));
+                list.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Tenants.FormerTenant(), FormerTenantListAction.class));
+                list.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Tenants.FormerGuarantor(), FormerGuarantorListAction.class));
             }
         }
 

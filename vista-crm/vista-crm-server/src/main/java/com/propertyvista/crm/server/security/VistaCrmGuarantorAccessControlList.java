@@ -21,6 +21,7 @@ import static com.pyx4j.entity.security.AbstractCRUDPermission.UPDATE;
 
 import com.pyx4j.security.server.UIAclBuilder;
 
+import com.propertyvista.crm.rpc.services.customer.ac.FormerGuarantorListAction;
 import com.propertyvista.crm.rpc.services.customer.ac.GuarantorChangePassword;
 import com.propertyvista.dto.GuarantorDTO;
 
@@ -33,6 +34,11 @@ class VistaCrmGuarantorAccessControlList extends UIAclBuilder {
         grant(GuarantorFull, GuarantorDTO.class, READ | UPDATE);
 
         // Actions:
+
+        // access to former guarantors accordion menu
+        grant(GuarantorAdvanced, FormerGuarantorListAction.class);
+        grant(GuarantorFull, FormerGuarantorListAction.class);
+
         grant(GuarantorBasic, GuarantorChangePassword.class);
         grant(GuarantorAdvanced, GuarantorChangePassword.class);
         grant(GuarantorFull, GuarantorChangePassword.class);
