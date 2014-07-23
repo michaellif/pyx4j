@@ -21,8 +21,15 @@ import com.propertyvista.common.client.ui.components.VistaEditorsComponentFactor
 
 public abstract class CrmEntityForm<E extends IEntity> extends PrimeEntityForm<E> {
 
+    private final Class<E> rootClass;
+
     public CrmEntityForm(Class<E> rootClass, IForm<E> view) {
         super(rootClass, new VistaEditorsComponentFactory(), view);
+        this.rootClass = rootClass;
+    }
+
+    public Class<E> getRootClass() {
+        return rootClass;
     }
 
 }

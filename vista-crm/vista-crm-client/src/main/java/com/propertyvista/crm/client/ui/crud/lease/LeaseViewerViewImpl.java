@@ -71,7 +71,6 @@ import com.propertyvista.crm.rpc.VistaCrmDebugId;
 import com.propertyvista.crm.rpc.dto.billing.BillDataDTO;
 import com.propertyvista.crm.rpc.dto.financial.AutoPayHistoryDTO;
 import com.propertyvista.crm.rpc.dto.occupancy.opconstraints.CancelMoveOutConstraintsDTO;
-import com.propertyvista.crm.rpc.security.LeaseNotesPermission;
 import com.propertyvista.crm.rpc.services.lease.ac.LeaseAgreementSigning;
 import com.propertyvista.crm.rpc.services.lease.ac.LeaseCompletion;
 import com.propertyvista.crm.rpc.services.lease.ac.LeaseNotice;
@@ -165,8 +164,6 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
         });
 
         // Buttons:
-        setNotesPermissionClass(LeaseNotesPermission.class);
-
         leaseAgreementButton = new Button(i18n.tr("Lease Agreement"), new ActionPermission(LeaseAgreementSigning.class));
         ButtonMenuBar leaseAgreementDocumentMenu = new ButtonMenuBar();
 

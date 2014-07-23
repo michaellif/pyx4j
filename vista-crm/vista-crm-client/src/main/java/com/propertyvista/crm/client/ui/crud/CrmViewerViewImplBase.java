@@ -139,6 +139,18 @@ public class CrmViewerViewImplBase<E extends IEntity> extends AbstractViewer<E> 
         setForm(form);
     }
 
+    protected void setForm(CrmEntityForm<E> form) {
+        super.setForm(form);
+
+        // set default notes permission class (root entity one):
+        if (notesPermissionClass == null) {
+            setNotesPermissionClass(form.getRootClass());
+        }
+    }
+
+    /*
+     * overrides default notes permission class (root entity one)
+     */
     public void setNotesPermissionClass(Class<? extends IEntity> permissionClass) {
         notesButton.setPermission(DataModelPermission.permissionRead(permissionClass));
         notesPermissionClass = permissionClass;
