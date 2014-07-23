@@ -17,6 +17,10 @@ import java.rmi.RemoteException;
 
 import org.apache.commons.lang.Validate;
 
+import com.pyx4j.commons.SimpleMessageFormat;
+import com.pyx4j.config.server.ServerSideFactory;
+
+import com.propertyvista.biz.communication.NotificationFacade;
 import com.propertyvista.biz.financial.ar.ARException;
 import com.propertyvista.biz.financial.payment.PaymentBatchContext;
 import com.propertyvista.domain.settings.PmcYardiCredential;
@@ -65,24 +69,38 @@ public class YardiPaymentBatchContext implements PaymentBatchContext {
         if (recordCount == 0) {
             cancelBatch();
         } else {
+            String error = null;
             try {
                 YardiSystemBatchesService.getInstance().postBatch(yc, this);
             } catch (RemoteException e) {
-                throw new ARException("Posting Batch to Yardi failed due to communication failure", e);
+                error = new SimpleMessageFormat("Unable to post Batch {0} ({1}) to Yardi due to communication failure.").format(batchId, propertyCode);
+                throw new ARException(error, e);
             } catch (YardiServiceException e) {
-                throw new ARException("Posting Batch to Yardi failed", e);
+                error = new SimpleMessageFormat("Unable to post Batch {0} ({1}) to Yardi: {2}").format(batchId, propertyCode, e.getMessage());
+                throw new ARException(error, e);
+            } finally {
+                if (error != null) {
+                    ServerSideFactory.create(NotificationFacade.class).yardiUnableToPostPaymentBatch(error);
+                }
             }
         }
     }
 
     @Override
     public void cancelBatch() throws ARException {
+        String error = null;
         try {
             YardiSystemBatchesService.getInstance().cancelBatch(yc, this);
         } catch (RemoteException e) {
-            throw new ARException("Cancel Yardi Batch failed due to communication failure", e);
+            error = new SimpleMessageFormat("Unable to cancel Yardi Batch {0} ({1}) due to communication failure").format(batchId, propertyCode);
+            throw new ARException(error, e);
         } catch (YardiServiceException e) {
-            throw new ARException("Cancel Yardi Batch failed", e);
+            error = new SimpleMessageFormat("Unable to cancel Yardi Batch {0} ({1}): {2}").format(batchId, propertyCode, e.getMessage());
+            throw new ARException(error, e);
+        } finally {
+            if (error != null) {
+                ServerSideFactory.create(NotificationFacade.class).yardiUnableToPostPaymentBatch(error);
+            }
         }
     }
 

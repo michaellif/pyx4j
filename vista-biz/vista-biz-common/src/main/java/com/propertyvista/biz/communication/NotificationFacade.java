@@ -17,7 +17,6 @@ import java.util.List;
 
 import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.payment.AutopayAgreement;
-import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.tenant.lease.Lease;
 
 /**
@@ -35,7 +34,7 @@ public interface NotificationFacade {
 
     public void yardiUnableToRejectPayment(PaymentRecord paymentRecord, boolean applyNSF, String yardiErrorMessage);
 
-    public void yardiUnableToPostPaymentBatch(Building batchBuilding, PaymentRecord firstPaymentRecord, String errorMessage);
+    public void yardiUnableToPostPaymentBatch(String errorMessage);
 
     public void yardiConfigurationError(String errorMessage);
 

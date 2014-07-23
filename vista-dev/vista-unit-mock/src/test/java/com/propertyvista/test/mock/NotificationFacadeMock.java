@@ -18,7 +18,6 @@ import java.util.List;
 import com.propertyvista.biz.communication.NotificationFacade;
 import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.payment.AutopayAgreement;
-import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.tenant.lease.Lease;
 
 public class NotificationFacadeMock implements NotificationFacade {
@@ -76,8 +75,7 @@ public class NotificationFacadeMock implements NotificationFacade {
     }
 
     @Override
-    public void yardiUnableToPostPaymentBatch(Building batchBuilding, PaymentRecord firstPaymentRecord, String errorMessage) {
-
+    public void yardiUnableToPostPaymentBatch(String errorMessage) {
     }
 
     @Override
