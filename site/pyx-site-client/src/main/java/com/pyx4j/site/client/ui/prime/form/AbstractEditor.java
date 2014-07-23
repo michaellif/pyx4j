@@ -29,6 +29,7 @@ import com.pyx4j.entity.core.ILooseVersioning;
 import com.pyx4j.entity.core.IVersionedEntity;
 import com.pyx4j.entity.shared.UniqueConstraintUserRuntimeException;
 import com.pyx4j.entity.shared.utils.VersionedEntityUtils;
+import com.pyx4j.essentials.client.crud.CrudDebugId;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.Button.ButtonMenuBar;
@@ -55,6 +56,7 @@ public abstract class AbstractEditor<E extends IEntity> extends AbstractForm<E> 
                 save();
             }
         });
+        btnSave.ensureDebugId(CrudDebugId.Crud_Save.debugId());
         addHeaderToolbarItem(btnSave);
 
         btnApply = new Button(i18n.tr("Apply"), new Command() {
