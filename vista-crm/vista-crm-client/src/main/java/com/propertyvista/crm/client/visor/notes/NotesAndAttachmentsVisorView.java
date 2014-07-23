@@ -24,6 +24,7 @@ import com.google.gwt.user.client.ui.SimplePanel;
 import com.pyx4j.commons.Key;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.core.EntityFactory;
+import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.IObject;
 import com.pyx4j.entity.rpc.EntitySearchResult;
 import com.pyx4j.entity.security.DataModelPermission;
@@ -60,7 +61,6 @@ import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
 import com.propertyvista.common.client.ui.decorations.VistaBoxFolderItemDecorator;
 import com.propertyvista.crm.client.resources.CrmImages;
 import com.propertyvista.crm.rpc.services.NoteAttachmentUploadService;
-import com.propertyvista.domain.note.HasNotesAndAttachments;
 import com.propertyvista.domain.note.NoteAttachment;
 import com.propertyvista.domain.note.NotesAndAttachments;
 import com.propertyvista.domain.note.NotesAndAttachmentsDTO;
@@ -71,6 +71,8 @@ public class NotesAndAttachmentsVisorView extends AbstractVisorPane {
     private static final I18n i18n = I18n.get(NotesAndAttachmentsVisorView.class);
 
     private final NotesAndAttachmentsForm form;
+
+    private Class<? extends IEntity> permissionClass = null;
 
     public NotesAndAttachmentsVisorView(NotesAndAttachmentsVisorController controller) {
         super(controller);
@@ -84,6 +86,19 @@ public class NotesAndAttachmentsVisorView extends AbstractVisorPane {
         contentPane.getElement().getStyle().setMargin(6, Unit.PX);
         contentPane.setWidget(form.asWidget());
         setContentPane(new ScrollPanel(contentPane));
+    }
+
+    public void setPermissionClass(Class<? extends IEntity> permissionClass) {
+        this.permissionClass = permissionClass;
+        form.updatePermission();
+    }
+
+    private boolean hasPermissionUpdate() {
+        return (permissionClass != null ? SecurityController.check(DataModelPermission.permissionUpdate(permissionClass)) : true);
+    }
+
+    private boolean hasPermissionCreate() {
+        return (permissionClass != null ? SecurityController.check(DataModelPermission.permissionCreate(permissionClass)) : true);
     }
 
     public void populate(final Command onPopulate) {
@@ -107,14 +122,21 @@ public class NotesAndAttachmentsVisorView extends AbstractVisorPane {
 
     public class NotesAndAttachmentsForm extends CForm<NotesAndAttachmentsDTO> {
 
+        private final NotesAndAttachmentsFolder notesAndAttachmentsFolder = new NotesAndAttachmentsFolder();
+
         public NotesAndAttachmentsForm() {
             super(NotesAndAttachmentsDTO.class);
+        }
+
+        public void updatePermission() {
+            setEditable(hasPermissionUpdate());
+            notesAndAttachmentsFolder.updatePermission();
         }
 
         @Override
         protected IsWidget createContent() {
             FormPanel formPanel = new FormPanel(this);
-            formPanel.append(Location.Dual, proto().notes(), new NotesAndAttachmentsFolder());
+            formPanel.append(Location.Dual, proto().notes(), notesAndAttachmentsFolder);
             return formPanel;
         }
 
@@ -123,12 +145,12 @@ public class NotesAndAttachmentsVisorView extends AbstractVisorPane {
             public NotesAndAttachmentsFolder() {
                 super(NotesAndAttachments.class);
                 setOrderable(false);
+            }
+
+            public void updatePermission() {
                 inheritEditable(false);
-                // TODO  this BAD  change this
-                {
-                    setEditable(SecurityController.check(DataModelPermission.permissionUpdate(HasNotesAndAttachments.class)));
-                    setAddable(SecurityController.check(DataModelPermission.permissionCreate(HasNotesAndAttachments.class)));
-                }
+                setEditable(hasPermissionUpdate());
+                setAddable(hasPermissionCreate());
             }
 
             @Override
@@ -145,7 +167,7 @@ public class NotesAndAttachmentsVisorView extends AbstractVisorPane {
             protected CFolderItem<NotesAndAttachments> createItem(boolean first) {
                 final CFolderItem<NotesAndAttachments> item = super.createItem(first);
 
-                if (SecurityController.check(DataModelPermission.permissionUpdate(HasNotesAndAttachments.class))) {
+                if (hasPermissionUpdate()) {
                     item.addAction(ActionType.Cust1, i18n.tr("Edit Note"), CrmImages.INSTANCE.editButton(), new Command() {
                         @SuppressWarnings("rawtypes")
                         @Override

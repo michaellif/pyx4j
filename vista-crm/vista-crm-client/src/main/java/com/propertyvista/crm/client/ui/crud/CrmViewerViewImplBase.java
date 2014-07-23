@@ -25,6 +25,7 @@ import com.pyx4j.entity.core.IVersionData;
 import com.pyx4j.entity.core.IVersionedEntity;
 import com.pyx4j.entity.rpc.AbstractListCrudService;
 import com.pyx4j.entity.rpc.AbstractVersionDataListService;
+import com.pyx4j.entity.security.DataModelPermission;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.site.client.ui.BreadcrumbsBar;
@@ -36,6 +37,7 @@ import com.pyx4j.widgets.client.Button.SecureMenuItem;
 
 import com.propertyvista.common.client.ui.components.versioning.VersionSelectorDialog;
 import com.propertyvista.crm.client.activity.crud.CrmViewerActivity;
+import com.propertyvista.crm.client.visor.notes.NotesAndAttachmentsVisorController;
 import com.propertyvista.crm.rpc.VistaCrmDebugId;
 import com.propertyvista.crm.rpc.services.breadcrumbs.BreadcrumbsService;
 import com.propertyvista.domain.note.HasNotesAndAttachments;
@@ -72,6 +74,8 @@ public class CrmViewerViewImplBase<E extends IEntity> extends AbstractViewer<E> 
 
     private Button.ButtonMenuBar actionsMenu;
 
+    private Class<? extends IEntity> notesPermissionClass = null;
+
     public CrmViewerViewImplBase() {
         this(false);
     }
@@ -80,13 +84,16 @@ public class CrmViewerViewImplBase<E extends IEntity> extends AbstractViewer<E> 
         this.viewOnly = viewOnly;
 
         // Notes button:
-        addHeaderToolbarItem((notesButton = new Button(i18n.tr("Notes"), new Command() {
+        notesButton = new Button(i18n.tr("Notes"), new Command() {
             @SuppressWarnings("unchecked")
             @Override
             public void execute() {
-                ((CrmViewerActivity<E>) getPresenter()).getNotesAndAttachmentsController().show();
+                NotesAndAttachmentsVisorController notesController = ((CrmViewerActivity<E>) getPresenter()).getNotesAndAttachmentsController();
+                notesController.setPermissionClass(notesPermissionClass);
+                notesController.show();
             }
-        })).asWidget());
+        });
+        addHeaderToolbarItem(notesButton);
 
         // Edit button:
         if (!this.viewOnly) {
@@ -132,8 +139,9 @@ public class CrmViewerViewImplBase<E extends IEntity> extends AbstractViewer<E> 
         setForm(form);
     }
 
-    public Button getNotesButton() {
-        return notesButton;
+    public void setNotesPermissionClass(Class<? extends IEntity> permissionClass) {
+        notesButton.setPermission(DataModelPermission.permissionRead(permissionClass));
+        notesPermissionClass = permissionClass;
     }
 
     public MenuItemSeparator addActionSeparator() {

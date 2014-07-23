@@ -17,6 +17,7 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.Command;
 
 import com.pyx4j.commons.Key;
+import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.criterion.EntityListCriteria;
 import com.pyx4j.entity.rpc.EntitySearchResult;
 import com.pyx4j.i18n.shared.I18n;
@@ -43,6 +44,10 @@ public class NotesAndAttachmentsVisorController extends AbstractVisorController 
         service = GWT.<NotesAndAttachmentsCrudService> create(NotesAndAttachmentsCrudService.class);
         visor = new NotesAndAttachmentsVisorView(this);
         this.notesParentId = notesParentId;
+    }
+
+    public void setPermissionClass(Class<? extends IEntity> permissionClass) {
+        visor.setPermissionClass(permissionClass);
     }
 
     @Override
@@ -77,5 +82,4 @@ public class NotesAndAttachmentsVisorController extends AbstractVisorController 
             service.delete(callback, item.getPrimaryKey());
         }
     }
-
 }

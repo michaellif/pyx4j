@@ -27,6 +27,7 @@ import com.pyx4j.security.server.UIAclBuilder;
 import com.pyx4j.security.shared.ActionPermission;
 
 import com.propertyvista.crm.rpc.dto.billing.BillDataDTO;
+import com.propertyvista.crm.rpc.security.LeaseNotesPermission;
 import com.propertyvista.crm.rpc.security.LeaseTermEditOnLeaseInstanceAccess;
 import com.propertyvista.crm.rpc.services.billing.BillCrudService;
 import com.propertyvista.crm.rpc.services.lease.ac.LeaseAgreementSigning;
@@ -36,7 +37,6 @@ import com.propertyvista.crm.rpc.services.lease.ac.LeaseRunBill;
 import com.propertyvista.crm.rpc.services.lease.ac.LeaseStateManagement;
 import com.propertyvista.crm.rpc.services.lease.ac.SendMail;
 import com.propertyvista.domain.legal.LegalLetter;
-import com.propertyvista.domain.note.HasNotesAndAttachments;
 import com.propertyvista.domain.tenant.lease.LeaseAdjustment;
 import com.propertyvista.dto.DepositLifecycleDTO;
 import com.propertyvista.dto.LeaseDTO;
@@ -76,11 +76,8 @@ class VistaCrmLeaseAccessControlList extends UIAclBuilder {
         grant(LeaseFull, LeaseLegalStateDTO.class, ALL);
         // See also VistaCrmLegalAccessControlList
 
-        // TODO  this BAD  change this
-        {
-            grant(LeaseAdvanced, HasNotesAndAttachments.class, READ);
-            grant(LeaseFull, HasNotesAndAttachments.class, ALL);
-        }
+        grant(LeaseAdvanced, LeaseNotesPermission.class, READ);
+        grant(LeaseFull, LeaseNotesPermission.class, ALL);
 
         // ---- Financial:
 

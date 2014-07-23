@@ -71,6 +71,7 @@ import com.propertyvista.crm.rpc.VistaCrmDebugId;
 import com.propertyvista.crm.rpc.dto.billing.BillDataDTO;
 import com.propertyvista.crm.rpc.dto.financial.AutoPayHistoryDTO;
 import com.propertyvista.crm.rpc.dto.occupancy.opconstraints.CancelMoveOutConstraintsDTO;
+import com.propertyvista.crm.rpc.security.LeaseNotesPermission;
 import com.propertyvista.crm.rpc.services.lease.ac.LeaseAgreementSigning;
 import com.propertyvista.crm.rpc.services.lease.ac.LeaseCompletion;
 import com.propertyvista.crm.rpc.services.lease.ac.LeaseNotice;
@@ -80,7 +81,6 @@ import com.propertyvista.crm.rpc.services.lease.ac.LeaseStateManagement;
 import com.propertyvista.crm.rpc.services.lease.ac.SendMail;
 import com.propertyvista.crm.rpc.services.lease.ac.UpdateFromYardi;
 import com.propertyvista.domain.communication.EmailTemplateType;
-import com.propertyvista.domain.note.HasNotesAndAttachments;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.Lease.CompletionType;
 import com.propertyvista.domain.tenant.lease.Lease.Status;
@@ -165,7 +165,7 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
         });
 
         // Buttons:
-        getNotesButton().setPermission(DataModelPermission.permissionRead(HasNotesAndAttachments.class));
+        setNotesPermissionClass(LeaseNotesPermission.class);
 
         leaseAgreementButton = new Button(i18n.tr("Lease Agreement"), new ActionPermission(LeaseAgreementSigning.class));
         ButtonMenuBar leaseAgreementDocumentMenu = new ButtonMenuBar();
