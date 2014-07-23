@@ -39,7 +39,6 @@ import com.pyx4j.forms.client.ui.folder.BoxFolderDecorator;
 import com.pyx4j.forms.client.ui.folder.BoxFolderItemDecorator;
 import com.pyx4j.forms.client.ui.folder.CFolderItem;
 import com.pyx4j.forms.client.ui.folder.IFolderDecorator;
-import com.pyx4j.forms.client.ui.folder.IFolderItemDecorator;
 import com.pyx4j.forms.client.ui.folder.ItemActionsBar.ActionType;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.forms.client.ui.panels.FormPanel;
@@ -58,7 +57,6 @@ import com.pyx4j.widgets.client.dialog.OkCancelDialog;
 
 import com.propertyvista.common.client.VistaFileURLBuilder;
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
-import com.propertyvista.common.client.ui.decorations.VistaBoxFolderItemDecorator;
 import com.propertyvista.crm.client.resources.CrmImages;
 import com.propertyvista.crm.rpc.services.NoteAttachmentUploadService;
 import com.propertyvista.domain.note.NoteAttachment;
@@ -120,7 +118,7 @@ public class NotesAndAttachmentsVisorView extends AbstractVisorPane {
         return (NotesAndAttachmentsVisorController) super.getController();
     }
 
-    public class NotesAndAttachmentsForm extends CForm<NotesAndAttachmentsDTO> {
+    private class NotesAndAttachmentsForm extends CForm<NotesAndAttachmentsDTO> {
 
         private final NotesAndAttachmentsFolder notesAndAttachmentsFolder = new NotesAndAttachmentsFolder();
 
@@ -148,24 +146,17 @@ public class NotesAndAttachmentsVisorView extends AbstractVisorPane {
             }
 
             public void updatePermission() {
-                inheritEditable(false);
+//                inheritEditable(false);
                 setEditable(hasPermissionUpdate());
                 setAddable(hasPermissionCreate());
+
+                for (int i = 0; i < getItemCount(); ++i) {
+                    initItemActions(getItem(i));
+                }
             }
 
-            @Override
-            protected CForm<NotesAndAttachments> createItemForm(IObject<?> member) {
-                return new NoteEditor(true);
-            }
-
-            @Override
-            public IFolderItemDecorator<NotesAndAttachments> createItemDecorator() {
-                return new VistaBoxFolderItemDecorator<NotesAndAttachments>(this);
-            }
-
-            @Override
-            protected CFolderItem<NotesAndAttachments> createItem(boolean first) {
-                final CFolderItem<NotesAndAttachments> item = super.createItem(first);
+            private CFolderItem<NotesAndAttachments> initItemActions(final CFolderItem<NotesAndAttachments> item) {
+                item.getItemActionsBar().clear();
 
                 if (hasPermissionUpdate()) {
                     item.addAction(ActionType.Cust1, i18n.tr("Edit Note"), CrmImages.INSTANCE.editButton(), new Command() {
@@ -174,12 +165,22 @@ public class NotesAndAttachmentsVisorView extends AbstractVisorPane {
                         public void execute() {
                             item.setViewable(false);
                             ((BoxFolderItemDecorator) item.getDecorator()).setExpended(true);
-                            ((NoteEditor) item.getComponents().toArray()[0]).setViewableMode(false);
+                            ((NoteEditor) item.getComponents().iterator().next()).setViewableMode(false);
                         }
                     });
                 }
 
                 return item;
+            }
+
+            @Override
+            protected CForm<NotesAndAttachments> createItemForm(IObject<?> member) {
+                return new NoteEditor(true);
+            }
+
+            @Override
+            protected CFolderItem<NotesAndAttachments> createItem(boolean first) {
+                return initItemActions(super.createItem(first));
             }
 
             @Override

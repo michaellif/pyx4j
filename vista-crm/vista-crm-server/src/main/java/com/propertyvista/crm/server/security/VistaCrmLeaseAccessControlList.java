@@ -62,39 +62,40 @@ class VistaCrmLeaseAccessControlList extends UIAclBuilder {
         {// ---- Lease(Term) itself:
             List<Class<? extends IEntity>> entities = entities(LeaseDTO.class, LeaseTermDTO.class);
             grant(LeaseBasic, entities, READ);
+
             grant(LeaseAdvanced, entities, READ);
+
             grant(LeaseFull, LeaseDTO.class, ALL);
             grant(LeaseFull, LeaseTermDTO.class, new LeaseTermEditOnLeaseInstanceAccess(), ALL);
         }
 
         // ---- Legal/Documentation:
-
-        grant(LeaseAdvanced, LegalLetter.class, READ);
-        grant(LeaseFull, LegalLetter.class, ALL);
-
-        grant(LeaseAdvanced, LeaseLegalStateDTO.class, READ);
-        grant(LeaseFull, LeaseLegalStateDTO.class, ALL);
         // See also VistaCrmLegalAccessControlList
 
+        grant(LeaseAdvanced, LegalLetter.class, READ);
+        grant(LeaseAdvanced, LeaseLegalStateDTO.class, READ);
         grant(LeaseAdvanced, LeaseNotesPermission.class, READ);
+
+        grant(LeaseFull, LegalLetter.class, ALL);
+        grant(LeaseFull, LeaseLegalStateDTO.class, ALL);
         grant(LeaseFull, LeaseNotesPermission.class, ALL);
 
         // ---- Financial:
+        // See also VistaCrmFinancialAccessControlList
 
         grant(LeaseAdvanced, LeaseAdjustment.class, READ);
-        grant(LeaseFull, LeaseAdjustment.class, READ);
-
         grant(LeaseAdvanced, DepositLifecycleDTO.class, READ);
-        grant(LeaseFull, DepositLifecycleDTO.class, READ);
-
         grant(LeaseAdvanced, TransactionHistoryDTO.class, READ);
+
+        grant(LeaseFull, LeaseAdjustment.class, READ);
+        grant(LeaseFull, DepositLifecycleDTO.class, READ);
         grant(LeaseFull, TransactionHistoryDTO.class, READ);
 
         // Bills
         grant(LeaseAdvanced, BillDataDTO.class, READ);
-        grant(LeaseFull, BillDataDTO.class, READ);
-
         grant(LeaseAdvanced, new IServiceExecutePermission(BillCrudService.class));
+
+        grant(LeaseFull, BillDataDTO.class, READ);
         grant(LeaseFull, new IServiceExecutePermission(BillCrudService.class));
 
         grant(LeaseFull, new ActionPermission(LeaseRunBill.class));
