@@ -68,7 +68,7 @@ public class NavigAdministrationViewImpl extends Composite implements NavigAdmin
 
         {//Profile
             SideMenuList list = new SideMenuList();
-            root.addMenuItem(new SideMenuItem(list, i18n.tr("Profile"), null));
+            root.addMenuItem(new SideMenuItem(list, i18n.tr("Profile"), null, null));
             list.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Administration.Profile.CompanyInfo().formViewerPlace(new Key(-1)), DataModelPermission
                     .permissionRead(PmcCompanyInfoDTO.class)));
             list.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Administration.Profile.PaymentMethods().formViewerPlace(new Key(-1)), DataModelPermission
@@ -79,7 +79,7 @@ public class NavigAdministrationViewImpl extends Composite implements NavigAdmin
             if (SecurityController.check(VistaCrmBehavior.PropertyVistaAccountOwner_OLD, VistaCrmBehavior.PropertyVistaSupport)) {
                 if (VistaTODO.ENABLE_ONBOARDING_WIZARDS_IN_DEVELOPMENT && ApplicationMode.isDevelopment()) {
                     SideMenuList list = new SideMenuList();
-                    root.addMenuItem(new SideMenuItem(list, i18n.tr("Settings"), null));
+                    root.addMenuItem(new SideMenuItem(list, i18n.tr("Settings"), null, null));
                     list.addMenuItem(new SideMenuAppPlaceItem(new Settings.OnlinePaymentSetup()));
                     list.addMenuItem(new SideMenuAppPlaceItem(new Settings.CreditCheck()));
 
@@ -98,7 +98,7 @@ public class NavigAdministrationViewImpl extends Composite implements NavigAdmin
 
         {//Security
             SideMenuList list = new SideMenuList();
-            root.addMenuItem(new SideMenuItem(list, i18n.tr("Security"), null));
+            root.addMenuItem(new SideMenuItem(list, i18n.tr("Security"), null, null));
             list.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Administration.Security.AuditRecords(), DataModelPermission
                     .permissionRead(AuditRecordDTO.class)));
             list.addMenuItem(new SideMenuAppPlaceItem(new Security.UserRole(), DataModelPermission.permissionRead(CrmRole.class)));
@@ -107,7 +107,7 @@ public class NavigAdministrationViewImpl extends Composite implements NavigAdmin
 
         {//Financial
             SideMenuList list = new SideMenuList();
-            root.addMenuItem(new SideMenuItem(list, i18n.tr("Financial"), null));
+            root.addMenuItem(new SideMenuItem(list, i18n.tr("Financial"), null, null));
 
             list.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Administration.Financial.ARCode(), DataModelPermission.permissionRead(ARCode.class)));
             if (!VistaFeatures.instance().yardiIntegration()) {
@@ -122,7 +122,7 @@ public class NavigAdministrationViewImpl extends Composite implements NavigAdmin
 
         {//Content Management
             SideMenuList list = new SideMenuList();
-            root.addMenuItem(new SideMenuItem(list, i18n.tr("Content Management"), null));
+            root.addMenuItem(new SideMenuItem(list, i18n.tr("Content Management"), null, null));
 
             list.addMenuItem(new SideMenuAppPlaceItem(new ContentManagement.General(), CrmContentManagementAccess.class));
             list.addMenuItem(new SideMenuAppPlaceItem(new ContentManagement.Website(), CrmContentManagementAccess.class));
@@ -131,7 +131,7 @@ public class NavigAdministrationViewImpl extends Composite implements NavigAdmin
 
         {//Policies
             SideMenuList list = new SideMenuList();
-            root.addMenuItem(new SideMenuItem(list, i18n.tr("Policies"), null));
+            root.addMenuItem(new SideMenuItem(list, i18n.tr("Policies"), null, null));
 
             list.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Administration.Policies.ApplicationDocumentation(),
                     CrmAdministrationPolicesOtherAccess.class));
@@ -154,7 +154,7 @@ public class NavigAdministrationViewImpl extends Composite implements NavigAdmin
             }
 
             SideMenuList legalList = new SideMenuList();
-            list.addMenuItem(new SideMenuItem(legalList, i18n.tr("Legal"), null));
+            list.addMenuItem(new SideMenuItem(legalList, i18n.tr("Legal"), null, null));
 
             legalList.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Administration.Policies.AgreementLegalTerms(),
                     CrmAdministrationPolicesOtherAccess.class));

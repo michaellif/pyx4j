@@ -40,6 +40,7 @@ import com.propertyvista.common.client.ClientLocaleUtils;
 import com.propertyvista.common.client.theme.SiteViewTheme;
 import com.propertyvista.crm.client.CrmSite;
 import com.propertyvista.crm.client.resources.CrmImages;
+import com.propertyvista.crm.rpc.CrmMainNavigationDebugId;
 import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.crm.rpc.dto.company.ac.EmployeeDirectoryList;
 import com.propertyvista.crm.rpc.dto.financial.moneyin.batch.MoneyInBatchDTO;
@@ -115,7 +116,7 @@ public class NavigViewImpl extends Composite implements NavigView {
 
         {//User
             SideMenuList list = new SideMenuList();
-            root.addMenuItem(userMenuItem = new SideMenuItem(list, "User", CrmImages.INSTANCE.userIcon()));
+            root.addMenuItem(userMenuItem = new SideMenuItem(list, "User", CrmImages.INSTANCE.userIcon(), null));
             list.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Account.AccountData()));
 
             list.addMenuItem(adminMenuItem = new SideMenuItem(new Command() {
@@ -140,7 +141,7 @@ public class NavigViewImpl extends Composite implements NavigView {
             }, i18n.tr("Support"), null));
 
             languagesMenuList = new SideMenuList();
-            list.addMenuItem(new SideMenuItem(languagesMenuList, i18n.tr("Languages"), null));
+            list.addMenuItem(new SideMenuItem(languagesMenuList, i18n.tr("Languages"), null, null));
 
             list.addMenuItem(new SideMenuItem(new Command() {
                 @Override
@@ -152,19 +153,19 @@ public class NavigViewImpl extends Composite implements NavigView {
 
         {//Dashboards
             SideMenuList list = new SideMenuList();
-            root.addMenuItem(new SideMenuItem(list, i18n.tr("Dashboards"), CrmImages.INSTANCE.dashboardsIcon()));
+            root.addMenuItem(new SideMenuItem(list, i18n.tr("Dashboards"), CrmImages.INSTANCE.dashboardsIcon(), null));
             list.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Dashboard.Manage()));
 
             systemDashboard = new SideMenuAppPlaceItem(new CrmSiteMap.Dashboard.View().formPlace(new Key(-1)));
             list.addMenuItem(systemDashboard);
 
             customDashboards = new SideMenuList();
-            list.addMenuItem(new SideMenuItem(customDashboards, i18n.tr("Custom Dashboards"), null));
+            list.addMenuItem(new SideMenuItem(customDashboards, i18n.tr("Custom Dashboards"), null, null));
         }
 
         {//Properties
             SideMenuList list = new SideMenuList();
-            root.addMenuItem(new SideMenuItem(list, i18n.tr("Properties"), CrmImages.INSTANCE.propertiesIcon()));
+            root.addMenuItem(new SideMenuItem(list, i18n.tr("Properties"), CrmImages.INSTANCE.propertiesIcon(), CrmMainNavigationDebugId.Properties));
 
             if (!VistaFeatures.instance().yardiIntegration()) {
                 list.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Properties.Complex(), DataModelPermission.permissionRead(ComplexDTO.class)));
@@ -176,7 +177,7 @@ public class NavigViewImpl extends Composite implements NavigView {
 
         {//Tenants
             SideMenuList list = new SideMenuList();
-            root.addMenuItem(new SideMenuItem(list, i18n.tr("Tenants & Leases"), CrmImages.INSTANCE.tenantsIcon()));
+            root.addMenuItem(new SideMenuItem(list, i18n.tr("Tenants & Leases"), CrmImages.INSTANCE.tenantsIcon(), CrmMainNavigationDebugId.Leases));
 
             list.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Tenants.Lease(), DataModelPermission.permissionRead(LeaseDTO.class)));
             list.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Tenants.Tenant(), TenantListAction.class));
@@ -192,7 +193,7 @@ public class NavigViewImpl extends Composite implements NavigView {
 
         {//Marketing
             SideMenuList list = new SideMenuList();
-            root.addMenuItem(new SideMenuItem(list, i18n.tr("Marketing & Rentals"), CrmImages.INSTANCE.marketingIcon()));
+            root.addMenuItem(new SideMenuItem(list, i18n.tr("Marketing & Rentals"), CrmImages.INSTANCE.marketingIcon(), CrmMainNavigationDebugId.Marketing));
 
             list.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Marketing.Lead(), DataModelPermission.permissionRead(Lead.class)));
             list.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Tenants.LeaseApplication(), DataModelPermission.permissionRead(LeaseApplicationDTO.class)));
@@ -201,7 +202,7 @@ public class NavigViewImpl extends Composite implements NavigView {
 
         {//LegalAndCollections
             SideMenuList list = new SideMenuList();
-            root.addMenuItem(new SideMenuItem(list, i18n.tr("Legal & Collections"), CrmImages.INSTANCE.legalIcon()));
+            root.addMenuItem(new SideMenuItem(list, i18n.tr("Legal & Collections"), CrmImages.INSTANCE.legalIcon(), null));
 
             list.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.LegalAndCollections.N4GenerationTool()));
             list.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.LegalAndCollections.N4DownloadTool()));
@@ -212,7 +213,7 @@ public class NavigViewImpl extends Composite implements NavigView {
 
         {//Finance
             SideMenuList list = new SideMenuList();
-            root.addMenuItem(new SideMenuItem(list, i18n.tr("Finance"), CrmImages.INSTANCE.financeIcon()));
+            root.addMenuItem(new SideMenuItem(list, i18n.tr("Finance"), CrmImages.INSTANCE.financeIcon(), CrmMainNavigationDebugId.Finance));
 
             list.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Finance.AggregatedTransfer(), DataModelPermission.permissionRead(AggregatedTransfer.class)));
             if (SecurityController.check(VistaCrmBehavior.BuildingFinancial_OLD)) {
@@ -228,7 +229,7 @@ public class NavigViewImpl extends Composite implements NavigView {
 
         {//Organization
             SideMenuList list = new SideMenuList();
-            root.addMenuItem(new SideMenuItem(list, i18n.tr("Organization"), CrmImages.INSTANCE.organizationIcon()));
+            root.addMenuItem(new SideMenuItem(list, i18n.tr("Organization"), CrmImages.INSTANCE.organizationIcon(), null));
 
             list.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Organization.Employee(), EmployeeDirectoryList.class));
             list.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Organization.Portfolio(), DataModelPermission.permissionRead(Portfolio.class)));
@@ -237,12 +238,12 @@ public class NavigViewImpl extends Composite implements NavigView {
             }
             list.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Communication.Message(), DataModelPermission.permissionRead(MessageDTO.class)));
             communicationGroups = new SideMenuList();
-            list.addMenuItem(new SideMenuItem(communicationGroups, i18n.tr("Groups"), null, DataModelPermission.permissionRead(MessageCategory.class)));
+            list.addMenuItem(new SideMenuItem(communicationGroups, i18n.tr("Groups"), null, null, DataModelPermission.permissionRead(MessageCategory.class)));
         }
 
         {//Reports
             SideMenuList list = new SideMenuList();
-            root.addMenuItem(new SideMenuItem(list, i18n.tr("Reports"), CrmImages.INSTANCE.reportsIcon()));
+            root.addMenuItem(new SideMenuItem(list, i18n.tr("Reports"), CrmImages.INSTANCE.reportsIcon(), null));
 
             list.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Reports.AutoPayChanges()));
             list.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Reports.Availability()));

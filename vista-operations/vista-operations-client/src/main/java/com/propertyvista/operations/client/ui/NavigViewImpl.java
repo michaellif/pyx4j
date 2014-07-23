@@ -46,7 +46,7 @@ public class NavigViewImpl extends Composite implements NavigView {
 
         {//PMC Management
             SideMenuList list = new SideMenuList();
-            root.addMenuItem(new SideMenuItem(list, i18n.tr("PMC Management"), null));
+            root.addMenuItem(new SideMenuItem(list, i18n.tr("PMC Management"), null, null));
             list.addMenuItem(new SideMenuAppPlaceItem(new OperationsSiteMap.Management.PMC(), VistaOperationsBehavior.SystemAdmin));
             list.addMenuItem(new SideMenuAppPlaceItem(new OperationsSiteMap.Management.PmcMerchantAccount(), VistaOperationsBehavior.Caledon));
             list.addMenuItem(new SideMenuAppPlaceItem(new OperationsSiteMap.Management.Trigger(), VistaOperationsBehavior.ProcessAdmin));
@@ -58,7 +58,7 @@ public class NavigViewImpl extends Composite implements NavigView {
 
         {//Funds Transfer
             SideMenuList list = new SideMenuList();
-            root.addMenuItem(new SideMenuItem(list, i18n.tr("Funds Transfer"), null));
+            root.addMenuItem(new SideMenuItem(list, i18n.tr("Funds Transfer"), null, null));
             list.addMenuItem(new SideMenuAppPlaceItem(new OperationsSiteMap.FundsTransfer.CardTransactionRecord(), VistaOperationsBehavior.Caledon));
             list.addMenuItem(new SideMenuAppPlaceItem(new OperationsSiteMap.FundsTransfer.DirectDebitRecord(), VistaOperationsBehavior.Caledon));
             list.addMenuItem(new SideMenuAppPlaceItem(new OperationsSiteMap.FundsTransfer.FundsTransferFile(), VistaOperationsBehavior.Caledon));
@@ -72,13 +72,13 @@ public class NavigViewImpl extends Composite implements NavigView {
 
         {//Security
             SideMenuList list = new SideMenuList();
-            root.addMenuItem(new SideMenuItem(list, i18n.tr("Security"), null));
+            root.addMenuItem(new SideMenuItem(list, i18n.tr("Security"), null, null));
             list.addMenuItem(new SideMenuAppPlaceItem(new OperationsSiteMap.Security.AuditRecord(), VistaOperationsBehavior.SystemAdmin));
         }
 
         {//Legal
             SideMenuList list = new SideMenuList();
-            root.addMenuItem(new SideMenuItem(list, i18n.tr("Legal"), null));
+            root.addMenuItem(new SideMenuItem(list, i18n.tr("Legal"), null, null));
             list.addMenuItem(new SideMenuAppPlaceItem(new OperationsSiteMap.Legal.PmcTerms(), VistaOperationsBehavior.SystemAdmin));
             list.addMenuItem(new SideMenuAppPlaceItem(new OperationsSiteMap.Legal.PmcPaymentPadTerms(), VistaOperationsBehavior.SystemAdmin));
 
@@ -100,7 +100,7 @@ public class NavigViewImpl extends Composite implements NavigView {
 
         {//Administration
             SideMenuList list = new SideMenuList();
-            root.addMenuItem(new SideMenuItem(list, i18n.tr("Administration"), null));
+            root.addMenuItem(new SideMenuItem(list, i18n.tr("Administration"), null, null));
             list.addMenuItem(new SideMenuAppPlaceItem(new OperationsSiteMap.Administration.Maintenance(), VistaOperationsBehavior.SystemAdmin));
             list.addMenuItem(new SideMenuAppPlaceItem(new OperationsSiteMap.Administration.Simulation(), VistaOperationsBehavior.SystemAdmin));
             list.addMenuItem(new SideMenuAppPlaceItem(new OperationsSiteMap.Administration.AdminUsers(), VistaOperationsBehavior.SystemAdmin));
@@ -112,7 +112,7 @@ public class NavigViewImpl extends Composite implements NavigView {
 
         if (ApplicationMode.isDevelopment()) {//Dev Simulation
             SideMenuList list = new SideMenuList();
-            root.addMenuItem(new SideMenuItem(list, i18n.tr("Dev Simulation"), null));
+            root.addMenuItem(new SideMenuItem(list, i18n.tr("Dev Simulation"), null, null));
             list.addMenuItem(new SideMenuAppPlaceItem(new OperationsSiteMap.Simulator.SimulatedDataPreload(), VistaOperationsBehavior.SecurityAdmin));
 
             list.addMenuItem(new SideMenuAppPlaceItem(new OperationsSiteMap.Simulator.PadSimulation.PadSimFile(), VistaOperationsBehavior.Caledon));
