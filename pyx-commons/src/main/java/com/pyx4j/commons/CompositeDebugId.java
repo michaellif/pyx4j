@@ -47,6 +47,10 @@ public class CompositeDebugId implements IDebugId {
         this(new StringDebugId(parent), child);
     }
 
+    public CompositeDebugId(String parent, String child) {
+        this(new StringDebugId(parent), new StringDebugId(child));
+    }
+
     public CompositeDebugId(String suffix, int itemNumber) {
         this(new StringDebugId(suffix), String.valueOf(itemNumber));
     }
