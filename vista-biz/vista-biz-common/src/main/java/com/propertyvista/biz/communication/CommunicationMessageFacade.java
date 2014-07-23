@@ -13,6 +13,7 @@
  */
 package com.propertyvista.biz.communication;
 
+import java.io.Serializable;
 import java.util.List;
 
 import org.apache.commons.collections4.set.ListOrderedSet;
@@ -48,4 +49,6 @@ public interface CommunicationMessageFacade {
     public CommunicationEndpointDTO generateEndpointDTO(CommunicationEndpoint entity);
 
     public String sendersAsStringView(ListOrderedSet<CommunicationEndpoint> senders);
+
+    public Serializable getCommunicationStatus();
 }

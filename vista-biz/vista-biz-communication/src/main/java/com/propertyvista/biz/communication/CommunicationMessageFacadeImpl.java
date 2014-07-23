@@ -13,6 +13,7 @@
  */
 package com.propertyvista.biz.communication;
 
+import java.io.Serializable;
 import java.util.List;
 
 import org.apache.commons.collections4.set.ListOrderedSet;
@@ -71,5 +72,10 @@ public class CommunicationMessageFacadeImpl implements CommunicationMessageFacad
     @Override
     public String sendersAsStringView(ListOrderedSet<CommunicationEndpoint> senders) {
         return CommunicationManager.instance().sendersAsStringView(senders);
+    }
+
+    @Override
+    public Serializable getCommunicationStatus() {
+        return CommunicationManager.instance().getCommunicationStatus();
     }
 }

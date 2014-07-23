@@ -32,9 +32,12 @@ import com.pyx4j.site.rpc.AppPlace;
 import com.propertyvista.common.client.ClientLocaleUtils;
 import com.propertyvista.crm.client.CrmSite;
 import com.propertyvista.crm.client.activity.login.GetSatisfaction;
+import com.propertyvista.crm.client.event.CommunicationStatusUpdateEvent;
+import com.propertyvista.crm.client.event.CommunicationStatusUpdateHandler;
 import com.propertyvista.crm.client.ui.HeaderView;
 import com.propertyvista.crm.client.ui.HeaderView.HeaderPresenter;
 import com.propertyvista.crm.rpc.CrmSiteMap;
+import com.propertyvista.crm.rpc.dto.communication.CrmCommunicationSystemNotification;
 import com.propertyvista.shared.i18n.CompiledLocale;
 
 public class HeaderActivity extends AbstractActivity implements HeaderPresenter {
@@ -68,8 +71,15 @@ public class HeaderActivity extends AbstractActivity implements HeaderPresenter 
             }
         });
 
+        eventBus.addHandler(CommunicationStatusUpdateEvent.getType(), new CommunicationStatusUpdateHandler() {
+
+            @Override
+            public void onStatusUpdate(CommunicationStatusUpdateEvent event) {
+                updateCommunicationMessagesCount(event.getCommunicationSystemNotification());
+            }
+        });
+
         obtainAvailableLocales();
-        obtainCommunicationMessagesCount();
     }
 
     private void updateAuthenticatedView() {
@@ -109,8 +119,8 @@ public class HeaderActivity extends AbstractActivity implements HeaderPresenter 
         view.setAvailableLocales(ClientLocaleUtils.obtainAvailableLocales());
     }
 
-    private void obtainCommunicationMessagesCount() {
-        view.setCommunicationMessagesCount(3);
+    private void updateCommunicationMessagesCount(CrmCommunicationSystemNotification communicationStatus) {
+        view.setCommunicationMessagesCount(communicationStatus);
     }
 
     @Override

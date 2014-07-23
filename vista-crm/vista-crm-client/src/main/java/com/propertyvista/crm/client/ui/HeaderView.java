@@ -6,6 +6,7 @@ import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.site.client.IsView;
 
+import com.propertyvista.crm.rpc.dto.communication.CrmCommunicationSystemNotification;
 import com.propertyvista.shared.i18n.CompiledLocale;
 
 public interface HeaderView extends IsWidget, IsView {
@@ -42,6 +43,6 @@ public interface HeaderView extends IsWidget, IsView {
 
     void setAvailableLocales(List<CompiledLocale> locales);
 
-    void setCommunicationMessagesCount(int count);
+    void setCommunicationMessagesCount(CrmCommunicationSystemNotification status);
 
 }

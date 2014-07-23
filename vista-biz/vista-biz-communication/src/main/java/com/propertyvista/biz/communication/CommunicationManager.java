@@ -13,32 +13,47 @@
  */
 package com.propertyvista.biz.communication;
 
+import java.io.Serializable;
 import java.util.HashSet;
+import java.util.List;
+import java.util.Vector;
 
 import org.apache.commons.collections4.set.ListOrderedSet;
 
 import com.pyx4j.commons.Key;
+import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.core.AttachLevel;
 import com.pyx4j.entity.core.EntityFactory;
+import com.pyx4j.entity.core.criterion.AndCriterion;
 import com.pyx4j.entity.core.criterion.EntityListCriteria;
+import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
+import com.pyx4j.entity.core.criterion.PropertyCriterion;
 import com.pyx4j.entity.rpc.EntitySearchResult;
 import com.pyx4j.entity.security.EntityPermission;
 import com.pyx4j.entity.server.IEntityPersistenceService.ICursorIterator;
 import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.security.shared.Context;
 import com.pyx4j.security.shared.SecurityController;
 
+import com.propertyvista.crm.rpc.dto.communication.CrmCommunicationSystemNotification;
 import com.propertyvista.domain.communication.CommunicationEndpoint;
 import com.propertyvista.domain.communication.CommunicationEndpoint.ContactType;
 import com.propertyvista.domain.communication.CommunicationThread;
+import com.propertyvista.domain.communication.CommunicationThread.ThreadStatus;
 import com.propertyvista.domain.communication.DeliveryHandle;
 import com.propertyvista.domain.communication.Message;
+import com.propertyvista.domain.communication.MessageCategory;
 import com.propertyvista.domain.communication.SystemEndpoint;
+import com.propertyvista.domain.communication.SystemEndpoint.SystemEndpointName;
+import com.propertyvista.domain.company.Employee;
 import com.propertyvista.domain.company.Portfolio;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.security.CrmUser;
 import com.propertyvista.domain.security.CustomerUser;
 import com.propertyvista.dto.CommunicationEndpointDTO;
+import com.propertyvista.portal.rpc.shared.dto.communication.PortalCommunicationSystemNotification;
+import com.propertyvista.shared.VistaUserVisit;
 
 public class CommunicationManager {
     private static class SingletonHolder {
@@ -178,5 +193,60 @@ public class CommunicationManager {
             return senders.get(0).getStringView() + ", " + senders.get(1).getStringView();
         }
         return senders.get(0).getStringView() + " ... " + senders.get(senders.size() - 1).getStringView();
+    }
+
+    public Serializable getCommunicationStatus() {
+        final EntityListCriteria<CommunicationThread> direcrCriteria = EntityListCriteria.create(CommunicationThread.class);
+        direcrCriteria.eq(direcrCriteria.proto().content().$().recipients().$().isRead(), false);
+        direcrCriteria.eq(direcrCriteria.proto().content().$().recipients().$().recipient(), Context.visit(VistaUserVisit.class).getCurrentUser());
+
+        final Vector<CommunicationThread> directMessages = Persistence.secureQuery(direcrCriteria, AttachLevel.IdOnly);
+
+        final EntityListCriteria<CommunicationThread> disptchedCriteria = EntityListCriteria.create(CommunicationThread.class);
+        disptchedCriteria.in(disptchedCriteria.proto().status(), ThreadStatus.New, ThreadStatus.Open, ThreadStatus.Unassigned);
+
+        List<MessageCategory> userGroups = getUserGroups();
+        if (userGroups != null && userGroups.size() > 0) {
+            AndCriterion newDispatchedCriteria = new AndCriterion(PropertyCriterion.eq(disptchedCriteria.proto().owner(),
+                    ServerSideFactory.create(CommunicationMessageFacade.class).getSystemEndpointFromCache(SystemEndpointName.Unassigned)),
+                    PropertyCriterion.in(disptchedCriteria.proto().topic(), userGroups));
+
+            disptchedCriteria.or(newDispatchedCriteria,
+                    PropertyCriterion.eq(disptchedCriteria.proto().owner(), Context.visit(VistaUserVisit.class).getCurrentUser()));
+
+        } else {
+            disptchedCriteria.eq(disptchedCriteria.proto().owner(), Context.visit(VistaUserVisit.class).getCurrentUser());
+        }
+        final Vector<CommunicationThread> dispatchedMessages = Persistence.secureQuery(disptchedCriteria, AttachLevel.IdOnly);
+
+        if (dispatchedMessages != null && dispatchedMessages.size() > 0 && directMessages != null && directMessages.size() > 0) {
+            directMessages.removeAll(dispatchedMessages);
+        }
+
+        switch (Context.visit(VistaUserVisit.class).getApplication()) {
+        case crm:
+            return new CrmCommunicationSystemNotification(directMessages == null ? 0 : directMessages.size(), dispatchedMessages == null ? 0
+                    : dispatchedMessages.size());
+
+        case resident:
+            return new PortalCommunicationSystemNotification(directMessages == null ? 0 : directMessages.size());
+
+        default:
+            return null;
+        }
+    }
+
+    private List<MessageCategory> getUserGroups() {
+        EntityQueryCriteria<MessageCategory> groupCriteria = EntityQueryCriteria.create(MessageCategory.class);
+
+        EntityQueryCriteria<Employee> criteria = EntityQueryCriteria.create(Employee.class);
+        criteria.add(PropertyCriterion.eq(criteria.proto().user(), Context.visit(VistaUserVisit.class).getCurrentUser()));
+        Employee e = Persistence.service().retrieve(criteria);
+        if (e == null) {
+            return null;
+        }
+        groupCriteria.in(groupCriteria.proto().dispatchers(), e.getPrimaryKey());
+
+        return Persistence.service().query(groupCriteria, AttachLevel.IdOnly);
     }
 }

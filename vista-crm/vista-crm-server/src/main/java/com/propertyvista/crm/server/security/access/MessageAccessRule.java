@@ -39,7 +39,7 @@ public class MessageAccessRule implements DatasetAccessRule<Message> {
                 new OrCriterion(PropertyCriterion.eq(criteria.proto().sender(), CrmAppContext.getCurrentUser()),//
                         PropertyCriterion.eq(criteria.proto().thread().owner(), CrmAppContext.getCurrentUser())));//
         if (userGroups != null && userGroups.size() > 0) {
-            criteria.or(PropertyCriterion.in(criteria.proto().thread().topic(), getUserGroups()), inboxOr);//
+            criteria.or(PropertyCriterion.in(criteria.proto().thread().topic(), userGroups), inboxOr);//
 
         } else {
             criteria.add(inboxOr);

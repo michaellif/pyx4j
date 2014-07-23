@@ -39,6 +39,7 @@ import com.propertyvista.crm.client.CrmSite;
 import com.propertyvista.crm.client.resources.CrmImages;
 import com.propertyvista.crm.client.themes.CommunicationCrmTheme;
 import com.propertyvista.crm.rpc.CrmUserVisit;
+import com.propertyvista.crm.rpc.dto.communication.CrmCommunicationSystemNotification;
 import com.propertyvista.crm.rpc.services.admin.ac.CrmAdministrationAccess;
 import com.propertyvista.dto.MessageDTO;
 import com.propertyvista.shared.i18n.CompiledLocale;
@@ -344,14 +345,28 @@ public class HeaderViewImpl extends FlowPanel implements HeaderView {
     }
 
     @Override
-    public void setCommunicationMessagesCount(int count) {
-        if (count > 0) {
+    public void setCommunicationMessagesCount(CrmCommunicationSystemNotification status) {
+        StringBuffer statusLabel = null;
+        if (status != null) {
+            if (status.numberOfNewDirectMessages > 0) {
+                statusLabel = new StringBuffer();
+                statusLabel.append(status.numberOfNewDirectMessages);
+            }
+
+            if (status.numberOfNewDispatchedMessages > 0) {
+                if (statusLabel == null) {
+                    statusLabel = new StringBuffer();
+                } else {
+                    statusLabel.append("/");
+                }
+                statusLabel.append(status.numberOfNewDispatchedMessages);
+            }
+        }
+        if (statusLabel != null) {
             communicationButton.setImage(CrmImages.INSTANCE.alertsOn());
-            communicationButton.setTextLabel(String.valueOf(count));
+            communicationButton.setTextLabel(statusLabel.toString());
         } else {
             communicationButton.setImage(CrmImages.INSTANCE.alertsOff());
         }
-
     }
-
 }

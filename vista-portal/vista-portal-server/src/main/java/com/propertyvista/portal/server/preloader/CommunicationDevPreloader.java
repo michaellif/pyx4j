@@ -31,6 +31,7 @@ import com.propertyvista.domain.communication.DeliveryHandle;
 import com.propertyvista.domain.communication.Message;
 import com.propertyvista.domain.communication.MessageCategory;
 import com.propertyvista.domain.communication.MessageCategory.MessageGroupCategory;
+import com.propertyvista.domain.communication.SystemEndpoint;
 import com.propertyvista.domain.security.CrmUser;
 import com.propertyvista.domain.security.CustomerUser;
 import com.propertyvista.domain.security.common.AbstractPmcUser;
@@ -92,6 +93,10 @@ public class CommunicationDevPreloader extends AbstractDataPreloader {
         criteriaMessageGroup.eq(criteriaMessageGroup.proto().category(), MessageGroupCategory.Custom);
         MessageCategory mg = Persistence.service().retrieve(criteriaMessageGroup);
 
+        EntityQueryCriteria<SystemEndpoint> criteriaSystemEndpoint = EntityQueryCriteria.create(SystemEndpoint.class);
+        criteriaSystemEndpoint.eq(criteriaSystemEndpoint.proto().name(), SystemEndpoint.SystemEndpointName.Unassigned.toString());
+        SystemEndpoint sep = Persistence.service().retrieve(criteriaSystemEndpoint);
+
         // message flow:
         // m001 -> t001 (read, important)
         // t001 -> m001 (reply unread)
@@ -104,17 +109,17 @@ public class CommunicationDevPreloader extends AbstractDataPreloader {
 
         for (int i = 0; i < 1; i++) {
             CommunicationThread msg1 = createMessage(i, m001, t001, null, "No Water",
-                    "It will no water in the whole year! Please go to a Sea sand bring water!", true, true, mg, m001);
-            createMessage(i, t003, m001, msg1, "T03", "Hi,\n     Thanks for communication :)", true, false, mg, m001);
-            createMessage(i, t003, m001, null, "T03", "Hi,\n     Bye)", true, false, mg, m001);
-            createMessage(i, t001, m001, msg1, "No water", "Hi,\n     Thanks for communication, I went to Black Sea to become White :)", true, false, mg, m001);
+                    "It will no water in the whole year! Please go to a Sea sand bring water!", true, true, mg, sep);
+            createMessage(i, t003, m001, msg1, "T03", "Hi,\n     Thanks for communication :)", true, false, mg, sep);
+            createMessage(i, t003, m001, null, "T03", "Hi,\n     Bye)", true, false, mg, sep);
+            createMessage(i, t001, m001, msg1, "No water", "Hi,\n     Thanks for communication, I went to Black Sea to become White :)", true, false, mg, sep);
             createMessage(i, t002, e001, null, "How to use this?",
-                    "Hey,\n    I would like to know how to use this portal thing, stuff here, is there a quick tutorial?", true, false, mg, m001);
+                    "Hey,\n    I would like to know how to use this portal thing, stuff here, is there a quick tutorial?", true, false, mg, sep);
             createMessage(i, m001, e001, null, "We miss you", "Please come back from hollyday we miss you, mostly because there is to mucjh work for us.",
-                    false, false, mg, m001);
-            createMessage(i, m001, t002, null, "Happy New Year", "We wish you Happy New Year, all best", false, false, mg, m001);
+                    false, false, mg, sep);
+            createMessage(i, m001, t002, null, "Happy New Year", "We wish you Happy New Year, all best", false, false, mg, sep);
             CommunicationThread msg6 = createMessage(i, m001, t001, null, "Late payment notification",
-                    "Dear Kenneth Puent,\nWe inform you are late on payment. Please play it ASAP!\n\nRegards,\n", true, false, mg, m001);
+                    "Dear Kenneth Puent,\nWe inform you are late on payment. Please play it ASAP!\n\nRegards,\n", true, false, mg, sep);
             createMessage(
                     i,
                     t001,
@@ -122,7 +127,7 @@ public class CommunicationDevPreloader extends AbstractDataPreloader {
                     msg6,
                     "Late payment notification",
                     "Dear Veronica W Canoy,\nThanks for reminder. My payment it will be delaying one more week, until that please accept my dinner invitation!:)",
-                    true, false, mg, m001);
+                    true, false, mg, sep);
         }
         return "persons and messages created";
     }
@@ -134,7 +139,7 @@ public class CommunicationDevPreloader extends AbstractDataPreloader {
     }
 
     private CommunicationThread createMessage(int i, AbstractPmcUser from, AbstractPmcUser to, CommunicationThread parent, String topic, String msgContent,
-            boolean highImportance, boolean isRead, MessageCategory mg, CrmUser owner) {
+            boolean highImportance, boolean isRead, MessageCategory mg, SystemEndpoint owner) {
 
         if (from == null || to == null || topic == null || msgContent == null) {
             return null;
