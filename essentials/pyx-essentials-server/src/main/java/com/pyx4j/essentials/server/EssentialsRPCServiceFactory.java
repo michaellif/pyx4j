@@ -20,8 +20,8 @@
  */
 package com.pyx4j.essentials.server;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Vector;
 
 import com.pyx4j.config.server.rpc.IServiceFilter;
 import com.pyx4j.config.shared.ApplicationBackend;
@@ -36,7 +36,7 @@ public class EssentialsRPCServiceFactory extends ReflectionServiceFactory {
     @Override
     public List<IServiceFilter> getServiceFilterChain(Class<? extends Service<?, ?>> serviceClass) {
         //List<IServiceFilter> filters = super.getServiceFilterChain(serviceClass);
-        List<IServiceFilter> filters = new Vector<IServiceFilter>();
+        List<IServiceFilter> filters = new ArrayList<>();
 
         if (ApplicationBackend.getBackendType() == ApplicationBackendType.RDB) {
             filters.add(new RpcEntityDumpServiceFilter());
