@@ -22,6 +22,7 @@ import com.pyx4j.essentials.server.EssentialsRPCServiceFactory;
 import com.pyx4j.rpc.shared.IService;
 import com.pyx4j.rpc.shared.Service;
 
+import com.propertyvista.biz.communication.CommunicationStatusRpcServiceFilter;
 import com.propertyvista.server.common.reference.ReferenceDataServiceVistaImpl;
 
 public class VistaRPCServiceFactory extends EssentialsRPCServiceFactory {
@@ -39,7 +40,7 @@ public class VistaRPCServiceFactory extends EssentialsRPCServiceFactory {
     public List<IServiceFilter> getServiceFilterChain(Class<? extends Service<?, ?>> serviceClass) {
         List<IServiceFilter> filters = new ArrayList<>();
         filters.addAll(super.getServiceFilterChain(serviceClass));
-//        filters.add(new CommunicationStatusRpcServiceFilter());
+        filters.add(new CommunicationStatusRpcServiceFilter());
         return filters;
     }
 

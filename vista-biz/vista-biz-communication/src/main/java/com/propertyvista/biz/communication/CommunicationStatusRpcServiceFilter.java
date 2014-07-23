@@ -28,7 +28,7 @@ public class CommunicationStatusRpcServiceFilter implements IServiceFilter {
 
     @Override
     public Serializable filterIncomming(Class<? extends Service<?, ?>> serviceClass, Serializable request) {
-        return null;
+        return request;
     }
 
     @Override
@@ -46,6 +46,6 @@ public class CommunicationStatusRpcServiceFilter implements IServiceFilter {
             }
         }
 
-        return null;
+        return response;
     }
 }
