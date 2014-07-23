@@ -31,6 +31,7 @@ import com.propertyvista.crm.rpc.security.LeaseTermEditOnLeaseInstanceAccess;
 import com.propertyvista.crm.rpc.services.billing.BillCrudService;
 import com.propertyvista.crm.rpc.services.lease.ac.LeaseAgreementSigning;
 import com.propertyvista.crm.rpc.services.lease.ac.LeaseConfirmBill;
+import com.propertyvista.crm.rpc.services.lease.ac.LeaseRenew;
 import com.propertyvista.crm.rpc.services.lease.ac.LeaseReserveUnit;
 import com.propertyvista.crm.rpc.services.lease.ac.LeaseRunBill;
 import com.propertyvista.crm.rpc.services.lease.ac.LeaseStateManagement;
@@ -56,7 +57,12 @@ class VistaCrmLeaseAccessControlList extends UIAclBuilder {
         grant(LeaseAdvanced, new ActionPermission(LeaseAgreementSigning.class));
         grant(LeaseFull, new ActionPermission(LeaseAgreementSigning.class));
 
+        grant(LeaseFull, new ActionPermission(LeaseRunBill.class));
+        grant(LeaseFull, new ActionPermission(LeaseConfirmBill.class));
+
+        grant(LeaseFull, new ActionPermission(LeaseReserveUnit.class));
         grant(LeaseFull, new ActionPermission(LeaseStateManagement.class));
+        grant(LeaseFull, new ActionPermission(LeaseRenew.class));
 
         {// ---- Lease(Term) itself:
             List<Class<? extends IEntity>> entities = entities(LeaseDTO.class, LeaseTermDTO.class);
@@ -94,11 +100,6 @@ class VistaCrmLeaseAccessControlList extends UIAclBuilder {
 
         grant(LeaseFull, BillDataDTO.class, READ);
         grant(LeaseFull, new IServiceExecutePermission(BillCrudService.class));
-
-        grant(LeaseFull, new ActionPermission(LeaseRunBill.class));
-        grant(LeaseFull, new ActionPermission(LeaseConfirmBill.class));
-
-        grant(LeaseFull, new ActionPermission(LeaseReserveUnit.class));
     }
 
 }

@@ -74,6 +74,7 @@ import com.propertyvista.crm.rpc.dto.occupancy.opconstraints.CancelMoveOutConstr
 import com.propertyvista.crm.rpc.services.lease.ac.LeaseAgreementSigning;
 import com.propertyvista.crm.rpc.services.lease.ac.LeaseCompletion;
 import com.propertyvista.crm.rpc.services.lease.ac.LeaseNotice;
+import com.propertyvista.crm.rpc.services.lease.ac.LeaseRenew;
 import com.propertyvista.crm.rpc.services.lease.ac.LeaseReserveUnit;
 import com.propertyvista.crm.rpc.services.lease.ac.LeaseRunBill;
 import com.propertyvista.crm.rpc.services.lease.ac.LeaseStateManagement;
@@ -353,7 +354,7 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
         // Renewing stuff : ---------------------------------------------------
 
         if (VistaTODO.VISTA_1789_Renew_Lease) {
-            renewButton = new Button(i18n.tr("Renew"), new ActionPermission(LeaseStateManagement.class));
+            renewButton = new Button(i18n.tr("Renew"), new ActionPermission(LeaseRenew.class));
             Button.ButtonMenuBar renewMenu = renewButton.createMenu();
 
             offerAction = new MenuItem(i18n.tr("Create Offer"), new Command() {
@@ -384,7 +385,7 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
                 public void execute() {
                     renewActionExecuter();
                 }
-            }, new ActionPermission(LeaseStateManagement.class));
+            }, new ActionPermission(LeaseRenew.class));
             if (!VistaFeatures.instance().yardiIntegration()) {
                 addAction(renewAction);
             }
