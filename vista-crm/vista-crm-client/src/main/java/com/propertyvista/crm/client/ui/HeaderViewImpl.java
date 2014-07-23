@@ -367,6 +367,7 @@ public class HeaderViewImpl extends FlowPanel implements HeaderView {
             communicationButton.setTextLabel(statusLabel.toString());
         } else {
             communicationButton.setImage(CrmImages.INSTANCE.alertsOff());
+            communicationButton.setTextLabel("");
         }
     }
 }
