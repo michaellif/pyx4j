@@ -37,7 +37,9 @@ import org.slf4j.LoggerFactory;
 import com.google.gwt.http.client.URL;
 import com.google.gwt.place.shared.Place;
 
+import com.pyx4j.commons.IDebugId;
 import com.pyx4j.commons.Key;
+import com.pyx4j.commons.StringDebugId;
 import com.pyx4j.i18n.annotations.I18n;
 import com.pyx4j.i18n.annotations.I18n.I18nStrategy;
 import com.pyx4j.site.shared.meta.URLEncoder;
@@ -273,6 +275,20 @@ public class AppPlace extends Place {
 
     public void setStable(boolean stable) {
         this.stable = stable;
+    }
+
+    public IDebugId asDebugId() {
+        return new StringDebugId(getPlaceId().replace('/', '.'));
+    }
+
+    public boolean canUseAsDebugId() {
+        if (placeArgs == null) {
+            return true;
+        } else if (placeArgs.containsKey(ARG_NAME_ID)) {
+            return false;
+        } else {
+            return false;
+        }
     }
 
     public AppPlace copy(AppPlace place) {

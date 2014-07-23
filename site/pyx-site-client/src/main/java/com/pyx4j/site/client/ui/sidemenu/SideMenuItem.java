@@ -38,6 +38,7 @@ import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Widget;
 
+import com.pyx4j.commons.IDebugId;
 import com.pyx4j.gwt.commons.layout.LayoutChangeRequestEvent;
 import com.pyx4j.gwt.commons.layout.LayoutChangeRequestEvent.ChangeType;
 import com.pyx4j.gwt.commons.layout.LayoutType;
@@ -174,6 +175,10 @@ public class SideMenuItem implements ISideMenuNode {
     @Override
     public Widget asWidget() {
         return contentPanel;
+    }
+
+    protected void setDebugId(IDebugId debugId) {
+        itemPanel.ensureDebugId(debugId.debugId());
     }
 
     public void setCaption(String text) {

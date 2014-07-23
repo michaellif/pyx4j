@@ -67,6 +67,9 @@ public class SideMenuAppPlaceItem extends SideMenuItem {
             }
         }, caption == null ? AppSite.getHistoryMapper().getPlaceInfo(appPlace).getNavigLabel() : caption, images, permission);
         this.appPlace = appPlace;
+        if (appPlace.canUseAsDebugId()) {
+            this.setDebugId(appPlace.asDebugId());
+        }
     }
 
     public AppPlace getPlace() {
