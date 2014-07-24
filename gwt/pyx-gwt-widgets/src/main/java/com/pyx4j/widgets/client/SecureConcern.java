@@ -56,7 +56,7 @@ public class SecureConcern {
         if (permissions == null) {
             securityControllerDecision = true;
         } else {
-            securityControllerDecision = null;
+            securityControllerDecision = SecurityController.check(permissions);
         }
     }
 
@@ -73,20 +73,11 @@ public class SecureConcern {
     }
 
     public boolean getDecision() {
-        // assert (securityControllerDecision != null) : "setSecurityContext() had not been called";
-        // return decision && securityControllerDecision;
-
         if (securityControllerDecision == null) {
             return false;
         } else {
             return decision && securityControllerDecision;
         }
-    }
-
-    // TODO Bad function for bad selectTab in CTabbedEntityForm constructor
-    @Deprecated
-    public boolean getDecision2() {
-        return decision;
     }
 
     public boolean hasDecision() {

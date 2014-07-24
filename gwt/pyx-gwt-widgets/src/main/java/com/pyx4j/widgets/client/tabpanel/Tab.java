@@ -104,7 +104,7 @@ public class Tab extends LayoutPanel implements HasSecureConcern {
     }
 
     public boolean isTabVisible() {
-        return visible.getDecision2();
+        return visible.getDecision();
     }
 
     public void setPermitVisiblePermission(Permission... permission) {
@@ -124,7 +124,7 @@ public class Tab extends LayoutPanel implements HasSecureConcern {
     }
 
     public boolean isTabEnabled() {
-        return enabled.getDecision2();
+        return enabled.getDecision();
     }
 
     public void setPermitEnabledPermission(Permission... permission) {
