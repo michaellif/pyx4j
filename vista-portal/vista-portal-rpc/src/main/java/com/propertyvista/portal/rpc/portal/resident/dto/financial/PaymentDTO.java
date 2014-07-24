@@ -13,13 +13,9 @@
  */
 package com.propertyvista.portal.rpc.portal.resident.dto.financial;
 
-import com.pyx4j.entity.annotations.Caption;
-import com.pyx4j.entity.annotations.Detached;
-import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.core.IList;
 
-import com.propertyvista.domain.security.CustomerSignature;
 import com.propertyvista.dto.PaymentRecordDTO;
 
 @Transient
@@ -27,8 +23,4 @@ public interface PaymentDTO extends PaymentRecordDTO {
 
     IList<PaymentInfoDTO> currentAutoPayments();
 
-    @Owned
-    @Detached
-    @Caption(name = "I agree to the service fee being charged and have read the applicable terms and conditions")
-    CustomerSignature convenienceFeeSignature();
 }

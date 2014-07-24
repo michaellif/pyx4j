@@ -258,7 +258,7 @@ public class PaymentWizard extends CPortalEntityWizard<PaymentDTO> {
         });
         cSignature.setDecorator(new SignatureDecorator());
 
-        formPanel.append(Location.Left, proto().convenienceFeeSignature(), cSignature);
+        formPanel.append(Location.Left, proto().convenienceFeeSignedTerm().signature(), cSignature);
 
         formPanel.hr();
 
@@ -396,7 +396,7 @@ public class PaymentWizard extends CPortalEntityWizard<PaymentDTO> {
         panel.add(createDecorator(i18n.tr("Payment Method:"), get(proto().paymentMethod()).getValue().getStringView()));
         panel.add(createDecorator(i18n.tr("Amount to pay:"), ((CTextFieldBase<?, ?>) get(proto().amount())).getFormattedValue()));
 
-        get(proto().convenienceFeeSignature()).setVisible(false);
+        get(proto().convenienceFeeSignedTerm().signature()).setVisible(false);
 
         PaymentConvenienceFeeDTO inData = EntityFactory.create(PaymentConvenienceFeeDTO.class);
         inData.paymentMethod().set(get(proto().paymentMethod()).getValue());
@@ -408,7 +408,7 @@ public class PaymentWizard extends CPortalEntityWizard<PaymentDTO> {
                     panel.add(createDecorator(i18n.tr("Web Payment Fee:"), result.feeAmount().getStringView()));
                     panel.add(createDecorator(i18n.tr("Payment Total:"), result.total().getStringView()));
 
-                    get(proto().convenienceFeeSignature()).setVisible(true);
+                    get(proto().convenienceFeeSignedTerm().signature()).setVisible(true);
 
                     getValue().convenienceFee().setValue(result.feeAmount().getValue());
                     getValue().convenienceFeeReferenceNumber().setValue(result.transactionNumber().getValue());

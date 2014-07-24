@@ -215,6 +215,10 @@ public interface PaymentRecord extends IEntity, HasNotesAndAttachments {
     @Caption(name = "Fee Reference Number")
     IPrimitive<String> convenienceFeeReferenceNumber();
 
+    @Owned
+    @Detached
+    SignedWebPaymentTerm convenienceFeeSignedTerm();
+
     LeasePaymentMethod paymentMethod();
 
     @ToString(index = 2)

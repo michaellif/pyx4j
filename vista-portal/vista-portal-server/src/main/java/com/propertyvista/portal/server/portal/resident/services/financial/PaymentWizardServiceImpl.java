@@ -16,6 +16,7 @@ package com.propertyvista.portal.server.portal.resident.services.financial;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Vector;
+import java.util.concurrent.Callable;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
@@ -23,6 +24,7 @@ import com.pyx4j.commons.UserRuntimeException;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.config.server.SystemDateManager;
 import com.pyx4j.entity.core.EntityFactory;
+import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.server.AbstractCrudServiceDtoImpl;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.ISignature.SignatureFormat;
@@ -43,10 +45,12 @@ import com.propertyvista.domain.security.common.VistaApplication;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.util.DomainUtil;
 import com.propertyvista.dto.payment.ConvenienceFeeCalculationResponseTO;
+import com.propertyvista.operations.domain.legal.VistaTerms;
 import com.propertyvista.portal.rpc.portal.resident.dto.financial.PaymentDTO;
 import com.propertyvista.portal.rpc.portal.resident.services.financial.PaymentWizardService;
 import com.propertyvista.portal.rpc.portal.shared.dto.PaymentConvenienceFeeDTO;
 import com.propertyvista.portal.server.portal.resident.ResidentPortalContext;
+import com.propertyvista.server.TaskRunner;
 import com.propertyvista.server.common.util.AddressRetriever;
 
 public class PaymentWizardServiceImpl extends AbstractCrudServiceDtoImpl<PaymentRecord, PaymentDTO> implements PaymentWizardService {
@@ -68,7 +72,7 @@ public class PaymentWizardServiceImpl extends AbstractCrudServiceDtoImpl<Payment
         Persistence.service().retrieve(lease.unit());
         Persistence.service().retrieve(lease.unit().building());
 
-        PaymentDTO dto = EntityFactory.create(PaymentDTO.class);
+        final PaymentDTO dto = EntityFactory.create(PaymentDTO.class);
 
         dto.billingAccount().set(lease.billingAccount());
 
@@ -96,8 +100,18 @@ public class PaymentWizardServiceImpl extends AbstractCrudServiceDtoImpl<Payment
 
         dto.currentAutoPayments().addAll(BillingServiceImpl.retrieveCurrentAutoPayments(lease));
 
-        dto.convenienceFeeSignature().signatureFormat().setValue(SignatureFormat.AgreeBox);
-
+        dto.convenienceFeeSignedTerm().signature().signatureFormat().setValue(SignatureFormat.AgreeBox);
+        TaskRunner.runInOperationsNamespace(new Callable<Void>() {
+            @Override
+            public Void call() {
+                EntityQueryCriteria<VistaTerms> criteria = EntityQueryCriteria.create(VistaTerms.class);
+                criteria.eq(criteria.proto().target(), VistaTerms.Target.TenantPaymentWebPaymentFeeTerms);
+                VistaTerms terms = Persistence.service().retrieve(criteria);
+                dto.convenienceFeeSignedTerm().term().setValue(terms.getPrimaryKey());
+                dto.convenienceFeeSignedTerm().termFor().setValue(terms.version().fromDate().getValue());
+                return null;
+            }
+        });
         return dto;
     }
 

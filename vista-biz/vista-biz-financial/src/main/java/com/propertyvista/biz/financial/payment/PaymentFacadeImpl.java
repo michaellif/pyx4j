@@ -153,6 +153,9 @@ public class PaymentFacadeImpl implements PaymentFacade {
                     .contains(ccType)) {
                 Validate.notNull(paymentRecord.convenienceFee().getValue(), "Convenience Fee fee not calculated");
                 Validate.notNull(paymentRecord.convenienceFeeReferenceNumber().getValue(), "Convenience Fee fee not calculated");
+                Validate.isTrue(paymentRecord.convenienceFeeSignedTerm().signature().agree().getValue(), "Convenience Fee fee not signed");
+            } else {
+                paymentRecord.convenienceFeeSignedTerm().set(null);
             }
         }
         if (!paymentRecord.paymentMethod().id().isNull()) {
