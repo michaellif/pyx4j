@@ -11,11 +11,10 @@
  * @author vlads
  * @version $Id$
  */
-package com.propertyvista.portal.server.preloader;
+package com.propertyvista.biz.preloader;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.EnumSet;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -26,6 +25,7 @@ import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.core.criterion.PropertyCriterion;
 import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.entity.server.dataimport.AbstractDataPreloader;
 import com.pyx4j.essentials.server.csv.EntityCSVReciver;
 import com.pyx4j.gwt.server.IOUtils;
 
@@ -33,9 +33,8 @@ import com.propertyvista.biz.generator.LocationsGenerator;
 import com.propertyvista.domain.security.CrmRole;
 import com.propertyvista.domain.security.SecurityQuestion;
 import com.propertyvista.domain.security.VistaCrmBehavior;
-import com.propertyvista.preloader.BaseVistaDevDataPreloader;
 
-public class CrmRolesPreloader extends BaseVistaDevDataPreloader {
+public class CrmRolesPreloader extends AbstractDataPreloader {
 
     public static final String DEFAULT_ACCESS_ALL_ROLE_NAME = "All";
 
@@ -64,10 +63,7 @@ public class CrmRolesPreloader extends BaseVistaDevDataPreloader {
     public static CrmRole getDefaultRole() {
         EntityQueryCriteria<CrmRole> criteria = EntityQueryCriteria.create(CrmRole.class);
         criteria.add(PropertyCriterion.eq(criteria.proto().name(), CrmRolesPreloader.DEFAULT_ACCESS_ALL_ROLE_NAME));
-        CrmRole role = Persistence.service().retrieve(criteria);
-        assert (role != null);
-        return role;
-
+        return Persistence.service().retrieve(criteria);
     }
 
     public static CrmRole getSupportRole() {
@@ -144,14 +140,6 @@ public class CrmRolesPreloader extends BaseVistaDevDataPreloader {
 
         createRole(VistaCrmBehavior.PropertyVistaAccountOwner_OLD.name(), true, VistaCrmBehavior.PropertyVistaAccountOwner_OLD);
         createRole(DEFAULT_SUPPORT_ROLE_NAME, VistaCrmBehavior.PropertyVistaSupport);
-
-        if (ApplicationMode.isDevelopment()) {
-            for (VistaCrmBehavior behavior : EnumSet.allOf(VistaCrmBehavior.class)) {
-                createRole("Test-" + behavior.name(), behavior);
-            }
-        }
-
-        //TODO Add roles reload with proper business names.
 
         Persistence.service().persist(
                 EntityCSVReciver.create(SecurityQuestion.class).loadResourceFile(IOUtils.resourceFileName("SecurityQuestion.csv", LocationsGenerator.class)));

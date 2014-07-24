@@ -36,6 +36,7 @@ import com.pyx4j.entity.server.UnitOfWork;
 import com.pyx4j.entity.server.dataimport.AbstractDataPreloader;
 
 import com.propertyvista.biz.policy.IdAssignmentFacade;
+import com.propertyvista.biz.preloader.CrmRolesPreloader;
 import com.propertyvista.biz.system.UserManagementFacade;
 import com.propertyvista.biz.system.encryption.PasswordEncryptorFacade;
 import com.propertyvista.domain.DemoData;

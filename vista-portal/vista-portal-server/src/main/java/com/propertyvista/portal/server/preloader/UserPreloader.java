@@ -26,6 +26,7 @@ import com.pyx4j.entity.core.criterion.PropertyCriterion;
 import com.pyx4j.entity.server.Persistence;
 
 import com.propertyvista.biz.policy.IdAssignmentFacade;
+import com.propertyvista.biz.preloader.CrmRolesPreloader;
 import com.propertyvista.biz.system.UserManagementFacade;
 import com.propertyvista.biz.system.encryption.PasswordEncryptorFacade;
 import com.propertyvista.domain.DemoData;

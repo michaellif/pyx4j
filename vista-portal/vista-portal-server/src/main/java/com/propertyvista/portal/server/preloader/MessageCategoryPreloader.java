@@ -17,6 +17,7 @@ import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.server.PersistenceServicesFactory;
 import com.pyx4j.entity.server.dataimport.AbstractDataPreloader;
 
+import com.propertyvista.biz.preloader.CrmRolesPreloader;
 import com.propertyvista.domain.communication.MessageCategory;
 import com.propertyvista.domain.communication.MessageCategory.MessageGroupCategory;
 import com.propertyvista.domain.security.CrmRole;

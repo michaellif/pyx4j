@@ -16,6 +16,8 @@ package com.propertyvista.portal.server.preloader;
 import com.pyx4j.entity.server.dataimport.DataPreloaderCollection;
 import com.pyx4j.server.contexts.NamespaceManager;
 
+import com.propertyvista.biz.preloader.CrmRolesPreloader;
+import com.propertyvista.biz.preloader.ReportsAdministrationPreloader;
 import com.propertyvista.domain.DemoData.DemoPmc;
 import com.propertyvista.misc.VistaDataPreloaderParameter;
 import com.propertyvista.misc.VistaDevPreloadConfig;
@@ -26,6 +28,7 @@ import com.propertyvista.portal.server.preloader.site.redridge.RedridgeSitePrelo
 import com.propertyvista.portal.server.preloader.site.rockville.RockvilleSitePreloader;
 import com.propertyvista.portal.server.preloader.site.star.StarlightSitePreloader;
 import com.propertyvista.portal.server.preloader.site.vista.VistaSitePreloader;
+import com.propertyvista.preloader.CrmRolesDevPreloader;
 import com.propertyvista.preloader.MerchantAccountPreloader;
 import com.propertyvista.preloader.policy.PaymentMethodSelectionPolicyDevPreloader;
 
@@ -47,6 +50,7 @@ public class VistaDataPreloaders extends DataPreloaderCollection {
         add(new ReferenceDataPreloader());
         add(new MessageCategoryPreloader());
         add(new SystemEndpointPreloader());
+        add(new ReportsAdministrationPreloader());
 
         //DEMO Different data for different PMC
         DemoPmc demoPmc;
@@ -89,6 +93,8 @@ public class VistaDataPreloaders extends DataPreloaderCollection {
         if (production) {
             //DEMO add(new ProdSitePreloader());
         } else {
+
+            add(new CrmRolesDevPreloader());
 
             add(new UserPreloader());
             add(new MerchantAccountPreloader());
