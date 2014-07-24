@@ -892,7 +892,11 @@ public abstract class SharedEntityHandler extends ObjectHandler<Map<String, Seri
 
     @Override
     public boolean implies(ProtectionDomain<?> domain) {
-        return ((InstanceAccess) domain).implies(this);
+        if (domain instanceof InstanceAccess) {
+            return ((InstanceAccess) domain).implies(this);
+        } else {
+            return false;
+        }
     }
 
     @Override
