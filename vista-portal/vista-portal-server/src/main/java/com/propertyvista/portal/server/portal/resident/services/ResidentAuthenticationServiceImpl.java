@@ -19,6 +19,9 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.commons.UserRuntimeException;
@@ -29,6 +32,7 @@ import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.core.criterion.PropertyCriterion;
 import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.essentials.server.AbstractAntiBot;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.security.rpc.AuthenticationResponse;
 import com.pyx4j.security.shared.Behavior;
@@ -37,6 +41,7 @@ import com.propertyvista.biz.communication.CommunicationFacade;
 import com.propertyvista.biz.financial.payment.PaymentFacade;
 import com.propertyvista.biz.tenant.CustomerFacade;
 import com.propertyvista.biz.tenant.OnlineApplicationFacade;
+import com.propertyvista.config.VistaDeployment;
 import com.propertyvista.domain.payment.PaymentType;
 import com.propertyvista.domain.security.CustomerUser;
 import com.propertyvista.domain.security.PortalResidentBehavior;
@@ -55,6 +60,8 @@ import com.propertyvista.shared.exceptions.LoginTokenExpiredUserRuntimeException
 
 public class ResidentAuthenticationServiceImpl extends VistaAuthenticationServicesImpl<CustomerUser, CustomerUserCredential> implements
         ResidentAuthenticationService {
+
+    private final static Logger log = LoggerFactory.getLogger(ResidentAuthenticationServiceImpl.class);
 
     private static final I18n i18n = I18n.get(ResidentAuthenticationServiceImpl.class);
 
@@ -107,10 +114,15 @@ public class ResidentAuthenticationServiceImpl extends VistaAuthenticationServic
         }
 
         if (leases.size() == 0) {
-            if (ApplicationMode.isDevelopment()) {
+            if (!ServerSideFactory.create(OnlineApplicationFacade.class).getOnlineApplications(user).isEmpty()) {
+                // active prospect - need a nice message with target url
+                String url = VistaDeployment.getBaseApplicationURL(VistaApplication.prospect, true);
+                throw new UserRuntimeException(i18n.tr("User Account not activated yet. Please use the following URL to log in to your Application:\n{0}", url));
+            } else if (ApplicationMode.isDevelopment()) {
                 throw new Error("Lease not found for user " + user.getDebugExceptionInfoString());
             } else {
-                throw new UserRuntimeException(i18n.tr(GENERIC_FAILED_MESSAGE));
+                log.warn("Invalid log-in attempt {} : no active lease or app found: ", user.email().getValue());
+                throw new UserRuntimeException(i18n.tr(AbstractAntiBot.GENERIC_LOGIN_FAILED_MESSAGE));
             }
         } else if (selectedLease != null) {
             actualBehaviors.addAll(ServerSideFactory.create(CustomerFacade.class).getLeaseBehavior(user, selectedLease));
