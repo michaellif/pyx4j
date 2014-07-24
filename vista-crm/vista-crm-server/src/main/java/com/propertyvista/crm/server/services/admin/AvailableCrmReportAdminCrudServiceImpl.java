@@ -13,15 +13,29 @@
  */
 package com.propertyvista.crm.server.services.admin;
 
+import com.pyx4j.entity.core.AttachLevel;
 import com.pyx4j.entity.server.AbstractCrudServiceImpl;
+import com.pyx4j.entity.server.Persistence;
 
 import com.propertyvista.crm.rpc.services.admin.AvailableCrmReportAdminCrudService;
 import com.propertyvista.domain.reports.AvailableCrmReport;
 
 public class AvailableCrmReportAdminCrudServiceImpl extends AbstractCrudServiceImpl<AvailableCrmReport> implements AvailableCrmReportAdminCrudService {
 
-    public AvailableCrmReportAdminCrudServiceImpl(Class<AvailableCrmReport> entityClass) {
+    public AvailableCrmReportAdminCrudServiceImpl() {
         super(AvailableCrmReport.class);
+    }
+
+    @Override
+    protected void enhanceListRetrieved(AvailableCrmReport bo, AvailableCrmReport to) {
+        super.enhanceListRetrieved(bo, to);
+        Persistence.ensureRetrieve(to.roles(), AttachLevel.ToStringMembers);
+    }
+
+    @Override
+    protected void enhanceRetrieved(AvailableCrmReport bo, AvailableCrmReport to, com.pyx4j.entity.rpc.AbstractCrudService.RetrieveTarget retrieveTarget) {
+        super.enhanceRetrieved(bo, to, retrieveTarget);
+        Persistence.ensureRetrieve(to.roles(), AttachLevel.Attached);
     }
 
 }

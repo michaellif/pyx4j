@@ -51,6 +51,7 @@ import com.propertyvista.common.client.ui.components.editors.NameEditor;
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
 import com.propertyvista.common.client.ui.components.security.UserAuditingConfigurationForm;
 import com.propertyvista.common.client.ui.validators.BirthdayDateValidator;
+import com.propertyvista.crm.client.ui.components.CrmRoleFolder;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.crm.client.ui.crud.organisation.common.BuildingFolder;
 import com.propertyvista.crm.client.ui.crud.organisation.common.PortfolioFolder;

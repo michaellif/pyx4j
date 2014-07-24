@@ -45,6 +45,7 @@ import com.propertyvista.domain.financial.ARCode;
 import com.propertyvista.domain.financial.GlCodeCategory;
 import com.propertyvista.domain.financial.MerchantAccount;
 import com.propertyvista.domain.financial.tax.Tax;
+import com.propertyvista.domain.reports.AvailableCrmReport;
 import com.propertyvista.domain.security.CrmRole;
 import com.propertyvista.domain.security.VistaCrmBehavior;
 import com.propertyvista.dto.AuditRecordDTO;
@@ -105,6 +106,9 @@ public class NavigAdministrationViewImpl extends Composite implements NavigAdmin
 
             list.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Administration.Settings.CommunicationSettings(), DataModelPermission
                     .permissionRead(MessageCategory.class)));
+
+            list.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Administration.Security.AssignReports(), DataModelPermission
+                    .permissionRead(AvailableCrmReport.class)));
 
             list.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Administration.Security.TenantSecurity(), GlobalTenantSecurity.class));
         }

@@ -90,6 +90,7 @@ import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.property.asset.unit.AptUnitItem;
 import com.propertyvista.domain.property.vendor.Vendor;
+import com.propertyvista.domain.reports.AvailableCrmReport;
 import com.propertyvista.domain.security.CrmRole;
 import com.propertyvista.domain.site.gadgets.HomePageGadget;
 import com.propertyvista.domain.tenant.lead.Appointment;
@@ -163,6 +164,8 @@ public class CrmEntityMapper {
         AppPlaceEntityMapper.register(Employee.class, Organization.Employee.class, defaultImage);
         AppPlaceEntityMapper.register(Portfolio.class, Organization.Portfolio.class, defaultImage);
         AppPlaceEntityMapper.register(Vendor.class, Organization.Vendor.class, defaultImage);
+
+        AppPlaceEntityMapper.register(AvailableCrmReport.class, Administration.Security.AssignReports.class, defaultImage);
 
         AppPlaceEntityMapper.register(HomePageGadget.class, Administration.ContentManagement.Website.HomePageGadgets.class, defaultImage);
 

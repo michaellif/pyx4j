@@ -14,8 +14,11 @@
 package com.propertyvista.domain.reports;
 
 import com.pyx4j.entity.annotations.Detached;
+import com.pyx4j.entity.annotations.Editor;
+import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.annotations.Indexed;
 import com.pyx4j.entity.annotations.MemberColumn;
+import com.pyx4j.entity.annotations.ReadOnly;
 import com.pyx4j.entity.annotations.SecurityEnabled;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.core.IEntity;
@@ -52,6 +55,8 @@ public interface AvailableCrmReport extends IEntity {
         }
     }
 
+    @ReadOnly
+    @Editor(type = EditorType.label)
     @Indexed(uniqueConstraint = true)
     IPrimitive<CrmReportType> reportType();
 

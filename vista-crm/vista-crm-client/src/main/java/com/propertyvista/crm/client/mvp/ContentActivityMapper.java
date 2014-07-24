@@ -33,6 +33,9 @@ import com.propertyvista.crm.client.activity.crud.account.AccountViewerActivity;
 import com.propertyvista.crm.client.activity.crud.account.LoginAttemptsListerActivity;
 import com.propertyvista.crm.client.activity.crud.account.MandatoryAccountRecoveryOptionsSetupActivity;
 import com.propertyvista.crm.client.activity.crud.administration.auditrecords.CrmAuditRecordsListerActivity;
+import com.propertyvista.crm.client.activity.crud.administration.availablereport.AvailableCrmReportEditorActivity;
+import com.propertyvista.crm.client.activity.crud.administration.availablereport.AvailableCrmReportListerActivity;
+import com.propertyvista.crm.client.activity.crud.administration.availablereport.AvailableCrmReportViewerActivity;
 import com.propertyvista.crm.client.activity.crud.administration.creditcheck.CustomerCreditCheckListerActivity;
 import com.propertyvista.crm.client.activity.crud.administration.creditcheck.CustomerCreditCheckViewerActivity;
 import com.propertyvista.crm.client.activity.crud.administration.financial.arcode.ARCodeEditorActivity;
@@ -110,12 +113,12 @@ import com.propertyvista.crm.client.activity.crud.building.catalog.FeatureEditor
 import com.propertyvista.crm.client.activity.crud.building.catalog.FeatureViewerActivity;
 import com.propertyvista.crm.client.activity.crud.building.catalog.ServiceEditorActivity;
 import com.propertyvista.crm.client.activity.crud.building.catalog.ServiceViewerActivity;
-import com.propertyvista.crm.client.activity.crud.communication.MessageEditorActivity;
-import com.propertyvista.crm.client.activity.crud.communication.MessageListerActivity;
-import com.propertyvista.crm.client.activity.crud.communication.MessageViewerActivity;
 import com.propertyvista.crm.client.activity.crud.communication.MessageCategoryEditorActivity;
 import com.propertyvista.crm.client.activity.crud.communication.MessageCategoryListerActivity;
 import com.propertyvista.crm.client.activity.crud.communication.MessageCategoryViewActivity;
+import com.propertyvista.crm.client.activity.crud.communication.MessageEditorActivity;
+import com.propertyvista.crm.client.activity.crud.communication.MessageListerActivity;
+import com.propertyvista.crm.client.activity.crud.communication.MessageViewerActivity;
 import com.propertyvista.crm.client.activity.crud.complex.ComplexEditorActivity;
 import com.propertyvista.crm.client.activity.crud.complex.ComplexListerActivity;
 import com.propertyvista.crm.client.activity.crud.complex.ComplexViewerActivity;
@@ -1007,19 +1010,6 @@ public class ContentActivityMapper implements AppActivityMapper {
                             break;
                         }
 
-                    } else if (crudPlace instanceof Administration.Security.UserRole) {
-                        switch (crudPlace.getType()) {
-                        case editor:
-                            activity = new CrmRoleEditorActivity(crudPlace);
-                            break;
-                        case viewer:
-                            activity = new CrmRoleViewerActivity(crudPlace);
-                            break;
-                        case lister:
-                            activity = new CrmRoleListerActivity(crudPlace);
-                            break;
-                        }
-
                     } else if (crudPlace instanceof Administration.Financial.MerchantAccount) {
                         switch (crudPlace.getType()) {
                         case editor:
@@ -1355,6 +1345,7 @@ public class ContentActivityMapper implements AppActivityMapper {
                             break;
                         }
 // - Security
+
                     } else if (crudPlace instanceof Account.LoginAttemptsLog) {
                         switch (crudPlace.getType()) {
                         case lister:
@@ -1364,8 +1355,37 @@ public class ContentActivityMapper implements AppActivityMapper {
                             break;
                         }
 
+                    } else if (crudPlace instanceof Administration.Security.UserRole) {
+                        switch (crudPlace.getType()) {
+                        case editor:
+                            activity = new CrmRoleEditorActivity(crudPlace);
+                            break;
+                        case viewer:
+                            activity = new CrmRoleViewerActivity(crudPlace);
+                            break;
+                        case lister:
+                            activity = new CrmRoleListerActivity(crudPlace);
+                            break;
+                        }
+
+                    } else if (crudPlace instanceof Administration.Security.AssignReports) {
+                        switch (crudPlace.getType()) {
+                        case editor:
+                            activity = new AvailableCrmReportEditorActivity(crudPlace);
+                            break;
+                        case viewer:
+                            activity = new AvailableCrmReportViewerActivity(crudPlace);
+                            break;
+                        case lister:
+                            activity = new AvailableCrmReportListerActivity(crudPlace);
+                            break;
+                        }
+
                     } else if (crudPlace instanceof Administration.Security.AuditRecords) {
                         activity = new CrmAuditRecordsListerActivity(place);
+
+                    } else if (crudPlace instanceof Administration.Security.TenantSecurity) {
+                        activity = new TenantSecurityViewerActivity(place);
 
                     } else if (crudPlace instanceof Administration.Settings.CreditCheck.Status) {
                         activity = new CreditCheckStatusViewerActivity(crudPlace);
@@ -1406,9 +1426,6 @@ public class ContentActivityMapper implements AppActivityMapper {
                         default:
                             break;
                         }
-
-                    } else if (crudPlace instanceof Administration.Security.TenantSecurity) {
-                        activity = new TenantSecurityViewerActivity(place);
 
                         // reports
                     } else if (place instanceof Reports.AutoPayChanges) {

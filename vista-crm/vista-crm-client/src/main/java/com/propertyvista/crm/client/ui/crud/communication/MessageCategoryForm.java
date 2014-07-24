@@ -25,8 +25,8 @@ import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.prime.form.IForm;
 
+import com.propertyvista.crm.client.ui.components.CrmRoleFolder;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
-import com.propertyvista.crm.client.ui.crud.organisation.employee.CrmRoleFolder;
 import com.propertyvista.crm.client.ui.crud.organisation.employee.EmployeeFolder;
 import com.propertyvista.crm.client.ui.crud.organisation.employee.EmployeeFolder.ParentEmployeeGetter;
 import com.propertyvista.domain.communication.MessageCategory;
