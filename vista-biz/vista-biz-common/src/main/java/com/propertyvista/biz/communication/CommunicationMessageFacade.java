@@ -18,6 +18,7 @@ import java.util.List;
 
 import org.apache.commons.collections4.set.ListOrderedSet;
 
+import com.pyx4j.commons.Key;
 import com.pyx4j.entity.core.AttachLevel;
 import com.pyx4j.entity.core.criterion.EntityListCriteria;
 import com.pyx4j.entity.rpc.EntitySearchResult;
@@ -56,4 +57,6 @@ public interface CommunicationMessageFacade {
     public List<CommunicationThread> getDispathcedThreads();
 
     public List<CommunicationThread> getDirectThreads();
+
+    public boolean isDispatchedThread(Key threadKey);
 }

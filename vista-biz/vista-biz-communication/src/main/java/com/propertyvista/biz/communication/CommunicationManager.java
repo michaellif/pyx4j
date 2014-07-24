@@ -197,7 +197,7 @@ public class CommunicationManager {
     public Serializable getCommunicationStatus() {
         final List<CommunicationThread> directMessages = getDirectThreads();
 
-        final List<CommunicationThread> dispatchedMessages = getDispathcedThreads();
+        final List<CommunicationThread> dispatchedMessages = getDispatchedThreads();
 
         if (dispatchedMessages != null && dispatchedMessages.size() > 0 && directMessages != null && directMessages.size() > 0) {
             directMessages.removeAll(dispatchedMessages);
@@ -216,7 +216,20 @@ public class CommunicationManager {
         }
     }
 
-    public List<CommunicationThread> getDispathcedThreads() {
+    public boolean isDispatchedThread(Key threadKey) {
+        final EntityListCriteria<CommunicationThread> dispatchedCriteria = getDispatchedCriteria();
+        dispatchedCriteria.in(dispatchedCriteria.proto().id(), threadKey);
+        final List<CommunicationThread> dispatchedMessages = Persistence.service().query(dispatchedCriteria, AttachLevel.IdOnly);
+        return dispatchedMessages != null && dispatchedMessages.size() > 0;
+    }
+
+    public List<CommunicationThread> getDispatchedThreads() {
+        final EntityListCriteria<CommunicationThread> dispatchedCriteria = getDispatchedCriteria();
+        final List<CommunicationThread> dispatchedMessages = Persistence.service().query(dispatchedCriteria, AttachLevel.IdOnly);
+        return dispatchedMessages;
+    }
+
+    private EntityListCriteria<CommunicationThread> getDispatchedCriteria() {
         final EntityListCriteria<CommunicationThread> dispatchedCriteria = EntityListCriteria.create(CommunicationThread.class);
         dispatchedCriteria.in(dispatchedCriteria.proto().status(), ThreadStatus.New, ThreadStatus.Open, ThreadStatus.Unassigned);
 
@@ -232,8 +245,7 @@ public class CommunicationManager {
         } else {
             dispatchedCriteria.eq(dispatchedCriteria.proto().owner(), Context.visit(VistaUserVisit.class).getCurrentUser());
         }
-        final List<CommunicationThread> dispatchedMessages = Persistence.service().query(dispatchedCriteria, AttachLevel.IdOnly);
-        return dispatchedMessages;
+        return dispatchedCriteria;
     }
 
     public List<CommunicationThread> getDirectThreads() {
@@ -245,7 +257,7 @@ public class CommunicationManager {
         return directMessages;
     }
 
-    private List<MessageCategory> getUserGroups() {
+    public List<MessageCategory> getUserGroups() {
         EntityQueryCriteria<MessageCategory> groupCriteria = EntityQueryCriteria.create(MessageCategory.class);
 
         EntityQueryCriteria<Employee> criteria = EntityQueryCriteria.create(Employee.class);

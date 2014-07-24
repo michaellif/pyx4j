@@ -357,6 +357,7 @@ public class MessageCrudServiceImpl extends AbstractCrudServiceDtoImpl<Message, 
             boolean isHighImportance = false;
             boolean hasAttachment = false;
             Message lastMessage = null;
+            CommunicationMessageFacade communicationFacade = ServerSideFactory.create(CommunicationMessageFacade.class);
             for (Message m : ms) {
                 Persistence.ensureRetrieve(m.recipients(), AttachLevel.Attached);
                 Persistence.ensureRetrieve(m.sender(), AttachLevel.Attached);
@@ -364,7 +365,7 @@ public class MessageCrudServiceImpl extends AbstractCrudServiceDtoImpl<Message, 
                     Persistence.ensureRetrieve(m.attachments(), AttachLevel.Attached);
                 }
                 hasAttachment = hasAttachment || m.attachments().size() > 0;
-                MessageDTO currentDTO = copyChildDTO(m, EntityFactory.create(MessageDTO.class), isForList);
+                MessageDTO currentDTO = copyChildDTO(m, EntityFactory.create(MessageDTO.class), isForList, communicationFacade);
                 to.content().add(currentDTO);
                 if (currentDTO.star().getValue(false)) {
                     star = true;
@@ -381,7 +382,7 @@ public class MessageCrudServiceImpl extends AbstractCrudServiceDtoImpl<Message, 
                     lastMessage = m;
                 }
             }
-            copyChildDTO(lastMessage, to, isForList);
+            copyChildDTO(lastMessage, to, isForList, communicationFacade);
             if (isHighImportance) {
                 to.highImportance().setValue(true);
             }
@@ -392,14 +393,16 @@ public class MessageCrudServiceImpl extends AbstractCrudServiceDtoImpl<Message, 
                 to.isRead().setValue(false);
             }
             to.hasAttachments().setValue(hasAttachment);
+            if (isForList) {
+                to.isDirect().setValue(!communicationFacade.isDispatchedThread(bo.thread().getPrimaryKey()));
+            }
         }
     }
 
-    private MessageDTO copyChildDTO(Message m, MessageDTO messageDTO, boolean isForList) {
+    private MessageDTO copyChildDTO(Message m, MessageDTO messageDTO, boolean isForList, CommunicationMessageFacade communicationFacade) {
         boolean star = false;
         boolean isRead = true;
 
-        CommunicationMessageFacade communicationFacade = ServerSideFactory.create(CommunicationMessageFacade.class);
         messageDTO.isInRecipients().setValue(false);
         for (DeliveryHandle dh : m.recipients()) {
             if (!isForList && !dh.generatedFromGroup().getValue(false)) {

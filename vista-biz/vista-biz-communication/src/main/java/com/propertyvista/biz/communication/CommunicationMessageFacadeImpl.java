@@ -18,6 +18,7 @@ import java.util.List;
 
 import org.apache.commons.collections4.set.ListOrderedSet;
 
+import com.pyx4j.commons.Key;
 import com.pyx4j.entity.core.AttachLevel;
 import com.pyx4j.entity.core.criterion.EntityListCriteria;
 import com.pyx4j.entity.rpc.EntitySearchResult;
@@ -82,11 +83,16 @@ public class CommunicationMessageFacadeImpl implements CommunicationMessageFacad
 
     @Override
     public List<CommunicationThread> getDispathcedThreads() {
-        return CommunicationManager.instance().getDispathcedThreads();
+        return CommunicationManager.instance().getDispatchedThreads();
     }
 
     @Override
     public List<CommunicationThread> getDirectThreads() {
         return CommunicationManager.instance().getDirectThreads();
+    }
+
+    @Override
+    public boolean isDispatchedThread(Key threadKey) {
+        return CommunicationManager.instance().isDispatchedThread(threadKey);
     }
 }

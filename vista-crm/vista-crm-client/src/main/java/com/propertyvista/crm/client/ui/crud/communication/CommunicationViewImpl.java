@@ -43,7 +43,6 @@ import com.pyx4j.widgets.client.Anchor;
 import com.propertyvista.crm.client.resources.CrmImages;
 import com.propertyvista.crm.client.themes.CommunicationCrmTheme;
 import com.propertyvista.crm.rpc.CrmSiteMap;
-import com.propertyvista.domain.communication.MessageCategory.MessageGroupCategory;
 import com.propertyvista.dto.MessageDTO;
 
 public class CommunicationViewImpl extends FlowPanel implements CommunicationView, RequiresResize {
@@ -113,7 +112,7 @@ public class CommunicationViewImpl extends FlowPanel implements CommunicationVie
         int dispatchedMessagesNum = 0;
         if (messages != null && messages.size() > 0) {
             for (final MessageDTO message : messages) {
-                boolean isDirect = MessageGroupCategory.Custom.toString().equals(message.topic().category().getValue().toString());
+                boolean isDirect = message.isDirect().getValue(false);//MessageGroupCategory.Custom.toString().equals(message.topic().category().getValue().toString());
                 mainHolder.add(new MessagePanel(message, isDirect));
                 if (isDirect) {
                     directMessagesNum++;
