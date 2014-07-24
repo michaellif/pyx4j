@@ -17,12 +17,14 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.Command;
 
 import com.pyx4j.entity.core.IVersionedEntity;
+import com.pyx4j.entity.security.DataModelPermission;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.PaneTheme;
 import com.pyx4j.widgets.client.Button;
 
 import com.propertyvista.common.client.PrintUtils;
 import com.propertyvista.crm.client.ui.crud.CrmViewerViewImplBase;
+import com.propertyvista.crm.rpc.dto.billing.BillDataDTO;
 import com.propertyvista.crm.rpc.services.selections.version.LeaseTermVersionService;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseTerm;
@@ -47,7 +49,7 @@ public class LeaseTermViewerViewImpl extends CrmViewerViewImplBase<LeaseTermDTO>
                 public void execute() {
                     ((LeaseTermViewerView.Presenter) getPresenter()).getChargesVisorController().show();
                 }
-            }));
+            }, DataModelPermission.permissionRead(BillDataDTO.class)));
         }
 
         if (false) {

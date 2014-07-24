@@ -32,6 +32,7 @@ import com.propertyvista.crm.rpc.security.LeaseInstanceAccess;
 import com.propertyvista.crm.rpc.security.LeaseTermEditOnFormerLeaseInstanceAccess;
 import com.propertyvista.crm.rpc.security.LeaseTermEditOnLeaseInstanceAccess;
 import com.propertyvista.crm.rpc.services.billing.BillCrudService;
+import com.propertyvista.crm.rpc.services.billing.BillPreviewService;
 import com.propertyvista.crm.rpc.services.lease.ac.FormerLeaseListAction;
 import com.propertyvista.crm.rpc.services.lease.ac.LeaseAgreementSigning;
 import com.propertyvista.crm.rpc.services.lease.ac.LeaseConfirmBill;
@@ -42,6 +43,7 @@ import com.propertyvista.crm.rpc.services.lease.ac.LeaseStateManagement;
 import com.propertyvista.crm.rpc.services.lease.ac.SendMail;
 import com.propertyvista.domain.legal.LegalLetter;
 import com.propertyvista.domain.tenant.lease.LeaseAdjustment;
+import com.propertyvista.dto.BillDTO;
 import com.propertyvista.dto.DepositLifecycleDTO;
 import com.propertyvista.dto.LeaseDTO;
 import com.propertyvista.dto.LeaseLegalStateDTO;
@@ -81,11 +83,15 @@ class VistaCrmLeaseAccessControlList extends UIAclBuilder {
         grant(LeaseFull, TransactionHistoryDTO.class, READ);
 
         // Bills
+        grant(LeaseAdvanced, BillDTO.class, READ);
         grant(LeaseAdvanced, BillDataDTO.class, READ);
         grant(LeaseAdvanced, new IServiceExecutePermission(BillCrudService.class));
+        grant(LeaseAdvanced, new IServiceExecutePermission(BillPreviewService.class));
 
+        grant(LeaseFull, BillDTO.class, READ);
         grant(LeaseFull, BillDataDTO.class, READ);
         grant(LeaseFull, new IServiceExecutePermission(BillCrudService.class));
+        grant(LeaseFull, new IServiceExecutePermission(BillPreviewService.class));
 
         //  ---- Actions:
         // TODO move ? to proper section in this file
