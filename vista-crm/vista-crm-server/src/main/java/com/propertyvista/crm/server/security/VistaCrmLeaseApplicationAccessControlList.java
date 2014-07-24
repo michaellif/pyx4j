@@ -27,7 +27,6 @@ import java.util.List;
 
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.security.server.UIAclBuilder;
-import com.pyx4j.security.shared.ActionPermission;
 
 import com.propertyvista.crm.rpc.security.LeaseTermEditOnApplicationInstanceAccess;
 import com.propertyvista.crm.rpc.services.lease.ac.ApplicationDecisionADC;
@@ -55,11 +54,13 @@ class VistaCrmLeaseApplicationAccessControlList extends UIAclBuilder {
             List<Class<? extends IEntity>> entities = entities(LeaseApplicationDTO.class);
             grant(ApplicationBasic, entities, ALL);
             grant(ApplicationFull, entities, ALL);
-            grant(ApplicationVerifyDoc, entities, READ | UPDATE);
+
+            grant(ApplicationVerifyDoc, entities, READ);
 
             grant(ApplicationBasic, LeaseTermDTO.class, new LeaseTermEditOnApplicationInstanceAccess(), ALL);
             grant(ApplicationFull, LeaseTermDTO.class, new LeaseTermEditOnApplicationInstanceAccess(), ALL);
-            grant(ApplicationVerifyDoc, LeaseTermDTO.class, new LeaseTermEditOnApplicationInstanceAccess(), READ | UPDATE);
+
+            grant(ApplicationVerifyDoc, LeaseTermDTO.class, new LeaseTermEditOnApplicationInstanceAccess(), READ);
         }
 
         {// Financial:
@@ -68,29 +69,32 @@ class VistaCrmLeaseApplicationAccessControlList extends UIAclBuilder {
         }
 
         // Application Documents:
-        grant(ApplicationFull, LeaseApplicationDocument.class, READ | UPDATE);
-        grant(ApplicationVerifyDoc, LeaseApplicationDocument.class, READ | UPDATE);
+        grant(ApplicationBasic, LeaseApplicationDocument.class, READ);
+        grant(ApplicationFull, LeaseApplicationDocument.class, READ);
+        grant(ApplicationVerifyDoc, LeaseApplicationDocument.class, READ);
         // signing Action:
-        grant(ApplicationBasic, new ActionPermission(ApplicationDocumentSigning.class));
-        grant(ApplicationFull, new ActionPermission(ApplicationDocumentSigning.class));
-        grant(ApplicationVerifyDoc, new ActionPermission(ApplicationDocumentSigning.class));
+        grant(ApplicationBasic, ApplicationDocumentSigning.class);
+        grant(ApplicationFull, ApplicationDocumentSigning.class);
+        grant(ApplicationVerifyDoc, ApplicationDocumentSigning.class);
 
         // Application Decisions:
-        grant(ApplicationFull, new ActionPermission(ApplicationDecisionADC.class));
-        grant(ApplicationFull, new ActionPermission(ApplicationDecisionMoreInfo.class));
+        grant(ApplicationFull, ApplicationDecisionADC.class);
+        grant(ApplicationFull, ApplicationDecisionMoreInfo.class);
 
-        grant(ApplicationDecisionRecommendationApprove, new ActionPermission(ApplicationDecisionADC.class));
-        grant(ApplicationDecisionRecommendationApprove, new ActionPermission(ApplicationDecisionMoreInfo.class));
+        grant(ApplicationDecisionRecommendationApprove, ApplicationDecisionADC.class);
+        grant(ApplicationDecisionRecommendationApprove, ApplicationDecisionMoreInfo.class);
 
-        grant(ApplicationDecisionRecommendationFurtherMoreInfo, new ActionPermission(ApplicationDecisionADC.class));
-        grant(ApplicationDecisionRecommendationFurtherMoreInfo, new ActionPermission(ApplicationDecisionMoreInfo.class));
+        grant(ApplicationDecisionRecommendationFurtherMoreInfo, ApplicationDecisionADC.class);
+        grant(ApplicationDecisionRecommendationFurtherMoreInfo, ApplicationDecisionMoreInfo.class);
 
-        grant(ApplicationDecisionAll, new ActionPermission(ApplicationDecisionADC.class));
-        grant(ApplicationDecisionAll, new ActionPermission(ApplicationDecisionMoreInfo.class));
+        grant(ApplicationDecisionAll, ApplicationDecisionADC.class);
+        grant(ApplicationDecisionAll, ApplicationDecisionMoreInfo.class);
 
-        grant(ApplicationBasic, new ActionPermission(ApplicationOnlineApplication.class));
-        grant(ApplicationFull, new ActionPermission(ApplicationOnlineApplication.class));
+        // Reserve unit and start Online:        
+        grant(ApplicationBasic, ApplicationReserveUnit.class);
+        grant(ApplicationBasic, ApplicationOnlineApplication.class);
 
-        grant(ApplicationFull, new ActionPermission(ApplicationReserveUnit.class));
+        grant(ApplicationFull, ApplicationReserveUnit.class);
+        grant(ApplicationFull, ApplicationOnlineApplication.class);
     }
 }
