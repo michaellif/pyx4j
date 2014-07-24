@@ -51,7 +51,7 @@ class PaymentBatchPosting {
     private final boolean paymentBatchAsSingleTransaction;
 
     PaymentBatchPosting() {
-        this.paymentBatchAsSingleTransaction = VistaFeatures.instance().yardiIntegration();
+        this.paymentBatchAsSingleTransaction = !VistaFeatures.instance().yardiIntegration();
     }
 
     /**
