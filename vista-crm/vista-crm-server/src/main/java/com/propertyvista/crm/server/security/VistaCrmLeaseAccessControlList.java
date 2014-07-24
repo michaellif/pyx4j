@@ -18,6 +18,7 @@ import static com.propertyvista.domain.security.VistaCrmBehavior.LeaseBasic;
 import static com.propertyvista.domain.security.VistaCrmBehavior.LeaseFull;
 import static com.pyx4j.entity.security.AbstractCRUDPermission.ALL;
 import static com.pyx4j.entity.security.AbstractCRUDPermission.READ;
+import static com.pyx4j.entity.security.AbstractCRUDPermission.UPDATE;
 
 import java.util.List;
 
@@ -26,6 +27,9 @@ import com.pyx4j.rpc.shared.IServiceExecutePermission;
 import com.pyx4j.security.server.UIAclBuilder;
 
 import com.propertyvista.crm.rpc.dto.billing.BillDataDTO;
+import com.propertyvista.crm.rpc.security.FormerLeaseInstanceAccess;
+import com.propertyvista.crm.rpc.security.LeaseInstanceAccess;
+import com.propertyvista.crm.rpc.security.LeaseTermEditOnFormerLeaseInstanceAccess;
 import com.propertyvista.crm.rpc.security.LeaseTermEditOnLeaseInstanceAccess;
 import com.propertyvista.crm.rpc.services.billing.BillCrudService;
 import com.propertyvista.crm.rpc.services.lease.ac.FormerLeaseListAction;
@@ -51,7 +55,8 @@ class VistaCrmLeaseAccessControlList extends UIAclBuilder {
             List<Class<? extends IEntity>> entities = entities(LeaseDTO.class, LeaseTermDTO.class);
             grant(LeaseBasic, entities, READ);
             grant(LeaseAdvanced, entities, READ);
-            grant(LeaseFull, LeaseDTO.class, ALL);
+
+            grant(LeaseFull, LeaseDTO.class, new LeaseInstanceAccess(), ALL);
             grant(LeaseFull, LeaseTermDTO.class, new LeaseTermEditOnLeaseInstanceAccess(), ALL);
         }
 
@@ -98,8 +103,19 @@ class VistaCrmLeaseAccessControlList extends UIAclBuilder {
         grant(LeaseFull, LeaseStateManagement.class);
         grant(LeaseFull, LeaseRenew.class);
 
-        // access to former leases accordion menu
+        // --------------------------------------------------------------------------------------------------------------------
+
+        // Former Leases:
+
+//        grant(LeaseAdvanced, LeaseDTO.class, new FormerLeaseInstanceAccess(), READ);
+//        grant(LeaseFull, LeaseTermDTO.class, new LeaseTermEditOnFormerLeaseInstanceAccess(), READ);
+
+        grant(LeaseFull, LeaseDTO.class, new FormerLeaseInstanceAccess(), READ | UPDATE);
+        grant(LeaseFull, LeaseTermDTO.class, new LeaseTermEditOnFormerLeaseInstanceAccess(), READ | UPDATE);
+
+        // Actions:
         grant(LeaseAdvanced, FormerLeaseListAction.class);
         grant(LeaseFull, FormerLeaseListAction.class);
+
     }
 }
