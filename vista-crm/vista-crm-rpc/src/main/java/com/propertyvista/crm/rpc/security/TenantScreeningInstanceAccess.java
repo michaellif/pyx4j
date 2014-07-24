@@ -29,6 +29,6 @@ public class TenantScreeningInstanceAccess extends ForTypesAccessRule {
 
     @Override
     public boolean implies(IEntity contextEntity) {
-        return ((LeaseParticipantScreeningTO) contextEntity).leaseStatus().getValue().isPresent();
+        return super.implies(contextEntity) && ((LeaseParticipantScreeningTO) contextEntity).leaseStatus().getValue().isPresent();
     }
 }
