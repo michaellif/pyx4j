@@ -28,6 +28,7 @@ import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseTerm;
 import com.propertyvista.domain.tenant.lease.LeaseTerm.Status;
 import com.propertyvista.dto.LeaseTermDTO;
+import com.propertyvista.misc.VistaTODO;
 import com.propertyvista.shared.config.VistaFeatures;
 
 public class LeaseTermViewerViewImpl extends CrmViewerViewImplBase<LeaseTermDTO> implements LeaseTermViewerView {
@@ -58,13 +59,15 @@ public class LeaseTermViewerViewImpl extends CrmViewerViewImplBase<LeaseTermDTO>
             }));
         }
 
-        addHeaderToolbarItem(offerAcceptButton = new Button(i18n.tr("Accept"), new Command() {
-            @Override
-            public void execute() {
-                ((LeaseTermViewerView.Presenter) getPresenter()).accept();
-            }
-        }));
-        offerAcceptButton.addStyleName(PaneTheme.StyleName.HighlightedButton.name());
+        if (VistaTODO.VISTA_1789_Renew_Lease) {
+            addHeaderToolbarItem(offerAcceptButton = new Button(i18n.tr("Accept"), new Command() {
+                @Override
+                public void execute() {
+                    ((LeaseTermViewerView.Presenter) getPresenter()).accept();
+                }
+            }));
+            offerAcceptButton.addStyleName(PaneTheme.StyleName.HighlightedButton.name());
+        }
     }
 
     @Override
@@ -78,7 +81,9 @@ public class LeaseTermViewerViewImpl extends CrmViewerViewImplBase<LeaseTermDTO>
         }
         setFinalizationVisible(isFinalizationVisible() && !value.lease().status().getValue().isDraft());
 
-        offerAcceptButton.setVisible(value.status().getValue() == Status.Offer && !((IVersionedEntity<?>) value).version().versionNumber().isNull()
-                && value.lease().nextTerm().isNull());
+        if (VistaTODO.VISTA_1789_Renew_Lease) {
+            offerAcceptButton.setVisible(value.status().getValue() == Status.Offer && !((IVersionedEntity<?>) value).version().versionNumber().isNull()
+                    && value.lease().nextTerm().isNull());
+        }
     }
 }
