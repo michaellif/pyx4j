@@ -15,7 +15,6 @@ package com.propertyvista.biz.communication;
 
 import java.io.Serializable;
 import java.util.List;
-import java.util.Vector;
 
 import org.apache.commons.collections4.set.ListOrderedSet;
 
@@ -82,12 +81,12 @@ public class CommunicationMessageFacadeImpl implements CommunicationMessageFacad
     }
 
     @Override
-    public Vector<CommunicationThread> getDispathcedThreads() {
+    public List<CommunicationThread> getDispathcedThreads() {
         return CommunicationManager.instance().getDispathcedThreads();
     }
 
     @Override
-    public Vector<CommunicationThread> getDirectThreads() {
+    public List<CommunicationThread> getDirectThreads() {
         return CommunicationManager.instance().getDirectThreads();
     }
 }

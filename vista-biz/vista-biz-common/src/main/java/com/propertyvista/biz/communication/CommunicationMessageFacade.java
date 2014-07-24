@@ -15,7 +15,6 @@ package com.propertyvista.biz.communication;
 
 import java.io.Serializable;
 import java.util.List;
-import java.util.Vector;
 
 import org.apache.commons.collections4.set.ListOrderedSet;
 
@@ -54,7 +53,7 @@ public interface CommunicationMessageFacade {
 
     public Serializable getCommunicationStatus();
 
-    public Vector<CommunicationThread> getDispathcedThreads();
+    public List<CommunicationThread> getDispathcedThreads();
 
-    public Vector<CommunicationThread> getDirectThreads();
+    public List<CommunicationThread> getDirectThreads();
 }

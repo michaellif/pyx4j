@@ -34,6 +34,8 @@ public interface ToolbarView extends IsView {
         void showLeases();
 
         void setLocale(CompiledLocale locale);
+
+        void loadMessages();
     }
 
     void setPresenter(ToolbarPresenter presenter);

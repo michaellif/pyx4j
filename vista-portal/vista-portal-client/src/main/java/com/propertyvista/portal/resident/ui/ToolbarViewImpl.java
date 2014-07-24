@@ -147,6 +147,8 @@ public class ToolbarViewImpl extends FlowPanel implements ToolbarView {
                     AppSite.getEventBus().fireEvent(new LayoutChangeRequestEvent(communicationButton));
                     break;
                 }
+
+                presenter.loadMessages();
             }
         });
         communicationButton.addStyleName(PortalRootPaneTheme.StyleName.AllertButton.name());
@@ -307,6 +309,7 @@ public class ToolbarViewImpl extends FlowPanel implements ToolbarView {
             communicationButton.setTextLabel(String.valueOf(count));
         } else {
             communicationButton.setImage(PortalImages.INSTANCE.alertsOff());
+            communicationButton.setTextLabel("");
         }
 
     }

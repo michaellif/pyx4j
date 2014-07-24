@@ -14,24 +14,16 @@
 package com.propertyvista.portal.resident.activity.communication;
 
 import com.google.gwt.activity.shared.AbstractActivity;
-import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.place.shared.Place;
-import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
-import com.pyx4j.entity.core.criterion.EntityListCriteria;
-import com.pyx4j.entity.rpc.EntitySearchResult;
 import com.pyx4j.security.client.ClientContext;
 
 import com.propertyvista.portal.resident.ResidentPortalSite;
 import com.propertyvista.portal.resident.ui.communication.CommunicationView;
-import com.propertyvista.portal.rpc.portal.resident.communication.MessageDTO;
-import com.propertyvista.portal.rpc.portal.resident.services.MessagePortalCrudService;
 
 public class CommunicationActivity extends AbstractActivity implements CommunicationView.CommunicationPresenter {
-
-    private final MessagePortalCrudService communicationMessageActivityService = (MessagePortalCrudService) GWT.create(MessagePortalCrudService.class);
 
     private final CommunicationView view;
 
@@ -46,24 +38,6 @@ public class CommunicationActivity extends AbstractActivity implements Communica
             return;
         }
         panel.setWidget(view);
-        final EntityListCriteria<MessageDTO> criteria = EntityListCriteria.create(MessageDTO.class);
-        criteria.eq(criteria.proto().thread().content().$().recipients().$().isRead(), false);
-        criteria.eq(criteria.proto().thread().content().$().recipients().$().recipient(), ClientContext.getUserVisit().getPrincipalPrimaryKey());
-        criteria.setPageSize(50);
-        criteria.setPageNumber(0);
-
-        communicationMessageActivityService.list(new AsyncCallback<EntitySearchResult<MessageDTO>>() {
-
-            @Override
-            public void onFailure(Throwable caught) {
-            }
-
-            @Override
-            public void onSuccess(EntitySearchResult<MessageDTO> result) {
-                view.populate(result == null || result.getData() == null ? null : result.getData());
-
-            }
-        }, criteria);
-
+        view.populate(null);
     }
 }

@@ -29,7 +29,7 @@ public interface MessageCrudService extends AbstractCrudService<MessageDTO> {
 
     void assignOwnership(AsyncCallback<MessageDTO> callback, MessageDTO source, Employee employee);
 
-    public void listForHeader(AsyncCallback<EntitySearchResult<MessageDTO>> callback);
+    void listForHeader(AsyncCallback<EntitySearchResult<MessageDTO>> callback);
 
     @Transient
     public static interface MessageInitializationData extends InitializationData {

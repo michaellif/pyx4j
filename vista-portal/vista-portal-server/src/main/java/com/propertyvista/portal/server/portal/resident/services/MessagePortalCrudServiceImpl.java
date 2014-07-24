@@ -132,6 +132,23 @@ public class MessagePortalCrudServiceImpl extends AbstractCrudServiceDtoImpl<Mes
     }
 
     @Override
+    public void listForHeader(AsyncCallback<EntitySearchResult<MessageDTO>> callback) {
+        CommunicationMessageFacade communicationFacade = ServerSideFactory.create(CommunicationMessageFacade.class);
+
+        List<CommunicationThread> directThreads = communicationFacade.getDirectThreads();
+
+        EntityListCriteria<MessageDTO> messageCriteria = EntityListCriteria.create(MessageDTO.class);
+        if (directThreads != null && directThreads.size() > 0) {
+            messageCriteria.add(PropertyCriterion.in(messageCriteria.proto().thread(), directThreads));
+        } else {
+            messageCriteria.notExists(messageCriteria.proto().thread());
+        }
+        messageCriteria.setPageSize(50);
+        messageCriteria.setPageNumber(0);
+        list(callback, messageCriteria);
+    }
+
+    @Override
     protected EntitySearchResult<Message> query(EntityListCriteria<Message> criteria) {
         return ServerSideFactory.create(CommunicationMessageFacade.class).query(criteria);
     }

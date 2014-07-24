@@ -110,8 +110,8 @@ public class MessageCrudServiceImpl extends AbstractCrudServiceDtoImpl<Message, 
     public void listForHeader(AsyncCallback<EntitySearchResult<MessageDTO>> callback) {
         CommunicationMessageFacade communicationFacade = ServerSideFactory.create(CommunicationMessageFacade.class);
 
-        Vector<CommunicationThread> directThreads = communicationFacade.getDirectThreads();
-        Vector<CommunicationThread> dispatchedThreads = communicationFacade.getDispathcedThreads();
+        List<CommunicationThread> directThreads = communicationFacade.getDirectThreads();
+        List<CommunicationThread> dispatchedThreads = communicationFacade.getDispathcedThreads();
 
         if (directThreads != null && directThreads.size() > 0 && dispatchedThreads != null && dispatchedThreads.size() > 0) {
             directThreads.removeAll(dispatchedThreads);

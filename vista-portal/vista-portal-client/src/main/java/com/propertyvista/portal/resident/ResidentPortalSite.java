@@ -20,6 +20,7 @@ import com.pyx4j.security.rpc.AuthenticationService;
 import com.pyx4j.site.rpc.NotificationAppPlace;
 import com.pyx4j.site.shared.domain.Notification;
 
+import com.propertyvista.portal.resident.activity.PortalClientCommunicationManager;
 import com.propertyvista.portal.resident.themes.ResidentPortalTheme;
 import com.propertyvista.portal.resident.ui.ResidentPortalRootPane;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
@@ -38,6 +39,8 @@ public class ResidentPortalSite extends PortalSite {
         // RPC creation below, Entity needs to be compiled -> generated first
         ClientContext.setAuthenticationService(GWT.<AuthenticationService> create(ResidentAuthenticationService.class));
         super.onSiteLoad();
+
+        PortalClientCommunicationManager.instance();
     }
 
     @Override

@@ -16,7 +16,6 @@ package com.propertyvista.biz.communication;
 import java.io.Serializable;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Vector;
 
 import org.apache.commons.collections4.set.ListOrderedSet;
 
@@ -196,9 +195,9 @@ public class CommunicationManager {
     }
 
     public Serializable getCommunicationStatus() {
-        final Vector<CommunicationThread> directMessages = getDirectThreads();
+        final List<CommunicationThread> directMessages = getDirectThreads();
 
-        final Vector<CommunicationThread> dispatchedMessages = getDispathcedThreads();
+        final List<CommunicationThread> dispatchedMessages = getDispathcedThreads();
 
         if (dispatchedMessages != null && dispatchedMessages.size() > 0 && directMessages != null && directMessages.size() > 0) {
             directMessages.removeAll(dispatchedMessages);
@@ -217,7 +216,7 @@ public class CommunicationManager {
         }
     }
 
-    public Vector<CommunicationThread> getDispathcedThreads() {
+    public List<CommunicationThread> getDispathcedThreads() {
         final EntityListCriteria<CommunicationThread> dispatchedCriteria = EntityListCriteria.create(CommunicationThread.class);
         dispatchedCriteria.in(dispatchedCriteria.proto().status(), ThreadStatus.New, ThreadStatus.Open, ThreadStatus.Unassigned);
 
@@ -233,16 +232,16 @@ public class CommunicationManager {
         } else {
             dispatchedCriteria.eq(dispatchedCriteria.proto().owner(), Context.visit(VistaUserVisit.class).getCurrentUser());
         }
-        final Vector<CommunicationThread> dispatchedMessages = Persistence.secureQuery(dispatchedCriteria, AttachLevel.IdOnly);
+        final List<CommunicationThread> dispatchedMessages = Persistence.service().query(dispatchedCriteria, AttachLevel.IdOnly);
         return dispatchedMessages;
     }
 
-    public Vector<CommunicationThread> getDirectThreads() {
+    public List<CommunicationThread> getDirectThreads() {
         final EntityListCriteria<CommunicationThread> directCriteria = EntityListCriteria.create(CommunicationThread.class);
         directCriteria.eq(directCriteria.proto().content().$().recipients().$().isRead(), false);
         directCriteria.eq(directCriteria.proto().content().$().recipients().$().recipient(), Context.visit(VistaUserVisit.class).getCurrentUser());
 
-        final Vector<CommunicationThread> directMessages = Persistence.secureQuery(directCriteria, AttachLevel.IdOnly);
+        final List<CommunicationThread> directMessages = Persistence.service().query(directCriteria, AttachLevel.IdOnly);
         return directMessages;
     }
 

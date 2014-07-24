@@ -14,10 +14,13 @@
 package com.propertyvista.portal.resident.activity;
 
 import com.google.gwt.activity.shared.AbstractActivity;
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.place.shared.Place;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
+import com.pyx4j.entity.rpc.EntitySearchResult;
 import com.pyx4j.gwt.commons.layout.LayoutChangeRequestEvent;
 import com.pyx4j.gwt.commons.layout.LayoutChangeRequestEvent.ChangeType;
 import com.pyx4j.security.client.ClientContext;
@@ -27,10 +30,16 @@ import com.pyx4j.site.client.AppSite;
 import com.propertyvista.common.client.ClientLocaleUtils;
 import com.propertyvista.domain.security.PortalResidentBehavior;
 import com.propertyvista.portal.resident.ResidentPortalSite;
+import com.propertyvista.portal.resident.events.CommunicationStatusUpdateEvent;
+import com.propertyvista.portal.resident.events.CommunicationStatusUpdateHandler;
 import com.propertyvista.portal.resident.ui.ToolbarView;
 import com.propertyvista.portal.resident.ui.ToolbarView.ToolbarPresenter;
+import com.propertyvista.portal.resident.ui.communication.CommunicationView;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
 import com.propertyvista.portal.rpc.portal.resident.ResidentPortalSiteMap;
+import com.propertyvista.portal.rpc.portal.resident.communication.MessageDTO;
+import com.propertyvista.portal.rpc.portal.resident.services.MessagePortalCrudService;
+import com.propertyvista.portal.rpc.shared.dto.communication.PortalCommunicationSystemNotification;
 import com.propertyvista.shared.i18n.CompiledLocale;
 
 public class ToolbarActivity extends AbstractActivity implements ToolbarPresenter {
@@ -39,10 +48,13 @@ public class ToolbarActivity extends AbstractActivity implements ToolbarPresente
 
     private final Place place;
 
+    private final MessagePortalCrudService communicationService;
+
     public ToolbarActivity(Place place) {
         this.place = place;
         this.view = ResidentPortalSite.getViewFactory().getView(ToolbarView.class);
         assert (view != null);
+        communicationService = (MessagePortalCrudService) GWT.create(MessagePortalCrudService.class);
         view.setPresenter(this);
     }
 
@@ -58,7 +70,14 @@ public class ToolbarActivity extends AbstractActivity implements ToolbarPresente
             view.setLeasesSelectorEnabled(false);
         }
         obtainAvailableLocales();
-        obtainCommunicationMessagesCount();
+
+        eventBus.addHandler(CommunicationStatusUpdateEvent.getType(), new CommunicationStatusUpdateHandler() {
+
+            @Override
+            public void onStatusUpdate(CommunicationStatusUpdateEvent event) {
+                updateCommunicationMessagesCount(event.getCommunicationSystemNotification());
+            }
+        });
 
         AppSite.getEventBus().fireEvent(new LayoutChangeRequestEvent(ChangeType.resizeComponents));
     }
@@ -87,8 +106,8 @@ public class ToolbarActivity extends AbstractActivity implements ToolbarPresente
         view.setAvailableLocales(ClientLocaleUtils.obtainAvailableLocales());
     }
 
-    private void obtainCommunicationMessagesCount() {
-        view.setCommunicationMessagesCount(15);
+    private void updateCommunicationMessagesCount(PortalCommunicationSystemNotification communicationStatus) {
+        view.setCommunicationMessagesCount(communicationStatus == null ? 0 : communicationStatus.numberOfNewDirectMessages);
     }
 
     @Override
@@ -100,4 +119,24 @@ public class ToolbarActivity extends AbstractActivity implements ToolbarPresente
     public void showLeases() {
         AppSite.getPlaceController().goTo(new ResidentPortalSiteMap.LeaseContextSelection());
     }
+
+    @Override
+    public void loadMessages() {
+        final CommunicationView cview = ResidentPortalSite.getViewFactory().getView(CommunicationView.class);
+
+        communicationService.listForHeader(new AsyncCallback<EntitySearchResult<MessageDTO>>() {
+
+            @Override
+            public void onSuccess(EntitySearchResult<MessageDTO> result) {
+                if (cview != null) {
+                    cview.populate(result == null || result.getData() == null ? null : result.getData());
+                }
+            }
+
+            @Override
+            public void onFailure(Throwable caught) {
+            }
+        });
+    }
+
 }
