@@ -27,6 +27,7 @@ import com.propertyvista.crm.rpc.dto.admin.PmcCompanyInfoDTO;
 import com.propertyvista.crm.rpc.dto.admin.PmcPaymentMethodsDTO;
 import com.propertyvista.crm.rpc.dto.tenant.CustomerCreditCheckDTO;
 import com.propertyvista.crm.rpc.services.admin.ARCodeCrudService;
+import com.propertyvista.crm.rpc.services.admin.AvailableCrmReportAdminCrudService;
 import com.propertyvista.crm.rpc.services.admin.CrmRoleCrudService;
 import com.propertyvista.crm.rpc.services.admin.CustomerCreditCheckCrudService;
 import com.propertyvista.crm.rpc.services.admin.GlCodeCategoryCrudService;
@@ -46,6 +47,7 @@ import com.propertyvista.domain.financial.GlCodeCategory;
 import com.propertyvista.domain.financial.MerchantAccount;
 import com.propertyvista.domain.financial.tax.Tax;
 import com.propertyvista.domain.pmc.PmcPaymentMethod;
+import com.propertyvista.domain.reports.AvailableCrmReport;
 import com.propertyvista.domain.security.CrmRole;
 import com.propertyvista.domain.tenant.CustomerCreditCheck;
 import com.propertyvista.dto.AuditRecordDTO;
@@ -80,6 +82,10 @@ class VistaCrmAdministrationAccessControlList extends UIAclBuilder {
         grant(AdminGeneral, GlobalTenantSecurity.class);
         grant(AdminGeneral, new IServiceExecutePermission(ExportTenantsService.class));
         grant(AdminGeneral, new IServiceExecutePermission(EmailToTenantsService.class));
+
+        grant(AdminGeneral, new IServiceExecutePermission(AvailableCrmReportAdminCrudService.class));
+        grant(AdminGeneral, new EntityPermission(AvailableCrmReport.class, ALL));
+        grant(AdminGeneral, AvailableCrmReport.class, ALL);
 
         // Security Communications
         grant(AdminGeneral, new EntityPermission(MessageCategory.class, ALL));
