@@ -60,7 +60,7 @@ public class ForTypesAccessRule implements InstanceAccess {
 
     @Override
     public boolean implies(IEntity contextEntity) {
-        if (entityClasses == null) {
+        if (entityClasses.isEmpty()) {
             initAfterSerialization();
         }
         return entityClasses.contains(contextEntity.getValueClass());
