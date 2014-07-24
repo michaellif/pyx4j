@@ -415,9 +415,11 @@ public class Button extends FocusPanel implements IFocusWidget, HasSecureConcern
 
     }
 
-    public static class ButtonMenuBar extends MenuBar {
+    public static class ButtonMenuBar extends MenuBar implements HasSecureConcern {
 
         private final DropDownPanel popup;
+
+        private final SecureConcernsHolder secureConcerns = new SecureConcernsHolder();
 
         public ButtonMenuBar() {
             super(true);
@@ -440,6 +442,9 @@ public class Button extends FocusPanel implements IFocusWidget, HasSecureConcern
 
                     }
                 });
+            }
+            if (item instanceof HasSecureConcern) {
+                secureConcerns.addSecureConcern((HasSecureConcern) item);
             }
             return super.insertItem(item, beforeIndex);
         }
@@ -464,6 +469,17 @@ public class Button extends FocusPanel implements IFocusWidget, HasSecureConcern
 
         public DropDownPanel getMenuPopup() {
             return popup;
+        }
+
+        @Override
+        public void clearItems() {
+            super.clearItems();
+            secureConcerns.clear();
+        }
+
+        @Override
+        public void setSecurityContext(AccessControlContext context) {
+            secureConcerns.setSecurityContext(context);
         }
     }
 
