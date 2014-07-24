@@ -47,33 +47,10 @@ import com.propertyvista.dto.TransactionHistoryDTO;
 class VistaCrmLeaseAccessControlList extends UIAclBuilder {
 
     VistaCrmLeaseAccessControlList() {
-
-        //  ---- Actions:
-        // TODO move ? to proper section in this file
-        grant(LeaseBasic, SendMail.class);
-        grant(LeaseAdvanced, SendMail.class);
-        grant(LeaseFull, SendMail.class);
-
-        grant(LeaseAdvanced, LeaseAgreementSigning.class);
-        grant(LeaseFull, LeaseAgreementSigning.class);
-
-        grant(LeaseFull, LeaseRunBill.class);
-        grant(LeaseFull, LeaseConfirmBill.class);
-
-        grant(LeaseFull, LeaseReserveUnit.class);
-        grant(LeaseFull, LeaseStateManagement.class);
-        grant(LeaseFull, LeaseRenew.class);
-
-        // access to former leases accordion menu
-        grant(LeaseAdvanced, FormerLeaseListAction.class);
-        grant(LeaseFull, FormerLeaseListAction.class);
-
         {// ---- Lease(Term) itself:
             List<Class<? extends IEntity>> entities = entities(LeaseDTO.class, LeaseTermDTO.class);
             grant(LeaseBasic, entities, READ);
-
             grant(LeaseAdvanced, entities, READ);
-
             grant(LeaseFull, LeaseDTO.class, ALL);
             grant(LeaseFull, LeaseTermDTO.class, new LeaseTermEditOnLeaseInstanceAccess(), ALL);
         }
@@ -104,5 +81,25 @@ class VistaCrmLeaseAccessControlList extends UIAclBuilder {
 
         grant(LeaseFull, BillDataDTO.class, READ);
         grant(LeaseFull, new IServiceExecutePermission(BillCrudService.class));
+
+        //  ---- Actions:
+        // TODO move ? to proper section in this file
+        grant(LeaseBasic, SendMail.class);
+        grant(LeaseAdvanced, SendMail.class);
+        grant(LeaseFull, SendMail.class);
+
+        grant(LeaseAdvanced, LeaseAgreementSigning.class);
+        grant(LeaseFull, LeaseAgreementSigning.class);
+
+        grant(LeaseFull, LeaseRunBill.class);
+        grant(LeaseFull, LeaseConfirmBill.class);
+
+        grant(LeaseFull, LeaseReserveUnit.class);
+        grant(LeaseFull, LeaseStateManagement.class);
+        grant(LeaseFull, LeaseRenew.class);
+
+        // access to former leases accordion menu
+        grant(LeaseAdvanced, FormerLeaseListAction.class);
+        grant(LeaseFull, FormerLeaseListAction.class);
     }
 }
