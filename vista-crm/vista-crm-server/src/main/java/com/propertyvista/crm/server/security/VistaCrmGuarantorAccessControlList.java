@@ -35,6 +35,7 @@ class VistaCrmGuarantorAccessControlList extends UIAclBuilder {
         grant(GuarantorAdvanced, GuarantorDTO.class, READ);
         grant(GuarantorFull, GuarantorDTO.class, READ | UPDATE);
 
+        grant(GuarantorAdvanced, LeaseParticipantScreeningTO.class, READ);
         grant(GuarantorFull, LeaseParticipantScreeningTO.class, ALL);
 
         // Actions:
