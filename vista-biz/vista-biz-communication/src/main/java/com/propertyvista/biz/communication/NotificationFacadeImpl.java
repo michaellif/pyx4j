@@ -19,9 +19,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.pyx4j.config.server.ServerSideFactory;
-import com.pyx4j.entity.server.Executable;
-import com.pyx4j.entity.server.TransactionScopeOption;
-import com.pyx4j.entity.server.UnitOfWork;
 
 import com.propertyvista.biz.communication.notifications.AbstractNotification;
 import com.propertyvista.biz.communication.notifications.AutoPayCancelledByResidentNotification;
@@ -91,15 +88,7 @@ public class NotificationFacadeImpl implements NotificationFacade {
 
     @Override
     public void yardiUnableToPostPaymentBatch(final String errorMessage) {
-        // need own transaction context to report the failure as the original transaction will be rolled back
-        new UnitOfWork(TransactionScopeOption.RequiresNew).execute(new Executable<Void, RuntimeException>() {
-
-            @Override
-            public Void execute() throws RuntimeException {
-                aggregateOrSend(new YardiConfigurationNotification(errorMessage));
-                return null;
-            }
-        });
+        aggregateOrSend(new YardiConfigurationNotification(errorMessage));
     }
 
     @Override

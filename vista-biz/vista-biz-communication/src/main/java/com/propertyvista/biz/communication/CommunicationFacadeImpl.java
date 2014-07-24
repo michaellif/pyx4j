@@ -365,7 +365,7 @@ public class CommunicationFacadeImpl implements CommunicationFacade {
     public void sendYardiConfigurationNotification(List<String> sendTo, String message) {
         MailMessage m = MessageTemplatesCrmNotification.createYardiConfigurationNotificationEmail(message);
         m.setTo(sendTo);
-        Mail.queue(m, null, null);
+        Mail.queueUofW(m, null, null);
     }
 
 }
