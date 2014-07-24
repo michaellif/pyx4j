@@ -40,6 +40,7 @@ import com.propertyvista.crm.rpc.services.customer.EmailToTenantsService;
 import com.propertyvista.crm.rpc.services.customer.ExportTenantsService;
 import com.propertyvista.crm.rpc.services.security.CrmAuditRecordsListerService;
 import com.propertyvista.crm.rpc.services.selections.SelectGlCodeListService;
+import com.propertyvista.domain.communication.MessageCategory;
 import com.propertyvista.domain.financial.ARCode;
 import com.propertyvista.domain.financial.GlCodeCategory;
 import com.propertyvista.domain.financial.MerchantAccount;
@@ -79,6 +80,10 @@ class VistaCrmAdministrationAccessControlList extends UIAclBuilder {
         grant(AdminGeneral, GlobalTenantSecurity.class);
         grant(AdminGeneral, new IServiceExecutePermission(ExportTenantsService.class));
         grant(AdminGeneral, new IServiceExecutePermission(EmailToTenantsService.class));
+
+        // Security Communications
+        grant(AdminGeneral, new EntityPermission(MessageCategory.class, ALL));
+        grant(AdminGeneral, MessageCategory.class, ALL);
 
         // Financial
 

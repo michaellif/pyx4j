@@ -39,6 +39,7 @@ import com.propertyvista.crm.rpc.services.admin.ac.CrmAdministrationPolicesFinan
 import com.propertyvista.crm.rpc.services.admin.ac.CrmAdministrationPolicesOtherAccess;
 import com.propertyvista.crm.rpc.services.admin.ac.CrmContentManagementAccess;
 import com.propertyvista.crm.rpc.services.admin.ac.GlobalTenantSecurity;
+import com.propertyvista.domain.communication.MessageCategory;
 import com.propertyvista.domain.customizations.CountryOfOperation;
 import com.propertyvista.domain.financial.ARCode;
 import com.propertyvista.domain.financial.GlCodeCategory;
@@ -87,7 +88,6 @@ public class NavigAdministrationViewImpl extends Composite implements NavigAdmin
                         list.addMenuItem(new SideMenuAppPlaceItem(new Settings.CreditCheck.Setup()));
                         list.addMenuItem(new SideMenuAppPlaceItem(new Settings.CreditCheck.Status().formViewerPlace(new Key(-1))));
                     }
-                    list.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Administration.Settings.CommunicationSettings()));
 
                     if (ApplicationMode.isDevelopment() || !VistaTODO.pendingYardiConfigPatchILS) {
                         list.addMenuItem(new SideMenuAppPlaceItem(new Settings.ILSConfig()));
@@ -102,6 +102,10 @@ public class NavigAdministrationViewImpl extends Composite implements NavigAdmin
             list.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Administration.Security.AuditRecords(), DataModelPermission
                     .permissionRead(AuditRecordDTO.class)));
             list.addMenuItem(new SideMenuAppPlaceItem(new Security.UserRole(), DataModelPermission.permissionRead(CrmRole.class)));
+
+            list.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Administration.Settings.CommunicationSettings(), DataModelPermission
+                    .permissionRead(MessageCategory.class)));
+
             list.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Administration.Security.TenantSecurity(), GlobalTenantSecurity.class));
         }
 

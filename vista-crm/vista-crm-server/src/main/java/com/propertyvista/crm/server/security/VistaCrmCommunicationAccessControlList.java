@@ -13,8 +13,7 @@
  */
 package com.propertyvista.crm.server.security;
 
-import static com.propertyvista.domain.security.VistaCrmBehavior.CommunicationBasic;
-import static com.propertyvista.domain.security.VistaCrmBehavior.CommunicationFull;
+import static com.propertyvista.domain.security.VistaCrmBehavior.Communication;
 import static com.pyx4j.entity.security.AbstractCRUDPermission.ALL;
 import static com.pyx4j.entity.security.AbstractCRUDPermission.READ;
 
@@ -38,22 +37,21 @@ import com.propertyvista.dto.MessageDTO;
 class VistaCrmCommunicationAccessControlList extends UIAclBuilder {
 
     VistaCrmCommunicationAccessControlList() {
-        grant(CommunicationBasic, new IServiceExecutePermission(MessageCategoryCrudService.class));
+        grant(Communication, new IServiceExecutePermission(MessageCategoryCrudService.class));
 
-        grant(CommunicationBasic, new MessageCategoryAccessRule(), MessageCategory.class);
-        grant(CommunicationBasic, new EntityPermission(SystemEndpoint.class, READ));
-        grant(CommunicationBasic, new IServiceExecutePermission(MessageCrudService.class));
-        grant(CommunicationBasic, new MessageAccessRule(), Message.class);
-        grant(CommunicationBasic, new EntityPermission(Message.class, ALL));
-        grant(CommunicationBasic, new EntityPermission(MessageAttachment.class, ALL));
-        grant(CommunicationBasic, new EntityPermission(CommunicationThread.class, ALL));
-        grant(CommunicationBasic, new IServiceExecutePermission(MessageAttachmentUploadService.class));
-        grant(CommunicationBasic, new IServiceExecutePermission(SelectCommunicationEndpointListService.class));
+        grant(Communication, new MessageCategoryAccessRule(), MessageCategory.class);
+        grant(Communication, new EntityPermission(SystemEndpoint.class, READ));
+        grant(Communication, new IServiceExecutePermission(MessageCrudService.class));
+        grant(Communication, new MessageAccessRule(), Message.class);
+        grant(Communication, new EntityPermission(Message.class, ALL));
+        grant(Communication, new EntityPermission(MessageAttachment.class, ALL));
+        grant(Communication, new EntityPermission(CommunicationThread.class, ALL));
+        grant(Communication, new IServiceExecutePermission(MessageAttachmentUploadService.class));
+        grant(Communication, new IServiceExecutePermission(SelectCommunicationEndpointListService.class));
 
-        grant(CommunicationBasic, MessageCategory.class, READ);
-        grant(CommunicationBasic, MessageDTO.class, ALL);
+        grant(Communication, MessageCategory.class, READ);
+        grant(Communication, MessageDTO.class, ALL);
 
-        grant(CommunicationFull, new EntityPermission(MessageCategory.class, ALL));
-        grant(CommunicationFull, MessageCategory.class, ALL);
+        // Administration is granted in VistaCrmAdministrationAccessControlList
     }
 }

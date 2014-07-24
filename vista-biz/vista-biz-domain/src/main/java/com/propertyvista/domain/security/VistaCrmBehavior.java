@@ -159,7 +159,7 @@ public enum VistaCrmBehavior implements Behavior {
 
     // --
 
-    CommunicationBasic, CommunicationFull,
+    Communication,
 
     // --
 
