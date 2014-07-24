@@ -18,8 +18,8 @@ import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.forms.client.ui.CForm;
-import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
+import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.site.client.ui.visor.AbstractVisorViewer;
@@ -70,6 +70,5 @@ public class ChargesVisorView extends AbstractVisorViewer<BillDataDTO> {
             formPanel.append(Location.Left, proto().bill(), new BillForm(true));
             return formPanel;
         }
-
     }
 }

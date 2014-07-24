@@ -13,6 +13,8 @@
  */
 package com.propertyvista.common.client.ui.components.editors.dto.bill;
 
+import java.math.BigDecimal;
+
 import com.google.gwt.dom.client.Style.Display;
 import com.google.gwt.dom.client.Style.Position;
 import com.google.gwt.dom.client.Style.Unit;
@@ -25,11 +27,11 @@ import com.google.gwt.user.client.ui.SimplePanel;
 
 import com.pyx4j.commons.IFormatter;
 import com.pyx4j.commons.LogicalDate;
+import com.pyx4j.entity.core.IPrimitive;
 import com.pyx4j.forms.client.ui.CViewer;
 import com.pyx4j.forms.client.ui.decorators.FieldCollapsableDecorator;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.ui.prime.form.FieldDecoratorBuilder;
 import com.pyx4j.widgets.client.event.shared.ToggleEvent;
 import com.pyx4j.widgets.client.event.shared.ToggleHandler;
 import com.pyx4j.widgets.client.images.WidgetsImages;
@@ -105,14 +107,15 @@ public class LineItemCollapsibleViewer extends CViewer<InvoiceLineItemGroupDTO> 
 
         content.getColumnFormatter().setWidth(0, "80%"); //overrides FlexTable's width auto-management for cells
         content.getColumnFormatter().setWidth(2, "20%");
-        content.setWidth(FieldDecoratorBuilder.LABEL_WIDTH + FieldDecoratorBuilder.CONTENT_WIDTH + "em");
+//        content.setWidth(FieldDecoratorBuilder.LABEL_WIDTH + FieldDecoratorBuilder.CONTENT_WIDTH + "em");
+        content.setWidth("345px");
 
         int row = 0;
         if (value != null && !value.total().isNull()) {
             content.getFlexCellFormatter().setColSpan(row, 0, 2);
 
             content.setWidget(row, 0, new HTML(value.getMeta().getCaption()));
-            content.setWidget(row, 2, new HTML(value.total().getStringView()));
+            content.setWidget(row, 2, new HTML(fomatMoneyValue(value.total())));
 
             // styling:
             content.getRowFormatter().setStyleName(row, BillingTheme.StyleName.BillingLineItem.name());
@@ -129,7 +132,8 @@ public class LineItemCollapsibleViewer extends CViewer<InvoiceLineItemGroupDTO> 
         content.getColumnFormatter().setWidth(0, "20%"); //overrides FlexTable's width auto-management for cells
         content.getColumnFormatter().setWidth(1, "60%");
         content.getColumnFormatter().setWidth(2, "20%");
-        content.setWidth(FieldDecoratorBuilder.LABEL_WIDTH + FieldDecoratorBuilder.CONTENT_WIDTH + "em");
+//        content.setWidth(FieldDecoratorBuilder.LABEL_WIDTH + FieldDecoratorBuilder.CONTENT_WIDTH + "em");
+        content.setWidth("345px");
 
         int row = 0;
         if (value != null && !value.total().isNull()) {
@@ -147,25 +151,29 @@ public class LineItemCollapsibleViewer extends CViewer<InvoiceLineItemGroupDTO> 
                         if (item instanceof InvoiceProductCharge) {
                             InvoiceProductCharge productCharge = (InvoiceProductCharge) item;
                             InvoiceSubLineItem charge = productCharge.chargeSubLineItem();
-                            addDetailRecord(content, row++, formatDays(item), charge.description().getValue(), charge.amount().getStringView());
+                            addDetailRecord(content, row++, formatDays(item), charge.description().getValue(), fomatMoneyValue(charge.amount()));
                             for (InvoiceSubLineItem adjustment : productCharge.adjustmentSubLineItems()) {
-                                addDetailRecord(content, row++, formatDays(item), adjustment.description().getValue(), adjustment.amount().getStringView());
+                                addDetailRecord(content, row++, formatDays(item), adjustment.description().getValue(), fomatMoneyValue(adjustment.amount()));
                             }
                             for (InvoiceSubLineItem concession : productCharge.concessionSubLineItems()) {
-                                addDetailRecord(content, row++, formatDays(item), concession.description().getValue(), concession.amount().getStringView());
+                                addDetailRecord(content, row++, formatDays(item), concession.description().getValue(), fomatMoneyValue(concession.amount()));
                             }
                         } else {
-                            addDetailRecord(content, row++, formatDays(item), item.description().getValue(), item.amount().getStringView());
+                            addDetailRecord(content, row++, formatDays(item), item.description().getValue(), fomatMoneyValue(item.amount()));
                         }
                     } else if (item instanceof InvoiceCredit) {
-                        addDetailRecord(content, row++, formatDays(item), item.description().getValue(), item.amount().getStringView());
+                        addDetailRecord(content, row++, formatDays(item), item.description().getValue(), fomatMoneyValue(item.amount()));
                     }
                 }
             }
-            addTotalRecord(content, row++, i18n.tr("Total"), value.total().getStringView());
+            addTotalRecord(content, row++, i18n.tr("Total"), fomatMoneyValue(value.total()));
         }
 
         return content;
+    }
+
+    private String fomatMoneyValue(IPrimitive<BigDecimal> value) {
+        return "$" + value.getStringView();
     }
 
     private void addDetailRecord(BasicFlexFormPanel table, int row, String date, String description, String amount) {
