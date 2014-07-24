@@ -775,6 +775,16 @@ BEGIN
                 ||'SET tax_type = ''Percentage'' '
                 ||'WHERE    tax_type = ''percent'' ';
                 
+        -- legal_terms_policy_item
+        
+        EXECUTE 'UPDATE '||v_schema_name||'.legal_terms_policy_item '
+                ||'SET content = regexp_replace(content, ''Convenience Fee'', ''Web Payment Fee'',''g'') '
+                ||'WHERE    caption = ''RESIDENT PORTAL TERMS AND CONDITIONS'' ';
+                
+        EXECUTE 'UPDATE '||v_schema_name||'.legal_terms_policy_item '
+                ||'SET content = regexp_replace(content, ''Convenience Fees'', ''Web Payment Fees'',''g'') '
+                ||'WHERE    caption = ''RESIDENT PORTAL TERMS AND CONDITIONS'' ';
+                
         -- marketing
         
         EXECUTE 'UPDATE '||v_schema_name||'.marketing AS m '
