@@ -122,6 +122,11 @@ public class CommunicationViewImpl extends FlowPanel implements CommunicationVie
                 }
             }
         }
+        setHeader(directMessagesNum, dispatchedMessagesNum);
+    }
+
+    @Override
+    public void setHeader(int directMessagesNum, int dispatchedMessagesNum) {
         headerHolder.setNumberOfMessages(directMessagesNum, dispatchedMessagesNum);
     }
 
@@ -140,7 +145,7 @@ public class CommunicationViewImpl extends FlowPanel implements CommunicationVie
         public MessagePanel(final MessageDTO message, boolean isDirect) {
             setStyleName(CommunicationCrmTheme.StyleName.CommMessage.name());
 
-            photoImage = new Image(isDirect ? CrmImages.INSTANCE.avatar() : CrmImages.INSTANCE.noticeWarning());
+            photoImage = new Image(isDirect ? CrmImages.INSTANCE.avatar() : CrmImages.INSTANCE.alertsOn());
             subjectField = new Label(message.subject().getStringView());
             getElement().getStyle().setCursor(Cursor.POINTER);
             addClickHandler(new ClickHandler() {

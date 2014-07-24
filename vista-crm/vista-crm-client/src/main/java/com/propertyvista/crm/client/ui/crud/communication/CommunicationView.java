@@ -24,5 +24,7 @@ public interface CommunicationView extends IsView {
     interface CommunicationPresenter {
     }
 
+    public void setHeader(int directMessagesNum, int dispatchedMessagesNum);
+
     void populate(Vector<MessageDTO> messages);
 }
