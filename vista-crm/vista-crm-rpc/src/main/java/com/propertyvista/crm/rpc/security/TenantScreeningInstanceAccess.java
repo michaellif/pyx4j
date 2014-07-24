@@ -14,13 +14,18 @@
 package com.propertyvista.crm.rpc.security;
 
 import com.pyx4j.entity.core.IEntity;
-import com.pyx4j.entity.security.InstanceAccess;
+import com.pyx4j.entity.security.ForTypesAccessRule;
 
 import com.propertyvista.dto.LeaseParticipantScreeningTO;
 
-public class TenantScreeningInstanceAccess implements InstanceAccess {
+public class TenantScreeningInstanceAccess extends ForTypesAccessRule {
 
     private static final long serialVersionUID = 1L;
+
+    @SuppressWarnings("unchecked")
+    public TenantScreeningInstanceAccess() {
+        super(LeaseParticipantScreeningTO.class);
+    }
 
     @Override
     public boolean implies(IEntity contextEntity) {

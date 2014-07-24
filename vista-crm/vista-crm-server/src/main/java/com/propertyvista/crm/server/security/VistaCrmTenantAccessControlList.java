@@ -40,7 +40,10 @@ class VistaCrmTenantAccessControlList extends UIAclBuilder {
         grant(TenantAdvanced, TenantDTO.class, new TenantInstanceAccess(), READ);
         grant(TenantFull, TenantDTO.class, new TenantInstanceAccess(), READ | UPDATE);
 
+        grant(TenantAdvanced, LeaseParticipantScreeningTO.class, new TenantInstanceAccess(), READ);
         grant(TenantAdvanced, LeaseParticipantScreeningTO.class, new TenantScreeningInstanceAccess(), READ);
+
+        grant(TenantFull, LeaseParticipantScreeningTO.class, new TenantInstanceAccess(), ALL);
         grant(TenantFull, LeaseParticipantScreeningTO.class, new TenantScreeningInstanceAccess(), ALL);
 
         grant(TenantBasic, TenantPortalAccessInformationDTO.class, READ);
@@ -62,7 +65,10 @@ class VistaCrmTenantAccessControlList extends UIAclBuilder {
         grant(TenantAdvanced, TenantDTO.class, new FormerTenantInstanceAccess(), READ);
         grant(TenantFull, TenantDTO.class, new FormerTenantInstanceAccess(), READ | UPDATE);
 
+        grant(TenantAdvanced, LeaseParticipantScreeningTO.class, new FormerTenantInstanceAccess(), READ);
         grant(TenantAdvanced, LeaseParticipantScreeningTO.class, new FormerTenantScreeningInstanceAccess(), READ);
+
+        grant(TenantFull, LeaseParticipantScreeningTO.class, new FormerTenantInstanceAccess(), READ | UPDATE);
         grant(TenantFull, LeaseParticipantScreeningTO.class, new FormerTenantScreeningInstanceAccess(), READ | UPDATE);
 
         // Actions:
