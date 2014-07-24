@@ -196,28 +196,9 @@ public class CommunicationManager {
     }
 
     public Serializable getCommunicationStatus() {
-        final EntityListCriteria<CommunicationThread> directCriteria = EntityListCriteria.create(CommunicationThread.class);
-        directCriteria.eq(directCriteria.proto().content().$().recipients().$().isRead(), false);
-        directCriteria.eq(directCriteria.proto().content().$().recipients().$().recipient(), Context.visit(VistaUserVisit.class).getCurrentUser());
+        final Vector<CommunicationThread> directMessages = getDirectThreads();
 
-        final Vector<CommunicationThread> directMessages = Persistence.secureQuery(directCriteria, AttachLevel.IdOnly);
-
-        final EntityListCriteria<CommunicationThread> dispatchedCriteria = EntityListCriteria.create(CommunicationThread.class);
-        dispatchedCriteria.in(dispatchedCriteria.proto().status(), ThreadStatus.New, ThreadStatus.Open, ThreadStatus.Unassigned);
-
-        List<MessageCategory> userGroups = getUserGroups();
-        if (userGroups != null && userGroups.size() > 0) {
-            AndCriterion newDispatchedCriteria = new AndCriterion(PropertyCriterion.eq(dispatchedCriteria.proto().owner(),
-                    ServerSideFactory.create(CommunicationMessageFacade.class).getSystemEndpointFromCache(SystemEndpointName.Unassigned)),
-                    PropertyCriterion.in(dispatchedCriteria.proto().topic(), userGroups));
-
-            dispatchedCriteria.or(newDispatchedCriteria,
-                    PropertyCriterion.eq(dispatchedCriteria.proto().owner(), Context.visit(VistaUserVisit.class).getCurrentUser()));
-
-        } else {
-            dispatchedCriteria.eq(dispatchedCriteria.proto().owner(), Context.visit(VistaUserVisit.class).getCurrentUser());
-        }
-        final Vector<CommunicationThread> dispatchedMessages = Persistence.secureQuery(dispatchedCriteria, AttachLevel.IdOnly);
+        final Vector<CommunicationThread> dispatchedMessages = getDispathcedThreads();
 
         if (dispatchedMessages != null && dispatchedMessages.size() > 0 && directMessages != null && directMessages.size() > 0) {
             directMessages.removeAll(dispatchedMessages);
@@ -234,6 +215,35 @@ public class CommunicationManager {
         default:
             return null;
         }
+    }
+
+    public Vector<CommunicationThread> getDispathcedThreads() {
+        final EntityListCriteria<CommunicationThread> dispatchedCriteria = EntityListCriteria.create(CommunicationThread.class);
+        dispatchedCriteria.in(dispatchedCriteria.proto().status(), ThreadStatus.New, ThreadStatus.Open, ThreadStatus.Unassigned);
+
+        List<MessageCategory> userGroups = getUserGroups();
+        if (userGroups != null && userGroups.size() > 0) {
+            AndCriterion newDispatchedCriteria = new AndCriterion(PropertyCriterion.eq(dispatchedCriteria.proto().owner(),
+                    ServerSideFactory.create(CommunicationMessageFacade.class).getSystemEndpointFromCache(SystemEndpointName.Unassigned)),
+                    PropertyCriterion.in(dispatchedCriteria.proto().topic(), userGroups));
+
+            dispatchedCriteria.or(newDispatchedCriteria,
+                    PropertyCriterion.eq(dispatchedCriteria.proto().owner(), Context.visit(VistaUserVisit.class).getCurrentUser()));
+
+        } else {
+            dispatchedCriteria.eq(dispatchedCriteria.proto().owner(), Context.visit(VistaUserVisit.class).getCurrentUser());
+        }
+        final Vector<CommunicationThread> dispatchedMessages = Persistence.secureQuery(dispatchedCriteria, AttachLevel.IdOnly);
+        return dispatchedMessages;
+    }
+
+    public Vector<CommunicationThread> getDirectThreads() {
+        final EntityListCriteria<CommunicationThread> directCriteria = EntityListCriteria.create(CommunicationThread.class);
+        directCriteria.eq(directCriteria.proto().content().$().recipients().$().isRead(), false);
+        directCriteria.eq(directCriteria.proto().content().$().recipients().$().recipient(), Context.visit(VistaUserVisit.class).getCurrentUser());
+
+        final Vector<CommunicationThread> directMessages = Persistence.secureQuery(directCriteria, AttachLevel.IdOnly);
+        return directMessages;
     }
 
     private List<MessageCategory> getUserGroups() {

@@ -15,6 +15,7 @@ package com.propertyvista.biz.communication;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.Vector;
 
 import org.apache.commons.collections4.set.ListOrderedSet;
 
@@ -23,6 +24,7 @@ import com.pyx4j.entity.core.criterion.EntityListCriteria;
 import com.pyx4j.entity.rpc.EntitySearchResult;
 
 import com.propertyvista.domain.communication.CommunicationEndpoint;
+import com.propertyvista.domain.communication.CommunicationThread;
 import com.propertyvista.domain.communication.DeliveryHandle;
 import com.propertyvista.domain.communication.Message;
 import com.propertyvista.domain.communication.MessageCategory;
@@ -51,4 +53,8 @@ public interface CommunicationMessageFacade {
     public String sendersAsStringView(ListOrderedSet<CommunicationEndpoint> senders);
 
     public Serializable getCommunicationStatus();
+
+    public Vector<CommunicationThread> getDispathcedThreads();
+
+    public Vector<CommunicationThread> getDirectThreads();
 }

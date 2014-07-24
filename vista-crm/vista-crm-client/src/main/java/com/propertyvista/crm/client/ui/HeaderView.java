@@ -33,6 +33,8 @@ public interface HeaderView extends IsWidget, IsView {
 
         void getSatisfaction();
 
+        void loadMessages();
+
     }
 
     void setPresenter(HeaderPresenter presenter);

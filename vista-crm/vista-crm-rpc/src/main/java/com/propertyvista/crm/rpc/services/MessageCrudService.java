@@ -17,6 +17,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.rpc.AbstractCrudService;
+import com.pyx4j.entity.rpc.EntitySearchResult;
 
 import com.propertyvista.domain.communication.CommunicationThread.ThreadStatus;
 import com.propertyvista.domain.company.Employee;
@@ -27,6 +28,8 @@ public interface MessageCrudService extends AbstractCrudService<MessageDTO> {
     void saveMessage(AsyncCallback<MessageDTO> callback, MessageDTO source, ThreadStatus threadStatus);
 
     void assignOwnership(AsyncCallback<MessageDTO> callback, MessageDTO source, Employee employee);
+
+    public void listForHeader(AsyncCallback<EntitySearchResult<MessageDTO>> callback);
 
     @Transient
     public static interface MessageInitializationData extends InitializationData {

@@ -196,6 +196,7 @@ public class HeaderViewImpl extends FlowPanel implements HeaderView {
                         AppSite.getEventBus().fireEvent(new LayoutChangeRequestEvent(communicationButton));
                         break;
                     }
+                    presenter.loadMessages();
                 }
             });
             communicationButton.setPermission(DataModelPermission.permissionRead(MessageDTO.class));
@@ -357,7 +358,7 @@ public class HeaderViewImpl extends FlowPanel implements HeaderView {
                 if (statusLabel == null) {
                     statusLabel = new StringBuffer();
                 } else {
-                    statusLabel.append("/");
+                    statusLabel.append(" / ");
                 }
                 statusLabel.append(status.numberOfNewDispatchedMessages);
             }

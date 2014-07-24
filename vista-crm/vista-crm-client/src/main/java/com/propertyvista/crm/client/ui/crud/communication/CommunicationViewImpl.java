@@ -29,7 +29,6 @@ import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
-import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.RequiresResize;
 import com.google.gwt.user.client.ui.ScrollPanel;
 
@@ -44,6 +43,7 @@ import com.pyx4j.widgets.client.Anchor;
 import com.propertyvista.crm.client.resources.CrmImages;
 import com.propertyvista.crm.client.themes.CommunicationCrmTheme;
 import com.propertyvista.crm.rpc.CrmSiteMap;
+import com.propertyvista.domain.communication.MessageCategory.MessageGroupCategory;
 import com.propertyvista.dto.MessageDTO;
 
 public class CommunicationViewImpl extends FlowPanel implements CommunicationView, RequiresResize {
@@ -109,13 +109,20 @@ public class CommunicationViewImpl extends FlowPanel implements CommunicationVie
     @Override
     public void populate(Vector<MessageDTO> messages) {
         mainHolder.clear();
-        int messagesNum = messages == null || messages.isEmpty() ? 0 : messages.size();
-        headerHolder.setNumberOfMessages(messagesNum);
-        if (messagesNum > 0) {
+        int directMessagesNum = 0;
+        int dispatchedMessagesNum = 0;
+        if (messages != null && messages.size() > 0) {
             for (final MessageDTO message : messages) {
-                mainHolder.add(new MessagePanel(message));
+                boolean isDirect = MessageGroupCategory.Custom.toString().equals(message.topic().category().getValue().toString());
+                mainHolder.add(new MessagePanel(message, isDirect));
+                if (isDirect) {
+                    directMessagesNum++;
+                } else {
+                    dispatchedMessagesNum++;
+                }
             }
         }
+        headerHolder.setNumberOfMessages(directMessagesNum, dispatchedMessagesNum);
     }
 
     class MessagePanel extends FlexTable {
@@ -130,10 +137,10 @@ public class CommunicationViewImpl extends FlowPanel implements CommunicationVie
 
         private final Label senderField;
 
-        public MessagePanel(final MessageDTO message) {
+        public MessagePanel(final MessageDTO message, boolean isDirect) {
             setStyleName(CommunicationCrmTheme.StyleName.CommMessage.name());
 
-            photoImage = new Image(CrmImages.INSTANCE.avatar());
+            photoImage = new Image(isDirect ? CrmImages.INSTANCE.avatar() : CrmImages.INSTANCE.noticeWarning());
             subjectField = new Label(message.subject().getStringView());
             getElement().getStyle().setCursor(Cursor.POINTER);
             addClickHandler(new ClickHandler() {
@@ -207,9 +214,24 @@ public class CommunicationViewImpl extends FlowPanel implements CommunicationVie
 
         }
 
-        public void setNumberOfMessages(int number) {
-            if (number > 0) {
-                messagesAnchor.setText("Messages (" + String.valueOf(number) + ")");
+        public void setNumberOfMessages(int directMessagesNum, int dispatchedMessagesNum) {
+            StringBuffer statusLabel = null;
+            if (directMessagesNum > 0 || dispatchedMessagesNum > 0) {
+                if (directMessagesNum > 0) {
+                    statusLabel = new StringBuffer();
+                    statusLabel.append(directMessagesNum);
+                }
+
+                if (dispatchedMessagesNum > 0) {
+                    if (statusLabel == null) {
+                        statusLabel = new StringBuffer();
+                    } else {
+                        statusLabel.append(" / ");
+                    }
+                    statusLabel.append(dispatchedMessagesNum);
+                }
+
+                messagesAnchor.setText("Messages (" + statusLabel.toString() + ")");
             } else {
                 messagesAnchor.setText("Messages");
             }

@@ -14,11 +14,14 @@
 package com.propertyvista.crm.client.activity;
 
 import com.google.gwt.activity.shared.AbstractActivity;
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.place.shared.Place;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
+import com.pyx4j.entity.rpc.EntitySearchResult;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.security.client.BehaviorChangeEvent;
 import com.pyx4j.security.client.BehaviorChangeHandler;
@@ -36,8 +39,11 @@ import com.propertyvista.crm.client.event.CommunicationStatusUpdateEvent;
 import com.propertyvista.crm.client.event.CommunicationStatusUpdateHandler;
 import com.propertyvista.crm.client.ui.HeaderView;
 import com.propertyvista.crm.client.ui.HeaderView.HeaderPresenter;
+import com.propertyvista.crm.client.ui.crud.communication.CommunicationView;
 import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.crm.rpc.dto.communication.CrmCommunicationSystemNotification;
+import com.propertyvista.crm.rpc.services.MessageCrudService;
+import com.propertyvista.dto.MessageDTO;
 import com.propertyvista.shared.i18n.CompiledLocale;
 
 public class HeaderActivity extends AbstractActivity implements HeaderPresenter {
@@ -46,10 +52,14 @@ public class HeaderActivity extends AbstractActivity implements HeaderPresenter 
 
     private final Place place;
 
+    private final MessageCrudService communicationService;
+
     public HeaderActivity(Place place) {
         this.place = place;
         view = CrmSite.getViewFactory().getView(HeaderView.class);
         view.setPresenter(this);
+
+        communicationService = (MessageCrudService) GWT.create(MessageCrudService.class);
     }
 
     @Override
@@ -121,6 +131,25 @@ public class HeaderActivity extends AbstractActivity implements HeaderPresenter 
 
     private void updateCommunicationMessagesCount(CrmCommunicationSystemNotification communicationStatus) {
         view.setCommunicationMessagesCount(communicationStatus);
+    }
+
+    @Override
+    public void loadMessages() {
+        final CommunicationView cview = CrmSite.getViewFactory().getView(CommunicationView.class);
+
+        communicationService.listForHeader(new AsyncCallback<EntitySearchResult<MessageDTO>>() {
+
+            @Override
+            public void onSuccess(EntitySearchResult<MessageDTO> result) {
+                if (cview != null) {
+                    cview.populate(result == null || result.getData() == null ? null : result.getData());
+                }
+            }
+
+            @Override
+            public void onFailure(Throwable caught) {
+            }
+        });
     }
 
     @Override

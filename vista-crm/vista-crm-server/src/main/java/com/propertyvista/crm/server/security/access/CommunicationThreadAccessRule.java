@@ -23,23 +23,24 @@ import com.pyx4j.entity.security.DatasetAccessRule;
 import com.pyx4j.entity.server.Persistence;
 
 import com.propertyvista.crm.server.util.CrmAppContext;
-import com.propertyvista.domain.communication.Message;
+import com.propertyvista.domain.communication.CommunicationThread;
 import com.propertyvista.domain.communication.MessageCategory;
 import com.propertyvista.domain.company.Employee;
 import com.propertyvista.server.domain.security.CrmUserCredential;
 
-public class CommunicationMessageAccessRule implements DatasetAccessRule<Message> {
+public class CommunicationThreadAccessRule implements DatasetAccessRule<CommunicationThread> {
 
     private static final long serialVersionUID = 1L;
 
     @Override
-    public void applyRule(EntityQueryCriteria<Message> criteria) {
+    public void applyRule(EntityQueryCriteria<CommunicationThread> criteria) {
         List<MessageCategory> userGroups = getUserGroups();
-        OrCriterion inboxOr = new OrCriterion(PropertyCriterion.eq(criteria.proto().recipients().$().recipient(), CrmAppContext.getCurrentUser()), //
-                new OrCriterion(PropertyCriterion.eq(criteria.proto().sender(), CrmAppContext.getCurrentUser()),//
-                        PropertyCriterion.eq(criteria.proto().thread().owner(), CrmAppContext.getCurrentUser())));//
+        OrCriterion inboxOr = new OrCriterion(
+                PropertyCriterion.eq(criteria.proto().content().$().recipients().$().recipient(), CrmAppContext.getCurrentUser()), //
+                new OrCriterion(PropertyCriterion.eq(criteria.proto().content().$().sender(), CrmAppContext.getCurrentUser()),//
+                        PropertyCriterion.eq(criteria.proto().owner(), CrmAppContext.getCurrentUser())));//
         if (userGroups != null && userGroups.size() > 0) {
-            criteria.or(PropertyCriterion.in(criteria.proto().thread().topic(), getUserGroups()), inboxOr);//
+            criteria.or(PropertyCriterion.in(criteria.proto().topic(), userGroups), inboxOr);//
 
         } else {
             criteria.add(inboxOr);

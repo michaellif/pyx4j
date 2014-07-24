@@ -107,6 +107,36 @@ public class MessageCrudServiceImpl extends AbstractCrudServiceDtoImpl<Message, 
     }
 
     @Override
+    public void listForHeader(AsyncCallback<EntitySearchResult<MessageDTO>> callback) {
+        CommunicationMessageFacade communicationFacade = ServerSideFactory.create(CommunicationMessageFacade.class);
+
+        Vector<CommunicationThread> directThreads = communicationFacade.getDirectThreads();
+        Vector<CommunicationThread> dispatchedThreads = communicationFacade.getDispathcedThreads();
+
+        if (directThreads != null && directThreads.size() > 0 && dispatchedThreads != null && dispatchedThreads.size() > 0) {
+            directThreads.removeAll(dispatchedThreads);
+        }
+
+        if (directThreads == null) {
+            directThreads = new Vector<CommunicationThread>();
+        }
+
+        if (dispatchedThreads != null && dispatchedThreads.size() > 0) {
+            directThreads.addAll(dispatchedThreads);
+        }
+
+        EntityListCriteria<MessageDTO> messageCriteria = EntityListCriteria.create(MessageDTO.class);
+        if (directThreads != null && directThreads.size() > 0) {
+            messageCriteria.add(PropertyCriterion.in(messageCriteria.proto().thread(), directThreads));
+        } else {
+            messageCriteria.notExists(messageCriteria.proto().thread());
+        }
+        messageCriteria.setPageSize(50);
+        messageCriteria.setPageNumber(0);
+        list(callback, messageCriteria);
+    }
+
+    @Override
     protected MessageDTO init(InitializationData initializationData) {
         MessageDTO dto = EntityFactory.create(MessageDTO.class);
         dto.date().setValue(SystemDateManager.getDate());
@@ -326,6 +356,7 @@ public class MessageCrudServiceImpl extends AbstractCrudServiceDtoImpl<Message, 
             boolean isRead = true;
             boolean isHighImportance = false;
             boolean hasAttachment = false;
+            Message lastMessage = null;
             for (Message m : ms) {
                 Persistence.ensureRetrieve(m.recipients(), AttachLevel.Attached);
                 Persistence.ensureRetrieve(m.sender(), AttachLevel.Attached);
@@ -345,9 +376,12 @@ public class MessageCrudServiceImpl extends AbstractCrudServiceDtoImpl<Message, 
                     isHighImportance = false;
                 }
                 if (to.id().equals(currentDTO.id())) {
-                    copyChildDTO(m, to, isForList);
+                    lastMessage = m;
+                } else if (isForList) {
+                    lastMessage = m;
                 }
             }
+            copyChildDTO(lastMessage, to, isForList);
             if (isHighImportance) {
                 to.highImportance().setValue(true);
             }
