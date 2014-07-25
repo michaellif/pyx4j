@@ -196,13 +196,6 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
             }
         }, DataModelPermission.permissionRead(LeaseApplicationDTO.class)));
 
-        addView(new SecureMenuItem(i18n.tr("View Legal State"), new Command() {
-            @Override
-            public void execute() {
-                ((LeaseViewerView.Presenter) getPresenter()).legalState();
-            }
-        }, DataModelPermission.permissionRead(LeaseLegalStateDTO.class)));
-
         addView(new SecureMenuItem(i18n.tr("View Deleted AutoPays"), new Command() {
             @Override
             public void execute() {
@@ -237,6 +230,13 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
             }
         }, DataModelPermission.permissionCreate(MaintenanceRequestDTO.class)));
         maintenanceAction.ensureDebugId(VistaCrmDebugId.Maintenance.ActionCreateRequest.debugId());
+
+        addAction(new SecureMenuItem(i18n.tr("Manage Legal State"), new Command() {
+            @Override
+            public void execute() {
+                ((LeaseViewerView.Presenter) getPresenter()).legalState();
+            }
+        }, DataModelPermission.permissionRead(LeaseLegalStateDTO.class)));
 
         noticeAction = new SecureMenuItem(i18n.tr("Notice..."), new Command() {
             @Override
