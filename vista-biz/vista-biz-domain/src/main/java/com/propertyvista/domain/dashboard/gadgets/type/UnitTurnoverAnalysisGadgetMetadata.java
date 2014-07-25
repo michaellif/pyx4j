@@ -32,24 +32,7 @@ import com.propertyvista.domain.security.VistaCrmBehavior;
         description = "A graph that visually demonstrates the turnover rate in either percentage or quantity over the course of multiple years.",
         keywords = { "Units", "Chart", "Turnover", "Availability", "Occupancy" },
         allowedBehaviors = {
-                VistaCrmBehavior.PropertyManagement_OLD,
-                VistaCrmBehavior.Mechanicals_OLD,
-                VistaCrmBehavior.BuildingFinancial_OLD,
-                VistaCrmBehavior.Marketing_OLD,
-                VistaCrmBehavior.MarketingMedia_OLD,
-                VistaCrmBehavior.Tenants_OLD,
-                VistaCrmBehavior.Equifax_OLD,
-                VistaCrmBehavior.Emergency_OLD,
-                VistaCrmBehavior.ScreeningData_OLD,
-                VistaCrmBehavior.Occupancy_OLD,
-                VistaCrmBehavior.Maintenance_OLD,
-                VistaCrmBehavior.Organization_OLD,
-                VistaCrmBehavior.Contacts_OLD,
-                VistaCrmBehavior.ProductCatalog_OLD,
-                VistaCrmBehavior.Billing_OLD,
-                VistaCrmBehavior.Reports_OLD,
-                VistaCrmBehavior.PropertyVistaAccountOwner_OLD,
-                VistaCrmBehavior.PropertyVistaSupport
+                VistaCrmBehavior.DashboardsGadgets
         }
 )//@formatter:on
 public interface UnitTurnoverAnalysisGadgetMetadata extends GadgetMetadata, BuildingGadget {

@@ -506,7 +506,7 @@ public class VistaCrmAccessControlList extends ServletContainerAclBuilder {
 
 // - Other:
         grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(NotesAndAttachmentsCrudService.class));
-        grant(VistaCrmBehavior.Organization_OLD, new EntityPermission(NoteAttachment.class, EntityPermission.READ));
+        grant(VistaBasicBehavior.CRM, new EntityPermission(NoteAttachment.class, EntityPermission.READ));
 
         grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(PmcDocumentFileUploadService.class));
 

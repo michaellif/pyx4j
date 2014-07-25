@@ -39,24 +39,7 @@ import com.propertyvista.domain.security.VistaCrmBehavior;
         description = "Shows the information about lease arrears, including how long it is overdue, total balance, legal status information etc. This gadget can either show total arrears or arrears of specific type (i.e. rent, parking or other)",
         keywords = "Arrears",
         allowedBehaviors = {
-                VistaCrmBehavior.PropertyManagement_OLD,
-                VistaCrmBehavior.Mechanicals_OLD,
-                VistaCrmBehavior.BuildingFinancial_OLD,
-                VistaCrmBehavior.Marketing_OLD,
-                VistaCrmBehavior.MarketingMedia_OLD,
-                VistaCrmBehavior.Tenants_OLD,
-                VistaCrmBehavior.Equifax_OLD,
-                VistaCrmBehavior.Emergency_OLD,
-                VistaCrmBehavior.ScreeningData_OLD,
-                VistaCrmBehavior.Occupancy_OLD,
-                VistaCrmBehavior.Maintenance_OLD,
-                VistaCrmBehavior.Organization_OLD,
-                VistaCrmBehavior.Contacts_OLD,
-                VistaCrmBehavior.ProductCatalog_OLD,
-                VistaCrmBehavior.Billing_OLD,
-                VistaCrmBehavior.Reports_OLD,
-                VistaCrmBehavior.PropertyVistaAccountOwner_OLD,
-                VistaCrmBehavior.PropertyVistaSupport
+                VistaCrmBehavior.DashboardsGadgets,
         }
 )//@formatter:on
 public interface ArrearsStatusGadgetMetadata extends GadgetMetadata, BuildingGadget {

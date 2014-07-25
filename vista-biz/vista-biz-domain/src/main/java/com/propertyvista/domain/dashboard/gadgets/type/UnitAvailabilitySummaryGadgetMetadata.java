@@ -30,24 +30,7 @@ import com.propertyvista.domain.security.VistaCrmBehavior;
         description = "Shows a summary of information about all units, including the total number of units, vacancy, notice and net exposure information in both percentages and quantity",
         keywords = {"Units", "Availability", "Occupancy", "Vacancy"},
         allowedBehaviors = {
-                VistaCrmBehavior.PropertyManagement_OLD,
-                VistaCrmBehavior.Mechanicals_OLD,
-                VistaCrmBehavior.BuildingFinancial_OLD,
-                VistaCrmBehavior.Marketing_OLD,
-                VistaCrmBehavior.MarketingMedia_OLD,
-                VistaCrmBehavior.Tenants_OLD,
-                VistaCrmBehavior.Equifax_OLD,
-                VistaCrmBehavior.Emergency_OLD,
-                VistaCrmBehavior.ScreeningData_OLD,
-                VistaCrmBehavior.Occupancy_OLD,
-                VistaCrmBehavior.Maintenance_OLD,
-                VistaCrmBehavior.Organization_OLD,
-                VistaCrmBehavior.Contacts_OLD,
-                VistaCrmBehavior.ProductCatalog_OLD,
-                VistaCrmBehavior.Billing_OLD,
-                VistaCrmBehavior.Reports_OLD,
-                VistaCrmBehavior.PropertyVistaAccountOwner_OLD,
-                VistaCrmBehavior.PropertyVistaSupport
+                VistaCrmBehavior.DashboardsGadgets
         }
 )//@formatter:on
 public interface UnitAvailabilitySummaryGadgetMetadata extends GadgetMetadata, HasCustomizableDateGadgetMetadata, BuildingGadget {

@@ -43,6 +43,7 @@ import com.propertyvista.crm.client.resources.CrmImages;
 import com.propertyvista.crm.rpc.CrmMainNavigationDebugId;
 import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.crm.rpc.dto.company.ac.EmployeeDirectoryList;
+import com.propertyvista.crm.rpc.dto.financial.AutoPayHistoryDTO;
 import com.propertyvista.crm.rpc.dto.financial.moneyin.batch.MoneyInBatchDTO;
 import com.propertyvista.crm.rpc.dto.legal.n4.LegalNoticeCandidateDTO;
 import com.propertyvista.crm.rpc.services.customer.ac.FormerGuarantorListAction;
@@ -54,7 +55,6 @@ import com.propertyvista.domain.communication.MessageCategory;
 import com.propertyvista.domain.company.Portfolio;
 import com.propertyvista.domain.dashboard.DashboardMetadata;
 import com.propertyvista.domain.financial.AggregatedTransfer;
-import com.propertyvista.domain.security.VistaCrmBehavior;
 import com.propertyvista.domain.security.common.VistaBasicBehavior;
 import com.propertyvista.domain.tenant.lead.Lead;
 import com.propertyvista.dto.AptUnitDTO;
@@ -66,6 +66,7 @@ import com.propertyvista.dto.LeaseApplicationDTO;
 import com.propertyvista.dto.LeaseDTO;
 import com.propertyvista.dto.MaintenanceRequestDTO;
 import com.propertyvista.dto.MessageDTO;
+import com.propertyvista.dto.PaymentRecordDTO;
 import com.propertyvista.shared.config.VistaFeatures;
 import com.propertyvista.shared.i18n.CompiledLocale;
 
@@ -221,15 +222,11 @@ public class NavigViewImpl extends Composite implements NavigView {
             root.addMenuItem(new SideMenuItem(list, i18n.tr("Finance"), CrmImages.INSTANCE.financeIcon(), CrmMainNavigationDebugId.Finance));
 
             list.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Finance.AggregatedTransfer(), DataModelPermission.permissionRead(AggregatedTransfer.class)));
-            if (SecurityController.check(VistaCrmBehavior.BuildingFinancial_OLD)) {
-                list.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Finance.AutoPay()));
-            }
+            list.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Finance.AutoPay(), DataModelPermission.permissionRead(AutoPayHistoryDTO.class)));
             list.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Finance.AutoPayReview(), DataModelPermission.permissionUpdate(MoneyInBatchDTO.class)));
             list.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Finance.MoneyIn(), DataModelPermission.permissionCreate(MoneyInBatchDTO.class)));
             list.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Finance.MoneyIn.Batch(), DataModelPermission.permissionRead(MoneyInBatchDTO.class)));
-            if (SecurityController.check(VistaCrmBehavior.AggregatedTransfer_OLD, VistaCrmBehavior.Billing_OLD)) {
-                list.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Finance.Payment()));
-            }
+            list.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Finance.Payment(), DataModelPermission.permissionRead(PaymentRecordDTO.class)));
         }
 
         {//Organization

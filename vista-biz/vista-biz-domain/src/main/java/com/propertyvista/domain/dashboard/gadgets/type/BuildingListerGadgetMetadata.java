@@ -30,24 +30,7 @@ import com.propertyvista.domain.security.VistaCrmBehavior;
         description = "Table-list-like gadget which displays building data according to prefered rules. Query and display data can be set up",
         keywords = "Buildings",
         allowedBehaviors = {
-                VistaCrmBehavior.PropertyManagement_OLD,
-                VistaCrmBehavior.Mechanicals_OLD,
-                VistaCrmBehavior.BuildingFinancial_OLD,
-                VistaCrmBehavior.Marketing_OLD,
-                VistaCrmBehavior.MarketingMedia_OLD,
-                VistaCrmBehavior.Tenants_OLD,
-                VistaCrmBehavior.Equifax_OLD,
-                VistaCrmBehavior.Emergency_OLD,
-                VistaCrmBehavior.ScreeningData_OLD,
-                VistaCrmBehavior.Occupancy_OLD,
-                VistaCrmBehavior.Maintenance_OLD,
-                VistaCrmBehavior.Organization_OLD,
-                VistaCrmBehavior.Contacts_OLD,
-                VistaCrmBehavior.ProductCatalog_OLD,
-                VistaCrmBehavior.Billing_OLD,
-                VistaCrmBehavior.Reports_OLD,
-                VistaCrmBehavior.PropertyVistaAccountOwner_OLD,
-                VistaCrmBehavior.PropertyVistaSupport
+                VistaCrmBehavior.DashboardsGadgets
         }        
 )//@formatter:on
 public interface BuildingListerGadgetMetadata extends GadgetMetadata {

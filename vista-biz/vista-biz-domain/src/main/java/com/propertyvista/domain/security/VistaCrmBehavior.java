@@ -29,13 +29,16 @@ public enum VistaCrmBehavior implements Behavior {
 
     OAPI_ILS,
 
+    @Deprecated
     Mechanicals_OLD,
 
+    @Deprecated
     BuildingFinancial_OLD,
 
     @Deprecated
     Marketing_OLD,
 
+    @Deprecated
     MarketingMedia_OLD,
 
     Tenants_OLD,
@@ -43,6 +46,7 @@ public enum VistaCrmBehavior implements Behavior {
     @Deprecated
     Equifax_OLD,
 
+    @Deprecated
     Emergency_OLD,
 
     @Deprecated
@@ -57,15 +61,10 @@ public enum VistaCrmBehavior implements Behavior {
     @Deprecated
     Organization_OLD,
 
-    OrganizationFinancial_OLD,
-
-    AggregatedTransfer_OLD,
-
     @Deprecated
-    OrganizationPolicy_OLD,
-
     Contacts_OLD,
 
+    @Deprecated
     ProductCatalog_OLD,
 
     Billing_OLD,
@@ -78,6 +77,7 @@ public enum VistaCrmBehavior implements Behavior {
     //Onboarding
     PropertyVistaAccountOwner_OLD,
 
+    @Deprecated
     Commandant_OLD,
 
     @Deprecated
@@ -173,6 +173,8 @@ public enum VistaCrmBehavior implements Behavior {
     LegalCollectionsFull,
 
     // --
+
+    DashboardsGadgets,
 
     // --
 
