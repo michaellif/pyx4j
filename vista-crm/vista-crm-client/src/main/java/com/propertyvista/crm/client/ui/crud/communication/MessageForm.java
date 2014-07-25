@@ -184,6 +184,8 @@ public class MessageForm extends CrmEntityForm<MessageDTO> {
 
         private FormPanel searchCriteriaPanel;
 
+        private Widget to;
+
         private Button.ButtonMenuBar subMenu;
 
         private final Button actionsButton;
@@ -238,7 +240,7 @@ public class MessageForm extends CrmEntityForm<MessageDTO> {
             formPanel.append(Location.Dual, proto().header()).decorate().labelWidth(0).customLabel("").useLabelSemicolon(false).assistantWidget(statusToolBar);
             formPanel.br();
 
-            formPanel.h4("To");
+            to = formPanel.h4("To");
             subMenu = new Button.ButtonMenuBar();
             subMenu.addItem(new MenuItem(i18n.tr("Tenant"), new Command() {
                 @Override
@@ -310,8 +312,6 @@ public class MessageForm extends CrmEntityForm<MessageDTO> {
             searchCriteriaPanel.append(Location.Dual, createCommunicationEndpointSelector());
             searchCriteriaPanel.h4("", actionsButton);
             formPanel.append(Location.Dual, searchCriteriaPanel);
-            formPanel.br();
-            formPanel.br();
             formPanel.br();
 
             formPanel.append(Location.Dual, proto().highImportance(), new CCheckBox()).decorate();
@@ -551,6 +551,8 @@ public class MessageForm extends CrmEntityForm<MessageDTO> {
                 if (getValue().to().size() > 0) {
                     communicationEndpointSelector.addAll(getValue().to(), false);
                 }
+                searchCriteriaPanel.setVisible(true);
+                to.setVisible(true);
                 BoxFolderItemDecorator<DeliveryHandle> d = (BoxFolderItemDecorator<DeliveryHandle>) getParent().getDecorator();
                 d.setExpended(true);
                 setViewable(false);
@@ -579,7 +581,12 @@ public class MessageForm extends CrmEntityForm<MessageDTO> {
                 setEnabled(false);
                 subMenu.setVisible(false);
                 actionsButton.setVisible(false);
-                communicationEndpointSelector.addAll(getValue().to(), true);
+                if (getValue().to() != null && getValue().to().size() > 0) {
+                    communicationEndpointSelector.addAll(getValue().to(), true);
+                } else {
+                    searchCriteriaPanel.setVisible(false);
+                    to.setVisible(false);
+                }
                 communicationEndpointSelector.setReadOnly(true);
                 btnSend.setVisible(false);
                 btnCancel.setVisible(false);

@@ -127,10 +127,10 @@ public class MessageViewerViewImpl extends CrmViewerViewImplBase<MessageDTO> imp
             MenuItem action = threadStatusActions.get(status);
             if (status.equals(value.status().getValue())) {
                 setActionVisible(action, false);
-            } else if (status.equals(ThreadStatus.Open)) {
-                setActionVisible(action, ThreadStatus.Resolved.equals(value.status().getValue()));
-            } else {
-                setActionVisible(action, !invisible && !ThreadStatus.New.equals(value.status().getValue()));
+            }
+            // only Open, Resolved, Cancelled, Closed;
+            else {
+                setActionVisible(action, !invisible && !ThreadStatus.New.equals(status));
             }
         }
 

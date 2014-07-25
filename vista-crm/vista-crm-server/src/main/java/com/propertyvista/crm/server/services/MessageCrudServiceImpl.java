@@ -456,6 +456,7 @@ public class MessageCrudServiceImpl extends AbstractCrudServiceDtoImpl<Message, 
             if (threadStatus != null) {
                 message.status().setValue(threadStatus);
                 thread.status().setValue(threadStatus);
+                thread.owner().set(CrmAppContext.getCurrentUser());
 
                 Persistence.service().persist(thread);
                 m.recipients().add(
