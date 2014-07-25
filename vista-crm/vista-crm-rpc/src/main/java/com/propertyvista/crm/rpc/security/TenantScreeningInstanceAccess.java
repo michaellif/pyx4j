@@ -22,7 +22,6 @@ public class TenantScreeningInstanceAccess extends ForTypesAccessRule {
 
     private static final long serialVersionUID = 1L;
 
-    @SuppressWarnings("unchecked")
     public TenantScreeningInstanceAccess() {
         super(LeaseParticipantScreeningTO.class);
     }

@@ -23,7 +23,6 @@ public class FormerTenantInstanceAccess extends ForTypesAccessRule {
 
     private static final long serialVersionUID = 1L;
 
-    @SuppressWarnings("unchecked")
     public FormerTenantInstanceAccess() {
         super(TenantDTO.class);
     }
