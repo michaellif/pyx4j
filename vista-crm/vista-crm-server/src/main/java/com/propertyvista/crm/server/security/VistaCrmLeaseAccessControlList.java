@@ -42,7 +42,6 @@ import com.propertyvista.crm.rpc.services.lease.ac.LeaseReserveUnit;
 import com.propertyvista.crm.rpc.services.lease.ac.LeaseRunBill;
 import com.propertyvista.crm.rpc.services.lease.ac.LeaseStateManagement;
 import com.propertyvista.crm.rpc.services.lease.ac.SendMail;
-import com.propertyvista.domain.legal.LegalLetter;
 import com.propertyvista.domain.tenant.lease.LeaseAdjustment;
 import com.propertyvista.dto.BillDTO;
 import com.propertyvista.dto.DepositLifecycleDTO;
@@ -61,12 +60,6 @@ class VistaCrmLeaseAccessControlList extends UIAclBuilder {
             grant(LeaseFull, LeaseDTO.class, new LeaseInstanceAccess(), ALL);
             grant(LeaseFull, LeaseTermDTO.class, new LeaseTermEditOnLeaseInstanceAccess(), ALL);
         }
-
-        // ---- Legal/Documentation:
-        // See also VistaCrmLegalAccessControlList
-
-        grant(LeaseAdvanced, LegalLetter.class, READ);
-        grant(LeaseFull, LegalLetter.class, ALL);
 
         // ---- Financial:
         // See also VistaCrmFinancialAccessControlList

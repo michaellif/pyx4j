@@ -17,9 +17,9 @@ import static com.propertyvista.domain.security.VistaCrmBehavior.LegalCollection
 import static com.propertyvista.domain.security.VistaCrmBehavior.LegalCollectionsFull;
 import static com.pyx4j.entity.security.AbstractCRUDPermission.ALL;
 import static com.pyx4j.entity.security.AbstractCRUDPermission.READ;
+import static com.pyx4j.entity.security.AbstractCRUDPermission.UPDATE;
 
 import com.pyx4j.security.server.UIAclBuilder;
-import com.pyx4j.security.shared.ActionPermission;
 
 import com.propertyvista.crm.rpc.dto.legal.n4.LegalNoticeCandidateDTO;
 import com.propertyvista.crm.rpc.services.lease.ac.LeaseCompletion;
@@ -31,17 +31,19 @@ class VistaCrmLegalAccessControlList extends UIAclBuilder {
 
     VistaCrmLegalAccessControlList() {
 
-        grant(LegalCollectionsBasic, new ActionPermission(LeaseNotice.class));
-        grant(LegalCollectionsFull, new ActionPermission(LeaseNotice.class));
+        // Actions:
+        grant(LegalCollectionsBasic, LeaseNotice.class);
 
-        grant(LegalCollectionsFull, new ActionPermission(LeaseCompletion.class));
+        grant(LegalCollectionsFull, LeaseNotice.class);
+        grant(LegalCollectionsFull, LeaseCompletion.class);
 
+        // Legal documents:
         grant(LegalCollectionsBasic, LegalLetter.class, READ);
         grant(LegalCollectionsBasic, LeaseLegalStateDTO.class, READ);
         grant(LegalCollectionsBasic, LegalNoticeCandidateDTO.class, READ);
 
-        grant(LegalCollectionsFull, LegalLetter.class, ALL);
-        grant(LegalCollectionsFull, LeaseLegalStateDTO.class, ALL);
+        grant(LegalCollectionsFull, LegalLetter.class, READ);
+        grant(LegalCollectionsFull, LeaseLegalStateDTO.class, READ | UPDATE);
         grant(LegalCollectionsFull, LegalNoticeCandidateDTO.class, ALL);
     }
 }
