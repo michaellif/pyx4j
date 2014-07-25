@@ -46,6 +46,15 @@ public class ForTypesAccessRule implements InstanceAccess {
     protected ForTypesAccessRule() {
     }
 
+    public ForTypesAccessRule(Class<? extends IEntity> entityClass) {
+        prototypes.add(EntityFactory.getEntityPrototype(entityClass));
+    }
+
+    public ForTypesAccessRule(Class<? extends IEntity> entityClass1, Class<? extends IEntity> entityClass2) {
+        prototypes.add(EntityFactory.getEntityPrototype(entityClass1));
+        prototypes.add(EntityFactory.getEntityPrototype(entityClass2));
+    }
+
     public ForTypesAccessRule(@SuppressWarnings("unchecked") Class<? extends IEntity>... entityClasses) {
         for (Class<? extends IEntity> entityClass : entityClasses) {
             prototypes.add(EntityFactory.getEntityPrototype(entityClass));
