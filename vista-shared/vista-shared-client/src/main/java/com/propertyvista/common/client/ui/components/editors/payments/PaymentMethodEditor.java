@@ -116,8 +116,8 @@ public class PaymentMethodEditor<E extends AbstractPaymentMethod> extends CForm<
         get(proto().sameAsCurrent()).addValueChangeHandler(new ValueChangeHandler<Boolean>() {
             @Override
             public void onValueChange(ValueChangeEvent<Boolean> event) {
-                onBillingAddressSameAsCurrentOne(event.getValue(), get(proto().billingAddress()));
                 get(proto().billingAddress()).setEditable(!event.getValue());
+                onBillingAddressSameAsCurrentOne(event.getValue(), get(proto().billingAddress()));
             }
         });
 
