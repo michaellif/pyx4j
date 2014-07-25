@@ -74,14 +74,6 @@ public class CrmRolesPreloader extends AbstractDataPreloader {
 
     }
 
-    public static CrmRole getPropertyVistaAccountOwnerRole() {
-        EntityQueryCriteria<CrmRole> criteria = EntityQueryCriteria.create(CrmRole.class);
-        criteria.add(PropertyCriterion.eq(criteria.proto().name(), VistaCrmBehavior.PropertyVistaAccountOwner_OLD.name()));
-        CrmRole role = Persistence.service().retrieve(criteria);
-        assert (role != null);
-        return role;
-    }
-
     @Override
     public String create() {
         List<VistaCrmBehavior> allRoles = new ArrayList<VistaCrmBehavior>(Arrays.asList(VistaCrmBehavior.values()));

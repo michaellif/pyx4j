@@ -74,7 +74,7 @@ public enum VistaCrmBehavior implements Behavior {
 
     Reports_OLD,
 
-    //Onboarding
+    @Deprecated
     PropertyVistaAccountOwner_OLD,
 
     @Deprecated

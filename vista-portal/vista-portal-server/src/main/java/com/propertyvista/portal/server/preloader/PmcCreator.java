@@ -20,6 +20,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.pyx4j.commons.CommonsStringUtils;
+import com.pyx4j.commons.Key;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.entity.core.EntityFactory;
@@ -78,11 +79,10 @@ public class PmcCreator {
                 log.info("Preload {}", preloader.create());
 
                 CrmRole defaultRole = CrmRolesPreloader.getDefaultRole();
-                CrmRole pvRole = CrmRolesPreloader.getPropertyVistaAccountOwnerRole();
 
                 for (OnboardingUser onbUser : getAllOnboardingUsers(pmc)) {
                     createCrmEmployee(onbUser.firstName().getValue(), onbUser.lastName().getValue(), onbUser.email().getValue(), onbUser.password().getValue(),
-                            defaultRole, pvRole);
+                            onbUser.getPrimaryKey(), defaultRole);
                 }
 
                 // Create support account by default
@@ -95,7 +95,7 @@ public class PmcCreator {
                         if (i == 2) {
                             additinalRole = CrmRolesPreloader.getSupportRole();
                         }
-                        createCrmEmployee(email, email, email, email, defaultRole, additinalRole);
+                        createCrmEmployee(email, email, email, email, null, defaultRole, additinalRole);
                     }
                 }
 
@@ -117,11 +117,11 @@ public class PmcCreator {
     }
 
     public static void createVistaSupportUsers() {
-        createCrmEmployee("Support", "PropertyVista", CrmUser.VISTA_SUPPORT_ACCOUNT_EMAIL, null, CrmRolesPreloader.getDefaultRole(),
+        createCrmEmployee("Support", "PropertyVista", CrmUser.VISTA_SUPPORT_ACCOUNT_EMAIL, null, null, CrmRolesPreloader.getDefaultRole(),
                 CrmRolesPreloader.getSupportRole());
     }
 
-    public static CrmUser createCrmEmployee(String firstName, String lastName, String email, String password, CrmRole... roles) {
+    public static CrmUser createCrmEmployee(String firstName, String lastName, String email, String password, Key onboardingUserKey, CrmRole... roles) {
         if (!ApplicationMode.isDevelopment()) {
             EntityQueryCriteria<CrmUser> criteria = EntityQueryCriteria.create(CrmUser.class);
             criteria.add(PropertyCriterion.eq(criteria.proto().email(), email));
@@ -149,6 +149,8 @@ public class PmcCreator {
 
         CrmUserCredential credential = EntityFactory.create(CrmUserCredential.class);
         credential.setPrimaryKey(user.getPrimaryKey());
+
+        credential.onboardingUser().setValue(onboardingUserKey);
 
         credential.user().set(user);
 

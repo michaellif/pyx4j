@@ -54,9 +54,7 @@ import com.propertyvista.domain.pmc.Pmc;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.security.AuditRecordEventType;
-import com.propertyvista.domain.security.CrmRole;
 import com.propertyvista.domain.security.CustomerUser;
-import com.propertyvista.domain.security.VistaCrmBehavior;
 import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.domain.tenant.CustomerCreditCheck;
 import com.propertyvista.domain.tenant.insurance.GeneralInsuranceCertificate;
@@ -357,23 +355,13 @@ class VistaBusinessStatsReport {
 
         {
 
-            List<CrmUserCredential> users = Persistence.service().query(EntityQueryCriteria.create(CrmUserCredential.class));
-
-            CrmUserCredential crmUser = EntityFactory.create(CrmUserCredential.class);
-            userLoop: for (CrmUserCredential user : users) {
-                for (CrmRole role : user.roles()) {
-                    for (VistaCrmBehavior behaviour : role.behaviors()) {
-                        if (behaviour.equals(VistaCrmBehavior.PropertyVistaAccountOwner_OLD)) {
-                            Persistence.service().retrieve(user.user());
-                            crmUser = user;
-                            break userLoop;
-                        }
-                    }
-                }
+            EntityQueryCriteria<CrmUserCredential> criteria = EntityQueryCriteria.create(CrmUserCredential.class);
+            criteria.isNotNull(criteria.proto().onboardingUser());
+            CrmUserCredential crmUser = Persistence.service().retrieve(EntityQueryCriteria.create(CrmUserCredential.class));
+            if (crmUser != null) {
+                data.contactName().setValue(crmUser.user().name().getValue());
+                data.contactEmail().setValue(crmUser.user().email().getValue());
             }
-
-            data.contactName().setValue(crmUser.user().name() != null ? crmUser.user().name().getValue() : null);
-            data.contactEmail().setValue(crmUser.user().email() != null ? crmUser.user().email().getValue() : null);
         }
 
         er.reportEntity(formatter, data);
