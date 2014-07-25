@@ -76,8 +76,6 @@ public class CrmViewerViewImplBase<E extends IEntity> extends AbstractViewer<E> 
 
     private Class<? extends IEntity> notesPermissionClass = null;
 
-    private AccessControlContext notesSecurityContexts = null;
-
     public CrmViewerViewImplBase() {
         this(false);
     }
@@ -91,16 +89,10 @@ public class CrmViewerViewImplBase<E extends IEntity> extends AbstractViewer<E> 
             @Override
             public void execute() {
                 NotesAndAttachmentsVisorController notesController = ((CrmViewerActivity<E>) getPresenter()).getNotesAndAttachmentsController();
-                notesController.setSecurityData(notesPermissionClass, notesSecurityContexts);
+                notesController.setSecurityData(notesPermissionClass, getForm().getValue());
                 notesController.show();
             }
-        }) {
-            @Override
-            public void setSecurityContext(AccessControlContext context) {
-                super.setSecurityContext(context);
-                notesSecurityContexts = context;
-            }
-        };
+        });
         addHeaderToolbarItem(notesButton);
 
         // Edit button:
