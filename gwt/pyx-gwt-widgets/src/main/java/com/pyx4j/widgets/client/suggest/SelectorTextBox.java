@@ -57,6 +57,7 @@ import com.google.gwt.user.client.ui.SuggestOracle.Suggestion;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.UIObject;
 
+import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.commons.IFormatter;
 import com.pyx4j.widgets.client.ITextWidget;
 import com.pyx4j.widgets.client.TextWatermark;
@@ -146,9 +147,9 @@ public class SelectorTextBox<E> extends Composite implements WatermarkComponent,
             setText("");
         } else {
             setText(formatter.format(value));
+            display.hideSuggestions();
+            fireSuggestionEvent(value);
         }
-        display.hideSuggestions();
-        fireSuggestionEvent(value);
     }
 
     @Override
@@ -163,7 +164,7 @@ public class SelectorTextBox<E> extends Composite implements WatermarkComponent,
     @Override
     public void setText(String text) {
         box.setText(text);
-        if (watermark != null) {
+        if (!box.hasFocus() && watermark != null) {
             watermark.show();
         }
     }
@@ -247,6 +248,11 @@ public class SelectorTextBox<E> extends Composite implements WatermarkComponent,
     }
 
     class InputTextBox extends TextBox {
+
+        private boolean focused = false;
+
+        private String text;
+
         public InputTextBox() {
 
             addKeyDownHandler(new KeyDownHandler() {
@@ -263,6 +269,7 @@ public class SelectorTextBox<E> extends Composite implements WatermarkComponent,
                     case KeyCodes.KEY_ENTER:
                     case KeyCodes.KEY_TAB:
                         SelectorTextBox.this.setValue(display.getCurrentSelection());
+                        syncInput();
                         break;
                     }
                 }
@@ -272,7 +279,9 @@ public class SelectorTextBox<E> extends Composite implements WatermarkComponent,
 
                 @Override
                 public void onKeyUp(KeyUpEvent event) {
-                    refreshSuggestions();
+                    if (syncInput()) {
+                        refreshSuggestions();
+                    }
                 }
             });
 
@@ -288,6 +297,7 @@ public class SelectorTextBox<E> extends Composite implements WatermarkComponent,
 
                 @Override
                 public void onFocus(FocusEvent event) {
+                    focused = true;
                     refreshSuggestions();
                 }
             });
@@ -296,6 +306,7 @@ public class SelectorTextBox<E> extends Composite implements WatermarkComponent,
 
                 @Override
                 public void onBlur(BlurEvent event) {
+                    focused = false;
                     SelectorTextBox.this.setValue(display.getCurrentSelection());
                 }
             });
@@ -304,6 +315,18 @@ public class SelectorTextBox<E> extends Composite implements WatermarkComponent,
             addStyleName(WidgetTheme.StyleName.SuggestBox.name());
             addStyleDependentName(WidgetTheme.StyleDependent.singleLine.name());
 
+        }
+
+        public boolean hasFocus() {
+            return focused;
+        }
+
+        private boolean syncInput() {
+            String newText = getText();
+            // check if new input has been received
+            boolean result = (!display.isSuggestionListShowing() && CommonsStringUtils.isEmpty(newText)) || (text != null && !text.equals(newText));
+            text = newText;
+            return result;
         }
     }
 
