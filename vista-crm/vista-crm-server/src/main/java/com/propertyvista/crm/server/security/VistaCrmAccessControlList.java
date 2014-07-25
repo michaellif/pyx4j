@@ -31,7 +31,6 @@ import com.propertyvista.crm.rpc.services.NoteAttachmentUploadService;
 import com.propertyvista.crm.rpc.services.PmcDocumentFileUploadService;
 import com.propertyvista.crm.rpc.services.PmcTermsOfServiceService;
 import com.propertyvista.crm.rpc.services.UpdateUploadService;
-import com.propertyvista.crm.rpc.services.billing.BillPreviewService;
 import com.propertyvista.crm.rpc.services.billing.BillPrintService;
 import com.propertyvista.crm.rpc.services.billing.BillingCycleBillListService;
 import com.propertyvista.crm.rpc.services.billing.BillingCycleLeaseListService;
@@ -66,7 +65,6 @@ import com.propertyvista.crm.rpc.services.customer.PreauthorizedPaymentsVisorSer
 import com.propertyvista.crm.rpc.services.customer.TenantCrudService;
 import com.propertyvista.crm.rpc.services.customer.TenantPadFileDownloadService;
 import com.propertyvista.crm.rpc.services.customer.TenantPadFileUploadService;
-import com.propertyvista.crm.rpc.services.customer.TenantPasswordChangeService;
 import com.propertyvista.crm.rpc.services.customer.lead.AppointmentCrudService;
 import com.propertyvista.crm.rpc.services.customer.lead.LeadCrudService;
 import com.propertyvista.crm.rpc.services.customer.lead.ShowingCrudService;
@@ -436,8 +434,6 @@ public class VistaCrmAccessControlList extends ServletContainerAclBuilder {
         grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(PaymentRecordCrudService.class));
         grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(CreditCardValidationService.class));
 
-        grant(VistaCrmBehavior.Tenants_OLD, new IServiceExecutePermission(TenantPasswordChangeService.class));
-
         grant(VistaCrmBehavior.PropertyVistaSupport, new IServiceExecutePermission(TenantPadFileDownloadService.class));
         grant(VistaCrmBehavior.PropertyVistaSupport, new IServiceExecutePermission(TenantPadFileUploadService.class));
 
@@ -451,8 +447,6 @@ public class VistaCrmAccessControlList extends ServletContainerAclBuilder {
         grant(VistaCrmBehavior.Billing_OLD, new IServiceExecutePermission(BillingExecutionService.class));
         grant(VistaCrmBehavior.Billing_OLD, new IServiceExecutePermission(BillingCycleBillListService.class));
         grant(VistaCrmBehavior.Billing_OLD, new IServiceExecutePermission(BillingCycleLeaseListService.class));
-
-        grant(VistaCrmBehavior.Tenants_OLD, new IServiceExecutePermission(BillPreviewService.class));
 
         grant(VistaCrmBehavior.Billing_OLD, new IServiceExecutePermission(PaymentRecordListService.class));
 

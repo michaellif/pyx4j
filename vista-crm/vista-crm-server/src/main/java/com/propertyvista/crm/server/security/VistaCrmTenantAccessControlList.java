@@ -20,12 +20,14 @@ import static com.pyx4j.entity.security.AbstractCRUDPermission.ALL;
 import static com.pyx4j.entity.security.AbstractCRUDPermission.READ;
 import static com.pyx4j.entity.security.AbstractCRUDPermission.UPDATE;
 
+import com.pyx4j.rpc.shared.IServiceExecutePermission;
 import com.pyx4j.security.server.UIAclBuilder;
 
 import com.propertyvista.crm.rpc.security.FormerTenantInstanceAccess;
 import com.propertyvista.crm.rpc.security.FormerTenantScreeningInstanceAccess;
 import com.propertyvista.crm.rpc.security.TenantInstanceAccess;
 import com.propertyvista.crm.rpc.security.TenantScreeningInstanceAccess;
+import com.propertyvista.crm.rpc.services.customer.TenantPasswordChangeService;
 import com.propertyvista.crm.rpc.services.customer.ac.FormerTenantListAction;
 import com.propertyvista.crm.rpc.services.customer.ac.TenantChangePassword;
 import com.propertyvista.crm.rpc.services.customer.ac.TenantListAction;
@@ -58,6 +60,7 @@ class VistaCrmTenantAccessControlList extends UIAclBuilder {
         grant(TenantBasic, TenantChangePassword.class, new TenantInstanceAccess());
         grant(TenantAdvanced, TenantChangePassword.class, new TenantInstanceAccess());
         grant(TenantFull, TenantChangePassword.class, new TenantInstanceAccess());
+        grant(TenantBasic, TenantAdvanced, TenantFull, new IServiceExecutePermission(TenantPasswordChangeService.class));
 
 // --------------------------------------------------------------------------------------------------------------------
 

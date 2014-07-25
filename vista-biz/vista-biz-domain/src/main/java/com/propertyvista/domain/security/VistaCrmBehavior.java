@@ -42,6 +42,7 @@ public enum VistaCrmBehavior implements Behavior {
     @Deprecated
     MarketingMedia_OLD,
 
+    @Deprecated
     Tenants_OLD,
 
     @Deprecated
