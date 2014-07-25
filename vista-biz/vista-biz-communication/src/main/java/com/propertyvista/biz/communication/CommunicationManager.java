@@ -17,12 +17,9 @@ import java.io.Serializable;
 import java.util.HashSet;
 import java.util.List;
 
-import org.apache.commons.collections4.set.ListOrderedSet;
-
 import com.pyx4j.commons.Key;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.core.AttachLevel;
-import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.criterion.AndCriterion;
 import com.pyx4j.entity.core.criterion.EntityListCriteria;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
@@ -35,22 +32,12 @@ import com.pyx4j.security.shared.Context;
 import com.pyx4j.security.shared.SecurityController;
 
 import com.propertyvista.crm.rpc.dto.communication.CrmCommunicationSystemNotification;
-import com.propertyvista.domain.communication.CommunicationEndpoint;
-import com.propertyvista.domain.communication.CommunicationEndpoint.ContactType;
 import com.propertyvista.domain.communication.CommunicationThread;
 import com.propertyvista.domain.communication.CommunicationThread.ThreadStatus;
-import com.propertyvista.domain.communication.DeliveryHandle;
 import com.propertyvista.domain.communication.Message;
 import com.propertyvista.domain.communication.MessageCategory;
-import com.propertyvista.domain.communication.SystemEndpoint;
 import com.propertyvista.domain.communication.SystemEndpoint.SystemEndpointName;
 import com.propertyvista.domain.company.Employee;
-import com.propertyvista.domain.company.Portfolio;
-import com.propertyvista.domain.property.asset.building.Building;
-import com.propertyvista.domain.property.asset.unit.AptUnit;
-import com.propertyvista.domain.security.CrmUser;
-import com.propertyvista.domain.security.CustomerUser;
-import com.propertyvista.dto.CommunicationEndpointDTO;
 import com.propertyvista.portal.rpc.shared.dto.communication.PortalCommunicationSystemNotification;
 import com.propertyvista.shared.VistaUserVisit;
 
@@ -111,87 +98,6 @@ public class CommunicationManager {
         Persistence.applyDatasetAccessRule(threadCriteria);
 
         r.setTotalRows(Persistence.service().count(threadCriteria));
-    }
-
-    public String extractEndpointName(CommunicationEndpoint entity) {
-        if (entity == null) {
-            return null;
-        }
-
-        if (entity.getInstanceValueClass().equals(SystemEndpoint.class)) {
-            SystemEndpoint e = entity.cast();
-            return e.name().getValue();
-        } else if (entity.getInstanceValueClass().equals(CrmUser.class)) {
-            CrmUser e = entity.cast();
-            return e.name().getValue();
-        } else if (entity.getInstanceValueClass().equals(CustomerUser.class)) {
-            CustomerUser e = entity.cast();
-            return e.name().getValue();
-        } else if (entity.getInstanceValueClass().equals(Building.class)) {
-            Building e = entity.cast();
-            return e.propertyCode().getValue();
-        } else if (entity.getInstanceValueClass().equals(AptUnit.class)) {
-            AptUnit e = entity.cast();
-            return e.getStringView();
-        }
-        return null;
-    }
-
-    public DeliveryHandle createDeliveryHandle(CommunicationEndpoint endpoint, boolean generatedFromGroup) {
-        DeliveryHandle dh = EntityFactory.create(DeliveryHandle.class);
-        dh.isRead().setValue(false);
-        dh.star().setValue(false);
-        dh.recipient().set(endpoint);
-        dh.generatedFromGroup().setValue(generatedFromGroup);
-        return dh;
-    }
-
-    public CommunicationEndpointDTO generateEndpointDTO(CommunicationEndpoint entity) {
-        if (entity == null) {
-            return null;
-        }
-        CommunicationEndpointDTO rec = EntityFactory.create(CommunicationEndpointDTO.class);
-        rec.endpoint().set(entity);
-
-        if (entity.getInstanceValueClass().equals(SystemEndpoint.class)) {
-            SystemEndpoint e = entity.cast();
-            rec.name().setValue(e.name().getValue());
-            rec.type().setValue(ContactType.System);
-        } else if (entity.getInstanceValueClass().equals(CrmUser.class)) {
-            CrmUser e = entity.cast();
-            rec.name().set(e.name());
-            rec.type().setValue(ContactType.Employee);
-        } else if (entity.getInstanceValueClass().equals(CustomerUser.class)) {
-            CustomerUser e = entity.cast();
-            rec.name().set(e.name());
-            rec.type().setValue(ContactType.Tenant);
-        } else if (entity.getInstanceValueClass().equals(Building.class)) {
-            Building e = entity.cast();
-            rec.name().set(e.propertyCode());
-            rec.type().setValue(ContactType.Building);
-        } else if (entity.getInstanceValueClass().equals(Portfolio.class)) {
-            Portfolio e = entity.cast();
-            rec.name().set(e.name());
-            rec.type().setValue(ContactType.Portfolio);
-        } else if (entity.getInstanceValueClass().equals(AptUnit.class)) {
-            AptUnit e = entity.cast();
-            rec.name().setValue(e.getStringView());
-            rec.type().setValue(ContactType.Unit);
-        }
-        return rec;
-    }
-
-    public String sendersAsStringView(ListOrderedSet<CommunicationEndpoint> senders) {
-        if (senders == null || senders.size() < 1) {
-            return "";
-        }
-        if (senders.size() == 1) {
-            return senders.get(0).getStringView();
-        }
-        if (senders.size() == 2) {
-            return senders.get(0).getStringView() + ", " + senders.get(1).getStringView();
-        }
-        return senders.get(0).getStringView() + " ... " + senders.get(senders.size() - 1).getStringView();
     }
 
     public Serializable getCommunicationStatus() {
@@ -257,7 +163,7 @@ public class CommunicationManager {
         return directMessages;
     }
 
-    public List<MessageCategory> getUserGroups() {
+    private List<MessageCategory> getUserGroups() {
         EntityQueryCriteria<MessageCategory> groupCriteria = EntityQueryCriteria.create(MessageCategory.class);
 
         EntityQueryCriteria<Employee> criteria = EntityQueryCriteria.create(Employee.class);

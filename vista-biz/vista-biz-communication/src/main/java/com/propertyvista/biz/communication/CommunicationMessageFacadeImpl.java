@@ -33,17 +33,23 @@ import com.propertyvista.domain.communication.SystemEndpoint;
 import com.propertyvista.domain.communication.SystemEndpoint.SystemEndpointName;
 import com.propertyvista.domain.company.Employee;
 import com.propertyvista.dto.CommunicationEndpointDTO;
+import com.propertyvista.dto.MessageDTO;
 
 public class CommunicationMessageFacadeImpl implements CommunicationMessageFacade {
 
     @Override
-    public MessageCategory getMessageCategoryFromCache(MessageGroupCategory mgCategory) {
-        return MessageCategoryManager.instance().getMessageCategoryFromCache(mgCategory);
+    public String buildForwardSubject(MessageDTO forwardedMessage) {
+        return MessageTextBuilder.buildForwardSubject(forwardedMessage);
     }
 
     @Override
-    public SystemEndpoint getSystemEndpointFromCache(SystemEndpointName sep) {
-        return SystemEndpointManager.instance().getSystemEndpointFromCache(sep);
+    public String buildForwardText(MessageDTO forwardedMessage) {
+        return MessageTextBuilder.buildForwardText(forwardedMessage);
+    }
+
+    @Override
+    public MessageCategory getMessageCategoryFromCache(MessageGroupCategory mgCategory) {
+        return MessageCategoryManager.instance().getMessageCategoryFromCache(mgCategory);
     }
 
     @Override
@@ -52,28 +58,38 @@ public class CommunicationMessageFacadeImpl implements CommunicationMessageFacad
     }
 
     @Override
-    public EntitySearchResult<Message> query(EntityListCriteria<Message> criteria) {
-        return CommunicationManager.instance().query(criteria);
+    public SystemEndpoint getSystemEndpointFromCache(SystemEndpointName sep) {
+        return CommunicationEndpointManager.instance().getSystemEndpointFromCache(sep);
     }
 
     @Override
     public String extractEndpointName(CommunicationEndpoint entity) {
-        return CommunicationManager.instance().extractEndpointName(entity);
+        return CommunicationEndpointManager.instance().extractEndpointName(entity);
     }
 
     @Override
     public DeliveryHandle createDeliveryHandle(CommunicationEndpoint endpoint, boolean generatedFromGroup) {
-        return CommunicationManager.instance().createDeliveryHandle(endpoint, generatedFromGroup);
+        return CommunicationEndpointManager.instance().createDeliveryHandle(endpoint, generatedFromGroup);
     }
 
     @Override
     public CommunicationEndpointDTO generateEndpointDTO(CommunicationEndpoint entity) {
-        return CommunicationManager.instance().generateEndpointDTO(entity);
+        return CommunicationEndpointManager.instance().generateEndpointDTO(entity);
     }
 
     @Override
     public String sendersAsStringView(ListOrderedSet<CommunicationEndpoint> senders) {
-        return CommunicationManager.instance().sendersAsStringView(senders);
+        return CommunicationEndpointManager.instance().sendersAsStringView(senders);
+    }
+
+    @Override
+    public void buildRecipientList(Message bo, MessageDTO to) {
+        CommunicationEndpointManager.instance().buildRecipientList(bo, to);
+    }
+
+    @Override
+    public EntitySearchResult<Message> query(EntityListCriteria<Message> criteria) {
+        return CommunicationManager.instance().query(criteria);
     }
 
     @Override

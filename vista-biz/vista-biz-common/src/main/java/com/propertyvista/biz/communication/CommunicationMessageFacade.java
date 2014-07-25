@@ -33,16 +33,19 @@ import com.propertyvista.domain.communication.SystemEndpoint;
 import com.propertyvista.domain.communication.SystemEndpoint.SystemEndpointName;
 import com.propertyvista.domain.company.Employee;
 import com.propertyvista.dto.CommunicationEndpointDTO;
+import com.propertyvista.dto.MessageDTO;
 
 public interface CommunicationMessageFacade {
 
-    public MessageCategory getMessageCategoryFromCache(MessageGroupCategory mgCategory);
+    public String buildForwardSubject(MessageDTO forwardedMessage);
 
-    public SystemEndpoint getSystemEndpointFromCache(SystemEndpointName sep);
+    public String buildForwardText(MessageDTO forwardedMessage);
+
+    public MessageCategory getMessageCategoryFromCache(MessageGroupCategory mgCategory);
 
     public List<MessageCategory> getDispatchedMessageCategories(Employee employee, AttachLevel attachLevel);
 
-    public EntitySearchResult<Message> query(EntityListCriteria<Message> criteria);
+    public SystemEndpoint getSystemEndpointFromCache(SystemEndpointName sep);
 
     public String extractEndpointName(CommunicationEndpoint entity);
 
@@ -51,6 +54,10 @@ public interface CommunicationMessageFacade {
     public CommunicationEndpointDTO generateEndpointDTO(CommunicationEndpoint entity);
 
     public String sendersAsStringView(ListOrderedSet<CommunicationEndpoint> senders);
+
+    public void buildRecipientList(Message bo, MessageDTO to);
+
+    public EntitySearchResult<Message> query(EntityListCriteria<Message> criteria);
 
     public Serializable getCommunicationStatus();
 
