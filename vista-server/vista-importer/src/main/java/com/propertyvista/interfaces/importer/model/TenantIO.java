@@ -42,4 +42,6 @@ public interface TenantIO extends IEntity {
     IList<AutoPayAgreementIO> autoPayAgreements();
 
     IList<InsuranceCertificateIO> insurance();
+
+    IPrimitive<Boolean> hadDirectDebitPayments();
 }

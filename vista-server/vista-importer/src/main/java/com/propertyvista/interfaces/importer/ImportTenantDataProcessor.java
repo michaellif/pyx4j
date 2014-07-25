@@ -121,5 +121,10 @@ public class ImportTenantDataProcessor {
         for (InsuranceCertificateIO certificateIO : tenantIO.insurance()) {
             new ImportInsuranceCertificateDataProcessor().importModel(context, lease, leaseTermTenant.leaseParticipant(), certificateIO);
         }
+
+        // Notify tenant that account number had Changed
+        if (tenantIO.hadDirectDebitPayments().getValue(false)) {
+            // TODO Stas VISTA-5007
+        }
     }
 }

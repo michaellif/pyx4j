@@ -38,6 +38,12 @@ public class ExportTenantDataRetriever {
 
         tenantIO.insurance().addAll(new ExportInsuranceDataRetriever().getModel(leaseTermTenant.leaseParticipant()));
 
+        //Find if there are DirectDebit payment Records in DB in this lease. If so then we will send notification upon import
+        // TODO Stas VISTA-5007
+        if (false) {
+            tenantIO.hadDirectDebitPayments().setValue(true);
+        }
+
         return tenantIO;
     }
 
