@@ -25,10 +25,9 @@ public enum VistaCrmBehavior implements Behavior {
 
     PropertyManagement_OLD,
 
-    OAPI,
+    OAPI_Properties,
 
-    @Deprecated
-    ILS_OLD,
+    OAPI_ILS,
 
     Mechanicals_OLD,
 

@@ -93,7 +93,7 @@ public class ILSAuthFilter implements Filter {
 
                                 @Override
                                 public void onSuccess(AuthenticationResponse result) {
-                                    rc.set(SecurityController.check(VistaCrmBehavior.ILS_OLD));
+                                    rc.set(SecurityController.check(VistaCrmBehavior.OAPI_ILS));
                                     Lifecycle.endSession();
                                 }
                             }, new ClientSystemInfo(), authenticationRequest);

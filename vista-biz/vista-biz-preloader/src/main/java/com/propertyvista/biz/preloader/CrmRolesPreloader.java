@@ -98,7 +98,7 @@ public class CrmRolesPreloader extends AbstractDataPreloader {
         allRoles.remove(VistaCrmBehavior.PropertyVistaSupport);
         allRoles.remove(VistaCrmBehavior.PropertyVistaAccountOwner_OLD);
         if (!ApplicationMode.isDevelopment()) {
-            allRoles.remove(VistaCrmBehavior.OAPI);
+            allRoles.remove(VistaCrmBehavior.OAPI_Properties);
         }
 
         createRole(DEFAULT_ACCESS_ALL_ROLE_NAME, true, allRoles.toArray(new VistaCrmBehavior[allRoles.size()]));
