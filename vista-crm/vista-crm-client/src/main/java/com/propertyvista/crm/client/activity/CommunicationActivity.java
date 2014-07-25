@@ -26,6 +26,7 @@ import com.propertyvista.crm.client.ui.crud.communication.CommunicationView;
 import com.propertyvista.dto.MessageDTO;
 
 public class CommunicationActivity extends AbstractActivity implements CommunicationView.CommunicationPresenter {
+
     private final CommunicationView view;
 
     public CommunicationActivity(Place place) {

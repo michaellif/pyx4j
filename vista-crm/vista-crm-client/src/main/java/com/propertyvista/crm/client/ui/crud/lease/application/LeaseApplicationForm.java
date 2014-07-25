@@ -24,7 +24,6 @@ import com.pyx4j.forms.client.ui.folder.CFolder;
 import com.pyx4j.forms.client.ui.folder.IFolderItemDecorator;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.forms.client.ui.panels.FormPanel;
-import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.site.client.ui.prime.form.IForm;
 import com.pyx4j.widgets.client.tabpanel.Tab;
 
@@ -47,7 +46,7 @@ public class LeaseApplicationForm extends LeaseFormBase<LeaseApplicationDTO> {
 
     private FormPanel onlineStatusPanel;
 
-    private final Tab chargesTab, paymentsTab, financialTab, applicationDocumentsTab;
+    private final Tab chargesTab;
 
     public LeaseApplicationForm(IForm<LeaseApplicationDTO> view) {
         super(LeaseApplicationDTO.class, view);
@@ -55,21 +54,17 @@ public class LeaseApplicationForm extends LeaseFormBase<LeaseApplicationDTO> {
         selectTab(addTab(createDetailsTab(), i18n.tr("Details")));
         addTab(createInfoTab(), i18n.tr("Information"));
         chargesTab = addTab(createChargesTab(), i18n.tr("Potential Charges"));
-        paymentsTab = addTab(((LeaseApplicationViewerView) getParentView()).getPaymentListerView().asWidget(), i18n.tr("Payments"));
-        financialTab = addTab(createFinancialTab(), i18n.tr("Financial"));
+        addTab(((LeaseApplicationViewerView) getParentView()).getPaymentListerView().asWidget(), i18n.tr("Payments"),
+                DataModelPermission.permissionRead(PaymentRecordDTO.class));
+        addTab(createFinancialTab(), i18n.tr("Financial"), DataModelPermission.permissionRead(TenantFinancialDTO.class));
         addTab(createApprovalTab(), i18n.tr("Approval"));
-        applicationDocumentsTab = addTab(createApplicationDocumentsTab(), i18n.tr("Application Documents"));
+        addTab(createApplicationDocumentsTab(), i18n.tr("Application Documents"), DataModelPermission.permissionRead(LeaseApplicationDocument.class));
     }
 
     @Override
     public void onReset() {
         super.onReset();
-
-        // Static Tabs visibility (by permission):  
         chargesTab.setTabVisible(!VistaFeatures.instance().yardiIntegration());
-        paymentsTab.setTabVisible(SecurityController.check(DataModelPermission.permissionRead(PaymentRecordDTO.class)));
-        financialTab.setTabVisible(SecurityController.check(DataModelPermission.permissionRead(TenantFinancialDTO.class)));
-        applicationDocumentsTab.setTabVisible(SecurityController.check(DataModelPermission.permissionRead(LeaseApplicationDocument.class)));
     }
 
     @Override

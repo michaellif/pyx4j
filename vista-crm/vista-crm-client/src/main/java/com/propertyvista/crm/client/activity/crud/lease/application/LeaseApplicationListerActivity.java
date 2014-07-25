@@ -16,9 +16,6 @@ package com.propertyvista.crm.client.activity.crud.lease.application;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.place.shared.Place;
 
-import com.pyx4j.entity.security.DataModelPermission;
-import com.pyx4j.security.shared.SecurityController;
-
 import com.propertyvista.crm.client.CrmSite;
 import com.propertyvista.crm.client.activity.crud.lease.common.LeaseListerActivityBase;
 import com.propertyvista.crm.client.ui.crud.lease.application.LeaseApplicationListerView;
@@ -32,8 +29,4 @@ public class LeaseApplicationListerActivity extends LeaseListerActivityBase<Leas
                 .<LeaseApplicationViewerCrudService> create(LeaseApplicationViewerCrudService.class), LeaseApplicationDTO.class);
     }
 
-    @Override
-    public boolean canCreateNewItem() {
-        return SecurityController.check(DataModelPermission.permissionCreate(LeaseApplicationDTO.class));
-    }
 }
