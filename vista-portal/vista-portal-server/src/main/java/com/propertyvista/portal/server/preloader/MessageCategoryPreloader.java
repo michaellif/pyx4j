@@ -27,8 +27,7 @@ public class MessageCategoryPreloader extends AbstractDataPreloader {
     @Override
     public String create() {
 
-        createCategory(MessageGroupCategory.TenantOriginated, "Tenant Originated Communication", CrmRolesPreloader.getDefaultRole(),
-                CrmRolesPreloader.getCommandantRole());
+        createCategory(MessageGroupCategory.TenantOriginated, "Tenant Originated Communication", CrmRolesPreloader.getDefaultRole());
         createCategory(MessageGroupCategory.LandlordOriginated, "Landlord Originated Communication", CrmRolesPreloader.getDefaultRole());
         createCategory(MessageGroupCategory.VendorOriginated, "Vendor Originated Communication", CrmRolesPreloader.getDefaultRole());
         createCategory(MessageGroupCategory.Custom, "General Communication", CrmRolesPreloader.getDefaultRole());

@@ -19,7 +19,6 @@ import com.pyx4j.commons.Key;
 import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.entity.security.DataModelPermission;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.site.client.ui.sidemenu.SideMenu;
 import com.pyx4j.site.client.ui.sidemenu.SideMenuAppPlaceItem;
 import com.pyx4j.site.client.ui.sidemenu.SideMenuItem;
@@ -47,7 +46,6 @@ import com.propertyvista.domain.financial.MerchantAccount;
 import com.propertyvista.domain.financial.tax.Tax;
 import com.propertyvista.domain.reports.AvailableCrmReport;
 import com.propertyvista.domain.security.CrmRole;
-import com.propertyvista.domain.security.VistaCrmBehavior;
 import com.propertyvista.dto.AuditRecordDTO;
 import com.propertyvista.misc.VistaTODO;
 import com.propertyvista.shared.config.VistaFeatures;
@@ -78,21 +76,19 @@ public class NavigAdministrationViewImpl extends Composite implements NavigAdmin
         }
 
         {//Settings
-            if (SecurityController.check(VistaCrmBehavior.PropertyVistaAccountOwner_OLD, VistaCrmBehavior.PropertyVistaSupport)) {
-                if (VistaTODO.ENABLE_ONBOARDING_WIZARDS_IN_DEVELOPMENT && ApplicationMode.isDevelopment()) {
-                    SideMenuList list = new SideMenuList();
-                    root.addMenuItem(new SideMenuItem(list, i18n.tr("Settings"), null, null));
-                    list.addMenuItem(new SideMenuAppPlaceItem(new Settings.OnlinePaymentSetup()));
-                    list.addMenuItem(new SideMenuAppPlaceItem(new Settings.CreditCheck()));
+            if (VistaTODO.ENABLE_ONBOARDING_WIZARDS_IN_DEVELOPMENT && ApplicationMode.isDevelopment()) {
+                SideMenuList list = new SideMenuList();
+                root.addMenuItem(new SideMenuItem(list, i18n.tr("Settings"), null, null));
+                list.addMenuItem(new SideMenuAppPlaceItem(new Settings.OnlinePaymentSetup()));
+                list.addMenuItem(new SideMenuAppPlaceItem(new Settings.CreditCheck()));
 
-                    if (ApplicationMode.isDevelopment()) {
-                        list.addMenuItem(new SideMenuAppPlaceItem(new Settings.CreditCheck.Setup()));
-                        list.addMenuItem(new SideMenuAppPlaceItem(new Settings.CreditCheck.Status().formViewerPlace(new Key(-1))));
-                    }
+                if (ApplicationMode.isDevelopment()) {
+                    list.addMenuItem(new SideMenuAppPlaceItem(new Settings.CreditCheck.Setup()));
+                    list.addMenuItem(new SideMenuAppPlaceItem(new Settings.CreditCheck.Status().formViewerPlace(new Key(-1))));
+                }
 
-                    if (ApplicationMode.isDevelopment() || !VistaTODO.pendingYardiConfigPatchILS) {
-                        list.addMenuItem(new SideMenuAppPlaceItem(new Settings.ILSConfig()));
-                    }
+                if (ApplicationMode.isDevelopment() || !VistaTODO.pendingYardiConfigPatchILS) {
+                    list.addMenuItem(new SideMenuAppPlaceItem(new Settings.ILSConfig()));
                 }
             }
         }

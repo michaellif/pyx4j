@@ -41,6 +41,10 @@ import com.propertyvista.crm.rpc.services.customer.EmailToTenantsService;
 import com.propertyvista.crm.rpc.services.customer.ExportTenantsService;
 import com.propertyvista.crm.rpc.services.security.CrmAuditRecordsListerService;
 import com.propertyvista.crm.rpc.services.selections.SelectGlCodeListService;
+import com.propertyvista.crm.rpc.services.vista2pmc.CreditCheckStatusCrudService;
+import com.propertyvista.crm.rpc.services.vista2pmc.CreditCheckWizardService;
+import com.propertyvista.crm.rpc.services.vista2pmc.ILSConfigCrudService;
+import com.propertyvista.crm.rpc.services.vista2pmc.OnlinePaymentWizardService;
 import com.propertyvista.domain.communication.MessageCategory;
 import com.propertyvista.domain.financial.ARCode;
 import com.propertyvista.domain.financial.GlCodeCategory;
@@ -52,6 +56,7 @@ import com.propertyvista.domain.security.CrmRole;
 import com.propertyvista.domain.tenant.CustomerCreditCheck;
 import com.propertyvista.dto.AuditRecordDTO;
 import com.propertyvista.operations.domain.security.AuditRecord;
+import com.propertyvista.portal.rpc.shared.services.CreditCardValidationService;
 
 class VistaCrmAdministrationAccessControlList extends UIAclBuilder {
 
@@ -114,5 +119,11 @@ class VistaCrmAdministrationAccessControlList extends UIAclBuilder {
         grant(AdminFinancial, new EntityPermission(CustomerCreditCheck.class, READ));
         grant(AdminFinancial, CustomerCreditCheckDTO.class, READ);
 
+        grant(AdminFinancial, new IServiceExecutePermission(CreditCheckStatusCrudService.class));
+        grant(AdminFinancial, new IServiceExecutePermission(CreditCheckWizardService.class));
+        grant(AdminFinancial, new IServiceExecutePermission(CreditCardValidationService.class));
+        grant(AdminFinancial, new IServiceExecutePermission(OnlinePaymentWizardService.class));
+
+        grant(AdminFinancial, new IServiceExecutePermission(ILSConfigCrudService.class));
     }
 }

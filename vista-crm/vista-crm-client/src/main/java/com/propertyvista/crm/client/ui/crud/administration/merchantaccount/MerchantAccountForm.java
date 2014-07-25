@@ -20,7 +20,6 @@ import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.site.client.ui.prime.form.IForm;
 import com.pyx4j.widgets.client.tabpanel.Tab;
 
@@ -30,7 +29,6 @@ import com.propertyvista.common.client.ui.validators.EcheckBranchTransitValidato
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.domain.financial.MerchantAccount;
 import com.propertyvista.domain.financial.MerchantAccount.MerchantAccountActivationStatus;
-import com.propertyvista.domain.security.VistaCrmBehavior;
 
 public class MerchantAccountForm extends CrmEntityForm<MerchantAccount> {
 
@@ -58,8 +56,7 @@ public class MerchantAccountForm extends CrmEntityForm<MerchantAccount> {
     @Override
     protected void onValueSet(boolean populate) {
         super.onValueSet(populate);
-        boolean editable = (getValue().status().getValue(MerchantAccountActivationStatus.PendindAppoval) == MerchantAccountActivationStatus.PendindAppoval)
-                && SecurityController.check(VistaCrmBehavior.PropertyVistaAccountOwner_OLD, VistaCrmBehavior.PropertyVistaSupport);
+        boolean editable = (getValue().status().getValue(MerchantAccountActivationStatus.PendindAppoval) == MerchantAccountActivationStatus.PendindAppoval);
 
         get(proto().bankId()).setEditable(editable);
         get(proto().branchTransitNumber()).setEditable(editable);

@@ -119,7 +119,6 @@ public class UserPreloader extends BaseVistaDevDataPreloader {
         int userCount = 0;
 
         CrmRole defaultRole = CrmRolesPreloader.getDefaultRole();
-        CrmRole accountOwnerRole = CrmRolesPreloader.getPropertyVistaAccountOwnerRole();
 
         for (int i = 1; i <= config().maxPropertyManagers; i++) {
             String email = DemoData.UserType.PM.getEmail(i);
@@ -134,7 +133,7 @@ public class UserPreloader extends BaseVistaDevDataPreloader {
                 additinalRole = CrmRolesPreloader.getSupportRole();
             }
 
-            emp.user().set(createCrmUser(emp.name().getStringView(), email, email, defaultRole, accountOwnerRole, additinalRole));
+            emp.user().set(createCrmUser(emp.name().getStringView(), email, email, defaultRole, additinalRole));
 
             Persistence.service().persist(emp);
 

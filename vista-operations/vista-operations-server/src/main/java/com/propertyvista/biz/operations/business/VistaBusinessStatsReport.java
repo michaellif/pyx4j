@@ -358,6 +358,7 @@ class VistaBusinessStatsReport {
         {
 
             List<CrmUserCredential> users = Persistence.service().query(EntityQueryCriteria.create(CrmUserCredential.class));
+
             CrmUserCredential crmUser = EntityFactory.create(CrmUserCredential.class);
             userLoop: for (CrmUserCredential user : users) {
                 for (CrmRole role : user.roles()) {

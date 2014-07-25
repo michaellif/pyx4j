@@ -24,11 +24,15 @@ import com.propertyvista.domain.security.VistaCrmBehavior;
 
 public class CrmRolesDevPreloader extends BaseVistaDevDataPreloader {
 
-    private int rolesCount;
-
     @Override
     public String create() {
         for (VistaCrmBehavior behavior : EnumSet.allOf(VistaCrmBehavior.class)) {
+
+            // TODO remove this if
+            if (behavior.name().endsWith("_OLD")) {
+                continue;
+            }
+
             createRole("Test-" + behavior.name(), behavior);
         }
         return null;
@@ -44,7 +48,6 @@ public class CrmRolesDevPreloader extends BaseVistaDevDataPreloader {
         role.behaviors().addAll(Arrays.asList(behavior));
         role.requireSecurityQuestionForPasswordReset().setValue(requireSecurityQuestionForPasswordReset);
         Persistence.service().persist(role);
-        rolesCount++;
         return role;
     }
 

@@ -76,7 +76,7 @@ public class MerchantAccountCrudServiceImpl extends AbstractCrudServiceImpl<Merc
     @Override
     protected void enhanceRetrieved(MerchantAccount bo, MerchantAccount to, RetrieveTarget retrieveTarget) {
         setCalulatedFileds(bo, to);
-        if (SecurityController.check(VistaCrmBehavior.PropertyVistaAccountOwner_OLD, VistaCrmBehavior.PropertyVistaSupport)) {
+        if (SecurityController.check(VistaCrmBehavior.AdminFinancial, VistaCrmBehavior.PropertyVistaSupport)) {
             to.status().setValue(bo.status().getValue());
         }
     }
@@ -97,7 +97,7 @@ public class MerchantAccountCrudServiceImpl extends AbstractCrudServiceImpl<Merc
 
     private boolean isEditable(MerchantAccount bo) {
         return (bo.status().getValue(MerchantAccountActivationStatus.PendindAppoval) == MerchantAccountActivationStatus.PendindAppoval)
-                && SecurityController.check(VistaCrmBehavior.PropertyVistaAccountOwner_OLD, VistaCrmBehavior.PropertyVistaSupport);
+                && SecurityController.check(VistaCrmBehavior.AdminFinancial, VistaCrmBehavior.PropertyVistaSupport);
     }
 
     @Override
