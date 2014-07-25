@@ -33,6 +33,7 @@ import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseTermGuarantor;
 import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
 import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
+import com.propertyvista.domain.tenant.lease.Tenant;
 import com.propertyvista.domain.tenant.prospect.LeaseApplicationDocument;
 
 /**
@@ -69,9 +70,9 @@ public interface CommunicationFacade {
 
     void sendNewPmcEmail(OnboardingUser user, Pmc pmc);
 
-    void sendTenantSurePaymentNotProcessedEmail(String tenantEmail, LogicalDate gracePeriodEndDate, LogicalDate cancellationDate);
+    void sendTenantSurePaymentNotProcessedEmail(Tenant tenant, LogicalDate gracePeriodEndDate, LogicalDate cancellationDate);
 
-    void sendTenantSurePaymentsResumedEmail(String tenantEmail);
+    void sendTenantSurePaymentsResumedEmail(Tenant tenant);
 
     void sendTenantSureRenewalEmail(String tenantEmail, TenantSureInsurancePolicy policy);
 

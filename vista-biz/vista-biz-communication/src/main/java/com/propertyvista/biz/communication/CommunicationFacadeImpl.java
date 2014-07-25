@@ -49,6 +49,7 @@ import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseTermGuarantor;
 import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
 import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
+import com.propertyvista.domain.tenant.lease.Tenant;
 import com.propertyvista.domain.tenant.prospect.LeaseApplicationDocument;
 import com.propertyvista.server.common.security.AccessKey;
 import com.propertyvista.server.domain.security.CrmUserCredential;
@@ -182,23 +183,20 @@ public class CommunicationFacadeImpl implements CommunicationFacade {
     }
 
     @Override
-    public void sendTenantSurePaymentNotProcessedEmail(String tenantEmail, LogicalDate gracePeriodEndDate, LogicalDate cancellationDate) {
-        MailMessage m = MessageTemplatesTenantSure.createTenantSurePaymentNotProcessedEmail(gracePeriodEndDate, cancellationDate);
-        m.setTo(tenantEmail);
+    public void sendTenantSurePaymentNotProcessedEmail(Tenant tenant, LogicalDate gracePeriodEndDate, LogicalDate cancellationDate) {
+        MailMessage m = MessageTemplatesTenantSure.createTenantSurePaymentNotProcessedEmail(tenant, gracePeriodEndDate, cancellationDate);
         Mail.queue(m, null, getTenantSureConfig());
     }
 
     @Override
-    public void sendTenantSurePaymentsResumedEmail(String tenantEmail) {
-        MailMessage m = MessageTemplatesTenantSure.createTenantSurePaymentsResumedEmail();
-        m.setTo(tenantEmail);
+    public void sendTenantSurePaymentsResumedEmail(Tenant tenant) {
+        MailMessage m = MessageTemplatesTenantSure.createTenantSurePaymentsResumedEmail(tenant);
         Mail.queue(m, null, getTenantSureConfig());
     }
 
     @Override
     public void sendTenantSureCCExpiringEmail(Person tenant, String ccLastDigits, LogicalDate ccExpiry) {
         MailMessage m = MessageTemplatesTenantSure.createTenantSureCCExpiringEmail(tenant, ccLastDigits, ccExpiry);
-        m.setTo(tenant.email().getStringView());
         Mail.queue(m, null, getTenantSureConfig());
     }
 

@@ -514,8 +514,7 @@ public class TenantSureFacadeImpl implements TenantSureFacade {
         insuranceTenantSure.cancellation().setValue(CancellationType.SkipPayment);
         Persistence.service().merge(insuranceTenantSure);
 
-        sendPaymentNotProcessedEmail(getTenantsEmail(tenantId), getGracePeriodEndDate(insuranceTenantSure),
-                TenantSurePayments.getNextPaymentDate(insuranceTenantSure));
+        sendPaymentNotProcessedEmail(tenantId, getGracePeriodEndDate(insuranceTenantSure), TenantSurePayments.getNextPaymentDate(insuranceTenantSure));
 
         Persistence.service().commit();
     }
@@ -528,7 +527,7 @@ public class TenantSureFacadeImpl implements TenantSureFacade {
             throw new Error("It's impossible to activate a tenant sure insurance which is not " + TenantSureStatus.PendingCancellation);
         }
 
-        sendPaymentsResumedEmail(getTenantsEmail(tenantId));
+        sendPaymentsResumedEmail(tenantId);
 
         insuranceTenantSure.status().setValue(TenantSureStatus.Active);
         insuranceTenantSure.cancellation().setValue(null);
@@ -689,12 +688,12 @@ public class TenantSureFacadeImpl implements TenantSureFacade {
         return new LogicalDate(gracePeriodEnd.getTime());
     }
 
-    private void sendPaymentNotProcessedEmail(String tenantEmail, LogicalDate gracePeriodEndDate, LogicalDate cancellationDate) {
-        ServerSideFactory.create(CommunicationFacade.class).sendTenantSurePaymentNotProcessedEmail(tenantEmail, gracePeriodEndDate, cancellationDate);
+    private void sendPaymentNotProcessedEmail(Tenant tenant, LogicalDate gracePeriodEndDate, LogicalDate cancellationDate) {
+        ServerSideFactory.create(CommunicationFacade.class).sendTenantSurePaymentNotProcessedEmail(tenant, gracePeriodEndDate, cancellationDate);
     }
 
-    private void sendPaymentsResumedEmail(String tenantEmail) {
-        ServerSideFactory.create(CommunicationFacade.class).sendTenantSurePaymentsResumedEmail(tenantEmail);
+    private void sendPaymentsResumedEmail(Tenant tenant) {
+        ServerSideFactory.create(CommunicationFacade.class).sendTenantSurePaymentsResumedEmail(tenant);
     }
 
     private static TenantSurePaymentItemDTO makePaymentItem(String description, BigDecimal amount, List<TenantSurePaymentItemTaxDTO> taxes) {
