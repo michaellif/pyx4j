@@ -118,7 +118,7 @@ public class NavigActivity extends AbstractActivity implements NavigPresenter {
     }
 
     private void updateDashboardItems() {
-        if (isDashboardFolderUpdateRequired) {
+        if (isDashboardFolderUpdateRequired && SecurityController.check(DataModelPermission.permissionRead(DashboardMetadata.class))) {
             dashboardMetadataCrudService.list(new DefaultAsyncCallback<EntitySearchResult<DashboardMetadata>>() {
 
                 @Override

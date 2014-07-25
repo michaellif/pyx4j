@@ -158,9 +158,10 @@ public class NavigViewImpl extends Composite implements NavigView {
         {//Dashboards
             SideMenuList list = new SideMenuList();
             root.addMenuItem(new SideMenuItem(list, i18n.tr("Dashboards"), CrmImages.INSTANCE.dashboardsIcon(), null));
-            list.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Dashboard.Manage()));
+            list.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Dashboard.Manage(), DataModelPermission.permissionRead(DashboardMetadata.class)));
 
-            systemDashboard = new SideMenuAppPlaceItem(new CrmSiteMap.Dashboard.View().formPlace(new Key(-1)));
+            systemDashboard = new SideMenuAppPlaceItem(new CrmSiteMap.Dashboard.View().formPlace(new Key(-1)),
+                    DataModelPermission.permissionRead(DashboardMetadata.class));
             list.addMenuItem(systemDashboard);
 
             customDashboards = new SideMenuList();
