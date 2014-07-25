@@ -34,7 +34,9 @@ import com.pyx4j.security.server.UIAclBuilder;
 import com.propertyvista.crm.rpc.dto.billing.BillingCycleDTO;
 import com.propertyvista.crm.rpc.services.MediaUploadBuildingService;
 import com.propertyvista.crm.rpc.services.MediaUploadFloorplanService;
+import com.propertyvista.crm.rpc.services.billing.BillingCycleBillListService;
 import com.propertyvista.crm.rpc.services.billing.BillingCycleCrudService;
+import com.propertyvista.crm.rpc.services.billing.BillingCycleLeaseListService;
 import com.propertyvista.crm.rpc.services.building.ac.CommunityEvents;
 import com.propertyvista.crm.rpc.services.building.ac.ImportExport;
 import com.propertyvista.crm.rpc.services.building.ac.UpdateUnitAvailability;
@@ -182,9 +184,9 @@ class VistaCrmBuildingAccessControlList extends UIAclBuilder {
             grant(BuildingAccounting, entities, READ);
             grant(BuildingAdministrator, entities, ALL);
             // see also VistaCrmFinancialAccessControlList  FinancialFull
-            grant(BuildingFinancial, new IServiceExecutePermission(BillingCycleCrudService.class));
-            grant(BuildingAccounting, new IServiceExecutePermission(BillingCycleCrudService.class));
-            grant(BuildingAdministrator, new IServiceExecutePermission(BillingCycleCrudService.class));
+            grant(BuildingFinancial, BuildingAccounting, BuildingAdministrator, new IServiceExecutePermission(BillingCycleCrudService.class));
+            grant(BuildingFinancial, BuildingAccounting, BuildingAdministrator, new IServiceExecutePermission(BillingCycleBillListService.class));
+            grant(BuildingFinancial, BuildingAccounting, BuildingAdministrator, new IServiceExecutePermission(BillingCycleLeaseListService.class));
         }
 
         { // P

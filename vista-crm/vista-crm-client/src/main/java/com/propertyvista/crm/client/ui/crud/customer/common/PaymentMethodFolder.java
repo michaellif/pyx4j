@@ -24,8 +24,8 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
-import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.CField;
+import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.security.shared.SecurityController;
@@ -105,7 +105,7 @@ public abstract class PaymentMethodFolder extends VistaBoxFolder<LeasePaymentMet
                 protected IsWidget createContent() {
                     IsWidget content = super.createContent();
 
-                    if (SecurityController.check(VistaCrmBehavior.Billing_OLD)) {
+                    if (SecurityController.check(VistaCrmBehavior.FinancialPayments)) {
                         ((CField) get(proto().accountNo())).setNavigationCommand(new Command() {
                             @Override
                             public void execute() {

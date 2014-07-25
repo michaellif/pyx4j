@@ -33,6 +33,7 @@ import com.propertyvista.crm.rpc.dto.financial.moneyin.batch.MoneyInBatchDTO;
 import com.propertyvista.crm.rpc.dto.tenant.PreauthorizedPaymentsDTO;
 import com.propertyvista.crm.rpc.services.billing.BillCrudService;
 import com.propertyvista.crm.rpc.services.billing.BillPreviewService;
+import com.propertyvista.crm.rpc.services.billing.BillPrintService;
 import com.propertyvista.crm.rpc.services.billing.BillingCycleCrudService;
 import com.propertyvista.crm.rpc.services.financial.AggregatedTransferCrudService;
 import com.propertyvista.crm.rpc.services.financial.AutoPayHistoryCrudService;
@@ -41,6 +42,7 @@ import com.propertyvista.crm.rpc.services.financial.MoneyInBatchCrudService;
 import com.propertyvista.crm.rpc.services.financial.MoneyInBatchDepositSlipPrintService;
 import com.propertyvista.crm.rpc.services.financial.MoneyInToolService;
 import com.propertyvista.crm.rpc.services.financial.PaymentRecordListService;
+import com.propertyvista.crm.rpc.services.financial.RevealAccountNumberService;
 import com.propertyvista.crm.rpc.services.lease.ac.LeaseConfirmBill;
 import com.propertyvista.crm.rpc.services.lease.ac.LeaseRunBill;
 import com.propertyvista.domain.financial.AggregatedTransfer;
@@ -91,7 +93,8 @@ class VistaCrmFinancialAccessControlList extends UIAclBuilder {
         grant(FinancialPayments, TransactionHistoryDTO.class, READ);
         grant(FinancialPayments, AutoPayHistoryDTO.class, READ);
         grant(FinancialPayments, new IServiceExecutePermission(AutoPayHistoryCrudService.class));
-        // See also VistaCrmLeasesAccessControlList
+
+        grant(FinancialPayments, new IServiceExecutePermission(RevealAccountNumberService.class));
 
         grant(FinancialPayments, LeaseAdjustment.class, READ | UPDATE);
         grant(FinancialPayments, DepositLifecycleDTO.class, READ | UPDATE);
@@ -111,6 +114,7 @@ class VistaCrmFinancialAccessControlList extends UIAclBuilder {
         grant(FinancialFull, BillDataDTO.class, READ);
         grant(FinancialFull, new IServiceExecutePermission(BillCrudService.class));
         grant(FinancialFull, new IServiceExecutePermission(BillPreviewService.class));
+        grant(FinancialFull, new IServiceExecutePermission(BillPrintService.class));
 
         grant(FinancialFull, BuildingMerchantAccount.class, READ | UPDATE);
 

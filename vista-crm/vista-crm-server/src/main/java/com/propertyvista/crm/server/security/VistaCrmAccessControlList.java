@@ -31,10 +31,6 @@ import com.propertyvista.crm.rpc.services.NoteAttachmentUploadService;
 import com.propertyvista.crm.rpc.services.PmcDocumentFileUploadService;
 import com.propertyvista.crm.rpc.services.PmcTermsOfServiceService;
 import com.propertyvista.crm.rpc.services.UpdateUploadService;
-import com.propertyvista.crm.rpc.services.billing.BillPrintService;
-import com.propertyvista.crm.rpc.services.billing.BillingCycleBillListService;
-import com.propertyvista.crm.rpc.services.billing.BillingCycleLeaseListService;
-import com.propertyvista.crm.rpc.services.billing.BillingExecutionService;
 import com.propertyvista.crm.rpc.services.billing.LeaseAdjustmentCrudService;
 import com.propertyvista.crm.rpc.services.billing.PaymentRecordCrudService;
 import com.propertyvista.crm.rpc.services.breadcrumbs.BreadcrumbsService;
@@ -88,8 +84,6 @@ import com.propertyvista.crm.rpc.services.dashboard.gadgets.PaymentRecordsSummar
 import com.propertyvista.crm.rpc.services.dashboard.gadgets.UnitAvailabilityStatusListService;
 import com.propertyvista.crm.rpc.services.dashboard.gadgets.UnitAvailabilitySummaryGadgetService;
 import com.propertyvista.crm.rpc.services.dashboard.gadgets.UnitTurnoverAnalysisGadgetService;
-import com.propertyvista.crm.rpc.services.financial.PaymentRecordListService;
-import com.propertyvista.crm.rpc.services.financial.RevealAccountNumberService;
 import com.propertyvista.crm.rpc.services.importer.ExportBuildingDataDownloadService;
 import com.propertyvista.crm.rpc.services.importer.ImportBuildingDataService;
 import com.propertyvista.crm.rpc.services.lease.BlankApplicationDocumentDownloadService;
@@ -441,16 +435,6 @@ public class VistaCrmAccessControlList extends ServletContainerAclBuilder {
 
         grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(CustomerPictureCrmUploadService.class));
         grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(InsuranceCertificateScanCrmUploadService.class));
-
-// - Billing
-        grant(VistaCrmBehavior.Billing_OLD, new IServiceExecutePermission(BillPrintService.class));
-        grant(VistaCrmBehavior.Billing_OLD, new IServiceExecutePermission(BillingExecutionService.class));
-        grant(VistaCrmBehavior.Billing_OLD, new IServiceExecutePermission(BillingCycleBillListService.class));
-        grant(VistaCrmBehavior.Billing_OLD, new IServiceExecutePermission(BillingCycleLeaseListService.class));
-
-        grant(VistaCrmBehavior.Billing_OLD, new IServiceExecutePermission(PaymentRecordListService.class));
-
-        grant(VistaCrmBehavior.Billing_OLD, new IServiceExecutePermission(RevealAccountNumberService.class));
 
 // - Service-related:
         grant(VistaBasicBehavior.CRM, new EntityPermission(Service.class, EntityPermission.ALL));

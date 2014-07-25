@@ -25,11 +25,10 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
-import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.CField;
+import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
-import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 
 import com.propertyvista.common.client.ui.components.editors.payments.EcheckInfoEditor;
@@ -40,7 +39,6 @@ import com.propertyvista.domain.payment.CreditCardInfo;
 import com.propertyvista.domain.payment.EcheckInfo;
 import com.propertyvista.domain.payment.PaymentType;
 import com.propertyvista.domain.pmc.PmcPaymentMethod;
-import com.propertyvista.domain.security.VistaCrmBehavior;
 
 public class PmcPaymentMethodFolder extends VistaBoxFolder<PmcPaymentMethod> {
 
@@ -105,21 +103,18 @@ public class PmcPaymentMethodFolder extends VistaBoxFolder<PmcPaymentMethod> {
                 protected IsWidget createContent() {
                     IsWidget content = super.createContent();
 
-                    if (SecurityController.check(VistaCrmBehavior.Billing_OLD)) {
-                        ((CField) get(proto().accountNo())).setNavigationCommand(new Command() {
-                            @Override
-                            public void execute() {
-                                GWT.<RevealAccountNumberService> create(RevealAccountNumberService.class).obtainUnobfuscatedAccountNumber(
-                                        new DefaultAsyncCallback<EcheckInfo>() {
-                                            @Override
-                                            public void onSuccess(EcheckInfo result) {
-                                                MessageDialog.info(i18n.tr("Account Number") + ": <b>" + result.accountNo().newNumber().getStringView()
-                                                        + "</b>");
-                                            }
-                                        }, EntityFactory.createIdentityStub(EcheckInfo.class, getValue().getPrimaryKey()));
-                            }
-                        });
-                    }
+                    ((CField) get(proto().accountNo())).setNavigationCommand(new Command() {
+                        @Override
+                        public void execute() {
+                            GWT.<RevealAccountNumberService> create(RevealAccountNumberService.class).obtainUnobfuscatedAccountNumber(
+                                    new DefaultAsyncCallback<EcheckInfo>() {
+                                        @Override
+                                        public void onSuccess(EcheckInfo result) {
+                                            MessageDialog.info(i18n.tr("Account Number") + ": <b>" + result.accountNo().newNumber().getStringView() + "</b>");
+                                        }
+                                    }, EntityFactory.createIdentityStub(EcheckInfo.class, getValue().getPrimaryKey()));
+                        }
+                    });
 
                     return content;
                 };

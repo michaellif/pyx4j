@@ -132,7 +132,7 @@ public class PaymentRecordForm extends CrmEntityForm<PaymentRecordDTO> {
                 protected IsWidget createContent() {
                     IsWidget content = super.createContent();
 
-                    if (SecurityController.check(VistaCrmBehavior.Billing_OLD)) {
+                    if (SecurityController.check(VistaCrmBehavior.FinancialPayments)) {
                         ((CField) get(proto().accountNo())).setNavigationCommand(new Command() {
                             @Override
                             public void execute() {

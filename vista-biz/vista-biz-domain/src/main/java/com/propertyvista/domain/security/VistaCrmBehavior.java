@@ -69,6 +69,7 @@ public enum VistaCrmBehavior implements Behavior {
     @Deprecated
     ProductCatalog_OLD,
 
+    @Deprecated
     Billing_OLD,
 
     Reports_OLD,
