@@ -15,25 +15,11 @@ package com.propertyvista.crm.client.activity;
 
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.rpc.AbstractListCrudService;
-import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.site.client.activity.ListerController;
 import com.pyx4j.site.client.activity.SecureListerController;
 import com.pyx4j.site.client.ui.prime.lister.ILister;
 
-import com.propertyvista.domain.security.VistaCrmBehavior;
-
 public class ListerControllerFactory {
-
-    @Deprecated
-    public static <E extends IEntity> ListerController<E> create(ILister<E> view, AbstractListCrudService<E> service, Class<E> entityClass,
-            final VistaCrmBehavior... whoCanAdd) {
-        return new ListerController<E>(entityClass, view, service) {
-            @Override
-            public boolean canCreateNewItem() {
-                return SecurityController.check(whoCanAdd);
-            }
-        };
-    }
 
     public static <E extends IEntity> ListerController<E> create(final Class<E> entityClass, ILister<E> view, AbstractListCrudService<E> service) {
         return new SecureListerController<E>(entityClass, view, service);

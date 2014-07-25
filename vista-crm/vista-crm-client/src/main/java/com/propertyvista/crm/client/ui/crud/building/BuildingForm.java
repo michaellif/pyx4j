@@ -41,6 +41,7 @@ import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.CImage;
 import com.pyx4j.forms.client.ui.CImageSlider;
 import com.pyx4j.forms.client.ui.CMonthYearPicker;
+import com.pyx4j.forms.client.ui.PermitEditAccessAdapter;
 import com.pyx4j.forms.client.ui.folder.FolderColumnDescriptor;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.forms.client.ui.panels.FormPanel;
@@ -338,7 +339,7 @@ public class BuildingForm extends CrmEntityForm<BuildingDTO> {
         formPanel.append(Location.Left, proto().merchantAccount()).decorate().componentWidth(180);
 
         // tweak:
-        get(proto().merchantAccount()).setEditable(SecurityController.check(DataModelPermission.permissionUpdate(BuildingMerchantAccount.class)));
+        get(proto().merchantAccount()).addAccessAdapter(new PermitEditAccessAdapter(DataModelPermission.permissionUpdate(BuildingMerchantAccount.class)));
         get(proto().merchantAccount()).addValueChangeHandler(new ValueChangeHandler<MerchantAccount>() {
             @Override
             public void onValueChange(ValueChangeEvent<MerchantAccount> event) {
