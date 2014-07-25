@@ -51,7 +51,7 @@ public class DashboardManagementViewerActivity extends CrmViewerActivity<Dashboa
     protected void onPopulateSuccess(DashboardMetadata result) {
         boolean isAccessedByOwner = ClientContext.getUserVisit().getPrincipalPrimaryKey().equals(result.ownerUser().getPrimaryKey());
         canEdit = isAccessedByOwner;
-        ((DashboardManagementViewerView) getView()).setTakeOwnershipEnabled(SecurityController.check(VistaCrmBehavior.DashboardManager_OLD)
+        ((DashboardManagementViewerView) getView()).setTakeOwnershipEnabled(SecurityController.check(VistaCrmBehavior.DashboardManager)
                 & !isAccessedByOwner);
         ((DashboardManagementViewerView) getView()).setChangeOwnershipEnabled(isAccessedByOwner);
         super.onPopulateSuccess(result);

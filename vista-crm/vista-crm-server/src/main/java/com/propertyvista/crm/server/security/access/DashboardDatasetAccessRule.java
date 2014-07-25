@@ -28,7 +28,7 @@ public class DashboardDatasetAccessRule implements DatasetAccessRule<DashboardMe
 
     @Override
     public void applyRule(EntityQueryCriteria<DashboardMetadata> criteria) {//@formatter:off
-        if (!SecurityController.check(VistaCrmBehavior.DashboardManager_OLD)) {
+        if (!SecurityController.check(VistaCrmBehavior.DashboardManager)) {
             criteria.or(PropertyCriterion.eq(criteria.proto().ownerUser(), VistaContext.getCurrentUserPrimaryKey()),
                     PropertyCriterion.eq(criteria.proto().isShared(), true));
         }

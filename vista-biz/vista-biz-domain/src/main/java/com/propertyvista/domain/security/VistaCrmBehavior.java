@@ -71,9 +71,6 @@ public enum VistaCrmBehavior implements Behavior {
 
     Reports_OLD,
 
-    /** this behaviour can take control of other's people dashboards */
-    DashboardManager_OLD,
-
     //Onboarding
     PropertyVistaAccountOwner_OLD,
 
@@ -175,6 +172,9 @@ public enum VistaCrmBehavior implements Behavior {
     // --
 
     DashboardsGadgets,
+
+    /** this behaviour can take control of other's people dashboards */
+    DashboardManager,
 
     // --
 
