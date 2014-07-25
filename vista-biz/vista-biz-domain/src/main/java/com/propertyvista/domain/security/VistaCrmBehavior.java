@@ -21,71 +21,13 @@ import com.pyx4j.security.shared.Behavior;
 @I18n
 public enum VistaCrmBehavior implements Behavior {
 
-    /** This is preliminary list */
-
-    @Deprecated
-    PropertyManagement_OLD,
-
     OAPI_Properties,
 
     OAPI_ILS,
 
-    @Deprecated
-    Mechanicals_OLD,
-
-    @Deprecated
-    BuildingFinancial_OLD,
-
-    @Deprecated
-    Marketing_OLD,
-
-    @Deprecated
-    MarketingMedia_OLD,
-
-    @Deprecated
-    Tenants_OLD,
-
-    @Deprecated
-    Equifax_OLD,
-
-    @Deprecated
-    Emergency_OLD,
-
-    @Deprecated
-    ScreeningData_OLD,
-
-    @Deprecated
-    Occupancy_OLD,
-
-    @Deprecated
-    Maintenance_OLD,
-
-    @Deprecated
-    Organization_OLD,
-
-    @Deprecated
-    Contacts_OLD,
-
-    @Deprecated
-    ProductCatalog_OLD,
-
-    @Deprecated
-    Billing_OLD,
-
-    Reports_OLD,
-
-    @Deprecated
-    PropertyVistaAccountOwner_OLD,
-
-    @Deprecated
-    Commandant_OLD,
-
-    @Deprecated
-    MessageGroup_OLD,
+    // --
 
     PropertyVistaSupport,
-
-    /***************** this is new List **************** */
 
     BuildingBasic,
 

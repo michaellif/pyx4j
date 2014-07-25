@@ -27,12 +27,6 @@ public class CrmRolesDevPreloader extends BaseVistaDevDataPreloader {
     @Override
     public String create() {
         for (VistaCrmBehavior behavior : EnumSet.allOf(VistaCrmBehavior.class)) {
-
-            // TODO remove this if
-            if (behavior.name().endsWith("_OLD")) {
-                continue;
-            }
-
             createRole("Test-" + behavior.name(), behavior);
         }
         return null;

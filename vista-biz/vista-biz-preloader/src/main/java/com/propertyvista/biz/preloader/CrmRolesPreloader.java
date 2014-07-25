@@ -39,8 +39,6 @@ public class CrmRolesPreloader extends AbstractDataPreloader {
 
     public static final String DEFAULT_SUPPORT_ROLE_NAME = "PropertyVista Support";
 
-    public static final String DEFAULT_COMMANDANT_ROLE_NAME = "Commandant";
-
     private final static Logger log = LoggerFactory.getLogger(CrmRolesPreloader.class);
 
     private int rolesCount;
@@ -81,43 +79,7 @@ public class CrmRolesPreloader extends AbstractDataPreloader {
         allRoles.remove(VistaCrmBehavior.OAPI_Properties);
         allRoles.remove(VistaCrmBehavior.OAPI_ILS);
 
-        //TODO Remove
-        for (VistaCrmBehavior behavior : VistaCrmBehavior.values()) {
-            if (behavior.name().endsWith("_OLD")) {
-                allRoles.remove(behavior);
-            }
-        }
-
         createRole(DEFAULT_ACCESS_ALL_ROLE_NAME, true, allRoles.toArray(new VistaCrmBehavior[allRoles.size()]));
-
-        // TODO crea new Prelaod
-        if (false) {
-            createRole("Accountant_OLD", VistaCrmBehavior.ProductCatalog_OLD, VistaCrmBehavior.Billing_OLD, VistaCrmBehavior.Reports_OLD);
-            createRole("Accounting_OLD", true, VistaCrmBehavior.PropertyManagement_OLD, VistaCrmBehavior.Organization_OLD, VistaCrmBehavior.Contacts_OLD,
-                    VistaCrmBehavior.Reports_OLD);
-            createRole("Admin_OLD", true, VistaCrmBehavior.Organization_OLD, VistaCrmBehavior.Contacts_OLD, VistaCrmBehavior.Reports_OLD);
-            createRole("AM_OLD", VistaCrmBehavior.Contacts_OLD, VistaCrmBehavior.Reports_OLD);
-            createRole("Asset Manager_OLD", true, VistaCrmBehavior.PropertyManagement_OLD, VistaCrmBehavior.BuildingFinancial_OLD, VistaCrmBehavior.Reports_OLD);
-            createRole("BR_OLD", VistaCrmBehavior.Tenants_OLD, VistaCrmBehavior.Emergency_OLD, VistaCrmBehavior.ScreeningData_OLD,
-                    VistaCrmBehavior.Occupancy_OLD, VistaCrmBehavior.Maintenance_OLD, VistaCrmBehavior.Contacts_OLD, VistaCrmBehavior.Reports_OLD);
-            createRole(DEFAULT_COMMANDANT_ROLE_NAME, VistaCrmBehavior.Tenants_OLD, VistaCrmBehavior.Commandant_OLD, VistaCrmBehavior.Emergency_OLD,
-                    VistaCrmBehavior.ScreeningData_OLD, VistaCrmBehavior.Maintenance_OLD, VistaCrmBehavior.Reports_OLD);
-            createRole("Communication Manager_OLD", VistaCrmBehavior.MessageGroup_OLD);
-            createRole("Executive_OLD", VistaCrmBehavior.Organization_OLD, VistaCrmBehavior.Contacts_OLD, VistaCrmBehavior.Reports_OLD);
-            createRole("Leasing_OLD", VistaCrmBehavior.Tenants_OLD, VistaCrmBehavior.Equifax_OLD, VistaCrmBehavior.ScreeningData_OLD,
-                    VistaCrmBehavior.Reports_OLD);
-            createRole("Legal_OLD", VistaCrmBehavior.Equifax_OLD, VistaCrmBehavior.Reports_OLD);
-            createRole("Maintenance_OLD", VistaCrmBehavior.Mechanicals_OLD, VistaCrmBehavior.Occupancy_OLD, VistaCrmBehavior.Maintenance_OLD,
-                    VistaCrmBehavior.Reports_OLD);
-            createRole("Marketing and Leasing Specialist_OLD", VistaCrmBehavior.Marketing_OLD, VistaCrmBehavior.MarketingMedia_OLD,
-                    VistaCrmBehavior.Reports_OLD);
-            createRole("Mechanical Engineer_OLD", VistaCrmBehavior.Mechanicals_OLD, VistaCrmBehavior.Reports_OLD);
-            createRole("Owner_OLD", true, VistaCrmBehavior.BuildingFinancial_OLD, VistaCrmBehavior.Reports_OLD);
-            createRole("PM_OLD", VistaCrmBehavior.Tenants_OLD, VistaCrmBehavior.Emergency_OLD, VistaCrmBehavior.ScreeningData_OLD,
-                    VistaCrmBehavior.Occupancy_OLD, VistaCrmBehavior.Contacts_OLD, VistaCrmBehavior.Reports_OLD);
-
-            createRole(VistaCrmBehavior.PropertyVistaAccountOwner_OLD.name(), true, VistaCrmBehavior.PropertyVistaAccountOwner_OLD);
-        }
 
         createRole(DEFAULT_SUPPORT_ROLE_NAME, VistaCrmBehavior.PropertyVistaSupport);
 
