@@ -28,7 +28,7 @@ import com.propertyvista.domain.security.VistaCrmBehavior;
         description = "Displays insurance coverage of buildings",
         keywords = {"Insurance"},
                 allowedBehaviors = {
-                VistaCrmBehavior.DashboardsGadgets
+                VistaCrmBehavior.DashboardsGadgetsBasic
       }        
 )//@formatter:on
 public interface BuildingResidentInsuranceCoverageGadgetMetadata extends GadgetMetadata, BuildingGadget {

@@ -30,7 +30,7 @@ import com.propertyvista.domain.security.VistaCrmBehavior;
         description = "Table-list-like gadget which displays building data according to prefered rules. Query and display data can be set up",
         keywords = "Buildings",
         allowedBehaviors = {
-                VistaCrmBehavior.DashboardsGadgets
+                VistaCrmBehavior.DashboardsGadgetsBasic
         }        
 )//@formatter:on
 public interface BuildingListerGadgetMetadata extends GadgetMetadata {

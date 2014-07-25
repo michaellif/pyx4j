@@ -31,7 +31,7 @@ import com.propertyvista.domain.security.VistaCrmBehavior;
         description = "Displays summary of leases that about to expire grouped by expiration date.",
         keywords = { "Leases" },
         allowedBehaviors = {
-                VistaCrmBehavior.DashboardsGadgets
+                VistaCrmBehavior.DashboardsGadgetsBasic
         }
 )//@formatter:on
 public interface LeaseExpirationGadgetMetadata extends CounterGadgetBaseMetadata, BuildingGadget {

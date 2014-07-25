@@ -23,6 +23,7 @@ public enum VistaCrmBehavior implements Behavior {
 
     /** This is preliminary list */
 
+    @Deprecated
     PropertyManagement_OLD,
 
     OAPI_Properties,
@@ -171,10 +172,10 @@ public enum VistaCrmBehavior implements Behavior {
 
     // --
 
-    DashboardsGadgets,
+    DashboardsGadgetsBasic,
 
     /** this behaviour can take control of other's people dashboards */
-    DashboardManager,
+    DashboardsGadgetsFull,
 
     // --
 

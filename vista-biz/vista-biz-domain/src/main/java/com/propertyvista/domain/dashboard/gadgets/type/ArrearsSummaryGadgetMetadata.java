@@ -36,7 +36,7 @@ import com.propertyvista.domain.security.VistaCrmBehavior;
         description = "Displays summary of arrears, has an option to zoom-in to view list of relevant leases.",
         keywords = { "Arrears", "Collections" },
         allowedBehaviors = {
-                VistaCrmBehavior.DashboardsGadgets
+                VistaCrmBehavior.DashboardsGadgetsBasic
         }
 )//@formatter:on
 public interface ArrearsSummaryGadgetMetadata extends CounterGadgetBaseMetadata, BuildingGadget {

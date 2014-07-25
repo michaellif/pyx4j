@@ -31,7 +31,7 @@ import com.propertyvista.domain.security.VistaCrmBehavior;
         description = "Displays summary of collections",
         keywords = { "Collections", "Funds", "Money", "Payments" },
         allowedBehaviors = {
-                VistaCrmBehavior.DashboardsGadgets
+                VistaCrmBehavior.DashboardsGadgetsBasic
         }
 )//@formatter:on
 public interface CollectionsGadgetMetadata extends CounterGadgetBaseMetadata, BuildingGadget {

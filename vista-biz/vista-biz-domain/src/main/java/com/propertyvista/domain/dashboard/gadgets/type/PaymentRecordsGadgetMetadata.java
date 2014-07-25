@@ -37,7 +37,7 @@ import com.propertyvista.domain.security.VistaCrmBehavior;
         description = "Displays payment records that changed today.",
         keywords = { "Payments", "Collections", "Money"},
         allowedBehaviors = {
-                VistaCrmBehavior.DashboardsGadgets
+                VistaCrmBehavior.DashboardsGadgetsBasic
         }
 )//@formatter:on
 public interface PaymentRecordsGadgetMetadata extends GadgetMetadata, BuildingGadget {

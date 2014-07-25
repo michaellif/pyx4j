@@ -30,7 +30,6 @@ import com.propertyvista.crm.rpc.services.admin.MerchantAccountCrudService;
 import com.propertyvista.crm.rpc.services.selections.SelectBuildingListService;
 import com.propertyvista.domain.financial.MerchantAccount;
 import com.propertyvista.domain.property.asset.building.Building;
-import com.propertyvista.domain.security.VistaCrmBehavior;
 
 public class MerchantAccountViewerActivity extends CrmViewerActivity<MerchantAccount> {
 
@@ -40,8 +39,8 @@ public class MerchantAccountViewerActivity extends CrmViewerActivity<MerchantAcc
         super(MerchantAccount.class, place, CrmSite.getViewFactory().getView(MerchantAccountViewerView.class), GWT
                 .<AbstractCrudService<MerchantAccount>> create(MerchantAccountCrudService.class));
 
-        buildingLister = ListerControllerFactory.create(((MerchantAccountViewerView) getView()).getBuildingListerView(),
-                GWT.<AbstractListCrudService<Building>> create(SelectBuildingListService.class), Building.class, VistaCrmBehavior.PropertyManagement_OLD);
+        buildingLister = ListerControllerFactory.create(Building.class, ((MerchantAccountViewerView) getView()).getBuildingListerView(),
+                GWT.<AbstractListCrudService<Building>> create(SelectBuildingListService.class));
     }
 
     @Override

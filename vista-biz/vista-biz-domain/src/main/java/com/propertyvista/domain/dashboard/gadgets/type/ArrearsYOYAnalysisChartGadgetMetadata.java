@@ -31,7 +31,7 @@ import com.propertyvista.domain.security.VistaCrmBehavior;
         description = "A graph that visually demonstrates the arrear balance each month over the course of multiple years.",
         keywords = {"Arrears", "Chart" },
         allowedBehaviors = {
-                VistaCrmBehavior.DashboardsGadgets
+                VistaCrmBehavior.DashboardsGadgetsBasic
         }
 )//@formatter:on
 public interface ArrearsYOYAnalysisChartGadgetMetadata extends GadgetMetadata, BuildingGadget {

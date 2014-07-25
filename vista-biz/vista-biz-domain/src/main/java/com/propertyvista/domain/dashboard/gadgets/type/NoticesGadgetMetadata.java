@@ -31,7 +31,7 @@ import com.propertyvista.domain.security.VistaCrmBehavior;
         description = "Display the number of notices grouped by move-out date, and lets view their details",
         keywords = { "Leases", "Notices" },
         allowedBehaviors = {
-                VistaCrmBehavior.DashboardsGadgets
+                VistaCrmBehavior.DashboardsGadgetsBasic
         }
 )//@formatter:on
 public interface NoticesGadgetMetadata extends CounterGadgetBaseMetadata, BuildingGadget {

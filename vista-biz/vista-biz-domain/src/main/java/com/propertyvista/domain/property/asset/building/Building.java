@@ -29,7 +29,6 @@ import com.pyx4j.entity.annotations.OrderColumn;
 import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.ReadOnly;
 import com.pyx4j.entity.annotations.RpcTransient;
-import com.pyx4j.entity.annotations.SecurityEnabled;
 import com.pyx4j.entity.annotations.Timestamp;
 import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.ToStringFormat;
@@ -69,7 +68,6 @@ import com.propertyvista.shared.config.YardiImported;
 //TODO rename to Property?!
 @ToStringFormat("{0}{1,choice,null#|!null#, {1}}")
 @DiscriminatorValue("Building")
-@SecurityEnabled
 public interface Building extends PolicyNode, HasNotesAndAttachments, CommunicationEndpoint {
 
     interface OrderInComplexId extends ColumnId {

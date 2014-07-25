@@ -32,7 +32,7 @@ import com.propertyvista.domain.security.VistaCrmBehavior;
         description = "A graph that visually demonstrates the turnover rate in either percentage or quantity over the course of multiple years.",
         keywords = { "Units", "Chart", "Turnover", "Availability", "Occupancy" },
         allowedBehaviors = {
-                VistaCrmBehavior.DashboardsGadgets
+                VistaCrmBehavior.DashboardsGadgetsBasic
         }
 )//@formatter:on
 public interface UnitTurnoverAnalysisGadgetMetadata extends GadgetMetadata, BuildingGadget {

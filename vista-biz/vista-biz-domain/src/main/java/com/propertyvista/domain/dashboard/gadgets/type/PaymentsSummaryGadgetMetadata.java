@@ -34,7 +34,7 @@ import com.propertyvista.domain.security.VistaCrmBehavior;
         description = "Displays payments aggregated by merchant account",
         keywords = { "Payments", "Collections", "Money"},
         allowedBehaviors = {
-                VistaCrmBehavior.DashboardsGadgets
+                VistaCrmBehavior.DashboardsGadgetsBasic
         }
 )//@formatter:on
 public interface PaymentsSummaryGadgetMetadata extends GadgetMetadata, HasCustomizableDateGadgetMetadata, BuildingGadget {

@@ -30,7 +30,7 @@ import com.propertyvista.domain.security.VistaCrmBehavior;
         description = "Displays summary of applications",
         keywords = { "Applications" },
         allowedBehaviors = {                               
-                VistaCrmBehavior.DashboardsGadgets,
+                VistaCrmBehavior.DashboardsGadgetsBasic,
                 VistaCrmBehavior.ApplicationFull
         }
 )//@formatter:on

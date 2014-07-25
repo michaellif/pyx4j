@@ -30,7 +30,7 @@ import com.propertyvista.domain.security.VistaCrmBehavior;
         description = "Displays comparison of number of leads vs number of appointmends vs number of rentals",
         keywords = { "Leads", "Rentals", "Leases" },
         allowedBehaviors = {
-                VistaCrmBehavior.DashboardsGadgets
+                VistaCrmBehavior.DashboardsGadgetsBasic
         }
 )//@formatter:on
 public interface LeadsAndRentalsGadgetMetadata extends CounterGadgetBaseMetadata, BuildingGadget {

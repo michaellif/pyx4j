@@ -31,7 +31,7 @@ import com.propertyvista.domain.security.VistaCrmBehavior;
         description = "Displays summary of maintenance orders grouped by priorty and lets to view details of grouped orders",
         keywords = { "Maintenance", "Work Orders" },
         allowedBehaviors = {
-                VistaCrmBehavior.DashboardsGadgets,
+                VistaCrmBehavior.DashboardsGadgetsBasic,
                 VistaCrmBehavior.MaintenanceFull,
         }
 )//@formatter:on

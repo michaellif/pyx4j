@@ -358,13 +358,8 @@ public class VistaCrmAccessControlList extends ServletContainerAclBuilder {
         grant(VistaBasicBehavior.CRM, new EntityPermission(CommunityEvent.class, EntityPermission.ALL));
         grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(CommunityEventCrudService.class));
 
-        grant(VistaCrmBehavior.PropertyManagement_OLD, new IServiceExecutePermission(UpdateUploadService.class));
         grant(VistaCrmBehavior.PropertyVistaSupport, new IServiceExecutePermission(UpdateUploadService.class));
-
-        grant(VistaCrmBehavior.PropertyManagement_OLD, new IServiceExecutePermission(ImportBuildingDataService.class));
         grant(VistaCrmBehavior.PropertyVistaSupport, new IServiceExecutePermission(ImportBuildingDataService.class));
-
-        grant(VistaCrmBehavior.PropertyManagement_OLD, new IServiceExecutePermission(ExportBuildingDataDownloadService.class));
         grant(VistaCrmBehavior.PropertyVistaSupport, new IServiceExecutePermission(ExportBuildingDataDownloadService.class));
 
 // - Unit-related:
