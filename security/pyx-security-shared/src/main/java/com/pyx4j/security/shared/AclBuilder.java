@@ -172,6 +172,17 @@ public class AclBuilder implements AclCreator {
         getGroup(behavior).permissions.add(permission);
     }
 
+    protected void grant(Behavior behavior1, Behavior behavior2, Permission permission) {
+        getGroup(behavior1).permissions.add(permission);
+        getGroup(behavior2).permissions.add(permission);
+    }
+
+    protected void grant(Behavior behavior1, Behavior behavior2, Behavior behavior3, Permission permission) {
+        getGroup(behavior1).permissions.add(permission);
+        getGroup(behavior2).permissions.add(permission);
+        getGroup(behavior3).permissions.add(permission);
+    }
+
     protected void grant(Behavior behavior, Class<? extends AccessRule> accessRuleInterfaceClass, AccessRule accessRule, Object subject) {
         getGroup(behavior).grant(accessRuleInterfaceClass, accessRule, subject);
     }
