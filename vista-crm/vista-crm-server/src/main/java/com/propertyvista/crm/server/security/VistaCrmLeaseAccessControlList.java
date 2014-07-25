@@ -46,7 +46,6 @@ import com.propertyvista.domain.tenant.lease.LeaseAdjustment;
 import com.propertyvista.dto.BillDTO;
 import com.propertyvista.dto.DepositLifecycleDTO;
 import com.propertyvista.dto.LeaseDTO;
-import com.propertyvista.dto.LeaseLegalStateDTO;
 import com.propertyvista.dto.LeaseTermDTO;
 import com.propertyvista.dto.TransactionHistoryDTO;
 
@@ -66,10 +65,7 @@ class VistaCrmLeaseAccessControlList extends UIAclBuilder {
         // See also VistaCrmLegalAccessControlList
 
         grant(LeaseAdvanced, LegalLetter.class, READ);
-        grant(LeaseAdvanced, LeaseLegalStateDTO.class, READ);
-
         grant(LeaseFull, LegalLetter.class, ALL);
-        grant(LeaseFull, LeaseLegalStateDTO.class, ALL);
 
         // ---- Financial:
         // See also VistaCrmFinancialAccessControlList

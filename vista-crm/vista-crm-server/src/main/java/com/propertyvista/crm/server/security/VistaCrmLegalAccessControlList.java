@@ -21,6 +21,7 @@ import static com.pyx4j.entity.security.AbstractCRUDPermission.READ;
 import com.pyx4j.security.server.UIAclBuilder;
 import com.pyx4j.security.shared.ActionPermission;
 
+import com.propertyvista.crm.rpc.dto.legal.n4.LegalNoticeCandidateDTO;
 import com.propertyvista.crm.rpc.services.lease.ac.LeaseCompletion;
 import com.propertyvista.crm.rpc.services.lease.ac.LeaseNotice;
 import com.propertyvista.domain.legal.LegalLetter;
@@ -36,10 +37,11 @@ class VistaCrmLegalAccessControlList extends UIAclBuilder {
         grant(LegalCollectionsFull, new ActionPermission(LeaseCompletion.class));
 
         grant(LegalCollectionsBasic, LegalLetter.class, READ);
-        grant(LegalCollectionsFull, LegalLetter.class, ALL);
-
         grant(LegalCollectionsBasic, LeaseLegalStateDTO.class, READ);
+        grant(LegalCollectionsBasic, LegalNoticeCandidateDTO.class, READ);
+
+        grant(LegalCollectionsFull, LegalLetter.class, ALL);
         grant(LegalCollectionsFull, LeaseLegalStateDTO.class, ALL);
-        // See also VistaCrmLeasesAccessControlList
+        grant(LegalCollectionsFull, LegalNoticeCandidateDTO.class, ALL);
     }
 }

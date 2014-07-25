@@ -19,6 +19,7 @@ import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.entity.core.EntityFactory;
+import com.pyx4j.entity.security.DataModelPermission;
 import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.forms.client.ui.panels.FormPanel;
@@ -67,13 +68,13 @@ public class LeaseLegalStateForm extends CForm<LeaseLegalStateDTO> {
             public void execute() {
                 LeaseLegalStateForm.this.controller.updateStatus();
             }
-        }));
+        }, DataModelPermission.permissionUpdate(LeaseLegalStateDTO.class)));
         panel.add(new Button(i18n.tr("Clear"), new Command() {
             @Override
             public void execute() {
                 LeaseLegalStateForm.this.controller.clearStatus();
             }
-        }));
+        }, DataModelPermission.permissionUpdate(LeaseLegalStateDTO.class)));
         return panel;
     }
 

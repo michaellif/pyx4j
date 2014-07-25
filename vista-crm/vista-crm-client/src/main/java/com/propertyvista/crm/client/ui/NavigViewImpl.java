@@ -44,6 +44,7 @@ import com.propertyvista.crm.rpc.CrmMainNavigationDebugId;
 import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.crm.rpc.dto.company.ac.EmployeeDirectoryList;
 import com.propertyvista.crm.rpc.dto.financial.moneyin.batch.MoneyInBatchDTO;
+import com.propertyvista.crm.rpc.dto.legal.n4.LegalNoticeCandidateDTO;
 import com.propertyvista.crm.rpc.services.customer.ac.FormerGuarantorListAction;
 import com.propertyvista.crm.rpc.services.customer.ac.FormerTenantListAction;
 import com.propertyvista.crm.rpc.services.customer.ac.PotentialTenantListAction;
@@ -206,8 +207,10 @@ public class NavigViewImpl extends Composite implements NavigView {
             SideMenuList list = new SideMenuList();
             root.addMenuItem(new SideMenuItem(list, i18n.tr("Legal & Collections"), CrmImages.INSTANCE.legalIcon(), null));
 
-            list.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.LegalAndCollections.N4GenerationTool()));
-            list.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.LegalAndCollections.N4DownloadTool()));
+            list.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.LegalAndCollections.N4GenerationTool(), DataModelPermission
+                    .permissionCreate(LegalNoticeCandidateDTO.class)));
+            list.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.LegalAndCollections.N4DownloadTool(), DataModelPermission
+                    .permissionRead(LegalNoticeCandidateDTO.class)));
             if (false) { // TODO L1 implementation
                 list.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.LegalAndCollections.L1GenerationTool()));
             }

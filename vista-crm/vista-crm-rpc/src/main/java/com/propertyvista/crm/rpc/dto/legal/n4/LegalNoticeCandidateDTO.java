@@ -19,6 +19,7 @@ import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.annotations.Format;
+import com.pyx4j.entity.annotations.SecurityEnabled;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.core.IPrimitive;
 
@@ -27,6 +28,7 @@ import com.propertyvista.domain.legal.LegalNoticeCandidate;
 import com.propertyvista.domain.legal.n4.N4LegalLetter;
 
 @Transient
+@SecurityEnabled
 public interface LegalNoticeCandidateDTO extends LegalNoticeCandidate, BulkEditableEntity {
 
     IPrimitive<String> building();
