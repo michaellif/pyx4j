@@ -16,12 +16,12 @@ BEGIN TRANSACTION;
     -- Sequences to drop
     DROP SEQUENCE communication_message$to_seq;
     DROP SEQUENCE communication_message_attachment_blob_seq;
+    DROP SEQUENCE country_seq;
 
 
     -- Altered Sequences
     
     ALTER SEQUENCE province_seq RENAME TO province_policy_node_seq;
-    ALTER SEQUENCE country_seq RENAME TO country_policy_node_seq;
     
     -- New sequences
     
@@ -36,9 +36,11 @@ BEGIN TRANSACTION;
     CREATE SEQUENCE communication_delivery_handle_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;
     CREATE SEQUENCE communication_message_category$dispatchers_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;
     CREATE SEQUENCE communication_message_category$rls_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;
-    CREATE SEQUENCE communication_message_category_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;  -- CREATE SEQUENCE country_policy_node_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;
+    CREATE SEQUENCE communication_message_category_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;  
+    CREATE SEQUENCE country_policy_node_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;
     CREATE SEQUENCE dev_card_service_simulation_reconciliation_record_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;
     CREATE SEQUENCE message_attachment_blob_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;
+    CREATE SEQUENCE signed_web_payment_term_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;
 
 
   

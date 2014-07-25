@@ -432,7 +432,8 @@ BEGIN
         -- payment_record
         
         ALTER TABLE payment_record  ADD COLUMN aggregated_transfer_discriminator VARCHAR(50),
-                                    ADD COLUMN aggregated_transfer_return_discriminator VARCHAR(50);
+                                    ADD COLUMN aggregated_transfer_return_discriminator VARCHAR(50),
+                                    ADD COLUMN convenience_fee_signed_term BIGINT;
                                     
         
         -- payment_record_processing
@@ -470,6 +471,19 @@ BEGIN
         -- restrictions_policy
         
         ALTER TABLE restrictions_policy ADD COLUMN no_need_guarantors BOOLEAN;
+        
+        -- signed_web_payment_term
+        
+        CREATE TABLE signed_web_payment_term
+        (
+            id                          BIGINT              NOT NULL,
+            term                        BIGINT,
+            term_for                    TIMESTAMP,
+            signature                   BIGINT,
+                CONSTRAINT signed_web_payment_term_pk PRIMARY KEY(id)
+        );
+        
+        ALTER TABLE signed_web_payment_term OWNER TO vista;
         
         -- site_titles
         
@@ -1157,6 +1171,10 @@ BEGIN
             REFERENCES building(id)  DEFERRABLE INITIALLY DEFERRED;
         ALTER TABLE master_online_application ADD CONSTRAINT master_online_application_ils_floorplan_fk FOREIGN KEY(ils_floorplan) 
             REFERENCES floorplan(id)  DEFERRABLE INITIALLY DEFERRED;
+        ALTER TABLE payment_record ADD CONSTRAINT payment_record_convenience_fee_signed_term_fk FOREIGN KEY(convenience_fee_signed_term) 
+            REFERENCES signed_web_payment_term(id)  DEFERRABLE INITIALLY DEFERRED;
+        ALTER TABLE signed_web_payment_term ADD CONSTRAINT signed_web_payment_term_signature_fk FOREIGN KEY(signature) 
+            REFERENCES customer_signature(id)  DEFERRABLE INITIALLY DEFERRED;
             
         -- check constraints
         
