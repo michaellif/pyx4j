@@ -20,6 +20,7 @@ import javax.xml.ws.WebServiceException;
 import org.apache.commons.lang.exception.ExceptionUtils;
 
 import com.pyx4j.config.server.ServerSideConfiguration;
+import com.pyx4j.config.server.SystemDateManager;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.i18n.shared.I18n;
@@ -143,7 +144,7 @@ public class OperationsNotificationManager {
         } else {
             email.setSubject("TenantSure error");
         }
-        email.setHtmlBody(error.getMessage() + "<br><pre>" + ExceptionUtils.getStackTrace(error) + "</pre>");
+        email.setHtmlBody(SystemDateManager.getDate() + "<br>" + error.getMessage() + "<br><pre>" + ExceptionUtils.getStackTrace(error) + "</pre>");
 
         return email;
     }
