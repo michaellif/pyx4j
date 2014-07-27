@@ -102,7 +102,6 @@ public class UserManagementFacadeImpl implements UserManagementFacade {
                 Persistence.service().retrieve(role);
                 processed.add(role);
                 behaviors.addAll(role.behaviors());
-                addAllBehaviors(behaviors, role.roles(), processed);
             }
             if (role.requireSecurityQuestionForPasswordReset().getValue(false)) {
                 behaviors.add(VistaBasicBehavior.CRMPasswordChangeRequiresSecurityQuestion);

@@ -14,6 +14,7 @@
 package com.propertyvista.server.domain.security;
 
 import com.pyx4j.commons.Key;
+import com.pyx4j.entity.annotations.JoinColumn;
 import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.RpcBlacklist;
 import com.pyx4j.entity.annotations.Table;
@@ -23,16 +24,18 @@ import com.pyx4j.i18n.annotations.I18n;
 
 import com.propertyvista.domain.security.CrmRole;
 import com.propertyvista.domain.security.CrmUser;
-import com.propertyvista.domain.security.common.AbstractUserCredential;
+import com.propertyvista.domain.security.CrmUserRolesLink;
 
 @RpcBlacklist
 @Table(primaryKeyStrategy = Table.PrimaryKeyStrategy.ASSIGNED, expands = CrmUser.class)
 @I18n(strategy = I18n.I18nStrategy.IgnoreAll)
-public interface CrmUserCredential extends AbstractUserCredential<CrmUser> {
+public interface CrmUserCredential extends CrmUserRolesLink {
 
     IPrimitive<Boolean> accessAllBuildings();
 
+    @Override
     @MemberColumn(name = "rls")
+    @JoinColumn(CrmRoleColumnId.class)
     ISet<CrmRole> roles();
 
     IPrimitive<Key> onboardingUser();

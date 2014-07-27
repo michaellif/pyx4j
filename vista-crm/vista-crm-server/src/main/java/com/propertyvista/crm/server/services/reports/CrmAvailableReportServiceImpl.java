@@ -24,18 +24,13 @@ import com.propertyvista.crm.rpc.services.reports.CrmAvailableReportService;
 import com.propertyvista.crm.server.util.CrmAppContext;
 import com.propertyvista.domain.reports.AvailableCrmReport;
 import com.propertyvista.domain.reports.AvailableCrmReport.CrmReportType;
-import com.propertyvista.server.domain.security.CrmUserCredential;
 
 public class CrmAvailableReportServiceImpl implements CrmAvailableReportService {
 
     @Override
     public void obtainAvailableReportTypes(AsyncCallback<Vector<CrmReportType>> callback) {
         EntityQueryCriteria<AvailableCrmReport> criteria = EntityQueryCriteria.create(AvailableCrmReport.class);
-
-        // criteria.in(criteria.proto().roles().$().users(), CrmAppContext.getCurrentUser());
-        CrmUserCredential crs = Persistence.service().retrieve(CrmUserCredential.class, CrmAppContext.getCurrentUser().getPrimaryKey());
-        criteria.in(criteria.proto().roles(), crs.roles());
-
+        criteria.in(criteria.proto().roles().$().users(), CrmAppContext.getCurrentUser());
         Vector<CrmReportType> result = new Vector<>();
 
         for (AvailableCrmReport r : Persistence.service().query(criteria)) {

@@ -16,8 +16,10 @@ package com.propertyvista.domain.security;
 import java.util.Date;
 
 import com.pyx4j.entity.annotations.Caption;
+import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.Editor.EditorType;
+import com.pyx4j.entity.annotations.JoinTable;
 import com.pyx4j.entity.annotations.Length;
 import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.SecurityEnabled;
@@ -25,6 +27,7 @@ import com.pyx4j.entity.annotations.Timestamp;
 import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.annotations.validator.NotNull;
+import com.pyx4j.entity.core.AttachLevel;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.IList;
 import com.pyx4j.entity.core.IPrimitive;
@@ -51,9 +54,6 @@ public interface CrmRole extends IEntity {
     @Transient
     IList<VistaCrmBehaviorDTO> permissions();
 
-    @MemberColumn(name = "rls")
-    ISet<CrmRole> roles();
-
     /**
      * <b>Warning:</b> whenever this value is about to be used to implement some logic, if a role has {@link VistaCrmBehavior#CreditCheckFull} in
      * {@link #behaviors()},
@@ -69,4 +69,10 @@ public interface CrmRole extends IEntity {
     @Timestamp
     IPrimitive<Date> updated();
 
+    /**
+     * This can be used to build query by Roles
+     */
+    @Detached(level = AttachLevel.Detached)
+    @JoinTable(value = CrmUserRolesLink.class, mappedBy = CrmUserRolesLink.CrmRoleColumnId.class)
+    ISet<CrmUser> users();
 }

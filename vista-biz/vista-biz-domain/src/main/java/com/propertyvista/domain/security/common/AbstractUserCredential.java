@@ -17,6 +17,7 @@ import java.util.Date;
 
 import com.pyx4j.entity.annotations.AbstractEntity;
 import com.pyx4j.entity.annotations.Caption;
+import com.pyx4j.entity.annotations.ColumnId;
 import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.GwtBlacklist;
 import com.pyx4j.entity.annotations.MemberColumn;
@@ -27,7 +28,6 @@ import com.pyx4j.entity.annotations.Timestamp;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.IPrimitive;
 
-
 /**
  * Should be nice to move this to Server side domain package
  */
@@ -35,6 +35,9 @@ import com.pyx4j.entity.core.IPrimitive;
 @RpcBlacklist
 @GwtBlacklist
 public interface AbstractUserCredential<E extends AbstractUser> extends IEntity {
+
+    interface UserColumnId extends ColumnId {
+    }
 
     @Detached
     @MemberColumn(name = "usr")
