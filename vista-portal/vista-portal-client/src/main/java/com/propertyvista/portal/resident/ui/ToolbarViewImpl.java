@@ -33,6 +33,7 @@ import com.pyx4j.gwt.commons.layout.LayoutChangeRequestEvent;
 import com.pyx4j.gwt.commons.layout.LayoutChangeRequestEvent.ChangeType;
 import com.pyx4j.gwt.commons.layout.LayoutType;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.rpc.AppPlace;
 import com.pyx4j.widgets.client.Button;
@@ -40,6 +41,7 @@ import com.pyx4j.widgets.client.Button.ButtonMenuBar;
 import com.pyx4j.widgets.client.Toolbar;
 
 import com.propertyvista.common.client.ClientLocaleUtils;
+import com.propertyvista.domain.security.PortalResidentBehavior;
 import com.propertyvista.portal.shared.resources.PortalImages;
 import com.propertyvista.portal.shared.themes.PortalRootPaneTheme;
 import com.propertyvista.shared.i18n.CompiledLocale;
@@ -288,7 +290,7 @@ public class ToolbarViewImpl extends FlowPanel implements ToolbarView {
             break;
         }
         loginButton.setVisible(!loggedIn && !hideLoginButton);
-        communicationButton.setVisible(loggedIn);
+        communicationButton.setVisible(loggedIn && SecurityController.check(PortalResidentBehavior.Resident));
 
         switch (layoutType) {
         case monitor:

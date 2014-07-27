@@ -26,7 +26,6 @@ import com.propertyvista.crm.server.util.CrmAppContext;
 import com.propertyvista.domain.communication.Message;
 import com.propertyvista.domain.communication.MessageCategory;
 import com.propertyvista.domain.company.Employee;
-import com.propertyvista.server.domain.security.CrmUserCredential;
 
 public class MessageAccessRule implements DatasetAccessRule<Message> {
 
@@ -47,14 +46,10 @@ public class MessageAccessRule implements DatasetAccessRule<Message> {
     }
 
     private List<MessageCategory> getUserGroups() {
-        CrmUserCredential crs = Persistence.service().retrieve(CrmUserCredential.class, CrmAppContext.getCurrentUser().getPrimaryKey());
         EntityQueryCriteria<MessageCategory> groupCriteria = EntityQueryCriteria.create(MessageCategory.class);
         Employee e = CrmAppContext.getCurrentUserEmployee();
-        if (crs.roles() == null || crs.roles().size() < 1) {
-            return null;
-        }
 
-        PropertyCriterion byRoles = PropertyCriterion.in(groupCriteria.proto().roles(), crs.roles());
+        PropertyCriterion byRoles = PropertyCriterion.in(groupCriteria.proto().roles().$().users(), CrmAppContext.getCurrentUser().getPrimaryKey());
         if (e == null) {
             groupCriteria.add(byRoles);
         } else {

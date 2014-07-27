@@ -14,6 +14,7 @@
 package com.propertyvista.biz.communication;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 
@@ -38,6 +39,9 @@ import com.propertyvista.domain.communication.Message;
 import com.propertyvista.domain.communication.MessageCategory;
 import com.propertyvista.domain.communication.SystemEndpoint.SystemEndpointName;
 import com.propertyvista.domain.company.Employee;
+import com.propertyvista.domain.security.VistaCrmBehavior;
+import com.propertyvista.domain.security.VistaDataAccessBehavior;
+import com.propertyvista.domain.security.common.VistaApplication;
 import com.propertyvista.portal.rpc.shared.dto.communication.PortalCommunicationSystemNotification;
 import com.propertyvista.shared.VistaUserVisit;
 
@@ -130,8 +134,15 @@ public class CommunicationManager {
     }
 
     public List<CommunicationThread> getDispatchedThreads() {
+        if (VistaApplication.crm.equals(Context.visit(VistaUserVisit.class).getApplication()) && !SecurityController.check(VistaCrmBehavior.Communication)) {
+            return new ArrayList<CommunicationThread>();
+        }
+        if (VistaApplication.resident.equals(Context.visit(VistaUserVisit.class).getApplication())
+                && !SecurityController.check(VistaDataAccessBehavior.ResidentInPortal)) {
+            return new ArrayList<CommunicationThread>();
+        }
         final EntityListCriteria<CommunicationThread> dispatchedCriteria = getDispatchedCriteria();
-        final List<CommunicationThread> dispatchedMessages = Persistence.service().query(dispatchedCriteria, AttachLevel.IdOnly);
+        final List<CommunicationThread> dispatchedMessages = Persistence.secureQuery(dispatchedCriteria, AttachLevel.IdOnly);
         return dispatchedMessages;
     }
 
@@ -155,11 +166,19 @@ public class CommunicationManager {
     }
 
     public List<CommunicationThread> getDirectThreads() {
+        if (VistaApplication.crm.equals(Context.visit(VistaUserVisit.class).getApplication()) && !SecurityController.check(VistaCrmBehavior.Communication)) {
+            return new ArrayList<CommunicationThread>();
+        }
+        if (VistaApplication.resident.equals(Context.visit(VistaUserVisit.class).getApplication())
+                && !SecurityController.check(VistaDataAccessBehavior.ResidentInPortal)) {
+            return new ArrayList<CommunicationThread>();
+        }
+
         final EntityListCriteria<CommunicationThread> directCriteria = EntityListCriteria.create(CommunicationThread.class);
         directCriteria.eq(directCriteria.proto().content().$().recipients().$().isRead(), false);
         directCriteria.eq(directCriteria.proto().content().$().recipients().$().recipient(), Context.visit(VistaUserVisit.class).getCurrentUser());
 
-        final List<CommunicationThread> directMessages = Persistence.service().query(directCriteria, AttachLevel.IdOnly);
+        final List<CommunicationThread> directMessages = Persistence.secureQuery(directCriteria, AttachLevel.IdOnly);
         return directMessages;
     }
 

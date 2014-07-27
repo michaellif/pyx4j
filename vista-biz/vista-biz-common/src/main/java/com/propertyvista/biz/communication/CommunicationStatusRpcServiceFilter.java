@@ -15,15 +15,23 @@ package com.propertyvista.biz.communication;
 
 import java.io.Serializable;
 
+import com.pyx4j.commons.Pair;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.config.server.rpc.IServiceFilter;
 import com.pyx4j.rpc.shared.Service;
 import com.pyx4j.security.shared.Context;
+import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.server.contexts.ServerContext;
 
+import com.propertyvista.domain.security.VistaCrmBehavior;
+import com.propertyvista.domain.security.VistaDataAccessBehavior;
+import com.propertyvista.domain.security.common.VistaApplication;
 import com.propertyvista.shared.VistaUserVisit;
 
 public class CommunicationStatusRpcServiceFilter implements IServiceFilter {
+    private static final String TIMESTAMPED_ATTRIBUTE = CommunicationMessageFacade.class.getName();
+
+    private static final short REFRESH_TIME = 60; // in sec
 
     @Override
     public Serializable filterIncomming(Class<? extends Service<?, ?>> serviceClass, Serializable request) {
@@ -35,13 +43,48 @@ public class CommunicationStatusRpcServiceFilter implements IServiceFilter {
         // TODO create message notification and send to GWT
 
         if (ServerContext.isUserLoggedIn()) {
-            switch (Context.visit(VistaUserVisit.class).getApplication()) {
-            case crm:
-            case resident:
-                ServerContext.addResponseSystemNotification(ServerSideFactory.create(CommunicationMessageFacade.class).getCommunicationStatus());
+            if (VistaApplication.crm.equals(Context.visit(VistaUserVisit.class).getApplication())) {
+                if (!SecurityController.check(VistaCrmBehavior.Communication)) {
+                    return response;
+                }
+            } else if (VistaApplication.resident.equals(Context.visit(VistaUserVisit.class).getApplication())) {
+                if (!SecurityController.check(VistaDataAccessBehavior.ResidentInPortal)) {
+                    return response;
+                }
+            } else {
+                return response;
             }
+
+            Serializable cachedNotification = getFromCache();
+            if (cachedNotification == null) {
+                Serializable communicationNotification = ServerSideFactory.create(CommunicationMessageFacade.class).getCommunicationStatus();
+                ServerContext.addResponseSystemNotification(communicationNotification);
+                ServerContext.getVisit().setAttribute(TIMESTAMPED_ATTRIBUTE,
+                        new Pair<Long, Serializable>(System.currentTimeMillis(), communicationNotification));
+            } else {
+                ServerContext.addResponseSystemNotification(cachedNotification);
+            }
+
         }
 
         return response;
+    }
+
+    private Serializable getFromCache() {
+        Serializable cached = ServerContext.getVisit().getAttribute(TIMESTAMPED_ATTRIBUTE);
+        if (cached != null) {
+            Pair<Long, Serializable> cachedEntity = (Pair<Long, Serializable>) cached;
+            Long cachedTimeStamp = cachedEntity.getA();
+
+            if (cachedTimeStamp != null) {
+                long now = System.currentTimeMillis();
+                long diff = now - cachedTimeStamp;
+                long diffSeconds = diff / 1000;
+                if (diffSeconds < REFRESH_TIME) {
+                    return cachedEntity.getB();
+                }
+            }
+        }
+        return null;
     }
 }

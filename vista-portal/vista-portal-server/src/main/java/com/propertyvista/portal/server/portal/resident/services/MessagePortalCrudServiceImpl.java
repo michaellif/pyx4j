@@ -13,12 +13,14 @@
  */
 package com.propertyvista.portal.server.portal.resident.services;
 
+import java.io.Serializable;
 import java.util.List;
 
 import org.apache.commons.collections4.set.ListOrderedSet;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
+import com.pyx4j.commons.Pair;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.config.server.SystemDateManager;
 import com.pyx4j.entity.core.AttachLevel;
@@ -32,6 +34,7 @@ import com.pyx4j.entity.core.criterion.PropertyCriterion;
 import com.pyx4j.entity.rpc.EntitySearchResult;
 import com.pyx4j.entity.server.AbstractCrudServiceDtoImpl;
 import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.server.contexts.ServerContext;
 
 import com.propertyvista.biz.communication.CommunicationMessageFacade;
 import com.propertyvista.domain.communication.CommunicationEndpoint;
@@ -127,6 +130,8 @@ public class MessagePortalCrudServiceImpl extends AbstractCrudServiceDtoImpl<Mes
         t.topic().set(communicationFacade.getMessageCategoryFromCache(MessageGroupCategory.TenantOriginated));
         t.content().add(bo);
         t.owner().set(communicationFacade.getSystemEndpointFromCache(SystemEndpointName.Unassigned));
+
+        ServerContext.getVisit().setAttribute(CommunicationMessageFacade.class.getName(), new Pair<Long, Serializable>(0L, null));
 
         return Persistence.secureSave(t);
     }
@@ -282,8 +287,10 @@ public class MessagePortalCrudServiceImpl extends AbstractCrudServiceDtoImpl<Mes
             dh.star().set(message.star());
             Persistence.service().persist(dh);
         }
-
         Persistence.service().commit();
+
+        ServerContext.getVisit().setAttribute(CommunicationMessageFacade.class.getName(), new Pair<Long, Serializable>(0L, null));
+
         callback.onSuccess(message);
     }
 

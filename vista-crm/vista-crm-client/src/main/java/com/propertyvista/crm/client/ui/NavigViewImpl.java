@@ -57,7 +57,7 @@ import com.propertyvista.domain.company.Portfolio;
 import com.propertyvista.domain.dashboard.DashboardMetadata;
 import com.propertyvista.domain.financial.AggregatedTransfer;
 import com.propertyvista.domain.reports.AvailableCrmReport.CrmReportType;
-import com.propertyvista.domain.security.common.VistaBasicBehavior;
+import com.propertyvista.domain.security.VistaCrmBehavior;
 import com.propertyvista.domain.tenant.lead.Lead;
 import com.propertyvista.dto.AptUnitDTO;
 import com.propertyvista.dto.BuildingDTO;
@@ -303,7 +303,7 @@ public class NavigViewImpl extends Composite implements NavigView {
 
     @Override
     public void updateCommunicationGroups(Vector<MessageCategory> metadataList) {
-        if (!SecurityController.check(VistaBasicBehavior.CRM)) {
+        if (!SecurityController.check(VistaCrmBehavior.Communication)) {
             return;
         }
         communicationGroups.clear();
