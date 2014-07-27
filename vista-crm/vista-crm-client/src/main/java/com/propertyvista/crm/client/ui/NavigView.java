@@ -23,6 +23,7 @@ import com.pyx4j.site.rpc.AppPlace;
 
 import com.propertyvista.domain.communication.MessageCategory;
 import com.propertyvista.domain.dashboard.DashboardMetadata;
+import com.propertyvista.domain.reports.AvailableCrmReport.CrmReportType;
 import com.propertyvista.shared.i18n.CompiledLocale;
 
 public interface NavigView extends IsWidget, IsView {
@@ -46,6 +47,8 @@ public interface NavigView extends IsWidget, IsView {
     void updateDashboards(Vector<DashboardMetadata> metadataList);
 
     void updateCommunicationGroups(Vector<MessageCategory> metadataList);
+
+    void updateAvailableReports(List<CrmReportType> reportTypes);
 
     void setAvailableLocales(List<CompiledLocale> localeList);
 

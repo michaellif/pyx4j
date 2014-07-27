@@ -51,10 +51,12 @@ import com.propertyvista.crm.rpc.services.customer.ac.FormerTenantListAction;
 import com.propertyvista.crm.rpc.services.customer.ac.PotentialTenantListAction;
 import com.propertyvista.crm.rpc.services.customer.ac.TenantListAction;
 import com.propertyvista.crm.rpc.services.lease.ac.FormerLeaseListAction;
+import com.propertyvista.crm.rpc.services.reports.CrmReportsMapper;
 import com.propertyvista.domain.communication.MessageCategory;
 import com.propertyvista.domain.company.Portfolio;
 import com.propertyvista.domain.dashboard.DashboardMetadata;
 import com.propertyvista.domain.financial.AggregatedTransfer;
+import com.propertyvista.domain.reports.AvailableCrmReport.CrmReportType;
 import com.propertyvista.domain.security.common.VistaBasicBehavior;
 import com.propertyvista.domain.tenant.lead.Lead;
 import com.propertyvista.dto.AptUnitDTO;
@@ -105,6 +107,8 @@ public class NavigViewImpl extends Composite implements NavigView {
     private SideMenuList customDashboards;
 
     private SideMenuList communicationGroups;
+
+    private SideMenuList reports;
 
     private LayoutType layoutType;
 
@@ -245,15 +249,15 @@ public class NavigViewImpl extends Composite implements NavigView {
         }
 
         {//Reports
-            SideMenuList list = new SideMenuList();
-            root.addMenuItem(new SideMenuItem(list, i18n.tr("Reports"), CrmImages.INSTANCE.reportsIcon(), null));
+            reports = new SideMenuList();
+            root.addMenuItem(new SideMenuItem(reports, i18n.tr("Reports"), CrmImages.INSTANCE.reportsIcon(), null));
 
-            list.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Reports.AutoPayChanges()));
-            list.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Reports.Availability()));
-            list.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Reports.CustomerCreditCheck()));
-            list.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Reports.Eft()));
-            list.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Reports.EftVariance()));
-            list.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Reports.ResidentInsurance()));
+//            list.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Reports.AutoPayChanges()));
+//            list.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Reports.Availability()));
+//            list.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Reports.CustomerCreditCheck()));
+//            list.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Reports.Eft()));
+//            list.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Reports.EftVariance()));
+//            list.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Reports.ResidentInsurance()));
         }
 
         AppSite.getEventBus().addHandler(LayoutChangeEvent.TYPE, new LayoutChangeHandler() {
@@ -286,6 +290,14 @@ public class NavigViewImpl extends Composite implements NavigView {
         for (DashboardMetadata metadata : metadataList) {
             customDashboards.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Dashboard.View().formPlace(metadata.getPrimaryKey()), metadata.name()
                     .getStringView(), null));
+        }
+    }
+
+    @Override
+    public void updateAvailableReports(List<CrmReportType> reportTypes) {
+        reports.clear();
+        for (CrmReportType type : reportTypes) {
+            reports.addMenuItem(new SideMenuAppPlaceItem(CrmReportsMapper.resolvePlace(type)));
         }
     }
 
@@ -352,4 +364,5 @@ public class NavigViewImpl extends Composite implements NavigView {
         }
 
     }
+
 }

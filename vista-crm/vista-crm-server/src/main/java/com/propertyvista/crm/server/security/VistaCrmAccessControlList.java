@@ -91,6 +91,7 @@ import com.propertyvista.crm.rpc.services.organization.VendorCrudService;
 import com.propertyvista.crm.rpc.services.policies.CrmPolicyRetrieveService;
 import com.propertyvista.crm.rpc.services.policies.policy.EmailTemplatesPolicyCrudService;
 import com.propertyvista.crm.rpc.services.pub.CrmAuthenticationService;
+import com.propertyvista.crm.rpc.services.reports.CrmAvailableReportService;
 import com.propertyvista.crm.rpc.services.reports.CrmReportsService;
 import com.propertyvista.crm.rpc.services.reports.CrmReportsSettingsPersistenceService;
 import com.propertyvista.crm.rpc.services.security.CrmLoginAttemptsListerService;
@@ -239,6 +240,7 @@ public class VistaCrmAccessControlList extends ServletContainerAclBuilder {
         grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(DownloadableService.class));
 
 // - Reports:
+        grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(CrmAvailableReportService.class));
         grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(CrmReportsService.class));
         grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(CrmReportsSettingsPersistenceService.class));
 

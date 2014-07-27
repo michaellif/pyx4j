@@ -13,6 +13,8 @@
  */
 package com.propertyvista.crm.client.activity;
 
+import java.util.Vector;
+
 import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.core.client.Scheduler;
@@ -20,7 +22,6 @@ import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
-import com.pyx4j.commons.Key;
 import com.pyx4j.entity.core.criterion.EntityListCriteria;
 import com.pyx4j.entity.rpc.EntitySearchResult;
 import com.pyx4j.entity.security.DataModelPermission;
@@ -40,21 +41,16 @@ import com.propertyvista.crm.client.ui.NavigView.NavigPresenter;
 import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.crm.rpc.services.MessageCategoryCrudService;
 import com.propertyvista.crm.rpc.services.dashboard.DashboardMetadataCrudService;
+import com.propertyvista.crm.rpc.services.reports.CrmAvailableReportService;
 import com.propertyvista.domain.communication.MessageCategory;
 import com.propertyvista.domain.dashboard.DashboardMetadata;
+import com.propertyvista.domain.reports.AvailableCrmReport;
+import com.propertyvista.domain.reports.AvailableCrmReport.CrmReportType;
 import com.propertyvista.shared.i18n.CompiledLocale;
 
 public class NavigActivity extends AbstractActivity implements NavigPresenter {
 
     private final NavigView view;
-
-    private DashboardMetadataCrudService dashboardMetadataCrudService;
-
-    private boolean isDashboardFolderUpdateRequired;
-
-    private boolean isCommunicationFolderUpdateRequired;
-
-    private Key previousUserPk;
 
     private Place place;
 
@@ -67,19 +63,23 @@ public class NavigActivity extends AbstractActivity implements NavigPresenter {
     public void start(AcceptsOneWidget panel, EventBus eventBus) {
         panel.setWidget(view);
         obtainAvailableLocales();
+        updateDashboardItems();
+
+        // Do not load hidden menus immediately to let main view load first
+        Scheduler.get().scheduleFixedDelay(new Scheduler.RepeatingCommand() {
+            @Override
+            public boolean execute() {
+                updateMessageCategoryItems();
+                updateAvailableReportItems();
+                return false;
+            }
+        }, 1300);
     }
 
     public void withPlace(Place place) {
         this.place = place;
-        Key currentUserPk = ClientContext.getUserVisit() != null ? ClientContext.getUserVisit().getPrincipalPrimaryKey() : null;
-        isCommunicationFolderUpdateRequired = isDashboardFolderUpdateRequired = previousUserPk == null || currentUserPk == null
-                || !previousUserPk.equals(currentUserPk);
-        previousUserPk = currentUserPk;
 
-        dashboardMetadataCrudService = GWT.<DashboardMetadataCrudService> create(DashboardMetadataCrudService.class);
         view.updateUserName(ClientContext.getUserVisit().getName());
-        updateDashboardItems();
-        updateMessageCategoryItems();
 
         if (place instanceof AppPlace) {
             view.select((AppPlace) place);
@@ -104,47 +104,53 @@ public class NavigActivity extends AbstractActivity implements NavigPresenter {
                 });
             }
         });
-        previousUserPk = null;
     }
 
     public void onBoardUpdate(BoardUpdateEvent event) {
         if (DashboardMetadata.class.equals(event.getTargetEntityType())) {
-            isDashboardFolderUpdateRequired = true;
             updateDashboardItems();
         } else if (MessageCategory.class.equals(event.getTargetEntityType())) {
-            isCommunicationFolderUpdateRequired = true;
             updateMessageCategoryItems();
+        } else if (AvailableCrmReport.class.equals(event.getTargetEntityType())) {
+            updateAvailableReportItems();
         }
     }
 
     private void updateDashboardItems() {
-        if (isDashboardFolderUpdateRequired && SecurityController.check(DataModelPermission.permissionRead(DashboardMetadata.class))) {
-            dashboardMetadataCrudService.list(new DefaultAsyncCallback<EntitySearchResult<DashboardMetadata>>() {
+        if (SecurityController.check(DataModelPermission.permissionRead(DashboardMetadata.class))) {
+            GWT.<DashboardMetadataCrudService> create(DashboardMetadataCrudService.class).list(
+                    new DefaultAsyncCallback<EntitySearchResult<DashboardMetadata>>() {
 
-                @Override
-                public void onSuccess(EntitySearchResult<DashboardMetadata> result) {
-                    view.updateDashboards(result.getData());
-                    isDashboardFolderUpdateRequired = false;
-                }
+                        @Override
+                        public void onSuccess(EntitySearchResult<DashboardMetadata> result) {
+                            view.updateDashboards(result.getData());
+                        }
 
-            }, EntityListCriteria.create(DashboardMetadata.class));
+                    }, EntityListCriteria.create(DashboardMetadata.class));
         }
+    }
 
+    private void updateAvailableReportItems() {
+        GWT.<CrmAvailableReportService> create(CrmAvailableReportService.class).obtainAvailableReportTypes(new DefaultAsyncCallback<Vector<CrmReportType>>() {
+            @Override
+            public void onSuccess(Vector<CrmReportType> result) {
+                view.updateAvailableReports(result);
+            }
+
+        });
     }
 
     private void updateMessageCategoryItems() {
-        if (isCommunicationFolderUpdateRequired && SecurityController.check(DataModelPermission.permissionRead(MessageCategory.class))) {
+        if (SecurityController.check(DataModelPermission.permissionRead(MessageCategory.class))) {
             GWT.<MessageCategoryCrudService> create(MessageCategoryCrudService.class).list(new DefaultAsyncCallback<EntitySearchResult<MessageCategory>>() {
 
                 @Override
                 public void onSuccess(EntitySearchResult<MessageCategory> result) {
                     view.updateCommunicationGroups(result.getData());
-                    isCommunicationFolderUpdateRequired = false;
                 }
 
             }, EntityListCriteria.create(MessageCategory.class));
         }
-
     }
 
     @Override
