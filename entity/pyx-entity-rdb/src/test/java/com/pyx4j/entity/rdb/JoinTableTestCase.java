@@ -43,6 +43,10 @@ import com.pyx4j.entity.test.shared.domain.join.BRefReadChild;
 import com.pyx4j.entity.test.shared.domain.join.BRefReadOwner;
 import com.pyx4j.entity.test.shared.domain.join.OneToOneReadChild;
 import com.pyx4j.entity.test.shared.domain.join.OneToOneReadOwner;
+import com.pyx4j.entity.test.shared.domain.join.org3.Department3;
+import com.pyx4j.entity.test.shared.domain.join.org3.Employee3;
+import com.pyx4j.entity.test.shared.domain.join.org4.Department4;
+import com.pyx4j.entity.test.shared.domain.join.org4.Employee4;
 import com.pyx4j.gwt.server.DateUtils;
 
 public abstract class JoinTableTestCase extends DatastoreTestBase {
@@ -494,6 +498,107 @@ public abstract class JoinTableTestCase extends DatastoreTestBase {
             Assert.assertEquals("Found using JoinTable", 1, data.size());
             Assert.assertEquals("Got right object", o.getPrimaryKey(), data.get(0).getPrimaryKey());
             Assert.assertEquals("Data retrieved using JoinTable", c.getPrimaryKey(), data.get(0).child().getPrimaryKey());
+        }
+
+    }
+
+    public void testJoinTableManyToManyQueryOnTable() {
+        String testId = uniqueString();
+
+        Employee3 emp11 = EntityFactory.create(Employee3.class);
+        String emp11Name = "E1.1 " + uniqueString();
+        emp11.testId().setValue(testId);
+        emp11.name().setValue(emp11Name);
+        srv.persist(emp11);
+
+        Employee3 emp12 = EntityFactory.create(Employee3.class);
+        String emp12Name = "E1.2 " + uniqueString();
+        emp12.testId().setValue(testId);
+        emp12.name().setValue(emp12Name);
+        srv.persist(emp12);
+
+        Department3 department1 = EntityFactory.create(Department3.class);
+        String dep1name = "D1 " + uniqueString();
+        department1.testId().setValue(testId);
+        department1.name().setValue(dep1name);
+        department1.employees().add(emp11);
+        srv.persist(department1);
+
+        Department3 department2 = EntityFactory.create(Department3.class);
+        String dep2name = "D1 " + uniqueString();
+        department2.testId().setValue(testId);
+        department2.name().setValue(dep2name);
+        department2.employees().add(emp11);
+        department2.employees().add(emp12);
+        srv.persist(department2);
+
+        // See if Query works
+        {
+            EntityQueryCriteria<Employee3> criteria = EntityQueryCriteria.create(Employee3.class);
+            criteria.eq(criteria.proto().testId(), testId);
+            criteria.in(criteria.proto().departments(), department1);
+
+            List<Employee3> retrived = srv.query(criteria);
+            Assert.assertEquals("result set size", 1, retrived.size());
+        }
+
+        {
+            EntityQueryCriteria<Employee3> criteria = EntityQueryCriteria.create(Employee3.class);
+            criteria.eq(criteria.proto().testId(), testId);
+            criteria.in(criteria.proto().departments(), department2);
+
+            List<Employee3> retrived = srv.query(criteria);
+            Assert.assertEquals("result set size", 2, retrived.size());
+        }
+    }
+
+    public void testJoinTableManyToManyQueryAutoTable() {
+        String testId = uniqueString();
+
+        Employee4 emp11 = EntityFactory.create(Employee4.class);
+        String emp11Name = "E1.1 " + uniqueString();
+        emp11.testId().setValue(testId);
+        emp11.name().setValue(emp11Name);
+        srv.persist(emp11);
+
+        Employee4 emp12 = EntityFactory.create(Employee4.class);
+        String emp12Name = "E1.2 " + uniqueString();
+        emp12.testId().setValue(testId);
+        emp12.name().setValue(emp12Name);
+        srv.persist(emp12);
+
+        Department4 department1 = EntityFactory.create(Department4.class);
+        String dep1name = "D1 " + uniqueString();
+        department1.testId().setValue(testId);
+        department1.name().setValue(dep1name);
+        department1.employees().add(emp11);
+        srv.persist(department1);
+
+        Department4 department2 = EntityFactory.create(Department4.class);
+        String dep2name = "D1 " + uniqueString();
+        department2.testId().setValue(testId);
+        department2.name().setValue(dep2name);
+        department2.employees().add(emp11);
+        department2.employees().add(emp12);
+        srv.persist(department2);
+
+        // See if Query works
+        {
+            EntityQueryCriteria<Employee4> criteria = EntityQueryCriteria.create(Employee4.class);
+            criteria.eq(criteria.proto().testId(), testId);
+            criteria.in(criteria.proto().departments(), department1);
+
+            List<Employee4> retrived = srv.query(criteria);
+            Assert.assertEquals("result set size", 1, retrived.size());
+        }
+
+        {
+            EntityQueryCriteria<Employee4> criteria = EntityQueryCriteria.create(Employee4.class);
+            criteria.eq(criteria.proto().testId(), testId);
+            criteria.in(criteria.proto().departments(), department2);
+
+            List<Employee4> retrived = srv.query(criteria);
+            Assert.assertEquals("result set size", 2, retrived.size());
         }
 
     }
