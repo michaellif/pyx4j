@@ -13,9 +13,9 @@
  */
 package com.propertyvista.portal.server.portal.shared.services;
 
+import com.propertyvista.domain.security.CustomerUserCredential;
 import com.propertyvista.portal.rpc.portal.shared.services.PasswordChangeUserService;
 import com.propertyvista.server.common.security.VistaUserSelfPasswordChangeServiceImpl;
-import com.propertyvista.server.domain.security.CustomerUserCredential;
 
 public class PasswordChangeUserServiceImpl extends VistaUserSelfPasswordChangeServiceImpl<CustomerUserCredential> implements
         PasswordChangeUserService {

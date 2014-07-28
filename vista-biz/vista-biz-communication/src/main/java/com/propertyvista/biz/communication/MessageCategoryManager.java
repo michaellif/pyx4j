@@ -25,7 +25,7 @@ import com.propertyvista.domain.communication.MessageCategory;
 import com.propertyvista.domain.communication.MessageCategory.MessageGroupCategory;
 import com.propertyvista.domain.company.Employee;
 import com.propertyvista.domain.security.CrmUser;
-import com.propertyvista.server.domain.security.CrmUserCredential;
+import com.propertyvista.domain.security.CrmUserCredential;
 
 public class MessageCategoryManager {
 

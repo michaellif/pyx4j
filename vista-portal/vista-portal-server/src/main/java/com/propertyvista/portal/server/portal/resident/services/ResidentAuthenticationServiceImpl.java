@@ -44,6 +44,7 @@ import com.propertyvista.biz.tenant.OnlineApplicationFacade;
 import com.propertyvista.config.VistaDeployment;
 import com.propertyvista.domain.payment.PaymentType;
 import com.propertyvista.domain.security.CustomerUser;
+import com.propertyvista.domain.security.CustomerUserCredential;
 import com.propertyvista.domain.security.PortalResidentBehavior;
 import com.propertyvista.domain.security.VistaCustomerPaymentTypeBehavior;
 import com.propertyvista.domain.security.common.VistaApplication;
@@ -54,7 +55,6 @@ import com.propertyvista.portal.rpc.portal.resident.ResidentUserVisit;
 import com.propertyvista.portal.rpc.portal.resident.services.ResidentAuthenticationService;
 import com.propertyvista.portal.server.portal.resident.ResidentPortalContext;
 import com.propertyvista.server.common.security.VistaAuthenticationServicesImpl;
-import com.propertyvista.server.domain.security.CustomerUserCredential;
 import com.propertyvista.shared.VistaUserVisit;
 import com.propertyvista.shared.exceptions.LoginTokenExpiredUserRuntimeException;
 

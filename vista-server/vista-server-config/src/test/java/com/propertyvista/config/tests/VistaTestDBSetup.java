@@ -33,10 +33,10 @@ import com.propertyvista.domain.VistaNamespace;
 import com.propertyvista.domain.blob.LeaseTermAgreementDocumentBlob;
 import com.propertyvista.domain.note.NotesAndAttachments;
 import com.propertyvista.domain.policy.policies.YardiInterfacePolicy;
+import com.propertyvista.domain.security.CustomerUserCredential;
 import com.propertyvista.domain.tenant.lead.Lead;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.server.domain.IdAssignmentSequence;
-import com.propertyvista.server.domain.security.CustomerUserCredential;
 
 public class VistaTestDBSetup {
 

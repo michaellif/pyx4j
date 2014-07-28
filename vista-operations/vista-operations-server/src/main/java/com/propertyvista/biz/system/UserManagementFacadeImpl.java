@@ -34,12 +34,12 @@ import com.propertyvista.biz.system.encryption.PasswordEncryptorFacade;
 import com.propertyvista.crm.rpc.dto.account.GlobalLoginResponseDTO;
 import com.propertyvista.domain.security.CrmRole;
 import com.propertyvista.domain.security.CrmUser;
+import com.propertyvista.domain.security.CrmUserCredential;
 import com.propertyvista.domain.security.VistaDataAccessBehavior;
 import com.propertyvista.domain.security.common.AbstractUser;
 import com.propertyvista.domain.security.common.AbstractUserCredential;
 import com.propertyvista.domain.security.common.VistaBasicBehavior;
 import com.propertyvista.server.common.security.VistaPasswordResetServiceImpl;
-import com.propertyvista.server.domain.security.CrmUserCredential;
 
 public class UserManagementFacadeImpl implements UserManagementFacade {
 

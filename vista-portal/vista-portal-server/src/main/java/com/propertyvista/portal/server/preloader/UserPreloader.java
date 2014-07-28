@@ -33,12 +33,12 @@ import com.propertyvista.domain.DemoData;
 import com.propertyvista.domain.company.Employee;
 import com.propertyvista.domain.security.CrmRole;
 import com.propertyvista.domain.security.CrmUser;
+import com.propertyvista.domain.security.CrmUserCredential;
 import com.propertyvista.domain.security.CustomerUser;
+import com.propertyvista.domain.security.CustomerUserCredential;
 import com.propertyvista.generator.SecurityGenerator;
 import com.propertyvista.generator.util.CommonsGenerator;
 import com.propertyvista.preloader.BaseVistaDevDataPreloader;
-import com.propertyvista.server.domain.security.CrmUserCredential;
-import com.propertyvista.server.domain.security.CustomerUserCredential;
 import com.propertyvista.shared.config.VistaDemo;
 
 public class UserPreloader extends BaseVistaDevDataPreloader {

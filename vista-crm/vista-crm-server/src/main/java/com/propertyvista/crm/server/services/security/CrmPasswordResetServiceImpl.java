@@ -17,8 +17,8 @@ import com.pyx4j.security.rpc.AuthenticationResponse;
 
 import com.propertyvista.crm.rpc.services.security.CrmPasswordResetService;
 import com.propertyvista.crm.server.services.pub.CrmAuthenticationServiceImpl;
+import com.propertyvista.domain.security.CrmUserCredential;
 import com.propertyvista.server.common.security.VistaPasswordResetServiceImpl;
-import com.propertyvista.server.domain.security.CrmUserCredential;
 
 public class CrmPasswordResetServiceImpl extends VistaPasswordResetServiceImpl<CrmUserCredential> implements CrmPasswordResetService {
 

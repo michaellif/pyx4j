@@ -41,7 +41,9 @@ import com.propertyvista.domain.payment.AutopayAgreement;
 import com.propertyvista.domain.person.Person;
 import com.propertyvista.domain.pmc.Pmc;
 import com.propertyvista.domain.security.CrmUser;
+import com.propertyvista.domain.security.CrmUserCredential;
 import com.propertyvista.domain.security.CustomerUser;
+import com.propertyvista.domain.security.CustomerUserCredential;
 import com.propertyvista.domain.security.OnboardingUser;
 import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.domain.tenant.insurance.TenantSureInsurancePolicy;
@@ -52,8 +54,6 @@ import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
 import com.propertyvista.domain.tenant.lease.Tenant;
 import com.propertyvista.domain.tenant.prospect.LeaseApplicationDocument;
 import com.propertyvista.server.common.security.AccessKey;
-import com.propertyvista.server.domain.security.CrmUserCredential;
-import com.propertyvista.server.domain.security.CustomerUserCredential;
 
 public class CommunicationFacadeImpl implements CommunicationFacade {
 

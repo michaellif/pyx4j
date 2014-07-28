@@ -16,10 +16,10 @@ package com.propertyvista.interfaces.importer;
 import com.pyx4j.entity.core.AttachLevel;
 import com.pyx4j.entity.server.Persistence;
 
+import com.propertyvista.domain.security.CustomerUserCredential;
 import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
 import com.propertyvista.interfaces.importer.converter.TenantConverter;
 import com.propertyvista.interfaces.importer.model.TenantIO;
-import com.propertyvista.server.domain.security.CustomerUserCredential;
 
 public class ExportTenantDataRetriever {
 

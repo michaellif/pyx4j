@@ -14,8 +14,8 @@
 package com.propertyvista.crm.server.services.security;
 
 import com.propertyvista.crm.rpc.services.security.CrmPasswordChangeUserService;
+import com.propertyvista.domain.security.CrmUserCredential;
 import com.propertyvista.server.common.security.VistaUserSelfPasswordChangeServiceImpl;
-import com.propertyvista.server.domain.security.CrmUserCredential;
 
 public class CrmPasswordChangeUserServiceImpl extends VistaUserSelfPasswordChangeServiceImpl<CrmUserCredential> implements CrmPasswordChangeUserService {
 

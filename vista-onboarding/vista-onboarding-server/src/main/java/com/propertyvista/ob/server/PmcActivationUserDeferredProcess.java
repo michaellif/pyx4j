@@ -23,12 +23,12 @@ import com.pyx4j.entity.server.UnitOfWork;
 
 import com.propertyvista.biz.communication.CommunicationFacade;
 import com.propertyvista.domain.security.CrmUser;
+import com.propertyvista.domain.security.CrmUserCredential;
 import com.propertyvista.domain.security.OnboardingUser;
 import com.propertyvista.ob.rpc.dto.OnboardingApplicationStatus;
 import com.propertyvista.ob.rpc.dto.OnboardingUserVisit;
 import com.propertyvista.server.TaskRunner;
 import com.propertyvista.server.common.security.AccessKey;
-import com.propertyvista.server.domain.security.CrmUserCredential;
 
 @SuppressWarnings("serial")
 public class PmcActivationUserDeferredProcess extends PmcActivationDeferredProcess {

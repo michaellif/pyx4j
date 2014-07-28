@@ -21,7 +21,7 @@ import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.config.VistaDeployment;
 import com.propertyvista.domain.pmc.Pmc;
-import com.propertyvista.server.domain.security.CrmUserCredential;
+import com.propertyvista.domain.security.CrmUserCredential;
 
 public class UserAccessUtils {
 

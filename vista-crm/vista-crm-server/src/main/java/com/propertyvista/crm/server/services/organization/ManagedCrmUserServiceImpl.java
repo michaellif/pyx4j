@@ -14,8 +14,8 @@
 package com.propertyvista.crm.server.services.organization;
 
 import com.propertyvista.crm.rpc.services.organization.ManagedCrmUserService;
+import com.propertyvista.domain.security.CrmUserCredential;
 import com.propertyvista.server.common.security.VistaManagedPasswordChangeServiceImpl;
-import com.propertyvista.server.domain.security.CrmUserCredential;
 
 public class ManagedCrmUserServiceImpl extends VistaManagedPasswordChangeServiceImpl<CrmUserCredential> implements ManagedCrmUserService {
 

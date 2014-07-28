@@ -42,6 +42,7 @@ import com.propertyvista.biz.policy.IdAssignmentFacade;
 import com.propertyvista.biz.system.AuditFacade;
 import com.propertyvista.biz.system.encryption.PasswordEncryptorFacade;
 import com.propertyvista.domain.security.CustomerUser;
+import com.propertyvista.domain.security.CustomerUserCredential;
 import com.propertyvista.domain.security.PortalResidentBehavior;
 import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.domain.tenant.CustomerAcceptedTerms;
@@ -57,7 +58,6 @@ import com.propertyvista.portal.rpc.portal.resident.dto.ResidentSelfRegistration
 import com.propertyvista.portal.rpc.shared.EntityValidationException;
 import com.propertyvista.server.TaskRunner;
 import com.propertyvista.server.common.security.AccessKey;
-import com.propertyvista.server.domain.security.CustomerUserCredential;
 import com.propertyvista.shared.config.VistaDemo;
 
 public class CustomerFacadeImpl implements CustomerFacade {

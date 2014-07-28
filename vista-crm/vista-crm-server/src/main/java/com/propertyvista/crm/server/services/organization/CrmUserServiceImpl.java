@@ -36,9 +36,9 @@ import com.propertyvista.crm.server.util.CrmAppContext;
 import com.propertyvista.domain.company.Employee;
 import com.propertyvista.domain.company.Notification;
 import com.propertyvista.domain.company.Portfolio;
+import com.propertyvista.domain.security.CrmUserCredential;
 import com.propertyvista.domain.security.UserAuditingConfigurationDTO;
 import com.propertyvista.domain.security.VistaCrmBehavior;
-import com.propertyvista.server.domain.security.CrmUserCredential;
 
 public class CrmUserServiceImpl extends AbstractCrudServiceDtoImpl<Employee, EmployeeDTO> implements CrmUserService {
 

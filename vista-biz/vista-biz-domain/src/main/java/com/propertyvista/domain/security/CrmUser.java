@@ -14,13 +14,26 @@
 package com.propertyvista.domain.security;
 
 import com.pyx4j.entity.annotations.Caption;
+import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.DiscriminatorValue;
+import com.pyx4j.entity.annotations.JoinTable;
+import com.pyx4j.entity.annotations.RpcTransient;
+import com.pyx4j.entity.core.AttachLevel;
 
 import com.propertyvista.domain.security.common.AbstractPmcUser;
+import com.propertyvista.domain.security.common.AbstractUserCredential;
 
 @Caption(name = "User")
 @DiscriminatorValue("CrmUser")
 public interface CrmUser extends AbstractPmcUser {
 
     public static final String VISTA_SUPPORT_ACCOUNT_EMAIL = "support@propertyvista.com";
+
+    /**
+     * This Magic can be used to build query by Roles
+     */
+    @RpcTransient
+    @Detached(level = AttachLevel.Detached)
+    @JoinTable(value = CrmUserCredential.class, mappedBy = AbstractUserCredential.UserColumnId.class)
+    CrmUserCredential credential();
 }

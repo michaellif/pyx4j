@@ -43,10 +43,10 @@ import com.propertyvista.domain.company.Notification;
 import com.propertyvista.domain.security.AuditRecordEventType;
 import com.propertyvista.domain.security.CrmRole;
 import com.propertyvista.domain.security.CrmUser;
+import com.propertyvista.domain.security.CrmUserCredential;
 import com.propertyvista.domain.security.UserAuditingConfigurationDTO;
 import com.propertyvista.server.common.security.UserAccessUtils;
 import com.propertyvista.server.domain.security.BehaviorHolder;
-import com.propertyvista.server.domain.security.CrmUserCredential;
 
 public class EmployeeCrudServiceImpl extends AbstractCrudServiceDtoImpl<Employee, EmployeeDTO> implements EmployeeCrudService {
 
@@ -84,12 +84,12 @@ public class EmployeeCrudServiceImpl extends AbstractCrudServiceDtoImpl<Employee
 
     @Override
     protected void enhanceListCriteria(EntityListCriteria<Employee> boCriteria, EntityListCriteria<EmployeeDTO> toCriteria) {
-        //toCriteria.removeAllCriterions(toCriteria.proto().user().roles());
+        toCriteria.removeAllCriterions(toCriteria.proto().user().credential());
         if (SecurityController.check(DataModelPermission.permissionRead(EmployeePrivilegesDTO.class))) {
             PropertyCriterion roleCriteria = toCriteria.getCriterion(toCriteria.proto().privileges().roles());
             if (roleCriteria != null) {
                 toCriteria.getFilters().remove(roleCriteria);
-                // boCriteria.eq(boCriteria.proto().user().roles(), roleCriteria.getValue());
+                boCriteria.eq(boCriteria.proto().user().credential().roles(), roleCriteria.getValue());
             }
         }
         super.enhanceListCriteria(boCriteria, toCriteria);

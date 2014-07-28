@@ -73,6 +73,6 @@ public interface CrmRole extends IEntity {
      * This can be used to build query by Roles
      */
     @Detached(level = AttachLevel.Detached)
-    @JoinTable(value = CrmUserRolesLink.class, mappedBy = CrmUserRolesLink.CrmRoleColumnId.class)
+    @JoinTable(value = CrmUserCredential.class, mappedBy = CrmUserCredential.CrmRoleColumnId.class)
     ISet<CrmUser> users();
 }

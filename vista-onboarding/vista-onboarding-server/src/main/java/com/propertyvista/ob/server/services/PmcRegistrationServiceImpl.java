@@ -40,6 +40,7 @@ import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.domain.pmc.Pmc;
 import com.propertyvista.domain.pmc.Pmc.PmcStatus;
 import com.propertyvista.domain.pmc.PmcEquifaxStatus;
+import com.propertyvista.domain.security.CrmUserCredential;
 import com.propertyvista.domain.security.OnboardingUser;
 import com.propertyvista.domain.security.common.VistaApplication;
 import com.propertyvista.ob.rpc.dto.OnboardingApplicationStatus;
@@ -50,7 +51,6 @@ import com.propertyvista.ob.rpc.services.PmcRegistrationService;
 import com.propertyvista.ob.server.PmcActivationUserDeferredProcess;
 import com.propertyvista.server.TaskRunner;
 import com.propertyvista.server.common.security.AccessKey;
-import com.propertyvista.server.domain.security.CrmUserCredential;
 
 public class PmcRegistrationServiceImpl implements PmcRegistrationService {
 
