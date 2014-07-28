@@ -17,6 +17,7 @@ BEGIN TRANSACTION;
     DROP SEQUENCE communication_message$to_seq;
     DROP SEQUENCE communication_message_attachment_blob_seq;
     DROP SEQUENCE country_seq;
+    DROP SEQUENCE crm_role$rls_seq;
 
 
     -- Altered Sequences
@@ -29,6 +30,8 @@ BEGIN TRANSACTION;
     CREATE SEQUENCE aggregated_transfer$chargebacks_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;
     CREATE SEQUENCE aggregated_transfer_adjustment_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;
     CREATE SEQUENCE aggregated_transfer_chargeback_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;
+    CREATE SEQUENCE available_crm_report$rls_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;
+    CREATE SEQUENCE available_crm_report_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;
     CREATE SEQUENCE cards_reconciliation_file_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;
     CREATE SEQUENCE cards_reconciliation_record$adjustments_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;
     CREATE SEQUENCE cards_reconciliation_record$chargebacks_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;
@@ -50,6 +53,8 @@ BEGIN TRANSACTION;
     ALTER SEQUENCE aggregated_transfer$chargebacks_seq OWNER TO vista ;
     ALTER SEQUENCE aggregated_transfer_adjustment_seq OWNER TO vista ;
     ALTER SEQUENCE aggregated_transfer_chargeback_seq OWNER TO vista ;
+    ALTER SEQUENCE available_crm_report$rls_seq OWNER TO vista ;
+    ALTER SEQUENCE available_crm_report_seq OWNER TO vista ;
     ALTER SEQUENCE cards_reconciliation_file_seq OWNER TO vista ;
     ALTER SEQUENCE cards_reconciliation_record$adjustments_seq OWNER TO vista ;
     ALTER SEQUENCE cards_reconciliation_record$chargebacks_seq OWNER TO vista ;

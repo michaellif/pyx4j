@@ -35,6 +35,8 @@ BEGIN
         ALTER TABLE city DROP CONSTRAINT city_province_fk;
         ALTER TABLE communication_message$to DROP CONSTRAINT communication_message$to_owner_fk;
         ALTER TABLE communication_message_attachment DROP CONSTRAINT communication_message_attachment_message_fk;
+        ALTER TABLE crm_role$rls DROP CONSTRAINT crm_role$rls_owner_fk;
+        ALTER TABLE crm_role$rls DROP CONSTRAINT crm_role$rls_value_fk;
         ALTER TABLE customer_screening_income_info DROP CONSTRAINT customer_screening_income_info_address_country_fk;
         ALTER TABLE customer_screening_income_info DROP CONSTRAINT customer_screening_income_info_address_province_fk;
         ALTER TABLE customer_screening_v DROP CONSTRAINT customer_screening_v_current_address_country_fk;
@@ -189,6 +191,31 @@ BEGIN
         ALTER TABLE apt_unit    ADD COLUMN info_legal_address_country VARCHAR(50),
                                 ADD COLUMN info_legal_address_province VARCHAR(500);
         
+        
+        -- available_crm_report
+        
+        CREATE TABLE available_crm_report
+        (
+            id                          BIGINT                  NOT NULL,
+            report_type                 VARCHAR(50),
+                CONSTRAINT available_crm_report_pk PRIMARY KEY(id)
+        );
+        
+        ALTER TABLE available_crm_report OWNER TO vista;
+        
+        
+        -- available_crm_report$rls
+        
+        CREATE TABLE available_crm_report$rls
+        (
+            id                          BIGINT                  NOT NULL,
+            owner                       BIGINT,
+            value                       BIGINT,
+            seq                         INT,
+                CONSTRAINT available_crm_report$rls_pk PRIMARY KEY(id)
+        );
+        
+        ALTER TABLE available_crm_report$rls OWNER TO vista;
         
         
         -- billable_item_adjustment
@@ -1075,6 +1102,10 @@ BEGIN
         
         DROP TABLE country;
         
+        -- crm_role$rls
+        
+        DROP TABLE crm_role$rls;
+        
         -- customer_screening_income_info
         
         ALTER TABLE customer_screening_income_info  DROP COLUMN address_country_old,
@@ -1196,6 +1227,10 @@ BEGIN
             FOREIGN KEY(owner) REFERENCES aggregated_transfer(id)  DEFERRABLE INITIALLY DEFERRED;
         ALTER TABLE aggregated_transfer$chargebacks ADD CONSTRAINT aggregated_transfer$chargebacks_value_fk 
             FOREIGN KEY(value) REFERENCES aggregated_transfer_chargeback(id)  DEFERRABLE INITIALLY DEFERRED;
+        ALTER TABLE available_crm_report$rls ADD CONSTRAINT available_crm_report$rls_owner_fk FOREIGN KEY(owner) 
+            REFERENCES available_crm_report(id)  DEFERRABLE INITIALLY DEFERRED;
+        ALTER TABLE available_crm_report$rls ADD CONSTRAINT available_crm_report$rls_value_fk FOREIGN KEY(value) 
+            REFERENCES crm_role(id)  DEFERRABLE INITIALLY DEFERRED;
         ALTER TABLE communication_delivery_handle ADD CONSTRAINT communication_delivery_handle_message_fk FOREIGN KEY(message) 
             REFERENCES communication_message(id)  DEFERRABLE INITIALLY DEFERRED;
         ALTER TABLE communication_message_attachment ADD CONSTRAINT communication_message_attachment_message_fk FOREIGN KEY(message) 
@@ -1250,6 +1285,8 @@ BEGIN
                 'Tanzania', 'Thailand', 'TimorLeste', 'Togo', 'Tokelau', 'Tonga', 'Trinidad', 'Tunisia', 'Turkey', 'Turkmenistan', 'TurksCaicos', 
                 'Tuvalu', 'Uganda', 'Ukraine', 'UnitedArabEmirates', 'UnitedKingdom', 'UnitedStates', 'Uruguay', 'Uzbekistan', 'Vanuatu', 'Vatican', 
                 'Venezuela', 'VietNam', 'VirginIslands', 'VirginIslandsGB', 'WallisFutuna', 'WesternSahara', 'Yemen', 'Zambia', 'Zimbabwe'));
+        ALTER TABLE available_crm_report ADD CONSTRAINT available_crm_report_report_type_e_ck 
+            CHECK ((report_type) IN ('AutoPayChanges', 'Availability', 'CustomerCreditCheck', 'EFT', 'EftVariance', 'ResidentInsurance'));
         ALTER TABLE billable_item_adjustment ADD CONSTRAINT billable_item_adjustment_adjustment_type_e_ck 
             CHECK ((adjustment_type) IN ('Monetary', 'Percentage'));
         ALTER TABLE billing_arrears_snapshot ADD CONSTRAINT billing_arrears_snapshot_legal_status_e_ck
@@ -1582,6 +1619,8 @@ BEGIN
         
         CREATE INDEX aggregated_transfer$adjustments_owner_idx ON aggregated_transfer$adjustments USING btree(owner);
         CREATE INDEX aggregated_transfer$chargebacks_owner_idx ON aggregated_transfer$chargebacks USING btree(owner);
+        CREATE INDEX available_crm_report$rls_owner_idx ON available_crm_report$rls USING btree (owner);
+        CREATE UNIQUE INDEX available_crm_report_report_type_idx ON available_crm_report USING btree (report_type);
         CREATE INDEX communication_delivery_handle_message_idx ON communication_delivery_handle USING btree(message);
         CREATE INDEX communication_message_category$dispatchers_owner_idx ON communication_message_category$dispatchers USING btree(owner);
         CREATE INDEX communication_message_category$rls_owner_idx ON communication_message_category$rls USING btree(owner);
