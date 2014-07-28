@@ -164,6 +164,9 @@ class PaymentUtils {
     static AllowedPaymentsSetup getAllowedPaymentsSetup(BillingAccount billingAccountId, VistaApplication vistaApplication) {
         AllowedPaymentsSetup to = EntityFactory.create(AllowedPaymentsSetup.class);
         to.electronicPaymentsAllowed().setValue(isElectronicPaymentsSetup(billingAccountId));
+        to.allowedPaymentTypes().setCollectionValue(Collections.<PaymentType> emptySet());
+        to.allowedCardTypes().setCollectionValue(Collections.<CreditCardType> emptySet());
+        to.convenienceFeeApplicableCardTypes().setCollectionValue(Collections.<CreditCardType> emptySet());
 
         BillingAccount billingAccount = billingAccountId.duplicate();
         Persistence.ensureRetrieve(billingAccount, AttachLevel.Attached);
@@ -197,6 +200,9 @@ class PaymentUtils {
     static AllowedPaymentsSetup getAllowedPaymentsSetup(Building policyNode, VistaApplication vistaApplication) {
         AllowedPaymentsSetup to = EntityFactory.create(AllowedPaymentsSetup.class);
         to.electronicPaymentsAllowed().setValue(isElectronicPaymentsSetup(policyNode));
+        to.allowedPaymentTypes().setCollectionValue(Collections.<PaymentType> emptySet());
+        to.allowedCardTypes().setCollectionValue(Collections.<CreditCardType> emptySet());
+        to.convenienceFeeApplicableCardTypes().setCollectionValue(Collections.<CreditCardType> emptySet());
 
         ElectronicPaymentSetup setup = getEffectiveElectronicPaymentsSetup(policyNode);
         PaymentTypeSelectionPolicy paymentMethodSelectionPolicy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(policyNode,
