@@ -16,10 +16,12 @@ package com.propertyvista.portal.resident.ui.financial.autopay;
 import com.google.gwt.dom.client.Style.FontWeight;
 import com.google.gwt.user.client.ui.IsWidget;
 
+import com.pyx4j.commons.IFormatter;
+import com.pyx4j.commons.SimpleMessageFormat;
 import com.pyx4j.entity.core.IObject;
 import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.CMoneyLabel;
-import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
+import com.pyx4j.forms.client.ui.folder.BoxFolderItemDecorator;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.i18n.shared.I18n;
 
@@ -28,7 +30,6 @@ import com.propertyvista.domain.payment.AutopayAgreement;
 import com.propertyvista.domain.payment.AutopayAgreement.AutopayAgreementCoveredItem;
 import com.propertyvista.portal.shared.ui.PortalFormPanel;
 import com.propertyvista.portal.shared.ui.util.PortalBoxFolder;
-import com.propertyvista.portal.shared.ui.util.decorators.FieldDecoratorBuilder;
 
 public class PapCoveredItemFolder extends PortalBoxFolder<AutopayAgreement.AutopayAgreementCoveredItem> {
 
@@ -45,6 +46,20 @@ public class PapCoveredItemFolder extends PortalBoxFolder<AutopayAgreement.Autop
     @Override
     protected CForm<AutopayAgreementCoveredItem> createItemForm(IObject<?> member) {
         return new CoveredItemViewer();
+    }
+
+    @Override
+    public BoxFolderItemDecorator<AutopayAgreementCoveredItem> createItemDecorator() {
+        BoxFolderItemDecorator<AutopayAgreementCoveredItem> decor = super.createItemDecorator();
+        decor.setCaptionFormatter(new IFormatter<AutopayAgreementCoveredItem, String>() {
+            @Override
+            public String format(AutopayAgreementCoveredItem value) {
+                return SimpleMessageFormat.format("RENT: ${0}, Amount Paid: ${1}", value.billableItem().agreedPrice().getStringView(), value.amount()
+                        .getStringView());
+            }
+        });
+
+        return decor;
     }
 
     class CoveredItemViewer extends CForm<AutopayAgreementCoveredItem> {
