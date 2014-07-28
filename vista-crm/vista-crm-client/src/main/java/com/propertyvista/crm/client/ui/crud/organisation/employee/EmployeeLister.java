@@ -37,8 +37,8 @@ public class EmployeeLister extends AbstractLister<EmployeeDTO> {
             new MemberColumnDescriptor.Builder(proto().email()).build(),
             new MemberColumnDescriptor.Builder(proto().updated(), false).build(),
             //TODO make this conditional if user can read this.
-            new MemberColumnDescriptor.Builder(proto().privileges().roles(), false).build(),
-            new MemberColumnDescriptor.Builder(proto().privileges().behaviors(), false).build()
+            new MemberColumnDescriptor.Builder(proto().privileges().roles(), false).sortable(false).build(),
+            new MemberColumnDescriptor.Builder(proto().privileges().behaviors(), false).sortable(false).build()
         ));//@formatter:on
     }
 

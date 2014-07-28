@@ -91,6 +91,11 @@ public class EmployeeCrudServiceImpl extends AbstractCrudServiceDtoImpl<Employee
                 toCriteria.getFilters().remove(roleCriteria);
                 boCriteria.eq(boCriteria.proto().user().credential().roles(), roleCriteria.getValue());
             }
+            PropertyCriterion behaviorsCriteria = toCriteria.getCriterion(toCriteria.proto().privileges().behaviors());
+            if (behaviorsCriteria != null) {
+                toCriteria.getFilters().remove(behaviorsCriteria);
+                boCriteria.eq(boCriteria.proto().user().credential().roles().$().behaviors(), behaviorsCriteria.getValue());
+            }
         }
         super.enhanceListCriteria(boCriteria, toCriteria);
     }
