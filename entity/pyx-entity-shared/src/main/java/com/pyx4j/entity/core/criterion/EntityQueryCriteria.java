@@ -22,6 +22,7 @@ package com.pyx4j.entity.core.criterion;
 
 import java.io.Serializable;
 import java.util.Collection;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Vector;
 
@@ -223,6 +224,18 @@ public class EntityQueryCriteria<E extends IEntity> extends FiltersBuilder imple
         PropertyCriterion citerion = getCriterion(member);
         if (citerion != null) {
             getFilters().remove(citerion);
+        }
+    }
+
+    public void removeAllCriterions(IObject<?> member) {
+        if (getFilters() != null) {
+            Iterator<Criterion> it = getFilters().iterator();
+            while (it.hasNext()) {
+                Criterion citerion = it.next();
+                if ((citerion instanceof PropertyCriterion) && (member.getPath().toString().startsWith(((PropertyCriterion) citerion).getPropertyPath()))) {
+                    it.remove();
+                }
+            }
         }
     }
 
