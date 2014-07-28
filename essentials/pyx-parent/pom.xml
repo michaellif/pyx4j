@@ -131,6 +131,7 @@
         <slf4jVersion>1.7.6</slf4jVersion>
 
         <jasperreportsVersion>5.2.0</jasperreportsVersion>
+        <dynamicreportsVersion>3.1.6</dynamicreportsVersion>
         <batikVersion>1.7</batikVersion>
 
         <!-- Used for speed up the GWT compiler for developers -->
@@ -515,6 +516,23 @@
                    <!--exclusion><groupId>org.apache.poi</groupId><artifactId>poi</artifactId></exclusion-->
                 </exclusions>
             </dependency>
+
+            <!-- The version shuld match jasperreports -->
+	        <dependency>
+	            <groupId>net.sourceforge.dynamicreports</groupId>
+	            <artifactId>dynamicreports-core</artifactId>
+	            <version>${dynamicreportsVersion}</version>
+	            <exclusions>
+                    <exclusion><groupId>javax.servlet</groupId><artifactId>servlet-api</artifactId></exclusion>
+                    <exclusion><groupId>avalon-framework</groupId><artifactId>avalon-framework-impl</artifactId></exclusion>
+                </exclusions>
+	        </dependency>
+	        
+	        <dependency>
+	            <groupId>net.sourceforge.dynamicreports</groupId>
+	            <artifactId>dynamicreports-adhoc</artifactId>
+	            <version>${dynamicreportsVersion}</version>
+	        </dependency>   
 
             <!-- latest version for jasperreports -->
             <dependency>
