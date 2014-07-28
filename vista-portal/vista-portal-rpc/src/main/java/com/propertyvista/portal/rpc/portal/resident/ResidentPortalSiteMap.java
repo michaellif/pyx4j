@@ -192,7 +192,7 @@ public class ResidentPortalSiteMap extends PortalSiteMap {
         }
     }
 
-    @PlaceProperties(navigLabel = "My Perks & Offers")
+    @PlaceProperties(navigLabel = "Perks")
     public static class Offers extends AppPlace {
     }
 
