@@ -24,6 +24,6 @@ public class LeaseInstanceAccess implements InstanceAccess {
 
     @Override
     public boolean implies(IEntity contextEntity) {
-        return ((LeaseDTO) contextEntity).status().getValue().isCurrent();
+        return ((LeaseDTO) contextEntity).status().getValue().isPresent();
     }
 }
