@@ -24,7 +24,6 @@ import com.pyx4j.forms.client.ui.CEntityLabel;
 import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.folder.BoxFolderItemDecorator;
 import com.pyx4j.forms.client.ui.folder.CFolderItem;
-import com.pyx4j.forms.client.ui.folder.IFolderItemDecorator;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.security.shared.SecurityController;
@@ -35,7 +34,6 @@ import com.pyx4j.widgets.client.dialog.MessageDialog;
 import com.propertyvista.domain.payment.PaymentMethod;
 import com.propertyvista.domain.security.VistaCustomerPaymentTypeBehavior;
 import com.propertyvista.domain.tenant.lease.Tenant;
-import com.propertyvista.dto.PreauthorizedPaymentCoveredItemDTO;
 import com.propertyvista.portal.rpc.portal.resident.dto.financial.AutoPayInfoDTO;
 import com.propertyvista.portal.rpc.portal.resident.dto.financial.AutoPaySummaryDTO;
 import com.propertyvista.portal.shared.resources.PortalImages;
@@ -67,8 +65,7 @@ public class AutoPayAgreementsGadget extends AbstractGadget<FinancialDashboardVi
     protected void populate(AutoPaySummaryDTO value) {
         view.populate(value);
 
-        autoPayButton.setVisible(!value.leaseStatus().getValue().isNoAutoPay()
-                && SecurityController.check(VistaCustomerPaymentTypeBehavior.forAutoPay()));
+        autoPayButton.setVisible(!value.leaseStatus().getValue().isNoAutoPay() && SecurityController.check(VistaCustomerPaymentTypeBehavior.forAutoPay()));
     }
 
     class AutoPayAgreementsToolbar extends GadgetToolbar {
@@ -179,6 +176,11 @@ public class AutoPayAgreementsGadget extends AbstractGadget<FinancialDashboardVi
 
                 ((CFolderItem<AutoPayInfoDTO>) getParent()).setRemovable(!getValue().paymentMethod().isNull()
                         && parentView.getValue().allowCancelationByResident().getValue(false));
+
+                if (getValue().paymentMethodRestricted().getValue(false)) {
+                    get(proto().paymentMethod()).setNote(i18n.tr("This Payment Method Type is currently restricted and cannot be used in Portal!"),
+                            NoteStyle.Warn);
+                }
             }
         }
     }

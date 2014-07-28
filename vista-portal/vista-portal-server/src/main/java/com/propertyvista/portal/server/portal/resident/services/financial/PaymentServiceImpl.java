@@ -37,6 +37,7 @@ import com.propertyvista.domain.payment.AutopayAgreement;
 import com.propertyvista.domain.payment.AutopayAgreement.AutopayAgreementCoveredItem;
 import com.propertyvista.domain.payment.CreditCardInfo;
 import com.propertyvista.domain.payment.LeasePaymentMethod;
+import com.propertyvista.domain.payment.PaymentMethod;
 import com.propertyvista.domain.payment.PaymentType;
 import com.propertyvista.domain.policy.policies.AutoPayPolicy;
 import com.propertyvista.domain.security.common.VistaApplication;
@@ -202,7 +203,7 @@ public class PaymentServiceImpl implements PaymentService {
         return Persistence.service().exists(criteria);
     }
 
-    private static Boolean isRestricted(AllowedPaymentsSetup aps, LeasePaymentMethod pm) {
+    private static Boolean isRestricted(AllowedPaymentsSetup aps, PaymentMethod pm) {
         Boolean result = false;
 
         if (!aps.allowedPaymentTypes().contains(pm.type().getValue())) {
@@ -235,6 +236,8 @@ public class PaymentServiceImpl implements PaymentService {
     private static List<AutoPayInfoDTO> retrieveCurrentAutoPayments(Lease lease) {
         List<AutoPayInfoDTO> currentAutoPayments = new ArrayList<AutoPayInfoDTO>();
         LogicalDate excutionDate = ServerSideFactory.create(PaymentMethodFacade.class).getNextAutopayDate(lease);
+        AllowedPaymentsSetup aps = ServerSideFactory.create(PaymentFacade.class).getAllowedPaymentsSetup(lease.billingAccount(), VistaApplication.resident);
+
         for (AutopayAgreement pap : ServerSideFactory.create(PaymentMethodFacade.class).retrieveAutopayAgreements(lease)) {
             AutoPayInfoDTO autoPayInfo = EntityFactory.create(AutoPayInfoDTO.class);
             autoPayInfo.id().setValue(pap.id().getValue());
@@ -249,6 +252,7 @@ public class PaymentServiceImpl implements PaymentService {
             Persistence.ensureRetrieve(autoPayInfo.payer(), AttachLevel.ToStringMembers);
             if (autoPayInfo.payer().equals(ResidentPortalContext.getTenant())) {
                 autoPayInfo.paymentMethod().set(pap.paymentMethod());
+                autoPayInfo.paymentMethodRestricted().setValue(isRestricted(aps, autoPayInfo.paymentMethod()));
             }
 
             currentAutoPayments.add(autoPayInfo);
@@ -267,7 +271,5 @@ public class PaymentServiceImpl implements PaymentService {
         protected void bind() {
             bindCompleteObject();
         }
-
     }
-
 }

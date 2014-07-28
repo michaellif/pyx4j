@@ -19,5 +19,4 @@ import com.pyx4j.entity.annotations.Transient;
 @Transient
 @ToStringFormat("${0}{1,choice,null#|!null#, {1}}")
 public interface AutoPayInfoDTO extends PaymentInfoDTO {
-
 }

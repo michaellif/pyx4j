@@ -37,6 +37,8 @@ public interface PaymentInfoDTO extends IEntity {
     @Editor(type = EditorType.label)
     PaymentMethod paymentMethod();
 
+    IPrimitive<Boolean> paymentMethodRestricted();
+
     @ToString(index = 2)
     @Editor(type = EditorType.label)
     Tenant payer();
