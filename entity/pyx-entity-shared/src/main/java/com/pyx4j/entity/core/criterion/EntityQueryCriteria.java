@@ -219,6 +219,13 @@ public class EntityQueryCriteria<E extends IEntity> extends FiltersBuilder imple
         return null;
     }
 
+    public void removeCriterion(IObject<?> member) {
+        PropertyCriterion citerion = getCriterion(member);
+        if (citerion != null) {
+            getFilters().remove(citerion);
+        }
+    }
+
     public List<Criterion> getFilters() {
         return filters;
     }
