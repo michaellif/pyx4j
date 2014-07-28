@@ -84,7 +84,7 @@ public class EmployeeCrudServiceImpl extends AbstractCrudServiceDtoImpl<Employee
 
     @Override
     protected void enhanceListCriteria(EntityListCriteria<Employee> boCriteria, EntityListCriteria<EmployeeDTO> toCriteria) {
-        toCriteria.removeAllCriterions(toCriteria.proto().user().roles());
+        //toCriteria.removeAllCriterions(toCriteria.proto().user().roles());
         if (SecurityController.check(DataModelPermission.permissionRead(EmployeePrivilegesDTO.class))) {
             PropertyCriterion roleCriteria = toCriteria.getCriterion(toCriteria.proto().privileges().roles());
             if (roleCriteria != null) {
