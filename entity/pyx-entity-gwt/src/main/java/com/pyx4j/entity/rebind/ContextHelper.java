@@ -42,6 +42,7 @@ import com.google.gwt.core.ext.typeinfo.TypeOracle;
 
 import com.pyx4j.entity.annotations.AbstractEntity;
 import com.pyx4j.entity.annotations.InheritedOnInterface;
+import com.pyx4j.entity.annotations.RpcBlacklist;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.IList;
 import com.pyx4j.entity.core.IObject;
@@ -96,6 +97,8 @@ class ContextHelper {
         if (!(type.isAssignableTo(iEnentityInterfaceType) && (type.isInterface() != null) && iEnentityInterfaceType != type)) {
             return false;
         } else if ((type.getAnnotation(AbstractEntity.class) != null) && (!type.getAnnotation(AbstractEntity.class).generateMetadata())) {
+            return false;
+        } else if ((type.getAnnotation(RpcBlacklist.class) != null) && (!type.getAnnotation(RpcBlacklist.class).generateMetadata())) {
             return false;
         } else {
             return true;

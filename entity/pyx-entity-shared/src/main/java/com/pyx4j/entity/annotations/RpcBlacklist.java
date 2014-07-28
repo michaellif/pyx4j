@@ -37,8 +37,10 @@ import java.lang.annotation.Target;
  * 
  * The check is done at GWT compile time (rebind)
  */
-@Target( { ElementType.TYPE })
+@Target({ ElementType.TYPE })
 @Retention(RetentionPolicy.RUNTIME)
 public @interface RpcBlacklist {
+
+    boolean generateMetadata() default true;
 
 }
