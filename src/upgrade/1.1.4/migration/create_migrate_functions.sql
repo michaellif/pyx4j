@@ -591,7 +591,28 @@ BEGIN
                 ||'SET  info_legal_address_street_name = '
                 ||'     TRIM(info_legal_address_street_name)||'' ''||INITCAP(TRIM(info_legal_address_street_direction)) '
                 ||'WHERE    info_legal_address_street_direction IS NOT NULL ';
+                
+        -- available_crm_report
         
+        EXECUTE 'INSERT INTO '||v_schema_name||'.available_crm_report(id,report_type) '
+                ||'(SELECT nextval(''public.available_crm_report_seq'') AS id, '
+                ||' ''AutoPayChanges'' AS report_type )';
+        EXECUTE 'INSERT INTO '||v_schema_name||'.available_crm_report(id,report_type) '
+                ||'(SELECT nextval(''public.available_crm_report_seq'') AS id, '
+                ||' ''Availability'' AS report_type )';
+        EXECUTE 'INSERT INTO '||v_schema_name||'.available_crm_report(id,report_type) '
+                ||'(SELECT nextval(''public.available_crm_report_seq'') AS id, '
+                ||' ''CustomerCreditCheck'' AS report_type )';
+        EXECUTE 'INSERT INTO '||v_schema_name||'.available_crm_report(id,report_type) '
+                ||'(SELECT nextval(''public.available_crm_report_seq'') AS id, '
+                ||' ''EFT'' AS report_type )';
+        EXECUTE 'INSERT INTO '||v_schema_name||'.available_crm_report(id,report_type) '
+                ||'(SELECT nextval(''public.available_crm_report_seq'') AS id, '
+                ||' ''EftVariance'' AS report_type )';
+        EXECUTE 'INSERT INTO '||v_schema_name||'.available_crm_report(id,report_type) '
+                ||'(SELECT nextval(''public.available_crm_report_seq'') AS id, '
+                ||' ''ResidentInsurance'' AS report_type )';
+              
         -- billable_item_adjustment
         
         EXECUTE 'UPDATE '||v_schema_name||'.billable_item_adjustment '
