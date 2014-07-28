@@ -17,25 +17,13 @@ import java.util.Vector;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
-import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
-import com.pyx4j.entity.server.Persistence;
-
 import com.propertyvista.crm.rpc.services.reports.CrmAvailableReportService;
-import com.propertyvista.crm.server.util.CrmAppContext;
-import com.propertyvista.domain.reports.AvailableCrmReport;
 import com.propertyvista.domain.reports.AvailableCrmReport.CrmReportType;
 
 public class CrmAvailableReportServiceImpl implements CrmAvailableReportService {
 
     @Override
     public void obtainAvailableReportTypes(AsyncCallback<Vector<CrmReportType>> callback) {
-        EntityQueryCriteria<AvailableCrmReport> criteria = EntityQueryCriteria.create(AvailableCrmReport.class);
-        criteria.in(criteria.proto().roles().$().users(), CrmAppContext.getCurrentUser());
-        Vector<CrmReportType> result = new Vector<>();
-
-        for (AvailableCrmReport r : Persistence.service().query(criteria)) {
-            result.add(r.reportType().getValue());
-        }
-        callback.onSuccess(result);
+        callback.onSuccess(CrmReportsSecurity.currentUserAvailableReportTypes());
     }
 }

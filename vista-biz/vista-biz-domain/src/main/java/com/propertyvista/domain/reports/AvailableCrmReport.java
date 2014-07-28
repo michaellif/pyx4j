@@ -21,6 +21,7 @@ import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.ReadOnly;
 import com.pyx4j.entity.annotations.SecurityEnabled;
 import com.pyx4j.entity.annotations.validator.NotNull;
+import com.pyx4j.entity.core.AttachLevel;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.IList;
 import com.pyx4j.entity.core.IPrimitive;
@@ -61,7 +62,7 @@ public interface AvailableCrmReport extends IEntity {
     IPrimitive<CrmReportType> reportType();
 
     @NotNull
-    @Detached
+    @Detached(level = AttachLevel.Detached)
     @MemberColumn(name = "rls")
     IList<CrmRole> roles();
 }
