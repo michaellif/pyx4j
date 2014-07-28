@@ -18,5 +18,7 @@
     </replace-with>
     
     <extend-configuration-property name="rpc.blacklist" value="com.propertyvista.domain.security.common.AbstractUserCredential" />
+    <extend-configuration-property name="rpc.blacklist" value="com.propertyvista.domain.security.CrmUserCredential" />
+    <extend-configuration-property name="rpc.blacklist" value="com.propertyvista.domain.security.CustomerUserCredential" />
     
 </module>
