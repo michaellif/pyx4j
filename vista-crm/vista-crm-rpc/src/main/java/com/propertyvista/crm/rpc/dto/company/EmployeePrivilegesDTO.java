@@ -14,12 +14,15 @@
 package com.propertyvista.crm.rpc.dto.company;
 
 import com.pyx4j.entity.annotations.Caption;
+import com.pyx4j.entity.annotations.ReadOnly;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.core.IList;
 import com.pyx4j.entity.core.IPrimitive;
+import com.pyx4j.entity.core.IPrimitiveSet;
 
 import com.propertyvista.domain.security.CrmRole;
 import com.propertyvista.domain.security.UserCredentialEditDTO;
+import com.propertyvista.domain.security.VistaCrmBehavior;
 
 @Transient
 public interface EmployeePrivilegesDTO extends UserCredentialEditDTO {
@@ -31,6 +34,10 @@ public interface EmployeePrivilegesDTO extends UserCredentialEditDTO {
     IPrimitive<Boolean> restrictAccessToSelectedBuildingsAndPortfolios();
 
     IList<CrmRole> roles();
+
+    @Caption(name = "Permissions")
+    @ReadOnly
+    IPrimitiveSet<VistaCrmBehavior> behaviors();
 
     @Caption(name = "Has security question")
     IPrimitive<Boolean> isSecurityQuestionSet();

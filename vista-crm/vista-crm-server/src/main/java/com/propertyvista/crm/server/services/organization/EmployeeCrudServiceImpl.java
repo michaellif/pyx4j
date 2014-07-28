@@ -19,6 +19,8 @@ import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.commons.EqualsHelper;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.core.EntityFactory;
+import com.pyx4j.entity.core.criterion.EntityListCriteria;
+import com.pyx4j.entity.core.criterion.PropertyCriterion;
 import com.pyx4j.entity.security.DataModelPermission;
 import com.pyx4j.entity.server.AbstractCrudServiceDtoImpl;
 import com.pyx4j.entity.server.Persistence;
@@ -39,6 +41,7 @@ import com.propertyvista.crm.rpc.services.organization.EmployeeCrudService;
 import com.propertyvista.domain.company.Employee;
 import com.propertyvista.domain.company.Notification;
 import com.propertyvista.domain.security.AuditRecordEventType;
+import com.propertyvista.domain.security.CrmRole;
 import com.propertyvista.domain.security.CrmUser;
 import com.propertyvista.domain.security.UserAuditingConfigurationDTO;
 import com.propertyvista.server.common.security.UserAccessUtils;
@@ -66,6 +69,30 @@ public class EmployeeCrudServiceImpl extends AbstractCrudServiceDtoImpl<Employee
 
         return newEmployee;
 
+    }
+
+    @Override
+    protected void enhanceListRetrieved(Employee bo, EmployeeDTO to) {
+        if (SecurityController.check(DataModelPermission.permissionRead(EmployeePrivilegesDTO.class))) {
+            CrmUserCredential crs = Persistence.service().retrieve(CrmUserCredential.class, bo.user().getPrimaryKey());
+            to.privileges().roles().addAll(crs.roles());
+            for (CrmRole role : crs.roles()) {
+                to.privileges().behaviors().addAll(role.behaviors());
+            }
+        }
+    }
+
+    @Override
+    protected void enhanceListCriteria(EntityListCriteria<Employee> boCriteria, EntityListCriteria<EmployeeDTO> toCriteria) {
+        toCriteria.removeAllCriterions(toCriteria.proto().user().roles());
+        if (SecurityController.check(DataModelPermission.permissionRead(EmployeePrivilegesDTO.class))) {
+            PropertyCriterion roleCriteria = toCriteria.getCriterion(toCriteria.proto().privileges().roles());
+            if (roleCriteria != null) {
+                toCriteria.getFilters().remove(roleCriteria);
+                // boCriteria.eq(boCriteria.proto().user().roles(), roleCriteria.getValue());
+            }
+        }
+        super.enhanceListCriteria(boCriteria, toCriteria);
     }
 
     @Override
