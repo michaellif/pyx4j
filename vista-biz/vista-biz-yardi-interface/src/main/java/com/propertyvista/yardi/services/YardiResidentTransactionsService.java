@@ -67,6 +67,7 @@ import com.propertyvista.biz.asset.BuildingFacade;
 import com.propertyvista.biz.communication.NotificationFacade;
 import com.propertyvista.biz.financial.payment.PaymentMethodFacade;
 import com.propertyvista.biz.occupancy.OccupancyFacade;
+import com.propertyvista.biz.system.UnableToPostTerminalYardiServiceException;
 import com.propertyvista.biz.system.YardiPropertyNoAccessException;
 import com.propertyvista.biz.system.YardiServiceException;
 import com.propertyvista.biz.system.yardi.YardiConfigurationFacade;
@@ -94,8 +95,10 @@ import com.propertyvista.yardi.processors.YardiProductCatalogProcessor;
 import com.propertyvista.yardi.stubs.ExternalInterfaceLoggingStub;
 import com.propertyvista.yardi.stubs.YardiGuestManagementStub;
 import com.propertyvista.yardi.stubs.YardiILSGuestCardStub;
+import com.propertyvista.yardi.stubs.YardiLicense;
 import com.propertyvista.yardi.stubs.YardiResidentNoTenantsExistException;
 import com.propertyvista.yardi.stubs.YardiResidentTransactionsStub;
+import com.propertyvista.yardi.stubs.YardiServiceMessageException;
 
 /**
  * Implementation functionality for updating properties/units/leases/tenants basing on getResidentTransactions from YARDI api
@@ -270,7 +273,18 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
         YardiPaymentProcessor paymentProcessor = new YardiPaymentProcessor();
         ResidentTransactions reversalTransactions = paymentProcessor.createTransactions(paymentProcessor.createTransactionForReversal(reversal));
 
-        ServerSideFactory.create(YardiResidentTransactionsStub.class).importResidentTransactions(yc, reversalTransactions);
+        try {
+            ServerSideFactory.create(YardiResidentTransactionsStub.class).importResidentTransactions(yc, reversalTransactions);
+        } catch (YardiServiceMessageException e) {
+            YardiLicense.handleVendorLicenseError(e.getMessages());
+            if (e.getMessages().hasErrorMessage(YardiHandledErrorMessages.unableToPostTerminalMessages)) {
+                throw new UnableToPostTerminalYardiServiceException(e.getMessages().getPrettyErrorMessageText());
+            } else if (e.getMessages().hasErrorMessage(YardiHandledErrorMessages.errorMessage_NoAccess)) {
+                throw new YardiPropertyNoAccessException(e.getMessages().getErrorMessage().getValue());
+            } else {
+                throw new YardiServiceException(e.getMessages().toString());
+            }
+        }
     }
 
     // Internal implementation:
@@ -326,6 +340,16 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
                     transactions.add(residentTransactions);
                 }
                 executionMonitor.addInfoEvent("PropertyTransactions", propertyCode);
+            } catch (YardiServiceMessageException e) {
+                if (e.getMessages().hasErrorMessage(YardiHandledErrorMessages.errorMessage_NoAccess)) {
+                    throw new YardiPropertyNoAccessException(e.getMessages().getErrorMessage().getValue());
+                } else if (e.getMessages().hasErrorMessage(YardiHandledErrorMessages.errorMessage_TenantNotFound)) {
+                    // All Ok there are no transactions
+                } else {
+                    YardiLicense.handleVendorLicenseError(e.getMessages());
+                    throw new YardiServiceException(SimpleMessageFormat.format("{0}; PropertyId {1}", e.getMessages().toString(), propertyCode));
+                }
+
             } catch (YardiPropertyNoAccessException e) {
                 if (suspendBuilding(yardiInterfaceId, propertyCode)) {
                     executionMonitor.addErredEvent("BuildingSuspended", e);

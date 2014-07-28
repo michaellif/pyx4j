@@ -131,7 +131,7 @@ public class YardiLicense {
         configLoaded = true;
     }
 
-    static void handleVendorLicenseError(Messages messages) {
+    public static void handleVendorLicenseError(Messages messages) {
         if (messages.hasErrorMessage(errorMessage_License_Fragements)) {
             restLicenseCache();
         }

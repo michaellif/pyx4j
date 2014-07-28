@@ -33,6 +33,13 @@ public class Messages {
         return StringUtils.startsWith(s, "<Messages>") && StringUtils.endsWith(s, "</Messages>");
     }
 
+    public static Messages createErrorInMock(String message) {
+        Messages msgs = new Messages();
+        Message m = new Message(MessageType.Error, message);
+        msgs.getMessages().add(m);
+        return msgs;
+    }
+
     public static Messages create(Message... messages) {
         Messages msgs = new Messages();
         msgs.getMessages().addAll(Arrays.asList(messages));

@@ -52,7 +52,6 @@ import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.commons.SimpleMessageFormat;
 import com.pyx4j.essentials.j2se.util.MarshallUtil;
 
-import com.propertyvista.biz.system.UnableToPostTerminalYardiServiceException;
 import com.propertyvista.biz.system.YardiPropertyNoAccessException;
 import com.propertyvista.biz.system.YardiServiceException;
 import com.propertyvista.domain.settings.PmcYardiCredential;
@@ -66,22 +65,30 @@ public class YardiResidentTransactionsStubImpl extends AbstractYardiStub impleme
 
     private final static Logger log = LoggerFactory.getLogger(YardiResidentTransactionsStubImpl.class);
 
+    @Deprecated
     private static final String errorMessage_NoAccess = "Invalid or no access to Yardi Property";
 
+    @Deprecated
     private static final String errorMessage_TenantNotFound = "No tenants exist with the given search criteria";
 
     //-- payment reversal post messages
 
+    @Deprecated
     private static final String errorMessage_AlreadyNSF1 = "May not  NSF  a receipt that has been NSF";
 
+    @Deprecated
     private static final String errorMessage_AlreadyNSF2 = "May not  reverse  a receipt that has been NSF";
 
+    @Deprecated
     private static final String errorMessage_AlreadyReversed = "Receipt has already been reversed";
 
+    @Deprecated
     private static final String errorMessage_PostMonthAccess1 = "Cannot  NSF  a receipt whose post month is outside your allowable range";
 
+    @Deprecated
     private static final String errorMessage_PostMonthAccess2 = "Cannot  reverse  a receipt whose post month is outside your allowable range";
 
+    @Deprecated
     private static final String[] unableToPostTerminalMessages = new String[] { errorMessage_AlreadyNSF1, errorMessage_AlreadyNSF2,
             errorMessage_AlreadyReversed, errorMessage_PostMonthAccess1, errorMessage_PostMonthAccess2 };
 
@@ -144,8 +151,7 @@ public class YardiResidentTransactionsStubImpl extends AbstractYardiStub impleme
     }
 
     @Override
-    public ResidentTransactions getAllResidentTransactions(PmcYardiCredential yc, String propertyId) throws YardiServiceException,
-            YardiPropertyNoAccessException, RemoteException {
+    public ResidentTransactions getAllResidentTransactions(PmcYardiCredential yc, String propertyId) throws YardiServiceException, RemoteException {
         boolean success = false;
         try {
 
@@ -171,15 +177,7 @@ public class YardiResidentTransactionsStubImpl extends AbstractYardiStub impleme
             if (Messages.isMessageResponse(xml)) {
                 Messages messages = MarshallUtil.unmarshal(Messages.class, xml);
                 if (messages.isError()) {
-                    if (messages.hasErrorMessage(errorMessage_NoAccess)) {
-                        throw new YardiPropertyNoAccessException(messages.getErrorMessage().getValue());
-                    } else if (messages.hasErrorMessage(errorMessage_TenantNotFound)) {
-                        success = true;
-                        return null;
-                    } else {
-                        YardiLicense.handleVendorLicenseError(messages);
-                        throw new YardiServiceException(SimpleMessageFormat.format("{0}; PropertyId {1}", messages.toString(), propertyId));
-                    }
+                    throw new YardiServiceMessageException(messages);
                 } else {
                     log.info(messages.toString());
                 }
@@ -274,14 +272,7 @@ public class YardiResidentTransactionsStubImpl extends AbstractYardiStub impleme
             String xml = response.getImportResidentTransactions_LoginResult().getExtraElement().toString();
             Messages messages = MarshallUtil.unmarshal(Messages.class, xml);
             if (messages.isError()) {
-                YardiLicense.handleVendorLicenseError(messages);
-                if (messages.hasErrorMessage(unableToPostTerminalMessages)) {
-                    throw new UnableToPostTerminalYardiServiceException(messages.getPrettyErrorMessageText());
-                } else if (messages.hasErrorMessage(errorMessage_NoAccess)) {
-                    throw new YardiPropertyNoAccessException(messages.getErrorMessage().getValue());
-                } else {
-                    throw new YardiServiceException(messages.toString());
-                }
+                throw new YardiServiceMessageException(messages);
             } else {
                 log.debug(messages.toString());
             }

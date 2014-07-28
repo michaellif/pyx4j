@@ -23,9 +23,9 @@ import com.yardi.entity.resident.RTCustomer;
 import com.yardi.entity.resident.ResidentTransactions;
 import com.yardi.entity.resident.Transactions;
 
-import com.propertyvista.biz.system.YardiPropertyNoAccessException;
 import com.propertyvista.biz.system.YardiServiceException;
 import com.propertyvista.test.mock.MockEventBus;
+import com.propertyvista.yardi.beans.Messages;
 import com.propertyvista.yardi.beans.Properties;
 import com.propertyvista.yardi.beans.Property;
 import com.propertyvista.yardi.mock.updater.CoTenantUpdateEvent;
@@ -42,6 +42,7 @@ import com.propertyvista.yardi.mock.updater.TransactionChargeUpdateEvent;
 import com.propertyvista.yardi.mock.updater.TransactionChargeUpdater;
 import com.propertyvista.yardi.mock.updater.UnitTransferSimulator;
 import com.propertyvista.yardi.mock.updater.UnitTransferSimulatorEvent;
+import com.propertyvista.yardi.stubs.YardiServiceMessageException;
 
 public class YardiMockServer implements TransactionChargeUpdateEvent.Handler, PropertyUpdateEvent.Handler, RtCustomerUpdateEvent.Handler,
         CoTenantUpdateEvent.Handler, LeaseChargeUpdateEvent.Handler, UnitTransferSimulatorEvent.Handler, RentableItemTypeUpdateEvent.Handler {
@@ -94,7 +95,7 @@ public class YardiMockServer implements TransactionChargeUpdateEvent.Handler, Pr
             throw new RuntimeException("Property '" + propertyId + "' not found");
         }
         if (propertyManager.mockFeatures.isBlockAccess()) {
-            throw new YardiPropertyNoAccessException("Invalid or no access to Yardi Property " + propertyId);
+            throw new YardiServiceMessageException(Messages.createErrorInMock("Invalid or no access to Yardi Property " + propertyId));
         }
         return propertyManager;
     }
