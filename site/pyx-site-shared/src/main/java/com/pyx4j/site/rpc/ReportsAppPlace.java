@@ -29,6 +29,8 @@ public class ReportsAppPlace<R extends ReportMetadata> extends CrudAppPlace {
 
     private R metadata;
 
+    private Class<R> metadataClass;
+
     /**
      * This constructor should never be used (it's only for serialization)
      */
@@ -39,6 +41,7 @@ public class ReportsAppPlace<R extends ReportMetadata> extends CrudAppPlace {
     public ReportsAppPlace(Class<R> metadataClass) {
         setStable(true);
         setType(Type.viewer);
+        this.metadataClass = metadataClass;
     }
 
     public ReportsAppPlace<R> define(R metadata) {
@@ -51,6 +54,10 @@ public class ReportsAppPlace<R extends ReportMetadata> extends CrudAppPlace {
 
     public ReportMetadata getReportMetadata() {
         return metadata;
+    }
+
+    public Class<R> getReportMetadataClass() {
+        return metadataClass;
     }
 
     public String getReportMetadataId() {

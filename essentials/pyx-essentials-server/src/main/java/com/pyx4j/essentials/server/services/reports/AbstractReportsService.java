@@ -21,7 +21,6 @@
 package com.pyx4j.essentials.server.services.reports;
 
 import java.io.Serializable;
-import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -216,48 +215,28 @@ public abstract class AbstractReportsService<R extends ReportMetadata> implement
 
     }
 
-    private final Map<Class<? extends ReportMetadata>, Class<? extends ReportGenerator>> reportGenerators;
+    private final ReportGeneratorFactory reportGeneratorFactory;
 
-    public AbstractReportsService(Map<Class<? extends ReportMetadata>, Class<? extends ReportGenerator>> reportGenerators) {
-        this.reportGenerators = reportGenerators;
+    public AbstractReportsService(ReportGeneratorFactory reportGeneratorFactory) {
+        this.reportGeneratorFactory = reportGeneratorFactory;
     }
 
     @Override
     public void generateReport(AsyncCallback<Serializable> callback, R reportMetadata) {
-
-        Class<? extends ReportGenerator> reportGeneratorClass = reportGenerators.get(reportMetadata.getInstanceValueClass());
-        if (reportGeneratorClass != null) {
-            ReportGenerator reportGenerator;
-            try {
-                reportGenerator = reportGeneratorClass.newInstance();
-            } catch (Throwable e) {
-                throw new Error("report generation failed: failed to instantiate report generator class '" + reportGeneratorClass.getName() + "'", e);
-            }
-            callback.onSuccess(reportGenerator.generateReport(reportMetadata));
-        } else {
-            throw new Error("report generation failed: report generator for report type '" + reportMetadata.getInstanceValueClass().getName()
-                    + "' was not found");
-        }
+        @SuppressWarnings("unchecked")
+        Class<? extends ReportMetadata> reportMetadataClass = (Class<? extends ReportMetadata>) reportMetadata.getInstanceValueClass();
+        ReportGenerator reportGenerator = reportGeneratorFactory.getReportGenerator(reportMetadataClass);
+        callback.onSuccess(reportGenerator.generateReport(reportMetadata));
 
     }
 
     @Override
     public void generateReportAsync(AsyncCallback<String> callback, R reportMetadata) {
-        Class<? extends ReportGenerator> reportGeneratorClass = reportGenerators.get(reportMetadata.getInstanceValueClass());
-        if (reportGeneratorClass != null) {
-            ReportGenerator reportGenerator;
-            try {
-                reportGenerator = reportGeneratorClass.newInstance();
-            } catch (Throwable e) {
-                throw new Error("report generation failed: failed to instantiate report generator class '" + reportGeneratorClass.getName() + "'", e);
-            }
-            callback.onSuccess(DeferredProcessRegistry.fork(new GenerateReportDeferredProcess(reportGenerator, reportMetadata),
-                    DeferredProcessRegistry.THREAD_POOL_DOWNLOADS));
-        } else {
-            throw new Error("report generation failed: report generator for report type '" + reportMetadata.getInstanceValueClass().getName()
-                    + "' was not found");
-        }
-
+        @SuppressWarnings("unchecked")
+        Class<? extends ReportMetadata> reportMetadataClass = (Class<? extends ReportMetadata>) reportMetadata.getInstanceValueClass();
+        ReportGenerator reportGenerator = reportGeneratorFactory.getReportGenerator(reportMetadataClass);
+        callback.onSuccess(DeferredProcessRegistry.fork(new GenerateReportDeferredProcess(reportGenerator, reportMetadata),
+                DeferredProcessRegistry.THREAD_POOL_DOWNLOADS));
     }
 
     @Override
@@ -269,20 +248,11 @@ public abstract class AbstractReportsService<R extends ReportMetadata> implement
 
     @Override
     public void export(AsyncCallback<String> callback, R reportMetadata) {
-        Class<? extends ReportGenerator> reportGeneratorClass = reportGenerators.get(reportMetadata.getInstanceValueClass());
-        if (reportGeneratorClass != null) {
-            ReportGenerator reportGenerator = null;
-            try {
-                reportGenerator = reportGeneratorClass.newInstance();
-            } catch (Throwable e) {
-                throw new Error("report generation failed: failed to instantiate report generator class '" + reportGeneratorClass.getName() + "'", e);
-            }
-            callback.onSuccess(DeferredProcessRegistry.fork(new ExportReportDeferredProcess(reportGenerator, reportMetadata),
-                    DeferredProcessRegistry.THREAD_POOL_DOWNLOADS));
-        } else {
-            throw new Error("report generation failed: report generator for report type '" + reportMetadata.getInstanceValueClass().getName()
-                    + "' was not found or doesn't support export");
-        }
+        @SuppressWarnings("unchecked")
+        Class<? extends ReportMetadata> reportMetadataClass = (Class<? extends ReportMetadata>) reportMetadata.getInstanceValueClass();
+        ReportGenerator reportGenerator = reportGeneratorFactory.getReportGenerator(reportMetadataClass);
+        callback.onSuccess(DeferredProcessRegistry.fork(new ExportReportDeferredProcess(reportGenerator, reportMetadata),
+                DeferredProcessRegistry.THREAD_POOL_DOWNLOADS));
     }
 
     @Override
