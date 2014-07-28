@@ -18,6 +18,9 @@
 -- _expiring_ schema migration 
 --\i migrate_expiring_schema.sql;
 
+-- Import new roles and behaviours
+\i insert_tmp_roles.sql
+
 -- Split simple address functioon
 \i split_simple_address.sql
 
@@ -328,5 +331,6 @@ COMMIT;
 
 
 DROP FUNCTION _dba_.migrate_pmc_114(text);
+DROP TABLE _dba_.tmp_roles;
 
 

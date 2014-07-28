@@ -961,6 +961,49 @@ BEGIN
         /**
         ***     ==========================================================================================================
         ***
+        ***             ROLES AND BEHAVIOURS
+        ***
+        ***     ==========================================================================================================
+        **/
+        
+        -- delete all behaviours for old roles
+        
+        EXECUTE 'DELETE FROM '||v_schema_name||'.crm_role$behaviors ';
+        
+        -- delete all from crm_user_credential$rls for roles not in ('All', 'propertyVista Support')
+        EXECUTE 'DELETE FROM '||v_schema_name||'.crm_user_credential$rls '
+                ||'WHERE value IN ( SELECT id FROM '||v_schema_name||'.crm_role '
+                ||'                 WHERE name NOT IN (''All'', ''PropertyVista Support'' ))';
+                
+        -- delete old roles
+        
+         EXECUTE 'DELETE FROM '||v_schema_name||'.crm_role '
+                ||'WHERE name  NOT IN (''All'', ''PropertyVista Support'' )';
+        
+        
+        -- import new roles form tmp_table 
+        
+        EXECUTE 'INSERT INTO '||v_schema_name||'.crm_role (id,name,'
+                ||'require_security_question_for_password_reset,updated) '
+                ||'(SELECT  DISTINCT nextval(''public.crm_role_seq'') AS id, '
+                ||'         t.name,t.require_security_question_for_password_reset, '
+                ||'         date_trunc(''second'',current_timestamp)::timestamp '
+                ||'FROM     _dba_.tmp_roles t '
+                ||'WHERE    t.name NOT IN (''All'', ''PropertyVista Support'' ))';
+                
+        -- import new role behaviours 
+        
+        EXECUTE 'INSERT INTO '||v_schema_name||'.crm_role$behaviors (id,owner,value) '
+                ||'(SELECT  nextval(''public.crm_role$behaviors_seq'') AS id, '
+                ||'         r.id AS owner, t.value '
+                ||'FROM     '||v_schema_name||'.crm_role r '
+                ||'JOIN     _dba_.tmp_roles AS t ON (t.name = r.name)) ';
+        
+        
+        
+        /**
+        ***     ==========================================================================================================
+        ***
         ***             DROP TABLES AND COLUMNS
         ***
         ***     ==========================================================================================================
