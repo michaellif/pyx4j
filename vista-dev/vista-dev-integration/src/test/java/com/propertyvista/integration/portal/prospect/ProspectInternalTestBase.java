@@ -60,6 +60,7 @@ import com.propertyvista.test.mock.models.PmcDataModel;
 import com.propertyvista.test.mock.models.ProductTaxPolicyDataModel;
 import com.propertyvista.test.mock.models.RestrictionsPolicyDataModel;
 import com.propertyvista.test.mock.models.TaxesDataModel;
+import com.propertyvista.test.mock.models.VistaOperationsDataModel;
 
 public abstract class ProspectInternalTestBase extends IntegrationTestBase {
 
@@ -80,6 +81,7 @@ public abstract class ProspectInternalTestBase extends IntegrationTestBase {
     @Override
     protected List<Class<? extends MockDataModel<?>>> getMockModelTypes() {
         List<Class<? extends MockDataModel<?>>> models = new ArrayList<Class<? extends MockDataModel<?>>>();
+        models.add(VistaOperationsDataModel.class);
         models.add(PmcDataModel.class);
         models.add(CustomerDataModel.class);
         models.add(LocationsDataModel.class);

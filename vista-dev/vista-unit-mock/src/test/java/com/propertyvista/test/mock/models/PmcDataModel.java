@@ -52,13 +52,6 @@ public class PmcDataModel extends MockDataModel<Pmc> {
         }
 
         if (((EntityPersistenceServiceRDB) Persistence.service()).getDatabaseType() == DatabaseType.PostgreSQL) {
-            String namespace = NamespaceManager.getNamespace();
-            try {
-                NamespaceManager.setNamespace(VistaNamespace.operationsNamespace);
-                RDBUtils.ensureNamespace();
-            } finally {
-                NamespaceManager.setNamespace(namespace);
-            }
             NamespaceManager.setNamespace(NamespaceManager.getNamespace());
             RDBUtils.ensureNamespace();
             RDBUtils.initAllEntityTables();
