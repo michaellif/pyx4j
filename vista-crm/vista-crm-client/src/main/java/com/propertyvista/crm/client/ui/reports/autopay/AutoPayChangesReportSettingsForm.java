@@ -22,11 +22,13 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
+import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.site.client.ui.IPane;
 import com.pyx4j.site.client.ui.prime.form.FieldDecoratorBuilder;
 
 import com.propertyvista.crm.client.ui.reports.eft.SelectedBuildingsFolder;
 import com.propertyvista.domain.reports.AutoPayChangesReportMetadata;
+import com.propertyvista.domain.security.VistaCrmBehavior;
 
 public class AutoPayChangesReportSettingsForm extends CForm<AutoPayChangesReportMetadata> {
 
@@ -58,6 +60,10 @@ public class AutoPayChangesReportSettingsForm extends CForm<AutoPayChangesReport
         get(proto().minimum()).asWidget().getElement().getStyle().setDisplay(Display.BLOCK);
         leftSidePanel.add(inject(proto().maximum(), new FieldDecoratorBuilder().componentWidth("100px").build()));
         get(proto().maximum()).asWidget().getElement().getStyle().setDisplay(Display.BLOCK);
+
+        if (SecurityController.checkBehavior(VistaCrmBehavior.PropertyVistaSupport)) {
+            leftSidePanel.add(new FormDecoratorBuilder(inject(proto().trace())).build());
+        }
 
         FlowPanel buildingFilterPanel = new FlowPanel();
         buildingFilterPanel.add(inject(proto().filterByBuildings(), new FieldDecoratorBuilder().build()));

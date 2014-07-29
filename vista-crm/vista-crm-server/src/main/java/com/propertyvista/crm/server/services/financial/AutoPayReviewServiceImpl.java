@@ -82,6 +82,7 @@ public class AutoPayReviewServiceImpl implements AutoPayReviewService {
             reportCriteria.setExpectedMoveOutCriteris(filterSettings.minimum().getValue(), filterSettings.maximum().getValue());
         }
         reportCriteria.setLeasesOnNoticeOnly(filterSettings.leasesOnNoticeOnly().getValue(false));
+        reportCriteria.setTrace(filterSettings.trace().getValue(false));
         return reportCriteria;
     }
 

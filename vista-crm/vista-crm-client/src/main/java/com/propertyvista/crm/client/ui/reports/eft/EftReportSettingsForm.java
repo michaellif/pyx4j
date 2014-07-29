@@ -32,6 +32,7 @@ import com.pyx4j.entity.core.meta.EntityMeta;
 import com.pyx4j.forms.client.ui.CComboBox;
 import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.site.client.ui.IPane;
 import com.pyx4j.site.client.ui.prime.form.FieldDecoratorBuilder;
 import com.pyx4j.site.shared.domain.reports.ReportOrderColumnMetadata;
@@ -40,6 +41,7 @@ import com.propertyvista.crm.client.ui.crud.organisation.common.PortfolioFolder;
 import com.propertyvista.crm.rpc.dto.reports.EftReportRecordDTO;
 import com.propertyvista.domain.financial.BillingAccount.BillingPeriod;
 import com.propertyvista.domain.reports.EftReportMetadata;
+import com.propertyvista.domain.security.VistaCrmBehavior;
 import com.propertyvista.shared.config.VistaFeatures;
 
 public class EftReportSettingsForm extends CForm<EftReportMetadata> {
@@ -75,6 +77,10 @@ public class EftReportSettingsForm extends CForm<EftReportMetadata> {
         column1.add(inject(proto().onlyWithNotice(), new FieldDecoratorBuilder().build()));
         column1.add(inject(proto().paymentStatus(), new FieldDecoratorBuilder().componentWidth(INPUT_FIELD_WIDTH).build()));
         column1.add(inject(proto().orderBy(), makeOrderByComboBox(), new FieldDecoratorBuilder().componentWidth(INPUT_FIELD_WIDTH).build()));
+
+        if (SecurityController.checkBehavior(VistaCrmBehavior.PropertyVistaSupport)) {
+            column1.add(new FormDecoratorBuilder(inject(proto().trace())).build());
+        }
 
         FlowPanel column2 = new FlowPanel();
         column2.add(inject(proto().filterByBillingCycle(), new FieldDecoratorBuilder().componentWidth(CHECKBOX_WIDTH).build()));

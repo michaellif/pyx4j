@@ -151,6 +151,7 @@ public class EftReportGenerator implements ReportExporter {
                     reportCriteria.setExpectedMoveOutCriteris(reportMetadata.minimum().getValue(), reportMetadata.maximum().getValue());
                 }
                 reportCriteria.setLeasesOnNoticeOnly(reportMetadata.leasesOnNoticeOnly().getValue(false));
+                reportCriteria.setTrace(reportMetadata.trace().getValue(false));
                 paymentRecords.addAll(ServerSideFactory.create(PaymentReportFacade.class).reportPreauthorisedPayments(reportCriteria,
                         reportProgressStatusHolder.getExecutionMonitor()));
             }

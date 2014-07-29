@@ -41,4 +41,6 @@ public interface AutoPayChangesReportMetadata extends ReportMetadata, Exportable
 
     @NotNull
     IPrimitive<LogicalDate> maximum();
+
+    IPrimitive<Boolean> trace();
 }

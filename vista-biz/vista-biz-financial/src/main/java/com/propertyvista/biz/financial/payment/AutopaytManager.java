@@ -19,6 +19,8 @@ import java.util.Collections;
 import java.util.List;
 
 import org.apache.commons.lang.Validate;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.commons.SimpleMessageFormat;
@@ -52,6 +54,8 @@ class AutopaytManager {
 
     private static final I18n i18n = I18n.get(AutopaytManager.class);
 
+    private static final Logger log = LoggerFactory.getLogger(AutopaytManager.class);
+
     static class PreauthorizedAmount {
 
         LeaseTermTenant leaseTermTenant;
@@ -63,7 +67,10 @@ class AutopaytManager {
         String notice;
     }
 
+    private boolean trace;
+
     List<PaymentRecord> reportPreauthorisedPayments(PreauthorizedPaymentsReportCriteria reportCriteria, ExecutionMonitor executionMonitor) {
+        trace = reportCriteria.isTrace();
         List<PaymentRecord> paymentRecords = new ArrayList<PaymentRecord>();
         createPreauthorisedPayments(executionMonitor, reportCriteria.padGenerationDate, true, paymentRecords, reportCriteria);
         return paymentRecords;
@@ -173,6 +180,9 @@ class AutopaytManager {
 
     private List<PaymentRecord> createBillingAccountPreauthorisedPayments(BillingCycle billingCycle, BillingAccount billingAccount,
             ExecutionMonitor executionMonitor, boolean reportOny) {
+        if (trace) {
+            log.debug("processing billingAccount {}", billingAccount.accountNumber());
+        }
         // Validate that PAD was not created for this account
         {
             EntityQueryCriteria<PaymentRecord> criteria = EntityQueryCriteria.create(PaymentRecord.class);
@@ -190,6 +200,9 @@ class AutopaytManager {
                 ServerSideFactory.create(PaymentFacade.class).schedulePayment(paymentRecord);
             }
             executionMonitor.addProcessedEvent(paymentRecord.paymentMethod().type().getStringView(), paymentRecord.amount().getValue());
+        }
+        if (trace) {
+            log.debug("Create paymentRecords {}", paymentRecords.size());
         }
         return paymentRecords;
     }
@@ -224,9 +237,18 @@ class AutopaytManager {
         Persistence.ensureRetrieve(billingAccount.lease(), AttachLevel.Attached);
         AutoPayPolicy autoPayPolicy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(billingAccount.lease().unit().building(),
                 AutoPayPolicy.class);
+        if (trace) {
+            log.debug("AutoPayPolicy         onLeaseChargeChangeRule {}", autoPayPolicy.onLeaseChargeChangeRule());
+            log.debug("AutoPayPolicy excludeFirstBillingPeriodCharge {}", autoPayPolicy.excludeFirstBillingPeriodCharge());
+            log.debug("AutoPayPolicy  excludeLastBillingPeriodCharge {}", autoPayPolicy.excludeLastBillingPeriodCharge());
+        }
         if ((billingAccount.lease().status().getValue() != Lease.Status.Active)
-                || (!AutopayAgreementMananger.isPreauthorizedPaymentsApplicableForBillingCycle(billingAccount.lease(), billingCycle, autoPayPolicy))) {
+                || (!AutopayAgreementMananger.isPreauthorizedPaymentsApplicableForBillingCycleWithTrace(billingAccount.lease(), billingCycle, autoPayPolicy,
+                        trace))) {
             // Do not create payments
+            if (trace) {
+                log.debug("Payments Not Applicable ForBillingCycle");
+            }
             return Collections.emptyList();
         }
 
@@ -251,7 +273,9 @@ class AutopaytManager {
                 }
             }
         }
-
+        if (trace) {
+            log.debug("processing leaseParticipants {}", leaseParticipants.size());
+        }
         List<PreauthorizedAmount> records = new ArrayList<PreauthorizedAmount>();
         for (LeaseTermTenant leaseParticipant : leaseParticipants) {
             List<AutopayAgreement> preauthorizedPayments;
@@ -268,6 +292,9 @@ class AutopaytManager {
                 criteria.asc(criteria.proto().id());
                 preauthorizedPayments = Persistence.service().query(criteria);
             }
+            if (trace) {
+                log.debug("processing preauthorizedPayments {}", preauthorizedPayments.size());
+            }
             for (AutopayAgreement pap : preauthorizedPayments) {
 
                 Validate.isTrue(pap.paymentMethod().type().getValue().isSchedulable());
@@ -279,6 +306,9 @@ class AutopaytManager {
                 record.amount = BigDecimal.ZERO;
                 for (AutopayAgreementCoveredItem item : pap.coveredItems()) {
                     record.amount = record.amount.add(item.amount().getValue());
+                }
+                if (trace) {
+                    log.debug("PreauthorizedAmount {}", record.amount);
                 }
                 records.add(record);
             }

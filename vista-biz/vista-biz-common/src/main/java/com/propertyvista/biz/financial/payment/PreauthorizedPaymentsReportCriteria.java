@@ -33,6 +33,8 @@ public final class PreauthorizedPaymentsReportCriteria {
 
     private boolean leasesOnNoticeOnly;
 
+    private boolean trace;
+
     public PreauthorizedPaymentsReportCriteria(LogicalDate padGenerationDate, List<Building> selectedBuildings) {
         this.padGenerationDate = padGenerationDate;
         this.selectedBuildings = selectedBuildings;
@@ -85,6 +87,14 @@ public final class PreauthorizedPaymentsReportCriteria {
 
     public void setLeasesOnNoticeOnly(boolean leasesOnNoticeOnly) {
         this.leasesOnNoticeOnly = leasesOnNoticeOnly;
+    }
+
+    public boolean isTrace() {
+        return trace;
+    }
+
+    public void setTrace(boolean trace) {
+        this.trace = trace;
     }
 
 }

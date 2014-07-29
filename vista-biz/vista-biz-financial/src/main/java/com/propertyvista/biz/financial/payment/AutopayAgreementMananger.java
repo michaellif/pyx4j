@@ -536,7 +536,14 @@ class AutopayAgreementMananger {
     }
 
     static boolean isPreauthorizedPaymentsApplicableForBillingCycle(Lease lease, BillingCycle paymentCycle, AutoPayPolicy autoPayPolicy) {
+        return isPreauthorizedPaymentsApplicableForBillingCycleWithTrace(lease, paymentCycle, autoPayPolicy, false);
+    }
+
+    static boolean isPreauthorizedPaymentsApplicableForBillingCycleWithTrace(Lease lease, BillingCycle paymentCycle, AutoPayPolicy autoPayPolicy, boolean trace) {
         if (lease.status().getValue().isNoAutoPay()) {
+            if (trace) {
+                log.debug("lease.status isNoAutoPay");
+            }
             return false;
         }
         // TODO: lease first month check:
@@ -545,10 +552,16 @@ class AutopayAgreementMananger {
         } else
         // lease last month check:
         if (leaseLastBillingPeriodChargePolicyCheck(lease, paymentCycle, autoPayPolicy)) {
+            if (trace) {
+                log.debug("lease last month detected");
+            }
             return false;
         } else
         // Lease end date check:
         if (leaseEndDateCheck(lease, paymentCycle)) {
+            if (trace) {
+                log.debug("leaseEnd detected");
+            }
             return false;
         } else {
             return true;

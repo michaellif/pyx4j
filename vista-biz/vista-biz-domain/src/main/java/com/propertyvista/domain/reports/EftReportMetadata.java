@@ -78,4 +78,6 @@ public interface EftReportMetadata extends ReportMetadata, ExportableReport {
     IPrimitive<LogicalDate> maximum();
 
     ReportOrderColumnMetadata orderBy();
+
+    IPrimitive<Boolean> trace();
 }
