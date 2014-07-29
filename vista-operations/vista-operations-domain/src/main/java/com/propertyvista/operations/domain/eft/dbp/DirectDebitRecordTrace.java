@@ -13,6 +13,8 @@
  */
 package com.propertyvista.operations.domain.eft.dbp;
 
+import com.pyx4j.commons.LogicalDate;
+import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.EmbeddedEntity;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.IPrimitive;
@@ -25,7 +27,11 @@ public interface DirectDebitRecordTrace extends IEntity {
     //Location code assigned to each source (e.g. BMO is 1001)
     IPrimitive<String> locationCode();
 
+    @Caption(name = "Collection Date Raw")
     IPrimitive<String> collectionDate();
+
+    @Caption(name = "Collection Date")
+    IPrimitive<LogicalDate> collection();
 
     //Identification of source of remittance information. Value of 14 represents telebanking/electronic bill payments.
     IPrimitive<String> sourceCode();

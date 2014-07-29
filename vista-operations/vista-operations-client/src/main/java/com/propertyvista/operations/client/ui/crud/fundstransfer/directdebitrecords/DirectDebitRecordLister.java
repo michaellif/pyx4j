@@ -13,12 +13,14 @@
  */
 package com.propertyvista.operations.client.ui.crud.fundstransfer.directdebitrecords;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 import com.pyx4j.entity.core.criterion.Criterion;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.entity.core.criterion.PropertyCriterion;
+import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.forms.client.ui.datatable.DataTableModel;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.site.client.ui.prime.lister.AbstractLister;
@@ -31,34 +33,30 @@ public class DirectDebitRecordLister extends AbstractLister<DirectDebitRecord> {
     public DirectDebitRecordLister(boolean addPmcColumn) {
         super(DirectDebitRecord.class, false, false);
 
+        List<ColumnDescriptor> columns = new ArrayList<>();
+
         if (addPmcColumn) {
-            setDataTableModel(new DataTableModel<DirectDebitRecord>(//@formatter:off                
-                new MemberColumnDescriptor.Builder(proto().pmc()).build(),
-                new MemberColumnDescriptor.Builder(proto().pmc().namespace()).visible(false).build(),
-                new MemberColumnDescriptor.Builder(proto().accountNumber()).build(),
-                new MemberColumnDescriptor.Builder(proto().amount()).build(),
-                new MemberColumnDescriptor.Builder(proto().paymentReferenceNumber()).build(),
-                new MemberColumnDescriptor.Builder(proto().customerName()).build(),
-                new MemberColumnDescriptor.Builder(proto().receivedDate()).build(),
-                new MemberColumnDescriptor.Builder(proto().processingStatus()).build()
-            ));//@formatter:on
-        } else {
-            setDataTableModel(new DataTableModel<DirectDebitRecord>(//@formatter:off                
-                    new MemberColumnDescriptor.Builder(proto().accountNumber()).build(),
-                    new MemberColumnDescriptor.Builder(proto().amount()).build(),
-                    new MemberColumnDescriptor.Builder(proto().paymentReferenceNumber()).build(),
-                    new MemberColumnDescriptor.Builder(proto().customerName()).build(),
-                    new MemberColumnDescriptor.Builder(proto().receivedDate()).build(),
-                    new MemberColumnDescriptor.Builder(proto().processingStatus()).build()
-            ));//@formatter:on
+            columns.add(new MemberColumnDescriptor.Builder(proto().pmc()).build());
+            columns.add(new MemberColumnDescriptor.Builder(proto().pmc().namespace()).visible(false).build());
         }
+
+        columns.add(new MemberColumnDescriptor.Builder(proto().accountNumber()).build());
+        columns.add(new MemberColumnDescriptor.Builder(proto().amount()).build());
+        columns.add(new MemberColumnDescriptor.Builder(proto().paymentReferenceNumber()).build());
+        columns.add(new MemberColumnDescriptor.Builder(proto().customerName()).build());
+        columns.add(new MemberColumnDescriptor.Builder(proto().receivedDate()).build());
+        columns.add(new MemberColumnDescriptor.Builder(proto().processingStatus()).build());
+        columns.add(new MemberColumnDescriptor.Builder(proto().trace().collection()).build());
+        columns.add(new MemberColumnDescriptor.Builder(proto().trace().locationCode()).build());
+        columns.add(new MemberColumnDescriptor.Builder(proto().trace().sourceCode()).build());
+        columns.add(new MemberColumnDescriptor.Builder(proto().trace().traceNumber()).build());
+
+        setDataTableModel(new DataTableModel<DirectDebitRecord>(columns));
 
     }
 
     public void setParentPmc(Pmc pmc) {
-        this.getDataSource().setPreDefinedFilters(Arrays.<Criterion> asList(//@formatter:off
-                PropertyCriterion.eq(proto().pmc(), pmc)
-        ));//@formatter:on
+        this.getDataSource().setPreDefinedFilters(Arrays.<Criterion> asList(PropertyCriterion.eq(proto().pmc(), pmc)));
     }
 
     @Override

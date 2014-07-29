@@ -82,7 +82,7 @@ public class RemconRecordBatchHeader implements RemconRecord {
     public String operatorNumber;
 
     //Collection Date. Date of payment collection provided by the source location code telebanking operator (MMDDYY)
-    @RemconField(value = 6, type = RemconFieldType.DateYYMMDD)
+    @RemconField(value = 6, type = RemconFieldType.DateMMDDYY)
     public String collectionDate;
 
     @RemconField(5)

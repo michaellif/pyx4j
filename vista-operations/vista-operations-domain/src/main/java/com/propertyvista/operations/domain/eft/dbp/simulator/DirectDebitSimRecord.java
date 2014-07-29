@@ -24,6 +24,7 @@ import com.pyx4j.entity.annotations.Indexed;
 import com.pyx4j.entity.annotations.JoinColumn;
 import com.pyx4j.entity.annotations.Length;
 import com.pyx4j.entity.annotations.Owner;
+import com.pyx4j.entity.annotations.ReadOnly;
 import com.pyx4j.entity.annotations.RequireFeature;
 import com.pyx4j.entity.annotations.Table;
 import com.pyx4j.entity.annotations.Timestamp;
@@ -62,6 +63,7 @@ public interface DirectDebitSimRecord extends IEntity {
 
     @Timestamp(Timestamp.Update.Created)
     @Format("yyyy-MM-dd HH:mm")
+    @ReadOnly
     IPrimitive<Date> receivedDate();
 
 }

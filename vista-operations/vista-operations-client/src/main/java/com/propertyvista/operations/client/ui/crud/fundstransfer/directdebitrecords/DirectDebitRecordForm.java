@@ -42,6 +42,7 @@ public class DirectDebitRecordForm extends OperationsEntityForm<DirectDebitRecor
 
         formPanel.h1("Trace");
 
+        formPanel.append(Location.Left, proto().trace().collection()).decorate();
         formPanel.append(Location.Left, proto().trace().collectionDate()).decorate();
         formPanel.append(Location.Left, proto().trace().locationCode()).decorate();
         formPanel.append(Location.Left, proto().trace().sourceCode()).decorate();

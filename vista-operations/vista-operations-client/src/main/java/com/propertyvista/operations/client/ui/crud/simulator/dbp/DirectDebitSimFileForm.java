@@ -42,7 +42,8 @@ public class DirectDebitSimFileForm extends OperationsEntityForm<DirectDebitSimF
                     new FolderColumnDescriptor(proto().accountNumber(), "15em"),
                     new FolderColumnDescriptor(proto().paymentReferenceNumber(), "20em"),
                     new FolderColumnDescriptor(proto().customerName(), "20em"),
-                    new FolderColumnDescriptor(proto().amount(), "10em")
+                    new FolderColumnDescriptor(proto().amount(), "10em"),
+                    new FolderColumnDescriptor(proto().receivedDate(), "10em")
             );//@formatter:off
         }
 

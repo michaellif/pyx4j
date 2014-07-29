@@ -59,6 +59,7 @@ public class RemconFileConvertor {
             batchHeader.batchNumber = String.valueOf(batchNumber++);
             batchHeader.batchAmount = "0";
             batchHeader.mode = "1";
+            batchHeader.collectionDate = new SimpleDateFormat("MMddyy").format(debitRecord.receivedDate().getValue());
             batchTrailer.boxNumber = batchHeader.boxNumber;
 
             detailRecord.batchNumber = batchHeader.batchNumber;

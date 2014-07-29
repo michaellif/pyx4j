@@ -38,6 +38,7 @@ public class DirectDebitSimRecordForm extends OperationsEntityForm<DirectDebitSi
         formPanel.append(Location.Dual, proto().amount()).decorate().componentWidth(240);
         formPanel.append(Location.Dual, proto().paymentReferenceNumber()).decorate().componentWidth(240);
         formPanel.append(Location.Dual, proto().customerName()).decorate().componentWidth(240);
+        formPanel.append(Location.Dual, proto().receivedDate()).decorate().componentWidth(240);
 
         CEntityLabel<DirectDebitSimFile> fileLink = new CEntityLabel<DirectDebitSimFile>();
         fileLink.setNavigationCommand(new Command() {

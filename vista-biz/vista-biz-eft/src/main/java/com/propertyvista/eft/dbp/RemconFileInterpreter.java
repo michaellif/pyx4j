@@ -14,9 +14,12 @@
 package com.propertyvista.eft.dbp;
 
 import java.math.BigDecimal;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Collections;
 
 import com.pyx4j.commons.CommonsStringUtils;
+import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.core.EntityFactory;
 
 import com.propertyvista.eft.dbp.remcon.RemconFile;
@@ -56,6 +59,13 @@ public class RemconFileInterpreter {
 
                 directDebitRecord.trace().locationCode().setValue(currentBatchHeader.locationCode);
                 directDebitRecord.trace().collectionDate().setValue(currentBatchHeader.collectionDate);
+                if (CommonsStringUtils.isStringSet(currentBatchHeader.collectionDate)) {
+                    try {
+                        directDebitRecord.trace().collection()
+                                .setValue(new LogicalDate(new SimpleDateFormat("MMddyy").parse(currentBatchHeader.collectionDate)));
+                    } catch (ParseException ignore) {
+                    }
+                }
                 directDebitRecord.trace().sourceCode().setValue(currentBatchHeader.sourceCode);
                 directDebitRecord.trace().traceNumber().setValue(currentBatchHeader.traceNumber);
 
