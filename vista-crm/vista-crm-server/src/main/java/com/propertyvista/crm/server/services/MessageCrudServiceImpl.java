@@ -24,7 +24,6 @@ import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.config.server.SystemDateManager;
 import com.pyx4j.entity.core.AttachLevel;
 import com.pyx4j.entity.core.EntityFactory;
-import com.pyx4j.entity.core.IList;
 import com.pyx4j.entity.core.Path;
 import com.pyx4j.entity.core.criterion.EntityListCriteria;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
@@ -209,15 +208,17 @@ public class MessageCrudServiceImpl extends AbstractCrudServiceDtoImpl<Message, 
     }
 
     protected void enhanceDbo(Message bo, MessageDTO to, boolean isForList) {
+        EntityListCriteria<Message> visibleMessageCriteria = EntityListCriteria.create(Message.class);
+        visibleMessageCriteria.eq(visibleMessageCriteria.proto().thread(), bo.thread());
+        final Vector<Message> ms = Persistence.secureQuery(visibleMessageCriteria, AttachLevel.Attached);
+
         Persistence.ensureRetrieve(bo.thread(), AttachLevel.Attached);
-        Persistence.ensureRetrieve(bo.thread().content(), AttachLevel.Attached);
         Persistence.ensureRetrieve(bo.thread().topic(), AttachLevel.Attached);
         if (!isForList) {
             Persistence.ensureRetrieve(bo.thread().owner(), AttachLevel.Attached);
         }
         Persistence.ensureRetrieve(bo.recipients(), AttachLevel.Attached);
-        IList<Message> ms = bo.thread().content();
-        if (ms != null && !ms.isNull()) {
+        if (ms != null && ms.size() > 0) {
             boolean star = false;
             boolean isRead = true;
             boolean isHighImportance = false;
@@ -231,7 +232,7 @@ public class MessageCrudServiceImpl extends AbstractCrudServiceDtoImpl<Message, 
                     Persistence.ensureRetrieve(m.attachments(), AttachLevel.Attached);
                 }
                 hasAttachment = hasAttachment || m.attachments().size() > 0;
-                MessageDTO currentDTO = copyChildDTO(m, EntityFactory.create(MessageDTO.class), isForList, communicationFacade);
+                MessageDTO currentDTO = copyChildDTO(bo.thread(), m, EntityFactory.create(MessageDTO.class), isForList, communicationFacade);
                 to.content().add(currentDTO);
                 if (currentDTO.star().getValue(false)) {
                     star = true;
@@ -248,7 +249,7 @@ public class MessageCrudServiceImpl extends AbstractCrudServiceDtoImpl<Message, 
                     lastMessage = m;
                 }
             }
-            copyChildDTO(lastMessage, to, isForList, communicationFacade);
+            copyChildDTO(bo.thread(), lastMessage, to, isForList, communicationFacade);
             if (isHighImportance) {
                 to.highImportance().setValue(true);
             }
@@ -259,13 +260,13 @@ public class MessageCrudServiceImpl extends AbstractCrudServiceDtoImpl<Message, 
                 to.isRead().setValue(false);
             }
             to.hasAttachments().setValue(hasAttachment);
-            if (isForList) {
-                to.isDirect().setValue(!communicationFacade.isDispatchedThread(bo.thread().getPrimaryKey()));
-            }
+
+            to.isDirect().setValue(!communicationFacade.isDispatchedThread(bo.thread().getPrimaryKey()));
         }
     }
 
-    private MessageDTO copyChildDTO(Message m, MessageDTO messageDTO, boolean isForList, CommunicationMessageFacade communicationFacade) {
+    private MessageDTO copyChildDTO(CommunicationThread thread, Message m, MessageDTO messageDTO, boolean isForList,
+            CommunicationMessageFacade communicationFacade) {
         boolean star = false;
         boolean isRead = true;
 
@@ -288,17 +289,17 @@ public class MessageCrudServiceImpl extends AbstractCrudServiceDtoImpl<Message, 
         }
 
         messageDTO.id().set(m.id());
-        messageDTO.subject().set(m.thread().subject());
-        messageDTO.allowedReply().set(m.thread().allowedReply());
-        messageDTO.status().set(m.thread().status());
-        Persistence.ensureRetrieve(m.thread().owner(), AttachLevel.Attached);
+        messageDTO.subject().set(thread.subject());
+        messageDTO.allowedReply().set(thread.allowedReply());
+        messageDTO.status().set(thread.status());
+        Persistence.ensureRetrieve(thread.owner(), AttachLevel.Attached);
         if (!isForList) {
-            messageDTO.owner().set((communicationFacade.generateEndpointDTO(m.thread().owner())));
+            messageDTO.owner().set((communicationFacade.generateEndpointDTO(thread.owner())));
         }
         messageDTO.text().set(m.text());
         messageDTO.date().set(m.date());
         messageDTO.thread().setAttachLevel(AttachLevel.Attached);
-        messageDTO.thread().set(m.thread());
+        messageDTO.thread().set(thread);
         messageDTO.attachments().set(m.attachments());
         messageDTO.hasAttachments().setValue(m.attachments().size() > 0);
         messageDTO.highImportance().set(m.highImportance());
@@ -306,7 +307,7 @@ public class MessageCrudServiceImpl extends AbstractCrudServiceDtoImpl<Message, 
         messageDTO.sender().set((communicationFacade.generateEndpointDTO(m.sender())));
         messageDTO.isRead().setValue(isRead);
         messageDTO.star().setValue(star);
-        messageDTO.topic().set(m.thread().topic());
+        messageDTO.topic().set(thread.topic());
         messageDTO.header().sender().setValue(communicationFacade.extractEndpointName(m.sender()));
         messageDTO.header().date().set(m.date());
 

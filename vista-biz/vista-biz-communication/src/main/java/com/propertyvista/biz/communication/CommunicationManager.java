@@ -148,7 +148,7 @@ public class CommunicationManager {
 
     private EntityListCriteria<CommunicationThread> getDispatchedCriteria() {
         final EntityListCriteria<CommunicationThread> dispatchedCriteria = EntityListCriteria.create(CommunicationThread.class);
-        dispatchedCriteria.in(dispatchedCriteria.proto().status(), ThreadStatus.New, ThreadStatus.Open, ThreadStatus.Unassigned);
+        dispatchedCriteria.in(dispatchedCriteria.proto().status(), ThreadStatus.New, ThreadStatus.Open, ThreadStatus.Unassigned, ThreadStatus.Resolved);
 
         List<MessageCategory> userGroups = getUserGroups();
         if (userGroups != null && userGroups.size() > 0) {

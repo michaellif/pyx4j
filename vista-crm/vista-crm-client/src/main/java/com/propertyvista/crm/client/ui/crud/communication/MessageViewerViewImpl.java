@@ -121,7 +121,7 @@ public class MessageViewerViewImpl extends CrmViewerViewImplBase<MessageDTO> imp
         super.populate(value);
 
         boolean invisible = MessageGroupCategory.Custom.equals(value.topic().category().getValue()) || ThreadStatus.Closed.equals(value.status().getValue())
-                || ThreadStatus.Cancelled.equals(value.status().getValue());
+                || ThreadStatus.Cancelled.equals(value.status().getValue()) || value.isDirect().getValue();
         setActionVisible(assignOwnershipAction, !invisible);
         for (ThreadStatus status : threadStatusActions.keySet()) {
             MenuItem action = threadStatusActions.get(status);

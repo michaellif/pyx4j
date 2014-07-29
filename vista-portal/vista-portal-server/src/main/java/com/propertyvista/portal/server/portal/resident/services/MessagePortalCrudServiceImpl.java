@@ -25,7 +25,6 @@ import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.config.server.SystemDateManager;
 import com.pyx4j.entity.core.AttachLevel;
 import com.pyx4j.entity.core.EntityFactory;
-import com.pyx4j.entity.core.IList;
 import com.pyx4j.entity.core.Path;
 import com.pyx4j.entity.core.criterion.EntityListCriteria;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
@@ -169,11 +168,14 @@ public class MessagePortalCrudServiceImpl extends AbstractCrudServiceDtoImpl<Mes
     }
 
     protected void enhanceDbo(Message bo, MessageDTO to) {
+        EntityListCriteria<Message> visibleMessageCriteria = EntityListCriteria.create(Message.class);
+        visibleMessageCriteria.eq(visibleMessageCriteria.proto().thread(), bo.thread());
+        final List<Message> ms = Persistence.secureQuery(visibleMessageCriteria, AttachLevel.Attached);
+
         Persistence.ensureRetrieve(bo.thread(), AttachLevel.Attached);
-        Persistence.ensureRetrieve(bo.thread().content(), AttachLevel.Attached);
         Persistence.ensureRetrieve(bo.recipients(), AttachLevel.Attached);
-        IList<Message> ms = bo.thread().content();
-        if (ms != null && !ms.isNull()) {
+
+        if (ms != null && ms.size() > 0) {
             boolean star = false;
             boolean isRead = true;
             boolean isHighImportance = false;
@@ -192,7 +194,7 @@ public class MessagePortalCrudServiceImpl extends AbstractCrudServiceDtoImpl<Mes
                 hasAttachment = hasAttachment || m.attachments().size() > 0;
                 messagesInThread++;
 
-                MessageDTO currentDTO = copyChildDTO(m, EntityFactory.create(MessageDTO.class), facade);
+                MessageDTO currentDTO = copyChildDTO(bo.thread(), m, EntityFactory.create(MessageDTO.class), facade);
                 to.content().add(currentDTO);
                 if (currentDTO.star().getValue(false)) {
                     star = true;
@@ -204,7 +206,7 @@ public class MessagePortalCrudServiceImpl extends AbstractCrudServiceDtoImpl<Mes
                     isHighImportance = false;
                 }
                 if (to.id().equals(currentDTO.id())) {
-                    copyChildDTO(m, to, facade);
+                    copyChildDTO(bo.thread(), m, to, facade);
                 }
 
                 senders.add(m.sender());
@@ -224,7 +226,7 @@ public class MessagePortalCrudServiceImpl extends AbstractCrudServiceDtoImpl<Mes
         }
     }
 
-    private MessageDTO copyChildDTO(Message m, MessageDTO messageDTO, CommunicationMessageFacade facade) {
+    private MessageDTO copyChildDTO(CommunicationThread thread, Message m, MessageDTO messageDTO, CommunicationMessageFacade facade) {
         boolean star = false;
         boolean isRead = true;
 
@@ -241,13 +243,13 @@ public class MessagePortalCrudServiceImpl extends AbstractCrudServiceDtoImpl<Mes
         }
 
         messageDTO.id().set(m.id());
-        messageDTO.subject().set(m.thread().subject());
-        messageDTO.allowedReply().set(m.thread().allowedReply());
-        messageDTO.status().set(m.thread().status());
+        messageDTO.subject().set(thread.subject());
+        messageDTO.allowedReply().set(thread.allowedReply());
+        messageDTO.status().set(thread.status());
         messageDTO.text().set(m.text());
         messageDTO.date().set(m.date());
         messageDTO.thread().setAttachLevel(AttachLevel.Attached);
-        messageDTO.thread().set(m.thread());
+        messageDTO.thread().set(thread);
         messageDTO.attachments().set(m.attachments());
         messageDTO.highImportance().set(m.highImportance());
         messageDTO.sender().setAttachLevel(AttachLevel.Attached);
