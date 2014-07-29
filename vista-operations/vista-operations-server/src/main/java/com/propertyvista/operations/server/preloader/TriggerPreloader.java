@@ -31,7 +31,7 @@ public class TriggerPreloader extends AbstractDataPreloader {
 
         for (PmcProcessType pmcProcessType : EnumSet.allOf(PmcProcessType.class)) {
             Trigger trigger = EntityFactory.create(Trigger.class);
-            trigger.scheduleSuspended().setValue(false);
+            trigger.scheduleSuspended().setValue(true);
             trigger.triggerType().setValue(pmcProcessType);
             trigger.name().setValue(pmcProcessType.getDescription());
 

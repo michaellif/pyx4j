@@ -14,24 +14,31 @@
 package com.propertyvista.biz.financial.payment;
 
 import java.util.Date;
+import java.util.concurrent.Callable;
 
 import org.apache.commons.lang.time.DateUtils;
 
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.config.server.ServerSideFactory;
+import com.pyx4j.entity.core.AttachLevel;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
+import com.pyx4j.entity.server.IEntityPersistenceService.ICursorIterator;
 import com.pyx4j.entity.server.Persistence;
 
 import com.propertyvista.biz.ExecutionMonitor;
+import com.propertyvista.biz.financial.payment.CreditCardFacade.ReferenceNumberPrefix;
 import com.propertyvista.biz.system.OperationsAlertFacade;
+import com.propertyvista.config.VistaDeployment;
 import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.payment.PaymentType;
+import com.propertyvista.domain.pmc.Pmc;
 import com.propertyvista.operations.domain.eft.caledoneft.FundsTransferBatch;
 import com.propertyvista.operations.domain.eft.caledoneft.FundsTransferBatchProcessingStatus;
 import com.propertyvista.operations.domain.eft.caledoneft.FundsTransferFile;
 import com.propertyvista.operations.domain.eft.caledoneft.FundsTransferRecord;
 import com.propertyvista.operations.domain.eft.caledoneft.FundsTransferRecordProcessingStatus;
 import com.propertyvista.operations.domain.eft.cards.CardTransactionRecord;
+import com.propertyvista.server.TaskRunner;
 
 class PaymentHealthMonitor {
 
@@ -122,7 +129,7 @@ class PaymentHealthMonitor {
         verifyCardTransactionsPmc(forDate);
     }
 
-    private void verifyCardTransactionsPmc(LogicalDate forDate) {
+    private void verifyFundsTransferPmc(LogicalDate forDate) {
         // see if we recived and processed reconciliation report
         {
             Date reportSince = DateUtils.addMonths(forDate, -2);
@@ -141,9 +148,23 @@ class PaymentHealthMonitor {
                 executionMonitor.addFailedEvent("EftAggregatedTransfer", instance.amount().getValue());
             }
         }
+
+        {
+            Date reportSince = DateUtils.addDays(forDate, -7);
+            EntityQueryCriteria<PaymentRecord> criteria = EntityQueryCriteria.create(PaymentRecord.class);
+            criteria.le(criteria.proto().lastStatusChangeDate(), reportSince);
+            criteria.eq(criteria.proto().paymentStatus(), PaymentRecord.PaymentStatus.Queued);
+            int count = Persistence.service().count(criteria);
+            if (count > 0) {
+                PaymentRecord instance = Persistence.service().retrieve(criteria);
+                ServerSideFactory.create(OperationsAlertFacade.class).record(instance, "There are Payment Records {0} Queued for a week", count);
+                executionMonitor.addFailedEvent("QueuedPaymentRecord", instance.amount().getValue());
+            }
+        }
     }
 
-    private void verifyFundsTransferPmc(LogicalDate forDate) {
+    private void verifyCardTransactionsPmc(LogicalDate forDate) {
+        final Pmc pmc = VistaDeployment.getCurrentPmc();
         // see if caledon created reconciliation report
         {
             Date reportSince = com.pyx4j.gwt.server.DateUtils.detectDateformat("2014-06-17"); // DateUtils.addMonths(forDate, -2);
@@ -166,14 +187,51 @@ class PaymentHealthMonitor {
         {
             Date reportSince = DateUtils.addDays(forDate, -7);
             EntityQueryCriteria<PaymentRecord> criteria = EntityQueryCriteria.create(PaymentRecord.class);
-            criteria.le(criteria.proto().lastStatusChangeDate(), reportSince);
-            criteria.eq(criteria.proto().paymentStatus(), PaymentRecord.PaymentStatus.Queued);
-            int count = Persistence.service().count(criteria);
-            if (count > 0) {
-                PaymentRecord instance = Persistence.service().retrieve(criteria);
-                ServerSideFactory.create(OperationsAlertFacade.class).record(instance, "There are Payment Records {0} Queued for a week", count);
-                executionMonitor.addFailedEvent("QueuedPaymentRecord", instance.amount().getValue());
+            criteria.ge(criteria.proto().finalizeDate(), reportSince);
+            criteria.eq(criteria.proto().paymentMethod().type(), PaymentType.CreditCard);
+            ICursorIterator<PaymentRecord> iterator = Persistence.service().query(null, criteria, AttachLevel.Attached);
+            try {
+                while (iterator.hasNext()) {
+                    PaymentRecord paymentRecord = iterator.next();
+                    CardTransactionRecord cardTransactionRecord = getCardTransactionRecord(pmc, paymentRecord);
+                    if (cardTransactionRecord == null) {
+                        ServerSideFactory.create(OperationsAlertFacade.class).record(paymentRecord, "Card Payment Record {0} do not have TransactionRecord",
+                                paymentRecord.id());
+                        executionMonitor.addFailedEvent("CardTransaction", paymentRecord.amount().getValue());
+                    } else {
+                        boolean statusMismatch = false;
+                        if (paymentRecord.paymentStatus().getValue() == PaymentRecord.PaymentStatus.Cleared) {
+                            if (!"0000".equals(cardTransactionRecord.saleResponseCode().getValue())) {
+                                statusMismatch = true;
+                            }
+                        } else if ("0000".equals(cardTransactionRecord.saleResponseCode().getValue())) {
+                            statusMismatch = true;
+                        }
+                        if (statusMismatch) {
+                            ServerSideFactory.create(OperationsAlertFacade.class).record(paymentRecord,
+                                    "Card Payment Record {0} and TransactionRecord have status mismatch", paymentRecord.id());
+                            executionMonitor.addFailedEvent("CardTransaction", paymentRecord.amount().getValue());
+                        }
+                    }
+                }
+            } finally {
+                iterator.close();
             }
+
         }
+
+    }
+
+    private CardTransactionRecord getCardTransactionRecord(final Pmc pmc, final PaymentRecord paymentRecord) {
+        return TaskRunner.runInOperationsNamespace(new Callable<CardTransactionRecord>() {
+            @Override
+            public CardTransactionRecord call() {
+                EntityQueryCriteria<CardTransactionRecord> criteria = EntityQueryCriteria.create(CardTransactionRecord.class);
+                criteria.eq(criteria.proto().pmc(), pmc);
+                criteria.eq(criteria.proto().paymentTransactionId(),
+                        ServerSideFactory.create(CreditCardFacade.class).getTransactionreferenceNumber(ReferenceNumberPrefix.RentPayments, paymentRecord.id()));
+                return Persistence.service().retrieve(criteria);
+            }
+        });
     }
 }

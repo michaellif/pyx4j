@@ -20,6 +20,7 @@ import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.annotations.Format;
+import com.pyx4j.entity.annotations.Indexed;
 import com.pyx4j.entity.annotations.Length;
 import com.pyx4j.entity.annotations.Table;
 import com.pyx4j.entity.annotations.Timestamp;
@@ -45,6 +46,7 @@ public interface CardTransactionRecord extends IEntity {
     IPrimitive<String> merchantTerminalId();
 
     @Length(60)
+    @Indexed
     IPrimitive<String> paymentTransactionId();
 
     @NotNull
