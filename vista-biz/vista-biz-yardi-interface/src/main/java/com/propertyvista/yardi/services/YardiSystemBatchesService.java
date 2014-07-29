@@ -104,24 +104,14 @@ public class YardiSystemBatchesService extends YardiAbstractService {
 
         paymentBatchContext.ensureOpenBatch(yc, propertyCode);
 
-        boolean success = false;
-        try {
+        YardiPaymentProcessor paymentProcessor = new YardiPaymentProcessor();
+        ResidentTransactions residentTransactions = paymentProcessor.createTransactions(paymentProcessor.createTransactionForReversal(reversal));
+        stub.addReceiptsToBatch(yc, paymentBatchContext.getBatchId(), residentTransactions);
 
-            YardiPaymentProcessor paymentProcessor = new YardiPaymentProcessor();
-            ResidentTransactions residentTransactions = paymentProcessor.createTransactions(paymentProcessor.createTransactionForReversal(reversal));
-            stub.addReceiptsToBatch(yc, paymentBatchContext.getBatchId(), residentTransactions);
+        paymentBatchContext.incrementRecordCount();
 
-            paymentBatchContext.incrementRecordCount();
-
-            if (singleTrasactionBatch) {
-                paymentBatchContext.postBatch();
-            }
-            success = true;
-        } finally {
-            if (singleTrasactionBatch && !success) {
-                log.debug("Single transaction {} failed, call CancelReceiptBatch", reversal.id().getValue());
-                paymentBatchContext.cancelBatch();
-            }
+        if (singleTrasactionBatch) {
+            paymentBatchContext.postBatch();
         }
     }
 

@@ -52,7 +52,7 @@ class PaymentBatchManager {
     private State state;
 
     PaymentBatchManager(PropertyManager propertyManager) {
-        id = nextId++;
+        id = ++nextId;
         this.propertyManager = propertyManager;
         state = State.New;
         log.debug("ReceiptBatch #{} created", id);
@@ -60,6 +60,10 @@ class PaymentBatchManager {
 
     public long getId() {
         return id;
+    }
+
+    public PropertyManager getPropertyManager() {
+        return propertyManager;
     }
 
     public void addReceiptsToBatch(ResidentTransactions residentTransactions) throws YardiServiceException {

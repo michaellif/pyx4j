@@ -23,6 +23,7 @@ import com.yardi.entity.resident.RTCustomer;
 import com.yardi.entity.resident.ResidentTransactions;
 import com.yardi.entity.resident.Transactions;
 
+import com.propertyvista.biz.system.YardiPropertyNoAccessException;
 import com.propertyvista.biz.system.YardiServiceException;
 import com.propertyvista.test.mock.MockEventBus;
 import com.propertyvista.yardi.beans.Messages;
@@ -42,6 +43,7 @@ import com.propertyvista.yardi.mock.updater.TransactionChargeUpdateEvent;
 import com.propertyvista.yardi.mock.updater.TransactionChargeUpdater;
 import com.propertyvista.yardi.mock.updater.UnitTransferSimulator;
 import com.propertyvista.yardi.mock.updater.UnitTransferSimulatorEvent;
+import com.propertyvista.yardi.services.YardiHandledErrorMessages;
 import com.propertyvista.yardi.stubs.YardiServiceMessageException;
 
 public class YardiMockServer implements TransactionChargeUpdateEvent.Handler, PropertyUpdateEvent.Handler, RtCustomerUpdateEvent.Handler,
@@ -97,6 +99,9 @@ public class YardiMockServer implements TransactionChargeUpdateEvent.Handler, Pr
         if (propertyManager.mockFeatures.isBlockAccess()) {
             throw new YardiServiceMessageException(Messages.createErrorInMock("Invalid or no access to Yardi Property " + propertyId));
         }
+        if (propertyManager.mockFeatures.isBlockBatchOpening()) {
+            throw new YardiServiceMessageException(Messages.createErrorInMock("Cannot open Batch for Yardi Property " + propertyId));
+        }
         return propertyManager;
     }
 
@@ -146,13 +151,18 @@ public class YardiMockServer implements TransactionChargeUpdateEvent.Handler, Pr
     }
 
     public long openReceiptBatch(String propertyId) throws YardiServiceException {
-        PropertyManager propertyManager = getExistingPropertyManagerRuntime(propertyId);
-        if (propertyManager.mockFeatures.isBlockBatchOpening()) {
-            throw new RuntimeException("BatchOpening disabled for " + propertyId);
+        try {
+            PropertyManager propertyManager = getExistingPropertyManagerRuntime(propertyId);
+            PaymentBatchManager b = new PaymentBatchManager(propertyManager);
+            openBatches.put(b.getId(), b);
+            return b.getId();
+        } catch (YardiServiceMessageException e) {
+            if (e.getMessages().hasErrorMessage(YardiHandledErrorMessages.errorMessage_NoAccess)) {
+                return -2;
+            } else {
+                return 0;
+            }
         }
-        PaymentBatchManager b = new PaymentBatchManager(propertyManager);
-        openBatches.put(b.getId(), b);
-        return b.getId();
     }
 
     PaymentBatchManager getBatch(long batchId) {
@@ -163,16 +173,34 @@ public class YardiMockServer implements TransactionChargeUpdateEvent.Handler, Pr
     }
 
     public void addReceiptsToBatch(long batchId, ResidentTransactions residentTransactions) throws YardiServiceException {
-        getBatch(batchId).addReceiptsToBatch(residentTransactions);
+        if (batchId > 0) {
+            getBatch(batchId).addReceiptsToBatch(residentTransactions);
+        } else if (batchId == -2) {
+            throw new YardiPropertyNoAccessException("Invalid batch: -2");
+        } else {
+            throw new YardiServiceException("Invalid batch: " + batchId);
+        }
     }
 
-    public void postReceiptBatch(long batchId) {
-        getBatch(batchId).postReceiptBatch();
+    public void postReceiptBatch(long batchId) throws YardiServiceException {
+        if (batchId > 0) {
+            getBatch(batchId).postReceiptBatch();
+        } else if (batchId == -2) {
+            throw new YardiPropertyNoAccessException("Invalid batch: -2");
+        } else {
+            throw new YardiServiceException("Invalid batch: " + batchId);
+        }
     }
 
-    public void cancelReceiptBatch(long batchId) {
-        getBatch(batchId).cancelReceiptBatch();
-        openBatches.remove(batchId);
+    public void cancelReceiptBatch(long batchId) throws YardiServiceException {
+        if (batchId > 0) {
+            getBatch(batchId).cancelReceiptBatch();
+            openBatches.remove(batchId);
+        } else if (batchId == -2) {
+            throw new YardiPropertyNoAccessException("Invalid batch: -2");
+        } else {
+            throw new YardiServiceException("Invalid batch: " + batchId);
+        }
     }
 
     public void importResidentTransactions(ResidentTransactions reversalTransactions) throws YardiServiceException {

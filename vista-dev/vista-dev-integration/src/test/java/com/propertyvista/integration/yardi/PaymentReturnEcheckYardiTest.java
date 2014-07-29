@@ -17,7 +17,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import org.junit.Ignore;
 import org.junit.experimental.categories.Category;
 
 import com.pyx4j.config.server.ServerSideFactory;
@@ -43,7 +42,6 @@ import com.propertyvista.yardi.mock.updater.PropertyUpdateEvent;
 import com.propertyvista.yardi.mock.updater.PropertyUpdater;
 import com.propertyvista.yardi.services.YardiResidentTransactionsService;
 
-@Ignore
 @Category(FunctionalTests.class)
 public class PaymentReturnEcheckYardiTest extends PaymentYardiTestBase {
 

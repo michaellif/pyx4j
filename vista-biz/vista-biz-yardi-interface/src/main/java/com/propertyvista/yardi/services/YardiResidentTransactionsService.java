@@ -336,9 +336,7 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
             }
             try {
                 ResidentTransactions residentTransactions = stub.getAllResidentTransactions(yc, propertyCode);
-                if (residentTransactions != null) {
-                    transactions.add(residentTransactions);
-                }
+                transactions.add(residentTransactions);
                 executionMonitor.addInfoEvent("PropertyTransactions", propertyCode);
             } catch (YardiServiceMessageException e) {
                 if (e.getMessages().hasErrorMessage(YardiHandledErrorMessages.errorMessage_NoAccess)) {
