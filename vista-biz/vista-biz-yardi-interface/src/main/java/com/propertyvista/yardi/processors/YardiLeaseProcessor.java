@@ -39,7 +39,6 @@ import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.commons.EqualsHelper;
 import com.pyx4j.commons.Key;
 import com.pyx4j.commons.LogicalDate;
-import com.pyx4j.commons.SimpleMessageFormat;
 import com.pyx4j.commons.Validate;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.config.server.SystemDateManager;
@@ -70,7 +69,6 @@ import com.propertyvista.domain.tenant.lease.Lease.Status;
 import com.propertyvista.domain.tenant.lease.LeaseTerm;
 import com.propertyvista.portal.rpc.shared.PolicyNotFoundException;
 import com.propertyvista.yardi.mergers.LeaseMerger;
-import com.propertyvista.yardi.mergers.LeaseMerger.LeaseChargesMergeStatus;
 import com.propertyvista.yardi.mergers.TenantMerger;
 import com.propertyvista.yardi.services.ARCodeAdapter;
 
@@ -169,8 +167,11 @@ public class YardiLeaseProcessor {
             // ignore
         }
 
-        List<BillableItem> uidLookupList = new ArrayList<BillableItem>(lease.currentTerm().version().leaseProducts().featureItems());
-        uidLookupList.add(lease.currentTerm().version().leaseProducts().serviceItem());
+        List<BillableItem> uidLookupList = new ArrayList<>();
+        if (!lease.currentTerm().version().leaseProducts().serviceItem().isNull()) {
+            uidLookupList.add(lease.currentTerm().version().leaseProducts().serviceItem());
+        }
+        uidLookupList.addAll(lease.currentTerm().version().leaseProducts().featureItems());
 
         for (Transactions tr : transactions) {
             if (tr == null || tr.getCharge() == null) {
@@ -206,18 +207,8 @@ public class YardiLeaseProcessor {
             newItems.add(fillBillableItem(tr.getCharge().getDetail(), newItem));
         }
 
-        LeaseChargesMergeStatus mergeStatus = new LeaseMerger().mergeBillableItems(newItems, lease, executionMonitor);
-        if (!LeaseChargesMergeStatus.NoChange.equals(mergeStatus)) {
+        if (new LeaseMerger().mergeBillableItems(newItems, lease, executionMonitor)) {
             finalizeLease(lease);
-
-            if (LeaseChargesMergeStatus.TotalAmount.equals(mergeStatus)) {
-                Persistence.ensureRetrieve(leaseId.unit().building(), AttachLevel.Attached);
-                String msg = SimpleMessageFormat.format("charges changed for lease {0} ({1})", leaseId.leaseId(), leaseId.unit().building().propertyCode()
-                        .getValue());
-
-                log.debug(msg);
-                executionMonitor.addInfoEvent("chargesChanged", msg);
-            }
         }
 
         return lease;

@@ -860,7 +860,9 @@ public abstract class LeaseAbstractManager {
     }
 
     protected void finalizeBillableItems(LeaseTerm leaseTerm) {
-        leaseTerm.version().leaseProducts().serviceItem().finalized().setValue(Boolean.TRUE);
+        if (!leaseTerm.version().leaseProducts().serviceItem().isNull()) {
+            leaseTerm.version().leaseProducts().serviceItem().finalized().setValue(Boolean.TRUE);
+        }
         for (BillableItem item : leaseTerm.version().leaseProducts().featureItems()) {
             item.finalized().setValue(Boolean.TRUE);
         }

@@ -124,42 +124,51 @@ public class LeaseMerger {
         lease.billingAccount().paymentAccepted().setValue(BillingAccount.PaymentAccepted.getPaymentType(rtCustomer.getPaymentAccepted()));
     }
 
-    public LeaseChargesMergeStatus mergeBillableItems(List<BillableItem> items, Lease lease, ExecutionMonitor executionMonitor) {
-        LeaseChargesMergeStatus mergeStatus = LeaseChargesMergeStatus.NoChange;
-        List<BillableItem> lookupList = new ArrayList<BillableItem>(lease.currentTerm().version().leaseProducts().featureItems());
-        for (BillableItem item : items) {
-            BillableItem leaseItem = null;
-            LeaseChargesMergeStatus lookupStatus = compareBillableItems(item, lease.currentTerm().version().leaseProducts().serviceItem());
-            if (LeaseChargesMergeStatus.NoChange.equals(lookupStatus)) {
-                log.debug("      existing service: {} - {}", item.yardiChargeCode().getValue(), item.agreedPrice().getValue());
-                continue;
-            } else if (lookupStatus == null) {
-                leaseItem = findBillableItem(item, lookupList);
-                lookupStatus = (leaseItem == null ? null : compareBillableItems(item, leaseItem));
-                if (LeaseChargesMergeStatus.NoChange.equals(lookupStatus)) {
-                    log.debug("      existing feature: {} - {}", item.yardiChargeCode().getValue(), item.agreedPrice().getValue());
-                    continue;
+    public boolean mergeBillableItems(List<BillableItem> items, Lease lease, ExecutionMonitor executionMonitor) {
+        boolean mergeRequired = false;
+        List<BillableItem> lookupList = new ArrayList<>();
+        if (!lease.currentTerm().version().leaseProducts().serviceItem().isNull()) {
+            lookupList.add(lease.currentTerm().version().leaseProducts().serviceItem());
+        }
+        lookupList.addAll(lease.currentTerm().version().leaseProducts().featureItems());
+
+        if (lookupList.size() != items.size()) {
+            mergeRequired = true;
+        } else {
+            for (BillableItem newItem : items) {
+                BillableItem existing = findBillableItem(newItem, lookupList);
+                if ((existing == null) || (!compareBillableItems(existing, newItem))) {
+                    mergeRequired = true;
+                    break;
+                } else {
+                    lookupList.remove(existing);
                 }
             }
-            log.debug("      new or modified item: {} - {}", item.yardiChargeCode().getValue(), item.agreedPrice().getValue());
-            // update mergeStatus to the highest lookupStatus
-            if (lookupStatus == null) {
-                // new product added
-                mergeStatus = LeaseChargesMergeStatus.TotalAmount;
-            } else if (lookupStatus.compareTo(mergeStatus) > 0) {
-                mergeStatus = lookupStatus;
+
+            if (!mergeRequired) {
+                // See if Service item is changed
+                boolean serviceItemRecived = false;
+                for (BillableItem item : items) {
+                    // process new item
+                    if (isServiceItem(item)) {
+                        serviceItemRecived = true;
+                        if (!compareBillableItems(item, lease.currentTerm().version().leaseProducts().serviceItem())) {
+                            mergeRequired = true;
+                        }
+                        break;
+                    }
+                }
+
+                if ((!serviceItemRecived) && !lease.currentTerm().version().leaseProducts().serviceItem().isNull()) {
+                    mergeRequired = true;
+                }
             }
         }
-        // see if we have expired items
-        if (!lookupList.isEmpty()) {
-            mergeStatus = LeaseChargesMergeStatus.TotalAmount;
-        }
-        // if changes detected - set new lease products
-        if (!LeaseChargesMergeStatus.NoChange.equals(mergeStatus)) {
+
+        if (mergeRequired) {
+            lease.currentTerm().version().leaseProducts().serviceItem().set(null);
             lease.currentTerm().version().leaseProducts().featureItems().clear();
-
             boolean serviceItemRecived = false;
-
             for (BillableItem item : items) {
                 // process new item
                 if (isServiceItem(item)) {
@@ -182,7 +191,8 @@ public class LeaseMerger {
                 }
             }
         }
-        return mergeStatus;
+
+        return mergeRequired;
     }
 
     public BillableItem findBillableItem(BillableItem item, List<BillableItem> items) {
@@ -221,19 +231,18 @@ public class LeaseMerger {
         return arCode != null && ARCode.Type.Residential.equals(arCode.type().getValue());
     }
 
-    private LeaseChargesMergeStatus compareBillableItems(BillableItem item1, BillableItem item2) {
+    private boolean compareBillableItems(BillableItem item1, BillableItem item2) {
         if (item1.uid().compareTo(item2.uid()) != 0) {
-            return null;
+            return false;
         }
-
-        LeaseChargesMergeStatus result = LeaseChargesMergeStatus.NoChange;
         if (item1.expirationDate().compareTo(item2.expirationDate()) != 0 || item1.effectiveDate().compareTo(item2.effectiveDate()) != 0) {
-            result = LeaseChargesMergeStatus.DatesOnly;
+            return false;
         }
         if (item1.agreedPrice().compareTo(item2.agreedPrice()) != 0) {
-            result = LeaseChargesMergeStatus.TotalAmount;
+            return false;
+        } else {
+            return true;
         }
-        return result;
     }
 
     private static boolean isChanged(IPrimitive<LogicalDate> existing, Date imported) {
