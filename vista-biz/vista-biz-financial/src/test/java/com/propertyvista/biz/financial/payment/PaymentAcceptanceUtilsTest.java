@@ -338,4 +338,49 @@ public class PaymentAcceptanceUtilsTest extends TestCase {
         }
 
     }
+
+    public void testConvenienceFeeDisabled() {
+        AbstractPaymentSetup systemSetup = EntityFactory.create(AbstractPaymentSetup.class);
+        systemSetup.acceptedVisa().setValue(true);
+        systemSetup.acceptedMasterCard().setValue(true);
+        systemSetup.acceptedVisaConvenienceFee().setValue(true);
+        systemSetup.acceptedMasterCardConvenienceFee().setValue(false); // <---
+
+        MerchantElectronicPaymentSetup merchantSetup = EntityFactory.create(MerchantElectronicPaymentSetup.class);
+        merchantSetup.acceptedCreditCard().setValue(true);
+        merchantSetup.acceptedCreditCardConvenienceFee().setValue(true);
+        merchantSetup.acceptedCreditCardVisaDebit().setValue(true);
+
+        // Nothing accepted in portal, fee not applied on MC
+        {
+            PaymentTypeSelectionPolicy selectionPolicy = EntityFactory.create(PaymentTypeSelectionPolicy.class);
+            selectionPolicy.acceptedCreditCardMasterCard().setValue(true);
+            selectionPolicy.acceptedCreditCardVisa().setValue(true);
+
+            assertAllowed(VistaApplication.resident, merchantSetup, systemSetup, false, selectionPolicy, CreditCardType.Visa, Expect.Fee);
+            assertAllowed(VistaApplication.resident, merchantSetup, systemSetup, false, selectionPolicy, CreditCardType.MasterCard, Expect.Disable);
+
+            Collection<PaymentType> paymentTypesCrm = PaymentAcceptanceUtils.getAllowedPaymentTypes(VistaApplication.crm, merchantSetup, systemSetup, false,
+                    selectionPolicy);
+            Assert.assertTrue("Cards Allowed expected, but was " + paymentTypesCrm, paymentTypesCrm.contains(PaymentType.CreditCard));
+
+            Collection<PaymentType> paymentTypesResident = PaymentAcceptanceUtils.getAllowedPaymentTypes(VistaApplication.resident, merchantSetup, systemSetup,
+                    false, selectionPolicy);
+            Assert.assertTrue("Cards Allowed expected, but was " + paymentTypesResident, paymentTypesResident.contains(PaymentType.CreditCard));
+        }
+
+        //===========
+        // Change place for Visa and MC
+        systemSetup.acceptedVisaConvenienceFee().setValue(false);
+        systemSetup.acceptedMasterCardConvenienceFee().setValue(true);
+
+        {
+            PaymentTypeSelectionPolicy selectionPolicy = EntityFactory.create(PaymentTypeSelectionPolicy.class);
+            selectionPolicy.acceptedCreditCardMasterCard().setValue(true);
+            selectionPolicy.acceptedCreditCardVisa().setValue(true);
+
+            assertAllowed(VistaApplication.resident, merchantSetup, systemSetup, false, selectionPolicy, CreditCardType.Visa, Expect.Disable);
+            assertAllowed(VistaApplication.resident, merchantSetup, systemSetup, false, selectionPolicy, CreditCardType.MasterCard, Expect.Fee);
+        }
+    }
 }

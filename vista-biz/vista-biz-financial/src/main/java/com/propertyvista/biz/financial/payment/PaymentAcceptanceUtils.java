@@ -405,12 +405,14 @@ public class PaymentAcceptanceUtils {
 
         require.add(new CardTypeAcceptance(CreditCardType.MasterCard).//
                 and(p.systemSetup().acceptedMasterCard(), p.merchantSetup().acceptedCreditCard(), p.acceptedCreditCardMasterCard()).//
-                or(p.residentPortalCreditCardMasterCard(), p.merchantSetup().acceptedCreditCardConvenienceFee()). //
+                or(p.residentPortalCreditCardMasterCard(), //
+                        and(p.systemSetup().acceptedMasterCardConvenienceFee(), p.merchantSetup().acceptedCreditCardConvenienceFee())). //
                 or(p.notCashEquivalent(), p.cashEquivalentCreditCardMasterCard()));
 
         require.add(new CardTypeAcceptance(CreditCardType.Visa).//
                 and(p.systemSetup().acceptedVisa(), p.merchantSetup().acceptedCreditCard(), p.acceptedCreditCardVisa()).// 
-                or(p.residentPortalCreditCardVisa(), p.merchantSetup().acceptedCreditCardConvenienceFee()). // 
+                or(p.residentPortalCreditCardVisa(), //
+                        and(p.systemSetup().acceptedVisaConvenienceFee(), p.merchantSetup().acceptedCreditCardConvenienceFee())). // 
                 or(p.notCashEquivalent(), p.cashEquivalentCreditCardVisa()));
 
         if (VistaTODO.visaDebitHasConvenienceFee) {
