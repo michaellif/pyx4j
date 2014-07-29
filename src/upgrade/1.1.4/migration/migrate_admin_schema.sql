@@ -78,6 +78,17 @@ SET search_path = '_admin_';
         ALTER TABLE admin_pmc_merchant_account_index ADD COLUMN terminal_id_conv_fee VARCHAR(8);
         
         
+        -- admin_pmc_payment_type_info
+        
+        ALTER TABLE admin_pmc_payment_type_info ADD COLUMN accepted_echeck BOOLEAN,
+                                                ADD COLUMN accepted_direct_banking BOOLEAN,
+                                                ADD COLUMN accepted_master_card BOOLEAN,
+                                                ADD COLUMN accepted_master_card_convenience_fee BOOLEAN,
+                                                ADD COLUMN accepted_visa BOOLEAN,
+                                                ADD COLUMN accepted_visa_convenience_fee BOOLEAN;
+                                                
+        
+        
         -- business_information
         
         ALTER TABLE business_information    ADD COLUMN business_address_country VARCHAR(50),
@@ -153,6 +164,10 @@ SET search_path = '_admin_';
         
         ALTER TABLE cards_reconciliation_record$chargebacks OWNER TO vista;
         
+        -- customer_credit_check_transaction
+        
+        ALTER TABLE customer_credit_check_transaction ADD COLUMN tax NUMERIC(18,2);
+        
         -- dev_card_service_simulation_reconciliation_record
         
         CREATE TABLE dev_card_service_simulation_reconciliation_record
@@ -178,6 +193,26 @@ SET search_path = '_admin_';
         
         ALTER TABLE dev_equifax_simulator_config ADD COLUMN force_result_risk_code VARCHAR(500);
         
+        
+        -- direct_debit_record
+        
+        ALTER TABLE direct_debit_record ADD COLUMN trace_collection DATE;
+        
+        
+        -- fee_default_equifax_fee
+        
+        ALTER TABLE fee_default_equifax_fee ADD COLUMN tax_rate NUMERIC(18,4);
+        
+        
+        -- fee_default_payment_fees
+        
+        ALTER TABLE fee_default_payment_fees    ADD COLUMN accepted_echeck BOOLEAN NOT NULL,
+                                                ADD COLUMN accepted_direct_banking BOOLEAN NOT NULL,
+                                                ADD COLUMN accepted_master_card BOOLEAN NOT NULL,
+                                                ADD COLUMN accepted_master_card_convenience_fee BOOLEAN NOT NULL,
+                                                ADD COLUMN accepted_visa BOOLEAN NOT NULL,
+                                                ADD COLUMN accepted_visa_convenience_fee BOOLEAN NOT NULL; 
+         
         
         -- operations_alert
         
@@ -212,6 +247,16 @@ SET search_path = '_admin_';
         ***     ============================================================================================================
         **/
         
+        
+        -- fee_default_payment_fees
+        
+        UPDATE  fee_default_payment_fees
+        SET accepted_echeck = TRUE,
+            accepted_direct_banking = TRUE,
+            accepted_master_card = TRUE,
+            accepted_master_card_convenience_fee = TRUE,
+            accepted_visa = TRUE,
+            accepted_visa_convenience_fee = TRUE; 
         
         --outgoing_mail_queue
         
@@ -365,6 +410,7 @@ SET search_path = '_admin_';
         CREATE INDEX cards_reconciliation_record$adjustments_owner_idx ON cards_reconciliation_record$adjustments USING btree (owner);
         CREATE INDEX cards_reconciliation_record$chargebacks_owner_idx ON cards_reconciliation_record$chargebacks USING btree (owner);
         CREATE INDEX cards_reconciliation_record_merchant_account_idx ON cards_reconciliation_record USING btree (merchant_account);
+        CREATE INDEX card_transaction_record_payment_transaction_id_idx ON card_transaction_record USING btree (payment_transaction_id);
         CREATE INDEX direct_debit_record_pmc_processing_status_idx ON direct_debit_record USING btree(pmc, processing_status);
 
 COMMIT;
