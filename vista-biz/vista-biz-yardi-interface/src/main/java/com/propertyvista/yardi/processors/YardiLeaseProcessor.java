@@ -401,7 +401,6 @@ public class YardiLeaseProcessor {
         // unit:
         if (unit.getPrimaryKey() != null) {
             leaseFacade.setPackage(lease.currentTerm(), unit, null, Collections.<BillableItem> emptyList());
-            leaseFacade.setLeaseAgreedPrice(lease, yardiLease.getCurrentRent());
         }
 
         //  dates:

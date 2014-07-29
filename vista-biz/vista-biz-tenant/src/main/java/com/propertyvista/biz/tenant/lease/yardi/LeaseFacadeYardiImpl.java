@@ -13,7 +13,6 @@
  */
 package com.propertyvista.biz.tenant.lease.yardi;
 
-import java.math.BigDecimal;
 import java.util.List;
 
 import com.pyx4j.commons.LogicalDate;
@@ -188,11 +187,6 @@ public class LeaseFacadeYardiImpl implements LeaseFacade {
     @Override
     public void updateLeaseDates(Lease lease) {
         getLeaseYardiManager(lease).updateLeaseDates(lease);
-    }
-
-    @Override
-    public void setLeaseAgreedPrice(Lease lease, BigDecimal price) {
-        getLeaseYardiManager(lease).setLeaseAgreedPrice(lease, price);
     }
 
     @Override

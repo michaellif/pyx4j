@@ -13,7 +13,6 @@
  */
 package com.propertyvista.biz.tenant.lease.internal;
 
-import java.math.BigDecimal;
 import java.util.List;
 
 import com.pyx4j.commons.LogicalDate;
@@ -181,11 +180,6 @@ public class LeaseFacadeInternalImpl implements LeaseFacade {
     @Override
     public void updateLeaseDates(Lease lease) {
         new LeaseInternalManager().updateLeaseDates(lease);
-    }
-
-    @Override
-    public void setLeaseAgreedPrice(Lease lease, BigDecimal price) {
-        new LeaseInternalManager().setLeaseAgreedPrice(lease, price);
     }
 
     @Override

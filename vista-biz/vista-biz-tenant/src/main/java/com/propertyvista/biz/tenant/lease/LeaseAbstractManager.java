@@ -710,12 +710,6 @@ public abstract class LeaseAbstractManager {
         return newItem;
     }
 
-    public void setLeaseAgreedPrice(Lease lease, BigDecimal price) {
-        Persistence.ensureRetrieve(lease, AttachLevel.Attached);
-
-        lease.currentTerm().version().leaseProducts().serviceItem().agreedPrice().setValue(price == null ? BigDecimal.ZERO : price);
-    }
-
     public boolean isMoveOutWithinNextBillingCycle(Lease leaseId) {
         Lease lease = Persistence.service().retrieve(Lease.class, leaseId.getPrimaryKey());
         if (!Lease.Status.isApplicationUnitSelected(lease)) {

@@ -13,7 +13,6 @@
  */
 package com.propertyvista.biz.tenant.lease;
 
-import java.math.BigDecimal;
 import java.util.List;
 
 import com.pyx4j.commons.LogicalDate;
@@ -109,8 +108,6 @@ public interface LeaseFacade {
     BillableItem createBillableItem(Lease lease, ProductItem itemId);
 
     void updateLeaseDates(Lease lease);
-
-    void setLeaseAgreedPrice(Lease lease, BigDecimal price);
 
     boolean isMoveOutWithinNextBillingCycle(Lease leaseId);
 
