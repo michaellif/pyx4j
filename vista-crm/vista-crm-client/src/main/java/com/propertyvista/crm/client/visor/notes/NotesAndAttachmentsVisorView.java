@@ -24,10 +24,8 @@ import com.google.gwt.user.client.ui.SimplePanel;
 import com.pyx4j.commons.Key;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.core.EntityFactory;
-import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.IObject;
 import com.pyx4j.entity.rpc.EntitySearchResult;
-import com.pyx4j.entity.security.DataModelPermission;
 import com.pyx4j.forms.client.events.PropertyChangeEvent;
 import com.pyx4j.forms.client.events.PropertyChangeEvent.PropertyName;
 import com.pyx4j.forms.client.events.PropertyChangeHandler;
@@ -47,6 +45,7 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.security.shared.AccessControlContext;
+import com.pyx4j.security.shared.Permission;
 import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.site.client.ui.visor.AbstractVisorPane;
 import com.pyx4j.widgets.client.Anchor;
@@ -71,7 +70,7 @@ public class NotesAndAttachmentsVisorView extends AbstractVisorPane {
 
     private final NotesAndAttachmentsForm form;
 
-    private Class<? extends IEntity> permissionClass = null;
+    private Permission permissionUpdate = null;
 
     private AccessControlContext securityContext = null;
 
@@ -89,15 +88,15 @@ public class NotesAndAttachmentsVisorView extends AbstractVisorPane {
         setContentPane(new ScrollPanel(contentPane));
     }
 
-    public void setSecurityData(Class<? extends IEntity> permissionClass, AccessControlContext securityContext) {
-        this.permissionClass = permissionClass;
+    public void setSecurityData(Permission permissionUpdate, AccessControlContext securityContext) {
+        this.permissionUpdate = permissionUpdate;
         this.securityContext = securityContext;
 
         form.updatePermission();
     }
 
     private boolean hasPermissionUpdate() {
-        return (permissionClass != null ? SecurityController.check(securityContext, DataModelPermission.permissionUpdate(permissionClass)) : true);
+        return (permissionUpdate != null ? SecurityController.check(securityContext, permissionUpdate) : true);
     }
 
     public void populate(final Command onPopulate) {

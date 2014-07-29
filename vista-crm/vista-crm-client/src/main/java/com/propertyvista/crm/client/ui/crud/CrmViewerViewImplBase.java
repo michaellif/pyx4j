@@ -28,7 +28,7 @@ import com.pyx4j.entity.rpc.AbstractVersionDataListService;
 import com.pyx4j.entity.security.DataModelPermission;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
-import com.pyx4j.security.shared.AccessControlContext;
+import com.pyx4j.security.shared.Permission;
 import com.pyx4j.site.client.ui.BreadcrumbsBar;
 import com.pyx4j.site.client.ui.PaneTheme;
 import com.pyx4j.site.client.ui.prime.IPrimePane;
@@ -74,7 +74,7 @@ public class CrmViewerViewImplBase<E extends IEntity> extends AbstractViewer<E> 
 
     private Button.ButtonMenuBar actionsMenu;
 
-    private Class<? extends IEntity> notesPermissionClass = null;
+    private Permission notesPermissionUpdate = null;
 
     public CrmViewerViewImplBase() {
         this(false);
@@ -89,7 +89,7 @@ public class CrmViewerViewImplBase<E extends IEntity> extends AbstractViewer<E> 
             @Override
             public void execute() {
                 NotesAndAttachmentsVisorController notesController = ((CrmViewerActivity<E>) getPresenter()).getNotesAndAttachmentsController();
-                notesController.setSecurityData(notesPermissionClass, getForm().getValue());
+                notesController.setSecurityData(notesPermissionUpdate, getForm().getValue());
                 notesController.show();
             }
         });
@@ -145,17 +145,17 @@ public class CrmViewerViewImplBase<E extends IEntity> extends AbstractViewer<E> 
         super.setForm(form);
 
         // set default notes permission class (root entity one):
-        if (notesPermissionClass == null) {
-            setNotesPermissionClass(form.getRootClass());
+        if (notesPermissionUpdate == null) {
+            setNotesPermissions(DataModelPermission.permissionRead(form.getRootClass()), DataModelPermission.permissionUpdate(form.getRootClass()));
         }
     }
 
     /*
      * overrides default notes permission class (root entity one)
      */
-    public void setNotesPermissionClass(Class<? extends IEntity> permissionClass) {
-        notesButton.setPermission(DataModelPermission.permissionRead(permissionClass));
-        notesPermissionClass = permissionClass;
+    public void setNotesPermissions(Permission permissionRead, Permission permissionUpdate) {
+        notesButton.setPermission(permissionRead);
+        notesPermissionUpdate = permissionUpdate;
     }
 
     public MenuItemSeparator addActionSeparator() {
