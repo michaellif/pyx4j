@@ -20,7 +20,10 @@ import com.pyx4j.entity.annotations.AbstractEntity;
 import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.annotations.Format;
+import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.Timestamp;
+import com.pyx4j.entity.annotations.ToString;
+import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.IPrimitive;
 import com.pyx4j.i18n.annotations.I18n;
@@ -47,4 +50,12 @@ public interface AbstractEquifaxFee extends IEntity {
 
     @Timestamp(Timestamp.Update.Updated)
     IPrimitive<Date> updated();
+
+    @NotNull
+    @Format("#,##0.00")
+    @ToString(index = 2)
+    @MemberColumn(scale = 4)
+    @Editor(type = EditorType.percentage)
+    IPrimitive<BigDecimal> taxRate();
+
 }

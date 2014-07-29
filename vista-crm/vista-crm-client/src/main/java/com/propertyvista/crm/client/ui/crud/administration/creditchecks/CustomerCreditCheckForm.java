@@ -17,8 +17,8 @@ import com.google.gwt.user.client.Command;
 
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.forms.client.ui.CEntityHyperlink;
-import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
+import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.AppPlaceEntityMapper;
 import com.pyx4j.site.client.AppSite;
@@ -68,6 +68,7 @@ public class CustomerCreditCheckForm extends CrmEntityForm<CustomerCreditCheckDT
 
         formPanel.h1(i18n.tr("Fees"));
         formPanel.append(Location.Left, proto().transaction().amount()).decorate();
+        formPanel.append(Location.Left, proto().transaction().tax()).decorate();
         formPanel.append(Location.Left, proto().transactionRef()).decorate();
 
         setTabBarVisible(false);

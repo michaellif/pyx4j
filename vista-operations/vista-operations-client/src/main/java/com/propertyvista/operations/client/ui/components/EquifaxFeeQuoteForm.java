@@ -23,10 +23,13 @@ import com.propertyvista.domain.pmc.fee.AbstractEquifaxFee;
 
 public class EquifaxFeeQuoteForm extends CForm<AbstractEquifaxFee> {
 
+    private final boolean systemDefault;
+
     private final boolean makeMandatory;
 
-    public EquifaxFeeQuoteForm(boolean makeMandatory) {
+    public EquifaxFeeQuoteForm(boolean systemDefault, boolean makeMandatory) {
         super(AbstractEquifaxFee.class);
+        this.systemDefault = systemDefault;
         this.makeMandatory = makeMandatory;
     }
 
@@ -38,6 +41,10 @@ public class EquifaxFeeQuoteForm extends CForm<AbstractEquifaxFee> {
         formPanel.append(Location.Right, proto().fullCreditReportSetUpFee()).decorate().componentWidth(120);
         formPanel.append(Location.Left, proto().recommendationReportPerApplicantFee()).decorate().componentWidth(120);
         formPanel.append(Location.Right, proto().fullCreditReportPerApplicantFee()).decorate().componentWidth(120);
+
+        if (systemDefault) {
+            formPanel.append(Location.Left, proto().taxRate()).decorate().componentWidth(120);
+        }
 
         if (makeMandatory) {
             get(proto().recommendationReportSetUpFee()).setMandatory(true);

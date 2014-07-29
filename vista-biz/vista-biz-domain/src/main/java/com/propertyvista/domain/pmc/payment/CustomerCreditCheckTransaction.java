@@ -63,6 +63,10 @@ public interface CustomerCreditCheckTransaction extends IEntity {
     @Editor(type = EditorType.money)
     IPrimitive<BigDecimal> amount();
 
+    @Format("#,##0.00")
+    @Editor(type = EditorType.money)
+    IPrimitive<BigDecimal> tax();
+
     PmcPaymentMethod paymentMethod();
 
     IPrimitive<TransactionStatus> status();

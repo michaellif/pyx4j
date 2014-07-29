@@ -45,7 +45,7 @@ public class VistaSystemDefaultsForm extends OperationsEntityForm<VistaSystemDef
         FormPanel formPanel = new FormPanel(this);
 
         formPanel.h1(i18n.tr("Default Fees"));
-        formPanel.append(Location.Dual, proto().equifaxFees(), new EquifaxFeeQuoteForm(true));
+        formPanel.append(Location.Dual, proto().equifaxFees(), new EquifaxFeeQuoteForm(true, true));
 
         formPanel.h1(i18n.tr("Default  Usage Limits"));
         formPanel.append(Location.Dual, proto().equifaxLimit().dailyReports()).decorate().componentWidth(72);

@@ -72,6 +72,9 @@ public class Vista2PmcFacadeImpl implements Vista2PmcFacade {
         setNonNullMember(fee.recommendationReportSetUpFee(), pmc.equifaxFee(), defaultEfxFeee);
         setNonNullMember(fee.fullCreditReportPerApplicantFee(), pmc.equifaxFee(), defaultEfxFeee);
         setNonNullMember(fee.fullCreditReportSetUpFee(), pmc.equifaxFee(), defaultEfxFeee);
+
+        fee.taxRate().setValue(defaultEfxFeee.taxRate().getValue());
+
         return fee;
     }
 

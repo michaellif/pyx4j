@@ -216,7 +216,7 @@ public class PmcForm extends OperationsEntityForm<PmcDTO> {
         FormPanel formPanel = new FormPanel(this);
 
         formPanel.h1(i18n.tr("Equifax Fee Quote"));
-        formPanel.append(Location.Dual, proto().equifaxFee(), new EquifaxFeeQuoteForm(false));
+        formPanel.append(Location.Dual, proto().equifaxFee(), new EquifaxFeeQuoteForm(false, false));
 
         formPanel.h1(i18n.tr("Equifax"));
         formPanel.append(Location.Left, proto().equifaxInfo().status()).decorate().componentWidth(200);

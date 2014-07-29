@@ -13,6 +13,8 @@
  */
 package com.propertyvista.domain.pmc.fee;
 
+import java.math.BigDecimal;
+
 import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.Indexed;
 import com.pyx4j.entity.annotations.JoinColumn;
@@ -20,6 +22,8 @@ import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.annotations.ReadOnly;
 import com.pyx4j.entity.annotations.Table;
+import com.pyx4j.entity.annotations.Transient;
+import com.pyx4j.entity.core.IPrimitive;
 
 import com.propertyvista.domain.VistaNamespace;
 import com.propertyvista.domain.pmc.Pmc;
@@ -34,5 +38,9 @@ public interface PmcEquifaxFee extends AbstractEquifaxFee {
     @Indexed(uniqueConstraint = true)
     @Detached
     Pmc pmc();
+
+    @Override
+    @Transient
+    IPrimitive<BigDecimal> taxRate();
 
 }

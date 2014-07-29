@@ -36,6 +36,7 @@ import com.propertyvista.domain.payment.CreditCardInfo;
 import com.propertyvista.domain.pmc.PmcEquifaxInfo;
 import com.propertyvista.domain.pmc.fee.AbstractEquifaxFee;
 import com.propertyvista.domain.pmc.payment.CustomerCreditCheckTransaction;
+import com.propertyvista.domain.util.DomainUtil;
 import com.propertyvista.server.TaskRunner;
 
 class ScreeningPayments {
@@ -66,6 +67,10 @@ class ScreeningPayments {
             throw new IllegalArgumentException();
         }
 
+        if (!fee.taxRate().isNull()) {
+            transaction.tax().setValue(DomainUtil.roundMoney(transaction.amount().getValue().multiply(fee.taxRate().getValue())));
+        }
+
         if (transaction.amount().getValue().compareTo(BigDecimal.ZERO) == 0) {
             return null;
         }
@@ -88,7 +93,7 @@ class ScreeningPayments {
         // Do authorization
         try {
             String authorizationNumber = ServerSideFactory.create(CreditCardFacade.class).preAuthorization(merchantTerminalId(),
-                    transaction.amount().getValue(), ReferenceNumberPrefix.EquifaxScreening, transaction.id(),
+                    transaction.amount().getValue().add(transaction.tax().getValue(BigDecimal.ZERO)), ReferenceNumberPrefix.EquifaxScreening, transaction.id(),
                     (CreditCardInfo) transaction.paymentMethod().details().cast());
 
             transaction.status().setValue(CustomerCreditCheckTransaction.TransactionStatus.Authorized);
@@ -159,8 +164,9 @@ class ScreeningPayments {
         });
 
         try {
-            String authorizationNumber = ServerSideFactory.create(CreditCardFacade.class).completion(merchantTerminalId(), transaction.amount().getValue(),
-                    ReferenceNumberPrefix.EquifaxScreening, transaction.id(), (CreditCardInfo) transaction.paymentMethod().details().cast());
+            String authorizationNumber = ServerSideFactory.create(CreditCardFacade.class).completion(merchantTerminalId(),
+                    transaction.amount().getValue().add(transaction.tax().getValue(BigDecimal.ZERO)), ReferenceNumberPrefix.EquifaxScreening, transaction.id(),
+                    (CreditCardInfo) transaction.paymentMethod().details().cast());
             transaction.transactionAuthorizationNumber().setValue(authorizationNumber);
             transaction.transactionDate().setValue(SystemDateManager.getDate());
             transaction.status().setValue(CustomerCreditCheckTransaction.TransactionStatus.Cleared);

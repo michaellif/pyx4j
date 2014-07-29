@@ -14,8 +14,8 @@
 package com.propertyvista.operations.client.ui.crud.creditcheck;
 
 import com.pyx4j.forms.client.ui.CEntityLabel;
-import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
+import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.prime.form.IForm;
 import com.pyx4j.site.client.ui.prime.misc.CEntityCrudHyperlink;
@@ -38,6 +38,7 @@ public class CustomerCreditCheckTransactionForm extends OperationsEntityForm<Cus
 
         formPanel.h1(i18n.tr("Details"));
         formPanel.append(Location.Left, proto().amount()).decorate();
+        formPanel.append(Location.Left, proto().tax()).decorate();
         formPanel.append(Location.Left, proto().paymentMethod(), new CEntityLabel<PmcPaymentMethod>()).decorate();
         formPanel.append(Location.Left, proto().status()).decorate();
         formPanel.append(Location.Left, proto().transactionAuthorizationNumber()).decorate();

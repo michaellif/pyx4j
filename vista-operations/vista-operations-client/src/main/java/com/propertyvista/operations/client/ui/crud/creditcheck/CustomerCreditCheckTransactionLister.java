@@ -34,6 +34,7 @@ public class CustomerCreditCheckTransactionLister extends AbstractLister<Custome
         setDataTableModel(new DataTableModel<CustomerCreditCheckTransactionDTO>( //@formatter:off
             new MemberColumnDescriptor.Builder(proto().pmc()).build(),
             new MemberColumnDescriptor.Builder(proto().amount()).build(),
+            new MemberColumnDescriptor.Builder(proto().tax()).build(),
             new MemberColumnDescriptor.Builder(proto().paymentMethod()).visible(false).build(),
             new MemberColumnDescriptor.Builder(proto().status()).build(),
             new MemberColumnDescriptor.Builder(proto().transactionAuthorizationNumber()).build(),

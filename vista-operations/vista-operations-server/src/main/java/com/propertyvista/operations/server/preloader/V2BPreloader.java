@@ -63,6 +63,7 @@ public class V2BPreloader extends AbstractDataPreloader {
             fee.recommendationReportSetUpFee().setValue(new BigDecimal("0"));
             fee.fullCreditReportPerApplicantFee().setValue(new BigDecimal("19.11"));
             fee.fullCreditReportSetUpFee().setValue(new BigDecimal("150"));
+            fee.taxRate().setValue(new BigDecimal("0.13"));
             Persistence.service().persist(fee);
         }
         {
