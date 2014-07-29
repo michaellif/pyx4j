@@ -89,6 +89,7 @@ public class PmcDataModel extends MockDataModel<Pmc> {
         });
 
         addItem(pmc);
+        VistaDeployment.changePmcContext();
     }
 
     public OrganizationPoliciesNode getOrgNode() {
