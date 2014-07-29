@@ -78,8 +78,8 @@ public class EftReportSettingsForm extends CForm<EftReportMetadata> {
         column1.add(inject(proto().paymentStatus(), new FieldDecoratorBuilder().componentWidth(INPUT_FIELD_WIDTH).build()));
         column1.add(inject(proto().orderBy(), makeOrderByComboBox(), new FieldDecoratorBuilder().componentWidth(INPUT_FIELD_WIDTH).build()));
 
-        if (SecurityController.checkBehavior(VistaCrmBehavior.PropertyVistaSupport)) {
-            column1.add(new FormDecoratorBuilder(inject(proto().trace())).build());
+        if (SecurityController.check(VistaCrmBehavior.PropertyVistaSupport)) {
+            column1.add(inject(proto().trace(), new FieldDecoratorBuilder().build()));
         }
 
         FlowPanel column2 = new FlowPanel();

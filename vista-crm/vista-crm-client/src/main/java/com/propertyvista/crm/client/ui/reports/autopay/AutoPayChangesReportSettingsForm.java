@@ -20,8 +20,8 @@ import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.forms.client.ui.CForm;
-import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
+import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.site.client.ui.IPane;
 import com.pyx4j.site.client.ui.prime.form.FieldDecoratorBuilder;
@@ -61,8 +61,8 @@ public class AutoPayChangesReportSettingsForm extends CForm<AutoPayChangesReport
         leftSidePanel.add(inject(proto().maximum(), new FieldDecoratorBuilder().componentWidth("100px").build()));
         get(proto().maximum()).asWidget().getElement().getStyle().setDisplay(Display.BLOCK);
 
-        if (SecurityController.checkBehavior(VistaCrmBehavior.PropertyVistaSupport)) {
-            leftSidePanel.add(new FormDecoratorBuilder(inject(proto().trace())).build());
+        if (SecurityController.check(VistaCrmBehavior.PropertyVistaSupport)) {
+            leftSidePanel.add(inject(proto().trace(), new FieldDecoratorBuilder().componentWidth("100px").build()));
         }
 
         FlowPanel buildingFilterPanel = new FlowPanel();
