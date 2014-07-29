@@ -47,6 +47,8 @@ import com.propertyvista.crm.rpc.services.lease.ac.LeaseConfirmBill;
 import com.propertyvista.crm.rpc.services.lease.ac.LeaseRunBill;
 import com.propertyvista.domain.financial.AggregatedTransfer;
 import com.propertyvista.domain.financial.BuildingMerchantAccount;
+import com.propertyvista.domain.financial.CardsAggregatedTransfer;
+import com.propertyvista.domain.financial.EftAggregatedTransfer;
 import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.domain.property.asset.building.BuildingFinancial;
 import com.propertyvista.domain.security.VistaCrmBehavior;
@@ -74,6 +76,8 @@ class VistaCrmFinancialAccessControlList extends UIAclBuilder {
 
         // ------ Financial: Aggregated Transfer 
         grant(FinancialAggregatedTransfer, AggregatedTransfer.class, READ);
+        grant(FinancialAggregatedTransfer, EftAggregatedTransfer.class, READ);
+        grant(FinancialAggregatedTransfer, CardsAggregatedTransfer.class, READ);
         grant(FinancialAggregatedTransfer, new IServiceExecutePermission(AggregatedTransferCrudService.class));
         grant(FinancialAggregatedTransfer, PaymentRecordDTO.class, READ);
         grant(FinancialAggregatedTransfer, new IServiceExecutePermission(PaymentRecordListService.class));

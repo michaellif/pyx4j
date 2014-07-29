@@ -17,6 +17,9 @@ import java.math.BigDecimal;
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.annotations.DiscriminatorValue;
+import com.pyx4j.entity.annotations.Editor;
+import com.pyx4j.entity.annotations.Editor.EditorType;
+import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.core.IPrimitive;
 import com.pyx4j.i18n.annotations.I18n;
 
@@ -26,12 +29,20 @@ public interface CardsAggregatedTransfer extends AggregatedTransfer {
 
     IPrimitive<Key> cardsReconciliationRecordKey();
 
+    @Format("#,##0.00")
+    @Editor(type = EditorType.money)
     IPrimitive<BigDecimal> visaDeposit();
 
+    @Format("#,##0.00")
+    @Editor(type = EditorType.money)
     IPrimitive<BigDecimal> visaFee();
 
+    @Format("#,##0.00")
+    @Editor(type = EditorType.money)
     IPrimitive<BigDecimal> mastercardDeposit();
 
+    @Format("#,##0.00")
+    @Editor(type = EditorType.money)
     IPrimitive<BigDecimal> mastercardFee();
 
 }
