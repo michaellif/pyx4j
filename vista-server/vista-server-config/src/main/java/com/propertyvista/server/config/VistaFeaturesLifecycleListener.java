@@ -15,11 +15,13 @@ package com.propertyvista.server.config;
 
 import com.pyx4j.config.server.LifecycleListener;
 
+import com.propertyvista.config.VistaDeployment;
+
 public class VistaFeaturesLifecycleListener implements LifecycleListener {
 
     @Override
     public void onRequestBegin() {
-        VistaFeatures.removeThreadLocale();
+        VistaDeployment.removeThreadLocale();
     }
 
     @Override
@@ -32,7 +34,7 @@ public class VistaFeaturesLifecycleListener implements LifecycleListener {
 
     @Override
     public void onContextEnd() {
-        VistaFeatures.removeThreadLocale();
+        VistaDeployment.removeThreadLocale();
     }
 
 }

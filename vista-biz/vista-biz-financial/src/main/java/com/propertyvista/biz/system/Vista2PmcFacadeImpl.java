@@ -17,6 +17,7 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.concurrent.Callable;
 
+import com.pyx4j.entity.core.AttachLevel;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.IPrimitive;
@@ -33,6 +34,7 @@ import com.propertyvista.domain.pmc.PmcEquifaxInfo;
 import com.propertyvista.domain.pmc.PmcPaymentTypeInfo;
 import com.propertyvista.domain.pmc.fee.AbstractEquifaxFee;
 import com.propertyvista.domain.pmc.fee.AbstractPaymentFees;
+import com.propertyvista.domain.pmc.fee.AbstractPaymentSetup;
 import com.propertyvista.domain.pmc.fee.PmcEquifaxFee;
 import com.propertyvista.operations.domain.vista2pmc.DefaultEquifaxFee;
 import com.propertyvista.operations.domain.vista2pmc.DefaultPaymentFees;
@@ -84,7 +86,7 @@ public class Vista2PmcFacadeImpl implements Vista2PmcFacade {
         TaskRunner.runInOperationsNamespace(new Callable<PmcEquifaxInfo>() {
             @Override
             public PmcEquifaxInfo call() {
-                Persistence.service().retrieveMember(pmc.equifaxInfo());
+                Persistence.ensureRetrieve(pmc.equifaxInfo(), AttachLevel.Attached);
                 return pmc.equifaxInfo();
             }
         });
@@ -102,28 +104,57 @@ public class Vista2PmcFacadeImpl implements Vista2PmcFacade {
 
     @Override
     public AbstractPaymentFees getPaymentFees() {
-        final Pmc pmc = VistaDeployment.getCurrentPmc().duplicate();
-        DefaultPaymentFees defaultFeee = TaskRunner.runInOperationsNamespace(new Callable<DefaultPaymentFees>() {
+        final Pmc pmc = VistaDeployment.getCurrentPmc();
+        DefaultPaymentFees systemDefaultFeee = TaskRunner.runInOperationsNamespace(new Callable<DefaultPaymentFees>() {
             @Override
             public DefaultPaymentFees call() {
-                Persistence.service().retrieveMember(pmc.paymentTypeInfo());
+                Persistence.ensureRetrieve(pmc.paymentTypeInfo(), AttachLevel.Attached);
                 return Persistence.service().retrieve(EntityQueryCriteria.create(DefaultPaymentFees.class));
             }
         });
         PmcPaymentTypeInfo pmcFee = pmc.paymentTypeInfo();
 
         AbstractPaymentFees fee = EntityFactory.create(AbstractPaymentFees.class);
-        setNonNullMember(fee.ccVisaFee(), pmcFee, defaultFeee);
-        setNonNullMember(fee.ccMasterCardFee(), pmcFee, defaultFeee);
-        setNonNullMember(fee.ccDiscoverFee(), pmcFee, defaultFeee);
-        setNonNullMember(fee.ccAmexFee(), pmcFee, defaultFeee);
-        setNonNullMember(fee.eChequeFee(), pmcFee, defaultFeee);
-        setNonNullMember(fee.directBankingFee(), pmcFee, defaultFeee);
-        setNonNullMember(fee.interacCaledonFee(), pmcFee, defaultFeee);
-        setNonNullMember(fee.interacPaymentPadFee(), pmcFee, defaultFeee);
-        setNonNullMember(fee.interacVisaFee(), pmcFee, defaultFeee);
-        setNonNullMember(fee.visaDebitFee(), pmcFee, defaultFeee);
+        setNonNullMember(fee.ccVisaFee(), pmcFee, systemDefaultFeee);
+        setNonNullMember(fee.ccMasterCardFee(), pmcFee, systemDefaultFeee);
+        setNonNullMember(fee.ccDiscoverFee(), pmcFee, systemDefaultFeee);
+        setNonNullMember(fee.ccAmexFee(), pmcFee, systemDefaultFeee);
+        setNonNullMember(fee.eChequeFee(), pmcFee, systemDefaultFeee);
+        setNonNullMember(fee.directBankingFee(), pmcFee, systemDefaultFeee);
+        setNonNullMember(fee.interacCaledonFee(), pmcFee, systemDefaultFeee);
+        setNonNullMember(fee.interacPaymentPadFee(), pmcFee, systemDefaultFeee);
+        setNonNullMember(fee.interacVisaFee(), pmcFee, systemDefaultFeee);
+        setNonNullMember(fee.visaDebitFee(), pmcFee, systemDefaultFeee);
+
+        // System Setup OFF will override Pmc setup ON
+        combinePmcAndSystem(fee.acceptedEcheck(), pmcFee, systemDefaultFeee);
+        combinePmcAndSystem(fee.acceptedDirectBanking(), pmcFee, systemDefaultFeee);
+        combinePmcAndSystem(fee.acceptedVisa(), pmcFee, systemDefaultFeee);
+        combinePmcAndSystem(fee.acceptedVisaConvenienceFee(), pmcFee, systemDefaultFeee);
+        combinePmcAndSystem(fee.acceptedMasterCard(), pmcFee, systemDefaultFeee);
+        combinePmcAndSystem(fee.acceptedMasterCardConvenienceFee(), pmcFee, systemDefaultFeee);
+
         return fee;
+    }
+
+    @SuppressWarnings("unchecked")
+    private static void combinePmcAndSystem(IPrimitive<Boolean> dst, IEntity pmcSettings, IEntity systemSettings) {
+        boolean systemValue = ((IPrimitive<Boolean>) systemSettings.getMember(dst.getFieldName())).getValue();
+        if (!systemValue) {
+            dst.setValue(false);
+        } else {
+            Boolean pmcValue = ((IPrimitive<Boolean>) pmcSettings.getMember(dst.getFieldName())).getValue();
+            if (pmcValue == Boolean.FALSE) {
+                dst.setValue(false);
+            } else {
+                dst.setValue(true);
+            }
+        }
+    }
+
+    @Override
+    public AbstractPaymentSetup getPaymentSetup() {
+        return getPaymentFees();
     }
 
     @Override

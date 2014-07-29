@@ -7,52 +7,33 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2013-01-02
+ * Created on Jul 29, 2014
  * @author vlads
  * @version $Id$
  */
-package com.propertyvista.operations.domain.vista2pmc;
+package com.propertyvista.domain.pmc.fee;
 
+import com.pyx4j.entity.annotations.AbstractEntity;
 import com.pyx4j.entity.annotations.Caption;
-import com.pyx4j.entity.annotations.MemberColumn;
-import com.pyx4j.entity.annotations.Table;
-import com.pyx4j.entity.annotations.validator.NotNull;
+import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.IPrimitive;
+import com.pyx4j.i18n.annotations.I18n;
 
-import com.propertyvista.domain.VistaNamespace;
-import com.propertyvista.domain.pmc.fee.AbstractPaymentFees;
+@AbstractEntity
+@I18n(strategy = I18n.I18nStrategy.IgnoreThis)
+public interface AbstractPaymentSetup extends IEntity {
 
-@Table(prefix = "fee", namespace = VistaNamespace.operationsNamespace)
-public interface DefaultPaymentFees extends AbstractPaymentFees {
-
-    @Override
-    @NotNull
-    @MemberColumn(notNull = true)
     @Caption(name = "Accepted eCheck (ACH)")
     IPrimitive<Boolean> acceptedEcheck();
 
-    @Override
-    @NotNull
-    @MemberColumn(notNull = true)
     IPrimitive<Boolean> acceptedDirectBanking();
 
-    @Override
-    @NotNull
-    @MemberColumn(notNull = true)
     IPrimitive<Boolean> acceptedVisa();
 
-    @Override
-    @NotNull
-    @MemberColumn(notNull = true)
     IPrimitive<Boolean> acceptedVisaConvenienceFee();
 
-    @Override
-    @NotNull
-    @MemberColumn(notNull = true)
     IPrimitive<Boolean> acceptedMasterCard();
 
-    @Override
-    @NotNull
-    @MemberColumn(notNull = true)
     IPrimitive<Boolean> acceptedMasterCardConvenienceFee();
+
 }

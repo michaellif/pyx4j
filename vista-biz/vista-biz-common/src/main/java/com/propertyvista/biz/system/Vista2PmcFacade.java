@@ -18,6 +18,7 @@ import java.math.BigDecimal;
 import com.propertyvista.domain.financial.MerchantAccount;
 import com.propertyvista.domain.pmc.fee.AbstractEquifaxFee;
 import com.propertyvista.domain.pmc.fee.AbstractPaymentFees;
+import com.propertyvista.domain.pmc.fee.AbstractPaymentSetup;
 
 public interface Vista2PmcFacade {
 
@@ -26,6 +27,8 @@ public interface Vista2PmcFacade {
     BigDecimal getPmcPerApplicantFee();
 
     AbstractPaymentFees getPaymentFees();
+
+    AbstractPaymentSetup getPaymentSetup();
 
     String getTenantSureMerchantTerminalId();
 

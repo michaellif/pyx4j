@@ -48,7 +48,7 @@ import com.propertyvista.domain.property.asset.building.Building;
 public interface MerchantAccount extends AbstractMerchantAccount, HasNotesAndAttachments {
 
     @EmbeddedEntity
-    public interface ElectronicPaymentSetup extends IEntity {
+    public interface MerchantElectronicPaymentSetup extends IEntity {
 
         IPrimitive<Boolean> acceptedEcheck();
 
@@ -122,7 +122,7 @@ public interface MerchantAccount extends AbstractMerchantAccount, HasNotesAndAtt
     @MemberColumn(notNull = true)
     IPrimitive<Boolean> invalid();
 
-    ElectronicPaymentSetup setup();
+    MerchantElectronicPaymentSetup setup();
 
     @ReadOnly
     @Format("yyyy-MM-dd HH:mm")

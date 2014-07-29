@@ -23,13 +23,12 @@ import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.Timestamp;
-import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.IPrimitive;
 import com.pyx4j.i18n.annotations.I18n;
 
 @AbstractEntity
 @I18n(strategy = I18n.I18nStrategy.IgnoreThis)
-public interface AbstractPaymentFees extends IEntity {
+public interface AbstractPaymentFees extends AbstractPaymentSetup {
 
     /**
      * this fee is percent of a transaction
@@ -80,10 +79,6 @@ public interface AbstractPaymentFees extends IEntity {
     //Not implemented
     @Editor(type = EditorType.money)
     IPrimitive<BigDecimal> interacVisaFee();
-
-    IPrimitive<Boolean> acceptedVisaConvenienceFee();
-
-    IPrimitive<Boolean> acceptedMasterCardConvenienceFee();
 
     @Timestamp(Timestamp.Update.Updated)
     IPrimitive<Date> updated();

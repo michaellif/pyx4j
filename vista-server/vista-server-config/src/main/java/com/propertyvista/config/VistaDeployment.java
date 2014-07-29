@@ -39,7 +39,20 @@ import com.propertyvista.shared.config.VistaSettings;
 
 public class VistaDeployment {
 
+    private static final ThreadLocal<Pmc> threadLocalePmc = new ThreadLocal<Pmc>() {
+        @Override
+        protected Pmc initialValue() {
+            return loadCurrentPmc();
+        }
+    };
+
     public static void changePmcContext() {
+        VistaFeatures.removeThreadLocale();
+        removeThreadLocale();
+    }
+
+    public static void removeThreadLocale() {
+        threadLocalePmc.remove();
         VistaFeatures.removeThreadLocale();
     }
 
@@ -66,6 +79,10 @@ public class VistaDeployment {
     }
 
     public static Pmc getCurrentPmc() {
+        return threadLocalePmc.get();
+    }
+
+    private static Pmc loadCurrentPmc() {
         final String namespace = NamespaceManager.getNamespace();
         assert (!namespace.equals(VistaNamespace.operationsNamespace)) : "Function not available when running in operations namespace";
         try {

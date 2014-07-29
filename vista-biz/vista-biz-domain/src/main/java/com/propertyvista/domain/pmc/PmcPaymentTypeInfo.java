@@ -21,7 +21,6 @@ import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.annotations.ReadOnly;
 import com.pyx4j.entity.annotations.Table;
-import com.pyx4j.entity.core.IPrimitive;
 import com.pyx4j.i18n.annotations.I18n;
 
 import com.propertyvista.domain.VistaNamespace;
@@ -39,27 +38,5 @@ public interface PmcPaymentTypeInfo extends AbstractPaymentFees {
     @Indexed(uniqueConstraint = true)
     @Detached
     Pmc pmc();
-
-    //This not used for now.
-
-    IPrimitive<Boolean> ccVisaPaymentAvailable();
-
-    IPrimitive<Boolean> ccMasterCardPaymentAvailable();
-
-    IPrimitive<Boolean> ccDiscoverPaymentAvailable();
-
-    IPrimitive<Boolean> ccAmexPaymentAvailable();
-
-    //--
-    @Caption(name = "eCheck (ACH) Payment Available")
-    IPrimitive<Boolean> eCheckPaymentAvailable();
-
-    IPrimitive<Boolean> eftPaymentAvailable();
-
-    IPrimitive<Boolean> interacCaledonPaymentAvailable();
-
-    IPrimitive<Boolean> interacPaymentPadPaymentAvailable();
-
-    IPrimitive<Boolean> interacVisaPaymentAvailable();
 
 }

@@ -27,16 +27,18 @@ import com.pyx4j.essentials.server.admin.SystemMaintenance;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.biz.policy.PolicyFacade;
+import com.propertyvista.biz.system.Vista2PmcFacade;
 import com.propertyvista.domain.financial.AllowedPaymentsSetup;
 import com.propertyvista.domain.financial.BillingAccount;
 import com.propertyvista.domain.financial.BillingAccount.PaymentAccepted;
 import com.propertyvista.domain.financial.MerchantAccount;
-import com.propertyvista.domain.financial.MerchantAccount.ElectronicPaymentSetup;
 import com.propertyvista.domain.financial.MerchantAccount.MerchantAccountActivationStatus;
+import com.propertyvista.domain.financial.MerchantAccount.MerchantElectronicPaymentSetup;
 import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.payment.CreditCardInfo.CreditCardType;
 import com.propertyvista.domain.payment.EcheckInfo;
 import com.propertyvista.domain.payment.PaymentType;
+import com.propertyvista.domain.pmc.fee.AbstractPaymentSetup;
 import com.propertyvista.domain.policy.policies.PaymentTypeSelectionPolicy;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
@@ -80,8 +82,8 @@ class PaymentUtils {
         return isElectronicPaymentsSetup(Persistence.service().retrieve(criteria));
     }
 
-    public static ElectronicPaymentSetup getEffectiveElectronicPaymentsSetup(MerchantAccount merchantAccount) {
-        ElectronicPaymentSetup paymentsSetup;
+    public static MerchantElectronicPaymentSetup getEffectiveElectronicPaymentsSetup(MerchantAccount merchantAccount) {
+        MerchantElectronicPaymentSetup paymentsSetup;
         if (isElectronicPaymentsSetup(merchantAccount)) {
             if (merchantAccount.merchantTerminalIdConvenienceFee().isNull()) {
                 merchantAccount.setup().acceptedCreditCardConvenienceFee().setValue(false);
@@ -101,19 +103,19 @@ class PaymentUtils {
                 paymentsSetup.acceptedInterac().setValue(false);
             }
         } else {
-            paymentsSetup = EntityFactory.create(ElectronicPaymentSetup.class);
+            paymentsSetup = EntityFactory.create(MerchantElectronicPaymentSetup.class);
         }
         return paymentsSetup;
     }
 
-    public static ElectronicPaymentSetup getEffectiveElectronicPaymentsSetup(BillingAccount billingAccountId) {
+    private static MerchantElectronicPaymentSetup getEffectiveElectronicPaymentsSetup(BillingAccount billingAccountId) {
         EntityQueryCriteria<MerchantAccount> criteria = EntityQueryCriteria.create(MerchantAccount.class);
         criteria.add(PropertyCriterion.eq(criteria.proto()._buildings().$().units().$().leases().$().billingAccount(), billingAccountId));
         MerchantAccount merchantAccount = Persistence.service().retrieve(criteria);
         return getEffectiveElectronicPaymentsSetup(merchantAccount);
     }
 
-    public static ElectronicPaymentSetup getEffectiveElectronicPaymentsSetup(Building buildingId) {
+    static MerchantElectronicPaymentSetup getEffectiveElectronicPaymentsSetup(Building buildingId) {
         EntityQueryCriteria<MerchantAccount> criteria = EntityQueryCriteria.create(MerchantAccount.class);
         criteria.add(PropertyCriterion.eq(criteria.proto()._buildings(), buildingId));
         MerchantAccount merchantAccount = Persistence.service().retrieve(criteria);
@@ -173,7 +175,8 @@ class PaymentUtils {
         PaymentAccepted paymentAccepted = billingAccount.paymentAccepted().getValue();
         if (paymentAccepted != PaymentAccepted.DoNotAccept) {
 
-            ElectronicPaymentSetup setup = getEffectiveElectronicPaymentsSetup(billingAccountId);
+            AbstractPaymentSetup systemSetup = ServerSideFactory.create(Vista2PmcFacade.class).getPaymentSetup();
+            MerchantElectronicPaymentSetup merchantSetup = getEffectiveElectronicPaymentsSetup(billingAccountId);
             PaymentTypeSelectionPolicy paymentMethodSelectionPolicy;
             {
                 EntityQueryCriteria<Building> criteria = EntityQueryCriteria.create(Building.class);
@@ -182,16 +185,16 @@ class PaymentUtils {
                 paymentMethodSelectionPolicy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(policyNode, PaymentTypeSelectionPolicy.class);
             }
             to.allowedPaymentTypes().setCollectionValue(
-                    PaymentAcceptanceUtils.getAllowedPaymentTypes(vistaApplication, setup, paymentAccepted == PaymentAccepted.CashEquivalent,
-                            paymentMethodSelectionPolicy));
+                    PaymentAcceptanceUtils.getAllowedPaymentTypes(vistaApplication, merchantSetup, systemSetup,
+                            paymentAccepted == PaymentAccepted.CashEquivalent, paymentMethodSelectionPolicy));
 
-            if (setup.acceptedCreditCard().getValue(false)) {
+            if (merchantSetup.acceptedCreditCard().getValue(false)) {
                 to.allowedCardTypes().setCollectionValue(
-                        PaymentAcceptanceUtils.getAllowedCreditCardTypes(vistaApplication, setup, paymentAccepted == PaymentAccepted.CashEquivalent,
-                                paymentMethodSelectionPolicy, false));
+                        PaymentAcceptanceUtils.getAllowedCreditCardTypes(vistaApplication, merchantSetup, systemSetup,
+                                paymentAccepted == PaymentAccepted.CashEquivalent, paymentMethodSelectionPolicy, false));
                 to.convenienceFeeApplicableCardTypes().setCollectionValue(
-                        PaymentAcceptanceUtils.getAllowedCreditCardTypes(vistaApplication, setup, paymentAccepted == PaymentAccepted.CashEquivalent,
-                                paymentMethodSelectionPolicy, true));
+                        PaymentAcceptanceUtils.getAllowedCreditCardTypes(vistaApplication, merchantSetup, systemSetup,
+                                paymentAccepted == PaymentAccepted.CashEquivalent, paymentMethodSelectionPolicy, true));
             }
         }
         return to;
@@ -204,20 +207,24 @@ class PaymentUtils {
         to.allowedCardTypes().setCollectionValue(Collections.<CreditCardType> emptySet());
         to.convenienceFeeApplicableCardTypes().setCollectionValue(Collections.<CreditCardType> emptySet());
 
-        ElectronicPaymentSetup setup = getEffectiveElectronicPaymentsSetup(policyNode);
+        AbstractPaymentSetup systemSetup = ServerSideFactory.create(Vista2PmcFacade.class).getPaymentSetup();
+        MerchantElectronicPaymentSetup merchantSetup = getEffectiveElectronicPaymentsSetup(policyNode);
         PaymentTypeSelectionPolicy paymentMethodSelectionPolicy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(policyNode,
                 PaymentTypeSelectionPolicy.class);
 
         boolean requireCashEquivalent = false;
 
         to.allowedPaymentTypes().setCollectionValue(
-                PaymentAcceptanceUtils.getAllowedPaymentTypes(vistaApplication, setup, requireCashEquivalent, paymentMethodSelectionPolicy));
+                PaymentAcceptanceUtils
+                        .getAllowedPaymentTypes(vistaApplication, merchantSetup, systemSetup, requireCashEquivalent, paymentMethodSelectionPolicy));
 
-        if (setup.acceptedCreditCard().getValue(false)) {
+        if (merchantSetup.acceptedCreditCard().getValue(false)) {
             to.allowedCardTypes().setCollectionValue(
-                    PaymentAcceptanceUtils.getAllowedCreditCardTypes(vistaApplication, setup, requireCashEquivalent, paymentMethodSelectionPolicy, false));
+                    PaymentAcceptanceUtils.getAllowedCreditCardTypes(vistaApplication, merchantSetup, systemSetup, requireCashEquivalent,
+                            paymentMethodSelectionPolicy, false));
             to.convenienceFeeApplicableCardTypes().setCollectionValue(
-                    PaymentAcceptanceUtils.getAllowedCreditCardTypes(vistaApplication, setup, requireCashEquivalent, paymentMethodSelectionPolicy, true));
+                    PaymentAcceptanceUtils.getAllowedCreditCardTypes(vistaApplication, merchantSetup, systemSetup, requireCashEquivalent,
+                            paymentMethodSelectionPolicy, true));
         }
 
         return to;
@@ -231,7 +238,8 @@ class PaymentUtils {
             return Collections.emptyList();
         }
 
-        ElectronicPaymentSetup setup = getEffectiveElectronicPaymentsSetup(billingAccountId);
+        AbstractPaymentSetup systemSetup = ServerSideFactory.create(Vista2PmcFacade.class).getPaymentSetup();
+        MerchantElectronicPaymentSetup merchantSetup = getEffectiveElectronicPaymentsSetup(billingAccountId);
         PaymentTypeSelectionPolicy paymentMethodSelectionPolicy;
         {
             EntityQueryCriteria<AptUnit> criteria = EntityQueryCriteria.create(AptUnit.class);
@@ -239,7 +247,7 @@ class PaymentUtils {
             paymentMethodSelectionPolicy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(Persistence.service().retrieve(criteria),
                     PaymentTypeSelectionPolicy.class);
         }
-        return PaymentAcceptanceUtils.getAllowedPaymentTypes(vistaApplication, setup, paymentAccepted == PaymentAccepted.CashEquivalent,
+        return PaymentAcceptanceUtils.getAllowedPaymentTypes(vistaApplication, merchantSetup, systemSetup, paymentAccepted == PaymentAccepted.CashEquivalent,
                 paymentMethodSelectionPolicy);
     }
 
@@ -252,11 +260,12 @@ class PaymentUtils {
     }
 
     private static Collection<CreditCardType> getCardTypes(BillingAccount billingAccountId, VistaApplication vistaApplication, boolean forConvenienceFeeOnly) {
+        AbstractPaymentSetup systemSetup = ServerSideFactory.create(Vista2PmcFacade.class).getPaymentSetup();
         BillingAccount billingAccount = billingAccountId.duplicate();
         Persistence.ensureRetrieve(billingAccount, AttachLevel.Attached);
         PaymentAccepted paymentAccepted = billingAccount.paymentAccepted().getValue();
-        ElectronicPaymentSetup setup = getEffectiveElectronicPaymentsSetup(billingAccountId);
-        if ((paymentAccepted == PaymentAccepted.DoNotAccept) || !setup.acceptedCreditCard().getValue(false)) {
+        MerchantElectronicPaymentSetup merchantSetup = getEffectiveElectronicPaymentsSetup(billingAccountId);
+        if ((paymentAccepted == PaymentAccepted.DoNotAccept) || !merchantSetup.acceptedCreditCard().getValue(false)) {
             return Collections.emptyList();
         }
         PaymentTypeSelectionPolicy paymentMethodSelectionPolicy;
@@ -266,7 +275,7 @@ class PaymentUtils {
             paymentMethodSelectionPolicy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(Persistence.service().retrieve(criteria),
                     PaymentTypeSelectionPolicy.class);
         }
-        return PaymentAcceptanceUtils.getAllowedCreditCardTypes(vistaApplication, setup, paymentAccepted == PaymentAccepted.CashEquivalent,
+        return PaymentAcceptanceUtils.getAllowedCreditCardTypes(vistaApplication, merchantSetup, systemSetup, paymentAccepted == PaymentAccepted.CashEquivalent,
                 paymentMethodSelectionPolicy, forConvenienceFeeOnly);
     }
 
