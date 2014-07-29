@@ -17,6 +17,7 @@ import java.math.BigDecimal;
 import java.util.Date;
 
 import com.pyx4j.entity.annotations.AbstractEntity;
+import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.annotations.Format;
@@ -62,6 +63,7 @@ public interface AbstractPaymentFees extends IEntity {
 
     //--
     @Editor(type = EditorType.money)
+    @Caption(name = "eCheck (ACH) Fee")
     IPrimitive<BigDecimal> eChequeFee();
 
     @Editor(type = EditorType.money)
@@ -78,6 +80,10 @@ public interface AbstractPaymentFees extends IEntity {
     //Not implemented
     @Editor(type = EditorType.money)
     IPrimitive<BigDecimal> interacVisaFee();
+
+    IPrimitive<Boolean> acceptedVisaConvenienceFee();
+
+    IPrimitive<Boolean> acceptedMasterCardConvenienceFee();
 
     @Timestamp(Timestamp.Update.Updated)
     IPrimitive<Date> updated();

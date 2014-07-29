@@ -15,10 +15,10 @@ package com.propertyvista.operations.client.ui.components;
 
 import com.google.gwt.user.client.ui.IsWidget;
 
+import com.pyx4j.forms.client.ui.CComboBoxBoolean;
 import com.pyx4j.forms.client.ui.CForm;
-import com.pyx4j.forms.client.ui.CMoneyField;
-import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
-import com.pyx4j.site.client.ui.prime.form.FieldDecoratorBuilder;
+import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
+import com.pyx4j.forms.client.ui.panels.FormPanel;
 
 import com.propertyvista.domain.pmc.fee.AbstractPaymentFees;
 
@@ -30,17 +30,19 @@ public class PaymentFeesForm<E extends AbstractPaymentFees> extends CForm<E> {
 
     @Override
     protected IsWidget createContent() {
-        BasicFlexFormPanel panel = new BasicFlexFormPanel();
-        int row = -1;
+        FormPanel formPanel = new FormPanel(this);
 
-        panel.setWidget(++row, 0, inject(proto().ccVisaFee(), new FieldDecoratorBuilder().build()));
-        panel.setWidget(++row, 0, inject(proto().ccMasterCardFee(), new FieldDecoratorBuilder().build()));
+        formPanel.append(Location.Left, proto().ccVisaFee()).decorate();
+        formPanel.append(Location.Left, proto().ccMasterCardFee()).decorate();
 
-        panel.setWidget(++row, 0, inject(proto().visaDebitFee(), new FieldDecoratorBuilder().build()));
+        formPanel.append(Location.Left, proto().visaDebitFee()).decorate();
 
-        panel.setWidget(++row, 0, inject(proto().eChequeFee(), new CMoneyField(), new FieldDecoratorBuilder().build()));
-        panel.setWidget(++row, 0, inject(proto().directBankingFee(), new CMoneyField(), new FieldDecoratorBuilder().build()));
+        formPanel.append(Location.Left, proto().eChequeFee()).decorate();
+        formPanel.append(Location.Left, proto().directBankingFee()).decorate();
 
-        return panel;
+        formPanel.append(Location.Left, proto().acceptedVisaConvenienceFee(), new CComboBoxBoolean()).decorate();
+        formPanel.append(Location.Left, proto().acceptedMasterCardConvenienceFee(), new CComboBoxBoolean()).decorate();
+
+        return formPanel;
     }
 }

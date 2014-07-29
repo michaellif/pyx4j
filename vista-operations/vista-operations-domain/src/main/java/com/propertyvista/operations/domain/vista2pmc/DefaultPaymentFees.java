@@ -13,7 +13,10 @@
  */
 package com.propertyvista.operations.domain.vista2pmc;
 
+import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.Table;
+import com.pyx4j.entity.annotations.validator.NotNull;
+import com.pyx4j.entity.core.IPrimitive;
 
 import com.propertyvista.domain.VistaNamespace;
 import com.propertyvista.domain.pmc.fee.AbstractPaymentFees;
@@ -21,4 +24,13 @@ import com.propertyvista.domain.pmc.fee.AbstractPaymentFees;
 @Table(prefix = "fee", namespace = VistaNamespace.operationsNamespace)
 public interface DefaultPaymentFees extends AbstractPaymentFees {
 
+    @Override
+    @NotNull
+    @MemberColumn(notNull = true)
+    IPrimitive<Boolean> acceptedVisaConvenienceFee();
+
+    @Override
+    @NotNull
+    @MemberColumn(notNull = true)
+    IPrimitive<Boolean> acceptedMasterCardConvenienceFee();
 }

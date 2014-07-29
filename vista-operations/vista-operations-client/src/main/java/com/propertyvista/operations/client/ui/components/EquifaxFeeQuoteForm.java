@@ -37,13 +37,13 @@ public class EquifaxFeeQuoteForm extends CForm<AbstractEquifaxFee> {
     protected IsWidget createContent() {
         FormPanel formPanel = new FormPanel(this);
 
-        formPanel.append(Location.Left, proto().recommendationReportSetUpFee()).decorate().componentWidth(120);
-        formPanel.append(Location.Right, proto().fullCreditReportSetUpFee()).decorate().componentWidth(120);
-        formPanel.append(Location.Left, proto().recommendationReportPerApplicantFee()).decorate().componentWidth(120);
-        formPanel.append(Location.Right, proto().fullCreditReportPerApplicantFee()).decorate().componentWidth(120);
+        formPanel.append(Location.Left, proto().recommendationReportSetUpFee()).decorate();
+        formPanel.append(Location.Right, proto().fullCreditReportSetUpFee()).decorate();
+        formPanel.append(Location.Left, proto().recommendationReportPerApplicantFee()).decorate();
+        formPanel.append(Location.Right, proto().fullCreditReportPerApplicantFee()).decorate();
 
         if (systemDefault) {
-            formPanel.append(Location.Left, proto().taxRate()).decorate().componentWidth(120);
+            formPanel.append(Location.Dual, proto().taxRate()).decorate();
         }
 
         if (makeMandatory) {

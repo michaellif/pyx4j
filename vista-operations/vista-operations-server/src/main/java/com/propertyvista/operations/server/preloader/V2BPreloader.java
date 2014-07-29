@@ -78,6 +78,9 @@ public class V2BPreloader extends AbstractDataPreloader {
             fee.interacCaledonFee().setValue(new BigDecimal("1.50"));
             fee.interacPaymentPadFee().setValue(new BigDecimal("19.99"));
             fee.interacVisaFee().setValue(new BigDecimal("0.75"));
+
+            fee.acceptedVisaConvenienceFee().setValue(true);
+            fee.acceptedMasterCardConvenienceFee().setValue(true);
             Persistence.service().persist(fee);
         }
         {

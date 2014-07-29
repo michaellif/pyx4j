@@ -51,7 +51,7 @@ public interface PmcPaymentTypeInfo extends AbstractPaymentFees {
     IPrimitive<Boolean> ccAmexPaymentAvailable();
 
     //--
-
+    @Caption(name = "eCheck (ACH) Payment Available")
     IPrimitive<Boolean> eCheckPaymentAvailable();
 
     IPrimitive<Boolean> eftPaymentAvailable();
