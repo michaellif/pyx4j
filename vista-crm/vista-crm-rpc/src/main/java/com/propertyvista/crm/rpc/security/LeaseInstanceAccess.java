@@ -28,6 +28,6 @@ public class LeaseInstanceAccess extends ForTypesAccessRule {
 
     @Override
     public boolean implies(IEntity contextEntity) {
-        return ((LeaseDTO) contextEntity).status().getValue().isPresent();
+        return super.implies(contextEntity) && ((LeaseDTO) contextEntity).status().getValue().isPresent();
     }
 }
