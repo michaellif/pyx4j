@@ -103,6 +103,9 @@ public class ResidentPortalSiteMap extends PortalSiteMap {
             }
 
             public static class PaymentSubmitting extends AppPlace {
+                {
+                    setStable(false);
+                }
 
                 public PaymentSubmitting() {
                 }
@@ -125,6 +128,9 @@ public class ResidentPortalSiteMap extends PortalSiteMap {
 
             @PlaceProperties(caption = "Pre-Authorized Payment Submitted")
             public static class PreauthorizedPaymentSubmitted extends AppPlace {
+                {
+                    setStable(false);
+                }
 
                 public PreauthorizedPaymentSubmitted() {
                 }
@@ -144,6 +150,9 @@ public class ResidentPortalSiteMap extends PortalSiteMap {
             }
 
             public static class PaymentMethodSubmitted extends AppPlace {
+                {
+                    setStable(false);
+                }
 
                 public PaymentMethodSubmitted() {
                 }
@@ -182,7 +191,9 @@ public class ResidentPortalSiteMap extends PortalSiteMap {
         }
 
         public static class MoveInWizardConfirmation extends AppPlace {
-
+            {
+                setStable(false);
+            }
         }
     }
 
@@ -212,19 +223,23 @@ public class ResidentPortalSiteMap extends PortalSiteMap {
 
                 @PlaceProperties(navigLabel = "TenantSure Order Completed", caption = "TenantSure Order Completed")
                 public static class TenantSureWizardConfirmation extends AppPlace {
-
+                    {
+                        setStable(false);
+                    }
                 }
 
                 @PlaceProperties(navigLabel = "TenantSure Management", caption = "TenantSure Management")
                 public static class TenantSurePage extends AppPlace {
 
-                    public static class UpdateCreditCardConfirmation extends AppPlace {
-
-                    }
-
                     @PlaceProperties(caption = "Update Credit Card")
                     public static class UpdateCreditCard extends AppPlace {
 
+                    }
+
+                    public static class UpdateCreditCardConfirmation extends AppPlace {
+                        {
+                            setStable(false);
+                        }
                     }
 
                     @PlaceProperties(caption = "Tenant Sure Contact Info")
