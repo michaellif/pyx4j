@@ -85,9 +85,9 @@ public class YardiARIntegrationAgent {
     /*
      * ChargeProcessor utils
      */
-    public static BillingAccount getYardiBillingAccount(final Key yardiInterfaceId, RTCustomer customer) {
+    public static BillingAccount getYardiBillingAccount(final Key yardiInterfaceId, String leaseId) {
         EntityQueryCriteria<Lease> criteria = EntityQueryCriteria.create(Lease.class);
-        criteria.eq(criteria.proto().leaseId(), customer.getCustomerID());
+        criteria.eq(criteria.proto().leaseId(), leaseId);
         criteria.eq(criteria.proto().unit().building().integrationSystemId(), yardiInterfaceId);
         Lease lease = Persistence.service().retrieve(criteria);
         if (lease == null) {

@@ -51,8 +51,8 @@ public class YardiLeaseFinancialProcessor {
     /*
      * Updates charges and payments
      */
-    public void processLease(RTCustomer rtCustomer, Key yardiInterfaceId) throws YardiServiceException {
-        BillingAccount account = new YardiChargeProcessor().getAccount(yardiInterfaceId, rtCustomer);
+    public void processLease(String leaseId, RTCustomer rtCustomer, Key yardiInterfaceId) throws YardiServiceException {
+        BillingAccount account = new YardiChargeProcessor().getAccount(yardiInterfaceId, leaseId);
 
         new YardiChargeProcessor().removeOldCharges(account);
         new YardiPaymentProcessor().removeOldPayments(account);
@@ -125,23 +125,23 @@ public class YardiLeaseFinancialProcessor {
     }
 
     private class LeaseFinancialStats {
-    
+
         private BigDecimal chargesAmount = BigDecimal.ZERO;
-    
+
         private BigDecimal paymentsAmount = BigDecimal.ZERO;
-    
+
         public void addCharge(BigDecimal payment) {
             this.chargesAmount = chargesAmount.add(payment);
         }
-    
+
         public void addPayment(BigDecimal payment) {
             this.paymentsAmount = paymentsAmount.add(payment);
         }
-    
+
         public BigDecimal getCharges() {
             return chargesAmount;
         }
-    
+
         public BigDecimal getPayments() {
             return paymentsAmount;
         }

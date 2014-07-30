@@ -13,8 +13,6 @@
  */
 package com.propertyvista.yardi.processors;
 
-import com.yardi.entity.resident.RTCustomer;
-
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.server.Persistence;
@@ -27,8 +25,8 @@ import com.propertyvista.domain.financial.yardi.YardiDebit;
 
 public class YardiChargeProcessor {
 
-    public BillingAccount getAccount(final Key yardiInterfaceId, RTCustomer cust) throws YardiServiceException {
-        BillingAccount account = YardiARIntegrationAgent.getYardiBillingAccount(yardiInterfaceId, cust);
+    public BillingAccount getAccount(final Key yardiInterfaceId, String leaseId) throws YardiServiceException {
+        BillingAccount account = YardiARIntegrationAgent.getYardiBillingAccount(yardiInterfaceId, leaseId);
         if (account == null) {
             throw new YardiServiceException("YardiBillingAccount is null for RTCustomer");
         }

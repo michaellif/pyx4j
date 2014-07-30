@@ -58,7 +58,7 @@ import com.propertyvista.domain.property.asset.unit.AptUnit;
 
 public class YardiProductCatalogProcessor {
 
-    private final static Logger log = LoggerFactory.getLogger(YardiLeaseProcessor.class);
+    private final static Logger log = LoggerFactory.getLogger(YardiProductCatalogProcessor.class);
 
     private final ExecutionMonitor executionMonitor;
 
