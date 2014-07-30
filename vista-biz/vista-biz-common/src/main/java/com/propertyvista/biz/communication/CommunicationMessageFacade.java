@@ -65,5 +65,5 @@ public interface CommunicationMessageFacade {
 
     public List<CommunicationThread> getDirectThreads();
 
-    public boolean isDispatchedThread(Key threadKey);
+    public boolean isDispatchedThread(Key threadKey, boolean includeByRoles);
 }

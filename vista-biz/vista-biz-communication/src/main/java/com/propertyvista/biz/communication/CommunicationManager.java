@@ -126,8 +126,8 @@ public class CommunicationManager {
         }
     }
 
-    public boolean isDispatchedThread(Key threadKey) {
-        final EntityListCriteria<CommunicationThread> dispatchedCriteria = getDispatchedCriteria();
+    public boolean isDispatchedThread(Key threadKey, boolean includeByRoles) {
+        final EntityListCriteria<CommunicationThread> dispatchedCriteria = getDispatchedCriteria(includeByRoles);
         dispatchedCriteria.in(dispatchedCriteria.proto().id(), threadKey);
         final List<CommunicationThread> dispatchedMessages = Persistence.service().query(dispatchedCriteria, AttachLevel.IdOnly);
         return dispatchedMessages != null && dispatchedMessages.size() > 0;
@@ -141,24 +141,28 @@ public class CommunicationManager {
                 && !SecurityController.check(VistaDataAccessBehavior.ResidentInPortal)) {
             return new ArrayList<CommunicationThread>();
         }
-        final EntityListCriteria<CommunicationThread> dispatchedCriteria = getDispatchedCriteria();
+        final EntityListCriteria<CommunicationThread> dispatchedCriteria = getDispatchedCriteria(false);
         final List<CommunicationThread> dispatchedMessages = Persistence.secureQuery(dispatchedCriteria, AttachLevel.IdOnly);
         return dispatchedMessages;
     }
 
-    private EntityListCriteria<CommunicationThread> getDispatchedCriteria() {
+    private EntityListCriteria<CommunicationThread> getDispatchedCriteria(boolean includeByRoles) {
         final EntityListCriteria<CommunicationThread> dispatchedCriteria = EntityListCriteria.create(CommunicationThread.class);
         dispatchedCriteria.in(dispatchedCriteria.proto().status(), ThreadStatus.New, ThreadStatus.Open, ThreadStatus.Unassigned, ThreadStatus.Resolved);
 
-        List<MessageCategory> userGroups = getUserGroups();
+        List<MessageCategory> userGroups = includeByRoles ? getUserGroupsIncludingRoles() : getUserGroups();
         if (userGroups != null && userGroups.size() > 0) {
-            AndCriterion newDispatchedCriteria = new AndCriterion(PropertyCriterion.eq(dispatchedCriteria.proto().owner(),
-                    ServerSideFactory.create(CommunicationMessageFacade.class).getSystemEndpointFromCache(SystemEndpointName.Unassigned)),
-                    PropertyCriterion.in(dispatchedCriteria.proto().topic(), userGroups));
+            if (includeByRoles) {
+                dispatchedCriteria.or(PropertyCriterion.in(dispatchedCriteria.proto().topic(), userGroups),
+                        PropertyCriterion.eq(dispatchedCriteria.proto().owner(), Context.visit(VistaUserVisit.class).getCurrentUser()));
+            } else {
+                AndCriterion newDispatchedCriteria = new AndCriterion(PropertyCriterion.eq(dispatchedCriteria.proto().owner(),
+                        ServerSideFactory.create(CommunicationMessageFacade.class).getSystemEndpointFromCache(SystemEndpointName.Unassigned)),
+                        PropertyCriterion.in(dispatchedCriteria.proto().topic(), userGroups));
 
-            dispatchedCriteria.or(newDispatchedCriteria,
-                    PropertyCriterion.eq(dispatchedCriteria.proto().owner(), Context.visit(VistaUserVisit.class).getCurrentUser()));
-
+                dispatchedCriteria.or(newDispatchedCriteria,
+                        PropertyCriterion.eq(dispatchedCriteria.proto().owner(), Context.visit(VistaUserVisit.class).getCurrentUser()));
+            }
         } else {
             dispatchedCriteria.eq(dispatchedCriteria.proto().owner(), Context.visit(VistaUserVisit.class).getCurrentUser());
         }
@@ -184,15 +188,32 @@ public class CommunicationManager {
 
     private List<MessageCategory> getUserGroups() {
         EntityQueryCriteria<MessageCategory> groupCriteria = EntityQueryCriteria.create(MessageCategory.class);
-
-        EntityQueryCriteria<Employee> criteria = EntityQueryCriteria.create(Employee.class);
-        criteria.add(PropertyCriterion.eq(criteria.proto().user(), Context.visit(VistaUserVisit.class).getCurrentUser()));
-        Employee e = Persistence.service().retrieve(criteria);
+        Employee e = getCurrentEmployee();
         if (e == null) {
             return null;
         }
         groupCriteria.in(groupCriteria.proto().dispatchers(), e.getPrimaryKey());
 
         return Persistence.service().query(groupCriteria, AttachLevel.IdOnly);
+    }
+
+    private List<MessageCategory> getUserGroupsIncludingRoles() {
+        EntityQueryCriteria<MessageCategory> groupCriteria = EntityQueryCriteria.create(MessageCategory.class);
+        Employee e = getCurrentEmployee();
+
+        PropertyCriterion byRoles = PropertyCriterion.in(groupCriteria.proto().roles().$().users(), Context.visit(VistaUserVisit.class).getCurrentUser());
+        if (e == null) {
+            groupCriteria.add(byRoles);
+        } else {
+            groupCriteria.or(byRoles, PropertyCriterion.in(groupCriteria.proto().dispatchers(), e.getPrimaryKey()));
+        }
+        return Persistence.service().query(groupCriteria, AttachLevel.IdOnly);
+    }
+
+    private Employee getCurrentEmployee() {
+        EntityQueryCriteria<Employee> criteria = EntityQueryCriteria.create(Employee.class);
+        criteria.add(PropertyCriterion.eq(criteria.proto().user(), Context.visit(VistaUserVisit.class).getCurrentUser()));
+        return Persistence.service().retrieve(criteria);
+
     }
 }

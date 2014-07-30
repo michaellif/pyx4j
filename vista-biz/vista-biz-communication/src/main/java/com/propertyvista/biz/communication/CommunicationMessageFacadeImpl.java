@@ -108,7 +108,8 @@ public class CommunicationMessageFacadeImpl implements CommunicationMessageFacad
     }
 
     @Override
-    public boolean isDispatchedThread(Key threadKey) {
-        return CommunicationManager.instance().isDispatchedThread(threadKey);
+    public boolean isDispatchedThread(Key threadKey, boolean includeByRoles) {
+        return CommunicationManager.instance().isDispatchedThread(threadKey, includeByRoles);
     }
+
 }

@@ -68,6 +68,7 @@ import com.propertyvista.crm.rpc.services.selections.SelectCrmUserListService;
 import com.propertyvista.crm.rpc.services.selections.SelectPortfolioListService;
 import com.propertyvista.domain.communication.CommunicationEndpoint;
 import com.propertyvista.domain.communication.CommunicationEndpoint.ContactType;
+import com.propertyvista.domain.communication.CommunicationThread.ThreadStatus;
 import com.propertyvista.domain.communication.DeliveryHandle;
 import com.propertyvista.domain.communication.MessageCategory.MessageGroupCategory;
 import com.propertyvista.domain.company.Employee;
@@ -591,7 +592,8 @@ public class MessageForm extends CrmEntityForm<MessageDTO> {
                 btnSend.setVisible(false);
                 btnCancel.setVisible(false);
                 btnReply.setVisible(!ClientContext.getUserVisit().getName().equals(getValue().header().sender().getValue())
-                        && getValue().allowedReply().getValue(true));
+                        && getValue().allowedReply().getValue(true) && !ThreadStatus.Closed.equals(getValue().status().getValue())
+                        && !ThreadStatus.Cancelled.equals(getValue().status().getValue()));
                 btnForward.setVisible(true);
                 get(proto().header()).setVisible(true);
                 get(proto().star()).setVisible(getValue().isInRecipients().getValue(false));

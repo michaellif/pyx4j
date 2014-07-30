@@ -41,7 +41,6 @@ public class MessageTextBuilder {
         }
         StringBuffer bodyText = new StringBuffer();
         StringBuffer buffer = null;
-        new StringBuffer();
         for (CommunicationEndpointDTO recipient : forwardedMessage.to()) {
             if (buffer == null) {
                 buffer = new StringBuffer();
@@ -58,8 +57,10 @@ public class MessageTextBuilder {
         bodyText.append(forwardedMessage.date().getStringView());
         bodyText.append("\nSubject: ");
         bodyText.append(forwardedMessage.subject().getValue());
-        bodyText.append("\nTo: ");
-        bodyText.append(buffer.toString());
+        if (buffer != null) {
+            bodyText.append("\nTo: ");
+            bodyText.append(buffer.toString());
+        }
         bodyText.append("\n\nFwd:\n");
         bodyText.append(forwardedMessage.text().getValue());
 

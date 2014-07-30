@@ -261,7 +261,8 @@ public class MessageCrudServiceImpl extends AbstractCrudServiceDtoImpl<Message, 
             }
             to.hasAttachments().setValue(hasAttachment);
 
-            to.isDirect().setValue(!communicationFacade.isDispatchedThread(bo.thread().getPrimaryKey()));
+            to.isDirect().setValue(!communicationFacade.isDispatchedThread(bo.thread().getPrimaryKey(), !isForList));
+
         }
     }
 

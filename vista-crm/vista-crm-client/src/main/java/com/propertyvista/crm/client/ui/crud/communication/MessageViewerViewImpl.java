@@ -77,7 +77,7 @@ public class MessageViewerViewImpl extends CrmViewerViewImplBase<MessageDTO> imp
             threadStatusActions.put(ts, new MenuItem(i18n.tr("Mark as ") + ts.toString(), new Command() {
                 @Override
                 public void execute() {
-                    new UpdateThreadStatusBox(form, ts.toString()) {
+                    new UpdateThreadStatusBox(form, form.getValue().status().getValue().toString(), ts.toString()) {
                         @Override
                         public boolean onClickOk() {
                             if (validate()) {
@@ -121,7 +121,7 @@ public class MessageViewerViewImpl extends CrmViewerViewImplBase<MessageDTO> imp
         super.populate(value);
 
         boolean invisible = MessageGroupCategory.Custom.equals(value.topic().category().getValue()) || ThreadStatus.Closed.equals(value.status().getValue())
-                || ThreadStatus.Cancelled.equals(value.status().getValue()) || value.isDirect().getValue();
+                || ThreadStatus.Cancelled.equals(value.status().getValue()) || value.isDirect().getValue(false).booleanValue();
         setActionVisible(assignOwnershipAction, !invisible);
         for (ThreadStatus status : threadStatusActions.keySet()) {
             MenuItem action = threadStatusActions.get(status);
@@ -184,8 +184,14 @@ public class MessageViewerViewImpl extends CrmViewerViewImplBase<MessageDTO> imp
 
         private CForm<MessageDTO> content;
 
-        public UpdateThreadStatusBox(final MessageForm form, String status) {
-            super(i18n.tr("Update Status to: ") + status);
+        private final String oldStatus;
+
+        private final String newStatus;
+
+        public UpdateThreadStatusBox(final MessageForm form, String oldStatus, String newStatus) {
+            super(i18n.tr("Update Status to: ") + newStatus);
+            this.oldStatus = oldStatus;
+            this.newStatus = newStatus;
             setBody(createBody(form));
         }
 
@@ -208,7 +214,9 @@ public class MessageViewerViewImpl extends CrmViewerViewImplBase<MessageDTO> imp
             };
 
             content.init();
-            content.populate(EntityFactory.create(MessageDTO.class));
+            MessageDTO ms = EntityFactory.create(MessageDTO.class);
+            ms.text().setValue("Status was changed from '" + oldStatus + "' to '" + newStatus + "'.\r\nReason:\r\n");
+            content.populate(ms);
             return content.asWidget();
         }
 
