@@ -14,13 +14,17 @@
 package com.propertyvista.crm.rpc.security;
 
 import com.pyx4j.entity.core.IEntity;
-import com.pyx4j.entity.security.InstanceAccess;
+import com.pyx4j.entity.security.ForTypesAccessRule;
 
 import com.propertyvista.dto.LeaseDTO;
 
-public class FormerLeaseInstanceAccess implements InstanceAccess {
+public class FormerLeaseInstanceAccess extends ForTypesAccessRule {
 
     private static final long serialVersionUID = 1L;
+
+    public FormerLeaseInstanceAccess() {
+        super(LeaseDTO.class);
+    }
 
     @Override
     public boolean implies(IEntity contextEntity) {
