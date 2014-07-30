@@ -355,5 +355,11 @@ public class MaintenanceRequestWizard extends CPortalEntityWizard<MaintenanceReq
         public boolean isValueEmpty() {
             return getValue() == null || getValue().isNull();
         }
+
+        @Override
+        protected String getDebugInfo() {
+            // to avoid large meta tree dump
+            return "value=" + (getValue() == null ? "null" : getValue().getStringView()) + ";";
+        }
     }
 }

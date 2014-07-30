@@ -595,6 +595,7 @@ public class MaintenanceRequestForm extends CrmEntityForm<MaintenanceRequestDTO>
 
         @Override
         protected String getDebugInfo() {
+            // to avoid large meta tree dump
             return "value=" + (getValue() == null ? "null" : getValue().getStringView()) + ";";
         }
     }
