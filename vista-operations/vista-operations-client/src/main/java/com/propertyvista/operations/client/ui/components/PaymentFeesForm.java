@@ -44,6 +44,8 @@ public class PaymentFeesForm<E extends AbstractPaymentFees> extends CForm<E> {
         formPanel.append(Location.Left, proto().acceptedDirectBanking(), new CComboBoxBoolean()).decorate();
         formPanel.append(Location.Left, proto().acceptedVisa(), new CComboBoxBoolean()).decorate();
         formPanel.append(Location.Left, proto().acceptedVisaConvenienceFee(), new CComboBoxBoolean()).decorate();
+        formPanel.append(Location.Left, proto().acceptedVisaDebit(), new CComboBoxBoolean()).decorate();
+        formPanel.append(Location.Left, proto().acceptedVisaDebitConvenienceFee(), new CComboBoxBoolean()).decorate();
         formPanel.append(Location.Left, proto().acceptedMasterCard(), new CComboBoxBoolean()).decorate();
         formPanel.append(Location.Left, proto().acceptedMasterCardConvenienceFee(), new CComboBoxBoolean()).decorate();
 

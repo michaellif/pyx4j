@@ -32,6 +32,10 @@ public interface AbstractPaymentSetup extends IEntity {
 
     IPrimitive<Boolean> acceptedVisaConvenienceFee();
 
+    IPrimitive<Boolean> acceptedVisaDebit();
+
+    IPrimitive<Boolean> acceptedVisaDebitConvenienceFee();
+
     IPrimitive<Boolean> acceptedMasterCard();
 
     IPrimitive<Boolean> acceptedMasterCardConvenienceFee();

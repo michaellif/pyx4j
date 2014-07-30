@@ -13,6 +13,10 @@
  */
 package com.propertyvista.crm.server.services.policies.policy;
 
+import com.pyx4j.config.server.ServerSideFactory;
+import com.pyx4j.entity.rpc.AbstractCrudService;
+
+import com.propertyvista.biz.system.Vista2PmcFacade;
 import com.propertyvista.crm.rpc.services.policies.policy.PaymentTypeSelectionPolicyCrudService;
 import com.propertyvista.crm.server.services.policies.GenericPolicyCrudService;
 import com.propertyvista.domain.policy.dto.PaymentTypeSelectionPolicyDTO;
@@ -24,4 +28,11 @@ public class PaymentTypeSelectionPolicyCrudServiceImpl extends GenericPolicyCrud
     public PaymentTypeSelectionPolicyCrudServiceImpl() {
         super(PaymentTypeSelectionPolicy.class, PaymentTypeSelectionPolicyDTO.class);
     }
+
+    @Override
+    protected void enhanceRetrieved(PaymentTypeSelectionPolicy bo, PaymentTypeSelectionPolicyDTO to, AbstractCrudService.RetrieveTarget retrieveTarget) {
+        super.enhanceRetrieved(bo, to, retrieveTarget);
+        to.pmcPaymentSetup().set(ServerSideFactory.create(Vista2PmcFacade.class).getPaymentSetup());
+    }
+
 }

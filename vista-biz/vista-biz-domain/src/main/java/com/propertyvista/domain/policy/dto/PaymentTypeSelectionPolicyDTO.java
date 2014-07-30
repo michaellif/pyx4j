@@ -16,11 +16,14 @@ package com.propertyvista.domain.policy.dto;
 import com.pyx4j.entity.annotations.ExtendsBO;
 import com.pyx4j.entity.annotations.Transient;
 
+import com.propertyvista.domain.pmc.fee.AbstractPaymentSetup;
 import com.propertyvista.domain.policy.framework.PolicyDTOBase;
 import com.propertyvista.domain.policy.policies.PaymentTypeSelectionPolicy;
 
 @Transient
 @ExtendsBO(PaymentTypeSelectionPolicy.class)
 public interface PaymentTypeSelectionPolicyDTO extends PolicyDTOBase, PaymentTypeSelectionPolicy {
+
+    AbstractPaymentSetup pmcPaymentSetup();
 
 }

@@ -13,21 +13,26 @@
  */
 package com.propertyvista.crm.client.ui.crud.policies.paymenttypeselection;
 
+import java.util.Arrays;
+import java.util.List;
+
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.IsWidget;
 
+import com.pyx4j.entity.core.IPrimitive;
 import com.pyx4j.forms.client.ui.decorators.FieldDecorator;
 import com.pyx4j.forms.client.ui.decorators.FieldDecorator.Builder.Alignment;
 import com.pyx4j.forms.client.ui.decorators.FieldDecorator.Builder.LabelPosition;
-import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
+import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.prime.form.FieldDecoratorBuilder;
 import com.pyx4j.site.client.ui.prime.form.IForm;
 
 import com.propertyvista.common.client.theme.VistaTheme;
 import com.propertyvista.crm.client.ui.crud.policies.common.PolicyDTOTabPanelBasedForm;
+import com.propertyvista.domain.pmc.fee.AbstractPaymentSetup;
 import com.propertyvista.domain.policy.dto.PaymentTypeSelectionPolicyDTO;
 import com.propertyvista.misc.VistaTODO;
 
@@ -40,6 +45,10 @@ public class PaymentTypeSelectionPolicyForm extends PolicyDTOTabPanelBasedForm<P
     private static final String contW = "120px";
 
     private static final String lblW = "120px";
+
+    private static final String convenienceMarker = " *";
+
+    private HTML convenienceNoticeHtml;
 
     public PaymentTypeSelectionPolicyForm(IForm<PaymentTypeSelectionPolicyDTO> view) {
         super(PaymentTypeSelectionPolicyDTO.class, view);
@@ -62,8 +71,6 @@ public class PaymentTypeSelectionPolicyForm extends PolicyDTOTabPanelBasedForm<P
         accepted.setWidget(0, ++col, inject(proto().acceptedVisaDebit(), decorator()));
         accepted.setWidget(0, ++col, inject(proto().acceptedInterac(), decorator()));
 
-        final String convenienceMarker = " *";
-
         BasicFlexFormPanel residentPortal = new BasicFlexFormPanel();
         col = -1;
         residentPortal.setH4(0, ++col, 1, i18n.tr("Resident Portal:"));
@@ -75,18 +82,9 @@ public class PaymentTypeSelectionPolicyForm extends PolicyDTOTabPanelBasedForm<P
         residentPortal.getWidget(0, col).setWidth(lblW);
         residentPortal.setWidget(0, ++col, inject(proto().residentPortalEcheck(), decorator()));
         residentPortal.setWidget(0, ++col, inject(proto().residentPortalDirectBanking(), decorator()));
-        residentPortal.setWidget(
-                0,
-                ++col,
-                inject(proto().residentPortalCreditCardMasterCard(), decorator(proto().residentPortalCreditCardMasterCard().getMeta().getCaption()
-                        + convenienceMarker)));
-        residentPortal.setWidget(0, ++col,
-                inject(proto().residentPortalCreditCardVisa(), decorator(proto().residentPortalCreditCardVisa().getMeta().getCaption() + convenienceMarker)));
-        residentPortal.setWidget(
-                0,
-                ++col,
-                inject(proto().residentPortalVisaDebit(), decorator(proto().residentPortalVisaDebit().getMeta().getCaption()
-                        + (VistaTODO.visaDebitHasConvenienceFee ? convenienceMarker : ""))));
+        residentPortal.setWidget(0, ++col, inject(proto().residentPortalCreditCardMasterCard(), decorator()));
+        residentPortal.setWidget(0, ++col, inject(proto().residentPortalCreditCardVisa(), decorator()));
+        residentPortal.setWidget(0, ++col, inject(proto().residentPortalVisaDebit(), decorator()));
         residentPortal.setWidget(0, ++col, inject(proto().residentPortalInterac(), decorator()));
 
         BasicFlexFormPanel prospectPortal = new BasicFlexFormPanel();
@@ -101,15 +99,9 @@ public class PaymentTypeSelectionPolicyForm extends PolicyDTOTabPanelBasedForm<P
         prospectPortal.setWidget(0, ++col, inject(proto().prospectEcheck(), decorator()));
         prospectPortal.setWidget(0, ++col, new HTML());
         prospectPortal.getWidget(0, col).setWidth(lblW);
-        prospectPortal.setWidget(0, ++col,
-                inject(proto().prospectCreditCardMasterCard(), decorator(proto().prospectCreditCardMasterCard().getMeta().getCaption() + convenienceMarker)));
-        prospectPortal.setWidget(0, ++col,
-                inject(proto().prospectCreditCardVisa(), decorator(proto().prospectCreditCardVisa().getMeta().getCaption() + convenienceMarker)));
-        prospectPortal.setWidget(
-                0,
-                ++col,
-                inject(proto().prospectVisaDebit(), decorator(proto().prospectVisaDebit().getMeta().getCaption()
-                        + (VistaTODO.visaDebitHasConvenienceFee ? convenienceMarker : ""))));
+        prospectPortal.setWidget(0, ++col, inject(proto().prospectCreditCardMasterCard(), decorator()));
+        prospectPortal.setWidget(0, ++col, inject(proto().prospectCreditCardVisa(), decorator()));
+        prospectPortal.setWidget(0, ++col, inject(proto().prospectVisaDebit(), decorator()));
         prospectPortal.setWidget(0, ++col, new HTML());
 
         BasicFlexFormPanel cashEquivalent = new BasicFlexFormPanel();
@@ -138,20 +130,85 @@ public class PaymentTypeSelectionPolicyForm extends PolicyDTOTabPanelBasedForm<P
         formPanel.append(Location.Left, cashEquivalent);
         formPanel.hr();
         formPanel.br();
-        HTML html;
-        formPanel.append(Location.Left,
-                html = new HTML(i18n.tr("Note: If payment marked with {0} is not selected, a Web Payment Fee will apply to the Resident.", convenienceMarker)));
-        html.setStyleName(VistaTheme.StyleName.InfoMessage.name());
+
+        formPanel.append(
+                Location.Left,
+                convenienceNoticeHtml = new HTML(i18n.tr("Note: If payment marked with {0} is not selected, a Web Payment Fee will apply to the Resident.",
+                        convenienceMarker)));
+        convenienceNoticeHtml.setStyleName(VistaTheme.StyleName.InfoMessage.name());
 
         return formPanel;
     }
 
-    private FieldDecorator decorator(String customLabel) {
+    private FieldDecorator decorator() {
         return new FieldDecoratorBuilder(lblW, contW).labelPosition(LabelPosition.top).labelAlignment(Alignment.center).useLabelSemicolon(false)
-                .componentAlignment(Alignment.center).customLabel(customLabel).build();
+                .componentAlignment(Alignment.center).build();
     }
 
-    private FieldDecorator decorator() {
-        return decorator(null);
+    @Override
+    protected void onValueSet(boolean populate) {
+        super.onValueSet(populate);
+
+        setConvenienceMarker(proto().prospectCreditCardVisa(), pmcPaymentSetup().acceptedVisaConvenienceFee().getValue());
+        setConvenienceMarker(proto().residentPortalCreditCardVisa(), pmcPaymentSetup().acceptedVisaConvenienceFee().getValue());
+
+        setConvenienceMarker(proto().prospectCreditCardMasterCard(), pmcPaymentSetup().acceptedMasterCardConvenienceFee().getValue());
+        setConvenienceMarker(proto().residentPortalCreditCardMasterCard(), pmcPaymentSetup().acceptedMasterCardConvenienceFee().getValue());
+
+        if (VistaTODO.visaDebitHasConvenienceFee) {
+            setConvenienceMarker(proto().prospectVisaDebit(), pmcPaymentSetup().acceptedVisaDebitConvenienceFee().getValue());
+            setConvenienceMarker(proto().residentPortalCreditCardMasterCard(), pmcPaymentSetup().acceptedVisaDebitConvenienceFee().getValue());
+        }
+
+        convenienceNoticeHtml.setVisible(pmcPaymentSetup().acceptedVisaConvenienceFee().getValue()
+                || pmcPaymentSetup().acceptedMasterCardConvenienceFee().getValue() || pmcPaymentSetup().acceptedVisaDebitConvenienceFee().getValue());
+
+        setEnabled(membersEcheck(), pmcPaymentSetup().acceptedEcheck().getValue());
+        setEnabled(membersDirectBanking(), pmcPaymentSetup().acceptedDirectBanking().getValue());
+        setEnabled(membersCreditCardVisa(), pmcPaymentSetup().acceptedVisa().getValue());
+        setEnabled(membersCreditCardMasterCard(), pmcPaymentSetup().acceptedMasterCard().getValue());
+        setEnabled(membersVisaDebit(), pmcPaymentSetup().acceptedVisaDebit().getValue());
     }
+
+    private AbstractPaymentSetup pmcPaymentSetup() {
+        return getValue().pmcPaymentSetup();
+    }
+
+    List<IPrimitive<Boolean>> membersEcheck() {
+        return Arrays.asList(proto().acceptedEcheck(), proto().residentPortalEcheck(), proto().prospectEcheck(), proto().cashEquivalentEcheck());
+    }
+
+    List<IPrimitive<Boolean>> membersDirectBanking() {
+        return Arrays.asList(proto().acceptedDirectBanking(), proto().residentPortalDirectBanking(), proto().cashEquivalentDirectBanking());
+    }
+
+    List<IPrimitive<Boolean>> membersCreditCardVisa() {
+        return Arrays.asList(proto().acceptedCreditCardVisa(), proto().residentPortalCreditCardVisa(), proto().prospectCreditCardVisa(), proto()
+                .cashEquivalentCreditCardVisa());
+    }
+
+    List<IPrimitive<Boolean>> membersCreditCardMasterCard() {
+        return Arrays.asList(proto().acceptedCreditCardMasterCard(), proto().residentPortalCreditCardMasterCard(), proto().prospectCreditCardMasterCard(),
+                proto().cashEquivalentCreditCardMasterCard());
+    }
+
+    List<IPrimitive<Boolean>> membersVisaDebit() {
+        return Arrays.asList(proto().acceptedVisaDebit(), proto().residentPortalVisaDebit(), proto().prospectVisaDebit(), proto().cashEquivalentVisaDebit());
+    }
+
+    private void setConvenienceMarker(IPrimitive<Boolean> member, boolean convenienceEnabled) {
+        if (convenienceEnabled) {
+            //  TODO "<div class=\"" + VistaTheme.StyleName.InfoMessage.name() + "\"" + convenienceMarker + "</div>"
+            ((FieldDecorator) get(member).getDecorator()).getLabel().setText(member.getMeta().getCaption() + convenienceMarker);
+        } else {
+            ((FieldDecorator) get(member).getDecorator()).getLabel().setText(member.getMeta().getCaption());
+        }
+    }
+
+    private void setEnabled(List<IPrimitive<Boolean>> members, boolean enabled) {
+        for (IPrimitive<Boolean> member : members) {
+            get(member).setEnabled(enabled);
+        }
+    }
+
 }

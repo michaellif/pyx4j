@@ -82,8 +82,10 @@ public class V2BPreloader extends AbstractDataPreloader {
             fee.acceptedEcheck().setValue(true);
             fee.acceptedDirectBanking().setValue(true);
             fee.acceptedVisa().setValue(true);
-            fee.acceptedMasterCard().setValue(true);
             fee.acceptedVisaConvenienceFee().setValue(true);
+            fee.acceptedVisaDebit().setValue(true);
+            fee.acceptedVisaDebitConvenienceFee().setValue(false);
+            fee.acceptedMasterCard().setValue(true);
             fee.acceptedMasterCardConvenienceFee().setValue(true);
             Persistence.service().persist(fee);
         }

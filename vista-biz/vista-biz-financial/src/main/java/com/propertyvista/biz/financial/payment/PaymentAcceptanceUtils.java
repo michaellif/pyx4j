@@ -391,7 +391,7 @@ public class PaymentAcceptanceUtils {
                 or(p.notCashEquivalent(), p.cashEquivalentCreditCardVisa()));
 
         require.add(new CardTypeAcceptance(CreditCardType.VisaDebit)//
-                .and(p.systemSetup().acceptedVisa(), p.merchantSetup().acceptedCreditCard(), p.merchantSetup().acceptedCreditCardVisaDebit(),
+                .and(p.systemSetup().acceptedVisaDebit(), p.merchantSetup().acceptedCreditCard(), p.merchantSetup().acceptedCreditCardVisaDebit(),
                         p.acceptedVisaDebit()).// 
                 or(p.notCashEquivalent(), p.cashEquivalentVisaDebit()));
 
@@ -417,13 +417,13 @@ public class PaymentAcceptanceUtils {
 
         if (VistaTODO.visaDebitHasConvenienceFee) {
             require.add(new CardTypeAcceptance(CreditCardType.VisaDebit).//
-                    and(p.systemSetup().acceptedVisa(), p.merchantSetup().acceptedCreditCard(), p.merchantSetup().acceptedCreditCardVisaDebit(),
+                    and(p.systemSetup().acceptedVisaDebit(), p.merchantSetup().acceptedCreditCard(), p.merchantSetup().acceptedCreditCardVisaDebit(),
                             p.acceptedVisaDebit()).// 
                     or(p.residentPortalVisaDebit(), p.merchantSetup().acceptedCreditCardConvenienceFee()). //
                     or(p.notCashEquivalent(), p.cashEquivalentVisaDebit()));
         } else {
             require.add(new CardTypeAcceptance(CreditCardType.VisaDebit).//
-                    and(p.systemSetup().acceptedVisa(), p.merchantSetup().acceptedCreditCard(), p.merchantSetup().acceptedCreditCardVisaDebit(),
+                    and(p.systemSetup().acceptedVisaDebit(), p.merchantSetup().acceptedCreditCard(), p.merchantSetup().acceptedCreditCardVisaDebit(),
                             p.acceptedVisaDebit()).// 
                     and(p.residentPortalVisaDebit()). //
                     or(p.notCashEquivalent(), p.cashEquivalentVisaDebit()));
@@ -478,13 +478,13 @@ public class PaymentAcceptanceUtils {
 
         if (VistaTODO.visaDebitHasConvenienceFee) {
             require.add(new CardTypeAcceptance(CreditCardType.VisaDebit).//
-                    and(p.systemSetup().acceptedVisa(), p.merchantSetup().acceptedCreditCard(),//
+                    and(p.systemSetup().acceptedVisaDebit(), p.merchantSetup().acceptedCreditCard(),//
                             p.merchantSetup().acceptedCreditCardVisaDebit(), p.acceptedVisaDebit()).// 
                     or(p.prospectVisaDebit(), //
                             and(p.systemSetup().acceptedVisaConvenienceFee(), p.merchantSetup().acceptedCreditCardConvenienceFee())));
         } else {
             require.add(new CardTypeAcceptance(CreditCardType.VisaDebit).//
-                    and(p.systemSetup().acceptedVisa(), p.merchantSetup().acceptedCreditCard(), //
+                    and(p.systemSetup().acceptedVisaDebit(), p.merchantSetup().acceptedCreditCard(), //
                             p.merchantSetup().acceptedCreditCardVisaDebit(), p.acceptedVisaDebit()).// 
                     and(p.prospectVisaDebit()));
         }
@@ -510,7 +510,7 @@ public class PaymentAcceptanceUtils {
         // VISTA-3995
         if (VistaTODO.visaDebitHasConvenienceFee) {
             require.add(new CardTypeAcceptance(CreditCardType.VisaDebit).//
-                    and(p.systemSetup().acceptedVisa(), p.merchantSetup().acceptedCreditCard(),//
+                    and(p.systemSetup().acceptedVisaDebit(), p.merchantSetup().acceptedCreditCard(),//
                             p.systemSetup().acceptedVisaConvenienceFee(), p.merchantSetup().acceptedCreditCardConvenienceFee()).// 
                     not(p.prospectVisaDebit()));
         }

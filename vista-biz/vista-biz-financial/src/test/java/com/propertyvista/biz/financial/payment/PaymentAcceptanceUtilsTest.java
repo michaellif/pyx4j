@@ -223,6 +223,7 @@ public class PaymentAcceptanceUtilsTest extends TestCase {
     public void testConvenienceFeeAcceptance() {
         AbstractPaymentSetup systemSetup = EntityFactory.create(AbstractPaymentSetup.class);
         systemSetup.acceptedVisa().setValue(true);
+        systemSetup.acceptedVisaDebit().setValue(true);
         systemSetup.acceptedMasterCard().setValue(true);
         systemSetup.acceptedVisaConvenienceFee().setValue(true);
         systemSetup.acceptedMasterCardConvenienceFee().setValue(true);

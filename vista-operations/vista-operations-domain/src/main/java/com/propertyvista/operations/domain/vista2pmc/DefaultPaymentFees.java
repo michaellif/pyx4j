@@ -49,6 +49,16 @@ public interface DefaultPaymentFees extends AbstractPaymentFees {
     @Override
     @NotNull
     @MemberColumn(notNull = true)
+    IPrimitive<Boolean> acceptedVisaDebit();
+
+    @Override
+    @NotNull
+    @MemberColumn(notNull = true)
+    IPrimitive<Boolean> acceptedVisaDebitConvenienceFee();
+
+    @Override
+    @NotNull
+    @MemberColumn(notNull = true)
     IPrimitive<Boolean> acceptedMasterCard();
 
     @Override

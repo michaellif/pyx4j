@@ -131,8 +131,20 @@ public class Vista2PmcFacadeImpl implements Vista2PmcFacade {
         combinePmcAndSystem(fee.acceptedDirectBanking(), pmcFee, systemDefaultFeee);
         combinePmcAndSystem(fee.acceptedVisa(), pmcFee, systemDefaultFeee);
         combinePmcAndSystem(fee.acceptedVisaConvenienceFee(), pmcFee, systemDefaultFeee);
+        combinePmcAndSystem(fee.acceptedVisaDebit(), pmcFee, systemDefaultFeee);
+        combinePmcAndSystem(fee.acceptedVisaDebitConvenienceFee(), pmcFee, systemDefaultFeee);
         combinePmcAndSystem(fee.acceptedMasterCard(), pmcFee, systemDefaultFeee);
         combinePmcAndSystem(fee.acceptedMasterCardConvenienceFee(), pmcFee, systemDefaultFeee);
+
+        if (!fee.acceptedVisa().getValue()) {
+            fee.acceptedVisaDebitConvenienceFee().setValue(false);
+        }
+        if (!fee.acceptedVisaDebit().getValue()) {
+            fee.acceptedVisaDebitConvenienceFee().setValue(false);
+        }
+        if (!fee.acceptedMasterCard().getValue()) {
+            fee.acceptedMasterCardConvenienceFee().setValue(false);
+        }
 
         return fee;
     }
@@ -154,7 +166,7 @@ public class Vista2PmcFacadeImpl implements Vista2PmcFacade {
 
     @Override
     public AbstractPaymentSetup getPaymentSetup() {
-        return getPaymentFees();
+        return getPaymentFees().duplicate(AbstractPaymentSetup.class);
     }
 
     @Override
