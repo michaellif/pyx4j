@@ -718,8 +718,8 @@ public abstract class LeaseAbstractManager {
         BillingCycle nextCycle = ServerSideFactory.create(PaymentMethodFacade.class).getNextAutopayBillingCycle(lease);
         AutoPayPolicy autoPayPolicy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(lease.unit().building(), AutoPayPolicy.class);
 
-        return (autoPayPolicy.excludeLastBillingPeriodCharge().getValue(Boolean.TRUE) && (beforeOrEqual(lease.expectedMoveOut(),
-                nextCycle.billingCycleEndDate()) || beforeOrEqual(lease.actualMoveOut(), nextCycle.billingCycleEndDate())));
+        return (autoPayPolicy.excludeLastBillingPeriodCharge().getValue(false) && (beforeOrEqual(lease.expectedMoveOut(), nextCycle.billingCycleEndDate()) || beforeOrEqual(
+                lease.actualMoveOut(), nextCycle.billingCycleEndDate())));
     }
 
     /**

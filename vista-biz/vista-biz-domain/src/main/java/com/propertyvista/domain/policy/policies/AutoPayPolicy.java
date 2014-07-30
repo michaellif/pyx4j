@@ -15,6 +15,7 @@ package com.propertyvista.domain.policy.policies;
 
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.DiscriminatorValue;
+import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.core.IPrimitive;
 import com.pyx4j.i18n.annotations.I18n;
@@ -49,9 +50,15 @@ public interface AutoPayPolicy extends Policy {
     @Caption(description = "AutoPay Change Rule for Lease Charge Changes (Suggestion)")
     IPrimitive<ChangeRule> onLeaseChargeChangeRule();
 
+    @NotNull
+    @MemberColumn(notNull = true)
     IPrimitive<Boolean> excludeFirstBillingPeriodCharge();
 
+    @NotNull
+    @MemberColumn(notNull = true)
     IPrimitive<Boolean> excludeLastBillingPeriodCharge();
 
+    @NotNull
+    @MemberColumn(notNull = true)
     IPrimitive<Boolean> allowCancelationByResident();
 }

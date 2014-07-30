@@ -577,7 +577,7 @@ class AutopayAgreementMananger {
     }
 
     static private boolean leaseLastBillingPeriodChargePolicyCheck(Lease lease, BillingCycle suspensionCycle, AutoPayPolicy autoPayPolicy) {
-        if (autoPayPolicy.excludeLastBillingPeriodCharge().getValue(Boolean.TRUE)) {
+        if (autoPayPolicy.excludeLastBillingPeriodCharge().getValue(false)) {
             return (beforeOrEqual(lease.expectedMoveOut(), suspensionCycle.billingCycleEndDate()) || beforeOrEqual(lease.actualMoveOut(),
                     suspensionCycle.billingCycleEndDate()));
         }
