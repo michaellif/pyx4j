@@ -39,6 +39,7 @@ import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.commons.EqualsHelper;
 import com.pyx4j.commons.Key;
 import com.pyx4j.commons.LogicalDate;
+import com.pyx4j.commons.SimpleMessageFormat;
 import com.pyx4j.commons.Validate;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.config.server.SystemDateManager;
@@ -87,9 +88,15 @@ public class YardiLeaseProcessor2 {
     public void process() throws YardiServiceException {
         for (String propertyCode : rtd.getData().keySet()) {
             for (String leaseId : rtd.getData().get(propertyCode).getData().keySet()) {
-                LeaseTransactionData ltd = rtd.getData().get(propertyCode).getData().get(leaseId);
+                processLease(propertyCode, leaseId, rtd.getData().get(propertyCode).getData().get(leaseId));
 
-                processLease(propertyCode, leaseId, ltd);
+                if (rtd.getExecutionMonitor().isTerminationRequested()) {
+                    break;
+                }
+            }
+
+            if (rtd.getExecutionMonitor().isTerminationRequested()) {
+                break;
             }
 
             // expire lease products for leases without charges :
@@ -131,6 +138,7 @@ public class YardiLeaseProcessor2 {
             leaseFacade.setPackage(lease.currentTerm(), unit, null, Collections.<BillableItem> emptyList());
         }
 
+        assert (ltd.getResident() != null);
         List<YardiCustomer> yardiCustomers = ltd.getResident().getCustomers().getCustomer();
         YardiLease yardiLease = yardiCustomers.get(0).getLease();
 
@@ -175,7 +183,8 @@ public class YardiLeaseProcessor2 {
             lease = ServerSideFactory.create(LeaseFacade.class).finalize(lease);
         }
 
-        log.debug("lease {} created for unit {}", lease.leaseId().getValue(), lease.unit().getStringView());
+        rtd.getExecutionMonitor().addInfoEvent("Lease",
+                SimpleMessageFormat.format("lease {0} created for unit {1}", lease.leaseId().getValue(), lease.unit().getStringView()));
 
         new YardiLeaseFinancialProcessor(rtd.getExecutionMonitor()).processLease(leaseId, ltd.getResident(), rtd.getYardiInterfaceId());
 
@@ -186,6 +195,16 @@ public class YardiLeaseProcessor2 {
         Lease lease = ServerSideFactory.create(LeaseFacade.class).load(existingLease, true);
         Persistence.ensureRetrieve(lease.currentTerm().version().tenants(), AttachLevel.Attached);
         log.debug("Updating lease {} for unit {}", leaseId);
+
+        if (ltd.getResident() == null) {
+            // there are no resident data - update just products: 
+            if (updateLeaseProducts(lease, ltd)) {
+                lease = ServerSideFactory.create(LeaseFacade.class).finalize(lease);
+                rtd.getExecutionMonitor().addInfoEvent("Lease",
+                        SimpleMessageFormat.format("lease {0} - products only updated (new version)", lease.leaseId().getValue()));
+            }
+            return lease;
+        }
 
         List<YardiCustomer> yardiCustomers = ltd.getResident().getCustomers().getCustomer();
         YardiLease yardiLease = yardiCustomers.get(0).getLease();
@@ -250,10 +269,10 @@ public class YardiLeaseProcessor2 {
         // persisting logic: 
         if (toFinalize) {
             lease = ServerSideFactory.create(LeaseFacade.class).finalize(lease);
-            log.debug("        Lease changes have been processed successfully (finalization is required)");
+            rtd.getExecutionMonitor().addInfoEvent("Lease", SimpleMessageFormat.format("lease {0} updated (new version)", lease.leaseId().getValue()));
         } else if (toPersist) {
             lease = ServerSideFactory.create(LeaseFacade.class).persist(lease);
-            log.debug("        Lease changes have been processed successfully (no version changes)");
+            rtd.getExecutionMonitor().addInfoEvent("Lease", SimpleMessageFormat.format("lease {0} updated (no version changes)", lease.leaseId().getValue()));
         } else {
             log.debug("        No lease changes detected");
         }
@@ -265,6 +284,7 @@ public class YardiLeaseProcessor2 {
 
     private boolean updateLeaseProducts(Lease lease, LeaseTransactionData ltd) {
         if (ltd.getCharges() == null) {
+            // lease has no charges - clear products: 
             return expireLeaseProducts(lease);
         }
 
@@ -341,6 +361,9 @@ public class YardiLeaseProcessor2 {
         if (BigDecimal.ZERO.compareTo(lease.currentTerm().version().leaseProducts().serviceItem().agreedPrice().getValue(BigDecimal.ZERO)) < 0) {
             lease.currentTerm().version().leaseProducts().serviceItem().agreedPrice().setValue(BigDecimal.ZERO);
             lease.currentTerm().version().leaseProducts().featureItems().clear();
+
+            rtd.getExecutionMonitor().addInfoEvent("Lease", SimpleMessageFormat.format("lease {0} - expire products", lease.leaseId().getValue()));
+
             return true;
         }
         return false;

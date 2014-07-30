@@ -209,9 +209,9 @@ public class YardiResidentTransactionsService2 extends YardiAbstractService {
         YardiResidentTransactionsStub stub = ServerSideFactory.create(YardiResidentTransactionsStub.class);
         YardiResidentTransactionsData rtd = new YardiResidentTransactionsData(executionMonitor, yardiInterfaceId);
 
-        ResidentTransactions transaction = stub.getResidentTransactionsForTenant(yc, propertyCode, lease.leaseId().getValue());
-        if (transaction != null) {
-            preProcessLeaseResidentsData(rtd, transaction, false);
+        ResidentTransactions transactions = stub.getResidentTransactionsForTenant(yc, propertyCode, lease.leaseId().getValue());
+        if (transactions != null) {
+            preProcessLeaseResidentsData(rtd, transactions, false);
         }
 
         ResidentTransactions leaseCharges = null;
@@ -316,7 +316,7 @@ public class YardiResidentTransactionsService2 extends YardiAbstractService {
                 if (residentTransactions != null) {
                     transactions.add(residentTransactions);
                 }
-                executionMonitor.addInfoEvent("PropertyTransactions", propertyCode);
+                executionMonitor.addInfoEvent("Property", propertyCode);
             } catch (YardiServiceMessageException e) {
                 if (e.getMessages().hasErrorMessage(YardiHandledErrorMessages.errorMessage_NoAccess)) {
                     throw new YardiPropertyNoAccessException(e.getMessages().getErrorMessage().getValue());
@@ -331,7 +331,7 @@ public class YardiResidentTransactionsService2 extends YardiAbstractService {
                 if (suspendBuilding(yardiInterfaceId, propertyCode)) {
                     executionMonitor.addErredEvent("BuildingSuspended", e);
                 } else {
-                    executionMonitor.addFailedEvent("PropertyTransactions", propertyCode, e);
+                    executionMonitor.addFailedEvent("Property", propertyCode, e);
                 }
             }
         }
@@ -442,6 +442,7 @@ public class YardiResidentTransactionsService2 extends YardiAbstractService {
                 }
             }
 
+            // lease resident data + charges:
             YardiResidentTransactionsData rtd = new YardiResidentTransactionsData(executionMonitor, yardiInterfaceId);
             preProcessResidentTransactionsData(rtd, transactions, getLeaseCharges(stub, yc, executionMonitor, importedBuildings));
             if (!executionMonitor.isTerminationRequested()) {
@@ -642,8 +643,8 @@ public class YardiResidentTransactionsService2 extends YardiAbstractService {
         unit.info().legalAddress().set(MappingUtils.getAddress(address, addrErr));
         if (addrErr.length() > 0) {
             String msg = SimpleMessageFormat.format("Unit pk={0}: got invalid address {1}", unit.getPrimaryKey(), addrErr);
-            log.warn(msg);
             executionMonitor.addInfoEvent("ParseAddress", msg);
+            log.warn(msg);
         } else {
             log.info("Unit pk={}: legal address has been assigned successfully", unit.getPrimaryKey());
         }
@@ -678,6 +679,7 @@ public class YardiResidentTransactionsService2 extends YardiAbstractService {
                 rtd.getData().put(propertyCode, prop = rtd.new PropertyTransactionData());
             }
 
+            // note - sorting input data list by lease status: former -> current -> future:
             for (RTCustomer rtCustomer : YardiLeaseProcessor2.sortRtCustomers(property.getRTCustomer())) {
                 String leaseId = YardiLeaseProcessor2.getLeaseID(rtCustomer.getCustomerID());
                 removeLease(activeLeases, leaseId);

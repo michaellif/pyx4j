@@ -76,9 +76,7 @@ public class YardiProductCatalogProcessor {
 
         updateEligibilityMatrixes(building.productCatalog());
 
-        String msg = SimpleMessageFormat.format("Processed Catalog for Building {0}", building.getStringView());
-        executionMonitor.addInfoEvent("YardiProductCatalogProcessor", msg);
-        log.info(">> " + msg);
+        executionMonitor.addInfoEvent("ProductCatalog", SimpleMessageFormat.format("Processed for {0}", building.getStringView()));
     }
 
     public void updateUnits(Building building, Map<String, BigDecimal> depositInfo) {
@@ -99,9 +97,7 @@ public class YardiProductCatalogProcessor {
 
         replaceOriginalDraftServices(building.productCatalog(), updatedServices);
 
-        String msg = SimpleMessageFormat.format("Updated Units for Building {0}", building.getStringView());
-        executionMonitor.addInfoEvent("YardiProductCatalogProcessor", msg);
-        log.info(">> " + msg);
+        executionMonitor.addInfoEvent("ProductCatalog", SimpleMessageFormat.format("Units updated for {0}", building.getStringView()));
     }
 
     public void persistCatalog(Building building) {
@@ -121,9 +117,7 @@ public class YardiProductCatalogProcessor {
             }
         }
 
-        String msg = SimpleMessageFormat.format("Persisted Catalog for Building {0}", building.getStringView());
-        executionMonitor.addInfoEvent("YardiProductCatalogProcessor", msg);
-        log.info(">> " + msg);
+        executionMonitor.addInfoEvent("ProductCatalog", SimpleMessageFormat.format("Persisted for {0}", building.getStringView()));
     }
 
     // ----------------------------------------------------------------------------------
