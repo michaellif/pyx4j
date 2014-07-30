@@ -100,9 +100,6 @@ public class ResidentPortalSiteMap extends PortalSiteMap {
         public static class Payment extends AppPlace {
 
             public static class PayNow extends CrudAppPlace {
-                {
-                    setStable(false);
-                }
             }
 
             public static class PaymentSubmitting extends AppPlace {
@@ -120,9 +117,6 @@ public class ResidentPortalSiteMap extends PortalSiteMap {
 
             @PlaceProperties(caption = "New Pre-Authorized Payment")
             public static class NewPreauthorizedPayment extends CrudAppPlace {
-                {
-                    setStable(false);
-                }
             }
 
             @PlaceProperties(caption = "Pre-Authorized Payment")
@@ -203,9 +197,6 @@ public class ResidentPortalSiteMap extends PortalSiteMap {
 
             /** This place is for updating insurance other than TenantSure */
             public static class GeneralPolicyWizard extends AppPlace {
-                {
-                    setStable(false);
-                }
             }
 
             public static class GeneralPolicyPage extends AppPlace {
