@@ -80,6 +80,7 @@ public class YardiLeaseProcessor {
     private final YardiResidentTransactionsData rtd;
 
     public YardiLeaseProcessor(YardiResidentTransactionsData rtd) {
+        assert (rtd != null);
         this.rtd = rtd;
     }
 

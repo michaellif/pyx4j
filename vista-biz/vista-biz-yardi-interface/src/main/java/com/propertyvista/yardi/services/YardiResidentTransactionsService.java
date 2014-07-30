@@ -482,12 +482,12 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
             ServerSideFactory.create(NotificationFacade.class).aggregatedNotificationsSend();
         }
 
-        log.info("Update completed.");
+        log.debug("updateProperties - completed.");
     }
 
     private List<Building> importProperties(Key yardiInterfaceId, ResidentTransactions transaction, final ExecutionMonitor executionMonitor,
             final ExternalInterfaceLoggingStub interfaceLog) {
-        log.info("ResidentTransactions: Properties import started...");
+        log.debug("ResidentTransactions: Properties import started...");
 
         List<Building> importedBuildings = new ArrayList<Building>();
 
@@ -506,7 +506,7 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
                 Building building = importBuiling(yardiInterfaceId, property.getPropertyID().get(0), executionMonitor);
                 importedBuildings.add(building);
 
-                log.info("Processing building: {}", propertyCode);
+                log.debug("Processing building: {}", propertyCode);
                 executionMonitor.addProcessedEvent("Building");
 
                 for (final RTCustomer rtCustomer : property.getRTCustomer()) {
@@ -535,14 +535,12 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
             }
         }
 
-        log.info("ResidentTransactions: Properties import complete.");
-
         return importedBuildings;
     }
 
     private Building importBuiling(final Key yardiInterfaceId, final PropertyIDType propertyId, final ExecutionMonitor executionMonitor)
             throws YardiServiceException {
-        log.info("Updating building {}", propertyId.getIdentification().getPrimaryID());
+        log.debug("Updating building {}", propertyId.getIdentification().getPrimaryID());
 
         return new UnitOfWork(TransactionScopeOption.RequiresNew).execute(new Executable<Building, YardiServiceException>() {
             @Override
@@ -564,7 +562,7 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
             }
         }
 
-        log.info("    Updating unit #" + yardiUnit.getInformation().get(0).getUnitID());
+        log.debug("    Updating unit #" + yardiUnit.getInformation().get(0).getUnitID());
 
         return new UnitOfWork(TransactionScopeOption.RequiresNew).execute(new Executable<AptUnit, YardiServiceException>() {
             @Override
@@ -583,7 +581,7 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
     }
 
     private AptUnit importUnit(final Building building, final Unit yardiUnit, ExecutionMonitor executionMonitor) throws YardiServiceException {
-        log.info("    Updating unit #" + yardiUnit.getInformation().get(0).getUnitID());
+        log.debug("    Updating unit #" + yardiUnit.getInformation().get(0).getUnitID());
 
         return new UnitOfWork(TransactionScopeOption.RequiresNew).execute(new Executable<AptUnit, YardiServiceException>() {
             @Override
@@ -637,7 +635,6 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
         importedAddressToString.append("country: ").append(address.getCountry()).append(", ");
         importedAddressToString.append("countyName: ").append(address.getCountyName()).append("");
         importedAddressToString.append(")");
-        log.info("Unit pk={}: Trying to assign legal address: '{}'", unit.getPrimaryKey(), importedAddressToString);
 
         StringBuilder addrErr = new StringBuilder();
         unit.info().legalAddress().set(MappingUtils.getAddress(address, addrErr));
@@ -645,8 +642,6 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
             String msg = SimpleMessageFormat.format("Unit pk={0}: got invalid address {1}", unit.getPrimaryKey(), addrErr);
             executionMonitor.addInfoEvent("ParseAddress", msg);
             log.warn(msg);
-        } else {
-            log.info("Unit pk={}: legal address has been assigned successfully", unit.getPrimaryKey());
         }
     }
 
@@ -720,6 +715,7 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
                 }
             }
             if (propertyCode == null) {
+                log.warn("preProcessLeaseChargesData: can't deduct property code!?");
                 continue;
             }
 
@@ -759,7 +755,7 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
 
     private List<Building> importPropertyMarketingInfo(final Key yardiInterfaceId, PhysicalProperty propertyInfo, List<Building> importedBuildings,
             final ExecutionMonitor executionMonitor) {
-        log.info("PropertyMarketing: import started...");
+        log.debug("PropertyMarketing: import started...");
 
         List<Building> newBuildings = new ArrayList<>();
 
@@ -777,7 +773,7 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
             String propertyCode = BuildingsMapper.getPropertyCode(property.getPropertyID());
 
             try {
-                log.info("  Processing building: {}", propertyCode);
+                log.debug("  Processing building: {}", propertyCode);
 
                 // import new buildings
                 Building building = MappingUtils.getBuilding(yardiInterfaceId, propertyCode);
@@ -787,7 +783,7 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
                 }
                 executionMonitor.addProcessedEvent("Building");
 
-                log.info("  Processing units for building: {}", propertyCode);
+                log.debug("  Processing units for building: {}", propertyCode);
 
                 // handle yardi Unit "Exclude" check box (no data sent for those units)
                 Persistence.ensureRetrieve(building.units(), AttachLevel.IdOnly);
@@ -830,7 +826,7 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
     }
 
     private void clearUnitAvailability(final Set<AptUnit> units, ExecutionMonitor executionMonitor) throws YardiServiceException {
-        log.info("    clear unit availability: {}", units.size());
+        log.debug("    clear unit availability: {}", units.size());
         new UnitOfWork(TransactionScopeOption.RequiresNew).execute(new Executable<Void, YardiServiceException>() {
             @Override
             public Void execute() throws YardiServiceException {
@@ -843,7 +839,7 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
     }
 
     private boolean updateAvailability(final AptUnit unit, final Availability avail, ExecutionMonitor executionMonitor) throws YardiServiceException {
-        log.info("    availability: {}: {}", unit.getStringView(), (avail == null || avail.getVacateDate() == null ? "Not " : "") + "Available");
+        log.debug("    availability: {}: {}", unit.getStringView(), (avail == null || avail.getVacateDate() == null ? "Not " : "") + "Available");
         return new UnitOfWork(TransactionScopeOption.RequiresNew).execute(new Executable<Boolean, YardiServiceException>() {
             @Override
             public Boolean execute() throws YardiServiceException {

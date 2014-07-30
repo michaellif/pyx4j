@@ -51,10 +51,6 @@ public class LeaseMerger {
 
     private final static Logger log = LoggerFactory.getLogger(LeaseMerger.class);
 
-    public enum LeaseChargesMergeStatus {
-        NoChange, DatesOnly, TotalAmount
-    }
-
     public static boolean isLeaseDatesChanged(YardiLease imported, Lease existing) {
         boolean changed = false;
 
