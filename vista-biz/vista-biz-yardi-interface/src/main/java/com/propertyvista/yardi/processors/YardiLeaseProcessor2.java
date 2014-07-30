@@ -92,6 +92,7 @@ public class YardiLeaseProcessor2 {
                 processLease(propertyCode, leaseId, ltd);
             }
 
+            // expire lease products for leases without charges :
             for (Lease lease : rtd.getData().get(propertyCode).getNoChargesLeases()) {
                 lease = ServerSideFactory.create(LeaseFacade.class).load(lease, true);
                 if (expireLeaseProducts(lease)) {
@@ -116,7 +117,7 @@ public class YardiLeaseProcessor2 {
         Validate.isTrue(CommonsStringUtils.isStringSet(unitNumber), "Unit number required");
 
         AptUnit unit = retrieveUnit(rtd.getYardiInterfaceId(), propertyCode, unitNumber);
-        log.debug("creating lease {} for unit {}", leaseId, unit.getStringView());
+        log.debug("Creating lease {} for unit {}", leaseId, unit.getStringView());
 
         LeaseFacade leaseFacade = ServerSideFactory.create(LeaseFacade.class);
 
@@ -184,7 +185,7 @@ public class YardiLeaseProcessor2 {
     private Lease updateLease(String propertyCode, String leaseId, LeaseTransactionData ltd, Lease existingLease) throws YardiServiceException {
         Lease lease = ServerSideFactory.create(LeaseFacade.class).load(existingLease, true);
         Persistence.ensureRetrieve(lease.currentTerm().version().tenants(), AttachLevel.Attached);
-        log.debug("creating lease {} for unit {}", leaseId);
+        log.debug("Updating lease {} for unit {}", leaseId);
 
         List<YardiCustomer> yardiCustomers = ltd.getResident().getCustomers().getCustomer();
         YardiLease yardiLease = yardiCustomers.get(0).getLease();
@@ -337,12 +338,9 @@ public class YardiLeaseProcessor2 {
         if (lease.status().getValue() == Lease.Status.Approved) {
             return false;
         }
-
         if (BigDecimal.ZERO.compareTo(lease.currentTerm().version().leaseProducts().serviceItem().agreedPrice().getValue(BigDecimal.ZERO)) < 0) {
-
             lease.currentTerm().version().leaseProducts().serviceItem().agreedPrice().setValue(BigDecimal.ZERO);
             lease.currentTerm().version().leaseProducts().featureItems().clear();
-
             return true;
         }
         return false;

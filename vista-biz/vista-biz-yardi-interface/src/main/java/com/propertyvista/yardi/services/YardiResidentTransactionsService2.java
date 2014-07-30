@@ -204,7 +204,7 @@ public class YardiResidentTransactionsService2 extends YardiAbstractService {
         }
         executionMonitor.setExpectedTotal(4L);
 
-        final Key yardiInterfaceId = yc.getPrimaryKey();
+        Key yardiInterfaceId = yc.getPrimaryKey();
         String propertyCode = lease.unit().building().propertyCode().getValue();
         YardiResidentTransactionsStub stub = ServerSideFactory.create(YardiResidentTransactionsStub.class);
         YardiResidentTransactionsData rtd = new YardiResidentTransactionsData(executionMonitor, yardiInterfaceId);
@@ -214,14 +214,13 @@ public class YardiResidentTransactionsService2 extends YardiAbstractService {
             preProcessLeaseResidentsData(rtd, transaction, false);
         }
 
-        BillingCycle nextCycle = ServerSideFactory.create(PaymentMethodFacade.class).getNextAutopayBillingCycle(lease);
         ResidentTransactions leaseCharges = null;
         try {
+            BillingCycle nextCycle = ServerSideFactory.create(PaymentMethodFacade.class).getNextAutopayBillingCycle(lease);
             leaseCharges = stub.getLeaseChargesForTenant(yc, propertyCode, lease.leaseId().getValue(), nextCycle.billingCycleStartDate().getValue());
         } catch (YardiResidentNoTenantsExistException e) {
             log.warn("Can't get changes for {}; {}", lease.leaseId().getValue(), e.getMessage()); // log error and reset lease charges.
         }
-
         if (leaseCharges != null) {
             preProcessLeaseChargesData(rtd, leaseCharges, false);
         }
