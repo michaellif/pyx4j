@@ -37,6 +37,8 @@ public class EmergencyContactFolder extends PortalBoxFolder<EmergencyContact> {
 
     public EmergencyContactFolder() {
         this(true);
+
+        setNoDataLabel(i18n.tr("Please enter emergency contact information if present"));
     }
 
     public EmergencyContactFolder(boolean modifiable) {
