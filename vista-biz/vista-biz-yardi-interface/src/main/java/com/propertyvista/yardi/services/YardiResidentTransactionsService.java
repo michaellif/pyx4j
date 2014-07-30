@@ -19,7 +19,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.GregorianCalendar;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -88,10 +87,11 @@ import com.propertyvista.yardi.mappers.BuildingsMapper;
 import com.propertyvista.yardi.mappers.MappingUtils;
 import com.propertyvista.yardi.processors.YardiBuildingProcessor;
 import com.propertyvista.yardi.processors.YardiILSMarketingProcessor;
-import com.propertyvista.yardi.processors.YardiLeaseFinancialProcessor;
 import com.propertyvista.yardi.processors.YardiLeaseProcessor;
 import com.propertyvista.yardi.processors.YardiPaymentProcessor;
 import com.propertyvista.yardi.processors.YardiProductCatalogProcessor;
+import com.propertyvista.yardi.services.YardiResidentTransactionsData.LeaseTransactionData;
+import com.propertyvista.yardi.services.YardiResidentTransactionsData.PropertyTransactionData;
 import com.propertyvista.yardi.stubs.ExternalInterfaceLoggingStub;
 import com.propertyvista.yardi.stubs.YardiGuestManagementStub;
 import com.propertyvista.yardi.stubs.YardiILSGuestCardStub;
@@ -204,52 +204,29 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
         }
         executionMonitor.setExpectedTotal(4L);
 
-        final Key yardiInterfaceId = yc.getPrimaryKey();
+        Key yardiInterfaceId = yc.getPrimaryKey();
         String propertyCode = lease.unit().building().propertyCode().getValue();
         YardiResidentTransactionsStub stub = ServerSideFactory.create(YardiResidentTransactionsStub.class);
+        YardiResidentTransactionsData rtd = new YardiResidentTransactionsData(executionMonitor, yardiInterfaceId);
 
-        ResidentTransactions transaction = stub.getResidentTransactionsForTenant(yc, propertyCode, lease.leaseId().getValue());
-        executionMonitor.addProcessedEvent("ResidentTransactions Request");
-        if (transaction != null && !transaction.getProperty().isEmpty()) {
-            Property property = transaction.getProperty().iterator().next();
-            if (!property.getRTCustomer().isEmpty()) {
-                importLease(yardiInterfaceId, propertyCode, property.getRTCustomer().iterator().next(), executionMonitor);
-            }
+        ResidentTransactions transactions = stub.getResidentTransactionsForTenant(yc, propertyCode, lease.leaseId().getValue());
+        if (transactions != null) {
+            preProcessLeaseResidentsData(rtd, transactions, false);
         }
-        executionMonitor.addProcessedEvent("Import Lease");
 
-        // import lease charges
-        BillingCycle nextCycle = ServerSideFactory.create(PaymentMethodFacade.class).getNextAutopayBillingCycle(lease);
         ResidentTransactions leaseCharges = null;
         try {
+            BillingCycle nextCycle = ServerSideFactory.create(PaymentMethodFacade.class).getNextAutopayBillingCycle(lease);
             leaseCharges = stub.getLeaseChargesForTenant(yc, propertyCode, lease.leaseId().getValue(), nextCycle.billingCycleStartDate().getValue());
         } catch (YardiResidentNoTenantsExistException e) {
             log.warn("Can't get changes for {}; {}", lease.leaseId().getValue(), e.getMessage()); // log error and reset lease charges.
-            // Do not remove lease charges from submitted lease applications
-            if (lease.status().getValue() != Lease.Status.Approved) {
-                terminateLeaseCharges(lease, executionMonitor);
-            }
         }
-        executionMonitor.addProcessedEvent("LeaseCharges Request");
         if (leaseCharges != null) {
-            boolean processed = false;
-            // we should just get one element in the list for the requested leaseId
-            for (Property property : leaseCharges.getProperty()) {
-                for (RTCustomer rtCustomer : property.getRTCustomer()) {
-                    processed |= importLeaseCharges(yardiInterfaceId, propertyCode, rtCustomer, executionMonitor);
-                }
-            }
-            // handle non-processed lease
-            if ((!processed) && (lease.status().getValue() != Lease.Status.Approved)) {
-                terminateLeaseCharges(lease, executionMonitor);
-            }
+            preProcessLeaseChargesData(rtd, leaseCharges, false);
         }
-        executionMonitor.addProcessedEvent("Import LeaseCharges");
 
-        try {
-            YardiLeaseProcessor.getInstance(executionMonitor).finalize();
-        } catch (Throwable e) {
-            log.error("YardiLeaseProcessor.finalize() error {}", e.getMessage());
+        if (!executionMonitor.isTerminationRequested()) {
+            importLeases(rtd);
         }
     }
 
@@ -336,8 +313,10 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
             }
             try {
                 ResidentTransactions residentTransactions = stub.getAllResidentTransactions(yc, propertyCode);
-                transactions.add(residentTransactions);
-                executionMonitor.addInfoEvent("PropertyTransactions", propertyCode);
+                if (residentTransactions != null) {
+                    transactions.add(residentTransactions);
+                }
+                executionMonitor.addInfoEvent("Property", propertyCode);
             } catch (YardiServiceMessageException e) {
                 if (e.getMessages().hasErrorMessage(YardiHandledErrorMessages.errorMessage_NoAccess)) {
                     throw new YardiPropertyNoAccessException(e.getMessages().getErrorMessage().getValue());
@@ -352,7 +331,7 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
                 if (suspendBuilding(yardiInterfaceId, propertyCode)) {
                     executionMonitor.addErredEvent("BuildingSuspended", e);
                 } else {
-                    executionMonitor.addFailedEvent("PropertyTransactions", propertyCode, e);
+                    executionMonitor.addFailedEvent("Property", propertyCode, e);
                 }
             }
         }
@@ -463,25 +442,11 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
                 }
             }
 
-            // leases:
+            // lease resident data + charges:
+            YardiResidentTransactionsData rtd = new YardiResidentTransactionsData(executionMonitor, yardiInterfaceId);
+            preProcessResidentTransactionsData(rtd, transactions, getLeaseCharges(stub, yc, executionMonitor, importedBuildings));
             if (!executionMonitor.isTerminationRequested()) {
-                for (ResidentTransactions transaction : transactions) {
-                    if (executionMonitor.isTerminationRequested()) {
-                        break;
-                    }
-                    importLeases(yardiInterfaceId, transaction, executionMonitor, stub);
-                }
-            }
-
-            // lease charges:
-            if (!executionMonitor.isTerminationRequested()) {
-                List<ResidentTransactions> allLeaseCharges = getLeaseCharges(stub, yc, executionMonitor, importedBuildings);
-                for (ResidentTransactions leaseCharges : allLeaseCharges) {
-                    if (executionMonitor.isTerminationRequested()) {
-                        break;
-                    }
-                    importLeaseCharges(yardiInterfaceId, leaseCharges, executionMonitor, stub);
-                }
+                importLeases(rtd);
             }
 
             // availability:
@@ -517,12 +482,6 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
             ServerSideFactory.create(NotificationFacade.class).aggregatedNotificationsSend();
         }
 
-        try {
-            YardiLeaseProcessor.getInstance(executionMonitor).finalize();
-        } catch (Throwable e) {
-            log.error("YardiLeaseProcessor.finalize() error {}", e.getMessage());
-        }
-
         log.info("Update completed.");
     }
 
@@ -550,7 +509,7 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
                 log.info("Processing building: {}", propertyCode);
                 executionMonitor.addProcessedEvent("Building");
 
-                for (final RTCustomer rtCustomer : YardiLeaseProcessor.sortRtCustomers(property.getRTCustomer())) {
+                for (final RTCustomer rtCustomer : property.getRTCustomer()) {
                     try {
                         importUnit(building, rtCustomer, executionMonitor);
                         executionMonitor.addProcessedEvent("Unit");
@@ -652,6 +611,16 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
         });
     }
 
+    private void importLeases(final YardiResidentTransactionsData rtd) throws YardiServiceException {
+        new UnitOfWork(TransactionScopeOption.RequiresNew).execute(new Executable<Void, YardiServiceException>() {
+            @Override
+            public Void execute() throws YardiServiceException {
+                new YardiLeaseProcessor(rtd).process();
+                return null;
+            }
+        });
+    }
+
     private void assignLegalAddress(final AptUnit unit, final Address address, final ExecutionMonitor executionMonitor) throws YardiServiceException {
         if (address.getAddress1() == null) {
             return;
@@ -674,226 +643,118 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
         unit.info().legalAddress().set(MappingUtils.getAddress(address, addrErr));
         if (addrErr.length() > 0) {
             String msg = SimpleMessageFormat.format("Unit pk={0}: got invalid address {1}", unit.getPrimaryKey(), addrErr);
-            log.warn(msg);
             executionMonitor.addInfoEvent("ParseAddress", msg);
+            log.warn(msg);
         } else {
             log.info("Unit pk={}: legal address has been assigned successfully", unit.getPrimaryKey());
         }
     }
 
-    private void importLeases(Key yardiInterfaceId, ResidentTransactions transaction, final ExecutionMonitor executionMonitor,
-            final ExternalInterfaceLoggingStub interfaceLog) {
-        log.info("ResidentTransactions: Lease import started...");
-
-        Map<String, List<Lease>> notProcessedLeases = new HashMap<String, List<Lease>>();
-
-        List<Property> properties = getProperties(transaction);
-        for (final Property property : properties) {
-            String propertyCode = BuildingsMapper.getPropertyCode(property.getPropertyID().get(0));
-            log.info("Processing Leases for building: {}", propertyCode);
-
-            List<Lease> activeLeases = getActiveLeases(yardiInterfaceId, propertyCode);
-            for (RTCustomer rtCustomer : YardiLeaseProcessor.sortRtCustomers(property.getRTCustomer())) {
-                removeLease(activeLeases, rtCustomer.getCustomerID());
-
-                try {
-                    importLease(yardiInterfaceId, propertyCode, rtCustomer, executionMonitor);
-                } catch (YardiServiceException e) {
-                    executionMonitor.addFailedEvent("Transactions",
-                            SimpleMessageFormat.format("Lease for customer {0} ({1})", rtCustomer.getCustomerID(), propertyCode), e);
-                    interfaceLog.logRecordedTracastions();
-                } catch (Throwable t) {
-                    executionMonitor.addErredEvent("Transactions",
-                            SimpleMessageFormat.format("Lease for customer {0} ({1})", rtCustomer.getCustomerID(), propertyCode), t);
-                    interfaceLog.logRecordedTracastions();
-                }
-            }
-
-            if (activeLeases.size() > 0) {
-                notProcessedLeases.put(propertyCode, activeLeases);
-            }
-
-            if (executionMonitor.isTerminationRequested()) {
+    private void preProcessResidentTransactionsData(YardiResidentTransactionsData rtd, List<ResidentTransactions> transactions,
+            List<ResidentTransactions> allLeaseCharges) {
+        for (ResidentTransactions transaction : transactions) {
+            if (rtd.getExecutionMonitor().isTerminationRequested()) {
                 break;
             }
+            preProcessLeaseResidentsData(rtd, transaction, true);
         }
 
-        log.info("ResidentTransactions: Leases import complete.");
-
-        if (notProcessedLeases.size() > 0 && !executionMonitor.isTerminationRequested() && executionMonitor.getErred() == 0) {
-            log.info("ResidentTransactions: closing leases started.");
-            // handle all non-processed leases
-            for (String propertyCode : notProcessedLeases.keySet()) {
-                closeLeases(notProcessedLeases.get(propertyCode));
+        for (ResidentTransactions leaseCharges : allLeaseCharges) {
+            if (rtd.getExecutionMonitor().isTerminationRequested()) {
+                break;
             }
-            log.info("ResidentTransactions: closing leases complete.");
+            preProcessLeaseChargesData(rtd, leaseCharges, true);
         }
     }
 
-    private void importLease(final Key yardiInterfaceId, final String propertyCode, final RTCustomer rtCustomer, final ExecutionMonitor executionMonitor)
-            throws YardiServiceException {
+    private void preProcessLeaseResidentsData(YardiResidentTransactionsData rtd, ResidentTransactions transaction, boolean closeNotProcessedLeases) {
+        List<Lease> notProcessedLeases = new ArrayList<>();
+        List<Property> properties = getProperties(transaction);
 
-        log.info("    Importing Lease (customerId={}):", rtCustomer.getCustomerID());
+        for (Property property : properties) {
+            String propertyCode = BuildingsMapper.getPropertyCode(property.getPropertyID().get(0));
+            List<Lease> activeLeases = getActiveLeases(rtd.getYardiInterfaceId(), propertyCode);
+            PropertyTransactionData prop = rtd.getData().get(propertyCode);
+            if (prop == null) {
+                rtd.getData().put(propertyCode, prop = rtd.new PropertyTransactionData());
+            }
 
-        if (YardiLeaseProcessor.isEligibleForProcessing(rtCustomer)) {
-            new UnitOfWork(TransactionScopeOption.RequiresNew).execute(new Executable<Void, YardiServiceException>() {
-                @Override
-                public Void execute() throws YardiServiceException {
+            // note - sorting input data list by lease status: former -> current -> future:
+            for (RTCustomer rtCustomer : YardiLeaseProcessor.sortRtCustomers(property.getRTCustomer())) {
+                String leaseId = YardiLeaseProcessor.getLeaseID(rtCustomer.getCustomerID());
+                removeLease(activeLeases, leaseId);
 
-                    YardiLeaseProcessor.getInstance(executionMonitor).processLease(rtCustomer, yardiInterfaceId, propertyCode);
-                    new YardiLeaseFinancialProcessor(executionMonitor).processLease(YardiLeaseProcessor.getLeaseID(rtCustomer), rtCustomer, yardiInterfaceId);
-
-                    return null;
-                }
-            });
-        } else {
-            log.info("    Lease and transactions for: {} skipped, lease does not meet criteria.", rtCustomer.getCustomerID());
-            // TODO skipping monitor message
-        }
-    }
-
-    private void importLeaseCharges(Key yardiInterfaceId, ResidentTransactions leaseCharges, final ExecutionMonitor executionMonitor,
-            final ExternalInterfaceLoggingStub interfaceLog) {
-        log.info("LeaseCharges: import started...");
-
-        // although we get properties here, all data inside is empty until we get down to the ChargeDetail level
-        List<Property> properties = getProperties(leaseCharges);
-        Map<String, List<Lease>> notProcessedLeases = new HashMap<String, List<Lease>>();
-        for (final Property property : properties) {
-            if (executionMonitor != null) {
-                IterationProgressCounter expectedTotal = executionMonitor.getIterationProgressCounter("Lease");
-                if (expectedTotal == null) {
-                    executionMonitor.setIterationProgressCounter("Lease", new IterationProgressCounter(properties.size(), property.getRTCustomer().size()));
+                LeaseTransactionData lease = prop.getData().get(propertyCode);
+                if (lease == null) {
+                    prop.getData().put(leaseId, lease = rtd.new LeaseTransactionData(rtCustomer, null));
                 } else {
-                    expectedTotal.onIterationCompleted(property.getRTCustomer().size());
+                    lease.setResident(rtCustomer);
                 }
             }
 
+            if (closeNotProcessedLeases) {
+                notProcessedLeases.addAll(activeLeases);
+            }
+        }
+
+        // close all non-processed leases:
+        if (closeNotProcessedLeases) {
+            closeLeases(notProcessedLeases);
+        }
+    }
+
+    private void preProcessLeaseChargesData(YardiResidentTransactionsData rtd, ResidentTransactions leaseCharges, boolean memorizeNoChargesLeases) {
+        List<Property> properties = getProperties(leaseCharges);
+        // although we get properties here, all data inside is empty until we get down to the ChargeDetail level
+
+        for (Property property : properties) {
             String propertyCode = null;
-            try {
-                // make sure we have non-empty leases and transactions
-                if (property.getRTCustomer().size() > 0) {
-                    // grab propertyCode from the first available ChargeDetail element
-                    for (RTCustomer rtCustomer : property.getRTCustomer()) {
-                        if (rtCustomer.getRTServiceTransactions().getTransactions().size() > 0) {
-                            propertyCode = rtCustomer.getRTServiceTransactions().getTransactions().get(0).getCharge().getDetail().getPropertyPrimaryID();
-                            break;
-                        }
+            // make sure we have non-empty leases and transactions
+            if (property.getRTCustomer().size() > 0) {
+                // grab propertyCode from the first available ChargeDetail element
+                for (RTCustomer rtCustomer : property.getRTCustomer()) {
+                    if (rtCustomer.getRTServiceTransactions().getTransactions().size() > 0) {
+                        propertyCode = rtCustomer.getRTServiceTransactions().getTransactions().get(0).getCharge().getDetail().getPropertyPrimaryID();
+                        break;
                     }
                 }
+            }
+            if (propertyCode == null) {
+                continue;
+            }
 
-                if (propertyCode == null) {
-                    log.info("Processed RTCustomer record with no transactions.");
+            propertyCode = BuildingsMapper.getPropertyCode(propertyCode);
+            List<Lease> activeLeases = getActiveLeases(rtd.getYardiInterfaceId(), propertyCode);
+
+            PropertyTransactionData prop = rtd.getData().get(propertyCode);
+            if (prop == null) {
+                rtd.getData().put(propertyCode, prop = rtd.new PropertyTransactionData());
+            }
+
+            for (RTCustomer rtCustomer : property.getRTCustomer()) {
+                if (rtCustomer.getRTServiceTransactions().getTransactions().size() == 0) {
                     continue;
                 }
 
-                log.info("Processing building: {}", propertyCode);
-                executionMonitor.addProcessedEvent("Building", propertyCode);
+                String leaseId = YardiLeaseProcessor.getLeaseID(rtCustomer.getRTServiceTransactions().getTransactions().get(0).getCharge().getDetail()
+                        .getCustomerID());
+                if (leaseId != null) {
+                    removeLease(activeLeases, leaseId);
 
-                List<Lease> activeLeases = getActiveLeases(yardiInterfaceId, propertyCode);
-                for (final RTCustomer rtCustomer : property.getRTCustomer()) {
-                    if (rtCustomer.getRTServiceTransactions().getTransactions().size() == 0) {
-                        continue;
-                    }
-
-                    String leaseId = null;
-                    try {
-                        leaseId = rtCustomer.getRTServiceTransactions().getTransactions().get(0).getCharge().getDetail().getCustomerID();
-                        if (leaseId != null) {
-                            removeLease(activeLeases, leaseId);
-                            importLeaseCharges(yardiInterfaceId, propertyCode, rtCustomer, executionMonitor);
-                        }
-                        executionMonitor.addProcessedEvent("Lease");
-                    } catch (Throwable t) {
-                        String msg = SimpleMessageFormat.format("Lease {0}", leaseId == null ? "undefined" : leaseId);
-                        executionMonitor.addErredEvent("Lease", msg, t);
-                        log.warn(msg, t);
-                        interfaceLog.logRecordedTracastions();
-                    }
-                }
-
-                if (activeLeases.size() > 0) {
-                    notProcessedLeases.put(propertyCode, activeLeases);
-                }
-            } catch (Throwable t) {
-                String msg = SimpleMessageFormat.format("Property {0}", propertyCode);
-                executionMonitor.addErredEvent("Building", msg, t);
-                log.warn(msg, t);
-                interfaceLog.logRecordedTracastions();
-            }
-
-            if (executionMonitor.isTerminationRequested()) {
-                break;
-            }
-        }
-        log.info("LeaseCharges: import complete.");
-
-        if (notProcessedLeases.size() > 0 && !executionMonitor.isTerminationRequested() && executionMonitor.getErred() == 0) {
-            log.info("LeaseCharges: terminating not-received charges started.");
-            // handle all non-processed leases
-            for (String propertyCode : notProcessedLeases.keySet()) {
-                for (Lease lease : notProcessedLeases.get(propertyCode)) {
-                    // Do not remove lease charges from submitted lease applications
-                    if (lease.status().getValue() == Lease.Status.Approved) {
-                        continue;
-                    }
-                    try {
-                        terminateLeaseCharges(lease, executionMonitor);
-                    } catch (Throwable t) {
-                        String msg = SimpleMessageFormat.format("Lease {0}", lease);
-                        executionMonitor.addErredEvent("Lease", msg, t);
-                        log.warn(msg, t);
+                    LeaseTransactionData lease = prop.getData().get(leaseId);
+                    if (lease == null) {
+                        prop.getData().put(leaseId, lease = rtd.new LeaseTransactionData(null, rtCustomer));
+                    } else {
+                        lease.setCharges(rtCustomer);
                     }
                 }
             }
-            log.info("LeaseCharges: terminating not-received charges complete.");
-        }
-    }
 
-    private boolean importLeaseCharges(Key yardiInterfaceId, final String propertyCode, final RTCustomer rtCustomer, final ExecutionMonitor executionMonitor)
-            throws YardiServiceException {
-        // make sure we have received any transactions
-        if (rtCustomer.getRTServiceTransactions().getTransactions().size() == 0) {
-            log.info("No Lease Charges received for property: ", propertyCode);
-            return false;
-        }
-        // grab customerId from the first available ChargeDetail element
-        String customerId = rtCustomer.getRTServiceTransactions().getTransactions().get(0).getCharge().getDetail().getCustomerID();
-        final Lease lease = YardiLeaseProcessor.getInstance(executionMonitor).findLease(yardiInterfaceId, propertyCode, customerId);
-        if (lease == null) {
-            throw new YardiServiceException(i18n.tr("Lease not found for customer: {0} on interface {1}", customerId, yardiInterfaceId));
-        }
-        log.info("    Processing lease: {}", customerId);
-
-        new UnitOfWork(TransactionScopeOption.RequiresNew).execute(new Executable<Void, YardiServiceException>() {
-            @Override
-            public Void execute() throws YardiServiceException {
-                // create/update billable items
-                YardiLeaseProcessor.getInstance(executionMonitor).updateLeaseProducts(rtCustomer.getRTServiceTransactions().getTransactions(), lease);
-                return null;
+            // memorize remaining leases as 'leases with no charges':
+            if (memorizeNoChargesLeases) {
+                prop.getNoChargesLeases().addAll(activeLeases);
             }
-        });
-
-        return true;
-    }
-
-    // create new term version with no features and set service charge = 0
-    private void terminateLeaseCharges(final Lease lease, final ExecutionMonitor executionMonitor) throws YardiServiceException {
-        new UnitOfWork(TransactionScopeOption.RequiresNew).execute(new Executable<Void, YardiServiceException>() {
-            @Override
-            public Void execute() throws YardiServiceException {
-                if (YardiLeaseProcessor.getInstance(executionMonitor).expireLeaseProducts(lease)) {
-                    Persistence.ensureRetrieve(lease.unit().building(), AttachLevel.Attached);
-                    String msg = SimpleMessageFormat.format("charges expired for lease {0} ({1})", lease.leaseId(), lease.unit().building().propertyCode()
-                            .getValue());
-                    log.info(msg);
-                    if (executionMonitor != null) {
-                        executionMonitor.addInfoEvent("chargesExpired", msg);
-                    }
-                }
-                return null;
-            }
-        });
+        }
     }
 
     private List<Building> importPropertyMarketingInfo(final Key yardiInterfaceId, PhysicalProperty propertyInfo, List<Building> importedBuildings,
