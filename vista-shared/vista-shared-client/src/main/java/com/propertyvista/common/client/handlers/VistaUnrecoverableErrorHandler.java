@@ -25,6 +25,7 @@ import com.pyx4j.gwt.commons.DefaultUnrecoverableErrorHandler;
 import com.pyx4j.gwt.commons.UncaughtHandler;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.security.client.ClientContext;
+import com.pyx4j.security.shared.SecurityViolationException;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.events.NotificationEvent;
 import com.pyx4j.site.shared.domain.Notification.NotificationType;
@@ -98,6 +99,10 @@ public class VistaUnrecoverableErrorHandler extends DefaultUnrecoverableErrorHan
         String title = i18n.tr("An Unexpected Error Has Occurred.");
 
         String userMessage = i18n.tr("Please report the incident to technical support, describing the steps taken prior to the error.\n");
+
+        if (caught instanceof SecurityViolationException) {
+            userMessage = i18n.tr("Access denied. Please contact your security administrator for any access inquiries.\n");
+        }
 
         if (sessionClosed) {
             userMessage += "\n" + i18n.tr("This session has been terminated to prevent data corruption.");
