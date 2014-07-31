@@ -39,7 +39,7 @@ import com.propertyvista.server.common.util.CanadianPostalCodeValidator;
 
 public class MappingUtils {
 
-    public static Building getBuilding(Key yardiInterfaceId, String propertyCode) {
+    public static Building retrieveBuilding(Key yardiInterfaceId, String propertyCode) {
         EntityQueryCriteria<Building> criteria = EntityQueryCriteria.create(Building.class);
 
         criteria.eq(criteria.proto().propertyCode(), BuildingsMapper.getPropertyCode(propertyCode));

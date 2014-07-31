@@ -112,7 +112,7 @@ public class YardiLeaseProcessor {
     }
 
     public Lease processLease(String propertyCode, String leaseId, LeaseTransactionData ltd) throws YardiServiceException {
-        Lease existingLease = findLease(rtd.getYardiInterfaceId(), propertyCode, leaseId);
+        Lease existingLease = retriveLease(rtd.getYardiInterfaceId(), propertyCode, leaseId);
         if (existingLease != null) {
             return updateLease(propertyCode, leaseId, ltd, existingLease);
         } else {
@@ -388,10 +388,10 @@ public class YardiLeaseProcessor {
         return getLeaseID(rtCustomer.getCustomerID());
     }
 
-    public static Lease findLease(Key yardiInterfaceId, String propertyCode, String customerId) {
+    public static Lease retriveLease(Key yardiInterfaceId, String propertyCode, String leaseId) {
         EntityQueryCriteria<Lease> criteria = EntityQueryCriteria.create(Lease.class);
 
-        criteria.eq(criteria.proto().leaseId(), customerId);
+        criteria.eq(criteria.proto().leaseId(), leaseId);
         criteria.eq(criteria.proto().integrationSystemId(), yardiInterfaceId);
         criteria.eq(criteria.proto().unit().building().propertyCode(), propertyCode);
         criteria.eq(criteria.proto().unit().building().integrationSystemId(), yardiInterfaceId);

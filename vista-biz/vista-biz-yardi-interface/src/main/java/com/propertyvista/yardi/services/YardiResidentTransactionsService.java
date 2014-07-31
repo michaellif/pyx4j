@@ -300,7 +300,7 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
             if (executionMonitor.isTerminationRequested()) {
                 break;
             }
-            Building building = MappingUtils.getBuilding(yardiInterfaceId, propertyCode);
+            Building building = MappingUtils.retrieveBuilding(yardiInterfaceId, propertyCode);
             if (building != null) {
                 // this should not happen since Suspended buildings have been filtered earlier - see updateAll()
                 if (building.suspended().getValue(false)) {
@@ -390,7 +390,7 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
                 break;
             }
 
-            Building building = MappingUtils.getBuilding(yc.getPrimaryKey(), propertyCode);
+            Building building = MappingUtils.retrieveBuilding(yc.getPrimaryKey(), propertyCode);
             if (building != null && building.suspended().isBooleanTrue()) {
                 executionMonitor.addInfoEvent("ILSPropertyMarketing", "skipped suspended building: " + propertyCode);
                 continue;
@@ -668,7 +668,7 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
 
         for (Property property : properties) {
             String propertyCode = BuildingsMapper.getPropertyCode(property.getPropertyID().get(0));
-            List<Lease> activeLeases = getActiveLeases(rtd.getYardiInterfaceId(), propertyCode);
+            List<Lease> activeLeases = retrieveActiveLeases(rtd.getYardiInterfaceId(), propertyCode);
             PropertyTransactionData prop = rtd.getData().get(propertyCode);
             if (prop == null) {
                 rtd.getData().put(propertyCode, prop = rtd.new PropertyTransactionData());
@@ -720,7 +720,7 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
             }
 
             propertyCode = BuildingsMapper.getPropertyCode(propertyCode);
-            List<Lease> activeLeases = getActiveLeases(rtd.getYardiInterfaceId(), propertyCode);
+            List<Lease> activeLeases = retrieveActiveLeases(rtd.getYardiInterfaceId(), propertyCode);
 
             PropertyTransactionData prop = rtd.getData().get(propertyCode);
             if (prop == null) {
@@ -776,7 +776,7 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
                 log.debug("  Processing building: {}", propertyCode);
 
                 // import new buildings
-                Building building = MappingUtils.getBuilding(yardiInterfaceId, propertyCode);
+                Building building = MappingUtils.retrieveBuilding(yardiInterfaceId, propertyCode);
                 if (building == null || !importedBuildings.contains(building)) {
                     building = importBuiling(yardiInterfaceId, new YardiILSMarketingProcessor().fixPropertyID(property.getPropertyID()), executionMonitor);
                     newBuildings.add(building);
@@ -897,7 +897,7 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
         return status;
     }
 
-    private List<Lease> getActiveLeases(Key yardiInterfaceId, String propertyCode) {
+    private List<Lease> retrieveActiveLeases(Key yardiInterfaceId, String propertyCode) {
         EntityQueryCriteria<Lease> criteria = EntityQueryCriteria.create(Lease.class);
 
         criteria.eq(criteria.proto().unit().building().propertyCode(), BuildingsMapper.getPropertyCode(propertyCode));
@@ -927,7 +927,7 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
     }
 
     private boolean suspendBuilding(Key yardiInterfaceId, String propertyCode) {
-        return suspendBuilding(MappingUtils.getBuilding(yardiInterfaceId, propertyCode));
+        return suspendBuilding(MappingUtils.retrieveBuilding(yardiInterfaceId, propertyCode));
     }
 
     private boolean suspendBuilding(Building building) {
