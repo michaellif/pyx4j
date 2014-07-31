@@ -240,7 +240,7 @@ public class TenantMapper {
             if (EmailValidator.isValid(email)) {
                 customer.person().email().setValue(EmailValidator.normalizeEmailAddress(email));
             } else {
-                String msg = "Invalid Email: " + email + " for CustomerID " + yardiCustomer.getCustomerID();
+                String msg = "Invalid Email: '" + email + "' for Customer " + yardiCustomer.getCustomerID();
                 executionMonitor.addFailedEvent("DataValidation", msg);
                 log.warn(msg);
             }

@@ -143,9 +143,8 @@ public class YardiUnitAvailabilityStatusAdapter {
                                 status.rentDeltaAbsolute().getValue().divide(status.marketRent().getValue(), 2, BigDecimal.ROUND_HALF_UP));
                     }
                 }
-
             } else {
-                log.warn("failed to set unit rent for availability status of unit pk={}: lease not found", unitId.getPrimaryKey());
+                log.warn("Failed to set unit rent for unit pk={}: lease not found", unitId.getPrimaryKey());
             }
         }
     }

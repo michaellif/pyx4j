@@ -148,7 +148,7 @@ public class YardiLeaseProcessor {
         LogicalDate date = guessFromDate(yardiLease);
         if (date == null) {
             date = SystemDateManager.getLogicalDate();
-            log.warn("Empty Yardi 'Lease From' date - substitute with current date!");
+            log.warn("Unable to guess 'Lease From' date - substitute with current one!");
         }
         lease.currentTerm().termFrom().setValue(date);
 
