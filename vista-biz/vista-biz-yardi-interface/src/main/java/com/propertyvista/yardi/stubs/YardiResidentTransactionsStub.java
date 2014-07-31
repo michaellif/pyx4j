@@ -18,6 +18,7 @@ import java.rmi.RemoteException;
 import com.yardi.entity.resident.ResidentTransactions;
 
 import com.pyx4j.commons.LogicalDate;
+import com.pyx4j.config.server.Handler;
 
 import com.propertyvista.biz.system.YardiPropertyNoAccessException;
 import com.propertyvista.biz.system.YardiServiceException;
@@ -27,6 +28,7 @@ import com.propertyvista.yardi.beans.Properties;
 
 public interface YardiResidentTransactionsStub extends YardiInterface {
 
+    @Override
     String ping(PmcYardiCredential yc) throws RemoteException;
 
     Properties getPropertyConfigurations(PmcYardiCredential yc) throws YardiServiceException, RemoteException;
@@ -34,6 +36,7 @@ public interface YardiResidentTransactionsStub extends YardiInterface {
     /**
      * Returns null of there are no tenants in Yardi DB
      */
+    @Handler(exception = ResidentTransactionsExceptionHandler.class)
     ResidentTransactions getAllResidentTransactions(PmcYardiCredential yc, String propertyListCode) throws YardiServiceException,
             YardiPropertyNoAccessException, RemoteException;
 
