@@ -45,10 +45,11 @@ public class ExportTenantDataRetriever {
         tenantIO.insurance().addAll(new ExportInsuranceDataRetriever().getModel(leaseTermTenant.leaseParticipant()));
 
         // See if any DirectDebit payment Records exist for this lease. If so then we will send notification upon import
+        Persistence.ensureRetrieve(leaseTermTenant.leaseTermV().holder().lease(), AttachLevel.Attached);
         EntityQueryCriteria<PaymentRecord> criteria = EntityQueryCriteria.create(PaymentRecord.class);
         criteria.eq(criteria.proto().paymentMethod().type(), PaymentType.DirectBanking);
         criteria.eq(criteria.proto().billingAccount(), leaseTermTenant.leaseTermV().holder().lease().billingAccount());
-        criteria.gt(criteria.proto().finalizeDate(), DateUtils.addMonths(SystemDateManager.getDate(), -6));
+        criteria.gt(criteria.proto().receivedDate(), DateUtils.addMonths(SystemDateManager.getDate(), -6));
         tenantIO.hadDirectDebitPayments().setValue(Persistence.service().exists(criteria));
 
         return tenantIO;

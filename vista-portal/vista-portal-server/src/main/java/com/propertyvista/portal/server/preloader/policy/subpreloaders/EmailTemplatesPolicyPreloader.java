@@ -88,6 +88,8 @@ public class EmailTemplatesPolicyPreloader extends AbstractPolicyPreloader<Email
         policy.templates().add(defaultEmailTemplatePaymentReceiptWithWebPaymentFee());
         policy.templates().add(defaultEmailTemplatePaymentReturned());
 
+        policy.templates().add(defaultEmailTemplateDirectDebitAccountChanged());
+
         return policy;
     }
 
@@ -1129,7 +1131,6 @@ public class EmailTemplatesPolicyPreloader extends AbstractPolicyPreloader<Email
         TenantT tenantT = EmailTemplateManager.getProto(type, TenantT.class);
         LeaseT leaseT = EmailTemplateManager.getProto(type, LeaseT.class);
         PortalLinksT portalT = EmailTemplateManager.getProto(type, PortalLinksT.class);
-        CompanyInfoT companyT = EmailTemplateManager.getProto(type, CompanyInfoT.class);
 
         EmailTemplate template = EntityFactory.create(EmailTemplate.class);
         template.useHeader().setValue(Boolean.TRUE);
@@ -1138,13 +1139,14 @@ public class EmailTemplatesPolicyPreloader extends AbstractPolicyPreloader<Email
         template.subject().setValue(i18n.tr("Direct Debit Account Changed", EmailTemplateManager.getVarname(portalT.CompanyName())));
         template.content().setValue(i18n.tr(//@formatter:off
                 "Dear {0},<br/><br/>" +
-                "Our Record indicate that You have made a DirectDebit payment in the past.<br/>" +
-                "Because your Lease has changed or Building ownership changes your Account Number has been changed.<br/><br/>" +
+                "Our Record indicate that you have made a Direct Debit Rent Payment in the past through your bank directly." +
+                "As a result of the Building Ownership changing, your Account Number has been updated accordingly.<br/><br/>" +
                 "Your new Account Number is: {1}<br/><br/>" +
-                "When making Bill payments next month please use the new account number.<br/>" +
-                "If you have automatic payment scheduled for next month, you must cancel it and schedule a new one.<br/><br/>" +
-                "Click <b>[[{2}|here]]</b> for detailed payment instructions.<br/><br/>" +
-                "You can review the status of your payment any time on your <b>[[{3}|myCommunity portal]]</b>.<br/><br/>" +
+                "Please ensure that you update your ACCOUNT NUMBER with your bank accordingly prior to making any future Bill Payments.<br/><br/>" +
+                "<b><u>Failure to update the account number may result in the payment not being processed and delays in refunding your payment via your bank.</u></b><br/><br/>" +
+                "If you have set your bank payment to automatically schedule your monthly rent payments, you must cancel this scheduled transaction and set up a new schedule with the new account number information.<br/><br/>" +
+                "You may click <b>[[{2}|here]]</b> for further detailed payment instructions.<br/><br/>" +
+                "If you have any questions around your balance and/or available payment methods you can review them in your Resident Portal <b>[[{3}|here]]</b>.<br/><br/>" +
                 "Thank you for choosing {4}.",
                 EmailTemplateManager.getVarname(tenantT.FirstName()),
                 EmailTemplateManager.getVarname(leaseT.BillingAccount()),
