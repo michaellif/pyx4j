@@ -85,7 +85,9 @@ SET search_path = '_admin_';
                                                 ADD COLUMN accepted_master_card BOOLEAN,
                                                 ADD COLUMN accepted_master_card_convenience_fee BOOLEAN,
                                                 ADD COLUMN accepted_visa BOOLEAN,
-                                                ADD COLUMN accepted_visa_convenience_fee BOOLEAN;
+                                                ADD COLUMN accepted_visa_convenience_fee BOOLEAN,
+                                                ADD COLUMN accepted_visa_debit BOOLEAN,
+                                                ADD COLUMN accepted_visa_debit_convenience_fee BOOLEAN;
                                                 
         
         
@@ -206,12 +208,14 @@ SET search_path = '_admin_';
         
         -- fee_default_payment_fees
         
-        ALTER TABLE fee_default_payment_fees    ADD COLUMN accepted_echeck BOOLEAN NOT NULL,
-                                                ADD COLUMN accepted_direct_banking BOOLEAN NOT NULL,
-                                                ADD COLUMN accepted_master_card BOOLEAN NOT NULL,
-                                                ADD COLUMN accepted_master_card_convenience_fee BOOLEAN NOT NULL,
-                                                ADD COLUMN accepted_visa BOOLEAN NOT NULL,
-                                                ADD COLUMN accepted_visa_convenience_fee BOOLEAN NOT NULL; 
+        ALTER TABLE fee_default_payment_fees    ADD COLUMN accepted_echeck BOOLEAN,
+                                                ADD COLUMN accepted_direct_banking BOOLEAN,
+                                                ADD COLUMN accepted_master_card BOOLEAN,
+                                                ADD COLUMN accepted_master_card_convenience_fee BOOLEAN,
+                                                ADD COLUMN accepted_visa BOOLEAN,
+                                                ADD COLUMN accepted_visa_convenience_fee BOOLEAN,
+                                                ADD COLUMN accepted_visa_debit BOOLEAN,
+                                                ADD COLUMN accepted_visa_debit_convenience_fee BOOLEAN;
          
         
         -- operations_alert
@@ -256,7 +260,9 @@ SET search_path = '_admin_';
             accepted_master_card = TRUE,
             accepted_master_card_convenience_fee = TRUE,
             accepted_visa = TRUE,
-            accepted_visa_convenience_fee = TRUE; 
+            accepted_visa_convenience_fee = TRUE,
+            accepted_visa_debit = TRUE,
+            accepted_visa_debit_convenience_fee = TRUE;
         
         --outgoing_mail_queue
         
@@ -394,6 +400,15 @@ SET search_path = '_admin_';
 
 
         -- not null
+               
+        ALTER TABLE fee_default_payment_fees    ALTER COLUMN accepted_echeck SET NOT NULL,
+                                                ALTER COLUMN accepted_direct_banking SET NOT NULL,
+                                                ALTER COLUMN accepted_master_card SET NOT NULL,
+                                                ALTER COLUMN accepted_master_card_convenience_fee SET NOT NULL,
+                                                ALTER COLUMN accepted_visa SET NOT NULL,
+                                                ALTER COLUMN accepted_visa_convenience_fee SET NOT NULL,
+                                                ALTER COLUMN accepted_visa_debit SET NOT NULL,
+                                                ALTER COLUMN accepted_visa_debit_convenience_fee SET NOT NULL;
         
         ALTER TABLE scheduler_trigger ALTER COLUMN schedule_suspended SET NOT NULL;
                 

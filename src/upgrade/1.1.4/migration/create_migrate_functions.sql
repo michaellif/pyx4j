@@ -1624,6 +1624,9 @@ BEGIN
         -- not null
         
         ALTER TABLE aggregated_transfer ALTER COLUMN id_discriminator SET NOT NULL;
+        ALTER TABLE auto_pay_policy ALTER COLUMN allow_cancelation_by_resident SET NOT NULL,
+                                    ALTER COLUMN exclude_first_billing_period_charge SET NOT NULL,
+                                    ALTER COLUMN exclude_last_billing_period_charge SET NOT NULL;
         ALTER TABLE communication_message ALTER COLUMN sender SET NOT NULL;
         ALTER TABLE communication_message ALTER COLUMN sender_discriminator SET NOT NULL;
         ALTER TABLE communication_thread ALTER COLUMN owner SET NOT NULL;
