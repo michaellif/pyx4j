@@ -227,7 +227,10 @@ public class YardiLeaseProcessor {
         if (leaseMove || !unitNumber.equals(lease.unit().info().number().getValue())) {
             Validate.isTrue(CommonsStringUtils.isStringSet(propertyCode), "Property Code required");
             AptUnit unit = retrieveUnit(rtd.getYardiInterfaceId(), propertyCode, unitNumber);
-            log.debug("change unit {} for lease {} to unit {}", lease.unit(), lease.leaseId().getValue(), unit);
+            rtd.getExecutionMonitor().addInfoEvent(
+                    "Lease",
+                    SimpleMessageFormat.format("lease {0}: updating unit {1} to unit {2}", lease.leaseId().getStringView(), lease.unit().getStringView(),
+                            unit.getStringView()));
 
             lease = new LeaseMerger().updateUnit(unit, lease, leaseMove);
             toFinalize = true;
@@ -272,10 +275,11 @@ public class YardiLeaseProcessor {
         // persisting logic: 
         if (toFinalize) {
             lease = ServerSideFactory.create(LeaseFacade.class).finalize(lease);
-            rtd.getExecutionMonitor().addInfoEvent("Lease", SimpleMessageFormat.format("lease {0} updated (new version)", lease.leaseId().getValue()));
+            rtd.getExecutionMonitor().addInfoEvent("Lease", SimpleMessageFormat.format("lease {0} updated (new version)", lease.leaseId().getStringView()));
         } else if (toPersist) {
             lease = ServerSideFactory.create(LeaseFacade.class).persist(lease);
-            rtd.getExecutionMonitor().addInfoEvent("Lease", SimpleMessageFormat.format("lease {0} updated (no version changes)", lease.leaseId().getValue()));
+            rtd.getExecutionMonitor().addInfoEvent("Lease",
+                    SimpleMessageFormat.format("lease {0} updated (no version changes)", lease.leaseId().getStringView()));
         } else {
             log.debug("        No lease changes detected");
         }
