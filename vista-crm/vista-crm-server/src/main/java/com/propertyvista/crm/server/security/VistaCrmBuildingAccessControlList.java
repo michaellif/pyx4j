@@ -34,12 +34,15 @@ import com.pyx4j.security.server.UIAclBuilder;
 import com.propertyvista.crm.rpc.dto.billing.BillingCycleDTO;
 import com.propertyvista.crm.rpc.services.MediaUploadBuildingService;
 import com.propertyvista.crm.rpc.services.MediaUploadFloorplanService;
+import com.propertyvista.crm.rpc.services.UpdateUploadService;
 import com.propertyvista.crm.rpc.services.billing.BillingCycleBillListService;
 import com.propertyvista.crm.rpc.services.billing.BillingCycleCrudService;
 import com.propertyvista.crm.rpc.services.billing.BillingCycleLeaseListService;
 import com.propertyvista.crm.rpc.services.building.ac.CommunityEvents;
 import com.propertyvista.crm.rpc.services.building.ac.ImportExport;
 import com.propertyvista.crm.rpc.services.building.ac.UpdateUnitAvailability;
+import com.propertyvista.crm.rpc.services.importer.ExportBuildingDataDownloadService;
+import com.propertyvista.crm.rpc.services.importer.ImportBuildingDataService;
 import com.propertyvista.domain.financial.BuildingMerchantAccount;
 import com.propertyvista.domain.financial.offering.Concession;
 import com.propertyvista.domain.financial.offering.Feature;
@@ -196,9 +199,11 @@ class VistaCrmBuildingAccessControlList extends UIAclBuilder {
             grant(BuildingAdministrator, CommunityEvents.class);
         }
         { // Q
-            grant(BuildingProperty, ImportExport.class);
-            grant(BuildingMarketing, ImportExport.class);
-            grant(BuildingAdministrator, ImportExport.class);
+            grant(BuildingProperty, BuildingMarketing, BuildingAdministrator, ImportExport.class);
+
+            grant(BuildingProperty, BuildingMarketing, BuildingAdministrator, new IServiceExecutePermission(UpdateUploadService.class));
+            grant(BuildingProperty, BuildingMarketing, BuildingAdministrator, new IServiceExecutePermission(ImportBuildingDataService.class));
+            grant(BuildingProperty, BuildingMarketing, BuildingAdministrator, new IServiceExecutePermission(ExportBuildingDataDownloadService.class));
         }
         { // R
             grant(BuildingProperty, UpdateUnitAvailability.class);
