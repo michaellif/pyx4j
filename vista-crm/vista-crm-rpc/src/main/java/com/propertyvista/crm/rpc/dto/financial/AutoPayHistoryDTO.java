@@ -41,4 +41,6 @@ public interface AutoPayHistoryDTO extends AutopayAgreement {
     @Editor(type = EditorType.moneylabel)
     @Caption(name = "Payment total")
     IPrimitive<BigDecimal> payment();
+
+    IPrimitive<String> auditDetails();
 }

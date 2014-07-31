@@ -141,8 +141,8 @@ import com.propertyvista.crm.client.activity.crud.customer.tenant.PotentialTenan
 import com.propertyvista.crm.client.activity.crud.customer.tenant.TenantEditorActivity;
 import com.propertyvista.crm.client.activity.crud.customer.tenant.TenantListerActivity;
 import com.propertyvista.crm.client.activity.crud.customer.tenant.TenantViewerActivity;
-import com.propertyvista.crm.client.activity.crud.financial.paps.PapListerActivity;
-import com.propertyvista.crm.client.activity.crud.financial.paps.PapViewerActivity;
+import com.propertyvista.crm.client.activity.crud.financial.paps.AutoPayHistoryListerActivity;
+import com.propertyvista.crm.client.activity.crud.financial.paps.AutoPayHistoryViewerActivity;
 import com.propertyvista.crm.client.activity.crud.floorplan.FloorplanEditorActivity;
 import com.propertyvista.crm.client.activity.crud.floorplan.FloorplanViewerActivity;
 import com.propertyvista.crm.client.activity.crud.landlord.LandlordEditorActivity;
@@ -806,10 +806,10 @@ public class ContentActivityMapper implements AppActivityMapper {
                     } else if (crudPlace instanceof Finance.AutoPay) {
                         switch (crudPlace.getType()) {
                         case viewer:
-                            activity = new PapViewerActivity(crudPlace);
+                            activity = new AutoPayHistoryViewerActivity(crudPlace);
                             break;
                         case lister:
-                            activity = new PapListerActivity(crudPlace);
+                            activity = new AutoPayHistoryListerActivity(crudPlace);
                             break;
                         default:
                             break;

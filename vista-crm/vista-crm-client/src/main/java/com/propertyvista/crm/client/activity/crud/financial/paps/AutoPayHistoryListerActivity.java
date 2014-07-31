@@ -22,15 +22,15 @@ import com.pyx4j.site.client.activity.AbstractListerActivity;
 import com.pyx4j.site.rpc.AppPlace;
 
 import com.propertyvista.crm.client.CrmSite;
-import com.propertyvista.crm.client.ui.crud.financial.paps.PapListerView;
+import com.propertyvista.crm.client.ui.crud.financial.paps.AutoPayHistoryListerView;
 import com.propertyvista.crm.rpc.dto.financial.AutoPayHistoryDTO;
 import com.propertyvista.crm.rpc.services.financial.AutoPayHistoryCrudService;
 import com.propertyvista.domain.payment.AutopayAgreement;
 
-public class PapListerActivity extends AbstractListerActivity<AutoPayHistoryDTO> {
+public class AutoPayHistoryListerActivity extends AbstractListerActivity<AutoPayHistoryDTO> {
 
-    public PapListerActivity(Place place) {
-        super(AutoPayHistoryDTO.class, place, CrmSite.getViewFactory().getView(PapListerView.class), GWT.<AutoPayHistoryCrudService> create(AutoPayHistoryCrudService.class));
+    public AutoPayHistoryListerActivity(Place place) {
+        super(AutoPayHistoryDTO.class, place, CrmSite.getViewFactory().getView(AutoPayHistoryListerView.class), GWT.<AutoPayHistoryCrudService> create(AutoPayHistoryCrudService.class));
     }
 
     @Override

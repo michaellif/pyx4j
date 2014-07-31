@@ -23,13 +23,12 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.prime.lister.AbstractLister;
 
 import com.propertyvista.crm.rpc.dto.financial.AutoPayHistoryDTO;
-import com.propertyvista.domain.financial.EftAggregatedTransfer;
 
-public class PapLister extends AbstractLister<AutoPayHistoryDTO> {
+public class AutoPayHistoryLister extends AbstractLister<AutoPayHistoryDTO> {
 
-    private static final I18n i18n = I18n.get(PapLister.class);
+    private static final I18n i18n = I18n.get(AutoPayHistoryLister.class);
 
-    public PapLister() {
+    public AutoPayHistoryLister() {
         super(AutoPayHistoryDTO.class, false);
 
         setDataTableModel(new DataTableModel<AutoPayHistoryDTO>(//@formatter:off

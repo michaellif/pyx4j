@@ -38,11 +38,11 @@ import com.propertyvista.domain.security.VistaCrmBehavior;
 import com.propertyvista.domain.security.common.AbstractPmcUser;
 import com.propertyvista.domain.tenant.lease.Tenant;
 
-public class PapForm extends CrmEntityForm<AutoPayHistoryDTO> {
+public class AutoPayHistoryForm extends CrmEntityForm<AutoPayHistoryDTO> {
 
-    private static final I18n i18n = I18n.get(PapForm.class);
+    private static final I18n i18n = I18n.get(AutoPayHistoryForm.class);
 
-    public PapForm(IForm<AutoPayHistoryDTO> view) {
+    public AutoPayHistoryForm(IForm<AutoPayHistoryDTO> view) {
         super(AutoPayHistoryDTO.class, view);
         createTabs();
     }
@@ -60,6 +60,7 @@ public class PapForm extends CrmEntityForm<AutoPayHistoryDTO> {
 
         formPanel.append(Location.Left, proto().createdBy(), new CEntityLabel<AbstractPmcUser>()).decorate().componentWidth(200);
         formPanel.append(Location.Left, proto().creationDate()).decorate().componentWidth(180);
+        formPanel.append(Location.Left, proto().auditDetails()).decorate();
 
         formPanel.append(Location.Right, proto().updatedByTenant()).decorate().componentWidth(120);
         formPanel.append(Location.Right, proto().updatedBySystem()).decorate().componentWidth(120);

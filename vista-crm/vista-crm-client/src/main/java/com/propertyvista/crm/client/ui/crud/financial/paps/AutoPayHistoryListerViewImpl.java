@@ -13,10 +13,12 @@
  */
 package com.propertyvista.crm.client.ui.crud.financial.paps;
 
-import com.pyx4j.site.client.ui.prime.lister.ILister;
-
+import com.propertyvista.crm.client.ui.crud.CrmListerViewImplBase;
 import com.propertyvista.crm.rpc.dto.financial.AutoPayHistoryDTO;
 
-public interface PapListerView extends ILister<AutoPayHistoryDTO> {
+public class AutoPayHistoryListerViewImpl extends CrmListerViewImplBase<AutoPayHistoryDTO> implements AutoPayHistoryListerView {
 
+    public AutoPayHistoryListerViewImpl() {
+        setLister(new AutoPayHistoryLister());
+    }
 }
