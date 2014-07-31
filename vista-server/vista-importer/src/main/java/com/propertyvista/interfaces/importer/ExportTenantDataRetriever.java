@@ -13,9 +13,15 @@
  */
 package com.propertyvista.interfaces.importer;
 
+import org.apache.commons.lang3.time.DateUtils;
+
+import com.pyx4j.config.server.SystemDateManager;
 import com.pyx4j.entity.core.AttachLevel;
+import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.server.Persistence;
 
+import com.propertyvista.domain.financial.PaymentRecord;
+import com.propertyvista.domain.payment.PaymentType;
 import com.propertyvista.domain.security.CustomerUserCredential;
 import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
 import com.propertyvista.interfaces.importer.converter.TenantConverter;
@@ -38,13 +44,13 @@ public class ExportTenantDataRetriever {
 
         tenantIO.insurance().addAll(new ExportInsuranceDataRetriever().getModel(leaseTermTenant.leaseParticipant()));
 
-        //Find if there are DirectDebit payment Records in DB in this lease. If so then we will send notification upon import
-        // TODO Stas VISTA-5007
-        if (false) {
-            tenantIO.hadDirectDebitPayments().setValue(true);
-        }
+        // See if any DirectDebit payment Records exist for this lease. If so then we will send notification upon import
+        EntityQueryCriteria<PaymentRecord> criteria = EntityQueryCriteria.create(PaymentRecord.class);
+        criteria.eq(criteria.proto().paymentMethod().type(), PaymentType.DirectBanking);
+        criteria.eq(criteria.proto().billingAccount(), leaseTermTenant.leaseTermV().holder().lease().billingAccount());
+        criteria.gt(criteria.proto().finalizeDate(), DateUtils.addMonths(SystemDateManager.getDate(), -6));
+        tenantIO.hadDirectDebitPayments().setValue(Persistence.service().exists(criteria));
 
         return tenantIO;
     }
-
 }

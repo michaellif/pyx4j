@@ -102,6 +102,9 @@ public class EmailTemplateRootObjectLoader {
             t.SiteHomeUrl().setValue(VistaDeployment.getBaseApplicationURL(VistaApplication.site, false));
             t.TenantPortalUrl().setValue(VistaDeployment.getBaseApplicationURL(VistaApplication.resident, true));
             t.ProspectPortalUrl().setValue(VistaDeployment.getBaseApplicationURL(VistaApplication.prospect, true));
+            t.DirectBankingHelpUrl().setValue(
+                    AppPlaceInfo.absoluteUrl(VistaDeployment.getBaseApplicationURL(VistaApplication.resident, true), true,
+                            ResidentPortalSiteMap.PortalTerms.DirectBankingInstruction.class));
             t.CompanyLogo().setValue(t.SiteHomeUrl().getValue() + "/" + DeploymentConsts.portalLogo + DeploymentConsts.siteImageResourceServletMapping);
 
             // TODO use SiteThemeServicesImpl.getSiteDescriptorFromCache()
@@ -270,6 +273,7 @@ public class EmailTemplateRootObjectLoader {
             t.StartDateWeekDay().setValue(new SimpleDateFormat("EEEE").format(context.lease().currentTerm().termFrom().getValue()));
             InternationalAddress address = AddressRetriever.getLeaseLegalAddress(context.lease());
             t.UnitAddress().setValue(address.getStringView());
+            t.BillingAccount().set(context.lease().billingAccount().accountNumber());
         } else if (tObj instanceof MaintenanceRequestT) {
             MaintenanceRequestT t = (MaintenanceRequestT) tObj;
 

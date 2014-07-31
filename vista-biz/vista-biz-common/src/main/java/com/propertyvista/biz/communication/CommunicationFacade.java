@@ -68,6 +68,8 @@ public interface CommunicationFacade {
 
     void sendTenantInvitation(LeaseTermTenant tenant);
 
+    void sendDirectDebitAccountChangedNote(LeaseTermTenant tenant);
+
     void sendNewPmcEmail(OnboardingUser user, Pmc pmc);
 
     void sendTenantSurePaymentNotProcessedEmail(Tenant tenant, LogicalDate gracePeriodEndDate, LogicalDate cancellationDate);

@@ -19,6 +19,7 @@ import com.propertyvista.biz.communication.NotificationFacade;
 import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.payment.AutopayAgreement;
 import com.propertyvista.domain.tenant.lease.Lease;
+import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
 
 public class NotificationFacadeMock implements NotificationFacade {
 
@@ -80,6 +81,10 @@ public class NotificationFacadeMock implements NotificationFacade {
 
     @Override
     public void yardiConfigurationError(String errorMessage) {
+    }
+
+    @Override
+    public void directDebitAccountChanged(LeaseTermTenant tenant) {
     }
 
 }

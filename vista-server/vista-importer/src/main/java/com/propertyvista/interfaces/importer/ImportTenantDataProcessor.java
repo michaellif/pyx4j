@@ -20,6 +20,7 @@ import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.server.Persistence;
 
+import com.propertyvista.biz.communication.NotificationFacade;
 import com.propertyvista.biz.tenant.CustomerFacade;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.tenant.Customer;
@@ -124,7 +125,7 @@ public class ImportTenantDataProcessor {
 
         // Notify tenant that account number had Changed
         if (tenantIO.hadDirectDebitPayments().getValue(false)) {
-            // TODO Stas VISTA-5007
+            ServerSideFactory.create(NotificationFacade.class).directDebitAccountChanged(leaseTermTenant);
         }
     }
 }

@@ -1123,4 +1123,36 @@ public class EmailTemplatesPolicyPreloader extends AbstractPolicyPreloader<Email
         return template;
     }
 
+    private EmailTemplate defaultEmailTemplateDirectDebitAccountChanged() {
+        EmailTemplateType type = EmailTemplateType.DirectDebitAccountChanged;
+
+        TenantT tenantT = EmailTemplateManager.getProto(type, TenantT.class);
+        LeaseT leaseT = EmailTemplateManager.getProto(type, LeaseT.class);
+        PortalLinksT portalT = EmailTemplateManager.getProto(type, PortalLinksT.class);
+        CompanyInfoT companyT = EmailTemplateManager.getProto(type, CompanyInfoT.class);
+
+        EmailTemplate template = EntityFactory.create(EmailTemplate.class);
+        template.useHeader().setValue(Boolean.TRUE);
+        template.useFooter().setValue(Boolean.TRUE);
+        template.type().setValue(type);
+        template.subject().setValue(i18n.tr("Direct Debit Account Changed", EmailTemplateManager.getVarname(portalT.CompanyName())));
+        template.content().setValue(i18n.tr(//@formatter:off
+                "Dear {0},<br/><br/>" +
+                "Our Record indicate that You have made a DirectDebit payment in the past.<br/>" +
+                "Because your Lease has changed or Building ownership changes your Account Number has been changed.<br/><br/>" +
+                "Your new Account Number is: {1}<br/><br/>" +
+                "When making Bill payments next month please use the new account number.<br/>" +
+                "If you have automatic payment scheduled for next month, you must cancel it and schedule a new one.<br/><br/>" +
+                "Click <b>[[{2}|here]]</b> for detailed payment instructions.<br/><br/>" +
+                "You can review the status of your payment any time on your <b>[[{3}|myCommunity portal]]</b>.<br/><br/>" +
+                "Thank you for choosing {4}.",
+                EmailTemplateManager.getVarname(tenantT.FirstName()),
+                EmailTemplateManager.getVarname(leaseT.BillingAccount()),
+                EmailTemplateManager.getVarname(portalT.DirectBankingHelpUrl()),
+                EmailTemplateManager.getVarname(portalT.TenantPortalUrl()),
+                EmailTemplateManager.getVarname(portalT.CompanyName())
+        ));//@formatter:on
+        return template;
+    }
+
 }

@@ -32,6 +32,7 @@ import com.propertyvista.biz.system.OperationsAlertFacade;
 import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.payment.AutopayAgreement;
 import com.propertyvista.domain.tenant.lease.Lease;
+import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
 
 public class NotificationFacadeImpl implements NotificationFacade {
 
@@ -135,6 +136,11 @@ public class NotificationFacadeImpl implements NotificationFacade {
     @Override
     public void autoPayCancellation(AutopayAgreement autopayAgreement) {
         ServerSideFactory.create(CommunicationFacade.class).sendTenantAutoPayCancellation(autopayAgreement);
+    }
+
+    @Override
+    public void directDebitAccountChanged(LeaseTermTenant tenant) {
+        ServerSideFactory.create(CommunicationFacade.class).sendDirectDebitAccountChangedNote(tenant);
     }
 
     @Override

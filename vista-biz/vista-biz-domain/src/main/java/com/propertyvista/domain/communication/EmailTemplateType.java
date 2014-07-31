@@ -66,7 +66,9 @@ public enum EmailTemplateType {
 
     PaymentReceiptWithWebPaymentFee,
 
-    PaymentReturned;
+    PaymentReturned,
+
+    DirectDebitAccountChanged;
 
     public static Set<EmailTemplateType> maintenanceTemplates() {
         return EnumSet.of(

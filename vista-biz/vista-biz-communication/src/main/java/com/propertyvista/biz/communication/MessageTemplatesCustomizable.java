@@ -276,6 +276,35 @@ class MessageTemplatesCustomizable {
         return email;
     }
 
+    public static MailMessage createDirectDebitAccountChangesEmail(LeaseTermTenant tenant) {
+        EmailTemplateType type = EmailTemplateType.DirectDebitAccountChanged;
+        // get building policy node
+        Persistence.ensureRetrieve(tenant.leaseTermV().holder().lease().unit().building(), AttachLevel.Attached);
+        EmailTemplate emailTemplate = getEmailTemplate(type, tenant.leaseTermV().holder().lease().unit().building());
+
+        EmailTemplateContext context = EntityFactory.create(EmailTemplateContext.class);
+        // populate context properties required by template type
+        context.leaseTermParticipant().set(tenant);
+        context.lease().set(tenant.leaseTermV().holder().lease());
+
+        ArrayList<IEntity> data = new ArrayList<IEntity>();
+        for (IEntity tObj : EmailTemplateManager.getTemplateDataObjects(type)) {
+            // ObjectLoader will load required T-Objects using context data
+            data.add(EmailTemplateRootObjectLoader.loadRootObject(tObj, context));
+        }
+        MailMessage email = new MailMessage();
+        CustomerUser user = tenant.leaseParticipant().customer().user();
+        if (user.isValueDetached()) {
+            Persistence.service().retrieve(tenant.leaseParticipant().customer().user());
+        }
+        email.setTo(user.email().getValue());
+        email.setSender(getSender());
+        // set email subject and body from the template
+        buildEmail(email, emailTemplate, context, data);
+
+        return email;
+    }
+
     private static MailMessage createTenantPayment(EmailTemplateType type, PaymentRecord paymentRecord) {
         Persistence.ensureRetrieve(paymentRecord.leaseTermParticipant(), AttachLevel.Attached);
         Persistence.ensureRetrieve(paymentRecord.leaseTermParticipant().leaseParticipant().customer().user(), AttachLevel.Attached);

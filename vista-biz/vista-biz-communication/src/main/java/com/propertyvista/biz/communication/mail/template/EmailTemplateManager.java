@@ -126,6 +126,10 @@ public class EmailTemplateManager {
             values.add(EntityFactory.create(LeaseT.class));
             values.add(EntityFactory.create(BuildingT.class));
             break;
+        case DirectDebitAccountChanged:
+            values.add(EntityFactory.create(TenantT.class));
+            values.add(EntityFactory.create(LeaseT.class));
+            break;
         default:
             throw new Error("Unknown EmailTemplateType: " + template.name());
         }

@@ -18,6 +18,7 @@ import java.util.List;
 import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.payment.AutopayAgreement;
 import com.propertyvista.domain.tenant.lease.Lease;
+import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
 
 /**
  * CRM and Tenant Notifications.
@@ -49,6 +50,8 @@ public interface NotificationFacade {
     public void autoPayCancelledBySystemNotification(Lease leaseId, List<AutopayAgreement> canceledAgreements);
 
     public void autoPayCancelledByResidentNotification(Lease leaseId, List<AutopayAgreement> canceledAgreements);
+
+    public void directDebitAccountChanged(LeaseTermTenant tenant);
 
     public void aggregateNotificationsStart();
 

@@ -32,6 +32,7 @@ public interface PortalLinksT extends IEntity {
 
     IPrimitive<String> ProspectPortalUrl();
 
-    IPrimitive<String> CopyrightNotice();
+    IPrimitive<String> DirectBankingHelpUrl();
 
+    IPrimitive<String> CopyrightNotice();
 }

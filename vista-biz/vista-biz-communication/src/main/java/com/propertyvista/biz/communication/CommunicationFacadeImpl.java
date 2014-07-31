@@ -366,4 +366,12 @@ public class CommunicationFacadeImpl implements CommunicationFacade {
         Mail.queueUofW(m, null, null);
     }
 
+    @Override
+    public void sendDirectDebitAccountChangedNote(LeaseTermTenant tenant) {
+        MailMessage m = MessageTemplatesCustomizable.createDirectDebitAccountChangesEmail(tenant);
+        if (m != null) {
+            Mail.queue(m, null, null);
+        }
+    }
+
 }
