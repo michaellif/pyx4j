@@ -42,9 +42,12 @@ BEGIN TRANSACTION;
     FROM    t
     WHERE   l.lease_id = t.lease_id;
     
+    UPDATE  cogir.lease_term AS lt
+    SET     unit = l.unit
+    FROM    cogir.lease l
+    WHERE   l.current_term = lt.id;
+    
 COMMIT;
 
 DROP TABLE IF EXISTS _dba_.cogir_move;
-    
-
     
