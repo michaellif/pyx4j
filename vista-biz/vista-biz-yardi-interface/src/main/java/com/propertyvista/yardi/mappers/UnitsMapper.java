@@ -86,22 +86,27 @@ public class UnitsMapper {
         unitTo.info()._bathrooms().set(floorplan.bathrooms());
         unitTo.info().area().set(floorplan.area());
         unitTo.info().areaUnits().set(floorplan.areaUnits());
-        switch (info.getUnitEcomomicStatus()) {
-        case RESIDENTIAL:
-            unitTo.info().economicStatus().setValue(EconomicStatus.residential);
-            break;
-        case COMMERCIAL:
-            unitTo.info().economicStatus().setValue(EconomicStatus.commercial);
-            break;
-        case OTHER:
+        if ((info.getUnitEcomomicStatus()) != null) {
+            switch (info.getUnitEcomomicStatus()) {
+            case RESIDENTIAL:
+                unitTo.info().economicStatus().setValue(EconomicStatus.residential);
+                break;
+            case COMMERCIAL:
+                unitTo.info().economicStatus().setValue(EconomicStatus.commercial);
+                break;
+            case OTHER:
+                unitTo.info().economicStatus().setValue(EconomicStatus.other);
+                break;
+            default:
+                unitTo.info().economicStatus().setValue(EconomicStatus.other);
+                log.debug("Unsupported unit economic status ('{}') for unit {} - imported as 'other'", info.getUnitEcomomicStatus(), info.getUnitID());
+                break;
+            }
+        } else {
             unitTo.info().economicStatus().setValue(EconomicStatus.other);
-            break;
-        default:
-            log.debug("Got unknown unit economic status ('{}') for unit {}: will be imported as 'other'", info.getUnitEcomomicStatus(), info.getUnitID());
-            unitTo.info().economicStatus().setValue(EconomicStatus.other);
-            break;
-
+            log.debug("NULL unit economic status ('{}') for unit {} - imported as 'other'", info.getUnitEcomomicStatus(), info.getUnitID());
         }
+
         unitTo.info().economicStatusDescription().setValue(info.getUnitEconomicStatusDescription());
 
         // financial
