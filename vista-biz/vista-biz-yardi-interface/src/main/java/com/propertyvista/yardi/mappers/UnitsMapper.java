@@ -20,7 +20,6 @@ import org.slf4j.LoggerFactory;
 import com.yardi.entity.maintenance.ServiceRequest;
 import com.yardi.entity.mits.Information;
 import com.yardi.entity.mits.Unit;
-import com.yardi.entity.mits.Uniteconstatusinfo;
 
 import com.pyx4j.entity.core.EntityFactory;
 
@@ -87,12 +86,21 @@ public class UnitsMapper {
         unitTo.info()._bathrooms().set(floorplan.bathrooms());
         unitTo.info().area().set(floorplan.area());
         unitTo.info().areaUnits().set(floorplan.areaUnits());
-
-        if (info.getUnitEcomomicStatus() == Uniteconstatusinfo.RESIDENTIAL) {
+        switch (info.getUnitEcomomicStatus()) {
+        case RESIDENTIAL:
             unitTo.info().economicStatus().setValue(EconomicStatus.residential);
-        } else {
+            break;
+        case COMMERCIAL:
+            unitTo.info().economicStatus().setValue(EconomicStatus.commercial);
+            break;
+        case OTHER:
+            unitTo.info().economicStatus().setValue(EconomicStatus.other);
+            break;
+        default:
             log.debug("Got unknown unit economic status ('{}') for unit {}: will be imported as 'other'", info.getUnitEcomomicStatus(), info.getUnitID());
             unitTo.info().economicStatus().setValue(EconomicStatus.other);
+            break;
+
         }
         unitTo.info().economicStatusDescription().setValue(info.getUnitEconomicStatusDescription());
 
