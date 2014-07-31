@@ -97,7 +97,7 @@ public class YardiBuildingProcessor {
         importedAddressToString.append("countyName: ").append(address.getCountyName()).append("");
         importedAddressToString.append(")");
 
-        log.info("Property PrimaryID={}, SecondaryID={}: Trying to import building address: '{}'", propertyId.getIdentification().getPrimaryID(), propertyId
+        log.debug("Property PrimaryID={}, SecondaryID={}: Trying to import building address: '{}'", propertyId.getIdentification().getPrimaryID(), propertyId
                 .getIdentification().getSecondaryID(), importedAddressToString.toString());
 
         StringBuilder addrErr = new StringBuilder();
@@ -111,7 +111,7 @@ public class YardiBuildingProcessor {
                 executionMonitor.addInfoEvent("ParseAddress", msg);
             }
         } else {
-            log.info("Property PrimaryID={}, SecondaryID={}: Address was imported successfully", propertyId.getIdentification().getPrimaryID(), propertyId
+            log.debug("Property PrimaryID={}, SecondaryID={}: Address was imported successfully", propertyId.getIdentification().getPrimaryID(), propertyId
                     .getIdentification().getSecondaryID());
         }
 

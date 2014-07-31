@@ -13,9 +13,6 @@
  */
 package com.propertyvista.yardi.processors;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.yardi.entity.resident.Property;
 import com.yardi.entity.resident.RTCustomer;
 import com.yardi.entity.resident.RTServiceTransactions;
@@ -33,8 +30,6 @@ import com.propertyvista.domain.financial.yardi.YardiReceipt;
 import com.propertyvista.domain.financial.yardi.YardiReceiptReversal;
 
 public class YardiPaymentProcessor {
-
-    private final static Logger log = LoggerFactory.getLogger(YardiPaymentProcessor.class);
 
     public void removeOldPayments(BillingAccount account) {
         EntityQueryCriteria<YardiPayment> criteria = EntityQueryCriteria.create(YardiPayment.class);

@@ -13,17 +13,12 @@
  */
 package com.propertyvista.yardi.mergers;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.propertyvista.domain.contact.InternationalAddress;
 import com.propertyvista.domain.marketing.Marketing;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.building.BuildingInfo;
 
 public class BuildingsMerger {
-
-    private final static Logger log = LoggerFactory.getLogger(BuildingsMerger.class);
 
     public Building merge(Building imported, Building existing) {
         return existing == null ? imported : mergeBuilding(imported, existing);

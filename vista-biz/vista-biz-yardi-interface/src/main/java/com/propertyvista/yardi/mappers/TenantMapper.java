@@ -56,16 +56,26 @@ public class TenantMapper {
         ignoredEmailLocalParts.add("nobody");
     }
 
+    public TenantMapper(ExecutionMonitor executionMonitor) {
+        assert (executionMonitor != null);
+        this.executionMonitor = executionMonitor;
+    }
+
     static public String getCustomerID(YardiCustomer yardiCustomer) {
         return yardiCustomer.getCustomerID().toLowerCase();
     }
 
-    public TenantMapper() {
-        this(null);
-    }
-
-    public TenantMapper(ExecutionMonitor executionMonitor) {
-        this.executionMonitor = executionMonitor;
+    public static LeaseTermParticipant.Role getRole(YardiCustomer yardiCustomer, LeaseTermParticipant<?> participant) {
+        // update CoApplicant <-> Dependent transition:
+        if (yardiCustomer.getLease().isResponsibleForLease()) {
+            if (participant.role().getValue() == Role.Applicant) {
+                return Role.Applicant;
+            } else {
+                return Role.CoApplicant;
+            }
+        } else {
+            return Role.Dependent;
+        }
     }
 
     public LeaseTermTenant createTenant(YardiCustomer yardiCustomer, List<LeaseTermTenant> tenants) {
@@ -110,19 +120,6 @@ public class TenantMapper {
         }
 
         return !EntityGraph.fullyEqual(customerOrig, customer);
-    }
-
-    public static LeaseTermParticipant.Role getRole(YardiCustomer yardiCustomer, LeaseTermParticipant<?> participant) {
-        // update CoApplicant <-> Dependent transition:
-        if (yardiCustomer.getLease().isResponsibleForLease()) {
-            if (participant.role().getValue() == Role.Applicant) {
-                return Role.Applicant;
-            } else {
-                return Role.CoApplicant;
-            }
-        } else {
-            return Role.Dependent;
-        }
     }
 
     public Customer mapCustomer(YardiCustomer yardiCustomer, Customer customer) {
@@ -245,10 +242,8 @@ public class TenantMapper {
                 customer.person().email().setValue(EmailValidator.normalizeEmailAddress(email));
             } else {
                 log.warn(">> DataValidation CustomerID : {} >> Invalid Email: [{}] ", yardiCustomer.getCustomerID(), email);
-                if (executionMonitor != null) {
-                    executionMonitor.addInfoEvent("DataValidation", CompletionType.failed,
-                            "Invalid Email: " + email + " for CustomerID " + yardiCustomer.getCustomerID(), null);
-                }
+                executionMonitor.addInfoEvent("DataValidation", CompletionType.failed,
+                        "Invalid Email: " + email + " for CustomerID " + yardiCustomer.getCustomerID(), null);
             }
         }
     }

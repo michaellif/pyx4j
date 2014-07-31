@@ -44,8 +44,8 @@ public class YardiLeaseFinancialProcessor {
     private final ExecutionMonitor executionMonitor;
 
     public YardiLeaseFinancialProcessor(ExecutionMonitor executionMonitor) {
-        this.executionMonitor = executionMonitor;
         assert (executionMonitor != null);
+        this.executionMonitor = executionMonitor;
     }
 
     /*
@@ -57,11 +57,11 @@ public class YardiLeaseFinancialProcessor {
         new YardiChargeProcessor().removeOldCharges(account);
         new YardiPaymentProcessor().removeOldPayments(account);
 
-        log.info("        Importing Lease Transactions:", rtCustomer.getCustomerID());
+        log.debug("        Importing Lease Transactions:", rtCustomer.getCustomerID());
 
         if (rtCustomer.getRTServiceTransactions() != null) {
             if (rtCustomer.getRTServiceTransactions().getTransactions().isEmpty()) {
-                log.info("          No Transactions for Lease customerId={} ", rtCustomer.getCustomerID());
+                log.debug("          No Transactions for Lease customerId={} ", rtCustomer.getCustomerID());
             }
 
             LeaseFinancialStats stats = new LeaseFinancialStats();
@@ -82,7 +82,7 @@ public class YardiLeaseFinancialProcessor {
             executionMonitor.addProcessedEvent("Transactions");
 
         } else {
-            log.info("          No RT Service Transactions Received for Lease customerId={} ", rtCustomer.getCustomerID());
+            log.debug("          No RT Service Transactions Received for Lease customerId={} ", rtCustomer.getCustomerID());
         }
     }
 
@@ -112,7 +112,7 @@ public class YardiLeaseFinancialProcessor {
         Persistence.service().persist(charge);
 
         stats.addCharge(charge.amount().getValue());
-        log.info("          Created charge (transactionId={}, chargePk={}, amount={})", detail.getTransactionID(), charge.id().getValue(), charge.amount()
+        log.debug("          Created charge (transactionId={}, chargePk={}, amount={})", detail.getTransactionID(), charge.id().getValue(), charge.amount()
                 .getValue());
     }
 
@@ -121,7 +121,7 @@ public class YardiLeaseFinancialProcessor {
         Persistence.service().persist(payment);
 
         stats.addPayment(payment.amount().getValue());
-        log.info("          Created payment (transactionId={}, amount={}) ", paymentIn.getDetail().getTransactionID(), payment.amount().getValue());
+        log.debug("          Created payment (transactionId={}, amount={}) ", paymentIn.getDetail().getTransactionID(), payment.amount().getValue());
     }
 
     private class LeaseFinancialStats {

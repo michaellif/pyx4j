@@ -97,7 +97,7 @@ public class UnitsMerger {
         Floorplan fp = unit.floorplan();
         if (fp.getPrimaryKey() != null) {
             // already there - don't touch it as PV is the origin for marketing data
-            log.info("    exising unit, existing floorplan - noop");
+            log.debug("    exising unit, existing floorplan - noop");
             return;
         }
 
@@ -106,13 +106,13 @@ public class UnitsMerger {
         for (Floorplan existing : building.floorplans()) {
             if (StringUtils.equals(existing.name().getValue(), fp.name().getValue())) {
                 unit.floorplan().set(existing);
-                log.info("    new unit, existing floorplan: {}", fp.name().getValue());
+                log.debug("    new unit, existing floorplan: {}", fp.name().getValue());
                 return;
             }
         }
 
         // new floorplan - persist
-        log.info("    new unit - creating floorplan: {}", fp.name().getValue());
+        log.debug("    new unit - creating floorplan: {}", fp.name().getValue());
         fp.building().set(building);
         Persistence.service().persist(fp);
 

@@ -121,6 +121,8 @@ public class LeaseMerger {
     }
 
     public boolean mergeBillableItems(List<BillableItem> items, Lease lease, ExecutionMonitor executionMonitor) {
+        assert (executionMonitor != null);
+
         boolean mergeRequired = false;
         List<BillableItem> lookupList = new ArrayList<>();
         if (!lease.currentTerm().version().leaseProducts().serviceItem().isNull()) {
@@ -172,10 +174,8 @@ public class LeaseMerger {
                         // This is wrong but we will the items to show.
                         lease.currentTerm().version().leaseProducts().featureItems().add(item);
                         String msg = SimpleMessageFormat.format("multiple serviceItems detected on lease {0}", lease.leaseId());
-                        log.info("      " + msg);
-                        if (executionMonitor != null) {
-                            executionMonitor.addFailedEvent("chargesChanged", msg);
-                        }
+                        log.warn("      " + msg);
+                        executionMonitor.addFailedEvent("chargesChanged", msg);
                     } else {
                         // replace if service
                         lease.currentTerm().version().leaseProducts().serviceItem().set(item);

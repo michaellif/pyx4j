@@ -17,9 +17,6 @@ import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.yardi.entity.ils.Availability;
 import com.yardi.entity.ils.DepositType;
 import com.yardi.entity.ils.ILSUnit;
@@ -32,7 +29,6 @@ import com.yardi.entity.mits.PropertyIDType;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.config.server.ServerSideFactory;
 
-import com.propertyvista.biz.ExecutionMonitor;
 import com.propertyvista.biz.occupancy.OccupancyFacade;
 import com.propertyvista.biz.system.YardiServiceException;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
@@ -40,18 +36,6 @@ import com.propertyvista.yardi.mappers.MappingUtils;
 import com.propertyvista.yardi.mappers.UnitsMapper;
 
 public class YardiILSMarketingProcessor {
-
-    private final static Logger log = LoggerFactory.getLogger(YardiILSMarketingProcessor.class);
-
-    private final ExecutionMonitor executionMonitor;
-
-    public YardiILSMarketingProcessor() {
-        this(null);
-    }
-
-    public YardiILSMarketingProcessor(ExecutionMonitor executionMonitor) {
-        this.executionMonitor = executionMonitor;
-    }
 
     public boolean updateAvailability(AptUnit unit, Availability avail) throws YardiServiceException {
         // no availability means "not available"

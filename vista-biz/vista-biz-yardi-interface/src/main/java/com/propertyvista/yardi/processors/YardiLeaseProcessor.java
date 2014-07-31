@@ -254,7 +254,8 @@ public class YardiLeaseProcessor {
 
         Persistence.ensureRetrieve(lease.currentTerm().version().tenants(), AttachLevel.Attached);
         Persistence.ensureRetrieve(lease.currentTerm().version().guarantors(), AttachLevel.Attached);
-        if (new TenantMerger().isChanged(yardiCustomers, lease.currentTerm().version().tenants(), lease.currentTerm().version().guarantors())) {
+        if (new TenantMerger(rtd.getExecutionMonitor()).isChanged(yardiCustomers, lease.currentTerm().version().tenants(), lease.currentTerm().version()
+                .guarantors())) {
             lease.currentTerm().set(new TenantMerger(rtd.getExecutionMonitor()).updateTenants(yardiCustomers, lease.currentTerm()));
             toFinalize = true;
             log.debug("        - Tenants Changed...");

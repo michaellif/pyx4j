@@ -17,8 +17,6 @@ import java.util.List;
 
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.collections4.Transformer;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import com.yardi.entity.mits.Identification;
 import com.yardi.entity.mits.PropertyIDType;
@@ -34,8 +32,6 @@ import com.propertyvista.domain.property.asset.building.Building;
  * 
  */
 public class BuildingsMapper {
-
-    private final static Logger log = LoggerFactory.getLogger(BuildingsMapper.class);
 
     static public String getPropertyCode(String propertyCode) {
         return propertyCode.toLowerCase();

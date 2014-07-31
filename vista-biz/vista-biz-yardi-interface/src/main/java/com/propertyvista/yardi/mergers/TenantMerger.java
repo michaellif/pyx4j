@@ -41,11 +41,8 @@ public class TenantMerger {
 
     private final ExecutionMonitor executionMonitor;
 
-    public TenantMerger() {
-        this(null);
-    }
-
     public TenantMerger(ExecutionMonitor executionMonitor) {
+        assert (executionMonitor != null);
         this.executionMonitor = executionMonitor;
     }
 
@@ -106,8 +103,7 @@ public class TenantMerger {
         boolean updated = false;
 
         for (YardiCustomer customer : yardiCustomers) {
-            LeaseTermParticipant<?> participant = findParticipant(term.version().tenants(), term.version().guarantors(),
-                    TenantMapper.getCustomerID(customer));
+            LeaseTermParticipant<?> participant = findParticipant(term.version().tenants(), term.version().guarantors(), TenantMapper.getCustomerID(customer));
 
             if (new TenantMapper(executionMonitor).updateCustomerData(customer, participant.leaseParticipant().customer())) {
                 ServerSideFactory.create(CustomerFacade.class).persistCustomer(participant.leaseParticipant().customer());

@@ -881,10 +881,11 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
                 }
 
             });
-            executionMonitor.addProcessedEvent("unit availability status", new BigDecimal(1));
+            executionMonitor.addProcessedEvent("AvailabilityStatus", new BigDecimal(1));
         } catch (Throwable e) {
-            executionMonitor.addFailedEvent("unit availability status", new BigDecimal(1));
-            log.error(SimpleMessageFormat.format("failed to import availability status for unit pk={0}", unit.getPrimaryKey()), e);
+            String msg = SimpleMessageFormat.format("failed to import availability status for unit pk={0}", unit.getPrimaryKey());
+            executionMonitor.addFailedEvent("AvailabilityStatus", msg);
+            log.error(msg, e);
         }
     }
 

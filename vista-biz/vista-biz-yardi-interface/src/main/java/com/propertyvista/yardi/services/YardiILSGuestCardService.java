@@ -64,7 +64,8 @@ public class YardiILSGuestCardService extends YardiAbstractService {
         for (ILSUnit ilsUnit : marketingInfo.getProperty().get(0).getILSUnit()) {
             if (CommonsStringUtils.equals(aptUnit.info().number().getValue(), UnitsMapper.getUnitID(ilsUnit.getUnit().getInformation().get(0)))) {
                 final Availability avail = ilsUnit.getAvailability();
-                log.info("New Unit Availability: {}: {}", aptUnit.getStringView(), (avail == null || avail.getVacateDate() == null ? "Not " : "") + "Available");
+                log.debug("New Unit Availability: {}: {}", aptUnit.getStringView(), (avail == null || avail.getVacateDate() == null ? "Not " : "")
+                        + "Available");
 
                 new UnitOfWork(TransactionScopeOption.RequiresNew).execute(new Executable<Void, YardiServiceException>() {
                     @Override
