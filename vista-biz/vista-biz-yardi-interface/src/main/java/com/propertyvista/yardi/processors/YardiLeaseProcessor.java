@@ -105,6 +105,7 @@ public class YardiLeaseProcessor {
                 lease = ServerSideFactory.create(LeaseFacade.class).load(lease, true);
                 if (expireLeaseProducts(lease)) {
                     lease = ServerSideFactory.create(LeaseFacade.class).finalize(lease);
+                    log.info(SimpleMessageFormat.format("lease {0} from NoChargesLeases - expireLeaseProducts!", lease.leaseId().getValue()));
                 }
             }
         }
