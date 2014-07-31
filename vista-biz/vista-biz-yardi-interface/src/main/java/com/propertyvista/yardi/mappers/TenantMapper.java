@@ -40,7 +40,6 @@ import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
 import com.propertyvista.domain.tenant.lease.LeaseTermParticipant.Role;
 import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
-import com.propertyvista.operations.domain.scheduler.CompletionType;
 
 public class TenantMapper {
 
@@ -241,9 +240,9 @@ public class TenantMapper {
             if (EmailValidator.isValid(email)) {
                 customer.person().email().setValue(EmailValidator.normalizeEmailAddress(email));
             } else {
-                log.warn(">> DataValidation CustomerID : {} >> Invalid Email: [{}] ", yardiCustomer.getCustomerID(), email);
-                executionMonitor.addInfoEvent("DataValidation", CompletionType.failed,
-                        "Invalid Email: " + email + " for CustomerID " + yardiCustomer.getCustomerID(), null);
+                String msg = "Invalid Email: " + email + " for CustomerID " + yardiCustomer.getCustomerID();
+                executionMonitor.addFailedEvent("DataValidation", msg);
+                log.warn(msg);
             }
         }
     }
