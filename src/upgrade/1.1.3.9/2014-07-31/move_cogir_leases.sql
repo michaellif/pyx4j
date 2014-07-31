@@ -12,15 +12,14 @@ DROP TABLE IF EXISTS _dba_.cogir_move;
 
 CREATE TABLE _dba_.cogir_move
 (
-    property_code               VARCHAR(24),
     lease_id                    VARCHAR(24),
+    property_code               VARCHAR(24),
     unit_num                    VARCHAR(24)
 );
 
 SET client_encoding TO 'latin1';
 
-COPY _dba_.cogir_move FROM '/home/akinareevski/import/cogir_move1.csv' DELIMITERS ',' CSV HEADER;
-COPY _dba_.cogir_move FROM '/home/akinareevski/import/cogir_move2.csv' DELIMITERS ',' CSV HEADER;
+COPY _dba_.cogir_move FROM '/home/akinareevski/import/cogir_move.csv' DELIMITERS ',' CSV HEADER;
 
 SET client_encoding TO 'utf8';
 
