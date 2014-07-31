@@ -36,6 +36,17 @@ public class UIAclBuilder extends ServletContainerAclBuilder {
         grant(behavior, new ActionPermission(actionClass));
     }
 
+    protected void grant(Behavior behavior1, Behavior behavior2, Class<? extends ActionId> actionClass) {
+        grant(behavior1, new ActionPermission(actionClass));
+        grant(behavior2, new ActionPermission(actionClass));
+    }
+
+    protected void grant(Behavior behavior1, Behavior behavior2, Behavior behavior3, Class<? extends ActionId> actionClass) {
+        grant(behavior1, new ActionPermission(actionClass));
+        grant(behavior2, new ActionPermission(actionClass));
+        grant(behavior3, new ActionPermission(actionClass));
+    }
+
     protected void grant(Behavior behavior, Class<? extends ActionId> actionClass, InstanceAccess protectionDomain) {
         grant(behavior, new ActionPermission(actionClass, protectionDomain));
     }
