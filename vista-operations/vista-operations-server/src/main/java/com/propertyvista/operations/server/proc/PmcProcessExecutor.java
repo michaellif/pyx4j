@@ -63,7 +63,7 @@ class PmcProcessExecutor {
     }
 
     void execute() {
-        long startTimeNano = System.nanoTime();
+        final long startTimeNano = System.nanoTime();
         ExecutorService executorService = Executors.newSingleThreadExecutor();
 
         try {
@@ -75,7 +75,7 @@ class PmcProcessExecutor {
             criteria.add(PropertyCriterion.eq(criteria.proto().status(), RunDataStatus.NeverRan));
             ICursorIterator<RunData> it = Persistence.service().query(null, criteria, AttachLevel.Attached);
             while (it.hasNext() && (!PmcProcessMonitor.isPendingTermination(run))) {
-                RunData runData = it.next();
+                final RunData runData = it.next();
                 if (runData.status().equals(RunDataStatus.Canceled)) {
                     continue;
                 }
@@ -86,9 +86,16 @@ class PmcProcessExecutor {
 
                 executeOneRunData(executorService, pmcProcess, runData, run.forDate().getValue());
 
-                addRunDataStatsToRunStats(run.executionReport(), startTimeNano, runData);
+                new UnitOfWork(TransactionScopeOption.RequiresNew, ConnectionTarget.TransactionProcessing).execute(new Executable<Void, RuntimeException>() {
 
-                Persistence.service().persist(runData);
+                    @Override
+                    public Void execute() {
+                        addRunDataStatsToRunStats(run.executionReport(), startTimeNano, runData);
+                        Persistence.service().persist(runData);
+                        return null;
+                    }
+
+                });
 
                 if (runData.status().getValue() != RunDataStatus.Processed) {
                     runStatus = RunStatus.PartiallyCompleted;
@@ -172,11 +179,20 @@ class PmcProcessExecutor {
             if (futureResult.isDone()) {
                 compleated = true;
             }
-            ExecutionMonitor monitor = context.getExecutionMonitor();
+            final ExecutionMonitor monitor = context.getExecutionMonitor();
             // Update Statistics in UI
             if (monitor.isDirty()) {
-                monitor.updateExecutionReportMajorStats(runData.executionReport());
-                Persistence.service().persist(runData.executionReport());
+
+                new UnitOfWork(TransactionScopeOption.RequiresNew, ConnectionTarget.Web).execute(new Executable<Void, RuntimeException>() {
+                    @Override
+                    public Void execute() {
+                        monitor.updateExecutionReportMajorStats(runData.executionReport());
+                        Persistence.service().persist(runData.executionReport());
+                        return null;
+                    }
+
+                });
+
                 monitor.markClean();
             }
 
@@ -204,9 +220,18 @@ class PmcProcessExecutor {
             runData.executionReport().averageDuration().setValue(durationNano / (Consts.MSEC2NANO * runData.executionReport().total().getValue()));
         }
 
-        Persistence.service().retrieveMember(runData.executionReport().details(), AttachLevel.Attached);
-        context.getExecutionMonitor().updateExecutionReport(runData.executionReport());
-        Persistence.service().persist(runData.executionReport());
+        new UnitOfWork(TransactionScopeOption.RequiresNew, ConnectionTarget.TransactionProcessing).execute(new Executable<Void, RuntimeException>() {
+
+            @Override
+            public Void execute() {
+                Persistence.service().retrieveMember(runData.executionReport().details(), AttachLevel.Attached);
+                context.getExecutionMonitor().updateExecutionReport(runData.executionReport());
+                Persistence.service().persist(runData.executionReport());
+                return null;
+            }
+
+        });
+
         if (executionException != null) {
             runData.status().setValue(RunDataStatus.Erred);
             runData.errorMessage().setValue(ExecutionMonitor.truncErrorMessage(ExceptionMessagesExtractor.getAllMessages(executionException)));

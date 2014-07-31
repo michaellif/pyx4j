@@ -24,20 +24,24 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.pyx4j.commons.Key;
+import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.config.server.SystemDateManager;
 import com.pyx4j.entity.core.AttachLevel;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.core.criterion.PropertyCriterion;
 import com.pyx4j.entity.server.ConnectionTarget;
+import com.pyx4j.entity.server.Executable;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.server.TransactionScopeOption;
+import com.pyx4j.entity.server.UnitOfWork;
 import com.pyx4j.essentials.server.ExceptionMessagesExtractor;
 import com.pyx4j.essentials.server.admin.SystemMaintenance;
 import com.pyx4j.server.contexts.Lifecycle;
 import com.pyx4j.server.contexts.NamespaceManager;
 
 import com.propertyvista.biz.ExecutionMonitor;
+import com.propertyvista.biz.system.OperationsAlertFacade;
 import com.propertyvista.domain.VistaNamespace;
 import com.propertyvista.domain.pmc.Pmc;
 import com.propertyvista.domain.pmc.Pmc.PmcStatus;
@@ -101,24 +105,26 @@ public class PmcProcessDispatcherJob implements Job {
             startAndRun(process, forPmcKey, scheduledFireTime, forDate, operationsUserKey);
 
             log.info("process end {} {} {}", process.id().getStringView(), process.triggerType().getStringView(), process.getStringView(), process);
+        } catch (Throwable e) {
+            log.error("PmcProcess infrastructure failed", e);
+            ServerSideFactory.create(OperationsAlertFacade.class).record(null, "PmcProcess infrastructure failed", e);
         } finally {
             Persistence.service().endTransaction();
             Lifecycle.endContext();
         }
     }
 
-    private void startAndRun(Trigger trigger, Long forPmcKey, Date scheduledFireTime, Date forDate, Long operationsUserKey) {
+    private void startAndRun(final Trigger trigger, Long forPmcKey, final Date scheduledFireTime, Date forDate, Long operationsUserKey) {
         EntityQueryCriteria<Run> criteria = EntityQueryCriteria.create(Run.class);
         criteria.add(PropertyCriterion.eq(criteria.proto().trigger(), trigger));
         criteria.add(PropertyCriterion.in(criteria.proto().status(), RunStatus.Sleeping, RunStatus.Running));
-        Run run = Persistence.service().retrieve(criteria);
-        if (run != null) {
+        final Run run = EntityFactory.create(Run.class);
+        run.set(Persistence.service().retrieve(criteria));
+        if (!run.isNull()) {
             // Need to resume run
             if (!run.status().getValue().equals(RunStatus.Sleeping)) {
                 return;
             }
-        } else {
-            run = EntityFactory.create(Run.class);
         }
         run.started().setValue(SystemDateManager.getDate());
         run.status().setValue(RunStatus.Running);
@@ -164,13 +170,31 @@ public class PmcProcessDispatcherJob implements Job {
         if (run.status().getValue() != RunStatus.Sleeping) {
             run.completed().setValue(SystemDateManager.getDate());
         }
-        Persistence.service().persist(run);
 
-        if ((run.status().getValue() == RunStatus.Sleeping) && !trigger.sleepRetry().isNull()) {
-            // Reschedule run automatically
-            JobUtils.schedulSleepRetry(trigger, scheduledFireTime);
-        }
-        JobNotifications.notify(trigger, run);
+        new UnitOfWork(TransactionScopeOption.RequiresNew, ConnectionTarget.TransactionProcessing).execute(new Executable<Void, RuntimeException>() {
+
+            @Override
+            public Void execute() {
+                Persistence.service().persist(run);
+                return null;
+            }
+
+        });
+
+        new UnitOfWork(TransactionScopeOption.RequiresNew, ConnectionTarget.TransactionProcessing).execute(new Executable<Void, RuntimeException>() {
+
+            @Override
+            public Void execute() {
+                if ((run.status().getValue() == RunStatus.Sleeping) && !trigger.sleepRetry().isNull()) {
+                    // Reschedule run automatically
+                    JobUtils.schedulSleepRetry(trigger, scheduledFireTime);
+                }
+                JobNotifications.notify(trigger, run);
+                return null;
+            }
+
+        });
+
     }
 
     private PmcProcess startProcess(Run run) {
