@@ -22,6 +22,13 @@ package com.pyx4j.config.server;
 
 public interface ExceptionHandler {
 
+    /**
+     * If exception is not thrown by handle() then next Handler is called
+     * 
+     * @param exception
+     *            caught in Facade function invocation.
+     * @throws Throwable
+     */
     public void handle(Throwable exception) throws Throwable;
 
 }

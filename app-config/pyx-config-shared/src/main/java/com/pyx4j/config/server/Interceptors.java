@@ -20,8 +20,9 @@
  */
 package com.pyx4j.config.server;
 
-public @interface Handler {
+public @interface Interceptors {
 
-    Class<? extends ExceptionHandler> exception();
+    // For now we only support ExceptionHandlers, in future we may add more like in javax.interceptor.Interceptors
+    Class<? extends ExceptionHandler>[] value();
 
 }
