@@ -13,13 +13,11 @@
  */
 package com.propertyvista.crm.server.services;
 
-import java.io.Serializable;
 import java.util.List;
 import java.util.Vector;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
-import com.pyx4j.commons.Pair;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.config.server.SystemDateManager;
 import com.pyx4j.entity.core.AttachLevel;
@@ -123,6 +121,8 @@ public class MessageCrudServiceImpl extends AbstractCrudServiceDtoImpl<Message, 
         } else {
             messageCriteria.notExists(messageCriteria.proto().thread());
         }
+        ServerContext.getVisit().setAttribute(CommunicationMessageFacade.class.getName(), new Long(0L));
+
         messageCriteria.setPageSize(50);
         messageCriteria.setPageNumber(0);
         list(callback, messageCriteria);
@@ -193,7 +193,7 @@ public class MessageCrudServiceImpl extends AbstractCrudServiceDtoImpl<Message, 
                 to.owner() == null || to.owner().isEmpty() || to.owner().isPrototype() || to.owner().isNull() ? communicationFacade
                         .getSystemEndpointFromCache(SystemEndpointName.Unassigned) : to.owner().endpoint());
 
-        ServerContext.getVisit().setAttribute(CommunicationMessageFacade.class.getName(), new Pair<Long, Serializable>(0L, null));
+        ServerContext.getVisit().setAttribute(CommunicationMessageFacade.class.getName(), new Long(0L));
         return Persistence.secureSave(t);
     }
 
@@ -353,7 +353,7 @@ public class MessageCrudServiceImpl extends AbstractCrudServiceDtoImpl<Message, 
             Persistence.service().commit();
             callback.onSuccess(message);
         }
-        ServerContext.getVisit().setAttribute(CommunicationMessageFacade.class.getName(), new Pair<Long, Serializable>(0L, null));
+        ServerContext.getVisit().setAttribute(CommunicationMessageFacade.class.getName(), new Long(0L));
     }
 
     @Override
@@ -370,7 +370,7 @@ public class MessageCrudServiceImpl extends AbstractCrudServiceDtoImpl<Message, 
         Persistence.ensureRetrieve(employee.user(), AttachLevel.Attached);
         message.owner().set((ServerSideFactory.create(CommunicationMessageFacade.class).generateEndpointDTO(employee.user())));
         message.status().set(thread.status());
-        ServerContext.getVisit().setAttribute(CommunicationMessageFacade.class.getName(), new Pair<Long, Serializable>(0L, null));
+        ServerContext.getVisit().setAttribute(CommunicationMessageFacade.class.getName(), new Long(0L));
         callback.onSuccess(message);
     }
 }

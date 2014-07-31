@@ -13,15 +13,15 @@
  */
 package com.propertyvista.portal.resident.activity;
 
-import com.pyx4j.gwt.commons.ClientEventBus;
 import com.pyx4j.rpc.client.RPCManager;
 import com.pyx4j.rpc.client.SystemNotificationEvent;
 import com.pyx4j.rpc.client.SystemNotificationHandler;
 
-import com.propertyvista.portal.resident.events.CommunicationStatusUpdateEvent;
 import com.propertyvista.portal.rpc.shared.dto.communication.PortalCommunicationSystemNotification;
 
 public class PortalClientCommunicationManager {
+
+    private PortalCommunicationSystemNotification latestNotification = null;
 
     private static class SingletonHolder {
         public static final PortalClientCommunicationManager INSTANCE = new PortalClientCommunicationManager();
@@ -37,11 +37,13 @@ public class PortalClientCommunicationManager {
             @Override
             public void onSystemNotificationReceived(SystemNotificationEvent event) {
                 if (event.getSystemNotification() instanceof PortalCommunicationSystemNotification) {
-                    PortalCommunicationSystemNotification notification = (PortalCommunicationSystemNotification) event.getSystemNotification();
-                    ClientEventBus.fireEvent(new CommunicationStatusUpdateEvent(notification));
+                    latestNotification = (PortalCommunicationSystemNotification) event.getSystemNotification();
                 }
             }
         });
     }
 
+    public PortalCommunicationSystemNotification getLatestCommunicationNotification() {
+        return latestNotification;
+    }
 }

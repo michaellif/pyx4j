@@ -107,7 +107,7 @@ public class ToolbarActivity extends AbstractActivity implements ToolbarPresente
     }
 
     private void updateCommunicationMessagesCount(PortalCommunicationSystemNotification communicationStatus) {
-        view.setCommunicationMessagesCount(communicationStatus == null ? 0 : communicationStatus.numberOfNewDirectMessages);
+        view.updateCommunicationMessagesCount(communicationStatus);
     }
 
     @Override
@@ -131,6 +131,7 @@ public class ToolbarActivity extends AbstractActivity implements ToolbarPresente
                 if (cview != null) {
                     cview.populate(result == null || result.getData() == null ? null : result.getData());
                 }
+                updateCommunicationMessagesCount(PortalClientCommunicationManager.instance().getLatestCommunicationNotification());
             }
 
             @Override

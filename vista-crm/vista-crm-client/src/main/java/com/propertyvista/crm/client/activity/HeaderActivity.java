@@ -144,6 +144,7 @@ public class HeaderActivity extends AbstractActivity implements HeaderPresenter 
                 if (cview != null) {
                     cview.populate(result == null || result.getData() == null ? null : result.getData());
                 }
+                updateCommunicationMessagesCount(CrmClientCommunicationManager.instance().getLatestCommunicationNotification());
             }
 
             @Override

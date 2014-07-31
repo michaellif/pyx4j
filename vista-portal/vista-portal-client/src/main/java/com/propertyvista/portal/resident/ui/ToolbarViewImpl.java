@@ -42,6 +42,8 @@ import com.pyx4j.widgets.client.Toolbar;
 
 import com.propertyvista.common.client.ClientLocaleUtils;
 import com.propertyvista.domain.security.PortalResidentBehavior;
+import com.propertyvista.portal.resident.activity.PortalClientCommunicationManager;
+import com.propertyvista.portal.rpc.shared.dto.communication.PortalCommunicationSystemNotification;
 import com.propertyvista.portal.shared.resources.PortalImages;
 import com.propertyvista.portal.shared.themes.PortalRootPaneTheme;
 import com.propertyvista.shared.i18n.CompiledLocale;
@@ -290,6 +292,8 @@ public class ToolbarViewImpl extends FlowPanel implements ToolbarView {
             break;
         }
         loginButton.setVisible(!loggedIn && !hideLoginButton);
+
+        updateCommunicationMessagesCount(PortalClientCommunicationManager.instance().getLatestCommunicationNotification());
         communicationButton.setVisible(loggedIn && SecurityController.check(PortalResidentBehavior.Resident));
 
         switch (layoutType) {
@@ -305,7 +309,8 @@ public class ToolbarViewImpl extends FlowPanel implements ToolbarView {
     }
 
     @Override
-    public void setCommunicationMessagesCount(int count) {
+    public void updateCommunicationMessagesCount(PortalCommunicationSystemNotification communicationStatus) {
+        int count = communicationStatus == null ? 0 : communicationStatus.numberOfNewDirectMessages;
         if (count > 0) {
             communicationButton.setImage(PortalImages.INSTANCE.alertsOn());
             communicationButton.setTextLabel(String.valueOf(count));

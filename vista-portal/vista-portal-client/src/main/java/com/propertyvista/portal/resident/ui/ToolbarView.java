@@ -17,6 +17,7 @@ import java.util.List;
 
 import com.pyx4j.site.client.IsView;
 
+import com.propertyvista.portal.rpc.shared.dto.communication.PortalCommunicationSystemNotification;
 import com.propertyvista.shared.i18n.CompiledLocale;
 
 public interface ToolbarView extends IsView {
@@ -48,6 +49,6 @@ public interface ToolbarView extends IsView {
 
     void setLeasesSelectorEnabled(boolean enabled);
 
-    void setCommunicationMessagesCount(int count);
+    void updateCommunicationMessagesCount(PortalCommunicationSystemNotification communicationStatus);
 
 }

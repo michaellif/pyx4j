@@ -13,14 +13,12 @@
  */
 package com.propertyvista.portal.server.portal.resident.services;
 
-import java.io.Serializable;
 import java.util.List;
 
 import org.apache.commons.collections4.set.ListOrderedSet;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
-import com.pyx4j.commons.Pair;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.config.server.SystemDateManager;
 import com.pyx4j.entity.core.AttachLevel;
@@ -130,7 +128,7 @@ public class MessagePortalCrudServiceImpl extends AbstractCrudServiceDtoImpl<Mes
         t.content().add(bo);
         t.owner().set(communicationFacade.getSystemEndpointFromCache(SystemEndpointName.Unassigned));
 
-        ServerContext.getVisit().setAttribute(CommunicationMessageFacade.class.getName(), new Pair<Long, Serializable>(0L, null));
+        ServerContext.getVisit().setAttribute(CommunicationMessageFacade.class.getName(), new Long(0L));
 
         return Persistence.secureSave(t);
     }
@@ -147,6 +145,9 @@ public class MessagePortalCrudServiceImpl extends AbstractCrudServiceDtoImpl<Mes
         } else {
             messageCriteria.notExists(messageCriteria.proto().thread());
         }
+
+        ServerContext.getVisit().setAttribute(CommunicationMessageFacade.class.getName(), new Long(0L));
+
         messageCriteria.setPageSize(50);
         messageCriteria.setPageNumber(0);
         list(callback, messageCriteria);
@@ -291,7 +292,7 @@ public class MessagePortalCrudServiceImpl extends AbstractCrudServiceDtoImpl<Mes
         }
         Persistence.service().commit();
 
-        ServerContext.getVisit().setAttribute(CommunicationMessageFacade.class.getName(), new Pair<Long, Serializable>(0L, null));
+        ServerContext.getVisit().setAttribute(CommunicationMessageFacade.class.getName(), new Long(0L));
 
         callback.onSuccess(message);
     }

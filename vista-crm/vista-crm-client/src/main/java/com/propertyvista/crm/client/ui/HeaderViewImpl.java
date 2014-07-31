@@ -36,6 +36,7 @@ import com.propertyvista.common.client.ClientLocaleUtils;
 import com.propertyvista.common.client.theme.SiteViewTheme;
 import com.propertyvista.common.client.ui.components.MediaUtils;
 import com.propertyvista.crm.client.CrmSite;
+import com.propertyvista.crm.client.activity.CrmClientCommunicationManager;
 import com.propertyvista.crm.client.resources.CrmImages;
 import com.propertyvista.crm.client.themes.CommunicationCrmTheme;
 import com.propertyvista.crm.rpc.CrmUserVisit;
@@ -342,6 +343,7 @@ public class HeaderViewImpl extends FlowPanel implements HeaderView {
             }
             break;
         }
+        setCommunicationMessagesCount(CrmClientCommunicationManager.instance().getLatestCommunicationNotification());
         communicationButton.setVisible(loggedIn);
     }
 

@@ -15,7 +15,6 @@ package com.propertyvista.biz.communication;
 
 import java.io.Serializable;
 
-import com.pyx4j.commons.Pair;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.config.server.rpc.IServiceFilter;
 import com.pyx4j.rpc.shared.Service;
@@ -55,14 +54,10 @@ public class CommunicationStatusRpcServiceFilter implements IServiceFilter {
                 return response;
             }
 
-            Serializable cachedNotification = getFromCache();
-            if (cachedNotification == null) {
+            if (!isCached()) {
                 Serializable communicationNotification = ServerSideFactory.create(CommunicationMessageFacade.class).getCommunicationStatus();
                 ServerContext.addResponseSystemNotification(communicationNotification);
-                ServerContext.getVisit().setAttribute(TIMESTAMPED_ATTRIBUTE,
-                        new Pair<Long, Serializable>(System.currentTimeMillis(), communicationNotification));
-            } else {
-                ServerContext.addResponseSystemNotification(cachedNotification);
+                ServerContext.getVisit().setAttribute(TIMESTAMPED_ATTRIBUTE, new Long(System.currentTimeMillis()));
             }
 
         }
@@ -70,21 +65,20 @@ public class CommunicationStatusRpcServiceFilter implements IServiceFilter {
         return response;
     }
 
-    private Serializable getFromCache() {
+    private boolean isCached() {
         Serializable cached = ServerContext.getVisit().getAttribute(TIMESTAMPED_ATTRIBUTE);
         if (cached != null) {
-            Pair<Long, Serializable> cachedEntity = (Pair<Long, Serializable>) cached;
-            Long cachedTimeStamp = cachedEntity.getA();
+            Long cachedTimeStamp = (Long) cached;
 
             if (cachedTimeStamp != null) {
                 long now = System.currentTimeMillis();
                 long diff = now - cachedTimeStamp;
                 long diffSeconds = diff / 1000;
                 if (diffSeconds < REFRESH_TIME) {
-                    return cachedEntity.getB();
+                    return true;
                 }
             }
         }
-        return null;
+        return false;
     }
 }

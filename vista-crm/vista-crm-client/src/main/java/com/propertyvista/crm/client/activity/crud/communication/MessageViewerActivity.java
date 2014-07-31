@@ -16,11 +16,14 @@ package com.propertyvista.crm.client.activity.crud.communication;
 import com.google.gwt.core.client.GWT;
 
 import com.pyx4j.entity.rpc.AbstractCrudService;
+import com.pyx4j.gwt.commons.ClientEventBus;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
 import com.propertyvista.crm.client.CrmSite;
+import com.propertyvista.crm.client.activity.CrmClientCommunicationManager;
 import com.propertyvista.crm.client.activity.crud.CrmViewerActivity;
+import com.propertyvista.crm.client.event.CommunicationStatusUpdateEvent;
 import com.propertyvista.crm.client.ui.crud.communication.MessageViewerView;
 import com.propertyvista.crm.rpc.services.MessageCrudService;
 import com.propertyvista.domain.communication.CommunicationThread.ThreadStatus;
@@ -42,6 +45,7 @@ public class MessageViewerActivity extends CrmViewerActivity<MessageDTO> impleme
                 if (rePopulate) {
                     getView().populate(result);
                 }
+                ClientEventBus.fireEvent(new CommunicationStatusUpdateEvent(CrmClientCommunicationManager.instance().getLatestCommunicationNotification()));
             }
         }, message, threadStatus);
 
@@ -52,8 +56,8 @@ public class MessageViewerActivity extends CrmViewerActivity<MessageDTO> impleme
         ((MessageCrudService) getService()).assignOwnership(new DefaultAsyncCallback<MessageDTO>() {
             @Override
             public void onSuccess(MessageDTO result) {
-
                 getView().populate(result);
+                ClientEventBus.fireEvent(new CommunicationStatusUpdateEvent(CrmClientCommunicationManager.instance().getLatestCommunicationNotification()));
             }
         }, message, empoyee);
     }

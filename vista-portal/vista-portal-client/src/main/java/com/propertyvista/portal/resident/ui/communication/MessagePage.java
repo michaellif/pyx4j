@@ -33,6 +33,7 @@ import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.forms.client.ui.folder.BoxFolderItemDecorator;
 import com.pyx4j.forms.client.ui.folder.CFolderItem;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
+import com.pyx4j.gwt.commons.ClientEventBus;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.security.client.ClientContext;
@@ -45,6 +46,8 @@ import com.propertyvista.common.client.ui.components.VistaViewersComponentFactor
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
 import com.propertyvista.domain.communication.CommunicationThread.ThreadStatus;
 import com.propertyvista.domain.communication.DeliveryHandle;
+import com.propertyvista.portal.resident.activity.PortalClientCommunicationManager;
+import com.propertyvista.portal.resident.events.CommunicationStatusUpdateEvent;
 import com.propertyvista.portal.resident.ui.communication.MessagePageView.MessagePagePresenter;
 import com.propertyvista.portal.rpc.portal.resident.ResidentPortalSiteMap;
 import com.propertyvista.portal.rpc.portal.resident.communication.MessageDTO;
@@ -296,6 +299,8 @@ public class MessagePage extends CPortalEntityForm<MessageDTO> {
                     ((MessagePagePresenter) MessagePage.this.getView().getPresenter()).saveMessageItem(new DefaultAsyncCallback<MessageDTO>() {
                         @Override
                         public void onSuccess(MessageDTO result) {
+                            ClientEventBus.fireEvent(new CommunicationStatusUpdateEvent(PortalClientCommunicationManager.instance()
+                                    .getLatestCommunicationNotification()));
                             AppSite.getPlaceController().goTo(new ResidentPortalSiteMap.Message.MessageView());
                         }
                     }, m);
@@ -334,6 +339,8 @@ public class MessagePage extends CPortalEntityForm<MessageDTO> {
                     ((MessagePagePresenter) MessagePage.this.getView().getPresenter()).saveMessageItem(new DefaultAsyncCallback<MessageDTO>() {
                         @Override
                         public void onSuccess(MessageDTO result) {
+                            ClientEventBus.fireEvent(new CommunicationStatusUpdateEvent(PortalClientCommunicationManager.instance()
+                                    .getLatestCommunicationNotification()));
                         }
                     }, value);
                 }
