@@ -31,6 +31,7 @@ import com.pyx4j.entity.server.Persistence;
 import com.propertyvista.biz.financial.payment.PaymentFacade;
 import com.propertyvista.biz.financial.payment.PaymentMethodFacade;
 import com.propertyvista.biz.financial.payment.PaymentMethodFacade.PaymentMethodUsage;
+import com.propertyvista.biz.financial.payment.PaymentMethodTarget;
 import com.propertyvista.domain.contact.InternationalAddress;
 import com.propertyvista.domain.financial.ARCode;
 import com.propertyvista.domain.payment.AutopayAgreement;
@@ -65,8 +66,9 @@ public class AutoPayWizardServiceImpl extends AbstractCrudServiceDtoImpl<Autopay
 
         AutoPayDTO dto = EntityFactory.create(AutoPayDTO.class);
 
-        dto.allowedPaymentsSetup()
-                .set(ServerSideFactory.create(PaymentFacade.class).getAllowedPaymentsSetup(lease.billingAccount(), VistaApplication.resident));
+        dto.allowedPaymentsSetup().set(
+                ServerSideFactory.create(PaymentFacade.class).getAllowedPaymentsSetup(lease.billingAccount(), PaymentMethodTarget.AutoPaySetup,
+                        VistaApplication.resident));
 
         // TODO: Currently allow just non-convenience fee cards (VISTA-3817, change 0):
         dto.allowedPaymentsSetup().allowedCardTypes().removeAll(dto.allowedPaymentsSetup().convenienceFeeApplicableCardTypes());
@@ -120,7 +122,9 @@ public class AutoPayWizardServiceImpl extends AbstractCrudServiceDtoImpl<Autopay
         Lease lease = ResidentPortalContext.getLease();
         Persistence.service().retrieve(lease.unit().building());
 
-        to.allowedPaymentsSetup().set(ServerSideFactory.create(PaymentFacade.class).getAllowedPaymentsSetup(lease.billingAccount(), VistaApplication.resident));
+        to.allowedPaymentsSetup().set(
+                ServerSideFactory.create(PaymentFacade.class).getAllowedPaymentsSetup(lease.billingAccount(), PaymentMethodTarget.TODO,
+                        VistaApplication.resident));
 
         // TODO: Currently allow just non-convenience fee cards (VISTA-3817, change 0):
         to.allowedPaymentsSetup().allowedCardTypes().removeAll(to.allowedPaymentsSetup().convenienceFeeApplicableCardTypes());

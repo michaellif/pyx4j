@@ -30,6 +30,7 @@ import com.pyx4j.entity.server.Persistence;
 import com.propertyvista.biz.financial.payment.PaymentFacade;
 import com.propertyvista.biz.financial.payment.PaymentMethodFacade;
 import com.propertyvista.biz.financial.payment.PaymentMethodFacade.PaymentMethodUsage;
+import com.propertyvista.biz.financial.payment.PaymentMethodTarget;
 import com.propertyvista.biz.policy.PolicyFacade;
 import com.propertyvista.domain.financial.AllowedPaymentsSetup;
 import com.propertyvista.domain.financial.PaymentRecord;
@@ -70,8 +71,9 @@ public class PaymentServiceImpl implements PaymentService {
         Persistence.service().retrieve(lease.unit());
         Persistence.service().retrieve(lease.unit().building());
 
-        dto.allowedPaymentsSetup()
-                .set(ServerSideFactory.create(PaymentFacade.class).getAllowedPaymentsSetup(lease.billingAccount(), VistaApplication.resident));
+        dto.allowedPaymentsSetup().set(
+                ServerSideFactory.create(PaymentFacade.class).getAllowedPaymentsSetup(lease.billingAccount(), PaymentMethodTarget.OneTimePayment,
+                        VistaApplication.resident));
 
         dto.address().set(AddressRetriever.getLeaseAddress(lease));
 
@@ -135,8 +137,9 @@ public class PaymentServiceImpl implements PaymentService {
         Lease lease = ResidentPortalContext.getLease();
         Persistence.service().retrieve(lease.unit().building());
 
-        dto.allowedPaymentsSetup()
-                .set(ServerSideFactory.create(PaymentFacade.class).getAllowedPaymentsSetup(lease.billingAccount(), VistaApplication.resident));
+        dto.allowedPaymentsSetup().set(
+                ServerSideFactory.create(PaymentFacade.class).getAllowedPaymentsSetup(lease.billingAccount(), PaymentMethodTarget.TODO,
+                        VistaApplication.resident));
 
         dto.address().set(AddressRetriever.getLeaseAddress(lease));
 
@@ -181,7 +184,8 @@ public class PaymentServiceImpl implements PaymentService {
         List<LeasePaymentMethod> methods = ServerSideFactory.create(PaymentMethodFacade.class).retrieveLeasePaymentMethods(
                 ResidentPortalContext.getLeaseTermTenant(), PaymentMethodUsage.InProfile, VistaApplication.resident);
 
-        AllowedPaymentsSetup aps = ServerSideFactory.create(PaymentFacade.class).getAllowedPaymentsSetup(lease.billingAccount(), VistaApplication.resident);
+        AllowedPaymentsSetup aps = ServerSideFactory.create(PaymentFacade.class).getAllowedPaymentsSetup(lease.billingAccount(), PaymentMethodTarget.TODO,
+                VistaApplication.resident);
 
         for (LeasePaymentMethod pm : methods) {
             PaymentMethodInfoDTO pmi = EntityFactory.create(PaymentMethodInfoDTO.class);
@@ -236,7 +240,8 @@ public class PaymentServiceImpl implements PaymentService {
     private static List<AutoPayInfoDTO> retrieveCurrentAutoPayments(Lease lease) {
         List<AutoPayInfoDTO> currentAutoPayments = new ArrayList<AutoPayInfoDTO>();
         LogicalDate excutionDate = ServerSideFactory.create(PaymentMethodFacade.class).getNextAutopayDate(lease);
-        AllowedPaymentsSetup aps = ServerSideFactory.create(PaymentFacade.class).getAllowedPaymentsSetup(lease.billingAccount(), VistaApplication.resident);
+        AllowedPaymentsSetup aps = ServerSideFactory.create(PaymentFacade.class).getAllowedPaymentsSetup(lease.billingAccount(), PaymentMethodTarget.TODO,
+                VistaApplication.resident);
 
         for (AutopayAgreement pap : ServerSideFactory.create(PaymentMethodFacade.class).retrieveAutopayAgreements(lease)) {
             AutoPayInfoDTO autoPayInfo = EntityFactory.create(AutoPayInfoDTO.class);

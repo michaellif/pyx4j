@@ -22,6 +22,7 @@ import com.pyx4j.entity.server.CrudEntityBinder;
 
 import com.propertyvista.biz.financial.payment.PaymentFacade;
 import com.propertyvista.biz.financial.payment.PaymentMethodFacade;
+import com.propertyvista.biz.financial.payment.PaymentMethodTarget;
 import com.propertyvista.domain.contact.InternationalAddress;
 import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.domain.payment.PaymentType;
@@ -50,8 +51,9 @@ public class PaymentMethodWizardServiceImpl extends AbstractCrudServiceDtoImpl<L
 
         PaymentMethodDTO dto = EntityFactory.create(PaymentMethodDTO.class);
 
-        dto.allowedPaymentsSetup()
-                .set(ServerSideFactory.create(PaymentFacade.class).getAllowedPaymentsSetup(lease.billingAccount(), VistaApplication.resident));
+        dto.allowedPaymentsSetup().set(
+                ServerSideFactory.create(PaymentFacade.class).getAllowedPaymentsSetup(lease.billingAccount(), PaymentMethodTarget.StoreInProfile,
+                        VistaApplication.resident));
 
         if (dto.allowedPaymentsSetup().allowedPaymentTypes().contains(PaymentType.Echeck)) {
             dto.paymentMethod().type().setValue(PaymentType.Echeck);

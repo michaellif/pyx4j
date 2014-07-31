@@ -35,6 +35,7 @@ import com.propertyvista.biz.financial.payment.PaymentException;
 import com.propertyvista.biz.financial.payment.PaymentFacade;
 import com.propertyvista.biz.financial.payment.PaymentMethodFacade;
 import com.propertyvista.biz.financial.payment.PaymentMethodFacade.PaymentMethodUsage;
+import com.propertyvista.biz.financial.payment.PaymentMethodTarget;
 import com.propertyvista.domain.contact.InternationalAddress;
 import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.payment.CreditCardInfo;
@@ -76,8 +77,9 @@ public class PaymentWizardServiceImpl extends AbstractCrudServiceDtoImpl<Payment
 
         dto.billingAccount().set(lease.billingAccount());
 
-        dto.allowedPaymentsSetup()
-                .set(ServerSideFactory.create(PaymentFacade.class).getAllowedPaymentsSetup(lease.billingAccount(), VistaApplication.resident));
+        dto.allowedPaymentsSetup().set(
+                ServerSideFactory.create(PaymentFacade.class).getAllowedPaymentsSetup(lease.billingAccount(), PaymentMethodTarget.OneTimePayment,
+                        VistaApplication.resident));
 
         dto.address().set(AddressRetriever.getLeaseAddress(lease));
 

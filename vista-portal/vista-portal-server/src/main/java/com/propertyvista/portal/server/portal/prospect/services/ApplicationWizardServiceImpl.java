@@ -43,6 +43,7 @@ import com.pyx4j.security.shared.SecurityController;
 import com.propertyvista.biz.financial.payment.PaymentFacade;
 import com.propertyvista.biz.financial.payment.PaymentMethodFacade;
 import com.propertyvista.biz.financial.payment.PaymentMethodFacade.PaymentMethodUsage;
+import com.propertyvista.biz.financial.payment.PaymentMethodTarget;
 import com.propertyvista.biz.occupancy.OccupancyFacade;
 import com.propertyvista.biz.policy.PolicyFacade;
 import com.propertyvista.biz.tenant.OnlineApplicationFacade;
@@ -809,7 +810,9 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
         PaymentDTO dto = EntityFactory.create(PaymentDTO.class);
 
         dto.billingAccount().set(lease.billingAccount());
-        dto.allowedPaymentsSetup().set(ServerSideFactory.create(PaymentFacade.class).getAllowedPaymentsSetup(to.policyNode(), VistaApplication.prospect));
+        dto.allowedPaymentsSetup().set(
+                ServerSideFactory.create(PaymentFacade.class).getAllowedPaymentsSetup(to.policyNode(), PaymentMethodTarget.StoreInProfile,
+                        VistaApplication.prospect));
 
         dto.address().set(AddressRetriever.getLeaseAddress(lease));
 

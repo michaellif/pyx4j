@@ -38,6 +38,7 @@ import com.propertyvista.biz.financial.payment.PaymentException;
 import com.propertyvista.biz.financial.payment.PaymentFacade;
 import com.propertyvista.biz.financial.payment.PaymentMethodFacade;
 import com.propertyvista.biz.financial.payment.PaymentMethodFacade.PaymentMethodUsage;
+import com.propertyvista.biz.financial.payment.PaymentMethodTarget;
 import com.propertyvista.crm.rpc.services.billing.PaymentRecordCrudService;
 import com.propertyvista.domain.contact.InternationalAddress;
 import com.propertyvista.domain.financial.BillingAccount;
@@ -89,7 +90,9 @@ public class PaymentRecordCrudServiceImpl extends AbstractCrudServiceDtoImpl<Pay
         super.enhanceRetrieved(bo, to, retrieveTarget);
         enhanceListRetrieved(bo, to);
 
-        to.allowedPaymentsSetup().set(ServerSideFactory.create(PaymentFacade.class).getAllowedPaymentsSetup(to.billingAccount(), VistaApplication.crm));
+        to.allowedPaymentsSetup().set(
+                ServerSideFactory.create(PaymentFacade.class).getAllowedPaymentsSetup(to.billingAccount(), PaymentMethodTarget.OneTimePayment,
+                        VistaApplication.crm));
 
         to.participants().addAll(retrievePayableUsers(to.billingAccount().lease()));
 
@@ -127,34 +130,35 @@ public class PaymentRecordCrudServiceImpl extends AbstractCrudServiceDtoImpl<Pay
             throw new RuntimeException("Entity '" + EntityFactory.getEntityMeta(BillingAccount.class).getCaption() + "' " + initData.parent().getPrimaryKey()
                     + " NotFound");
         }
-    
+
         if (!ServerSideFactory.create(PaymentFacade.class).isPaymentsAllowed(billingAccount)) {
             throw new UserRuntimeException(i18n.tr("No merchantAccount assigned to building to create the payment"));
         }
-    
+
         Persistence.ensureRetrieve(billingAccount.lease().unit().building(), AttachLevel.Attached);
-    
+
         PaymentRecordDTO dto = EntityFactory.create(PaymentRecordDTO.class);
-    
+
         dto.billingAccount().set(billingAccount);
-        dto.allowedPaymentsSetup().set(ServerSideFactory.create(PaymentFacade.class).getAllowedPaymentsSetup(dto.billingAccount(), VistaApplication.crm));
-    
+        dto.allowedPaymentsSetup().set(
+                ServerSideFactory.create(PaymentFacade.class).getAllowedPaymentsSetup(dto.billingAccount(), PaymentMethodTarget.TODO, VistaApplication.crm));
+
         dto.leaseId().set(billingAccount.lease().leaseId());
         dto.leaseStatus().set(billingAccount.lease().status());
         dto.propertyCode().set(billingAccount.lease().unit().building().propertyCode());
         dto.unitNumber().set(billingAccount.lease().unit().info().number());
-    
+
         dto.participants().addAll(retrievePayableUsers(billingAccount.lease()));
-    
+
         // some default values:
         dto.createdDate().setValue(SystemDateManager.getDate());
-    
+
         // calculate current balance:
         dto.amount().setValue(ServerSideFactory.create(ARFacade.class).getCurrentBalance(billingAccount));
         if (dto.amount().isNull() || dto.amount().getValue().signum() == -1) {
             dto.amount().setValue(new BigDecimal("0.00"));
         }
-    
+
         return dto;
     }
 
