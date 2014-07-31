@@ -101,7 +101,8 @@ public interface AutopayAgreement extends IEntity, HasNotesAndAttachments {
     @MemberColumn(notNull = true)
     LeasePaymentMethod paymentMethod();
 
-    @Length(40)
+    @Length(10000)
+    @Editor(type = Editor.EditorType.textarea)
     IPrimitive<String> comments();
 
     // internals: -------------------------------------------------------------

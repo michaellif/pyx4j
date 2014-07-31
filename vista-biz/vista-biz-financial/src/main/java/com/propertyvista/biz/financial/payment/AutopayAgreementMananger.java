@@ -26,6 +26,7 @@ import org.apache.commons.lang.Validate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.commons.EqualsHelper;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.commons.UserRuntimeException;
@@ -103,6 +104,7 @@ class AutopayAgreementMananger {
                         hasPaymentRecords = Persistence.service().count(criteria) > 0;
                     }
                     if (hasPaymentRecords) {
+                        addComment(origPreauthorizedPayment, "Replaced by Updated Agreement");
                         origPreauthorizedPayment.isDeleted().setValue(Boolean.TRUE);
                         origPreauthorizedPayment.expiredFrom().setValue(nextPaymentCycle.billingCycleStartDate().getValue());
                         Persistence.service().merge(origPreauthorizedPayment);
@@ -158,6 +160,10 @@ class AutopayAgreementMananger {
                 EntityFileLogger.log("unexpected-errors", "autopayAgreement-persist", preauthorizedPayment);
             }
         }
+    }
+
+    private void addComment(AutopayAgreement preauthorizedPayment, String message) {
+        preauthorizedPayment.comments().setValue(CommonsStringUtils.nvl_concat(preauthorizedPayment.comments().getValue(), message, "\n"));
     }
 
     private static class AllAmounts {
@@ -233,7 +239,7 @@ class AutopayAgreementMananger {
     }
 
     //If Tenant removes PAP - payment will NOT be canceled.
-    void deleteAutopayAgreement(AutopayAgreement preauthorizedPaymentId, boolean sendNotification) {
+    void deleteAutopayAgreement(AutopayAgreement preauthorizedPaymentId, boolean sendNotification, String comments) {
         AutopayAgreement preauthorizedPayment = Persistence.service().retrieve(AutopayAgreement.class, preauthorizedPaymentId.getPrimaryKey());
         Persistence.ensureRetrieve(preauthorizedPayment.tenant(), AttachLevel.Attached);
         Persistence.ensureRetrieve(preauthorizedPayment.tenant().lease(), AttachLevel.Attached);
@@ -258,6 +264,7 @@ class AutopayAgreementMananger {
         BillingCycle nextPaymentCycle = ServerSideFactory.create(PaymentMethodFacade.class).getNextAutopayBillingCycle(preauthorizedPayment.tenant().lease());
         preauthorizedPayment.expiredFrom().setValue(nextPaymentCycle.billingCycleStartDate().getValue());
 
+        addComment(preauthorizedPayment, comments);
         preauthorizedPayment.isDeleted().setValue(Boolean.TRUE);
         Persistence.service().merge(preauthorizedPayment);
         ServerSideFactory.create(AuditFacade.class).updated(preauthorizedPayment, "Deleted");
@@ -269,7 +276,7 @@ class AutopayAgreementMananger {
         criteria.eq(criteria.proto().isDeleted(), Boolean.FALSE);
 
         for (AutopayAgreement preauthorizedPayment : Persistence.service().query(criteria, AttachLevel.IdOnly)) {
-            deleteAutopayAgreement(preauthorizedPayment, true);
+            deleteAutopayAgreement(preauthorizedPayment, true, "Payment Method removed");
             new ScheduledPaymentsManager().cancelScheduledPayments(preauthorizedPayment);
         }
 
@@ -285,10 +292,11 @@ class AutopayAgreementMananger {
         AutoPayPolicy autoPayPolicy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(lease.unit().building(), AutoPayPolicy.class);
         AutoPayPolicy.ChangeRule changeRule = autoPayPolicy.onLeaseChargeChangeRule().getValue();
         BillingCycle nextCycle = ServerSideFactory.create(PaymentMethodFacade.class).getNextAutopayBillingCycle(lease);
-        if (!isPreauthorizedPaymentsApplicableForBillingCycle(lease, nextCycle, autoPayPolicy)) {
+        StringBuilder trace = new StringBuilder();
+        if (!isPreauthorizedPaymentsApplicableForBillingCycle(lease, nextCycle, autoPayPolicy, trace)) {
             // Suspend All
             for (AutopayAgreement pap : activePaps) {
-                deleteAutopayAgreement(pap, true);
+                deleteAutopayAgreement(pap, true, "Auto Pay will not be applicable for next BillingCycle " + trace);
             }
             ServerSideFactory.create(NotificationFacade.class).autoPayCancelledBySystemNotification(lease, activePaps);
             return;
@@ -409,13 +417,14 @@ class AutopayAgreementMananger {
         BillingCycle nextCycle = ServerSideFactory.create(PaymentMethodFacade.class).getNextAutopayBillingCycle(lease);
         AutoPayPolicy autoPayPolicy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(lease.unit().building(), AutoPayPolicy.class);
 
-        if (!isPreauthorizedPaymentsApplicableForBillingCycle(lease, nextCycle, autoPayPolicy)) {
+        StringBuilder trace = new StringBuilder();
+        if (!isPreauthorizedPaymentsApplicableForBillingCycle(lease, nextCycle, autoPayPolicy, trace)) {
             terminate = true;
         }
 
         if (terminate) {
             for (AutopayAgreement pap : activePaps) {
-                deleteAutopayAgreement(pap, true);
+                deleteAutopayAgreement(pap, true, trace.toString());
             }
             ServerSideFactory.create(NotificationFacade.class).autoPayCancelledBySystemNotification(lease, activePaps);
         }
@@ -425,7 +434,7 @@ class AutopayAgreementMananger {
         List<AutopayAgreement> activePaps = retrieveAutopayAgreements(lease);
         if (!activePaps.isEmpty()) {
             for (AutopayAgreement pap : activePaps) {
-                deleteAutopayAgreement(pap, sendNotification);
+                deleteAutopayAgreement(pap, sendNotification, "");
             }
             if (sendNotification) {
                 ServerSideFactory.create(NotificationFacade.class).autoPayCancelledBySystemNotification(lease, activePaps);
@@ -493,14 +502,15 @@ class AutopayAgreementMananger {
                                             account.lease().unit().building(), AutoPayPolicy.class);
 
                                     boolean terminate = false;
-                                    if (!isPreauthorizedPaymentsApplicableForBillingCycle(account.lease(), suspensionCycle, autoPayPolicy)) {
+                                    StringBuilder trace = new StringBuilder();
+                                    if (!isPreauthorizedPaymentsApplicableForBillingCycle(account.lease(), suspensionCycle, autoPayPolicy, trace)) {
                                         terminate = true;
                                     }
                                     if (terminate) {
                                         for (AutopayAgreement item : activePaps) {
                                             if (terminate) {
                                                 atLeaseOneTerminated = true;
-                                                deleteAutopayAgreement(item, true);
+                                                deleteAutopayAgreement(item, true, "Auto Pay will not not applicable for next BillingCycle " + trace);
                                                 executionMonitor.addProcessedEvent("AutoPay Cancel");
                                             }
                                         }
@@ -536,32 +546,24 @@ class AutopayAgreementMananger {
     }
 
     static boolean isPreauthorizedPaymentsApplicableForBillingCycle(Lease lease, BillingCycle paymentCycle, AutoPayPolicy autoPayPolicy) {
-        return isPreauthorizedPaymentsApplicableForBillingCycleWithTrace(lease, paymentCycle, autoPayPolicy, false);
+        return isPreauthorizedPaymentsApplicableForBillingCycle(lease, paymentCycle, autoPayPolicy, new StringBuilder());
     }
 
-    static boolean isPreauthorizedPaymentsApplicableForBillingCycleWithTrace(Lease lease, BillingCycle paymentCycle, AutoPayPolicy autoPayPolicy, boolean trace) {
+    static boolean isPreauthorizedPaymentsApplicableForBillingCycle(Lease lease, BillingCycle paymentCycle, AutoPayPolicy autoPayPolicy, StringBuilder trace) {
         if (lease.status().getValue().isNoAutoPay()) {
-            if (trace) {
-                log.debug("lease.status isNoAutoPay");
-            }
+            trace.append("Lease status '" + lease.status().getValue() + "' do not allow Auto Pay");
             return false;
         }
         // TODO: lease first month check:
-        if (leaseFirstBillingPeriodChargePolicyCheck(lease, paymentCycle, autoPayPolicy)) {
+        if (leaseFirstBillingPeriodChargePolicyCheck(lease, paymentCycle, autoPayPolicy, trace)) {
             return false;
         } else
         // lease last month check:
-        if (leaseLastBillingPeriodChargePolicyCheck(lease, paymentCycle, autoPayPolicy)) {
-            if (trace) {
-                log.debug("lease last month detected");
-            }
+        if (leaseLastBillingPeriodChargePolicyCheck(lease, paymentCycle, autoPayPolicy, trace)) {
             return false;
         } else
         // Lease end date check:
-        if (leaseEndDateCheck(lease, paymentCycle)) {
-            if (trace) {
-                log.debug("leaseEnd detected");
-            }
+        if (leaseEndDateCheck(lease, paymentCycle, trace)) {
             return false;
         } else {
             return true;
@@ -571,23 +573,39 @@ class AutopayAgreementMananger {
     // lease leaseXXXCheck(...) methods:
     // Note: do not synchronize it with criteria1 in updatePreauthorizedPayments(ExecutionMonitor executionMonitor, LogicalDate forDate) !!!   
 
-    static private boolean leaseFirstBillingPeriodChargePolicyCheck(Lease lease, BillingCycle nextCycle, AutoPayPolicy autoPayPolicy) {
+    static private boolean leaseFirstBillingPeriodChargePolicyCheck(Lease lease, BillingCycle nextCycle, AutoPayPolicy autoPayPolicy, StringBuilder trace) {
         // TODO Not implemented yet!..
         return false;
     }
 
-    static private boolean leaseLastBillingPeriodChargePolicyCheck(Lease lease, BillingCycle suspensionCycle, AutoPayPolicy autoPayPolicy) {
+    static private boolean leaseLastBillingPeriodChargePolicyCheck(Lease lease, BillingCycle suspensionCycle, AutoPayPolicy autoPayPolicy, StringBuilder trace) {
         if (autoPayPolicy.excludeLastBillingPeriodCharge().getValue(false)) {
-            return (beforeOrEqual(lease.expectedMoveOut(), suspensionCycle.billingCycleEndDate()) || beforeOrEqual(lease.actualMoveOut(),
-                    suspensionCycle.billingCycleEndDate()));
+            if (beforeOrEqual(lease.expectedMoveOut(), suspensionCycle.billingCycleEndDate())) {
+                trace.append("Lease Last Month detected; Expected Move Out : '" + lease.expectedMoveOut().getStringView() + "'");
+                return true;
+            }
+
+            if (beforeOrEqual(lease.actualMoveOut(), suspensionCycle.billingCycleEndDate())) {
+                trace.append("Lease Last Month detected; Actual Move Out : '" + lease.actualMoveOut().getStringView() + "'");
+                return true;
+            }
         }
         return false;
     }
 
-    static private boolean leaseEndDateCheck(Lease lease, BillingCycle suspensionCycle) {
+    static private boolean leaseEndDateCheck(Lease lease, BillingCycle suspensionCycle, StringBuilder trace) {
         if (VistaFeatures.instance().yardiIntegration()) {
-            return (before(lease.expectedMoveOut(), suspensionCycle.billingCycleStartDate()) || before(lease.actualMoveOut(),
-                    suspensionCycle.billingCycleStartDate()));
+            if (before(lease.expectedMoveOut(), suspensionCycle.billingCycleStartDate())) {
+                trace.append("Lease end detected; Expected Move Out : '" + lease.expectedMoveOut().getStringView() + "'");
+                return true;
+            }
+            if (before(lease.actualMoveOut(), suspensionCycle.billingCycleStartDate())) {
+                trace.append("Lease end detected; Actual Move Out : '" + lease.actualMoveOut().getStringView() + "'");
+                return true;
+            }
+
+            return false;
+
         } else {
             // TODO : calculate/ensure (case of Fixed and Periodic lease types) real lease end date!?
             return (before(lease.leaseTo(), suspensionCycle.billingCycleStartDate()));

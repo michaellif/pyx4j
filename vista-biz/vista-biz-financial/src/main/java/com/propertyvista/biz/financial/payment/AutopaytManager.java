@@ -242,12 +242,13 @@ class AutopaytManager {
             log.debug("AutoPayPolicy excludeFirstBillingPeriodCharge {}", autoPayPolicy.excludeFirstBillingPeriodCharge());
             log.debug("AutoPayPolicy  excludeLastBillingPeriodCharge {}", autoPayPolicy.excludeLastBillingPeriodCharge());
         }
+        StringBuilder traceMessage = new StringBuilder();
         if ((billingAccount.lease().status().getValue() != Lease.Status.Active)
-                || (!AutopayAgreementMananger.isPreauthorizedPaymentsApplicableForBillingCycleWithTrace(billingAccount.lease(), billingCycle, autoPayPolicy,
-                        trace))) {
+                || (!AutopayAgreementMananger.isPreauthorizedPaymentsApplicableForBillingCycle(billingAccount.lease(), billingCycle, autoPayPolicy,
+                        traceMessage))) {
             // Do not create payments
             if (trace) {
-                log.debug("Payments Not Applicable ForBillingCycle");
+                log.debug("Payments Not Applicable ForBillingCycle {}", traceMessage);
             }
             return Collections.emptyList();
         }

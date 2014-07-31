@@ -180,7 +180,7 @@ public class PaymentMethodFacadeImpl implements PaymentMethodFacade {
 
     @Override
     public void deleteAutopayAgreement(AutopayAgreement preauthorizedPayment) {
-        new AutopayAgreementMananger().deleteAutopayAgreement(preauthorizedPayment, true);
+        new AutopayAgreementMananger().deleteAutopayAgreement(preauthorizedPayment, true, null);
     }
 
     @Override
