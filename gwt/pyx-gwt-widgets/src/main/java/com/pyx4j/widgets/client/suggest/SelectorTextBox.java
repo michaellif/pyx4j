@@ -80,10 +80,13 @@ public class SelectorTextBox<E> extends Composite implements WatermarkComponent,
 
     private E value;
 
-    private final IFormatter<E, String> formatter;
+    private final IFormatter<E, String> valueFormatter;
 
-    public SelectorTextBox(final OptionsGrabber<E> optionsGrabber, IFormatter<E, String> formatter) {
-        this.formatter = formatter;
+    private final IFormatter<E, String[]> optionPathFormatter;
+
+    public SelectorTextBox(final OptionsGrabber<E> optionsGrabber, IFormatter<E, String> valueFormatter, IFormatter<E, String[]> optionPathFormatter) {
+        this.valueFormatter = valueFormatter;
+        this.optionPathFormatter = optionPathFormatter;
         this.optionsGrabber = optionsGrabber;
 
         this.box = new InputTextBox();
@@ -146,7 +149,7 @@ public class SelectorTextBox<E> extends Composite implements WatermarkComponent,
         if (value == null) {
             setText("");
         } else {
-            setText(formatter.format(value));
+            setText(valueFormatter.format(value));
             display.hideSuggestions();
             fireSuggestionEvent(value);
         }
@@ -193,13 +196,6 @@ public class SelectorTextBox<E> extends Composite implements WatermarkComponent,
         box.setFocus(focused);
     }
 
-    /**
-     * Sets the limit to the number of suggestions the oracle should provide. It
-     * is up to the oracle to enforce this limit.
-     * 
-     * @param limit
-     *            the limit to the number of suggestions provided
-     */
     public void setLimit(int limit) {
         this.limit = limit;
     }
@@ -237,7 +233,6 @@ public class SelectorTextBox<E> extends Composite implements WatermarkComponent,
                     case KeyCodes.KEY_ENTER:
                     case KeyCodes.KEY_TAB:
                         SelectorTextBox.this.setValue(display.getCurrentSelection());
-                        syncInput();
                         break;
                     }
                 }
@@ -635,7 +630,7 @@ public class SelectorTextBox<E> extends Composite implements WatermarkComponent,
         private final E suggestion;
 
         public SuggestionMenuItem(final E suggestion) {
-            super(formatter.format(suggestion), true, (MenuBar) null);
+            super(valueFormatter.format(suggestion), true, (MenuBar) null);
             this.suggestion = suggestion;
             getElement().getStyle().setProperty("whiteSpace", "nowrap");
             setStyleName(STYLENAME_DEFAULT);

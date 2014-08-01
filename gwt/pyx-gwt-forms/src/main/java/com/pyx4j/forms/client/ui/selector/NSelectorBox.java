@@ -59,6 +59,12 @@ public class NSelectorBox<E extends IEntity> extends NTextFieldBase<E, SelectorT
             public String format(E value) {
                 return getCComponent().getFormatter().format(value);
             }
+        }, new IFormatter<E, String[]>() {
+
+            @Override
+            public String[] format(E value) {
+                return getCComponent().getOptionPathFormatter().format(value);
+            }
         });
     }
 

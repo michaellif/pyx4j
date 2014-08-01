@@ -37,6 +37,8 @@ public class CSelectorBox<E extends IEntity> extends CTextFieldBase<E, NSelector
 
     private List<E> options = new ArrayList<E>();
 
+    private IFormatter<E, String[]> optionPathFormatter;
+
     public CSelectorBox() {
         super();
 
@@ -48,7 +50,23 @@ public class CSelectorBox<E extends IEntity> extends CTextFieldBase<E, NSelector
             }
         });
 
+        setOptionPathFormatter(new IFormatter<E, String[]>() {
+
+            @Override
+            public String[] format(E value) {
+                return null;
+            }
+        });
+
         setNativeComponent(new NSelectorBox<E>(this));
+    }
+
+    public IFormatter<E, String[]> getOptionPathFormatter() {
+        return optionPathFormatter;
+    }
+
+    public void setOptionPathFormatter(IFormatter<E, String[]> formatter) {
+        this.optionPathFormatter = formatter;
     }
 
     @Override
