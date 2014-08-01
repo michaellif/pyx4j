@@ -27,6 +27,7 @@ import java.util.Comparator;
 import com.google.gwt.event.logical.shared.SelectionEvent;
 import com.google.gwt.event.logical.shared.SelectionHandler;
 
+import com.pyx4j.commons.IFormatter;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.forms.client.ui.NTextFieldBase;
 import com.pyx4j.widgets.client.suggest.SelectorTextBox;
@@ -52,7 +53,13 @@ public class NSelectorBox<E extends IEntity> extends NTextFieldBase<E, SelectorT
 
     @Override
     protected SelectorTextBox<E> createEditor() {
-        return new SelectorTextBox<E>(optionsGrabber, getCComponent().getFormatter());
+        return new SelectorTextBox<E>(optionsGrabber, new IFormatter<E, String>() {
+
+            @Override
+            public String format(E value) {
+                return getCComponent().getFormatter().format(value);
+            }
+        });
     }
 
     @Override

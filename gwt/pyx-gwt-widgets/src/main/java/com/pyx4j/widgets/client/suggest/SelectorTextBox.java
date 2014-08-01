@@ -183,12 +183,6 @@ public class SelectorTextBox<E> extends Composite implements WatermarkComponent,
         getElement().setPropertyBoolean("disabled", !enabled);
     }
 
-    public void refreshSuggestionList() {
-        if (isAttached()) {
-            refreshSuggestions();
-        }
-    }
-
     @Override
     public void setAccessKey(char key) {
         box.setAccessKey(key);
@@ -215,36 +209,10 @@ public class SelectorTextBox<E> extends Composite implements WatermarkComponent,
         box.setTabIndex(index);
     }
 
-    /**
-     * Show the current list of suggestions.
-     */
-    public void showSuggestionList() {
-        if (isAttached()) {
-            refreshSuggestions();
-        }
-    }
-
     @Override
     protected void onEnsureDebugId(String baseID) {
         super.onEnsureDebugId(baseID);
         display.onEnsureDebugId(baseID);
-    }
-
-    void showSuggestions(String query) {
-
-        OptionsGrabber.Callback<E> callback = new OptionsGrabber.Callback<E>() {
-            @Override
-            public void onOptionsReady(OptionsGrabber.Request request, OptionsGrabber.Response<E> response) {
-                // If disabled while request was in-flight, drop it
-                if (!isEnabled()) {
-                    return;
-                }
-                display.showSuggestions(response.getOptions());
-            }
-        };
-
-        optionsGrabber.grabOptions(new OptionsGrabber.Request(query.length() == 0 ? "" : query, limit), callback);
-
     }
 
     class InputTextBox extends TextBox {
@@ -324,7 +292,8 @@ public class SelectorTextBox<E> extends Composite implements WatermarkComponent,
         private boolean syncInput() {
             String newText = getText();
             // check if new input has been received
-            boolean result = (!display.isSuggestionListShowing() && CommonsStringUtils.isEmpty(newText)) || (text != null && !text.equals(newText));
+            boolean result = (!display.isSuggestionListShowing() && CommonsStringUtils.isEmpty(newText))
+                    || (text == null ? newText != null : !text.equals(newText));
             text = newText;
             return result;
         }
@@ -335,7 +304,20 @@ public class SelectorTextBox<E> extends Composite implements WatermarkComponent,
     }
 
     private void refreshSuggestions() {
-        showSuggestions(getText());
+
+        OptionsGrabber.Callback<E> callback = new OptionsGrabber.Callback<E>() {
+            @Override
+            public void onOptionsReady(OptionsGrabber.Request request, OptionsGrabber.Response<E> response) {
+                // If disabled while request was in-flight, drop it
+                if (!isEnabled()) {
+                    return;
+                }
+                display.showSuggestions(response.getOptions());
+            }
+        };
+
+        optionsGrabber.grabOptions(new OptionsGrabber.Request(getText().length() == 0 ? "" : getText(), limit), callback);
+
     }
 
     @Override

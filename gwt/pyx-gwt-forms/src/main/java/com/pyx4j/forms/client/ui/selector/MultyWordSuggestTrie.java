@@ -78,7 +78,7 @@ public class MultyWordSuggestTrie<E> {
             this.trie.add(key, desc.get(key));
         }
 
-        log.debug(trie.toString());
+        log.trace(trie.toString());
     }
 
     public Collection<E> getCandidates(String query) {
@@ -106,7 +106,7 @@ public class MultyWordSuggestTrie<E> {
             }
         }
 
-        log.debug(candidates.toString());
+        log.trace(candidates.toString());
         return candidates;
     }
 
