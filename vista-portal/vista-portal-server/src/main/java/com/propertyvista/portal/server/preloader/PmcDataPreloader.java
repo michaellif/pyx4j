@@ -38,7 +38,6 @@ import com.propertyvista.domain.blob.MediaFileBlob;
 import com.propertyvista.domain.company.Portfolio;
 import com.propertyvista.domain.financial.offering.Feature;
 import com.propertyvista.domain.financial.offering.ProductCatalog;
-import com.propertyvista.domain.property.PropertyManager;
 import com.propertyvista.domain.property.asset.Boiler;
 import com.propertyvista.domain.property.asset.Complex;
 import com.propertyvista.domain.property.asset.Elevator;
@@ -84,7 +83,7 @@ public class PmcDataPreloader extends BaseVistaDevDataPreloader {
         if (ApplicationMode.isDevelopment()) {
             return deleteAll(Complex.class, Building.class, AptUnit.class, AptUnitItem.class, Floorplan.class, Vendor.class, Elevator.class, Boiler.class,
                     Roof.class, Parking.class, ParkingSpot.class, LockerArea.class, Locker.class, MediaFile.class, FileImageThumbnailBlob.class,
-                    MediaFileBlob.class, Feature.class, PropertyManager.class, ProductCatalog.class);
+                    MediaFileBlob.class, Feature.class, ProductCatalog.class);
         } else {
             return "This is production";
         }

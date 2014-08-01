@@ -38,7 +38,6 @@ import com.propertyvista.domain.financial.MerchantAccount;
 import com.propertyvista.domain.financial.offering.Feature;
 import com.propertyvista.domain.financial.offering.ProductCatalog;
 import com.propertyvista.domain.financial.offering.ProductItem;
-import com.propertyvista.domain.property.PropertyManager;
 import com.propertyvista.domain.property.asset.Boiler;
 import com.propertyvista.domain.property.asset.Complex;
 import com.propertyvista.domain.property.asset.Elevator;
@@ -56,7 +55,6 @@ import com.propertyvista.domain.property.vendor.Vendor;
 import com.propertyvista.generator.BuildingsGenerator;
 import com.propertyvista.generator.BuildingsGenerator.BuildingsGeneratorConfig;
 import com.propertyvista.generator.MediaGenerator;
-import com.propertyvista.generator.PreloadData;
 import com.propertyvista.generator.ProductCatalogGenerator;
 import com.propertyvista.generator.util.RandomUtil;
 import com.propertyvista.misc.VistaDataPreloaderParameter;
@@ -76,7 +74,7 @@ public class BuildingPreloader extends BaseVistaDevDataPreloader {
         if (ApplicationMode.isDevelopment()) {
             return deleteAll(Complex.class, Building.class, AptUnit.class, AptUnitItem.class, Floorplan.class, Vendor.class, Elevator.class, Boiler.class,
                     Roof.class, Parking.class, ParkingSpot.class, LockerArea.class, Locker.class, MediaFile.class, FileImageThumbnailBlob.class,
-                    MediaFileBlob.class, Feature.class, PropertyManager.class, ProductCatalog.class);
+                    MediaFileBlob.class, Feature.class, ProductCatalog.class);
         } else {
             return "This is production";
         }
@@ -94,13 +92,6 @@ public class BuildingPreloader extends BaseVistaDevDataPreloader {
 
         Persistence.service().persist(complexes);
         List<Complex> complexesWithBuildings = new Vector<Complex>();
-
-        // create some management companies:
-        List<PropertyManager> managements = new Vector<PropertyManager>();
-        for (String mngName : PreloadData.MANAGEMENT_COMPANY) {
-            managements.add(buildingGenerator.createPropertyManager(mngName));
-        }
-        Persistence.service().persist(managements);
 
         MerchantAccount merchantAccount = getMerchantAccount();
 

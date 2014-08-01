@@ -31,7 +31,6 @@ import com.propertyvista.domain.contact.InternationalAddress;
 import com.propertyvista.domain.pmc.IntegrationSystem;
 import com.propertyvista.domain.property.PropertyContact;
 import com.propertyvista.domain.property.PropertyContact.PropertyContactType;
-import com.propertyvista.domain.property.PropertyManager;
 import com.propertyvista.domain.property.asset.AreaMeasurementUnit;
 import com.propertyvista.domain.property.asset.Boiler;
 import com.propertyvista.domain.property.asset.Complex;
@@ -567,13 +566,6 @@ public class BuildingsGenerator {
         complex.website().setValue("www." + name.replace("#", "").replace(" ", "") + ".com");
 
         return complex;
-    }
-
-    public PropertyManager createPropertyManager(String name) {
-        PropertyManager pmc = EntityFactory.create(PropertyManager.class);
-        pmc.name().setValue(name);
-
-        return pmc;
     }
 
     private void ensureProvincePolicyNode(ISOProvince prov) {
