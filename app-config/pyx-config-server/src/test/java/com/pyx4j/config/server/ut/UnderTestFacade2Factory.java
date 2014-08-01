@@ -18,18 +18,21 @@
  * @author vlads
  * @version $Id$
  */
-package com.pyx4j.config.server;
+package com.pyx4j.config.server.ut;
 
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
+import com.pyx4j.config.server.FacadeFactory;
 
-@Target({ ElementType.METHOD })
-@Retention(RetentionPolicy.RUNTIME)
-public @interface Interceptors {
+public class UnderTestFacade2Factory implements FacadeFactory<UnderTestFacade2> {
 
-    // For now we only support ExceptionHandlers, in future we may add more like in javax.interceptor.Interceptors
-    Class<? extends ExceptionHandler>[] value();
+    public static int implVersion = 1;
+
+    @Override
+    public UnderTestFacade2 getFacade() {
+        if (implVersion == 1) {
+            return new UnderTestFacade21Impl();
+        } else {
+            return new UnderTestFacade22Impl();
+        }
+    }
 
 }

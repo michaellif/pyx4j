@@ -65,33 +65,44 @@ public class ServerSideFactory {
         if (interfaceClassName.contains(".shared.")) {
             interfaceClassName = interfaceClassName.replace(".shared.", ".server.");
         }
+        T instance;
 
-        String factoryClassName = interfaceClassName + "Factory";
-        try {
-            Class<FacadeFactory<T>> factoryKlass = (Class<FacadeFactory<T>>) Class.forName(factoryClassName);
-            FacadeFactory<T> factory = factoryKlass.newInstance();
-            return factory.getFacade();
-        } catch (ClassNotFoundException ignore) {
+        FacadeFactory<T> factory = null;
+        // TODO Optimize Find Factory with Map
+        {
+            String factoryClassName = interfaceClassName + "Factory";
+            try {
+                Class<FacadeFactory<T>> factoryKlass = (Class<FacadeFactory<T>>) Class.forName(factoryClassName);
+                factory = factoryKlass.newInstance();
+            } catch (ClassNotFoundException ignore) {
 
-        } catch (Throwable e) {
-            if (e instanceof RuntimeExceptionSerializable) {
-                throw (RuntimeExceptionSerializable) e;
-            } else {
-                throw new RuntimeException("Can't create " + factoryClassName, e);
+            } catch (Throwable e) {
+                if (e instanceof RuntimeExceptionSerializable) {
+                    throw (RuntimeExceptionSerializable) e;
+                } else {
+                    throw new RuntimeException("Can't create " + factoryClassName, e);
+                }
             }
         }
 
-        if (interfaceCalss.getSimpleName().startsWith("I") && Character.isUpperCase(interfaceCalss.getSimpleName().charAt(1))) {
-            interfaceClassName = interfaceClassName.replace(interfaceCalss.getSimpleName(), "Server" + interfaceCalss.getSimpleName().substring(1));
+        if (factory != null) {
+            instance = factory.getFacade();
         } else {
-            interfaceClassName = interfaceClassName + "Impl";
+            // TODO Optimize Find Class with Map
+            if (interfaceCalss.getSimpleName().startsWith("I") && Character.isUpperCase(interfaceCalss.getSimpleName().charAt(1))) {
+                interfaceClassName = interfaceClassName.replace(interfaceCalss.getSimpleName(), "Server" + interfaceCalss.getSimpleName().substring(1));
+            } else {
+                interfaceClassName = interfaceClassName + "Impl";
+            }
+            try {
+                Class<T> klass = (Class<T>) Class.forName(interfaceClassName);
+                instance = klass.newInstance();
+            } catch (Throwable e) {
+                throw new RuntimeException("Can't create " + interfaceClassName, e);
+            }
         }
-        try {
-            Class<T> klass = (Class<T>) Class.forName(interfaceClassName);
-            return klass.newInstance();
-        } catch (Throwable e) {
-            throw new RuntimeException("Can't create " + interfaceClassName, e);
-        }
+        // TODO Optimize interceptor creation if required
+        return createInterceptorsImplementation(interfaceCalss, instance);
     }
 
     @SuppressWarnings("unchecked")
@@ -129,6 +140,41 @@ public class ServerSideFactory {
             });
         } catch (IllegalArgumentException e) {
             throw new RuntimeException("Can't create " + interfaceCalss.getName(), e);
+        }
+    }
+
+    @SuppressWarnings("unchecked")
+    public static <T> T createInterceptorsImplementation(final Class<T> interfaceCalss, final T instance) {
+        try {
+            return (T) Proxy.newProxyInstance(Thread.currentThread().getContextClassLoader(), new Class[] { interfaceCalss }, new InvocationHandler() {
+
+                @Override
+                public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
+                    try {
+                        return method.invoke(instance, args);
+                    } catch (InvocationTargetException e) {
+                        if (!callExceptionHandlers(interfaceCalss, instance, method, e.getCause())) {
+                            throw e.getCause();
+                        } else {
+                            return null;
+                        }
+                    }
+                }
+            });
+        } catch (IllegalArgumentException e) {
+            throw new RuntimeException("Can't create " + interfaceCalss.getName(), e);
+        }
+    }
+
+    private static <T> boolean callExceptionHandlers(final Class<T> interfaceCalss, final T instance, Method method, Throwable exception) throws Throwable {
+        Class<? extends ExceptionHandler>[] exceptionHandlers = InterceptorsCache.getExceptionHandlers(interfaceCalss, instance, method);
+        if (exceptionHandlers == null) {
+            return false;
+        } else {
+            for (Class<? extends ExceptionHandler> exceptionHandler : exceptionHandlers) {
+                exceptionHandler.newInstance().handle(exception);
+            }
+            return false;
         }
     }
 

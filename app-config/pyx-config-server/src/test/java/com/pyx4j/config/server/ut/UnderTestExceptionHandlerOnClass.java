@@ -18,18 +18,19 @@
  * @author vlads
  * @version $Id$
  */
-package com.pyx4j.config.server;
+package com.pyx4j.config.server.ut;
 
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
+import com.pyx4j.config.server.ExceptionHandler;
 
-@Target({ ElementType.METHOD })
-@Retention(RetentionPolicy.RUNTIME)
-public @interface Interceptors {
+public class UnderTestExceptionHandlerOnClass implements ExceptionHandler {
 
-    // For now we only support ExceptionHandlers, in future we may add more like in javax.interceptor.Interceptors
-    Class<? extends ExceptionHandler>[] value();
+    @Override
+    public void handle(Throwable exception) throws Throwable {
+        if (exception instanceof IllegalMonitorStateException) {
+            throw new ArrayStoreException(exception.getMessage());
+        } else {
+            throw exception;
+        }
+    }
 
 }

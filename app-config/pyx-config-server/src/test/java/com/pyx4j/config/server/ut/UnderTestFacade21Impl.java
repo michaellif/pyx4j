@@ -18,18 +18,17 @@
  * @author vlads
  * @version $Id$
  */
-package com.pyx4j.config.server;
+package com.pyx4j.config.server.ut;
 
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
+public class UnderTestFacade21Impl implements UnderTestFacade2 {
 
-@Target({ ElementType.METHOD })
-@Retention(RetentionPolicy.RUNTIME)
-public @interface Interceptors {
-
-    // For now we only support ExceptionHandlers, in future we may add more like in javax.interceptor.Interceptors
-    Class<? extends ExceptionHandler>[] value();
-
+    @Override
+    public String echoOrThrowRedefinedOnClass(String value, Class<?> doThrow) {
+        if (doThrow == ArithmeticException.class) {
+            throw new ArithmeticException(value + "-.1");
+        } else if (doThrow == IllegalMonitorStateException.class) {
+            throw new IllegalMonitorStateException(value + "-.1");
+        }
+        return value;
+    }
 }
