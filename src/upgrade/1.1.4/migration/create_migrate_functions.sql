@@ -1090,8 +1090,8 @@ BEGIN
                                 DROP COLUMN info_address_county,
                                 DROP COLUMN info_address_street_direction,
                                 DROP COLUMN info_address_street_number_suffix,
-                                DROP COLUMN info_address_street_type;
-                                -- DROP COLUMN property_manager;
+                                DROP COLUMN info_address_street_type,
+                                DROP COLUMN property_manager;
                                 
         -- city 
         
@@ -1213,6 +1213,10 @@ BEGIN
         ALTER TABLE product_v   DROP COLUMN deposit_lmr_deposit_value,
                                 DROP COLUMN deposit_move_in_deposit_value,
                                 DROP COLUMN deposit_security_deposit_value;
+                                
+        -- property_manager
+        
+        DROP TABLE property_manager;
         
         -- province_policy_node
         
