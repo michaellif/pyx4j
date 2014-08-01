@@ -85,9 +85,9 @@ public class SelectorTextBox<E> extends Composite implements WatermarkComponent,
     private final IFormatter<E, String[]> optionPathFormatter;
 
     public SelectorTextBox(final OptionsGrabber<E> optionsGrabber, IFormatter<E, String> valueFormatter, IFormatter<E, String[]> optionPathFormatter) {
+        this.optionsGrabber = optionsGrabber;
         this.valueFormatter = valueFormatter;
         this.optionPathFormatter = optionPathFormatter;
-        this.optionsGrabber = optionsGrabber;
 
         this.box = new InputTextBox();
         this.display = new SuggestionDisplay();
