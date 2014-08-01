@@ -27,6 +27,9 @@
 -- Phone/fax numbers update
 \i update_phone_numbers.sql
 
+-- Move property managers
+\i move_property_manager.sql
+
 -- create migration function
 \i create_migrate_functions.sql;
 
@@ -329,7 +332,9 @@ BEGIN TRANSACTION;
         AND     namespace ~ '^z';
 COMMIT;
 
-
+DROP FUNCTION _dba_.move_property_manager(text);
+DROP FUNCTION _dba_.split_simple_address(text,text,text,text);
+DROP FUNCTION _dba_.update_phone_numbers(text);
 DROP FUNCTION _dba_.migrate_pmc_114(text);
 DROP TABLE _dba_.tmp_roles;
 

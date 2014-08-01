@@ -217,6 +217,9 @@ BEGIN
         
         ALTER TABLE available_crm_report$rls OWNER TO vista;
         
+        -- autopay_agreement
+        
+        ALTER TABLE autopay_agreement ALTER COLUMN comments TYPE VARCHAR(10000);
         
         -- billable_item_adjustment
         
@@ -653,6 +656,8 @@ BEGIN
                 ||' TRIM(info_address_street_name)||'' ''||INITCAP(TRIM(info_address_street_direction)) '
                 ||'WHERE    info_address_street_direction IS NOT NULL';
                 
+        PERFORM * FROM _dba_.move_property_manager(v_schema_name);
+        
         
         -- city
         

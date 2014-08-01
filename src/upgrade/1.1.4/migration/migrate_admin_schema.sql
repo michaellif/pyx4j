@@ -284,6 +284,18 @@ SET search_path = '_admin_';
         ***     ==========================================================================================================
         **/
        
+        -- admin_pmc_payment_type_info
+        
+        ALTER TABLE admin_pmc_payment_type_info DROP COLUMN cc_amex_payment_available,
+                                                DROP COLUMN cc_discover_payment_available,
+                                                DROP COLUMN cc_master_card_payment_available,
+                                                DROP COLUMN cc_visa_payment_available,
+                                                DROP COLUMN e_check_payment_available,
+                                                DROP COLUMN eft_payment_available,
+                                                DROP COLUMN interac_caledon_payment_available,
+                                                DROP COLUMN interac_payment_pad_payment_available,
+                                                DROP COLUMN interac_visa_payment_available;
+       
         -- business_information
         
         ALTER TABLE business_information    DROP COLUMN business_address_country_name,
