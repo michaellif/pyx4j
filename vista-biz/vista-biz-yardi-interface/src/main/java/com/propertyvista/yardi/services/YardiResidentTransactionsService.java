@@ -58,7 +58,6 @@ import com.pyx4j.entity.server.Executable;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.server.TransactionScopeOption;
 import com.pyx4j.entity.server.UnitOfWork;
-import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.biz.ExecutionMonitor;
 import com.propertyvista.biz.ExecutionMonitor.IterationProgressCounter;
@@ -109,8 +108,6 @@ import com.propertyvista.yardi.stubs.YardiServiceMessageException;
 public class YardiResidentTransactionsService extends YardiAbstractService {
 
     private final static Logger log = LoggerFactory.getLogger(YardiResidentTransactionsService.class);
-
-    private final I18n i18n = I18n.get(YardiResidentTransactionsService.class);
 
     private static class SingletonHolder {
         public static final YardiResidentTransactionsService INSTANCE = new YardiResidentTransactionsService();
@@ -891,10 +888,11 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
 
     private UnitAvailabilityStatus retrieveCurrentAvailabilityStatus(AptUnit unit) {
         EntityQueryCriteria<UnitAvailabilityStatus> criteria = EntityQueryCriteria.create(UnitAvailabilityStatus.class);
+
         criteria.eq(criteria.proto().unit(), unit);
         criteria.eq(criteria.proto().statusUntil(), OccupancyFacade.MAX_DATE);
-        UnitAvailabilityStatus status = Persistence.service().retrieve(criteria);
-        return status;
+
+        return Persistence.service().retrieve(criteria);
     }
 
     private List<Lease> retrieveActiveLeases(Key yardiInterfaceId, String propertyCode) {
