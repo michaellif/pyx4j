@@ -27,9 +27,15 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.pyx4j.commons.IFormatter;
+import com.pyx4j.forms.client.events.PropertyChangeEvent;
 
 public class MultyWordSuggestTrie<E> {
+
+    private static final Logger log = LoggerFactory.getLogger(PropertyChangeEvent.class);
 
     private static final String WHITESPACE_STRING = " ";
 
@@ -46,40 +52,37 @@ public class MultyWordSuggestTrie<E> {
         fillTrie();
     }
 
-    public MultyWordSuggestTrie() {
-        this.options = null;
-        this.formatter = null;
-        this.trie = new PrefixTrie();
-    }
-
     public PrefixTrie getTrie() {
         return trie;
     }
 
-    public void fillTrie() {
+    private void fillTrie() {
         Map<String, Collection<E>> desc = new HashMap<String, Collection<E>>();
 
-        for (E option : options) {
-            String stringValue = formatter.format(option).toLowerCase();
-            stringValue = stringValue.toLowerCase().replaceAll("[^\\w']+", " ");
-            String[] tokens = stringValue.split(WHITESPACE_STRING);
+        if (options != null) {
+            for (E option : options) {
+                String stringValue = formatter.format(option).toLowerCase();
+                stringValue = stringValue.toLowerCase().replaceAll("[^\\w']+", " ");
+                String[] tokens = stringValue.split(WHITESPACE_STRING);
 
-            for (int i = 0; i < tokens.length; i++) {
-                if (desc.containsKey(tokens[i])) {
-                    Collection<E> collection = desc.get(tokens[i]);
-                    collection.add(option);
-                } else {
-                    Collection<E> newList = new ArrayList<E>();
-                    newList.add(option);
-                    desc.put(tokens[i], newList);
+                for (int i = 0; i < tokens.length; i++) {
+                    if (desc.containsKey(tokens[i])) {
+                        Collection<E> collection = desc.get(tokens[i]);
+                        collection.add(option);
+                    } else {
+                        Collection<E> newList = new ArrayList<E>();
+                        newList.add(option);
+                        desc.put(tokens[i], newList);
+                    }
                 }
             }
         }
+
         for (String key : desc.keySet()) {
             this.trie.add(key, desc.get(key));
         }
 
-        System.err.println(trie);
+        log.debug(trie.toString());
     }
 
     public Collection<E> getCandidates(String query) {
@@ -107,7 +110,7 @@ public class MultyWordSuggestTrie<E> {
             }
         }
 
-        System.err.println(candidates.toString());
+        log.debug(candidates.toString());
         return candidates;
     }
 

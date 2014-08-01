@@ -42,7 +42,8 @@ public class MultyWordSuggestTrieTest {
 
     @Before
     public void setUp() {
-        suggestPlainTrie = new MultyWordSuggestTrie<String>();
+        suggestPlainTrie = new MultyWordSuggestTrie<String>(null, null);
+
         ArrayList<String> options = new ArrayList<String>();
         options.add("abcd, dcba");
         options.add("abcd abb ad dcba");
