@@ -82,12 +82,15 @@ public class LeaseForm extends LeaseFormBase<LeaseDTO> {
         get(proto().leaseId()).setVisible(true);
 
         // dynamic tabs visibility management:
-        setTabVisible(depositsTab, depositsTab.isTabVisible() && !getValue().status().getValue().isDraft());
-        setTabVisible(adjustmentsTab, adjustmentsTab.isTabVisible() && !getValue().status().getValue().isDraft());
-        setTabVisible(chargesTab, chargesTab.isTabVisible() && getValue().status().getValue().isDraft() && !getValue().billingPreview().isNull());
-        setTabVisible(billsTab, billsTab.isTabVisible() && !getValue().status().getValue().isDraft());
-        setTabVisible(paymentsTab, paymentsTab.isTabVisible() && !getValue().status().getValue().isDraft());
-        setTabVisible(financialTab, financialTab.isTabVisible() && !getValue().status().getValue().isDraft());
+        boolean isInternalMode = !VistaFeatures.instance().yardiIntegration();
+
+        setTabVisible(depositsTab, isInternalMode && !getValue().status().getValue().isDraft());
+        setTabVisible(adjustmentsTab, isInternalMode && !getValue().status().getValue().isDraft());
+        setTabVisible(chargesTab, isInternalMode && getValue().status().getValue().isDraft() && !getValue().billingPreview().isNull());
+        setTabVisible(billsTab, isInternalMode && !getValue().status().getValue().isDraft());
+
+        setTabVisible(paymentsTab, !getValue().status().getValue().isDraft());
+        setTabVisible(financialTab, !getValue().status().getValue().isDraft());
     }
 
     private IsWidget createFinancialTransactionHistoryTab() {

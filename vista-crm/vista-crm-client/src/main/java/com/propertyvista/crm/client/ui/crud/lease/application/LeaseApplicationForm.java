@@ -64,6 +64,7 @@ public class LeaseApplicationForm extends LeaseFormBase<LeaseApplicationDTO> {
     @Override
     public void onReset() {
         super.onReset();
+        // Yardi mode overrides:
         chargesTab.setTabVisible(!VistaFeatures.instance().yardiIntegration());
     }
 
@@ -72,7 +73,8 @@ public class LeaseApplicationForm extends LeaseFormBase<LeaseApplicationDTO> {
         super.onValueSet(populate);
 
         // dynamic tabs visibility management:
-        setTabVisible(chargesTab, chargesTab.isTabVisible() && getValue().status().getValue().isDraft() && !getValue().billingPreview().isNull());
+        setTabVisible(chargesTab, !VistaFeatures.instance().yardiIntegration() && getValue().status().getValue().isDraft()
+                && !getValue().billingPreview().isNull());
 
         get(proto().leaseApplication().applicationId()).setVisible(true);
         get(proto().leaseApplication().yardiApplicationId()).setVisible(VistaFeatures.instance().yardiIntegration());
