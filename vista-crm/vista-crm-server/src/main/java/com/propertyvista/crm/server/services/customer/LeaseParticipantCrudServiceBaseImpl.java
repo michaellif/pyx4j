@@ -121,7 +121,7 @@ public abstract class LeaseParticipantCrudServiceBaseImpl<BO extends LeasePartic
         BO leaseParticipant = Persistence.service().retrieve(boClass, participantId.getPrimaryKey());
         Persistence.ensureRetrieve(leaseParticipant.lease(), AttachLevel.Attached);
         callback.onSuccess(new Vector<PaymentType>(ServerSideFactory.create(PaymentFacade.class).getAllowedPaymentTypes(
-                leaseParticipant.lease().billingAccount(), PaymentMethodTarget.TODO, VistaApplication.crm)));
+                leaseParticipant.lease().billingAccount(), PaymentMethodTarget.StoreInProfile, VistaApplication.crm)));
     }
 
     @Override
