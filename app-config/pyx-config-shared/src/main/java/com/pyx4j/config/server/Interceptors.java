@@ -25,6 +25,11 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+/**
+ * Interceptors can be defined on interface or implementation of the Facade.
+ * Declaration on implementation takes precedence in this case interface declaration is ignored.
+ * 
+ */
 @Target({ ElementType.METHOD })
 @Retention(RetentionPolicy.RUNTIME)
 public @interface Interceptors {
