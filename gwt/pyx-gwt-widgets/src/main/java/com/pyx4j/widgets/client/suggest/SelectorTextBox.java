@@ -307,7 +307,7 @@ public class SelectorTextBox<E> extends Composite implements WatermarkComponent,
                 if (!isEnabled()) {
                     return;
                 }
-                display.showSuggestions(response.getOptions());
+                display.showSuggestions(response.getOptions(), request.getQuery());
             }
         };
 
@@ -508,7 +508,7 @@ public class SelectorTextBox<E> extends Composite implements WatermarkComponent,
             }
         }
 
-        protected void showSuggestions(Collection<E> suggestions) {
+        protected void showSuggestions(Collection<E> suggestions, String query) {
             // Hide the popup if there are no suggestions to display.
             boolean anySuggestions = (suggestions != null && suggestions.size() > 0);
 
@@ -520,8 +520,8 @@ public class SelectorTextBox<E> extends Composite implements WatermarkComponent,
             }
 
             suggestionMenu.clearItems();
-            for (final E curSuggestion : suggestions) {
-                suggestionMenu.addItem(new SuggestionMenuItem(curSuggestion));
+            for (final E suggestion : suggestions) {
+                suggestionMenu.addItem(new SuggestionMenuItem(suggestion));
             }
 
             if (anySuggestions) {
