@@ -607,13 +607,7 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
     }
 
     private void importLeases(final YardiResidentTransactionsData rtd) throws YardiServiceException {
-        new UnitOfWork(TransactionScopeOption.RequiresNew).execute(new Executable<Void, YardiServiceException>() {
-            @Override
-            public Void execute() throws YardiServiceException {
-                new YardiLeaseProcessor(rtd).process();
-                return null;
-            }
-        });
+        new YardiLeaseProcessor(rtd).process();
     }
 
     private void assignLegalAddress(final AptUnit unit, final Address address, final ExecutionMonitor executionMonitor) throws YardiServiceException {
@@ -674,7 +668,9 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
             // note - sorting input data list by lease status: former -> current -> future:
             for (RTCustomer rtCustomer : YardiLeaseProcessor.sortRtCustomers(property.getRTCustomer())) {
                 String leaseId = YardiLeaseProcessor.getLeaseID(rtCustomer.getCustomerID());
-                removeLease(activeLeases, leaseId);
+                if (closeNotProcessedLeases) {
+                    removeLease(activeLeases, leaseId);
+                }
 
                 LeaseTransactionData lease = prop.getData().get(propertyCode);
                 if (lease == null) {
@@ -732,7 +728,9 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
                 String leaseId = YardiLeaseProcessor.getLeaseID(rtCustomer.getRTServiceTransactions().getTransactions().get(0).getCharge().getDetail()
                         .getCustomerID());
                 if (leaseId != null) {
-                    removeLease(activeLeases, leaseId);
+                    if (memorizeNoChargesLeases) {
+                        removeLease(activeLeases, leaseId);
+                    }
 
                     LeaseTransactionData lease = prop.getData().get(leaseId);
                     if (lease == null) {

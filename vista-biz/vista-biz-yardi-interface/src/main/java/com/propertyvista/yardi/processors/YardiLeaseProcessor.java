@@ -46,7 +46,10 @@ import com.pyx4j.config.server.SystemDateManager;
 import com.pyx4j.entity.core.AttachLevel;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
+import com.pyx4j.entity.server.Executable;
 import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.entity.server.TransactionScopeOption;
+import com.pyx4j.entity.server.UnitOfWork;
 import com.pyx4j.entity.shared.utils.EntityGraph;
 
 import com.propertyvista.biz.financial.ar.yardi.YardiARIntegrationAgent;
@@ -87,9 +90,15 @@ public class YardiLeaseProcessor {
     // Public interface:
 
     public void process() throws YardiServiceException {
-        for (String propertyCode : rtd.getData().keySet()) {
-            for (String leaseId : rtd.getData().get(propertyCode).getData().keySet()) {
-                processLease(propertyCode, leaseId, rtd.getData().get(propertyCode).getData().get(leaseId));
+        for (final String propertyCode : rtd.getData().keySet()) {
+            for (final String leaseId : rtd.getData().get(propertyCode).getData().keySet()) {
+                new UnitOfWork(TransactionScopeOption.RequiresNew).execute(new Executable<Void, YardiServiceException>() {
+                    @Override
+                    public Void execute() throws YardiServiceException {
+                        processLease(propertyCode, leaseId, rtd.getData().get(propertyCode).getData().get(leaseId));
+                        return null;
+                    }
+                });
 
                 if (rtd.getExecutionMonitor().isTerminationRequested()) {
                     break;
