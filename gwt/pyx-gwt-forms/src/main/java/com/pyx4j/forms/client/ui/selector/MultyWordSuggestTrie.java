@@ -132,8 +132,9 @@ public class MultyWordSuggestTrie<E> {
 
         public Collection<E> getMatches(CharSequence word) {
             Node node = root.findNode(word, 0);
-            if (null == node)
+            if (null == node) {
                 return null;
+            }
             return node.getMatches();
         }
 
@@ -189,8 +190,9 @@ public class MultyWordSuggestTrie<E> {
             }
 
             boolean contains(CharSequence word, int currentIndex) {
-                if (word.equals(""))
+                if (word.equals("")) {
                     return false;
+                }
                 if (currentIndex == word.length()) {
                     return isWord;
                 }
