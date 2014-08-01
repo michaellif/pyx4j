@@ -8,7 +8,7 @@
 ***     ======================================================================================================================
 **/
 
-CREATE OR REPLACE FUNCTION _dba_.move_property_manager(v_schema_name) RETURNS VOID AS
+CREATE OR REPLACE FUNCTION _dba_.move_property_manager(v_schema_name TEXT) RETURNS VOID AS
 $$
 DECLARE
     
