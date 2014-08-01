@@ -71,7 +71,8 @@ public class PaymentMethodWizardServiceImpl extends AbstractCrudServiceDtoImpl<L
         bo.customer().set(ResidentPortalContext.getCustomer());
         bo.isProfiledMethod().setValue(Boolean.TRUE);
 
-        ServerSideFactory.create(PaymentFacade.class).validatePaymentMethod(lease.billingAccount(), bo, VistaApplication.resident);
+        ServerSideFactory.create(PaymentFacade.class).validatePaymentMethod(lease.billingAccount(), bo, PaymentMethodTarget.StoreInProfile,
+                VistaApplication.resident);
         ServerSideFactory.create(PaymentMethodFacade.class).persistLeasePaymentMethod(bo, lease.unit().building());
         return true;
     }

@@ -40,8 +40,11 @@ public class PaymentAcceptanceUtilsTest extends TestCase {
 
     private void assertAllowed(VistaApplication vistaApplication, MerchantElectronicPaymentSetup merchantSetup, AbstractPaymentSetup systemSetup,
             boolean requireCashEquivalent, PaymentTypeSelectionPolicy selectionPolicy, CreditCardType creditCardType, Expect expected) {
-        Collection<CreditCardType> allCards = PaymentAcceptanceUtils.getAllowedCreditCardTypes(vistaApplication, merchantSetup, systemSetup,
-                requireCashEquivalent, selectionPolicy, false);
+
+        PaymentMethodTarget paymentMethodTarget = PaymentMethodTarget.TODO;
+
+        Collection<CreditCardType> allCards = PaymentAcceptanceUtils.getAllowedCreditCardTypes(paymentMethodTarget, vistaApplication, merchantSetup,
+                systemSetup, requireCashEquivalent, selectionPolicy, false);
 
         if (expected != Expect.Disable) {
             Assert.assertTrue("Allowed" + creditCardType + " expected, but was " + allCards, allCards.contains(creditCardType));
@@ -49,8 +52,8 @@ public class PaymentAcceptanceUtilsTest extends TestCase {
             Assert.assertFalse("Not Allowed " + creditCardType + " expected, but was " + allCards, allCards.contains(creditCardType));
         }
 
-        Collection<CreditCardType> feeCards = PaymentAcceptanceUtils.getAllowedCreditCardTypes(vistaApplication, merchantSetup, systemSetup,
-                requireCashEquivalent, selectionPolicy, true);
+        Collection<CreditCardType> feeCards = PaymentAcceptanceUtils.getAllowedCreditCardTypes(paymentMethodTarget, vistaApplication, merchantSetup,
+                systemSetup, requireCashEquivalent, selectionPolicy, true);
 
         if (expected == Expect.Fee) {
             Assert.assertTrue("fee on " + creditCardType + " expected, but was " + feeCards, feeCards.contains(creditCardType));
@@ -62,6 +65,8 @@ public class PaymentAcceptanceUtilsTest extends TestCase {
     public void testNoCreditCardAcceptance() {
         AbstractPaymentSetup systemSetup = EntityFactory.create(AbstractPaymentSetup.class);
         systemSetup.acceptedEcheck().setValue(true);
+
+        PaymentMethodTarget paymentMethodTarget = PaymentMethodTarget.TODO;
 
         MerchantElectronicPaymentSetup merchantSetup = EntityFactory.create(MerchantElectronicPaymentSetup.class);
         merchantSetup.acceptedCreditCard().setValue(false);
@@ -86,12 +91,12 @@ public class PaymentAcceptanceUtilsTest extends TestCase {
                 assertAllowed(VistaApplication.crm, merchantSetup, systemSetup, true, selectionPolicy, creditCardType, Expect.Disable);
             }
 
-            Collection<PaymentType> paymentTypesCrm = PaymentAcceptanceUtils.getAllowedPaymentTypes(VistaApplication.crm, merchantSetup, systemSetup, false,
-                    selectionPolicy);
+            Collection<PaymentType> paymentTypesCrm = PaymentAcceptanceUtils.getAllowedPaymentTypes(paymentMethodTarget, VistaApplication.crm, merchantSetup,
+                    systemSetup, false, selectionPolicy);
             Assert.assertFalse("Cards Not Allowed expected, but was " + paymentTypesCrm, paymentTypesCrm.contains(PaymentType.CreditCard));
 
-            Collection<PaymentType> paymentTypesResident = PaymentAcceptanceUtils.getAllowedPaymentTypes(VistaApplication.resident, merchantSetup, systemSetup,
-                    false, selectionPolicy);
+            Collection<PaymentType> paymentTypesResident = PaymentAcceptanceUtils.getAllowedPaymentTypes(paymentMethodTarget, VistaApplication.resident,
+                    merchantSetup, systemSetup, false, selectionPolicy);
             Assert.assertFalse("Cards Not Allowed expected, but was " + paymentTypesResident, paymentTypesResident.contains(PaymentType.CreditCard));
         }
     }
@@ -99,6 +104,7 @@ public class PaymentAcceptanceUtilsTest extends TestCase {
     public void testEcheckAcceptance() {
         AbstractPaymentSetup systemSetup = EntityFactory.create(AbstractPaymentSetup.class);
         systemSetup.acceptedEcheck().setValue(true);
+        PaymentMethodTarget paymentMethodTarget = PaymentMethodTarget.TODO;
 
         // Accepted
         {
@@ -110,12 +116,12 @@ public class PaymentAcceptanceUtilsTest extends TestCase {
 
             selectionPolicy.residentPortalEcheck().setValue(true);
 
-            Collection<PaymentType> paymentTypesCrm = PaymentAcceptanceUtils.getAllowedPaymentTypes(VistaApplication.crm, merchantSetup, systemSetup, false,
-                    selectionPolicy);
+            Collection<PaymentType> paymentTypesCrm = PaymentAcceptanceUtils.getAllowedPaymentTypes(paymentMethodTarget, VistaApplication.crm, merchantSetup,
+                    systemSetup, false, selectionPolicy);
             Assert.assertTrue("Echeck Allowed expected, but was " + paymentTypesCrm, paymentTypesCrm.contains(PaymentType.Echeck));
 
-            Collection<PaymentType> paymentTypesResident = PaymentAcceptanceUtils.getAllowedPaymentTypes(VistaApplication.resident, merchantSetup, systemSetup,
-                    false, selectionPolicy);
+            Collection<PaymentType> paymentTypesResident = PaymentAcceptanceUtils.getAllowedPaymentTypes(paymentMethodTarget, VistaApplication.resident,
+                    merchantSetup, systemSetup, false, selectionPolicy);
             Assert.assertTrue("Echeck Allowed expected, but was " + paymentTypesResident, paymentTypesResident.contains(PaymentType.Echeck));
         }
 
@@ -129,12 +135,12 @@ public class PaymentAcceptanceUtilsTest extends TestCase {
 
             selectionPolicy.residentPortalEcheck().setValue(true);
 
-            Collection<PaymentType> paymentTypesCrm = PaymentAcceptanceUtils.getAllowedPaymentTypes(VistaApplication.crm, merchantSetup, systemSetup, false,
-                    selectionPolicy);
+            Collection<PaymentType> paymentTypesCrm = PaymentAcceptanceUtils.getAllowedPaymentTypes(paymentMethodTarget, VistaApplication.crm, merchantSetup,
+                    systemSetup, false, selectionPolicy);
             Assert.assertFalse("Echeck Not Allowed expected, but was " + paymentTypesCrm, paymentTypesCrm.contains(PaymentType.Echeck));
 
-            Collection<PaymentType> paymentTypesResident = PaymentAcceptanceUtils.getAllowedPaymentTypes(VistaApplication.resident, merchantSetup, systemSetup,
-                    false, selectionPolicy);
+            Collection<PaymentType> paymentTypesResident = PaymentAcceptanceUtils.getAllowedPaymentTypes(paymentMethodTarget, VistaApplication.resident,
+                    merchantSetup, systemSetup, false, selectionPolicy);
             Assert.assertFalse("Echeck Not Allowed expected, but was " + paymentTypesResident, paymentTypesResident.contains(PaymentType.Echeck));
         }
 
@@ -148,12 +154,12 @@ public class PaymentAcceptanceUtilsTest extends TestCase {
 
             selectionPolicy.residentPortalEcheck().setValue(false);
 
-            Collection<PaymentType> paymentTypesCrm = PaymentAcceptanceUtils.getAllowedPaymentTypes(VistaApplication.crm, setup, systemSetup, false,
-                    selectionPolicy);
+            Collection<PaymentType> paymentTypesCrm = PaymentAcceptanceUtils.getAllowedPaymentTypes(paymentMethodTarget, VistaApplication.crm, setup,
+                    systemSetup, false, selectionPolicy);
             Assert.assertTrue("Echeck Allowed expected, but was " + paymentTypesCrm, paymentTypesCrm.contains(PaymentType.Echeck));
 
-            Collection<PaymentType> paymentTypesResident = PaymentAcceptanceUtils.getAllowedPaymentTypes(VistaApplication.resident, setup, systemSetup, false,
-                    selectionPolicy);
+            Collection<PaymentType> paymentTypesResident = PaymentAcceptanceUtils.getAllowedPaymentTypes(paymentMethodTarget, VistaApplication.resident, setup,
+                    systemSetup, false, selectionPolicy);
             Assert.assertFalse("Echeck Not Allowed expected, but was " + paymentTypesResident, paymentTypesResident.contains(PaymentType.Echeck));
         }
 
@@ -252,12 +258,12 @@ public class PaymentAcceptanceUtilsTest extends TestCase {
                 assertAllowed(VistaApplication.crm, merchantSetup, systemSetup, true, selectionPolicy, creditCardType, Expect.Disable);
             }
 
-            Collection<PaymentType> paymentTypesCrm = PaymentAcceptanceUtils.getAllowedPaymentTypes(VistaApplication.crm, merchantSetup, systemSetup, false,
-                    selectionPolicy);
+            Collection<PaymentType> paymentTypesCrm = PaymentAcceptanceUtils.getAllowedPaymentTypes(PaymentMethodTarget.OneTimePayment, VistaApplication.crm,
+                    merchantSetup, systemSetup, false, selectionPolicy);
             Assert.assertTrue("Cards Allowed expected, but was " + paymentTypesCrm, paymentTypesCrm.contains(PaymentType.CreditCard));
 
-            Collection<PaymentType> paymentTypesResident = PaymentAcceptanceUtils.getAllowedPaymentTypes(VistaApplication.resident, merchantSetup, systemSetup,
-                    false, selectionPolicy);
+            Collection<PaymentType> paymentTypesResident = PaymentAcceptanceUtils.getAllowedPaymentTypes(PaymentMethodTarget.OneTimePayment,
+                    VistaApplication.resident, merchantSetup, systemSetup, false, selectionPolicy);
             Assert.assertTrue("Cards Allowed expected, but was " + paymentTypesResident, paymentTypesResident.contains(PaymentType.CreditCard));
         }
 
@@ -361,12 +367,12 @@ public class PaymentAcceptanceUtilsTest extends TestCase {
             assertAllowed(VistaApplication.resident, merchantSetup, systemSetup, false, selectionPolicy, CreditCardType.Visa, Expect.Fee);
             assertAllowed(VistaApplication.resident, merchantSetup, systemSetup, false, selectionPolicy, CreditCardType.MasterCard, Expect.Disable);
 
-            Collection<PaymentType> paymentTypesCrm = PaymentAcceptanceUtils.getAllowedPaymentTypes(VistaApplication.crm, merchantSetup, systemSetup, false,
-                    selectionPolicy);
+            Collection<PaymentType> paymentTypesCrm = PaymentAcceptanceUtils.getAllowedPaymentTypes(PaymentMethodTarget.OneTimePayment, VistaApplication.crm,
+                    merchantSetup, systemSetup, false, selectionPolicy);
             Assert.assertTrue("Cards Allowed expected, but was " + paymentTypesCrm, paymentTypesCrm.contains(PaymentType.CreditCard));
 
-            Collection<PaymentType> paymentTypesResident = PaymentAcceptanceUtils.getAllowedPaymentTypes(VistaApplication.resident, merchantSetup, systemSetup,
-                    false, selectionPolicy);
+            Collection<PaymentType> paymentTypesResident = PaymentAcceptanceUtils.getAllowedPaymentTypes(PaymentMethodTarget.OneTimePayment,
+                    VistaApplication.resident, merchantSetup, systemSetup, false, selectionPolicy);
             Assert.assertTrue("Cards Allowed expected, but was " + paymentTypesResident, paymentTypesResident.contains(PaymentType.CreditCard));
         }
 

@@ -92,18 +92,20 @@ public class PaymentFacadeImpl implements PaymentFacade {
     }
 
     @Override
-    public AllowedPaymentsSetup getAllowedPaymentsSetup(BillingAccount billingAccountId, PaymentMethodTarget paymentMethodTarget, VistaApplication vistaApplication) {
-        return PaymentUtils.getAllowedPaymentsSetup(billingAccountId, vistaApplication);
+    public AllowedPaymentsSetup getAllowedPaymentsSetup(BillingAccount billingAccountId, PaymentMethodTarget paymentMethodTarget,
+            VistaApplication vistaApplication) {
+        return PaymentUtils.getAllowedPaymentsSetup(billingAccountId, paymentMethodTarget, vistaApplication);
     }
 
     @Override
     public AllowedPaymentsSetup getAllowedPaymentsSetup(Building policyNode, PaymentMethodTarget paymentMethodTarget, VistaApplication vistaApplication) {
-        return PaymentUtils.getAllowedPaymentsSetup(policyNode, vistaApplication);
+        return PaymentUtils.getAllowedPaymentsSetup(policyNode, paymentMethodTarget, vistaApplication);
     }
 
     @Override
-    public Collection<PaymentType> getAllowedPaymentTypes(BillingAccount billingAccountId, VistaApplication vistaApplication) {
-        return PaymentUtils.getAllowedPaymentTypes(billingAccountId, vistaApplication);
+    public Collection<PaymentType> getAllowedPaymentTypes(BillingAccount billingAccountId, PaymentMethodTarget paymentMethodTarget,
+            VistaApplication vistaApplication) {
+        return PaymentUtils.getAllowedPaymentTypes(billingAccountId, paymentMethodTarget, vistaApplication);
     }
 
     @Override
@@ -125,7 +127,8 @@ public class PaymentFacadeImpl implements PaymentFacade {
     }
 
     @Override
-    public void validatePaymentMethod(BillingAccount billingAccount, LeasePaymentMethod paymentMethod, VistaApplication vistaApplication) {
+    public void validatePaymentMethod(BillingAccount billingAccount, LeasePaymentMethod paymentMethod, PaymentMethodTarget paymentMethodTarget,
+            VistaApplication vistaApplication) {
         switch (vistaApplication) {
         case prospect:
         case resident:
@@ -138,7 +141,8 @@ public class PaymentFacadeImpl implements PaymentFacade {
             throw new IllegalArgumentException();
         }
 
-        Validate.isTrue(getAllowedPaymentTypes(billingAccount, vistaApplication).contains(paymentMethod.type().getValue()), "Payment type not acceptable");
+        Validate.isTrue(getAllowedPaymentTypes(billingAccount, paymentMethodTarget, vistaApplication).contains(paymentMethod.type().getValue()),
+                "Payment type not acceptable");
         if (paymentMethod.type().getValue() == PaymentType.CreditCard) {
             CreditCardType cardType = paymentMethod.details().<CreditCardInfo> cast().cardType().getValue();
             Validate.isTrue(getAllowedCardTypes(billingAccount, vistaApplication).contains(cardType), "Card type " + cardType + " not acceptable");

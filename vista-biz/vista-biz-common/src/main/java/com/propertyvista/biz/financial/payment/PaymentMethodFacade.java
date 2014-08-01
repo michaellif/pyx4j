@@ -51,19 +51,10 @@ public interface PaymentMethodFacade {
 
     void deleteLeasePaymentMethod(LeasePaymentMethod paymentMethodId);
 
-    public enum PaymentMethodUsage {
-
-        InProfile,
-
-        OneTimePayments,
-
-        AutopayAgreementSetup
-    }
-
-    List<LeasePaymentMethod> retrieveLeasePaymentMethods(LeaseTermParticipant<? extends LeaseParticipant<?>> participantId, PaymentMethodUsage usage,
+    List<LeasePaymentMethod> retrieveLeasePaymentMethods(LeaseTermParticipant<? extends LeaseParticipant<?>> participantId, PaymentMethodTarget usage,
             VistaApplication vistaApplication);
 
-    List<LeasePaymentMethod> retrieveLeasePaymentMethods(LeaseParticipant<?> participantId, PaymentMethodUsage usage, VistaApplication vistaApplication);
+    List<LeasePaymentMethod> retrieveLeasePaymentMethods(LeaseParticipant<?> participantId, PaymentMethodTarget usage, VistaApplication vistaApplication);
 
     // Insurance:
 

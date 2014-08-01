@@ -31,7 +31,7 @@ import com.pyx4j.entity.server.Persistence;
 
 import com.propertyvista.biz.financial.payment.PaymentFacade;
 import com.propertyvista.biz.financial.payment.PaymentMethodFacade;
-import com.propertyvista.biz.financial.payment.PaymentMethodFacade.PaymentMethodUsage;
+import com.propertyvista.biz.financial.payment.PaymentMethodTarget;
 import com.propertyvista.biz.tenant.CustomerFacade;
 import com.propertyvista.crm.rpc.services.customer.LeaseParticipantCrudServiceBase;
 import com.propertyvista.domain.contact.InternationalAddress;
@@ -69,8 +69,8 @@ public abstract class LeaseParticipantCrudServiceBaseImpl<BO extends LeasePartic
         to.screening().set(LeaseParticipantUtils.getCustomerScreeningPointer(to));
         // fill/update payment methods: 
         to.paymentMethods().clear();
-        List<LeasePaymentMethod> methods = ServerSideFactory.create(PaymentMethodFacade.class).retrieveLeasePaymentMethods(bo, PaymentMethodUsage.InProfile,
-                VistaApplication.crm);
+        List<LeasePaymentMethod> methods = ServerSideFactory.create(PaymentMethodFacade.class).retrieveLeasePaymentMethods(bo,
+                PaymentMethodTarget.StoreInProfile, VistaApplication.crm);
         to.paymentMethods().addAll(methods);
         if (retrieveTarget == RetrieveTarget.Edit) {
             for (LeasePaymentMethod method : to.paymentMethods()) {
@@ -121,7 +121,7 @@ public abstract class LeaseParticipantCrudServiceBaseImpl<BO extends LeasePartic
         BO leaseParticipant = Persistence.service().retrieve(boClass, participantId.getPrimaryKey());
         Persistence.ensureRetrieve(leaseParticipant.lease(), AttachLevel.Attached);
         callback.onSuccess(new Vector<PaymentType>(ServerSideFactory.create(PaymentFacade.class).getAllowedPaymentTypes(
-                leaseParticipant.lease().billingAccount(), VistaApplication.crm)));
+                leaseParticipant.lease().billingAccount(), PaymentMethodTarget.TODO, VistaApplication.crm)));
     }
 
     @Override
@@ -177,7 +177,7 @@ public abstract class LeaseParticipantCrudServiceBaseImpl<BO extends LeasePartic
     protected boolean persistPaymentMethods(BO bo, TO to) {
         // delete payment methods removed in UI:
         for (LeasePaymentMethod paymentMethod : ServerSideFactory.create(PaymentMethodFacade.class).retrieveLeasePaymentMethods(bo,
-                PaymentMethodUsage.InProfile, VistaApplication.crm)) {
+                PaymentMethodTarget.StoreInProfile, VistaApplication.crm)) {
             if (!to.paymentMethods().contains(paymentMethod)) {
                 ServerSideFactory.create(PaymentMethodFacade.class).deleteLeasePaymentMethod(paymentMethod);
             }
@@ -193,7 +193,8 @@ public abstract class LeaseParticipantCrudServiceBaseImpl<BO extends LeasePartic
             paymentMethod.customer().set(bo.customer());
             paymentMethod.isProfiledMethod().setValue(true);
 
-            ServerSideFactory.create(PaymentFacade.class).validatePaymentMethod(bo.lease().billingAccount(), paymentMethod, VistaApplication.crm);
+            ServerSideFactory.create(PaymentFacade.class).validatePaymentMethod(bo.lease().billingAccount(), paymentMethod, PaymentMethodTarget.StoreInProfile,
+                    VistaApplication.crm);
             ServerSideFactory.create(PaymentMethodFacade.class).persistLeasePaymentMethod(paymentMethod, building);
         }
 

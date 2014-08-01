@@ -78,14 +78,14 @@ public class PaymentMethodFacadeImpl implements PaymentMethodFacade {
     }
 
     @Override
-    public List<LeasePaymentMethod> retrieveLeasePaymentMethods(LeaseTermParticipant<? extends LeaseParticipant<?>> participantId, PaymentMethodUsage usage,
+    public List<LeasePaymentMethod> retrieveLeasePaymentMethods(LeaseTermParticipant<? extends LeaseParticipant<?>> participantId, PaymentMethodTarget usage,
             VistaApplication vistaApplication) {
         Persistence.ensureRetrieve(participantId, AttachLevel.Attached);
         return retrieveLeasePaymentMethods(participantId.leaseParticipant(), usage, vistaApplication);
     }
 
     @Override
-    public List<LeasePaymentMethod> retrieveLeasePaymentMethods(LeaseParticipant<?> participantId, PaymentMethodUsage usage, VistaApplication vistaApplication) {
+    public List<LeasePaymentMethod> retrieveLeasePaymentMethods(LeaseParticipant<?> participantId, PaymentMethodTarget usage, VistaApplication vistaApplication) {
 
         List<LeasePaymentMethod> allMethods;
         {
@@ -101,7 +101,7 @@ public class PaymentMethodFacadeImpl implements PaymentMethodFacade {
             return Collections.emptyList();
         }
 
-        if (usage == PaymentMethodUsage.InProfile) {
+        if (usage == PaymentMethodTarget.StoreInProfile) {
             // Show all Already saved Method,  Do not apply filtering
             return allMethods;
         }
@@ -113,12 +113,12 @@ public class PaymentMethodFacadeImpl implements PaymentMethodFacade {
             billingAccount = Persistence.service().retrieve(criteria);
         }
 
-        Collection<PaymentType> allowedTypes = ServerSideFactory.create(PaymentFacade.class).getAllowedPaymentTypes(billingAccount, vistaApplication);
+        Collection<PaymentType> allowedTypes = ServerSideFactory.create(PaymentFacade.class).getAllowedPaymentTypes(billingAccount, usage, vistaApplication);
         // get payer's payment methods and remove non-allowed ones:
 
         Collection<CreditCardType> allowedCardTypes = ServerSideFactory.create(PaymentFacade.class).getAllowedCardTypes(billingAccount, vistaApplication);
 
-        if (usage == PaymentMethodUsage.AutopayAgreementSetup) {
+        if (usage == PaymentMethodTarget.AutoPaySetup) {
             Collection<CreditCardType> restrictedCardTypes = ServerSideFactory.create(PaymentFacade.class).getConvenienceFeeApplicableCardTypes(billingAccount,
                     vistaApplication);
             allowedCardTypes = new ArrayList<CreditCardType>(allowedCardTypes);

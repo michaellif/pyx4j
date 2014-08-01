@@ -28,7 +28,7 @@ import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.rpc.shared.VoidSerializable;
 
 import com.propertyvista.biz.financial.payment.PaymentMethodFacade;
-import com.propertyvista.biz.financial.payment.PaymentMethodFacade.PaymentMethodUsage;
+import com.propertyvista.biz.financial.payment.PaymentMethodTarget;
 import com.propertyvista.crm.rpc.dto.tenant.PreauthorizedPaymentsDTO;
 import com.propertyvista.crm.rpc.services.customer.PreauthorizedPaymentsVisorService;
 import com.propertyvista.crm.server.services.financial.PreauthorizedPaymentsCommons;
@@ -97,7 +97,7 @@ public class PreauthorizedPaymentsVisorServiceImpl implements PreauthorizedPayme
         Persistence.ensureRetrieve(papDto.tenant(), AttachLevel.Attached);
 
         List<LeasePaymentMethod> methods = ServerSideFactory.create(PaymentMethodFacade.class).retrieveLeasePaymentMethods(papDto.tenant(),
-                PaymentMethodUsage.AutopayAgreementSetup, VistaApplication.crm);
+                PaymentMethodTarget.AutoPaySetup, VistaApplication.crm);
 
         papDto.availablePaymentMethods().addAll(methods);
     }

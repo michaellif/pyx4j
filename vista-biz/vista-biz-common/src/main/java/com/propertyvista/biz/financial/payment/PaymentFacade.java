@@ -42,15 +42,17 @@ public interface PaymentFacade {
 
     AllowedPaymentsSetup getAllowedPaymentsSetup(Building policyNode, PaymentMethodTarget paymentMethodTarget, VistaApplication vistaApplication);
 
-    Collection<PaymentType> getAllowedPaymentTypes(BillingAccount billingAccountId, VistaApplication vistaApplication);
+    Collection<PaymentType> getAllowedPaymentTypes(BillingAccount billingAccountId, PaymentMethodTarget paymentMethodTarget, VistaApplication vistaApplication);
 
+    @Deprecated
     Collection<CreditCardType> getAllowedCardTypes(BillingAccount billingAccountId, VistaApplication vistaApplication);
 
     Collection<CreditCardType> getConvenienceFeeApplicableCardTypes(BillingAccount billingAccountId, VistaApplication vistaApplication);
 
     ConvenienceFeeCalculationResponseTO getConvenienceFee(BillingAccount billingAccountId, CreditCardType cardType, BigDecimal amount);
 
-    void validatePaymentMethod(BillingAccount billingAccount, LeasePaymentMethod paymentMethod, VistaApplication vistaApplication);
+    void validatePaymentMethod(BillingAccount billingAccount, LeasePaymentMethod paymentMethod, PaymentMethodTarget paymentMethodTarget,
+            VistaApplication vistaApplication);
 
     void validatePayment(PaymentRecord paymentRecord, VistaApplication vistaApplication);
 

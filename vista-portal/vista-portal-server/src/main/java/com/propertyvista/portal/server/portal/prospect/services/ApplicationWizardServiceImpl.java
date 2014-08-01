@@ -42,7 +42,6 @@ import com.pyx4j.security.shared.SecurityController;
 
 import com.propertyvista.biz.financial.payment.PaymentFacade;
 import com.propertyvista.biz.financial.payment.PaymentMethodFacade;
-import com.propertyvista.biz.financial.payment.PaymentMethodFacade.PaymentMethodUsage;
 import com.propertyvista.biz.financial.payment.PaymentMethodTarget;
 import com.propertyvista.biz.occupancy.OccupancyFacade;
 import com.propertyvista.biz.policy.PolicyFacade;
@@ -226,7 +225,7 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
     @Override
     public void getProfiledPaymentMethods(AsyncCallback<Vector<LeasePaymentMethod>> callback) {
         List<LeasePaymentMethod> methods = ServerSideFactory.create(PaymentMethodFacade.class).retrieveLeasePaymentMethods(
-                ProspectPortalContext.getLeaseTermTenant(), PaymentMethodUsage.OneTimePayments, VistaApplication.prospect);
+                ProspectPortalContext.getLeaseTermTenant(), PaymentMethodTarget.OneTimePayment, VistaApplication.prospect);
         callback.onSuccess(new Vector<LeasePaymentMethod>(methods));
     }
 
@@ -905,7 +904,8 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
                 }
             }
 
-            ServerSideFactory.create(PaymentFacade.class).validatePaymentMethod(lease.billingAccount(), pbo.paymentMethod(), VistaApplication.prospect);
+            ServerSideFactory.create(PaymentFacade.class).validatePaymentMethod(lease.billingAccount(), pbo.paymentMethod(),
+                    PaymentMethodTarget.OneTimePayment, VistaApplication.prospect);
             ServerSideFactory.create(PaymentFacade.class).validatePayment(pbo, VistaApplication.prospect);
             ServerSideFactory.create(PaymentFacade.class).persistPayment(pbo);
         }
@@ -921,8 +921,8 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
             to.payment().paymentMethod().customer().set(ResidentPortalContext.getCustomer());
             to.payment().paymentMethod().isProfiledMethod().setValue(Boolean.TRUE);
 
-            ServerSideFactory.create(PaymentFacade.class)
-                    .validatePaymentMethod(lease.billingAccount(), to.payment().paymentMethod(), VistaApplication.prospect);
+            ServerSideFactory.create(PaymentFacade.class).validatePaymentMethod(lease.billingAccount(), to.payment().paymentMethod(),
+                    PaymentMethodTarget.OneTimePayment, VistaApplication.prospect);
             ServerSideFactory.create(PaymentMethodFacade.class).persistLeasePaymentMethod(to.payment().paymentMethod(), lease.unit().building());
         }
     }

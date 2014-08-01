@@ -29,7 +29,6 @@ import com.pyx4j.entity.server.Persistence;
 
 import com.propertyvista.biz.financial.payment.PaymentFacade;
 import com.propertyvista.biz.financial.payment.PaymentMethodFacade;
-import com.propertyvista.biz.financial.payment.PaymentMethodFacade.PaymentMethodUsage;
 import com.propertyvista.biz.financial.payment.PaymentMethodTarget;
 import com.propertyvista.biz.policy.PolicyFacade;
 import com.propertyvista.domain.financial.AllowedPaymentsSetup;
@@ -138,7 +137,7 @@ public class PaymentServiceImpl implements PaymentService {
         Persistence.service().retrieve(lease.unit().building());
 
         dto.allowedPaymentsSetup().set(
-                ServerSideFactory.create(PaymentFacade.class).getAllowedPaymentsSetup(lease.billingAccount(), PaymentMethodTarget.TODO,
+                ServerSideFactory.create(PaymentFacade.class).getAllowedPaymentsSetup(lease.billingAccount(), PaymentMethodTarget.OneTimePayment,
                         VistaApplication.resident));
 
         dto.address().set(AddressRetriever.getLeaseAddress(lease));
@@ -182,7 +181,7 @@ public class PaymentServiceImpl implements PaymentService {
         List<PaymentMethodInfoDTO> paymentMethods = new ArrayList<PaymentMethodInfoDTO>();
 
         List<LeasePaymentMethod> methods = ServerSideFactory.create(PaymentMethodFacade.class).retrieveLeasePaymentMethods(
-                ResidentPortalContext.getLeaseTermTenant(), PaymentMethodUsage.InProfile, VistaApplication.resident);
+                ResidentPortalContext.getLeaseTermTenant(), PaymentMethodTarget.StoreInProfile, VistaApplication.resident);
 
         AllowedPaymentsSetup aps = ServerSideFactory.create(PaymentFacade.class).getAllowedPaymentsSetup(lease.billingAccount(), PaymentMethodTarget.TODO,
                 VistaApplication.resident);

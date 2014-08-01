@@ -37,7 +37,6 @@ import com.propertyvista.biz.financial.ar.ARFacade;
 import com.propertyvista.biz.financial.payment.PaymentException;
 import com.propertyvista.biz.financial.payment.PaymentFacade;
 import com.propertyvista.biz.financial.payment.PaymentMethodFacade;
-import com.propertyvista.biz.financial.payment.PaymentMethodFacade.PaymentMethodUsage;
 import com.propertyvista.biz.financial.payment.PaymentMethodTarget;
 import com.propertyvista.crm.rpc.services.billing.PaymentRecordCrudService;
 import com.propertyvista.domain.contact.InternationalAddress;
@@ -141,7 +140,8 @@ public class PaymentRecordCrudServiceImpl extends AbstractCrudServiceDtoImpl<Pay
 
         dto.billingAccount().set(billingAccount);
         dto.allowedPaymentsSetup().set(
-                ServerSideFactory.create(PaymentFacade.class).getAllowedPaymentsSetup(dto.billingAccount(), PaymentMethodTarget.TODO, VistaApplication.crm));
+                ServerSideFactory.create(PaymentFacade.class).getAllowedPaymentsSetup(dto.billingAccount(), PaymentMethodTarget.OneTimePayment,
+                        VistaApplication.crm));
 
         dto.leaseId().set(billingAccount.lease().leaseId());
         dto.leaseStatus().set(billingAccount.lease().status());
@@ -180,7 +180,8 @@ public class PaymentRecordCrudServiceImpl extends AbstractCrudServiceDtoImpl<Pay
             }
         }
 
-        ServerSideFactory.create(PaymentFacade.class).validatePaymentMethod(bo.billingAccount(), to.paymentMethod(), VistaApplication.crm);
+        ServerSideFactory.create(PaymentFacade.class).validatePaymentMethod(bo.billingAccount(), to.paymentMethod(), PaymentMethodTarget.OneTimePayment,
+                VistaApplication.crm);
         ServerSideFactory.create(PaymentFacade.class).validatePayment(bo, VistaApplication.crm);
         ServerSideFactory.create(PaymentFacade.class).persistPayment(bo);
 
@@ -195,7 +196,7 @@ public class PaymentRecordCrudServiceImpl extends AbstractCrudServiceDtoImpl<Pay
     @Override
     public void getProfiledPaymentMethods(AsyncCallback<Vector<LeasePaymentMethod>> callback, LeaseTermParticipant<? extends LeaseParticipant<?>> payer) {
         List<LeasePaymentMethod> methods = ServerSideFactory.create(PaymentMethodFacade.class).retrieveLeasePaymentMethods(payer,
-                PaymentMethodUsage.OneTimePayments, VistaApplication.crm);
+                PaymentMethodTarget.OneTimePayment, VistaApplication.crm);
         callback.onSuccess(new Vector<LeasePaymentMethod>(methods));
     }
 

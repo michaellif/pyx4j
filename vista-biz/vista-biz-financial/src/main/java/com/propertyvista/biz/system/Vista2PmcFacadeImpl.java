@@ -137,7 +137,7 @@ public class Vista2PmcFacadeImpl implements Vista2PmcFacade {
         combinePmcAndSystem(fee.acceptedMasterCardConvenienceFee(), pmcFee, systemDefaultFeee);
 
         if (!fee.acceptedVisa().getValue()) {
-            fee.acceptedVisaDebitConvenienceFee().setValue(false);
+            fee.acceptedVisaConvenienceFee().setValue(false);
         }
         if (!fee.acceptedVisaDebit().getValue()) {
             fee.acceptedVisaDebitConvenienceFee().setValue(false);

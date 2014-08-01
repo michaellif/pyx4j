@@ -34,7 +34,6 @@ import com.propertyvista.biz.financial.ar.ARFacade;
 import com.propertyvista.biz.financial.payment.PaymentException;
 import com.propertyvista.biz.financial.payment.PaymentFacade;
 import com.propertyvista.biz.financial.payment.PaymentMethodFacade;
-import com.propertyvista.biz.financial.payment.PaymentMethodFacade.PaymentMethodUsage;
 import com.propertyvista.biz.financial.payment.PaymentMethodTarget;
 import com.propertyvista.domain.contact.InternationalAddress;
 import com.propertyvista.domain.financial.PaymentRecord;
@@ -138,7 +137,8 @@ public class PaymentWizardServiceImpl extends AbstractCrudServiceDtoImpl<Payment
             }
         }
 
-        ServerSideFactory.create(PaymentFacade.class).validatePaymentMethod(lease.billingAccount(), bo.paymentMethod(), VistaApplication.resident);
+        ServerSideFactory.create(PaymentFacade.class).validatePaymentMethod(lease.billingAccount(), bo.paymentMethod(), PaymentMethodTarget.OneTimePayment,
+                VistaApplication.resident);
         ServerSideFactory.create(PaymentFacade.class).validatePayment(bo, VistaApplication.resident);
 
         ServerSideFactory.create(PaymentFacade.class).persistPayment(bo);
@@ -162,7 +162,7 @@ public class PaymentWizardServiceImpl extends AbstractCrudServiceDtoImpl<Payment
     @Override
     public void getProfiledPaymentMethods(AsyncCallback<Vector<LeasePaymentMethod>> callback) {
         List<LeasePaymentMethod> methods = ServerSideFactory.create(PaymentMethodFacade.class).retrieveLeasePaymentMethods(
-                ResidentPortalContext.getLeaseTermTenant(), PaymentMethodUsage.OneTimePayments, VistaApplication.resident);
+                ResidentPortalContext.getLeaseTermTenant(), PaymentMethodTarget.OneTimePayment, VistaApplication.resident);
         callback.onSuccess(new Vector<LeasePaymentMethod>(methods));
     }
 

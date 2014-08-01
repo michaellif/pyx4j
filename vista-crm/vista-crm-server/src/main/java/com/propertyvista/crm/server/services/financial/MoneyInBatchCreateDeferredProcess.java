@@ -33,6 +33,7 @@ import com.pyx4j.gwt.server.deferred.AbstractDeferredProcess;
 
 import com.propertyvista.biz.financial.payment.PaymentException;
 import com.propertyvista.biz.financial.payment.PaymentFacade;
+import com.propertyvista.biz.financial.payment.PaymentMethodTarget;
 import com.propertyvista.crm.rpc.dto.financial.moneyin.MoneyInPaymentDTO;
 import com.propertyvista.domain.financial.PaymentPostingBatch;
 import com.propertyvista.domain.financial.PaymentRecord;
@@ -139,8 +140,8 @@ public class MoneyInBatchCreateDeferredProcess extends AbstractDeferredProcess {
         checkInfo.checkNo().setValue(dto.checkNumber().getValue());
         paymentRecord.paymentMethod().details().set(checkInfo);
 
-        ServerSideFactory.create(PaymentFacade.class)
-                .validatePaymentMethod(paymentRecord.billingAccount(), paymentRecord.paymentMethod(), VistaApplication.crm);
+        ServerSideFactory.create(PaymentFacade.class).validatePaymentMethod(paymentRecord.billingAccount(), paymentRecord.paymentMethod(),
+                PaymentMethodTarget.OneTimePayment, VistaApplication.crm);
         ServerSideFactory.create(PaymentFacade.class).validatePayment(paymentRecord, VistaApplication.crm);
 
         paymentRecord.batch().set(batch);

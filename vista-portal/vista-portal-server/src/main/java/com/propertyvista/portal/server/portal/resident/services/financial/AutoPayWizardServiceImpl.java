@@ -30,7 +30,6 @@ import com.pyx4j.entity.server.Persistence;
 
 import com.propertyvista.biz.financial.payment.PaymentFacade;
 import com.propertyvista.biz.financial.payment.PaymentMethodFacade;
-import com.propertyvista.biz.financial.payment.PaymentMethodFacade.PaymentMethodUsage;
 import com.propertyvista.biz.financial.payment.PaymentMethodTarget;
 import com.propertyvista.domain.contact.InternationalAddress;
 import com.propertyvista.domain.financial.ARCode;
@@ -70,9 +69,6 @@ public class AutoPayWizardServiceImpl extends AbstractCrudServiceDtoImpl<Autopay
                 ServerSideFactory.create(PaymentFacade.class).getAllowedPaymentsSetup(lease.billingAccount(), PaymentMethodTarget.AutoPaySetup,
                         VistaApplication.resident));
 
-        // TODO: Currently allow just non-convenience fee cards (VISTA-3817, change 0):
-        dto.allowedPaymentsSetup().allowedCardTypes().removeAll(dto.allowedPaymentsSetup().convenienceFeeApplicableCardTypes());
-
         dto.address().set(AddressRetriever.getLeaseAddress(lease));
 
         dto.propertyCode().set(lease.unit().building().propertyCode());
@@ -98,13 +94,15 @@ public class AutoPayWizardServiceImpl extends AbstractCrudServiceDtoImpl<Autopay
             bo.paymentMethod().customer().set(ResidentPortalContext.getCustomer());
             bo.paymentMethod().isProfiledMethod().setValue(Boolean.TRUE);
 
-            ServerSideFactory.create(PaymentFacade.class).validatePaymentMethod(lease.billingAccount(), to.paymentMethod(), VistaApplication.resident);
+            ServerSideFactory.create(PaymentFacade.class).validatePaymentMethod(lease.billingAccount(), to.paymentMethod(), PaymentMethodTarget.AutoPaySetup,
+                    VistaApplication.resident);
             ServerSideFactory.create(PaymentMethodFacade.class).persistLeasePaymentMethod(bo.paymentMethod(), lease.unit().building());
         }
 
         updateCoveredItems(bo, to);
 
-        ServerSideFactory.create(PaymentFacade.class).validatePaymentMethod(lease.billingAccount(), to.paymentMethod(), VistaApplication.resident);
+        ServerSideFactory.create(PaymentFacade.class).validatePaymentMethod(lease.billingAccount(), to.paymentMethod(), PaymentMethodTarget.AutoPaySetup,
+                VistaApplication.resident);
         bo.set(ServerSideFactory.create(PaymentMethodFacade.class).persistAutopayAgreement(bo,
                 EntityFactory.createIdentityStub(Tenant.class, ResidentPortalContext.getTenant().getPrimaryKey())));
 
@@ -123,11 +121,8 @@ public class AutoPayWizardServiceImpl extends AbstractCrudServiceDtoImpl<Autopay
         Persistence.service().retrieve(lease.unit().building());
 
         to.allowedPaymentsSetup().set(
-                ServerSideFactory.create(PaymentFacade.class).getAllowedPaymentsSetup(lease.billingAccount(), PaymentMethodTarget.TODO,
+                ServerSideFactory.create(PaymentFacade.class).getAllowedPaymentsSetup(lease.billingAccount(), PaymentMethodTarget.AutoPaySetup,
                         VistaApplication.resident));
-
-        // TODO: Currently allow just non-convenience fee cards (VISTA-3817, change 0):
-        to.allowedPaymentsSetup().allowedCardTypes().removeAll(to.allowedPaymentsSetup().convenienceFeeApplicableCardTypes());
 
         to.address().set(AddressRetriever.getLeaseAddress(lease));
 
@@ -146,7 +141,7 @@ public class AutoPayWizardServiceImpl extends AbstractCrudServiceDtoImpl<Autopay
     @Override
     public void getProfiledPaymentMethods(AsyncCallback<Vector<LeasePaymentMethod>> callback) {
         List<LeasePaymentMethod> methods = ServerSideFactory.create(PaymentMethodFacade.class).retrieveLeasePaymentMethods(
-                ResidentPortalContext.getLeaseTermTenant(), PaymentMethodUsage.AutopayAgreementSetup, VistaApplication.resident);
+                ResidentPortalContext.getLeaseTermTenant(), PaymentMethodTarget.AutoPaySetup, VistaApplication.resident);
         callback.onSuccess(new Vector<LeasePaymentMethod>(methods));
     }
 

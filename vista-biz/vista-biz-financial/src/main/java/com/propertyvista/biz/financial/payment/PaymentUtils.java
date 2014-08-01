@@ -163,7 +163,8 @@ class PaymentUtils {
         return Persistence.service().retrieve(criteria);
     }
 
-    static AllowedPaymentsSetup getAllowedPaymentsSetup(BillingAccount billingAccountId, VistaApplication vistaApplication) {
+    static AllowedPaymentsSetup getAllowedPaymentsSetup(BillingAccount billingAccountId, PaymentMethodTarget paymentMethodTarget,
+            VistaApplication vistaApplication) {
         AllowedPaymentsSetup to = EntityFactory.create(AllowedPaymentsSetup.class);
         to.electronicPaymentsAllowed().setValue(isElectronicPaymentsSetup(billingAccountId));
         to.allowedPaymentTypes().setCollectionValue(Collections.<PaymentType> emptySet());
@@ -185,22 +186,22 @@ class PaymentUtils {
                 paymentMethodSelectionPolicy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(policyNode, PaymentTypeSelectionPolicy.class);
             }
             to.allowedPaymentTypes().setCollectionValue(
-                    PaymentAcceptanceUtils.getAllowedPaymentTypes(vistaApplication, merchantSetup, systemSetup,
+                    PaymentAcceptanceUtils.getAllowedPaymentTypes(paymentMethodTarget, vistaApplication, merchantSetup, systemSetup,
                             paymentAccepted == PaymentAccepted.CashEquivalent, paymentMethodSelectionPolicy));
 
             if (merchantSetup.acceptedCreditCard().getValue(false)) {
                 to.allowedCardTypes().setCollectionValue(
-                        PaymentAcceptanceUtils.getAllowedCreditCardTypes(vistaApplication, merchantSetup, systemSetup,
+                        PaymentAcceptanceUtils.getAllowedCreditCardTypes(paymentMethodTarget, vistaApplication, merchantSetup, systemSetup,
                                 paymentAccepted == PaymentAccepted.CashEquivalent, paymentMethodSelectionPolicy, false));
                 to.convenienceFeeApplicableCardTypes().setCollectionValue(
-                        PaymentAcceptanceUtils.getAllowedCreditCardTypes(vistaApplication, merchantSetup, systemSetup,
+                        PaymentAcceptanceUtils.getAllowedCreditCardTypes(paymentMethodTarget, vistaApplication, merchantSetup, systemSetup,
                                 paymentAccepted == PaymentAccepted.CashEquivalent, paymentMethodSelectionPolicy, true));
             }
         }
         return to;
     }
 
-    static AllowedPaymentsSetup getAllowedPaymentsSetup(Building policyNode, VistaApplication vistaApplication) {
+    static AllowedPaymentsSetup getAllowedPaymentsSetup(Building policyNode, PaymentMethodTarget paymentMethodTarget, VistaApplication vistaApplication) {
         AllowedPaymentsSetup to = EntityFactory.create(AllowedPaymentsSetup.class);
         to.electronicPaymentsAllowed().setValue(isElectronicPaymentsSetup(policyNode));
         to.allowedPaymentTypes().setCollectionValue(Collections.<PaymentType> emptySet());
@@ -215,22 +216,23 @@ class PaymentUtils {
         boolean requireCashEquivalent = false;
 
         to.allowedPaymentTypes().setCollectionValue(
-                PaymentAcceptanceUtils
-                        .getAllowedPaymentTypes(vistaApplication, merchantSetup, systemSetup, requireCashEquivalent, paymentMethodSelectionPolicy));
+                PaymentAcceptanceUtils.getAllowedPaymentTypes(paymentMethodTarget, vistaApplication, merchantSetup, systemSetup, requireCashEquivalent,
+                        paymentMethodSelectionPolicy));
 
         if (merchantSetup.acceptedCreditCard().getValue(false)) {
             to.allowedCardTypes().setCollectionValue(
-                    PaymentAcceptanceUtils.getAllowedCreditCardTypes(vistaApplication, merchantSetup, systemSetup, requireCashEquivalent,
+                    PaymentAcceptanceUtils.getAllowedCreditCardTypes(paymentMethodTarget, vistaApplication, merchantSetup, systemSetup, requireCashEquivalent,
                             paymentMethodSelectionPolicy, false));
             to.convenienceFeeApplicableCardTypes().setCollectionValue(
-                    PaymentAcceptanceUtils.getAllowedCreditCardTypes(vistaApplication, merchantSetup, systemSetup, requireCashEquivalent,
+                    PaymentAcceptanceUtils.getAllowedCreditCardTypes(paymentMethodTarget, vistaApplication, merchantSetup, systemSetup, requireCashEquivalent,
                             paymentMethodSelectionPolicy, true));
         }
 
         return to;
     }
 
-    static Collection<PaymentType> getAllowedPaymentTypes(BillingAccount billingAccountId, VistaApplication vistaApplication) {
+    static Collection<PaymentType> getAllowedPaymentTypes(BillingAccount billingAccountId, PaymentMethodTarget paymentMethodTarget,
+            VistaApplication vistaApplication) {
         BillingAccount billingAccount = billingAccountId.duplicate();
         Persistence.ensureRetrieve(billingAccount, AttachLevel.Attached);
         PaymentAccepted paymentAccepted = billingAccount.paymentAccepted().getValue();
@@ -247,8 +249,8 @@ class PaymentUtils {
             paymentMethodSelectionPolicy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(Persistence.service().retrieve(criteria),
                     PaymentTypeSelectionPolicy.class);
         }
-        return PaymentAcceptanceUtils.getAllowedPaymentTypes(vistaApplication, merchantSetup, systemSetup, paymentAccepted == PaymentAccepted.CashEquivalent,
-                paymentMethodSelectionPolicy);
+        return PaymentAcceptanceUtils.getAllowedPaymentTypes(paymentMethodTarget, vistaApplication, merchantSetup, systemSetup,
+                paymentAccepted == PaymentAccepted.CashEquivalent, paymentMethodSelectionPolicy);
     }
 
     public static Collection<CreditCardType> getAllowedCardTypes(BillingAccount billingAccountId, VistaApplication vistaApplication) {
@@ -275,8 +277,8 @@ class PaymentUtils {
             paymentMethodSelectionPolicy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(Persistence.service().retrieve(criteria),
                     PaymentTypeSelectionPolicy.class);
         }
-        return PaymentAcceptanceUtils.getAllowedCreditCardTypes(vistaApplication, merchantSetup, systemSetup, paymentAccepted == PaymentAccepted.CashEquivalent,
-                paymentMethodSelectionPolicy, forConvenienceFeeOnly);
+        return PaymentAcceptanceUtils.getAllowedCreditCardTypes(PaymentMethodTarget.TODO, vistaApplication, merchantSetup, systemSetup,
+                paymentAccepted == PaymentAccepted.CashEquivalent, paymentMethodSelectionPolicy, forConvenienceFeeOnly);
     }
 
     public static MerchantAccount retrieveMerchantAccount(Building buildingStub) {

@@ -13,10 +13,15 @@
  */
 package com.propertyvista.biz.financial.payment;
 
+import static com.propertyvista.biz.financial.payment.PaymentMethodTarget.OneTimePayment;
+import static com.propertyvista.biz.financial.payment.PaymentMethodTarget.StoreInProfile;
+
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.List;
 
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.core.EntityFactory;
@@ -43,30 +48,68 @@ public class PaymentAcceptanceUtils {
         AbstractPaymentSetup systemSetup();
 
         IPrimitive<Boolean> notCashEquivalent();
+
+        IPrimitive<PaymentMethodTarget> target();
     }
 
     private static abstract class BooleanCriterion {
 
         abstract boolean accept(IEntity selection);
 
-        @SuppressWarnings("unchecked")
-        protected static final boolean isTrue(IEntity selection, IPrimitive<Boolean> member) {
-            return (((IPrimitive<Boolean>) selection.getMember(member.getPath())).getValue(Boolean.FALSE));
-        }
     }
 
-    private static class CriterionAnd extends BooleanCriterion {
+    @SuppressWarnings("unchecked")
+    private static final boolean isTrue(IEntity selection, IPrimitive<Boolean> member) {
+        return (((IPrimitive<Boolean>) selection.getMember(member.getPath())).getValue(Boolean.FALSE));
+    }
 
-        Collection<IPrimitive<Boolean>> require;
+    private static class BooleanProtoCriterion extends BooleanCriterion {
 
-        CriterionAnd(Collection<IPrimitive<Boolean>> require) {
-            this.require = require;
+        IPrimitive<Boolean> require;
+
+        BooleanProtoCriterion(IPrimitive<Boolean> protoMemeber) {
+            this.require = protoMemeber;
         }
 
         @Override
         boolean accept(IEntity selection) {
-            for (IPrimitive<Boolean> member : require) {
-                if (!isTrue(selection, member)) {
+            return isTrue(selection, require);
+        }
+
+    }
+
+    static Collection<BooleanCriterion> asCriterion(Collection<IPrimitive<Boolean>> protos) {
+        Collection<BooleanCriterion> requires = new ArrayList<>();
+        for (IPrimitive<Boolean> proto : protos) {
+            requires.add(new BooleanProtoCriterion(proto));
+        }
+        return requires;
+    }
+
+    static Collection<BooleanCriterion> asCriterion(@SuppressWarnings("unchecked") IPrimitive<Boolean>... protos) {
+        Collection<BooleanCriterion> requires = new ArrayList<>();
+        for (IPrimitive<Boolean> proto : protos) {
+            requires.add(new BooleanProtoCriterion(proto));
+        }
+        return requires;
+    }
+
+    static class CriterionAnd extends BooleanCriterion {
+
+        private final Collection<BooleanCriterion> requires;
+
+        CriterionAnd(Collection<BooleanCriterion> requires) {
+            this.requires = requires;
+        }
+
+        CriterionAnd(BooleanCriterion... requires) {
+            this.requires = Arrays.asList(requires);
+        }
+
+        @Override
+        boolean accept(IEntity selection) {
+            for (BooleanCriterion require : requires) {
+                if (!require.accept(selection)) {
                     return false;
                 }
             }
@@ -75,59 +118,84 @@ public class PaymentAcceptanceUtils {
 
     }
 
-    private static class CriterionOr extends BooleanCriterion {
-
-        IPrimitive<Boolean> require1;
-
-        IPrimitive<Boolean> require2;
-
-        CriterionOr(IPrimitive<Boolean> require1, IPrimitive<Boolean> require2) {
-            this.require1 = require1;
-            this.require2 = require2;
-        }
-
-        @Override
-        public boolean accept(IEntity selection) {
-            return isTrue(selection, require1) || isTrue(selection, require2);
-        }
-
-    }
-
-    private static class CriterionOr2 extends BooleanCriterion {
-
-        IPrimitive<Boolean> require1;
-
-        BooleanCriterion require2;
-
-        CriterionOr2(IPrimitive<Boolean> require1, BooleanCriterion require2) {
-            this.require1 = require1;
-            this.require2 = require2;
-        }
-
-        @Override
-        public boolean accept(IEntity selection) {
-            return isTrue(selection, require1) || require2.accept(selection);
-        }
-
-    }
-
-    private static class CriterionNot extends BooleanCriterion {
-
-        IPrimitive<Boolean> require;
-
-        CriterionNot(IPrimitive<Boolean> require) {
-            this.require = require;
-        }
-
-        @Override
-        public boolean accept(IEntity selection) {
-            return !isTrue(selection, require);
-        }
-
+    private static BooleanCriterion and(BooleanCriterion criterion, @SuppressWarnings("unchecked") IPrimitive<Boolean>... require) {
+        return new CriterionAnd(criterion, new CriterionAnd(asCriterion(require)));
     }
 
     private static BooleanCriterion and(@SuppressWarnings("unchecked") IPrimitive<Boolean>... require) {
-        return new CriterionAnd(Arrays.asList(require));
+        return new CriterionAnd(asCriterion(require));
+    }
+
+    static class CriterionOr extends BooleanCriterion {
+
+        private final Collection<BooleanCriterion> requires;
+
+        CriterionOr(Collection<BooleanCriterion> requires) {
+            this.requires = requires;
+        }
+
+        CriterionOr(BooleanCriterion... requires) {
+            this.requires = Arrays.asList(requires);
+        }
+
+        @Override
+        boolean accept(IEntity selection) {
+            for (BooleanCriterion require : requires) {
+                if (require.accept(selection)) {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+    }
+
+    static class CriterionNot extends BooleanCriterion {
+
+        BooleanCriterion criterion;
+
+        CriterionNot(IPrimitive<Boolean> require) {
+            this.criterion = new BooleanProtoCriterion(require);
+        }
+
+        CriterionNot(BooleanCriterion criterion) {
+            this.criterion = criterion;
+        }
+
+        @Override
+        public boolean accept(IEntity selection) {
+            return !criterion.accept(selection);
+        }
+
+    }
+
+    private static class CriterionIn<E extends Serializable> extends BooleanCriterion {
+
+        Collection<E> options;
+
+        IPrimitive<E> require;
+
+        CriterionIn(IPrimitive<E> require, E[] options) {
+            this.require = require;
+
+            // TODO remove this.  TODO is  true
+            List<PaymentMethodTarget> t2 = new ArrayList<PaymentMethodTarget>(Arrays.asList((PaymentMethodTarget[]) options));
+            t2.add(PaymentMethodTarget.TODO);
+            this.options = (Collection<E>) t2;
+
+            // this.options = Arrays.asList(options);
+        }
+
+        @SuppressWarnings("unchecked")
+        @Override
+        public boolean accept(IEntity selection) {
+            return options.contains((((IPrimitive<E>) selection.getMember(require.getPath())).getValue()));
+        }
+
+    }
+
+    static BooleanCriterion in(IPrimitive<PaymentMethodTarget> target, PaymentMethodTarget... targets) {
+        return new CriterionIn<PaymentMethodTarget>(target, targets);
     }
 
     @SuppressWarnings("unchecked")
@@ -140,22 +208,27 @@ public class PaymentAcceptanceUtils {
         }
 
         E and(IPrimitive<Boolean>... require) {
-            this.require.add(new CriterionAnd(Arrays.asList(require)));
+            this.require.add(new CriterionAnd(asCriterion(require)));
             return (E) this;
         }
 
-        E or(IPrimitive<Boolean> require1, IPrimitive<Boolean> require2) {
-            this.require.add(new CriterionOr(require1, require2));
+        E or(IPrimitive<Boolean>... require) {
+            this.require.add(new CriterionOr(asCriterion(require)));
             return (E) this;
         }
 
         E or(IPrimitive<Boolean> require1, BooleanCriterion require2) {
-            this.require.add(new CriterionOr2(require1, require2));
+            this.require.add(new CriterionOr(new BooleanProtoCriterion(require1), require2));
             return (E) this;
         }
 
         E not(IPrimitive<Boolean> require) {
             this.require.add(new CriterionNot(require));
+            return (E) this;
+        }
+
+        E and(IPrimitive<PaymentMethodTarget> target, PaymentMethodTarget... targets) {
+            this.require.add(new CriterionIn<PaymentMethodTarget>(target, targets));
             return (E) this;
         }
 
@@ -205,8 +278,9 @@ public class PaymentAcceptanceUtils {
 
     private static Collection<CardTypeAcceptance> prospectPortalCardWithConvenienceFee = buildCardAcceptanceMatrixWithConvenienceFeeProspect();
 
-    static Collection<PaymentType> getAllowedPaymentTypes(VistaApplication vistaApplication, MerchantElectronicPaymentSetup merchantSetup,
-            AbstractPaymentSetup systemSetup, boolean requireCashEquivalent, PaymentTypeSelectionPolicy paymentMethodSelectionPolicy) {
+    static Collection<PaymentType> getAllowedPaymentTypes(PaymentMethodTarget paymentMethodTarget, VistaApplication vistaApplication,
+            MerchantElectronicPaymentSetup merchantSetup, AbstractPaymentSetup systemSetup, boolean requireCashEquivalent,
+            PaymentTypeSelectionPolicy paymentMethodSelectionPolicy) {
 
         Collection<PaymentTypeAcceptance> requireAcceptance;
         switch (vistaApplication) {
@@ -227,6 +301,7 @@ public class PaymentAcceptanceUtils {
         selection.merchantSetup().set(merchantSetup);
         selection.systemSetup().set(systemSetup);
         selection.notCashEquivalent().setValue(!requireCashEquivalent);
+        selection.target().setValue(paymentMethodTarget);
 
         Collection<PaymentType> allowedPaymentTypes = new ArrayList<PaymentType>();
         for (PaymentTypeAcceptance acceptance : requireAcceptance) {
@@ -238,9 +313,9 @@ public class PaymentAcceptanceUtils {
         return Collections.unmodifiableCollection(allowedPaymentTypes);
     }
 
-    public static Collection<CreditCardType> getAllowedCreditCardTypes(VistaApplication vistaApplication, MerchantElectronicPaymentSetup merchantSetup,
-            AbstractPaymentSetup systemSetup, boolean requireCashEquivalent, PaymentTypeSelectionPolicy paymentMethodSelectionPolicy,
-            boolean forConvenienceFeeOnly) {
+    public static Collection<CreditCardType> getAllowedCreditCardTypes(PaymentMethodTarget paymentMethodTarget, VistaApplication vistaApplication,
+            MerchantElectronicPaymentSetup merchantSetup, AbstractPaymentSetup systemSetup, boolean requireCashEquivalent,
+            PaymentTypeSelectionPolicy paymentMethodSelectionPolicy, boolean forConvenienceFeeOnly) {
         Collection<CardTypeAcceptance> requireAcceptance;
         switch (vistaApplication) {
         case prospect:
@@ -272,6 +347,7 @@ public class PaymentAcceptanceUtils {
         selection.notCashEquivalent().setValue(!requireCashEquivalent);
         selection.merchantSetup().set(merchantSetup);
         selection.systemSetup().set(systemSetup);
+        selection.target().setValue(paymentMethodTarget);
 
         Collection<CreditCardType> allowedPaymentTypes = new ArrayList<CreditCardType>();
         for (CardTypeAcceptance acceptance : requireAcceptance) {
@@ -326,23 +402,27 @@ public class PaymentAcceptanceUtils {
         require.add(new PaymentTypeAcceptance(PaymentType.CreditCard).//
                 and(p.systemSetup().acceptedMasterCard(), p.merchantSetup().acceptedCreditCard(), p.acceptedCreditCardMasterCard()).//
                 or(p.residentPortalCreditCardMasterCard(), //
-                        and(p.merchantSetup().acceptedCreditCardConvenienceFee(), p.systemSetup().acceptedMasterCardConvenienceFee())). //
+                        and(in(p.target(), StoreInProfile, OneTimePayment), //
+                                p.merchantSetup().acceptedCreditCardConvenienceFee(), p.systemSetup().acceptedMasterCardConvenienceFee())). //
                 or(p.notCashEquivalent(), p.cashEquivalentCreditCardMasterCard()));
 
         require.add(new PaymentTypeAcceptance(PaymentType.CreditCard).//
                 and(p.systemSetup().acceptedVisa(), p.merchantSetup().acceptedCreditCard(), p.acceptedCreditCardVisa()).//
                 or(p.residentPortalCreditCardVisa(), //
-                        and(p.merchantSetup().acceptedCreditCardConvenienceFee(), p.systemSetup().acceptedVisaConvenienceFee())). //
+                        and(in(p.target(), StoreInProfile, OneTimePayment), //
+                                p.merchantSetup().acceptedCreditCardConvenienceFee(), p.systemSetup().acceptedVisaConvenienceFee())). //
                 or(p.notCashEquivalent(), p.cashEquivalentCreditCardVisa()));
 
         require.add(new PaymentTypeAcceptance(PaymentType.CreditCard). //
-                and(p.systemSetup().acceptedVisa(), //
+                and(p.systemSetup().acceptedVisaDebit(), //
                         p.merchantSetup().acceptedCreditCard(), p.merchantSetup().acceptedCreditCardVisaDebit(), p.acceptedVisaDebit()).//
                 or(p.residentPortalVisaDebit(), //
-                        and(p.merchantSetup().acceptedCreditCardConvenienceFee(), p.systemSetup().acceptedVisaConvenienceFee())). // 
+                        and(in(p.target(), StoreInProfile, OneTimePayment), //
+                                p.merchantSetup().acceptedCreditCardConvenienceFee(), p.systemSetup().acceptedVisaDebitConvenienceFee())). // 
                 or(p.notCashEquivalent(), p.cashEquivalentVisaDebit()));
 
         require.add(new PaymentTypeAcceptance(PaymentType.DirectBanking).//
+                and(p.target(), OneTimePayment). //
                 and(p.merchantSetup().acceptedDirectBanking(), p.systemSetup().acceptedDirectBanking(), p.acceptedDirectBanking()). //
                 and(p.residentPortalDirectBanking()). //
                 or(p.notCashEquivalent(), p.cashEquivalentDirectBanking()));
@@ -406,13 +486,15 @@ public class PaymentAcceptanceUtils {
         require.add(new CardTypeAcceptance(CreditCardType.MasterCard).//
                 and(p.systemSetup().acceptedMasterCard(), p.merchantSetup().acceptedCreditCard(), p.acceptedCreditCardMasterCard()).//
                 or(p.residentPortalCreditCardMasterCard(), //
-                        and(p.systemSetup().acceptedMasterCardConvenienceFee(), p.merchantSetup().acceptedCreditCardConvenienceFee())). //
+                        and(in(p.target(), StoreInProfile, OneTimePayment), //
+                                p.systemSetup().acceptedMasterCardConvenienceFee(), p.merchantSetup().acceptedCreditCardConvenienceFee())). //
                 or(p.notCashEquivalent(), p.cashEquivalentCreditCardMasterCard()));
 
         require.add(new CardTypeAcceptance(CreditCardType.Visa).//
                 and(p.systemSetup().acceptedVisa(), p.merchantSetup().acceptedCreditCard(), p.acceptedCreditCardVisa()).// 
                 or(p.residentPortalCreditCardVisa(), //
-                        and(p.systemSetup().acceptedVisaConvenienceFee(), p.merchantSetup().acceptedCreditCardConvenienceFee())). // 
+                        and(in(p.target(), StoreInProfile, OneTimePayment), //
+                                p.systemSetup().acceptedVisaConvenienceFee(), p.merchantSetup().acceptedCreditCardConvenienceFee())). // 
                 or(p.notCashEquivalent(), p.cashEquivalentCreditCardVisa()));
 
         if (VistaTODO.visaDebitHasConvenienceFee) {

@@ -39,6 +39,7 @@ import com.pyx4j.security.shared.Behavior;
 
 import com.propertyvista.biz.communication.CommunicationFacade;
 import com.propertyvista.biz.financial.payment.PaymentFacade;
+import com.propertyvista.biz.financial.payment.PaymentMethodTarget;
 import com.propertyvista.biz.tenant.CustomerFacade;
 import com.propertyvista.biz.tenant.OnlineApplicationFacade;
 import com.propertyvista.config.VistaDeployment;
@@ -150,7 +151,7 @@ public class ResidentAuthenticationServiceImpl extends VistaAuthenticationServic
 
         if (selectedLease != null) {
             Collection<PaymentType> allowedPaymentTypes = ServerSideFactory.create(PaymentFacade.class).getAllowedPaymentTypes(selectedLease.billingAccount(),
-                    VistaApplication.resident);
+                    PaymentMethodTarget.TODO, VistaApplication.resident);
             for (PaymentType paymentType : allowedPaymentTypes) {
                 switch (paymentType) {
                 case CreditCard:
