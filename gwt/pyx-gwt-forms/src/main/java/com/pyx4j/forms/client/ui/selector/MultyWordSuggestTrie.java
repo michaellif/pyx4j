@@ -52,11 +52,6 @@ public class MultyWordSuggestTrie<E> {
         fillTrie();
     }
 
-    //TODO remove getTrie(), use getCandidates() in unit tests
-    public PrefixTrie getTrie() {
-        return trie;
-    }
-
     private void fillTrie() {
         Map<String, Collection<E>> desc = new HashMap<String, Collection<E>>();
 

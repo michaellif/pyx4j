@@ -22,13 +22,11 @@ package com.pyx4j.test.forms.client.ui.selector;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 import java.util.ArrayList;
 import java.util.Collection;
 
-import org.junit.Before;
 import org.junit.Test;
 
 import com.pyx4j.commons.IFormatter;
@@ -36,14 +34,10 @@ import com.pyx4j.forms.client.ui.selector.MultyWordSuggestTrie;
 
 public class MultyWordSuggestTrieTest {
 
-    MultyWordSuggestTrie<String> suggestPlainTrie;
+    @Test
+    public void testGetCandidates() {
 
-    MultyWordSuggestTrie<String> suggestTrie;
-
-    @Before
-    public void setUp() {
-        suggestPlainTrie = new MultyWordSuggestTrie<String>(null, null);
-
+        MultyWordSuggestTrie<String> suggestTrie;
         ArrayList<String> options = new ArrayList<String>();
         options.add("abcd, dcba");
         options.add("abcd abb ad dcba");
@@ -56,53 +50,6 @@ public class MultyWordSuggestTrieTest {
                 return value;
             }
         });
-    }
-
-    @Test
-    public void testEmptyString() {
-
-        suggestPlainTrie.getTrie().add(null, null);
-        assertFalse(suggestPlainTrie.getTrie().contains(""));
-
-        suggestPlainTrie.getTrie().add("", new ArrayList<String>());
-        assertFalse(suggestPlainTrie.getTrie().contains(""));
-    }
-
-    @Test
-    public void testContains() {
-        assertFalse(suggestPlainTrie.getTrie().contains(""));
-        assertFalse(suggestPlainTrie.getTrie().contains("abc"));
-
-        suggestPlainTrie.getTrie().add("abc", null);
-        assertTrue(suggestPlainTrie.getTrie().contains("abc"));
-        assertFalse(suggestPlainTrie.getTrie().contains("ab"));
-        assertFalse(suggestPlainTrie.getTrie().contains("abcd"));
-    }
-
-    @Test
-    public void testGetMatches() {
-        Collection<String> matches = suggestTrie.getTrie().getMatches("");
-        assertNull(matches);
-
-        matches = suggestTrie.getTrie().getMatches("ab");
-        assertNull(matches);
-
-        matches = suggestTrie.getTrie().getMatches("abcd");
-        assertEquals(3, matches.size());
-        assertFalse(matches.contains("abcd"));
-        assertTrue(matches.contains("abcd, dcba"));
-        assertTrue(matches.contains("abcd abb ad dcba"));
-        assertTrue(matches.contains("abcd abb ad ddd"));
-        assertFalse(matches.contains("af. fbb"));
-
-        matches.clear();
-        matches = suggestTrie.getTrie().getMatches("af");
-        assertTrue(matches.contains("af. fbb"));
-
-    }
-
-    @Test
-    public void testGetCandidates() {
 
         Collection<String> candidates = suggestTrie.getCandidates("ab");
         assertEquals(3, candidates.size());
@@ -136,21 +83,6 @@ public class MultyWordSuggestTrieTest {
         assertFalse(candidates.contains("abcd abb ad dcba"));
         assertFalse(candidates.contains("abcd abb ad ddd"));
         assertTrue(candidates.contains("af. fbb"));
-
-    }
-
-    @Test
-    public void testGetWordsStartingWith() {
-        Collection<String> startingWords = suggestTrie.getTrie().getWordsWithPrefix("ab");
-        assertEquals(2, startingWords.size());
-        assertTrue(startingWords.contains("abcd"));
-        assertTrue(startingWords.contains("abb"));
-
-        startingWords.clear();
-        startingWords = suggestTrie.getTrie().getWordsWithPrefix("abcd.");
-        assertEquals(0, startingWords.size());
-        assertFalse(startingWords.contains("abcd"));
-        assertFalse(startingWords.contains("abb"));
 
     }
 }
