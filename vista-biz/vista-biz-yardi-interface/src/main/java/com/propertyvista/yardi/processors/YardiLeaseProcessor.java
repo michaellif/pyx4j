@@ -69,7 +69,6 @@ import com.propertyvista.domain.tenant.lease.Lease.CompletionType;
 import com.propertyvista.domain.tenant.lease.Lease.Status;
 import com.propertyvista.domain.tenant.lease.LeaseTerm;
 import com.propertyvista.portal.rpc.shared.PolicyNotFoundException;
-import com.propertyvista.yardi.mappers.BuildingsMapper;
 import com.propertyvista.yardi.mergers.LeaseMerger;
 import com.propertyvista.yardi.mergers.TenantMerger;
 import com.propertyvista.yardi.services.ARCodeAdapter;
@@ -92,16 +91,15 @@ public class YardiLeaseProcessor {
     // Public interface:
 
     public void process() throws YardiServiceException {
+        List<Lease> nonProcessedLeases = Collections.emptyList();
+        if (rtd.isCloseNonProcessedLeases()) {
+            nonProcessedLeases = retrieveActiveLeases(rtd.getYardiInterfaceId());
+        }
+
         for (final String propertyCode : rtd.getKeySet()) {
-
-            List<Lease> currentLeases = Collections.emptyList();
-            if (rtd.isCloseNonProcessedLeases()) {
-                currentLeases = retrieveActiveLeases(rtd.getYardiInterfaceId(), propertyCode);
-            }
-
             for (final String leaseId : rtd.getData(propertyCode).getKeySet()) {
                 if (rtd.isCloseNonProcessedLeases()) {
-                    removeLease(currentLeases, leaseId);
+                    removeLease(nonProcessedLeases, leaseId);
                 }
 
                 new UnitOfWork(TransactionScopeOption.RequiresNew).execute(new Executable<Void, YardiServiceException>() {
@@ -120,15 +118,17 @@ public class YardiLeaseProcessor {
             if (rtd.getExecutionMonitor().isTerminationRequested()) {
                 break;
             }
+        }
 
+        if (!rtd.getExecutionMonitor().isTerminationRequested()) {
             if (rtd.isCloseNonProcessedLeases()) {
-                closeLeases(currentLeases);
+                closeLeases(nonProcessedLeases);
             }
         }
     }
 
     public Lease processLease(String propertyCode, String leaseId, LeaseTransactionData ltd) throws YardiServiceException {
-        Lease existingLease = retriveLease(rtd.getYardiInterfaceId(), propertyCode, leaseId);
+        Lease existingLease = retriveLease(rtd.getYardiInterfaceId(), leaseId);
         if (existingLease != null) {
             return updateLease(propertyCode, leaseId, ltd, existingLease);
         } else {
@@ -404,13 +404,11 @@ public class YardiLeaseProcessor {
         return getLeaseID(rtCustomer.getCustomerID());
     }
 
-    public static Lease retriveLease(Key yardiInterfaceId, String propertyCode, String leaseId) {
+    private static Lease retriveLease(Key yardiInterfaceId, String leaseId) {
         EntityQueryCriteria<Lease> criteria = EntityQueryCriteria.create(Lease.class);
 
         criteria.eq(criteria.proto().leaseId(), leaseId);
         criteria.eq(criteria.proto().integrationSystemId(), yardiInterfaceId);
-        criteria.eq(criteria.proto().unit().building().propertyCode(), propertyCode);
-        criteria.eq(criteria.proto().unit().building().integrationSystemId(), yardiInterfaceId);
 
         return Persistence.service().retrieve(criteria);
     }
@@ -534,7 +532,7 @@ public class YardiLeaseProcessor {
     }
 
     // @see function in migration PadProcessorInformation.billableItemId  that use the same value
-    public static String billableItemUid(String chargeCode, int chargeCodeItemNo) {
+    private static String billableItemUid(String chargeCode, int chargeCodeItemNo) {
         return chargeCode + ":" + chargeCodeItemNo;
     }
 
@@ -683,10 +681,9 @@ public class YardiLeaseProcessor {
         return lease;
     }
 
-    private static List<Lease> retrieveActiveLeases(Key yardiInterfaceId, String propertyCode) {
+    private static List<Lease> retrieveActiveLeases(Key yardiInterfaceId) {
         EntityQueryCriteria<Lease> criteria = EntityQueryCriteria.create(Lease.class);
 
-        criteria.eq(criteria.proto().unit().building().propertyCode(), BuildingsMapper.getPropertyCode(propertyCode));
         criteria.eq(criteria.proto().unit().building().integrationSystemId(), yardiInterfaceId);
         criteria.in(criteria.proto().status(), Lease.Status.active());
 

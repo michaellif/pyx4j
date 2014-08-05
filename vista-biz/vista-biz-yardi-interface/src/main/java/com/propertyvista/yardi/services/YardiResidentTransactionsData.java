@@ -78,23 +78,24 @@ public class YardiResidentTransactionsData {
 
     private final Map<String, PropertyTransactionData> data = new HashMap<>();
 
-    private final ExecutionMonitor executionMonitor;
-
     private final Key yardiInterfaceId;
 
-    private boolean closeNonProcessedLeases = true;
+    private final ExecutionMonitor executionMonitor;
 
-    public YardiResidentTransactionsData(ExecutionMonitor executionMonitor, Key yardiInterfaceId) {
-        this.executionMonitor = executionMonitor;
+    private final boolean closeNonProcessedLeases;
+
+    public YardiResidentTransactionsData(Key yardiInterfaceId, ExecutionMonitor executionMonitor) {
+        this(yardiInterfaceId, executionMonitor, true);
+    }
+
+    public YardiResidentTransactionsData(Key yardiInterfaceId, ExecutionMonitor executionMonitor, boolean closeNonProcessedLeases) {
         this.yardiInterfaceId = yardiInterfaceId;
+        this.executionMonitor = executionMonitor;
+        this.closeNonProcessedLeases = closeNonProcessedLeases;
     }
 
     public boolean isCloseNonProcessedLeases() {
         return closeNonProcessedLeases;
-    }
-
-    public void setCloseNonProcessedLeases(boolean closeNonProcessedLeases) {
-        this.closeNonProcessedLeases = closeNonProcessedLeases;
     }
 
     public Set<String> getKeySet() {

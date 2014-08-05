@@ -185,11 +185,11 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
             }
         }
 
-        updateProperties(yc, propertyCodes, executionMonitor);
+        updateProperties(yc, propertyCodes, executionMonitor, true);
     }
 
     public void updateBuilding(PmcYardiCredential yc, Building building, ExecutionMonitor executionMonitor) throws YardiServiceException, RemoteException {
-        updateProperties(yc, Arrays.asList(building.propertyCode().getValue()), executionMonitor);
+        updateProperties(yc, Arrays.asList(building.propertyCode().getValue()), executionMonitor, false);
     }
 
     public void updateLease(PmcYardiCredential yc, Lease lease, ExecutionMonitor executionMonitor) throws YardiServiceException, RemoteException {
@@ -203,8 +203,7 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
         Key yardiInterfaceId = yc.getPrimaryKey();
         String propertyCode = lease.unit().building().propertyCode().getValue();
         YardiResidentTransactionsStub stub = ServerSideFactory.create(YardiResidentTransactionsStub.class);
-        YardiResidentTransactionsData rtd = new YardiResidentTransactionsData(executionMonitor, yardiInterfaceId);
-        rtd.setCloseNonProcessedLeases(false);
+        YardiResidentTransactionsData rtd = new YardiResidentTransactionsData(yardiInterfaceId, executionMonitor, false);
 
         ResidentTransactions transactions = stub.getResidentTransactionsForTenant(yc, propertyCode, lease.leaseId().getValue());
         if (transactions != null) {
@@ -407,8 +406,8 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
         return marketingInfo;
     }
 
-    private void updateProperties(PmcYardiCredential yc, List<String> propertyCodes, ExecutionMonitor executionMonitor) throws YardiServiceException,
-            RemoteException {
+    private void updateProperties(PmcYardiCredential yc, List<String> propertyCodes, ExecutionMonitor executionMonitor, boolean closeNonProcessedLeases)
+            throws YardiServiceException, RemoteException {
         try {
             ServerSideFactory.create(YardiConfigurationFacade.class).startYardiTimer();
             ServerSideFactory.create(NotificationFacade.class).aggregateNotificationsStart();
@@ -440,7 +439,7 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
             }
 
             // lease resident data + charges:
-            YardiResidentTransactionsData rtd = new YardiResidentTransactionsData(executionMonitor, yardiInterfaceId);
+            YardiResidentTransactionsData rtd = new YardiResidentTransactionsData(yardiInterfaceId, executionMonitor, closeNonProcessedLeases);
             preProcessResidentTransactionsData(rtd, transactions, getLeaseCharges(stub, yc, executionMonitor, importedBuildings));
             if (!executionMonitor.isTerminationRequested()) {
                 importLeases(rtd);
@@ -665,6 +664,13 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
 
             // note - sorting input data list by lease status: former -> current -> future:
             for (RTCustomer rtCustomer : YardiLeaseProcessor.sortRtCustomers(property.getRTCustomer())) {
+                if (!YardiLeaseProcessor.isEligibleForProcessing(rtCustomer)) {
+                    String msg = SimpleMessageFormat.format("Transactions for: {0} skipped, lease does not meet criteria.", rtCustomer.getCustomerID());
+                    rtd.getExecutionMonitor().addInfoEvent("Lease", msg);
+                    log.warn(msg);
+                    continue;
+                }
+
                 String leaseId = YardiLeaseProcessor.getLeaseID(rtCustomer.getCustomerID());
 
                 LeaseTransactionData lease = prop.getData(propertyCode);
