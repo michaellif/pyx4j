@@ -13,9 +13,7 @@
  */
 package com.propertyvista.yardi.services;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -24,7 +22,6 @@ import com.yardi.entity.resident.RTCustomer;
 import com.pyx4j.commons.Key;
 
 import com.propertyvista.biz.ExecutionMonitor;
-import com.propertyvista.domain.tenant.lease.Lease;
 
 public class YardiResidentTransactionsData {
 
@@ -63,8 +60,6 @@ public class YardiResidentTransactionsData {
 
         private final Map<String, LeaseTransactionData> data = new HashMap<>();
 
-        private final List<Lease> noChargesLeases = new ArrayList<>();
-
         public PropertyTransactionData() {
         }
 
@@ -79,10 +74,6 @@ public class YardiResidentTransactionsData {
         public void putData(String key, LeaseTransactionData data) {
             this.data.put(key, data);
         }
-
-        public List<Lease> getNoChargesLeases() {
-            return noChargesLeases;
-        }
     }
 
     private final Map<String, PropertyTransactionData> data = new HashMap<>();
@@ -91,9 +82,19 @@ public class YardiResidentTransactionsData {
 
     private final Key yardiInterfaceId;
 
+    private boolean closeNonProcessedLeases = true;
+
     public YardiResidentTransactionsData(ExecutionMonitor executionMonitor, Key yardiInterfaceId) {
         this.executionMonitor = executionMonitor;
         this.yardiInterfaceId = yardiInterfaceId;
+    }
+
+    public boolean isCloseNonProcessedLeases() {
+        return closeNonProcessedLeases;
+    }
+
+    public void setCloseNonProcessedLeases(boolean closeNonProcessedLeases) {
+        this.closeNonProcessedLeases = closeNonProcessedLeases;
     }
 
     public Set<String> getKeySet() {

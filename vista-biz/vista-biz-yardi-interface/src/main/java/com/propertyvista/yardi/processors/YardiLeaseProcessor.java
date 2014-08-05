@@ -20,6 +20,7 @@ import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -68,6 +69,7 @@ import com.propertyvista.domain.tenant.lease.Lease.CompletionType;
 import com.propertyvista.domain.tenant.lease.Lease.Status;
 import com.propertyvista.domain.tenant.lease.LeaseTerm;
 import com.propertyvista.portal.rpc.shared.PolicyNotFoundException;
+import com.propertyvista.yardi.mappers.BuildingsMapper;
 import com.propertyvista.yardi.mergers.LeaseMerger;
 import com.propertyvista.yardi.mergers.TenantMerger;
 import com.propertyvista.yardi.services.ARCodeAdapter;
@@ -91,7 +93,17 @@ public class YardiLeaseProcessor {
 
     public void process() throws YardiServiceException {
         for (final String propertyCode : rtd.getKeySet()) {
+
+            List<Lease> currentLeases = Collections.emptyList();
+            if (rtd.isCloseNonProcessedLeases()) {
+                currentLeases = retrieveActiveLeases(rtd.getYardiInterfaceId(), propertyCode);
+            }
+
             for (final String leaseId : rtd.getData(propertyCode).getKeySet()) {
+                if (rtd.isCloseNonProcessedLeases()) {
+                    removeLease(currentLeases, leaseId);
+                }
+
                 new UnitOfWork(TransactionScopeOption.RequiresNew).execute(new Executable<Void, YardiServiceException>() {
                     @Override
                     public Void execute() throws YardiServiceException {
@@ -109,13 +121,8 @@ public class YardiLeaseProcessor {
                 break;
             }
 
-            // expire lease products for leases without charges :
-            for (Lease lease : rtd.getData(propertyCode).getNoChargesLeases()) {
-                lease = ServerSideFactory.create(LeaseFacade.class).load(lease, true);
-                if (expireLeaseProducts(lease)) {
-                    lease = ServerSideFactory.create(LeaseFacade.class).finalize(lease);
-                    log.info(SimpleMessageFormat.format("lease {0} from NoChargesLeases - expireLeaseProducts!", lease.leaseId().getValue()));
-                }
+            if (rtd.isCloseNonProcessedLeases()) {
+                closeLeases(currentLeases);
             }
         }
     }
@@ -674,5 +681,34 @@ public class YardiLeaseProcessor {
         log.debug("        Cancel Lease Completion");
         Persistence.service().retrieve(lease);
         return lease;
+    }
+
+    private static List<Lease> retrieveActiveLeases(Key yardiInterfaceId, String propertyCode) {
+        EntityQueryCriteria<Lease> criteria = EntityQueryCriteria.create(Lease.class);
+
+        criteria.eq(criteria.proto().unit().building().propertyCode(), BuildingsMapper.getPropertyCode(propertyCode));
+        criteria.eq(criteria.proto().unit().building().integrationSystemId(), yardiInterfaceId);
+        criteria.in(criteria.proto().status(), Lease.Status.active());
+
+        return Persistence.service().query(criteria);
+    }
+
+    private boolean removeLease(List<Lease> leases, final String leaseId) {
+        if (leaseId != null) {
+            Iterator<Lease> it = leases.iterator();
+            while (it.hasNext()) {
+                if (getLeaseID(leaseId).equals(it.next().leaseId().getValue())) {
+                    it.remove();
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    private void closeLeases(List<Lease> leases) {
+        for (Lease lease : leases) {
+            completeLease(lease);
+        }
     }
 }
