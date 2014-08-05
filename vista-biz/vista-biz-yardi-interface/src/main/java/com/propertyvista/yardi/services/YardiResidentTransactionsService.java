@@ -868,12 +868,6 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
         return Persistence.service().retrieve(criteria);
     }
 
-    private void closeLeases(List<Lease> leases) {
-        for (Lease lease : leases) {
-            YardiLeaseProcessor.completeLease(lease);
-        }
-    }
-
     private boolean suspendBuilding(Key yardiInterfaceId, String propertyCode) {
         return suspendBuilding(MappingUtils.retrieveBuilding(yardiInterfaceId, propertyCode));
     }

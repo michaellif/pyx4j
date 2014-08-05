@@ -655,7 +655,7 @@ public class YardiLeaseProcessor {
         return lease;
     }
 
-    public static void completeLease(Lease lease) {
+    private static void completeLease(Lease lease) {
         YardiLease yardiLease = new YardiLease();
         yardiLease.setExpectedMoveOutDate(SystemDateManager.getDate());
         yardiLease.setActualMoveOut(SystemDateManager.getDate());
