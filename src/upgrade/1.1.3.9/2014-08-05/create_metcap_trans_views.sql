@@ -39,6 +39,19 @@ CREATE OR REPLACE VIEW _dba_.metcap_nsf AS
     JOIN    metcap.lease l ON (l.id = lp.lease)
     JOIN    metcap.apt_unit a ON (a.id = l.unit)
     JOIN    metcap.building b ON (b.id = a.building)  
-    WHERE   p.transaction_error_message ~ 'NSF'
-    AND     p.last_status_change_date > '2014-08-01'
+    WHERE   --p.transaction_error_message ~ 'NSF'
+            p.created_date > '2014-08-01'
+    AND     p.payment_status != 'Cleared'
+    ORDER BY 1,2
 );
+
+SELECT  a.namespace, r.id,r.transaction_id, 
+        p.payment_status,
+        r.payment_date,r.merchant_terminal_id,r.amount, r.reconciliation_status,r.reason_code, r.reason_text 
+FROM    _admin_.funds_reconciliation_record_record r
+JOIN    _admin_.admin_pmc_merchant_account_index m ON (r.merchant_terminal_id = m.merchant_terminal_id)
+JOIN    _admin_.admin_pmc a ON (a.id = m.pmc)
+JOIN    metcap.payment_record p ON (r.transaction_id::bigint = p.id)
+WHERE   r.reason_code IS NOT NULL
+AND     a.namespace = 'metcap'
+AND     r.payment_date >= '01-AUG-2014';
