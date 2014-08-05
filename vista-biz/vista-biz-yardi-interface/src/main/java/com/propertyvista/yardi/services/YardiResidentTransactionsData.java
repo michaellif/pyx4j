@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import com.yardi.entity.resident.RTCustomer;
 
@@ -67,8 +68,16 @@ public class YardiResidentTransactionsData {
         public PropertyTransactionData() {
         }
 
-        public Map<String, LeaseTransactionData> getData() {
-            return data;
+        public Set<String> getKeySet() {
+            return this.data.keySet();
+        }
+
+        public LeaseTransactionData getData(String key) {
+            return this.data.get(key);
+        }
+
+        public void putData(String key, LeaseTransactionData data) {
+            this.data.put(key, data);
         }
 
         public List<Lease> getNoChargesLeases() {
@@ -87,8 +96,16 @@ public class YardiResidentTransactionsData {
         this.yardiInterfaceId = yardiInterfaceId;
     }
 
-    public Map<String, PropertyTransactionData> getData() {
-        return data;
+    public Set<String> getKeySet() {
+        return this.data.keySet();
+    }
+
+    public PropertyTransactionData getData(String key) {
+        return this.data.get(key);
+    }
+
+    public void putData(String key, PropertyTransactionData data) {
+        this.data.put(key, data);
     }
 
     public ExecutionMonitor getExecutionMonitor() {

@@ -90,12 +90,12 @@ public class YardiLeaseProcessor {
     // Public interface:
 
     public void process() throws YardiServiceException {
-        for (final String propertyCode : rtd.getData().keySet()) {
-            for (final String leaseId : rtd.getData().get(propertyCode).getData().keySet()) {
+        for (final String propertyCode : rtd.getKeySet()) {
+            for (final String leaseId : rtd.getData(propertyCode).getKeySet()) {
                 new UnitOfWork(TransactionScopeOption.RequiresNew).execute(new Executable<Void, YardiServiceException>() {
                     @Override
                     public Void execute() throws YardiServiceException {
-                        processLease(propertyCode, leaseId, rtd.getData().get(propertyCode).getData().get(leaseId));
+                        processLease(propertyCode, leaseId, rtd.getData(propertyCode).getData(leaseId));
                         return null;
                     }
                 });
@@ -110,7 +110,7 @@ public class YardiLeaseProcessor {
             }
 
             // expire lease products for leases without charges :
-            for (Lease lease : rtd.getData().get(propertyCode).getNoChargesLeases()) {
+            for (Lease lease : rtd.getData(propertyCode).getNoChargesLeases()) {
                 lease = ServerSideFactory.create(LeaseFacade.class).load(lease, true);
                 if (expireLeaseProducts(lease)) {
                     lease = ServerSideFactory.create(LeaseFacade.class).finalize(lease);

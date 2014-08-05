@@ -660,9 +660,9 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
         for (Property property : properties) {
             String propertyCode = BuildingsMapper.getPropertyCode(property.getPropertyID().get(0));
             List<Lease> activeLeases = retrieveActiveLeases(rtd.getYardiInterfaceId(), propertyCode);
-            PropertyTransactionData prop = rtd.getData().get(propertyCode);
+            PropertyTransactionData prop = rtd.getData(propertyCode);
             if (prop == null) {
-                rtd.getData().put(propertyCode, prop = rtd.new PropertyTransactionData());
+                rtd.putData(propertyCode, prop = rtd.new PropertyTransactionData());
             }
 
             // note - sorting input data list by lease status: former -> current -> future:
@@ -672,9 +672,9 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
                     removeLease(activeLeases, leaseId);
                 }
 
-                LeaseTransactionData lease = prop.getData().get(propertyCode);
+                LeaseTransactionData lease = prop.getData(propertyCode);
                 if (lease == null) {
-                    prop.getData().put(leaseId, lease = rtd.new LeaseTransactionData(rtCustomer, null));
+                    prop.putData(leaseId, lease = rtd.new LeaseTransactionData(rtCustomer, null));
                 } else {
                     lease.setResident(rtCustomer);
                 }
@@ -715,9 +715,9 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
             propertyCode = BuildingsMapper.getPropertyCode(propertyCode);
             List<Lease> activeLeases = retrieveActiveLeases(rtd.getYardiInterfaceId(), propertyCode);
 
-            PropertyTransactionData prop = rtd.getData().get(propertyCode);
+            PropertyTransactionData prop = rtd.getData(propertyCode);
             if (prop == null) {
-                rtd.getData().put(propertyCode, prop = rtd.new PropertyTransactionData());
+                rtd.putData(propertyCode, prop = rtd.new PropertyTransactionData());
             }
 
             for (RTCustomer rtCustomer : property.getRTCustomer()) {
@@ -732,9 +732,9 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
                         removeLease(activeLeases, leaseId);
                     }
 
-                    LeaseTransactionData lease = prop.getData().get(leaseId);
+                    LeaseTransactionData lease = prop.getData(leaseId);
                     if (lease == null) {
-                        prop.getData().put(leaseId, lease = rtd.new LeaseTransactionData(null, rtCustomer));
+                        prop.putData(leaseId, lease = rtd.new LeaseTransactionData(null, rtCustomer));
                     } else {
                         lease.setCharges(rtCustomer);
                     }
