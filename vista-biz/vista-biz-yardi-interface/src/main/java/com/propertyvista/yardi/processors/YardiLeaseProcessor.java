@@ -137,23 +137,21 @@ public class YardiLeaseProcessor {
     }
 
     private Lease createLease(String propertyCode, String leaseId, LeaseTransactionData ltd) throws YardiServiceException {
-        Validate.isTrue(CommonsStringUtils.isStringSet(propertyCode), "Property Code required");
         String unitNumber = YardiARIntegrationAgent.getUnitId(ltd.getResident());
         Validate.isTrue(CommonsStringUtils.isStringSet(unitNumber), "Unit number required");
+        Validate.isTrue(CommonsStringUtils.isStringSet(propertyCode), "Property Code required");
 
         AptUnit unit = retrieveUnit(rtd.getYardiInterfaceId(), propertyCode, unitNumber);
         log.debug("Creating lease {} for unit {}", leaseId, unit.getStringView());
 
-        LeaseFacade leaseFacade = ServerSideFactory.create(LeaseFacade.class);
-
-        Lease lease = leaseFacade.create(Lease.Status.ExistingLease);
+        Lease lease = ServerSideFactory.create(LeaseFacade.class).create(Lease.Status.ExistingLease);
         lease.leaseId().setValue(getLeaseID(ltd.getResident()));
         lease.type().setValue(ARCode.Type.Residential);
         lease.integrationSystemId().setValue(rtd.getYardiInterfaceId());
 
         // unit:
         if (unit.getPrimaryKey() != null) {
-            leaseFacade.setPackage(lease.currentTerm(), unit, null, Collections.<BillableItem> emptyList());
+            ServerSideFactory.create(LeaseFacade.class).setPackage(lease.currentTerm(), unit, null, Collections.<BillableItem> emptyList());
         }
 
         assert (ltd.getResident() != null);
@@ -194,8 +192,8 @@ public class YardiLeaseProcessor {
         // tenants:
         new TenantMerger(rtd.getExecutionMonitor()).createTenants(yardiCustomers, lease.currentTerm());
 
-        lease = leaseFacade.persist(lease);
-        leaseFacade.approve(lease, null, null);
+        lease = ServerSideFactory.create(LeaseFacade.class).persist(lease);
+        ServerSideFactory.create(LeaseFacade.class).approve(lease, null, null);
         lease = ServerSideFactory.create(LeaseFacade.class).load(lease, true);
         if (updateLeaseProducts(lease, ltd)) {
             lease = ServerSideFactory.create(LeaseFacade.class).finalize(lease);
