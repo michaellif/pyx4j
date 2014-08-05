@@ -704,8 +704,14 @@ public class YardiLeaseProcessor {
     }
 
     private void closeLeases(List<Lease> leases) {
-        for (Lease lease : leases) {
-            completeLease(lease);
+        for (final Lease lease : leases) {
+            new UnitOfWork(TransactionScopeOption.RequiresNew).execute(new Executable<Void, RuntimeException>() {
+                @Override
+                public Void execute() {
+                    completeLease(lease);
+                    return null;
+                }
+            });
         }
     }
 }
