@@ -61,11 +61,11 @@ public class LeaseAgreementDocumentForm extends CForm<LeaseTermAgreementDocument
                 .append(Location.Dual,
                         proto().file(),
                         new CFile(GWT.<UploadService<?, ?>> create(LeaseTermAgreementDocumentUploadService.class), new VistaFileURLBuilder(
-                                LeaseTermAgreementDocument.class))).decorate().customLabel(i18n.tr("Agreement Document File")).componentWidth(350);
+                                LeaseTermAgreementDocument.class))).decorate().customLabel(i18n.tr("Agreement Document File")).componentWidth(300);
 
         if (viewOnly) {
             formPanel.append(Location.Dual, proto().signedParticipants(), new LeaseAgreementSignedParticipantsViewer()).decorate()
-                    .customLabel(i18n.tr("Signed Participants")).componentWidth(350);
+                    .customLabel(i18n.tr("Signed Participants")).componentWidth(300);
         } else {
             formPanel
                     .append(Location.Dual, proto().signedParticipants(),
@@ -74,10 +74,10 @@ public class LeaseAgreementDocumentForm extends CForm<LeaseTermAgreementDocument
                                 public String getItemName(LeaseTermParticipant<?> pariticipant) {
                                     return LeaseAgreementDocumentFolder.formatParticipant(pariticipant);
                                 }
-                            }).decorate().customLabel(i18n.tr("Signed Participant")).componentWidth(350);
+                            }).decorate().customLabel(i18n.tr("Signed Participant")).componentWidth(300);
         }
         formPanel.append(Location.Dual, proto().signedEmployeeUploader().name(), new CLabel<String>()).decorate()
-                .customLabel(i18n.tr("Signed Employee / Uploader")).componentWidth(350);
+                .customLabel(i18n.tr("Signed Employee / Uploader")).componentWidth(300);
         return formPanel;
     }
 
