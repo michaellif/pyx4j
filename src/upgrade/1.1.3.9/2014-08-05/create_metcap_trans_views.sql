@@ -94,7 +94,7 @@ CREATE OR REPLACE VIEW _dba_.metcap_nsf AS
     JOIN    metcap.lease l ON (l.id = lp.lease)
     JOIN    metcap.apt_unit au ON (au.id = l.unit)
     JOIN    metcap.building b ON (b.id = au.building)
-    WHERE   r.reason_code IS NOT NULL
+    WHERE   r.reconciliation_status IN ('RETURNED','REJECTED')
     AND     a.namespace = 'metcap'
     AND     r.payment_date >= '01-AUG-2014'
     ORDER BY 3,2
