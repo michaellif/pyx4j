@@ -18,6 +18,7 @@ BEGIN TRANSACTION;
     DROP SEQUENCE communication_message_attachment_blob_seq;
     DROP SEQUENCE country_seq;
     DROP SEQUENCE crm_role$rls_seq;
+    DROP SEQUENCE property_manager_seq;
 
 
     -- Altered Sequences

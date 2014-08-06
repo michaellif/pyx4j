@@ -70,6 +70,7 @@ BEGIN
         ALTER TABLE billable_item_adjustment DROP CONSTRAINT billable_item_adjustment_adjustment_type_e_ck;
         ALTER TABLE communication_message DROP CONSTRAINT communication_message_sender_discriminator_d_ck;
         ALTER TABLE communication_thread DROP CONSTRAINT communication_thread_responsible_discriminator_d_ck;
+        ALTER TABLE email_template DROP CONSTRAINT email_template_template_type_e_ck;
         ALTER TABLE lease_adjustment DROP CONSTRAINT lease_adjustment_tax_type_e_ck;
         ALTER TABLE legal_letter DROP CONSTRAINT legal_letter_status_discriminator_d_ck;
         ALTER TABLE legal_status DROP CONSTRAINT legal_status_id_discriminator_ck;
@@ -615,7 +616,17 @@ BEGIN
         EXECUTE 'INSERT INTO '||v_schema_name||'.available_crm_report(id,report_type) '
                 ||'(SELECT nextval(''public.available_crm_report_seq'') AS id, '
                 ||' ''ResidentInsurance'' AS report_type )';
-              
+        
+        -- auto_pay_policy
+        
+        EXECUTE 'UPDATE '||v_schema_name||'.auto_pay_policy '
+                ||'SET  exclude_first_billing_period_charge = FALSE '
+                ||'WHERE exclude_first_billing_period_charge IS NULL';
+                
+        EXECUTE 'UPDATE '||v_schema_name||'.auto_pay_policy '
+                ||'SET  exclude_last_billing_period_charge = FALSE '
+                ||'WHERE exclude_last_billing_period_charge IS NULL';
+        
         -- billable_item_adjustment
         
         EXECUTE 'UPDATE '||v_schema_name||'.billable_item_adjustment '
@@ -1461,6 +1472,12 @@ BEGIN
             'Tokelau', 'Tonga', 'Trinidad', 'Tunisia', 'Turkey', 'Turkmenistan', 'TurksCaicos', 'Tuvalu', 'Uganda', 'Ukraine', 'UnitedArabEmirates', 'UnitedKingdom', 
             'UnitedStates', 'Uruguay', 'Uzbekistan', 'Vanuatu', 'Vatican', 'Venezuela', 'VietNam', 'VirginIslands', 'VirginIslandsGB', 'WallisFutuna', 'WesternSahara', 
             'Yemen', 'Zambia', 'Zimbabwe'));
+        ALTER TABLE email_template ADD CONSTRAINT email_template_template_type_e_ck 
+            CHECK ((template_type) IN ('ApplicationApproved', 'ApplicationCreatedApplicant', 'ApplicationCreatedCoApplicant', 'ApplicationCreatedGuarantor', 
+            'ApplicationDeclined', 'AutoPayCancellation', 'AutoPayChanges', 'AutoPaySetupConfirmation', 'DirectDebitAccountChanged', 'MaintenanceRequestCancelled', 
+            'MaintenanceRequestCompleted', 'MaintenanceRequestCreatedPMC', 'MaintenanceRequestCreatedTenant', 'MaintenanceRequestEntryNotice', 'MaintenanceRequestUpdated', 
+            'OneTimePaymentSubmitted', 'PasswordRetrievalCrm', 'PasswordRetrievalProspect', 'PasswordRetrievalTenant', 'PaymentReceipt', 'PaymentReceiptWithWebPaymentFee', 
+            'PaymentReturned', 'ProspectWelcome', 'TenantInvitation'));
         ALTER TABLE emergency_contact ADD CONSTRAINT emergency_contact_address_country_e_ck 
             CHECK ((address_country) IN ('Afghanistan', 'AlandIslands', 'Albania', 'Algeria', 'AmericanSamoa', 'Andorra', 'Angola', 'Anguilla', 'Antarctica', 
             'Antigua', 'Argentina', 'Armenia', 'Aruba', 'Australia', 'Austria', 'Azerbaijan', 'Bahamas', 'Bahrain', 'Bangladesh', 'Barbados', 'Belarus', 'Belgium', 
