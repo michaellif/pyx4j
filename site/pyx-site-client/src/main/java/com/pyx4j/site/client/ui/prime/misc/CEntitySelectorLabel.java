@@ -35,7 +35,7 @@ public abstract class CEntitySelectorLabel<E extends IEntity> extends CTextField
 
     public CEntitySelectorLabel() {
         setNativeComponent(new NEntitySelectorLabel<E>(this));
-        asWidget().setWidth("100%");
+        asWidget();
     }
 
     @Override
