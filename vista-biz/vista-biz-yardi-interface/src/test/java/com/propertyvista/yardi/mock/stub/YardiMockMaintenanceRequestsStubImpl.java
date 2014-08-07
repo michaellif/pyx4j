@@ -13,13 +13,11 @@
  */
 package com.propertyvista.yardi.mock.stub;
 
-import java.rmi.RemoteException;
-
 import com.yardi.entity.maintenance.ServiceRequests;
 import com.yardi.entity.maintenance.meta.YardiMaintenanceConfigMeta;
 import com.yardi.ws.operations.requests.GetServiceRequest_Search;
 
-import com.propertyvista.biz.system.YardiServiceException;
+import com.propertyvista.biz.system.yardi.YardiServiceException;
 import com.propertyvista.domain.settings.PmcYardiCredential;
 import com.propertyvista.yardi.beans.Properties;
 import com.propertyvista.yardi.stubs.YardiMaintenanceRequestsStub;
@@ -27,51 +25,44 @@ import com.propertyvista.yardi.stubs.YardiMaintenanceRequestsStub;
 public class YardiMockMaintenanceRequestsStubImpl implements YardiMaintenanceRequestsStub {
 
     @Override
-    public Properties getPropertyConfigurations(PmcYardiCredential yc) throws YardiServiceException, RemoteException {
+    public Properties getPropertyConfigurations(PmcYardiCredential yc) throws YardiServiceException {
         // TODO Auto-generated method stub
         return null;
     }
 
     @Override
-    public YardiMaintenanceConfigMeta getMaintenanceConfigMeta(PmcYardiCredential yc) throws YardiServiceException, RemoteException {
+    public YardiMaintenanceConfigMeta getMaintenanceConfigMeta(PmcYardiCredential yc) throws YardiServiceException {
         // TODO Auto-generated method stub
         return null;
     }
 
     @Override
-    public ServiceRequests getRequestsByParameters(PmcYardiCredential yc, GetServiceRequest_Search params) throws YardiServiceException, RemoteException {
+    public ServiceRequests getRequestsByParameters(PmcYardiCredential yc, GetServiceRequest_Search params) throws YardiServiceException {
         // TODO Auto-generated method stub
         return null;
     }
 
     @Override
-    public ServiceRequests postMaintenanceRequests(PmcYardiCredential yc, ServiceRequests requests) throws YardiServiceException, RemoteException {
+    public ServiceRequests postMaintenanceRequests(PmcYardiCredential yc, ServiceRequests requests) throws YardiServiceException {
         // TODO Auto-generated method stub
         return null;
     }
 
     @Override
-    public String ping(PmcYardiCredential yc) throws RemoteException {
+    public String ping(PmcYardiCredential yc) {
         // TODO Auto-generated method stub
         return null;
     }
 
     @Override
-    public void validate(PmcYardiCredential yc) throws RemoteException, YardiServiceException {
+    public void validate(PmcYardiCredential yc) throws YardiServiceException {
         // TODO Auto-generated method stub
 
     }
 
     @Override
-    public String getPluginVersion(PmcYardiCredential yc) throws RemoteException {
+    public String getPluginVersion(PmcYardiCredential yc) {
         // TODO Auto-generated method stub
         return null;
     }
-
-    @Override
-    public void logRecordedTracastions() {
-        // TODO Auto-generated method stub
-
-    }
-
 }

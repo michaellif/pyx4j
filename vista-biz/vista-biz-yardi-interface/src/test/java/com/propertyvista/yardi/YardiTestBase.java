@@ -27,8 +27,8 @@ import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.server.contexts.NamespaceManager;
 
 import com.propertyvista.biz.ExecutionMonitor;
-import com.propertyvista.biz.system.YardiServiceException;
 import com.propertyvista.biz.system.encryption.PasswordEncryptorFacade;
+import com.propertyvista.biz.system.yardi.YardiServiceException;
 import com.propertyvista.domain.VistaNamespace;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
@@ -60,6 +60,7 @@ import com.propertyvista.yardi.stubs.YardiGuestManagementStub;
 import com.propertyvista.yardi.stubs.YardiILSGuestCardStub;
 import com.propertyvista.yardi.stubs.YardiMaintenanceRequestsStub;
 import com.propertyvista.yardi.stubs.YardiResidentTransactionsStub;
+import com.propertyvista.yardi.stubs.YardiStubFactory;
 import com.propertyvista.yardi.stubs.YardiSystemBatchesStub;
 
 public class YardiTestBase extends IntegrationTestBase {
@@ -171,4 +172,21 @@ public class YardiTestBase extends IntegrationTestBase {
         }
     }
 
+    @Override
+    @SuppressWarnings("unchecked")
+    public <T> void registerFacadeMock(Class<T> interfaceCalss, Class<? extends T> implCalss) {
+        if (YardiInterface.class.isAssignableFrom(interfaceCalss)) {
+            registerStubMock((Class<YardiInterface>) interfaceCalss, (Class<? extends YardiInterface>) implCalss);
+        } else {
+            super.registerFacadeMock(interfaceCalss, implCalss);
+        }
+    }
+
+    <T extends YardiInterface> void registerStubMock(Class<T> interfaceClass, Class<? extends T> implClass) {
+        YardiStubFactory.register(interfaceClass, implClass);
+    }
+
+    <T extends YardiInterface> void registerStubMock(Class<T> interfaceClass, Class<? extends T> implClass, String version) {
+        YardiStubFactory.register(interfaceClass, implClass, version);
+    }
 }

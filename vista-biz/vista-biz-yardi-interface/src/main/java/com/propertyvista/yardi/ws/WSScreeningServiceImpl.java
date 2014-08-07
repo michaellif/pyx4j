@@ -36,7 +36,7 @@ import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.essentials.j2se.util.MarshallUtil;
 import com.pyx4j.i18n.shared.I18n;
 
-import com.propertyvista.biz.system.YardiServiceException;
+import com.propertyvista.biz.system.yardi.YardiServiceException;
 import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.server.domain.CustomerCreditCheckReport;
 import com.propertyvista.yardi.beans.Message;

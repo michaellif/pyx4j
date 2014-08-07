@@ -27,7 +27,7 @@ import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.server.Persistence;
 
 import com.propertyvista.biz.ExecutionMonitor;
-import com.propertyvista.biz.system.YardiServiceException;
+import com.propertyvista.biz.system.yardi.YardiServiceException;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.yardi.mappers.BuildingsMapper;

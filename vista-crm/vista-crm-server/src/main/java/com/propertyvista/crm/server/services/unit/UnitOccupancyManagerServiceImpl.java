@@ -26,8 +26,8 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.shared.VoidSerializable;
 
 import com.propertyvista.biz.occupancy.OccupancyFacade;
-import com.propertyvista.biz.system.YardiARFacade;
-import com.propertyvista.biz.system.YardiServiceException;
+import com.propertyvista.biz.system.yardi.YardiARFacade;
+import com.propertyvista.biz.system.yardi.YardiServiceException;
 import com.propertyvista.crm.rpc.dto.occupancy.opconstraints.MakeVacantConstraintsDTO;
 import com.propertyvista.crm.rpc.services.unit.UnitOccupancyManagerService;
 import com.propertyvista.domain.property.asset.unit.AptUnit;

@@ -13,6 +13,8 @@
  */
 package com.propertyvista.yardi.services;
 
+import java.rmi.RemoteException;
+
 import com.yardi.entity.guestcard40.MarketingSources;
 import com.yardi.entity.ils.PhysicalProperty;
 
@@ -22,20 +24,20 @@ import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.rdb.cfg.Configuration.DatabaseType;
 
-import com.propertyvista.biz.system.YardiServiceException;
 import com.propertyvista.biz.system.encryption.PasswordEncryptorFacade;
 import com.propertyvista.biz.system.yardi.YardiConfigurationFacade;
+import com.propertyvista.biz.system.yardi.YardiServiceException;
 import com.propertyvista.config.tests.VistaTestsServerSideConfiguration;
 import com.propertyvista.domain.settings.PmcYardiCredential;
 import com.propertyvista.server.config.DevYardiCredentials;
 import com.propertyvista.server.config.DevYardiCredentials.YardiCredentialId;
 import com.propertyvista.test.mock.security.PasswordEncryptorFacadeMock;
-import com.propertyvista.yardi.stubs.YardiGuestManagementStub;
-import com.propertyvista.yardi.stubs.YardiILSGuestCardStub;
+import com.propertyvista.yardi.stubs.YardiGuestManagementStubProxy;
+import com.propertyvista.yardi.stubs.YardiILSGuestCardStubProxy;
 
 public class YardiILSServiceClientExample {
 
-    public static void main(String[] args) throws YardiServiceException {
+    public static void main(String[] args) throws YardiServiceException, RemoteException {
         ServerSideFactory.register(PasswordEncryptorFacade.class, PasswordEncryptorFacadeMock.class);
         ServerSideConfiguration.setInstance(new VistaTestsServerSideConfiguration(DatabaseType.HSQLDB));
 
@@ -49,19 +51,14 @@ public class YardiILSServiceClientExample {
         ServerSideFactory.create(YardiConfigurationFacade.class).startYardiTimer();
 
         if (true) {
-            YardiGuestManagementStub stub = ServerSideFactory.create(YardiGuestManagementStub.class);
-
-            MarketingSources properties = stub.getYardiMarketingSources(yc, propertyId);
+            MarketingSources properties = new YardiGuestManagementStubProxy().getYardiMarketingSources(yc, propertyId);
             if (properties.getProperty() != null) {
                 System.out.println("Got " + properties.getProperty().size() + " properties");
             }
         }
 
         if (false) {
-
-            YardiILSGuestCardStub stub = ServerSideFactory.create(YardiILSGuestCardStub.class);
-
-            PhysicalProperty properties = stub.getPropertyMarketingInfo(yc, propertyId);
+            PhysicalProperty properties = new YardiILSGuestCardStubProxy().getPropertyMarketingInfo(yc, propertyId);
 
             if (properties.getProperty() != null) {
                 System.out.println("Got " + properties.getProperty().size() + " properties");

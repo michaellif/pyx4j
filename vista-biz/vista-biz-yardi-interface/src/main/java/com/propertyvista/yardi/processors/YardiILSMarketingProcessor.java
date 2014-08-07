@@ -30,7 +30,7 @@ import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.config.server.ServerSideFactory;
 
 import com.propertyvista.biz.occupancy.OccupancyFacade;
-import com.propertyvista.biz.system.YardiServiceException;
+import com.propertyvista.biz.system.yardi.YardiServiceException;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.yardi.mappers.MappingUtils;
 import com.propertyvista.yardi.mappers.UnitsMapper;

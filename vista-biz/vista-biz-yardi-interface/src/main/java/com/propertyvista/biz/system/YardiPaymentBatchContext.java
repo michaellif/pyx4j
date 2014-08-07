@@ -23,6 +23,7 @@ import com.pyx4j.config.server.ServerSideFactory;
 import com.propertyvista.biz.communication.NotificationFacade;
 import com.propertyvista.biz.financial.ar.ARException;
 import com.propertyvista.biz.financial.payment.PaymentBatchContext;
+import com.propertyvista.biz.system.yardi.YardiServiceException;
 import com.propertyvista.domain.settings.PmcYardiCredential;
 import com.propertyvista.yardi.services.YardiSystemBatchesService;
 

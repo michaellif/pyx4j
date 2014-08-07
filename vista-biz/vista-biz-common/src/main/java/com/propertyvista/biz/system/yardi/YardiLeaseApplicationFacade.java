@@ -15,7 +15,6 @@ package com.propertyvista.biz.system.yardi;
 
 import com.pyx4j.commons.UserRuntimeException;
 
-import com.propertyvista.biz.system.YardiServiceException;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.tenant.lease.Lease;
 

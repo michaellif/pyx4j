@@ -31,9 +31,9 @@ import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.server.contexts.NamespaceManager;
 
-import com.propertyvista.biz.system.YardiServiceException;
 import com.propertyvista.biz.system.encryption.PasswordEncryptorFacade;
 import com.propertyvista.biz.system.yardi.YardiLeaseApplicationFacade;
+import com.propertyvista.biz.system.yardi.YardiServiceException;
 import com.propertyvista.biz.tenant.lease.LeaseFacade;
 import com.propertyvista.domain.PriorAddress;
 import com.propertyvista.domain.VistaNamespace;

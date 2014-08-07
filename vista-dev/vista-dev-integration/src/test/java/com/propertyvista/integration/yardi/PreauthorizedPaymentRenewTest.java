@@ -23,7 +23,7 @@ import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.gwt.server.DateUtils;
 
 import com.propertyvista.biz.system.OperationsTriggerFacade;
-import com.propertyvista.biz.system.YardiServiceException;
+import com.propertyvista.biz.system.yardi.YardiServiceException;
 import com.propertyvista.domain.payment.PaymentType;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.Tenant;

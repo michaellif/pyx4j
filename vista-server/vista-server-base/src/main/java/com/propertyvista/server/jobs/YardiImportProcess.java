@@ -23,8 +23,8 @@ import com.pyx4j.commons.TimeUtils;
 import com.pyx4j.config.server.ServerSideFactory;
 
 import com.propertyvista.biz.ExecutionMonitor;
-import com.propertyvista.biz.system.YardiARFacade;
-import com.propertyvista.biz.system.YardiServiceException;
+import com.propertyvista.biz.system.yardi.YardiARFacade;
+import com.propertyvista.biz.system.yardi.YardiServiceException;
 import com.propertyvista.domain.settings.PmcVistaFeatures;
 import com.propertyvista.operations.domain.scheduler.CompletionType;
 import com.propertyvista.shared.config.VistaFeatures;

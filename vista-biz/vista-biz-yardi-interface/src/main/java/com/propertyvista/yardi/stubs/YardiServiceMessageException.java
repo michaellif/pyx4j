@@ -13,7 +13,7 @@
  */
 package com.propertyvista.yardi.stubs;
 
-import com.propertyvista.biz.system.YardiServiceException;
+import com.propertyvista.biz.system.yardi.YardiServiceException;
 import com.propertyvista.yardi.beans.Messages;
 
 @SuppressWarnings("serial")

@@ -46,12 +46,11 @@ import com.yardi.ws.operations.requests.ServiceRequestXml_type0;
 
 import com.pyx4j.essentials.j2se.util.MarshallUtil;
 
-import com.propertyvista.biz.system.YardiServiceException;
+import com.propertyvista.biz.system.yardi.YardiServiceException;
 import com.propertyvista.domain.settings.PmcYardiCredential;
 import com.propertyvista.yardi.YardiConstants;
 import com.propertyvista.yardi.YardiConstants.Action;
 import com.propertyvista.yardi.YardiInterfaceType;
-import com.propertyvista.yardi.beans.Messages;
 import com.propertyvista.yardi.beans.Properties;
 
 public class YardiMaintenanceRequestsStubImpl extends AbstractYardiStub implements YardiMaintenanceRequestsStub {
@@ -60,193 +59,118 @@ public class YardiMaintenanceRequestsStubImpl extends AbstractYardiStub implemen
 
     @Override
     public Properties getPropertyConfigurations(PmcYardiCredential yc) throws YardiServiceException, RemoteException {
-        try {
-            init(Action.GetPropertyConfigurations);
+        init(Action.GetPropertyConfigurations);
 
-            GetPropertyConfigurations request = new GetPropertyConfigurations();
-            request.setUserName(yc.username().getValue());
-            request.setPassword(yc.password().number().getValue());
-            request.setServerName(yc.serverName().getValue());
-            request.setDatabase(yc.database().getValue());
-            request.setPlatform(yc.platform().getValue().name());
-            request.setInterfaceEntity(YardiConstants.MAINTENANCE_INTERFACE_ENTITY);
-            request.setInterfaceLicense(YardiLicense.getInterfaceLicense(YardiInterfaceType.Maintenance, yc));
+        GetPropertyConfigurations request = new GetPropertyConfigurations();
+        request.setUserName(yc.username().getValue());
+        request.setPassword(yc.password().number().getValue());
+        request.setServerName(yc.serverName().getValue());
+        request.setDatabase(yc.database().getValue());
+        request.setPlatform(yc.platform().getValue().name());
+        request.setInterfaceEntity(YardiConstants.MAINTENANCE_INTERFACE_ENTITY);
+        request.setInterfaceLicense(YardiLicense.getInterfaceLicense(YardiInterfaceType.Maintenance, yc));
 
-            GetPropertyConfigurationsResponse response = getMaintenanceRequestsService(yc).getPropertyConfigurations(request);
-            if (response.getGetPropertyConfigurationsResult() == null) {
-                throw new Error("Received response is null");
-            }
-
-            String xml = response.getGetPropertyConfigurationsResult().getExtraElement().toString();
-
-            if (Messages.isMessageResponse(xml)) {
-                Messages messages = MarshallUtil.unmarshal(Messages.class, xml);
-                if (messages.isError()) {
-                    YardiLicense.handleVendorLicenseError(messages);
-                    throw new YardiServiceException(messages.toString());
-                } else {
-                    log.info(messages.toString());
-                    return null;
-                }
-            }
-
-            return MarshallUtil.unmarshal(Properties.class, xml);
-        } catch (JAXBException e) {
-            throw new Error(e);
-        }
+        GetPropertyConfigurationsResponse response = getMaintenanceRequestsService(yc).getPropertyConfigurations(request);
+        String xml = response.getGetPropertyConfigurationsResult().getExtraElement().toString();
+        return ensureResult(xml, Properties.class);
     }
 
     @Override
     public YardiMaintenanceConfigMeta getMaintenanceConfigMeta(PmcYardiCredential yc) throws YardiServiceException, RemoteException {
-        try {
-            init(Action.GetCustomValues);
+        init(Action.GetCustomValues);
 
-            GetCustomValues request = new GetCustomValues();
-            request.setUserName(yc.username().getValue());
-            request.setPassword(yc.password().number().getValue());
-            request.setServerName(yc.serverName().getValue());
-            request.setDatabase(yc.database().getValue());
-            request.setPlatform(yc.platform().getValue().name());
-            request.setInterfaceEntity(YardiConstants.MAINTENANCE_INTERFACE_ENTITY);
-            request.setInterfaceLicense(YardiLicense.getInterfaceLicense(YardiInterfaceType.Maintenance, yc));
+        GetCustomValues request = new GetCustomValues();
+        request.setUserName(yc.username().getValue());
+        request.setPassword(yc.password().number().getValue());
+        request.setServerName(yc.serverName().getValue());
+        request.setDatabase(yc.database().getValue());
+        request.setPlatform(yc.platform().getValue().name());
+        request.setInterfaceEntity(YardiConstants.MAINTENANCE_INTERFACE_ENTITY);
+        request.setInterfaceLicense(YardiLicense.getInterfaceLicense(YardiInterfaceType.Maintenance, yc));
 
-            GetCustomValuesResponse response = getMaintenanceRequestsService(yc).getCustomValues(request);
-            String xml = response.getGetCustomValuesResult().getExtraElement().toString();
-
-            // When Yardi has problems it returns invalid request with undocumented Error element inside !?
-            String error = yardiErrorCheck(xml);
-            if (error != null) {
-                throw new YardiServiceException(error);
-            }
-
-            if (Messages.isMessageResponse(xml)) {
-                Messages messages = MarshallUtil.unmarshal(Messages.class, xml);
-                if (messages.isError()) {
-                    YardiLicense.handleVendorLicenseError(messages);
-                    throw new YardiServiceException(messages.toString());
-                } else {
-                    log.info(messages.toString());
-                }
-            }
-
-            CustomConfig config = MarshallUtil.unmarshal(CustomConfig.class, xml);
-            return config.getCustomValues();
-
-        } catch (JAXBException e) {
-            throw new Error(e);
-        }
+        GetCustomValuesResponse response = getMaintenanceRequestsService(yc).getCustomValues(request);
+        String xml = response.getGetCustomValuesResult().getExtraElement().toString();
+        CustomConfig config = ensureResult(xml, CustomConfig.class);
+        return config.getCustomValues();
     }
 
     @Override
     public ServiceRequests getRequestsByParameters(PmcYardiCredential yc, GetServiceRequest_Search request) throws YardiServiceException, RemoteException {
-        try {
-            init(Action.GetServiceRequests);
+        init(Action.GetServiceRequests);
 
-            request.setUserName(yc.username().getValue());
-            request.setPassword(yc.password().number().getValue());
-            request.setServerName(yc.serverName().getValue());
-            request.setDatabase(yc.database().getValue());
-            request.setPlatform(yc.platform().getValue().name());
-            request.setInterfaceEntity(YardiConstants.MAINTENANCE_INTERFACE_ENTITY);
-            request.setInterfaceLicense(YardiLicense.getInterfaceLicense(YardiInterfaceType.Maintenance, yc));
+        request.setUserName(yc.username().getValue());
+        request.setPassword(yc.password().number().getValue());
+        request.setServerName(yc.serverName().getValue());
+        request.setDatabase(yc.database().getValue());
+        request.setPlatform(yc.platform().getValue().name());
+        request.setInterfaceEntity(YardiConstants.MAINTENANCE_INTERFACE_ENTITY);
+        request.setInterfaceLicense(YardiLicense.getInterfaceLicense(YardiInterfaceType.Maintenance, yc));
 
-            GetServiceRequest_SearchResponse response = getMaintenanceRequestsService(yc).getServiceRequest_Search(request);
-            String xml = response.getGetServiceRequest_SearchResult().getExtraElement().toString();
-
-            // When Yardi has problems it returns invalid request with undocumented Error element inside !?
-            String error = yardiErrorCheck(xml);
-            if (error != null) {
-                throw new YardiServiceException(error);
-            }
-
-            if (Messages.isMessageResponse(xml)) {
-                Messages messages = MarshallUtil.unmarshal(Messages.class, xml);
-                if (messages.isError()) {
-                    YardiLicense.handleVendorLicenseError(messages);
-                    log.warn("Yardi Error: {}", messages.getMessages().get(0).getValue());
-                    throw new YardiServiceException(messages.toString());
-                } else {
-                    log.info(messages.toString());
-                }
-            }
-
-            ServiceRequests requests = MarshallUtil.unmarshal(ServiceRequests.class, xml);
-            return requests;
-
-        } catch (JAXBException e) {
-            throw new Error(e);
-        }
+        GetServiceRequest_SearchResponse response = getMaintenanceRequestsService(yc).getServiceRequest_Search(request);
+        String xml = response.getGetServiceRequest_SearchResult().getExtraElement().toString();
+        return ensureResult(xml, ServiceRequests.class);
     }
 
     @Override
     public ServiceRequests postMaintenanceRequests(PmcYardiCredential yc, ServiceRequests requests) throws YardiServiceException, RemoteException {
+        Validate.notNull(requests, "requests can not be null");
+
+        init(Action.CreateOrEditServiceRequests);
+        validateWriteAccess(yc);
+
+        CreateOrEditServiceRequests request = new CreateOrEditServiceRequests();
+        request.setUserName(yc.username().getValue());
+        request.setPassword(yc.password().number().getValue());
+        request.setServerName(yc.serverName().getValue());
+        request.setDatabase(yc.database().getValue());
+        request.setPlatform(yc.platform().getValue().name());
+        request.setInterfaceEntity(YardiConstants.MAINTENANCE_INTERFACE_ENTITY);
+        request.setInterfaceLicense(YardiLicense.getInterfaceLicense(YardiInterfaceType.Maintenance, yc));
+
         try {
-            Validate.notNull(requests, "requests can not be null");
-
-            init(Action.CreateOrEditServiceRequests);
-            validateWriteAccess(yc);
-
-            CreateOrEditServiceRequests request = new CreateOrEditServiceRequests();
-            request.setUserName(yc.username().getValue());
-            request.setPassword(yc.password().number().getValue());
-            request.setServerName(yc.serverName().getValue());
-            request.setDatabase(yc.database().getValue());
-            request.setPlatform(yc.platform().getValue().name());
-            request.setInterfaceEntity(YardiConstants.MAINTENANCE_INTERFACE_ENTITY);
-            request.setInterfaceLicense(YardiLicense.getInterfaceLicense(YardiInterfaceType.Maintenance, yc));
-
             ServiceRequestXml_type0 serviceRequestXml = new ServiceRequestXml_type0();
             String rawXml = MarshallUtil.marshall(requests);
             log.debug("{}", rawXml);
             OMElement element = AXIOMUtil.stringToOM(rawXml);
             serviceRequestXml.setExtraElement(element);
             request.setServiceRequestXml(serviceRequestXml);
-
-            CreateOrEditServiceRequestsResponse response = getMaintenanceRequestsService(yc).createOrEditServiceRequests(request);
-            String responseXml = response.getCreateOrEditServiceRequestsResult().getExtraElement().toString();
-
-            // When Yardi has problems it returns invalid request with undocumented Error element inside !?
-            String error = yardiErrorCheck(responseXml);
-            if (error != null) {
-                throw new YardiServiceException(error);
-            }
-
-            if (Messages.isMessageResponse(responseXml)) {
-                Messages messages = MarshallUtil.unmarshal(Messages.class, responseXml);
-                if (messages.isError()) {
-                    YardiLicense.handleVendorLicenseError(messages);
-                    throw new YardiServiceException(messages.toString());
-                } else {
-                    log.info(messages.toString());
-                }
-            }
-
-            return MarshallUtil.unmarshal(ServiceRequests.class, responseXml);
         } catch (JAXBException e) {
             throw new Error(e);
         } catch (XMLStreamException e) {
             throw new Error(e);
         }
+
+        CreateOrEditServiceRequestsResponse response = getMaintenanceRequestsService(yc).createOrEditServiceRequests(request);
+        String xml = response.getCreateOrEditServiceRequestsResult().getExtraElement().toString();
+        return ensureResult(xml, ServiceRequests.class);
     }
 
     @Override
-    public String ping(PmcYardiCredential yc) throws RemoteException {
-        init(Action.Ping);
-        PingResponse response = getMaintenanceRequestsService(yc).ping(new Ping());
-        return response.getPingResult();
+    public String ping(PmcYardiCredential yc) {
+        try {
+            init(Action.Ping);
+            PingResponse response = getMaintenanceRequestsService(yc).ping(new Ping());
+            return response.getPingResult();
+        } catch (RemoteException e) {
+            throw new Error(e);
+        }
     }
 
     @Override
-    public void validate(PmcYardiCredential yc) throws RemoteException, YardiServiceException {
+    public String getPluginVersion(PmcYardiCredential yc) {
+        try {
+            init(Action.GetVersionNumber);
+            GetVersionNumberResponse response = getMaintenanceRequestsService(yc).getVersionNumber(new GetVersionNumber());
+            return response.getGetVersionNumberResult();
+        } catch (RemoteException e) {
+            throw new Error(e);
+        }
+    }
+
+    @Override
+    public void validate(PmcYardiCredential yc) throws YardiServiceException, RemoteException {
         // try to pull properties
         getPropertyConfigurations(yc);
-    }
-
-    @Override
-    public String getPluginVersion(PmcYardiCredential yc) throws RemoteException {
-        init(Action.GetVersionNumber);
-        GetVersionNumberResponse response = getMaintenanceRequestsService(yc).getVersionNumber(new GetVersionNumber());
-        return response.getGetVersionNumberResult();
     }
 
     private ItfServiceRequests getMaintenanceRequestsService(PmcYardiCredential yc) throws AxisFault {

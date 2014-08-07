@@ -24,7 +24,7 @@ import com.yardi.entity.resident.RTCustomer;
 import com.yardi.entity.resident.ResidentTransactions;
 import com.yardi.entity.resident.Transactions;
 
-import com.propertyvista.biz.system.YardiServiceException;
+import com.propertyvista.biz.system.yardi.YardiServiceException;
 import com.propertyvista.domain.financial.BillingAccount;
 import com.propertyvista.domain.financial.BillingAccount.PaymentAccepted;
 

@@ -31,8 +31,8 @@ import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.gwt.server.DateUtils;
 
 import com.propertyvista.biz.ExecutionMonitor;
-import com.propertyvista.biz.system.YardiARFacade;
-import com.propertyvista.biz.system.YardiServiceException;
+import com.propertyvista.biz.system.yardi.YardiARFacade;
+import com.propertyvista.biz.system.yardi.YardiServiceException;
 import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.financial.PaymentRecord.PaymentStatus;
 import com.propertyvista.domain.financial.billing.BillingCycle;

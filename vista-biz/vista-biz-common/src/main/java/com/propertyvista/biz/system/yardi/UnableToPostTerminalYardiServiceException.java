@@ -7,29 +7,20 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Jun 27, 2013
- * @author VladL
+ * Created on Oct 28, 2013
+ * @author vlads
  * @version $Id$
  */
-package com.propertyvista.biz.system;
+package com.propertyvista.biz.system.yardi;
 
-public class YardiPropertyNoAccessException extends YardiServiceException {
+/**
+ * We can't post Receipt again, The error will not be corrected automatically.
+ */
+public class UnableToPostTerminalYardiServiceException extends YardiServiceException {
 
     private static final long serialVersionUID = 1L;
 
-    public YardiPropertyNoAccessException() {
-        super();
-    }
-
-    public YardiPropertyNoAccessException(String message, Throwable cause) {
-        super(message, cause);
-    }
-
-    public YardiPropertyNoAccessException(String message) {
+    public UnableToPostTerminalYardiServiceException(String message) {
         super(message);
-    }
-
-    public YardiPropertyNoAccessException(Throwable cause) {
-        super(cause);
     }
 }

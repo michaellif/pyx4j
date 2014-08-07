@@ -11,7 +11,7 @@
  * @author stanp
  * @version $Id$
  */
-package com.propertyvista.biz.system;
+package com.propertyvista.biz.system.yardi;
 
 import java.rmi.RemoteException;
 import java.util.Date;

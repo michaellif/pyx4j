@@ -27,9 +27,9 @@ import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.biz.occupancy.OccupancyFacade;
-import com.propertyvista.biz.system.YardiARFacade;
-import com.propertyvista.biz.system.YardiServiceException;
+import com.propertyvista.biz.system.yardi.YardiARFacade;
 import com.propertyvista.biz.system.yardi.YardiLeaseApplicationFacade;
+import com.propertyvista.biz.system.yardi.YardiServiceException;
 import com.propertyvista.biz.tenant.lease.LeaseAbstractManager;
 import com.propertyvista.domain.company.Employee;
 import com.propertyvista.domain.financial.BillingAccount;

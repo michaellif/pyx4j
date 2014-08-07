@@ -26,7 +26,7 @@ import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.server.Persistence;
 
-import com.propertyvista.biz.system.YardiServiceException;
+import com.propertyvista.biz.system.yardi.YardiServiceException;
 import com.propertyvista.config.VistaDeployment;
 import com.propertyvista.domain.contact.InternationalAddress;
 import com.propertyvista.domain.customizations.CountryOfOperation;

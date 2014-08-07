@@ -11,7 +11,7 @@
  * @author vlads
  * @version $Id$
  */
-package com.propertyvista.biz.system;
+package com.propertyvista.biz.system.yardi;
 
 import com.propertyvista.domain.settings.PmcYardiCredential;
 import com.propertyvista.operations.rpc.dto.ConnectionTestResultDTO;

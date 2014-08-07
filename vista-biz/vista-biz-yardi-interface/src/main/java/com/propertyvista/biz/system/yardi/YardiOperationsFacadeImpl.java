@@ -11,11 +11,12 @@
  * @author vlads
  * @version $Id$
  */
-package com.propertyvista.biz.system;
+package com.propertyvista.biz.system.yardi;
 
 import com.pyx4j.config.server.ServerSideFactory;
 
 import com.propertyvista.biz.system.encryption.PasswordEncryptorFacade;
+import com.propertyvista.biz.system.yardi.YardiOperationsFacade;
 import com.propertyvista.domain.settings.PmcYardiCredential;
 import com.propertyvista.operations.rpc.dto.ConnectionTestResultDTO;
 import com.propertyvista.yardi.YardiInterface;

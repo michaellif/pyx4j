@@ -13,11 +13,11 @@
  */
 package com.propertyvista.biz.system.yardi;
 
+import java.rmi.RemoteException;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
 
 import com.propertyvista.biz.ExecutionMonitor;
-import com.propertyvista.biz.system.YardiServiceException;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.settings.PmcYardiCredential;
 
@@ -52,6 +52,6 @@ public interface YardiConfigurationFacade {
 
     long stopYardiTimer(AtomicReference<Long> maxTimeResult);
 
-    List<String> retrievePropertyCodes(PmcYardiCredential yc, ExecutionMonitor executionMonitor) throws YardiServiceException;
+    List<String> retrievePropertyCodes(PmcYardiCredential yc, ExecutionMonitor executionMonitor) throws YardiServiceException, RemoteException;
 
 }

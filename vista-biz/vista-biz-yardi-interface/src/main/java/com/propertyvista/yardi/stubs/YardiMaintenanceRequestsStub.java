@@ -19,7 +19,7 @@ import com.yardi.entity.maintenance.ServiceRequests;
 import com.yardi.entity.maintenance.meta.YardiMaintenanceConfigMeta;
 import com.yardi.ws.operations.requests.GetServiceRequest_Search;
 
-import com.propertyvista.biz.system.YardiServiceException;
+import com.propertyvista.biz.system.yardi.YardiServiceException;
 import com.propertyvista.domain.settings.PmcYardiCredential;
 import com.propertyvista.yardi.YardiInterface;
 import com.propertyvista.yardi.beans.Properties;

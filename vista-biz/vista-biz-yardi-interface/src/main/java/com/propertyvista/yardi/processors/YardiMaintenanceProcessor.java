@@ -39,7 +39,7 @@ import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.server.Persistence;
 
 import com.propertyvista.biz.financial.maintenance.MaintenanceFacade;
-import com.propertyvista.biz.system.YardiServiceException;
+import com.propertyvista.biz.system.yardi.YardiServiceException;
 import com.propertyvista.domain.maintenance.MaintenanceRequest;
 import com.propertyvista.domain.maintenance.MaintenanceRequestCategory;
 import com.propertyvista.domain.maintenance.MaintenanceRequestMetadata;

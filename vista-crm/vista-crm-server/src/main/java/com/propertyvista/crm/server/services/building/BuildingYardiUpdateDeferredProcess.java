@@ -25,8 +25,8 @@ import com.pyx4j.gwt.server.deferred.AbstractDeferredProcess;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.biz.ExecutionMonitor;
-import com.propertyvista.biz.system.YardiARFacade;
-import com.propertyvista.biz.system.YardiServiceException;
+import com.propertyvista.biz.system.yardi.YardiARFacade;
+import com.propertyvista.biz.system.yardi.YardiServiceException;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.operations.domain.scheduler.CompletionType;
 

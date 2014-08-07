@@ -13,11 +13,9 @@
  */
 package com.propertyvista.yardi.mock.stub;
 
-import java.rmi.RemoteException;
-
 import com.yardi.entity.ils.PhysicalProperty;
 
-import com.propertyvista.biz.system.YardiServiceException;
+import com.propertyvista.biz.system.yardi.YardiServiceException;
 import com.propertyvista.domain.settings.PmcYardiCredential;
 import com.propertyvista.yardi.beans.Properties;
 import com.propertyvista.yardi.stubs.YardiILSGuestCardStub;
@@ -25,11 +23,7 @@ import com.propertyvista.yardi.stubs.YardiILSGuestCardStub;
 public class YardiMockILSGuestCardStubImpl implements YardiILSGuestCardStub {
 
     @Override
-    public void logRecordedTracastions() {
-    }
-
-    @Override
-    public Properties getPropertyConfigurations(PmcYardiCredential yc) throws YardiServiceException, RemoteException {
+    public Properties getPropertyConfigurations(PmcYardiCredential yc) throws YardiServiceException {
         // TODO Auto-generated method stub
         return null;
     }
@@ -41,19 +35,19 @@ public class YardiMockILSGuestCardStubImpl implements YardiILSGuestCardStub {
     }
 
     @Override
-    public String ping(PmcYardiCredential yc) throws RemoteException {
+    public String ping(PmcYardiCredential yc) {
         // TODO Auto-generated method stub
         return null;
     }
 
     @Override
-    public void validate(PmcYardiCredential yc) throws RemoteException, YardiServiceException {
+    public void validate(PmcYardiCredential yc) throws YardiServiceException {
         // TODO Auto-generated method stub
 
     }
 
     @Override
-    public String getPluginVersion(PmcYardiCredential yc) throws RemoteException {
+    public String getPluginVersion(PmcYardiCredential yc) {
         // TODO Auto-generated method stub
         return null;
     }

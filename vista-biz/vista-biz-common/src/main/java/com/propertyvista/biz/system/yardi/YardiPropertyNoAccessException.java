@@ -11,25 +11,25 @@
  * @author VladL
  * @version $Id$
  */
-package com.propertyvista.yardi.stubs;
+package com.propertyvista.biz.system.yardi;
 
-public class YardiResidentNoTenantsExistException extends Exception {
+public class YardiPropertyNoAccessException extends YardiServiceException {
 
     private static final long serialVersionUID = 1L;
 
-    public YardiResidentNoTenantsExistException() {
+    public YardiPropertyNoAccessException() {
         super();
     }
 
-    public YardiResidentNoTenantsExistException(String message, Throwable cause) {
+    public YardiPropertyNoAccessException(String message, Throwable cause) {
         super(message, cause);
     }
 
-    public YardiResidentNoTenantsExistException(String message) {
+    public YardiPropertyNoAccessException(String message) {
         super(message);
     }
 
-    public YardiResidentNoTenantsExistException(Throwable cause) {
+    public YardiPropertyNoAccessException(Throwable cause) {
         super(cause);
     }
 }

@@ -24,7 +24,7 @@ import com.pyx4j.server.mail.MailMessage;
 
 import com.propertyvista.biz.communication.CommunicationFacade;
 import com.propertyvista.biz.financial.maintenance.MaintenanceAbstractManager;
-import com.propertyvista.biz.system.YardiMaintenanceFacade;
+import com.propertyvista.biz.system.yardi.YardiMaintenanceFacade;
 import com.propertyvista.domain.maintenance.MaintenanceRequest;
 import com.propertyvista.domain.maintenance.MaintenanceRequestSchedule;
 import com.propertyvista.domain.maintenance.MaintenanceRequestStatus;

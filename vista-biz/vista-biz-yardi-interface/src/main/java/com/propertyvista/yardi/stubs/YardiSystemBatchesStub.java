@@ -17,7 +17,7 @@ import java.rmi.RemoteException;
 
 import com.yardi.entity.resident.ResidentTransactions;
 
-import com.propertyvista.biz.system.YardiServiceException;
+import com.propertyvista.biz.system.yardi.YardiServiceException;
 import com.propertyvista.domain.settings.PmcYardiCredential;
 import com.propertyvista.yardi.YardiInterface;
 

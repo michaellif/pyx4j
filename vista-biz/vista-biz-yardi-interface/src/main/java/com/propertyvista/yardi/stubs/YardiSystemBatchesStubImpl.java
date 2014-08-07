@@ -18,11 +18,8 @@ import java.rmi.RemoteException;
 import javax.xml.bind.JAXBException;
 import javax.xml.stream.XMLStreamException;
 
-import org.apache.axiom.om.OMElement;
 import org.apache.axiom.om.util.AXIOMUtil;
 import org.apache.axis2.AxisFault;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import com.yardi.entity.resident.ResidentTransactions;
 import com.yardi.ws.ItfResidentTransactions20_SysBatch;
@@ -39,210 +36,134 @@ import com.yardi.ws.operations.transactionsbatch.Ping;
 import com.yardi.ws.operations.transactionsbatch.PingResponse;
 import com.yardi.ws.operations.transactionsbatch.PostReceiptBatch;
 import com.yardi.ws.operations.transactionsbatch.PostReceiptBatchResponse;
+import com.yardi.ws.operations.transactionsbatch.TransactionXml_type0;
 
 import com.pyx4j.essentials.j2se.util.MarshallUtil;
 
-import com.propertyvista.biz.system.YardiServiceException;
+import com.propertyvista.biz.system.yardi.YardiServiceException;
 import com.propertyvista.domain.settings.PmcYardiCredential;
 import com.propertyvista.yardi.YardiConstants;
 import com.propertyvista.yardi.YardiConstants.Action;
 import com.propertyvista.yardi.YardiInterfaceType;
-import com.propertyvista.yardi.beans.Messages;
 
 public class YardiSystemBatchesStubImpl extends AbstractYardiStub implements YardiSystemBatchesStub {
 
-    private final static Logger log = LoggerFactory.getLogger(YardiSystemBatchesStubImpl.class);
-
     @Override
-    public long openReceiptBatch(PmcYardiCredential yc, String propertyId) throws RemoteException, YardiServiceException {
-        boolean success = false;
-        try {
-            init(Action.OpenReceiptBatch);
-            validateWriteAccess(yc);
+    public long openReceiptBatch(PmcYardiCredential yc, String propertyId) throws RemoteException {
+        init(Action.OpenReceiptBatch);
+        validateWriteAccess(yc);
 
-            OpenReceiptBatch request = new OpenReceiptBatch();
-            request.setUserName(yc.username().getValue());
-            request.setPassword(yc.password().number().getValue());
-            request.setServerName(yc.serverName().getValue());
-            request.setDatabase(yc.database().getValue());
-            request.setPlatform(yc.platform().getValue().name());
-            request.setInterfaceEntity(YardiConstants.INTERFACE_ENTITY);
-            request.setInterfaceLicense(YardiLicense.getInterfaceLicense(YardiInterfaceType.BillingAndPayments, yc));
-            request.setYardiPropertyId(propertyId);
+        OpenReceiptBatch request = new OpenReceiptBatch();
+        request.setUserName(yc.username().getValue());
+        request.setPassword(yc.password().number().getValue());
+        request.setServerName(yc.serverName().getValue());
+        request.setDatabase(yc.database().getValue());
+        request.setPlatform(yc.platform().getValue().name());
+        request.setInterfaceEntity(YardiConstants.INTERFACE_ENTITY);
+        request.setInterfaceLicense(YardiLicense.getInterfaceLicense(YardiInterfaceType.BillingAndPayments, yc));
+        request.setYardiPropertyId(propertyId);
 
-            OpenReceiptBatchResponse response = getResidentTransactionsSysBatchService(yc).openReceiptBatch(request);
-
-            long result = response.getOpenReceiptBatchResult();
-            log.debug("OpenReceiptBatch: {}", result);
-            if (result == 0) {
-                throw new YardiServiceException("Could not open Receipt batch");
-            } else if (result == -1) {
-                throw new YardiServiceException("Web service user has insufficient privileges for this operation");
-            } else if (result == -2) {
-                throw new YardiServiceException("Interface Entity does not have access to Yardi Property " + propertyId);
-            }
-
-            success = true;
-            return result;
-        } finally {
-            if (!success) {
-                log.warn("Yardi transaction recorded at {}", printableListOfRecordedTracastionFiles());
-            }
-        }
+        OpenReceiptBatchResponse response = getResidentTransactionsSysBatchService(yc).openReceiptBatch(request);
+        return response.getOpenReceiptBatchResult();
     }
 
     @Override
     public void addReceiptsToBatch(PmcYardiCredential yc, long batchId, ResidentTransactions residentTransactions) throws YardiServiceException,
             RemoteException {
-        boolean success = false;
+        init(Action.AddReceiptsToBatch);
+        validateWriteAccess(yc);
+
+        AddReceiptsToBatch request = new AddReceiptsToBatch();
+        request.setUserName(yc.username().getValue());
+        request.setPassword(yc.password().number().getValue());
+        request.setServerName(yc.serverName().getValue());
+        request.setDatabase(yc.database().getValue());
+        request.setPlatform(yc.platform().getValue().name());
+        request.setInterfaceEntity(YardiConstants.INTERFACE_ENTITY);
+        request.setInterfaceLicense(YardiLicense.getInterfaceLicense(YardiInterfaceType.BillingAndPayments, yc));
+        request.setBatchId(batchId);
+
         try {
-            init(Action.AddReceiptsToBatch);
-            validateWriteAccess(yc);
-
-            AddReceiptsToBatch request = new AddReceiptsToBatch();
-            request.setUserName(yc.username().getValue());
-            request.setPassword(yc.password().number().getValue());
-            request.setServerName(yc.serverName().getValue());
-            request.setDatabase(yc.database().getValue());
-            request.setPlatform(yc.platform().getValue().name());
-            request.setInterfaceEntity(YardiConstants.INTERFACE_ENTITY);
-            request.setInterfaceLicense(YardiLicense.getInterfaceLicense(YardiInterfaceType.BillingAndPayments, yc));
-            request.setBatchId(batchId);
-
-            com.yardi.ws.operations.transactionsbatch.TransactionXml_type0 transactionXml = new com.yardi.ws.operations.transactionsbatch.TransactionXml_type0();
-
             String batchXml = MarshallUtil.marshall(residentTransactions);
-            log.debug("{}", batchXml);
-            OMElement element = AXIOMUtil.stringToOM(batchXml);
-            transactionXml.setExtraElement(element);
-
+            TransactionXml_type0 transactionXml = new TransactionXml_type0();
+            transactionXml.setExtraElement(AXIOMUtil.stringToOM(batchXml));
             request.setTransactionXml(transactionXml);
 
             AddReceiptsToBatchResponse response = getResidentTransactionsSysBatchService(yc).addReceiptsToBatch(request);
-            if ((response == null) || (response.getAddReceiptsToBatchResult() == null) || (response.getAddReceiptsToBatchResult().getExtraElement() == null)) {
-                throw new YardiServiceException("addReceiptsToBatch received NULL response");
-            }
-            String responseXml = response.getAddReceiptsToBatchResult().getExtraElement().toString();
-            log.debug("AddReceiptsToBatch: {}", responseXml);
-
-            Messages messages = MarshallUtil.unmarshal(Messages.class, responseXml);
-            if (messages.isError()) {
-                YardiLicense.handleVendorLicenseError(messages);
-                throw new YardiServiceException(messages.toString());
-            } else {
-                log.debug(messages.toString());
-            }
-            success = true;
+            String xml = response.getAddReceiptsToBatchResult().getExtraElement().toString();
+            ensureValid(xml);
         } catch (JAXBException e) {
             throw new Error(e);
         } catch (XMLStreamException e) {
             throw new Error(e);
-        } finally {
-            if (!success) {
-                log.warn("Yardi transaction recorded at {}", printableListOfRecordedTracastionFiles());
-            }
         }
     }
 
     @Override
     public void postReceiptBatch(PmcYardiCredential yc, long batchId) throws YardiServiceException, RemoteException {
-        boolean success = false;
-        try {
-            init(Action.PostReceiptBatch);
-            validateWriteAccess(yc);
+        init(Action.PostReceiptBatch);
+        validateWriteAccess(yc);
 
-            PostReceiptBatch request = new PostReceiptBatch();
-            request.setUserName(yc.username().getValue());
-            request.setPassword(yc.password().number().getValue());
-            request.setServerName(yc.serverName().getValue());
-            request.setDatabase(yc.database().getValue());
-            request.setPlatform(yc.platform().getValue().name());
-            request.setInterfaceEntity(YardiConstants.INTERFACE_ENTITY);
-            request.setInterfaceLicense(YardiLicense.getInterfaceLicense(YardiInterfaceType.BillingAndPayments, yc));
-            request.setBatchId(batchId);
+        PostReceiptBatch request = new PostReceiptBatch();
+        request.setUserName(yc.username().getValue());
+        request.setPassword(yc.password().number().getValue());
+        request.setServerName(yc.serverName().getValue());
+        request.setDatabase(yc.database().getValue());
+        request.setPlatform(yc.platform().getValue().name());
+        request.setInterfaceEntity(YardiConstants.INTERFACE_ENTITY);
+        request.setInterfaceLicense(YardiLicense.getInterfaceLicense(YardiInterfaceType.BillingAndPayments, yc));
+        request.setBatchId(batchId);
 
-            PostReceiptBatchResponse response = getResidentTransactionsSysBatchService(yc).postReceiptBatch(request);
-            if ((response == null) || (response.getPostReceiptBatchResult() == null) || (response.getPostReceiptBatchResult().getExtraElement() == null)) {
-                throw new YardiServiceException("postReceiptBatch received NULL response");
-            }
-            String xml = response.getPostReceiptBatchResult().getExtraElement().toString();
-            log.debug("PostReceiptBatch: {}", xml);
-
-            Messages messages = MarshallUtil.unmarshal(Messages.class, xml);
-            if (messages.isError()) {
-                YardiLicense.handleVendorLicenseError(messages);
-                throw new YardiServiceException(messages.toString());
-            } else {
-                log.debug(messages.toString());
-            }
-            success = true;
-        } catch (JAXBException e) {
-            throw new Error(e);
-        } finally {
-            if (!success) {
-                log.warn("Yardi transaction recorded at {}", printableListOfRecordedTracastionFiles());
-            }
-        }
+        PostReceiptBatchResponse response = getResidentTransactionsSysBatchService(yc).postReceiptBatch(request);
+        String xml = response.getPostReceiptBatchResult().getExtraElement().toString();
+        ensureValid(xml);
     }
 
     @Override
     public void cancelReceiptBatch(PmcYardiCredential yc, long batchId) throws YardiServiceException, RemoteException {
-        boolean success = false;
+        init(Action.CancelReceiptBatch);
+        validateWriteAccess(yc);
+
+        CancelReceiptBatch request = new CancelReceiptBatch();
+        request.setUserName(yc.username().getValue());
+        request.setPassword(yc.password().number().getValue());
+        request.setServerName(yc.serverName().getValue());
+        request.setDatabase(yc.database().getValue());
+        request.setPlatform(yc.platform().getValue().name());
+        request.setInterfaceEntity(YardiConstants.INTERFACE_ENTITY);
+        request.setInterfaceLicense(YardiLicense.getInterfaceLicense(YardiInterfaceType.BillingAndPayments, yc));
+        request.setBatchId(batchId);
+
+        CancelReceiptBatchResponse response = getResidentTransactionsSysBatchService(yc).cancelReceiptBatch(request);
+        String xml = response.getCancelReceiptBatchResult().getExtraElement().toString();
+        ensureValid(xml);
+    }
+
+    @Override
+    public String ping(PmcYardiCredential yc) {
         try {
-            init(Action.CancelReceiptBatch);
-            validateWriteAccess(yc);
-
-            CancelReceiptBatch request = new CancelReceiptBatch();
-            request.setUserName(yc.username().getValue());
-            request.setPassword(yc.password().number().getValue());
-            request.setServerName(yc.serverName().getValue());
-            request.setDatabase(yc.database().getValue());
-            request.setPlatform(yc.platform().getValue().name());
-            request.setInterfaceEntity(YardiConstants.INTERFACE_ENTITY);
-            request.setInterfaceLicense(YardiLicense.getInterfaceLicense(YardiInterfaceType.BillingAndPayments, yc));
-            request.setBatchId(batchId);
-
-            CancelReceiptBatchResponse response = getResidentTransactionsSysBatchService(yc).cancelReceiptBatch(request);
-            if ((response == null) || (response.getCancelReceiptBatchResult() == null) || (response.getCancelReceiptBatchResult().getExtraElement() == null)) {
-                throw new YardiServiceException("cancelReceiptBatch received NULL response");
-            }
-            String xml = response.getCancelReceiptBatchResult().getExtraElement().toString();
-            log.debug("CancelReceiptBatch: {}", xml);
-
-            Messages messages = MarshallUtil.unmarshal(Messages.class, xml);
-            if (messages.isError()) {
-                YardiLicense.handleVendorLicenseError(messages);
-                throw new YardiServiceException(messages.toString());
-            } else {
-                log.debug(messages.toString());
-            }
-            success = true;
-        } catch (JAXBException e) {
+            init(Action.Ping);
+            PingResponse pr = getResidentTransactionsSysBatchService(yc).ping(new Ping());
+            return pr.getPingResult();
+        } catch (RemoteException e) {
             throw new Error(e);
-        } finally {
-            if (!success) {
-                log.warn("Yardi transaction recorded at {}", printableListOfRecordedTracastionFiles());
-            }
         }
     }
 
     @Override
-    public String ping(PmcYardiCredential yc) throws RemoteException {
-        init(Action.Ping);
-        PingResponse pr = getResidentTransactionsSysBatchService(yc).ping(new Ping());
-        return pr.getPingResult();
-    }
-
-    @Override
-    public void validate(PmcYardiCredential yc) throws RemoteException, YardiServiceException {
+    public void validate(PmcYardiCredential yc) throws YardiServiceException {
         // no READ-ONLY method available to use for validation
     }
 
     @Override
-    public String getPluginVersion(PmcYardiCredential yc) throws RemoteException {
-        init(Action.GetVersionNumber);
-        GetVersionNumberResponse response = getResidentTransactionsSysBatchService(yc).getVersionNumber(new GetVersionNumber());
-        return response.getGetVersionNumberResult();
+    public String getPluginVersion(PmcYardiCredential yc) {
+        try {
+            init(Action.GetVersionNumber);
+            GetVersionNumberResponse response = getResidentTransactionsSysBatchService(yc).getVersionNumber(new GetVersionNumber());
+            return response.getGetVersionNumberResult();
+        } catch (RemoteException e) {
+            throw new Error(e);
+        }
     }
 
     private ItfResidentTransactions20_SysBatch getResidentTransactionsSysBatchService(PmcYardiCredential yc) throws AxisFault {

@@ -11,7 +11,7 @@
  * @author vlads
  * @version $Id$
  */
-package com.propertyvista.biz.system;
+package com.propertyvista.biz.system.yardi;
 
 import java.rmi.RemoteException;
 import java.util.ArrayList;
@@ -24,7 +24,10 @@ import com.pyx4j.entity.server.Persistence;
 import com.propertyvista.biz.ExecutionMonitor;
 import com.propertyvista.biz.financial.ar.ARException;
 import com.propertyvista.biz.financial.payment.PaymentBatchContext;
-import com.propertyvista.biz.system.yardi.YardiCredentials;
+import com.propertyvista.biz.system.AbstractYardiFacadeImpl;
+import com.propertyvista.biz.system.YardiPaymentBatchContext;
+import com.propertyvista.biz.system.yardi.YardiARFacade;
+import com.propertyvista.biz.system.yardi.YardiServiceException;
 import com.propertyvista.biz.tenant.lease.LeaseFacade;
 import com.propertyvista.domain.financial.yardi.YardiReceipt;
 import com.propertyvista.domain.financial.yardi.YardiReceiptReversal;

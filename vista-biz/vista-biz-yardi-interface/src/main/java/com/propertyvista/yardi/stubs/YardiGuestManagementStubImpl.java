@@ -15,6 +15,9 @@ package com.propertyvista.yardi.stubs;
 
 import java.rmi.RemoteException;
 
+import javax.xml.bind.JAXBException;
+import javax.xml.stream.XMLStreamException;
+
 import org.apache.axiom.om.OMElement;
 import org.apache.axiom.om.util.AXIOMUtil;
 import org.apache.axis2.AxisFault;
@@ -53,15 +56,13 @@ import com.yardi.ws.operations.ils.UnitAvailability_Login;
 import com.yardi.ws.operations.ils.UnitAvailability_LoginResponse;
 import com.yardi.ws.operations.ils.XmlDocument_type1;
 
-import com.pyx4j.commons.SimpleMessageFormat;
 import com.pyx4j.essentials.j2se.util.MarshallUtil;
 
-import com.propertyvista.biz.system.YardiServiceException;
+import com.propertyvista.biz.system.yardi.YardiServiceException;
 import com.propertyvista.domain.settings.PmcYardiCredential;
 import com.propertyvista.yardi.YardiConstants;
 import com.propertyvista.yardi.YardiConstants.Action;
 import com.propertyvista.yardi.YardiInterfaceType;
-import com.propertyvista.yardi.beans.Messages;
 import com.propertyvista.yardi.beans.Properties;
 
 public class YardiGuestManagementStubImpl extends AbstractYardiStub implements YardiGuestManagementStub {
@@ -69,370 +70,245 @@ public class YardiGuestManagementStubImpl extends AbstractYardiStub implements Y
     private final static Logger log = LoggerFactory.getLogger(YardiGuestManagementStubImpl.class);
 
     @Override
-    public Properties getPropertyConfigurations(PmcYardiCredential yc) throws YardiServiceException {
-        try {
-            init(Action.GetPropertyConfigurations);
+    public Properties getPropertyConfigurations(PmcYardiCredential yc) throws YardiServiceException, RemoteException {
+        init(Action.GetPropertyConfigurations);
 
-            GetPropertyConfigurations request = new GetPropertyConfigurations();
+        GetPropertyConfigurations request = new GetPropertyConfigurations();
 
-            request.setInterfaceEntity(YardiConstants.ILS_INTERFACE_ENTITY);
-            request.setInterfaceLicense(YardiLicense.getInterfaceLicense(YardiInterfaceType.ILSGuestCard, yc));
+        request.setInterfaceEntity(YardiConstants.ILS_INTERFACE_ENTITY);
+        request.setInterfaceLicense(YardiLicense.getInterfaceLicense(YardiInterfaceType.ILSGuestCard, yc));
 
-            request.setUserName(yc.username().getValue());
-            request.setPassword(yc.password().number().getValue());
-            request.setServerName(yc.serverName().getValue());
-            request.setDatabase(yc.database().getValue());
-            request.setPlatform(yc.platform().getValue().name());
+        request.setUserName(yc.username().getValue());
+        request.setPassword(yc.password().number().getValue());
+        request.setServerName(yc.serverName().getValue());
+        request.setDatabase(yc.database().getValue());
+        request.setPlatform(yc.platform().getValue().name());
 
-            GetPropertyConfigurationsResponse response = getILSGuestCardService(yc).getPropertyConfigurations(request);
-            if ((response == null) || (response.getGetPropertyConfigurationsResult() == null)
-                    || (response.getGetPropertyConfigurationsResult().getExtraElement() == null)) {
-                throw new YardiServiceException(SimpleMessageFormat.format(
-                        "Yardi connection configuration error, Login error or database ''{0}'' do not exists on Yardi server", yc.database()));
-            }
-            String xml = response.getGetPropertyConfigurationsResult().getExtraElement().toString();
-
-            if (Messages.isMessageResponse(xml)) {
-                Messages messages = MarshallUtil.unmarshal(Messages.class, xml);
-                if (messages.isError()) {
-                    YardiLicense.handleVendorLicenseError(messages);
-                    throw new YardiServiceException(messages.toString());
-                } else {
-                    log.info(messages.toString());
-                    return null;
-                }
-            }
-
-            return MarshallUtil.unmarshal(Properties.class, xml);
-        } catch (Throwable e) {
-            throw new Error(e);
-        }
+        GetPropertyConfigurationsResponse response = getILSGuestCardService(yc).getPropertyConfigurations(request);
+        String xml = response.getGetPropertyConfigurationsResult().getExtraElement().toString();
+        return ensureResult(xml, Properties.class);
     }
 
     @Override
-    public RentableItems getRentableItems(PmcYardiCredential yc, String propertyId) throws YardiServiceException {
-        try {
-            init(Action.GetYardiRentableItems);
+    public RentableItems getRentableItems(PmcYardiCredential yc, String propertyId) throws YardiServiceException, RemoteException {
+        init(Action.GetYardiRentableItems);
 
-            GetYardiRentableItems_Login request = new GetYardiRentableItems_Login();
+        GetYardiRentableItems_Login request = new GetYardiRentableItems_Login();
 
-            request.setInterfaceEntity(YardiConstants.ILS_INTERFACE_ENTITY);
-            request.setInterfaceLicense(YardiLicense.getInterfaceLicense(YardiInterfaceType.ILSGuestCard, yc));
+        request.setInterfaceEntity(YardiConstants.ILS_INTERFACE_ENTITY);
+        request.setInterfaceLicense(YardiLicense.getInterfaceLicense(YardiInterfaceType.ILSGuestCard, yc));
 
-            request.setUserName(yc.username().getValue());
-            request.setPassword(yc.password().number().getValue());
-            request.setServerName(yc.serverName().getValue());
-            request.setDatabase(yc.database().getValue());
-            request.setPlatform(yc.platform().getValue().name());
+        request.setUserName(yc.username().getValue());
+        request.setPassword(yc.password().number().getValue());
+        request.setServerName(yc.serverName().getValue());
+        request.setDatabase(yc.database().getValue());
+        request.setPlatform(yc.platform().getValue().name());
 
-            request.setYardiPropertyId(propertyId);
+        request.setYardiPropertyId(propertyId);
 
-            GetYardiRentableItems_LoginResponse response = getILSGuestCardService(yc).getYardiRentableItems_Login(request);
-            if ((response == null) || (response.getGetYardiRentableItems_LoginResult() == null)
-                    || (response.getGetYardiRentableItems_LoginResult().getExtraElement() == null)) {
-                throw new YardiServiceException(SimpleMessageFormat.format(
-                        "Yardi connection configuration error, Login error or database ''{0}'' do not exists on Yardi server", yc.database()));
-            }
-            String xml = response.getGetYardiRentableItems_LoginResult().getExtraElement().toString();
+        GetYardiRentableItems_LoginResponse response = getILSGuestCardService(yc).getYardiRentableItems_Login(request);
+        String xml = response.getGetYardiRentableItems_LoginResult().getExtraElement().toString();
 
-            if (Messages.isMessageResponse(xml)) {
-                Messages messages = MarshallUtil.unmarshal(Messages.class, xml);
-                if (messages.isError()) {
-                    YardiLicense.handleVendorLicenseError(messages);
-                    throw new YardiServiceException(messages.toString());
-                } else {
-                    log.info(messages.toString());
-                }
-            }
-
-            return MarshallUtil.unmarshal(RentableItems.class, xml);
-
-        } catch (Throwable e) {
-            throw new Error(e);
-        }
+        return ensureResult(xml, RentableItems.class);
     }
 
     @Override
-    public MarketingSources getYardiMarketingSources(PmcYardiCredential yc, String propertyId) throws YardiServiceException {
-        try {
-            init(Action.GetYardiMarketingSources);
+    public MarketingSources getYardiMarketingSources(PmcYardiCredential yc, String propertyId) throws YardiServiceException, RemoteException {
+        init(Action.GetYardiMarketingSources);
 
-            GetYardiAgentsSourcesResults_Login request = new GetYardiAgentsSourcesResults_Login();
+        GetYardiAgentsSourcesResults_Login request = new GetYardiAgentsSourcesResults_Login();
 
-            request.setInterfaceEntity(YardiConstants.ILS_INTERFACE_ENTITY);
-            request.setInterfaceLicense(YardiLicense.getInterfaceLicense(YardiInterfaceType.ILSGuestCard, yc));
+        request.setInterfaceEntity(YardiConstants.ILS_INTERFACE_ENTITY);
+        request.setInterfaceLicense(YardiLicense.getInterfaceLicense(YardiInterfaceType.ILSGuestCard, yc));
 
-            request.setUserName(yc.username().getValue());
-            request.setPassword(yc.password().number().getValue());
-            request.setServerName(yc.serverName().getValue());
-            request.setDatabase(yc.database().getValue());
-            request.setPlatform(yc.platform().getValue().name());
+        request.setUserName(yc.username().getValue());
+        request.setPassword(yc.password().number().getValue());
+        request.setServerName(yc.serverName().getValue());
+        request.setDatabase(yc.database().getValue());
+        request.setPlatform(yc.platform().getValue().name());
 
-            request.setYardiPropertyId(propertyId);
+        request.setYardiPropertyId(propertyId);
 
-            GetYardiAgentsSourcesResults_LoginResponse response = getILSGuestCardService(yc).getYardiAgentsSourcesResults_Login(request);
-            if ((response == null) || (response.getGetYardiAgentsSourcesResults_LoginResult() == null)
-                    || (response.getGetYardiAgentsSourcesResults_LoginResult().getExtraElement() == null)) {
-                throw new YardiServiceException(SimpleMessageFormat.format(
-                        "Yardi connection configuration error, Login error or database ''{0}'' do not exists on Yardi server", yc.database()));
-            }
+        GetYardiAgentsSourcesResults_LoginResponse response = getILSGuestCardService(yc).getYardiAgentsSourcesResults_Login(request);
+        String xml = response.getGetYardiAgentsSourcesResults_LoginResult().getExtraElement().toString();
 
-            OMElement root = response.getGetYardiAgentsSourcesResults_LoginResult().getExtraElement();
-            String xml = root.toString();
-
-            if (Messages.isMessageResponse(xml)) {
-                Messages messages = MarshallUtil.unmarshal(Messages.class, xml);
-                if (messages.isError()) {
-                    YardiLicense.handleVendorLicenseError(messages);
-                    throw new YardiServiceException(messages.toString());
-                } else {
-                    log.info(messages.toString());
-                }
-            }
-
-            return MarshallUtil.unmarshal(MarketingSources.class, xml);
-        } catch (YardiServiceException ye) {
-            throw ye;
-        } catch (Throwable e) {
-            throw new Error(e);
-        }
+        return ensureResult(xml, MarketingSources.class);
     }
 
     @Override
-    public PhysicalProperty getPropertyMarketingInfo(PmcYardiCredential yc, String propertyId) throws YardiServiceException {
-        try {
-            init(Action.GetPropertyMarketingInfo);
+    public PhysicalProperty getPropertyMarketingInfo(PmcYardiCredential yc, String propertyId) throws YardiServiceException, RemoteException {
+        init(Action.GetPropertyMarketingInfo);
 
-            UnitAvailability_Login request = new UnitAvailability_Login();
+        UnitAvailability_Login request = new UnitAvailability_Login();
 
-            request.setInterfaceEntity(YardiConstants.ILS_INTERFACE_ENTITY);
-            request.setInterfaceLicense(YardiLicense.getInterfaceLicense(YardiInterfaceType.ILSGuestCard, yc));
+        request.setInterfaceEntity(YardiConstants.ILS_INTERFACE_ENTITY);
+        request.setInterfaceLicense(YardiLicense.getInterfaceLicense(YardiInterfaceType.ILSGuestCard, yc));
 
-            request.setUserName(yc.username().getValue());
-            request.setPassword(yc.password().number().getValue());
-            request.setServerName(yc.serverName().getValue());
-            request.setDatabase(yc.database().getValue());
-            request.setPlatform(yc.platform().getValue().name());
+        request.setUserName(yc.username().getValue());
+        request.setPassword(yc.password().number().getValue());
+        request.setServerName(yc.serverName().getValue());
+        request.setDatabase(yc.database().getValue());
+        request.setPlatform(yc.platform().getValue().name());
 
-            request.setYardiPropertyId(propertyId);
+        request.setYardiPropertyId(propertyId);
 
-            UnitAvailability_LoginResponse response = getILSGuestCard20Service(yc).unitAvailability_Login(request);
-            if (response.getUnitAvailability_LoginResult() == null) {
-                throw new Error("Received response is null");
-            }
+        UnitAvailability_LoginResponse response = getILSGuestCard20Service(yc).unitAvailability_Login(request);
+        String xml = response.getUnitAvailability_LoginResult().getExtraElement().toString();
 
-            String xml = response.getUnitAvailability_LoginResult().getExtraElement().toString();
-
-            if (Messages.isMessageResponse(xml)) {
-                Messages messages = MarshallUtil.unmarshal(Messages.class, xml);
-                if (messages.isError()) {
-                    YardiLicense.handleVendorLicenseError(messages);
-                    throw new YardiServiceException(messages.toString());
-                } else {
-                    log.info(messages.toString());
-                }
-            }
-            return MarshallUtil.unmarshal(PhysicalProperty.class, xml);
-        } catch (Throwable e) {
-            throw new YardiServiceException(e);
-        }
+        return ensureResult(xml, PhysicalProperty.class);
     }
 
     @Override
-    public LeadManagement getGuestActivity(PmcYardiCredential yc, String propertyId) throws YardiServiceException {
-        try {
-            init(Action.GetYardiGuestActivity);
+    public LeadManagement getGuestActivity(PmcYardiCredential yc, String propertyId) throws YardiServiceException, RemoteException {
+        init(Action.GetYardiGuestActivity);
 
-            GetYardiGuestActivity_Login request = new GetYardiGuestActivity_Login();
+        GetYardiGuestActivity_Login request = new GetYardiGuestActivity_Login();
 
-            request.setInterfaceEntity(YardiConstants.ILS_INTERFACE_ENTITY);
-            request.setInterfaceLicense(YardiLicense.getInterfaceLicense(YardiInterfaceType.ILSGuestCard, yc));
+        request.setInterfaceEntity(YardiConstants.ILS_INTERFACE_ENTITY);
+        request.setInterfaceLicense(YardiLicense.getInterfaceLicense(YardiInterfaceType.ILSGuestCard, yc));
 
-            request.setUserName(yc.username().getValue());
-            request.setPassword(yc.password().number().getValue());
-            request.setServerName(yc.serverName().getValue());
-            request.setDatabase(yc.database().getValue());
-            request.setPlatform(yc.platform().getValue().name());
+        request.setUserName(yc.username().getValue());
+        request.setPassword(yc.password().number().getValue());
+        request.setServerName(yc.serverName().getValue());
+        request.setDatabase(yc.database().getValue());
+        request.setPlatform(yc.platform().getValue().name());
 
-            request.setYardiPropertyId(propertyId);
+        request.setYardiPropertyId(propertyId);
 
-            GetYardiGuestActivity_LoginResponse response = getILSGuestCardService(yc).getYardiGuestActivity_Login(request);
-            if (response.getGetYardiGuestActivity_LoginResult() == null) {
-                throw new Error("Received response is null");
-            }
+        GetYardiGuestActivity_LoginResponse response = getILSGuestCardService(yc).getYardiGuestActivity_Login(request);
+        String xml = response.getGetYardiGuestActivity_LoginResult().getExtraElement().toString();
 
-            String xml = response.getGetYardiGuestActivity_LoginResult().getExtraElement().toString();
-
-            if (Messages.isMessageResponse(xml)) {
-                Messages messages = MarshallUtil.unmarshal(Messages.class, xml);
-                if (messages.isError()) {
-                    YardiLicense.handleVendorLicenseError(messages);
-                    throw new YardiServiceException(messages.toString());
-                } else {
-                    log.info(messages.toString());
-                }
-            }
-            return MarshallUtil.unmarshal(LeadManagement.class, xml);
-        } catch (Throwable e) {
-            throw new YardiServiceException(e);
-        }
+        return ensureResult(xml, LeadManagement.class);
     }
 
     @Override
-    public LeadManagement findGuest(PmcYardiCredential yc, String propertyId, String guestId) throws YardiServiceException {
-        try {
-            init(Action.GetYardiGuestSearch);
+    public LeadManagement findGuest(PmcYardiCredential yc, String propertyId, String guestId) throws YardiServiceException, RemoteException {
+        init(Action.GetYardiGuestSearch);
 
-            GetYardiGuestActivity_Search request = new GetYardiGuestActivity_Search();
+        GetYardiGuestActivity_Search request = new GetYardiGuestActivity_Search();
 
-            request.setInterfaceEntity(YardiConstants.ILS_INTERFACE_ENTITY);
-            request.setInterfaceLicense(YardiLicense.getInterfaceLicense(YardiInterfaceType.ILSGuestCard, yc));
+        request.setInterfaceEntity(YardiConstants.ILS_INTERFACE_ENTITY);
+        request.setInterfaceLicense(YardiLicense.getInterfaceLicense(YardiInterfaceType.ILSGuestCard, yc));
 
-            request.setUserName(yc.username().getValue());
-            request.setPassword(yc.password().number().getValue());
-            request.setServerName(yc.serverName().getValue());
-            request.setDatabase(yc.database().getValue());
-            request.setPlatform(yc.platform().getValue().name());
+        request.setUserName(yc.username().getValue());
+        request.setPassword(yc.password().number().getValue());
+        request.setServerName(yc.serverName().getValue());
+        request.setDatabase(yc.database().getValue());
+        request.setPlatform(yc.platform().getValue().name());
 
-            request.setYardiPropertyId(propertyId);
-            request.setThirdPartyId(guestId);
+        request.setYardiPropertyId(propertyId);
+        request.setThirdPartyId(guestId);
 
-            // all search fields are required
-            request.setFirstName("");
-            request.setLastName("");
-            request.setEmailAddress("");
-            request.setPhoneNumber("");
-            request.setDateOfBirth("");
-            request.setFederalId("");
+        // all search fields are required
+        request.setFirstName("");
+        request.setLastName("");
+        request.setEmailAddress("");
+        request.setPhoneNumber("");
+        request.setDateOfBirth("");
+        request.setFederalId("");
 
-            GetYardiGuestActivity_SearchResponse response = getILSGuestCardService(yc).getYardiGuestActivity_Search(request);
-            if (response.getGetYardiGuestActivity_SearchResult() == null) {
-                throw new Error("Received response is null");
-            }
+        GetYardiGuestActivity_SearchResponse response = getILSGuestCardService(yc).getYardiGuestActivity_Search(request);
+        String xml = response.getGetYardiGuestActivity_SearchResult().getExtraElement().toString();
 
-            String xml = response.getGetYardiGuestActivity_SearchResult().getExtraElement().toString();
-
-            if (Messages.isMessageResponse(xml)) {
-                Messages messages = MarshallUtil.unmarshal(Messages.class, xml);
-                if (messages.isError()) {
-                    YardiLicense.handleVendorLicenseError(messages);
-                    throw new YardiServiceException(messages.toString());
-                } else {
-                    log.info(messages.toString());
-                }
-            }
-            return MarshallUtil.unmarshal(LeadManagement.class, xml);
-        } catch (Throwable e) {
-            throw new YardiServiceException(e);
-        }
+        return ensureResult(xml, LeadManagement.class);
     }
 
     @Override
-    public void importGuestInfo(PmcYardiCredential yc, LeadManagement leadInfo) throws YardiServiceException {
+    public void importGuestInfo(PmcYardiCredential yc, LeadManagement leadInfo) throws YardiServiceException, RemoteException {
+        init(Action.ImportGuestInfo);
+        validateWriteAccess(yc);
+
+        ImportYardiGuest_Login request = new ImportYardiGuest_Login();
+
+        request.setInterfaceEntity(YardiConstants.ILS_INTERFACE_ENTITY);
+        request.setInterfaceLicense(YardiLicense.getInterfaceLicense(YardiInterfaceType.ILSGuestCard, yc));
+
+        request.setUserName(yc.username().getValue());
+        request.setPassword(yc.password().number().getValue());
+        request.setServerName(yc.serverName().getValue());
+        request.setDatabase(yc.database().getValue());
+        request.setPlatform(yc.platform().getValue().name());
+
         try {
-            init(Action.ImportGuestInfo);
-            validateWriteAccess(yc);
-
-            ImportYardiGuest_Login request = new ImportYardiGuest_Login();
-
-            request.setInterfaceEntity(YardiConstants.ILS_INTERFACE_ENTITY);
-            request.setInterfaceLicense(YardiLicense.getInterfaceLicense(YardiInterfaceType.ILSGuestCard, yc));
-
-            request.setUserName(yc.username().getValue());
-            request.setPassword(yc.password().number().getValue());
-            request.setServerName(yc.serverName().getValue());
-            request.setDatabase(yc.database().getValue());
-            request.setPlatform(yc.platform().getValue().name());
-
             String leadXml = MarshallUtil.marshall(leadInfo);
             log.debug(leadXml);
             XmlDoc_type0 xmlDoc = new XmlDoc_type0();
             OMElement element = AXIOMUtil.stringToOM(leadXml);
             xmlDoc.setExtraElement(element);
             request.setXmlDoc(xmlDoc);
-
-            ImportYardiGuest_LoginResponse response = getILSGuestCardService(yc).importYardiGuest_Login(request);
-            if ((response == null) || (response.getImportYardiGuest_LoginResult() == null)
-                    || (response.getImportYardiGuest_LoginResult().getExtraElement() == null)) {
-                throw new YardiServiceException("importResidentTransactions received NULL response");
-            }
-            String xml = response.getImportYardiGuest_LoginResult().getExtraElement().toString();
-
-            Messages messages = MarshallUtil.unmarshal(Messages.class, xml);
-            if (messages.isError()) {
-                YardiLicense.handleVendorLicenseError(messages);
-                throw new YardiServiceException(messages.toString());
-            } else {
-                log.info(messages.toString());
-            }
-        } catch (YardiServiceException e) {
-            throw e;
-        } catch (Throwable e) {
-            throw new YardiServiceException(e);
+        } catch (JAXBException e) {
+            throw new Error(e);
+        } catch (XMLStreamException e) {
+            throw new Error(e);
         }
+
+        ImportYardiGuest_LoginResponse response = getILSGuestCardService(yc).importYardiGuest_Login(request);
+        String xml = response.getImportYardiGuest_LoginResult().getExtraElement().toString();
+
+        ensureValid(xml);
     }
 
     @Override
-    public void importApplication(PmcYardiCredential yc, LeaseApplication leaseApp) throws YardiServiceException {
+    public void importApplication(PmcYardiCredential yc, LeaseApplication leaseApp) throws YardiServiceException, RemoteException {
+        init(Action.ImportApplication);
+        validateWriteAccess(yc);
+
+        ImportApplication_Login request = new ImportApplication_Login();
+
+        request.setInterfaceEntity(YardiConstants.ILS_INTERFACE_ENTITY);
+        request.setInterfaceLicense(YardiLicense.getInterfaceLicense(YardiInterfaceType.ILSGuestCard, yc));
+
+        request.setUserName(yc.username().getValue());
+        request.setPassword(yc.password().number().getValue());
+        request.setServerName(yc.serverName().getValue());
+        request.setDatabase(yc.database().getValue());
+        request.setPlatform(yc.platform().getValue().name());
+
         try {
-            init(Action.ImportApplication);
-            validateWriteAccess(yc);
-
-            ImportApplication_Login request = new ImportApplication_Login();
-
-            request.setInterfaceEntity(YardiConstants.ILS_INTERFACE_ENTITY);
-            request.setInterfaceLicense(YardiLicense.getInterfaceLicense(YardiInterfaceType.ILSGuestCard, yc));
-
-            request.setUserName(yc.username().getValue());
-            request.setPassword(yc.password().number().getValue());
-            request.setServerName(yc.serverName().getValue());
-            request.setDatabase(yc.database().getValue());
-            request.setPlatform(yc.platform().getValue().name());
-
             String leaseAppXml = MarshallUtil.marshall(leaseApp);
-            log.debug(leaseAppXml);
             XmlDocument_type1 xmlDoc = new XmlDocument_type1();
             OMElement element = AXIOMUtil.stringToOM(leaseAppXml);
             xmlDoc.setExtraElement(element);
             request.setXmlDocument(xmlDoc);
-
-            ImportApplication_LoginResponse response = getILSGuestCard20Service(yc).importApplication_Login(request);
-            if ((response == null) || (response.getImportApplication_LoginResult() == null)
-                    || (response.getImportApplication_LoginResult().getExtraElement() == null)) {
-                throw new YardiServiceException("importResidentTransactions received NULL response");
-            }
-            String xml = response.getImportApplication_LoginResult().getExtraElement().toString();
-
-            Messages messages = MarshallUtil.unmarshal(Messages.class, xml);
-            if (messages.isError()) {
-                YardiLicense.handleVendorLicenseError(messages);
-                throw new YardiServiceException(messages.toString());
-            } else {
-                log.info(messages.toString());
-            }
-        } catch (Throwable e) {
-            throw new YardiServiceException(e);
+        } catch (JAXBException e) {
+            throw new Error(e);
+        } catch (XMLStreamException e) {
+            throw new Error(e);
         }
+
+        ImportApplication_LoginResponse response = getILSGuestCard20Service(yc).importApplication_Login(request);
+        String xml = response.getImportApplication_LoginResult().getExtraElement().toString();
+
+        ensureValid(xml);
     }
 
     @Override
-    public String ping(PmcYardiCredential yc) throws RemoteException {
-        init(Action.Ping);
-        PingResponse response = getILSGuestCardService(yc).ping(new Ping());
-        return response.getPingResult();
+    public String ping(PmcYardiCredential yc) {
+        try {
+            init(Action.Ping);
+            PingResponse response = getILSGuestCardService(yc).ping(new Ping());
+            return response.getPingResult();
+        } catch (RemoteException e) {
+            throw new Error(e);
+        }
+
     }
 
     @Override
-    public void validate(PmcYardiCredential yc) throws RemoteException, YardiServiceException {
+    public void validate(PmcYardiCredential yc) throws YardiServiceException, RemoteException {
         // try to pull properties
         getPropertyConfigurations(yc);
     }
 
     @Override
-    public String getPluginVersion(PmcYardiCredential yc) throws RemoteException {
-        init(Action.GetVersionNumber);
-        GetVersionNumberResponse response = getILSGuestCardService(yc).getVersionNumber(new GetVersionNumber());
-        return response.getGetVersionNumberResult();
+    public String getPluginVersion(PmcYardiCredential yc) {
+        try {
+            init(Action.GetVersionNumber);
+            GetVersionNumberResponse response = getILSGuestCardService(yc).getVersionNumber(new GetVersionNumber());
+            return response.getGetVersionNumberResult();
+        } catch (RemoteException e) {
+            throw new Error(e);
+        }
     }
 
     private ItfILSGuestCard getILSGuestCardService(PmcYardiCredential yc) throws AxisFault {

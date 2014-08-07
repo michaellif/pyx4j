@@ -50,11 +50,10 @@ import com.yardi.entity.resident.ResidentTransactions;
 import com.pyx4j.commons.Key;
 import com.pyx4j.commons.SimpleMessageFormat;
 import com.pyx4j.commons.UserRuntimeException;
-import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.core.AttachLevel;
 import com.pyx4j.entity.server.Persistence;
 
-import com.propertyvista.biz.system.YardiServiceException;
+import com.propertyvista.biz.system.yardi.YardiServiceException;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.settings.PmcYardiCredential;
 import com.propertyvista.domain.tenant.lease.BillableItem;
@@ -62,8 +61,8 @@ import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.yardi.YardiConstants;
 import com.propertyvista.yardi.mappers.TenantMapper;
 import com.propertyvista.yardi.processors.YardiGuestProcessor;
-import com.propertyvista.yardi.stubs.YardiGuestManagementStub;
-import com.propertyvista.yardi.stubs.YardiResidentTransactionsStub;
+import com.propertyvista.yardi.stubs.YardiGuestManagementStubProxy;
+import com.propertyvista.yardi.stubs.YardiResidentTransactionsStubProxy;
 
 public class YardiGuestManagementService extends YardiAbstractService {
 
@@ -100,7 +99,7 @@ public class YardiGuestManagementService extends YardiAbstractService {
 
     private static final String ILS_SOURCE = "ILS";
 
-    public String createNewProspect(PmcYardiCredential yc, Lease lease) throws YardiServiceException {
+    public String createNewProspect(PmcYardiCredential yc, Lease lease) throws YardiServiceException, RemoteException {
         Persistence.ensureRetrieve(lease.unit().building(), AttachLevel.Attached);
         Persistence.ensureRetrieve(lease._applicant(), AttachLevel.Attached);
 
@@ -128,8 +127,10 @@ public class YardiGuestManagementService extends YardiAbstractService {
 
     /**
      * Try to hold unit for the given lease. In case of failure will throw exception.
+     * 
+     * @throws RemoteException
      */
-    public boolean holdUnit(PmcYardiCredential yc, Lease lease) throws YardiServiceException {
+    public boolean holdUnit(PmcYardiCredential yc, Lease lease) throws YardiServiceException, RemoteException {
         if (!lease.leaseApplication().yardiApplicationId().getValue("").startsWith("p")) {
             throw new UserRuntimeException("Invalid Lease Application id: " + lease.leaseApplication().yardiApplicationId().getValue());
         }
@@ -158,8 +159,10 @@ public class YardiGuestManagementService extends YardiAbstractService {
     /**
      * Try to release unit for the given lease. In case of failure will throw exception.
      * Will fail if attempted to release unit that has no hold by this lease.
+     * 
+     * @throws RemoteException
      */
-    public boolean releaseUnit(PmcYardiCredential yc, Lease lease) throws YardiServiceException {
+    public boolean releaseUnit(PmcYardiCredential yc, Lease lease) throws YardiServiceException, RemoteException {
         if (!lease.leaseApplication().yardiApplicationId().getValue("").startsWith("p")) {
             throw new UserRuntimeException("Invalid Lease Application id: " + lease.leaseApplication().yardiApplicationId().getValue());
         }
@@ -181,7 +184,7 @@ public class YardiGuestManagementService extends YardiAbstractService {
         return true;
     }
 
-    public boolean cancelApplication(PmcYardiCredential yc, Lease lease) throws YardiServiceException {
+    public boolean cancelApplication(PmcYardiCredential yc, Lease lease) throws YardiServiceException, RemoteException {
         EventType event = null;
         YardiGuestProcessor guestProcessor = new YardiGuestProcessor(ILS_AGENT, ILS_SOURCE);
         if (!lease.leaseApplication().yardiApplicationId().getValue("").startsWith("t")) {
@@ -208,7 +211,7 @@ public class YardiGuestManagementService extends YardiAbstractService {
         return true;
     }
 
-    public boolean declineApplication(PmcYardiCredential yc, Lease lease) throws YardiServiceException {
+    public boolean declineApplication(PmcYardiCredential yc, Lease lease) throws YardiServiceException, RemoteException {
         if (!lease.leaseApplication().yardiApplicationId().getValue("").startsWith("t")) {
             throw new UserRuntimeException("Invalid Lease Application id: " + lease.leaseApplication().yardiApplicationId().getValue());
         }
@@ -229,7 +232,7 @@ public class YardiGuestManagementService extends YardiAbstractService {
         return true;
     }
 
-    public Map<Key, String> addLeaseParticipants(PmcYardiCredential yc, Lease lease) throws YardiServiceException {
+    public Map<Key, String> addLeaseParticipants(PmcYardiCredential yc, Lease lease) throws YardiServiceException, RemoteException {
         Persistence.ensureRetrieve(lease.unit().building(), AttachLevel.Attached);
         Persistence.ensureRetrieve(lease._applicant(), AttachLevel.Attached);
 
@@ -243,7 +246,7 @@ public class YardiGuestManagementService extends YardiAbstractService {
         return getParticipants(yc, lease, null);
     }
 
-    public SignLeaseResults signLease(final PmcYardiCredential yc, final Lease lease) throws YardiServiceException {
+    public SignLeaseResults signLease(final PmcYardiCredential yc, final Lease lease) throws YardiServiceException, RemoteException {
         if (!lease.leaseApplication().yardiApplicationId().getValue("").startsWith("p")) {
             throw new UserRuntimeException("Invalid Lease Application id: " + lease.leaseApplication().yardiApplicationId().getValue());
         }
@@ -317,13 +320,13 @@ public class YardiGuestManagementService extends YardiAbstractService {
         };
     }
 
-    public RentableItems getRentableItems(PmcYardiCredential yc, String propertyId) throws YardiServiceException {
+    public RentableItems getRentableItems(PmcYardiCredential yc, String propertyId) throws YardiServiceException, RemoteException {
         log.info("Getting RentableItems for property {}", propertyId);
-        return ServerSideFactory.create(YardiGuestManagementStub.class).getRentableItems(yc, propertyId);
+        return new YardiGuestManagementStubProxy().getRentableItems(yc, propertyId);
     }
 
-    public void validateSettings(PmcYardiCredential yc, String propertyCode) throws YardiServiceException {
-        MarketingSources sources = ServerSideFactory.create(YardiGuestManagementStub.class).getYardiMarketingSources(yc, propertyCode);
+    public void validateSettings(PmcYardiCredential yc, String propertyCode) throws YardiServiceException, RemoteException {
+        MarketingSources sources = new YardiGuestManagementStubProxy().getYardiMarketingSources(yc, propertyCode);
 
         String agentName = null;
         String sourceName = null;
@@ -377,8 +380,12 @@ public class YardiGuestManagementService extends YardiAbstractService {
         return lease.currentTerm().version().leaseProducts().featureItems();
     }
 
-    /** get available rentable item codes */
-    private Map<RentableItemKey, RentableItem> getAvailableRentableItems(PmcYardiCredential yc, Lease lease) throws YardiServiceException {
+    /**
+     * get available rentable item codes
+     * 
+     * @throws RemoteException
+     */
+    private Map<RentableItemKey, RentableItem> getAvailableRentableItems(PmcYardiCredential yc, Lease lease) throws YardiServiceException, RemoteException {
         Map<RentableItemKey, RentableItem> availableCodes = new HashMap<RentableItemKey, RentableItem>();
         RentableItems rentableItems = getRentableItems(yc, lease.unit().building().propertyCode().getValue());
         for (RentableItemType type : rentableItems.getItemType()) {
@@ -395,15 +402,15 @@ public class YardiGuestManagementService extends YardiAbstractService {
         return availableCodes;
     }
 
-    private void submitGuest(PmcYardiCredential yc, Prospect guest) throws YardiServiceException {
+    private void submitGuest(PmcYardiCredential yc, Prospect guest) throws YardiServiceException, RemoteException {
         LeadManagement lead = new LeadManagement();
         lead.setProspects(new Prospects());
         lead.getProspects().getProspect().add(guest);
-        ServerSideFactory.create(YardiGuestManagementStub.class).importGuestInfo(yc, lead);
+        new YardiGuestManagementStubProxy().importGuestInfo(yc, lead);
     }
 
-    private String getTenantId(PmcYardiCredential yc, String propertyCode, String guestId, IdentityType type) throws YardiServiceException {
-        LeadManagement guestActivity = ServerSideFactory.create(YardiGuestManagementStub.class).findGuest(yc, propertyCode, guestId);
+    private String getTenantId(PmcYardiCredential yc, String propertyCode, String guestId, IdentityType type) throws YardiServiceException, RemoteException {
+        LeadManagement guestActivity = new YardiGuestManagementStubProxy().findGuest(yc, propertyCode, guestId);
         if (guestActivity.getProspects().getProspect().size() != 1) {
             throw new YardiServiceException(SimpleMessageFormat.format("Prospect not found: {0}", guestId));
         }
@@ -424,10 +431,10 @@ public class YardiGuestManagementService extends YardiAbstractService {
         return null;
     }
 
-    private Map<Key, String> getParticipants(PmcYardiCredential yc, Lease lease, Map<String, String> residentIds) throws YardiServiceException {
+    private Map<Key, String> getParticipants(PmcYardiCredential yc, Lease lease, Map<String, String> residentIds) throws YardiServiceException, RemoteException {
         Key tenantId = lease.getPrimaryKey();
-        LeadManagement guestActivity = ServerSideFactory.create(YardiGuestManagementStub.class).findGuest(yc,
-                lease.unit().building().propertyCode().getValue(), tenantId.toString());
+        LeadManagement guestActivity = new YardiGuestManagementStubProxy()
+                .findGuest(yc, lease.unit().building().propertyCode().getValue(), tenantId.toString());
         if (guestActivity.getProspects().getProspect().size() != 1) {
             throw new YardiServiceException(SimpleMessageFormat.format("Prospect not found: {0}", tenantId));
         }
@@ -478,24 +485,19 @@ public class YardiGuestManagementService extends YardiAbstractService {
         return participants;
     }
 
-    private Map<String, String> getLeaseResidentIds(PmcYardiCredential yc, String propertyCode, String tenantId) throws YardiServiceException {
-        YardiResidentTransactionsStub stub = ServerSideFactory.create(YardiResidentTransactionsStub.class);
-        try {
-            Map<String, String> result = null;
-            ResidentTransactions transaction = stub.getResidentTransactionsForTenant(yc, propertyCode, tenantId);
-            if (transaction != null && !transaction.getProperty().isEmpty()) {
-                Property property = transaction.getProperty().iterator().next();
-                if (!property.getRTCustomer().isEmpty()) {
-                    result = new HashMap<String, String>();
-                    for (YardiCustomer customer : property.getRTCustomer().iterator().next().getCustomers().getCustomer()) {
-                        result.put(getNameKey(customer.getName()), TenantMapper.getCustomerID(customer));
-                    }
+    private Map<String, String> getLeaseResidentIds(PmcYardiCredential yc, String propertyCode, String tenantId) throws YardiServiceException, RemoteException {
+        Map<String, String> result = null;
+        ResidentTransactions transaction = new YardiResidentTransactionsStubProxy().getResidentTransactionsForTenant(yc, propertyCode, tenantId);
+        if (transaction != null && !transaction.getProperty().isEmpty()) {
+            Property property = transaction.getProperty().iterator().next();
+            if (!property.getRTCustomer().isEmpty()) {
+                result = new HashMap<String, String>();
+                for (YardiCustomer customer : property.getRTCustomer().iterator().next().getCustomers().getCustomer()) {
+                    result.put(getNameKey(customer.getName()), TenantMapper.getCustomerID(customer));
                 }
             }
-            return result;
-        } catch (RemoteException e) {
-            throw new YardiServiceException(e);
         }
+        return result;
     }
 
     private String getNameKey(Name name) {

@@ -18,38 +18,25 @@ import java.rmi.RemoteException;
 import com.yardi.entity.resident.ResidentTransactions;
 
 import com.pyx4j.commons.LogicalDate;
-import com.pyx4j.config.server.Interceptors;
 
-import com.propertyvista.biz.system.YardiPropertyNoAccessException;
-import com.propertyvista.biz.system.YardiServiceException;
+import com.propertyvista.biz.system.yardi.YardiServiceException;
 import com.propertyvista.domain.settings.PmcYardiCredential;
 import com.propertyvista.yardi.YardiInterface;
 import com.propertyvista.yardi.beans.Properties;
 
 public interface YardiResidentTransactionsStub extends YardiInterface {
 
-    @Override
-    String ping(PmcYardiCredential yc) throws RemoteException;
-
     Properties getPropertyConfigurations(PmcYardiCredential yc) throws YardiServiceException, RemoteException;
 
-    /**
-     * Returns null of there are no tenants in Yardi DB
-     */
-    @Interceptors(ResidentTransactionsExceptionHandler.class)
-    ResidentTransactions getAllResidentTransactions(PmcYardiCredential yc, String propertyListCode) throws YardiServiceException,
-            YardiPropertyNoAccessException, RemoteException;
+    ResidentTransactions getAllResidentTransactions(PmcYardiCredential yc, String propertyListCode) throws YardiServiceException, RemoteException;
 
     ResidentTransactions getResidentTransactionsForTenant(PmcYardiCredential yc, String propertyId, String tenantId) throws YardiServiceException,
             RemoteException;
 
     void importResidentTransactions(PmcYardiCredential yc, ResidentTransactions reversalTransactions) throws YardiServiceException, RemoteException;
 
-    void getUnitInformation(PmcYardiCredential yc, String propertyId) throws YardiServiceException, RemoteException;
-
-    ResidentTransactions getAllLeaseCharges(PmcYardiCredential yc, String propertyListCode, LogicalDate date) throws YardiServiceException, RemoteException,
-            YardiPropertyNoAccessException;
+    ResidentTransactions getAllLeaseCharges(PmcYardiCredential yc, String propertyListCode, LogicalDate date) throws YardiServiceException, RemoteException;
 
     ResidentTransactions getLeaseChargesForTenant(PmcYardiCredential yc, String propertyId, String tenantId, LogicalDate date) throws YardiServiceException,
-            RemoteException, YardiResidentNoTenantsExistException;
+            RemoteException;
 }

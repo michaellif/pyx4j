@@ -30,7 +30,7 @@ import com.pyx4j.quartz.SchedulerHelper;
 import com.pyx4j.rpc.shared.VoidSerializable;
 
 import com.propertyvista.biz.system.AuditFacade;
-import com.propertyvista.biz.system.YardiOperationsFacade;
+import com.propertyvista.biz.system.yardi.YardiOperationsFacade;
 import com.propertyvista.config.SystemConfig;
 import com.propertyvista.config.VistaDeployment;
 import com.propertyvista.domain.security.AuditRecordEventType;

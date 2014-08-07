@@ -23,19 +23,18 @@ import com.yardi.entity.ils.ILSUnit;
 import com.yardi.entity.ils.PhysicalProperty;
 
 import com.pyx4j.commons.CommonsStringUtils;
-import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.core.AttachLevel;
 import com.pyx4j.entity.server.Executable;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.server.TransactionScopeOption;
 import com.pyx4j.entity.server.UnitOfWork;
 
-import com.propertyvista.biz.system.YardiServiceException;
+import com.propertyvista.biz.system.yardi.YardiServiceException;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.settings.PmcYardiCredential;
 import com.propertyvista.yardi.mappers.UnitsMapper;
 import com.propertyvista.yardi.processors.YardiILSMarketingProcessor;
-import com.propertyvista.yardi.stubs.YardiILSGuestCardStub;
+import com.propertyvista.yardi.stubs.YardiILSGuestCardStubProxy;
 
 public class YardiILSGuestCardService extends YardiAbstractService {
 
@@ -55,10 +54,9 @@ public class YardiILSGuestCardService extends YardiAbstractService {
     /** Update availability for specific unit */
     // TODO - move to ILS/GuestCard v4 - UnitAvailability_LoginByUnit
     public void updateUnitAvailability(PmcYardiCredential yc, final AptUnit aptUnit) throws YardiServiceException, RemoteException {
-        YardiILSGuestCardStub stub = ServerSideFactory.create(YardiILSGuestCardStub.class);
         Persistence.ensureRetrieve(aptUnit.building(), AttachLevel.Attached);
         String propertyId = aptUnit.building().propertyCode().getValue();
-        PhysicalProperty marketingInfo = stub.getPropertyMarketingInfo(yc, propertyId);
+        PhysicalProperty marketingInfo = new YardiILSGuestCardStubProxy().getPropertyMarketingInfo(yc, propertyId);
 
         // process new availability data
         for (ILSUnit ilsUnit : marketingInfo.getProperty().get(0).getILSUnit()) {

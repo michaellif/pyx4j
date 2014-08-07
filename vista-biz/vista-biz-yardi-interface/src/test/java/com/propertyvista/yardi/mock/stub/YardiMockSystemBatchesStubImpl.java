@@ -13,11 +13,9 @@
  */
 package com.propertyvista.yardi.mock.stub;
 
-import java.rmi.RemoteException;
-
 import com.yardi.entity.resident.ResidentTransactions;
 
-import com.propertyvista.biz.system.YardiServiceException;
+import com.propertyvista.biz.system.yardi.YardiServiceException;
 import com.propertyvista.domain.settings.PmcYardiCredential;
 import com.propertyvista.yardi.mock.YardiMockServer;
 import com.propertyvista.yardi.stubs.YardiSystemBatchesStub;
@@ -25,49 +23,41 @@ import com.propertyvista.yardi.stubs.YardiSystemBatchesStub;
 public class YardiMockSystemBatchesStubImpl implements YardiSystemBatchesStub {
 
     @Override
-    public long openReceiptBatch(PmcYardiCredential yc, String propertyCode) throws YardiServiceException, RemoteException {
+    public long openReceiptBatch(PmcYardiCredential yc, String propertyCode) throws YardiServiceException {
         return YardiMockServer.instance().openReceiptBatch(propertyCode);
     }
 
     @Override
-    public void addReceiptsToBatch(PmcYardiCredential yc, long batchId, ResidentTransactions residentTransactions) throws YardiServiceException,
-            RemoteException {
+    public void addReceiptsToBatch(PmcYardiCredential yc, long batchId, ResidentTransactions residentTransactions) throws YardiServiceException {
         YardiMockServer.instance().addReceiptsToBatch(batchId, residentTransactions);
     }
 
     @Override
-    public void postReceiptBatch(PmcYardiCredential yc, long batchId) throws YardiServiceException, RemoteException {
+    public void postReceiptBatch(PmcYardiCredential yc, long batchId) throws YardiServiceException {
         YardiMockServer.instance().postReceiptBatch(batchId);
     }
 
     @Override
-    public void cancelReceiptBatch(PmcYardiCredential yc, long batchId) throws YardiServiceException, RemoteException {
+    public void cancelReceiptBatch(PmcYardiCredential yc, long batchId) throws YardiServiceException {
         YardiMockServer.instance().cancelReceiptBatch(batchId);
 
     }
 
     @Override
-    public String ping(PmcYardiCredential yc) throws RemoteException {
+    public String ping(PmcYardiCredential yc) {
         // TODO Auto-generated method stub
         return null;
     }
 
     @Override
-    public void validate(PmcYardiCredential yc) throws RemoteException, YardiServiceException {
+    public void validate(PmcYardiCredential yc) throws YardiServiceException {
         // TODO Auto-generated method stub
 
     }
 
     @Override
-    public String getPluginVersion(PmcYardiCredential yc) throws RemoteException {
+    public String getPluginVersion(PmcYardiCredential yc) {
         // TODO Auto-generated method stub
         return null;
     }
-
-    @Override
-    public void logRecordedTracastions() {
-        // TODO Auto-generated method stub
-
-    }
-
 }

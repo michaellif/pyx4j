@@ -13,11 +13,8 @@
  */
 package com.propertyvista.yardi.mock.stub;
 
-import java.rmi.RemoteException;
-
 import javax.xml.bind.JAXBException;
 
-import org.apache.axis2.AxisFault;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -26,7 +23,7 @@ import com.yardi.entity.resident.ResidentTransactions;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.essentials.j2se.util.MarshallUtil;
 
-import com.propertyvista.biz.system.YardiServiceException;
+import com.propertyvista.biz.system.yardi.YardiServiceException;
 import com.propertyvista.domain.settings.PmcYardiCredential;
 import com.propertyvista.yardi.TransactionLog;
 import com.propertyvista.yardi.beans.Properties;
@@ -36,10 +33,6 @@ import com.propertyvista.yardi.stubs.YardiResidentTransactionsStub;
 public class YardiMockResidentTransactionsStubImpl implements YardiResidentTransactionsStub {
 
     private final static Logger log = LoggerFactory.getLogger(YardiMockResidentTransactionsStubImpl.class);
-
-    @Override
-    public void logRecordedTracastions() {
-    }
 
     public static <T> T dumpXml(String contextName, T data) {
         try {
@@ -51,7 +44,7 @@ public class YardiMockResidentTransactionsStubImpl implements YardiResidentTrans
     }
 
     @Override
-    public String ping(PmcYardiCredential yc) throws AxisFault {
+    public String ping(PmcYardiCredential yc) {
         // TODO Auto-generated method stub
         return null;
     }
@@ -77,30 +70,24 @@ public class YardiMockResidentTransactionsStubImpl implements YardiResidentTrans
     }
 
     @Override
-    public void getUnitInformation(PmcYardiCredential yc, String propertyId) throws YardiServiceException {
-        // TODO Auto-generated method stub
-
-    }
-
-    @Override
-    public ResidentTransactions getAllLeaseCharges(PmcYardiCredential yc, String propertyId, LogicalDate date) throws YardiServiceException, RemoteException {
+    public ResidentTransactions getAllLeaseCharges(PmcYardiCredential yc, String propertyId, LogicalDate date) throws YardiServiceException {
         return dumpXml("getAllLeaseCharges", YardiMockServer.instance().getAllLeaseCharges(propertyId));
     }
 
     @Override
     public ResidentTransactions getLeaseChargesForTenant(PmcYardiCredential yc, String propertyId, String tenantId, LogicalDate date)
-            throws YardiServiceException, RemoteException {
+            throws YardiServiceException {
         return dumpXml("getLeaseChargesForTenant", YardiMockServer.instance().getLeaseChargesForTenant(propertyId, tenantId));
     }
 
     @Override
-    public void validate(PmcYardiCredential yc) throws RemoteException, YardiServiceException {
+    public void validate(PmcYardiCredential yc) throws YardiServiceException {
         // TODO Auto-generated method stub
 
     }
 
     @Override
-    public String getPluginVersion(PmcYardiCredential yc) throws RemoteException {
+    public String getPluginVersion(PmcYardiCredential yc) {
         // TODO Auto-generated method stub
         return null;
     }

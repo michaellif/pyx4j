@@ -18,6 +18,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import javax.xml.bind.JAXBException;
+
 import org.apache.axis2.client.Options;
 import org.apache.axis2.client.Stub;
 import org.apache.axis2.context.MessageContext;
@@ -35,8 +37,11 @@ import com.pyx4j.commons.TimeUtils;
 import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.essentials.j2se.HostConfig.ProxyConfig;
+import com.pyx4j.essentials.j2se.util.MarshallUtil;
 
 import com.propertyvista.biz.system.yardi.YardiConfigurationFacade;
+import com.propertyvista.biz.system.yardi.YardiResponseException;
+import com.propertyvista.biz.system.yardi.YardiServiceException;
 import com.propertyvista.config.AbstractVistaServerSideConfiguration;
 import com.propertyvista.config.SystemConfig;
 import com.propertyvista.config.VistaDeployment;
@@ -44,9 +49,9 @@ import com.propertyvista.config.VistaSystemsSimulationConfig;
 import com.propertyvista.domain.settings.PmcYardiCredential;
 import com.propertyvista.yardi.TransactionLog;
 import com.propertyvista.yardi.YardiConstants.Action;
-import com.propertyvista.yardi.YardiInterface;
+import com.propertyvista.yardi.beans.Messages;
 
-public abstract class AbstractYardiStub implements YardiInterface, ExternalInterfaceLoggingStub {
+public abstract class AbstractYardiStub implements ExternalInterfaceLoggingStub {
 
     private final static Logger log = LoggerFactory.getLogger(AbstractYardiStub.class);
 
@@ -212,6 +217,31 @@ public abstract class AbstractYardiStub implements YardiInterface, ExternalInter
             return yc.serviceURLBase().getValue() + path;
         } else {
             return yc.serviceURLBase().getValue() + "/" + path;
+        }
+    }
+
+    protected <R> R ensureResult(String xml, Class<R> resultType) throws YardiServiceException {
+        try {
+            R result = MarshallUtil.unmarshal(resultType, xml);
+            return result;
+        } catch (JAXBException e) {
+            logRecordedTracastions();
+            throw new YardiResponseException(xml);
+        }
+    }
+
+    protected void ensureValid(String xml) throws YardiServiceException {
+        try {
+            Messages messages = MarshallUtil.unmarshal(Messages.class, xml);
+            if (messages.isError()) {
+                logRecordedTracastions();
+                throw new YardiResponseException(xml);
+            } else {
+                log.debug(messages.toString());
+            }
+        } catch (JAXBException e) {
+            logRecordedTracastions();
+            throw new YardiServiceException(e);
         }
     }
 }

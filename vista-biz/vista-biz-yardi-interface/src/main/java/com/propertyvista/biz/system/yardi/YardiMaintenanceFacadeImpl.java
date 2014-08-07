@@ -11,11 +11,14 @@
  * @author stanp
  * @version $Id$
  */
-package com.propertyvista.biz.system;
+package com.propertyvista.biz.system.yardi;
 
 import java.rmi.RemoteException;
 import java.util.Date;
 
+import com.propertyvista.biz.system.AbstractYardiFacadeImpl;
+import com.propertyvista.biz.system.yardi.YardiMaintenanceFacade;
+import com.propertyvista.biz.system.yardi.YardiServiceException;
 import com.propertyvista.domain.maintenance.MaintenanceRequest;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.settings.PmcYardiCredential;

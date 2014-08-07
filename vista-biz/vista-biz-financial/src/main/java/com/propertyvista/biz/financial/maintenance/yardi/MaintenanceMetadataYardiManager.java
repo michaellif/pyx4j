@@ -21,7 +21,7 @@ import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.server.Persistence;
 
 import com.propertyvista.biz.financial.maintenance.MaintenanceMetadataAbstractManager;
-import com.propertyvista.biz.system.YardiMaintenanceFacade;
+import com.propertyvista.biz.system.yardi.YardiMaintenanceFacade;
 import com.propertyvista.config.VistaDeployment;
 import com.propertyvista.domain.maintenance.MaintenanceRequestCategory;
 import com.propertyvista.domain.maintenance.MaintenanceRequestMetadata;

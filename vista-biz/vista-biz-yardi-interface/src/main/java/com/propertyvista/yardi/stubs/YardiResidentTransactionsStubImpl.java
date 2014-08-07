@@ -39,416 +39,202 @@ import com.yardi.ws.operations.transactions.GetResidentTransactions_Login;
 import com.yardi.ws.operations.transactions.GetResidentTransactions_LoginResponse;
 import com.yardi.ws.operations.transactions.GetResidentsLeaseCharges_Login;
 import com.yardi.ws.operations.transactions.GetResidentsLeaseCharges_LoginResponse;
-import com.yardi.ws.operations.transactions.GetUnitInformation_Login;
-import com.yardi.ws.operations.transactions.GetUnitInformation_LoginResponse;
 import com.yardi.ws.operations.transactions.GetVersionNumber;
 import com.yardi.ws.operations.transactions.GetVersionNumberResponse;
 import com.yardi.ws.operations.transactions.ImportResidentTransactions_Login;
 import com.yardi.ws.operations.transactions.ImportResidentTransactions_LoginResponse;
 import com.yardi.ws.operations.transactions.Ping;
 import com.yardi.ws.operations.transactions.PingResponse;
+import com.yardi.ws.operations.transactions.TransactionXml_type0;
 
 import com.pyx4j.commons.LogicalDate;
-import com.pyx4j.commons.SimpleMessageFormat;
 import com.pyx4j.essentials.j2se.util.MarshallUtil;
 
-import com.propertyvista.biz.system.YardiPropertyNoAccessException;
-import com.propertyvista.biz.system.YardiServiceException;
+import com.propertyvista.biz.system.yardi.YardiServiceException;
 import com.propertyvista.domain.settings.PmcYardiCredential;
 import com.propertyvista.yardi.YardiConstants;
 import com.propertyvista.yardi.YardiConstants.Action;
 import com.propertyvista.yardi.YardiInterfaceType;
-import com.propertyvista.yardi.beans.Messages;
 import com.propertyvista.yardi.beans.Properties;
 
 public class YardiResidentTransactionsStubImpl extends AbstractYardiStub implements YardiResidentTransactionsStub {
 
     private final static Logger log = LoggerFactory.getLogger(YardiResidentTransactionsStubImpl.class);
 
-    @Deprecated
-    private static final String errorMessage_NoAccess = "Invalid or no access to Yardi Property";
-
-    @Deprecated
-    private static final String errorMessage_TenantNotFound = "No tenants exist with the given search criteria";
-
-    //-- payment reversal post messages
-
-    @Deprecated
-    private static final String errorMessage_AlreadyNSF1 = "May not  NSF  a receipt that has been NSF";
-
-    @Deprecated
-    private static final String errorMessage_AlreadyNSF2 = "May not  reverse  a receipt that has been NSF";
-
-    @Deprecated
-    private static final String errorMessage_AlreadyReversed = "Receipt has already been reversed";
-
-    @Deprecated
-    private static final String errorMessage_PostMonthAccess1 = "Cannot  NSF  a receipt whose post month is outside your allowable range";
-
-    @Deprecated
-    private static final String errorMessage_PostMonthAccess2 = "Cannot  reverse  a receipt whose post month is outside your allowable range";
-
-    @Deprecated
-    private static final String[] unableToPostTerminalMessages = new String[] { errorMessage_AlreadyNSF1, errorMessage_AlreadyNSF2,
-            errorMessage_AlreadyReversed, errorMessage_PostMonthAccess1, errorMessage_PostMonthAccess2 };
-
     @Override
-    public String ping(PmcYardiCredential yc) throws RemoteException {
-        init(Action.Ping);
-        PingResponse pr = getResidentTransactionsService(yc).ping(new Ping());
-        return pr.getPingResult();
+    public String ping(PmcYardiCredential yc) {
+        try {
+            init(Action.Ping);
+            PingResponse response = getResidentTransactionsService(yc).ping(new Ping());
+            return response.getPingResult();
+        } catch (RemoteException e) {
+            throw new Error(e);
+        }
     }
 
     @Override
-    public void validate(PmcYardiCredential yc) throws RemoteException, YardiServiceException {
+    public String getPluginVersion(PmcYardiCredential yc) {
+        try {
+            init(Action.GetVersionNumber);
+            GetVersionNumberResponse response = getResidentTransactionsService(yc).getVersionNumber(new GetVersionNumber());
+            return response.getGetVersionNumberResult();
+        } catch (RemoteException e) {
+            throw new Error(e);
+        }
+    }
+
+    @Override
+    public void validate(PmcYardiCredential yc) throws YardiServiceException, RemoteException {
         // try to pull properties
         getPropertyConfigurations(yc);
     }
 
     @Override
-    public String getPluginVersion(PmcYardiCredential yc) throws RemoteException {
-        init(Action.GetVersionNumber);
-        GetVersionNumberResponse response = getResidentTransactionsService(yc).getVersionNumber(new GetVersionNumber());
-        return response.getGetVersionNumberResult();
-    }
-
-    @Override
     public Properties getPropertyConfigurations(PmcYardiCredential yc) throws YardiServiceException, RemoteException {
-        try {
-            init(Action.GetPropertyConfigurations);
+        init(Action.GetPropertyConfigurations);
 
-            GetPropertyConfigurations request = new GetPropertyConfigurations();
-            request.setUserName(yc.username().getValue());
-            request.setPassword(yc.password().number().getValue());
-            request.setServerName(yc.serverName().getValue());
-            request.setDatabase(yc.database().getValue());
-            request.setPlatform(yc.platform().getValue().name());
-            request.setInterfaceEntity(YardiConstants.INTERFACE_ENTITY);
-            request.setInterfaceLicense(YardiLicense.getInterfaceLicense(YardiInterfaceType.BillingAndPayments, yc));
+        GetPropertyConfigurations request = new GetPropertyConfigurations();
+        request.setUserName(yc.username().getValue());
+        request.setPassword(yc.password().number().getValue());
+        request.setServerName(yc.serverName().getValue());
+        request.setDatabase(yc.database().getValue());
+        request.setPlatform(yc.platform().getValue().name());
+        request.setInterfaceEntity(YardiConstants.INTERFACE_ENTITY);
+        request.setInterfaceLicense(YardiLicense.getInterfaceLicense(YardiInterfaceType.BillingAndPayments, yc));
 
-            GetPropertyConfigurationsResponse response = getResidentTransactionsService(yc).getPropertyConfigurations(request);
-            if ((response == null) || (response.getGetPropertyConfigurationsResult() == null)
-                    || (response.getGetPropertyConfigurationsResult().getExtraElement() == null)) {
-                throw new YardiServiceException(SimpleMessageFormat.format(
-                        "Yardi connection configuration error, Login error or database ''{0}'' do not exists on Yardi server", yc.database()));
-            }
-            String xml = response.getGetPropertyConfigurationsResult().getExtraElement().toString();
-            if (Messages.isMessageResponse(xml)) {
-                Messages messages = MarshallUtil.unmarshal(Messages.class, xml);
-                if (messages.isError()) {
-                    YardiLicense.handleVendorLicenseError(messages);
-                    throw new YardiServiceException(messages.toString());
-                } else {
-                    log.info(messages.toString());
-                    return null;
-                }
-            }
-
-            return MarshallUtil.unmarshal(Properties.class, xml);
-        } catch (JAXBException e) {
-            throw new Error(e);
-        }
+        GetPropertyConfigurationsResponse response = getResidentTransactionsService(yc).getPropertyConfigurations(request);
+        String xml = response.getGetPropertyConfigurationsResult().getExtraElement().toString();
+        return ensureResult(xml, Properties.class);
     }
 
     @Override
     public ResidentTransactions getAllResidentTransactions(PmcYardiCredential yc, String propertyId) throws YardiServiceException, RemoteException {
-        boolean success = false;
-        try {
+        init(Action.GetResidentTransactions);
 
-            init(Action.GetResidentTransactions);
+        GetResidentTransactions_Login request = new GetResidentTransactions_Login();
+        request.setUserName(yc.username().getValue());
+        request.setPassword(yc.password().number().getValue());
+        request.setServerName(yc.serverName().getValue());
+        request.setDatabase(yc.database().getValue());
+        request.setPlatform(yc.platform().getValue().name());
+        request.setInterfaceEntity(YardiConstants.INTERFACE_ENTITY);
+        request.setInterfaceLicense(YardiLicense.getInterfaceLicense(YardiInterfaceType.BillingAndPayments, yc));
+        request.setYardiPropertyId(propertyId);
 
-            GetResidentTransactions_Login request = new GetResidentTransactions_Login();
-            request.setUserName(yc.username().getValue());
-            request.setPassword(yc.password().number().getValue());
-            request.setServerName(yc.serverName().getValue());
-            request.setDatabase(yc.database().getValue());
-            request.setPlatform(yc.platform().getValue().name());
-            request.setInterfaceEntity(YardiConstants.INTERFACE_ENTITY);
-            request.setInterfaceLicense(YardiLicense.getInterfaceLicense(YardiInterfaceType.BillingAndPayments, yc));
-            request.setYardiPropertyId(propertyId);
-
-            GetResidentTransactions_LoginResponse response = getResidentTransactionsService(yc).getResidentTransactions_Login(request);
-            if ((response == null) || (response.getGetResidentTransactions_LoginResult() == null)) {
-                throw new YardiServiceException(SimpleMessageFormat.format(
-                        "Yardi connection configuration error, Login error or database ''{0}'' or Property Id ''{1}'' do not exists on Yardi server",
-                        yc.database(), propertyId));
-            }
-            String xml = response.getGetResidentTransactions_LoginResult().getExtraElement().toString();
-            if (Messages.isMessageResponse(xml)) {
-                Messages messages = MarshallUtil.unmarshal(Messages.class, xml);
-                if (messages.isError()) {
-                    throw new YardiServiceMessageException(messages);
-                } else {
-                    log.info(messages.toString());
-                }
-            }
-
-            ResidentTransactions transactions = MarshallUtil.unmarshal(ResidentTransactions.class, xml);
-            success = true;
-            return transactions;
-        } catch (JAXBException e) {
-            throw new Error(e);
-        } finally {
-            if (!success) {
-                log.warn("Yardi transaction recorded at {}", printableListOfRecordedTracastionFiles());
-            }
-        }
+        GetResidentTransactions_LoginResponse response = getResidentTransactionsService(yc).getResidentTransactions_Login(request);
+        String xml = response.getGetResidentTransactions_LoginResult().getExtraElement().toString();
+        return ensureResult(xml, ResidentTransactions.class);
     }
 
     @Override
     public ResidentTransactions getResidentTransactionsForTenant(PmcYardiCredential yc, String propertyId, String tenantId) throws YardiServiceException,
             RemoteException {
-        boolean success = false;
-        try {
-            init(Action.GetResidentTransaction);
+        init(Action.GetResidentTransaction);
 
-            GetResidentTransaction_Login request = new GetResidentTransaction_Login();
-            request.setUserName(yc.username().getValue());
-            request.setPassword(yc.password().number().getValue());
-            request.setServerName(yc.serverName().getValue());
-            request.setDatabase(yc.database().getValue());
-            request.setPlatform(yc.platform().getValue().name());
-            request.setInterfaceEntity(YardiConstants.INTERFACE_ENTITY);
-            request.setInterfaceLicense(YardiLicense.getInterfaceLicense(YardiInterfaceType.BillingAndPayments, yc));
-            request.setYardiPropertyId(propertyId);
-            request.setTenantId(tenantId);
+        GetResidentTransaction_Login request = new GetResidentTransaction_Login();
+        request.setUserName(yc.username().getValue());
+        request.setPassword(yc.password().number().getValue());
+        request.setServerName(yc.serverName().getValue());
+        request.setDatabase(yc.database().getValue());
+        request.setPlatform(yc.platform().getValue().name());
+        request.setInterfaceEntity(YardiConstants.INTERFACE_ENTITY);
+        request.setInterfaceLicense(YardiLicense.getInterfaceLicense(YardiInterfaceType.BillingAndPayments, yc));
+        request.setYardiPropertyId(propertyId);
+        request.setTenantId(tenantId);
 
-            GetResidentTransaction_LoginResponse response = getResidentTransactionsService(yc).getResidentTransaction_Login(request);
-            if ((response == null) || (response.getGetResidentTransaction_LoginResult() == null)
-                    || (response.getGetResidentTransaction_LoginResult().getExtraElement() == null)) {
-                throw new YardiServiceException(SimpleMessageFormat.format(
-                        "Yardi connection configuration error, Login error or database ''{0}'' do not exists on Yardi server; PropertyId {1}, TenantId {2}",
-                        yc.database(), propertyId, tenantId));
-            }
-            String xml = response.getGetResidentTransaction_LoginResult().getExtraElement().toString();
-            if (Messages.isMessageResponse(xml)) {
-                Messages messages = MarshallUtil.unmarshal(Messages.class, xml);
-                if (messages.isError()) {
-                    YardiLicense.handleVendorLicenseError(messages);
-                    throw new YardiServiceException(SimpleMessageFormat.format("{0}; PropertyId {1}, TenantId {2}", messages.toString(), propertyId, tenantId));
-                } else {
-                    log.info(messages.toString());
-                }
-            }
-            ResidentTransactions transactions = MarshallUtil.unmarshal(ResidentTransactions.class, xml);
-            success = true;
-            return transactions;
-        } catch (JAXBException e) {
-            throw new Error(e);
-        } finally {
-            if (!success) {
-                log.warn("Yardi transaction recorded at {}", printableListOfRecordedTracastionFiles());
-            }
-        }
+        GetResidentTransaction_LoginResponse response = getResidentTransactionsService(yc).getResidentTransaction_Login(request);
+        String xml = response.getGetResidentTransaction_LoginResult().getExtraElement().toString();
+        return ensureResult(xml, ResidentTransactions.class);
     }
 
     @Override
     public void importResidentTransactions(PmcYardiCredential yc, ResidentTransactions reversalTransactions) throws YardiServiceException, RemoteException {
-        boolean success = false;
+        init(Action.ImportResidentTransactions);
+
+        ImportResidentTransactions_Login request = new ImportResidentTransactions_Login();
+        request.setUserName(yc.username().getValue());
+        request.setPassword(yc.password().number().getValue());
+        request.setServerName(yc.serverName().getValue());
+        request.setDatabase(yc.database().getValue());
+        request.setPlatform(yc.platform().getValue().name());
+        request.setInterfaceEntity(YardiConstants.INTERFACE_ENTITY);
+        request.setInterfaceLicense(YardiLicense.getInterfaceLicense(YardiInterfaceType.BillingAndPayments, yc));
+
         try {
-            init(Action.ImportResidentTransactions);
-
-            ImportResidentTransactions_Login request = new ImportResidentTransactions_Login();
-            request.setUserName(yc.username().getValue());
-            request.setPassword(yc.password().number().getValue());
-            request.setServerName(yc.serverName().getValue());
-            request.setDatabase(yc.database().getValue());
-            request.setPlatform(yc.platform().getValue().name());
-            request.setInterfaceEntity(YardiConstants.INTERFACE_ENTITY);
-            request.setInterfaceLicense(YardiLicense.getInterfaceLicense(YardiInterfaceType.BillingAndPayments, yc));
-
             String trXml = MarshallUtil.marshall(reversalTransactions);
-            log.debug(trXml);
-            com.yardi.ws.operations.transactions.TransactionXml_type0 transactionXml = new com.yardi.ws.operations.transactions.TransactionXml_type0();
+            TransactionXml_type0 transactionXml = new TransactionXml_type0();
             OMElement element = AXIOMUtil.stringToOM(trXml);
             transactionXml.setExtraElement(element);
             request.setTransactionXml(transactionXml);
-
-            ImportResidentTransactions_LoginResponse response = getResidentTransactionsService(yc).importResidentTransactions_Login(request);
-            if ((response == null) || (response.getImportResidentTransactions_LoginResult() == null)
-                    || (response.getImportResidentTransactions_LoginResult().getExtraElement() == null)) {
-                throw new YardiServiceException("importResidentTransactions received NULL response");
-            }
-            String xml = response.getImportResidentTransactions_LoginResult().getExtraElement().toString();
-            Messages messages = MarshallUtil.unmarshal(Messages.class, xml);
-            if (messages.isError()) {
-                throw new YardiServiceMessageException(messages);
-            } else {
-                log.debug(messages.toString());
-            }
-            success = true;
         } catch (JAXBException e) {
             throw new Error(e);
         } catch (XMLStreamException e) {
             throw new Error(e);
-        } finally {
-            if (!success) {
-                log.warn("Yardi transaction recorded at {}", printableListOfRecordedTracastionFiles());
-            }
         }
-    }
 
-    @Override
-    public void getUnitInformation(PmcYardiCredential yc, String propertyId) throws YardiServiceException, RemoteException {
-        boolean success = false;
-        try {
-            init(Action.GetUnitInformation);
-
-            GetUnitInformation_Login request = new GetUnitInformation_Login();
-            request.setUserName(yc.username().getValue());
-            request.setPassword(yc.password().number().getValue());
-            request.setServerName(yc.serverName().getValue());
-            request.setDatabase(yc.database().getValue());
-            request.setPlatform(yc.platform().getValue().name());
-            request.setInterfaceEntity(YardiConstants.INTERFACE_ENTITY);
-            request.setInterfaceLicense(YardiLicense.getInterfaceLicense(YardiInterfaceType.BillingAndPayments, yc));
-            request.setYardiPropertyId(propertyId);
-
-            GetUnitInformation_LoginResponse response = getResidentTransactionsService(yc).getUnitInformation_Login(request);
-            if ((response == null) || (response.getGetUnitInformation_LoginResult() == null)
-                    || (response.getGetUnitInformation_LoginResult().getExtraElement() == null)) {
-                throw new YardiServiceException("getUnitInformation_Login received NULL response");
-            }
-            String xml = response.getGetUnitInformation_LoginResult().getExtraElement().toString();
-            if (Messages.isMessageResponse(xml)) {
-                Messages messages = MarshallUtil.unmarshal(Messages.class, xml);
-                if (messages.isError()) {
-                    YardiLicense.handleVendorLicenseError(messages);
-                    throw new YardiServiceException(SimpleMessageFormat.format("{0}; PropertyId {1}", messages.toString(), propertyId));
-                } else {
-                    log.debug(messages.toString());
-                }
-            }
-            //TODO
-//            ResidentTransactions transactions = MarshallUtil.unmarshal(ResidentTransactions.class, xml);
-//            return transactions;
-
-            success = true;
-        } catch (JAXBException e) {
-            throw new Error(e);
-        } finally {
-            if (!success) {
-                log.warn("Yardi transaction recorded at {}", printableListOfRecordedTracastionFiles());
-            }
-        }
+        ImportResidentTransactions_LoginResponse response = getResidentTransactionsService(yc).importResidentTransactions_Login(request);
+        String xml = response.getImportResidentTransactions_LoginResult().getExtraElement().toString();
+        ensureValid(xml);
     }
 
     @Override
     public ResidentTransactions getAllLeaseCharges(PmcYardiCredential yc, String propertyListCode, LogicalDate date) throws YardiServiceException,
-            RemoteException, YardiPropertyNoAccessException {
-        boolean success = false;
-        try {
-            init(Action.GetResidentsLeaseCharges);
+            RemoteException {
+        init(Action.GetResidentsLeaseCharges);
 
-            Calendar calendar = GregorianCalendar.getInstance();
-            calendar.setTime(date);
+        Calendar calendar = GregorianCalendar.getInstance();
+        calendar.setTime(date);
 
-            GetResidentsLeaseCharges_Login request = new GetResidentsLeaseCharges_Login();
-            request.setUserName(yc.username().getValue());
-            request.setPassword(yc.password().number().getValue());
-            request.setServerName(yc.serverName().getValue());
-            request.setDatabase(yc.database().getValue());
-            request.setPlatform(yc.platform().getValue().name());
-            request.setInterfaceEntity(YardiConstants.INTERFACE_ENTITY);
-            request.setInterfaceLicense(YardiLicense.getInterfaceLicense(YardiInterfaceType.BillingAndPayments, yc));
-            request.setYardiPropertyId(propertyListCode);
-            request.setPostMonth(calendar);
+        GetResidentsLeaseCharges_Login request = new GetResidentsLeaseCharges_Login();
+        request.setUserName(yc.username().getValue());
+        request.setPassword(yc.password().number().getValue());
+        request.setServerName(yc.serverName().getValue());
+        request.setDatabase(yc.database().getValue());
+        request.setPlatform(yc.platform().getValue().name());
+        request.setInterfaceEntity(YardiConstants.INTERFACE_ENTITY);
+        request.setInterfaceLicense(YardiLicense.getInterfaceLicense(YardiInterfaceType.BillingAndPayments, yc));
+        request.setYardiPropertyId(propertyListCode);
+        request.setPostMonth(calendar);
 
-            GetResidentsLeaseCharges_LoginResponse response = getResidentTransactionsService(yc).getResidentsLeaseCharges_Login(request);
-            if ((response == null) || (response.getGetResidentsLeaseCharges_LoginResult() == null)
-                    || (response.getGetResidentsLeaseCharges_LoginResult().getExtraElement() == null)) {
-                throw new YardiServiceException(SimpleMessageFormat.format("getResidentsLeaseCharges received NULL response; PropertyListCode {0}, Date {1}",
-                        propertyListCode, date));
-            }
-            String xml = response.getGetResidentsLeaseCharges_LoginResult().getExtraElement().toString();
-            if (Messages.isMessageResponse(xml)) {
-                Messages messages = MarshallUtil.unmarshal(Messages.class, xml);
-                if (messages.isError()) {
-                    if (messages.hasErrorMessage(errorMessage_NoAccess)) {
-                        throw new YardiPropertyNoAccessException(messages.getErrorMessage().getValue());
-                    } else {
-                        YardiLicense.handleVendorLicenseError(messages);
-                        throw new YardiServiceException(SimpleMessageFormat.format("{0}; PropertyListCode {1}, Date {2}", messages.toString(),
-                                propertyListCode, date));
-                    }
-                } else {
-                    log.debug(messages.toString());
-                }
-            }
-
-            ResidentTransactions transactions = MarshallUtil.unmarshal(ResidentTransactions.class, xml);
-            success = true;
-            return transactions;
-        } catch (JAXBException e) {
-            throw new Error(e);
-        } finally {
-            if (!success) {
-                log.warn("Yardi transaction recorded at {}", printableListOfRecordedTracastionFiles());
-            }
-        }
+        GetResidentsLeaseCharges_LoginResponse response = getResidentTransactionsService(yc).getResidentsLeaseCharges_Login(request);
+        String xml = response.getGetResidentsLeaseCharges_LoginResult().getExtraElement().toString();
+        return ensureResult(xml, ResidentTransactions.class);
     }
 
     @Override
     public ResidentTransactions getLeaseChargesForTenant(PmcYardiCredential yc, String propertyId, String tenantId, LogicalDate date)
-            throws YardiServiceException, RemoteException, YardiResidentNoTenantsExistException {
-        boolean success = false;
-        try {
-            init(Action.GetResidentLeaseCharges);
+            throws YardiServiceException, RemoteException {
+        init(Action.GetResidentLeaseCharges);
 
-            Calendar calendar = GregorianCalendar.getInstance();
-            calendar.setTime(date);
+        Calendar calendar = GregorianCalendar.getInstance();
+        calendar.setTime(date);
 
-            GetResidentLeaseCharges_Login request = new GetResidentLeaseCharges_Login();
-            request.setUserName(yc.username().getValue());
-            request.setPassword(yc.password().number().getValue());
-            request.setServerName(yc.serverName().getValue());
-            request.setDatabase(yc.database().getValue());
-            request.setPlatform(yc.platform().getValue().name());
-            request.setInterfaceEntity(YardiConstants.INTERFACE_ENTITY);
-            request.setInterfaceLicense(YardiLicense.getInterfaceLicense(YardiInterfaceType.BillingAndPayments, yc));
-            request.setYardiPropertyId(propertyId);
-            request.setTenantId(tenantId);
-            request.setPostMonth(calendar);
+        GetResidentLeaseCharges_Login request = new GetResidentLeaseCharges_Login();
+        request.setUserName(yc.username().getValue());
+        request.setPassword(yc.password().number().getValue());
+        request.setServerName(yc.serverName().getValue());
+        request.setDatabase(yc.database().getValue());
+        request.setPlatform(yc.platform().getValue().name());
+        request.setInterfaceEntity(YardiConstants.INTERFACE_ENTITY);
+        request.setInterfaceLicense(YardiLicense.getInterfaceLicense(YardiInterfaceType.BillingAndPayments, yc));
+        request.setYardiPropertyId(propertyId);
+        request.setTenantId(tenantId);
+        request.setPostMonth(calendar);
 
-            GetResidentLeaseCharges_LoginResponse response = getResidentTransactionsService(yc).getResidentLeaseCharges_Login(request);
-            if ((response == null) || (response.getGetResidentLeaseCharges_LoginResult() == null)
-                    || (response.getGetResidentLeaseCharges_LoginResult().getExtraElement() == null)) {
-                throw new YardiServiceException(SimpleMessageFormat.format(
-                        "getResidentsLeaseCharges received NULL response; PropertyId {0}, TenantId {1}, Date {2}", propertyId, tenantId, date));
-            }
-            String xml = response.getGetResidentLeaseCharges_LoginResult().getExtraElement().toString();
-            if (Messages.isMessageResponse(xml)) {
-                Messages messages = MarshallUtil.unmarshal(Messages.class, xml);
-                if (messages.isError()) {
-                    if (messages.hasErrorMessage(errorMessage_TenantNotFound)) {
-                        throw new YardiResidentNoTenantsExistException(messages.getErrorMessage().getValue());
-                    } else {
-                        YardiLicense.handleVendorLicenseError(messages);
-                        throw new YardiServiceException(SimpleMessageFormat.format("{0}; PropertyId {1}, TenantId {2}, Date {3}", messages.toString(),
-                                propertyId, tenantId, date));
-                    }
-                } else {
-                    log.info(messages.toString());
-                }
-            }
-
-            ResidentTransactions transactions = MarshallUtil.unmarshal(ResidentTransactions.class, xml);
-            success = true;
-            return transactions;
-        } catch (JAXBException e) {
-            throw new Error(e);
-        } finally {
-            if (!success) {
-                log.warn("Yardi transaction recorded at {}", printableListOfRecordedTracastionFiles());
-            }
-        }
+        GetResidentLeaseCharges_LoginResponse response = getResidentTransactionsService(yc).getResidentLeaseCharges_Login(request);
+        String xml = response.getGetResidentLeaseCharges_LoginResult().getExtraElement().toString();
+        return ensureResult(xml, ResidentTransactions.class);
     }
 
-    private ItfResidentTransactions2_0 getResidentTransactionsService(PmcYardiCredential yc) throws AxisFault {
-        ItfResidentTransactions2_0Stub serviceStub = new ItfResidentTransactions2_0Stub(getResidentTransactionsServiceURL(yc));
-        addMessageContextListener("ResidentTransactions", serviceStub, null);
-        setTransportOptions(serviceStub, yc);
-        return serviceStub;
+    private ItfResidentTransactions2_0 getResidentTransactionsService(PmcYardiCredential yc) {
+        try {
+            ItfResidentTransactions2_0Stub serviceStub = new ItfResidentTransactions2_0Stub(getResidentTransactionsServiceURL(yc));
+            addMessageContextListener("ResidentTransactions", serviceStub, null);
+            setTransportOptions(serviceStub, yc);
+            return serviceStub;
+        } catch (AxisFault e) {
+            throw new Error(e);
+        }
     }
 
     private String getResidentTransactionsServiceURL(PmcYardiCredential yc) {

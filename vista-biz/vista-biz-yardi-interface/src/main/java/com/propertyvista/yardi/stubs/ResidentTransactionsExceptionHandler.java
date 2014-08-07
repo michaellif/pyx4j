@@ -16,8 +16,8 @@ package com.propertyvista.yardi.stubs;
 import com.pyx4j.commons.SimpleMessageFormat;
 import com.pyx4j.config.server.ExceptionHandler;
 
-import com.propertyvista.biz.system.YardiPropertyNoAccessException;
-import com.propertyvista.biz.system.YardiServiceException;
+import com.propertyvista.biz.system.yardi.YardiPropertyNoAccessException;
+import com.propertyvista.biz.system.yardi.YardiServiceException;
 import com.propertyvista.yardi.services.YardiHandledErrorMessages;
 
 public class ResidentTransactionsExceptionHandler implements ExceptionHandler {

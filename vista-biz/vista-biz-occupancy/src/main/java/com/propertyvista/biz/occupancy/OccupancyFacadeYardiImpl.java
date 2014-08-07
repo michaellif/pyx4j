@@ -32,8 +32,8 @@ import com.pyx4j.entity.server.TransactionScopeOption;
 import com.pyx4j.entity.server.UnitOfWork;
 import com.pyx4j.i18n.shared.I18n;
 
-import com.propertyvista.biz.system.YardiServiceException;
 import com.propertyvista.biz.system.yardi.YardiLeaseApplicationFacade;
+import com.propertyvista.biz.system.yardi.YardiServiceException;
 import com.propertyvista.crm.rpc.dto.occupancy.opconstraints.CancelMoveOutConstraintsDTO;
 import com.propertyvista.crm.rpc.dto.occupancy.opconstraints.MakeVacantConstraintsDTO;
 import com.propertyvista.domain.property.asset.unit.AptUnit;

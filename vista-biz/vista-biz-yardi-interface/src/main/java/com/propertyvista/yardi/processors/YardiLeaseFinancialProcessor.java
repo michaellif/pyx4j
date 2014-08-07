@@ -30,7 +30,7 @@ import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.biz.ExecutionMonitor;
 import com.propertyvista.biz.financial.ar.yardi.YardiARIntegrationAgent;
-import com.propertyvista.biz.system.YardiServiceException;
+import com.propertyvista.biz.system.yardi.YardiServiceException;
 import com.propertyvista.domain.financial.BillingAccount;
 import com.propertyvista.domain.financial.billing.InvoiceLineItem;
 import com.propertyvista.domain.financial.yardi.YardiPayment;

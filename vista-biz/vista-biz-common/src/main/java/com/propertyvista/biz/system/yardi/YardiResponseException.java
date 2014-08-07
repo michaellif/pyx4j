@@ -7,30 +7,22 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Dec 28, 2012
- * @author Mykola
+ * Created on Aug 5, 2014
+ * @author stanp
  * @version $Id$
  */
-package com.propertyvista.biz.system;
+package com.propertyvista.biz.system.yardi;
 
-public class YardiServiceException extends Exception {
+@SuppressWarnings("serial")
+public class YardiResponseException extends YardiServiceException {
 
-    private static final long serialVersionUID = 1L;
+    private final String responseXml;
 
-    public YardiServiceException() {
-        super();
+    public YardiResponseException(String responseXml) {
+        this.responseXml = responseXml;
     }
 
-    public YardiServiceException(String message, Throwable cause) {
-        super(message, cause);
+    public String getResponse() {
+        return responseXml;
     }
-
-    public YardiServiceException(String message) {
-        super(message);
-    }
-
-    public YardiServiceException(Throwable cause) {
-        super(cause);
-    }
-
 }

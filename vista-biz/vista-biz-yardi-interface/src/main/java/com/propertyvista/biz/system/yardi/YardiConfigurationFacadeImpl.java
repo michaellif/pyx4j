@@ -24,12 +24,11 @@ import com.pyx4j.config.server.ServerSideFactory;
 
 import com.propertyvista.biz.ExecutionMonitor;
 import com.propertyvista.biz.communication.NotificationFacade;
-import com.propertyvista.biz.system.YardiServiceException;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.settings.PmcYardiCredential;
 import com.propertyvista.yardi.mappers.BuildingsMapper;
-import com.propertyvista.yardi.stubs.YardiGuestManagementStub;
-import com.propertyvista.yardi.stubs.YardiResidentTransactionsStub;
+import com.propertyvista.yardi.stubs.YardiGuestManagementStubProxy;
+import com.propertyvista.yardi.stubs.YardiResidentTransactionsStubProxy;
 
 public class YardiConfigurationFacadeImpl implements YardiConfigurationFacade {
 
@@ -79,12 +78,11 @@ public class YardiConfigurationFacadeImpl implements YardiConfigurationFacade {
     }
 
     @Override
-    public List<String> retrievePropertyCodes(PmcYardiCredential yc, ExecutionMonitor executionMonitor) throws YardiServiceException {
+    public List<String> retrievePropertyCodes(PmcYardiCredential yc, ExecutionMonitor executionMonitor) throws YardiServiceException, RemoteException {
         // create master-list of all configured properties (this assumes that ILS is the master interface for property configurations)
         List<String> masterPropertyList = new ArrayList<>();
 
-        YardiGuestManagementStub ilsStub = ServerSideFactory.create(YardiGuestManagementStub.class);
-        for (com.propertyvista.yardi.beans.Property property : ilsStub.getPropertyConfigurations(yc).getProperties()) {
+        for (com.propertyvista.yardi.beans.Property property : new YardiGuestManagementStubProxy().getPropertyConfigurations(yc).getProperties()) {
             masterPropertyList.add(BuildingsMapper.getPropertyCode(property.getCode())); // lower case
         }
 
@@ -96,7 +94,7 @@ public class YardiConfigurationFacadeImpl implements YardiConfigurationFacade {
             for (String propertyListCode : yc.propertyListCodes().getValue().trim().split("\\s*,\\s*")) {
                 List<PropertyMarketingSources> sourceList = null;
                 try {
-                    sourceList = ilsStub.getYardiMarketingSources(yc, propertyListCode).getProperty();
+                    sourceList = new YardiGuestManagementStubProxy().getYardiMarketingSources(yc, propertyListCode).getProperty();
                     for (PropertyMarketingSources sources : sourceList) {
                         propertyCodes.add(BuildingsMapper.getPropertyCode(sources.getPropertyCode()));
                     }
@@ -114,31 +112,26 @@ public class YardiConfigurationFacadeImpl implements YardiConfigurationFacade {
 
         if (propertyCodes.size() > 0) {
             // B&P sanity check - ensure selected properties available in B&P PropertyConfigurations
-            YardiResidentTransactionsStub bpStub = ServerSideFactory.create(YardiResidentTransactionsStub.class);
-            try {
-                List<String> bpPropertyList = new ArrayList<>();
-                for (com.propertyvista.yardi.beans.Property property : bpStub.getPropertyConfigurations(yc).getProperties()) {
-                    bpPropertyList.add(BuildingsMapper.getPropertyCode(property.getCode()));
-                }
+            List<String> bpPropertyList = new ArrayList<>();
+            for (com.propertyvista.yardi.beans.Property property : new YardiResidentTransactionsStubProxy().getPropertyConfigurations(yc).getProperties()) {
+                bpPropertyList.add(BuildingsMapper.getPropertyCode(property.getCode()));
+            }
 
-                List<String> bpMissingList = new ArrayList<>();
-                for (String propertyCode : propertyCodes) {
-                    if (!bpPropertyList.contains(propertyCode)) {
-                        bpMissingList.add(propertyCode);
-                    }
+            List<String> bpMissingList = new ArrayList<>();
+            for (String propertyCode : propertyCodes) {
+                if (!bpPropertyList.contains(propertyCode)) {
+                    bpMissingList.add(propertyCode);
                 }
+            }
 
-                if (bpMissingList.size() > 0) {
-                    bpPropertyList.removeAll(bpMissingList);
-                    StringBuilder error = new StringBuilder("Properties not configured for B&P interface:");
-                    for (String code : bpMissingList) {
-                        error.append(" ").append(code);
-                    }
-                    executionMonitor.addErredEvent("YardiConfig", error.toString());
-                    ServerSideFactory.create(NotificationFacade.class).yardiConfigurationError(error.toString());
+            if (bpMissingList.size() > 0) {
+                bpPropertyList.removeAll(bpMissingList);
+                StringBuilder error = new StringBuilder("Properties not configured for B&P interface:");
+                for (String code : bpMissingList) {
+                    error.append(" ").append(code);
                 }
-            } catch (RemoteException e) {
-                throw new YardiServiceException(e);
+                executionMonitor.addErredEvent("YardiConfig", error.toString());
+                ServerSideFactory.create(NotificationFacade.class).yardiConfigurationError(error.toString());
             }
         }
 

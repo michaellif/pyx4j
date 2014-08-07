@@ -18,7 +18,7 @@ import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.server.Persistence;
 
 import com.propertyvista.biz.financial.ar.yardi.YardiARIntegrationAgent;
-import com.propertyvista.biz.system.YardiServiceException;
+import com.propertyvista.biz.system.yardi.YardiServiceException;
 import com.propertyvista.domain.financial.BillingAccount;
 import com.propertyvista.domain.financial.yardi.YardiCredit;
 import com.propertyvista.domain.financial.yardi.YardiDebit;

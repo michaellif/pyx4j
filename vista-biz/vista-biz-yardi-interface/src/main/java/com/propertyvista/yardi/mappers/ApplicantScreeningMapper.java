@@ -26,7 +26,7 @@ import com.yardi.entity.screening.Income;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.core.EntityFactory;
 
-import com.propertyvista.biz.system.YardiServiceException;
+import com.propertyvista.biz.system.yardi.YardiServiceException;
 import com.propertyvista.domain.media.IdentificationDocumentFolder;
 import com.propertyvista.domain.policy.policies.domain.IdentificationDocumentType.Type;
 import com.propertyvista.domain.tenant.Customer;

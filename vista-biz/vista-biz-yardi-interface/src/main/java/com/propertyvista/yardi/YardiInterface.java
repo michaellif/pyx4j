@@ -15,16 +15,14 @@ package com.propertyvista.yardi;
 
 import java.rmi.RemoteException;
 
-import com.propertyvista.biz.system.YardiServiceException;
+import com.propertyvista.biz.system.yardi.YardiServiceException;
 import com.propertyvista.domain.settings.PmcYardiCredential;
-import com.propertyvista.yardi.stubs.ExternalInterfaceLoggingStub;
 
-public interface YardiInterface extends ExternalInterfaceLoggingStub {
+public interface YardiInterface {
 
-    String ping(PmcYardiCredential yc) throws RemoteException;
+    String ping(PmcYardiCredential yc);
 
-    void validate(PmcYardiCredential yc) throws RemoteException, YardiServiceException;
+    String getPluginVersion(PmcYardiCredential yc);
 
-    String getPluginVersion(PmcYardiCredential yc) throws RemoteException;
-
+    void validate(PmcYardiCredential yc) throws YardiServiceException, RemoteException;
 }

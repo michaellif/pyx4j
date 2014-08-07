@@ -23,8 +23,8 @@ import com.yardi.entity.resident.RTCustomer;
 import com.yardi.entity.resident.ResidentTransactions;
 import com.yardi.entity.resident.Transactions;
 
-import com.propertyvista.biz.system.YardiPropertyNoAccessException;
-import com.propertyvista.biz.system.YardiServiceException;
+import com.propertyvista.biz.system.yardi.YardiPropertyNoAccessException;
+import com.propertyvista.biz.system.yardi.YardiServiceException;
 import com.propertyvista.test.mock.MockEventBus;
 import com.propertyvista.yardi.beans.Messages;
 import com.propertyvista.yardi.beans.Properties;

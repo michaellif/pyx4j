@@ -17,7 +17,7 @@ import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.gwt.rpc.deferred.DeferredProcessProgressResponse;
 import com.pyx4j.gwt.server.deferred.AbstractDeferredProcess;
 
-import com.propertyvista.biz.system.YardiOperationsFacade;
+import com.propertyvista.biz.system.yardi.YardiOperationsFacade;
 import com.propertyvista.domain.settings.PmcYardiCredential;
 import com.propertyvista.operations.rpc.dto.ConnectionTestResultDTO;
 

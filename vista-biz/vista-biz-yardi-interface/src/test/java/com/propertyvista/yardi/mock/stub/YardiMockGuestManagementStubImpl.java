@@ -13,8 +13,6 @@
  */
 package com.propertyvista.yardi.mock.stub;
 
-import java.rmi.RemoteException;
-
 import javax.xml.bind.JAXBException;
 
 import org.slf4j.Logger;
@@ -28,7 +26,7 @@ import com.yardi.entity.leaseapp30.LeaseApplication;
 
 import com.pyx4j.essentials.j2se.util.MarshallUtil;
 
-import com.propertyvista.biz.system.YardiServiceException;
+import com.propertyvista.biz.system.yardi.YardiServiceException;
 import com.propertyvista.domain.settings.PmcYardiCredential;
 import com.propertyvista.yardi.TransactionLog;
 import com.propertyvista.yardi.beans.Properties;
@@ -46,11 +44,6 @@ public class YardiMockGuestManagementStubImpl implements YardiGuestManagementStu
             log.error("writing data dump error", e);
         }
         return data;
-    }
-
-    @Override
-    public void logRecordedTracastions() {
-        // TODO Auto-generated method stub
     }
 
     @Override
@@ -94,19 +87,19 @@ public class YardiMockGuestManagementStubImpl implements YardiGuestManagementStu
     }
 
     @Override
-    public String ping(PmcYardiCredential yc) throws RemoteException {
+    public String ping(PmcYardiCredential yc) {
         // TODO Auto-generated method stub
         return null;
     }
 
     @Override
-    public void validate(PmcYardiCredential yc) throws RemoteException, YardiServiceException {
+    public void validate(PmcYardiCredential yc) throws YardiServiceException {
         // TODO Auto-generated method stub
 
     }
 
     @Override
-    public String getPluginVersion(PmcYardiCredential yc) throws RemoteException {
+    public String getPluginVersion(PmcYardiCredential yc) {
         // TODO Auto-generated method stub
         return null;
     }
