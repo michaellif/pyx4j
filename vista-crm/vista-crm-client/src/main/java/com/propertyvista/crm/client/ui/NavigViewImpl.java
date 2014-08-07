@@ -243,6 +243,12 @@ public class NavigViewImpl extends Composite implements NavigView {
             if (!VistaFeatures.instance().yardiIntegration()) {
                 list.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Organization.Vendor()));
             }
+        }
+
+        {//Message Center
+            SideMenuList list = new SideMenuList();
+            root.addMenuItem(new SideMenuItem(list, i18n.tr("Message Center"), CrmImages.INSTANCE.reportsIcon(), null));
+
             list.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Communication.Message(), DataModelPermission.permissionRead(MessageDTO.class)));
             communicationGroups = new SideMenuList();
             list.addMenuItem(new SideMenuItem(communicationGroups, i18n.tr("Groups"), null, null, DataModelPermission.permissionRead(MessageCategory.class)));
