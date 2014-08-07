@@ -63,6 +63,9 @@ public class CrmSiteMap implements SiteMap {
     public static class PasswordChange extends AppPlace {
     }
 
+    public static class Welcome extends AppPlace {
+    }
+
     public static class Properties extends AppPlace {
         @PlaceProperties(navigLabel = "Complexes")
         public static class Complex extends CrmCrudAppPlace {

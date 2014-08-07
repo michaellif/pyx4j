@@ -28,6 +28,7 @@ import com.pyx4j.site.rpc.ReportsAppPlace;
 
 import com.propertyvista.crm.client.activity.NotificationsActivity;
 import com.propertyvista.crm.client.activity.RuntimeErrorActivity;
+import com.propertyvista.crm.client.activity.WelcomeActivity;
 import com.propertyvista.crm.client.activity.crud.account.AccountEditorActivity;
 import com.propertyvista.crm.client.activity.crud.account.AccountViewerActivity;
 import com.propertyvista.crm.client.activity.crud.account.LoginAttemptsListerActivity;
@@ -294,6 +295,7 @@ import com.propertyvista.crm.rpc.CrmSiteMap.Properties;
 import com.propertyvista.crm.rpc.CrmSiteMap.Reports;
 import com.propertyvista.crm.rpc.CrmSiteMap.RuntimeError;
 import com.propertyvista.crm.rpc.CrmSiteMap.Tenants;
+import com.propertyvista.crm.rpc.CrmSiteMap.Welcome;
 import com.propertyvista.domain.reports.AutoPayChangesReportMetadata;
 import com.propertyvista.domain.reports.AvailabilityReportMetadata;
 import com.propertyvista.domain.reports.CustomerCreditCheckReportMetadata;
@@ -1507,6 +1509,9 @@ public class ContentActivityMapper implements AppActivityMapper {
 
                 } else if (place instanceof Notifications) {
                     activity = new NotificationsActivity(place);
+
+                } else if (place instanceof Welcome) {
+                    activity = new WelcomeActivity();
                 }
 
                 callback.onSuccess(activity);

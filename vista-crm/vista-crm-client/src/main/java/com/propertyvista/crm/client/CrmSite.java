@@ -65,6 +65,7 @@ import com.propertyvista.crm.rpc.dto.admin.PmcCompanyInfoDTO;
 import com.propertyvista.crm.rpc.services.admin.ac.CrmContentManagementAccess;
 import com.propertyvista.crm.rpc.services.policies.CrmPolicyRetrieveService;
 import com.propertyvista.crm.rpc.services.pub.CrmAuthenticationService;
+import com.propertyvista.domain.dashboard.DashboardMetadata;
 import com.propertyvista.domain.financial.ARCode;
 import com.propertyvista.domain.security.common.VistaBasicBehavior;
 import com.propertyvista.portal.rpc.DeploymentConsts;
@@ -193,7 +194,10 @@ public class CrmSite extends VistaSite {
     }
 
     static public AppPlace getSystemDashboardPlace() {
-        return new CrmSiteMap.Dashboard.View().formPlace(new Key(-1));
+        if (SecurityController.check(DataModelPermission.permissionRead(DashboardMetadata.class))) {
+            return new CrmSiteMap.Dashboard.View().formPlace(new Key(-1));
+        }
+        return new CrmSiteMap.Welcome();
     }
 
     static public AppPlace getAvalableAdministrationPlace() {
