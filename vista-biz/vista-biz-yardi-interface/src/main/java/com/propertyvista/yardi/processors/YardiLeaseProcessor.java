@@ -217,7 +217,7 @@ public class YardiLeaseProcessor {
             if (updateLeaseProducts(lease, ltd)) {
                 lease = ServerSideFactory.create(LeaseFacade.class).finalize(lease);
                 rtd.getExecutionMonitor().addInfoEvent("Lease",
-                        SimpleMessageFormat.format("lease {0} - products only updated (new version)", lease.leaseId().getValue()));
+                        SimpleMessageFormat.format("lease {0} - products only updated (new version)", lease.leaseId().getStringView()));
             }
             return lease;
         }
@@ -230,6 +230,7 @@ public class YardiLeaseProcessor {
                 && !EqualsHelper.equals(lease.currentTerm().yardiLeasePk().getValue(), getYardiLeasePk(yardiCustomers))) {
             // TODO Need to find another lease to merge with
             leaseMove = true;
+            log.info("- Lease {} Moving...", lease.leaseId().getStringView());
         }
 
         boolean toPersist = false;
