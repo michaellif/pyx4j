@@ -62,9 +62,9 @@ public class N4PolicyForm extends PolicyDTOTabPanelBasedForm<N4PolicyDTO> {
         companyNameAndPhonesFormPanel.append(Location.Left, proto().phoneNumber(), new CPhoneField(PhoneType.northAmerica)).decorate();
         companyNameAndPhonesFormPanel.append(Location.Right, proto().faxNumber(), new CPhoneField(PhoneType.northAmerica)).decorate();
 
-        signatureFormPanel.append(Location.Left, companyNameAndPhonesFormPanel);
+        signatureFormPanel.append(Location.Dual, companyNameAndPhonesFormPanel);
 
-        signatureFormPanel.append(Location.Left, proto().mailingAddress(), new InternationalAddressEditor());
+        signatureFormPanel.append(Location.Dual, proto().mailingAddress(), new InternationalAddressEditor());
 
         FormPanel arCodesFormPanel = new FormPanel(this);
         arCodesFormPanel.h1(i18n.tr("Use the following AR Codes for calculation of charged vs. owed rent amount:"));
