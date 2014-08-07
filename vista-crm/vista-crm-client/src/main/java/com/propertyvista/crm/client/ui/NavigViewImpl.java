@@ -22,7 +22,6 @@ import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Composite;
 
-import com.pyx4j.commons.Key;
 import com.pyx4j.entity.security.DataModelPermission;
 import com.pyx4j.gwt.commons.layout.LayoutChangeEvent;
 import com.pyx4j.gwt.commons.layout.LayoutChangeHandler;
@@ -137,7 +136,7 @@ public class NavigViewImpl extends Composite implements NavigView {
             list.addMenuItem(exitAdminMenuItem = new SideMenuItem(new Command() {
                 @Override
                 public void execute() {
-                    AppSite.getPlaceController().goTo(CrmSite.getSystemDashboardPlace());
+                    AppSite.getPlaceController().goTo(CrmSite.getDefaultPlace());
                 }
             }, i18n.tr("Exit Administration"), null));
 
@@ -164,8 +163,7 @@ public class NavigViewImpl extends Composite implements NavigView {
             root.addMenuItem(new SideMenuItem(list, i18n.tr("Dashboards"), CrmImages.INSTANCE.dashboardsIcon(), null));
             list.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Dashboard.Manage(), DataModelPermission.permissionRead(DashboardMetadata.class)));
 
-            systemDashboard = new SideMenuAppPlaceItem(new CrmSiteMap.Dashboard.View().formPlace(new Key(-1)),
-                    DataModelPermission.permissionRead(DashboardMetadata.class));
+            systemDashboard = new SideMenuAppPlaceItem(CrmSite.getSystemDashboardPlace(), DataModelPermission.permissionRead(DashboardMetadata.class));
             list.addMenuItem(systemDashboard);
 
             customDashboards = new SideMenuList();

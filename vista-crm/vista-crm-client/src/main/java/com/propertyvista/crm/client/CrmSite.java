@@ -193,11 +193,15 @@ public class CrmSite extends VistaSite {
         });
     }
 
-    static public AppPlace getSystemDashboardPlace() {
+    static public AppPlace getDefaultPlace() {
         if (SecurityController.check(DataModelPermission.permissionRead(DashboardMetadata.class))) {
-            return new CrmSiteMap.Dashboard.View().formPlace(new Key(-1));
+            return getSystemDashboardPlace();
         }
         return new CrmSiteMap.Welcome();
+    }
+
+    static public AppPlace getSystemDashboardPlace() {
+        return new CrmSiteMap.Dashboard.View().formPlace(new Key(-1));
     }
 
     static public AppPlace getAvalableAdministrationPlace() {

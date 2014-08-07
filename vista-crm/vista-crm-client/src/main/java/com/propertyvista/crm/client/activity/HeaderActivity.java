@@ -102,7 +102,7 @@ public class HeaderActivity extends AbstractActivity implements HeaderPresenter 
 
     @Override
     public void navigToLanding() {
-        AppSite.getPlaceController().goTo(CrmSite.getSystemDashboardPlace());
+        AppSite.getPlaceController().goTo(CrmSite.getDefaultPlace());
     }
 
     @Override
@@ -170,7 +170,7 @@ public class HeaderActivity extends AbstractActivity implements HeaderPresenter 
 
     @Override
     public void back2CrmView() {
-        AppSite.getPlaceController().goTo(CrmSite.getSystemDashboardPlace());
+        AppSite.getPlaceController().goTo(CrmSite.getDefaultPlace());
     }
 
     @Override

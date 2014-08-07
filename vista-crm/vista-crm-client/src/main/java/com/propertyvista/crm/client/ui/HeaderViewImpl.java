@@ -205,16 +205,14 @@ public class HeaderViewImpl extends FlowPanel implements HeaderView {
             communicationButton.addStyleName(CommunicationCrmTheme.StyleName.AllertButton.name());
 
             exitAdminButton = new Button(i18n.tr("Exit Administration"), new Command() {
-
                 @Override
                 public void execute() {
-                    AppSite.getPlaceController().goTo(CrmSite.getSystemDashboardPlace());
+                    AppSite.getPlaceController().goTo(CrmSite.getDefaultPlace());
                 }
             });
             exitAdminButton.ensureDebugId("home");
 
             adminButton = new Button(i18n.tr("Administration"), new Command() {
-
                 @Override
                 public void execute() {
                     AppSite.getPlaceController().goTo(CrmSite.getAvalableAdministrationPlace());

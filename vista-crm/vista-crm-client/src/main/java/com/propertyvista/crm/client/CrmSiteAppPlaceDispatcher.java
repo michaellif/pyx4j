@@ -33,7 +33,7 @@ public class CrmSiteAppPlaceDispatcher extends AbstractAppPlaceDispatcher {
     @Override
     protected AppPlace obtainDefaultPlace() {
         if (ClientContext.isAuthenticated()) {
-            return CrmSite.getSystemDashboardPlace();
+            return CrmSite.getDefaultPlace();
         } else {
             return new CrmSiteMap.Login();
         }
