@@ -35,6 +35,7 @@ import com.propertyvista.crm.rpc.security.LeaseTermEditOnLeaseInstanceAccess;
 import com.propertyvista.crm.rpc.services.billing.BillCrudService;
 import com.propertyvista.crm.rpc.services.billing.BillPreviewService;
 import com.propertyvista.crm.rpc.services.billing.BillPrintService;
+import com.propertyvista.crm.rpc.services.billing.BillingExecutionService;
 import com.propertyvista.crm.rpc.services.lease.ac.FormerLeaseListAction;
 import com.propertyvista.crm.rpc.services.lease.ac.LeaseAgreementSigning;
 import com.propertyvista.crm.rpc.services.lease.ac.LeaseConfirmBill;
@@ -98,6 +99,7 @@ class VistaCrmLeaseAccessControlList extends UIAclBuilder {
 
         grant(LeaseFull, LeaseRunBill.class);
         grant(LeaseFull, LeaseConfirmBill.class);
+        grant(LeaseFull, new IServiceExecutePermission(BillingExecutionService.class));
 
         grant(LeaseFull, LeaseReserveUnit.class);
         grant(LeaseFull, LeaseStateManagement.class);
