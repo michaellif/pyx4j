@@ -52,6 +52,7 @@ import com.propertyvista.crm.rpc.services.customer.ac.TenantListAction;
 import com.propertyvista.crm.rpc.services.lease.ac.FormerLeaseListAction;
 import com.propertyvista.crm.rpc.services.reports.CrmReportsMapper;
 import com.propertyvista.domain.communication.MessageCategory;
+import com.propertyvista.domain.communication.MessageCategory.MessageGroupCategory;
 import com.propertyvista.domain.company.Portfolio;
 import com.propertyvista.domain.dashboard.DashboardMetadata;
 import com.propertyvista.domain.financial.AggregatedTransfer;
@@ -248,6 +249,7 @@ public class NavigViewImpl extends Composite implements NavigView {
             root.addMenuItem(new SideMenuItem(list, i18n.tr("Message Center"), CrmImages.INSTANCE.reportsIcon(), null));
 
             list.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Communication.Message(), DataModelPermission.permissionRead(MessageDTO.class)));
+            list.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Communication.Ticket(), DataModelPermission.permissionRead(MessageDTO.class)));
             communicationGroups = new SideMenuList();
             list.addMenuItem(new SideMenuItem(communicationGroups, i18n.tr("Groups"), null, null, DataModelPermission.permissionRead(MessageCategory.class)));
         }
@@ -313,8 +315,9 @@ public class NavigViewImpl extends Composite implements NavigView {
         communicationGroups.clear();
         Collections.sort(metadataList, ORDER_CATEGORY_BY_NAME);
         for (MessageCategory metadata : metadataList) {
-            communicationGroups.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Communication.Message(metadata).formListerPlace(), metadata.topic()
-                    .getStringView(), null));
+            AppPlace place = MessageGroupCategory.Custom.equals(metadata.category().getValue()) ? new CrmSiteMap.Communication.Message(metadata)
+                    .formListerPlace() : new CrmSiteMap.Communication.Ticket(metadata).formListerPlace();
+            communicationGroups.addMenuItem(new SideMenuAppPlaceItem(place, metadata.topic().getStringView(), null));
         }
     }
 

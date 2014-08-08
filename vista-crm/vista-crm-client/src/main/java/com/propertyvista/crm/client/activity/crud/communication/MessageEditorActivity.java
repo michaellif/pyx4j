@@ -26,15 +26,22 @@ import com.propertyvista.crm.client.ui.crud.communication.MessageEditorView;
 import com.propertyvista.crm.rpc.CrmSiteMap.Communication.Message;
 import com.propertyvista.crm.rpc.services.MessageCrudService;
 import com.propertyvista.crm.rpc.services.MessageCrudService.MessageInitializationData;
+import com.propertyvista.domain.communication.MessageCategory;
 import com.propertyvista.dto.MessageDTO;
 
 public class MessageEditorActivity extends CrmEditorActivity<MessageDTO> implements MessageEditorView.Presenter {
 
-    private final Message place;
+    private final CrudAppPlace place;
+
+    private MessageCategory mc;
 
     public MessageEditorActivity(CrudAppPlace place) {
         super(MessageDTO.class, place, CrmSite.getViewFactory().getView(MessageEditorView.class), GWT.<MessageCrudService> create(MessageCrudService.class));
-        this.place = (Message) place;
+        this.place = place;
+        InitializationData data = place.getInitializationData();
+        if (data != null && data instanceof MessageInitializationData) {
+            mc = ((MessageInitializationData) data).messageCategory();
+        }
     }
 
     @Override
@@ -46,7 +53,20 @@ public class MessageEditorActivity extends CrmEditorActivity<MessageDTO> impleme
     @Override
     protected void obtainInitializationData(AsyncCallback<InitializationData> callback) {
         MessageInitializationData initData = EntityFactory.create(MessageInitializationData.class);
-        initData.forwardedMessage().set(place.getForwardedMessage());
+        if (place instanceof Message) {
+            Message p = (Message) place;
+            initData.forwardedMessage().set(p.getForwardedMessage());
+        }
+
+        if (mc != null) {
+            initData.messageCategory().set(mc);
+        }
         callback.onSuccess(initData);
+    }
+
+    @Override
+    public MessageCategory getCategory() {
+
+        return mc;
     }
 }

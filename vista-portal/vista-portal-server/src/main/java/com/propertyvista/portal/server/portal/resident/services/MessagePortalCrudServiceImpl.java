@@ -124,7 +124,7 @@ public class MessagePortalCrudServiceImpl extends AbstractCrudServiceDtoImpl<Mes
         t.subject().set(to.subject());
         t.allowedReply().setValue(true);
         t.status().setValue(ThreadStatus.New);
-        t.topic().set(communicationFacade.getMessageCategoryFromCache(MessageGroupCategory.TenantOriginated));
+        t.topic().set(communicationFacade.getMessageCategoryFromCache(MessageGroupCategory.Tenant));
         t.content().add(bo);
         t.owner().set(communicationFacade.getSystemEndpointFromCache(SystemEndpointName.Unassigned));
 

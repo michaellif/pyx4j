@@ -20,6 +20,7 @@ import com.pyx4j.entity.rpc.AbstractCrudService;
 import com.pyx4j.entity.rpc.EntitySearchResult;
 
 import com.propertyvista.domain.communication.CommunicationThread.ThreadStatus;
+import com.propertyvista.domain.communication.MessageCategory;
 import com.propertyvista.domain.company.Employee;
 import com.propertyvista.dto.MessageDTO;
 
@@ -35,5 +36,7 @@ public interface MessageCrudService extends AbstractCrudService<MessageDTO> {
     public static interface MessageInitializationData extends InitializationData {
 
         MessageDTO forwardedMessage();
+
+        MessageCategory messageCategory();
     }
 }

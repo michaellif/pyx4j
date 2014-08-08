@@ -141,9 +141,28 @@ public class CommunicationManager {
                 && !SecurityController.check(VistaDataAccessBehavior.ResidentInPortal)) {
             return new ArrayList<CommunicationThread>();
         }
-        final EntityListCriteria<CommunicationThread> dispatchedCriteria = getDispatchedCriteria(false);
+        final EntityListCriteria<CommunicationThread> dispatchedCriteria = getUnassignedDispatchedCriteria();
+        if (dispatchedCriteria == null) {
+            return new ArrayList<CommunicationThread>();
+        }
         final List<CommunicationThread> dispatchedMessages = Persistence.secureQuery(dispatchedCriteria, AttachLevel.IdOnly);
         return dispatchedMessages;
+    }
+
+    private EntityListCriteria<CommunicationThread> getUnassignedDispatchedCriteria() {
+        List<MessageCategory> userGroups = getUserGroups();
+        if (userGroups != null && userGroups.size() > 0) {
+            final EntityListCriteria<CommunicationThread> dispatchedCriteria = EntityListCriteria.create(CommunicationThread.class);
+            dispatchedCriteria.in(dispatchedCriteria.proto().status(), ThreadStatus.New, ThreadStatus.Open, ThreadStatus.Unassigned, ThreadStatus.Resolved);
+
+            AndCriterion newDispatchedCriteria = new AndCriterion(PropertyCriterion.eq(dispatchedCriteria.proto().owner(),
+                    ServerSideFactory.create(CommunicationMessageFacade.class).getSystemEndpointFromCache(SystemEndpointName.Unassigned)),
+                    PropertyCriterion.in(dispatchedCriteria.proto().topic(), userGroups));
+
+            dispatchedCriteria.add(newDispatchedCriteria);
+            return dispatchedCriteria;
+        }
+        return null;
     }
 
     private EntityListCriteria<CommunicationThread> getDispatchedCriteria(boolean includeByRoles) {

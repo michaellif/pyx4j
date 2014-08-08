@@ -75,6 +75,10 @@ public class CommunicationEndpointManager {
 
     public SystemEndpoint getSystemEndpointFromCache(SystemEndpointName sepName) {
         SystemEndpoint ep = CacheService.get(SystemEndpointCacheKey.getCacheKey(sepName.toString()));
+        if (ep == null) {
+            cacheSystemEndpoints();
+            return CacheService.get(SystemEndpointCacheKey.getCacheKey(sepName.toString()));
+        }
         return ep;
     }
 

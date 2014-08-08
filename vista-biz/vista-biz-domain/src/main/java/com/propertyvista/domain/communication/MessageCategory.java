@@ -40,14 +40,14 @@ public interface MessageCategory extends IEntity {
     @I18n(context = "MessageGroup")
     @XmlType(name = "Message Group Category")
     public enum MessageGroupCategory {
-        @Translate("Tenant Originated")
-        TenantOriginated,
+        @Translate("Tenant")
+        Tenant,
 
-        @Translate("Landlord Originated")
-        LandlordOriginated,
+        @Translate("Landlord")
+        Landlord,
 
-        @Translate("Vendor Originated")
-        VendorOriginated,
+        @Translate("Vendor")
+        Vendor,
 
         @Translate("Custom")
         Custom;

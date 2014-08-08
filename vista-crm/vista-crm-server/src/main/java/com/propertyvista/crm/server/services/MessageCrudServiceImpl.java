@@ -44,6 +44,7 @@ import com.propertyvista.domain.communication.MessageAttachment;
 import com.propertyvista.domain.communication.MessageCategory.MessageGroupCategory;
 import com.propertyvista.domain.communication.SystemEndpoint.SystemEndpointName;
 import com.propertyvista.domain.company.Employee;
+import com.propertyvista.domain.security.CrmUser;
 import com.propertyvista.dto.MessageDTO;
 
 public class MessageCrudServiceImpl extends AbstractCrudServiceDtoImpl<Message, MessageDTO> implements MessageCrudService {
@@ -55,6 +56,12 @@ public class MessageCrudServiceImpl extends AbstractCrudServiceDtoImpl<Message, 
     protected Path convertPropertyDTOPathToDBOPath(String path, Message boProto, MessageDTO toProto) {
         if (path.equals(toProto.topic().getPath().toString())) {
             return boProto.thread().topic().getPath();
+        }
+        if (path.equals(toProto.status().getPath().toString())) {
+            return boProto.thread().status().getPath();
+        }
+        if (path.equals(toProto.owner().getPath().toString()) || path.equals(toProto.ownerForList().getPath().toString())) {
+            return boProto.thread().owner().getPath();
         }
         if (path.equals(toProto.topic().category().getPath().toString())) {
             return boProto.thread().topic().category().getPath();
@@ -159,6 +166,9 @@ public class MessageCrudServiceImpl extends AbstractCrudServiceDtoImpl<Message, 
                     }
                 }
             }
+            if (data.messageCategory() != null && !data.messageCategory().isNull()) {
+                dto.topic().set(data.messageCategory());
+            }
         }
         return dto;
 
@@ -186,7 +196,9 @@ public class MessageCrudServiceImpl extends AbstractCrudServiceDtoImpl<Message, 
         t.allowedReply().set(to.allowedReply());
 
         t.topic().set(to.topic());
-        Persistence.service().retrieveMember(to.topic());
+        if (to.topic().isValueDetached()) {
+            Persistence.service().retrieve(to.topic());
+        }
         t.status().setValue(isNew && !MessageGroupCategory.Custom.equals(to.topic().category().getValue()) ? ThreadStatus.New : ThreadStatus.Unassigned);
         t.content().add(bo);
         t.owner().set(
@@ -214,9 +226,8 @@ public class MessageCrudServiceImpl extends AbstractCrudServiceDtoImpl<Message, 
 
         Persistence.ensureRetrieve(bo.thread(), AttachLevel.Attached);
         Persistence.ensureRetrieve(bo.thread().topic(), AttachLevel.Attached);
-        if (!isForList) {
-            Persistence.ensureRetrieve(bo.thread().owner(), AttachLevel.Attached);
-        }
+        Persistence.ensureRetrieve(bo.thread().owner(), AttachLevel.Attached);
+
         Persistence.ensureRetrieve(bo.recipients(), AttachLevel.Attached);
         if (ms != null && ms.size() > 0) {
             boolean star = false;
@@ -294,9 +305,12 @@ public class MessageCrudServiceImpl extends AbstractCrudServiceDtoImpl<Message, 
         messageDTO.allowedReply().set(thread.allowedReply());
         messageDTO.status().set(thread.status());
         Persistence.ensureRetrieve(thread.owner(), AttachLevel.Attached);
-        if (!isForList) {
-            messageDTO.owner().set((communicationFacade.generateEndpointDTO(thread.owner())));
+        messageDTO.owner().set((communicationFacade.generateEndpointDTO(thread.owner())));
+        if (isForList && thread.owner().getInstanceValueClass().equals(CrmUser.class)) {
+            messageDTO.ownerForList().set(thread.owner());
         }
+        messageDTO.ownerForList();
+
         messageDTO.text().set(m.text());
         messageDTO.date().set(m.date());
         messageDTO.thread().setAttachLevel(AttachLevel.Attached);

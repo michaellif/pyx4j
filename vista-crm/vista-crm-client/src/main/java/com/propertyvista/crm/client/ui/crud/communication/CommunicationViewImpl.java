@@ -181,6 +181,8 @@ public class CommunicationViewImpl extends FlowPanel implements CommunicationVie
 
         private final Anchor messagesAnchor;
 
+        private final Anchor ticketsAnchor;
+
         private final Image writeActionImage;
 
         public HeaderHolder() {
@@ -198,8 +200,21 @@ public class CommunicationViewImpl extends FlowPanel implements CommunicationVie
                     AppSite.getPlaceController().goTo(place);
                 }
             });
+
             messagesAnchor.setStyleName(CommunicationCrmTheme.StyleName.CommHeaderTitle.name());
             messagesAnchor.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
+
+            ticketsAnchor = new Anchor("Tickets", new Command() {
+
+                @Override
+                public void execute() {
+                    CrudAppPlace place = new CrmSiteMap.Communication.Ticket();
+                    place.setType(Type.lister);
+                    AppSite.getPlaceController().goTo(place);
+                }
+            });
+            ticketsAnchor.setStyleName(CommunicationCrmTheme.StyleName.CommHeaderTitle.name());
+            ticketsAnchor.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
 
             writeActionImage = new Image(CrmImages.INSTANCE.writeMessage());
             writeActionImage.setStyleName(CommunicationCrmTheme.StyleName.CommHeaderWriteAction.name());
@@ -214,30 +229,26 @@ public class CommunicationViewImpl extends FlowPanel implements CommunicationVie
                 }
             });
             add(messagesAnchor);
+            add(ticketsAnchor);
             add(writeActionImage);
 
         }
 
         public void setNumberOfMessages(int directMessagesNum, int dispatchedMessagesNum) {
-            StringBuffer statusLabel = null;
-            if (directMessagesNum > 0 || dispatchedMessagesNum > 0) {
-                if (directMessagesNum > 0) {
-                    statusLabel = new StringBuffer();
-                    statusLabel.append(directMessagesNum);
-                }
-
-                if (dispatchedMessagesNum > 0) {
-                    if (statusLabel == null) {
-                        statusLabel = new StringBuffer();
-                    } else {
-                        statusLabel.append(" / ");
-                    }
-                    statusLabel.append(dispatchedMessagesNum);
-                }
-
-                messagesAnchor.setText("Messages (" + statusLabel.toString() + ")");
+            if (directMessagesNum > 0) {
+                StringBuffer statusLabel = new StringBuffer();
+                statusLabel.append(directMessagesNum);
+                messagesAnchor.setText("Messages (" + statusLabel.toString() + "), ");
             } else {
-                messagesAnchor.setText("Messages");
+                messagesAnchor.setText("Messages, ");
+            }
+
+            if (dispatchedMessagesNum > 0) {
+                StringBuffer statusLabel = new StringBuffer();
+                statusLabel.append(dispatchedMessagesNum);
+                ticketsAnchor.setText("Tickets (" + statusLabel.toString() + ")");
+            } else {
+                ticketsAnchor.setText("Tickets");
             }
         }
     }

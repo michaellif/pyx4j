@@ -37,6 +37,7 @@ import com.pyx4j.site.client.ui.IPane;
 import com.pyx4j.site.client.ui.prime.form.IForm;
 import com.pyx4j.widgets.client.Button;
 
+import com.propertyvista.crm.client.activity.crud.communication.MessageEditorActivity;
 import com.propertyvista.crm.client.ui.components.boxes.BuildingSelectorDialog;
 import com.propertyvista.crm.client.ui.components.boxes.TenantSelectorDialog;
 import com.propertyvista.crm.client.ui.components.boxes.UnitSelectorDialog;
@@ -46,6 +47,7 @@ import com.propertyvista.crm.rpc.services.selections.SelectCrmUserListService;
 import com.propertyvista.crm.rpc.services.selections.SelectPortfolioListService;
 import com.propertyvista.domain.communication.CommunicationEndpoint;
 import com.propertyvista.domain.communication.CommunicationEndpoint.ContactType;
+import com.propertyvista.domain.communication.MessageCategory;
 import com.propertyvista.domain.company.Portfolio;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
@@ -168,6 +170,19 @@ public class MessageEditForm extends CrmEntityForm<MessageDTO> {
         formPanel.br();
 
         return formPanel;
+    }
+
+    @Override
+    protected MessageDTO preprocessValue(MessageDTO value, boolean fireEvent, boolean populate) {
+        if (value == null || value.getPrimaryKey() == null || value.getPrimaryKey().isDraft()) {
+            MessageCategory mc = ((MessageEditorActivity) getParentView().getPresenter()).getCategory();
+            if (mc != null && !mc.isNull()) {
+                get(proto().topic()).setEditable(false);
+            } else {
+                get(proto().topic()).setEditable(true);
+            }
+        }
+        return value;
     }
 
     public void reinit() {

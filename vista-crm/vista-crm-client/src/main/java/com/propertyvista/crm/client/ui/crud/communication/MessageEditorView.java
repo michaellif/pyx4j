@@ -17,6 +17,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.site.client.ui.prime.form.IEditor;
 
+import com.propertyvista.domain.communication.MessageCategory;
 import com.propertyvista.dto.MessageDTO;
 
 public interface MessageEditorView extends IEditor<MessageDTO> {
@@ -24,6 +25,8 @@ public interface MessageEditorView extends IEditor<MessageDTO> {
     interface Presenter extends IEditor.Presenter {
 
         void saveMessage(AsyncCallback<MessageDTO> callback, MessageDTO message);
-    }
 
+        MessageCategory getCategory();
+
+    }
 }

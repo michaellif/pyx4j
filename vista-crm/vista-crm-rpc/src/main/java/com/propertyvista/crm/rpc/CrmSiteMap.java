@@ -635,6 +635,21 @@ public class CrmSiteMap implements SiteMap {
             }
         }
 
+        @PlaceProperties(navigLabel = "Tickets")
+        public static class Ticket extends CrmCrudAppPlace {
+            private MessageCategory filterByCategory;
+
+            public Ticket() {
+            }
+
+            public Ticket(MessageCategory filterByCategory) {
+                this.filterByCategory = filterByCategory;
+            }
+
+            public MessageCategory getMessageCategory() {
+                return filterByCategory;
+            }
+        }
     }
 
     // Communication Ended --------------
