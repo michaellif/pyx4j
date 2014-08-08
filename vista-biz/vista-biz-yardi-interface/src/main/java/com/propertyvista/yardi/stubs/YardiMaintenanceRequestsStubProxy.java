@@ -19,6 +19,7 @@ import com.yardi.entity.maintenance.ServiceRequests;
 import com.yardi.entity.maintenance.meta.YardiMaintenanceConfigMeta;
 import com.yardi.ws.operations.requests.GetServiceRequest_Search;
 
+import com.propertyvista.biz.system.yardi.YardiInterfaceNotConfiguredForPropertyException;
 import com.propertyvista.biz.system.yardi.YardiResponseException;
 import com.propertyvista.biz.system.yardi.YardiServiceException;
 import com.propertyvista.domain.settings.PmcYardiCredential;
@@ -28,6 +29,53 @@ public class YardiMaintenanceRequestsStubProxy extends YardiAbstractStubProxy im
 
     public YardiMaintenanceRequestsStubProxy() {
         setMessageErrorHandler(noPropertyAccessHandler);
+
+        // When Yardi SR interface has problems, instead of Messages response it returns a response with undocumented
+        // ErrorMessage element inside data element!?
+        //   <ServiceRequests><ServiceRequest>
+        //     <ErrorMessages><Error>There are no work orders found for these input values.</Error></ErrorMessages>
+        //   </ServiceRequest></ServiceRequests>
+        // or
+        //   <ServiceRequests><ServiceRequest>
+        //     <ServiceRequestId>0</ServiceRequestId>
+        //     <PropertyCode>B1</PropertyCode>
+        //     <UnitCode>#100</UnitCode>
+        //     <ErrorMessages><Error>Could not find Property:B1.</Error></ErrorMessages>
+        //  </ServiceRequest>
+        // or
+        //  <ServiceRequests><ServiceRequest>
+        //     <PropertyCode>gibb0380</PropertyCode>
+        //     <UnitCode>0100</UnitCode>
+        //     <ErrorMessage>Interface 'Property Vista-Maintenance' is not Configured for property 'gibb0380'</ErrorMessage>
+        //  </ServiceRequest></ServiceRequests>
+        setDataErrorHandler(new DataErrorHandler() {
+            @Override
+            public void handle(String xml) throws YardiServiceException {
+                for (String regex : new String[] { //
+                ".*<ErrorMessages><Error>(.*)</Error></ErrorMessages>.*", //
+                        ".*<ErrorMessage>(.*)</ErrorMessage>.*" //
+                }) {
+                    if (xml.matches(regex) && ignoreErrorMessage(xml.replaceFirst(regex, "$1"))) {
+                        return;
+                    }
+                }
+                throw new YardiServiceException(GENERIC_YARDI_ERROR);
+            }
+
+            private boolean ignoreErrorMessage(String message) throws YardiServiceException {
+                String lcMessage = message == null ? null : message.toLowerCase();
+                // we don't consider these an error
+                boolean ignore = lcMessage == null || //
+                        lcMessage.contains("no work orders found") || //
+                        lcMessage.contains("no service requests found");
+                if (ignore) {
+                    return true;
+                } else if (lcMessage.contains("is not configured for property")) {
+                    throw new YardiInterfaceNotConfiguredForPropertyException(message);
+                }
+                return false;
+            }
+        });
     }
 
     private YardiMaintenanceRequestsStub getStub(PmcYardiCredential yc) {

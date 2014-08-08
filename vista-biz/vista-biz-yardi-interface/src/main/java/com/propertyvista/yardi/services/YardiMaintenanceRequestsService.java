@@ -209,7 +209,8 @@ public class YardiMaintenanceRequestsService extends YardiAbstractService {
             params.setFromDate(dateFormat.format(fromDate));
         }
         log.info("Getting tickets for {} modified after {}", params.getYardiPropertyId(), params.getFromDate());
-        final ServiceRequests newRequests = new YardiMaintenanceRequestsStubProxy().getRequestsByParameters(yc, params);
+        ServiceRequests requests = new YardiMaintenanceRequestsStubProxy().getRequestsByParameters(yc, params);
+        final ServiceRequests newRequests = requests == null ? new ServiceRequests() : requests;
         return new UnitOfWork(TransactionScopeOption.Nested).execute(new Executable<Date, YardiServiceException>() {
             @Override
             public Date execute() throws YardiServiceException {

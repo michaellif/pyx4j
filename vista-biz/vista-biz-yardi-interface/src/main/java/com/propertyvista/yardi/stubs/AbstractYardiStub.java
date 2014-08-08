@@ -13,12 +13,21 @@
  */
 package com.propertyvista.yardi.stubs;
 
+import java.io.StringReader;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
+import javax.xml.bind.Unmarshaller;
+import javax.xml.bind.ValidationEvent;
+import javax.xml.bind.ValidationEventHandler;
+import javax.xml.stream.XMLInputFactory;
+import javax.xml.stream.XMLStreamException;
+import javax.xml.stream.XMLStreamReader;
 
 import org.apache.axis2.client.Options;
 import org.apache.axis2.client.Stub;
@@ -220,11 +229,23 @@ public abstract class AbstractYardiStub implements ExternalInterfaceLoggingStub 
         }
     }
 
+    @SuppressWarnings("unchecked")
     protected <R> R ensureResult(String xml, Class<R> resultType) throws YardiServiceException {
+        final List<String> errorTags = Arrays.asList("ErrorMessage", "ErrorMessages");
         try {
-            R result = MarshallUtil.unmarshal(resultType, xml);
-            return result;
+            final XMLStreamReader xsr = XMLInputFactory.newFactory().createXMLStreamReader(new StringReader(xml));
+            Unmarshaller um = JAXBContext.newInstance(resultType).createUnmarshaller();
+            um.setEventHandler(new ValidationEventHandler() {
+                @Override
+                public boolean handleEvent(ValidationEvent event) {
+                    return !errorTags.contains(xsr.getLocalName());
+                }
+            });
+            return (R) um.unmarshal(xsr);
         } catch (JAXBException e) {
+            logRecordedTracastions();
+            throw new YardiResponseException(xml);
+        } catch (XMLStreamException e) {
             logRecordedTracastions();
             throw new YardiResponseException(xml);
         }

@@ -71,7 +71,7 @@ public class YardiAbstractStubProxy {
                 throw new YardiServiceException(GENERIC_YARDI_ERROR, xe);
             }
         } else if (dataErrorHandler != null) {
-            dataErrorHandler.handle();
+            dataErrorHandler.handle(xml);
         }
     }
 
@@ -87,6 +87,6 @@ public class YardiAbstractStubProxy {
     }
 
     public interface DataErrorHandler {
-        void handle() throws YardiServiceException;
+        void handle(String xml) throws YardiServiceException;
     }
 }
