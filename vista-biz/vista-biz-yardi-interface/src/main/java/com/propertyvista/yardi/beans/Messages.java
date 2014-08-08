@@ -17,11 +17,15 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import javax.xml.bind.JAXBException;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import org.apache.commons.lang.StringUtils;
 
+import com.pyx4j.essentials.j2se.util.MarshallUtil;
+
+import com.propertyvista.biz.system.yardi.YardiResponseException;
 import com.propertyvista.yardi.beans.Message.MessageType;
 
 @XmlRootElement(name = "Messages")
@@ -33,11 +37,14 @@ public class Messages {
         return StringUtils.startsWith(s, "<Messages>") && StringUtils.endsWith(s, "</Messages>");
     }
 
-    public static Messages createErrorInMock(String message) {
+    public static void throwYardiResponseException(String message) throws YardiResponseException {
         Messages msgs = new Messages();
         Message m = new Message(MessageType.Error, message);
         msgs.getMessages().add(m);
-        return msgs;
+        try {
+            throw new YardiResponseException(MarshallUtil.marshall(msgs), message);
+        } catch (JAXBException ignore) {
+        }
     }
 
     public static Messages create(Message... messages) {

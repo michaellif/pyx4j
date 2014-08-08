@@ -19,6 +19,11 @@ public class YardiResponseException extends YardiServiceException {
     private final String responseXml;
 
     public YardiResponseException(String responseXml) {
+        this(responseXml, null);
+    }
+
+    public YardiResponseException(String responseXml, String message) {
+        super(message == null ? "Invalid Yardi Response" : message);
         this.responseXml = responseXml;
     }
 

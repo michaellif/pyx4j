@@ -23,7 +23,6 @@ import com.yardi.entity.resident.RTCustomer;
 import com.yardi.entity.resident.ResidentTransactions;
 import com.yardi.entity.resident.Transactions;
 
-import com.propertyvista.biz.system.yardi.YardiPropertyNoAccessException;
 import com.propertyvista.biz.system.yardi.YardiServiceException;
 import com.propertyvista.test.mock.MockEventBus;
 import com.propertyvista.yardi.beans.Messages;
@@ -44,7 +43,6 @@ import com.propertyvista.yardi.mock.updater.TransactionChargeUpdater;
 import com.propertyvista.yardi.mock.updater.UnitTransferSimulator;
 import com.propertyvista.yardi.mock.updater.UnitTransferSimulatorEvent;
 import com.propertyvista.yardi.services.YardiHandledErrorMessages;
-import com.propertyvista.yardi.stubs.YardiServiceMessageException;
 
 public class YardiMockServer implements TransactionChargeUpdateEvent.Handler, PropertyUpdateEvent.Handler, RtCustomerUpdateEvent.Handler,
         CoTenantUpdateEvent.Handler, LeaseChargeUpdateEvent.Handler, UnitTransferSimulatorEvent.Handler, RentableItemTypeUpdateEvent.Handler {
@@ -80,14 +78,12 @@ public class YardiMockServer implements TransactionChargeUpdateEvent.Handler, Pr
         propertyManagers.clear();
     }
 
-    PropertyManager getExistingPropertyManagerSetup(String propertyId) {
+    PropertyManager getExistingPropertyManagerSetup(String propertyId) throws YardiServiceException {
         PropertyManager propertyManager = propertyManagers.get(propertyId);
         if (propertyManager == null) {
             throw new RuntimeException("Property '" + propertyId + "' not found");
         }
-        if (propertyManager.mockFeatures.isBlockAccess()) {
-            throw new RuntimeException("Invalid or no access to Yardi Property " + propertyId);
-        }
+        handleMockFeatures(propertyManager);
         return propertyManager;
     }
 
@@ -96,13 +92,17 @@ public class YardiMockServer implements TransactionChargeUpdateEvent.Handler, Pr
         if (propertyManager == null) {
             throw new RuntimeException("Property '" + propertyId + "' not found");
         }
+        handleMockFeatures(propertyManager);
+        return propertyManager;
+    }
+
+    void handleMockFeatures(PropertyManager propertyManager) throws YardiServiceException {
         if (propertyManager.mockFeatures.isBlockAccess()) {
-            throw new YardiServiceMessageException(Messages.createErrorInMock("Invalid or no access to Yardi Property " + propertyId));
+            Messages.throwYardiResponseException(YardiHandledErrorMessages.errorMessage_NoAccess + " " + propertyManager.getPropertyId());
         }
         if (propertyManager.mockFeatures.isBlockBatchOpening()) {
-            throw new YardiServiceMessageException(Messages.createErrorInMock("Cannot open Batch for Yardi Property " + propertyId));
+            Messages.throwYardiResponseException("Cannot open Batch for Yardi Property " + propertyManager.getPropertyId());
         }
-        return propertyManager;
     }
 
     public Properties getPropertyConfigurations() {
@@ -150,14 +150,15 @@ public class YardiMockServer implements TransactionChargeUpdateEvent.Handler, Pr
         return getExistingPropertyManagerRuntime(propertyId).getRentableItems();
     }
 
-    public long openReceiptBatch(String propertyId) throws YardiServiceException {
+    public long openReceiptBatch(String propertyId) {
+        // per yardi spec, this method returns 0 or negative batch id in case of an error
         try {
             PropertyManager propertyManager = getExistingPropertyManagerRuntime(propertyId);
             PaymentBatchManager b = new PaymentBatchManager(propertyManager);
             openBatches.put(b.getId(), b);
             return b.getId();
-        } catch (YardiServiceMessageException e) {
-            if (e.getMessages().hasErrorMessage(YardiHandledErrorMessages.errorMessage_NoAccess)) {
+        } catch (YardiServiceException e) {
+            if (e.getMessage().contains(YardiHandledErrorMessages.errorMessage_NoAccess)) {
                 return -2;
             } else {
                 return 0;
@@ -165,42 +166,31 @@ public class YardiMockServer implements TransactionChargeUpdateEvent.Handler, Pr
         }
     }
 
-    PaymentBatchManager getBatch(long batchId) {
-        if (!openBatches.containsKey(batchId)) {
-            throw new Error(batchId + " batch not found");
+    PaymentBatchManager getBatch(long batchId) throws YardiServiceException {
+        if (batchId > 0) {
+            if (openBatches.containsKey(batchId)) {
+                return openBatches.get(batchId);
+            }
+            Messages.throwYardiResponseException(batchId + " batch not found");
+        } else if (batchId == -2) {
+            Messages.throwYardiResponseException(YardiHandledErrorMessages.errorMessage_NoAccess);
+        } else {
+            Messages.throwYardiResponseException("Invalid batch: " + batchId);
         }
-        return openBatches.get(batchId);
+        return null;
     }
 
     public void addReceiptsToBatch(long batchId, ResidentTransactions residentTransactions) throws YardiServiceException {
-        if (batchId > 0) {
-            getBatch(batchId).addReceiptsToBatch(residentTransactions);
-        } else if (batchId == -2) {
-            throw new YardiPropertyNoAccessException("Invalid batch: -2");
-        } else {
-            throw new YardiServiceException("Invalid batch: " + batchId);
-        }
+        getBatch(batchId).addReceiptsToBatch(residentTransactions);
     }
 
     public void postReceiptBatch(long batchId) throws YardiServiceException {
-        if (batchId > 0) {
-            getBatch(batchId).postReceiptBatch();
-        } else if (batchId == -2) {
-            throw new YardiPropertyNoAccessException("Invalid batch: -2");
-        } else {
-            throw new YardiServiceException("Invalid batch: " + batchId);
-        }
+        getBatch(batchId).postReceiptBatch();
     }
 
     public void cancelReceiptBatch(long batchId) throws YardiServiceException {
-        if (batchId > 0) {
-            getBatch(batchId).cancelReceiptBatch();
-            openBatches.remove(batchId);
-        } else if (batchId == -2) {
-            throw new YardiPropertyNoAccessException("Invalid batch: -2");
-        } else {
-            throw new YardiServiceException("Invalid batch: " + batchId);
-        }
+        getBatch(batchId).cancelReceiptBatch();
+        openBatches.remove(batchId);
     }
 
     public void importResidentTransactions(ResidentTransactions reversalTransactions) throws YardiServiceException {
@@ -228,49 +218,49 @@ public class YardiMockServer implements TransactionChargeUpdateEvent.Handler, Pr
     @Override
     public void addOrUpdateTransactionCharge(TransactionChargeUpdateEvent event) {
         TransactionChargeUpdater updater = event.getUpdater();
-        getExistingPropertyManagerSetup(updater.getPropertyID()).addOrUpdateTransactionCharge(updater);
+        propertyManagers.get(updater.getPropertyID()).addOrUpdateTransactionCharge(updater);
     }
 
     @Override
     public void addOrUpdateRtCustomer(RtCustomerUpdateEvent event) {
         RtCustomerUpdater updater = event.getUpdater();
-        getExistingPropertyManagerSetup(updater.getPropertyID()).addOrUpdateRtCustomer(updater);
+        propertyManagers.get(updater.getPropertyID()).addOrUpdateRtCustomer(updater);
     }
 
     @Override
     public void addOrUpdateCoTenant(CoTenantUpdateEvent event) {
         CoTenantUpdater updater = event.getUpdater();
-        getExistingPropertyManagerSetup(updater.getPropertyID()).addOrUpdateCoTenant(updater);
+        propertyManagers.get(updater.getPropertyID()).addOrUpdateCoTenant(updater);
     }
 
     @Override
     public void addOrUpdateLeaseCharge(LeaseChargeUpdateEvent event) {
         LeaseChargeUpdater updater = event.getUpdater();
-        getExistingPropertyManagerSetup(updater.getPropertyID()).addOrUpdateLeaseCharge(updater);
+        propertyManagers.get(updater.getPropertyID()).addOrUpdateLeaseCharge(updater);
     }
 
     @Override
     public void removeLeaseCharge(LeaseChargeUpdateEvent event) {
         LeaseChargeUpdater updater = event.getUpdater();
-        getExistingPropertyManagerSetup(updater.getPropertyID()).removeLeaseCharge(updater);
+        propertyManagers.get(updater.getPropertyID()).removeLeaseCharge(updater);
     }
 
     @Override
     public void unitTransferSimulation(UnitTransferSimulatorEvent event) {
         UnitTransferSimulator updater = event.getUpdater();
-        getExistingPropertyManagerSetup(updater.getPropertyID()).unitTransferSimulation(updater);
+        propertyManagers.get(updater.getPropertyID()).unitTransferSimulation(updater);
     }
 
     @Override
     public void addOrUpdateRentableItemType(RentableItemTypeUpdateEvent event) {
         RentableItemTypeUpdater updater = event.getUpdater();
-        getExistingPropertyManagerSetup(updater.getPropertyID()).addOrUpdateRentableItemType(updater);
+        propertyManagers.get(updater.getPropertyID()).addOrUpdateRentableItemType(updater);
     }
 
     @Override
     public void removeRentableItemType(RentableItemTypeUpdateEvent event) {
         RentableItemTypeUpdater updater = event.getUpdater();
-        getExistingPropertyManagerSetup(updater.getPropertyID()).removeRentableItemType(updater);
+        propertyManagers.get(updater.getPropertyID()).removeRentableItemType(updater);
     }
 
 }
