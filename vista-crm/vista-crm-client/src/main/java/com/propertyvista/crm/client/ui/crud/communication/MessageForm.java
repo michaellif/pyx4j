@@ -169,7 +169,9 @@ public class MessageForm extends CrmEntityForm<MessageDTO> {
 
         private Anchor btnMarkAsUnread;
 
-        private Anchor btnForward;
+        private Anchor btnForwardMessage;
+
+        private Anchor btnForwardTicket;
 
         private Anchor btnReply;
 
@@ -485,7 +487,7 @@ public class MessageForm extends CrmEntityForm<MessageDTO> {
 
             });
 
-            btnForward = new Anchor(i18n.tr("Forward"), new Command() {
+            btnForwardMessage = new Anchor(i18n.tr("Create Message"), new Command() {
                 @Override
                 public void execute() {
                     if (!isValid()) {
@@ -494,6 +496,21 @@ public class MessageForm extends CrmEntityForm<MessageDTO> {
                     } else {
                         MessageDTO currentMessage = getCurrent();
                         CrudAppPlace place = new CrmSiteMap.Communication.Message(currentMessage);
+                        place.setType(Type.editor);
+                        AppSite.getPlaceController().goTo(place);
+                    }
+                };
+            });
+
+            btnForwardTicket = new Anchor(i18n.tr("Create Ticket"), new Command() {
+                @Override
+                public void execute() {
+                    if (!isValid()) {
+                        setVisited(true);
+                        MessageDialog.error(i18n.tr("Error"), getValidationResults().getValidationMessage(true));
+                    } else {
+                        MessageDTO currentMessage = getCurrent();
+                        CrudAppPlace place = new CrmSiteMap.Communication.Ticket(currentMessage);
                         place.setType(Type.editor);
                         AppSite.getPlaceController().goTo(place);
                     }
@@ -522,7 +539,8 @@ public class MessageForm extends CrmEntityForm<MessageDTO> {
 
             tb.addItem(btnSend);
             tb.addItem(btnReply);
-            tb.addItem(btnForward);
+            tb.addItem(btnForwardMessage);
+            tb.addItem(btnForwardTicket);
             tb.addItem(btnCancel);
             tb.addItem(btnMarkAsUnread);
             return tb;
@@ -562,7 +580,8 @@ public class MessageForm extends CrmEntityForm<MessageDTO> {
                 btnSend.setVisible(true);
                 btnCancel.setVisible(true);
                 btnReply.setVisible(false);
-                btnForward.setVisible(false);
+                btnForwardMessage.setVisible(false);
+                btnForwardTicket.setVisible(false);
                 starImage.setVisible(false);
                 btnMarkAsUnread.setVisible(false);
                 get(proto().star()).setVisible(false);
@@ -594,7 +613,8 @@ public class MessageForm extends CrmEntityForm<MessageDTO> {
                 btnReply.setVisible(!ClientContext.getUserVisit().getName().equals(getValue().header().sender().getValue())
                         && getValue().allowedReply().getValue(true) && !ThreadStatus.Closed.equals(getValue().status().getValue())
                         && !ThreadStatus.Cancelled.equals(getValue().status().getValue()));
-                btnForward.setVisible(true);
+                btnForwardMessage.setVisible(true);
+                btnForwardTicket.setVisible(true);
                 get(proto().header()).setVisible(true);
                 get(proto().star()).setVisible(getValue().isInRecipients().getValue(false));
                 btnMarkAsUnread.setVisible(getValue().isInRecipients().getValue(false));

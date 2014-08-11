@@ -134,6 +134,11 @@ public class MessageViewerViewImpl extends CrmViewerViewImplBase<MessageDTO> imp
             }
         }
 
+        if (MessageGroupCategory.Custom.equals(value.topic().category().getValue())) {
+            setCaption(i18n.tr("Message") + " " + value.getStringView());
+        } else {
+            setCaption(i18n.tr("Ticket") + " " + value.getStringView());
+        }
     }
 
     public void assignEmployee(Employee e) {

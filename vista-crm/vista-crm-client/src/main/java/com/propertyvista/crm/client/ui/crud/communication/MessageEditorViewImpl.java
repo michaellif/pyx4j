@@ -28,4 +28,9 @@ public class MessageEditorViewImpl extends CrmEditorViewImplBase<MessageDTO> imp
 
     }
 
+    @Override
+    public void populate(MessageDTO value) {
+        super.populate(value);
+        setCaption(i18n.tr("New") + " " + getCaptionBase());
+    }
 }

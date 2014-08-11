@@ -609,16 +609,15 @@ public class CrmSiteMap implements SiteMap {
     // Communication Started --------------
     @PlaceProperties(navigLabel = "Communication")
     public static class Communication extends AppPlace {
-        @PlaceProperties(navigLabel = "Messages")
-        public static class Message extends CrmCrudAppPlace {
+        public static class CommunicationAppPlace extends CrmCrudAppPlace {
             private MessageCategory filterByCategory;
 
             private MessageDTO forwardedMessage;
 
-            public Message() {
+            public CommunicationAppPlace() {
             }
 
-            public Message(MessageCategory filterByCategory) {
+            public CommunicationAppPlace(MessageCategory filterByCategory) {
                 this.filterByCategory = filterByCategory;
             }
 
@@ -626,7 +625,7 @@ public class CrmSiteMap implements SiteMap {
                 return filterByCategory;
             }
 
-            public Message(MessageDTO forwardedMessage) {
+            public CommunicationAppPlace(MessageDTO forwardedMessage) {
                 this.forwardedMessage = forwardedMessage;
             }
 
@@ -635,19 +634,31 @@ public class CrmSiteMap implements SiteMap {
             }
         }
 
-        @PlaceProperties(navigLabel = "Tickets")
-        public static class Ticket extends CrmCrudAppPlace {
-            private MessageCategory filterByCategory;
+        @PlaceProperties(navigLabel = "Messages")
+        public static class Message extends CommunicationAppPlace {
+            public Message() {
+            }
 
+            public Message(MessageCategory filterByCategory) {
+                super(filterByCategory);
+            }
+
+            public Message(MessageDTO forwardedMessage) {
+                super(forwardedMessage);
+            }
+        }
+
+        @PlaceProperties(navigLabel = "Tickets")
+        public static class Ticket extends CommunicationAppPlace {
             public Ticket() {
             }
 
             public Ticket(MessageCategory filterByCategory) {
-                this.filterByCategory = filterByCategory;
+                super(filterByCategory);
             }
 
-            public MessageCategory getMessageCategory() {
-                return filterByCategory;
+            public Ticket(MessageDTO forwardedMessage) {
+                super(forwardedMessage);
             }
         }
     }

@@ -24,7 +24,7 @@ import com.pyx4j.widgets.client.style.theme.WidgetTheme;
 
 public class CommunicationCrmTheme extends Theme {
     public static enum StyleName implements IStyleName {
-        Comm, CommContent, CommCallout, CommHeader, CommHeaderTitle, CommHeaderWriteAction, CommMessage, AllertButton
+        Comm, CommContent, CommCallout, CommHeader, CommHeaderTitle, CommMessage, AllertButton
     }
 
     public static enum StyleDependent implements IStyleDependent {
@@ -63,12 +63,6 @@ public class CommunicationCrmTheme extends Theme {
         style.addProperty("color", ThemeColor.foreground, 0.1);
         style.addProperty("font-weight", "bold");
         style.addProperty("color", ThemeColor.foreground, 0.1);
-        addStyle(style);
-
-        style = new Style(".", StyleName.CommHeaderWriteAction);
-        style.addProperty("margin", "17px 15px 0 5px");
-        style.addProperty("vertical-align", "top");
-        style.addProperty("float", "right");
         addStyle(style);
 
         style = new Style(".", StyleName.CommMessage);

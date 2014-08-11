@@ -183,7 +183,9 @@ public class CommunicationViewImpl extends FlowPanel implements CommunicationVie
 
         private final Anchor ticketsAnchor;
 
-        private final Image writeActionImage;
+        private final Anchor newMessageAnchor;
+
+        private final Anchor newTicketAnchor;
 
         public HeaderHolder() {
 
@@ -216,21 +218,34 @@ public class CommunicationViewImpl extends FlowPanel implements CommunicationVie
             ticketsAnchor.setStyleName(CommunicationCrmTheme.StyleName.CommHeaderTitle.name());
             ticketsAnchor.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
 
-            writeActionImage = new Image(CrmImages.INSTANCE.writeMessage());
-            writeActionImage.setStyleName(CommunicationCrmTheme.StyleName.CommHeaderWriteAction.name());
-            writeActionImage.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
-            writeActionImage.getElement().getStyle().setCursor(Cursor.POINTER);
-            writeActionImage.addClickHandler(new ClickHandler() {
+            newMessageAnchor = new Anchor("Create Message, ", new Command() {
+
                 @Override
-                public void onClick(ClickEvent event) {
+                public void execute() {
                     CrudAppPlace place = new CrmSiteMap.Communication.Message();
                     place.setType(Type.editor);
                     AppSite.getPlaceController().goTo(place);
                 }
             });
+            newMessageAnchor.setStyleName(CommunicationCrmTheme.StyleName.CommHeaderTitle.name());
+            newMessageAnchor.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
+
+            newTicketAnchor = new Anchor("Create Ticket", new Command() {
+
+                @Override
+                public void execute() {
+                    CrudAppPlace place = new CrmSiteMap.Communication.Ticket();
+                    place.setType(Type.editor);
+                    AppSite.getPlaceController().goTo(place);
+                }
+            });
+            newTicketAnchor.setStyleName(CommunicationCrmTheme.StyleName.CommHeaderTitle.name());
+            newTicketAnchor.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
+
             add(messagesAnchor);
             add(ticketsAnchor);
-            add(writeActionImage);
+            add(newMessageAnchor);
+            add(newTicketAnchor);
 
         }
 
@@ -246,9 +261,9 @@ public class CommunicationViewImpl extends FlowPanel implements CommunicationVie
             if (dispatchedMessagesNum > 0) {
                 StringBuffer statusLabel = new StringBuffer();
                 statusLabel.append(dispatchedMessagesNum);
-                ticketsAnchor.setText("Tickets (" + statusLabel.toString() + ")");
+                ticketsAnchor.setText("Tickets (" + statusLabel.toString() + "), ");
             } else {
-                ticketsAnchor.setText("Tickets");
+                ticketsAnchor.setText("Tickets, ");
             }
         }
     }

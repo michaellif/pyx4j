@@ -25,7 +25,9 @@ import com.google.gwt.user.client.ui.MenuItem;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
+import com.pyx4j.entity.core.criterion.PropertyCriterion;
 import com.pyx4j.entity.rpc.AbstractListCrudService;
+import com.pyx4j.forms.client.ui.CEntityComboBox;
 import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
@@ -161,7 +163,47 @@ public class MessageEditForm extends CrmEntityForm<MessageDTO> {
         formPanel.h3("");
         formPanel.br();
         formPanel.append(Location.Dual, proto().subject()).decorate();
-        formPanel.append(Location.Dual, proto().topic()).decorate();
+
+        formPanel.append(Location.Dual, proto().topic(), new CEntityComboBox<MessageCategory>(MessageCategory.class) {
+            @Override
+            public void retriveOptions(final AsyncOptionsReadyCallback<MessageCategory> callback) {
+                resetCriteria();
+                resetOptions();
+                if (getParentView() == null || getParentView().getPresenter() == null) {
+                    retriveOptionsPrivate(callback);
+                } else {
+                    MessageEditorActivity presenter = ((MessageEditorActivity) getParentView().getPresenter());
+                    final Boolean is4Message = presenter.isForMessage();
+                    if (is4Message == null) {
+                        retriveOptionsPrivate(callback);
+                    } else {
+                        final PropertyCriterion crit = is4Message ? PropertyCriterion.eq(proto().category(), MessageCategory.MessageGroupCategory.Custom)
+                                : PropertyCriterion.ne(proto().category(), MessageCategory.MessageGroupCategory.Custom);
+
+                        resetCriteria();
+                        addCriterion(crit);
+
+                        resetOptions();
+                        retriveOptionsPrivate(callback);
+                    }
+                }
+            }
+
+            private void retriveOptionsPrivate(final AsyncOptionsReadyCallback<MessageCategory> callback) {
+                super.retriveOptions(new AsyncOptionsReadyCallback<MessageCategory>() {
+                    @Override
+                    public void onOptionsReady(List<MessageCategory> opt) {
+
+                        if (callback != null && opt != null) {
+                            callback.onOptionsReady(opt);
+                        }
+                    }
+                });
+            }
+        }).decorate();
+
+        get(proto().topic());
+
         formPanel.append(Location.Left, proto().allowedReply()).decorate();
         formPanel.append(Location.Right, proto().highImportance()).decorate();
         formPanel.br();

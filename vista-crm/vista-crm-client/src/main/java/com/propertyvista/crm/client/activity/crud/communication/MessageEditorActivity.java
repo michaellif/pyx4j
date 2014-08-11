@@ -66,7 +66,14 @@ public class MessageEditorActivity extends CrmEditorActivity<MessageDTO> impleme
 
     @Override
     public MessageCategory getCategory() {
-
         return mc;
+    }
+
+    @Override
+    public Boolean isForMessage() {
+        if (place == null) {
+            return null;
+        }
+        return place instanceof Message;
     }
 }

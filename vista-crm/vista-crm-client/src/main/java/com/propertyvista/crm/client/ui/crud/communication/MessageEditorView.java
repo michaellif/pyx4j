@@ -28,5 +28,6 @@ public interface MessageEditorView extends IEditor<MessageDTO> {
 
         MessageCategory getCategory();
 
+        Boolean isForMessage();
     }
 }
