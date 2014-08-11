@@ -65,7 +65,7 @@ import com.propertyvista.biz.financial.payment.PaymentMethodFacade;
 import com.propertyvista.biz.occupancy.OccupancyFacade;
 import com.propertyvista.biz.system.yardi.YardiConfigurationFacade;
 import com.propertyvista.biz.system.yardi.YardiPropertyNoAccessException;
-import com.propertyvista.biz.system.yardi.YardiResidentNoTenantsExistException;
+import com.propertyvista.biz.system.yardi.YardiNoTenantsExistException;
 import com.propertyvista.biz.system.yardi.YardiServiceException;
 import com.propertyvista.domain.dashboard.gadgets.availability.UnitAvailabilityStatus;
 import com.propertyvista.domain.financial.ARCode;
@@ -91,7 +91,6 @@ import com.propertyvista.yardi.services.YardiResidentTransactionsData.LeaseTrans
 import com.propertyvista.yardi.services.YardiResidentTransactionsData.PropertyTransactionData;
 import com.propertyvista.yardi.stubs.YardiGuestManagementStubProxy;
 import com.propertyvista.yardi.stubs.YardiILSGuestCardStubProxy;
-import com.propertyvista.yardi.stubs.YardiLicense;
 import com.propertyvista.yardi.stubs.YardiResidentTransactionsStubProxy;
 import com.propertyvista.yardi.stubs.YardiServiceMessageException;
 
@@ -195,7 +194,7 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
             BillingCycle nextCycle = ServerSideFactory.create(PaymentMethodFacade.class).getNextAutopayBillingCycle(lease);
             leaseCharges = new YardiResidentTransactionsStubProxy().getLeaseChargesForTenant(yc, propertyCode, lease.leaseId().getValue(), nextCycle
                     .billingCycleStartDate().getValue());
-        } catch (YardiResidentNoTenantsExistException e) {
+        } catch (YardiNoTenantsExistException e) {
             log.warn("Can't get changes for {}; {}", lease.leaseId().getValue(), e.getMessage()); // log error and reset lease charges.
         }
         if (leaseCharges != null) {
@@ -283,15 +282,9 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
                 }
                 executionMonitor.addInfoEvent("Property", propertyCode);
             } catch (YardiServiceMessageException e) {
-                if (e.getMessages().hasErrorMessage(YardiHandledErrorMessages.errorMessage_NoAccess)) {
-                    throw new YardiPropertyNoAccessException(e.getMessages().getErrorMessage().getValue());
-                } else if (e.getMessages().hasErrorMessage(YardiHandledErrorMessages.errorMessage_TenantNotFound)) {
+                if (e.getMessages().hasErrorMessage(YardiHandledErrorMessages.errorMessage_TenantNotFound)) {
                     // All Ok there are no transactions
-                } else {
-                    YardiLicense.handleVendorLicenseError(e.getMessages());
-                    throw new YardiServiceException(SimpleMessageFormat.format("{0}; PropertyId {1}", e.getMessages().toString(), propertyCode));
                 }
-
             } catch (YardiPropertyNoAccessException e) {
                 if (suspendBuilding(yardiInterfaceId, propertyCode)) {
                     executionMonitor.addErredEvent("BuildingSuspended", e);

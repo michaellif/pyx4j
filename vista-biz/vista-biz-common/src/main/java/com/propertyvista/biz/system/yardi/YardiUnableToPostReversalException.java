@@ -16,11 +16,11 @@ package com.propertyvista.biz.system.yardi;
 /**
  * We can't post Receipt again, The error will not be corrected automatically.
  */
-public class UnableToPostTerminalYardiServiceException extends YardiServiceException {
+public class YardiUnableToPostReversalException extends YardiServiceException {
 
     private static final long serialVersionUID = 1L;
 
-    public UnableToPostTerminalYardiServiceException(String message) {
+    public YardiUnableToPostReversalException(String message) {
         super(message);
     }
 }

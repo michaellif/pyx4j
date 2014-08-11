@@ -14,23 +14,23 @@
 package com.propertyvista.biz.system.yardi;
 
 
-public class YardiResidentNoTenantsExistException extends YardiServiceException {
+public class YardiNoTenantsExistException extends YardiServiceException {
 
     private static final long serialVersionUID = 1L;
 
-    public YardiResidentNoTenantsExistException() {
+    public YardiNoTenantsExistException() {
         super();
     }
 
-    public YardiResidentNoTenantsExistException(String message, Throwable cause) {
+    public YardiNoTenantsExistException(String message, Throwable cause) {
         super(message, cause);
     }
 
-    public YardiResidentNoTenantsExistException(String message) {
+    public YardiNoTenantsExistException(String message) {
         super(message);
     }
 
-    public YardiResidentNoTenantsExistException(Throwable cause) {
+    public YardiNoTenantsExistException(Throwable cause) {
         super(cause);
     }
 }

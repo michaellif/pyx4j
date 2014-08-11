@@ -19,10 +19,11 @@ import com.yardi.entity.resident.ResidentTransactions;
 
 import com.pyx4j.commons.LogicalDate;
 
-import com.propertyvista.biz.system.yardi.UnableToPostTerminalYardiServiceException;
+import com.propertyvista.biz.system.yardi.YardiNoTenantsExistException;
 import com.propertyvista.biz.system.yardi.YardiPropertyNoAccessException;
 import com.propertyvista.biz.system.yardi.YardiResponseException;
 import com.propertyvista.biz.system.yardi.YardiServiceException;
+import com.propertyvista.biz.system.yardi.YardiUnableToPostReversalException;
 import com.propertyvista.domain.settings.PmcYardiCredential;
 import com.propertyvista.yardi.beans.Messages;
 import com.propertyvista.yardi.beans.Properties;
@@ -32,12 +33,22 @@ import com.propertyvista.yardi.services.YardiHandledErrorMessages;
  * This class is used to provide an access for the application to a specific Yardi interface.
  * It's main functions are the following:
  * - create an instance of a proper yardi stub implementation delegate
- * - call corresponding delegate method and validate response for possible errors
+ * - call corresponding delegate method and validate response message for possible errors
  */
 public class YardiResidentTransactionsStubProxy extends YardiAbstractStubProxy implements YardiResidentTransactionsStub {
 
     public YardiResidentTransactionsStubProxy() {
-        setMessageErrorHandler(noPropertyAccessHandler);
+        setMessageErrorHandler(new MessageErrorHandler() {
+            @Override
+            public boolean handle(Messages messages) throws YardiServiceException {
+                if (messages.hasErrorMessage(YardiHandledErrorMessages.errorMessage_TenantNotFound)) {
+                    throw new YardiNoTenantsExistException(messages.getErrorMessage().getValue());
+                } else if (messages.hasErrorMessage(YardiHandledErrorMessages.errorMessage_NoAccess)) {
+                    throw new YardiPropertyNoAccessException(messages.getErrorMessage().getValue());
+                }
+                return false;
+            }
+        });
     }
 
     private YardiResidentTransactionsStub getStub(PmcYardiCredential yc) {
@@ -96,8 +107,8 @@ public class YardiResidentTransactionsStubProxy extends YardiAbstractStubProxy i
             setMessageErrorHandler(new MessageErrorHandler() {
                 @Override
                 public boolean handle(Messages messages) throws YardiServiceException {
-                    if (messages.hasErrorMessage(YardiHandledErrorMessages.unableToPostTerminalMessages)) {
-                        throw new UnableToPostTerminalYardiServiceException(messages.getErrorMessage().getValue());
+                    if (messages.hasErrorMessage(YardiHandledErrorMessages.unableToPostReversalMessages)) {
+                        throw new YardiUnableToPostReversalException(messages.getErrorMessage().getValue());
                     } else if (messages.hasErrorMessage(YardiHandledErrorMessages.errorMessage_NoAccess)) {
                         throw new YardiPropertyNoAccessException(messages.getErrorMessage().getValue());
                     }

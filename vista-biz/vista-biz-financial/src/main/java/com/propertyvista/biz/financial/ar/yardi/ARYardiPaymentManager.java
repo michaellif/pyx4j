@@ -33,7 +33,7 @@ import com.propertyvista.biz.financial.ar.ARAbstractPaymentManager;
 import com.propertyvista.biz.financial.ar.ARException;
 import com.propertyvista.biz.financial.billingcycle.BillingCycleFacade;
 import com.propertyvista.biz.financial.payment.PaymentBatchContext;
-import com.propertyvista.biz.system.yardi.UnableToPostTerminalYardiServiceException;
+import com.propertyvista.biz.system.yardi.YardiUnableToPostReversalException;
 import com.propertyvista.biz.system.yardi.YardiARFacade;
 import com.propertyvista.biz.system.yardi.YardiPropertyNoAccessException;
 import com.propertyvista.biz.system.yardi.YardiServiceException;
@@ -134,7 +134,7 @@ class ARYardiPaymentManager extends ARAbstractPaymentManager {
         } catch (RemoteException e) {
             throw new ARException(SimpleMessageFormat.format("Posting receipt {0} reversal to Yardi failed due to communication failure; Lease Id {1}", //
                     paymentRecord.id(), paymentRecord.billingAccount().lease().leaseId()), e);
-        } catch (UnableToPostTerminalYardiServiceException e) {
+        } catch (YardiUnableToPostReversalException e) {
             paymentRecord.notice().setValue(e.getMessage());
             Persistence.service().merge(paymentRecord);
             ServerSideFactory.create(NotificationFacade.class).yardiUnableToRejectPayment(paymentRecord, applyNSF, e.getMessage());

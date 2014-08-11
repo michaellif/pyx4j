@@ -31,7 +31,7 @@ public abstract class YardiHandledErrorMessages {
 
     public static final String errorMessage_PostMonthAccess2 = "Cannot  reverse  a receipt whose post month is outside your allowable range";
 
-    public static final String[] unableToPostTerminalMessages = new String[] { errorMessage_AlreadyNSF1, errorMessage_AlreadyNSF2,
+    public static final String[] unableToPostReversalMessages = new String[] { errorMessage_AlreadyNSF1, errorMessage_AlreadyNSF2,
             errorMessage_AlreadyReversed, errorMessage_PostMonthAccess1, errorMessage_PostMonthAccess2 };
 
 }
