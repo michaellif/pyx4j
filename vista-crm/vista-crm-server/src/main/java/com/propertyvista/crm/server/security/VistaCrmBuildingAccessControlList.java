@@ -218,8 +218,8 @@ class VistaCrmBuildingAccessControlList extends UIAclBuilder {
             grant(BuildingBasic, entities, READ);
             grant(BuildingFinancial, entities, READ);
             grant(BuildingAccounting, entities, READ);
-            grant(BuildingProperty, entities, READ);
-            grant(BuildingMarketing, entities, ALL);
+            grant(BuildingProperty, entities, ALL);
+            grant(BuildingMarketing, entities, READ | UPDATE);
             grant(BuildingMechanicals, entities, READ);
             grant(BuildingAdministrator, entities, ALL);
             grant(BuildingLeasing, entities, READ);
