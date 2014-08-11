@@ -303,7 +303,7 @@ public abstract class CForm<E extends IEntity> extends CContainer<CForm<E>, E, I
         EntityMeta em = entity1.getEntityMeta();
         for (String memberName : em.getMemberNames()) {
             MemberMeta memberMeta = em.getMemberMeta(memberName);
-            if (memberMeta.isDetached() || memberMeta.isTransient() || memberMeta.isRpcTransient()) {
+            if ((memberMeta.isDetached() || memberMeta.isTransient() || memberMeta.isRpcTransient())&&!IList.class.equals(memberMeta.getObjectClass())) {
                 continue;
             }
             if (memberMeta.isEntity()) {
@@ -328,6 +328,9 @@ public abstract class CForm<E extends IEntity> extends CContainer<CForm<E>, E, I
                     return false;
                 }
             } else if (IList.class.equals(memberMeta.getObjectClass())) {
+                if(memberMeta.getAttachLevel().equals(com.pyx4j.entity.core.AttachLevel.Detached)){
+                    continue;
+                }
                 if (memberMeta.isOwnedRelationships()) {
                     if (!listValuesEquals((IList<?>) entity1.getMember(memberName), (IList<?>) entity2.getMember(memberName), processed)) {
                         log.debug("changed {}", memberName);
