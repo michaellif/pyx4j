@@ -1379,7 +1379,7 @@ BEGIN
         ALTER TABLE communication_message ADD CONSTRAINT communication_message_sender_discriminator_d_ck 
             CHECK ((sender_discriminator) IN ('AptUnit', 'Building', 'CrmUser', 'CustomerUser', 'Portfolio', 'SystemEndpoint', 'Tenant'));
         ALTER TABLE communication_message_category ADD CONSTRAINT communication_message_category_category_e_ck 
-            CHECK ((category) IN ('Custom', 'LandlordOriginated', 'TenantOriginated', 'VendorOriginated'));
+            CHECK ((category) IN ('Custom', 'Landlord', 'Tenant', 'Vendor'));
         ALTER TABLE communication_thread ADD CONSTRAINT communication_thread_owner_discriminator_d_ck 
             CHECK ((owner_discriminator) IN ('AptUnit', 'Building', 'CrmUser', 'CustomerUser', 'Portfolio', 'SystemEndpoint', 'Tenant'));
         ALTER TABLE communication_thread ADD CONSTRAINT communication_thread_status_e_ck 
