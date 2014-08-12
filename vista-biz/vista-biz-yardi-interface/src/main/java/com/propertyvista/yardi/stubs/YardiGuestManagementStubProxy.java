@@ -26,9 +26,9 @@ import com.propertyvista.biz.system.yardi.YardiServiceException;
 import com.propertyvista.domain.settings.PmcYardiCredential;
 import com.propertyvista.yardi.beans.Properties;
 
-public class YardiGuestManagementStubProxy extends YardiAbstractStubProxy implements YardiGuestManagementStub {
+class YardiGuestManagementStubProxy extends YardiAbstractStubProxy implements YardiGuestManagementStub {
 
-    public YardiGuestManagementStubProxy() {
+    YardiGuestManagementStubProxy() {
         setMessageErrorHandler(noPropertyAccessHandler);
     }
 

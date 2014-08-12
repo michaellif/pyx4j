@@ -36,7 +36,7 @@ import com.propertyvista.yardi.YardiConstants.Action;
 import com.propertyvista.yardi.YardiInterfaceType;
 import com.propertyvista.yardi.beans.Properties;
 
-public class YardiILSGuestCardStubImpl extends AbstractYardiStub implements YardiILSGuestCardStub {
+class YardiILSGuestCardStubImpl extends AbstractYardiStub implements YardiILSGuestCardStub {
 
     @Override
     public Properties getPropertyConfigurations(PmcYardiCredential yc) throws YardiServiceException, RemoteException {

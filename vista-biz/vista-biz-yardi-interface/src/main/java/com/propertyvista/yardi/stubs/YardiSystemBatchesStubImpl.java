@@ -46,7 +46,7 @@ import com.propertyvista.yardi.YardiConstants;
 import com.propertyvista.yardi.YardiConstants.Action;
 import com.propertyvista.yardi.YardiInterfaceType;
 
-public class YardiSystemBatchesStubImpl extends AbstractYardiStub implements YardiSystemBatchesStub {
+class YardiSystemBatchesStubImpl extends AbstractYardiStub implements YardiSystemBatchesStub {
 
     @Override
     public long openReceiptBatch(PmcYardiCredential yc, String propertyId) throws RemoteException {

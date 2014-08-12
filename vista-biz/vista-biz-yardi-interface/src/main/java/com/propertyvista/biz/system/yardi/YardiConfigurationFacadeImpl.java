@@ -27,8 +27,9 @@ import com.propertyvista.biz.communication.NotificationFacade;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.settings.PmcYardiCredential;
 import com.propertyvista.yardi.mappers.BuildingsMapper;
-import com.propertyvista.yardi.stubs.YardiGuestManagementStubProxy;
-import com.propertyvista.yardi.stubs.YardiResidentTransactionsStubProxy;
+import com.propertyvista.yardi.stubs.YardiGuestManagementStub;
+import com.propertyvista.yardi.stubs.YardiResidentTransactionsStub;
+import com.propertyvista.yardi.stubs.YardiStubFactory;
 
 public class YardiConfigurationFacadeImpl implements YardiConfigurationFacade {
 
@@ -82,7 +83,8 @@ public class YardiConfigurationFacadeImpl implements YardiConfigurationFacade {
         // create master-list of all configured properties (this assumes that ILS is the master interface for property configurations)
         List<String> masterPropertyList = new ArrayList<>();
 
-        for (com.propertyvista.yardi.beans.Property property : new YardiGuestManagementStubProxy().getPropertyConfigurations(yc).getProperties()) {
+        for (com.propertyvista.yardi.beans.Property property : YardiStubFactory.create(YardiGuestManagementStub.class).getPropertyConfigurations(yc)
+                .getProperties()) {
             masterPropertyList.add(BuildingsMapper.getPropertyCode(property.getCode())); // lower case
         }
 
@@ -94,7 +96,7 @@ public class YardiConfigurationFacadeImpl implements YardiConfigurationFacade {
             for (String propertyListCode : yc.propertyListCodes().getValue().trim().split("\\s*,\\s*")) {
                 List<PropertyMarketingSources> sourceList = null;
                 try {
-                    sourceList = new YardiGuestManagementStubProxy().getYardiMarketingSources(yc, propertyListCode).getProperty();
+                    sourceList = YardiStubFactory.create(YardiGuestManagementStub.class).getYardiMarketingSources(yc, propertyListCode).getProperty();
                     for (PropertyMarketingSources sources : sourceList) {
                         propertyCodes.add(BuildingsMapper.getPropertyCode(sources.getPropertyCode()));
                     }
@@ -113,7 +115,8 @@ public class YardiConfigurationFacadeImpl implements YardiConfigurationFacade {
         if (propertyCodes.size() > 0) {
             // B&P sanity check - ensure selected properties available in B&P PropertyConfigurations
             List<String> bpPropertyList = new ArrayList<>();
-            for (com.propertyvista.yardi.beans.Property property : new YardiResidentTransactionsStubProxy().getPropertyConfigurations(yc).getProperties()) {
+            for (com.propertyvista.yardi.beans.Property property : YardiStubFactory.create(YardiResidentTransactionsStub.class).getPropertyConfigurations(yc)
+                    .getProperties()) {
                 bpPropertyList.add(BuildingsMapper.getPropertyCode(property.getCode()));
             }
 

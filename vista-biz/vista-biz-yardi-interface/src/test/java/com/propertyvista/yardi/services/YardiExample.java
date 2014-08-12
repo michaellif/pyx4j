@@ -24,7 +24,8 @@ import com.pyx4j.commons.LogicalDate;
 
 import com.propertyvista.domain.property.yardi.YardiPropertyConfiguration;
 import com.propertyvista.server.config.DevYardiCredentials;
-import com.propertyvista.yardi.stubs.YardiResidentTransactionsStubProxy;
+import com.propertyvista.yardi.stubs.YardiResidentTransactionsStub;
+import com.propertyvista.yardi.stubs.YardiStubFactory;
 
 public class YardiExample {
 
@@ -48,7 +49,7 @@ public class YardiExample {
 
     private static void getResidentTransactions() {
         try {
-            ResidentTransactions residentTransactions = new YardiResidentTransactionsStubProxy().getAllResidentTransactions(
+            ResidentTransactions residentTransactions = YardiStubFactory.create(YardiResidentTransactionsStub.class).getAllResidentTransactions(
                     DevYardiCredentials.getTestPmcYardiCredential(), DevYardiCredentials.getTestPmcYardiCredential().propertyListCodes().getValue());
             System.out.println(residentTransactions);
         } catch (Throwable e) {
@@ -59,8 +60,8 @@ public class YardiExample {
 
     private static void getResidentsLeaseCharges() {
         try {
-            new YardiResidentTransactionsStubProxy().getAllLeaseCharges(DevYardiCredentials.getTestPmcYardiCredential(), DevYardiCredentials
-                    .getTestPmcYardiCredential().propertyListCodes().getValue(), new LogicalDate());
+            YardiStubFactory.create(YardiResidentTransactionsStub.class).getAllLeaseCharges(DevYardiCredentials.getTestPmcYardiCredential(),
+                    DevYardiCredentials.getTestPmcYardiCredential().propertyListCodes().getValue(), new LogicalDate());
 
         } catch (Throwable e) {
             log.error("error", e);

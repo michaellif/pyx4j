@@ -64,8 +64,8 @@ import com.propertyvista.biz.communication.NotificationFacade;
 import com.propertyvista.biz.financial.payment.PaymentMethodFacade;
 import com.propertyvista.biz.occupancy.OccupancyFacade;
 import com.propertyvista.biz.system.yardi.YardiConfigurationFacade;
-import com.propertyvista.biz.system.yardi.YardiPropertyNoAccessException;
 import com.propertyvista.biz.system.yardi.YardiNoTenantsExistException;
+import com.propertyvista.biz.system.yardi.YardiPropertyNoAccessException;
 import com.propertyvista.biz.system.yardi.YardiServiceException;
 import com.propertyvista.domain.dashboard.gadgets.availability.UnitAvailabilityStatus;
 import com.propertyvista.domain.financial.ARCode;
@@ -89,10 +89,11 @@ import com.propertyvista.yardi.processors.YardiPaymentProcessor;
 import com.propertyvista.yardi.processors.YardiProductCatalogProcessor;
 import com.propertyvista.yardi.services.YardiResidentTransactionsData.LeaseTransactionData;
 import com.propertyvista.yardi.services.YardiResidentTransactionsData.PropertyTransactionData;
-import com.propertyvista.yardi.stubs.YardiGuestManagementStubProxy;
-import com.propertyvista.yardi.stubs.YardiILSGuestCardStubProxy;
-import com.propertyvista.yardi.stubs.YardiResidentTransactionsStubProxy;
+import com.propertyvista.yardi.stubs.YardiGuestManagementStub;
+import com.propertyvista.yardi.stubs.YardiILSGuestCardStub;
+import com.propertyvista.yardi.stubs.YardiResidentTransactionsStub;
 import com.propertyvista.yardi.stubs.YardiServiceMessageException;
+import com.propertyvista.yardi.stubs.YardiStubFactory;
 
 /**
  * Implementation functionality for updating properties/units/leases/tenants basing on getResidentTransactions from YARDI api
@@ -126,7 +127,7 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
     }
 
     public List<YardiPropertyConfiguration> getPropertyConfigurations(PmcYardiCredential yc) throws YardiServiceException, RemoteException {
-        return getPropertyConfigurations(new YardiResidentTransactionsStubProxy().getPropertyConfigurations(yc));
+        return getPropertyConfigurations(YardiStubFactory.create(YardiResidentTransactionsStub.class).getPropertyConfigurations(yc));
     }
 
     /**
@@ -183,8 +184,8 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
         String propertyCode = lease.unit().building().propertyCode().getValue();
         YardiResidentTransactionsData rtd = new YardiResidentTransactionsData(yardiInterfaceId, executionMonitor, false);
 
-        ResidentTransactions transactions = new YardiResidentTransactionsStubProxy().getResidentTransactionsForTenant(yc, propertyCode, lease.leaseId()
-                .getValue());
+        ResidentTransactions transactions = YardiStubFactory.create(YardiResidentTransactionsStub.class).getResidentTransactionsForTenant(yc, propertyCode,
+                lease.leaseId().getValue());
         if (transactions != null) {
             preProcessLeaseResidentsData(rtd, transactions);
         }
@@ -192,8 +193,8 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
         ResidentTransactions leaseCharges = null;
         try {
             BillingCycle nextCycle = ServerSideFactory.create(PaymentMethodFacade.class).getNextAutopayBillingCycle(lease);
-            leaseCharges = new YardiResidentTransactionsStubProxy().getLeaseChargesForTenant(yc, propertyCode, lease.leaseId().getValue(), nextCycle
-                    .billingCycleStartDate().getValue());
+            leaseCharges = YardiStubFactory.create(YardiResidentTransactionsStub.class).getLeaseChargesForTenant(yc, propertyCode, lease.leaseId().getValue(),
+                    nextCycle.billingCycleStartDate().getValue());
         } catch (YardiNoTenantsExistException e) {
             log.warn("Can't get changes for {}; {}", lease.leaseId().getValue(), e.getMessage()); // log error and reset lease charges.
         }
@@ -207,7 +208,8 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
     }
 
     public void updateProductCatalog(PmcYardiCredential yc, Building building, ExecutionMonitor executionMonitor) throws YardiServiceException, RemoteException {
-        PhysicalProperty propertyMarketing = new YardiILSGuestCardStubProxy().getPropertyMarketingInfo(yc, building.propertyCode().getValue());
+        PhysicalProperty propertyMarketing = YardiStubFactory.create(YardiILSGuestCardStub.class).getPropertyMarketingInfo(yc,
+                building.propertyCode().getValue());
         Map<String, BigDecimal> depositInfo = getBuildingDepositInfo(building,
                 (propertyMarketing != null ? Arrays.asList(propertyMarketing) : Collections.<PhysicalProperty> emptyList()));
 
@@ -216,7 +218,7 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
 
     public void updateProductCatalog(PmcYardiCredential yc, Building building, Map<String, BigDecimal> depositInfo, ExecutionMonitor executionMonitor)
             throws YardiServiceException, RemoteException {
-        RentableItems rentableItems = new YardiGuestManagementStubProxy().getRentableItems(yc, building.propertyCode().getValue());
+        RentableItems rentableItems = YardiStubFactory.create(YardiGuestManagementStub.class).getRentableItems(yc, building.propertyCode().getValue());
 
         importProductCatalog(yc.getPrimaryKey(), building, rentableItems, depositInfo, executionMonitor);
     }
@@ -225,7 +227,7 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
         YardiPaymentProcessor paymentProcessor = new YardiPaymentProcessor();
         ResidentTransactions reversalTransactions = paymentProcessor.createTransactions(paymentProcessor.createTransactionForReversal(reversal));
 
-        new YardiResidentTransactionsStubProxy().importResidentTransactions(yc, reversalTransactions);
+        YardiStubFactory.create(YardiResidentTransactionsStub.class).importResidentTransactions(yc, reversalTransactions);
     }
 
     // Internal implementation:
@@ -276,7 +278,8 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
                 // process as propertyCode or new building
             }
             try {
-                ResidentTransactions residentTransactions = new YardiResidentTransactionsStubProxy().getAllResidentTransactions(yc, propertyCode);
+                ResidentTransactions residentTransactions = YardiStubFactory.create(YardiResidentTransactionsStub.class).getAllResidentTransactions(yc,
+                        propertyCode);
                 if (residentTransactions != null) {
                     transactions.add(residentTransactions);
                 }
@@ -320,8 +323,8 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
             } else {
                 BillingCycle nextCycle = ServerSideFactory.create(PaymentMethodFacade.class).getNextAutopayBillingCycle(building, BillingPeriod.Monthly, 1);
                 try {
-                    ResidentTransactions residentTransactions = new YardiResidentTransactionsStubProxy().getAllLeaseCharges(yc, building.propertyCode()
-                            .getValue(), nextCycle.billingCycleStartDate().getValue());
+                    ResidentTransactions residentTransactions = YardiStubFactory.create(YardiResidentTransactionsStub.class).getAllLeaseCharges(yc,
+                            building.propertyCode().getValue(), nextCycle.billingCycleStartDate().getValue());
                     if (residentTransactions != null) {
                         transactions.add(residentTransactions);
                     }
@@ -355,7 +358,7 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
             }
 
             try {
-                PhysicalProperty propertyMarketing = new YardiILSGuestCardStubProxy().getPropertyMarketingInfo(yc, propertyCode);
+                PhysicalProperty propertyMarketing = YardiStubFactory.create(YardiILSGuestCardStub.class).getPropertyMarketingInfo(yc, propertyCode);
                 if (propertyMarketing != null) {
                     marketingInfo.add(propertyMarketing);
                 }

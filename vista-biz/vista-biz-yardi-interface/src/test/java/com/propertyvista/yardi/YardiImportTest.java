@@ -49,7 +49,8 @@ import com.propertyvista.yardi.mock.updater.RtCustomerUpdater;
 import com.propertyvista.yardi.mock.updater.TransactionChargeUpdateEvent;
 import com.propertyvista.yardi.mock.updater.TransactionChargeUpdater;
 import com.propertyvista.yardi.services.YardiResidentTransactionsService;
-import com.propertyvista.yardi.stubs.YardiResidentTransactionsStubProxy;
+import com.propertyvista.yardi.stubs.YardiResidentTransactionsStub;
+import com.propertyvista.yardi.stubs.YardiStubFactory;
 
 public class YardiImportTest extends YardiTestBase {
 
@@ -368,8 +369,8 @@ public class YardiImportTest extends YardiTestBase {
 
     @Test
     public void testGetResidentTransactionsForTenant() throws Exception {
-        ResidentTransactions transactions = new YardiResidentTransactionsStubProxy().getResidentTransactionsForTenant(getYardiCredential(PROPERTYID),
-                PROPERTYID, TENANTID);
+        ResidentTransactions transactions = YardiStubFactory.create(YardiResidentTransactionsStub.class).getResidentTransactionsForTenant(
+                getYardiCredential(PROPERTYID), PROPERTYID, TENANTID);
         assertNotNull(transactions);
         assertEquals(1, transactions.getProperty().get(0).getRTCustomer().size());
         assertEquals(TENANTID, transactions.getProperty().get(0).getRTCustomer().get(0).getCustomerID());
@@ -377,19 +378,21 @@ public class YardiImportTest extends YardiTestBase {
 
     @Test
     public void testGetLeaseChargesForTenant() throws Exception {
-        ResidentTransactions transactions = new YardiResidentTransactionsStubProxy().getLeaseChargesForTenant(getYardiCredential(PROPERTYID), PROPERTYID,
-                TENANTID, null);
+        ResidentTransactions transactions = YardiStubFactory.create(YardiResidentTransactionsStub.class).getLeaseChargesForTenant(
+                getYardiCredential(PROPERTYID), PROPERTYID, TENANTID, null);
         assertEquals(1, transactions.getProperty().get(0).getRTCustomer().size());
         assertEquals("Has LeaseCharges", 0, transactions.getProperty().get(0).getRTCustomer().get(0).getRTServiceTransactions().getTransactions().size());
 
         setSysDate("01-Jun-2012");
 
-        transactions = new YardiResidentTransactionsStubProxy().getLeaseChargesForTenant(getYardiCredential(PROPERTYID), PROPERTYID, TENANTID, null);
+        transactions = YardiStubFactory.create(YardiResidentTransactionsStub.class).getLeaseChargesForTenant(getYardiCredential(PROPERTYID), PROPERTYID,
+                TENANTID, null);
         assertEquals("Has LeaseCharges", 3, transactions.getProperty().get(0).getRTCustomer().get(0).getRTServiceTransactions().getTransactions().size());
 
         setSysDate("01-Aug-2014");
 
-        transactions = new YardiResidentTransactionsStubProxy().getLeaseChargesForTenant(getYardiCredential(PROPERTYID), PROPERTYID, TENANTID, null);
+        transactions = YardiStubFactory.create(YardiResidentTransactionsStub.class).getLeaseChargesForTenant(getYardiCredential(PROPERTYID), PROPERTYID,
+                TENANTID, null);
         assertEquals("Has LeaseCharges", 0, transactions.getProperty().get(0).getRTCustomer().get(0).getRTServiceTransactions().getTransactions().size());
     }
 

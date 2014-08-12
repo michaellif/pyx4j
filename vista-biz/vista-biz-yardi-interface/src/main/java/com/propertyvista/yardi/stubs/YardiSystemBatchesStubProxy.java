@@ -24,7 +24,7 @@ import com.propertyvista.domain.settings.PmcYardiCredential;
 
 public class YardiSystemBatchesStubProxy extends YardiAbstractStubProxy implements YardiSystemBatchesStub {
 
-    public YardiSystemBatchesStubProxy() {
+    YardiSystemBatchesStubProxy() {
         setMessageErrorHandler(noPropertyAccessHandler);
     }
 

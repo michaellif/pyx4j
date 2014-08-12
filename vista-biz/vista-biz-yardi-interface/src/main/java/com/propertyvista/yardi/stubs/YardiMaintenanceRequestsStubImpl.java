@@ -53,7 +53,7 @@ import com.propertyvista.yardi.YardiConstants.Action;
 import com.propertyvista.yardi.YardiInterfaceType;
 import com.propertyvista.yardi.beans.Properties;
 
-public class YardiMaintenanceRequestsStubImpl extends AbstractYardiStub implements YardiMaintenanceRequestsStub {
+class YardiMaintenanceRequestsStubImpl extends AbstractYardiStub implements YardiMaintenanceRequestsStub {
 
     private final static Logger log = LoggerFactory.getLogger(YardiMaintenanceRequestsStubImpl.class);
 

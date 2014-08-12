@@ -25,9 +25,9 @@ import com.propertyvista.biz.system.yardi.YardiServiceException;
 import com.propertyvista.domain.settings.PmcYardiCredential;
 import com.propertyvista.yardi.beans.Properties;
 
-public class YardiMaintenanceRequestsStubProxy extends YardiAbstractStubProxy implements YardiMaintenanceRequestsStub {
+class YardiMaintenanceRequestsStubProxy extends YardiAbstractStubProxy implements YardiMaintenanceRequestsStub {
 
-    public YardiMaintenanceRequestsStubProxy() {
+    YardiMaintenanceRequestsStubProxy() {
         setMessageErrorHandler(noPropertyAccessHandler);
 
         // When Yardi SR interface has problems, instead of Messages response it returns a response with undocumented

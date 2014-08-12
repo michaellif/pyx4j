@@ -29,12 +29,23 @@ public class YardiStubFactory {
 
     private static Map<Class<?>, Map<String, Class<?>>> registeredImplementations = null;
 
-    public static <T> T create(Class<T> interfaceClass) {
-        return create(interfaceClass, null);
+    @SuppressWarnings("unchecked")
+    public static <T extends YardiInterface> T create(Class<T> interfaceClass) {
+        String interfaceClassName = interfaceClass.getName();
+        interfaceClassName = interfaceClassName + "Proxy";
+        try {
+            return (T) Class.forName(interfaceClassName).newInstance();
+        } catch (Throwable e) {
+            throw new RuntimeException("Can't create " + interfaceClassName, e);
+        }
+    }
+
+    static <T> T getStub(Class<T> interfaceClass) {
+        return getStub(interfaceClass, null);
     }
 
     @SuppressWarnings("unchecked")
-    public static <T> T create(Class<T> interfaceClass, String version) {
+    static <T> T getStub(Class<T> interfaceClass, String version) {
         if (registeredImplementations != null) {
             Map<String, Class<?>> versions = registeredImplementations.get(interfaceClass);
             if (versions != null) {

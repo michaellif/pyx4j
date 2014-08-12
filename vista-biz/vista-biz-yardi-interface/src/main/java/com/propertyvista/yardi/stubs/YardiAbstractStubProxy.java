@@ -27,7 +27,7 @@ import com.propertyvista.yardi.YardiInterface;
 import com.propertyvista.yardi.beans.Messages;
 import com.propertyvista.yardi.services.YardiHandledErrorMessages;
 
-public class YardiAbstractStubProxy {
+class YardiAbstractStubProxy {
 
     private final static Logger log = LoggerFactory.getLogger(YardiResidentTransactionsStubProxy.class);
 
@@ -46,6 +46,9 @@ public class YardiAbstractStubProxy {
             return false;
         }
     };
+
+    YardiAbstractStubProxy() {
+    }
 
     void setDataErrorHandler(DataErrorHandler dataErrorHandler) {
         this.dataErrorHandler = dataErrorHandler;
@@ -78,7 +81,7 @@ public class YardiAbstractStubProxy {
     <T extends YardiInterface> T getStubInstance(Class<T> ifClass, PmcYardiCredential yc) {
         // TODO - yc may have stub version info that should be passed to the factory
         String version = null;
-        T stub = YardiStubFactory.create(ifClass, version);
+        T stub = YardiStubFactory.getStub(ifClass, version);
         return stub;
     }
 

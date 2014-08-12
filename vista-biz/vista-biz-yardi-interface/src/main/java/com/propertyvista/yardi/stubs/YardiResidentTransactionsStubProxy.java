@@ -35,9 +35,9 @@ import com.propertyvista.yardi.services.YardiHandledErrorMessages;
  * - create an instance of a proper yardi stub implementation delegate
  * - call corresponding delegate method and validate response message for possible errors
  */
-public class YardiResidentTransactionsStubProxy extends YardiAbstractStubProxy implements YardiResidentTransactionsStub {
+class YardiResidentTransactionsStubProxy extends YardiAbstractStubProxy implements YardiResidentTransactionsStub {
 
-    public YardiResidentTransactionsStubProxy() {
+    YardiResidentTransactionsStubProxy() {
         setMessageErrorHandler(new MessageErrorHandler() {
             @Override
             public boolean handle(Messages messages) throws YardiServiceException {

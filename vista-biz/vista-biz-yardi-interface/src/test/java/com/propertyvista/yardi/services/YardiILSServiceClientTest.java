@@ -38,7 +38,8 @@ import com.propertyvista.config.tests.VistaTestsServerSideConfiguration;
 import com.propertyvista.domain.settings.PmcYardiCredential;
 import com.propertyvista.server.config.DevYardiCredentials;
 import com.propertyvista.test.mock.security.PasswordEncryptorFacadeMock;
-import com.propertyvista.yardi.stubs.YardiILSGuestCardStubProxy;
+import com.propertyvista.yardi.stubs.YardiILSGuestCardStub;
+import com.propertyvista.yardi.stubs.YardiStubFactory;
 
 public class YardiILSServiceClientTest {
 
@@ -62,10 +63,10 @@ public class YardiILSServiceClientTest {
                     propConfig.getProperties().add(prop);
                 } else {
                     // get properties from getPropertyConfigurations()
-                    propConfig = new YardiILSGuestCardStubProxy().getPropertyConfigurations(yc);
+                    propConfig = YardiStubFactory.create(YardiILSGuestCardStub.class).getPropertyConfigurations(yc);
                 }
                 for (com.propertyvista.yardi.beans.Property prop : propConfig.getProperties()) {
-                    PhysicalProperty property = new YardiILSGuestCardStubProxy().getPropertyMarketingInfo(yc, prop.getCode());
+                    PhysicalProperty property = YardiStubFactory.create(YardiILSGuestCardStub.class).getPropertyMarketingInfo(yc, prop.getCode());
                     log.info("PhysicalProperty: {}", property.getProperty().get(0).getPropertyID().getIdentification().getPrimaryID());
 //                for (Property building : property.getProperty()) {
 //                    log.info(building.getPropertyID().getIdentification().getPrimaryID() + ": " + building.getILSUnit().size() + " units");

@@ -50,7 +50,8 @@ import com.propertyvista.domain.settings.PmcYardiCredential;
 import com.propertyvista.shared.config.VistaFeatures;
 import com.propertyvista.yardi.beans.Properties;
 import com.propertyvista.yardi.processors.YardiMaintenanceProcessor;
-import com.propertyvista.yardi.stubs.YardiMaintenanceRequestsStubProxy;
+import com.propertyvista.yardi.stubs.YardiMaintenanceRequestsStub;
+import com.propertyvista.yardi.stubs.YardiStubFactory;
 
 /*
  * The agent is responsible for persisting all imported data in the DB by requests from MaintenanceFacade.
@@ -191,7 +192,7 @@ public class YardiMaintenanceRequestsService extends YardiAbstractService {
         ServiceRequests requests = new ServiceRequests();
         requests.getServiceRequest().add(serviceRequest);
 
-        ServiceRequests result = new YardiMaintenanceRequestsStubProxy().postMaintenanceRequests(yc, requests);
+        ServiceRequests result = YardiStubFactory.create(YardiMaintenanceRequestsStub.class).postMaintenanceRequests(yc, requests);
         ServiceRequest sr = result.getServiceRequest().get(0);
         // In case of error Yardi may return request xml with invalid scheme...
         if (!isResponseValid(sr)) {
@@ -209,7 +210,7 @@ public class YardiMaintenanceRequestsService extends YardiAbstractService {
             params.setFromDate(dateFormat.format(fromDate));
         }
         log.info("Getting tickets for {} modified after {}", params.getYardiPropertyId(), params.getFromDate());
-        ServiceRequests requests = new YardiMaintenanceRequestsStubProxy().getRequestsByParameters(yc, params);
+        ServiceRequests requests = YardiStubFactory.create(YardiMaintenanceRequestsStub.class).getRequestsByParameters(yc, params);
         final ServiceRequests newRequests = requests == null ? new ServiceRequests() : requests;
         return new UnitOfWork(TransactionScopeOption.Nested).execute(new Executable<Date, YardiServiceException>() {
             @Override
@@ -242,7 +243,7 @@ public class YardiMaintenanceRequestsService extends YardiAbstractService {
     }
 
     protected void loadMeta(final PmcYardiCredential yc) throws YardiServiceException, RemoteException {
-        final YardiMaintenanceConfigMeta yardiMeta = new YardiMaintenanceRequestsStubProxy().getMaintenanceConfigMeta(yc);
+        final YardiMaintenanceConfigMeta yardiMeta = YardiStubFactory.create(YardiMaintenanceRequestsStub.class).getMaintenanceConfigMeta(yc);
         final MaintenanceRequestMetadata meta = ServerSideFactory.create(MaintenanceFacade.class).getMaintenanceMetadata(
                 VistaDeployment.getPmcYardiBuildings(yc).get(0));
         new UnitOfWork(TransactionScopeOption.Nested).execute(new Executable<Void, YardiServiceException>() {
@@ -270,7 +271,7 @@ public class YardiMaintenanceRequestsService extends YardiAbstractService {
 
     public List<String> getPropertyCodes(PmcYardiCredential yc) throws YardiServiceException, RemoteException {
         List<String> propertyCodes = new ArrayList<String>();
-        Properties properties = new YardiMaintenanceRequestsStubProxy().getPropertyConfigurations(yc);
+        Properties properties = YardiStubFactory.create(YardiMaintenanceRequestsStub.class).getPropertyConfigurations(yc);
         for (com.propertyvista.yardi.beans.Property property : properties.getProperties()) {
             if (StringUtils.isNotEmpty(property.getCode())) {
                 propertyCodes.add(property.getCode());

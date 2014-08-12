@@ -34,7 +34,8 @@ import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.settings.PmcYardiCredential;
 import com.propertyvista.yardi.mappers.UnitsMapper;
 import com.propertyvista.yardi.processors.YardiILSMarketingProcessor;
-import com.propertyvista.yardi.stubs.YardiILSGuestCardStubProxy;
+import com.propertyvista.yardi.stubs.YardiILSGuestCardStub;
+import com.propertyvista.yardi.stubs.YardiStubFactory;
 
 public class YardiILSGuestCardService extends YardiAbstractService {
 
@@ -56,7 +57,7 @@ public class YardiILSGuestCardService extends YardiAbstractService {
     public void updateUnitAvailability(PmcYardiCredential yc, final AptUnit aptUnit) throws YardiServiceException, RemoteException {
         Persistence.ensureRetrieve(aptUnit.building(), AttachLevel.Attached);
         String propertyId = aptUnit.building().propertyCode().getValue();
-        PhysicalProperty marketingInfo = new YardiILSGuestCardStubProxy().getPropertyMarketingInfo(yc, propertyId);
+        PhysicalProperty marketingInfo = YardiStubFactory.create(YardiILSGuestCardStub.class).getPropertyMarketingInfo(yc, propertyId);
 
         // process new availability data
         for (ILSUnit ilsUnit : marketingInfo.getProperty().get(0).getILSUnit()) {

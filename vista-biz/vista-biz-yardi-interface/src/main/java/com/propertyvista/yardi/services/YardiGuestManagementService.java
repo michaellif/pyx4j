@@ -61,8 +61,9 @@ import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.yardi.YardiConstants;
 import com.propertyvista.yardi.mappers.TenantMapper;
 import com.propertyvista.yardi.processors.YardiGuestProcessor;
-import com.propertyvista.yardi.stubs.YardiGuestManagementStubProxy;
-import com.propertyvista.yardi.stubs.YardiResidentTransactionsStubProxy;
+import com.propertyvista.yardi.stubs.YardiGuestManagementStub;
+import com.propertyvista.yardi.stubs.YardiResidentTransactionsStub;
+import com.propertyvista.yardi.stubs.YardiStubFactory;
 
 public class YardiGuestManagementService extends YardiAbstractService {
 
@@ -322,11 +323,11 @@ public class YardiGuestManagementService extends YardiAbstractService {
 
     public RentableItems getRentableItems(PmcYardiCredential yc, String propertyId) throws YardiServiceException, RemoteException {
         log.info("Getting RentableItems for property {}", propertyId);
-        return new YardiGuestManagementStubProxy().getRentableItems(yc, propertyId);
+        return YardiStubFactory.create(YardiGuestManagementStub.class).getRentableItems(yc, propertyId);
     }
 
     public void validateSettings(PmcYardiCredential yc, String propertyCode) throws YardiServiceException, RemoteException {
-        MarketingSources sources = new YardiGuestManagementStubProxy().getYardiMarketingSources(yc, propertyCode);
+        MarketingSources sources = YardiStubFactory.create(YardiGuestManagementStub.class).getYardiMarketingSources(yc, propertyCode);
 
         String agentName = null;
         String sourceName = null;
@@ -406,11 +407,11 @@ public class YardiGuestManagementService extends YardiAbstractService {
         LeadManagement lead = new LeadManagement();
         lead.setProspects(new Prospects());
         lead.getProspects().getProspect().add(guest);
-        new YardiGuestManagementStubProxy().importGuestInfo(yc, lead);
+        YardiStubFactory.create(YardiGuestManagementStub.class).importGuestInfo(yc, lead);
     }
 
     private String getTenantId(PmcYardiCredential yc, String propertyCode, String guestId, IdentityType type) throws YardiServiceException, RemoteException {
-        LeadManagement guestActivity = new YardiGuestManagementStubProxy().findGuest(yc, propertyCode, guestId);
+        LeadManagement guestActivity = YardiStubFactory.create(YardiGuestManagementStub.class).findGuest(yc, propertyCode, guestId);
         if (guestActivity.getProspects().getProspect().size() != 1) {
             throw new YardiServiceException(SimpleMessageFormat.format("Prospect not found: {0}", guestId));
         }
@@ -433,8 +434,8 @@ public class YardiGuestManagementService extends YardiAbstractService {
 
     private Map<Key, String> getParticipants(PmcYardiCredential yc, Lease lease, Map<String, String> residentIds) throws YardiServiceException, RemoteException {
         Key tenantId = lease.getPrimaryKey();
-        LeadManagement guestActivity = new YardiGuestManagementStubProxy()
-                .findGuest(yc, lease.unit().building().propertyCode().getValue(), tenantId.toString());
+        LeadManagement guestActivity = YardiStubFactory.create(YardiGuestManagementStub.class).findGuest(yc, lease.unit().building().propertyCode().getValue(),
+                tenantId.toString());
         if (guestActivity.getProspects().getProspect().size() != 1) {
             throw new YardiServiceException(SimpleMessageFormat.format("Prospect not found: {0}", tenantId));
         }
@@ -487,7 +488,8 @@ public class YardiGuestManagementService extends YardiAbstractService {
 
     private Map<String, String> getLeaseResidentIds(PmcYardiCredential yc, String propertyCode, String tenantId) throws YardiServiceException, RemoteException {
         Map<String, String> result = null;
-        ResidentTransactions transaction = new YardiResidentTransactionsStubProxy().getResidentTransactionsForTenant(yc, propertyCode, tenantId);
+        ResidentTransactions transaction = YardiStubFactory.create(YardiResidentTransactionsStub.class).getResidentTransactionsForTenant(yc, propertyCode,
+                tenantId);
         if (transaction != null && !transaction.getProperty().isEmpty()) {
             Property property = transaction.getProperty().iterator().next();
             if (!property.getRTCustomer().isEmpty()) {

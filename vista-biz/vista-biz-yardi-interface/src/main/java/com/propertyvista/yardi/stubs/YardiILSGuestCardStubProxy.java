@@ -22,9 +22,9 @@ import com.propertyvista.biz.system.yardi.YardiServiceException;
 import com.propertyvista.domain.settings.PmcYardiCredential;
 import com.propertyvista.yardi.beans.Properties;
 
-public class YardiILSGuestCardStubProxy extends YardiAbstractStubProxy implements YardiILSGuestCardStub {
+class YardiILSGuestCardStubProxy extends YardiAbstractStubProxy implements YardiILSGuestCardStub {
 
-    public YardiILSGuestCardStubProxy() {
+    YardiILSGuestCardStubProxy() {
         setMessageErrorHandler(noPropertyAccessHandler);
     }
 

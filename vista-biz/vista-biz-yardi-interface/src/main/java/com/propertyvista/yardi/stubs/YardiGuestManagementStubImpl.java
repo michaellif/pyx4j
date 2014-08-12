@@ -65,7 +65,7 @@ import com.propertyvista.yardi.YardiConstants.Action;
 import com.propertyvista.yardi.YardiInterfaceType;
 import com.propertyvista.yardi.beans.Properties;
 
-public class YardiGuestManagementStubImpl extends AbstractYardiStub implements YardiGuestManagementStub {
+class YardiGuestManagementStubImpl extends AbstractYardiStub implements YardiGuestManagementStub {
 
     private final static Logger log = LoggerFactory.getLogger(YardiGuestManagementStubImpl.class);
 

@@ -60,7 +60,7 @@ import com.propertyvista.yardi.TransactionLog;
 import com.propertyvista.yardi.YardiConstants.Action;
 import com.propertyvista.yardi.beans.Messages;
 
-public abstract class AbstractYardiStub implements ExternalInterfaceLoggingStub {
+abstract class AbstractYardiStub implements ExternalInterfaceLoggingStub {
 
     private final static Logger log = LoggerFactory.getLogger(AbstractYardiStub.class);
 

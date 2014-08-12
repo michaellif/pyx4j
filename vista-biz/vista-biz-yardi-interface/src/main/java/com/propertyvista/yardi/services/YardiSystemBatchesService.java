@@ -27,7 +27,8 @@ import com.propertyvista.domain.financial.yardi.YardiReceipt;
 import com.propertyvista.domain.financial.yardi.YardiReceiptReversal;
 import com.propertyvista.domain.settings.PmcYardiCredential;
 import com.propertyvista.yardi.processors.YardiPaymentProcessor;
-import com.propertyvista.yardi.stubs.YardiSystemBatchesStubProxy;
+import com.propertyvista.yardi.stubs.YardiStubFactory;
+import com.propertyvista.yardi.stubs.YardiSystemBatchesStub;
 
 public class YardiSystemBatchesService extends YardiAbstractService {
 
@@ -45,15 +46,15 @@ public class YardiSystemBatchesService extends YardiAbstractService {
     }
 
     public long openReceiptBatch(PmcYardiCredential yc, String propertyCode) throws RemoteException, YardiServiceException {
-        return new YardiSystemBatchesStubProxy().openReceiptBatch(yc, propertyCode);
+        return YardiStubFactory.create(YardiSystemBatchesStub.class).openReceiptBatch(yc, propertyCode);
     }
 
     public void cancelBatch(PmcYardiCredential yc, YardiPaymentBatchContext paymentBatchContext) throws RemoteException, YardiServiceException {
-        new YardiSystemBatchesStubProxy().cancelReceiptBatch(yc, paymentBatchContext.getBatchId());
+        YardiStubFactory.create(YardiSystemBatchesStub.class).cancelReceiptBatch(yc, paymentBatchContext.getBatchId());
     }
 
     public void postBatch(PmcYardiCredential yc, YardiPaymentBatchContext paymentBatchContext) throws RemoteException, YardiServiceException {
-        new YardiSystemBatchesStubProxy().postReceiptBatch(yc, paymentBatchContext.getBatchId());
+        YardiStubFactory.create(YardiSystemBatchesStub.class).postReceiptBatch(yc, paymentBatchContext.getBatchId());
     }
 
     public void postReceipt(PmcYardiCredential yc, YardiReceipt receipt, String propertyCode, YardiPaymentBatchContext paymentBatchContext)
@@ -72,7 +73,7 @@ public class YardiSystemBatchesService extends YardiAbstractService {
 
             YardiPaymentProcessor paymentProcessor = new YardiPaymentProcessor();
             ResidentTransactions residentTransactions = paymentProcessor.createTransactions(paymentProcessor.createTransactionForPayment(receipt));
-            new YardiSystemBatchesStubProxy().addReceiptsToBatch(yc, paymentBatchContext.getBatchId(), residentTransactions);
+            YardiStubFactory.create(YardiSystemBatchesStub.class).addReceiptsToBatch(yc, paymentBatchContext.getBatchId(), residentTransactions);
 
             paymentBatchContext.incrementRecordCount();
 
@@ -101,7 +102,7 @@ public class YardiSystemBatchesService extends YardiAbstractService {
 
         YardiPaymentProcessor paymentProcessor = new YardiPaymentProcessor();
         ResidentTransactions residentTransactions = paymentProcessor.createTransactions(paymentProcessor.createTransactionForReversal(reversal));
-        new YardiSystemBatchesStubProxy().addReceiptsToBatch(yc, paymentBatchContext.getBatchId(), residentTransactions);
+        YardiStubFactory.create(YardiSystemBatchesStub.class).addReceiptsToBatch(yc, paymentBatchContext.getBatchId(), residentTransactions);
 
         paymentBatchContext.incrementRecordCount();
 
