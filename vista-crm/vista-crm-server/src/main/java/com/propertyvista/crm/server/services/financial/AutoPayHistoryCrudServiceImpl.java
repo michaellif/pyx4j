@@ -22,6 +22,7 @@ import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.server.AbstractCrudServiceDtoImpl;
 import com.pyx4j.entity.server.Persistence;
 
+import com.propertyvista.biz.financial.payment.PaymentBillableUtils;
 import com.propertyvista.biz.system.VistaContext;
 import com.propertyvista.config.VistaDeployment;
 import com.propertyvista.crm.rpc.dto.financial.AutoPayHistoryDTO;
@@ -93,7 +94,7 @@ public class AutoPayHistoryCrudServiceImpl extends AbstractCrudServiceDtoImpl<Au
         dto.price().setValue(BigDecimal.ZERO);
         dto.payment().setValue(BigDecimal.ZERO);
         for (AutopayAgreementCoveredItem item : dto.coveredItems()) {
-            dto.price().setValue(dto.payment().getValue().add(item.billableItem().agreedPrice().getValue()));
+            dto.price().setValue(dto.payment().getValue().add(PaymentBillableUtils.getActualPrice(item.billableItem())));
             dto.payment().setValue(dto.payment().getValue().add(item.amount().getValue()));
         }
     }

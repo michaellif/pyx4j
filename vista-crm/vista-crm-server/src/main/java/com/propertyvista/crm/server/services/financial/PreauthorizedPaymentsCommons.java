@@ -27,6 +27,7 @@ import com.pyx4j.entity.rpc.AbstractCrudService.RetrieveTarget;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.server.CrudEntityBinder;
 
+import com.propertyvista.biz.financial.payment.PaymentBillableUtils;
 import com.propertyvista.biz.financial.payment.PaymentMethodFacade;
 import com.propertyvista.domain.financial.ARCode;
 import com.propertyvista.domain.payment.AutopayAgreement;
@@ -143,7 +144,7 @@ public class PreauthorizedPaymentsCommons {
             itemDto.covered().setValue(itemDto.covered().getValue().add(papci.amount().getValue()));
         }
 
-        BigDecimal itemPrice = billableItem.agreedPrice().getValue();
+        BigDecimal itemPrice = PaymentBillableUtils.getActualPrice(billableItem);
         if (itemPrice.compareTo(BigDecimal.ZERO) != 0) {
             itemDto.amount().setValue(isNewPap ? itemPrice.subtract(itemDto.covered().getValue()) : BigDecimal.ZERO);
             itemDto.percent().setValue(itemDto.amount().getValue().divide(itemPrice, 2, RoundingMode.FLOOR));
@@ -180,7 +181,7 @@ public class PreauthorizedPaymentsCommons {
             itemDto.covered().setValue(itemDto.covered().getValue().add(papci.amount().getValue()));
         }
 
-        BigDecimal itemPrice = itemDto.billableItem().agreedPrice().getValue();
+        BigDecimal itemPrice = PaymentBillableUtils.getActualPrice(itemDto.billableItem());
         if (itemPrice.compareTo(BigDecimal.ZERO) != 0) {
             itemDto.percent().setValue(itemDto.amount().getValue().divide(itemPrice, 2, RoundingMode.FLOOR));
         } else {

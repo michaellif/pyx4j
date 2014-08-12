@@ -53,6 +53,7 @@ import com.pyx4j.commons.UserRuntimeException;
 import com.pyx4j.entity.core.AttachLevel;
 import com.pyx4j.entity.server.Persistence;
 
+import com.propertyvista.biz.financial.payment.PaymentBillableUtils;
 import com.propertyvista.biz.system.yardi.YardiServiceException;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.settings.PmcYardiCredential;
@@ -64,9 +65,10 @@ import com.propertyvista.yardi.processors.YardiGuestProcessor;
 import com.propertyvista.yardi.stubs.YardiGuestManagementStub;
 import com.propertyvista.yardi.stubs.YardiResidentTransactionsStub;
 import com.propertyvista.yardi.stubs.YardiStubFactory;
+import com.propertyvista.yardi.stubs.YardiResidentTransactionsStubProxy;
 
 public class YardiGuestManagementService extends YardiAbstractService {
-
+    
     private static final Logger log = LoggerFactory.getLogger(YardiGuestManagementService.class);
 
     public enum IdentityType {
@@ -373,8 +375,7 @@ public class YardiGuestManagementService extends YardiAbstractService {
     }
 
     private BigDecimal getRentPrice(Lease lease) {
-        // TODO calculate adjustments?!
-        return lease.currentTerm().version().leaseProducts().serviceItem().agreedPrice().getValue();
+        return PaymentBillableUtils.getActualPrice(lease.currentTerm().version().leaseProducts().serviceItem());
     }
 
     private List<BillableItem> getLeaseProducts(Lease lease) {

@@ -31,6 +31,7 @@ import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.server.Persistence;
 
+import com.propertyvista.biz.financial.payment.PaymentBillableUtils;
 import com.propertyvista.domain.dashboard.gadgets.availability.UnitAvailabilityStatus;
 import com.propertyvista.domain.dashboard.gadgets.availability.UnitAvailabilityStatus.RentReadiness;
 import com.propertyvista.domain.dashboard.gadgets.availability.UnitAvailabilityStatus.RentedStatus;
@@ -134,7 +135,7 @@ public class YardiUnitAvailabilityStatusAdapter {
             Lease lease = retrieveLastLease(unitId);
             if (lease != null) {
                 Persistence.ensureRetrieve(lease.currentTerm().version().leaseProducts().serviceItem(), AttachLevel.Attached);
-                status.unitRent().setValue(lease.currentTerm().version().leaseProducts().serviceItem().agreedPrice().getValue());
+                status.unitRent().setValue(PaymentBillableUtils.getActualPrice(lease.currentTerm().version().leaseProducts().serviceItem()));
 
                 if (status.marketRent().getValue() != null) {
                     status.rentDeltaAbsolute().setValue(status.unitRent().getValue().subtract(status.marketRent().getValue()));

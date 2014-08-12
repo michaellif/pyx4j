@@ -40,6 +40,7 @@ import com.pyx4j.gwt.server.DateUtils;
 import com.pyx4j.gwt.server.deferred.DeferredProcessRegistry;
 import com.pyx4j.security.shared.SecurityController;
 
+import com.propertyvista.biz.financial.payment.PaymentBillableUtils;
 import com.propertyvista.biz.financial.payment.PaymentFacade;
 import com.propertyvista.biz.financial.payment.PaymentMethodFacade;
 import com.propertyvista.biz.financial.payment.PaymentMethodTarget;
@@ -275,9 +276,9 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
         result.selectedService().set(term.version().leaseProducts().serviceItem());
         result.selectedFeatures().addAll(term.version().leaseProducts().featureItems());
 
-        result.totalMonthlyCharge().setValue(result.selectedService().agreedPrice().getValue());
+        result.totalMonthlyCharge().setValue(PaymentBillableUtils.getActualPrice(result.selectedService()));
         for (BillableItem feature : result.selectedFeatures()) {
-            result.totalMonthlyCharge().setValue(result.totalMonthlyCharge().getValue().add(feature.agreedPrice().getValue()));
+            result.totalMonthlyCharge().setValue(result.totalMonthlyCharge().getValue().add(PaymentBillableUtils.getActualPrice(feature)));
         }
 
         fillDeposits(result);
