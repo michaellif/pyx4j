@@ -104,7 +104,7 @@ public class ReportTemplate {
             currencyType = new CurrencyType();
 
             HyperLinkBuilder link = hyperLink("http://propertyvista.com/");
-            propertyCustomTitleComponent = reportTitleBuilder("http://propertyvista.com/", "images/logo.png", "Invalid Direct Debit Report");
+            propertyCustomTitleComponent = null;// reportTitleBuilder("http://propertyvista.com/", "images/logo.png", "Invalid Direct Debit Report");
 
             footerComponent = cmp.pageXofY()
                                  .setStyle(

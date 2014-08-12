@@ -20,6 +20,11 @@
  */
 package com.pyx4j.entity.report.dynamic.test;
 
+import static org.junit.Assert.assertTrue;
+
+import java.nio.file.Files;
+import java.nio.file.Paths;
+
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -34,7 +39,8 @@ public class DynamicReportFactoryTest {
 
     @Test
     public void testCreateReport(){
-        report = new DynamicReport("C:\\temp\\reports\\logo.png", "Dynamic Report Test");
+        report = new DynamicReport("/com/pyx4j/entity/report/dynamic/test/logo.png", "Dynamic Report Test");
         report.export(ExportTo.PDF, "C:\\temp\\reports");
+        assertTrue(Files.isRegularFile(Paths.get("C:\\", "temp", "reports", "Dynamic Report Test.pdf")));
     }
 }
