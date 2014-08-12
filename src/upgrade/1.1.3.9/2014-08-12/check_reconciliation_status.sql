@@ -39,8 +39,7 @@ BEGIN
     FROM    _admin_.funds_reconciliation_record_record r
     JOIN    _admin_.admin_pmc_merchant_account_index m ON (r.merchant_terminal_id = m.merchant_terminal_id)
     JOIN    _admin_.admin_pmc a ON (a.id = m.pmc)
-    WHERE   r.processing_status
-    AND     r.reconciliation_status IN ('RETURNED', 'REJECTED')
+    WHERE   r.reconciliation_status IN ('RETURNED', 'REJECTED')
     AND     r.payment_date >= '01-AUG-2014'
     LOOP
         
