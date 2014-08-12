@@ -166,23 +166,22 @@ public class LeaseMerger {
         if (mergeRequired) {
             lease.currentTerm().version().leaseProducts().serviceItem().set(null);
             lease.currentTerm().version().leaseProducts().featureItems().clear();
-            boolean serviceItemRecived = false;
+
             for (BillableItem item : items) {
-                // process new item
                 if (isServiceItem(item)) {
-                    if (serviceItemRecived) {
-                        // This is wrong but we will the items to show.
-                        lease.currentTerm().version().leaseProducts().featureItems().add(item);
-                        String msg = SimpleMessageFormat.format("multiple serviceItems detected on lease {0}", lease.leaseId());
-                        log.warn("      " + msg);
-                        executionMonitor.addFailedEvent("chargesChanged", msg);
-                    } else {
-                        // replace if service
+                    if (lease.currentTerm().version().leaseProducts().serviceItem().isNull()) {
                         lease.currentTerm().version().leaseProducts().serviceItem().set(item);
-                        serviceItemRecived = true;
+                    } else {
+                        // TODO: add multiple services as features now, then redesign:
+                        lease.currentTerm().version().leaseProducts().featureItems().add(item);
+
+                        String msg = SimpleMessageFormat.format("multiple serviceItems detected on lease {0} - added as features", lease.leaseId());
+                        log.info("      " + msg);
+                        if (executionMonitor != null) {
+                            executionMonitor.addInfoEvent("ChargesProblems", msg);
+                        }
                     }
                 } else {
-                    // new feature - add it
                     lease.currentTerm().version().leaseProducts().featureItems().add(item);
                 }
             }
