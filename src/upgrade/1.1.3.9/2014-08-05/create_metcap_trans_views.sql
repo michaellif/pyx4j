@@ -103,10 +103,11 @@ CREATE OR REPLACE VIEW _dba_.metcap_nsf AS
 COPY (SELECT * FROM _dba_.metcap_nsf ORDER BY 2,3) TO '/tmp/metcap_nsf.csv' CSV HEADER;
 
     SELECT  a.namespace AS pmc,b.property_code,b.suspended,l.lease_id,
-            r.transaction_id, r.payment_date,r.merchant_terminal_id,
+            r.transaction_id, r.payment_date,p.created_date,r.merchant_terminal_id,
             r.amount,r.reconciliation_status,
             p.payment_status,p.notice,
-            r.reason_code, r.reason_text 
+            r.reason_code, r.reason_text,
+            r.processing_status 
     FROM    _admin_.funds_reconciliation_record_record r
     JOIN    _admin_.admin_pmc_merchant_account_index m ON (r.merchant_terminal_id = m.merchant_terminal_id)
     JOIN    _admin_.admin_pmc a ON (a.id = m.pmc)
@@ -119,21 +120,4 @@ COPY (SELECT * FROM _dba_.metcap_nsf ORDER BY 2,3) TO '/tmp/metcap_nsf.csv' CSV 
     WHERE   r.reason_code  IS NOT NULL 
     AND     a.namespace = 'metcap'
     AND     r.payment_date >= '01-AUG-2014'
-    ORDER BY 3,2
-    
-    SELECT  a.namespace AS pmc,b.property_code,l.lease_id,
-            r.transaction_id, r.payment_date,r.merchant_terminal_id,
-            r.amount,r.reconciliation_status,
-            p.payment_status,r.processing_status,
-            r.reason_code, r.reason_text 
-    FROM    _admin_.funds_reconciliation_record_record r
-    JOIN    _admin_.admin_pmc_merchant_account_index m ON (r.merchant_terminal_id = m.merchant_terminal_id)
-    JOIN    _admin_.admin_pmc a ON (a.id = m.pmc)
-    JOIN    greenwin.payment_record p ON (r.transaction_id::bigint = p.id)
-    JOIN    greenwin.lease_term_participant ltp ON (ltp.id = p.lease_term_participant)
-    JOIN    greenwin.lease_participant lp ON (lp.id = ltp.lease_participant)
-    JOIN    greenwin.lease l ON (l.id = lp.lease)
-    JOIN    greenwin.apt_unit au ON (au.id = l.unit)
-    JOIN    greenwin.building b ON (b.id = au.building)
-    WHERE   upper(p.payment_status) != r.reconciliation_status
-    ORDER BY 3,2
+    ORDER BY 3,2;
