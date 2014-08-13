@@ -178,7 +178,7 @@ public class LeaseMerger {
                         String msg = SimpleMessageFormat.format("multiple serviceItems detected on lease {0} - added as features", lease.leaseId());
                         log.info("      " + msg);
                         if (executionMonitor != null) {
-                            executionMonitor.addInfoEvent("ChargesProblems", msg);
+                            executionMonitor.addFailedEvent("ChargesProblems", msg);
                         }
                     }
                 } else {
