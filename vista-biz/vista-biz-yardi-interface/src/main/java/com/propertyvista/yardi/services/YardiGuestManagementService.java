@@ -65,10 +65,9 @@ import com.propertyvista.yardi.processors.YardiGuestProcessor;
 import com.propertyvista.yardi.stubs.YardiGuestManagementStub;
 import com.propertyvista.yardi.stubs.YardiResidentTransactionsStub;
 import com.propertyvista.yardi.stubs.YardiStubFactory;
-import com.propertyvista.yardi.stubs.YardiResidentTransactionsStubProxy;
 
 public class YardiGuestManagementService extends YardiAbstractService {
-    
+
     private static final Logger log = LoggerFactory.getLogger(YardiGuestManagementService.class);
 
     public enum IdentityType {
