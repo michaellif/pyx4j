@@ -15,6 +15,9 @@ package com.propertyvista.crm.client.ui.crud.building;
 
 import java.util.List;
 
+import com.google.gwt.user.client.rpc.AsyncCallback;
+
+import com.pyx4j.rpc.shared.VoidSerializable;
 import com.pyx4j.site.client.ui.prime.form.IViewer;
 import com.pyx4j.site.client.ui.prime.lister.ILister;
 
@@ -23,6 +26,7 @@ import com.propertyvista.crm.client.visor.dashboard.IDashboardVisorController;
 import com.propertyvista.crm.client.visor.maintenance.MaintenanceRequestVisorController;
 import com.propertyvista.crm.rpc.dto.billing.BillingCycleDTO;
 import com.propertyvista.domain.dashboard.DashboardMetadata;
+import com.propertyvista.domain.financial.MerchantAccount;
 import com.propertyvista.domain.financial.offering.Concession;
 import com.propertyvista.domain.financial.offering.Feature;
 import com.propertyvista.domain.financial.offering.Service;
@@ -39,6 +43,8 @@ import com.propertyvista.dto.RoofDTO;
 public interface BuildingViewerView extends IViewer<BuildingDTO> {
 
     public interface BuildingViewerPresenter extends BuildingPresenterCommon, IViewer.Presenter {
+
+        void setMerchantAccount(AsyncCallback<VoidSerializable> callback, MerchantAccount merchantAccountStub);
 
         MaintenanceRequestVisorController getMaintenanceRequestVisorController();
 

@@ -41,7 +41,6 @@ import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.CImage;
 import com.pyx4j.forms.client.ui.CImageSlider;
 import com.pyx4j.forms.client.ui.CMonthYearPicker;
-import com.pyx4j.forms.client.ui.PermitEditAccessAdapter;
 import com.pyx4j.forms.client.ui.folder.FolderColumnDescriptor;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.forms.client.ui.panels.FormPanel;
@@ -70,7 +69,6 @@ import com.propertyvista.crm.client.ui.crud.building.MarketingEditor.MarketingCo
 import com.propertyvista.crm.rpc.dto.billing.BillingCycleDTO;
 import com.propertyvista.crm.rpc.services.MediaUploadBuildingService;
 import com.propertyvista.domain.MediaFile;
-import com.propertyvista.domain.financial.BuildingMerchantAccount;
 import com.propertyvista.domain.financial.MerchantAccount;
 import com.propertyvista.domain.financial.offering.Product;
 import com.propertyvista.domain.marketing.Marketing;
@@ -336,10 +334,9 @@ public class BuildingForm extends CrmEntityForm<BuildingDTO> {
         formPanel.append(Location.Right, proto().financial().currency().name()).decorate().componentWidth(100).customLabel(i18n.tr("Currency Name"));
 
         formPanel.br();
-        formPanel.append(Location.Left, proto().merchantAccount()).decorate().componentWidth(180);
+        formPanel.append(Location.Left, proto().merchantAccount(), new CEntityLabel<MerchantAccount>()).decorate().componentWidth(180);
 
         // tweak:
-        get(proto().merchantAccount()).addAccessAdapter(new PermitEditAccessAdapter(DataModelPermission.permissionUpdate(BuildingMerchantAccount.class)));
         get(proto().merchantAccount()).addValueChangeHandler(new ValueChangeHandler<MerchantAccount>() {
             @Override
             public void onValueChange(ValueChangeEvent<MerchantAccount> event) {

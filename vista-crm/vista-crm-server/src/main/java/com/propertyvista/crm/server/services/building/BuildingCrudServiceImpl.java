@@ -28,6 +28,7 @@ import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.geo.GeoPoint;
 import com.pyx4j.gwt.server.deferred.DeferredProcessRegistry;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.rpc.shared.VoidSerializable;
 
 import com.propertyvista.biz.asset.BuildingFacade;
 import com.propertyvista.biz.system.AuditFacade;
@@ -160,26 +161,6 @@ public class BuildingCrudServiceImpl extends AbstractCrudServiceDtoImpl<Building
 
     @Override
     protected boolean persist(Building bo, BuildingDTO to) {
-
-        {
-            MerchantAccount origAccount = null;
-
-            Persistence.service().retrieveMember(bo.merchantAccounts());
-            if (!bo.merchantAccounts().isEmpty()) {
-                origAccount = bo.merchantAccounts().iterator().next().merchantAccount();
-            }
-
-            if (!to.merchantAccount().equals(origAccount)) {
-                bo.merchantAccounts().clear();
-                if (!to.merchantAccount().isNull()) {
-                    BuildingMerchantAccount bma = bo.merchantAccounts().$();
-                    bma.merchantAccount().set(to.merchantAccount());
-                    bo.merchantAccounts().add(bma);
-                }
-                ServerSideFactory.create(AuditFacade.class).updated(bo, "MerchantAccount assigned " + to.merchantAccount().getStringView());
-            }
-
-        }
 
         saveGeotagging(bo, to);
 
@@ -318,10 +299,40 @@ public class BuildingCrudServiceImpl extends AbstractCrudServiceDtoImpl<Building
     }
 
     @Override
-    public void retrieveMerchantAccountStatus(AsyncCallback<MerchantAccount> callback, MerchantAccount merchantAccountStub) {
-        MerchantAccount entity = Persistence.service().retrieve(MerchantAccount.class, merchantAccountStub.getPrimaryKey());
+    public void retrieveMerchantAccountStatus(AsyncCallback<MerchantAccount> callback, MerchantAccount merchantAccountId) {
+        MerchantAccount entity = Persistence.service().retrieve(MerchantAccount.class, merchantAccountId.getPrimaryKey());
         ServerSideFactory.create(Vista2PmcFacade.class).calulateMerchantAccountStatus(entity);
         callback.onSuccess(entity);
+    }
+
+    @Override
+    public void setMerchantAccount(AsyncCallback<VoidSerializable> callback, Building buildingId, MerchantAccount merchantAccountId) {
+        Building building = Persistence.service().retrieve(Building.class, buildingId.getPrimaryKey());
+        MerchantAccount merchantAccount = merchantAccountId.isNull() ? EntityFactory.create(MerchantAccount.class) : Persistence.service().retrieve(
+                MerchantAccount.class, merchantAccountId.getPrimaryKey());
+
+        MerchantAccount origAccount = null;
+
+        Persistence.service().retrieveMember(building.merchantAccounts());
+        if (!building.merchantAccounts().isEmpty()) {
+            origAccount = building.merchantAccounts().iterator().next().merchantAccount();
+        }
+
+        if (!merchantAccount.equals(origAccount)) {
+            building.merchantAccounts().clear();
+            if (!merchantAccount.isNull()) {
+                BuildingMerchantAccount bma = building.merchantAccounts().$();
+                bma.merchantAccount().set(merchantAccount);
+                building.merchantAccounts().add(bma);
+            }
+
+            Persistence.service().merge(building);
+            Persistence.service().commit();
+
+            ServerSideFactory.create(AuditFacade.class).updated(building, "MerchantAccount assigned " + merchantAccount.getStringView());
+        }
+
+        callback.onSuccess(null);
     }
 
     @Override

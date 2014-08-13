@@ -704,7 +704,7 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
                                 get(proto().currentTerm().termTo()), i18n.tr("The Date Should Be Within The Lease Period"));
 
                         new StartEndDateValidation(get(proto().expectedMoveOut()), get(proto().terminationLeaseTo()),
-                                i18n.tr("The Terminationi Date Can't Be Earlier Than The Expected Move Out date"));
+                                i18n.tr("The Termination Date Can't Be Earlier Than The Expected Move Out date"));
 
                         get(proto().terminationLeaseTo()).addValueChangeHandler(new RevalidationTrigger<LogicalDate>(get(proto().expectedMoveOut())));
                     }

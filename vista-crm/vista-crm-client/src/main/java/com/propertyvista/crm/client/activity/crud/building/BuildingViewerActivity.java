@@ -31,6 +31,7 @@ import com.pyx4j.gwt.rpc.deferred.DeferredProcessProgressResponse;
 import com.pyx4j.gwt.rpc.upload.UploadService;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
+import com.pyx4j.rpc.shared.VoidSerializable;
 import com.pyx4j.site.client.ReportDialog;
 import com.pyx4j.site.client.ui.prime.lister.ILister.Presenter;
 import com.pyx4j.site.rpc.CrudAppPlace;
@@ -287,4 +288,9 @@ public class BuildingViewerActivity extends CrmViewerActivity<BuildingDTO> imple
         d.start(GWT.<ExportBuildingDataDownloadService> create(ExportBuildingDataDownloadService.class), criteria);
     }
 
+    @Override
+    public void setMerchantAccount(AsyncCallback<VoidSerializable> callback, MerchantAccount merchantAccountId) {
+        ((BuildingCrudService) getService()).setMerchantAccount(callback, EntityFactory.createIdentityStub(Building.class, currentBuildingId),
+                merchantAccountId);
+    }
 }

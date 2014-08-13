@@ -18,6 +18,7 @@ import java.util.Vector;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.entity.rpc.AbstractCrudService;
+import com.pyx4j.rpc.shared.VoidSerializable;
 import com.pyx4j.security.annotations.AccessControl;
 
 import com.propertyvista.crm.rpc.services.lease.ac.UpdateFromYardi;
@@ -29,7 +30,9 @@ import com.propertyvista.dto.BuildingDTO;
 
 public interface BuildingCrudService extends AbstractCrudService<BuildingDTO> {
 
-    void retrieveMerchantAccountStatus(AsyncCallback<MerchantAccount> callback, MerchantAccount merchantAccountStub);
+    void retrieveMerchantAccountStatus(AsyncCallback<MerchantAccount> callback, MerchantAccount merchantAccountId);
+
+    void setMerchantAccount(AsyncCallback<VoidSerializable> callback, Building buildingStub, MerchantAccount merchantAccountId);
 
     void retrieveEmployee(AsyncCallback<Employee> callback, Employee employeeId);
 
@@ -37,4 +40,5 @@ public interface BuildingCrudService extends AbstractCrudService<BuildingDTO> {
     void updateFromYardi(AsyncCallback<String> callback, Building buildingId);
 
     void getILSVendors(AsyncCallback<Vector<ILSVendor>> callback);
+
 }

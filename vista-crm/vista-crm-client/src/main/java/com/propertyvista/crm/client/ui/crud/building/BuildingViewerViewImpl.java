@@ -17,21 +17,33 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import com.google.gwt.event.logical.shared.ValueChangeEvent;
+import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.Command;
+import com.google.gwt.user.client.ui.IsWidget;
+import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.config.shared.ApplicationMode;
+import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.annotations.validator.NotNull;
+import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.IPrimitive;
 import com.pyx4j.entity.security.DataModelPermission;
+import com.pyx4j.forms.client.ui.CForm;
+import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
+import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.rpc.client.DefaultAsyncCallback;
+import com.pyx4j.rpc.shared.VoidSerializable;
 import com.pyx4j.security.shared.ActionPermission;
 import com.pyx4j.site.client.ui.prime.lister.ILister;
 import com.pyx4j.site.client.ui.prime.lister.ListerInternalViewImplBase;
 import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.Button.ButtonMenuBar;
 import com.pyx4j.widgets.client.Button.SecureMenuItem;
+import com.pyx4j.widgets.client.dialog.OkCancelDialog;
 
 import com.propertyvista.crm.client.ui.crud.CrmViewerViewImplBase;
 import com.propertyvista.crm.client.ui.crud.billing.cycle.BillingCycleLister;
@@ -50,6 +62,8 @@ import com.propertyvista.crm.rpc.services.building.ac.ImportExport;
 import com.propertyvista.crm.rpc.services.lease.ac.UpdateFromYardi;
 import com.propertyvista.domain.dashboard.DashboardMetadata;
 import com.propertyvista.domain.financial.BillingAccount.BillingPeriod;
+import com.propertyvista.domain.financial.BuildingMerchantAccount;
+import com.propertyvista.domain.financial.MerchantAccount;
 import com.propertyvista.domain.financial.offering.Concession;
 import com.propertyvista.domain.financial.offering.Feature;
 import com.propertyvista.domain.financial.offering.Service;
@@ -157,6 +171,12 @@ public class BuildingViewerViewImpl extends CrmViewerViewImplBase<BuildingDTO> i
             }
         }, new ActionPermission(ImportExport.class)));
 
+        addAction(new SecureMenuItem(i18n.tr("Select Merchant Account"), new Command() {
+            @Override
+            public void execute() {
+                new MerchantAccountSelectionBox().show();
+            }
+        }, DataModelPermission.permissionUpdate(BuildingMerchantAccount.class)));
     }
 
     @Override
@@ -247,6 +267,82 @@ public class BuildingViewerViewImpl extends CrmViewerViewImplBase<BuildingDTO> i
                 }
 
             });
+        }
+    }
+
+    @Transient
+    public interface MerchantAccountSelection extends IEntity {
+
+        MerchantAccount merchantAccount();
+    }
+
+    private class MerchantAccountSelectionBox extends OkCancelDialog {
+
+        private final CForm<MerchantAccountSelection> content = new CForm<MerchantAccountSelection>(MerchantAccountSelection.class) {
+            @Override
+            protected IsWidget createContent() {
+                FormPanel formPanel = new FormPanel(this);
+
+                formPanel.append(Location.Left, proto().merchantAccount()).decorate().componentWidth(180);
+
+                // tweak:
+                get(proto().merchantAccount()).addValueChangeHandler(new ValueChangeHandler<MerchantAccount>() {
+                    @Override
+                    public void onValueChange(ValueChangeEvent<MerchantAccount> event) {
+                        fillMerchantAccountStatus(event.getValue());
+                    }
+                });
+
+                return formPanel;
+            }
+
+            private void fillMerchantAccountStatus(MerchantAccount value) {
+                if (value != null && !value.isNull()) {
+                    ((BuildingPresenterCommon) getPresenter()).retrieveMerchantAccountStatus(new DefaultAsyncCallback<MerchantAccount>() {
+                        @Override
+                        public void onSuccess(MerchantAccount result) {
+                            get(proto().merchantAccount()).setNote(result.status().getStringView() + ", " + result.paymentsStatus().getStringView());
+                        }
+                    }, EntityFactory.createIdentityStub(MerchantAccount.class, value.getPrimaryKey()));
+                } else {
+                    get(proto().merchantAccount()).setNote(null);
+                }
+            }
+
+            @Override
+            protected void onValueSet(boolean populate) {
+                super.onValueSet(populate);
+                fillMerchantAccountStatus(getValue().merchantAccount());
+            }
+        };
+
+        public MerchantAccountSelectionBox() {
+            super(i18n.tr("Select Merchant Account"));
+            setBody(createBody());
+        }
+
+        protected Widget createBody() {
+            getOkButton().setEnabled(true);
+
+            MerchantAccountSelection value = EntityFactory.create(MerchantAccountSelection.class);
+            value.<MerchantAccount> set(value.merchantAccount(), getForm().getValue().merchantAccount().<MerchantAccount> duplicate());
+
+            content.init();
+            content.populate(value);
+            return content.asWidget();
+        }
+
+        @Override
+        public boolean onClickOk() {
+            final MerchantAccount merchantAccount = content.getValue().merchantAccount();
+            ((BuildingViewerPresenter) getPresenter()).setMerchantAccount(new DefaultAsyncCallback<VoidSerializable>() {
+                @Override
+                public void onSuccess(VoidSerializable result) {
+                    getForm().get(getForm().proto().merchantAccount()).setValue(merchantAccount);
+                }
+            }, merchantAccount.<MerchantAccount> createIdentityStub());
+
+            return true;
         }
     }
 
