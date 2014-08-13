@@ -170,23 +170,22 @@ public class CPersonalIdentityField<T extends IPersonalIdentity> extends CTextFi
         public E parse(String string) throws ParseException {
             E value = component.getValue();
             if (CommonsStringUtils.isEmpty(string)) {
-                // empty input means no change to the model object
-                // TODO - need a way to clear value
-                return value;
+                // clear value on empty user input
+                if (value != null && value.obfuscatedNumber().isNull()) {
+                    value.newNumber().setValue(null);
+                }
             } else {
                 // non-empty string could be either new user input or obfuscated value (formatted) of existing entity
                 if (!formatter.isValidInput(string)) {
                     throw new ParseException(i18n.tr("Invalid value format."), 0);
                 }
-                // check if we are parsing user input or obfuscated value
-                boolean userInput = (value == null || value.obfuscatedNumber().isNull());
-                // populate resulting value
                 if (value == null) {
                     // this should never happen
                     throw new Error("Value is null");
                 }
+                // populate resulting value
                 String data = formatter.inputFilter(string);
-                if (userInput) {
+                if (value.obfuscatedNumber().isNull()) {
                     // if no obfuscated value then we are getting new user input
                     value.newNumber().setValue(data);
                     value.obfuscatedNumber().setValue(null);
@@ -194,8 +193,8 @@ public class CPersonalIdentityField<T extends IPersonalIdentity> extends CTextFi
                     value.newNumber().setValue(null);
                     value.obfuscatedNumber().setValue(data);
                 }
-                return value;
             }
+            return value;
         }
     }
 
