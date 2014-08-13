@@ -165,11 +165,11 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
             }
         }
 
-        updateProperties(yc, propertyCodes, executionMonitor, true);
+        updateProperties(yc, propertyCodes, executionMonitor, true); // all non-processed leases will be closed during processing!
     }
 
     public void updateBuilding(PmcYardiCredential yc, Building building, ExecutionMonitor executionMonitor) throws YardiServiceException, RemoteException {
-        updateProperties(yc, Arrays.asList(building.propertyCode().getValue()), executionMonitor, false);
+        updateProperties(yc, Arrays.asList(building.propertyCode().getValue()), executionMonitor, false); // note: DO NOT close non-processed leases!
     }
 
     public void updateLease(PmcYardiCredential yc, Lease lease, ExecutionMonitor executionMonitor) throws YardiServiceException, RemoteException {
@@ -182,7 +182,7 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
 
         Key yardiInterfaceId = yc.getPrimaryKey();
         String propertyCode = lease.unit().building().propertyCode().getValue();
-        YardiResidentTransactionsData rtd = new YardiResidentTransactionsData(yardiInterfaceId, executionMonitor, false);
+        YardiResidentTransactionsData rtd = new YardiResidentTransactionsData(yardiInterfaceId, executionMonitor, false); // note: DO NOT close non-processed leases!
 
         ResidentTransactions transactions = YardiStubFactory.create(YardiResidentTransactionsStub.class).getResidentTransactionsForTenant(yc, propertyCode,
                 lease.leaseId().getValue());

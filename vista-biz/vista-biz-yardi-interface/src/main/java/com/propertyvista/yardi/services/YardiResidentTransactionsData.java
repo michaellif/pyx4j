@@ -84,10 +84,6 @@ public class YardiResidentTransactionsData {
 
     private final boolean closeNonProcessedLeases;
 
-    public YardiResidentTransactionsData(Key yardiInterfaceId, ExecutionMonitor executionMonitor) {
-        this(yardiInterfaceId, executionMonitor, true);
-    }
-
     public YardiResidentTransactionsData(Key yardiInterfaceId, ExecutionMonitor executionMonitor, boolean closeNonProcessedLeases) {
         this.yardiInterfaceId = yardiInterfaceId;
         this.executionMonitor = executionMonitor;
