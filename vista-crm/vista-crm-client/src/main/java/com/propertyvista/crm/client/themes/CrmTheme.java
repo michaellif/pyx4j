@@ -34,7 +34,6 @@ import com.pyx4j.widgets.client.dialog.DialogTheme;
 import com.pyx4j.widgets.client.richtext.RichTextEditorTheme;
 import com.pyx4j.widgets.client.selector.SelectedItemHolder;
 import com.pyx4j.widgets.client.selector.SuggestiveSelector;
-import com.pyx4j.widgets.client.selector.SuggestiveSelector;
 import com.pyx4j.widgets.client.style.theme.WidgetTheme;
 import com.pyx4j.widgets.client.tabpanel.TabTheme;
 
@@ -718,6 +717,7 @@ public class CrmTheme extends VistaTheme {
 
         style = new Style("." + ItemsHolderForm.Styles.BulkActionsPanel.name());
         style.addProperty("height", "0px");
+        style.addProperty("font-weight", "bold");
         addStyle(style);
 
         style = new Style("." + ItemsHolderForm.Styles.BulkFolderHolder.name());

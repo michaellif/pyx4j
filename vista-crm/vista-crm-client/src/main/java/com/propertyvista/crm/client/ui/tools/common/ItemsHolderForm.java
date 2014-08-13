@@ -18,6 +18,7 @@ import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
+import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Widget;
 
@@ -28,6 +29,7 @@ import com.pyx4j.forms.client.ui.folder.CFolder;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.Anchor;
 import com.pyx4j.widgets.client.CheckBox;
+import com.pyx4j.widgets.client.Label;
 
 import com.propertyvista.crm.rpc.dto.financial.autopayreview.BulkEditableEntity;
 
@@ -154,7 +156,10 @@ public abstract class ItemsHolderForm<Item extends BulkEditableEntity, Holder ex
                 checkAll();
             }
         });
-        actionsPanel.add(checkAllVisibleItems);
+        HorizontalPanel checkAllVisibleItemsHolder = new HorizontalPanel();
+        checkAllVisibleItemsHolder.add(checkAllVisibleItems);
+        checkAllVisibleItemsHolder.add(new Label(i18n.tr("Select All")));
+        actionsPanel.add(checkAllVisibleItemsHolder);
 
         return actionsPanel;
     }
