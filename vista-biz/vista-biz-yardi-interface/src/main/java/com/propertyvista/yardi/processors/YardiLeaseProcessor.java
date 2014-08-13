@@ -577,7 +577,7 @@ public class YardiLeaseProcessor {
     private BillableItem fillBillableItem(ChargeDetail detail, BillableItem newItem) {
 
         newItem.agreedPrice().setValue(new BigDecimal(detail.getAmount()));
-        newItem.updated().setValue(getLogicalDate(SystemDateManager.getDate()));
+        newItem.updated().setValue(SystemDateManager.getLogicalDate());
         newItem.effectiveDate().setValue(getLogicalDate(detail.getServiceFromDate()));
         newItem.expirationDate().setValue(getLogicalDate(detail.getServiceToDate()));
         newItem.description().setValue(getLeaseChargeDescription(detail));
