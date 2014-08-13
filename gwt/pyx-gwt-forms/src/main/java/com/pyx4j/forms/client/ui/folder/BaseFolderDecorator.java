@@ -25,6 +25,7 @@ import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.IsWidget;
+import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.SimplePanel;
 
 import com.pyx4j.commons.IDebugId;
@@ -41,37 +42,42 @@ import com.pyx4j.widgets.client.Button;
 
 public abstract class BaseFolderDecorator<E extends IEntity> extends FlowPanel implements IFolderDecorator<E> {
 
-    private final SimplePanel container;
+    private final SimplePanel contentPanel;
 
     private Button addButton = null;
 
     private boolean addable;
 
-    private final HTML validationMessageHolder;
+    private final HTML validationLabel;
+
+    private final HTML noteLabel;
 
     public BaseFolderDecorator(FolderImages images, String title, boolean addable) {
         this.addable = addable;
         addButton = new Button(images.addButton().regular(), title);
         addButton.addStyleName(FolderTheme.StyleName.CFolderAddButton.name());
 
-        validationMessageHolder = new HTML();
-        validationMessageHolder.setStyleName(CComponentTheme.StyleName.ValidationLabel.name());
+        validationLabel = new HTML();
+        validationLabel.setStyleName(CComponentTheme.StyleName.ValidationLabel.name());
 
-        container = new SimplePanel();
-        container.setStyleName(FolderTheme.StyleName.CFolderContent.name());
+        noteLabel = new HTML();
+        noteLabel.setStyleName(CComponentTheme.StyleName.NoteLabel.name());
+
+        contentPanel = new SimplePanel();
+        contentPanel.setStyleName(FolderTheme.StyleName.CFolderContent.name());
 
     }
 
-    protected SimplePanel getContainer() {
-        return container;
+    protected Panel getContentPanel() {
+        return contentPanel;
     }
 
     protected Button getAddButton() {
         return addButton;
     }
 
-    protected HTML getValidationMessageHolder() {
-        return validationMessageHolder;
+    protected HTML getValidationLabel() {
+        return validationLabel;
     }
 
     protected boolean isAddable() {
@@ -94,7 +100,7 @@ public abstract class BaseFolderDecorator<E extends IEntity> extends FlowPanel i
 
     @Override
     public void setContent(IsWidget content) {
-        container.setWidget(content);
+        contentPanel.setWidget(content);
     }
 
     @Override
@@ -108,7 +114,7 @@ public abstract class BaseFolderDecorator<E extends IEntity> extends FlowPanel i
                 }
                 if (event.isEventOfType(PropertyName.valid)) {
                     ValidationResults results = folder.getValidationResults();
-                    validationMessageHolder.setHTML(results.getValidationMessage(true));
+                    validationLabel.setHTML(results.getValidationMessage(true));
                 }
             }
         });

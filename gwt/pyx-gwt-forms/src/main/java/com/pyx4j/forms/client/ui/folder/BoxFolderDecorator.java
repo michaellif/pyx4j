@@ -42,9 +42,9 @@ public class BoxFolderDecorator<E extends IEntity> extends BaseFolderDecorator<E
 
         asWidget().setStyleName(FolderTheme.StyleName.CFolderBoxDecorator.name());
 
-        add(getValidationMessageHolder());
+        add(getValidationLabel());
 
-        add(getContainer());
+        add(getContentPanel());
 
         SimplePanel addButtonHolder = new SimplePanel(getAddButton());
         addButtonHolder.setStyleName(FolderTheme.StyleName.CFolderBoxDecoratorAddButtonHolder.name());
