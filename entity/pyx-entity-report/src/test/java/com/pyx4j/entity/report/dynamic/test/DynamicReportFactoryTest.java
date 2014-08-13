@@ -45,7 +45,7 @@ public class DynamicReportFactoryTest {
         Path tmpDir = Files.createTempDirectory("dynamic-report-test");
         report.export(ExportTo.PDF, tmpDir.toString());
         Path pdf = Paths.get(tmpDir.toString(), "Dynamic Report Test.pdf");
-        assertTrue(Files.isRegularFile(pdf));
+        assertTrue(Files.exists(pdf));
         Files.delete(pdf);
         Files.delete(tmpDir);
     }
