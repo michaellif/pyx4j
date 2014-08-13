@@ -13,7 +13,6 @@
  */
 package com.propertyvista.yardi.mergers;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
@@ -120,33 +119,27 @@ public class LeaseMerger {
         lease.billingAccount().paymentAccepted().setValue(BillingAccount.PaymentAccepted.getPaymentType(rtCustomer.getPaymentAccepted()));
     }
 
-    public boolean mergeBillableItems(List<BillableItem> items, Lease lease, ExecutionMonitor executionMonitor) {
+    public boolean mergeBillableItems(List<BillableItem> newItems, List<BillableItem> currentItems, Lease lease, ExecutionMonitor executionMonitor) {
         assert (executionMonitor != null);
 
         boolean mergeRequired = false;
-        List<BillableItem> lookupList = new ArrayList<>();
-        if (!lease.currentTerm().version().leaseProducts().serviceItem().isNull()) {
-            lookupList.add(lease.currentTerm().version().leaseProducts().serviceItem());
-        }
-        lookupList.addAll(lease.currentTerm().version().leaseProducts().featureItems());
-
-        if (lookupList.size() != items.size()) {
+        if (currentItems.size() != newItems.size()) {
             mergeRequired = true;
         } else {
-            for (BillableItem newItem : items) {
-                BillableItem existing = findBillableItem(newItem, lookupList);
+            for (BillableItem newItem : newItems) {
+                BillableItem existing = extractBillableItem(newItem, currentItems);
                 if ((existing == null) || (!compareBillableItems(existing, newItem))) {
                     mergeRequired = true;
                     break;
                 } else {
-                    lookupList.remove(existing);
+                    currentItems.remove(existing);
                 }
             }
 
             if (!mergeRequired) {
                 // See if Service item is changed
                 boolean serviceItemRecived = false;
-                for (BillableItem item : items) {
+                for (BillableItem item : newItems) {
                     // process new item
                     if (isServiceItem(item)) {
                         serviceItemRecived = true;
@@ -167,7 +160,7 @@ public class LeaseMerger {
             lease.currentTerm().version().leaseProducts().serviceItem().set(null);
             lease.currentTerm().version().leaseProducts().featureItems().clear();
 
-            for (BillableItem item : items) {
+            for (BillableItem item : newItems) {
                 if (isServiceItem(item)) {
                     if (lease.currentTerm().version().leaseProducts().serviceItem().isNull()) {
                         lease.currentTerm().version().leaseProducts().serviceItem().set(item);
@@ -190,7 +183,7 @@ public class LeaseMerger {
         return mergeRequired;
     }
 
-    public BillableItem findBillableItem(BillableItem item, List<BillableItem> items) {
+    public BillableItem extractBillableItem(BillableItem item, List<BillableItem> items) {
         Iterator<BillableItem> it = items.iterator();
         while (it.hasNext()) {
             BillableItem leaseItem = it.next();
@@ -235,9 +228,9 @@ public class LeaseMerger {
         }
         if (item1.agreedPrice().compareTo(item2.agreedPrice()) != 0) {
             return false;
-        } else {
-            return true;
         }
+
+        return true;
     }
 
     private static boolean isChanged(IPrimitive<LogicalDate> existing, Date imported) {

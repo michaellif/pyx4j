@@ -310,8 +310,6 @@ public class YardiLeaseProcessor {
             return expireLeaseProducts(lease);
         }
 
-        List<BillableItem> newItems = new ArrayList<BillableItem>();
-
         // Ensure all items are uniquely identified by the order in YArdi
         /**
          * rrent -> rrent:1
@@ -333,12 +331,13 @@ public class YardiLeaseProcessor {
             // ignore
         }
 
-        List<BillableItem> uidLookupList = new ArrayList<>();
+        List<BillableItem> currentItems = new ArrayList<>();
         if (!lease.currentTerm().version().leaseProducts().serviceItem().isNull()) {
-            uidLookupList.add(lease.currentTerm().version().leaseProducts().serviceItem());
+            currentItems.add(lease.currentTerm().version().leaseProducts().serviceItem());
         }
-        uidLookupList.addAll(lease.currentTerm().version().leaseProducts().featureItems());
+        currentItems.addAll(lease.currentTerm().version().leaseProducts().featureItems());
 
+        List<BillableItem> newItems = new ArrayList<BillableItem>();
         for (Transactions tr : ltd.getCharges().getRTServiceTransactions().getTransactions()) {
             if (tr == null || tr.getCharge() == null) {
                 continue;
@@ -359,7 +358,7 @@ public class YardiLeaseProcessor {
             // create new item from an empty stub or from a copy if we find item with the same uid
             String uid = billableItemUid(tr.getCharge().getDetail().getChargeCode(), chargeCodeItemNo);
             BillableItem newItem = null;
-            for (BillableItem leaseItem : uidLookupList) {
+            for (BillableItem leaseItem : currentItems) {
                 if (uid.compareTo(leaseItem.uid().getValue()) == 0) {
                     newItem = EntityGraph.businessDuplicate(leaseItem);
                 }
@@ -372,7 +371,7 @@ public class YardiLeaseProcessor {
             newItems.add(fillBillableItem(tr.getCharge().getDetail(), newItem));
         }
 
-        return new LeaseMerger().mergeBillableItems(newItems, lease, rtd.getExecutionMonitor());
+        return new LeaseMerger().mergeBillableItems(newItems, currentItems, lease, rtd.getExecutionMonitor());
     }
 
     private boolean expireLeaseProducts(Lease lease) {
