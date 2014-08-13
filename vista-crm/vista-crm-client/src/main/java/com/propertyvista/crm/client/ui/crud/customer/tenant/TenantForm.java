@@ -104,8 +104,8 @@ public class TenantForm extends LeaseParticipantForm<TenantDTO> {
             get(proto().paymentMethods()).setNote(null);
             get(proto().preauthorizedPayments()).setNote(null);
             if (!getValue().electronicPaymentsAllowed().getValue(false)) {
-                get(proto().paymentMethods()).setNote(i18n.tr("Merchant Account is not setup to receive Electronic Payments"), NoteStyle.Warn);
-                get(proto().preauthorizedPayments()).setNote(i18n.tr("Merchant Account is not setup to receive Electronic Payments"), NoteStyle.Warn);
+                get(proto().paymentMethods()).setNote(i18n.tr("Merchant Account is not set up to receive Electronic Payments"), NoteStyle.Warn);
+                get(proto().preauthorizedPayments()).setNote(i18n.tr("Merchant Account is not set up to receive Electronic Payments"), NoteStyle.Warn);
             }
         }
 
@@ -188,7 +188,7 @@ public class TenantForm extends LeaseParticipantForm<TenantDTO> {
         public PreauthorizedPaymentFolder() {
             super(PreauthorizedPaymentDTO.class, true);
             setOrderable(false);
-            setNoDataLabel(i18n.tr("No AutoPay payments are setup"));
+            setNoDataLabel(i18n.tr("No Auto Payments are set up"));
         }
 
         @Override
