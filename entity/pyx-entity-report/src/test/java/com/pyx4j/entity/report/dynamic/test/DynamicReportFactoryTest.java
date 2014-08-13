@@ -22,7 +22,9 @@ package com.pyx4j.entity.report.dynamic.test;
 
 import static org.junit.Assert.assertTrue;
 
+import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 
 import org.junit.Test;
@@ -38,9 +40,13 @@ public class DynamicReportFactoryTest {
 
 
     @Test
-    public void testCreateReport(){
+    public void testCreateReport() throws IOException {
         report = new DynamicReport("/com/pyx4j/entity/report/dynamic/test/logo.png", "Dynamic Report Test");
-        report.export(ExportTo.PDF, "C:\\temp\\reports");
-        assertTrue(Files.isRegularFile(Paths.get("C:\\", "temp", "reports", "Dynamic Report Test.pdf")));
+        Path tmpDir = Files.createTempDirectory("dynamic-report-test");
+        report.export(ExportTo.PDF, tmpDir.toString());
+        Path pdf = Paths.get(tmpDir.toString(), "Dynamic Report Test.pdf");
+        assertTrue(Files.isRegularFile(pdf));
+        Files.delete(pdf);
+        Files.delete(tmpDir);
     }
 }
