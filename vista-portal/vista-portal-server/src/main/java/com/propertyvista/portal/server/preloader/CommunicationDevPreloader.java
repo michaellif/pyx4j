@@ -90,7 +90,7 @@ public class CommunicationDevPreloader extends AbstractDataPreloader {
         }
 
         EntityQueryCriteria<MessageCategory> criteriaMessageGroup = EntityQueryCriteria.create(MessageCategory.class);
-        criteriaMessageGroup.eq(criteriaMessageGroup.proto().category(), MessageGroupCategory.Custom);
+        criteriaMessageGroup.eq(criteriaMessageGroup.proto().category(), MessageGroupCategory.Message);
         MessageCategory mg = Persistence.service().retrieve(criteriaMessageGroup);
 
         EntityQueryCriteria<SystemEndpoint> criteriaSystemEndpoint = EntityQueryCriteria.create(SystemEndpoint.class);
@@ -153,9 +153,12 @@ public class CommunicationDevPreloader extends AbstractDataPreloader {
             thread.owner().set(owner);
             thread.allowedReply().setValue(true);
             thread.topic().set(mg);
+
             PersistenceServicesFactory.getPersistenceService().persist(thread);
-        } else
+
+        } else {
             thread = parent;
+        }
 
         Message c = EntityFactory.create(Message.class);
         c.sender().set(from);

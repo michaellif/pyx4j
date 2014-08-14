@@ -29,13 +29,17 @@ public class MessageCategoryCrudServiceImpl extends AbstractCrudServiceImpl<Mess
     @Override
     protected MessageCategory init(InitializationData initializationData) {
         MessageCategory dto = super.init(initializationData);
-        dto.category().setValue(MessageGroupCategory.Custom);
+        dto.category().setValue(MessageGroupCategory.Message);
         return dto;
     }
 
     @Override
     protected void enhanceRetrieved(MessageCategory bo, MessageCategory to, RetrieveTarget retrieveTarget) {
         super.enhanceRetrieved(bo, to, retrieveTarget);
+        enhanceDbo(bo, to);
+    }
+
+    private void enhanceDbo(MessageCategory bo, MessageCategory to) {
         Persistence.ensureRetrieve(bo.dispatchers(), AttachLevel.Attached);
         to.dispatchers().setAttachLevel(AttachLevel.Attached);
         to.dispatchers().set(bo.dispatchers());
@@ -49,10 +53,14 @@ public class MessageCategoryCrudServiceImpl extends AbstractCrudServiceImpl<Mess
     }
 
     @Override
+    protected void enhanceListRetrieved(MessageCategory entity, MessageCategory dto) {
+        enhanceDbo(entity, dto);
+    }
+
+    @Override
     protected boolean persist(MessageCategory bo, MessageCategory in) {
         boolean isNew = bo.id().isNull() || bo.isPrototype();
         if (isNew) {
-            bo.category().setValue(MessageGroupCategory.Custom);
             in.topic().set(bo.topic());
         }
         bo.dispatchers().clear();
@@ -65,7 +73,7 @@ public class MessageCategoryCrudServiceImpl extends AbstractCrudServiceImpl<Mess
 
     @Override
     protected void delete(MessageCategory group) {
-        if (!MessageGroupCategory.Custom.equals(group.category().getValue())) {
+        if (MessageGroupCategory.Ticket.equals(group.category().getValue())) {
             throw new Error("Cannot delete predefined message group");
         }
         group.deleted().setValue(true);

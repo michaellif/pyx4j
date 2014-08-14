@@ -18,6 +18,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.pyx4j.site.client.ui.prime.form.IEditor;
 
 import com.propertyvista.domain.communication.MessageCategory;
+import com.propertyvista.domain.communication.MessageCategory.MessageGroupCategory;
 import com.propertyvista.dto.MessageDTO;
 
 public interface MessageEditorView extends IEditor<MessageDTO> {
@@ -28,6 +29,6 @@ public interface MessageEditorView extends IEditor<MessageDTO> {
 
         MessageCategory getCategory();
 
-        Boolean isForMessage();
+        MessageGroupCategory getCategoryType();
     }
 }

@@ -32,7 +32,7 @@ import com.pyx4j.i18n.shared.I18nEnum;
 @DiscriminatorValue("CommunicationThread")
 public interface CommunicationThread extends IEntity {
 
-    @I18n(context = "CommunicationThread")
+    @I18n(context = "Communication Thread Status")
     @XmlType(name = "ThreadStatus")
     public enum ThreadStatus {
 

@@ -16,6 +16,7 @@ package com.propertyvista.crm.client.ui.crud.communication;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.crm.client.ui.crud.CrmEditorViewImplBase;
+import com.propertyvista.domain.communication.MessageCategory.MessageGroupCategory;
 import com.propertyvista.dto.MessageDTO;
 
 public class MessageEditorViewImpl extends CrmEditorViewImplBase<MessageDTO> implements MessageEditorView {
@@ -31,6 +32,8 @@ public class MessageEditorViewImpl extends CrmEditorViewImplBase<MessageDTO> imp
     @Override
     public void populate(MessageDTO value) {
         super.populate(value);
-        setCaption(i18n.tr("New") + " " + getCaptionBase());
+        MessageGroupCategory ct = ((MessageEditorView.Presenter) getForm().getParentView().getPresenter()).getCategoryType();
+        String caption = i18n.tr("New") + " " + (ct == null ? MessageGroupCategory.Message.toString() : ct.toString());
+        setCaption(caption);
     }
 }

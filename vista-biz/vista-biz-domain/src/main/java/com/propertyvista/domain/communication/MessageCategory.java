@@ -40,6 +40,30 @@ public interface MessageCategory extends IEntity {
     @I18n(context = "MessageGroup")
     @XmlType(name = "Message Group Category")
     public enum MessageGroupCategory {
+        @Translate("Message")
+        Message,
+
+        @Translate("Ticket")
+        Ticket,
+
+        @Translate("IVR")
+        IVR,
+
+        @Translate("SMS")
+        SMS,
+
+        @Translate("Notification")
+        Notification;
+
+        @Override
+        public String toString() {
+            return I18nEnum.toString(this);
+        }
+    }
+
+    @I18n(context = "TicketType")
+    @XmlType(name = "TicketType")
+    public enum TicketType {
         @Translate("Tenant")
         Tenant,
 
@@ -49,8 +73,8 @@ public interface MessageCategory extends IEntity {
         @Translate("Vendor")
         Vendor,
 
-        @Translate("Custom")
-        Custom;
+        @Translate("NotTicket")
+        NotTicket;
 
         @Override
         public String toString() {
@@ -64,6 +88,9 @@ public interface MessageCategory extends IEntity {
 
     @NotNull
     IPrimitive<MessageGroupCategory> category();
+
+    @NotNull
+    IPrimitive<TicketType> ticketType();
 
     @NotNull
     IPrimitive<Boolean> deleted();

@@ -22,7 +22,7 @@ import com.pyx4j.entity.core.criterion.PropertyCriterion;
 import com.pyx4j.entity.server.Persistence;
 
 import com.propertyvista.domain.communication.MessageCategory;
-import com.propertyvista.domain.communication.MessageCategory.MessageGroupCategory;
+import com.propertyvista.domain.communication.MessageCategory.TicketType;
 import com.propertyvista.domain.company.Employee;
 import com.propertyvista.domain.security.CrmUser;
 import com.propertyvista.domain.security.CrmUserCredential;
@@ -38,7 +38,7 @@ public class MessageCategoryManager {
     }
 
     private static class CategoryCacheKey {
-        static String getCacheKey(MessageGroupCategory mgCategory) {
+        static String getCacheKey(TicketType mgCategory) {
             return String.format("%s_%s", MessageCategory.class.getName(), mgCategory);
         }
     }
@@ -49,15 +49,15 @@ public class MessageCategoryManager {
 
     private void cacheMessageCategories() {
         EntityQueryCriteria<MessageCategory> criteria = EntityQueryCriteria.create(MessageCategory.class);
-        criteria.ne(criteria.proto().category(), MessageGroupCategory.Custom);
+        criteria.ne(criteria.proto().ticketType(), TicketType.NotTicket);
         List<MessageCategory> predefinedEps = Persistence.service().query(criteria);
         if (predefinedEps != null) {
             for (MessageCategory ep : predefinedEps)
-                CacheService.put(CategoryCacheKey.getCacheKey(ep.category().getValue()), ep);
+                CacheService.put(CategoryCacheKey.getCacheKey(ep.ticketType().getValue()), ep);
         }
     }
 
-    public MessageCategory getMessageCategoryFromCache(MessageGroupCategory mgCategory) {
+    public MessageCategory getMessageCategoryFromCache(TicketType mgCategory) {
         MessageCategory ep = CacheService.get(CategoryCacheKey.getCacheKey(mgCategory));
         return ep;
     }

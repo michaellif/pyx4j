@@ -50,6 +50,7 @@ import com.propertyvista.crm.rpc.services.selections.SelectPortfolioListService;
 import com.propertyvista.domain.communication.CommunicationEndpoint;
 import com.propertyvista.domain.communication.CommunicationEndpoint.ContactType;
 import com.propertyvista.domain.communication.MessageCategory;
+import com.propertyvista.domain.communication.MessageCategory.MessageGroupCategory;
 import com.propertyvista.domain.company.Portfolio;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
@@ -173,12 +174,11 @@ public class MessageEditForm extends CrmEntityForm<MessageDTO> {
                     retriveOptionsPrivate(callback);
                 } else {
                     MessageEditorActivity presenter = ((MessageEditorActivity) getParentView().getPresenter());
-                    final Boolean is4Message = presenter.isForMessage();
-                    if (is4Message == null) {
+                    final MessageGroupCategory categoryType = presenter.getCategoryType();
+                    if (categoryType == null) {
                         retriveOptionsPrivate(callback);
                     } else {
-                        final PropertyCriterion crit = is4Message ? PropertyCriterion.eq(proto().category(), MessageCategory.MessageGroupCategory.Custom)
-                                : PropertyCriterion.ne(proto().category(), MessageCategory.MessageGroupCategory.Custom);
+                        final PropertyCriterion crit = PropertyCriterion.eq(proto().category(), categoryType);
 
                         resetCriteria();
                         addCriterion(crit);

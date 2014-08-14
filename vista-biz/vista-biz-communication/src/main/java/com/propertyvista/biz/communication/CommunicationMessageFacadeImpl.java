@@ -28,7 +28,7 @@ import com.propertyvista.domain.communication.CommunicationThread;
 import com.propertyvista.domain.communication.DeliveryHandle;
 import com.propertyvista.domain.communication.Message;
 import com.propertyvista.domain.communication.MessageCategory;
-import com.propertyvista.domain.communication.MessageCategory.MessageGroupCategory;
+import com.propertyvista.domain.communication.MessageCategory.TicketType;
 import com.propertyvista.domain.communication.SystemEndpoint;
 import com.propertyvista.domain.communication.SystemEndpoint.SystemEndpointName;
 import com.propertyvista.domain.company.Employee;
@@ -48,7 +48,7 @@ public class CommunicationMessageFacadeImpl implements CommunicationMessageFacad
     }
 
     @Override
-    public MessageCategory getMessageCategoryFromCache(MessageGroupCategory mgCategory) {
+    public MessageCategory getMessageCategoryFromCache(TicketType mgCategory) {
         return MessageCategoryManager.instance().getMessageCategoryFromCache(mgCategory);
     }
 

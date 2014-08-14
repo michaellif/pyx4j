@@ -17,7 +17,9 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
+import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.entity.core.EntityFactory;
+import com.pyx4j.entity.core.criterion.EntityListCriteria;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.forms.client.ui.datatable.DataTableModel;
@@ -28,6 +30,7 @@ import com.pyx4j.widgets.client.dialog.MessageDialog;
 
 import com.propertyvista.domain.communication.MessageCategory;
 import com.propertyvista.domain.communication.MessageCategory.MessageGroupCategory;
+import com.propertyvista.misc.VistaTODO;
 
 public class MessageCategoryLister extends AbstractLister<MessageCategory> {
 
@@ -38,7 +41,7 @@ public class MessageCategoryLister extends AbstractLister<MessageCategory> {
         addItemSelectionHandler(new ItemSelectionHandler<MessageCategory>() {
             @Override
             public void onSelect(MessageCategory selectedItem) {
-                if (selectedItem != null && !MessageGroupCategory.Custom.equals(selectedItem.category().getValue())) {
+                if (selectedItem != null && MessageGroupCategory.Ticket.equals(selectedItem.category().getValue())) {
                     MessageDialog.warn(i18n.tr("Error"), i18n.tr("No delete operation is allowed for predefined message categories"));
                 }
             }
@@ -60,7 +63,7 @@ public class MessageCategoryLister extends AbstractLister<MessageCategory> {
     @Override
     protected void onItemsDelete(final Collection<MessageCategory> items) {
         for (MessageCategory item : items) {
-            if (!MessageGroupCategory.Custom.equals(item.category().getValue())) {
+            if (MessageGroupCategory.Ticket.equals(item.category().getValue())) {
                 MessageDialog.warn(i18n.tr("Error"), i18n.tr("No delete operation is allowed for predefined message categories"));
                 return;
             }
@@ -69,4 +72,11 @@ public class MessageCategoryLister extends AbstractLister<MessageCategory> {
         super.onItemsDelete(items);
     }
 
+    @Override
+    protected EntityListCriteria<MessageCategory> updateCriteria(EntityListCriteria<MessageCategory> criteria) {
+        if (!ApplicationMode.isDevelopment() || !VistaTODO.ADDITIONAL_COMMUNICATION_FEATURES) {
+            criteria.in(criteria.proto().category(), new MessageGroupCategory[] { MessageGroupCategory.Message, MessageGroupCategory.Ticket });
+        }
+        return super.updateCriteria(criteria);
+    }
 }

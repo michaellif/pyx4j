@@ -22,7 +22,7 @@ import com.pyx4j.site.rpc.annotations.PlaceProperties;
 import com.pyx4j.site.shared.meta.PublicPlace;
 import com.pyx4j.site.shared.meta.SiteMap;
 
-import com.propertyvista.domain.communication.MessageCategory;
+import com.propertyvista.domain.communication.MessageCategory.MessageGroupCategory;
 import com.propertyvista.domain.reports.AutoPayChangesReportMetadata;
 import com.propertyvista.domain.reports.AvailabilityReportMetadata;
 import com.propertyvista.domain.reports.CustomerCreditCheckReportMetadata;
@@ -609,56 +609,30 @@ public class CrmSiteMap implements SiteMap {
     // Communication Started --------------
     @PlaceProperties(navigLabel = "Communication")
     public static class Communication extends AppPlace {
-        public static class CommunicationAppPlace extends CrmCrudAppPlace {
-            private MessageCategory filterByCategory;
+        @PlaceProperties(navigLabel = "Messages")
+        public static class Message extends CrmCrudAppPlace {
+            private final Object criteria;
 
             private MessageDTO forwardedMessage;
 
-            public CommunicationAppPlace() {
+            public Message() {
+                criteria = MessageGroupCategory.Message;
             }
 
-            public CommunicationAppPlace(MessageCategory filterByCategory) {
-                this.filterByCategory = filterByCategory;
+            public Message(Object criteria) {
+                this.criteria = criteria;
             }
 
-            public MessageCategory getMessageCategory() {
-                return filterByCategory;
+            public Object getCriteria() {
+                return criteria;
             }
 
-            public CommunicationAppPlace(MessageDTO forwardedMessage) {
+            public void setForwardedMessage(MessageDTO forwardedMessage) {
                 this.forwardedMessage = forwardedMessage;
             }
 
             public MessageDTO getForwardedMessage() {
                 return forwardedMessage;
-            }
-        }
-
-        @PlaceProperties(navigLabel = "Messages")
-        public static class Message extends CommunicationAppPlace {
-            public Message() {
-            }
-
-            public Message(MessageCategory filterByCategory) {
-                super(filterByCategory);
-            }
-
-            public Message(MessageDTO forwardedMessage) {
-                super(forwardedMessage);
-            }
-        }
-
-        @PlaceProperties(navigLabel = "Tickets")
-        public static class Ticket extends CommunicationAppPlace {
-            public Ticket() {
-            }
-
-            public Ticket(MessageCategory filterByCategory) {
-                super(filterByCategory);
-            }
-
-            public Ticket(MessageDTO forwardedMessage) {
-                super(forwardedMessage);
             }
         }
     }

@@ -194,12 +194,11 @@ public class MessageCrudServiceImpl extends AbstractCrudServiceDtoImpl<Message, 
         CommunicationThread t = EntityFactory.create(CommunicationThread.class);
         t.subject().set(to.subject());
         t.allowedReply().set(to.allowedReply());
-
         t.topic().set(to.topic());
         if (to.topic().isValueDetached()) {
             Persistence.service().retrieve(to.topic());
         }
-        t.status().setValue(isNew && !MessageGroupCategory.Custom.equals(to.topic().category().getValue()) ? ThreadStatus.New : ThreadStatus.Unassigned);
+        t.status().setValue(isNew && MessageGroupCategory.Ticket.equals(to.topic().category().getValue()) ? ThreadStatus.New : ThreadStatus.Unassigned);
         t.content().add(bo);
         t.owner().set(
                 to.owner() == null || to.owner().isEmpty() || to.owner().isPrototype() || to.owner().isNull() ? communicationFacade
@@ -373,6 +372,7 @@ public class MessageCrudServiceImpl extends AbstractCrudServiceDtoImpl<Message, 
     @Override
     public void assignOwnership(AsyncCallback<MessageDTO> callback, MessageDTO message, Employee employee) {
         CommunicationThread thread = Persistence.secureRetrieve(CommunicationThread.class, message.thread().id().getValue());
+        CommunicationMessageFacade communicationFacade = ServerSideFactory.create(CommunicationMessageFacade.class);
 
         if (ThreadStatus.New.equals(thread.status().getValue())) {
             thread.status().setValue(ThreadStatus.Open);
@@ -382,9 +382,18 @@ public class MessageCrudServiceImpl extends AbstractCrudServiceDtoImpl<Message, 
         Persistence.service().persist(thread);
         Persistence.service().commit();
         Persistence.ensureRetrieve(employee.user(), AttachLevel.Attached);
-        message.owner().set((ServerSideFactory.create(CommunicationMessageFacade.class).generateEndpointDTO(employee.user())));
+
+        message.owner().set(communicationFacade.generateEndpointDTO(employee.user()));
         message.status().set(thread.status());
-        ServerContext.getVisit().setAttribute(CommunicationMessageFacade.class.getName(), new Long(0L));
-        callback.onSuccess(message);
+        if (!CrmAppContext.getCurrentUser().equals(employee.user())) {
+            MessageDTO dto = EntityFactory.create(MessageDTO.class);
+            dto.to().add(message.owner());
+            dto.text().setValue("Ticket owner was changed to: " + employee.user().getStringView());
+            dto.thread().set(thread);
+            saveMessage(callback, dto, null);
+        } else {
+            ServerContext.getVisit().setAttribute(CommunicationMessageFacade.class.getName(), new Long(0L));
+            callback.onSuccess(message);
+        }
     }
 }

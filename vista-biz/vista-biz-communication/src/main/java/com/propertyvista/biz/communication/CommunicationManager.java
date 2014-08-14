@@ -141,7 +141,7 @@ public class CommunicationManager {
                 && !SecurityController.check(VistaDataAccessBehavior.ResidentInPortal)) {
             return new ArrayList<CommunicationThread>();
         }
-        final EntityListCriteria<CommunicationThread> dispatchedCriteria = getUnassignedDispatchedCriteria();
+        final EntityListCriteria<CommunicationThread> dispatchedCriteria = getUnassignedDispatchedCriteria();//getDispatchedCriteria(false);
         if (dispatchedCriteria == null) {
             return new ArrayList<CommunicationThread>();
         }
@@ -159,7 +159,12 @@ public class CommunicationManager {
                     ServerSideFactory.create(CommunicationMessageFacade.class).getSystemEndpointFromCache(SystemEndpointName.Unassigned)),
                     PropertyCriterion.in(dispatchedCriteria.proto().topic(), userGroups));
 
-            dispatchedCriteria.add(newDispatchedCriteria);
+            AndCriterion ownedUnreadCriteria = new AndCriterion(PropertyCriterion.eq(dispatchedCriteria.proto().owner(), Context.visit(VistaUserVisit.class)
+                    .getCurrentUser()), new AndCriterion(PropertyCriterion.eq(dispatchedCriteria.proto().content().$().recipients().$().isRead(), false),
+                    PropertyCriterion.eq(dispatchedCriteria.proto().content().$().recipients().$().recipient(), Context.visit(VistaUserVisit.class)
+                            .getCurrentUser())));
+
+            dispatchedCriteria.or(newDispatchedCriteria, ownedUnreadCriteria);
             return dispatchedCriteria;
         }
         return null;

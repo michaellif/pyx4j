@@ -64,6 +64,7 @@ import com.propertyvista.crm.client.ui.components.boxes.UnitSelectorDialog;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.crm.client.ui.tools.common.selectors.CommunicationEndpointSelector;
 import com.propertyvista.crm.rpc.CrmSiteMap;
+import com.propertyvista.crm.rpc.CrmSiteMap.Communication.Message;
 import com.propertyvista.crm.rpc.services.selections.SelectCrmUserListService;
 import com.propertyvista.crm.rpc.services.selections.SelectPortfolioListService;
 import com.propertyvista.domain.communication.CommunicationEndpoint;
@@ -126,8 +127,8 @@ public class MessageForm extends CrmEntityForm<MessageDTO> {
             get(proto().status()).setVisible(false);
 
         } else {
-            get(proto().owner().name()).setVisible(!MessageGroupCategory.Custom.equals(getValue().topic().category().getValue()));
-            get(proto().status()).setVisible(!MessageGroupCategory.Custom.equals(getValue().topic().category().getValue()));
+            get(proto().owner().name()).setVisible(MessageGroupCategory.Ticket.equals(getValue().topic().category().getValue()));
+            get(proto().status()).setVisible(MessageGroupCategory.Ticket.equals(getValue().topic().category().getValue()));
         }
     }
 
@@ -495,7 +496,8 @@ public class MessageForm extends CrmEntityForm<MessageDTO> {
                         MessageDialog.error(i18n.tr("Error"), getValidationResults().getValidationMessage(true));
                     } else {
                         MessageDTO currentMessage = getCurrent();
-                        CrudAppPlace place = new CrmSiteMap.Communication.Message(currentMessage);
+                        Message place = new CrmSiteMap.Communication.Message(MessageGroupCategory.Message);
+                        place.setForwardedMessage(currentMessage);
                         place.setType(Type.editor);
                         AppSite.getPlaceController().goTo(place);
                     }
@@ -510,7 +512,8 @@ public class MessageForm extends CrmEntityForm<MessageDTO> {
                         MessageDialog.error(i18n.tr("Error"), getValidationResults().getValidationMessage(true));
                     } else {
                         MessageDTO currentMessage = getCurrent();
-                        CrudAppPlace place = new CrmSiteMap.Communication.Ticket(currentMessage);
+                        Message place = new CrmSiteMap.Communication.Message(MessageGroupCategory.Ticket);
+                        place.setForwardedMessage(currentMessage);
                         place.setType(Type.editor);
                         AppSite.getPlaceController().goTo(place);
                     }
@@ -531,7 +534,7 @@ public class MessageForm extends CrmEntityForm<MessageDTO> {
 
                     m.isRead().setValue(false);
                     saveMessage(m, false);
-                    CrudAppPlace place = new CrmSiteMap.Communication.Message();
+                    CrudAppPlace place = new CrmSiteMap.Communication.Message(m.topic().category().getValue());
                     place.setType(Type.lister);
                     AppSite.getPlaceController().goTo(place);
                 }

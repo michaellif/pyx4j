@@ -398,6 +398,25 @@ public interface CrmImages extends VistaImages {
         ImageResource active();
     }
 
+    MessageCenterIconImages messageCenterIcon();
+
+    public interface MessageCenterIconImages extends ButtonImages {
+        @Override
+        @ImageOptions(repeatStyle = RepeatStyle.Both)
+        @Source("MessageCenter_normal.png")
+        ImageResource regular();
+
+        @Override
+        @ImageOptions(repeatStyle = RepeatStyle.Both)
+        @Source("MessageCenter_active.png")
+        ImageResource hover();
+
+        @Override
+        @ImageOptions(repeatStyle = RepeatStyle.Both)
+        @Source("MessageCenter_hover.png")
+        ImageResource active();
+    }
+
     EditIconButtonImages editButton();
 
     public interface EditIconButtonImages extends ButtonImages {

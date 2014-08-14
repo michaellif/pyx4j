@@ -48,7 +48,7 @@ public class VistaDataPreloaders extends DataPreloaderCollection {
         add(new PreloadPolicies(production));
         add(new DashboardPreloader());
         add(new ReferenceDataPreloader());
-        add(new MessageCategoryPreloader());
+        add(new MessageCategoryPreloader(production));
         add(new SystemEndpointPreloader());
         add(new ReportsAdministrationPreloader());
 

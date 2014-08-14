@@ -1444,7 +1444,7 @@ public class ContentActivityMapper implements AppActivityMapper {
                         activity = new ResidentInsuranceReportActivity((ReportsAppPlace<ResidentInsuranceReportMetadata>) place);
                     }
                     // Communication
-                    else if (crudPlace instanceof Communication.Message || crudPlace instanceof Communication.Ticket) {
+                    else if (crudPlace instanceof Communication.Message) {
                         switch (crudPlace.getType()) {
                         case lister:
                             activity = new MessageListerActivity(crudPlace);

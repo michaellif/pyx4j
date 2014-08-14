@@ -26,7 +26,6 @@ import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
-import com.pyx4j.entity.core.criterion.PropertyCriterion;
 import com.pyx4j.entity.rpc.AbstractListCrudService;
 import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
@@ -34,7 +33,6 @@ import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.site.client.activity.EntitySelectorTableVisorController;
 import com.pyx4j.site.client.ui.IPane;
 import com.pyx4j.widgets.client.dialog.OkCancelDialog;
@@ -120,7 +118,7 @@ public class MessageViewerViewImpl extends CrmViewerViewImplBase<MessageDTO> imp
     public void populate(MessageDTO value) {
         super.populate(value);
 
-        boolean invisible = MessageGroupCategory.Custom.equals(value.topic().category().getValue()) || ThreadStatus.Closed.equals(value.status().getValue())
+        boolean invisible = !MessageGroupCategory.Ticket.equals(value.topic().category().getValue()) || ThreadStatus.Closed.equals(value.status().getValue())
                 || ThreadStatus.Cancelled.equals(value.status().getValue()) || value.isDirect().getValue(false).booleanValue();
         setActionVisible(assignOwnershipAction, !invisible);
         for (ThreadStatus status : threadStatusActions.keySet()) {
@@ -134,11 +132,7 @@ public class MessageViewerViewImpl extends CrmViewerViewImplBase<MessageDTO> imp
             }
         }
 
-        if (MessageGroupCategory.Custom.equals(value.topic().category().getValue())) {
-            setCaption(i18n.tr("Message") + " " + value.getStringView());
-        } else {
-            setCaption(i18n.tr("Ticket") + " " + value.getStringView());
-        }
+        setCaption(value.topic().category().getValue() + " " + value.getStringView());
     }
 
     public void assignEmployee(Employee e) {
@@ -150,10 +144,6 @@ public class MessageViewerViewImpl extends CrmViewerViewImplBase<MessageDTO> imp
 
         public EmployeeSelectorDialog(IPane parentView) {
             super(parentView, Employee.class, false, null, i18n.tr("Select Employee"));
-
-            // add restriction for papa/mama employee, so that he/she won't be able manage himself :)
-            // FIXME: somehow we need to forbid circular references. maybe only server side (if someone wants to be a smart ass)
-            addFilter(PropertyCriterion.ne(proto().id(), ClientContext.getUserVisit().getPrincipalPrimaryKey()));
         }
 
         @Override
@@ -207,8 +197,8 @@ public class MessageViewerViewImpl extends CrmViewerViewImplBase<MessageDTO> imp
                 @Override
                 protected IsWidget createContent() {
                     FormPanel main = new FormPanel(this);
-
                     main.append(Location.Dual, inject(proto().text())).decorate().customLabel(i18n.tr("Comment"));
+
                     return main;
                 }
 

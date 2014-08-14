@@ -39,7 +39,7 @@ import com.propertyvista.domain.communication.CommunicationThread;
 import com.propertyvista.domain.communication.CommunicationThread.ThreadStatus;
 import com.propertyvista.domain.communication.DeliveryHandle;
 import com.propertyvista.domain.communication.Message;
-import com.propertyvista.domain.communication.MessageCategory.MessageGroupCategory;
+import com.propertyvista.domain.communication.MessageCategory.TicketType;
 import com.propertyvista.domain.communication.SystemEndpoint.SystemEndpointName;
 import com.propertyvista.portal.rpc.portal.resident.communication.MessageDTO;
 import com.propertyvista.portal.rpc.portal.resident.services.MessagePortalCrudService;
@@ -98,7 +98,6 @@ public class MessagePortalCrudServiceImpl extends AbstractCrudServiceDtoImpl<Mes
         dto.highImportance().setValue(false);
         dto.allowedReply().setValue(true);
         dto.sender().set(ResidentPortalContext.getCurrentUser());
-
         if (initializationData instanceof MessageInitializationData) {
             dto.text().set(((MessageInitializationData) initializationData).initalizedText());
         }
@@ -124,10 +123,9 @@ public class MessagePortalCrudServiceImpl extends AbstractCrudServiceDtoImpl<Mes
         t.subject().set(to.subject());
         t.allowedReply().setValue(true);
         t.status().setValue(ThreadStatus.New);
-        t.topic().set(communicationFacade.getMessageCategoryFromCache(MessageGroupCategory.Tenant));
+        t.topic().set(communicationFacade.getMessageCategoryFromCache(TicketType.Tenant));
         t.content().add(bo);
         t.owner().set(communicationFacade.getSystemEndpointFromCache(SystemEndpointName.Unassigned));
-
         ServerContext.getVisit().setAttribute(CommunicationMessageFacade.class.getName(), new Long(0L));
 
         return Persistence.secureSave(t);

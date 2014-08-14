@@ -27,6 +27,7 @@ import com.propertyvista.crm.rpc.CrmSiteMap.Communication.Message;
 import com.propertyvista.crm.rpc.services.MessageCrudService;
 import com.propertyvista.crm.rpc.services.MessageCrudService.MessageInitializationData;
 import com.propertyvista.domain.communication.MessageCategory;
+import com.propertyvista.domain.communication.MessageCategory.MessageGroupCategory;
 import com.propertyvista.dto.MessageDTO;
 
 public class MessageEditorActivity extends CrmEditorActivity<MessageDTO> implements MessageEditorView.Presenter {
@@ -35,12 +36,26 @@ public class MessageEditorActivity extends CrmEditorActivity<MessageDTO> impleme
 
     private MessageCategory mc;
 
+    private MessageGroupCategory mgc;
+
     public MessageEditorActivity(CrudAppPlace place) {
         super(MessageDTO.class, place, CrmSite.getViewFactory().getView(MessageEditorView.class), GWT.<MessageCrudService> create(MessageCrudService.class));
         this.place = place;
         InitializationData data = place.getInitializationData();
         if (data != null && data instanceof MessageInitializationData) {
-            mc = ((MessageInitializationData) data).messageCategory();
+            MessageInitializationData mid = (MessageInitializationData) data;
+            mc = mid.messageCategory();
+            mgc = mid.categoryType() == null || mid.categoryType().isNull() ? null : mid.categoryType().getValue();
+        } else {
+            Object placeCriteria = place instanceof Message ? ((Message) place).getCriteria() : null;
+
+            if (placeCriteria == null) {
+                mgc = MessageGroupCategory.Message;
+            } else if (placeCriteria instanceof MessageCategory) {
+                mc = (MessageCategory) placeCriteria;
+            } else if (placeCriteria instanceof MessageGroupCategory) {
+                mgc = (MessageGroupCategory) placeCriteria;
+            }
         }
     }
 
@@ -53,10 +68,8 @@ public class MessageEditorActivity extends CrmEditorActivity<MessageDTO> impleme
     @Override
     protected void obtainInitializationData(AsyncCallback<InitializationData> callback) {
         MessageInitializationData initData = EntityFactory.create(MessageInitializationData.class);
-        if (place instanceof Message) {
-            Message p = (Message) place;
-            initData.forwardedMessage().set(p.getForwardedMessage());
-        }
+        MessageDTO fm = place instanceof Message ? ((Message) place).getForwardedMessage() : null;
+        initData.forwardedMessage().set(fm);
 
         if (mc != null) {
             initData.messageCategory().set(mc);
@@ -70,10 +83,15 @@ public class MessageEditorActivity extends CrmEditorActivity<MessageDTO> impleme
     }
 
     @Override
-    public Boolean isForMessage() {
-        if (place == null) {
-            return null;
+    public MessageGroupCategory getCategoryType() {
+        MessageGroupCategory result = null;
+        if (mc != null) {
+            result = mc.category().getValue();
         }
-        return place instanceof Message;
+
+        if (result == null) {
+            return mgc;
+        }
+        return result;
     }
 }

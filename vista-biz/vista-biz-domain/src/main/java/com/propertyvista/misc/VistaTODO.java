@@ -32,11 +32,6 @@ public class VistaTODO {
     public static boolean removedForProductionOAPI = false;
 
     /**
-     * TODO: Do not forget to turn it on/off during/after production release !!!
-     */
-    public static final boolean ENABLE_COMMUNCATION_CENTER = false;
-
-    /**
      * Check that lease from is in the future compared to transaction time (currently if is true billing tests fail)
      */
     public static final boolean checkLeaseDatesOnUnitReservation = false;
@@ -60,6 +55,8 @@ public class VistaTODO {
     public static boolean VISTA_3207_TENANT_SURE_YEARLY_PAY_SCHEDULE_IMPLEMENTED = false;
 
     public static boolean pendingYardiConfigPatchILS = false;
+
+    public static boolean ADDITIONAL_COMMUNICATION_FEATURES = true;
 
     public static boolean ILS_TestMode = true;
 

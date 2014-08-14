@@ -43,6 +43,7 @@ import com.pyx4j.widgets.client.Anchor;
 import com.propertyvista.crm.client.resources.CrmImages;
 import com.propertyvista.crm.client.themes.CommunicationCrmTheme;
 import com.propertyvista.crm.rpc.CrmSiteMap;
+import com.propertyvista.domain.communication.MessageCategory.MessageGroupCategory;
 import com.propertyvista.dto.MessageDTO;
 
 public class CommunicationViewImpl extends FlowPanel implements CommunicationView, RequiresResize {
@@ -210,7 +211,7 @@ public class CommunicationViewImpl extends FlowPanel implements CommunicationVie
 
                 @Override
                 public void execute() {
-                    CrudAppPlace place = new CrmSiteMap.Communication.Ticket();
+                    CrudAppPlace place = new CrmSiteMap.Communication.Message(MessageGroupCategory.Ticket);
                     place.setType(Type.lister);
                     AppSite.getPlaceController().goTo(place);
                 }
@@ -234,7 +235,7 @@ public class CommunicationViewImpl extends FlowPanel implements CommunicationVie
 
                 @Override
                 public void execute() {
-                    CrudAppPlace place = new CrmSiteMap.Communication.Ticket();
+                    CrudAppPlace place = new CrmSiteMap.Communication.Message(MessageGroupCategory.Ticket);
                     place.setType(Type.editor);
                     AppSite.getPlaceController().goTo(place);
                 }
@@ -253,17 +254,19 @@ public class CommunicationViewImpl extends FlowPanel implements CommunicationVie
             if (directMessagesNum > 0) {
                 StringBuffer statusLabel = new StringBuffer();
                 statusLabel.append(directMessagesNum);
+                messagesAnchor.setVisible(true);
                 messagesAnchor.setText("Messages (" + statusLabel.toString() + "), ");
             } else {
-                messagesAnchor.setText("Messages, ");
+                messagesAnchor.setVisible(false);
             }
 
             if (dispatchedMessagesNum > 0) {
                 StringBuffer statusLabel = new StringBuffer();
                 statusLabel.append(dispatchedMessagesNum);
-                ticketsAnchor.setText("Tickets (" + statusLabel.toString() + "), ");
+                ticketsAnchor.setVisible(true);
+                ticketsAnchor.setText("Tickets in Process (" + statusLabel.toString() + "), ");
             } else {
-                ticketsAnchor.setText("Tickets, ");
+                ticketsAnchor.setVisible(false);
             }
         }
     }
