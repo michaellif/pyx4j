@@ -301,6 +301,7 @@ BEGIN
             id                          BIGINT              NOT NULL,
             topic                       VARCHAR(500),
             category                    VARCHAR(50),
+            ticket_type                 VARCHAR(50),
             deleted                     BOOLEAN,
                 CONSTRAINT  communication_message_category_pk PRIMARY KEY(id)
         );
@@ -852,7 +853,8 @@ BEGIN
         EXECUTE 'UPDATE '||v_schema_name||'.lease_adjustment '
                 ||'SET tax_type = ''Percentage'' '
                 ||'WHERE    tax_type = ''percent'' ';
-                
+        
+        /*        
         -- legal_terms_policy_item
         
         EXECUTE 'UPDATE '||v_schema_name||'.legal_terms_policy_item '
@@ -862,7 +864,10 @@ BEGIN
         EXECUTE 'UPDATE '||v_schema_name||'.legal_terms_policy_item '
                 ||'SET content = regexp_replace(content, ''Convenience Fees'', ''Web Payment Fees'',''g'') '
                 ||'WHERE    caption = ''RESIDENT PORTAL TERMS AND CONDITIONS'' ';
-                
+        
+        */
+        
+        
         -- marketing
         
         EXECUTE 'UPDATE '||v_schema_name||'.marketing AS m '
@@ -1379,7 +1384,9 @@ BEGIN
         ALTER TABLE communication_message ADD CONSTRAINT communication_message_sender_discriminator_d_ck 
             CHECK ((sender_discriminator) IN ('AptUnit', 'Building', 'CrmUser', 'CustomerUser', 'Portfolio', 'SystemEndpoint', 'Tenant'));
         ALTER TABLE communication_message_category ADD CONSTRAINT communication_message_category_category_e_ck 
-            CHECK ((category) IN ('Custom', 'Landlord', 'Tenant', 'Vendor'));
+            CHECK ((category) IN ('IVR', 'Message', 'Notification', 'SMS', 'Ticket'));
+        ALTER TABLE communication_message_category ADD CONSTRAINT communication_message_category_ticket_type_e_ck 
+            CHECK ((ticket_type) IN ('Landlord', 'NotTicket', 'Tenant', 'Vendor'));
         ALTER TABLE communication_thread ADD CONSTRAINT communication_thread_owner_discriminator_d_ck 
             CHECK ((owner_discriminator) IN ('AptUnit', 'Building', 'CrmUser', 'CustomerUser', 'Portfolio', 'SystemEndpoint', 'Tenant'));
         ALTER TABLE communication_thread ADD CONSTRAINT communication_thread_status_e_ck 
