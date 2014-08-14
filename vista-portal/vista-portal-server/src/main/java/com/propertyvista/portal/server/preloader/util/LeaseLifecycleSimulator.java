@@ -14,6 +14,7 @@
 package com.propertyvista.portal.server.preloader.util;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -237,7 +238,7 @@ public class LeaseLifecycleSimulator {
     }
 
     private boolean hasNextEvent() {
-        return !events.isEmpty() && (events.peek().date().before(simEnd) | events.peek().date().equals(simEnd));
+        return !events.isEmpty() && (events.peek().date().before(simEnd) || events.peek().date().equals(simEnd));
     }
 
     // EVENTS
@@ -392,7 +393,7 @@ public class LeaseLifecycleSimulator {
 
         @Override
         public void exec() {
-            if (runBilling & numOfPayments != 0) {
+            if (runBilling && numOfPayments != 0) {
                 --numOfPayments;
                 performRandomPayment();
             }
@@ -415,7 +416,7 @@ public class LeaseLifecycleSimulator {
             if (bill != null && bill.totalDueAmount().getValue().compareTo(BigDecimal.ZERO) != 0) {
                 BigDecimal amount = tenantAgent.pay(bill);
                 if (debug) {
-                    System.out.println("" + now() + " payed " + amount);
+                    System.out.println("" + now() + " paid " + amount);
                 }
                 PaymentRecord payment = receivePayment(amount);
                 if (payment != null) {
@@ -482,24 +483,20 @@ public class LeaseLifecycleSimulator {
 
         @Override
         public void exec() {
-            if (now().before(lease.currentTerm().termFrom().getValue())) {
-                return;
-            }
-            numOfBills--;
             if (numOfBills != 0) {
 
-                if (now().before(lease.currentTerm().termTo().getValue()) & lease.status().getValue() != Lease.Status.Completed) {
+                if (now().before(lease.currentTerm().termTo().getValue()) && lease.status().getValue() != Lease.Status.Completed) {
 
                     Bill lastBill = ServerSideFactory.create(BillingFacade.class).getLatestBill(lease);
-                    if (lastBill.billingPeriodStartDate().isNull() | lastBill.billingPeriodEndDate().getValue().compareTo(lease.leaseTo().getValue()) >= 0) {
+                    if (lastBill.billingPeriodStartDate().isNull() || lastBill.billingPeriodEndDate().getValue().compareTo(lease.leaseTo().getValue()) >= 0) {
                         // lease ended
                         return;
                     }
 
                     LogicalDate billingRunDay = ServerSideFactory.create(BillingFacade.class).getNextBillBillingCycle(lease).targetBillExecutionDate()
                             .getValue();
-                    if (now().equals(billingRunDay) & (now().compareTo(lease.leaseTo().getValue()) < 0)
-                            & (now().compareTo(lease.expectedMoveOut().getValue()) < 0)) {
+                    if (now().equals(billingRunDay) && (now().compareTo(lease.leaseTo().getValue()) < 0)
+                            && (now().compareTo(lease.expectedMoveOut().getValue()) < 0)) {
                         BillingFacade billing = ServerSideFactory.create(BillingFacade.class);
                         try {
                             billing.runBilling(lease);
@@ -522,6 +519,7 @@ public class LeaseLifecycleSimulator {
                         LogicalDate nextRun = new LogicalDate(cal.getTime());
                         queueEvent(nextRun, new RunBillingRecurrent(lease));
 
+                        numOfBills--;
                     } else {
                         queueEvent(billingRunDay, new RunBillingRecurrent(lease));
                     }
@@ -681,7 +679,7 @@ public class LeaseLifecycleSimulator {
                 if (random.nextDouble() < 0.5) {
                     // pay just a part of the bill
                     BigDecimal part = new BigDecimal(0.1d + random.nextDouble());
-                    return bill.totalDueAmount().getValue().multiply(part);
+                    return bill.totalDueAmount().getValue().multiply(part).setScale(2, RoundingMode.HALF_UP);
                 } else {
                     // don't pay at all
                     return null;
@@ -790,6 +788,7 @@ public class LeaseLifecycleSimulator {
             return this;
         }
 
+        /** Setting negative value means "run until now" */
         public void setNumOfBillsAndPayments(int i) {
             leaseLifecycleSim.numOfBills = i;
             leaseLifecycleSim.numOfPayments = i;

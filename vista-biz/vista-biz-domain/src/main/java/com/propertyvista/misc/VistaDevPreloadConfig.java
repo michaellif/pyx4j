@@ -124,7 +124,7 @@ public final class VistaDevPreloadConfig implements Serializable {
         config.numUnitsPerFloor = 2;
         config.numOfLeasesWithNoSimulation = 0;
         config.numOfPseudoRandomLeasesWithSimulatedBilling = 1;
-        config.oneBillOnePayment = true;
+        config.oneBillOnePayment = false;
         return config;
     }
 
@@ -147,7 +147,7 @@ public final class VistaDevPreloadConfig implements Serializable {
         config.minimizePreloadTime = true;
         config.numOfLeasesWithNoSimulation = 0;
         config.numOfPseudoRandomLeasesWithSimulatedBilling = 1;
-        config.oneBillOnePayment = true;
+        config.oneBillOnePayment = false;
         return config;
     }
 
