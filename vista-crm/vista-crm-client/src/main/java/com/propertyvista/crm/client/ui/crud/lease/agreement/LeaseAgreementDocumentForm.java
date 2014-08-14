@@ -16,22 +16,26 @@ package com.propertyvista.crm.client.ui.crud.lease.agreement;
 import java.util.List;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.IsWidget;
 
+import com.pyx4j.commons.IFormatter;
+import com.pyx4j.commons.SimpleMessageFormat;
+import com.pyx4j.entity.core.IList;
 import com.pyx4j.forms.client.ui.CFile;
 import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.forms.client.ui.CListBox;
-import com.pyx4j.forms.client.ui.CListBox.SelectionMode;
+import com.pyx4j.forms.client.ui.CViewer;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.forms.client.validators.AbstractComponentValidator;
 import com.pyx4j.forms.client.validators.BasicValidationError;
 import com.pyx4j.gwt.rpc.upload.UploadService;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.widgets.client.Label;
 
 import com.propertyvista.common.client.VistaFileURLBuilder;
-import com.propertyvista.crm.client.ui.crud.lease.agreement.LeaseAgreementDocumentFolder.LeaseAgreementSignedParticipantsViewer;
 import com.propertyvista.crm.rpc.services.lease.LeaseTermAgreementDocumentUploadService;
 import com.propertyvista.domain.tenant.lease.LeaseTermAgreementDocument;
 import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
@@ -40,9 +44,14 @@ public class LeaseAgreementDocumentForm extends CForm<LeaseTermAgreementDocument
 
     private static final I18n i18n = I18n.get(LeaseAgreementDocumentForm.class);
 
-    private final boolean viewOnly;
+    private final CListBox<LeaseTermParticipant<?>> signedParticipantsListBox = new CListBox<LeaseTermParticipant<?>>() {
+        @Override
+        public String getItemName(LeaseTermParticipant<?> pariticipant) {
+            return LeaseAgreementSignedParticipantsViewer.formatParticipant(pariticipant);
+        }
+    };
 
-    private CListBox<LeaseTermParticipant<?>> signedParticipantsListBox;
+    private final boolean viewOnly;
 
     public LeaseAgreementDocumentForm(boolean viewOnly) {
         super(LeaseTermAgreementDocument.class);
@@ -61,23 +70,18 @@ public class LeaseAgreementDocumentForm extends CForm<LeaseTermAgreementDocument
                 .append(Location.Dual,
                         proto().file(),
                         new CFile(GWT.<UploadService<?, ?>> create(LeaseTermAgreementDocumentUploadService.class), new VistaFileURLBuilder(
-                                LeaseTermAgreementDocument.class))).decorate().customLabel(i18n.tr("Agreement Document File")).componentWidth(300);
+                                LeaseTermAgreementDocument.class))).decorate().customLabel(i18n.tr("Agreement Document File")).labelWidth(200)
+                .componentWidth(220);
 
         if (viewOnly) {
             formPanel.append(Location.Dual, proto().signedParticipants(), new LeaseAgreementSignedParticipantsViewer()).decorate()
-                    .customLabel(i18n.tr("Signed Participants")).componentWidth(300);
+                    .customLabel(i18n.tr("Signed Participants")).labelWidth(200).componentWidth(250);
         } else {
-            formPanel
-                    .append(Location.Dual, proto().signedParticipants(),
-                            signedParticipantsListBox = new CListBox<LeaseTermParticipant<?>>(SelectionMode.SINGLE_PANEL) {
-                                @Override
-                                public String getItemName(LeaseTermParticipant<?> pariticipant) {
-                                    return LeaseAgreementDocumentFolder.formatParticipant(pariticipant);
-                                }
-                            }).decorate().customLabel(i18n.tr("Signed Participant")).componentWidth(300);
+            formPanel.append(Location.Dual, proto().signedParticipants(), signedParticipantsListBox).decorate().customLabel(i18n.tr("Signed Participant"))
+                    .labelWidth(200).componentWidth(250);
         }
         formPanel.append(Location.Dual, proto().signedEmployeeUploader().name(), new CLabel<String>()).decorate()
-                .customLabel(i18n.tr("Signed Employee / Uploader")).componentWidth(300);
+                .customLabel(i18n.tr("Signed Employee / Uploader")).labelWidth(200).componentWidth(250);
         return formPanel;
     }
 
@@ -99,5 +103,29 @@ public class LeaseAgreementDocumentForm extends CForm<LeaseTermAgreementDocument
                 return null;
             }
         });
+    }
+
+    private static class LeaseAgreementSignedParticipantsViewer extends CViewer<IList<LeaseTermParticipant<?>>> {
+
+        public LeaseAgreementSignedParticipantsViewer() {
+            setFormatter(new IFormatter<IList<LeaseTermParticipant<?>>, IsWidget>() {
+                @Override
+                public IsWidget format(IList<LeaseTermParticipant<?>> value) {
+                    FlowPanel panel = new FlowPanel();
+                    if (value != null) {
+                        for (LeaseTermParticipant<?> participant : value) {
+                            String signerStringView = formatParticipant(participant);
+                            panel.add(new Label(signerStringView));
+                        }
+                    }
+                    return panel;
+                }
+            });
+        }
+
+        public static String formatParticipant(LeaseTermParticipant<?> participant) {
+            return SimpleMessageFormat.format("{0} ({1})", participant.leaseParticipant().customer().person().name().getStringView(), participant.role()
+                    .getValue().toString());
+        }
     }
 }

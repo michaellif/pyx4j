@@ -15,19 +15,11 @@ package com.propertyvista.crm.client.ui.crud.lease.agreement;
 
 import java.util.List;
 
-import com.google.gwt.user.client.ui.FlowPanel;
-import com.google.gwt.user.client.ui.IsWidget;
-
-import com.pyx4j.commons.IFormatter;
-import com.pyx4j.commons.SimpleMessageFormat;
 import com.pyx4j.entity.core.EntityFactory;
-import com.pyx4j.entity.core.IList;
 import com.pyx4j.entity.core.IObject;
 import com.pyx4j.forms.client.ui.CForm;
-import com.pyx4j.forms.client.ui.CViewer;
 import com.pyx4j.forms.client.ui.folder.CFolderItem;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.widgets.client.Label;
 import com.pyx4j.widgets.client.dialog.OkCancelDialog;
 
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
@@ -89,31 +81,6 @@ public class LeaseAgreementDocumentFolder extends VistaBoxFolder<LeaseTermAgreem
         this.uploader = uploader;
     }
 
-    public static String formatParticipant(LeaseTermParticipant<?> participant) {
-        return SimpleMessageFormat.format("{0} ({1})", participant.leaseParticipant().customer().person().name().getStringView(), participant.role().getValue()
-                .toString());
-    }
-
-    public static class LeaseAgreementSignedParticipantsViewer extends CViewer<IList<LeaseTermParticipant<?>>> {
-
-        public LeaseAgreementSignedParticipantsViewer() {
-            setFormatter(new IFormatter<IList<LeaseTermParticipant<?>>, IsWidget>() {
-                @Override
-                public IsWidget format(IList<LeaseTermParticipant<?>> value) {
-                    FlowPanel panel = new FlowPanel();
-                    if (value != null) {
-                        for (LeaseTermParticipant<?> participant : value) {
-                            String signerStringView = formatParticipant(participant);
-                            panel.add(new Label(signerStringView));
-                        }
-                    }
-                    return panel;
-                }
-            });
-        }
-
-    }
-
     public abstract class LeaseAgreementDocumentUploadDialog extends OkCancelDialog {
 
         private final LeaseAgreementDocumentForm form;
@@ -128,6 +95,7 @@ public class LeaseAgreementDocumentFolder extends VistaBoxFolder<LeaseTermAgreem
             form.populate(newDoc);
             form.setParticipantOptions(LeaseAgreementDocumentFolder.this.participantOptions);
             setBody(form);
+            setDialogPixelWidth(500);
         }
 
         @Override
@@ -136,14 +104,10 @@ public class LeaseAgreementDocumentFolder extends VistaBoxFolder<LeaseTermAgreem
             if (form.isValid()) {
                 accept(form.getValue());
                 return true;
-            } else {
-                return false;
             }
-
+            return false;
         }
 
         public abstract void accept(LeaseTermAgreementDocument document);
-
     }
-
 }
