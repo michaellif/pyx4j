@@ -65,6 +65,7 @@ BEGIN
         -- now update content of what is left
         
         EXECUTE 'UPDATE '||v_schema_name||'.legal_terms_policy_item AS pi '
+                ||'SET  content = t.content '
                 ||'FROM     (SELECT     caption, content, md5(content) AS checksum '
                 ||'         FROM    _dba_.tmp_policy_items) AS t '
                 ||'WHERE    pi.caption = t.caption '
