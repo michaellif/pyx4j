@@ -20,8 +20,10 @@ import static com.pyx4j.entity.security.AbstractCRUDPermission.ALL;
 import static com.pyx4j.entity.security.AbstractCRUDPermission.READ;
 import static com.pyx4j.entity.security.AbstractCRUDPermission.UPDATE;
 
+import com.pyx4j.rpc.shared.IServiceExecutePermission;
 import com.pyx4j.security.server.UIAclBuilder;
 
+import com.propertyvista.crm.rpc.services.customer.GuarantorPasswordChangeService;
 import com.propertyvista.crm.rpc.services.customer.ac.FormerGuarantorListAction;
 import com.propertyvista.crm.rpc.services.customer.ac.GuarantorChangePassword;
 import com.propertyvista.dto.GuarantorDTO;
@@ -47,5 +49,6 @@ class VistaCrmGuarantorAccessControlList extends UIAclBuilder {
         grant(GuarantorBasic, GuarantorChangePassword.class);
         grant(GuarantorAdvanced, GuarantorChangePassword.class);
         grant(GuarantorFull, GuarantorChangePassword.class);
+        grant(GuarantorBasic, GuarantorAdvanced, GuarantorFull, new IServiceExecutePermission(GuarantorPasswordChangeService.class));
     }
 }

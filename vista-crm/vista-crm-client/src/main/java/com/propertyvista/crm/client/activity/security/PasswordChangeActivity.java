@@ -40,6 +40,7 @@ import com.propertyvista.common.client.ui.components.security.PasswordChangeView
 import com.propertyvista.common.client.ui.components.security.TenantPasswordStrengthRule;
 import com.propertyvista.crm.client.CrmSite;
 import com.propertyvista.crm.rpc.CrmSiteMap;
+import com.propertyvista.crm.rpc.services.customer.GuarantorPasswordChangeService;
 import com.propertyvista.crm.rpc.services.customer.TenantPasswordChangeService;
 import com.propertyvista.crm.rpc.services.organization.ManagedCrmUserService;
 import com.propertyvista.crm.rpc.services.security.CrmPasswordChangeUserService;
@@ -118,6 +119,8 @@ public class PasswordChangeActivity extends AbstractActivity implements Password
             }
         } else if (principalClass.equals(PrincipalClass.TENANT)) {
             service = GWT.<TenantPasswordChangeService> create(TenantPasswordChangeService.class);
+        } else if (principalClass.equals(PrincipalClass.GUARANTOR)) {
+            service = GWT.<TenantPasswordChangeService> create(GuarantorPasswordChangeService.class);
         } else {
             throw new UnrecoverableClientError("Got unknown principal class or changing password for this principal has not yet been implemented");
         }
