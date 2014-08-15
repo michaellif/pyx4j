@@ -20,7 +20,9 @@ DECLARE
 BEGIN
 
     FOR v_schema_name IN 
-    SELECT  namespace FROM _admin_.admin_pmc 
+    SELECT  a.namespace 
+    FROM    _admin_.admin_pmc a
+    JOIN    pg_catalog.pg_namespace n ON (a.namespace = n.nspname)
     LOOP
     
         -- DELETE EXTRA legal_term_policy records
