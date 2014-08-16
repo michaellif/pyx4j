@@ -338,4 +338,5 @@ DROP FUNCTION _dba_.update_phone_numbers(text);
 DROP FUNCTION _dba_.migrate_pmc_114(text);
 DROP TABLE _dba_.tmp_roles;
 
-
+-- Final step - update legal_terms_policy items
+\i update_policy_items.sql
