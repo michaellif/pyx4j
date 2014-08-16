@@ -26,6 +26,7 @@ import com.pyx4j.entity.annotations.Indexed;
 import com.pyx4j.entity.annotations.JoinColumn;
 import com.pyx4j.entity.annotations.Length;
 import com.pyx4j.entity.annotations.MemberColumn;
+import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.annotations.ReadOnly;
 import com.pyx4j.entity.annotations.ToString;
@@ -102,6 +103,7 @@ public interface LeaseApplication extends IEntity {
     @JoinColumn
     Lease lease();
 
+    @Owned(cascade = {})
     MasterOnlineApplication onlineApplication();
 
     @NotNull
