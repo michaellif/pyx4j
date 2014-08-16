@@ -63,6 +63,7 @@ import com.propertyvista.crm.rpc.services.lease.ac.CreditCheckRun;
 import com.propertyvista.domain.customizations.CountryOfOperation;
 import com.propertyvista.domain.pmc.PmcEquifaxStatus;
 import com.propertyvista.domain.security.VistaCrmBehavior;
+import com.propertyvista.domain.tenant.lease.LeaseApplication;
 import com.propertyvista.domain.tenant.lease.LeaseApplication.Status;
 import com.propertyvista.domain.tenant.lease.LeaseTermGuarantor;
 import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
@@ -377,16 +378,17 @@ public class LeaseApplicationViewerViewImpl extends LeaseViewerViewImplBase<Leas
         super.populate(value);
 
         Status status = value.leaseApplication().status().getValue();
+        boolean isOnlineApplication = LeaseApplication.Status.isOnlineApplication(value.leaseApplication());
 
         // set buttons state:
         setViewVisible(viewLease, status.isCurrent());
 
-        setActionVisible(createOnlineApplication, status == Status.Created);
-        setActionVisible(cancelOnlineApplication, status == Status.OnlineApplication);
-        setActionVisible(inviteAction, status == Status.OnlineApplication);
+        setActionVisible(createOnlineApplication, status == Status.InProgress);
+        setActionVisible(cancelOnlineApplication, isOnlineApplication);
+        setActionVisible(inviteAction, isOnlineApplication);
         setActionVisible(creditCheckAction, status.isDraft());
         setActionVisible(approveAction, status.isDraft());
-        setActionVisible(moreInfoAction, status.isDraft() && status != Status.Created);
+        setActionVisible(moreInfoAction, status.isDraft() && status != Status.InProgress);
         setActionVisible(declineAction, status.isDraft());
         setActionVisible(cancelAction, status.isDraft());
 

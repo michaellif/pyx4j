@@ -73,10 +73,10 @@ public class ApplicationsGadgetServiceImpl implements ApplicationsGadgetService 
         if (proto.applications() == applicationsFilterMember) {
             criteria.in(criteria.proto().leaseApplication().status(), EnumSet.allOf(LeaseApplication.Status.class));
         } else if (proto.inProgress() == applicationsFilterMember) {
-            criteria.add(PropertyCriterion.in(criteria.proto().leaseApplication().status(),
-                    EnumSet.of(LeaseApplication.Status.Created, LeaseApplication.Status.OnlineApplication)));
+            criteria.add(PropertyCriterion.in(criteria.proto().leaseApplication().status(), LeaseApplication.Status.InProgress));
         } else if (proto.pending() == applicationsFilterMember) {
-            criteria.add(PropertyCriterion.eq(criteria.proto().leaseApplication().status(), LeaseApplication.Status.PendingDecision));
+            criteria.add(PropertyCriterion.eq(criteria.proto().leaseApplication().status(),
+                    EnumSet.of(LeaseApplication.Status.Submitted, LeaseApplication.Status.PendingFurtherInformation, LeaseApplication.Status.PendingDecision)));
         } else if (proto.approved() == applicationsFilterMember) {
             criteria.add(PropertyCriterion.eq(criteria.proto().leaseApplication().status(), LeaseApplication.Status.Approved));
         } else if (proto.declined() == applicationsFilterMember) {

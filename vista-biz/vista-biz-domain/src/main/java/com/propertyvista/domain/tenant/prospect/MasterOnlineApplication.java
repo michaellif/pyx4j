@@ -13,6 +13,9 @@
  */
 package com.propertyvista.domain.tenant.prospect;
 
+import java.util.Collection;
+import java.util.EnumSet;
+
 import javax.xml.bind.annotation.XmlType;
 
 import com.pyx4j.commons.LogicalDate;
@@ -51,6 +54,18 @@ public interface MasterOnlineApplication extends IEntity {
         @Override
         public String toString() {
             return I18nEnum.toString(this);
+        }
+
+        // state sets:
+
+        public static Collection<Status> inProgress() {
+            return EnumSet.of(Incomplete, Submitted, InformationRequested);
+        }
+
+        // states:
+
+        public boolean isInProgress() {
+            return inProgress().contains(this);
         }
     }
 

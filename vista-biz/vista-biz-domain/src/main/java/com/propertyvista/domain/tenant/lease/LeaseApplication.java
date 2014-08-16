@@ -26,7 +26,6 @@ import com.pyx4j.entity.annotations.Indexed;
 import com.pyx4j.entity.annotations.JoinColumn;
 import com.pyx4j.entity.annotations.Length;
 import com.pyx4j.entity.annotations.MemberColumn;
-import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.annotations.ReadOnly;
 import com.pyx4j.entity.annotations.ToString;
@@ -46,9 +45,11 @@ public interface LeaseApplication extends IEntity {
     @XmlType(name = "LeaseApplicationStatus")
     public enum Status {
 
-        Created, // Mapped to Lease status Created and ApplicationInProgress
+        InProgress, // Mapped to Lease status Created and ApplicationInProgress
 
-        OnlineApplication,
+        Submitted,
+
+        PendingFurtherInformation,
 
         PendingDecision,
 
@@ -66,7 +67,7 @@ public interface LeaseApplication extends IEntity {
         // state sets:
 
         public static Collection<Status> draft() {
-            return EnumSet.of(Created, OnlineApplication, PendingDecision);
+            return EnumSet.of(InProgress, Submitted, PendingFurtherInformation, PendingDecision);
         }
 
         public static Collection<Status> current() {
@@ -90,6 +91,10 @@ public interface LeaseApplication extends IEntity {
         public boolean isProcessed() {
             return processed().contains(this);
         }
+
+        public static boolean isOnlineApplication(LeaseApplication app) {
+            return (!app.onlineApplication().status().isNull() && app.onlineApplication().status().getValue().isInProgress());
+        }
     }
 
     @Owner
@@ -97,8 +102,6 @@ public interface LeaseApplication extends IEntity {
     @JoinColumn
     Lease lease();
 
-    @Detached
-    @Owned(cascade = {})
     MasterOnlineApplication onlineApplication();
 
     @NotNull

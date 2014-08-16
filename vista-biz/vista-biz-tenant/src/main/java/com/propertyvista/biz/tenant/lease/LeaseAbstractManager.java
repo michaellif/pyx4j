@@ -121,7 +121,7 @@ public abstract class LeaseAbstractManager {
         switch (lease.status().getValue()) {
         case Application:
             ServerSideFactory.create(IdAssignmentFacade.class).assignId(lease.leaseApplication());
-            lease.leaseApplication().status().setValue(LeaseApplication.Status.Created);
+            lease.leaseApplication().status().setValue(LeaseApplication.Status.InProgress);
             break; // ok, allowed value...
         case NewLease:
         case ExistingLease:
@@ -290,14 +290,12 @@ public abstract class LeaseAbstractManager {
         if (!lease.status().getValue().isDraft()) {
             throw new IllegalStateException(SimpleMessageFormat.format("Invalid Lease Status (\"{0}\")", lease.status().getValue()));
         }
-        if (lease.leaseApplication().status().getValue() != LeaseApplication.Status.Created) {
+        if (lease.leaseApplication().status().getValue() != LeaseApplication.Status.InProgress) {
             throw new IllegalStateException(SimpleMessageFormat.format("Invalid Application Status (\"{0}\")", lease.leaseApplication().status().getValue()));
         }
 
         ServerSideFactory.create(OnlineApplicationFacade.class)
                 .createMasterOnlineApplication(lease.leaseApplication().onlineApplication(), building, floorplan);
-
-        lease.leaseApplication().status().setValue(LeaseApplication.Status.OnlineApplication);
 
         Persistence.service().merge(lease);
     }
@@ -309,13 +307,13 @@ public abstract class LeaseAbstractManager {
         if (!lease.status().getValue().isDraft()) {
             throw new IllegalStateException(SimpleMessageFormat.format("Invalid Lease Status (\"{0}\")", lease.status().getValue()));
         }
-        if (lease.leaseApplication().status().getValue() != LeaseApplication.Status.OnlineApplication) {
+        if (!LeaseApplication.Status.isOnlineApplication(lease.leaseApplication())) {
             throw new IllegalStateException(SimpleMessageFormat.format("Invalid Application Status (\"{0}\")", lease.leaseApplication().status().getValue()));
         }
 
         ServerSideFactory.create(OnlineApplicationFacade.class).cancelMasterOnlineApplication(lease.leaseApplication().onlineApplication());
 
-        lease.leaseApplication().status().setValue(LeaseApplication.Status.Created);
+        lease.leaseApplication().status().setValue(LeaseApplication.Status.InProgress);
 
         Persistence.service().merge(lease);
     }
