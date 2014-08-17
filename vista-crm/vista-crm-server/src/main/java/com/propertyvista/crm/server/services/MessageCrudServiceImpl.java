@@ -22,6 +22,7 @@ import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.config.server.SystemDateManager;
 import com.pyx4j.entity.core.AttachLevel;
 import com.pyx4j.entity.core.EntityFactory;
+import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.Path;
 import com.pyx4j.entity.core.criterion.EntityListCriteria;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
@@ -190,15 +191,19 @@ public class MessageCrudServiceImpl extends AbstractCrudServiceDtoImpl<Message, 
         bo.sender().set(CrmAppContext.getCurrentUser());
         bo.text().set(to.text());
         bo.highImportance().set(to.highImportance());
+        if (to.topic().isValueDetached()) {
+            Persistence.service().retrieve(to.topic());
+        }
+        boolean isTicket = MessageGroupCategory.Ticket.equals(to.topic().category().getValue());
 
+        if (isTicket) {
+            bo.recipients().add(communicationFacade.createDeliveryHandle(communicationFacade.getSystemEndpointFromCache(SystemEndpointName.Unassigned), true));
+        }
         CommunicationThread t = EntityFactory.create(CommunicationThread.class);
         t.subject().set(to.subject());
         t.allowedReply().set(to.allowedReply());
         t.topic().set(to.topic());
-        if (to.topic().isValueDetached()) {
-            Persistence.service().retrieve(to.topic());
-        }
-        t.status().setValue(isNew && MessageGroupCategory.Ticket.equals(to.topic().category().getValue()) ? ThreadStatus.New : ThreadStatus.Unassigned);
+        t.status().setValue(isNew && isTicket ? ThreadStatus.Open : ThreadStatus.Unassigned);
         t.content().add(bo);
         t.owner().set(
                 to.owner() == null || to.owner().isEmpty() || to.owner().isPrototype() || to.owner().isNull() ? communicationFacade
@@ -370,25 +375,31 @@ public class MessageCrudServiceImpl extends AbstractCrudServiceDtoImpl<Message, 
     }
 
     @Override
-    public void assignOwnership(AsyncCallback<MessageDTO> callback, MessageDTO message, Employee employee) {
+    public void assignOwnership(AsyncCallback<MessageDTO> callback, MessageDTO message, IEntity employee) {
         CommunicationThread thread = Persistence.secureRetrieve(CommunicationThread.class, message.thread().id().getValue());
         CommunicationMessageFacade communicationFacade = ServerSideFactory.create(CommunicationMessageFacade.class);
-
-        if (ThreadStatus.New.equals(thread.status().getValue())) {
-            thread.status().setValue(ThreadStatus.Open);
+        Employee e = null;
+        if (employee != null) {
+            if (employee.getInstanceValueClass().equals(Employee.class)) {
+                e = employee.cast();
+            } else {
+                e = CrmAppContext.getCurrentUserEmployee();
+            }
+            Persistence.ensureRetrieve(e.user(), AttachLevel.Attached);
         }
-        thread.owner().set(employee.user());
+
+        thread.owner().set(e == null ? communicationFacade.getSystemEndpointFromCache(SystemEndpointName.Unassigned) : e.user());
 
         Persistence.service().persist(thread);
         Persistence.service().commit();
-        Persistence.ensureRetrieve(employee.user(), AttachLevel.Attached);
 
-        message.owner().set(communicationFacade.generateEndpointDTO(employee.user()));
+        message.owner().set(
+                communicationFacade.generateEndpointDTO(e == null ? communicationFacade.getSystemEndpointFromCache(SystemEndpointName.Unassigned) : e.user()));
         message.status().set(thread.status());
-        if (!CrmAppContext.getCurrentUser().equals(employee.user())) {
+        if (!CrmAppContext.getCurrentUser().equals(employee)) {
             MessageDTO dto = EntityFactory.create(MessageDTO.class);
             dto.to().add(message.owner());
-            dto.text().setValue("Ticket owner was changed to: " + employee.user().getStringView());
+            dto.text().setValue("Ticket owner was changed to: " + message.owner().name().getStringView());
             dto.thread().set(thread);
             saveMessage(callback, dto, null);
         } else {

@@ -244,14 +244,6 @@ public class MessageEditForm extends CrmEntityForm<MessageDTO> {
         super.onValueSet(populate);
     }
 
-    @Override
-    public boolean isValid() {
-        if (getValue() != null && getValue().to() != null && getValue().to().size() < 1) {
-            return false;
-        }
-        return super.isValid();
-    }
-
     private CommunicationEndpointSelector createCommunicationEndpointSelector() {
         return epSelector = new CommunicationEndpointSelector() {//@formatter:off
             @Override protected void onItemAdded(CommunicationEndpointDTO item) {

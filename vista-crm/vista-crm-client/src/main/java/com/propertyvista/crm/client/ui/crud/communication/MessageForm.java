@@ -64,15 +64,12 @@ import com.propertyvista.crm.client.ui.components.boxes.UnitSelectorDialog;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.crm.client.ui.tools.common.selectors.CommunicationEndpointSelector;
 import com.propertyvista.crm.rpc.CrmSiteMap;
-import com.propertyvista.crm.rpc.CrmSiteMap.Communication.Message;
 import com.propertyvista.crm.rpc.services.selections.SelectCrmUserListService;
 import com.propertyvista.crm.rpc.services.selections.SelectPortfolioListService;
 import com.propertyvista.domain.communication.CommunicationEndpoint;
 import com.propertyvista.domain.communication.CommunicationEndpoint.ContactType;
-import com.propertyvista.domain.communication.CommunicationThread.ThreadStatus;
 import com.propertyvista.domain.communication.DeliveryHandle;
 import com.propertyvista.domain.communication.MessageCategory.MessageGroupCategory;
-import com.propertyvista.domain.company.Employee;
 import com.propertyvista.domain.company.Portfolio;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
@@ -101,7 +98,7 @@ public class MessageForm extends CrmEntityForm<MessageDTO> {
         setEnabled(true);
     }
 
-    public void assignOwnership(Employee employee) {
+    public void assignOwnership(IEntity employee) {
         ((MessageViewerView.Presenter) getParentView().getPresenter()).assignOwnership(getValue(), employee);
     }
 
@@ -169,10 +166,6 @@ public class MessageForm extends CrmEntityForm<MessageDTO> {
         private Anchor btnCancel;
 
         private Anchor btnMarkAsUnread;
-
-        private Anchor btnForwardMessage;
-
-        private Anchor btnForwardTicket;
 
         private Anchor btnReply;
 
@@ -469,8 +462,11 @@ public class MessageForm extends CrmEntityForm<MessageDTO> {
                         MessageDTO currentMessage = getCurrent();
                         messagesFolder.addItem();
                         CFolderItem<MessageDTO> newItem = messagesFolder.getItem(messagesFolder.getItemCount() - 1);
-                        newItem.getValue().text().setValue(currentMessage == null ? null : "\nRe:\n" + currentMessage.text().getValue());
-
+                        if (ClientContext.getUserVisit().getName().equals(getValue().header().sender().getValue())) {
+                            newItem.getValue().text().setValue(currentMessage == null ? null : "\nRe:\n" + currentMessage.text().getValue());
+                        } else {
+                            newItem.getValue().text().setValue(currentMessage == null ? null : "\nFwd:\n" + currentMessage.text().getValue());
+                        }
                         if (!ClientContext.getUserVisit().getName().equals(currentMessage.header().sender().getValue())) {
                             newItem.getValue().to().add(currentMessage.sender());
                         }
@@ -486,38 +482,6 @@ public class MessageForm extends CrmEntityForm<MessageDTO> {
                     }
                 }
 
-            });
-
-            btnForwardMessage = new Anchor(i18n.tr("Create Message"), new Command() {
-                @Override
-                public void execute() {
-                    if (!isValid()) {
-                        setVisited(true);
-                        MessageDialog.error(i18n.tr("Error"), getValidationResults().getValidationMessage(true));
-                    } else {
-                        MessageDTO currentMessage = getCurrent();
-                        Message place = new CrmSiteMap.Communication.Message(MessageGroupCategory.Message);
-                        place.setForwardedMessage(currentMessage);
-                        place.setType(Type.editor);
-                        AppSite.getPlaceController().goTo(place);
-                    }
-                };
-            });
-
-            btnForwardTicket = new Anchor(i18n.tr("Create Ticket"), new Command() {
-                @Override
-                public void execute() {
-                    if (!isValid()) {
-                        setVisited(true);
-                        MessageDialog.error(i18n.tr("Error"), getValidationResults().getValidationMessage(true));
-                    } else {
-                        MessageDTO currentMessage = getCurrent();
-                        Message place = new CrmSiteMap.Communication.Message(MessageGroupCategory.Ticket);
-                        place.setForwardedMessage(currentMessage);
-                        place.setType(Type.editor);
-                        AppSite.getPlaceController().goTo(place);
-                    }
-                };
             });
 
             btnCancel = new Anchor(i18n.tr("Cancel"), new Command() {
@@ -542,8 +506,6 @@ public class MessageForm extends CrmEntityForm<MessageDTO> {
 
             tb.addItem(btnSend);
             tb.addItem(btnReply);
-            tb.addItem(btnForwardMessage);
-            tb.addItem(btnForwardTicket);
             tb.addItem(btnCancel);
             tb.addItem(btnMarkAsUnread);
             return tb;
@@ -583,8 +545,6 @@ public class MessageForm extends CrmEntityForm<MessageDTO> {
                 btnSend.setVisible(true);
                 btnCancel.setVisible(true);
                 btnReply.setVisible(false);
-                btnForwardMessage.setVisible(false);
-                btnForwardTicket.setVisible(false);
                 starImage.setVisible(false);
                 btnMarkAsUnread.setVisible(false);
                 get(proto().star()).setVisible(false);
@@ -613,11 +573,8 @@ public class MessageForm extends CrmEntityForm<MessageDTO> {
                 communicationEndpointSelector.setReadOnly(true);
                 btnSend.setVisible(false);
                 btnCancel.setVisible(false);
-                btnReply.setVisible(!ClientContext.getUserVisit().getName().equals(getValue().header().sender().getValue())
-                        && getValue().allowedReply().getValue(true) && !ThreadStatus.Closed.equals(getValue().status().getValue())
-                        && !ThreadStatus.Cancelled.equals(getValue().status().getValue()));
-                btnForwardMessage.setVisible(true);
-                btnForwardTicket.setVisible(true);
+                btnReply.setText(ClientContext.getUserVisit().getName().equals(getValue().header().sender().getValue()) ? i18n.tr("Forward") : i18n.tr("Reply"));
+                btnReply.setVisible(getValue().allowedReply().getValue(true));
                 get(proto().header()).setVisible(true);
                 get(proto().star()).setVisible(getValue().isInRecipients().getValue(false));
                 btnMarkAsUnread.setVisible(getValue().isInRecipients().getValue(false));

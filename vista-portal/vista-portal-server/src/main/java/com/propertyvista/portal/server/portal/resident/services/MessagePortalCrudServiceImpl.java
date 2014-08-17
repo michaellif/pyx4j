@@ -122,7 +122,7 @@ public class MessagePortalCrudServiceImpl extends AbstractCrudServiceDtoImpl<Mes
         CommunicationThread t = EntityFactory.create(CommunicationThread.class);
         t.subject().set(to.subject());
         t.allowedReply().setValue(true);
-        t.status().setValue(ThreadStatus.New);
+        t.status().setValue(ThreadStatus.Open);
         t.topic().set(communicationFacade.getMessageCategoryFromCache(TicketType.Tenant));
         t.content().add(bo);
         t.owner().set(communicationFacade.getSystemEndpointFromCache(SystemEndpointName.Unassigned));
@@ -172,6 +172,7 @@ public class MessagePortalCrudServiceImpl extends AbstractCrudServiceDtoImpl<Mes
         final List<Message> ms = Persistence.secureQuery(visibleMessageCriteria, AttachLevel.Attached);
 
         Persistence.ensureRetrieve(bo.thread(), AttachLevel.Attached);
+        Persistence.ensureRetrieve(bo.thread().topic(), AttachLevel.Attached);
         Persistence.ensureRetrieve(bo.recipients(), AttachLevel.Attached);
 
         if (ms != null && ms.size() > 0) {
@@ -257,6 +258,7 @@ public class MessagePortalCrudServiceImpl extends AbstractCrudServiceDtoImpl<Mes
         messageDTO.star().setValue(star);
         messageDTO.header().sender().setValue(facade.extractEndpointName(m.sender()));
         messageDTO.header().date().set(m.date());
+        messageDTO.topic().set(thread.topic());
 
         return messageDTO;
     }

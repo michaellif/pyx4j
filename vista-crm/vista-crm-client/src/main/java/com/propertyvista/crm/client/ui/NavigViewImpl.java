@@ -252,15 +252,15 @@ public class NavigViewImpl extends Composite implements NavigView {
             root.addMenuItem(new SideMenuItem(list, i18n.tr("Message Center"), CrmImages.INSTANCE.messageCenterIcon(), null));
 
             list.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Communication.Message(), DataModelPermission.permissionRead(MessageDTO.class)));
-            list.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Communication.Message(MessageGroupCategory.Ticket), i18n.tr("Tickets"), null,
-                    DataModelPermission.permissionRead(MessageDTO.class)));
+            list.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Communication.Message(MessageGroupCategory.Ticket),
+                    MessageGroupCategory.Ticket.toString(), null, DataModelPermission.permissionRead(MessageDTO.class)));
             if (ApplicationMode.isDevelopment() && VistaTODO.ADDITIONAL_COMMUNICATION_FEATURES) {
-                list.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Communication.Message(MessageGroupCategory.IVR), i18n.tr("IVRs"), null,
-                        DataModelPermission.permissionRead(MessageDTO.class)));
-                list.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Communication.Message(MessageGroupCategory.Notification), i18n.tr("Notifications"),
+                list.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Communication.Message(MessageGroupCategory.IVR), MessageGroupCategory.IVR.toString(),
                         null, DataModelPermission.permissionRead(MessageDTO.class)));
-                list.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Communication.Message(MessageGroupCategory.SMS), i18n.tr("SMSes"), null,
-                        DataModelPermission.permissionRead(MessageDTO.class)));
+                list.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Communication.Message(MessageGroupCategory.Notification),
+                        MessageGroupCategory.Notification.toString(), null, DataModelPermission.permissionRead(MessageDTO.class)));
+                list.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Communication.Message(MessageGroupCategory.SMS), MessageGroupCategory.SMS.toString(),
+                        null, DataModelPermission.permissionRead(MessageDTO.class)));
             }
             communicationGroups = new SideMenuList();
             list.addMenuItem(new SideMenuItem(communicationGroups, i18n.tr("Groups"), null, null, DataModelPermission.permissionRead(MessageCategory.class)));

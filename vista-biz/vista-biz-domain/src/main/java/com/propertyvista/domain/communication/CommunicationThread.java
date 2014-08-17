@@ -36,7 +36,7 @@ public interface CommunicationThread extends IEntity {
     @XmlType(name = "ThreadStatus")
     public enum ThreadStatus {
 
-        Unassigned, New, Open, Resolved, Cancelled, Closed;
+        Unassigned, Open, Resolved;
 
         @Override
         public String toString() {

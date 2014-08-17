@@ -13,10 +13,10 @@
  */
 package com.propertyvista.crm.client.ui.crud.communication;
 
+import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.site.client.ui.prime.form.IViewer;
 
 import com.propertyvista.domain.communication.CommunicationThread.ThreadStatus;
-import com.propertyvista.domain.company.Employee;
 import com.propertyvista.dto.MessageDTO;
 
 public interface MessageViewerView extends IViewer<MessageDTO> {
@@ -25,6 +25,6 @@ public interface MessageViewerView extends IViewer<MessageDTO> {
 
         void saveMessage(MessageDTO message, ThreadStatus threadStatus, boolean rePopulate);
 
-        void assignOwnership(MessageDTO source, Employee empoyee);
+        void assignOwnership(MessageDTO source, IEntity empoyee);
     }
 }

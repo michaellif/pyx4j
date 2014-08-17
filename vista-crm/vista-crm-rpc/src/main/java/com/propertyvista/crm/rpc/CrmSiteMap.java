@@ -609,7 +609,7 @@ public class CrmSiteMap implements SiteMap {
     // Communication Started --------------
     @PlaceProperties(navigLabel = "Communication")
     public static class Communication extends AppPlace {
-        @PlaceProperties(navigLabel = "Messages")
+        @PlaceProperties(navigLabel = "Message")
         public static class Message extends CrmCrudAppPlace {
             private final Object criteria;
 

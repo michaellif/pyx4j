@@ -15,6 +15,7 @@ package com.propertyvista.crm.client.activity.crud.communication;
 
 import com.google.gwt.core.client.GWT;
 
+import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.rpc.AbstractCrudService;
 import com.pyx4j.gwt.commons.ClientEventBus;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
@@ -27,7 +28,6 @@ import com.propertyvista.crm.client.event.CommunicationStatusUpdateEvent;
 import com.propertyvista.crm.client.ui.crud.communication.MessageViewerView;
 import com.propertyvista.crm.rpc.services.MessageCrudService;
 import com.propertyvista.domain.communication.CommunicationThread.ThreadStatus;
-import com.propertyvista.domain.company.Employee;
 import com.propertyvista.dto.MessageDTO;
 
 public class MessageViewerActivity extends CrmViewerActivity<MessageDTO> implements MessageViewerView.Presenter {
@@ -52,7 +52,7 @@ public class MessageViewerActivity extends CrmViewerActivity<MessageDTO> impleme
     }
 
     @Override
-    public void assignOwnership(MessageDTO message, Employee empoyee) {
+    public void assignOwnership(MessageDTO message, IEntity empoyee) {
         ((MessageCrudService) getService()).assignOwnership(new DefaultAsyncCallback<MessageDTO>() {
             @Override
             public void onSuccess(MessageDTO result) {

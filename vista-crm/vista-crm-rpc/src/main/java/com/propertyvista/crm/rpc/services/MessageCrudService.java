@@ -16,6 +16,7 @@ package com.propertyvista.crm.rpc.services;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.entity.annotations.Transient;
+import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.IPrimitive;
 import com.pyx4j.entity.rpc.AbstractCrudService;
 import com.pyx4j.entity.rpc.EntitySearchResult;
@@ -23,14 +24,13 @@ import com.pyx4j.entity.rpc.EntitySearchResult;
 import com.propertyvista.domain.communication.CommunicationThread.ThreadStatus;
 import com.propertyvista.domain.communication.MessageCategory;
 import com.propertyvista.domain.communication.MessageCategory.MessageGroupCategory;
-import com.propertyvista.domain.company.Employee;
 import com.propertyvista.dto.MessageDTO;
 
 public interface MessageCrudService extends AbstractCrudService<MessageDTO> {
 
     void saveMessage(AsyncCallback<MessageDTO> callback, MessageDTO source, ThreadStatus threadStatus);
 
-    void assignOwnership(AsyncCallback<MessageDTO> callback, MessageDTO source, Employee employee);
+    void assignOwnership(AsyncCallback<MessageDTO> callback, MessageDTO source, IEntity employee);
 
     void listForHeader(AsyncCallback<EntitySearchResult<MessageDTO>> callback);
 

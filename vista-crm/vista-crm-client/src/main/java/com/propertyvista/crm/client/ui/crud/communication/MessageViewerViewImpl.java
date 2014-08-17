@@ -25,6 +25,7 @@ import com.google.gwt.user.client.ui.MenuItem;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.entity.core.EntityFactory;
+import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.entity.rpc.AbstractListCrudService;
 import com.pyx4j.forms.client.ui.CForm;
@@ -33,13 +34,16 @@ import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.site.client.activity.EntitySelectorTableVisorController;
 import com.pyx4j.site.client.ui.IPane;
 import com.pyx4j.widgets.client.dialog.OkCancelDialog;
 
 import com.propertyvista.common.client.PrintUtils;
 import com.propertyvista.crm.client.ui.crud.CrmViewerViewImplBase;
+import com.propertyvista.crm.rpc.CrmUserVisit;
 import com.propertyvista.crm.rpc.services.selections.SelectEmployeeListService;
+import com.propertyvista.domain.communication.CommunicationEndpoint.ContactType;
 import com.propertyvista.domain.communication.CommunicationThread.ThreadStatus;
 import com.propertyvista.domain.communication.MessageCategory.MessageGroupCategory;
 import com.propertyvista.domain.company.Employee;
@@ -51,6 +55,10 @@ public class MessageViewerViewImpl extends CrmViewerViewImplBase<MessageDTO> imp
 
     private final MenuItem assignOwnershipAction;
 
+    private final MenuItem assignToMeAction;
+
+    private final MenuItem unassignAction;
+
     private final Map<ThreadStatus, MenuItem> threadStatusActions;
 
     public MessageViewerViewImpl() {
@@ -59,7 +67,19 @@ public class MessageViewerViewImpl extends CrmViewerViewImplBase<MessageDTO> imp
 
         final MessageForm form = (MessageForm) getForm();
 
-        assignOwnershipAction = new MenuItem(i18n.tr("Assign Ownership"), new Command() {
+        assignToMeAction = new MenuItem(i18n.tr("Assign to Me"), new Command() {
+            @Override
+            public void execute() {
+                assignEmployee(ClientContext.visit(CrmUserVisit.class).getCurrentUser());
+            }
+        });
+        unassignAction = new MenuItem(i18n.tr("Unassign"), new Command() {
+            @Override
+            public void execute() {
+                assignEmployee(null);
+            }
+        });
+        assignOwnershipAction = new MenuItem(i18n.tr("Assign Owner"), new Command() {
             @Override
             public void execute() {
                 new EmployeeSelectorDialog(form.getParentView()).show();
@@ -69,10 +89,10 @@ public class MessageViewerViewImpl extends CrmViewerViewImplBase<MessageDTO> imp
         threadStatusActions = new HashMap<ThreadStatus, MenuItem>();
 
         for (final ThreadStatus ts : ThreadStatus.values()) {
-            if (ts.equals(ThreadStatus.New) || ts.equals(ThreadStatus.Unassigned)) {
+            if (ts.equals(ThreadStatus.Unassigned)) {
                 continue;
             }
-            threadStatusActions.put(ts, new MenuItem(i18n.tr("Mark as ") + ts.toString(), new Command() {
+            threadStatusActions.put(ts, new MenuItem(ThreadStatus.Open.equals(ts) ? ThreadStatus.Open.toString() : i18n.tr("Resolve"), new Command() {
                 @Override
                 public void execute() {
                     new UpdateThreadStatusBox(form, form.getValue().status().getValue().toString(), ts.toString()) {
@@ -91,6 +111,8 @@ public class MessageViewerViewImpl extends CrmViewerViewImplBase<MessageDTO> imp
             }));
         }
 
+        addAction(assignToMeAction);
+        addAction(unassignAction);
         addAction(assignOwnershipAction);
         for (MenuItem action : threadStatusActions.values()) {
             addAction(action);
@@ -118,24 +140,24 @@ public class MessageViewerViewImpl extends CrmViewerViewImplBase<MessageDTO> imp
     public void populate(MessageDTO value) {
         super.populate(value);
 
-        boolean invisible = !MessageGroupCategory.Ticket.equals(value.topic().category().getValue()) || ThreadStatus.Closed.equals(value.status().getValue())
-                || ThreadStatus.Cancelled.equals(value.status().getValue()) || value.isDirect().getValue(false).booleanValue();
+        boolean invisible = !MessageGroupCategory.Ticket.equals(value.topic().category().getValue()) || value.isDirect().getValue(false).booleanValue();
         setActionVisible(assignOwnershipAction, !invisible);
         for (ThreadStatus status : threadStatusActions.keySet()) {
             MenuItem action = threadStatusActions.get(status);
             if (status.equals(value.status().getValue())) {
                 setActionVisible(action, false);
             }
-            // only Open, Resolved, Cancelled, Closed;
+            // only Open, Resolved;
             else {
-                setActionVisible(action, !invisible && !ThreadStatus.New.equals(status));
+                setActionVisible(action, !invisible);
             }
         }
-
+        setActionVisible(assignToMeAction, !invisible && !ClientContext.getUserVisit().getName().equals(value.owner().name().getValue()));
+        setActionVisible(unassignAction, !invisible && !ContactType.System.equals(value.owner().type().getValue()));
         setCaption(value.topic().category().getValue() + " " + value.getStringView());
     }
 
-    public void assignEmployee(Employee e) {
+    public void assignEmployee(IEntity e) {
         ((MessageForm) getForm()).assignOwnership(e);
 
     }

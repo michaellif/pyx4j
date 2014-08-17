@@ -46,6 +46,7 @@ import com.propertyvista.common.client.ui.components.VistaViewersComponentFactor
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
 import com.propertyvista.domain.communication.CommunicationThread.ThreadStatus;
 import com.propertyvista.domain.communication.DeliveryHandle;
+import com.propertyvista.domain.communication.MessageCategory;
 import com.propertyvista.portal.resident.activity.PortalClientCommunicationManager;
 import com.propertyvista.portal.resident.events.CommunicationStatusUpdateEvent;
 import com.propertyvista.portal.resident.ui.communication.MessagePageView.MessagePagePresenter;
@@ -78,22 +79,13 @@ public class MessagePage extends CPortalEntityForm<MessageDTO> {
         PortalFormPanel formPanel = new PortalFormPanel(this);
         inject(proto().thread());
         inject(proto().allowedReply());
-        formPanel.append(Location.Left, proto().subject(), new CLabel<String>()).decorate();
-        formPanel.append(Location.Left, proto().status(), new CLabel<String>()).decorate();
+        inject(proto().status());
+        inject(proto().topic());
+        formPanel.append(Location.Left, proto().subject(), new CLabel<String>());
         formPanel.append(Location.Left, proto().content(), messagesFolder);
         formPanel.br();
 
         return formPanel;
-    }
-
-    @Override
-    protected void onValueSet(boolean populate) {
-        super.onValueSet(populate);
-        if (getValue() == null || getValue().isPrototype()) {
-            get(proto().status()).setVisible(false);
-        } else {
-            get(proto().status()).setVisible(!ThreadStatus.Unassigned.equals(getValue().status().getValue()));
-        }
     }
 
     private class OpenMessageFolder extends VistaBoxFolder<MessageDTO> {
@@ -257,11 +249,11 @@ public class MessagePage extends CPortalEntityForm<MessageDTO> {
                         setVisited(true);
                         MessageDialog.error(i18n.tr("Error"), getValidationResults().getValidationMessage(true));
                     } else {
-                        String forwardText = buildReplyText();
+                        String text = buildReplyForwardText(ClientContext.getUserVisit().getPrincipalPrimaryKey().equals(getValue().sender().getPrimaryKey()));
                         MessageDTO currentMessage = getCurrent();
                         messagesFolder.addItem();
                         CFolderItem<MessageDTO> newItem = messagesFolder.getItem(messagesFolder.getItemCount() - 1);
-                        newItem.getValue().text().setValue(forwardText);
+                        newItem.getValue().text().setValue(text);
                         if (ThreadStatus.Unassigned.equals(currentMessage.status().getValue())) {
                             if (!ClientContext.getUserVisit().getName().equals(currentMessage.header().sender().getValue())) {
                                 DeliveryHandle dh = EntityFactory.create(DeliveryHandle.class);
@@ -290,7 +282,7 @@ public class MessagePage extends CPortalEntityForm<MessageDTO> {
                 }
             });
 
-            btnMarkAsUnread = new Anchor("Mark as unread", new Command() {
+            btnMarkAsUnread = new Anchor(i18n.tr("Mark as unread"), new Command() {
                 @Override
                 public void execute() {
                     MessageDTO m = getValue();
@@ -318,10 +310,12 @@ public class MessagePage extends CPortalEntityForm<MessageDTO> {
             return tb;
         }
 
-        private String buildReplyText() {
+        private String buildReplyForwardText(boolean isForward) {
             CFolderItem<MessageDTO> current = (CFolderItem<MessageDTO>) getParent();
-            String forwardText = current == null ? null : "\nRe:\n" + current.getValue().text().getValue();
-            return forwardText;
+            if (isForward) {
+                return current == null ? null : "\nFwd:\n" + current.getValue().text().getValue();
+            }
+            return current == null ? null : "\nRe:\n" + current.getValue().text().getValue();
         }
 
         private MessageDTO getCurrent() {
@@ -381,8 +375,16 @@ public class MessagePage extends CPortalEntityForm<MessageDTO> {
                 setEnabled(false);
                 btnSend.setVisible(false);
                 btnCancel.setVisible(false);
-                btnReply.setVisible(!ClientContext.getUserVisit().getPrincipalPrimaryKey().equals(getValue().sender().getPrimaryKey())
-                        && getValue().allowedReply().getValue(true) && !ThreadStatus.Closed.equals(getValue().status().getValue()));
+                boolean isForward = ClientContext.getUserVisit().getPrincipalPrimaryKey().equals(getValue().sender().getPrimaryKey());
+                if (isForward) {
+                    btnReply.setText(i18n.tr("Forward"));
+                    MessageCategory topic = getValue().topic();
+                    btnReply.setVisible(getValue().allowedReply().getValue(true)
+                            && MessageCategory.MessageGroupCategory.Ticket.equals(topic.category().getValue()));
+                } else {
+                    btnReply.setText(i18n.tr(i18n.tr("Reply")));
+                    btnReply.setVisible(getValue().allowedReply().getValue(true));
+                }
                 get(proto().star()).setVisible(!ClientContext.getUserVisit().getPrincipalPrimaryKey().equals(getValue().sender().getPrimaryKey()));
                 btnMarkAsUnread.setVisible(!ClientContext.getUserVisit().getPrincipalPrimaryKey().equals(getValue().sender().getPrimaryKey()));
                 starImage.setVisible(!ClientContext.getUserVisit().getPrincipalPrimaryKey().equals(getValue().sender().getPrimaryKey()));
