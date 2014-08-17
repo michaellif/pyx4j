@@ -24,6 +24,7 @@ import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Locale;
 import java.util.StringTokenizer;
 
 import javax.mail.internet.AddressException;
@@ -124,6 +125,8 @@ class SMTPMailUtils {
     }
 
     static boolean allowDestinations(String emailFilter, String email) {
+        emailFilter = emailFilter.toLowerCase(Locale.ENGLISH);
+        email = email.toLowerCase(Locale.ENGLISH);
         StringTokenizer st = new StringTokenizer(emailFilter, ";");
         if (st.hasMoreElements()) {
             while (st.hasMoreElements()) {
