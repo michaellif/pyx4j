@@ -26,6 +26,8 @@ public class PasswordTextBox extends com.google.gwt.user.client.ui.PasswordTextB
 
     private TextWatermark watermark;
 
+    private boolean revealText = false;
+
     public PasswordTextBox() {
         setStyleName(WidgetTheme.StyleName.TextBox.name());
         addStyleDependentName(WidgetTheme.StyleDependent.singleLine.name());
@@ -49,16 +51,29 @@ public class PasswordTextBox extends com.google.gwt.user.client.ui.PasswordTextB
                 @Override
                 void show(boolean show) {
                     super.show(show);
-                    if (isShown()) {
-                        getElement().setAttribute("type", "text");
-                    } else {
-                        getElement().setAttribute("type", "password");
+                    if (!revealText) {
+                        if (isShown()) {
+                            getElement().setAttribute("type", "text");
+                        } else {
+                            getElement().setAttribute("type", "password");
+                        }
                     }
-
                 }
             };
         }
         watermark.setWatermark(text);
+    }
+
+    public void revealText(boolean reveal) {
+        this.revealText = reveal;
+        if (reveal) {
+            getElement().setAttribute("type", "text");
+        } else {
+            getElement().setAttribute("type", "password");
+            if (watermark != null) {
+                watermark.show();
+            }
+        }
     }
 
     @Override

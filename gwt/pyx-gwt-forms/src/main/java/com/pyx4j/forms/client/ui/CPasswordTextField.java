@@ -29,6 +29,8 @@ import com.pyx4j.forms.client.validators.RegexValidator;
 
 public class CPasswordTextField extends CTextFieldBase<String, NPasswordTextBox> {
 
+    private boolean unmasked;
+
     public CPasswordTextField() {
         super();
         setFormatter(new StringFormat());
@@ -48,6 +50,17 @@ public class CPasswordTextField extends CTextFieldBase<String, NPasswordTextBox>
     @Override
     public boolean isValueEmpty() {
         return super.isValueEmpty() || CommonsStringUtils.isEmpty(getValue());
+    }
+
+    public boolean isUnmasked() {
+        return unmasked;
+    }
+
+    public void setUnmasked(boolean unmasked) {
+        this.unmasked = unmasked;
+        if (getNativeComponent().getEditor() != null) {
+            getNativeComponent().getEditor().revealText(unmasked);
+        }
     }
 
     static class StringFormat implements IFormatter<String, String> {
