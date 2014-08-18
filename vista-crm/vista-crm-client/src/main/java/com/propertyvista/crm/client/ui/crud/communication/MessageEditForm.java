@@ -21,6 +21,7 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.MenuItem;
+import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.IEntity;
@@ -71,6 +72,12 @@ public class MessageEditForm extends CrmEntityForm<MessageDTO> {
 
     private final Button actionsButton;
 
+    private Widget to;
+
+    private Widget h3;
+
+    private Widget newLine;
+
     CommunicationEndpointSelector epSelector;
 
     public MessageEditForm(IForm<MessageDTO> view) {
@@ -87,7 +94,7 @@ public class MessageEditForm extends CrmEntityForm<MessageDTO> {
     public IsWidget createGeneralForm() {
         FormPanel formPanel = new FormPanel(this);
 
-        formPanel.h4("To");
+        to = formPanel.h4("To");
         subMenu = new Button.ButtonMenuBar();
         subMenu.addItem(new MenuItem(i18n.tr("Tenant"), new Command() {
             @Override
@@ -156,13 +163,12 @@ public class MessageEditForm extends CrmEntityForm<MessageDTO> {
 
         actionsButton.setMenu(subMenu);
         searchCriteriaPanel = new FormPanel(this);
-
         searchCriteriaPanel.append(Location.Dual, createCommunicationEndpointSelector());
         formPanel.append(Location.Dual, searchCriteriaPanel);
         formPanel.h4("", actionsButton);
 
-        formPanel.h3("");
-        formPanel.br();
+        h3 = formPanel.h3("");
+        newLine = formPanel.br();
         formPanel.append(Location.Dual, proto().subject()).decorate();
 
         formPanel.append(Location.Dual, proto().topic(), new CEntityComboBox<MessageCategory>(MessageCategory.class) {
@@ -197,6 +203,14 @@ public class MessageEditForm extends CrmEntityForm<MessageDTO> {
                         if (callback != null && opt != null) {
                             callback.onOptionsReady(opt);
                         }
+                        /*-if (opt.size() > 0) {
+                            if (MessageGroupCategory.Ticket.equals(opt.get(0).category().getValue())) {
+                                setToVisible(false);
+                            } else {
+                                setToVisible(true);
+
+                            }
+                        }-*/
                     }
                 });
             }
@@ -216,15 +230,31 @@ public class MessageEditForm extends CrmEntityForm<MessageDTO> {
 
     @Override
     protected MessageDTO preprocessValue(MessageDTO value, boolean fireEvent, boolean populate) {
+        setToVisible(true);
         if (value == null || value.getPrimaryKey() == null || value.getPrimaryKey().isDraft()) {
             MessageCategory mc = ((MessageEditorActivity) getParentView().getPresenter()).getCategory();
             if (mc != null && !mc.isNull()) {
                 get(proto().topic()).setEditable(false);
+                if (MessageGroupCategory.Ticket.equals(mc.category().getValue())) {
+                    setToVisible(false);
+                }
             } else {
                 get(proto().topic()).setEditable(true);
             }
+            MessageGroupCategory mgc = ((MessageEditorActivity) getParentView().getPresenter()).getCategoryType();
+            if (mgc != null) {
+                setToVisible(!MessageGroupCategory.Ticket.equals(mgc));
+            }
         }
         return value;
+    }
+
+    private void setToVisible(boolean isVisible) {
+        searchCriteriaPanel.setVisible(isVisible);
+        actionsButton.setVisible(isVisible);
+        to.setVisible(isVisible);
+        h3.setVisible(isVisible);
+        newLine.setVisible(isVisible);
     }
 
     public void reinit() {

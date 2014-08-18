@@ -44,11 +44,11 @@ import com.pyx4j.widgets.client.dialog.MessageDialog;
 
 import com.propertyvista.common.client.ui.components.VistaViewersComponentFactory;
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
-import com.propertyvista.domain.communication.CommunicationThread.ThreadStatus;
 import com.propertyvista.domain.communication.DeliveryHandle;
 import com.propertyvista.domain.communication.MessageCategory;
 import com.propertyvista.portal.resident.activity.PortalClientCommunicationManager;
 import com.propertyvista.portal.resident.events.CommunicationStatusUpdateEvent;
+import com.propertyvista.portal.resident.themes.CommunicationTheme;
 import com.propertyvista.portal.resident.ui.communication.MessagePageView.MessagePagePresenter;
 import com.propertyvista.portal.rpc.portal.resident.ResidentPortalSiteMap;
 import com.propertyvista.portal.rpc.portal.resident.communication.MessageDTO;
@@ -72,6 +72,7 @@ public class MessagePage extends CPortalEntityForm<MessageDTO> {
         setEditable(true);
         setEnabled(true);
         asWidget().setStyleName(com.propertyvista.portal.shared.themes.EntityViewTheme.StyleName.EntityView.name());
+        asWidget().addStyleName(CommunicationTheme.StyleName.CommunicationFolderView.name());
     }
 
     @Override
@@ -81,7 +82,9 @@ public class MessagePage extends CPortalEntityForm<MessageDTO> {
         inject(proto().allowedReply());
         inject(proto().status());
         inject(proto().topic());
-        formPanel.append(Location.Left, proto().subject(), new CLabel<String>());
+        CLabel<String> threadLabel = new CLabel<String>();
+        threadLabel.asWidget().setStylePrimaryName(CommunicationTheme.StyleName.CommunicationThreadName.name());
+        formPanel.append(Location.Left, proto().subject(), threadLabel);
         formPanel.append(Location.Left, proto().content(), messagesFolder);
         formPanel.br();
 
@@ -249,12 +252,12 @@ public class MessagePage extends CPortalEntityForm<MessageDTO> {
                         setVisited(true);
                         MessageDialog.error(i18n.tr("Error"), getValidationResults().getValidationMessage(true));
                     } else {
-                        String text = buildReplyForwardText(ClientContext.getUserVisit().getPrincipalPrimaryKey().equals(getValue().sender().getPrimaryKey()));
+                        String text = buildReplyForwardText(false);
                         MessageDTO currentMessage = getCurrent();
                         messagesFolder.addItem();
                         CFolderItem<MessageDTO> newItem = messagesFolder.getItem(messagesFolder.getItemCount() - 1);
                         newItem.getValue().text().setValue(text);
-                        if (ThreadStatus.Unassigned.equals(currentMessage.status().getValue())) {
+                        if (!MessageCategory.MessageGroupCategory.Ticket.equals(currentMessage.topic().getValue())) {
                             if (!ClientContext.getUserVisit().getName().equals(currentMessage.header().sender().getValue())) {
                                 DeliveryHandle dh = EntityFactory.create(DeliveryHandle.class);
                                 dh.isRead().setValue(false);
@@ -375,16 +378,7 @@ public class MessagePage extends CPortalEntityForm<MessageDTO> {
                 setEnabled(false);
                 btnSend.setVisible(false);
                 btnCancel.setVisible(false);
-                boolean isForward = ClientContext.getUserVisit().getPrincipalPrimaryKey().equals(getValue().sender().getPrimaryKey());
-                if (isForward) {
-                    btnReply.setText(i18n.tr("Forward"));
-                    MessageCategory topic = getValue().topic();
-                    btnReply.setVisible(getValue().allowedReply().getValue(true)
-                            && MessageCategory.MessageGroupCategory.Ticket.equals(topic.category().getValue()));
-                } else {
-                    btnReply.setText(i18n.tr(i18n.tr("Reply")));
-                    btnReply.setVisible(getValue().allowedReply().getValue(true));
-                }
+                btnReply.setVisible(getValue().allowedReply().getValue(true));
                 get(proto().star()).setVisible(!ClientContext.getUserVisit().getPrincipalPrimaryKey().equals(getValue().sender().getPrimaryKey()));
                 btnMarkAsUnread.setVisible(!ClientContext.getUserVisit().getPrincipalPrimaryKey().equals(getValue().sender().getPrimaryKey()));
                 starImage.setVisible(!ClientContext.getUserVisit().getPrincipalPrimaryKey().equals(getValue().sender().getPrimaryKey()));

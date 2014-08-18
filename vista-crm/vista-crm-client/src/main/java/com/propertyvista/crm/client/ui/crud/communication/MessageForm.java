@@ -462,11 +462,8 @@ public class MessageForm extends CrmEntityForm<MessageDTO> {
                         MessageDTO currentMessage = getCurrent();
                         messagesFolder.addItem();
                         CFolderItem<MessageDTO> newItem = messagesFolder.getItem(messagesFolder.getItemCount() - 1);
-                        if (ClientContext.getUserVisit().getName().equals(getValue().header().sender().getValue())) {
-                            newItem.getValue().text().setValue(currentMessage == null ? null : "\nRe:\n" + currentMessage.text().getValue());
-                        } else {
-                            newItem.getValue().text().setValue(currentMessage == null ? null : "\nFwd:\n" + currentMessage.text().getValue());
-                        }
+                        newItem.getValue().text().setValue(currentMessage == null ? null : "\nRe:\n" + currentMessage.text().getValue());
+
                         if (!ClientContext.getUserVisit().getName().equals(currentMessage.header().sender().getValue())) {
                             newItem.getValue().to().add(currentMessage.sender());
                         }
@@ -573,7 +570,6 @@ public class MessageForm extends CrmEntityForm<MessageDTO> {
                 communicationEndpointSelector.setReadOnly(true);
                 btnSend.setVisible(false);
                 btnCancel.setVisible(false);
-                btnReply.setText(ClientContext.getUserVisit().getName().equals(getValue().header().sender().getValue()) ? i18n.tr("Forward") : i18n.tr("Reply"));
                 btnReply.setVisible(getValue().allowedReply().getValue(true));
                 get(proto().header()).setVisible(true);
                 get(proto().star()).setVisible(getValue().isInRecipients().getValue(false));
