@@ -22,7 +22,7 @@ import com.pyx4j.site.client.IsView;
 
 public interface PasswordChangeView extends IsView {
 
-    public interface Presenter {
+    public interface PasswordChangePresenter {
 
         public static final String PRINCIPAL_PK_ARG = "id";
 
@@ -39,7 +39,7 @@ public interface PasswordChangeView extends IsView {
         void cancel();
     }
 
-    public void setPresenter(Presenter presenter);
+    public void setPresenter(PasswordChangePresenter presenter);
 
     void reset();
 

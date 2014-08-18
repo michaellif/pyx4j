@@ -64,9 +64,9 @@ public class GuarantorViewerActivity extends CrmViewerActivity<GuarantorDTO> imp
     public void goToChangePassword(Key guarantorPrincipalPk, String guarantorName) {
         if (guarantorPrincipalPk != null) {
             AppPlace passwordChangePlace = new CrmSiteMap.PasswordChange();
-            passwordChangePlace.queryArg(PasswordChangeView.Presenter.PRINCIPAL_PK_ARG, guarantorPrincipalPk.toString());
-            passwordChangePlace.queryArg(PasswordChangeView.Presenter.PRINCIPAL_NAME_ARG, guarantorName);
-            passwordChangePlace.queryArg(PasswordChangeView.Presenter.PRINCIPAL_CLASS, PasswordChangeView.Presenter.PrincipalClass.GUARANTOR.toString());
+            passwordChangePlace.queryArg(PasswordChangeView.PasswordChangePresenter.PRINCIPAL_PK_ARG, guarantorPrincipalPk.toString());
+            passwordChangePlace.queryArg(PasswordChangeView.PasswordChangePresenter.PRINCIPAL_NAME_ARG, guarantorName);
+            passwordChangePlace.queryArg(PasswordChangeView.PasswordChangePresenter.PRINCIPAL_CLASS, PasswordChangeView.PasswordChangePresenter.PrincipalClass.GUARANTOR.toString());
             AppSite.getPlaceController().goTo(passwordChangePlace);
         }
     }

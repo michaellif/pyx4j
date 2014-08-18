@@ -163,18 +163,6 @@ public class PortalTheme extends Theme {
                 style.addProperty("width", "100%");
                 addStyle(style);
 
-                style = new Style(".", StyleName.FormFlexPanelLeftColumn);
-                style.addProperty("width", "100%");
-                addStyle(style);
-
-                style = new Style(".", StyleName.FormFlexPanelRightColumn);
-                style.addProperty("width", "0");
-                addStyle(style);
-
-                style = new Style(".", StyleName.FormFlexPanelLeftCell);
-                style.addProperty("text-align", "center");
-                addStyle(style);
-
                 style = new Style(".", StyleName.FormFlexPanelH1);
                 style.addProperty("margin", "0");
                 style.addProperty("background", "transparent");

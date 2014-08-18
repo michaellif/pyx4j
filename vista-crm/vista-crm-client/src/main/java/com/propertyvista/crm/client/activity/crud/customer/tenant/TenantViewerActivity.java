@@ -93,9 +93,9 @@ public class TenantViewerActivity extends CrmViewerActivity<TenantDTO> implement
     public void changePassword(Key tenantPrincipalPk, String tenantName) {
         if (tenantPrincipalPk != null) {
             AppPlace passwordChangePlace = new CrmSiteMap.PasswordChange();
-            passwordChangePlace.queryArg(PasswordChangeView.Presenter.PRINCIPAL_PK_ARG, tenantPrincipalPk.toString());
-            passwordChangePlace.queryArg(PasswordChangeView.Presenter.PRINCIPAL_NAME_ARG, tenantName);
-            passwordChangePlace.queryArg(PasswordChangeView.Presenter.PRINCIPAL_CLASS, PasswordChangeView.Presenter.PrincipalClass.TENANT.toString());
+            passwordChangePlace.queryArg(PasswordChangeView.PasswordChangePresenter.PRINCIPAL_PK_ARG, tenantPrincipalPk.toString());
+            passwordChangePlace.queryArg(PasswordChangeView.PasswordChangePresenter.PRINCIPAL_NAME_ARG, tenantName);
+            passwordChangePlace.queryArg(PasswordChangeView.PasswordChangePresenter.PRINCIPAL_CLASS, PasswordChangeView.PasswordChangePresenter.PrincipalClass.TENANT.toString());
             AppSite.getPlaceController().goTo(passwordChangePlace);
         }
     }

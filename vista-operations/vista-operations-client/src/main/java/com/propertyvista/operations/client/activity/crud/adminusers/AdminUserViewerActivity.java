@@ -38,9 +38,9 @@ public class AdminUserViewerActivity extends AbstractViewerActivity<OperationsUs
     @Override
     public void goToChangePassword(Key userId, String userName) {
         AppPlace passwordChangePlace = new OperationsSiteMap.PasswordChange();
-        passwordChangePlace.placeArg(PasswordChangeView.Presenter.PRINCIPAL_PK_ARG, userId.toString());
-        passwordChangePlace.placeArg(PasswordChangeView.Presenter.PRINCIPAL_NAME_ARG, userName);
-        passwordChangePlace.placeArg(PasswordChangeView.Presenter.PRINCIPAL_CLASS, PasswordChangeView.Presenter.PrincipalClass.ADMIN.toString());
+        passwordChangePlace.placeArg(PasswordChangeView.PasswordChangePresenter.PRINCIPAL_PK_ARG, userId.toString());
+        passwordChangePlace.placeArg(PasswordChangeView.PasswordChangePresenter.PRINCIPAL_NAME_ARG, userName);
+        passwordChangePlace.placeArg(PasswordChangeView.PasswordChangePresenter.PRINCIPAL_CLASS, PasswordChangeView.PasswordChangePresenter.PrincipalClass.ADMIN.toString());
         AppSite.getPlaceController().goTo(passwordChangePlace);
     }
 

@@ -21,7 +21,8 @@ import com.pyx4j.forms.client.events.NValueChangeHandler;
 import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.CTextFieldBase;
 import com.pyx4j.forms.client.ui.RevalidationTrigger;
-import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
+import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
+import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.forms.client.validators.AbstractComponentValidator;
 import com.pyx4j.forms.client.validators.BasicValidationError;
 import com.pyx4j.forms.client.validators.password.HasDescription;
@@ -30,7 +31,6 @@ import com.pyx4j.forms.client.validators.password.PasswordStrengthValueValidator
 import com.pyx4j.forms.client.validators.password.PasswordStrengthWidget;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.security.rpc.PasswordChangeRequest;
-import com.pyx4j.site.client.ui.prime.form.FieldDecoratorBuilder;
 
 import com.propertyvista.common.client.theme.HorizontalAlignCenterMixin;
 
@@ -60,24 +60,19 @@ public class PasswordResetForm extends CForm<PasswordChangeRequest> {
     @Override
     protected IsWidget createContent() {
 
-        TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel();
-        main.setWidth("40em");
-        main.setStyleName(HorizontalAlignCenterMixin.StyleName.HorizontalAlignCenter.name(), true);
+        FormPanel formPanel = new FormPanel(this);
 
-        int row = -1;
-
-        main.setWidget(++row, 0, inject(proto().securityQuestion(), new FieldDecoratorBuilder().build()));
-        main.setWidget(++row, 0, inject(proto().securityAnswer(), new FieldDecoratorBuilder().build()));
+        formPanel.append(Location.Left, proto().securityQuestion()).decorate();
+        formPanel.append(Location.Left, proto().securityAnswer()).decorate();
 
         passwordStrengthWidget = new PasswordStrengthWidget(passwordStrengthRule);
-        main.setWidget(++row, 0,
-                inject(proto().newPassword(), new FieldDecoratorBuilder().componentWidth(15).labelWidth(15).assistantWidget(passwordStrengthWidget).build()));
-        main.setWidget(++row, 0, inject(proto().newPasswordConfirm(), new FieldDecoratorBuilder().componentWidth(15).labelWidth(15).build()));
+        formPanel.append(Location.Left, proto().newPassword()).decorate().assistantWidget(passwordStrengthWidget);
+        formPanel.append(Location.Left, proto().newPasswordConfirm()).decorate();
 
         get(proto().securityQuestion()).setVisible(false);
         get(proto().securityAnswer()).setVisible(false);
 
-        return main;
+        return formPanel;
     }
 
     @Override

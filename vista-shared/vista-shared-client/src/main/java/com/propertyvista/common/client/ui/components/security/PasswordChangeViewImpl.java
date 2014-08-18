@@ -15,12 +15,13 @@ package com.propertyvista.common.client.ui.components.security;
 
 import java.util.Set;
 
+import com.google.gwt.dom.client.Style.Display;
+import com.google.gwt.dom.client.Style.TextAlign;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
-import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.Widget;
@@ -29,13 +30,13 @@ import com.pyx4j.commons.HtmlUtils;
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.essentials.client.crud.CrudDebugId;
-import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.forms.client.validators.password.PasswordStrengthRule;
 import com.pyx4j.forms.client.validators.password.PasswordStrengthRule.PasswordStrengthVerdict;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.security.rpc.PasswordChangeRequest;
 import com.pyx4j.widgets.client.Anchor;
 import com.pyx4j.widgets.client.Button;
+import com.pyx4j.widgets.client.Toolbar;
 
 import com.propertyvista.common.client.ui.components.login.PasswordChangeForm;
 import com.propertyvista.common.client.ui.decorations.DecorationUtils;
@@ -44,7 +45,7 @@ public class PasswordChangeViewImpl implements PasswordChangeView {
 
     private static final I18n i18n = I18n.get(PasswordChangeViewImpl.class);
 
-    private Presenter presenter;
+    private PasswordChangePresenter presenter;
 
     private final PasswordChangeForm form;
 
@@ -53,23 +54,21 @@ public class PasswordChangeViewImpl implements PasswordChangeView {
     private final Panel panel;
 
     public PasswordChangeViewImpl() {
-        TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel();
+        FlowPanel content = new FlowPanel();
         content.getElement().getStyle().setPaddingTop(1, Unit.EM);
-
-        int row = -1;
+        content.getElement().getStyle().setTextAlign(TextAlign.CENTER);
 
         userNameLabel = new HTML();
-        content.setWidget(++row, 0, 2, new HTML("&nbsp;"));
-        content.setWidget(++row, 0, 2, userNameLabel);
-        content.getFlexCellFormatter().setHorizontalAlignment(row, 0, HasHorizontalAlignment.ALIGN_CENTER);
+        userNameLabel.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
+        content.add(userNameLabel);
 
         form = new PasswordChangeForm();
         form.init();
         form.asWidget().setWidth("100%");
-        content.setWidget(++row, 0, 2, form);
-        content.getFlexCellFormatter().setHorizontalAlignment(row, 0, HasHorizontalAlignment.ALIGN_CENTER);
+        content.add(form);
 
-        FlowPanel footer = new FlowPanel();
+        Toolbar footer = new Toolbar();
+        footer.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
 
         Button submitButton = new Button(i18n.tr("Submit"), new Command() {
 
@@ -84,9 +83,7 @@ public class PasswordChangeViewImpl implements PasswordChangeView {
             }
         });
         submitButton.ensureDebugId(CrudDebugId.Criteria_Submit.toString());
-        submitButton.asWidget().getElement().getStyle().setMargin(10, Unit.PX);
-        submitButton.asWidget().getElement().getStyle().setFloat(com.google.gwt.dom.client.Style.Float.RIGHT);
-        footer.add(DecorationUtils.inline(submitButton));
+        footer.addItem(DecorationUtils.inline(submitButton));
 
         Anchor cancel = new Anchor(i18n.tr("Cancel"), new Command() {
             @Override
@@ -94,11 +91,9 @@ public class PasswordChangeViewImpl implements PasswordChangeView {
                 presenter.cancel();
             }
         });
-        cancel.asWidget().getElement().getStyle().setMargin(10, Unit.PX);
-        cancel.asWidget().getElement().getStyle().setFloat(com.google.gwt.dom.client.Style.Float.RIGHT);
-        footer.add(DecorationUtils.inline(cancel));
+        footer.addItem(DecorationUtils.inline(cancel));
 
-        content.setWidget(++row, 0, footer);
+        content.add(footer);
 
         panel = new ScrollPanel(content);
     }
@@ -109,7 +104,7 @@ public class PasswordChangeViewImpl implements PasswordChangeView {
     }
 
     @Override
-    public void setPresenter(Presenter presenter) {
+    public void setPresenter(PasswordChangePresenter presenter) {
         this.presenter = presenter;
         form.populateNew();
     }

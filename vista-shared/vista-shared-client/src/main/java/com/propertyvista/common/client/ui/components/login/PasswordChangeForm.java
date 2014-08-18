@@ -23,11 +23,10 @@ import com.pyx4j.forms.client.events.NValueChangeEvent;
 import com.pyx4j.forms.client.events.NValueChangeHandler;
 import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.CPasswordTextField;
-import com.pyx4j.forms.client.ui.CTextField;
 import com.pyx4j.forms.client.ui.CTextFieldBase;
-import com.pyx4j.forms.client.ui.NTextFieldBase;
 import com.pyx4j.forms.client.ui.RevalidationTrigger;
-import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
+import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
+import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.forms.client.validators.AbstractComponentValidator;
 import com.pyx4j.forms.client.validators.BasicValidationError;
 import com.pyx4j.forms.client.validators.password.DefaultPasswordStrengthRule;
@@ -38,7 +37,6 @@ import com.pyx4j.forms.client.validators.password.PasswordStrengthValueValidator
 import com.pyx4j.forms.client.validators.password.PasswordStrengthWidget;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.security.rpc.PasswordChangeRequest;
-import com.pyx4j.site.client.ui.prime.form.FieldDecoratorBuilder;
 
 import com.propertyvista.common.client.theme.HorizontalAlignCenterMixin;
 
@@ -60,12 +58,6 @@ public class PasswordChangeForm extends CForm<PasswordChangeRequest> {
 
     protected Boolean requireChangePasswordOnNextSignInUserDefinedValue;
 
-    private int newPasswordFieldRow;
-
-    private TwoColumnFlexFormPanel mainPanel;
-
-    private NValueChangeHandler<String> passwordValueChangeHandler;
-
     public PasswordChangeForm(List<String> dictionary, boolean isCurrentPasswordRequired, boolean isRequireChangePasswordOnNextSignInRequired) {
         super(PasswordChangeRequest.class);
         this.passwordStrengthRule = new DefaultPasswordStrengthRule();
@@ -84,24 +76,16 @@ public class PasswordChangeForm extends CForm<PasswordChangeRequest> {
     @Override
     protected IsWidget createContent() {
 
-        mainPanel = new TwoColumnFlexFormPanel();
-        mainPanel.setWidth("40em");
-        mainPanel.setStyleName(HorizontalAlignCenterMixin.StyleName.HorizontalAlignCenter.name(), true);
+        FormPanel formPanel = new FormPanel(this);
 
-        int row = -1;
-
-        mainPanel.setWidget(++row, 0, 2, inject(proto().currentPassword(), new FieldDecoratorBuilder().componentWidth(15).labelWidth(15).build()));
-        mainPanel.getFlexCellFormatter().getElement(row, 0).getStyle().setPaddingBottom(1., Unit.EM);
+        formPanel.append(Location.Left, proto().currentPassword()).decorate();
 
         passwordStrengthWidget = new PasswordStrengthWidget(passwordStrengthRule);
-        mainPanel.setWidget(newPasswordFieldRow = ++row, 0, 2,
-                inject(proto().newPassword(), new FieldDecoratorBuilder().componentWidth(15).labelWidth(15).assistantWidget(passwordStrengthWidget).build()));
-        mainPanel.setWidget(++row, 0, 2, inject(proto().newPasswordConfirm(), new FieldDecoratorBuilder().componentWidth(15).labelWidth(15).build()));
+        formPanel.append(Location.Left, proto().newPassword()).decorate().assistantWidget(passwordStrengthWidget);
+        formPanel.append(Location.Left, proto().newPasswordConfirm()).decorate();
+        formPanel.append(Location.Left, proto().passwordChangeRequired()).decorate();
 
-        mainPanel.setWidget(++row, 0, 2,
-                inject(proto().passwordChangeRequired(), new FieldDecoratorBuilder().componentWidth(15).labelWidth(15).build()));
-
-        return mainPanel;
+        return formPanel;
     }
 
     @Override
@@ -109,7 +93,7 @@ public class PasswordChangeForm extends CForm<PasswordChangeRequest> {
         get(proto().newPasswordConfirm()).addComponentValidator(new AbstractComponentValidator<String>() {
             @Override
             public BasicValidationError isValid() {
-                if (getComponent().getValue() == null || !getComponent().getValue().equals(get(proto().newPassword()).getValue())) {
+                if (getComponent().getValue() != null && !getComponent().getValue().equals(get(proto().newPassword()).getValue())) {
                     return new BasicValidationError(getComponent(), i18n.tr("The passwords don't match."));
                 } else {
                     return null;
@@ -119,7 +103,7 @@ public class PasswordChangeForm extends CForm<PasswordChangeRequest> {
 
         get(proto().newPassword()).addValueChangeHandler(new RevalidationTrigger<String>(get(proto().newPasswordConfirm())));
 
-        ((CTextFieldBase<?, ?>) get(proto().newPassword())).addNValueChangeHandler(passwordValueChangeHandler = new NValueChangeHandler<String>() {
+        ((CTextFieldBase<?, ?>) get(proto().newPassword())).addNValueChangeHandler(new NValueChangeHandler<String>() {
             @Override
             public void onNValueChange(NValueChangeEvent<String> event) {
                 passwordStrengthWidget.ratePassword(event.getValue());
@@ -187,16 +171,7 @@ public class PasswordChangeForm extends CForm<PasswordChangeRequest> {
 
     public void setMaskPassword(boolean maskPassword) {
         get(proto().newPasswordConfirm()).setVisible(maskPassword);
-        unbind(proto().newPassword());
-        CTextFieldBase<String, ? extends NTextFieldBase<String, ?, CTextFieldBase<String, ?>>> c = maskPassword ? new CPasswordTextField() : new CTextField();
-        c.addNValueChangeHandler(passwordValueChangeHandler);
-        c.addComponentValidator(passwordStrengthValidator);
-        c.addValueChangeHandler(new RevalidationTrigger<String>(get(proto().newPasswordConfirm())));
-
-        mainPanel.setWidget(newPasswordFieldRow, 0, 2,
-                inject(proto().newPassword(), c, new FieldDecoratorBuilder().componentWidth(15).labelWidth(15).assistantWidget(passwordStrengthWidget).build()));
-        setPasswordStrengthRule(passwordStrengthRule); // to redraw tooltip
-
+        ((CPasswordTextField) get(proto().newPassword())).setUnmasked(!maskPassword);
     }
 
 }

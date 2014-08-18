@@ -37,12 +37,13 @@ import com.pyx4j.site.rpc.AppPlace;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 
 import com.propertyvista.common.client.ui.components.security.PasswordChangeView;
+import com.propertyvista.common.client.ui.components.security.PasswordChangeView.PasswordChangePresenter;
 import com.propertyvista.operations.client.OperationsSite;
 import com.propertyvista.operations.rpc.OperationsSiteMap;
 import com.propertyvista.operations.rpc.services.AdminPasswordChangeManagedService;
 import com.propertyvista.operations.rpc.services.AdminPasswordChangeUserService;
 
-public class PasswordChangeActivity extends AbstractActivity implements PasswordChangeView.Presenter {
+public class PasswordChangeActivity extends AbstractActivity implements PasswordChangePresenter {
 
     private final static I18n i18n = I18n.get(PasswordChangeActivity.class);
 

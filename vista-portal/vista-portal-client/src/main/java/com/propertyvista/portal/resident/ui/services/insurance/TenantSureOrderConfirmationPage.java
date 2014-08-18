@@ -16,7 +16,6 @@ package com.propertyvista.portal.resident.ui.services.insurance;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.commons.css.ThemeColor;
-import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.Label;
 
@@ -36,14 +35,10 @@ public class TenantSureOrderConfirmationPage extends CPortalEntityForm<TenantSur
 
     @Override
     protected IsWidget createContent() {
-        TwoColumnFlexFormPanel mainPanel = new TwoColumnFlexFormPanel();
-        int row = -1;
-
         Label label = new Label();
         label.addStyleName(TenantSureTheme.StyleName.TenantSurePucrhaseViewMessageText.name());
         label.setText(i18n.tr("An email with your insurance policy has been sent to your email."));
-        mainPanel.setWidget(++row, 0, label);
-        return mainPanel;
+        return label;
     }
 
 }
