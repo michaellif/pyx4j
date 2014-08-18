@@ -57,6 +57,7 @@ public class PasswordChangeActivity extends AbstractActivity implements Password
 
     public PasswordChangeActivity(Place place) {
         view = OperationsSite.getViewFactory().getView(PasswordChangeView.class);
+        view.reset();
         view.setPresenter(this);
 
         try {
@@ -113,6 +114,7 @@ public class PasswordChangeActivity extends AbstractActivity implements Password
 
             @Override
             public void onSuccess(VoidSerializable result) {
+                view.reset();
                 MessageDialog.info(i18n.tr("Password was changed successfully"));
                 History.back();
             }
@@ -127,6 +129,7 @@ public class PasswordChangeActivity extends AbstractActivity implements Password
 
     @Override
     public void cancel() {
+        view.reset();
         History.back();
     }
 
