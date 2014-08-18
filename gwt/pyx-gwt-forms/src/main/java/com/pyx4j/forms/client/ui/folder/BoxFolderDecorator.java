@@ -42,7 +42,7 @@ public class BoxFolderDecorator<E extends IEntity> extends BaseFolderDecorator<E
 
         asWidget().setStyleName(FolderTheme.StyleName.CFolderBoxDecorator.name());
 
-        add(getValidationLabel());
+        add(getMessagePannel());
 
         add(getContentPanel());
 

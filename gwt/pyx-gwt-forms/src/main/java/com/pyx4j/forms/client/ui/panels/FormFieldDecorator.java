@@ -41,7 +41,7 @@ public class FormFieldDecorator extends FieldDecorator {
                 getBuilder().useLabelSemicolon(true);
             }
         }
-        updateCaption();
+        renderLabel();
         updateLabelAlignment();
         super.updateViewable();
     }

@@ -70,7 +70,7 @@ public class TableFolderDecorator<E extends IEntity> extends BaseFolderDecorator
 
         asWidget().setStyleName(CFolderTableDecorator.name());
 
-        add(getValidationLabel());
+        add(getMessagePannel());
 
         header = new HorizontalPanel();
         header.setStyleName(CFolderTableHeader.name());

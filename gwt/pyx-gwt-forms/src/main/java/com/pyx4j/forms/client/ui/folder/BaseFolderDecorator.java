@@ -20,10 +20,8 @@
  */
 package com.pyx4j.forms.client.ui.folder;
 
-import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.event.shared.HandlerRegistration;
+import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.FlowPanel;
-import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.SimplePanel;
@@ -34,10 +32,8 @@ import com.pyx4j.forms.client.events.PropertyChangeEvent;
 import com.pyx4j.forms.client.events.PropertyChangeEvent.PropertyName;
 import com.pyx4j.forms.client.events.PropertyChangeHandler;
 import com.pyx4j.forms.client.images.FolderImages;
-import com.pyx4j.forms.client.ui.CComponentTheme;
 import com.pyx4j.forms.client.ui.FormNavigationDebugId;
-import com.pyx4j.forms.client.validators.ValidationResults;
-import com.pyx4j.gwt.commons.HandlerRegistrationGC;
+import com.pyx4j.forms.client.ui.decorators.MessagePannel;
 import com.pyx4j.widgets.client.Button;
 
 public abstract class BaseFolderDecorator<E extends IEntity> extends FlowPanel implements IFolderDecorator<E> {
@@ -48,24 +44,22 @@ public abstract class BaseFolderDecorator<E extends IEntity> extends FlowPanel i
 
     private boolean addable;
 
-    private final HTML validationLabel;
-
-    private final HTML noteLabel;
+    private final MessagePannel messagePannel;
 
     public BaseFolderDecorator(FolderImages images, String title, boolean addable) {
         this.addable = addable;
         addButton = new Button(images.addButton().regular(), title);
         addButton.addStyleName(FolderTheme.StyleName.CFolderAddButton.name());
 
-        validationLabel = new HTML();
-        validationLabel.setStyleName(CComponentTheme.StyleName.ValidationLabel.name());
-
-        noteLabel = new HTML();
-        noteLabel.setStyleName(CComponentTheme.StyleName.NoteLabel.name());
-
         contentPanel = new SimplePanel();
         contentPanel.setStyleName(FolderTheme.StyleName.CFolderContent.name());
 
+        messagePannel = new MessagePannel(MessagePannel.Location.Top);
+
+    }
+
+    protected Panel getMessagePannel() {
+        return messagePannel;
     }
 
     protected Panel getContentPanel() {
@@ -74,10 +68,6 @@ public abstract class BaseFolderDecorator<E extends IEntity> extends FlowPanel i
 
     protected Button getAddButton() {
         return addButton;
-    }
-
-    protected HTML getValidationLabel() {
-        return validationLabel;
     }
 
     protected boolean isAddable() {
@@ -89,13 +79,10 @@ public abstract class BaseFolderDecorator<E extends IEntity> extends FlowPanel i
     }
 
     @Override
-    public HandlerRegistration addItemAddClickHandler(ClickHandler handler) {
+    public void setItemAddCommand(Command command) {
         if (isAddable()) {
-            HandlerRegistrationGC h = new HandlerRegistrationGC();
-            h.add(addButton.addClickHandler(handler));
-            return h;
+            addButton.setCommand(command);
         }
-        return null;
     }
 
     @Override
@@ -106,19 +93,25 @@ public abstract class BaseFolderDecorator<E extends IEntity> extends FlowPanel i
     @Override
     public void init(final CFolder<E> folder) {
 
+        messagePannel.init(folder);
+
         folder.addPropertyChangeHandler(new PropertyChangeHandler() {
             @Override
             public void onPropertyChange(PropertyChangeEvent event) {
+                if (event.isEventOfType(PropertyName.valid)) {
+                    messagePannel.renderValidationMessage();
+                }
+                if (event.isEventOfType(PropertyName.note)) {
+                    messagePannel.renderNote();
+                }
                 if (event.getPropertyName() == PropertyName.debugId) {
                     onSetDebugId(folder.getDebugId());
-                }
-                if (event.isEventOfType(PropertyName.valid)) {
-                    ValidationResults results = folder.getValidationResults();
-                    validationLabel.setHTML(results.getValidationMessage(true));
                 }
             }
         });
 
+        messagePannel.renderValidationMessage();
+        messagePannel.renderNote();
         onSetDebugId(folder.getDebugId());
     }
 

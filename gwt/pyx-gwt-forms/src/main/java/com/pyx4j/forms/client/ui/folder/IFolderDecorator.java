@@ -20,9 +20,8 @@
  */
 package com.pyx4j.forms.client.ui.folder;
 
-import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
-import com.google.gwt.event.shared.HandlerRegistration;
+import com.google.gwt.user.client.Command;
 
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.IList;
@@ -32,7 +31,7 @@ public interface IFolderDecorator<E extends IEntity> extends IDecorator<CFolder<
 
     public static String DEBUGID_SUFIX = "_fd_";
 
-    HandlerRegistration addItemAddClickHandler(ClickHandler handler);
+    void setItemAddCommand(Command command);
 
     void setAddButtonVisible(boolean show);
 

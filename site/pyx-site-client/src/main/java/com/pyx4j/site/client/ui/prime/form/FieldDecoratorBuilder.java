@@ -64,7 +64,7 @@ public class FieldDecoratorBuilder extends FieldDecorator.Builder {
                         useLabelSemicolon(true);
                     }
                 }
-                updateCaption();
+                renderLabel();
                 updateLabelAlignment();
                 super.updateViewable();
             }

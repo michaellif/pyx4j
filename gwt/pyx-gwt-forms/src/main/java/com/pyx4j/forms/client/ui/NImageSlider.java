@@ -303,9 +303,8 @@ public class NImageSlider<E extends IHasFile<?>> extends NField<IList<E>, ImageS
             }
 
             @Override
-            public HandlerRegistration addItemAddClickHandler(ClickHandler handler) {
+            public void setItemAddCommand(Command command) {
                 // TODO Auto-generated method stub
-                return null;
             }
 
             @Override

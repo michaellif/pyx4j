@@ -40,9 +40,6 @@ import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.Focusable;
-import com.google.gwt.user.client.ui.HTML;
-import com.google.gwt.user.client.ui.HasHorizontalAlignment;
-import com.google.gwt.user.client.ui.HasHorizontalAlignment.HorizontalAlignmentConstant;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Label;
@@ -55,10 +52,8 @@ import com.pyx4j.forms.client.ImageFactory;
 import com.pyx4j.forms.client.events.PropertyChangeEvent;
 import com.pyx4j.forms.client.events.PropertyChangeEvent.PropertyName;
 import com.pyx4j.forms.client.events.PropertyChangeHandler;
-import com.pyx4j.forms.client.ui.CComponentTheme;
 import com.pyx4j.forms.client.ui.CField;
 import com.pyx4j.forms.client.ui.INativeField;
-import com.pyx4j.forms.client.ui.decorators.FieldDecorator.Builder.Alignment;
 import com.pyx4j.forms.client.ui.decorators.FieldDecorator.Builder.LabelPosition;
 import com.pyx4j.gwt.commons.css.CssVariable;
 import com.pyx4j.gwt.commons.layout.ILayoutable;
@@ -89,9 +84,7 @@ public class FieldDecorator extends FlowPanel implements IFieldDecorator, ILayou
 
     private Image mandatoryImage;
 
-    private HTML validationLabel;
-
-    private Label noteLabel;
+    private MessagePannel messagePannel;
 
     private SimplePanel labelHolder;
 
@@ -157,13 +150,8 @@ public class FieldDecorator extends FlowPanel implements IFieldDecorator, ILayou
         contentHolder.getElement().getStyle().setProperty("textAlign", builder.componentAlignment.name());
         contentHolder.setWidth(builder.componentWidth);
 
-        validationLabel = new HTML();
-        validationLabel.setVisible(false);
-        validationLabel.setStyleName(CComponentTheme.StyleName.ValidationLabel.name());
-
-        noteLabel = new Label();
-        noteLabel.setVisible(false);
-        noteLabel.setStyleName(CComponentTheme.StyleName.NoteLabel.name());
+        messagePannel = new MessagePannel(MessagePannel.Location.Bottom);
+        messagePannel.init(component);
 
         assistantWidgetHolder = new SimplePanel();
         assistantWidgetHolder.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
@@ -184,15 +172,10 @@ public class FieldDecorator extends FlowPanel implements IFieldDecorator, ILayou
         containerPanel.getElement().getStyle().setVerticalAlign(VerticalAlign.MIDDLE);
 
         containerPanel.add(contentPanel);
-        containerPanel.add(validationLabel);
-        containerPanel.add(noteLabel);
+        containerPanel.add(messagePannel);
 
         add(labelHolder);
         add(containerPanel);
-
-        //TODO implement component alignment
-        HorizontalAlignmentConstant componentAlignment = builder.componentAlignment == Alignment.right ? HasHorizontalAlignment.ALIGN_RIGHT
-                : builder.componentAlignment == Alignment.left ? HasHorizontalAlignment.ALIGN_LEFT : HasHorizontalAlignment.ALIGN_CENTER;
 
         label.ensureDebugId(CompositeDebugId.debugId(component.getDebugId(), DebugIds.Label));
 
@@ -229,13 +212,13 @@ public class FieldDecorator extends FlowPanel implements IFieldDecorator, ILayou
                 } else if (event.getPropertyName() == PropertyChangeEvent.PropertyName.visible) {
                     updateVisibility();
                 } else if (event.getPropertyName() == PropertyChangeEvent.PropertyName.title) {
-                    updateCaption();
+                    renderLabel();
                 } else if (event.getPropertyName() == PropertyChangeEvent.PropertyName.tooltip) {
-                    updateTooltip();
+                    renderTooltip();
                 } else if (event.getPropertyName() == PropertyChangeEvent.PropertyName.note) {
-                    updateNote();
+                    messagePannel.renderNote();
                 } else if (event.isEventOfType(PropertyName.valid, PropertyName.editingInProgress, PropertyName.editingCompleted)) {
-                    renderValidationMessage();
+                    messagePannel.renderValidationMessage();
                 }
                 if (event.isEventOfType(PropertyName.valid, PropertyName.visited, PropertyName.repopulated, PropertyName.enabled, PropertyName.editable,
                         PropertyName.visible, PropertyName.mandatory)) {
@@ -245,14 +228,15 @@ public class FieldDecorator extends FlowPanel implements IFieldDecorator, ILayou
         });
 
         renderMandatoryStar();
-        renderValidationMessage();
         updateLabelPosition();
         updateLabelAlignment();
-        updateNote();
-        updateCaption();
+        renderLabel();
         updateViewable();
-        updateTooltip();
+        renderTooltip();
         updateVisibility();
+
+        messagePannel.renderNote();
+        messagePannel.renderValidationMessage();
 
         doLayout(LayoutType.getLayoutType(Window.getClientWidth()));
 
@@ -296,23 +280,6 @@ public class FieldDecorator extends FlowPanel implements IFieldDecorator, ILayou
                 mandatoryImageHolder.clear();
             }
         }
-    }
-
-    protected void renderValidationMessage() {
-        if (!component.isValid() && !component.isEditingInProgress()) {
-            validationLabel.setHTML(component.getValidationResults().getValidationMessage(true));
-            component.asWidget().addStyleDependentName(WidgetDecoratorTheme.StyleDependent.invalid.name());
-            validationLabel.setVisible(true);
-        } else {
-            validationLabel.setText(null);
-            component.asWidget().removeStyleDependentName(WidgetDecoratorTheme.StyleDependent.invalid.name());
-            validationLabel.setVisible(false);
-        }
-
-        if (component.getDebugId() != null) {
-            validationLabel.ensureDebugId(new CompositeDebugId(component.getDebugId(), DebugIds.ValidationLabel).debugId());
-        }
-
     }
 
     protected void updateLabelPosition() {
@@ -363,7 +330,7 @@ public class FieldDecorator extends FlowPanel implements IFieldDecorator, ILayou
         setVisible(component.isVisible());
     }
 
-    private void updateTooltip() {
+    private void renderTooltip() {
         if (component == null) {//Not initiated yet
             return;
         }
@@ -380,23 +347,6 @@ public class FieldDecorator extends FlowPanel implements IFieldDecorator, ILayou
         }
     }
 
-    private void updateNote() {
-        if (component == null) {//Not initiated yet
-            return;
-        }
-        if (component.getNote() != null && component.getNote().trim().length() > 0) {
-            noteLabel.setText(component.getNote());
-            noteLabel.setVisible(true);
-            noteLabel.addStyleDependentName(component.getNoteStyle().getStyle().toString());
-        } else {
-            noteLabel.setText(null);
-            noteLabel.setVisible(false);
-            for (CComponentTheme.StyleDependent style : CComponentTheme.StyleDependent.values()) {
-                noteLabel.removeStyleDependentName(style.toString());
-            }
-        }
-    }
-
     protected void updateViewable() {
         if (component == null) {//Not initiated yet
             return;
@@ -410,7 +360,7 @@ public class FieldDecorator extends FlowPanel implements IFieldDecorator, ILayou
         }
     }
 
-    protected void updateCaption() {
+    protected void renderLabel() {
         if (component == null) {//Not initiated yet
             return;
         }

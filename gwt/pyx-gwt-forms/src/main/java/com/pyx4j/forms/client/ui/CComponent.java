@@ -90,7 +90,7 @@ public abstract class CComponent<SELF_TYPE extends CComponent<SELF_TYPE, DATA_TY
 
     private String note;
 
-    private NoteStyle noteStyle;
+    private NoteStyle noteStyle = NoteStyle.Info;
 
     private CContainer<?, ?, ?> parent;
 
