@@ -27,6 +27,7 @@ import com.pyx4j.commons.css.Style;
 import com.pyx4j.commons.css.Theme;
 import com.pyx4j.commons.css.ThemeColor;
 import com.pyx4j.commons.css.ThemeId;
+import com.pyx4j.forms.client.ui.CComponentTheme;
 import com.pyx4j.widgets.client.style.theme.WidgetTheme;
 
 public abstract class FolderTheme extends Theme {
@@ -75,6 +76,14 @@ public abstract class FolderTheme extends Theme {
         addStyle(style);
 
         style = new Style(".", StyleName.CFolderBoxDecorator);
+        addStyle(style);
+
+        style = new Style(".", StyleName.CFolderBoxDecorator, " .", CComponentTheme.StyleName.NoteLabel);
+        style.addProperty("font-size", "1.2em");
+        addStyle(style);
+
+        style = new Style(".", StyleName.CFolderBoxDecorator, " .", CComponentTheme.StyleName.ValidationLabel);
+        style.addProperty("font-size", "1.2em");
         addStyle(style);
 
         style = new Style(".", StyleName.CFolderBoxDecoratorAddButtonHolder);

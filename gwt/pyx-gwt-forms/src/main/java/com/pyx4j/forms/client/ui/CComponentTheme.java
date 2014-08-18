@@ -120,7 +120,7 @@ public class CComponentTheme extends Theme {
         addStyle(style);
 
         style = new Style(".", StyleName.NoteLabel, "-", StyleDependent.warning);
-        style.addProperty("color", ThemeColor.object1, 1);
+        style.addProperty("color", "orange");
         addStyle(style);
 
     }
