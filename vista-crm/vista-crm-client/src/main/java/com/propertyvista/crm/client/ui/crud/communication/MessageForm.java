@@ -468,6 +468,9 @@ public class MessageForm extends CrmEntityForm<MessageDTO> {
                             newItem.getValue().to().add(currentMessage.sender());
                         }
 
+                        for (int i = 0; i < messagesFolder.getItemCount(); i++) {
+                            ((MessageFolderItem) messagesFolder.getItem(i).getEntityForm()).setCanReply(false);
+                        }
                         newItem.refresh(false);
                         CForm<MessageDTO> form = newItem.getEntityForm();
                         if (form != null && form instanceof MessageFolderItem) {
@@ -475,7 +478,9 @@ public class MessageForm extends CrmEntityForm<MessageDTO> {
                             folderItemForm.setFocusForEditingText();
                             folderItemForm.communicationEndpointSelector.addAll(newItem.getValue().to(), false);
                         }
+
                         newItem.asWidget().getElement().scrollIntoView();
+
                     }
                 }
 
@@ -485,6 +490,9 @@ public class MessageForm extends CrmEntityForm<MessageDTO> {
                 @Override
                 public void execute() {
                     ((MessageFolder) getParent().getParent()).removeItem((CFolderItem<MessageDTO>) getParent());
+                    for (int i = 0; i < messagesFolder.getItemCount(); i++) {
+                        ((MessageFolderItem) messagesFolder.getItem(i).getEntityForm()).setCanReply(true);
+                    }
                 }
             });
 
@@ -523,6 +531,12 @@ public class MessageForm extends CrmEntityForm<MessageDTO> {
                 ((MessageViewerView.Presenter) p).saveMessage(m, null, refresh);
             }
         };
+
+        protected void setCanReply(boolean canReply) {
+            boolean isNew = getValue().isPrototype() || getValue().date() == null || getValue().date().isNull();
+            btnReply.setVisible(canReply && getValue().allowedReply().getValue(true) && !isNew);
+            btnMarkAsUnread.setVisible(canReply && !isNew && getValue().isInRecipients().getValue(false));
+        }
 
         @Override
         protected void onValueSet(boolean populate) {

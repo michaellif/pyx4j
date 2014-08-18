@@ -267,6 +267,9 @@ public class MessagePage extends CPortalEntityForm<MessageDTO> {
                                 newItem.getValue().recipients().add(dh);
                             }
                         }
+                        for (int i = 0; i < messagesFolder.getItemCount(); i++) {
+                            ((MessageFolderItem) messagesFolder.getItem(i).getEntityForm()).setCanReply(false);
+                        }
                         newItem.refresh(false);
                         newItem.asWidget().getElement().scrollIntoView();
                         CForm<MessageDTO> form = newItem.getEntityForm();
@@ -282,6 +285,9 @@ public class MessagePage extends CPortalEntityForm<MessageDTO> {
                 @Override
                 public void execute() {
                     ((OpenMessageFolder) getParent().getParent()).removeItem((CFolderItem<MessageDTO>) getParent());
+                    for (int i = 0; i < messagesFolder.getItemCount(); i++) {
+                        ((MessageFolderItem) messagesFolder.getItem(i).getEntityForm()).setCanReply(true);
+                    }
                 }
             });
 
@@ -349,6 +355,13 @@ public class MessagePage extends CPortalEntityForm<MessageDTO> {
                 }
             }
             return super.preprocessValue(value, fireEvent, populate);
+        }
+
+        protected void setCanReply(boolean canReply) {
+            boolean isNew = getValue().isPrototype() || getValue().date() == null || getValue().date().isNull();
+            btnReply.setVisible(canReply && getValue().allowedReply().getValue(true) && !isNew);
+            btnMarkAsUnread
+                    .setVisible(canReply && !isNew && !ClientContext.getUserVisit().getPrincipalPrimaryKey().equals(getValue().sender().getPrimaryKey()));
         }
 
         @Override
