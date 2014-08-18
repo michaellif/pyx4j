@@ -997,17 +997,21 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
             Object newValue;
             Object prevValue;
             if (memberMeta.getObjectClassType() == ObjectClassType.Entity) {
-                if (memberMeta.isOwnedRelationships() && !memberMeta.isCascadePersist()) {
+                if (memberMeta.isOwnedRelationships() && !memberMeta.isCascadePersist() && (member instanceof MemberExternalOperationsMeta)) {
                     continue;
                 }
+
                 IEntity newMemberEntity = (IEntity) member.getMember(entity);
                 newValue = newMemberEntity.getPrimaryKey();
 
                 IEntity prevMemberEntity = (IEntity) member.getMember(baseEntity);
+
+                // TODO do not load child data, Only detect column value change if not CascadePersist
                 // merge incomplete data
                 if (!TableModelCollections.isUpdatableMember(prevMemberEntity)) {
                     tm.retrieveMember(getPersistenceContext(), baseEntity, prevMemberEntity);
                 }
+
                 prevValue = prevMemberEntity.getPrimaryKey();
 
                 // ignore version data in non versioned key

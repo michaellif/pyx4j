@@ -26,6 +26,7 @@ import com.pyx4j.entity.core.AttachLevel;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.test.shared.domain.ownership.cascade.BidirectionalOneToManyNCPChild;
 import com.pyx4j.entity.test.shared.domain.ownership.cascade.BidirectionalOneToManyNCPParent;
+import com.pyx4j.entity.test.shared.domain.ownership.cascade.BidirectionalOneToOneNCPChild;
 import com.pyx4j.entity.test.shared.domain.ownership.cascade.BidirectionalOneToOneNCPParent;
 
 public abstract class CascadeTestCase extends AssociationMappingTestCase {
@@ -98,6 +99,41 @@ public abstract class CascadeTestCase extends AssociationMappingTestCase {
                 Assert.assertEquals("data did not changed", childName, parent.child().name().getValue());
                 Assert.assertEquals("data did not changed", testId, parent.child().testId().getValue());
             }
+        }
+
+    }
+
+    public void testBidirectionalOneToOneNCAddChildPersist() {
+        testBidirectionalOneToOneNCAddChildSave(TestCaseMethod.Persist);
+    }
+
+    public void testBidirectionalOneToOneNCAddChildMerge() {
+        testBidirectionalOneToOneNCAddChildSave(TestCaseMethod.Merge);
+    }
+
+    public void testBidirectionalOneToOneNCAddChildSave(TestCaseMethod testCaseMethod) {
+        String testId = uniqueString();
+        BidirectionalOneToOneNCPParent o = EntityFactory.create(BidirectionalOneToOneNCPParent.class);
+        o.testId().setValue(testId);
+        o.name().setValue(uniqueString());
+        srvSave(o, testCaseMethod);
+
+        // Save Child separately as not attached to parent
+
+        // Then update link to it in parent
+        BidirectionalOneToOneNCPChild c = o.child();
+        c.testId().setValue(testId);
+        c.name().setValue(uniqueString());
+        srvSave(c, testCaseMethod);
+        srvSave(o, testCaseMethod);
+
+        // Get Parent and see that Child is retrieved, then verify values
+        {
+            BidirectionalOneToOneNCPParent parent = srv.retrieve(BidirectionalOneToOneNCPParent.class, o.getPrimaryKey());
+            Assert.assertNotNull("data retrieved ", parent);
+            Assert.assertEquals("child data retrieved", AttachLevel.Attached, parent.child().getAttachLevel());
+            Assert.assertNotNull("child link present ", parent.child().getPrimaryKey());
+            Assert.assertEquals("correct data retrieved", c.name(), parent.child().name());
         }
 
     }
