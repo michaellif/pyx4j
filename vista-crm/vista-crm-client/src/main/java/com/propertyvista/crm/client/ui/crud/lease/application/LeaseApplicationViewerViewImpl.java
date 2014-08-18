@@ -383,8 +383,8 @@ public class LeaseApplicationViewerViewImpl extends LeaseViewerViewImplBase<Leas
         // set buttons state:
         setViewVisible(viewLease, status.isCurrent());
 
-        setActionVisible(createOnlineApplication, status == Status.InProgress);
-        setActionVisible(cancelOnlineApplication, isOnlineApplication);
+        setActionVisible(createOnlineApplication, status == Status.InProgress && !isOnlineApplication);
+        setActionVisible(cancelOnlineApplication, status == Status.InProgress && isOnlineApplication);
         setActionVisible(inviteAction, isOnlineApplication);
         setActionVisible(creditCheckAction, status.isDraft());
         setActionVisible(approveAction, status.isDraft());
