@@ -46,7 +46,7 @@ public interface LeaseApplication extends IEntity {
     @XmlType(name = "LeaseApplicationStatus")
     public enum Status {
 
-        InProgress, // Mapped to Lease status Created and ApplicationInProgress
+        InProgress, // Mapped to Lease status Application
 
         Submitted,
 
@@ -94,6 +94,7 @@ public interface LeaseApplication extends IEntity {
         }
 
         public static boolean isOnlineApplication(LeaseApplication app) {
+            assert (!app.onlineApplication().isValueDetached());
             return (!app.onlineApplication().status().isNull() && app.onlineApplication().status().getValue().isInProgress());
         }
     }
