@@ -25,6 +25,7 @@ import java.util.List;
 
 import org.junit.Assert;
 
+import com.pyx4j.commons.Consts;
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.core.AttachLevel;
 import com.pyx4j.entity.core.EntityFactory;
@@ -481,7 +482,9 @@ public abstract class VersionTestCase extends DatastoreTestBase {
             // Retrieve new version
             RefToVersioned refToVersioned1r1 = srv.retrieve(RefToVersioned.class, refToVersioned1.getPrimaryKey());
             assertEquals("ref not updated", origName, refToVersioned1r1.itemA().version().name().getValue());
-            assertEquals("date as of time of save", DateUtils.detectDateformat("2011-01-15"), new Date(refToVersioned1r1.itemA().getPrimaryKey().getVersion()));
+            // += 1 second
+            assertEquals("date as of time of save", (double) DateUtils.detectDateformat("2011-01-15").getTime(), (double) new Date(refToVersioned1r1.itemA()
+                    .getPrimaryKey().getVersion()).getTime(), Consts.SEC2MILLISECONDS);
         }
 
         // Retrieval of item itself, by default returns current
