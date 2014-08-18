@@ -331,34 +331,39 @@ public class MailQueue implements Runnable {
     }
 
     private AbstractOutgoingMailQueue peek() {
-        return new UnitOfWork(TransactionScopeOption.RequiresNew).execute(new Executable<AbstractOutgoingMailQueue, RuntimeException>() {
+        try {
+            return new UnitOfWork(TransactionScopeOption.RequiresNew).execute(new Executable<AbstractOutgoingMailQueue, RuntimeException>() {
 
-            @Override
-            public AbstractOutgoingMailQueue execute() {
-                for (final Class<? extends AbstractOutgoingMailQueue> persistableEntityClass : persistableEntities.values()) {
+                @Override
+                public AbstractOutgoingMailQueue execute() {
+                    for (final Class<? extends AbstractOutgoingMailQueue> persistableEntityClass : persistableEntities.values()) {
 
-                    AbstractOutgoingMailQueue persistable = runInEntityNamespace(persistableEntityClass,
-                            new Executable<AbstractOutgoingMailQueue, RuntimeException>() {
-                                @Override
-                                public AbstractOutgoingMailQueue execute() {
-                                    @SuppressWarnings("unchecked")
-                                    EntityListCriteria<AbstractOutgoingMailQueue> criteria = (EntityListCriteria<AbstractOutgoingMailQueue>) EntityListCriteria
-                                            .create(persistableEntityClass);
-                                    criteria.eq(criteria.proto().status(), MailQueueStatus.Queued);
-                                    criteria.asc(criteria.proto().attempts());
-                                    criteria.desc(criteria.proto().priority());
-                                    criteria.asc(criteria.proto().updated());
-                                    return Persistence.service().retrieve(criteria);
-                                }
-                            });
+                        AbstractOutgoingMailQueue persistable = runInEntityNamespace(persistableEntityClass,
+                                new Executable<AbstractOutgoingMailQueue, RuntimeException>() {
+                                    @Override
+                                    public AbstractOutgoingMailQueue execute() {
+                                        @SuppressWarnings("unchecked")
+                                        EntityListCriteria<AbstractOutgoingMailQueue> criteria = (EntityListCriteria<AbstractOutgoingMailQueue>) EntityListCriteria
+                                                .create(persistableEntityClass);
+                                        criteria.eq(criteria.proto().status(), MailQueueStatus.Queued);
+                                        criteria.asc(criteria.proto().attempts());
+                                        criteria.desc(criteria.proto().priority());
+                                        criteria.asc(criteria.proto().updated());
+                                        return Persistence.service().retrieve(criteria);
+                                    }
+                                });
 
-                    if (persistable != null) {
-                        return persistable;
+                        if (persistable != null) {
+                            return persistable;
+                        }
                     }
+                    return null;
                 }
-                return null;
-            }
-        });
+            });
+        } catch (Throwable e) {
+            log.error("unable to read MailQueue tables", e);
+            return null;
+        }
     }
 
     private static String getNamespace(Class<? extends IEntity> entityClass) {
