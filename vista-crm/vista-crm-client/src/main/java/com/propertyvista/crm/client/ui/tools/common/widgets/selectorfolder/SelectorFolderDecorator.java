@@ -33,6 +33,7 @@ import com.google.gwt.event.dom.client.KeyUpEvent;
 import com.google.gwt.event.dom.client.KeyUpHandler;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.shared.HandlerRegistration;
+import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.IsWidget;
@@ -208,9 +209,8 @@ public class SelectorFolderDecorator<E extends IEntity> extends Composite implem
     }
 
     @Override
-    public HandlerRegistration addItemAddClickHandler(ClickHandler handler) {
+    public void setItemAddCommand(Command command) {
         // TODO Auto-generated method stub
-        return null;
     }
 
     /*

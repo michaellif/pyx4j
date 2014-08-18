@@ -66,10 +66,9 @@ public class GeoLocationEditor extends CForm<GeoLocation> {
         get(proto().latitude()).addComponentValidator(new AbstractComponentValidator<Double>() {
             @Override
             public BasicValidationError isValid() {
-                CComponent<?, LatitudeType, ?> latitudeType = get(proto().latitudeType());
                 Double value = getComponent().getValue();
-                return ((value == null && latitudeType.getValue() == null) || (value != null && (value >= 0 && value <= 90))) ? null
-                        : new BasicValidationError(getComponent(), i18n.tr("Latitude may be in range [0-90] degree"));
+                return (value == null || (value >= 0 && value <= 90)) ? null : new BasicValidationError(getComponent(), i18n
+                        .tr("Latitude may be in range [0-90] degree"));
             }
         });
         get(proto().latitude()).addValueChangeHandler(new RevalidationTrigger<Double>(get(proto().latitudeType())));
@@ -90,9 +89,8 @@ public class GeoLocationEditor extends CForm<GeoLocation> {
         get(proto().longitude()).addComponentValidator(new AbstractComponentValidator<Double>() {
             @Override
             public BasicValidationError isValid() {
-                CComponent<?, LongitudeType, ?> longitudeType = get(proto().longitudeType());
-                return ((getComponent().getValue() == null && longitudeType.getValue() == null) || (getComponent().getValue() != null && (getComponent()
-                        .getValue() >= 0 && getComponent().getValue() <= 180))) ? null : new BasicValidationError(getComponent(), i18n
+                Double value = getComponent().getValue();
+                return (value == null || (value >= 0 && value <= 180)) ? null : new BasicValidationError(getComponent(), i18n
                         .tr("Longitude may be in range [0-180] degree"));
             }
         });
@@ -140,7 +138,7 @@ public class GeoLocationEditor extends CForm<GeoLocation> {
                     try {
                         return Math.abs(nf.parse(string));
                     } catch (NumberFormatException e) {
-                        throw new ParseException(i18n.tr("Coordinate Format error"), 0);
+                        throw new ParseException(i18n.tr("Coordinate Format Error"), 0);
                     }
                 }
             }
