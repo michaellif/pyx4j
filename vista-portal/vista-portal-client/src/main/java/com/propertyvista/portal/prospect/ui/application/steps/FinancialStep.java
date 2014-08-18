@@ -73,7 +73,8 @@ public class FinancialStep extends ApplicationWizardStep {
         }
 
         if (getWizard().isEditable()) {
-            ((PersonalIncomeFolder) (CComponent<?, ?, ?>) get(proto().applicantData().incomes())).setDocumentsPolicy(getValue().applicantData().documentsPolicy());
+            ((PersonalIncomeFolder) (CComponent<?, ?, ?>) get(proto().applicantData().incomes())).setDocumentsPolicy(getValue().applicantData()
+                    .documentsPolicy());
         }
     }
 
@@ -85,13 +86,26 @@ public class FinancialStep extends ApplicationWizardStep {
             @Override
             public BasicValidationError isValid() {
                 if (getComponent().getValue() != null) {
-                    return (getValue().applicantData().assets().size() > 0) || (getValue().applicantData().incomes().size() > 0) ? null : new BasicValidationError(
-                            getComponent(), i18n.tr("At least one source of income or one asset is required"));
+                    return (getValue().applicantData().assets().size() > 0) || (getValue().applicantData().incomes().size() > 0) ? null
+                            : new BasicValidationError(getComponent(), i18n.tr("At least one source of income or one asset is required"));
                 }
                 return null;
             }
         });
         get(proto().applicantData().assets()).addValueChangeHandler(
                 new RevalidationTrigger<List<CustomerScreeningPersonalAsset>>(get(proto().applicantData().incomes())));
+
+        get(proto().applicantData().assets()).addComponentValidator(new AbstractComponentValidator<List<CustomerScreeningPersonalAsset>>() {
+            @Override
+            public BasicValidationError isValid() {
+                if (getComponent().getValue() != null) {
+                    return (getValue().applicantData().assets().size() > 0) || (getValue().applicantData().incomes().size() > 0) ? null
+                            : new BasicValidationError(getComponent(), i18n.tr("At least one asset or one source of income is required"));
+                }
+                return null;
+            }
+        });
+        get(proto().applicantData().incomes()).addValueChangeHandler(
+                new RevalidationTrigger<List<CustomerScreeningIncome>>(get(proto().applicantData().assets())));
     }
 }
