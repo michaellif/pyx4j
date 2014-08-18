@@ -72,6 +72,7 @@ BEGIN
         ALTER TABLE communication_thread DROP CONSTRAINT communication_thread_responsible_discriminator_d_ck;
         ALTER TABLE email_template DROP CONSTRAINT email_template_template_type_e_ck;
         ALTER TABLE lease_adjustment DROP CONSTRAINT lease_adjustment_tax_type_e_ck;
+        ALTER TABLE lease_application DROP CONSTRAINT lease_application_status_e_ck;
         ALTER TABLE legal_letter DROP CONSTRAINT legal_letter_status_discriminator_d_ck;
         ALTER TABLE legal_status DROP CONSTRAINT legal_status_id_discriminator_ck;
         ALTER TABLE marketing DROP CONSTRAINT marketing_marketing_address_street_direction_e_ck;
@@ -537,6 +538,7 @@ BEGIN
                 ||'FROM '||v_schema_name||'.merchant_account m '
                 ||'WHERE    a.merchant_account_key = m.id '; 
         
+        
         -- province_policy_node
         
         EXECUTE 'UPDATE '||v_schema_name||'.province_policy_node '
@@ -853,6 +855,16 @@ BEGIN
         EXECUTE 'UPDATE '||v_schema_name||'.lease_adjustment '
                 ||'SET tax_type = ''Percentage'' '
                 ||'WHERE    tax_type = ''percent'' ';
+                
+        -- lease_application
+        
+        EXECUTE 'UPDATE '||v_schema_name||'.lease_application '
+                ||'SET  status = ''InProgress'' '
+                ||'WHERE    status = ''Created'' ';
+                
+        EXECUTE 'UPDATE '||v_schema_name||'.lease_application '
+                ||'SET  status = ''InProgress'' '
+                ||'WHERE    status = ''OnlineApplication'' ';
         
         /*        
         -- legal_terms_policy_item
@@ -1389,8 +1401,7 @@ BEGIN
             CHECK ((ticket_type) IN ('Landlord', 'NotTicket', 'Tenant', 'Vendor'));
         ALTER TABLE communication_thread ADD CONSTRAINT communication_thread_owner_discriminator_d_ck 
             CHECK ((owner_discriminator) IN ('AptUnit', 'Building', 'CrmUser', 'CustomerUser', 'Portfolio', 'SystemEndpoint', 'Tenant'));
-        ALTER TABLE communication_thread ADD CONSTRAINT communication_thread_status_e_ck 
-            CHECK ((status) IN ('Cancelled', 'Closed', 'New', 'Open', 'Resolved', 'Unassigned'));
+        ALTER TABLE communication_thread ADD CONSTRAINT communication_thread_status_e_ck CHECK ((status) IN ('Open', 'Resolved', 'Unassigned'));
         ALTER TABLE country_policy_node ADD CONSTRAINT country_policy_node_country_e_ck 
             CHECK ((country) IN ('Afghanistan', 'AlandIslands', 'Albania', 'Algeria', 'AmericanSamoa', 'Andorra', 'Angola', 'Anguilla', 'Antarctica', 
             'Antigua', 'Argentina', 'Armenia', 'Aruba', 'Australia', 'Austria', 'Azerbaijan', 'Bahamas', 'Bahrain', 'Bangladesh', 'Barbados', 'Belarus', 
@@ -1529,6 +1540,8 @@ BEGIN
             'UnitedStates', 'Uruguay', 'Uzbekistan', 'Vanuatu', 'Vatican', 'Venezuela', 'VietNam', 'VirginIslands', 'VirginIslandsGB', 'WallisFutuna', 
             'WesternSahara', 'Yemen', 'Zambia', 'Zimbabwe'));
         ALTER TABLE lease_adjustment ADD CONSTRAINT lease_adjustment_tax_type_e_ck CHECK ((tax_type) IN ('Monetary', 'Percentage'));
+        ALTER TABLE lease_application ADD CONSTRAINT lease_application_status_e_ck 
+            CHECK ((status) IN ('Approved', 'Cancelled', 'Declined', 'InProgress', 'PendingDecision', 'PendingFurtherInformation', 'Submitted'));
         ALTER TABLE legal_letter ADD CONSTRAINT legal_letter_status_discriminator_d_ck CHECK ((status_discriminator) IN ('LegalStatus', 'LegalStatusN4'));
         ALTER TABLE legal_status ADD CONSTRAINT legal_status_id_discriminator_ck CHECK ((id_discriminator) IN ('LegalStatus', 'LegalStatusN4'));
         ALTER TABLE marketing ADD CONSTRAINT marketing_marketing_address_country_e_ck 

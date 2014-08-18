@@ -338,5 +338,27 @@ DROP FUNCTION _dba_.update_phone_numbers(text);
 DROP FUNCTION _dba_.migrate_pmc_114(text);
 DROP TABLE _dba_.tmp_roles;
 
+/**
+*** ===================================================================
+***
+***     One time update to _admin_.card_transaction_record 
+***
+*** ===================================================================
+**/
+
+UPDATE  _admin_.card_transaction_record AS ct 
+SET     pmc = a.id 
+FROM    _admin_.admin_pmc_merchant_account_index m 
+JOIN    _admin_.admin_pmc a ON (a.id = m.pmc)
+WHERE   ct.pmc IS NULL
+AND     ct.merchant_terminal_id = m.terminal_id;
+
+UPDATE  _admin_.card_transaction_record AS ct 
+SET     pmc = a.id 
+FROM    _admin_.admin_pmc_merchant_account_index m 
+JOIN    _admin_.admin_pmc a ON (a.id = m.pmc)
+WHERE   ct.pmc IS NULL
+AND     ct.merchant_terminal_id = m.terminal_id_conv_fee;
+
 -- Final step - update legal_terms_policy items
 \i update_policy_items.sql
