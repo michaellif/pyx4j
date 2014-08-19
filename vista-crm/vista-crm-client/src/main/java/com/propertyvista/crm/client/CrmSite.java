@@ -49,6 +49,7 @@ import com.pyx4j.site.rpc.NotificationAppPlace;
 import com.pyx4j.site.shared.domain.Notification;
 
 import com.propertyvista.common.client.ClientLocaleUtils;
+import com.propertyvista.common.client.WalkMe;
 import com.propertyvista.common.client.config.VistaFeaturesCustomizationClient;
 import com.propertyvista.common.client.handlers.VistaUnrecoverableErrorHandler;
 import com.propertyvista.common.client.policy.ClientPolicyManager;
@@ -165,6 +166,9 @@ public class CrmSite extends VistaSite {
                 VistaFeaturesCustomizationClient.enviromentTitleVisible = descriptor.enviromentTitleVisible().getValue(Boolean.TRUE);
                 ClientLocaleUtils.setCountryOfOperationLocale();
                 obtainAuthenticationData();
+                if (descriptor.walkMeEnabled().getValue(false)) {
+                    WalkMe.load();
+                }
             }
 
             @Override

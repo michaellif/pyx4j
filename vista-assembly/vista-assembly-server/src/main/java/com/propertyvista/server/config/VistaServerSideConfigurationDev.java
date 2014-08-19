@@ -37,6 +37,11 @@ public class VistaServerSideConfigurationDev extends VistaServerSideConfiguratio
     }
 
     @Override
+    public boolean walkMeEnabled() {
+        return false;
+    }
+
+    @Override
     public ServerSideConfiguration selectInstanceByContextName(ServletContext servletContext, String contextName) {
         // Disable environment selection.
         return this;

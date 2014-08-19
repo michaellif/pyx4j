@@ -456,4 +456,9 @@ public class VistaServerSideConfiguration extends AbstractVistaServerSideConfigu
     public int yardiConnectionTimeout() {
         return getConfigProperties().getSecondsValue("yardiConnectionTimeout", Consts.MIN2SEC * 9);
     }
+
+    @Override
+    public boolean walkMeEnabled() {
+        return getConfigProperties().getBooleanValue("walkMeEnabled", true);
+    }
 }

@@ -35,6 +35,7 @@ import com.pyx4j.site.client.events.NotificationHandler;
 import com.pyx4j.site.client.ui.layout.frontoffice.FrontOfficeLayoutPanel;
 
 import com.propertyvista.common.client.ClientLocaleUtils;
+import com.propertyvista.common.client.WalkMe;
 import com.propertyvista.common.client.config.VistaFeaturesCustomizationClient;
 import com.propertyvista.common.client.handlers.VistaUnrecoverableErrorHandler;
 import com.propertyvista.common.client.policy.ClientPolicyManager;
@@ -157,6 +158,9 @@ public abstract class PortalSite extends VistaSite {
                 VistaFeaturesCustomizationClient.setGoogleAnalyticDisableForEmployee(descriptor.isGoogleAnalyticDisableForEmployee().getValue());
                 VistaFeaturesCustomizationClient.enviromentTitleVisible = descriptor.enviromentTitleVisible().getValue(Boolean.TRUE);
                 obtainAuthenticationData();
+                if (descriptor.walkMeEnabled().getValue(false)) {
+                    WalkMe.load();
+                }
             }
 
             @Override

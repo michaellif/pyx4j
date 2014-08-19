@@ -40,4 +40,6 @@ public interface SiteDefinitionsDTO extends IEntity {
     IPrimitive<Boolean> isGoogleAnalyticDisableForEmployee();
 
     IPrimitive<Boolean> enviromentTitleVisible();
+
+    IPrimitive<Boolean> walkMeEnabled();
 }
