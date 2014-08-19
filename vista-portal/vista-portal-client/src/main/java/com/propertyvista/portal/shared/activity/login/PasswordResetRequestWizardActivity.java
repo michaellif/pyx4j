@@ -25,6 +25,8 @@ import com.pyx4j.rpc.shared.VoidSerializable;
 import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.security.rpc.AuthenticationService;
 import com.pyx4j.security.rpc.PasswordRetrievalRequest;
+import com.pyx4j.site.client.AppSite;
+import com.pyx4j.site.rpc.AppPlace;
 import com.pyx4j.site.shared.domain.Notification;
 import com.pyx4j.site.shared.domain.Notification.NotificationType;
 import com.pyx4j.widgets.client.CaptchaComposite;
@@ -101,4 +103,9 @@ public class PasswordResetRequestWizardActivity extends AbstractWizardActivity<P
     public String mayStop() {
         return null;
     };
+
+    @Override
+    public void cancel() {
+        AppSite.getPlaceController().goTo(AppPlace.NOWHERE);
+    }
 }

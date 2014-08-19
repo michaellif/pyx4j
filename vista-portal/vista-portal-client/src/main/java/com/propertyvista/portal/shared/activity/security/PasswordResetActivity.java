@@ -26,6 +26,8 @@ import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.security.rpc.AbstractPasswordResetService;
 import com.pyx4j.security.rpc.AuthenticationResponse;
 import com.pyx4j.security.rpc.PasswordChangeRequest;
+import com.pyx4j.site.client.AppSite;
+import com.pyx4j.site.rpc.AppPlace;
 import com.pyx4j.site.shared.domain.Notification;
 import com.pyx4j.site.shared.domain.Notification.NotificationType;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
@@ -77,4 +79,10 @@ public class PasswordResetActivity extends AbstractWizardActivity<PasswordChange
     public String mayStop() {
         return null;
     };
+
+    @Override
+    public void cancel() {
+        AppSite.getPlaceController().goTo(AppPlace.NOWHERE);
+    }
+
 }
