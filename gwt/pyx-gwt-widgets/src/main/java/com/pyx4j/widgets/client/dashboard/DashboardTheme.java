@@ -103,8 +103,6 @@ public class DashboardTheme extends Theme {
         addStyle(style);
 
         style = new Style(".", StyleName.DashboardGadgetHolderMenu);
-        style.addProperty("background-color", ThemeColor.foreground);
-        style.addProperty("border", "1px solid #aaa");
         style.addProperty("font", "menu");
         addStyle(style);
 
