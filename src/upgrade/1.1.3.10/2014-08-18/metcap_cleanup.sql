@@ -29,6 +29,14 @@ BEGIN TRANSACTION;
     AND     b.property_code NOT IN ('rann0001','lake0245','silv1315',
     'east0350','east0340','darc7110');
     
--- COMMIT;
+    -- autopay_agreement
+    
+    UPDATE  metcap.autopay_agreement AS aa 
+    SET     is_deleted = TRUE 
+    FROM    metcap.payment_method pm
+    WHERE   pm.is_deleted 
+    AND     aa.payment_method = pm.id;
+    
+COMMIT;
     
     
