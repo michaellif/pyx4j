@@ -24,6 +24,7 @@ import org.apache.axis2.AxisFault;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.yardi.entity.guestcard40.AttachmentTypesAndChargeCodes;
 import com.yardi.entity.guestcard40.LeadManagement;
 import com.yardi.entity.guestcard40.MarketingSources;
 import com.yardi.entity.guestcard40.RentableItems;
@@ -33,6 +34,8 @@ import com.yardi.ws.ItfILSGuestCard;
 import com.yardi.ws.ItfILSGuestCard2_0;
 import com.yardi.ws.ItfILSGuestCard2_0Stub;
 import com.yardi.ws.ItfILSGuestCardStub;
+import com.yardi.ws.operations.guestcard40.GetAttachmentTypesAndChargeCodes;
+import com.yardi.ws.operations.guestcard40.GetAttachmentTypesAndChargeCodesResponse;
 import com.yardi.ws.operations.guestcard40.GetPropertyConfigurations;
 import com.yardi.ws.operations.guestcard40.GetPropertyConfigurationsResponse;
 import com.yardi.ws.operations.guestcard40.GetVersionNumber;
@@ -87,6 +90,26 @@ class YardiGuestManagementStubImpl extends AbstractYardiStub implements YardiGue
         GetPropertyConfigurationsResponse response = getILSGuestCardService(yc).getPropertyConfigurations(request);
         String xml = response.getGetPropertyConfigurationsResult().getExtraElement().toString();
         return ensureResult(xml, Properties.class);
+    }
+
+    @Override
+    public AttachmentTypesAndChargeCodes getConfiguredAttachmentsAndCharges(PmcYardiCredential yc) throws YardiServiceException, RemoteException {
+        init(Action.GetConfiguredAttachmentsAndCharges);
+
+        GetAttachmentTypesAndChargeCodes request = new GetAttachmentTypesAndChargeCodes();
+
+        request.setInterfaceEntity(YardiConstants.ILS_INTERFACE_ENTITY);
+        request.setInterfaceLicense(YardiLicense.getInterfaceLicense(YardiInterfaceType.ILSGuestCard, yc));
+
+        request.setUserName(yc.username().getValue());
+        request.setPassword(yc.password().number().getValue());
+        request.setServerName(yc.serverName().getValue());
+        request.setDatabase(yc.database().getValue());
+        request.setPlatform(yc.platform().getValue().name());
+
+        GetAttachmentTypesAndChargeCodesResponse response = getILSGuestCardService(yc).getAttachmentTypesAndChargeCodes(request);
+        String xml = response.getGetAttachmentTypesAndChargeCodesResult().getExtraElement().toString();
+        return ensureResult(xml, AttachmentTypesAndChargeCodes.class);
     }
 
     @Override

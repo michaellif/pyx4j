@@ -15,6 +15,7 @@ package com.propertyvista.yardi.stubs;
 
 import java.rmi.RemoteException;
 
+import com.yardi.entity.guestcard40.AttachmentTypesAndChargeCodes;
 import com.yardi.entity.guestcard40.LeadManagement;
 import com.yardi.entity.guestcard40.MarketingSources;
 import com.yardi.entity.guestcard40.RentableItems;
@@ -55,6 +56,16 @@ class YardiGuestManagementStubProxy extends YardiAbstractStubProxy implements Ya
     public Properties getPropertyConfigurations(PmcYardiCredential yc) throws YardiServiceException, RemoteException {
         try {
             return getStub(yc).getPropertyConfigurations(yc);
+        } catch (YardiResponseException e) {
+            validateResponseXml(e.getResponse());
+        }
+        return null;
+    }
+
+    @Override
+    public AttachmentTypesAndChargeCodes getConfiguredAttachmentsAndCharges(PmcYardiCredential yc) throws YardiServiceException, RemoteException {
+        try {
+            return getStub(yc).getConfiguredAttachmentsAndCharges(yc);
         } catch (YardiResponseException e) {
             validateResponseXml(e.getResponse());
         }

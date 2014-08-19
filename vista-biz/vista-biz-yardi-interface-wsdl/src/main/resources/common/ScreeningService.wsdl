@@ -7,8 +7,8 @@
 		targetNamespace="http://propertyvista.com/interfaces/ws/ApplicantScreening"
 		xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
   <wsdl:types>
-	<s:schema elementFormDefault="qualified" targetNamespace="http://propertyvista.com/interfaces/ws/ApplicantScreening">
-	  <s:element name="ServiceRequest" minOccurs="0" maxOccurs="1" type="s:string"/>
+    <s:schema elementFormDefault="qualified" targetNamespace="http://propertyvista.com/interfaces/ws/ApplicantScreening">
+     <s:element name="ServiceRequest" type="s:string"/>
       <s:element name="ServiceResponse">
         <s:complexType>
           <s:sequence>

@@ -15,6 +15,7 @@ package com.propertyvista.yardi.stubs;
 
 import java.rmi.RemoteException;
 
+import com.yardi.entity.guestcard40.AttachmentTypesAndChargeCodes;
 import com.yardi.entity.guestcard40.LeadManagement;
 import com.yardi.entity.guestcard40.MarketingSources;
 import com.yardi.entity.guestcard40.RentableItems;
@@ -29,6 +30,8 @@ import com.propertyvista.yardi.beans.Properties;
 public interface YardiGuestManagementStub extends YardiInterface {
 
     Properties getPropertyConfigurations(PmcYardiCredential yc) throws YardiServiceException, RemoteException;
+
+    AttachmentTypesAndChargeCodes getConfiguredAttachmentsAndCharges(PmcYardiCredential yc) throws YardiServiceException, RemoteException;
 
     RentableItems getRentableItems(PmcYardiCredential yc, String propertyId) throws YardiServiceException, RemoteException;
 

@@ -16,9 +16,9 @@ package com.propertyvista.yardi;
 public class YardiConstants {
 
     public enum Action {
-        Ping, GetVersionNumber, ImportResidentTransactions, GetPropertyConfigurations, GetUnitInformation,
+        Ping, GetVersionNumber, ImportResidentTransactions, GetPropertyConfigurations, GetConfiguredAttachmentsAndCharges,
 
-        GetResidentTransactions, GetResidentTransaction, GetResidentTransactions_ByChargeDate,
+        GetUnitInformation, GetResidentTransactions, GetResidentTransaction, GetResidentTransactions_ByChargeDate,
 
         GetResidentTransactions_ByApplicationDate, GetResidentLeaseCharges, GetResidentsLeaseCharges,
 

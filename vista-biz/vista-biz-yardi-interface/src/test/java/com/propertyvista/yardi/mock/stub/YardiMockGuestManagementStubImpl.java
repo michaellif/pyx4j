@@ -13,11 +13,14 @@
  */
 package com.propertyvista.yardi.mock.stub;
 
+import java.rmi.RemoteException;
+
 import javax.xml.bind.JAXBException;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.yardi.entity.guestcard40.AttachmentTypesAndChargeCodes;
 import com.yardi.entity.guestcard40.LeadManagement;
 import com.yardi.entity.guestcard40.MarketingSources;
 import com.yardi.entity.guestcard40.RentableItems;
@@ -44,6 +47,12 @@ public class YardiMockGuestManagementStubImpl implements YardiGuestManagementStu
             log.error("writing data dump error", e);
         }
         return data;
+    }
+
+    @Override
+    public AttachmentTypesAndChargeCodes getConfiguredAttachmentsAndCharges(PmcYardiCredential yc) throws YardiServiceException, RemoteException {
+        // TODO Auto-generated method stub
+        return null;
     }
 
     @Override
