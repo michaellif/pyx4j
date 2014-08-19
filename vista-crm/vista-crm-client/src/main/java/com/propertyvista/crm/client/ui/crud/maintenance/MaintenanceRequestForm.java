@@ -255,10 +255,10 @@ public class MaintenanceRequestForm extends CrmEntityForm<MaintenanceRequestDTO>
         accessPanel.append(Location.Dual, inject(proto().petInstructions())).decorate().customLabel(i18n.tr("Entry Instructions"));
         get(proto().petInstructions()).setNote(i18n.tr("Entry instructions, including Pet Warnings, etc"));
 
-        accessPanel.append(Location.Left, inject(proto().preferredDate1())).decorate().componentWidth(100);
-        accessPanel.append(Location.Left, inject(proto().preferredDate2())).decorate().componentWidth(100);
-        accessPanel.append(Location.Right, inject(proto().preferredTime1())).decorate().componentWidth(100);
-        accessPanel.append(Location.Right, inject(proto().preferredTime2())).decorate().componentWidth(100);
+        accessPanel.append(Location.Left, inject(proto().preferredDate1())).decorate().componentWidth(120);
+        accessPanel.append(Location.Left, inject(proto().preferredDate2())).decorate().componentWidth(120);
+        accessPanel.append(Location.Right, inject(proto().preferredTime1())).decorate().componentWidth(120);
+        accessPanel.append(Location.Right, inject(proto().preferredTime2())).decorate().componentWidth(120);
         get(proto().preferredDate1()).addComponentValidator(new FutureDateValidator());
         get(proto().preferredDate2()).addComponentValidator(new FutureDateValidator());
 
