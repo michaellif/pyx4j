@@ -91,15 +91,19 @@ public class AjaxJSLoader {
 
         private void injectJS(String apiUrl) {
             String url;
-            int prefixIdx = apiUrl.indexOf(')');
-            if (prefixIdx == -1) {
-                url = Window.Location.getProtocol() + "//" + apiUrl;
+            if (apiUrl.startsWith("https://")) {
+                url = apiUrl;
             } else {
-                int protocolSeparatorIdx = apiUrl.indexOf('|');
-                if (Window.Location.getProtocol().equals("https:")) {
-                    url = "https://" + apiUrl.substring(1, protocolSeparatorIdx) + apiUrl.substring(prefixIdx + 1);
+                int prefixIdx = apiUrl.indexOf(')');
+                if (prefixIdx == -1) {
+                    url = Window.Location.getProtocol() + "//" + apiUrl;
                 } else {
-                    url = "http://" + apiUrl.substring(protocolSeparatorIdx + 1, prefixIdx) + apiUrl.substring(prefixIdx + 1);
+                    int protocolSeparatorIdx = apiUrl.indexOf('|');
+                    if (Window.Location.getProtocol().equals("https:")) {
+                        url = "https://" + apiUrl.substring(1, protocolSeparatorIdx) + apiUrl.substring(prefixIdx + 1);
+                    } else {
+                        url = "http://" + apiUrl.substring(protocolSeparatorIdx + 1, prefixIdx) + apiUrl.substring(prefixIdx + 1);
+                    }
                 }
             }
             Document doc = Document.get();
