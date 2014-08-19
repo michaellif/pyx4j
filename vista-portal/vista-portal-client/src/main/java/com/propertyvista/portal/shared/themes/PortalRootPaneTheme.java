@@ -333,7 +333,6 @@ public class PortalRootPaneTheme extends Theme {
 
         style = new Style(".", StyleName.AllertButton, " .", WidgetTheme.StyleName.ButtonText);
         style.addProperty("background", "none repeat scroll 0 0 #FF0000");
-        style.addProperty("border", "1px solid #FF0000");
         style.addProperty("border-radius", "5px");
         style.addProperty("font-size", "11px");
         style.addProperty("height", "auto");
@@ -342,6 +341,7 @@ public class PortalRootPaneTheme extends Theme {
         style.addProperty("position", "absolute");
         style.addProperty("left", "15px");
         style.addProperty("top", "4px");
+        style.addProperty("padding", "2px 4px");
         addStyle(style);
 
     }
