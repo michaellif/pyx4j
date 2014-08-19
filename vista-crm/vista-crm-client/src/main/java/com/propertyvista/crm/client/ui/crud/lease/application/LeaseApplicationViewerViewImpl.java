@@ -94,9 +94,13 @@ public class LeaseApplicationViewerViewImpl extends LeaseViewerViewImplBase<Leas
 
     private final MenuItem creditCheckAction;
 
-    private final MenuItem approveAction;
-
     private final MenuItem moreInfoAction;
+
+    private final MenuItem submitAction;
+
+    private final MenuItem completeAction;
+
+    private final MenuItem approveAction;
 
     private final MenuItem declineAction;
 
@@ -206,14 +210,6 @@ public class LeaseApplicationViewerViewImpl extends LeaseViewerViewImplBase<Leas
 
         // TODO Move Lease Action
 
-        approveAction = new SecureMenuItem(i18n.tr("Approve"), new Command() {
-            @Override
-            public void execute() {
-                approveActionExecuter();
-            }
-        }, new ActionPermission(ApplicationDecisionADC.class));
-        addAction(approveAction);
-
         moreInfoAction = new SecureMenuItem(i18n.tr("More Info"), new Command() {
             @Override
             public void execute() {
@@ -223,6 +219,30 @@ public class LeaseApplicationViewerViewImpl extends LeaseViewerViewImplBase<Leas
         if (!VistaTODO.VISTA_4484_Action_More_Info_should_be_hidden_as_not_fully_implemented) {
             addAction(moreInfoAction);
         }
+
+        submitAction = new SecureMenuItem(i18n.tr("Submit"), new Command() {
+            @Override
+            public void execute() {
+                submitActionExecuter();
+            }
+        }, new ActionPermission(ApplicationDecisionADC.class));
+        addAction(submitAction);
+
+        completeAction = new SecureMenuItem(i18n.tr("Complete"), new Command() {
+            @Override
+            public void execute() {
+                completeActionExecuter();
+            }
+        }, new ActionPermission(ApplicationDecisionADC.class));
+        addAction(completeAction);
+
+        approveAction = new SecureMenuItem(i18n.tr("Approve"), new Command() {
+            @Override
+            public void execute() {
+                approveActionExecuter();
+            }
+        }, new ActionPermission(ApplicationDecisionADC.class));
+        addAction(approveAction);
 
         declineAction = new SecureMenuItem(i18n.tr("Decline"), new Command() {
             @Override
@@ -304,16 +324,6 @@ public class LeaseApplicationViewerViewImpl extends LeaseViewerViewImplBase<Leas
         });
     }
 
-    private void approveActionExecuter() {
-        new ActionBox(i18n.tr("Approve")) {
-            @Override
-            public boolean onClickOk() {
-                ((LeaseApplicationViewerView.Presenter) getPresenter()).applicationAction(updateValue(Action.Approve));
-                return true;
-            }
-        }.show();
-    }
-
     private void moreInfoActionExecuter() {
         ((LeaseViewerViewBase.Presenter) getPresenter()).retrieveUsers(new DefaultAsyncCallback<List<LeaseTermParticipant<?>>>() {
             @Override
@@ -322,12 +332,42 @@ public class LeaseApplicationViewerViewImpl extends LeaseViewerViewImplBase<Leas
 
                     @Override
                     public boolean onClickOk() {
-                        // TODO make the credit check happen
+                        // TODO ask for more info here...
                         return true;
                     }
                 }.show();
             }
         });
+    }
+
+    private void submitActionExecuter() {
+        new ActionBox(i18n.tr("Submit")) {
+            @Override
+            public boolean onClickOk() {
+                ((LeaseApplicationViewerView.Presenter) getPresenter()).applicationAction(updateValue(Action.Submit));
+                return true;
+            }
+        }.show();
+    }
+
+    private void completeActionExecuter() {
+        new ActionBox(i18n.tr("Complete")) {
+            @Override
+            public boolean onClickOk() {
+                ((LeaseApplicationViewerView.Presenter) getPresenter()).applicationAction(updateValue(Action.Complete));
+                return true;
+            }
+        }.show();
+    }
+
+    private void approveActionExecuter() {
+        new ActionBox(i18n.tr("Approve")) {
+            @Override
+            public boolean onClickOk() {
+                ((LeaseApplicationViewerView.Presenter) getPresenter()).applicationAction(updateValue(Action.Approve));
+                return true;
+            }
+        }.show();
     }
 
     private void declineActionExecuter() {
@@ -362,8 +402,10 @@ public class LeaseApplicationViewerViewImpl extends LeaseViewerViewImplBase<Leas
         setActionVisible(cancelOnlineApplication, false);
         setActionVisible(inviteAction, false);
         setActionVisible(creditCheckAction, false);
-        setActionVisible(approveAction, false);
         setActionVisible(moreInfoAction, false);
+        setActionVisible(submitAction, false);
+        setActionVisible(completeAction, false);
+        setActionVisible(approveAction, false);
         setActionVisible(declineAction, false);
         setActionVisible(cancelAction, false);
 
@@ -379,6 +421,7 @@ public class LeaseApplicationViewerViewImpl extends LeaseViewerViewImplBase<Leas
 
         Status status = value.leaseApplication().status().getValue();
         boolean isOnlineApplication = LeaseApplication.Status.isOnlineApplication(value.leaseApplication());
+        boolean noPtAppProgress = (value.masterApplicationStatus().progress().getValue(BigDecimal.ZERO).compareTo(BigDecimal.ZERO) == 0);
 
         // set buttons state:
         setViewVisible(viewLease, status.isCurrent());
@@ -386,17 +429,22 @@ public class LeaseApplicationViewerViewImpl extends LeaseViewerViewImplBase<Leas
         setActionVisible(createOnlineApplication, status == Status.InProgress && !isOnlineApplication);
         setActionVisible(cancelOnlineApplication, status == Status.InProgress && isOnlineApplication);
         setActionVisible(inviteAction, isOnlineApplication);
-        setActionVisible(creditCheckAction, status.isDraft());
-        setActionVisible(approveAction, status.isDraft());
-        setActionVisible(moreInfoAction, status.isDraft() && status != Status.InProgress);
-        setActionVisible(declineAction, status.isDraft());
+
+        setActionVisible(submitAction, status == Status.InProgress && (!isOnlineApplication || noPtAppProgress));
+
+        setActionVisible(creditCheckAction, status == Status.Submitted);
+        setActionVisible(moreInfoAction, status == Status.Submitted);
+
+        setActionVisible(completeAction, status == Status.Submitted);
+        setActionVisible(approveAction, status == Status.PendingDecision);
+        setActionVisible(declineAction, status == Status.PendingDecision);
+
         setActionVisible(cancelAction, status.isDraft());
 
         setActionVisible(newPaymentAction, status.isDraft() && isPaymentAccepted(value));
 
         // edit/view terms enabling logic:
-        BigDecimal progress = (value.masterApplicationStatus().progress().isNull() ? BigDecimal.ZERO : value.masterApplicationStatus().progress().getValue());
-        editButton.setVisible(status.isDraft() && progress.compareTo(BigDecimal.ZERO) == 0);
+        editButton.setVisible(status.isDraft() && (!isOnlineApplication || noPtAppProgress));
         termsButton.setVisible(!status.isDraft());
 
         documentsButton.setVisible(status.isDraft());

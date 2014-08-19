@@ -103,6 +103,16 @@ public class LeaseFacadeInternalImpl implements LeaseFacade {
     }
 
     @Override
+    public void submitApplication(Lease leaseId, Employee decidedBy, String decisionReason) {
+        new LeaseInternalManager().submitApplication(leaseId, decidedBy, decisionReason);
+    }
+
+    @Override
+    public void completeApplication(Lease leaseId, Employee decidedBy, String decisionReason) {
+        new LeaseInternalManager().completeApplication(leaseId, decidedBy, decisionReason);
+    }
+
+    @Override
     public void declineApplication(Lease leaseId, Employee decidedBy, String decisionReason) {
         new LeaseInternalManager().declineApplication(leaseId, decidedBy, decisionReason);
     }

@@ -27,6 +27,10 @@ public interface LeaseApplicationActionDTO extends IEntity {
 
     public enum Action {
 
+        Submit,
+
+        Complete,
+
         Approve,
 
         Decline,

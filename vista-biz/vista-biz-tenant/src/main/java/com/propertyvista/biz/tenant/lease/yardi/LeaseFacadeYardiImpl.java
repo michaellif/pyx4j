@@ -110,6 +110,16 @@ public class LeaseFacadeYardiImpl implements LeaseFacade {
     }
 
     @Override
+    public void submitApplication(Lease leaseId, Employee decidedBy, String decisionReason) {
+        getLeaseYardiManager(retrieveLeseStatus(leaseId)).submitApplication(leaseId, decidedBy, decisionReason);
+    }
+
+    @Override
+    public void completeApplication(Lease leaseId, Employee decidedBy, String decisionReason) {
+        getLeaseYardiManager(retrieveLeseStatus(leaseId)).completeApplication(leaseId, decidedBy, decisionReason);
+    }
+
+    @Override
     public void declineApplication(Lease leaseId, Employee decidedBy, String decisionReason) {
         getLeaseYardiManager(retrieveLeseStatus(leaseId)).declineApplication(leaseId, decidedBy, decisionReason);
     }

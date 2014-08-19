@@ -67,13 +67,21 @@ public interface LeaseFacade {
 
     // DB-data Lease state interfaces:
 
+    // application related:
+
     void createMasterOnlineApplication(Lease leaseId, Building building, Floorplan floorplan);
 
     void cancelMasterOnlineApplication(Lease leaseId);
 
+    void submitApplication(Lease leaseId, Employee decidedBy, String decisionReason);
+
+    void completeApplication(Lease leaseId, Employee decidedBy, String decisionReason);
+
     void declineApplication(Lease leaseId, Employee decidedBy, String decisionReason);
 
     void cancelApplication(Lease leaseId, Employee decidedBy, String decisionReason);
+
+    // lease/application related:
 
     void approve(Lease leaseId, Employee decidedBy, String decisionReason);
 

@@ -333,6 +333,28 @@ public abstract class LeaseAbstractManager {
         }
     }
 
+    public void submitApplication(Lease leaseId, Employee decidedBy, String decisionReason) {
+        Lease lease = load(leaseId, false);
+
+        lease.leaseApplication().status().setValue(LeaseApplication.Status.Submitted);
+        lease.leaseApplication().decidedBy().set(decidedBy);
+        lease.leaseApplication().decisionReason().setValue(decisionReason);
+        lease.leaseApplication().decisionDate().setValue(SystemDateManager.getLogicalDate());
+
+        Persistence.service().merge(lease);
+    }
+
+    public void completeApplication(Lease leaseId, Employee decidedBy, String decisionReason) {
+        Lease lease = load(leaseId, false);
+
+        lease.leaseApplication().status().setValue(LeaseApplication.Status.PendingDecision);
+        lease.leaseApplication().decidedBy().set(decidedBy);
+        lease.leaseApplication().decisionReason().setValue(decisionReason);
+        lease.leaseApplication().decisionDate().setValue(SystemDateManager.getLogicalDate());
+
+        Persistence.service().merge(lease);
+    }
+
     public void declineApplication(Lease leaseId, Employee decidedBy, String decisionReason) {
         Lease lease = load(leaseId, false);
         Status status = lease.status().getValue();

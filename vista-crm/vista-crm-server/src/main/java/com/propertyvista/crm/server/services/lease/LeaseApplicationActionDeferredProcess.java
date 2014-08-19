@@ -24,6 +24,7 @@ import com.pyx4j.gwt.server.deferred.AbstractDeferredProcess;
 import com.propertyvista.biz.tenant.lease.LeaseFacade;
 import com.propertyvista.crm.rpc.dto.LeaseApplicationActionDTO;
 import com.propertyvista.crm.server.util.CrmAppContext;
+import com.propertyvista.domain.company.Employee;
 
 public class LeaseApplicationActionDeferredProcess extends AbstractDeferredProcess {
 
@@ -48,22 +49,29 @@ public class LeaseApplicationActionDeferredProcess extends AbstractDeferredProce
 
             @Override
             public Void execute() throws RuntimeException {
+                Employee currentUser = CrmAppContext.getCurrentUserEmployee();
+                String decisionReason = actionDTO.decisionReason().getValue();
+
                 switch (actionDTO.action().getValue()) {
                 case Approve:
-                    ServerSideFactory.create(LeaseFacade.class).approve(actionDTO.leaseId(), CrmAppContext.getCurrentUserEmployee(),
-                            actionDTO.decisionReason().getValue());
+                    ServerSideFactory.create(LeaseFacade.class).approve(actionDTO.leaseId(), currentUser, decisionReason);
                     break;
                 case Decline:
-                    ServerSideFactory.create(LeaseFacade.class).declineApplication(actionDTO.leaseId(), CrmAppContext.getCurrentUserEmployee(),
-                            actionDTO.decisionReason().getValue());
+                    ServerSideFactory.create(LeaseFacade.class).declineApplication(actionDTO.leaseId(), currentUser, decisionReason);
+                    break;
+                case Submit:
+                    ServerSideFactory.create(LeaseFacade.class).submitApplication(actionDTO.leaseId(), currentUser, decisionReason);
+                    break;
+                case Complete:
+                    ServerSideFactory.create(LeaseFacade.class).completeApplication(actionDTO.leaseId(), currentUser, decisionReason);
                     break;
                 case Cancel:
-                    ServerSideFactory.create(LeaseFacade.class).cancelApplication(actionDTO.leaseId(), CrmAppContext.getCurrentUserEmployee(),
-                            actionDTO.decisionReason().getValue());
+                    ServerSideFactory.create(LeaseFacade.class).cancelApplication(actionDTO.leaseId(), currentUser, decisionReason);
                     break;
                 default:
                     throw new IllegalArgumentException();
                 }
+
                 return null;
             }
 
