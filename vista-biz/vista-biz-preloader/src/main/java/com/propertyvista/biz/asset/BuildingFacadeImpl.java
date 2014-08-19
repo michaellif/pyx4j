@@ -21,6 +21,7 @@
 package com.propertyvista.biz.asset;
 
 import com.pyx4j.config.server.ServerSideFactory;
+import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.server.Persistence;
 
 import com.propertyvista.biz.communication.OperationsNotificationFacade;
@@ -108,4 +109,17 @@ public class BuildingFacadeImpl implements BuildingFacade {
         ServerSideFactory.create(OperationsNotificationFacade.class).buildingSuspended(building);
         ServerSideFactory.create(AuditFacade.class).updated(building, building.suspended().getValue(false) ? "Suspended" : "Unsuspended");
     }
+    @Override
+    public boolean isSuspend(Building buildingId) {
+        EntityQueryCriteria<Building> criteria = EntityQueryCriteria.create(Building.class);
+        criteria.eq(criteria.proto().id(), buildingId.getPrimaryKey());
+        return isSuspend(criteria);
+    }
+
+    @Override
+    public boolean isSuspend(EntityQueryCriteria<Building> criteria) {
+        criteria.eq(criteria.proto().suspended(), true);
+        return Persistence.service().count(criteria) > 0;
+    }
+
 }

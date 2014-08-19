@@ -19,6 +19,7 @@ import java.rmi.RemoteException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.commons.SimpleMessageFormat;
 import com.pyx4j.config.server.ServerSideFactory;
@@ -28,15 +29,16 @@ import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.i18n.shared.I18n;
 
+import com.propertyvista.biz.asset.BuildingFacade;
 import com.propertyvista.biz.communication.NotificationFacade;
 import com.propertyvista.biz.financial.ar.ARAbstractPaymentManager;
 import com.propertyvista.biz.financial.ar.ARException;
 import com.propertyvista.biz.financial.billingcycle.BillingCycleFacade;
 import com.propertyvista.biz.financial.payment.PaymentBatchContext;
-import com.propertyvista.biz.system.yardi.YardiUnableToPostReversalException;
 import com.propertyvista.biz.system.yardi.YardiARFacade;
 import com.propertyvista.biz.system.yardi.YardiPropertyNoAccessException;
 import com.propertyvista.biz.system.yardi.YardiServiceException;
+import com.propertyvista.biz.system.yardi.YardiUnableToPostReversalException;
 import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.financial.billing.BillingCycle;
 import com.propertyvista.domain.financial.yardi.YardiReceipt;
@@ -129,37 +131,38 @@ class ARYardiPaymentManager extends ARAbstractPaymentManager {
 
         Persistence.service().persist(reversal);
 
-        try {
-            ServerSideFactory.create(YardiARFacade.class).postReceiptReversal(reversal);
-        } catch (RemoteException e) {
-            throw new ARException(SimpleMessageFormat.format("Posting receipt {0} reversal to Yardi failed due to communication failure; Lease Id {1}", //
-                    paymentRecord.id(), paymentRecord.billingAccount().lease().leaseId()), e);
-        } catch (YardiUnableToPostReversalException e) {
-            paymentRecord.notice().setValue(e.getMessage());
+        /// Handle Sold buildings
+        if (ServerSideFactory.create(BuildingFacade.class).isSuspend(billingCycle.building())) {
+            paymentRecord.notice().setValue(
+                    CommonsStringUtils.nvl_concat(paymentRecord.notice().getValue(), "Reversal was not posted to Yardi for suspended building", "\n"));
             Persistence.service().merge(paymentRecord);
-            ServerSideFactory.create(NotificationFacade.class).yardiUnableToRejectPayment(paymentRecord, applyNSF, e.getMessage());
-        } catch (YardiPropertyNoAccessException e) {
-            // Handle Sold buildings
-            Persistence.service().retrieve(billingCycle.building());
-            if (billingCycle.building().suspended().getValue()) {
+        } else {
+
+            try {
+                ServerSideFactory.create(YardiARFacade.class).postReceiptReversal(reversal);
+            } catch (RemoteException e) {
+                throw new ARException(SimpleMessageFormat.format("Posting receipt {0} reversal to Yardi failed due to communication failure; Lease Id {1}", //
+                        paymentRecord.id(), paymentRecord.billingAccount().lease().leaseId()), e);
+            } catch (YardiUnableToPostReversalException e) {
                 paymentRecord.notice().setValue(e.getMessage());
                 Persistence.service().merge(paymentRecord);
                 ServerSideFactory.create(NotificationFacade.class).yardiUnableToRejectPayment(paymentRecord, applyNSF, e.getMessage());
-            } else {
+            } catch (YardiPropertyNoAccessException e) {
+                ServerSideFactory.create(NotificationFacade.class).yardiUnableToRejectPayment(paymentRecord, applyNSF, e.getMessage());
+                throw new ARException(SimpleMessageFormat.format("Posting receipt {0} reversal to Yardi failed; Lease Id {1}", //
+                        paymentRecord.id(), paymentRecord.billingAccount().lease().leaseId()), e);
+            } catch (YardiServiceException e) {
                 throw new ARException(SimpleMessageFormat.format("Posting receipt {0} reversal to Yardi failed; Lease Id {1}", //
                         paymentRecord.id(), paymentRecord.billingAccount().lease().leaseId()), e);
             }
-        } catch (YardiServiceException e) {
-            throw new ARException(SimpleMessageFormat.format("Posting receipt {0} reversal to Yardi failed; Lease Id {1}", //
-                    paymentRecord.id(), paymentRecord.billingAccount().lease().leaseId()), e);
-        }
 
-        try {
-            Persistence.service().retrieve(paymentRecord.billingAccount().lease());
-            ServerSideFactory.create(YardiARFacade.class).updateLease(paymentRecord.billingAccount().lease(), null);
-        } catch (Throwable ignoreDataRetrivalFromYardy) {
-            // We ignore error here because it will require unnecessary transaction reject
-            log.debug("ignoreDataRetrivalFromYardy", ignoreDataRetrivalFromYardy);
+            try {
+                Persistence.service().retrieve(paymentRecord.billingAccount().lease());
+                ServerSideFactory.create(YardiARFacade.class).updateLease(paymentRecord.billingAccount().lease(), null);
+            } catch (Throwable ignoreDataRetrivalFromYardy) {
+                // We ignore error here because it will require unnecessary transaction reject
+                log.debug("ignoreDataRetrivalFromYardy", ignoreDataRetrivalFromYardy);
+            }
         }
     }
 

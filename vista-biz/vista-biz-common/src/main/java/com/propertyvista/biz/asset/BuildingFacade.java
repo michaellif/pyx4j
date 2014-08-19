@@ -13,6 +13,8 @@
  */
 package com.propertyvista.biz.asset;
 
+import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
+
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 
@@ -23,4 +25,8 @@ public interface BuildingFacade {
     AptUnit persist(AptUnit unit);
 
     void suspend(Building building);
+
+    boolean isSuspend(Building buildingId);
+
+    boolean isSuspend(EntityQueryCriteria<Building> criteria);
 }
