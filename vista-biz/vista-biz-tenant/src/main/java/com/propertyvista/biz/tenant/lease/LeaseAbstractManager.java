@@ -297,9 +297,7 @@ public abstract class LeaseAbstractManager {
         ServerSideFactory.create(OnlineApplicationFacade.class)
                 .createMasterOnlineApplication(lease.leaseApplication().onlineApplication(), building, floorplan);
 
-        // TODO : fix merge problem:
-//        Persistence.service().merge(lease);
-        Persistence.service().persist(lease);
+        Persistence.service().merge(lease);
     }
 
     public void cancelMasterOnlineApplication(Lease leaseId) {
