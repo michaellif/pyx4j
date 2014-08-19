@@ -55,6 +55,7 @@ public abstract class BaseFolderDecorator<E extends IEntity> extends FlowPanel i
         contentPanel.setStyleName(FolderTheme.StyleName.CFolderContent.name());
 
         messagePannel = new MessagePannel(MessagePannel.Location.Top);
+        messagePannel.setStyleName(FolderTheme.StyleName.CFolderMessagePanel.name());
 
     }
 

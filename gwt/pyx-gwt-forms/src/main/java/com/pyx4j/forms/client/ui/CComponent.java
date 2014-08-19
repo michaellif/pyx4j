@@ -454,7 +454,7 @@ public abstract class CComponent<SELF_TYPE extends CComponent<SELF_TYPE, DATA_TY
 
     public final void revalidate() {
         Set<AbstractValidationError> origValidationErrors = new HashSet<>(validationErrors);
-        if (isValidatable()) {
+        if (isValidatable() && !isEditingInProgress()) {
             validationErrors = new HashSet<>();
 
             if (componentValidators != null) {
@@ -660,6 +660,7 @@ public abstract class CComponent<SELF_TYPE extends CComponent<SELF_TYPE, DATA_TY
                 asyncValidator.setValidationError(null);
             }
             editingInProgress = true;
+            revalidate();
             PropertyChangeEvent.fire(this, PropertyChangeEvent.PropertyName.editingInProgress);
         }
     }

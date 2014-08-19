@@ -36,7 +36,7 @@ public abstract class WidgetDecoratorTheme extends Theme {
 
         WidgetDecorator, WidgetDecoratorLabelHolder, WidgetDecoratorLabel, WidgetDecoratorMandatoryImage, WidgetDecoratorInfoImage,
 
-        WidgetDecoratorContainerPanel, WidgetDecoratorContentPanel, WidgetDecoratorContent, WidgetDecoratorContentHolder,
+        WidgetDecoratorContainerPanel, WidgetDecoratorContentPanel, WidgetDecoratorContent, WidgetDecoratorContentHolder, WidgetDecoratorMessagePanel,
 
         EntityContainerDecorator, EntityContainerDecoratorToolbar, EntityContainerDecoratorCollapsedCaption
     }
@@ -175,6 +175,13 @@ public abstract class WidgetDecoratorTheme extends Theme {
         style.addProperty("border-color", getBackgroundColor());
         addStyle(style);
 
+        style = new Style(".", StyleName.WidgetDecoratorMessagePanel, " .", CComponentTheme.StyleName.NoteLabel);
+        style.addProperty("font-size", "1em");
+        addStyle(style);
+
+        style = new Style(".", StyleName.WidgetDecoratorMessagePanel, " .", CComponentTheme.StyleName.ValidationLabel);
+        style.addProperty("font-size", "1em");
+        addStyle(style);
     }
 
     protected abstract ThemeColor getBackgroundColor();

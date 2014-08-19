@@ -29,6 +29,7 @@ import static com.pyx4j.forms.client.ui.decorators.WidgetDecoratorTheme.StyleNam
 import static com.pyx4j.forms.client.ui.decorators.WidgetDecoratorTheme.StyleName.WidgetDecoratorLabel;
 import static com.pyx4j.forms.client.ui.decorators.WidgetDecoratorTheme.StyleName.WidgetDecoratorLabelHolder;
 import static com.pyx4j.forms.client.ui.decorators.WidgetDecoratorTheme.StyleName.WidgetDecoratorMandatoryImage;
+import static com.pyx4j.forms.client.ui.decorators.WidgetDecoratorTheme.StyleName.WidgetDecoratorMessagePanel;
 
 import com.google.gwt.dom.client.Style.Display;
 import com.google.gwt.dom.client.Style.Position;
@@ -151,6 +152,7 @@ public class FieldDecorator extends FlowPanel implements IFieldDecorator, ILayou
         contentHolder.setWidth(builder.componentWidth);
 
         messagePannel = new MessagePannel(MessagePannel.Location.Bottom);
+        messagePannel.setStyleName(WidgetDecoratorMessagePanel.name());
         messagePannel.init(component);
 
         assistantWidgetHolder = new SimplePanel();

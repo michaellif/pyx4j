@@ -34,7 +34,7 @@ public abstract class FolderTheme extends Theme {
 
     public static enum StyleName implements IStyleName {
 
-        CFolder, CFolderActionsBar, CFolderAddButton, CFolderContent,
+        CFolder, CFolderActionsBar, CFolderAddButton, CFolderContent, CFolderMessagePanel,
 
         CFolderRemoveButton, CFolderUpButton, CFolderDownButton, CFolderCustomButton,
 
@@ -78,11 +78,11 @@ public abstract class FolderTheme extends Theme {
         style = new Style(".", StyleName.CFolderBoxDecorator);
         addStyle(style);
 
-        style = new Style(".", StyleName.CFolderBoxDecorator, " .", CComponentTheme.StyleName.NoteLabel);
+        style = new Style(".", StyleName.CFolderMessagePanel, " .", CComponentTheme.StyleName.NoteLabel);
         style.addProperty("font-size", "1.2em");
         addStyle(style);
 
-        style = new Style(".", StyleName.CFolderBoxDecorator, " .", CComponentTheme.StyleName.ValidationLabel);
+        style = new Style(".", StyleName.CFolderMessagePanel, " .", CComponentTheme.StyleName.ValidationLabel);
         style.addProperty("font-size", "1.2em");
         addStyle(style);
 
