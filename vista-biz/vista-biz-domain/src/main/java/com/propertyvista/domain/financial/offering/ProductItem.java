@@ -64,6 +64,11 @@ public interface ProductItem extends IEntity {
     @Format("#,##0.00")
     @Caption(name = "Deposit LMR")
     @Editor(type = EditorType.money)
+    IPrimitive<BigDecimal> yardiDepositLMR();
+
+    @Format("#,##0.00")
+    @Caption(name = "Deposit LMR")
+    @Editor(type = EditorType.money)
     IPrimitive<BigDecimal> depositLMR();
 
     @Format("#,##0.00")
