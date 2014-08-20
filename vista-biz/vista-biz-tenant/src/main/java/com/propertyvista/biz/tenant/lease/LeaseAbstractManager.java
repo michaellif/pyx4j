@@ -74,7 +74,6 @@ import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.building.BuildingUtility;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.property.asset.unit.occupancy.AptUnitOccupancySegment;
-import com.propertyvista.domain.security.CrmUser;
 import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.domain.tenant.CustomerScreening;
 import com.propertyvista.domain.tenant.lease.BillableItem;
@@ -337,22 +336,24 @@ public abstract class LeaseAbstractManager {
         Lease lease = load(leaseId, false);
 
         lease.leaseApplication().status().setValue(LeaseApplication.Status.Submitted);
-        lease.leaseApplication().decidedBy().set(decidedBy);
-        lease.leaseApplication().decisionReason().setValue(decisionReason);
-        lease.leaseApplication().decisionDate().setValue(SystemDateManager.getLogicalDate());
+        lease.leaseApplication().submission().decidedBy().set(decidedBy);
+        lease.leaseApplication().submission().decisionReason().setValue(decisionReason);
+        lease.leaseApplication().submission().decisionDate().setValue(SystemDateManager.getLogicalDate());
 
         Persistence.service().merge(lease);
+        Persistence.service().merge(creteLeaseNote(lease, "Submit Application", decisionReason, decidedBy));
     }
 
     public void completeApplication(Lease leaseId, Employee decidedBy, String decisionReason) {
         Lease lease = load(leaseId, false);
 
         lease.leaseApplication().status().setValue(LeaseApplication.Status.PendingDecision);
-        lease.leaseApplication().decidedBy().set(decidedBy);
-        lease.leaseApplication().decisionReason().setValue(decisionReason);
-        lease.leaseApplication().decisionDate().setValue(SystemDateManager.getLogicalDate());
+        lease.leaseApplication().validation().decidedBy().set(decidedBy);
+        lease.leaseApplication().validation().decisionReason().setValue(decisionReason);
+        lease.leaseApplication().validation().decisionDate().setValue(SystemDateManager.getLogicalDate());
 
         Persistence.service().merge(lease);
+        Persistence.service().merge(creteLeaseNote(lease, "Complete Application", decisionReason, decidedBy));
     }
 
     public void declineApplication(Lease leaseId, Employee decidedBy, String decisionReason) {
@@ -362,13 +363,14 @@ public abstract class LeaseAbstractManager {
         // TODO Review the status
         lease.status().setValue(Lease.Status.Cancelled);
         lease.leaseApplication().status().setValue(LeaseApplication.Status.Declined);
-        lease.leaseApplication().decidedBy().set(decidedBy);
-        lease.leaseApplication().decisionReason().setValue(decisionReason);
-        lease.leaseApplication().decisionDate().setValue(SystemDateManager.getLogicalDate());
+        lease.leaseApplication().approval().decidedBy().set(decidedBy);
+        lease.leaseApplication().approval().decisionReason().setValue(decisionReason);
+        lease.leaseApplication().approval().decisionDate().setValue(SystemDateManager.getLogicalDate());
 
         recordApplicationData(lease.currentTerm());
 
         Persistence.service().merge(lease);
+        Persistence.service().merge(creteLeaseNote(lease, "Decline Application", decisionReason, decidedBy));
 
         releaseUnit(lease, status);
 
@@ -385,7 +387,6 @@ public abstract class LeaseAbstractManager {
                 ServerSideFactory.create(CommunicationFacade.class).sendApplicationDeclined(participant);
             }
         }
-
     }
 
     public void cancelApplication(Lease leaseId, Employee decidedBy, String decisionReason) {
@@ -394,11 +395,12 @@ public abstract class LeaseAbstractManager {
 
         lease.status().setValue(Lease.Status.Cancelled);
         lease.leaseApplication().status().setValue(LeaseApplication.Status.Cancelled);
-        lease.leaseApplication().decidedBy().set(decidedBy);
-        lease.leaseApplication().decisionReason().setValue(decisionReason);
-        lease.leaseApplication().decisionDate().setValue(SystemDateManager.getLogicalDate());
+        lease.leaseApplication().approval().decidedBy().set(decidedBy);
+        lease.leaseApplication().approval().decisionReason().setValue(decisionReason);
+        lease.leaseApplication().approval().decisionDate().setValue(SystemDateManager.getLogicalDate());
 
         Persistence.service().merge(lease);
+        Persistence.service().merge(creteLeaseNote(lease, "Cancel Application", decisionReason, decidedBy));
 
         releaseUnit(lease, status);
     }
@@ -423,9 +425,10 @@ public abstract class LeaseAbstractManager {
 
         if (leaseStatus == Status.Application) {
             lease.leaseApplication().status().setValue(LeaseApplication.Status.Approved);
-            lease.leaseApplication().decidedBy().set(decidedBy);
-            lease.leaseApplication().decisionReason().setValue(decisionReason);
-            lease.leaseApplication().decisionDate().setValue(SystemDateManager.getLogicalDate());
+            lease.leaseApplication().approval().decidedBy().set(decidedBy);
+            lease.leaseApplication().approval().decisionReason().setValue(decisionReason);
+            lease.leaseApplication().approval().decisionDate().setValue(SystemDateManager.getLogicalDate());
+            Persistence.service().merge(creteLeaseNote(lease, "Approve Application", decisionReason, decidedBy));
 
             ServerSideFactory.create(OnlineApplicationFacade.class).approveMasterOnlineApplication(lease.leaseApplication().onlineApplication());
 
@@ -666,9 +669,7 @@ public abstract class LeaseAbstractManager {
         updateLeaseDates(lease);
 
         Persistence.service().merge(lease);
-
-        Persistence.service().merge(
-                creteLeaseNote(leaseId, "Cancel " + completionType.toString(), decisionReason, (decidedBy != null ? decidedBy.user() : null)));
+        Persistence.service().merge(creteLeaseNote(lease, "Cancel " + completionType.toString(), decisionReason, (decidedBy != null ? decidedBy : null)));
 
         cancelMoveOutUnit(lease);
     }
@@ -705,7 +706,7 @@ public abstract class LeaseAbstractManager {
 
         lease.status().setValue(Status.Cancelled);
         Persistence.service().merge(lease);
-        Persistence.service().merge(creteLeaseNote(leaseId, "Cancel Lease", decisionReason, decidedBy.user()));
+        Persistence.service().merge(creteLeaseNote(lease, "Cancel Lease", decisionReason, decidedBy));
     }
 
     // Utils : --------------------------------------------------------------------------------------------------------
@@ -1112,14 +1113,16 @@ public abstract class LeaseAbstractManager {
         }
     }
 
-    private NotesAndAttachments creteLeaseNote(Lease leaseId, String subject, String note, CrmUser user) {
+    private NotesAndAttachments creteLeaseNote(Lease lease, String subject, String note, Employee employee) {
         NotesAndAttachments naa = EntityFactory.create(NotesAndAttachments.class);
-        naa.owner().set(leaseId);
+        naa.owner().set(lease);
 
         naa.subject().setValue(subject);
         naa.note().setValue(note);
 
-        naa.user().set(user);
+        if (employee != null) {
+            naa.user().set(employee.user());
+        }
 
         return naa;
     }

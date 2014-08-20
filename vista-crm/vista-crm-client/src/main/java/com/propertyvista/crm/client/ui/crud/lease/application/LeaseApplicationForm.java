@@ -86,9 +86,9 @@ public class LeaseApplicationForm extends LeaseFormBase<LeaseApplicationDTO> {
         // show processing result:
         LeaseApplication.Status status = getValue().leaseApplication().status().getValue();
 
-        get(proto().leaseApplication().decidedBy()).setVisible(status.isProcessed());
-        get(proto().leaseApplication().decisionDate()).setVisible(status.isProcessed());
-        get(proto().leaseApplication().decisionReason()).setVisible(status.isProcessed());
+        get(proto().leaseApplication().submission()).setVisible(!getValue().leaseApplication().submission().isEmpty());
+        get(proto().leaseApplication().validation()).setVisible(!getValue().leaseApplication().validation().isEmpty());
+        get(proto().leaseApplication().approval()).setVisible(!getValue().leaseApplication().approval().isEmpty());
     }
 
     private IsWidget createInfoTab() {
@@ -143,9 +143,10 @@ public class LeaseApplicationForm extends LeaseFormBase<LeaseApplicationDTO> {
         FormPanel formPanel = new FormPanel(this);
 
         formPanel.append(Location.Left, proto().leaseApplication().status(), new CEnumLabel()).decorate().componentWidth(180);
-        formPanel.append(Location.Left, proto().leaseApplication().decidedBy()).decorate();
-        formPanel.append(Location.Left, proto().leaseApplication().decisionDate()).decorate().componentWidth(120);
-        formPanel.append(Location.Left, proto().leaseApplication().decisionReason()).decorate();
+
+        formPanel.append(Location.Dual, proto().leaseApplication().submission(), new DecisionInfoForm(i18n.tr("Submission info:")));
+        formPanel.append(Location.Dual, proto().leaseApplication().validation(), new DecisionInfoForm(i18n.tr("Validation info:")));
+        formPanel.append(Location.Dual, proto().leaseApplication().approval(), new DecisionInfoForm(i18n.tr("Approve/Decline/Cancel info:")));
 
         if (VistaFeatures.instance().onlineApplication()) {
             formPanel.append(Location.Dual, onlineStatusPanel = createOnlineStatusPanel());
@@ -189,5 +190,27 @@ public class LeaseApplicationForm extends LeaseFormBase<LeaseApplicationDTO> {
         FormPanel formPanel = new FormPanel(this);
         formPanel.append(Location.Dual, proto().applicationDocuments(), new LeaseApplicationDocumentFolder());
         return formPanel;
+    }
+
+    public class DecisionInfoForm extends CForm<LeaseApplication.DecisionInfo> {
+        String caption;
+
+        public DecisionInfoForm(String caption) {
+            super(LeaseApplication.DecisionInfo.class);
+            this.caption = caption;
+        }
+
+        @Override
+        protected IsWidget createContent() {
+            FormPanel formPanel = new FormPanel(this);
+
+            formPanel.h4(caption);
+            formPanel.append(Location.Left, proto().decidedBy()).decorate();
+            formPanel.append(Location.Left, proto().decisionDate()).decorate().componentWidth(120);
+            formPanel.append(Location.Left, proto().decisionReason()).decorate();
+
+            return formPanel;
+        }
+
     }
 }

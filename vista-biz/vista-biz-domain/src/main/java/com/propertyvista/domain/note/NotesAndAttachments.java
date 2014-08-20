@@ -17,6 +17,7 @@ import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.Editor;
+import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.annotations.Indexed;
 import com.pyx4j.entity.annotations.Length;
 import com.pyx4j.entity.annotations.MemberColumn;
@@ -24,6 +25,7 @@ import com.pyx4j.entity.annotations.OrderBy;
 import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.ReadOnly;
 import com.pyx4j.entity.annotations.Timestamp;
+import com.pyx4j.entity.annotations.Timestamp.Update;
 import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.ToStringFormat;
 import com.pyx4j.entity.annotations.validator.NotNull;
@@ -54,15 +56,18 @@ public interface NotesAndAttachments extends IEntity {
     @OrderBy(PrimaryKey.class)
     IList<NoteAttachment> attachments();
 
+    @ReadOnly
     @ToString(index = 1)
     @MemberColumn(name = "crmuser")
-    @ReadOnly
+    @Caption(name = "Created By")
     CrmUser user();
 
     @ToString(index = 2)
-    @Caption(name = "Last Updated")
-    @Timestamp
+    @Timestamp(Update.Updated)
+    @Editor(type = EditorType.label)
     IPrimitive<LogicalDate> updated();
 
+    @Timestamp(Update.Created)
+    @Editor(type = EditorType.label)
     IPrimitive<LogicalDate> created();
 }

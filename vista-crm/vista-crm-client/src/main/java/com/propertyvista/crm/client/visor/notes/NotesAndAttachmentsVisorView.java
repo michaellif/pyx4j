@@ -22,7 +22,6 @@ import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.SimplePanel;
 
 import com.pyx4j.commons.Key;
-import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.IObject;
 import com.pyx4j.entity.rpc.EntitySearchResult;
@@ -251,9 +250,6 @@ public class NotesAndAttachmentsVisorView extends AbstractVisorPane {
                                     user.setPrimaryKey(ClientContext.getUserVisit().getPrincipalPrimaryKey());
                                     user.name().setValue(ClientContext.getUserVisit().getName());
                                     getValue().user().set(user);
-                                    getValue().created().setValue(new LogicalDate(ClientContext.getServerDate()));
-                                } else {
-                                    getValue().updated().setValue(new LogicalDate(ClientContext.getServerDate()));
                                 }
                                 getController().save(getValue(), new DefaultAsyncCallback<Key>() {
                                     @Override

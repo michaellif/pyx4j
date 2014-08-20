@@ -22,6 +22,7 @@ import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.Editor.EditorType;
+import com.pyx4j.entity.annotations.EmbeddedEntity;
 import com.pyx4j.entity.annotations.Indexed;
 import com.pyx4j.entity.annotations.JoinColumn;
 import com.pyx4j.entity.annotations.Length;
@@ -122,14 +123,26 @@ public interface LeaseApplication extends IEntity {
     IPrimitive<Status> status();
 
     /**
+     * no
      * if empty - application has been created by prospect
      */
     Employee createdBy();
 
-    Employee decidedBy();
+    interface DecisionInfo extends IEntity {
 
-    @ToString(index = 1)
-    IPrimitive<LogicalDate> decisionDate();
+        Employee decidedBy();
 
-    IPrimitive<String> decisionReason();
+        IPrimitive<LogicalDate> decisionDate();
+
+        IPrimitive<String> decisionReason();
+    }
+
+    @EmbeddedEntity
+    DecisionInfo submission();
+
+    @EmbeddedEntity
+    DecisionInfo validation();
+
+    @EmbeddedEntity
+    DecisionInfo approval();
 }
