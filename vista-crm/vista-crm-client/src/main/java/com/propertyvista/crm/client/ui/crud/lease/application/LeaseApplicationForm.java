@@ -206,7 +206,7 @@ public class LeaseApplicationForm extends LeaseFormBase<LeaseApplicationDTO> {
 
             formPanel.h4(caption);
             formPanel.append(Location.Left, proto().decidedBy()).decorate();
-            formPanel.append(Location.Left, proto().decisionDate()).decorate().componentWidth(120);
+            formPanel.append(Location.Left, proto().decisionDate()).decorate();
             formPanel.append(Location.Left, proto().decisionReason()).decorate();
 
             return formPanel;

@@ -130,10 +130,13 @@ public interface LeaseApplication extends IEntity {
 
     interface DecisionInfo extends IEntity {
 
+        @Editor(type = EditorType.label)
         Employee decidedBy();
 
+        @Editor(type = EditorType.label)
         IPrimitive<LogicalDate> decisionDate();
 
+        @Editor(type = EditorType.textarea)
         IPrimitive<String> decisionReason();
     }
 
