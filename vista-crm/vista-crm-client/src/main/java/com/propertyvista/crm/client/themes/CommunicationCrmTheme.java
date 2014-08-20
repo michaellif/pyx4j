@@ -28,7 +28,7 @@ public class CommunicationCrmTheme extends Theme {
     }
 
     public static enum StyleDependent implements IStyleDependent {
-        sideComm,
+        sideComm, alertOn
     }
 
     public CommunicationCrmTheme() {
@@ -91,7 +91,7 @@ public class CommunicationCrmTheme extends Theme {
         style.addProperty("line-height", "60px");
         addStyle(style);
 
-        style = new Style(".", WidgetTheme.StyleName.Button, ".", StyleName.AllertButton);
+        style = new Style(".", StyleName.AllertButton);
         style.addProperty("position", "relative");
         addStyle(style);
 
@@ -106,6 +106,11 @@ public class CommunicationCrmTheme extends Theme {
         style.addProperty("right", "0px");
         style.addProperty("top", "4px");
         style.addProperty("padding", "2px 4px");
+        style.addProperty("display", "none");
+        addStyle(style);
+
+        style = new Style(".", StyleName.AllertButton, "-", StyleDependent.alertOn, " .", WidgetTheme.StyleName.ButtonText);
+        style.addProperty("display", "inline");
         addStyle(style);
 
     }

@@ -30,6 +30,7 @@ import com.pyx4j.security.shared.Context;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.Button.ButtonMenuBar;
+import com.pyx4j.widgets.client.style.theme.WidgetTheme;
 import com.pyx4j.widgets.client.Toolbar;
 
 import com.propertyvista.common.client.ClientLocaleUtils;
@@ -202,7 +203,8 @@ public class HeaderViewImpl extends FlowPanel implements HeaderView {
             });
             communicationButton.setPermission(DataModelPermission.permissionRead(MessageDTO.class));
 
-            communicationButton.addStyleName(CommunicationCrmTheme.StyleName.AllertButton.name());
+            communicationButton.setStyleName(CommunicationCrmTheme.StyleName.AllertButton.name());
+            communicationButton.addStyleName(WidgetTheme.StyleName.Button.name());
 
             exitAdminButton = new Button(i18n.tr("Exit Administration"), new Command() {
                 @Override
@@ -366,9 +368,11 @@ public class HeaderViewImpl extends FlowPanel implements HeaderView {
         if (statusLabel != null) {
             communicationButton.setImage(CrmImages.INSTANCE.alertsOn());
             communicationButton.setTextLabel(statusLabel.toString());
+            communicationButton.addStyleDependentName(CommunicationCrmTheme.StyleDependent.alertOn.name());
         } else {
             communicationButton.setImage(CrmImages.INSTANCE.alertsOff());
             communicationButton.setTextLabel("");
+            communicationButton.removeStyleDependentName(CommunicationCrmTheme.StyleDependent.alertOn.name());
         }
     }
 }

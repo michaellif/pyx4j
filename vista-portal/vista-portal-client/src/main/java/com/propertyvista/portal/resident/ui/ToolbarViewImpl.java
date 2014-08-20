@@ -39,6 +39,7 @@ import com.pyx4j.site.rpc.AppPlace;
 import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.Button.ButtonMenuBar;
 import com.pyx4j.widgets.client.Toolbar;
+import com.pyx4j.widgets.client.style.theme.WidgetTheme;
 
 import com.propertyvista.common.client.ClientLocaleUtils;
 import com.propertyvista.domain.security.PortalResidentBehavior;
@@ -155,7 +156,8 @@ public class ToolbarViewImpl extends FlowPanel implements ToolbarView {
                 presenter.loadMessages();
             }
         });
-        communicationButton.addStyleName(PortalRootPaneTheme.StyleName.AllertButton.name());
+        communicationButton.setStyleName(PortalRootPaneTheme.StyleName.AllertButton.name());
+        communicationButton.addStyleName(WidgetTheme.StyleName.Button.name());
 
         rightToolbar.addItem(loginButton);
         rightToolbar.addItem(tenantButton);
@@ -314,9 +316,11 @@ public class ToolbarViewImpl extends FlowPanel implements ToolbarView {
         if (count > 0) {
             communicationButton.setImage(PortalImages.INSTANCE.alertsOn());
             communicationButton.setTextLabel(String.valueOf(count));
+            communicationButton.addStyleDependentName(PortalRootPaneTheme.StyleDependent.alertOn.name());
         } else {
             communicationButton.setImage(PortalImages.INSTANCE.alertsOff());
             communicationButton.setTextLabel("");
+            communicationButton.removeStyleDependentName(PortalRootPaneTheme.StyleDependent.alertOn.name());
         }
 
     }

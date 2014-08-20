@@ -43,7 +43,7 @@ public class PortalRootPaneTheme extends Theme {
     }
 
     public static enum StyleDependent implements IStyleDependent {
-        hover, active, sideMenu, collapsedMenu, sideComm, error, warning, info, confirm
+        hover, active, sideMenu, collapsedMenu, sideComm, error, warning, info, confirm, alertOn
     }
 
     public PortalRootPaneTheme() {
@@ -342,6 +342,11 @@ public class PortalRootPaneTheme extends Theme {
         style.addProperty("left", "15px");
         style.addProperty("top", "4px");
         style.addProperty("padding", "2px 4px");
+        style.addProperty("display", "none");
+        addStyle(style);
+
+        style = new Style(".", StyleName.AllertButton, "-", StyleDependent.alertOn, " .", WidgetTheme.StyleName.ButtonText);
+        style.addProperty("display", "inline");
         addStyle(style);
 
     }
