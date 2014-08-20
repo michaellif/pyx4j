@@ -98,7 +98,7 @@ public abstract class LeaseFormBase<DTO extends LeaseDTO> extends CrmEntityForm<
 
         get(proto().terminationLeaseTo()).setVisible(!getValue().terminationLeaseTo().isNull());
 
-        get(proto().unit()).setNote(getValue().unitMoveOutNote().getValue());
+        get(proto().unit()).setNote(getValue().unitMoveOutNote().getValue(), NoteStyle.Warn);
 
         if (VistaFeatures.instance().yardiIntegration()) {
             get(proto().terminationLeaseTo()).setVisible(false);
@@ -112,7 +112,7 @@ public abstract class LeaseFormBase<DTO extends LeaseDTO> extends CrmEntityForm<
     }
 
     public void onTenantInsuranceOwnerClicked(Tenant tenantId) {
-    }
+    
 
     protected IsWidget createDetailsTab() {
         FormPanel formPanel = new FormPanel(this);
