@@ -432,7 +432,7 @@ public class LeaseApplicationViewerViewImpl extends LeaseViewerViewImplBase<Leas
 
         setActionVisible(createOnlineApplication, status == Status.InProgress && !isOnlineApplication);
         setActionVisible(cancelOnlineApplication, status == Status.InProgress && isOnlineApplication);
-        setActionVisible(inviteAction, isOnlineApplication);
+        setActionVisible(inviteAction, status == Status.InProgress && isOnlineApplication);
 
         setActionVisible(submitAction, status == Status.InProgress && (!isOnlineApplication || noPtAppProgress));
 
