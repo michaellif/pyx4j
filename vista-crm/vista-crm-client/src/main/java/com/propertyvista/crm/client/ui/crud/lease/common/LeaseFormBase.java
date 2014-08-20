@@ -112,7 +112,7 @@ public abstract class LeaseFormBase<DTO extends LeaseDTO> extends CrmEntityForm<
     }
 
     public void onTenantInsuranceOwnerClicked(Tenant tenantId) {
-    
+    }
 
     protected IsWidget createDetailsTab() {
         FormPanel formPanel = new FormPanel(this);
