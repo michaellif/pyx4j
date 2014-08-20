@@ -123,7 +123,6 @@ public interface LeaseApplication extends IEntity {
     IPrimitive<Status> status();
 
     /**
-     * no
      * if empty - application has been created by prospect
      */
     Employee createdBy();

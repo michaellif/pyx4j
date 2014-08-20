@@ -99,6 +99,7 @@ public class LeaseTermCrudServiceImpl extends AbstractVersionedCrudServiceDtoImp
             case Application:
                 term.termFrom().setValue(SystemDateManager.getLogicalDate());
                 term.termTo().setValue(calcLeaseEndDate(term.termFrom().getValue()));
+                lease.leaseApplication().createdBy().set(CrmAppContext.getCurrentUserEmployee());
                 break;
             }
 
