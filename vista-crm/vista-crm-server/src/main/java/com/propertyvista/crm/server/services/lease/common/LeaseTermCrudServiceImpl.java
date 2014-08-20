@@ -409,7 +409,7 @@ public class LeaseTermCrudServiceImpl extends AbstractVersionedCrudServiceDtoImp
             criteria.isNull(criteria.proto().actualMoveOut());
 
             if (Persistence.service().exists(criteria)) {
-                dto.unitMoveOutNote().setValue("Warning: This unit is not freed completely by previous tenant!");
+                dto.unitMoveOutNote().setValue("This unit is not freed completely by previous tenant!");
             }
         }
     }
