@@ -44,28 +44,31 @@ public class NotificationsActivity extends AbstractActivity implements Notificat
 
     private final NotificationsView view;
 
-    private static List<Notification> notifications = new ArrayList<>();
+    private final List<Notification> notifications = new ArrayList<>();
 
-    public NotificationsActivity(Place place) {
+    private final Notification productionNotification = new Notification(i18n.tr("This is PRODUCTION Environment!"), i18n.tr("PRODUCTION SUPPORT!"),
+            NotificationType.WARNING);
+
+    public NotificationsActivity() {
         view = CrmSite.getViewFactory().getView(NotificationsView.class);
-        withPlace(place);
+        if (VistaFeaturesCustomizationClient.enviromentTitleVisible && VistaDemo.isDemo()) {
+            notifications.add(new Notification(i18n.tr("This is Demo Environment"), i18n.tr("Demo Environment"), NotificationType.INFO));
+        }
     }
 
     @Override
     public void start(AcceptsOneWidget container, EventBus eventBus) {
+        view.setPresenter(this);
         container.setWidget(view);
 
-        if (VistaFeaturesCustomizationClient.enviromentTitleVisible && VistaDemo.isDemo()) {
-            notifications.add(new Notification(i18n.tr("This is Demo Environment"), i18n.tr("Demo Environment"), NotificationType.INFO));
-        }
-
+        updateAuthenticatedView();
         view.showNotifications(notifications);
 
-        updateAuthenticatedView();
         eventBus.addHandler(BehaviorChangeEvent.getType(), new BehaviorChangeHandler() {
             @Override
             public void onBehaviorChange(BehaviorChangeEvent event) {
                 updateAuthenticatedView();
+                view.showNotifications(notifications);
             }
         });
 
@@ -74,8 +77,10 @@ public class NotificationsActivity extends AbstractActivity implements Notificat
             @Override
             public void onContextChange(ContextChangeEvent event) {
                 updateAuthenticatedView();
+                view.showNotifications(notifications);
             }
         });
+
     }
 
     public NotificationsActivity withPlace(Place place) {
@@ -89,11 +94,10 @@ public class NotificationsActivity extends AbstractActivity implements Notificat
     }
 
     private void updateAuthenticatedView() {
-        if (ClientContext.isAuthenticated()) {
-            if (SecurityController.check(VistaCrmBehavior.PropertyVistaSupport) && ApplicationBackend.isProductionBackend()) {
-                notifications.add(new Notification(i18n.tr("This is PRODUCTION Environment!"), i18n.tr("PRODUCTION SUPPORT!"), NotificationType.WARNING));
-                view.showNotifications(notifications);
-            }
+        if (ClientContext.isAuthenticated() && SecurityController.check(VistaCrmBehavior.PropertyVistaSupport) && ApplicationBackend.isProductionBackend()) {
+            notifications.add(productionNotification);
+        } else {
+            notifications.remove(productionNotification);
         }
     }
 

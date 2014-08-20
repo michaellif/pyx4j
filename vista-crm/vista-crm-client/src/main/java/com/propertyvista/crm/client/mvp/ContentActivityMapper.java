@@ -1507,9 +1507,6 @@ public class ContentActivityMapper implements AppActivityMapper {
                 } else if (place instanceof RuntimeError) {
                     activity = new RuntimeErrorActivity((RuntimeError) place);
 
-                } else if (place instanceof Notifications) {
-                    activity = new NotificationsActivity(place);
-
                 } else if (place instanceof Welcome) {
                     activity = new WelcomeActivity();
                 }

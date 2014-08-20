@@ -21,11 +21,14 @@ import com.propertyvista.crm.client.activity.NotificationsActivity;
 
 public class NotificationsActivityMapper implements ActivityMapper {
 
+    private final NotificationsActivity notificationsActivity;
+
     public NotificationsActivityMapper() {
+        notificationsActivity = new NotificationsActivity();
     }
 
     @Override
     public Activity getActivity(Place place) {
-        return new NotificationsActivity(place);
+        return notificationsActivity.withPlace(place);
     }
 }
