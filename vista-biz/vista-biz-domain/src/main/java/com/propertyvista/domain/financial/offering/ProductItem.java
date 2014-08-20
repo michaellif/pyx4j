@@ -61,6 +61,10 @@ public interface ProductItem extends IEntity {
     @Editor(type = EditorType.money)
     IPrimitive<BigDecimal> price();
 
+    /**
+     * if null - no yardi imported deposit
+     * if set any value (including 0) - some deposit imported.
+     */
     @Format("#,##0.00")
     @Caption(name = "Deposit LMR")
     @Editor(type = EditorType.money)
