@@ -78,14 +78,16 @@ public class LeaseTermViewerViewImpl extends CrmViewerViewImplBase<LeaseTermDTO>
 
         if (VistaFeatures.instance().yardiIntegration()) {
             setEditingVisible(value.lease().status().getValue() == Lease.Status.Application);
+            setFinalizationVisible(false);
         } else {
-            setEditingVisible(!value.lease().status().getValue().isFormer() && value.status().getValue() != Status.AcceptedOffer);
-        }
-        setFinalizationVisible(isFinalizationVisible() && !value.lease().status().getValue().isDraft());
+            boolean movedOutLease = !value.lease().actualMoveOut().isNull();
+            setEditingVisible(!value.lease().status().getValue().isFormer() && !movedOutLease && value.status().getValue() != Status.AcceptedOffer);
+            setFinalizationVisible(isFinalizationVisible() && value.lease().status().getValue().isCurrent() && !movedOutLease);
 
-        if (VistaTODO.VISTA_1789_Renew_Lease) {
-            offerAcceptButton.setVisible(value.status().getValue() == Status.Offer && !((IVersionedEntity<?>) value).version().versionNumber().isNull()
-                    && value.lease().nextTerm().isNull());
+            if (VistaTODO.VISTA_1789_Renew_Lease) {
+                offerAcceptButton.setVisible(value.status().getValue() == Status.Offer && !((IVersionedEntity<?>) value).version().versionNumber().isNull()
+                        && value.lease().nextTerm().isNull());
+            }
         }
     }
 }

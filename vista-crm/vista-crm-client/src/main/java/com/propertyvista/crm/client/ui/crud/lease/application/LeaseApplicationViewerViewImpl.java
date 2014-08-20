@@ -374,6 +374,10 @@ public class LeaseApplicationViewerViewImpl extends LeaseViewerViewImplBase<Leas
         new ActionBox(i18n.tr("Decline")) {
             @Override
             public boolean onClickOk() {
+                if (CommonsStringUtils.isEmpty(getReason())) {
+                    MessageDialog.error(i18n.tr("Error"), i18n.tr("Please fill the reason"));
+                    return false;
+                }
                 ((LeaseApplicationViewerView.Presenter) getPresenter()).applicationAction(updateValue(Action.Decline));
                 return true;
             }

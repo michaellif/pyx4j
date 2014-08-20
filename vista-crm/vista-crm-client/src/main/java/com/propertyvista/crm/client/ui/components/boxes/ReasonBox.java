@@ -35,6 +35,7 @@ public abstract class ReasonBox extends OkCancelDialog {
 
     protected Widget createBody() {
         VerticalPanel content = new VerticalPanel();
+        content.setSpacing(4);
 
         content.add(new HTML(i18n.tr("Please fill the reason") + ":"));
         content.add(reason);
