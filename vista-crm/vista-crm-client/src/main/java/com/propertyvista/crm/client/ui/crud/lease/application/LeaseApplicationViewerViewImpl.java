@@ -443,6 +443,10 @@ public class LeaseApplicationViewerViewImpl extends LeaseViewerViewImplBase<Leas
 
         setActionVisible(newPaymentAction, status.isDraft() && isPaymentAccepted(value));
 
+        setActionHighlighted(submitAction, submitAction.isVisible());
+        setActionHighlighted(completeAction, completeAction.isVisible());
+        setActionHighlighted(approveAction, approveAction.isVisible());
+
         // edit/view terms enabling logic:
         editButton.setVisible(status.isDraft() && (!isOnlineApplication || noPtAppProgress));
         termsButton.setVisible(!status.isDraft());
