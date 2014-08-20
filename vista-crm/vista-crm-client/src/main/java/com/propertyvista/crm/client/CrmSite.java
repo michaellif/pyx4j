@@ -13,9 +13,6 @@
  */
 package com.propertyvista.crm.client;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.Cookies;
 import com.google.gwt.user.client.Window;
@@ -75,8 +72,6 @@ import com.propertyvista.portal.rpc.portal.shared.services.SiteThemeServices;
 import com.propertyvista.portal.rpc.shared.services.PolicyRetrieveService;
 
 public class CrmSite extends VistaSite {
-
-    private static final Logger log = LoggerFactory.getLogger(CrmSite.class);
 
     private static final I18n i18n = I18n.get(CrmSite.class);
 

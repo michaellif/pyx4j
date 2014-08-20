@@ -21,6 +21,7 @@ import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
+import com.pyx4j.config.shared.ApplicationBackend;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.security.client.BehaviorChangeEvent;
 import com.pyx4j.security.client.BehaviorChangeHandler;
@@ -82,7 +83,7 @@ public class NotificationsActivity extends AbstractActivity implements Notificat
 
     private void updateAuthenticatedView() {
         if (ClientContext.isAuthenticated()) {
-            if (SecurityController.check(VistaCrmBehavior.PropertyVistaSupport)) {
+            if (SecurityController.check(VistaCrmBehavior.PropertyVistaSupport) && ApplicationBackend.isProductionBackend()) {
                 List<String> notifList = new ArrayList<String>();
                 notifList.add(i18n.tr("PRODUCTION SUPPORT!"));
                 showNotifications(notifList);
