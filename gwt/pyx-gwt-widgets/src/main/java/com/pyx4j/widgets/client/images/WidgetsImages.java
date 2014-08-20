@@ -27,10 +27,6 @@ import com.google.gwt.resources.client.ImageResource.RepeatStyle;
 
 public interface WidgetsImages extends ClientBundle {
 
-    AddIconButtonImages addButton();
-
-    DelIconButtonImages delButton();
-
     ImageResource expand();
 
     ImageResource collapse();
@@ -91,6 +87,8 @@ public interface WidgetsImages extends ClientBundle {
     @Source("rate-full-star.png")
     ImageResource rateFullStar();
 
+    AddIconButtonImages addButton();
+
     public interface AddIconButtonImages extends ButtonImages {
         @Override
         @ImageOptions(repeatStyle = RepeatStyle.Both)
@@ -107,6 +105,8 @@ public interface WidgetsImages extends ClientBundle {
         @Source("add.png")
         ImageResource active();
     }
+
+    DelIconButtonImages delButton();
 
     public interface DelIconButtonImages extends ButtonImages {
         @Override
