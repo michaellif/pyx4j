@@ -47,6 +47,7 @@ BEGIN
         ALTER TABLE emergency_contact DROP CONSTRAINT emergency_contact_address_province_fk;
         ALTER TABLE landlord DROP CONSTRAINT landlord_address_country_fk;
         ALTER TABLE landlord DROP CONSTRAINT landlord_address_province_fk;
+        ALTER TABLE lease_application DROP CONSTRAINT lease_application_decided_by_fk;
         ALTER TABLE marketing DROP CONSTRAINT marketing_marketing_address_country_fk;
         ALTER TABLE marketing DROP CONSTRAINT marketing_marketing_address_province_fk;
         ALTER TABLE master_online_application DROP CONSTRAINT master_online_application_building_fk;
@@ -371,6 +372,21 @@ BEGIN
                                             ADD COLUMN current_address_province VARCHAR(500),
                                             ADD COLUMN previous_address_country VARCHAR(50),
                                             ADD COLUMN previous_address_province VARCHAR(500);
+                                            
+                                                
+                                                
+        -- decision_info
+        
+        CREATE TABLE decision_info
+        (
+            id                              BIGINT              NOT NULL,
+            decided_by                      BIGINT,
+            decision_date                   DATE,
+            decision_reason                 VARCHAR(500),
+                CONSTRAINT decision_info_pk PRIMARY KEY(id)
+        );
+        
+        ALTER TABLE decision_info OWNER TO vista;
         
         -- emergency_contact
         
@@ -403,6 +419,18 @@ BEGIN
         
         ALTER TABLE lease_adjustment    ADD COLUMN tax_amount NUMERIC(18,2),
                                         ADD COLUMN tax_percent NUMERIC(18,2);
+                                        
+        -- lease_application
+        
+        ALTER TABLE lease_application   ADD COLUMN submission_decided_by BIGINT,
+                                        ADD COLUMN submission_decision_date DATE,
+                                        ADD COLUMN submission_decision_reason VARCHAR(500),
+                                        ADD COLUMN validation_decided_by BIGINT,
+                                        ADD COLUMN validation_decision_date DATE,
+                                        ADD COLUMN validation_decision_reason VARCHAR(500),
+                                        ADD COLUMN approval_decided_by BIGINT,
+                                        ADD COLUMN approval_decision_date DATE,
+                                        ADD COLUMN approval_decision_reason VARCHAR(500);
         
         -- legal_status
         
@@ -477,6 +505,10 @@ BEGIN
         -- online_application
         
         ALTER TABLE online_application ADD COLUMN create_date DATE;
+        
+        -- product_item
+        
+        ALTER TABLE product_item ADD COLUMN yardi_deposit_lmr NUMERIC(18,2);
         
         -- product_v
         
@@ -1313,6 +1345,14 @@ BEGIN
             REFERENCES crm_role(id)  DEFERRABLE INITIALLY DEFERRED;
         ALTER TABLE communication_thread ADD CONSTRAINT communication_thread_topic_fk FOREIGN KEY(topic) 
             REFERENCES communication_message_category(id)  DEFERRABLE INITIALLY DEFERRED;
+        ALTER TABLE decision_info ADD CONSTRAINT decision_info_decided_by_fk FOREIGN KEY(decided_by) 
+            REFERENCES employee(id)  DEFERRABLE INITIALLY DEFERRED;
+        ALTER TABLE lease_application ADD CONSTRAINT lease_application_approval_decided_by_fk FOREIGN KEY(approval_decided_by) 
+            REFERENCES employee(id)  DEFERRABLE INITIALLY DEFERRED;
+        ALTER TABLE lease_application ADD CONSTRAINT lease_application_submission_decided_by_fk FOREIGN KEY(submission_decided_by) 
+            REFERENCES employee(id)  DEFERRABLE INITIALLY DEFERRED;
+        ALTER TABLE lease_application ADD CONSTRAINT lease_application_validation_decided_by_fk FOREIGN KEY(validation_decided_by) 
+            REFERENCES employee(id)  DEFERRABLE INITIALLY DEFERRED;
         ALTER TABLE master_online_application ADD CONSTRAINT master_online_application_ils_building_fk FOREIGN KEY(ils_building) 
             REFERENCES building(id)  DEFERRABLE INITIALLY DEFERRED;
         ALTER TABLE master_online_application ADD CONSTRAINT master_online_application_ils_floorplan_fk FOREIGN KEY(ils_floorplan) 
