@@ -18,9 +18,9 @@ import com.google.gwt.resources.client.ImageResource;
 
 import com.pyx4j.forms.client.ImageFactory.FormsImageBundle;
 import com.pyx4j.forms.client.images.FolderImages;
-import com.pyx4j.widgets.client.images.WidgetsImages;
+import com.pyx4j.widgets.client.ImageFactory.WidgetsImageBundle;
 
-public interface VistaImages extends FormsImageBundle, FolderImages, WidgetsImages {
+public interface VistaImages extends FormsImageBundle, FolderImages, WidgetsImageBundle {
 
     VistaImages INSTANCE = GWT.create(VistaImages.class);
 

@@ -29,20 +29,22 @@ import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.security.client.ContextChangeEvent;
 import com.pyx4j.security.client.ContextChangeHandler;
 import com.pyx4j.security.shared.SecurityController;
-import com.pyx4j.site.client.AppSite;
+import com.pyx4j.site.shared.domain.Notification;
+import com.pyx4j.site.shared.domain.Notification.NotificationType;
 
 import com.propertyvista.common.client.config.VistaFeaturesCustomizationClient;
 import com.propertyvista.crm.client.CrmSite;
-import com.propertyvista.crm.client.ui.CrmRootPane;
 import com.propertyvista.crm.client.ui.NotificationsView;
 import com.propertyvista.domain.security.VistaCrmBehavior;
 import com.propertyvista.shared.config.VistaDemo;
 
-public class NotificationsActivity extends AbstractActivity implements NotificationsView.Presenter {
+public class NotificationsActivity extends AbstractActivity implements NotificationsView.NotificationsPresenter {
 
     private static final I18n i18n = I18n.get(NotificationsActivity.class);
 
     private final NotificationsView view;
+
+    private static List<Notification> notifications = new ArrayList<>();
 
     public NotificationsActivity(Place place) {
         view = CrmSite.getViewFactory().getView(NotificationsView.class);
@@ -53,12 +55,11 @@ public class NotificationsActivity extends AbstractActivity implements Notificat
     public void start(AcceptsOneWidget container, EventBus eventBus) {
         container.setWidget(view);
 
-        List<String> notifList = new ArrayList<String>();
-
         if (VistaFeaturesCustomizationClient.enviromentTitleVisible && VistaDemo.isDemo()) {
-            notifList.add(i18n.tr("Demo Environment"));
+            notifications.add(new Notification(i18n.tr("This is Demo Environment"), i18n.tr("Demo Environment"), NotificationType.INFO));
         }
-        showNotifications(notifList);
+
+        view.showNotifications(notifications);
 
         updateAuthenticatedView();
         eventBus.addHandler(BehaviorChangeEvent.getType(), new BehaviorChangeHandler() {
@@ -81,20 +82,19 @@ public class NotificationsActivity extends AbstractActivity implements Notificat
         return this;
     }
 
+    @Override
+    public void acceptMessage(Notification notification) {
+        notifications.remove(notification);
+        view.showNotifications(notifications);
+    }
+
     private void updateAuthenticatedView() {
         if (ClientContext.isAuthenticated()) {
             if (SecurityController.check(VistaCrmBehavior.PropertyVistaSupport) && ApplicationBackend.isProductionBackend()) {
-                List<String> notifList = new ArrayList<String>();
-                notifList.add(i18n.tr("PRODUCTION SUPPORT!"));
-                showNotifications(notifList);
+                notifications.add(new Notification(i18n.tr("This is PRODUCTION Environment!"), i18n.tr("PRODUCTION SUPPORT!"), NotificationType.WARNING));
+                view.showNotifications(notifications);
             }
         }
-    }
-
-    private void showNotifications(List<String> notifList) {
-        view.showNotifications(notifList);
-        CrmRootPane rootPane = (CrmRootPane) AppSite.instance().getRootPane();
-        rootPane.allocateNotificationsSpace(notifList.size());
     }
 
 }

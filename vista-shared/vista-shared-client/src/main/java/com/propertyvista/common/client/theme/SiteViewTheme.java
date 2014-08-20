@@ -22,17 +22,33 @@ import com.pyx4j.commons.css.ThemeColor;
 import com.pyx4j.commons.css.ThemeId;
 import com.pyx4j.widgets.client.style.theme.WidgetTheme;
 
+import com.propertyvista.common.client.resources.VistaImages;
+
 public class SiteViewTheme extends Theme {
 
     public static enum StyleName implements IStyleName {
-        SiteView, SiteViewContent, SiteViewAction, SiteViewHeader, SiteViewSideMenu, SiteViewFooter, SiteViewExtra, SiteViewExtraItem, SiteViewExtraTitle;
+        SiteView, SiteViewContent, SiteViewAction, SiteViewHeader, SiteViewSideMenu, SiteViewFooter,
+
+        SiteViewExtra, SiteViewExtraItem, SiteViewExtraTitle,
+
+        SiteViewNotificationContainer, SiteViewNotificationItem, SiteViewNotificationItemTitle, SiteViewNotificationItemCloseButton;
     }
 
     public static enum StyleDependent implements IStyleDependent {
-        selected
+        selected, error, warning, info, confirm
     }
 
     public SiteViewTheme() {
+        initGeneralStyles();
+        initNotificationStyles();
+    }
+
+    @Override
+    public final ThemeId getId() {
+        return new ClassBasedThemeId(getClass());
+    }
+
+    private void initGeneralStyles() {
         // All viewable area:
         Style style = new Style(".", StyleName.SiteView.name());
         style.addProperty("color", ThemeColor.foreground);
@@ -138,8 +154,51 @@ public class SiteViewTheme extends Theme {
         addStyle(style);
     }
 
-    @Override
-    public final ThemeId getId() {
-        return new ClassBasedThemeId(getClass());
+    private void initNotificationStyles() {
+        Style style = new Style(".", StyleName.SiteViewNotificationContainer);
+        style.addProperty("padding-top", "10px");
+        style.addProperty("display", "inline-block");
+        style.addProperty("width", "100%");
+        addStyle(style);
+
+        style = new Style(".", StyleName.SiteViewNotificationItem);
+        style.addProperty("text-align", "center");
+        style.addProperty("padding", "6px 6px 6px 50px");
+        style.addProperty("min-height", "40px");
+        style.addProperty("position", "relative");
+        addStyle(style);
+
+        style = new Style(".", StyleName.SiteViewNotificationItem, "-" + StyleDependent.error);
+        style.addProperty("background", "url('" + VistaImages.INSTANCE.error().getSafeUri().asString() + "') no-repeat scroll 10px center");
+        style.addProperty("background-color", "#ffd3d3");
+        addStyle(style);
+
+        style = new Style(".", StyleName.SiteViewNotificationItem, "-" + StyleDependent.warning);
+        style.addProperty("background", "url('" + VistaImages.INSTANCE.warning().getSafeUri().asString() + "') no-repeat scroll 10px center");
+        style.addProperty("background-color", "#fdfdcb");
+        addStyle(style);
+
+        style = new Style(".", StyleName.SiteViewNotificationItem, "-" + StyleDependent.info);
+        style.addProperty("background", "url('" + VistaImages.INSTANCE.info().getSafeUri().asString() + "') no-repeat scroll 10px center");
+        style.addProperty("background-color", "#bfeafa");
+        addStyle(style);
+
+        style = new Style(".", StyleName.SiteViewNotificationItem, "-" + StyleDependent.confirm);
+        style.addProperty("background", "url('" + VistaImages.INSTANCE.confirm().getSafeUri().asString() + "') no-repeat scroll 10px center");
+        style.addProperty("background-color", "#c2e1e3");
+        addStyle(style);
+
+        style = new Style(".", StyleName.SiteViewNotificationItemTitle);
+        style.addProperty("font-weight", "bold");
+        addStyle(style);
+
+        style = new Style(".", StyleName.SiteViewNotificationItemCloseButton);
+        style.addProperty("display", "inline-block");
+        style.addProperty("position", "absolute");
+        style.addProperty("right", "5px");
+        style.addProperty("top", "5px");
+        addStyle(style);
+
     }
+
 }

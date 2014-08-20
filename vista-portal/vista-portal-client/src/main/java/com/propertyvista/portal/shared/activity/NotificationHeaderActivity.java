@@ -62,13 +62,13 @@ public class NotificationHeaderActivity extends AbstractActivity implements Noti
 
         panel.setWidget(view);
         AppSite.getEventBus().fireEvent(new LayoutChangeRequestEvent(ChangeType.resizeComponents));
-        view.populate(notifications);
+        view.showNotifications(notifications);
     }
 
     @Override
     public void acceptMessage(Notification notification) {
         notifications.remove(notification);
-        view.populate(notifications);
+        view.showNotifications(notifications);
     }
 
     @Override

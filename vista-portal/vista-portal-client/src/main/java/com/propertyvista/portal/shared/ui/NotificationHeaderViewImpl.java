@@ -32,15 +32,9 @@ public class NotificationHeaderViewImpl extends FlowPanel implements Notificatio
 
     private NotificationHeaderPresenter presenter;
 
-    private final FlowPanel contentPanel;
-
     public NotificationHeaderViewImpl() {
 
         setStyleName(PortalRootPaneTheme.StyleName.NotificationContainer.name());
-
-        contentPanel = new FlowPanel();
-
-        add(contentPanel);
 
     }
 
@@ -50,8 +44,8 @@ public class NotificationHeaderViewImpl extends FlowPanel implements Notificatio
     }
 
     @Override
-    public void populate(List<Notification> notifications) {
-        contentPanel.clear();
+    public void showNotifications(List<Notification> notifications) {
+        clear();
         if (notifications.size() == 0) {
             setVisible(false);
         } else {
@@ -101,7 +95,7 @@ public class NotificationHeaderViewImpl extends FlowPanel implements Notificatio
                     break;
                 }
 
-                contentPanel.add(message);
+                add(message);
 
             }
 

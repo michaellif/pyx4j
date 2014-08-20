@@ -18,13 +18,17 @@ import java.util.List;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.site.client.IsView;
+import com.pyx4j.site.shared.domain.Notification;
 
 public interface NotificationsView extends IsWidget, IsView {
 
+    public interface NotificationsPresenter {
 
-    public interface Presenter {
+        void acceptMessage(Notification notification);
 
     }
 
-    void showNotifications(List<String> notifications);
+    void showNotifications(List<Notification> notifications);
+
+    void setPresenter(NotificationsPresenter presenter);
 }

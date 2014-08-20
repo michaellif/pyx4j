@@ -28,5 +28,5 @@ public interface NotificationHeaderView extends IsView {
 
     void setPresenter(NotificationHeaderPresenter presenter);
 
-    void populate(List<Notification> notifications);
+    void showNotifications(List<Notification> notifications);
 }
