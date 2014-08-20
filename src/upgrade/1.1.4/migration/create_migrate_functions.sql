@@ -1079,6 +1079,16 @@ BEGIN
                 ||'         r.id AS owner, t.value '
                 ||'FROM     '||v_schema_name||'.crm_role r '
                 ||'JOIN     _dba_.tmp_roles AS t ON (t.name = r.name)) ';
+                
+    
+        -- available_crm_report$rls 
+        
+        EXECUTE 'INSERT INTO '||v_schema_name||'.available_crm_report$rls (id, owner, value) '
+                ||'(SELECT  nextval(''public.available_crm_report$rls_seq'') AS id, '
+                ||'         a.id AS owner, r.id AS value '
+                ||'FROM     '||v_schema_name||'.available_crm_report a, '
+                ||'         '||v_schema_name||'.crm_role r '
+                ||'WHERE    r.name = ''All'' )';
         
         
         
