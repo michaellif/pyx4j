@@ -136,6 +136,8 @@ public class LeaseApplicationViewerCrudServiceImpl extends LeaseViewerCrudServic
                 break;
             }
         }
+
+        dto.onlineApplication().setValue(Status.isOnlineApplication(in.leaseApplication()));
     }
 
     @Override

@@ -32,14 +32,14 @@ public class LeaseApplicationLister extends AbstractLister<LeaseApplicationDTO> 
     public LeaseApplicationLister() {
         super(LeaseApplicationDTO.class, true);
 
-        setDataTableModel(new DataTableModel<LeaseApplicationDTO>(//@formatter:off
+        setDataTableModel(new DataTableModel<LeaseApplicationDTO>(  //@formatter:off
             new Builder(proto().leaseApplication().applicationId()).columnTitle(i18n.tr("Id")).build(),
             new Builder(proto().type()).build(),
 
             new Builder(proto().unit().building().propertyCode()).build(),
             new Builder(proto().unit()).build(),
 
-            new Builder(proto().leaseApplication().status(), true).build(),
+            new Builder(proto().leaseApplication().status()).build(),
 
             new Builder(proto().currentTerm().termFrom()).build(),
             new Builder(proto().currentTerm().termTo()).build(),
@@ -51,6 +51,8 @@ public class LeaseApplicationLister extends AbstractLister<LeaseApplicationDTO> 
             new Builder(proto().moveOutSubmissionDate(), false).build(),
 
             new Builder(proto().creationDate(), false).build(),
+
+            new Builder(proto().onlineApplication()).sortable(false).searchable(false).build(),
 
             new Builder(proto()._applicant().customer().person().name()).columnTitle(i18n.tr("Primary Tenant Name")).searchable(false).build(),
             new Builder(proto()._applicant().customer().person().name().firstName(), false).columnTitle(i18n.tr("Primary Tenant First Name")).build(),
@@ -67,7 +69,7 @@ public class LeaseApplicationLister extends AbstractLister<LeaseApplicationDTO> 
             //new Builder(proto().currentTerm().version().tenants().$().leaseParticipant().customer().person().name().lastName(), false).build(),
             new Builder(proto().currentTerm().version().tenants()).searchable(false).build()
 
-        ));//@formatter:on
+        )); //@formatter:on
     }
 
     @Override

@@ -44,6 +44,8 @@ public interface LeaseApplicationDTO extends LeaseDTO {
 
     IPrimitive<Integer> numberOfGuarantors();
 
+    IPrimitive<Boolean> onlineApplication();
+
     IList<LeaseApplicationDocument> applicationDocuments();
 
 }
