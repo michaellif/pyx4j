@@ -581,8 +581,8 @@ public class LeaseApplicationViewerViewImpl extends LeaseViewerViewImplBase<Leas
             super(SelectParticipant.class);
             selectCombo = new CComboBox<LeaseTermParticipant<?>>() {
                 @Override
-                public String getItemName(LeaseTermParticipant<?> o) {
-                    return (o != null) ? formatLeaseParticipant(o) : super.getItemName(o);
+                public String getItemName(LeaseTermParticipant<?> item) {
+                    return (item != null) ? formatLeaseParticipant(item) : super.getItemName(item);
                 }
             };
             selectCombo.setOptions(participants);
