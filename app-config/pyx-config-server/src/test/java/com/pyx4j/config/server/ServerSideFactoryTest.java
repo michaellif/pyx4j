@@ -36,7 +36,7 @@ public class ServerSideFactoryTest extends TestCase {
         Assert.assertEquals("256", ServerSideFactory.create(UnderTestFacade1.class).echoOrThrow("256", null));
 
         try {
-            ServerSideFactory.create(UnderTestFacade1.class).echoOrThrow("257", ArithmeticException.class);
+            ServerSideFactory.createDefaultImplementation(UnderTestFacade1.class, true).echoOrThrow("257", ArithmeticException.class);
             Assert.fail("Exception expected");
         } catch (ArithmeticException ok) {
             Assert.assertEquals("257", ok.getMessage());
@@ -46,7 +46,7 @@ public class ServerSideFactoryTest extends TestCase {
 
         // On interface
         try {
-            ServerSideFactory.create(UnderTestFacade1.class).echoOrThrow("257", IllegalMonitorStateException.class);
+            ServerSideFactory.createDefaultImplementation(UnderTestFacade1.class, true).echoOrThrow("257", IllegalMonitorStateException.class);
             Assert.fail("Exception expected");
         } catch (UnsupportedOperationException ok) {
             Assert.assertEquals("257", ok.getMessage());
@@ -56,7 +56,7 @@ public class ServerSideFactoryTest extends TestCase {
 
         // On class
         try {
-            ServerSideFactory.create(UnderTestFacade1.class).echoOrThrowRedefinedOnClass("258", IllegalMonitorStateException.class);
+            ServerSideFactory.createDefaultImplementation(UnderTestFacade1.class, true).echoOrThrowRedefinedOnClass("258", IllegalMonitorStateException.class);
             Assert.fail("Exception expected");
         } catch (ArrayStoreException ok) {
             Assert.assertEquals("258", ok.getMessage());
@@ -66,7 +66,7 @@ public class ServerSideFactoryTest extends TestCase {
 
         // On class again, debug InterceptorsCache
         try {
-            ServerSideFactory.create(UnderTestFacade1.class).echoOrThrowRedefinedOnClass("258", IllegalMonitorStateException.class);
+            ServerSideFactory.createDefaultImplementation(UnderTestFacade1.class, true).echoOrThrowRedefinedOnClass("258", IllegalMonitorStateException.class);
             Assert.fail("Exception expected");
         } catch (ArrayStoreException ok) {
             Assert.assertEquals("258", ok.getMessage());
@@ -79,7 +79,7 @@ public class ServerSideFactoryTest extends TestCase {
         // On interface
         UnderTestFacade2Factory.implVersion = 1;
         try {
-            ServerSideFactory.create(UnderTestFacade2.class).echoOrThrowRedefinedOnClass("257", IllegalMonitorStateException.class);
+            ServerSideFactory.createDefaultImplementation(UnderTestFacade2.class, true).echoOrThrowRedefinedOnClass("257", IllegalMonitorStateException.class);
             Assert.fail("Exception expected");
         } catch (UnsupportedOperationException ok) {
             Assert.assertEquals("257-.1", ok.getMessage());
@@ -90,7 +90,7 @@ public class ServerSideFactoryTest extends TestCase {
         // On class
         UnderTestFacade2Factory.implVersion = 2;
         try {
-            ServerSideFactory.create(UnderTestFacade2.class).echoOrThrowRedefinedOnClass("258", IllegalMonitorStateException.class);
+            ServerSideFactory.createDefaultImplementation(UnderTestFacade2.class, true).echoOrThrowRedefinedOnClass("258", IllegalMonitorStateException.class);
             Assert.fail("Exception expected");
         } catch (ArrayStoreException ok) {
             Assert.assertEquals("258-.2", ok.getMessage());
@@ -101,7 +101,7 @@ public class ServerSideFactoryTest extends TestCase {
         // On class again, debug InterceptorsCache
         UnderTestFacade2Factory.implVersion = 2;
         try {
-            ServerSideFactory.create(UnderTestFacade2.class).echoOrThrowRedefinedOnClass("259", IllegalMonitorStateException.class);
+            ServerSideFactory.createDefaultImplementation(UnderTestFacade2.class, true).echoOrThrowRedefinedOnClass("259", IllegalMonitorStateException.class);
             Assert.fail("Exception expected");
         } catch (ArrayStoreException ok) {
             Assert.assertEquals("259-.2", ok.getMessage());
@@ -112,7 +112,7 @@ public class ServerSideFactoryTest extends TestCase {
         // On interface
         UnderTestFacade2Factory.implVersion = 1;
         try {
-            ServerSideFactory.create(UnderTestFacade2.class).echoOrThrowRedefinedOnClass("260", IllegalMonitorStateException.class);
+            ServerSideFactory.createDefaultImplementation(UnderTestFacade2.class, true).echoOrThrowRedefinedOnClass("260", IllegalMonitorStateException.class);
             Assert.fail("Exception expected");
         } catch (UnsupportedOperationException ok) {
             Assert.assertEquals("260-.1", ok.getMessage());

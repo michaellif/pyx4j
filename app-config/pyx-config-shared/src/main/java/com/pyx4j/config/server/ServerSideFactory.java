@@ -53,14 +53,14 @@ public class ServerSideFactory {
                 }
             }
         }
-        return createDefaultImplementation(interfaceCalss);
+        return createDefaultImplementation(interfaceCalss, false);
     }
 
     /**
      * Should be used only during unit tests
      */
     @SuppressWarnings("unchecked")
-    public static <T> T createDefaultImplementation(Class<T> interfaceCalss) {
+    public static <T> T createDefaultImplementation(Class<T> interfaceCalss, boolean injectInterceptors) {
         String interfaceClassName = interfaceCalss.getName();
         if (interfaceClassName.contains(".shared.")) {
             interfaceClassName = interfaceClassName.replace(".shared.", ".server.");
@@ -101,8 +101,12 @@ public class ServerSideFactory {
                 throw new RuntimeException("Can't create " + interfaceClassName, e);
             }
         }
-        // TODO Optimize interceptor creation if required
-        return createInterceptorsImplementation(interfaceCalss, instance);
+        if (injectInterceptors) {
+            // TODO Optimize interceptor creation if required
+            return createInterceptorsImplementation(interfaceCalss, instance);
+        } else {
+            return instance;
+        }
     }
 
     @SuppressWarnings("unchecked")
