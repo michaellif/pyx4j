@@ -13,7 +13,7 @@
  */
 package com.propertyvista.portal.resident.ui.signup;
 
-import com.pyx4j.forms.client.ui.selector.CSelectorBox;
+import com.pyx4j.forms.client.ui.CSelectorBox;
 
 import com.propertyvista.portal.rpc.portal.resident.dto.SelfRegistrationBuildingDTO;
 
