@@ -202,6 +202,22 @@ public class EntityGraph {
         return fullyEqualValues(ent1, ent2, false, new HashSet<IEntity>(), ignoreValues);
     }
 
+    /**
+     * 
+     * @param ent1
+     *            entity1 to compare
+     * @param ent2
+     *            entity2 to compare
+     * @param ignoreValues
+     *            ignore values of selected members
+     * 
+     *            Example: EntityGraph.ownedEqualValues(origSchedule, updateSchedule, origSchedule.timestamp());
+     * @return
+     */
+    public static boolean ownedEqualValues(IEntity ent1, IEntity ent2, IObject<?>... ignoreValues) {
+        return fullyEqualValues(ent1, ent2, true, new HashSet<IEntity>(), ignoreValues);
+    }
+
     @SuppressWarnings("unchecked")
     private static boolean fullyEqualValues(IEntity ent1, IEntity ent2, boolean ownedValuesOnly, Set<IEntity> processed, IObject<?>... ignoreValues) {
         // Cast if required to concert instance
