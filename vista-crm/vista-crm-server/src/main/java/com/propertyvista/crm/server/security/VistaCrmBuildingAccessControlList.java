@@ -49,6 +49,8 @@ import com.propertyvista.domain.financial.offering.Feature;
 import com.propertyvista.domain.financial.offering.Product;
 import com.propertyvista.domain.financial.offering.Service;
 import com.propertyvista.domain.marketing.Marketing;
+import com.propertyvista.domain.property.asset.Locker;
+import com.propertyvista.domain.property.asset.ParkingSpot;
 import com.propertyvista.domain.property.asset.building.BuildingAddOns;
 import com.propertyvista.domain.property.asset.building.BuildingFinancial;
 import com.propertyvista.domain.property.asset.building.BuildingMechanical;
@@ -171,7 +173,7 @@ class VistaCrmBuildingAccessControlList extends UIAclBuilder {
             // see also VistaCrmFinancialAccessControlList  FinancialFull
         }
         { // N
-            List<Class<? extends IEntity>> entities = entities(BuildingAddOns.class, ParkingDTO.class, LockerAreaDTO.class);
+            List<Class<? extends IEntity>> entities = entities(BuildingAddOns.class, ParkingDTO.class, ParkingSpot.class, LockerAreaDTO.class, Locker.class);
 
             grant(BuildingAccounting, entities, READ);
             grant(BuildingProperty, entities, ALL);
