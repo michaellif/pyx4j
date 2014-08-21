@@ -64,51 +64,51 @@ public class OAPIFilter implements Filter {
             final HttpServletRequest httpRequest = (HttpServletRequest) request;
             final HttpServletResponse httpResponse = (HttpServletResponse) response;
 
-            final AtomicBoolean rc = new AtomicBoolean(false);
-            final String auth = httpRequest.getHeader("Authorization");
-            if (auth != null) {
-
-                try {
+            try {
+                final AtomicBoolean authenticated = new AtomicBoolean(false);
+                final String auth = httpRequest.getHeader("Authorization");
+                if (auth != null) {
+                    // TODO Why space ? Add comment
                     final int index = auth.indexOf(' ');
                     if (index > 0) {
-                        final String[] credentials = StringUtils.split(new String(Base64.decodeBase64(auth.substring(index)), StandardCharsets.UTF_8), ':');
-                        if (credentials.length != 3) {
-                            log.warn("invalid credentials format");
-                        } else {
+                        try {
+                            final String[] credentials = StringUtils.split(new String(Base64.decodeBase64(auth.substring(index)), StandardCharsets.UTF_8), ':');
+                            if (credentials.length != 3) {
+                                log.warn("invalid credentials format");
+                            } else {
 
-                            NamespaceManager.setNamespace(credentials[1]);
+                                NamespaceManager.setNamespace(credentials[1]);
 
-                            AuthenticationRequest authenticationRequest = EntityFactory.create(AuthenticationRequest.class);
-                            authenticationRequest.email().setValue(credentials[0]);
-                            authenticationRequest.password().setValue(credentials[2]);
+                                AuthenticationRequest authenticationRequest = EntityFactory.create(AuthenticationRequest.class);
+                                authenticationRequest.email().setValue(credentials[0]);
+                                authenticationRequest.password().setValue(credentials[2]);
 
-                            LocalService.create(CrmAuthenticationService.class).authenticate(new AsyncCallback<AuthenticationResponse>() {
-                                @Override
-                                public void onFailure(Throwable caught) {
-                                    rc.set(false);
-                                }
+                                LocalService.create(CrmAuthenticationService.class).authenticate(new AsyncCallback<AuthenticationResponse>() {
+                                    @Override
+                                    public void onFailure(Throwable caught) {
+                                        authenticated.set(false);
+                                    }
 
-                                @Override
-                                public void onSuccess(AuthenticationResponse result) {
-                                    rc.set(SecurityController.check(VistaCrmBehavior.OAPI_Properties));
-                                }
-                            }, new ClientSystemInfo(), authenticationRequest);
+                                    @Override
+                                    public void onSuccess(AuthenticationResponse result) {
+                                        authenticated.set(SecurityController.check(VistaCrmBehavior.OAPI_Properties));
+                                    }
+                                }, new ClientSystemInfo(), authenticationRequest);
+                            }
+
+                        } catch (Throwable t) {
+                            log.error("Login failed", t);
                         }
                     }
-                } catch (Throwable t) {
-                    log.error("Login failed", t);
                 }
-            }
-
-            if (rc.get()) {
-                try {
+                if (authenticated.get()) {
                     chain.doFilter(httpRequest, httpResponse);
-                } finally {
-                    Lifecycle.endSession();
+                } else {
+                    httpResponse.setHeader("WWW-Authenticate", "Basic realm=\"Vista Realm\"");
+                    httpResponse.sendError(HttpServletResponse.SC_UNAUTHORIZED);
                 }
-            } else {
-                httpResponse.setHeader("WWW-Authenticate", "Basic realm=\"Vista Realm\"");
-                httpResponse.sendError(HttpServletResponse.SC_UNAUTHORIZED);
+            } finally {
+                Lifecycle.endSession();
             }
         } else {
             chain.doFilter(request, response);
