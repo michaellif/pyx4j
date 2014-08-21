@@ -109,6 +109,13 @@
             <classifier>tests</classifier>
         </dependency>
 
+       <dependency>
+            <groupId>com.pyx4j</groupId>
+            <artifactId>pyx-gwt-forms</artifactId>
+            <version>${project.version}</version>
+            <classifier>tests</classifier>
+        </dependency>
+
         <dependency>
             <groupId>com.pyx4j</groupId>
             <artifactId>pyx-i18n-shared</artifactId>

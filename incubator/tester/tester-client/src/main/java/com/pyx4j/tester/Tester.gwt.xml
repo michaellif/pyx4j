@@ -8,6 +8,9 @@
 	<inherits name='com.pyx4j.security.Security'/>
 
     <inherits name='com.pyx4j.unit.test.UnitTests'/>
+
+	<inherits name='com.pyx4j.forms.test.TestsGwtForms'/>
+
 	<inherits name='com.pyx4j.test.CommonsTests'/>
     <inherits name='com.pyx4j.gwt.test.GwtCommonsTests'/>
     <inherits name='com.pyx4j.entity.test.EntitySharedTests'/>
@@ -17,7 +20,7 @@
 	<inherits name='com.pyx4j.serialization.test.SerializationTests'/>
 	<inherits name='com.pyx4j.webstorage.test.HTML5LocalStorageTests'/>
     <inherits name='com.pyx4j.i18n.test.I18NSharedTests'/>
-	
+
 	<inherits name='com.pyx4j.log4gwt.Log4gwtRPCAppender'/>
 
     <inherits name='com.google.gwt.user.Debug'/>
