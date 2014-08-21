@@ -115,6 +115,10 @@ public class EntityDiff {
                 return;
             }
             processed.add(ent1);
+            if (!ent1.getValueClass().equals(ent2.getValueClass())) {
+                addChanges(path, null, true, safeStringView(ent1), safeStringView(ent2));
+                return;
+            }
 
             EntityMeta em = ent1.getEntityMeta();
             for (String memberName : em.getMemberNames()) {
