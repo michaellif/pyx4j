@@ -16,6 +16,7 @@ package com.propertyvista.crm.client.ui.crud.lease.common;
 import com.google.gwt.user.client.Command;
 
 import com.pyx4j.commons.IFormatter;
+import com.pyx4j.commons.Key;
 import com.pyx4j.forms.client.ui.CEntityLabel;
 import com.pyx4j.site.client.AppPlaceEntityMapper;
 import com.pyx4j.site.client.AppSite;
@@ -32,7 +33,9 @@ public class CLeaseTermVHyperlink extends CEntityLabel<LeaseTermV> {
             @Override
             public void execute() {
                 if (!getValue().isNull()) {
-                    AppSite.getPlaceController().goTo(AppPlaceEntityMapper.resolvePlace(LeaseTerm.class).formViewerPlace(getValue().holder().getPrimaryKey()));
+                    long versionNo = (getValue().versionNumber().isNull() ? 0 : getValue().versionNumber().getValue());
+                    Key leaseTermKey = new Key(getValue().holder().getPrimaryKey().asLong(), versionNo);
+                    AppSite.getPlaceController().goTo(AppPlaceEntityMapper.resolvePlace(LeaseTerm.class).formViewerPlace(leaseTermKey));
                 }
             }
         });
