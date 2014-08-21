@@ -897,6 +897,11 @@ BEGIN
         EXECUTE 'UPDATE '||v_schema_name||'.lease_application '
                 ||'SET  status = ''InProgress'' '
                 ||'WHERE    status = ''OnlineApplication'' ';
+                
+        EXECUTE 'UPDATE '||v_schema_name||'.lease_application '
+                ||'SET  approval_decided_by = decided_by, '
+                ||'     approval_decision_date = decision_date, '
+                ||'     approval_decision_reason = decision_reason';
         
         /*        
         -- legal_terms_policy_item
@@ -1248,6 +1253,12 @@ BEGIN
         -- lease_adjustment
         
         ALTER TABLE lease_adjustment DROP COLUMN tax;
+        
+        -- lease_application
+        
+        ALTER TABLE lease_application   DROP COLUMN decided_by,
+                                        DROP COLUMN decision_date,
+                                        DROP COLUMN decision_reason;
                                 
         -- legal_letter
         
