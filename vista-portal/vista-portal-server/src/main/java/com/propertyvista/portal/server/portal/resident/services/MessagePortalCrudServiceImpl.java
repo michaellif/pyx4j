@@ -123,7 +123,7 @@ public class MessagePortalCrudServiceImpl extends AbstractCrudServiceDtoImpl<Mes
         t.subject().set(to.subject());
         t.allowedReply().setValue(true);
         t.status().setValue(ThreadStatus.Open);
-        t.topic().set(communicationFacade.getMessageCategoryFromCache(TicketType.Tenant));
+        t.category().set(communicationFacade.getMessageCategoryFromCache(TicketType.Tenant));
         t.content().add(bo);
         t.owner().set(communicationFacade.getSystemEndpointFromCache(SystemEndpointName.Unassigned));
         ServerContext.getVisit().setAttribute(CommunicationMessageFacade.class.getName(), new Long(0L));
@@ -172,7 +172,7 @@ public class MessagePortalCrudServiceImpl extends AbstractCrudServiceDtoImpl<Mes
         final List<Message> ms = Persistence.secureQuery(visibleMessageCriteria, AttachLevel.Attached);
 
         Persistence.ensureRetrieve(bo.thread(), AttachLevel.Attached);
-        Persistence.ensureRetrieve(bo.thread().topic(), AttachLevel.Attached);
+        Persistence.ensureRetrieve(bo.thread().category(), AttachLevel.Attached);
         Persistence.ensureRetrieve(bo.recipients(), AttachLevel.Attached);
 
         if (ms != null && ms.size() > 0) {
@@ -258,7 +258,7 @@ public class MessagePortalCrudServiceImpl extends AbstractCrudServiceDtoImpl<Mes
         messageDTO.star().setValue(star);
         messageDTO.header().sender().setValue(facade.extractEndpointName(m.sender()));
         messageDTO.header().date().set(m.date());
-        messageDTO.topic().set(thread.topic());
+        messageDTO.category().set(thread.category());
 
         return messageDTO;
     }

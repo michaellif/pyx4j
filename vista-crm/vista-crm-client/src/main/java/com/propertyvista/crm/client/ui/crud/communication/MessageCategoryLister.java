@@ -29,7 +29,7 @@ import com.pyx4j.site.client.ui.prime.lister.AbstractLister;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 
 import com.propertyvista.domain.communication.MessageCategory;
-import com.propertyvista.domain.communication.MessageCategory.MessageGroupCategory;
+import com.propertyvista.domain.communication.MessageCategory.CategoryType;
 import com.propertyvista.misc.VistaTODO;
 
 public class MessageCategoryLister extends AbstractLister<MessageCategory> {
@@ -41,7 +41,7 @@ public class MessageCategoryLister extends AbstractLister<MessageCategory> {
         addItemSelectionHandler(new ItemSelectionHandler<MessageCategory>() {
             @Override
             public void onSelect(MessageCategory selectedItem) {
-                if (selectedItem != null && MessageGroupCategory.Ticket.equals(selectedItem.category().getValue())) {
+                if (selectedItem != null && CategoryType.Ticket.equals(selectedItem.categoryType().getValue())) {
                     MessageDialog.warn(i18n.tr("Error"), i18n.tr("No delete operation is allowed for predefined message categories"));
                 }
             }
@@ -52,18 +52,18 @@ public class MessageCategoryLister extends AbstractLister<MessageCategory> {
     public static ColumnDescriptor[] createColumnDescriptors() {
         MessageCategory proto = EntityFactory.getEntityPrototype(MessageCategory.class);
 
-        return new ColumnDescriptor[] { new MemberColumnDescriptor.Builder(proto.topic()).build(), new MemberColumnDescriptor.Builder(proto.category()).build() };
+        return new ColumnDescriptor[] { new MemberColumnDescriptor.Builder(proto.category()).build(), new MemberColumnDescriptor.Builder(proto.categoryType()).build() };
     }
 
     @Override
     public List<Sort> getDefaultSorting() {
-        return Arrays.asList(new Sort(proto().topic(), false));
+        return Arrays.asList(new Sort(proto().category(), false));
     }
 
     @Override
     protected void onItemsDelete(final Collection<MessageCategory> items) {
         for (MessageCategory item : items) {
-            if (MessageGroupCategory.Ticket.equals(item.category().getValue())) {
+            if (CategoryType.Ticket.equals(item.categoryType().getValue())) {
                 MessageDialog.warn(i18n.tr("Error"), i18n.tr("No delete operation is allowed for predefined message categories"));
                 return;
             }
@@ -75,7 +75,7 @@ public class MessageCategoryLister extends AbstractLister<MessageCategory> {
     @Override
     protected EntityListCriteria<MessageCategory> updateCriteria(EntityListCriteria<MessageCategory> criteria) {
         if (!ApplicationMode.isDevelopment() || !VistaTODO.ADDITIONAL_COMMUNICATION_FEATURES) {
-            criteria.in(criteria.proto().category(), new MessageGroupCategory[] { MessageGroupCategory.Message, MessageGroupCategory.Ticket });
+            criteria.in(criteria.proto().categoryType(), new CategoryType[] { CategoryType.Message, CategoryType.Ticket });
         }
         return super.updateCriteria(criteria);
     }

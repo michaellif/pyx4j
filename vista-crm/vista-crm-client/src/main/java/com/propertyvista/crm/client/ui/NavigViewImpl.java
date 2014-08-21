@@ -53,7 +53,7 @@ import com.propertyvista.crm.rpc.services.customer.ac.TenantListAction;
 import com.propertyvista.crm.rpc.services.lease.ac.FormerLeaseListAction;
 import com.propertyvista.crm.rpc.services.reports.CrmReportsMapper;
 import com.propertyvista.domain.communication.MessageCategory;
-import com.propertyvista.domain.communication.MessageCategory.MessageGroupCategory;
+import com.propertyvista.domain.communication.MessageCategory.CategoryType;
 import com.propertyvista.domain.company.Portfolio;
 import com.propertyvista.domain.dashboard.DashboardMetadata;
 import com.propertyvista.domain.financial.AggregatedTransfer;
@@ -89,7 +89,7 @@ public class NavigViewImpl extends Composite implements NavigView {
     private static final Comparator<MessageCategory> ORDER_CATEGORY_BY_NAME = new Comparator<MessageCategory>() {
         @Override
         public int compare(MessageCategory e1, MessageCategory e2) {
-            return e1.topic().getValue().toLowerCase().compareTo(e2.topic().getValue().toLowerCase());
+            return e1.category().getValue().toLowerCase().compareTo(e2.category().getValue().toLowerCase());
         }
     };
 
@@ -252,15 +252,13 @@ public class NavigViewImpl extends Composite implements NavigView {
             root.addMenuItem(new SideMenuItem(list, i18n.tr("Message Center"), CrmImages.INSTANCE.messageCenterIcon(), null));
 
             list.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Communication.Message(), DataModelPermission.permissionRead(MessageDTO.class)));
-            list.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Communication.Message(MessageGroupCategory.Ticket),
-                    MessageGroupCategory.Ticket.toString(), null, DataModelPermission.permissionRead(MessageDTO.class)));
             if (ApplicationMode.isDevelopment() && VistaTODO.ADDITIONAL_COMMUNICATION_FEATURES) {
-                list.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Communication.Message(MessageGroupCategory.IVR), MessageGroupCategory.IVR.toString(),
-                        null, DataModelPermission.permissionRead(MessageDTO.class)));
-                list.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Communication.Message(MessageGroupCategory.Notification),
-                        MessageGroupCategory.Notification.toString(), null, DataModelPermission.permissionRead(MessageDTO.class)));
-                list.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Communication.Message(MessageGroupCategory.SMS), MessageGroupCategory.SMS.toString(),
-                        null, DataModelPermission.permissionRead(MessageDTO.class)));
+                list.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Communication.Message(CategoryType.IVR), CategoryType.IVR.toString(), null,
+                        DataModelPermission.permissionRead(MessageDTO.class)));
+                list.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Communication.Message(CategoryType.Notification),
+                        CategoryType.Notification.toString(), null, DataModelPermission.permissionRead(MessageDTO.class)));
+                list.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Communication.Message(CategoryType.SMS), CategoryType.SMS.toString(), null,
+                        DataModelPermission.permissionRead(MessageDTO.class)));
             }
             communicationGroups = new SideMenuList();
             list.addMenuItem(new SideMenuItem(communicationGroups, i18n.tr("Groups"), null, null, DataModelPermission.permissionRead(MessageCategory.class)));
@@ -328,14 +326,14 @@ public class NavigViewImpl extends Composite implements NavigView {
         Collections.sort(metadataList, ORDER_CATEGORY_BY_NAME);
         for (MessageCategory metadata : metadataList) {
             AppPlace place = null;
-            MessageGroupCategory cat = metadata.category().getValue();
-            if (MessageGroupCategory.Message.equals(cat) || MessageGroupCategory.Ticket.equals(cat)
+            CategoryType cat = metadata.categoryType().getValue();
+            if (CategoryType.Message.equals(cat) || CategoryType.Ticket.equals(cat)
                     || (ApplicationMode.isDevelopment() && VistaTODO.ADDITIONAL_COMMUNICATION_FEATURES)) {
                 if (metadata.roles() != null) {
                     for (CrmRole role : metadata.roles()) {
                         if (cat != null && SecurityController.check(role.behaviors())) {
                             place = new CrmSiteMap.Communication.Message(metadata).formListerPlace();
-                            communicationGroups.addMenuItem(new SideMenuAppPlaceItem(place, metadata.topic().getStringView(), null));
+                            communicationGroups.addMenuItem(new SideMenuAppPlaceItem(place, metadata.category().getStringView(), null));
                             break;
                         }
                     }

@@ -23,7 +23,7 @@ import com.pyx4j.entity.rpc.EntitySearchResult;
 
 import com.propertyvista.domain.communication.CommunicationThread.ThreadStatus;
 import com.propertyvista.domain.communication.MessageCategory;
-import com.propertyvista.domain.communication.MessageCategory.MessageGroupCategory;
+import com.propertyvista.domain.communication.MessageCategory.CategoryType;
 import com.propertyvista.dto.MessageDTO;
 
 public interface MessageCrudService extends AbstractCrudService<MessageDTO> {
@@ -41,6 +41,6 @@ public interface MessageCrudService extends AbstractCrudService<MessageDTO> {
 
         MessageCategory messageCategory();
 
-        IPrimitive<MessageGroupCategory> categoryType();
+        IPrimitive<CategoryType> categoryType();
     }
 }

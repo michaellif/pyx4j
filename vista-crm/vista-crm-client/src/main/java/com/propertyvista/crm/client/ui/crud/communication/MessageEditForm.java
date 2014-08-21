@@ -51,7 +51,7 @@ import com.propertyvista.crm.rpc.services.selections.SelectPortfolioListService;
 import com.propertyvista.domain.communication.CommunicationEndpoint;
 import com.propertyvista.domain.communication.CommunicationEndpoint.ContactType;
 import com.propertyvista.domain.communication.MessageCategory;
-import com.propertyvista.domain.communication.MessageCategory.MessageGroupCategory;
+import com.propertyvista.domain.communication.MessageCategory.CategoryType;
 import com.propertyvista.domain.company.Portfolio;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
@@ -171,7 +171,7 @@ public class MessageEditForm extends CrmEntityForm<MessageDTO> {
         newLine = formPanel.br();
         formPanel.append(Location.Dual, proto().subject()).decorate();
 
-        formPanel.append(Location.Dual, proto().topic(), new CEntityComboBox<MessageCategory>(MessageCategory.class) {
+        formPanel.append(Location.Dual, proto().category(), new CEntityComboBox<MessageCategory>(MessageCategory.class) {
             @Override
             public void retriveOptions(final AsyncOptionsReadyCallback<MessageCategory> callback) {
                 resetCriteria();
@@ -180,11 +180,11 @@ public class MessageEditForm extends CrmEntityForm<MessageDTO> {
                     retriveOptionsPrivate(callback);
                 } else {
                     MessageEditorActivity presenter = ((MessageEditorActivity) getParentView().getPresenter());
-                    final MessageGroupCategory categoryType = presenter.getCategoryType();
+                    final CategoryType categoryType = presenter.getCategoryType();
                     if (categoryType == null) {
                         retriveOptionsPrivate(callback);
                     } else {
-                        final PropertyCriterion crit = PropertyCriterion.eq(proto().category(), categoryType);
+                        final PropertyCriterion crit = PropertyCriterion.eq(proto().categoryType(), categoryType);
 
                         resetCriteria();
                         addCriterion(crit);
@@ -216,7 +216,7 @@ public class MessageEditForm extends CrmEntityForm<MessageDTO> {
             }
         }).decorate();
 
-        get(proto().topic());
+        get(proto().category());
 
         formPanel.append(Location.Left, proto().allowedReply()).decorate();
         formPanel.append(Location.Right, proto().highImportance()).decorate();
@@ -234,16 +234,16 @@ public class MessageEditForm extends CrmEntityForm<MessageDTO> {
         if (value == null || value.getPrimaryKey() == null || value.getPrimaryKey().isDraft()) {
             MessageCategory mc = ((MessageEditorActivity) getParentView().getPresenter()).getCategory();
             if (mc != null && !mc.isNull()) {
-                get(proto().topic()).setEditable(false);
-                if (MessageGroupCategory.Ticket.equals(mc.category().getValue())) {
+                get(proto().category()).setEditable(false);
+                if (CategoryType.Ticket.equals(mc.categoryType().getValue())) {
                     setToVisible(false);
                 }
             } else {
-                get(proto().topic()).setEditable(true);
+                get(proto().category()).setEditable(true);
             }
-            MessageGroupCategory mgc = ((MessageEditorActivity) getParentView().getPresenter()).getCategoryType();
+            CategoryType mgc = ((MessageEditorActivity) getParentView().getPresenter()).getCategoryType();
             if (mgc != null) {
-                setToVisible(!MessageGroupCategory.Ticket.equals(mgc));
+                setToVisible(!CategoryType.Ticket.equals(mgc));
             }
         }
         return value;

@@ -20,7 +20,7 @@ import com.pyx4j.site.rpc.AppPlace;
 import com.propertyvista.crm.client.ui.crud.CrmListerViewImplBase;
 import com.propertyvista.crm.rpc.CrmSiteMap.Communication.Message;
 import com.propertyvista.domain.communication.MessageCategory;
-import com.propertyvista.domain.communication.MessageCategory.MessageGroupCategory;
+import com.propertyvista.domain.communication.MessageCategory.CategoryType;
 import com.propertyvista.dto.MessageDTO;
 
 public class MessageListerViewImpl extends CrmListerViewImplBase<MessageDTO> implements MessageListerView {
@@ -38,9 +38,9 @@ public class MessageListerViewImpl extends CrmListerViewImplBase<MessageDTO> imp
             String caption = null;
             Object placeCriteria = place instanceof Message ? ((Message) place).getCriteria() : null;
             if (placeCriteria != null) {
-                MessageGroupCategory category = null;
-                if (placeCriteria instanceof MessageGroupCategory) {
-                    category = (MessageGroupCategory) placeCriteria;
+                CategoryType category = null;
+                if (placeCriteria instanceof CategoryType) {
+                    category = (CategoryType) placeCriteria;
                     if (category != null) {
                         switch (category) {
                         case Message:
@@ -50,19 +50,19 @@ public class MessageListerViewImpl extends CrmListerViewImplBase<MessageDTO> imp
                             caption = i18n.tr("Tickets");
                             break;
                         case IVR:
-                            caption = i18n.tr("IVRs");
+                            caption = i18n.tr("IVR");
                             break;
                         case Notification:
                             caption = i18n.tr("Notifications");
                             break;
                         case SMS:
-                            caption = i18n.tr("SMSes");
+                            caption = i18n.tr("SMS");
                             break;
                         }
                     }
                 } else {
                     MessageCategory mc = (MessageCategory) placeCriteria;
-                    caption = mc.topic().getValue();
+                    caption = mc.category().getValue();
                 }
             }
             if (caption != null) {

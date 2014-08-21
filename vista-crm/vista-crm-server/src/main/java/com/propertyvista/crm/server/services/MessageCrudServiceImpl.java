@@ -42,7 +42,7 @@ import com.propertyvista.domain.communication.CommunicationThread.ThreadStatus;
 import com.propertyvista.domain.communication.DeliveryHandle;
 import com.propertyvista.domain.communication.Message;
 import com.propertyvista.domain.communication.MessageAttachment;
-import com.propertyvista.domain.communication.MessageCategory.MessageGroupCategory;
+import com.propertyvista.domain.communication.MessageCategory.CategoryType;
 import com.propertyvista.domain.communication.SystemEndpoint.SystemEndpointName;
 import com.propertyvista.domain.company.Employee;
 import com.propertyvista.domain.security.CrmUser;
@@ -55,8 +55,8 @@ public class MessageCrudServiceImpl extends AbstractCrudServiceDtoImpl<Message, 
 
     @Override
     protected Path convertPropertyDTOPathToDBOPath(String path, Message boProto, MessageDTO toProto) {
-        if (path.equals(toProto.topic().getPath().toString())) {
-            return boProto.thread().topic().getPath();
+        if (path.equals(toProto.category().getPath().toString())) {
+            return boProto.thread().category().getPath();
         }
         if (path.equals(toProto.status().getPath().toString())) {
             return boProto.thread().status().getPath();
@@ -64,8 +64,8 @@ public class MessageCrudServiceImpl extends AbstractCrudServiceDtoImpl<Message, 
         if (path.equals(toProto.owner().getPath().toString()) || path.equals(toProto.ownerForList().getPath().toString())) {
             return boProto.thread().owner().getPath();
         }
-        if (path.equals(toProto.topic().category().getPath().toString())) {
-            return boProto.thread().topic().category().getPath();
+        if (path.equals(toProto.category().categoryType().getPath().toString())) {
+            return boProto.thread().category().categoryType().getPath();
         }
         if (path.equals(toProto.content().$().recipients().$().isRead().getPath().toString()) || path.equals(toProto.isRead().getPath().toString())) {
             return boProto.recipients().$().isRead().getPath();
@@ -168,7 +168,7 @@ public class MessageCrudServiceImpl extends AbstractCrudServiceDtoImpl<Message, 
                 }
             }
             if (data.messageCategory() != null && !data.messageCategory().isNull()) {
-                dto.topic().set(data.messageCategory());
+                dto.category().set(data.messageCategory());
             }
         }
         return dto;
@@ -191,10 +191,10 @@ public class MessageCrudServiceImpl extends AbstractCrudServiceDtoImpl<Message, 
         bo.sender().set(CrmAppContext.getCurrentUser());
         bo.text().set(to.text());
         bo.highImportance().set(to.highImportance());
-        if (to.topic().isValueDetached()) {
-            Persistence.service().retrieve(to.topic());
+        if (to.category().isValueDetached()) {
+            Persistence.service().retrieve(to.category());
         }
-        boolean isTicket = MessageGroupCategory.Ticket.equals(to.topic().category().getValue());
+        boolean isTicket = CategoryType.Ticket.equals(to.category().categoryType().getValue());
 
         if (isTicket) {
             bo.recipients().add(communicationFacade.createDeliveryHandle(communicationFacade.getSystemEndpointFromCache(SystemEndpointName.Unassigned), true));
@@ -202,7 +202,7 @@ public class MessageCrudServiceImpl extends AbstractCrudServiceDtoImpl<Message, 
         CommunicationThread t = EntityFactory.create(CommunicationThread.class);
         t.subject().set(to.subject());
         t.allowedReply().set(to.allowedReply());
-        t.topic().set(to.topic());
+        t.category().set(to.category());
         t.status().setValue(isNew && isTicket ? ThreadStatus.Open : ThreadStatus.Unassigned);
         t.content().add(bo);
         t.owner().set(
@@ -229,7 +229,7 @@ public class MessageCrudServiceImpl extends AbstractCrudServiceDtoImpl<Message, 
         final Vector<Message> ms = Persistence.secureQuery(visibleMessageCriteria, AttachLevel.Attached);
 
         Persistence.ensureRetrieve(bo.thread(), AttachLevel.Attached);
-        Persistence.ensureRetrieve(bo.thread().topic(), AttachLevel.Attached);
+        Persistence.ensureRetrieve(bo.thread().category(), AttachLevel.Attached);
         Persistence.ensureRetrieve(bo.thread().owner(), AttachLevel.Attached);
 
         Persistence.ensureRetrieve(bo.recipients(), AttachLevel.Attached);
@@ -326,7 +326,7 @@ public class MessageCrudServiceImpl extends AbstractCrudServiceDtoImpl<Message, 
         messageDTO.sender().set((communicationFacade.generateEndpointDTO(m.sender())));
         messageDTO.isRead().setValue(isRead);
         messageDTO.star().setValue(star);
-        messageDTO.topic().set(thread.topic());
+        messageDTO.category().set(thread.category());
         messageDTO.header().sender().setValue(communicationFacade.extractEndpointName(m.sender()));
         messageDTO.header().date().set(m.date());
 

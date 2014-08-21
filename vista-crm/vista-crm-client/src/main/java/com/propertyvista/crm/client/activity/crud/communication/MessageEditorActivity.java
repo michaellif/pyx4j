@@ -27,7 +27,7 @@ import com.propertyvista.crm.rpc.CrmSiteMap.Communication.Message;
 import com.propertyvista.crm.rpc.services.MessageCrudService;
 import com.propertyvista.crm.rpc.services.MessageCrudService.MessageInitializationData;
 import com.propertyvista.domain.communication.MessageCategory;
-import com.propertyvista.domain.communication.MessageCategory.MessageGroupCategory;
+import com.propertyvista.domain.communication.MessageCategory.CategoryType;
 import com.propertyvista.dto.MessageDTO;
 
 public class MessageEditorActivity extends CrmEditorActivity<MessageDTO> implements MessageEditorView.Presenter {
@@ -36,7 +36,7 @@ public class MessageEditorActivity extends CrmEditorActivity<MessageDTO> impleme
 
     private MessageCategory mc;
 
-    private MessageGroupCategory mgc;
+    private CategoryType mgc;
 
     public MessageEditorActivity(CrudAppPlace place) {
         super(MessageDTO.class, place, CrmSite.getViewFactory().getView(MessageEditorView.class), GWT.<MessageCrudService> create(MessageCrudService.class));
@@ -50,11 +50,11 @@ public class MessageEditorActivity extends CrmEditorActivity<MessageDTO> impleme
             Object placeCriteria = place instanceof Message ? ((Message) place).getCriteria() : null;
 
             if (placeCriteria == null) {
-                mgc = MessageGroupCategory.Message;
+                mgc = CategoryType.Message;
             } else if (placeCriteria instanceof MessageCategory) {
                 mc = (MessageCategory) placeCriteria;
-            } else if (placeCriteria instanceof MessageGroupCategory) {
-                mgc = (MessageGroupCategory) placeCriteria;
+            } else if (placeCriteria instanceof CategoryType) {
+                mgc = (CategoryType) placeCriteria;
             }
         }
     }
@@ -83,10 +83,10 @@ public class MessageEditorActivity extends CrmEditorActivity<MessageDTO> impleme
     }
 
     @Override
-    public MessageGroupCategory getCategoryType() {
-        MessageGroupCategory result = null;
+    public CategoryType getCategoryType() {
+        CategoryType result = null;
         if (mc != null) {
-            result = mc.category().getValue();
+            result = mc.categoryType().getValue();
         }
 
         if (result == null) {

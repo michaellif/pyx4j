@@ -48,7 +48,7 @@ public interface MessageDTO extends Message {
     @NotNull
     @Detached
     @MemberColumn(notNull = true)
-    MessageCategory topic();
+    MessageCategory category();
 
     @NotNull
     @ReadOnly

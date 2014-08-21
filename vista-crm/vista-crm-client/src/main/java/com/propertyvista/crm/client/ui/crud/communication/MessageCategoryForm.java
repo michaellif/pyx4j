@@ -34,7 +34,7 @@ import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.crm.client.ui.crud.organisation.employee.EmployeeFolder;
 import com.propertyvista.crm.client.ui.crud.organisation.employee.EmployeeFolder.ParentEmployeeGetter;
 import com.propertyvista.domain.communication.MessageCategory;
-import com.propertyvista.domain.communication.MessageCategory.MessageGroupCategory;
+import com.propertyvista.domain.communication.MessageCategory.CategoryType;
 import com.propertyvista.misc.VistaTODO;
 
 public class MessageCategoryForm extends CrmEntityForm<MessageCategory> {
@@ -58,15 +58,15 @@ public class MessageCategoryForm extends CrmEntityForm<MessageCategory> {
 
     private IsWidget createInfoTab() {
         FormPanel formPanel = new FormPanel(this);
-        formPanel.append(Location.Left, proto().topic()).decorate();
+        formPanel.append(Location.Left, proto().category()).decorate();
         if (ApplicationMode.isDevelopment() && VistaTODO.ADDITIONAL_COMMUNICATION_FEATURES) {
-            CComboBox<MessageGroupCategory> categoryComp = new CComboBox<MessageGroupCategory>();
-            categoryComp.setOptions(EnumSet.of(MessageGroupCategory.Message, MessageGroupCategory.IVR, MessageGroupCategory.Notification,
-                    MessageGroupCategory.SMS));
+            CComboBox<CategoryType> categoryComp = new CComboBox<CategoryType>();
+            categoryComp.setOptions(EnumSet.of(CategoryType.Message, CategoryType.IVR, CategoryType.Notification,
+                    CategoryType.SMS));
 
-            formPanel.append(Location.Left, proto().category(), categoryComp).decorate();
+            formPanel.append(Location.Left, proto().categoryType(), categoryComp).decorate();
         } else {
-            formPanel.append(Location.Left, proto().category(), new CLabel<MessageGroupCategory>()).decorate();
+            formPanel.append(Location.Left, proto().categoryType(), new CLabel<CategoryType>()).decorate();
         }
         dispatcherHeader = formPanel.h1(i18n.tr("Message Category Dispatchers"));
         formPanel.append(Location.Left, proto().dispatchers(), dispatcherFolder = new EmployeeFolder(this, new ParentEmployeeGetter() {
@@ -76,9 +76,9 @@ public class MessageCategoryForm extends CrmEntityForm<MessageCategory> {
             }
         }));
 
-        get(proto().category()).addValueChangeHandler(new ValueChangeHandler<MessageGroupCategory>() {
+        get(proto().categoryType()).addValueChangeHandler(new ValueChangeHandler<CategoryType>() {
             @Override
-            public void onValueChange(ValueChangeEvent<MessageGroupCategory> event) {
+            public void onValueChange(ValueChangeEvent<CategoryType> event) {
                 setDispatchersVisability(event.getValue());
             }
         });
@@ -97,11 +97,11 @@ public class MessageCategoryForm extends CrmEntityForm<MessageCategory> {
             return;
         }
 
-        setDispatchersVisability(se.category().getValue());
+        setDispatchersVisability(se.categoryType().getValue());
     }
 
-    private void setDispatchersVisability(MessageGroupCategory value) {
-        boolean showDispatchers = MessageGroupCategory.Ticket.equals(value);
+    private void setDispatchersVisability(CategoryType value) {
+        boolean showDispatchers = CategoryType.Ticket.equals(value);
         dispatcherFolder.setVisible(showDispatchers);
         dispatcherHeader.setVisible(showDispatchers);
     }

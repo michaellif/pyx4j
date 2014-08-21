@@ -58,7 +58,7 @@ public interface CommunicationThread extends IEntity {
     @NotNull
     @Detached
     @MemberColumn(notNull = true)
-    MessageCategory topic();
+    MessageCategory category();
 
     @NotNull
     @Owned

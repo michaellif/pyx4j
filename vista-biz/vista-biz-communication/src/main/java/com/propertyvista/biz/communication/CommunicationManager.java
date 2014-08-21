@@ -157,7 +157,7 @@ public class CommunicationManager {
 
             AndCriterion newDispatchedCriteria = new AndCriterion(PropertyCriterion.eq(dispatchedCriteria.proto().owner(),
                     ServerSideFactory.create(CommunicationMessageFacade.class).getSystemEndpointFromCache(SystemEndpointName.Unassigned)),
-                    PropertyCriterion.in(dispatchedCriteria.proto().topic(), userGroups));
+                    PropertyCriterion.in(dispatchedCriteria.proto().category(), userGroups));
 
             AndCriterion ownedUnreadCriteria = new AndCriterion(PropertyCriterion.eq(dispatchedCriteria.proto().owner(), Context.visit(VistaUserVisit.class)
                     .getCurrentUser()), new AndCriterion(PropertyCriterion.eq(dispatchedCriteria.proto().content().$().recipients().$().isRead(), false),
@@ -177,12 +177,12 @@ public class CommunicationManager {
         List<MessageCategory> userGroups = includeByRoles ? getUserGroupsIncludingRoles() : getUserGroups();
         if (userGroups != null && userGroups.size() > 0) {
             if (includeByRoles) {
-                dispatchedCriteria.or(PropertyCriterion.in(dispatchedCriteria.proto().topic(), userGroups),
+                dispatchedCriteria.or(PropertyCriterion.in(dispatchedCriteria.proto().category(), userGroups),
                         PropertyCriterion.eq(dispatchedCriteria.proto().owner(), Context.visit(VistaUserVisit.class).getCurrentUser()));
             } else {
                 AndCriterion newDispatchedCriteria = new AndCriterion(PropertyCriterion.eq(dispatchedCriteria.proto().owner(),
                         ServerSideFactory.create(CommunicationMessageFacade.class).getSystemEndpointFromCache(SystemEndpointName.Unassigned)),
-                        PropertyCriterion.in(dispatchedCriteria.proto().topic(), userGroups));
+                        PropertyCriterion.in(dispatchedCriteria.proto().category(), userGroups));
 
                 dispatchedCriteria.or(newDispatchedCriteria,
                         PropertyCriterion.eq(dispatchedCriteria.proto().owner(), Context.visit(VistaUserVisit.class).getCurrentUser()));

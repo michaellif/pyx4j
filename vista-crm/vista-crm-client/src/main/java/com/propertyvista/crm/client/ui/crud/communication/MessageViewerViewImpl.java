@@ -45,7 +45,7 @@ import com.propertyvista.crm.rpc.CrmUserVisit;
 import com.propertyvista.crm.rpc.services.selections.SelectEmployeeListService;
 import com.propertyvista.domain.communication.CommunicationEndpoint.ContactType;
 import com.propertyvista.domain.communication.CommunicationThread.ThreadStatus;
-import com.propertyvista.domain.communication.MessageCategory.MessageGroupCategory;
+import com.propertyvista.domain.communication.MessageCategory.CategoryType;
 import com.propertyvista.domain.company.Employee;
 import com.propertyvista.dto.MessageDTO;
 
@@ -140,7 +140,7 @@ public class MessageViewerViewImpl extends CrmViewerViewImplBase<MessageDTO> imp
     public void populate(MessageDTO value) {
         super.populate(value);
 
-        boolean invisible = !MessageGroupCategory.Ticket.equals(value.topic().category().getValue()) || value.isDirect().getValue(false).booleanValue();
+        boolean invisible = !CategoryType.Ticket.equals(value.category().categoryType().getValue()) || value.isDirect().getValue(false).booleanValue();
         setActionVisible(assignOwnershipAction, !invisible);
         for (ThreadStatus status : threadStatusActions.keySet()) {
             MenuItem action = threadStatusActions.get(status);
@@ -154,7 +154,7 @@ public class MessageViewerViewImpl extends CrmViewerViewImplBase<MessageDTO> imp
         }
         setActionVisible(assignToMeAction, !invisible && !ClientContext.getUserVisit().getName().equals(value.owner().name().getValue()));
         setActionVisible(unassignAction, !invisible && !ContactType.System.equals(value.owner().type().getValue()));
-        setCaption(value.topic().category().getValue() + " " + value.getStringView());
+        setCaption(value.category().categoryType().getValue().toString());
     }
 
     public void assignEmployee(IEntity e) {

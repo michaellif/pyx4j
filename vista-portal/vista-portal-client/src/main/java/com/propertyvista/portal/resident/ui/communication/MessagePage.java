@@ -81,7 +81,7 @@ public class MessagePage extends CPortalEntityForm<MessageDTO> {
         inject(proto().thread());
         inject(proto().allowedReply());
         inject(proto().status());
-        inject(proto().topic());
+        inject(proto().category());
         CLabel<String> threadLabel = new CLabel<String>();
         threadLabel.asWidget().setStylePrimaryName(CommunicationTheme.StyleName.CommunicationThreadName.name());
         formPanel.append(Location.Left, proto().subject(), threadLabel);
@@ -257,7 +257,7 @@ public class MessagePage extends CPortalEntityForm<MessageDTO> {
                         messagesFolder.addItem();
                         CFolderItem<MessageDTO> newItem = messagesFolder.getItem(messagesFolder.getItemCount() - 1);
                         newItem.getValue().text().setValue(text);
-                        if (!MessageCategory.MessageGroupCategory.Ticket.equals(currentMessage.topic().getValue())) {
+                        if (!MessageCategory.CategoryType.Ticket.equals(currentMessage.category().getValue())) {
                             if (!ClientContext.getUserVisit().getName().equals(currentMessage.header().sender().getValue())) {
                                 DeliveryHandle dh = EntityFactory.create(DeliveryHandle.class);
                                 dh.isRead().setValue(false);

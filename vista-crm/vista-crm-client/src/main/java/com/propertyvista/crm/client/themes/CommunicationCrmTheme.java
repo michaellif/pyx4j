@@ -24,7 +24,7 @@ import com.pyx4j.widgets.client.style.theme.WidgetTheme;
 
 public class CommunicationCrmTheme extends Theme {
     public static enum StyleName implements IStyleName {
-        Comm, CommContent, CommCallout, CommHeader, CommHeaderTitle, CommMessage, AllertButton
+        Comm, CommContent, CommCallout, CommHeader, CommHeaderTitle, CommMessage, AllertButton, CommunicationThreadName
     }
 
     public static enum StyleDependent implements IStyleDependent {
@@ -111,6 +111,12 @@ public class CommunicationCrmTheme extends Theme {
 
         style = new Style(".", StyleName.AllertButton, "-", StyleDependent.alertOn, " .", WidgetTheme.StyleName.ButtonText);
         style.addProperty("display", "inline");
+        addStyle(style);
+
+        style = new Style(".", CommunicationCrmTheme.StyleName.CommunicationThreadName.name());
+        style.addProperty("font-size", "1.5em");
+        style.addProperty("font-weight", "bold");
+        style.addProperty("text-align", "left");
         addStyle(style);
 
     }

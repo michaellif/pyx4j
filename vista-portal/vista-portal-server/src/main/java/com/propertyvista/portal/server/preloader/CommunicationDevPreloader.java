@@ -30,7 +30,7 @@ import com.propertyvista.domain.communication.CommunicationThread.ThreadStatus;
 import com.propertyvista.domain.communication.DeliveryHandle;
 import com.propertyvista.domain.communication.Message;
 import com.propertyvista.domain.communication.MessageCategory;
-import com.propertyvista.domain.communication.MessageCategory.MessageGroupCategory;
+import com.propertyvista.domain.communication.MessageCategory.CategoryType;
 import com.propertyvista.domain.communication.SystemEndpoint;
 import com.propertyvista.domain.security.CrmUser;
 import com.propertyvista.domain.security.CustomerUser;
@@ -90,7 +90,7 @@ public class CommunicationDevPreloader extends AbstractDataPreloader {
         }
 
         EntityQueryCriteria<MessageCategory> criteriaMessageGroup = EntityQueryCriteria.create(MessageCategory.class);
-        criteriaMessageGroup.eq(criteriaMessageGroup.proto().category(), MessageGroupCategory.Message);
+        criteriaMessageGroup.eq(criteriaMessageGroup.proto().categoryType(), CategoryType.Message);
         MessageCategory mg = Persistence.service().retrieve(criteriaMessageGroup);
 
         EntityQueryCriteria<SystemEndpoint> criteriaSystemEndpoint = EntityQueryCriteria.create(SystemEndpoint.class);
@@ -152,7 +152,7 @@ public class CommunicationDevPreloader extends AbstractDataPreloader {
             thread.status().setValue(ThreadStatus.Unassigned);
             thread.owner().set(owner);
             thread.allowedReply().setValue(true);
-            thread.topic().set(mg);
+            thread.category().set(mg);
 
             PersistenceServicesFactory.getPersistenceService().persist(thread);
 

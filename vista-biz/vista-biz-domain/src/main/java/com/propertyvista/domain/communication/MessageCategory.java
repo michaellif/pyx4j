@@ -38,8 +38,8 @@ import com.propertyvista.domain.security.CrmRole;
 public interface MessageCategory extends IEntity {
 
     @I18n(context = "MessageGroup")
-    @XmlType(name = "Message Group Category")
-    public enum MessageGroupCategory {
+    @XmlType(name = "Type")
+    public enum CategoryType {
         @Translate("Message")
         Message,
 
@@ -84,10 +84,10 @@ public interface MessageCategory extends IEntity {
 
     @NotNull
     @ToString(index = 0)
-    IPrimitive<String> topic();
+    IPrimitive<String> category();
 
     @NotNull
-    IPrimitive<MessageGroupCategory> category();
+    IPrimitive<CategoryType> categoryType();
 
     @NotNull
     IPrimitive<TicketType> ticketType();

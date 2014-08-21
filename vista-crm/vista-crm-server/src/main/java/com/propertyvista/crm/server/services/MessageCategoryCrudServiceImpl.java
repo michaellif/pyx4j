@@ -19,7 +19,7 @@ import com.pyx4j.entity.server.Persistence;
 
 import com.propertyvista.crm.rpc.services.MessageCategoryCrudService;
 import com.propertyvista.domain.communication.MessageCategory;
-import com.propertyvista.domain.communication.MessageCategory.MessageGroupCategory;
+import com.propertyvista.domain.communication.MessageCategory.CategoryType;
 
 public class MessageCategoryCrudServiceImpl extends AbstractCrudServiceImpl<MessageCategory> implements MessageCategoryCrudService {
     public MessageCategoryCrudServiceImpl() {
@@ -29,7 +29,7 @@ public class MessageCategoryCrudServiceImpl extends AbstractCrudServiceImpl<Mess
     @Override
     protected MessageCategory init(InitializationData initializationData) {
         MessageCategory dto = super.init(initializationData);
-        dto.category().setValue(MessageGroupCategory.Message);
+        dto.categoryType().setValue(CategoryType.Message);
         return dto;
     }
 
@@ -48,8 +48,8 @@ public class MessageCategoryCrudServiceImpl extends AbstractCrudServiceImpl<Mess
         to.roles().setAttachLevel(AttachLevel.Attached);
         to.roles().set(bo.roles());
 
-        to.topic().set(bo.topic());
         to.category().set(bo.category());
+        to.categoryType().set(bo.categoryType());
     }
 
     @Override
@@ -61,7 +61,7 @@ public class MessageCategoryCrudServiceImpl extends AbstractCrudServiceImpl<Mess
     protected boolean persist(MessageCategory bo, MessageCategory in) {
         boolean isNew = bo.id().isNull() || bo.isPrototype();
         if (isNew) {
-            in.topic().set(bo.topic());
+            in.category().set(bo.category());
         }
         bo.dispatchers().clear();
         bo.dispatchers().addAll(in.dispatchers());
@@ -73,7 +73,7 @@ public class MessageCategoryCrudServiceImpl extends AbstractCrudServiceImpl<Mess
 
     @Override
     protected void delete(MessageCategory group) {
-        if (MessageGroupCategory.Ticket.equals(group.category().getValue())) {
+        if (CategoryType.Ticket.equals(group.categoryType().getValue())) {
             throw new Error("Cannot delete predefined message group");
         }
         group.deleted().setValue(true);

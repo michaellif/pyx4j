@@ -33,6 +33,7 @@ import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.entity.rpc.AbstractListCrudService;
 import com.pyx4j.forms.client.ui.CCheckBox;
 import com.pyx4j.forms.client.ui.CForm;
+import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.forms.client.ui.folder.BoxFolderItemDecorator;
@@ -58,6 +59,7 @@ import com.propertyvista.common.client.ui.components.VistaViewersComponentFactor
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
 import com.propertyvista.crm.client.activity.crud.communication.MessageViewerActivity;
 import com.propertyvista.crm.client.resources.CrmImages;
+import com.propertyvista.crm.client.themes.CommunicationCrmTheme;
 import com.propertyvista.crm.client.ui.components.boxes.BuildingSelectorDialog;
 import com.propertyvista.crm.client.ui.components.boxes.TenantSelectorDialog;
 import com.propertyvista.crm.client.ui.components.boxes.UnitSelectorDialog;
@@ -69,7 +71,7 @@ import com.propertyvista.crm.rpc.services.selections.SelectPortfolioListService;
 import com.propertyvista.domain.communication.CommunicationEndpoint;
 import com.propertyvista.domain.communication.CommunicationEndpoint.ContactType;
 import com.propertyvista.domain.communication.DeliveryHandle;
-import com.propertyvista.domain.communication.MessageCategory.MessageGroupCategory;
+import com.propertyvista.domain.communication.MessageCategory.CategoryType;
 import com.propertyvista.domain.company.Portfolio;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
@@ -104,10 +106,13 @@ public class MessageForm extends CrmEntityForm<MessageDTO> {
 
     public IsWidget createGeneralForm() {
         FormPanel formPanel = new FormPanel(this);
+        CLabel<String> threadLabel = new CLabel<String>();
+        threadLabel.asWidget().setStylePrimaryName(CommunicationCrmTheme.StyleName.CommunicationThreadName.name());
 
-        formPanel.append(Location.Dual, proto().subject()).decorate();
+        formPanel.append(Location.Dual, proto().subject(), threadLabel);
+        formPanel.br();
         formPanel.append(Location.Left, proto().allowedReply()).decorate();
-        formPanel.append(Location.Right, proto().topic()).decorate();
+        formPanel.append(Location.Right, proto().category()).decorate();
         formPanel.append(Location.Left, proto().owner().name()).decorate().customLabel(i18n.tr("Owner"));
         formPanel.append(Location.Right, proto().status()).decorate();
         formPanel.append(Location.Dual, proto().content(), messagesFolder);
@@ -124,8 +129,8 @@ public class MessageForm extends CrmEntityForm<MessageDTO> {
             get(proto().status()).setVisible(false);
 
         } else {
-            get(proto().owner().name()).setVisible(MessageGroupCategory.Ticket.equals(getValue().topic().category().getValue()));
-            get(proto().status()).setVisible(MessageGroupCategory.Ticket.equals(getValue().topic().category().getValue()));
+            get(proto().owner().name()).setVisible(CategoryType.Ticket.equals(getValue().category().categoryType().getValue()));
+            get(proto().status()).setVisible(CategoryType.Ticket.equals(getValue().category().categoryType().getValue()));
         }
     }
 
@@ -503,7 +508,7 @@ public class MessageForm extends CrmEntityForm<MessageDTO> {
 
                     m.isRead().setValue(false);
                     saveMessage(m, false);
-                    CrudAppPlace place = new CrmSiteMap.Communication.Message(m.topic().category().getValue());
+                    CrudAppPlace place = new CrmSiteMap.Communication.Message(m.category().categoryType().getValue());
                     place.setType(Type.lister);
                     AppSite.getPlaceController().goTo(place);
                 }

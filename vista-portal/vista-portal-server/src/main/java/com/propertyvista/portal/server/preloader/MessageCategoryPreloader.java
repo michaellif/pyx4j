@@ -19,7 +19,7 @@ import com.pyx4j.entity.server.dataimport.AbstractDataPreloader;
 
 import com.propertyvista.biz.preloader.CrmRolesPreloader;
 import com.propertyvista.domain.communication.MessageCategory;
-import com.propertyvista.domain.communication.MessageCategory.MessageGroupCategory;
+import com.propertyvista.domain.communication.MessageCategory.CategoryType;
 import com.propertyvista.domain.communication.MessageCategory.TicketType;
 import com.propertyvista.domain.security.CrmRole;
 
@@ -33,23 +33,23 @@ public class MessageCategoryPreloader extends AbstractDataPreloader {
     @Override
     public String create() {
 
-        createCategory(MessageGroupCategory.Ticket, TicketType.Tenant, TicketType.Tenant.toString(), CrmRolesPreloader.getDefaultRole());
-        createCategory(MessageGroupCategory.Ticket, TicketType.Landlord, TicketType.Landlord.toString(), CrmRolesPreloader.getDefaultRole());
-        createCategory(MessageGroupCategory.Ticket, TicketType.Vendor, TicketType.Vendor.toString(), CrmRolesPreloader.getDefaultRole());
-        createCategory(MessageGroupCategory.Message, TicketType.NotTicket, "General Message", CrmRolesPreloader.getDefaultRole());
+        createCategory(CategoryType.Ticket, TicketType.Tenant, TicketType.Tenant.toString(), CrmRolesPreloader.getDefaultRole());
+        createCategory(CategoryType.Ticket, TicketType.Landlord, TicketType.Landlord.toString(), CrmRolesPreloader.getDefaultRole());
+        createCategory(CategoryType.Ticket, TicketType.Vendor, TicketType.Vendor.toString(), CrmRolesPreloader.getDefaultRole());
+        createCategory(CategoryType.Message, TicketType.NotTicket, "General Message", CrmRolesPreloader.getDefaultRole());
         if (!isProduction) {
-            createCategory(MessageGroupCategory.IVR, TicketType.NotTicket, "General IVR", CrmRolesPreloader.getDefaultRole());
-            createCategory(MessageGroupCategory.SMS, TicketType.NotTicket, "General SMS", CrmRolesPreloader.getDefaultRole());
-            createCategory(MessageGroupCategory.Notification, TicketType.NotTicket, "General Notification", CrmRolesPreloader.getDefaultRole());
+            createCategory(CategoryType.IVR, TicketType.NotTicket, "General IVR", CrmRolesPreloader.getDefaultRole());
+            createCategory(CategoryType.SMS, TicketType.NotTicket, "General SMS", CrmRolesPreloader.getDefaultRole());
+            createCategory(CategoryType.Notification, TicketType.NotTicket, "General Notification", CrmRolesPreloader.getDefaultRole());
         }
         return null;
     }
 
-    private void createCategory(MessageGroupCategory category, TicketType ticketType, String topic, CrmRole... defaultRole) {
+    private void createCategory(CategoryType category, TicketType ticketType, String topic, CrmRole... defaultRole) {
         MessageCategory mg = EntityFactory.create(MessageCategory.class);
-        mg.category().setValue(category);
+        mg.categoryType().setValue(category);
         mg.ticketType().setValue(ticketType);
-        mg.topic().setValue(topic);
+        mg.category().setValue(topic);
         if (defaultRole != null && defaultRole.length > 0) {
             for (int i = 0; i < defaultRole.length; ++i)
                 mg.roles().add(defaultRole[i]);

@@ -43,7 +43,7 @@ import com.pyx4j.widgets.client.Anchor;
 import com.propertyvista.crm.client.resources.CrmImages;
 import com.propertyvista.crm.client.themes.CommunicationCrmTheme;
 import com.propertyvista.crm.rpc.CrmSiteMap;
-import com.propertyvista.domain.communication.MessageCategory.MessageGroupCategory;
+import com.propertyvista.domain.communication.MessageCategory.CategoryType;
 import com.propertyvista.dto.MessageDTO;
 
 public class CommunicationViewImpl extends FlowPanel implements CommunicationView, RequiresResize {
@@ -211,7 +211,7 @@ public class CommunicationViewImpl extends FlowPanel implements CommunicationVie
 
                 @Override
                 public void execute() {
-                    CrudAppPlace place = new CrmSiteMap.Communication.Message(MessageGroupCategory.Ticket);
+                    CrudAppPlace place = new CrmSiteMap.Communication.Message(CategoryType.Ticket);
                     place.setType(Type.lister);
                     AppSite.getPlaceController().goTo(place);
                 }
@@ -235,7 +235,7 @@ public class CommunicationViewImpl extends FlowPanel implements CommunicationVie
 
                 @Override
                 public void execute() {
-                    CrudAppPlace place = new CrmSiteMap.Communication.Message(MessageGroupCategory.Ticket);
+                    CrudAppPlace place = new CrmSiteMap.Communication.Message(CategoryType.Ticket);
                     place.setType(Type.editor);
                     AppSite.getPlaceController().goTo(place);
                 }

@@ -39,7 +39,7 @@ public class CommunicationThreadAccessRule implements DatasetAccessRule<Communic
                 new OrCriterion(PropertyCriterion.eq(criteria.proto().content().$().sender(), CrmAppContext.getCurrentUser()),//
                         PropertyCriterion.eq(criteria.proto().owner(), CrmAppContext.getCurrentUser())));//
         if (userGroups != null && userGroups.size() > 0) {
-            criteria.or(PropertyCriterion.in(criteria.proto().topic(), userGroups), inboxOr);//
+            criteria.or(PropertyCriterion.in(criteria.proto().category(), userGroups), inboxOr);//
 
         } else {
             criteria.add(inboxOr);

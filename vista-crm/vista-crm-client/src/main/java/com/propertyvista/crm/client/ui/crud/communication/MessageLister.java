@@ -13,78 +13,124 @@
  */
 package com.propertyvista.crm.client.ui.crud.communication;
 
+import com.google.gwt.user.client.Command;
+
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.criterion.EntityListCriteria;
+import com.pyx4j.entity.security.DataModelPermission;
+import com.pyx4j.forms.client.images.FolderImages;
 import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.forms.client.ui.datatable.DataTableModel;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.prime.lister.AbstractLister;
 import com.pyx4j.site.rpc.AppPlace;
+import com.pyx4j.widgets.client.Button;
 
 import com.propertyvista.crm.rpc.CrmSiteMap.Communication.Message;
 import com.propertyvista.crm.rpc.services.MessageCrudService;
 import com.propertyvista.domain.communication.MessageCategory;
-import com.propertyvista.domain.communication.MessageCategory.MessageGroupCategory;
+import com.propertyvista.domain.communication.MessageCategory.CategoryType;
 import com.propertyvista.dto.MessageDTO;
 
 public class MessageLister extends AbstractLister<MessageDTO> {
     private static final I18n i18n = I18n.get(MessageLister.class);
 
+    private Button newMessage;
+
+    private Button newTicket;
+
     public MessageLister() {
         super(MessageDTO.class, true);
 
-        setDataTableModel(new DataTableModel<MessageDTO>(createColumnDescriptors(MessageGroupCategory.Message)));
+        setDataTableModel(new DataTableModel<MessageDTO>(createColumnDescriptors(CategoryType.Message)));
 
         getDataTablePanel().setFilteringEnabled(true);
         // No sorting work for it
         getDataTablePanel().getDataTable().setHasColumnClickSorting(false);
+
+        addActionItem(newTicket = new Button(FolderImages.INSTANCE.addButton().hover(), i18n.tr("New Ticket"), new Command() {
+            @Override
+            public void execute() {
+                editNewEntity(CategoryType.Ticket);
+            }
+        }));
+        newTicket.setPermission(DataModelPermission.permissionCreate(MessageDTO.class));
+
+        addActionItem(newMessage = new Button(FolderImages.INSTANCE.addButton().hover(), i18n.tr("New Message"), new Command() {
+            @Override
+            public void execute() {
+                editNewEntity(CategoryType.Message);
+            }
+        }));
+        newMessage.setPermission(DataModelPermission.permissionCreate(MessageDTO.class));
     }
 
-    public static ColumnDescriptor[] createColumnDescriptors(MessageGroupCategory category) {
+    public static ColumnDescriptor[] createColumnDescriptors(CategoryType category) {
         MessageDTO proto = EntityFactory.getEntityPrototype(MessageDTO.class);
 
+        if (category == null) {
+            return new ColumnDescriptor[] {//@formatter:off
+                    new MemberColumnDescriptor.Builder(proto.isRead()).searchable(false).width("100px").build(),
+                    new MemberColumnDescriptor.Builder(proto.star()).searchable(false).width("100px").build(),
+                    new MemberColumnDescriptor.Builder(proto.highImportance()).searchable(false).width("100px").build(),
+                    new MemberColumnDescriptor.Builder(proto.hasAttachments()).searchable(false).width("100px").build(),
+                    new MemberColumnDescriptor.Builder(proto.sender().name()).columnTitle(i18n.tr("Sender")).searchable(false).width("200px").build(),
+                    new MemberColumnDescriptor.Builder(proto.date()).searchable(false).width("200px").build(),
+                    new MemberColumnDescriptor.Builder(proto.subject()).searchable(false).width("1000px").build(),
+                    new MemberColumnDescriptor.Builder(proto.category(), false).searchable(false).width("300px").build(),
+                    new MemberColumnDescriptor.Builder(proto.category().categoryType(), false).searchableOnly().columnTitle(i18n.tr("Category")).build(),
+                    new MemberColumnDescriptor.Builder(proto.allowedReply()).searchable(false).width("100px").build(),
+                    new MemberColumnDescriptor.Builder(proto.thread().owner()).searchable(false).width("200px").build(),
+                    new MemberColumnDescriptor.Builder(proto.ownerForList(), false).columnTitle(i18n.tr("Owner")).searchableOnly().build(),
+                    new MemberColumnDescriptor.Builder(proto.status()).searchable(true).width("100px").build() };
+        }
+        else {
         switch (category) {
         case Ticket:
             return new ColumnDescriptor[] {//@formatter:off
-                new MemberColumnDescriptor.Builder(proto.star()).searchable(false).build(),
-                new MemberColumnDescriptor.Builder(proto.highImportance()).searchable(false).build(),
-                new MemberColumnDescriptor.Builder(proto.hasAttachments()).searchable(false).build(),
-                new MemberColumnDescriptor.Builder(proto.sender().name()).columnTitle(i18n.tr("Sender")).searchable(false).build(),
-                new MemberColumnDescriptor.Builder(proto.date()).searchable(false).build(),
-                new MemberColumnDescriptor.Builder(proto.subject()).searchable(false).build(),
-                new MemberColumnDescriptor.Builder(proto.topic(), false).searchable(false).build(),
-                new MemberColumnDescriptor.Builder(proto.topic().category(), false).searchableOnly().build(),
-                new MemberColumnDescriptor.Builder(proto.allowedReply()).searchable(false).build(),
-                new MemberColumnDescriptor.Builder(proto.thread().owner()).searchable(false).build(),
+                new MemberColumnDescriptor.Builder(proto.star()).searchable(false).width("100px").build(),
+                new MemberColumnDescriptor.Builder(proto.highImportance()).searchable(false).width("100px").build(),
+                new MemberColumnDescriptor.Builder(proto.hasAttachments()).searchable(false).width("100px").build(),
+                new MemberColumnDescriptor.Builder(proto.sender().name()).columnTitle(i18n.tr("Sender")).searchable(false).width("200px").build(),
+                new MemberColumnDescriptor.Builder(proto.date()).searchable(false).width("200px").build(),
+                new MemberColumnDescriptor.Builder(proto.subject()).searchable(false).width("1000px").build(),
+                new MemberColumnDescriptor.Builder(proto.category(), false).searchable(false).width("300px").build(),
+                new MemberColumnDescriptor.Builder(proto.category().categoryType(), false).searchableOnly().build(),
+                new MemberColumnDescriptor.Builder(proto.allowedReply()).searchable(false).width("100px").build(),
+                new MemberColumnDescriptor.Builder(proto.thread().owner()).searchable(false).width("200px").build(),
                 new MemberColumnDescriptor.Builder(proto.ownerForList(), false).columnTitle(i18n.tr("Owner")).searchableOnly().build(),
-                new MemberColumnDescriptor.Builder(proto.status()).searchable(true).build() };
+                new MemberColumnDescriptor.Builder(proto.status()).searchable(true).width("100px").build() };
         case Message:
             return new ColumnDescriptor[] {//@formatter:off
-                new MemberColumnDescriptor.Builder(proto.isRead()).searchable(false).build(),
-                new MemberColumnDescriptor.Builder(proto.star()).searchable(false).build(),
-                new MemberColumnDescriptor.Builder(proto.highImportance()).searchable(false).build(),
-                new MemberColumnDescriptor.Builder(proto.hasAttachments()).searchable(false).build(),
-                new MemberColumnDescriptor.Builder(proto.sender().name()).columnTitle(i18n.tr("Sender")).searchable(false).build(),
-                new MemberColumnDescriptor.Builder(proto.date()).searchable(false).build(),
-                new MemberColumnDescriptor.Builder(proto.subject()).searchable(false).build(),
-                new MemberColumnDescriptor.Builder(proto.topic(), false).searchable(false).build(),
-                new MemberColumnDescriptor.Builder(proto.topic().category(), false).searchableOnly().build(),
-                new MemberColumnDescriptor.Builder(proto.allowedReply()).searchable(false).build() };
-      //@formatter:on
-        default:
-            return new ColumnDescriptor[] {//@formatter:off
-                    	    new MemberColumnDescriptor.Builder(proto.isRead()).searchable(false).build(),
-                            new MemberColumnDescriptor.Builder(proto.star()).searchable(false).build(),
-                            new MemberColumnDescriptor.Builder(proto.highImportance()).searchable(false).build(),
-                            new MemberColumnDescriptor.Builder(proto.hasAttachments()).searchable(false).build(),
-                            new MemberColumnDescriptor.Builder(proto.sender().name()).columnTitle(i18n.tr("Sender")).searchable(false).build(),
-                            new MemberColumnDescriptor.Builder(proto.date()).searchable(false).build(),
-                            new MemberColumnDescriptor.Builder(proto.subject()).searchable(false).build(),
-                            new MemberColumnDescriptor.Builder(proto.topic(), false).searchable(false).build(),
-                            new MemberColumnDescriptor.Builder(proto.topic().category(), false).searchableOnly().build(),
-                            new MemberColumnDescriptor.Builder(proto.allowedReply()).searchable(false).build() };
-        }//@formatter:on
+                new MemberColumnDescriptor.Builder(proto.isRead()).searchable(false).width("100px").build(),
+                new MemberColumnDescriptor.Builder(proto.star()).searchable(false).width("100px").build(),
+                new MemberColumnDescriptor.Builder(proto.highImportance()).searchable(false).width("100px").build(),
+                new MemberColumnDescriptor.Builder(proto.hasAttachments()).searchable(false).width("100px").build(),
+                new MemberColumnDescriptor.Builder(proto.sender().name()).columnTitle(i18n.tr("Sender")).searchable(false).width("200px").build(),
+                new MemberColumnDescriptor.Builder(proto.date()).searchable(false).width("200px").build(),
+                new MemberColumnDescriptor.Builder(proto.subject()).searchable(false).width("1000px").build(),
+                new MemberColumnDescriptor.Builder(proto.category(), false).searchable(false).width("300px").build(),
+                new MemberColumnDescriptor.Builder(proto.category().categoryType(), false).searchableOnly().build(),
+                new MemberColumnDescriptor.Builder(proto.allowedReply()).searchable(false).width("100px").build() };
+     //@formatter:on
+            default:
+                return new ColumnDescriptor[] {//@formatter:off
+                    new MemberColumnDescriptor.Builder(proto.isRead()).searchable(false).width("100px").build(),
+                    new MemberColumnDescriptor.Builder(proto.star()).searchable(false).width("100px").build(),
+                    new MemberColumnDescriptor.Builder(proto.highImportance()).searchable(false).width("100px").build(),
+                    new MemberColumnDescriptor.Builder(proto.hasAttachments()).searchable(false).width("100px").build(),
+                    new MemberColumnDescriptor.Builder(proto.sender().name()).columnTitle(i18n.tr("Sender")).searchable(false).width("200px").build(),
+                    new MemberColumnDescriptor.Builder(proto.date()).searchable(false).width("200px").build(),
+                    new MemberColumnDescriptor.Builder(proto.subject()).searchable(false).width("1000px").build(),
+                    new MemberColumnDescriptor.Builder(proto.category(), false).searchable(false).width("300px").build(),
+                    new MemberColumnDescriptor.Builder(proto.category().categoryType(), false).searchableOnly().build(),
+                    new MemberColumnDescriptor.Builder(proto.allowedReply()).searchable(false).width("100px").build(),
+                    new MemberColumnDescriptor.Builder(proto.thread().owner()).searchable(false).width("200px").build(),
+                    new MemberColumnDescriptor.Builder(proto.ownerForList(), false).columnTitle(i18n.tr("Owner")).searchableOnly().build(),
+                    new MemberColumnDescriptor.Builder(proto.status()).searchable(true).width("100px").build() };
+            }//@formatter:on
+        }
     }
 
     @Override
@@ -92,17 +138,23 @@ public class MessageLister extends AbstractLister<MessageDTO> {
         com.pyx4j.site.client.ui.prime.IPrimePane.Presenter p = getPresenter();
         AppPlace place = p.getPlace();
         Object placeCriteria = place instanceof Message ? ((Message) place).getCriteria() : null;
-        MessageGroupCategory category;
+        CategoryType category = null;
         if (placeCriteria == null) {
-            getDataTablePanel().getAddButton().setCaption(i18n.tr("New Message"));
-            criteria.eq(criteria.proto().topic().category(), category = MessageGroupCategory.Message);
-        } else if (placeCriteria instanceof MessageGroupCategory) {
-            getDataTablePanel().getAddButton().setCaption(i18n.tr("New" + " " + placeCriteria.toString()));
-            criteria.eq(criteria.proto().topic().category(), category = (MessageGroupCategory) placeCriteria);
+            newMessage.setVisible(true);
+            newTicket.setVisible(true);
+            getDataTablePanel().getAddButton().setVisible(false);
         } else {
-            MessageCategory mc = (MessageCategory) placeCriteria;
-            getDataTablePanel().getAddButton().setCaption(i18n.tr("New" + " " + (category = mc.category().getValue()).toString()));
-            criteria.eq(criteria.proto().topic(), mc);
+            newMessage.setVisible(false);
+            newTicket.setVisible(false);
+            getDataTablePanel().getAddButton().setVisible(true);
+            if (placeCriteria instanceof CategoryType) {
+                getDataTablePanel().getAddButton().setCaption(i18n.tr("New") + " " + placeCriteria.toString());
+                criteria.eq(criteria.proto().category().categoryType(), category = (CategoryType) placeCriteria);
+            } else {
+                MessageCategory mc = (MessageCategory) placeCriteria;
+                getDataTablePanel().getAddButton().setCaption(i18n.tr("New") + " " + (category = mc.categoryType().getValue()).toString());
+                criteria.eq(criteria.proto().category(), mc);
+            }
         }
         setDataTableModel(new DataTableModel<MessageDTO>(createColumnDescriptors(category)));
 
@@ -113,17 +165,21 @@ public class MessageLister extends AbstractLister<MessageDTO> {
     protected void onItemNew() {
         com.pyx4j.site.client.ui.prime.IPrimePane.Presenter p = getPresenter();
         AppPlace place = p.getPlace();
-        MessageCrudService.MessageInitializationData initData = EntityFactory.create(MessageCrudService.MessageInitializationData.class);
         Object placeCriteria = place instanceof Message ? ((Message) place).getCriteria() : null;
 
+        editNewEntity(placeCriteria);
+
+    }
+
+    private void editNewEntity(Object placeCriteria) {
+        MessageCrudService.MessageInitializationData initData = EntityFactory.create(MessageCrudService.MessageInitializationData.class);
         if (placeCriteria == null) {
-            initData.categoryType().setValue(MessageGroupCategory.Message);
+            initData.categoryType().setValue(null);
         } else if (placeCriteria instanceof MessageCategory) {
             initData.messageCategory().set((MessageCategory) placeCriteria);
-        } else if (placeCriteria instanceof MessageGroupCategory) {
-            initData.categoryType().setValue((MessageGroupCategory) placeCriteria);
+        } else if (placeCriteria instanceof CategoryType) {
+            initData.categoryType().setValue((CategoryType) placeCriteria);
         }
         getPresenter().editNew(Message.class, initData);
-
     }
 }
