@@ -272,7 +272,7 @@ class PaymentMethodPersister {
         case CreditCard:
             //Verify CC change
             CreditCardInfo cc = paymentMethod.details().cast();
-            if (!paymentMethod.details().id().isNull()) {
+            if ((!paymentMethod.details().id().isNull()) && (origPaymentMethod.detach().isAssignableFrom(CreditCardInfo.class))) {
                 CreditCardInfo origcc = origPaymentMethod.details().cast();
                 if (cc.card().newNumber().isNull()) {
                     Validate.isEquals(origcc.card().obfuscatedNumber(), cc.card().obfuscatedNumber(), "obfuscatedNumber changed");
@@ -305,9 +305,10 @@ class PaymentMethodPersister {
             }
             // Allow to update expiryDate or create token
             boolean needUpdate = (origPaymentMethod == null);
-            needUpdate |= (!cc.card().newNumber().isNull());
+            needUpdate = needUpdate || (!cc.card().newNumber().isNull());
             if (origPaymentMethod != null) {
-                needUpdate |= (!EntityGraph.membersEquals(cc, origPaymentMethod.details().cast(), cc.expiryDate()));
+                needUpdate = needUpdate || !origPaymentMethod.details().isAssignableFrom(CreditCardInfo.class);
+                needUpdate = needUpdate || (!EntityGraph.membersEquals(cc, origPaymentMethod.details().cast(), cc.expiryDate()));
             }
             if (needUpdate) {
                 ServerSideFactory.create(CreditCardFacade.class).persistToken(merchantTerminalSource.getMerchantTerminalId(), cc);
