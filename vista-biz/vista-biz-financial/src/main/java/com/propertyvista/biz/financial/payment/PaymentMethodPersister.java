@@ -272,7 +272,7 @@ class PaymentMethodPersister {
         case CreditCard:
             //Verify CC change
             CreditCardInfo cc = paymentMethod.details().cast();
-            if ((!paymentMethod.details().id().isNull()) && (origPaymentMethod.detach().isAssignableFrom(CreditCardInfo.class))) {
+            if ((!paymentMethod.details().id().isNull()) && (origPaymentMethod.details().isAssignableFrom(CreditCardInfo.class))) {
                 CreditCardInfo origcc = origPaymentMethod.details().cast();
                 if (cc.card().newNumber().isNull()) {
                     Validate.isEquals(origcc.card().obfuscatedNumber(), cc.card().obfuscatedNumber(), "obfuscatedNumber changed");
