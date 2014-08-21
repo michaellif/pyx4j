@@ -100,13 +100,11 @@ public class TenantForm extends LeaseParticipantForm<TenantDTO> {
                 getValue().electronicPaymentsAllowed().getValue(false) && !getValue().isMoveOutWithinNextBillingCycle().getValue(false));
 
         // disable any payment-related editing if no electronic payments allowed:
-        if (isEditable()) {
-            get(proto().paymentMethods()).setNote(null);
-            get(proto().preauthorizedPayments()).setNote(null);
-            if (!getValue().electronicPaymentsAllowed().getValue(false)) {
-                get(proto().paymentMethods()).setNote(i18n.tr("Merchant Account is not set up to receive Electronic Payments"), NoteStyle.Warn);
-                get(proto().preauthorizedPayments()).setNote(i18n.tr("Merchant Account is not set up to receive Electronic Payments"), NoteStyle.Warn);
-            }
+        get(proto().paymentMethods()).setNote(null);
+        get(proto().preauthorizedPayments()).setNote(null);
+        if (!getValue().electronicPaymentsAllowed().getValue(false)) {
+            get(proto().paymentMethods()).setNote(i18n.tr("Merchant Account is not set up to receive Electronic Payments"), NoteStyle.Warn);
+            get(proto().preauthorizedPayments()).setNote(i18n.tr("Merchant Account is not set up to receive Electronic Payments"), NoteStyle.Warn);
         }
 
         updateTenantInsuranceTabControls();
