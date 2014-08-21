@@ -61,6 +61,11 @@ public class PaymentMethodFacadeImpl implements PaymentMethodFacade {
     }
 
     @Override
+    public boolean isPaymentMethodUpdated(LeasePaymentMethod paymentMethod) {
+        return PaymentMethodPersister.isPaymentMethodUpdated(paymentMethod);
+    }
+
+    @Override
     public LeasePaymentMethod persistLeasePaymentMethod(LeasePaymentMethod paymentMethod, Building building) {
         return PaymentMethodPersister.persistLeasePaymentMethod(building, paymentMethod);
     }

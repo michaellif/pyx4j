@@ -47,6 +47,8 @@ public interface PaymentMethodFacade {
      */
     boolean isCompletePaymentMethod(LeasePaymentMethod paymentMethod);
 
+    boolean isPaymentMethodUpdated(LeasePaymentMethod paymentMethod);
+
     LeasePaymentMethod persistLeasePaymentMethod(LeasePaymentMethod paymentMethod, Building buildingId);
 
     void deleteLeasePaymentMethod(LeasePaymentMethod paymentMethodId);
@@ -106,4 +108,5 @@ public interface PaymentMethodFacade {
     LogicalDate getNextAutopayDate(Lease lease);
 
     List<PaymentRecord> calulatePreauthorizedPayment(BillingCycle billingCycle, BillingAccount billingAccountId);
+
 }

@@ -96,6 +96,37 @@ class PaymentMethodPersister {
         return true;
     }
 
+    private static boolean isDetailsChanged(AbstractPaymentMethod paymentMethod, AbstractPaymentMethod origPaymentMethod) {
+        switch (paymentMethod.type().getValue()) {
+        case Echeck:
+            EcheckInfo eci = paymentMethod.details().cast();
+            EcheckInfo origeci = origPaymentMethod.details().cast();
+            return !EntityGraph.ownedEqualValues(eci, origeci, eci.accountNo());
+        case CreditCard:
+            CreditCardInfo cc = paymentMethod.details().cast();
+            CreditCardInfo origcc = origPaymentMethod.details().cast();
+            return !EntityGraph.ownedEqualValues(cc, origcc, cc.card());
+        default:
+            return !EntityGraph.ownedEqualValues(paymentMethod.details(), origPaymentMethod.details());
+        }
+    }
+
+    static boolean isPaymentMethodUpdated(LeasePaymentMethod paymentMethod) {
+        if (paymentMethod.id().isNull()) {
+            return true;
+        }
+        LeasePaymentMethod origPaymentMethod = Persistence.service().retrieve(LeasePaymentMethod.class, paymentMethod.getPrimaryKey());
+        if (isAccountNumberChange(paymentMethod, origPaymentMethod)) {
+            return true;
+        } else {
+            if (!EntityGraph.ownedEqualValues(paymentMethod, origPaymentMethod, paymentMethod.details())) {
+                return true;
+            } else {
+                return isDetailsChanged(paymentMethod, origPaymentMethod);
+            }
+        }
+    }
+
     static LeasePaymentMethod persistLeasePaymentMethod(Building building, LeasePaymentMethod paymentMethod) {
         LeasePaymentMethod origPaymentMethod = null;
         if (!paymentMethod.id().isNull()) {
