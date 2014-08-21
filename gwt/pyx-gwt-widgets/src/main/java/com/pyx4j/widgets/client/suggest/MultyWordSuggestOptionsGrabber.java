@@ -18,7 +18,7 @@
  * @author michaellif
  * @version $Id$
  */
-package com.pyx4j.forms.client.ui.selector;
+package com.pyx4j.widgets.client.suggest;
 
 import java.util.Collection;
 import java.util.Collections;
@@ -26,7 +26,6 @@ import java.util.Comparator;
 import java.util.List;
 
 import com.pyx4j.commons.IFormatter;
-import com.pyx4j.widgets.client.suggest.OptionsGrabber;
 
 public class MultyWordSuggestOptionsGrabber<E> implements OptionsGrabber<E> {
 

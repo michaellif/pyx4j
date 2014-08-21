@@ -30,7 +30,7 @@ import java.util.Collection;
 import org.junit.Test;
 
 import com.pyx4j.commons.IFormatter;
-import com.pyx4j.forms.client.ui.selector.MultyWordSuggestTrie;
+import com.pyx4j.widgets.client.suggest.MultyWordSuggestTrie;
 
 public class MultyWordSuggestTrieTest {
 

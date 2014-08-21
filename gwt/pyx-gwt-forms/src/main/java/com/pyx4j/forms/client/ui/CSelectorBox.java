@@ -18,7 +18,7 @@
  * @author Michael
  * @version $Id$
  */
-package com.pyx4j.forms.client.ui.selector;
+package com.pyx4j.forms.client.ui;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -31,7 +31,6 @@ import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.forms.client.events.HasOptionsChangeHandlers;
 import com.pyx4j.forms.client.events.OptionsChangeEvent;
 import com.pyx4j.forms.client.events.OptionsChangeHandler;
-import com.pyx4j.forms.client.ui.CTextFieldBase;
 
 public class CSelectorBox<E extends IEntity> extends CTextFieldBase<E, NSelectorBox<E>> implements HasOptionsChangeHandlers<List<E>> {
 

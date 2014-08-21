@@ -18,7 +18,7 @@
  * @author michaellif
  * @version $Id$
  */
-package com.pyx4j.forms.client.ui.selector;
+package com.pyx4j.widgets.client.suggest;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -31,11 +31,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.pyx4j.commons.IFormatter;
-import com.pyx4j.forms.client.events.PropertyChangeEvent;
 
 public class MultyWordSuggestTrie<E> {
 
-    private static final Logger log = LoggerFactory.getLogger(PropertyChangeEvent.class);
+    private static final Logger log = LoggerFactory.getLogger(MultyWordSuggestTrie.class);
 
     private static final String WHITESPACE_STRING = " ";
 

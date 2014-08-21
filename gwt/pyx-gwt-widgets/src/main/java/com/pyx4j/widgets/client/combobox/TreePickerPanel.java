@@ -75,8 +75,7 @@ public class TreePickerPanel<E> extends PickerPanel<E> {
         requiredOptionsRefresh = (options == null);
         tree.clear();
         for (E option : options) {
-            PickerTreeItem treeItem = null;
-            treeItem = new PickerTreeItem(option);
+            PickerTreeItem treeItem = new PickerTreeItem(option);
             tree.addItem(treeItem);
             if (!plainList) {
                 treeItem.addItem(SafeHtmlUtils.fromTrustedString("Loading..."));

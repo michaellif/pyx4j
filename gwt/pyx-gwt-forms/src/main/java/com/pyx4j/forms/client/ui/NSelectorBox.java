@@ -18,7 +18,7 @@
  * @author Michael
  * @version $Id$
  */
-package com.pyx4j.forms.client.ui.selector;
+package com.pyx4j.forms.client.ui;
 
 import java.text.ParseException;
 import java.util.Collection;
@@ -29,7 +29,7 @@ import com.google.gwt.event.logical.shared.SelectionHandler;
 
 import com.pyx4j.commons.IFormatter;
 import com.pyx4j.entity.core.IEntity;
-import com.pyx4j.forms.client.ui.NTextFieldBase;
+import com.pyx4j.widgets.client.suggest.MultyWordSuggestOptionsGrabber;
 import com.pyx4j.widgets.client.suggest.SelectorTextBox;
 
 public class NSelectorBox<E extends IEntity> extends NTextFieldBase<E, SelectorTextBox<E>, CSelectorBox<E>> {
