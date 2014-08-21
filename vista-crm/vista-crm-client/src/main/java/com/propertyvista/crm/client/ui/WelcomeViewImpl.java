@@ -33,7 +33,7 @@ public class WelcomeViewImpl extends VerticalPanel implements WelcomeView {
 
         FlexTable content = new FlexTable();
 
-        HTML msg = new HTML(i18n.tr("Welcome to the CRM"));
+        HTML msg = new HTML(i18n.tr("Welcome to CRM"));
         Style msgStyle = msg.getElement().getStyle();
         msgStyle.setProperty("fontSize", "20px");
         msgStyle.setProperty("fontWeight", "bold");
