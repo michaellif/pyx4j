@@ -34,6 +34,8 @@ import com.yardi.ws.ItfILSGuestCard;
 import com.yardi.ws.ItfILSGuestCard2_0;
 import com.yardi.ws.ItfILSGuestCard2_0Stub;
 import com.yardi.ws.ItfILSGuestCardStub;
+import com.yardi.ws.operations.guestcard40.GetApplication_Login;
+import com.yardi.ws.operations.guestcard40.GetApplication_LoginResponse;
 import com.yardi.ws.operations.guestcard40.GetAttachmentTypesAndChargeCodes;
 import com.yardi.ws.operations.guestcard40.GetAttachmentTypesAndChargeCodesResponse;
 import com.yardi.ws.operations.guestcard40.GetPropertyConfigurations;
@@ -48,16 +50,16 @@ import com.yardi.ws.operations.guestcard40.GetYardiGuestActivity_Search;
 import com.yardi.ws.operations.guestcard40.GetYardiGuestActivity_SearchResponse;
 import com.yardi.ws.operations.guestcard40.GetYardiRentableItems_Login;
 import com.yardi.ws.operations.guestcard40.GetYardiRentableItems_LoginResponse;
+import com.yardi.ws.operations.guestcard40.ImportApplication_Login;
+import com.yardi.ws.operations.guestcard40.ImportApplication_LoginResponse;
 import com.yardi.ws.operations.guestcard40.ImportYardiGuest_Login;
 import com.yardi.ws.operations.guestcard40.ImportYardiGuest_LoginResponse;
 import com.yardi.ws.operations.guestcard40.Ping;
 import com.yardi.ws.operations.guestcard40.PingResponse;
 import com.yardi.ws.operations.guestcard40.XmlDoc_type0;
-import com.yardi.ws.operations.ils.ImportApplication_Login;
-import com.yardi.ws.operations.ils.ImportApplication_LoginResponse;
+import com.yardi.ws.operations.guestcard40.XmlDocument_type0;
 import com.yardi.ws.operations.ils.UnitAvailability_Login;
 import com.yardi.ws.operations.ils.UnitAvailability_LoginResponse;
-import com.yardi.ws.operations.ils.XmlDocument_type1;
 
 import com.pyx4j.essentials.j2se.util.MarshallUtil;
 
@@ -205,6 +207,30 @@ class YardiGuestManagementStubImpl extends AbstractYardiStub implements YardiGue
     }
 
     @Override
+    public LeaseApplication getApplication(PmcYardiCredential yc, String propertyId, String prospectId) throws YardiServiceException, RemoteException {
+        init(Action.GetApplication);
+
+        GetApplication_Login request = new GetApplication_Login();
+
+        request.setInterfaceEntity(YardiConstants.ILS_INTERFACE_ENTITY);
+        request.setInterfaceLicense(YardiLicense.getInterfaceLicense(YardiInterfaceType.ILSGuestCard, yc));
+
+        request.setUserName(yc.username().getValue());
+        request.setPassword(yc.password().number().getValue());
+        request.setServerName(yc.serverName().getValue());
+        request.setDatabase(yc.database().getValue());
+        request.setPlatform(yc.platform().getValue().name());
+
+        request.setPropertyID(propertyId);
+        request.setProspectID(prospectId);
+
+        GetApplication_LoginResponse response = getILSGuestCardService(yc).getApplication_Login(request);
+        String xml = response.getGetApplication_LoginResult().getExtraElement().toString();
+
+        return ensureResult(xml, LeaseApplication.class);
+    }
+
+    @Override
     public LeadManagement findGuest(PmcYardiCredential yc, String propertyId, String guestId) throws YardiServiceException, RemoteException {
         init(Action.GetYardiGuestSearch);
 
@@ -289,7 +315,7 @@ class YardiGuestManagementStubImpl extends AbstractYardiStub implements YardiGue
 
         try {
             String leaseAppXml = MarshallUtil.marshall(leaseApp);
-            XmlDocument_type1 xmlDoc = new XmlDocument_type1();
+            XmlDocument_type0 xmlDoc = new XmlDocument_type0();
             OMElement element = AXIOMUtil.stringToOM(leaseAppXml);
             xmlDoc.setExtraElement(element);
             request.setXmlDocument(xmlDoc);
@@ -299,7 +325,7 @@ class YardiGuestManagementStubImpl extends AbstractYardiStub implements YardiGue
             throw new Error(e);
         }
 
-        ImportApplication_LoginResponse response = getILSGuestCard20Service(yc).importApplication_Login(request);
+        ImportApplication_LoginResponse response = getILSGuestCardService(yc).importApplication_Login(request);
         String xml = response.getImportApplication_LoginResult().getExtraElement().toString();
 
         ensureValid(xml);

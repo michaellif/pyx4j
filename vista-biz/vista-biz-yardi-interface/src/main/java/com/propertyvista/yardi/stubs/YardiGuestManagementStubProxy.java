@@ -22,10 +22,13 @@ import com.yardi.entity.guestcard40.RentableItems;
 import com.yardi.entity.ils.PhysicalProperty;
 import com.yardi.entity.leaseapp30.LeaseApplication;
 
+import com.propertyvista.biz.system.yardi.YardiPropertyNoAccessException;
 import com.propertyvista.biz.system.yardi.YardiResponseException;
 import com.propertyvista.biz.system.yardi.YardiServiceException;
 import com.propertyvista.domain.settings.PmcYardiCredential;
+import com.propertyvista.yardi.beans.Messages;
 import com.propertyvista.yardi.beans.Properties;
+import com.propertyvista.yardi.services.YardiHandledErrorMessages;
 
 class YardiGuestManagementStubProxy extends YardiAbstractStubProxy implements YardiGuestManagementStub {
 
@@ -113,8 +116,42 @@ class YardiGuestManagementStubProxy extends YardiAbstractStubProxy implements Ya
     }
 
     @Override
+    public LeaseApplication getApplication(PmcYardiCredential yc, String propertyId, String prospectId) throws YardiServiceException, RemoteException {
+        // TODO Auto-generated method stub
+        setDataErrorHandler(new DataErrorHandler() {
+            @Override
+            public void handle(String xml) throws YardiServiceException {
+                for (String regex : new String[] { ".*<Error>(.*)</Error>.*" }) {
+                    if (xml.matches(regex) && ignoreErrorMessage(xml.replaceFirst(regex, "$1"))) {
+                        return;
+                    }
+                }
+                throw new YardiServiceException(GENERIC_YARDI_ERROR);
+            }
+
+            private boolean ignoreErrorMessage(String message) throws YardiServiceException {
+                String lcMessage = message == null ? null : message.toLowerCase();
+                // we don't consider this an error
+                return lcMessage == null || lcMessage.contains("invalid prospect id");
+            }
+        });
+        return null;
+    }
+
+    @Override
     public LeadManagement findGuest(PmcYardiCredential yc, String propertyId, String guestId) throws YardiServiceException, RemoteException {
         try {
+            setMessageErrorHandler(new MessageErrorHandler() {
+                @Override
+                public boolean handle(Messages messages) throws YardiServiceException {
+                    if (messages.hasErrorMessage(YardiHandledErrorMessages.errorMessage_GuestNotFound)) {
+                        return true;
+                    } else if (messages.hasErrorMessage(YardiHandledErrorMessages.errorMessage_NoAccess)) {
+                        throw new YardiPropertyNoAccessException(messages.getErrorMessage().getValue());
+                    }
+                    return false;
+                }
+            });
             return getStub(yc).findGuest(yc, propertyId, guestId);
         } catch (YardiResponseException e) {
             validateResponseXml(e.getResponse());

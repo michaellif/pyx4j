@@ -118,4 +118,10 @@ public class YardiMockGuestManagementStubImpl implements YardiGuestManagementStu
         return dumpXml("getPropertyConfigurations", YardiMockServer.instance().getPropertyConfigurations());
     }
 
+    @Override
+    public LeaseApplication getApplication(PmcYardiCredential yc, String propertyId, String prospectId) throws YardiServiceException, RemoteException {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
 }
