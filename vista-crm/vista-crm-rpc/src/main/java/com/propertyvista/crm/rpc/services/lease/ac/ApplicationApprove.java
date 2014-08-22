@@ -15,7 +15,7 @@ package com.propertyvista.crm.rpc.services.lease.ac;
 
 import com.pyx4j.security.annotations.ActionId;
 
-public class ApplicationDecisionMoreInfo implements ActionId {
+public class ApplicationApprove implements ActionId {
 
     private static final long serialVersionUID = 1L;
 

@@ -33,8 +33,8 @@ import com.pyx4j.security.server.UIAclBuilder;
 
 import com.propertyvista.crm.rpc.security.LeaseTermEditOnApplicationInstanceAccess;
 import com.propertyvista.crm.rpc.services.lease.ac.ApplicationCancel;
-import com.propertyvista.crm.rpc.services.lease.ac.ApplicationDecisionADC;
-import com.propertyvista.crm.rpc.services.lease.ac.ApplicationDecisionMoreInfo;
+import com.propertyvista.crm.rpc.services.lease.ac.ApplicationApprove;
+import com.propertyvista.crm.rpc.services.lease.ac.ApplicationMoreInfo;
 import com.propertyvista.crm.rpc.services.lease.ac.ApplicationDocumentSigning;
 import com.propertyvista.crm.rpc.services.lease.ac.ApplicationOnlineApplication;
 import com.propertyvista.crm.rpc.services.lease.ac.ApplicationReserveUnit;
@@ -93,12 +93,12 @@ class VistaCrmLeaseApplicationAccessControlList extends UIAclBuilder {
         grant(ApplicationDecisionVerify, ApplicationVerify.class);
         grant(ApplicationDecisionFull, ApplicationVerify.class);
 
-        grant(ApplicationDecisionApprove, ApplicationDecisionADC.class);
-        grant(ApplicationDecisionFull, ApplicationDecisionADC.class);
+        grant(ApplicationDecisionApprove, ApplicationApprove.class);
+        grant(ApplicationDecisionFull, ApplicationApprove.class);
 
-        grant(ApplicationDecisionVerify, ApplicationDecisionMoreInfo.class);
-        grant(ApplicationDecisionApprove, ApplicationDecisionMoreInfo.class);
-        grant(ApplicationDecisionFull, ApplicationDecisionMoreInfo.class);
+        grant(ApplicationDecisionVerify, ApplicationMoreInfo.class);
+        grant(ApplicationDecisionApprove, ApplicationMoreInfo.class);
+        grant(ApplicationDecisionFull, ApplicationMoreInfo.class);
 
         grant(ApplicationDecisionStartOnline, ApplicationCancel.class);
         grant(ApplicationDecisionReserveUnit, ApplicationCancel.class);

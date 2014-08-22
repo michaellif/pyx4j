@@ -54,8 +54,11 @@ import com.propertyvista.crm.client.ui.crud.lease.common.LeaseViewerViewImplBase
 import com.propertyvista.crm.rpc.dto.LeaseApplicationActionDTO;
 import com.propertyvista.crm.rpc.dto.LeaseApplicationActionDTO.Action;
 import com.propertyvista.crm.rpc.services.lease.LeaseApplicationDocumentUploadService;
-import com.propertyvista.crm.rpc.services.lease.ac.ApplicationDecisionADC;
-import com.propertyvista.crm.rpc.services.lease.ac.ApplicationDecisionMoreInfo;
+import com.propertyvista.crm.rpc.services.lease.ac.ApplicationCancel;
+import com.propertyvista.crm.rpc.services.lease.ac.ApplicationApprove;
+import com.propertyvista.crm.rpc.services.lease.ac.ApplicationMoreInfo;
+import com.propertyvista.crm.rpc.services.lease.ac.ApplicationSubmit;
+import com.propertyvista.crm.rpc.services.lease.ac.ApplicationVerify;
 import com.propertyvista.crm.rpc.services.lease.ac.ApplicationDocumentSigning;
 import com.propertyvista.crm.rpc.services.lease.ac.ApplicationOnlineApplication;
 import com.propertyvista.crm.rpc.services.lease.ac.ApplicationReserveUnit;
@@ -215,7 +218,7 @@ public class LeaseApplicationViewerViewImpl extends LeaseViewerViewImplBase<Leas
             public void execute() {
                 moreInfoActionExecuter();
             }
-        }, new ActionPermission(ApplicationDecisionMoreInfo.class));
+        }, new ActionPermission(ApplicationMoreInfo.class));
         if (!VistaTODO.VISTA_4484_Action_More_Info_should_be_hidden_as_not_fully_implemented) {
             addAction(moreInfoAction);
         }
@@ -225,7 +228,7 @@ public class LeaseApplicationViewerViewImpl extends LeaseViewerViewImplBase<Leas
             public void execute() {
                 submitActionExecuter();
             }
-        }, new ActionPermission(ApplicationDecisionADC.class));
+        }, new ActionPermission(ApplicationSubmit.class));
         addAction(submitAction);
 
         completeAction = new SecureMenuItem(i18n.tr("Complete"), new Command() {
@@ -233,7 +236,7 @@ public class LeaseApplicationViewerViewImpl extends LeaseViewerViewImplBase<Leas
             public void execute() {
                 completeActionExecuter();
             }
-        }, new ActionPermission(ApplicationDecisionADC.class));
+        }, new ActionPermission(ApplicationVerify.class));
         addAction(completeAction);
 
         approveAction = new SecureMenuItem(i18n.tr("Approve"), new Command() {
@@ -241,7 +244,7 @@ public class LeaseApplicationViewerViewImpl extends LeaseViewerViewImplBase<Leas
             public void execute() {
                 approveActionExecuter();
             }
-        }, new ActionPermission(ApplicationDecisionADC.class));
+        }, new ActionPermission(ApplicationApprove.class));
         addAction(approveAction);
 
         declineAction = new SecureMenuItem(i18n.tr("Decline"), new Command() {
@@ -249,7 +252,7 @@ public class LeaseApplicationViewerViewImpl extends LeaseViewerViewImplBase<Leas
             public void execute() {
                 declineActionExecuter();
             }
-        }, new ActionPermission(ApplicationDecisionADC.class));
+        }, new ActionPermission(ApplicationApprove.class));
         addAction(declineAction);
 
         cancelAction = new SecureMenuItem(i18n.tr("Cancel"), new Command() {
@@ -257,7 +260,7 @@ public class LeaseApplicationViewerViewImpl extends LeaseViewerViewImplBase<Leas
             public void execute() {
                 cancelActionExecuter();
             }
-        }, new ActionPermission(ApplicationDecisionADC.class));
+        }, new ActionPermission(ApplicationCancel.class));
         addAction(cancelAction);
     }
 
