@@ -54,14 +54,14 @@ import com.propertyvista.crm.client.ui.crud.lease.common.LeaseViewerViewImplBase
 import com.propertyvista.crm.rpc.dto.LeaseApplicationActionDTO;
 import com.propertyvista.crm.rpc.dto.LeaseApplicationActionDTO.Action;
 import com.propertyvista.crm.rpc.services.lease.LeaseApplicationDocumentUploadService;
-import com.propertyvista.crm.rpc.services.lease.ac.ApplicationCancel;
 import com.propertyvista.crm.rpc.services.lease.ac.ApplicationApprove;
-import com.propertyvista.crm.rpc.services.lease.ac.ApplicationMoreInfo;
-import com.propertyvista.crm.rpc.services.lease.ac.ApplicationSubmit;
-import com.propertyvista.crm.rpc.services.lease.ac.ApplicationVerify;
+import com.propertyvista.crm.rpc.services.lease.ac.ApplicationCancel;
 import com.propertyvista.crm.rpc.services.lease.ac.ApplicationDocumentSigning;
+import com.propertyvista.crm.rpc.services.lease.ac.ApplicationMoreInfo;
 import com.propertyvista.crm.rpc.services.lease.ac.ApplicationOnlineApplication;
 import com.propertyvista.crm.rpc.services.lease.ac.ApplicationReserveUnit;
+import com.propertyvista.crm.rpc.services.lease.ac.ApplicationSubmit;
+import com.propertyvista.crm.rpc.services.lease.ac.ApplicationVerify;
 import com.propertyvista.crm.rpc.services.lease.ac.CreditCheckRun;
 import com.propertyvista.domain.customizations.CountryOfOperation;
 import com.propertyvista.domain.pmc.PmcEquifaxStatus;
@@ -455,7 +455,7 @@ public class LeaseApplicationViewerViewImpl extends LeaseViewerViewImplBase<Leas
         setActionHighlighted(approveAction, approveAction.isVisible());
 
         // edit/view terms enabling logic:
-        editButton.setVisible(status.isDraft() && (!isOnlineApplication || noPtAppProgress));
+        editButton.setVisible(status.isDraft() && status != Status.PendingDecision && (!isOnlineApplication || noPtAppProgress));
         termsButton.setVisible(!status.isDraft());
 
         documentsButton.setVisible(status.isDraft());
