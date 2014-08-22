@@ -19,6 +19,8 @@ public abstract class YardiHandledErrorMessages {
 
     public static final String errorMessage_TenantNotFound = "No tenants exist with the given search criteria";
 
+    public static final String errorMessage_GuestNotFound = "No guests exist with the given search criteria.";
+
     //-- payment reversal post messages
 
     public static final String errorMessage_AlreadyNSF1 = "May not  NSF  a receipt that has been NSF";
