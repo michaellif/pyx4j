@@ -23,10 +23,9 @@ package com.pyx4j.commons.css;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Vector;
-
-import com.google.gwt.user.client.ui.RootPanel;
 
 public abstract class Theme {
 
@@ -44,7 +43,7 @@ public abstract class Theme {
         this.discriminator = discriminator;
 
         styles = new ArrayList<Style>();
-        mixinThemes = new HashMap<ThemeId, Theme>();
+        mixinThemes = new LinkedHashMap<ThemeId, Theme>();
     }
 
     public abstract ThemeId getId();
