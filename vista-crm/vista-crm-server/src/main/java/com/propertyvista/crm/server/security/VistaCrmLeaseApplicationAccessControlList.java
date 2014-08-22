@@ -14,9 +14,12 @@
 package com.propertyvista.crm.server.security;
 
 import static com.propertyvista.domain.security.VistaCrmBehavior.ApplicationBasic;
-import static com.propertyvista.domain.security.VistaCrmBehavior.ApplicationDecisionAll;
-import static com.propertyvista.domain.security.VistaCrmBehavior.ApplicationDecisionRecommendationApprove;
-import static com.propertyvista.domain.security.VistaCrmBehavior.ApplicationDecisionRecommendationFurtherMoreInfo;
+import static com.propertyvista.domain.security.VistaCrmBehavior.ApplicationDecisionApprove;
+import static com.propertyvista.domain.security.VistaCrmBehavior.ApplicationDecisionFull;
+import static com.propertyvista.domain.security.VistaCrmBehavior.ApplicationDecisionReserveUnit;
+import static com.propertyvista.domain.security.VistaCrmBehavior.ApplicationDecisionStartOnline;
+import static com.propertyvista.domain.security.VistaCrmBehavior.ApplicationDecisionSubmit;
+import static com.propertyvista.domain.security.VistaCrmBehavior.ApplicationDecisionVerify;
 import static com.propertyvista.domain.security.VistaCrmBehavior.ApplicationFull;
 import static com.propertyvista.domain.security.VistaCrmBehavior.ApplicationVerifyDoc;
 import static com.pyx4j.entity.security.AbstractCRUDPermission.ALL;
@@ -29,11 +32,14 @@ import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.security.server.UIAclBuilder;
 
 import com.propertyvista.crm.rpc.security.LeaseTermEditOnApplicationInstanceAccess;
+import com.propertyvista.crm.rpc.services.lease.ac.ApplicationCancel;
 import com.propertyvista.crm.rpc.services.lease.ac.ApplicationDecisionADC;
 import com.propertyvista.crm.rpc.services.lease.ac.ApplicationDecisionMoreInfo;
 import com.propertyvista.crm.rpc.services.lease.ac.ApplicationDocumentSigning;
 import com.propertyvista.crm.rpc.services.lease.ac.ApplicationOnlineApplication;
 import com.propertyvista.crm.rpc.services.lease.ac.ApplicationReserveUnit;
+import com.propertyvista.crm.rpc.services.lease.ac.ApplicationSubmit;
+import com.propertyvista.crm.rpc.services.lease.ac.ApplicationVerify;
 import com.propertyvista.domain.tenant.lead.Lead;
 import com.propertyvista.domain.tenant.prospect.LeaseApplicationDocument;
 import com.propertyvista.dto.LeaseApplicationDTO;
@@ -52,15 +58,18 @@ class VistaCrmLeaseApplicationAccessControlList extends UIAclBuilder {
 
         {// Application(Term) itself:
             List<Class<? extends IEntity>> entities = entities(LeaseApplicationDTO.class);
-            grant(ApplicationBasic, entities, ALL);
+            grant(ApplicationBasic, entities, READ);
+            grant(ApplicationBasic, LeaseTermDTO.class, new LeaseTermEditOnApplicationInstanceAccess(), READ);
+
             grant(ApplicationFull, entities, ALL);
-
-            grant(ApplicationVerifyDoc, entities, READ);
-
-            grant(ApplicationBasic, LeaseTermDTO.class, new LeaseTermEditOnApplicationInstanceAccess(), ALL);
             grant(ApplicationFull, LeaseTermDTO.class, new LeaseTermEditOnApplicationInstanceAccess(), ALL);
 
+            grant(ApplicationDecisionFull, entities, ALL);
+            grant(ApplicationDecisionFull, LeaseTermDTO.class, new LeaseTermEditOnApplicationInstanceAccess(), ALL);
+
+            grant(ApplicationVerifyDoc, entities, READ);
             grant(ApplicationVerifyDoc, LeaseTermDTO.class, new LeaseTermEditOnApplicationInstanceAccess(), READ);
+
         }
 
         {// Financial:
@@ -78,23 +87,31 @@ class VistaCrmLeaseApplicationAccessControlList extends UIAclBuilder {
         grant(ApplicationVerifyDoc, ApplicationDocumentSigning.class);
 
         // Application Decisions:
-        grant(ApplicationFull, ApplicationDecisionADC.class);
-        grant(ApplicationFull, ApplicationDecisionMoreInfo.class);
+        grant(ApplicationDecisionSubmit, ApplicationSubmit.class);
+        grant(ApplicationDecisionFull, ApplicationSubmit.class);
 
-        grant(ApplicationDecisionRecommendationApprove, ApplicationDecisionADC.class);
-        grant(ApplicationDecisionRecommendationApprove, ApplicationDecisionMoreInfo.class);
+        grant(ApplicationDecisionVerify, ApplicationVerify.class);
+        grant(ApplicationDecisionFull, ApplicationVerify.class);
 
-        grant(ApplicationDecisionRecommendationFurtherMoreInfo, ApplicationDecisionADC.class);
-        grant(ApplicationDecisionRecommendationFurtherMoreInfo, ApplicationDecisionMoreInfo.class);
+        grant(ApplicationDecisionApprove, ApplicationDecisionADC.class);
+        grant(ApplicationDecisionFull, ApplicationDecisionADC.class);
 
-        grant(ApplicationDecisionAll, ApplicationDecisionADC.class);
-        grant(ApplicationDecisionAll, ApplicationDecisionMoreInfo.class);
+        grant(ApplicationDecisionVerify, ApplicationDecisionMoreInfo.class);
+        grant(ApplicationDecisionApprove, ApplicationDecisionMoreInfo.class);
+        grant(ApplicationDecisionFull, ApplicationDecisionMoreInfo.class);
+
+        grant(ApplicationDecisionStartOnline, ApplicationCancel.class);
+        grant(ApplicationDecisionReserveUnit, ApplicationCancel.class);
+        grant(ApplicationDecisionSubmit, ApplicationCancel.class);
+        grant(ApplicationDecisionVerify, ApplicationCancel.class);
+        grant(ApplicationDecisionApprove, ApplicationCancel.class);
+        grant(ApplicationDecisionFull, ApplicationCancel.class);
 
         // Reserve unit and start Online:        
-        grant(ApplicationBasic, ApplicationReserveUnit.class);
-        grant(ApplicationBasic, ApplicationOnlineApplication.class);
+        grant(ApplicationDecisionReserveUnit, ApplicationReserveUnit.class);
+        grant(ApplicationDecisionFull, ApplicationReserveUnit.class);
 
-        grant(ApplicationFull, ApplicationReserveUnit.class);
-        grant(ApplicationFull, ApplicationOnlineApplication.class);
+        grant(ApplicationDecisionStartOnline, ApplicationOnlineApplication.class);
+        grant(ApplicationDecisionFull, ApplicationOnlineApplication.class);
     }
 }

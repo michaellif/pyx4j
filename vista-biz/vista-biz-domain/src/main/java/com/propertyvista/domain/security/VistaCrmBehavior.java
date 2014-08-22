@@ -63,12 +63,11 @@ public enum VistaCrmBehavior implements Behavior {
 
     // --
 
-    ApplicationDecisionRecommendationApprove,
+    ApplicationDecisionReserveUnit, ApplicationDecisionStartOnline,
 
-    @Translate("Application Decision Recommendation Further Information")
-    ApplicationDecisionRecommendationFurtherMoreInfo,
+    ApplicationDecisionSubmit, ApplicationDecisionVerify, ApplicationDecisionApprove,
 
-    ApplicationDecisionAll,
+    ApplicationDecisionFull,
 
     // --
 
