@@ -73,6 +73,9 @@ public class NTextArea extends NTextComponent<String, TextArea, CTextComponent<S
 
     public void setVisibleLines(int visibleLines) {
         this.visibleLines = visibleLines;
+        if (getEditor() != null) {
+            getEditor().setVisibleLines(visibleLines);
+        }
     }
 
     public void scrollToBottom() {
