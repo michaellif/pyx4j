@@ -87,6 +87,33 @@ public class CreditCardInfoEditor extends CForm<CreditCardInfo> {
         // tweak:
         monthYearPicker.setYearRange(new Range(1900 + new Date().getYear(), 10));
         get(proto().securityCode()).setVisible(isEditable());
+        get(proto().securityCode()).setMandatory(false);
+        // manage security code mandatory state:
+        get(proto().nameOn()).addValueChangeHandler(new ValueChangeHandler<String>() {
+            @Override
+            public void onValueChange(ValueChangeEvent<String> event) {
+                get(proto().securityCode()).setMandatory(true);
+            }
+        });
+        get(proto().cardType()).addValueChangeHandler(new ValueChangeHandler<CreditCardType>() {
+            @Override
+            public void onValueChange(ValueChangeEvent<CreditCardType> event) {
+                get(proto().securityCode()).setMandatory(true);
+            }
+        });
+        get(proto().card()).addValueChangeHandler(new ValueChangeHandler<CreditCardNumberIdentity>() {
+            @Override
+            public void onValueChange(ValueChangeEvent<CreditCardNumberIdentity> event) {
+                get(proto().securityCode()).setMandatory(true);
+            }
+
+        });
+        get(proto().expiryDate()).addValueChangeHandler(new ValueChangeHandler<LogicalDate>() {
+            @Override
+            public void onValueChange(ValueChangeEvent<LogicalDate> event) {
+                get(proto().securityCode()).setMandatory(true);
+            }
+        });
 
         return formPanel;
     }
@@ -102,9 +129,8 @@ public class CreditCardInfoEditor extends CForm<CreditCardInfo> {
             }
         }
 
-        if (isEditable()) {
-            ((CTextComponent<?, ?>) get(proto().securityCode())).setWatermark("XXX");
-        }
+        get(proto().securityCode()).setMandatory(false);
+        ((CTextComponent<?, ?>) get(proto().securityCode())).setWatermark("XXX");
     }
 
     @Override
