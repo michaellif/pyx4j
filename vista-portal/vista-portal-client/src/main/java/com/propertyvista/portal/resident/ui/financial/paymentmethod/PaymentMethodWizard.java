@@ -13,6 +13,7 @@
  */
 package com.propertyvista.portal.resident.ui.financial.paymentmethod;
 
+import java.util.Collections;
 import java.util.Set;
 
 import com.google.gwt.core.client.GWT;
@@ -66,18 +67,27 @@ public class PaymentMethodWizard extends CPortalEntityWizard<PaymentMethodDTO> {
             LeasePaymentMethod.class) {
 
         @Override
-        public Set<PaymentType> getPaymentTypes() {
-            return PaymentMethodWizard.this.getValue().allowedPaymentsSetup().allowedPaymentTypes();
+        public Set<PaymentType> getDefaultPaymentTypes() {
+            if (PaymentMethodWizard.this.getValue() != null) {
+                return PaymentMethodWizard.this.getValue().allowedPaymentsSetup().allowedPaymentTypes();
+            }
+            return Collections.emptySet();
         }
 
         @Override
         protected Set<CreditCardType> getAllowedCardTypes() {
-            return PaymentMethodWizard.this.getValue().allowedPaymentsSetup().allowedCardTypes();
+            if (PaymentMethodWizard.this.getValue() != null) {
+                return PaymentMethodWizard.this.getValue().allowedPaymentsSetup().allowedCardTypes();
+            }
+            return Collections.emptySet();
         }
 
         @Override
         protected Set<CreditCardType> getConvienceFeeApplicableCardTypes() {
-            return PaymentMethodWizard.this.getValue().allowedPaymentsSetup().convenienceFeeApplicableCardTypes();
+            if (PaymentMethodWizard.this.getValue() != null) {
+                return PaymentMethodWizard.this.getValue().allowedPaymentsSetup().convenienceFeeApplicableCardTypes();
+            }
+            return Collections.emptySet();
         };
 
         @Override
@@ -146,13 +156,6 @@ public class PaymentMethodWizard extends CPortalEntityWizard<PaymentMethodDTO> {
             confirmationDetailsHolder.clear();
             confirmationDetailsHolder.setWidget(createConfirmationDetailsPanel());
         }
-    }
-
-    @Override
-    protected void onValueSet(final boolean populate) {
-        super.onValueSet(populate);
-
-        paymentMethodEditor.setElectronicPaymentsEnabled(getValue().allowedPaymentsSetup().electronicPaymentsAllowed().getValue(Boolean.FALSE));
     }
 
     private Widget createConfirmationDetailsPanel() {

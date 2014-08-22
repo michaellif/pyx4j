@@ -14,6 +14,7 @@
 package com.propertyvista.portal.resident.ui.financial.autopay;
 
 import java.math.BigDecimal;
+import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
@@ -90,18 +91,27 @@ public class AutoPayWizard extends CPortalEntityWizard<AutoPayDTO> {
             LeasePaymentMethod.class) {
 
         @Override
-        public Set<PaymentType> getPaymentTypes() {
-            return AutoPayWizard.this.getValue().allowedPaymentsSetup().allowedPaymentTypes();
+        public Set<PaymentType> getDefaultPaymentTypes() {
+            if (AutoPayWizard.this.getValue() != null) {
+                return AutoPayWizard.this.getValue().allowedPaymentsSetup().allowedPaymentTypes();
+            }
+            return Collections.emptySet();
         }
 
         @Override
         protected Set<CreditCardType> getAllowedCardTypes() {
-            return AutoPayWizard.this.getValue().allowedPaymentsSetup().allowedCardTypes();
+            if (AutoPayWizard.this.getValue() != null) {
+                return AutoPayWizard.this.getValue().allowedPaymentsSetup().allowedCardTypes();
+            }
+            return Collections.emptySet();
         }
 
         @Override
         protected Set<CreditCardType> getConvienceFeeApplicableCardTypes() {
-            return AutoPayWizard.this.getValue().allowedPaymentsSetup().convenienceFeeApplicableCardTypes();
+            if (AutoPayWizard.this.getValue() != null) {
+                return AutoPayWizard.this.getValue().allowedPaymentsSetup().convenienceFeeApplicableCardTypes();
+            }
+            return Collections.emptySet();
         };
 
         @Override
@@ -173,7 +183,7 @@ public class AutoPayWizard extends CPortalEntityWizard<AutoPayDTO> {
             @Override
             public void onValueChange(ValueChangeEvent<PaymentSelect> event) {
                 paymentMethodEditor.reset();
-                paymentMethodEditor.setElectronicPaymentsEnabled(getValue().allowedPaymentsSetup().electronicPaymentsAllowed().getValue(Boolean.FALSE));
+                paymentMethodEditor.setDefaultPaymentTypes();
 
                 if (event.getValue() != null) {
                     switch (event.getValue()) {
@@ -278,8 +288,6 @@ public class AutoPayWizard extends CPortalEntityWizard<AutoPayDTO> {
     protected void onValueSet(final boolean populate) {
         super.onValueSet(populate);
 
-        paymentMethodEditor.setElectronicPaymentsEnabled(getValue().allowedPaymentsSetup().electronicPaymentsAllowed().getValue(Boolean.FALSE));
-
         loadProfiledPaymentMethods(new DefaultAsyncCallback<Void>() {
             @Override
             public void onSuccess(Void result) {
@@ -302,8 +310,8 @@ public class AutoPayWizard extends CPortalEntityWizard<AutoPayDTO> {
             @Override
             public BasicValidationError isValid() {
                 if (getComponent().getValue() != null) {
-                    return (paymentMethodEditor.getPaymentTypes().contains(getComponent().getValue().type().getValue()) ? null : new BasicValidationError(
-                            getComponent(), i18n.tr("Not allowed payment type!")));
+                    return (paymentMethodEditor.getDefaultPaymentTypes().contains(getComponent().getValue().type().getValue()) ? null
+                            : new BasicValidationError(getComponent(), i18n.tr("Not allowed payment type!")));
                 }
                 return null;
             }

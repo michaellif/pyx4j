@@ -80,7 +80,7 @@ public class TenantSurePaymentMethodForm extends PortalPaymentMethodEditor<Insur
     }
 
     @Override
-    public Set<PaymentType> getPaymentTypes() {
+    public Set<PaymentType> getDefaultPaymentTypes() {
         return EnumSet.of(PaymentType.CreditCard);
     }
 

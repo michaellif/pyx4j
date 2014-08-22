@@ -176,9 +176,8 @@ public class IdUploaderFolder extends PortalBoxFolder<IdentificationDocumentFold
                 public BasicValidationError isValid() {
                     if (getComponent().getValue() != null && getComponent().getValue().size() < 1) {
                         return new BasicValidationError(getComponent(), i18n.tr("At least one document file is required"));
-                    } else {
-                        return null;
                     }
+                    return null;
                 }
             });
 

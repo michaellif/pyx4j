@@ -13,7 +13,6 @@
  */
 package com.propertyvista.common.client.ui.components.editors.payments;
 
-import java.util.Collection;
 import java.util.EnumSet;
 import java.util.Set;
 
@@ -25,17 +24,15 @@ import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.entity.core.EntityFactory;
+import com.pyx4j.forms.client.ui.CComboBox;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEntityLabel;
 import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.CNumberLabel;
-import com.pyx4j.forms.client.ui.CRadioGroup;
-import com.pyx4j.forms.client.ui.CRadioGroupEnum;
 import com.pyx4j.forms.client.ui.IEditableComponentFactory;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.widgets.client.RadioGroup;
 
 import com.propertyvista.common.client.ui.components.editors.InternationalAddressEditor;
 import com.propertyvista.domain.contact.InternationalAddress;
@@ -84,8 +81,7 @@ public class PaymentMethodEditor<E extends AbstractPaymentMethod> extends CForm<
         formPanel.append(Location.Left, proto().id(), new CNumberLabel()).decorate().componentWidth(120);
         formPanel.append(Location.Right, proto().creationDate()).decorate().componentWidth(120);
 
-        formPanel.append(Location.Left, proto().type(), new CRadioGroupEnum<PaymentType>(PaymentType.class, RadioGroup.Layout.HORISONTAL)).decorate()
-                .componentWidth(200);
+        formPanel.append(Location.Left, proto().type(), new CComboBox<PaymentType>()).decorate().componentWidth(200);
         if (proto() instanceof PaymentMethod) {
             formPanel.append(Location.Right, ((PaymentMethod) proto()).createdBy(), new CEntityLabel<AbstractPmcUser>()).decorate().componentWidth(200);
         }
@@ -127,7 +123,8 @@ public class PaymentMethodEditor<E extends AbstractPaymentMethod> extends CForm<
     @Override
     public void onReset() {
         super.onReset();
-        setPaymentTypesEnabled(EnumSet.allOf(PaymentType.class), true);
+
+        setPaymentTypes(null);
         get(proto().type()).setNote(null);
         setBillingAddressVisible(false);
 
@@ -150,6 +147,8 @@ public class PaymentMethodEditor<E extends AbstractPaymentMethod> extends CForm<
     @Override
     protected void onValueSet(boolean populate) {
         super.onValueSet(populate);
+
+        setDefaultPaymentTypes();
 
         get(proto().billingAddress()).setEditable(!getValue().sameAsCurrent().getValue(false));
 
@@ -355,9 +354,8 @@ public class PaymentMethodEditor<E extends AbstractPaymentMethod> extends CForm<
     public boolean isIsPreauthorizedVisible() {
         if (paymentEntityClass.equals(PmcPaymentMethod.class)) {
             return get(((PmcPaymentMethod) proto()).selectForEquifaxPayments()).isVisible();
-        } else {
-            return false;
         }
+        return false;
     }
 
     // Payment Type options manipulation:
@@ -365,25 +363,17 @@ public class PaymentMethodEditor<E extends AbstractPaymentMethod> extends CForm<
     /**
      * Override in derived classes to supply alternative set of options.
      */
-    public Set<PaymentType> getPaymentTypes() {
+    public Set<PaymentType> getDefaultPaymentTypes() {
         return EnumSet.allOf(PaymentType.class);
     }
 
-    public void setPaymentTypes(Collection<PaymentType> types) {
-        ((CRadioGroup<PaymentType>) get(proto().type())).setOptions(types);
+    public void setDefaultPaymentTypes() {
+        setPaymentTypes(getDefaultPaymentTypes());
     }
 
-    public void setPaymentTypesEnabled(Collection<PaymentType> opt, boolean enabled) {
-        if (get(proto().type()) instanceof CRadioGroup) {
-            ((CRadioGroup<PaymentType>) get(proto().type())).setOptionsEnabled(opt, enabled);
-        }
-    }
-
-    public void setElectronicPaymentsEnabled(Boolean electronicPaymentsEnabled) {
-        if (electronicPaymentsEnabled != Boolean.TRUE) {
-            this.setPaymentTypesEnabled(PaymentType.electronicPayments(), false);
-            get(proto().type()).setNote(i18n.tr("Warning: Building has not been set up to process electronic payments yet"), NoteStyle.Warn);
-        }
+    @SuppressWarnings("unchecked")
+    public void setPaymentTypes(Set<PaymentType> types) {
+        ((CComboBox<PaymentType>) get(proto().type())).setOptions(types);
     }
 
     protected Set<CreditCardType> getAllowedCardTypes() {

@@ -13,6 +13,7 @@
  */
 package com.propertyvista.portal.resident.ui.financial.paymentmethod;
 
+import java.util.Collections;
 import java.util.Set;
 
 import com.google.gwt.user.client.ui.IsWidget;
@@ -44,18 +45,27 @@ public class PaymentMethodViewForm extends CPortalEntityEditor<PaymentMethodDTO>
         formPanel.append(Location.Left, proto().paymentMethod(), new PortalPaymentMethodEditor<LeasePaymentMethod>(LeasePaymentMethod.class) {
 
             @Override
-            public Set<PaymentType> getPaymentTypes() {
-                return PaymentMethodViewForm.this.getValue().allowedPaymentsSetup().allowedPaymentTypes();
+            public Set<PaymentType> getDefaultPaymentTypes() {
+                if (PaymentMethodViewForm.this.getValue() != null) {
+                    return PaymentMethodViewForm.this.getValue().allowedPaymentsSetup().allowedPaymentTypes();
+                }
+                return Collections.emptySet();
             }
 
             @Override
             protected Set<CreditCardType> getAllowedCardTypes() {
-                return PaymentMethodViewForm.this.getValue().allowedPaymentsSetup().allowedCardTypes();
+                if (PaymentMethodViewForm.this.getValue() != null) {
+                    return PaymentMethodViewForm.this.getValue().allowedPaymentsSetup().allowedCardTypes();
+                }
+                return Collections.emptySet();
             }
 
             @Override
             protected Set<CreditCardType> getConvienceFeeApplicableCardTypes() {
-                return PaymentMethodViewForm.this.getValue().allowedPaymentsSetup().convenienceFeeApplicableCardTypes();
+                if (PaymentMethodViewForm.this.getValue() != null) {
+                    return PaymentMethodViewForm.this.getValue().allowedPaymentsSetup().convenienceFeeApplicableCardTypes();
+                }
+                return Collections.emptySet();
             }
         });
 

@@ -49,7 +49,7 @@ public abstract class PortalPaymentMethodEditor<E extends AbstractPaymentMethod>
     }
 
     @Override
-    public abstract Set<PaymentType> getPaymentTypes();
+    public abstract Set<PaymentType> getDefaultPaymentTypes();
 
     @Override
     protected abstract Set<CreditCardType> getAllowedCardTypes();
@@ -181,7 +181,7 @@ public abstract class PortalPaymentMethodEditor<E extends AbstractPaymentMethod>
 
         if (get(proto().type()).isEditable() && get(proto().type()) instanceof CComboBox) {
             CComboBox<PaymentType> type = ((CComboBox<PaymentType>) get(proto().type()));
-            type.setOptions(getPaymentTypes());
+            type.setOptions(getDefaultPaymentTypes());
             // set single-available option preselected for new items: 
             if (getValue().id().isNull() && !type.getOptions().isEmpty()) {
                 type.setValue(type.getOptions().get(0), true, populate);

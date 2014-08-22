@@ -14,7 +14,7 @@
 package com.propertyvista.crm.client.ui.crud.billing.payment;
 
 import java.math.BigDecimal;
-import java.util.EnumSet;
+import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
@@ -95,13 +95,19 @@ public class PaymentRecordForm extends CrmEntityForm<PaymentRecordDTO> {
 
     private final PaymentMethodEditor<LeasePaymentMethod> paymentMethodEditor = new PaymentMethodEditor<LeasePaymentMethod>(LeasePaymentMethod.class) {
         @Override
-        public Set<PaymentType> getPaymentTypes() {
-            return PaymentRecordForm.this.getValue().allowedPaymentsSetup().allowedPaymentTypes().getValue();
+        public Set<PaymentType> getDefaultPaymentTypes() {
+            if (PaymentRecordForm.this.getValue() != null) {
+                return PaymentRecordForm.this.getValue().allowedPaymentsSetup().allowedPaymentTypes().getValue();
+            }
+            return Collections.emptySet();
         }
 
         @Override
         protected Set<CreditCardType> getAllowedCardTypes() {
-            return PaymentRecordForm.this.getValue().allowedPaymentsSetup().allowedCardTypes().getValue();
+            if (PaymentRecordForm.this.getValue() != null) {
+                return PaymentRecordForm.this.getValue().allowedPaymentsSetup().allowedCardTypes().getValue();
+            }
+            return Collections.emptySet();
         };
 
         @Override
@@ -270,7 +276,7 @@ public class PaymentRecordForm extends CrmEntityForm<PaymentRecordDTO> {
             @Override
             public void onValueChange(ValueChangeEvent<PaymentDataDTO.PaymentSelect> event) {
                 paymentMethodEditor.reset();
-                paymentMethodEditor.setElectronicPaymentsEnabled(getValue().allowedPaymentsSetup().electronicPaymentsAllowed().getValue(Boolean.FALSE));
+                paymentMethodEditor.setDefaultPaymentTypes();
 
                 if (event.getValue() != null) {
                     switch (event.getValue()) {
@@ -302,7 +308,6 @@ public class PaymentRecordForm extends CrmEntityForm<PaymentRecordDTO> {
                     case Profiled:
                         paymentMethodEditor.setEditable(false);
                         paymentMethodEditor.setVisible(false);
-                        paymentMethodEditor.setPaymentTypesEnabled(EnumSet.allOf(PaymentType.class), false);
                         paymentMethodEditorHeader.setVisible(false);
 
                         profiledPaymentMethodsCombo.reset();
@@ -392,9 +397,6 @@ public class PaymentRecordForm extends CrmEntityForm<PaymentRecordDTO> {
         noticeViewer.updateVisibility();
 
         if (isEditable()) {
-            paymentMethodEditor.setPaymentTypes(getValue().allowedPaymentsSetup().allowedPaymentTypes());
-            paymentMethodEditor.setElectronicPaymentsEnabled(getValue().allowedPaymentsSetup().electronicPaymentsAllowed().getValue(Boolean.FALSE));
-
             if (isNew) {
                 get(proto().leaseTermParticipant()).setEditable(true);
             } else {
@@ -489,9 +491,8 @@ public class PaymentRecordForm extends CrmEntityForm<PaymentRecordDTO> {
 
     private void changeLeaseParticipant() {
         paymentMethodEditor.reset();
+        paymentMethodEditor.setDefaultPaymentTypes();
         paymentMethodEditor.setBillingAddressAsCurrentEnabled(true);
-        paymentMethodEditor.setPaymentTypes(getValue().allowedPaymentsSetup().allowedPaymentTypes());
-        paymentMethodEditor.setElectronicPaymentsEnabled(getValue().allowedPaymentsSetup().electronicPaymentsAllowed().getValue(Boolean.FALSE));
         loadProfiledPaymentMethods(new DefaultAsyncCallback<Void>() {
             @Override
             public void onSuccess(Void result) {

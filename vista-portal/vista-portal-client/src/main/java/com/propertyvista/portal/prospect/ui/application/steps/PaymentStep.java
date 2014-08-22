@@ -13,6 +13,7 @@
  */
 package com.propertyvista.portal.prospect.ui.application.steps;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
@@ -57,18 +58,27 @@ public class PaymentStep extends ApplicationWizardStep {
             LeasePaymentMethod.class) {
 
         @Override
-        public Set<PaymentType> getPaymentTypes() {
-            return PaymentStep.this.getValue().payment().allowedPaymentsSetup().allowedPaymentTypes();
+        public Set<PaymentType> getDefaultPaymentTypes() {
+            if (PaymentStep.this.getValue() != null) {
+                return PaymentStep.this.getValue().payment().allowedPaymentsSetup().allowedPaymentTypes();
+            }
+            return Collections.emptySet();
         }
 
         @Override
         protected Set<CreditCardType> getAllowedCardTypes() {
-            return PaymentStep.this.getValue().payment().allowedPaymentsSetup().allowedCardTypes();
+            if (PaymentStep.this.getValue() != null) {
+                return PaymentStep.this.getValue().payment().allowedPaymentsSetup().allowedCardTypes();
+            }
+            return Collections.emptySet();
         }
 
         @Override
         protected Set<CreditCardType> getConvienceFeeApplicableCardTypes() {
-            return PaymentStep.this.getValue().payment().allowedPaymentsSetup().convenienceFeeApplicableCardTypes();
+            if (PaymentStep.this.getValue() != null) {
+                return PaymentStep.this.getValue().payment().allowedPaymentsSetup().convenienceFeeApplicableCardTypes();
+            }
+            return Collections.emptySet();
         };
 
         @Override
@@ -129,8 +139,7 @@ public class PaymentStep extends ApplicationWizardStep {
             @Override
             public void onValueChange(ValueChangeEvent<PaymentSelect> event) {
                 paymentMethodEditor.reset();
-                paymentMethodEditor.setElectronicPaymentsEnabled(getValue().payment().allowedPaymentsSetup().electronicPaymentsAllowed()
-                        .getValue(Boolean.FALSE));
+                paymentMethodEditor.setDefaultPaymentTypes();
 
                 if (event.getValue() != null) {
                     switch (event.getValue()) {
@@ -215,7 +224,6 @@ public class PaymentStep extends ApplicationWizardStep {
         if (isPaymentRequired) {
             paymentMethodPanel.setVisible(true);
             paymentMethodHolder.setWidget(paymentMethodPanel);
-            paymentMethodEditor.setElectronicPaymentsEnabled(getValue().payment().allowedPaymentsSetup().electronicPaymentsAllowed().getValue(Boolean.FALSE));
             loadProfiledPaymentMethods(new DefaultAsyncCallback<Void>() {
                 @Override
                 public void onSuccess(Void result) {
