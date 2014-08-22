@@ -27,7 +27,7 @@ public class AdditionalInfoStepTheme extends Theme {
     }
 
     public AdditionalInfoStepTheme() {
-        Style style = new Style(".", StyleName.GeneralQuestionsSection, " .", FormPanelTheme.StyleName.FluidPanelBlock);
+        Style style = new Style(".", StyleName.GeneralQuestionsSection, " .", FormPanelTheme.StyleName.FormPanelCell);
         style.addProperty("text-align", "left");
         addStyle(style);
 

@@ -26,6 +26,8 @@ public class ProspectPortalTheme extends PortalTheme {
 
     @Override
     protected void initStyles() {
+        super.initStyles();
+
         addTheme(new RentalSummaryTheme());
         addTheme(new AdditionalInfoStepTheme());
         addTheme(new SummaryStepTheme());
@@ -44,7 +46,6 @@ public class ProspectPortalTheme extends PortalTheme {
             }
         });
 
-        super.initStyles();
     }
 
 }
