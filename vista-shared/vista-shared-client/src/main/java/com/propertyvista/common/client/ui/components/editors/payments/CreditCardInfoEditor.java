@@ -63,6 +63,8 @@ public class CreditCardInfoEditor extends CForm<CreditCardInfo> {
 
     private BasicValidationError isCreditCardNumberValid;
 
+    protected final CMonthYearPicker monthYearPicker = new CMonthYearPicker(false);
+
     protected final CComboBox<CreditCardType> typeSelector = new CComboBox<CreditCardType>();
 
     protected final CPersonalIdentityField<CreditCardNumberIdentity> cardEditor = new CPersonalIdentityField<CreditCardNumberIdentity>(
@@ -70,22 +72,34 @@ public class CreditCardInfoEditor extends CForm<CreditCardInfo> {
 
     public CreditCardInfoEditor() {
         super(CreditCardInfo.class);
+
+        monthYearPicker.setYearRange(new Range(1900 + new Date().getYear(), 10));
     }
 
     @Override
     protected IsWidget createContent() {
         FormPanel formPanel = new FormPanel(this);
 
-        CMonthYearPicker monthYearPicker = new CMonthYearPicker(false);
         formPanel.append(Location.Left, proto().nameOn()).decorate().componentWidth(200);
         formPanel.append(Location.Left, proto().cardType(), typeSelector).decorate().componentWidth(200);
 
         formPanel.append(Location.Left, proto().card(), cardEditor).decorate().componentWidth(200);
-        formPanel.append(Location.Left, proto().expiryDate()).decorate().componentWidth(200);
-        formPanel.append(Location.Left, proto().securityCode()).decorate().componentWidth(80);
+        formPanel.append(Location.Left, proto().expiryDate(), monthYearPicker).decorate().componentWidth(125);
+        formPanel.append(Location.Left, proto().securityCode()).decorate().componentWidth(20);
 
-        // tweak:
-        monthYearPicker.setYearRange(new Range(1900 + new Date().getYear(), 10));
+        contentTweaks();
+        return formPanel;
+    }
+
+    protected void contentTweaks() {
+        get(proto().cardType()).addValueChangeHandler(new ValueChangeHandler<CreditCardType>() {
+            @Override
+            public void onValueChange(ValueChangeEvent<CreditCardType> event) {
+                // imitate user input and revalidate
+                cardEditor.clear(true);
+            }
+        });
+
         get(proto().securityCode()).setVisible(isEditable());
         get(proto().securityCode()).setMandatory(false);
         // manage security code mandatory state:
@@ -114,8 +128,6 @@ public class CreditCardInfoEditor extends CForm<CreditCardInfo> {
                 get(proto().securityCode()).setMandatory(true);
             }
         });
-
-        return formPanel;
     }
 
     @Override
@@ -170,13 +182,6 @@ public class CreditCardInfoEditor extends CForm<CreditCardInfo> {
                 return (get(proto().cardType()).getValue() == null ? null : get(proto().cardType()).getValue());
             }
         }));
-        get(proto().cardType()).addValueChangeHandler(new ValueChangeHandler<CreditCardType>() {
-            @Override
-            public void onValueChange(ValueChangeEvent<CreditCardType> event) {
-                // imitate user input and revalidate
-                cardEditor.clear(true);
-            }
-        });
 
         get(proto().expiryDate()).addComponentValidator(new FutureDateValidator());
 

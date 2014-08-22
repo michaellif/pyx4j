@@ -13,7 +13,6 @@
  */
 package com.propertyvista.portal.shared.ui.util.editors;
 
-import java.util.Date;
 import java.util.Set;
 
 import com.google.gwt.dom.client.Style.Unit;
@@ -22,11 +21,9 @@ import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Widget;
-import com.google.gwt.view.client.Range;
 
 import com.pyx4j.forms.client.ui.CComboBox;
 import com.pyx4j.forms.client.ui.CForm;
-import com.pyx4j.forms.client.ui.CMonthYearPicker;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.i18n.shared.I18n;
 
@@ -92,10 +89,11 @@ public abstract class PortalPaymentMethodEditor<E extends AbstractPaymentMethod>
             @Override
             protected IsWidget createContent() {
                 PortalFormPanel formPanel = new PortalFormPanel(this);
+
                 formPanel.append(Location.Left, proto().nameOn()).decorate();
                 formPanel.append(Location.Left, proto().accountNo(), accountEditor).decorate();
 
-                formPanel.append(Location.Left, proto().branchTransitNumber()).decorate().componentWidth(150);
+                formPanel.append(Location.Left, proto().branchTransitNumber()).decorate().componentWidth(80);
                 formPanel.append(Location.Left, proto().bankId()).decorate().componentWidth(50);
 
                 if (!isViewable() && isEditable()) {
@@ -115,7 +113,7 @@ public abstract class PortalPaymentMethodEditor<E extends AbstractPaymentMethod>
             @Override
             protected IsWidget createContent() {
                 PortalFormPanel formPanel = new PortalFormPanel(this);
-                CMonthYearPicker monthYearPicker = new CMonthYearPicker(false);
+
                 formPanel.append(Location.Left, proto().nameOn()).decorate();
                 formPanel.append(Location.Left, proto().cardType(), typeSelector).decorate();
 
@@ -123,18 +121,19 @@ public abstract class PortalPaymentMethodEditor<E extends AbstractPaymentMethod>
                 formPanel.append(Location.Left, proto().expiryDate(), monthYearPicker).decorate().componentWidth(125);
                 formPanel.append(Location.Left, proto().securityCode()).decorate().componentWidth(50);
 
-                // tweak:
-                monthYearPicker.setYearRange(new Range(1900 + new Date().getYear(), 10));
-                get(proto().securityCode()).setVisible(isEditable());
+                contentTweaks();
+                return formPanel;
+            }
 
+            @Override
+            protected void contentTweaks() {
+                super.contentTweaks();
                 get(proto().cardType()).addValueChangeHandler(new ValueChangeHandler<CreditCardType>() {
                     @Override
                     public void onValueChange(ValueChangeEvent<CreditCardType> event) {
                         decorateConvienceFeeApplicableCard(event.getValue());
                     }
                 });
-
-                return formPanel;
             }
 
             @Override

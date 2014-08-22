@@ -173,7 +173,7 @@ public class AutoPayWizard extends CPortalEntityWizard<AutoPayDTO> {
         formPanel.append(Location.Left, proto().selectPaymentMethod(), new CRadioGroupEnum<PaymentSelect>(PaymentSelect.class, RadioGroup.Layout.HORISONTAL))
                 .decorate().componentWidth(200);
 
-        formPanel.append(Location.Left, proto().profiledPaymentMethod(), profiledPaymentMethodsCombo).decorate().componentWidth(200);
+        formPanel.append(Location.Left, proto().profiledPaymentMethod(), profiledPaymentMethodsCombo).decorate();
 
         formPanel.append(Location.Left, proto().paymentMethod(), paymentMethodEditor);
 
