@@ -87,9 +87,9 @@ public class ConfigInfoServlet extends HttpServlet {
         b.append("persistenceNamePrefix    : ").append(conf.persistenceNamePrefix()).append("\n");
         b.append("\n");
 
-        b.append("PersistenceConfiguration :\n  ").append(conf.getPersistenceConfiguration().toString().replaceAll("\n", "\n  ")).append("\n");
+        b.append("PersistenceConfiguration :\n  ").append(nvl(conf.getPersistenceConfiguration()).replaceAll("\n", "\n  ")).append("\n");
 
-        b.append("MailService              :\n  ").append(conf.getMailServiceConfigConfiguration().toString().replaceAll("\n", "\n  ")).append("\n");
+        b.append("MailService              :\n  ").append(nvl(conf.getMailServiceConfigConfiguration()).replaceAll("\n", "\n  ")).append("\n");
 
         b.append(applicationConfigurationText());
         b.append("\n");
@@ -104,6 +104,14 @@ public class ConfigInfoServlet extends HttpServlet {
         b.append("System Properties:\n").append(ServerSideConfiguration.getSystemProperties());
 
         return b.toString();
+    }
+
+    private String nvl(Object configuration) {
+        if (configuration == null) {
+            return "{null}";
+        } else {
+            return configuration.toString();
+        }
     }
 
     private String applicationUptime() {
