@@ -90,7 +90,7 @@ public class ServerSideConfiguration {
     @SuppressWarnings("unchecked")
     public static <E extends ServerSideConfiguration> E instance(Class<E> serverSideConfigurationClass) {
         ServerSideConfiguration i = instance();
-        if (i.getClass().isAssignableFrom(serverSideConfigurationClass)) {
+        if (!serverSideConfigurationClass.isAssignableFrom(i.getClass())) {
             throw new Error(i.getClass().getName() + " cannot be cast to " + serverSideConfigurationClass.getName(), instanceDefinedFrom);
         }
         return (E) i;
