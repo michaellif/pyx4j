@@ -527,12 +527,12 @@
                     <exclusion><groupId>avalon-framework</groupId><artifactId>avalon-framework-impl</artifactId></exclusion>
                 </exclusions>
 	        </dependency>
-	        
+
 	        <dependency>
 	            <groupId>net.sourceforge.dynamicreports</groupId>
 	            <artifactId>dynamicreports-adhoc</artifactId>
 	            <version>${dynamicreportsVersion}</version>
-	        </dependency>   
+	        </dependency>
 
             <!-- latest version for jasperreports -->
             <dependency>
@@ -939,6 +939,7 @@
                                         <artifactId>maven-plugin-plugin</artifactId>
                                         <versionRange>[1.0,)</versionRange>
                                         <goals>
+                                            <goal>descriptor</goal>
                                             <goal>generate-resources</goal>
                                             <goal>process-classes</goal>
                                         </goals>
