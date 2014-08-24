@@ -46,8 +46,8 @@ import com.pyx4j.security.rpc.PasswordRetrievalRequest;
 import com.pyx4j.security.shared.ActionPermission;
 import com.pyx4j.security.shared.Permission;
 import com.pyx4j.security.shared.SecurityController;
-import com.pyx4j.server.contexts.ServerContext;
 import com.pyx4j.server.contexts.Lifecycle;
+import com.pyx4j.server.contexts.ServerContext;
 import com.pyx4j.server.contexts.Visit;
 
 /**
@@ -143,6 +143,13 @@ public abstract class AuthenticationServiceImpl implements AuthenticationService
             }
         }
         return cleintPermissions;
+    }
+
+    @Override
+    @IgnoreSessionToken
+    public void verifyVersion(AsyncCallback<VoidSerializable> callback, ClientSystemInfo clientSystemInfo) {
+        assertClientSystemInfo(clientSystemInfo);
+        callback.onSuccess(null);
     }
 
     @Override

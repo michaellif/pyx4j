@@ -51,6 +51,7 @@ import com.pyx4j.rpc.client.RPCManager;
 import com.pyx4j.rpc.client.RecoverableBlockingAsyncCallback;
 import com.pyx4j.rpc.client.SystemNotificationEvent;
 import com.pyx4j.rpc.client.SystemNotificationHandler;
+import com.pyx4j.rpc.shared.VoidSerializable;
 import com.pyx4j.security.rpc.AuthenticationRequest;
 import com.pyx4j.security.rpc.AuthenticationResponse;
 import com.pyx4j.security.rpc.AuthenticationService;
@@ -340,6 +341,10 @@ public class ClientContext extends Context {
         } else {
             return authenticationService;
         }
+    }
+
+    public static void verifyVersion(AsyncCallback<VoidSerializable> callback) {
+        select(null).verifyVersion(callback, clientSystemInfo);
     }
 
     /**

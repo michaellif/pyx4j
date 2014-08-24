@@ -30,6 +30,8 @@ public interface AuthenticationService extends IService {
 
     public void getSystemReadOnlyStatus(AsyncCallback<Boolean> callback);
 
+    public void verifyVersion(AsyncCallback<VoidSerializable> callback, ClientSystemInfo clientSystemInfo);
+
     public void authenticate(AsyncCallback<AuthenticationResponse> callback, ClientSystemInfo clientSystemInfo, String sessionToken);
 
     public void authenticate(AsyncCallback<AuthenticationResponse> callback, ClientSystemInfo clientSystemInfo, AuthenticationRequest request);
