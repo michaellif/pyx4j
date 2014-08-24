@@ -20,20 +20,17 @@
  */
 package com.pyx4j.essentials.rpc;
 
-import java.io.Serializable;
-
-import com.pyx4j.entity.core.criterion.Criterion;
-
 /**
+ * This is temporary class to find and fix GWT serialization stability problems.
+ * e.g. different list .gwt.rpc created in hosted mode. or at with different builds.
  * 
- * This is temporary class to find and fix GWT 2.0.0 serialization stability problems.
- * e.g. different list .gwt.rpc created in hosted mode.
+ * at the GWT version 2.6.1 this is not used.
  * 
- * TODO remove in next GWT version 2.1.0
  */
-@SuppressWarnings("serial")
-public class RPCSerializationHack implements Serializable {
+//@SuppressWarnings("serial")
+public class RPCSerializationHack /* implements java.io.Serializable */{
 
-    public Criterion[] criterionArray;
+    // removed in next GWT version 2.6.1, Loogs like works fine
+    // public Criterion[] criterionArray;
 
 }

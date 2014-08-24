@@ -61,6 +61,7 @@ public abstract class AppSite implements EntryPoint {
 
     static {
         ClientEntityFactory.ensureIEntityImplementations();
+        ClientApplicationVersion.instance().getBuildLabel();
     }
 
     private static final Logger log = LoggerFactory.getLogger(AppSite.class);
