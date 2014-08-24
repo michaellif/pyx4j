@@ -25,8 +25,8 @@ import java.io.InputStream;
 import java.io.PrintWriter;
 import java.io.Serializable;
 import java.net.URL;
-import java.sql.Date;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Properties;
 
 import com.google.gwt.core.ext.BadPropertyValueException;
@@ -149,6 +149,7 @@ public class ClientApplicationVersionGenerator extends Generator {
             writer.println();
 
             writer.println();
+            writer.println("/* " + new Date() + "*/");
             writer.println("public final Date getBuildDate() {");
             writer.indent();
             writer.print("return new Date(");
