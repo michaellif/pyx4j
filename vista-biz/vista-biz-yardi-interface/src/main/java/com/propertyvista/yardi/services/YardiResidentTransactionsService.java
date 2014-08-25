@@ -422,9 +422,10 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
                 }
             }
 
-            // product catalog for new buildings:
+            // product catalog for new buildings (+ possible new units in old ones!):
             if (!executionMonitor.isTerminationRequested() && (ApplicationMode.isDevelopment() || !VistaTODO.pendingYardiConfigPatchILS)) {
-                for (Building building : newBuildings) {
+                importedBuildings.addAll(newBuildings);
+                for (Building building : importedBuildings) {
                     if (executionMonitor.isTerminationRequested()) {
                         break;
                     }
@@ -687,6 +688,9 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
         }
     }
 
+    /*
+     * Note: this method potentially creates(imports) new buildings (which it returns) and NEW units in old buildings (which is not so obvious!)
+     */
     private List<Building> importPropertyMarketingInfo(final Key yardiInterfaceId, PhysicalProperty propertyInfo, List<Building> importedBuildings,
             final ExecutionMonitor executionMonitor) {
         log.debug("PropertyMarketing: import started...");
