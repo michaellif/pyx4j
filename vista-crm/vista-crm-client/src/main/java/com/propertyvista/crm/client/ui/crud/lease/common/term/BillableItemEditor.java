@@ -22,7 +22,6 @@ import com.google.gwt.user.client.ui.SimplePanel;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.IObject;
-import com.pyx4j.entity.shared.IMoneyPercentAmount;
 import com.pyx4j.forms.client.events.PropertyChangeEvent;
 import com.pyx4j.forms.client.events.PropertyChangeHandler;
 import com.pyx4j.forms.client.ui.CComponent;
@@ -424,16 +423,6 @@ public class BillableItemEditor extends CForm<BillableItem> {
                             if (leaseTerm.getValue().termTo().getValue() != null && getComponent().getValue().after(leaseTerm.getValue().termTo().getValue())) {
                                 return new BasicValidationError(getComponent(), "The date should not exceed the Lease Expiration date");
                             }
-                        }
-                        return null;
-                    }
-                });
-
-                get(proto().value()).addComponentValidator(new AbstractComponentValidator<IMoneyPercentAmount>() {
-                    @Override
-                    public BasicValidationError isValid() {
-                        if (getComponent().getValue() != null) {
-                            // TODO : some validation here...
                         }
                         return null;
                     }
