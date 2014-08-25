@@ -98,7 +98,7 @@ public class PasswordChangeActivity extends AbstractActivity implements Password
                 strengthRule.setDictionary(Arrays.asList(userName));
                 view.setPasswordStrengthRule(strengthRule);
             }
-        } else if (principalClass == PrincipalClass.TENANT) {
+        } else if (principalClass == PrincipalClass.TENANT || principalClass == PrincipalClass.GUARANTOR) {
             view.setAskForCurrentPassword(false);
             view.setAskForRequireChangePasswordOnNextSignIn(true, true, PasswordStrengthVerdict.Weak);
             view.setEnforcedPasswordStrengths(null);
