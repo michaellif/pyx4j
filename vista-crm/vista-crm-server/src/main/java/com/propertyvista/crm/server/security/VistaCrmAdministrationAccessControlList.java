@@ -28,6 +28,7 @@ import com.propertyvista.crm.rpc.dto.admin.PmcPaymentMethodsDTO;
 import com.propertyvista.crm.rpc.dto.tenant.CustomerCreditCheckDTO;
 import com.propertyvista.crm.rpc.services.admin.ARCodeCrudService;
 import com.propertyvista.crm.rpc.services.admin.AvailableCrmReportAdminCrudService;
+import com.propertyvista.crm.rpc.services.admin.CrmRoleBehaviorDTOListService;
 import com.propertyvista.crm.rpc.services.admin.CrmRoleCrudService;
 import com.propertyvista.crm.rpc.services.admin.CustomerCreditCheckCrudService;
 import com.propertyvista.crm.rpc.services.admin.GlCodeCategoryCrudService;
@@ -81,6 +82,7 @@ class VistaCrmAdministrationAccessControlList extends UIAclBuilder {
         grant(AdminGeneral, AuditRecordDTO.class, READ);
 
         grant(AdminGeneral, new IServiceExecutePermission(CrmRoleCrudService.class));
+        grant(AdminGeneral, new IServiceExecutePermission(CrmRoleBehaviorDTOListService.class));
         grant(AdminGeneral, new EntityPermission(CrmRole.class, ALL));
         grant(AdminGeneral, CrmRole.class, ALL);
 

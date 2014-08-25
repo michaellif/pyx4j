@@ -14,13 +14,16 @@
 package com.propertyvista.crm.client.ui.crud.administration.role;
 
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
 
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 
-import com.pyx4j.entity.core.criterion.EntityListCriteria;
-import com.pyx4j.entity.rpc.EntitySearchResult;
+import com.pyx4j.entity.rpc.AbstractListCrudService;
+import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
+import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.forms.client.ui.folder.CFolderItem;
 import com.pyx4j.forms.client.ui.folder.FolderColumnDescriptor;
 import com.pyx4j.forms.client.ui.folder.IFolderDecorator;
@@ -28,13 +31,13 @@ import com.pyx4j.forms.client.ui.folder.TableFolderDecorator;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.rpc.client.DefaultAsyncCallback;
-import com.pyx4j.site.client.ui.dialogs.EntitySelectorListDialog;
+import com.pyx4j.site.client.activity.EntitySelectorTableVisorController;
+import com.pyx4j.site.client.ui.IPane;
 import com.pyx4j.site.client.ui.prime.form.IForm;
 
 import com.propertyvista.common.client.ui.components.folders.VistaTableFolder;
-import com.propertyvista.crm.client.activity.crud.administration.role.CrmRoleBehaviorDTOListServiceImpl;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
+import com.propertyvista.crm.rpc.services.admin.CrmRoleBehaviorDTOListService;
 import com.propertyvista.domain.security.CrmRole;
 import com.propertyvista.domain.security.VistaCrmBehavior;
 import com.propertyvista.domain.security.VistaCrmBehaviorDTO;
@@ -94,7 +97,7 @@ public class CrmRoleForm extends CrmEntityForm<CrmRole> {
         }
     }
 
-    private static class CrmRolePermissionsFolder extends VistaTableFolder<VistaCrmBehaviorDTO> {
+    private class CrmRolePermissionsFolder extends VistaTableFolder<VistaCrmBehaviorDTO> {
 
         public CrmRolePermissionsFolder() {
             super(VistaCrmBehaviorDTO.class);
@@ -122,21 +125,35 @@ public class CrmRoleForm extends CrmEntityForm<CrmRole> {
 
         @Override
         protected void addItem() {
-            new CrmRoleBehaviorDTOListServiceImpl().list(new DefaultAsyncCallback<EntitySearchResult<VistaCrmBehaviorDTO>>() {
-                @Override
-                public void onSuccess(EntitySearchResult<VistaCrmBehaviorDTO> result) {
-                    result.getData().removeAll(getValue());
-                    new EntitySelectorListDialog<VistaCrmBehaviorDTO>(i18n.tr("Select Permissions"), true, result.getData()) {
-                        @Override
-                        public boolean onClickOk() {
-                            for (VistaCrmBehaviorDTO item : getSelectedItems()) {
-                                addItem(item);
-                            }
-                            return true;
-                        }
-                    }.show();
-                }
-            }, EntityListCriteria.create(VistaCrmBehaviorDTO.class));
+            new CrmPermissionSelectorDialog(CrmRoleForm.this.getParentView()).show();
         }
+
+        public class CrmPermissionSelectorDialog extends EntitySelectorTableVisorController<VistaCrmBehaviorDTO> {
+
+            public CrmPermissionSelectorDialog(IPane parentView) {
+                super(parentView, VistaCrmBehaviorDTO.class, false, true, new HashSet<>(getValue()), i18n.tr("Select Permissions"));
+            }
+
+            @Override
+            protected AbstractListCrudService<VistaCrmBehaviorDTO> getSelectService() {
+                return GWT.<AbstractListCrudService<VistaCrmBehaviorDTO>> create(CrmRoleBehaviorDTOListService.class);
+            }
+
+            @Override
+            protected List<ColumnDescriptor> defineColumnDescriptors() {
+                return Arrays.asList(//
+                        new MemberColumnDescriptor.Builder(proto().permission(), true).build(),//
+                        new MemberColumnDescriptor.Builder(proto().description(), true).build());
+            }
+
+            @Override
+            protected void onClickOk() {
+                for (VistaCrmBehaviorDTO item : getSelectedItems()) {
+                    addItem(item);
+                }
+            }
+
+        }
+
     }
 }

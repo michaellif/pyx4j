@@ -56,6 +56,12 @@
 
         <dependency>
             <groupId>com.propertyvista</groupId>
+            <artifactId>vista-biz-preloader</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.propertyvista</groupId>
             <artifactId>vista-importer</artifactId>
             <version>${project.version}</version>
         </dependency>

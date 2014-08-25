@@ -11,21 +11,22 @@
  * @author vlads
  * @version $Id$
  */
-package com.propertyvista.crm.client.activity.crud.administration.role;
+package com.propertyvista.crm.server.services.admin;
 
 import java.util.EnumSet;
 
 import com.pyx4j.entity.rpc.InMemeoryListService;
 
+import com.propertyvista.biz.generator.PermissionDescriptionLoader;
 import com.propertyvista.crm.rpc.VistaCrmBehaviorDTOCoverter;
-import com.propertyvista.crm.rpc.services.CrmRoleBehaviorDTOListService;
+import com.propertyvista.crm.rpc.services.admin.CrmRoleBehaviorDTOListService;
 import com.propertyvista.domain.security.VistaCrmBehavior;
 import com.propertyvista.domain.security.VistaCrmBehaviorDTO;
 
 public class CrmRoleBehaviorDTOListServiceImpl extends InMemeoryListService<VistaCrmBehaviorDTO> implements CrmRoleBehaviorDTOListService {
 
     public CrmRoleBehaviorDTOListServiceImpl() {
-        super(VistaCrmBehaviorDTOCoverter.toDTO(EnumSet.allOf(VistaCrmBehavior.class)));
+        super(PermissionDescriptionLoader.enhanceDesctiontions(VistaCrmBehaviorDTOCoverter.toDTO(EnumSet.allOf(VistaCrmBehavior.class))));
     }
 
 }

@@ -1,5 +1,5 @@
 /*
- * (C) Copyright Property Vista Software Inc. 2011- All Rights Reserved.
+ * (C) Copyright Property Vista Software Inc. 2011-2012 All Rights Reserved.
  *
  * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
  * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
@@ -7,30 +7,23 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Jan 19, 2012
+ * Created on Aug 25, 2014
  * @author vlads
  * @version $Id$
  */
-package com.propertyvista.domain.security;
+package com.propertyvista.biz.generator.model;
 
-import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.IPrimitive;
 import com.pyx4j.i18n.annotations.I18n;
 
-/**
- * Wrapper class to enabled Editing of CrmBehavior in Roles UI
- * 
- */
 @Transient
 @I18n(strategy = I18n.I18nStrategy.IgnoreThis)
-public interface VistaCrmBehaviorDTO extends IEntity {
+public interface PermissionDescription extends IEntity {
 
-    IPrimitive<VistaCrmBehavior> behavior();
-
-    @ToString
     IPrimitive<String> permission();
 
     IPrimitive<String> description();
+    
 }
