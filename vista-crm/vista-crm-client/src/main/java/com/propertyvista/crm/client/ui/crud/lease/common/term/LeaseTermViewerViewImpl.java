@@ -13,6 +13,8 @@
  */
 package com.propertyvista.crm.client.ui.crud.lease.common.term;
 
+import java.math.BigDecimal;
+
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.Command;
 
@@ -27,6 +29,7 @@ import com.propertyvista.crm.client.ui.crud.CrmViewerViewImplBase;
 import com.propertyvista.crm.rpc.dto.billing.BillDataDTO;
 import com.propertyvista.crm.rpc.services.selections.version.LeaseTermVersionService;
 import com.propertyvista.domain.tenant.lease.Lease;
+import com.propertyvista.domain.tenant.lease.LeaseApplication;
 import com.propertyvista.domain.tenant.lease.LeaseTerm;
 import com.propertyvista.domain.tenant.lease.LeaseTerm.Status;
 import com.propertyvista.dto.LeaseTermDTO;
@@ -76,11 +79,16 @@ public class LeaseTermViewerViewImpl extends CrmViewerViewImplBase<LeaseTermDTO>
     public void populate(LeaseTermDTO value) {
         super.populate(value);
 
-        if (VistaFeatures.instance().yardiIntegration()) {
-            setEditingVisible(value.lease().status().getValue() == Lease.Status.Application);
+        if (value.lease().status().getValue() == Lease.Status.Application) {
+            LeaseApplication.Status status = value.lease().leaseApplication().status().getValue();
+            boolean isOnlineApplication = LeaseApplication.Status.isOnlineApplication(value.lease().leaseApplication());
+            boolean noPtAppProgress = (value.masterApplicationStatus().progress().getValue(BigDecimal.ZERO).compareTo(BigDecimal.ZERO) == 0);
+
+            setEditingVisible(status.isDraft() && status != LeaseApplication.Status.PendingDecision && (!isOnlineApplication || noPtAppProgress));
             setFinalizationVisible(false);
         } else {
             boolean movedOutLease = !value.lease().actualMoveOut().isNull();
+
             setEditingVisible(!value.lease().status().getValue().isFormer() && !movedOutLease && value.status().getValue() != Status.AcceptedOffer);
             setFinalizationVisible(isFinalizationVisible() && value.lease().status().getValue().isCurrent() && !movedOutLease);
 

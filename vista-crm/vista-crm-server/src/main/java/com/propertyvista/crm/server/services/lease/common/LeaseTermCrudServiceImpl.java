@@ -38,6 +38,7 @@ import com.pyx4j.rpc.shared.VoidSerializable;
 import com.propertyvista.biz.financial.deposit.DepositFacade;
 import com.propertyvista.biz.financial.payment.PaymentMethodFacade;
 import com.propertyvista.biz.policy.PolicyFacade;
+import com.propertyvista.biz.tenant.OnlineApplicationFacade;
 import com.propertyvista.biz.tenant.lease.LeaseFacade;
 import com.propertyvista.crm.rpc.services.lease.common.LeaseTermCrudService;
 import com.propertyvista.crm.server.util.CrmAppContext;
@@ -54,6 +55,7 @@ import com.propertyvista.domain.tenant.lease.BillableItemAdjustment;
 import com.propertyvista.domain.tenant.lease.Deposit;
 import com.propertyvista.domain.tenant.lease.Deposit.DepositType;
 import com.propertyvista.domain.tenant.lease.Lease;
+import com.propertyvista.domain.tenant.lease.Lease.Status;
 import com.propertyvista.domain.tenant.lease.LeaseTerm;
 import com.propertyvista.domain.tenant.lease.LeaseTerm.Type;
 import com.propertyvista.domain.tenant.lease.LeaseTermGuarantor;
@@ -186,6 +188,12 @@ public class LeaseTermCrudServiceImpl extends AbstractVersionedCrudServiceDtoImp
         }
 
         setAgeRestrictions(to);
+
+        if (to.lease().status().getValue() == Status.Application) {
+            to.masterApplicationStatus()
+                    .set(ServerSideFactory.create(OnlineApplicationFacade.class).calculateOnlineApplicationStatus(
+                            to.lease().leaseApplication().onlineApplication()));
+        }
     }
 
     @Override

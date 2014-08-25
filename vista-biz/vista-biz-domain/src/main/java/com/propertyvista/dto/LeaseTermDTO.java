@@ -30,6 +30,7 @@ import com.propertyvista.domain.financial.offering.Concession;
 import com.propertyvista.domain.financial.offering.ProductItem;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.tenant.lease.LeaseTerm;
+import com.propertyvista.domain.tenant.prospect.MasterOnlineApplicationStatus;
 
 @Transient
 @ExtendsBO
@@ -66,4 +67,6 @@ public interface LeaseTermDTO extends LeaseTerm {
     IPrimitive<Boolean> maturedOccupantsAreApplicants();
 
     IPrimitive<Boolean> noNeedGuarantors();
+
+    MasterOnlineApplicationStatus masterApplicationStatus();
 }
