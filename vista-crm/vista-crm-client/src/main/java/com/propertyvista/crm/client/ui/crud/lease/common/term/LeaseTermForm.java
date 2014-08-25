@@ -250,6 +250,7 @@ public class LeaseTermForm extends CrmEntityForm<LeaseTermDTO> {
                 };
             }
         }).decorate();
+        get(proto().unit()).setMandatory(true);
 
         if (VistaTODO.VISTA_2446_Periodic_Lease_Terms) {
             formPanel.append(Location.Left, proto().type()).decorate().componentWidth(180).customLabel(i18n.tr("Term Type"));
