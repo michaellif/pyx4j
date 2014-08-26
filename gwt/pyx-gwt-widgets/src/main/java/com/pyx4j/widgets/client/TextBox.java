@@ -20,66 +20,10 @@
  */
 package com.pyx4j.widgets.client;
 
-import com.pyx4j.widgets.client.style.theme.WidgetTheme;
-
-public class TextBox extends com.google.gwt.user.client.ui.TextBox implements ITextWidget, WatermarkComponent {
-
-    private TextWatermark watermark;
+public class TextBox extends TextBoxBase {
 
     public TextBox() {
-        setStyleName(WidgetTheme.StyleName.TextBox.name());
-        addStyleDependentName(WidgetTheme.StyleDependent.singleLine.name());
-    }
-
-    @Override
-    public void setWatermark(String text) {
-        if (watermark == null) {
-            watermark = new TextWatermark(this) {
-
-                @Override
-                public String getText() {
-                    return TextBox.super.getText();
-                }
-
-                @Override
-                public void setText(String text) {
-                    TextBox.super.setText(text);
-                }
-            };
-        }
-        watermark.setWatermark(text);
-    }
-
-    @Override
-    public String getWatermark() {
-        return watermark.getWatermark();
-    }
-
-    @Override
-    public void setText(String text) {
-        super.setText(text);
-        if (watermark != null) {
-            watermark.show();
-        }
-    }
-
-    @Override
-    public String getText() {
-        if (watermark != null && watermark.isShown()) {
-            return "";
-        } else {
-            return super.getText();
-        }
-    }
-
-    @Override
-    public void setEditable(boolean editable) {
-        setReadOnly(!editable);
-    }
-
-    @Override
-    public boolean isEditable() {
-        return !isReadOnly();
+        setTextBoxWidget(new com.google.gwt.user.client.ui.TextBox());
     }
 
 }

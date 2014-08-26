@@ -73,7 +73,7 @@ public class NSignature extends NFocusField<ISignature, SignaturePanel, CSignatu
             signature = null;
             if (getEditor() != null) {
                 getEditor().checkBox.setValue(null);
-                getEditor().textBox.setValue(null);
+                getEditor().textBox.setText(null);
                 getEditor().init(SignatureFormat.None);
             }
             if (getViewer() != null) {
@@ -86,19 +86,19 @@ public class NSignature extends NFocusField<ISignature, SignaturePanel, CSignatu
                 switch (signature.signatureFormat().getValue()) {
                 case AgreeBox:
                 case None:
-                    getEditor().textBox.setValue(null);
+                    getEditor().textBox.setText(null);
                     break;
                 case AgreeBoxAndFullName:
                 case FullName:
-                    getEditor().textBox.setValue(signature.fullName().getValue());
+                    getEditor().textBox.setText(signature.fullName().getValue());
                     break;
                 case Initials:
-                    getEditor().textBox.setValue(signature.initials().getValue());
+                    getEditor().textBox.setText(signature.initials().getValue());
                     break;
                 }
             }
             if (getViewer() != null) {
-                if (signature.agree().isBooleanTrue()) {
+                if (signature.agree().getValue(false)) {
                     switch (signature.signatureFormat().getValue()) {
                     case AgreeBox:
                         getViewer().setText(null);

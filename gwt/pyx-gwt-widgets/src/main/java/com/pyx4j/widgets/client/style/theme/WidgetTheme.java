@@ -32,7 +32,9 @@ import com.pyx4j.widgets.client.ImageFactory;
 public class WidgetTheme extends Theme {
 
     public static enum StyleName implements IStyleName {
-        TextBox, ListBox, Toolbar, ToolbarItem, ToolbarSeparator,
+        TextBox, TextBoxContainer, TextBoxActionButton,
+
+        ListBox, Toolbar, ToolbarItem, ToolbarSeparator,
 
         StatusBar,
 
@@ -62,7 +64,7 @@ public class WidgetTheme extends Theme {
 
         CollapsablePanel, CollapsablePanelImage,
 
-        SuggestBox, SuggestBoxPopup;
+        SuggestBox, SuggestBoxPopup, SelectionBoxPicker, SelectionBoxPickerItem;
     }
 
     public static enum StyleDependent implements IStyleDependent {
@@ -122,6 +124,7 @@ public class WidgetTheme extends Theme {
         style.addProperty("-moz-box-sizing", "border-box");
         style.addProperty("-webkit-box-sizing", "border-box");
         style.addProperty("font-family", "inherit");
+        style.addProperty("width", "100%");
         addStyle(style);
 
         style = new Style(".", StyleName.TextBox, "-", StyleDependent.disabled);
@@ -146,6 +149,25 @@ public class WidgetTheme extends Theme {
 
         style = new Style(".", StyleName.TextBox, "-", StyleDependent.watermark);
         style.addProperty("color", ThemeColor.foreground, 0.5);
+        addStyle(style);
+
+        style = new Style(".", StyleName.TextBoxActionButton);
+        style.addProperty("vertical-align", "middle");
+        style.addProperty("margin", "0");
+        style.addProperty("height", "2em");
+        style.addProperty("cursor", "pointer");
+        style.addProperty("-webkit-touch-callout", "none");
+        style.addProperty("-webkit-user-select", "none");
+        style.addProperty("-khtml-user-select", "none");
+        style.addProperty("-moz-user-select", "none");
+        style.addProperty("-ms-user-select", "none");
+        style.addProperty("user-select", "none");
+        addStyle(style);
+
+        style = new Style(".", StyleName.TextBoxActionButton, "-", WidgetTheme.StyleDependent.disabled);
+        style.addGradient(ThemeColor.foreground, 0.1, ThemeColor.foreground, 0.1);
+        style.addProperty("cursor", "default");
+        style.addProperty("opacity", "0.4");
         addStyle(style);
 
     }
@@ -411,7 +433,14 @@ public class WidgetTheme extends Theme {
     }
 
     protected void initSuggestBoxStyle() {
-        Style style = new Style(".", StyleName.SuggestBoxPopup);
+
+        Style style = new Style(".", StyleName.SuggestBox);
+        style.addProperty("vertical-align", "middle");
+        style.addProperty("width", "100%");
+        style.addProperty("margin-right", "21px");
+        addStyle(style);
+
+        style = new Style(".", StyleName.SuggestBoxPopup);
         style.addProperty("background-color", "white");
         style.addProperty("padding", "2px");
         style.addProperty("border-color", ThemeColor.foreground, 0.4);

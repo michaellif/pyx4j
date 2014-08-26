@@ -37,6 +37,9 @@ public interface WidgetsImages extends ClientBundle {
     ImageResource viewMenu();
 
     @ImageOptions(repeatStyle = RepeatStyle.Both)
+    public ImageResource action();
+
+    @ImageOptions(repeatStyle = RepeatStyle.Both)
     public ImageResource comboBoxPicker();
 
     @ImageOptions(repeatStyle = RepeatStyle.Both)

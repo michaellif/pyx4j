@@ -46,37 +46,33 @@ import com.google.gwt.event.logical.shared.SelectionHandler;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
-import com.google.gwt.user.client.ui.Composite;
+import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.HasAnimation;
 import com.google.gwt.user.client.ui.HasEnabled;
 import com.google.gwt.user.client.ui.MenuBar;
 import com.google.gwt.user.client.ui.MenuItem;
 import com.google.gwt.user.client.ui.PopupPanel;
+import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.SuggestOracle;
 import com.google.gwt.user.client.ui.SuggestOracle.Suggestion;
-import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.UIObject;
 
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.commons.IFormatter;
-import com.pyx4j.widgets.client.ITextWidget;
-import com.pyx4j.widgets.client.TextWatermark;
-import com.pyx4j.widgets.client.WatermarkComponent;
+import com.pyx4j.widgets.client.Button;
+import com.pyx4j.widgets.client.ImageFactory;
+import com.pyx4j.widgets.client.TextBoxBase;
 import com.pyx4j.widgets.client.style.theme.WidgetTheme;
 
-public class SelectorTextBox<E> extends Composite implements WatermarkComponent, ITextWidget, HasEnabled, HasAllKeyHandlers, HasSelectionHandlers<E> {
+public class SelectorTextBox<E> extends TextBoxBase implements HasEnabled, HasAllKeyHandlers, HasSelectionHandlers<E> {
 
     private boolean editable = true;
-
-    private TextWatermark watermark;
 
     private int limit = 20;
 
     private final OptionsGrabber<E> optionsGrabber;
 
     private final SuggestionDisplay display;
-
-    private final InputTextBox box;
 
     private E value;
 
@@ -85,29 +81,33 @@ public class SelectorTextBox<E> extends Composite implements WatermarkComponent,
     private final IFormatter<E, String[]> optionPathFormatter;
 
     public SelectorTextBox(final OptionsGrabber<E> optionsGrabber, IFormatter<E, String> valueFormatter, IFormatter<E, String[]> optionPathFormatter) {
+
         this.optionsGrabber = optionsGrabber;
         this.valueFormatter = valueFormatter;
         this.optionPathFormatter = optionPathFormatter;
 
-        this.box = new InputTextBox();
-        this.display = new SuggestionDisplay();
+        display = new SuggestionDisplay();
 
-        initWidget(box);
+        setTextBoxWidget(new InputTextBox());
+
+        setAction(new Command() {
+
+            @Override
+            public void execute() {
+
+            }
+        }, ImageFactory.getImages().action());
+
     }
 
     @Override
-    public HandlerRegistration addKeyDownHandler(KeyDownHandler handler) {
-        return addDomHandler(handler, KeyDownEvent.getType());
+    protected void setTextBoxWidget(com.google.gwt.user.client.ui.TextBoxBase textBoxWidget) {
+        super.setTextBoxWidget(textBoxWidget);
     }
 
     @Override
     public HandlerRegistration addKeyPressHandler(KeyPressHandler handler) {
         return addDomHandler(handler, KeyPressEvent.getType());
-    }
-
-    @Override
-    public HandlerRegistration addKeyUpHandler(KeyUpHandler handler) {
-        return addDomHandler(handler, KeyUpEvent.getType());
     }
 
     @Override
@@ -135,11 +135,6 @@ public class SelectorTextBox<E> extends Composite implements WatermarkComponent,
         return display;
     }
 
-    @Override
-    public int getTabIndex() {
-        return box.getTabIndex();
-    }
-
     public E getValue() {
         return value;
     }
@@ -156,53 +151,16 @@ public class SelectorTextBox<E> extends Composite implements WatermarkComponent,
     }
 
     @Override
-    public String getText() {
-        if (watermark != null && watermark.isShown()) {
-            return "";
-        } else {
-            return box.getText();
-        }
-    }
-
-    @Override
-    public void setText(String text) {
-        box.setText(text);
-        if (!box.hasFocus() && watermark != null) {
-            watermark.show();
-        }
-    }
-
-    @Override
-    public boolean isEnabled() {
-        return box.isEnabled();
-    }
-
-    @Override
     public void setEnabled(boolean enabled) {
-        box.setEnabled(enabled);
+        super.setEnabled(enabled);
         if (!enabled) {
             display.hideSuggestions();
         }
         getElement().setPropertyBoolean("disabled", !enabled);
     }
 
-    @Override
-    public void setAccessKey(char key) {
-        box.setAccessKey(key);
-    }
-
-    @Override
-    public void setFocus(boolean focused) {
-        box.setFocus(focused);
-    }
-
     public void setLimit(int limit) {
         this.limit = limit;
-    }
-
-    @Override
-    public void setTabIndex(int index) {
-        box.setTabIndex(index);
     }
 
     @Override
@@ -211,7 +169,7 @@ public class SelectorTextBox<E> extends Composite implements WatermarkComponent,
         display.onEnsureDebugId(baseID);
     }
 
-    class InputTextBox extends TextBox {
+    class InputTextBox extends com.google.gwt.user.client.ui.TextBox {
 
         private boolean focused = false;
 
@@ -313,40 +271,6 @@ public class SelectorTextBox<E> extends Composite implements WatermarkComponent,
 
         optionsGrabber.grabOptions(new OptionsGrabber.Request(getText().length() == 0 ? "" : getText(), limit), callback);
 
-    }
-
-    @Override
-    public void setWatermark(String text) {
-        if (watermark == null) {
-            watermark = new TextWatermark(this) {
-
-                @Override
-                public String getText() {
-                    return box.getText();
-                }
-
-                @Override
-                public void setText(String text) {
-                    box.setText(text);
-                }
-            };
-        }
-        watermark.setWatermark(text);
-    }
-
-    @Override
-    public String getWatermark() {
-        return watermark.getWatermark();
-    }
-
-    @Override
-    public HandlerRegistration addBlurHandler(BlurHandler handler) {
-        return addDomHandler(handler, BlurEvent.getType());
-    }
-
-    @Override
-    public HandlerRegistration addFocusHandler(FocusHandler handler) {
-        return addDomHandler(handler, FocusEvent.getType());
     }
 
     @Override
@@ -638,7 +562,7 @@ public class SelectorTextBox<E> extends Composite implements WatermarkComponent,
             setScheduledCommand(new ScheduledCommand() {
                 @Override
                 public void execute() {
-                    box.setFocus(true);
+                    getTextBoxWidget().setFocus(true);
                     setValue(suggestion);
                 }
             });

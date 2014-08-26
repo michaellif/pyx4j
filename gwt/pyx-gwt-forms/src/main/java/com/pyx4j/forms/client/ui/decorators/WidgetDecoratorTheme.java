@@ -57,8 +57,8 @@ public abstract class WidgetDecoratorTheme extends Theme {
     protected void initStyles() {
         Style style = new Style(".", StyleName.WidgetDecorator);
         style.addProperty("border-spacing", "0");
-        style.addProperty("padding", "5px 0");
         style.addProperty("white-space", "nowrap");
+        style.addProperty("padding", "5px 0");
         addStyle(style);
 
         style = new Style(".", StyleName.WidgetDecorator, "-", StyleDependent.viewable);
@@ -135,9 +135,6 @@ public abstract class WidgetDecoratorTheme extends Theme {
 
         style = new Style(".", StyleName.WidgetDecoratorContentHolder);
         style.addProperty("word-wrap", "break-word");
-        addStyle(style);
-
-        style = new Style(".", StyleName.WidgetDecoratorContent);
         addStyle(style);
 
         style = new Style(".", StyleName.WidgetDecoratorContent, "-", StyleDependent.invalid, " .", WidgetTheme.StyleName.TextBox);

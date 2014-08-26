@@ -31,9 +31,6 @@ public enum CSSClass {
 
     pyx4j_StatusBar,
 
-    //Picker
-    pyx4j_Picker, pyx4j_PickerPanel, pyx4j_PickerLine, pyx4j_PickerLine_Selected,
-
     // Style for GWT button active { The one that has Enter focus in dialog}
     gwtButtonDefault,
 

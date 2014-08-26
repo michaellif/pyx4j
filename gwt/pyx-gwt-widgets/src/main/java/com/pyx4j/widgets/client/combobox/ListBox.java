@@ -33,7 +33,7 @@ public class ListBox<E> extends ComboBox<E> {
         super();
         textBox = new TextBoxViewerPanel<E>();
         textBox.setWatermark("Test");
-        textBox.setReadOnly(true);
+        textBox.setEditable(false);
         setViewerPanel(textBox);
         setPickerPanel(new TreePickerPanel<E>(this, multipleSelect, plainList));
         setOptionsGrabber(new ListOptionsGrabber<E>(this));

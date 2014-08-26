@@ -25,12 +25,13 @@ import com.google.gwt.event.dom.client.BlurHandler;
 import com.google.gwt.event.dom.client.FocusEvent;
 import com.google.gwt.event.dom.client.FocusHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
+import com.google.gwt.user.client.ui.FocusWidget;
 
 import com.pyx4j.widgets.client.style.theme.WidgetTheme;
 
 public abstract class TextWatermark {
 
-    private final WatermarkComponent component;
+    private final FocusWidget component;
 
     private String watermark;
 
@@ -40,7 +41,7 @@ public abstract class TextWatermark {
 
     private boolean insideShowWatermark = false;
 
-    public TextWatermark(WatermarkComponent component) {
+    public TextWatermark(FocusWidget component) {
         this.component = component;
     }
 

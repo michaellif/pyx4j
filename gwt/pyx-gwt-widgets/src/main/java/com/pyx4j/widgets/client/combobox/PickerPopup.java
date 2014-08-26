@@ -23,7 +23,7 @@ package com.pyx4j.widgets.client.combobox;
 import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.UIObject;
 
-import com.pyx4j.commons.css.CSSClass;
+import com.pyx4j.widgets.client.style.theme.WidgetTheme;
 
 public class PickerPopup<E> extends PopupPanel {
 
@@ -34,7 +34,7 @@ public class PickerPopup<E> extends PopupPanel {
         this.parent = parent;
         addAutoHidePartner(parent.getElement());
         setPreviewingAllNativeEvents(true);
-        setStyleName(CSSClass.pyx4j_PickerPanel.name());
+        setStyleName(WidgetTheme.StyleName.SelectionBoxPicker.name());
 
     }
 

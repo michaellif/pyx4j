@@ -20,65 +20,18 @@
  */
 package com.pyx4j.widgets.client;
 
-import com.pyx4j.widgets.client.style.theme.WidgetTheme;
+public class TextArea extends TextBoxBase {
 
-public class TextArea extends com.google.gwt.user.client.ui.TextArea implements WatermarkComponent, ITextWidget {
-
-    private TextWatermark watermark;
+    private final com.google.gwt.user.client.ui.TextArea textBoxWidget;
 
     public TextArea() {
-        setStyleName(WidgetTheme.StyleName.TextBox.name());
-        getElement().getStyle().setProperty("resize", "vertical");
+        textBoxWidget = new com.google.gwt.user.client.ui.TextArea();
+        textBoxWidget.getElement().getStyle().setProperty("resize", "vertical");
+        setTextBoxWidget(textBoxWidget);
     }
 
-    @Override
-    public void setWatermark(String text) {
-        if (watermark == null) {
-            watermark = new TextWatermark(this) {
-
-                @Override
-                public String getText() {
-                    return TextArea.super.getText();
-                }
-
-                @Override
-                public void setText(String text) {
-                    TextArea.super.setText(text);
-                }
-            };
-        }
-        watermark.setWatermark(text);
+    public void setVisibleLines(int visibleLines) {
+        textBoxWidget.setVisibleLines(visibleLines);
     }
 
-    @Override
-    public String getWatermark() {
-        return watermark.getWatermark();
-    }
-
-    @Override
-    public void setText(String text) {
-        super.setText(text);
-        if (watermark != null) {
-            watermark.show();
-        }
-    }
-
-    @Override
-    public String getText() {
-        if (watermark != null && watermark.isShown()) {
-            return null;
-        } else {
-            return super.getText();
-        }
-    }
-
-    @Override
-    public void setEditable(boolean editable) {
-        setReadOnly(!editable);
-    }
-
-    @Override
-    public boolean isEditable() {
-        return !isReadOnly();
-    }
 }

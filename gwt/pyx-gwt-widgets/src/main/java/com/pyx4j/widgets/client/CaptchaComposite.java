@@ -168,12 +168,11 @@ public class CaptchaComposite extends SimplePanel implements IFocusWidget {
 
             @Override
             public void onChange(ChangeEvent event) {
-                responseInternal.setValue(response.getText());
+                responseInternal.setText(response.getText());
             }
         });
         response.getElement().getStyle().setProperty("padding", "2px 5px");
 
-        response.setName("recaptcha_response_field");
         response.getElement().getStyle().setMarginTop(5, Unit.PX);
         response.getElement().getStyle().setWidth(100, Unit.PCT);
         divHolder.add(response);

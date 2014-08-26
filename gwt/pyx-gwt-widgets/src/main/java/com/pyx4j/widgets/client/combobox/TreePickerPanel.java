@@ -40,6 +40,7 @@ import com.google.gwt.user.client.ui.Tree;
 import com.google.gwt.user.client.ui.TreeItem;
 
 import com.pyx4j.commons.css.CSSClass;
+import com.pyx4j.widgets.client.style.theme.WidgetTheme;
 
 public class TreePickerPanel<E> extends PickerPanel<E> {
 
@@ -84,7 +85,7 @@ public class TreePickerPanel<E> extends PickerPanel<E> {
             treeItem.setUserObject(option);
 
             treeItem.getElement().getStyle().setPadding(1, Unit.PX);
-            treeItem.setStyleName(CSSClass.pyx4j_PickerLine.name());
+            treeItem.setStyleName(WidgetTheme.StyleName.SelectionBoxPickerItem.name());
         }
     }
 
@@ -160,7 +161,7 @@ public class TreePickerPanel<E> extends PickerPanel<E> {
         public void setChecked(boolean checked) {
             this.checked = checked;
             if (!multipleSelect) {
-                setStyleName(getElement(), CSSClass.pyx4j_PickerLine_Selected.name(), checked);
+                setStyleDependentName(WidgetTheme.StyleDependent.selected.name(), checked);
             } else {
                 checkBox.setValue(checked);
             }

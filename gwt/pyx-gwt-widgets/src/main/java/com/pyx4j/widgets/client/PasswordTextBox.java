@@ -20,48 +20,43 @@
  */
 package com.pyx4j.widgets.client;
 
-import com.pyx4j.widgets.client.style.theme.WidgetTheme;
-
-public class PasswordTextBox extends com.google.gwt.user.client.ui.PasswordTextBox implements ITextWidget, WatermarkComponent {
-
-    private TextWatermark watermark;
+public class PasswordTextBox extends TextBoxBase {
 
     private boolean revealText = false;
 
+    private TextWatermark watermark;
+
     public PasswordTextBox() {
-        setStyleName(WidgetTheme.StyleName.TextBox.name());
-        addStyleDependentName(WidgetTheme.StyleDependent.singleLine.name());
+        setTextBoxWidget(new com.google.gwt.user.client.ui.PasswordTextBox());
     }
 
     @Override
-    public void setWatermark(String text) {
-        if (watermark == null) {
-            watermark = new TextWatermark(this) {
+    protected TextWatermark createWatermark() {
+        watermark = new TextWatermark(getTextBoxWidget()) {
 
-                @Override
-                public String getText() {
-                    return PasswordTextBox.super.getText();
-                }
+            @Override
+            public String getText() {
+                return getTextBoxWidget().getText();
+            }
 
-                @Override
-                public void setText(String text) {
-                    PasswordTextBox.super.setText(text);
-                }
+            @Override
+            public void setText(String text) {
+                getTextBoxWidget().setText(text);
+            }
 
-                @Override
-                void show(boolean show) {
-                    super.show(show);
-                    if (!revealText) {
-                        if (isShown()) {
-                            getElement().setAttribute("type", "text");
-                        } else {
-                            getElement().setAttribute("type", "password");
-                        }
+            @Override
+            void show(boolean show) {
+                super.show(show);
+                if (!revealText) {
+                    if (isShown()) {
+                        getTextBoxWidget().getElement().setAttribute("type", "text");
+                    } else {
+                        getTextBoxWidget().getElement().setAttribute("type", "password");
                     }
                 }
-            };
-        }
-        watermark.setWatermark(text);
+            }
+        };
+        return watermark;
     }
 
     public void revealText(boolean reveal) {
@@ -76,35 +71,4 @@ public class PasswordTextBox extends com.google.gwt.user.client.ui.PasswordTextB
         }
     }
 
-    @Override
-    public String getWatermark() {
-        return watermark.getWatermark();
-    }
-
-    @Override
-    public void setText(String text) {
-        super.setText(text);
-        if (watermark != null) {
-            watermark.show();
-        }
-    }
-
-    @Override
-    public String getText() {
-        if (watermark != null && watermark.isShown()) {
-            return null;
-        } else {
-            return super.getText();
-        }
-    }
-
-    @Override
-    public void setEditable(boolean editable) {
-        setReadOnly(!editable);
-    }
-
-    @Override
-    public boolean isEditable() {
-        return !isReadOnly();
-    }
 }
