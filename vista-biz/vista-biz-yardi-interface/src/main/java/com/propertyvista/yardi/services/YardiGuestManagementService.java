@@ -16,16 +16,21 @@ package com.propertyvista.yardi.services;
 import java.math.BigDecimal;
 import java.rmi.RemoteException;
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.yardi.entity.guestcard40.AttachmentTypesAndChargeCodes;
+import com.yardi.entity.guestcard40.ChargeCode;
 import com.yardi.entity.guestcard40.Customer;
 import com.yardi.entity.guestcard40.EventType;
 import com.yardi.entity.guestcard40.EventTypes;
@@ -41,6 +46,7 @@ import com.yardi.entity.guestcard40.Prospects;
 import com.yardi.entity.guestcard40.RentableItem;
 import com.yardi.entity.guestcard40.RentableItemType;
 import com.yardi.entity.guestcard40.RentableItems;
+import com.yardi.entity.leaseapp30.LeaseApplication;
 import com.yardi.entity.mits.Information;
 import com.yardi.entity.mits.Name;
 import com.yardi.entity.mits.YardiCustomer;
@@ -50,15 +56,20 @@ import com.yardi.entity.resident.ResidentTransactions;
 import com.pyx4j.commons.Key;
 import com.pyx4j.commons.SimpleMessageFormat;
 import com.pyx4j.commons.UserRuntimeException;
+import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.core.AttachLevel;
 import com.pyx4j.entity.server.Persistence;
 
+import com.propertyvista.biz.financial.deposit.DepositFacade;
 import com.propertyvista.biz.financial.payment.PaymentBillableUtils;
 import com.propertyvista.biz.system.yardi.YardiServiceException;
+import com.propertyvista.domain.financial.offering.YardiChargeCode;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.settings.PmcYardiCredential;
 import com.propertyvista.domain.tenant.lease.BillableItem;
+import com.propertyvista.domain.tenant.lease.Deposit;
 import com.propertyvista.domain.tenant.lease.Lease;
+import com.propertyvista.misc.VistaTODO;
 import com.propertyvista.yardi.YardiConstants;
 import com.propertyvista.yardi.mappers.TenantMapper;
 import com.propertyvista.yardi.processors.YardiGuestProcessor;
@@ -249,56 +260,83 @@ public class YardiGuestManagementService extends YardiAbstractService {
     }
 
     public SignLeaseResults signLease(final PmcYardiCredential yc, final Lease lease) throws YardiServiceException, RemoteException {
-        if (!lease.leaseApplication().yardiApplicationId().getValue("").startsWith("p")) {
+        String prospectId = lease.leaseApplication().yardiApplicationId().getValue("");
+        if (!prospectId.startsWith("p")) {
             throw new UserRuntimeException("Invalid Lease Application id: " + lease.leaseApplication().yardiApplicationId().getValue());
         }
 
         YardiGuestProcessor guestProcessor = new YardiGuestProcessor(ILS_AGENT, ILS_SOURCE);
-        Prospect guest = guestProcessor.getProspect(lease);
-        // get available rentable item ids per type
-        Map<RentableItemKey, RentableItem> availableItems = getAvailableRentableItems(yc, lease);
-        // add selected rentable items
-        for (BillableItem product : getLeaseProducts(lease)) {
-            String type = product.item().product().holder().yardiCode().getValue();
-            RentableItemKey lookupKey = new RentableItemKey(type, product.agreedPrice().getValue());
-            RentableItem item = availableItems.get(lookupKey);
-            if (item == null) {
-                throw new UserRuntimeException(SimpleMessageFormat.format("No available ''{0}'' found for the price of ''{1}''", lookupKey.code,
-                        lookupKey.price));
-            }
 
-            guestProcessor.addRentableItem(guest, type, item.getCode());
-        }
-        // ensure unit
-        guestProcessor.addUnit(guest, getUnitInfo(lease.unit()));
-        // create lease
-        for (EventTypes type : Arrays.asList(EventTypes.APPLICATION, EventTypes.APPROVE, EventTypes.LEASE_SIGN)) {
-            EventType event = guestProcessor.getNewEvent(type, false);
-            if (type == EventTypes.LEASE_SIGN) {
-                event.setQuotes(guestProcessor.getRentQuote(getRentPrice(lease)));
-            }
-            guestProcessor.setEvent(guest, event);
+        String guestId = lease.getPrimaryKey().toString();
 
-            // Allow intermediate events to fail as they could have been triggered
-            // by previous attempts - so, we only care about LEASE_SIGN event
-            try {
-                submitGuest(yc, guest);
-                log.info("Event Submitted: {}", type.name());
-            } catch (YardiServiceException e) {
-                log.info("Event Failed: {}", type.name());
+        // check if lease has already been signed by previous attempts; if not run lease sign flow
+        Persistence.ensureRetrieve(lease.unit().building(), AttachLevel.Attached);
+        String propertyCode = lease.unit().building().propertyCode().getValue();
+        Set<EventTypes> currentEvents = getEvents(yc, propertyCode, guestId);
+        if (!currentEvents.contains(EventTypes.LEASE_SIGN)) {
+            Prospect guest = guestProcessor.getProspect(lease);
+            // get available rentable item ids per type
+            Map<RentableItemKey, RentableItem> availableItems = getAvailableRentableItems(yc, lease);
+            // add selected rentable items
+            for (BillableItem product : getLeaseProducts(lease)) {
+                String type = product.item().product().holder().yardiCode().getValue();
+                RentableItemKey lookupKey = new RentableItemKey(type, product.agreedPrice().getValue());
+                RentableItem item = availableItems.get(lookupKey);
+                if (item == null) {
+                    throw new UserRuntimeException(SimpleMessageFormat.format("No available ''{0}'' found for the price of ''{1}''", lookupKey.code,
+                            lookupKey.price));
+                }
+
+                guestProcessor.addRentableItem(guest, type, item.getCode());
+            }
+            // ensure unit
+            guestProcessor.addUnit(guest, getUnitInfo(lease.unit()));
+            // create/update future lease
+            for (EventTypes type : Arrays.asList(EventTypes.APPLICATION, EventTypes.APPROVE, EventTypes.LEASE_SIGN)) {
+                if (currentEvents.contains(type)) {
+                    continue;
+                }
+                EventType event = guestProcessor.getNewEvent(type, false);
                 if (type == EventTypes.LEASE_SIGN) {
-                    throw e;
+                    event.setQuotes(guestProcessor.getRentQuote(getRentPrice(lease)));
+                }
+                guestProcessor.setEvent(guest, event);
+
+                // Ignore errors other than for LEASE_SIGN event
+                try {
+                    submitGuest(yc, guest);
+                    log.info("Event Submitted: {}", type.name());
+                } catch (YardiServiceException e) {
+                    log.info("Event Failed: {}", type.name());
+                    if (type == EventTypes.LEASE_SIGN) {
+                        throw e;
+                    }
                 }
             }
         }
         // do tenant search to retrieve lease id
-        String guestId = lease.getPrimaryKey().toString();
         Persistence.ensureRetrieve(lease.unit().building(), AttachLevel.Attached);
-        final String tenantId = getTenantId(yc, lease.unit().building().propertyCode().getValue(), guestId, IdentityType.Tenant);
+        final String tenantId = getTenantId(yc, propertyCode, guestId, IdentityType.Tenant);
         if (tenantId == null) {
             throw new YardiServiceException("Tenant not found: " + guestId);
         }
         log.info("Created Lease: {}", tenantId);
+
+        boolean useMasterDeposit = lease.currentTerm().version().leaseProducts().serviceItem().item().yardiDepositLMR().isNull();
+        if (useMasterDeposit && VistaTODO.VISTA_4517_Master_Deposit_Completed) {
+            ensureDepositChargeCodesConfigured(yc, lease);
+            // make sure no application exists for the prospect
+            LeaseApplication la = YardiStubFactory.create(YardiGuestManagementStub.class).getApplication(yc, propertyCode, prospectId);
+            if (la == null) {
+                // do ImportApplication to push Deposits back to Yardi as App Fees
+                YardiStubFactory.create(YardiGuestManagementStub.class).importApplication(yc,
+                        guestProcessor.getLeaseApplication(lease, tenantId, getLeaseDeposits(lease)));
+            } else {
+                // TODO - what's the proper handling of existing application with possible app charges?
+                // Options: do nothing, add Master Deposit charges, or merge Master Deposit charges...
+                log.info("Application exists - ImportApplication skipped for prospect: {}", tenantId);
+            }
+        }
 
         // call resident transactions to retrieve name-to-residentId mapping
         final Map<String, String> residentIds = getLeaseResidentIds(yc, lease.unit().building().propertyCode().getValue(), tenantId);
@@ -347,10 +385,6 @@ public class YardiGuestManagementService extends YardiAbstractService {
             }
         }
 
-        // TODO - check for Deposit charge code mapping
-        // - get list of configured charge codes for GuestCard service (use GetAttachmentTypesAndChargeCodes)
-        // - check Deposit policy to ensure that charge code for each item belongs to the list above
-
         StringBuilder msg = new StringBuilder();
         if (agentName == null) {
             msg.append(SimpleMessageFormat.format("Yardi Marketing Agent ''{0}'' is not configured for property ''{1}''.\n", ILS_AGENT, propertyCode));
@@ -361,6 +395,58 @@ public class YardiGuestManagementService extends YardiAbstractService {
         if (msg.length() > 0) {
             throw new UserRuntimeException(msg.toString());
         }
+    }
+
+    /**
+     * Check for Deposit charge code mapping
+     * - get list of configured charge codes for GuestCard service (use GetAttachmentTypesAndChargeCodes)
+     * - check Deposit policy to ensure that charge code for each item belongs to the list above
+     */
+    private void ensureDepositChargeCodesConfigured(PmcYardiCredential yc, Lease lease) throws YardiServiceException, RemoteException {
+        AttachmentTypesAndChargeCodes chargeCodeConfig = YardiStubFactory.create(YardiGuestManagementStub.class).getConfiguredAttachmentsAndCharges(yc);
+        StringBuilder unconfigured = new StringBuilder();
+        // get lease master deposit codes, if any
+        List<Deposit> leaseDeposits = getLeaseDeposits(lease);
+        if (leaseDeposits == null || leaseDeposits.size() == 0) {
+            log.warn("No deposits found for lease: {}", lease.leaseId().getValue());
+        }
+        for (Deposit leaseDeposit : leaseDeposits) {
+            if (leaseDeposit.chargeCode().yardiChargeCodes().size() == 0) {
+                // TODO - why do we need more than one charge code per ARCode? - which one to use for deposit charge?
+                throw new UserRuntimeException(SimpleMessageFormat.format("No Yardi charge code found for ARCode ''{0}''", leaseDeposit.chargeCode()
+                        .getStringView()));
+            }
+            for (YardiChargeCode code : leaseDeposit.chargeCode().yardiChargeCodes()) {
+                boolean found = false;
+                for (ChargeCode configured : chargeCodeConfig.getChargeCodes().getChargeCode()) {
+                    if (configured.getID().equals(code.yardiChargeCode().getValue())) {
+                        found = true;
+                        break;
+                    }
+                }
+                if (!found) {
+                    unconfigured.append(unconfigured.length() == 0 ? "" : ", ").append(code.getStringView());
+                }
+            }
+        }
+
+        if (unconfigured.length() > 0) {
+            throw new YardiServiceException(SimpleMessageFormat.format("Charge Code(s) ''{0}'' not configured in Yardi for interface: {1}",
+                    unconfigured.toString(), YardiConstants.ILS_INTERFACE_ENTITY));
+        }
+    }
+
+    private List<Deposit> getLeaseDeposits(Lease lease) {
+        List<Deposit> deposits = new ArrayList<>();
+        try {
+            List<BillableItem> products = new ArrayList<>(lease.currentTerm().version().leaseProducts().featureItems());
+            products.add(lease.currentTerm().version().leaseProducts().serviceItem());
+            for (BillableItem product : products) {
+                deposits.addAll(ServerSideFactory.create(DepositFacade.class).createRequiredDeposits(product));
+            }
+        } catch (Throwable ignore) {
+        }
+        return deposits;
     }
 
     private Information getUnitInfo(AptUnit unit) {
@@ -412,7 +498,7 @@ public class YardiGuestManagementService extends YardiAbstractService {
 
     private String getTenantId(PmcYardiCredential yc, String propertyCode, String guestId, IdentityType type) throws YardiServiceException, RemoteException {
         LeadManagement guestActivity = YardiStubFactory.create(YardiGuestManagementStub.class).findGuest(yc, propertyCode, guestId);
-        if (guestActivity.getProspects().getProspect().size() != 1) {
+        if (guestActivity == null || guestActivity.getProspects().getProspect().size() != 1) {
             throw new YardiServiceException(SimpleMessageFormat.format("Prospect not found: {0}", guestId));
         }
         Prospect p = guestActivity.getProspects().getProspect().get(0);
@@ -430,6 +516,19 @@ public class YardiGuestManagementService extends YardiAbstractService {
             }
         }
         return null;
+    }
+
+    private Set<EventTypes> getEvents(PmcYardiCredential yc, String propertyCode, String guestId) throws YardiServiceException, RemoteException {
+        LeadManagement guestActivity = YardiStubFactory.create(YardiGuestManagementStub.class).findGuest(yc, propertyCode, guestId);
+        if (guestActivity == null || guestActivity.getProspects().getProspect().size() != 1) {
+            throw new YardiServiceException(SimpleMessageFormat.format("Prospect not found: {0}", guestId));
+        }
+        Set<EventTypes> result = new HashSet<>();
+        Prospect p = guestActivity.getProspects().getProspect().get(0);
+        for (EventType c : p.getEvents().getEvent()) {
+            result.add(c.getEventType());
+        }
+        return result;
     }
 
     private Map<Key, String> getParticipants(PmcYardiCredential yc, Lease lease, Map<String, String> residentIds) throws YardiServiceException, RemoteException {

@@ -21,7 +21,6 @@ import com.pyx4j.commons.SimpleMessageFormat;
 import com.pyx4j.commons.UserRuntimeException;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.config.server.SystemDateManager;
-import com.pyx4j.entity.core.AttachLevel;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.i18n.shared.I18n;
@@ -29,6 +28,7 @@ import com.pyx4j.i18n.shared.I18n;
 import com.propertyvista.biz.occupancy.OccupancyFacade;
 import com.propertyvista.biz.system.yardi.YardiARFacade;
 import com.propertyvista.biz.system.yardi.YardiLeaseApplicationFacade;
+import com.propertyvista.biz.system.yardi.YardiProspectNotEditableException;
 import com.propertyvista.biz.system.yardi.YardiServiceException;
 import com.propertyvista.biz.tenant.lease.LeaseAbstractManager;
 import com.propertyvista.domain.company.Employee;
@@ -81,38 +81,33 @@ public class LeaseYardiApplicationManager extends LeaseAbstractManager {
 
     @Override
     public Lease approve(Lease leaseId, Employee decidedBy, String decisionReason) {
+        // create application if not done before
         try {
-            ServerSideFactory.create(YardiLeaseApplicationFacade.class).createApplication(leaseId);
-        } catch (YardiServiceException e) {
-            throw new UserRuntimeException(i18n.tr("Posting Application to Yardi failed") + "\n" + e.getMessage(), e);
-        }
-
-        Lease lease = super.approve(leaseId, decidedBy, decisionReason);
-
-        // Send Participants to yardi after activation validation if we have not done so in previous attempt
-        Persistence.ensureRetrieve(lease._applicant(), AttachLevel.Attached);
-        if (lease._applicant().yardiApplicantId().isNull()) {
             try {
-                ServerSideFactory.create(YardiLeaseApplicationFacade.class).addLeaseParticipants(lease);
-            } catch (YardiServiceException e) {
-                throw new UserRuntimeException(i18n.tr("Posting Applicants to Yardi failed") + "\n" + e.getMessage(), e);
+                // create main applicant (prospect)
+                ServerSideFactory.create(YardiLeaseApplicationFacade.class).createApplication(leaseId);
+                // Send Participants to yardi after activation validation if we have not done so in previous attempt
+                ServerSideFactory.create(YardiLeaseApplicationFacade.class).addLeaseParticipants(leaseId);
+            } catch (YardiProspectNotEditableException ignore) {
+                // Can happen if previous approval fails after LEASE_SIGN.
+                // Ignore and try to approve again, as it may haven't been completed before.
             }
-        }
 
-        try {
-            lease = ServerSideFactory.create(YardiLeaseApplicationFacade.class).approveApplication(lease);
+            // create Yardi Future Lease with products and deposits (reenterable)
+            ServerSideFactory.create(YardiLeaseApplicationFacade.class).approveApplication(leaseId);
+            Lease lease = super.approve(leaseId, decidedBy, decisionReason);
+
+            // Unit occupancy state managed by purely by Import procedure.
+            try {
+                ServerSideFactory.create(YardiARFacade.class).updateUnitAvailability(lease.unit());
+            } catch (Throwable e) {
+                log.error("unable to update unit availability", e);
+            }
+
+            return lease;
         } catch (YardiServiceException e) {
-            throw new UserRuntimeException(i18n.tr("Posting Application to Yardi failed") + "\n" + e.getMessage(), e);
+            throw new UserRuntimeException(i18n.tr("Posting Applicants to Yardi failed") + "\n" + e.getMessage(), e);
         }
-
-        // Unit occupancy state managed by purely by Import procedure.
-        try {
-            ServerSideFactory.create(YardiARFacade.class).updateUnitAvailability(lease.unit());
-        } catch (Throwable e) {
-            log.error("unable to update unit availability", e);
-        }
-
-        return lease;
     }
 
     @Override

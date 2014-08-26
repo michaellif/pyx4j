@@ -21,6 +21,8 @@ public abstract class YardiHandledErrorMessages {
 
     public static final String errorMessage_GuestNotFound = "No guests exist with the given search criteria.";
 
+    public static final String errorMessage_ProspectNotEditable = "Prospect Status is 'Resident', Prospect is not editable";
+
     //-- payment reversal post messages
 
     public static final String errorMessage_AlreadyNSF1 = "May not  NSF  a receipt that has been NSF";

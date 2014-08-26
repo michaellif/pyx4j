@@ -323,7 +323,7 @@ public class DepositFacadeImpl implements DepositFacade {
             value = productItem.depositSecurity().getValue();
             break;
         }
-        if (VistaFeatures.instance().yardiIntegration()) {
+        if (false && VistaFeatures.instance().yardiIntegration()) {
             return value; // allow null deposit value here in Yardi mode...
         } else {
             return (value == null ? getProductDepositValue(productDeposit) : value); // get Product value if Item not set 

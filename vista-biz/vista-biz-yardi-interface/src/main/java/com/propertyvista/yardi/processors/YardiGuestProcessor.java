@@ -15,6 +15,8 @@ package com.propertyvista.yardi.processors;
 
 import java.math.BigDecimal;
 import java.sql.Timestamp;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
@@ -44,6 +46,16 @@ import com.yardi.entity.guestcard40.Prospect;
 import com.yardi.entity.guestcard40.Quote;
 import com.yardi.entity.guestcard40.Quotes;
 import com.yardi.entity.guestcard40.UnitType;
+import com.yardi.entity.leaseapp30.AccountingData;
+import com.yardi.entity.leaseapp30.Charge;
+import com.yardi.entity.leaseapp30.ChargeSet;
+import com.yardi.entity.leaseapp30.ChargeType;
+import com.yardi.entity.leaseapp30.Frequency;
+import com.yardi.entity.leaseapp30.LALease;
+import com.yardi.entity.leaseapp30.LeaseApplication;
+import com.yardi.entity.leaseapp30.PropertyType;
+import com.yardi.entity.leaseapp30.ResidentType;
+import com.yardi.entity.leaseapp30.Tenant;
 import com.yardi.entity.mits.Information;
 
 import com.pyx4j.config.server.ServerSideFactory;
@@ -56,6 +68,7 @@ import com.propertyvista.domain.person.Name;
 import com.propertyvista.domain.ref.ISOCountry;
 import com.propertyvista.domain.ref.ISOProvince;
 import com.propertyvista.domain.tenant.PersonRelationship;
+import com.propertyvista.domain.tenant.lease.Deposit;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
 import com.propertyvista.domain.tenant.lease.LeaseTermParticipant.Role;
@@ -305,6 +318,75 @@ public class YardiGuestProcessor {
         Quotes quotes = new Quotes();
         quotes.getQuote().add(quote);
         return quotes;
+    }
+
+    public LeaseApplication getLeaseApplication(Lease lease, String tId, List<Deposit> depositCharges) {
+        Persistence.ensureRetrieve(lease._applicant(), AttachLevel.Attached);
+
+        LeaseApplication app = new LeaseApplication();
+
+        // tenant
+        Tenant tenant = new Tenant();
+        tenant.setResidentType(ResidentType.INDIVIDUAL);
+        com.yardi.entity.leaseapp30.Identification id = new com.yardi.entity.leaseapp30.Identification();
+        id.setIDType("tenant"); // TenantID
+        id.setIDValue(tId);
+        id.setIDType("thirdparty");
+        id.setIDValue(lease.getPrimaryKey().toString());
+        tenant.getIdentification().add(id);
+        com.yardi.entity.leaseapp30.Name name = new com.yardi.entity.leaseapp30.Name();
+        name.setFirstName(lease._applicant().customer().person().name().firstName().getValue());
+        name.setLastName(lease._applicant().customer().person().name().lastName().getValue());
+        tenant.setName(name);
+        app.getTenant().add(tenant);
+
+        //charges
+        AccountingData charges = new AccountingData();
+        ChargeSet chargeSet = new ChargeSet();
+        chargeSet.setFrequency(Frequency.ONE_TIME);
+        try {
+            chargeSet.setStart(new SimpleDateFormat("yyyy-MM-dd").parse("0001-01-01"));
+            chargeSet.setEnd(new SimpleDateFormat("yyyy-MM-dd").parse("0001-01-01"));
+        } catch (ParseException e) {
+            throw new Error(e);
+        }
+        for (Deposit deposit : depositCharges) {
+            if (deposit.chargeCode().yardiChargeCodes().size() > 0) {
+                chargeSet.getCharge().add( //
+                        getAppFee( //
+                                deposit.amount().getValue(), //
+                                deposit.chargeCode().yardiChargeCodes().get(0).yardiChargeCode().getValue(), //
+                                deposit.description().getValue() //
+                        ));
+            }
+        }
+        charges.getChargeSet().add(chargeSet);
+        tenant.setAccountingData(charges);
+
+        // lease
+        LALease laLease = new LALease();
+        laLease.getIdentification().add(tenant.getIdentification().get(0));
+        PropertyType property = new PropertyType();
+        com.yardi.entity.leaseapp30.Identification propId = new com.yardi.entity.leaseapp30.Identification();
+        propId.setIDValue(lease.unit().building().propertyCode().getValue());
+        property.getIdentification().add(propId);
+        property.setMarketingName("");
+        laLease.setProperty(property);
+        app.getLALease().add(laLease);
+
+        return app;
+    }
+
+    private Charge getAppFee(BigDecimal amount, String chargeCode, String description) {
+        Charge charge = new Charge();
+        com.yardi.entity.leaseapp30.Identification chargeId = new com.yardi.entity.leaseapp30.Identification();
+        charge.setChargeType(ChargeType.APPLICATION_FEE);
+        charge.setLabel(chargeCode);
+        chargeId.setIDValue("0");
+        chargeId.setOrganizationName(description);
+        charge.getIdentification().add(chargeId);
+        charge.setAmount(amount.toPlainString());
+        return charge;
     }
 
     private Identification getThirdPartyId(String thirdPartyId) {

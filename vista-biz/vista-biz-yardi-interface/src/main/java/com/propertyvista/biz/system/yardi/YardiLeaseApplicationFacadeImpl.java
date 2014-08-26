@@ -23,6 +23,7 @@ import org.slf4j.LoggerFactory;
 import com.pyx4j.commons.Key;
 import com.pyx4j.commons.UserRuntimeException;
 import com.pyx4j.commons.Validate;
+import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.core.AttachLevel;
 import com.pyx4j.entity.server.CompensationHandler;
 import com.pyx4j.entity.server.Executable;
@@ -31,6 +32,7 @@ import com.pyx4j.entity.server.TransactionScopeOption;
 import com.pyx4j.entity.server.UnitOfWork;
 
 import com.propertyvista.biz.system.AbstractYardiFacadeImpl;
+import com.propertyvista.biz.tenant.lease.LeaseFacade;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.settings.PmcYardiCredential;
 import com.propertyvista.domain.tenant.lease.Lease;
@@ -132,7 +134,8 @@ public class YardiLeaseApplicationFacadeImpl extends AbstractYardiFacadeImpl imp
 
     @Override
     public void addLeaseParticipants(final Lease leaseId) throws YardiServiceException {
-        final Lease lease = Persistence.service().retrieve(Lease.class, leaseId.getPrimaryKey());
+        // load lease to access participants
+        final Lease lease = ServerSideFactory.create(LeaseFacade.class).load(leaseId, false);
 
         Persistence.ensureRetrieve(lease.unit().building(), AttachLevel.ToStringMembers);
         validateApplicationAcceptance(lease.unit().building());
@@ -145,8 +148,6 @@ public class YardiLeaseApplicationFacadeImpl extends AbstractYardiFacadeImpl imp
                     Map<Key, String> participants = YardiGuestManagementService.getInstance().addLeaseParticipants(getPmcYardiCredential(lease), lease);
 
                     // save lease participants ids
-                    Persistence.ensureRetrieve(lease.currentTerm().version().tenants(), AttachLevel.Attached);
-                    Persistence.ensureRetrieve(lease.currentTerm().version().guarantors(), AttachLevel.Attached);
                     for (LeaseTermParticipant<?> participant : CollectionUtils.union(lease.currentTerm().version().tenants(), lease.currentTerm().version()
                             .guarantors())) {
                         Persistence.ensureRetrieve(participant.leaseParticipant(), AttachLevel.Attached);
@@ -189,7 +190,9 @@ public class YardiLeaseApplicationFacadeImpl extends AbstractYardiFacadeImpl imp
     }
 
     @Override
-    public Lease approveApplication(final Lease lease) throws YardiServiceException {
+    public Lease approveApplication(final Lease leaseId) throws YardiServiceException {
+        final Lease lease = ServerSideFactory.create(LeaseFacade.class).load(leaseId, false);
+
         Persistence.ensureRetrieve(lease.unit().building(), AttachLevel.ToStringMembers);
         validateApplicationAcceptance(lease.unit().building());
 

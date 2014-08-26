@@ -23,6 +23,7 @@ import com.yardi.entity.ils.PhysicalProperty;
 import com.yardi.entity.leaseapp30.LeaseApplication;
 
 import com.propertyvista.biz.system.yardi.YardiPropertyNoAccessException;
+import com.propertyvista.biz.system.yardi.YardiProspectNotEditableException;
 import com.propertyvista.biz.system.yardi.YardiResponseException;
 import com.propertyvista.biz.system.yardi.YardiServiceException;
 import com.propertyvista.domain.settings.PmcYardiCredential;
@@ -117,24 +118,28 @@ class YardiGuestManagementStubProxy extends YardiAbstractStubProxy implements Ya
 
     @Override
     public LeaseApplication getApplication(PmcYardiCredential yc, String propertyId, String prospectId) throws YardiServiceException, RemoteException {
-        // TODO Auto-generated method stub
-        setDataErrorHandler(new DataErrorHandler() {
-            @Override
-            public void handle(String xml) throws YardiServiceException {
-                for (String regex : new String[] { ".*<Error>(.*)</Error>.*" }) {
-                    if (xml.matches(regex) && ignoreErrorMessage(xml.replaceFirst(regex, "$1"))) {
-                        return;
+        try {
+            setDataErrorHandler(new DataErrorHandler() {
+                @Override
+                public void handle(String xml) throws YardiServiceException {
+                    for (String regex : new String[] { ".*<Error>(.*)</Error>.*" }) {
+                        if (xml.matches(regex) && ignoreErrorMessage(xml.replaceFirst(regex, "$1"))) {
+                            return;
+                        }
                     }
+                    throw new YardiServiceException(GENERIC_YARDI_ERROR);
                 }
-                throw new YardiServiceException(GENERIC_YARDI_ERROR);
-            }
 
-            private boolean ignoreErrorMessage(String message) throws YardiServiceException {
-                String lcMessage = message == null ? null : message.toLowerCase();
-                // we don't consider this an error
-                return lcMessage == null || lcMessage.contains("invalid prospect id");
-            }
-        });
+                private boolean ignoreErrorMessage(String message) throws YardiServiceException {
+                    String lcMessage = message == null ? null : message.toLowerCase();
+                    // we don't consider this an error
+                    return lcMessage == null || lcMessage.contains("invalid prospect id");
+                }
+            });
+            return getStub(yc).getApplication(yc, propertyId, prospectId);
+        } catch (YardiResponseException e) {
+            validateResponseXml(e.getResponse());
+        }
         return null;
     }
 
@@ -162,6 +167,17 @@ class YardiGuestManagementStubProxy extends YardiAbstractStubProxy implements Ya
     @Override
     public void importGuestInfo(PmcYardiCredential yc, LeadManagement leadInfo) throws YardiServiceException, RemoteException {
         try {
+            setMessageErrorHandler(new MessageErrorHandler() {
+                @Override
+                public boolean handle(Messages messages) throws YardiServiceException {
+                    if (messages.hasErrorMessage(YardiHandledErrorMessages.errorMessage_ProspectNotEditable)) {
+                        throw new YardiProspectNotEditableException(messages.getErrorMessage().getValue());
+                    } else if (messages.hasErrorMessage(YardiHandledErrorMessages.errorMessage_NoAccess)) {
+                        throw new YardiPropertyNoAccessException(messages.getErrorMessage().getValue());
+                    }
+                    return false;
+                }
+            });
             getStub(yc).importGuestInfo(yc, leadInfo);
         } catch (YardiResponseException e) {
             validateResponseXml(e.getResponse());

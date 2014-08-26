@@ -78,4 +78,6 @@ public class VistaTODO {
     public static boolean VISTA_4498_Remove_Unnecessary_Validation_Screening_CRM = true;
 
     public static boolean VISTA_2693_Yardi_Plugin_V1_1_Upgrade_Completed = true;
+
+    public static boolean VISTA_4517_Master_Deposit_Completed = false;
 }
