@@ -51,7 +51,9 @@ class VistaCrmPotentialTenantAccessControlList extends UIAclBuilder {
 
         grant(PotentialTenantBasic, TenantChangePassword.class, new PotentialTenantInstanceAccess());
         grant(PotentialTenantAdvanced, TenantChangePassword.class, new PotentialTenantInstanceAccess());
+        grant(PotentialTenantScreening, TenantChangePassword.class, new PotentialTenantInstanceAccess());
         grant(PotentialTenantFull, TenantChangePassword.class, new PotentialTenantInstanceAccess());
-        grant(PotentialTenantBasic, PotentialTenantAdvanced, PotentialTenantFull, new IServiceExecutePermission(TenantPasswordChangeService.class));
+        grant(PotentialTenantBasic, PotentialTenantAdvanced, PotentialTenantScreening, new IServiceExecutePermission(TenantPasswordChangeService.class));
+        grant(PotentialTenantFull, new IServiceExecutePermission(TenantPasswordChangeService.class));
     }
 }
