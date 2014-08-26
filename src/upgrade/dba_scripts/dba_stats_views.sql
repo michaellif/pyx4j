@@ -14,23 +14,29 @@ CREATE OR REPLACE VIEW _dba_.building_stats_view AS
                 t0.total_units AS "Total Units",
                 t0.active_leases AS "Active Leases",
                 t0.reg_units AS "Units with Registered Tenants",
-                ROUND(t0.reg_units::numeric(4,1)*100/t0.total_units,1) AS "% Units with Registered Tenants",
+                CASE WHEN t0.total_units > 0 THEN ROUND(t0.reg_units::numeric(4,1)*100/t0.total_units,1) 
+                ELSE 0 END AS "% Units with Registered Tenants",
                 t0.units_epay AS "Units with Electronic Payments",
                 t0.reg_units_epay AS "Units with Registered Tenants Using Electronic Payments",
-                ROUND(t0.reg_units_epay::numeric(4,1)*100/t0.units_epay,1) AS "% Reg. Units with Epay to Total Units with Epay",
+                CASE WHEN t0.units_epay > 0 THEN ROUND(t0.reg_units_epay::numeric(4,1)*100/t0.units_epay,1) 
+                ELSE 0 END AS "% Reg. Units with Epay to Total Units with Epay",
                 t0.total_tenants AS "Total Tenants",
-                ROUND(t0.total_tenants/t0.total_units::numeric(4,1),1) AS "Average Tenant per Unit",
+                CASE WHEN t0.total_units > 0 THEN ROUND(t0.total_tenants/t0.total_units::numeric(4,1),1) 
+                ELSE 0 END AS "Average Tenant per Unit",
                 t0.reg_tenants AS "Registered Tenants",
                 t0.reg_tenants - t1.reg_tenants AS "Registered Tennats: Change over Last Week",
-                ROUND(t0.reg_tenants::numeric(4,1)*100/t0.total_tenants,1) AS "% Registered Tenants",
+                CASE WHEN t0.total_tenants > 0 THEN ROUND(t0.reg_tenants::numeric(4,1)*100/t0.total_tenants,1) 
+                ELSE 0 END AS "% Registered Tenants",
                 t0.tenant_login_week AS "Tenant Logins This Week",
                 t0.tenant_login_month AS "Tenant Logins This Month",
                 t0.tenants_epay AS "Tenants Using Electronic Payments",
                 t0.tenants_epay - t1.tenants_epay AS "Tenants Using Electronic Payments : Change over Last Week",
                 t0.reg_tenants_epay AS "Registered Tenants Using Electronic Payments",
                 t0.reg_tenants_epay - t1.reg_tenants_epay  "Registered Tenants Using Electronic Payments : Change over Last Week",
-                ROUND(t0.reg_tenants_epay::numeric(4,1)*100/t0.tenants_epay,1) AS "% Registered Tenants with Epay to Total Tenants with Epay",
-                ROUND(t0.reg_tenants_epay::numeric(4,1)*100/t0.reg_tenants,1) AS "% Registered Tenants with Epay to All Registered Tenants",
+                CASE WHEN t0.tenants_epay > 0 THEN ROUND(t0.reg_tenants_epay::numeric(4,1)*100/t0.tenants_epay,1) 
+                ELSE 0 END AS "% Registered Tenants with Epay to Total Tenants with Epay",
+                CASE WHEN t0.reg_tenants > 0 THEN ROUND(t0.reg_tenants_epay::numeric(4,1)*100/t0.reg_tenants,1) 
+                ELSE 0 END AS "% Registered Tenants with Epay to All Registered Tenants",
                 t0.count_trans_recur AS "Transactions Processed This Month, Recurring",
                 t0.amount_trans_recur AS "Amount Processed This Month, Recurring",
                 t0.count_trans_recur_reg AS "Registered Tenants: Transactions Processed This Month,Recurring",
