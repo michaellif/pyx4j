@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011- All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -17,10 +17,15 @@ import java.math.BigDecimal;
 
 import junit.framework.AssertionFailedError;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.gwt.server.DateUtils;
 
 public class Tester {
+
+    private final static Logger log = LoggerFactory.getLogger(Tester.class);
 
     public static boolean continueOnError = false;
 
@@ -38,6 +43,7 @@ public class Tester {
         if ((expected != null) && (expected.equals(actual))) {
             return;
         }
+        log.error("test error {}", format(message, expected, actual));
         if (continueOnError) {
             System.out.println(new StringBuilder().append(format(message, expected, actual)).append("\nat ").append(Thread.currentThread().getStackTrace()[3]));
         } else {
@@ -52,6 +58,7 @@ public class Tester {
         if ((expected != null) && (expected.compareTo(actual) == 0)) {
             return;
         }
+        log.error("test error {}", format(message, expected, actual));
         if (continueOnError) {
             System.out.println(new StringBuilder().append(format(message, expected, actual)).append("\nat ").append(Thread.currentThread().getStackTrace()[3]));
         } else {
@@ -68,6 +75,7 @@ public class Tester {
 
     public void assertTrue(String message, boolean condition) {
         if (!(condition)) {
+            log.error("test error {}", message);
             if (continueOnError) {
                 System.out.println(new StringBuilder().append(message).append("\nat ").append(Thread.currentThread().getStackTrace()[3]));
             } else {
