@@ -251,10 +251,10 @@ public class NotesAndAttachmentsVisorView extends AbstractVisorPane {
                                     user.name().setValue(ClientContext.getUserVisit().getName());
                                     getValue().user().set(user);
                                 }
-                                getController().save(getValue(), new DefaultAsyncCallback<Key>() {
+                                getController().save(getValue(), new DefaultAsyncCallback<NotesAndAttachments>() {
                                     @Override
-                                    public void onSuccess(Key result) {
-                                        getValue().setPrimaryKey(result);
+                                    public void onSuccess(NotesAndAttachments result) {
+                                        populate(result);
                                         setViewableMode(true);
                                         refresh(false);
                                     }

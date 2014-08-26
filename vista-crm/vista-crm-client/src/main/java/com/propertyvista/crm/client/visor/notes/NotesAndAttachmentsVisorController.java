@@ -15,9 +15,11 @@ package com.propertyvista.crm.client.visor.notes;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.Command;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.core.criterion.EntityListCriteria;
+import com.pyx4j.entity.rpc.AbstractCrudService.RetrieveTarget;
 import com.pyx4j.entity.rpc.EntitySearchResult;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
@@ -67,12 +69,20 @@ public class NotesAndAttachmentsVisorController extends AbstractVisorController 
         service.list(callback, criteria);
     }
 
-    public void save(NotesAndAttachments item, DefaultAsyncCallback<Key> callback) {
+    public void save(NotesAndAttachments item, final AsyncCallback<NotesAndAttachments> callback) {
         item.owner().set(notesParentId);
+
+        AsyncCallback<Key> saveCallback = new DefaultAsyncCallback<Key>() {
+            @Override
+            public void onSuccess(Key entityId) {
+                service.retrieve(callback, entityId, RetrieveTarget.Edit);
+            }
+        };
+
         if (item.getPrimaryKey() == null) {
-            service.create(callback, item);
+            service.create(saveCallback, item);
         } else {
-            service.save(callback, item);
+            service.save(saveCallback, item);
         }
     }
 
