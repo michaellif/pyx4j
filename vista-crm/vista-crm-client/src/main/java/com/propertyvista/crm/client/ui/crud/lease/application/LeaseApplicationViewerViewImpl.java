@@ -25,6 +25,7 @@ import com.google.gwt.user.client.ui.MenuItem;
 
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.entity.annotations.Transient;
+import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.security.DataModelPermission;
@@ -573,6 +574,7 @@ public class LeaseApplicationViewerViewImpl extends LeaseViewerViewImplBase<Leas
 
     @Transient
     public interface SelectParticipant extends IEntity {
+        @NotNull
         LeaseTermParticipant<?> selectParticipant();
     }
 
