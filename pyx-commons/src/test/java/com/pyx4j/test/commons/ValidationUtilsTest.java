@@ -55,6 +55,7 @@ public class ValidationUtilsTest extends TestCase {
         assertFalse("Invalid Email: Text followed email is not allowed", ValidationUtils.isValidEmail("email@domain.com (Joe Smith)"));
         assertFalse("Invalid Email: Missing top level domain (.com/.net/.org/etc)", ValidationUtils.isValidEmail("email@domain"));
         assertFalse("Invalid Email: Leading dash in front of domain is invalid", ValidationUtils.isValidEmail("email@-domain.com"));
+        assertFalse("Invalid Email: Underscore in the domain name is invalid", ValidationUtils.isValidEmail("email@domain_name.com"));
 //        assertFalse("Invalid Email: .web is not a valid top level domain", ValidationUtils.isValidEmail("email@domain.web"));
 //        assertFalse("Invalid Email: Invalid IP format", ValidationUtils.isValidEmail("email@111.222.333.44444"));
         assertFalse("Invalid Email: Multiple dot in the domain portion is invalid", ValidationUtils.isValidEmail("email@domain..com"));
