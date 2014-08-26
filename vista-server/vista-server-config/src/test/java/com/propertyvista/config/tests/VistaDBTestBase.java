@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011- All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -18,12 +18,17 @@ import java.util.Set;
 
 import junit.framework.TestCase;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.cache.CacheService;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.server.PersistenceServicesFactory;
 
 public abstract class VistaDBTestBase extends TestCase {
+
+    private final static Logger log = LoggerFactory.getLogger(VistaDBTestBase.class);
 
     private static long initializationTime = System.currentTimeMillis();
 
@@ -37,11 +42,12 @@ public abstract class VistaDBTestBase extends TestCase {
 
     @Override
     protected void setUp() throws Exception {
+        log.debug("=================== setUp UnitTest {}.{}  ===================", this.getClass().getName(), this.getName());
         super.setUp();
         CacheService.resetAll();
         VistaTestDBSetup.init();
 
-        // Avoid side effects from unfinished setUp() in another tests 
+        // Avoid side effects from unfinished setUp() in another tests
         try {
             Persistence.service().removeThreadLocale();
         } catch (Throwable ignore) {
