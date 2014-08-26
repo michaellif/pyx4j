@@ -251,9 +251,6 @@ public class BillableItemEditor extends CForm<BillableItem> {
                 get(proto().agreedPrice()).setMandatory(false);
             }
 
-            get(proto().effectiveDate()).setEditable(false);
-            get(proto().expirationDate()).setEditable(false);
-
             get(proto().effectiveDate()).setVisible(!getValue().effectiveDate().isNull());
             get(proto().expirationDate()).setVisible(!getValue().expirationDate().isNull());
 
