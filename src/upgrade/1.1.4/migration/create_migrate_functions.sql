@@ -301,8 +301,8 @@ BEGIN
         CREATE TABLE communication_message_category
         (
             id                          BIGINT              NOT NULL,
-            topic                       VARCHAR(500),
-            category                    VARCHAR(50),
+            category                    VARCHAR(500),
+            category_type               VARCHAR(50),
             ticket_type                 VARCHAR(50),
             deleted                     BOOLEAN,
                 CONSTRAINT  communication_message_category_pk PRIMARY KEY(id)
@@ -339,7 +339,7 @@ BEGIN
         ALTER TABLE communication_thread    ADD COLUMN owner BIGINT,
                                             ADD COLUMN owner_discriminator VARCHAR(50),
                                             ADD COLUMN status VARCHAR(50),
-                                            ADD COLUMN topic BIGINT,
+                                            ADD COLUMN category BIGINT,
                                             ADD COLUMN allowed_reply BOOLEAN;
                                             
         ALTER TABLE communication_thread ALTER COLUMN subject TYPE VARCHAR(78);
@@ -1354,7 +1354,7 @@ BEGIN
             REFERENCES communication_message_category(id)  DEFERRABLE INITIALLY DEFERRED;
         ALTER TABLE communication_message_category$rls ADD CONSTRAINT communication_message_category$rls_value_fk FOREIGN KEY(value) 
             REFERENCES crm_role(id)  DEFERRABLE INITIALLY DEFERRED;
-        ALTER TABLE communication_thread ADD CONSTRAINT communication_thread_topic_fk FOREIGN KEY(topic) 
+        ALTER TABLE communication_thread ADD CONSTRAINT communication_thread_category_fk FOREIGN KEY(category) 
             REFERENCES communication_message_category(id)  DEFERRABLE INITIALLY DEFERRED;
         ALTER TABLE decision_info ADD CONSTRAINT decision_info_decided_by_fk FOREIGN KEY(decided_by) 
             REFERENCES employee(id)  DEFERRABLE INITIALLY DEFERRED;
@@ -1454,10 +1454,10 @@ BEGIN
             'Tennessee', 'Texas', 'Utah', 'Vermont', 'VirginIslands', 'Virginia', 'Washington', 'WestVirginia', 'Wisconsin', 'Wyoming', 'YukonTerritory'));
         ALTER TABLE communication_delivery_handle ADD CONSTRAINT communication_delivery_handle_recipient_discriminator_d_ck 
             CHECK ((recipient_discriminator) IN ('AptUnit', 'Building', 'CrmUser', 'CustomerUser', 'Portfolio', 'SystemEndpoint', 'Tenant'));
+        ALTER TABLE communication_message_category ADD CONSTRAINT communication_message_category_category_type_e_ck 
+            CHECK ((category_type) IN ('IVR', 'Message', 'Notification', 'SMS', 'Ticket'));
         ALTER TABLE communication_message ADD CONSTRAINT communication_message_sender_discriminator_d_ck 
             CHECK ((sender_discriminator) IN ('AptUnit', 'Building', 'CrmUser', 'CustomerUser', 'Portfolio', 'SystemEndpoint', 'Tenant'));
-        ALTER TABLE communication_message_category ADD CONSTRAINT communication_message_category_category_e_ck 
-            CHECK ((category) IN ('IVR', 'Message', 'Notification', 'SMS', 'Ticket'));
         ALTER TABLE communication_message_category ADD CONSTRAINT communication_message_category_ticket_type_e_ck 
             CHECK ((ticket_type) IN ('Landlord', 'NotTicket', 'Tenant', 'Vendor'));
         ALTER TABLE communication_thread ADD CONSTRAINT communication_thread_owner_discriminator_d_ck 
@@ -1737,7 +1737,7 @@ BEGIN
         ALTER TABLE communication_message ALTER COLUMN sender SET NOT NULL;
         ALTER TABLE communication_message ALTER COLUMN sender_discriminator SET NOT NULL;
         ALTER TABLE communication_thread ALTER COLUMN owner SET NOT NULL;
-        ALTER TABLE communication_thread ALTER COLUMN topic SET NOT NULL;
+        ALTER TABLE communication_thread ALTER COLUMN category SET NOT NULL;
         ALTER TABLE communication_thread ALTER COLUMN owner_discriminator SET NOT NULL;
         
         /**
