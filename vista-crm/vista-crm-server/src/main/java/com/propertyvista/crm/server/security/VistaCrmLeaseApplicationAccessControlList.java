@@ -24,7 +24,6 @@ import static com.propertyvista.domain.security.VistaCrmBehavior.ApplicationFull
 import static com.propertyvista.domain.security.VistaCrmBehavior.ApplicationVerifyDoc;
 import static com.pyx4j.entity.security.AbstractCRUDPermission.ALL;
 import static com.pyx4j.entity.security.AbstractCRUDPermission.READ;
-import static com.pyx4j.entity.security.AbstractCRUDPermission.UPDATE;
 
 import java.util.List;
 
@@ -32,10 +31,10 @@ import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.security.server.UIAclBuilder;
 
 import com.propertyvista.crm.rpc.security.LeaseTermEditOnApplicationInstanceAccess;
-import com.propertyvista.crm.rpc.services.lease.ac.ApplicationCancel;
 import com.propertyvista.crm.rpc.services.lease.ac.ApplicationApprove;
-import com.propertyvista.crm.rpc.services.lease.ac.ApplicationMoreInfo;
+import com.propertyvista.crm.rpc.services.lease.ac.ApplicationCancel;
 import com.propertyvista.crm.rpc.services.lease.ac.ApplicationDocumentSigning;
+import com.propertyvista.crm.rpc.services.lease.ac.ApplicationMoreInfo;
 import com.propertyvista.crm.rpc.services.lease.ac.ApplicationOnlineApplication;
 import com.propertyvista.crm.rpc.services.lease.ac.ApplicationReserveUnit;
 import com.propertyvista.crm.rpc.services.lease.ac.ApplicationSubmit;
@@ -52,7 +51,7 @@ class VistaCrmLeaseApplicationAccessControlList extends UIAclBuilder {
 
         {// Lead:
             List<Class<? extends IEntity>> entities = entities(Lead.class);
-            grant(ApplicationBasic, entities, READ | UPDATE);
+            grant(ApplicationBasic, entities, READ);
             grant(ApplicationFull, entities, ALL);
         }
 
@@ -106,6 +105,7 @@ class VistaCrmLeaseApplicationAccessControlList extends UIAclBuilder {
         grant(ApplicationDecisionVerify, ApplicationCancel.class);
         grant(ApplicationDecisionApprove, ApplicationCancel.class);
         grant(ApplicationDecisionFull, ApplicationCancel.class);
+        grant(ApplicationFull, ApplicationCancel.class);
 
         // Reserve unit and start Online:        
         grant(ApplicationDecisionReserveUnit, ApplicationReserveUnit.class);
