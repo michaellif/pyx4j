@@ -89,7 +89,6 @@ import com.propertyvista.yardi.processors.YardiPaymentProcessor;
 import com.propertyvista.yardi.processors.YardiProductCatalogProcessor;
 import com.propertyvista.yardi.services.YardiResidentTransactionsData.LeaseTransactionData;
 import com.propertyvista.yardi.services.YardiResidentTransactionsData.PropertyTransactionData;
-import com.propertyvista.yardi.stubs.YardiGuestManagementStub;
 import com.propertyvista.yardi.stubs.YardiILSGuestCardStub;
 import com.propertyvista.yardi.stubs.YardiResidentTransactionsStub;
 import com.propertyvista.yardi.stubs.YardiServiceMessageException;
@@ -218,7 +217,7 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
 
     public void updateProductCatalog(PmcYardiCredential yc, Building building, Map<String, BigDecimal> depositInfo, ExecutionMonitor executionMonitor)
             throws YardiServiceException, RemoteException {
-        RentableItems rentableItems = YardiStubFactory.create(YardiGuestManagementStub.class).getRentableItems(yc, building.propertyCode().getValue());
+        RentableItems rentableItems = YardiStubFactory.create(YardiILSGuestCardStub.class).getRentableItems(yc, building.propertyCode().getValue());
 
         importProductCatalog(yc.getPrimaryKey(), building, rentableItems, depositInfo, executionMonitor);
     }

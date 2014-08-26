@@ -32,7 +32,6 @@ import com.propertyvista.domain.settings.PmcYardiCredential;
 import com.propertyvista.server.config.DevYardiCredentials;
 import com.propertyvista.server.config.DevYardiCredentials.YardiCredentialId;
 import com.propertyvista.test.mock.security.PasswordEncryptorFacadeMock;
-import com.propertyvista.yardi.stubs.YardiGuestManagementStub;
 import com.propertyvista.yardi.stubs.YardiILSGuestCardStub;
 import com.propertyvista.yardi.stubs.YardiStubFactory;
 
@@ -52,7 +51,7 @@ public class YardiILSServiceClientExample {
         ServerSideFactory.create(YardiConfigurationFacade.class).startYardiTimer();
 
         if (true) {
-            MarketingSources properties = YardiStubFactory.create(YardiGuestManagementStub.class).getYardiMarketingSources(yc, propertyId);
+            MarketingSources properties = YardiStubFactory.create(YardiILSGuestCardStub.class).getYardiMarketingSources(yc, propertyId);
             if (properties.getProperty() != null) {
                 System.out.println("Got " + properties.getProperty().size() + " properties");
             }

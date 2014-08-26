@@ -50,13 +50,11 @@ import com.propertyvista.test.mock.models.PmcDataModel;
 import com.propertyvista.test.mock.models.RestrictionsPolicyDataModel;
 import com.propertyvista.test.mock.security.PasswordEncryptorFacadeMock;
 import com.propertyvista.yardi.mock.YardiMockServer;
-import com.propertyvista.yardi.mock.stub.YardiMockGuestManagementStubImpl;
 import com.propertyvista.yardi.mock.stub.YardiMockILSGuestCardStubImpl;
 import com.propertyvista.yardi.mock.stub.YardiMockMaintenanceRequestsStubImpl;
 import com.propertyvista.yardi.mock.stub.YardiMockResidentTransactionsStubImpl;
 import com.propertyvista.yardi.mock.stub.YardiMockSystemBatchesStubImpl;
 import com.propertyvista.yardi.services.YardiResidentTransactionsService;
-import com.propertyvista.yardi.stubs.YardiGuestManagementStub;
 import com.propertyvista.yardi.stubs.YardiILSGuestCardStub;
 import com.propertyvista.yardi.stubs.YardiMaintenanceRequestsStub;
 import com.propertyvista.yardi.stubs.YardiResidentTransactionsStub;
@@ -72,7 +70,6 @@ public class YardiTestBase extends IntegrationTestBase {
         registerFacadeMock(YardiResidentTransactionsStub.class, YardiMockResidentTransactionsStubImpl.class);
         registerFacadeMock(YardiSystemBatchesStub.class, YardiMockSystemBatchesStubImpl.class);
         registerFacadeMock(YardiMaintenanceRequestsStub.class, YardiMockMaintenanceRequestsStubImpl.class);
-        registerFacadeMock(YardiGuestManagementStub.class, YardiMockGuestManagementStubImpl.class);
         registerFacadeMock(YardiILSGuestCardStub.class, YardiMockILSGuestCardStubImpl.class);
         registerFacadeMock(PasswordEncryptorFacade.class, PasswordEncryptorFacadeMock.class);
 

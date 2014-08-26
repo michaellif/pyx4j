@@ -73,7 +73,7 @@ import com.propertyvista.misc.VistaTODO;
 import com.propertyvista.yardi.YardiConstants;
 import com.propertyvista.yardi.mappers.TenantMapper;
 import com.propertyvista.yardi.processors.YardiGuestProcessor;
-import com.propertyvista.yardi.stubs.YardiGuestManagementStub;
+import com.propertyvista.yardi.stubs.YardiILSGuestCardStub;
 import com.propertyvista.yardi.stubs.YardiResidentTransactionsStub;
 import com.propertyvista.yardi.stubs.YardiStubFactory;
 
@@ -326,10 +326,10 @@ public class YardiGuestManagementService extends YardiAbstractService {
         if (useMasterDeposit && VistaTODO.VISTA_4517_Master_Deposit_Completed) {
             ensureDepositChargeCodesConfigured(yc, lease);
             // make sure no application exists for the prospect
-            LeaseApplication la = YardiStubFactory.create(YardiGuestManagementStub.class).getApplication(yc, propertyCode, prospectId);
+            LeaseApplication la = YardiStubFactory.create(YardiILSGuestCardStub.class).getApplication(yc, propertyCode, prospectId);
             if (la == null) {
                 // do ImportApplication to push Deposits back to Yardi as App Fees
-                YardiStubFactory.create(YardiGuestManagementStub.class).importApplication(yc,
+                YardiStubFactory.create(YardiILSGuestCardStub.class).importApplication(yc,
                         guestProcessor.getLeaseApplication(lease, tenantId, getLeaseDeposits(lease)));
             } else {
                 // TODO - what's the proper handling of existing application with possible app charges?
@@ -362,11 +362,11 @@ public class YardiGuestManagementService extends YardiAbstractService {
 
     public RentableItems getRentableItems(PmcYardiCredential yc, String propertyId) throws YardiServiceException, RemoteException {
         log.info("Getting RentableItems for property {}", propertyId);
-        return YardiStubFactory.create(YardiGuestManagementStub.class).getRentableItems(yc, propertyId);
+        return YardiStubFactory.create(YardiILSGuestCardStub.class).getRentableItems(yc, propertyId);
     }
 
     public void validateSettings(PmcYardiCredential yc, String propertyCode) throws YardiServiceException, RemoteException {
-        MarketingSources sources = YardiStubFactory.create(YardiGuestManagementStub.class).getYardiMarketingSources(yc, propertyCode);
+        MarketingSources sources = YardiStubFactory.create(YardiILSGuestCardStub.class).getYardiMarketingSources(yc, propertyCode);
 
         String agentName = null;
         String sourceName = null;
@@ -403,7 +403,7 @@ public class YardiGuestManagementService extends YardiAbstractService {
      * - check Deposit policy to ensure that charge code for each item belongs to the list above
      */
     private void ensureDepositChargeCodesConfigured(PmcYardiCredential yc, Lease lease) throws YardiServiceException, RemoteException {
-        AttachmentTypesAndChargeCodes chargeCodeConfig = YardiStubFactory.create(YardiGuestManagementStub.class).getConfiguredAttachmentsAndCharges(yc);
+        AttachmentTypesAndChargeCodes chargeCodeConfig = YardiStubFactory.create(YardiILSGuestCardStub.class).getConfiguredAttachmentsAndCharges(yc);
         StringBuilder unconfigured = new StringBuilder();
         // get lease master deposit codes, if any
         List<Deposit> leaseDeposits = getLeaseDeposits(lease);
@@ -493,11 +493,11 @@ public class YardiGuestManagementService extends YardiAbstractService {
         LeadManagement lead = new LeadManagement();
         lead.setProspects(new Prospects());
         lead.getProspects().getProspect().add(guest);
-        YardiStubFactory.create(YardiGuestManagementStub.class).importGuestInfo(yc, lead);
+        YardiStubFactory.create(YardiILSGuestCardStub.class).importGuestInfo(yc, lead);
     }
 
     private String getTenantId(PmcYardiCredential yc, String propertyCode, String guestId, IdentityType type) throws YardiServiceException, RemoteException {
-        LeadManagement guestActivity = YardiStubFactory.create(YardiGuestManagementStub.class).findGuest(yc, propertyCode, guestId);
+        LeadManagement guestActivity = YardiStubFactory.create(YardiILSGuestCardStub.class).findGuest(yc, propertyCode, guestId);
         if (guestActivity == null || guestActivity.getProspects().getProspect().size() != 1) {
             throw new YardiServiceException(SimpleMessageFormat.format("Prospect not found: {0}", guestId));
         }
@@ -519,7 +519,7 @@ public class YardiGuestManagementService extends YardiAbstractService {
     }
 
     private Set<EventTypes> getEvents(PmcYardiCredential yc, String propertyCode, String guestId) throws YardiServiceException, RemoteException {
-        LeadManagement guestActivity = YardiStubFactory.create(YardiGuestManagementStub.class).findGuest(yc, propertyCode, guestId);
+        LeadManagement guestActivity = YardiStubFactory.create(YardiILSGuestCardStub.class).findGuest(yc, propertyCode, guestId);
         if (guestActivity == null || guestActivity.getProspects().getProspect().size() != 1) {
             throw new YardiServiceException(SimpleMessageFormat.format("Prospect not found: {0}", guestId));
         }
@@ -533,7 +533,7 @@ public class YardiGuestManagementService extends YardiAbstractService {
 
     private Map<Key, String> getParticipants(PmcYardiCredential yc, Lease lease, Map<String, String> residentIds) throws YardiServiceException, RemoteException {
         Key tenantId = lease.getPrimaryKey();
-        LeadManagement guestActivity = YardiStubFactory.create(YardiGuestManagementStub.class).findGuest(yc, lease.unit().building().propertyCode().getValue(),
+        LeadManagement guestActivity = YardiStubFactory.create(YardiILSGuestCardStub.class).findGuest(yc, lease.unit().building().propertyCode().getValue(),
                 tenantId.toString());
         if (guestActivity.getProspects().getProspect().size() != 1) {
             throw new YardiServiceException(SimpleMessageFormat.format("Prospect not found: {0}", tenantId));

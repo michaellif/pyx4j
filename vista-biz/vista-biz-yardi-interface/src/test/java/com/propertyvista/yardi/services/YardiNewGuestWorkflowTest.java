@@ -80,7 +80,7 @@ import com.propertyvista.domain.ref.ISOProvince;
 import com.propertyvista.domain.settings.PmcYardiCredential;
 import com.propertyvista.test.mock.security.PasswordEncryptorFacadeMock;
 import com.propertyvista.yardi.processors.YardiGuestProcessor;
-import com.propertyvista.yardi.stubs.YardiGuestManagementStub;
+import com.propertyvista.yardi.stubs.YardiILSGuestCardStub;
 import com.propertyvista.yardi.stubs.YardiStubFactory;
 
 /**
@@ -123,7 +123,7 @@ public class YardiNewGuestWorkflowTest {
                 String xml = getMarketingSourcesXml();
                 sources = MarshallUtil.unmarshal(MarketingSources.class, xml);
             } else {
-                sources = YardiStubFactory.create(YardiGuestManagementStub.class).getYardiMarketingSources(yc, yc.propertyListCodes().getValue());
+                sources = YardiStubFactory.create(YardiILSGuestCardStub.class).getYardiMarketingSources(yc, yc.propertyListCodes().getValue());
             }
 
             String agentName = null;
@@ -158,7 +158,7 @@ public class YardiNewGuestWorkflowTest {
             // retrieve guests
             Map<String, Prospect> guests = new HashMap<String, Prospect>();
             try {
-                LeadManagement guestActivity = YardiStubFactory.create(YardiGuestManagementStub.class).getGuestActivity(yc, yc.propertyListCodes().getValue());
+                LeadManagement guestActivity = YardiStubFactory.create(YardiILSGuestCardStub.class).getGuestActivity(yc, yc.propertyListCodes().getValue());
                 for (Prospect guest : guestActivity.getProspects().getProspect()) {
                     Customer c = guest.getCustomers().getCustomer().get(0);
                     if (EnumSet.of(CustomerInfo.CURRENT_RESIDENT, CustomerInfo.FORMER_RESIDENT, CustomerInfo.FUTURE_RESIDENT, CustomerInfo.OTHER).contains(
@@ -192,8 +192,8 @@ public class YardiNewGuestWorkflowTest {
             if (mockMode) {
                 System.out.println("Available Units: #156 (2008-1-10),  #158 (2008-1-11),  #159 (2011-3-21), ");
             } else {
-                PhysicalProperty property = YardiStubFactory.create(YardiGuestManagementStub.class).getPropertyMarketingInfo(yc,
-                        yc.propertyListCodes().getValue());
+                PhysicalProperty property = YardiStubFactory.create(YardiILSGuestCardStub.class)
+                        .getPropertyMarketingInfo(yc, yc.propertyListCodes().getValue());
                 log.info("PhysicalProperty: {}", property.getProperty().get(0).getPropertyID().getIdentification().getPrimaryID());
                 for (ILSUnit ilsUnit : property.getProperty().get(0).getILSUnit()) {
                     Availability avail = ilsUnit.getAvailability();
@@ -312,7 +312,7 @@ public class YardiNewGuestWorkflowTest {
             lease.setProperty(property);
             app.getLALease().add(lease);
 
-            YardiStubFactory.create(YardiGuestManagementStub.class).importApplication(yc, app);
+            YardiStubFactory.create(YardiILSGuestCardStub.class).importApplication(yc, app);
         } catch (Throwable t) {
             throw new RuntimeException(t);
         }
@@ -323,7 +323,7 @@ public class YardiNewGuestWorkflowTest {
         lead.setProspects(new Prospects());
         lead.getProspects().getProspect().add(guest);
         try {
-            YardiStubFactory.create(YardiGuestManagementStub.class).importGuestInfo(yc, lead);
+            YardiStubFactory.create(YardiILSGuestCardStub.class).importGuestInfo(yc, lead);
         } catch (Throwable t) {
             throw new RuntimeException(t);
         }
@@ -367,7 +367,7 @@ public class YardiNewGuestWorkflowTest {
         Map<String, ILSUnit> units = new HashMap<String, ILSUnit>();
         PhysicalProperty property;
         try {
-            property = YardiStubFactory.create(YardiGuestManagementStub.class).getPropertyMarketingInfo(yc, yc.propertyListCodes().getValue());
+            property = YardiStubFactory.create(YardiILSGuestCardStub.class).getPropertyMarketingInfo(yc, yc.propertyListCodes().getValue());
         } catch (Throwable t) {
             throw new RuntimeException(t);
         }
@@ -411,7 +411,7 @@ public class YardiNewGuestWorkflowTest {
         // print available (unused) items for select
         List<String> availItems = new ArrayList<String>();
         try {
-            RentableItems items = YardiStubFactory.create(YardiGuestManagementStub.class).getRentableItems(yc, yc.propertyListCodes().getValue());
+            RentableItems items = YardiStubFactory.create(YardiILSGuestCardStub.class).getRentableItems(yc, yc.propertyListCodes().getValue());
             for (RentableItemType type : items.getItemType()) {
                 availItems.add(type.getCode());
             }
