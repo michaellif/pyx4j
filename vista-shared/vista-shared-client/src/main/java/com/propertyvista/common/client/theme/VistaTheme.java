@@ -21,7 +21,6 @@ import com.pyx4j.commons.css.Style;
 import com.pyx4j.commons.css.Theme;
 import com.pyx4j.commons.css.ThemeColor;
 import com.pyx4j.commons.css.ThemeId;
-import com.pyx4j.widgets.client.ImageFactory;
 
 import com.propertyvista.common.client.ui.components.VistaTabLayoutPanel;
 
@@ -272,50 +271,6 @@ public class VistaTheme extends Theme {
         style.addProperty("color", ThemeColor.foreground, 0.2);
         style.addProperty("cursor", "default");
         addStyle(style);
-    }
-
-    protected void initComboBoxStyles() {
-        Style style = new Style(Selector.valueOf(CSSClass.pyx4j_Picker));
-        style.addProperty("border", "1px solid transparent");
-        style.addProperty("cursor", "pointer");
-        style.addProperty("cursor", "hand");
-        style.addProperty("outline", "none");
-        style.addProperty("width", "18px");
-        style.addProperty("height", "22px");
-        style.addProperty("background", "url('" + ImageFactory.getImages().comboBoxPicker().getSafeUri().asString() + "') no-repeat 100%");
-        addStyle(style);
-
-        style = new Style("." + CSSClass.pyx4j_Picker + "-hover");
-        style.addProperty("background", "url('" + ImageFactory.getImages().comboBoxPickerHover().getSafeUri().asString() + "') no-repeat 100%");
-        addStyle(style);
-
-        style = new Style("." + CSSClass.pyx4j_Picker + "-pushed");
-        style.addProperty("background", "url('" + ImageFactory.getImages().comboBoxPickerPushed().getSafeUri().asString() + "') no-repeat 100%");
-        addStyle(style);
-
-        style = new Style("." + CSSClass.pyx4j_PickerPanel);
-        style.addProperty("border-color", ThemeColor.object1, 0.6);
-        style.addProperty("border-style", "solid");
-        style.addProperty("border-width", "1px");
-        style.addProperty("background-color", "#fff");
-        addStyle(style);
-
-        addStyle(style);
-        style = new Style("." + CSSClass.pyx4j_PickerPanel + " td");
-        style.addProperty("padding", "0px");
-
-        style = new Style("." + CSSClass.pyx4j_PickerPanel + " table");
-        style.addProperty("border-collapse", "collapse");
-        addStyle(style);
-
-        style = new Style("." + CSSClass.pyx4j_PickerLine + " .gwt-TreeItem-selected");
-        style.addProperty("background", "transparent");
-        addStyle(style);
-
-        style = new Style("." + CSSClass.pyx4j_PickerLine_Selected);
-        style.addProperty("background", "lightGray");
-        addStyle(style);
-
     }
 
     protected void initGwtButtonStyles() {
