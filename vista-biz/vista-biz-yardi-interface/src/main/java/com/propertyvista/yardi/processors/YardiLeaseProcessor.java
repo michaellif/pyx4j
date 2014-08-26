@@ -661,12 +661,17 @@ public class YardiLeaseProcessor {
 
     private static Lease completeLease(Lease lease, YardiLease yardiLease) {
         Persistence.ensureRetrieve(lease, AttachLevel.Attached);
-        if (lease.completion().isNull()) {
-            ServerSideFactory.create(LeaseFacade.class).createCompletionEvent(lease, CompletionType.Termination, SystemDateManager.getLogicalDate(),
-                    getLogicalDate(yardiLease.getExpectedMoveOutDate()), getLogicalDate(yardiLease.getActualMoveOut()));
+        if (lease.status().getValue() == Status.Approved) {
+            ServerSideFactory.create(LeaseFacade.class).cancelLease(lease, null, "Yardi import lease cancellation.");
+        } else {
+            if (lease.completion().isNull()) {
+                ServerSideFactory.create(LeaseFacade.class).createCompletionEvent(lease, CompletionType.Termination, SystemDateManager.getLogicalDate(),
+                        getLogicalDate(yardiLease.getExpectedMoveOutDate()), getLogicalDate(yardiLease.getActualMoveOut()));
+            }
+
+            ServerSideFactory.create(LeaseFacade.class).moveOut(lease, getLogicalDate(yardiLease.getActualMoveOut()));
         }
 
-        ServerSideFactory.create(LeaseFacade.class).moveOut(lease, getLogicalDate(yardiLease.getActualMoveOut()));
         log.debug("        Complete Lease");
         Persistence.service().retrieve(lease);
         return lease;
