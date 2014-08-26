@@ -99,10 +99,6 @@ public enum VistaCrmBehavior implements Behavior {
 
     // --
 
-    Communication,
-
-    // --
-
     PortfolioBasic, PortfolioFull,
 
     // --

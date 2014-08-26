@@ -22,9 +22,9 @@ import com.pyx4j.security.shared.Context;
 import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.server.contexts.ServerContext;
 
-import com.propertyvista.domain.security.VistaCrmBehavior;
 import com.propertyvista.domain.security.VistaDataAccessBehavior;
 import com.propertyvista.domain.security.common.VistaApplication;
+import com.propertyvista.domain.security.common.VistaBasicBehavior;
 import com.propertyvista.shared.VistaUserVisit;
 
 public class CommunicationStatusRpcServiceFilter implements IServiceFilter {
@@ -39,27 +39,26 @@ public class CommunicationStatusRpcServiceFilter implements IServiceFilter {
 
     @Override
     public Serializable filterOutgoing(Class<? extends Service<?, ?>> serviceClass, Serializable response) {
-        // TODO create message notification and send to GWT
-
         if (ServerContext.isUserLoggedIn()) {
-            if (VistaApplication.crm.equals(Context.visit(VistaUserVisit.class).getApplication())) {
-                if (!SecurityController.check(VistaCrmBehavior.Communication)) {
+
+            if (VistaApplication.resident.equals(Context.visit(VistaUserVisit.class).getApplication())) {
+                if (!SecurityController.check(VistaDataAccessBehavior.ResidentInPortal) && !SecurityController.check(VistaDataAccessBehavior.GuarantorInPortal)) {
                     return response;
                 }
-            } else if (VistaApplication.resident.equals(Context.visit(VistaUserVisit.class).getApplication())) {
-                if (!SecurityController.check(VistaDataAccessBehavior.ResidentInPortal)) {
+            } else if (VistaApplication.crm.equals(Context.visit(VistaUserVisit.class).getApplication())) {
+                if (!SecurityController.check(VistaBasicBehavior.CRM)) {
                     return response;
                 }
             } else {
                 return response;
             }
-
             if (!isCached()) {
                 Serializable communicationNotification = ServerSideFactory.create(CommunicationMessageFacade.class).getCommunicationStatus();
-                ServerContext.addResponseSystemNotification(communicationNotification);
-                ServerContext.getVisit().setAttribute(TIMESTAMPED_ATTRIBUTE, new Long(System.currentTimeMillis()));
+                if (communicationNotification != null) {
+                    ServerContext.addResponseSystemNotification(communicationNotification);
+                    ServerContext.getVisit().setAttribute(TIMESTAMPED_ATTRIBUTE, new Long(System.currentTimeMillis()));
+                }
             }
-
         }
 
         return response;

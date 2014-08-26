@@ -296,7 +296,8 @@ public class ToolbarViewImpl extends FlowPanel implements ToolbarView {
         loginButton.setVisible(!loggedIn && !hideLoginButton);
 
         updateCommunicationMessagesCount(PortalClientCommunicationManager.instance().getLatestCommunicationNotification());
-        communicationButton.setVisible(loggedIn && SecurityController.check(PortalResidentBehavior.Resident));
+        communicationButton.setVisible(loggedIn
+                && (SecurityController.check(PortalResidentBehavior.Resident) || SecurityController.check(PortalResidentBehavior.Guarantor)));
 
         switch (layoutType) {
         case monitor:

@@ -24,22 +24,24 @@ import org.apache.commons.collections4.set.ListOrderedSet;
 import com.pyx4j.entity.cache.CacheService;
 import com.pyx4j.entity.core.AttachLevel;
 import com.pyx4j.entity.core.EntityFactory;
+import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.criterion.EntityListCriteria;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.server.Persistence;
 
 import com.propertyvista.domain.communication.CommunicationEndpoint;
 import com.propertyvista.domain.communication.CommunicationEndpoint.ContactType;
+import com.propertyvista.domain.communication.CommunicationGroup;
 import com.propertyvista.domain.communication.DeliveryHandle;
 import com.propertyvista.domain.communication.Message;
 import com.propertyvista.domain.communication.SystemEndpoint;
 import com.propertyvista.domain.communication.SystemEndpoint.SystemEndpointName;
+import com.propertyvista.domain.company.Employee;
 import com.propertyvista.domain.company.Portfolio;
 import com.propertyvista.domain.property.asset.building.Building;
-import com.propertyvista.domain.property.asset.unit.AptUnit;
-import com.propertyvista.domain.security.CrmUser;
-import com.propertyvista.domain.security.CustomerUser;
+import com.propertyvista.domain.tenant.lease.Guarantor;
 import com.propertyvista.domain.tenant.lease.Lease;
+import com.propertyvista.domain.tenant.lease.LeaseParticipant;
 import com.propertyvista.domain.tenant.lease.Tenant;
 import com.propertyvista.dto.CommunicationEndpointDTO;
 import com.propertyvista.dto.MessageDTO;
@@ -90,18 +92,24 @@ public class CommunicationEndpointManager {
         if (entity.getInstanceValueClass().equals(SystemEndpoint.class)) {
             SystemEndpoint e = entity.cast();
             return e.name().getValue();
-        } else if (entity.getInstanceValueClass().equals(CrmUser.class)) {
-            CrmUser e = entity.cast();
-            return e.name().getValue();
-        } else if (entity.getInstanceValueClass().equals(CustomerUser.class)) {
-            CustomerUser e = entity.cast();
-            return e.name().getValue();
-        } else if (entity.getInstanceValueClass().equals(Building.class)) {
-            Building e = entity.cast();
-            return e.propertyCode().getValue();
-        } else if (entity.getInstanceValueClass().equals(AptUnit.class)) {
-            AptUnit e = entity.cast();
-            return e.getStringView();
+        } else if (entity.getInstanceValueClass().equals(Employee.class)) {
+            Employee e = entity.cast();
+            return e.name().getStringView();
+        } else if (entity.getInstanceValueClass().equals(Tenant.class)) {
+            Tenant e = entity.cast();
+            return e.customer().person().name().getStringView();
+        } else if (entity.getInstanceValueClass().equals(Guarantor.class)) {
+            Guarantor e = entity.cast();
+            return e.customer().person().name().getStringView();
+        } else if (entity.getInstanceValueClass().equals(CommunicationGroup.class)) {
+            CommunicationGroup cg = entity.cast();
+            if (cg.portfolio() != null && !cg.portfolio().isNull() && !cg.portfolio().isEmpty()) {
+                Portfolio e = cg.portfolio().cast();
+                return e.name().getStringView();
+            } else {
+                Building e = cg.building().cast();
+                return e.propertyCode().getStringView();
+            }
         }
         return null;
     }
@@ -110,7 +118,12 @@ public class CommunicationEndpointManager {
         DeliveryHandle dh = EntityFactory.create(DeliveryHandle.class);
         dh.isRead().setValue(false);
         dh.star().setValue(false);
-        dh.recipient().set(endpoint);
+        if (endpoint.getInstanceValueClass().equals(CommunicationGroup.class)) {
+            dh.recipient().set(getSystemEndpointFromCache(SystemEndpointName.Group));
+            dh.communicationGroup().set(endpoint);
+        } else {
+            dh.recipient().set(endpoint);
+        }
         dh.generatedFromGroup().setValue(generatedFromGroup);
         return dh;
     }
@@ -126,26 +139,29 @@ public class CommunicationEndpointManager {
             SystemEndpoint e = entity.cast();
             rec.name().setValue(e.name().getValue());
             rec.type().setValue(ContactType.System);
-        } else if (entity.getInstanceValueClass().equals(CrmUser.class)) {
-            CrmUser e = entity.cast();
-            rec.name().set(e.name());
+        } else if (entity.getInstanceValueClass().equals(Employee.class)) {
+            Employee e = entity.cast();
+            rec.name().setValue(e.name().getStringView());
             rec.type().setValue(ContactType.Employee);
-        } else if (entity.getInstanceValueClass().equals(CustomerUser.class)) {
-            CustomerUser e = entity.cast();
-            rec.name().set(e.name());
+        } else if (entity.getInstanceValueClass().equals(Tenant.class)) {
+            Tenant e = entity.cast();
+            rec.name().setValue(e.customer().person().name().getStringView());
             rec.type().setValue(ContactType.Tenant);
-        } else if (entity.getInstanceValueClass().equals(Building.class)) {
-            Building e = entity.cast();
-            rec.name().set(e.propertyCode());
-            rec.type().setValue(ContactType.Building);
-        } else if (entity.getInstanceValueClass().equals(Portfolio.class)) {
-            Portfolio e = entity.cast();
-            rec.name().set(e.name());
-            rec.type().setValue(ContactType.Portfolio);
-        } else if (entity.getInstanceValueClass().equals(AptUnit.class)) {
-            AptUnit e = entity.cast();
-            rec.name().setValue(e.getStringView());
-            rec.type().setValue(ContactType.Unit);
+        } else if (entity.getInstanceValueClass().equals(Guarantor.class)) {
+            Guarantor e = entity.cast();
+            rec.name().setValue(e.customer().person().name().getStringView());
+            rec.type().setValue(ContactType.Tenant);
+        } else if (entity.getInstanceValueClass().equals(CommunicationGroup.class)) {
+            CommunicationGroup cg = entity.cast();
+            if (cg.portfolio() != null && !cg.portfolio().isNull() && !cg.portfolio().isEmpty()) {
+                Portfolio e = cg.portfolio().cast();
+                rec.name().set(e.name());
+                rec.type().setValue(ContactType.Portfolio);
+            } else {
+                Building e = cg.building().cast();
+                rec.name().set(e.propertyCode());
+                rec.type().setValue(ContactType.Building);
+            }
         }
         return rec;
     }
@@ -164,39 +180,68 @@ public class CommunicationEndpointManager {
     }
 
     public void buildRecipientList(Message bo, MessageDTO to) {
-        HashMap<CommunicationEndpoint, Boolean> visited = new HashMap<CommunicationEndpoint, Boolean>();
+        HashMap<IEntity, Boolean> visited = new HashMap<IEntity, Boolean>();
         for (CommunicationEndpointDTO todep : to.to()) {
-            if (!Tenant.class.equals(todep.endpoint().getInstanceValueClass())) {
-                if (visited.containsKey(todep.endpoint())) {
-                    Boolean currentValue = visited.get(todep.endpoint());
-                    visited.put(todep.endpoint(), visited.get(todep.endpoint()).booleanValue() && (currentValue == null ? false : currentValue.booleanValue()));
+            IEntity epEntity = todep.endpoint();
+            if (CommunicationGroup.class.equals(epEntity.getInstanceValueClass())) {
+                CommunicationGroup group = epEntity.cast();
+                epEntity = group.portfolio() != null && !group.portfolio().isNull() && !group.portfolio().isEmpty() ? group.portfolio() : group.building();
+            }
+            if (!Tenant.class.equals(epEntity.getInstanceValueClass()) && !Guarantor.class.equals(epEntity.getInstanceValueClass())) {
+                if (visited.containsKey(epEntity)) {
+                    Boolean currentValue = visited.get(epEntity);
+                    visited.put(epEntity, currentValue.booleanValue() && (currentValue == null ? false : currentValue.booleanValue()));
                 } else {
-                    visited.put(todep.endpoint(), false);
+                    visited.put(epEntity, false);
                 }
-
             }
             expandCommunicationEndpoint(visited, todep);
         }
-        for (Entry<CommunicationEndpoint, Boolean> todep : visited.entrySet()) {
-            bo.recipients().add(createDeliveryHandle(todep.getKey(), todep.getValue()));
+        for (Entry<IEntity, Boolean> todep : visited.entrySet()) {
+            if (todep.getKey().getInstanceValueClass().equals(SystemEndpoint.class)) {
+                SystemEndpoint e = todep.getKey().cast();
+                bo.recipients().add(createDeliveryHandle(e, todep.getValue()));
+            } else if (todep.getKey().getInstanceValueClass().equals(Employee.class)) {
+                Employee e = todep.getKey().cast();
+                bo.recipients().add(createDeliveryHandle(e, todep.getValue()));
+            } else if (todep.getKey().getInstanceValueClass().equals(Tenant.class)) {
+                Tenant e = todep.getKey().cast();
+                bo.recipients().add(createDeliveryHandle(e, todep.getValue()));
+            } else if (todep.getKey().getInstanceValueClass().equals(Guarantor.class)) {
+                Guarantor e = todep.getKey().cast();
+                bo.recipients().add(createDeliveryHandle(e, todep.getValue()));
+            } else if (todep.getKey().getInstanceValueClass().equals(CommunicationGroup.class)) {
+                CommunicationGroup e = todep.getKey().cast();
+                bo.recipients().add(createDeliveryHandle(e, todep.getValue()));
+            } else {
+                CommunicationGroup cg = EntityFactory.create(CommunicationGroup.class);
+                if (todep.getKey().getInstanceValueClass().equals(Building.class)) {
+                    Building b = todep.getKey().cast();
+                    cg.building().set(b);
+                } else if (todep.getKey().getInstanceValueClass().equals(Portfolio.class)) {
+                    Portfolio b = todep.getKey().cast();
+                    cg.portfolio().set(b);
+                }
+                DeliveryHandle dh = createDeliveryHandle(cg, todep.getValue());
+                bo.recipients().add(dh);
+            }
         }
     }
 
-    private void expandCommunicationEndpoint(HashMap<CommunicationEndpoint, Boolean> visited, CommunicationEndpointDTO ep) {
-        EntityListCriteria<Tenant> criteria = createActiveLeaseCriteria();
+    private void expandCommunicationEndpoint(HashMap<IEntity, Boolean> visited, CommunicationEndpointDTO ep) {
+        EntityListCriteria<LeaseParticipant> criteria = createActiveLeaseCriteria();
 
         switch (ep.type().getValue()) {
         case Building: {
-            criteria.eq(criteria.proto().lease().unit().building(), ep.endpoint());
+            CommunicationGroup cg = ep.endpoint().cast();
+            criteria.eq(criteria.proto().lease().unit().building(), cg.building());
             break;
         }
-        case Unit: {
-            criteria.eq(criteria.proto().lease().unit(), ep.endpoint());
-            break;
-        }
+
         case Portfolio: {
+            CommunicationGroup cg = ep.endpoint().cast();
             EntityListCriteria<Portfolio> buildingCriteria = EntityListCriteria.create(Portfolio.class);
-            buildingCriteria.in(buildingCriteria.proto().id(), ep.endpoint());
+            buildingCriteria.in(buildingCriteria.proto().id(), cg.portfolio());
             Vector<Portfolio> ps = Persistence.secureQuery(buildingCriteria, AttachLevel.Attached);
             ArrayList<Building> bs = new ArrayList<Building>();
             if (ps == null || ps.isEmpty()) {
@@ -222,23 +267,22 @@ public class CommunicationEndpointManager {
         }
         }
 
-        Vector<Tenant> tenants = Persistence.secureQuery(criteria, AttachLevel.IdOnly);
+        Vector<LeaseParticipant> tenants = Persistence.secureQuery(criteria, AttachLevel.IdOnly);
         if (tenants != null) {
-            for (Tenant t : tenants) {
-                Persistence.ensureRetrieve(t.customer(), AttachLevel.Attached);
-                if (visited.containsKey(t.customer().user())) {
-                    Boolean currentValue = visited.get(t.customer().user()).booleanValue();
+            for (LeaseParticipant t : tenants) {
+                if (visited.containsKey(t)) {
+                    Boolean currentValue = visited.get(t).booleanValue();
 
-                    visited.put(t.customer().user(), currentValue && !ContactType.Tenant.equals(ep.type().getValue()));
+                    visited.put(t, currentValue && !ContactType.Tenant.equals(ep.type().getValue()));
                 } else {
-                    visited.put(t.customer().user(), !ContactType.Tenant.equals(ep.type().getValue()));
+                    visited.put(t, !ContactType.Tenant.equals(ep.type().getValue()));
                 }
             }
         }
     }
 
-    private EntityListCriteria<Tenant> createActiveLeaseCriteria() {
-        EntityListCriteria<Tenant> criteria = EntityListCriteria.create(Tenant.class);
+    private EntityListCriteria<LeaseParticipant> createActiveLeaseCriteria() {
+        EntityListCriteria<LeaseParticipant> criteria = EntityListCriteria.create(LeaseParticipant.class);
         criteria.eq(criteria.proto().lease().status(), Lease.Status.Active);
         return criteria;
     }

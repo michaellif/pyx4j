@@ -14,6 +14,7 @@
 package com.propertyvista.domain.communication;
 
 import com.pyx4j.entity.annotations.Detached;
+import com.pyx4j.entity.annotations.EmbeddedEntity;
 import com.pyx4j.entity.annotations.Indexed;
 import com.pyx4j.entity.annotations.JoinColumn;
 import com.pyx4j.entity.annotations.MemberColumn;
@@ -55,4 +56,8 @@ public interface DeliveryHandle extends IEntity {
     @NotNull
     @ReadOnly
     IPrimitive<Boolean> generatedFromGroup();
+
+    @EmbeddedEntity
+    CommunicationGroup communicationGroup();
+
 }

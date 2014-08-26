@@ -41,7 +41,6 @@ import com.pyx4j.entity.core.ISet;
 import com.pyx4j.entity.shared.adapters.index.AlphanumIndexAdapter;
 
 import com.propertyvista.domain.MediaFile;
-import com.propertyvista.domain.communication.CommunicationEndpoint;
 import com.propertyvista.domain.company.Portfolio;
 import com.propertyvista.domain.dashboard.gadgets.availability.UnitTurnoverStats;
 import com.propertyvista.domain.financial.BuildingMerchantAccount;
@@ -68,7 +67,7 @@ import com.propertyvista.shared.config.YardiImported;
 //TODO rename to Property?!
 @ToStringFormat("{0}{1,choice,null#|!null#, {1}}")
 @DiscriminatorValue("Building")
-public interface Building extends PolicyNode, HasNotesAndAttachments, CommunicationEndpoint {
+public interface Building extends PolicyNode, HasNotesAndAttachments {
 
     interface OrderInComplexId extends ColumnId {
     }

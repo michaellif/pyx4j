@@ -31,17 +31,22 @@ import com.pyx4j.entity.server.IEntityPersistenceService.ICursorIterator;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.security.shared.Context;
 import com.pyx4j.security.shared.SecurityController;
+import com.pyx4j.server.contexts.ServerContext;
 
 import com.propertyvista.crm.rpc.dto.communication.CrmCommunicationSystemNotification;
+import com.propertyvista.domain.communication.CommunicationEndpoint;
 import com.propertyvista.domain.communication.CommunicationThread;
 import com.propertyvista.domain.communication.CommunicationThread.ThreadStatus;
 import com.propertyvista.domain.communication.Message;
 import com.propertyvista.domain.communication.MessageCategory;
 import com.propertyvista.domain.communication.SystemEndpoint.SystemEndpointName;
 import com.propertyvista.domain.company.Employee;
-import com.propertyvista.domain.security.VistaCrmBehavior;
 import com.propertyvista.domain.security.VistaDataAccessBehavior;
 import com.propertyvista.domain.security.common.VistaApplication;
+import com.propertyvista.domain.security.common.VistaBasicBehavior;
+import com.propertyvista.domain.tenant.lease.LeaseParticipant;
+import com.propertyvista.portal.rpc.portal.CustomerUserVisit;
+import com.propertyvista.portal.rpc.portal.resident.ResidentUserVisit;
 import com.propertyvista.portal.rpc.shared.dto.communication.PortalCommunicationSystemNotification;
 import com.propertyvista.shared.VistaUserVisit;
 
@@ -105,43 +110,44 @@ public class CommunicationManager {
     }
 
     public Serializable getCommunicationStatus() {
-        final List<CommunicationThread> directMessages = getDirectThreads();
+        CommunicationEndpoint ep = getCurrentUserAsEndpoint();
+        if (ep == null) {
+            return null;
+        }
+        if (VistaApplication.crm.equals(Context.visit(VistaUserVisit.class).getApplication()) && !SecurityController.check(VistaBasicBehavior.CRM)) {
+            return null;
+        }
 
-        final List<CommunicationThread> dispatchedMessages = getDispatchedThreads();
+        final List<CommunicationThread> directMessages = getDirectThreads(ep);
+        boolean isCRM = VistaApplication.crm.equals(Context.visit(VistaUserVisit.class).getApplication());
+        final List<CommunicationThread> dispatchedMessages = isCRM ? getDispatchedThreads((Employee) ep) : null;
 
         if (dispatchedMessages != null && dispatchedMessages.size() > 0 && directMessages != null && directMessages.size() > 0) {
             directMessages.removeAll(dispatchedMessages);
         }
 
-        switch (Context.visit(VistaUserVisit.class).getApplication()) {
-        case crm:
+        if (isCRM) {
             return new CrmCommunicationSystemNotification(directMessages == null ? 0 : directMessages.size(), dispatchedMessages == null ? 0
                     : dispatchedMessages.size());
-
-        case resident:
+        } else if (VistaApplication.resident.equals(Context.visit(VistaUserVisit.class).getApplication())) {
             return new PortalCommunicationSystemNotification(directMessages == null ? 0 : directMessages.size());
-
-        default:
-            return null;
         }
+
+        return null;
     }
 
-    public boolean isDispatchedThread(Key threadKey, boolean includeByRoles) {
-        final EntityListCriteria<CommunicationThread> dispatchedCriteria = getDispatchedCriteria(includeByRoles);
+    public boolean isDispatchedThread(Key threadKey, boolean includeByRoles, Employee currentUser) {
+        final EntityListCriteria<CommunicationThread> dispatchedCriteria = getDispatchedCriteria(includeByRoles, currentUser);
         dispatchedCriteria.in(dispatchedCriteria.proto().id(), threadKey);
         final List<CommunicationThread> dispatchedMessages = Persistence.service().query(dispatchedCriteria, AttachLevel.IdOnly);
         return dispatchedMessages != null && dispatchedMessages.size() > 0;
     }
 
-    public List<CommunicationThread> getDispatchedThreads() {
-        if (VistaApplication.crm.equals(Context.visit(VistaUserVisit.class).getApplication()) && !SecurityController.check(VistaCrmBehavior.Communication)) {
+    public List<CommunicationThread> getDispatchedThreads(Employee currentUser) {
+        if (!VistaApplication.crm.equals(Context.visit(VistaUserVisit.class).getApplication())) {
             return new ArrayList<CommunicationThread>();
         }
-        if (VistaApplication.resident.equals(Context.visit(VistaUserVisit.class).getApplication())
-                && !SecurityController.check(VistaDataAccessBehavior.ResidentInPortal)) {
-            return new ArrayList<CommunicationThread>();
-        }
-        final EntityListCriteria<CommunicationThread> dispatchedCriteria = getUnassignedDispatchedCriteria();//getDispatchedCriteria(false);
+        final EntityListCriteria<CommunicationThread> dispatchedCriteria = getUnassignedDispatchedCriteria(currentUser);
         if (dispatchedCriteria == null) {
             return new ArrayList<CommunicationThread>();
         }
@@ -149,20 +155,19 @@ public class CommunicationManager {
         return dispatchedMessages;
     }
 
-    private EntityListCriteria<CommunicationThread> getUnassignedDispatchedCriteria() {
-        List<MessageCategory> userGroups = getUserGroups();
+    private EntityListCriteria<CommunicationThread> getUnassignedDispatchedCriteria(Employee currentUser) {
+        List<MessageCategory> userGroups = getUserGroups(currentUser);
         if (userGroups != null && userGroups.size() > 0) {
             final EntityListCriteria<CommunicationThread> dispatchedCriteria = EntityListCriteria.create(CommunicationThread.class);
-            dispatchedCriteria.in(dispatchedCriteria.proto().status(), ThreadStatus.Open, ThreadStatus.Unassigned, ThreadStatus.Resolved);
+            dispatchedCriteria.in(dispatchedCriteria.proto().status(), ThreadStatus.Open, ThreadStatus.Resolved);
 
             AndCriterion newDispatchedCriteria = new AndCriterion(PropertyCriterion.eq(dispatchedCriteria.proto().owner(),
                     ServerSideFactory.create(CommunicationMessageFacade.class).getSystemEndpointFromCache(SystemEndpointName.Unassigned)),
                     PropertyCriterion.in(dispatchedCriteria.proto().category(), userGroups));
 
-            AndCriterion ownedUnreadCriteria = new AndCriterion(PropertyCriterion.eq(dispatchedCriteria.proto().owner(), Context.visit(VistaUserVisit.class)
-                    .getCurrentUser()), new AndCriterion(PropertyCriterion.eq(dispatchedCriteria.proto().content().$().recipients().$().isRead(), false),
-                    PropertyCriterion.eq(dispatchedCriteria.proto().content().$().recipients().$().recipient(), Context.visit(VistaUserVisit.class)
-                            .getCurrentUser())));
+            AndCriterion ownedUnreadCriteria = new AndCriterion(PropertyCriterion.eq(dispatchedCriteria.proto().owner(), currentUser), new AndCriterion(
+                    PropertyCriterion.eq(dispatchedCriteria.proto().content().$().recipients().$().isRead(), false), PropertyCriterion.eq(dispatchedCriteria
+                            .proto().content().$().recipients().$().recipient(), currentUser)));
 
             dispatchedCriteria.or(newDispatchedCriteria, ownedUnreadCriteria);
             return dispatchedCriteria;
@@ -170,49 +175,44 @@ public class CommunicationManager {
         return null;
     }
 
-    private EntityListCriteria<CommunicationThread> getDispatchedCriteria(boolean includeByRoles) {
+    private EntityListCriteria<CommunicationThread> getDispatchedCriteria(boolean includeByRoles, Employee currentUser) {
         final EntityListCriteria<CommunicationThread> dispatchedCriteria = EntityListCriteria.create(CommunicationThread.class);
-        dispatchedCriteria.in(dispatchedCriteria.proto().status(), ThreadStatus.Open, ThreadStatus.Unassigned, ThreadStatus.Resolved);
+        dispatchedCriteria.in(dispatchedCriteria.proto().status(), ThreadStatus.Open, ThreadStatus.Resolved);
 
-        List<MessageCategory> userGroups = includeByRoles ? getUserGroupsIncludingRoles() : getUserGroups();
+        List<MessageCategory> userGroups = includeByRoles ? getUserGroupsIncludingRoles(currentUser) : getUserGroups(currentUser);
         if (userGroups != null && userGroups.size() > 0) {
             if (includeByRoles) {
                 dispatchedCriteria.or(PropertyCriterion.in(dispatchedCriteria.proto().category(), userGroups),
-                        PropertyCriterion.eq(dispatchedCriteria.proto().owner(), Context.visit(VistaUserVisit.class).getCurrentUser()));
+                        PropertyCriterion.eq(dispatchedCriteria.proto().owner(), currentUser));
             } else {
                 AndCriterion newDispatchedCriteria = new AndCriterion(PropertyCriterion.eq(dispatchedCriteria.proto().owner(),
                         ServerSideFactory.create(CommunicationMessageFacade.class).getSystemEndpointFromCache(SystemEndpointName.Unassigned)),
                         PropertyCriterion.in(dispatchedCriteria.proto().category(), userGroups));
 
-                dispatchedCriteria.or(newDispatchedCriteria,
-                        PropertyCriterion.eq(dispatchedCriteria.proto().owner(), Context.visit(VistaUserVisit.class).getCurrentUser()));
+                dispatchedCriteria.or(newDispatchedCriteria, PropertyCriterion.eq(dispatchedCriteria.proto().owner(), currentUser));
             }
         } else {
-            dispatchedCriteria.eq(dispatchedCriteria.proto().owner(), Context.visit(VistaUserVisit.class).getCurrentUser());
+            dispatchedCriteria.eq(dispatchedCriteria.proto().owner(), currentUser);
         }
         return dispatchedCriteria;
     }
 
-    public List<CommunicationThread> getDirectThreads() {
-        if (VistaApplication.crm.equals(Context.visit(VistaUserVisit.class).getApplication()) && !SecurityController.check(VistaCrmBehavior.Communication)) {
-            return new ArrayList<CommunicationThread>();
-        }
+    public List<CommunicationThread> getDirectThreads(CommunicationEndpoint currentUser) {
         if (VistaApplication.resident.equals(Context.visit(VistaUserVisit.class).getApplication())
-                && !SecurityController.check(VistaDataAccessBehavior.ResidentInPortal)) {
+                && !SecurityController.check(VistaDataAccessBehavior.ResidentInPortal) && !SecurityController.check(VistaDataAccessBehavior.GuarantorInPortal)) {
             return new ArrayList<CommunicationThread>();
         }
 
         final EntityListCriteria<CommunicationThread> directCriteria = EntityListCriteria.create(CommunicationThread.class);
         directCriteria.eq(directCriteria.proto().content().$().recipients().$().isRead(), false);
-        directCriteria.eq(directCriteria.proto().content().$().recipients().$().recipient(), Context.visit(VistaUserVisit.class).getCurrentUser());
+        directCriteria.eq(directCriteria.proto().content().$().recipients().$().recipient(), currentUser);
 
         final List<CommunicationThread> directMessages = Persistence.secureQuery(directCriteria, AttachLevel.IdOnly);
         return directMessages;
     }
 
-    private List<MessageCategory> getUserGroups() {
+    private List<MessageCategory> getUserGroups(Employee e) {
         EntityQueryCriteria<MessageCategory> groupCriteria = EntityQueryCriteria.create(MessageCategory.class);
-        Employee e = getCurrentEmployee();
         if (e == null) {
             return null;
         }
@@ -221,11 +221,10 @@ public class CommunicationManager {
         return Persistence.service().query(groupCriteria, AttachLevel.IdOnly);
     }
 
-    private List<MessageCategory> getUserGroupsIncludingRoles() {
+    private List<MessageCategory> getUserGroupsIncludingRoles(Employee e) {
         EntityQueryCriteria<MessageCategory> groupCriteria = EntityQueryCriteria.create(MessageCategory.class);
-        Employee e = getCurrentEmployee();
 
-        PropertyCriterion byRoles = PropertyCriterion.in(groupCriteria.proto().roles().$().users(), Context.visit(VistaUserVisit.class).getCurrentUser());
+        PropertyCriterion byRoles = PropertyCriterion.in(groupCriteria.proto().roles().$().users(), e);
         if (e == null) {
             groupCriteria.add(byRoles);
         } else {
@@ -234,10 +233,20 @@ public class CommunicationManager {
         return Persistence.service().query(groupCriteria, AttachLevel.IdOnly);
     }
 
-    private Employee getCurrentEmployee() {
-        EntityQueryCriteria<Employee> criteria = EntityQueryCriteria.create(Employee.class);
-        criteria.add(PropertyCriterion.eq(criteria.proto().user(), Context.visit(VistaUserVisit.class).getCurrentUser()));
-        return Persistence.service().retrieve(criteria);
+    @SuppressWarnings("rawtypes")
+    private CommunicationEndpoint getCurrentUserAsEndpoint() {
+        if (VistaApplication.resident.equals(Context.visit(VistaUserVisit.class).getApplication())) {
 
+            EntityQueryCriteria<LeaseParticipant> criteria = EntityQueryCriteria.create(LeaseParticipant.class);
+            criteria.eq(criteria.proto().lease(), ServerContext.visit(ResidentUserVisit.class).getLease());
+            criteria.eq(criteria.proto().customer().user(), ServerContext.visit(CustomerUserVisit.class).getCurrentUser());
+            return Persistence.service().retrieve(criteria);
+
+        } else if (VistaApplication.crm.equals(Context.visit(VistaUserVisit.class).getApplication())) {
+            EntityQueryCriteria<Employee> criteria = EntityQueryCriteria.create(Employee.class);
+            criteria.add(PropertyCriterion.eq(criteria.proto().user(), Context.visit(VistaUserVisit.class).getCurrentUser()));
+            return Persistence.service().retrieve(criteria);
+        }
+        return null;
     }
 }

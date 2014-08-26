@@ -49,20 +49,20 @@ public class MessageLister extends AbstractLister<MessageDTO> {
         // No sorting work for it
         getDataTablePanel().getDataTable().setHasColumnClickSorting(false);
 
-        addActionItem(newTicket = new Button(FolderImages.INSTANCE.addButton().hover(), i18n.tr("New Ticket"), new Command() {
-            @Override
-            public void execute() {
-                editNewEntity(CategoryType.Ticket);
-            }
-        }));
-        newTicket.setPermission(DataModelPermission.permissionCreate(MessageDTO.class));
-
         addActionItem(newMessage = new Button(FolderImages.INSTANCE.addButton().hover(), i18n.tr("New Message"), new Command() {
             @Override
             public void execute() {
                 editNewEntity(CategoryType.Message);
             }
         }));
+        addActionItem(newTicket = new Button(FolderImages.INSTANCE.addButton().hover(), i18n.tr("New Ticket"), new Command() {
+            @Override
+            public void execute() {
+                editNewEntity(CategoryType.Ticket);
+            }
+        }));
+
+        newTicket.setPermission(DataModelPermission.permissionCreate(MessageDTO.class));
         newMessage.setPermission(DataModelPermission.permissionCreate(MessageDTO.class));
     }
 

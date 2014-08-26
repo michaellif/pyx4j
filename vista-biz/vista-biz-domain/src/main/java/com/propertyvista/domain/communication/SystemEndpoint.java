@@ -31,6 +31,9 @@ public interface SystemEndpoint extends CommunicationEndpoint {
         @Translate("Automatic")
         Automatic,
 
+        @Translate("Group")
+        Group,
+
         @Translate("Ticket Dispatcher")
         Unassigned;
 

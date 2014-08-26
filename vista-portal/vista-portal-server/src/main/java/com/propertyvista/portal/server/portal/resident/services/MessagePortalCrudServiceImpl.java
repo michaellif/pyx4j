@@ -86,7 +86,7 @@ public class MessagePortalCrudServiceImpl extends AbstractCrudServiceDtoImpl<Mes
         PropertyCriterion recipientCiteria = toCriteria.getCriterion(toCriteria.proto().thread().content().$().recipients().$().recipient());
         if (recipientCiteria != null) {
             toCriteria.getFilters().remove(recipientCiteria);
-            boCriteria.eq(boCriteria.proto().recipients().$().recipient(), ResidentPortalContext.getCurrentUser());
+            boCriteria.eq(boCriteria.proto().recipients().$().recipient(), ResidentPortalContext.getLeaseParticipant());
         }
         super.enhanceListCriteria(boCriteria, toCriteria);
     }
@@ -97,7 +97,7 @@ public class MessagePortalCrudServiceImpl extends AbstractCrudServiceDtoImpl<Mes
         dto.isRead().setValue(false);
         dto.highImportance().setValue(false);
         dto.allowedReply().setValue(true);
-        dto.sender().set(ResidentPortalContext.getCurrentUser());
+        dto.sender().set(ResidentPortalContext.getLeaseParticipant());
         if (initializationData instanceof MessageInitializationData) {
             dto.text().set(((MessageInitializationData) initializationData).initalizedText());
         }
@@ -113,7 +113,7 @@ public class MessagePortalCrudServiceImpl extends AbstractCrudServiceDtoImpl<Mes
 
         bo.attachments().set(to.attachments());
         bo.date().setValue(SystemDateManager.getDate());
-        bo.sender().set(ResidentPortalContext.getCurrentUser());
+        bo.sender().set(ResidentPortalContext.getLeaseParticipant());
         bo.text().set(to.text());
         bo.highImportance().set(to.highImportance());
         CommunicationMessageFacade communicationFacade = ServerSideFactory.create(CommunicationMessageFacade.class);
@@ -135,7 +135,7 @@ public class MessagePortalCrudServiceImpl extends AbstractCrudServiceDtoImpl<Mes
     public void listForHeader(AsyncCallback<EntitySearchResult<MessageDTO>> callback) {
         CommunicationMessageFacade communicationFacade = ServerSideFactory.create(CommunicationMessageFacade.class);
 
-        List<CommunicationThread> directThreads = communicationFacade.getDirectThreads();
+        List<CommunicationThread> directThreads = communicationFacade.getDirectThreads(ResidentPortalContext.getLeaseParticipant());
 
         EntityListCriteria<MessageDTO> messageCriteria = EntityListCriteria.create(MessageDTO.class);
         if (directThreads != null && directThreads.size() > 0) {
@@ -188,7 +188,7 @@ public class MessagePortalCrudServiceImpl extends AbstractCrudServiceDtoImpl<Mes
                 Persistence.ensureRetrieve(m.recipients(), AttachLevel.Attached);
                 Persistence.ensureRetrieve(m.attachments(), AttachLevel.Attached);
                 Persistence.ensureRetrieve(m.sender(), AttachLevel.Attached);
-                if (!ResidentPortalContext.getCurrentUser().equals(m.sender()) && !isRecipientOf(m)) {
+                if (!ResidentPortalContext.getLeaseParticipant().equals(m.sender()) && !isRecipientOf(m)) {
                     continue;
                 }
                 hasAttachment = hasAttachment || m.attachments().size() > 0;
@@ -230,8 +230,9 @@ public class MessagePortalCrudServiceImpl extends AbstractCrudServiceDtoImpl<Mes
         boolean star = false;
         boolean isRead = true;
 
+        messageDTO.isInRecipients().setValue(false);
         for (DeliveryHandle dh : m.recipients()) {
-            if (!ResidentPortalContext.getCurrentUser().equals(dh.recipient())) {
+            if (!ResidentPortalContext.getLeaseParticipant().equals(dh.recipient())) {
                 continue;
             }
             if (dh.star().getValue(false)) {
@@ -240,6 +241,7 @@ public class MessagePortalCrudServiceImpl extends AbstractCrudServiceDtoImpl<Mes
             if (!dh.isRead().getValue(false)) {
                 isRead = false;
             }
+            messageDTO.isInRecipients().setValue(true);
         }
 
         messageDTO.id().set(m.id());
@@ -272,7 +274,7 @@ public class MessagePortalCrudServiceImpl extends AbstractCrudServiceDtoImpl<Mes
             m.thread().set(thread);
             m.attachments().set(message.attachments());
             m.date().setValue(SystemDateManager.getDate());
-            m.sender().set(ResidentPortalContext.getCurrentUser());
+            m.sender().set(ResidentPortalContext.getLeaseParticipant());
             m.text().set(message.text());
             m.highImportance().set(message.highImportance());
             if (message.recipients() != null && message.recipients().size() > 0) {
@@ -283,7 +285,7 @@ public class MessagePortalCrudServiceImpl extends AbstractCrudServiceDtoImpl<Mes
             Persistence.service().persist(m);
         } else {
             EntityQueryCriteria<DeliveryHandle> dhCriteria = EntityQueryCriteria.create(DeliveryHandle.class);
-            dhCriteria.eq(dhCriteria.proto().recipient(), ResidentPortalContext.getCurrentUser());
+            dhCriteria.eq(dhCriteria.proto().recipient(), ResidentPortalContext.getLeaseParticipant());
             dhCriteria.eq(dhCriteria.proto().message(), message);
             DeliveryHandle dh = Persistence.retrieveUnique(dhCriteria, AttachLevel.Attached);
             dh.isRead().set(message.isRead());
@@ -299,7 +301,7 @@ public class MessagePortalCrudServiceImpl extends AbstractCrudServiceDtoImpl<Mes
 
     private boolean isRecipientOf(Message m) {
         for (DeliveryHandle dh : m.recipients()) {
-            if (ResidentPortalContext.getCurrentUser().equals(dh.recipient())) {
+            if (ResidentPortalContext.getLeaseParticipant().equals(dh.recipient())) {
                 return true;
             }
         }

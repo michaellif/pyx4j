@@ -24,12 +24,11 @@ import com.pyx4j.entity.core.IList;
 import com.pyx4j.entity.core.ISet;
 import com.pyx4j.i18n.annotations.I18n;
 
-import com.propertyvista.domain.communication.CommunicationEndpoint;
 import com.propertyvista.domain.payment.AutopayAgreement;
 
 @I18n(strategy = I18n.I18nStrategy.IgnoreThis)
 @DiscriminatorValue("Tenant")
-public interface Tenant extends LeaseParticipant<LeaseTermTenant>, CommunicationEndpoint {
+public interface Tenant extends LeaseParticipant<LeaseTermTenant> {
 
     @Owned(cascade = {})
     @Detached(level = AttachLevel.Detached)

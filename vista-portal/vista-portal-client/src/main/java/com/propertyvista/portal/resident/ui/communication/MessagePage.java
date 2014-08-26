@@ -162,6 +162,7 @@ public class MessagePage extends CPortalEntityForm<MessageDTO> {
             inject(proto().isRead());
             inject(proto().thread());
             inject(proto().allowedReply());
+            inject(proto().isInRecipients());
 
             FlowPanel detailsPanel = new FlowPanel();
             detailsPanel.getElement().getStyle().setPosition(Position.RELATIVE);
@@ -334,8 +335,9 @@ public class MessagePage extends CPortalEntityForm<MessageDTO> {
 
         @Override
         protected MessageDTO preprocessValue(MessageDTO value, boolean fireEvent, boolean populate) {
+
             if (value != null && value.getPrimaryKey() != null && !value.getPrimaryKey().isDraft()) {
-                if (!value.isRead().getValue() && !ClientContext.getUserVisit().getPrincipalPrimaryKey().equals(value.sender().getPrimaryKey())) {
+                if (!value.isRead().getValue(true) && value.isInRecipients().getValue(false)) {
                     value.isRead().setValue(true);
                     BoxFolderItemDecorator<DeliveryHandle> d = (BoxFolderItemDecorator<DeliveryHandle>) getParent().getDecorator();
                     d.setExpended(true);
@@ -360,8 +362,7 @@ public class MessagePage extends CPortalEntityForm<MessageDTO> {
         protected void setCanReply(boolean canReply) {
             boolean isNew = getValue().isPrototype() || getValue().date() == null || getValue().date().isNull();
             btnReply.setVisible(canReply && getValue().allowedReply().getValue(true) && !isNew);
-            btnMarkAsUnread
-                    .setVisible(canReply && !isNew && !ClientContext.getUserVisit().getPrincipalPrimaryKey().equals(getValue().sender().getPrimaryKey()));
+            btnMarkAsUnread.setVisible(canReply && !isNew && getValue().isInRecipients().getValue(false));
         }
 
         @Override
@@ -381,7 +382,7 @@ public class MessagePage extends CPortalEntityForm<MessageDTO> {
                 get(proto().star()).setVisible(false);
                 attachmentCaption.setVisible(false);
                 attachmentBr.setVisible(false);
-                attachemnts.setVisible(false);
+                attachemnts.setVisible(true);
                 highImportnaceImage.setVisible(false);
                 get(proto().highImportance()).setVisible(true);
                 statusToolBar.asWidget().setVisible(false);
@@ -392,9 +393,10 @@ public class MessagePage extends CPortalEntityForm<MessageDTO> {
                 btnSend.setVisible(false);
                 btnCancel.setVisible(false);
                 btnReply.setVisible(getValue().allowedReply().getValue(true));
-                get(proto().star()).setVisible(!ClientContext.getUserVisit().getPrincipalPrimaryKey().equals(getValue().sender().getPrimaryKey()));
-                btnMarkAsUnread.setVisible(!ClientContext.getUserVisit().getPrincipalPrimaryKey().equals(getValue().sender().getPrimaryKey()));
-                starImage.setVisible(!ClientContext.getUserVisit().getPrincipalPrimaryKey().equals(getValue().sender().getPrimaryKey()));
+                MessageDTO i = getValue();
+                get(proto().star()).setVisible(getValue().isInRecipients().getValue(false));
+                btnMarkAsUnread.setVisible(getValue().isInRecipients().getValue(false));
+                starImage.setVisible(getValue().isInRecipients().getValue(false));
                 starImage.setResource(get(proto().star()).getValue() ? PortalImages.INSTANCE.fullStar() : (PortalImages.INSTANCE.noStar()));
 
                 attachmentCaption.setVisible(getValue().attachments().size() > 0);

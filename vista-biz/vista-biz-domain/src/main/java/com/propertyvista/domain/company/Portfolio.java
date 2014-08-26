@@ -25,12 +25,11 @@ import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.IList;
 import com.pyx4j.entity.core.IPrimitive;
 
-import com.propertyvista.domain.communication.CommunicationEndpoint;
 import com.propertyvista.domain.property.asset.building.Building;
 
 @DiscriminatorValue("Portfolio")
 @SecurityEnabled
-public interface Portfolio extends IEntity, CommunicationEndpoint {
+public interface Portfolio extends IEntity {
 
     @NotNull
     @ToString

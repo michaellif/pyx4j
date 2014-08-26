@@ -61,9 +61,9 @@ public interface CommunicationMessageFacade {
 
     public Serializable getCommunicationStatus();
 
-    public List<CommunicationThread> getDispathcedThreads();
+    boolean isDispatchedThread(Key threadKey, boolean includeByRoles, Employee e);
 
-    public List<CommunicationThread> getDirectThreads();
+    List<CommunicationThread> getDirectThreads(CommunicationEndpoint e);
 
-    public boolean isDispatchedThread(Key threadKey, boolean includeByRoles);
+    List<CommunicationThread> getDispathcedThreads(Employee e);
 }

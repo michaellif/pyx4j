@@ -46,7 +46,6 @@ import com.propertyvista.domain.communication.MessageCategory;
 import com.propertyvista.domain.dashboard.DashboardMetadata;
 import com.propertyvista.domain.reports.AvailableCrmReport;
 import com.propertyvista.domain.reports.AvailableCrmReport.CrmReportType;
-import com.propertyvista.domain.security.VistaCrmBehavior;
 import com.propertyvista.shared.i18n.CompiledLocale;
 
 public class NavigActivity extends AbstractActivity implements NavigPresenter {
@@ -142,7 +141,7 @@ public class NavigActivity extends AbstractActivity implements NavigPresenter {
     }
 
     private void updateMessageCategoryItems() {
-        if (SecurityController.check(DataModelPermission.permissionRead(MessageCategory.class)) && SecurityController.check(VistaCrmBehavior.Communication)) {
+        if (SecurityController.check(DataModelPermission.permissionRead(MessageCategory.class))) {
             GWT.<MessageCategoryCrudService> create(MessageCategoryCrudService.class).list(new DefaultAsyncCallback<EntitySearchResult<MessageCategory>>() {
 
                 @Override

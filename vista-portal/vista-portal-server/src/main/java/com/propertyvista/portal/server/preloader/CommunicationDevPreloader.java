@@ -25,16 +25,15 @@ import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.server.PersistenceServicesFactory;
 import com.pyx4j.entity.server.dataimport.AbstractDataPreloader;
 
+import com.propertyvista.domain.communication.CommunicationEndpoint;
 import com.propertyvista.domain.communication.CommunicationThread;
-import com.propertyvista.domain.communication.CommunicationThread.ThreadStatus;
 import com.propertyvista.domain.communication.DeliveryHandle;
 import com.propertyvista.domain.communication.Message;
 import com.propertyvista.domain.communication.MessageCategory;
 import com.propertyvista.domain.communication.MessageCategory.CategoryType;
 import com.propertyvista.domain.communication.SystemEndpoint;
-import com.propertyvista.domain.security.CrmUser;
-import com.propertyvista.domain.security.CustomerUser;
-import com.propertyvista.domain.security.common.AbstractPmcUser;
+import com.propertyvista.domain.company.Employee;
+import com.propertyvista.domain.tenant.lease.Tenant;
 
 public class CommunicationDevPreloader extends AbstractDataPreloader {
 
@@ -48,16 +47,16 @@ public class CommunicationDevPreloader extends AbstractDataPreloader {
 //      CRM login as EMP: e001@pyx4j.com
 //      Resident login: t001@pyx4j.com, t002@pyx4j.com
 
-        EntityQueryCriteria<CrmUser> criteriaCrmUser = EntityQueryCriteria.create(CrmUser.class);
-        List<CrmUser> listCrmUsers = Persistence.service().query(criteriaCrmUser);
-        log.info("There are {} crm usres ", listCrmUsers.size());
+        EntityQueryCriteria<Employee> criteriaEmployee = EntityQueryCriteria.create(Employee.class);
+        List<Employee> listEmployees = Persistence.service().query(criteriaEmployee);
+        log.info("There are {} crm usres ", listEmployees.size());
 
         // get a few existing CrmUsers:
-        CrmUser m001 = null;
-        CrmUser e001 = null;
-        if (listCrmUsers != null) {
+        Employee m001 = null;
+        Employee e001 = null;
+        if (listEmployees != null) {
             String email;
-            for (CrmUser crmUser : listCrmUsers) {
+            for (Employee crmUser : listEmployees) {
                 email = crmUser.email().getStringView();
                 if ("m001@pyx4j.com".equals(email)) {
                     m001 = crmUser;
@@ -67,18 +66,18 @@ public class CommunicationDevPreloader extends AbstractDataPreloader {
             }
         }
 
-        EntityQueryCriteria<CustomerUser> criteriaCustomerUser = EntityQueryCriteria.create(CustomerUser.class);
-        List<CustomerUser> listCustomerUser = Persistence.service().query(criteriaCustomerUser);
-        log.info("\n\nThere are {} customer users", listCustomerUser.size());
+        EntityQueryCriteria<Tenant> criteriaTenant = EntityQueryCriteria.create(Tenant.class);
+        List<Tenant> listTenants = Persistence.service().query(criteriaTenant);
+        log.info("\n\nThere are {} customer users", listTenants.size());
 
         // get a few existing CustomerUsers
-        CustomerUser t001 = null;
-        CustomerUser t002 = null;
-        CustomerUser t003 = null;
-        if (listCustomerUser != null) {
+        Tenant t001 = null;
+        Tenant t002 = null;
+        Tenant t003 = null;
+        if (listTenants != null) {
             String email;
-            for (CustomerUser customerUser : listCustomerUser) {
-                email = customerUser.email().getStringView();
+            for (Tenant customerUser : listTenants) {
+                email = customerUser.customer().person().email().getStringView();
                 if ("t001@pyx4j.com".equals(email)) {
                     t001 = customerUser;
                 } else if ("t002@pyx4j.com".equals(email)) {
@@ -138,8 +137,8 @@ public class CommunicationDevPreloader extends AbstractDataPreloader {
         return deleteAll(CommunicationThread.class);
     }
 
-    private CommunicationThread createMessage(int i, AbstractPmcUser from, AbstractPmcUser to, CommunicationThread parent, String topic, String msgContent,
-            boolean highImportance, boolean isRead, MessageCategory mg, SystemEndpoint owner) {
+    private CommunicationThread createMessage(int i, CommunicationEndpoint from, CommunicationEndpoint to, CommunicationThread parent, String topic,
+            String msgContent, boolean highImportance, boolean isRead, MessageCategory mg, SystemEndpoint owner) {
 
         if (from == null || to == null || topic == null || msgContent == null) {
             return null;
@@ -149,7 +148,6 @@ public class CommunicationDevPreloader extends AbstractDataPreloader {
         if (parent == null) {
             thread = EntityFactory.create(CommunicationThread.class);
             thread.subject().setValue(Integer.toString(i) + "_" + topic);
-            thread.status().setValue(ThreadStatus.Unassigned);
             thread.owner().set(owner);
             thread.allowedReply().setValue(true);
             thread.category().set(mg);

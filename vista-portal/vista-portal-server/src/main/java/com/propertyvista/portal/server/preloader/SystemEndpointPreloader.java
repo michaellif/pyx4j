@@ -27,6 +27,7 @@ public class SystemEndpointPreloader extends AbstractDataPreloader {
 
         createSystemEndpoint(SystemEndpointName.Unassigned);
         createSystemEndpoint(SystemEndpointName.Automatic);
+        createSystemEndpoint(SystemEndpointName.Group);
         return null;
     }
 

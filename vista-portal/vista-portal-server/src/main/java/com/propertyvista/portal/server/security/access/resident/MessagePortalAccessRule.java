@@ -26,8 +26,8 @@ public class MessagePortalAccessRule implements DatasetAccessRule<Message> {
 
     @Override
     public void applyRule(EntityQueryCriteria<Message> criteria) {
-        criteria.or(PropertyCriterion.eq(criteria.proto().sender(), ResidentPortalContext.getCurrentUser()),
-                PropertyCriterion.eq(criteria.proto().recipients().$().recipient(), ResidentPortalContext.getCurrentUser()));
+        criteria.or(PropertyCriterion.eq(criteria.proto().sender(), ResidentPortalContext.getLeaseParticipant()),
+                PropertyCriterion.eq(criteria.proto().recipients().$().recipient(), ResidentPortalContext.getLeaseParticipant()));
     }
 
 }

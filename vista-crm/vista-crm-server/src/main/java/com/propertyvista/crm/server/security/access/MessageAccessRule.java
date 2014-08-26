@@ -33,10 +33,11 @@ public class MessageAccessRule implements DatasetAccessRule<Message> {
 
     @Override
     public void applyRule(EntityQueryCriteria<Message> criteria) {
-        List<MessageCategory> userGroups = getUserGroups();
-        OrCriterion inboxOr = new OrCriterion(PropertyCriterion.eq(criteria.proto().recipients().$().recipient(), CrmAppContext.getCurrentUser()), //
-                new OrCriterion(PropertyCriterion.eq(criteria.proto().sender(), CrmAppContext.getCurrentUser()),//
-                        PropertyCriterion.eq(criteria.proto().thread().owner(), CrmAppContext.getCurrentUser())));//
+        Employee e = CrmAppContext.getCurrentUserEmployee();
+        List<MessageCategory> userGroups = getUserGroups(e);
+        OrCriterion inboxOr = new OrCriterion(PropertyCriterion.eq(criteria.proto().recipients().$().recipient(), e), //
+                new OrCriterion(PropertyCriterion.eq(criteria.proto().sender(), e),//
+                        PropertyCriterion.eq(criteria.proto().thread().owner(), e)));//
         if (userGroups != null && userGroups.size() > 0) {
             criteria.or(PropertyCriterion.in(criteria.proto().thread().category(), userGroups), inboxOr);//
 
@@ -45,11 +46,14 @@ public class MessageAccessRule implements DatasetAccessRule<Message> {
         }
     }
 
-    private List<MessageCategory> getUserGroups() {
+    private List<MessageCategory> getUserGroups(Employee e) {
         EntityQueryCriteria<MessageCategory> groupCriteria = EntityQueryCriteria.create(MessageCategory.class);
-        Employee e = CrmAppContext.getCurrentUserEmployee();
 
         PropertyCriterion byRoles = PropertyCriterion.in(groupCriteria.proto().roles().$().users(), CrmAppContext.getCurrentUser().getPrimaryKey());
+        if (byRoles == null) {
+            return null;
+        }
+
         if (e == null) {
             groupCriteria.add(byRoles);
         } else {

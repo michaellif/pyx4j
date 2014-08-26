@@ -14,35 +14,27 @@
 package com.propertyvista.crm.client.ui.crud.organisation.employee;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashSet;
 import java.util.List;
 
-import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.Command;
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.core.IObject;
-import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.entity.core.criterion.PropertyCriterion;
-import com.pyx4j.entity.rpc.AbstractListCrudService;
 import com.pyx4j.forms.client.ui.CEntityLabel;
 import com.pyx4j.forms.client.ui.CField;
 import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.CLabel;
-import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
-import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.forms.client.ui.folder.CFolderRowEditor;
 import com.pyx4j.forms.client.ui.folder.FolderColumnDescriptor;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.AppSite;
-import com.pyx4j.site.client.activity.EntitySelectorTableVisorController;
 import com.pyx4j.site.client.ui.IPane;
 
 import com.propertyvista.common.client.ui.components.folders.VistaTableFolder;
+import com.propertyvista.crm.client.ui.components.boxes.EmployeeSelectorDialog;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.crm.rpc.CrmSiteMap;
-import com.propertyvista.crm.rpc.services.selections.SelectEmployeeListService;
 import com.propertyvista.domain.company.Employee;
 import com.propertyvista.domain.person.Name;
 
@@ -98,13 +90,13 @@ public class EmployeeFolder extends VistaTableFolder<Employee> {
 
     @Override
     protected void addItem() {
-        new EmployeeSelectorDialog(parent.getParentView()).show();
+        new EmployeeSelectorDialogExcludeCurrent(parent.getParentView()).show();
     }
 
-    private class EmployeeSelectorDialog extends EntitySelectorTableVisorController<Employee> {
+    private class EmployeeSelectorDialogExcludeCurrent extends EmployeeSelectorDialog {
 
-        public EmployeeSelectorDialog(IPane parentView) {
-            super(parentView, Employee.class, true, new HashSet<>(getValue()), i18n.tr("Select Employee"));
+        public EmployeeSelectorDialogExcludeCurrent(IPane parentView) {
+            super(parentView, true);
 
             // add restriction for papa/mama employee, so that he/she won't be able manage himself :)
             // FIXME: somehow we need to forbid circular references. maybe only server side (if someone wants to be a smart ass)
@@ -116,29 +108,6 @@ public class EmployeeFolder extends VistaTableFolder<Employee> {
             for (Employee selected : getSelectedItems()) {
                 addItem(selected);
             }
-        }
-
-        @Override
-        protected List<ColumnDescriptor> defineColumnDescriptors() {
-            return Arrays.asList(//@formatter:off
-                    new MemberColumnDescriptor.Builder(proto().employeeId()).build(),
-                    new MemberColumnDescriptor.Builder(proto().name()).searchable(false).build(),
-                    new MemberColumnDescriptor.Builder(proto().title()).build(),
-                    new MemberColumnDescriptor.Builder(proto().name().firstName()).searchableOnly().build(),
-                    new MemberColumnDescriptor.Builder(proto().name().lastName()).searchableOnly().build(),
-                    new MemberColumnDescriptor.Builder(proto().email(), false).build(),
-                    new MemberColumnDescriptor.Builder(proto().updated(), false).build()
-            ); //@formatter:on
-        }
-
-        @Override
-        public List<Sort> getDefaultSorting() {
-            return Arrays.asList(new Sort(proto().employeeId(), false));
-        }
-
-        @Override
-        protected AbstractListCrudService<Employee> getSelectService() {
-            return GWT.<AbstractListCrudService<Employee>> create(SelectEmployeeListService.class);
         }
     }
 

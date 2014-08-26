@@ -98,18 +98,18 @@ public class CommunicationMessageFacadeImpl implements CommunicationMessageFacad
     }
 
     @Override
-    public List<CommunicationThread> getDispathcedThreads() {
-        return CommunicationManager.instance().getDispatchedThreads();
+    public List<CommunicationThread> getDispathcedThreads(Employee e) {
+        return CommunicationManager.instance().getDispatchedThreads(e);
     }
 
     @Override
-    public List<CommunicationThread> getDirectThreads() {
-        return CommunicationManager.instance().getDirectThreads();
+    public List<CommunicationThread> getDirectThreads(CommunicationEndpoint ep) {
+        return CommunicationManager.instance().getDirectThreads(ep);
     }
 
     @Override
-    public boolean isDispatchedThread(Key threadKey, boolean includeByRoles) {
-        return CommunicationManager.instance().isDispatchedThread(threadKey, includeByRoles);
+    public boolean isDispatchedThread(Key threadKey, boolean includeByRoles, Employee e) {
+        return CommunicationManager.instance().isDispatchedThread(threadKey, includeByRoles, e);
     }
 
 }

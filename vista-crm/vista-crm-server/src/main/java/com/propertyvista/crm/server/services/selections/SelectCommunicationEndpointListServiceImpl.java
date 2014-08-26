@@ -18,6 +18,8 @@ import java.util.Vector;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.config.server.ServerSideFactory;
+import com.pyx4j.entity.core.EntityFactory;
+import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.criterion.EntityListCriteria;
 import com.pyx4j.entity.core.criterion.PropertyCriterion;
 import com.pyx4j.entity.rpc.EntitySearchResult;
@@ -27,11 +29,11 @@ import com.pyx4j.entity.server.Persistence;
 import com.propertyvista.biz.communication.CommunicationMessageFacade;
 import com.propertyvista.crm.rpc.services.selections.SelectCommunicationEndpointListService;
 import com.propertyvista.domain.communication.CommunicationEndpoint;
+import com.propertyvista.domain.communication.CommunicationGroup;
+import com.propertyvista.domain.company.Employee;
 import com.propertyvista.domain.company.Portfolio;
 import com.propertyvista.domain.property.asset.building.Building;
-import com.propertyvista.domain.property.asset.unit.AptUnit;
-import com.propertyvista.domain.security.CrmUser;
-import com.propertyvista.domain.security.CustomerUser;
+import com.propertyvista.domain.tenant.lease.LeaseParticipant;
 import com.propertyvista.dto.CommunicationEndpointDTO;
 
 public class SelectCommunicationEndpointListServiceImpl extends AbstractListServiceImpl<CommunicationEndpoint> implements
@@ -52,46 +54,54 @@ public class SelectCommunicationEndpointListServiceImpl extends AbstractListServ
         int pageSize = criteria.getPageSize();
         Vector<CommunicationEndpointDTO> dtos = new Vector<CommunicationEndpointDTO>();
 
-        accumulate(dtos, createByPatternCriteria(CustomerUser.class, pageSize, namePattern));
-        accumulate(dtos, createByPatternCriteria(CrmUser.class, pageSize, namePattern));
-        accumulate(dtos, createByPatternCriteria(Building.class, pageSize, namePattern));
-        accumulate(dtos, createByPatternCriteria(Portfolio.class, pageSize, namePattern));
-        accumulate(dtos, createByPatternCriteria(AptUnit.class, pageSize, namePattern));
+        accumulate(dtos, createByPatternCriteria(LeaseParticipant.class, pageSize, namePattern), LeaseParticipant.class);
+        accumulate(dtos, createByPatternCriteria(Employee.class, pageSize, namePattern), Employee.class);
+        accumulate(dtos, createByPatternCriteria(Building.class, pageSize, namePattern), Building.class);
+        accumulate(dtos, createByPatternCriteria(Portfolio.class, pageSize, namePattern), Portfolio.class);
 
         callback.onSuccess(dtos);
     }
 
-    private <T extends CommunicationEndpoint> void accumulate(Vector<CommunicationEndpointDTO> accumulatedDtos, EntityListCriteria<T> criteria) {
+    private <T extends IEntity> void accumulate(Vector<CommunicationEndpointDTO> accumulatedDtos, EntityListCriteria<T> criteria, Class<T> entityClass) {
         if (criteria.getPageSize() > 0 && accumulatedDtos.size() >= criteria.getPageSize()) {
             return;
         }
         EntitySearchResult<T> endpoints = Persistence.secureQuery(criteria);
 
         if (endpoints != null && endpoints.getData() != null && endpoints.getData().size() > 0) {
-            for (CommunicationEndpoint ep : endpoints.getData()) {
+            for (IEntity ep : endpoints.getData()) {
                 if (criteria.getPageSize() > 0 && accumulatedDtos.size() >= criteria.getPageSize()) {
                     return;
                 }
-                accumulatedDtos.add((ServerSideFactory.create(CommunicationMessageFacade.class).generateEndpointDTO(ep)));
+                IEntity processed = ep;
+                if (entityClass.equals(Building.class)) {
+                    CommunicationGroup cg = EntityFactory.create(CommunicationGroup.class);
+                    cg.building().set(ep);
+                    processed = cg;
+                } else if (entityClass.equals(Portfolio.class)) {
+                    CommunicationGroup cg = EntityFactory.create(CommunicationGroup.class);
+                    cg.portfolio().set(ep);
+                    processed = cg;
+                }
+
+                accumulatedDtos.add((ServerSideFactory.create(CommunicationMessageFacade.class).generateEndpointDTO((CommunicationEndpoint) processed)));
             }
         }
     }
 
-    @SuppressWarnings("unchecked")
-    private static <T extends CommunicationEndpoint> EntityListCriteria<T> createByPatternCriteria(Class<T> entityClass, int pageSize, String namePattern) {
+    @SuppressWarnings({ "unchecked", "rawtypes" })
+    private static <T extends IEntity> EntityListCriteria<T> createByPatternCriteria(Class<T> entityClass, int pageSize, String namePattern) {
         EntityListCriteria<T> criteria = EntityListCriteria.create(entityClass);
         criteria.setPageSize(pageSize);
 
-        if (entityClass.equals(CustomerUser.class)) {
-            criteria.like(((EntityListCriteria<CustomerUser>) criteria).proto().name(), namePattern);
-        } else if (entityClass.equals(CrmUser.class)) {
-            criteria.like(((EntityListCriteria<CrmUser>) criteria).proto().name(), namePattern);
+        if (entityClass.equals(LeaseParticipant.class)) {
+            criteria.like(((EntityListCriteria<LeaseParticipant>) criteria).proto().customer().user().name(), namePattern);
+        } else if (entityClass.equals(Employee.class)) {
+            criteria.like(((EntityListCriteria<Employee>) criteria).proto().user().name(), namePattern);
         } else if (entityClass.equals(Building.class)) {
             criteria.like(((EntityListCriteria<Building>) criteria).proto().propertyCode(), namePattern);
         } else if (entityClass.equals(Portfolio.class)) {
             criteria.like(((EntityListCriteria<Portfolio>) criteria).proto().name(), namePattern);
-        } else if (entityClass.equals(AptUnit.class)) {
-            criteria.like(((EntityListCriteria<AptUnit>) criteria).proto().info().number(), namePattern);
         }
         return criteria;
     }

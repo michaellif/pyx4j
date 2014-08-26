@@ -208,6 +208,7 @@ public class VistaPortalAccessControlList extends ServletContainerAclBuilder {
         grant(PortalResidentBehavior.Resident, new IServiceExecutePermission(CustomerPicturePortalUploadService.class));
         grant(PortalResidentBehavior.Resident, new IServiceExecutePermission(MaintenanceRequestPictureUploadPortalService.class));
         grant(PortalResidentBehavior.Resident, new IServiceExecutePermission(MessageAttachmentUploadPortalService.class));
+        grant(PortalResidentBehavior.Guarantor, new IServiceExecutePermission(MessageAttachmentUploadPortalService.class));
         grant(new IServiceExecutePermission(ExtraActivityPortalService.class));
         grant(new IServiceExecutePermission(CommunityEventPortalCrudService.class));
         grant(new IServiceExecutePermission(MessagePortalCrudService.class));
@@ -215,12 +216,20 @@ public class VistaPortalAccessControlList extends ServletContainerAclBuilder {
         grant(PortalResidentBehavior.Resident, new IServiceExecutePermission(DeferredProcessService.class));
 
         grant(PortalResidentBehavior.Resident, new EntityPermission(CustomerPicture.class, CRUD));
+
         grant(PortalResidentBehavior.Resident, new EntityPermission(DeliveryHandle.class, CRUD));
         grant(PortalResidentBehavior.Resident, new EntityPermission(MessageAttachment.class, CRUD));
         grant(PortalResidentBehavior.Resident, new EntityPermission(CommunicationThread.class, CRUD));
         grant(PortalResidentBehavior.Resident, new EntityPermission(Message.class, CRUD));
         grant(PortalResidentBehavior.Resident, new EntityPermission(MaintenanceRequestPicture.class, CRUD));
         grant(PortalResidentBehavior.Resident, new EntityPermission(MessageCategory.class, CRUD));
+
+        grant(PortalResidentBehavior.Guarantor, new EntityPermission(DeliveryHandle.class, CRUD));
+        grant(PortalResidentBehavior.Guarantor, new EntityPermission(MessageAttachment.class, CRUD));
+        grant(PortalResidentBehavior.Guarantor, new EntityPermission(CommunicationThread.class, CRUD));
+        grant(PortalResidentBehavior.Guarantor, new EntityPermission(Message.class, CRUD));
+        grant(PortalResidentBehavior.Guarantor, new EntityPermission(MaintenanceRequestPicture.class, CRUD));
+        grant(PortalResidentBehavior.Guarantor, new EntityPermission(MessageCategory.class, CRUD));
 
         //========================= Prospect Portal
 
@@ -229,7 +238,6 @@ public class VistaPortalAccessControlList extends ServletContainerAclBuilder {
         grant(PortalProspectBehavior.Prospect, new IServiceExecutePermission(ApplicationContextSelectionService.class));
 
         grant(PortalProspectBehavior.Prospect, new IServiceExecutePermission(CustomerPicturePortalUploadService.class));
-        grant(PortalProspectBehavior.Prospect, new IServiceExecutePermission(MessageAttachmentUploadPortalService.class));
         grant(PortalProspectBehavior.Prospect, new IServiceExecutePermission(DeferredProcessService.class));
         grant(PortalProspectBehavior.Prospect, new IServiceExecutePermission(CreditCardValidationService.class));
 
@@ -294,9 +302,13 @@ public class VistaPortalAccessControlList extends ServletContainerAclBuilder {
         grant(VistaDataAccessBehavior.ResidentInPortal, new GeneralInsurancePolicyDatasetAccessRule(), GeneralInsurancePolicy.class);
         grant(VistaDataAccessBehavior.ResidentInPortal, new InsuranceCertificateScanDatasetAccessRule(), InsuranceCertificateScan.class);
         grant(VistaDataAccessBehavior.ResidentInPortal, new MaintenanceRequestTenantDatasetAccessRule(), MaintenanceRequest.class);
+        grant(VistaDataAccessBehavior.ResidentInPortal, new MaintenanceRequestPictureTenantDatasetAccessRule(), MaintenanceRequestPicture.class);
         grant(VistaDataAccessBehavior.ResidentInPortal, new MessagePortalAccessRule(), Message.class);
         grant(VistaDataAccessBehavior.ResidentInPortal, new CommunicationThreadPortalAccessRule(), CommunicationThread.class);
-        grant(VistaDataAccessBehavior.ResidentInPortal, new MaintenanceRequestPictureTenantDatasetAccessRule(), MaintenanceRequestPicture.class);
+
+        grant(PortalResidentBehavior.Guarantor, VistaDataAccessBehavior.GuarantorInPortal);
+        grant(VistaDataAccessBehavior.GuarantorInPortal, new MessagePortalAccessRule(), Message.class);
+        grant(VistaDataAccessBehavior.GuarantorInPortal, new CommunicationThreadPortalAccessRule(), CommunicationThread.class);
 
         grant(PortalProspectBehavior.Prospect, VistaDataAccessBehavior.ProspectInPortal);
         grant(VistaDataAccessBehavior.ProspectInPortal, new CustomerPictureProspectDatasetAccessRule(), CustomerPicture.class);

@@ -7,19 +7,23 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2013-01-16
- * @author vlads
+ * Created on Aug 22, 2014
+ * @author smolka
  * @version $Id$
  */
-package com.propertyvista.domain.security.common;
+package com.propertyvista.domain.communication;
 
-import com.pyx4j.entity.annotations.AbstractEntity;
-import com.pyx4j.entity.annotations.Inheritance;
-import com.pyx4j.i18n.annotations.I18n;
+import com.pyx4j.entity.annotations.DiscriminatorValue;
+import com.pyx4j.entity.annotations.EmbeddedEntity;
 
-@AbstractEntity
-@Inheritance(strategy = Inheritance.InheritanceStrategy.TABLE_PER_CLASS)
-@I18n(strategy = I18n.I18nStrategy.IgnoreThis)
-public interface AbstractPmcUser extends AbstractUser {
+import com.propertyvista.domain.company.Portfolio;
+import com.propertyvista.domain.property.asset.building.Building;
 
+@EmbeddedEntity
+@DiscriminatorValue("CommunicationGroup")
+public interface CommunicationGroup extends CommunicationEndpoint {
+
+    Building building();
+
+    Portfolio portfolio();
 }

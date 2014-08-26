@@ -26,8 +26,8 @@ public class CommunicationThreadPortalAccessRule implements DatasetAccessRule<Co
 
     @Override
     public void applyRule(EntityQueryCriteria<CommunicationThread> criteria) {
-        criteria.or(PropertyCriterion.eq(criteria.proto().content().$().sender(), ResidentPortalContext.getCurrentUser()),
-                PropertyCriterion.eq(criteria.proto().content().$().recipients().$().recipient(), ResidentPortalContext.getCurrentUser()));
+        criteria.or(PropertyCriterion.eq(criteria.proto().content().$().sender(), ResidentPortalContext.getLeaseParticipant()),
+                PropertyCriterion.eq(criteria.proto().content().$().recipients().$().recipient(), ResidentPortalContext.getLeaseParticipant()));
     }
 
 }

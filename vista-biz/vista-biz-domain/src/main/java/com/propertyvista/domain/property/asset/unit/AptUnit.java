@@ -35,7 +35,6 @@ import com.pyx4j.entity.core.AttachLevel;
 import com.pyx4j.entity.core.IPrimitive;
 import com.pyx4j.entity.core.ISet;
 
-import com.propertyvista.domain.communication.CommunicationEndpoint;
 import com.propertyvista.domain.financial.offering.ProductItem;
 import com.propertyvista.domain.note.HasNotesAndAttachments;
 import com.propertyvista.domain.policy.framework.PolicyNode;
@@ -49,7 +48,7 @@ import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.shared.adapters.FloorplanCountersUpdateAdapter;
 
 @DiscriminatorValue("AptUnit")
-public interface AptUnit extends BuildingElement, PolicyNode, HasNotesAndAttachments, CommunicationEndpoint {
+public interface AptUnit extends BuildingElement, PolicyNode, HasNotesAndAttachments {
 
     @Override
     @Owner

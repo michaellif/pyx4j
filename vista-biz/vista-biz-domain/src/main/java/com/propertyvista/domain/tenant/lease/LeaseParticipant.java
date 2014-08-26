@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011-2012 All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -37,13 +37,14 @@ import com.pyx4j.entity.core.ISet;
 import com.pyx4j.entity.shared.adapters.index.AlphanumIndexAdapter;
 import com.pyx4j.i18n.annotations.I18n;
 
+import com.propertyvista.domain.communication.CommunicationEndpoint;
 import com.propertyvista.domain.note.HasNotesAndAttachments;
 import com.propertyvista.domain.tenant.Customer;
 
 @Inheritance(strategy = Inheritance.InheritanceStrategy.SINGLE_TABLE)
 @AbstractEntity
 @I18n(strategy = I18n.I18nStrategy.IgnoreThis)
-public interface LeaseParticipant<E extends LeaseTermParticipant<?>> extends IEntity, HasNotesAndAttachments {
+public interface LeaseParticipant<E extends LeaseTermParticipant<?>> extends IEntity, CommunicationEndpoint, HasNotesAndAttachments {
 
     @Owner
     @NotNull

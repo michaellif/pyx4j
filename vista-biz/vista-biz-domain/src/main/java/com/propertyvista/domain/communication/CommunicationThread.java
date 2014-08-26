@@ -36,7 +36,7 @@ public interface CommunicationThread extends IEntity {
     @XmlType(name = "ThreadStatus")
     public enum ThreadStatus {
 
-        Unassigned, Open, Resolved;
+        Open, Resolved;
 
         @Override
         public String toString() {
@@ -52,7 +52,6 @@ public interface CommunicationThread extends IEntity {
     @ReadOnly
     IPrimitive<Boolean> allowedReply();
 
-    @NotNull
     IPrimitive<ThreadStatus> status();
 
     @NotNull

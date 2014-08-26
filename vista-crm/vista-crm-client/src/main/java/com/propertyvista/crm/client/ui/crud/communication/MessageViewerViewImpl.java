@@ -13,12 +13,9 @@
  */
 package com.propertyvista.crm.client.ui.crud.communication;
 
-import java.util.Arrays;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
-import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.MenuItem;
@@ -26,23 +23,17 @@ import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.IEntity;
-import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
-import com.pyx4j.entity.rpc.AbstractListCrudService;
 import com.pyx4j.forms.client.ui.CForm;
-import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
-import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.security.client.ClientContext;
-import com.pyx4j.site.client.activity.EntitySelectorTableVisorController;
-import com.pyx4j.site.client.ui.IPane;
 import com.pyx4j.widgets.client.dialog.OkCancelDialog;
 
 import com.propertyvista.common.client.PrintUtils;
+import com.propertyvista.crm.client.ui.components.boxes.EmployeeSelectorDialog;
 import com.propertyvista.crm.client.ui.crud.CrmViewerViewImplBase;
 import com.propertyvista.crm.rpc.CrmUserVisit;
-import com.propertyvista.crm.rpc.services.selections.SelectEmployeeListService;
 import com.propertyvista.domain.communication.CommunicationEndpoint.ContactType;
 import com.propertyvista.domain.communication.CommunicationThread.ThreadStatus;
 import com.propertyvista.domain.communication.MessageCategory.CategoryType;
@@ -82,16 +73,21 @@ public class MessageViewerViewImpl extends CrmViewerViewImplBase<MessageDTO> imp
         assignOwnershipAction = new MenuItem(i18n.tr("Assign Owner"), new Command() {
             @Override
             public void execute() {
-                new EmployeeSelectorDialog(form.getParentView()).show();
+                new EmployeeSelectorDialog(form.getParentView(), false) {
+                    @Override
+                    public void onClickOk() {
+                        for (Employee selected : getSelectedItems()) {
+                            assignEmployee(getSelectedItem());
+                        }
+                    }
+                }.show();
             }
         });
 
         threadStatusActions = new HashMap<ThreadStatus, MenuItem>();
 
         for (final ThreadStatus ts : ThreadStatus.values()) {
-            if (ts.equals(ThreadStatus.Unassigned)) {
-                continue;
-            }
+
             threadStatusActions.put(ts, new MenuItem(ThreadStatus.Open.equals(ts) ? ThreadStatus.Open.toString() : i18n.tr("Resolve"), new Command() {
                 @Override
                 public void execute() {
@@ -160,41 +156,6 @@ public class MessageViewerViewImpl extends CrmViewerViewImplBase<MessageDTO> imp
     public void assignEmployee(IEntity e) {
         ((MessageForm) getForm()).assignOwnership(e);
 
-    }
-
-    private class EmployeeSelectorDialog extends EntitySelectorTableVisorController<Employee> {
-
-        public EmployeeSelectorDialog(IPane parentView) {
-            super(parentView, Employee.class, false, null, i18n.tr("Select Employee"));
-        }
-
-        @Override
-        public void onClickOk() {
-            assignEmployee(getSelectedItem());
-        }
-
-        @Override
-        protected List<ColumnDescriptor> defineColumnDescriptors() {
-            return Arrays.asList(//@formatter:off
-                    new MemberColumnDescriptor.Builder(proto().employeeId()).build(),
-                    new MemberColumnDescriptor.Builder(proto().name()).searchable(false).build(),
-                    new MemberColumnDescriptor.Builder(proto().title()).build(),
-                    new MemberColumnDescriptor.Builder(proto().name().firstName()).searchableOnly().build(),
-                    new MemberColumnDescriptor.Builder(proto().name().lastName()).searchableOnly().build(),
-                    new MemberColumnDescriptor.Builder(proto().email(), false).build(),
-                    new MemberColumnDescriptor.Builder(proto().updated(), false).build()
-            ); //@formatter:on
-        }
-
-        @Override
-        public List<Sort> getDefaultSorting() {
-            return Arrays.asList(new Sort(proto().employeeId(), false));
-        }
-
-        @Override
-        protected AbstractListCrudService<Employee> getSelectService() {
-            return GWT.<AbstractListCrudService<Employee>> create(SelectEmployeeListService.class);
-        }
     }
 
     static abstract class UpdateThreadStatusBox extends OkCancelDialog {

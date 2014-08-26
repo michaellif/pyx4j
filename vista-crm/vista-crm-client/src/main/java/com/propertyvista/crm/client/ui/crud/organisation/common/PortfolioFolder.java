@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011- All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -14,39 +14,32 @@
 package com.propertyvista.crm.client.ui.crud.organisation.common;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.Command;
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.IObject;
 import com.pyx4j.entity.core.criterion.Criterion;
-import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.entity.core.criterion.PropertyCriterion;
-import com.pyx4j.entity.rpc.AbstractListCrudService;
 import com.pyx4j.forms.client.ui.CField;
 import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.CLabel;
-import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
-import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.forms.client.ui.folder.CFolderRowEditor;
 import com.pyx4j.forms.client.ui.folder.FolderColumnDescriptor;
 import com.pyx4j.forms.client.ui.folder.IFolderDecorator;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.AppSite;
-import com.pyx4j.site.client.activity.EntitySelectorTableVisorController;
 import com.pyx4j.site.client.ui.IPane;
 
 import com.propertyvista.common.client.ui.components.folders.VistaTableFolder;
 import com.propertyvista.common.client.ui.decorations.VistaTableFolderDecorator;
+import com.propertyvista.crm.client.ui.components.boxes.PortfolioSelectorDialog;
 import com.propertyvista.crm.client.ui.crud.organisation.employee.EmployeeForm;
 import com.propertyvista.crm.rpc.CrmSiteMap;
-import com.propertyvista.crm.rpc.services.selections.SelectPortfolioListService;
 import com.propertyvista.domain.company.Portfolio;
 
 public class PortfolioFolder extends VistaTableFolder<Portfolio> {
@@ -102,31 +95,13 @@ public class PortfolioFolder extends VistaTableFolder<Portfolio> {
 
     @Override
     protected void addItem() {
-        new PortfolioSelectorDialog(parentView, new HashSet<>(getValue())).show();
+        new PortfolioSelectorDialogExtraFilters(parentView, new HashSet<>(getValue())).show();
     }
 
-    private class PortfolioSelectorDialog extends EntitySelectorTableVisorController<Portfolio> {
+    private class PortfolioSelectorDialogExtraFilters extends PortfolioSelectorDialog {
 
-        public PortfolioSelectorDialog(IPane parentView, Set<Portfolio> alreadySelected) {
-            super(parentView, Portfolio.class, true, alreadySelected, i18n.tr("Select Portfolio"));
-        }
-
-        @Override
-        protected List<ColumnDescriptor> defineColumnDescriptors() {
-            return Arrays.asList(//@formatter:off
-                    new MemberColumnDescriptor.Builder(proto().name()).build(),
-                    new MemberColumnDescriptor.Builder(proto().description()).wordWrap(true).build()                    
-            ); //@formatter:on
-        }
-
-        @Override
-        public List<Sort> getDefaultSorting() {
-            return Arrays.asList(new Sort(proto().name(), false));
-        }
-
-        @Override
-        protected AbstractListCrudService<Portfolio> getSelectService() {
-            return GWT.<AbstractListCrudService<Portfolio>> create(SelectPortfolioListService.class);
+        public PortfolioSelectorDialogExtraFilters(IPane parentView, Set<Portfolio> alreadySelected) {
+            super(parentView, true, alreadySelected);
         }
 
         @Override

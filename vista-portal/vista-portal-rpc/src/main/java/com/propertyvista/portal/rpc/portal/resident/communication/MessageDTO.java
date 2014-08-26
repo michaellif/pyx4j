@@ -82,6 +82,10 @@ public interface MessageDTO extends Message {
 
     @NotNull
     @ReadOnly
+    IPrimitive<Boolean> isInRecipients();
+
+    @NotNull
+    @ReadOnly
     @Editor(type = Editor.EditorType.label)
     MessageHeader header();
 

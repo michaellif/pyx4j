@@ -28,6 +28,7 @@ import com.pyx4j.gwt.commons.layout.LayoutChangeEvent;
 import com.pyx4j.gwt.commons.layout.LayoutChangeHandler;
 import com.pyx4j.gwt.commons.layout.LayoutType;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.ui.sidemenu.SideMenu;
@@ -54,12 +55,12 @@ import com.propertyvista.crm.rpc.services.lease.ac.FormerLeaseListAction;
 import com.propertyvista.crm.rpc.services.reports.CrmReportsMapper;
 import com.propertyvista.domain.communication.MessageCategory;
 import com.propertyvista.domain.communication.MessageCategory.CategoryType;
+import com.propertyvista.domain.company.Employee;
 import com.propertyvista.domain.company.Portfolio;
 import com.propertyvista.domain.dashboard.DashboardMetadata;
 import com.propertyvista.domain.financial.AggregatedTransfer;
 import com.propertyvista.domain.reports.AvailableCrmReport.CrmReportType;
 import com.propertyvista.domain.security.CrmRole;
-import com.propertyvista.domain.security.VistaCrmBehavior;
 import com.propertyvista.domain.tenant.lead.Lead;
 import com.propertyvista.dto.AptUnitDTO;
 import com.propertyvista.dto.BuildingDTO;
@@ -319,9 +320,7 @@ public class NavigViewImpl extends Composite implements NavigView {
 
     @Override
     public void updateCommunicationGroups(Vector<MessageCategory> metadataList) {
-        if (!SecurityController.check(VistaCrmBehavior.Communication)) {
-            return;
-        }
+
         communicationGroups.clear();
         Collections.sort(metadataList, ORDER_CATEGORY_BY_NAME);
         for (MessageCategory metadata : metadataList) {
@@ -329,7 +328,17 @@ public class NavigViewImpl extends Composite implements NavigView {
             CategoryType cat = metadata.categoryType().getValue();
             if (CategoryType.Message.equals(cat) || CategoryType.Ticket.equals(cat)
                     || (ApplicationMode.isDevelopment() && VistaTODO.ADDITIONAL_COMMUNICATION_FEATURES)) {
-                if (metadata.roles() != null) {
+                boolean added = false;
+                if (metadata.dispatchers() != null) {
+                    for (Employee emp : metadata.dispatchers()) {
+                        if (ClientContext.getUserVisit().getPrincipalPrimaryKey().equals(emp.user().getPrimaryKey())) {
+                            place = new CrmSiteMap.Communication.Message(metadata).formListerPlace();
+                            communicationGroups.addMenuItem(new SideMenuAppPlaceItem(place, metadata.category().getStringView(), null));
+                            added = true;
+                        }
+                    }
+                }
+                if (!added && metadata.roles() != null) {
                     for (CrmRole role : metadata.roles()) {
                         if (cat != null && SecurityController.check(role.behaviors())) {
                             place = new CrmSiteMap.Communication.Message(metadata).formListerPlace();
