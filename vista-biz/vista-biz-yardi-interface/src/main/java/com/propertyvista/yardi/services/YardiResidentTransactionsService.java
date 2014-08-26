@@ -36,6 +36,7 @@ import com.yardi.entity.mits.Address;
 import com.yardi.entity.mits.Information;
 import com.yardi.entity.mits.PropertyIDType;
 import com.yardi.entity.mits.Unit;
+import com.yardi.entity.resident.ChargeDetail;
 import com.yardi.entity.resident.Property;
 import com.yardi.entity.resident.RTCustomer;
 import com.yardi.entity.resident.ResidentTransactions;
@@ -79,6 +80,7 @@ import com.propertyvista.domain.settings.PmcYardiCredential;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.misc.VistaTODO;
 import com.propertyvista.operations.domain.scheduler.CompletionType;
+import com.propertyvista.yardi.YardiTrace;
 import com.propertyvista.yardi.beans.Properties;
 import com.propertyvista.yardi.mappers.BuildingsMapper;
 import com.propertyvista.yardi.mappers.MappingUtils;
@@ -96,9 +98,9 @@ import com.propertyvista.yardi.stubs.YardiStubFactory;
 
 /**
  * Implementation functionality for updating properties/units/leases/tenants basing on getResidentTransactions from YARDI api
- * 
+ *
  * @author Mykola
- * 
+ *
  */
 public class YardiResidentTransactionsService extends YardiAbstractService {
 
@@ -131,7 +133,7 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
 
     /**
      * Updates/creates entities basing on data from YARDI System.
-     * 
+     *
      * @param yp
      *            the YARDI System connection parameters
      * @throws YardiServiceException
@@ -671,6 +673,11 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
             for (RTCustomer rtCustomer : property.getRTCustomer()) {
                 if (rtCustomer.getRTServiceTransactions().getTransactions().size() == 0) {
                     continue;
+                }
+
+                if (YardiTrace.trace) {
+                    ChargeDetail details = rtCustomer.getRTServiceTransactions().getTransactions().get(0).getCharge().getDetail();
+                    log.debug("got charge {} {}", details.getChargeCode(), details.getAmount());
                 }
 
                 String leaseId = YardiLeaseProcessor.getLeaseID(rtCustomer.getRTServiceTransactions().getTransactions().get(0).getCharge().getDetail()

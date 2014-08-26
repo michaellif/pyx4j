@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011-2012 All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -16,6 +16,8 @@ package com.propertyvista.yardi;
 import java.math.BigDecimal;
 
 import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.yardi.entity.mits.Customerinfo;
 import com.yardi.entity.resident.ResidentTransactions;
@@ -54,6 +56,8 @@ import com.propertyvista.yardi.stubs.YardiStubFactory;
 
 public class YardiImportTest extends YardiTestBase {
 
+    private final static Logger log = LoggerFactory.getLogger(YardiImportTest.class);
+
     private static String PROPERTYID = "prop123";
 
     private static String TENANTID = "t000111";
@@ -71,7 +75,7 @@ public class YardiImportTest extends YardiTestBase {
             set(PropertyUpdater.ADDRESS.Address1, "11 prop123 str").
             set(PropertyUpdater.ADDRESS.PostalCode, "A1B 2C3").
             set(PropertyUpdater.ADDRESS.State, "ON").
-            set(PropertyUpdater.ADDRESS.Country, "Canada");        
+            set(PropertyUpdater.ADDRESS.Country, "Canada");
             // @formatter:on
             MockEventBus.fireEvent(new PropertyUpdateEvent(updater));
         }
@@ -108,7 +112,7 @@ public class YardiImportTest extends YardiTestBase {
             set(LeaseChargeUpdater.Name.ChargeCode, "rrent").
             set(LeaseChargeUpdater.Name.GLAccountNumber, "40000301").
             set(LeaseChargeUpdater.Name.Amount, "1234.56").
-            set(LeaseChargeUpdater.Name.Comment, "Rent (05/2013)");        
+            set(LeaseChargeUpdater.Name.Comment, "Rent (05/2013)");
             // @formatter:on
             MockEventBus.fireEvent(new LeaseChargeUpdateEvent(updater));
         }
@@ -121,7 +125,7 @@ public class YardiImportTest extends YardiTestBase {
             set(LeaseChargeUpdater.Name.ServiceToDate, DateUtils.detectDateformat("31-Jul-2014")).
             set(LeaseChargeUpdater.Name.ChargeCode, "rinpark").
             set(LeaseChargeUpdater.Name.Amount, "50.00").
-            set(LeaseChargeUpdater.Name.Comment, "Parking A");        
+            set(LeaseChargeUpdater.Name.Comment, "Parking A");
             // @formatter:on
             MockEventBus.fireEvent(new LeaseChargeUpdateEvent(updater));
         }
@@ -134,7 +138,7 @@ public class YardiImportTest extends YardiTestBase {
             set(LeaseChargeUpdater.Name.ServiceToDate, DateUtils.detectDateformat("31-Jul-2014")).
             set(LeaseChargeUpdater.Name.ChargeCode, "rpark").
             set(LeaseChargeUpdater.Name.Amount, "60.00").
-            set(LeaseChargeUpdater.Name.Comment, "Parking B");        
+            set(LeaseChargeUpdater.Name.Comment, "Parking B");
             // @formatter:on
             MockEventBus.fireEvent(new LeaseChargeUpdateEvent(updater));
         }
@@ -165,7 +169,7 @@ public class YardiImportTest extends YardiTestBase {
             set(TransactionChargeUpdater.Name.AmountPaid, "1.00").
             set(TransactionChargeUpdater.Name.BalanceDue, "1234.56").
             set(TransactionChargeUpdater.Name.Amount, "1234.56").
-            set(TransactionChargeUpdater.Name.Comment, "Rent (05/2013)");        
+            set(TransactionChargeUpdater.Name.Comment, "Rent (05/2013)");
             // @formatter:on
             MockEventBus.fireEvent(new TransactionChargeUpdateEvent(updater));
         }
@@ -221,6 +225,7 @@ public class YardiImportTest extends YardiTestBase {
 
         setSysDate("25-May-2013");
 
+        log.debug("first import");
         YardiResidentTransactionsService.getInstance().updateAll(getYardiCredential(PROPERTYID), new ExecutionMonitor());
 
         Building building = getBuilding(PROPERTYID);
@@ -266,7 +271,7 @@ public class YardiImportTest extends YardiTestBase {
         effectiveDate("01-Jun-2012").
         expirationDate("31-Jul-2014").
         description("Indoor Parking").
-        agreedPrice("50.00");  
+        agreedPrice("50.00");
         // @formatter:on
 
         // @formatter:off
@@ -275,7 +280,7 @@ public class YardiImportTest extends YardiTestBase {
         effectiveDate("01-Jun-2012").
         expirationDate("31-Jul-2014").
         description("Parking B").
-        agreedPrice("60.00");  
+        agreedPrice("60.00");
         // @formatter:on
 
         {
@@ -287,17 +292,13 @@ public class YardiImportTest extends YardiTestBase {
         }
 
         {
-            // @formatter:off
-            LeaseChargeUpdater updater = new LeaseChargeUpdater(PROPERTYID, TENANTID, "rent").
-            set(LeaseChargeUpdater.Name.Amount, "1250.00");
-            // @formatter:on
+            LeaseChargeUpdater updater = new LeaseChargeUpdater(PROPERTYID, TENANTID, "rent"). //
+                    set(LeaseChargeUpdater.Name.Amount, "1250.00");
             MockEventBus.fireEvent(new LeaseChargeUpdateEvent(updater));
         }
 
         { // item will be removed from next term
-            // @formatter:off
             LeaseChargeUpdater updater = new LeaseChargeUpdater(PROPERTYID, TENANTID, "parkB").remove();
-            // @formatter:on
             MockEventBus.fireEvent(new LeaseChargeUpdateEvent(updater));
         }
 
@@ -309,7 +310,7 @@ public class YardiImportTest extends YardiTestBase {
             set(LeaseChargeUpdater.Name.ServiceToDate, DateUtils.detectDateformat("31-Jul-2014")).
             set(LeaseChargeUpdater.Name.ChargeCode, "rlock").
             set(LeaseChargeUpdater.Name.Amount, "150.00").
-            set(LeaseChargeUpdater.Name.Comment, "Locker A");        
+            set(LeaseChargeUpdater.Name.Comment, "Locker A");
             // @formatter:on
             MockEventBus.fireEvent(new LeaseChargeUpdateEvent(updater));
         }
@@ -322,6 +323,7 @@ public class YardiImportTest extends YardiTestBase {
             MockEventBus.fireEvent(new CoTenantUpdateEvent(updater));
         }
 
+        log.debug("second import");
         YardiResidentTransactionsService.getInstance().updateAll(getYardiCredential(PROPERTYID), new ExecutionMonitor());
 
         lease = getCurrentLease(unit);
@@ -342,9 +344,10 @@ public class YardiImportTest extends YardiTestBase {
         role(Role.CoApplicant);
         // @formatter:on
 
-        // @formatter:off
-        new BillableItemTester(lease.currentTerm().version().leaseProducts().serviceItem()).
-        agreedPrice("1250.00");
+        log.debug("test currentTerm pk={}, serviceItem pk={}", lease.currentTerm().getPrimaryKey(), lease.currentTerm().version().leaseProducts().serviceItem()
+                .getPrimaryKey());
+
+        new BillableItemTester(lease.currentTerm().version().leaseProducts().serviceItem()).agreedPrice("1250.00");
 
         assertEquals(2, lease.currentTerm().version().leaseProducts().featureItems().size());
 
@@ -354,7 +357,7 @@ public class YardiImportTest extends YardiTestBase {
         effectiveDate("01-Jun-2012").
         expirationDate("31-Jul-2014").
         description("Indoor Parking").
-        agreedPrice("50.00");  
+        agreedPrice("50.00");
         // @formatter:on
 
         // @formatter:off
@@ -363,7 +366,7 @@ public class YardiImportTest extends YardiTestBase {
         effectiveDate("01-Jun-2012").
         expirationDate("31-Jul-2014").
         description("Locker A").
-        agreedPrice("150.00");  
+        agreedPrice("150.00");
         // @formatter:on
     }
 
@@ -396,12 +399,13 @@ public class YardiImportTest extends YardiTestBase {
         assertEquals("Has LeaseCharges", 0, transactions.getProperty().get(0).getRTCustomer().get(0).getRTServiceTransactions().getTransactions().size());
     }
 
+    @Test
     public void testRentableItemsPreload() throws Exception {
         setupRentableItem();
 
         setSysDate("2010-11-01");
 
-        // Initial Import 
+        // Initial Import
         yardiImportAll(getYardiCredential(PROPERTYID));
 
         Building building = getBuilding(PROPERTYID);

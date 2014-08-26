@@ -43,6 +43,7 @@ import com.propertyvista.domain.tenant.lease.BillableItem;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.Lease.CompletionType;
 import com.propertyvista.domain.tenant.lease.LeaseTerm;
+import com.propertyvista.yardi.YardiTrace;
 import com.propertyvista.yardi.processors.YardiLeaseProcessor;
 import com.propertyvista.yardi.services.ARCodeAdapter;
 
@@ -164,6 +165,9 @@ public class LeaseMerger {
                 if (isServiceItem(item)) {
                     if (lease.currentTerm().version().leaseProducts().serviceItem().isNull()) {
                         lease.currentTerm().version().leaseProducts().serviceItem().set(item);
+                        if (YardiTrace.trace) {
+                            log.debug("set service item agreedPrice {}", item.agreedPrice());
+                        }
                     } else {
                         // TODO: add multiple services as features now, then redesign:
                         lease.currentTerm().version().leaseProducts().featureItems().add(item);

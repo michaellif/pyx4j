@@ -69,6 +69,7 @@ import com.propertyvista.domain.tenant.lease.Lease.CompletionType;
 import com.propertyvista.domain.tenant.lease.Lease.Status;
 import com.propertyvista.domain.tenant.lease.LeaseTerm;
 import com.propertyvista.portal.rpc.shared.PolicyNotFoundException;
+import com.propertyvista.yardi.YardiTrace;
 import com.propertyvista.yardi.mergers.LeaseMerger;
 import com.propertyvista.yardi.mergers.TenantMerger;
 import com.propertyvista.yardi.services.ARCodeAdapter;
@@ -210,10 +211,10 @@ public class YardiLeaseProcessor {
     private Lease updateLease(String propertyCode, String leaseId, LeaseTransactionData ltd, Lease existingLease) throws YardiServiceException {
         Lease lease = ServerSideFactory.create(LeaseFacade.class).load(existingLease, true);
         Persistence.ensureRetrieve(lease.currentTerm().version().tenants(), AttachLevel.Attached);
-        log.debug("Updating lease {} for unit {}", leaseId);
+        log.debug("Updating lease {} in propertyCode {}", leaseId, propertyCode);
 
         if (ltd.getResident() == null) {
-            // there are no resident data - update just products: 
+            // there are no resident data - update just products:
             if (updateLeaseProducts(lease, ltd)) {
                 lease = ServerSideFactory.create(LeaseFacade.class).finalize(lease);
                 rtd.getExecutionMonitor().addInfoEvent("Lease",
@@ -287,7 +288,7 @@ public class YardiLeaseProcessor {
 
         toFinalize |= updateLeaseProducts(lease, ltd);
 
-        // persisting logic: 
+        // persisting logic:
         if (toFinalize) {
             lease = ServerSideFactory.create(LeaseFacade.class).finalize(lease);
             rtd.getExecutionMonitor().addInfoEvent("Lease", SimpleMessageFormat.format("lease {0} updated (new version)", lease.leaseId().getStringView()));
@@ -306,7 +307,7 @@ public class YardiLeaseProcessor {
 
     private boolean updateLeaseProducts(Lease lease, LeaseTransactionData ltd) {
         if (ltd.getCharges() == null) {
-            // lease has no charges - clear products: 
+            // lease has no charges - clear products:
             return expireLeaseProducts(lease);
         }
 
@@ -366,6 +367,10 @@ public class YardiLeaseProcessor {
             if (newItem == null) {
                 newItem = EntityFactory.create(BillableItem.class);
                 newItem.uid().setValue(uid);
+            }
+
+            if (YardiTrace.trace) {
+                log.debug("add lease charge {} {}", tr.getCharge().getDetail().getChargeCode(), tr.getCharge().getDetail().getAmount());
             }
 
             newItems.add(fillBillableItem(tr.getCharge().getDetail(), newItem));
@@ -477,7 +482,7 @@ public class YardiLeaseProcessor {
 
     /**
      * Sort list of Yardi leases (RTCustomer-s) by lease status: former -> current -> future
-     * 
+     *
      * @param rtCustomers
      *            - list to sort
      * @return - sorted input list
@@ -587,7 +592,7 @@ public class YardiLeaseProcessor {
     }
 
     //
-    // Lease state management: 
+    // Lease state management:
     //
     private Lease manageLeaseState(Lease lease, RTCustomer rtCustomer, YardiLease yardiLease) {
         if (lease.status().getValue().isActive()) {
@@ -598,7 +603,7 @@ public class YardiLeaseProcessor {
                     activateLease(lease);
                 }
 
-                // notice On/Off mechanics: 
+                // notice On/Off mechanics:
                 if (isOnNotice(rtCustomer, yardiLease)) {
                     if (lease.completion().getValue() != CompletionType.Notice) {
                         lease = markLeaseOnNotice(lease, yardiLease);

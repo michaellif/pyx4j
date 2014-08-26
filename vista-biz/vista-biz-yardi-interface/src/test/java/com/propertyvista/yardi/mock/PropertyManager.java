@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011-2012 All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -19,6 +19,8 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 import org.apache.commons.lang.SerializationUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.yardi.entity.guestcard40.RentableItemType;
 import com.yardi.entity.guestcard40.RentableItems;
@@ -53,6 +55,8 @@ import com.propertyvista.yardi.mock.updater.TransactionChargeUpdater;
 import com.propertyvista.yardi.mock.updater.UnitTransferSimulator;
 
 public class PropertyManager {
+
+    private static final Logger log = LoggerFactory.getLogger(PropertyManager.class);
 
     private final String propertyId;
 
@@ -423,6 +427,7 @@ public class PropertyManager {
             ChargeDetail detail = new ChargeDetail();
             charge.setDetail(detail);
             charges.put(updater.getLeaseChargeID(), charge);
+            log.debug("create new Charge {}", updater.getLeaseChargeID());
         }
         ChargeDetail detail = charge.getDetail();
         detail.setCustomerID(updater.getCustomerID());
@@ -432,8 +437,8 @@ public class PropertyManager {
         for (com.propertyvista.yardi.mock.updater.Name name : updater.getPropertyMap().keySet()) {
             Property<?> property = updater.getPropertyMap().get(name);
             updateProperty(charge.getDetail(), property);
+            log.debug("update Charge {}; property {} {}", updater.getLeaseChargeID(), property.getName(), property.getValue());
         }
-        charge.getDetail();
     }
 
     public void removeLeaseCharge(LeaseChargeUpdater updater) {
