@@ -432,9 +432,9 @@ public abstract class VersionTestCase extends DatastoreTestBase {
 
         itemA1.saveAction().setValue(SaveAction.saveAsDraft);
         srv.persist(itemA1);
-
         // Finalize as of (current) date
         setDBTime("2011-01-01");
+
         itemA1.saveAction().setValue(SaveAction.saveAsFinal);
         srv.persist(itemA1);
 
@@ -481,7 +481,7 @@ public abstract class VersionTestCase extends DatastoreTestBase {
         {
             // Retrieve new version
             RefToVersioned refToVersioned1r1 = srv.retrieve(RefToVersioned.class, refToVersioned1.getPrimaryKey());
-            assertEquals("ref not updated", origName, refToVersioned1r1.itemA().version().name().getValue());
+            assertEquals("ref shuld not be updated", origName, refToVersioned1r1.itemA().version().name().getValue());
             // += 1 second
             assertEquals("date as of time of save", (double) DateUtils.detectDateformat("2011-01-15").getTime(), (double) new Date(refToVersioned1r1.itemA()
                     .getPrimaryKey().getVersion()).getTime(), Consts.SEC2MILLISECONDS);

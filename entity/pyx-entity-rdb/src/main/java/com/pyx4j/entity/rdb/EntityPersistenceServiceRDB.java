@@ -213,15 +213,13 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
     private void endCallContext() {
         PersistenceContext persistenceContext = threadSessions.get();
         if (persistenceContext != null) {
-            try {
-                if (persistenceContext.isSingelAPICallTransaction()) {
-                    try {
-                        persistenceContext.close();
-                    } finally {
-                        threadSessions.remove();
-                    }
+            if (persistenceContext.isSingelAPICallTransaction()) {
+                try {
+                    persistenceContext.close();
+                } finally {
+                    threadSessions.remove();
                 }
-            } finally {
+            } else if (!persistenceContext.isExplicitTransaction()) {
                 persistenceContext.endCallContext();
             }
         }
@@ -393,6 +391,9 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
     @Override
     public Date getTransactionTime() {
         assert getPersistenceContext() != null : "Transaction Context was not started";
+        if (PersistenceTrace.traceTransaction) {
+            log.info("{} TransactionTime {}", getPersistenceContext().txId(), getPersistenceContext().getTimeNow());
+        }
         return getPersistenceContext().getTimeNow();
     }
 

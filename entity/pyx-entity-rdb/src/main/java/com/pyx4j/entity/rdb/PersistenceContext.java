@@ -371,6 +371,7 @@ public class PersistenceContext {
             }
             transactionContexts.peek().fireCompletionHandlers();
         }
+        timeNow = null;
     }
 
     void rollback() {
@@ -421,6 +422,7 @@ public class PersistenceContext {
                 throw new Error("There are uncommitted changes in Database");
             }
         }
+        timeNow = null;
     }
 
     public void terminate() {
@@ -441,6 +443,7 @@ public class PersistenceContext {
             }
             throw new Error("Transaction was not ended");
         }
+        timeNow = null;
     }
 
     public static void debugOpenSessions() {
