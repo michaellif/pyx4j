@@ -53,7 +53,6 @@ import com.propertyvista.domain.tenant.lease.DepositLifecycle.DepositStatus;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseAdjustment;
 import com.propertyvista.domain.util.DomainUtil;
-import com.propertyvista.shared.config.VistaFeatures;
 
 public class DepositFacadeImpl implements DepositFacade {
     private static final I18n i18n = I18n.get(DepositFacadeImpl.class);
@@ -323,11 +322,7 @@ public class DepositFacadeImpl implements DepositFacade {
             value = productItem.depositSecurity().getValue();
             break;
         }
-        if (false && VistaFeatures.instance().yardiIntegration()) {
-            return value; // allow null deposit value here in Yardi mode...
-        } else {
-            return (value == null ? getProductDepositValue(productDeposit) : value); // get Product value if Item not set 
-        }
+        return (value == null ? getProductDepositValue(productDeposit) : value); // get Product value if Item not set 
     }
 
     private BigDecimal getProductDepositValue(ProductDeposit deposit) {
