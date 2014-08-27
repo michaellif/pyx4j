@@ -45,8 +45,12 @@ import com.propertyvista.domain.VistaNamespace;
 @Table(prefix = "dev", namespace = VistaNamespace.operationsNamespace)
 public interface CardServiceSimulationMerchantAccount extends IEntity {
 
+    @Indexed(group = "un,2", uniqueConstraint = true)
+    @Editor(type = EditorType.label)
+    CardServiceSimulationCompany company();
+
     @ToString(index = 1)
-    @Indexed(uniqueConstraint = true)
+    @Indexed(group = "un,1", uniqueConstraint = true)
     @NotNull
     @Length(8)
     IPrimitive<String> terminalID();

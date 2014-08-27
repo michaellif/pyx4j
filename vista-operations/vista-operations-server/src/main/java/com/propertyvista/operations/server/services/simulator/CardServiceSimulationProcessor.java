@@ -23,7 +23,10 @@ import org.slf4j.LoggerFactory;
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
+import com.pyx4j.entity.server.Executable;
 import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.entity.server.TransactionScopeOption;
+import com.pyx4j.entity.server.UnitOfWork;
 
 import com.propertyvista.eft.caledoncards.CaledonCardProduct;
 import com.propertyvista.eft.caledoncards.CaledonCardsUtils;
@@ -38,6 +41,7 @@ import com.propertyvista.eft.caledoncards.CaledonResponse;
 import com.propertyvista.eft.caledoncards.CaledonTokenAction;
 import com.propertyvista.eft.caledoncards.CaledonTransactionType;
 import com.propertyvista.operations.domain.eft.cards.simulator.CardServiceSimulationCard;
+import com.propertyvista.operations.domain.eft.cards.simulator.CardServiceSimulationCompany;
 import com.propertyvista.operations.domain.eft.cards.simulator.CardServiceSimulationMerchantAccount;
 import com.propertyvista.operations.domain.eft.cards.simulator.CardServiceSimulationToken;
 import com.propertyvista.operations.domain.eft.cards.simulator.CardServiceSimulationTransaction;
@@ -53,10 +57,10 @@ public class CardServiceSimulationProcessor {
 
     }
 
-    public static CaledonResponse execute(CaledonRequestToken caledonRequest) {
+    public static CaledonResponse execute(CardServiceSimulationCompany company, CaledonRequestToken caledonRequest) {
         CaledonResponse caledonResponse;
         try {
-            CardServiceSimulationMerchantAccount merchantAccount = ehshureMerchantAccount(caledonRequest.terminalID);
+            CardServiceSimulationMerchantAccount merchantAccount = ehshureMerchantAccount(company, caledonRequest.terminalID);
             if (!merchantAccount.responseCode().isNull()) {
                 caledonResponse = new CaledonResponse();
                 caledonResponse.code = merchantAccount.responseCode().getValue();
@@ -86,7 +90,7 @@ public class CardServiceSimulationProcessor {
         return caledonResponse;
     }
 
-    public static CaledonFeeCalulationResponse executeFeeCalulation(CaledonFeeCalulationRequest request) {
+    public static CaledonFeeCalulationResponse executeFeeCalulation(CardServiceSimulationCompany company, CaledonFeeCalulationRequest request) {
         CaledonFeeCalulationResponse response = new CaledonFeeCalulationResponse();
         response.type = request.type;
         response.terminalID = request.terminalID;
@@ -95,7 +99,7 @@ public class CardServiceSimulationProcessor {
         response.amount = request.amount;
 
         try {
-            CardServiceSimulationMerchantAccount merchantAccount = ehshureMerchantAccount(request.terminalID);
+            CardServiceSimulationMerchantAccount merchantAccount = ehshureMerchantAccount(company, request.terminalID);
             if (!merchantAccount.responseCode().isNull()) {
                 response.responseCode = merchantAccount.responseCode().getValue();
                 response.responseText = "Simulated merchant code '" + response.responseCode + "'";
@@ -126,7 +130,7 @@ public class CardServiceSimulationProcessor {
         return amount.multiply(feePercent).setScale(2, RoundingMode.HALF_UP);
     }
 
-    public static CaledonPaymentWithFeeResponse executePaymentWithFee(CaledonPaymentWithFeeRequest request) {
+    public static CaledonPaymentWithFeeResponse executePaymentWithFee(CardServiceSimulationCompany company, CaledonPaymentWithFeeRequest request) {
         CaledonPaymentWithFeeResponse response = new CaledonPaymentWithFeeResponse();
         response.type = request.type;
         response.terminalID = request.terminalID;
@@ -139,7 +143,7 @@ public class CardServiceSimulationProcessor {
         response.totalAmount = request.totalAmount;
 
         try {
-            CardServiceSimulationMerchantAccount merchantAccount = ehshureMerchantAccount(request.terminalID);
+            CardServiceSimulationMerchantAccount merchantAccount = ehshureMerchantAccount(company, request.terminalID);
             if (!merchantAccount.responseCode().isNull()) {
                 response.responseCode = merchantAccount.responseCode().getValue();
                 response.responsePaymentAuthorization = "Simulated merchant code '" + response.responseCode + "'";
@@ -209,15 +213,34 @@ public class CardServiceSimulationProcessor {
         }
     }
 
-    private static CardServiceSimulationMerchantAccount ehshureMerchantAccount(String terminalID) {
+    public static CardServiceSimulationCompany ehshureCompany(final String cardsReconciliationId) {
+        return new UnitOfWork(TransactionScopeOption.RequiresNew).execute(new Executable<CardServiceSimulationCompany, RuntimeException>() {
+            @Override
+            public CardServiceSimulationCompany execute() throws RuntimeException {
+                EntityQueryCriteria<CardServiceSimulationCompany> criteria = EntityQueryCriteria.create(CardServiceSimulationCompany.class);
+                criteria.eq(criteria.proto().companyId(), cardsReconciliationId);
+                CardServiceSimulationCompany company = Persistence.service().retrieve(criteria);
+                if (company == null) {
+                    company = EntityFactory.create(CardServiceSimulationCompany.class);
+                    company.companyId().setValue(cardsReconciliationId);
+                    Persistence.service().persist(company);
+                }
+                return company;
+            }
+        });
+    }
+
+    private static CardServiceSimulationMerchantAccount ehshureMerchantAccount(CardServiceSimulationCompany company, String terminalID) {
         if (CommonsStringUtils.isEmpty(terminalID)) {
             throw new Error("No terminalID");
         }
         EntityQueryCriteria<CardServiceSimulationMerchantAccount> criteria = EntityQueryCriteria.create(CardServiceSimulationMerchantAccount.class);
         criteria.eq(criteria.proto().terminalID(), terminalID);
+        criteria.eq(criteria.proto().company(), company);
         CardServiceSimulationMerchantAccount merchantAccount = Persistence.service().retrieve(criteria);
         if (merchantAccount == null) {
             merchantAccount = EntityFactory.create(CardServiceSimulationMerchantAccount.class);
+            merchantAccount.company().set(company);
             merchantAccount.terminalID().setValue(terminalID);
             merchantAccount.balance().setValue(BigDecimal.ZERO);
 
@@ -360,7 +383,7 @@ public class CardServiceSimulationProcessor {
         CardServiceSimulationMerchantAccount convenienceFeeMerchantAccount = null;
         if (caledonRequest instanceof CaledonRequestTokenWithFee) {
             transaction.convenienceFee().setValue(((CaledonRequestTokenWithFee) caledonRequest).feeAmount);
-            convenienceFeeMerchantAccount = ehshureMerchantAccount("ConvFee");
+            convenienceFeeMerchantAccount = ehshureMerchantAccount(merchantAccount.company(), "ConvFee");
         }
 
         CardServiceSimulatorConfig config = CardServiceSimulationUtils.getCardServiceSimulatorConfig();

@@ -42,6 +42,7 @@ import com.pyx4j.rpc.server.RemoteServiceServlet;
 import com.pyx4j.server.contexts.LifecycleFilter;
 
 import com.propertyvista.biz.system.AuditSessionListener;
+import com.propertyvista.config.BankingSimulatorConfiguration;
 import com.propertyvista.domain.security.common.VistaApplication;
 import com.propertyvista.ils.ILSAuthFilter;
 import com.propertyvista.ils.kijiji.rs.KijijiApiRsApplication;
@@ -230,7 +231,7 @@ public class VistaWebApplicationInitializer implements ServletContainerInitializ
         {
             {
                 ServletRegistration.Dynamic sc = ctx.addServlet("CardServiceSimulationServlet", CardServiceSimulationServlet.class);
-                sc.addMapping("/o/CardServiceSimulation/*");
+                sc.addMapping("/" + BankingSimulatorConfiguration.cardServiceSimulatorServletMapping + "*");
             }
         }
 

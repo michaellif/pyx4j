@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011-2012 All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -44,6 +44,7 @@ import com.pyx4j.gwt.server.IOUtils;
 
 import com.propertyvista.config.AbstractVistaServerSideConfiguration;
 import com.propertyvista.eft.caledoncards.reports.CardsReconciliationReceiveManager;
+import com.propertyvista.operations.domain.eft.cards.simulator.CardServiceSimulationCompany;
 import com.propertyvista.operations.domain.eft.cards.simulator.CardServiceSimulationMerchantAccount;
 import com.propertyvista.operations.domain.eft.cards.simulator.CardServiceSimulationReconciliationRecord;
 import com.propertyvista.operations.domain.eft.cards.simulator.CardServiceSimulationTransaction;
@@ -58,9 +59,10 @@ public class CardReconciliationSimulationManager {
 
     private static final Logger log = LoggerFactory.getLogger(CardReconciliationSimulationManager.class);
 
-    public String createReports(LogicalDate from, LogicalDate to) {
+    public String createReports(CardServiceSimulationCompany company, LogicalDate from, LogicalDate to) {
         EntityQueryCriteria<CardServiceSimulationTransaction> criteria = EntityQueryCriteria.create(CardServiceSimulationTransaction.class);
         criteria.eq(criteria.proto().transactionType(), SimpulationTransactionType.sale);
+        criteria.eq(criteria.proto().merchant().company(), company);
         criteria.eq(criteria.proto().responseCode(), "0000");
         criteria.eq(criteria.proto().voided(), Boolean.FALSE);
         criteria.ge(criteria.proto().transactionDate(), from);

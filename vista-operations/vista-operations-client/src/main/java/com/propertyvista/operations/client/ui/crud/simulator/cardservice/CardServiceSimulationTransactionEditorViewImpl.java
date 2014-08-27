@@ -42,6 +42,8 @@ public class CardServiceSimulationTransactionEditorViewImpl extends OperationsEd
                     .append(Location.Left, proto().merchant(),
                             OperationsEditorsComponentFactory.createEntityHyperlink(CardServiceSimulationMerchantAccount.class)).decorate().componentWidth(216);
 
+            formPanel.append(Location.Left, proto().merchant().company()).decorate();
+
             formPanel.append(Location.Left, proto().transactionType()).decorate();
             formPanel.append(Location.Left, proto().scheduledSimulatedResponce()).decorate();
             formPanel.append(Location.Left, proto().amount()).decorate();

@@ -34,6 +34,7 @@ import com.propertyvista.operations.domain.eft.caledoneft.simulator.PadSimBatch;
 import com.propertyvista.operations.domain.eft.caledoneft.simulator.PadSimFile;
 import com.propertyvista.operations.domain.eft.cards.CardTransactionRecord;
 import com.propertyvista.operations.domain.eft.cards.simulator.CardServiceSimulationCard;
+import com.propertyvista.operations.domain.eft.cards.simulator.CardServiceSimulationCompany;
 import com.propertyvista.operations.domain.eft.cards.simulator.CardServiceSimulationMerchantAccount;
 import com.propertyvista.operations.domain.eft.cards.simulator.CardServiceSimulationReconciliationRecord;
 import com.propertyvista.operations.domain.eft.cards.simulator.CardServiceSimulationTransaction;
@@ -205,6 +206,7 @@ public class VistaOperationsAccessControlList extends ServletContainerAclBuilder
 
         grant(VistaOperationsBehavior.Caledon, new IServiceExecutePermission(CardServiceSimulationMerchantAccountCrudService.class));
         grant(VistaOperationsBehavior.Caledon, new EntityPermission(CardServiceSimulationMerchantAccount.class, EntityPermission.ALL));
+        grant(VistaOperationsBehavior.Caledon, new EntityPermission(CardServiceSimulationCompany.class, EntityPermission.READ));
 
         grant(VistaOperationsBehavior.Caledon, new IServiceExecutePermission(CardServiceSimulationReconciliationCrudService.class));
         grant(VistaOperationsBehavior.Caledon, new EntityPermission(CardServiceSimulationReconciliationRecord.class, EntityPermission.ALL));

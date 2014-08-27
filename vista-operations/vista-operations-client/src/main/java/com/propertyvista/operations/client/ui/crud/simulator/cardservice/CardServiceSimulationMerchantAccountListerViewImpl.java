@@ -27,12 +27,13 @@ public class CardServiceSimulationMerchantAccountListerViewImpl extends Operatio
 
         public CardServiceSimulationLister() {
             super(CardServiceSimulationMerchantAccount.class, true, true);
-            setDataTableModel(new DataTableModel<CardServiceSimulationMerchantAccount>(//@formatter:off
-                    new MemberColumnDescriptor.Builder(proto().terminalID()).build(),
-                    new MemberColumnDescriptor.Builder(proto().balance()).build(),
-                    new MemberColumnDescriptor.Builder(proto().responseCode()).build(),
-                    new MemberColumnDescriptor.Builder(proto().created()).build()
-            ));//@formatter:off
+            setDataTableModel(new DataTableModel<CardServiceSimulationMerchantAccount>(//
+                    new MemberColumnDescriptor.Builder(proto().terminalID()).build(), //
+                    new MemberColumnDescriptor.Builder(proto().company()).build(), //
+                    new MemberColumnDescriptor.Builder(proto().balance()).build(), //
+                    new MemberColumnDescriptor.Builder(proto().responseCode()).build(), //
+                    new MemberColumnDescriptor.Builder(proto().created()).build() //
+            ));
         }
     }
 

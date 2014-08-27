@@ -39,6 +39,7 @@ import com.propertyvista.eft.caledoncards.CaledonRequestToken;
 import com.propertyvista.eft.caledoncards.CaledonResponse;
 import com.propertyvista.eft.caledoncards.HttpRequestField;
 import com.propertyvista.eft.caledoncards.HttpResponseField;
+import com.propertyvista.operations.domain.eft.cards.simulator.CardServiceSimulationCompany;
 import com.propertyvista.operations.domain.eft.cards.simulator.CardServiceSimulatorConfig;
 
 @SuppressWarnings("serial")
@@ -106,24 +107,37 @@ public class CardServiceSimulationServlet extends HttpServlet {
     }
 
     private String processTransaction(boolean convFeeApi, HttpServletRequest httpRequest) throws IOException {
+        CardServiceSimulationCompany company = getCompany(convFeeApi, httpRequest);
         if (convFeeApi) {
             String type = httpRequest.getParameter("type");
             if (CaledonFeeRequestTypes.FeeCalulation.getIntrfaceValue().equals(type)) {
                 CaledonFeeCalulationRequest caledonRequest = buildCaledonRequest(httpRequest, new CaledonFeeCalulationRequest());
-                CaledonFeeCalulationResponse caledonResponse = CardServiceSimulationProcessor.executeFeeCalulation(caledonRequest);
+                CaledonFeeCalulationResponse caledonResponse = CardServiceSimulationProcessor.executeFeeCalulation(company, caledonRequest);
                 return buildResponse(caledonResponse);
             } else if (CaledonFeeRequestTypes.PaymentWithFee.getIntrfaceValue().equals(type) || CaledonFeeRequestTypes.Void.getIntrfaceValue().equals(type)) {
                 CaledonPaymentWithFeeRequest caledonRequest = buildCaledonRequest(httpRequest, new CaledonPaymentWithFeeRequest());
-                CaledonPaymentWithFeeResponse caledonResponse = CardServiceSimulationProcessor.executePaymentWithFee(caledonRequest);
+                CaledonPaymentWithFeeResponse caledonResponse = CardServiceSimulationProcessor.executePaymentWithFee(company, caledonRequest);
                 return buildResponse(caledonResponse);
             } else {
                 return "&response_code=C001&response_text=Simulation type Rejected";
             }
         } else {
             CaledonRequestToken caledonRequest = buildCaledonRequest(httpRequest, new CaledonRequestToken());
-            CaledonResponse caledonResponse = CardServiceSimulationProcessor.execute(caledonRequest);
+            CaledonResponse caledonResponse = CardServiceSimulationProcessor.execute(company, caledonRequest);
             return buildResponse(caledonResponse);
         }
+    }
+
+    private static CardServiceSimulationCompany getCompany(boolean convFeeApi, HttpServletRequest httpRequest) throws IOException {
+        String cardsReconciliationId = httpRequest.getPathInfo().substring(1);
+        int idx = cardsReconciliationId.indexOf("/");
+        if (idx > 0) {
+            cardsReconciliationId = cardsReconciliationId.substring(0, idx);
+        }
+        if ("convfee".equals(cardsReconciliationId)) {
+            cardsReconciliationId = "";
+        }
+        return CardServiceSimulationProcessor.ehshureCompany(cardsReconciliationId);
     }
 
     private <E> E buildCaledonRequest(HttpServletRequest httpRequest, E caledonRequest) {
