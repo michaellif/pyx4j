@@ -66,6 +66,7 @@ import com.propertyvista.domain.company.Notification.NotificationType;
 import com.propertyvista.domain.company.Portfolio;
 import com.propertyvista.domain.policy.policies.domain.IdAssignmentItem.IdTarget;
 import com.propertyvista.domain.property.asset.building.Building;
+import com.propertyvista.domain.security.UserAuditingConfigurationDTO;
 import com.propertyvista.domain.security.VistaCrmBehavior;
 import com.propertyvista.misc.VistaTODO;
 import com.propertyvista.shared.config.VistaFeatures;
@@ -74,17 +75,25 @@ public class EmployeeForm extends CrmEntityForm<EmployeeDTO> {
 
     private static final I18n i18n = I18n.get(EmployeeForm.class);
 
-    private final Tab privilegesTab, auditingTab, alertsTab;
+    private final Tab personalInfoTab, privilegesTab, auditingTab, alertsTab;
 
     private final FormPanel buildingsAccessPanel;
 
     public EmployeeForm(IForm<EmployeeDTO> view) {
         super(EmployeeDTO.class, view);
         buildingsAccessPanel = new FormPanel(this);
-        selectTab(addTab(createInfoTab(), i18n.tr("Personal Information")));
-        privilegesTab = addTab(createPrivilegesTab(), i18n.tr("Privileges"));
-        auditingTab = addTab(createAuditingConfigurationTab(), i18n.tr("Auditing"));
-        alertsTab = addTab(createAlertsTab(), i18n.tr("Alerts"));
+
+        selectTab(personalInfoTab = addTab(createInfoTab(), i18n.tr("Personal Information"), DataModelPermission.permissionRead(EmployeeDTO.class)));
+        privilegesTab = addTab(createPrivilegesTab(), i18n.tr("Privileges"), DataModelPermission.permissionRead(EmployeePrivilegesDTO.class));
+        auditingTab = addTab(createAuditingConfigurationTab(), i18n.tr("Auditing"), DataModelPermission.permissionRead(UserAuditingConfigurationDTO.class));
+        alertsTab = addTab(createAlertsTab(), i18n.tr("Alerts"), DataModelPermission.permissionRead(Notification.class));
+
+        if (isEditable()) {
+            personalInfoTab.setPermitEnabledPermission(DataModelPermission.permissionUpdate(EmployeeDTO.class));
+            privilegesTab.setPermitEnabledPermission(DataModelPermission.permissionUpdate(EmployeePrivilegesDTO.class));
+            auditingTab.setPermitEnabledPermission(DataModelPermission.permissionUpdate(UserAuditingConfigurationDTO.class));
+            alertsTab.setPermitEnabledPermission(DataModelPermission.permissionUpdate(Notification.class));
+        }
     }
 
     @Override
@@ -139,7 +148,7 @@ public class EmployeeForm extends CrmEntityForm<EmployeeDTO> {
         get(proto().mobilePhone()).setVisible(isManager || isSelfEditor);
         get(proto().signature().file()).setVisible(isManager || isSelfEditor);
 
-        privilegesTab.setTabVisible(isManager && SecurityController.check(DataModelPermission.permissionRead(EmployeePrivilegesDTO.class)));
+        privilegesTab.setTabVisible(isManager);
         auditingTab.setTabVisible(VistaTODO.VISTA_4066_EmployeeAuditingEmailNotificationsImplemented && (isSelfEditor || isManager));
         alertsTab.setTabVisible(isSelfEditor || isManager);
     }

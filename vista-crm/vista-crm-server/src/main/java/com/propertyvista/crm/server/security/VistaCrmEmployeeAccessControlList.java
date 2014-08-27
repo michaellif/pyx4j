@@ -39,8 +39,10 @@ import com.propertyvista.crm.rpc.services.organization.SelectCrmRoleListService;
 import com.propertyvista.crm.rpc.services.security.CrmAccountRecoveryOptionsUserService;
 import com.propertyvista.crm.rpc.services.security.CrmPasswordChangeUserService;
 import com.propertyvista.domain.company.Employee;
+import com.propertyvista.domain.company.Notification;
 import com.propertyvista.domain.company.Portfolio;
 import com.propertyvista.domain.security.CrmRole;
+import com.propertyvista.domain.security.UserAuditingConfigurationDTO;
 import com.propertyvista.domain.security.common.VistaBasicBehavior;
 
 class VistaCrmEmployeeAccessControlList extends UIAclBuilder {
@@ -62,22 +64,28 @@ class VistaCrmEmployeeAccessControlList extends UIAclBuilder {
         }
 
         // ------ Employee View and Management
-        grant(EmployeeFull, new ActionPermission(EmployeeDirectoryList.class));
         grant(EmployeeBasic, EmployeeDTO.class, READ);
+        grant(EmployeeBasic, Notification.class, READ);
+
         grant(EmployeeFull, EmployeeDTO.class, ALL);
         grant(EmployeeFull, EmployeePrivilegesDTO.class, ALL);
+        grant(EmployeeFull, UserAuditingConfigurationDTO.class, ALL);
+        grant(EmployeeFull, Notification.class, ALL);
 
+        grant(EmployeeFull, new ActionPermission(EmployeeDirectoryList.class));
         grant(EmployeeFull, new ActionPermission(CRMUserSecurityActions.class));
 
         //-- back-end
         {
-            grant(EmployeeBasic, new IServiceExecutePermission(EmployeeCrudService.class));
             grant(EmployeeBasic, new EntityPermission(Employee.class, READ));
+            grant(EmployeeBasic, new IServiceExecutePermission(EmployeeCrudService.class));
 
             grant(EmployeeFull, new EntityPermission(Employee.class, ALL));
             grant(EmployeeFull, new EntityPermission(CrmRole.class, READ));
-            grant(EmployeeFull, new IServiceExecutePermission(SelectCrmRoleListService.class));
+
+            grant(EmployeeFull, new IServiceExecutePermission(EmployeeCrudService.class));
             grant(EmployeeFull, new IServiceExecutePermission(ManagedCrmUserService.class));
+            grant(EmployeeFull, new IServiceExecutePermission(SelectCrmRoleListService.class));
 
         }
         grant(EmployeeFull, EmployeeBasic);
