@@ -96,7 +96,7 @@ public class PaymentPostingCheckYardiTest extends PaymentYardiTestBase {
 
         {
             Lease leaseCurrent = Persistence.service().retrieve(Lease.class, lease.getPrimaryKey());
-            assertEquals("initial lease version", Integer.valueOf(2), leaseCurrent.currentTerm().version().versionNumber().getValue());
+            assertEquals("initial lease version", Integer.valueOf(1), leaseCurrent.currentTerm().version().versionNumber().getValue());
         }
 
         // Make change in Yardi before posting payment.
@@ -121,7 +121,7 @@ public class PaymentPostingCheckYardiTest extends PaymentYardiTestBase {
 
         {
             Lease leaseCurrent = Persistence.service().retrieve(Lease.class, lease.getPrimaryKey());
-            assertEquals("update lease version", Integer.valueOf(3), leaseCurrent.currentTerm().version().versionNumber().getValue());
+            assertEquals("update lease version", Integer.valueOf(2), leaseCurrent.currentTerm().version().versionNumber().getValue());
         }
 
         new PaymentRecordTester(getLease().billingAccount()).lastRecordStatus(PaymentStatus.Received);
@@ -160,7 +160,7 @@ public class PaymentPostingCheckYardiTest extends PaymentYardiTestBase {
 
         {
             Lease leaseCurrent = Persistence.service().retrieve(Lease.class, lease.getPrimaryKey());
-            assertEquals("initial lease version", Integer.valueOf(2), leaseCurrent.currentTerm().version().versionNumber().getValue());
+            assertEquals("initial lease version", Integer.valueOf(1), leaseCurrent.currentTerm().version().versionNumber().getValue());
         }
 
         // Make change in Yardi before posting payment.
@@ -185,7 +185,7 @@ public class PaymentPostingCheckYardiTest extends PaymentYardiTestBase {
 
         {
             Lease leaseCurrent = Persistence.service().retrieve(Lease.class, lease.getPrimaryKey());
-            assertEquals("update lease version", Integer.valueOf(3), leaseCurrent.currentTerm().version().versionNumber().getValue());
+            assertEquals("update lease version", Integer.valueOf(2), leaseCurrent.currentTerm().version().versionNumber().getValue());
         }
 
         new PaymentRecordTester(getLease().billingAccount()).lastRecordStatus(PaymentStatus.Received);
