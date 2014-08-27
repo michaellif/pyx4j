@@ -117,7 +117,7 @@ public abstract class CTextFieldBase<DATA, WIDGET extends INativeTextComponent<D
     }
 
     @Override
-    public boolean isValuesEquals(DATA value1, DATA value2) {
+    public boolean isValuesEqual(DATA value1, DATA value2) {
         //This takes in consideration that 2 values can be null but actual state of component is not empty after failed parsing
         return value1 != null && value1 == value2;
     }

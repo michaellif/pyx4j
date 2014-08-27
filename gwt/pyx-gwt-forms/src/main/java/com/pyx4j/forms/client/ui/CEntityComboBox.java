@@ -241,7 +241,7 @@ public class CEntityComboBox<E extends IEntity> extends CComboBox<E> implements 
     }
 
     @Override
-    public boolean isValuesEquals(E value1, E value2) {
+    public boolean isValuesEqual(E value1, E value2) {
         if (((value1 == null) || value1.isNull()) && ((value2 == null) || value2.isNull())) {
             return true;
         } else if (isUseNamesComparison()) {

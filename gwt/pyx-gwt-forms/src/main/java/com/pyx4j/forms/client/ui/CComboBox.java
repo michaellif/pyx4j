@@ -98,7 +98,7 @@ public class CComboBox<E> extends CFocusComponent<E, NComboBox<E>> implements Ha
             @Override
             public int indexOf(Object o) {
                 for (int i = 0; i < this.size(); i++) {
-                    if (isValuesEquals(this.get(i), (E) o)) {
+                    if (isValuesEqual(this.get(i), (E) o)) {
                         return i;
                     }
                 }
@@ -140,7 +140,7 @@ public class CComboBox<E> extends CFocusComponent<E, NComboBox<E>> implements Ha
             getNativeComponent().removeOption(opt);
         }
         options.remove(opt);
-        if (isValuesEquals(getValue(), opt)) {
+        if (isValuesEqual(getValue(), opt)) {
             setValue(null);
         }
     }

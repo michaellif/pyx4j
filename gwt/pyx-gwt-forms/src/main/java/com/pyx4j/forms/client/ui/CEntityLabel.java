@@ -43,7 +43,7 @@ public class CEntityLabel<E extends IEntity> extends CLabel<E> {
      * Allow presentation update of the same entity when setValue is called
      */
     @Override
-    public boolean isValuesEquals(E value1, E value2) {
+    public boolean isValuesEqual(E value1, E value2) {
         return value1 == value2;
     }
 }

@@ -145,6 +145,16 @@ public abstract class CComponent<SELF_TYPE extends CComponent<SELF_TYPE, DATA_TY
                     }
                 }
             });
+
+            addValueChangeHandler(new ValueChangeHandler<DATA_TYPE>() {
+
+                @Override
+                public void onValueChange(ValueChangeEvent<DATA_TYPE> event) {
+                    if (asWidget() != null) {
+                        asWidget().getElement().setAttribute(DEV_ATTR, CComponent.this.getDebugInfo());
+                    }
+                }
+            });
         }
     }
 
@@ -332,10 +342,10 @@ public abstract class CComponent<SELF_TYPE extends CComponent<SELF_TYPE, DATA_TY
     public boolean isMandatoryConditionMet() {
         for (AbstractValidationError error : validationErrors) {
             if (error instanceof MandatoryValidationError) {
-                return true;
+                return false;
             }
         }
-        return false;
+        return true;
     }
 
     public void setMandatoryValidationMessage(String message) {
@@ -489,25 +499,10 @@ public abstract class CComponent<SELF_TYPE extends CComponent<SELF_TYPE, DATA_TY
         PropertyChangeEvent.fire(this, PropertyChangeEvent.PropertyName.reset);
     }
 
-    protected final void update(DATA_TYPE value) {
-        if (!isValuesEquals(getValue(), value)) {
-            this.value = value;
-            revalidate();
-            //Overwrite native value with the value that has been formatted by getNativeValue()
-            if (isValid()) {
-                setEditorValue(value);
-            }
-            if (getParent() != null) {
-                getParent().updateContainer(this);
-            }
-            ValueChangeEvent.fire(this, value);
-        }
-    }
-
     public final void setValue(DATA_TYPE value, boolean fireEvent, boolean populate) {
 
         //In case of CComponent model represented by IEntity, disable check for equality because value may be the same instance that is returned by getValue()
-        if (value instanceof IEntity || !isValuesEquals(getValue(), value)) {
+        if (value instanceof IEntity || !isValuesEqual(getValue(), value)) {
             this.value = preprocessValue(value, fireEvent, populate);
             setEditorValue(this.value);
             revalidate();
@@ -581,7 +576,7 @@ public abstract class CComponent<SELF_TYPE extends CComponent<SELF_TYPE, DATA_TY
         return getValue() == null || (getValue() instanceof IEntity && ((IEntity) getValue()).isNull());
     }
 
-    public boolean isValuesEquals(DATA_TYPE value1, DATA_TYPE value2) {
+    public boolean isValuesEqual(DATA_TYPE value1, DATA_TYPE value2) {
         return value1 == value2;
     }
 
@@ -672,10 +667,25 @@ public abstract class CComponent<SELF_TYPE extends CComponent<SELF_TYPE, DATA_TY
             boolean wasVisited = isVisited();
             editingInProgress = false;
             setVisited(true);
+            DATA_TYPE editorValue;
             try {
-                update(getEditorValue());
+                editorValue = getEditorValue();
             } catch (ParseException e) {
-                update(null);
+                editorValue = null;
+            }
+
+            this.value = editorValue;
+
+            if (isValueEmpty() || !isValuesEqual(this.value, editorValue)) {
+                revalidate();
+                //Overwrite native value with the value that has been formatted by getNativeValue()
+                if (isValid()) {
+                    setEditorValue(this.value);
+                }
+                if (getParent() != null) {
+                    getParent().updateContainer(this);
+                }
+                ValueChangeEvent.fire(this, this.value);
             }
 
             if (!wasEmpty || (wasEmpty && !isValueEmpty())) {
@@ -698,6 +708,7 @@ public abstract class CComponent<SELF_TYPE extends CComponent<SELF_TYPE, DATA_TY
         info.append("type").append("=").append(getClass().getSimpleName()).append(";");
         info.append("title").append("=").append(getTitle()).append(";");
         info.append("mandatory").append("=").append(isMandatory()).append(";");
+        info.append("mandatoryCondtitionMet").append("=").append(isMandatoryConditionMet()).append(";");
         info.append("enabled").append("=").append(isEnabled()).append(";");
         info.append("editable").append("=").append(isEditable()).append(";");
         info.append("visible").append("=").append(isVisible()).append(";");

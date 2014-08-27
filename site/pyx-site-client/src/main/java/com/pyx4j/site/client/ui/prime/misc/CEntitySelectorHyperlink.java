@@ -41,8 +41,4 @@ public abstract class CEntitySelectorHyperlink<E extends IEntity> extends CTextF
         setNativeComponent(new NEntitySelectorHyperlink<E>(this));
     }
 
-    @Override
-    public boolean isValueEmpty() {
-        return (super.isValueEmpty() || getValue().isEmpty());
-    }
 }

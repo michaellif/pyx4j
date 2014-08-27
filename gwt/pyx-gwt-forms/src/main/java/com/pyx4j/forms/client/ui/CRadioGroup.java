@@ -59,7 +59,7 @@ public abstract class CRadioGroup<E> extends CFocusComponent<E, NRadioGroup<E>> 
             @Override
             public int indexOf(Object o) {
                 for (int i = 0; i < this.size(); i++) {
-                    if (isValuesEquals(this.get(i), (E) o)) {
+                    if (isValuesEqual(this.get(i), (E) o)) {
                         return i;
                     }
                 }
