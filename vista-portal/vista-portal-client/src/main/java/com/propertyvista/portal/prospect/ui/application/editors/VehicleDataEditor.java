@@ -22,7 +22,7 @@ import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.domain.tenant.lease.extradata.Vehicle;
-import com.propertyvista.portal.shared.ui.PortalFormPanel;
+import com.pyx4j.forms.client.ui.panels.FormPanel;
 
 public class VehicleDataEditor extends CForm<Vehicle> {
 
@@ -38,7 +38,7 @@ public class VehicleDataEditor extends CForm<Vehicle> {
 
     @Override
     protected IsWidget createContent() {
-        PortalFormPanel formPanel = new PortalFormPanel(this);
+        FormPanel formPanel = new FormPanel(this);
 
         formPanel.h3(i18n.tr("Vehicle Data"));
 

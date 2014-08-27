@@ -24,7 +24,7 @@ import com.pyx4j.rpc.client.DefaultAsyncCallback;
 
 import com.propertyvista.domain.person.Person;
 import com.propertyvista.portal.rpc.portal.prospect.dto.GuarantorDTO;
-import com.propertyvista.portal.shared.ui.PortalFormPanel;
+import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.propertyvista.portal.shared.ui.util.PortalBoxFolder;
 import com.propertyvista.shared.services.dev.MockDataGenerator;
 
@@ -58,7 +58,7 @@ public class GuarantorsFolder extends PortalBoxFolder<GuarantorDTO> {
 
         @Override
         protected IsWidget createContent() {
-            PortalFormPanel formPanel = new PortalFormPanel(this);
+            FormPanel formPanel = new FormPanel(this);
             formPanel.append(Location.Left, proto().name().firstName()).decorate();
             formPanel.append(Location.Left, proto().name().lastName()).decorate();
             formPanel.append(Location.Left, proto().relationship()).decorate();

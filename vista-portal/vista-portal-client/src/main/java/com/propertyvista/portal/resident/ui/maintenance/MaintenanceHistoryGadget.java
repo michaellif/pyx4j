@@ -26,7 +26,7 @@ import com.propertyvista.portal.rpc.portal.resident.dto.maintenance.MaintenanceR
 import com.propertyvista.portal.rpc.portal.resident.dto.maintenance.MaintenanceSummaryDTO;
 import com.propertyvista.portal.shared.resources.PortalImages;
 import com.propertyvista.portal.shared.ui.AbstractGadget;
-import com.propertyvista.portal.shared.ui.PortalFormPanel;
+import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.propertyvista.portal.shared.ui.util.PortalBoxFolder;
 
 public class MaintenanceHistoryGadget extends AbstractGadget<MaintenanceDashboardViewImpl> {
@@ -61,7 +61,7 @@ public class MaintenanceHistoryGadget extends AbstractGadget<MaintenanceDashboar
 
         @Override
         protected IsWidget createContent() {
-            PortalFormPanel formPanel = new PortalFormPanel(this);
+            FormPanel formPanel = new FormPanel(this);
             formPanel.append(Location.Left, proto().closedMaintenanceRequests(), new ClosedMaintenanceRequestsFolder());
             formPanel.append(Location.Left, message);
             return formPanel;

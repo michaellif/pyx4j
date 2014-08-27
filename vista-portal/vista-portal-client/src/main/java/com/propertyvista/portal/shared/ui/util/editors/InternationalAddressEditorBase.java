@@ -31,7 +31,7 @@ import com.propertyvista.common.client.ui.components.editors.PostalCodeFormat;
 import com.propertyvista.common.client.ui.validators.ZipCodeValueValidator;
 import com.propertyvista.domain.contact.InternationalAddress;
 import com.propertyvista.domain.ref.ISOCountry;
-import com.propertyvista.portal.shared.ui.PortalFormPanel;
+import com.pyx4j.forms.client.ui.panels.FormPanel;
 
 public class InternationalAddressEditorBase<A extends InternationalAddress> extends CForm<A> {
 
@@ -47,7 +47,7 @@ public class InternationalAddressEditorBase<A extends InternationalAddress> exte
 
     @Override
     protected IsWidget createContent() {
-        PortalFormPanel formPanel = new PortalFormPanel(this);
+        FormPanel formPanel = new FormPanel(this);
 
         formPanel.append(Location.Left, proto().country(), new CCountryComboBox(ISOCountry.Canada, ISOCountry.UnitedStates)).decorate();
         formPanel.append(Location.Left, proto().streetNumber()).decorate();

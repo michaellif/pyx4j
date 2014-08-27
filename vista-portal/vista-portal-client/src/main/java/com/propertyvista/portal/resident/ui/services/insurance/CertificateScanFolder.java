@@ -26,7 +26,7 @@ import com.pyx4j.i18n.shared.I18n;
 import com.propertyvista.common.client.VistaFileURLBuilder;
 import com.propertyvista.domain.tenant.insurance.InsuranceCertificateScan;
 import com.propertyvista.portal.rpc.portal.resident.services.services.InsuranceCertificateScanResidentUploadService;
-import com.propertyvista.portal.shared.ui.PortalFormPanel;
+import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.propertyvista.portal.shared.ui.util.PortalBoxFolder;
 
 public class CertificateScanFolder extends PortalBoxFolder<InsuranceCertificateScan> {
@@ -51,7 +51,7 @@ public class CertificateScanFolder extends PortalBoxFolder<InsuranceCertificateS
 
         @Override
         protected IsWidget createContent() {
-            PortalFormPanel formPanel = new PortalFormPanel(this);
+            FormPanel formPanel = new FormPanel(this);
 
             CFile cfile = new CFile(GWT.<UploadService<?, ?>> create(InsuranceCertificateScanResidentUploadService.class), new VistaFileURLBuilder(
                     InsuranceCertificateScan.class));

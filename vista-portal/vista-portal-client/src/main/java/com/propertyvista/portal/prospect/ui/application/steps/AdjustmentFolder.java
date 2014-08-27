@@ -21,7 +21,7 @@ import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 
 import com.propertyvista.domain.tenant.lease.BillableItemAdjustment;
-import com.propertyvista.portal.shared.ui.PortalFormPanel;
+import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.propertyvista.portal.shared.ui.util.PortalBoxFolder;
 
 public class AdjustmentFolder extends PortalBoxFolder<BillableItemAdjustment> {
@@ -44,7 +44,7 @@ public class AdjustmentFolder extends PortalBoxFolder<BillableItemAdjustment> {
 
         @Override
         protected IsWidget createContent() {
-            PortalFormPanel formPanel = new PortalFormPanel(this);
+            FormPanel formPanel = new FormPanel(this);
 
             formPanel.append(Location.Left, proto().value()).decorate();
             formPanel.append(Location.Left, proto().effectiveDate(), new CDateLabel()).decorate();

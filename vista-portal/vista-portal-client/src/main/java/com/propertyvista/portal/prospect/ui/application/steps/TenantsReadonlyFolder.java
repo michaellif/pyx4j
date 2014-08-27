@@ -23,7 +23,7 @@ import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 
 import com.propertyvista.domain.person.Name;
 import com.propertyvista.portal.rpc.portal.prospect.dto.TenantDTO;
-import com.propertyvista.portal.shared.ui.PortalFormPanel;
+import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.propertyvista.portal.shared.ui.util.PortalBoxFolder;
 
 public class TenantsReadonlyFolder extends PortalBoxFolder<TenantDTO> {
@@ -46,7 +46,7 @@ public class TenantsReadonlyFolder extends PortalBoxFolder<TenantDTO> {
 
         @Override
         protected IsWidget createContent() {
-            PortalFormPanel formPanel = new PortalFormPanel(this);
+            FormPanel formPanel = new FormPanel(this);
             formPanel.append(Location.Left, proto().name(), new CEntityLabel<Name>()).decorate();
             formPanel.append(Location.Left, proto().role(), new CEnumLabel()).decorate();
 

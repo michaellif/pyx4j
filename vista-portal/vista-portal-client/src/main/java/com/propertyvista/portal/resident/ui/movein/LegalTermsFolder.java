@@ -27,7 +27,7 @@ import com.propertyvista.domain.security.CustomerSignature;
 import com.propertyvista.domain.tenant.lease.SignedAgreementLegalTerm;
 import com.propertyvista.portal.shared.ui.OriginalSignatureMock;
 import com.propertyvista.portal.shared.ui.OriginalSignatureValidator;
-import com.propertyvista.portal.shared.ui.PortalFormPanel;
+import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.propertyvista.portal.shared.ui.util.PortalBoxFolder;
 
 public class LegalTermsFolder extends PortalBoxFolder<SignedAgreementLegalTerm> {
@@ -52,7 +52,7 @@ public class LegalTermsFolder extends PortalBoxFolder<SignedAgreementLegalTerm> 
 
         @Override
         protected IsWidget createContent() {
-            PortalFormPanel formPanel = new PortalFormPanel(this);
+            FormPanel formPanel = new FormPanel(this);
             CLabel<String> caption = new CLabel<String>();
             caption.asWidget().addStyleName(FlexFormPanelTheme.StyleName.FormFlexPanelH1Label.name());
             formPanel.append(Location.Left, proto().term().title(), caption);

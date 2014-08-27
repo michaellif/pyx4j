@@ -31,7 +31,7 @@ import com.propertyvista.domain.payment.PaymentType;
 import com.propertyvista.domain.security.VistaCustomerPaymentTypeBehavior;
 import com.propertyvista.portal.rpc.portal.resident.dto.financial.PaymentMethodDTO;
 import com.propertyvista.portal.shared.ui.CPortalEntityEditor;
-import com.propertyvista.portal.shared.ui.PortalFormPanel;
+import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.propertyvista.portal.shared.ui.util.editors.PortalPaymentMethodEditor;
 
 public class PaymentMethodViewForm extends CPortalEntityEditor<PaymentMethodDTO> {
@@ -46,7 +46,7 @@ public class PaymentMethodViewForm extends CPortalEntityEditor<PaymentMethodDTO>
 
     @Override
     protected IsWidget createContent() {
-        PortalFormPanel formPanel = new PortalFormPanel(this);
+        FormPanel formPanel = new FormPanel(this);
 
         formPanel.append(Location.Left, proto().paymentMethod(), new PortalPaymentMethodEditor<LeasePaymentMethod>(LeasePaymentMethod.class) {
 

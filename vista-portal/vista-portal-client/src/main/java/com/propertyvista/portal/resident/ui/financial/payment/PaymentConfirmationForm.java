@@ -36,7 +36,7 @@ import com.propertyvista.dto.PaymentRecordDTO;
 import com.propertyvista.portal.resident.ui.financial.payment.PaymentConfirmationView.PaymentConfirmationPresenter;
 import com.propertyvista.portal.shared.ui.AbstractFormView;
 import com.propertyvista.portal.shared.ui.CPortalEntityForm;
-import com.propertyvista.portal.shared.ui.PortalFormPanel;
+import com.pyx4j.forms.client.ui.panels.FormPanel;
 
 public class PaymentConfirmationForm extends CPortalEntityForm<PaymentRecordDTO> {
 
@@ -56,7 +56,7 @@ public class PaymentConfirmationForm extends CPortalEntityForm<PaymentRecordDTO>
 
     @Override
     protected IsWidget createContent() {
-        PortalFormPanel formPanel = new PortalFormPanel(this);
+        FormPanel formPanel = new FormPanel(this);
 
         formPanel.append(Location.Left, proto().id(), new CNumberLabel()).decorate().customLabel(i18n.tr("Reference Number"));
         formPanel.append(Location.Left, proto().paymentMethod(), new CEntityLabel<LeasePaymentMethod>()).decorate();

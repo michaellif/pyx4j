@@ -30,7 +30,7 @@ import com.propertyvista.portal.rpc.portal.resident.dto.ResidentAccountDTO;
 import com.propertyvista.portal.shared.themes.EntityViewTheme;
 import com.propertyvista.portal.shared.themes.NavigationAnchorTheme;
 import com.propertyvista.portal.shared.ui.CPortalEntityForm;
-import com.propertyvista.portal.shared.ui.PortalFormPanel;
+import com.pyx4j.forms.client.ui.panels.FormPanel;
 
 public class AccountPage extends CPortalEntityForm<ResidentAccountDTO> {
 
@@ -43,7 +43,7 @@ public class AccountPage extends CPortalEntityForm<ResidentAccountDTO> {
 
     @Override
     protected IsWidget createContent() {
-        PortalFormPanel formPanel = new PortalFormPanel(this);
+        FormPanel formPanel = new FormPanel(this);
         formPanel.h1(i18n.tr("Security"));
 
         Anchor anchor = new Anchor("Change my Password", new Command() {

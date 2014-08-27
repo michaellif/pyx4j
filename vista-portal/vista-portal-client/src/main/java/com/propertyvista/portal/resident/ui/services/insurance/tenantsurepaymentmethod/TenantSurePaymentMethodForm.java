@@ -34,7 +34,7 @@ import com.propertyvista.domain.payment.CreditCardInfo.CreditCardType;
 import com.propertyvista.domain.payment.InsurancePaymentMethod;
 import com.propertyvista.domain.payment.PaymentType;
 import com.propertyvista.portal.rpc.portal.resident.ResidentPortalSiteMap.ResidentPortalTerms;
-import com.propertyvista.portal.shared.ui.PortalFormPanel;
+import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.propertyvista.portal.shared.ui.TermsAnchor;
 import com.propertyvista.portal.shared.ui.util.decorators.SignatureDecorator;
 import com.propertyvista.portal.shared.ui.util.editors.PortalPaymentMethodEditor;
@@ -56,7 +56,7 @@ public class TenantSurePaymentMethodForm extends PortalPaymentMethodEditor<Insur
 
     @Override
     protected IsWidget createContent() {
-        PortalFormPanel content = (PortalFormPanel) super.createContent();
+        FormPanel content = (FormPanel) super.createContent();
         content.br();
 
         SafeHtmlBuilder signatureDescriptionBuilder = new SafeHtmlBuilder();

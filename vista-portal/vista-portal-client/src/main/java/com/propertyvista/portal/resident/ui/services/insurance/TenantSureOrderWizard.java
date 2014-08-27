@@ -42,7 +42,7 @@ import com.propertyvista.portal.rpc.portal.resident.dto.insurance.TenantSureQuot
 import com.propertyvista.portal.shared.resources.PortalImages;
 import com.propertyvista.portal.shared.themes.NavigationAnchorTheme;
 import com.propertyvista.portal.shared.ui.CPortalEntityWizard;
-import com.propertyvista.portal.shared.ui.PortalFormPanel;
+import com.pyx4j.forms.client.ui.panels.FormPanel;
 
 public class TenantSureOrderWizard extends CPortalEntityWizard<TenantSureInsurancePolicyDTO> {
 
@@ -97,7 +97,7 @@ public class TenantSureOrderWizard extends CPortalEntityWizard<TenantSureInsuran
     }
 
     private IsWidget createPersonalInfoStep() {
-        PortalFormPanel formPanel = new PortalFormPanel(this);
+        FormPanel formPanel = new FormPanel(this);
 
         formPanel.h1(PortalImages.INSTANCE.residentServicesIcon(), i18n.tr("Personal Disclaimer Terms"));
 
@@ -124,7 +124,7 @@ public class TenantSureOrderWizard extends CPortalEntityWizard<TenantSureInsuran
     }
 
     private IsWidget createInsuranceCoverageStep() {
-        PortalFormPanel formPanel = new PortalFormPanel(this);
+        FormPanel formPanel = new FormPanel(this);
 
         formPanel.append(Location.Left, proto().tenantSureCoverageRequest(), coverageRequestForm = new TenantSureCoverageRequestForm());
         get(proto().tenantSureCoverageRequest()).addValueChangeHandler(new ValueChangeHandler<TenantSureCoverageDTO>() {
@@ -167,7 +167,7 @@ public class TenantSureOrderWizard extends CPortalEntityWizard<TenantSureInsuran
     }
 
     private IsWidget createPaymentMethodStep() {
-        PortalFormPanel formPanel = new PortalFormPanel(this);
+        FormPanel formPanel = new FormPanel(this);
 
         formPanel.h1(i18n.tr("Summary"));
         formPanel.append(Location.Left, proto().tenantSureCoverageRequestConfirmation(), new TenantSureCoverageRequestForm(true));

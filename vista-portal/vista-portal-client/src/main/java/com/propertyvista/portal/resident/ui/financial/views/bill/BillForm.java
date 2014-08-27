@@ -32,7 +32,7 @@ import com.propertyvista.domain.financial.billing.Bill.BillStatus;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.dto.BillDTO;
 import com.propertyvista.dto.InvoiceLineItemGroupDTO;
-import com.propertyvista.portal.shared.ui.PortalFormPanel;
+import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.propertyvista.portal.shared.ui.util.CBuildingLabel;
 
 public class BillForm extends CForm<BillDTO> {
@@ -58,7 +58,7 @@ public class BillForm extends CForm<BillDTO> {
 
     @Override
     protected IsWidget createContent() {
-        PortalFormPanel formPanel = new PortalFormPanel(this);
+        FormPanel formPanel = new FormPanel(this);
 
         if (showInfoSection) {
             formPanel.h1(i18n.tr("Info"));

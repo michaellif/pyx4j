@@ -57,7 +57,7 @@ import com.propertyvista.domain.policy.policies.domain.IdAssignmentItem.IdTarget
 import com.propertyvista.portal.rpc.portal.resident.dto.maintenance.MaintenanceRequestDTO;
 import com.propertyvista.portal.rpc.portal.resident.services.maintenance.MaintenanceRequestPictureUploadPortalService;
 import com.propertyvista.portal.shared.ui.CPortalEntityWizard;
-import com.propertyvista.portal.shared.ui.PortalFormPanel;
+import com.pyx4j.forms.client.ui.panels.FormPanel;
 
 public class MaintenanceRequestWizard extends CPortalEntityWizard<MaintenanceRequestDTO> {
 
@@ -67,17 +67,17 @@ public class MaintenanceRequestWizard extends CPortalEntityWizard<MaintenanceReq
 
     private MaintenanceRequestCategoryChoice mrCategory;
 
-    private PortalFormPanel categoryPanel;
+    private FormPanel categoryPanel;
 
-    private PortalFormPanel permissionPanel;
+    private FormPanel permissionPanel;
 
-    private PortalFormPanel accessPanel;
+    private FormPanel accessPanel;
 
-    private PortalFormPanel statusPanel;
+    private FormPanel statusPanel;
 
     private final PrioritySelector prioritySelector = new PrioritySelector();
 
-    private PortalFormPanel imagePanel;
+    private FormPanel imagePanel;
 
     public MaintenanceRequestWizard(MaintenanceRequestWizardView view) {
         super(MaintenanceRequestDTO.class, view, i18n.tr("New Maintenance Request"), i18n.tr("Submit"), ThemeColor.contrast5);
@@ -119,7 +119,7 @@ public class MaintenanceRequestWizard extends CPortalEntityWizard<MaintenanceReq
     }
 
     public IsWidget createDetailsStep() {
-        PortalFormPanel content = new PortalFormPanel(this);
+        FormPanel content = new FormPanel(this);
 
         content.append(Location.Left, inject(proto().requestId(), new CLabel<String>())).decorate().componentWidth(250);
         content.br();
@@ -127,7 +127,7 @@ public class MaintenanceRequestWizard extends CPortalEntityWizard<MaintenanceReq
 
         // category panel
         bind(mrCategory = new MaintenanceRequestCategoryChoice(), proto().category());
-        content.append(Location.Dual, categoryPanel = new PortalFormPanel(this));
+        content.append(Location.Dual, categoryPanel = new FormPanel(this));
 
         // Description
         content.append(Location.Left, inject(proto().summary())).decorate().componentWidth(250);
@@ -141,7 +141,7 @@ public class MaintenanceRequestWizard extends CPortalEntityWizard<MaintenanceReq
         get(proto().reporterPhone()).setMandatory(true);
         content.br();
 
-        imagePanel = new PortalFormPanel(this);
+        imagePanel = new FormPanel(this);
         CImageSlider<MaintenanceRequestPicture> imageSlider = new CImageSlider<MaintenanceRequestPicture>(MaintenanceRequestPicture.class,
                 GWT.<MaintenanceRequestPictureUploadPortalService> create(MaintenanceRequestPictureUploadPortalService.class), new VistaFileURLBuilder(
                         MaintenanceRequestPicture.class)) {
@@ -152,7 +152,7 @@ public class MaintenanceRequestWizard extends CPortalEntityWizard<MaintenanceReq
 
             @Override
             public Widget getImageEntryView(CForm<MaintenanceRequestPicture> entryForm) {
-                PortalFormPanel main = new PortalFormPanel(entryForm);
+                FormPanel main = new FormPanel(entryForm);
                 CTextField descr = new CTextField();
                 descr.setWatermark(entryForm.proto().description().getMeta().getCaption());
                 main.append(Location.Dual, entryForm.inject(entryForm.proto().description(), descr)).decorate().customLabel("").labelWidth(0)
@@ -165,10 +165,10 @@ public class MaintenanceRequestWizard extends CPortalEntityWizard<MaintenanceReq
         imagePanel.append(Location.Left, inject(proto().pictures(), imageSlider)).decorate().componentWidth(100);
         content.append(Location.Dual, imagePanel);
 
-        accessPanel = new PortalFormPanel(this);
+        accessPanel = new FormPanel(this);
         accessPanel.append(Location.Left, inject(proto().petInstructions())).decorate().componentWidth(250);
         // schedule panel
-        PortalFormPanel schedulePanel = new PortalFormPanel(this);
+        FormPanel schedulePanel = new FormPanel(this);
         schedulePanel.append(Location.Left, inject(proto().preferredDate1())).decorate().componentWidth(120);
         schedulePanel.append(Location.Left, inject(proto().preferredTime1())).decorate().componentWidth(120);
         schedulePanel.append(Location.Left, inject(proto().preferredDate2())).decorate().componentWidth(120);
@@ -178,13 +178,13 @@ public class MaintenanceRequestWizard extends CPortalEntityWizard<MaintenanceReq
         ((CDatePicker) get(proto().preferredDate2())).setPastDateSelectionAllowed(false);
         accessPanel.append(Location.Dual, schedulePanel);
 
-        permissionPanel = new PortalFormPanel(this);
+        permissionPanel = new FormPanel(this);
         permissionPanel.append(Location.Left, inject(proto().permissionToEnter())).decorate().componentWidth(250);
         permissionPanel.append(Location.Dual, accessPanel);
         content.append(Location.Dual, permissionPanel);
         content.br();
 
-        statusPanel = new PortalFormPanel(this);
+        statusPanel = new FormPanel(this);
         statusPanel.h1(i18n.tr("Status"));
         statusPanel.append(Location.Left, inject(proto().status(), new CEntityLabel<MaintenanceRequestStatus>())).decorate().componentWidth(100);
         statusPanel.append(Location.Left, inject(proto().updated(), new CDateLabel())).decorate().componentWidth(100);

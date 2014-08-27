@@ -40,7 +40,7 @@ import com.propertyvista.portal.rpc.portal.prospect.ProspectPortalSiteMap;
 import com.propertyvista.portal.shared.themes.DashboardTheme;
 import com.propertyvista.portal.shared.ui.AbstractGadget;
 import com.propertyvista.portal.shared.ui.GadgetToolbar;
-import com.propertyvista.portal.shared.ui.PortalFormPanel;
+import com.pyx4j.forms.client.ui.panels.FormPanel;
 
 public class ApplicationStatusPageViewImpl extends FlowPanel implements ApplicationStatusPageView {
 
@@ -242,7 +242,7 @@ public class ApplicationStatusPageViewImpl extends FlowPanel implements Applicat
 
             @Override
             protected IsWidget createContent() {
-                PortalFormPanel formPanel = new PortalFormPanel(this);
+                FormPanel formPanel = new FormPanel(this);
                 formPanel.append(Location.Left, proto().progress()).decorate();
                 formPanel.br();
                 formPanel.append(Location.Left, proto().individualApplications(), new ApplicationStatusFolder());

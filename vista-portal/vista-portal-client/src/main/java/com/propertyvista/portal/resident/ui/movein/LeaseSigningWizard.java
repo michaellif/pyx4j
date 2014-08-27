@@ -29,13 +29,13 @@ import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.portal.rpc.portal.resident.dto.movein.LeaseAgreementDTO;
 import com.propertyvista.portal.shared.ui.CPortalEntityWizard;
-import com.propertyvista.portal.shared.ui.PortalFormPanel;
+import com.pyx4j.forms.client.ui.panels.FormPanel;
 
 public class LeaseSigningWizard extends CPortalEntityWizard<LeaseAgreementDTO> {
 
     private final static I18n i18n = I18n.get(LeaseSigningWizard.class);
 
-    private PortalFormPanel featurePanel;
+    private FormPanel featurePanel;
 
     public LeaseSigningWizard(LeaseSigningWizardView view) {
         super(LeaseAgreementDTO.class, view, i18n.tr("Lease Agreement"), i18n.tr("Submit"), ThemeColor.contrast2);
@@ -46,7 +46,7 @@ public class LeaseSigningWizard extends CPortalEntityWizard<LeaseAgreementDTO> {
     }
 
     public IsWidget createDetailsStep() {
-        PortalFormPanel formPanel = new PortalFormPanel(this);
+        FormPanel formPanel = new FormPanel(this);
 //        formPanel.h1(i18n.tr("Details"));
 
         CEntityLabel<Building> buildingLabel = new CEntityLabel<Building>();
@@ -75,7 +75,7 @@ public class LeaseSigningWizard extends CPortalEntityWizard<LeaseAgreementDTO> {
         formPanel.append(Location.Left, proto().leaseTerm().version().leaseProducts().serviceItem().agreedPrice(), new CMoneyLabel()).decorate()
                 .customLabel(i18n.tr("Base Rent"));
 
-        formPanel.append(Location.Left, featurePanel = new PortalFormPanel(this));
+        formPanel.append(Location.Left, featurePanel = new FormPanel(this));
         featurePanel.h3(i18n.tr("Lease Options"));
         featurePanel.append(Location.Left, proto().leaseTerm().version().leaseProducts().featureItems(), new FeaturesFolder());
 
@@ -86,14 +86,14 @@ public class LeaseSigningWizard extends CPortalEntityWizard<LeaseAgreementDTO> {
     }
 
     public IsWidget createAgreementStep() {
-        PortalFormPanel formPanel = new PortalFormPanel(this);
+        FormPanel formPanel = new FormPanel(this);
 //        formPanel.h1(i18n.tr("Agreement"));
         formPanel.append(Location.Left, proto().legalTerms(), new LegalTermsFolder());
         return formPanel;
     }
 
     public IsWidget createConfirmationStep() {
-        PortalFormPanel formPanel = new PortalFormPanel(this);
+        FormPanel formPanel = new FormPanel(this);
 //        formPanel.h1(i18n.tr("Confirmation"));
         formPanel.append(Location.Left, proto().confirmationTerms(), new ConfirmationTermsFolder());
         return formPanel;

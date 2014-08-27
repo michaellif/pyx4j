@@ -46,7 +46,7 @@ import com.propertyvista.portal.prospect.ui.application.ApplicationWizard;
 import com.propertyvista.portal.prospect.ui.application.ApplicationWizardStep;
 import com.propertyvista.portal.rpc.portal.prospect.dto.CoapplicantDTO;
 import com.propertyvista.portal.rpc.portal.prospect.dto.DependentDTO;
-import com.propertyvista.portal.shared.ui.PortalFormPanel;
+import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.propertyvista.portal.shared.ui.util.PortalBoxFolder;
 import com.propertyvista.shared.services.dev.MockDataGenerator;
 
@@ -62,7 +62,7 @@ public class PeopleStep extends ApplicationWizardStep {
 
     @Override
     public IsWidget createStepContent() {
-        PortalFormPanel formPanel = new PortalFormPanel(getWizard());
+        FormPanel formPanel = new FormPanel(getWizard());
 
         HTML message = new HTML(i18n.tr("Everyone living in the residence must be listed below."));
         message.setStyleName(StyleName.WarningMessage.name());
@@ -146,7 +146,7 @@ public class PeopleStep extends ApplicationWizardStep {
 
             @Override
             protected IsWidget createContent() {
-                PortalFormPanel formPanel = new PortalFormPanel(this);
+                FormPanel formPanel = new FormPanel(this);
 
                 formPanel.append(Location.Left, proto().name().firstName()).decorate();
                 formPanel.append(Location.Left, proto().name().lastName()).decorate();
@@ -222,7 +222,7 @@ public class PeopleStep extends ApplicationWizardStep {
 
             @Override
             protected IsWidget createContent() {
-                PortalFormPanel formPanel = new PortalFormPanel(this);
+                FormPanel formPanel = new FormPanel(this);
 
                 formPanel.append(Location.Left, proto().name().firstName()).decorate();
                 formPanel.append(Location.Left, proto().name().lastName()).decorate();

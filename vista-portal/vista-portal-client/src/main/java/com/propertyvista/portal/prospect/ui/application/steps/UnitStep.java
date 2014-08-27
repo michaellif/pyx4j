@@ -47,7 +47,7 @@ import com.propertyvista.portal.rpc.portal.prospect.dto.UnitSelectionDTO.Bathroo
 import com.propertyvista.portal.rpc.portal.prospect.dto.UnitSelectionDTO.BedroomNumber;
 import com.propertyvista.portal.rpc.portal.prospect.dto.UnitSelectionDTO.UnitTO;
 import com.propertyvista.portal.shared.resources.PortalImages;
-import com.propertyvista.portal.shared.ui.PortalFormPanel;
+import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.propertyvista.portal.shared.ui.util.PortalBoxFolder;
 
 public class UnitStep extends ApplicationWizardStep {
@@ -87,7 +87,7 @@ public class UnitStep extends ApplicationWizardStep {
 
     @Override
     public IsWidget createStepContent() {
-        PortalFormPanel formPanel = new PortalFormPanel(getWizard());
+        FormPanel formPanel = new FormPanel(getWizard());
 
         formPanel.append(Location.Left, proto().unitSelection().building(), new CEntityLabel<Building>()).decorate();
         formPanel.append(Location.Left, proto().unitSelection().moveIn()).decorate().componentWidth(120);
@@ -259,7 +259,7 @@ public class UnitStep extends ApplicationWizardStep {
 
             @Override
             protected IsWidget createContent() {
-                PortalFormPanel formPanel = new PortalFormPanel(this);
+                FormPanel formPanel = new FormPanel(this);
 
                 formPanel.append(Location.Left, proto().number()).decorate();
                 formPanel.append(Location.Left, proto().floor()).decorate();

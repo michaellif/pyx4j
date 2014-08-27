@@ -44,7 +44,7 @@ import com.propertyvista.domain.tenant.lease.extradata.Pet;
 import com.propertyvista.domain.tenant.lease.extradata.Vehicle;
 import com.propertyvista.portal.prospect.ui.application.editors.PetDataEditor;
 import com.propertyvista.portal.prospect.ui.application.editors.VehicleDataEditor;
-import com.propertyvista.portal.shared.ui.PortalFormPanel;
+import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.propertyvista.portal.shared.ui.util.PortalBoxFolder;
 
 public class FeatureFolder extends PortalBoxFolder<BillableItem> {
@@ -99,9 +99,9 @@ public class FeatureFolder extends PortalBoxFolder<BillableItem> {
 
     private class FeatureItemForm extends CForm<BillableItem> {
 
-        private PortalFormPanel adjustmentPanel;
+        private FormPanel adjustmentPanel;
 
-        private PortalFormPanel depositPanel;
+        private FormPanel depositPanel;
 
         private final SimplePanel extraDataPanel = new SimplePanel();
 
@@ -112,19 +112,19 @@ public class FeatureFolder extends PortalBoxFolder<BillableItem> {
 
         @Override
         protected IsWidget createContent() {
-            PortalFormPanel formPanel = new PortalFormPanel(this);
+            FormPanel formPanel = new FormPanel(this);
 
             formPanel.append(Location.Left, proto().item().name(), new CLabel<String>()).decorate();
             formPanel.append(Location.Left, proto().agreedPrice(), new CMoneyLabel()).decorate().customLabel(i18n.tr("Monthly Price"));
             formPanel.append(Location.Left, proto().description(), new CLabel<String>()).decorate();
             formPanel.append(Location.Left, extraDataPanel);
 
-            adjustmentPanel = new PortalFormPanel(this);
+            adjustmentPanel = new FormPanel(this);
             adjustmentPanel.h4(proto().adjustments().getMeta().getCaption());
             adjustmentPanel.append(Location.Left, proto().adjustments(), new AdjustmentFolder());
             formPanel.append(Location.Left, adjustmentPanel);
 
-            depositPanel = new PortalFormPanel(this);
+            depositPanel = new FormPanel(this);
             depositPanel.h4(proto().deposits().getMeta().getCaption());
             depositPanel.append(Location.Left, proto().deposits(), new DepositFolder());
             formPanel.append(Location.Left, depositPanel);

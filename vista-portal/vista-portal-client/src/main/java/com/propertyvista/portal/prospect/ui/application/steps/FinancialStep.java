@@ -33,7 +33,7 @@ import com.propertyvista.domain.tenant.prospect.OnlineApplicationWizardStepMeta;
 import com.propertyvista.portal.prospect.ui.application.ApplicationWizardStep;
 import com.propertyvista.portal.prospect.ui.application.editors.PersonalAssetFolder;
 import com.propertyvista.portal.prospect.ui.application.editors.PersonalIncomeFolder;
-import com.propertyvista.portal.shared.ui.PortalFormPanel;
+import com.pyx4j.forms.client.ui.panels.FormPanel;
 
 public class FinancialStep extends ApplicationWizardStep {
 
@@ -47,7 +47,7 @@ public class FinancialStep extends ApplicationWizardStep {
 
     @Override
     public IsWidget createStepContent() {
-        PortalFormPanel formPanel = new PortalFormPanel(getWizard());
+        FormPanel formPanel = new FormPanel(getWizard());
 
         formPanel.h3(i18n.tr("Income"));
         formPanel.append(Location.Left, proto().applicantData().incomes(), new PersonalIncomeFolder());

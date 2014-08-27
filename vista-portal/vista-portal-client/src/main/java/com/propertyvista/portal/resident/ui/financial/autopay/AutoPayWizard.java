@@ -68,7 +68,7 @@ import com.propertyvista.portal.rpc.portal.PortalSiteMap;
 import com.propertyvista.portal.rpc.portal.resident.ResidentPortalSiteMap.ResidentPortalTerms;
 import com.propertyvista.portal.rpc.portal.resident.dto.financial.AutoPayDTO;
 import com.propertyvista.portal.shared.ui.CPortalEntityWizard;
-import com.propertyvista.portal.shared.ui.PortalFormPanel;
+import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.propertyvista.portal.shared.ui.TermsAnchor;
 import com.propertyvista.portal.shared.ui.util.decorators.FieldDecoratorBuilder;
 import com.propertyvista.portal.shared.ui.util.editors.PortalPaymentMethodEditor;
@@ -148,7 +148,7 @@ public class AutoPayWizard extends CPortalEntityWizard<AutoPayDTO> {
     }
 
     private IsWidget createDetailsStep() {
-        PortalFormPanel formPanel = new PortalFormPanel(this);
+        FormPanel formPanel = new FormPanel(this);
         formPanel.append(Location.Left, proto().tenant(), new CEntityLabel<Tenant>()).decorate().componentWidth(200);
         formPanel.append(Location.Left, proto().address(), new CEntityLabel<InternationalAddress>()).decorate().componentWidth(200);
         formPanel.append(Location.Left, proto().coveredItemsDTO(), new PapCoveredItemDtoFolder() {
@@ -169,7 +169,7 @@ public class AutoPayWizard extends CPortalEntityWizard<AutoPayDTO> {
     }
 
     private IsWidget createSelectPaymentMethodStep() {
-        PortalFormPanel formPanel = new PortalFormPanel(this);
+        FormPanel formPanel = new FormPanel(this);
         formPanel.append(Location.Left, proto().selectPaymentMethod(), new CRadioGroupEnum<PaymentSelect>(PaymentSelect.class, RadioGroup.Layout.HORISONTAL))
                 .decorate().componentWidth(200);
 
@@ -236,7 +236,7 @@ public class AutoPayWizard extends CPortalEntityWizard<AutoPayDTO> {
     }
 
     private IsWidget createConfirmationStep() {
-        PortalFormPanel formPanel = new PortalFormPanel(this);
+        FormPanel formPanel = new FormPanel(this);
 
         formPanel.append(Location.Left, confirmationDetailsHolder);
         formPanel.br();

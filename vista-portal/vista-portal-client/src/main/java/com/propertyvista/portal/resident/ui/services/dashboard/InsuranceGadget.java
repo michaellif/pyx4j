@@ -35,7 +35,7 @@ import com.propertyvista.portal.rpc.portal.resident.dto.insurance.status.Insuran
 import com.propertyvista.portal.rpc.portal.resident.dto.insurance.status.TenantSureCertificateSummaryDTO;
 import com.propertyvista.portal.shared.resources.PortalImages;
 import com.propertyvista.portal.shared.ui.AbstractGadget;
-import com.propertyvista.portal.shared.ui.PortalFormPanel;
+import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.propertyvista.portal.shared.ui.util.PortalBoxFolder;
 
 public class InsuranceGadget extends AbstractGadget<ServicesDashboardViewImpl> {
@@ -86,7 +86,7 @@ public class InsuranceGadget extends AbstractGadget<ServicesDashboardViewImpl> {
 
         @Override
         protected IsWidget createContent() {
-            PortalFormPanel formPanel = new PortalFormPanel(this);
+            FormPanel formPanel = new FormPanel(this);
             formPanel.h4(i18n.tr("Certificates"));
             formPanel.append(Location.Left, proto().certificates(), folder = new InsuranceCertificatesFolder());
             return formPanel;
@@ -135,7 +135,7 @@ public class InsuranceGadget extends AbstractGadget<ServicesDashboardViewImpl> {
 
             @Override
             protected IsWidget createContent() {
-                PortalFormPanel formPanel = new PortalFormPanel(this);
+                FormPanel formPanel = new FormPanel(this);
                 formPanel.append(Location.Left, proto().insuranceProvider(), new CLabel<String>()).decorate().componentWidth(180);
                 formPanel.append(Location.Left, proto().insuranceCertificateNumber(), new CLabel<String>()).decorate().componentWidth(180);
                 formPanel.append(Location.Left, proto().liabilityCoverage()).decorate().componentWidth(180);

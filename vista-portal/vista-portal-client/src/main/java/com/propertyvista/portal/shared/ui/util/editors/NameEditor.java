@@ -25,27 +25,24 @@ import com.pyx4j.forms.client.events.PropertyChangeHandler;
 import com.pyx4j.forms.client.ui.CEntityLabel;
 import com.pyx4j.forms.client.ui.CField;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
+import com.pyx4j.forms.client.ui.panels.FormPanel;
 
 import com.propertyvista.domain.person.Name;
 import com.propertyvista.domain.person.Name.Prefix;
 import com.propertyvista.portal.shared.ui.AccessoryEntityForm;
-import com.propertyvista.portal.shared.ui.PortalFormPanel;
-import com.propertyvista.portal.shared.ui.util.decorators.FieldDecoratorBuilder;
 
 public class NameEditor extends AccessoryEntityForm<Name> {
 
     private final CField<Name, ?> nameComp;
 
-    public NameEditor() {
-        this(null);
-    }
+    private final String customViewLabel;
 
     public NameEditor(String customViewLabel) {
         super(Name.class);
+        this.customViewLabel = customViewLabel;
 
         nameComp = new CEntityLabel<Name>();
         nameComp.asWidget().getElement().getStyle().setFontWeight(FontWeight.BOLDER);
-        nameComp.setDecorator(new FieldDecoratorBuilder(200).customLabel(customViewLabel).build());
 
         adopt(nameComp);
     }
@@ -59,9 +56,9 @@ public class NameEditor extends AccessoryEntityForm<Name> {
 
     @Override
     protected IsWidget createContent() {
-        PortalFormPanel formPanel = new PortalFormPanel(this);
+        FormPanel formPanel = new FormPanel(this);
 
-        formPanel.append(Location.Left, nameComp);
+        formPanel.append(Location.Left, nameComp).decorate().customLabel(customViewLabel).componentWidth(200);
         formPanel.append(Location.Left, proto().firstName()).decorate().componentWidth(200);
         formPanel.append(Location.Left, proto().lastName()).decorate().componentWidth(200);
         formPanel.append(Location.Left, proto().middleName()).decorate().componentWidth(60);

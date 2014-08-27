@@ -38,7 +38,7 @@ import com.propertyvista.portal.rpc.portal.resident.dto.financial.PaymentMethodD
 import com.propertyvista.portal.shared.themes.BlockMixin;
 import com.propertyvista.portal.shared.themes.EntityViewTheme;
 import com.propertyvista.portal.shared.ui.CPortalEntityForm;
-import com.propertyvista.portal.shared.ui.PortalFormPanel;
+import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.propertyvista.portal.shared.ui.util.decorators.FieldDecoratorBuilder;
 
 public class PaymentMethodConfirmationForm extends CPortalEntityForm<PaymentMethodDTO> {
@@ -51,7 +51,7 @@ public class PaymentMethodConfirmationForm extends CPortalEntityForm<PaymentMeth
 
     @Override
     protected IsWidget createContent() {
-        PortalFormPanel formPanel = new PortalFormPanel(this);
+        FormPanel formPanel = new FormPanel(this);
         formPanel.append(Location.Left, proto().paymentMethod(), new CEntityLabel<LeasePaymentMethod>()).decorate().componentWidth(250)
                 .labelAlignment(Alignment.left);
         formPanel.hr();

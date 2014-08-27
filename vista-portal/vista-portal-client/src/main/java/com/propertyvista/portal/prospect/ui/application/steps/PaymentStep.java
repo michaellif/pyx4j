@@ -45,7 +45,7 @@ import com.propertyvista.domain.security.PortalProspectBehavior;
 import com.propertyvista.domain.tenant.prospect.OnlineApplicationWizardStepMeta;
 import com.propertyvista.dto.PaymentDataDTO.PaymentSelect;
 import com.propertyvista.portal.prospect.ui.application.ApplicationWizardStep;
-import com.propertyvista.portal.shared.ui.PortalFormPanel;
+import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.propertyvista.portal.shared.ui.util.editors.PortalPaymentMethodEditor;
 
 public class PaymentStep extends ApplicationWizardStep {
@@ -89,7 +89,7 @@ public class PaymentStep extends ApplicationWizardStep {
 
     private Widget depositHeader, feesHeader;
 
-    private PortalFormPanel paymentMethodPanel;
+    private FormPanel paymentMethodPanel;
 
     private final SimplePanel paymentMethodHolder = new SimplePanel();
 
@@ -105,7 +105,7 @@ public class PaymentStep extends ApplicationWizardStep {
 
     @Override
     public IsWidget createStepContent() {
-        PortalFormPanel formPanel = new PortalFormPanel(getWizard());
+        FormPanel formPanel = new FormPanel(getWizard());
 
         if (SecurityController.check(PortalProspectBehavior.Applicant)) {
             depositHeader = formPanel.h3(i18n.tr("Deposits"));
@@ -122,8 +122,8 @@ public class PaymentStep extends ApplicationWizardStep {
         return formPanel;
     }
 
-    public PortalFormPanel createPaymentMethodPanel() {
-        PortalFormPanel formPanel = new PortalFormPanel(getWizard());
+    public FormPanel createPaymentMethodPanel() {
+        FormPanel formPanel = new FormPanel(getWizard());
 
         formPanel.h3(i18n.tr("Payment Method"));
         formPanel.append(Location.Left, proto().payment().selectPaymentMethod(),

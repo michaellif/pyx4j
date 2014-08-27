@@ -22,7 +22,7 @@ import com.pyx4j.widgets.client.Button;
 
 import com.propertyvista.domain.tenant.prospect.OnlineApplicationWizardStepMeta;
 import com.propertyvista.portal.prospect.ui.application.ApplicationWizardStep;
-import com.propertyvista.portal.shared.ui.PortalFormPanel;
+import com.pyx4j.forms.client.ui.panels.FormPanel;
 
 public abstract class LegalStep extends ApplicationWizardStep {
 
@@ -34,7 +34,7 @@ public abstract class LegalStep extends ApplicationWizardStep {
 
     @Override
     public IsWidget createStepContent() {
-        PortalFormPanel formPanel = new PortalFormPanel(getWizard());
+        FormPanel formPanel = new FormPanel(getWizard());
         formPanel.append(Location.Left, proto().legalTerms(), new LegalTermsFolder());
         formPanel.append(Location.Left, new Button(i18n.tr("Download Lease Agreement Draft"), new Command() {
             @Override

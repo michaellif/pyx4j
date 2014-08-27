@@ -76,7 +76,7 @@ import com.propertyvista.portal.rpc.portal.shared.dto.PaymentConvenienceFeeDTO;
 import com.propertyvista.portal.shared.resources.PortalImages;
 import com.propertyvista.portal.shared.ui.CPortalEntityWizard;
 import com.propertyvista.portal.shared.ui.IWizardView;
-import com.propertyvista.portal.shared.ui.PortalFormPanel;
+import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.propertyvista.portal.shared.ui.TermsAnchor;
 import com.propertyvista.portal.shared.ui.util.decorators.SignatureDecorator;
 import com.propertyvista.portal.shared.ui.util.editors.PortalPaymentMethodEditor;
@@ -148,7 +148,7 @@ public class PaymentWizard extends CPortalEntityWizard<PaymentDTO> {
     }
 
     private IsWidget createDetailsStep() {
-        PortalFormPanel formPanel = new PortalFormPanel(this);
+        FormPanel formPanel = new FormPanel(this);
 
         formPanel.h1(PortalImages.INSTANCE.billingIcon(), i18n.tr("Payment Details"));
 
@@ -162,7 +162,7 @@ public class PaymentWizard extends CPortalEntityWizard<PaymentDTO> {
     }
 
     private IsWidget createSelectPaymentMethodStep() {
-        PortalFormPanel formPanel = new PortalFormPanel(this);
+        FormPanel formPanel = new FormPanel(this);
 
         formPanel.append(Location.Left, proto().selectPaymentMethod(), new CRadioGroupEnum<PaymentSelect>(PaymentSelect.class, RadioGroup.Layout.HORISONTAL))
                 .decorate();
@@ -241,7 +241,7 @@ public class PaymentWizard extends CPortalEntityWizard<PaymentDTO> {
     }
 
     private IsWidget createConfirmationStep() {
-        PortalFormPanel formPanel = new PortalFormPanel(this);
+        FormPanel formPanel = new FormPanel(this);
 
         formPanel.append(Location.Left, confirmationDetailsHolder);
 

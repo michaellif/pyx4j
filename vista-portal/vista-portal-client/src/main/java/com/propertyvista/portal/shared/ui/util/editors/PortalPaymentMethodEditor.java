@@ -35,7 +35,7 @@ import com.propertyvista.common.client.ui.components.editors.payments.PaymentMet
 import com.propertyvista.domain.payment.AbstractPaymentMethod;
 import com.propertyvista.domain.payment.CreditCardInfo.CreditCardType;
 import com.propertyvista.domain.payment.PaymentType;
-import com.propertyvista.portal.shared.ui.PortalFormPanel;
+import com.pyx4j.forms.client.ui.panels.FormPanel;
 
 public abstract class PortalPaymentMethodEditor<E extends AbstractPaymentMethod> extends PaymentMethodEditor<E> {
 
@@ -55,7 +55,7 @@ public abstract class PortalPaymentMethodEditor<E extends AbstractPaymentMethod>
 
     @Override
     protected IsWidget createContent() {
-        PortalFormPanel formPanel = new PortalFormPanel(this);
+        FormPanel formPanel = new FormPanel(this);
 
         formPanel.append(Location.Left, proto().type(), new CComboBox<PaymentType>()).decorate();
         formPanel.append(Location.Left, paymentDetailsHolder);
@@ -88,7 +88,7 @@ public abstract class PortalPaymentMethodEditor<E extends AbstractPaymentMethod>
         return new EcheckInfoEditor() {
             @Override
             protected IsWidget createContent() {
-                PortalFormPanel formPanel = new PortalFormPanel(this);
+                FormPanel formPanel = new FormPanel(this);
 
                 formPanel.append(Location.Left, proto().nameOn()).decorate();
                 formPanel.append(Location.Left, proto().accountNo(), accountEditor).decorate();
@@ -112,7 +112,7 @@ public abstract class PortalPaymentMethodEditor<E extends AbstractPaymentMethod>
         return new CreditCardInfoEditor() {
             @Override
             protected IsWidget createContent() {
-                PortalFormPanel formPanel = new PortalFormPanel(this);
+                FormPanel formPanel = new FormPanel(this);
 
                 formPanel.append(Location.Left, proto().nameOn()).decorate();
                 formPanel.append(Location.Left, proto().cardType(), typeSelector).decorate();

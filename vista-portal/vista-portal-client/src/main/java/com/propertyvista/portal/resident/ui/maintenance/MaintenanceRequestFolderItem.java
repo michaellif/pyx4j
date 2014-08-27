@@ -34,7 +34,7 @@ import com.propertyvista.domain.maintenance.MaintenanceRequestStatus.StatusPhase
 import com.propertyvista.portal.resident.ui.maintenance.MaintenanceDashboardView.MaintenanceDashboardPresenter;
 import com.propertyvista.portal.rpc.portal.resident.ResidentPortalSiteMap;
 import com.propertyvista.portal.rpc.portal.resident.dto.maintenance.MaintenanceRequestStatusDTO;
-import com.propertyvista.portal.shared.ui.PortalFormPanel;
+import com.pyx4j.forms.client.ui.panels.FormPanel;
 
 public class MaintenanceRequestFolderItem extends CForm<MaintenanceRequestStatusDTO> {
 
@@ -54,7 +54,7 @@ public class MaintenanceRequestFolderItem extends CForm<MaintenanceRequestStatus
 
     @Override
     protected IsWidget createContent() {
-        PortalFormPanel formPanel = new PortalFormPanel(this);
+        FormPanel formPanel = new FormPanel(this);
 
         formPanel.append(Location.Left, proto().subject(), new CLabel<String>()).decorate().componentWidth(180);
         formPanel.append(Location.Left, proto().description(), new CLabel<String>()).decorate().componentWidth(250);

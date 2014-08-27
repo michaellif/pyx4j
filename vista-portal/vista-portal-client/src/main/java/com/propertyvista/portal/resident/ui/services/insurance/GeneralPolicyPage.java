@@ -24,7 +24,7 @@ import com.pyx4j.widgets.client.Button;
 
 import com.propertyvista.portal.rpc.portal.resident.dto.insurance.GeneralInsurancePolicyDTO;
 import com.propertyvista.portal.shared.ui.CPortalEntityForm;
-import com.propertyvista.portal.shared.ui.PortalFormPanel;
+import com.pyx4j.forms.client.ui.panels.FormPanel;
 
 public class GeneralPolicyPage extends CPortalEntityForm<GeneralInsurancePolicyDTO> {
 
@@ -36,7 +36,7 @@ public class GeneralPolicyPage extends CPortalEntityForm<GeneralInsurancePolicyD
 
     @Override
     protected IsWidget createContent() {
-        PortalFormPanel formPanel = new PortalFormPanel(this);
+        FormPanel formPanel = new FormPanel(this);
 
         formPanel.append(Location.Left, proto().certificate().insuranceProvider()).decorate().componentWidth(150);
         formPanel.append(Location.Left, proto().certificate().insuranceCertificateNumber()).decorate().componentWidth(150);

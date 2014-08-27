@@ -50,7 +50,7 @@ import com.propertyvista.domain.payment.PaymentType;
 import com.propertyvista.portal.rpc.portal.resident.dto.financial.PaymentMethodDTO;
 import com.propertyvista.portal.shared.ui.CPortalEntityWizard;
 import com.propertyvista.portal.shared.ui.IWizardView;
-import com.propertyvista.portal.shared.ui.PortalFormPanel;
+import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.propertyvista.portal.shared.ui.util.editors.PortalPaymentMethodEditor;
 
 public class PaymentMethodWizard extends CPortalEntityWizard<PaymentMethodDTO> {
@@ -129,7 +129,7 @@ public class PaymentMethodWizard extends CPortalEntityWizard<PaymentMethodDTO> {
     }
 
     private IsWidget createPaymentMethodStep() {
-        PortalFormPanel formPanel = new PortalFormPanel(this);
+        FormPanel formPanel = new FormPanel(this);
 
         formPanel.append(Location.Left, proto().paymentMethod(), paymentMethodEditor);
 
@@ -137,7 +137,7 @@ public class PaymentMethodWizard extends CPortalEntityWizard<PaymentMethodDTO> {
     }
 
     private IsWidget createConfirmationStep() {
-        PortalFormPanel formPanel = new PortalFormPanel(this);
+        FormPanel formPanel = new FormPanel(this);
         formPanel.append(Location.Left, confirmationDetailsHolder);
 
         formPanel.br();

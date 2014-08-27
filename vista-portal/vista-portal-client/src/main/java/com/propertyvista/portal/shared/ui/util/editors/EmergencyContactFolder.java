@@ -28,7 +28,7 @@ import com.propertyvista.common.client.ui.components.editors.InternationalAddres
 import com.propertyvista.common.client.ui.validators.BirthdayDateValidator;
 import com.propertyvista.domain.tenant.EmergencyContact;
 import com.propertyvista.domain.tenant.PersonRelationship;
-import com.propertyvista.portal.shared.ui.PortalFormPanel;
+import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.propertyvista.portal.shared.ui.util.PortalBoxFolder;
 
 public class EmergencyContactFolder extends PortalBoxFolder<EmergencyContact> {
@@ -77,7 +77,7 @@ public class EmergencyContactFolder extends PortalBoxFolder<EmergencyContact> {
 
         @Override
         protected IsWidget createContent() {
-            PortalFormPanel formPanel = new PortalFormPanel(this);
+            FormPanel formPanel = new FormPanel(this);
 
             formPanel.append(Location.Left, proto().name(), new NameEditor(i18n.tr("Full Name")));
             formPanel.append(Location.Left, proto().sex()).decorate().componentWidth(85);

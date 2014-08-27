@@ -25,7 +25,7 @@ import com.pyx4j.forms.client.ui.folder.BoxFolderItemDecorator;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 
 import com.propertyvista.domain.tenant.lease.BillableItem;
-import com.propertyvista.portal.shared.ui.PortalFormPanel;
+import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.propertyvista.portal.shared.ui.util.PortalBoxFolder;
 
 public class FeatureReadOnlyFolder extends PortalBoxFolder<BillableItem> {
@@ -62,7 +62,7 @@ public class FeatureReadOnlyFolder extends PortalBoxFolder<BillableItem> {
 
         @Override
         protected IsWidget createContent() {
-            PortalFormPanel formPanel = new PortalFormPanel(this);
+            FormPanel formPanel = new FormPanel(this);
             formPanel.append(Location.Left, proto().item().name(), new CLabel<String>()).decorate();
             formPanel.append(Location.Left, proto().agreedPrice(), new CMoneyLabel()).decorate();
             formPanel.append(Location.Left, proto().description(), new CLabel<String>()).decorate();

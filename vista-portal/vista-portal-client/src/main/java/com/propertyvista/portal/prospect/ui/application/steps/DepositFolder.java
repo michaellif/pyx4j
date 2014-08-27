@@ -22,7 +22,7 @@ import com.pyx4j.forms.client.ui.CMoneyLabel;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 
 import com.propertyvista.domain.tenant.lease.Deposit;
-import com.propertyvista.portal.shared.ui.PortalFormPanel;
+import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.propertyvista.portal.shared.ui.util.PortalBoxFolder;
 
 public class DepositFolder extends PortalBoxFolder<Deposit> {
@@ -44,7 +44,7 @@ public class DepositFolder extends PortalBoxFolder<Deposit> {
 
         @Override
         protected IsWidget createContent() {
-            PortalFormPanel formPanel = new PortalFormPanel(this);
+            FormPanel formPanel = new FormPanel(this);
             formPanel.append(Location.Left, proto().description(), new CLabel<String>()).decorate();
             formPanel.append(Location.Left, proto().amount(), new CMoneyLabel()).decorate();
 

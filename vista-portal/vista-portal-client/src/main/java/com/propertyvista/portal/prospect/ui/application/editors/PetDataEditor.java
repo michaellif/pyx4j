@@ -23,7 +23,7 @@ import com.pyx4j.i18n.shared.I18n;
 import com.propertyvista.common.client.ui.validators.BirthdayDateValidator;
 import com.propertyvista.domain.tenant.lease.extradata.Pet;
 import com.propertyvista.domain.tenant.lease.extradata.Pet.WeightUnit;
-import com.propertyvista.portal.shared.ui.PortalFormPanel;
+import com.pyx4j.forms.client.ui.panels.FormPanel;
 
 public class PetDataEditor extends CForm<Pet> {
 
@@ -35,7 +35,7 @@ public class PetDataEditor extends CForm<Pet> {
 
     @Override
     protected IsWidget createContent() {
-        PortalFormPanel formPanel = new PortalFormPanel(this);
+        FormPanel formPanel = new FormPanel(this);
 
         formPanel.h3(i18n.tr("Pet Data"));
 

@@ -27,7 +27,7 @@ import com.pyx4j.i18n.shared.I18n;
 import com.propertyvista.domain.financial.billing.InvoiceLineItem;
 import com.propertyvista.dto.TransactionHistoryDTO;
 import com.propertyvista.portal.shared.ui.CPortalEntityForm;
-import com.propertyvista.portal.shared.ui.PortalFormPanel;
+import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.propertyvista.portal.shared.ui.util.PortalBoxFolder;
 
 public class TransactionHistoryViewForm extends CPortalEntityForm<TransactionHistoryDTO> {
@@ -40,7 +40,7 @@ public class TransactionHistoryViewForm extends CPortalEntityForm<TransactionHis
 
     @Override
     protected IsWidget createContent() {
-        PortalFormPanel formPanel = new PortalFormPanel(this);
+        FormPanel formPanel = new FormPanel(this);
         formPanel.append(Location.Left, proto().issueDate(), new CDateLabel()).decorate().componentWidth(100);
         formPanel.append(Location.Left, proto().currentBalanceAmount(), new CMoneyLabel()).decorate().componentWidth(100);
         formPanel.append(Location.Left, proto().lineItems(), new InvoiceLineItemFolder());
@@ -66,7 +66,7 @@ public class TransactionHistoryViewForm extends CPortalEntityForm<TransactionHis
 
             @Override
             protected IsWidget createContent() {
-                PortalFormPanel formPanel = new PortalFormPanel(this);
+                FormPanel formPanel = new FormPanel(this);
                 formPanel.append(Location.Left, proto().amount(), new CMoneyLabel()).decorate().componentWidth(100);
                 formPanel.append(Location.Left, proto().postDate(), new CDateLabel()).decorate().componentWidth(100);
                 formPanel.append(Location.Left, proto().description(), new CLabel<String>()).decorate().componentWidth(250);

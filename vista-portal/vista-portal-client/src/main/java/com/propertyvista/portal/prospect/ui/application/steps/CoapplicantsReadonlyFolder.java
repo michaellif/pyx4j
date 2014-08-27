@@ -24,7 +24,7 @@ import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 
 import com.propertyvista.domain.person.Name;
 import com.propertyvista.portal.rpc.portal.prospect.dto.CoapplicantDTO;
-import com.propertyvista.portal.shared.ui.PortalFormPanel;
+import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.propertyvista.portal.shared.ui.util.PortalBoxFolder;
 
 public class CoapplicantsReadonlyFolder extends PortalBoxFolder<CoapplicantDTO> {
@@ -46,7 +46,7 @@ public class CoapplicantsReadonlyFolder extends PortalBoxFolder<CoapplicantDTO> 
 
         @Override
         protected IsWidget createContent() {
-            PortalFormPanel formPanel = new PortalFormPanel(this);
+            FormPanel formPanel = new FormPanel(this);
             formPanel.append(Location.Left, proto().name(), new CEntityLabel<Name>()).decorate();
             formPanel.append(Location.Left, proto().relationship(), new CEnumLabel()).decorate();
             formPanel.append(Location.Left, proto().email(), new CLabel<String>()).decorate();

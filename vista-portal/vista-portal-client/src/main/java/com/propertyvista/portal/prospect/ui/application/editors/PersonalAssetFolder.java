@@ -28,7 +28,7 @@ import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.domain.tenant.income.CustomerScreeningPersonalAsset;
 import com.propertyvista.domain.tenant.income.CustomerScreeningPersonalAsset.AssetType;
-import com.propertyvista.portal.shared.ui.PortalFormPanel;
+import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.propertyvista.portal.shared.ui.util.PortalBoxFolder;
 
 public class PersonalAssetFolder extends PortalBoxFolder<CustomerScreeningPersonalAsset> {
@@ -77,7 +77,7 @@ public class PersonalAssetFolder extends PortalBoxFolder<CustomerScreeningPerson
 
         @Override
         protected IsWidget createContent() {
-            PortalFormPanel formPanel = new PortalFormPanel(this);
+            FormPanel formPanel = new FormPanel(this);
 
             formPanel.append(Location.Left, proto().assetType()).decorate().componentWidth(180);
             formPanel.append(Location.Left, proto().percent()).decorate().componentWidth(60);

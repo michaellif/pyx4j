@@ -28,7 +28,7 @@ import com.propertyvista.portal.rpc.portal.resident.dto.financial.LatestActiviti
 import com.propertyvista.portal.rpc.portal.resident.dto.financial.LatestActivitiesDTO.InvoicePaymentDTO;
 import com.propertyvista.portal.shared.resources.PortalImages;
 import com.propertyvista.portal.shared.ui.AbstractGadget;
-import com.propertyvista.portal.shared.ui.PortalFormPanel;
+import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.propertyvista.portal.shared.ui.util.PortalBoxFolder;
 
 public class LatestActivitiesGadget extends AbstractGadget<FinancialDashboardViewImpl> {
@@ -60,7 +60,7 @@ public class LatestActivitiesGadget extends AbstractGadget<FinancialDashboardVie
 
         @Override
         protected IsWidget createContent() {
-            PortalFormPanel formPanel = new PortalFormPanel(this);
+            FormPanel formPanel = new FormPanel(this);
 
             formPanel.append(Location.Left, proto().payments(), new InvoiceLineItemFolder());
 
@@ -90,7 +90,7 @@ public class LatestActivitiesGadget extends AbstractGadget<FinancialDashboardVie
 
             @Override
             protected IsWidget createContent() {
-                PortalFormPanel formPanel = new PortalFormPanel(this);
+                FormPanel formPanel = new FormPanel(this);
 
                 formPanel.append(Location.Left, proto().id(), new CNumberLabel()).decorate();
                 formPanel.append(Location.Left, proto().amount()).decorate();

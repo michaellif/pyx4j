@@ -26,7 +26,7 @@ import com.pyx4j.widgets.client.Button;
 import com.propertyvista.portal.rpc.portal.prospect.ProspectPortalSiteMap;
 import com.propertyvista.portal.rpc.portal.prospect.dto.OnlineApplicationConfirmationDTO;
 import com.propertyvista.portal.shared.ui.CPortalEntityForm;
-import com.propertyvista.portal.shared.ui.PortalFormPanel;
+import com.pyx4j.forms.client.ui.panels.FormPanel;
 
 public class ApplicationConfirmationForm extends CPortalEntityForm<OnlineApplicationConfirmationDTO> {
 
@@ -38,7 +38,7 @@ public class ApplicationConfirmationForm extends CPortalEntityForm<OnlineApplica
 
     @Override
     protected IsWidget createContent() {
-        PortalFormPanel formPanel = new PortalFormPanel(this);
+        FormPanel formPanel = new FormPanel(this);
         formPanel
                 .h4(i18n.tr("Your application has been successfully submitted. An email has been sent to you as well with all pertinent information. Once all applicants/guarantors (if applicable) have successfully submitted the application we will process your application and will advise you of our decision. The process can take between 1-3 business days. If you have any questions about the status of your application, please do not hesitate to contact us directly or check back here to see the latest status of your application."));
 

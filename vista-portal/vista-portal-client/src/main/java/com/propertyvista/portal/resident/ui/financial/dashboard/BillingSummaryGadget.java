@@ -31,7 +31,7 @@ import com.propertyvista.portal.rpc.portal.resident.dto.financial.BillingSummary
 import com.propertyvista.portal.shared.resources.PortalImages;
 import com.propertyvista.portal.shared.ui.AbstractGadget;
 import com.propertyvista.portal.shared.ui.GadgetToolbar;
-import com.propertyvista.portal.shared.ui.PortalFormPanel;
+import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.propertyvista.shared.config.VistaFeatures;
 
 public class BillingSummaryGadget extends AbstractGadget<FinancialDashboardViewImpl> {
@@ -113,7 +113,7 @@ public class BillingSummaryGadget extends AbstractGadget<FinancialDashboardViewI
 
         @Override
         protected IsWidget createContent() {
-            PortalFormPanel formPanel = new PortalFormPanel(this);
+            FormPanel formPanel = new FormPanel(this);
 
             formPanel.append(Location.Left, proto().currentBalance()).decorate().componentWidth(140);
             if (!VistaFeatures.instance().yardiIntegration()) {

@@ -35,7 +35,7 @@ import com.propertyvista.portal.prospect.themes.SummaryStepTheme;
 import com.propertyvista.portal.prospect.ui.application.ApplicationWizardStep;
 import com.propertyvista.portal.rpc.portal.prospect.dto.OnlineApplicationDTO;
 import com.propertyvista.portal.shared.resources.PortalImages;
-import com.propertyvista.portal.shared.ui.PortalFormPanel;
+import com.pyx4j.forms.client.ui.panels.FormPanel;
 
 public abstract class AbstractSectionPanel extends CollapsablePanel {
 
@@ -43,7 +43,7 @@ public abstract class AbstractSectionPanel extends CollapsablePanel {
 
     private final SectionCaptionBar captionBar;
 
-    private final PortalFormPanel contentPanel;
+    private final FormPanel contentPanel;
 
     private final ApplicationWizardStep step;
 
@@ -55,7 +55,7 @@ public abstract class AbstractSectionPanel extends CollapsablePanel {
         super(VistaImages.INSTANCE);
         this.step = step;
         this.captionBar = new SectionCaptionBar(index, caption);
-        this.contentPanel = new PortalFormPanel(form);
+        this.contentPanel = new FormPanel(form);
         this.entityPrototype = EntityFactory.getEntityPrototype(OnlineApplicationDTO.class);
 
         setStyleName(SummaryStepTheme.StyleName.SummaryStepSection.name());

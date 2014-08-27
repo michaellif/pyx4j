@@ -26,7 +26,7 @@ import com.pyx4j.widgets.client.Button;
 import com.propertyvista.domain.security.VistaCustomerPaymentTypeBehavior;
 import com.propertyvista.portal.rpc.portal.resident.dto.financial.BillViewDTO;
 import com.propertyvista.portal.shared.ui.CPortalEntityForm;
-import com.propertyvista.portal.shared.ui.PortalFormPanel;
+import com.pyx4j.forms.client.ui.panels.FormPanel;
 
 public class BillViewForm extends CPortalEntityForm<BillViewDTO> {
 
@@ -45,7 +45,7 @@ public class BillViewForm extends CPortalEntityForm<BillViewDTO> {
 
     @Override
     protected IsWidget createContent() {
-        PortalFormPanel formPanel = new PortalFormPanel(this);
+        FormPanel formPanel = new FormPanel(this);
         formPanel.append(Location.Left, proto().billData(), new BillForm());
         return formPanel;
     }

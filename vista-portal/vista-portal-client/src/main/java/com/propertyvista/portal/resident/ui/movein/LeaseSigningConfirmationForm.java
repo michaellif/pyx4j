@@ -28,7 +28,7 @@ import com.propertyvista.domain.security.PortalResidentBehavior;
 import com.propertyvista.portal.rpc.portal.resident.dto.movein.LeaseAgreementConfirmationDTO;
 import com.propertyvista.portal.shared.ui.AbstractFormView;
 import com.propertyvista.portal.shared.ui.CPortalEntityForm;
-import com.propertyvista.portal.shared.ui.PortalFormPanel;
+import com.pyx4j.forms.client.ui.panels.FormPanel;
 
 public class LeaseSigningConfirmationForm extends CPortalEntityForm<LeaseAgreementConfirmationDTO> {
 
@@ -40,7 +40,7 @@ public class LeaseSigningConfirmationForm extends CPortalEntityForm<LeaseAgreeme
 
     @Override
     protected IsWidget createContent() {
-        PortalFormPanel formPanel = new PortalFormPanel(this);
+        FormPanel formPanel = new FormPanel(this);
 
         formPanel
                 .h4(i18n.tr("Thank you. We have received your signed Lease Agreement. You can obtain a draft copy of the agreement by clicking 'Download Agreement' button here."));

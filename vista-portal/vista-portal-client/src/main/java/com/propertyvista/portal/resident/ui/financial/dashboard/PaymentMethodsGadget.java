@@ -39,7 +39,7 @@ import com.propertyvista.portal.rpc.portal.resident.dto.financial.PaymentMethodS
 import com.propertyvista.portal.shared.resources.PortalImages;
 import com.propertyvista.portal.shared.ui.AbstractGadget;
 import com.propertyvista.portal.shared.ui.GadgetToolbar;
-import com.propertyvista.portal.shared.ui.PortalFormPanel;
+import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.propertyvista.portal.shared.ui.util.PortalBoxFolder;
 
 public class PaymentMethodsGadget extends AbstractGadget<FinancialDashboardViewImpl> {
@@ -89,7 +89,7 @@ public class PaymentMethodsGadget extends AbstractGadget<FinancialDashboardViewI
 
         @Override
         protected IsWidget createContent() {
-            PortalFormPanel formPanel = new PortalFormPanel(this);
+            FormPanel formPanel = new FormPanel(this);
             formPanel.append(Location.Left, proto().paymentMethods(), new PaymentMethodFolder(this));
             return formPanel;
         }
@@ -144,7 +144,7 @@ public class PaymentMethodsGadget extends AbstractGadget<FinancialDashboardViewI
 
             @Override
             protected IsWidget createContent() {
-                PortalFormPanel formPanel = new PortalFormPanel(this);
+                FormPanel formPanel = new FormPanel(this);
 
                 formPanel.append(Location.Left, proto().paymentMethod().creationDate(), new CDateLabel()).decorate().componentWidth(100);
                 formPanel.append(Location.Left, proto().paymentMethod().type(), new CEnumLabel()).decorate().componentWidth(150);

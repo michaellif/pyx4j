@@ -31,7 +31,7 @@ import com.propertyvista.common.client.ui.components.tenantinsurance.YesNoComboB
 import com.propertyvista.misc.VistaTODO;
 import com.propertyvista.portal.rpc.portal.resident.dto.insurance.TenantSureAgreementParamsDTO;
 import com.propertyvista.portal.rpc.portal.resident.dto.insurance.TenantSureCoverageDTO;
-import com.propertyvista.portal.shared.ui.PortalFormPanel;
+import com.pyx4j.forms.client.ui.panels.FormPanel;
 
 public class TenantSureCoverageRequestForm extends CForm<TenantSureCoverageDTO> {
 
@@ -51,7 +51,7 @@ public class TenantSureCoverageRequestForm extends CForm<TenantSureCoverageDTO> 
 
     @Override
     protected IsWidget createContent() {
-        PortalFormPanel formPanel = new PortalFormPanel(this);
+        FormPanel formPanel = new FormPanel(this);
 
         formPanel.append(Location.Left, proto().inceptionDate()).decorate();
         formPanel.h1(i18n.tr("Coverage"));

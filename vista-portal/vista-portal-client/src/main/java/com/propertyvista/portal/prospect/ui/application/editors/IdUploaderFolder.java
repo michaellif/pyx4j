@@ -40,7 +40,7 @@ import com.propertyvista.domain.policy.policies.domain.IdentificationDocumentTyp
 import com.propertyvista.domain.util.ValidationUtils;
 import com.propertyvista.misc.CreditCardNumberGenerator;
 import com.propertyvista.portal.shared.ui.AccessoryEntityForm;
-import com.propertyvista.portal.shared.ui.PortalFormPanel;
+import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.propertyvista.portal.shared.ui.util.PortalBoxFolder;
 
 public class IdUploaderFolder extends PortalBoxFolder<IdentificationDocumentFolder> {
@@ -163,7 +163,7 @@ public class IdUploaderFolder extends PortalBoxFolder<IdentificationDocumentFold
 
         @Override
         protected IsWidget createContent() {
-            PortalFormPanel formPanel = new PortalFormPanel(this);
+            FormPanel formPanel = new FormPanel(this);
 
             formPanel.append(Location.Left, proto().idType(), new CEntityLabel<IdentificationDocumentType>()).decorate();
             formPanel.append(Location.Left, proto().idNumber()).decorate();

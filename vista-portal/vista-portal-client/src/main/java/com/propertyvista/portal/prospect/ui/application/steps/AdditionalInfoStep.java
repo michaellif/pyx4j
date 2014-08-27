@@ -37,7 +37,7 @@ import com.propertyvista.misc.BusinessRules;
 import com.propertyvista.portal.prospect.themes.AdditionalInfoStepTheme;
 import com.propertyvista.portal.prospect.ui.application.ApplicationWizardStep;
 import com.propertyvista.portal.prospect.ui.application.editors.PriorAddressEditor;
-import com.propertyvista.portal.shared.ui.PortalFormPanel;
+import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.propertyvista.portal.shared.ui.util.decorators.FieldDecoratorBuilder;
 import com.propertyvista.portal.shared.ui.util.decorators.RadioButtonGroupDecoratorBuilder;
 
@@ -45,7 +45,7 @@ public class AdditionalInfoStep extends ApplicationWizardStep {
 
     private static final I18n i18n = I18n.get(AdditionalInfoStep.class);
 
-    private PortalFormPanel previousAddress;
+    private FormPanel previousAddress;
 
     public AdditionalInfoStep() {
         super(OnlineApplicationWizardStepMeta.AdditionalInfo);
@@ -53,12 +53,12 @@ public class AdditionalInfoStep extends ApplicationWizardStep {
 
     @Override
     public IsWidget createStepContent() {
-        PortalFormPanel formPanel = new PortalFormPanel(getWizard());
+        FormPanel formPanel = new FormPanel(getWizard());
 
         formPanel.h3(i18n.tr("Current Address"));
         formPanel.append(Location.Left, proto().applicantData().currentAddress(), new PriorAddressEditor());
 
-        previousAddress = new PortalFormPanel(getWizard()) {
+        previousAddress = new FormPanel(getWizard()) {
             @Override
             public void setVisible(boolean visible) {
                 get(proto().applicantData().previousAddress()).setVisible(visible);
@@ -71,7 +71,7 @@ public class AdditionalInfoStep extends ApplicationWizardStep {
 
         formPanel.h3(i18n.tr("General Questions"));
 
-        PortalFormPanel questionsPanel = new PortalFormPanel(getWizard());
+        FormPanel questionsPanel = new FormPanel(getWizard());
         questionsPanel.addStyleName(AdditionalInfoStepTheme.StyleName.GeneralQuestionsSection.name());
 
         questionsPanel.append(Location.Left, inject(proto().applicantData().legalQuestions().suedForRent(), new LegalQuestionWidgetDecoratorBuilder().build()));

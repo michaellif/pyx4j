@@ -29,7 +29,7 @@ import com.propertyvista.domain.tenant.insurance.InsuranceCertificateScan;
 import com.propertyvista.domain.tenant.lease.Tenant;
 import com.propertyvista.portal.rpc.portal.resident.dto.insurance.GeneralInsurancePolicyDTO;
 import com.propertyvista.portal.shared.ui.CPortalEntityWizard;
-import com.propertyvista.portal.shared.ui.PortalFormPanel;
+import com.pyx4j.forms.client.ui.panels.FormPanel;
 
 public class GeneralPolicyUploadWizard extends CPortalEntityWizard<GeneralInsurancePolicyDTO> {
 
@@ -57,7 +57,7 @@ public class GeneralPolicyUploadWizard extends CPortalEntityWizard<GeneralInsura
     }
 
     public IsWidget createDetailsStep() {
-        PortalFormPanel formPanel = new PortalFormPanel(this);
+        FormPanel formPanel = new FormPanel(this);
 
         formPanel.append(Location.Left, proto().certificate().insuranceProvider()).decorate().componentWidth(150);
         formPanel.append(Location.Left, proto().certificate().insuranceCertificateNumber()).decorate().componentWidth(150);

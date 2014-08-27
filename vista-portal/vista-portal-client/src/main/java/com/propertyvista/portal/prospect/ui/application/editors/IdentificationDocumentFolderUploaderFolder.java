@@ -27,7 +27,7 @@ import com.pyx4j.i18n.shared.I18n;
 import com.propertyvista.common.client.VistaFileURLBuilder;
 import com.propertyvista.domain.media.IdentificationDocumentFile;
 import com.propertyvista.portal.rpc.portal.prospect.services.IdentificationDocumentProspectUploadService;
-import com.propertyvista.portal.shared.ui.PortalFormPanel;
+import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.propertyvista.portal.shared.ui.util.PortalBoxFolder;
 import com.propertyvista.portal.shared.ui.util.decorators.FieldDecoratorBuilder;
 
@@ -52,7 +52,7 @@ public class IdentificationDocumentFolderUploaderFolder extends PortalBoxFolder<
 
         @Override
         protected IsWidget createContent() {
-            PortalFormPanel formPanel = new PortalFormPanel(this);
+            FormPanel formPanel = new FormPanel(this);
 
             CFile cfile = new CFile(GWT.<UploadService<?, ?>> create(IdentificationDocumentProspectUploadService.class), new VistaFileURLBuilder(
                     IdentificationDocumentFile.class));

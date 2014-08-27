@@ -25,7 +25,7 @@ import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.domain.person.Name;
 import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
-import com.propertyvista.portal.shared.ui.PortalFormPanel;
+import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.propertyvista.portal.shared.ui.util.PortalBoxFolder;
 
 public class TenantsFolder extends PortalBoxFolder<LeaseTermTenant> {
@@ -49,7 +49,7 @@ public class TenantsFolder extends PortalBoxFolder<LeaseTermTenant> {
 
         @Override
         protected IsWidget createContent() {
-            PortalFormPanel formPanel = new PortalFormPanel(this);
+            FormPanel formPanel = new FormPanel(this);
             formPanel.append(Location.Left, proto().leaseParticipant().customer().person().name(), new CEntityLabel<Name>()).decorate();
             formPanel.append(Location.Left, proto().role(), new CEnumLabel()).decorate();
             formPanel.append(Location.Left, proto().leaseParticipant().customer().person().email(), new CLabel<String>()).decorate();

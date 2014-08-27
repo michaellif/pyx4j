@@ -25,7 +25,7 @@ import com.pyx4j.i18n.shared.I18n;
 import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.portal.rpc.portal.resident.dto.financial.AutoPayDTO;
 import com.propertyvista.portal.shared.ui.CPortalEntityForm;
-import com.propertyvista.portal.shared.ui.PortalFormPanel;
+import com.pyx4j.forms.client.ui.panels.FormPanel;
 
 public class AutoPayConfirmationForm extends CPortalEntityForm<AutoPayDTO> {
 
@@ -37,7 +37,7 @@ public class AutoPayConfirmationForm extends CPortalEntityForm<AutoPayDTO> {
 
     @Override
     protected IsWidget createContent() {
-        PortalFormPanel formPanel = new PortalFormPanel(this);
+        FormPanel formPanel = new FormPanel(this);
 
         formPanel.append(Location.Left, proto().paymentMethod(), new CEntityLabel<LeasePaymentMethod>()).decorate().componentWidth(200)
                 .labelAlignment(Alignment.left);

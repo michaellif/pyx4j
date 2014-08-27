@@ -36,23 +36,23 @@ import com.propertyvista.portal.prospect.events.ApplicationWizardStateChangeEven
 import com.propertyvista.portal.prospect.ui.application.ApplicationWizardStep;
 import com.propertyvista.portal.rpc.portal.prospect.dto.LeaseChargesDataDTO;
 import com.propertyvista.portal.rpc.portal.prospect.dto.UnitOptionsSelectionDTO;
-import com.propertyvista.portal.shared.ui.PortalFormPanel;
+import com.pyx4j.forms.client.ui.panels.FormPanel;
 
 public class OptionsStep extends ApplicationWizardStep {
 
     private static final I18n i18n = I18n.get(OptionsStep.class);
 
-    private PortalFormPanel depositPanel;
+    private FormPanel depositPanel;
 
-    private PortalFormPanel chargedPanel;
+    private FormPanel chargedPanel;
 
-    private PortalFormPanel petsPanel;
+    private FormPanel petsPanel;
 
-    private PortalFormPanel parkingPanel;
+    private FormPanel parkingPanel;
 
-    private PortalFormPanel storagePanel;
+    private FormPanel storagePanel;
 
-    private PortalFormPanel otherPanel;
+    private FormPanel otherPanel;
 
     private FeatureFolder2 lockerFolder;
 
@@ -66,7 +66,7 @@ public class OptionsStep extends ApplicationWizardStep {
 
     @Override
     public IsWidget createStepContent() {
-        PortalFormPanel formPanel = new PortalFormPanel(getWizard());
+        FormPanel formPanel = new FormPanel(getWizard());
         formPanel.append(Location.Left, proto().unitOptionsSelection(), new StepDataForm());
         return formPanel;
     }
@@ -101,36 +101,36 @@ public class OptionsStep extends ApplicationWizardStep {
 
         @Override
         protected IsWidget createContent() {
-            PortalFormPanel formPanel = new PortalFormPanel(this);
+            FormPanel formPanel = new FormPanel(this);
 
             formPanel.append(Location.Left, proto().selectedService().agreedPrice(), new CMoneyLabel()).decorate().customLabel(i18n.tr("Monthly Unit Price"));
 
-            depositPanel = new PortalFormPanel(this);
+            depositPanel = new FormPanel(this);
             depositPanel.h3(i18n.tr("Unit Deposits"));
             depositPanel.append(Location.Left, proto().selectedService().deposits(), new DepositFolder());
             formPanel.append(Location.Left, depositPanel);
 
-            petsPanel = new PortalFormPanel(this);
+            petsPanel = new FormPanel(this);
             petsPanel.h2(i18n.tr("Pets"));
             petsPanel.append(Location.Left, proto().selectedPets(), petFolder = new FeatureFolder2(ARCode.Type.Pet));
             formPanel.append(Location.Left, petsPanel);
 
-            parkingPanel = new PortalFormPanel(this);
+            parkingPanel = new FormPanel(this);
             parkingPanel.h2(i18n.tr("Parking"));
             parkingPanel.append(Location.Left, proto().selectedParking(), parkingFolder = new FeatureFolder2(ARCode.Type.Parking));
             formPanel.append(Location.Left, parkingPanel);
 
-            storagePanel = new PortalFormPanel(this);
+            storagePanel = new FormPanel(this);
             storagePanel.h2(i18n.tr("Storage"));
             storagePanel.append(Location.Left, proto().selectedStorage(), lockerFolder = new FeatureFolder2(ARCode.Type.Locker));
             formPanel.append(Location.Left, storagePanel);
 
-            chargedPanel = new PortalFormPanel(this);
+            chargedPanel = new FormPanel(this);
             chargedPanel.h2(i18n.tr("Utilities"));
             chargedPanel.append(Location.Left, proto().selectedUtilities(), new FeatureFolder2(ARCode.Type.Utility));
             formPanel.append(Location.Left, chargedPanel);
 
-            otherPanel = new PortalFormPanel(this);
+            otherPanel = new FormPanel(this);
             otherPanel.h2(i18n.tr("Other"));
             otherPanel.append(Location.Left, proto().selectedOther(), new FeatureFolder2(ARCode.Type.OneTime));
             formPanel.append(Location.Left, otherPanel);

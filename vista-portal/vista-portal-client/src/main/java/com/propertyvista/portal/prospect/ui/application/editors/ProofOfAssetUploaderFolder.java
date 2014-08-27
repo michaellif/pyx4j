@@ -21,7 +21,7 @@ import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.domain.media.ProofOfAssetDocumentFolder;
-import com.propertyvista.portal.shared.ui.PortalFormPanel;
+import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.propertyvista.portal.shared.ui.util.PortalBoxFolder;
 
 public class ProofOfAssetUploaderFolder extends PortalBoxFolder<ProofOfAssetDocumentFolder> {
@@ -45,7 +45,7 @@ public class ProofOfAssetUploaderFolder extends PortalBoxFolder<ProofOfAssetDocu
 
         @Override
         protected IsWidget createContent() {
-            PortalFormPanel formPanel = new PortalFormPanel(this);
+            FormPanel formPanel = new FormPanel(this);
             formPanel.append(Location.Left, proto().description()).decorate().componentWidth(250);
 
             formPanel.h3(i18n.tr("Files"));

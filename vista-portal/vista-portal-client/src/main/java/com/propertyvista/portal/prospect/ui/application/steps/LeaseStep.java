@@ -29,18 +29,18 @@ import com.propertyvista.domain.property.asset.Floorplan;
 import com.propertyvista.domain.security.PortalProspectBehavior;
 import com.propertyvista.domain.tenant.prospect.OnlineApplicationWizardStepMeta;
 import com.propertyvista.portal.prospect.ui.application.ApplicationWizardStep;
-import com.propertyvista.portal.shared.ui.PortalFormPanel;
+import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.propertyvista.shared.config.VistaFeatures;
 
 public class LeaseStep extends ApplicationWizardStep {
 
     private static final I18n i18n = I18n.get(LeaseStep.class);
 
-    private PortalFormPanel adjustmentPanel;
+    private FormPanel adjustmentPanel;
 
-    private PortalFormPanel depositPanel;
+    private FormPanel depositPanel;
 
-    private PortalFormPanel featurePanel;
+    private FormPanel featurePanel;
 
     public LeaseStep() {
         super(OnlineApplicationWizardStepMeta.Lease);
@@ -48,7 +48,7 @@ public class LeaseStep extends ApplicationWizardStep {
 
     @Override
     public IsWidget createStepContent() {
-        PortalFormPanel formPanel = new PortalFormPanel(getWizard());
+        FormPanel formPanel = new FormPanel(getWizard());
         formPanel.h3(i18n.tr("Landlord Info"));
         formPanel.append(Location.Left, proto().landlordInfo().name(), new CLabel<String>()).decorate();
         formPanel.append(Location.Left, proto().landlordInfo().address(), new CLabel<String>()).decorate();
@@ -68,17 +68,17 @@ public class LeaseStep extends ApplicationWizardStep {
                 .customLabel(i18n.tr("Monthly Unit Rent"));
         formPanel.append(Location.Left, proto().leaseChargesData().selectedService().description(), new CLabel<String>()).decorate();
 
-        adjustmentPanel = new PortalFormPanel(getWizard());
+        adjustmentPanel = new FormPanel(getWizard());
         adjustmentPanel.h4(i18n.tr("Unit Adjustments"));
         adjustmentPanel.append(Location.Dual, proto().leaseChargesData().selectedService().adjustments(), new AdjustmentFolder());
         formPanel.append(Location.Left, adjustmentPanel);
 
-        depositPanel = new PortalFormPanel(getWizard());
+        depositPanel = new FormPanel(getWizard());
         depositPanel.h4(i18n.tr("Unit Deposits"));
         depositPanel.append(Location.Left, proto().leaseChargesData().selectedService().deposits(), new DepositFolder());
         formPanel.append(Location.Left, depositPanel);
 
-        featurePanel = new PortalFormPanel(getWizard());
+        featurePanel = new FormPanel(getWizard());
         featurePanel.h3(i18n.tr("Features"));
         featurePanel.append(Location.Left, proto().leaseChargesData().selectedFeatures(), new FeatureFolder());
         formPanel.append(Location.Left, featurePanel);

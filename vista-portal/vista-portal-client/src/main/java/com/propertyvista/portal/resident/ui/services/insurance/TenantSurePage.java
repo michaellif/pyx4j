@@ -45,7 +45,7 @@ import com.propertyvista.portal.rpc.portal.resident.dto.insurance.TenantSureInsu
 import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.TenantSureMessageDTO;
 import com.propertyvista.portal.shared.themes.NavigationAnchorTheme;
 import com.propertyvista.portal.shared.ui.CPortalEntityForm;
-import com.propertyvista.portal.shared.ui.PortalFormPanel;
+import com.pyx4j.forms.client.ui.panels.FormPanel;
 
 public class TenantSurePage extends CPortalEntityForm<TenantSureInsurancePolicyDTO> {
 
@@ -67,7 +67,7 @@ public class TenantSurePage extends CPortalEntityForm<TenantSureInsurancePolicyD
 
     @Override
     protected IsWidget createContent() {
-        PortalFormPanel formPanel = new PortalFormPanel(this);
+        FormPanel formPanel = new FormPanel(this);
         formPanel.append(Location.Left, new TenantSureLogo());
         formPanel.append(Location.Left, makeGreetingPanel());
 

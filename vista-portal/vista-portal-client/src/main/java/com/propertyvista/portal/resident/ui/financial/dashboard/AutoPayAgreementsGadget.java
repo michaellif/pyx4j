@@ -39,7 +39,7 @@ import com.propertyvista.portal.rpc.portal.resident.dto.financial.AutoPaySummary
 import com.propertyvista.portal.shared.resources.PortalImages;
 import com.propertyvista.portal.shared.ui.AbstractGadget;
 import com.propertyvista.portal.shared.ui.GadgetToolbar;
-import com.propertyvista.portal.shared.ui.PortalFormPanel;
+import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.propertyvista.portal.shared.ui.util.PortalBoxFolder;
 
 public class AutoPayAgreementsGadget extends AbstractGadget<FinancialDashboardViewImpl> {
@@ -89,7 +89,7 @@ public class AutoPayAgreementsGadget extends AbstractGadget<FinancialDashboardVi
 
         @Override
         protected IsWidget createContent() {
-            PortalFormPanel formPanel = new PortalFormPanel(this);
+            FormPanel formPanel = new FormPanel(this);
 
             formPanel.append(Location.Left, proto().nextAutoPayDate(), new CDateLabel()).decorate().componentWidth(100);
             formPanel.br();
@@ -155,7 +155,7 @@ public class AutoPayAgreementsGadget extends AbstractGadget<FinancialDashboardVi
 
             @Override
             protected IsWidget createContent() {
-                PortalFormPanel formPanel = new PortalFormPanel(this);
+                FormPanel formPanel = new FormPanel(this);
 
                 formPanel.append(Location.Left, proto().payer(), new CEntityLabel<Tenant>()).decorate().componentWidth(250);
                 formPanel.append(Location.Left, proto().paymentMethod(), new CEntityLabel<PaymentMethod>()).decorate().componentWidth(250);

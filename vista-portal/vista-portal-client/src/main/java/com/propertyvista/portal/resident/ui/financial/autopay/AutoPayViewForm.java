@@ -35,7 +35,7 @@ import com.propertyvista.domain.security.VistaCustomerPaymentTypeBehavior;
 import com.propertyvista.dto.PreauthorizedPaymentCoveredItemDTO;
 import com.propertyvista.portal.rpc.portal.resident.dto.financial.AutoPayDTO;
 import com.propertyvista.portal.shared.ui.CPortalEntityEditor;
-import com.propertyvista.portal.shared.ui.PortalFormPanel;
+import com.pyx4j.forms.client.ui.panels.FormPanel;
 
 public class AutoPayViewForm extends CPortalEntityEditor<AutoPayDTO> {
 
@@ -57,7 +57,7 @@ public class AutoPayViewForm extends CPortalEntityEditor<AutoPayDTO> {
 
     @Override
     protected IsWidget createContent() {
-        PortalFormPanel formPanel = new PortalFormPanel(this);
+        FormPanel formPanel = new FormPanel(this);
         formPanel.append(Location.Left, proto().paymentMethod(), new CEntityLabel<LeasePaymentMethod>()).decorate().componentWidth(200)
                 .labelAlignment(Alignment.left);
 

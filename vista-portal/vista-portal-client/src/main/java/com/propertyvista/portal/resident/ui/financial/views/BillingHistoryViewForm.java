@@ -31,7 +31,7 @@ import com.propertyvista.domain.financial.billing.Bill;
 import com.propertyvista.portal.rpc.portal.resident.dto.financial.BillDataDTO;
 import com.propertyvista.portal.rpc.portal.resident.dto.financial.BillingHistoryDTO;
 import com.propertyvista.portal.shared.ui.CPortalEntityForm;
-import com.propertyvista.portal.shared.ui.PortalFormPanel;
+import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.propertyvista.portal.shared.ui.util.PortalBoxFolder;
 
 public class BillingHistoryViewForm extends CPortalEntityForm<BillingHistoryDTO> {
@@ -44,7 +44,7 @@ public class BillingHistoryViewForm extends CPortalEntityForm<BillingHistoryDTO>
 
     @Override
     protected IsWidget createContent() {
-        PortalFormPanel formPanel = new PortalFormPanel(this);
+        FormPanel formPanel = new FormPanel(this);
         formPanel.append(Location.Left, proto().bills(), new BillDataFolder());
         return formPanel;
     }
@@ -71,7 +71,7 @@ public class BillingHistoryViewForm extends CPortalEntityForm<BillingHistoryDTO>
 
             @Override
             protected IsWidget createContent() {
-                PortalFormPanel formPanel = new PortalFormPanel(this);
+                FormPanel formPanel = new FormPanel(this);
 
                 formPanel.append(Location.Left, proto().referenceNo(), new CNumberLabel()).decorate().componentWidth(100);
                 formPanel.append(Location.Left, proto().amount(), new CMoneyLabel()).decorate().componentWidth(100);

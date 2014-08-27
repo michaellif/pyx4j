@@ -54,7 +54,7 @@ import com.propertyvista.portal.rpc.portal.resident.ResidentPortalSiteMap;
 import com.propertyvista.portal.rpc.portal.resident.communication.MessageDTO;
 import com.propertyvista.portal.shared.resources.PortalImages;
 import com.propertyvista.portal.shared.ui.CPortalEntityForm;
-import com.propertyvista.portal.shared.ui.PortalFormPanel;
+import com.pyx4j.forms.client.ui.panels.FormPanel;
 
 public class MessagePage extends CPortalEntityForm<MessageDTO> {
 
@@ -77,7 +77,7 @@ public class MessagePage extends CPortalEntityForm<MessageDTO> {
 
     @Override
     public IsWidget createContent() {
-        PortalFormPanel formPanel = new PortalFormPanel(this);
+        FormPanel formPanel = new FormPanel(this);
         inject(proto().thread());
         inject(proto().allowedReply());
         inject(proto().status());
@@ -156,7 +156,7 @@ public class MessagePage extends CPortalEntityForm<MessageDTO> {
 
         @Override
         public IsWidget createContent() {
-            PortalFormPanel formPanel = new PortalFormPanel(this);
+            FormPanel formPanel = new FormPanel(this);
 
             inject(proto().star());
             inject(proto().isRead());

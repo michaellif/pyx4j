@@ -46,7 +46,7 @@ import com.propertyvista.portal.rpc.portal.resident.dto.maintenance.MaintenanceR
 import com.propertyvista.portal.rpc.portal.resident.services.maintenance.MaintenanceRequestPictureUploadPortalService;
 import com.propertyvista.portal.shared.themes.EntityViewTheme;
 import com.propertyvista.portal.shared.ui.CPortalEntityForm;
-import com.propertyvista.portal.shared.ui.PortalFormPanel;
+import com.pyx4j.forms.client.ui.panels.FormPanel;
 
 public class MaintenanceRequestPage extends CPortalEntityForm<MaintenanceRequestDTO> {
 
@@ -56,9 +56,9 @@ public class MaintenanceRequestPage extends CPortalEntityForm<MaintenanceRequest
 
     private final Button btnPrint;
 
-    private PortalFormPanel imagePanel;
+    private FormPanel imagePanel;
 
-    private PortalFormPanel scheduledPanel;
+    private FormPanel scheduledPanel;
 
     private RateIt rateIt;
 
@@ -89,7 +89,7 @@ public class MaintenanceRequestPage extends CPortalEntityForm<MaintenanceRequest
 
     @Override
     protected IsWidget createContent() {
-        PortalFormPanel formPanel = new PortalFormPanel(this);
+        FormPanel formPanel = new FormPanel(this);
 
         formPanel.h1(i18n.tr("Basic Information"));
         formPanel.append(Location.Left, proto().requestId(), new CLabel<String>()).decorate().componentWidth(250);
@@ -118,7 +118,7 @@ public class MaintenanceRequestPage extends CPortalEntityForm<MaintenanceRequest
         formPanel.append(Location.Left, proto().priority(), new CEntityLabel<MaintenanceRequestPriority>()).decorate().componentWidth(250);
         formPanel.append(Location.Left, proto().status().phase()).decorate().componentWidth(250);
 
-        imagePanel = new PortalFormPanel(this);
+        imagePanel = new FormPanel(this);
         CImageSlider<MaintenanceRequestPicture> imageSlider = new CImageSlider<MaintenanceRequestPicture>(MaintenanceRequestPicture.class,
                 GWT.<MaintenanceRequestPictureUploadPortalService> create(MaintenanceRequestPictureUploadPortalService.class), new VistaFileURLBuilder(
                         MaintenanceRequestPicture.class)) {
@@ -129,7 +129,7 @@ public class MaintenanceRequestPage extends CPortalEntityForm<MaintenanceRequest
 
             @Override
             public IsWidget getImageEntryView(CForm<MaintenanceRequestPicture> entryForm) {
-                PortalFormPanel formPanel = new PortalFormPanel(entryForm);
+                FormPanel formPanel = new FormPanel(entryForm);
                 formPanel.append(Location.Left, entryForm.proto().description()).decorate().componentWidth(150);
                 return formPanel;
             }
@@ -138,7 +138,7 @@ public class MaintenanceRequestPage extends CPortalEntityForm<MaintenanceRequest
         imagePanel.append(Location.Left, proto().pictures(), imageSlider).decorate().componentWidth(100);
         formPanel.append(Location.Left, imagePanel);
 
-        scheduledPanel = new PortalFormPanel(this);
+        scheduledPanel = new FormPanel(this);
 
         scheduledPanel.append(Location.Left, proto().petInstructions()).decorate().componentWidth(250);
 

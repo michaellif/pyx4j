@@ -39,7 +39,7 @@ import com.propertyvista.domain.tenant.income.IncomeInfoSelfEmployed;
 import com.propertyvista.domain.tenant.income.IncomeInfoSocialServices;
 import com.propertyvista.domain.tenant.income.IncomeInfoStudentIncome;
 import com.propertyvista.domain.tenant.income.IncomeSource;
-import com.propertyvista.portal.shared.ui.PortalFormPanel;
+import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.propertyvista.portal.shared.ui.util.editors.InternationalAddressEditor;
 
 public class PersonalIncomeEditor extends CForm<CustomerScreeningIncome> {
@@ -61,7 +61,7 @@ public class PersonalIncomeEditor extends CForm<CustomerScreeningIncome> {
 
     @Override
     protected IsWidget createContent() {
-        PortalFormPanel formPanel = new PortalFormPanel(this);
+        FormPanel formPanel = new FormPanel(this);
         formPanel.append(Location.Left, proto().incomeSource(), new CEnumLabel()).decorate().componentWidth(250);
         formPanel.append(Location.Left, detailsHolder);
         formPanel.append(Location.Left, proto().documents(), fileUpload);
@@ -133,7 +133,7 @@ public class PersonalIncomeEditor extends CForm<CustomerScreeningIncome> {
 
             @Override
             protected IsWidget createContent() {
-                PortalFormPanel formPanel = new PortalFormPanel(this);
+                FormPanel formPanel = new FormPanel(this);
 
                 formPanel.append(Location.Left, proto().name()).decorate().componentWidth(250);
                 formPanel.append(Location.Left, proto().employedForYears()).decorate().componentWidth(60);
@@ -173,7 +173,7 @@ public class PersonalIncomeEditor extends CForm<CustomerScreeningIncome> {
         return new CForm<IncomeInfoSeasonallyEmployed>(IncomeInfoSeasonallyEmployed.class) {
             @Override
             protected IsWidget createContent() {
-                PortalFormPanel formPanel = new PortalFormPanel(this);
+                FormPanel formPanel = new FormPanel(this);
                 formPanel.append(Location.Left, proto().name()).decorate().componentWidth(250);
 
                 formPanel.append(Location.Left, proto().supervisorName()).decorate().componentWidth(250);
@@ -202,7 +202,7 @@ public class PersonalIncomeEditor extends CForm<CustomerScreeningIncome> {
         return new CForm<IncomeInfoStudentIncome>(IncomeInfoStudentIncome.class) {
             @Override
             protected IsWidget createContent() {
-                PortalFormPanel formPanel = new PortalFormPanel(this);
+                FormPanel formPanel = new FormPanel(this);
                 formPanel.append(Location.Left, proto().name()).decorate().componentWidth(250);
 
                 formPanel.h3(proto().address().getMeta().getCaption());
@@ -233,7 +233,7 @@ public class PersonalIncomeEditor extends CForm<CustomerScreeningIncome> {
         return new CForm<IncomeInfoSelfEmployed>(IncomeInfoSelfEmployed.class) {
             @Override
             protected IsWidget createContent() {
-                PortalFormPanel formPanel = new PortalFormPanel(this);
+                FormPanel formPanel = new FormPanel(this);
                 formPanel.append(Location.Left, proto().name()).decorate().componentWidth(250);
                 formPanel.append(Location.Left, proto().employedForYears()).decorate().componentWidth(60);
 
@@ -267,7 +267,7 @@ public class PersonalIncomeEditor extends CForm<CustomerScreeningIncome> {
         return new CForm<IncomeInfoSocialServices>(IncomeInfoSocialServices.class) {
             @Override
             protected IsWidget createContent() {
-                PortalFormPanel formPanel = new PortalFormPanel(this);
+                FormPanel formPanel = new FormPanel(this);
                 formPanel.append(Location.Left, proto().name()).decorate().componentWidth(250);
                 formPanel.append(Location.Left, proto().supervisorName()).decorate().componentWidth(250);
                 formPanel.append(Location.Left, proto().supervisorPhone()).decorate().componentWidth(180);
@@ -296,7 +296,7 @@ public class PersonalIncomeEditor extends CForm<CustomerScreeningIncome> {
 
             @Override
             protected IsWidget createContent() {
-                PortalFormPanel formPanel = new PortalFormPanel(this);
+                FormPanel formPanel = new FormPanel(this);
 
                 formPanel.append(Location.Left, proto().name()).decorate().componentWidth(250);
                 formPanel.append(Location.Left, proto().monthlyAmount()).decorate().componentWidth(120);
@@ -329,7 +329,7 @@ public class PersonalIncomeEditor extends CForm<CustomerScreeningIncome> {
         };
     }
 
-    private static void injectIEmploymentInfo(PortalFormPanel formPanel, CForm<? extends IEmploymentInfo> parent) {
+    private static void injectIEmploymentInfo(FormPanel formPanel, CForm<? extends IEmploymentInfo> parent) {
         formPanel.h3(i18n.tr("Employment Info"));
         formPanel.append(Location.Left, parent.proto().monthlyAmount()).decorate().componentWidth(120);
         formPanel.append(Location.Left, parent.proto().position()).decorate().componentWidth(250);

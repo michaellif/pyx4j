@@ -15,9 +15,7 @@ package com.propertyvista.portal.shared.ui.util.decorators;
 
 import com.pyx4j.forms.client.ui.decorators.FieldDecorator;
 
-import com.propertyvista.portal.shared.ui.AbstractPortalPanel;
-
-public class FieldDecoratorBuilder extends FieldDecorator.Builder {
+public class FieldDecoratorBuilder extends FieldDecorator.Builder<FieldDecoratorBuilder> {
 
     // default sizes (in pixels): 
     public static final int LABEL_WIDTH = 220;

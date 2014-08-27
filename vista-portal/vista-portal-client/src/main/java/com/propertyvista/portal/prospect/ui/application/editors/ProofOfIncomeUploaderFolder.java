@@ -27,7 +27,7 @@ import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.domain.media.ProofOfIncomeDocumentFolder;
 import com.propertyvista.domain.policy.policies.ApplicationDocumentationPolicy;
-import com.propertyvista.portal.shared.ui.PortalFormPanel;
+import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.propertyvista.portal.shared.ui.util.PortalBoxFolder;
 import com.propertyvista.portal.shared.ui.util.decorators.FieldDecoratorBuilder;
 
@@ -80,7 +80,7 @@ public class ProofOfIncomeUploaderFolder extends PortalBoxFolder<ProofOfIncomeDo
 
         @Override
         protected IsWidget createContent() {
-            PortalFormPanel formPanel = new PortalFormPanel(this);
+            FormPanel formPanel = new FormPanel(this);
             formPanel.append(Location.Left, proto().description()).decorate().componentWidth(250);
 
             formPanel.h3(i18n.tr("Files"));

@@ -38,7 +38,7 @@ import com.propertyvista.portal.rpc.portal.resident.dto.ResidentProfileDTO;
 import com.propertyvista.portal.rpc.portal.shared.services.CustomerPicturePortalUploadService;
 import com.propertyvista.portal.shared.themes.EntityViewTheme;
 import com.propertyvista.portal.shared.ui.CPortalEntityEditor;
-import com.propertyvista.portal.shared.ui.PortalFormPanel;
+import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.propertyvista.portal.shared.ui.util.editors.EmergencyContactFolder;
 import com.propertyvista.shared.config.VistaFeatures;
 
@@ -53,7 +53,7 @@ public class ProfilePage extends CPortalEntityEditor<ResidentProfileDTO> {
 
     @Override
     protected IsWidget createContent() {
-        PortalFormPanel formPanel = new PortalFormPanel(this);
+        FormPanel formPanel = new FormPanel(this);
 
         CImage imageHolder = new CImage(GWT.<CustomerPicturePortalUploadService> create(CustomerPicturePortalUploadService.class), new VistaFileURLBuilder(
                 CustomerPicture.class));

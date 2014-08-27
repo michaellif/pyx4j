@@ -29,7 +29,7 @@ import com.propertyvista.portal.resident.ui.services.insurance.tenantsurepayment
 import com.propertyvista.portal.rpc.portal.resident.dto.insurance.InsurancePaymentMethodDTO;
 import com.propertyvista.portal.shared.ui.CPortalEntityWizard;
 import com.propertyvista.portal.shared.ui.IWizardView;
-import com.propertyvista.portal.shared.ui.PortalFormPanel;
+import com.pyx4j.forms.client.ui.panels.FormPanel;
 
 public class TenantSurePaymentMethodWizard extends CPortalEntityWizard<InsurancePaymentMethodDTO> {
 
@@ -62,7 +62,7 @@ public class TenantSurePaymentMethodWizard extends CPortalEntityWizard<Insurance
     }
 
     private IsWidget createDisplayCurrentPaymentMethodStep() {
-        PortalFormPanel formPanel = new PortalFormPanel(this);
+        FormPanel formPanel = new FormPanel(this);
         formPanel.append(Location.Left, proto().currentPaymentMethod().creationDate(), new CDateLabel()).decorate().componentWidth(100);
         formPanel.append(Location.Left, proto().currentPaymentMethod().details(), new CEntityLabel<PaymentDetails>()).decorate();
         formPanel.append(Location.Left, proto().currentPaymentMethod().billingAddress(), new CEntityLabel<InternationalAddress>()).decorate();
@@ -70,7 +70,7 @@ public class TenantSurePaymentMethodWizard extends CPortalEntityWizard<Insurance
     }
 
     private IsWidget createInputNewPaymentMethodStep() {
-        PortalFormPanel formPanel = new PortalFormPanel(this);
+        FormPanel formPanel = new FormPanel(this);
         formPanel.append(Location.Left, proto().newPaymentMethod(), paymentMethodForm);
         return formPanel;
     }

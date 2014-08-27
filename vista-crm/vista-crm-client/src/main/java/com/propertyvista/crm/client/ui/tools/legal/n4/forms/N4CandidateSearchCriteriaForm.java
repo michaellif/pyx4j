@@ -24,7 +24,6 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.CLabel;
-import com.pyx4j.forms.client.ui.decorators.FieldDecorator.Builder;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.forms.client.validators.AbstractComponentValidator;
 import com.pyx4j.forms.client.validators.BasicValidationError;
@@ -46,7 +45,7 @@ public class N4CandidateSearchCriteriaForm extends CForm<N4CandidateSearchCriter
         }
 
         @Override
-        public Builder componentWidth(String componentWidth) {
+        public FieldDecoratorBuilder componentWidth(String componentWidth) {
             labelWidth(componentWidth);
             return super.componentWidth(componentWidth);
         }

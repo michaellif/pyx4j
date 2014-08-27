@@ -25,7 +25,7 @@ import com.pyx4j.i18n.shared.I18n;
 import com.propertyvista.common.client.VistaFileURLBuilder;
 import com.propertyvista.domain.communication.MessageAttachment;
 import com.propertyvista.portal.rpc.portal.resident.services.MessageAttachmentUploadPortalService;
-import com.propertyvista.portal.shared.ui.PortalFormPanel;
+import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.propertyvista.portal.shared.ui.util.PortalBoxFolder;
 
 public class MessageAttachmentFolder extends PortalBoxFolder<MessageAttachment> {
@@ -50,7 +50,7 @@ public class MessageAttachmentFolder extends PortalBoxFolder<MessageAttachment> 
 
         @Override
         protected IsWidget createContent() {
-            PortalFormPanel formPanel = new PortalFormPanel(this);
+            FormPanel formPanel = new FormPanel(this);
             formPanel.append(
                     Location.Left,
                     proto().file(),

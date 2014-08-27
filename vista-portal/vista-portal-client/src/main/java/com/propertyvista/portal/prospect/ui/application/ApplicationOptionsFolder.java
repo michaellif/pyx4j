@@ -25,7 +25,7 @@ import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.domain.financial.offering.ProductItem;
 import com.propertyvista.portal.rpc.portal.prospect.dto.OptionDTO;
-import com.propertyvista.portal.shared.ui.PortalFormPanel;
+import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.propertyvista.portal.shared.ui.util.PortalBoxFolder;
 import com.propertyvista.portal.shared.ui.util.decorators.FieldDecoratorBuilder;
 
@@ -51,7 +51,7 @@ public class ApplicationOptionsFolder extends PortalBoxFolder<OptionDTO> {
 
         @Override
         protected IsWidget createContent() {
-            PortalFormPanel formPanel = new PortalFormPanel(this);
+            FormPanel formPanel = new FormPanel(this);
             formPanel.append(Location.Left, proto().item(), new CEntityLabel<ProductItem>()).decorate().componentWidth(200).customLabel(i18n.tr("Item Name"));
             formPanel.append(Location.Left, proto().price(), new CMoneyLabel()).decorate();
             return formPanel;
