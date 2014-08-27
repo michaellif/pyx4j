@@ -35,6 +35,7 @@ import com.pyx4j.entity.core.IVersionedEntity.SaveAction;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.core.criterion.PropertyCriterion;
 import com.pyx4j.entity.rdb.PersistenceContext;
+import com.pyx4j.entity.rdb.TODO;
 import com.pyx4j.entity.shared.utils.EntityGraph;
 
 public class TableModleVersioned {
@@ -49,6 +50,9 @@ public class TableModleVersioned {
 
         if ((versionedEntity.getPrimaryKey().getVersion() == Key.VERSION_DRAFT)) {
             criteria.isNull(criteria.proto().fromDate());
+            criteria.isNull(criteria.proto().toDate());
+        } else if (TODO.versionQueryCurrent && versionedEntity.getPrimaryKey().getVersion() == Key.VERSION_CURRENT) {
+            criteria.isNotNull(criteria.proto().fromDate());
             criteria.isNull(criteria.proto().toDate());
         } else {
             Date forDate;

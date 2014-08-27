@@ -34,7 +34,10 @@ import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria.VersionedCriteria;
 import com.pyx4j.entity.core.criterion.PropertyCriterion;
 import com.pyx4j.entity.rpc.EntityCriteriaByPK;
+import com.pyx4j.entity.server.Executable;
 import com.pyx4j.entity.server.IEntityPersistenceService.ICursorIterator;
+import com.pyx4j.entity.server.TransactionScopeOption;
+import com.pyx4j.entity.server.UnitOfWork;
 import com.pyx4j.entity.shared.utils.EntityGraph;
 import com.pyx4j.entity.shared.utils.VersionedEntityUtils;
 import com.pyx4j.entity.test.server.DatastoreTestBase;
@@ -212,13 +215,13 @@ public abstract class VersionTestCase extends DatastoreTestBase {
         }
 
         // Retrieval of item before current existed by Pk
-        {
+        if (!TODO.versionQueryCurrent) {
             setDBTime("2010-01-01");
             ItemA itemA1r = srv.retrieve(ItemA.class, itemA1.getPrimaryKey().asCurrentKey());
             assertTrue("current is null", itemA1r.version().isNull());
         }
         // Retrieval of item before current existed by Query
-        {
+        if (!TODO.versionQueryCurrent) {
             setDBTime("2010-01-01");
             ItemA itemA1r = srv.retrieve(EntityCriteriaByPK.create(ItemA.class, itemA1.getPrimaryKey().asCurrentKey()));
             assertTrue("current is null", itemA1r.version().isNull());
@@ -268,6 +271,132 @@ public abstract class VersionTestCase extends DatastoreTestBase {
             ItemA itemA1r = srv.retrieve(ItemA.class, itemA1.getPrimaryKey().asCurrentKey(), AttachLevel.ToStringMembers, false);
             assertEquals("ToStringMembers getStringView", " - " + currentName, itemA1r.getStringView());
         }
+
+    }
+
+    public void testRetrieveInTrasaction() {
+        final String testId = uniqueString();
+        final ItemA itemA1 = EntityFactory.create(ItemA.class);
+
+        srv.endTransaction();
+        srv.startTransaction();
+
+        setDBTime("2010-02-01");
+        final String v1Name = "V1-" + uniqueString();
+        new UnitOfWork(TransactionScopeOption.RequiresNew).execute(new Executable<Void, RuntimeException>() {
+
+            @Override
+            public Void execute() {
+                itemA1.testId().setValue(testId);
+                itemA1.version().name().setValue(v1Name);
+                itemA1.saveAction().setValue(SaveAction.saveAsFinal);
+                srv.persist(itemA1);
+                return null;
+            }
+
+        });
+
+        {
+            ItemA itemA1r = srv.retrieve(ItemA.class, itemA1.getPrimaryKey().asCurrentKey());
+            srv.retrieve(itemA1r);
+            assertEquals("getSpecific", v1Name, itemA1r.version().name().getValue());
+        }
+
+        setDBTime("2010-02-02");
+        final String v2Name = "V2-" + uniqueString();
+        new UnitOfWork(TransactionScopeOption.RequiresNew).execute(new Executable<Void, RuntimeException>() {
+
+            @Override
+            public Void execute() {
+                itemA1.version().set(EntityGraph.businessDuplicate(itemA1.version()));
+                VersionedEntityUtils.setAsDraft(itemA1.version());
+                itemA1.version().name().setValue(v2Name);
+                itemA1.saveAction().setValue(SaveAction.saveAsFinal);
+                srv.persist(itemA1);
+                return null;
+            }
+
+        });
+
+        {
+            ItemA itemA1r = srv.retrieve(ItemA.class, itemA1.getPrimaryKey().asCurrentKey());
+            srv.retrieve(itemA1r);
+            assertEquals("getSpecific", v2Name, itemA1r.version().name().getValue());
+        }
+
+        setDBTime("2010-02-03");
+        final String v3Name = "V3-" + uniqueString();
+        new UnitOfWork(TransactionScopeOption.RequiresNew).execute(new Executable<Void, RuntimeException>() {
+
+            @Override
+            public Void execute() {
+                itemA1.version().set(EntityGraph.businessDuplicate(itemA1.version()));
+                VersionedEntityUtils.setAsDraft(itemA1.version());
+                itemA1.version().name().setValue(v3Name);
+                itemA1.saveAction().setValue(SaveAction.saveAsFinal);
+                srv.persist(itemA1);
+                return null;
+            }
+
+        });
+
+        {
+            ItemA itemA1r = srv.retrieve(ItemA.class, itemA1.getPrimaryKey().asVersionKey(DateUtils.detectDateformat("2010-02-03")));
+            srv.retrieve(itemA1r);
+            assertEquals("getSpecific", v3Name, itemA1r.version().name().getValue());
+        }
+
+        // The same time
+        final String v4Name = "V4-" + uniqueString();
+        new UnitOfWork(TransactionScopeOption.RequiresNew).execute(new Executable<Void, RuntimeException>() {
+
+            @Override
+            public Void execute() {
+                itemA1.version().set(EntityGraph.businessDuplicate(itemA1.version()));
+                VersionedEntityUtils.setAsDraft(itemA1.version());
+                itemA1.version().name().setValue(v4Name);
+                itemA1.saveAction().setValue(SaveAction.saveAsFinal);
+                srv.persist(itemA1);
+                return null;
+            }
+
+        });
+        new UnitOfWork(TransactionScopeOption.RequiresNew).execute(new Executable<Void, RuntimeException>() {
+
+            @Override
+            public Void execute() {
+                ItemA itemA1r = srv.retrieve(ItemA.class, itemA1.getPrimaryKey().asCurrentKey());
+                srv.retrieve(itemA1r);
+                assertEquals("getSpecific", v4Name, itemA1r.version().name().getValue());
+                return null;
+            }
+
+        });
+
+        {
+            ItemA itemA1r = srv.retrieve(ItemA.class, itemA1.getPrimaryKey().asVersionKey(DateUtils.detectDateformat("2010-02-01 15:00")));
+            srv.retrieve(itemA1r);
+            assertEquals("getSpecific", v1Name, itemA1r.version().name().getValue());
+        }
+
+        {
+            ItemA itemA1r = srv.retrieve(ItemA.class, itemA1.getPrimaryKey().asVersionKey(DateUtils.detectDateformat("2010-02-02 15:00")));
+            srv.retrieve(itemA1r);
+            assertEquals("getSpecific", v2Name, itemA1r.version().name().getValue());
+        }
+
+        setDBTime("2010-02-04");
+        new UnitOfWork(TransactionScopeOption.RequiresNew).execute(new Executable<Void, RuntimeException>() {
+
+            @Override
+            public Void execute() {
+                ItemA itemA1r = srv.retrieve(ItemA.class, itemA1.getPrimaryKey().asCurrentKey());
+                srv.retrieve(itemA1r);
+                assertEquals("getSpecific", v4Name, itemA1r.version().name().getValue());
+                return null;
+            }
+
+        });
 
     }
 
