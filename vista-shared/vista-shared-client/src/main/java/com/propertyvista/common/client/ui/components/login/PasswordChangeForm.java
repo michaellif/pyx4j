@@ -83,7 +83,7 @@ public class PasswordChangeForm extends CForm<PasswordChangeRequest> {
         passwordStrengthWidget = new PasswordStrengthWidget(passwordStrengthRule);
         formPanel.append(Location.Left, proto().newPassword()).decorate().assistantWidget(passwordStrengthWidget);
         formPanel.append(Location.Left, proto().newPasswordConfirm()).decorate();
-        formPanel.append(Location.Left, proto().passwordChangeRequired()).decorate();
+        formPanel.append(Location.Left, proto().passwordChangeRequired()).decorate().componentWidth(30);
 
         return formPanel;
     }
