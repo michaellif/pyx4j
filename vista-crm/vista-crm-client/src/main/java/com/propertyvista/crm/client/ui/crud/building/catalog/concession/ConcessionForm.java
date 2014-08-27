@@ -13,9 +13,10 @@
  */
 package com.propertyvista.crm.client.ui.crud.building.catalog.concession;
 
+import com.google.gwt.event.logical.shared.ValueChangeEvent;
+import com.google.gwt.event.logical.shared.ValueChangeHandler;
+
 import com.pyx4j.entity.shared.IMoneyPercentAmount.ValueType;
-import com.pyx4j.forms.client.events.PropertyChangeEvent;
-import com.pyx4j.forms.client.events.PropertyChangeHandler;
 import com.pyx4j.forms.client.ui.CDateLabel;
 import com.pyx4j.forms.client.ui.CMoneyPercentCombo;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
@@ -49,9 +50,9 @@ public class ConcessionForm extends CrmEntityForm<Concession> {
 
         formPanel.append(Location.Dual, proto().version().description()).decorate();
 
-        get(proto().version().type()).addPropertyChangeHandler(new PropertyChangeHandler() {
+        get(proto().version().type()).addValueChangeHandler(new ValueChangeHandler<Type>() {
             @Override
-            public void onPropertyChange(PropertyChangeEvent event) {
+            public void onValueChange(ValueChangeEvent<Type> event) {
                 Type type = get(proto().version().type()).getValue();
                 moneyPct.setAmountType(Type.percentageOff.equals(type) ? ValueType.Percentage : ValueType.Monetary);
                 moneyPct.setEnabled(!Type.free.equals(type));

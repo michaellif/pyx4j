@@ -20,8 +20,7 @@ import com.google.gwt.event.logical.shared.ValueChangeHandler;
 
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.shared.IMoneyPercentAmount;
-import com.pyx4j.forms.client.events.PropertyChangeEvent;
-import com.pyx4j.forms.client.events.PropertyChangeHandler;
+import com.pyx4j.entity.shared.IMoneyPercentAmount.ValueType;
 import com.pyx4j.forms.client.ui.CDateLabel;
 import com.pyx4j.forms.client.ui.CMoneyPercentCombo;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
@@ -88,9 +87,9 @@ public class LeaseAdjustmentForm extends CrmEntityForm<LeaseAdjustment> {
         formPanel.append(Location.Dual, proto().description()).decorate();
 
         // tweak:
-        get(proto().taxType()).addPropertyChangeHandler(new PropertyChangeHandler() {
+        get(proto().taxType()).addValueChangeHandler(new ValueChangeHandler<ValueType>() {
             @Override
-            public void onPropertyChange(PropertyChangeEvent event) {
+            public void onValueChange(ValueChangeEvent<ValueType> event) {
                 moneyPercent.setAmountType(get(proto().taxType()).getValue());
             }
         });

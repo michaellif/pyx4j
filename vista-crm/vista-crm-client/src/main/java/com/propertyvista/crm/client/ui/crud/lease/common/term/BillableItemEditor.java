@@ -16,14 +16,15 @@ package com.propertyvista.crm.client.ui.crud.lease.common.term;
 import java.util.Arrays;
 import java.util.List;
 
+import com.google.gwt.event.logical.shared.ValueChangeEvent;
+import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.SimplePanel;
 
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.IObject;
-import com.pyx4j.forms.client.events.PropertyChangeEvent;
-import com.pyx4j.forms.client.events.PropertyChangeHandler;
+import com.pyx4j.entity.shared.IMoneyPercentAmount.ValueType;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEnumLabel;
 import com.pyx4j.forms.client.ui.CField;
@@ -367,9 +368,9 @@ public class BillableItemEditor extends CForm<BillableItem> {
             protected IsWidget createContent() {
                 IsWidget content = super.createContent();
                 final CMoneyPercentCombo moneyPct = (CMoneyPercentCombo) get(proto().value());
-                get(proto().type()).addPropertyChangeHandler(new PropertyChangeHandler() {
+                get(proto().type()).addValueChangeHandler(new ValueChangeHandler<ValueType>() {
                     @Override
-                    public void onPropertyChange(PropertyChangeEvent event) {
+                    public void onValueChange(ValueChangeEvent<ValueType> event) {
                         moneyPct.setAmountType(get(proto().type()).getValue());
                     }
                 });

@@ -102,9 +102,9 @@ public class LeaseBillingPolicyForm extends PolicyDTOTabPanelBasedForm<LeaseBill
         formPanel.append(Location.Left, proto().lateFee().maxTotalFee(), maxTotalFee).decorate().componentWidth(120);
 
         // add fee type control dependencies
-        get(proto().lateFee().baseFeeType()).addPropertyChangeHandler(new PropertyChangeHandler() {
+        get(proto().lateFee().baseFeeType()).addValueChangeHandler(new ValueChangeHandler<BaseFeeType>() {
             @Override
-            public void onPropertyChange(PropertyChangeEvent event) {
+            public void onValueChange(ValueChangeEvent<BaseFeeType> event) {
                 BaseFeeType type = get(proto().lateFee().baseFeeType()).getValue();
                 baseFee.setAmountType(BaseFeeType.FlatAmount.equals(type) ? ValueType.Monetary : ValueType.Percentage);
             }

@@ -18,8 +18,7 @@ import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.entity.core.criterion.PropertyCriterion;
-import com.pyx4j.forms.client.events.PropertyChangeEvent;
-import com.pyx4j.forms.client.events.PropertyChangeHandler;
+import com.pyx4j.entity.shared.IMoneyPercentAmount.ValueType;
 import com.pyx4j.forms.client.ui.CEntityComboBox;
 import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.CMoneyPercentCombo;
@@ -54,9 +53,9 @@ public class ProductDepositEditor extends CForm<ProductDeposit> {
         // tweaks:
         chargeCodeSelector.addCriterion(PropertyCriterion.in(chargeCodeSelector.proto().type(), ARCode.Type.deposits()));
 
-        get(proto().valueType()).addPropertyChangeHandler(new PropertyChangeHandler() {
+        get(proto().valueType()).addValueChangeHandler(new ValueChangeHandler<ValueType>() {
             @Override
-            public void onPropertyChange(PropertyChangeEvent event) {
+            public void onValueChange(ValueChangeEvent<ValueType> event) {
                 moneyPct.setAmountType(get(proto().valueType()).getValue());
             }
         });
