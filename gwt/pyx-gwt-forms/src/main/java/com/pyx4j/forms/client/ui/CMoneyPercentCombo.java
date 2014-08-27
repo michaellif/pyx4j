@@ -51,6 +51,14 @@ public class CMoneyPercentCombo extends CTextFieldBase<IMoneyPercentAmount, NTex
         setNativeComponent(new NTextBox<IMoneyPercentAmount>(this));
     }
 
+    @Override
+    public boolean isValueEmpty() {
+        return getValue() == null || getValue().isNull() || ( //
+                BigDecimal.ZERO.compareTo(getValue().amount().getValue(BigDecimal.ZERO)) >= 0 && //
+                BigDecimal.ZERO.compareTo(getValue().percent().getValue(BigDecimal.ZERO)) >= 0 //
+                );
+    }
+
     public void setAmountType(ValueType type) {
         amountType = type;
         setEditorValue(getValue());
