@@ -69,6 +69,7 @@ import com.propertyvista.crm.client.ui.crud.building.MarketingEditor.MarketingCo
 import com.propertyvista.crm.rpc.dto.billing.BillingCycleDTO;
 import com.propertyvista.crm.rpc.services.MediaUploadBuildingService;
 import com.propertyvista.domain.MediaFile;
+import com.propertyvista.domain.financial.BuildingMerchantAccount;
 import com.propertyvista.domain.financial.MerchantAccount;
 import com.propertyvista.domain.financial.offering.Product;
 import com.propertyvista.domain.marketing.Marketing;
@@ -322,6 +323,7 @@ public class BuildingForm extends CrmEntityForm<BuildingDTO> {
         return formPanel;
     }
 
+    @SuppressWarnings("unchecked")
     private FormPanel createFinancialTab() {
         FormPanel formPanel = new FormPanel(this);
 
@@ -343,6 +345,15 @@ public class BuildingForm extends CrmEntityForm<BuildingDTO> {
                 fillMerchantAccountStatus(event.getValue());
             }
         });
+
+        if (SecurityController.check(DataModelPermission.permissionUpdate(BuildingMerchantAccount.class))) {
+            ((CField<MerchantAccount, ?>) get(proto().merchantAccount())).setNavigationCommand(new Command() {
+                @Override
+                public void execute() {
+                    ((BuildingViewerView) getParentView()).selectMerchantAccount();
+                }
+            });
+        }
 
         return formPanel;
     }

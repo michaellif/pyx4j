@@ -174,7 +174,7 @@ public class BuildingViewerViewImpl extends CrmViewerViewImplBase<BuildingDTO> i
         addAction(new SecureMenuItem(i18n.tr("Select Merchant Account"), new Command() {
             @Override
             public void execute() {
-                new MerchantAccountSelectionBox().show();
+                selectMerchantAccount();
             }
         }, DataModelPermission.permissionUpdate(BuildingMerchantAccount.class)));
     }
@@ -235,6 +235,11 @@ public class BuildingViewerViewImpl extends CrmViewerViewImplBase<BuildingDTO> i
     }
 
     // Internals:
+
+    @Override
+    public void selectMerchantAccount() {
+        new MerchantAccountSelectionBox().show();
+    }
 
     public interface RunBillData extends IEntity {
 
@@ -345,5 +350,4 @@ public class BuildingViewerViewImpl extends CrmViewerViewImplBase<BuildingDTO> i
             return true;
         }
     }
-
 }

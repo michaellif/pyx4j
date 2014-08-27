@@ -80,4 +80,6 @@ public interface BuildingViewerView extends IViewer<BuildingDTO> {
     ILister<Concession> getConcessionListerView();
 
     ILister<BillingCycleDTO> getBillingCycleListerView();
+
+    void selectMerchantAccount();
 }
