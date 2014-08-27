@@ -50,9 +50,8 @@ public class EmployeeViewerActivity extends CrmViewerActivity<EmployeeDTO> imple
     public boolean canEdit() {
         if (ClientContext.getUserVisit().getPrincipalPrimaryKey().equals(entity.user().getPrimaryKey())) {
             return SecurityController.check(VistaCrmBehavior.AccountSelf);
-        } else {
-            return super.canEdit();
         }
+        return super.canEdit();
     }
 
     @Override
@@ -66,7 +65,8 @@ public class EmployeeViewerActivity extends CrmViewerActivity<EmployeeDTO> imple
         AppPlace passwordChangePlace = new CrmSiteMap.PasswordChange();
         passwordChangePlace.queryArg(PasswordChangeView.PasswordChangePresenter.PRINCIPAL_PK_ARG, userId.toString());
         passwordChangePlace.queryArg(PasswordChangeView.PasswordChangePresenter.PRINCIPAL_NAME_ARG, userName);
-        passwordChangePlace.queryArg(PasswordChangeView.PasswordChangePresenter.PRINCIPAL_CLASS, PasswordChangeView.PasswordChangePresenter.PrincipalClass.EMPLOYEE.toString());
+        passwordChangePlace.queryArg(PasswordChangeView.PasswordChangePresenter.PRINCIPAL_CLASS,
+                PasswordChangeView.PasswordChangePresenter.PrincipalClass.EMPLOYEE.toString());
         AppSite.getPlaceController().goTo(passwordChangePlace);
     }
 

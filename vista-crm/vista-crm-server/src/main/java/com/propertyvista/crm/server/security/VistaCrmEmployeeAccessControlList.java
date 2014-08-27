@@ -66,6 +66,7 @@ class VistaCrmEmployeeAccessControlList extends UIAclBuilder {
         // ------ Employee View and Management
         grant(EmployeeBasic, EmployeeDTO.class, READ);
         grant(EmployeeBasic, Notification.class, READ);
+        grant(EmployeeBasic, new ActionPermission(EmployeeDirectoryList.class));
 
         grant(EmployeeFull, EmployeeDTO.class, ALL);
         grant(EmployeeFull, EmployeePrivilegesDTO.class, ALL);
