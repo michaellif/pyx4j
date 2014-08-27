@@ -45,11 +45,11 @@ public class TableModleVersioned {
         @SuppressWarnings("unchecked")
         Class<? extends IVersionData<?>> targetEntityClass = (Class<? extends IVersionData<?>>) member.getMemberMeta().getValueClass();
         EntityQueryCriteria<? extends IVersionData<?>> criteria = EntityQueryCriteria.create(targetEntityClass);
-        criteria.add(PropertyCriterion.eq(criteria.proto().holder(), entity));
+        criteria.eq(criteria.proto().holder(), entity);
 
         if ((versionedEntity.getPrimaryKey().getVersion() == Key.VERSION_DRAFT)) {
-            criteria.add(PropertyCriterion.isNull(criteria.proto().fromDate()));
-            criteria.add(PropertyCriterion.isNull(criteria.proto().toDate()));
+            criteria.isNull(criteria.proto().fromDate());
+            criteria.isNull(criteria.proto().toDate());
         } else {
             Date forDate;
             if (versionedEntity.getPrimaryKey().getVersion() == Key.VERSION_CURRENT) {
@@ -57,7 +57,7 @@ public class TableModleVersioned {
             } else {
                 forDate = new java.util.Date(versionedEntity.getPrimaryKey().getVersion());
             }
-            criteria.add(PropertyCriterion.le(criteria.proto().fromDate(), forDate));
+            criteria.le(criteria.proto().fromDate(), forDate);
             criteria.or(PropertyCriterion.gt(criteria.proto().toDate(), forDate), PropertyCriterion.isNull(criteria.proto().toDate()));
         }
         TableModel tm = mappings.getTableModel(persistenceContext, targetEntityClass);
@@ -169,7 +169,7 @@ public class TableModleVersioned {
                 } else if (false && !newEntity && existingDraft == null) {
                     throw new Error("Can't finalize version when Draft was not created");
                 } else if (versionData.getPrimaryKey() != null) {
-                    // TODO optimize new item creation if no data changed; for now Finalize create new data anyway, 
+                    // TODO optimize new item creation if no data changed; for now Finalize create new data anyway,
                     versionData = EntityGraph.businessDuplicate(versionData);
                     versionData.setPrimaryKey(null);
                     versionData.holder().set(versionedEntity);
