@@ -44,10 +44,9 @@ public class YardiLeaseImportVersionsTest extends PaymentYardiTestBase {
     }
 
     public void testCurrentTermVersionsChange() throws Exception {
-        // Currently, initial import creates 2 lease term versions
         {
             Lease leaseCurrent = Persistence.service().retrieve(Lease.class, lease.getPrimaryKey());
-            assertEquals("initial lease version", Integer.valueOf(2), leaseCurrent.currentTerm().version().versionNumber().getValue());
+            assertEquals("initial lease version", Integer.valueOf(1), leaseCurrent.currentTerm().version().versionNumber().getValue());
         }
 
         // No changes in Yardi, Just run import
@@ -56,7 +55,7 @@ public class YardiLeaseImportVersionsTest extends PaymentYardiTestBase {
         // Nothing changes, expect the same version
         {
             Lease leaseCurrent = Persistence.service().retrieve(Lease.class, lease.getPrimaryKey());
-            assertEquals("initial lease version", Integer.valueOf(2), leaseCurrent.currentTerm().version().versionNumber().getValue());
+            assertEquals("initial lease version", Integer.valueOf(1), leaseCurrent.currentTerm().version().versionNumber().getValue());
         }
 
         // Make two change in Yardi
@@ -76,14 +75,14 @@ public class YardiLeaseImportVersionsTest extends PaymentYardiTestBase {
         // Two changes made version ++1
         {
             Lease leaseCurrent = Persistence.service().retrieve(Lease.class, lease.getPrimaryKey());
-            assertEquals("update lease version", Integer.valueOf(3), leaseCurrent.currentTerm().version().versionNumber().getValue());
+            assertEquals("update lease version", Integer.valueOf(2), leaseCurrent.currentTerm().version().versionNumber().getValue());
         }
 
         yardiImportAll(getYardiCredential("prop1"));
 
         {
             Lease leaseCurrent = Persistence.service().retrieve(Lease.class, lease.getPrimaryKey());
-            assertEquals("update lease version", Integer.valueOf(3), leaseCurrent.currentTerm().version().versionNumber().getValue());
+            assertEquals("update lease version", Integer.valueOf(2), leaseCurrent.currentTerm().version().versionNumber().getValue());
         }
 
     }
