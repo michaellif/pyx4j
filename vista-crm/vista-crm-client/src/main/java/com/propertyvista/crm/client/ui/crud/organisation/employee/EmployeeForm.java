@@ -150,7 +150,6 @@ public class EmployeeForm extends CrmEntityForm<EmployeeDTO> {
 
         privilegesTab.setTabVisible(isManager);
         auditingTab.setTabVisible(VistaTODO.VISTA_4066_EmployeeAuditingEmailNotificationsImplemented && (isSelfEditor || isManager));
-        alertsTab.setTabVisible(isSelfEditor || isManager);
     }
 
     private IsWidget createInfoTab() {
