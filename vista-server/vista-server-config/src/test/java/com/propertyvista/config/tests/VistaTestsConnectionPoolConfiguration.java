@@ -28,7 +28,7 @@ public class VistaTestsConnectionPoolConfiguration extends ConnectionPoolConfigu
         if (unreturnedConnectionTimeout != 0) {
             switch (connectionType) {
             case BackgroundProcess:
-                unreturnedConnectionTimeout = 1 * Consts.MIN2SEC;
+                unreturnedConnectionTimeout = 2 * Consts.MIN2SEC;
                 break;
             case TransactionProcessing:
                 unreturnedConnectionTimeout = 1 * Consts.MIN2SEC;
