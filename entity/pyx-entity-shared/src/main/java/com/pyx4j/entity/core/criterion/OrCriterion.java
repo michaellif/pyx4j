@@ -32,10 +32,10 @@ public class OrCriterion implements Criterion {
 
     private static final long serialVersionUID = 1L;
 
-    //N.B. this is should final; but it is not to enable GWT serialization 
+    //N.B. this is should final; but it is not to enable GWT serialization
     private Vector<Criterion> filtersLeft;
 
-    //N.B. this is should final; but it is not to enable GWT serialization 
+    //N.B. this is should final; but it is not to enable GWT serialization
     private Vector<Criterion> filtersRight;
 
     public OrCriterion() {
@@ -113,5 +113,12 @@ public class OrCriterion implements Criterion {
             return EqualsHelper.equals(this.filtersLeft, ((OrCriterion) o).filtersLeft)
                     && EqualsHelper.equals(this.filtersRight, ((OrCriterion) o).filtersRight);
         }
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder builder = new StringBuilder();
+        builder.append(getFiltersLeft()).append(" OR ").append(getFiltersRight());
+        return builder.toString();
     }
 }

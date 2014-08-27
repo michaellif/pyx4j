@@ -32,7 +32,7 @@ public class AndCriterion extends FiltersBuilder implements Criterion {
 
     private static final long serialVersionUID = 1L;
 
-    //N.B. this is should final; but it is not to enable GWT serialization 
+    //N.B. this is should final; but it is not to enable GWT serialization
     private Vector<Criterion> filters;
 
     public AndCriterion() {
@@ -91,5 +91,10 @@ public class AndCriterion extends FiltersBuilder implements Criterion {
         } else {
             return EqualsHelper.equals(this.filters, ((AndCriterion) o).filters);
         }
+    }
+
+    @Override
+    public String toString() {
+        return filters.toString();
     }
 }
