@@ -33,6 +33,7 @@ import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 
+import com.pyx4j.forms.client.ui.decorators.FieldDecorator;
 import com.pyx4j.gwt.commons.BrowserType;
 import com.pyx4j.gwt.commons.layout.LayoutChangeRequestEvent;
 import com.pyx4j.gwt.commons.layout.LayoutType;
@@ -48,6 +49,10 @@ import com.pyx4j.widgets.client.style.theme.HorizontalAlignCenterMixin;
 public class FrontOfficeLayoutPanel extends ResponsiveLayoutPanel {
 
     public static final int MAX_WIDTH = 1200;
+
+    static {
+        FieldDecorator.Builder.setDefaultLabelWidth("220px");
+    }
 
     private final InlineToolbarHolder inlineToolbarHolder;
 

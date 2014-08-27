@@ -15,7 +15,7 @@ package com.pyx4j.site.client.ui.prime.form;
 
 import com.pyx4j.forms.client.ui.decorators.FieldDecorator;
 
-public class FieldDecoratorBuilder extends FieldDecorator.Builder {
+public class FieldDecoratorBuilder extends FieldDecorator.Builder<FieldDecoratorBuilder> {
 
     // default sizes (in EMs): 
     public static final double LABEL_WIDTH = 15;

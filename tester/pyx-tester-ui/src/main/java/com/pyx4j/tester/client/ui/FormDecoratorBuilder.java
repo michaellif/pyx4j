@@ -21,7 +21,7 @@ import com.pyx4j.forms.client.ui.decorators.FieldDecorator;
 import com.pyx4j.tester.client.TesterSite;
 import com.pyx4j.tester.client.ui.event.CComponentBrowserEvent;
 
-public class FormDecoratorBuilder extends FieldDecorator.Builder {
+public class FormDecoratorBuilder extends FieldDecorator.Builder<FormDecoratorBuilder> {
 
     public FormDecoratorBuilder(String labelWidth, String componentWidth) {
         super();

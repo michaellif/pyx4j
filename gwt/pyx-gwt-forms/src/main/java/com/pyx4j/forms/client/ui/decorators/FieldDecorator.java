@@ -405,6 +405,12 @@ public class FieldDecorator extends FlowPanel implements IFieldDecorator, ILayou
 
     public static class Builder<E extends Builder<E>> {
 
+        private static String LABEL_WIDTH = "150px";
+
+        public static void setDefaultLabelWidth(String labelWidth) {
+            LABEL_WIDTH = labelWidth;
+        }
+
         public enum Alignment {
             left, right, center
         }
@@ -432,7 +438,7 @@ public class FieldDecorator extends FlowPanel implements IFieldDecorator, ILayou
         private LabelPosition labelPosition = LabelPosition.left;
 
         public Builder() {
-            labelWidth = "150px";
+            labelWidth = LABEL_WIDTH;
             componentWidth = "100%";
         }
 
