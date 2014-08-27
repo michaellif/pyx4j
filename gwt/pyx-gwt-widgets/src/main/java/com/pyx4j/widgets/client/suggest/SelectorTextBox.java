@@ -32,12 +32,9 @@ import com.google.gwt.event.dom.client.ChangeEvent;
 import com.google.gwt.event.dom.client.ChangeHandler;
 import com.google.gwt.event.dom.client.FocusEvent;
 import com.google.gwt.event.dom.client.FocusHandler;
-import com.google.gwt.event.dom.client.HasAllKeyHandlers;
 import com.google.gwt.event.dom.client.KeyCodes;
 import com.google.gwt.event.dom.client.KeyDownEvent;
 import com.google.gwt.event.dom.client.KeyDownHandler;
-import com.google.gwt.event.dom.client.KeyPressEvent;
-import com.google.gwt.event.dom.client.KeyPressHandler;
 import com.google.gwt.event.dom.client.KeyUpEvent;
 import com.google.gwt.event.dom.client.KeyUpHandler;
 import com.google.gwt.event.logical.shared.HasSelectionHandlers;
@@ -48,25 +45,19 @@ import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.HasAnimation;
-import com.google.gwt.user.client.ui.HasEnabled;
 import com.google.gwt.user.client.ui.MenuBar;
 import com.google.gwt.user.client.ui.MenuItem;
 import com.google.gwt.user.client.ui.PopupPanel;
-import com.google.gwt.user.client.ui.SimplePanel;
-import com.google.gwt.user.client.ui.SuggestOracle;
 import com.google.gwt.user.client.ui.SuggestOracle.Suggestion;
 import com.google.gwt.user.client.ui.UIObject;
 
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.commons.IFormatter;
-import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.ImageFactory;
 import com.pyx4j.widgets.client.TextBoxBase;
 import com.pyx4j.widgets.client.style.theme.WidgetTheme;
 
-public class SelectorTextBox<E> extends TextBoxBase implements HasEnabled, HasAllKeyHandlers, HasSelectionHandlers<E> {
-
-    private boolean editable = true;
+public class SelectorTextBox<E> extends TextBoxBase implements HasSelectionHandlers<E> {
 
     private int limit = 20;
 
@@ -101,29 +92,8 @@ public class SelectorTextBox<E> extends TextBoxBase implements HasEnabled, HasAl
     }
 
     @Override
-    protected void setTextBoxWidget(com.google.gwt.user.client.ui.TextBoxBase textBoxWidget) {
-        super.setTextBoxWidget(textBoxWidget);
-    }
-
-    @Override
-    public HandlerRegistration addKeyPressHandler(KeyPressHandler handler) {
-        return addDomHandler(handler, KeyPressEvent.getType());
-    }
-
-    @Override
     public HandlerRegistration addSelectionHandler(SelectionHandler<E> handler) {
         return addHandler(handler, SelectionEvent.getType());
-    }
-
-    /**
-     * Gets the limit for the number of suggestions that should be displayed for
-     * this box. It is up to the current {@link SuggestOracle} to enforce this
-     * limit.
-     * 
-     * @return the limit for the number of suggestions
-     */
-    public int getLimit() {
-        return limit;
     }
 
     /**
@@ -156,7 +126,6 @@ public class SelectorTextBox<E> extends TextBoxBase implements HasEnabled, HasAl
         if (!enabled) {
             display.hideSuggestions();
         }
-        getElement().setPropertyBoolean("disabled", !enabled);
     }
 
     public void setLimit(int limit) {
@@ -271,17 +240,6 @@ public class SelectorTextBox<E> extends TextBoxBase implements HasEnabled, HasAl
 
         optionsGrabber.grabOptions(new OptionsGrabber.Request(getText().length() == 0 ? "" : getText(), limit), callback);
 
-    }
-
-    @Override
-    public void setEditable(boolean editable) {
-        this.editable = editable;
-        setEnabled(editable && this.isEnabled());
-    }
-
-    @Override
-    public boolean isEditable() {
-        return editable;
     }
 
     @Override

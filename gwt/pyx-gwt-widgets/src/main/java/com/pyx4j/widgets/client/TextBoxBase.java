@@ -98,6 +98,7 @@ public abstract class TextBoxBase extends Composite implements ITextWidget, Wate
                     textBoxHolder.getElement().getStyle().setMarginRight(actionButton.getOffsetWidth(), Unit.PX);
                 }
             };
+            actionButton.setEnabled(isEditable() && isEnabled());
             actionButton.getElement().getStyle().setPosition(Position.ABSOLUTE);
             actionButton.getElement().getStyle().setTop(0, Unit.PX);
             actionButton.getElement().getStyle().setRight(0, Unit.PX);
@@ -159,6 +160,9 @@ public abstract class TextBoxBase extends Composite implements ITextWidget, Wate
     @Override
     public void setEditable(boolean editable) {
         textBoxWidget.setReadOnly(!editable);
+        if (actionButton != null) {
+            actionButton.setEnabled(isEditable() && isEnabled());
+        }
     }
 
     @Override
@@ -169,6 +173,9 @@ public abstract class TextBoxBase extends Composite implements ITextWidget, Wate
     @Override
     public void setEnabled(boolean enabled) {
         textBoxWidget.setEnabled(enabled);
+        if (actionButton != null) {
+            actionButton.setEnabled(isEditable() && isEnabled());
+        }
     }
 
     @Override
