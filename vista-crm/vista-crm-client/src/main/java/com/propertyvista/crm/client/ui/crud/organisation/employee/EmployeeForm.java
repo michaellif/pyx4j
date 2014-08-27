@@ -164,9 +164,10 @@ public class EmployeeForm extends CrmEntityForm<EmployeeDTO> {
         formPanel.append(Location.Left, proto().birthDate()).decorate().componentWidth(100);
 
         formPanel.br();
-        formPanel.append(Location.Left, proto().homePhone()).decorate().componentWidth(100);
-        formPanel.append(Location.Right, proto().mobilePhone()).decorate().componentWidth(100);
-        formPanel.append(Location.Left, proto().workPhone()).decorate().componentWidth(100);
+        formPanel.append(Location.Left, proto().homePhone()).decorate().componentWidth(200);
+        formPanel.append(Location.Right, proto().mobilePhone()).decorate().componentWidth(200);
+
+        formPanel.append(Location.Left, proto().workPhone()).decorate().componentWidth(200);
         formPanel.append(Location.Right, proto().email()).decorate().componentWidth(200);
         get(proto().email()).setMandatory(true);
 
@@ -175,8 +176,8 @@ public class EmployeeForm extends CrmEntityForm<EmployeeDTO> {
         signature.setScaleMode(ScaleMode.Contain);
         signature.setImageSize(250, 60);
         signature.setThumbnailPlaceholder(new Image(VistaImages.INSTANCE.signaturePlaceholder()));
-        formPanel.append(Location.Dual, proto().signature().file(), signature).decorate().customLabel(i18n.tr("Signature"));
 
+        formPanel.append(Location.Dual, proto().signature().file(), signature).decorate().customLabel(i18n.tr("Signature"));
         formPanel.append(Location.Dual, proto().description()).decorate();
 
         return formPanel;

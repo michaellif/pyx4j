@@ -19,8 +19,8 @@ import static com.propertyvista.domain.security.VistaCrmBehavior.PortfolioBasic;
 import static com.propertyvista.domain.security.VistaCrmBehavior.PortfolioFull;
 import static com.pyx4j.entity.security.AbstractCRUDPermission.ALL;
 import static com.pyx4j.entity.security.AbstractCRUDPermission.READ;
+import static com.pyx4j.entity.security.AbstractCRUDPermission.UPDATE;
 
-import com.pyx4j.entity.security.DataModelPermission;
 import com.pyx4j.entity.security.EntityPermission;
 import com.pyx4j.rpc.shared.IServiceExecutePermission;
 import com.pyx4j.security.server.UIAclBuilder;
@@ -43,6 +43,7 @@ import com.propertyvista.domain.company.Notification;
 import com.propertyvista.domain.company.Portfolio;
 import com.propertyvista.domain.security.CrmRole;
 import com.propertyvista.domain.security.UserAuditingConfigurationDTO;
+import com.propertyvista.domain.security.VistaCrmBehavior;
 import com.propertyvista.domain.security.common.VistaBasicBehavior;
 
 class VistaCrmEmployeeAccessControlList extends UIAclBuilder {
@@ -50,16 +51,21 @@ class VistaCrmEmployeeAccessControlList extends UIAclBuilder {
     VistaCrmEmployeeAccessControlList() {
 
         // -- Crm Users, Self management ==  All Users 
-        grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(CrmPasswordChangeUserService.class));
         grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(CrmUserService.class));
+        grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(CrmPasswordChangeUserService.class));
         grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(CrmAccountRecoveryOptionsUserService.class));
         grant(VistaBasicBehavior.CRMSetupAccountRecoveryOptionsRequired, new IServiceExecutePermission(CrmAccountRecoveryOptionsUserService.class));
 
         // ------ Account Self management
         // There are no UI Permissions, UI bound to  VistaCrmBehavior.AccountSelf
+
         //-- back-end
         {
-            grant(VistaBasicBehavior.CRM, DataModelPermission.create(EmployeeDTO.class, new EmployeeSelfInstanceAccess(), READ));
+            grant(VistaBasicBehavior.CRM, EmployeeDTO.class, new EmployeeSelfInstanceAccess(), READ);
+
+            grant(VistaCrmBehavior.AccountSelf, EmployeeDTO.class, new EmployeeSelfInstanceAccess(), READ | UPDATE);
+            grant(VistaCrmBehavior.AccountSelf, Notification.class, new EmployeeSelfInstanceAccess(), READ | UPDATE);
+
             // There are special  service for this, CrmUserService
         }
 
