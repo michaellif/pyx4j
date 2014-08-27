@@ -23,6 +23,7 @@ package com.pyx4j.widgets.client;
 import com.google.gwt.dom.client.InputElement;
 import com.google.gwt.dom.client.LabelElement;
 
+import com.pyx4j.commons.IDebugId;
 import com.pyx4j.widgets.client.style.theme.WidgetTheme;
 
 public class CheckBox extends com.google.gwt.user.client.ui.CheckBox implements IFocusWidget {
@@ -41,6 +42,11 @@ public class CheckBox extends com.google.gwt.user.client.ui.CheckBox implements 
         this.setText(label);
     }
 
+    @Override
+    public void setDebugId(IDebugId debugId) {
+        ensureDebugId(debugId.debugId());
+    }
+
     /**
      * Change the Debug Id to avoid a special cases for CheckBox in selenium.
      */
@@ -51,7 +57,6 @@ public class CheckBox extends com.google.gwt.user.client.ui.CheckBox implements 
         ensureDebugId(labelElem, baseID, "label");
         ensureDebugId(inputElem, baseID);
         labelElem.setHtmlFor(inputElem.getId());
-
     }
 
     @Override

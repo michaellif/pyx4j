@@ -41,6 +41,7 @@ import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
 import com.pyx4j.commons.CommonsStringUtils;
+import com.pyx4j.commons.IDebugId;
 import com.pyx4j.commons.UserRuntimeException;
 import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.gwt.commons.AjaxJSLoader;
@@ -48,10 +49,10 @@ import com.pyx4j.i18n.shared.I18n;
 
 /**
  * This class Injects reCAPTCHA Client API code.
- * 
+ *
  * @see <a href="http://code.google.com/apis/recaptcha/intro.html">for more information</a>
  * @see <a href="http://code.google.com/apis/recaptcha/docs/customization.html">Customization</a>
- * 
+ *
  */
 public class CaptchaComposite extends SimplePanel implements IFocusWidget {
 
@@ -173,6 +174,7 @@ public class CaptchaComposite extends SimplePanel implements IFocusWidget {
         });
         response.getElement().getStyle().setProperty("padding", "2px 5px");
 
+        response.setNameProperty("recaptcha_response_field");
         response.getElement().getStyle().setMarginTop(5, Unit.PX);
         response.getElement().getStyle().setWidth(100, Unit.PCT);
         divHolder.add(response);
@@ -182,6 +184,11 @@ public class CaptchaComposite extends SimplePanel implements IFocusWidget {
         divHolder.add(responseInternal);
 
         this.add(divHolder);
+    }
+
+    @Override
+    public void setDebugId(IDebugId debugId) {
+        // Do Nothing.
     }
 
     private void assigneRecaptchaId() {
@@ -196,7 +203,7 @@ public class CaptchaComposite extends SimplePanel implements IFocusWidget {
 
     /**
      * Use https://www.google.com/recaptcha/admin/create to create your key
-     * 
+     *
      * @param publicKey
      */
     public static void setPublicKey(String publicKey) {

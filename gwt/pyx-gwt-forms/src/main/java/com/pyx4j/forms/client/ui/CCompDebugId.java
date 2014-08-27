@@ -1,6 +1,6 @@
 /*
  * Pyx4j framework
- * Copyright (C) 2008-2011 pyx4j.com.
+ * Copyright (C) 2008-2013 pyx4j.com.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -14,7 +14,7 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on 2011-05-18
+ * Created on Aug 27, 2014
  * @author vlads
  * @version $Id$
  */
@@ -24,7 +24,11 @@ import com.pyx4j.commons.IDebugId;
 
 public enum CCompDebugId implements IDebugId {
 
-    trigger;
+    // Sufix
+    FileName,
+
+    // Sufix
+    UploadFile;
 
     @Override
     public String debugId() {

@@ -26,6 +26,7 @@ import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.LayoutPanel;
 
+import com.pyx4j.commons.IDebugId;
 import com.pyx4j.gwt.shared.Dimension;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.ImageViewport.ScaleMode;
@@ -129,6 +130,12 @@ public class ImageSlider extends LayoutPanel implements IWidget {
 
     public Button getEditButton() {
         return editButton;
+    }
+
+    @Override
+    public void setDebugId(IDebugId debugId) {
+        // TODO  Make a proper complex implementation
+        ensureDebugId(debugId.debugId());
     }
 
 }

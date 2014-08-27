@@ -36,6 +36,8 @@ import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.SimplePanel;
 
+import com.pyx4j.commons.CompositeDebugId;
+import com.pyx4j.commons.IDebugId;
 import com.pyx4j.widgets.client.style.theme.WidgetTheme;
 
 public abstract class TextBoxBase extends Composite implements ITextWidget, WatermarkComponent {
@@ -49,6 +51,8 @@ public abstract class TextBoxBase extends Composite implements ITextWidget, Wate
     private final FlowPanel contentPanel;
 
     private Button actionButton;
+
+    private IDebugId debugId;
 
     public TextBoxBase() {
         contentPanel = new FlowPanel();
@@ -65,7 +69,9 @@ public abstract class TextBoxBase extends Composite implements ITextWidget, Wate
 
     protected void setTextBoxWidget(com.google.gwt.user.client.ui.TextBoxBase textBoxWidget) {
         this.textBoxWidget = textBoxWidget;
-
+        if (this.debugId != null) {
+            this.textBoxWidget.ensureDebugId(this.debugId.debugId());
+        }
         textBoxWidget.setStyleName(WidgetTheme.StyleName.TextBox.name());
         if (textBoxWidget instanceof com.google.gwt.user.client.ui.TextBox) {
             textBoxWidget.addStyleDependentName(WidgetTheme.StyleDependent.singleLine.name());
@@ -98,6 +104,10 @@ public abstract class TextBoxBase extends Composite implements ITextWidget, Wate
 
             actionButton.setStyleName(WidgetTheme.StyleName.TextBoxActionButton.name());
             contentPanel.add(actionButton);
+
+            if (this.debugId != null) {
+                this.actionButton.ensureDebugId(CompositeDebugId.debugId(this.debugId, WidgetDebugId.trigger));
+            }
         }
     }
 
@@ -184,6 +194,19 @@ public abstract class TextBoxBase extends Composite implements ITextWidget, Wate
     @Override
     public void setTabIndex(int index) {
         textBoxWidget.setTabIndex(index);
+    }
+
+    @Override
+    public void setDebugId(IDebugId debugId) {
+        this.debugId = debugId;
+        textBoxWidget.ensureDebugId(debugId.debugId());
+    }
+
+    /**
+     * Set TextBox HTML element name
+     */
+    public void setNameProperty(String name) {
+        textBoxWidget.setName(name);
     }
 
     public HandlerRegistration addValueChangeHandler(ValueChangeHandler<String> handler) {

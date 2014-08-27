@@ -35,6 +35,7 @@ import com.google.gwt.i18n.client.LocaleInfo;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.view.client.Range;
 
+import com.pyx4j.commons.IDebugId;
 import com.pyx4j.commons.LogicalDate;
 
 public class MonthYearPicker extends HorizontalPanel implements HasChangeHandlers, IFocusWidget {
@@ -174,6 +175,11 @@ public class MonthYearPicker extends HorizontalPanel implements HasChangeHandler
                 yearSelector.setFocus(false);
             }
         }
+    }
+
+    @Override
+    public void setDebugId(IDebugId debugId) {
+        ensureDebugId(debugId.debugId());
     }
 
     @Override

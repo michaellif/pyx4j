@@ -22,6 +22,8 @@ package com.pyx4j.widgets.client;
 
 import com.google.gwt.user.client.ui.SimplePanel;
 
+import com.pyx4j.commons.IDebugId;
+
 public class Viewer extends SimplePanel implements IWidget {
 
     public Viewer() {
@@ -43,6 +45,11 @@ public class Viewer extends SimplePanel implements IWidget {
     @Override
     public boolean isEnabled() {
         return false;
+    }
+
+    @Override
+    public void setDebugId(IDebugId debugId) {
+        ensureDebugId(debugId.debugId());
     }
 
 }

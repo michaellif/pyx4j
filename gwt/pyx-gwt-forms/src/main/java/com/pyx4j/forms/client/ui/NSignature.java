@@ -30,6 +30,7 @@ import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.ui.DockPanel;
 import com.google.gwt.user.client.ui.SimplePanel;
 
+import com.pyx4j.commons.IDebugId;
 import com.pyx4j.entity.shared.ISignature;
 import com.pyx4j.entity.shared.ISignature.SignatureFormat;
 import com.pyx4j.forms.client.ui.NSignature.SignaturePanel;
@@ -311,6 +312,12 @@ public class NSignature extends NFocusField<ISignature, SignaturePanel, CSignatu
         @Override
         public void setTabIndex(int index) {
             textBox.setTabIndex(index);
+        }
+
+        @Override
+        public void setDebugId(IDebugId debugId) {
+            // TODO Implment this properly
+            ensureDebugId(debugId.debugId());
         }
 
     }

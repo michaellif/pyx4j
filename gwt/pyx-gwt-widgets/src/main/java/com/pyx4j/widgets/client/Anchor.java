@@ -26,6 +26,7 @@ import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.Event;
 
+import com.pyx4j.commons.IDebugId;
 import com.pyx4j.widgets.client.style.theme.WidgetTheme;
 
 public class Anchor extends com.google.gwt.user.client.ui.Anchor implements IFocusWidget {
@@ -95,4 +96,8 @@ public class Anchor extends com.google.gwt.user.client.ui.Anchor implements IFoc
         return false;
     }
 
+    @Override
+    public void setDebugId(IDebugId debugId) {
+        ensureDebugId(debugId.debugId());
+    }
 }

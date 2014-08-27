@@ -26,6 +26,8 @@ import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.FlowPanel;
 
+import com.pyx4j.commons.CompositeDebugId;
+import com.pyx4j.commons.IDebugId;
 import com.pyx4j.entity.shared.IFile;
 import com.pyx4j.forms.client.ImageFactory;
 import com.pyx4j.gwt.client.upload.FileUploadDialog;
@@ -130,6 +132,12 @@ public class NFile extends NField<IFile<?>, NFile.ContentPanel, CFile, NFile.Con
             });
             add(uploadAnchor);
 
+        }
+
+        @Override
+        public void setDebugId(IDebugId debugId) {
+            fileNameAnchor.ensureDebugId(CompositeDebugId.debugId(debugId, CCompDebugId.FileName));
+            uploadAnchor.ensureDebugId(CompositeDebugId.debugId(debugId, CCompDebugId.UploadFile));
         }
 
         public void setNativeValue(IFile<?> value) {

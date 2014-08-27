@@ -14,43 +14,21 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on Jan 12, 2012
- * @author michaellif
+ * Created on 2011-05-18
+ * @author vlads
  * @version $Id$
  */
 package com.pyx4j.widgets.client;
 
-import com.google.gwt.dom.client.Element;
-import com.google.gwt.user.client.ui.IsWidget;
-
 import com.pyx4j.commons.IDebugId;
 
-public interface IWidget extends IsWidget {
+public enum WidgetDebugId implements IDebugId {
 
-    void setEnabled(boolean enabled);
+    trigger;
 
-    boolean isEnabled();
-
-    void setEditable(boolean editable);
-
-    boolean isEditable();
-
-    void setVisible(boolean visible);
-
-    boolean isVisible();
-
-    void setWidth(String width);
-
-    void setHeight(String height);
-
-    void addStyleDependentName(String styleSuffix);
-
-    void addStyleName(String styleName);
-
-    void removeStyleDependentName(String styleSuffix);
-
-    void setDebugId(IDebugId debugId);
-
-    Element getElement();
+    @Override
+    public String debugId() {
+        return name();
+    }
 
 }

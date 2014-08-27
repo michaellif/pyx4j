@@ -42,6 +42,7 @@ import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
+import com.pyx4j.commons.IDebugId;
 import com.pyx4j.widgets.client.style.theme.WidgetTheme;
 
 public class RadioGroup<E> extends SimplePanel implements IFocusWidget, HasValueChangeHandlers<E> {
@@ -203,6 +204,11 @@ public class RadioGroup<E> extends SimplePanel implements IFocusWidget, HasValue
                 b.setFocus(false);
             }
         }
+    }
+
+    @Override
+    public void setDebugId(IDebugId debugId) {
+        ensureDebugId(debugId.debugId());
     }
 
     @Override

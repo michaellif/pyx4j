@@ -38,11 +38,13 @@ import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.PushButton;
 import com.google.gwt.user.client.ui.ToggleButton;
 
+import com.pyx4j.commons.IDebugId;
 import com.pyx4j.widgets.client.ITextWidget;
 import com.pyx4j.widgets.client.RichTextArea;
 import com.pyx4j.widgets.client.richtext.ExtendedRichTextToolbar.RichTextAction;
 
 public class ExtendedRichTextArea extends DockPanel implements ITextWidget {
+
     private final RichTextArea richTextArea;
 
     private final ExtendedRichTextToolbar toolbar;
@@ -263,6 +265,11 @@ public class ExtendedRichTextArea extends DockPanel implements ITextWidget {
         } else {
             richTextArea.setText(html);
         }
+    }
+
+    @Override
+    public void setDebugId(IDebugId debugId) {
+        ensureDebugId(debugId.debugId());
     }
 
     @Override

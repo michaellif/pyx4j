@@ -16,6 +16,7 @@ import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.SimplePanel;
 
 import com.pyx4j.commons.CommonsStringUtils;
+import com.pyx4j.commons.IDebugId;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.criterion.Criterion;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
@@ -30,8 +31,8 @@ import com.pyx4j.forms.client.ui.CComboBox.AsyncOptionsReadyCallback;
 import com.pyx4j.forms.client.ui.CFocusComponent;
 import com.pyx4j.forms.client.ui.NFocusField;
 import com.pyx4j.forms.client.validators.AbstractComponentValidator;
-import com.pyx4j.forms.client.validators.IValidator;
 import com.pyx4j.forms.client.validators.BasicValidationError;
+import com.pyx4j.forms.client.validators.IValidator;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.tester.client.view.widget.CAddressStateComboBox.NAddressStateBox;
 import com.pyx4j.widgets.client.IFocusWidget;
@@ -364,6 +365,11 @@ public abstract class CAddressStateComboBox<E, OPTION extends IEntity> extends C
             public void removeStyleDependentName(String styleSuffix) {
                 textBox.removeStyleDependentName(styleSuffix);
                 listBox.removeStyleDependentName(styleSuffix);
+            }
+
+            @Override
+            public void setDebugId(IDebugId debugId) {
+                ensureDebugId(debugId.debugId());
             }
 
             @Override

@@ -52,6 +52,7 @@ import com.google.gwt.user.client.ui.FocusPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.ListBox;
 
+import com.pyx4j.commons.IDebugId;
 import com.pyx4j.forms.client.ImageFactory;
 import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.GroupFocusHandler;
@@ -266,7 +267,13 @@ public class NativeListSelectionComposite<E> extends FocusPanel implements INati
     }
 
     @Override
+    public void setDebugId(IDebugId debugId) {
+        ensureDebugId(debugId.debugId());
+    }
+
+    @Override
     protected void onEnsureDebugId(String baseID) {
+        //TODO Use Enum   like in ItemActionsBar.ActionType
         optionsListBox.ensureDebugId(baseID + "-options");
         selectedListBox.ensureDebugId(baseID + "-selected");
         removeButton.ensureDebugId(baseID + "-removeButton");

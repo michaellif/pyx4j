@@ -47,6 +47,7 @@ import com.google.gwt.user.client.ui.Widget;
 import com.pyx4j.commons.CompositeDebugId;
 import com.pyx4j.commons.IDebugId;
 import com.pyx4j.widgets.client.Button;
+import com.pyx4j.widgets.client.WidgetDebugId;
 import com.pyx4j.widgets.client.GroupFocusHandler;
 import com.pyx4j.widgets.client.IWidget;
 import com.pyx4j.widgets.client.style.theme.WidgetTheme;
@@ -244,7 +245,7 @@ public abstract class NField<DATA_TYPE, EDITOR extends IWidget, CCOMP extends CF
 
         assert (debugId != null) : "Unassigned DebugId in native component of " + getCComponent().shortDebugInfo();
         if (editor != null) {
-            editor.ensureDebugId(debugId.debugId());
+            editor.setDebugId(debugId);
         }
         if (viewer != null) {
             viewer.ensureDebugId(debugId.debugId());
@@ -372,7 +373,7 @@ public abstract class NField<DATA_TYPE, EDITOR extends IWidget, CCOMP extends CF
                     }
                 }));
 
-                triggerButton.ensureDebugId(CompositeDebugId.debugId(baseDebugID, CCompDebugId.trigger));
+                triggerButton.ensureDebugId(CompositeDebugId.debugId(baseDebugID, WidgetDebugId.trigger));
                 triggerButtonHolder.setWidget(triggerButton);
             }
         }
@@ -391,7 +392,7 @@ public abstract class NField<DATA_TYPE, EDITOR extends IWidget, CCOMP extends CF
                 clearButtonHandlerRegistrations.add(clearButton.addFocusHandler(groupFocusHandler));
                 clearButtonHandlerRegistrations.add(clearButton.addBlurHandler(groupFocusHandler));
 
-                clearButton.ensureDebugId(CompositeDebugId.debugId(baseDebugID, CCompDebugId.trigger));
+                clearButton.ensureDebugId(CompositeDebugId.debugId(baseDebugID, WidgetDebugId.trigger));
                 clearButton.getElement().getStyle().setDisplay(Display.BLOCK);
                 clearButtonHolder.setWidget(clearButton);
             }

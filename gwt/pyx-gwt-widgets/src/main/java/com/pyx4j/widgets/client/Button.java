@@ -45,6 +45,7 @@ import com.google.gwt.user.client.ui.MenuBar;
 import com.google.gwt.user.client.ui.MenuItem;
 import com.google.gwt.user.client.ui.SimplePanel;
 
+import com.pyx4j.commons.IDebugId;
 import com.pyx4j.security.annotations.ActionId;
 import com.pyx4j.security.shared.AccessControlContext;
 import com.pyx4j.security.shared.ActionPermission;
@@ -290,6 +291,11 @@ public class Button extends FocusPanel implements IFocusWidget, HasSecureConcern
     public void setEnabled(boolean enabled) {
         getElement().setPropertyBoolean("disabled", !enabled);
         buttonFacesHandler.setEnabled(enabled);
+    }
+
+    @Override
+    public void setDebugId(IDebugId debugId) {
+        ensureDebugId(debugId.debugId());
     }
 
     @Override
