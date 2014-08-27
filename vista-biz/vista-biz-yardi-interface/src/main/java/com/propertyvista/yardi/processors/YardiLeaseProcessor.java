@@ -193,12 +193,11 @@ public class YardiLeaseProcessor {
         // tenants:
         new TenantMerger(rtd.getExecutionMonitor()).createTenants(yardiCustomers, lease.currentTerm());
 
+        updateLeaseProducts(lease, ltd);
+
         lease = ServerSideFactory.create(LeaseFacade.class).persist(lease);
         ServerSideFactory.create(LeaseFacade.class).approve(lease, null, null);
-        lease = ServerSideFactory.create(LeaseFacade.class).load(lease, true);
-        if (updateLeaseProducts(lease, ltd)) {
-            lease = ServerSideFactory.create(LeaseFacade.class).finalize(lease);
-        }
+        lease = ServerSideFactory.create(LeaseFacade.class).load(lease, false);
 
         rtd.getExecutionMonitor().addInfoEvent("Lease",
                 SimpleMessageFormat.format("lease {0} created for unit {1}", lease.leaseId().getValue(), lease.unit().getStringView()));
@@ -333,9 +332,7 @@ public class YardiLeaseProcessor {
         }
 
         List<BillableItem> currentItems = new ArrayList<>();
-        if (!lease.currentTerm().version().leaseProducts().serviceItem().isNull()) {
-            currentItems.add(lease.currentTerm().version().leaseProducts().serviceItem());
-        }
+        currentItems.add(lease.currentTerm().version().leaseProducts().serviceItem());
         currentItems.addAll(lease.currentTerm().version().leaseProducts().featureItems());
 
         List<BillableItem> newItems = new ArrayList<BillableItem>();
@@ -360,7 +357,7 @@ public class YardiLeaseProcessor {
             String uid = billableItemUid(tr.getCharge().getDetail().getChargeCode(), chargeCodeItemNo);
             BillableItem newItem = null;
             for (BillableItem leaseItem : currentItems) {
-                if (uid.compareTo(leaseItem.uid().getValue()) == 0) {
+                if (!leaseItem.uid().isNull() && uid.compareTo(leaseItem.uid().getValue()) == 0) {
                     newItem = EntityGraph.businessDuplicate(leaseItem);
                 }
             }
