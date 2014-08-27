@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011-2012 All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -26,6 +26,7 @@ import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.SimplePanel;
 
 import com.pyx4j.commons.CommonsStringUtils;
+import com.pyx4j.commons.IDebugId;
 import com.pyx4j.forms.client.events.NValueChangeEvent;
 import com.pyx4j.forms.client.ui.NFocusField;
 import com.pyx4j.widgets.client.IFocusWidget;
@@ -151,6 +152,7 @@ public class NProvinceComboBox extends NFocusField<String, IFocusWidget, CProvin
     }
 
     static class ComboEditor extends SimplePanel implements IFocusWidget {
+
         private TextBox textBox;
 
         private ListBox listBox;
@@ -248,6 +250,11 @@ public class NProvinceComboBox extends NFocusField<String, IFocusWidget, CProvin
         public void removeStyleDependentName(String styleSuffix) {
             textBox.removeStyleDependentName(styleSuffix);
             listBox.removeStyleDependentName(styleSuffix);
+        }
+
+        @Override
+        public void setDebugId(IDebugId debugId) {
+            ensureDebugId(debugId.debugId());
         }
 
         @Override

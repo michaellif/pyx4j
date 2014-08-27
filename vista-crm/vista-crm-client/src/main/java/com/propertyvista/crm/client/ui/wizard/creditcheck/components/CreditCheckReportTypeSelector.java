@@ -36,6 +36,7 @@ import com.google.gwt.user.client.ui.FocusPanel;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
 
+import com.pyx4j.commons.IDebugId;
 import com.pyx4j.commons.css.IStyleDependent;
 import com.pyx4j.commons.css.IStyleName;
 import com.pyx4j.i18n.shared.I18n;
@@ -214,6 +215,11 @@ public class CreditCheckReportTypeSelector extends Composite implements IFocusWi
     public void setTabIndex(int index) {
         // TODO Auto-generated method stub
 
+    }
+
+    @Override
+    public void setDebugId(IDebugId debugId) {
+        ensureDebugId(debugId.debugId());
     }
 
     @Override
