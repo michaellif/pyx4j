@@ -24,6 +24,7 @@ import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.Owned;
+import com.pyx4j.entity.annotations.SecurityEnabled;
 import com.pyx4j.entity.annotations.Timestamp;
 import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.validator.NotNull;
@@ -36,6 +37,7 @@ import com.pyx4j.i18n.shared.I18nEnum;
 import com.propertyvista.domain.note.HasNotesAndAttachments;
 import com.propertyvista.domain.property.asset.building.BuildingAddOns;
 
+@SecurityEnabled
 @DiscriminatorValue("Parking")
 public interface Parking extends BuildingElement, HasNotesAndAttachments, BuildingAddOns {
 

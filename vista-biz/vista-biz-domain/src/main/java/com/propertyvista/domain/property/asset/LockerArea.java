@@ -21,6 +21,7 @@ import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.Owned;
+import com.pyx4j.entity.annotations.SecurityEnabled;
 import com.pyx4j.entity.annotations.Timestamp;
 import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.validator.NotNull;
@@ -30,6 +31,7 @@ import com.pyx4j.entity.core.ISet;
 
 import com.propertyvista.domain.property.asset.building.BuildingAddOns;
 
+@SecurityEnabled
 @DiscriminatorValue("LockerArea")
 public interface LockerArea extends BuildingElement, BuildingAddOns {
 

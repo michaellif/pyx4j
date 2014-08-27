@@ -20,6 +20,7 @@ import com.pyx4j.entity.annotations.JoinColumn;
 import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.annotations.ReadOnly;
+import com.pyx4j.entity.annotations.SecurityEnabled;
 import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.core.IEntity;
@@ -29,6 +30,7 @@ import com.pyx4j.i18n.shared.I18nEnum;
 
 import com.propertyvista.shared.adapters.ParkingSpotCountersAdapter;
 
+@SecurityEnabled
 public interface ParkingSpot extends IEntity {
 
     @I18n
