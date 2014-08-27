@@ -39,7 +39,7 @@ public class YesNoComboBox extends CComboBox<Boolean> {
     }
 
     @Override
-    public boolean isValuesEquals(Boolean value1, Boolean value2) {
+    public boolean isValuesEqual(Boolean value1, Boolean value2) {
         if (value1 == null | value2 == null) {
             return value1 == value2;
         } else {

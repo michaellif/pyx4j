@@ -96,7 +96,7 @@ public class MaintenanceRequestCategoryChoice extends CComboBox<MaintenanceReque
     }
 
     @Override
-    public boolean isValuesEquals(MaintenanceRequestCategory value1, MaintenanceRequestCategory value2) {
+    public boolean isValuesEqual(MaintenanceRequestCategory value1, MaintenanceRequestCategory value2) {
         // compare categories using PK
         return value1 != null && value2 != null && !value1.isValueDetached() && !value2.isValueDetached() && value1.getPrimaryKey() != null
                 && value1.getPrimaryKey().equals(value2.getPrimaryKey());
@@ -272,7 +272,7 @@ public class MaintenanceRequestCategoryChoice extends CComboBox<MaintenanceReque
         MaintenanceRequestCategory found = null;
         for (MaintenanceRequestCategory subCat : parent.subCategories()) {
             // if not this one, go to the next level down the tree
-            if (isValuesEquals(entry, subCat)) {
+            if (isValuesEqual(entry, subCat)) {
                 return subCat;
             } else if ((found = findMetaEntry(entry, subCat)) != null) {
                 return found;

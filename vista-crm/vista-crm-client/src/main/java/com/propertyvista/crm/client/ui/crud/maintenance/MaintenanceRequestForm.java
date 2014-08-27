@@ -584,7 +584,7 @@ public class MaintenanceRequestForm extends CrmEntityForm<MaintenanceRequestDTO>
         }
 
         @Override
-        public boolean isValuesEquals(MaintenanceRequestPriority value1, MaintenanceRequestPriority value2) {
+        public boolean isValuesEqual(MaintenanceRequestPriority value1, MaintenanceRequestPriority value2) {
             return value1 != null && value2 != null && value1.name().equals(value2.name());
         }
 
@@ -611,7 +611,7 @@ public class MaintenanceRequestForm extends CrmEntityForm<MaintenanceRequestDTO>
         }
 
         @Override
-        public boolean isValuesEquals(MaintenanceRequestStatus value1, MaintenanceRequestStatus value2) {
+        public boolean isValuesEqual(MaintenanceRequestStatus value1, MaintenanceRequestStatus value2) {
             return value1 != null && value2 != null && value1.name().equals(value2.name());
         }
 

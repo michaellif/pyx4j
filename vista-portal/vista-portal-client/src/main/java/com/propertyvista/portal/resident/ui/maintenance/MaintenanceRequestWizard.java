@@ -347,7 +347,7 @@ public class MaintenanceRequestWizard extends CPortalEntityWizard<MaintenanceReq
         }
 
         @Override
-        public boolean isValuesEquals(MaintenanceRequestPriority value1, MaintenanceRequestPriority value2) {
+        public boolean isValuesEqual(MaintenanceRequestPriority value1, MaintenanceRequestPriority value2) {
             return value1 != null && value2 != null && value1.name().equals(value2.name());
         }
 

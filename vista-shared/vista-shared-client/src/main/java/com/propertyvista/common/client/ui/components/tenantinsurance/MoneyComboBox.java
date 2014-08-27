@@ -46,7 +46,7 @@ public class MoneyComboBox extends CComboBox<BigDecimal> {
     }
 
     @Override
-    public boolean isValuesEquals(BigDecimal value1, BigDecimal value2) {
+    public boolean isValuesEqual(BigDecimal value1, BigDecimal value2) {
         if (value1 == null | value2 == null) {
             return value1 == value2;
         } else {
