@@ -87,8 +87,6 @@ import com.pyx4j.entity.server.AdapterFactory;
 import com.pyx4j.entity.server.CompensationHandler;
 import com.pyx4j.entity.server.ConnectionTarget;
 import com.pyx4j.entity.server.Executable;
-import com.pyx4j.entity.server.IEntityPersistenceService;
-import com.pyx4j.entity.server.IEntityPersistenceServiceExt;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.server.PersistenceServicesFactory;
 import com.pyx4j.entity.server.TransactionScopeOption;
@@ -100,11 +98,11 @@ import com.pyx4j.security.shared.SecurityViolationException;
 import com.pyx4j.server.contexts.NamespaceManager;
 
 /**
- * 
+ *
  * @see PersistenceServicesFactory#RDBMS_IMPL_CLASS
- * 
+ *
  */
-public class EntityPersistenceServiceRDB implements IEntityPersistenceService, IEntityPersistenceServiceExt {
+public class EntityPersistenceServiceRDB implements IEntityPersistenceServiceRDB {
 
     private static final Logger log = LoggerFactory.getLogger(EntityPersistenceServiceRDB.class);
 
@@ -193,6 +191,7 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
         mappings.reset();
     }
 
+    @Override
     public MultitenancyType getMultitenancyType() {
         return connectionProvider.getDialect().getMultitenancyType();
     }
@@ -463,12 +462,14 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
         }
     }
 
+    @Override
     public DatabaseType getDatabaseType() {
         // Because mapping hods configuration ...
         return mappings.getDatabaseType();
     }
 
-    String getDatabaseName() {
+    @Override
+    public String getDatabaseName() {
         // Because mapping hods configuration ...
         return mappings.getDatabaseName();
     }
@@ -485,6 +486,7 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
         return connectionProvider.getConnection(ConnectionReason.forDDL);
     }
 
+    @Override
     public boolean isTableExists(Class<? extends IEntity> entityClass) {
         startCallContext(ConnectionReason.forRead);
         try {
@@ -544,6 +546,7 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
         return mappings.ensureTable(getPersistenceContext(), entityMeta.getEntityClass(), false);
     }
 
+    @Override
     public void ensureSchemaModel(Iterable<Class<? extends IEntity>> classes) {
         mappings.ensureSchemaModel(getPersistenceContext(), classes);
     }
@@ -855,7 +858,7 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
 
     /**
      * This is untested method do not use unless you know what is inside this function!
-     * 
+     *
      * @deprecated do not use unless told to do so!
      */
     @Deprecated

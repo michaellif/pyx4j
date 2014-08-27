@@ -251,6 +251,10 @@ public class PersistenceContext {
             if (options().assertTransactionManangementCallOrigin.startsWith(UnitOfWork.class.getName())) {
                 options().transactionManangementCallOriginSetFrom = Trace.getCallOrigin(UnitOfWork.class);
             }
+            // Ignore call origin when called from ProxyInstance
+            if (options().assertTransactionManangementCallOrigin.startsWith("sun.reflect.")) {
+                options().assertTransactionManangementCallOrigin = null;
+            }
         }
     }
 

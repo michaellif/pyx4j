@@ -96,7 +96,7 @@ public class RDBUtils implements Closeable {
         RDBUtils utils = new RDBUtils();
         Connection connection = null;
         try {
-            if (((EntityPersistenceServiceRDB) Persistence.service()).getMultitenancyType() == MultitenancyType.SeparateSchemas) {
+            if (((IEntityPersistenceServiceRDB) Persistence.service()).getMultitenancyType() == MultitenancyType.SeparateSchemas) {
                 connection = utils.connection();
                 String storedNamespaceName = NamespaceManager.getNamespace();
                 boolean schemaExists = false;
@@ -117,7 +117,7 @@ public class RDBUtils implements Closeable {
                 }
 
                 if (!schemaExists) {
-                    switch (((EntityPersistenceServiceRDB) Persistence.service()).getDatabaseType()) {
+                    switch (((IEntityPersistenceServiceRDB) Persistence.service()).getDatabaseType()) {
                     case PostgreSQL:
                         utils.execute("CREATE SCHEMA " + storedNamespaceName);
                         break;
@@ -141,7 +141,7 @@ public class RDBUtils implements Closeable {
         RDBUtils utils = new RDBUtils();
         try {
             log.debug("recreate DB/SCHEMAs");
-            switch (((EntityPersistenceServiceRDB) Persistence.service()).getDatabaseType()) {
+            switch (((IEntityPersistenceServiceRDB) Persistence.service()).getDatabaseType()) {
             case PostgreSQL:
                 DatabaseMetaData dbMeta = utils.connection().getMetaData();
                 ResultSet rs = null;
@@ -170,9 +170,9 @@ public class RDBUtils implements Closeable {
             default:
                 throw new Error("Unsupported dialect");
             }
-            ((EntityPersistenceServiceRDB) Persistence.service()).resetMapping();
-            ((EntityPersistenceServiceRDB) Persistence.service()).resetConnectionPool();
-            log.info("Database '{}' recreated in {}", ((EntityPersistenceServiceRDB) Persistence.service()).getDatabaseName(), TimeUtils.secSince(start));
+            ((IEntityPersistenceServiceRDB) Persistence.service()).resetMapping();
+            ((IEntityPersistenceServiceRDB) Persistence.service()).resetConnectionPool();
+            log.info("Database '{}' recreated in {}", ((IEntityPersistenceServiceRDB) Persistence.service()).getDatabaseName(), TimeUtils.secSince(start));
         } catch (SQLException e) {
             throw new Error(e);
         } finally {
@@ -185,7 +185,7 @@ public class RDBUtils implements Closeable {
         RDBUtils utils = new RDBUtils();
         try {
             log.debug("recreate DB/SCHEMA {}", schema);
-            switch (((EntityPersistenceServiceRDB) Persistence.service()).getDatabaseType()) {
+            switch (((IEntityPersistenceServiceRDB) Persistence.service()).getDatabaseType()) {
             case PostgreSQL:
                 DatabaseMetaData dbMeta = utils.connection().getMetaData();
                 ResultSet rs = null;
@@ -271,7 +271,7 @@ public class RDBUtils implements Closeable {
             }
             allClasses.add(entityClass);
         }
-        ((EntityPersistenceServiceRDB) Persistence.service()).ensureSchemaModel(allClasses);
+        ((IEntityPersistenceServiceRDB) Persistence.service()).ensureSchemaModel(allClasses);
         log.info("Total of {} tables created/verified in {}", allClasses.size(), TimeUtils.secSince(start));
     }
 
@@ -293,12 +293,12 @@ public class RDBUtils implements Closeable {
             }
             allClasses.add(entityClass);
         }
-        ((EntityPersistenceServiceRDB) Persistence.service()).ensureSchemaModel(allClasses);
+        ((IEntityPersistenceServiceRDB) Persistence.service()).ensureSchemaModel(allClasses);
         log.info("Total of {} tables created/verified in {}", allClasses.size(), TimeUtils.secSince(start));
     }
 
     public static void deleteFromAllEntityTables() {
-        EntityPersistenceServiceRDB srv = (EntityPersistenceServiceRDB) Persistence.service();
+        IEntityPersistenceServiceRDB srv = (IEntityPersistenceServiceRDB) Persistence.service();
         List<String> allClasses = EntityClassFinder.getEntityClassesNames();
         for (String className : allClasses) {
             Class<? extends IEntity> entityClass = ServerEntityFactory.entityClass(className);
