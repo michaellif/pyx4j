@@ -148,7 +148,7 @@ public class PaymentPostingCheckYardiTest extends PaymentYardiTestBase {
 
         {
             Lease leaseCurrent = Persistence.service().retrieve(Lease.class, lease.getPrimaryKey());
-            assertEquals("update lease version", Integer.valueOf(4), leaseCurrent.currentTerm().version().versionNumber().getValue());
+            assertEquals("update lease version", Integer.valueOf(3), leaseCurrent.currentTerm().version().versionNumber().getValue());
         }
 
     }
