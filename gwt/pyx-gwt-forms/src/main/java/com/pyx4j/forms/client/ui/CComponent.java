@@ -573,7 +573,11 @@ public abstract class CComponent<SELF_TYPE extends CComponent<SELF_TYPE, DATA_TY
     }
 
     public boolean isValueEmpty() {
-        return getValue() == null || (getValue() instanceof IEntity && ((IEntity) getValue()).isNull());
+        return isValueEmpty(getValue());
+    }
+
+    private boolean isValueEmpty(DATA_TYPE value) {
+        return value == null || (value instanceof IEntity && ((IEntity) value).isNull());
     }
 
     public boolean isValuesEqual(DATA_TYPE value1, DATA_TYPE value2) {
@@ -674,9 +678,9 @@ public abstract class CComponent<SELF_TYPE extends CComponent<SELF_TYPE, DATA_TY
                 editorValue = null;
             }
 
-            this.value = editorValue;
+            if (isValueEmpty(editorValue) || !isValuesEqual(this.value, editorValue)) {
+                this.value = editorValue;
 
-            if (isValueEmpty() || !isValuesEqual(this.value, editorValue)) {
                 revalidate();
                 //Overwrite native value with the value that has been formatted by getNativeValue()
                 if (isValid()) {
