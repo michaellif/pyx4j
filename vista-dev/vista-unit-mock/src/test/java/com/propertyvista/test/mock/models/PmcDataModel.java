@@ -16,7 +16,7 @@ package com.propertyvista.test.mock.models;
 import java.util.concurrent.Callable;
 
 import com.pyx4j.entity.core.EntityFactory;
-import com.pyx4j.entity.rdb.EntityPersistenceServiceRDB;
+import com.pyx4j.entity.rdb.IEntityPersistenceServiceRDB;
 import com.pyx4j.entity.rdb.RDBUtils;
 import com.pyx4j.entity.rdb.cfg.Configuration.DatabaseType;
 import com.pyx4j.entity.server.Persistence;
@@ -51,7 +51,7 @@ public class PmcDataModel extends MockDataModel<Pmc> {
             return;
         }
 
-        if (((EntityPersistenceServiceRDB) Persistence.service()).getDatabaseType() == DatabaseType.PostgreSQL) {
+        if (((IEntityPersistenceServiceRDB) Persistence.service()).getDatabaseType() == DatabaseType.PostgreSQL) {
             NamespaceManager.setNamespace(NamespaceManager.getNamespace());
             RDBUtils.ensureNamespace();
             RDBUtils.initAllEntityTables();

@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011- All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -17,13 +17,13 @@ import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
 
-import junit.framework.Assert;
+import org.junit.Assert;
 
 import com.pyx4j.entity.annotations.AbstractEntity;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.meta.EntityMeta;
-import com.pyx4j.entity.rdb.EntityPersistenceServiceRDB;
+import com.pyx4j.entity.rdb.IEntityPersistenceServiceRDB;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.server.ServerEntityFactory;
 import com.pyx4j.entity.server.impl.EntityClassFinder;
@@ -34,7 +34,7 @@ public class VistaDBResetTest extends VistaDBTestBase {
 
     public void testObjectsStructure() {
         List<String> allClasses = EntityClassFinder.getEntityClassesNames();
-        EntityPersistenceServiceRDB srv = (EntityPersistenceServiceRDB) Persistence.service();
+        IEntityPersistenceServiceRDB srv = (IEntityPersistenceServiceRDB) Persistence.service();
 
         Map<String, Class<? extends IEntity>> allTables = new Hashtable<String, Class<? extends IEntity>>();
 
