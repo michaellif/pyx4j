@@ -15,8 +15,8 @@
 *** --------------------------------------------------------------------
 **/
 
-ALTER TABLE _dba_.building_stats    ADD COLUMN total_insurance INT,
-                                    ADD COLUMN total_tenantsure INT;
+ALTER TABLE _dba_.building_stats    ADD COLUMN total_insurance INT  DEFAULT 0,
+                                    ADD COLUMN total_tenantsure INT DEFAULT 0;
                                     
 
 
@@ -887,7 +887,6 @@ BEGIN
                         ||'         JOIN    '||v_schema_name||'.insurance_policy p ON (lp.id = p.tenant) '
                         ||'         WHERE   l.status = ''Active'' '
                         ||'         AND NOT p.is_deleted '
-                        ||'         AND     p.id_discriminator = ''GeneralInsurancePolicy'' '
                         ||'         GROUP BY b.property_code ) AS t '
                         ||'WHERE    s.property_code = t.property_code '
                         ||'AND     s.pmc = '''||v_schema_name||''' ' 
