@@ -18,8 +18,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.collections4.map.CaseInsensitiveMap;
-
-import com.google.gwt.thirdparty.guava.common.primitives.Chars;
+import org.apache.commons.lang.StringUtils;
 
 import com.pyx4j.essentials.server.csv.EntityCSVReciver;
 import com.pyx4j.gwt.server.IOUtils;
@@ -57,22 +56,10 @@ public class PermissionDescriptionLoader {
 
         for (VistaCrmBehaviorDTO dto : to) {
             // Ignore some chars from permission names from DB
-            String key = removeAllChars(dto.permission().getValue(), IGNORING_CHARS);
+            String key = StringUtils.replaceChars(dto.permission().getValue(), new String(IGNORING_CHARS), null);
             if (from.containsKey(key))
                 dto.description().setValue(from.get(key));
         }
-    }
-
-    private static String removeAllChars(String str, char[] chars) {
-        StringBuffer result = new StringBuffer();
-
-        for (char c : str.toCharArray()) {
-            if (!(Chars.asList(chars)).contains(c)) {
-                result.append(c);
-            }
-        }
-
-        return result.toString();
     }
 
     private static void initDescriptionsMap() {
@@ -83,7 +70,8 @@ public class PermissionDescriptionLoader {
 
         for (PermissionDescription p : descriptions) {
             // Ignore some chars from permission names from XLS file
-            descriptionsMap.put(removeAllChars(p.permission().getValue(), IGNORING_CHARS), p.description().getValue());
+            String permissionNameIgnoreChars = StringUtils.replaceChars(p.permission().getValue(), new String(IGNORING_CHARS), null);
+            descriptionsMap.put(permissionNameIgnoreChars, p.description().getValue());
         }
     }
 
