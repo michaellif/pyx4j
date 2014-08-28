@@ -72,7 +72,7 @@ public class LeaseParticipanApprovalFolder extends VistaBoxFolder<LeaseParticipa
 
     private class LeaseParticipanApprovalViewer extends CForm<LeaseParticipanApprovalDTO> {
 
-        private Widget creditCheckResultPanel;
+        private final Widget creditCheckResultPanel = createCreditCheckResultPanel();
 
         public LeaseParticipanApprovalViewer() {
             super(LeaseParticipanApprovalDTO.class);
@@ -86,7 +86,7 @@ public class LeaseParticipanApprovalFolder extends VistaBoxFolder<LeaseParticipa
 
             main.setWidget(0, 0, createLeaseParticipantInfoPanel());
             if (VistaFeatures.instance().countryOfOperation() == CountryOfOperation.Canada) {
-                main.setWidget(0, 1, creditCheckResultPanel = createCreditCheckResultPanel());
+                main.setWidget(0, 1, creditCheckResultPanel);
             }
 
             main.getFlexCellFormatter().setVerticalAlignment(0, 0, HasVerticalAlignment.ALIGN_TOP);
