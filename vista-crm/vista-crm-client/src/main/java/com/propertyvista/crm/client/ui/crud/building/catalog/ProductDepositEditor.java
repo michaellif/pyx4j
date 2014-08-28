@@ -56,7 +56,7 @@ public class ProductDepositEditor extends CForm<ProductDeposit> {
         get(proto().valueType()).addValueChangeHandler(new ValueChangeHandler<ValueType>() {
             @Override
             public void onValueChange(ValueChangeEvent<ValueType> event) {
-                moneyPct.setAmountType(get(proto().valueType()).getValue());
+                moneyPct.setAmountType(event.getValue());
             }
         });
 

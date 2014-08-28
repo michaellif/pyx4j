@@ -53,9 +53,8 @@ public class ConcessionForm extends CrmEntityForm<Concession> {
         get(proto().version().type()).addValueChangeHandler(new ValueChangeHandler<Type>() {
             @Override
             public void onValueChange(ValueChangeEvent<Type> event) {
-                Type type = get(proto().version().type()).getValue();
-                moneyPct.setAmountType(Type.percentageOff.equals(type) ? ValueType.Percentage : ValueType.Monetary);
-                moneyPct.setEnabled(!Type.free.equals(type));
+                moneyPct.setAmountType(Type.percentageOff.equals(event.getValue()) ? ValueType.Percentage : ValueType.Monetary);
+                moneyPct.setEnabled(!Type.free.equals(event.getValue()));
             }
         });
 

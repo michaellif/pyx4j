@@ -90,7 +90,7 @@ public class LeaseAdjustmentForm extends CrmEntityForm<LeaseAdjustment> {
         get(proto().taxType()).addValueChangeHandler(new ValueChangeHandler<ValueType>() {
             @Override
             public void onValueChange(ValueChangeEvent<ValueType> event) {
-                moneyPercent.setAmountType(get(proto().taxType()).getValue());
+                moneyPercent.setAmountType(event.getValue());
             }
         });
         get(proto().executionType()).addValueChangeHandler(new ValueChangeHandler<ExecutionType>() {

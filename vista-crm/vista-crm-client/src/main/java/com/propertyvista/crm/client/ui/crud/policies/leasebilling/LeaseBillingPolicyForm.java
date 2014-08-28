@@ -105,8 +105,7 @@ public class LeaseBillingPolicyForm extends PolicyDTOTabPanelBasedForm<LeaseBill
         get(proto().lateFee().baseFeeType()).addValueChangeHandler(new ValueChangeHandler<BaseFeeType>() {
             @Override
             public void onValueChange(ValueChangeEvent<BaseFeeType> event) {
-                BaseFeeType type = get(proto().lateFee().baseFeeType()).getValue();
-                baseFee.setAmountType(BaseFeeType.FlatAmount.equals(type) ? ValueType.Monetary : ValueType.Percentage);
+                baseFee.setAmountType(BaseFeeType.FlatAmount.equals(event.getValue()) ? ValueType.Monetary : ValueType.Percentage);
             }
         });
         get(proto().lateFee().maxTotalFeeType()).addPropertyChangeHandler(new PropertyChangeHandler() {
