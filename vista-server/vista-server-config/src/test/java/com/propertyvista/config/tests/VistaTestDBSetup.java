@@ -152,7 +152,7 @@ public class VistaTestDBSetup {
                         @Override
                         public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
                             if (slowPersistenceMethods.contains(method.getName())) {
-                                Thread.sleep(1000);
+                                Thread.sleep(700);
                             }
                             try {
                                 return method.invoke(origService, args);
