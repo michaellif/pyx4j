@@ -18,6 +18,7 @@ import java.util.Date;
 import java.util.concurrent.Callable;
 
 import com.pyx4j.commons.UserRuntimeException;
+import com.pyx4j.entity.core.AttachLevel;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.IPrimitive;
@@ -90,7 +91,7 @@ public class EquifaxEnforceLimit {
         EquifaxLimit pmcLimit = TaskRunner.runInOperationsNamespace(new Callable<EquifaxLimit>() {
             @Override
             public EquifaxLimit call() {
-                Persistence.service().retrieveMember(pmc.equifaxInfo());
+                Persistence.ensureRetrieve(pmc.equifaxInfo(), AttachLevel.Attached);
                 return pmc.equifaxInfo().limit();
             }
         });
