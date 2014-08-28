@@ -8,6 +8,17 @@
 ***     ======================================================================================================================
 **/
 
+/** --------------------------------------------------------------------
+***
+***     Changes to the _dba_.building_stats as of Aug 28, 2014
+***
+*** --------------------------------------------------------------------
+**/
+
+ALTER TABLE _dba_.building_stats    ADD COLUMN total_insurance INT,
+                                    ADD COLUMN total_tenantsure INT;
+                                    
+
 
 CREATE OR REPLACE FUNCTION _dba_.gather_building_stats(v_schema_name TEXT) RETURNS VOID
 AS
@@ -862,6 +873,45 @@ BEGIN
                         ||'WHERE   s.property_code = t.property_code '
                         ||'AND     s.pmc = '''||v_schema_name||''' ' 
                         ||'AND     s.stats_week = '''||v_this_week||''' ';
+                        
+                        
+                -- Tenants with renters insurance 
+                
+                EXECUTE 'UPDATE _dba_.building_stats AS s '
+                        ||'SET total_insurance = t.total_insurance '
+                        ||'FROM     (SELECT b.property_code, COUNT(p.id) AS total_insurance '
+                        ||'         FROM    '||v_schema_name||'.building b '
+                        ||'         JOIN    '||v_schema_name||'.apt_unit a ON (b.id = a.building) '
+                        ||'         JOIN    '||v_schema_name||'.lease l ON (a.id = l.lease) '
+                        ||'         JOIN    '||v_schema_name||'.lease_participant lp ON (l.id = lp.lease) '
+                        ||'         JOIN    '||v_schema_name||'.insurance_policy p ON (lp.id = p.tenant) '
+                        ||'         WHERE   l.status = ''Active'' '
+                        ||'         AND NOT p.is_deleted '
+                        ||'         AND     p.id_discriminator = ''GeneralInsurancePolicy'' '
+                        ||'         GROUP BY b.property_code ) AS t '
+                        ||'WHERE    s.property_code = t.property_code '
+                        ||'AND     s.pmc = '''||v_schema_name||''' ' 
+                        ||'AND     s.stats_week = '''||v_this_week||''' ';
+                
+                -- Tenants with tenantsure
+                
+                EXECUTE 'UPDATE _dba_.building_stats AS s '
+                        ||'SET total_insurance = t.total_tenantsure '
+                        ||'FROM     (SELECT b.property_code, COUNT(p.id) AS total_tenantsure '
+                        ||'         FROM    '||v_schema_name||'.building b '
+                        ||'         JOIN    '||v_schema_name||'.apt_unit a ON (b.id = a.building) '
+                        ||'         JOIN    '||v_schema_name||'.lease l ON (a.id = l.lease) '
+                        ||'         JOIN    '||v_schema_name||'.lease_participant lp ON (l.id = lp.lease) '
+                        ||'         JOIN    '||v_schema_name||'.insurance_policy p ON (lp.id = p.tenant) '
+                        ||'         WHERE   l.status = ''Active'' '
+                        ||'         AND NOT p.is_deleted '
+                        ||'         AND     p.id_discriminator = ''TenantSureInsurancePolicy'' '
+                        ||'         AND     p.status = ''Active'' '
+                        ||'         GROUP BY b.property_code ) AS t '
+                        ||'WHERE    s.property_code = t.property_code '
+                        ||'AND     s.pmc = '''||v_schema_name||''' ' 
+                        ||'AND     s.stats_week = '''||v_this_week||''' ';
+                
                 
                 DROP TABLE _dba_.tmp_stats;
         END IF;
