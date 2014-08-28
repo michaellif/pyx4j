@@ -24,7 +24,7 @@ import java.util.Set;
 
 import com.google.gwt.user.client.ui.IsWidget;
 
-public interface SelectorValuePanel<E> extends IsWidget {
+public interface ISelectorValuePanel<E> extends IsWidget {
 
     void setSelection(Set<E> items);
 
