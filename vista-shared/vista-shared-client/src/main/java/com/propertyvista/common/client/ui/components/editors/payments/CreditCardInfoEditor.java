@@ -84,8 +84,8 @@ public class CreditCardInfoEditor extends CForm<CreditCardInfo> {
         formPanel.append(Location.Left, proto().cardType(), typeSelector).decorate().componentWidth(200);
 
         formPanel.append(Location.Left, proto().card(), cardEditor).decorate().componentWidth(200);
-        formPanel.append(Location.Left, proto().expiryDate(), monthYearPicker).decorate().componentWidth(125);
-        formPanel.append(Location.Left, proto().securityCode()).decorate().componentWidth(20);
+        formPanel.append(Location.Left, proto().expiryDate(), monthYearPicker).decorate().componentWidth(200);
+        formPanel.append(Location.Left, proto().securityCode()).decorate().componentWidth(50);
 
         contentTweaks();
         return formPanel;
