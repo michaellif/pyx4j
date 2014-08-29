@@ -15,6 +15,7 @@
 *** --------------------------------------------------------------------
 **/
 
+/*
 ALTER TABLE _dba_.building_stats    ADD COLUMN total_insurance INT  DEFAULT 0,
                                     ADD COLUMN total_tenantsure INT DEFAULT 0;
                                     
@@ -23,6 +24,7 @@ UPDATE _dba_.building_stats
 SET total_insurance = 0,
     total_tenantsure = 0;
 
+*/
 
 CREATE OR REPLACE FUNCTION _dba_.gather_building_stats(v_schema_name TEXT) RETURNS VOID
 AS
@@ -899,7 +901,7 @@ BEGIN
                 -- Tenants with tenantsure
                 
                 EXECUTE 'UPDATE _dba_.building_stats AS s '
-                        ||'SET total_insurance = t.total_tenantsure '
+                        ||'SET total_tenantsure = t.total_tenantsure '
                         ||'FROM     (SELECT b.property_code, COUNT(p.id) AS total_tenantsure '
                         ||'         FROM    '||v_schema_name||'.building b '
                         ||'         JOIN    '||v_schema_name||'.apt_unit a ON (b.id = a.building) '
@@ -911,7 +913,7 @@ BEGIN
                         ||'         AND     p.id_discriminator = ''TenantSureInsurancePolicy'' '
                         ||'         AND     p.status = ''Active'' '
                         ||'         GROUP BY b.property_code ) AS t '
-                        ||'WHERE    s.property_code = t.property_code '
+                        ||'WHERE   s.property_code = t.property_code '
                         ||'AND     s.pmc = '''||v_schema_name||''' ' 
                         ||'AND     s.stats_week = '''||v_this_week||''' ';
                 
