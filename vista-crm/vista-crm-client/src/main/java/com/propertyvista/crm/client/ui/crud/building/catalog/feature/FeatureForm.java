@@ -17,8 +17,8 @@ import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.forms.client.ui.CBooleanLabel;
 import com.pyx4j.forms.client.ui.RevalidationTrigger;
-import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
+import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.AppPlaceEntityMapper;
 import com.pyx4j.site.client.ui.prime.form.IForm;
@@ -29,7 +29,6 @@ import com.propertyvista.crm.client.ui.crud.building.catalog.ProductDepositEdito
 import com.propertyvista.domain.financial.ARCode;
 import com.propertyvista.domain.financial.offering.Feature;
 import com.propertyvista.misc.VistaTODO;
-import com.propertyvista.shared.config.VistaFeatures;
 
 public class FeatureForm extends CrmEntityForm<Feature> {
 
@@ -67,13 +66,11 @@ public class FeatureForm extends CrmEntityForm<Feature> {
         headerLMR = formPanel.h3(i18n.tr("Last Month Rent"));
         formPanel.append(Location.Dual, proto().version().depositLMR(), new ProductDepositEditor());
 
-        if (!VistaFeatures.instance().yardiIntegration()) {
-            headerMoveIn = formPanel.h3(i18n.tr("Move In"));
-            formPanel.append(Location.Dual, proto().version().depositMoveIn(), new ProductDepositEditor());
+        headerMoveIn = formPanel.h3(i18n.tr("Move In"));
+        formPanel.append(Location.Dual, proto().version().depositMoveIn(), new ProductDepositEditor());
 
-            headerSecurity = formPanel.h3(i18n.tr("Security"));
-            formPanel.append(Location.Dual, proto().version().depositSecurity(), new ProductDepositEditor());
-        }
+        headerSecurity = formPanel.h3(i18n.tr("Security"));
+        formPanel.append(Location.Dual, proto().version().depositSecurity(), new ProductDepositEditor());
 
         // tweaks:
         ProductDepositEditor dpe;
@@ -81,13 +78,11 @@ public class FeatureForm extends CrmEntityForm<Feature> {
         dpe = (ProductDepositEditor) get(proto().version().depositLMR());
         dpe.get(dpe.proto().depositType()).setEditable(false);
 
-        if (!VistaFeatures.instance().yardiIntegration()) {
-            dpe = (ProductDepositEditor) get(proto().version().depositMoveIn());
-            dpe.get(dpe.proto().depositType()).setEditable(false);
+        dpe = (ProductDepositEditor) get(proto().version().depositMoveIn());
+        dpe.get(dpe.proto().depositType()).setEditable(false);
 
-            dpe = (ProductDepositEditor) get(proto().version().depositSecurity());
-            dpe.get(dpe.proto().depositType()).setEditable(false);
-        }
+        dpe = (ProductDepositEditor) get(proto().version().depositSecurity());
+        dpe.get(dpe.proto().depositType()).setEditable(false);
 
         return formPanel;
     }
@@ -110,17 +105,13 @@ public class FeatureForm extends CrmEntityForm<Feature> {
             headerLMR.setVisible(getValue().version().depositLMR().enabled().getValue(false));
             get(proto().version().depositLMR()).setVisible(getValue().version().depositLMR().enabled().getValue(false));
 
-            if (!VistaFeatures.instance().yardiIntegration()) {
-                headerMoveIn.setVisible(getValue().version().depositMoveIn().enabled().getValue(false));
-                get(proto().version().depositMoveIn()).setVisible(getValue().version().depositMoveIn().enabled().getValue(false));
+            headerMoveIn.setVisible(getValue().version().depositMoveIn().enabled().getValue(false));
+            get(proto().version().depositMoveIn()).setVisible(getValue().version().depositMoveIn().enabled().getValue(false));
 
-                headerSecurity.setVisible(getValue().version().depositSecurity().enabled().getValue(false));
-                get(proto().version().depositSecurity()).setVisible(getValue().version().depositSecurity().enabled().getValue(false));
+            headerSecurity.setVisible(getValue().version().depositSecurity().enabled().getValue(false));
+            get(proto().version().depositSecurity()).setVisible(getValue().version().depositSecurity().enabled().getValue(false));
 
-                headerDeposits.setVisible(headerLMR.isVisible() || headerMoveIn.isVisible() || headerSecurity.isVisible());
-            } else {
-                headerDeposits.setVisible(headerLMR.isVisible());
-            }
+            headerDeposits.setVisible(headerLMR.isVisible() || headerMoveIn.isVisible() || headerSecurity.isVisible());
         }
     }
 

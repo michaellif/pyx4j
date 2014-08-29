@@ -53,12 +53,11 @@ class FeatureItemFolder extends VistaTableFolder<ProductItem> {
         columns.add(new FolderColumnDescriptor(proto().price(), "8em"));
         columns.add(new FolderColumnDescriptor(proto().element(), "15em"));
         if (VistaFeatures.instance().yardiIntegration()) {
-            columns.add(new FolderColumnDescriptor(proto().depositLMR(), "10em"));
-        } else {
-            columns.add(new FolderColumnDescriptor(proto().depositLMR(), "5em"));
-            columns.add(new FolderColumnDescriptor(proto().depositMoveIn(), "5em"));
-            columns.add(new FolderColumnDescriptor(proto().depositSecurity(), "5em"));
+            columns.add(new FolderColumnDescriptor(proto().yardiDepositLMR(), "5em"));
         }
+        columns.add(new FolderColumnDescriptor(proto().depositLMR(), "5em"));
+        columns.add(new FolderColumnDescriptor(proto().depositMoveIn(), "5em"));
+        columns.add(new FolderColumnDescriptor(proto().depositSecurity(), "5em"));
         columns.add(new FolderColumnDescriptor(proto().description(), "25em"));
 
         return columns;

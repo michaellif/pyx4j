@@ -470,11 +470,11 @@ public class YardiProductCatalogProcessor {
             // update deposit:
             BigDecimal depositValue = depositInfo.get(unit.info().number().getValue());
             if (depositValue != null && depositValue.compareTo(BigDecimal.ZERO) > 0) {
-                item.depositLMR().setValue(depositValue);
+                item.yardiDepositLMR().setValue(depositValue);
                 // enable service deposit:
                 updated.getB().version().depositLMR().enabled().setValue(true);
             } else {
-                item.depositLMR().setValue(null); // no deposit set for the item...
+                item.yardiDepositLMR().setValue(null); // no deposit set for the item...
             }
         }
 

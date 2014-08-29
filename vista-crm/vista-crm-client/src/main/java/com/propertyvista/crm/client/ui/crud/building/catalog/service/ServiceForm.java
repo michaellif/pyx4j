@@ -28,7 +28,6 @@ import com.propertyvista.crm.client.ui.crud.building.catalog.ProductDepositEdito
 import com.propertyvista.domain.financial.ARCode;
 import com.propertyvista.domain.financial.offering.Service;
 import com.propertyvista.misc.VistaTODO;
-import com.propertyvista.shared.config.VistaFeatures;
 
 public class ServiceForm extends CrmEntityForm<Service> {
 
@@ -65,13 +64,11 @@ public class ServiceForm extends CrmEntityForm<Service> {
         headerLMR = formPanel.h3(i18n.tr("Last Month Rent"));
         formPanel.append(Location.Dual, inject(proto().version().depositLMR(), new ProductDepositEditor()));
 
-        if (!VistaFeatures.instance().yardiIntegration()) {
-            headerMoveIn = formPanel.h3(i18n.tr("Move In"));
-            formPanel.append(Location.Dual, inject(proto().version().depositMoveIn(), new ProductDepositEditor()));
+        headerMoveIn = formPanel.h3(i18n.tr("Move In"));
+        formPanel.append(Location.Dual, inject(proto().version().depositMoveIn(), new ProductDepositEditor()));
 
-            headerSecurity = formPanel.h3(i18n.tr("Security"));
-            formPanel.append(Location.Dual, inject(proto().version().depositSecurity(), new ProductDepositEditor()));
-        }
+        headerSecurity = formPanel.h3(i18n.tr("Security"));
+        formPanel.append(Location.Dual, inject(proto().version().depositSecurity(), new ProductDepositEditor()));
 
         // tweaks:
         ProductDepositEditor dpe;
@@ -79,13 +76,11 @@ public class ServiceForm extends CrmEntityForm<Service> {
         dpe = (ProductDepositEditor) get(proto().version().depositLMR());
         dpe.get(dpe.proto().depositType()).setEditable(false);
 
-        if (!VistaFeatures.instance().yardiIntegration()) {
-            dpe = (ProductDepositEditor) get(proto().version().depositMoveIn());
-            dpe.get(dpe.proto().depositType()).setEditable(false);
+        dpe = (ProductDepositEditor) get(proto().version().depositMoveIn());
+        dpe.get(dpe.proto().depositType()).setEditable(false);
 
-            dpe = (ProductDepositEditor) get(proto().version().depositSecurity());
-            dpe.get(dpe.proto().depositType()).setEditable(false);
-        }
+        dpe = (ProductDepositEditor) get(proto().version().depositSecurity());
+        dpe.get(dpe.proto().depositType()).setEditable(false);
 
         return formPanel;
     }
@@ -121,17 +116,13 @@ public class ServiceForm extends CrmEntityForm<Service> {
             headerLMR.setVisible(getValue().version().depositLMR().enabled().getValue(false));
             get(proto().version().depositLMR()).setVisible(getValue().version().depositLMR().enabled().getValue(false));
 
-            if (!VistaFeatures.instance().yardiIntegration()) {
-                headerMoveIn.setVisible(getValue().version().depositMoveIn().enabled().getValue(false));
-                get(proto().version().depositMoveIn()).setVisible(getValue().version().depositMoveIn().enabled().getValue(false));
+            headerMoveIn.setVisible(getValue().version().depositMoveIn().enabled().getValue(false));
+            get(proto().version().depositMoveIn()).setVisible(getValue().version().depositMoveIn().enabled().getValue(false));
 
-                headerSecurity.setVisible(getValue().version().depositSecurity().enabled().getValue(false));
-                get(proto().version().depositSecurity()).setVisible(getValue().version().depositSecurity().enabled().getValue(false));
+            headerSecurity.setVisible(getValue().version().depositSecurity().enabled().getValue(false));
+            get(proto().version().depositSecurity()).setVisible(getValue().version().depositSecurity().enabled().getValue(false));
 
-                headerDeposits.setVisible(headerLMR.isVisible() || headerMoveIn.isVisible() || headerSecurity.isVisible());
-            } else {
-                headerDeposits.setVisible(headerLMR.isVisible());
-            }
+            headerDeposits.setVisible(headerLMR.isVisible() || headerMoveIn.isVisible() || headerSecurity.isVisible());
         }
     }
 }

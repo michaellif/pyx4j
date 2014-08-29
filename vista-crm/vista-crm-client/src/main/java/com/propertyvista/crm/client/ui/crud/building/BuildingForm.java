@@ -154,7 +154,9 @@ public class BuildingForm extends CrmEntityForm<BuildingDTO> {
         super.onValueSet(populate);
 
         // dynamic tabs visibility management:
-        catalogTab.setTabVisible(!getValue().defaultProductCatalog().getValue(false));
+        if (!VistaFeatures.instance().yardiIntegration()) {
+            catalogTab.setTabVisible(!getValue().defaultProductCatalog().getValue(false));
+        }
 
         get(proto().complex()).setVisible(!getValue().complex().isNull());
         get(proto().externalId()).setVisible(!getValue().externalId().isNull());
@@ -222,9 +224,7 @@ public class BuildingForm extends CrmEntityForm<BuildingDTO> {
         formPanel.append(Location.Left, proto().landlord(), new CEntityCrudHyperlink<Landlord>(AppPlaceEntityMapper.resolvePlace(Landlord.class))).decorate()
                 .componentWidth(150);
 
-        if (!VistaFeatures.instance().yardiIntegration()) {
-            formPanel.append(Location.Right, proto().defaultProductCatalog()).decorate().componentWidth(50);
-        }
+        formPanel.append(Location.Right, proto().defaultProductCatalog()).decorate().componentWidth(50);
         formPanel.append(Location.Right, proto().suspended()).decorate().componentWidth(50);
 
         formPanel.h1(proto().info().address().getMeta().getCaption());
