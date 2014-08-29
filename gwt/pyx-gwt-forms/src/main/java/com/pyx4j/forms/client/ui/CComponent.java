@@ -489,8 +489,8 @@ public abstract class CComponent<SELF_TYPE extends CComponent<SELF_TYPE, DATA_TY
     }
 
     public final void reset() {
-        this.value = null;
-        setEditorValue(null);
+        resetValue();
+        setEditorValue(getValue());
         if (getParent() != null) {
             getParent().updateContainer(this);
         }
@@ -573,15 +573,78 @@ public abstract class CComponent<SELF_TYPE extends CComponent<SELF_TYPE, DATA_TY
     }
 
     public boolean isValueEmpty() {
-        return isValueEmpty(getValue());
-    }
-
-    private boolean isValueEmpty(DATA_TYPE value) {
         return value == null || (value instanceof IEntity && ((IEntity) value).isNull());
     }
 
     public boolean isValuesEqual(DATA_TYPE value1, DATA_TYPE value2) {
         return value1 == value2;
+    }
+
+    public boolean isEditingInProgress() {
+        return editingInProgress;
+    }
+
+    public final void startEditing() {
+        if (isEnabled() && isVisible() && isEditable() && !isViewable()) {
+            onEditingStart();
+            if (asyncValidator != null) {
+                asyncValidator.setValidationError(null);
+            }
+            editingInProgress = true;
+            revalidate();
+            PropertyChangeEvent.fire(this, PropertyChangeEvent.PropertyName.editingInProgress);
+        }
+    }
+
+    public final void stopEditing() {
+        if (isEnabled() && isVisible() && isEditable() && !isViewable()) {
+            onEditingStop();
+            boolean wasEmpty = isValueEmpty();
+            boolean wasVisited = isVisited();
+            editingInProgress = false;
+            setVisited(true);
+            DATA_TYPE editorValue = null;
+            try {
+                editorValue = getEditorValue();
+            } catch (ParseException e) {
+                resetValue();
+            }
+
+            if (isValueEmpty() || !isValuesEqual(this.value, editorValue)) {
+                this.value = editorValue;
+
+                revalidate();
+                //Overwrite native value with the value that has been formatted by getNativeValue()
+                if (isValid()) {
+                    setEditorValue(this.value);
+                }
+                if (getParent() != null) {
+                    getParent().updateContainer(this);
+                }
+                ValueChangeEvent.fire(this, this.value);
+            }
+
+            if (!wasEmpty || (wasEmpty && !isValueEmpty())) {
+                setVisited(true);
+            } else {
+                setVisited(wasVisited);
+            }
+            PropertyChangeEvent.fire(this, PropertyChangeEvent.PropertyName.editingCompleted);
+        }
+    }
+
+    private void resetValue() {
+        if (value instanceof IEntity) {
+            ((IEntity) value).setValue(null);
+        } else {
+            value = null;
+        }
+    }
+
+    protected void onEditingStart() {
+    }
+
+    protected void onEditingStop() {
     }
 
     public ValidationResults getValidationResults() {
@@ -646,65 +709,6 @@ public abstract class CComponent<SELF_TYPE extends CComponent<SELF_TYPE, DATA_TY
 
     public String shortDebugInfo() {
         return GWTJava5Helper.getSimpleName(this.getClass()) + ((debugId != null) ? " " + debugId : "");
-    }
-
-    public boolean isEditingInProgress() {
-        return editingInProgress;
-    }
-
-    public final void startEditing() {
-        if (isEnabled() && isVisible() && isEditable() && !isViewable()) {
-            onEditingStart();
-            if (asyncValidator != null) {
-                asyncValidator.setValidationError(null);
-            }
-            editingInProgress = true;
-            revalidate();
-            PropertyChangeEvent.fire(this, PropertyChangeEvent.PropertyName.editingInProgress);
-        }
-    }
-
-    public final void stopEditing() {
-        if (isEnabled() && isVisible() && isEditable() && !isViewable()) {
-            onEditingStop();
-            boolean wasEmpty = isValueEmpty();
-            boolean wasVisited = isVisited();
-            editingInProgress = false;
-            setVisited(true);
-            DATA_TYPE editorValue;
-            try {
-                editorValue = getEditorValue();
-            } catch (ParseException e) {
-                editorValue = null;
-            }
-
-            if (isValueEmpty(editorValue) || !isValuesEqual(this.value, editorValue)) {
-                this.value = editorValue;
-
-                revalidate();
-                //Overwrite native value with the value that has been formatted by getNativeValue()
-                if (isValid()) {
-                    setEditorValue(this.value);
-                }
-                if (getParent() != null) {
-                    getParent().updateContainer(this);
-                }
-                ValueChangeEvent.fire(this, this.value);
-            }
-
-            if (!wasEmpty || (wasEmpty && !isValueEmpty())) {
-                setVisited(true);
-            } else {
-                setVisited(wasVisited);
-            }
-            PropertyChangeEvent.fire(this, PropertyChangeEvent.PropertyName.editingCompleted);
-        }
-    }
-
-    protected void onEditingStart() {
-    }
-
-    protected void onEditingStop() {
     }
 
     protected String getDebugInfo() {
