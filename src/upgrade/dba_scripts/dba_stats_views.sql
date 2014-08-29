@@ -14,7 +14,7 @@ CREATE OR REPLACE VIEW _dba_.building_stats_view AS
                 t0.total_units AS "Total Units",
                 t0.active_leases AS "Occupied Units",
                 t0.reg_units AS "Units with Registered Tenants",
-                CASE WHEN t0.total_units > 0 THEN ROUND(t0.reg_units::numeric(4,1)*100/t0.total_units,1) 
+                CASE WHEN t0.active_leases > 0 THEN ROUND(t0.reg_units::numeric(4,1)*100/t0.active_leases,1) 
                 ELSE 0 END AS "% Units with Registered Tenants",
                 t0.units_epay AS "Units with Electronic Payments",
                 t0.reg_units_epay AS "Units with Registered Tenants Using Electronic Payments",
