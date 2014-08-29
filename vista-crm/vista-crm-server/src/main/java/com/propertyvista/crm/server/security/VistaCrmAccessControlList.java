@@ -107,6 +107,8 @@ import com.propertyvista.crm.rpc.services.selections.SelectFeatureListService;
 import com.propertyvista.crm.rpc.services.selections.SelectFloorplanListService;
 import com.propertyvista.crm.rpc.services.selections.SelectLeaseAdjustmentReasonListService;
 import com.propertyvista.crm.rpc.services.selections.SelectLeaseTermListService;
+import com.propertyvista.crm.rpc.services.selections.SelectLockerAreaListService;
+import com.propertyvista.crm.rpc.services.selections.SelectParkingListService;
 import com.propertyvista.crm.rpc.services.selections.SelectPortfolioListService;
 import com.propertyvista.crm.rpc.services.selections.SelectProductCodeListService;
 import com.propertyvista.crm.rpc.services.selections.SelectTenantListService;
@@ -277,11 +279,15 @@ public class VistaCrmAccessControlList extends ServletContainerAclBuilder {
 
         grant(VistaBasicBehavior.CRM, new EntityPermission(Parking.class, EntityPermission.ALL));
         grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(ParkingCrudService.class));
+        grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(SelectParkingListService.class));
+
         grant(VistaBasicBehavior.CRM, new EntityPermission(ParkingSpot.class, EntityPermission.ALL));
         grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(ParkingSpotCrudService.class));
 
         grant(VistaBasicBehavior.CRM, new EntityPermission(LockerArea.class, EntityPermission.ALL));
         grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(LockerAreaCrudService.class));
+        grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(SelectLockerAreaListService.class));
+
         grant(VistaBasicBehavior.CRM, new EntityPermission(Locker.class, EntityPermission.ALL));
         grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(LockerCrudService.class));
 

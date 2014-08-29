@@ -13,12 +13,19 @@
  */
 package com.propertyvista.crm.client.ui.crud.building.catalog.feature;
 
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.commons.IFormatter;
+import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.IObject;
+import com.pyx4j.entity.core.criterion.Criterion;
+import com.pyx4j.entity.core.criterion.PropertyCriterion;
 import com.pyx4j.forms.client.ui.CEntityHyperlink;
 import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.folder.BoxFolderItemDecorator;
@@ -27,8 +34,12 @@ import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.site.client.AppPlaceEntityMapper;
 import com.pyx4j.site.client.AppSite;
+import com.pyx4j.site.client.ui.IShowable;
 
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
+import com.propertyvista.crm.client.ui.components.boxes.LockerAreaSelectorDialog;
+import com.propertyvista.crm.client.ui.components.boxes.ParkingSelectorDialog;
+import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.domain.financial.offering.Feature;
 import com.propertyvista.domain.financial.offering.ProductItem;
 import com.propertyvista.domain.property.asset.BuildingElement;
@@ -37,9 +48,9 @@ import com.propertyvista.domain.property.asset.Parking;
 
 class FeatureItemFolder extends VistaBoxFolder<ProductItem> {
 
-    private final CForm<Feature> parent;
+    private final CrmEntityForm<Feature> parent;
 
-    public FeatureItemFolder(CForm<Feature> parent) {
+    public FeatureItemFolder(CrmEntityForm<Feature> parent) {
         super(ProductItem.class, parent.isEditable());
         this.parent = parent;
     }
@@ -60,6 +71,67 @@ class FeatureItemFolder extends VistaBoxFolder<ProductItem> {
     @Override
     protected CForm<ProductItem> createItemForm(IObject<?> member) {
         return new FeatureItemEditor();
+    }
+
+    @Override
+    protected void addItem() {
+        IShowable buildingElementSelectionBox = null;
+        switch (parent.getValue().code().type().getValue()) {
+        case Parking:
+            Set<Parking> alreadySelectedParking = new HashSet<Parking>(getValue().size());
+            for (ProductItem item : getValue()) {
+                alreadySelectedParking.add((Parking) item.element().cast());
+            }
+            buildingElementSelectionBox = new ParkingSelectorDialog(parent.getParentView(), alreadySelectedParking) {
+                @Override
+                protected void setFilters(List<Criterion> filters) {
+                    super.setFilters(filters);
+                    addFilter(PropertyCriterion.eq(EntityFactory.getEntityPrototype(Parking.class).building().productCatalog(), parent.getValue().catalog()));
+                }
+
+                @Override
+                public void onClickOk() {
+                    for (BuildingElement element : getSelectedItems()) {
+                        ProductItem item = EntityFactory.create(ProductItem.class);
+                        item.element().set(element);
+                        addItem(item);
+                    }
+                }
+            };
+            break;
+
+        case Locker:
+            Set<LockerArea> alreadySelectedLockerArea = new HashSet<LockerArea>(getValue().size());
+            for (ProductItem item : getValue()) {
+                alreadySelectedLockerArea.add((LockerArea) item.element().cast());
+            }
+            buildingElementSelectionBox = new LockerAreaSelectorDialog(parent.getParentView(), alreadySelectedLockerArea) {
+                @Override
+                protected void setFilters(List<Criterion> filters) {
+                    super.setFilters(filters);
+                    addFilter(PropertyCriterion.eq(EntityFactory.getEntityPrototype(LockerArea.class).building().productCatalog(), parent.getValue().catalog()));
+                }
+
+                @Override
+                public void onClickOk() {
+                    for (BuildingElement element : getSelectedItems()) {
+                        ProductItem item = EntityFactory.create(ProductItem.class);
+                        item.element().set(element);
+                        addItem(item);
+                    }
+                }
+            };
+            break;
+
+        default:
+            break;
+        }
+
+        if (buildingElementSelectionBox != null) {
+            buildingElementSelectionBox.show();
+        } else {
+            super.addItem();
+        }
     }
 
     private class FeatureItemEditor extends CForm<ProductItem> {
