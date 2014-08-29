@@ -11,7 +11,7 @@
  * @author stanp
  * @version $Id$
  */
-package com.propertyvista.oapi.service.marketing;
+package com.propertyvista.oapi.processing;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -52,7 +52,7 @@ import com.propertyvista.oapi.service.marketing.model.WSPropertySearchCriteria;
 import com.propertyvista.portal.rpc.portal.prospect.ProspectPortalSiteMap;
 import com.propertyvista.server.common.util.PropertyFinder;
 
-public class PropertyMarketingProcessor {
+public class MarketingServiceProcessor {
 
     public PropertyList getPropertyList(WSPropertySearchCriteria criteria) {
         PropertyList result = new PropertyList();

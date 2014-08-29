@@ -11,7 +11,7 @@
  * @author michaellif
  * @version $Id$
  */
-package com.propertyvista.oapi;
+package com.propertyvista.oapi.processing;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,7 +33,7 @@ import com.propertyvista.oapi.model.BuildingIO;
 import com.propertyvista.oapi.model.BuildingsIO;
 import com.propertyvista.oapi.model.UnitIO;
 
-public class PropertyService {
+public class PropertyServiceProcessor {
 
     public static BuildingsIO getBuildings() {
 

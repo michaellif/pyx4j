@@ -11,7 +11,7 @@
  * @author stanp
  * @version $Id$
  */
-package com.propertyvista.oapi.service.marketing.rs;
+package com.propertyvista.oapi.rs;
 
 import java.util.List;
 import java.util.Set;
@@ -31,8 +31,8 @@ import com.propertyvista.dto.PropertySearchCriteria.BathroomChoice;
 import com.propertyvista.dto.PropertySearchCriteria.BedroomChoice;
 import com.propertyvista.oapi.model.BuildingIO;
 import com.propertyvista.oapi.model.FloorplanIO;
-import com.propertyvista.oapi.service.marketing.PropertyMarketingProcessor;
-import com.propertyvista.oapi.service.marketing.PropertyMarketingService;
+import com.propertyvista.oapi.processing.MarketingServiceProcessor;
+import com.propertyvista.oapi.service.MarketingService;
 import com.propertyvista.oapi.service.marketing.model.AppointmentRequest;
 import com.propertyvista.oapi.service.marketing.model.FloorplanAvailability;
 import com.propertyvista.oapi.service.marketing.model.FloorplanList;
@@ -40,7 +40,7 @@ import com.propertyvista.oapi.service.marketing.model.PropertyList;
 import com.propertyvista.oapi.service.marketing.model.WSPropertySearchCriteria;
 
 @Path("marketing")
-public class RSPropertyMarketingImpl implements PropertyMarketingService {
+public class RSMarketingServiceImpl implements MarketingService {
 
     @GET
     @Path("getPropertyList")
@@ -58,7 +58,7 @@ public class RSPropertyMarketingImpl implements PropertyMarketingService {
 
     @Override
     public PropertyList getPropertyList(WSPropertySearchCriteria criteria) {
-        return new PropertyMarketingProcessor().getPropertyList(criteria);
+        return new MarketingServiceProcessor().getPropertyList(criteria);
     }
 
     @GET
@@ -66,7 +66,7 @@ public class RSPropertyMarketingImpl implements PropertyMarketingService {
     @Produces(MediaType.APPLICATION_XML)
     @Override
     public BuildingIO getPropertyInfo(@QueryParam("prId") String propertyId) {
-        return new PropertyMarketingProcessor().getPropertyInfo(propertyId);
+        return new MarketingServiceProcessor().getPropertyInfo(propertyId);
     }
 
     @GET
@@ -74,7 +74,7 @@ public class RSPropertyMarketingImpl implements PropertyMarketingService {
     @Produces(MediaType.APPLICATION_XML)
     @Override
     public FloorplanList getFloorplanList(@QueryParam("prId") String propertyId) {
-        return new PropertyMarketingProcessor().getFloorplanList(propertyId);
+        return new MarketingServiceProcessor().getFloorplanList(propertyId);
     }
 
     @GET
@@ -82,7 +82,7 @@ public class RSPropertyMarketingImpl implements PropertyMarketingService {
     @Produces(MediaType.APPLICATION_XML)
     @Override
     public FloorplanIO getFloorplanInfo(@QueryParam("prId") String propertyId, @QueryParam("fpId") String fpId) {
-        return new PropertyMarketingProcessor().getFloorplanInfo(propertyId, fpId);
+        return new MarketingServiceProcessor().getFloorplanInfo(propertyId, fpId);
     }
 
     @GET
@@ -91,7 +91,7 @@ public class RSPropertyMarketingImpl implements PropertyMarketingService {
     @Override
     public List<FloorplanAvailability> getFloorplanAvailability(@QueryParam("prId") String prId, @QueryParam("fpId") String fpId,
             @QueryParam("moveIn") LogicalDate date) {
-        return new PropertyMarketingProcessor().getFloorplanAvailability(prId, fpId, date);
+        return new MarketingServiceProcessor().getFloorplanAvailability(prId, fpId, date);
     }
 
     @POST
@@ -99,13 +99,13 @@ public class RSPropertyMarketingImpl implements PropertyMarketingService {
     @Consumes(MediaType.APPLICATION_XML)
     @Override
     public void requestAppointment(AppointmentRequest request) {
-        new PropertyMarketingProcessor().requestAppointment(request);
+        new MarketingServiceProcessor().requestAppointment(request);
     }
 
     @GET
     @Path("getApplyForLeaseUrl")
     @Override
     public String getApplyForLeaseUrl(@QueryParam("prId") String prId, @QueryParam("fpId") String fpId) {
-        return new PropertyMarketingProcessor().getApplyForLeaseUrl(prId, fpId);
+        return new MarketingServiceProcessor().getApplyForLeaseUrl(prId, fpId);
     }
 }

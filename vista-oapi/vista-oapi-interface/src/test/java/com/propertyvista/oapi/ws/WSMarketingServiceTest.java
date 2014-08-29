@@ -1,24 +1,27 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011-2012 All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Dec 5, 2012
- * @author michaellif
+ * Created on Jun 30, 2014
+ * @author stanp
  * @version $Id$
  */
-package com.propertyvista.oapi.service.marketing.rs;
+package com.propertyvista.oapi.ws;
 
 import java.math.BigDecimal;
+import java.net.URL;
 import java.util.List;
 
-import javax.ws.rs.client.Entity;
-import javax.ws.rs.core.Application;
-import javax.ws.rs.core.GenericType;
+import javax.xml.namespace.QName;
+import javax.xml.ws.Service;
+import javax.xml.ws.handler.LogicalHandler;
+import javax.xml.ws.handler.LogicalMessageContext;
+import javax.xml.ws.handler.MessageContext;
 
 import org.junit.Assert;
 import org.junit.Test;
@@ -40,15 +43,17 @@ import com.propertyvista.domain.tenant.lead.Lead.DayPart;
 import com.propertyvista.domain.tenant.lead.Lead.LeaseTerm;
 import com.propertyvista.oapi.model.BuildingIO;
 import com.propertyvista.oapi.model.FloorplanIO;
-import com.propertyvista.oapi.rs.RSOapiTestBase;
 import com.propertyvista.oapi.service.marketing.model.AppointmentRequest;
 import com.propertyvista.oapi.service.marketing.model.FloorplanAvailability;
 import com.propertyvista.oapi.service.marketing.model.FloorplanList;
 import com.propertyvista.oapi.service.marketing.model.PropertyList;
+import com.propertyvista.oapi.service.marketing.model.WSPropertySearchCriteria;
 import com.propertyvista.portal.rpc.portal.prospect.ProspectPortalSiteMap;
 import com.propertyvista.test.mock.models.BuildingDataModel;
 
-public class RSPropertyMarketingTest extends RSOapiTestBase {
+public class WSMarketingServiceTest extends WSOapiTestBase {
+
+    private WSMarketingServiceTestInterface service;
 
     private Building building;
 
@@ -57,8 +62,42 @@ public class RSPropertyMarketingTest extends RSOapiTestBase {
     private AptUnit unit;
 
     @Override
-    protected Class<? extends Application> getServiceApplication() {
-        return OapiRsApplication.class;
+    protected void setUp() throws Exception {
+        super.setUp();
+
+        // Create server. The server will run in a separate thread, so we need to provide namespace and Persistence handling
+        final String namespace = NamespaceManager.getNamespace();
+        publish(WSMarketingServiceImpl.class, new LogicalHandler<LogicalMessageContext>() {
+
+            @Override
+            public boolean handleMessage(LogicalMessageContext context) {
+                // handler is called twice - on request and on response; we use the first call
+                if (NamespaceManager.getNamespace() == null) {
+                    NamespaceManager.setNamespace(namespace);
+                    Persistence.service().startBackgroundProcessTransaction();
+                }
+                return true;
+            }
+
+            @Override
+            public boolean handleFault(LogicalMessageContext context) {
+                return true;
+            }
+
+            @Override
+            public void close(MessageContext context) {
+                if (Persistence.service().getTransactionScopeOption() != null) {
+                    Persistence.service().commit();
+                    Persistence.service().endTransaction();
+                }
+            }
+        });
+
+        String nsUrl = "http://ws.oapi.propertyvista.com/";
+        QName svcName = new QName(nsUrl, WSMarketingServiceImpl.class.getSimpleName() + "Service");
+        QName portName = new QName(nsUrl, WSMarketingServiceImpl.class.getSimpleName() + "Port");
+        service = Service.create(new URL(getAddress()), svcName).getPort(portName, WSMarketingServiceTestInterface.class);
+
     }
 
     @Override
@@ -94,55 +133,42 @@ public class RSPropertyMarketingTest extends RSOapiTestBase {
 
     @Test
     public void testGetBuildings() {
-        PropertyList propertyList = target("marketing/getPropertyList").queryParam("province", building.info().address().province().getValue()).request()
-                .get(PropertyList.class);
+        WSPropertySearchCriteria crit = new WSPropertySearchCriteria();
+        crit.province = "Ontario";
+        PropertyList propertyList = service.getPropertyList(crit);
         Assert.assertEquals(1, propertyList.items.size());
     }
 
     @Test
     public void testGetPropertyInfo() {
-        // in - String prId; out - BuildingIO
-        BuildingIO buildingIO = target("marketing/getPropertyInfo") //
-                .queryParam("prId", building.propertyCode().getValue()) //
-                .request().get(BuildingIO.class);
+        BuildingIO buildingIO = service.getPropertyInfo(building.propertyCode().getValue());
         Assert.assertEquals(building.info().address().province().getValue(), buildingIO.info.address.province.getValue());
     }
 
     @Test
     public void testGetFloorplanList() {
-        // in - String propertyId; out - FloorplanList
-        FloorplanList floorplanList = target("marketing/getFloorplanList") //
-                .queryParam("prId", building.propertyCode().getValue()) //
-                .request().get(FloorplanList.class);
+        FloorplanList floorplanList = service.getFloorplanList(building.propertyCode().getValue());
         Assert.assertEquals(1, floorplanList.items.size());
     }
 
     @Test
     public void testGetFloorplanInfo() {
-        // in - String propertyId, String fpId; out - FloorplanIO
-        FloorplanIO floorplanIO = target("marketing/getFloorplanInfo") //
-                .queryParam("prId", building.propertyCode().getValue()) //
-                .queryParam("fpId", fp.name().getValue()) //
-                .request().get(FloorplanIO.class);
+        FloorplanIO floorplanIO = service.getFloorplanInfo(building.propertyCode().getValue(), fp.name().getValue());
         Assert.assertEquals(fp.name().getValue(), floorplanIO.name);
     }
 
     @Test
     public void testGetFloorplanAvailability() {
-        // in - String propertyId, String fpId, LogicalDate date; out - List<FloorplanAvailability>
-        GenericType<List<FloorplanAvailability>> availListType = new GenericType<List<FloorplanAvailability>>() {
-        };
-        List<FloorplanAvailability> fpAvail = target("marketing/getFloorplanAvailability") //
-                .queryParam("prId", building.propertyCode().getValue()) //
-                .queryParam("fpId", fp.name().getValue()) //
-                .queryParam("moveIn", unit.availability().availableForRent().getValue()) //
-                .request().get(availListType);
+        List<FloorplanAvailability> fpAvail = service.getFloorplanAvailability( //
+                building.propertyCode().getValue(), //
+                fp.name().getValue(), //
+                unit.availability().availableForRent().getValue() //
+                );
         Assert.assertEquals(1, fpAvail.size());
     }
 
     @Test
     public void testRequestAppointment() {
-        // in - AppointmentRequest request
         AppointmentRequest ar = new AppointmentRequest();
         ar.firstName = "John";
         ar.lastName = "Smith";
@@ -152,7 +178,7 @@ public class RSPropertyMarketingTest extends RSOapiTestBase {
         ar.floorplanId = fp.name().getValue();
         ar.preferredDate1 = SystemDateManager.getLogicalDate();
         ar.preferredTime1 = DayPart.Afternoon;
-        target("marketing/requestAppointment").request().post(Entity.xml(ar));
+        service.requestAppointment(ar);
 
         // retrieve the lead
         EntityQueryCriteria<Lead> crit = EntityQueryCriteria.create(Lead.class);
@@ -162,11 +188,7 @@ public class RSPropertyMarketingTest extends RSOapiTestBase {
 
     @Test
     public void testGetApplyForLeaseUrl() {
-        // in - String propertyId, String fpId; out - String
-        String url = target("marketing/getApplyForLeaseUrl") //
-                .queryParam("prId", building.propertyCode().getValue()) //
-                .queryParam("fpId", fp.name().getValue()) //
-                .request().get(String.class);
+        String url = service.getApplyForLeaseUrl(building.propertyCode().getValue(), fp.name().getValue());
         StringBuilder params = new StringBuilder() //
                 .append(ProspectPortalSiteMap.ARG_ILS_BUILDING_ID).append("=").append(building.propertyCode().getValue()) //
                 .append("&") //

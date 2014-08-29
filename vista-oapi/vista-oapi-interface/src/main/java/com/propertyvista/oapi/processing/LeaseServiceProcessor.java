@@ -11,7 +11,7 @@
  * @author michaellif
  * @version $Id$
  */
-package com.propertyvista.oapi;
+package com.propertyvista.oapi.processing;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -31,7 +31,7 @@ import com.propertyvista.oapi.marshaling.TenantMarshaller;
 import com.propertyvista.oapi.model.LeaseIO;
 import com.propertyvista.oapi.model.TenantIO;
 
-public class LeaseService {
+public class LeaseServiceProcessor {
 
     private static final IEntityPersistenceService service;
 

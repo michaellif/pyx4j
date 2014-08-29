@@ -11,7 +11,7 @@
  * @author stanp
  * @version $Id$
  */
-package com.propertyvista.oapi.service.marketing.ws;
+package com.propertyvista.oapi.ws;
 
 import java.util.List;
 
@@ -22,7 +22,7 @@ import com.pyx4j.commons.LogicalDate;
 
 import com.propertyvista.oapi.model.BuildingIO;
 import com.propertyvista.oapi.model.FloorplanIO;
-import com.propertyvista.oapi.service.marketing.PropertyMarketingService;
+import com.propertyvista.oapi.service.MarketingService;
 import com.propertyvista.oapi.service.marketing.model.AppointmentRequest;
 import com.propertyvista.oapi.service.marketing.model.FloorplanAvailability;
 import com.propertyvista.oapi.service.marketing.model.FloorplanList;
@@ -30,7 +30,7 @@ import com.propertyvista.oapi.service.marketing.model.PropertyList;
 import com.propertyvista.oapi.service.marketing.model.WSPropertySearchCriteria;
 
 @WebService
-public interface WSPropertyMarketingTestInterface extends PropertyMarketingService {
+public interface WSMarketingServiceTestInterface extends MarketingService {
 
     @Override
     public PropertyList getPropertyList(@WebParam(name = "criteria") WSPropertySearchCriteria criteria);

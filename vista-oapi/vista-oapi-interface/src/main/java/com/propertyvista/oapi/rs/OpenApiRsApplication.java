@@ -26,6 +26,6 @@ public class OpenApiRsApplication extends Application {
 
     @Override
     public Set<Class<?>> getClasses() {
-        return new HashSet<Class<?>>(Arrays.asList(RSExceptionMapper.class, RSPropertyService.class, RSLeaseService.class));
+        return new HashSet<Class<?>>(Arrays.asList(RSExceptionMapper.class, RSPropertyServiceImpl.class, RSLeaseServiceImpl.class));
     }
 }

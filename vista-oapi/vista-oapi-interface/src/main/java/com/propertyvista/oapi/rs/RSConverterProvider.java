@@ -11,7 +11,7 @@
  * @author stanp
  * @version $Id$
  */
-package com.propertyvista.oapi.service;
+package com.propertyvista.oapi.rs;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Type;

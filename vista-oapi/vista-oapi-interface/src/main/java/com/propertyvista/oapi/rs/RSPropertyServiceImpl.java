@@ -28,10 +28,11 @@ import javax.ws.rs.core.Response;
 
 import com.pyx4j.i18n.shared.I18n;
 
-import com.propertyvista.oapi.PropertyService;
 import com.propertyvista.oapi.model.BuildingIO;
 import com.propertyvista.oapi.model.BuildingsIO;
 import com.propertyvista.oapi.model.UnitIO;
+import com.propertyvista.oapi.processing.PropertyServiceProcessor;
+import com.propertyvista.oapi.service.PropertyService;
 
 //http://localhost:8888/vista/interfaces/oapi/rs/buildings
 //https://static-22.birchwoodsoftwaregroup.com/interfaces/oapi/rs/buildings
@@ -55,14 +56,15 @@ import com.propertyvista.oapi.model.UnitIO;
  */
 
 @Path("/buildings")
-public class RSPropertyService {
+public class RSPropertyServiceImpl implements PropertyService {
 
-    private static I18n i18n = I18n.get(RSPropertyService.class);
+    private static I18n i18n = I18n.get(RSPropertyServiceImpl.class);
 
+    @Override
     @GET
     @Produces({ MediaType.APPLICATION_XML })
     public BuildingsIO getBuildings(@QueryParam("province") String province) {
-        BuildingsIO allBuildings = PropertyService.getBuildings();
+        BuildingsIO allBuildings = PropertyServiceProcessor.getBuildings();
         if (province == null) {
             return allBuildings;
         }
@@ -76,22 +78,24 @@ public class RSPropertyService {
         return filteredBuildings;
     }
 
+    @Override
     @GET
     @Path("/{propertyCode}")
     @Produces({ MediaType.APPLICATION_XML })
     public BuildingIO getBuildingByPropertyCode(@PathParam("propertyCode") String propertyCode) {
-        BuildingIO buildingIO = PropertyService.getBuildingByPropertyCode(propertyCode);
+        BuildingIO buildingIO = PropertyServiceProcessor.getBuildingByPropertyCode(propertyCode);
         if (buildingIO == null) {
             throw new RuntimeException(i18n.tr("Building with propertyCode={0} not found", propertyCode));
         }
         return buildingIO;
     }
 
+    @Override
     @GET
     @Path("/{propertyCode}/units")
     @Produces({ MediaType.APPLICATION_XML })
     public List<UnitIO> getAllUnitsByPropertyCode(@PathParam("propertyCode") String propertyCode, @QueryParam("floorplan") String floorplan) {
-        List<UnitIO> allUnits = PropertyService.getUnitsByPropertyCode(propertyCode);
+        List<UnitIO> allUnits = PropertyServiceProcessor.getUnitsByPropertyCode(propertyCode);
         List<UnitIO> filteredUnits = new ArrayList<UnitIO>();
         for (UnitIO unit : allUnits) {
             if (unit.floorplanName.equals(floorplan)) {
@@ -101,30 +105,33 @@ public class RSPropertyService {
         return filteredUnits;
     }
 
+    @Override
     @GET
     @Path("/{propertyCode}/units/{unitNumber}")
     @Produces({ MediaType.APPLICATION_XML })
     public UnitIO getUnitByNumber(@PathParam("propertyCode") String propertyCode, @PathParam("unitNumber") String unitNumber) {
-        UnitIO unitIO = PropertyService.getUnitByNumber(propertyCode, unitNumber);
+        UnitIO unitIO = PropertyServiceProcessor.getUnitByNumber(propertyCode, unitNumber);
         if (unitIO == null) {
             throw new RuntimeException(i18n.tr("Unit with propertyCode={0} and unitNumber={1} not found", propertyCode, unitNumber));
         }
         return unitIO;
     }
 
+    @Override
     @POST
     @Path("/updateBuilding")
     @Consumes({ MediaType.APPLICATION_XML })
     public Response updateBuilding(BuildingIO buildingIO) throws Exception {
-        PropertyService.updateBuilding(buildingIO);
+        PropertyServiceProcessor.updateBuilding(buildingIO);
         return RSUtils.createSuccessResponse(i18n.tr("Building updated successfully"));
     }
 
+    @Override
     @POST
     @Path("/{propertyCode}/units/updateUnit")
     @Consumes({ MediaType.APPLICATION_XML })
     public Response updateUnit(@PathParam("propertyCode") String propertyCode, UnitIO unitIO) throws Exception {
-        PropertyService.updateUnit(unitIO);
+        PropertyServiceProcessor.updateUnit(unitIO);
         return RSUtils.createSuccessResponse(i18n.tr("Unit updated successfully"));
     }
 

@@ -47,7 +47,7 @@ public class RSPropertyServiceTest extends RSOapiTestBase {
 
     @Override
     protected Class<? extends Application> getServiceApplication() {
-        return OpenApiRsApplication.class;
+        return OapiRsApplication.class;
     }
 
     @Override

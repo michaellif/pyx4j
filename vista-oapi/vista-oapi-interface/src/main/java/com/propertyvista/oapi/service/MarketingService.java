@@ -11,7 +11,7 @@
  * @author stanp
  * @version $Id$
  */
-package com.propertyvista.oapi.service.marketing;
+package com.propertyvista.oapi.service;
 
 import java.util.List;
 
@@ -29,7 +29,7 @@ import com.propertyvista.oapi.service.marketing.model.WSPropertySearchCriteria;
  * TODO
  * PV: exclude building/fp from this listing via ILS marketing vendor?
  */
-public interface PropertyMarketingService {
+public interface MarketingService extends OAPIService {
 
     PropertyList getPropertyList(WSPropertySearchCriteria criteria);
 

@@ -34,7 +34,7 @@ public class RSLeaseServiceTest extends RSOapiTestBase {
 
     @Override
     protected Class<? extends Application> getServiceApplication() {
-        return OpenApiRsApplication.class;
+        return OapiRsApplication.class;
     }
 
     @Test
@@ -56,7 +56,7 @@ public class RSLeaseServiceTest extends RSOapiTestBase {
         Response response = target().path("leases/testLeaseId/updateTenants").request(MediaType.APPLICATION_XML)
                 .post(Entity.xml(new GenericEntity<List<TenantIO>>(tenants) {
                 }));
-        Assert.assertEquals(Response.Status.OK.getStatusCode(), response.getStatus());
+        Assert.assertEquals(Response.Status.NO_CONTENT.getStatusCode(), response.getStatus());
     }
 
     public void ignore_testUpdateLease() {

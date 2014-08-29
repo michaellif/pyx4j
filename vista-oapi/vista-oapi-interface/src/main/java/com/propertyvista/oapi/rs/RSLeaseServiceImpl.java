@@ -24,13 +24,13 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
 
 import com.pyx4j.i18n.shared.I18n;
 
-import com.propertyvista.oapi.LeaseService;
 import com.propertyvista.oapi.model.LeaseIO;
 import com.propertyvista.oapi.model.TenantIO;
+import com.propertyvista.oapi.processing.LeaseServiceProcessor;
+import com.propertyvista.oapi.service.LeaseService;
 
 //http://localhost:8888/vista/interfaces/oapi/rs/leases
 //https://static-22.birchwoodsoftwaregroup.com/interfaces/oapi/rs/leases
@@ -52,14 +52,15 @@ import com.propertyvista.oapi.model.TenantIO;
  */
 
 @Path("/leases")
-public class RSLeaseService {
+public class RSLeaseServiceImpl implements LeaseService {
 
-    private static I18n i18n = I18n.get(RSLeaseService.class);
+    private static I18n i18n = I18n.get(RSLeaseServiceImpl.class);
 
+    @Override
     @GET
     @Produces({ MediaType.APPLICATION_XML })
     public List<LeaseIO> getLeases(@QueryParam("propertyCode") String propertyCode) {
-        List<LeaseIO> allLeases = LeaseService.getLeases();
+        List<LeaseIO> allLeases = LeaseServiceProcessor.getLeases();
         if (propertyCode == null) {
             return allLeases;
         }
@@ -72,38 +73,42 @@ public class RSLeaseService {
         return filteredLeases;
     }
 
+    @Override
     @GET
     @Path("/{leaseId}")
     @Produces({ MediaType.APPLICATION_XML })
     public LeaseIO getLeaseById(@PathParam("leaseId") String leaseId) {
-        LeaseIO leaseIO = LeaseService.getLeaseById(leaseId);
+        LeaseIO leaseIO = LeaseServiceProcessor.getLeaseById(leaseId);
         if (leaseIO == null) {
             throw new RuntimeException(i18n.tr("Lease with leaseId={0} not found", leaseId));
         }
-        return LeaseService.getLeaseById(leaseId);
+        return LeaseServiceProcessor.getLeaseById(leaseId);
     }
 
+    @Override
     @GET
     @Path("/{leaseId}/tenants")
     @Produces({ MediaType.APPLICATION_XML })
     public List<TenantIO> getTenants(@PathParam("leaseId") String leaseId) {
-        return LeaseService.getTenants(leaseId);
+        return LeaseServiceProcessor.getTenants(leaseId);
     }
 
+    @Override
     @POST
     @Path("/updateLease")
     @Consumes({ MediaType.APPLICATION_XML })
-    public Response updateLease(LeaseIO leaseIO) {
-        LeaseService.updateLease(leaseIO);
-        return RSUtils.createSuccessResponse(i18n.tr("Lease updated successfully"));
+    public void updateLease(LeaseIO leaseIO) {
+        LeaseServiceProcessor.updateLease(leaseIO);
+        RSUtils.createSuccessResponse(i18n.tr("Lease updated successfully"));
     }
 
+    @Override
     @POST
     @Path("/{leaseId}/updateTenants")
     @Consumes({ MediaType.APPLICATION_XML })
-    public Response updateTenants(@PathParam("leaseId") String leaseId, List<TenantIO> tenantIOs) {
+    public void updateTenants(@PathParam("leaseId") String leaseId, List<TenantIO> tenantIOs) {
         //TODO mkoval implementation TBD
-        return RSUtils.createSuccessResponse(i18n.tr("Operation is not implemented"));
+        RSUtils.createSuccessResponse(i18n.tr("Operation is not implemented"));
     }
 
 }

@@ -11,7 +11,7 @@
  * @author stanp
  * @version $Id$
  */
-package com.propertyvista.oapi.service.marketing.rs;
+package com.propertyvista.oapi.rs;
 
 import java.util.Arrays;
 import java.util.HashSet;
@@ -19,15 +19,18 @@ import java.util.Set;
 
 import javax.ws.rs.core.Application;
 
-import com.propertyvista.oapi.service.RSConverterProvider;
-
 public class OapiRsApplication extends Application {
 
     @Override
     public Set<Class<?>> getClasses() {
         return new HashSet<Class<?>>(Arrays.asList( //
-                RSPropertyMarketingImpl.class, //
-                RSConverterProvider.class //
+                // helpers
+                RSExceptionMapper.class, //
+                RSConverterProvider.class, //
+                // service
+                RSPropertyServiceImpl.class, //
+                RSLeaseServiceImpl.class, //
+                RSMarketingServiceImpl.class //
                 ));
     }
 }
