@@ -82,7 +82,7 @@ BEGIN
                 UPDATE  _dba_.building_stats AS s
                 SET     active_leases = t.active_leases
                 FROM    (SELECT a.property_code, COUNT(a.lease_id) AS active_leases
-                        FROM    (SELECT DISTINCT property_code,lease_id 
+                        FROM    (SELECT DISTINCT property_code,unit_id 
                                 FROM    _dba_.tmp_stats 
                                 WHERE   lease_status = 'Active') AS a
                         GROUP BY a.property_code) AS t

@@ -12,7 +12,7 @@ CREATE OR REPLACE VIEW _dba_.building_stats_view AS
 (
         SELECT  t0.pmc AS "PMC",t0.property_code AS "Property Code",
                 t0.total_units AS "Total Units",
-                t0.active_leases AS "Active Leases",
+                t0.active_leases AS "Occupied Units",
                 t0.reg_units AS "Units with Registered Tenants",
                 CASE WHEN t0.total_units > 0 THEN ROUND(t0.reg_units::numeric(4,1)*100/t0.total_units,1) 
                 ELSE 0 END AS "% Units with Registered Tenants",
