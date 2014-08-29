@@ -55,7 +55,7 @@ public class FeatureForm extends CrmEntityForm<Feature> {
             formPanel.append(Location.Left, proto().defaultCatalogItem(), new CBooleanLabel()).decorate();
         }
 
-        formPanel.append(Location.Right, proto().expiredFrom()).decorate().componentWidth(100);
+        formPanel.append(Location.Right, proto().expiredFrom()).decorate().componentWidth(150);
         formPanel.append(Location.Right, proto().version().price()).decorate().componentWidth(100);
         formPanel.append(Location.Right, proto().version().availableOnline()).decorate().componentWidth(40);
         formPanel.append(Location.Right, proto().version().mandatory()).decorate().componentWidth(40);
