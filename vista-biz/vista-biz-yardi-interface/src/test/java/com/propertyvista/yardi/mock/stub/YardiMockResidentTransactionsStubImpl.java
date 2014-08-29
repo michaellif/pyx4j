@@ -13,22 +13,15 @@
  */
 package com.propertyvista.yardi.mock.stub;
 
-import java.text.SimpleDateFormat;
-
-import javax.xml.bind.JAXBException;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.yardi.entity.resident.ResidentTransactions;
 
 import com.pyx4j.commons.LogicalDate;
-import com.pyx4j.config.server.SystemDateManager;
-import com.pyx4j.essentials.j2se.util.MarshallUtil;
 
 import com.propertyvista.biz.system.yardi.YardiServiceException;
 import com.propertyvista.domain.settings.PmcYardiCredential;
-import com.propertyvista.yardi.TransactionLog;
 import com.propertyvista.yardi.beans.Properties;
 import com.propertyvista.yardi.mock.YardiMockServer;
 import com.propertyvista.yardi.stubs.YardiResidentTransactionsStub;
@@ -36,17 +29,6 @@ import com.propertyvista.yardi.stubs.YardiResidentTransactionsStub;
 public class YardiMockResidentTransactionsStubImpl implements YardiResidentTransactionsStub {
 
     private final static Logger log = LoggerFactory.getLogger(YardiMockResidentTransactionsStubImpl.class);
-
-    public static <T> T dumpXml(String contextName, T data) {
-        try {
-            String name = TransactionLog.log(TransactionLog.getNextNumber(),
-                    contextName + "_" + new SimpleDateFormat("yyyy-MM-dd_HH_mm").format(SystemDateManager.getDate()), MarshallUtil.marshall(data), "xml");
-            log.debug("log file created {}", name);
-        } catch (JAXBException e) {
-            log.error("writing data dump error", e);
-        }
-        return data;
-    }
 
     @Override
     public String ping(PmcYardiCredential yc) {
@@ -56,12 +38,12 @@ public class YardiMockResidentTransactionsStubImpl implements YardiResidentTrans
 
     @Override
     public Properties getPropertyConfigurations(PmcYardiCredential yc) throws YardiServiceException {
-        return dumpXml("getPropertyConfigurations", YardiMockServer.instance().getPropertyConfigurations());
+        return YardiMockUtils.dumpXml("getPropertyConfigurations", YardiMockServer.instance().getPropertyConfigurations());
     }
 
     @Override
     public ResidentTransactions getAllResidentTransactions(PmcYardiCredential yc, String propertyId) throws YardiServiceException {
-        return dumpXml("getAllResidentTransactions", YardiMockServer.instance().getAllResidentTransactions(propertyId));
+        return YardiMockUtils.dumpXml("getAllResidentTransactions", YardiMockServer.instance().getAllResidentTransactions(propertyId));
     }
 
     @Override
@@ -76,13 +58,13 @@ public class YardiMockResidentTransactionsStubImpl implements YardiResidentTrans
 
     @Override
     public ResidentTransactions getAllLeaseCharges(PmcYardiCredential yc, String propertyId, LogicalDate date) throws YardiServiceException {
-        return dumpXml("getAllLeaseCharges", YardiMockServer.instance().getAllLeaseCharges(propertyId));
+        return YardiMockUtils.dumpXml("getAllLeaseCharges", YardiMockServer.instance().getAllLeaseCharges(propertyId));
     }
 
     @Override
     public ResidentTransactions getLeaseChargesForTenant(PmcYardiCredential yc, String propertyId, String tenantId, LogicalDate date)
             throws YardiServiceException {
-        return dumpXml("getLeaseChargesForTenant", YardiMockServer.instance().getLeaseChargesForTenant(propertyId, tenantId));
+        return YardiMockUtils.dumpXml("getLeaseChargesForTenant", YardiMockServer.instance().getLeaseChargesForTenant(propertyId, tenantId));
     }
 
     @Override
