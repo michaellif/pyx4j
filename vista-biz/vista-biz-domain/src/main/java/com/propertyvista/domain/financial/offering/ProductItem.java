@@ -66,7 +66,7 @@ public interface ProductItem extends IEntity {
      * if set any value (including 0) - some deposit imported.
      */
     @Format("#,##0.00")
-    @Caption(name = "Deposit LMR")
+    @Caption(name = "Yardi Deposit LMR")
     @Editor(type = EditorType.money)
     IPrimitive<BigDecimal> yardiDepositLMR();
 

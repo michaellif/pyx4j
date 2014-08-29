@@ -62,7 +62,7 @@ class ServiceItemFolder extends VistaBoxFolder<ProductItem> {
         decor.setCaptionFormatter(new IFormatter<ProductItem, String>() {
             @Override
             public String format(ProductItem value) {
-                return value.name().getStringView() + ", Unit: " + value.element().getStringView() + ", Price: " + value.price().getStringView();
+                return value.name().getStringView() + ", Unit: " + value.element().getStringView() + ", Price: $" + value.price().getStringView();
             }
         });
         return decor;
@@ -123,9 +123,9 @@ class ServiceItemFolder extends VistaBoxFolder<ProductItem> {
             Class<? extends IEntity> buildingElementClass = null;
             if (ARCode.Type.unitRelatedServices().contains(parent.getValue().code().type().getValue())) {
                 buildingElementClass = AptUnit.class;
+                AppSite.getPlaceController()
+                        .goTo(AppPlaceEntityMapper.resolvePlace(buildingElementClass).formViewerPlace(getValue().element().getPrimaryKey()));
             }
-            assert (buildingElementClass != null);
-            AppSite.getPlaceController().goTo(AppPlaceEntityMapper.resolvePlace(buildingElementClass).formViewerPlace(getValue().element().getPrimaryKey()));
         }
 
         @Override
@@ -149,18 +149,20 @@ class ServiceItemFolder extends VistaBoxFolder<ProductItem> {
         protected void onValueSet(boolean populate) {
             super.onValueSet(populate);
 
-            if (VistaFeatures.instance().yardiIntegration()) {
-                get(proto().yardiDepositLMR()).setVisible(!getValue().yardiDepositLMR().isNull());
-                get(proto().depositLMR()).setVisible(getValue().yardiDepositLMR().isNull());
-                get(proto().depositMoveIn()).setVisible(getValue().yardiDepositLMR().isNull());
-                get(proto().depositSecurity()).setVisible(getValue().yardiDepositLMR().isNull());
-            } else {
-                get(proto().yardiDepositLMR()).setVisible(false);
-                if (isViewable()) {
-                    get(proto().depositLMR()).setVisible(!getValue().depositLMR().isNull());
-                    get(proto().depositMoveIn()).setVisible(!getValue().depositMoveIn().isNull());
-                    get(proto().depositSecurity()).setVisible(!getValue().depositSecurity().isNull());
-                }
+            get(proto().yardiDepositLMR()).setVisible(false);
+
+            if (isViewable()) {
+                get(proto().depositLMR()).setVisible(parent.getValue().version().depositLMR().enabled().getValue());
+                get(proto().depositMoveIn()).setVisible(parent.getValue().version().depositMoveIn().enabled().getValue());
+                get(proto().depositSecurity()).setVisible(parent.getValue().version().depositSecurity().enabled().getValue());
+            }
+
+            if (VistaFeatures.instance().yardiIntegration() && !getValue().yardiDepositLMR().isNull()) {
+                get(proto().yardiDepositLMR()).setVisible(true);
+
+                get(proto().depositLMR()).setVisible(false);
+                get(proto().depositMoveIn()).setVisible(false);
+                get(proto().depositSecurity()).setVisible(false);
             }
         }
     }
