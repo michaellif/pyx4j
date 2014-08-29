@@ -47,6 +47,15 @@ public class BuildingIO extends AbstractElementIO {
     public List<UtilityIO> includedUtilities = new ArrayList<UtilityIO>();
 
     @XmlElementWrapper
+    @XmlElements(@XmlElement(name = "floorplan"))
+    public List<FloorplanIO> floorplans = new ArrayList<FloorplanIO>();
+
+    //mandatory for portal
+    @XmlElementWrapper
+    @XmlElements(@XmlElement(name = "unit"))
+    public List<UnitIO> units = new ArrayList<UnitIO>();
+
+    @XmlElementWrapper
     @XmlElements(@XmlElement(name = "parking"))
     public List<ParkingIO> parkings = new ArrayList<ParkingIO>();
 
@@ -58,10 +67,9 @@ public class BuildingIO extends AbstractElementIO {
     @XmlElements(@XmlElement(name = "media"))
     public List<MediaImageIO> medias = new ArrayList<MediaImageIO>();
 
-    //mandatory for portal
     @XmlElementWrapper
-    @XmlElements(@XmlElement(name = "unit"))
-    public List<UnitIO> units = new ArrayList<UnitIO>();
+    @XmlElements(@XmlElement(name = "lease"))
+    public List<LeaseIO> leases = new ArrayList<LeaseIO>();
 
     public BuildingIO() {
     }

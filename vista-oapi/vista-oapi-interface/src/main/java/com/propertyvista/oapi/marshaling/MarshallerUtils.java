@@ -32,7 +32,7 @@ public class MarshallerUtils {
     public static <T extends IEntity, E extends ElementIO> void set(T entity, E elementIO, Marshaller<T, E> marshaller) {
         if (elementIO != null) {
 
-            if (elementIO.getAction() == Action.nil) {
+            if (elementIO.getAction() == Action.delete) {
                 entity.setValue(null);
             } else {
                 try {

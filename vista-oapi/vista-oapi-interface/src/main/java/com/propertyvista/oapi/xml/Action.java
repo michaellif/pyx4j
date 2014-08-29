@@ -15,5 +15,5 @@ package com.propertyvista.oapi.xml;
 
 public enum Action {
 
-    nil
+    delete
 }
