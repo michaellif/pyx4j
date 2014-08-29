@@ -79,7 +79,9 @@ class ServiceItemFolder extends VistaBoxFolder<ProductItem> {
         if (ARCode.Type.unitRelatedServices().contains(parent.getValue().code().type().getValue())) {
             Set<AptUnit> alreadySelected = new HashSet<AptUnit>(getValue().size());
             for (ProductItem item : getValue()) {
-                alreadySelected.add((AptUnit) item.element().cast());
+                if (!item.element().isNull()) {
+                    alreadySelected.add((AptUnit) item.element().cast());
+                }
             }
             buildingElementSelectionBox = new UnitSelectorDialog(parent.getParentView(), alreadySelected) {
                 @Override

@@ -80,7 +80,9 @@ class FeatureItemFolder extends VistaBoxFolder<ProductItem> {
         case Parking:
             Set<Parking> alreadySelectedParking = new HashSet<Parking>(getValue().size());
             for (ProductItem item : getValue()) {
-                alreadySelectedParking.add((Parking) item.element().cast());
+                if (!item.element().isNull()) {
+                    alreadySelectedParking.add((Parking) item.element().cast());
+                }
             }
             buildingElementSelectionBox = new ParkingSelectorDialog(parent.getParentView(), alreadySelectedParking) {
                 @Override
@@ -103,7 +105,9 @@ class FeatureItemFolder extends VistaBoxFolder<ProductItem> {
         case Locker:
             Set<LockerArea> alreadySelectedLockerArea = new HashSet<LockerArea>(getValue().size());
             for (ProductItem item : getValue()) {
-                alreadySelectedLockerArea.add((LockerArea) item.element().cast());
+                if (!item.element().isNull()) {
+                    alreadySelectedLockerArea.add((LockerArea) item.element().cast());
+                }
             }
             buildingElementSelectionBox = new LockerAreaSelectorDialog(parent.getParentView(), alreadySelectedLockerArea) {
                 @Override
