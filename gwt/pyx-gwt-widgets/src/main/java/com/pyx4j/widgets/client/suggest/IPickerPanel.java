@@ -1,6 +1,6 @@
 /*
  * Pyx4j framework
- * Copyright (C) 2008-2011 pyx4j.com.
+ * Copyright (C) 2008-2010 pyx4j.com.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -14,7 +14,7 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on Dec 24, 2011
+ * Created on Jul 20, 2010
  * @author michaellif
  * @version $Id$
  */
@@ -24,8 +24,11 @@ import java.util.Collection;
 
 import com.google.gwt.user.client.ui.IsWidget;
 
-public interface ISelectorValuePanel<E> extends IsWidget {
+public interface IPickerPanel<E> extends IsWidget {
+
+    void setOptions(Collection<E> options);
 
     void setSelection(Collection<E> items);
 
+    void setSelectorWidget(AbstractSelectorWidget<E> selectorWidget);
 }

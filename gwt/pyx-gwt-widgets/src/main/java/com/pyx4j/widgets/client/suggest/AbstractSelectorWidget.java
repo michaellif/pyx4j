@@ -14,18 +14,24 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on Dec 24, 2011
+ * Created on Aug 28, 2014
  * @author michaellif
  * @version $Id$
  */
 package com.pyx4j.widgets.client.suggest;
 
 import java.util.Collection;
+import java.util.HashSet;
 
-import com.google.gwt.user.client.ui.IsWidget;
+import com.google.gwt.user.client.ui.Composite;
 
-public interface ISelectorValuePanel<E> extends IsWidget {
+import com.pyx4j.widgets.client.combobox.PickerPopup;
 
-    void setSelection(Collection<E> items);
+public abstract class AbstractSelectorWidget<E> extends Composite {
 
+    private final Collection<E> selection = new HashSet<E>();
+
+    private ISelectorValuePanel<E> viewerPanel;
+
+    private PickerPopup<E> pickerPopup;
 }
