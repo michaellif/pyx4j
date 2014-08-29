@@ -92,7 +92,7 @@ CREATE OR REPLACE VIEW _dba_.building_stats_view AS
                 t0.total_insurance AS "Units with Renters Insurance",
                 t0.total_insurance - t1.total_insurance AS "Units with Renters Insurance : Change from Last Week",
                 t0.total_tenantsure AS "Units with TenantSure",
-                t0.total_insurance - t1.total_insurance AS "Units with TenantSure : Change from Last Week"
+                t0.total_tenantsure - t1.total_tenantsure AS "Units with TenantSure : Change from Last Week"
         FROM    (SELECT  * 
                 FROM    _dba_.building_stats
                 WHERE   reg_tenants > 0 
