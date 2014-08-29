@@ -88,7 +88,11 @@ CREATE OR REPLACE VIEW _dba_.building_stats_view AS
                 t0.total_maint_requests AS "Total Maintenance Requests",
                 t0.maint_requests_month AS "Maintenance Requests This Month",
                 t0.tenant_maint_requests AS "Total Tenant Maintenance Requests",
-                t0.tenant_maint_requests_month AS "Tenant Maintenance Requests This Month"          
+                t0.tenant_maint_requests_month AS "Tenant Maintenance Requests This Month",
+                t0.total_insurance AS "Units with Renters Insurance",
+                t0.total_insurance - t1.total_insurance AS "Units with Renters Insurance : Change from Last Week",
+                t0.total_total_tenantsure AS "Units with TenantSure",
+                t0.total_insurance - t1.total_insurance AS "Units with TenantSure : Change from Last Week"
         FROM    (SELECT  * 
                 FROM    _dba_.building_stats
                 WHERE   reg_tenants > 0 
