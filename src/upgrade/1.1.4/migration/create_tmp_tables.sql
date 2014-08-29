@@ -2,7 +2,8 @@ CREATE TABLE _dba_.tmp_roles AS
 (   SELECT  r.name,b.value,
             r.require_security_question_for_password_reset
     FROM    vista.crm_role r 
-    JOIN    vista.crm_role$behaviors b ON (r.id = b.owner) 
+    JOIN    vista.crm_role$behaviors b ON (r.id = b.owner)
+    WHERE   name !~ 'Test' 
 );
 
 
