@@ -15,7 +15,7 @@
 *** --------------------------------------------------------------------
 **/
 
-/*
+
 ALTER TABLE _dba_.building_stats    ADD COLUMN total_insurance INT  DEFAULT 0,
                                     ADD COLUMN total_tenantsure INT DEFAULT 0;
                                     
@@ -24,7 +24,7 @@ UPDATE _dba_.building_stats
 SET total_insurance = 0,
     total_tenantsure = 0;
 
-*/
+
 
 CREATE OR REPLACE FUNCTION _dba_.gather_building_stats(v_schema_name TEXT) RETURNS VOID
 AS
