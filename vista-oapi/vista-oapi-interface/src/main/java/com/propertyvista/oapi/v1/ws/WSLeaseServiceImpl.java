@@ -18,9 +18,10 @@ import java.util.Map;
 
 import javax.jws.WebService;
 
+import com.propertyvista.oapi.v1.Version;
 import com.propertyvista.oapi.v1.model.LeaseIO;
 
-@WebService(endpointInterface = "com.propertyvista.oapi.v1.ws.WSLeaseService")
+@WebService(endpointInterface = "com.propertyvista.oapi." + Version.VERSION_NAME + ".ws.WSLeaseService")
 public class WSLeaseServiceImpl implements WSLeaseService {
 
     static private Map<String, LeaseIO> leases = new HashMap<String, LeaseIO>();

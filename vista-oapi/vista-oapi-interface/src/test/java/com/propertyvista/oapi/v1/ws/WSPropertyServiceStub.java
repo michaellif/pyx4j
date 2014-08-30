@@ -11,9 +11,10 @@ import javax.xml.ws.WebServiceClient;
 import javax.xml.ws.WebServiceException;
 import javax.xml.ws.WebServiceFeature;
 
+import com.propertyvista.oapi.v1.Version;
 import com.propertyvista.oapi.v1.ws.WSPropertyService;
 
-@WebServiceClient(name = "WSPropertyServiceImplService", targetNamespace = "http://ws.v1.oapi.propertyvista.com/", wsdlLocation = "http://localhost:8888/WS/WSPropertyService?wsdl")
+@WebServiceClient(name = "WSPropertyServiceImplService", targetNamespace = "http://ws." + Version.VERSION_NAME + ".oapi.propertyvista.com/", wsdlLocation = "http://localhost:8888/WS/WSPropertyService?wsdl")
 @HandlerChain(file = "client-handler-chain.xml")
 public class WSPropertyServiceStub extends Service {
 
@@ -21,9 +22,9 @@ public class WSPropertyServiceStub extends Service {
 
     private final static WebServiceException IMPL_SERVICE_EXCEPTION;
 
-    private final static QName IMPL_SERVICE_QNAME = new QName("http://ws.v1.oapi.propertyvista.com/", "WSPropertyServiceImplService");
+    private final static QName IMPL_SERVICE_QNAME = new QName("http://ws." + Version.VERSION_NAME + ".oapi.propertyvista.com/", "WSPropertyServiceImplService");
 
-    private final static QName IMPL_PORT_QNAME = new QName("http://ws.v1.oapi.propertyvista.com/", "WSPropertyServiceImplPort");
+    private final static QName IMPL_PORT_QNAME = new QName("http://ws." + Version.VERSION_NAME + ".oapi.propertyvista.com/", "WSPropertyServiceImplPort");
 
     static {
         URL url = null;

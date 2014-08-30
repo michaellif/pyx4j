@@ -32,8 +32,8 @@ import com.propertyvista.oapi.v1.model.TenantIO;
 import com.propertyvista.oapi.v1.processing.LeaseServiceProcessor;
 import com.propertyvista.oapi.v1.service.LeaseService;
 
-//http://localhost:8888/vista/interfaces/oapi/rs/leases
-//https://static-22.birchwoodsoftwaregroup.com/interfaces/oapi/rs/leases
+//http://localhost:8888/vista/interfaces/oapi/v1/rs/leases
+//https://static-22.birchwoodsoftwaregroup.com/interfaces/oapi/v1/rs/leases
 
 /**
  * 

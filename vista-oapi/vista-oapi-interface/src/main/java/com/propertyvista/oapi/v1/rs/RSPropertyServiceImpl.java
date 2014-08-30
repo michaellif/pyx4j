@@ -34,24 +34,24 @@ import com.propertyvista.oapi.v1.model.UnitIO;
 import com.propertyvista.oapi.v1.processing.PropertyServiceProcessor;
 import com.propertyvista.oapi.v1.service.PropertyService;
 
-//http://localhost:8888/vista/interfaces/oapi/rs/buildings
-//https://static-22.birchwoodsoftwaregroup.com/interfaces/oapi/rs/buildings
+//http://localhost:8888/vista/interfaces/oapi/v1/rs/buildings
+//https://static-22.birchwoodsoftwaregroup.com/interfaces/oapi/v1/rs/buildings
 
 /**
  * 
- * interfaces/oapi/rs/buildings/<buildingCode>/units/<unitId>
+ * interfaces/oapi/v1/rs/buildings/<buildingCode>/units/<unitId>
  * 
- * interfaces/oapi/rs/buildings/ - all buildings
+ * interfaces/oapi/v1/rs/buildings/ - all buildings
  * 
- * interfaces/oapi/rs/buildings?city=Toronto - all buildings in Toronto
+ * interfaces/oapi/v1/rs/buildings?city=Toronto - all buildings in Toronto
  * 
- * interfaces/oapi/rs/buildings/<buildingCode>/units - all units
+ * interfaces/oapi/v1/rs/buildings/<buildingCode>/units - all units
  * 
- * interfaces/oapi/rs/buildings/<buildingCode>/units?floorplan=3bdrm - all units for which floorplanName = 3bdrm
+ * interfaces/oapi/v1/rs/buildings/<buildingCode>/units?floorplan=3bdrm - all units for which floorplanName = 3bdrm
  * 
- * interfaces/oapi/rs/buildings/updateBuilding - updates/creates building
+ * interfaces/oapi/v1/rs/buildings/updateBuilding - updates/creates building
  * 
- * interfaces/oapi/rs/buildings/<buildingCode>/units/updateUnit - updates/creates unit for corresponding building
+ * interfaces/oapi/v1/rs/buildings/<buildingCode>/units/updateUnit - updates/creates unit for corresponding building
  * 
  */
 

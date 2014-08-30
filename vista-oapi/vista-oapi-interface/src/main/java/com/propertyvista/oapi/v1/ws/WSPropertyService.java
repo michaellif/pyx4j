@@ -28,8 +28,8 @@ import com.propertyvista.oapi.v1.model.BuildingIO;
 import com.propertyvista.oapi.v1.model.BuildingsIO;
 import com.propertyvista.oapi.v1.model.UnitIO;
 
-//http://localhost:8888/vista/interfaces/oapi/ws/WSPropertyService?wsdl
-//https://static-22.birchwoodsoftwaregroup.com/interfaces/oapi/ws/WSPropertyService?wsdl
+//http://localhost:8888/vista/interfaces/oapi/v1/ws/WSPropertyService?wsdl
+//https://static-22.birchwoodsoftwaregroup.com/interfaces/oapi/v1/ws/WSPropertyService?wsdl
 
 @WebService
 @SOAPBinding(style = Style.DOCUMENT, use = Use.LITERAL, parameterStyle = ParameterStyle.WRAPPED)

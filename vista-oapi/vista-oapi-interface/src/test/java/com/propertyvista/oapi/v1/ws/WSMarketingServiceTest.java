@@ -41,6 +41,7 @@ import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.tenant.lead.Lead;
 import com.propertyvista.domain.tenant.lead.Lead.DayPart;
 import com.propertyvista.domain.tenant.lead.Lead.LeaseTerm;
+import com.propertyvista.oapi.v1.Version;
 import com.propertyvista.oapi.v1.model.BuildingIO;
 import com.propertyvista.oapi.v1.model.FloorplanIO;
 import com.propertyvista.oapi.v1.service.marketing.model.AppointmentRequest;
@@ -94,7 +95,7 @@ public class WSMarketingServiceTest extends WSOapiTestBase {
             }
         });
 
-        String nsUrl = "http://ws.v1.oapi.propertyvista.com/";
+        String nsUrl = "http://ws." + Version.VERSION_NAME + ".oapi.propertyvista.com/";
         QName svcName = new QName(nsUrl, WSMarketingServiceImpl.class.getSimpleName() + "Service");
         QName portName = new QName(nsUrl, WSMarketingServiceImpl.class.getSimpleName() + "Port");
         service = Service.create(new URL(getAddress()), svcName).getPort(portName, WSMarketingServiceTestInterface.class);

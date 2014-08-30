@@ -19,13 +19,14 @@ import java.util.Map;
 
 import javax.jws.WebService;
 
+import com.propertyvista.oapi.v1.Version;
 import com.propertyvista.oapi.v1.model.BuildingIO;
 import com.propertyvista.oapi.v1.model.BuildingsIO;
 import com.propertyvista.oapi.v1.model.UnitIO;
 import com.propertyvista.oapi.v1.processing.PropertyServiceProcessor;
 import com.propertyvista.oapi.xml.StringIO;
 
-@WebService(endpointInterface = "com.propertyvista.oapi.v1.ws.WSPropertyService")
+@WebService(endpointInterface = "com.propertyvista.oapi." + Version.VERSION_NAME + ".ws.WSPropertyService")
 public class WSPropertyServiceImpl implements WSPropertyService {
 
     static private Map<String, BuildingIO> buildings = new HashMap<String, BuildingIO>();

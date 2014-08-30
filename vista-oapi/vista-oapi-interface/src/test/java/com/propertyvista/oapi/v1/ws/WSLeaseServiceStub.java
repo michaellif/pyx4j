@@ -10,18 +10,19 @@ import javax.xml.ws.WebServiceClient;
 import javax.xml.ws.WebServiceException;
 import javax.xml.ws.WebServiceFeature;
 
+import com.propertyvista.oapi.v1.Version;
 import com.propertyvista.oapi.v1.ws.WSLeaseService;
 
-@WebServiceClient(name = "WSLeaseServiceImplService", targetNamespace = "http://ws.v1.oapi.propertyvista.com/", wsdlLocation = "http://localhost:8888/WS/WSLeaseService?wsdl")
+@WebServiceClient(name = "WSLeaseServiceImplService", targetNamespace = "http://ws." + Version.VERSION_NAME + ".oapi.propertyvista.com/", wsdlLocation = "http://localhost:8888/WS/WSLeaseService?wsdl")
 public class WSLeaseServiceStub extends Service {
 
     private final static URL IMPL_SERVICE_WSDL_LOCATION;
 
     private final static WebServiceException IMPL_SERVICE_EXCEPTION;
 
-    private final static QName IMPL_SERVICE_QNAME = new QName("http://ws.v1.oapi.propertyvista.com/", "WSLeaseServiceImplService");
+    private final static QName IMPL_SERVICE_QNAME = new QName("http://ws." + Version.VERSION_NAME + ".oapi.propertyvista.com/", "WSLeaseServiceImplService");
 
-    private final static QName IMPL_PORT_QNAME = new QName("http://ws.v1.oapi.propertyvista.com/", "WSLeaseServiceImplPort");
+    private final static QName IMPL_PORT_QNAME = new QName("http://ws." + Version.VERSION_NAME + ".oapi.propertyvista.com/", "WSLeaseServiceImplPort");
 
     static {
         URL url = null;
