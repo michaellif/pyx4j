@@ -21,7 +21,7 @@ import com.propertyvista.oapi.xml.BigDecimalIO;
 import com.propertyvista.oapi.xml.LogicalDateIO;
 import com.propertyvista.oapi.xml.StringIO;
 
-public class ChargeMarshaller implements Marshaller<ChargeDTO, ChargeIO> {
+public class ChargeMarshaller extends AbstractMarshaller<ChargeDTO, ChargeIO> {
 
     private static class SingletonHolder {
         public static final ChargeMarshaller INSTANCE = new ChargeMarshaller();
@@ -40,13 +40,13 @@ public class ChargeMarshaller implements Marshaller<ChargeDTO, ChargeIO> {
             return null;
         }
         ChargeIO chargeIO = new ChargeIO();
-        chargeIO.transactionId = MarshallerUtils.getValue(charge.transactionId());
-        chargeIO.leaseId = MarshallerUtils.getValue(charge.leaseId());
+        chargeIO.transactionId = getValue(charge.transactionId());
+        chargeIO.leaseId = getValue(charge.leaseId());
 
-        chargeIO.amount = MarshallerUtils.createIo(BigDecimalIO.class, charge.amount());
-        chargeIO.description = MarshallerUtils.createIo(StringIO.class, charge.description());
-        chargeIO.fromDate = MarshallerUtils.createIo(LogicalDateIO.class, charge.fromDate());
-        chargeIO.toDate = MarshallerUtils.createIo(LogicalDateIO.class, charge.toDate());
+        chargeIO.amount = createIo(BigDecimalIO.class, charge.amount());
+        chargeIO.description = createIo(StringIO.class, charge.description());
+        chargeIO.fromDate = createIo(LogicalDateIO.class, charge.fromDate());
+        chargeIO.toDate = createIo(LogicalDateIO.class, charge.toDate());
         return chargeIO;
     }
 
@@ -56,10 +56,10 @@ public class ChargeMarshaller implements Marshaller<ChargeDTO, ChargeIO> {
         charge.transactionId().setValue(chargeIO.transactionId);
         charge.leaseId().setValue(chargeIO.leaseId);
 
-        MarshallerUtils.setValue(charge.amount(), chargeIO.amount);
-        MarshallerUtils.setValue(charge.description(), chargeIO.description);
-        MarshallerUtils.setValue(charge.fromDate(), chargeIO.fromDate); // Transaction.ChargeDetail.ServiceFromDate
-        MarshallerUtils.setValue(charge.toDate(), chargeIO.toDate); // Transaction.ChargeDetail.ServiceToDate
+        setValue(charge.amount(), chargeIO.amount);
+        setValue(charge.description(), chargeIO.description);
+        setValue(charge.fromDate(), chargeIO.fromDate); // Transaction.ChargeDetail.ServiceFromDate
+        setValue(charge.toDate(), chargeIO.toDate); // Transaction.ChargeDetail.ServiceToDate
         return charge;
     }
 

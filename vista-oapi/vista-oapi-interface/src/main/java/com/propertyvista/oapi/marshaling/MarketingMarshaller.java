@@ -19,7 +19,7 @@ import com.propertyvista.domain.marketing.Marketing;
 import com.propertyvista.oapi.model.MarketingIO;
 import com.propertyvista.oapi.xml.StringIO;
 
-public class MarketingMarshaller implements Marshaller<Marketing, MarketingIO> {
+public class MarketingMarshaller extends AbstractMarshaller<Marketing, MarketingIO> {
 
     private static class SingletonHolder {
         public static final MarketingMarshaller INSTANCE = new MarketingMarshaller();
@@ -38,9 +38,9 @@ public class MarketingMarshaller implements Marshaller<Marketing, MarketingIO> {
             return null;
         }
         MarketingIO marketingIO = new MarketingIO();
-        marketingIO.name = MarshallerUtils.getValue(marketing.name());
+        marketingIO.name = getValue(marketing.name());
 
-        marketingIO.description = MarshallerUtils.createIo(StringIO.class, marketing.description());
+        marketingIO.description = createIo(StringIO.class, marketing.description());
 
         return marketingIO;
     }
@@ -49,7 +49,7 @@ public class MarketingMarshaller implements Marshaller<Marketing, MarketingIO> {
     public Marketing unmarshal(MarketingIO marketingIO) {
         Marketing marketing = EntityFactory.create(Marketing.class);
         marketing.name().setValue(marketingIO.name);
-        MarshallerUtils.setValue(marketing.description(), marketingIO.description);
+        setValue(marketing.description(), marketingIO.description);
 
         return marketing;
     }

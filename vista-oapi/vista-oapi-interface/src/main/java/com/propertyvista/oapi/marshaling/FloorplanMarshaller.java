@@ -38,7 +38,7 @@ import com.propertyvista.oapi.xml.LogicalDateIO;
 import com.propertyvista.oapi.xml.StringIO;
 import com.propertyvista.server.common.util.PropertyFinder;
 
-public class FloorplanMarshaller implements Marshaller<Floorplan, FloorplanIO> {
+public class FloorplanMarshaller extends AbstractMarshaller<Floorplan, FloorplanIO> {
 
     private static class SingletonHolder {
         public static final FloorplanMarshaller INSTANCE = new FloorplanMarshaller();
@@ -60,13 +60,13 @@ public class FloorplanMarshaller implements Marshaller<Floorplan, FloorplanIO> {
         Persistence.ensureRetrieve(fp.building(), AttachLevel.Attached);
         fpIO.propertyCode = fp.building().propertyCode().getValue();
         fpIO.name = fp.name().getValue();
-        fpIO.marketingName = MarshallerUtils.createIo(StringIO.class, fp.marketingName());
-        fpIO.description = MarshallerUtils.createIo(StringIO.class, fp.description());
-        fpIO.floorCount = MarshallerUtils.createIo(IntegerIO.class, fp.floorCount());
-        fpIO.bedrooms = MarshallerUtils.createIo(IntegerIO.class, fp.bedrooms());
-        fpIO.dens = MarshallerUtils.createIo(IntegerIO.class, fp.dens());
-        fpIO.bathrooms = MarshallerUtils.createIo(IntegerIO.class, fp.bathrooms());
-        fpIO.halfBath = MarshallerUtils.createIo(IntegerIO.class, fp.halfBath());
+        fpIO.marketingName = createIo(StringIO.class, fp.marketingName());
+        fpIO.description = createIo(StringIO.class, fp.description());
+        fpIO.floorCount = createIo(IntegerIO.class, fp.floorCount());
+        fpIO.bedrooms = createIo(IntegerIO.class, fp.bedrooms());
+        fpIO.dens = createIo(IntegerIO.class, fp.dens());
+        fpIO.bathrooms = createIo(IntegerIO.class, fp.bathrooms());
+        fpIO.halfBath = createIo(IntegerIO.class, fp.halfBath());
 
         Persistence.ensureRetrieve(fp.amenities(), AttachLevel.Attached);
         fpIO.amenities = FloorplanAmenityMarshaller.getInstance().marshal(fp.amenities());
@@ -77,11 +77,11 @@ public class FloorplanMarshaller implements Marshaller<Floorplan, FloorplanIO> {
         List<AptUnit> units = PropertyFinder.getFloorplanUnits(fp);
         MinMaxPair<BigDecimal> minMaxRent = PropertyFinder.getMinMaxMarketRent(units);
         MinMaxPair<Integer> minMaxArea = PropertyFinder.getMinMaxAreaInSqFeet(units);
-        fpIO.rentFrom = MarshallerUtils.createIo(BigDecimalIO.class, minMaxRent.getMin());
-        fpIO.rentTo = MarshallerUtils.createIo(BigDecimalIO.class, minMaxRent.getMax());
-        fpIO.sqftFrom = MarshallerUtils.createIo(IntegerIO.class, minMaxArea.getMin());
-        fpIO.sqftTo = MarshallerUtils.createIo(IntegerIO.class, minMaxArea.getMax());
-        fpIO.availableFrom = MarshallerUtils.createIo(LogicalDateIO.class, getDateAvailable(fp));
+        fpIO.rentFrom = createIo(BigDecimalIO.class, minMaxRent.getMin());
+        fpIO.rentTo = createIo(BigDecimalIO.class, minMaxRent.getMax());
+        fpIO.sqftFrom = createIo(IntegerIO.class, minMaxArea.getMin());
+        fpIO.sqftTo = createIo(IntegerIO.class, minMaxArea.getMax());
+        fpIO.availableFrom = createIo(LogicalDateIO.class, getDateAvailable(fp));
         return fpIO;
     }
 
@@ -113,13 +113,13 @@ public class FloorplanMarshaller implements Marshaller<Floorplan, FloorplanIO> {
             throw new Error("Building not found for the given property code");
         }
 
-        MarshallerUtils.setValue(fp.marketingName(), fpIO.marketingName);
-        MarshallerUtils.setValue(fp.description(), fpIO.description);
-        MarshallerUtils.setValue(fp.floorCount(), fpIO.floorCount);
-        MarshallerUtils.setValue(fp.bedrooms(), fpIO.bedrooms);
-        MarshallerUtils.setValue(fp.dens(), fpIO.dens);
-        MarshallerUtils.setValue(fp.bathrooms(), fpIO.bathrooms);
-        MarshallerUtils.setValue(fp.halfBath(), fpIO.halfBath);
+        setValue(fp.marketingName(), fpIO.marketingName);
+        setValue(fp.description(), fpIO.description);
+        setValue(fp.floorCount(), fpIO.floorCount);
+        setValue(fp.bedrooms(), fpIO.bedrooms);
+        setValue(fp.dens(), fpIO.dens);
+        setValue(fp.bathrooms(), fpIO.bathrooms);
+        setValue(fp.halfBath(), fpIO.halfBath);
         fp.media().addAll(MediaMarshaller.getInstance().unmarshal(fpIO.medias));
         fp.amenities().addAll(FloorplanAmenityMarshaller.getInstance().unmarshal(fpIO.amenities));
 

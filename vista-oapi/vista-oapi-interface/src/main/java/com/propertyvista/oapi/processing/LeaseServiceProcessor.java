@@ -25,11 +25,11 @@ import com.pyx4j.server.contexts.NamespaceManager;
 
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseParticipant;
-import com.propertyvista.oapi.binder.LeasePersister;
 import com.propertyvista.oapi.marshaling.LeaseMarshaller;
 import com.propertyvista.oapi.marshaling.TenantMarshaller;
 import com.propertyvista.oapi.model.LeaseIO;
 import com.propertyvista.oapi.model.TenantIO;
+import com.propertyvista.oapi.persisting.LeasePersister;
 
 public class LeaseServiceProcessor {
 

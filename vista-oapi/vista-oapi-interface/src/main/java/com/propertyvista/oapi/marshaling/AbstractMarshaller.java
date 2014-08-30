@@ -7,7 +7,7 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Dec 6, 2012
+ * Created on Nov 16, 2012
  * @author michaellif
  * @version $Id$
  */
@@ -22,14 +22,18 @@ import com.propertyvista.oapi.xml.Action;
 import com.propertyvista.oapi.xml.ElementIO;
 import com.propertyvista.oapi.xml.PrimitiveIO;
 
-public class MarshallerUtils {
+public abstract class AbstractMarshaller<ValueType extends IEntity, BoundType> {
+
+    public abstract BoundType marshal(ValueType v) throws Exception;
+
+    public abstract ValueType unmarshal(BoundType v) throws Exception;
 
     /**
      * 
      * Marshals elementIO->entity
      * 
      */
-    public static <T extends IEntity, E extends ElementIO> void set(T entity, E elementIO, Marshaller<T, E> marshaller) {
+    public static <T extends IEntity, E extends ElementIO> void set(T entity, E elementIO, AbstractMarshaller<T, E> marshaller) {
         if (elementIO != null) {
 
             if (elementIO.getAction() == Action.delete) {

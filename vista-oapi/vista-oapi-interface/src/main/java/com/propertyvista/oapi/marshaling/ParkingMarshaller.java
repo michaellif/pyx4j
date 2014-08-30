@@ -25,7 +25,7 @@ import com.propertyvista.oapi.model.types.ParkingTypeIO;
 import com.propertyvista.oapi.xml.DoubleIO;
 import com.propertyvista.oapi.xml.StringIO;
 
-public class ParkingMarshaller implements Marshaller<Parking, ParkingIO> {
+public class ParkingMarshaller extends AbstractMarshaller<Parking, ParkingIO> {
 
     private static class SingletonHolder {
         public static final ParkingMarshaller INSTANCE = new ParkingMarshaller();
@@ -45,9 +45,9 @@ public class ParkingMarshaller implements Marshaller<Parking, ParkingIO> {
         }
         ParkingIO parkingIO = new ParkingIO();
         parkingIO.name = parking.name().getValue();
-        parkingIO.description = MarshallerUtils.createIo(StringIO.class, parking.description());
-        parkingIO.type = MarshallerUtils.createIo(ParkingTypeIO.class, parking.type());
-        parkingIO.levels = MarshallerUtils.createIo(DoubleIO.class, parking.levels());
+        parkingIO.description = createIo(StringIO.class, parking.description());
+        parkingIO.type = createIo(ParkingTypeIO.class, parking.type());
+        parkingIO.levels = createIo(DoubleIO.class, parking.levels());
         return parkingIO;
     }
 
@@ -63,9 +63,9 @@ public class ParkingMarshaller implements Marshaller<Parking, ParkingIO> {
     public Parking unmarshal(ParkingIO parkingIO) {
         Parking parking = EntityFactory.create(Parking.class);
         parking.name().setValue(parkingIO.name);
-        MarshallerUtils.setValue(parking.description(), parkingIO.description);
-        MarshallerUtils.setValue(parking.type(), parkingIO.type);
-        MarshallerUtils.setValue(parking.levels(), parkingIO.levels);
+        setValue(parking.description(), parkingIO.description);
+        setValue(parking.type(), parkingIO.type);
+        setValue(parking.levels(), parkingIO.levels);
         return parking;
     }
 
@@ -73,7 +73,7 @@ public class ParkingMarshaller implements Marshaller<Parking, ParkingIO> {
         List<Parking> parkings = new ArrayList<Parking>();
         for (ParkingIO parkingIO : parkingIOList) {
             Parking parking = EntityFactory.create(Parking.class);
-            MarshallerUtils.set(parking, parkingIO, ParkingMarshaller.getInstance());
+            set(parking, parkingIO, ParkingMarshaller.getInstance());
             parkings.add(parking);
         }
         return parkings;

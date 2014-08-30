@@ -19,7 +19,7 @@ import com.propertyvista.domain.property.asset.building.BuildingInfo;
 import com.propertyvista.oapi.model.BuildingInfoIO;
 import com.propertyvista.oapi.model.types.BuildingTypeIO;
 
-public class BuildingInfoMarshaller implements Marshaller<BuildingInfo, BuildingInfoIO> {
+public class BuildingInfoMarshaller extends AbstractMarshaller<BuildingInfo, BuildingInfoIO> {
 
     private static class SingletonHolder {
         public static final BuildingInfoMarshaller INSTANCE = new BuildingInfoMarshaller();
@@ -40,7 +40,7 @@ public class BuildingInfoMarshaller implements Marshaller<BuildingInfo, Building
         BuildingInfoIO buildingInfoIO = new BuildingInfoIO();
 
         buildingInfoIO.address = AddressMarshaller.getInstance().marshal(info.address());
-        buildingInfoIO.buildingType = MarshallerUtils.createIo(BuildingTypeIO.class, info.type());
+        buildingInfoIO.buildingType = createIo(BuildingTypeIO.class, info.type());
         return buildingInfoIO;
     }
 
@@ -52,8 +52,8 @@ public class BuildingInfoMarshaller implements Marshaller<BuildingInfo, Building
 
         BuildingInfo buildingInfo = EntityFactory.create(BuildingInfo.class);
 
-        MarshallerUtils.set(buildingInfo.address(), buildingInfoIO.address, AddressMarshaller.getInstance());
-        MarshallerUtils.setValue(buildingInfo.type(), buildingInfoIO.buildingType);
+        set(buildingInfo.address(), buildingInfoIO.address, AddressMarshaller.getInstance());
+        setValue(buildingInfo.type(), buildingInfoIO.buildingType);
         return buildingInfo;
     }
 }

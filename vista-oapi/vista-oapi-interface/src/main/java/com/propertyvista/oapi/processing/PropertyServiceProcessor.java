@@ -25,13 +25,13 @@ import com.propertyvista.biz.asset.BuildingFacade;
 import com.propertyvista.biz.preloader.DefaultProductCatalogFacade;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
-import com.propertyvista.oapi.binder.BuildingPersister;
-import com.propertyvista.oapi.binder.UnitPersister;
 import com.propertyvista.oapi.marshaling.BuildingMarshaller;
 import com.propertyvista.oapi.marshaling.UnitMarshaller;
 import com.propertyvista.oapi.model.BuildingIO;
 import com.propertyvista.oapi.model.BuildingsIO;
 import com.propertyvista.oapi.model.UnitIO;
+import com.propertyvista.oapi.persisting.BuildingPersister;
+import com.propertyvista.oapi.persisting.UnitPersister;
 
 public class PropertyServiceProcessor {
 

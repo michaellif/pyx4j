@@ -24,7 +24,7 @@ import com.propertyvista.oapi.model.BuildingAmenityIO;
 import com.propertyvista.oapi.model.types.BuildingAmenityTypeIO;
 import com.propertyvista.oapi.xml.StringIO;
 
-public class BuildingAmenityMarshaller implements Marshaller<BuildingAmenity, BuildingAmenityIO> {
+public class BuildingAmenityMarshaller extends AbstractMarshaller<BuildingAmenity, BuildingAmenityIO> {
 
     private static class SingletonHolder {
         public static final BuildingAmenityMarshaller INSTANCE = new BuildingAmenityMarshaller();
@@ -44,9 +44,9 @@ public class BuildingAmenityMarshaller implements Marshaller<BuildingAmenity, Bu
         }
         BuildingAmenityIO amenityIO = new BuildingAmenityIO();
 
-        amenityIO.name = MarshallerUtils.getValue(amenity.name());
-        amenityIO.description = MarshallerUtils.createIo(StringIO.class, amenity.description());
-        amenityIO.type = MarshallerUtils.createIo(BuildingAmenityTypeIO.class, amenity.type());
+        amenityIO.name = getValue(amenity.name());
+        amenityIO.description = createIo(StringIO.class, amenity.description());
+        amenityIO.type = createIo(BuildingAmenityTypeIO.class, amenity.type());
         return amenityIO;
     }
 
@@ -62,8 +62,8 @@ public class BuildingAmenityMarshaller implements Marshaller<BuildingAmenity, Bu
     public BuildingAmenity unmarshal(BuildingAmenityIO amenityIO) {
         BuildingAmenity amenity = EntityFactory.create(BuildingAmenity.class);
         amenity.name().setValue(amenityIO.name);
-        MarshallerUtils.setValue(amenity.description(), amenityIO.description);
-        MarshallerUtils.setValue(amenity.type(), amenityIO.type);
+        setValue(amenity.description(), amenityIO.description);
+        setValue(amenity.type(), amenityIO.type);
         return amenity;
     }
 
@@ -72,7 +72,7 @@ public class BuildingAmenityMarshaller implements Marshaller<BuildingAmenity, Bu
         for (BuildingAmenityIO amenityIO : amenityIOList) {
             BuildingAmenity amenity = EntityFactory.create(BuildingAmenity.class);
 
-            MarshallerUtils.set(amenity, amenityIO, BuildingAmenityMarshaller.getInstance());
+            set(amenity, amenityIO, BuildingAmenityMarshaller.getInstance());
             amenities.add(amenity);
         }
         return amenities;

@@ -35,7 +35,7 @@ import com.propertyvista.oapi.xml.LogicalDateIO;
 import com.propertyvista.oapi.xml.StringIO;
 import com.propertyvista.server.common.util.PropertyFinder;
 
-public class FloorplanInfoMarshaller implements Marshaller<Floorplan, FloorplanInfoIO> {
+public class FloorplanInfoMarshaller extends AbstractMarshaller<Floorplan, FloorplanInfoIO> {
 
     private static class SingletonHolder {
         public static final FloorplanInfoMarshaller INSTANCE = new FloorplanInfoMarshaller();
@@ -54,20 +54,20 @@ public class FloorplanInfoMarshaller implements Marshaller<Floorplan, FloorplanI
             return null;
         }
         FloorplanInfoIO fpIO = new FloorplanInfoIO();
-        fpIO.marketingName = MarshallerUtils.createIo(StringIO.class, fp.marketingName());
-        fpIO.description = MarshallerUtils.createIo(StringIO.class, fp.description());
-        fpIO.bedrooms = MarshallerUtils.createIo(IntegerIO.class, fp.bedrooms());
-        fpIO.dens = MarshallerUtils.createIo(IntegerIO.class, fp.dens());
-        fpIO.bathrooms = MarshallerUtils.createIo(IntegerIO.class, fp.bathrooms());
-        fpIO.halfBath = MarshallerUtils.createIo(IntegerIO.class, fp.halfBath());
+        fpIO.marketingName = createIo(StringIO.class, fp.marketingName());
+        fpIO.description = createIo(StringIO.class, fp.description());
+        fpIO.bedrooms = createIo(IntegerIO.class, fp.bedrooms());
+        fpIO.dens = createIo(IntegerIO.class, fp.dens());
+        fpIO.bathrooms = createIo(IntegerIO.class, fp.bathrooms());
+        fpIO.halfBath = createIo(IntegerIO.class, fp.halfBath());
 
         // calculated values
         List<AptUnit> units = PropertyFinder.getFloorplanUnits(fp);
         MinMaxPair<BigDecimal> minMaxRent = PropertyFinder.getMinMaxMarketRent(units);
         MinMaxPair<Integer> minMaxArea = PropertyFinder.getMinMaxAreaInSqFeet(units);
-        fpIO.rentFrom = MarshallerUtils.createIo(BigDecimalIO.class, minMaxRent.getMin());
-        fpIO.sqftFrom = MarshallerUtils.createIo(IntegerIO.class, minMaxArea.getMin());
-        fpIO.availableFrom = MarshallerUtils.createIo(LogicalDateIO.class, getDateAvailable(fp));
+        fpIO.rentFrom = createIo(BigDecimalIO.class, minMaxRent.getMin());
+        fpIO.sqftFrom = createIo(IntegerIO.class, minMaxArea.getMin());
+        fpIO.availableFrom = createIo(LogicalDateIO.class, getDateAvailable(fp));
         return fpIO;
     }
 

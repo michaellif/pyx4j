@@ -20,7 +20,7 @@ import com.propertyvista.domain.ref.ISOCountry;
 import com.propertyvista.oapi.model.AddressIO;
 import com.propertyvista.oapi.xml.StringIO;
 
-public class AddressMarshaller implements Marshaller<InternationalAddress, AddressIO> {
+public class AddressMarshaller extends AbstractMarshaller<InternationalAddress, AddressIO> {
 
     private static class SingletonHolder {
         public static final AddressMarshaller INSTANCE = new AddressMarshaller();
@@ -40,13 +40,13 @@ public class AddressMarshaller implements Marshaller<InternationalAddress, Addre
         }
         AddressIO addressIO = new AddressIO();
 
-        addressIO.country = MarshallerUtils.createIo(StringIO.class, address.country().getValue().name);
-        addressIO.province = MarshallerUtils.createIo(StringIO.class, address.province());
-        addressIO.city = MarshallerUtils.createIo(StringIO.class, address.city());
-        addressIO.postalCode = MarshallerUtils.createIo(StringIO.class, address.postalCode());
-        addressIO.streetNumber = MarshallerUtils.createIo(StringIO.class, address.streetNumber());
-        addressIO.streetName = MarshallerUtils.createIo(StringIO.class, address.streetName());
-        addressIO.unitNumber = MarshallerUtils.createIo(StringIO.class, address.suiteNumber());
+        addressIO.country = createIo(StringIO.class, address.country().getValue().name);
+        addressIO.province = createIo(StringIO.class, address.province());
+        addressIO.city = createIo(StringIO.class, address.city());
+        addressIO.postalCode = createIo(StringIO.class, address.postalCode());
+        addressIO.streetNumber = createIo(StringIO.class, address.streetNumber());
+        addressIO.streetName = createIo(StringIO.class, address.streetName());
+        addressIO.unitNumber = createIo(StringIO.class, address.suiteNumber());
         return addressIO;
     }
 
@@ -58,12 +58,12 @@ public class AddressMarshaller implements Marshaller<InternationalAddress, Addre
             address.country().setValue(ISOCountry.forName(addressIO.country.getValue()));
         }
 
-        MarshallerUtils.setValue(address.province(), addressIO.province);
-        MarshallerUtils.setValue(address.city(), addressIO.city);
-        MarshallerUtils.setValue(address.postalCode(), addressIO.postalCode);
-        MarshallerUtils.setValue(address.streetNumber(), addressIO.streetNumber);
-        MarshallerUtils.setValue(address.streetName(), addressIO.streetName);
-        MarshallerUtils.setValue(address.suiteNumber(), addressIO.unitNumber);
+        setValue(address.province(), addressIO.province);
+        setValue(address.city(), addressIO.city);
+        setValue(address.postalCode(), addressIO.postalCode);
+        setValue(address.streetNumber(), addressIO.streetNumber);
+        setValue(address.streetName(), addressIO.streetName);
+        setValue(address.suiteNumber(), addressIO.unitNumber);
 
         return address;
     }

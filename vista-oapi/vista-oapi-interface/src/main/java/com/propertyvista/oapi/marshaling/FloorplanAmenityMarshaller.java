@@ -24,7 +24,7 @@ import com.propertyvista.oapi.model.FloorplanAmenityIO;
 import com.propertyvista.oapi.model.types.FloorplanAmenityTypeIO;
 import com.propertyvista.oapi.xml.StringIO;
 
-public class FloorplanAmenityMarshaller implements Marshaller<FloorplanAmenity, FloorplanAmenityIO> {
+public class FloorplanAmenityMarshaller extends AbstractMarshaller<FloorplanAmenity, FloorplanAmenityIO> {
 
     private static class SingletonHolder {
         public static final FloorplanAmenityMarshaller INSTANCE = new FloorplanAmenityMarshaller();
@@ -44,9 +44,9 @@ public class FloorplanAmenityMarshaller implements Marshaller<FloorplanAmenity, 
         }
         FloorplanAmenityIO amenityIO = new FloorplanAmenityIO();
 
-        amenityIO.name = MarshallerUtils.getValue(amenity.name());
-        amenityIO.description = MarshallerUtils.createIo(StringIO.class, amenity.description());
-        amenityIO.type = MarshallerUtils.createIo(FloorplanAmenityTypeIO.class, amenity.type());
+        amenityIO.name = getValue(amenity.name());
+        amenityIO.description = createIo(StringIO.class, amenity.description());
+        amenityIO.type = createIo(FloorplanAmenityTypeIO.class, amenity.type());
         return amenityIO;
     }
 
@@ -62,8 +62,8 @@ public class FloorplanAmenityMarshaller implements Marshaller<FloorplanAmenity, 
     public FloorplanAmenity unmarshal(FloorplanAmenityIO amenityIO) {
         FloorplanAmenity amenity = EntityFactory.create(FloorplanAmenity.class);
         amenity.name().setValue(amenityIO.name);
-        MarshallerUtils.setValue(amenity.description(), amenityIO.description);
-        MarshallerUtils.setValue(amenity.type(), amenityIO.type);
+        setValue(amenity.description(), amenityIO.description);
+        setValue(amenity.type(), amenityIO.type);
         return amenity;
     }
 
@@ -71,7 +71,7 @@ public class FloorplanAmenityMarshaller implements Marshaller<FloorplanAmenity, 
         List<FloorplanAmenity> amenities = new ArrayList<FloorplanAmenity>();
         for (FloorplanAmenityIO amenityIO : amenityIOList) {
             FloorplanAmenity amenity = EntityFactory.create(FloorplanAmenity.class);
-            MarshallerUtils.set(amenity, amenityIO, FloorplanAmenityMarshaller.getInstance());
+            set(amenity, amenityIO, FloorplanAmenityMarshaller.getInstance());
             amenities.add(amenity);
         }
         return amenities;

@@ -20,7 +20,7 @@ import com.pyx4j.entity.server.Persistence;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.oapi.model.BuildingIO;
 
-public class BuildingMarshaller implements Marshaller<Building, BuildingIO> {
+public class BuildingMarshaller extends AbstractMarshaller<Building, BuildingIO> {
 
     private static class SingletonHolder {
         public static final BuildingMarshaller INSTANCE = new BuildingMarshaller();
@@ -39,7 +39,7 @@ public class BuildingMarshaller implements Marshaller<Building, BuildingIO> {
             return null;
         }
         BuildingIO buildingIO = new BuildingIO();
-        buildingIO.propertyCode = MarshallerUtils.getValue(building.propertyCode());
+        buildingIO.propertyCode = getValue(building.propertyCode());
 
         buildingIO.info = BuildingInfoMarshaller.getInstance().marshal(building.info());
         buildingIO.marketing = MarketingMarshaller.getInstance().marshal(building.marketing());
@@ -64,8 +64,8 @@ public class BuildingMarshaller implements Marshaller<Building, BuildingIO> {
         Building building = EntityFactory.create(Building.class);
         building.propertyCode().setValue(buildingIO.propertyCode);
 
-        MarshallerUtils.set(building.info(), buildingIO.info, BuildingInfoMarshaller.getInstance());
-        MarshallerUtils.set(building.marketing(), buildingIO.marketing, MarketingMarshaller.getInstance());
+        set(building.info(), buildingIO.info, BuildingInfoMarshaller.getInstance());
+        set(building.marketing(), buildingIO.marketing, MarketingMarshaller.getInstance());
 
         building.contacts().propertyContacts().addAll(ContactMarshaller.getInstance().unmarshal(buildingIO.contacts));
         building.media().addAll(MediaMarshaller.getInstance().unmarshal(buildingIO.medias));

@@ -22,7 +22,7 @@ import com.propertyvista.domain.property.PropertyContact;
 import com.propertyvista.oapi.model.ContactIO;
 import com.propertyvista.oapi.xml.StringIO;
 
-public class ContactMarshaller implements Marshaller<PropertyContact, ContactIO> {
+public class ContactMarshaller extends AbstractMarshaller<PropertyContact, ContactIO> {
 
     private static class SingletonHolder {
         public static final ContactMarshaller INSTANCE = new ContactMarshaller();
@@ -41,10 +41,10 @@ public class ContactMarshaller implements Marshaller<PropertyContact, ContactIO>
             return null;
         }
         ContactIO contactIO = new ContactIO();
-        contactIO.name = MarshallerUtils.getValue(contact.name());
+        contactIO.name = getValue(contact.name());
 
-        contactIO.email = MarshallerUtils.createIo(StringIO.class, contact.email());
-        contactIO.phone = MarshallerUtils.createIo(StringIO.class, contact.phone());
+        contactIO.email = createIo(StringIO.class, contact.email());
+        contactIO.phone = createIo(StringIO.class, contact.phone());
         return contactIO;
     }
 
@@ -62,8 +62,8 @@ public class ContactMarshaller implements Marshaller<PropertyContact, ContactIO>
         PropertyContact contact = EntityFactory.create(PropertyContact.class);
         contact.name().setValue(contactIO.name);
 
-        MarshallerUtils.setValue(contact.email(), contactIO.email);
-        MarshallerUtils.setValue(contact.phone(), contactIO.phone);
+        setValue(contact.email(), contactIO.email);
+        setValue(contact.phone(), contactIO.phone);
         return contact;
     }
 
@@ -71,7 +71,7 @@ public class ContactMarshaller implements Marshaller<PropertyContact, ContactIO>
         List<PropertyContact> contacts = new ArrayList<PropertyContact>();
         for (ContactIO contactIO : contactIOList) {
             PropertyContact contact = EntityFactory.create(PropertyContact.class);
-            MarshallerUtils.set(contact, contactIO, ContactMarshaller.getInstance());
+            set(contact, contactIO, ContactMarshaller.getInstance());
             contacts.add(contact);
         }
         return contacts;

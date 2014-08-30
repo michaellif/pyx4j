@@ -25,7 +25,6 @@ import org.glassfish.jersey.test.JerseyTest;
 import org.glassfish.jersey.test.inmemory.InMemoryTestContainerFactory;
 import org.glassfish.jersey.test.spi.TestContainerFactory;
 
-import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.server.Persistence;
 
 import com.propertyvista.domain.property.asset.building.Building;
@@ -42,69 +41,34 @@ public abstract class RSOapiTestBase extends IntegrationTestBase {
 
     private Building building;
 
-    protected final JerseyTest RSTestHelper = new JerseyTest() {
+    private final JerseyTest rsTestHelper;
 
-        @Override
-        protected Application configure() {
-            Class<?> serviceClass = getServiceClass();
-            if (serviceClass != null) {
-                return new ResourceConfig(serviceClass);
-            } else {
-                Class<?> appClass = getServiceApplication();
-                if (appClass != null) {
-                    try {
-                        return (Application) appClass.newInstance();
-                    } catch (Exception ignore) {
+    public RSOapiTestBase() {
+        rsTestHelper = new JerseyTest() {
+
+            @Override
+            protected Application configure() {
+                Class<?> serviceClass = getServiceClass();
+                if (serviceClass != null) {
+                    return new ResourceConfig(serviceClass);
+                } else {
+                    Class<?> appClass = getServiceApplication();
+                    if (appClass != null) {
+                        try {
+                            return (Application) appClass.newInstance();
+                        } catch (Exception ignore) {
+                        }
                     }
                 }
+                return null;
             }
-            return null;
-        }
 
-        @Override
-        protected TestContainerFactory getTestContainerFactory() {
-            // Use this factory to run RS server in the same thread as the test and preserve the pmc namespace
-            return new InMemoryTestContainerFactory();
-        }
-    };
-
-    @Override
-    protected void setUp() throws Exception {
-        super.setUp();
-        RSTestHelper.setUp();
-        init();
-    }
-
-    @Override
-    protected void tearDown() throws Exception {
-        RSTestHelper.tearDown();
-        super.tearDown();
-    }
-
-    public void init() throws Exception {
-        preloadData();
-        // load building
-        getBuilding();
-    }
-
-    protected Class<?> getServiceClass() {
-        return null;
-    }
-
-    protected Class<? extends Application> getServiceApplication() {
-        return null;
-    }
-
-    protected WebTarget target() {
-        return RSTestHelper.target();
-    }
-
-    protected WebTarget target(String path) {
-        return RSTestHelper.target().path(path);
-    }
-
-    protected Client client() {
-        return RSTestHelper.client();
+            @Override
+            protected TestContainerFactory getTestContainerFactory() {
+                // Use this factory to run RS server in the same thread as the test and preserve the pmc namespace
+                return new InMemoryTestContainerFactory();
+            }
+        };
     }
 
     @Override
@@ -121,11 +85,47 @@ public abstract class RSOapiTestBase extends IntegrationTestBase {
 
     protected Building getBuilding() {
         if (building == null) {
-            building = Persistence.service().retrieve(EntityQueryCriteria.create(Building.class));
-        }
-        if (building == null) {
             building = getDataModel(BuildingDataModel.class).addBuilding();
+            Persistence.service().commit();
         }
         return building;
     }
+
+    @Override
+    protected void setUp() throws Exception {
+        super.setUp();
+        rsTestHelper.setUp();
+        init();
+    }
+
+    @Override
+    protected void tearDown() throws Exception {
+        rsTestHelper.tearDown();
+        super.tearDown();
+    }
+
+    public void init() throws Exception {
+        preloadData();
+    }
+
+    protected Class<?> getServiceClass() {
+        return null;
+    }
+
+    protected Class<? extends Application> getServiceApplication() {
+        return null;
+    }
+
+    protected WebTarget target() {
+        return rsTestHelper.target();
+    }
+
+    protected WebTarget target(String path) {
+        return rsTestHelper.target().path(path);
+    }
+
+    protected Client client() {
+        return rsTestHelper.client();
+    }
+
 }

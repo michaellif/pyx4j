@@ -26,7 +26,7 @@ import com.propertyvista.oapi.model.UnitIO;
 import com.propertyvista.oapi.xml.IntegerIO;
 import com.propertyvista.oapi.xml.StringIO;
 
-public class UnitMarshaller implements Marshaller<AptUnit, UnitIO> {
+public class UnitMarshaller extends AbstractMarshaller<AptUnit, UnitIO> {
 
     private static class SingletonHolder {
         public static final UnitMarshaller INSTANCE = new UnitMarshaller();
@@ -45,12 +45,12 @@ public class UnitMarshaller implements Marshaller<AptUnit, UnitIO> {
             return null;
         }
         UnitIO unitIO = new UnitIO();
-        unitIO.number = MarshallerUtils.getValue(unit.info().number());
-        unitIO.propertyCode = MarshallerUtils.getValue(unit.building().propertyCode());
+        unitIO.number = getValue(unit.info().number());
+        unitIO.propertyCode = getValue(unit.building().propertyCode());
 
-        unitIO.floorplanName = MarshallerUtils.createIo(StringIO.class, unit.floorplan().name());
-        unitIO.baths = MarshallerUtils.createIo(IntegerIO.class, unit.floorplan().bathrooms());
-        unitIO.beds = MarshallerUtils.createIo(IntegerIO.class, unit.floorplan().bedrooms());
+        unitIO.floorplanName = createIo(StringIO.class, unit.floorplan().name());
+        unitIO.baths = createIo(IntegerIO.class, unit.floorplan().bathrooms());
+        unitIO.beds = createIo(IntegerIO.class, unit.floorplan().bedrooms());
         return unitIO;
     }
 
@@ -105,9 +105,9 @@ public class UnitMarshaller implements Marshaller<AptUnit, UnitIO> {
         }
         if (unit.floorplan().isNull()) {
             Floorplan floorplan = EntityFactory.create(Floorplan.class);
-            MarshallerUtils.setValue(floorplan.name(), unitIO.floorplanName);
-            MarshallerUtils.setValue(floorplan.bedrooms(), unitIO.beds);
-            MarshallerUtils.setValue(floorplan.bathrooms(), unitIO.baths);
+            setValue(floorplan.name(), unitIO.floorplanName);
+            setValue(floorplan.bedrooms(), unitIO.beds);
+            setValue(floorplan.bathrooms(), unitIO.baths);
             floorplan.building().set(building);
             Persistence.service().persist(floorplan);
             unit.floorplan().set(floorplan);

@@ -27,7 +27,7 @@ import com.propertyvista.oapi.xml.StringIO;
 import com.propertyvista.portal.rpc.DeploymentConsts;
 import com.propertyvista.portal.rpc.portal.ImageConsts;
 
-public class MediaMarshaller implements Marshaller<MediaFile, MediaImageIO> {
+public class MediaMarshaller extends AbstractMarshaller<MediaFile, MediaImageIO> {
 
     private static class SingletonHolder {
         public static final MediaMarshaller INSTANCE = new MediaMarshaller();
@@ -46,7 +46,7 @@ public class MediaMarshaller implements Marshaller<MediaFile, MediaImageIO> {
             return null;
         }
         MediaImageIO mediaIO = new MediaImageIO();
-        mediaIO.caption = MarshallerUtils.createIo(StringIO.class, media.caption());
+        mediaIO.caption = createIo(StringIO.class, media.caption());
         mediaIO.accessUrl = getMediaImgUrl(media);
         return mediaIO;
     }
@@ -62,7 +62,7 @@ public class MediaMarshaller implements Marshaller<MediaFile, MediaImageIO> {
     @Override
     public MediaFile unmarshal(MediaImageIO mediaIO) {
         MediaFile media = EntityFactory.create(MediaFile.class);
-        MarshallerUtils.setValue(media.caption(), mediaIO.caption);
+        setValue(media.caption(), mediaIO.caption);
         return media;
     }
 
@@ -70,7 +70,7 @@ public class MediaMarshaller implements Marshaller<MediaFile, MediaImageIO> {
         List<MediaFile> medias = new ArrayList<MediaFile>();
         for (MediaImageIO mediaIO : MediaIOList) {
             MediaFile media = EntityFactory.create(MediaFile.class);
-            MarshallerUtils.set(media, mediaIO, MediaMarshaller.getInstance());
+            set(media, mediaIO, MediaMarshaller.getInstance());
             medias.add(media);
         }
         return medias;

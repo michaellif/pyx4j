@@ -21,7 +21,7 @@ import com.propertyvista.oapi.xml.BigDecimalIO;
 import com.propertyvista.oapi.xml.LogicalDateIO;
 import com.propertyvista.oapi.xml.StringIO;
 
-public class PaymentRecordMarshaller implements Marshaller<PaymentRecordDTO, PaymentRecordIO> {
+public class PaymentRecordMarshaller extends AbstractMarshaller<PaymentRecordDTO, PaymentRecordIO> {
 
     private static class SingletonHolder {
         public static final PaymentRecordMarshaller INSTANCE = new PaymentRecordMarshaller();
@@ -40,13 +40,13 @@ public class PaymentRecordMarshaller implements Marshaller<PaymentRecordDTO, Pay
             return null;
         }
         PaymentRecordIO paymentIO = new PaymentRecordIO();
-        paymentIO.transactionId = MarshallerUtils.getValue(payment.transactionId());
+        paymentIO.transactionId = getValue(payment.transactionId());
 
-        paymentIO.externalTransactionId = MarshallerUtils.createIo(StringIO.class, payment.externalTransactionId());
-        paymentIO.leaseId = MarshallerUtils.createIo(StringIO.class, payment.leaseId());
-        paymentIO.amount = MarshallerUtils.createIo(BigDecimalIO.class, payment.amount());
-        paymentIO.transactionDate = MarshallerUtils.createIo(LogicalDateIO.class, payment.transactionDate());
-        paymentIO.paymentType = MarshallerUtils.createIo(StringIO.class, payment.paymentType());
+        paymentIO.externalTransactionId = createIo(StringIO.class, payment.externalTransactionId());
+        paymentIO.leaseId = createIo(StringIO.class, payment.leaseId());
+        paymentIO.amount = createIo(BigDecimalIO.class, payment.amount());
+        paymentIO.transactionDate = createIo(LogicalDateIO.class, payment.transactionDate());
+        paymentIO.paymentType = createIo(StringIO.class, payment.paymentType());
         return paymentIO;
     }
 
@@ -55,11 +55,11 @@ public class PaymentRecordMarshaller implements Marshaller<PaymentRecordDTO, Pay
         PaymentRecordDTO payment = EntityFactory.create(PaymentRecordDTO.class);
         payment.transactionId().setValue(paymentIO.transactionId);
 
-        MarshallerUtils.setValue(payment.externalTransactionId(), paymentIO.externalTransactionId);
-        MarshallerUtils.setValue(payment.leaseId(), paymentIO.leaseId);
-        MarshallerUtils.setValue(payment.amount(), paymentIO.amount);
-        MarshallerUtils.setValue(payment.transactionDate(), paymentIO.transactionDate);
-        MarshallerUtils.setValue(payment.paymentType(), paymentIO.paymentType);
+        setValue(payment.externalTransactionId(), paymentIO.externalTransactionId);
+        setValue(payment.leaseId(), paymentIO.leaseId);
+        setValue(payment.amount(), paymentIO.amount);
+        setValue(payment.transactionDate(), paymentIO.transactionDate);
+        setValue(payment.paymentType(), paymentIO.paymentType);
         return payment;
     }
 

@@ -24,7 +24,7 @@ import com.propertyvista.oapi.model.TenantIO;
 import com.propertyvista.oapi.model.types.SexTypeIO;
 import com.propertyvista.oapi.xml.StringIO;
 
-public class TenantMarshaller implements Marshaller<Person, TenantIO> {
+public class TenantMarshaller extends AbstractMarshaller<Person, TenantIO> {
 
     private static class SingletonHolder {
         public static final TenantMarshaller INSTANCE = new TenantMarshaller();
@@ -43,13 +43,13 @@ public class TenantMarshaller implements Marshaller<Person, TenantIO> {
             return null;
         }
         TenantIO tenantIO = new TenantIO();
-        tenantIO.firstName = MarshallerUtils.getValue(person.name().firstName());
-        tenantIO.lastName = MarshallerUtils.getValue(person.name().lastName());
-        tenantIO.middleName = MarshallerUtils.getValue(person.name().middleName());
+        tenantIO.firstName = getValue(person.name().firstName());
+        tenantIO.lastName = getValue(person.name().lastName());
+        tenantIO.middleName = getValue(person.name().middleName());
 
-        tenantIO.sex = MarshallerUtils.createIo(SexTypeIO.class, person.sex());
-        tenantIO.phone = MarshallerUtils.createIo(StringIO.class, person.homePhone());
-        tenantIO.email = MarshallerUtils.createIo(StringIO.class, person.email());
+        tenantIO.sex = createIo(SexTypeIO.class, person.sex());
+        tenantIO.phone = createIo(StringIO.class, person.homePhone());
+        tenantIO.email = createIo(StringIO.class, person.email());
         return tenantIO;
     }
 
@@ -68,9 +68,9 @@ public class TenantMarshaller implements Marshaller<Person, TenantIO> {
         person.name().lastName().setValue(tenantIO.lastName);
         person.name().middleName().setValue(tenantIO.middleName);
 
-        MarshallerUtils.setValue(person.sex(), tenantIO.sex);
-        MarshallerUtils.setValue(person.homePhone(), tenantIO.phone);
-        MarshallerUtils.setValue(person.email(), tenantIO.email);
+        setValue(person.sex(), tenantIO.sex);
+        setValue(person.homePhone(), tenantIO.phone);
+        setValue(person.email(), tenantIO.email);
         return person;
     }
 
@@ -78,7 +78,7 @@ public class TenantMarshaller implements Marshaller<Person, TenantIO> {
         List<Person> participants = new ArrayList<Person>();
         for (TenantIO tenantIO : tenantIOList) {
             Person participant = EntityFactory.create(Person.class);
-            MarshallerUtils.set(participant, tenantIO, TenantMarshaller.getInstance());
+            set(participant, tenantIO, TenantMarshaller.getInstance());
             participants.add(participant);
         }
         return participants;

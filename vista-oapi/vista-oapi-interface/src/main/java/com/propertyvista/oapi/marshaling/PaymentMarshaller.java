@@ -20,7 +20,7 @@ import com.propertyvista.oapi.model.PaymentIO;
 import com.propertyvista.oapi.xml.BigDecimalIO;
 import com.propertyvista.oapi.xml.StringIO;
 
-public class PaymentMarshaller implements Marshaller<PaymentDTO, PaymentIO> {
+public class PaymentMarshaller extends AbstractMarshaller<PaymentDTO, PaymentIO> {
 
     private static class SingletonHolder {
         public static final PaymentMarshaller INSTANCE = new PaymentMarshaller();
@@ -42,9 +42,9 @@ public class PaymentMarshaller implements Marshaller<PaymentDTO, PaymentIO> {
         io.transactionId = payment.transactionId().getValue();
         io.leaseId = payment.leaseId().getValue();
 
-        io.amount = MarshallerUtils.createIo(BigDecimalIO.class, payment.amount());
-        io.description = MarshallerUtils.createIo(StringIO.class, payment.description());
-        io.paymentType = MarshallerUtils.createIo(StringIO.class, payment.paymentType());
+        io.amount = createIo(BigDecimalIO.class, payment.amount());
+        io.description = createIo(StringIO.class, payment.description());
+        io.paymentType = createIo(StringIO.class, payment.paymentType());
         return io;
     }
 
@@ -53,9 +53,9 @@ public class PaymentMarshaller implements Marshaller<PaymentDTO, PaymentIO> {
         PaymentDTO dto = EntityFactory.create(PaymentDTO.class);
         dto.transactionId().setValue(io.transactionId);
         dto.leaseId().setValue(io.leaseId);
-        MarshallerUtils.setValue(dto.amount(), io.amount);
-        MarshallerUtils.setValue(dto.description(), io.description);
-        MarshallerUtils.setValue(dto.paymentType(), io.paymentType);
+        setValue(dto.amount(), io.amount);
+        setValue(dto.description(), io.description);
+        setValue(dto.paymentType(), io.paymentType);
         return dto;
     }
 

@@ -38,7 +38,7 @@ import com.propertyvista.oapi.model.types.LeaseStatusIO;
 import com.propertyvista.oapi.model.types.PaymentFrequencyIO;
 import com.propertyvista.oapi.xml.LogicalDateIO;
 
-public class LeaseMarshaller implements Marshaller<Lease, LeaseIO> {
+public class LeaseMarshaller extends AbstractMarshaller<Lease, LeaseIO> {
 
     private static class SingletonHolder {
         public static final LeaseMarshaller INSTANCE = new LeaseMarshaller();
@@ -57,14 +57,14 @@ public class LeaseMarshaller implements Marshaller<Lease, LeaseIO> {
             return null;
         }
         LeaseIO leaseIO = new LeaseIO();
-        leaseIO.leaseId = MarshallerUtils.getValue(lease.leaseId());
-        leaseIO.propertyCode = MarshallerUtils.getValue(lease.unit().building().propertyCode());
-        leaseIO.unitNumber = MarshallerUtils.getValue(lease.unit().info().number());
+        leaseIO.leaseId = getValue(lease.leaseId());
+        leaseIO.propertyCode = getValue(lease.unit().building().propertyCode());
+        leaseIO.unitNumber = getValue(lease.unit().info().number());
 
-        leaseIO.status = MarshallerUtils.createIo(LeaseStatusIO.class, lease.status());
-        leaseIO.paymentFrequency = MarshallerUtils.createIo(PaymentFrequencyIO.class, lease.billingAccount().billingPeriod());
-        leaseIO.leaseFrom = MarshallerUtils.createIo(LogicalDateIO.class, lease.leaseFrom());
-        leaseIO.leaseTo = MarshallerUtils.createIo(LogicalDateIO.class, lease.currentTerm().termTo());
+        leaseIO.status = createIo(LeaseStatusIO.class, lease.status());
+        leaseIO.paymentFrequency = createIo(PaymentFrequencyIO.class, lease.billingAccount().billingPeriod());
+        leaseIO.leaseFrom = createIo(LogicalDateIO.class, lease.leaseFrom());
+        leaseIO.leaseTo = createIo(LogicalDateIO.class, lease.currentTerm().termTo());
 
         Persistence.service().retrieveMember(lease.leaseParticipants());
         List<Person> persons = new ArrayList<Person>();
