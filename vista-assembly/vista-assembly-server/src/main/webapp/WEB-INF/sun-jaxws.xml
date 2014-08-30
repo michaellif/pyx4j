@@ -4,12 +4,12 @@
   version="2.0">
   <endpoint
       name="PropertyService"
-      implementation="com.propertyvista.oapi.ws.WSPropertyServiceImpl"
-      url-pattern="/interfaces/oapi/ws/WSPropertyService"/>
+      implementation="com.propertyvista.oapi.v1.ws.WSPropertyServiceImpl"
+      url-pattern="/interfaces/oapi/v1/ws/WSPropertyService"/>
   <endpoint
       name="MarketingService"
-      implementation="com.propertyvista.oapi.ws.WSMarketingServiceImpl"
-      url-pattern="/interfaces/oapi/ws/WSMarketingService"/>
+      implementation="com.propertyvista.oapi.v1.ws.WSMarketingServiceImpl"
+      url-pattern="/interfaces/oapi/v1/ws/WSMarketingService"/>
   <endpoint
       name="ScreeningService"
       interface="com.yardi.ws.WSScreeningService"

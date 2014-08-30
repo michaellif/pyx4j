@@ -11,23 +11,8 @@
  * @author stanp
  * @version $Id$
  */
-package com.propertyvista.oapi.annotations;
+package com.propertyvista.oapi.v1.service;
 
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
+public interface OAPIService {
 
-import com.propertyvista.oapi.v1.service.OAPIService;
-
-@Target({ ElementType.FIELD })
-@Retention(RetentionPolicy.RUNTIME)
-/**
- * Limits the use of the target property to the given list of services
- */
-public @interface ServiceScope {
-
-    Class<? extends OAPIService>[] service() default {};
-
-    //   context() default ;
 }
