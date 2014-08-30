@@ -163,7 +163,24 @@ public class EntityGraph {
         }
     }
 
-    private static final boolean traceFullyEqual = false;
+    public static class EntityGraphEqualOptions {
+
+        public boolean trace = false;
+
+        public boolean ownedValuesOnly = false;
+
+        public boolean ignoreTransient = true;
+
+        public boolean ignoreRpcTransient = false;
+
+        public EntityGraphEqualOptions() {
+
+        }
+
+        public EntityGraphEqualOptions(boolean ownedValuesOnly) {
+            this.ownedValuesOnly = ownedValuesOnly;
+        }
+    }
 
     /**
      * Ignore changes in values of Not owned Objects.
@@ -171,55 +188,66 @@ public class EntityGraph {
      */
     public static boolean fullyEqual(IEntity ent1, IEntity ent2) {
         if (!EqualsHelper.equals(ent1, ent2)) {
-            if (traceFullyEqual) {
-                log.info("--changes\n{}\n!=\n{}", ent1, ent2);
-            }
             return false;
         }
-        return fullyEqualValues(ent1, ent2, true, new HashSet<IEntity>(), new IObject<?>[0]);
+        return fullyEqualValues(ent1, ent2, new EntityGraphEqualOptions(true), new HashSet<IEntity>(), new HashSet<Path>());
     }
 
     /**
      * Include changes in values of Not owned Objects
      */
     public static boolean fullyEqualValues(IEntity ent1, IEntity ent2) {
-        return fullyEqualValues(ent1, ent2, false, new HashSet<IEntity>(), new IObject<?>[0]);
+        return fullyEqualValues(ent1, ent2, new EntityGraphEqualOptions(false), new HashSet<IEntity>(), new HashSet<Path>());
     }
 
     /**
-     * 
+     *
      * @param ent1
      *            entity1 to compare
      * @param ent2
      *            entity2 to compare
      * @param ignoreValues
      *            ignore values of selected members
-     * 
+     *
      *            Example: EntityGraph.fullyEqualValues(origSchedule, updateSchedule, origSchedule.timestamp());
      * @return
      */
     public static boolean fullyEqualValues(IEntity ent1, IEntity ent2, IObject<?>... ignoreValues) {
-        return fullyEqualValues(ent1, ent2, false, new HashSet<IEntity>(), ignoreValues);
+        return fullyEqualValues(ent1, ent2, new EntityGraphEqualOptions(false), new HashSet<IEntity>(), toIgnorePath(ignoreValues));
+    }
+
+    public static boolean fullyEqual(IEntity ent1, IEntity ent2, EntityGraphEqualOptions options, IObject<?>... ignoreValues) {
+        return fullyEqualValues(ent1, ent2, options, new HashSet<IEntity>(), toIgnorePath(ignoreValues));
     }
 
     /**
-     * 
+     *
      * @param ent1
      *            entity1 to compare
      * @param ent2
      *            entity2 to compare
      * @param ignoreValues
      *            ignore values of selected members
-     * 
+     *
      *            Example: EntityGraph.ownedEqualValues(origSchedule, updateSchedule, origSchedule.timestamp());
      * @return
      */
     public static boolean ownedEqualValues(IEntity ent1, IEntity ent2, IObject<?>... ignoreValues) {
-        return fullyEqualValues(ent1, ent2, true, new HashSet<IEntity>(), ignoreValues);
+        return fullyEqualValues(ent1, ent2, new EntityGraphEqualOptions(true), new HashSet<IEntity>(), toIgnorePath(ignoreValues));
+    }
+
+    private static Set<Path> toIgnorePath(IObject<?>... ignoreValues) {
+        Set<Path> ignorePath = new HashSet<Path>();
+        if (ignoreValues != null) {
+            for (IObject<?> ignore : ignoreValues) {
+                ignorePath.add(ignore.getPath());
+            }
+        }
+        return ignorePath;
     }
 
     @SuppressWarnings("unchecked")
-    private static boolean fullyEqualValues(IEntity ent1, IEntity ent2, boolean ownedValuesOnly, Set<IEntity> processed, IObject<?>... ignoreValues) {
+    private static boolean fullyEqualValues(IEntity ent1, IEntity ent2, EntityGraphEqualOptions options, Set<IEntity> processed, Set<Path> ignorePaths) {
         // Cast if required to concert instance
         ent1 = ent1.cast();
         ent2 = ent2.cast();
@@ -229,21 +257,17 @@ public class EntityGraph {
         }
         processed.add(ent1);
 
-        Set<Path> ignorePath = new HashSet<Path>();
-        if (ignoreValues != null) {
-            for (IObject<?> ignore : ignoreValues) {
-                ignorePath.add(ignore.getPath());
-            }
-        }
-
         EntityMeta em = ent1.getEntityMeta();
         for (String memberName : em.getMemberNames()) {
             MemberMeta memberMeta = em.getMemberMeta(memberName);
-            if (memberMeta.isTransient()) {
+            if (options.ignoreTransient && memberMeta.isTransient()) {
+                continue;
+            }
+            if (options.ignoreRpcTransient && memberMeta.isRpcTransient()) {
                 continue;
             }
             IObject<?> member1 = ent1.getMember(memberName);
-            if (ignorePath.contains(member1.getPath())) {
+            if (ignorePaths.contains(member1.getPath())) {
                 continue;
             }
 
@@ -256,58 +280,65 @@ public class EntityGraph {
             case Entity:
                 IEntity ent1Member = (IEntity) member1;
                 IEntity ent2Member = (IEntity) member2;
-                if (ent2Member.isNull() && ent2Member.isNull()) {
+                if (ent1Member.isNull() && ent2Member.isNull()) {
                     continue;
                 } else if (memberMeta.isEmbedded()) {
-                    if (!fullyEqualValues(ent1Member, ent2Member, ownedValuesOnly, processed, new IObject<?>[0])) {
-                        if (traceFullyEqual) {
-                            log.info("--changes in member {}", memberName);
+                    if (!fullyEqualValues(ent1Member, ent2Member, options, processed, ignorePaths)) {
+                        if (options.trace) {
+                            log.info("changes in member {} {}", memberName, member1.getPath());
                         }
                         return false;
                     }
-                } else if (ownedValuesOnly && !memberMeta.isOwnedRelationships()) {
+                } else if (options.ownedValuesOnly && !memberMeta.isOwnedRelationships()) {
                     if (!ent1Member.equals(ent2Member)) {
-                        if (traceFullyEqual) {
-                            log.info("--changes in member {}", memberName);
+                        if (options.trace) {
+                            log.info("changes in member {} {}", memberName, member1.getPath());
+                            log.debug("changed [{}] -> [{}]", ent1Member.getDebugExceptionInfoString(), ent2Member.getDebugExceptionInfoString());
                         }
                         return false;
                     }
-                } else if (!fullyEqualValues(ent1Member, ent2Member, ownedValuesOnly, processed, new IObject<?>[0])) {
-                    if (traceFullyEqual) {
-                        log.info("--changes in member {}", memberName);
+                } else if (!fullyEqualValues(ent1Member, ent2Member, options, processed, ignorePaths)) {
+                    if (!ent1.hasValues() && !ent2.hasValues()) {
+                        if (options.trace) {
+                            log.debug("ignore owner {} changes {}", memberName, member1.getPath());
+                        }
+                    } else {
+                        if (options.trace) {
+                            log.info("changes in member {} {}", memberName, member1.getPath());
+                        }
+                        return false;
                     }
-                    return false;
                 }
                 break;
             case EntityList:
-                if (ownedValuesOnly && !memberMeta.isOwnedRelationships()) {
+                if (options.ownedValuesOnly && !memberMeta.isOwnedRelationships()) {
                     if (!EqualsHelper.equals(member1, member2)) {
-                        if (traceFullyEqual) {
-                            log.info("--changes in member {}", memberName);
+                        if (options.trace) {
+                            log.info("changes in member {} {}", memberName, member1.getPath());
                         }
                         return false;
                     }
                 } else {
-                    if (!fullyEqualValues((IList<IEntity>) member1, (IList<IEntity>) member2, ownedValuesOnly, processed)) {
-                        if (traceFullyEqual) {
-                            log.info("--changes in member {}", memberName);
+                    if (!fullyEqualValues((IList<IEntity>) member1, (IList<IEntity>) member2, options, processed)) {
+                        if (options.trace) {
+                            log.info("changes in member {} {}", memberName, member1.getPath());
                         }
                         return false;
                     }
                 }
                 break;
             case EntitySet:
-                if (ownedValuesOnly && !memberMeta.isOwnedRelationships()) {
+                if (options.ownedValuesOnly && !memberMeta.isOwnedRelationships()) {
                     if (!EqualsHelper.equals(member1, member2)) {
-                        if (traceFullyEqual) {
-                            log.info("--changes in member {}", memberName);
+                        if (options.trace) {
+                            log.info("changes in member {} {}", memberName, member1.getPath());
                         }
                         return false;
                     }
                 } else {
-                    if (!fullyEqualValues((ISet<IEntity>) member1, (ISet<IEntity>) member2, ownedValuesOnly, processed)) {
-                        if (traceFullyEqual) {
-                            log.info("--changes in member {}", memberName);
+                    if (!fullyEqualValues((ISet<IEntity>) member1, (ISet<IEntity>) member2, options, processed)) {
+                        if (options.trace) {
+                            log.info("changes in member {} {}", memberName, member1.getPath());
                         }
                         return false;
                     }
@@ -315,8 +346,9 @@ public class EntityGraph {
                 break;
             default:
                 if (!EqualsHelper.equals(member1, member2)) {
-                    if (traceFullyEqual) {
-                        log.info("--changes in member {}", memberName);
+                    if (options.trace) {
+                        log.info("changes in member {} {}", memberName, member1.getPath());
+                        log.debug("[{}] -> [{}]", member1, member2);
                     }
                     return false;
                 }
@@ -325,9 +357,12 @@ public class EntityGraph {
         return true;
     }
 
-    private static boolean fullyEqualValues(ISet<IEntity> set1, ISet<IEntity> set2, boolean ownedValuesOnly, Set<IEntity> processed) {
+    private static boolean fullyEqualValues(ISet<IEntity> set1, ISet<IEntity> set2, EntityGraphEqualOptions options, Set<IEntity> processed) {
         if (set1.size() != set2.size()) {
             return false;
+        }
+        if (set1.getAttachLevel() == AttachLevel.CollectionSizeOnly) {
+            return true;
         }
         Iterator<IEntity> iter1 = set1.iterator();
         List<IEntity> set2copy = new Vector<IEntity>(set2);
@@ -336,7 +371,7 @@ public class EntityGraph {
             // Find first entity with the same data
             Iterator<IEntity> iter2 = set2copy.iterator();
             while (iter2.hasNext()) {
-                if (!fullyEqualValues(ent1, iter2.next(), ownedValuesOnly, processed, new IObject<?>[0])) {
+                if (!fullyEqualValues(ent1, iter2.next(), options, processed, new HashSet<Path>())) {
                     // Do not compare the same objects twice
                     iter2.remove();
                     continue set1Loop;
@@ -347,14 +382,17 @@ public class EntityGraph {
         return true;
     }
 
-    private static boolean fullyEqualValues(IList<IEntity> value1, IList<IEntity> value2, boolean ownedValuesOnly, Set<IEntity> processed) {
+    private static boolean fullyEqualValues(IList<IEntity> value1, IList<IEntity> value2, EntityGraphEqualOptions options, Set<IEntity> processed) {
         if (value1.size() != value2.size()) {
             return false;
+        }
+        if (value1.getAttachLevel() == AttachLevel.CollectionSizeOnly) {
+            return true;
         }
         Iterator<IEntity> iter1 = value1.iterator();
         Iterator<IEntity> iter2 = value2.iterator();
         for (; iter1.hasNext() && iter2.hasNext();) {
-            if (!fullyEqualValues(iter1.next(), iter2.next(), ownedValuesOnly, processed, new IObject<?>[0])) {
+            if (!fullyEqualValues(iter1.next(), iter2.next(), options, processed, new HashSet<Path>())) {
                 return false;
             }
         }
@@ -363,7 +401,7 @@ public class EntityGraph {
 
     /**
      * Compare ignoring addition of ID's in Entity ent2
-     * 
+     *
      * @param clientSide
      * @param received
      *            the entity after save in DB. new Pk may be assigned to values.
@@ -510,7 +548,7 @@ public class EntityGraph {
 
     /**
      * Set value only if the value is null
-     * 
+     *
      * @param valueMemeber
      * @param value
      * @return true if the value is changed
@@ -526,7 +564,7 @@ public class EntityGraph {
 
     /**
      * Set value only if the value is different
-     * 
+     *
      * @param valueMemeber
      * @param value
      * @return true if the value is changed

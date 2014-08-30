@@ -27,10 +27,13 @@ import org.junit.Assert;
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.shared.utils.EntityGraph;
+import com.pyx4j.entity.shared.utils.EntityGraph.EntityGraphEqualOptions;
 import com.pyx4j.entity.test.shared.domain.Department;
 import com.pyx4j.entity.test.shared.domain.Employee;
 import com.pyx4j.entity.test.shared.domain.Status;
 import com.pyx4j.entity.test.shared.domain.Task;
+import com.pyx4j.entity.test.shared.domain.bidir.Master;
+import com.pyx4j.entity.test.shared.domain.equal.WithPersonalIdentity;
 import com.pyx4j.entity.test.shared.domain.inherit.Base1Entity;
 import com.pyx4j.entity.test.shared.domain.inherit.Base2Entity;
 import com.pyx4j.entity.test.shared.domain.inherit.Concrete1Entity;
@@ -191,6 +194,45 @@ public class EntityEqualsTest extends InitializerTestBase {
         assertFalse("Data should be different\n" + ent1.toString() + "\n!=\n" + ent2.toString(), EntityGraph.fullyEqualValues(ent1, ent2));
 
         assertTrue("Owned Data should be same\n" + ent1.toString() + "\n==\n" + ent2.toString(), EntityGraph.fullyEqual(ent1, ent2));
+    }
+
+    public void testFullyEqualIsDirtyPersonalIdentity() {
+        // CForm isDirty()
+        EntityGraphEqualOptions options = new EntityGraphEqualOptions(false);
+        options.ignoreTransient = false;
+        options.ignoreRpcTransient = true;
+        options.trace = true;
+
+        WithPersonalIdentity ent1 = EntityFactory.create(WithPersonalIdentity.class);
+
+        WithPersonalIdentity ent2 = EntityFactory.create(WithPersonalIdentity.class);
+        ent2.identity().newNumber().setValue("1234");
+
+        assertFalse("Data should be different\n" + ent1.toString() + "\n!=\n" + ent2.toString(), EntityGraph.fullyEqual(ent1, ent2, options));
+    }
+
+    public void testFullyEqualIsDirtyWithOwner() {
+        EntityGraphEqualOptions options = new EntityGraphEqualOptions(false);
+        options.ignoreTransient = false;
+        options.ignoreRpcTransient = true;
+        options.trace = true;
+
+        Master ent1 = EntityFactory.create(Master.class);
+        ent1.name().setValue("V1");
+
+        Master ent2 = EntityFactory.create(Master.class);
+        ent2.name().setValue("V1");
+        // init owner
+        ent2.child().master();
+
+        assertTrue("Data should be same\n" + ent1.toString() + "\n!=\n" + ent2.toString(), EntityGraph.fullyEqual(ent1, ent2, options));
+
+        ent2.name().setValue("V2");
+        assertFalse("Data should be different\n" + ent1.toString() + "\n!=\n" + ent2.toString(), EntityGraph.fullyEqual(ent1, ent2, options));
+
+        ent2.name().setValue("V1");
+        ent2.child().name().setValue("C1");
+        assertFalse("Data should be different\n" + ent1.toString() + "\n!=\n" + ent2.toString(), EntityGraph.fullyEqual(ent1, ent2, options));
     }
 
     public void testBusinessEqual() {

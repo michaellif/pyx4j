@@ -85,7 +85,7 @@ public abstract class SharedEntityHandler extends ObjectHandler<Map<String, Seri
 
     /**
      * Creation of stand alone or member Entity
-     * 
+     *
      * @param clazz
      * @param parent
      * @param fieldName
@@ -588,7 +588,7 @@ public abstract class SharedEntityHandler extends ObjectHandler<Map<String, Seri
         if ((1 == thisValue.size()) && (thisValue.containsKey(PRIMARY_KEY))) {
             return true;
         } else {
-            return ((EntityValueMap) thisValue).isNull(new HashSet<Map<String, Serializable>>(), true);
+            return ((EntityValueMap) thisValue).isNull(new HashSet<Map<String, Serializable>>(), true, false);
         }
     }
 
@@ -615,7 +615,7 @@ public abstract class SharedEntityHandler extends ObjectHandler<Map<String, Seri
             if (actualValuesCount == 0) {
                 return false;
             } else {
-                return !((EntityValueMap) thisValue).isNull(processed, false);
+                return !((EntityValueMap) thisValue).isNull(processed, false, true);
             }
         }
     }
@@ -1100,7 +1100,7 @@ public abstract class SharedEntityHandler extends ObjectHandler<Map<String, Seri
 
     /**
      * TODO add this check to GWT compiler
-     * 
+     *
      * @deprecated Forbidden name, Eclipse Search for references bug
      */
     @Deprecated

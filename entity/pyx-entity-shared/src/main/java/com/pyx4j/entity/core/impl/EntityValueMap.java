@@ -75,10 +75,10 @@ public class EntityValueMap extends HashMap<String, Serializable> {
     }
 
     public boolean isNull() {
-        return isNull(new HashSet<Map<String, Serializable>>(), false);
+        return isNull(new HashSet<Map<String, Serializable>>(), false, false);
     }
 
-    boolean isNull(Set<Map<String, Serializable>> processed, boolean ignorePk) {
+    boolean isNull(Set<Map<String, Serializable>> processed, boolean ignorePk, boolean ignoreOwner) {
         processed.add(this);
         if (this.isEmpty()) {
             return true;
@@ -90,9 +90,13 @@ public class EntityValueMap extends HashMap<String, Serializable> {
             if (me.getValue() instanceof EntityValueMap) {
                 if (processed.contains(me.getValue())) {
                     // Owner/Owned binding is not empty!
-                    return false;
+                    if (ignoreOwner) {
+                        continue;
+                    } else {
+                        return false;
+                    }
                 }
-                if (!((EntityValueMap) me.getValue()).isNull(processed, ignorePk)) {
+                if (!((EntityValueMap) me.getValue()).isNull(processed, ignorePk, ignoreOwner)) {
                     return false;
                 }
             } else if (me.getValue() instanceof Collection<?>) {

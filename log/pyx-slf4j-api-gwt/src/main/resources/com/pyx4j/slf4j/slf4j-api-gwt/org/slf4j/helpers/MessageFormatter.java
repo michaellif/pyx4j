@@ -28,6 +28,8 @@ package org.slf4j.helpers;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.pyx4j.commons.IStringView;
+
 // contributors: lizongbo: proposed special treatment of array parameter values
 // Joern Huxhorn: pointed out double[] omission, suggested deep array copy
 /**
@@ -301,6 +303,12 @@ final public class MessageFormatter {
 
   private static void safeObjectAppend(StringBuffer sbuf, Object o) {
     try {
+//------ vlads begin       
+        if (o instanceof com.pyx4j.commons.IStringView) {
+            sbuf.append(((com.pyx4j.commons.IStringView)o).getStringView());
+            return;
+        }
+//------ vlads end        
       String oAsString = o.toString();
       sbuf.append(oAsString);
     } catch (Throwable t) {

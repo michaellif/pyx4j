@@ -48,6 +48,8 @@ import com.pyx4j.entity.core.ObjectClassType;
 import com.pyx4j.entity.core.Path;
 import com.pyx4j.entity.core.meta.EntityMeta;
 import com.pyx4j.entity.core.meta.MemberMeta;
+import com.pyx4j.entity.shared.utils.EntityGraph;
+import com.pyx4j.entity.shared.utils.EntityGraph.EntityGraphEqualOptions;
 import com.pyx4j.forms.client.ui.decorators.IFieldDecorator;
 import com.pyx4j.forms.client.ui.decorators.IFormDecorator;
 import com.pyx4j.gwt.commons.UnrecoverableClientError;
@@ -281,13 +283,21 @@ public abstract class CForm<E extends IEntity> extends CContainer<CForm<E>, E, I
         if (isAttached()) {
             throw new Error("Editor is bound. Only isDirty() method of root editor can be called.");
         }
-        return !equalRecursive(getOrigValue(), getValue());
+        EntityGraphEqualOptions options = new EntityGraphEqualOptions(false);
+        options.ignoreTransient = false;
+        options.ignoreRpcTransient = true;
+        options.trace = true;
+        return !EntityGraph.fullyEqual(getOrigValue(), getValue(), options);
+        //return !equalRecursive(getOrigValue(), getValue());
     }
 
+    //TODO VladsL I keep in in 1.1.4 to verify the code.  Remove once tested
+    @Deprecated
     public static boolean equalRecursive(IEntity entity1, IEntity entity2) {
         return equalRecursive(entity1, entity2, new HashSet<IEntity>());
     }
 
+    @Deprecated
     private static boolean equalRecursive(IEntity entity1, IEntity entity2, Set<IEntity> processed) {
         if (((entity2 == null) || entity2.isNull())) {
             return isEmptyEntity(entity1);
@@ -346,6 +356,7 @@ public abstract class CForm<E extends IEntity> extends CContainer<CForm<E>, E, I
         return true;
     }
 
+    @Deprecated
     private static boolean listValuesEquals(IList<?> value1, IList<?> value2, Set<IEntity> processed) {
         if (value1.size() != value2.size()) {
             return false;
@@ -360,6 +371,7 @@ public abstract class CForm<E extends IEntity> extends CContainer<CForm<E>, E, I
         return true;
     }
 
+    @Deprecated
     public static boolean isEmptyEntity(IEntity entity) {
         if ((entity == null) || entity.isNull()) {
             return true;
