@@ -13,11 +13,13 @@
  */
 package com.propertyvista.portal.server.security.access.resident;
 
+import com.pyx4j.entity.core.criterion.AndCriterion;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.core.criterion.PropertyCriterion;
 import com.pyx4j.entity.security.DatasetAccessRule;
 
 import com.propertyvista.domain.communication.CommunicationThread;
+import com.propertyvista.domain.tenant.lease.LeaseParticipant;
 import com.propertyvista.portal.server.portal.resident.ResidentPortalContext;
 
 public class CommunicationThreadPortalAccessRule implements DatasetAccessRule<CommunicationThread> {
@@ -26,8 +28,13 @@ public class CommunicationThreadPortalAccessRule implements DatasetAccessRule<Co
 
     @Override
     public void applyRule(EntityQueryCriteria<CommunicationThread> criteria) {
-        criteria.or(PropertyCriterion.eq(criteria.proto().content().$().sender(), ResidentPortalContext.getLeaseParticipant()),
-                PropertyCriterion.eq(criteria.proto().content().$().recipients().$().recipient(), ResidentPortalContext.getLeaseParticipant()));
+        LeaseParticipant<?> lp = ResidentPortalContext.getLeaseParticipant();
+        criteria.or(PropertyCriterion.eq(criteria.proto().content().$().sender(), lp),
+                PropertyCriterion.eq(criteria.proto().content().$().recipients().$().recipient(), lp));
+
+        AndCriterion hiddenCriteria = new AndCriterion(PropertyCriterion.eq(criteria.proto().userPolicy().$().hidden(), true), PropertyCriterion.eq(criteria
+                .proto().userPolicy().$().policyConsumer(), lp));
+        criteria.notExists(criteria.proto().userPolicy(), hiddenCriteria);
     }
 
 }

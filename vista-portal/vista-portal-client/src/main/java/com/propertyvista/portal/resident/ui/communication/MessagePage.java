@@ -23,6 +23,8 @@ import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Widget;
 
+import com.pyx4j.commons.IFormatter;
+import com.pyx4j.commons.SimpleMessageFormat;
 import com.pyx4j.commons.css.ThemeColor;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.IObject;
@@ -32,13 +34,16 @@ import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.forms.client.ui.folder.BoxFolderItemDecorator;
 import com.pyx4j.forms.client.ui.folder.CFolderItem;
+import com.pyx4j.forms.client.ui.form.FormDecorator;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
+import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.gwt.commons.ClientEventBus;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.widgets.client.Anchor;
+import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.Toolbar;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 
@@ -54,7 +59,6 @@ import com.propertyvista.portal.rpc.portal.resident.ResidentPortalSiteMap;
 import com.propertyvista.portal.rpc.portal.resident.communication.MessageDTO;
 import com.propertyvista.portal.shared.resources.PortalImages;
 import com.propertyvista.portal.shared.ui.CPortalEntityForm;
-import com.pyx4j.forms.client.ui.panels.FormPanel;
 
 public class MessagePage extends CPortalEntityForm<MessageDTO> {
 
@@ -62,9 +66,22 @@ public class MessagePage extends CPortalEntityForm<MessageDTO> {
 
     private final OpenMessageFolder messagesFolder;
 
-    public MessagePage(MessagePageView view) {
-        super(MessageDTO.class, view, "Message", ThemeColor.contrast5);
+    private final Button btnDelete;
 
+    public MessagePage(MessagePageView view) {
+        super(MessageDTO.class, view, i18n.tr("Message"), ThemeColor.contrast5);
+        btnDelete = new Button(i18n.tr("Delete"), new Command() {
+            @Override
+            public void execute() {
+                MessageDialog.confirm(i18n.tr("Please confirm"), i18n.tr("Are you sure you would like to delete this message thread?"), new Command() {
+
+                    @Override
+                    public void execute() {
+                        ((MessagePagePresenter) MessagePage.this.getView().getPresenter()).hideThread();
+                    }
+                });
+            }
+        });
         messagesFolder = new OpenMessageFolder();
         inheritEditable(false);
         inheritViewable(false);
@@ -91,6 +108,14 @@ public class MessagePage extends CPortalEntityForm<MessageDTO> {
         return formPanel;
     }
 
+    @Override
+    protected FormDecorator<MessageDTO> createDecorator() {
+        FormDecorator<MessageDTO> decorator = super.createDecorator();
+
+        decorator.addHeaderToolbarWidget(btnDelete);
+        return decorator;
+    }
+
     private class OpenMessageFolder extends VistaBoxFolder<MessageDTO> {
 
         public OpenMessageFolder() {
@@ -101,6 +126,13 @@ public class MessagePage extends CPortalEntityForm<MessageDTO> {
         @Override
         public BoxFolderItemDecorator<MessageDTO> createItemDecorator() {
             BoxFolderItemDecorator<MessageDTO> decor = (BoxFolderItemDecorator<MessageDTO>) super.createItemDecorator();
+            decor.setCaptionFormatter(new IFormatter<MessageDTO, String>() {
+                @Override
+                public String format(MessageDTO value) {
+                    return SimpleMessageFormat.format("{0}, {1}:", value.date(), value.text());
+                }
+            });
+
             decor.setExpended(false);
             return decor;
         }

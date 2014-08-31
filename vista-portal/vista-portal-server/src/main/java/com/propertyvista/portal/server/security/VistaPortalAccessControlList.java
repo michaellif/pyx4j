@@ -26,6 +26,7 @@ import com.propertyvista.domain.communication.DeliveryHandle;
 import com.propertyvista.domain.communication.Message;
 import com.propertyvista.domain.communication.MessageAttachment;
 import com.propertyvista.domain.communication.MessageCategory;
+import com.propertyvista.domain.communication.ThreadPolicyHandle;
 import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.financial.billing.Bill;
 import com.propertyvista.domain.maintenance.MaintenanceRequest;
@@ -207,8 +208,7 @@ public class VistaPortalAccessControlList extends ServletContainerAclBuilder {
 
         grant(PortalResidentBehavior.Resident, new IServiceExecutePermission(CustomerPicturePortalUploadService.class));
         grant(PortalResidentBehavior.Resident, new IServiceExecutePermission(MaintenanceRequestPictureUploadPortalService.class));
-        grant(PortalResidentBehavior.Resident, new IServiceExecutePermission(MessageAttachmentUploadPortalService.class));
-        grant(PortalResidentBehavior.Guarantor, new IServiceExecutePermission(MessageAttachmentUploadPortalService.class));
+
         grant(new IServiceExecutePermission(ExtraActivityPortalService.class));
         grant(new IServiceExecutePermission(CommunityEventPortalCrudService.class));
         grant(new IServiceExecutePermission(MessagePortalCrudService.class));
@@ -217,12 +217,17 @@ public class VistaPortalAccessControlList extends ServletContainerAclBuilder {
 
         grant(PortalResidentBehavior.Resident, new EntityPermission(CustomerPicture.class, CRUD));
 
+        // ========================= communication
+        grant(PortalResidentBehavior.Resident, new IServiceExecutePermission(MessageAttachmentUploadPortalService.class));
+        grant(PortalResidentBehavior.Guarantor, new IServiceExecutePermission(MessageAttachmentUploadPortalService.class));
+
         grant(PortalResidentBehavior.Resident, new EntityPermission(DeliveryHandle.class, CRUD));
         grant(PortalResidentBehavior.Resident, new EntityPermission(MessageAttachment.class, CRUD));
         grant(PortalResidentBehavior.Resident, new EntityPermission(CommunicationThread.class, CRUD));
         grant(PortalResidentBehavior.Resident, new EntityPermission(Message.class, CRUD));
         grant(PortalResidentBehavior.Resident, new EntityPermission(MaintenanceRequestPicture.class, CRUD));
         grant(PortalResidentBehavior.Resident, new EntityPermission(MessageCategory.class, CRUD));
+        grant(PortalResidentBehavior.Resident, new EntityPermission(ThreadPolicyHandle.class, CRUD));
 
         grant(PortalResidentBehavior.Guarantor, new EntityPermission(DeliveryHandle.class, CRUD));
         grant(PortalResidentBehavior.Guarantor, new EntityPermission(MessageAttachment.class, CRUD));
@@ -230,6 +235,7 @@ public class VistaPortalAccessControlList extends ServletContainerAclBuilder {
         grant(PortalResidentBehavior.Guarantor, new EntityPermission(Message.class, CRUD));
         grant(PortalResidentBehavior.Guarantor, new EntityPermission(MaintenanceRequestPicture.class, CRUD));
         grant(PortalResidentBehavior.Guarantor, new EntityPermission(MessageCategory.class, CRUD));
+        grant(PortalResidentBehavior.Guarantor, new EntityPermission(ThreadPolicyHandle.class, CRUD));
 
         //========================= Prospect Portal
 

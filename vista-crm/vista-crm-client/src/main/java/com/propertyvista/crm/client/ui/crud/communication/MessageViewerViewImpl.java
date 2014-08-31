@@ -50,6 +50,8 @@ public class MessageViewerViewImpl extends CrmViewerViewImplBase<MessageDTO> imp
 
     private final MenuItem unassignAction;
 
+    private final MenuItem hideUnhideAction;
+
     private final Map<ThreadStatus, MenuItem> threadStatusActions;
 
     public MessageViewerViewImpl() {
@@ -106,6 +108,12 @@ public class MessageViewerViewImpl extends CrmViewerViewImplBase<MessageDTO> imp
                 }
             }));
         }
+        hideUnhideAction = new MenuItem(i18n.tr("Hide"), new Command() {
+            @Override
+            public void execute() {
+                hideUnhide();
+            }
+        });
 
         addAction(assignToMeAction);
         addAction(unassignAction);
@@ -113,6 +121,8 @@ public class MessageViewerViewImpl extends CrmViewerViewImplBase<MessageDTO> imp
         for (MenuItem action : threadStatusActions.values()) {
             addAction(action);
         }
+
+        addAction(hideUnhideAction);
 
         MenuItem btnPrint = new MenuItem(i18n.tr("Print"), new Command() {
             @Override
@@ -151,11 +161,17 @@ public class MessageViewerViewImpl extends CrmViewerViewImplBase<MessageDTO> imp
         setActionVisible(assignToMeAction, !invisible && !ClientContext.getUserVisit().getName().equals(value.owner().name().getValue()));
         setActionVisible(unassignAction, !invisible && !ContactType.System.equals(value.owner().type().getValue()));
         setCaption(value.category().categoryType().getValue().toString());
+
+        hideUnhideAction.setText(value.hidden().getValue(false) ? i18n.tr("Unhide") : i18n.tr("Hide"));
+        //setActionVisible(hideUnhideAction, !CategoryType.Ticket.equals(value.category().categoryType().getValue()));
     }
 
     public void assignEmployee(IEntity e) {
         ((MessageForm) getForm()).assignOwnership(e);
+    }
 
+    public void hideUnhide() {
+        ((MessageForm) getForm()).hideUnhide();
     }
 
     static abstract class UpdateThreadStatusBox extends OkCancelDialog {

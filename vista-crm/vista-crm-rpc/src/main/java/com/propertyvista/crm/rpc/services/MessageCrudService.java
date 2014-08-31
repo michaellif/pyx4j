@@ -34,6 +34,8 @@ public interface MessageCrudService extends AbstractCrudService<MessageDTO> {
 
     void listForHeader(AsyncCallback<EntitySearchResult<MessageDTO>> callback);
 
+    void hideUnhide(AsyncCallback<MessageDTO> callback, MessageDTO source);
+
     @Transient
     public static interface MessageInitializationData extends InitializationData {
 

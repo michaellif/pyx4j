@@ -18,10 +18,14 @@ import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
+import com.pyx4j.rpc.client.DefaultAsyncCallback;
+import com.pyx4j.rpc.shared.VoidSerializable;
+import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.rpc.AppPlace;
 
 import com.propertyvista.portal.resident.ui.communication.MessagePageView;
 import com.propertyvista.portal.resident.ui.communication.MessagePageView.MessagePagePresenter;
+import com.propertyvista.portal.rpc.portal.resident.ResidentPortalSiteMap;
 import com.propertyvista.portal.rpc.portal.resident.communication.MessageDTO;
 import com.propertyvista.portal.rpc.portal.resident.services.MessagePortalCrudService;
 import com.propertyvista.portal.shared.activity.AbstractEditorActivity;
@@ -42,6 +46,17 @@ public class MessagePageActivity extends AbstractEditorActivity<MessageDTO> impl
     public void saveMessageItem(AsyncCallback<MessageDTO> callback, MessageDTO message) {
 
         ((MessagePortalCrudService) getService()).saveChildMessage(callback, message);
+    }
+
+    @Override
+    public void hideThread() {
+        ((MessagePortalCrudService) getService()).hideThread(new DefaultAsyncCallback<VoidSerializable>() {
+            @Override
+            public void onSuccess(VoidSerializable result) {
+                AppSite.getPlaceController().goTo(new ResidentPortalSiteMap.Message.MessageView());
+            }
+        }, getEntityId());
+
     }
 
 }

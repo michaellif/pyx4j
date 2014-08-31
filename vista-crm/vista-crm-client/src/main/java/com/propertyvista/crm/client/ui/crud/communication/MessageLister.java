@@ -13,10 +13,14 @@
  */
 package com.propertyvista.crm.client.ui.crud.communication;
 
+import java.util.List;
+
 import com.google.gwt.user.client.Command;
 
 import com.pyx4j.entity.core.EntityFactory;
+import com.pyx4j.entity.core.criterion.Criterion;
 import com.pyx4j.entity.core.criterion.EntityListCriteria;
+import com.pyx4j.entity.core.criterion.PropertyCriterion;
 import com.pyx4j.entity.security.DataModelPermission;
 import com.pyx4j.forms.client.images.FolderImages;
 import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
@@ -83,7 +87,8 @@ public class MessageLister extends AbstractLister<MessageDTO> {
                     new MemberColumnDescriptor.Builder(proto.allowedReply()).searchable(false).width("100px").build(),
                     new MemberColumnDescriptor.Builder(proto.thread().owner()).searchable(false).width("200px").build(),
                     new MemberColumnDescriptor.Builder(proto.ownerForList(), false).columnTitle(i18n.tr("Owner")).searchableOnly().build(),
-                    new MemberColumnDescriptor.Builder(proto.status()).searchable(true).width("100px").build() };
+                    new MemberColumnDescriptor.Builder(proto.status()).searchable(true).width("100px").build(),
+                    new MemberColumnDescriptor.Builder(proto.hidden(), false).searchableOnly().columnTitle(i18n.tr("Hidden")).build()};
         }
         else {
         switch (category) {
@@ -96,7 +101,7 @@ public class MessageLister extends AbstractLister<MessageDTO> {
                 new MemberColumnDescriptor.Builder(proto.date()).searchable(false).width("200px").build(),
                 new MemberColumnDescriptor.Builder(proto.subject()).searchable(false).width("1000px").build(),
                 new MemberColumnDescriptor.Builder(proto.category(), false).searchable(false).width("300px").build(),
-                new MemberColumnDescriptor.Builder(proto.category().categoryType(), false).searchableOnly().build(),
+                new MemberColumnDescriptor.Builder(proto.category().categoryType(), false).searchableOnly().columnTitle(i18n.tr("Category")).build(),
                 new MemberColumnDescriptor.Builder(proto.allowedReply()).searchable(false).width("100px").build(),
                 new MemberColumnDescriptor.Builder(proto.thread().owner()).searchable(false).width("200px").build(),
                 new MemberColumnDescriptor.Builder(proto.ownerForList(), false).columnTitle(i18n.tr("Owner")).searchableOnly().build(),
@@ -111,7 +116,7 @@ public class MessageLister extends AbstractLister<MessageDTO> {
                 new MemberColumnDescriptor.Builder(proto.date()).searchable(false).width("200px").build(),
                 new MemberColumnDescriptor.Builder(proto.subject()).searchable(false).width("1000px").build(),
                 new MemberColumnDescriptor.Builder(proto.category(), false).searchable(false).width("300px").build(),
-                new MemberColumnDescriptor.Builder(proto.category().categoryType(), false).searchableOnly().build(),
+                new MemberColumnDescriptor.Builder(proto.category().categoryType(), false).searchableOnly().columnTitle(i18n.tr("Category")).build(),
                 new MemberColumnDescriptor.Builder(proto.allowedReply()).searchable(false).width("100px").build() };
      //@formatter:on
             default:
@@ -124,7 +129,7 @@ public class MessageLister extends AbstractLister<MessageDTO> {
                     new MemberColumnDescriptor.Builder(proto.date()).searchable(false).width("200px").build(),
                     new MemberColumnDescriptor.Builder(proto.subject()).searchable(false).width("1000px").build(),
                     new MemberColumnDescriptor.Builder(proto.category(), false).searchable(false).width("300px").build(),
-                    new MemberColumnDescriptor.Builder(proto.category().categoryType(), false).searchableOnly().build(),
+                    new MemberColumnDescriptor.Builder(proto.category().categoryType(), false).searchableOnly().columnTitle(i18n.tr("Category")).build(),
                     new MemberColumnDescriptor.Builder(proto.allowedReply()).searchable(false).width("100px").build(),
                     new MemberColumnDescriptor.Builder(proto.thread().owner()).searchable(false).width("200px").build(),
                     new MemberColumnDescriptor.Builder(proto.ownerForList(), false).columnTitle(i18n.tr("Owner")).searchableOnly().build(),
@@ -158,7 +163,43 @@ public class MessageLister extends AbstractLister<MessageDTO> {
         }
         setDataTableModel(new DataTableModel<MessageDTO>(createColumnDescriptors(category)));
 
-        return super.updateCriteria(criteria);
+        EntityListCriteria<MessageDTO> result = super.updateCriteria(criteria);
+        if (placeCriteria == null) {
+            addOrIgnoreHidden(criteria);
+        }
+        return result;
+    }
+
+    private void addOrIgnoreHidden(EntityListCriteria<MessageDTO> criteria) {
+        List<Criterion> currentCriterias = criteria.getFilters();
+        boolean ignoreHidden = true;
+        if (currentCriterias != null && currentCriterias.size() > 0) {
+            java.util.Iterator<Criterion> i = currentCriterias.iterator();
+
+            while (i.hasNext()) {
+                Criterion criterion = i.next();
+                if (criterion instanceof PropertyCriterion) {
+                    PropertyCriterion propertyCriterion = (PropertyCriterion) criterion;
+
+                    if (propertyCriterion.getPropertyPath().equals(criteria.proto().hidden().getPath().toString())) {
+                        ignoreHidden = false;
+                        break;
+                    }
+                }
+            }
+        }
+        if (ignoreHidden) {
+            criteria.notExists(criteria.proto().thread().userPolicy(), PropertyCriterion.eq(criteria.proto().thread().userPolicy().$().hidden(), true));
+        } else {
+            PropertyCriterion policy = criteria.getCriterion(criteria.proto().hidden());
+            if (policy != null && policy.getValue() != null) {
+                Boolean val = Boolean.valueOf(policy.getValue().toString());
+                if (val != null && !val.booleanValue()) {
+                    currentCriterias.remove(policy);
+                    criteria.notExists(criteria.proto().thread().userPolicy(), PropertyCriterion.eq(criteria.proto().thread().userPolicy().$().hidden(), true));
+                }
+            }
+        }
     }
 
     @Override

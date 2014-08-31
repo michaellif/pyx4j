@@ -26,5 +26,7 @@ public interface MessageViewerView extends IViewer<MessageDTO> {
         void saveMessage(MessageDTO message, ThreadStatus threadStatus, boolean rePopulate);
 
         void assignOwnership(MessageDTO source, IEntity empoyee);
+
+        void hideUnhide(MessageDTO source);
     }
 }

@@ -83,8 +83,8 @@ public class CommunicationMessageFacadeImpl implements CommunicationMessageFacad
     }
 
     @Override
-    public void buildRecipientList(Message bo, MessageDTO to) {
-        CommunicationEndpointManager.instance().buildRecipientList(bo, to);
+    public void buildRecipientList(Message bo, MessageDTO to, CommunicationThread thread) {
+        CommunicationEndpointManager.instance().buildRecipientList(bo, to, thread);
     }
 
     @Override

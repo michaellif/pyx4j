@@ -15,10 +15,12 @@ package com.propertyvista.portal.rpc.portal.resident.services;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
+import com.pyx4j.commons.Key;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.core.IPrimitive;
 import com.pyx4j.entity.rpc.AbstractCrudService;
 import com.pyx4j.entity.rpc.EntitySearchResult;
+import com.pyx4j.rpc.shared.VoidSerializable;
 
 import com.propertyvista.portal.rpc.portal.resident.communication.MessageDTO;
 
@@ -32,4 +34,6 @@ public interface MessagePortalCrudService extends AbstractCrudService<MessageDTO
 
         IPrimitive<String> initalizedText();
     }
+
+    public void hideThread(AsyncCallback<VoidSerializable> callback, Key entityId);
 }

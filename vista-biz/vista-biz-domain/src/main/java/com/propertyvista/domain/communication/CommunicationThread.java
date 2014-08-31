@@ -70,4 +70,10 @@ public interface CommunicationThread extends IEntity {
     @MemberColumn(notNull = true)
     CommunicationEndpoint owner();
 
+    @NotNull
+    @Owned
+    @Detached
+    @OrderBy(PrimaryKey.class)
+    IList<ThreadPolicyHandle> userPolicy();
+
 }

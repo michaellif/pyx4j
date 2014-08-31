@@ -23,6 +23,8 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.MenuItem;
 import com.google.gwt.user.client.ui.Widget;
 
+import com.pyx4j.commons.IFormatter;
+import com.pyx4j.commons.SimpleMessageFormat;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.IObject;
@@ -91,6 +93,10 @@ public class MessageForm extends CrmEntityForm<MessageDTO> {
         ((MessageViewerView.Presenter) getParentView().getPresenter()).assignOwnership(getValue(), employee);
     }
 
+    public void hideUnhide() {
+        ((MessageViewerView.Presenter) getParentView().getPresenter()).hideUnhide(getValue());
+    }
+
     public IsWidget createGeneralForm() {
         FormPanel formPanel = new FormPanel(this);
         CLabel<String> threadLabel = new CLabel<String>();
@@ -130,6 +136,13 @@ public class MessageForm extends CrmEntityForm<MessageDTO> {
         @Override
         public IFolderItemDecorator<MessageDTO> createItemDecorator() {
             BoxFolderItemDecorator<MessageDTO> decor = (BoxFolderItemDecorator<MessageDTO>) super.createItemDecorator();
+            decor.setCaptionFormatter(new IFormatter<MessageDTO, String>() {
+                @Override
+                public String format(MessageDTO value) {
+                    return SimpleMessageFormat.format("{0}, {1}:", value.date(), value.text());
+                }
+            });
+
             decor.setExpended(false);
             return decor;
         }

@@ -66,6 +66,9 @@ public interface MessageDTO extends Message {
     @NotNull
     IPrimitive<ThreadStatus> status();
 
+    @ReadOnly
+    IPrimitive<Boolean> hidden();
+
     @NotNull
     @Detached
     @MemberColumn(notNull = true)

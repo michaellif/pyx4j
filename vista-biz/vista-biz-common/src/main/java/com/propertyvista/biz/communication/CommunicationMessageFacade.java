@@ -55,7 +55,7 @@ public interface CommunicationMessageFacade {
 
     public String sendersAsStringView(ListOrderedSet<CommunicationEndpoint> senders);
 
-    public void buildRecipientList(Message bo, MessageDTO to);
+    public void buildRecipientList(Message bo, MessageDTO to, CommunicationThread thread);
 
     public EntitySearchResult<Message> query(EntityListCriteria<Message> criteria);
 

@@ -25,6 +25,7 @@ import com.pyx4j.entity.cache.CacheService;
 import com.pyx4j.entity.core.AttachLevel;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.IEntity;
+import com.pyx4j.entity.core.IList;
 import com.pyx4j.entity.core.criterion.EntityListCriteria;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.server.Persistence;
@@ -32,10 +33,12 @@ import com.pyx4j.entity.server.Persistence;
 import com.propertyvista.domain.communication.CommunicationEndpoint;
 import com.propertyvista.domain.communication.CommunicationEndpoint.ContactType;
 import com.propertyvista.domain.communication.CommunicationGroup;
+import com.propertyvista.domain.communication.CommunicationThread;
 import com.propertyvista.domain.communication.DeliveryHandle;
 import com.propertyvista.domain.communication.Message;
 import com.propertyvista.domain.communication.SystemEndpoint;
 import com.propertyvista.domain.communication.SystemEndpoint.SystemEndpointName;
+import com.propertyvista.domain.communication.ThreadPolicyHandle;
 import com.propertyvista.domain.company.Employee;
 import com.propertyvista.domain.company.Portfolio;
 import com.propertyvista.domain.property.asset.building.Building;
@@ -179,7 +182,7 @@ public class CommunicationEndpointManager {
         return senders.get(0).getStringView() + " ... " + senders.get(senders.size() - 1).getStringView();
     }
 
-    public void buildRecipientList(Message bo, MessageDTO to) {
+    public void buildRecipientList(Message bo, MessageDTO to, CommunicationThread thread) {
         HashMap<IEntity, Boolean> visited = new HashMap<IEntity, Boolean>();
         for (CommunicationEndpointDTO todep : to.to()) {
             IEntity epEntity = todep.endpoint();
@@ -197,19 +200,23 @@ public class CommunicationEndpointManager {
             }
             expandCommunicationEndpoint(visited, todep);
         }
+        if (thread != null) {
+            Persistence.ensureRetrieve(thread.userPolicy(), AttachLevel.Attached);
+        }
         for (Entry<IEntity, Boolean> todep : visited.entrySet()) {
+            DeliveryHandle dh = null;
             if (todep.getKey().getInstanceValueClass().equals(SystemEndpoint.class)) {
                 SystemEndpoint e = todep.getKey().cast();
                 bo.recipients().add(createDeliveryHandle(e, todep.getValue()));
             } else if (todep.getKey().getInstanceValueClass().equals(Employee.class)) {
                 Employee e = todep.getKey().cast();
-                bo.recipients().add(createDeliveryHandle(e, todep.getValue()));
+                bo.recipients().add(dh = createDeliveryHandle(e, todep.getValue()));
             } else if (todep.getKey().getInstanceValueClass().equals(Tenant.class)) {
                 Tenant e = todep.getKey().cast();
-                bo.recipients().add(createDeliveryHandle(e, todep.getValue()));
+                bo.recipients().add(dh = createDeliveryHandle(e, todep.getValue()));
             } else if (todep.getKey().getInstanceValueClass().equals(Guarantor.class)) {
                 Guarantor e = todep.getKey().cast();
-                bo.recipients().add(createDeliveryHandle(e, todep.getValue()));
+                bo.recipients().add(dh = createDeliveryHandle(e, todep.getValue()));
             } else if (todep.getKey().getInstanceValueClass().equals(CommunicationGroup.class)) {
                 CommunicationGroup e = todep.getKey().cast();
                 bo.recipients().add(createDeliveryHandle(e, todep.getValue()));
@@ -222,8 +229,21 @@ public class CommunicationEndpointManager {
                     Portfolio b = todep.getKey().cast();
                     cg.portfolio().set(b);
                 }
-                DeliveryHandle dh = createDeliveryHandle(cg, todep.getValue());
-                bo.recipients().add(dh);
+                bo.recipients().add(createDeliveryHandle(cg, todep.getValue()));
+            }
+            if (thread != null && dh != null) {
+                unhideThreadForRecipient(thread.userPolicy(), dh);
+            }
+        }
+    }
+
+    private void unhideThreadForRecipient(IList<ThreadPolicyHandle> phs, DeliveryHandle dh) {
+        if (dh != null && phs != null && !phs.isNull()) {
+            for (ThreadPolicyHandle ph : phs) {
+                if (ph.policyConsumer().equals(dh.recipient())) {
+                    ph.hidden().setValue(false);
+                    Persistence.service().persist(ph);
+                }
             }
         }
     }

@@ -19,6 +19,7 @@ import org.apache.commons.collections4.set.ListOrderedSet;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
+import com.pyx4j.commons.Key;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.config.server.SystemDateManager;
 import com.pyx4j.entity.core.AttachLevel;
@@ -31,6 +32,7 @@ import com.pyx4j.entity.core.criterion.PropertyCriterion;
 import com.pyx4j.entity.rpc.EntitySearchResult;
 import com.pyx4j.entity.server.AbstractCrudServiceDtoImpl;
 import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.rpc.shared.VoidSerializable;
 import com.pyx4j.server.contexts.ServerContext;
 
 import com.propertyvista.biz.communication.CommunicationMessageFacade;
@@ -40,7 +42,9 @@ import com.propertyvista.domain.communication.CommunicationThread.ThreadStatus;
 import com.propertyvista.domain.communication.DeliveryHandle;
 import com.propertyvista.domain.communication.Message;
 import com.propertyvista.domain.communication.MessageCategory.TicketType;
+import com.propertyvista.domain.communication.ThreadPolicyHandle;
 import com.propertyvista.domain.communication.SystemEndpoint.SystemEndpointName;
+import com.propertyvista.domain.tenant.lease.LeaseParticipant;
 import com.propertyvista.portal.rpc.portal.resident.communication.MessageDTO;
 import com.propertyvista.portal.rpc.portal.resident.services.MessagePortalCrudService;
 import com.propertyvista.portal.server.portal.resident.ResidentPortalContext;
@@ -183,12 +187,12 @@ public class MessagePortalCrudServiceImpl extends AbstractCrudServiceDtoImpl<Mes
             int messagesInThread = 0;
             CommunicationMessageFacade facade = ServerSideFactory.create(CommunicationMessageFacade.class);
             ListOrderedSet<CommunicationEndpoint> senders = new ListOrderedSet<CommunicationEndpoint>();
-
+            LeaseParticipant<?> lp = ResidentPortalContext.getLeaseParticipant();
             for (Message m : ms) {
                 Persistence.ensureRetrieve(m.recipients(), AttachLevel.Attached);
                 Persistence.ensureRetrieve(m.attachments(), AttachLevel.Attached);
                 Persistence.ensureRetrieve(m.sender(), AttachLevel.Attached);
-                if (!ResidentPortalContext.getLeaseParticipant().equals(m.sender()) && !isRecipientOf(m)) {
+                if (!lp.equals(m.sender()) && !isRecipientOf(m, lp)) {
                     continue;
                 }
                 hasAttachment = hasAttachment || m.attachments().size() > 0;
@@ -231,8 +235,9 @@ public class MessagePortalCrudServiceImpl extends AbstractCrudServiceDtoImpl<Mes
         boolean isRead = true;
 
         messageDTO.isInRecipients().setValue(false);
+        LeaseParticipant<?> lp = ResidentPortalContext.getLeaseParticipant();
         for (DeliveryHandle dh : m.recipients()) {
-            if (!ResidentPortalContext.getLeaseParticipant().equals(dh.recipient())) {
+            if (!lp.equals(dh.recipient())) {
                 continue;
             }
             if (dh.star().getValue(false)) {
@@ -299,13 +304,41 @@ public class MessagePortalCrudServiceImpl extends AbstractCrudServiceDtoImpl<Mes
         callback.onSuccess(message);
     }
 
-    private boolean isRecipientOf(Message m) {
+    @Override
+    public void hideThread(AsyncCallback<VoidSerializable> callback, Key entityId) {
+        EntityQueryCriteria<CommunicationThread> threadCriteria = EntityQueryCriteria.create(CommunicationThread.class);
+        threadCriteria.add(PropertyCriterion.in(threadCriteria.proto().content().$().id(), entityId));
+        CommunicationThread thread = Persistence.secureRetrieve(threadCriteria);
+        if (thread == null) {
+            callback.onFailure(new Error("The thread does not exist"));
+            return;
+        }
+
+        LeaseParticipant<?> currentUser = ResidentPortalContext.getLeaseParticipant();
+        EntityQueryCriteria<ThreadPolicyHandle> policyCriteria = EntityQueryCriteria.create(ThreadPolicyHandle.class);
+
+        policyCriteria.add(PropertyCriterion.in(policyCriteria.proto().thread(), thread));
+        policyCriteria.eq(policyCriteria.proto().policyConsumer(), currentUser);
+
+        ThreadPolicyHandle handle = Persistence.secureRetrieve(policyCriteria);
+        if (handle == null) {
+            handle = EntityFactory.create(ThreadPolicyHandle.class);
+            handle.policyConsumer().set(currentUser);
+            handle.thread().set(thread);
+        }
+
+        handle.hidden().setValue(true);
+        Persistence.service().persist(handle);
+        Persistence.service().commit();
+        callback.onSuccess(null);
+    }
+
+    private boolean isRecipientOf(Message m, LeaseParticipant<?> lp) {
         for (DeliveryHandle dh : m.recipients()) {
-            if (ResidentPortalContext.getLeaseParticipant().equals(dh.recipient())) {
+            if (lp.equals(dh.recipient())) {
                 return true;
             }
         }
         return false;
     }
-
 }

@@ -24,6 +24,7 @@ public interface MessagePageView extends IEditorView<MessageDTO> {
 
         void saveMessageItem(AsyncCallback<MessageDTO> callback, MessageDTO message);
 
+        void hideThread();
     }
 
 }

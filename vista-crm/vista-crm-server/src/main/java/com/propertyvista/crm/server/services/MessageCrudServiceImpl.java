@@ -45,6 +45,7 @@ import com.propertyvista.domain.communication.Message;
 import com.propertyvista.domain.communication.MessageAttachment;
 import com.propertyvista.domain.communication.MessageCategory.CategoryType;
 import com.propertyvista.domain.communication.SystemEndpoint.SystemEndpointName;
+import com.propertyvista.domain.communication.ThreadPolicyHandle;
 import com.propertyvista.domain.company.Employee;
 import com.propertyvista.domain.security.CrmUser;
 import com.propertyvista.dto.CommunicationEndpointDTO;
@@ -83,6 +84,9 @@ public class MessageCrudServiceImpl extends AbstractCrudServiceDtoImpl<Message, 
         }
         if (path.equals(toProto.subject().getPath().toString())) {
             return boProto.thread().subject().getPath();
+        }
+        if (path.equals(toProto.hidden().getPath().toString())) {
+            return boProto.thread().userPolicy().$().hidden().getPath();
         }
         return super.convertPropertyDTOPathToDBOPath(path, boProto, toProto);
     }
@@ -185,7 +189,7 @@ public class MessageCrudServiceImpl extends AbstractCrudServiceDtoImpl<Message, 
         }
 
         CommunicationMessageFacade communicationFacade = ServerSideFactory.create(CommunicationMessageFacade.class);
-        communicationFacade.buildRecipientList(bo, to);
+        communicationFacade.buildRecipientList(bo, to, null);
 
         bo.attachments().set(to.attachments());
         bo.date().setValue(SystemDateManager.getDate());
@@ -234,8 +238,8 @@ public class MessageCrudServiceImpl extends AbstractCrudServiceDtoImpl<Message, 
         Persistence.ensureRetrieve(bo.thread(), AttachLevel.Attached);
         Persistence.ensureRetrieve(bo.thread().category(), AttachLevel.Attached);
         Persistence.ensureRetrieve(bo.thread().owner(), AttachLevel.Attached);
-
         Persistence.ensureRetrieve(bo.recipients(), AttachLevel.Attached);
+        Employee currentUser = CrmAppContext.getCurrentUserEmployee();
         if (ms != null && ms.size() > 0) {
             boolean star = false;
             boolean isRead = true;
@@ -250,7 +254,7 @@ public class MessageCrudServiceImpl extends AbstractCrudServiceDtoImpl<Message, 
                     Persistence.ensureRetrieve(m.attachments(), AttachLevel.Attached);
                 }
                 hasAttachment = hasAttachment || m.attachments().size() > 0;
-                MessageDTO currentDTO = copyChildDTO(bo.thread(), m, EntityFactory.create(MessageDTO.class), isForList, communicationFacade);
+                MessageDTO currentDTO = copyChildDTO(bo.thread(), m, EntityFactory.create(MessageDTO.class), isForList, communicationFacade, currentUser);
                 to.content().add(currentDTO);
                 if (currentDTO.star().getValue(false)) {
                     star = true;
@@ -267,7 +271,7 @@ public class MessageCrudServiceImpl extends AbstractCrudServiceDtoImpl<Message, 
                     lastMessage = m;
                 }
             }
-            copyChildDTO(bo.thread(), lastMessage, to, isForList, communicationFacade);
+            copyChildDTO(bo.thread(), lastMessage, to, isForList, communicationFacade, currentUser);
             if (isHighImportance) {
                 to.highImportance().setValue(true);
             }
@@ -279,13 +283,22 @@ public class MessageCrudServiceImpl extends AbstractCrudServiceDtoImpl<Message, 
             }
             to.hasAttachments().setValue(hasAttachment);
 
-            to.isDirect().setValue(!communicationFacade.isDispatchedThread(bo.thread().getPrimaryKey(), !isForList, CrmAppContext.getCurrentUserEmployee()));
+            to.isDirect().setValue(!communicationFacade.isDispatchedThread(bo.thread().getPrimaryKey(), !isForList, currentUser));
 
+            evaluateHiddenProperty(bo, to, currentUser);
         }
     }
 
+    private void evaluateHiddenProperty(Message bo, MessageDTO to, Employee currentUser) {
+        EntityQueryCriteria<ThreadPolicyHandle> policyCriteria = EntityQueryCriteria.create(ThreadPolicyHandle.class);
+        policyCriteria.eq(policyCriteria.proto().thread(), bo.thread());
+
+        ThreadPolicyHandle ph = Persistence.secureRetrieve(policyCriteria);
+        to.hidden().setValue(ph != null && !ph.isNull() && ph.hidden().getValue(false));
+    }
+
     private MessageDTO copyChildDTO(CommunicationThread thread, Message m, MessageDTO messageDTO, boolean isForList,
-            CommunicationMessageFacade communicationFacade) {
+            CommunicationMessageFacade communicationFacade, Employee currentUser) {
         boolean star = false;
         boolean isRead = true;
 
@@ -308,7 +321,7 @@ public class MessageCrudServiceImpl extends AbstractCrudServiceDtoImpl<Message, 
                 }
                 messageDTO.to().add(ep);
             }
-            if (!CrmAppContext.getCurrentUserEmployee().equals(dh.recipient())) {
+            if (!currentUser.equals(dh.recipient())) {
                 continue;
             }
             if (dh.star().getValue(false)) {
@@ -355,6 +368,7 @@ public class MessageCrudServiceImpl extends AbstractCrudServiceDtoImpl<Message, 
     }
 
     private void saveAndUpdate(AsyncCallback<MessageDTO> callback, MessageDTO message, ThreadStatus threadStatus, boolean updateOwner) {
+        Employee currentUser = CrmAppContext.getCurrentUserEmployee();
         if (message.date().isNull()) {
             CommunicationThread thread = Persistence.secureRetrieve(CommunicationThread.class, message.thread().id().getValue());
             CommunicationMessageFacade communicationFacade = ServerSideFactory.create(CommunicationMessageFacade.class);
@@ -362,7 +376,7 @@ public class MessageCrudServiceImpl extends AbstractCrudServiceDtoImpl<Message, 
             if (threadStatus != null) {
                 message.status().setValue(threadStatus);
                 thread.status().setValue(threadStatus);
-                thread.owner().set(CrmAppContext.getCurrentUserEmployee());
+                thread.owner().set(currentUser);
 
                 Persistence.service().persist(thread);
                 m.recipients().add(
@@ -371,15 +385,15 @@ public class MessageCrudServiceImpl extends AbstractCrudServiceDtoImpl<Message, 
             } else {
                 if (updateOwner && CategoryType.Ticket.equals(message.category().categoryType().getValue())
                         && thread.owner().equals(communicationFacade.getSystemEndpointFromCache(SystemEndpointName.Unassigned))) {
-                    thread.owner().set(CrmAppContext.getCurrentUserEmployee());
+                    thread.owner().set(currentUser);
                     Persistence.service().persist(thread);
                 }
-                communicationFacade.buildRecipientList(m, message);
+                communicationFacade.buildRecipientList(m, message, thread);
             }
             m.thread().set(thread);
             m.attachments().set(message.attachments());
             m.date().setValue(SystemDateManager.getDate());
-            m.sender().set(CrmAppContext.getCurrentUserEmployee());
+            m.sender().set(currentUser);
             m.text().set(message.text());
             m.highImportance().setValue(false);
             Persistence.service().persist(m);
@@ -387,7 +401,7 @@ public class MessageCrudServiceImpl extends AbstractCrudServiceDtoImpl<Message, 
             retrieve(callback, m.getPrimaryKey(), RetrieveTarget.View);
         } else {
             EntityQueryCriteria<DeliveryHandle> dhCriteria = EntityQueryCriteria.create(DeliveryHandle.class);
-            dhCriteria.eq(dhCriteria.proto().recipient(), CrmAppContext.getCurrentUserEmployee());
+            dhCriteria.eq(dhCriteria.proto().recipient(), currentUser);
             dhCriteria.eq(dhCriteria.proto().message(), message);
             DeliveryHandle dh = Persistence.retrieveUnique(dhCriteria, AttachLevel.Attached);
             dh.isRead().set(message.isRead());
@@ -430,5 +444,29 @@ public class MessageCrudServiceImpl extends AbstractCrudServiceDtoImpl<Message, 
             ServerContext.getVisit().setAttribute(CommunicationMessageFacade.class.getName(), new Long(0L));
             callback.onSuccess(message);
         }
+    }
+
+    @Override
+    public void hideUnhide(AsyncCallback<MessageDTO> callback, MessageDTO source) {
+
+        Employee currentUser = CrmAppContext.getCurrentUserEmployee();
+        EntityQueryCriteria<ThreadPolicyHandle> policyCriteria = EntityQueryCriteria.create(ThreadPolicyHandle.class);
+
+        policyCriteria.add(PropertyCriterion.in(policyCriteria.proto().thread(), source.thread()));
+        policyCriteria.eq(policyCriteria.proto().policyConsumer(), currentUser);
+
+        ThreadPolicyHandle handle = Persistence.secureRetrieve(policyCriteria);
+        if (handle == null) {
+            handle = EntityFactory.create(ThreadPolicyHandle.class);
+            handle.policyConsumer().set(currentUser);
+            handle.thread().set(source.thread());
+            handle.hidden().setValue(true);
+        } else {
+            handle.hidden().setValue(!handle.hidden().getValue(false));
+        }
+
+        Persistence.service().persist(handle);
+        Persistence.service().commit();
+        retrieve(callback, source.getPrimaryKey(), RetrieveTarget.View);
     }
 }

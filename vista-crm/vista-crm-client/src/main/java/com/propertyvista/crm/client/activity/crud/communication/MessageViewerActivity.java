@@ -19,13 +19,16 @@ import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.rpc.AbstractCrudService;
 import com.pyx4j.gwt.commons.ClientEventBus;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
+import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.rpc.CrudAppPlace;
+import com.pyx4j.site.rpc.CrudAppPlace.Type;
 
 import com.propertyvista.crm.client.CrmSite;
 import com.propertyvista.crm.client.activity.CrmClientCommunicationManager;
 import com.propertyvista.crm.client.activity.crud.CrmViewerActivity;
 import com.propertyvista.crm.client.event.CommunicationStatusUpdateEvent;
 import com.propertyvista.crm.client.ui.crud.communication.MessageViewerView;
+import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.crm.rpc.services.MessageCrudService;
 import com.propertyvista.domain.communication.CommunicationThread.ThreadStatus;
 import com.propertyvista.dto.MessageDTO;
@@ -61,4 +64,22 @@ public class MessageViewerActivity extends CrmViewerActivity<MessageDTO> impleme
             }
         }, message, empoyee);
     }
+
+    @Override
+    public void hideUnhide(MessageDTO source) {
+        ((MessageCrudService) getService()).hideUnhide(new DefaultAsyncCallback<MessageDTO>() {
+            @Override
+            public void onSuccess(MessageDTO result) {
+                boolean gotoLister = result.hidden().getValue(false);
+                if (gotoLister) {
+                    CrudAppPlace place = new CrmSiteMap.Communication.Message();
+                    place.setType(Type.lister);
+                    AppSite.getPlaceController().goTo(place);
+                } else {
+                    getView().populate(result);
+                }
+            }
+        }, source);
+    }
+
 }

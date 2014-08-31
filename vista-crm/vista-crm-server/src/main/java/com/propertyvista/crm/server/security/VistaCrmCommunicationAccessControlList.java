@@ -27,11 +27,13 @@ import com.propertyvista.crm.rpc.services.selections.SelectCommunicationEndpoint
 import com.propertyvista.crm.server.security.access.CommunicationThreadAccessRule;
 import com.propertyvista.crm.server.security.access.MessageAccessRule;
 import com.propertyvista.crm.server.security.access.MessageCategoryAccessRule;
+import com.propertyvista.crm.server.security.access.ThreadPolicyHandleAccessRule;
 import com.propertyvista.domain.communication.CommunicationThread;
 import com.propertyvista.domain.communication.Message;
 import com.propertyvista.domain.communication.MessageAttachment;
 import com.propertyvista.domain.communication.MessageCategory;
 import com.propertyvista.domain.communication.SystemEndpoint;
+import com.propertyvista.domain.communication.ThreadPolicyHandle;
 import com.propertyvista.domain.security.common.VistaBasicBehavior;
 import com.propertyvista.dto.MessageDTO;
 
@@ -47,7 +49,9 @@ class VistaCrmCommunicationAccessControlList extends UIAclBuilder {
         grant(VistaBasicBehavior.CRM, new EntityPermission(Message.class, ALL));
         grant(VistaBasicBehavior.CRM, new EntityPermission(MessageAttachment.class, ALL));
         grant(VistaBasicBehavior.CRM, new EntityPermission(CommunicationThread.class, ALL));
+        grant(VistaBasicBehavior.CRM, new EntityPermission(ThreadPolicyHandle.class, ALL));
         grant(VistaBasicBehavior.CRM, new CommunicationThreadAccessRule(), CommunicationThread.class);
+        grant(VistaBasicBehavior.CRM, new ThreadPolicyHandleAccessRule(), ThreadPolicyHandle.class);
         grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(MessageAttachmentUploadService.class));
         grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(SelectCommunicationEndpointListService.class));
 
