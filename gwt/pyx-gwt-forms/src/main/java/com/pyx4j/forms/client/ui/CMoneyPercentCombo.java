@@ -33,7 +33,7 @@ import com.pyx4j.entity.shared.IMoneyPercentAmount;
 import com.pyx4j.entity.shared.IMoneyPercentAmount.ValueType;
 import com.pyx4j.i18n.shared.I18n;
 
-public class CMoneyPercentCombo extends CTextFieldBase<IMoneyPercentAmount, NTextBox<IMoneyPercentAmount>> {
+public abstract class CMoneyPercentCombo extends CTextFieldBase<IMoneyPercentAmount, NTextBox<IMoneyPercentAmount>> {
 
     static final I18n i18n = I18n.get(CMoneyPercentCombo.class);
 
@@ -43,13 +43,13 @@ public class CMoneyPercentCombo extends CTextFieldBase<IMoneyPercentAmount, NTex
 
     private final NumberFormat pf = NumberFormat.getFormat(i18n.tr("#0.00%"));
 
-    private ValueType amountType;
-
     public CMoneyPercentCombo() {
         setFormatter(new MoneyPercentFormat());
         setParser(new MoneyPercentParser());
         setNativeComponent(new NTextBox<IMoneyPercentAmount>(this));
     }
+
+    public abstract ValueType getAmountType();
 
     @Override
     public boolean isValueEmpty() {
@@ -59,9 +59,11 @@ public class CMoneyPercentCombo extends CTextFieldBase<IMoneyPercentAmount, NTex
                 );
     }
 
-    public void setAmountType(ValueType type) {
-        amountType = type;
+    @Override
+    public boolean isValid() {
+        // this will call formatter that will set correct value field (amount/percent) based on value type (Monetary/Percentage)
         setEditorValue(getValue());
+        return super.isValid();
     }
 
     @Override
@@ -72,12 +74,13 @@ public class CMoneyPercentCombo extends CTextFieldBase<IMoneyPercentAmount, NTex
         return super.preprocessValue(value, fireEvent, populate);
     }
 
-    private void clearValue() {
+    private IMoneyPercentAmount clearValue() {
         IMoneyPercentAmount value = getValue();
         if (value != null) {
             value.percent().setValue(BigDecimal.ZERO);
             value.amount().setValue(BigDecimal.ZERO);
         }
+        return value;
     }
 
     class MoneyPercentFormat implements IFormatter<IMoneyPercentAmount, String> {
@@ -88,7 +91,7 @@ public class CMoneyPercentCombo extends CTextFieldBase<IMoneyPercentAmount, NTex
                 return nf.format(BigDecimal.ZERO);
             }
             String result = null;
-            switch (amountType) {
+            switch (getAmountType()) {
             case Monetary:
                 if (isEditable()) {
                     result = nf.format(value.amount().getValue(BigDecimal.ZERO));
@@ -114,12 +117,11 @@ public class CMoneyPercentCombo extends CTextFieldBase<IMoneyPercentAmount, NTex
         public IMoneyPercentAmount parse(String string) throws ParseException {
             IMoneyPercentAmount value = getValue();
             if (CommonsStringUtils.isEmpty(string)) {
-                clearValue();
-                return value;
+                return clearValue();
             }
             try {
                 BigDecimal amount = new BigDecimal(nf.parse(string)).setScale(2, RoundingMode.HALF_UP);
-                if (ValueType.Monetary.equals(amountType)) {
+                if (ValueType.Monetary.equals(getAmountType())) {
                     value.amount().setValue(amount);
                     value.percent().setValue(null);
                 } else {
