@@ -23,6 +23,7 @@ import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.IEntity;
+import com.pyx4j.entity.core.criterion.Criterion;
 import com.pyx4j.entity.core.criterion.PropertyCriterion;
 import com.pyx4j.forms.client.ui.CEntityComboBox;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
@@ -44,6 +45,7 @@ import com.propertyvista.domain.communication.CommunicationGroup;
 import com.propertyvista.domain.communication.MessageCategory;
 import com.propertyvista.domain.communication.MessageCategory.CategoryType;
 import com.propertyvista.domain.company.Employee;
+import com.propertyvista.domain.company.EmployeeEnabledCriteria;
 import com.propertyvista.domain.company.Portfolio;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.tenant.lease.Tenant;
@@ -90,12 +92,7 @@ public class MessageEditForm extends CrmEntityForm<MessageDTO> {
                 new TenantSelectorDialog(MessageEditForm.this.getParentView(), true) {
                     @Override
                     public void onClickOk() {
-                        Collection<Tenant> ts = getSelectedItems();
-                        if (ts != null && getSelectedItems().size() > 0) {
-                            for (Tenant selected : ts) {
-                                addRecipient(selected);
-                            }
-                        }
+                        onAdd(getSelectedItems());
                     }
                 }.show();
             }
@@ -108,6 +105,12 @@ public class MessageEditForm extends CrmEntityForm<MessageDTO> {
                     @Override
                     public void onClickOk() {
                         onAdd(getSelectedItems());
+                    }
+
+                    @Override
+                    protected void setFilters(List<Criterion> filters) {
+                        super.setFilters(filters);
+                        addFilter(new EmployeeEnabledCriteria(true));
                     }
                 }.show();
             }
@@ -179,14 +182,6 @@ public class MessageEditForm extends CrmEntityForm<MessageDTO> {
                         if (callback != null && opt != null) {
                             callback.onOptionsReady(opt);
                         }
-                        /*-if (opt.size() > 0) {
-                            if (MessageGroupCategory.Ticket.equals(opt.get(0).category().getValue())) {
-                                setToVisible(false);
-                            } else {
-                                setToVisible(true);
-
-                            }
-                        }-*/
                     }
                 });
             }

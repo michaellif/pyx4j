@@ -14,6 +14,7 @@
 package com.propertyvista.crm.client.ui.crud.communication;
 
 import java.util.Collection;
+import java.util.List;
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
@@ -28,6 +29,7 @@ import com.pyx4j.commons.SimpleMessageFormat;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.IObject;
+import com.pyx4j.entity.core.criterion.Criterion;
 import com.pyx4j.forms.client.ui.CCheckBox;
 import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.CLabel;
@@ -65,6 +67,7 @@ import com.propertyvista.domain.communication.CommunicationGroup;
 import com.propertyvista.domain.communication.DeliveryHandle;
 import com.propertyvista.domain.communication.MessageCategory.CategoryType;
 import com.propertyvista.domain.company.Employee;
+import com.propertyvista.domain.company.EmployeeEnabledCriteria;
 import com.propertyvista.domain.company.Portfolio;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.tenant.lease.Tenant;
@@ -250,12 +253,7 @@ public class MessageForm extends CrmEntityForm<MessageDTO> {
                     new TenantSelectorDialog(MessageForm.this.getParentView(), true) {
                         @Override
                         public void onClickOk() {
-                            Collection<Tenant> ts = getSelectedItems();
-                            if (ts != null && getSelectedItems().size() > 0) {
-                                for (Tenant selected : ts) {
-                                    addRecipient(selected);
-                                }
-                            }
+                            onAdd(getSelectedItems());
                         }
                     }.show();
                 }
@@ -267,6 +265,12 @@ public class MessageForm extends CrmEntityForm<MessageDTO> {
                         @Override
                         public void onClickOk() {
                             onAdd(getSelectedItems());
+                        }
+
+                        @Override
+                        protected void setFilters(List<Criterion> filters) {
+                            super.setFilters(filters);
+                            addFilter(new EmployeeEnabledCriteria(true));
                         }
                     }.show();
                 }

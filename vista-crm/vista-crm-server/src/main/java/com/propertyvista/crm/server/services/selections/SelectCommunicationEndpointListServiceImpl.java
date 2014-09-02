@@ -98,6 +98,7 @@ public class SelectCommunicationEndpointListServiceImpl extends AbstractListServ
             criteria.like(((EntityListCriteria<LeaseParticipant>) criteria).proto().customer().user().name(), namePattern);
         } else if (entityClass.equals(Employee.class)) {
             criteria.like(((EntityListCriteria<Employee>) criteria).proto().user().name(), namePattern);
+            criteria.eq(((EntityListCriteria<Employee>) criteria).proto().user().credential().enabled(), true);
         } else if (entityClass.equals(Building.class)) {
             criteria.like(((EntityListCriteria<Building>) criteria).proto().propertyCode(), namePattern);
         } else if (entityClass.equals(Portfolio.class)) {
