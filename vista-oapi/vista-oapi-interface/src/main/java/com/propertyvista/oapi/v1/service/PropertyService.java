@@ -31,6 +31,8 @@ public interface PropertyService extends OAPIService {
 
     UnitIO getUnitByNumber(String propertyCode, String unitNumber);
 
+    Response createBuilding(BuildingIO buildingIO) throws Exception;
+
     Response updateBuilding(BuildingIO buildingIO) throws Exception;
 
     Response updateUnit(String propertyCode, UnitIO unitIO) throws Exception;

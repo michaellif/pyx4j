@@ -19,6 +19,7 @@ import java.util.List;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
@@ -115,6 +116,15 @@ public class RSPropertyServiceImpl implements PropertyService {
             throw new RuntimeException(i18n.tr("Unit with propertyCode={0} and unitNumber={1} not found", propertyCode, unitNumber));
         }
         return unitIO;
+    }
+
+    @Override
+    @PUT
+    @Path("/createBuilding")
+    @Consumes({ MediaType.APPLICATION_XML })
+    public Response createBuilding(BuildingIO buildingIO) throws Exception {
+        PropertyServiceProcessor.createBuilding(buildingIO);
+        return RSUtils.createSuccessResponse(i18n.tr("Building created successfully"));
     }
 
     @Override

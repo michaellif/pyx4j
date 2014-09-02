@@ -154,6 +154,20 @@ public class UserPreloader extends BaseVistaDevDataPreloader {
             userCount++;
         }
 
+        for (int i = 1; i <= DemoData.UserType.OAPI.getDefaultMax(); i++) {
+            String email = DemoData.UserType.OAPI.getEmail(i);
+
+            Employee emp = CommonsGenerator.createEmployee().duplicate(Employee.class);
+            ServerSideFactory.create(IdAssignmentFacade.class).assignId(emp);
+            emp.title().setValue(CommonsGenerator.randomEmployeeTitle());
+            emp.email().setValue(email);
+
+            emp.user().set(createCrmUser(emp.name().getStringView(), email, email, CrmRolesPreloader.getOapiRole()));
+
+            Persistence.service().persist(emp);
+            userCount++;
+        }
+
         PmcCreator.createVistaSupportUsers();
 
         return "Created " + userCount + " Employee/Users";

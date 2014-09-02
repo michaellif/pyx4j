@@ -24,6 +24,7 @@ import java.net.MalformedURLException;
 import java.net.PasswordAuthentication;
 import java.net.URL;
 
+import com.propertyvista.domain.DemoData;
 import com.propertyvista.oapi.XmlFormatter;
 
 public class LeaseServiceRSClient {
@@ -48,7 +49,7 @@ public class LeaseServiceRSClient {
         Authenticator.setDefault(new Authenticator() {
             @Override
             protected PasswordAuthentication getPasswordAuthentication() {
-                return new PasswordAuthentication("m001@pyx4j.com:vista", "m001@pyx4j.com".toCharArray());
+                return new PasswordAuthentication("o001@pyx4j.com:vista", "o001@pyx4j.com".toCharArray());
             }
         });
 
@@ -127,7 +128,7 @@ public class LeaseServiceRSClient {
         Authenticator.setDefault(new Authenticator() {
             @Override
             protected PasswordAuthentication getPasswordAuthentication() {
-                return new PasswordAuthentication("m001@pyx4j.com:vista", "m001@pyx4j.com".toCharArray());
+                return new PasswordAuthentication("o001@pyx4j.com:vista", "o001@pyx4j.com".toCharArray());
             }
         });
 

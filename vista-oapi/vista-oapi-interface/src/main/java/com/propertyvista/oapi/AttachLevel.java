@@ -17,7 +17,5 @@ public enum AttachLevel {
 
     Detached,
 
-    ShortForm,
-
     Attached;
 }

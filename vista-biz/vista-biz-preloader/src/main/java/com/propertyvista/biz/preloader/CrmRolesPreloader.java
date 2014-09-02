@@ -59,17 +59,22 @@ public class CrmRolesPreloader extends AbstractDataPreloader {
 
     public static CrmRole getDefaultRole() {
         EntityQueryCriteria<CrmRole> criteria = EntityQueryCriteria.create(CrmRole.class);
-        criteria.add(PropertyCriterion.eq(criteria.proto().name(), CrmRolesPreloader.DEFAULT_ACCESS_ALL_ROLE_NAME));
+        criteria.eq(criteria.proto().name(), CrmRolesPreloader.DEFAULT_ACCESS_ALL_ROLE_NAME);
         return Persistence.service().retrieve(criteria);
     }
 
     public static CrmRole getSupportRole() {
         EntityQueryCriteria<CrmRole> criteria = EntityQueryCriteria.create(CrmRole.class);
-        criteria.add(PropertyCriterion.eq(criteria.proto().name(), CrmRolesPreloader.DEFAULT_SUPPORT_ROLE_NAME));
+        criteria.eq(criteria.proto().name(), CrmRolesPreloader.DEFAULT_SUPPORT_ROLE_NAME);
         CrmRole role = Persistence.service().retrieve(criteria);
         assert (role != null);
         return role;
+    }
 
+    public static CrmRole getOapiRole() {
+        EntityQueryCriteria<CrmRole> criteria = EntityQueryCriteria.create(CrmRole.class);
+        criteria.eq(criteria.proto().behaviors(), VistaCrmBehavior.OAPI_Properties);
+        return Persistence.service().retrieve(criteria);
     }
 
     @Override

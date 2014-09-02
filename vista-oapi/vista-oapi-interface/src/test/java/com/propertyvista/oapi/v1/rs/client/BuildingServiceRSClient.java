@@ -49,7 +49,7 @@ public class BuildingServiceRSClient {
         Authenticator.setDefault(new Authenticator() {
             @Override
             protected PasswordAuthentication getPasswordAuthentication() {
-                return new PasswordAuthentication("m001@pyx4j.com:vista", "m001@pyx4j.com".toCharArray());
+                return new PasswordAuthentication("o001@pyx4j.com:vista", "o001@pyx4j.com".toCharArray());
             }
         });
 
@@ -125,7 +125,7 @@ public class BuildingServiceRSClient {
         Authenticator.setDefault(new Authenticator() {
             @Override
             protected PasswordAuthentication getPasswordAuthentication() {
-                return new PasswordAuthentication("m001@pyx4j.com:vista", "m001@pyx4j.com".toCharArray());
+                return new PasswordAuthentication("o001@pyx4j.com:vista", "o001@pyx4j.com".toCharArray());
             }
         });
 

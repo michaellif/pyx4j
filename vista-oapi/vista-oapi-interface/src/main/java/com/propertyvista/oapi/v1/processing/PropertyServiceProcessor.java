@@ -61,6 +61,11 @@ public class PropertyServiceProcessor {
         return BuildingMarshaller.getInstance().marshal(buildings.get(0));
     }
 
+    public static void createBuilding(BuildingIO buildingIO) {
+        // TODO see 
+
+    }
+
     public static void updateBuilding(BuildingIO buildingIO) throws Exception {
         Building building = BuildingMarshaller.getInstance().unmarshal(buildingIO);
 
@@ -112,4 +117,5 @@ public class PropertyServiceProcessor {
 
         Persistence.service().commit();
     }
+
 }
