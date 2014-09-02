@@ -26,6 +26,22 @@ CREATE OR REPLACE VIEW _dba_.visa_trans AS
     AND     ct.fee_amount IS NOT NULL
     AND     ct.sale_response_code = '0000'
     UNION
+    SELECT  'dms' AS pmc, b.property_code, l.lease_id, 
+            c.person_name_first_name||' '||c.person_name_last_name AS name,
+            c.person_email,
+            p.amount, ct.fee_amount,p.id AS payment_id, p.finalize_date
+    FROM    _admin_.card_transaction_record ct
+    JOIN    dms.payment_record p ON (p.id = regexp_replace(ct.payment_transaction_id, '[A-Z]', '')::bigint)
+    JOIN    dms.lease_term_participant ltp ON (ltp.id = p.lease_term_participant)
+    JOIN    dms.lease_participant lp ON (lp.id = ltp.lease_participant)
+    JOIN    dms.customer c ON (c.id = lp.customer)
+    JOIN    dms.lease l ON (l.id = lp.lease) 
+    JOIN    dms.apt_unit a ON (a.id = l.unit)
+    JOIN    dms.building b ON (b.id = a.building)
+    WHERE   ct.card_type = 'Visa'
+    AND     ct.fee_amount IS NOT NULL
+    AND     ct.sale_response_code = '0000'
+    UNION
     SELECT  'cogir' AS pmc, b.property_code, l.lease_id, 
             c.person_name_first_name||' '||c.person_name_last_name AS name,
             c.person_email,
