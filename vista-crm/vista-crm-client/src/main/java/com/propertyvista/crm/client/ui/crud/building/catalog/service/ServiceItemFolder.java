@@ -53,6 +53,12 @@ class ServiceItemFolder extends VistaBoxFolder<ProductItem> {
     public ServiceItemFolder(CrmEntityForm<Service> parent) {
         super(ProductItem.class, parent.isEditable());
         this.parent = parent;
+
+        if (VistaFeatures.instance().yardiIntegration()) {
+            setAddable(false);
+            setRemovable(false);
+            setOrderable(false);
+        }
     }
 
     @Override
@@ -159,12 +165,15 @@ class ServiceItemFolder extends VistaBoxFolder<ProductItem> {
                 get(proto().depositSecurity()).setVisible(parent.getValue().version().depositSecurity().enabled().getValue());
             }
 
-            if (VistaFeatures.instance().yardiIntegration() && !getValue().yardiDepositLMR().isNull()) {
-                get(proto().yardiDepositLMR()).setVisible(true);
+            // Yardi mode visibility/editability correction:
+            if (VistaFeatures.instance().yardiIntegration()) {
+                get(proto().name()).setEditable(false);
+                get(proto().price()).setEditable(false);
 
-                get(proto().depositLMR()).setVisible(false);
-                get(proto().depositMoveIn()).setVisible(false);
-                get(proto().depositSecurity()).setVisible(false);
+                if (!getValue().yardiDepositLMR().isNull()) {
+                    get(proto().yardiDepositLMR()).setVisible(true);
+                    get(proto().depositLMR()).setVisible(false);
+                }
             }
         }
     }

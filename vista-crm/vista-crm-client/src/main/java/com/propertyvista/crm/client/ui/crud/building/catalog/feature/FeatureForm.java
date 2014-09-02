@@ -29,6 +29,7 @@ import com.propertyvista.crm.client.ui.crud.building.catalog.ProductDepositEdito
 import com.propertyvista.domain.financial.ARCode;
 import com.propertyvista.domain.financial.offering.Feature;
 import com.propertyvista.misc.VistaTODO;
+import com.propertyvista.shared.config.VistaFeatures;
 
 public class FeatureForm extends CrmEntityForm<Feature> {
 
@@ -112,6 +113,16 @@ public class FeatureForm extends CrmEntityForm<Feature> {
             get(proto().version().depositSecurity()).setVisible(getValue().version().depositSecurity().enabled().getValue(false));
 
             headerDeposits.setVisible(headerLMR.isVisible() || headerMoveIn.isVisible() || headerSecurity.isVisible());
+        }
+
+        // Yardi mode visibility/editability correction:
+        if (VistaFeatures.instance().yardiIntegration()) {
+            get(proto().version().name()).setEditable(false);
+            get(proto().version().description()).setEditable(false);
+            get(proto().version().price()).setEditable(false);
+
+            get(proto().expiredFrom()).setVisible(false);
+            get(proto().version().availableOnline()).setVisible(false);
         }
     }
 

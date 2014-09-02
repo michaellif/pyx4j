@@ -45,6 +45,7 @@ import com.propertyvista.domain.financial.offering.ProductItem;
 import com.propertyvista.domain.property.asset.BuildingElement;
 import com.propertyvista.domain.property.asset.LockerArea;
 import com.propertyvista.domain.property.asset.Parking;
+import com.propertyvista.shared.config.VistaFeatures;
 
 class FeatureItemFolder extends VistaBoxFolder<ProductItem> {
 
@@ -53,6 +54,12 @@ class FeatureItemFolder extends VistaBoxFolder<ProductItem> {
     public FeatureItemFolder(CrmEntityForm<Feature> parent) {
         super(ProductItem.class, parent.isEditable());
         this.parent = parent;
+
+        if (VistaFeatures.instance().yardiIntegration()) {
+            setAddable(false);
+            setRemovable(false);
+            setOrderable(false);
+        }
     }
 
     @Override

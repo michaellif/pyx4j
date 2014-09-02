@@ -28,6 +28,7 @@ import com.propertyvista.crm.client.ui.crud.building.catalog.ProductDepositEdito
 import com.propertyvista.domain.financial.ARCode;
 import com.propertyvista.domain.financial.offering.Service;
 import com.propertyvista.misc.VistaTODO;
+import com.propertyvista.shared.config.VistaFeatures;
 
 public class ServiceForm extends CrmEntityForm<Service> {
 
@@ -40,7 +41,9 @@ public class ServiceForm extends CrmEntityForm<Service> {
 
         selectTab(addTab(createGeneralTab(), i18n.tr("General")));
         addTab(createItemsTab(), i18n.tr("Items"));
-        addTab(createEligibilityTab(), i18n.tr("Eligibility"));
+        if (!VistaFeatures.instance().yardiIntegration()) {
+            addTab(createEligibilityTab(), i18n.tr("Eligibility"));
+        }
     }
 
     public FormPanel createGeneralTab() {
@@ -122,6 +125,16 @@ public class ServiceForm extends CrmEntityForm<Service> {
             get(proto().version().depositSecurity()).setVisible(getValue().version().depositSecurity().enabled().getValue(false));
 
             headerDeposits.setVisible(headerLMR.isVisible() || headerMoveIn.isVisible() || headerSecurity.isVisible());
+        }
+
+        // Yardi mode visibility/editability correction:
+        if (VistaFeatures.instance().yardiIntegration()) {
+            get(proto().version().name()).setEditable(false);
+            get(proto().version().description()).setEditable(false);
+            get(proto().version().price()).setEditable(false);
+
+            get(proto().expiredFrom()).setVisible(false);
+            get(proto().version().availableOnline()).setVisible(false);
         }
     }
 }
