@@ -608,6 +608,7 @@ public abstract class CComponent<SELF_TYPE extends CComponent<SELF_TYPE, DATA_TY
                 editorValue = getEditorValue();
             } catch (ParseException e) {
                 resetValue();
+                editorValue = getValue();
             }
 
             if (isValueEmpty() || !isValuesEqual(this.value, editorValue)) {
