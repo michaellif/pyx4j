@@ -44,11 +44,11 @@ import com.propertyvista.domain.tenant.lead.Lead.LeaseTerm;
 import com.propertyvista.oapi.v1.Version;
 import com.propertyvista.oapi.v1.model.BuildingIO;
 import com.propertyvista.oapi.v1.model.FloorplanIO;
+import com.propertyvista.oapi.v1.searchcriteria.PropertySearchCriteriaIO;
 import com.propertyvista.oapi.v1.service.marketing.model.AppointmentRequest;
 import com.propertyvista.oapi.v1.service.marketing.model.FloorplanAvailability;
 import com.propertyvista.oapi.v1.service.marketing.model.FloorplanList;
 import com.propertyvista.oapi.v1.service.marketing.model.PropertyList;
-import com.propertyvista.oapi.v1.service.marketing.model.WSPropertySearchCriteria;
 import com.propertyvista.oapi.v1.ws.WSMarketingServiceImpl;
 import com.propertyvista.portal.rpc.portal.prospect.ProspectPortalSiteMap;
 import com.propertyvista.test.mock.models.BuildingDataModel;
@@ -135,7 +135,7 @@ public class WSMarketingServiceTest extends WSOapiTestBase {
 
     @Test
     public void testGetBuildings() {
-        WSPropertySearchCriteria crit = new WSPropertySearchCriteria();
+        PropertySearchCriteriaIO crit = new PropertySearchCriteriaIO();
         crit.province = "Ontario";
         PropertyList propertyList = service.getPropertyList(crit);
         Assert.assertEquals(1, propertyList.items.size());

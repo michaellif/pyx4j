@@ -22,18 +22,18 @@ import com.pyx4j.commons.LogicalDate;
 
 import com.propertyvista.oapi.v1.model.BuildingIO;
 import com.propertyvista.oapi.v1.model.FloorplanIO;
+import com.propertyvista.oapi.v1.searchcriteria.PropertySearchCriteriaIO;
 import com.propertyvista.oapi.v1.service.MarketingService;
 import com.propertyvista.oapi.v1.service.marketing.model.AppointmentRequest;
 import com.propertyvista.oapi.v1.service.marketing.model.FloorplanAvailability;
 import com.propertyvista.oapi.v1.service.marketing.model.FloorplanList;
 import com.propertyvista.oapi.v1.service.marketing.model.PropertyList;
-import com.propertyvista.oapi.v1.service.marketing.model.WSPropertySearchCriteria;
 
 @WebService
 public interface WSMarketingServiceTestInterface extends MarketingService {
 
     @Override
-    public PropertyList getPropertyList(@WebParam(name = "criteria") WSPropertySearchCriteria criteria);
+    public PropertyList getPropertyList(@WebParam(name = "criteria") PropertySearchCriteriaIO criteria);
 
     @Override
     public BuildingIO getPropertyInfo(@WebParam(name = "propertyId") String propertyId);

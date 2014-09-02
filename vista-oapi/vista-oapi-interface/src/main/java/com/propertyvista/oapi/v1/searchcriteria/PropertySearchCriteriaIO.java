@@ -11,7 +11,7 @@
  * @author stanp
  * @version $Id$
  */
-package com.propertyvista.oapi.v1.service.marketing.model;
+package com.propertyvista.oapi.v1.searchcriteria;
 
 import java.util.Set;
 
@@ -27,7 +27,7 @@ import com.propertyvista.dto.PropertySearchCriteria.BedroomChoice;
 import com.propertyvista.dto.PropertySearchCriteria.SearchType;
 
 @XmlAccessorType(XmlAccessType.FIELD)
-public class WSPropertySearchCriteria {
+public class PropertySearchCriteriaIO {
 
     public String city;
 
@@ -47,10 +47,10 @@ public class WSPropertySearchCriteria {
 
     public Set<BuildingAmenity.Type> amenities;
 
-    public WSPropertySearchCriteria() {
+    public PropertySearchCriteriaIO() {
     }
 
-    public WSPropertySearchCriteria( //
+    public PropertySearchCriteriaIO( //
             String city, String province, //
             BedroomChoice minBeds, BedroomChoice maxBeds, //
             BathroomChoice minBaths, BathroomChoice maxBaths, //

@@ -19,11 +19,11 @@ import com.pyx4j.commons.LogicalDate;
 
 import com.propertyvista.oapi.v1.model.BuildingIO;
 import com.propertyvista.oapi.v1.model.FloorplanIO;
+import com.propertyvista.oapi.v1.searchcriteria.PropertySearchCriteriaIO;
 import com.propertyvista.oapi.v1.service.marketing.model.AppointmentRequest;
 import com.propertyvista.oapi.v1.service.marketing.model.FloorplanAvailability;
 import com.propertyvista.oapi.v1.service.marketing.model.FloorplanList;
 import com.propertyvista.oapi.v1.service.marketing.model.PropertyList;
-import com.propertyvista.oapi.v1.service.marketing.model.WSPropertySearchCriteria;
 
 /*
  * TODO
@@ -31,7 +31,7 @@ import com.propertyvista.oapi.v1.service.marketing.model.WSPropertySearchCriteri
  */
 public interface MarketingService extends OAPIService {
 
-    PropertyList getPropertyList(WSPropertySearchCriteria criteria);
+    PropertyList getPropertyList(PropertySearchCriteriaIO criteria);
 
     BuildingIO getPropertyInfo(String propertyId);
 

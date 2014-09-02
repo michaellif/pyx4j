@@ -19,21 +19,27 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.Authenticator;
+import java.net.CookieHandler;
+import java.net.CookieManager;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.PasswordAuthentication;
 import java.net.URL;
 
 import com.propertyvista.oapi.XmlFormatter;
+import com.propertyvista.oapi.v1.Version;
 
 public class BuildingServiceRSClient {
 
-    private static boolean isLocal = false;
+    private static boolean isLocal = true;
 
     public static void main(String[] args) throws MalformedURLException {
 
         String buildingCode = String.valueOf(System.currentTimeMillis());
         buildingCode = buildingCode.substring(buildingCode.length() - 8, buildingCode.length());
+
+        CookieHandler.setDefault(new CookieManager());
+
         createBuilding(buildingCode);
         getBuilding(buildingCode);
     }
@@ -49,9 +55,9 @@ public class BuildingServiceRSClient {
 
         URL url = null;
         if (isLocal) {
-            url = new URL("http://localhost:8888/vista/interfaces/oapi/v1/rs/buildings/updateBuilding");
+            url = new URL("http://localhost:8888/vista/interfaces/oapi/" + Version.VERSION_NAME + "/rs/buildings/updateBuilding");
         } else {
-            url = new URL("http://static-66.birchwoodsoftwaregroup.com/interfaces/oapi/v1/rs/buildings/updateBuilding");
+            url = new URL("http://static-66.birchwoodsoftwaregroup.com/interfaces/oapi/" + Version.VERSION_NAME + "/rs/buildings/updateBuilding");
         }
         HttpURLConnection conn = null;
         OutputStreamWriter out = null;
@@ -125,9 +131,9 @@ public class BuildingServiceRSClient {
 
         URL url = null;
         if (isLocal) {
-            url = new URL("http://localhost:8888/vista/interfaces/oapi/rs/buildings/" + buildingCode);
+            url = new URL("http://localhost:8888/vista/interfaces/oapi/" + Version.VERSION_NAME + "/rs/buildings/" + buildingCode);
         } else {
-            url = new URL("http://static-66.birchwoodsoftwaregroup.com/interfaces/oapi/rs/buildings/" + buildingCode);
+            url = new URL("http://static-66.birchwoodsoftwaregroup.com/interfaces/oapi/" + Version.VERSION_NAME + "/rs/buildings/" + buildingCode);
         }
 
         HttpURLConnection conn = null;

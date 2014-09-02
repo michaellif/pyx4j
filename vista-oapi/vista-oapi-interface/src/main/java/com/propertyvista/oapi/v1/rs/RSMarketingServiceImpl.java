@@ -32,12 +32,12 @@ import com.propertyvista.dto.PropertySearchCriteria.BedroomChoice;
 import com.propertyvista.oapi.v1.model.BuildingIO;
 import com.propertyvista.oapi.v1.model.FloorplanIO;
 import com.propertyvista.oapi.v1.processing.MarketingServiceProcessor;
+import com.propertyvista.oapi.v1.searchcriteria.PropertySearchCriteriaIO;
 import com.propertyvista.oapi.v1.service.MarketingService;
 import com.propertyvista.oapi.v1.service.marketing.model.AppointmentRequest;
 import com.propertyvista.oapi.v1.service.marketing.model.FloorplanAvailability;
 import com.propertyvista.oapi.v1.service.marketing.model.FloorplanList;
 import com.propertyvista.oapi.v1.service.marketing.model.PropertyList;
-import com.propertyvista.oapi.v1.service.marketing.model.WSPropertySearchCriteria;
 
 @Path("marketing")
 public class RSMarketingServiceImpl implements MarketingService {
@@ -52,12 +52,12 @@ public class RSMarketingServiceImpl implements MarketingService {
             @QueryParam("minPrice") Integer minPrice, @QueryParam("maxPrice") Integer maxPrice, //
             @QueryParam("amenities") Set<BuildingAmenity.Type> amenities//
     ) {
-        WSPropertySearchCriteria criteria = new WSPropertySearchCriteria(city, province, minBeds, maxBeds, minBaths, maxBaths, minPrice, maxPrice, amenities);
+        PropertySearchCriteriaIO criteria = new PropertySearchCriteriaIO(city, province, minBeds, maxBeds, minBaths, maxBaths, minPrice, maxPrice, amenities);
         return getPropertyList(criteria);
     }
 
     @Override
-    public PropertyList getPropertyList(WSPropertySearchCriteria criteria) {
+    public PropertyList getPropertyList(PropertySearchCriteriaIO criteria) {
         return new MarketingServiceProcessor().getPropertyList(criteria);
     }
 

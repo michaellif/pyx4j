@@ -42,11 +42,11 @@ import com.propertyvista.oapi.v1.marshaling.FloorplanInfoMarshaller;
 import com.propertyvista.oapi.v1.marshaling.FloorplanMarshaller;
 import com.propertyvista.oapi.v1.model.BuildingIO;
 import com.propertyvista.oapi.v1.model.FloorplanIO;
+import com.propertyvista.oapi.v1.searchcriteria.PropertySearchCriteriaIO;
 import com.propertyvista.oapi.v1.service.marketing.model.AppointmentRequest;
 import com.propertyvista.oapi.v1.service.marketing.model.FloorplanAvailability;
 import com.propertyvista.oapi.v1.service.marketing.model.FloorplanList;
 import com.propertyvista.oapi.v1.service.marketing.model.PropertyList;
-import com.propertyvista.oapi.v1.service.marketing.model.WSPropertySearchCriteria;
 import com.propertyvista.oapi.v1.service.marketing.model.FloorplanList.FloorplanListItem;
 import com.propertyvista.oapi.v1.service.marketing.model.PropertyList.PropertyListItem;
 import com.propertyvista.portal.rpc.portal.prospect.ProspectPortalSiteMap;
@@ -54,7 +54,7 @@ import com.propertyvista.server.common.util.PropertyFinder;
 
 public class MarketingServiceProcessor {
 
-    public PropertyList getPropertyList(WSPropertySearchCriteria criteria) {
+    public PropertyList getPropertyList(PropertySearchCriteriaIO criteria) {
         PropertyList result = new PropertyList();
         for (Building building : PropertyFinder.getPropertyList(criteria.getDbCriteria())) {
             PropertyListItem item = new PropertyListItem();
