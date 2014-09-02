@@ -32,7 +32,6 @@ import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.core.criterion.PropertyCriterion;
 import com.pyx4j.entity.server.Persistence;
-import com.pyx4j.entity.shared.IMoneyPercentAmount.ValueType;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.biz.financial.ar.ARFacade;
@@ -53,6 +52,7 @@ import com.propertyvista.domain.tenant.lease.DepositLifecycle.DepositStatus;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseAdjustment;
 import com.propertyvista.domain.util.DomainUtil;
+import com.propertyvista.shared.config.VistaFeatures;
 
 public class DepositFacadeImpl implements DepositFacade {
     private static final I18n i18n = I18n.get(DepositFacadeImpl.class);
@@ -60,27 +60,25 @@ public class DepositFacadeImpl implements DepositFacade {
     @Override
     public Deposit createDeposit(DepositType depositType, BillableItem billableItem) {
         ProductDeposit productDeposit = getProductDepositByType(depositType, billableItem.item());
-        return (productDeposit == null ? null : makeDeposit(productDeposit, billableItem));
+        return makeDeposit(productDeposit, billableItem);
     }
 
     @Override
     public List<Deposit> createRequiredDeposits(BillableItem billableItem) {
         List<Deposit> deposits = new ArrayList<Deposit>();
+
         for (DepositType type : DepositType.values()) {
-            ProductDeposit productDeposit = getProductDepositByType(type, billableItem.item());
-            if (productDeposit.enabled().getValue(false)) {
-                Deposit deposit = makeDeposit(productDeposit, billableItem);
-                if (deposit != null) {
-                    deposits.add(deposit);
-                }
+            Deposit deposit = createDeposit(type, billableItem);
+            if (deposit != null) {
+                deposits.add(deposit);
             }
         }
+
         return deposits;
     }
 
     @Override
     public DepositLifecycle createDepositLifecycle(Deposit deposit, BillingAccount billingAccount) {
-
         DepositLifecycle depositLifecycle = EntityFactory.create(DepositLifecycle.class);
 
         depositLifecycle.currentAmount().setValue(deposit.amount().getValue());
@@ -98,6 +96,7 @@ public class DepositFacadeImpl implements DepositFacade {
     public Deposit getDeposit(DepositLifecycle depositLifecycle) {
         EntityQueryCriteria<Deposit> criteria = new EntityQueryCriteria<Deposit>(Deposit.class);
         criteria.add(PropertyCriterion.eq(criteria.proto().lifecycle(), depositLifecycle));
+
         List<Deposit> deposits = Persistence.service().query(criteria);
         if (!deposits.isEmpty()) {
             Collections.sort(deposits, new Comparator<Deposit>() {
@@ -108,6 +107,7 @@ public class DepositFacadeImpl implements DepositFacade {
             });
             return deposits.get(0); // get the very first version of the deposit 
         }
+
         throw new IllegalArgumentException();
     }
 
@@ -124,6 +124,7 @@ public class DepositFacadeImpl implements DepositFacade {
         } else {
             leases = Arrays.asList(lease);
         }
+
         List<Deposit> addList;
         for (Lease l : leases) {
             addList = l.currentTerm().version().leaseProducts().serviceItem().deposits();
@@ -143,6 +144,7 @@ public class DepositFacadeImpl implements DepositFacade {
                 }
             }
         }
+
         return deposits;
     }
 
@@ -262,10 +264,6 @@ public class DepositFacadeImpl implements DepositFacade {
     }
 
     private Deposit makeDeposit(ProductDeposit productDeposit, BillableItem billableItem) {
-        if (!productDeposit.enabled().getValue(false)) {
-            return null;
-        }
-
         Deposit deposit = EntityFactory.create(Deposit.class);
 
         deposit.chargeCode().set(productDeposit.chargeCode());
@@ -274,18 +272,13 @@ public class DepositFacadeImpl implements DepositFacade {
         deposit.description().set(productDeposit.description());
         deposit.billableItem().set(billableItem);
 
-        BigDecimal depositValue = getDepositValue(productDeposit, billableItem.item());
-        if (depositValue != null) {
-            switch (productDeposit.valueType().getValue()) {
-            case Monetary:
-                deposit.amount().setValue(depositValue);
-                break;
-            case Percentage:
-                deposit.amount().setValue(DomainUtil.roundMoney(depositValue.multiply(billableItem.agreedPrice().getValue())));
-                break;
-            default:
-                throw new Error("Unsupported ValueType");
-            }
+        BigDecimal depositAmount = getProductItemDepositAmount(productDeposit, billableItem.item());
+        if (depositAmount == null) {
+            depositAmount = getProductDepositAmount(productDeposit, billableItem.agreedPrice().getValue(BigDecimal.ZERO));
+        }
+
+        if (depositAmount != null) {
+            deposit.amount().setValue(depositAmount);
         } else {
             deposit = null; // no deposit for null deposit value!..
         }
@@ -294,43 +287,63 @@ public class DepositFacadeImpl implements DepositFacade {
     }
 
     private ProductDeposit getProductDepositByType(DepositType depositType, ProductItem productItem) {
-        ProductDeposit productDeposit = null;
         switch (depositType) {
         case LastMonthDeposit:
-            productDeposit = productItem.product().depositLMR();
-            break;
+            return productItem.product().depositLMR();
         case MoveInDeposit:
-            productDeposit = productItem.product().depositMoveIn();
-            break;
+            return productItem.product().depositMoveIn();
         case SecurityDeposit:
-            productDeposit = productItem.product().depositSecurity();
-            break;
-        }
-        return productDeposit;
-    }
-
-    private BigDecimal getDepositValue(ProductDeposit productDeposit, ProductItem productItem) {
-        BigDecimal value = null;
-        switch (productDeposit.depositType().getValue()) {
-        case MoveInDeposit:
-            value = productItem.depositMoveIn().getValue();
-            break;
-        case LastMonthDeposit:
-            value = productItem.depositLMR().getValue();
-            break;
-        case SecurityDeposit:
-            value = productItem.depositSecurity().getValue();
-            break;
-        }
-        return (value == null ? getProductDepositValue(productDeposit) : value); // get Product value if Item not set 
-    }
-
-    private BigDecimal getProductDepositValue(ProductDeposit deposit) {
-        if (ValueType.Percentage.equals(deposit.valueType().getValue())) {
-            return deposit.value().percent().getValue();
-        } else {
-            return deposit.value().amount().getValue();
+            return productItem.product().depositSecurity();
+        default:
+            throw new Error("Unsupported DepositType");
         }
     }
 
+    private BigDecimal getProductItemDepositAmount(ProductDeposit productDeposit, ProductItem productItem) {
+        BigDecimal amount = null;
+
+        if (productDeposit.enabled().getValue(false)) {
+            switch (productDeposit.depositType().getValue()) {
+            case MoveInDeposit:
+                amount = productItem.depositMoveIn().getValue();
+                break;
+            case LastMonthDeposit:
+                amount = productItem.depositLMR().getValue();
+                break;
+            case SecurityDeposit:
+                amount = productItem.depositSecurity().getValue();
+                break;
+            default:
+                throw new Error("Unsupported DepositType");
+            }
+        }
+
+        // correct for Yardi mode:
+        if (VistaFeatures.instance().yardiIntegration()) {
+            if (productDeposit.depositType().getValue() == DepositType.LastMonthDeposit && !productItem.yardiDepositLMR().isNull()) {
+                amount = productItem.yardiDepositLMR().getValue();
+            }
+        }
+
+        return amount;
+    }
+
+    private BigDecimal getProductDepositAmount(ProductDeposit productDeposit, BigDecimal agreedPrice) {
+        BigDecimal amount = null;
+
+        if (productDeposit.enabled().getValue(false)) {
+            switch (productDeposit.valueType().getValue()) {
+            case Monetary:
+                amount = productDeposit.value().amount().getValue(BigDecimal.ZERO);
+                break;
+            case Percentage:
+                amount = DomainUtil.roundMoney(productDeposit.value().percent().getValue(BigDecimal.ZERO).multiply(agreedPrice));
+                break;
+            default:
+                throw new Error("Unsupported ValueType");
+            }
+        }
+
+        return amount;
+    }
 }

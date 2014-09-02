@@ -42,7 +42,6 @@ import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.IVersionedEntity.SaveAction;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.server.Persistence;
-import com.pyx4j.entity.shared.IMoneyPercentAmount.ValueType;
 import com.pyx4j.entity.shared.utils.EntityGraph;
 
 import com.propertyvista.biz.ExecutionMonitor;
@@ -444,12 +443,6 @@ public class YardiProductCatalogProcessor {
 
         Service originalService = updated.getB().duplicate();
 
-        // disable deposit till further processing:
-        updated.getB().version().depositLMR().enabled().setValue(false);
-        // set Yardi deposit default value/type:
-        updated.getB().version().depositLMR().valueType().setValue(ValueType.Monetary);
-        updated.getB().version().depositLMR().value().amount().setValue(new BigDecimal("0.00"));
-
         List<ProductItem> serviceItems = new ArrayList<ProductItem>(updated.getB().version().items());
         Collections.sort(serviceItems, new ProductItemByElementComparator());
 
@@ -471,8 +464,6 @@ public class YardiProductCatalogProcessor {
             BigDecimal depositValue = depositInfo.get(unit.info().number().getValue());
             if (depositValue != null && depositValue.compareTo(BigDecimal.ZERO) > 0) {
                 item.yardiDepositLMR().setValue(depositValue);
-                // enable service deposit:
-                updated.getB().version().depositLMR().enabled().setValue(true);
             } else {
                 item.yardiDepositLMR().setValue(null); // no deposit set for the item...
             }
