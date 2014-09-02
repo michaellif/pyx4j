@@ -71,7 +71,7 @@ public class ListHandler<TYPE extends IEntity> extends AbstractCollectionHandler
     protected List<Map<String, Serializable>> ensureValue() {
         List<Map<String, Serializable>> value = getValue();
         if (value == null) {
-            // TODO test  modifiable Objects Properties 
+            // TODO test  modifiable Objects Properties
             value = new Vector<Map<String, Serializable>>();
             setValue(value);
         }
@@ -151,7 +151,7 @@ public class ListHandler<TYPE extends IEntity> extends AbstractCollectionHandler
         if (value != null) {
             return createTypedEntity(value.get(index));
         } else {
-            throw new NullPointerException();
+            throw new IndexOutOfBoundsException("Index: " + index + ", on empty List");
         }
     }
 
@@ -191,7 +191,7 @@ public class ListHandler<TYPE extends IEntity> extends AbstractCollectionHandler
 
     @Override
     public Iterator<TYPE> iterator() {
-        // iterator is also behaves likes Elvis 
+        // iterator is also behaves likes Elvis
         final List<Map<String, Serializable>> value = getValue();
         if (value == null) {
             return new Iterator<TYPE>() {
