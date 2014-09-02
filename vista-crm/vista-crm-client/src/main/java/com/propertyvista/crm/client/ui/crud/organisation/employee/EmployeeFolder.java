@@ -36,6 +36,7 @@ import com.propertyvista.crm.client.ui.components.boxes.EmployeeSelectorDialog;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.domain.company.Employee;
+import com.propertyvista.domain.company.EmployeeEnabledCriteria;
 import com.propertyvista.domain.person.Name;
 
 public class EmployeeFolder extends VistaTableFolder<Employee> {
@@ -46,10 +47,13 @@ public class EmployeeFolder extends VistaTableFolder<Employee> {
 
     private final ParentEmployeeGetter parentEmployeeGetter;
 
-    public EmployeeFolder(CrmEntityForm<?> parent, ParentEmployeeGetter parentEmployeeGetter) {
+    public final boolean askForActiveOnlyEmployees;
+
+    public EmployeeFolder(CrmEntityForm<?> parent, ParentEmployeeGetter parentEmployeeGetter, boolean askForActiveOnlyEmployees) {
         super(Employee.class, parent.isEditable());
         this.parent = parent;
         this.parentEmployeeGetter = parentEmployeeGetter;
+        this.askForActiveOnlyEmployees = askForActiveOnlyEmployees;
     }
 
     @Override
@@ -101,6 +105,10 @@ public class EmployeeFolder extends VistaTableFolder<Employee> {
             // add restriction for papa/mama employee, so that he/she won't be able manage himself :)
             // FIXME: somehow we need to forbid circular references. maybe only server side (if someone wants to be a smart ass)
             addFilter(PropertyCriterion.ne(proto().id(), parentEmployeeGetter.getParentId()));
+
+            if (askForActiveOnlyEmployees) {
+                addFilter(new EmployeeEnabledCriteria(true));
+            }
         }
 
         @Override

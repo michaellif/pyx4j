@@ -74,7 +74,7 @@ public class MessageCategoryForm extends CrmEntityForm<MessageCategory> {
             public Key getParentId() {
                 return null;
             }
-        }));
+        }, true));
 
         get(proto().categoryType()).addValueChangeHandler(new ValueChangeHandler<CategoryType>() {
             @Override

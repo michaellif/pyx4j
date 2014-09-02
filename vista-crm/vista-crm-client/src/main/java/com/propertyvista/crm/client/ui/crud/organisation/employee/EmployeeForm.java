@@ -220,7 +220,7 @@ public class EmployeeForm extends CrmEntityForm<EmployeeDTO> {
             public Key getParentId() {
                 return (getValue() != null ? getValue().getPrimaryKey() : null);
             }
-        }));
+        }, false));
 
         return formPanel;
     }
