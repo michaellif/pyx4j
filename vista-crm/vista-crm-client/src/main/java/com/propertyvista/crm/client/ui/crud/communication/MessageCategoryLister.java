@@ -52,7 +52,12 @@ public class MessageCategoryLister extends AbstractLister<MessageCategory> {
     public static ColumnDescriptor[] createColumnDescriptors() {
         MessageCategory proto = EntityFactory.getEntityPrototype(MessageCategory.class);
 
-        return new ColumnDescriptor[] { new MemberColumnDescriptor.Builder(proto.category()).build(), new MemberColumnDescriptor.Builder(proto.categoryType()).build() };
+        return new ColumnDescriptor[] {//@formatter:off
+                new MemberColumnDescriptor.Builder(proto.category()).columnTitle(i18n.tr("Name")).build(),
+                new MemberColumnDescriptor.Builder(proto.categoryType()).columnTitle(i18n.tr("Type")).build(),
+                new MemberColumnDescriptor.Builder(proto.roles(),false).sortable(false).build(),
+                new MemberColumnDescriptor.Builder(proto.dispatchers(),false).sortable(false).build()};
+      //@formatter:on
     }
 
     @Override

@@ -26,6 +26,7 @@ import com.pyx4j.forms.client.ui.CComboBox;
 import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.forms.client.ui.panels.FormPanel;
+import com.pyx4j.forms.client.validators.BasicValidationError;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.prime.form.IForm;
 
@@ -58,15 +59,14 @@ public class MessageCategoryForm extends CrmEntityForm<MessageCategory> {
 
     private IsWidget createInfoTab() {
         FormPanel formPanel = new FormPanel(this);
-        formPanel.append(Location.Left, proto().category()).decorate();
+        formPanel.append(Location.Left, proto().category()).decorate().customLabel(i18n.tr("Name"));
         if (ApplicationMode.isDevelopment() && VistaTODO.ADDITIONAL_COMMUNICATION_FEATURES) {
             CComboBox<CategoryType> categoryComp = new CComboBox<CategoryType>();
-            categoryComp.setOptions(EnumSet.of(CategoryType.Message, CategoryType.IVR, CategoryType.Notification,
-                    CategoryType.SMS));
+            categoryComp.setOptions(EnumSet.of(CategoryType.Message, CategoryType.IVR, CategoryType.Notification, CategoryType.SMS));
 
-            formPanel.append(Location.Left, proto().categoryType(), categoryComp).decorate();
+            formPanel.append(Location.Left, proto().categoryType(), categoryComp).decorate().customLabel(i18n.tr("Type"));
         } else {
-            formPanel.append(Location.Left, proto().categoryType(), new CLabel<CategoryType>()).decorate();
+            formPanel.append(Location.Left, proto().categoryType(), new CLabel<CategoryType>()).decorate().customLabel(i18n.tr("Type"));
         }
         dispatcherHeader = formPanel.h1(i18n.tr("Message Category Dispatchers"));
         formPanel.append(Location.Left, proto().dispatchers(), dispatcherFolder = new EmployeeFolder(this, new ParentEmployeeGetter() {
@@ -98,6 +98,24 @@ public class MessageCategoryForm extends CrmEntityForm<MessageCategory> {
         }
 
         setDispatchersVisability(se.categoryType().getValue());
+    }
+
+    @Override
+    public boolean isValid() {
+        if (getValue() != null && !getValue().isNull() && !getValue().isEmpty() && !getValue().isPrototype()) {
+            if (CategoryType.Ticket.equals(getValue().categoryType().getValue())) {
+                if ((getValue().dispatchers() == null || getValue().dispatchers().isNull() || getValue().dispatchers().isEmpty() || getValue().dispatchers()
+                        .size() < 1)
+                        && (getValue().roles() == null || getValue().roles().isNull() || getValue().roles().isEmpty() || getValue().roles().size() < 1)) {
+                    validationErrors.add(new BasicValidationError(this, i18n.tr("Please specify at least one dispatcher or role.")));
+                }
+            } else {
+                if (getValue().roles() == null || getValue().roles().isNull() || getValue().roles().isEmpty() || getValue().roles().size() < 1) {
+                    validationErrors.add(new BasicValidationError(this, i18n.tr("Please specify at least one role.")));
+                }
+            }
+        }
+        return super.isValid();
     }
 
     private void setDispatchersVisability(CategoryType value) {
