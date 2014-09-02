@@ -161,7 +161,7 @@ public class VistaWebApplicationInitializer implements ServletContainerInitializ
         {
             {
                 FilterRegistration.Dynamic fc = ctx.addFilter("OAPIFilter", OAPIFilter.class);
-                fc.addMappingForUrlPatterns(null, true, "/interfaces/oapi/*");
+                fc.addMappingForUrlPatterns(null, true, "/interfaces/oapi/v1/*");
             }
 
             if (!VistaTODO.removedForProductionOAPI) {
@@ -172,12 +172,12 @@ public class VistaWebApplicationInitializer implements ServletContainerInitializ
                 }
                 {
                     ServletRegistration.Dynamic sc = ctx.addServlet("OpenApiWsService", WSServlet.class);
-                    sc.addMapping("/interfaces/oapi/ws/*");
+                    sc.addMapping("/interfaces/oapi/v1/ws/*");
                 }
 
                 {
                     ServletRegistration.Dynamic sc = ctx.addServlet("OpenApiRsService", ServletContainer.class);
-                    sc.addMapping("/interfaces/oapi/rs/*");
+                    sc.addMapping("/interfaces/oapi/v1/rs/*");
                     sc.setInitParameter("javax.ws.rs.Application", OapiRsApplication.class.getName());
                 }
             }
