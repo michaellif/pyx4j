@@ -41,7 +41,7 @@
                         </goals>
                         <configuration>
                             <staleFile>${project.build.directory}/jaxws/stale/.wsimportStaleFlag</staleFile>
-                            <wsdlDirectory>${basedir}/src/main/wsdl</wsdlDirectory>
+                            <wsdlDirectory>${basedir}/src/main/resources/com/cfcprograms/api/wsdl</wsdlDirectory>
                             <wsdlFiles>
                                 <wsdlFile>cfc_api.asmx.wsdl</wsdlFile>
                             </wsdlFiles>
