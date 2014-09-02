@@ -18,6 +18,7 @@ import java.util.List;
 
 import com.pyx4j.entity.core.EntityFactory;
 
+import com.propertyvista.domain.security.PasswordIdentity;
 import com.propertyvista.domain.settings.PmcYardiCredential;
 
 public class DevYardiCredentials {
@@ -119,6 +120,7 @@ public class DevYardiCredentials {
             cr.serviceURLBase().setValue(yc.serviceURLBase);
             cr.username().setValue(yc.username);
             cr.password().number().setValue(yc.password);
+            cr.password().obfuscatedNumber().setValue(PasswordIdentity.obfuscatedValue);
             cr.serverName().setValue(yc.serverName);
             cr.database().setValue(yc.database);
             cr.platform().setValue(PmcYardiCredential.Platform.SQL);

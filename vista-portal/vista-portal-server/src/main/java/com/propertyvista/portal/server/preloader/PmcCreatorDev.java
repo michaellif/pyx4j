@@ -30,6 +30,7 @@ import com.propertyvista.domain.pmc.PmcEquifaxStatus;
 import com.propertyvista.domain.pmc.info.PmcBusinessInfoDocument;
 import com.propertyvista.domain.pmc.info.PmcBusinessInfoDocument.Type;
 import com.propertyvista.domain.pmc.info.PmcDocumentFile;
+import com.propertyvista.domain.security.PasswordIdentity;
 import com.propertyvista.server.config.DevYardiCredentials;
 import com.propertyvista.shared.config.VistaDemo;
 
@@ -56,7 +57,9 @@ public class PmcCreatorDev {
         pmc.equifaxInfo().status().setValue(PmcEquifaxStatus.Active);
         pmc.equifaxInfo().reportType().setValue(CreditCheckReportType.FullCreditReport);
         pmc.equifaxInfo().memberNumber().number().setValue("999RZ00012");
+        pmc.equifaxInfo().memberNumber().obfuscatedNumber().setValue(PasswordIdentity.obfuscatedValue);
         pmc.equifaxInfo().securityCode().number().setValue("77");
+        pmc.equifaxInfo().securityCode().obfuscatedNumber().setValue(PasswordIdentity.obfuscatedValue);
 
         if (VistaDemo.isDemo()) {
             pmc.equifaxFee().recommendationReportPerApplicantFee().setValue(BigDecimal.ZERO);
