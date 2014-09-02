@@ -21,6 +21,7 @@ import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.criterion.EntityListCriteria;
 import com.pyx4j.entity.core.criterion.PropertyCriterion;
+import com.pyx4j.entity.core.criterion.PropertyCriterion.Restriction;
 import com.pyx4j.entity.security.DataModelPermission;
 import com.pyx4j.entity.server.AbstractCrudServiceDtoImpl;
 import com.pyx4j.entity.server.Persistence;
@@ -89,12 +90,25 @@ public class EmployeeCrudServiceImpl extends AbstractCrudServiceDtoImpl<Employee
             PropertyCriterion roleCriteria = toCriteria.getCriterion(toCriteria.proto().privileges().roles());
             if (roleCriteria != null) {
                 toCriteria.getFilters().remove(roleCriteria);
-                boCriteria.eq(boCriteria.proto().user().credential().roles(), roleCriteria.getValue());
+                if (roleCriteria.getRestriction() == Restriction.EQUAL) {
+                    boCriteria.eq(boCriteria.proto().user().credential().roles(), roleCriteria.getValue());
+                } else if (roleCriteria.getRestriction() == Restriction.NOT_EQUAL) {
+                    boCriteria.ne(boCriteria.proto().user().credential().roles(), roleCriteria.getValue());
+                } else {
+                    throw new IllegalArgumentException();
+                }
             }
             PropertyCriterion behaviorsCriteria = toCriteria.getCriterion(toCriteria.proto().privileges().behaviors());
             if (behaviorsCriteria != null) {
                 toCriteria.getFilters().remove(behaviorsCriteria);
-                boCriteria.eq(boCriteria.proto().user().credential().roles().$().behaviors(), behaviorsCriteria.getValue());
+                if (behaviorsCriteria.getRestriction() == Restriction.EQUAL) {
+                    boCriteria.eq(boCriteria.proto().user().credential().roles().$().behaviors(), behaviorsCriteria.getValue());
+                } else if (behaviorsCriteria.getRestriction() == Restriction.NOT_EQUAL) {
+                    boCriteria.notExists(boCriteria.proto().user().credential().roles(),
+                            PropertyCriterion.eq(boCriteria.proto().user().credential().roles().$().behaviors(), behaviorsCriteria.getValue()));
+                } else {
+                    throw new IllegalArgumentException();
+                }
             }
         }
         super.enhanceListCriteria(boCriteria, toCriteria);

@@ -21,14 +21,6 @@ import com.pyx4j.security.shared.Behavior;
 @I18n
 public enum VistaCrmBehavior implements Behavior {
 
-    OAPI_Properties,
-
-    OAPI_ILS,
-
-    // --
-
-    PropertyVistaSupport,
-
     BuildingBasic,
 
     BuildingFinancial,
@@ -121,6 +113,16 @@ public enum VistaCrmBehavior implements Behavior {
     // --
 
     AdminGeneral, AdminFinancial, AdminContent,
+
+    // --
+
+    OAPI_Properties,
+
+    OAPI_ILS,
+
+    // --
+
+    PropertyVistaSupport,
 
     ;
 
