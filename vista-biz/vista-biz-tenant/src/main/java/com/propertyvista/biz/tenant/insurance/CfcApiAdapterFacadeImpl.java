@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011-2012 All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -16,7 +16,6 @@ package com.propertyvista.biz.tenant.insurance;
 import java.io.File;
 import java.math.BigDecimal;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
@@ -44,6 +43,7 @@ import com.pyx4j.config.server.Credentials;
 import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.essentials.j2se.CredentialsFileStorage;
+import com.pyx4j.gwt.server.IOUtils;
 
 import com.propertyvista.biz.tenant.insurance.errors.CfcApiException;
 import com.propertyvista.biz.tenant.insurance.errors.TooManyPreviousClaimsException;
@@ -81,37 +81,53 @@ public class CfcApiAdapterFacadeImpl implements CfcApiAdapterFacade {
 
     private final TenantSureConfiguration configuration;
 
+    private static URL localWsdlLocation;
+
+    private static final String CFC_API_LOCAL_WSDL_FILENAME = "wsdl/cfc_api.asmx.wsdl";
+
     public CfcApiAdapterFacadeImpl(TenantSureConfiguration configuration) {
         this.configuration = configuration;
     }
 
-    // TODO this monster needs refactoring: looks like having an abstract factory and a a multiple factories with every permutation of settings would do the job.    
+    private static synchronized URL getWsdlURL() {
+        if (localWsdlLocation == null) {
+            try {
+                localWsdlLocation = IOUtils.getResource(CFC_API_LOCAL_WSDL_FILENAME, com.cfcprograms.api.CFCAPI.class);
+            } catch (Exception e) {
+                throw new Error(String.format("Can not initialize the default wsdl '%s' from local resources", CFC_API_LOCAL_WSDL_FILENAME), e);
+            }
+        }
+
+        return localWsdlLocation;
+    }
+
+    // TODO this monster needs refactoring: looks like having an abstract factory and a a multiple factories with every permutation of settings would do the job.
     private CFCAPISoap getApi() {
         // Initialize proxy configuration
         SystemConfig.instance();
 
         CFCAPI api = null;
-        try {
-            String url = configuration.cfcApiEndpointUrl();
-            api = new CFCAPI(new URL(url), new QName("http://api.cfcprograms.com/", "CFC_API"));
-            api.setHandlerResolver(new HandlerResolver() {
-                @SuppressWarnings("rawtypes")
-                @Override
-                public List<Handler> getHandlerChain(PortInfo portInfo) {
-                    List<Handler> handlerChain = new ArrayList<Handler>();
-                    handlerChain.add(new CfcApiLogHandler());
-                    return handlerChain;
-                }
-            });
-        } catch (MalformedURLException e) {
-            throw new Error(e);
-        }
+        api = new CFCAPI(getWsdlURL(), new QName("http://api.cfcprograms.com/", "CFC_API"));
+        api.setHandlerResolver(new HandlerResolver() {
+            @SuppressWarnings("rawtypes")
+            @Override
+            public List<Handler> getHandlerChain(PortInfo portInfo) {
+                List<Handler> handlerChain = new ArrayList<Handler>();
+                handlerChain.add(new CfcApiLogHandler());
+                return handlerChain;
+            }
+        });
+
         CFCAPISoap soap = api.getCFCAPISoap();
         Map<String, Object> requestContext = ((BindingProvider) soap).getRequestContext();
 
         // If we are using JAXWS reference implementation at runtime
         requestContext.put(JAXWSProperties.CONNECT_TIMEOUT, 30 * Consts.SEC2MILLISECONDS);
         requestContext.put(JAXWSProperties.REQUEST_TIMEOUT, 80 * Consts.SEC2MILLISECONDS);
+
+        // Change WS Endpoint at runtime
+        requestContext.put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY, configuration.cfcApiEndpointUrl());
+
         // Just in case if we will be using JDK bundled JAXWS
         requestContext.put(JAXWSProperties_CONNECT_TIMEOUT, 30 * Consts.SEC2MILLISECONDS);
         requestContext.put(JAXWSProperties_REQUEST_TIMEOUT, 80 * Consts.SEC2MILLISECONDS);
@@ -249,7 +265,7 @@ public class CfcApiAdapterFacadeImpl implements CfcApiAdapterFacade {
 
     /**
      * Opens a new session to CFC
-     * 
+     *
      * @return session id, or throw an <code>Error<code>
      * @throws CfcApiException
      */
