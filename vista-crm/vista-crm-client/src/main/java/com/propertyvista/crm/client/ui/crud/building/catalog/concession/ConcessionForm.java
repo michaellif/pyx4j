@@ -13,9 +13,6 @@
  */
 package com.propertyvista.crm.client.ui.crud.building.catalog.concession;
 
-import com.google.gwt.event.logical.shared.ValueChangeEvent;
-import com.google.gwt.event.logical.shared.ValueChangeHandler;
-
 import com.pyx4j.entity.shared.IMoneyPercentAmount.ValueType;
 import com.pyx4j.forms.client.ui.CDateLabel;
 import com.pyx4j.forms.client.ui.CMoneyPercentCombo;
@@ -38,7 +35,14 @@ public class ConcessionForm extends CrmEntityForm<Concession> {
         FormPanel formPanel = new FormPanel(this);
 
         formPanel.append(Location.Left, proto().version().type()).decorate().componentWidth(120);
-        final CMoneyPercentCombo moneyPct = new CMoneyPercentCombo();
+        final CMoneyPercentCombo moneyPct = new CMoneyPercentCombo() {
+
+            @Override
+            public ValueType getAmountType() {
+                Concession value = ConcessionForm.this.getValue();
+                return Type.percentageOff.equals(value.version().type().getValue()) ? ValueType.Percentage : ValueType.Monetary;
+            }
+        };
         formPanel.append(Location.Left, proto().version().value(), moneyPct).decorate().componentWidth(100);
         formPanel.append(Location.Left, proto().version().term()).decorate().componentWidth(120);
         formPanel.append(Location.Left, proto().version().condition()).decorate().componentWidth(100);
@@ -49,14 +53,6 @@ public class ConcessionForm extends CrmEntityForm<Concession> {
         formPanel.append(Location.Right, proto().updated(), new CDateLabel()).decorate().componentWidth(90);
 
         formPanel.append(Location.Dual, proto().version().description()).decorate();
-
-        get(proto().version().type()).addValueChangeHandler(new ValueChangeHandler<Type>() {
-            @Override
-            public void onValueChange(ValueChangeEvent<Type> event) {
-                moneyPct.setAmountType(Type.percentageOff.equals(event.getValue()) ? ValueType.Percentage : ValueType.Monetary);
-                moneyPct.setEnabled(!Type.free.equals(event.getValue()));
-            }
-        });
 
         selectTab(addTab(formPanel, i18n.tr("Concession")));
         setTabBarVisible(false);

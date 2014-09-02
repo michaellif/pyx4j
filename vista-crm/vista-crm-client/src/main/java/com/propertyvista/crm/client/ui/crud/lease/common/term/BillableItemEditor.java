@@ -16,8 +16,6 @@ package com.propertyvista.crm.client.ui.crud.lease.common.term;
 import java.util.Arrays;
 import java.util.List;
 
-import com.google.gwt.event.logical.shared.ValueChangeEvent;
-import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.SimplePanel;
 
@@ -358,22 +356,16 @@ public class BillableItemEditor extends CForm<BillableItem> {
             @Override
             protected CField<?, ?> createCell(FolderColumnDescriptor column) {
                 if (column.getObject() == proto().value()) {
-                    return inject(column.getObject(), new CMoneyPercentCombo());
+                    return inject(column.getObject(), new CMoneyPercentCombo() {
+
+                        @Override
+                        public ValueType getAmountType() {
+                            return BillableItemAdjustmentEditor.this.getValue().type().getValue();
+                        }
+                    });
                 } else {
                     return super.createCell(column);
                 }
-            }
-
-            @Override
-            protected IsWidget createContent() {
-                IsWidget content = super.createContent();
-                get(proto().type()).addValueChangeHandler(new ValueChangeHandler<ValueType>() {
-                    @Override
-                    public void onValueChange(ValueChangeEvent<ValueType> event) {
-                        ((CMoneyPercentCombo) get(proto().value())).setAmountType(event.getValue());
-                    }
-                });
-                return content;
             }
 
             @Override

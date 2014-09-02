@@ -94,25 +94,32 @@ public class LeaseBillingPolicyForm extends PolicyDTOTabPanelBasedForm<LeaseBill
         FormPanel formPanel = new FormPanel(this);
 
         formPanel.append(Location.Left, proto().lateFee().baseFeeType()).decorate().componentWidth(120);
-        final CMoneyPercentCombo baseFee = new CMoneyPercentCombo();
+        final CMoneyPercentCombo baseFee = new CMoneyPercentCombo() {
+
+            @Override
+            public ValueType getAmountType() {
+                LeaseBillingPolicyDTO value = LeaseBillingPolicyForm.this.getValue();
+                return BaseFeeType.FlatAmount.equals(proto().lateFee().baseFeeType().getValue()) ? ValueType.Monetary : ValueType.Percentage;
+            }
+        };
         formPanel.append(Location.Left, proto().lateFee().baseFee(), baseFee).decorate().componentWidth(120);
 
         formPanel.append(Location.Left, proto().lateFee().maxTotalFeeType()).decorate().componentWidth(120);
-        final CMoneyPercentCombo maxTotalFee = new CMoneyPercentCombo();
+        final CMoneyPercentCombo maxTotalFee = new CMoneyPercentCombo() {
+
+            @Override
+            public ValueType getAmountType() {
+                LeaseBillingPolicyDTO value = LeaseBillingPolicyForm.this.getValue();
+                return MaxTotalFeeType.PercentMonthlyRent.equals(value.lateFee().maxTotalFeeType().getValue()) ? ValueType.Percentage : ValueType.Monetary;
+            }
+        };
         formPanel.append(Location.Left, proto().lateFee().maxTotalFee(), maxTotalFee).decorate().componentWidth(120);
 
         // add fee type control dependencies
-        get(proto().lateFee().baseFeeType()).addValueChangeHandler(new ValueChangeHandler<BaseFeeType>() {
-            @Override
-            public void onValueChange(ValueChangeEvent<BaseFeeType> event) {
-                baseFee.setAmountType(BaseFeeType.FlatAmount.equals(event.getValue()) ? ValueType.Monetary : ValueType.Percentage);
-            }
-        });
         get(proto().lateFee().maxTotalFeeType()).addPropertyChangeHandler(new PropertyChangeHandler() {
             @Override
             public void onPropertyChange(PropertyChangeEvent event) {
                 MaxTotalFeeType type = get(proto().lateFee().maxTotalFeeType()).getValue();
-                maxTotalFee.setAmountType(MaxTotalFeeType.PercentMonthlyRent.equals(type) ? ValueType.Percentage : ValueType.Monetary);
                 maxTotalFee.setVisible(!MaxTotalFeeType.Unlimited.equals(type));
                 if (MaxTotalFeeType.Unlimited.equals(type) && maxTotalFee.getValue() != null) {
                     maxTotalFee.getValue().amount().setValue(null);

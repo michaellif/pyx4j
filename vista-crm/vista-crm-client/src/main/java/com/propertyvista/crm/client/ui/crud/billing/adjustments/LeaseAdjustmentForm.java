@@ -74,7 +74,13 @@ public class LeaseAdjustmentForm extends CrmEntityForm<LeaseAdjustment> {
         formPanel.append(Location.Left, proto().overwriteDefaultTax()).decorate().componentWidth(80);
         get(proto().overwriteDefaultTax()).setVisible(isEditable());
         formPanel.append(Location.Left, proto().taxType()).decorate().componentWidth(100);
-        final CMoneyPercentCombo moneyPercent = new CMoneyPercentCombo();
+        final CMoneyPercentCombo moneyPercent = new CMoneyPercentCombo() {
+
+            @Override
+            public ValueType getAmountType() {
+                return LeaseAdjustmentForm.this.getValue().taxType().getValue();
+            }
+        };
         formPanel.append(Location.Left, proto().tax(), moneyPercent).decorate().componentWidth(100);
         if (!isEditable()) {
             formPanel.append(Location.Left, proto()._total()).decorate().componentWidth(120);
@@ -87,12 +93,6 @@ public class LeaseAdjustmentForm extends CrmEntityForm<LeaseAdjustment> {
         formPanel.append(Location.Dual, proto().description()).decorate();
 
         // tweak:
-        get(proto().taxType()).addValueChangeHandler(new ValueChangeHandler<ValueType>() {
-            @Override
-            public void onValueChange(ValueChangeEvent<ValueType> event) {
-                moneyPercent.setAmountType(event.getValue());
-            }
-        });
         get(proto().executionType()).addValueChangeHandler(new ValueChangeHandler<ExecutionType>() {
             @Override
             public void onValueChange(ValueChangeEvent<ExecutionType> event) {
