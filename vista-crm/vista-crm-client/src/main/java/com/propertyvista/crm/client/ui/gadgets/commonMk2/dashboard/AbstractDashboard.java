@@ -172,7 +172,7 @@ public abstract class AbstractDashboard extends ResizeComposite {
     protected abstract void onDashboardMetadataChanged();
 
     protected final void onPrintRequested() {
-        Print.preview(DashboardPrintHelper.makePrintLayout(DOM.clone(board.asWidget().getElement(), true)));
+        Print.preview(DashboardPrintHelper.makePrintLayout(DOM.clone(scrollPanel.getWidget().getElement(), true)));
     }
 
     private void setLayoutManager(ILayoutManager layoutManager) {
