@@ -144,7 +144,7 @@ class PaymentHealthMonitor {
             int count = Persistence.service().count(criteria);
             if (count > 0) {
                 PaymentRecord instance = Persistence.service().retrieve(criteria);
-                ServerSideFactory.create(OperationsAlertFacade.class).record(instance, "EFT Payment Records {0} do not have Aggregated Transfer", count);
+                ServerSideFactory.create(OperationsAlertFacade.class).record(instance, " {0} EFT Payment Records do not have Aggregated Transfer", count);
                 executionMonitor.addFailedEvent("EftAggregatedTransfer", instance.amount().getValue());
             }
         }
@@ -157,7 +157,7 @@ class PaymentHealthMonitor {
             int count = Persistence.service().count(criteria);
             if (count > 0) {
                 PaymentRecord instance = Persistence.service().retrieve(criteria);
-                ServerSideFactory.create(OperationsAlertFacade.class).record(instance, "There are Payment Records {0} Queued for a week", count);
+                ServerSideFactory.create(OperationsAlertFacade.class).record(instance, "There are {0} Payment Records Queued for a week", count);
                 executionMonitor.addFailedEvent("QueuedPaymentRecord", instance.amount().getValue());
             }
         }
@@ -178,7 +178,7 @@ class PaymentHealthMonitor {
             int count = Persistence.service().count(criteria);
             if (count > 0) {
                 PaymentRecord instance = Persistence.service().retrieve(criteria);
-                ServerSideFactory.create(OperationsAlertFacade.class).record(instance, "Cleared Card Payment Records {0} do not have Aggregated Transfer",
+                ServerSideFactory.create(OperationsAlertFacade.class).record(instance, "{0} Cleared Card Payment Records do not have Aggregated Transfer",
                         count);
                 executionMonitor.addFailedEvent("CardsAggregatedTransfer", instance.amount().getValue());
             }
@@ -195,7 +195,7 @@ class PaymentHealthMonitor {
                     PaymentRecord paymentRecord = iterator.next();
                     CardTransactionRecord cardTransactionRecord = getCardTransactionRecord(pmc, paymentRecord);
                     if (cardTransactionRecord == null) {
-                        ServerSideFactory.create(OperationsAlertFacade.class).record(paymentRecord, "Card Payment Record {0} do not have TransactionRecord",
+                        ServerSideFactory.create(OperationsAlertFacade.class).record(paymentRecord, "{0} Card Payment Record do not have TransactionRecord",
                                 paymentRecord.id());
                         executionMonitor.addFailedEvent("CardTransaction", paymentRecord.amount().getValue());
                     } else {
@@ -209,7 +209,7 @@ class PaymentHealthMonitor {
                         }
                         if (statusMismatch) {
                             ServerSideFactory.create(OperationsAlertFacade.class).record(paymentRecord,
-                                    "Card Payment Record {0} and TransactionRecord have status mismatch", paymentRecord.id());
+                                    "{0} Card Payment Record and TransactionRecord have status mismatch", paymentRecord.id());
                             executionMonitor.addFailedEvent("CardTransaction", paymentRecord.amount().getValue());
                         }
                     }
