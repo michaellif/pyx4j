@@ -8,6 +8,32 @@
 ***     ======================================================================================================================
 **/
 
+/**
+*** --------------------------------------------------------------------
+***
+***     Create table _expiring_.customer_credit_check_report_no_backup
+***     This table should be present on production anyways
+***
+*** --------------------------------------------------------------------
+**/
+
+BEGIN TRANSACTION;
+
+    CREATE TABLE IF NOT EXISTS _expiring_.customer_credit_check_report_no_backup
+    (
+        id                      BIGINT                  NOT NULL,
+        pmc                     BIGINT                  NOT NULL,
+        public_key              BIGINT                  NOT NULL,
+        created                 TIMESTAMP               NOT NULL,
+        customer                BIGINT                  NOT NULL,
+        data                    BYTEA,
+            CONSTRAINT customer_credit_check_report_no_backup_pk PRIMARY KEY(id)
+    );
+    
+    ALTER TABLE _expiring_.customer_credit_check_report_no_backup OWNER TO vista;
+    
+COMMIT;
+
 -- public schema migration
 \i migrate_public_schema.sql;
 
@@ -20,6 +46,9 @@
 
 -- Import new roles and behaviours
 \i insert_tmp_roles.sql
+
+-- Communication msg categories
+\i insert_tmp_categories.sql
 
 -- Split simple address functioon
 \i split_simple_address.sql
@@ -337,6 +366,7 @@ DROP FUNCTION _dba_.split_simple_address(text,text,text,text);
 DROP FUNCTION _dba_.update_phone_numbers(text);
 DROP FUNCTION _dba_.migrate_pmc_114(text);
 DROP TABLE _dba_.tmp_roles;
+DROP TABLE _dba_.tmp_categories;
 
 /**
 *** ===================================================================

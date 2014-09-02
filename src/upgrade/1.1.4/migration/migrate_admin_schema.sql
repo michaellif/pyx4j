@@ -49,6 +49,7 @@ SET search_path = '_admin_';
         DROP INDEX business_information_business_address_country_name_idx;
         DROP INDEX business_information_business_address_province_code_idx;
         DROP INDEX business_information_business_address_province_name_idx;
+        DROP INDEX dev_card_service_simulation_merchant_account_terminal_id_idx;
         DROP INDEX direct_debit_record_pmc_idx;
         DROP INDEX personal_information_personal_address_country_name_idx;
         DROP INDEX personal_information_personal_address_province_code_idx;
@@ -170,6 +171,23 @@ SET search_path = '_admin_';
         
         ALTER TABLE customer_credit_check_transaction ADD COLUMN tax NUMERIC(18,2);
         
+        
+        -- dev_card_service_simulation_merchant_account
+        
+        ALTER TABLE dev_card_service_simulation_merchant_account ADD COLUMN company BIGINT;
+        
+        -- dev_card_service_simulation_company
+        
+        CREATE TABLE dev_card_service_simulation_company
+        (
+            id                      BIGINT              NOT NULL,
+            company_id              VARCHAR(500),
+                CONSTRAINT dev_card_service_simulation_company_pk PRIMARY KEY(id)
+        );
+        
+        ALTER TABLE dev_card_service_simulation_company OWNER TO vista;
+        
+        
         -- dev_card_service_simulation_reconciliation_record
         
         CREATE TABLE dev_card_service_simulation_reconciliation_record
@@ -271,6 +289,11 @@ SET search_path = '_admin_';
         
         -- scheduler_trigger
         
+        INSERT INTO scheduler_trigger(id,trigger_type,name,population_type,
+        schedule_suspended,created) VALUES (nextval('public.scheduler_trigger_seq'),
+        'vistaHeathMonitor','Vista Heath Monitor','allPmc',TRUE,
+        DATE_TRUNC('second',current_timestamp)::timestamp);
+        
         UPDATE  scheduler_trigger
         SET     schedule_suspended = FALSE
         WHERE   schedule_suspended IS NULL;
@@ -339,6 +362,8 @@ SET search_path = '_admin_';
             REFERENCES cards_reconciliation_record(id)  DEFERRABLE INITIALLY DEFERRED;
         ALTER TABLE cards_reconciliation_record$chargebacks ADD CONSTRAINT cards_reconciliation_record$chargebacks_owner_fk FOREIGN KEY(owner) 
             REFERENCES cards_reconciliation_record(id)  DEFERRABLE INITIALLY DEFERRED;
+        ALTER TABLE dev_card_service_simulation_merchant_account ADD CONSTRAINT dev_card_service_simulation_merchant_account_company_fk FOREIGN KEY(company) 
+            REFERENCES dev_card_service_simulation_company(id)  DEFERRABLE INITIALLY DEFERRED;
         ALTER TABLE dev_card_service_simulation_reconciliation_record ADD CONSTRAINT dev_card_service_simulation_reconciliation_record_merchant_fk FOREIGN KEY(merchant) 
             REFERENCES dev_card_service_simulation_merchant_account(id)  DEFERRABLE INITIALLY DEFERRED;
 
@@ -438,6 +463,8 @@ SET search_path = '_admin_';
         CREATE INDEX cards_reconciliation_record$chargebacks_owner_idx ON cards_reconciliation_record$chargebacks USING btree (owner);
         CREATE INDEX cards_reconciliation_record_merchant_account_idx ON cards_reconciliation_record USING btree (merchant_account);
         CREATE INDEX card_transaction_record_payment_transaction_id_idx ON card_transaction_record USING btree (payment_transaction_id);
+        CREATE UNIQUE INDEX dev_card_service_simulation_merchant_account_term_comp_idx ON dev_card_service_simulation_merchant_account USING btree (terminal_id, company);
+        CREATE UNIQUE INDEX dev_card_service_simulation_company_company_id_idx ON dev_card_service_simulation_company USING btree (company_id);
         CREATE INDEX direct_debit_record_pmc_processing_status_idx ON direct_debit_record USING btree(pmc, processing_status);
 
 COMMIT;

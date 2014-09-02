@@ -259,13 +259,15 @@ BEGIN
         
         CREATE TABLE communication_delivery_handle
         (
-            id                          BIGINT                  NOT NULL,
-            recipient                   BIGINT                  NOT NULL,
-            recipient_discriminator     VARCHAR(50)             NOT NULL,
-            star                        BOOLEAN,
-            is_read                     BOOLEAN,
-            message                     BIGINT                  NOT NULL,
-            generated_from_group        BOOLEAN,
+            id                              BIGINT                  NOT NULL,
+            recipient                       BIGINT                  NOT NULL,
+            recipient_discriminator         VARCHAR(50)             NOT NULL,
+            star                            BOOLEAN,
+            is_read                         BOOLEAN,
+            message                         BIGINT                  NOT NULL,
+            generated_from_group            BOOLEAN,
+            communication_group_building    BIGINT,
+            communication_group_portfolio   BIGINT,
                     CONSTRAINT communication_delivery_handle_pk PRIMARY KEY(id)
         );
         
@@ -345,6 +347,20 @@ BEGIN
         ALTER TABLE communication_thread ALTER COLUMN subject TYPE VARCHAR(78);
         
         ALTER TABLE communication_message_category$rls OWNER TO vista;
+        
+        -- communication_thread_policy_handle
+        
+        CREATE TABLE communication_thread_policy_handle
+        (
+            id                              BIGINT          NOT NULL,
+            policy_consumer                 BIGINT          NOT NULL,
+            policy_consumer_discriminator   VARCHAR(50)     NOT NULL,
+            hidden                          BOOLEAN,
+            thread                          BIGINT          NOT NULL,
+                CONSTRAINT communication_thread_policy_handle_pk PRIMARY KEY(id)
+        );
+        
+        ALTER TABLE communication_thread_policy_handle OWNER TO vista;
         
         -- crm_role
         
@@ -719,7 +735,25 @@ BEGIN
                 ||'SET  province = p.province '
                 ||'FROM '||v_schema_name||'.province_policy_node p '
                 ||'WHERE    c.province_old = p.id ';
+        
+        -- communication_message_category
+        
+        EXECUTE 'INSERT INTO '||v_schema_name||'.communication_message_category '
+                ||'(id,category,category_type,ticket_type,deleted) '
+                ||'(SELECT  nextval(''public.communication_message_category_seq'') AS id, '
+                ||'     category,category_type,ticket_type,deleted '
+                ||'FROM _dba_.tmp_categories) ';
                 
+                
+        -- communication_message_category$rls
+        
+        EXECUTE 'INSERT INTO '||v_schema_name||'.communication_message_category$rls'
+                ||'(id,owner,value,seq) '
+                ||'(SELECT  nextval(''public.communication_message_category$rls_seq'') AS id,'
+                ||'         c.id AS owner, r.id AS value, 0 AS seq '
+                ||' FROM    '||v_schema_name||'.communication_message_category c, '
+                ||'         '||v_schema_name||'.crm_role r '
+                ||'WHERE r.name = ''All'') ';
        
         -- customer_screening_income_info
         
@@ -1072,6 +1106,14 @@ BEGIN
         
         EXECUTE 'UPDATE '||v_schema_name||'.restrictions_policy '
                 ||'SET  no_need_guarantors = FALSE ';
+                
+        
+        -- system_endpoint
+        
+        EXECUTE 'INSERT INTO '||v_schema_name||'.system_endpoint(id,name) VALUES '
+                ||'(nextval(''public.system_endpoint_seq''), ''Ticket Dispatcher''),'
+                ||'(nextval(''public.system_endpoint_seq''), ''Automatic''),'
+                ||'(nextval(''public.system_endpoint_seq''), ''Group'')';
        
        
         SET CONSTRAINTS ALL IMMEDIATE;
@@ -1342,6 +1384,10 @@ BEGIN
             REFERENCES available_crm_report(id)  DEFERRABLE INITIALLY DEFERRED;
         ALTER TABLE available_crm_report$rls ADD CONSTRAINT available_crm_report$rls_value_fk FOREIGN KEY(value) 
             REFERENCES crm_role(id)  DEFERRABLE INITIALLY DEFERRED;
+        ALTER TABLE communication_delivery_handle ADD CONSTRAINT communication_delivery_handle_communication_group_building_fk FOREIGN KEY(communication_group_building) 
+            REFERENCES building(id)  DEFERRABLE INITIALLY DEFERRED;
+        ALTER TABLE communication_delivery_handle ADD CONSTRAINT communication_delivery_handle_communication_group_portfolio_fk FOREIGN KEY(communication_group_portfolio) 
+            REFERENCES portfolio(id)  DEFERRABLE INITIALLY DEFERRED;
         ALTER TABLE communication_delivery_handle ADD CONSTRAINT communication_delivery_handle_message_fk FOREIGN KEY(message) 
             REFERENCES communication_message(id)  DEFERRABLE INITIALLY DEFERRED;
         ALTER TABLE communication_message_attachment ADD CONSTRAINT communication_message_attachment_message_fk FOREIGN KEY(message) 
@@ -1356,6 +1402,8 @@ BEGIN
             REFERENCES crm_role(id)  DEFERRABLE INITIALLY DEFERRED;
         ALTER TABLE communication_thread ADD CONSTRAINT communication_thread_category_fk FOREIGN KEY(category) 
             REFERENCES communication_message_category(id)  DEFERRABLE INITIALLY DEFERRED;
+        ALTER TABLE communication_thread_policy_handle ADD CONSTRAINT communication_thread_policy_handle_thread_fk FOREIGN KEY(thread) 
+            REFERENCES communication_thread(id)  DEFERRABLE INITIALLY DEFERRED;
         ALTER TABLE decision_info ADD CONSTRAINT decision_info_decided_by_fk FOREIGN KEY(decided_by) 
             REFERENCES employee(id)  DEFERRABLE INITIALLY DEFERRED;
         ALTER TABLE lease_application ADD CONSTRAINT lease_application_approval_decided_by_fk FOREIGN KEY(approval_decided_by) 
@@ -1453,16 +1501,18 @@ BEGIN
             'Oregon', 'Pennsylvania', 'PrinceEdwardIsland', 'PuertoRico', 'Quebec', 'RhodeIsland', 'Saskatchewan', 'SouthCarolina', 'SouthDakota', 
             'Tennessee', 'Texas', 'Utah', 'Vermont', 'VirginIslands', 'Virginia', 'Washington', 'WestVirginia', 'Wisconsin', 'Wyoming', 'YukonTerritory'));
         ALTER TABLE communication_delivery_handle ADD CONSTRAINT communication_delivery_handle_recipient_discriminator_d_ck 
-            CHECK ((recipient_discriminator) IN ('AptUnit', 'Building', 'CrmUser', 'CustomerUser', 'Portfolio', 'SystemEndpoint', 'Tenant'));
+            CHECK ((recipient_discriminator) IN ('Employee', 'Guarantor', 'SystemEndpoint', 'Tenant'));
         ALTER TABLE communication_message_category ADD CONSTRAINT communication_message_category_category_type_e_ck 
             CHECK ((category_type) IN ('IVR', 'Message', 'Notification', 'SMS', 'Ticket'));
         ALTER TABLE communication_message ADD CONSTRAINT communication_message_sender_discriminator_d_ck 
-            CHECK ((sender_discriminator) IN ('AptUnit', 'Building', 'CrmUser', 'CustomerUser', 'Portfolio', 'SystemEndpoint', 'Tenant'));
+            CHECK ((sender_discriminator) IN ('Employee', 'Guarantor', 'SystemEndpoint', 'Tenant'));
         ALTER TABLE communication_message_category ADD CONSTRAINT communication_message_category_ticket_type_e_ck 
             CHECK ((ticket_type) IN ('Landlord', 'NotTicket', 'Tenant', 'Vendor'));
         ALTER TABLE communication_thread ADD CONSTRAINT communication_thread_owner_discriminator_d_ck 
-            CHECK ((owner_discriminator) IN ('AptUnit', 'Building', 'CrmUser', 'CustomerUser', 'Portfolio', 'SystemEndpoint', 'Tenant'));
-        ALTER TABLE communication_thread ADD CONSTRAINT communication_thread_status_e_ck CHECK ((status) IN ('Open', 'Resolved', 'Unassigned'));
+            CHECK ((owner_discriminator) IN ('Employee', 'Guarantor', 'SystemEndpoint', 'Tenant'));
+        ALTER TABLE communication_thread ADD CONSTRAINT communication_thread_status_e_ck CHECK ((status) IN ('Open', 'Resolved'));
+        ALTER TABLE communication_thread_policy_handle ADD CONSTRAINT communication_thread_policy_handle_policy_consumer_discr_d_ck 
+            CHECK ((policy_consumer_discriminator) IN ('Employee', 'Guarantor', 'SystemEndpoint', 'Tenant'));
         ALTER TABLE country_policy_node ADD CONSTRAINT country_policy_node_country_e_ck 
             CHECK ((country) IN ('Afghanistan', 'AlandIslands', 'Albania', 'Algeria', 'AmericanSamoa', 'Andorra', 'Angola', 'Anguilla', 'Antarctica', 
             'Antigua', 'Argentina', 'Armenia', 'Aruba', 'Australia', 'Austria', 'Azerbaijan', 'Bahamas', 'Bahrain', 'Bangladesh', 'Barbados', 'Belarus', 
@@ -1756,6 +1806,7 @@ BEGIN
         CREATE INDEX communication_message_category$dispatchers_owner_idx ON communication_message_category$dispatchers USING btree(owner);
         CREATE INDEX communication_message_category$rls_owner_idx ON communication_message_category$rls USING btree(owner);
         CREATE INDEX communication_message_thread_idx ON communication_message USING btree(thread);
+        CREATE INDEX communication_thread_policy_handle_thread_idx ON communication_thread_policy_handle USING btree (thread);
 
 
         
