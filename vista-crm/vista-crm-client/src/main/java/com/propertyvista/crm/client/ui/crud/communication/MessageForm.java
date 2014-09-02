@@ -263,7 +263,7 @@ public class MessageForm extends CrmEntityForm<MessageDTO> {
             subMenu.addItem(new MenuItem(i18n.tr("Corporate"), new Command() {
                 @Override
                 public void execute() {
-                    new EmployeeSelectorDialog(MessageForm.this.getParentView()) {
+                    new EmployeeSelectorDialog(MessageForm.this.getParentView(), true) {
                         @Override
                         public void onClickOk() {
                             onAdd(getSelectedItems());
@@ -287,7 +287,7 @@ public class MessageForm extends CrmEntityForm<MessageDTO> {
             subMenu.addItem(new MenuItem(i18n.tr("Portfolio"), new Command() {
                 @Override
                 public void execute() {
-                    new PortfolioSelectorDialog(MessageForm.this.getParentView()) {
+                    new PortfolioSelectorDialog(MessageForm.this.getParentView(), true) {
                         @Override
                         public void onClickOk() {
                             onAdd(getSelectedItems());
