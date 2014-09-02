@@ -35,6 +35,7 @@ import com.propertyvista.oapi.v1.model.UnitIO;
 import com.propertyvista.oapi.v1.processing.PropertyServiceProcessor;
 import com.propertyvista.oapi.v1.service.PropertyService;
 
+//http://localhost:8888/vista/interfaces/oapi/v1/rs/application.wadl
 //http://localhost:8888/vista/interfaces/oapi/v1/rs/buildings
 //https://static-22.birchwoodsoftwaregroup.com/interfaces/oapi/v1/rs/buildings
 

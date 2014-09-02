@@ -42,7 +42,7 @@ public class RSPropertyServiceTest extends RSOapiTestBase {
 
     private Building building;
 
-    private Floorplan fp;
+    private Floorplan floorplan;
 
     private AptUnit unit;
 
@@ -59,20 +59,20 @@ public class RSPropertyServiceTest extends RSOapiTestBase {
         Persistence.ensureRetrieve(building.units(), AttachLevel.Attached);
         if (building.floorplans().size() < 1) {
             // set building details
-            fp = EntityFactory.create(Floorplan.class);
-            fp.building().set(building);
-            fp.name().setValue("2bdrm");
-            Persistence.service().persist(fp);
+            floorplan = EntityFactory.create(Floorplan.class);
+            floorplan.building().set(building);
+            floorplan.name().setValue("2bdrm");
+            Persistence.service().persist(floorplan);
 
             unit = EntityFactory.create(AptUnit.class);
             unit.building().set(building);
             unit.info().number().setValue("1");
-            unit.floorplan().set(fp);
+            unit.floorplan().set(floorplan);
             Persistence.service().persist(unit);
 
             Persistence.service().commit();
         } else {
-            fp = new ArrayList<Floorplan>(building.floorplans()).get(0);
+            floorplan = new ArrayList<Floorplan>(building.floorplans()).get(0);
             unit = new ArrayList<AptUnit>(building.units()).get(0);
         }
     }
@@ -113,7 +113,7 @@ public class RSPropertyServiceTest extends RSOapiTestBase {
     public void testUpdateUnits() {
         UnitIO unit = new UnitIO();
         unit.propertyCode = building.propertyCode().getValue();
-        unit.floorplanName = new StringIO(fp.name().getValue());
+        unit.floorplanName = new StringIO(floorplan.name().getValue());
         unit.number = "2";
         unit.baths = new IntegerIO(1);
         unit.beds = new IntegerIO(2);

@@ -24,6 +24,7 @@ import javax.servlet.ServletRegistration;
 
 import org.apache.wicket.protocol.http.ContextParamWebApplicationFactory;
 import org.apache.wicket.protocol.http.WicketFilter;
+import org.glassfish.jersey.server.ServerProperties;
 import org.glassfish.jersey.servlet.ServletContainer;
 
 import com.sun.xml.ws.transport.http.servlet.WSServlet;
@@ -48,6 +49,7 @@ import com.propertyvista.ils.ILSAuthFilter;
 import com.propertyvista.ils.kijiji.rs.KijijiApiRsApplication;
 import com.propertyvista.misc.VistaTODO;
 import com.propertyvista.oapi.v1.rs.OapiRsApplication;
+import com.propertyvista.oapi.v1.rs.wadl.OapiWadlGeneratorConfig;
 import com.propertyvista.operations.server.services.simulator.CardServiceSimulationServlet;
 import com.propertyvista.operations.server.servlet.VistaConfigInfoServlet;
 import com.propertyvista.operations.server.servlet.VistaStackTraceViewServlet;
@@ -179,6 +181,7 @@ public class VistaWebApplicationInitializer implements ServletContainerInitializ
                     ServletRegistration.Dynamic sc = ctx.addServlet("OpenApiRsService", ServletContainer.class);
                     sc.addMapping("/interfaces/oapi/v1/rs/*");
                     sc.setInitParameter("javax.ws.rs.Application", OapiRsApplication.class.getName());
+                    sc.setInitParameter(ServerProperties.WADL_GENERATOR_CONFIG, OapiWadlGeneratorConfig.class.getName());
                 }
             }
 
