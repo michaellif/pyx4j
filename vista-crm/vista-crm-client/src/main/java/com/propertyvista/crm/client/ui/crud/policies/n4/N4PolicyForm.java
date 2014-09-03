@@ -158,7 +158,7 @@ public class N4PolicyForm extends PolicyDTOTabPanelBasedForm<N4PolicyDTO> {
 
         @Override
         public boolean onClickOk() {
-            form.revalidate();
+            form.setVisitedRecursive();
             return form.isValid();
         }
 

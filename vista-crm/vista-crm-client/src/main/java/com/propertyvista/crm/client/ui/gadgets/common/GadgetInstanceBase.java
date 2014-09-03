@@ -423,7 +423,6 @@ public abstract class GadgetInstanceBase<T extends GadgetMetadata> implements IG
         @Override
         public boolean onOk() {
             form.setVisitedRecursive();
-            form.revalidate();
             if (form.isValid()) {
                 T metadata = form.getValue();
                 Key key = getMetadata().id().getValue();

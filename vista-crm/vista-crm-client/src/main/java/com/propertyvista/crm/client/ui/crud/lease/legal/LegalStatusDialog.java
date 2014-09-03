@@ -37,7 +37,6 @@ public class LegalStatusDialog extends OkCancelDialog {
     @Override
     public boolean onClickOk() {
         form.setVisitedRecursive();
-        form.revalidate();
         for (LegalLetter letter : form.getValue().letters()) {
             if (letter.file().isEmpty()) {
                 return false;

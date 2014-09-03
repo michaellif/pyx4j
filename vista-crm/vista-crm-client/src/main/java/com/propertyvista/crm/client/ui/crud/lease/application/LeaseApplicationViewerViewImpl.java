@@ -502,8 +502,8 @@ public class LeaseApplicationViewerViewImpl extends LeaseViewerViewImplBase<Leas
                 protected IsWidget createContent() {
                     FormPanel formPanel = new FormPanel(this);
 
-                    formPanel.append(Location.Left, proto().informationCompoletness()).decorate().labelWidth(250).componentWidth(30);
                     formPanel.append(Location.Left, proto().creditCheck()).decorate().labelWidth(250).componentWidth(30);
+                    formPanel.append(Location.Left, proto().informationCompoletness()).decorate().labelWidth(250).componentWidth(30);
                     formPanel.append(Location.Left, proto().employmentConfirmation()).decorate().labelWidth(250).componentWidth(30);
                     formPanel.append(Location.Left, proto().landlordConfirmation()).decorate().labelWidth(250).componentWidth(30);
 
@@ -524,7 +524,6 @@ public class LeaseApplicationViewerViewImpl extends LeaseViewerViewImplBase<Leas
         @Override
         public boolean onClickOk() {
             form.setVisitedRecursive();
-            form.revalidate();
             if (form.isValid()) {
                 ((LeaseApplicationViewerView.Presenter) getPresenter()).applicationAction(actionValue(Action.Approve));
                 return true;
@@ -625,7 +624,6 @@ public class LeaseApplicationViewerViewImpl extends LeaseViewerViewImplBase<Leas
         @Override
         public boolean onClickOk() {
             form.setVisitedRecursive();
-            form.revalidate();
             if (form.isValid()) {
                 ((LeaseApplicationViewerView.Presenter) LeaseApplicationViewerViewImpl.this.getPresenter()).downloadBlankLeaseApplicationDocument(form
                         .getValue().selectParticipant());
@@ -682,7 +680,6 @@ public class LeaseApplicationViewerViewImpl extends LeaseViewerViewImplBase<Leas
         @Override
         public boolean onClickOk() {
             form.setVisitedRecursive();
-            form.revalidate();
             if (form.isValid()) {
                 ((LeaseApplicationViewerView.Presenter) LeaseApplicationViewerViewImpl.this.getPresenter()).saveLeaseApplicationDocument(form.getValue());
                 return true;

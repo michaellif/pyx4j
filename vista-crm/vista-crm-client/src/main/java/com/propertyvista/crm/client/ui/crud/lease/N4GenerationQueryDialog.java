@@ -36,8 +36,7 @@ public class N4GenerationQueryDialog extends OkCancelDialog {
 
     @Override
     public boolean onClickOk() {
-        form.revalidate();
-
+        form.setVisitedRecursive();
         return form.isValid();
     }
 
