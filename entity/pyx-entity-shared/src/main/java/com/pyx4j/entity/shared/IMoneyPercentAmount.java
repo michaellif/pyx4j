@@ -37,6 +37,7 @@ import com.pyx4j.i18n.shared.I18nEnum;
 @EmbeddedEntity
 @ToStringFormat("{0,choice,!null#${0,number,#,##0.00}|null#{1,number,percent}}")
 public interface IMoneyPercentAmount extends IEntity {
+
     @I18n
     @XmlType(name = "ValueType")
     public enum ValueType {

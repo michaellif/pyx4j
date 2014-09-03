@@ -26,6 +26,7 @@ import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.commons.IFormatter;
 import com.pyx4j.commons.IParser;
 import com.pyx4j.commons.PersonalIdentityFormatter;
+import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.shared.IPersonalIdentity;
 import com.pyx4j.forms.client.validators.RegexValidator;
 import com.pyx4j.forms.client.validators.TextBoxParserValidator;
@@ -33,7 +34,7 @@ import com.pyx4j.i18n.shared.I18n;
 
 /**
  * This field is used to protect personal identity by hiding part of ID
- * 
+ *
  * NOTE - It's made generic to allow for properly typed new entity creation (see CPersonalIdentityField#parse())
  * This however should not be considered as a final solution as the new entity may also require some additional
  * business-related initialization steps...
@@ -48,6 +49,8 @@ public class CPersonalIdentityField<T extends IPersonalIdentity> extends CTextFi
 
     }
 
+    private final Class<T> entityClass;
+
     public CPersonalIdentityField(Class<T> entityClass) {
         this(entityClass, null);
     }
@@ -58,6 +61,7 @@ public class CPersonalIdentityField<T extends IPersonalIdentity> extends CTextFi
 
     public CPersonalIdentityField(Class<T> entityClass, PersonalIdentityFormatter formatter, boolean mandatory) {
         super();
+        this.entityClass = entityClass;
         setMandatory(mandatory);
         setPersonalIdentityFormatter(formatter);
         setNativeComponent(new NPersonalIdentityField<T>(this));
@@ -168,7 +172,7 @@ public class CPersonalIdentityField<T extends IPersonalIdentity> extends CTextFi
 
         @Override
         public E parse(String string) throws ParseException {
-            E value = component.getValue();
+            E value = EntityFactory.create(component.entityClass);
             if (CommonsStringUtils.isEmpty(string)) {
                 // clear value on empty user input
                 if (value != null && value.obfuscatedNumber().isNull()) {

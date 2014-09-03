@@ -489,7 +489,7 @@ public abstract class CComponent<SELF_TYPE extends CComponent<SELF_TYPE, DATA_TY
     }
 
     public final void reset() {
-        resetValue();
+        this.value = null;
         setEditorValue(getValue());
         if (getParent() != null) {
             getParent().updateContainer(this);
@@ -527,7 +527,7 @@ public abstract class CComponent<SELF_TYPE extends CComponent<SELF_TYPE, DATA_TY
 
     /**
      * Attention! Fires onValueChange event
-     * 
+     *
      * @param value
      */
     public final void setValue(DATA_TYPE value) {
@@ -603,12 +603,11 @@ public abstract class CComponent<SELF_TYPE extends CComponent<SELF_TYPE, DATA_TY
             boolean wasVisited = isVisited();
             editingInProgress = false;
             setVisited(true);
-            DATA_TYPE editorValue = null;
+            DATA_TYPE editorValue;
             try {
                 editorValue = getEditorValue();
             } catch (ParseException e) {
-                resetValue();
-                editorValue = getValue();
+                editorValue = null;
             }
 
             if (isValueEmpty() || !isValuesEqual(this.value, editorValue)) {
@@ -631,14 +630,6 @@ public abstract class CComponent<SELF_TYPE extends CComponent<SELF_TYPE, DATA_TY
                 setVisited(wasVisited);
             }
             PropertyChangeEvent.fire(this, PropertyChangeEvent.PropertyName.editingCompleted);
-        }
-    }
-
-    private void resetValue() {
-        if (value instanceof IEntity) {
-            ((IEntity) value).setValue(null);
-        } else {
-            value = null;
         }
     }
 

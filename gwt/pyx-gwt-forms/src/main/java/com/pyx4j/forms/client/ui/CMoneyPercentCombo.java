@@ -29,6 +29,7 @@ import com.google.gwt.i18n.client.NumberFormat;
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.commons.IFormatter;
 import com.pyx4j.commons.IParser;
+import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.shared.IMoneyPercentAmount;
 import com.pyx4j.entity.shared.IMoneyPercentAmount.ValueType;
 import com.pyx4j.i18n.shared.I18n;
@@ -74,15 +75,6 @@ public abstract class CMoneyPercentCombo extends CTextFieldBase<IMoneyPercentAmo
         return super.preprocessValue(value, fireEvent, populate);
     }
 
-    private IMoneyPercentAmount clearValue() {
-        IMoneyPercentAmount value = getValue();
-        if (value != null) {
-            value.percent().setValue(BigDecimal.ZERO);
-            value.amount().setValue(BigDecimal.ZERO);
-        }
-        return value;
-    }
-
     class MoneyPercentFormat implements IFormatter<IMoneyPercentAmount, String> {
 
         @Override
@@ -115,11 +107,12 @@ public abstract class CMoneyPercentCombo extends CTextFieldBase<IMoneyPercentAmo
 
         @Override
         public IMoneyPercentAmount parse(String string) throws ParseException {
-            IMoneyPercentAmount value = getValue();
+            IMoneyPercentAmount value = EntityFactory.create(IMoneyPercentAmount.class);
             if (CommonsStringUtils.isEmpty(string)) {
-                return clearValue();
+                return value;
             }
             try {
+                value = EntityFactory.create(IMoneyPercentAmount.class);
                 BigDecimal amount = new BigDecimal(nf.parse(string)).setScale(2, RoundingMode.HALF_UP);
                 if (ValueType.Monetary.equals(getAmountType())) {
                     value.amount().setValue(amount);
