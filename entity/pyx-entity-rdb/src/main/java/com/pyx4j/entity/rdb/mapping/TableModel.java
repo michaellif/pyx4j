@@ -81,7 +81,7 @@ public class TableModel {
 
     private final Dialect dialect;
 
-    private final Mappings mappings;
+    final Mappings mappings;
 
     private final EntityMeta entityMeta;
 

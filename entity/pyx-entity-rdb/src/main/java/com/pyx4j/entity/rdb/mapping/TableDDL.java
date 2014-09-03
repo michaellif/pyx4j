@@ -115,8 +115,6 @@ class TableDDL {
 
     }
 
-    protected static int identityOffset = 0;
-
     private static final boolean NS_PART_OF_PK = true;
 
     static List<String> sqlCreate(Dialect dialect, TableModel tableModel, Configuration configuration) {
@@ -214,9 +212,11 @@ class TableDDL {
             }
         }
 
-        int tablesIdentityOffset = configuration.tablesIdentityOffset();
-        if ((tablesIdentityOffset != 0) && !dialect.isSequencesBaseIdentity() && (tableModel.getPrimaryKeyStrategy() == Table.PrimaryKeyStrategy.AUTO)) {
-            sqls.add(dialect.sqlAlterIdentityColumn(tableModel.tableName, nextIdentityOffset(tablesIdentityOffset)));
+        if (!dialect.isSequencesBaseIdentity() && (tableModel.getPrimaryKeyStrategy() == Table.PrimaryKeyStrategy.AUTO)) {
+            int tablesIdentityOffset = tableModel.mappings.tableIdentityOffset(tableModel.entityMeta().getEntityClass().getSimpleName());
+            if (tablesIdentityOffset != 0) {
+                sqls.add(dialect.sqlAlterIdentityColumn(tableModel.tableName, tablesIdentityOffset));
+            }
         }
         return sqls;
     }
@@ -577,9 +577,11 @@ class TableDDL {
 
         sqls.add(sqlIdx.toString());
 
-        int tablesIdentityOffset = configuration.tablesIdentityOffset();
-        if ((tablesIdentityOffset != 0) && !dialect.isSequencesBaseIdentity()) {
-            sqls.add(dialect.sqlAlterIdentityColumn(tableName, nextIdentityOffset(tablesIdentityOffset)));
+        if (!dialect.isSequencesBaseIdentity()) {
+            int tablesIdentityOffset = tableModel.mappings.tableIdentityOffset(tableModel.entityMeta().getEntityClass().getSimpleName());
+            if (tablesIdentityOffset != 0) {
+                sqls.add(dialect.sqlAlterIdentityColumn(tableName, tablesIdentityOffset));
+            }
         }
 
         return sqls;
@@ -633,11 +635,6 @@ class TableDDL {
             }
             return null;
         }
-    }
-
-    static synchronized int nextIdentityOffset(int tablesidentityOffset) {
-        identityOffset += tablesidentityOffset;
-        return identityOffset;
     }
 
 }

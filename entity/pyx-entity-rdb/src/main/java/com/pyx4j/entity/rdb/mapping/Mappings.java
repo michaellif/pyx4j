@@ -75,6 +75,8 @@ public class Mappings {
 
     public static final boolean traceInit = false;
 
+    private int identityOffset = 0;
+
     public Mappings(ConnectionProvider connectionProvider, Configuration configuration) {
         this.connectionProvider = connectionProvider;
         this.configuration = configuration;
@@ -356,10 +358,15 @@ public class Mappings {
         }
     }
 
+    private synchronized int nextIdentityOffset(int tablesidentityOffset) {
+        identityOffset += tablesidentityOffset;
+        return identityOffset;
+    }
+
     int nextIdentityOffset() {
         int identityOffset = 0;
         if (tablesIdentityOffset() != 0) {
-            identityOffset = TableDDL.nextIdentityOffset(tablesIdentityOffset());
+            identityOffset = nextIdentityOffset(tablesIdentityOffset());
         }
         return identityOffset;
     }
