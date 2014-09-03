@@ -102,7 +102,8 @@ SET search_path = '_admin_';
                                             
         -- card_transaction_record
         
-        ALTER TABLE card_transaction_record ADD COLUMN pmc BIGINT;
+        ALTER TABLE card_transaction_record ADD COLUMN pmc BIGINT,
+                                            ADD COLUMN completion_date TIMESTAMP;
         
         -- cards_reconciliation_file
         
@@ -268,6 +269,13 @@ SET search_path = '_admin_';
         ***
         ***     ============================================================================================================
         **/
+        
+        
+        -- card_transaction_record
+        
+        UPDATE  card_transaction_record
+        SET     completion_date = creation_date
+        WHERE   sale_response_code = '0000';
         
         
         -- fee_default_payment_fees
