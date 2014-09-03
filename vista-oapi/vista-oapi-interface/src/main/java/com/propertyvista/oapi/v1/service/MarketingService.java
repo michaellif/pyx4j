@@ -18,12 +18,12 @@ import java.util.List;
 import com.pyx4j.commons.LogicalDate;
 
 import com.propertyvista.oapi.v1.model.BuildingIO;
+import com.propertyvista.oapi.v1.model.BuildingListIO;
 import com.propertyvista.oapi.v1.model.FloorplanIO;
+import com.propertyvista.oapi.v1.model.FloorplanListIO;
 import com.propertyvista.oapi.v1.searchcriteria.PropertySearchCriteriaIO;
 import com.propertyvista.oapi.v1.service.marketing.model.AppointmentRequest;
 import com.propertyvista.oapi.v1.service.marketing.model.FloorplanAvailability;
-import com.propertyvista.oapi.v1.service.marketing.model.FloorplanList;
-import com.propertyvista.oapi.v1.service.marketing.model.PropertyList;
 
 /*
  * TODO
@@ -31,13 +31,13 @@ import com.propertyvista.oapi.v1.service.marketing.model.PropertyList;
  */
 public interface MarketingService extends OAPIService {
 
-    PropertyList getPropertyList(PropertySearchCriteriaIO criteria);
+    BuildingListIO getBuildingList(PropertySearchCriteriaIO criteria);
 
-    BuildingIO getPropertyInfo(String propertyId);
+    BuildingIO getBuilding(String propertyId);
 
-    FloorplanList getFloorplanList(String propertyId);
+    FloorplanListIO getFloorplanList(String propertyId);
 
-    FloorplanIO getFloorplanInfo(String propertyId, String fpId);
+    FloorplanIO getFloorplan(String propertyId, String fpId);
 
     List<FloorplanAvailability> getFloorplanAvailability(String propertyId, String fpId, LogicalDate date);
 

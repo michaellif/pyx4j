@@ -25,7 +25,7 @@ import javax.jws.soap.SOAPBinding.Style;
 import javax.jws.soap.SOAPBinding.Use;
 
 import com.propertyvista.oapi.v1.model.BuildingIO;
-import com.propertyvista.oapi.v1.model.BuildingsIO;
+import com.propertyvista.oapi.v1.model.BuildingListIO;
 import com.propertyvista.oapi.v1.model.UnitIO;
 
 //http://localhost:8888/vista/interfaces/oapi/v1/ws/WSPropertyService?wsdl
@@ -39,7 +39,7 @@ public interface WSPropertyService {
     void createBuilding(@WebParam(name = "building") BuildingIO building);
 
     @WebResult(name = "buildings")
-    BuildingsIO listAllBuildings();
+    BuildingListIO listAllBuildings();
 
     @WebResult(name = "building")
     BuildingIO getBuildingByPropertyCode(@WebParam(name = "propertyCode") String propertyCode);

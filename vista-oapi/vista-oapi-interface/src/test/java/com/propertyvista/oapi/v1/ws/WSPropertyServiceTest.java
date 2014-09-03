@@ -22,7 +22,7 @@ import javax.xml.ws.BindingProvider;
 import org.junit.Test;
 
 import com.propertyvista.oapi.v1.model.BuildingIO;
-import com.propertyvista.oapi.v1.model.BuildingsIO;
+import com.propertyvista.oapi.v1.model.BuildingListIO;
 import com.propertyvista.oapi.v1.ws.WSPropertyService;
 import com.propertyvista.oapi.v1.ws.WSPropertyServiceImpl;
 
@@ -70,7 +70,7 @@ public class WSPropertyServiceTest extends WSOapiTestBase {
         service.createBuilding(new BuildingIO("b1"));
         service.createBuilding(new BuildingIO("b2"));
 
-        BuildingsIO buildings = service.listAllBuildings();
+        BuildingListIO buildings = service.listAllBuildings();
 
 //        assertEquals(0, buildings.buildings.size());
 

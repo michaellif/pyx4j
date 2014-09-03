@@ -30,22 +30,22 @@ import com.propertyvista.domain.property.asset.building.BuildingAmenity;
 import com.propertyvista.dto.PropertySearchCriteria.BathroomChoice;
 import com.propertyvista.dto.PropertySearchCriteria.BedroomChoice;
 import com.propertyvista.oapi.v1.model.BuildingIO;
+import com.propertyvista.oapi.v1.model.BuildingListIO;
 import com.propertyvista.oapi.v1.model.FloorplanIO;
+import com.propertyvista.oapi.v1.model.FloorplanListIO;
 import com.propertyvista.oapi.v1.processing.MarketingServiceProcessor;
 import com.propertyvista.oapi.v1.searchcriteria.PropertySearchCriteriaIO;
 import com.propertyvista.oapi.v1.service.MarketingService;
 import com.propertyvista.oapi.v1.service.marketing.model.AppointmentRequest;
 import com.propertyvista.oapi.v1.service.marketing.model.FloorplanAvailability;
-import com.propertyvista.oapi.v1.service.marketing.model.FloorplanList;
-import com.propertyvista.oapi.v1.service.marketing.model.PropertyList;
 
 @Path("marketing")
 public class RSMarketingServiceImpl implements MarketingService {
 
     @GET
-    @Path("getPropertyList")
+    @Path("getBuildings")
     @Produces(MediaType.APPLICATION_XML)
-    public PropertyList getPropertyList( //
+    public BuildingListIO getBuildings( //
             @QueryParam("city") String city, @QueryParam("province") String province, //
             @QueryParam("minBeds") BedroomChoice minBeds, @QueryParam("maxBeds") BedroomChoice maxBeds, //
             @QueryParam("minBaths") BathroomChoice minBaths, @QueryParam("maxBaths") BathroomChoice maxBaths, //
@@ -53,19 +53,19 @@ public class RSMarketingServiceImpl implements MarketingService {
             @QueryParam("amenities") Set<BuildingAmenity.Type> amenities//
     ) {
         PropertySearchCriteriaIO criteria = new PropertySearchCriteriaIO(city, province, minBeds, maxBeds, minBaths, maxBaths, minPrice, maxPrice, amenities);
-        return getPropertyList(criteria);
+        return getBuildingList(criteria);
     }
 
     @Override
-    public PropertyList getPropertyList(PropertySearchCriteriaIO criteria) {
-        return new MarketingServiceProcessor().getPropertyList(criteria);
+    public BuildingListIO getBuildingList(PropertySearchCriteriaIO criteria) {
+        return new MarketingServiceProcessor().getBuildingList(criteria);
     }
 
     @GET
     @Path("getPropertyInfo")
     @Produces(MediaType.APPLICATION_XML)
     @Override
-    public BuildingIO getPropertyInfo(@QueryParam("prId") String propertyId) {
+    public BuildingIO getBuilding(@QueryParam("prId") String propertyId) {
         return new MarketingServiceProcessor().getPropertyInfo(propertyId);
     }
 
@@ -73,7 +73,7 @@ public class RSMarketingServiceImpl implements MarketingService {
     @Path("getFloorplanList")
     @Produces(MediaType.APPLICATION_XML)
     @Override
-    public FloorplanList getFloorplanList(@QueryParam("prId") String propertyId) {
+    public FloorplanListIO getFloorplanList(@QueryParam("prId") String propertyId) {
         return new MarketingServiceProcessor().getFloorplanList(propertyId);
     }
 
@@ -81,7 +81,7 @@ public class RSMarketingServiceImpl implements MarketingService {
     @Path("getFloorplanInfo")
     @Produces(MediaType.APPLICATION_XML)
     @Override
-    public FloorplanIO getFloorplanInfo(@QueryParam("prId") String propertyId, @QueryParam("fpId") String fpId) {
+    public FloorplanIO getFloorplan(@QueryParam("prId") String propertyId, @QueryParam("fpId") String fpId) {
         return new MarketingServiceProcessor().getFloorplanInfo(propertyId, fpId);
     }
 

@@ -39,12 +39,11 @@ import com.propertyvista.domain.tenant.lead.Lead;
 import com.propertyvista.domain.tenant.lead.Lead.DayPart;
 import com.propertyvista.domain.tenant.lead.Lead.LeaseTerm;
 import com.propertyvista.oapi.v1.model.BuildingIO;
+import com.propertyvista.oapi.v1.model.BuildingListIO;
 import com.propertyvista.oapi.v1.model.FloorplanIO;
-import com.propertyvista.oapi.v1.rs.OapiRsApplication;
+import com.propertyvista.oapi.v1.model.FloorplanListIO;
 import com.propertyvista.oapi.v1.service.marketing.model.AppointmentRequest;
 import com.propertyvista.oapi.v1.service.marketing.model.FloorplanAvailability;
-import com.propertyvista.oapi.v1.service.marketing.model.FloorplanList;
-import com.propertyvista.oapi.v1.service.marketing.model.PropertyList;
 import com.propertyvista.portal.rpc.portal.prospect.ProspectPortalSiteMap;
 import com.propertyvista.test.mock.models.BuildingDataModel;
 
@@ -94,9 +93,9 @@ public class RSMarketingServiceTest extends RSOapiTestBase {
 
     @Test
     public void testGetBuildings() {
-        PropertyList propertyList = target("marketing/getPropertyList").queryParam("province", building.info().address().province().getValue()).request()
-                .get(PropertyList.class);
-        Assert.assertEquals(1, propertyList.items.size());
+        BuildingListIO buildings = target("marketing/getBuildings").queryParam("province", building.info().address().province().getValue()).request()
+                .get(BuildingListIO.class);
+        Assert.assertEquals(1, buildings.buildingList.size());
     }
 
     @Test
@@ -111,10 +110,10 @@ public class RSMarketingServiceTest extends RSOapiTestBase {
     @Test
     public void testGetFloorplanList() {
         // in - String propertyId; out - FloorplanList
-        FloorplanList floorplanList = target("marketing/getFloorplanList") //
+        FloorplanListIO floorplanList = target("marketing/getFloorplanList") //
                 .queryParam("prId", building.propertyCode().getValue()) //
-                .request().get(FloorplanList.class);
-        Assert.assertEquals(1, floorplanList.items.size());
+                .request().get(FloorplanListIO.class);
+        Assert.assertEquals(1, floorplanList.floorplanList.size());
     }
 
     @Test

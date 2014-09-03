@@ -7,15 +7,21 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Sep 2, 2014
+ * Created on Sep 3, 2014
  * @author michaellif
  * @version $Id$
  */
-package com.propertyvista.oapi;
+package com.propertyvista.oapi.v1.model;
 
-public enum AttachLevel {
+import java.util.ArrayList;
+import java.util.List;
 
-    Detached,
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
 
-    Attached;
+@XmlRootElement(name = "floorplans", namespace = "http://www.w3.org/2001/XMLSchema-instance")
+public class FloorplanListIO {
+
+    @XmlElement(name = "floorplan")
+    public List<FloorplanIO> floorplanList = new ArrayList<FloorplanIO>();
 }

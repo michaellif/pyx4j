@@ -22,6 +22,11 @@ import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlElements;
 import javax.xml.bind.annotation.XmlRootElement;
 
+import com.propertyvista.oapi.DetailsLevel;
+import com.propertyvista.oapi.annotations.ServiceScope;
+import com.propertyvista.oapi.annotations.ServiceScopes;
+import com.propertyvista.oapi.v1.service.PortationService;
+import com.propertyvista.oapi.v1.service.OAPIService;
 import com.propertyvista.oapi.xml.AbstractElementIO;
 import com.propertyvista.oapi.xml.StringIO;
 
@@ -38,6 +43,13 @@ public class BuildingIO extends AbstractElementIO {
 
     public MarketingIO marketing;
 
+    public BuildingIO() {
+    }
+
+    public BuildingIO(String propertyCode) {
+        this.propertyCode = propertyCode;
+    }
+
     @XmlElementWrapper
     @XmlElements(@XmlElement(name = "amenity"))
     public List<BuildingAmenityIO> amenities = new ArrayList<BuildingAmenityIO>();
@@ -46,37 +58,41 @@ public class BuildingIO extends AbstractElementIO {
     @XmlElements(@XmlElement(name = "utility"))
     public List<UtilityIO> includedUtilities = new ArrayList<UtilityIO>();
 
+    @ServiceScopes({ @ServiceScope(services = { OAPIService.class }, attachLevel = DetailsLevel.Details),
+            @ServiceScope(services = { PortationService.class }, attachLevel = DetailsLevel.Always) })
     @XmlElementWrapper
     @XmlElements(@XmlElement(name = "floorplan"))
     public List<FloorplanIO> floorplans = new ArrayList<FloorplanIO>();
 
-    //mandatory for portal
+    @ServiceScopes({ @ServiceScope(services = { OAPIService.class }, attachLevel = DetailsLevel.Details),
+            @ServiceScope(services = { PortationService.class }, attachLevel = DetailsLevel.Always) })
     @XmlElementWrapper
     @XmlElements(@XmlElement(name = "unit"))
     public List<UnitIO> units = new ArrayList<UnitIO>();
 
+    @ServiceScopes({ @ServiceScope(services = { OAPIService.class }, attachLevel = DetailsLevel.Details),
+            @ServiceScope(services = { PortationService.class }, attachLevel = DetailsLevel.Always) })
     @XmlElementWrapper
     @XmlElements(@XmlElement(name = "parking"))
     public List<ParkingIO> parkings = new ArrayList<ParkingIO>();
 
+    @ServiceScopes({ @ServiceScope(services = { OAPIService.class }, attachLevel = DetailsLevel.Details),
+            @ServiceScope(services = { PortationService.class }, attachLevel = DetailsLevel.Always) })
     @XmlElementWrapper
     @XmlElements(@XmlElement(name = "contact"))
     public List<ContactIO> contacts = new ArrayList<ContactIO>();
 
+    @ServiceScopes({ @ServiceScope(services = { OAPIService.class }, attachLevel = DetailsLevel.Details),
+            @ServiceScope(services = { PortationService.class }, attachLevel = DetailsLevel.Always) })
     @XmlElementWrapper
     @XmlElements(@XmlElement(name = "media"))
     public List<MediaImageIO> medias = new ArrayList<MediaImageIO>();
 
+    @ServiceScopes({ @ServiceScope(services = { OAPIService.class }, attachLevel = DetailsLevel.Details),
+            @ServiceScope(services = { PortationService.class }, attachLevel = DetailsLevel.Always) })
     @XmlElementWrapper
     @XmlElements(@XmlElement(name = "lease"))
     public List<LeaseIO> leases = new ArrayList<LeaseIO>();
-
-    public BuildingIO() {
-    }
-
-    public BuildingIO(String propertyCode) {
-        this.propertyCode = propertyCode;
-    }
 
     @Override
     public boolean equals(Object obj) {

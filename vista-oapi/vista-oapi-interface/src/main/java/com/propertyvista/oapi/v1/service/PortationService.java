@@ -7,21 +7,18 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Aug 29, 2014
- * @author stanp
+ * Created on Sep 2, 2014
+ * @author michaellif
  * @version $Id$
  */
-package com.propertyvista.oapi.annotations;
+package com.propertyvista.oapi.v1.service;
 
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
+import com.propertyvista.oapi.v1.model.BuildingListIO;
 
-@Target({ ElementType.FIELD })
-@Retention(RetentionPolicy.RUNTIME)
-public @interface ServiceScopes {
+public interface PortationService extends OAPIService {
 
-    ServiceScope[] value();
+    BuildingListIO exportBuildings();
+
+    void importBuildings(BuildingListIO buildings);
 
 }

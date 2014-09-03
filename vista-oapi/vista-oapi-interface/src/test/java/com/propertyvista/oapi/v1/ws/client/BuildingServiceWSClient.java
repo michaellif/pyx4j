@@ -18,7 +18,7 @@ import java.net.MalformedURLException;
 import java.net.PasswordAuthentication;
 import java.net.URL;
 
-import com.propertyvista.oapi.v1.model.BuildingsIO;
+import com.propertyvista.oapi.v1.model.BuildingListIO;
 import com.propertyvista.oapi.v1.ws.WSPropertyService;
 import com.propertyvista.oapi.v1.ws.WSPropertyServiceStub;
 
@@ -46,7 +46,7 @@ public class BuildingServiceWSClient {
 
         WSPropertyService service = stub.getPropertyServicePort();
 
-        BuildingsIO buildings = service.listAllBuildings();
+        BuildingListIO buildings = service.listAllBuildings();
 
     }
 }

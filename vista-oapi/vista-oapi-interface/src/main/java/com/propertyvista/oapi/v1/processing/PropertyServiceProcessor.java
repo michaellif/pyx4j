@@ -28,23 +28,23 @@ import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.oapi.v1.marshaling.BuildingMarshaller;
 import com.propertyvista.oapi.v1.marshaling.UnitMarshaller;
 import com.propertyvista.oapi.v1.model.BuildingIO;
-import com.propertyvista.oapi.v1.model.BuildingsIO;
+import com.propertyvista.oapi.v1.model.BuildingListIO;
 import com.propertyvista.oapi.v1.model.UnitIO;
 import com.propertyvista.oapi.v1.persisting.BuildingPersister;
 import com.propertyvista.oapi.v1.persisting.UnitPersister;
 
 public class PropertyServiceProcessor {
 
-    public static BuildingsIO getBuildings() {
+    public static BuildingListIO getBuildings() {
 
         EntityQueryCriteria<Building> buildingCriteria = EntityQueryCriteria.create(Building.class);
         buildingCriteria.asc(buildingCriteria.proto().propertyCode());
         List<Building> buildings = Persistence.service().query(buildingCriteria);
 
-        BuildingsIO buildingsRs = new BuildingsIO();
+        BuildingListIO buildingsRs = new BuildingListIO();
 
         for (Building building : buildings) {
-            buildingsRs.buildings.add(BuildingMarshaller.getInstance().marshal(building));
+            buildingsRs.buildingList.add(BuildingMarshaller.getInstance().marshal(building));
         }
 
         return buildingsRs;
@@ -59,11 +59,6 @@ public class PropertyServiceProcessor {
             return null;
         }
         return BuildingMarshaller.getInstance().marshal(buildings.get(0));
-    }
-
-    public static void createBuilding(BuildingIO buildingIO) {
-        // TODO see 
-
     }
 
     public static void updateBuilding(BuildingIO buildingIO) throws Exception {

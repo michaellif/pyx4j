@@ -21,7 +21,7 @@ import javax.jws.WebService;
 
 import com.propertyvista.oapi.v1.Version;
 import com.propertyvista.oapi.v1.model.BuildingIO;
-import com.propertyvista.oapi.v1.model.BuildingsIO;
+import com.propertyvista.oapi.v1.model.BuildingListIO;
 import com.propertyvista.oapi.v1.model.UnitIO;
 import com.propertyvista.oapi.v1.processing.PropertyServiceProcessor;
 import com.propertyvista.oapi.xml.StringIO;
@@ -42,7 +42,7 @@ public class WSPropertyServiceImpl implements WSPropertyService {
     }
 
     @Override
-    public BuildingsIO listAllBuildings() {
+    public BuildingListIO listAllBuildings() {
         return PropertyServiceProcessor.getBuildings();
     }
 

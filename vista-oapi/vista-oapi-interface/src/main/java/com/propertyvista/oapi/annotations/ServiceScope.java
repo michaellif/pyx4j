@@ -13,15 +13,12 @@
  */
 package com.propertyvista.oapi.annotations;
 
-import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
 
-import com.propertyvista.oapi.AttachLevel;
+import com.propertyvista.oapi.DetailsLevel;
 import com.propertyvista.oapi.v1.service.OAPIService;
 
-@Target({ ElementType.FIELD })
 @Retention(RetentionPolicy.RUNTIME)
 /**
  * Limits the use of the target property to the given list of services
@@ -30,5 +27,5 @@ public @interface ServiceScope {
 
     Class<? extends OAPIService>[] services() default {};
 
-    AttachLevel attachLevel() default AttachLevel.Attached;
+    DetailsLevel attachLevel() default DetailsLevel.Always;
 }

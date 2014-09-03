@@ -20,8 +20,8 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
 @XmlRootElement(name = "buildings", namespace = "http://www.w3.org/2001/XMLSchema-instance")
-public class BuildingsIO {
+public class BuildingListIO {
 
     @XmlElement(name = "building")
-    public List<BuildingIO> buildings = new ArrayList<BuildingIO>();
+    public List<BuildingIO> buildingList = new ArrayList<BuildingIO>();
 }

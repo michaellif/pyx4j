@@ -44,12 +44,10 @@ import com.propertyvista.domain.tenant.lead.Lead.LeaseTerm;
 import com.propertyvista.oapi.v1.Version;
 import com.propertyvista.oapi.v1.model.BuildingIO;
 import com.propertyvista.oapi.v1.model.FloorplanIO;
+import com.propertyvista.oapi.v1.model.FloorplanListIO;
 import com.propertyvista.oapi.v1.searchcriteria.PropertySearchCriteriaIO;
 import com.propertyvista.oapi.v1.service.marketing.model.AppointmentRequest;
 import com.propertyvista.oapi.v1.service.marketing.model.FloorplanAvailability;
-import com.propertyvista.oapi.v1.service.marketing.model.FloorplanList;
-import com.propertyvista.oapi.v1.service.marketing.model.PropertyList;
-import com.propertyvista.oapi.v1.ws.WSMarketingServiceImpl;
 import com.propertyvista.portal.rpc.portal.prospect.ProspectPortalSiteMap;
 import com.propertyvista.test.mock.models.BuildingDataModel;
 
@@ -137,25 +135,24 @@ public class WSMarketingServiceTest extends WSOapiTestBase {
     public void testGetBuildings() {
         PropertySearchCriteriaIO crit = new PropertySearchCriteriaIO();
         crit.province = "Ontario";
-        PropertyList propertyList = service.getPropertyList(crit);
-        Assert.assertEquals(1, propertyList.items.size());
+        Assert.assertEquals(1, service.getBuildingList(crit).buildingList.size());
     }
 
     @Test
     public void testGetPropertyInfo() {
-        BuildingIO buildingIO = service.getPropertyInfo(building.propertyCode().getValue());
+        BuildingIO buildingIO = service.getBuilding(building.propertyCode().getValue());
         Assert.assertEquals(building.info().address().province().getValue(), buildingIO.info.address.province.getValue());
     }
 
     @Test
     public void testGetFloorplanList() {
-        FloorplanList floorplanList = service.getFloorplanList(building.propertyCode().getValue());
-        Assert.assertEquals(1, floorplanList.items.size());
+        FloorplanListIO floorplanList = service.getFloorplanList(building.propertyCode().getValue());
+        Assert.assertEquals(1, floorplanList.floorplanList.size());
     }
 
     @Test
     public void testGetFloorplanInfo() {
-        FloorplanIO floorplanIO = service.getFloorplanInfo(building.propertyCode().getValue(), fp.name().getValue());
+        FloorplanIO floorplanIO = service.getFloorplan(building.propertyCode().getValue(), fp.name().getValue());
         Assert.assertEquals(fp.name().getValue(), floorplanIO.name);
     }
 

@@ -7,21 +7,17 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Aug 29, 2014
- * @author stanp
+ * Created on Sep 2, 2014
+ * @author michaellif
  * @version $Id$
  */
-package com.propertyvista.oapi.annotations;
+package com.propertyvista.oapi;
 
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
+public enum DetailsLevel {
 
-@Target({ ElementType.FIELD })
-@Retention(RetentionPolicy.RUNTIME)
-public @interface ServiceScopes {
+    Never, //Never shown
 
-    ServiceScope[] value();
+    Always, // Always shown (both listers and details)
 
+    Details; // Shown only on details view
 }

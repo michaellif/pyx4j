@@ -13,25 +13,22 @@
  */
 package com.propertyvista.oapi.v1.service;
 
-import java.util.List;
-
 import javax.ws.rs.core.Response;
 
 import com.propertyvista.oapi.v1.model.BuildingIO;
-import com.propertyvista.oapi.v1.model.BuildingsIO;
+import com.propertyvista.oapi.v1.model.BuildingListIO;
 import com.propertyvista.oapi.v1.model.UnitIO;
+import com.propertyvista.oapi.v1.model.UnitListIO;
 
 public interface PropertyService extends OAPIService {
 
-    BuildingsIO getBuildings(String province);
+    BuildingListIO getBuildingList(String province);
 
-    BuildingIO getBuildingByPropertyCode(String propertyCode);
+    BuildingIO getBuilding(String propertyCode);
 
-    List<UnitIO> getAllUnitsByPropertyCode(String propertyCode, String floorplan);
+    UnitListIO getUnitList(String propertyCode, String floorplan);
 
     UnitIO getUnitByNumber(String propertyCode, String unitNumber);
-
-    Response createBuilding(BuildingIO buildingIO) throws Exception;
 
     Response updateBuilding(BuildingIO buildingIO) throws Exception;
 

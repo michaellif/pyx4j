@@ -32,7 +32,7 @@ import com.pyx4j.entity.server.Persistence;
 import com.propertyvista.domain.property.asset.Floorplan;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
-import com.propertyvista.oapi.v1.model.BuildingsIO;
+import com.propertyvista.oapi.v1.model.BuildingListIO;
 import com.propertyvista.oapi.v1.model.UnitIO;
 import com.propertyvista.oapi.v1.rs.OapiRsApplication;
 import com.propertyvista.oapi.xml.IntegerIO;
@@ -79,14 +79,14 @@ public class RSPropertyServiceTest extends RSOapiTestBase {
 
     @Test
     public void testGetBuildings() {
-        BuildingsIO response = target("buildings").queryParam("province", "Ontario").request().get(BuildingsIO.class);
-        Assert.assertEquals(1, response.buildings.size());
+        BuildingListIO response = target("buildings").queryParam("province", "Ontario").request().get(BuildingListIO.class);
+        Assert.assertEquals(1, response.buildingList.size());
     }
 
     @Test
     public void testGetBuildingsByProvince_NonExistingProvince() {
-        BuildingsIO buildings = target("buildings").queryParam("province", "NonExisting").request().get(BuildingsIO.class);
-        Assert.assertTrue(buildings.buildings.isEmpty());
+        BuildingListIO buildings = target("buildings").queryParam("province", "NonExisting").request().get(BuildingListIO.class);
+        Assert.assertTrue(buildings.buildingList.isEmpty());
     }
 
     @Test
