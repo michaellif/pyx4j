@@ -165,14 +165,14 @@ class CardsReconciliationProcessor {
         }
 
         // Validate Card Types Totals.
-        if (reconciliationRecord.visaDeposit().getValue().compareTo(totals.visaAmount) != 0) {
-            executionMonitor.addErredEvent("DailyTotals", totals.visaAmount.subtract(reconciliationRecord.visaDeposit().getValue()), //
+        if (reconciliationRecord.visaDeposit().getValue(BigDecimal.ZERO).compareTo(totals.visaAmount) != 0) {
+            executionMonitor.addErredEvent("DailyTotals", totals.visaAmount.subtract(reconciliationRecord.visaDeposit().getValue(BigDecimal.ZERO)), //
                     SimpleMessageFormat.format("Merchant {0} Visa Deposit {1} does not match transactions total {2}",//
                             reconciliationRecord.merchantTerminalId(), reconciliationRecord.visaDeposit(), totals.visaAmount));
         }
 
-        if (reconciliationRecord.mastercardDeposit().getValue().compareTo(totals.mastercardAmount) != 0) {
-            executionMonitor.addErredEvent("DailyTotals", totals.mastercardAmount.subtract(reconciliationRecord.mastercardDeposit().getValue()), //
+        if (reconciliationRecord.mastercardDeposit().getValue(BigDecimal.ZERO).compareTo(totals.mastercardAmount) != 0) {
+            executionMonitor.addErredEvent("DailyTotals", totals.mastercardAmount.subtract(reconciliationRecord.mastercardDeposit().getValue(BigDecimal.ZERO)), //
                     SimpleMessageFormat.format("Merchant {0} MasterCard Deposit {1} does not match transactions total {2}",//
                             reconciliationRecord.merchantTerminalId(), reconciliationRecord.mastercardDeposit(), totals.mastercardAmount));
         }
