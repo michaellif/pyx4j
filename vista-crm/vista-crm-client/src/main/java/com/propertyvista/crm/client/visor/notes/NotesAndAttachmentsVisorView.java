@@ -20,6 +20,7 @@ import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.SimplePanel;
+import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.core.EntityFactory;
@@ -145,7 +146,6 @@ public class NotesAndAttachmentsVisorView extends AbstractVisorPane {
             }
 
             public void updatePermission() {
-//                inheritEditable(false);
                 setEditable(hasPermissionUpdate());
                 setAddable(hasPermissionUpdate());
 
@@ -206,6 +206,8 @@ public class NotesAndAttachmentsVisorView extends AbstractVisorPane {
 
                 private Anchor btnCancel;
 
+                private Widget attachmentsHeader;
+
                 private AttachmentsEditorFolder attachmentsFolder;
 
                 public NoteEditor(boolean viewable) {
@@ -227,7 +229,7 @@ public class NotesAndAttachmentsVisorView extends AbstractVisorPane {
 
                     formPanel.append(Location.Left, proto().user(), new CEntityLabel<CrmUser>()).decorate().componentWidth(200);
 
-                    formPanel.h3(i18n.tr("Attachments"));
+                    attachmentsHeader = formPanel.h3(i18n.tr("Attachments"));
                     formPanel.append(Location.Dual, proto().attachments(), attachmentsFolder = new AttachmentsEditorFolder());
 
                     formPanel.append(Location.Right, createLowerToolbar());
@@ -307,9 +309,7 @@ public class NotesAndAttachmentsVisorView extends AbstractVisorPane {
                 @Override
                 protected void onValueSet(boolean populate) {
                     super.onValueSet(populate);
-                    if (getValue().isEmpty()) {
-                        setViewableMode(false);
-                    }
+                    setViewableMode(!getValue().isEmpty());
 
                     if (!isOwner()) {
                         @SuppressWarnings("unchecked")
@@ -321,6 +321,11 @@ public class NotesAndAttachmentsVisorView extends AbstractVisorPane {
                     get(proto().created()).setVisible(!getValue().created().isNull());
                     get(proto().updated()).setVisible(!getValue().updated().isNull());
                     get(proto().user()).setVisible(!getValue().user().isNull());
+                }
+
+                private void setAttachmentsVisible(boolean visible) {
+                    attachmentsHeader.setVisible(visible);
+                    attachmentsFolder.setVisible(visible);
                 }
 
                 private void setButtonsVisible(boolean visible) {
@@ -341,6 +346,7 @@ public class NotesAndAttachmentsVisorView extends AbstractVisorPane {
                     setButtonsVisible(!isViewable);
                     setViewable(isViewable);
                     attachmentsFolder.setViewableMode(isViewable);
+                    setAttachmentsVisible(!isViewable || !getValue().attachments().isEmpty());
                 }
             }
 
