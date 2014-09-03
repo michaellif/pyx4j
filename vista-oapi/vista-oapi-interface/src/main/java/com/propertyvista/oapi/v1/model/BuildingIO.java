@@ -13,10 +13,7 @@
  */
 package com.propertyvista.oapi.v1.model;
 
-import java.util.ArrayList;
-
 import javax.xml.bind.annotation.XmlAttribute;
-import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import com.propertyvista.oapi.v1.model.types.BuildingStructureTypeIO;

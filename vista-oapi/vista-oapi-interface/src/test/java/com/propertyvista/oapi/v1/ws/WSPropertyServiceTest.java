@@ -23,8 +23,6 @@ import org.junit.Test;
 
 import com.propertyvista.oapi.v1.model.BuildingIO;
 import com.propertyvista.oapi.v1.model.BuildingListIO;
-import com.propertyvista.oapi.v1.ws.WSPropertyService;
-import com.propertyvista.oapi.v1.ws.WSPropertyServiceImpl;
 
 public class WSPropertyServiceTest extends WSOapiTestBase {
 

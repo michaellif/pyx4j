@@ -24,7 +24,6 @@ import java.net.MalformedURLException;
 import java.net.PasswordAuthentication;
 import java.net.URL;
 
-import com.propertyvista.domain.DemoData;
 import com.propertyvista.oapi.XmlFormatter;
 
 public class LeaseServiceRSClient {

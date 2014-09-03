@@ -20,8 +20,6 @@ import org.slf4j.LoggerFactory;
 import com.propertyvista.domain.pmc.IntegrationSystem;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
-import com.propertyvista.oapi.v1.marshaling.BuildingMarshaller;
-import com.propertyvista.oapi.v1.marshaling.UnitMarshaller;
 import com.propertyvista.oapi.v1.model.BuildingIO;
 import com.propertyvista.oapi.v1.model.UnitIO;
 import com.propertyvista.oapi.v1.persisting.BuildingPersister;

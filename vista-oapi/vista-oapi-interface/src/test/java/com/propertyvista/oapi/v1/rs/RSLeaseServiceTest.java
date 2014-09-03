@@ -29,7 +29,6 @@ import org.junit.Test;
 
 import com.propertyvista.oapi.v1.model.LeaseIO;
 import com.propertyvista.oapi.v1.model.TenantIO;
-import com.propertyvista.oapi.v1.rs.OapiRsApplication;
 
 public class RSLeaseServiceTest extends RSOapiTestBase {
 

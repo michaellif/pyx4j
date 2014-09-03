@@ -22,8 +22,6 @@ import javax.xml.ws.BindingProvider;
 import org.junit.Test;
 
 import com.propertyvista.oapi.v1.model.LeaseIO;
-import com.propertyvista.oapi.v1.ws.WSLeaseService;
-import com.propertyvista.oapi.v1.ws.WSLeaseServiceImpl;
 
 public class WSLeaseServiceTest extends WSOapiTestBase {
 

@@ -11,7 +11,6 @@ import javax.xml.ws.WebServiceException;
 import javax.xml.ws.WebServiceFeature;
 
 import com.propertyvista.oapi.v1.Version;
-import com.propertyvista.oapi.v1.ws.WSLeaseService;
 
 @WebServiceClient(name = "WSLeaseServiceImplService", targetNamespace = "http://ws." + Version.VERSION_NAME + ".oapi.propertyvista.com/", wsdlLocation = "http://localhost:8888/WS/WSLeaseService?wsdl")
 public class WSLeaseServiceStub extends Service {

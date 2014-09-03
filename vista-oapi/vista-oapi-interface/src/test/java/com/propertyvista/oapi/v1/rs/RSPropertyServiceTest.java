@@ -34,7 +34,6 @@ import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.oapi.v1.model.BuildingListIO;
 import com.propertyvista.oapi.v1.model.UnitIO;
-import com.propertyvista.oapi.v1.rs.OapiRsApplication;
 import com.propertyvista.oapi.xml.IntegerIO;
 import com.propertyvista.oapi.xml.StringIO;
 

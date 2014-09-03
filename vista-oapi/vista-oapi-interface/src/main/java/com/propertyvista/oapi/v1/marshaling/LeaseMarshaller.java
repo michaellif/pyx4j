@@ -34,7 +34,6 @@ import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
 import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
 import com.propertyvista.oapi.AbstractMarshaller;
 import com.propertyvista.oapi.v1.model.LeaseIO;
-import com.propertyvista.oapi.v1.model.TenantIO;
 import com.propertyvista.oapi.v1.model.types.LeaseStatusIO;
 import com.propertyvista.oapi.v1.model.types.PaymentFrequencyIO;
 import com.propertyvista.oapi.xml.LogicalDateIO;

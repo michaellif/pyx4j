@@ -12,7 +12,6 @@ import javax.xml.ws.WebServiceException;
 import javax.xml.ws.WebServiceFeature;
 
 import com.propertyvista.oapi.v1.Version;
-import com.propertyvista.oapi.v1.ws.WSPropertyService;
 
 @WebServiceClient(name = "WSPropertyServiceImplService", targetNamespace = "http://ws." + Version.VERSION_NAME + ".oapi.propertyvista.com/", wsdlLocation = "http://localhost:8888/WS/WSPropertyService?wsdl")
 @HandlerChain(file = "client-handler-chain.xml")

@@ -19,13 +19,10 @@ import java.util.List;
 
 import com.pyx4j.entity.core.EntityFactory;
 
-import com.propertyvista.domain.property.asset.Parking;
 import com.propertyvista.domain.property.asset.building.BuildingAmenity;
 import com.propertyvista.oapi.AbstractMarshaller;
 import com.propertyvista.oapi.v1.model.BuildingAmenityIO;
 import com.propertyvista.oapi.v1.model.BuildingAmenityListIO;
-import com.propertyvista.oapi.v1.model.ParkingIO;
-import com.propertyvista.oapi.v1.model.ParkingListIO;
 import com.propertyvista.oapi.v1.model.types.BuildingAmenityTypeIO;
 import com.propertyvista.oapi.xml.StringIO;
 
