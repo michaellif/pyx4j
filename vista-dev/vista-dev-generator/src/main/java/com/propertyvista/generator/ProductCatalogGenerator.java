@@ -36,6 +36,7 @@ import com.propertyvista.domain.financial.offering.Service;
 import com.propertyvista.domain.property.asset.BuildingElement;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.tenant.lease.Deposit.DepositType;
+import com.propertyvista.domain.util.DomainUtil;
 import com.propertyvista.generator.util.RandomUtil;
 
 public class ProductCatalogGenerator {
@@ -239,9 +240,9 @@ public class ProductCatalogGenerator {
             break;
         }
 
-        item.depositLMR().setValue(getDepositValue(feature.version().depositLMR()));
-        item.depositMoveIn().setValue(getDepositValue(feature.version().depositMoveIn()));
-        item.depositSecurity().setValue(getDepositValue(feature.version().depositSecurity()));
+        item.depositLMR().setValue(getDepositAmount(feature.version().depositLMR(), item));
+        item.depositMoveIn().setValue(getDepositAmount(feature.version().depositMoveIn(), item));
+        item.depositSecurity().setValue(getDepositAmount(feature.version().depositSecurity(), item));
 
         return item;
     }
@@ -294,9 +295,9 @@ public class ProductCatalogGenerator {
             item.description().setValue(arCode.type().getStringView() + " description");
             item.price().setValue(price); // This value may not be used in all cases and overridden later in generator
 
-            item.depositLMR().setValue(getDepositValue(service.version().depositLMR()));
-            item.depositMoveIn().setValue(getDepositValue(service.version().depositMoveIn()));
-            item.depositSecurity().setValue(getDepositValue(service.version().depositSecurity()));
+            item.depositLMR().setValue(getDepositAmount(service.version().depositLMR(), item));
+            item.depositMoveIn().setValue(getDepositAmount(service.version().depositMoveIn(), item));
+            item.depositSecurity().setValue(getDepositAmount(service.version().depositSecurity(), item));
 
             Persistence.ensureRetrieve(service.version().items(), AttachLevel.Attached);
             service.version().items().add(item);
@@ -323,9 +324,9 @@ public class ProductCatalogGenerator {
         }
     }
 
-    private BigDecimal getDepositValue(ProductDeposit deposit) {
+    private BigDecimal getDepositAmount(ProductDeposit deposit, ProductItem item) {
         if (ValueType.Percentage.equals(deposit.valueType().getValue())) {
-            return deposit.value().percent().getValue();
+            return DomainUtil.roundMoney(deposit.value().percent().getValue(BigDecimal.ZERO).multiply(item.price().getValue(BigDecimal.ZERO)));
         } else {
             return deposit.value().amount().getValue();
         }
