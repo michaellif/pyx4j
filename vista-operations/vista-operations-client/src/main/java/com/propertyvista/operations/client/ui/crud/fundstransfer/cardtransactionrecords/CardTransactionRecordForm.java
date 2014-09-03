@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011-2012 All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -35,6 +35,7 @@ public class CardTransactionRecordForm extends OperationsEntityForm<CardTransact
         formPanel.append(Location.Left, proto().merchantTerminalId()).decorate();
 
         formPanel.append(Location.Left, proto().paymentTransactionId()).decorate();
+        formPanel.append(Location.Left, proto().completionDate()).decorate();
         formPanel.append(Location.Left, proto().cardType()).decorate();
         formPanel.append(Location.Left, proto().amount()).decorate();
         formPanel.append(Location.Left, proto().feeAmount()).decorate();
@@ -43,6 +44,7 @@ public class CardTransactionRecordForm extends OperationsEntityForm<CardTransact
         formPanel.append(Location.Left, proto().saleResponseText()).decorate();
 
         formPanel.append(Location.Left, proto().feeResponseCode()).decorate();
+        formPanel.append(Location.Left, proto().creationDate()).decorate();
 
         selectTab(addTab(formPanel, i18n.tr("General")));
         setTabBarVisible(false);

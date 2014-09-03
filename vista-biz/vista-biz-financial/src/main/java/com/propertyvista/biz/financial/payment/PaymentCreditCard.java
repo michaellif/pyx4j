@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011-2012 All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -86,6 +86,8 @@ class PaymentCreditCard {
                 ReferenceNumberPrefix.RentPayments, paymentRecord.id(), paymentRecord.convenienceFeeReferenceNumber().getValue(),
                 paymentRecord.paymentMethod().details().<CreditCardInfo> cast());
 
+        transactionRecord.completionDate().setValue(SystemDateManager.getDate());
+
         TaskRunner.runUnitOfWorkInOperationstNamespace(TransactionScopeOption.RequiresNew, new Executable<Void, RuntimeException>() {
             @Override
             public Void execute() {
@@ -142,7 +144,7 @@ class PaymentCreditCard {
                             ServerSideFactory.create(OperationsAlertFacade.class).record(paymentRecord,
                                     "Unable to void Card transaction {0} {1} {2}; response {3} {4}",//
                                     merchantTerminalId, //
-                                    paymentRecord.id(), // 
+                                    paymentRecord.id(), //
                                     paymentRecord.amount(), //
                                     voidResponse.code(), //
                                     voidResponse.message());

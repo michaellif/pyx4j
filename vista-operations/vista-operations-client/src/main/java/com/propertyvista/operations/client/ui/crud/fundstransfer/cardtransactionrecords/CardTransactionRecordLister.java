@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011-2012 All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -32,7 +32,7 @@ public class CardTransactionRecordLister extends AbstractLister<CardTransactionR
         super(CardTransactionRecord.class, false, false);
 
         if (addPmcColumn) {
-            setDataTableModel(new DataTableModel<CardTransactionRecord>(//@formatter:off                
+            setDataTableModel(new DataTableModel<CardTransactionRecord>(//@formatter:off
                 new MemberColumnDescriptor.Builder(proto().pmc()).build(),
                 new MemberColumnDescriptor.Builder(proto().pmc().namespace()).visible(false).build(),
                 new MemberColumnDescriptor.Builder(proto().merchantTerminalId()).build(),
@@ -40,17 +40,21 @@ public class CardTransactionRecordLister extends AbstractLister<CardTransactionR
                 new MemberColumnDescriptor.Builder(proto().amount()).build(),
                 new MemberColumnDescriptor.Builder(proto().feeAmount()).build(),
                 new MemberColumnDescriptor.Builder(proto().paymentTransactionId()).build(),
+                new MemberColumnDescriptor.Builder(proto().completionDate()).build(),
                 new MemberColumnDescriptor.Builder(proto().saleResponseCode()).build(),
-                new MemberColumnDescriptor.Builder(proto().feeResponseCode()).build()
+                new MemberColumnDescriptor.Builder(proto().feeResponseCode()).build(),
+                new MemberColumnDescriptor.Builder(proto().creationDate()).build()
             ));//@formatter:on
         } else {
-            setDataTableModel(new DataTableModel<CardTransactionRecord>(//@formatter:off                
+            setDataTableModel(new DataTableModel<CardTransactionRecord>(//@formatter:off
                     new MemberColumnDescriptor.Builder(proto().cardType()).build(),
                     new MemberColumnDescriptor.Builder(proto().amount()).build(),
                     new MemberColumnDescriptor.Builder(proto().feeAmount()).build(),
                     new MemberColumnDescriptor.Builder(proto().paymentTransactionId()).build(),
+                    new MemberColumnDescriptor.Builder(proto().completionDate()).build(),
                     new MemberColumnDescriptor.Builder(proto().saleResponseCode()).build(),
-                    new MemberColumnDescriptor.Builder(proto().feeResponseCode()).build()
+                    new MemberColumnDescriptor.Builder(proto().feeResponseCode()).build(),
+                    new MemberColumnDescriptor.Builder(proto().creationDate()).build()
             ));//@formatter:on
         }
 
