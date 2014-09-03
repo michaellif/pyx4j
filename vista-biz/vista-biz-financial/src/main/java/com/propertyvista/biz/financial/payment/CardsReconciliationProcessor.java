@@ -141,7 +141,8 @@ class CardsReconciliationProcessor {
         }
         at.grossPaymentCount().setValue(0);
         at.grossPaymentAmount().setValue(BigDecimal.ZERO);
-        at.netAmount().setValue(reconciliationRecord.totalDeposit().getValue(BigDecimal.ZERO));
+        at.netAmount().setValue(
+                reconciliationRecord.totalDeposit().getValue(BigDecimal.ZERO).subtract(reconciliationRecord.totalFee().getValue(BigDecimal.ZERO)));
         at.grossPaymentFee().setValue(reconciliationRecord.totalFee().getValue(BigDecimal.ZERO));
         // all card type details
 
