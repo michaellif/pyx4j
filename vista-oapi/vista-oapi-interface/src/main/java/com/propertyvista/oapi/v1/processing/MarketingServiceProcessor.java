@@ -46,13 +46,14 @@ import com.propertyvista.oapi.v1.model.FloorplanAvailabilityIO;
 import com.propertyvista.oapi.v1.model.FloorplanIO;
 import com.propertyvista.oapi.v1.model.FloorplanListIO;
 import com.propertyvista.oapi.v1.searchcriteria.PropertySearchCriteriaIO;
+import com.propertyvista.oapi.v1.service.MarketingService;
 import com.propertyvista.portal.rpc.portal.prospect.ProspectPortalSiteMap;
 import com.propertyvista.server.common.util.PropertyFinder;
 
 public class MarketingServiceProcessor extends AbstractProcessor {
 
     public MarketingServiceProcessor(ServiceType serviceType) {
-        super(serviceType);
+        super(MarketingService.class, serviceType);
     }
 
     public BuildingListIO getBuildingList(PropertySearchCriteriaIO criteria) {

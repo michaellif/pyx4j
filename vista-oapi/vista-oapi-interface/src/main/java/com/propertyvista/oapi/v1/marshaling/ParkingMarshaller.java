@@ -13,10 +13,6 @@
  */
 package com.propertyvista.oapi.v1.marshaling;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-
 import com.pyx4j.entity.core.EntityFactory;
 
 import com.propertyvista.domain.property.asset.Parking;
@@ -52,14 +48,6 @@ public class ParkingMarshaller extends AbstractMarshaller<Parking, ParkingIO> {
         return parkingIO;
     }
 
-    public List<ParkingIO> marshal(Collection<Parking> parkings) {
-        List<ParkingIO> parkingIOList = new ArrayList<ParkingIO>();
-        for (Parking parking : parkings) {
-            parkingIOList.add(marshal(parking));
-        }
-        return parkingIOList;
-    }
-
     @Override
     public Parking unmarshal(ParkingIO parkingIO) {
         Parking parking = EntityFactory.create(Parking.class);
@@ -70,13 +58,4 @@ public class ParkingMarshaller extends AbstractMarshaller<Parking, ParkingIO> {
         return parking;
     }
 
-    public List<Parking> unmarshal(Collection<ParkingIO> parkingIOList) {
-        List<Parking> parkings = new ArrayList<Parking>();
-        for (ParkingIO parkingIO : parkingIOList) {
-            Parking parking = EntityFactory.create(Parking.class);
-            set(parking, parkingIO, ParkingMarshaller.getInstance());
-            parkings.add(parking);
-        }
-        return parkings;
-    }
 }

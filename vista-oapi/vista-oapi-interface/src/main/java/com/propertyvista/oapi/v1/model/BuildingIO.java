@@ -13,29 +13,22 @@
  */
 package com.propertyvista.oapi.v1.model;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlElements;
 import javax.xml.bind.annotation.XmlRootElement;
 
-import com.propertyvista.oapi.DetailsLevel;
-import com.propertyvista.oapi.annotations.ServiceScope;
-import com.propertyvista.oapi.annotations.ServiceScopes;
 import com.propertyvista.oapi.v1.model.types.BuildingStructureTypeIO;
 import com.propertyvista.oapi.v1.model.types.BuildingTypeIO;
 import com.propertyvista.oapi.v1.model.types.ConstructionTypeIO;
 import com.propertyvista.oapi.v1.model.types.FloorTypeIO;
 import com.propertyvista.oapi.v1.model.types.FoundationTypeIO;
 import com.propertyvista.oapi.v1.model.types.WaterSupplyTypeIO;
-import com.propertyvista.oapi.v1.service.PortationService;
-import com.propertyvista.oapi.v1.service.OAPIService;
 import com.propertyvista.oapi.xml.AbstractElementIO;
 import com.propertyvista.oapi.xml.BooleanIO;
 import com.propertyvista.oapi.xml.IntegerIO;
+import com.propertyvista.oapi.xml.ListIO;
 import com.propertyvista.oapi.xml.StringIO;
 
 @XmlRootElement(name = "building")
@@ -98,48 +91,36 @@ public class BuildingIO extends AbstractElementIO {
     }
 
     @XmlElementWrapper
-    @XmlElements(@XmlElement(name = "amenity"))
-    public List<BuildingAmenityIO> amenities = new ArrayList<BuildingAmenityIO>();
+    @XmlElement(name = "amenity")
+    public ListIO<BuildingAmenityIO> amenities = new ListIO<BuildingAmenityIO>();
 
     @XmlElementWrapper
-    @XmlElements(@XmlElement(name = "utility"))
-    public List<UtilityIO> includedUtilities = new ArrayList<UtilityIO>();
+    @XmlElement(name = "utility")
+    public ListIO<UtilityIO> includedUtilities = new ListIO<UtilityIO>();
 
-    @ServiceScopes({ @ServiceScope(services = { OAPIService.class }, attachLevel = DetailsLevel.Details),
-            @ServiceScope(services = { PortationService.class }, attachLevel = DetailsLevel.Always) })
     @XmlElementWrapper
-    @XmlElements(@XmlElement(name = "floorplan"))
-    public List<FloorplanIO> floorplans = new ArrayList<FloorplanIO>();
+    @XmlElement(name = "floorplan")
+    public ListIO<FloorplanIO> floorplans = new ListIO<FloorplanIO>();
 
-    @ServiceScopes({ @ServiceScope(services = { OAPIService.class }, attachLevel = DetailsLevel.Details),
-            @ServiceScope(services = { PortationService.class }, attachLevel = DetailsLevel.Always) })
     @XmlElementWrapper
-    @XmlElements(@XmlElement(name = "unit"))
-    public List<UnitIO> units = new ArrayList<UnitIO>();
+    @XmlElement(name = "unit")
+    public ListIO<UnitIO> units = new ListIO<UnitIO>();
 
-    @ServiceScopes({ @ServiceScope(services = { OAPIService.class }, attachLevel = DetailsLevel.Details),
-            @ServiceScope(services = { PortationService.class }, attachLevel = DetailsLevel.Always) })
     @XmlElementWrapper
-    @XmlElements(@XmlElement(name = "parking"))
-    public List<ParkingIO> parkings = new ArrayList<ParkingIO>();
+    @XmlElement(name = "parking")
+    public ListIO<ParkingIO> parkings = new ListIO<ParkingIO>();
 
-    @ServiceScopes({ @ServiceScope(services = { OAPIService.class }, attachLevel = DetailsLevel.Details),
-            @ServiceScope(services = { PortationService.class }, attachLevel = DetailsLevel.Always) })
     @XmlElementWrapper
-    @XmlElements(@XmlElement(name = "contact"))
-    public List<ContactIO> contacts = new ArrayList<ContactIO>();
+    @XmlElement(name = "contact")
+    public ListIO<ContactIO> contacts = new ListIO<ContactIO>();
 
-    @ServiceScopes({ @ServiceScope(services = { OAPIService.class }, attachLevel = DetailsLevel.Details),
-            @ServiceScope(services = { PortationService.class }, attachLevel = DetailsLevel.Always) })
     @XmlElementWrapper
-    @XmlElements(@XmlElement(name = "media"))
-    public List<MediaImageIO> medias = new ArrayList<MediaImageIO>();
+    @XmlElement(name = "media")
+    public ListIO<MediaImageIO> medias = new ListIO<MediaImageIO>();
 
-    @ServiceScopes({ @ServiceScope(services = { OAPIService.class }, attachLevel = DetailsLevel.Details),
-            @ServiceScope(services = { PortationService.class }, attachLevel = DetailsLevel.Always) })
     @XmlElementWrapper
-    @XmlElements(@XmlElement(name = "lease"))
-    public List<LeaseIO> leases = new ArrayList<LeaseIO>();
+    @XmlElement(name = "lease")
+    public ListIO<LeaseIO> leases = new ListIO<LeaseIO>();
 
     @Override
     public boolean equals(Object obj) {

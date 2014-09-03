@@ -33,11 +33,12 @@ import com.propertyvista.oapi.v1.model.UnitIO;
 import com.propertyvista.oapi.v1.model.UnitListIO;
 import com.propertyvista.oapi.v1.persisting.BuildingPersister;
 import com.propertyvista.oapi.v1.persisting.UnitPersister;
+import com.propertyvista.oapi.v1.service.PropertyService;
 
 public class PropertyServiceProcessor extends AbstractProcessor {
 
     public PropertyServiceProcessor(ServiceType serviceType) {
-        super(serviceType);
+        super(PropertyService.class, serviceType);
     }
 
     public BuildingListIO getBuildings() {

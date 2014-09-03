@@ -19,8 +19,13 @@ import com.pyx4j.entity.server.Persistence;
 
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.oapi.AbstractMarshaller;
+import com.propertyvista.oapi.ServiceType;
 import com.propertyvista.oapi.v1.model.BuildingIO;
 import com.propertyvista.oapi.v1.model.types.BuildingTypeIO;
+import com.propertyvista.oapi.v1.processing.AbstractProcessor;
+import com.propertyvista.oapi.v1.service.PortationService;
+import com.propertyvista.oapi.xml.Action;
+import com.propertyvista.oapi.xml.ListIO;
 
 public class BuildingMarshaller extends AbstractMarshaller<Building, BuildingIO> {
 
@@ -56,8 +61,12 @@ public class BuildingMarshaller extends AbstractMarshaller<Building, BuildingIO>
         Persistence.service().retrieveMember(building.amenities());
         buildingIO.amenities = BuildingAmenityMarshaller.getInstance().marshal(building.amenities());
 
-        Persistence.service().retrieveMember(building.parkings());
-        buildingIO.parkings = ParkingMarshaller.getInstance().marshal(building.parkings());
+        if (AbstractProcessor.getServiceType() != ServiceType.List || AbstractProcessor.getServiceClass() == PortationService.class) {
+            Persistence.ensureRetrieve(building.parkings(), AttachLevel.Attached);
+            buildingIO.parkings = ParkingMarshaller.getInstance().marshal(building.parkings());
+        } else {
+            buildingIO.parkings = new ListIO<>(Action.notAttached);
+        }
 
         return buildingIO;
     }

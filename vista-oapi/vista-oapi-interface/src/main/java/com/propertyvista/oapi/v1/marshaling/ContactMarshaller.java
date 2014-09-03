@@ -14,6 +14,7 @@
 package com.propertyvista.oapi.v1.marshaling;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import com.pyx4j.entity.core.EntityFactory;
@@ -49,14 +50,6 @@ public class ContactMarshaller extends AbstractMarshaller<PropertyContact, Conta
         return contactIO;
     }
 
-    public List<ContactIO> marshal(List<PropertyContact> contacts) {
-        List<ContactIO> contactIOList = new ArrayList<ContactIO>();
-        for (PropertyContact contact : contacts) {
-            contactIOList.add(marshal(contact));
-        }
-        return contactIOList;
-    }
-
     @Override
     public PropertyContact unmarshal(ContactIO contactIO) {
 
@@ -68,13 +61,4 @@ public class ContactMarshaller extends AbstractMarshaller<PropertyContact, Conta
         return contact;
     }
 
-    public List<PropertyContact> unmarshal(List<ContactIO> contactIOList) {
-        List<PropertyContact> contacts = new ArrayList<PropertyContact>();
-        for (ContactIO contactIO : contactIOList) {
-            PropertyContact contact = EntityFactory.create(PropertyContact.class);
-            set(contact, contactIO, ContactMarshaller.getInstance());
-            contacts.add(contact);
-        }
-        return contacts;
-    }
 }

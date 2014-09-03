@@ -14,7 +14,6 @@
 package com.propertyvista.oapi.v1.marshaling;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 import com.pyx4j.entity.core.EntityFactory;
@@ -23,6 +22,7 @@ import com.propertyvista.domain.person.Person;
 import com.propertyvista.oapi.AbstractMarshaller;
 import com.propertyvista.oapi.v1.model.TenantIO;
 import com.propertyvista.oapi.v1.model.types.SexTypeIO;
+import com.propertyvista.oapi.xml.ListIO;
 import com.propertyvista.oapi.xml.StringIO;
 
 public class TenantMarshaller extends AbstractMarshaller<Person, TenantIO> {
@@ -54,14 +54,6 @@ public class TenantMarshaller extends AbstractMarshaller<Person, TenantIO> {
         return tenantIO;
     }
 
-    public List<TenantIO> marshal(Collection<Person> participants) {
-        List<TenantIO> tenants = new ArrayList<TenantIO>();
-        for (Person participant : participants) {
-            tenants.add(marshal(participant));
-        }
-        return tenants;
-    }
-
     @Override
     public Person unmarshal(TenantIO tenantIO) {
         Person person = EntityFactory.create(Person.class);
@@ -75,9 +67,10 @@ public class TenantMarshaller extends AbstractMarshaller<Person, TenantIO> {
         return person;
     }
 
-    public List<Person> unmarshal(Collection<TenantIO> tenantIOList) {
+    @Override
+    public List<Person> unmarshal(ListIO<TenantIO> tenantIOList) {
         List<Person> participants = new ArrayList<Person>();
-        for (TenantIO tenantIO : tenantIOList) {
+        for (TenantIO tenantIO : tenantIOList.getValue()) {
             Person participant = EntityFactory.create(Person.class);
             set(participant, tenantIO, TenantMarshaller.getInstance());
             participants.add(participant);

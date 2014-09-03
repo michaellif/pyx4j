@@ -13,18 +13,15 @@
  */
 package com.propertyvista.oapi.v1.model;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElementWrapper;
-import javax.xml.bind.annotation.XmlElements;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import com.propertyvista.oapi.xml.AbstractElementIO;
 import com.propertyvista.oapi.xml.BigDecimalIO;
 import com.propertyvista.oapi.xml.IntegerIO;
+import com.propertyvista.oapi.xml.ListIO;
 import com.propertyvista.oapi.xml.LogicalDateIO;
 import com.propertyvista.oapi.xml.StringIO;
 
@@ -71,12 +68,12 @@ public class FloorplanIO extends AbstractElementIO {
     public LogicalDateIO availableFrom;
 
     @XmlElementWrapper
-    @XmlElements(@XmlElement(name = "amenity", type = FloorplanAmenityIO.class))
-    public List<FloorplanAmenityIO> amenities = new ArrayList<FloorplanAmenityIO>();
+    @XmlElement(name = "amenity", type = FloorplanAmenityIO.class)
+    public ListIO<FloorplanAmenityIO> amenities = new ListIO<FloorplanAmenityIO>();
 
     @XmlElementWrapper
-    @XmlElements(@XmlElement(name = "media", type = MediaImageIO.class))
-    public List<MediaImageIO> medias = new ArrayList<MediaImageIO>();
+    @XmlElement(name = "media", type = MediaImageIO.class)
+    public ListIO<MediaImageIO> medias = new ListIO<MediaImageIO>();
 
     @Override
     public boolean equals(Object obj) {

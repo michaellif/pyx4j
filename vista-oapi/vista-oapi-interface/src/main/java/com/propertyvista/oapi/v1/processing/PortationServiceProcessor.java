@@ -20,12 +20,13 @@ import com.propertyvista.dto.PropertySearchCriteria;
 import com.propertyvista.oapi.ServiceType;
 import com.propertyvista.oapi.v1.marshaling.BuildingMarshaller;
 import com.propertyvista.oapi.v1.model.BuildingListIO;
+import com.propertyvista.oapi.v1.service.PortationService;
 import com.propertyvista.server.common.util.PropertyFinder;
 
 public class PortationServiceProcessor extends AbstractProcessor {
 
     public PortationServiceProcessor(ServiceType serviceType) {
-        super(serviceType);
+        super(PortationService.class, serviceType);
     }
 
     public BuildingListIO exportBuildings() {

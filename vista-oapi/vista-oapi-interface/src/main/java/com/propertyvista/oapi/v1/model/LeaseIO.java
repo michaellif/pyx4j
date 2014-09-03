@@ -13,8 +13,6 @@
  */
 package com.propertyvista.oapi.v1.model;
 
-import java.util.List;
-
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlRootElement;
 
@@ -24,6 +22,7 @@ import com.propertyvista.oapi.v1.model.types.LeaseTypeIO;
 import com.propertyvista.oapi.v1.model.types.PaymentFrequencyIO;
 import com.propertyvista.oapi.xml.AbstractElementIO;
 import com.propertyvista.oapi.xml.BigDecimalIO;
+import com.propertyvista.oapi.xml.ListIO;
 import com.propertyvista.oapi.xml.LogicalDateIO;
 
 @XmlRootElement(name = "lease")
@@ -53,7 +52,7 @@ public class LeaseIO extends AbstractElementIO {
     // output only. Input done through leaseTerm.
     public LogicalDateIO leaseTo;
 
-    public List<TenantIO> tenants;
+    public ListIO<TenantIO> tenants;
 
     public LeaseIO() {
     }

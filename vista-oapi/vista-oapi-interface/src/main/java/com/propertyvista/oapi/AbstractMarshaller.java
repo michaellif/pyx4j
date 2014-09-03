@@ -14,26 +14,46 @@
 package com.propertyvista.oapi;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.IPrimitive;
 
 import com.propertyvista.oapi.xml.Action;
 import com.propertyvista.oapi.xml.ElementIO;
+import com.propertyvista.oapi.xml.ListIO;
 import com.propertyvista.oapi.xml.PrimitiveIO;
 
 public abstract class AbstractMarshaller<ValueType extends IEntity, BoundType> {
 
-    public abstract BoundType marshal(ValueType v) throws Exception;
+    public abstract BoundType marshal(ValueType v);
 
-    public abstract ValueType unmarshal(BoundType v) throws Exception;
+    public abstract ValueType unmarshal(BoundType v);
+
+    public ListIO<BoundType> marshal(Collection<ValueType> collection) {
+        ListIO<BoundType> ioList = new ListIO<BoundType>();
+        for (ValueType item : collection) {
+            ioList.getValue().add(marshal(item));
+        }
+        return ioList;
+    }
+
+    public List<ValueType> unmarshal(ListIO<BoundType> listIO) {
+        List<ValueType> list = new ArrayList<ValueType>();
+        for (BoundType ioItem : listIO.getValue()) {
+            list.add(unmarshal(ioItem));
+        }
+        return list;
+    }
 
     /**
      * 
-     * Marshals elementIO->entity
+     * Unmarshals elementIO->entity
      * 
      */
-    public static <T extends IEntity, E extends ElementIO> void set(T entity, E elementIO, AbstractMarshaller<T, E> marshaller) {
+    public <T extends IEntity, E extends ElementIO> void set(T entity, E elementIO, AbstractMarshaller<T, E> marshaller) {
         if (elementIO != null) {
 
             if (elementIO.getAction() == Action.delete) {
@@ -55,7 +75,7 @@ public abstract class AbstractMarshaller<ValueType extends IEntity, BoundType> {
      * sets value for IPrimitive if primitiveIO is not null
      * 
      */
-    public static <T extends Serializable> void setValue(IPrimitive<T> primitive, PrimitiveIO<T> primitiveIO) {
+    public <T extends Serializable> void setValue(IPrimitive<T> primitive, PrimitiveIO<T> primitiveIO) {
         if (primitiveIO != null) {
             primitive.setValue(primitiveIO.getValue());
         }
@@ -66,14 +86,14 @@ public abstract class AbstractMarshaller<ValueType extends IEntity, BoundType> {
      * returns PrimitiveIO if neither IPrimitive nor its value is null
      * 
      */
-    public static <T extends Serializable, E extends PrimitiveIO<T>> E createIo(Class<E> classIO, IPrimitive<T> primitive) {
+    public <T extends Serializable, E extends PrimitiveIO<T>> E createIo(Class<E> classIO, IPrimitive<T> primitive) {
         if (primitive != null && !primitive.isNull()) {
             return createIo(classIO, primitive.getValue());
         }
         return null;
     }
 
-    public static <T extends Serializable, E extends PrimitiveIO<T>> E createIo(Class<E> classIO, T value) {
+    public <T extends Serializable, E extends PrimitiveIO<T>> E createIo(Class<E> classIO, T value) {
         if (value != null) {
             E primitiveIO;
             try {
@@ -92,7 +112,7 @@ public abstract class AbstractMarshaller<ValueType extends IEntity, BoundType> {
      * returns IPrimitive's value if neither IPrimitive nor its value is null
      * 
      */
-    public static <T extends Serializable> T getValue(IPrimitive<T> primitive) {
+    public <T extends Serializable> T getValue(IPrimitive<T> primitive) {
         if (primitive != null && !primitive.isNull()) {
             T result = primitive.getValue();
             return result;

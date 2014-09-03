@@ -13,6 +13,7 @@
  */
 package com.propertyvista.oapi.xml;
 
+import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlValue;
 
 public class StringIO implements PrimitiveIO<String> {
@@ -40,6 +41,7 @@ public class StringIO implements PrimitiveIO<String> {
     }
 
     @Override
+    @XmlAttribute
     public Action getAction() {
         return action;
     }

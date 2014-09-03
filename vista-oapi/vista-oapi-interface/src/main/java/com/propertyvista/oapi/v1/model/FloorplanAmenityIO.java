@@ -24,7 +24,7 @@ public class FloorplanAmenityIO extends AbstractElementIO {
     @XmlAttribute
     public String name;
 
-    public String newName;
+    public StringIO newName;
 
     public FloorplanAmenityTypeIO type;
 

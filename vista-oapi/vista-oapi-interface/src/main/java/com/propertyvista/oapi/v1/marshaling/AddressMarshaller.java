@@ -13,6 +13,8 @@
  */
 package com.propertyvista.oapi.v1.marshaling;
 
+import java.util.Collection;
+
 import com.pyx4j.entity.core.EntityFactory;
 
 import com.propertyvista.domain.contact.InternationalAddress;
@@ -68,4 +70,5 @@ public class AddressMarshaller extends AbstractMarshaller<InternationalAddress, 
 
         return address;
     }
+
 }

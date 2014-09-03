@@ -78,15 +78,15 @@ public class BuildingPersistenceTest extends WSOapiTestBase {
         assertEquals(buildingIO.marketing.description.getValue(), buildingIO2.marketing.description.getValue());
 
         // amenities
-        for (int i = 0; i < buildingIO.amenities.size(); i++) {
+        for (int i = 0; i < buildingIO.amenities.getValue().size(); i++) {
             assertEquals(buildingIO.amenities.get(i).name, buildingIO2.amenities.get(i).name);
             assertEquals(buildingIO.amenities.get(i).description.getValue(), buildingIO2.amenities.get(i).description.getValue());
             assertEquals(buildingIO.amenities.get(i).type.getValue(), buildingIO2.amenities.get(i).type.getValue());
         }
 
         // parkings
-        for (int i = 0; i < buildingIO.parkings.size(); i++) {
-            ParkingIO parking = buildingIO2.parkings.get(buildingIO2.parkings.indexOf(buildingIO.parkings.get(i)));
+        for (int i = 0; i < buildingIO.parkings.getValue().size(); i++) {
+            ParkingIO parking = buildingIO2.parkings.get(buildingIO2.parkings.getValue().indexOf(buildingIO.parkings.get(i)));
             assertEquals(buildingIO.parkings.get(i).name, parking.name);
             assertEquals(buildingIO.parkings.get(i).description.getValue(), parking.description.getValue());
             assertEquals(buildingIO.parkings.get(i).levels.getValue(), parking.levels.getValue());
@@ -95,19 +95,19 @@ public class BuildingPersistenceTest extends WSOapiTestBase {
         }
 
         // contacts
-        for (int i = 0; i < buildingIO.contacts.size(); i++) {
+        for (int i = 0; i < buildingIO.contacts.getValue().size(); i++) {
             assertEquals(buildingIO.contacts.get(i).name, buildingIO2.contacts.get(i).name);
             assertEquals(buildingIO.contacts.get(i).email.getValue(), buildingIO2.contacts.get(i).email.getValue());
             assertEquals(buildingIO.contacts.get(i).phone.getValue(), buildingIO2.contacts.get(i).phone.getValue());
         }
 
         // medias
-        for (int i = 0; i < buildingIO.medias.size(); i++) {
+        for (int i = 0; i < buildingIO.medias.getValue().size(); i++) {
             assertEquals(buildingIO.medias.get(i).caption.getValue(), buildingIO2.medias.get(i).caption.getValue());
         }
 
         // units
-        for (int i = 0; i < buildingIO.units.size(); i++) {
+        for (int i = 0; i < buildingIO.units.getValue().size(); i++) {
             assertEquals(buildingIO.units.get(i).number, buildingIO2.units.get(i).number);
             assertEquals(buildingIO.units.get(i).propertyCode, buildingIO2.units.get(i).propertyCode);
             assertEquals(buildingIO.units.get(i).baths.getValue(), buildingIO2.units.get(i).baths.getValue());
@@ -219,16 +219,16 @@ public class BuildingPersistenceTest extends WSOapiTestBase {
         b.buildingType = new BuildingTypeIO(BuildingInfo.Type.residential);
 
         b.marketing = marketing;
-        b.amenities.add(amenity1);
-        b.amenities.add(amenity2);
+        b.amenities.getValue().add(amenity1);
+        b.amenities.getValue().add(amenity2);
 //        b.includedUtilities.add(utility1);
 //        b.includedUtilities.add(utility2);
-        b.parkings.add(parking1);
-        b.parkings.add(parking2);
-        b.contacts.add(contact1);
-        b.contacts.add(contact2);
-        b.medias.add(media1);
-        b.medias.add(media2);
+        b.parkings.getValue().add(parking1);
+        b.parkings.getValue().add(parking2);
+        b.contacts.getValue().add(contact1);
+        b.contacts.getValue().add(contact2);
+        b.medias.getValue().add(media1);
+        b.medias.getValue().add(media2);
         return b;
     }
 

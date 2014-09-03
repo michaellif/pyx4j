@@ -28,6 +28,7 @@ public class OapiRsApplication extends Application {
                 RSExceptionMapper.class, //
                 RSConverterProvider.class, //
                 // service
+                RSPortationServiceImpl.class, //
                 RSPropertyServiceImpl.class, //
                 RSLeaseServiceImpl.class, //
                 RSMarketingServiceImpl.class //

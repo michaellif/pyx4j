@@ -25,7 +25,7 @@ import com.propertyvista.oapi.v1.model.BuildingListIO;
 import com.propertyvista.oapi.v1.processing.PortationServiceProcessor;
 import com.propertyvista.oapi.v1.service.PortationService;
 
-@Path("portation")
+@Path("/portation")
 public class RSPortationServiceImpl implements PortationService {
 
     @Override

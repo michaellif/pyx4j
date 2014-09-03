@@ -13,10 +13,6 @@
  */
 package com.propertyvista.oapi.v1.marshaling;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-
 import com.pyx4j.entity.core.EntityFactory;
 
 import com.propertyvista.domain.property.asset.building.BuildingAmenity;
@@ -51,14 +47,6 @@ public class BuildingAmenityMarshaller extends AbstractMarshaller<BuildingAmenit
         return amenityIO;
     }
 
-    public List<BuildingAmenityIO> marshal(Collection<BuildingAmenity> amenities) {
-        List<BuildingAmenityIO> amenityIOList = new ArrayList<BuildingAmenityIO>();
-        for (BuildingAmenity amenity : amenities) {
-            amenityIOList.add(marshal(amenity));
-        }
-        return amenityIOList;
-    }
-
     @Override
     public BuildingAmenity unmarshal(BuildingAmenityIO amenityIO) {
         BuildingAmenity amenity = EntityFactory.create(BuildingAmenity.class);
@@ -68,14 +56,4 @@ public class BuildingAmenityMarshaller extends AbstractMarshaller<BuildingAmenit
         return amenity;
     }
 
-    public List<BuildingAmenity> unmarshal(Collection<BuildingAmenityIO> amenityIOList) {
-        List<BuildingAmenity> amenities = new ArrayList<BuildingAmenity>();
-        for (BuildingAmenityIO amenityIO : amenityIOList) {
-            BuildingAmenity amenity = EntityFactory.create(BuildingAmenity.class);
-
-            set(amenity, amenityIO, BuildingAmenityMarshaller.getInstance());
-            amenities.add(amenity);
-        }
-        return amenities;
-    }
 }

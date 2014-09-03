@@ -24,6 +24,7 @@ import com.propertyvista.domain.media.ThumbnailSize;
 import com.propertyvista.domain.security.common.VistaApplication;
 import com.propertyvista.oapi.AbstractMarshaller;
 import com.propertyvista.oapi.v1.model.MediaImageIO;
+import com.propertyvista.oapi.xml.ListIO;
 import com.propertyvista.oapi.xml.StringIO;
 import com.propertyvista.portal.rpc.DeploymentConsts;
 import com.propertyvista.portal.rpc.portal.ImageConsts;
@@ -52,10 +53,10 @@ public class MediaMarshaller extends AbstractMarshaller<MediaFile, MediaImageIO>
         return mediaIO;
     }
 
-    public List<MediaImageIO> marshal(List<MediaFile> mediaList) {
-        List<MediaImageIO> mediaIOList = new ArrayList<MediaImageIO>();
+    public ListIO<MediaImageIO> marshal(List<MediaFile> mediaList) {
+        ListIO<MediaImageIO> mediaIOList = new ListIO<MediaImageIO>();
         for (MediaFile media : mediaList) {
-            mediaIOList.add(marshal(media));
+            mediaIOList.getValue().add(marshal(media));
         }
         return mediaIOList;
     }

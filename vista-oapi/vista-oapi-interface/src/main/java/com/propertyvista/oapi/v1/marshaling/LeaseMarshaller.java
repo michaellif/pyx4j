@@ -73,9 +73,8 @@ public class LeaseMarshaller extends AbstractMarshaller<Lease, LeaseIO> {
             Person person = participant.customer().person();
             persons.add(person);
         }
-        List<TenantIO> tenants = new ArrayList<TenantIO>();
-        tenants.addAll(TenantMarshaller.getInstance().marshal(persons));
-        leaseIO.tenants = tenants;
+
+        leaseIO.tenants = TenantMarshaller.getInstance().marshal(persons);
         return leaseIO;
     }
 

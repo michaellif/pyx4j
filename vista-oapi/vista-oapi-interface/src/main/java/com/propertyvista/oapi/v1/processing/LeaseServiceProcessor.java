@@ -30,11 +30,12 @@ import com.propertyvista.oapi.v1.marshaling.TenantMarshaller;
 import com.propertyvista.oapi.v1.model.LeaseIO;
 import com.propertyvista.oapi.v1.model.TenantIO;
 import com.propertyvista.oapi.v1.persisting.LeasePersister;
+import com.propertyvista.oapi.v1.service.LeaseService;
 
 public class LeaseServiceProcessor extends AbstractProcessor {
 
     public LeaseServiceProcessor(ServiceType serviceType) {
-        super(serviceType);
+        super(LeaseService.class, serviceType);
     }
 
     public List<LeaseIO> getLeases() {

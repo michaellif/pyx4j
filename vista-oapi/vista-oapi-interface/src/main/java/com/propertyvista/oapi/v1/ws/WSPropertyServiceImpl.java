@@ -62,7 +62,7 @@ public class WSPropertyServiceImpl implements WSPropertyService {
             newUnit.number = unitNumber;
             newUnit.floorplanName = new StringIO(floorplanName);
             newUnit.propertyCode = propertyCode;
-            building.units.add(newUnit);
+            building.units.getValue().add(newUnit);
         } else {
             //TODO error, create building before putting units in it
         }
