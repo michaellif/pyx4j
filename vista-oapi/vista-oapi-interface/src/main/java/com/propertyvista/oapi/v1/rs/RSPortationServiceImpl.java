@@ -20,6 +20,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
+import com.propertyvista.oapi.ServiceType;
 import com.propertyvista.oapi.v1.model.BuildingListIO;
 import com.propertyvista.oapi.v1.processing.PortationServiceProcessor;
 import com.propertyvista.oapi.v1.service.PortationService;
@@ -32,7 +33,12 @@ public class RSPortationServiceImpl implements PortationService {
     @Path("exportBuildings")
     @Produces(MediaType.APPLICATION_XML)
     public BuildingListIO exportBuildings() {
-        return new PortationServiceProcessor().exportBuildings();
+        PortationServiceProcessor processor = new PortationServiceProcessor(ServiceType.List);
+        try {
+            return processor.exportBuildings();
+        } finally {
+            processor.destroy();
+        }
     }
 
     @POST

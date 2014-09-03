@@ -27,6 +27,7 @@ import javax.ws.rs.core.MediaType;
 
 import com.pyx4j.i18n.shared.I18n;
 
+import com.propertyvista.oapi.ServiceType;
 import com.propertyvista.oapi.v1.model.LeaseIO;
 import com.propertyvista.oapi.v1.model.TenantIO;
 import com.propertyvista.oapi.v1.processing.LeaseServiceProcessor;
@@ -60,17 +61,22 @@ public class RSLeaseServiceImpl implements LeaseService {
     @GET
     @Produces({ MediaType.APPLICATION_XML })
     public List<LeaseIO> getLeases(@QueryParam("propertyCode") String propertyCode) {
-        List<LeaseIO> allLeases = new LeaseServiceProcessor().getLeases();
-        if (propertyCode == null) {
-            return allLeases;
-        }
-        List<LeaseIO> filteredLeases = new ArrayList<LeaseIO>();
-        for (LeaseIO lease : allLeases) {
-            if (lease.propertyCode.equals(propertyCode)) {
-                filteredLeases.add(lease);
+        LeaseServiceProcessor processor = new LeaseServiceProcessor(ServiceType.List);
+        try {
+            List<LeaseIO> allLeases = processor.getLeases();
+            if (propertyCode == null) {
+                return allLeases;
             }
+            List<LeaseIO> filteredLeases = new ArrayList<LeaseIO>();
+            for (LeaseIO lease : allLeases) {
+                if (lease.propertyCode.equals(propertyCode)) {
+                    filteredLeases.add(lease);
+                }
+            }
+            return filteredLeases;
+        } finally {
+            processor.destroy();
         }
-        return filteredLeases;
     }
 
     @Override
@@ -78,11 +84,16 @@ public class RSLeaseServiceImpl implements LeaseService {
     @Path("/{leaseId}")
     @Produces({ MediaType.APPLICATION_XML })
     public LeaseIO getLeaseById(@PathParam("leaseId") String leaseId) {
-        LeaseIO leaseIO = new LeaseServiceProcessor().getLeaseById(leaseId);
-        if (leaseIO == null) {
-            throw new RuntimeException(i18n.tr("Lease with leaseId={0} not found", leaseId));
+        LeaseServiceProcessor processor = new LeaseServiceProcessor(ServiceType.Read);
+        try {
+            LeaseIO leaseIO = processor.getLeaseById(leaseId);
+            if (leaseIO == null) {
+                throw new RuntimeException(i18n.tr("Lease with leaseId={0} not found", leaseId));
+            }
+            return leaseIO;
+        } finally {
+            processor.destroy();
         }
-        return new LeaseServiceProcessor().getLeaseById(leaseId);
     }
 
     @Override
@@ -90,16 +101,25 @@ public class RSLeaseServiceImpl implements LeaseService {
     @Path("/{leaseId}/tenants")
     @Produces({ MediaType.APPLICATION_XML })
     public List<TenantIO> getTenants(@PathParam("leaseId") String leaseId) {
-        return new LeaseServiceProcessor().getTenants(leaseId);
+        LeaseServiceProcessor processor = new LeaseServiceProcessor(ServiceType.List);
+        try {
+            return processor.getTenants(leaseId);
+        } finally {
+            processor.destroy();
+        }
     }
 
     @Override
     @POST
     @Path("/updateLease")
     @Consumes({ MediaType.APPLICATION_XML })
-    public void updateLease(LeaseIO leaseIO) {
-        new LeaseServiceProcessor().updateLease(leaseIO);
-        RSUtils.createSuccessResponse(i18n.tr("Lease updated successfully"));
+    public void updateLease(LeaseIO lease) {
+        LeaseServiceProcessor processor = new LeaseServiceProcessor(ServiceType.Write);
+        try {
+            processor.updateLease(lease);
+        } finally {
+            processor.destroy();
+        }
     }
 
     @Override
@@ -108,7 +128,6 @@ public class RSLeaseServiceImpl implements LeaseService {
     @Consumes({ MediaType.APPLICATION_XML })
     public void updateTenants(@PathParam("leaseId") String leaseId, List<TenantIO> tenantIOs) {
         //TODO mkoval implementation TBD
-        RSUtils.createSuccessResponse(i18n.tr("Operation is not implemented"));
     }
 
 }

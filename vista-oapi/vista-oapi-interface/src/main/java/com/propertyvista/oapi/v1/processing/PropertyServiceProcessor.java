@@ -13,7 +13,6 @@
  */
 package com.propertyvista.oapi.v1.processing;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import com.pyx4j.config.server.ServerSideFactory;
@@ -25,15 +24,21 @@ import com.propertyvista.biz.asset.BuildingFacade;
 import com.propertyvista.biz.preloader.DefaultProductCatalogFacade;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
+import com.propertyvista.oapi.ServiceType;
 import com.propertyvista.oapi.v1.marshaling.BuildingMarshaller;
 import com.propertyvista.oapi.v1.marshaling.UnitMarshaller;
 import com.propertyvista.oapi.v1.model.BuildingIO;
 import com.propertyvista.oapi.v1.model.BuildingListIO;
 import com.propertyvista.oapi.v1.model.UnitIO;
+import com.propertyvista.oapi.v1.model.UnitListIO;
 import com.propertyvista.oapi.v1.persisting.BuildingPersister;
 import com.propertyvista.oapi.v1.persisting.UnitPersister;
 
-public class PropertyServiceProcessor {
+public class PropertyServiceProcessor extends AbstractProcessor {
+
+    public PropertyServiceProcessor(ServiceType serviceType) {
+        super(serviceType);
+    }
 
     public BuildingListIO getBuildings() {
 
@@ -71,8 +76,8 @@ public class PropertyServiceProcessor {
         Persistence.service().commit();
     }
 
-    public List<UnitIO> getUnitsByPropertyCode(String propertyCode) {
-        List<UnitIO> unitsRS = new ArrayList<UnitIO>();
+    public UnitListIO getUnitsByPropertyCode(String propertyCode) {
+        UnitListIO unitsRS = new UnitListIO();
 
         List<AptUnit> units;
         {
@@ -83,7 +88,7 @@ public class PropertyServiceProcessor {
         for (AptUnit unit : units) {
             Persistence.service().retrieve(unit.floorplan());
             UnitIO unitIO = UnitMarshaller.getInstance().marshal(unit);
-            unitsRS.add(unitIO);
+            unitsRS.unitList.add(unitIO);
         }
         return unitsRS;
     }

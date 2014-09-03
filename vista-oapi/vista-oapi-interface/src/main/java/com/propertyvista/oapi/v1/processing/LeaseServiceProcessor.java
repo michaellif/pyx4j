@@ -24,13 +24,18 @@ import com.pyx4j.server.contexts.NamespaceManager;
 
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseParticipant;
+import com.propertyvista.oapi.ServiceType;
 import com.propertyvista.oapi.v1.marshaling.LeaseMarshaller;
 import com.propertyvista.oapi.v1.marshaling.TenantMarshaller;
 import com.propertyvista.oapi.v1.model.LeaseIO;
 import com.propertyvista.oapi.v1.model.TenantIO;
 import com.propertyvista.oapi.v1.persisting.LeasePersister;
 
-public class LeaseServiceProcessor {
+public class LeaseServiceProcessor extends AbstractProcessor {
+
+    public LeaseServiceProcessor(ServiceType serviceType) {
+        super(serviceType);
+    }
 
     public List<LeaseIO> getLeases() {
         List<LeaseIO> leasesRS = new ArrayList<LeaseIO>();

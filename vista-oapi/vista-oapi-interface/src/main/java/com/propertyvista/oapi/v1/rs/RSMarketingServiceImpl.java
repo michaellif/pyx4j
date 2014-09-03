@@ -29,6 +29,7 @@ import com.pyx4j.commons.LogicalDate;
 import com.propertyvista.domain.property.asset.building.BuildingAmenity;
 import com.propertyvista.dto.PropertySearchCriteria.BathroomChoice;
 import com.propertyvista.dto.PropertySearchCriteria.BedroomChoice;
+import com.propertyvista.oapi.ServiceType;
 import com.propertyvista.oapi.v1.model.AppointmentRequestIO;
 import com.propertyvista.oapi.v1.model.BuildingIO;
 import com.propertyvista.oapi.v1.model.BuildingListIO;
@@ -58,7 +59,12 @@ public class RSMarketingServiceImpl implements MarketingService {
 
     @Override
     public BuildingListIO getBuildingList(PropertySearchCriteriaIO criteria) {
-        return new MarketingServiceProcessor().getBuildingList(criteria);
+        MarketingServiceProcessor processor = new MarketingServiceProcessor(ServiceType.List);
+        try {
+            return processor.getBuildingList(criteria);
+        } finally {
+            processor.destroy();
+        }
     }
 
     @GET
@@ -66,7 +72,12 @@ public class RSMarketingServiceImpl implements MarketingService {
     @Produces(MediaType.APPLICATION_XML)
     @Override
     public BuildingIO getBuilding(@QueryParam("prId") String propertyId) {
-        return new MarketingServiceProcessor().getPropertyInfo(propertyId);
+        MarketingServiceProcessor processor = new MarketingServiceProcessor(ServiceType.Read);
+        try {
+            return processor.getPropertyInfo(propertyId);
+        } finally {
+            processor.destroy();
+        }
     }
 
     @GET
@@ -74,7 +85,12 @@ public class RSMarketingServiceImpl implements MarketingService {
     @Produces(MediaType.APPLICATION_XML)
     @Override
     public FloorplanListIO getFloorplanList(@QueryParam("prId") String propertyId) {
-        return new MarketingServiceProcessor().getFloorplanList(propertyId);
+        MarketingServiceProcessor processor = new MarketingServiceProcessor(ServiceType.List);
+        try {
+            return processor.getFloorplanList(propertyId);
+        } finally {
+            processor.destroy();
+        }
     }
 
     @GET
@@ -82,7 +98,12 @@ public class RSMarketingServiceImpl implements MarketingService {
     @Produces(MediaType.APPLICATION_XML)
     @Override
     public FloorplanIO getFloorplan(@QueryParam("prId") String propertyId, @QueryParam("fpId") String fpId) {
-        return new MarketingServiceProcessor().getFloorplanInfo(propertyId, fpId);
+        MarketingServiceProcessor processor = new MarketingServiceProcessor(ServiceType.Read);
+        try {
+            return processor.getFloorplanInfo(propertyId, fpId);
+        } finally {
+            processor.destroy();
+        }
     }
 
     @GET
@@ -91,7 +112,12 @@ public class RSMarketingServiceImpl implements MarketingService {
     @Override
     public List<FloorplanAvailabilityIO> getFloorplanAvailability(@QueryParam("prId") String prId, @QueryParam("fpId") String fpId,
             @QueryParam("moveIn") LogicalDate date) {
-        return new MarketingServiceProcessor().getFloorplanAvailability(prId, fpId, date);
+        MarketingServiceProcessor processor = new MarketingServiceProcessor(ServiceType.List);
+        try {
+            return processor.getFloorplanAvailability(prId, fpId, date);
+        } finally {
+            processor.destroy();
+        }
     }
 
     @POST
@@ -99,13 +125,23 @@ public class RSMarketingServiceImpl implements MarketingService {
     @Consumes(MediaType.APPLICATION_XML)
     @Override
     public void requestAppointment(AppointmentRequestIO request) {
-        new MarketingServiceProcessor().requestAppointment(request);
+        MarketingServiceProcessor processor = new MarketingServiceProcessor(ServiceType.Write);
+        try {
+            processor.requestAppointment(request);
+        } finally {
+            processor.destroy();
+        }
     }
 
     @GET
     @Path("getApplyForLeaseUrl")
     @Override
     public String getApplyForLeaseUrl(@QueryParam("prId") String prId, @QueryParam("fpId") String fpId) {
-        return new MarketingServiceProcessor().getApplyForLeaseUrl(prId, fpId);
+        MarketingServiceProcessor processor = new MarketingServiceProcessor(ServiceType.Read);
+        try {
+            return processor.getApplyForLeaseUrl(prId, fpId);
+        } finally {
+            processor.destroy();
+        }
     }
 }

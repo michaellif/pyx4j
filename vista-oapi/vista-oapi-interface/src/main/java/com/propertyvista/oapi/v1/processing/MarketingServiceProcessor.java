@@ -36,6 +36,7 @@ import com.propertyvista.domain.security.common.VistaApplication;
 import com.propertyvista.domain.tenant.lead.Guest;
 import com.propertyvista.domain.tenant.lead.Lead;
 import com.propertyvista.domain.util.DomainUtil;
+import com.propertyvista.oapi.ServiceType;
 import com.propertyvista.oapi.v1.marshaling.BuildingMarshaller;
 import com.propertyvista.oapi.v1.marshaling.FloorplanMarshaller;
 import com.propertyvista.oapi.v1.model.AppointmentRequestIO;
@@ -48,7 +49,11 @@ import com.propertyvista.oapi.v1.searchcriteria.PropertySearchCriteriaIO;
 import com.propertyvista.portal.rpc.portal.prospect.ProspectPortalSiteMap;
 import com.propertyvista.server.common.util.PropertyFinder;
 
-public class MarketingServiceProcessor {
+public class MarketingServiceProcessor extends AbstractProcessor {
+
+    public MarketingServiceProcessor(ServiceType serviceType) {
+        super(serviceType);
+    }
 
     public BuildingListIO getBuildingList(PropertySearchCriteriaIO criteria) {
         BuildingListIO result = new BuildingListIO();

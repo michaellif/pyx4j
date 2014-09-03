@@ -19,10 +19,13 @@ import java.util.Map;
 
 import javax.jws.WebService;
 
+import com.propertyvista.oapi.ServiceType;
 import com.propertyvista.oapi.v1.Version;
 import com.propertyvista.oapi.v1.model.BuildingIO;
 import com.propertyvista.oapi.v1.model.BuildingListIO;
 import com.propertyvista.oapi.v1.model.UnitIO;
+import com.propertyvista.oapi.v1.model.UnitListIO;
+import com.propertyvista.oapi.v1.processing.MarketingServiceProcessor;
 import com.propertyvista.oapi.v1.processing.PropertyServiceProcessor;
 import com.propertyvista.oapi.xml.StringIO;
 
@@ -43,7 +46,12 @@ public class WSPropertyServiceImpl implements WSPropertyService {
 
     @Override
     public BuildingListIO listAllBuildings() {
-        return new PropertyServiceProcessor().getBuildings();
+        PropertyServiceProcessor processor = new PropertyServiceProcessor(ServiceType.List);
+        try {
+            return processor.getBuildings();
+        } finally {
+            processor.destroy();
+        }
     }
 
     @Override
@@ -62,8 +70,13 @@ public class WSPropertyServiceImpl implements WSPropertyService {
     }
 
     @Override
-    public List<UnitIO> listAllBuildingUnits(String buildingCode) {
-        return new PropertyServiceProcessor().getUnitsByPropertyCode(buildingCode);
+    public UnitListIO listAllBuildingUnits(String buildingCode) {
+        PropertyServiceProcessor processor = new PropertyServiceProcessor(ServiceType.List);
+        try {
+            return processor.getUnitsByPropertyCode(buildingCode);
+        } finally {
+            processor.destroy();
+        }
     }
 
 }

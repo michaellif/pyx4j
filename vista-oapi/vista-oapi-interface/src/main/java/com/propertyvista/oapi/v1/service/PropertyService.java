@@ -13,8 +13,6 @@
  */
 package com.propertyvista.oapi.v1.service;
 
-import javax.ws.rs.core.Response;
-
 import com.propertyvista.oapi.v1.model.BuildingIO;
 import com.propertyvista.oapi.v1.model.BuildingListIO;
 import com.propertyvista.oapi.v1.model.UnitIO;
@@ -30,7 +28,7 @@ public interface PropertyService extends OAPIService {
 
     UnitIO getUnitByNumber(String propertyCode, String unitNumber);
 
-    Response updateBuilding(BuildingIO buildingIO) throws Exception;
+    void updateBuilding(BuildingIO buildingIO) throws Exception;
 
-    Response updateUnit(String propertyCode, UnitIO unitIO) throws Exception;
+    void updateUnit(String propertyCode, UnitIO unitIO) throws Exception;
 }

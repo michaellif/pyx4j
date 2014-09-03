@@ -24,6 +24,7 @@ import javax.jws.soap.SOAPBinding.Use;
 
 import com.pyx4j.commons.LogicalDate;
 
+import com.propertyvista.oapi.ServiceType;
 import com.propertyvista.oapi.v1.model.AppointmentRequestIO;
 import com.propertyvista.oapi.v1.model.BuildingIO;
 import com.propertyvista.oapi.v1.model.BuildingListIO;
@@ -40,38 +41,73 @@ public class WSMarketingServiceImpl implements MarketingService {
 
     @Override
     public BuildingListIO getBuildingList(@WebParam(name = "criteria") PropertySearchCriteriaIO criteria) {
-        return new MarketingServiceProcessor().getBuildingList(criteria);
+        MarketingServiceProcessor processor = new MarketingServiceProcessor(ServiceType.List);
+        try {
+            return processor.getBuildingList(criteria);
+        } finally {
+            processor.destroy();
+        }
     }
 
     @Override
     public BuildingIO getBuilding(@WebParam(name = "propertyId") String propertyId) {
-        return new MarketingServiceProcessor().getPropertyInfo(propertyId);
+        MarketingServiceProcessor processor = new MarketingServiceProcessor(ServiceType.Read);
+        try {
+            return processor.getPropertyInfo(propertyId);
+        } finally {
+            processor.destroy();
+        }
     }
 
     @Override
     public FloorplanListIO getFloorplanList(@WebParam(name = "propertyId") String propertyId) {
-        return new MarketingServiceProcessor().getFloorplanList(propertyId);
+        MarketingServiceProcessor processor = new MarketingServiceProcessor(ServiceType.Read);
+        try {
+            return processor.getFloorplanList(propertyId);
+        } finally {
+            processor.destroy();
+        }
     }
 
     @Override
     public FloorplanIO getFloorplan(@WebParam(name = "propertyId") String propertyId, @WebParam(name = "floorplanId") String fpId) {
-        return new MarketingServiceProcessor().getFloorplanInfo(propertyId, fpId);
+        MarketingServiceProcessor processor = new MarketingServiceProcessor(ServiceType.Read);
+        try {
+            return processor.getFloorplanInfo(propertyId, fpId);
+        } finally {
+            processor.destroy();
+        }
     }
 
     @Override
-    public List<FloorplanAvailabilityIO> getFloorplanAvailability(@WebParam(name = "propertyId") String propertyId, @WebParam(name = "floorplanId") String fpId,
-            @WebParam(name = "moveinDate") LogicalDate date) {
-        return new MarketingServiceProcessor().getFloorplanAvailability(propertyId, fpId, date);
+    public List<FloorplanAvailabilityIO> getFloorplanAvailability(@WebParam(name = "propertyId") String propertyId,
+            @WebParam(name = "floorplanId") String fpId, @WebParam(name = "moveinDate") LogicalDate date) {
+        MarketingServiceProcessor processor = new MarketingServiceProcessor(ServiceType.List);
+        try {
+            return processor.getFloorplanAvailability(propertyId, fpId, date);
+        } finally {
+            processor.destroy();
+        }
     }
 
     @Override
     public void requestAppointment(@WebParam(name = "request") AppointmentRequestIO request) {
-        new MarketingServiceProcessor().requestAppointment(request);
+        MarketingServiceProcessor processor = new MarketingServiceProcessor(ServiceType.Write);
+        try {
+            processor.requestAppointment(request);
+        } finally {
+            processor.destroy();
+        }
     }
 
     @Override
     public String getApplyForLeaseUrl(@WebParam(name = "propertyId") String propertyId, @WebParam(name = "floorplanId") String fpId) {
-        return new MarketingServiceProcessor().getApplyForLeaseUrl(propertyId, fpId);
+        MarketingServiceProcessor processor = new MarketingServiceProcessor(ServiceType.Read);
+        try {
+            return processor.getApplyForLeaseUrl(propertyId, fpId);
+        } finally {
+            processor.destroy();
+        }
     }
 
 }

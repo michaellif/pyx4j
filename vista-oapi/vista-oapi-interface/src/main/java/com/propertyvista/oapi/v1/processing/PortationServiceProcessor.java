@@ -17,12 +17,17 @@ import com.pyx4j.entity.core.EntityFactory;
 
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.dto.PropertySearchCriteria;
+import com.propertyvista.oapi.ServiceType;
 import com.propertyvista.oapi.v1.marshaling.BuildingInfoMarshaller;
 import com.propertyvista.oapi.v1.model.BuildingIO;
 import com.propertyvista.oapi.v1.model.BuildingListIO;
 import com.propertyvista.server.common.util.PropertyFinder;
 
-public class PortationServiceProcessor {
+public class PortationServiceProcessor extends AbstractProcessor {
+
+    public PortationServiceProcessor(ServiceType serviceType) {
+        super(serviceType);
+    }
 
     public BuildingListIO exportBuildings() {
         BuildingListIO result = new BuildingListIO();
