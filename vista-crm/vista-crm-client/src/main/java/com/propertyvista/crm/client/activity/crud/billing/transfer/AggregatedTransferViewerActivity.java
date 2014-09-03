@@ -61,7 +61,7 @@ public class AggregatedTransferViewerActivity extends CrmViewerActivity<Aggregat
 
         PaymentRecordDTO proto = EntityFactory.getEntityPrototype(PaymentRecordDTO.class);
 
-        // BO IS Polimorphic.  Also TO class != BO
+        // BO IS Polymorphic.  Also TO class != BO
         AggregatedTransfer typeSafeParent = (AggregatedTransfer) EntityFactory.createIdentityStub(result.getEntityMeta().getBOClass(), result.getPrimaryKey());
 
         paymentLister.clearPreDefinedFilters();
