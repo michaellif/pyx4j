@@ -378,6 +378,7 @@ public class LeaseTermForm extends CrmEntityForm<LeaseTermDTO> {
 
         setUnitNote(getValue().unitMoveOutNote().getValue());
         setRestrictions(getValue(), false);
+        tenantsFolder.setNextAutopayApplicabilityMessage(getValue().nextAutopayApplicabilityMessage().getValue());
     }
 
     @Override

@@ -41,7 +41,7 @@ public abstract class LeaseCrudServiceBaseImpl<DTO extends LeaseDTO> extends Abs
     }
 
     @Override
-    protected void enhanceRetrieved(Lease in, DTO to, RetrieveTarget retrieveTarget) {
+    protected void enhanceRetrieved(Lease bo, DTO to, RetrieveTarget retrieveTarget) {
         Persistence.service().retrieve(to.unit().building());
 
         loadCurrentTerm(to);
@@ -52,6 +52,7 @@ public abstract class LeaseCrudServiceBaseImpl<DTO extends LeaseDTO> extends Abs
             fillPreauthorizedPayments(item);
             loadTenantInsurance(to, item);
         }
+        to.nextAutopayApplicabilityMessage().setValue(ServerSideFactory.create(PaymentMethodFacade.class).getNextAutopayApplicabilityMessage(bo));
 
         for (LeaseTermGuarantor item : to.currentTerm().version().guarantors()) {
             Persistence.service().retrieve(item.screening(), AttachLevel.ToStringMembers, false);
@@ -76,7 +77,7 @@ public abstract class LeaseCrudServiceBaseImpl<DTO extends LeaseDTO> extends Abs
 
     /**
      * override in descendants to implement appropriate term loading procedure (for Lease/Application)
-     * 
+     *
      * @param to
      */
     protected abstract void loadCurrentTerm(DTO to);

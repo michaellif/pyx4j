@@ -164,6 +164,7 @@ public class LeaseTermCrudServiceImpl extends AbstractVersionedCrudServiceDtoImp
             participant.effectiveScreening().set(LeaseParticipantUtils.getLeaseTermEffectiveScreeningPointer(to.lease(), participant));
             fillPreauthorizedPayments(participant);
         }
+        to.nextAutopayApplicabilityMessage().setValue(ServerSideFactory.create(PaymentMethodFacade.class).getNextAutopayApplicabilityMessage(to.lease()));
 
         if (in.getPrimaryKey() != null) {
             Persistence.service().retrieveMember(to.version().guarantors());

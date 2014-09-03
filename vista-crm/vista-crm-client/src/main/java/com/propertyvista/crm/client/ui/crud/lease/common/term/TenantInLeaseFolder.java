@@ -36,6 +36,7 @@ import com.pyx4j.forms.client.ui.CNumberLabel;
 import com.pyx4j.forms.client.ui.PermitViewAccessAdapter;
 import com.pyx4j.forms.client.ui.RevalidationTrigger;
 import com.pyx4j.forms.client.ui.folder.BoxFolderItemDecorator;
+import com.pyx4j.forms.client.ui.folder.CFolderItem;
 import com.pyx4j.forms.client.ui.folder.IFolderItemDecorator;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.forms.client.ui.panels.FormPanel;
@@ -182,6 +183,12 @@ public class TenantInLeaseFolder extends LeaseTermParticipantFolder<LeaseTermTen
                 return null;
             }
         });
+    }
+
+    public void setNextAutopayApplicabilityMessage(String text) {
+        for (CFolderItem<LeaseTermTenant> item : getComponents()) {
+            ((TenantInLeaseEditor) ((CFolderItem<?>) item).getComponents().iterator().next()).setNextAutopayApplicabilityMessage(text);
+        }
     }
 
     private class TenantInLeaseEditor extends CForm<LeaseTermTenant> {
@@ -334,6 +341,10 @@ public class TenantInLeaseFolder extends LeaseTermParticipantFolder<LeaseTermTen
             getValue().leaseParticipant().preauthorizedPayments().clear();
             getValue().leaseParticipant().preauthorizedPayments().addAll(pads);
             preauthorizedPayments.setValue(getValue().leaseParticipant().preauthorizedPayments());
+        }
+
+        public void setNextAutopayApplicabilityMessage(String text) {
+            preauthorizedPayments.setNote(text, NoteStyle.Warn);
         }
     }
 

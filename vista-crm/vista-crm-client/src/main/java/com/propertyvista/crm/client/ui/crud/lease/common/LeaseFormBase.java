@@ -54,6 +54,8 @@ public abstract class LeaseFormBase<DTO extends LeaseDTO> extends CrmEntityForm<
 
     protected static final I18n i18n = I18n.get(LeaseFormBase.class);
 
+    private TenantInLeaseFolder tenantInLeaseFolder;
+
     protected LeaseFormBase(Class<DTO> clazz, IForm<DTO> view) {
         super(clazz, view);
         setEditable(false);
@@ -109,6 +111,8 @@ public abstract class LeaseFormBase<DTO extends LeaseDTO> extends CrmEntityForm<
         }
 
         get(proto().currentLegalStatus()).setVisible(!(getValue().currentLegalStatus().isNull()));
+
+        tenantInLeaseFolder.setNextAutopayApplicabilityMessage(getValue().nextAutopayApplicabilityMessage().getValue());
     }
 
     public void onTenantInsuranceOwnerClicked(Tenant tenantId) {
@@ -190,7 +194,7 @@ public abstract class LeaseFormBase<DTO extends LeaseDTO> extends CrmEntityForm<
 
         // Tenants/Guarantors: ----------------------------------------------------------------------------------------------------------------------
         formPanel.h1(proto().currentTerm().version().tenants().getMeta().getCaption());
-        formPanel.append(Location.Dual, proto().currentTerm().version().tenants(), new TenantInLeaseFolder(this));
+        formPanel.append(Location.Dual, proto().currentTerm().version().tenants(), tenantInLeaseFolder = new TenantInLeaseFolder(this));
 
         formPanel.h1(proto().currentTerm().version().guarantors().getMeta().getCaption());
         formPanel.append(Location.Dual, proto().currentTerm().version().guarantors(), new GuarantorInLeaseFolder(this));

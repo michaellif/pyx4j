@@ -69,4 +69,6 @@ public interface LeaseTermDTO extends LeaseTerm {
     IPrimitive<Boolean> noNeedGuarantors();
 
     MasterOnlineApplicationStatus masterApplicationStatus();
+
+    IPrimitive<String> nextAutopayApplicabilityMessage();
 }
