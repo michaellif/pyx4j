@@ -21,20 +21,20 @@ import javax.xml.bind.annotation.XmlRootElement;
 import com.propertyvista.oapi.xml.AbstractListIO;
 import com.propertyvista.oapi.xml.Action;
 
-@XmlRootElement(name = "floorplans")
-public class FloorplanListIO extends AbstractListIO<FloorplanIO> {
+@XmlRootElement(name = "utilities")
+public class UtilityListIO extends AbstractListIO<UtilityIO> {
 
-    public FloorplanListIO() {
+    public UtilityListIO() {
         super();
     }
 
-    public FloorplanListIO(Action action) {
+    public UtilityListIO(Action action) {
         super(action);
     }
 
     @Override
-    @XmlElement(name = "floorplan")
-    public ArrayList<FloorplanIO> getList() {
+    @XmlElement(name = "utility")
+    public ArrayList<UtilityIO> getList() {
         return super.getList();
     };
 }

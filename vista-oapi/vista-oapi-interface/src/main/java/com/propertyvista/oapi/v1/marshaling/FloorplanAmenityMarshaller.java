@@ -13,11 +13,16 @@
  */
 package com.propertyvista.oapi.v1.marshaling;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+
 import com.pyx4j.entity.core.EntityFactory;
 
 import com.propertyvista.domain.property.asset.FloorplanAmenity;
 import com.propertyvista.oapi.AbstractMarshaller;
 import com.propertyvista.oapi.v1.model.FloorplanAmenityIO;
+import com.propertyvista.oapi.v1.model.FloorplanAmenityListIO;
 import com.propertyvista.oapi.v1.model.types.FloorplanAmenityTypeIO;
 import com.propertyvista.oapi.xml.StringIO;
 
@@ -47,6 +52,14 @@ public class FloorplanAmenityMarshaller extends AbstractMarshaller<FloorplanAmen
         return amenityIO;
     }
 
+    public FloorplanAmenityListIO marshalCollection(Collection<FloorplanAmenity> amenity) {
+        FloorplanAmenityListIO ioList = new FloorplanAmenityListIO();
+        for (FloorplanAmenity item : amenity) {
+            ioList.add(marshal(item));
+        }
+        return ioList;
+    }
+
     @Override
     public FloorplanAmenity unmarshal(FloorplanAmenityIO amenityIO) {
         FloorplanAmenity amenity = EntityFactory.create(FloorplanAmenity.class);
@@ -54,6 +67,14 @@ public class FloorplanAmenityMarshaller extends AbstractMarshaller<FloorplanAmen
         setValue(amenity.description(), amenityIO.description);
         setValue(amenity.type(), amenityIO.type);
         return amenity;
+    }
+
+    public List<FloorplanAmenity> unmarshalCollection(FloorplanAmenityListIO listIO) {
+        List<FloorplanAmenity> list = new ArrayList<FloorplanAmenity>();
+        for (FloorplanAmenityIO ioItem : listIO.getList()) {
+            list.add(unmarshal(ioItem));
+        }
+        return list;
     }
 
 }

@@ -22,7 +22,6 @@ import com.propertyvista.domain.person.Person;
 import com.propertyvista.oapi.AbstractMarshaller;
 import com.propertyvista.oapi.v1.model.TenantIO;
 import com.propertyvista.oapi.v1.model.types.SexTypeIO;
-import com.propertyvista.oapi.xml.ListIO;
 import com.propertyvista.oapi.xml.StringIO;
 
 public class TenantMarshaller extends AbstractMarshaller<Person, TenantIO> {
@@ -68,9 +67,9 @@ public class TenantMarshaller extends AbstractMarshaller<Person, TenantIO> {
     }
 
     @Override
-    public List<Person> unmarshal(ListIO<TenantIO> tenantIOList) {
+    public List<Person> unmarshal(ArrayList<TenantIO> tenantIOList) {
         List<Person> participants = new ArrayList<Person>();
-        for (TenantIO tenantIO : tenantIOList.getValue()) {
+        for (TenantIO tenantIO : tenantIOList) {
             Person participant = EntityFactory.create(Person.class);
             set(participant, tenantIO, TenantMarshaller.getInstance());
             participants.add(participant);

@@ -73,7 +73,7 @@ public class MarketingServiceProcessor extends AbstractProcessor {
         Building building = PropertyFinder.getBuildingDetails(propertyId);
         if (building != null) {
             for (Floorplan floorplan : PropertyFinder.getBuildingFloorplans(building).keySet()) {
-                result.floorplanList.add(FloorplanMarshaller.getInstance().marshal(floorplan));
+                result.getList().add(FloorplanMarshaller.getInstance().marshal(floorplan));
             }
         }
         return result;

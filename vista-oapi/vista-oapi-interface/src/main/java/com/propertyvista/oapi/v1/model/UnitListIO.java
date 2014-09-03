@@ -14,14 +14,27 @@
 package com.propertyvista.oapi.v1.model;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
-@XmlRootElement(name = "units", namespace = "http://www.w3.org/2001/XMLSchema-instance")
-public class UnitListIO {
+import com.propertyvista.oapi.xml.AbstractListIO;
+import com.propertyvista.oapi.xml.Action;
 
+@XmlRootElement(name = "units", namespace = "http://www.w3.org/2001/XMLSchema-instance")
+public class UnitListIO extends AbstractListIO<UnitIO> {
+
+    public UnitListIO() {
+        super();
+    }
+
+    public UnitListIO(Action action) {
+        super(action);
+    }
+
+    @Override
     @XmlElement(name = "unit")
-    public List<UnitIO> unitList = new ArrayList<UnitIO>();
+    public ArrayList<UnitIO> getList() {
+        return super.getList();
+    };
 }

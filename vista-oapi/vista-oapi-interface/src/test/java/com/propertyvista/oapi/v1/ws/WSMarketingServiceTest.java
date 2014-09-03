@@ -147,7 +147,7 @@ public class WSMarketingServiceTest extends WSOapiTestBase {
     @Test
     public void testGetFloorplanList() {
         FloorplanListIO floorplanList = service.getFloorplanList(building.propertyCode().getValue());
-        Assert.assertEquals(1, floorplanList.floorplanList.size());
+        Assert.assertEquals(1, floorplanList.getList().size());
     }
 
     @Test

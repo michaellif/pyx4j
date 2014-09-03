@@ -23,7 +23,6 @@ import com.pyx4j.entity.core.IPrimitive;
 
 import com.propertyvista.oapi.xml.Action;
 import com.propertyvista.oapi.xml.ElementIO;
-import com.propertyvista.oapi.xml.ListIO;
 import com.propertyvista.oapi.xml.PrimitiveIO;
 
 public abstract class AbstractMarshaller<ValueType extends IEntity, BoundType> {
@@ -32,17 +31,17 @@ public abstract class AbstractMarshaller<ValueType extends IEntity, BoundType> {
 
     public abstract ValueType unmarshal(BoundType v);
 
-    public ListIO<BoundType> marshal(Collection<ValueType> collection) {
-        ListIO<BoundType> ioList = new ListIO<BoundType>();
+    public ArrayList<BoundType> marshal(Collection<ValueType> collection) {
+        ArrayList<BoundType> ioList = new ArrayList<BoundType>();
         for (ValueType item : collection) {
-            ioList.getValue().add(marshal(item));
+            ioList.add(marshal(item));
         }
         return ioList;
     }
 
-    public List<ValueType> unmarshal(ListIO<BoundType> listIO) {
+    public List<ValueType> unmarshal(ArrayList<BoundType> listIO) {
         List<ValueType> list = new ArrayList<ValueType>();
-        for (BoundType ioItem : listIO.getValue()) {
+        for (BoundType ioItem : listIO) {
             list.add(unmarshal(ioItem));
         }
         return list;

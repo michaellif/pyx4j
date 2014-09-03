@@ -13,11 +13,19 @@
  */
 package com.propertyvista.oapi.v1.marshaling;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+
 import com.pyx4j.entity.core.EntityFactory;
 
+import com.propertyvista.domain.property.asset.Parking;
 import com.propertyvista.domain.property.asset.building.BuildingAmenity;
 import com.propertyvista.oapi.AbstractMarshaller;
 import com.propertyvista.oapi.v1.model.BuildingAmenityIO;
+import com.propertyvista.oapi.v1.model.BuildingAmenityListIO;
+import com.propertyvista.oapi.v1.model.ParkingIO;
+import com.propertyvista.oapi.v1.model.ParkingListIO;
 import com.propertyvista.oapi.v1.model.types.BuildingAmenityTypeIO;
 import com.propertyvista.oapi.xml.StringIO;
 
@@ -47,6 +55,14 @@ public class BuildingAmenityMarshaller extends AbstractMarshaller<BuildingAmenit
         return amenityIO;
     }
 
+    public BuildingAmenityListIO marshalCollection(Collection<BuildingAmenity> amenity) {
+        BuildingAmenityListIO ioList = new BuildingAmenityListIO();
+        for (BuildingAmenity item : amenity) {
+            ioList.add(marshal(item));
+        }
+        return ioList;
+    }
+
     @Override
     public BuildingAmenity unmarshal(BuildingAmenityIO amenityIO) {
         BuildingAmenity amenity = EntityFactory.create(BuildingAmenity.class);
@@ -56,4 +72,11 @@ public class BuildingAmenityMarshaller extends AbstractMarshaller<BuildingAmenit
         return amenity;
     }
 
+    public List<BuildingAmenity> unmarshalCollection(BuildingAmenityListIO listIO) {
+        List<BuildingAmenity> list = new ArrayList<BuildingAmenity>();
+        for (BuildingAmenityIO ioItem : listIO.getList()) {
+            list.add(unmarshal(ioItem));
+        }
+        return list;
+    }
 }

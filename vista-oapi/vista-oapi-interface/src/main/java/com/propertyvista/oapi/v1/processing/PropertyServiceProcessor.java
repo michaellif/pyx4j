@@ -89,7 +89,7 @@ public class PropertyServiceProcessor extends AbstractProcessor {
         for (AptUnit unit : units) {
             Persistence.service().retrieve(unit.floorplan());
             UnitIO unitIO = UnitMarshaller.getInstance().marshal(unit);
-            unitsRS.unitList.add(unitIO);
+            unitsRS.getList().add(unitIO);
         }
         return unitsRS;
     }

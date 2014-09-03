@@ -13,10 +13,10 @@
  */
 package com.propertyvista.oapi.v1.model;
 
+import java.util.ArrayList;
+
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlElementWrapper;
-import javax.xml.bind.annotation.XmlElements;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import com.propertyvista.oapi.v1.model.types.BuildingStructureTypeIO;
@@ -28,7 +28,6 @@ import com.propertyvista.oapi.v1.model.types.WaterSupplyTypeIO;
 import com.propertyvista.oapi.xml.AbstractElementIO;
 import com.propertyvista.oapi.xml.BooleanIO;
 import com.propertyvista.oapi.xml.IntegerIO;
-import com.propertyvista.oapi.xml.ListIO;
 import com.propertyvista.oapi.xml.StringIO;
 
 @XmlRootElement(name = "building")
@@ -90,37 +89,21 @@ public class BuildingIO extends AbstractElementIO {
         this.propertyCode = propertyCode;
     }
 
-    @XmlElementWrapper
-    @XmlElement(name = "amenity")
-    public ListIO<BuildingAmenityIO> amenities = new ListIO<BuildingAmenityIO>();
+    public BuildingAmenityListIO amenities = new BuildingAmenityListIO();
 
-    @XmlElementWrapper
-    @XmlElement(name = "utility")
-    public ListIO<UtilityIO> includedUtilities = new ListIO<UtilityIO>();
+    public UtilityListIO includedUtilities = new UtilityListIO();
 
-    @XmlElementWrapper
-    @XmlElement(name = "floorplan")
-    public ListIO<FloorplanIO> floorplans = new ListIO<FloorplanIO>();
+    public FloorplanListIO floorplans = new FloorplanListIO();
 
-    @XmlElementWrapper
-    @XmlElement(name = "unit")
-    public ListIO<UnitIO> units = new ListIO<UnitIO>();
+    public UnitListIO units = new UnitListIO();
 
-    @XmlElementWrapper
-    @XmlElement(name = "parking")
-    public ListIO<ParkingIO> parkings = new ListIO<ParkingIO>();
+    public ParkingListIO parkings = new ParkingListIO();
 
-    @XmlElementWrapper
-    @XmlElement(name = "contact")
-    public ListIO<ContactIO> contacts = new ListIO<ContactIO>();
+    public ContactListIO contacts = new ContactListIO();
 
-    @XmlElementWrapper
-    @XmlElement(name = "media")
-    public ListIO<MediaImageIO> medias = new ListIO<MediaImageIO>();
+    public MediaImageListIO medias = new MediaImageListIO();
 
-    @XmlElementWrapper
-    @XmlElement(name = "lease")
-    public ListIO<LeaseIO> leases = new ListIO<LeaseIO>();
+    public LeaseListIO leases = new LeaseListIO();
 
     @Override
     public boolean equals(Object obj) {

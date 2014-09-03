@@ -108,9 +108,9 @@ public class RSPropertyServiceImpl implements PropertyService {
         try {
             UnitListIO allUnits = processor.getUnitsByPropertyCode(propertyCode);
             UnitListIO filteredUnits = new UnitListIO();
-            for (UnitIO unit : allUnits.unitList) {
+            for (UnitIO unit : allUnits.getList()) {
                 if (unit.floorplanName.equals(floorplan)) {
-                    filteredUnits.unitList.add(unit);
+                    filteredUnits.add(unit);
                 }
             }
             return filteredUnits;

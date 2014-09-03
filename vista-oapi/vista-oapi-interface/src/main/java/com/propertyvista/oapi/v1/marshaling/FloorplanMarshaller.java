@@ -70,9 +70,9 @@ public class FloorplanMarshaller extends AbstractMarshaller<Floorplan, Floorplan
         fpIO.halfBath = createIo(IntegerIO.class, fp.halfBath());
 
         Persistence.ensureRetrieve(fp.amenities(), AttachLevel.Attached);
-        fpIO.amenities = FloorplanAmenityMarshaller.getInstance().marshal(fp.amenities());
+        fpIO.amenities = FloorplanAmenityMarshaller.getInstance().marshalCollection(fp.amenities());
         Persistence.ensureRetrieve(fp.media(), AttachLevel.Attached);
-        fpIO.medias = MediaMarshaller.getInstance().marshal(fp.media());
+        fpIO.medias = MediaMarshaller.getInstance().marshalCollection(fp.media());
 
         // calculated values
         List<AptUnit> units = PropertyFinder.getFloorplanUnits(fp);
@@ -121,8 +121,8 @@ public class FloorplanMarshaller extends AbstractMarshaller<Floorplan, Floorplan
         setValue(fp.dens(), fpIO.dens);
         setValue(fp.bathrooms(), fpIO.bathrooms);
         setValue(fp.halfBath(), fpIO.halfBath);
-        fp.media().addAll(MediaMarshaller.getInstance().unmarshal(fpIO.medias));
-        fp.amenities().addAll(FloorplanAmenityMarshaller.getInstance().unmarshal(fpIO.amenities));
+        fp.media().addAll(MediaMarshaller.getInstance().unmarshalCollection(fpIO.medias));
+        fp.amenities().addAll(FloorplanAmenityMarshaller.getInstance().unmarshalCollection(fpIO.amenities));
 
         return fp;
     }

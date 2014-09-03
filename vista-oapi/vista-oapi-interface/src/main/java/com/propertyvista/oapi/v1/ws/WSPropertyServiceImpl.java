@@ -14,7 +14,6 @@
 package com.propertyvista.oapi.v1.ws;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import javax.jws.WebService;
@@ -25,7 +24,6 @@ import com.propertyvista.oapi.v1.model.BuildingIO;
 import com.propertyvista.oapi.v1.model.BuildingListIO;
 import com.propertyvista.oapi.v1.model.UnitIO;
 import com.propertyvista.oapi.v1.model.UnitListIO;
-import com.propertyvista.oapi.v1.processing.MarketingServiceProcessor;
 import com.propertyvista.oapi.v1.processing.PropertyServiceProcessor;
 import com.propertyvista.oapi.xml.StringIO;
 
@@ -62,7 +60,7 @@ public class WSPropertyServiceImpl implements WSPropertyService {
             newUnit.number = unitNumber;
             newUnit.floorplanName = new StringIO(floorplanName);
             newUnit.propertyCode = propertyCode;
-            building.units.getValue().add(newUnit);
+            building.units.add(newUnit);
         } else {
             //TODO error, create building before putting units in it
         }

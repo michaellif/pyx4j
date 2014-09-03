@@ -113,7 +113,7 @@ public class RSMarketingServiceTest extends RSOapiTestBase {
         FloorplanListIO floorplanList = target("marketing/getFloorplanList") //
                 .queryParam("prId", building.propertyCode().getValue()) //
                 .request().get(FloorplanListIO.class);
-        Assert.assertEquals(1, floorplanList.floorplanList.size());
+        Assert.assertEquals(1, floorplanList.getList().size());
     }
 
     @Test
