@@ -77,7 +77,6 @@ import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
 import com.propertyvista.domain.tenant.prospect.LeaseApplicationDocument;
 import com.propertyvista.dto.LeaseApplicationDTO;
 import com.propertyvista.dto.LeaseDTO;
-import com.propertyvista.misc.VistaTODO;
 import com.propertyvista.shared.config.VistaFeatures;
 
 public class LeaseApplicationViewerViewImpl extends LeaseViewerViewImplBase<LeaseApplicationDTO> implements LeaseApplicationViewerView {
@@ -222,9 +221,7 @@ public class LeaseApplicationViewerViewImpl extends LeaseViewerViewImplBase<Leas
                 moreInfoActionExecuter();
             }
         }, new ActionPermission(ApplicationMoreInfo.class));
-        if (!VistaTODO.VISTA_4484_Action_More_Info_should_be_hidden_as_not_fully_implemented) {
-            addAction(moreInfoAction);
-        }
+        addAction(moreInfoAction);
 
         submitAction = new SecureMenuItem(i18n.tr("Submit"), new Command() {
             @Override
@@ -331,19 +328,13 @@ public class LeaseApplicationViewerViewImpl extends LeaseViewerViewImplBase<Leas
     }
 
     private void moreInfoActionExecuter() {
-        ((LeaseViewerViewBase.Presenter) getPresenter()).retrieveUsers(new DefaultAsyncCallback<List<LeaseTermParticipant<?>>>() {
+        new ActionBox(i18n.tr("Request for More Information")) {
             @Override
-            public void onSuccess(List<LeaseTermParticipant<?>> result) {
-                new EntitySelectorListDialog<LeaseTermParticipant<?>>(i18n.tr("Select Tenants/Guarantors To Acquire Info"), true, result) {
-
-                    @Override
-                    public boolean onClickOk() {
-                        // TODO ask for more info here...
-                        return true;
-                    }
-                }.show();
+            public boolean onClickOk() {
+                ((LeaseApplicationViewerView.Presenter) getPresenter()).applicationAction(actionValue(Action.MoreInfo));
+                return true;
             }
-        });
+        }.show();
     }
 
     private void submitActionExecuter() {
@@ -434,10 +425,10 @@ public class LeaseApplicationViewerViewImpl extends LeaseViewerViewImplBase<Leas
         setActionVisible(cancelOnlineApplication, status == Status.InProgress && isOnlineApplication);
         setActionVisible(inviteAction, status == Status.InProgress && isOnlineApplication);
 
-        setActionVisible(submitAction, status == Status.InProgress && (!isOnlineApplication || noPtAppProgress));
+        setActionVisible(submitAction, (status == Status.InProgress || status == Status.PendingFurtherInformation) && (!isOnlineApplication || noPtAppProgress));
+        setActionVisible(moreInfoAction, status == Status.Submitted || status == Status.PendingDecision);
 
         setActionVisible(creditCheckAction, status == Status.Submitted);
-        setActionVisible(moreInfoAction, status == Status.Submitted);
 
         setActionVisible(completeAction, status == Status.Submitted);
         setActionVisible(approveAction, status == Status.PendingDecision);

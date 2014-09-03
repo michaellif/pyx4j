@@ -110,6 +110,11 @@ public class LeaseFacadeYardiImpl implements LeaseFacade {
     }
 
     @Override
+    public void requestForMoreInformation(Lease leaseId, Employee decidedBy, String decisionReason) {
+        getLeaseYardiManager(retrieveLeseStatus(leaseId)).requestForMoreInformation(leaseId, decidedBy, decisionReason);
+    }
+
+    @Override
     public void submitApplication(Lease leaseId, Employee decidedBy, String decisionReason) {
         getLeaseYardiManager(retrieveLeseStatus(leaseId)).submitApplication(leaseId, decidedBy, decisionReason);
     }

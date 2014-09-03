@@ -29,6 +29,8 @@ public interface LeaseApplicationActionDTO extends IEntity {
 
         Submit,
 
+        MoreInfo,
+
         Complete,
 
         Approve,

@@ -59,6 +59,9 @@ public class LeaseApplicationActionDeferredProcess extends AbstractDeferredProce
                 case Decline:
                     ServerSideFactory.create(LeaseFacade.class).declineApplication(actionDTO.leaseId(), currentUser, decisionReason);
                     break;
+                case MoreInfo:
+                    ServerSideFactory.create(LeaseFacade.class).requestForMoreInformation(actionDTO.leaseId(), currentUser, decisionReason);
+                    break;
                 case Submit:
                     ServerSideFactory.create(LeaseFacade.class).submitApplication(actionDTO.leaseId(), currentUser, decisionReason);
                     break;

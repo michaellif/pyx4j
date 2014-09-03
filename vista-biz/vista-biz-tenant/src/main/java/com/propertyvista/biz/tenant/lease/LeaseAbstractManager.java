@@ -332,6 +332,15 @@ public abstract class LeaseAbstractManager {
         }
     }
 
+    public void requestForMoreInformation(Lease leaseId, Employee decidedBy, String decisionReason) {
+        Lease lease = load(leaseId, false);
+    
+        lease.leaseApplication().status().setValue(LeaseApplication.Status.PendingFurtherInformation);
+    
+        Persistence.service().merge(lease);
+        Persistence.service().merge(creteLeaseNote(lease, "Pending Further Information on Application", decisionReason, decidedBy));
+    }
+
     public void submitApplication(Lease leaseId, Employee decidedBy, String decisionReason) {
         Lease lease = load(leaseId, false);
 

@@ -73,6 +73,8 @@ public interface LeaseFacade {
 
     void cancelMasterOnlineApplication(Lease leaseId);
 
+    void requestForMoreInformation(Lease leaseId, Employee decidedBy, String decisionReason);
+
     void submitApplication(Lease leaseId, Employee decidedBy, String decisionReason);
 
     void completeApplication(Lease leaseId, Employee decidedBy, String decisionReason);
