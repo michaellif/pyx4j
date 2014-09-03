@@ -18,8 +18,7 @@ import com.pyx4j.entity.core.EntityFactory;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.dto.PropertySearchCriteria;
 import com.propertyvista.oapi.ServiceType;
-import com.propertyvista.oapi.v1.marshaling.BuildingInfoMarshaller;
-import com.propertyvista.oapi.v1.model.BuildingIO;
+import com.propertyvista.oapi.v1.marshaling.BuildingMarshaller;
 import com.propertyvista.oapi.v1.model.BuildingListIO;
 import com.propertyvista.server.common.util.PropertyFinder;
 
@@ -32,10 +31,7 @@ public class PortationServiceProcessor extends AbstractProcessor {
     public BuildingListIO exportBuildings() {
         BuildingListIO result = new BuildingListIO();
         for (Building building : PropertyFinder.getPropertyList(EntityFactory.create(PropertySearchCriteria.class))) {
-            BuildingIO item = new BuildingIO();
-            item.propertyCode = building.propertyCode().getValue();
-            item.info = BuildingInfoMarshaller.getInstance().marshal(building.info());
-            result.buildingList.add(item);
+            result.buildingList.add(BuildingMarshaller.getInstance().marshal(building));
         }
         return result;
     }

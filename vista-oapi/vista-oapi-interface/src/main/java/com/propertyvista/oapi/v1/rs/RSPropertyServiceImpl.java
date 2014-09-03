@@ -72,7 +72,7 @@ public class RSPropertyServiceImpl implements PropertyService {
             BuildingListIO filteredBuildings = new BuildingListIO();
 
             for (BuildingIO building : allBuildings.buildingList) {
-                if (building.info.address.province.getValue().equals(province)) {
+                if (building.address.province.getValue().equals(province)) {
                     filteredBuildings.buildingList.add(building);
                 }
             }

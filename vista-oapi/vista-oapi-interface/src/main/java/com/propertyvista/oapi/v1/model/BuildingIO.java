@@ -25,9 +25,17 @@ import javax.xml.bind.annotation.XmlRootElement;
 import com.propertyvista.oapi.DetailsLevel;
 import com.propertyvista.oapi.annotations.ServiceScope;
 import com.propertyvista.oapi.annotations.ServiceScopes;
+import com.propertyvista.oapi.v1.model.types.BuildingStructureTypeIO;
+import com.propertyvista.oapi.v1.model.types.BuildingTypeIO;
+import com.propertyvista.oapi.v1.model.types.ConstructionTypeIO;
+import com.propertyvista.oapi.v1.model.types.FloorTypeIO;
+import com.propertyvista.oapi.v1.model.types.FoundationTypeIO;
+import com.propertyvista.oapi.v1.model.types.WaterSupplyTypeIO;
 import com.propertyvista.oapi.v1.service.PortationService;
 import com.propertyvista.oapi.v1.service.OAPIService;
 import com.propertyvista.oapi.xml.AbstractElementIO;
+import com.propertyvista.oapi.xml.BooleanIO;
+import com.propertyvista.oapi.xml.IntegerIO;
 import com.propertyvista.oapi.xml.StringIO;
 
 @XmlRootElement(name = "building")
@@ -39,7 +47,46 @@ public class BuildingIO extends AbstractElementIO {
 
     public StringIO newPropertyCode;
 
-    public BuildingInfoIO info;
+    //mandatory for portal
+    public StringIO name;
+
+    public StringIO description;
+
+    public BuildingTypeIO buildingType;
+
+    public BuildingStructureTypeIO structureType;
+
+    //mandatory for portal
+    public AddressIO address;
+
+    public StringIO shape;
+
+    public StringIO totalStoreys;
+
+    public StringIO residentialStoreys;
+
+    // TODO this can later be date
+//    @XmlSchemaType(name = "date")
+//    @XmlElement(required = true)
+//    @XmlJavaTypeAdapter(LogicalDateXmlAdapter.class)
+//    public Date structureBuildYear;
+    public StringIO structureBuildYear;
+
+    public ConstructionTypeIO constructionType;
+
+    public FoundationTypeIO foundationType;
+
+    public FloorTypeIO floorType;
+
+    public StringIO landArea;
+
+    public WaterSupplyTypeIO waterSupply;
+
+    public BooleanIO centralAir;
+
+    public BooleanIO centralHeat;
+
+    public IntegerIO unitCount;
 
     public MarketingIO marketing;
 

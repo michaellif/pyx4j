@@ -22,12 +22,10 @@ import com.propertyvista.domain.property.asset.Parking;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.building.BuildingAmenity;
 import com.propertyvista.domain.property.asset.building.BuildingInfo;
-import com.propertyvista.oapi.v1.marshaling.BuildingMarshaller;
 import com.propertyvista.oapi.v1.model.AddressIO;
 import com.propertyvista.oapi.v1.model.AdvertisingBlurbIO;
 import com.propertyvista.oapi.v1.model.BuildingAmenityIO;
 import com.propertyvista.oapi.v1.model.BuildingIO;
-import com.propertyvista.oapi.v1.model.BuildingInfoIO;
 import com.propertyvista.oapi.v1.model.ContactIO;
 import com.propertyvista.oapi.v1.model.MarketingIO;
 import com.propertyvista.oapi.v1.model.MediaImageIO;
@@ -66,14 +64,14 @@ public class BuildingPersistenceTest extends WSOapiTestBase {
         assertEquals(buildingIO.propertyCode, buildingIO2.propertyCode);
 
         // address
-        assertEquals(buildingIO.info.address.city.getValue(), buildingIO2.info.address.city.getValue());
-        assertEquals(buildingIO.info.address.country.getValue(), buildingIO2.info.address.country.getValue());
-        assertEquals(buildingIO.info.address.postalCode.getValue(), buildingIO2.info.address.postalCode.getValue());
-        assertEquals(buildingIO.info.address.province.getValue(), buildingIO2.info.address.province.getValue());
-        assertEquals(buildingIO.info.address.streetNumber.getValue(), buildingIO2.info.address.streetNumber.getValue());
-        assertEquals(buildingIO.info.address.streetName.getValue(), buildingIO2.info.address.streetName.getValue());
-        assertEquals(buildingIO.info.address.unitNumber.getValue(), buildingIO2.info.address.unitNumber.getValue());
-        assertEquals(buildingIO.info.buildingType.getValue(), buildingIO2.info.buildingType.getValue());
+        assertEquals(buildingIO.address.city.getValue(), buildingIO2.address.city.getValue());
+        assertEquals(buildingIO.address.country.getValue(), buildingIO2.address.country.getValue());
+        assertEquals(buildingIO.address.postalCode.getValue(), buildingIO2.address.postalCode.getValue());
+        assertEquals(buildingIO.address.province.getValue(), buildingIO2.address.province.getValue());
+        assertEquals(buildingIO.address.streetNumber.getValue(), buildingIO2.address.streetNumber.getValue());
+        assertEquals(buildingIO.address.streetName.getValue(), buildingIO2.address.streetName.getValue());
+        assertEquals(buildingIO.address.unitNumber.getValue(), buildingIO2.address.unitNumber.getValue());
+        assertEquals(buildingIO.buildingType.getValue(), buildingIO2.buildingType.getValue());
 
         // marketing
         assertEquals(buildingIO.marketing.name, buildingIO2.marketing.name);
@@ -130,9 +128,6 @@ public class BuildingPersistenceTest extends WSOapiTestBase {
         addressIO.streetName = new StringIO("Bathurst St");
         addressIO.unitNumber = new StringIO("unit 4");
 
-        BuildingInfoIO info = new BuildingInfoIO();
-        info.address = addressIO;
-        info.buildingType = new BuildingTypeIO(BuildingInfo.Type.residential);
 //        info.centralAir = new BooleanIO(true);
 //        info.centralHeat = new BooleanIO(false);
 //        info.constructionType = new ConstructionTypeIO(BuildingInfo.ConstructionType.panel);
@@ -219,7 +214,10 @@ public class BuildingPersistenceTest extends WSOapiTestBase {
 
         // building
         BuildingIO b = new BuildingIO("building1");
-        b.info = info;
+
+        b.address = addressIO;
+        b.buildingType = new BuildingTypeIO(BuildingInfo.Type.residential);
+
         b.marketing = marketing;
         b.amenities.add(amenity1);
         b.amenities.add(amenity2);

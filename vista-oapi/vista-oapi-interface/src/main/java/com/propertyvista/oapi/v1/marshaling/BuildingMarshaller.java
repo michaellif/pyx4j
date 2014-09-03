@@ -20,6 +20,7 @@ import com.pyx4j.entity.server.Persistence;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.oapi.AbstractMarshaller;
 import com.propertyvista.oapi.v1.model.BuildingIO;
+import com.propertyvista.oapi.v1.model.types.BuildingTypeIO;
 
 public class BuildingMarshaller extends AbstractMarshaller<Building, BuildingIO> {
 
@@ -42,7 +43,8 @@ public class BuildingMarshaller extends AbstractMarshaller<Building, BuildingIO>
         BuildingIO buildingIO = new BuildingIO();
         buildingIO.propertyCode = getValue(building.propertyCode());
 
-        buildingIO.info = BuildingInfoMarshaller.getInstance().marshal(building.info());
+        buildingIO.address = AddressMarshaller.getInstance().marshal(building.info().address());
+        buildingIO.buildingType = createIo(BuildingTypeIO.class, building.info().type());
         buildingIO.marketing = MarketingMarshaller.getInstance().marshal(building.marketing());
 
         Persistence.service().retrieve(building.contacts().propertyContacts());
@@ -65,7 +67,9 @@ public class BuildingMarshaller extends AbstractMarshaller<Building, BuildingIO>
         Building building = EntityFactory.create(Building.class);
         building.propertyCode().setValue(buildingIO.propertyCode);
 
-        set(building.info(), buildingIO.info, BuildingInfoMarshaller.getInstance());
+        set(building.info().address(), buildingIO.address, AddressMarshaller.getInstance());
+        setValue(building.info().type(), buildingIO.buildingType);
+
         set(building.marketing(), buildingIO.marketing, MarketingMarshaller.getInstance());
 
         building.contacts().propertyContacts().addAll(ContactMarshaller.getInstance().unmarshal(buildingIO.contacts));

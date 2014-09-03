@@ -141,7 +141,7 @@ public class WSMarketingServiceTest extends WSOapiTestBase {
     @Test
     public void testGetPropertyInfo() {
         BuildingIO buildingIO = service.getBuilding(building.propertyCode().getValue());
-        Assert.assertEquals(building.info().address().province().getValue(), buildingIO.info.address.province.getValue());
+        Assert.assertEquals(building.info().address().province().getValue(), buildingIO.address.province.getValue());
     }
 
     @Test

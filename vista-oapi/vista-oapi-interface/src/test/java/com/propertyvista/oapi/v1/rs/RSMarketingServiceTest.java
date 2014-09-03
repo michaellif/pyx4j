@@ -104,7 +104,7 @@ public class RSMarketingServiceTest extends RSOapiTestBase {
         BuildingIO buildingIO = target("marketing/getBuilding") //
                 .queryParam("prId", building.propertyCode().getValue()) //
                 .request().get(BuildingIO.class);
-        Assert.assertEquals(building.info().address().province().getValue(), buildingIO.info.address.province.getValue());
+        Assert.assertEquals(building.info().address().province().getValue(), buildingIO.address.province.getValue());
     }
 
     @Test
