@@ -13,10 +13,13 @@
  */
 package com.propertyvista.oapi.v1.model;
 
+import javax.xml.bind.annotation.XmlType;
+
 import com.propertyvista.oapi.v1.model.types.BuildingAmenityTypeIO;
 import com.propertyvista.oapi.xml.AbstractElementIO;
 import com.propertyvista.oapi.xml.StringIO;
 
+@XmlType(name = "BuildingAmenity")
 public class BuildingAmenityIO extends AbstractElementIO {
 
     public String name;

@@ -14,17 +14,19 @@
 package com.propertyvista.oapi.xml;
 
 import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlType;
 
+@XmlType(name = "AbstractElement")
 public abstract class AbstractElementIO implements ElementIO {
 
     @XmlAttribute
-    private Action action;
+    private Note note;
 
     public AbstractElementIO() {
     }
 
     @Override
-    public Action getAction() {
-        return action;
+    public Note getNote() {
+        return note;
     }
 }

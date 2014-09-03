@@ -16,6 +16,7 @@ package com.propertyvista.oapi.v1.model;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlType;
 
 import com.pyx4j.commons.LogicalDate;
 
@@ -23,7 +24,8 @@ import com.propertyvista.domain.person.Name.Prefix;
 import com.propertyvista.domain.tenant.lead.Lead.DayPart;
 import com.propertyvista.domain.tenant.lead.Lead.LeaseTerm;
 
-@XmlRootElement
+@XmlType(name = "AppointmentRequest")
+@XmlRootElement(name = "appointmentRequest")
 @XmlAccessorType(XmlAccessType.FIELD)
 public class AppointmentRequestIO {
 

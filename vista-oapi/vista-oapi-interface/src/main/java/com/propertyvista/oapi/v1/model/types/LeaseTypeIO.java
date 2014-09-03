@@ -13,17 +13,19 @@
  */
 package com.propertyvista.oapi.v1.model.types;
 
+import javax.xml.bind.annotation.XmlType;
 import javax.xml.bind.annotation.XmlValue;
 
 import com.propertyvista.domain.financial.ARCode;
-import com.propertyvista.oapi.xml.Action;
+import com.propertyvista.oapi.xml.Note;
 import com.propertyvista.oapi.xml.PrimitiveIO;
 
+@XmlType(name = "LeaseType")
 public class LeaseTypeIO implements PrimitiveIO<ARCode.Type> {
 
     private ARCode.Type value;
 
-    private Action action;
+    private Note note;
 
     public LeaseTypeIO() {
     }
@@ -44,7 +46,7 @@ public class LeaseTypeIO implements PrimitiveIO<ARCode.Type> {
     }
 
     @Override
-    public Action getAction() {
-        return action;
+    public Note getNote() {
+        return note;
     }
 }

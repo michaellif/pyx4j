@@ -14,12 +14,14 @@
 package com.propertyvista.oapi.v1.model;
 
 import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlType;
 
 import com.propertyvista.oapi.v1.model.types.ParkingTypeIO;
 import com.propertyvista.oapi.xml.AbstractElementIO;
 import com.propertyvista.oapi.xml.DoubleIO;
 import com.propertyvista.oapi.xml.StringIO;
 
+@XmlType(name = "Parking")
 public class ParkingIO extends AbstractElementIO {
 
     @XmlAttribute

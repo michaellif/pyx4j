@@ -18,10 +18,12 @@ import java.math.BigDecimal;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlType;
 
 import com.pyx4j.commons.LogicalDate;
 
-@XmlRootElement
+@XmlType(name = "FloorplanAvailability")
+@XmlRootElement(name = "floorplanAvailability")
 @XmlAccessorType(XmlAccessType.FIELD)
 public class FloorplanAvailabilityIO {
 

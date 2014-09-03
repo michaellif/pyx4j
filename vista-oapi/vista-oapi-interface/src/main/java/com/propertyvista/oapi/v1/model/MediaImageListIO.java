@@ -17,10 +17,12 @@ import java.util.ArrayList;
 
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlType;
 
 import com.propertyvista.oapi.xml.AbstractListIO;
-import com.propertyvista.oapi.xml.Action;
+import com.propertyvista.oapi.xml.Note;
 
+@XmlType(name = "MediaImageList")
 @XmlRootElement(name = "medias")
 public class MediaImageListIO extends AbstractListIO<MediaImageIO> {
 
@@ -28,8 +30,8 @@ public class MediaImageListIO extends AbstractListIO<MediaImageIO> {
         super();
     }
 
-    public MediaImageListIO(Action action) {
-        super(action);
+    public MediaImageListIO(Note note) {
+        super(note);
     }
 
     @Override

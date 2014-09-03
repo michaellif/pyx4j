@@ -21,7 +21,8 @@ import java.util.List;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.IPrimitive;
 
-import com.propertyvista.oapi.xml.Action;
+import com.propertyvista.oapi.xml.AbstractListIO;
+import com.propertyvista.oapi.xml.Note;
 import com.propertyvista.oapi.xml.ElementIO;
 import com.propertyvista.oapi.xml.PrimitiveIO;
 
@@ -47,6 +48,26 @@ public abstract class AbstractMarshaller<ValueType extends IEntity, BoundType> {
         return list;
     }
 
+    public <C extends AbstractListIO<BoundType>> C marshalCollection(Class<C> collectionClass, Collection<ValueType> collection) {
+        try {
+            C ioList = collectionClass.newInstance();
+            for (ValueType item : collection) {
+                ioList.add(marshal(item));
+            }
+            return ioList;
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public <C extends AbstractListIO<BoundType>> List<ValueType> unmarshalCollection(C listIO) {
+        List<ValueType> list = new ArrayList<ValueType>();
+        for (BoundType ioItem : listIO.getList()) {
+            list.add(unmarshal(ioItem));
+        }
+        return list;
+    }
+
     /**
      * 
      * Unmarshals elementIO->entity
@@ -55,7 +76,7 @@ public abstract class AbstractMarshaller<ValueType extends IEntity, BoundType> {
     public <T extends IEntity, E extends ElementIO> void set(T entity, E elementIO, AbstractMarshaller<T, E> marshaller) {
         if (elementIO != null) {
 
-            if (elementIO.getAction() == Action.delete) {
+            if (elementIO.getNote() == Note.actionDelete) {
                 entity.setValue(null);
             } else {
                 try {

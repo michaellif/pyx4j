@@ -15,6 +15,7 @@ package com.propertyvista.oapi.v1.model;
 
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlType;
 
 import com.propertyvista.oapi.v1.model.types.BuildingStructureTypeIO;
 import com.propertyvista.oapi.v1.model.types.BuildingTypeIO;
@@ -27,6 +28,7 @@ import com.propertyvista.oapi.xml.BooleanIO;
 import com.propertyvista.oapi.xml.IntegerIO;
 import com.propertyvista.oapi.xml.StringIO;
 
+@XmlType(name = "Building")
 @XmlRootElement(name = "building")
 public class BuildingIO extends AbstractElementIO {
 

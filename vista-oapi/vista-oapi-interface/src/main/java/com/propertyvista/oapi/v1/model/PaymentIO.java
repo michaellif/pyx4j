@@ -14,11 +14,13 @@
 package com.propertyvista.oapi.v1.model;
 
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlType;
 
 import com.propertyvista.oapi.xml.BigDecimalIO;
 import com.propertyvista.oapi.xml.StringIO;
 
-@XmlRootElement
+@XmlType(name = "Payment")
+@XmlRootElement(name = "payment")
 public class PaymentIO extends TransactionIO {
 
     //   List<ChargeRS> charges;

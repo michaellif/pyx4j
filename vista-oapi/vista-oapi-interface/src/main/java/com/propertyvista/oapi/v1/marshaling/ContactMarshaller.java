@@ -13,16 +13,11 @@
  */
 package com.propertyvista.oapi.v1.marshaling;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-
 import com.pyx4j.entity.core.EntityFactory;
 
 import com.propertyvista.domain.property.PropertyContact;
 import com.propertyvista.oapi.AbstractMarshaller;
 import com.propertyvista.oapi.v1.model.ContactIO;
-import com.propertyvista.oapi.v1.model.ContactListIO;
 import com.propertyvista.oapi.xml.StringIO;
 
 public class ContactMarshaller extends AbstractMarshaller<PropertyContact, ContactIO> {
@@ -51,14 +46,6 @@ public class ContactMarshaller extends AbstractMarshaller<PropertyContact, Conta
         return contactIO;
     }
 
-    public ContactListIO marshalCollection(Collection<PropertyContact> amenity) {
-        ContactListIO ioList = new ContactListIO();
-        for (PropertyContact item : amenity) {
-            ioList.add(marshal(item));
-        }
-        return ioList;
-    }
-
     @Override
     public PropertyContact unmarshal(ContactIO contactIO) {
 
@@ -68,14 +55,6 @@ public class ContactMarshaller extends AbstractMarshaller<PropertyContact, Conta
         setValue(contact.email(), contactIO.email);
         setValue(contact.phone(), contactIO.phone);
         return contact;
-    }
-
-    public List<PropertyContact> unmarshalCollection(ContactListIO listIO) {
-        List<PropertyContact> list = new ArrayList<PropertyContact>();
-        for (ContactIO ioItem : listIO.getList()) {
-            list.add(unmarshal(ioItem));
-        }
-        return list;
     }
 
 }

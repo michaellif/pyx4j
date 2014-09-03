@@ -18,7 +18,6 @@ import java.util.List;
 import org.glassfish.jersey.server.wadl.config.WadlGeneratorConfig;
 import org.glassfish.jersey.server.wadl.config.WadlGeneratorDescription;
 import org.glassfish.jersey.server.wadl.internal.generators.WadlGeneratorApplicationDoc;
-import org.glassfish.jersey.server.wadl.internal.generators.WadlGeneratorGrammarsSupport;
 
 public class OapiWadlGeneratorConfig extends WadlGeneratorConfig {
 
@@ -27,8 +26,8 @@ public class OapiWadlGeneratorConfig extends WadlGeneratorConfig {
 
         return generator(WadlGeneratorApplicationDoc.class)//
                 .prop("applicationDocsStream", "application-doc.xml")//
-                .generator(WadlGeneratorGrammarsSupport.class)//                
-                .prop("grammarsStream", "application-grammars.xml")//
+//                .generator(WadlGeneratorGrammarsSupport.class)//                
+//                .prop("grammarsStream", "application-grammars.xml")//
 //                .generator(WadlGeneratorResourceDocSupport.class)//
 //                .prop("resourceDocStream", "resourcedoc.xml")//
                 .descriptions();

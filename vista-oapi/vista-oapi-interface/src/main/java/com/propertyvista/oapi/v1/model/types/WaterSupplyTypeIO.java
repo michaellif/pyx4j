@@ -13,17 +13,19 @@
  */
 package com.propertyvista.oapi.v1.model.types;
 
+import javax.xml.bind.annotation.XmlType;
 import javax.xml.bind.annotation.XmlValue;
 
 import com.propertyvista.domain.property.asset.building.BuildingInfo.WaterSupply;
-import com.propertyvista.oapi.xml.Action;
+import com.propertyvista.oapi.xml.Note;
 import com.propertyvista.oapi.xml.PrimitiveIO;
 
+@XmlType(name = "WaterSupplyType")
 public class WaterSupplyTypeIO implements PrimitiveIO<WaterSupply> {
 
     private WaterSupply value;
 
-    private Action action;
+    private Note note;
 
     public WaterSupplyTypeIO() {
     }
@@ -44,7 +46,7 @@ public class WaterSupplyTypeIO implements PrimitiveIO<WaterSupply> {
     }
 
     @Override
-    public Action getAction() {
-        return action;
+    public Note getNote() {
+        return note;
     }
 }

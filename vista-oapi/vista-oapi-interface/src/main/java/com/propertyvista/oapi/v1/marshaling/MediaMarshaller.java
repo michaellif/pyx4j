@@ -13,10 +13,6 @@
  */
 package com.propertyvista.oapi.v1.marshaling;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-
 import com.pyx4j.entity.core.EntityFactory;
 
 import com.propertyvista.config.VistaDeployment;
@@ -25,7 +21,6 @@ import com.propertyvista.domain.media.ThumbnailSize;
 import com.propertyvista.domain.security.common.VistaApplication;
 import com.propertyvista.oapi.AbstractMarshaller;
 import com.propertyvista.oapi.v1.model.MediaImageIO;
-import com.propertyvista.oapi.v1.model.MediaImageListIO;
 import com.propertyvista.oapi.xml.StringIO;
 import com.propertyvista.portal.rpc.DeploymentConsts;
 import com.propertyvista.portal.rpc.portal.ImageConsts;
@@ -54,27 +49,11 @@ public class MediaMarshaller extends AbstractMarshaller<MediaFile, MediaImageIO>
         return mediaIO;
     }
 
-    public MediaImageListIO marshalCollection(Collection<MediaFile> amenity) {
-        MediaImageListIO ioList = new MediaImageListIO();
-        for (MediaFile item : amenity) {
-            ioList.add(marshal(item));
-        }
-        return ioList;
-    }
-
     @Override
     public MediaFile unmarshal(MediaImageIO mediaIO) {
         MediaFile media = EntityFactory.create(MediaFile.class);
         setValue(media.caption(), mediaIO.caption);
         return media;
-    }
-
-    public List<MediaFile> unmarshalCollection(MediaImageListIO listIO) {
-        List<MediaFile> list = new ArrayList<MediaFile>();
-        for (MediaImageIO ioItem : listIO.getList()) {
-            list.add(unmarshal(ioItem));
-        }
-        return list;
     }
 
     private String getMediaImgUrl(MediaFile media) {

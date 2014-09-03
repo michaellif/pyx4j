@@ -32,7 +32,13 @@ import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.property.asset.unit.occupancy.AptUnitOccupancySegment;
 import com.propertyvista.oapi.AbstractMarshaller;
+import com.propertyvista.oapi.ServiceType;
+import com.propertyvista.oapi.v1.model.FloorplanAmenityListIO;
 import com.propertyvista.oapi.v1.model.FloorplanIO;
+import com.propertyvista.oapi.v1.model.MediaImageListIO;
+import com.propertyvista.oapi.v1.processing.AbstractProcessor;
+import com.propertyvista.oapi.v1.service.PortationService;
+import com.propertyvista.oapi.xml.Note;
 import com.propertyvista.oapi.xml.BigDecimalIO;
 import com.propertyvista.oapi.xml.IntegerIO;
 import com.propertyvista.oapi.xml.LogicalDateIO;
@@ -70,9 +76,13 @@ public class FloorplanMarshaller extends AbstractMarshaller<Floorplan, Floorplan
         fpIO.halfBath = createIo(IntegerIO.class, fp.halfBath());
 
         Persistence.ensureRetrieve(fp.amenities(), AttachLevel.Attached);
-        fpIO.amenities = FloorplanAmenityMarshaller.getInstance().marshalCollection(fp.amenities());
-        Persistence.ensureRetrieve(fp.media(), AttachLevel.Attached);
-        fpIO.medias = MediaMarshaller.getInstance().marshalCollection(fp.media());
+        fpIO.amenities = FloorplanAmenityMarshaller.getInstance().marshalCollection(FloorplanAmenityListIO.class, fp.amenities());
+        if (AbstractProcessor.getServiceType() != ServiceType.List || AbstractProcessor.getServiceClass() == PortationService.class) {
+            Persistence.ensureRetrieve(fp.media(), AttachLevel.Attached);
+            fpIO.medias = MediaMarshaller.getInstance().marshalCollection(MediaImageListIO.class, fp.media());
+        } else {
+            fpIO.medias = new MediaImageListIO(Note.contentDetached);
+        }
 
         // calculated values
         List<AptUnit> units = PropertyFinder.getFloorplanUnits(fp);

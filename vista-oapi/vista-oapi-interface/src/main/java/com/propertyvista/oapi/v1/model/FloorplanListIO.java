@@ -17,10 +17,12 @@ import java.util.ArrayList;
 
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlType;
 
 import com.propertyvista.oapi.xml.AbstractListIO;
-import com.propertyvista.oapi.xml.Action;
+import com.propertyvista.oapi.xml.Note;
 
+@XmlType(name = "FloorplanList")
 @XmlRootElement(name = "floorplans")
 public class FloorplanListIO extends AbstractListIO<FloorplanIO> {
 
@@ -28,8 +30,8 @@ public class FloorplanListIO extends AbstractListIO<FloorplanIO> {
         super();
     }
 
-    public FloorplanListIO(Action action) {
-        super(action);
+    public FloorplanListIO(Note note) {
+        super(note);
     }
 
     @Override

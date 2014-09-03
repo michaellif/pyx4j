@@ -20,12 +20,19 @@ import com.pyx4j.entity.server.Persistence;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.oapi.AbstractMarshaller;
 import com.propertyvista.oapi.ServiceType;
+import com.propertyvista.oapi.v1.model.BuildingAmenityListIO;
 import com.propertyvista.oapi.v1.model.BuildingIO;
+import com.propertyvista.oapi.v1.model.ContactListIO;
+import com.propertyvista.oapi.v1.model.FloorplanListIO;
+import com.propertyvista.oapi.v1.model.LeaseListIO;
+import com.propertyvista.oapi.v1.model.MediaImageListIO;
 import com.propertyvista.oapi.v1.model.ParkingListIO;
+import com.propertyvista.oapi.v1.model.UnitListIO;
 import com.propertyvista.oapi.v1.model.types.BuildingTypeIO;
 import com.propertyvista.oapi.v1.processing.AbstractProcessor;
+import com.propertyvista.oapi.v1.service.MarketingService;
 import com.propertyvista.oapi.v1.service.PortationService;
-import com.propertyvista.oapi.xml.Action;
+import com.propertyvista.oapi.xml.Note;
 
 public class BuildingMarshaller extends AbstractMarshaller<Building, BuildingIO> {
 
@@ -53,21 +60,34 @@ public class BuildingMarshaller extends AbstractMarshaller<Building, BuildingIO>
         buildingIO.marketing = MarketingMarshaller.getInstance().marshal(building.marketing());
 
         Persistence.service().retrieve(building.contacts().propertyContacts());
-        buildingIO.contacts = ContactMarshaller.getInstance().marshalCollection(building.contacts().propertyContacts());
+        buildingIO.contacts = ContactMarshaller.getInstance().marshalCollection(ContactListIO.class, building.contacts().propertyContacts());
 
         Persistence.ensureRetrieve(building.media(), AttachLevel.Attached);
-        buildingIO.medias = MediaMarshaller.getInstance().marshalCollection(building.media());
+        buildingIO.medias = MediaMarshaller.getInstance().marshalCollection(MediaImageListIO.class, building.media());
 
         Persistence.service().retrieveMember(building.amenities());
-        buildingIO.amenities = BuildingAmenityMarshaller.getInstance().marshalCollection(building.amenities());
+        buildingIO.amenities = BuildingAmenityMarshaller.getInstance().marshalCollection(BuildingAmenityListIO.class, building.amenities());
 
         if (AbstractProcessor.getServiceType() != ServiceType.List || AbstractProcessor.getServiceClass() == PortationService.class) {
             Persistence.ensureRetrieve(building.parkings(), AttachLevel.Attached);
-            buildingIO.parkings = ParkingMarshaller.getInstance().marshalCollection(building.parkings());
+            buildingIO.parkings = ParkingMarshaller.getInstance().marshalCollection(ParkingListIO.class, building.parkings());
         } else {
-            buildingIO.parkings = new ParkingListIO(Action.notAttached);
+            buildingIO.parkings = new ParkingListIO(Note.contentDetached);
         }
 
+        Persistence.ensureRetrieve(building.floorplans(), AttachLevel.Attached);
+        buildingIO.floorplans = FloorplanMarshaller.getInstance().marshalCollection(FloorplanListIO.class, building.floorplans());
+
+        if (AbstractProcessor.getServiceClass() == MarketingService.class) {
+            buildingIO.units = new UnitListIO(Note.contentDetached);
+        } else if (AbstractProcessor.getServiceType() != ServiceType.List || AbstractProcessor.getServiceClass() == PortationService.class) {
+            Persistence.ensureRetrieve(building.units(), AttachLevel.Attached);
+            buildingIO.units = UnitMarshaller.getInstance().marshalCollection(UnitListIO.class, building.units());
+        } else {
+            buildingIO.units = new UnitListIO(Note.contentDetached);
+        }
+
+        buildingIO.leases = new LeaseListIO(Note.contentDetached);
         return buildingIO;
     }
 

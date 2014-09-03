@@ -13,8 +13,11 @@
  */
 package com.propertyvista.oapi.v1.model;
 
+import javax.xml.bind.annotation.XmlType;
+
 import com.propertyvista.oapi.xml.AbstractElementIO;
 
+@XmlType(name = "Utility")
 public class UtilityIO extends AbstractElementIO {
 
     public String name;

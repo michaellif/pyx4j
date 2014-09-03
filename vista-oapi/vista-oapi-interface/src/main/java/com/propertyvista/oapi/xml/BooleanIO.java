@@ -13,13 +13,15 @@
  */
 package com.propertyvista.oapi.xml;
 
+import javax.xml.bind.annotation.XmlType;
 import javax.xml.bind.annotation.XmlValue;
 
+@XmlType(name = "BooleanBase")
 public class BooleanIO implements PrimitiveIO<Boolean> {
 
     private Boolean value;
 
-    private Action action;
+    private Note note;
 
     public BooleanIO() {
     }
@@ -40,7 +42,7 @@ public class BooleanIO implements PrimitiveIO<Boolean> {
     }
 
     @Override
-    public Action getAction() {
-        return action;
+    public Note getNote() {
+        return note;
     }
 }

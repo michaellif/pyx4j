@@ -16,20 +16,20 @@ package com.propertyvista.oapi.v1.model;
 import java.util.ArrayList;
 
 import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlType;
 
 import com.propertyvista.oapi.xml.AbstractListIO;
-import com.propertyvista.oapi.xml.Action;
+import com.propertyvista.oapi.xml.Note;
 
-@XmlRootElement(name = "amenities")
+@XmlType(name = "BuildingAmenityList")
 public class BuildingAmenityListIO extends AbstractListIO<BuildingAmenityIO> {
 
     public BuildingAmenityListIO() {
         super();
     }
 
-    public BuildingAmenityListIO(Action action) {
-        super(action);
+    public BuildingAmenityListIO(Note note) {
+        super(note);
     }
 
     @Override

@@ -21,9 +21,12 @@ import com.pyx4j.entity.core.EntityFactory;
 
 import com.propertyvista.domain.property.asset.building.BuildingAmenity;
 import com.propertyvista.oapi.AbstractMarshaller;
+import com.propertyvista.oapi.ServiceType;
 import com.propertyvista.oapi.v1.model.BuildingAmenityIO;
 import com.propertyvista.oapi.v1.model.BuildingAmenityListIO;
 import com.propertyvista.oapi.v1.model.types.BuildingAmenityTypeIO;
+import com.propertyvista.oapi.v1.processing.AbstractProcessor;
+import com.propertyvista.oapi.v1.service.PortationService;
 import com.propertyvista.oapi.xml.StringIO;
 
 public class BuildingAmenityMarshaller extends AbstractMarshaller<BuildingAmenity, BuildingAmenityIO> {
@@ -47,8 +50,10 @@ public class BuildingAmenityMarshaller extends AbstractMarshaller<BuildingAmenit
         BuildingAmenityIO amenityIO = new BuildingAmenityIO();
 
         amenityIO.name = getValue(amenity.name());
-        amenityIO.description = createIo(StringIO.class, amenity.description());
-        amenityIO.type = createIo(BuildingAmenityTypeIO.class, amenity.type());
+        if (AbstractProcessor.getServiceType() != ServiceType.List || AbstractProcessor.getServiceClass() == PortationService.class) {
+            amenityIO.description = createIo(StringIO.class, amenity.description());
+            amenityIO.type = createIo(BuildingAmenityTypeIO.class, amenity.type());
+        }
         return amenityIO;
     }
 

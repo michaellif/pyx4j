@@ -15,13 +15,15 @@ package com.propertyvista.oapi.xml;
 
 import java.math.BigDecimal;
 
+import javax.xml.bind.annotation.XmlType;
 import javax.xml.bind.annotation.XmlValue;
 
+@XmlType(name = "BigDecimalBase")
 public class BigDecimalIO implements PrimitiveIO<BigDecimal> {
 
     private BigDecimal value;
 
-    private Action action;
+    private Note note;
 
     public BigDecimalIO() {
     }
@@ -42,7 +44,7 @@ public class BigDecimalIO implements PrimitiveIO<BigDecimal> {
     }
 
     @Override
-    public Action getAction() {
-        return action;
+    public Note getNote() {
+        return note;
     }
 }

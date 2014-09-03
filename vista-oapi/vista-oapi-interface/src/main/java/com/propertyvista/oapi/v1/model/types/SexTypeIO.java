@@ -13,17 +13,19 @@
  */
 package com.propertyvista.oapi.v1.model.types;
 
+import javax.xml.bind.annotation.XmlType;
 import javax.xml.bind.annotation.XmlValue;
 
 import com.propertyvista.domain.person.Person;
-import com.propertyvista.oapi.xml.Action;
+import com.propertyvista.oapi.xml.Note;
 import com.propertyvista.oapi.xml.PrimitiveIO;
 
+@XmlType(name = "SexType")
 public class SexTypeIO implements PrimitiveIO<Person.Sex> {
 
     private Person.Sex value;
 
-    private Action action;
+    private Note note;
 
     public SexTypeIO() {
     }
@@ -44,7 +46,7 @@ public class SexTypeIO implements PrimitiveIO<Person.Sex> {
     }
 
     @Override
-    public Action getAction() {
-        return action;
+    public Note getNote() {
+        return note;
     }
 }

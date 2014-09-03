@@ -14,10 +14,12 @@
 package com.propertyvista.oapi.v1.model;
 
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlType;
 
 import com.propertyvista.oapi.xml.LogicalDateIO;
 
-@XmlRootElement
+@XmlType(name = "Charge")
+@XmlRootElement(name = "charge")
 public class ChargeIO extends TransactionIO {
 
     public ServiceIO service;

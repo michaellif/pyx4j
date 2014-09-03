@@ -13,13 +13,15 @@
  */
 package com.propertyvista.oapi.xml;
 
+import javax.xml.bind.annotation.XmlType;
 import javax.xml.bind.annotation.XmlValue;
 
+@XmlType(name = "DoobleBase")
 public class DoubleIO implements PrimitiveIO<Double> {
 
     private Double value;
 
-    private Action action;
+    private Note note;
 
     public DoubleIO() {
     }
@@ -40,7 +42,7 @@ public class DoubleIO implements PrimitiveIO<Double> {
     }
 
     @Override
-    public Action getAction() {
-        return action;
+    public Note getNote() {
+        return note;
     }
 }

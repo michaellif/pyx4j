@@ -17,19 +17,21 @@ import java.util.ArrayList;
 
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlType;
 
 import com.propertyvista.oapi.xml.AbstractListIO;
-import com.propertyvista.oapi.xml.Action;
+import com.propertyvista.oapi.xml.Note;
 
-@XmlRootElement(name = "units", namespace = "http://www.w3.org/2001/XMLSchema-instance")
+@XmlType(name = "UnitList")
+@XmlRootElement(name = "units")
 public class UnitListIO extends AbstractListIO<UnitIO> {
 
     public UnitListIO() {
         super();
     }
 
-    public UnitListIO(Action action) {
-        super(action);
+    public UnitListIO(Note note) {
+        super(note);
     }
 
     @Override

@@ -14,13 +14,15 @@
 package com.propertyvista.oapi.xml;
 
 import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlType;
 import javax.xml.bind.annotation.XmlValue;
 
+@XmlType(name = "IntegerBase")
 public class IntegerIO implements PrimitiveIO<Integer> {
 
     private Integer value;
 
-    private Action action;
+    private Note note;
 
     public IntegerIO() {
     }
@@ -42,7 +44,7 @@ public class IntegerIO implements PrimitiveIO<Integer> {
 
     @Override
     @XmlAttribute
-    public Action getAction() {
-        return action;
+    public Note getNote() {
+        return note;
     }
 }

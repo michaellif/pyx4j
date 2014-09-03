@@ -17,6 +17,7 @@ import java.util.ArrayList;
 
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlType;
 
 import com.propertyvista.oapi.v1.model.types.LeaseStatusIO;
 import com.propertyvista.oapi.v1.model.types.LeaseTermIO;
@@ -26,6 +27,7 @@ import com.propertyvista.oapi.xml.AbstractElementIO;
 import com.propertyvista.oapi.xml.BigDecimalIO;
 import com.propertyvista.oapi.xml.LogicalDateIO;
 
+@XmlType(name = "Lease")
 @XmlRootElement(name = "lease")
 public class LeaseIO extends AbstractElementIO {
 

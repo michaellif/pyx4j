@@ -16,19 +16,21 @@ package com.propertyvista.oapi.xml;
 import java.util.ArrayList;
 
 import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlType;
 
+@XmlType(name = "AbstractList")
 public class AbstractListIO<E> implements ElementIO {
 
     private ArrayList<E> list;
 
-    private Action action = Action.notAttached;
+    private Note note = Note.contentDetached;
 
     public AbstractListIO() {
         this(null);
     }
 
-    public AbstractListIO(Action action) {
-        this.action = action;
+    public AbstractListIO(Note note) {
+        this.note = note;
         list = new ArrayList<>();
     }
 
@@ -38,12 +40,12 @@ public class AbstractListIO<E> implements ElementIO {
 
     @XmlAttribute
     @Override
-    public Action getAction() {
-        return action;
+    public Note getNote() {
+        return note;
     }
 
-    public void setAction(Action action) {
-        this.action = action;
+    public void setAction(Note action) {
+        this.note = action;
     }
 
     public E get(int index) {

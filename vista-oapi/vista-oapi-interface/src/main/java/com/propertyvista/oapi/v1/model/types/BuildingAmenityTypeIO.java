@@ -13,18 +13,20 @@
  */
 package com.propertyvista.oapi.v1.model.types;
 
+import javax.xml.bind.annotation.XmlType;
 import javax.xml.bind.annotation.XmlValue;
 
 import com.propertyvista.domain.property.asset.building.BuildingAmenity;
 import com.propertyvista.domain.property.asset.building.BuildingAmenity.Type;
-import com.propertyvista.oapi.xml.Action;
+import com.propertyvista.oapi.xml.Note;
 import com.propertyvista.oapi.xml.PrimitiveIO;
 
+@XmlType(name = "BuildingAmenityTypeHolder")
 public class BuildingAmenityTypeIO implements PrimitiveIO<BuildingAmenity.Type> {
 
     private BuildingAmenity.Type value;
 
-    private Action action;
+    private Note note;
 
     public BuildingAmenityTypeIO() {
     }
@@ -45,7 +47,7 @@ public class BuildingAmenityTypeIO implements PrimitiveIO<BuildingAmenity.Type> 
     }
 
     @Override
-    public Action getAction() {
-        return action;
+    public Note getNote() {
+        return note;
     }
 }

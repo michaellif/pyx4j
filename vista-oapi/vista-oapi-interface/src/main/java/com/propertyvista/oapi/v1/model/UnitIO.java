@@ -15,11 +15,13 @@ package com.propertyvista.oapi.v1.model;
 
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlType;
 
 import com.propertyvista.oapi.xml.AbstractElementIO;
 import com.propertyvista.oapi.xml.IntegerIO;
 import com.propertyvista.oapi.xml.StringIO;
 
+@XmlType(name = "Unit")
 @XmlRootElement(name = "unit")
 public class UnitIO extends AbstractElementIO {
 

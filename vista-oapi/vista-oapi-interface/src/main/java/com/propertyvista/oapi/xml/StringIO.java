@@ -14,13 +14,15 @@
 package com.propertyvista.oapi.xml;
 
 import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlType;
 import javax.xml.bind.annotation.XmlValue;
 
+@XmlType(name = "StringBase")
 public class StringIO implements PrimitiveIO<String> {
 
     private String value;
 
-    private Action action;
+    private Note note;
 
     public StringIO() {
     }
@@ -42,8 +44,8 @@ public class StringIO implements PrimitiveIO<String> {
 
     @Override
     @XmlAttribute
-    public Action getAction() {
-        return action;
+    public Note getNote() {
+        return note;
     }
 
 }
