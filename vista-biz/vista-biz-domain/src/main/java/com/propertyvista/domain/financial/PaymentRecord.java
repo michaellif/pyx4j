@@ -59,12 +59,12 @@ import com.propertyvista.domain.tenant.lease.LeaseParticipant;
 import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
 
 /**
- * 
+ *
  * Actual payment record. {@link com.propertyvista.domain.financial.billing.InvoicePayment} captures payment portion for particular charge (in future version)
  * Deposit is considered as payment and presented by this class (this statement requires
  * review, Alex S, see deposit properties in
  * com.propertyvista.domain.financial.payment.java)
- * 
+ *
  * @author Alexs
  */
 @ToStringFormat("{0}, ${1,number,#,##0.00} - {2}")
@@ -182,6 +182,8 @@ public interface PaymentRecord extends IEntity, HasNotesAndAttachments {
     @ToString(index = 0)
     IPrimitive<Key> id();
 
+    // There is Max length in Yardi table trans.sUserDefined1 nvarchar(24)
+    @Length(24)
     @ReadOnly
     IPrimitive<String> yardiDocumentNumber();
 
