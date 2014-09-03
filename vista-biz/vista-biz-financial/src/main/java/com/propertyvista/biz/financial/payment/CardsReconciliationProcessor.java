@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011-2012 All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -40,6 +40,7 @@ import com.propertyvista.domain.financial.CardsAggregatedTransfer;
 import com.propertyvista.domain.financial.FundsTransferType;
 import com.propertyvista.domain.financial.MerchantAccount;
 import com.propertyvista.domain.financial.PaymentRecord;
+import com.propertyvista.domain.payment.CreditCardInfo;
 import com.propertyvista.domain.payment.PaymentType;
 import com.propertyvista.domain.pmc.Pmc;
 import com.propertyvista.operations.domain.eft.cards.CardsReconciliationRecord;
@@ -53,6 +54,20 @@ class CardsReconciliationProcessor {
     private final ExecutionMonitor executionMonitor;
 
     private final Pmc pmc;
+
+    private static class MerchantTotals {
+
+        BigDecimal totalAmount = BigDecimal.ZERO;
+
+        BigDecimal visaAmount = BigDecimal.ZERO;
+
+        BigDecimal visaConvenienceFee = BigDecimal.ZERO;
+
+        BigDecimal mastercardAmount = BigDecimal.ZERO;
+
+        BigDecimal mastercardConvenienceFee = BigDecimal.ZERO;
+
+    }
 
     CardsReconciliationProcessor(ExecutionMonitor executionMonitor) {
         this.executionMonitor = executionMonitor;
@@ -137,21 +152,33 @@ class CardsReconciliationProcessor {
 
         Persistence.service().persist(at);
 
-        attachPaymentRecords(at, reconciliationRecord);
+        MerchantTotals totals = new MerchantTotals();
+        attachPaymentRecords(at, reconciliationRecord, totals);
 
         // AggregatedTransfer updated
         Persistence.service().persist(at);
 
-        if (reconciliationRecord.totalDeposit().getValue().compareTo(at.grossPaymentAmount().getValue()) != 0) {
-            executionMonitor.addFailedEvent("DailyTotals", at.grossPaymentAmount().getValue().subtract(reconciliationRecord.totalDeposit().getValue()), //
+        if (reconciliationRecord.totalDeposit().getValue().compareTo(totals.totalAmount) != 0) {
+            executionMonitor.addErredEvent("DailyTotals", totals.totalAmount.subtract(reconciliationRecord.totalDeposit().getValue()), //
                     SimpleMessageFormat.format("Merchant {0} deposit {1} does not match transactions total {2}",//
-                            reconciliationRecord.merchantTerminalId(), reconciliationRecord.totalDeposit(), at.grossPaymentAmount()));
+                            reconciliationRecord.merchantTerminalId(), reconciliationRecord.totalDeposit(), totals.totalAmount));
         }
 
-        // TODO Validate card Types Totals.
+        // Validate Card Types Totals.
+        if (reconciliationRecord.visaDeposit().getValue().compareTo(totals.visaAmount) != 0) {
+            executionMonitor.addErredEvent("DailyTotals", totals.visaAmount.subtract(reconciliationRecord.visaDeposit().getValue()), //
+                    SimpleMessageFormat.format("Merchant {0} Visa Deposit {1} does not match transactions total {2}",//
+                            reconciliationRecord.merchantTerminalId(), reconciliationRecord.visaDeposit(), totals.visaAmount));
+        }
+
+        if (reconciliationRecord.mastercardDeposit().getValue().compareTo(totals.mastercardAmount) != 0) {
+            executionMonitor.addErredEvent("DailyTotals", totals.mastercardAmount.subtract(reconciliationRecord.mastercardDeposit().getValue()), //
+                    SimpleMessageFormat.format("Merchant {0} MasterCard Deposit {1} does not match transactions total {2}",//
+                            reconciliationRecord.merchantTerminalId(), reconciliationRecord.mastercardDeposit(), totals.mastercardAmount));
+        }
     }
 
-    private void attachPaymentRecords(CardsAggregatedTransfer at, CardsReconciliationRecord reconciliationRecord) {
+    private void attachPaymentRecords(CardsAggregatedTransfer at, CardsReconciliationRecord reconciliationRecord, MerchantTotals totals) {
         LogicalDate transactionsDate = new LogicalDate(DateUtils.addDays(reconciliationRecord.date().getValue(), -1));
         EntityQueryCriteria<PaymentRecord> criteria = EntityQueryCriteria.create(PaymentRecord.class);
         criteria.eq(criteria.proto().finalizeDate(), transactionsDate);
@@ -175,6 +202,20 @@ class CardsReconciliationProcessor {
 
                 at.grossPaymentCount().setValue(at.grossPaymentCount().getValue() + 1);
                 at.grossPaymentAmount().setValue(at.grossPaymentAmount().getValue().add(paymentRecord.amount().getValue()));
+
+                totals.totalAmount = totals.totalAmount.add(paymentRecord.amount().getValue());
+
+                switch (paymentRecord.paymentMethod().details().<CreditCardInfo> cast().cardType().getValue()) {
+                case MasterCard:
+                    totals.mastercardAmount = totals.mastercardAmount.add(paymentRecord.amount().getValue());
+                    totals.mastercardConvenienceFee = totals.mastercardConvenienceFee.add(paymentRecord.convenienceFee().getValue(BigDecimal.ZERO));
+                    break;
+                case Visa:
+                case VisaDebit:
+                    totals.visaAmount = totals.visaAmount.add(paymentRecord.amount().getValue());
+                    totals.visaConvenienceFee = totals.visaConvenienceFee.add(paymentRecord.convenienceFee().getValue(BigDecimal.ZERO));
+                    break;
+                }
 
                 executionMonitor.addInfoEvent("PaymentRecord", paymentRecord.amount().getValue(), null);
             }
