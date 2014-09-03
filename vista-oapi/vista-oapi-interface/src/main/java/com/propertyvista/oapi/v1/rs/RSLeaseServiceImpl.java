@@ -60,7 +60,7 @@ public class RSLeaseServiceImpl implements LeaseService {
     @GET
     @Produces({ MediaType.APPLICATION_XML })
     public List<LeaseIO> getLeases(@QueryParam("propertyCode") String propertyCode) {
-        List<LeaseIO> allLeases = LeaseServiceProcessor.getLeases();
+        List<LeaseIO> allLeases = new LeaseServiceProcessor().getLeases();
         if (propertyCode == null) {
             return allLeases;
         }
@@ -78,11 +78,11 @@ public class RSLeaseServiceImpl implements LeaseService {
     @Path("/{leaseId}")
     @Produces({ MediaType.APPLICATION_XML })
     public LeaseIO getLeaseById(@PathParam("leaseId") String leaseId) {
-        LeaseIO leaseIO = LeaseServiceProcessor.getLeaseById(leaseId);
+        LeaseIO leaseIO = new LeaseServiceProcessor().getLeaseById(leaseId);
         if (leaseIO == null) {
             throw new RuntimeException(i18n.tr("Lease with leaseId={0} not found", leaseId));
         }
-        return LeaseServiceProcessor.getLeaseById(leaseId);
+        return new LeaseServiceProcessor().getLeaseById(leaseId);
     }
 
     @Override
@@ -90,7 +90,7 @@ public class RSLeaseServiceImpl implements LeaseService {
     @Path("/{leaseId}/tenants")
     @Produces({ MediaType.APPLICATION_XML })
     public List<TenantIO> getTenants(@PathParam("leaseId") String leaseId) {
-        return LeaseServiceProcessor.getTenants(leaseId);
+        return new LeaseServiceProcessor().getTenants(leaseId);
     }
 
     @Override
@@ -98,7 +98,7 @@ public class RSLeaseServiceImpl implements LeaseService {
     @Path("/updateLease")
     @Consumes({ MediaType.APPLICATION_XML })
     public void updateLease(LeaseIO leaseIO) {
-        LeaseServiceProcessor.updateLease(leaseIO);
+        new LeaseServiceProcessor().updateLease(leaseIO);
         RSUtils.createSuccessResponse(i18n.tr("Lease updated successfully"));
     }
 

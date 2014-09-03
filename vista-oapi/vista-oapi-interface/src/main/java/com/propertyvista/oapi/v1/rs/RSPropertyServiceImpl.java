@@ -66,7 +66,7 @@ public class RSPropertyServiceImpl implements PropertyService {
     @GET
     @Produces({ MediaType.APPLICATION_XML })
     public BuildingListIO getBuildingList(@QueryParam("province") String province) {
-        BuildingListIO allBuildings = PropertyServiceProcessor.getBuildings();
+        BuildingListIO allBuildings = new PropertyServiceProcessor().getBuildings();
         if (province == null) {
             return allBuildings;
         }
@@ -85,7 +85,7 @@ public class RSPropertyServiceImpl implements PropertyService {
     @Path("/{propertyCode}")
     @Produces({ MediaType.APPLICATION_XML })
     public BuildingIO getBuilding(@PathParam("propertyCode") String propertyCode) {
-        BuildingIO buildingIO = PropertyServiceProcessor.getBuildingByPropertyCode(propertyCode);
+        BuildingIO buildingIO = new PropertyServiceProcessor().getBuildingByPropertyCode(propertyCode);
         if (buildingIO == null) {
             throw new RuntimeException(i18n.tr("Building with propertyCode={0} not found", propertyCode));
         }
@@ -97,7 +97,7 @@ public class RSPropertyServiceImpl implements PropertyService {
     @Path("/{propertyCode}/units")
     @Produces({ MediaType.APPLICATION_XML })
     public UnitListIO getUnitList(@PathParam("propertyCode") String propertyCode, @QueryParam("floorplan") String floorplan) {
-        List<UnitIO> allUnits = PropertyServiceProcessor.getUnitsByPropertyCode(propertyCode);
+        List<UnitIO> allUnits = new PropertyServiceProcessor().getUnitsByPropertyCode(propertyCode);
         UnitListIO filteredUnits = new UnitListIO();
         for (UnitIO unit : allUnits) {
             if (unit.floorplanName.equals(floorplan)) {
@@ -112,7 +112,7 @@ public class RSPropertyServiceImpl implements PropertyService {
     @Path("/{propertyCode}/units/{unitNumber}")
     @Produces({ MediaType.APPLICATION_XML })
     public UnitIO getUnitByNumber(@PathParam("propertyCode") String propertyCode, @PathParam("unitNumber") String unitNumber) {
-        UnitIO unitIO = PropertyServiceProcessor.getUnitByNumber(propertyCode, unitNumber);
+        UnitIO unitIO = new PropertyServiceProcessor().getUnitByNumber(propertyCode, unitNumber);
         if (unitIO == null) {
             throw new RuntimeException(i18n.tr("Unit with propertyCode={0} and unitNumber={1} not found", propertyCode, unitNumber));
         }
@@ -124,7 +124,7 @@ public class RSPropertyServiceImpl implements PropertyService {
     @Path("/updateBuilding")
     @Consumes({ MediaType.APPLICATION_XML })
     public Response updateBuilding(BuildingIO buildingIO) throws Exception {
-        PropertyServiceProcessor.updateBuilding(buildingIO);
+        new PropertyServiceProcessor().updateBuilding(buildingIO);
         return RSUtils.createSuccessResponse(i18n.tr("Building updated successfully"));
     }
 
@@ -133,7 +133,7 @@ public class RSPropertyServiceImpl implements PropertyService {
     @Path("/{propertyCode}/units/updateUnit")
     @Consumes({ MediaType.APPLICATION_XML })
     public Response updateUnit(@PathParam("propertyCode") String propertyCode, UnitIO unitIO) throws Exception {
-        PropertyServiceProcessor.updateUnit(unitIO);
+        new PropertyServiceProcessor().updateUnit(unitIO);
         return RSUtils.createSuccessResponse(i18n.tr("Unit updated successfully"));
     }
 

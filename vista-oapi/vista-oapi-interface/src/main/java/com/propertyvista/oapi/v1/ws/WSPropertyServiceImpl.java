@@ -43,7 +43,7 @@ public class WSPropertyServiceImpl implements WSPropertyService {
 
     @Override
     public BuildingListIO listAllBuildings() {
-        return PropertyServiceProcessor.getBuildings();
+        return new PropertyServiceProcessor().getBuildings();
     }
 
     @Override
@@ -63,7 +63,7 @@ public class WSPropertyServiceImpl implements WSPropertyService {
 
     @Override
     public List<UnitIO> listAllBuildingUnits(String buildingCode) {
-        return PropertyServiceProcessor.getUnitsByPropertyCode(buildingCode);
+        return new PropertyServiceProcessor().getUnitsByPropertyCode(buildingCode);
     }
 
 }

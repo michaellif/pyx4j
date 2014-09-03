@@ -39,13 +39,13 @@ import com.propertyvista.oapi.v1.processing.MarketingServiceProcessor;
 import com.propertyvista.oapi.v1.searchcriteria.PropertySearchCriteriaIO;
 import com.propertyvista.oapi.v1.service.MarketingService;
 
-@Path("marketing")
+@Path("/marketing")
 public class RSMarketingServiceImpl implements MarketingService {
 
     @GET
-    @Path("getBuildings")
+    @Path("getBuildingList")
     @Produces(MediaType.APPLICATION_XML)
-    public BuildingListIO getBuildings( //
+    public BuildingListIO getBuildingList( //
             @QueryParam("city") String city, @QueryParam("province") String province, //
             @QueryParam("minBeds") BedroomChoice minBeds, @QueryParam("maxBeds") BedroomChoice maxBeds, //
             @QueryParam("minBaths") BathroomChoice minBaths, @QueryParam("maxBaths") BathroomChoice maxBaths, //
@@ -62,7 +62,7 @@ public class RSMarketingServiceImpl implements MarketingService {
     }
 
     @GET
-    @Path("getPropertyInfo")
+    @Path("getBuilding")
     @Produces(MediaType.APPLICATION_XML)
     @Override
     public BuildingIO getBuilding(@QueryParam("prId") String propertyId) {
@@ -78,7 +78,7 @@ public class RSMarketingServiceImpl implements MarketingService {
     }
 
     @GET
-    @Path("getFloorplanInfo")
+    @Path("getFloorplan")
     @Produces(MediaType.APPLICATION_XML)
     @Override
     public FloorplanIO getFloorplan(@QueryParam("prId") String propertyId, @QueryParam("fpId") String fpId) {

@@ -19,7 +19,6 @@ import java.util.List;
 
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.core.criterion.PropertyCriterion;
-import com.pyx4j.entity.server.IEntityPersistenceService;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.server.contexts.NamespaceManager;
 
@@ -33,52 +32,46 @@ import com.propertyvista.oapi.v1.persisting.LeasePersister;
 
 public class LeaseServiceProcessor {
 
-    private static final IEntityPersistenceService service;
-
-    static {
-        service = Persistence.service();
-    }
-
-    public static List<LeaseIO> getLeases() {
+    public List<LeaseIO> getLeases() {
         List<LeaseIO> leasesRS = new ArrayList<LeaseIO>();
         NamespaceManager.setNamespace("vista");
         EntityQueryCriteria<Lease> leaseCriteria = EntityQueryCriteria.create(Lease.class);
         leaseCriteria.asc(leaseCriteria.proto().leaseId());
-        List<Lease> leases = service.query(leaseCriteria);
+        List<Lease> leases = Persistence.service().query(leaseCriteria);
         for (Lease lease : leases) {
-            service.retrieve(lease.unit().building());
+            Persistence.service().retrieve(lease.unit().building());
             leasesRS.add(LeaseMarshaller.getInstance().marshal(lease));
         }
 
         return leasesRS;
     }
 
-    public static LeaseIO getLeaseById(String leaseId) {
+    public LeaseIO getLeaseById(String leaseId) {
         NamespaceManager.setNamespace("vista");
         EntityQueryCriteria<Lease> leaseCriteria = EntityQueryCriteria.create(Lease.class);
         leaseCriteria.add(PropertyCriterion.eq(leaseCriteria.proto().leaseId(), leaseId));
-        List<Lease> leases = service.query(leaseCriteria);
+        List<Lease> leases = Persistence.service().query(leaseCriteria);
         if (leases == null || leases.isEmpty()) {
             return null;
         }
 
         Lease lease = leases.get(0);
-        service.retrieve(lease.unit().building());
+        Persistence.service().retrieve(lease.unit().building());
         return LeaseMarshaller.getInstance().marshal(lease);
     }
 
-    public static List<TenantIO> getTenants(String leaseId) {
+    public List<TenantIO> getTenants(String leaseId) {
         List<TenantIO> tenantsIO = new ArrayList<TenantIO>();
         NamespaceManager.setNamespace("vista");
         EntityQueryCriteria<Lease> leaseCriteria = EntityQueryCriteria.create(Lease.class);
         leaseCriteria.eq(leaseCriteria.proto().leaseId(), leaseId);
-        List<Lease> leases = service.query(leaseCriteria);
+        List<Lease> leases = Persistence.service().query(leaseCriteria);
         if (leases == null || leases.isEmpty()) {
             return Collections.emptyList();
         }
 
         Lease lease = leases.get(0);
-        service.retrieveMember(lease.leaseParticipants());
+        Persistence.service().retrieveMember(lease.leaseParticipants());
         for (LeaseParticipant<?> participant : lease.leaseParticipants()) {
             TenantIO tenantIO = TenantMarshaller.getInstance().marshal(participant.customer().person());
             tenantIO.leaseId = leaseId;
@@ -88,7 +81,7 @@ public class LeaseServiceProcessor {
         return tenantsIO;
     }
 
-    public static void updateLease(LeaseIO leaseIO) {
+    public void updateLease(LeaseIO leaseIO) {
         Lease leaseDTO = LeaseMarshaller.getInstance().unmarshal(leaseIO);
 
         new LeasePersister().persist(leaseDTO);

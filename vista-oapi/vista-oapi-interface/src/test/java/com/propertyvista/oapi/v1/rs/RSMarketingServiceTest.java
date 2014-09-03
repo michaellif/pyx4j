@@ -93,7 +93,7 @@ public class RSMarketingServiceTest extends RSOapiTestBase {
 
     @Test
     public void testGetBuildings() {
-        BuildingListIO buildings = target("marketing/getBuildings").queryParam("province", building.info().address().province().getValue()).request()
+        BuildingListIO buildings = target("marketing/getBuildingList").queryParam("province", building.info().address().province().getValue()).request()
                 .get(BuildingListIO.class);
         Assert.assertEquals(1, buildings.buildingList.size());
     }
@@ -101,7 +101,7 @@ public class RSMarketingServiceTest extends RSOapiTestBase {
     @Test
     public void testGetPropertyInfo() {
         // in - String prId; out - BuildingIO
-        BuildingIO buildingIO = target("marketing/getPropertyInfo") //
+        BuildingIO buildingIO = target("marketing/getBuilding") //
                 .queryParam("prId", building.propertyCode().getValue()) //
                 .request().get(BuildingIO.class);
         Assert.assertEquals(building.info().address().province().getValue(), buildingIO.info.address.province.getValue());
@@ -119,7 +119,7 @@ public class RSMarketingServiceTest extends RSOapiTestBase {
     @Test
     public void testGetFloorplanInfo() {
         // in - String propertyId, String fpId; out - FloorplanIO
-        FloorplanIO floorplanIO = target("marketing/getFloorplanInfo") //
+        FloorplanIO floorplanIO = target("marketing/getFloorplan") //
                 .queryParam("prId", building.propertyCode().getValue()) //
                 .queryParam("fpId", fp.name().getValue()) //
                 .request().get(FloorplanIO.class);

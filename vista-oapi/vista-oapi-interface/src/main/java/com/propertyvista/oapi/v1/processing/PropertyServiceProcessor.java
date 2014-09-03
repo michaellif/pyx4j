@@ -35,7 +35,7 @@ import com.propertyvista.oapi.v1.persisting.UnitPersister;
 
 public class PropertyServiceProcessor {
 
-    public static BuildingListIO getBuildings() {
+    public BuildingListIO getBuildings() {
 
         EntityQueryCriteria<Building> buildingCriteria = EntityQueryCriteria.create(Building.class);
         buildingCriteria.asc(buildingCriteria.proto().propertyCode());
@@ -50,7 +50,7 @@ public class PropertyServiceProcessor {
         return buildingsRs;
     }
 
-    public static BuildingIO getBuildingByPropertyCode(String propertyCode) {
+    public BuildingIO getBuildingByPropertyCode(String propertyCode) {
 
         EntityQueryCriteria<Building> buildingCriteria = EntityQueryCriteria.create(Building.class);
         buildingCriteria.eq(buildingCriteria.proto().propertyCode(), propertyCode);
@@ -61,7 +61,7 @@ public class PropertyServiceProcessor {
         return BuildingMarshaller.getInstance().marshal(buildings.get(0));
     }
 
-    public static void updateBuilding(BuildingIO buildingIO) throws Exception {
+    public void updateBuilding(BuildingIO buildingIO) throws Exception {
         Building building = BuildingMarshaller.getInstance().unmarshal(buildingIO);
 
         new BuildingPersister().persist(building);
@@ -71,7 +71,7 @@ public class PropertyServiceProcessor {
         Persistence.service().commit();
     }
 
-    public static List<UnitIO> getUnitsByPropertyCode(String propertyCode) {
+    public List<UnitIO> getUnitsByPropertyCode(String propertyCode) {
         List<UnitIO> unitsRS = new ArrayList<UnitIO>();
 
         List<AptUnit> units;
@@ -88,7 +88,7 @@ public class PropertyServiceProcessor {
         return unitsRS;
     }
 
-    public static UnitIO getUnitByNumber(String propertyCode, String unitNumber) {
+    public UnitIO getUnitByNumber(String propertyCode, String unitNumber) {
         EntityQueryCriteria<AptUnit> unitCriteria = EntityQueryCriteria.create(AptUnit.class);
         unitCriteria.add(PropertyCriterion.eq(unitCriteria.proto().building().propertyCode(), propertyCode));
         unitCriteria.eq(unitCriteria.proto().info().number(), unitNumber);
@@ -103,7 +103,7 @@ public class PropertyServiceProcessor {
 
     }
 
-    public static void updateUnit(UnitIO unitIO) {
+    public void updateUnit(UnitIO unitIO) {
         AptUnit unitDTO = UnitMarshaller.getInstance().unmarshal(unitIO);
 
         new UnitPersister().persist(unitDTO);
