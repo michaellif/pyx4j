@@ -28,10 +28,12 @@ import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.IEntity;
+import com.pyx4j.entity.core.IPrimitive;
 import com.pyx4j.entity.security.DataModelPermission;
 import com.pyx4j.forms.client.ui.CComboBox;
 import com.pyx4j.forms.client.ui.CFile;
 import com.pyx4j.forms.client.ui.CForm;
+import com.pyx4j.forms.client.ui.CTextArea;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.gwt.rpc.upload.UploadService;
@@ -348,7 +350,7 @@ public class LeaseApplicationViewerViewImpl extends LeaseViewerViewImplBase<Leas
         new ActionBox(i18n.tr("Submit")) {
             @Override
             public boolean onClickOk() {
-                ((LeaseApplicationViewerView.Presenter) getPresenter()).applicationAction(updateValue(Action.Submit));
+                ((LeaseApplicationViewerView.Presenter) getPresenter()).applicationAction(actionValue(Action.Submit));
                 return true;
             }
         }.show();
@@ -358,20 +360,14 @@ public class LeaseApplicationViewerViewImpl extends LeaseViewerViewImplBase<Leas
         new ActionBox(i18n.tr("Complete")) {
             @Override
             public boolean onClickOk() {
-                ((LeaseApplicationViewerView.Presenter) getPresenter()).applicationAction(updateValue(Action.Complete));
+                ((LeaseApplicationViewerView.Presenter) getPresenter()).applicationAction(actionValue(Action.Complete));
                 return true;
             }
         }.show();
     }
 
     private void approveActionExecuter() {
-        new ActionBox(i18n.tr("Approve")) {
-            @Override
-            public boolean onClickOk() {
-                ((LeaseApplicationViewerView.Presenter) getPresenter()).applicationAction(updateValue(Action.Approve));
-                return true;
-            }
-        }.show();
+        new ApproveDialog().show();
     }
 
     private void declineActionExecuter() {
@@ -382,7 +378,7 @@ public class LeaseApplicationViewerViewImpl extends LeaseViewerViewImplBase<Leas
                     MessageDialog.error(i18n.tr("Error"), i18n.tr("Please fill the reason"));
                     return false;
                 }
-                ((LeaseApplicationViewerView.Presenter) getPresenter()).applicationAction(updateValue(Action.Decline));
+                ((LeaseApplicationViewerView.Presenter) getPresenter()).applicationAction(actionValue(Action.Decline));
                 return true;
             }
         }.show();
@@ -396,7 +392,7 @@ public class LeaseApplicationViewerViewImpl extends LeaseViewerViewImplBase<Leas
                     MessageDialog.error(i18n.tr("Error"), i18n.tr("Please fill the reason"));
                     return false;
                 }
-                ((LeaseApplicationViewerView.Presenter) getPresenter()).applicationAction(updateValue(Action.Cancel));
+                ((LeaseApplicationViewerView.Presenter) getPresenter()).applicationAction(actionValue(Action.Cancel));
                 return true;
             }
         }.show();
@@ -468,10 +464,79 @@ public class LeaseApplicationViewerViewImpl extends LeaseViewerViewImplBase<Leas
             super(title);
         }
 
-        public LeaseApplicationActionDTO updateValue(Action status) {
+        public LeaseApplicationActionDTO actionValue(Action status) {
             LeaseApplicationActionDTO action = EntityFactory.create(LeaseApplicationActionDTO.class);
             action.leaseId().set(getForm().getValue().createIdentityStub());
             action.decisionReason().setValue(getReason());
+            action.action().setValue(status);
+            return action;
+        }
+    }
+
+    public interface ApprovalChecklist extends IEntity {
+
+        @NotNull
+        IPrimitive<Boolean> infoCompoletness();
+
+        @NotNull
+        IPrimitive<Boolean> creditCheck();
+
+        @NotNull
+        IPrimitive<Boolean> employmentConfirmation();
+
+        @NotNull
+        IPrimitive<Boolean> landlordConfirmation();
+    }
+
+    private class ApproveDialog extends OkCancelDialog {
+
+        private final CForm<ApprovalChecklist> form;
+
+        private final CTextArea notes = new CTextArea();
+
+        public ApproveDialog() {
+            super(i18n.tr("Application Approval Checklist"));
+
+            form = new CForm<ApprovalChecklist>(ApprovalChecklist.class) {
+                @Override
+                protected IsWidget createContent() {
+                    FormPanel formPanel = new FormPanel(this);
+
+                    formPanel.append(Location.Left, proto().infoCompoletness()).decorate().labelWidth(250).componentWidth(30);
+                    formPanel.append(Location.Left, proto().creditCheck()).decorate().labelWidth(250).componentWidth(30);
+                    formPanel.append(Location.Left, proto().employmentConfirmation()).decorate().labelWidth(250).componentWidth(30);
+                    formPanel.append(Location.Left, proto().landlordConfirmation()).decorate().labelWidth(250).componentWidth(30);
+
+                    formPanel.h4(i18n.tr("Notes:"));
+                    formPanel.append(Location.Left, notes);
+                    notes.asWidget().setWidth("334px");
+
+                    return formPanel;
+                }
+            };
+
+            form.init();
+            form.populateNew();
+            setBody(form);
+            setDialogPixelWidth(350);
+        }
+
+        @Override
+        public boolean onClickOk() {
+            form.setVisitedRecursive();
+            form.revalidate();
+            if (form.isValid()) {
+                ((LeaseApplicationViewerView.Presenter) getPresenter()).applicationAction(actionValue(Action.Approve));
+                return true;
+            } else {
+                return false;
+            }
+        }
+
+        public LeaseApplicationActionDTO actionValue(Action status) {
+            LeaseApplicationActionDTO action = EntityFactory.create(LeaseApplicationActionDTO.class);
+            action.leaseId().set(getForm().getValue().createIdentityStub());
+            action.decisionReason().setValue(notes.getValue());
             action.action().setValue(status);
             return action;
         }
