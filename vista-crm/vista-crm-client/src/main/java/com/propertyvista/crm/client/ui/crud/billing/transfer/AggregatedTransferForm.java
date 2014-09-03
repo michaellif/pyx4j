@@ -24,6 +24,7 @@ import com.pyx4j.widgets.client.tabpanel.Tab;
 
 import com.propertyvista.common.client.ui.components.folders.VistaTableFolder;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
+import com.propertyvista.crm.rpc.dto.financial.CardsAggregatedTransferDTO;
 import com.propertyvista.domain.financial.AggregatedTransfer;
 import com.propertyvista.domain.financial.AggregatedTransferAdjustment;
 import com.propertyvista.domain.financial.AggregatedTransferChargeback;
@@ -63,7 +64,7 @@ public class AggregatedTransferForm extends CrmEntityForm<AggregatedTransfer> {
         tabPanel.append(Location.Dual, view.getRejectedBatchPaymentsListerView().asWidget());
         rejectedBatchPaymentsTab = addTab(tabPanel, proto().rejectedBatchPayments().getMeta().getCaption());
 
-        // poly data forms: 
+        // poly data forms:
         cardsAggregatedTransferForm = new CardsAggregatedTransferForm(view);
         eftAggregatedTransferForm = new EftAggregatedTransferForm(view);
     }
@@ -94,21 +95,21 @@ public class AggregatedTransferForm extends CrmEntityForm<AggregatedTransfer> {
 
     @Override
     protected void onValuePropagation(AggregatedTransfer value, boolean fireEvent, boolean populate) {
-        setPolimorphicData(value, fireEvent, populate);
+        setPolymorphicData(value, fireEvent, populate);
         super.onValuePropagation(value, fireEvent, populate);
     }
 
-    private void setPolimorphicData(AggregatedTransfer value, boolean fireEvent, boolean populate) {
+    private void setPolymorphicData(AggregatedTransfer value, boolean fireEvent, boolean populate) {
         polyDataPanel.clear();
 
         if (value != null) {
-            if (value.getInstanceValueClass().equals(CardsAggregatedTransfer.class)) {
+            if (value.isInstanceOf(CardsAggregatedTransfer.class)) {
 
                 polyDataPanel.append(Location.Dual, cardsAggregatedTransferForm.asWidget());
                 setTabVisible(returnedPaymentsTab, false);
                 setTabVisible(rejectedBatchPaymentsTab, false);
 
-            } else if (value.getInstanceValueClass().equals(EftAggregatedTransfer.class)) {
+            } else if (value.isInstanceOf(EftAggregatedTransfer.class)) {
 
                 polyDataPanel.append(Location.Dual, eftAggregatedTransferForm.asWidget());
                 setTabVisible(returnedPaymentsTab, true);
@@ -126,9 +127,9 @@ public class AggregatedTransferForm extends CrmEntityForm<AggregatedTransfer> {
 
         get(proto().transactionErrorMessage()).setVisible(!getValue().transactionErrorMessage().isNull());
 
-        if (getValue().getInstanceValueClass().equals(CardsAggregatedTransfer.class)) {
-            cardsAggregatedTransferForm.setValue((CardsAggregatedTransfer) getValue(), !populate, populate);
-        } else if (getValue().getInstanceValueClass().equals(EftAggregatedTransfer.class)) {
+        if (getValue().isInstanceOf(CardsAggregatedTransferDTO.class)) {
+            cardsAggregatedTransferForm.setValue((CardsAggregatedTransferDTO) getValue(), !populate, populate);
+        } else if (getValue().isInstanceOf(EftAggregatedTransfer.class)) {
             eftAggregatedTransferForm.setValue((EftAggregatedTransfer) getValue(), !populate, populate);
         } else {
             assert false;

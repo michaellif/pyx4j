@@ -19,18 +19,20 @@ import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.security.shared.SecurityController;
 
 import com.propertyvista.common.client.ui.components.VistaEditorsComponentFactory;
-import com.propertyvista.domain.financial.CardsAggregatedTransfer;
+import com.propertyvista.crm.rpc.dto.financial.CardsAggregatedTransferDTO;
+import com.propertyvista.domain.security.VistaCrmBehavior;
 
-public class CardsAggregatedTransferForm extends CForm<CardsAggregatedTransfer> {
+public class CardsAggregatedTransferForm extends CForm<CardsAggregatedTransferDTO> {
 
     private static final I18n i18n = I18n.get(CardsAggregatedTransferForm.class);
 
     private final AggregatedTransferViewerView view;
 
     public CardsAggregatedTransferForm(AggregatedTransferViewerView view) {
-        super(CardsAggregatedTransfer.class, new VistaEditorsComponentFactory());
+        super(CardsAggregatedTransferDTO.class, new VistaEditorsComponentFactory());
         this.view = view;
         init();
         setViewable(true);
@@ -45,6 +47,12 @@ public class CardsAggregatedTransferForm extends CForm<CardsAggregatedTransfer> 
 
         formPanel.append(Location.Right, proto().mastercardDeposit()).decorate().componentWidth(120);
         formPanel.append(Location.Right, proto().mastercardFee()).decorate().componentWidth(120);
+
+        if (SecurityController.check(VistaCrmBehavior.PropertyVistaSupport)) {
+            formPanel.h3("Vista Support Trace info");
+            formPanel.append(Location.Dual, proto().fileMerchantTotal()).decorate();
+            formPanel.append(Location.Dual, proto().fileCardTotal()).decorate();
+        }
 
         return formPanel;
 
