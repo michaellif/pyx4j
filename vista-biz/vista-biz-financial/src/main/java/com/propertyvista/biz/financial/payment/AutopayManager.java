@@ -50,11 +50,11 @@ import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
 import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
 
-class AutopaytManager {
+class AutopayManager {
 
-    private static final I18n i18n = I18n.get(AutopaytManager.class);
+    private static final I18n i18n = I18n.get(AutopayManager.class);
 
-    private static final Logger log = LoggerFactory.getLogger(AutopaytManager.class);
+    private static final Logger log = LoggerFactory.getLogger(AutopayManager.class);
 
     static class PreauthorizedAmount {
 

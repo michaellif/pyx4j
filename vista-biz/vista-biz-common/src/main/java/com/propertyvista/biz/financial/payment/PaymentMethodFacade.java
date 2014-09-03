@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011-2012 All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -41,7 +41,7 @@ public interface PaymentMethodFacade {
     // Lease:
     /**
      * Used when form allow to enter incomplete data
-     * 
+     *
      * @param paymentMethod
      * @return is payment method can be saved
      */
@@ -80,7 +80,7 @@ public interface PaymentMethodFacade {
 
     /**
      * Suspend PreauthorizedPayments if required during LeaseTerm finalize.
-     * 
+     *
      * Update PreauthorizedPaymentCoveredItem to point to new BillableItem (May not be required after BillableItem version support)
      */
     void renewAutopayAgreements(Lease lease);
@@ -106,6 +106,8 @@ public interface PaymentMethodFacade {
     BillingCycle getNextAutopayBillingCycle(Building buildingId, BillingPeriod billingPeriod, Integer billingCycleStartDay);
 
     LogicalDate getNextAutopayDate(Lease lease);
+
+    String getNextAutopayApplicabilityMessage(Lease lease);
 
     List<PaymentRecord> calulatePreauthorizedPayment(BillingCycle billingCycle, BillingAccount billingAccountId);
 

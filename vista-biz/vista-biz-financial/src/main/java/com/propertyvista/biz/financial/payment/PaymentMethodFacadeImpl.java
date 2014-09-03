@@ -235,6 +235,11 @@ public class PaymentMethodFacadeImpl implements PaymentMethodFacade {
     }
 
     @Override
+    public String getNextAutopayApplicabilityMessage(Lease lease) {
+        return new AutopayAgreementMananger().getNextAutopayApplicabilityMessage(lease);
+    }
+
+    @Override
     public void renewAutopayAgreements(Lease lease) {
         new AutopayAgreementMananger().renewPreauthorizedPayments(lease);
     }
@@ -256,7 +261,7 @@ public class PaymentMethodFacadeImpl implements PaymentMethodFacade {
 
     @Override
     public List<PaymentRecord> calulatePreauthorizedPayment(BillingCycle billingCycle, BillingAccount billingAccountId) {
-        return new AutopaytManager().calulatePreauthorizedPayment(billingCycle, billingAccountId);
+        return new AutopayManager().calulatePreauthorizedPayment(billingCycle, billingAccountId);
     }
 
 }

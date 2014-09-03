@@ -29,7 +29,7 @@ public class PaymentReportFacadeImpl implements PaymentReportFacade {
 
     @Override
     public List<PaymentRecord> reportPreauthorisedPayments(PreauthorizedPaymentsReportCriteria reportCriteria, ExecutionMonitor executionMonitor) {
-        return new AutopaytManager().reportPreauthorisedPayments(reportCriteria, executionMonitor);
+        return new AutopayManager().reportPreauthorisedPayments(reportCriteria, executionMonitor);
     }
 
     @Override

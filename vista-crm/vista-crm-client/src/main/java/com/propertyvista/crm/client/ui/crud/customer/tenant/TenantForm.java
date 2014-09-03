@@ -85,7 +85,7 @@ public class TenantForm extends LeaseParticipantForm<TenantDTO> {
     protected void onValueSet(boolean populate) {
         super.onValueSet(populate);
 
-// VISTA-3517 - reopen       
+// VISTA-3517 - reopen
 //        boolean financialyEligible = (getValue().role().getValue() != Role.Dependent);
 //        Lease.Status leaseStatus = getValue().lease().status().getValue();
 //
@@ -105,6 +105,10 @@ public class TenantForm extends LeaseParticipantForm<TenantDTO> {
         if (!getValue().electronicPaymentsAllowed().getValue(false)) {
             get(proto().paymentMethods()).setNote(i18n.tr("Merchant Account is not set up to receive Electronic Payments"), NoteStyle.Warn);
             get(proto().preauthorizedPayments()).setNote(i18n.tr("Merchant Account is not set up to receive Electronic Payments"), NoteStyle.Warn);
+        }
+
+        if (!getValue().nextAutopayApplicabilityMessage().isNull()) {
+            get(proto().nextScheduledPaymentDate()).setNote(getValue().nextAutopayApplicabilityMessage().getValue(), NoteStyle.Warn);
         }
 
         updateTenantInsuranceTabControls();

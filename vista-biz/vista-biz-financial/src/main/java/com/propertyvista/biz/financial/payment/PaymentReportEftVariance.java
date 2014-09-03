@@ -25,7 +25,7 @@ import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.server.IEntityPersistenceService.ICursorIterator;
 import com.pyx4j.entity.server.Persistence;
 
-import com.propertyvista.biz.financial.payment.AutopaytManager.PreauthorizedAmount;
+import com.propertyvista.biz.financial.payment.AutopayManager.PreauthorizedAmount;
 import com.propertyvista.crm.rpc.dto.reports.EftVarianceReportRecordDTO;
 import com.propertyvista.crm.rpc.dto.reports.EftVarianceReportRecordDetailsDTO;
 import com.propertyvista.domain.financial.BillingAccount;
@@ -80,7 +80,7 @@ class PaymentReportEftVariance {
         Persistence.ensureRetrieve(billingAccount.lease().unit().building(), AttachLevel.Attached);
 
         BillingCycle billingCycle = ServerSideFactory.create(PaymentMethodFacade.class).getNextAutopayBillingCycle(billingAccount.lease());
-        List<PreauthorizedAmount> preauthorizedRecords = new AutopaytManager().calulatePapAmounts(billingCycle, billingAccount);
+        List<PreauthorizedAmount> preauthorizedRecords = new AutopayManager().calulatePapAmounts(billingCycle, billingAccount);
         if (preauthorizedRecords.size() == 0) {
             return null;
         }

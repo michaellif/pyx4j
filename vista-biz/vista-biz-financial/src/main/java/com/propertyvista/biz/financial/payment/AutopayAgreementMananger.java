@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011-2012 All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -282,6 +282,17 @@ class AutopayAgreementMananger {
 
     }
 
+    public String getNextAutopayApplicabilityMessage(Lease lease) {
+        AutoPayPolicy autoPayPolicy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(lease.unit().building(), AutoPayPolicy.class);
+        BillingCycle nextCycle = ServerSideFactory.create(PaymentMethodFacade.class).getNextAutopayBillingCycle(lease);
+        StringBuilder trace = new StringBuilder();
+        if (!isPreauthorizedPaymentsApplicableForBillingCycle(lease, nextCycle, autoPayPolicy, trace)) {
+            return i18n.tr("Auto Pay will not be applicable for next BillingCycle; {0}", trace);
+        } else {
+            return null;
+        }
+    }
+
     public void renewPreauthorizedPayments(Lease lease) {
         List<AutopayAgreement> activePaps = retrieveAutopayAgreements(lease);
         if (activePaps.isEmpty()) {
@@ -296,7 +307,7 @@ class AutopayAgreementMananger {
         if (!isPreauthorizedPaymentsApplicableForBillingCycle(lease, nextCycle, autoPayPolicy, trace)) {
             // Suspend All
             for (AutopayAgreement pap : activePaps) {
-                deleteAutopayAgreement(pap, true, "Auto Pay will not be applicable for next BillingCycle " + trace);
+                deleteAutopayAgreement(pap, true, i18n.tr("Auto Pay will not be applicable for next BillingCycle; {0}", trace));
             }
             ServerSideFactory.create(NotificationFacade.class).autoPayCancelledBySystemNotification(lease, activePaps);
             return;
@@ -471,7 +482,7 @@ class AutopayAgreementMananger {
                     // lease().actualMoveOut()      <=      suspensionCycle.billingCycleEndDate();
                     // lease().leaseTo()            <=      suspensionCycle.billingCycleEndDate();
                     //
-                    // Note: do not synchronize it with set of leaseXXXCheck(...) methods!!!   
+                    // Note: do not synchronize it with set of leaseXXXCheck(...) methods!!!
 
                     OrCriterion or1 = new OrCriterion();
                     or1.left().le(criteria1.proto().lease().expectedMoveOut(), suspensionCycle.billingCycleEndDate());
@@ -571,7 +582,7 @@ class AutopayAgreementMananger {
     }
 
     // lease leaseXXXCheck(...) methods:
-    // Note: do not synchronize it with criteria1 in updatePreauthorizedPayments(ExecutionMonitor executionMonitor, LogicalDate forDate) !!!   
+    // Note: do not synchronize it with criteria1 in updatePreauthorizedPayments(ExecutionMonitor executionMonitor, LogicalDate forDate) !!!
 
     static private boolean leaseFirstBillingPeriodChargePolicyCheck(Lease lease, BillingCycle nextCycle, AutoPayPolicy autoPayPolicy, StringBuilder trace) {
         // TODO Not implemented yet!..
