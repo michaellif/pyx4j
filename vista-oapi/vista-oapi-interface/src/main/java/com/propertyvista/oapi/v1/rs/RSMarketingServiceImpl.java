@@ -29,15 +29,15 @@ import com.pyx4j.commons.LogicalDate;
 import com.propertyvista.domain.property.asset.building.BuildingAmenity;
 import com.propertyvista.dto.PropertySearchCriteria.BathroomChoice;
 import com.propertyvista.dto.PropertySearchCriteria.BedroomChoice;
+import com.propertyvista.oapi.v1.model.AppointmentRequestIO;
 import com.propertyvista.oapi.v1.model.BuildingIO;
 import com.propertyvista.oapi.v1.model.BuildingListIO;
+import com.propertyvista.oapi.v1.model.FloorplanAvailabilityIO;
 import com.propertyvista.oapi.v1.model.FloorplanIO;
 import com.propertyvista.oapi.v1.model.FloorplanListIO;
 import com.propertyvista.oapi.v1.processing.MarketingServiceProcessor;
 import com.propertyvista.oapi.v1.searchcriteria.PropertySearchCriteriaIO;
 import com.propertyvista.oapi.v1.service.MarketingService;
-import com.propertyvista.oapi.v1.service.marketing.model.AppointmentRequest;
-import com.propertyvista.oapi.v1.service.marketing.model.FloorplanAvailability;
 
 @Path("marketing")
 public class RSMarketingServiceImpl implements MarketingService {
@@ -89,7 +89,7 @@ public class RSMarketingServiceImpl implements MarketingService {
     @Path("getFloorplanAvailability")
     @Produces(MediaType.APPLICATION_XML)
     @Override
-    public List<FloorplanAvailability> getFloorplanAvailability(@QueryParam("prId") String prId, @QueryParam("fpId") String fpId,
+    public List<FloorplanAvailabilityIO> getFloorplanAvailability(@QueryParam("prId") String prId, @QueryParam("fpId") String fpId,
             @QueryParam("moveIn") LogicalDate date) {
         return new MarketingServiceProcessor().getFloorplanAvailability(prId, fpId, date);
     }
@@ -98,7 +98,7 @@ public class RSMarketingServiceImpl implements MarketingService {
     @Path("requestAppointment")
     @Consumes(MediaType.APPLICATION_XML)
     @Override
-    public void requestAppointment(AppointmentRequest request) {
+    public void requestAppointment(AppointmentRequestIO request) {
         new MarketingServiceProcessor().requestAppointment(request);
     }
 

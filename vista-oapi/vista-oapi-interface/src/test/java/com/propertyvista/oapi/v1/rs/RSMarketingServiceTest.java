@@ -38,12 +38,12 @@ import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.tenant.lead.Lead;
 import com.propertyvista.domain.tenant.lead.Lead.DayPart;
 import com.propertyvista.domain.tenant.lead.Lead.LeaseTerm;
+import com.propertyvista.oapi.v1.model.AppointmentRequestIO;
 import com.propertyvista.oapi.v1.model.BuildingIO;
 import com.propertyvista.oapi.v1.model.BuildingListIO;
+import com.propertyvista.oapi.v1.model.FloorplanAvailabilityIO;
 import com.propertyvista.oapi.v1.model.FloorplanIO;
 import com.propertyvista.oapi.v1.model.FloorplanListIO;
-import com.propertyvista.oapi.v1.service.marketing.model.AppointmentRequest;
-import com.propertyvista.oapi.v1.service.marketing.model.FloorplanAvailability;
 import com.propertyvista.portal.rpc.portal.prospect.ProspectPortalSiteMap;
 import com.propertyvista.test.mock.models.BuildingDataModel;
 
@@ -129,9 +129,9 @@ public class RSMarketingServiceTest extends RSOapiTestBase {
     @Test
     public void testGetFloorplanAvailability() {
         // in - String propertyId, String fpId, LogicalDate date; out - List<FloorplanAvailability>
-        GenericType<List<FloorplanAvailability>> availListType = new GenericType<List<FloorplanAvailability>>() {
+        GenericType<List<FloorplanAvailabilityIO>> availListType = new GenericType<List<FloorplanAvailabilityIO>>() {
         };
-        List<FloorplanAvailability> fpAvail = target("marketing/getFloorplanAvailability") //
+        List<FloorplanAvailabilityIO> fpAvail = target("marketing/getFloorplanAvailability") //
                 .queryParam("prId", building.propertyCode().getValue()) //
                 .queryParam("fpId", fp.name().getValue()) //
                 .queryParam("moveIn", unit.availability().availableForRent().getValue()) //
@@ -142,7 +142,7 @@ public class RSMarketingServiceTest extends RSOapiTestBase {
     @Test
     public void testRequestAppointment() {
         // in - AppointmentRequest request
-        AppointmentRequest ar = new AppointmentRequest();
+        AppointmentRequestIO ar = new AppointmentRequestIO();
         ar.firstName = "John";
         ar.lastName = "Smith";
         ar.email = ar.firstName + "-" + ar.lastName + "-" + SystemDateManager.getTimeMillis() + "@pyx4j.com";

@@ -11,7 +11,7 @@
  * @author stanp
  * @version $Id$
  */
-package com.propertyvista.oapi.v1.service.marketing.model;
+package com.propertyvista.oapi.v1.model;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -25,7 +25,7 @@ import com.propertyvista.domain.tenant.lead.Lead.LeaseTerm;
 
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.FIELD)
-public class AppointmentRequest {
+public class AppointmentRequestIO {
 
     public Prefix namePrefix;
 

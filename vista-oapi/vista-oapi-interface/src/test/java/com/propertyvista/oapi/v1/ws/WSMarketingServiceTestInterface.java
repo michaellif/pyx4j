@@ -20,15 +20,14 @@ import javax.jws.WebService;
 
 import com.pyx4j.commons.LogicalDate;
 
+import com.propertyvista.oapi.v1.model.AppointmentRequestIO;
 import com.propertyvista.oapi.v1.model.BuildingIO;
 import com.propertyvista.oapi.v1.model.BuildingListIO;
+import com.propertyvista.oapi.v1.model.FloorplanAvailabilityIO;
 import com.propertyvista.oapi.v1.model.FloorplanIO;
 import com.propertyvista.oapi.v1.model.FloorplanListIO;
 import com.propertyvista.oapi.v1.searchcriteria.PropertySearchCriteriaIO;
 import com.propertyvista.oapi.v1.service.MarketingService;
-import com.propertyvista.oapi.v1.service.marketing.model.AppointmentRequest;
-import com.propertyvista.oapi.v1.service.marketing.model.FloorplanAvailability;
-import com.propertyvista.oapi.v1.service.marketing.model.FloorplanList;
 
 @WebService
 public interface WSMarketingServiceTestInterface extends MarketingService {
@@ -46,11 +45,11 @@ public interface WSMarketingServiceTestInterface extends MarketingService {
     public FloorplanIO getFloorplan(@WebParam(name = "propertyId") String propertyId, @WebParam(name = "floorplanId") String fpId);
 
     @Override
-    public List<FloorplanAvailability> getFloorplanAvailability(@WebParam(name = "propertyId") String propertyId, @WebParam(name = "floorplanId") String fpId,
-            @WebParam(name = "moveinDate") LogicalDate date);
+    public List<FloorplanAvailabilityIO> getFloorplanAvailability(@WebParam(name = "propertyId") String propertyId,
+            @WebParam(name = "floorplanId") String fpId, @WebParam(name = "moveinDate") LogicalDate date);
 
     @Override
-    public void requestAppointment(@WebParam(name = "request") AppointmentRequest request);
+    public void requestAppointment(@WebParam(name = "request") AppointmentRequestIO request);
 
     @Override
     public String getApplyForLeaseUrl(@WebParam(name = "propertyId") String propertyId, @WebParam(name = "floorplanId") String fpId);

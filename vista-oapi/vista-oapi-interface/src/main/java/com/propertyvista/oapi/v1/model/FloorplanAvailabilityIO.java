@@ -11,7 +11,7 @@
  * @author stanp
  * @version $Id$
  */
-package com.propertyvista.oapi.v1.service.marketing.model;
+package com.propertyvista.oapi.v1.model;
 
 import java.math.BigDecimal;
 
@@ -23,7 +23,7 @@ import com.pyx4j.commons.LogicalDate;
 
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.FIELD)
-public class FloorplanAvailability {
+public class FloorplanAvailabilityIO {
 
     public String floorplanName;
 

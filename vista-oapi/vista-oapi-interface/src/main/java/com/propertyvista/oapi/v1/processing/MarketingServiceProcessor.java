@@ -38,13 +38,13 @@ import com.propertyvista.domain.tenant.lead.Lead;
 import com.propertyvista.domain.util.DomainUtil;
 import com.propertyvista.oapi.v1.marshaling.BuildingMarshaller;
 import com.propertyvista.oapi.v1.marshaling.FloorplanMarshaller;
+import com.propertyvista.oapi.v1.model.AppointmentRequestIO;
 import com.propertyvista.oapi.v1.model.BuildingIO;
 import com.propertyvista.oapi.v1.model.BuildingListIO;
+import com.propertyvista.oapi.v1.model.FloorplanAvailabilityIO;
 import com.propertyvista.oapi.v1.model.FloorplanIO;
 import com.propertyvista.oapi.v1.model.FloorplanListIO;
 import com.propertyvista.oapi.v1.searchcriteria.PropertySearchCriteriaIO;
-import com.propertyvista.oapi.v1.service.marketing.model.AppointmentRequest;
-import com.propertyvista.oapi.v1.service.marketing.model.FloorplanAvailability;
 import com.propertyvista.portal.rpc.portal.prospect.ProspectPortalSiteMap;
 import com.propertyvista.server.common.util.PropertyFinder;
 
@@ -81,11 +81,11 @@ public class MarketingServiceProcessor {
         return fp == null ? null : FloorplanMarshaller.getInstance().marshal(PropertyFinder.getFloorplanDetails(fp.getPrimaryKey().asLong()));
     }
 
-    public List<FloorplanAvailability> getFloorplanAvailability(String propertyId, String fpId, LogicalDate date) {
+    public List<FloorplanAvailabilityIO> getFloorplanAvailability(String propertyId, String fpId, LogicalDate date) {
         if (date == null) {
             date = SystemDateManager.getLogicalDate();
         }
-        List<FloorplanAvailability> availInfo = new ArrayList<>();
+        List<FloorplanAvailabilityIO> availInfo = new ArrayList<>();
         EntityQueryCriteria<AptUnit> criteria = new EntityQueryCriteria<AptUnit>(AptUnit.class);
         criteria.eq(criteria.proto().building().propertyCode(), propertyId);
         criteria.eq(criteria.proto().floorplan().name(), fpId);
@@ -93,7 +93,7 @@ public class MarketingServiceProcessor {
                 null));
         criteria.sort(new Sort(criteria.proto().availability().availableForRent(), false));
         for (AptUnit unit : Persistence.service().query(criteria)) {
-            FloorplanAvailability avail = new FloorplanAvailability();
+            FloorplanAvailabilityIO avail = new FloorplanAvailabilityIO();
             avail.floorplanName = fpId;
             avail.marketRent = unit.financial()._marketRent().getValue();
             avail.areaSqFeet = DomainUtil.getAreaInSqFeet(unit.info().area(), unit.info().areaUnits());
@@ -103,7 +103,7 @@ public class MarketingServiceProcessor {
         return availInfo;
     }
 
-    public void requestAppointment(AppointmentRequest request) {
+    public void requestAppointment(AppointmentRequestIO request) {
         // TODO - use javax.validation for bean validation purposes, @NotNull, etc ?
         // for (ConstraintViolation<BeanClass> error : Validation.buildDefaultValidatorFactory.getValidator().validate(bean)) {
         //     ... notify about the wrong field, etc
