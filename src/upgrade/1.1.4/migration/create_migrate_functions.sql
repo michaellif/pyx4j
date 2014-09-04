@@ -512,6 +512,8 @@ BEGIN
                                     ADD COLUMN aggregated_transfer_return_discriminator VARCHAR(50),
                                     ADD COLUMN convenience_fee_signed_term BIGINT;
                                     
+        ALTER TABLE payment_record ALTER COLUMN yardi_document_number TYPE VARCHAR(24);
+                                    
         
         -- payment_record_processing
         
