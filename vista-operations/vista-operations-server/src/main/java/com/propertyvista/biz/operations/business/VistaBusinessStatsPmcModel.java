@@ -33,9 +33,17 @@ public interface VistaBusinessStatsPmcModel extends IEntity {
 
     IPrimitive<Date> lastLogin();
 
-    // PMC stats
-
     IPrimitive<String> country();
+
+    IPrimitive<Integer> tenantLoginsLastWeek();
+
+    IPrimitive<Integer> tenantLoginsLastMonth();
+
+    IPrimitive<Integer> employeeLoginsLastWeek();
+
+    IPrimitive<Integer> employeeLoginsLastMonth();
+
+    // PMC stats
 
     IPrimitive<Integer> buildingCount();
 
@@ -56,7 +64,7 @@ public interface VistaBusinessStatsPmcModel extends IEntity {
     /**
      * Paying tenant - tenant that we processed ELECTRONIC payments for within the last month. It could be 1-time payment, autopay, yardi-based eft payment -
      * anything that's processed through our banking connections.
-     * 
+     *
      * @see payingLeases();
      */
     IPrimitive<Integer> payingTenants();

@@ -32,6 +32,7 @@ import com.pyx4j.commons.SimpleMessageFormat;
 import com.pyx4j.commons.UserRuntimeException;
 import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.config.server.SystemDateManager;
+import com.pyx4j.entity.core.AttachLevel;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.server.Persistence;
@@ -54,8 +55,10 @@ import com.propertyvista.domain.pmc.Pmc;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.security.AuditRecordEventType;
+import com.propertyvista.domain.security.CrmUser;
 import com.propertyvista.domain.security.CrmUserCredential;
 import com.propertyvista.domain.security.CustomerUser;
+import com.propertyvista.domain.security.common.VistaUserType;
 import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.domain.tenant.CustomerCreditCheck;
 import com.propertyvista.domain.tenant.insurance.GeneralInsuranceCertificate;
@@ -101,7 +104,7 @@ class VistaBusinessStatsReport {
             formatter.newRow();
         }
         {
-            formatter.header("Total Login to CRM in last week");
+            formatter.header("All VISTA logins in last week");
             formatter.newRow();
 
             EntityQueryCriteria<AuditRecord> criteria = EntityQueryCriteria.create(AuditRecord.class);
@@ -128,9 +131,9 @@ class VistaBusinessStatsReport {
         EntityReportFormatter<VistaBusinessStatsPmcModel> er = new EntityReportFormatter<VistaBusinessStatsPmcModel>(VistaBusinessStatsPmcModel.class);
         VistaBusinessStatsPmcModel data = EntityFactory.create(VistaBusinessStatsPmcModel.class);
 
-        Date reportSince = DateUtils.addDays(SystemDateManager.getDate(), -7);
+        final Date reportSince = DateUtils.addDays(SystemDateManager.getDate(), -7);
 
-        Date monthlyPeriod = DateUtils.addMonths(SystemDateManager.getDate(), -1);
+        final Date monthlyPeriod = DateUtils.addMonths(SystemDateManager.getDate(), -1);
 
         final Pmc pmc = VistaDeployment.getCurrentPmc();
         data.name().setValue(pmc.name().getStringView());
@@ -151,6 +154,93 @@ class VistaBusinessStatsReport {
         }
 
         data.country().setValue(pmc.features().countryOfOperation().getValue().toString());
+
+        // CRM regular users (not SUPPORT)
+        EntityQueryCriteria<CrmUser> regularCRMUsersCriteria = EntityQueryCriteria.create(CrmUser.class);
+        regularCRMUsersCriteria.eq(regularCRMUsersCriteria.proto().email(), CrmUser.VISTA_SUPPORT_ACCOUNT_EMAIL);
+        final CrmUser singleSupport = Persistence.service().retrieve(regularCRMUsersCriteria);
+
+        // Employee logins last week
+        Integer auditRecordEmpWeek = TaskRunner.runInOperationsNamespace(new Callable<Integer>() {
+            @Override
+            public Integer call() {
+                EntityQueryCriteria<AuditRecord> criteria = EntityQueryCriteria.create(AuditRecord.class);
+                criteria.eq(criteria.proto().event(), AuditRecordEventType.Login);
+                criteria.eq(criteria.proto().namespace(), pmc.namespace());
+                criteria.ge(criteria.proto().created(), reportSince);
+                criteria.eq(criteria.proto().userType(), VistaUserType.crm);
+
+                // Filter SUPPORT logins
+                if (singleSupport != null) {
+                    criteria.ne(criteria.proto().user(), singleSupport);
+                }
+
+                return Persistence.service().count(criteria);
+            }
+        });
+
+        {
+            data.employeeLoginsLastWeek().setValue(auditRecordEmpWeek.intValue());
+        }
+
+        // Employee logins last month
+        Integer auditRecordEmpMonth = TaskRunner.runInOperationsNamespace(new Callable<Integer>() {
+            @Override
+            public Integer call() {
+                EntityQueryCriteria<AuditRecord> criteria = EntityQueryCriteria.create(AuditRecord.class);
+                criteria.eq(criteria.proto().event(), AuditRecordEventType.Login);
+                criteria.eq(criteria.proto().namespace(), pmc.namespace());
+                criteria.ge(criteria.proto().created(), monthlyPeriod);
+                criteria.eq(criteria.proto().userType(), VistaUserType.crm);
+
+                // Filter for SUPPORT logins
+                if (singleSupport != null) {
+                    criteria.ne(criteria.proto().user(), singleSupport);
+                }
+
+                return Persistence.service().count(criteria);
+            }
+        });
+
+        {
+            data.employeeLoginsLastMonth().setValue(auditRecordEmpMonth.intValue());
+        }
+
+        // Tenant logins last week
+        Integer auditRecordTenantWeek = TaskRunner.runInOperationsNamespace(new Callable<Integer>() {
+            @Override
+            public Integer call() {
+                EntityQueryCriteria<AuditRecord> criteria = EntityQueryCriteria.create(AuditRecord.class);
+                criteria.eq(criteria.proto().event(), AuditRecordEventType.Login);
+                criteria.eq(criteria.proto().namespace(), pmc.namespace());
+                criteria.ge(criteria.proto().created(), reportSince);
+                criteria.eq(criteria.proto().userType(), VistaUserType.customer);
+
+                return Persistence.service().count(criteria);
+            }
+        });
+
+        {
+            data.tenantLoginsLastWeek().setValue(auditRecordTenantWeek.intValue());
+        }
+
+        // Tenant logins last month
+        Integer auditRecordTenantMonth = TaskRunner.runInOperationsNamespace(new Callable<Integer>() {
+            @Override
+            public Integer call() {
+                EntityQueryCriteria<AuditRecord> criteria = EntityQueryCriteria.create(AuditRecord.class);
+                criteria.eq(criteria.proto().event(), AuditRecordEventType.Login);
+                criteria.eq(criteria.proto().namespace(), pmc.namespace());
+                criteria.ge(criteria.proto().created(), monthlyPeriod);
+                criteria.eq(criteria.proto().userType(), VistaUserType.customer);
+
+                return Persistence.service().count(criteria);
+            }
+        });
+
+        {
+            data.tenantLoginsLastMonth().setValue(auditRecordTenantMonth.intValue());
+        }
 
         {
             EntityQueryCriteria<Building> criteria = EntityQueryCriteria.create(Building.class);
@@ -196,7 +286,7 @@ class VistaBusinessStatsReport {
             data.payingLeases().setValue(Persistence.service().count(criteria));
         }
 
-        // TODO 
+        // TODO
         if (false) {
             EntityQueryCriteria<Lease> criteria = EntityQueryCriteria.create(Lease.class);
             criteria.eq(criteria.proto().billingAccount().payments().$().createdBy(), CustomerUser.class);
@@ -359,6 +449,7 @@ class VistaBusinessStatsReport {
             criteria.isNotNull(criteria.proto().onboardingUser());
             CrmUserCredential crmUser = Persistence.service().retrieve(EntityQueryCriteria.create(CrmUserCredential.class));
             if (crmUser != null) {
+                Persistence.ensureRetrieve(crmUser.user(), AttachLevel.Attached);
                 data.contactName().setValue(crmUser.user().name().getValue());
                 data.contactEmail().setValue(crmUser.user().email().getValue());
             }
