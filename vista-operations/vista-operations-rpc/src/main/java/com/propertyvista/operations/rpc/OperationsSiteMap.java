@@ -20,6 +20,7 @@ import com.pyx4j.site.rpc.annotations.PlaceProperties;
 import com.pyx4j.site.shared.meta.PublicPlace;
 import com.pyx4j.site.shared.meta.SiteMap;
 
+import com.propertyvista.crm.rpc.CrmCrudAppPlace;
 import com.propertyvista.operations.domain.legal.VistaTerms;
 import com.propertyvista.operations.domain.legal.VistaTerms.Target;
 
@@ -60,29 +61,29 @@ public class OperationsSiteMap implements SiteMap {
     public static class Management extends AppPlace {
 
         @PlaceProperties(navigLabel = "PMCs")
-        public static class PMC extends OperationsCrudAppPlace {
+        public static class PMC extends CrmCrudAppPlace {
         }
 
-        public static class EquifaxApproval extends OperationsCrudAppPlace {
+        public static class EquifaxApproval extends CrmCrudAppPlace {
         }
 
         @PlaceProperties(navigLabel = "PMC Merchant Accounts")
-        public static class PmcMerchantAccount extends OperationsCrudAppPlace {
+        public static class PmcMerchantAccount extends CrmCrudAppPlace {
         }
 
         @PlaceProperties(navigLabel = "Triggers")
-        public static class Trigger extends OperationsCrudAppPlace {
+        public static class Trigger extends CrmCrudAppPlace {
         }
 
         @PlaceProperties(navigLabel = "Trigger Runs")
-        public static class TriggerRun extends OperationsCrudAppPlace {
+        public static class TriggerRun extends CrmCrudAppPlace {
         }
 
         @PlaceProperties(navigLabel = "Trigger Runs Data")
-        public static class TriggerRunData extends OperationsCrudAppPlace {
+        public static class TriggerRunData extends CrmCrudAppPlace {
         }
 
-        public static class BillingSetup extends OperationsCrudAppPlace {
+        public static class BillingSetup extends CrmCrudAppPlace {
             // set default place type as Viewer one (we have no lister for this item!)
             public BillingSetup() {
                 formViewerPlace(new Key(-1));
@@ -90,56 +91,56 @@ public class OperationsSiteMap implements SiteMap {
         }
 
         @PlaceProperties(navigLabel = "Credit Check Transactions")
-        public static class CreditCheckTransaction extends OperationsCrudAppPlace {
+        public static class CreditCheckTransaction extends CrmCrudAppPlace {
         }
     }
 
     public static class FundsTransfer extends AppPlace {
 
         @PlaceProperties(navigLabel = "Card Transaction Records")
-        public static class CardTransactionRecord extends OperationsCrudAppPlace {
+        public static class CardTransactionRecord extends CrmCrudAppPlace {
         }
 
         @PlaceProperties(navigLabel = "Direct Debit Records")
-        public static class DirectDebitRecord extends OperationsCrudAppPlace {
+        public static class DirectDebitRecord extends CrmCrudAppPlace {
         }
 
         @PlaceProperties(navigLabel = "Funds Transfer Files")
-        public static class FundsTransferFile extends OperationsCrudAppPlace {
+        public static class FundsTransferFile extends CrmCrudAppPlace {
         }
 
         @PlaceProperties(navigLabel = "Funds Transfer Records")
-        public static class FundsTransferRecord extends OperationsCrudAppPlace {
+        public static class FundsTransferRecord extends CrmCrudAppPlace {
         }
 
         @PlaceProperties(navigLabel = "Funds Transfer Batches")
-        public static class FundsTransferBatch extends OperationsCrudAppPlace {
+        public static class FundsTransferBatch extends CrmCrudAppPlace {
         }
 
         @PlaceProperties(navigLabel = "Funds Reconciliation Files")
-        public static class FundsReconciliationFile extends OperationsCrudAppPlace {
+        public static class FundsReconciliationFile extends CrmCrudAppPlace {
         }
 
         @PlaceProperties(navigLabel = "Funds Reconciliation Summaries")
-        public static class FundsReconciliationSummary extends OperationsCrudAppPlace {
+        public static class FundsReconciliationSummary extends CrmCrudAppPlace {
         }
 
         @PlaceProperties(navigLabel = "Funds Reconciliation Records")
-        public static class FundsReconciliationRecord extends OperationsCrudAppPlace {
+        public static class FundsReconciliationRecord extends CrmCrudAppPlace {
         }
     }
 
     public static class Security extends AppPlace {
 
         @PlaceProperties(navigLabel = "Audit Records")
-        public static class AuditRecord extends OperationsCrudAppPlace {
+        public static class AuditRecord extends CrmCrudAppPlace {
 
         }
     }
 
     public static class Legal extends AppPlace {
 
-        public static abstract class VistaTermsAccess extends OperationsCrudAppPlace {
+        public static abstract class VistaTermsAccess extends CrmCrudAppPlace {
             private final Target target;
 
             public VistaTermsAccess(Target target) {
@@ -246,7 +247,7 @@ public class OperationsSiteMap implements SiteMap {
     public static class Administration extends AppPlace {
 
         @PlaceProperties(navigLabel = "System Maintenance", caption = "System Maintenance")
-        public static class Maintenance extends OperationsCrudAppPlace {
+        public static class Maintenance extends CrmCrudAppPlace {
             // set default place type as Viewer one (we have no lister for this item!)
             public Maintenance() {
                 formViewerPlace(new Key(-1));
@@ -254,7 +255,7 @@ public class OperationsSiteMap implements SiteMap {
         }
 
         @PlaceProperties(navigLabel = "Simulations")
-        public static class Simulation extends OperationsCrudAppPlace {
+        public static class Simulation extends CrmCrudAppPlace {
 
             public Simulation() {
                 formViewerPlace(new Key(-1));
@@ -262,48 +263,48 @@ public class OperationsSiteMap implements SiteMap {
         }
 
         @PlaceProperties(navigLabel = "Users", caption = "User")
-        public static class AdminUsers extends OperationsCrudAppPlace {
+        public static class AdminUsers extends CrmCrudAppPlace {
         }
 
-        public static class EncryptedStorage extends OperationsCrudAppPlace {
+        public static class EncryptedStorage extends CrmCrudAppPlace {
         }
 
-        public static class OperationsAlert extends OperationsCrudAppPlace {
+        public static class OperationsAlert extends CrmCrudAppPlace {
         }
 
-        public static class TenantSure extends OperationsCrudAppPlace {
+        public static class TenantSure extends CrmCrudAppPlace {
         }
 
-        public static class OutgoingMail extends OperationsCrudAppPlace {
+        public static class OutgoingMail extends CrmCrudAppPlace {
         }
     }
 
     public static class Simulator extends AppPlace {
 
-        public static class CardServiceSimulation extends OperationsCrudAppPlace implements DevelopmentOnlyPlace {
+        public static class CardServiceSimulation extends CrmCrudAppPlace implements DevelopmentOnlyPlace {
 
             @PlaceProperties(caption = "Simulated Card Service Configuration", navigLabel = "Cards Service Config")
-            public static class CardServiceSimulatorConfiguration extends OperationsCrudAppPlace implements DevelopmentOnlyPlace {
+            public static class CardServiceSimulatorConfiguration extends CrmCrudAppPlace implements DevelopmentOnlyPlace {
 
             }
 
             @PlaceProperties(caption = "Simulated Card", navigLabel = "Cards")
-            public static class CardServiceSimulationCard extends OperationsCrudAppPlace implements DevelopmentOnlyPlace {
+            public static class CardServiceSimulationCard extends CrmCrudAppPlace implements DevelopmentOnlyPlace {
 
             }
 
             @PlaceProperties(caption = "Simulated Card Transaction", navigLabel = "Card Transactions")
-            public static class CardServiceSimulationTransaction extends OperationsCrudAppPlace implements DevelopmentOnlyPlace {
+            public static class CardServiceSimulationTransaction extends CrmCrudAppPlace implements DevelopmentOnlyPlace {
 
             }
 
             @PlaceProperties(caption = "Simulated Card Merchant", navigLabel = "Card Merchants")
-            public static class CardServiceSimulationMerchantAccount extends OperationsCrudAppPlace implements DevelopmentOnlyPlace {
+            public static class CardServiceSimulationMerchantAccount extends CrmCrudAppPlace implements DevelopmentOnlyPlace {
 
             }
 
             @PlaceProperties(caption = "Simulated Cards Reconciliation", navigLabel = "Cards Reconciliations")
-            public static class CardServiceSimulationReconciliation extends OperationsCrudAppPlace implements DevelopmentOnlyPlace {
+            public static class CardServiceSimulationReconciliation extends CrmCrudAppPlace implements DevelopmentOnlyPlace {
 
             }
         }
@@ -311,16 +312,16 @@ public class OperationsSiteMap implements SiteMap {
         public static class PadSimulation extends CrudAppPlace {
 
             @PlaceProperties(caption = "Simulated Funds Transfer", navigLabel = "Funds Transfer")
-            public static class PadSimFile extends OperationsCrudAppPlace implements DevelopmentOnlyPlace {
+            public static class PadSimFile extends CrmCrudAppPlace implements DevelopmentOnlyPlace {
             }
 
             @PlaceProperties(caption = "PAD Batch")
-            public static class PadSimBatch extends OperationsCrudAppPlace implements DevelopmentOnlyPlace {
+            public static class PadSimBatch extends CrmCrudAppPlace implements DevelopmentOnlyPlace {
             }
 
         }
 
-        public static class SimulatedDataPreload extends OperationsCrudAppPlace implements DevelopmentOnlyPlace {
+        public static class SimulatedDataPreload extends CrmCrudAppPlace implements DevelopmentOnlyPlace {
 
             public SimulatedDataPreload() {
                 formViewerPlace(new Key(-1));
@@ -329,18 +330,18 @@ public class OperationsSiteMap implements SiteMap {
         }
 
         @PlaceProperties(caption = "Simulated Direct Banking Record", navigLabel = "Direct Banking Record")
-        public static class DirectBankingSimRecord extends OperationsCrudAppPlace implements DevelopmentOnlyPlace {
+        public static class DirectBankingSimRecord extends CrmCrudAppPlace implements DevelopmentOnlyPlace {
 
         }
 
         @PlaceProperties(caption = "Simulated Direct Banking File", navigLabel = "Direct Banking File")
-        public static class DirectBankingSimFile extends OperationsCrudAppPlace implements DevelopmentOnlyPlace {
+        public static class DirectBankingSimFile extends CrmCrudAppPlace implements DevelopmentOnlyPlace {
 
         }
 
     }
 
     @PlaceProperties(navigLabel = "Accounts")
-    public static class Account extends OperationsCrudAppPlace {
+    public static class Account extends CrmCrudAppPlace {
     }
 }
