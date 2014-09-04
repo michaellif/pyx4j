@@ -94,7 +94,7 @@ public class EntityGraph {
         if (!applyRecursively) {
             return;
         }
-
+        entity = entity.cast();
         EntityMeta em = entity.getEntityMeta();
         for (String memberName : em.getMemberNames()) {
             MemberMeta memberMeta = em.getMemberMeta(memberName);
@@ -136,6 +136,7 @@ public class EntityGraph {
         if (!applyRecursively) {
             return;
         }
+        entity = entity.cast();
 
         EntityMeta em = entity.getEntityMeta();
         for (String memberName : em.getMemberNames()) {
