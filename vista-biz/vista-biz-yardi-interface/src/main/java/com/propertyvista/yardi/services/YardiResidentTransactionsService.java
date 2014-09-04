@@ -860,9 +860,15 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
         return suspendBuilding(MappingUtils.retrieveBuilding(yardiInterfaceId, propertyCode));
     }
 
-    private boolean suspendBuilding(Building building) {
+    private boolean suspendBuilding(final Building building) {
         if (building != null && !building.suspended().getValue()) {
-            ServerSideFactory.create(BuildingFacade.class).suspend(building);
+            new UnitOfWork(TransactionScopeOption.RequiresNew).execute(new Executable<Void, RuntimeException>() {
+                @Override
+                public Void execute() throws RuntimeException {
+                    ServerSideFactory.create(BuildingFacade.class).suspend(building);
+                    return null;
+                }
+            });
             return true;
         }
         return false;

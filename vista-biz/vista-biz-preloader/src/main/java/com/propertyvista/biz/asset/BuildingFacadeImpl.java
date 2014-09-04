@@ -20,6 +20,9 @@
  */
 package com.propertyvista.biz.asset;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.server.Persistence;
@@ -38,6 +41,8 @@ import com.propertyvista.server.common.reference.PublicDataUpdater;
 import com.propertyvista.shared.config.VistaFeatures;
 
 public class BuildingFacadeImpl implements BuildingFacade {
+
+    private static final Logger log = LoggerFactory.getLogger(BuildingFacadeImpl.class);
 
     @Override
     public Building persist(Building building) {
@@ -100,15 +105,18 @@ public class BuildingFacadeImpl implements BuildingFacade {
 
     @Override
     public void suspend(Building building) {
+        log.info("Building {} Suspended", building);
         building.suspended().setValue(true);
         Persistence.service().merge(building);
         notifySuspended(building);
+
     }
 
     private void notifySuspended(Building building) {
         ServerSideFactory.create(OperationsNotificationFacade.class).buildingSuspended(building);
         ServerSideFactory.create(AuditFacade.class).updated(building, building.suspended().getValue(false) ? "Suspended" : "Unsuspended");
     }
+
     @Override
     public boolean isSuspend(Building buildingId) {
         EntityQueryCriteria<Building> criteria = EntityQueryCriteria.create(Building.class);

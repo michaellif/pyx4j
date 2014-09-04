@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011-2012 All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import org.junit.Assert;
 import org.junit.experimental.categories.Category;
 
 import com.pyx4j.config.server.ServerSideFactory;
@@ -89,7 +90,7 @@ public class PaymentReturnEcheckYardiTest extends PaymentYardiTestBase {
         new PaymentRecordTester(lease11.billingAccount()).lastRecordStatus(PaymentStatus.Returned);
     }
 
-    public void testNoAccessReturn() throws Exception {
+    public void testNoAccessSuspendedReturn() throws Exception {
         advanceSysDate("2011-01-02");
         new PaymentRecordTester(lease11.billingAccount()).lastRecordStatus(PaymentStatus.Cleared);
         new PaymentRecordTester(lease12.billingAccount()).lastRecordStatus(PaymentStatus.Cleared);
@@ -100,13 +101,41 @@ public class PaymentReturnEcheckYardiTest extends PaymentYardiTestBase {
             MockEventBus.fireEvent(new PropertyUpdateEvent(updater));
         }
 
+        YardiResidentTransactionsService.getInstance().updateAll(getYardiCredential("prop123"), new ExecutionMonitor());
+
         Building building = loadBuildingToModel("prop123");
-        ServerSideFactory.create(BuildingFacade.class).suspend(building);
-        Persistence.service().commit();
+        Assert.assertTrue("Now Suspended", building.suspended().getValue(false));
 
         MockEventBus.fireEvent(new ScheduledResponseReconciliation(PadTransactionUtils.toCaldeonTransactionId(paymentRecords.get(0).id()), "905", "Test"));
 
         SchedulerMock.runProcess(PmcProcessType.paymentsReceiveReconciliation, (Date) null);
+        new PaymentRecordTester(lease11.billingAccount()).lastRecordStatus(PaymentStatus.Returned);
+    }
+
+    public void testNoAccessNotSuspendedReturn() throws Exception {
+        advanceSysDate("2011-01-02");
+        new PaymentRecordTester(lease11.billingAccount()).lastRecordStatus(PaymentStatus.Cleared);
+        new PaymentRecordTester(lease12.billingAccount()).lastRecordStatus(PaymentStatus.Cleared);
+
+        {
+            PropertyUpdater updater = new PropertyUpdater("prop123")//
+                    .set(PropertyUpdater.MockFeatures.BlockAccess, true);
+            MockEventBus.fireEvent(new PropertyUpdateEvent(updater));
+        }
+
+        MockEventBus.fireEvent(new ScheduledResponseReconciliation(PadTransactionUtils.toCaldeonTransactionId(paymentRecords.get(0).id()), "905", "Test"));
+
+        SchedulerMock.runProcess(PmcProcessType.paymentsReceiveReconciliation, (Date) null);
+
+        // Record not processed, Since building is not suspend, but we will try again
+        new PaymentRecordTester(lease11.billingAccount()).lastRecordStatus(PaymentStatus.Cleared);
+
+        Building building = loadBuildingToModel("prop123");
+        ServerSideFactory.create(BuildingFacade.class).suspend(building);
+        Persistence.service().commit();
+
+        SchedulerMock.runProcess(PmcProcessType.paymentsPadProcessReconciliation, (Date) null);
+
         new PaymentRecordTester(lease11.billingAccount()).lastRecordStatus(PaymentStatus.Returned);
     }
 }
