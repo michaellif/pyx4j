@@ -184,23 +184,36 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
         Key yardiInterfaceId = yc.getPrimaryKey();
         String propertyCode = lease.unit().building().propertyCode().getValue();
         YardiResidentTransactionsData rtd = new YardiResidentTransactionsData(yardiInterfaceId, executionMonitor, false); // note: DO NOT close non-processed leases!
-
         ResidentTransactions transactions = YardiStubFactory.create(YardiResidentTransactionsStub.class).getResidentTransactionsForTenant(yc, propertyCode,
                 lease.leaseId().getValue());
-        if (transactions != null) {
-            preProcessLeaseResidentsData(rtd, transactions);
+
+        if (!executionMonitor.isTerminationRequested() && transactions != null) {
+            List<Building> importedBuildings = importProperties(yardiInterfaceId, transactions, executionMonitor);
+
+            if (!executionMonitor.isTerminationRequested() && (ApplicationMode.isDevelopment() || !VistaTODO.pendingYardiConfigPatchILS)) {
+                for (Building building : importedBuildings) {
+                    updateProductCatalog(yc, building, executionMonitor);
+                }
+            }
+
+            if (!executionMonitor.isTerminationRequested()) {
+                preProcessLeaseResidentsData(rtd, transactions);
+            }
         }
 
-        ResidentTransactions leaseCharges = null;
-        try {
-            BillingCycle nextCycle = ServerSideFactory.create(PaymentMethodFacade.class).getNextAutopayBillingCycle(lease);
-            leaseCharges = YardiStubFactory.create(YardiResidentTransactionsStub.class).getLeaseChargesForTenant(yc, propertyCode, lease.leaseId().getValue(),
-                    nextCycle.billingCycleStartDate().getValue());
-        } catch (YardiNoTenantsExistException e) {
-            log.warn("Can't get changes for {}; {}", lease.leaseId().getValue(), e.getMessage()); // log error and reset lease charges.
-        }
-        if (leaseCharges != null) {
-            preProcessLeaseChargesData(rtd, leaseCharges);
+        if (!executionMonitor.isTerminationRequested()) {
+            ResidentTransactions leaseCharges = null;
+            try {
+                BillingCycle nextCycle = ServerSideFactory.create(PaymentMethodFacade.class).getNextAutopayBillingCycle(lease);
+                leaseCharges = YardiStubFactory.create(YardiResidentTransactionsStub.class).getLeaseChargesForTenant(yc, propertyCode,
+                        lease.leaseId().getValue(), nextCycle.billingCycleStartDate().getValue());
+            } catch (YardiNoTenantsExistException e) {
+                log.warn("Can't get changes for {}; {}", lease.leaseId().getValue(), e.getMessage()); // log error and reset lease charges.
+            }
+
+            if (!executionMonitor.isTerminationRequested() && leaseCharges != null) {
+                preProcessLeaseChargesData(rtd, leaseCharges);
+            }
         }
 
         if (!executionMonitor.isTerminationRequested()) {
@@ -379,7 +392,6 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
             ServerSideFactory.create(NotificationFacade.class).aggregateNotificationsStart();
 
             final Key yardiInterfaceId = yc.getPrimaryKey();
-
             List<Building> importedBuildings = new ArrayList<>();
 
             // properties:
@@ -405,7 +417,9 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
 
             // lease resident data + charges:
             YardiResidentTransactionsData rtd = new YardiResidentTransactionsData(yardiInterfaceId, executionMonitor, closeNonProcessedLeases);
-            preProcessResidentTransactionsData(rtd, transactions, getLeaseCharges(yc, executionMonitor, importedBuildings));
+            if (!executionMonitor.isTerminationRequested()) {
+                preProcessResidentTransactionsData(rtd, transactions, getLeaseCharges(yc, executionMonitor, importedBuildings));
+            }
             if (!executionMonitor.isTerminationRequested()) {
                 importLeases(rtd);
             }
