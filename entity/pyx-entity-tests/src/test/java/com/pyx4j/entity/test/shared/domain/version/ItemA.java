@@ -20,7 +20,10 @@
  */
 package com.pyx4j.entity.test.shared.domain.version;
 
+import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.annotations.Table;
+import com.pyx4j.entity.annotations.Timestamp;
+import com.pyx4j.entity.annotations.Timestamp.Update;
 import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.ToStringFormat;
 import com.pyx4j.entity.core.IPrimitive;
@@ -44,9 +47,12 @@ public interface ItemA extends IVersionedEntity<ItemAVersion> {
 
         @ToString(index = 1)
         IPrimitive<String> name();
+
+        @Timestamp(Update.Updated)
+        IPrimitive<LogicalDate> updateDate();
     }
 
-//  To show concept we have this member:    
+//  To show concept we have this member:
 //    @Override
 //    ItemAVersion version();
 }

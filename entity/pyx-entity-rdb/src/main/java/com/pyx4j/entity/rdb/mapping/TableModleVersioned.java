@@ -214,7 +214,7 @@ public class TableModleVersioned {
             if (memberEntityExisting != null) {
                 // End effective period of currently active entity
                 memberEntityExisting.toDate().setValue(persistenceContext.getTimeNow());
-                update.add(memberEntityExisting);
+                tm.update(persistenceContext, memberEntityExisting);
                 versionData.versionNumber().setValue(memberEntityExisting.versionNumber().getValue() + 1);
             } else {
                 // Initial item creation

@@ -27,6 +27,7 @@ import org.junit.Assert;
 
 import com.pyx4j.commons.Consts;
 import com.pyx4j.commons.Key;
+import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.core.AttachLevel;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.IVersionedEntity.SaveAction;
@@ -1101,6 +1102,49 @@ public abstract class VersionTestCase extends DatastoreTestBase {
             criteriaChildren.add(PropertyCriterion.eq(criteriaChildren.proto().testId(), testId));
             assertEquals("ChildrenRemain", 0, srv.count(criteriaChildren));
         }
+    }
+
+    /**
+     * @Timestamp(Update.Updated) on IVersionData should not be updated
+     */
+    public void testUpdatedVersionedPart() {
+        String testId = uniqueString();
+        setDBTime("2010-01-01");
+        ItemA itemA1 = EntityFactory.create(ItemA.class);
+        itemA1.testId().setValue(testId);
+
+        final String v1Name = "V1-" + uniqueString();
+        itemA1.version().name().setValue(v1Name);
+        itemA1.saveAction().setValue(SaveAction.saveAsFinal);
+        srv.persist(itemA1);
+
+        LogicalDate vUpdated = itemA1.version().updateDate().getValue();
+
+        RefToVersioned refToVersioned1 = EntityFactory.create(RefToVersioned.class);
+        refToVersioned1.name().setValue(uniqueString());
+        refToVersioned1.testId().setValue(testId);
+        refToVersioned1.itemA().set(itemA1);
+        srv.persist(refToVersioned1);
+
+        // Make new version
+
+        setDBTime("2010-02-02");
+        final String v2Name = "V2-" + uniqueString();
+
+        itemA1.version().set(EntityGraph.businessDuplicate(itemA1.version()));
+        VersionedEntityUtils.setAsDraft(itemA1.version());
+        itemA1.version().name().setValue(v2Name);
+        itemA1.saveAction().setValue(SaveAction.saveAsFinal);
+        srv.persist(itemA1);
+
+        // Versioned has value of the time when it was saved
+        {
+            // Retrieve new version
+            RefToVersioned refToVersioned1r1 = srv.retrieve(RefToVersioned.class, refToVersioned1.getPrimaryKey());
+            assertEquals("ref shuld not be updated", v1Name, refToVersioned1r1.itemA().version().name().getValue());
+            assertEquals("date as of time of save", vUpdated, refToVersioned1r1.itemA().version().updateDate().getValue());
+        }
+
     }
 
     public void testPolymorphicVersioned() {
