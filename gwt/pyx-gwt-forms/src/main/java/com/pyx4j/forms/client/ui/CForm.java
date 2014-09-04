@@ -283,6 +283,10 @@ public abstract class CForm<E extends IEntity> extends CContainer<CForm<E>, E, I
         if (isAttached()) {
             throw new Error("Editor is bound. Only isDirty() method of root editor can be called.");
         }
+        // The rest was called
+        if (this.origEntity == null) {
+            return false;
+        }
         EntityGraphEqualOptions options = new EntityGraphEqualOptions(false);
         options.ignoreTransient = false;
         options.ignoreRpcTransient = true;
