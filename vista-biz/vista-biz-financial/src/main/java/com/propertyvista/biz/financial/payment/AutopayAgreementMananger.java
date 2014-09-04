@@ -48,6 +48,7 @@ import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.biz.ExecutionMonitor;
 import com.propertyvista.biz.communication.NotificationFacade;
+import com.propertyvista.biz.financial.billing.BillingFacade;
 import com.propertyvista.biz.financial.billingcycle.BillingCycleFacade;
 import com.propertyvista.biz.policy.PolicyFacade;
 import com.propertyvista.biz.system.AuditFacade;
@@ -193,14 +194,14 @@ class AutopayAgreementMananger {
         AllAmounts origPrice = new AllAmounts();
         for (AutopayAgreementCoveredItem item : orig.coveredItems()) {
             origAmounts.add(item.amount().getValue());
-            origPrice.add(PaymentBillableUtils.getActualPrice(item.billableItem()));
+            origPrice.add(ServerSideFactory.create(BillingFacade.class).getActualPrice(item.billableItem()));
         }
 
         AllAmounts newAmounts = new AllAmounts();
         AllAmounts newPrice = new AllAmounts();
         for (AutopayAgreementCoveredItem item : preauthorizedPayment.coveredItems()) {
             newAmounts.add(item.amount().getValue());
-            newPrice.add(PaymentBillableUtils.getActualPrice(item.billableItem()));
+            newPrice.add(ServerSideFactory.create(BillingFacade.class).getActualPrice(item.billableItem()));
         }
         return !origAmounts.equals(newAmounts);
     }
@@ -338,8 +339,8 @@ class AutopayAgreementMananger {
                     // Update the price if required
                     AutopayAgreementCoveredItem newCoveredItem = EntityFactory.create(AutopayAgreementCoveredItem.class);
 
-                    BigDecimal priceOriginal = PaymentBillableUtils.getActualPrice(coveredItemOriginal.billableItem());
-                    BigDecimal priceCurrent = PaymentBillableUtils.getActualPrice(billableItemCurrent);
+                    BigDecimal priceOriginal = ServerSideFactory.create(BillingFacade.class).getActualPrice(coveredItemOriginal.billableItem());
+                    BigDecimal priceCurrent = ServerSideFactory.create(BillingFacade.class).getActualPrice(billableItemCurrent);
 
                     if (priceOriginal.compareTo(priceCurrent) != 0) {
                         BigDecimal originalPaymentAmount = coveredItemOriginal.amount().getValue();

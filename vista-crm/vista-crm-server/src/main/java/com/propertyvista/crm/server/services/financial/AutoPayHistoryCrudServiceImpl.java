@@ -17,12 +17,13 @@ import java.math.BigDecimal;
 import java.util.concurrent.Callable;
 
 import com.pyx4j.commons.SimpleMessageFormat;
+import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.core.AttachLevel;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.server.AbstractCrudServiceDtoImpl;
 import com.pyx4j.entity.server.Persistence;
 
-import com.propertyvista.biz.financial.payment.PaymentBillableUtils;
+import com.propertyvista.biz.financial.billing.BillingFacade;
 import com.propertyvista.biz.system.VistaContext;
 import com.propertyvista.config.VistaDeployment;
 import com.propertyvista.crm.rpc.dto.financial.AutoPayHistoryDTO;
@@ -94,7 +95,7 @@ public class AutoPayHistoryCrudServiceImpl extends AbstractCrudServiceDtoImpl<Au
         dto.price().setValue(BigDecimal.ZERO);
         dto.payment().setValue(BigDecimal.ZERO);
         for (AutopayAgreementCoveredItem item : dto.coveredItems()) {
-            dto.price().setValue(dto.payment().getValue().add(PaymentBillableUtils.getActualPrice(item.billableItem())));
+            dto.price().setValue(dto.payment().getValue().add(ServerSideFactory.create(BillingFacade.class).getActualPrice(item.billableItem())));
             dto.payment().setValue(dto.payment().getValue().add(item.amount().getValue()));
         }
     }

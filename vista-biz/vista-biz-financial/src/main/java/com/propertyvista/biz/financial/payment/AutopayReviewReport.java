@@ -29,6 +29,7 @@ import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.server.IEntityPersistenceService.ICursorIterator;
 import com.pyx4j.entity.server.Persistence;
 
+import com.propertyvista.biz.financial.billing.BillingFacade;
 import com.propertyvista.biz.financial.billingcycle.BillingCycleFacade;
 import com.propertyvista.domain.financial.BillingAccount;
 import com.propertyvista.domain.financial.PaymentRecord;
@@ -224,14 +225,15 @@ class AutopayReviewReport {
             AutoPayReviewChargeDTO chargeReview = EntityFactory.create(AutoPayReviewChargeDTO.class);
             chargeReview.leaseCharge().setValue(getLeaseChargeDescription(coveredItem.billableItem()));
             chargeReview.current().billableItem().set(coveredItem.billableItem().createIdentityStub());
-            chargeReview.current().totalPrice().setValue(PaymentBillableUtils.getActualPrice(coveredItem.billableItem()));
+            chargeReview.current().totalPrice().setValue(ServerSideFactory.create(BillingFacade.class).getActualPrice(coveredItem.billableItem()));
             chargeReview.current().payment().setValue(coveredItem.amount().getValue());
             calulatePercent(chargeReview.current());
 
             AutopayAgreementCoveredItem coveredItemItemPrevious = coveredItemItemsPrevious.remove(coveredItem.billableItem().uid().getValue());
             if (coveredItemItemPrevious != null) {
                 chargeReview.previous().billableItem().set(coveredItemItemPrevious.billableItem().createIdentityStub());
-                chargeReview.previous().totalPrice().setValue(PaymentBillableUtils.getActualPrice(coveredItemItemPrevious.billableItem()));
+                chargeReview.previous().totalPrice()
+                        .setValue(ServerSideFactory.create(BillingFacade.class).getActualPrice(coveredItemItemPrevious.billableItem()));
                 chargeReview.previous().payment().setValue(coveredItemItemPrevious.amount().getValue());
                 calulatePercent(chargeReview.previous());
 
@@ -261,7 +263,7 @@ class AutopayReviewReport {
 
             chargeReview.leaseCharge().setValue(getLeaseChargeDescription(coveredItem.billableItem()));
             chargeReview.previous().billableItem().set(coveredItem.billableItem().createIdentityStub());
-            chargeReview.previous().totalPrice().setValue(PaymentBillableUtils.getActualPrice(coveredItem.billableItem()));
+            chargeReview.previous().totalPrice().setValue(ServerSideFactory.create(BillingFacade.class).getActualPrice(coveredItem.billableItem()));
             chargeReview.previous().payment().setValue(coveredItem.amount().getValue());
             calulatePercent(chargeReview.previous());
 
@@ -291,7 +293,7 @@ class AutopayReviewReport {
 
             chargeReview.leaseCharge().setValue(getLeaseChargeDescription(coveredItem.billableItem()));
             chargeReview.previous().billableItem().set(coveredItem.billableItem().createIdentityStub());
-            chargeReview.previous().totalPrice().setValue(PaymentBillableUtils.getActualPrice(coveredItem.billableItem()));
+            chargeReview.previous().totalPrice().setValue(ServerSideFactory.create(BillingFacade.class).getActualPrice(coveredItem.billableItem()));
             chargeReview.previous().payment().setValue(coveredItem.amount().getValue());
             calulatePercent(chargeReview.previous());
 

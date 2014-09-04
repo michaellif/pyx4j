@@ -25,13 +25,14 @@ import com.yardi.entity.mits.Unitleasestatusinfo;
 import com.yardi.entity.mits.Unitoccpstatusinfo;
 
 import com.pyx4j.commons.LogicalDate;
+import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.config.server.SystemDateManager;
 import com.pyx4j.entity.core.AttachLevel;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.server.Persistence;
 
-import com.propertyvista.biz.financial.payment.PaymentBillableUtils;
+import com.propertyvista.biz.financial.billing.BillingFacade;
 import com.propertyvista.domain.dashboard.gadgets.availability.UnitAvailabilityStatus;
 import com.propertyvista.domain.dashboard.gadgets.availability.UnitAvailabilityStatus.RentReadiness;
 import com.propertyvista.domain.dashboard.gadgets.availability.UnitAvailabilityStatus.RentedStatus;
@@ -135,7 +136,8 @@ public class YardiUnitAvailabilityStatusAdapter {
             Lease lease = retrieveLastLease(unitId);
             if (lease != null) {
                 Persistence.ensureRetrieve(lease.currentTerm().version().leaseProducts().serviceItem(), AttachLevel.Attached);
-                status.unitRent().setValue(PaymentBillableUtils.getActualPrice(lease.currentTerm().version().leaseProducts().serviceItem()));
+                status.unitRent().setValue(
+                        ServerSideFactory.create(BillingFacade.class).getActualPrice(lease.currentTerm().version().leaseProducts().serviceItem()));
 
                 if (status.marketRent().getValue() != null) {
                     status.rentDeltaAbsolute().setValue(status.unitRent().getValue().subtract(status.marketRent().getValue()));

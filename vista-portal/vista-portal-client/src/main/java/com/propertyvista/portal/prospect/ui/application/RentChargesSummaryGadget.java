@@ -65,11 +65,11 @@ public class RentChargesSummaryGadget extends FlowPanel {
         StringBuilder contentBuilder = new StringBuilder();
 
         if (onlineApplication != null && !onlineApplication.leaseChargesData().selectedService().isNull()) {
-            contentBuilder.append(formatCharge(onlineApplication.leaseChargesData().selectedService().agreedPrice().getValue(), onlineApplication
-                    .leaseChargesData().selectedService().item().name().getStringView()));
+            contentBuilder.append(formatCharge(onlineApplication.leaseChargesData().selectedService().agreedPrice().getValue(BigDecimal.ZERO),
+                    onlineApplication.leaseChargesData().selectedService().item().name().getStringView()));
 
             for (BillableItem billableItem : onlineApplication.leaseChargesData().selectedFeatures()) {
-                contentBuilder.append(formatCharge(billableItem.agreedPrice().getValue(), billableItem.item().name().getStringView()));
+                contentBuilder.append(formatCharge(billableItem.agreedPrice().getValue(BigDecimal.ZERO), billableItem.item().name().getStringView()));
             }
 
             if (onlineApplication.leaseChargesData().totalMonthlyCharge().getValue().compareTo(BigDecimal.ZERO) > 0) {
@@ -116,7 +116,7 @@ public class RentChargesSummaryGadget extends FlowPanel {
     }
 
     private String formatCharge(BigDecimal amount, String title, boolean bold) {
-        return (bold ? "<i>" : "") + title + "&nbsp;-&nbsp;$" + (amount != null ? amount : BigDecimal.ZERO) + (bold ? "</i>" : "") + "</br>";
+        return (bold ? "<i>" : "") + title + "&nbsp;-&nbsp;$" + amount + (bold ? "</i>" : "") + "</br>";
     }
 
     class InfoSection extends FlowPanel {

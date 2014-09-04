@@ -16,11 +16,12 @@ package com.propertyvista.interfaces.importer;
 import java.util.ArrayList;
 import java.util.Collection;
 
+import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.server.Persistence;
 
-import com.propertyvista.biz.financial.payment.PaymentBillableUtils;
+import com.propertyvista.biz.financial.billing.BillingFacade;
 import com.propertyvista.domain.payment.AutopayAgreement;
 import com.propertyvista.domain.payment.AutopayAgreement.AutopayAgreementCoveredItem;
 import com.propertyvista.domain.payment.PaymentType;
@@ -50,7 +51,7 @@ public class ExportAutoPayAgreementDataRetriever {
                 AutoPayAgreementCoveredItemIO itemModel = EntityFactory.create(AutoPayAgreementCoveredItemIO.class);
 
                 itemModel.amount().setValue(item.amount().getValue());
-                itemModel.chargeAmount().setValue(PaymentBillableUtils.getActualPrice(item.billableItem()));
+                itemModel.chargeAmount().setValue(ServerSideFactory.create(BillingFacade.class).getActualPrice(item.billableItem()));
 
                 itemModel.chargeId().setValue(item.billableItem().uid().getStringView());
                 itemModel.chargeCode().setValue(item.billableItem().yardiChargeCode().getValue());

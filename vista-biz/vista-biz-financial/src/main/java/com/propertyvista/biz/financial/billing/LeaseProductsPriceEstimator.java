@@ -135,7 +135,7 @@ public class LeaseProductsPriceEstimator {
 
     private void createChargeSubLineItem(InvoiceProductCharge charge, BillableItem billableItem) {
         charge.chargeSubLineItem().billableItem().set(billableItem);
-        charge.chargeSubLineItem().amount().setValue(charge.chargeSubLineItem().billableItem().agreedPrice().getValue());
+        charge.chargeSubLineItem().amount().setValue(charge.chargeSubLineItem().billableItem().agreedPrice().getValue(BigDecimal.ZERO));
         charge.chargeSubLineItem().description().setValue(billableItem.item().description().getStringView());
     }
 
@@ -166,10 +166,10 @@ public class LeaseProductsPriceEstimator {
         BigDecimal amount = null;
 
         if (ValueType.Percentage.equals(billableItemAdjustment.type().getValue())) {
-            amount = DomainUtil.roundMoney(billableItemAdjustment.billableItem().agreedPrice().getValue()
-                    .multiply(billableItemAdjustment.value().percent().getValue()));
+            amount = DomainUtil.roundMoney(billableItemAdjustment.billableItem().agreedPrice().getValue(BigDecimal.ZERO)
+                    .multiply(billableItemAdjustment.value().percent().getValue(BigDecimal.ZERO)));
         } else if (ValueType.Monetary.equals(billableItemAdjustment.type().getValue())) {
-            amount = billableItemAdjustment.value().amount().getValue();
+            amount = billableItemAdjustment.value().amount().getValue(BigDecimal.ZERO);
         }
 
         adjustment.amount().setValue(amount);

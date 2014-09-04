@@ -28,7 +28,7 @@ import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.server.AbstractCrudServiceDtoImpl;
 import com.pyx4j.entity.server.Persistence;
 
-import com.propertyvista.biz.financial.payment.PaymentBillableUtils;
+import com.propertyvista.biz.financial.billing.BillingFacade;
 import com.propertyvista.biz.financial.payment.PaymentFacade;
 import com.propertyvista.biz.financial.payment.PaymentMethodFacade;
 import com.propertyvista.biz.financial.payment.PaymentMethodTarget;
@@ -168,7 +168,8 @@ public class AutoPayWizardServiceImpl extends AbstractCrudServiceDtoImpl<Autopay
         }
 
         PreauthorizedPaymentCoveredItemDTO itemDto;
-        if (PaymentBillableUtils.getActualPrice(products.serviceItem()).compareTo(BigDecimal.ZERO) > 0 && !isCoveredItemExist(papDto, products.serviceItem())) {
+        if (ServerSideFactory.create(BillingFacade.class).getActualPrice(products.serviceItem()).compareTo(BigDecimal.ZERO) > 0
+                && !isCoveredItemExist(papDto, products.serviceItem())) {
             itemDto = createCoveredItemDTO(products.serviceItem(), lease);
             papDto.coveredItemsDTO().add(itemDto);
             papDto.total().setValue(papDto.total().getValue().add(itemDto.amount().getValue()));
@@ -177,7 +178,7 @@ public class AutoPayWizardServiceImpl extends AbstractCrudServiceDtoImpl<Autopay
         for (BillableItem billableItem : products.featureItems()) {
             Persistence.ensureRetrieve(billableItem.item().product(), AttachLevel.Attached);
             //@formatter:off
-            if (PaymentBillableUtils.getActualPrice(billableItem).compareTo(BigDecimal.ZERO) > 0                                                                            // non-free
+            if (ServerSideFactory.create(BillingFacade.class).getActualPrice(billableItem).compareTo(BigDecimal.ZERO) > 0                                                                            // non-free
                 && !ARCode.Type.nonReccuringFeatures().contains(billableItem.item().product().holder().code().type().getValue())                                       // recursive
                 && (billableItem.expirationDate().isNull() || billableItem.expirationDate().getValue().after(SystemDateManager.getLogicalDate()))     // non-expired 
                 && !isCoveredItemExist(papDto, billableItem)) {                                                                                                 // absent
@@ -212,7 +213,7 @@ public class AutoPayWizardServiceImpl extends AbstractCrudServiceDtoImpl<Autopay
             itemDto.covered().setValue(itemDto.covered().getValue().add(papci.amount().getValue()));
         }
 
-        BigDecimal itemPrice = PaymentBillableUtils.getActualPrice(billableItem);
+        BigDecimal itemPrice = ServerSideFactory.create(BillingFacade.class).getActualPrice(billableItem);
         if (itemPrice.compareTo(BigDecimal.ZERO) != 0) {
             itemDto.amount().setValue(itemPrice.subtract(itemDto.covered().getValue()));
             itemDto.percent().setValue(itemDto.amount().getValue().divide(itemPrice, 2, RoundingMode.FLOOR));
@@ -255,7 +256,7 @@ public class AutoPayWizardServiceImpl extends AbstractCrudServiceDtoImpl<Autopay
             itemDto.covered().setValue(itemDto.covered().getValue().add(papci.amount().getValue()));
         }
 
-        BigDecimal itemPrice = PaymentBillableUtils.getActualPrice(itemDto.billableItem());
+        BigDecimal itemPrice = ServerSideFactory.create(BillingFacade.class).getActualPrice(itemDto.billableItem());
         if (itemPrice.compareTo(BigDecimal.ZERO) != 0) {
             itemDto.percent().setValue(itemDto.amount().getValue().divide(itemPrice, 2, RoundingMode.FLOOR));
         } else {

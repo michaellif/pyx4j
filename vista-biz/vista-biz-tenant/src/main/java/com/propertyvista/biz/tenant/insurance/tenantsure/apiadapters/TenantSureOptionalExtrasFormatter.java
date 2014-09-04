@@ -13,6 +13,8 @@
  */
 package com.propertyvista.biz.tenant.insurance.tenantsure.apiadapters;
 
+import java.math.BigDecimal;
+
 import com.propertyvista.biz.tenant.insurance.TenantSureDeductibleOption;
 import com.propertyvista.domain.tenant.lease.Tenant;
 import com.propertyvista.portal.rpc.portal.resident.dto.insurance.TenantSureCoverageDTO;
@@ -28,7 +30,7 @@ public class TenantSureOptionalExtrasFormatter implements ITenantSureOptionalExt
 
         StringBuilder optionalExtras = new StringBuilder();
 
-        optionalExtras.append(format("MonthlyRevenue", tenant.lease().currentTerm().version().leaseProducts().serviceItem().agreedPrice().getValue()
+        optionalExtras.append(format("MonthlyRevenue", tenant.lease().currentTerm().version().leaseProducts().serviceItem().agreedPrice().getValue(BigDecimal.ZERO)
                 .toPlainString()));
         optionalExtras.append(format("Deductible", TenantSureDeductibleOption.deductibleOf(coverageRequest.deductible().getValue()).amount().toPlainString()));
         optionalExtras.append(format("Smoker", String.valueOf(coverageRequest.smoker().getValue(false))));

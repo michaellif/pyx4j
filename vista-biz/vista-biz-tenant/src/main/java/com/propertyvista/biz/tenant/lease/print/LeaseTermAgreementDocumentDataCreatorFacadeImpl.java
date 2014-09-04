@@ -29,6 +29,7 @@ import com.pyx4j.entity.core.AttachLevel;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.server.Persistence;
 
+import com.propertyvista.biz.financial.billing.BillingFacade;
 import com.propertyvista.domain.blob.LandlordMediaBlob;
 import com.propertyvista.domain.contact.InternationalAddress;
 import com.propertyvista.domain.policy.policies.domain.LeaseAgreementLegalTerm;
@@ -175,8 +176,8 @@ public class LeaseTermAgreementDocumentDataCreatorFacadeImpl implements LeaseTer
         termBuilder
                 .append("The Tenant agrees to pay to the Landlord, at the Landlord’s office or such place as directed in writing from time to time by the Landlord:<br>");
         termBuilder.append("&nbsp;&nbsp;&nbsp;&nbsp;");
-        termBuilder
-                .append(SimpleMessageFormat.format("Rent: ${0,number,#,##0.00}", leaseTerm.version().leaseProducts().serviceItem().agreedPrice().getValue()));
+        termBuilder.append(SimpleMessageFormat.format("Rent: ${0,number,#,##0.00}",
+                ServerSideFactory.create(BillingFacade.class).getActualPrice(leaseTerm.version().leaseProducts().serviceItem())));
 
         termBuilder.append("<br>");
         if (!leaseTerm.version().leaseProducts().featureItems().isEmpty()) {
@@ -184,7 +185,7 @@ public class LeaseTermAgreementDocumentDataCreatorFacadeImpl implements LeaseTer
             for (BillableItem featureItem : leaseTerm.version().leaseProducts().featureItems()) {
                 termBuilder.append("&nbsp;&nbsp;&nbsp;&nbsp;");
                 termBuilder.append(SimpleMessageFormat.format("{0} {1}: ${2,number,#,##0.00}", featureItem.item().name().getValue(), featureItem.description()
-                        .getValue(), featureItem.agreedPrice().getValue()));
+                        .getValue(), ServerSideFactory.create(BillingFacade.class).getActualPrice(featureItem)));
 
                 if (!featureItem.effectiveDate().isNull() || !featureItem.expirationDate().isNull()) {
                     termBuilder.append(" (");

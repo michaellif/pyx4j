@@ -24,6 +24,7 @@ import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.server.Persistence;
 
+import com.propertyvista.biz.financial.billing.BillingFacade;
 import com.propertyvista.biz.policy.PolicyFacade;
 import com.propertyvista.biz.tenant.ScreeningFacade;
 import com.propertyvista.domain.PriorAddress;
@@ -161,7 +162,7 @@ public class LeaseApplicationDocumentDataCreatorFacadeImpl implements LeaseAppli
         leaseSection.leaseFrom().setValue(application.lease().leaseFrom().getValue());
         leaseSection.leaseTo().setValue(application.lease().leaseTo().getValue());
 
-        leaseSection.unitRent().setValue(term.version().leaseProducts().serviceItem().agreedPrice().getValue());
+        leaseSection.unitRent().setValue(ServerSideFactory.create(BillingFacade.class).getActualPrice(term.version().leaseProducts().serviceItem()));
     }
 
     private void fillPeopleSection(LeaseApplicationDocumentDataPeopleSectionDTO peopleSection, LeaseApplication application,

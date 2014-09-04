@@ -19,6 +19,7 @@ import com.propertyvista.biz.financial.billing.BillingFacade;
 import com.propertyvista.biz.financial.billing.BillingUtils;
 import com.propertyvista.domain.financial.billing.Bill;
 import com.propertyvista.domain.financial.billing.BillingCycle;
+import com.propertyvista.domain.tenant.lease.BillableItem;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseAdjustment;
 import com.propertyvista.domain.tenant.lease.LeaseTerm;
@@ -87,6 +88,11 @@ public final class BillingInternalFacadeImpl implements BillingFacade {
     @Override
     public BigDecimal getMaxLeaseTermMonthlyTotal(LeaseTerm leaseTerm) {
         return BillingUtils.getMaxLeaseTermMonthlyTotal(leaseTerm);
+    }
+
+    @Override
+    public BigDecimal getActualPrice(BillableItem billableItem) {
+        return BillingUtils.getActualPrice(billableItem);
     }
 
 }

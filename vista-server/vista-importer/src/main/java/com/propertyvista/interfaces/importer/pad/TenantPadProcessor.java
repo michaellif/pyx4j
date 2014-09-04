@@ -988,8 +988,9 @@ public class TenantPadProcessor {
                             + "$ not found; already processed items " + formatBillableItems(billableItemsProcesed) + "; unprocessed "
                             + formatBillableItems(billableItemsUnprocessed));
                 }
-                if (charge._processorInformation().chargeAmount().getValue().compareTo(sameIdBillableItem.agreedPrice().getValue()) != 0) {
-                    charge._processorInformation().actualChargeCodeAmount().setValue(sameIdBillableItem.agreedPrice().getValue());
+                if (charge._processorInformation().chargeAmount().getValue(BigDecimal.ZERO)
+                        .compareTo(sameIdBillableItem.agreedPrice().getValue(BigDecimal.ZERO)) != 0) {
+                    charge._processorInformation().actualChargeCodeAmount().setValue(sameIdBillableItem.agreedPrice().getValue(BigDecimal.ZERO));
                     throw new Error("BillableItem '" + charge.chargeCode().getValue() + "' " + charge._processorInformation().chargeAmount().getValue()
                             + "$ do not match; already processed items " + formatBillableItems(billableItemsProcesed) + "; unprocessed "
                             + formatBillableItems(billableItemsUnprocessed));
@@ -999,7 +1000,8 @@ public class TenantPadProcessor {
                 for (BillableItem billableItem : billableItemsUnprocessed) {
                     if (!charge.chargeCode().getValue().equals(billableItem.yardiChargeCode().getValue())) {
                         continue;
-                    } else if (charge._processorInformation().chargeAmount().getValue().compareTo(billableItem.agreedPrice().getValue()) != 0) {
+                    } else if (charge._processorInformation().chargeAmount().getValue(BigDecimal.ZERO)
+                            .compareTo(billableItem.agreedPrice().getValue(BigDecimal.ZERO)) != 0) {
                         continue;
                     } else {
                         matchingBillableItem = billableItem;
@@ -1054,7 +1056,7 @@ public class TenantPadProcessor {
                 b.append(", ");
             }
             b.append("'").append(billableItem.yardiChargeCode().getValue()).append("' ");
-            b.append(billableItem.agreedPrice().getValue()).append("$ ");
+            b.append(billableItem.agreedPrice().getValue(BigDecimal.ZERO)).append("$ ");
         }
         return b.toString();
     }

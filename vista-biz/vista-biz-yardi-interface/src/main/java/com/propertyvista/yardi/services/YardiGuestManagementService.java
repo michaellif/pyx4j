@@ -56,10 +56,11 @@ import com.yardi.entity.resident.ResidentTransactions;
 import com.pyx4j.commons.Key;
 import com.pyx4j.commons.SimpleMessageFormat;
 import com.pyx4j.commons.UserRuntimeException;
+import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.core.AttachLevel;
 import com.pyx4j.entity.server.Persistence;
 
-import com.propertyvista.biz.financial.payment.PaymentBillableUtils;
+import com.propertyvista.biz.financial.billing.BillingFacade;
 import com.propertyvista.biz.system.yardi.YardiServiceException;
 import com.propertyvista.domain.financial.offering.YardiChargeCode;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
@@ -278,7 +279,7 @@ public class YardiGuestManagementService extends YardiAbstractService {
             // add selected rentable items
             for (BillableItem product : getLeaseProducts(lease)) {
                 String type = product.item().product().holder().yardiCode().getValue();
-                RentableItemKey lookupKey = new RentableItemKey(type, product.agreedPrice().getValue());
+                RentableItemKey lookupKey = new RentableItemKey(type, product.agreedPrice().getValue(BigDecimal.ZERO));
                 RentableItem item = availableItems.get(lookupKey);
                 if (item == null) {
                     throw new UserRuntimeException(SimpleMessageFormat.format("No available ''{0}'' found for the price of ''{1}''", lookupKey.code,
@@ -455,7 +456,7 @@ public class YardiGuestManagementService extends YardiAbstractService {
     }
 
     private BigDecimal getRentPrice(Lease lease) {
-        return PaymentBillableUtils.getActualPrice(lease.currentTerm().version().leaseProducts().serviceItem());
+        return ServerSideFactory.create(BillingFacade.class).getActualPrice(lease.currentTerm().version().leaseProducts().serviceItem());
     }
 
     private List<BillableItem> getLeaseProducts(Lease lease) {

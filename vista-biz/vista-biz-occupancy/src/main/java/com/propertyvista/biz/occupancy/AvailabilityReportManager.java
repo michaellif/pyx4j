@@ -153,7 +153,7 @@ public class AvailabilityReportManager {
                 status.rentedStatus().setValue(RentedStatus.Rented);
                 status.rentedFromDay().setValue(segment.lease().currentTerm().termFrom().getValue());
                 status.moveInDay().setValue(segment.lease().expectedMoveIn().getValue());
-                status.unitRent().setValue(segment.lease().currentTerm().version().leaseProducts().serviceItem().agreedPrice().getValue());
+                status.unitRent().setValue(segment.lease().currentTerm().version().leaseProducts().serviceItem().agreedPrice().getValue(BigDecimal.ZERO));
                 break;
             }
         }
@@ -207,7 +207,7 @@ public class AvailabilityReportManager {
                     status.rentedStatus().setValue(RentedStatus.Rented);
                     status.rentedFromDay().setValue(segment.lease().currentTerm().termFrom().getValue());
                     status.moveInDay().setValue(segment.lease().expectedMoveIn().getValue());
-                    status.unitRent().setValue(segment.lease().currentTerm().version().leaseProducts().serviceItem().agreedPrice().getValue());
+                    status.unitRent().setValue(segment.lease().currentTerm().version().leaseProducts().serviceItem().agreedPrice().getValue(BigDecimal.ZERO));
                 }
                 break;
             default:
@@ -233,7 +233,7 @@ public class AvailabilityReportManager {
                 status.rentedStatus().setValue(RentedStatus.Rented);
                 status.rentedFromDay().setValue(segment.lease().currentTerm().termFrom().getValue());
                 status.moveInDay().setValue(segment.lease().expectedMoveIn().getValue());
-                status.unitRent().setValue(segment.lease().currentTerm().version().leaseProducts().serviceItem().agreedPrice().getValue());
+                status.unitRent().setValue(segment.lease().currentTerm().version().leaseProducts().serviceItem().agreedPrice().getValue(BigDecimal.ZERO));
                 break;
             }
         }

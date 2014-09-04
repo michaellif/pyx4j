@@ -24,11 +24,13 @@ import com.cfcprograms.api.ObjectFactory;
 import com.cfcprograms.api.OptionQuote;
 
 import com.pyx4j.commons.UserRuntimeException;
+import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.core.criterion.PropertyCriterion;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.i18n.shared.I18n;
 
+import com.propertyvista.biz.financial.billing.BillingFacade;
 import com.propertyvista.biz.tenant.insurance.TenantSureOptionCode;
 import com.propertyvista.domain.tenant.insurance.TenantSureInsurancePolicyClient;
 import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
@@ -76,7 +78,8 @@ public class TenantSureCoverageRequestAdapter {
         GregorianCalendar inceptionDate = new GregorianCalendar();
         inceptionDate.setTime(coverageRequest.inceptionDate().getValue());
         optionQuote.setInceptionDate(dataTypeFactory.newXMLGregorianCalendar(inceptionDate));
-        optionQuote.setRevenue(tenantSureClient.tenant().lease().currentTerm().version().leaseProducts().serviceItem().agreedPrice().getValue());
+        optionQuote.setRevenue(ServerSideFactory.create(BillingFacade.class).getActualPrice(
+                tenantSureClient.tenant().lease().currentTerm().version().leaseProducts().serviceItem()));
         optionQuote.setEmployeeCount(countNumberOfTenants(tenantSureClient.tenant().lease().currentTerm()));
         optionQuote.setUsExposure(BigDecimal.ZERO);
         optionQuote.setRetroDate(dataTypeFactory.newXMLGregorianCalendar(new GregorianCalendar()));

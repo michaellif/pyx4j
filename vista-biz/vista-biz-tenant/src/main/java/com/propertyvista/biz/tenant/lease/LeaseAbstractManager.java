@@ -43,6 +43,7 @@ import com.pyx4j.gwt.server.DateUtils;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.biz.communication.CommunicationFacade;
+import com.propertyvista.biz.financial.billing.BillingFacade;
 import com.propertyvista.biz.financial.billingcycle.BillingCycleFacade;
 import com.propertyvista.biz.financial.deposit.DepositFacade;
 import com.propertyvista.biz.financial.payment.PaymentMethodFacade;
@@ -334,9 +335,9 @@ public abstract class LeaseAbstractManager {
 
     public void requestForMoreInformation(Lease leaseId, Employee decidedBy, String decisionReason) {
         Lease lease = load(leaseId, false);
-    
+
         lease.leaseApplication().status().setValue(LeaseApplication.Status.PendingFurtherInformation);
-    
+
         Persistence.service().merge(lease);
         Persistence.service().merge(creteLeaseNote(lease, "Pending Further Information on Application", decisionReason, decidedBy));
     }
@@ -1277,7 +1278,7 @@ public abstract class LeaseAbstractManager {
         BigDecimal origPrice = lease.unit().financial()._unitRent().getValue();
         BigDecimal currentPrice = null;
         if (!lease.currentTerm().version().isNull() && !lease.currentTerm().version().leaseProducts().serviceItem().isNull()) {
-            currentPrice = lease.currentTerm().version().leaseProducts().serviceItem().agreedPrice().getValue();
+            currentPrice = ServerSideFactory.create(BillingFacade.class).getActualPrice(lease.currentTerm().version().leaseProducts().serviceItem());
         }
 
         if ((origPrice != null && !origPrice.equals(currentPrice)) || (origPrice == null && currentPrice != null)) {

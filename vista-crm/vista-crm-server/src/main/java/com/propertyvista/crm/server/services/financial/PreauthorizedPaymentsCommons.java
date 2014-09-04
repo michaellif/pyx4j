@@ -24,10 +24,10 @@ import com.pyx4j.entity.core.AttachLevel;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.rpc.AbstractCrudService.RetrieveTarget;
-import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.server.CrudEntityBinder;
+import com.pyx4j.entity.server.Persistence;
 
-import com.propertyvista.biz.financial.payment.PaymentBillableUtils;
+import com.propertyvista.biz.financial.billing.BillingFacade;
 import com.propertyvista.biz.financial.payment.PaymentMethodFacade;
 import com.propertyvista.domain.financial.ARCode;
 import com.propertyvista.domain.payment.AutopayAgreement;
@@ -92,14 +92,15 @@ public class PreauthorizedPaymentsCommons {
         Lease lease = papDto.tenant().lease();
         LeaseProducts products = lease.currentTerm().version().leaseProducts();
         assert (products != null);
-        if (/* products.serviceItem().agreedPrice().getValue().compareTo(BigDecimal.ZERO) > 0 && */!isCoveredItemExist(papDto, products.serviceItem())) {
+        if (/* products.serviceItem().agreedPrice().getValue(BigDecimal.ZERO).compareTo(BigDecimal.ZERO) > 0 && */!isCoveredItemExist(papDto,
+                products.serviceItem())) {
             papDto.coveredItemsDTO().add(createCoveredItemDto(products.serviceItem(), lease, papDto.getPrimaryKey() == null));
         }
 
         for (BillableItem billableItem : products.featureItems()) {
             Persistence.ensureRetrieve(billableItem.item().product(), AttachLevel.Attached);
             //@formatter:off
-            if (/*billableItem.agreedPrice().getValue().compareTo(BigDecimal.ZERO) > 0                                                                            // non-free
+            if (/*billableItem.agreedPrice().getValue(BigDecimal.ZERO).compareTo(BigDecimal.ZERO) > 0                                                                            // non-free
                 &&*/ !ARCode.Type.nonReccuringFeatures().contains(billableItem.item().product().holder().code().type().getValue())                                       // recursive
                 && (billableItem.expirationDate().isNull() || billableItem.expirationDate().getValue().after(SystemDateManager.getLogicalDate()))     // non-expired 
                 && !isCoveredItemExist(papDto, billableItem)) {                                                                                                 // absent
@@ -144,7 +145,7 @@ public class PreauthorizedPaymentsCommons {
             itemDto.covered().setValue(itemDto.covered().getValue().add(papci.amount().getValue()));
         }
 
-        BigDecimal itemPrice = PaymentBillableUtils.getActualPrice(billableItem);
+        BigDecimal itemPrice = ServerSideFactory.create(BillingFacade.class).getActualPrice(billableItem);
         if (itemPrice.compareTo(BigDecimal.ZERO) != 0) {
             itemDto.amount().setValue(isNewPap ? itemPrice.subtract(itemDto.covered().getValue()) : BigDecimal.ZERO);
             itemDto.percent().setValue(itemDto.amount().getValue().divide(itemPrice, 2, RoundingMode.FLOOR));
@@ -181,7 +182,7 @@ public class PreauthorizedPaymentsCommons {
             itemDto.covered().setValue(itemDto.covered().getValue().add(papci.amount().getValue()));
         }
 
-        BigDecimal itemPrice = PaymentBillableUtils.getActualPrice(itemDto.billableItem());
+        BigDecimal itemPrice = ServerSideFactory.create(BillingFacade.class).getActualPrice(itemDto.billableItem());
         if (itemPrice.compareTo(BigDecimal.ZERO) != 0) {
             itemDto.percent().setValue(itemDto.amount().getValue().divide(itemPrice, 2, RoundingMode.FLOOR));
         } else {

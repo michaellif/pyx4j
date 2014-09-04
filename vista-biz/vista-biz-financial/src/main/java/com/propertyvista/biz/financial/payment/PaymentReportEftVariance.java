@@ -25,6 +25,7 @@ import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.server.IEntityPersistenceService.ICursorIterator;
 import com.pyx4j.entity.server.Persistence;
 
+import com.propertyvista.biz.financial.billing.BillingFacade;
 import com.propertyvista.biz.financial.payment.AutopayManager.PreauthorizedAmount;
 import com.propertyvista.crm.rpc.dto.reports.EftVarianceReportRecordDTO;
 import com.propertyvista.crm.rpc.dto.reports.EftVarianceReportRecordDetailsDTO;
@@ -111,7 +112,8 @@ class PaymentReportEftVariance {
         // Calculate charges
         Map<String, BillableItem> billableItems = PaymentBillableUtils.getAllBillableItems(billingAccount.lease().currentTerm().version());
         for (BillableItem billableItem : billableItems.values()) {
-            leaseRecord.leaseTotals().charges().setValue(leaseRecord.leaseTotals().charges().getValue().add(PaymentBillableUtils.getActualPrice(billableItem)));
+            leaseRecord.leaseTotals().charges()
+                    .setValue(leaseRecord.leaseTotals().charges().getValue().add(ServerSideFactory.create(BillingFacade.class).getActualPrice(billableItem)));
         }
 
         leaseRecord.leaseTotals().difference()

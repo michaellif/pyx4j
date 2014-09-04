@@ -265,12 +265,12 @@ public class BillingUtils {
             to = new LogicalDate(calendar.getTime());
             // add up price for service and all applicable features for the from-to period
             BigDecimal monthly = new BigDecimal("0.00");
-            monthly = monthly.add(leaseTerm.version().leaseProducts().serviceItem().agreedPrice().getValue());
+            monthly = monthly.add(leaseTerm.version().leaseProducts().serviceItem().agreedPrice().getValue(BigDecimal.ZERO));
             for (BillableItem feature : leaseTerm.version().leaseProducts().featureItems()) {
                 // add feature monthly price if active within current from-to period (not prorated)
                 if ((feature.effectiveDate().isNull() || feature.effectiveDate().getValue().before(to))
                         && (feature.expirationDate().isNull() || feature.expirationDate().getValue().after(from))) {
-                    monthly = monthly.add(feature.agreedPrice().getValue());
+                    monthly = monthly.add(feature.agreedPrice().getValue(BigDecimal.ZERO));
                 }
             }
 
@@ -282,4 +282,8 @@ public class BillingUtils {
         return total;
     }
 
+    //TODO proper implementation that will use adjustments
+    public static BigDecimal getActualPrice(BillableItem billableItem) {
+        return billableItem.agreedPrice().getValue(BigDecimal.ZERO);
+    }
 }

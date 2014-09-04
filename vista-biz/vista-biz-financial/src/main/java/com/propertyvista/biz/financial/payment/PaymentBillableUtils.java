@@ -13,7 +13,6 @@
  */
 package com.propertyvista.biz.financial.payment;
 
-import java.math.BigDecimal;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -22,11 +21,6 @@ import com.propertyvista.domain.tenant.lease.BillableItem;
 import com.propertyvista.domain.tenant.lease.LeaseTerm;
 
 public class PaymentBillableUtils {
-
-    //TODO proper implementation that will use adjustments
-    public static BigDecimal getActualPrice(BillableItem billableItem) {
-        return billableItem.agreedPrice().getValue(BigDecimal.ZERO);
-    }
 
     public static boolean isBillableItemPapable(BillableItem billableItem, BillingCycle cycle) {
         return (billableItem.expirationDate().isNull() || billableItem.expirationDate().getValue().after(cycle.billingCycleStartDate().getValue()));
