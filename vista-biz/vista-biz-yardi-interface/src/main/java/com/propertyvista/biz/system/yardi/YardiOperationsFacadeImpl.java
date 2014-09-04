@@ -16,12 +16,12 @@ package com.propertyvista.biz.system.yardi;
 import com.pyx4j.config.server.ServerSideFactory;
 
 import com.propertyvista.biz.system.encryption.PasswordEncryptorFacade;
-import com.propertyvista.biz.system.yardi.YardiOperationsFacade;
 import com.propertyvista.domain.settings.PmcYardiCredential;
 import com.propertyvista.operations.rpc.dto.ConnectionTestResultDTO;
 import com.propertyvista.yardi.YardiInterface;
 import com.propertyvista.yardi.YardiInterfaceType;
 import com.propertyvista.yardi.stubs.YardiLicense;
+import com.propertyvista.yardi.stubs.YardiStubFactory;
 
 public class YardiOperationsFacadeImpl implements YardiOperationsFacade {
 
@@ -54,7 +54,7 @@ public class YardiOperationsFacadeImpl implements YardiOperationsFacade {
             }
 
             result.append("Plugin: ").append(yardiInterface.name()).cr();
-            YardiInterface stub = ServerSideFactory.create(yardiInterface.ifClass);
+            YardiInterface stub = YardiStubFactory.create(yardiInterface.ifClass);
 
             result.sp().sp().append("Ping: ");
             try {

@@ -44,7 +44,11 @@ public class YardiSystemBatchesStubProxy extends YardiAbstractStubProxy implemen
 
     @Override
     public void validate(PmcYardiCredential yc) throws YardiServiceException, RemoteException {
-        getStub(yc).validate(yc);
+        try {
+            getStub(yc).validate(yc);
+        } catch (YardiResponseException e) {
+            validateResponseXml(e.getResponse());
+        }
     }
 
     @Override
