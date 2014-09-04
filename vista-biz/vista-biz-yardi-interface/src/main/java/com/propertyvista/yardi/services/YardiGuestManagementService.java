@@ -56,11 +56,9 @@ import com.yardi.entity.resident.ResidentTransactions;
 import com.pyx4j.commons.Key;
 import com.pyx4j.commons.SimpleMessageFormat;
 import com.pyx4j.commons.UserRuntimeException;
-import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.core.AttachLevel;
 import com.pyx4j.entity.server.Persistence;
 
-import com.propertyvista.biz.financial.deposit.DepositFacade;
 import com.propertyvista.biz.financial.payment.PaymentBillableUtils;
 import com.propertyvista.biz.system.yardi.YardiServiceException;
 import com.propertyvista.domain.financial.offering.YardiChargeCode;
@@ -327,14 +325,14 @@ public class YardiGuestManagementService extends YardiAbstractService {
             ensureDepositChargeCodesConfigured(yc, lease);
             // make sure no application exists for the prospect
             LeaseApplication la = YardiStubFactory.create(YardiILSGuestCardStub.class).getApplication(yc, propertyCode, prospectId);
-            if (la == null) {
+            if (la == null || guestProcessor.getApplicationCharges(la).isEmpty()) {
                 // do ImportApplication to push Deposits back to Yardi as App Fees
                 YardiStubFactory.create(YardiILSGuestCardStub.class).importApplication(yc,
                         guestProcessor.getLeaseApplication(lease, tenantId, getLeaseDeposits(lease)));
             } else {
                 // TODO - what's the proper handling of existing application with possible app charges?
                 // Options: do nothing, add Master Deposit charges, or merge Master Deposit charges...
-                log.info("Application exists - ImportApplication skipped for prospect: {}", tenantId);
+                log.info("Found Application with fees - ImportApplication skipped for prospect: {}", tenantId);
             }
         }
 
@@ -438,13 +436,10 @@ public class YardiGuestManagementService extends YardiAbstractService {
 
     private List<Deposit> getLeaseDeposits(Lease lease) {
         List<Deposit> deposits = new ArrayList<>();
-        try {
-            List<BillableItem> products = new ArrayList<>(lease.currentTerm().version().leaseProducts().featureItems());
-            products.add(lease.currentTerm().version().leaseProducts().serviceItem());
-            for (BillableItem product : products) {
-                deposits.addAll(ServerSideFactory.create(DepositFacade.class).createRequiredDeposits(product));
-            }
-        } catch (Throwable ignore) {
+        List<BillableItem> products = new ArrayList<>(lease.currentTerm().version().leaseProducts().featureItems());
+        products.add(lease.currentTerm().version().leaseProducts().serviceItem());
+        for (BillableItem product : products) {
+            deposits.addAll(product.deposits());
         }
         return deposits;
     }

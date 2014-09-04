@@ -377,6 +377,19 @@ public class YardiGuestProcessor {
         return app;
     }
 
+    public List<Charge> getApplicationCharges(LeaseApplication la) {
+        List<Charge> charges = new ArrayList<>();
+        for (LALease lease : la.getLALease()) {
+            if (lease == null || lease.getAccountingData() == null) {
+                continue;
+            }
+            for (ChargeSet chargeSet : lease.getAccountingData().getChargeSet()) {
+                charges.addAll(chargeSet.getCharge());
+            }
+        }
+        return charges;
+    }
+
     private Charge getAppFee(BigDecimal amount, String chargeCode, String description) {
         Charge charge = new Charge();
         com.yardi.entity.leaseapp30.Identification chargeId = new com.yardi.entity.leaseapp30.Identification();
