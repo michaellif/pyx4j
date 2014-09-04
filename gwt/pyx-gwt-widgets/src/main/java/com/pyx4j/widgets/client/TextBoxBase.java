@@ -185,13 +185,11 @@ public abstract class TextBoxBase extends Composite implements ITextWidget, Wate
 
     @Override
     public void addStyleDependentName(String styleSuffix) {
-        super.addStyleDependentName(styleSuffix);
         textBoxWidget.addStyleDependentName(styleSuffix);
     }
 
     @Override
     public void removeStyleDependentName(String styleSuffix) {
-        super.removeStyleDependentName(styleSuffix);
         textBoxWidget.removeStyleDependentName(styleSuffix);
     }
 
