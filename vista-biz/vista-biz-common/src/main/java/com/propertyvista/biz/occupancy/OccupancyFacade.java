@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011- All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -58,7 +58,7 @@ public interface OccupancyFacade {
 
     /**
      * Applied to {@link Status#pending}: convert's it to offMarket
-     * 
+     *
      * @param unit
      * @param type
      *            not {@link OffMarketType#construction}
@@ -69,7 +69,7 @@ public interface OccupancyFacade {
 
     /**
      * Applied to {@link Status#pending}
-     * 
+     *
      * @param renovationEndDate
      */
     void scopeRenovation(Key unitId, LogicalDate renovationEndDate);
@@ -95,7 +95,7 @@ public interface OccupancyFacade {
 
     /**
      * make make vacant can be done if there are no "leased" or "reserved" segments in the future.
-     * 
+     *
      * @return minimal vacantFrom range, for makeVacant operation, or null if it cannot be done
      */
     MakeVacantConstraintsDTO getMakeVacantConstraints(Key unitId);
@@ -121,7 +121,7 @@ public interface OccupancyFacade {
 
     // Used only in Yardi for now
     /**
-     * 
+     *
      * @param unit
      * @param availableForRent
      * @return true if the availability has been modified
@@ -138,7 +138,7 @@ public interface OccupancyFacade {
 
     /**
      * Defines the ending date of a lease, and sets the rest of unit occupancy as {@link Status#pending}
-     * 
+     *
      * @param moveOutDate
      *            a last day of of the lease: a <code>leased</code> occupancy segment that is connected to current lease will end on this date (inclusive)
      */
@@ -153,5 +153,7 @@ public interface OccupancyFacade {
      * Lease availability.
      */
     boolean isAvailableForExistingLease(Key unitId);
+
+    Lease retriveCurrentLease(AptUnit unitId);
 
 }

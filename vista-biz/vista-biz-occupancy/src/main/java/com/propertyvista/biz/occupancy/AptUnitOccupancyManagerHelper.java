@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011- All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -30,6 +30,7 @@ import com.pyx4j.gwt.server.DateUtils;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.property.asset.unit.occupancy.AptUnitOccupancySegment;
 import com.propertyvista.domain.property.asset.unit.occupancy.AptUnitOccupancySegment.Status;
+import com.propertyvista.domain.tenant.lease.Lease;
 
 /**
  * This class contains utility methods for unit occupancy manager.
@@ -100,7 +101,7 @@ public class AptUnitOccupancyManagerHelper {
     /**
      * Must be applied only to segments with valid PK. Works with the persistence: i.e. changes to the <code>segment</code> are persisted in the DB, and the new
      * segment that is created during split is also persisted in the DB.
-     * 
+     *
      * @param segment
      * @param splitDay
      * @param handler
@@ -144,7 +145,7 @@ public class AptUnitOccupancyManagerHelper {
     }
 
     /**
-     * 
+     *
      * @param unit
      * @param dateContainedByTheFirstSegment
      *            the first segment in the retrieved list must contain this date
@@ -155,7 +156,7 @@ public class AptUnitOccupancyManagerHelper {
     }
 
     /**
-     * 
+     *
      * @param unit
      * @param dateContainedByTheFirstSegment
      *            the first segment in the retrieved list must contain this date
@@ -168,7 +169,7 @@ public class AptUnitOccupancyManagerHelper {
     }
 
     /**
-     * 
+     *
      * @param unit
      * @param dateContainedByTheFirstSegment
      *            the first segment in the retrieved list must contain this date
@@ -181,7 +182,7 @@ public class AptUnitOccupancyManagerHelper {
     }
 
     /**
-     * 
+     *
      * @param unit
      * @param dateContainedByTheFirstSegment
      *            the first segment in the retrieved list must contain this date
@@ -219,7 +220,7 @@ public class AptUnitOccupancyManagerHelper {
 
     /**
      * Retrieve occupancy segment for a <code>unit</code> that contains <code>contained</code> date.
-     * 
+     *
      * @param unit
      * @param contained
      * @return
@@ -259,5 +260,42 @@ public class AptUnitOccupancyManagerHelper {
         boolean isMergeable(AptUnitOccupancySegment s1, AptUnitOccupancySegment s2);
 
         void onMerged(AptUnitOccupancySegment merged, AptUnitOccupancySegment s1, AptUnitOccupancySegment s2);
+    }
+
+    public static Lease retriveCurrentLease(AptUnit unitId) {
+        {
+            EntityQueryCriteria<Lease> criteria = EntityQueryCriteria.create(Lease.class);
+            criteria.eq(criteria.proto().unit(), unitId);
+            criteria.in(criteria.proto().status(), Lease.Status.Active);
+            // set sorting by 'from date' to get last active lease first.
+            criteria.desc(criteria.proto().leaseFrom());
+            Lease lease = Persistence.service().retrieve(criteria);
+            if (lease != null) {
+                return lease;
+            }
+        }
+
+        // No Active Lease, return all the rest
+        {
+            EntityQueryCriteria<Lease> criteria = EntityQueryCriteria.create(Lease.class);
+            criteria.eq(criteria.proto().unit(), unitId);
+            criteria.in(criteria.proto().status(), Lease.Status.current());
+            // set sorting by 'from date' to get last active lease first:
+            criteria.desc(criteria.proto().leaseFrom());
+            Lease lease = Persistence.service().retrieve(criteria);
+            if (lease != null) {
+                return lease;
+            }
+        }
+
+        // Just find Present.
+        {
+            EntityQueryCriteria<Lease> criteria = EntityQueryCriteria.create(Lease.class);
+            criteria.eq(criteria.proto().unit(), unitId);
+            criteria.in(criteria.proto().status(), Lease.Status.present());
+            // set sorting by 'from date' to get last active lease first:
+            criteria.desc(criteria.proto().leaseFrom());
+            return Persistence.service().retrieve(criteria);
+        }
     }
 }

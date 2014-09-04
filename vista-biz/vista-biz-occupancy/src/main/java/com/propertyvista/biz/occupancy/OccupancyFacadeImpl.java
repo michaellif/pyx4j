@@ -861,4 +861,9 @@ public class OccupancyFacadeImpl implements OccupancyFacade {
         Persistence.service().merge(segment);
     }
 
+    @Override
+    public Lease retriveCurrentLease(AptUnit unitId) {
+        return AptUnitOccupancyManagerHelper.retriveCurrentLease(unitId);
+    }
+
 }
