@@ -67,7 +67,7 @@ public class VistaTestDBSetup {
             ServerSideConfiguration.setInstance(initOnce);
 
             boolean forceSlowTests = (System.getProperty("test.db.slow") != null);
-            //forceSlowTests = true;
+            forceSlowTests = true;
             if (forceSlowTests) {
                 VistaTestsConnectionPoolConfiguration.initSlowTests();
                 prepareSlowPersistenceServices();
@@ -152,7 +152,7 @@ public class VistaTestDBSetup {
                         @Override
                         public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
                             if (slowPersistenceMethods.contains(method.getName())) {
-                                Thread.sleep(700);
+                                Thread.sleep(501);
                             }
                             try {
                                 return method.invoke(origService, args);
