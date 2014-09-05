@@ -140,15 +140,15 @@ class ServiceItemFolder extends VistaBoxFolder<ProductItem> {
         protected IsWidget createContent() {
             FormPanel formPanel = new FormPanel(this);
 
-            formPanel.append(Location.Left, proto().name()).decorate();
             formPanel.append(Location.Left, proto().element(), buildingElement).decorate();
+            formPanel.append(Location.Left, proto().name()).decorate();
             formPanel.append(Location.Left, proto().description()).decorate();
 
             formPanel.append(Location.Right, proto().price()).decorate().componentWidth(100);
-            formPanel.append(Location.Right, proto().yardiDepositLMR()).decorate().componentWidth(100);
             formPanel.append(Location.Right, proto().depositLMR()).decorate().componentWidth(100);
             formPanel.append(Location.Right, proto().depositMoveIn()).decorate().componentWidth(100);
             formPanel.append(Location.Right, proto().depositSecurity()).decorate().componentWidth(100);
+            formPanel.append(Location.Right, proto().yardiDepositLMR()).decorate().componentWidth(100);
 
             return formPanel;
         }

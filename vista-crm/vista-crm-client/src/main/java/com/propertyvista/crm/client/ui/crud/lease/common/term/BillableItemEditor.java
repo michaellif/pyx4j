@@ -473,7 +473,7 @@ public class BillableItemEditor extends CForm<BillableItem> {
         public List<FolderColumnDescriptor> columns() {
             return Arrays.asList(//@formatter:off
                 new FolderColumnDescriptor(proto().type(), "15em"),
-                new FolderColumnDescriptor(proto().amount(), "6em"),
+                new FolderColumnDescriptor(proto().amount(), "10em"),
                 new FolderColumnDescriptor(proto().description(), "25em"));
             //@formatter:on
         }

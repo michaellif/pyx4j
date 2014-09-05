@@ -60,7 +60,7 @@ public class VehicleDataEditor extends CForm<Vehicle> {
         get(proto().country()).addValueChangeHandler(new ValueChangeHandler<ISOCountry>() {
             @Override
             public void onValueChange(ValueChangeEvent<ISOCountry> event) {
-                province.setCountry(event.getValue());
+                onCountrySelected(event.getValue());
             }
         });
 
@@ -87,5 +87,41 @@ public class VehicleDataEditor extends CForm<Vehicle> {
         get(proto().year()).setMockValue(new LogicalDate());
         get(proto().plateNumber()).setMockValue("LastTimeDrive");
         get(proto().province()).setMockValueByString("Ontario");
+    }
+
+    @Override
+    protected void onValueSet(boolean populate) {
+        super.onValueSet(populate);
+        onCountrySelected(getValue().country().getValue());
+    }
+
+    private void onCountrySelected(ISOCountry country) {
+        province.setCountry(country);
+        if (country == null) {
+            applyDefaultSettings();
+            province.setVisible(false);
+        } else {
+            switch (country) {
+            case Canada:
+                province.setVisible(true);
+                province.setTitle("Province");
+                break;
+            case UnitedStates:
+                province.setVisible(true);
+                province.setTitle("State");
+                break;
+            case UnitedKingdom:
+                province.setVisible(false);
+                break;
+            default:
+                applyDefaultSettings();
+            }
+        }
+    }
+
+    // International
+    private void applyDefaultSettings() {
+        province.setVisible(true);
+        province.setTitle(proto().province().getMeta().getCaption());
     }
 }
