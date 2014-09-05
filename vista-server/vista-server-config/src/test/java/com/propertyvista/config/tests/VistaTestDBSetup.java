@@ -67,7 +67,7 @@ public class VistaTestDBSetup {
             ServerSideConfiguration.setInstance(initOnce);
 
             boolean forceSlowTests = (System.getProperty("test.db.slow") != null);
-            forceSlowTests = true;
+            //forceSlowTests = true;
             if (forceSlowTests) {
                 VistaTestsConnectionPoolConfiguration.initSlowTests();
                 prepareSlowPersistenceServices();
