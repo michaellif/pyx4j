@@ -63,6 +63,7 @@ import com.propertyvista.crm.client.ui.components.boxes.LeaseTermSelectorDialog;
 import com.propertyvista.crm.client.ui.components.boxes.ReasonBox;
 import com.propertyvista.crm.client.ui.crud.billing.adjustments.LeaseAdjustmentLister;
 import com.propertyvista.crm.client.ui.crud.billing.bill.BillLister;
+import com.propertyvista.crm.client.ui.crud.lease.common.LeaseViewerViewBase;
 import com.propertyvista.crm.client.ui.crud.lease.common.LeaseViewerViewImplBase;
 import com.propertyvista.crm.client.ui.crud.lease.financial.deposit.DepositLifecycleLister;
 import com.propertyvista.crm.client.ui.crud.maintenance.MaintenanceRequestLister;
@@ -109,6 +110,10 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
     private final ILister<LeaseAdjustment> adjustmentLister;
 
     private final ILister<MaintenanceRequestDTO> maintenanceLister;
+
+    private final MenuItem viewFutureTerm;
+
+    private final MenuItem viewHistoricTerms;
 
     private final Button leaseAgreementButton;
 
@@ -186,6 +191,20 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
 
         leaseAgreementButton.setMenu(leaseAgreementDocumentMenu);
         addHeaderToolbarItem(leaseAgreementButton);
+
+        termsMenu.addItem(viewFutureTerm = new MenuItem(i18n.tr("Future"), new Command() {
+            @Override
+            public void execute() {
+                ((LeaseViewerViewBase.Presenter) getPresenter()).viewTerm(getForm().getValue().nextTerm());
+            }
+        }));
+
+        termsMenu.addItem(viewHistoricTerms = new MenuItem(i18n.tr("Historic..."), new Command() {
+            @Override
+            public void execute() {
+                viewHistoricTermsExecuter();
+            }
+        }));
 
         // Views:
 
@@ -392,6 +411,22 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
         }
     }
 
+    private void viewHistoricTermsExecuter() {
+        new LeaseTermSelectorDialog(this) {
+            {
+                setParentFiltering(getForm().getValue().getPrimaryKey());
+                addFilter(PropertyCriterion.eq(proto().status(), LeaseTerm.Status.Historic));
+            }
+
+            @Override
+            public void onClickOk() {
+                if (!getSelectedItem().isNull()) {
+                    ((LeaseViewerViewBase.Presenter) getPresenter()).viewTerm(getSelectedItem());
+                }
+            }
+        }.show();
+    }
+
     private void sendMailActionExecuter() {
         ((LeaseViewerView.Presenter) getPresenter()).retrieveUsers(new DefaultAsyncCallback<List<LeaseTermParticipant<?>>>() {
             @Override
@@ -526,6 +561,9 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
 
     @Override
     public void reset() {
+        viewFutureTerm.setVisible(false);
+        viewHistoricTerms.setVisible(false);
+
         setViewVisible(viewApplication, false);
 
         setActionVisible(sendMailAction, false);
@@ -552,6 +590,9 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
     @Override
     public void populate(LeaseDTO value) {
         super.populate(value);
+
+        viewFutureTerm.setVisible(!value.nextTerm().isNull());
+        viewHistoricTerms.setVisible(value.historyPresent().getValue(false));
 
         Lease.Status status = value.status().getValue();
 

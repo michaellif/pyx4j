@@ -33,7 +33,6 @@ import com.propertyvista.biz.occupancy.OccupancyFacade;
 import com.propertyvista.biz.tenant.lease.LeaseFacade;
 import com.propertyvista.crm.rpc.services.lease.common.LeaseViewerCrudServiceBase;
 import com.propertyvista.domain.tenant.lease.Lease;
-import com.propertyvista.domain.tenant.lease.LeaseTerm;
 import com.propertyvista.domain.tenant.lease.LeaseTermGuarantor;
 import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
 import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
@@ -70,12 +69,6 @@ public abstract class LeaseViewerCrudServiceBaseImpl<DTO extends LeaseDTO> exten
 
             checkUnitMoveOut(to);
         }
-
-        EntityQueryCriteria<LeaseTerm> criteria = EntityQueryCriteria.create(LeaseTerm.class);
-        criteria.eq(criteria.proto().lease(), in);
-        criteria.ne(criteria.proto().id(), in.currentTerm().getPrimaryKey());
-        criteria.ne(criteria.proto().status(), LeaseTerm.Status.Offer);
-        to.historyPresent().setValue(Persistence.service().exists(criteria));
     }
 
     @Override

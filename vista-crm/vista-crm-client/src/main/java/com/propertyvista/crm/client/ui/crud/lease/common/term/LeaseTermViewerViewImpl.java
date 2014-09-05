@@ -89,7 +89,7 @@ public class LeaseTermViewerViewImpl extends CrmViewerViewImplBase<LeaseTermDTO>
         } else {
             boolean movedOutLease = !value.lease().actualMoveOut().isNull();
 
-            setEditingVisible(!value.lease().status().getValue().isFormer() && !movedOutLease && value.status().getValue() != Status.AcceptedOffer);
+            setEditingVisible(!value.lease().status().getValue().isFormer() && !movedOutLease && value.status().getValue() != Status.Historic);
             setFinalizationVisible(isFinalizationVisible() && value.lease().status().getValue().isCurrent() && !movedOutLease);
 
             if (VistaTODO.VISTA_1789_Renew_Lease) {

@@ -23,7 +23,6 @@ import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.MenuItem;
 import com.google.gwt.user.client.ui.Widget;
 
-import com.pyx4j.entity.core.criterion.PropertyCriterion;
 import com.pyx4j.entity.security.DataModelPermission;
 import com.pyx4j.forms.client.ui.CIntegerField;
 import com.pyx4j.i18n.shared.I18n;
@@ -35,7 +34,6 @@ import com.pyx4j.widgets.client.Button.ButtonMenuBar;
 import com.pyx4j.widgets.client.Button.SecureMenuItem;
 import com.pyx4j.widgets.client.dialog.OkCancelDialog;
 
-import com.propertyvista.crm.client.ui.components.boxes.LeaseTermSelectorDialog;
 import com.propertyvista.crm.client.ui.crud.CrmViewerViewImplBase;
 import com.propertyvista.crm.client.ui.crud.lease.LeaseViewerViewImpl;
 import com.propertyvista.crm.client.visor.paps.PreauthorizedPaymentsVisorController;
@@ -44,7 +42,6 @@ import com.propertyvista.crm.rpc.dto.tenant.PreauthorizedPaymentsDTO;
 import com.propertyvista.domain.financial.BillingAccount;
 import com.propertyvista.domain.payment.AutopayAgreement;
 import com.propertyvista.domain.tenant.lease.Lease;
-import com.propertyvista.domain.tenant.lease.LeaseTerm;
 import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
 import com.propertyvista.dto.LeaseDTO;
 import com.propertyvista.dto.PaymentRecordDTO;
@@ -57,13 +54,11 @@ public class LeaseViewerViewImplBase<DTO extends LeaseDTO> extends CrmViewerView
 
     protected final Button termsButton;
 
+    protected final Button.ButtonMenuBar termsMenu = new ButtonMenuBar();
+
     private final Button papsButton;
 
     private final Button.ButtonMenuBar papsMenu;
-
-    private final MenuItem viewFutureTerm;
-
-    private final MenuItem viewHistoricTerms;
 
     private final SecureMenuItem reserveUnit;
 
@@ -79,29 +74,12 @@ public class LeaseViewerViewImplBase<DTO extends LeaseDTO> extends CrmViewerView
         // Buttons:
 
         termsButton = new Button(i18n.tr("Terms"));
-        Button.ButtonMenuBar termsMenu = new ButtonMenuBar();
-
         termsMenu.addItem(new MenuItem(i18n.tr("Current"), new Command() {
             @Override
             public void execute() {
                 ((LeaseViewerViewBase.Presenter) getPresenter()).viewTerm(getForm().getValue().currentTerm());
             }
         }));
-
-        termsMenu.addItem(viewFutureTerm = new MenuItem(i18n.tr("Future"), new Command() {
-            @Override
-            public void execute() {
-                ((LeaseViewerViewBase.Presenter) getPresenter()).viewTerm(getForm().getValue().nextTerm());
-            }
-        }));
-
-        termsMenu.addItem(viewHistoricTerms = new MenuItem(i18n.tr("Historic..."), new Command() {
-            @Override
-            public void execute() {
-                viewHistoricTermsExecuter();
-            }
-        }));
-
         termsButton.setMenu(termsMenu);
         addHeaderToolbarItem(termsButton.asWidget());
 
@@ -138,22 +116,6 @@ public class LeaseViewerViewImplBase<DTO extends LeaseDTO> extends CrmViewerView
         addAction(newPaymentAction);
     }
 
-    private void viewHistoricTermsExecuter() {
-        new LeaseTermSelectorDialog(LeaseViewerViewImplBase.this) {
-            {
-                setParentFiltering(getForm().getValue().getPrimaryKey());
-                addFilter(PropertyCriterion.ne(proto().status(), LeaseTerm.Status.Offer));
-            }
-
-            @Override
-            public void onClickOk() {
-                if (!getSelectedItem().isNull()) {
-                    ((LeaseViewerViewBase.Presenter) getPresenter()).viewTerm(getSelectedItem());
-                }
-            }
-        }.show();
-    }
-
     private void reserveUnitExecuter() {
         new UnitReserveBox() {
             @Override
@@ -174,8 +136,6 @@ public class LeaseViewerViewImplBase<DTO extends LeaseDTO> extends CrmViewerView
 
     @Override
     public void reset() {
-        viewFutureTerm.setVisible(false);
-
         papsButton.setVisible(false);
 
         setActionVisible(reserveUnit, false);
@@ -188,9 +148,6 @@ public class LeaseViewerViewImplBase<DTO extends LeaseDTO> extends CrmViewerView
     @Override
     public void populate(DTO value) {
         super.populate(value);
-
-        viewFutureTerm.setVisible(!value.nextTerm().isNull());
-        viewHistoricTerms.setVisible(value.historyPresent().getValue(false));
 
         Lease.Status status = value.status().getValue();
         boolean reservationPreconditions = (!value.unit().isNull() && status.isDraft() && status != Lease.Status.ExistingLease);

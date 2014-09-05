@@ -14,6 +14,8 @@
 package com.propertyvista.crm.server.services.lease;
 
 import java.math.BigDecimal;
+import java.util.Date;
+import java.util.EnumSet;
 import java.util.Vector;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
@@ -146,7 +148,7 @@ public class LeaseApplicationViewerCrudServiceImpl extends LeaseViewerCrudServic
         assert (!dto.currentTerm().isNull());
 
         if (dto.leaseApplication().status().getValue() == Status.Approved) {
-            dto.currentTerm().set(Persistence.secureRetrieve(LeaseTerm.class, dto.currentTerm().getPrimaryKey().asVersionKey(dto.approvalDate().getValue())));
+            dto.currentTerm().set(loadHistoricTermVersion(dto, dto.approvalDate().getValue()));
         } else {
             dto.currentTerm().set(Persistence.retriveFinalOrDraft(LeaseTerm.class, dto.currentTerm().getPrimaryKey(), AttachLevel.Attached));
         }
@@ -156,6 +158,24 @@ public class LeaseApplicationViewerCrudServiceImpl extends LeaseViewerCrudServic
 
         Persistence.service().retrieveMember(dto.currentTerm().version().tenants());
         Persistence.service().retrieveMember(dto.currentTerm().version().guarantors());
+    }
+
+    private LeaseTerm loadHistoricTermVersion(LeaseApplicationDTO dto, Date forDate) {
+        LeaseTerm result = null;
+
+        EntityQueryCriteria<LeaseTerm> criteria = EntityQueryCriteria.create(LeaseTerm.class);
+        criteria.eq(criteria.proto().lease().id(), dto.getPrimaryKey());
+        criteria.in(criteria.proto().status(), EnumSet.of(LeaseTerm.Status.Current, LeaseTerm.Status.Historic));
+        criteria.asc(criteria.proto().creationDate());
+
+        for (LeaseTerm term : Persistence.service().query(criteria)) {
+            result = Persistence.secureRetrieve(LeaseTerm.class, term.getPrimaryKey().asVersionKey(forDate));
+            if (!result.version().isNull()) {
+                break; // found
+            }
+        }
+
+        return result;
     }
 
     private void loadLeaseParticipant(Lease lease, LeaseApplicationDTO dto, LeaseTermParticipant<? extends LeaseParticipant<?>> participantId) {

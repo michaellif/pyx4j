@@ -118,6 +118,11 @@ public class LeaseViewerCrudServiceImpl extends LeaseViewerCrudServiceBaseImpl<L
     protected void enhanceRetrieved(Lease in, LeaseDTO to, RetrieveTarget retrieveTarget) {
         super.enhanceRetrieved(in, to, retrieveTarget);
 
+        EntityQueryCriteria<LeaseTerm> criteria = EntityQueryCriteria.create(LeaseTerm.class);
+        criteria.eq(criteria.proto().lease(), in);
+        criteria.eq(criteria.proto().status(), LeaseTerm.Status.Historic);
+        to.historyPresent().setValue(Persistence.service().exists(criteria));
+
         if (Lease.Status.isApplicationUnitSelected(to)) {
             to.transactionHistory().set(ServerSideFactory.create(ARFacade.class).getTransactionHistory(to.billingAccount()));
             to.carryforwardBalance().setValue(to.billingAccount().carryforwardBalance().getValue());
