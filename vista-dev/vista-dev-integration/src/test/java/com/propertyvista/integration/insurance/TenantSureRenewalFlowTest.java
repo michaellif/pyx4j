@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011-2012 All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -60,12 +60,13 @@ public class TenantSureRenewalFlowTest extends InsuranceTestBase {
         InsurancePaymentMethod paymentMethod = createInsurancePaymentMethod(getLease()._applicant());
         ServerSideFactory.create(TenantSureFacade.class).savePaymentMethod(paymentMethod, getLease()._applicant());
         Persistence.service().commit();
+        longRunningTestTransactionSplit();
 
         TenantSureInsurancePolicy tenantSurePolicy = Persistence.service().retrieve(TenantSureInsurancePolicy.class, //
                 ServerSideFactory.create(TenantSureFacade.class).buyInsurance(quote, getLease()._applicant(), EntityFactory.create(CustomerSignature.class)));
 
         new TenantSureTransactionTester(tenantSurePolicy)//
-                .count(1) //    
+                .count(1) //
                 .lastRecordStatus(TenantSureTransaction.TransactionStatus.Cleared) //
                 .lastRecordPaymentDue("2011-01-20") //
                 .lastRecordTransactionDate("2011-01-20");
@@ -73,14 +74,14 @@ public class TenantSureRenewalFlowTest extends InsuranceTestBase {
         advanceSysDate("2011-12-21");
 
         new TenantSureTransactionTester(tenantSurePolicy)//
-                .count(12) //    
+                .count(12) //
                 .lastRecordStatus(TenantSureTransaction.TransactionStatus.Cleared) //
                 .lastRecordTransactionDate("2011-12-21");
 
         advanceSysDate("2012-01-21");
 
         new TenantSureTransactionTester(tenantSurePolicy)//
-                .count(12) //    
+                .count(12) //
                 .lastRecordTransactionDate("2011-12-21");
 
         TenantSureInsurancePolicy tenantSurePolicyNew = Persistence.service().retrieve(TenantSureInsurancePolicy.class,
@@ -96,15 +97,17 @@ public class TenantSureRenewalFlowTest extends InsuranceTestBase {
         assertEquals("Original renewal", tenantSurePolicy.renewal().getPrimaryKey(), tenantSurePolicyNew.getPrimaryKey());
 
         new TenantSureTransactionTester(tenantSurePolicyNew)//
-                .count(1) //    
+                .count(1) //
                 .lastRecordStatus(TenantSureTransaction.TransactionStatus.Cleared) //
                 .lastRecordPaymentDue("2012-01-20") //
                 .lastRecordTransactionDate("2012-01-20");
 
+        longRunningTestTransactionSplit();
+
         advanceSysDate("2013-01-22");
 
         new TenantSureTransactionTester(tenantSurePolicyNew)//
-                .count(12) //    
+                .count(12) //
                 .lastRecordTransactionDate("2012-12-21");
     }
 
@@ -126,7 +129,7 @@ public class TenantSureRenewalFlowTest extends InsuranceTestBase {
                 ServerSideFactory.create(TenantSureFacade.class).buyInsurance(quote, getLease()._applicant(), EntityFactory.create(CustomerSignature.class)));
 
         new TenantSureTransactionTester(tenantSurePolicy)//
-                .count(1) //    
+                .count(1) //
                 .lastRecordStatus(TenantSureTransaction.TransactionStatus.Cleared) //
                 .lastRecordPaymentDue("2011-01-20") //
                 .lastRecordTransactionDate("2011-01-20");
@@ -134,7 +137,7 @@ public class TenantSureRenewalFlowTest extends InsuranceTestBase {
         advanceSysDate("2011-12-21");
 
         new TenantSureTransactionTester(tenantSurePolicy)//
-                .count(12) //    
+                .count(12) //
                 .lastRecordStatus(TenantSureTransaction.TransactionStatus.Cleared) //
                 .lastRecordTransactionDate("2011-12-21");
 
@@ -146,7 +149,7 @@ public class TenantSureRenewalFlowTest extends InsuranceTestBase {
 
         // Old no payments
         new TenantSureTransactionTester(tenantSurePolicy)//
-                .count(12) //    
+                .count(12) //
                 .lastRecordTransactionDate("2011-12-21");
 
         TenantSureInsurancePolicy tenantSurePolicyNew = Persistence.service().retrieve(TenantSureInsurancePolicy.class,
