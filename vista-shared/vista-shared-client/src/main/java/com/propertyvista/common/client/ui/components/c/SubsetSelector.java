@@ -24,6 +24,7 @@ import com.google.gwt.event.dom.client.BlurHandler;
 import com.google.gwt.event.dom.client.FocusEvent;
 import com.google.gwt.event.dom.client.FocusHandler;
 import com.google.gwt.event.dom.client.KeyDownHandler;
+import com.google.gwt.event.dom.client.KeyPressHandler;
 import com.google.gwt.event.dom.client.KeyUpHandler;
 import com.google.gwt.event.logical.shared.HasValueChangeHandlers;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
@@ -182,6 +183,12 @@ public class SubsetSelector<OPTION_TYPE> extends SimplePanel implements IFocusWi
     }
 
     @Override
+    public HandlerRegistration addKeyPressHandler(KeyPressHandler handler) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
     public int getTabIndex() {
         if (optionsState.values().iterator().hasNext()) {
             Object next = optionsState.values().iterator().next();
@@ -245,4 +252,5 @@ public class SubsetSelector<OPTION_TYPE> extends SimplePanel implements IFocusWi
             }
         }
     }
+
 }
