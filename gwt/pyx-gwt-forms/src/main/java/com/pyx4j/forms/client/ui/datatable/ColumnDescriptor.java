@@ -220,6 +220,11 @@ public class ColumnDescriptor {
             return this;
         }
 
+        public Builder titlePrefix(String columnTitlePrefix) {
+            this.columnTitle = columnTitlePrefix + " " + columnTitle;
+            return this;
+        }
+
         public Builder sortable(boolean sortable) {
             this.sortable = sortable;
             return this;
