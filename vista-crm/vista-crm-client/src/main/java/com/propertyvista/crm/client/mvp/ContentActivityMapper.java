@@ -26,7 +26,6 @@ import com.pyx4j.site.rpc.AppPlace;
 import com.pyx4j.site.rpc.CrudAppPlace;
 import com.pyx4j.site.rpc.ReportsAppPlace;
 
-import com.propertyvista.crm.client.activity.NotificationsActivity;
 import com.propertyvista.crm.client.activity.RuntimeErrorActivity;
 import com.propertyvista.crm.client.activity.WelcomeActivity;
 import com.propertyvista.crm.client.activity.crud.account.AccountEditorActivity;
@@ -239,12 +238,15 @@ import com.propertyvista.crm.client.activity.policies.paymenttypeselection.Payme
 import com.propertyvista.crm.client.activity.policies.pet.PetPolicyEditorActivity;
 import com.propertyvista.crm.client.activity.policies.pet.PetPolicyListerActivity;
 import com.propertyvista.crm.client.activity.policies.pet.PetPolicyViewerActivity;
+import com.propertyvista.crm.client.activity.policies.portal.prospect.ProspectPortalPolicyEditorActivity;
+import com.propertyvista.crm.client.activity.policies.portal.prospect.ProspectPortalPolicyListerActivity;
+import com.propertyvista.crm.client.activity.policies.portal.prospect.ProspectPortalPolicyViewerActivity;
+import com.propertyvista.crm.client.activity.policies.portal.resident.ResidentPortalPolicyEditorActivity;
+import com.propertyvista.crm.client.activity.policies.portal.resident.ResidentPortalPolicyListerActivity;
+import com.propertyvista.crm.client.activity.policies.portal.resident.ResidentPortalPolicyViewerActivity;
 import com.propertyvista.crm.client.activity.policies.producttax.ProductTaxPolicyEditorActivity;
 import com.propertyvista.crm.client.activity.policies.producttax.ProductTaxPolicyListerActivity;
 import com.propertyvista.crm.client.activity.policies.producttax.ProductTaxPolicyViewerActivity;
-import com.propertyvista.crm.client.activity.policies.prospectportal.ProspectPortalPolicyEditorActivity;
-import com.propertyvista.crm.client.activity.policies.prospectportal.ProspectPortalPolicyListerActivity;
-import com.propertyvista.crm.client.activity.policies.prospectportal.ProspectPortalPolicyViewerActivity;
 import com.propertyvista.crm.client.activity.policies.restrictions.RestrictionsPolicyEditorActivity;
 import com.propertyvista.crm.client.activity.policies.restrictions.RestrictionsPolicyListerActivity;
 import com.propertyvista.crm.client.activity.policies.restrictions.RestrictionsPolicyViewerActivity;
@@ -286,7 +288,6 @@ import com.propertyvista.crm.rpc.CrmSiteMap.LegalAndCollections;
 import com.propertyvista.crm.rpc.CrmSiteMap.Login;
 import com.propertyvista.crm.rpc.CrmSiteMap.LoginWithToken;
 import com.propertyvista.crm.rpc.CrmSiteMap.Marketing;
-import com.propertyvista.crm.rpc.CrmSiteMap.Notifications;
 import com.propertyvista.crm.rpc.CrmSiteMap.Organization;
 import com.propertyvista.crm.rpc.CrmSiteMap.PasswordChange;
 import com.propertyvista.crm.rpc.CrmSiteMap.PasswordReset;
@@ -1346,6 +1347,19 @@ public class ContentActivityMapper implements AppActivityMapper {
                             activity = new ProspectPortalPolicyViewerActivity(crudPlace);
                             break;
                         }
+                    } else if (crudPlace instanceof Administration.Policies.ResidentPortal) {
+                        switch (crudPlace.getType()) {
+                        case lister:
+                            activity = new ResidentPortalPolicyListerActivity(crudPlace);
+                            break;
+                        case editor:
+                            activity = new ResidentPortalPolicyEditorActivity(crudPlace);
+                            break;
+                        case viewer:
+                            activity = new ResidentPortalPolicyViewerActivity(crudPlace);
+                            break;
+                        }
+
 // - Security
 
                     } else if (crudPlace instanceof Account.LoginAttemptsLog) {

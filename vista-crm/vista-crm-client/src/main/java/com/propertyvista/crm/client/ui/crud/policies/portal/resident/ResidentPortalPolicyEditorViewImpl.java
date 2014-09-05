@@ -1,5 +1,5 @@
 /*
- * (C) Copyright Property Vista Software Inc. 2011- All Rights Reserved.
+ * (C) Copyright Property Vista Software Inc. 2011-2015 All Rights Reserved.
  *
  * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
  * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
@@ -7,19 +7,19 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Jan 30, 2014
- * @author VladL
+ * Created on Sep 5, 2014
+ * @author vlads
  * @version $Id$
  */
-package com.propertyvista.crm.client.ui.crud.policies.prospectportal;
+package com.propertyvista.crm.client.ui.crud.policies.portal.resident;
 
 import com.propertyvista.crm.client.ui.crud.policies.common.PolicyEditorViewImplBase;
-import com.propertyvista.domain.policy.dto.ProspectPortalPolicyDTO;
+import com.propertyvista.domain.policy.dto.ResidentPortalPolicyDTO;
 
-public class ProspectPortalPolicyEditorViewImpl extends PolicyEditorViewImplBase<ProspectPortalPolicyDTO> implements ProspectPortalPolicyEditorView {
+public class ResidentPortalPolicyEditorViewImpl extends PolicyEditorViewImplBase<ResidentPortalPolicyDTO> implements ResidentPortalPolicyEditorView {
 
-    public ProspectPortalPolicyEditorViewImpl() {
-        setForm(new ProspectPortalPolicyForm(this));
+    public ResidentPortalPolicyEditorViewImpl() {
+        setForm(new ResidentPortalPolicyForm(this));
     }
 
 }

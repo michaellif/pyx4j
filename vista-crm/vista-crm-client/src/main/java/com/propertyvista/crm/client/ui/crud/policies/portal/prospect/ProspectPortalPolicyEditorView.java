@@ -11,7 +11,7 @@
  * @author VladL
  * @version $Id$
  */
-package com.propertyvista.crm.client.ui.crud.policies.prospectportal;
+package com.propertyvista.crm.client.ui.crud.policies.portal.prospect;
 
 import com.pyx4j.site.client.ui.prime.form.IEditor;
 

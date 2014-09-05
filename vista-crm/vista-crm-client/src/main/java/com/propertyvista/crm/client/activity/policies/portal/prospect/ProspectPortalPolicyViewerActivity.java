@@ -11,22 +11,22 @@
  * @author VladL
  * @version $Id$
  */
-package com.propertyvista.crm.client.activity.policies.prospectportal;
+package com.propertyvista.crm.client.activity.policies.portal.prospect;
 
 import com.google.gwt.core.client.GWT;
 
 import com.pyx4j.site.rpc.CrudAppPlace;
 
 import com.propertyvista.crm.client.CrmSite;
-import com.propertyvista.crm.client.activity.policies.common.PolicyEditorActivityBase;
-import com.propertyvista.crm.client.ui.crud.policies.prospectportal.ProspectPortalPolicyEditorView;
+import com.propertyvista.crm.client.activity.crud.CrmViewerActivity;
+import com.propertyvista.crm.client.ui.crud.policies.portal.prospect.ProspectPortalPolicyViewerView;
 import com.propertyvista.crm.rpc.services.policies.policy.ProspectPortalPolicyCrudService;
 import com.propertyvista.domain.policy.dto.ProspectPortalPolicyDTO;
 
-public class ProspectPortalPolicyEditorActivity extends PolicyEditorActivityBase<ProspectPortalPolicyDTO> {
+public class ProspectPortalPolicyViewerActivity extends CrmViewerActivity<ProspectPortalPolicyDTO> {
 
-    public ProspectPortalPolicyEditorActivity(CrudAppPlace place) {
-        super(ProspectPortalPolicyDTO.class, place, CrmSite.getViewFactory().getView(ProspectPortalPolicyEditorView.class), GWT
-                        .<ProspectPortalPolicyCrudService> create(ProspectPortalPolicyCrudService.class));
+    public ProspectPortalPolicyViewerActivity(CrudAppPlace place) {
+        super(ProspectPortalPolicyDTO.class, place, CrmSite.getViewFactory().getView(ProspectPortalPolicyViewerView.class), GWT
+                .<ProspectPortalPolicyCrudService> create(ProspectPortalPolicyCrudService.class));
     }
 }

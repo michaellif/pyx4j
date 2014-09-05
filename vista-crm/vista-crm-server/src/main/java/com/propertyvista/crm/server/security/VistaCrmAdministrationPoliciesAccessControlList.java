@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011-2012 All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -47,6 +47,7 @@ import com.propertyvista.crm.rpc.services.policies.policy.PaymentTypeSelectionPo
 import com.propertyvista.crm.rpc.services.policies.policy.PetPolicyCrudService;
 import com.propertyvista.crm.rpc.services.policies.policy.ProductTaxPolicyCrudService;
 import com.propertyvista.crm.rpc.services.policies.policy.ProspectPortalPolicyCrudService;
+import com.propertyvista.crm.rpc.services.policies.policy.ResidentPortalPolicyCrudService;
 import com.propertyvista.crm.rpc.services.policies.policy.RestrictionsPolicyCrudService;
 import com.propertyvista.crm.rpc.services.policies.policy.TenantInsurancePolicyCrudService;
 import com.propertyvista.crm.rpc.services.policies.policy.YardiInterfacePolicyCrudService;
@@ -68,6 +69,7 @@ import com.propertyvista.domain.policy.policies.N4Policy;
 import com.propertyvista.domain.policy.policies.PaymentTypeSelectionPolicy;
 import com.propertyvista.domain.policy.policies.ProductTaxPolicy;
 import com.propertyvista.domain.policy.policies.ProspectPortalPolicy;
+import com.propertyvista.domain.policy.policies.ResidentPortalPolicy;
 import com.propertyvista.domain.policy.policies.RestrictionsPolicy;
 import com.propertyvista.domain.policy.policies.TenantInsurancePolicy;
 import com.propertyvista.domain.policy.policies.YardiInterfacePolicy;
@@ -142,6 +144,9 @@ class VistaCrmAdministrationPoliciesAccessControlList extends UIAclBuilder {
 
         grant(AdminGeneral, new IServiceExecutePermission(ProspectPortalPolicyCrudService.class));
         grant(AdminGeneral, new EntityPermission(ProspectPortalPolicy.class, ALL));
+
+        grant(AdminGeneral, new IServiceExecutePermission(ResidentPortalPolicyCrudService.class));
+        grant(AdminGeneral, new EntityPermission(ResidentPortalPolicy.class, ALL));
 
         grant(AdminGeneral, new IServiceExecutePermission(RestrictionsPolicyCrudService.class));
         grant(AdminGeneral, new EntityPermission(RestrictionsPolicy.class, ALL));

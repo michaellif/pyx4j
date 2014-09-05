@@ -590,6 +590,9 @@ public class CrmSiteMap implements SiteMap {
             public static class ProspectPortal extends CrmCrudAppPlace {
             }
 
+            public static class ResidentPortal extends CrmCrudAppPlace {
+            }
+
             public static class Restrictions extends CrmCrudAppPlace {
             }
 
