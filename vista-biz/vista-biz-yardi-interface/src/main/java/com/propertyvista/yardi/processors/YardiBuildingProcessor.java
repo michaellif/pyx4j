@@ -63,14 +63,6 @@ public class YardiBuildingProcessor {
         if (building.floorplans().getAttachLevel() != AttachLevel.Attached) {
             Persistence.service().retrieveMember(building.floorplans(), AttachLevel.Attached);
         }
-        return updateUnitForBuilding(importedUnit, building);
-
-    }
-
-    private AptUnit updateUnitForBuilding(AptUnit importedUnit, Building building) throws YardiServiceException {
-        if (building == null) {
-            throw new YardiServiceException("Unable to update units for building: null");
-        }
         return new UnitsMerger().merge(building, importedUnit, retrieveUnit(building, importedUnit.info().number().getValue()));
     }
 
