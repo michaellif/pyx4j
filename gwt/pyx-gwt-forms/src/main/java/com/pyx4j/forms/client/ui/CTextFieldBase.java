@@ -33,6 +33,7 @@ import com.pyx4j.commons.IParser;
 import com.pyx4j.forms.client.events.HasNValueChangeHandlers;
 import com.pyx4j.forms.client.events.NValueChangeEvent;
 import com.pyx4j.forms.client.events.NValueChangeHandler;
+import com.pyx4j.forms.client.validators.TextBoxParserValidator;
 
 public abstract class CTextFieldBase<DATA, WIDGET extends INativeTextComponent<DATA>> extends CTextComponent<DATA, WIDGET> implements IAcceptText,
         HasNValueChangeHandlers<String> {
@@ -43,7 +44,7 @@ public abstract class CTextFieldBase<DATA, WIDGET extends INativeTextComponent<D
 
     public CTextFieldBase() {
         super();
-
+        addComponentValidator(new TextBoxParserValidator<DATA>());
     }
 
     public void setFormatter(IFormatter<DATA, String> formatter) {

@@ -31,7 +31,6 @@ import com.pyx4j.commons.IParser;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.forms.client.validators.AbstractComponentValidator;
 import com.pyx4j.forms.client.validators.BasicValidationError;
-import com.pyx4j.forms.client.validators.TextBoxParserValidator;
 import com.pyx4j.i18n.shared.I18n;
 
 public class CDatePicker extends CTextFieldBase<LogicalDate, NDatePicker> {
@@ -51,7 +50,6 @@ public class CDatePicker extends CTextFieldBase<LogicalDate, NDatePicker> {
         setFormatter(new DateFormatter(defaultDateFormat));
         setParser(new DateParser(defaultDateFormat));
         setWatermark("MM/DD/YYYY");
-        addComponentValidator(new TextBoxParserValidator<LogicalDate>());
         setNativeComponent(new NDatePicker(this));
     }
 

@@ -43,7 +43,6 @@ public class CMoneyField extends CTextFieldBase<BigDecimal, NTextBox<BigDecimal>
         super();
         setFormatter(new MoneyFormat());
         setParser(new MoneyParser());
-        addComponentValidator(new TextBoxParserValidator<BigDecimal>());
         setNativeComponent(new NTextBox<BigDecimal>(this));
     }
 

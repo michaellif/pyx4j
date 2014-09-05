@@ -34,7 +34,7 @@ import com.pyx4j.i18n.shared.I18n;
 
 /**
  * This field is used to protect personal identity by hiding part of ID
- *
+ * 
  * NOTE - It's made generic to allow for properly typed new entity creation (see CPersonalIdentityField#parse())
  * This however should not be considered as a final solution as the new entity may also require some additional
  * business-related initialization steps...
@@ -70,7 +70,6 @@ public class CPersonalIdentityField<T extends IPersonalIdentity> extends CTextFi
     public void setPersonalIdentityFormatter(PersonalIdentityFormatter formatter) {
         setFormatter(new PersonalIdentityFormat<T>(formatter));
         setParser(new PersonalIdentityParser<T>(this, formatter));
-        addComponentValidator(new TextBoxParserValidator<T>());
     }
 
     public void addRegexValidator(String regex, String regexValidationMessage) {

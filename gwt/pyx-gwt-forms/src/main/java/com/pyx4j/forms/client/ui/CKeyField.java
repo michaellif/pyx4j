@@ -28,7 +28,6 @@ import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.commons.IFormatter;
 import com.pyx4j.commons.IParser;
 import com.pyx4j.commons.Key;
-import com.pyx4j.forms.client.validators.TextBoxParserValidator;
 import com.pyx4j.i18n.shared.I18n;
 
 public class CKeyField extends CTextFieldBase<Key, NTextBox<Key>> {
@@ -40,7 +39,6 @@ public class CKeyField extends CTextFieldBase<Key, NTextBox<Key>> {
     public CKeyField() {
         super();
         numberFormat = NumberFormat.getDecimalFormat();
-        addComponentValidator(new TextBoxParserValidator<Key>());
         setNativeComponent(new NTextBox<Key>(this));
 
         setFormatter(new IFormatter<Key, String>() {

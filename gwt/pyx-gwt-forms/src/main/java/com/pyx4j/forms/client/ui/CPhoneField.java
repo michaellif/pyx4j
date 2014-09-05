@@ -44,7 +44,6 @@ public class CPhoneField extends CTextFieldBase<String, NTextBox<String>> {
         super();
         setFormatter(new PhoneFormatter(phoneType));
         setParser(new PhoneParser(phoneType));
-        addComponentValidator(new TextBoxParserValidator<String>());
         setNativeComponent(new NTextBox<String>(this));
         setWatermark(phoneType);
     }

@@ -25,7 +25,6 @@ import java.text.ParseException;
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.commons.IParser;
 import com.pyx4j.commons.ValidationUtils;
-import com.pyx4j.forms.client.validators.TextBoxParserValidator;
 import com.pyx4j.i18n.shared.I18n;
 
 public class CEmailField extends CTextFieldBase<String, NTextBox<String>> {
@@ -45,7 +44,6 @@ public class CEmailField extends CTextFieldBase<String, NTextBox<String>> {
         super();
         this.setMandatory(mandatory);
         setParser(new EmailParser());
-        addComponentValidator(new TextBoxParserValidator<String>());
         setNativeComponent(new NTextBox<String>(this));
     }
 
