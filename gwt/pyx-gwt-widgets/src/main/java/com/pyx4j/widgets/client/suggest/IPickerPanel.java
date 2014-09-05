@@ -30,5 +30,5 @@ public interface IPickerPanel<E> extends IsWidget {
 
     void setSelection(Collection<E> items);
 
-    void setSelectorWidget(AbstractSelectorWidget<E> selectorWidget);
+    void setSelectorWidget(ISelectorWidget<E> selectorWidget);
 }

@@ -34,7 +34,6 @@ public abstract class NTextFieldBase<DATA, WIDGET extends ITextWidget, CCOMP ext
 
     public NTextFieldBase(CCOMP cComponent) {
         super(cComponent);
-
     }
 
     @Override

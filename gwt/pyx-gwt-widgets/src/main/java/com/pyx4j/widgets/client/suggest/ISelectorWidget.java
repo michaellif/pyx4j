@@ -14,18 +14,14 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on Dec 24, 2011
+ * Created on Sep 4, 2014
  * @author michaellif
  * @version $Id$
  */
 package com.pyx4j.widgets.client.suggest;
 
-import java.util.Collection;
-
 import com.pyx4j.widgets.client.IFocusWidget;
 
-public interface ISelectorValuePanel<E> extends IFocusWidget {
-
-    void setSelection(Collection<E> items);
+public interface ISelectorWidget<E> extends IFocusWidget {
 
 }

@@ -26,24 +26,12 @@ import java.util.List;
 import com.google.gwt.core.client.Scheduler.ScheduledCommand;
 import com.google.gwt.dom.client.Document;
 import com.google.gwt.dom.client.NativeEvent;
-import com.google.gwt.event.dom.client.BlurEvent;
-import com.google.gwt.event.dom.client.BlurHandler;
 import com.google.gwt.event.dom.client.ChangeEvent;
 import com.google.gwt.event.dom.client.ChangeHandler;
-import com.google.gwt.event.dom.client.FocusEvent;
-import com.google.gwt.event.dom.client.FocusHandler;
-import com.google.gwt.event.dom.client.KeyCodes;
-import com.google.gwt.event.dom.client.KeyDownEvent;
-import com.google.gwt.event.dom.client.KeyDownHandler;
-import com.google.gwt.event.dom.client.KeyUpEvent;
-import com.google.gwt.event.dom.client.KeyUpHandler;
 import com.google.gwt.event.logical.shared.HasSelectionHandlers;
 import com.google.gwt.event.logical.shared.SelectionEvent;
 import com.google.gwt.event.logical.shared.SelectionHandler;
-import com.google.gwt.event.logical.shared.ValueChangeEvent;
-import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
-import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.HasAnimation;
 import com.google.gwt.user.client.ui.MenuBar;
 import com.google.gwt.user.client.ui.MenuItem;
@@ -51,13 +39,13 @@ import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.SuggestOracle.Suggestion;
 import com.google.gwt.user.client.ui.UIObject;
 
-import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.commons.IFormatter;
-import com.pyx4j.widgets.client.ImageFactory;
-import com.pyx4j.widgets.client.TextBoxBase;
+import com.pyx4j.widgets.client.IFocusWidget;
 import com.pyx4j.widgets.client.style.theme.WidgetTheme;
 
-public class SelectorTextBox<E> extends TextBoxBase implements HasSelectionHandlers<E> {
+public class SelectorTextBox<E> extends AbstractSelectorWidget<E> implements HasSelectionHandlers<E>, ISelectorWidget<E>, IFocusWidget {
+
+    private final SelectorTextBoxViewerPanel<E> textBox;
 
     private int limit = 20;
 
@@ -73,22 +61,27 @@ public class SelectorTextBox<E> extends TextBoxBase implements HasSelectionHandl
 
     public SelectorTextBox(final OptionsGrabber<E> optionsGrabber, IFormatter<E, String> valueFormatter, IFormatter<E, String[]> optionPathFormatter) {
 
+        textBox = new SelectorTextBoxViewerPanel<E>(this);
+        setViewerPanel(textBox);
+
         this.optionsGrabber = optionsGrabber;
         this.valueFormatter = valueFormatter;
         this.optionPathFormatter = optionPathFormatter;
 
         display = new SuggestionDisplay();
 
-        setTextBoxWidget(new InputTextBox());
+    }
 
-        setAction(new Command() {
-
+    //@Override
+    public HandlerRegistration addChangeHandler(ChangeHandler handler) {
+        addSelectionHandler(new SelectionHandler<E>() {
             @Override
-            public void execute() {
-
+            public void onSelection(SelectionEvent<E> event) {
+                NativeEvent nativeEvent = Document.get().createChangeEvent();
+                ChangeEvent.fireNativeEvent(nativeEvent, null);
             }
-        }, ImageFactory.getImages().action());
-
+        });
+        return addDomHandler(handler, ChangeEvent.getType());
     }
 
     @Override
@@ -109,12 +102,12 @@ public class SelectorTextBox<E> extends TextBoxBase implements HasSelectionHandl
         return value;
     }
 
-    private void setValue(E value) {
+    public void setValue(E value) {
         this.value = value;
         if (value == null) {
-            setText("");
+            textBox.setText("");
         } else {
-            setText(valueFormatter.format(value));
+            textBox.setText(valueFormatter.format(value));
             display.hideSuggestions();
             fireSuggestionEvent(value);
         }
@@ -138,89 +131,6 @@ public class SelectorTextBox<E> extends TextBoxBase implements HasSelectionHandl
         display.onEnsureDebugId(baseID);
     }
 
-    class InputTextBox extends com.google.gwt.user.client.ui.TextBox {
-
-        private boolean focused = false;
-
-        private String text;
-
-        public InputTextBox() {
-
-            addKeyDownHandler(new KeyDownHandler() {
-
-                @Override
-                public void onKeyDown(KeyDownEvent event) {
-                    switch (event.getNativeKeyCode()) {
-                    case KeyCodes.KEY_DOWN:
-                        display.moveSelectionDown();
-                        break;
-                    case KeyCodes.KEY_UP:
-                        display.moveSelectionUp();
-                        break;
-                    case KeyCodes.KEY_ENTER:
-                    case KeyCodes.KEY_TAB:
-                        SelectorTextBox.this.setValue(display.getCurrentSelection());
-                        break;
-                    }
-                }
-            });
-
-            addKeyUpHandler(new KeyUpHandler() {
-
-                @Override
-                public void onKeyUp(KeyUpEvent event) {
-                    if (syncInput()) {
-                        refreshSuggestions();
-                    }
-                }
-            });
-
-            addValueChangeHandler(new ValueChangeHandler<String>() {
-
-                @Override
-                public void onValueChange(ValueChangeEvent<String> event) {
-                    delegateEvent(SelectorTextBox.this, event);
-                }
-            });
-
-            addFocusHandler(new FocusHandler() {
-
-                @Override
-                public void onFocus(FocusEvent event) {
-                    focused = true;
-                    refreshSuggestions();
-                }
-            });
-
-            addBlurHandler(new BlurHandler() {
-
-                @Override
-                public void onBlur(BlurEvent event) {
-                    focused = false;
-                    SelectorTextBox.this.setValue(display.getCurrentSelection());
-                }
-            });
-
-            setStyleName(WidgetTheme.StyleName.TextBox.name());
-            addStyleName(WidgetTheme.StyleName.SuggestBox.name());
-            addStyleDependentName(WidgetTheme.StyleDependent.singleLine.name());
-
-        }
-
-        public boolean hasFocus() {
-            return focused;
-        }
-
-        private boolean syncInput() {
-            String newText = getText();
-            // check if new input has been received
-            boolean result = (!display.isSuggestionListShowing() && CommonsStringUtils.isEmpty(newText))
-                    || (text == null ? newText != null : !text.equals(newText));
-            text = newText;
-            return result;
-        }
-    }
-
     private void fireSuggestionEvent(E selectedSuggestion) {
         SelectionEvent.fire(this, selectedSuggestion);
     }
@@ -238,20 +148,8 @@ public class SelectorTextBox<E> extends TextBoxBase implements HasSelectionHandl
             }
         };
 
-        optionsGrabber.grabOptions(new OptionsGrabber.Request(getText().length() == 0 ? "" : getText(), limit), callback);
+        optionsGrabber.grabOptions(new OptionsGrabber.Request(textBox.getText().length() == 0 ? "" : textBox.getText(), limit), callback);
 
-    }
-
-    @Override
-    public HandlerRegistration addChangeHandler(ChangeHandler handler) {
-        addSelectionHandler(new SelectionHandler<E>() {
-            @Override
-            public void onSelection(SelectionEvent<E> event) {
-                NativeEvent nativeEvent = Document.get().createChangeEvent();
-                ChangeEvent.fireNativeEvent(nativeEvent, null);
-            }
-        });
-        return addDomHandler(handler, ChangeEvent.getType());
     }
 
     /**
@@ -520,7 +418,7 @@ public class SelectorTextBox<E> extends TextBoxBase implements HasSelectionHandl
             setScheduledCommand(new ScheduledCommand() {
                 @Override
                 public void execute() {
-                    getTextBoxWidget().setFocus(true);
+                    textBox.setFocus(true);
                     setValue(suggestion);
                 }
             });

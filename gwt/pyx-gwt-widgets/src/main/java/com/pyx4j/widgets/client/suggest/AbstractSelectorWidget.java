@@ -23,15 +23,99 @@ package com.pyx4j.widgets.client.suggest;
 import java.util.Collection;
 import java.util.HashSet;
 
+import com.google.gwt.event.dom.client.BlurHandler;
+import com.google.gwt.event.dom.client.FocusHandler;
+import com.google.gwt.event.dom.client.KeyDownHandler;
+import com.google.gwt.event.dom.client.KeyUpHandler;
+import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.ui.Composite;
 
+import com.pyx4j.commons.IDebugId;
 import com.pyx4j.widgets.client.combobox.PickerPopup;
 
-public abstract class AbstractSelectorWidget<E> extends Composite {
+public class AbstractSelectorWidget<E> extends Composite implements ISelectorWidget<E> {
 
     private final Collection<E> selection = new HashSet<E>();
 
     private ISelectorValuePanel<E> viewerPanel;
 
     private PickerPopup<E> pickerPopup;
+
+    public AbstractSelectorWidget() {
+
+    }
+
+    public void setViewerPanel(ISelectorValuePanel<E> viewerPanel) {
+        this.viewerPanel = viewerPanel;
+        initWidget(viewerPanel.asWidget());
+    }
+
+    public ISelectorValuePanel<E> getViewerPanel() {
+        return viewerPanel;
+    }
+
+    @Override
+    public HandlerRegistration addFocusHandler(FocusHandler handler) {
+        return viewerPanel.addFocusHandler(handler);
+    }
+
+    @Override
+    public HandlerRegistration addBlurHandler(BlurHandler handler) {
+        return viewerPanel.addBlurHandler(handler);
+    }
+
+    @Override
+    public HandlerRegistration addKeyDownHandler(KeyDownHandler handler) {
+        return viewerPanel.addKeyDownHandler(handler);
+    }
+
+    @Override
+    public HandlerRegistration addKeyUpHandler(KeyUpHandler handler) {
+        return viewerPanel.addKeyUpHandler(handler);
+    }
+
+    @Override
+    public void setEnabled(boolean enabled) {
+        viewerPanel.setEnabled(enabled);
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return viewerPanel.isEnabled();
+    }
+
+    @Override
+    public void setEditable(boolean editable) {
+        viewerPanel.setEditable(editable);
+    }
+
+    @Override
+    public boolean isEditable() {
+        return viewerPanel.isEditable();
+    }
+
+    @Override
+    public void setDebugId(IDebugId debugId) {
+        viewerPanel.setDebugId(debugId);
+    }
+
+    @Override
+    public int getTabIndex() {
+        return viewerPanel.getTabIndex();
+    }
+
+    @Override
+    public void setAccessKey(char key) {
+        viewerPanel.setAccessKey(key);
+    }
+
+    @Override
+    public void setFocus(boolean focused) {
+        viewerPanel.setFocus(focused);
+    }
+
+    @Override
+    public void setTabIndex(int index) {
+        viewerPanel.setTabIndex(index);
+    }
 }

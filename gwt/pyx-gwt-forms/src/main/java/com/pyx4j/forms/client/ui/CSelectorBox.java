@@ -31,8 +31,13 @@ import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.forms.client.events.HasOptionsChangeHandlers;
 import com.pyx4j.forms.client.events.OptionsChangeEvent;
 import com.pyx4j.forms.client.events.OptionsChangeHandler;
+import com.pyx4j.widgets.client.WatermarkComponent;
 
-public class CSelectorBox<E extends IEntity> extends CTextFieldBase<E, NSelectorBox<E>> implements HasOptionsChangeHandlers<List<E>> {
+public class CSelectorBox<E extends IEntity> extends CFocusComponent<E, NSelectorBox<E>> implements IAcceptsWatermark, HasOptionsChangeHandlers<List<E>> {
+
+    private String watermark;
+
+    private IFormatter<E, String> formatter;
 
     private List<E> options = new ArrayList<E>();
 
@@ -40,14 +45,6 @@ public class CSelectorBox<E extends IEntity> extends CTextFieldBase<E, NSelector
 
     public CSelectorBox() {
         super();
-
-        setFormatter(new IFormatter<E, String>() {
-
-            @Override
-            public String format(E value) {
-                return value.getStringView();
-            }
-        });
 
         setOptionPathFormatter(new IFormatter<E, String[]>() {
 
@@ -58,6 +55,26 @@ public class CSelectorBox<E extends IEntity> extends CTextFieldBase<E, NSelector
         });
 
         setNativeComponent(new NSelectorBox<E>(this));
+    }
+
+    public void setFormatter(IFormatter<E, String> formatter) {
+        this.formatter = formatter;
+    }
+
+    public final IFormatter<E, String> getFormatter() {
+        if (formatter == null) {
+            setFormatter(new IFormatter<E, String>() {
+                @Override
+                public String format(E value) {
+                    if (value == null) {
+                        return null;
+                    } else {
+                        return value.getStringView();
+                    }
+                }
+            });
+        }
+        return formatter;
     }
 
     public IFormatter<E, String[]> getOptionPathFormatter() {
@@ -80,4 +97,16 @@ public class CSelectorBox<E extends IEntity> extends CTextFieldBase<E, NSelector
         }
     }
 
+    @Override
+    public void setWatermark(String watermark) {
+        this.watermark = watermark;
+        if (asWidget() instanceof WatermarkComponent) {
+            ((WatermarkComponent) asWidget()).setWatermark(watermark);
+        }
+    }
+
+    @Override
+    public String getWatermark() {
+        return watermark;
+    }
 }

@@ -26,13 +26,15 @@ import java.util.Comparator;
 
 import com.google.gwt.event.logical.shared.SelectionEvent;
 import com.google.gwt.event.logical.shared.SelectionHandler;
+import com.google.gwt.user.client.ui.HTML;
 
 import com.pyx4j.commons.IFormatter;
 import com.pyx4j.entity.core.IEntity;
+import com.pyx4j.widgets.client.Label;
 import com.pyx4j.widgets.client.suggest.MultyWordSuggestOptionsGrabber;
 import com.pyx4j.widgets.client.suggest.SelectorTextBox;
 
-public class NSelectorBox<E extends IEntity> extends NTextFieldBase<E, SelectorTextBox<E>, CSelectorBox<E>> {
+public class NSelectorBox<E extends IEntity> extends NFocusField<E, SelectorTextBox<E>, CSelectorBox<E>, HTML> {
 
     private final MultyWordSuggestOptionsGrabber<E> optionsGrabber;
 
@@ -49,6 +51,11 @@ public class NSelectorBox<E extends IEntity> extends NTextFieldBase<E, SelectorT
 
     void processOptions(Collection<E> options) {
         optionsGrabber.setAllOptions(options);
+    }
+
+    @Override
+    protected Label createViewer() {
+        return new Label();
     }
 
     @Override
@@ -78,6 +85,15 @@ public class NSelectorBox<E extends IEntity> extends NTextFieldBase<E, SelectorT
                 getCComponent().stopEditing();
             }
         });
+    }
+
+    @Override
+    public void setNativeValue(E value) {
+        if (isViewable()) {
+            getViewer().setText(getCComponent().getFormatter().format(value));
+        } else {
+            getEditor().setValue(value);
+        }
     }
 
     @Override
