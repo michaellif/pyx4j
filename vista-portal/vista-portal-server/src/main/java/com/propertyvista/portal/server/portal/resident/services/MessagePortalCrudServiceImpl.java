@@ -33,6 +33,7 @@ import com.pyx4j.entity.rpc.EntitySearchResult;
 import com.pyx4j.entity.server.AbstractCrudServiceDtoImpl;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.rpc.shared.VoidSerializable;
+import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.server.contexts.ServerContext;
 
 import com.propertyvista.biz.communication.CommunicationMessageFacade;
@@ -42,8 +43,9 @@ import com.propertyvista.domain.communication.CommunicationThread.ThreadStatus;
 import com.propertyvista.domain.communication.DeliveryHandle;
 import com.propertyvista.domain.communication.Message;
 import com.propertyvista.domain.communication.MessageCategory.TicketType;
-import com.propertyvista.domain.communication.ThreadPolicyHandle;
 import com.propertyvista.domain.communication.SystemEndpoint.SystemEndpointName;
+import com.propertyvista.domain.communication.ThreadPolicyHandle;
+import com.propertyvista.domain.security.PortalResidentBehavior;
 import com.propertyvista.domain.tenant.lease.LeaseParticipant;
 import com.propertyvista.portal.rpc.portal.resident.communication.MessageDTO;
 import com.propertyvista.portal.rpc.portal.resident.services.MessagePortalCrudService;
@@ -114,6 +116,7 @@ public class MessagePortalCrudServiceImpl extends AbstractCrudServiceDtoImpl<Mes
         if (bo.isPrototype()) {
             bo.date().setValue(SystemDateManager.getDate());
         }
+        SecurityController.assertBehavior(PortalResidentBehavior.CommunicationCreateMessages);
 
         bo.attachments().set(to.attachments());
         bo.date().setValue(SystemDateManager.getDate());
