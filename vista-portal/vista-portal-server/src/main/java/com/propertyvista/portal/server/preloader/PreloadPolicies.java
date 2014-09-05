@@ -60,6 +60,7 @@ public class PreloadPolicies extends AbstractPoliciesPreloader {
         add(new LeaseAgreementPolicyPreloader());
         add(new LegalTermsPolicyPreloader());
         add(new BackgroundCheckPolicyPreloader());
+        add(new ResidentPortalPolicyPreloader());
 
         if (isProduction) {
             add(new ProductTaxPolicyPreloader());
@@ -67,7 +68,6 @@ public class PreloadPolicies extends AbstractPoliciesPreloader {
             add(new LeaseAdjustmentPolicyPreloader());
             add(new LeaseBillingPolicyPreloader());
             add(new ProspectPortalPolicyPreloader());
-            add(new ResidentPortalPolicyPreloader());
         } else {
             add(new MockupProductTaxPolicyPreloader());
             add(new MockupDepositPolicyPreloader());
