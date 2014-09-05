@@ -22,6 +22,7 @@ import com.yardi.entity.guestcard40.RentableItems;
 import com.yardi.entity.ils.PhysicalProperty;
 import com.yardi.entity.leaseapp30.LeaseApplication;
 
+import com.propertyvista.biz.system.yardi.YardiInterfaceNotConfiguredException;
 import com.propertyvista.biz.system.yardi.YardiPropertyNoAccessException;
 import com.propertyvista.biz.system.yardi.YardiProspectNotEditableException;
 import com.propertyvista.biz.system.yardi.YardiResponseException;
@@ -103,6 +104,17 @@ class YardiILSGuestCardStubProxy extends YardiAbstractStubProxy implements Yardi
     @Override
     public MarketingSources getYardiMarketingSources(PmcYardiCredential yc, String propertyId) throws YardiServiceException, RemoteException {
         try {
+            setMessageErrorHandler(new MessageErrorHandler() {
+                @Override
+                public boolean handle(Messages messages) throws YardiServiceException {
+                    if (messages.hasErrorMessage(YardiHandledErrorMessages.errorMessage_InterfaceNotConfigured)) {
+                        throw new YardiInterfaceNotConfiguredException(messages.getErrorMessage().getValue());
+                    } else if (messages.hasErrorMessage(YardiHandledErrorMessages.errorMessage_NoAccess)) {
+                        throw new YardiPropertyNoAccessException(messages.getErrorMessage().getValue());
+                    }
+                    return false;
+                }
+            });
             return getStub(yc).getYardiMarketingSources(yc, propertyId);
         } catch (YardiResponseException e) {
             validateResponseXml(e.getResponse());

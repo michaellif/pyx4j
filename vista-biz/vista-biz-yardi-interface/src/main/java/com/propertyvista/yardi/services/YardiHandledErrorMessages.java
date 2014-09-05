@@ -17,6 +17,8 @@ public abstract class YardiHandledErrorMessages {
 
     public static final String errorMessage_NoAccess = "Invalid or no access to Yardi Property";
 
+    public static final String errorMessage_InterfaceNotConfigured = "is not Configured for property";
+
     public static final String errorMessage_TenantNotFound = "No tenants exist with the given search criteria";
 
     public static final String errorMessage_GuestNotFound = "No guests exist with the given search criteria.";

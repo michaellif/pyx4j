@@ -33,17 +33,14 @@ public class Messages {
 
     private List<Message> messages = new ArrayList<Message>();
 
-    public static boolean isMessageResponse(String s) {
-        return StringUtils.startsWith(s, "<Messages>") && StringUtils.endsWith(s, "</Messages>");
-    }
-
     public static void throwYardiResponseException(String message) throws YardiResponseException {
         Messages msgs = new Messages();
         Message m = new Message(MessageType.Error, message);
         msgs.getMessages().add(m);
         try {
             throw new YardiResponseException(MarshallUtil.marshall(msgs), message);
-        } catch (JAXBException ignore) {
+        } catch (JAXBException e) {
+            throw new Error(e);
         }
     }
 

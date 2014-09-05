@@ -105,10 +105,22 @@ public class YardiConfigurationFacadeImpl implements YardiConfigurationFacade {
                     // report configuration issues
                     executionMonitor.addErredEvent("YardiConfig", error);
                     if (t instanceof YardiServiceException) {
-                        // send notification to Notification.YardiSynchronisation users
+                        // Two possible cases are known:
+                        // 1. YardiPropertyNoAccessException - non-existent propertyListCode
+                        // 2. YardiInterfaceNotConfiguredException - ILS/Guestcard not configured for a property in the list
+                        // We send config notification to Notification.YardiSynchronisation users
                         ServerSideFactory.create(NotificationFacade.class).yardiConfigurationError(error);
+                        // Now see if we should stop or continue...
+                        if (t instanceof YardiPropertyNoAccessException) {
+                            // Possible cases here (we continue anyway):
+                            // - propertyListCode is invalid - don't care
+                            // - building/list has been moved - the building/list will be suspended after we continue
+                            continue;
+                        }
+                        // Can't continue on YardiInterfaceNotConfiguredException because the entire list will be suspended
+                        // Stop processing here...
+                        throw t;
                     }
-                    throw t;
                 }
             }
         }

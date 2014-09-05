@@ -59,22 +59,22 @@ class YardiAbstractStubProxy {
     }
 
     void validateResponseXml(String xml) throws YardiServiceException {
-        if (Messages.isMessageResponse(xml)) {
-            try {
-                Messages messages = MarshallUtil.unmarshal(Messages.class, xml);
-                if (messages.isError()) {
-                    YardiLicense.handleVendorLicenseError(messages);
-                    if (messageErrorHandler == null || !messageErrorHandler.handle(messages)) {
-                        throw new YardiServiceException(messages.toString());
-                    }
-                } else {
-                    log.info(messages.toString());
+        try {
+            Messages messages = MarshallUtil.unmarshal(Messages.class, xml);
+            if (messages.isError()) {
+                YardiLicense.handleVendorLicenseError(messages);
+                if (messageErrorHandler == null || !messageErrorHandler.handle(messages)) {
+                    throw new YardiServiceException(messages.toString());
                 }
-            } catch (JAXBException xe) {
+            } else {
+                log.info(messages.toString());
+            }
+        } catch (JAXBException xe) {
+            if (dataErrorHandler != null) {
+                dataErrorHandler.handle(xml);
+            } else {
                 throw new YardiServiceException(GENERIC_YARDI_ERROR, xe);
             }
-        } else if (dataErrorHandler != null) {
-            dataErrorHandler.handle(xml);
         }
     }
 
