@@ -41,10 +41,20 @@ public abstract class CFocusComponent<DATA, WIDGET extends INativeFocusField<DAT
         getNativeComponent().setFocus(focused);
     }
 
-    @Override
-    public void applyAccessibilityRules() {
-        super.applyAccessibilityRules();
+    private void updateFocusNavigation() {
         setTabIndex((isEnabled() && isEditable()) ? 0 : -2); // enable/disable focus navigation
+    }
+
+    @Override
+    public void applyEnablingRules() {
+        super.applyEnablingRules();
+        updateFocusNavigation();
+    }
+
+    @Override
+    public void applyEditabilityRules() {
+        super.applyEditabilityRules();
+        updateFocusNavigation();
     }
 
 }
