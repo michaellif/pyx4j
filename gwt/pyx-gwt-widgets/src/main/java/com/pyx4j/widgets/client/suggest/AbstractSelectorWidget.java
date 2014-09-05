@@ -20,36 +20,36 @@
  */
 package com.pyx4j.widgets.client.suggest;
 
-import java.util.Collection;
-import java.util.HashSet;
-
 import com.google.gwt.event.dom.client.BlurHandler;
 import com.google.gwt.event.dom.client.FocusHandler;
 import com.google.gwt.event.dom.client.KeyDownHandler;
+import com.google.gwt.event.dom.client.KeyPressHandler;
 import com.google.gwt.event.dom.client.KeyUpHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.ui.Composite;
 
 import com.pyx4j.commons.IDebugId;
-import com.pyx4j.widgets.client.combobox.PickerPopup;
 
-public class AbstractSelectorWidget<E> extends Composite implements ISelectorWidget<E> {
-
-    private final Collection<E> selection = new HashSet<E>();
+public abstract class AbstractSelectorWidget<E> extends Composite implements ISelectorWidget<E> {
 
     private ISelectorValuePanel<E> viewerPanel;
 
     private PickerPopup<E> pickerPopup;
 
     public AbstractSelectorWidget() {
-
     }
 
     public void setViewerPanel(ISelectorValuePanel<E> viewerPanel) {
         this.viewerPanel = viewerPanel;
         initWidget(viewerPanel.asWidget());
+        pickerPopup = new PickerPopup<E>(this);
     }
 
+    protected PickerPopup<E> getPickerPopup() {
+        return pickerPopup;
+    }
+
+    @Override
     public ISelectorValuePanel<E> getViewerPanel() {
         return viewerPanel;
     }
@@ -72,6 +72,11 @@ public class AbstractSelectorWidget<E> extends Composite implements ISelectorWid
     @Override
     public HandlerRegistration addKeyUpHandler(KeyUpHandler handler) {
         return viewerPanel.addKeyUpHandler(handler);
+    }
+
+    @Override
+    public HandlerRegistration addKeyPressHandler(KeyPressHandler handler) {
+        return viewerPanel.addKeyPressHandler(handler);
     }
 
     @Override
@@ -118,4 +123,5 @@ public class AbstractSelectorWidget<E> extends Composite implements ISelectorWid
     public void setTabIndex(int index) {
         viewerPanel.setTabIndex(index);
     }
+
 }

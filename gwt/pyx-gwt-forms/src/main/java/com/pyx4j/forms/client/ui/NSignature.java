@@ -23,6 +23,7 @@ package com.pyx4j.forms.client.ui;
 import com.google.gwt.event.dom.client.BlurHandler;
 import com.google.gwt.event.dom.client.FocusHandler;
 import com.google.gwt.event.dom.client.KeyDownHandler;
+import com.google.gwt.event.dom.client.KeyPressHandler;
 import com.google.gwt.event.dom.client.KeyUpHandler;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
@@ -270,6 +271,11 @@ public class NSignature extends NFocusField<ISignature, SignaturePanel, CSignatu
         @Override
         public HandlerRegistration addKeyUpHandler(KeyUpHandler handler) {
             return textBox.addKeyUpHandler(handler);
+        }
+
+        @Override
+        public HandlerRegistration addKeyPressHandler(KeyPressHandler handler) {
+            return textBox.addKeyPressHandler(handler);
         }
 
         @Override

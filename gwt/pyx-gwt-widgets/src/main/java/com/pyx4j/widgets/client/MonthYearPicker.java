@@ -29,6 +29,7 @@ import com.google.gwt.event.dom.client.FocusEvent;
 import com.google.gwt.event.dom.client.FocusHandler;
 import com.google.gwt.event.dom.client.HasChangeHandlers;
 import com.google.gwt.event.dom.client.KeyDownHandler;
+import com.google.gwt.event.dom.client.KeyPressHandler;
 import com.google.gwt.event.dom.client.KeyUpHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.i18n.client.LocaleInfo;
@@ -250,6 +251,11 @@ public class MonthYearPicker extends HorizontalPanel implements HasChangeHandler
 
     @Override
     public HandlerRegistration addKeyUpHandler(KeyUpHandler handler) {
+        return null;
+    }
+
+    @Override
+    public HandlerRegistration addKeyPressHandler(KeyPressHandler handler) {
         return null;
     }
 }

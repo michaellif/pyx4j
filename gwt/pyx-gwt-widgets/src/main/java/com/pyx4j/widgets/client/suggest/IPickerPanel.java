@@ -20,15 +20,18 @@
  */
 package com.pyx4j.widgets.client.suggest;
 
-import java.util.Collection;
-
 import com.google.gwt.user.client.ui.IsWidget;
 
 public interface IPickerPanel<E> extends IsWidget {
 
-    void setOptions(Collection<E> options);
+    void setPickerPopup(PickerPopup<E> pickerPopup);
 
-    void setSelection(Collection<E> items);
+    void moveSelectionDown();
 
-    void setSelectorWidget(ISelectorWidget<E> selectorWidget);
+    void moveSelectionUp();
+
+    void pickSelection();
+
+    void refreshSuggestions();
+
 }

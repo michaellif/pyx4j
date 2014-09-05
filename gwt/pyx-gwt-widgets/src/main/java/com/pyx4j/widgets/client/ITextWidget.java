@@ -21,9 +21,10 @@
 package com.pyx4j.widgets.client;
 
 import com.google.gwt.event.dom.client.ChangeHandler;
+import com.google.gwt.event.dom.client.HasAllKeyHandlers;
 import com.google.gwt.event.shared.HandlerRegistration;
 
-public interface ITextWidget extends IFocusWidget {
+public interface ITextWidget extends IFocusWidget, HasAllKeyHandlers {
 
     String getText();
 

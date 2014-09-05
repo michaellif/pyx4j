@@ -25,6 +25,7 @@ import com.google.gwt.event.dom.client.BlurHandler;
 import com.google.gwt.event.dom.client.FocusEvent;
 import com.google.gwt.event.dom.client.FocusHandler;
 import com.google.gwt.event.dom.client.KeyDownHandler;
+import com.google.gwt.event.dom.client.KeyPressHandler;
 import com.google.gwt.event.dom.client.KeyUpHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.ui.Widget;
@@ -109,4 +110,8 @@ public abstract class NFocusField<DATA, EDITOR extends IFocusWidget, CCOMP exten
         return getEditor().addKeyUpHandler(handler);
     }
 
+    @Override
+    public HandlerRegistration addKeyPressHandler(KeyPressHandler handler) {
+        return getEditor().addKeyPressHandler(handler);
+    }
 }

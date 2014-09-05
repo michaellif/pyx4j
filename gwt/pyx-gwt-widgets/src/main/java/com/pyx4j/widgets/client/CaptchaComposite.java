@@ -31,6 +31,7 @@ import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.FocusHandler;
 import com.google.gwt.event.dom.client.KeyDownHandler;
+import com.google.gwt.event.dom.client.KeyPressHandler;
 import com.google.gwt.event.dom.client.KeyUpHandler;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
@@ -49,10 +50,10 @@ import com.pyx4j.i18n.shared.I18n;
 
 /**
  * This class Injects reCAPTCHA Client API code.
- *
+ * 
  * @see <a href="http://code.google.com/apis/recaptcha/intro.html">for more information</a>
  * @see <a href="http://code.google.com/apis/recaptcha/docs/customization.html">Customization</a>
- *
+ * 
  */
 public class CaptchaComposite extends SimplePanel implements IFocusWidget {
 
@@ -203,7 +204,7 @@ public class CaptchaComposite extends SimplePanel implements IFocusWidget {
 
     /**
      * Use https://www.google.com/recaptcha/admin/create to create your key
-     *
+     * 
      * @param publicKey
      */
     public static void setPublicKey(String publicKey) {
@@ -406,6 +407,11 @@ public class CaptchaComposite extends SimplePanel implements IFocusWidget {
 
     @Override
     public HandlerRegistration addKeyUpHandler(KeyUpHandler handler) {
+        return null;
+    }
+
+    @Override
+    public HandlerRegistration addKeyPressHandler(KeyPressHandler handler) {
         return null;
     }
 

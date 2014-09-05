@@ -20,10 +20,6 @@
  */
 package com.pyx4j.widgets.client.suggest;
 
-import java.util.Collection;
-import java.util.List;
-
-import com.google.gwt.core.client.Scheduler.ScheduledCommand;
 import com.google.gwt.dom.client.Document;
 import com.google.gwt.dom.client.NativeEvent;
 import com.google.gwt.event.dom.client.ChangeEvent;
@@ -32,28 +28,18 @@ import com.google.gwt.event.logical.shared.HasSelectionHandlers;
 import com.google.gwt.event.logical.shared.SelectionEvent;
 import com.google.gwt.event.logical.shared.SelectionHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
-import com.google.gwt.user.client.ui.HasAnimation;
-import com.google.gwt.user.client.ui.MenuBar;
-import com.google.gwt.user.client.ui.MenuItem;
-import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.SuggestOracle.Suggestion;
-import com.google.gwt.user.client.ui.UIObject;
 
 import com.pyx4j.commons.IFormatter;
 import com.pyx4j.widgets.client.IFocusWidget;
-import com.pyx4j.widgets.client.style.theme.WidgetTheme;
 
-public class SelectorTextBox<E> extends AbstractSelectorWidget<E> implements HasSelectionHandlers<E>, ISelectorWidget<E>, IFocusWidget {
-
-    private final SelectorTextBoxViewerPanel<E> textBox;
-
-    private int limit = 20;
-
-    private final OptionsGrabber<E> optionsGrabber;
-
-    private final SuggestionDisplay display;
+public class SelectorTextBox<E> extends AbstractSelectorWidget<E> implements HasSelectionHandlers<E>, IFocusWidget {
 
     private E value;
+
+    private final SelectorTextBoxValuePanel<E> textBox;
+
+    private final OptionsGrabber<E> optionsGrabber;
 
     private final IFormatter<E, String> valueFormatter;
 
@@ -61,18 +47,32 @@ public class SelectorTextBox<E> extends AbstractSelectorWidget<E> implements Has
 
     public SelectorTextBox(final OptionsGrabber<E> optionsGrabber, IFormatter<E, String> valueFormatter, IFormatter<E, String[]> optionPathFormatter) {
 
-        textBox = new SelectorTextBoxViewerPanel<E>(this);
-        setViewerPanel(textBox);
-
         this.optionsGrabber = optionsGrabber;
         this.valueFormatter = valueFormatter;
         this.optionPathFormatter = optionPathFormatter;
 
-        display = new SuggestionDisplay();
+        textBox = new SelectorTextBoxValuePanel<E>();
+        setViewerPanel(textBox);
 
     }
 
-    //@Override
+    @Override
+    public void setValue(E value) {
+        this.value = value;
+        if (value == null) {
+            textBox.setText("");
+        } else {
+            textBox.setText(valueFormatter.format(value));
+            getPickerPopup().hide();
+            fireSuggestionEvent(value);
+        }
+    }
+
+    @Override
+    public E getValue() {
+        return value;
+    }
+
     public HandlerRegistration addChangeHandler(ChangeHandler handler) {
         addSelectionHandler(new SelectionHandler<E>() {
             @Override
@@ -89,67 +89,16 @@ public class SelectorTextBox<E> extends AbstractSelectorWidget<E> implements Has
         return addHandler(handler, SelectionEvent.getType());
     }
 
-    /**
-     * Get the {@link SuggestionDisplay} used to display suggestions.
-     * 
-     * @return the {@link SuggestionDisplay}
-     */
-    public SuggestionDisplay getSuggestionDisplay() {
-        return display;
-    }
-
-    public E getValue() {
-        return value;
-    }
-
-    public void setValue(E value) {
-        this.value = value;
-        if (value == null) {
-            textBox.setText("");
-        } else {
-            textBox.setText(valueFormatter.format(value));
-            display.hideSuggestions();
-            fireSuggestionEvent(value);
-        }
-    }
-
     @Override
     public void setEnabled(boolean enabled) {
         super.setEnabled(enabled);
         if (!enabled) {
-            display.hideSuggestions();
+            getPickerPopup().hide();
         }
-    }
-
-    public void setLimit(int limit) {
-        this.limit = limit;
-    }
-
-    @Override
-    protected void onEnsureDebugId(String baseID) {
-        super.onEnsureDebugId(baseID);
-        display.onEnsureDebugId(baseID);
     }
 
     private void fireSuggestionEvent(E selectedSuggestion) {
         SelectionEvent.fire(this, selectedSuggestion);
-    }
-
-    private void refreshSuggestions() {
-
-        OptionsGrabber.Callback<E> callback = new OptionsGrabber.Callback<E>() {
-            @Override
-            public void onOptionsReady(OptionsGrabber.Request request, OptionsGrabber.Response<E> response) {
-                // If disabled while request was in-flight, drop it
-                if (!isEnabled()) {
-                    return;
-                }
-                display.showSuggestions(response.getOptions(), request.getQuery());
-            }
-        };
-
-        optionsGrabber.grabOptions(new OptionsGrabber.Request(textBox.getText().length() == 0 ? "" : textBox.getText(), limit), callback);
-
     }
 
     /**
@@ -157,277 +106,6 @@ public class SelectorTextBox<E> extends AbstractSelectorWidget<E> implements Has
      */
     public static interface SuggestionCallback<E> {
         void onSuggestionSelected(E suggestion);
-    }
-
-    class SuggestionDisplay implements HasAnimation {
-
-        private final SuggestionMenu suggestionMenu;
-
-        private final PopupPanel suggestionPopup;
-
-        /**
-         * We need to keep track of the last {@link SelectorTextBox} because it acts as
-         * an autoHide partner for the {@link PopupPanel}. If we use the same
-         * display for multiple {@link SelectorTextBox}, we need to switch the autoHide
-         * partner.
-         */
-        private SelectorTextBox<E> lastSuggestBox = null;
-
-        /**
-         * Object to position the suggestion display next to, instead of the
-         * associated suggest box.
-         */
-        private UIObject positionRelativeTo;
-
-        /**
-         * Construct a new {@link SuggestionDisplay}.
-         */
-        public SuggestionDisplay() {
-            suggestionMenu = new SuggestionMenu(true);
-            suggestionPopup = createPopup();
-            suggestionPopup.setWidget(suggestionMenu);
-        }
-
-        public void hideSuggestions() {
-            suggestionPopup.hide();
-        }
-
-        @Override
-        public boolean isAnimationEnabled() {
-            return suggestionPopup.isAnimationEnabled();
-        }
-
-        /**
-         * Check whether or not the list of suggestions is being shown.
-         * 
-         * @return true if the suggestions are visible, false if not
-         */
-        public boolean isSuggestionListShowing() {
-            return suggestionPopup.isShowing();
-        }
-
-        @Override
-        public void setAnimationEnabled(boolean enable) {
-            suggestionPopup.setAnimationEnabled(enable);
-        }
-
-        /**
-         * Sets the style name of the suggestion popup.
-         * 
-         * @param style
-         *            the new primary style name
-         * @see UIObject#setStyleName(String)
-         */
-        public void setPopupStyleName(String style) {
-            suggestionPopup.setStyleName(style);
-        }
-
-        /**
-         * Sets the UI object where the suggestion display should appear next to.
-         * 
-         * @param uiObject
-         *            the uiObject used for positioning, or null to position
-         *            relative to the suggest box
-         */
-        public void setPositionRelativeTo(UIObject uiObject) {
-            positionRelativeTo = uiObject;
-        }
-
-        /**
-         * Create the PopupPanel that will hold the list of suggestions.
-         * 
-         * @return the popup panel
-         */
-        protected PopupPanel createPopup() {
-            PopupPanel p = new PopupPanel(true, false);
-            p.setStyleName(WidgetTheme.StyleName.SuggestBoxPopup.name());
-
-            p.setPreviewingAllNativeEvents(true);
-            return p;
-        }
-
-        protected E getCurrentSelection() {
-            SuggestionMenuItem item = suggestionMenu.getSelectedItem();
-            return item == null ? null : item.getSuggestion();
-        }
-
-        /**
-         * Get the {@link PopupPanel} used to display suggestions.
-         * 
-         * @return the popup panel
-         */
-        protected PopupPanel getPopupPanel() {
-            return suggestionPopup;
-        }
-
-        protected void moveSelectionDown() {
-            // Make sure that the menu is actually showing. These keystrokes
-            // are only relevant when choosing a suggestion.
-            if (isSuggestionListShowing()) {
-                // If nothing is selected, getSelectedItemIndex will return -1 and we
-                // will select index 0 (the first item) by default.
-                suggestionMenu.selectItem(suggestionMenu.getSelectedItemIndex() + 1);
-            }
-        }
-
-        protected void moveSelectionUp() {
-            // Make sure that the menu is actually showing. These keystrokes
-            // are only relevant when choosing a suggestion.
-            if (isSuggestionListShowing()) {
-                // if nothing is selected, then we should select the last suggestion by
-                // default. This is because, in some cases, the suggestions menu will
-                // appear above the text box rather than below it (for example, if the
-                // text box is at the bottom of the window and the suggestions will not
-                // fit below the text box). In this case, users would expect to be able
-                // to use the up arrow to navigate to the suggestions.
-                if (suggestionMenu.getSelectedItemIndex() == -1) {
-                    suggestionMenu.selectItem(suggestionMenu.getNumItems() - 1);
-                } else {
-                    suggestionMenu.selectItem(suggestionMenu.getSelectedItemIndex() - 1);
-                }
-            }
-        }
-
-        protected void showSuggestions(Collection<E> suggestions, String query) {
-            // Hide the popup if there are no suggestions to display.
-            boolean anySuggestions = (suggestions != null && suggestions.size() > 0);
-
-            // Hide the popup before we manipulate the menu within it. If we do not
-            // do this, some browsers will redraw the popup as items are removed
-            // and added to the menu.
-            if (suggestionPopup.isAttached()) {
-                suggestionPopup.hide();
-            }
-
-            suggestionMenu.clearItems();
-            for (final E suggestion : suggestions) {
-                suggestionMenu.addItem(new SuggestionMenuItem(suggestion));
-            }
-
-            if (anySuggestions) {
-                // Select the first item in the suggestion menu.
-                suggestionMenu.selectItem(0);
-            }
-
-            // Link the popup autoHide to the TextBox.
-            if (lastSuggestBox != SelectorTextBox.this) {
-                // If the suggest box has changed, free the old one first.
-                if (lastSuggestBox != null) {
-                    suggestionPopup.removeAutoHidePartner(lastSuggestBox.getElement());
-                }
-                lastSuggestBox = SelectorTextBox.this;
-                suggestionPopup.addAutoHidePartner(SelectorTextBox.this.getElement());
-            }
-
-            if (anySuggestions) {
-                // Show the popup under the TextBox.
-                suggestionPopup.showRelativeTo(positionRelativeTo != null ? positionRelativeTo : SelectorTextBox.this);
-
-            } else {
-                suggestionPopup.hide();
-            }
-        }
-
-        /**
-         * Set the debug id of widgets used in the SuggestionDisplay.
-         * 
-         * @param suggestBoxBaseID
-         *            the baseID of the {@link SelectorTextBox}
-         * @see UIObject#onEnsureDebugId(String)
-         */
-        protected void onEnsureDebugId(String suggestBoxBaseID) {
-        }
-
-    }
-
-    /**
-     * The SuggestionMenu class is used for the display and selection of
-     * suggestions in the SuggestBox widget. SuggestionMenu differs from MenuBar
-     * in that it always has a vertical orientation, and it has no submenus. It
-     * also allows for programmatic selection of items in the menu, and
-     * programmatically performing the action associated with the selected item.
-     * In the MenuBar class, items cannot be selected programatically - they can
-     * only be selected when the user places the mouse over a particlar item.
-     * Additional methods in SuggestionMenu provide information about the number
-     * of items in the menu, and the index of the currently selected item.
-     */
-    private class SuggestionMenu extends MenuBar {
-
-        public SuggestionMenu(boolean vertical) {
-            super(vertical);
-            // Make sure that CSS styles specified for the default Menu classes
-            // do not affect this menu
-            setStyleName("");
-            setFocusOnHoverEnabled(false);
-        }
-
-        public int getNumItems() {
-            return getItems().size();
-        }
-
-        /**
-         * Returns the index of the menu item that is currently selected.
-         * 
-         * @return returns the selected item
-         */
-        public int getSelectedItemIndex() {
-            // The index of the currently selected item can only be
-            // obtained if the menu is showing.
-            MenuItem selectedItem = getSelectedItem();
-            if (selectedItem != null) {
-                return getItems().indexOf(selectedItem);
-            }
-            return -1;
-        }
-
-        /**
-         * Selects the item at the specified index in the menu. Selecting the item
-         * does not perform the item's associated action; it only changes the style
-         * of the item and updates the value of SuggestionMenu.selectedItem.
-         * 
-         * @param index
-         *            index
-         */
-        public void selectItem(int index) {
-            List<MenuItem> items = getItems();
-            if (index > -1 && index < items.size()) {
-                //TODO verify missing functionality from - itemOver(items.get(index), false);
-                selectItem(items.get(index));
-            }
-        }
-
-        @SuppressWarnings("unchecked")
-        @Override
-        protected SuggestionMenuItem getSelectedItem() {
-            return (SuggestionMenuItem) super.getSelectedItem();
-        }
-    }
-
-    private class SuggestionMenuItem extends MenuItem {
-
-        private static final String STYLENAME_DEFAULT = "item";
-
-        private final E suggestion;
-
-        public SuggestionMenuItem(final E suggestion) {
-            super(valueFormatter.format(suggestion), true, (MenuBar) null);
-            this.suggestion = suggestion;
-            getElement().getStyle().setProperty("whiteSpace", "nowrap");
-            setStyleName(STYLENAME_DEFAULT);
-
-            setScheduledCommand(new ScheduledCommand() {
-                @Override
-                public void execute() {
-                    textBox.setFocus(true);
-                    setValue(suggestion);
-                }
-            });
-        }
-
-        public E getSuggestion() {
-            return suggestion;
-        }
-
     }
 
 }

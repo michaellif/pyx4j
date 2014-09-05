@@ -10,6 +10,7 @@ import com.google.gwt.core.client.Scheduler.ScheduledCommand;
 import com.google.gwt.event.dom.client.BlurHandler;
 import com.google.gwt.event.dom.client.FocusHandler;
 import com.google.gwt.event.dom.client.KeyDownHandler;
+import com.google.gwt.event.dom.client.KeyPressHandler;
 import com.google.gwt.event.dom.client.KeyUpHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.ui.HTML;
@@ -433,6 +434,21 @@ public abstract class CAddressStateComboBox<E, OPTION extends IEntity> extends C
                     }
                 };
             }
+
+            @Override
+            public HandlerRegistration addKeyPressHandler(KeyPressHandler handler) {
+                final HandlerRegistration hr1 = textBox.addKeyPressHandler(handler);
+                final HandlerRegistration hr2 = listBox.addKeyPressHandler(handler);
+                return new HandlerRegistration() {
+                    @Override
+                    public void removeHandler() {
+                        hr1.removeHandler();
+                        hr2.removeHandler();
+                    }
+                };
+            }
+
         }
+
     }
 }

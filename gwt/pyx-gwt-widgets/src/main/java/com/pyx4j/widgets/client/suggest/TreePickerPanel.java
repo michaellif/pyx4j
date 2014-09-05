@@ -1,6 +1,6 @@
 /*
  * Pyx4j framework
- * Copyright (C) 2008-2011 pyx4j.com.
+ * Copyright (C) 2008-2013 pyx4j.com.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -14,16 +14,20 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on Jan 12, 2012
+ * Created on Sep 5, 2014
  * @author michaellif
  * @version $Id$
  */
-package com.pyx4j.widgets.client;
+package com.pyx4j.widgets.client.suggest;
 
-import com.google.gwt.event.dom.client.HasAllFocusHandlers;
-import com.google.gwt.event.dom.client.HasAllKeyHandlers;
-import com.google.gwt.user.client.ui.Focusable;
+import com.pyx4j.commons.IFormatter;
 
-public interface IFocusWidget extends IWidget, Focusable, HasAllFocusHandlers, HasAllKeyHandlers {
+public class TreePickerPanel<E> {
+
+    private final IFormatter<E, String[]> optionPathFormatter;
+
+    public TreePickerPanel(IFormatter<E, String[]> optionPathFormatter) {
+        this.optionPathFormatter = optionPathFormatter;
+    }
 
 }
