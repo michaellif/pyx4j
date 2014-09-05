@@ -108,6 +108,7 @@ public class YardiConfigurationFacadeImpl implements YardiConfigurationFacade {
                         // send notification to Notification.YardiSynchronisation users
                         ServerSideFactory.create(NotificationFacade.class).yardiConfigurationError(error);
                     }
+                    throw t;
                 }
             }
         }
