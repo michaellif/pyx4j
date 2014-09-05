@@ -444,7 +444,7 @@ public abstract class AbstractReport<R extends ReportMetadata> extends AbstractP
 
     private void populateSettingsForm(R reportSettings) {
         if (advancedSettingsForm != null) {
-            boolean isAdvancedMode = ((HasAdvancedSettings) reportSettings).isInAdvancedMode().isBooleanTrue();
+            boolean isAdvancedMode = ((HasAdvancedSettings) reportSettings).isInAdvancedMode().getValue(false);
             activeSettingsForm = isAdvancedMode ? advancedSettingsForm : simpleSettingsForm;
             reportSettingsFormControlBar.enableSettingsModeToggle(isAdvancedMode);
         } else {

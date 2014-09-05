@@ -207,7 +207,7 @@ public class IndexedEntitySearch<E extends IEntity> {
                 Date day = (Date) searchCriteria.getValue(new PathSearch(mm, path.toString(), "day"));
                 if (day != null) {
                     queryCriteria.add(new PropertyCriterion(srv.getIndexedPropertyName(meta, path), Restriction.EQUAL, TimeUtils.dayStart(day)));
-                    // Add in case index criteria is dropped by search 
+                    // Add in case index criteria is dropped by search
                     inMemoryFilters.add(new DayInMemoryFilter(path, day));
                 } else {
                     Date from = (Date) searchCriteria.getValue(new PathSearch(mm, path.toString(), "from"));
@@ -270,7 +270,7 @@ public class IndexedEntitySearch<E extends IEntity> {
                 if ((areaRadius != null) && (geoPointFrom != null)) {
                     List<String> keys = GeoCell.getBestCoveringSet(new GeoCircle(geoPointFrom, areaRadius.intValue()));
                     GeoPointIndexAdapter indexAdapter = null;
-                    if (value.returnAnyLocation().isBooleanTrue()) {
+                    if (value.returnAnyLocation().getValue(false)) {
                         keys.add(GeoCell.GEOCELL_ANYLOCATION);
                         MemberMeta geoMemberMeta = meta.getMemberMeta(geoPath);
                         Indexed index = geoMemberMeta.getAnnotation(Indexed.class);
@@ -312,7 +312,7 @@ public class IndexedEntitySearch<E extends IEntity> {
                     } else {
                         queryCriteria.add(new PropertyCriterion(srv.getIndexedPropertyName(meta, path), Restriction.EQUAL, String.valueOf(index.global())
                                 + ((Enum<?>) value).name()));
-                        // Add in case index criteria is dropped by search 
+                        // Add in case index criteria is dropped by search
                         if (IPrimitiveSet.class.isAssignableFrom(mm.getObjectClass())) {
                             inMemoryFilters.add(new PrimitiveSetInMemoryFilter(path, value));
                         } else {

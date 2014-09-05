@@ -44,7 +44,7 @@ public class NetworkSimulationServiceFilter implements IServiceFilter {
             return response;
         }
 
-        if (networkSimulationConfig.delay().isBooleanTrue()) {
+        if (networkSimulationConfig.delay().getValue(0) > 0) {
             try {
                 synchronized (dellayLock) {
                     dellayLock.wait(networkSimulationConfig.delay().getValue());

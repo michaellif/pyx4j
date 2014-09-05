@@ -45,7 +45,7 @@ public class EssentialsRPCServiceFactory extends ReflectionServiceFactory {
         filters.addAll(super.getServiceFilterChain(serviceClass));
 
         if ((NetworkSimulationServiceFilter.getNetworkSimulationConfig() != null)
-                && (NetworkSimulationServiceFilter.getNetworkSimulationConfig().enabled().isBooleanTrue())) {
+                && (NetworkSimulationServiceFilter.getNetworkSimulationConfig().enabled().getValue(false))) {
             filters.add(new NetworkSimulationServiceFilter());
         }
         return filters;
