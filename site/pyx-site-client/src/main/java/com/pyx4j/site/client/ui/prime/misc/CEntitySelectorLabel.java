@@ -21,7 +21,7 @@
 package com.pyx4j.site.client.ui.prime.misc;
 
 import com.pyx4j.entity.core.IEntity;
-import com.pyx4j.forms.client.ui.CTextFieldBase;
+import com.pyx4j.forms.client.ui.CFocusComponent;
 import com.pyx4j.site.client.ui.dialogs.AbstractEntitySelectorDialog;
 
 /**
@@ -29,7 +29,7 @@ import com.pyx4j.site.client.ui.dialogs.AbstractEntitySelectorDialog;
  * that triggers Entity Selector Dialog (see {@link CEntitySelectorLabel#getSelectorDialog()})
  */
 //TODO CEntitySelectorHyperlink should extend CEntityHyperlink ???
-public abstract class CEntitySelectorLabel<E extends IEntity> extends CTextFieldBase<E, NEntitySelectorLabel<E>> {
+public abstract class CEntitySelectorLabel<E extends IEntity> extends CFocusComponent<E, NEntitySelectorLabel<E>> {
 
     protected abstract AbstractEntitySelectorDialog<E> getSelectorDialog();
 

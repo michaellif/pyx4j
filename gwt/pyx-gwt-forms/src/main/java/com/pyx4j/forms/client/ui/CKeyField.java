@@ -35,15 +35,12 @@ public class CKeyField extends CTextFieldBase<Key, NTextBox<Key>> {
 
     private static final I18n i18n = I18n.get(CKeyField.class);
 
-    private final TextBoxParserValidator<Key> validator;
-
     private NumberFormat numberFormat;
 
     public CKeyField() {
         super();
         numberFormat = NumberFormat.getDecimalFormat();
-        validator = new TextBoxParserValidator<Key>();
-        addComponentValidator(validator);
+        addComponentValidator(new TextBoxParserValidator<Key>());
         setNativeComponent(new NTextBox<Key>(this));
 
         setFormatter(new IFormatter<Key, String>() {

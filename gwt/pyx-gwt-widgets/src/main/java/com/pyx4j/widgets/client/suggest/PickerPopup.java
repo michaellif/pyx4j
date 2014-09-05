@@ -122,7 +122,7 @@ public class PickerPopup<E> extends PopupPanel {
         if (isAttached()) {
             hide();
         }
-
+        this.pickerPanel = pickerPanel;
         pickerPanel.setPickerPopup(this);
         setWidget(pickerPanel.asWidget());
         showRelativeTo(selectorWidget.asWidget());
