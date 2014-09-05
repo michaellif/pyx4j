@@ -30,7 +30,9 @@ public enum PortalResidentBehavior implements Behavior {
 
     ResidentSecondary,
 
-    Guarantor /* is as well Prospective see VistaPortalAccessControlList */;
+    Guarantor, /* is as well Prospective see VistaPortalAccessControlList */
+
+    CommunicationCreateMessages;
 
     @Override
     public String toString() {

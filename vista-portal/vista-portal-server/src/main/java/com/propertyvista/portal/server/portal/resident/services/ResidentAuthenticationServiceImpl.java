@@ -40,10 +40,12 @@ import com.pyx4j.security.shared.Behavior;
 import com.propertyvista.biz.communication.CommunicationFacade;
 import com.propertyvista.biz.financial.payment.PaymentFacade;
 import com.propertyvista.biz.financial.payment.PaymentMethodTarget;
+import com.propertyvista.biz.policy.PolicyFacade;
 import com.propertyvista.biz.tenant.CustomerFacade;
 import com.propertyvista.biz.tenant.OnlineApplicationFacade;
 import com.propertyvista.config.VistaDeployment;
 import com.propertyvista.domain.payment.PaymentType;
+import com.propertyvista.domain.policy.policies.ResidentPortalPolicy;
 import com.propertyvista.domain.security.CustomerUser;
 import com.propertyvista.domain.security.CustomerUserCredential;
 import com.propertyvista.domain.security.PortalResidentBehavior;
@@ -131,6 +133,13 @@ public class ResidentAuthenticationServiceImpl extends VistaAuthenticationServic
             if (leases.size() > 1) {
                 actualBehaviors.add(PortalResidentBehavior.HasMultipleLeases);
             }
+
+            ResidentPortalPolicy policy = ServerSideFactory.create(PolicyFacade.class).obtainHierarchicalEffectivePolicy(selectedLease,
+                    ResidentPortalPolicy.class);
+            if (policy.communicationEnabled().getValue(false)) {
+                actualBehaviors.add(PortalResidentBehavior.CommunicationCreateMessages);
+            }
+
         } else {
             actualBehaviors.add(PortalResidentBehavior.LeaseSelectionRequired);
         }

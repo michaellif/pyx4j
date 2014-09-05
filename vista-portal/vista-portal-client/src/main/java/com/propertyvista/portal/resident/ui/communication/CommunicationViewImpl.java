@@ -35,9 +35,11 @@ import com.google.gwt.user.client.ui.ScrollPanel;
 import com.pyx4j.gwt.commons.layout.LayoutChangeEvent;
 import com.pyx4j.gwt.commons.layout.LayoutChangeHandler;
 import com.pyx4j.gwt.commons.layout.LayoutType;
+import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.widgets.client.Anchor;
 
+import com.propertyvista.domain.security.PortalResidentBehavior;
 import com.propertyvista.portal.rpc.portal.resident.ResidentPortalSiteMap;
 import com.propertyvista.portal.rpc.portal.resident.communication.MessageDTO;
 import com.propertyvista.portal.shared.resources.PortalImages;
@@ -196,6 +198,8 @@ public class CommunicationViewImpl extends FlowPanel implements CommunicationVie
             });
             add(messagesAnchor);
             add(writeActionImage);
+
+            writeActionImage.setVisible(SecurityController.check(PortalResidentBehavior.CommunicationCreateMessages));
 
         }
 
