@@ -26,7 +26,9 @@ import com.google.gwt.user.client.ui.Widget;
 import com.pyx4j.entity.security.DataModelPermission;
 import com.pyx4j.forms.client.ui.CIntegerField;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.security.shared.Permission;
+import com.pyx4j.site.client.ui.dialogs.EntitySelectorListDialog;
 import com.pyx4j.site.client.ui.prime.lister.ILister;
 import com.pyx4j.site.client.ui.prime.lister.ListerInternalViewImplBase;
 import com.pyx4j.widgets.client.Button;
@@ -42,6 +44,7 @@ import com.propertyvista.crm.rpc.dto.tenant.PreauthorizedPaymentsDTO;
 import com.propertyvista.domain.financial.BillingAccount;
 import com.propertyvista.domain.payment.AutopayAgreement;
 import com.propertyvista.domain.tenant.lease.Lease;
+import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
 import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
 import com.propertyvista.dto.LeaseDTO;
 import com.propertyvista.dto.PaymentRecordDTO;
@@ -49,6 +52,8 @@ import com.propertyvista.dto.PaymentRecordDTO;
 public class LeaseViewerViewImplBase<DTO extends LeaseDTO> extends CrmViewerViewImplBase<DTO> implements LeaseViewerViewBase<DTO> {
 
     private static final I18n i18n = I18n.get(LeaseViewerViewImpl.class);
+
+    private final MenuItem viewParticipants;
 
     protected final ILister<PaymentRecordDTO> paymentLister;
 
@@ -74,7 +79,7 @@ public class LeaseViewerViewImplBase<DTO extends LeaseDTO> extends CrmViewerView
         // Buttons:
 
         termsButton = new Button(i18n.tr("Terms"));
-        termsMenu.addItem(new MenuItem(i18n.tr("Current"), new Command() {
+        termsMenu.addItem(new MenuItem(i18n.tr("Effective"), new Command() {
             @Override
             public void execute() {
                 ((LeaseViewerViewBase.Presenter) getPresenter()).viewTerm(getForm().getValue().currentTerm());
@@ -89,6 +94,16 @@ public class LeaseViewerViewImplBase<DTO extends LeaseDTO> extends CrmViewerView
         papsButton.ensureDebugId(VistaCrmDebugId.Payments.ActionAutoPayments.debugId());
         papsButton.setMenu(papsMenu = new ButtonMenuBar());
         addHeaderToolbarItem(papsButton.asWidget());
+
+        // Views:
+
+        viewParticipants = new MenuItem(i18n.tr("Tenants/Guarantors"), new Command() {
+            @Override
+            public void execute() {
+                tenantsViewExecuter();
+            }
+        });
+        addView(viewParticipants);
 
         // Actions:
 
@@ -114,6 +129,21 @@ public class LeaseViewerViewImplBase<DTO extends LeaseDTO> extends CrmViewerView
         }, DataModelPermission.permissionCreate(PaymentRecordDTO.class));
         newPaymentAction.ensureDebugId(VistaCrmDebugId.Payments.ActionCreatePayment.debugId());
         addAction(newPaymentAction);
+    }
+
+    private void tenantsViewExecuter() {
+        ((LeaseViewerViewBase.Presenter) getPresenter()).retrieveParticipants(new DefaultAsyncCallback<List<LeaseTermParticipant<?>>>() {
+            @Override
+            public void onSuccess(List<LeaseTermParticipant<?>> result) {
+                new EntitySelectorListDialog<LeaseTermParticipant<?>>(i18n.tr("Select Tenants/Guarantors To Navigate"), false, result) {
+                    @Override
+                    public boolean onClickOk() {
+                        ((LeaseViewerViewBase.Presenter) getPresenter()).navigateParticipant(getSelectedItems());
+                        return true;
+                    }
+                }.show();
+            }
+        }, true);
     }
 
     private void reserveUnitExecuter() {

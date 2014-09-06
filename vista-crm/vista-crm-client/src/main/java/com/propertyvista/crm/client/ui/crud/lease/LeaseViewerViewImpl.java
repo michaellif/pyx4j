@@ -428,7 +428,7 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
     }
 
     private void sendMailActionExecuter() {
-        ((LeaseViewerView.Presenter) getPresenter()).retrieveUsers(new DefaultAsyncCallback<List<LeaseTermParticipant<?>>>() {
+        ((LeaseViewerView.Presenter) getPresenter()).retrieveParticipants(new DefaultAsyncCallback<List<LeaseTermParticipant<?>>>() {
             @Override
             public void onSuccess(List<LeaseTermParticipant<?>> result) {
                 new SendMailBox(result) {
@@ -439,7 +439,7 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
                     }
                 }.show();
             }
-        });
+        }, false);
     }
 
     private void noticeActionExecuter() {

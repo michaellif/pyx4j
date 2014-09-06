@@ -22,7 +22,6 @@ import com.pyx4j.commons.Key;
 import com.pyx4j.commons.Pair;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.core.AttachLevel;
-import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.rpc.shared.VoidSerializable;
@@ -30,10 +29,8 @@ import com.pyx4j.rpc.shared.VoidSerializable;
 import com.propertyvista.biz.financial.billing.BillingFacade;
 import com.propertyvista.biz.financial.billing.BillingUtils;
 import com.propertyvista.biz.occupancy.OccupancyFacade;
-import com.propertyvista.biz.tenant.lease.LeaseFacade;
 import com.propertyvista.crm.rpc.services.lease.common.LeaseViewerCrudServiceBase;
 import com.propertyvista.domain.tenant.lease.Lease;
-import com.propertyvista.domain.tenant.lease.LeaseTermGuarantor;
 import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
 import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
 import com.propertyvista.dto.LeaseDTO;
@@ -72,30 +69,37 @@ public abstract class LeaseViewerCrudServiceBaseImpl<DTO extends LeaseDTO> exten
     }
 
     @Override
-    public void retrieveUsers(AsyncCallback<Vector<LeaseTermParticipant<?>>> callback, Key entityId) {
-        Lease lease = ServerSideFactory.create(LeaseFacade.class).load(EntityFactory.createIdentityStub(Lease.class, entityId), false);
-
-        Vector<LeaseTermParticipant<?>> users = new Vector<LeaseTermParticipant<?>>();
-
-        assert (!lease.currentTerm().isNull());
-        Persistence.service().retrieve(lease.currentTerm().version().tenants());
-        for (LeaseTermTenant tenant : lease.currentTerm().version().tenants()) {
-            Persistence.service().retrieve(tenant);
-            switch (tenant.role().getValue()) {
-            case Applicant:
-            case CoApplicant:
-                users.add(tenant);
-            default:
-                break;
+    public void retrieveParticipants(final AsyncCallback<Vector<LeaseTermParticipant<?>>> callback, Key entityId, final Boolean includeDependants) {
+        retrieve(new AsyncCallback<DTO>() {
+            @Override
+            public void onFailure(Throwable caught) {
+                callback.onFailure(caught);
             }
-        }
 
-        Persistence.service().retrieve(lease.currentTerm().version().guarantors());
-        for (LeaseTermGuarantor guarantor : lease.currentTerm().version().guarantors()) {
-            users.add(guarantor);
-        }
+            @Override
+            public void onSuccess(DTO result) {
+                Vector<LeaseTermParticipant<?>> participants = new Vector<LeaseTermParticipant<?>>();
 
-        callback.onSuccess(users);
+                if (includeDependants) {
+                    participants.addAll(result.currentTerm().version().tenants());
+                } else {
+                    for (LeaseTermTenant tenant : result.currentTerm().version().tenants()) {
+                        Persistence.ensureRetrieve(tenant, AttachLevel.Attached);
+                        switch (tenant.role().getValue()) {
+                        case Applicant:
+                        case CoApplicant:
+                            participants.add(tenant);
+                        default:
+                            break;
+                        }
+                    }
+                }
+
+                participants.addAll(result.currentTerm().version().guarantors());
+
+                callback.onSuccess(participants);
+            }
+        }, entityId, RetrieveTarget.View);
     }
 
     void checkUnitMoveOut(DTO dto) {

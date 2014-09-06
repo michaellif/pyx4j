@@ -89,8 +89,6 @@ public class LeaseApplicationViewerViewImpl extends LeaseViewerViewImplBase<Leas
 
     private final MenuItem viewLease;
 
-    private final MenuItem viewParticipants;
-
     private final MenuItem createOnlineApplication;
 
     private final MenuItem cancelOnlineApplication;
@@ -161,14 +159,6 @@ public class LeaseApplicationViewerViewImpl extends LeaseViewerViewImplBase<Leas
             }
         }, DataModelPermission.permissionRead(LeaseDTO.class));
         addView(viewLease);
-
-        viewParticipants = new MenuItem(i18n.tr("Tenants/Guarantors"), new Command() {
-            @Override
-            public void execute() {
-                tenantsActionExecuter();
-            }
-        });
-        addView(viewParticipants);
 
         // Actions:
         setUnitReservationPermission(new ActionPermission(ApplicationReserveUnit.class));
@@ -264,34 +254,19 @@ public class LeaseApplicationViewerViewImpl extends LeaseViewerViewImplBase<Leas
         addAction(cancelAction);
     }
 
-    private void tenantsActionExecuter() {
-        ((LeaseViewerViewBase.Presenter) getPresenter()).retrieveUsers(new DefaultAsyncCallback<List<LeaseTermParticipant<?>>>() {
-            @Override
-            public void onSuccess(List<LeaseTermParticipant<?>> result) {
-                new EntitySelectorListDialog<LeaseTermParticipant<?>>(i18n.tr("Select Tenants/Guarantors To Navigate"), false, result) {
-                    @Override
-                    public boolean onClickOk() {
-                        ((LeaseApplicationViewerView.Presenter) getPresenter()).navigateUser(getSelectedItems());
-                        return true;
-                    }
-                }.show();
-            }
-        });
-    }
-
     private void inviteActionExecuter() {
-        ((LeaseViewerViewBase.Presenter) getPresenter()).retrieveUsers(new DefaultAsyncCallback<List<LeaseTermParticipant<?>>>() {
+        ((LeaseViewerViewBase.Presenter) getPresenter()).retrieveParticipants(new DefaultAsyncCallback<List<LeaseTermParticipant<?>>>() {
             @Override
             public void onSuccess(List<LeaseTermParticipant<?>> result) {
                 new EntitySelectorListDialog<LeaseTermParticipant<?>>(i18n.tr("Select Tenants/Guarantors To Send An Invitation To"), true, result) {
                     @Override
                     public boolean onClickOk() {
-                        ((LeaseApplicationViewerView.Presenter) getPresenter()).inviteUsers(getSelectedItems());
+                        ((LeaseApplicationViewerView.Presenter) getPresenter()).inviteParticipants(getSelectedItems());
                         return true;
                     }
                 }.show();
             }
-        });
+        }, false);
     }
 
     private void checkActionExecuter() {
@@ -300,7 +275,7 @@ public class LeaseApplicationViewerViewImpl extends LeaseViewerViewImplBase<Leas
             public void onSuccess(PmcEquifaxStatus result) {
                 switch (result) {
                 case Active:
-                    ((LeaseViewerViewBase.Presenter) getPresenter()).retrieveUsers(new DefaultAsyncCallback<List<LeaseTermParticipant<?>>>() {
+                    ((LeaseViewerViewBase.Presenter) getPresenter()).retrieveParticipants(new DefaultAsyncCallback<List<LeaseTermParticipant<?>>>() {
                         @Override
                         public void onSuccess(List<LeaseTermParticipant<?>> result) {
                             new EntitySelectorListDialog<LeaseTermParticipant<?>>(i18n.tr("Select Tenants/Guarantors To Check"), true, result) {
@@ -311,7 +286,7 @@ public class LeaseApplicationViewerViewImpl extends LeaseViewerViewImplBase<Leas
                                 }
                             }.show();
                         }
-                    });
+                    }, false);
                     break;
                 case NotRequested:
                     if (SecurityController.check(VistaCrmBehavior.AdminFinancial)) {

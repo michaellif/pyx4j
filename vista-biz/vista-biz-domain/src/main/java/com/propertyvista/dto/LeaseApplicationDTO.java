@@ -48,4 +48,5 @@ public interface LeaseApplicationDTO extends LeaseDTO {
 
     IList<LeaseApplicationDocument> applicationDocuments();
 
+    IPrimitive<String> currentTermNote();
 }

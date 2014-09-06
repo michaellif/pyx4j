@@ -29,7 +29,9 @@ public interface LeaseViewerViewBase<DTO extends LeaseDTO> extends IViewer<DTO> 
 
     interface Presenter extends IViewer.Presenter {
 
-        void retrieveUsers(AsyncCallback<List<LeaseTermParticipant<?>>> callback);
+        void retrieveParticipants(AsyncCallback<List<LeaseTermParticipant<?>>> callback, Boolean includeDependants);
+
+        void navigateParticipant(List<LeaseTermParticipant<?>> users);
 
         void viewTerm(LeaseTerm leaseTermId);
 

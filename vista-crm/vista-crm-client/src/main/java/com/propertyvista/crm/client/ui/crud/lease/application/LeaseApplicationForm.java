@@ -64,6 +64,9 @@ public class LeaseApplicationForm extends LeaseFormBase<LeaseApplicationDTO> {
     @Override
     public void onReset() {
         super.onReset();
+
+        get(proto().currentTerm()).setNote(null);
+
         // Yardi mode overrides:
         chargesTab.setTabVisible(!VistaFeatures.instance().yardiIntegration());
     }
@@ -89,6 +92,8 @@ public class LeaseApplicationForm extends LeaseFormBase<LeaseApplicationDTO> {
         get(proto().leaseApplication().submission()).setVisible(!getValue().leaseApplication().submission().isEmpty());
         get(proto().leaseApplication().validation()).setVisible(!getValue().leaseApplication().validation().isEmpty());
         get(proto().leaseApplication().approval()).setVisible(!getValue().leaseApplication().approval().isEmpty());
+
+        get(proto().currentTerm()).setNote(getValue().currentTermNote().getValue(), NoteStyle.Warn);
     }
 
     private IsWidget createInfoTab() {

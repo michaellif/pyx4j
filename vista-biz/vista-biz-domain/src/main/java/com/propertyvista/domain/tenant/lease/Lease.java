@@ -283,6 +283,7 @@ public interface Lease extends IEntity, HasNotesAndAttachments {
 
     LeaseTerm previousTerm();
 
+    @Caption(name = "Term in Effect")
     LeaseTerm currentTerm();
 
     LeaseTerm nextTerm();

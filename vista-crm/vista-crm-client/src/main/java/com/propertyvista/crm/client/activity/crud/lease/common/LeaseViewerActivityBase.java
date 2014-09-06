@@ -40,7 +40,9 @@ import com.propertyvista.crm.rpc.services.lease.common.LeaseViewerCrudServiceBas
 import com.propertyvista.domain.financial.BillingAccount;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseTerm;
+import com.propertyvista.domain.tenant.lease.LeaseTermGuarantor;
 import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
+import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
 import com.propertyvista.dto.LeaseDTO;
 import com.propertyvista.dto.PaymentRecordDTO;
 
@@ -89,13 +91,25 @@ public abstract class LeaseViewerActivityBase<DTO extends LeaseDTO> extends CrmV
     }
 
     @Override
-    public void retrieveUsers(final AsyncCallback<List<LeaseTermParticipant<?>>> callback) {
-        ((LeaseViewerCrudServiceBase<DTO>) getService()).retrieveUsers(new DefaultAsyncCallback<Vector<LeaseTermParticipant<?>>>() {
+    public void retrieveParticipants(final AsyncCallback<List<LeaseTermParticipant<?>>> callback, Boolean includeDependants) {
+        ((LeaseViewerCrudServiceBase<DTO>) getService()).retrieveParticipants(new DefaultAsyncCallback<Vector<LeaseTermParticipant<?>>>() {
             @Override
             public void onSuccess(Vector<LeaseTermParticipant<?>> result) {
                 callback.onSuccess(result);
             }
-        }, getEntityId());
+        }, getEntityId(), includeDependants);
+    }
+
+    @Override
+    public void navigateParticipant(List<LeaseTermParticipant<?>> users) {
+        assert (!users.isEmpty());
+        if (users.get(0) instanceof LeaseTermTenant) {
+            AppSite.getPlaceController().goTo(new CrmSiteMap.Tenants.Tenant().formViewerPlace(users.get(0).leaseParticipant().getPrimaryKey()));
+        } else if (users.get(0) instanceof LeaseTermGuarantor) {
+            AppSite.getPlaceController().goTo(new CrmSiteMap.Tenants.Guarantor().formViewerPlace(users.get(0).leaseParticipant().getPrimaryKey()));
+        } else {
+            throw new IllegalArgumentException("Unsupported Participant type");
+        }
     }
 
     @Override

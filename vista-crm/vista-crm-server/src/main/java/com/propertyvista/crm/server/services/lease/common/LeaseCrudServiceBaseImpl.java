@@ -59,7 +59,6 @@ public abstract class LeaseCrudServiceBaseImpl<DTO extends LeaseDTO> extends Abs
         }
 
         loadCommunicationLetters(to);
-
     }
 
     @Override

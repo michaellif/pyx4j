@@ -148,7 +148,14 @@ public class LeaseApplicationViewerCrudServiceImpl extends LeaseViewerCrudServic
         assert (!dto.currentTerm().isNull());
 
         if (dto.leaseApplication().status().getValue() == Status.Approved) {
+            dto.currentTermNote().setValue(null);
+            Key current = dto.currentTerm().getPrimaryKey();
+
             dto.currentTerm().set(loadHistoricTermVersion(dto, dto.approvalDate().getValue()));
+
+            if (!current.equalsIgnoreVersion(dto.currentTerm().getPrimaryKey())) {
+                dto.currentTermNote().setValue("Application effective Term is not the same as Lease one!");
+            }
         } else {
             dto.currentTerm().set(Persistence.retriveFinalOrDraft(LeaseTerm.class, dto.currentTerm().getPrimaryKey(), AttachLevel.Attached));
         }

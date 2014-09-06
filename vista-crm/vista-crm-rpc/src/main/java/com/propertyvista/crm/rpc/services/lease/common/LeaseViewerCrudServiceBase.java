@@ -26,7 +26,7 @@ import com.propertyvista.dto.LeaseDTO;
 
 public interface LeaseViewerCrudServiceBase<DTO extends LeaseDTO> extends AbstractCrudService<DTO> {
 
-    void retrieveUsers(AsyncCallback<Vector<LeaseTermParticipant<?>>> callback, Key entityId);
+    void retrieveParticipants(AsyncCallback<Vector<LeaseTermParticipant<?>>> callback, Key entityId, Boolean includeDependants);
 
     void reserveUnit(AsyncCallback<VoidSerializable> callback, Key entityId, int durationHours);
 

@@ -39,9 +39,7 @@ public interface LeaseApplicationViewerView extends LeaseViewerViewBase<LeaseApp
 
         void cancelOnlineApplication();
 
-        void navigateUser(List<LeaseTermParticipant<?>> users);
-
-        void inviteUsers(List<LeaseTermParticipant<?>> users);
+        void inviteParticipants(List<LeaseTermParticipant<?>> users);
 
         void creditCheck(List<LeaseTermParticipant<?>> users);
 
