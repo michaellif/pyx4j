@@ -25,7 +25,8 @@ import java.util.Collection;
 import java.util.Comparator;
 
 import com.google.gwt.event.logical.shared.SelectionEvent;
-import com.google.gwt.event.logical.shared.SelectionHandler;
+import com.google.gwt.event.logical.shared.ValueChangeEvent;
+import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.ui.HTML;
 
 import com.pyx4j.commons.IFormatter;
@@ -71,18 +72,6 @@ public class NSelectorBox<E extends IEntity> extends NFocusField<E, SelectorText
             @Override
             public String[] format(E value) {
                 return getCComponent().getOptionPathFormatter().format(value);
-            }
-        });
-    }
-
-    @Override
-    protected void onEditorCreate() {
-        super.onEditorCreate();
-        getEditor().addSelectionHandler(new SelectionHandler<E>() {
-            @Override
-            public void onSelection(SelectionEvent<E> event) {
-                setFocus(true);
-                getCComponent().stopEditing();
             }
         });
     }

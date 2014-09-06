@@ -127,6 +127,15 @@ public class MenuPickerPanel<E> extends MenuBar implements IPickerPanel<E> {
 
     @Override
     public void refreshSuggestions() {
+//TODO Refresh suggestions only when query changed
+        //  private boolean syncInput() {
+        //  String newText = getText();
+        //  // check if new input has been received
+        //  boolean result = (!display.isSuggestionListShowing() && CommonsStringUtils.isEmpty(newText))
+//              || (text == null ? newText != null : !text.equals(newText));
+        //  text = newText;
+        //  return result;
+        //}
 
         OptionsGrabber.Callback<E> callback = new OptionsGrabber.Callback<E>() {
             @Override

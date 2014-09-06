@@ -20,20 +20,17 @@
  */
 package com.pyx4j.widgets.client.suggest;
 
-import com.google.gwt.dom.client.Document;
-import com.google.gwt.dom.client.NativeEvent;
-import com.google.gwt.event.dom.client.ChangeEvent;
-import com.google.gwt.event.dom.client.ChangeHandler;
-import com.google.gwt.event.logical.shared.HasSelectionHandlers;
-import com.google.gwt.event.logical.shared.SelectionEvent;
-import com.google.gwt.event.logical.shared.SelectionHandler;
+import com.google.gwt.event.logical.shared.HasValueChangeHandlers;
+import com.google.gwt.event.logical.shared.ValueChangeEvent;
+import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
-import com.google.gwt.user.client.ui.SuggestOracle.Suggestion;
+import com.google.gwt.user.client.Command;
 
 import com.pyx4j.commons.IFormatter;
 import com.pyx4j.widgets.client.IFocusWidget;
+import com.pyx4j.widgets.client.ImageFactory;
 
-public class SelectorTextBox<E> extends AbstractSelectorWidget<E> implements HasSelectionHandlers<E>, IFocusWidget {
+public class SelectorTextBox<E> extends AbstractSelectorWidget<E> implements HasValueChangeHandlers<E>, IFocusWidget {
 
     private E value;
 
@@ -46,14 +43,26 @@ public class SelectorTextBox<E> extends AbstractSelectorWidget<E> implements Has
     private final IFormatter<E, String[]> optionPathFormatter;
 
     public SelectorTextBox(final OptionsGrabber<E> optionsGrabber, IFormatter<E, String> valueFormatter, IFormatter<E, String[]> optionPathFormatter) {
-
+        super(new SelectorTextBoxValuePanel<E>());
         this.optionsGrabber = optionsGrabber;
         this.valueFormatter = valueFormatter;
         this.optionPathFormatter = optionPathFormatter;
+        textBox = (SelectorTextBoxValuePanel<E>) getViewerPanel();
 
-        textBox = new SelectorTextBoxValuePanel<E>();
-        setViewerPanel(textBox);
+        textBox.addValueChangeHandler(new ValueChangeHandler<String>() {
 
+            @Override
+            public void onValueChange(ValueChangeEvent<String> event) {
+                System.out.println("+++++++++++++++onValueChange");
+            }
+        });
+
+        textBox.setAction(new Command() {
+            @Override
+            public void execute() {
+                System.out.println("+++++++++++++++setAction");
+            }
+        }, ImageFactory.getImages().action());
     }
 
     @Override
@@ -63,8 +72,8 @@ public class SelectorTextBox<E> extends AbstractSelectorWidget<E> implements Has
             textBox.setText("");
         } else {
             textBox.setText(valueFormatter.format(value));
-            getPickerPopup().hide();
-            fireSuggestionEvent(value);
+            hidePickerPopup();
+            fireValueChangeEvent(value);
         }
     }
 
@@ -73,39 +82,13 @@ public class SelectorTextBox<E> extends AbstractSelectorWidget<E> implements Has
         return value;
     }
 
-    public HandlerRegistration addChangeHandler(ChangeHandler handler) {
-        addSelectionHandler(new SelectionHandler<E>() {
-            @Override
-            public void onSelection(SelectionEvent<E> event) {
-                NativeEvent nativeEvent = Document.get().createChangeEvent();
-                ChangeEvent.fireNativeEvent(nativeEvent, null);
-            }
-        });
-        return addDomHandler(handler, ChangeEvent.getType());
-    }
-
     @Override
-    public HandlerRegistration addSelectionHandler(SelectionHandler<E> handler) {
-        return addHandler(handler, SelectionEvent.getType());
+    public HandlerRegistration addValueChangeHandler(ValueChangeHandler<E> handler) {
+        return addHandler(handler, ValueChangeEvent.getType());
     }
 
-    @Override
-    public void setEnabled(boolean enabled) {
-        super.setEnabled(enabled);
-        if (!enabled) {
-            getPickerPopup().hide();
-        }
-    }
-
-    private void fireSuggestionEvent(E selectedSuggestion) {
-        SelectionEvent.fire(this, selectedSuggestion);
-    }
-
-    /**
-     * The callback used when a user selects a {@link Suggestion}.
-     */
-    public static interface SuggestionCallback<E> {
-        void onSuggestionSelected(E suggestion);
+    private void fireValueChangeEvent(E value) {
+        ValueChangeEvent.fire(this, value);
     }
 
 }

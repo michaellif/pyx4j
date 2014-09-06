@@ -30,12 +30,7 @@ import com.pyx4j.widgets.client.TextBox;
 public class SelectorTextBoxValuePanel<E> extends TextBox implements ISelectorValuePanel<E> {
 
     public SelectorTextBoxValuePanel() {
-        setAction(new Command() {
-            @Override
-            public void execute() {
 
-            }
-        }, ImageFactory.getImages().action());
     }
 
     @Override

@@ -24,6 +24,7 @@ import com.google.gwt.dom.client.Style.Position;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.BlurHandler;
 import com.google.gwt.event.dom.client.ChangeHandler;
+import com.google.gwt.event.dom.client.FocusEvent;
 import com.google.gwt.event.dom.client.FocusHandler;
 import com.google.gwt.event.dom.client.KeyDownHandler;
 import com.google.gwt.event.dom.client.KeyPressHandler;
@@ -85,7 +86,7 @@ public abstract class TextBoxBase extends Composite implements ITextWidget, Wate
         return textBoxWidget;
     }
 
-    protected void setAction(Command command, ImageResource imageResource) {
+    public void setAction(Command command, ImageResource imageResource) {
         if (actionButton != null) {
             contentPanel.remove(actionButton);
         }
@@ -93,10 +94,26 @@ public abstract class TextBoxBase extends Composite implements ITextWidget, Wate
             textBoxHolder.getElement().getStyle().setMarginRight(0, Unit.PX);
         } else {
             actionButton = new Button(imageResource, command) {
+
+                {
+                    addFocusHandler(new FocusHandler() {
+
+                        @Override
+                        public void onFocus(FocusEvent event) {
+                            textBoxWidget.setFocus(true);
+                        }
+                    });
+                }
+
                 @Override
                 protected void onAttach() {
                     super.onAttach();
                     textBoxHolder.getElement().getStyle().setMarginRight(actionButton.getOffsetWidth(), Unit.PX);
+                }
+
+                @Override
+                public int getTabIndex() {
+                    return -1;
                 }
             };
             actionButton.setEnabled(isEditable() && isEnabled());

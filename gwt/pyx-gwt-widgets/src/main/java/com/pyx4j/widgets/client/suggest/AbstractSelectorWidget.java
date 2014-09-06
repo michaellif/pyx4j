@@ -22,8 +22,11 @@ package com.pyx4j.widgets.client.suggest;
 
 import com.google.gwt.event.dom.client.BlurHandler;
 import com.google.gwt.event.dom.client.FocusHandler;
+import com.google.gwt.event.dom.client.KeyCodes;
+import com.google.gwt.event.dom.client.KeyDownEvent;
 import com.google.gwt.event.dom.client.KeyDownHandler;
 import com.google.gwt.event.dom.client.KeyPressHandler;
+import com.google.gwt.event.dom.client.KeyUpEvent;
 import com.google.gwt.event.dom.client.KeyUpHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.ui.Composite;
@@ -32,26 +35,57 @@ import com.pyx4j.commons.IDebugId;
 
 public abstract class AbstractSelectorWidget<E> extends Composite implements ISelectorWidget<E> {
 
-    private ISelectorValuePanel<E> viewerPanel;
+    private final ISelectorValuePanel<E> viewerPanel;
 
-    private PickerPopup<E> pickerPopup;
+    private final PickerPopup<E> pickerPopup;
 
-    public AbstractSelectorWidget() {
-    }
-
-    public void setViewerPanel(ISelectorValuePanel<E> viewerPanel) {
+    public AbstractSelectorWidget(ISelectorValuePanel<E> viewerPanel) {
         this.viewerPanel = viewerPanel;
         initWidget(viewerPanel.asWidget());
         pickerPopup = new PickerPopup<E>(this);
-    }
 
-    protected PickerPopup<E> getPickerPopup() {
-        return pickerPopup;
+        viewerPanel.addKeyDownHandler(new KeyDownHandler() {
+
+            @Override
+            public void onKeyDown(KeyDownEvent event) {
+                switch (event.getNativeKeyCode()) {
+                case KeyCodes.KEY_DOWN:
+                    pickerPopup.moveSelectionDown();
+                    break;
+                case KeyCodes.KEY_UP:
+                    pickerPopup.moveSelectionUp();
+                    break;
+                case KeyCodes.KEY_ENTER:
+                case KeyCodes.KEY_TAB:
+                    pickerPopup.pickSelection();
+                    break;
+                }
+            }
+        });
+
+        viewerPanel.addKeyUpHandler(new KeyUpHandler() {
+
+            @Override
+            public void onKeyUp(KeyUpEvent event) {
+                //if (syncInput()) {
+                pickerPopup.refreshSuggestions();
+                //}
+            }
+        });
+
     }
 
     @Override
     public ISelectorValuePanel<E> getViewerPanel() {
         return viewerPanel;
+    }
+
+    protected void showPickerPopup(IPickerPanel<E> pickerPanel) {
+        pickerPopup.show(pickerPanel);
+    }
+
+    protected void hidePickerPopup() {
+        pickerPopup.hide();
     }
 
     @Override
@@ -82,6 +116,9 @@ public abstract class AbstractSelectorWidget<E> extends Composite implements ISe
     @Override
     public void setEnabled(boolean enabled) {
         viewerPanel.setEnabled(enabled);
+        if (!enabled) {
+            hidePickerPopup();
+        }
     }
 
     @Override
