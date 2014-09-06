@@ -96,6 +96,8 @@ public abstract class TextBoxBase extends Composite implements ITextWidget, Wate
             actionButton = new Button(imageResource, command) {
 
                 {
+                    setTabIndex(-1);
+
                     addFocusHandler(new FocusHandler() {
 
                         @Override
@@ -111,10 +113,6 @@ public abstract class TextBoxBase extends Composite implements ITextWidget, Wate
                     textBoxHolder.getElement().getStyle().setMarginRight(actionButton.getOffsetWidth(), Unit.PX);
                 }
 
-                @Override
-                public int getTabIndex() {
-                    return -1;
-                }
             };
             actionButton.setEnabled(isEditable() && isEnabled());
             actionButton.getElement().getStyle().setPosition(Position.ABSOLUTE);
@@ -212,6 +210,25 @@ public abstract class TextBoxBase extends Composite implements ITextWidget, Wate
     }
 
     @Override
+    public void setDebugId(IDebugId debugId) {
+        this.debugId = debugId;
+        textBoxWidget.ensureDebugId(debugId.debugId());
+    }
+
+    public HandlerRegistration addValueChangeHandler(ValueChangeHandler<String> handler) {
+        return textBoxWidget.addValueChangeHandler(handler);
+    }
+
+    @Override
+    public HandlerRegistration addChangeHandler(ChangeHandler handler) {
+        return textBoxWidget.addChangeHandler(handler);
+    }
+
+    public void setNameProperty(String name) {
+        textBoxWidget.setName(name);
+    }
+
+    @Override
     public int getTabIndex() {
         return textBoxWidget.getTabIndex();
     }
@@ -229,23 +246,6 @@ public abstract class TextBoxBase extends Composite implements ITextWidget, Wate
     @Override
     public void setTabIndex(int index) {
         textBoxWidget.setTabIndex(index);
-    }
-
-    @Override
-    public void setDebugId(IDebugId debugId) {
-        this.debugId = debugId;
-        textBoxWidget.ensureDebugId(debugId.debugId());
-    }
-
-    /**
-     * Set TextBox HTML element name
-     */
-    public void setNameProperty(String name) {
-        textBoxWidget.setName(name);
-    }
-
-    public HandlerRegistration addValueChangeHandler(ValueChangeHandler<String> handler) {
-        return textBoxWidget.addValueChangeHandler(handler);
     }
 
     @Override
@@ -275,12 +275,7 @@ public abstract class TextBoxBase extends Composite implements ITextWidget, Wate
     }
 
     @Override
-    public HandlerRegistration addChangeHandler(ChangeHandler handler) {
-        return textBoxWidget.addChangeHandler(handler);
-    }
-
-    @Override
     public HandlerRegistration addKeyPressHandler(KeyPressHandler handler) {
-        return getTextBoxWidget().addKeyPressHandler(handler);
+        return textBoxWidget.addKeyPressHandler(handler);
     }
 }
