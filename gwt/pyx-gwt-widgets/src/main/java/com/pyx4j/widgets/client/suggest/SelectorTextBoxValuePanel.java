@@ -20,22 +20,12 @@
  */
 package com.pyx4j.widgets.client.suggest;
 
-import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.event.shared.HandlerRegistration;
-import com.google.gwt.user.client.Command;
-
-import com.pyx4j.widgets.client.ImageFactory;
 import com.pyx4j.widgets.client.TextBox;
 
 public class SelectorTextBoxValuePanel<E> extends TextBox implements ISelectorValuePanel<E> {
 
     public SelectorTextBoxValuePanel() {
 
-    }
-
-    @Override
-    public HandlerRegistration addClickHandler(ClickHandler handler) {
-        return getTextBoxWidget().addClickHandler(handler);
     }
 
     @Override

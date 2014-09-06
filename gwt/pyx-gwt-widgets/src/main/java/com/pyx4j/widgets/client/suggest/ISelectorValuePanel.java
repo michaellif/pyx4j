@@ -20,12 +20,11 @@
  */
 package com.pyx4j.widgets.client.suggest;
 
-import com.google.gwt.event.dom.client.HasClickHandlers;
 import com.google.gwt.event.logical.shared.HasValueChangeHandlers;
 
 import com.pyx4j.widgets.client.IFocusWidget;
 
-public interface ISelectorValuePanel<E> extends IFocusWidget, HasClickHandlers, HasValueChangeHandlers<String> {
+public interface ISelectorValuePanel<E> extends IFocusWidget, HasValueChangeHandlers<String> {
 
     String getQuery();
 

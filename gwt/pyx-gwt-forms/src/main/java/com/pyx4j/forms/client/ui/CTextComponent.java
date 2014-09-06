@@ -53,6 +53,13 @@ public abstract class CTextComponent<DATA, WIDGET extends INativeFocusField<DATA
         return watermark;
     }
 
+    @Override
+    protected String getDebugInfo() {
+        StringBuilder info = new StringBuilder(super.getDebugInfo());
+        info.append("watermark").append("=").append(getWatermark()).append(";");
+        return info.toString();
+    }
+
     class TextComponentLengthValidator extends AbstractComponentValidator<DATA> {
 
         private final String validationMessage;

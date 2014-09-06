@@ -29,8 +29,9 @@ import com.google.gwt.user.client.Command;
 import com.pyx4j.commons.IFormatter;
 import com.pyx4j.widgets.client.IFocusWidget;
 import com.pyx4j.widgets.client.ImageFactory;
+import com.pyx4j.widgets.client.WatermarkComponent;
 
-public class SelectorTextBox<E> extends AbstractSelectorWidget<E> implements HasValueChangeHandlers<E>, IFocusWidget {
+public class SelectorTextBox<E> extends AbstractSelectorWidget<E> implements HasValueChangeHandlers<E>, IFocusWidget, WatermarkComponent {
 
     private E value;
 
@@ -89,6 +90,16 @@ public class SelectorTextBox<E> extends AbstractSelectorWidget<E> implements Has
 
     private void fireValueChangeEvent(E value) {
         ValueChangeEvent.fire(this, value);
+    }
+
+    @Override
+    public void setWatermark(String watermark) {
+        textBox.setWatermark(watermark);
+    }
+
+    @Override
+    public String getWatermark() {
+        return textBox.getWatermark();
     }
 
 }

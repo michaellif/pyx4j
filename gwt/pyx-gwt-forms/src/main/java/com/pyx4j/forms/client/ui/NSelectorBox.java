@@ -24,18 +24,16 @@ import java.text.ParseException;
 import java.util.Collection;
 import java.util.Comparator;
 
-import com.google.gwt.event.logical.shared.SelectionEvent;
-import com.google.gwt.event.logical.shared.ValueChangeEvent;
-import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.ui.HTML;
 
 import com.pyx4j.commons.IFormatter;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.widgets.client.Label;
+import com.pyx4j.widgets.client.WatermarkComponent;
 import com.pyx4j.widgets.client.suggest.MultyWordSuggestOptionsGrabber;
 import com.pyx4j.widgets.client.suggest.SelectorTextBox;
 
-public class NSelectorBox<E extends IEntity> extends NFocusField<E, SelectorTextBox<E>, CSelectorBox<E>, HTML> {
+public class NSelectorBox<E extends IEntity> extends NFocusField<E, SelectorTextBox<E>, CSelectorBox<E>, HTML> implements WatermarkComponent {
 
     private final MultyWordSuggestOptionsGrabber<E> optionsGrabber;
 
@@ -92,6 +90,22 @@ public class NSelectorBox<E extends IEntity> extends NFocusField<E, SelectorText
             return null;
         } else {
             return getEditor().getValue();
+        }
+    }
+
+    @Override
+    public void setWatermark(String watermark) {
+        if (getEditor() instanceof WatermarkComponent) {
+            ((WatermarkComponent) getEditor()).setWatermark(watermark);
+        }
+    }
+
+    @Override
+    public String getWatermark() {
+        if (getEditor() instanceof WatermarkComponent) {
+            return ((WatermarkComponent) getEditor()).getWatermark();
+        } else {
+            return null;
         }
     }
 }

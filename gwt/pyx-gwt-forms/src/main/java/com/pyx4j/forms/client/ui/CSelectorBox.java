@@ -109,4 +109,11 @@ public class CSelectorBox<E extends IEntity> extends CFocusComponent<E, NSelecto
     public String getWatermark() {
         return watermark;
     }
+
+    @Override
+    protected String getDebugInfo() {
+        StringBuilder info = new StringBuilder(super.getDebugInfo());
+        info.append("watermark").append("=").append(getWatermark()).append(";");
+        return info.toString();
+    }
 }
