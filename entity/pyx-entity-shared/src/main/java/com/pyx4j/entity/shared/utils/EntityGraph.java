@@ -249,11 +249,17 @@ public class EntityGraph {
 
     @SuppressWarnings("unchecked")
     private static boolean fullyEqualValues(IEntity ent1, IEntity ent2, EntityGraphEqualOptions options, Set<IEntity> processed, Set<Path> ignorePaths) {
+        if (ent1 == ent2) {
+            return true;
+        } else if ((ent1 == null) || (ent2 == null)) {
+            return false;
+        }
+
         // Cast if required to concert instance
         ent1 = ent1.cast();
         ent2 = ent2.cast();
 
-        if ((ent1 == ent2) || (processed.contains(ent1))) {
+        if (processed.contains(ent1)) {
             return true;
         }
         processed.add(ent1);
