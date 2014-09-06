@@ -67,9 +67,7 @@ public abstract class AbstractSelectorWidget<E> extends Composite implements ISe
 
             @Override
             public void onKeyUp(KeyUpEvent event) {
-                //if (syncInput()) {
                 pickerPopup.refreshSuggestions();
-                //}
             }
         });
 
