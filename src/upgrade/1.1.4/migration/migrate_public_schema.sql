@@ -47,6 +47,7 @@ BEGIN TRANSACTION;
     CREATE SEQUENCE dev_card_service_simulation_reconciliation_record_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;
     CREATE SEQUENCE dev_card_service_simulation_company_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;
     CREATE SEQUENCE message_attachment_blob_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;
+    CREATE SEQUENCE resident_portal_policy_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;
     CREATE SEQUENCE signed_web_payment_term_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;
 
 
@@ -73,7 +74,9 @@ BEGIN TRANSACTION;
     ALTER SEQUENCE dev_card_service_simulation_reconciliation_record_seq OWNER TO vista ;
     ALTER SEQUENCE dev_card_service_simulation_company_seq OWNER TO vista ;
     ALTER SEQUENCE message_attachment_blob_seq OWNER TO vista ;
+    ALTER SEQUENCE resident_portal_policy_seq OWNER TO vista ;
     ALTER SEQUENCE province_policy_node_seq OWNER TO vista ;
+    ALTER SEQUENCE signed_web_payment_term_seq OWNER TO vista;
 
        
 COMMIT;

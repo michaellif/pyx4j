@@ -550,6 +550,21 @@ BEGIN
         
         ALTER TABLE pt_vehicle  ADD COLUMN country VARCHAR(50),
                                 ADD COLUMN province VARCHAR(50);
+                                
+        -- resident_portal_policy
+        
+        CREATE TABLE resident_portal_policy
+        (
+            id                      BIGINT                  NOT NULL,
+            node                    BIGINT,
+            node_discriminator      VARCHAR(50),
+            updated                 TIMESTAMP,
+            communication_enabled   BOOLEAN,
+                CONSTRAINT resident_portal_policy_pk PRIMARY KEY(id)
+        );
+        
+        ALTER TABLE resident_portal_policy OWNER TO vista;
+        
         
         -- restrictions_policy
         
@@ -1103,6 +1118,17 @@ BEGIN
                 ||'SET  province = p.province '
                 ||'FROM '||v_schema_name||'.province_policy_node p '
                 ||'WHERE    pt.province_old = p.id ';
+                
+        
+        -- resident_portal_policy
+        
+        EXECUTE 'INSERT INTO '||v_schema_name||'.resident_portal_policy'
+                ||'(id,node,node_discriminator,updated,communication_enabled) '
+                ||'(SELECT  nextval(''public.resident_portal_policy_seq'') AS id, '
+                ||'         id AS node, ''OrganizationPoliciesNode'' AS node_discriminator,'
+                ||'         DATE_TRUNC(''second'',current_timestamp)::timestamp AS updated, '
+                ||'         FALSE AS communication_enabled '
+                ||' FROM '||v_schema_name||'.organization_policies_node )';
                 
         -- restrictions_policy
         
@@ -1707,8 +1733,8 @@ BEGIN
             'EftAggregatedTransfer', 'EmailTemplatesPolicy', 'Employee', 'Floorplan', 'Guarantor', 'IdAssignmentPolicy', 'Landlord', 'Lease', 
             'LeaseAdjustmentPolicy', 'LeaseBillingPolicy', 'LegalTermsPolicy', 'Locker', 'MaintenanceRequest', 'MaintenanceRequestPolicy', 
             'MerchantAccount', 'N4Policy', 'OnlineAppPolicy', 'Parking', 'PaymentPostingBatch', 'PaymentRecord', 'PaymentTransactionsPolicy', 
-            'PaymentTypeSelectionPolicy', 'PetPolicy', 'ProductTaxPolicy', 'ProspectPortalPolicy', 'RestrictionsPolicy', 'Tenant', 
-            'TenantInsurancePolicy', 'Vendor', 'YardiInterfacePolicy', 'feature', 'service'));
+            'PaymentTypeSelectionPolicy', 'PetPolicy', 'ProductTaxPolicy', 'ProspectPortalPolicy', 'ResidentPortalPolicy', 'RestrictionsPolicy', 
+            'Tenant', 'TenantInsurancePolicy', 'Vendor', 'YardiInterfacePolicy', 'feature', 'service'));
         ALTER TABLE notification ADD CONSTRAINT notification_tp_e_ck 
             CHECK ((tp) IN ('AutoPayCanceledByResident', 'AutoPayReviewRequired', 'ElectronicPaymentRejectedNsf', 'MaintenanceRequest', 'YardiSynchronization'));
         ALTER TABLE payment_method ADD CONSTRAINT payment_method_billing_address_country_e_ck 
@@ -1778,6 +1804,9 @@ BEGIN
             'NovaScotia', 'Nunavut', 'Ohio', 'Oklahoma', 'Ontario', 'Oregon', 'Pennsylvania', 'PrinceEdwardIsland', 'PuertoRico', 'Quebec', 
             'RhodeIsland', 'Saskatchewan', 'SouthCarolina', 'SouthDakota', 'Tennessee', 'Texas', 'Utah', 'Vermont', 'VirginIslands', 'Virginia', 
             'Washington', 'WestVirginia', 'Wisconsin', 'Wyoming', 'YukonTerritory'));
+        ALTER TABLE resident_portal_policy ADD CONSTRAINT resident_portal_policy_node_discriminator_d_ck 
+            CHECK ((node_discriminator) IN ('AptUnit', 'Building', 'Complex', 'Country', 'Floorplan', 'OrganizationPoliciesNode', 'Province'));
+
 
         
         -- not null
