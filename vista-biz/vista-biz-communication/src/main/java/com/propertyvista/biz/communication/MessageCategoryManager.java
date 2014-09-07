@@ -59,6 +59,10 @@ public class MessageCategoryManager {
 
     public MessageCategory getMessageCategoryFromCache(TicketType mgCategory) {
         MessageCategory ep = CacheService.get(CategoryCacheKey.getCacheKey(mgCategory));
+        if (ep == null) {
+            cacheMessageCategories();
+            ep = CacheService.get(CategoryCacheKey.getCacheKey(mgCategory));
+        }
         return ep;
     }
 

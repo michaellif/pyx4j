@@ -212,6 +212,7 @@ public class VistaPortalAccessControlList extends ServletContainerAclBuilder {
         grant(new IServiceExecutePermission(ExtraActivityPortalService.class));
         grant(new IServiceExecutePermission(CommunityEventPortalCrudService.class));
         grant(PortalResidentBehavior.Resident, new IServiceExecutePermission(MessagePortalCrudService.class));
+        grant(PortalResidentBehavior.Guarantor, new IServiceExecutePermission(MessagePortalCrudService.class));
 
         grant(PortalResidentBehavior.Resident, new IServiceExecutePermission(DeferredProcessService.class));
 
