@@ -46,6 +46,31 @@ public class MenuPickerPanel<E> extends MenuBar implements IPickerPanel<E> {
         setFocusOnHoverEnabled(false);
     }
 
+    @Override
+    public void refreshSuggestions(String query) {
+        System.out.println("+++++++++++++" + query);
+
+//TODO Refresh suggestions only when query changed
+        //  private boolean syncInput() {
+        //  String newText = getText();
+        //  // check if new input has been received
+        //  boolean result = (!display.isSuggestionListShowing() && CommonsStringUtils.isEmpty(newText))
+//              || (text == null ? newText != null : !text.equals(newText));
+        //  text = newText;
+        //  return result;
+        //}
+
+        OptionsGrabber.Callback<E> callback = new OptionsGrabber.Callback<E>() {
+            @Override
+            public void onOptionsReady(OptionsGrabber.Request request, OptionsGrabber.Response<E> response) {
+                showSuggestions(response.getOptions(), request.getQuery());
+            }
+        };
+
+        optionsGrabber.grabOptions(new OptionsGrabber.Request(query == null ? "" : query, limit), callback);
+
+    }
+
     public int getNumItems() {
         return getItems().size();
     }
@@ -123,30 +148,6 @@ public class MenuPickerPanel<E> extends MenuBar implements IPickerPanel<E> {
         }
 
         setVisible(true);
-    }
-
-    @Override
-    public void refreshSuggestions() {
-//TODO Refresh suggestions only when query changed
-        //  private boolean syncInput() {
-        //  String newText = getText();
-        //  // check if new input has been received
-        //  boolean result = (!display.isSuggestionListShowing() && CommonsStringUtils.isEmpty(newText))
-//              || (text == null ? newText != null : !text.equals(newText));
-        //  text = newText;
-        //  return result;
-        //}
-
-        OptionsGrabber.Callback<E> callback = new OptionsGrabber.Callback<E>() {
-            @Override
-            public void onOptionsReady(OptionsGrabber.Request request, OptionsGrabber.Response<E> response) {
-                showSuggestions(response.getOptions(), request.getQuery());
-            }
-        };
-
-        String query = pickerPopup.getSelectorWidget().getViewerPanel().getQuery();
-        optionsGrabber.grabOptions(new OptionsGrabber.Request(query == null ? "" : query, limit), callback);
-
     }
 
     private class SuggestionMenuItem extends MenuItem {

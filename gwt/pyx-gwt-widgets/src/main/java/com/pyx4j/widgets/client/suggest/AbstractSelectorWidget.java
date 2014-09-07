@@ -26,7 +26,6 @@ import com.google.gwt.event.dom.client.KeyCodes;
 import com.google.gwt.event.dom.client.KeyDownEvent;
 import com.google.gwt.event.dom.client.KeyDownHandler;
 import com.google.gwt.event.dom.client.KeyPressHandler;
-import com.google.gwt.event.dom.client.KeyUpEvent;
 import com.google.gwt.event.dom.client.KeyUpHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.ui.Composite;
@@ -39,7 +38,9 @@ public abstract class AbstractSelectorWidget<E> extends Composite implements ISe
 
     private final PickerPopup<E> pickerPopup;
 
-    public AbstractSelectorWidget(ISelectorValuePanel<E> viewerPanel) {
+    private String query = "";
+
+    public AbstractSelectorWidget(final ISelectorValuePanel<E> viewerPanel) {
         this.viewerPanel = viewerPanel;
         initWidget(viewerPanel.asWidget());
         pickerPopup = new PickerPopup<E>(this);
@@ -62,15 +63,14 @@ public abstract class AbstractSelectorWidget<E> extends Composite implements ISe
                 }
             }
         });
+    }
 
-        viewerPanel.addKeyUpHandler(new KeyUpHandler() {
+    protected String getQuery() {
+        return query;
+    }
 
-            @Override
-            public void onKeyUp(KeyUpEvent event) {
-                pickerPopup.refreshSuggestions();
-            }
-        });
-
+    protected void setQuery(String query) {
+        this.query = query;
     }
 
     @Override

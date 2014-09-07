@@ -20,6 +20,8 @@
  */
 package com.pyx4j.widgets.client;
 
+import com.google.gwt.core.client.Scheduler;
+import com.google.gwt.core.client.Scheduler.ScheduledCommand;
 import com.google.gwt.dom.client.Style.Position;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.BlurHandler;
@@ -34,15 +36,19 @@ import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.resources.client.ImageResource;
 import com.google.gwt.user.client.Command;
+import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.SimplePanel;
 
 import com.pyx4j.commons.CompositeDebugId;
 import com.pyx4j.commons.IDebugId;
+import com.pyx4j.widgets.client.event.shared.HasPasteHandlers;
+import com.pyx4j.widgets.client.event.shared.PasteEvent;
+import com.pyx4j.widgets.client.event.shared.PasteHandler;
 import com.pyx4j.widgets.client.style.theme.WidgetTheme;
 
-public abstract class TextBoxBase extends Composite implements ITextWidget, WatermarkComponent {
+public abstract class TextBoxBase extends Composite implements ITextWidget, HasPasteHandlers, WatermarkComponent {
 
     private TextWatermark watermark;
 
@@ -65,6 +71,8 @@ public abstract class TextBoxBase extends Composite implements ITextWidget, Wate
         textBoxHolder.getElement().getStyle().setMarginRight(0, Unit.PX);
 
         contentPanel.add(textBoxHolder);
+
+        sinkEvents(Event.ONPASTE);
 
         initWidget(contentPanel);
     }
@@ -278,4 +286,28 @@ public abstract class TextBoxBase extends Composite implements ITextWidget, Wate
     public HandlerRegistration addKeyPressHandler(KeyPressHandler handler) {
         return textBoxWidget.addKeyPressHandler(handler);
     }
+
+    @Override
+    public HandlerRegistration addPasteHandler(PasteHandler handler) {
+        return addHandler(handler, PasteEvent.getType());
+    }
+
+    @Override
+    public void onBrowserEvent(Event event) {
+        super.onBrowserEvent(event);
+        switch (event.getTypeInt()) {
+        case Event.ONPASTE:
+            event.stopPropagation();
+            Scheduler.get().scheduleDeferred(new ScheduledCommand() {
+
+                @Override
+                public void execute() {
+                    PasteEvent.fire(TextBoxBase.this);
+                }
+            });
+
+            break;
+        }
+    }
+
 }

@@ -14,33 +14,17 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on Apr 14, 2010
- * @author vlads
+ * Created on May 15, 2009
+ * @author michaellif
  * @version $Id$
  */
 package com.pyx4j.widgets.client.event.shared;
 
-import com.google.gwt.event.shared.EventHandler;
+import com.google.gwt.event.shared.HandlerRegistration;
+import com.google.gwt.event.shared.HasHandlers;
 
-/**
- * InlineWidget aware of PageLeavingEvent should not register them. It is done
- * automatically.
- * 
- * TODO this handler should be renamed to something like StateChangeHandler and should be
- * combined with BeforeCloseHandler
- * 
- * @author vlads
- * 
- */
-public interface PageLeavingHandler extends EventHandler {
+public interface HasPasteHandlers extends HasHandlers {
 
-    /**
-     * Fired just before the browser window closes or navigates to a different site or
-     * Page. No user-interface may be displayed!
-     * 
-     * @param event
-     *            the event
-     */
-    public void onPageLeaving(PageLeavingEvent event);
+    HandlerRegistration addPasteHandler(PasteHandler handler);
 
 }

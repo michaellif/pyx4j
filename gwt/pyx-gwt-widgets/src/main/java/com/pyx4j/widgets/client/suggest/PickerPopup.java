@@ -82,9 +82,9 @@ public class PickerPopup<E> extends PopupPanel {
         }
     };
 
-    public void refreshSuggestions() {
+    public void refreshSuggestions(String query) {
         if (pickerPanel != null) {
-            pickerPanel.refreshSuggestions();
+            pickerPanel.refreshSuggestions(query);
         }
     }
 

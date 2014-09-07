@@ -20,6 +20,8 @@
  */
 package com.pyx4j.widgets.client.suggest;
 
+import com.google.gwt.event.dom.client.KeyUpEvent;
+import com.google.gwt.event.dom.client.KeyUpHandler;
 import com.google.gwt.event.logical.shared.HasValueChangeHandlers;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
@@ -30,6 +32,8 @@ import com.pyx4j.commons.IFormatter;
 import com.pyx4j.widgets.client.IFocusWidget;
 import com.pyx4j.widgets.client.ImageFactory;
 import com.pyx4j.widgets.client.WatermarkComponent;
+import com.pyx4j.widgets.client.event.shared.PasteEvent;
+import com.pyx4j.widgets.client.event.shared.PasteHandler;
 
 public class SelectorTextBox<E> extends AbstractSelectorWidget<E> implements HasValueChangeHandlers<E>, IFocusWidget, WatermarkComponent {
 
@@ -37,31 +41,40 @@ public class SelectorTextBox<E> extends AbstractSelectorWidget<E> implements Has
 
     private final SelectorTextBoxValuePanel<E> textBox;
 
-    private final OptionsGrabber<E> optionsGrabber;
-
     private final IFormatter<E, String> valueFormatter;
 
     private final IFormatter<E, String[]> optionPathFormatter;
 
+    private final IPickerPanel<E> picker;
+
     public SelectorTextBox(final OptionsGrabber<E> optionsGrabber, IFormatter<E, String> valueFormatter, IFormatter<E, String[]> optionPathFormatter) {
         super(new SelectorTextBoxValuePanel<E>());
-        this.optionsGrabber = optionsGrabber;
         this.valueFormatter = valueFormatter;
         this.optionPathFormatter = optionPathFormatter;
         textBox = (SelectorTextBoxValuePanel<E>) getViewerPanel();
 
-        textBox.addValueChangeHandler(new ValueChangeHandler<String>() {
+        picker = new MenuPickerPanel<E>(optionsGrabber, valueFormatter);
+
+        textBox.addKeyUpHandler(new KeyUpHandler() {
 
             @Override
-            public void onValueChange(ValueChangeEvent<String> event) {
-                System.out.println("+++++++++++++++onValueChange");
+            public void onKeyUp(KeyUpEvent event) {
+                showSuggestPicker();
+            }
+        });
+
+        textBox.addPasteHandler(new PasteHandler() {
+
+            @Override
+            public void onPaste(PasteEvent event) {
+                showSuggestPicker();
             }
         });
 
         textBox.setAction(new Command() {
             @Override
             public void execute() {
-                System.out.println("+++++++++++++++setAction");
+                showEverithingPicker();
             }
         }, ImageFactory.getImages().action());
     }
@@ -81,6 +94,19 @@ public class SelectorTextBox<E> extends AbstractSelectorWidget<E> implements Has
     @Override
     public E getValue() {
         return value;
+    }
+
+    protected void showSuggestPicker() {
+        if (getQuery() != getViewerPanel().getQuery()) {
+            setQuery(getViewerPanel().getQuery());
+            picker.refreshSuggestions(getQuery());
+            showPickerPopup(picker);
+        }
+    }
+
+    protected void showEverithingPicker() {
+        picker.refreshSuggestions("");
+        showPickerPopup(picker);
     }
 
     @Override
