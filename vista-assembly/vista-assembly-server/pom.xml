@@ -232,7 +232,7 @@
                 <executions>
                     <execution>
                         <id>wsdl-coping</id>
-                        <phase>process-resources</phase>
+                        <phase>package</phase>
                         <goals>
                             <goal>unpack</goal>
                         </goals>
