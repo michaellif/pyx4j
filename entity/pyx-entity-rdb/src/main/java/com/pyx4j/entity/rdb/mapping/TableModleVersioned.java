@@ -26,6 +26,7 @@ import java.util.List;
 
 import com.pyx4j.commons.EqualsHelper;
 import com.pyx4j.commons.Key;
+import com.pyx4j.config.server.SystemDateManager;
 import com.pyx4j.entity.core.AttachLevel;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.ILooseVersioning;
@@ -35,7 +36,6 @@ import com.pyx4j.entity.core.IVersionedEntity.SaveAction;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.core.criterion.PropertyCriterion;
 import com.pyx4j.entity.rdb.PersistenceContext;
-import com.pyx4j.entity.rdb.TODO;
 import com.pyx4j.entity.shared.utils.EntityGraph;
 
 public class TableModleVersioned {
@@ -51,13 +51,10 @@ public class TableModleVersioned {
         if ((versionedEntity.getPrimaryKey().getVersion() == Key.VERSION_DRAFT)) {
             criteria.isNull(criteria.proto().fromDate());
             criteria.isNull(criteria.proto().toDate());
-        } else if (TODO.versionQueryCurrent && versionedEntity.getPrimaryKey().getVersion() == Key.VERSION_CURRENT) {
-            criteria.isNotNull(criteria.proto().fromDate());
-            criteria.isNull(criteria.proto().toDate());
         } else {
             Date forDate;
             if (versionedEntity.getPrimaryKey().getVersion() == Key.VERSION_CURRENT) {
-                forDate = persistenceContext.getTimeNow();
+                forDate = SystemDateManager.getDate();
             } else {
                 forDate = new java.util.Date(versionedEntity.getPrimaryKey().getVersion());
             }

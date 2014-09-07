@@ -22,6 +22,7 @@ package com.pyx4j.entity.rdb;
 
 public abstract class TODO {
 
-    public static final boolean versionQueryCurrent = true;
+    // Example
+    //public static final boolean doSomthing = false;
 
 }

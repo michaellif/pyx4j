@@ -216,13 +216,13 @@ public abstract class VersionTestCase extends DatastoreTestBase {
         }
 
         // Retrieval of item before current existed by Pk
-        if (!TODO.versionQueryCurrent) {
+        {
             setDBTime("2010-01-01");
             ItemA itemA1r = srv.retrieve(ItemA.class, itemA1.getPrimaryKey().asCurrentKey());
             assertTrue("current is null", itemA1r.version().isNull());
         }
         // Retrieval of item before current existed by Query
-        if (!TODO.versionQueryCurrent) {
+        {
             setDBTime("2010-01-01");
             ItemA itemA1r = srv.retrieve(EntityCriteriaByPK.create(ItemA.class, itemA1.getPrimaryKey().asCurrentKey()));
             assertTrue("current is null", itemA1r.version().isNull());
