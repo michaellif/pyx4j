@@ -53,7 +53,7 @@ public class SelectorTextBox<E> extends AbstractSelectorWidget<E> implements Has
         this.optionPathFormatter = optionPathFormatter;
         textBox = (SelectorTextBoxValuePanel<E>) getViewerPanel();
 
-        picker = new MenuPickerPanel<E>(optionsGrabber, valueFormatter);
+        picker = new TreePickerPanel<E>(optionsGrabber, valueFormatter, null);
 
         textBox.addKeyUpHandler(new KeyUpHandler() {
 
@@ -99,13 +99,13 @@ public class SelectorTextBox<E> extends AbstractSelectorWidget<E> implements Has
     protected void showSuggestPicker() {
         if (getQuery() != getViewerPanel().getQuery()) {
             setQuery(getViewerPanel().getQuery());
-            picker.refreshSuggestions(getQuery());
+            picker.refreshOptions(getQuery());
             showPickerPopup(picker);
         }
     }
 
     protected void showEverithingPicker() {
-        picker.refreshSuggestions("");
+        picker.refreshOptions("");
         showPickerPopup(picker);
     }
 

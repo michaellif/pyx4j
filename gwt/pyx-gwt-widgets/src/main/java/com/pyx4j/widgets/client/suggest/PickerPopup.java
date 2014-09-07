@@ -36,7 +36,7 @@ public class PickerPopup<E> extends PopupPanel {
         addAutoHidePartner(parent.getElement());
 
         setPreviewingAllNativeEvents(true);
-        setStyleName(WidgetTheme.StyleName.SelectionBoxPicker.name());
+        addStyleName(WidgetTheme.StyleName.SuggestBoxPopup.name());
 
     }
 
@@ -84,17 +84,13 @@ public class PickerPopup<E> extends PopupPanel {
 
     public void refreshSuggestions(String query) {
         if (pickerPanel != null) {
-            pickerPanel.refreshSuggestions(query);
+            pickerPanel.refreshOptions(query);
         }
     }
 
     @Override
     protected void onLoad() {
-        if (getOffsetWidth() <= selectorWidget.asWidget().getOffsetWidth()) {
-            setWidth((selectorWidget.asWidget().getOffsetWidth() - 2) + "px");
-        } else {
-            setWidth((getOffsetWidth() + 50) + "px");
-        }
+        setWidth(selectorWidget.asWidget().getOffsetWidth() + "px");
     }
 
 }

@@ -32,6 +32,6 @@ public interface IPickerPanel<E> extends IsWidget {
 
     void pickSelection();
 
-    void refreshSuggestions(String query);
+    void refreshOptions(String query);
 
 }
