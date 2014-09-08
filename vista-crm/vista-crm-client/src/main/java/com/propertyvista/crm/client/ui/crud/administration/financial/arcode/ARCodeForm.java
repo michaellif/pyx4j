@@ -61,7 +61,7 @@ public class ARCodeForm extends CrmEntityForm<ARCode> implements HasYardiIntegra
 
         yardiIntegrationPanel = new FormPanel(this);
         yardiIntegrationPanel.h1(i18n.tr("Yardi Integration"));
-        yardiIntegrationPanel.append(Location.Dual, proto().yardiChargeCodes(), new YardiChargeCodeFolder());
+        yardiIntegrationPanel.append(Location.Left, proto().yardiChargeCodes(), new YardiChargeCodeFolder());
 
         formPanel.append(Location.Dual, yardiIntegrationPanel);
 
@@ -73,5 +73,14 @@ public class ARCodeForm extends CrmEntityForm<ARCode> implements HasYardiIntegra
     public void setYardiIntegrationModeEnabled(boolean enabled) {
         yardiIntegrationPanel.setVisible(enabled);
         get(proto().glCode()).setVisible(!enabled);
+    }
+
+    @Override
+    protected void onValueSet(boolean populate) {
+        super.onValueSet(populate);
+
+        // disable type change on reserved codes:
+        get(proto().type()).inheritEditable(false);
+        get(proto().type()).setEditable(!getValue().reserved().isBooleanTrue());
     }
 }
