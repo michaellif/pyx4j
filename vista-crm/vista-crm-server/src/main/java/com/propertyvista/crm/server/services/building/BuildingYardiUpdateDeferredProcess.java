@@ -55,7 +55,7 @@ class BuildingYardiUpdateDeferredProcess extends AbstractDeferredProcess {
                 } catch (RemoteException e) {
                     throw new UserRuntimeException(i18n.tr("Yardi connection problem"), e);
                 } catch (YardiServiceException e) {
-                    throw new UserRuntimeException(i18n.tr("Error updating building form Yardi"), e);
+                    throw new UserRuntimeException(e.getMessage(), e);
                 }
 
                 return null;
