@@ -35,6 +35,7 @@ import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.DataFormat;
 import org.apache.poi.ss.usermodel.Font;
+import org.apache.poi.ss.usermodel.IndexedColors;
 import org.apache.poi.ss.usermodel.RichTextString;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
@@ -442,5 +443,20 @@ public class ReportTableXLSXFormatter implements ReportTableFormatter {
         if (groupStart.collapsed) {
             this.curentSheet.setRowGroupCollapsed(groupStart.start, true);
         }
+    }
+
+    public void addSeparatorRow(IndexedColors color) {
+
+        for (int i = 0; i < columnsCount; i++) {
+            Cell cell = getCurentRow().createCell(i);
+            CellStyle style = getWorkbook().createCellStyle();
+            style.cloneStyleFrom(cell.getCellStyle());
+            style.setFillForegroundColor(color.getIndex());
+            style.setFillPattern(CellStyle.SOLID_FOREGROUND);
+            cell.setCellStyle(style);
+        }
+
+        newRow();
+
     }
 }
