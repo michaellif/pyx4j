@@ -340,28 +340,30 @@ public class YardiGuestProcessor {
         tenant.setName(name);
         app.getTenant().add(tenant);
 
-        //charges
-        AccountingData charges = new AccountingData();
-        ChargeSet chargeSet = new ChargeSet();
-        chargeSet.setFrequency(Frequency.ONE_TIME);
-        try {
-            chargeSet.setStart(new SimpleDateFormat("yyyy-MM-dd").parse("0001-01-01"));
-            chargeSet.setEnd(new SimpleDateFormat("yyyy-MM-dd").parse("0001-01-01"));
-        } catch (ParseException e) {
-            throw new Error(e);
-        }
-        for (Deposit deposit : depositCharges) {
-            if (deposit.chargeCode().yardiChargeCodes().size() > 0) {
-                chargeSet.getCharge().add( //
-                        getAppFee( //
-                                deposit.amount().getValue(), //
-                                deposit.chargeCode().yardiChargeCodes().get(0).yardiChargeCode().getValue(), //
-                                deposit.description().getValue() //
-                        ));
+        // charges
+        if (!depositCharges.isEmpty()) {
+            AccountingData charges = new AccountingData();
+            ChargeSet chargeSet = new ChargeSet();
+            chargeSet.setFrequency(Frequency.ONE_TIME);
+            try {
+                chargeSet.setStart(new SimpleDateFormat("yyyy-MM-dd").parse("0001-01-01"));
+                chargeSet.setEnd(new SimpleDateFormat("yyyy-MM-dd").parse("0001-01-01"));
+            } catch (ParseException e) {
+                throw new Error(e);
             }
+            for (Deposit deposit : depositCharges) {
+                if (deposit.chargeCode().yardiChargeCodes().size() > 0) {
+                    chargeSet.getCharge().add( //
+                            getAppFee( //
+                                    deposit.amount().getValue(), //
+                                    deposit.chargeCode().yardiChargeCodes().get(0).yardiChargeCode().getValue(), //
+                                    deposit.description().getValue() //
+                            ));
+                }
+            }
+            charges.getChargeSet().add(chargeSet);
+            tenant.setAccountingData(charges);
         }
-        charges.getChargeSet().add(chargeSet);
-        tenant.setAccountingData(charges);
 
         // lease
         LALease laLease = new LALease();

@@ -68,7 +68,6 @@ import com.propertyvista.domain.settings.PmcYardiCredential;
 import com.propertyvista.domain.tenant.lease.BillableItem;
 import com.propertyvista.domain.tenant.lease.Deposit;
 import com.propertyvista.domain.tenant.lease.Lease;
-import com.propertyvista.misc.VistaTODO;
 import com.propertyvista.yardi.YardiConstants;
 import com.propertyvista.yardi.mappers.TenantMapper;
 import com.propertyvista.yardi.processors.YardiGuestProcessor;
@@ -322,14 +321,14 @@ public class YardiGuestManagementService extends YardiAbstractService {
         log.info("Created Lease: {}", tenantId);
 
         boolean useMasterDeposit = lease.currentTerm().version().leaseProducts().serviceItem().item().yardiDepositLMR().isNull();
-        if (useMasterDeposit && VistaTODO.VISTA_4517_Master_Deposit_Completed) {
+        List<Deposit> deposits = getLeaseDeposits(lease);
+        if (useMasterDeposit && !deposits.isEmpty()) {
             ensureDepositChargeCodesConfigured(yc, lease);
             // make sure no application exists for the prospect
-            LeaseApplication la = YardiStubFactory.create(YardiILSGuestCardStub.class).getApplication(yc, propertyCode, prospectId);
-            if (la == null || guestProcessor.getApplicationCharges(la).isEmpty()) {
+            LeaseApplication yardiApp = YardiStubFactory.create(YardiILSGuestCardStub.class).getApplication(yc, propertyCode, prospectId);
+            if (yardiApp == null || guestProcessor.getApplicationCharges(yardiApp).isEmpty()) {
                 // do ImportApplication to push Deposits back to Yardi as App Fees
-                YardiStubFactory.create(YardiILSGuestCardStub.class).importApplication(yc,
-                        guestProcessor.getLeaseApplication(lease, tenantId, getLeaseDeposits(lease)));
+                YardiStubFactory.create(YardiILSGuestCardStub.class).importApplication(yc, guestProcessor.getLeaseApplication(lease, tenantId, deposits));
             } else {
                 // TODO - what's the proper handling of existing application with possible app charges?
                 // Options: do nothing, add Master Deposit charges, or merge Master Deposit charges...
