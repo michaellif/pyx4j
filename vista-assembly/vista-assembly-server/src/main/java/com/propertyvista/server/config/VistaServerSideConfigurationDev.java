@@ -38,7 +38,7 @@ public class VistaServerSideConfigurationDev extends VistaServerSideConfiguratio
 
     @Override
     public boolean walkMeEnabled() {
-        return false;
+        return true;
     }
 
     @Override
@@ -171,7 +171,7 @@ public class VistaServerSideConfigurationDev extends VistaServerSideConfiguratio
     public BankingSimulatorConfiguration getBankingSimulatorConfiguration() {
         return new BankingSimulatorConfigurationCustom(this) {
 
-            // The same simulated service will be used even when production is ON. 
+            // The same simulated service will be used even when production is ON.
 
             @Override
             public boolean isFundsTransferSimulationConfigurable() {

@@ -33,7 +33,7 @@ public class ProspectWalkMe {
             public void onBehaviorChange(BehaviorChangeEvent event) {
                 if (SecurityController.check(PortalProspectBehavior.Prospect)) {
                     setupVariables();
-                    WalkMe.load();
+                    WalkMe.load(null);
                 }
             }
 

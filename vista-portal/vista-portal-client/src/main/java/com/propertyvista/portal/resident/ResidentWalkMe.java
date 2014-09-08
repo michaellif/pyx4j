@@ -34,7 +34,7 @@ public class ResidentWalkMe {
             public void onBehaviorChange(BehaviorChangeEvent event) {
                 if (SecurityController.check(PortalResidentBehavior.Resident)) {
                     setupVariables();
-                    WalkMe.load();
+                    WalkMe.load(null);
                 }
             }
 
