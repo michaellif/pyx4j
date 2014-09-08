@@ -20,6 +20,7 @@ import com.pyx4j.security.rpc.AuthenticationService;
 import com.pyx4j.site.rpc.NotificationAppPlace;
 import com.pyx4j.site.shared.domain.Notification;
 
+import com.propertyvista.domain.security.common.VistaApplication;
 import com.propertyvista.portal.resident.activity.PortalClientCommunicationManager;
 import com.propertyvista.portal.resident.themes.ResidentPortalTheme;
 import com.propertyvista.portal.resident.ui.ResidentPortalRootPane;
@@ -31,7 +32,8 @@ import com.propertyvista.portal.shared.PortalSite;
 public class ResidentPortalSite extends PortalSite {
 
     public ResidentPortalSite() {
-        super("vista-resident", ResidentPortalSiteMap.class, new ResidentPortalRootPane(), new ResidentPortalSiteDispatcher(), new ResidentPortalTheme());
+        super(VistaApplication.resident, ResidentPortalSiteMap.class, new ResidentPortalRootPane(), new ResidentPortalSiteDispatcher(),
+                new ResidentPortalTheme());
     }
 
     @Override

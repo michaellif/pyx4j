@@ -41,6 +41,7 @@ import com.propertyvista.common.client.handlers.VistaUnrecoverableErrorHandler;
 import com.propertyvista.common.client.policy.ClientPolicyManager;
 import com.propertyvista.common.client.site.VistaBrowserRequirments;
 import com.propertyvista.common.client.site.VistaSite;
+import com.propertyvista.domain.security.common.VistaApplication;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
 import com.propertyvista.portal.rpc.portal.SiteDefinitionsDTO;
 import com.propertyvista.portal.rpc.portal.shared.services.PortalPolicyRetrieveService;
@@ -51,7 +52,7 @@ import com.propertyvista.portal.shared.themes.PortalTheme;
 
 public abstract class PortalSite extends VistaSite {
 
-    private static SiteThemeServices siteThemeServices = GWT.create(SiteThemeServices.class);
+    private final VistaApplication application;
 
     private final RootPane<FrontOfficeLayoutPanel> rootPane;
 
@@ -61,11 +62,12 @@ public abstract class PortalSite extends VistaSite {
 
     private boolean canHideAddrBar = false;
 
-    public PortalSite(String appId, Class<? extends PortalSiteMap> siteMapClass, RootPane<FrontOfficeLayoutPanel> rootPane, AppPlaceDispatcher placeDispatcher,
-            PortalTheme portalTheme) {
-        super(appId, siteMapClass, new SingletonViewFactory(), placeDispatcher);
+    public PortalSite(VistaApplication application, Class<? extends PortalSiteMap> siteMapClass, RootPane<FrontOfficeLayoutPanel> rootPane,
+            AppPlaceDispatcher placeDispatcher, PortalTheme portalTheme) {
+        super("vista-" + application.name(), siteMapClass, new SingletonViewFactory(), placeDispatcher);
         this.rootPane = rootPane;
         this.portalTheme = portalTheme;
+        this.application = application;
     }
 
     @Override
@@ -149,7 +151,7 @@ public abstract class PortalSite extends VistaSite {
     }
 
     private void initSiteTheme() {
-        siteThemeServices.retrieveSiteDescriptor(new DefaultAsyncCallback<SiteDefinitionsDTO>() {
+        GWT.<SiteThemeServices> create(SiteThemeServices.class).retrieveSiteDescriptor(new DefaultAsyncCallback<SiteDefinitionsDTO>() {
             @Override
             public void onSuccess(SiteDefinitionsDTO descriptor) {
                 hideLoadingIndicator();
@@ -159,7 +161,7 @@ public abstract class PortalSite extends VistaSite {
                 VistaFeaturesCustomizationClient.enviromentTitleVisible = descriptor.enviromentTitleVisible().getValue(Boolean.TRUE);
                 obtainAuthenticationData();
                 if (descriptor.walkMeEnabled().getValue(false)) {
-                    WalkMe.load();
+                    WalkMe.enable(descriptor.walkMeJsAPIUrl().getValue());
                 }
             }
 
@@ -168,7 +170,7 @@ public abstract class PortalSite extends VistaSite {
                 hideLoadingIndicator();
                 super.onFailure(caught);
             }
-        }, ClientLocaleUtils.getCurrentLocale());
+        }, application, ClientLocaleUtils.getCurrentLocale());
 
     }
 

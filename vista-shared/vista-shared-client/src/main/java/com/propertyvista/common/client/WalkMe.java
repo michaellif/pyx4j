@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011-2012 All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -18,6 +18,7 @@ import org.slf4j.LoggerFactory;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
+import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.gwt.commons.AjaxJSLoader;
 
@@ -25,10 +26,14 @@ public class WalkMe {
 
     private static final Logger log = LoggerFactory.getLogger(WalkMe.class);
 
-    private static final String jsApi = "https://d3b3ehuo35wzeh.cloudfront.net/users/941bfed7d73c45cea7192ffc17c15d77/test/walkme_941bfed7d73c45cea7192ffc17c15d77_https.js";
+    private static String jsApi;
+
+    public static void enable(String walkMeJsAPIUrl) {
+        jsApi = walkMeJsAPIUrl;
+    }
 
     public static void load() {
-        if (ApplicationMode.offlineDevelopment) {
+        if (ApplicationMode.offlineDevelopment || CommonsStringUtils.isEmpty(jsApi)) {
             return;
         }
 

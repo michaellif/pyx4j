@@ -461,4 +461,23 @@ public class VistaServerSideConfiguration extends AbstractVistaServerSideConfigu
     public boolean walkMeEnabled() {
         return getConfigProperties().getBooleanValue("walkMeEnabled", true);
     }
+
+    @Override
+    public String walkMeJsAPIUrl(VistaApplication application) {
+        String defaultUrl;
+        switch (application) {
+        case crm:
+            defaultUrl = "https://d3b3ehuo35wzeh.cloudfront.net/users/941bfed7d73c45cea7192ffc17c15d77/test/walkme_941bfed7d73c45cea7192ffc17c15d77_https.js";
+            break;
+        case resident:
+            defaultUrl = "https://d3b3ehuo35wzeh.cloudfront.net/users/08186ae265d64e18953363c7294ab093/test/walkme_08186ae265d64e18953363c7294ab093_https.js";
+            break;
+        case prospect:
+            defaultUrl = null;
+            break;
+        default:
+            return null;
+        }
+        return getConfigProperties().getValue("walkMeJsAPIUrl", defaultUrl);
+    }
 }

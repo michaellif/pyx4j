@@ -20,6 +20,7 @@ import com.pyx4j.security.rpc.AuthenticationService;
 import com.pyx4j.site.rpc.NotificationAppPlace;
 import com.pyx4j.site.shared.domain.Notification;
 
+import com.propertyvista.domain.security.common.VistaApplication;
 import com.propertyvista.portal.prospect.themes.ProspectPortalTheme;
 import com.propertyvista.portal.prospect.ui.ProspectPortalRootPane;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
@@ -30,7 +31,8 @@ import com.propertyvista.portal.shared.PortalSite;
 public class ProspectPortalSite extends PortalSite {
 
     public ProspectPortalSite() {
-        super("vista-prospect", ProspectPortalSiteMap.class, new ProspectPortalRootPane(), new ProspectPortalSiteDispatcher(), new ProspectPortalTheme());
+        super(VistaApplication.prospect, ProspectPortalSiteMap.class, new ProspectPortalRootPane(), new ProspectPortalSiteDispatcher(),
+                new ProspectPortalTheme());
     }
 
     @Override

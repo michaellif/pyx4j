@@ -287,4 +287,14 @@ public class VistaTestsServerSideConfiguration extends AbstractVistaServerSideCo
         return Consts.MIN2SEC * 9;
     }
 
+    @Override
+    public boolean walkMeEnabled() {
+        return false;
+    }
+
+    @Override
+    public String walkMeJsAPIUrl(VistaApplication application) {
+        return null;
+    }
+
 }

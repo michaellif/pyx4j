@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011- All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -65,6 +65,7 @@ import com.propertyvista.crm.rpc.services.policies.CrmPolicyRetrieveService;
 import com.propertyvista.crm.rpc.services.pub.CrmAuthenticationService;
 import com.propertyvista.domain.dashboard.DashboardMetadata;
 import com.propertyvista.domain.financial.ARCode;
+import com.propertyvista.domain.security.common.VistaApplication;
 import com.propertyvista.domain.security.common.VistaBasicBehavior;
 import com.propertyvista.portal.rpc.DeploymentConsts;
 import com.propertyvista.portal.rpc.portal.SiteDefinitionsDTO;
@@ -162,7 +163,7 @@ public class CrmSite extends VistaSite {
                 ClientLocaleUtils.setCountryOfOperationLocale();
                 obtainAuthenticationData();
                 if (descriptor.walkMeEnabled().getValue(false)) {
-                    WalkMe.load();
+                    WalkMe.enable(descriptor.walkMeJsAPIUrl().getValue());
                 }
             }
 
@@ -172,7 +173,7 @@ public class CrmSite extends VistaSite {
                 StyleManager.installTheme(new CrmTheme(), VistaPalette.getServerUnavailablePalette());
                 super.onFailure(caught);
             }
-        }, ClientLocaleUtils.getCurrentLocale());
+        }, VistaApplication.crm, ClientLocaleUtils.getCurrentLocale());
 
     }
 

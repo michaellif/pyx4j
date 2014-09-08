@@ -96,7 +96,7 @@ public abstract class AbstractVistaServerSideConfiguration extends EssentialsSer
 
     public abstract EquifaxInterfaceConfiguration getEquifaxInterfaceConfiguration();
 
-    //(in seconds) 
+    //(in seconds)
     public abstract int yardiConnectionTimeout();
 
     public boolean isGoogleAnalyticDisableForEmployee() {
@@ -111,9 +111,9 @@ public abstract class AbstractVistaServerSideConfiguration extends EssentialsSer
         return true;
     }
 
-    public boolean walkMeEnabled() {
-        return true;
-    }
+    public abstract boolean walkMeEnabled();
+
+    public abstract String walkMeJsAPIUrl(VistaApplication application);
 
     public abstract String rdateServer();
 

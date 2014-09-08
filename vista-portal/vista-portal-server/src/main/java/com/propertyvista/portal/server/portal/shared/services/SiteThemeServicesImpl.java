@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011- All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -30,6 +30,7 @@ import com.pyx4j.rpc.shared.IgnoreSessionToken;
 
 import com.propertyvista.config.AbstractVistaServerSideConfiguration;
 import com.propertyvista.config.VistaDeployment;
+import com.propertyvista.domain.security.common.VistaApplication;
 import com.propertyvista.domain.site.SiteDescriptor;
 import com.propertyvista.domain.site.SiteTitles;
 import com.propertyvista.portal.rpc.portal.SiteDefinitionsDTO;
@@ -64,7 +65,7 @@ public class SiteThemeServicesImpl implements SiteThemeServices {
     }
 
     @Override
-    public void retrieveSiteDescriptor(AsyncCallback<SiteDefinitionsDTO> callback, CompiledLocale locale) {
+    public void retrieveSiteDescriptor(AsyncCallback<SiteDefinitionsDTO> callback, VistaApplication application, CompiledLocale locale) {
 
         // This is the fist service the GWT application is calling. Manage the system down.
         if (SystemMaintenance.getState() == SystemState.Unavailable) {
@@ -85,6 +86,7 @@ public class SiteThemeServicesImpl implements SiteThemeServices {
                 ServerSideConfiguration.instance(AbstractVistaServerSideConfiguration.class).isGoogleAnalyticDisableForEmployee());
         def.enviromentTitleVisible().setValue(ServerSideConfiguration.instance(AbstractVistaServerSideConfiguration.class).enviromentTitleVisible());
         def.walkMeEnabled().setValue(ServerSideConfiguration.instance(AbstractVistaServerSideConfiguration.class).walkMeEnabled());
+        def.walkMeJsAPIUrl().setValue(ServerSideConfiguration.instance(AbstractVistaServerSideConfiguration.class).walkMeJsAPIUrl(application));
 
         // TODO different resources base on locale
         if (descriptor.logo().size() > 0) {
