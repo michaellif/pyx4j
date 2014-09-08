@@ -85,7 +85,7 @@ public class TreePickerPanel<E> extends PickerPanel<E> {
             treeItem.setUserObject(option);
 
             treeItem.getElement().getStyle().setPadding(1, Unit.PX);
-            treeItem.setStyleName(WidgetTheme.StyleName.SelectionBoxPickerItem.name());
+            treeItem.setStyleName(WidgetTheme.StyleName.SelectionPickerPanelItem.name());
         }
     }
 

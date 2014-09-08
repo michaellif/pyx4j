@@ -54,6 +54,8 @@ public class TreePickerPanel<E> extends ScrollPanel implements IPickerPanel<E> {
         this.optionsFormatter = optionsFormatter;
         this.optionPathFormatter = optionPathFormatter;
 
+        setStyleName(WidgetTheme.StyleName.SelectionPickerPanel.name());
+
         getElement().getStyle().setProperty("overflowY", "auto");
         getElement().getStyle().setProperty("overflowX", "hidden");
 
@@ -70,18 +72,6 @@ public class TreePickerPanel<E> extends ScrollPanel implements IPickerPanel<E> {
     @Override
     public void setPickerPopup(PickerPopup<E> pickerPopup) {
         this.pickerPopup = pickerPopup;
-    }
-
-    @Override
-    public void moveSelectionDown() {
-        // TODO Auto-generated method stub
-
-    }
-
-    @Override
-    public void moveSelectionUp() {
-        // TODO Auto-generated method stub
-
     }
 
     @Override
@@ -105,6 +95,7 @@ public class TreePickerPanel<E> extends ScrollPanel implements IPickerPanel<E> {
     protected void showOptions(Collection<E> options, String query) {
         setVisible(false);
         tree.clear();
+
         for (E option : options) {
             PickerTreeItem treeItem = new PickerTreeItem(option);
             tree.addItem(treeItem);
@@ -112,9 +103,11 @@ public class TreePickerPanel<E> extends ScrollPanel implements IPickerPanel<E> {
             treeItem.setUserObject(option);
 
             treeItem.getElement().getStyle().setPadding(1, Unit.PX);
-            treeItem.setStyleName(WidgetTheme.StyleName.SelectionBoxPickerItem.name());
+            treeItem.setStyleName(WidgetTheme.StyleName.SelectionPickerPanelItem.name());
         }
-        setVisible(true);
+        if (options.size() > 0) {
+            setVisible(true);
+        }
     }
 
     class PickerTree extends Tree {

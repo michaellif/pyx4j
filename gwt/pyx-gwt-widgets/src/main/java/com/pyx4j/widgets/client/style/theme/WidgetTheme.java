@@ -64,7 +64,7 @@ public class WidgetTheme extends Theme {
 
         CollapsablePanel, CollapsablePanelImage,
 
-        SuggestBox, SuggestBoxPopup, SelectionBoxPicker, SelectionBoxPickerItem;
+        SuggestBox, SuggestBoxPopup, SelectionPickerPanel, SelectionPickerPanelItem;
     }
 
     public static enum StyleDependent implements IStyleDependent {
@@ -440,7 +440,7 @@ public class WidgetTheme extends Theme {
         style.addProperty("margin-right", "21px");
         addStyle(style);
 
-        style = new Style(".", StyleName.SuggestBoxPopup);
+        style = new Style(".", StyleName.SelectionPickerPanel);
         style.addProperty("background-color", "white");
         style.addProperty("padding", "2px");
         style.addProperty("border-color", ThemeColor.foreground, 0.4);
@@ -448,14 +448,6 @@ public class WidgetTheme extends Theme {
         style.addProperty("border-width", "1px");
         style.addProperty("cursor", "pointer");
         style.addProperty("cursor", "hand");
-        addStyle(style);
-
-        style = new Style(".", StyleName.SuggestBoxPopup, " .item");
-        addStyle(style);
-
-        style = new Style(".", StyleName.SuggestBoxPopup, " .item-selected");
-        style.addProperty("background-color", ThemeColor.foreground, 0.6);
-        style.addProperty("color", ThemeColor.foreground, 0.05);
         addStyle(style);
 
     }

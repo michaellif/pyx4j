@@ -40,9 +40,6 @@ public class PickerPopup<E> extends DropDownPanel {
     }
 
     public void show(IPickerPanel<E> pickerPanel) {
-        if (isAttached()) {
-            hide();
-        }
         this.pickerPanel = pickerPanel;
         pickerPanel.setPickerPopup(this);
         setWidget(pickerPanel.asWidget());
@@ -57,18 +54,6 @@ public class PickerPopup<E> extends DropDownPanel {
         }
         setWidget(null);
         super.hide(autoClosed);
-    }
-
-    public void moveSelectionDown() {
-        if (pickerPanel != null) {
-            pickerPanel.moveSelectionDown();
-        }
-    }
-
-    public void moveSelectionUp() {
-        if (pickerPanel != null) {
-            pickerPanel.moveSelectionUp();
-        }
     }
 
     public void pickSelection() {
