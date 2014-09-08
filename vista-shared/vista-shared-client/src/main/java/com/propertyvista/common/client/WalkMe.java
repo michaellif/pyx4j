@@ -124,16 +124,10 @@ public class WalkMe {
         for (int i = 0; i < nwt.length(); i++) {
             WalkThru wt = nwt.get(i);
             walkthrus.put(wt.getId(), wt.getName());
-            log.debug("got WalkThru {} '{}'", wt.getId(), wt.getName());
         }
         return walkthrus;
     }
 
-    public static void startWalkthruById(int walkthruId) {
-        log.debug("startWalkthruById '{}'", walkthruId);
-        native_startWalkthruById(walkthruId);
-    }
-
-    private native static void native_startWalkthruById(int walkthruId) /*-{  $wnd.WalkMeAPI.startWalkthruById(walkthruId); }-*/;
+    public static native void startWalkthruById(int walkthruId) /*-{  $wnd.WalkMeAPI.startWalkthruById(walkthruId); }-*/;
 
 }

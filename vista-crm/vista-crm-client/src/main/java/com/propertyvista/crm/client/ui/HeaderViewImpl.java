@@ -3,6 +3,9 @@ package com.propertyvista.crm.client.ui;
 import java.util.List;
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.google.gwt.dom.client.Style;
 import com.google.gwt.dom.client.Style.Cursor;
 import com.google.gwt.dom.client.Style.Display;
@@ -52,6 +55,8 @@ import com.propertyvista.shared.i18n.CompiledLocale;
 public class HeaderViewImpl extends FlowPanel implements HeaderView {
 
     public static String BACK_TO_CRM = "vista_Back2CRM";
+
+    private static final Logger log = LoggerFactory.getLogger(HeaderViewImpl.class);
 
     private static final I18n i18n = I18n.get(HeaderViewImpl.class);
 
@@ -415,6 +420,7 @@ public class HeaderViewImpl extends FlowPanel implements HeaderView {
                         walkMeHelpMenuBar.addItem(new MenuItem(me.getValue(), new Command() {
                             @Override
                             public void execute() {
+                                log.debug("call WalkThru {} '{}'", me.getKey(), me.getValue());
                                 WalkMe.startWalkthruById(me.getKey());
                             }
                         }));
