@@ -16,12 +16,17 @@ package com.propertyvista.common.client;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.gwt.core.client.JsArrayString;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.gwt.commons.AjaxJSLoader;
 
+/**
+ * http://support.walkme.com/customer/portal/articles/1561564-walkme-api
+ *
+ */
 public class WalkMe {
 
     private static final Logger log = LoggerFactory.getLogger(WalkMe.class);
@@ -65,5 +70,7 @@ public class WalkMe {
     private native static void createOnWalkMeReady() /*-{ $wnd.walkme_ready = function() { $wnd.vista_walkme_loaded = true;}; }-*/;
 
     private native static boolean isWalkMeJSLoaded() /*-{ return typeof $wnd.vista_walkme_loaded != "undefined"; }-*/;
+
+    public native static void setupWalkMeVariables(JsArrayString behaviors) /*-{ $wnd.vistaWalkMeBehaviors = behaviors; }-*/;
 
 }

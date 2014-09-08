@@ -43,6 +43,7 @@ public class ResidentPortalSite extends PortalSite {
         super.onSiteLoad();
 
         PortalClientCommunicationManager.instance();
+        ResidentWalkMe.init();
     }
 
     @Override

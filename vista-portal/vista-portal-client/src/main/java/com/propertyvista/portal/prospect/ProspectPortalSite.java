@@ -40,6 +40,8 @@ public class ProspectPortalSite extends PortalSite {
         // RPC creation below, Entity needs to be compiled -> generated first
         ClientContext.setAuthenticationService(GWT.<AuthenticationService> create(ProspectAuthenticationService.class));
         super.onSiteLoad();
+
+        ProspectWalkMe.init();
     }
 
     @Override

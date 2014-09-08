@@ -473,11 +473,11 @@ public class VistaServerSideConfiguration extends AbstractVistaServerSideConfigu
             defaultUrl = "https://d3b3ehuo35wzeh.cloudfront.net/users/08186ae265d64e18953363c7294ab093/test/walkme_08186ae265d64e18953363c7294ab093_https.js";
             break;
         case prospect:
-            defaultUrl = null;
+            defaultUrl = "https://d3b3ehuo35wzeh.cloudfront.net/users/04168f1a4dfe43709d560b7942e16b97/test/walkme_04168f1a4dfe43709d560b7942e16b97_https.js";
             break;
         default:
             return null;
         }
-        return getConfigProperties().getValue("walkMeJsAPIUrl", defaultUrl);
+        return getConfigProperties().getValue("walkMeJsAPIUrl." + application.name(), defaultUrl);
     }
 }
