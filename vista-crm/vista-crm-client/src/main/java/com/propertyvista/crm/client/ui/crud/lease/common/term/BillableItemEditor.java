@@ -16,8 +16,10 @@ package com.propertyvista.crm.client.ui.crud.lease.common.term;
 import java.util.Arrays;
 import java.util.List;
 
+import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
+import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.SimplePanel;
 
@@ -45,11 +47,13 @@ import com.pyx4j.site.client.AppPlaceEntityMapper;
 import com.pyx4j.site.client.ui.dialogs.EntitySelectorListDialog;
 import com.pyx4j.site.client.ui.prime.misc.CEntitySelectorHyperlink;
 import com.pyx4j.site.rpc.AppPlace;
+import com.pyx4j.widgets.client.Button;
 
 import com.propertyvista.common.client.ui.components.editors.PetDataEditor;
 import com.propertyvista.common.client.ui.components.editors.VehicleDataEditor;
 import com.propertyvista.common.client.ui.components.folders.VistaTableFolder;
 import com.propertyvista.common.client.ui.validators.StartEndDateValidation;
+import com.propertyvista.crm.rpc.dto.lease.financial.DepositListDTO;
 import com.propertyvista.domain.financial.ARCode;
 import com.propertyvista.domain.financial.offering.Feature;
 import com.propertyvista.domain.financial.offering.Product;
@@ -74,6 +78,20 @@ public class BillableItemEditor extends CForm<BillableItem> {
     private final FormPanel adjustmentPanel = new FormPanel(this);
 
     private final FormPanel depositPanel = new FormPanel(this);
+
+    private final DepositFolder depositFolder = new DepositFolder();
+
+    private final Button recalculateDeposits = new Button(i18n.tr("Recalculate Deposits"), new Command() {
+        @Override
+        public void execute() {
+            ((LeaseTermEditorView.Presenter) leaseTermEditorView.getPresenter()).recalculateDeposits(new DefaultAsyncCallback<DepositListDTO>() {
+                @Override
+                public void onSuccess(DepositListDTO result) {
+                    depositFolder.setValue(result.deposits());
+                }
+            }, BillableItemEditor.this.getValue());
+        }
+    });
 
     private final CForm<LeaseTermDTO> leaseTerm;
 
@@ -129,10 +147,14 @@ public class BillableItemEditor extends CForm<BillableItem> {
         formPanel.append(Location.Left, proto().yardiChargeCode()).decorate().componentWidth(120);
         formPanel.append(Location.Left, proto().agreedPrice()).decorate().componentWidth(120);
 
+        formPanel.append(Location.Right, recalculateDeposits);
+        recalculateDeposits.getElement().getStyle().setMarginLeft(150, Unit.PX);
+
         formPanel.append(Location.Right, proto().effectiveDate()).decorate().componentWidth(120);
         formPanel.append(Location.Right, proto().expirationDate()).decorate().componentWidth(120);
 
         formPanel.append(Location.Dual, proto().description()).decorate();
+
         formPanel.append(Location.Dual, extraDataPanel);
         formPanel.append(Location.Dual, adjustmentPanel);
         formPanel.append(Location.Dual, depositPanel);
@@ -143,7 +165,7 @@ public class BillableItemEditor extends CForm<BillableItem> {
         }
 
         depositPanel.h3(proto().deposits().getMeta().getCaption());
-        depositPanel.append(Location.Dual, proto().deposits(), new DepositFolder());
+        depositPanel.append(Location.Dual, proto().deposits(), depositFolder);
 
         itemEffectiveDateEditor = get(proto().effectiveDate());
         itemExpirationDateEditor = get(proto().expirationDate());
@@ -165,6 +187,8 @@ public class BillableItemEditor extends CForm<BillableItem> {
             get(proto().agreedPrice()).setEditable(false);
             get(proto().agreedPrice()).setMandatory(false);
         }
+
+        recalculateDeposits.setVisible(false);
     }
 
     @SuppressWarnings("unchecked")
@@ -222,15 +246,15 @@ public class BillableItemEditor extends CForm<BillableItem> {
 
             if (isViewable()) {
                 adjustmentPanel.setVisible(!getValue().adjustments().isEmpty());
-                depositPanel.setVisible(!getValue().deposits().isEmpty());
+                setDepositsVisible(!getValue().deposits().isEmpty());
             } else {
                 adjustmentPanel.setVisible(true);
-                depositPanel.setVisible(true);
+                setDepositsVisible(true);
             }
 
         } else {// tweak UI for empty ProductItem:
             adjustmentPanel.setVisible(false);
-            depositPanel.setVisible(false);
+            setDepositsVisible(false);
 
             if (isEditable()) {
                 get(proto().item()).setEditable(!leaseTerm.getValue().selectedServiceItems().isEmpty());
@@ -259,9 +283,9 @@ public class BillableItemEditor extends CForm<BillableItem> {
             adjustmentPanel.setVisible(false); // always invisible in Yardi mode!
 
             if (getValue().item().product().isInstanceOf(Service.ServiceV.class)) {
-                depositPanel.setVisible(((isEditable() && !getValue().item().isEmpty()) || !getValue().deposits().isEmpty()));
+                setDepositsVisible(((isEditable() && !getValue().item().isEmpty()) || !getValue().deposits().isEmpty()));
             } else if (getValue().item().product().isInstanceOf(Feature.FeatureV.class)) {
-                depositPanel.setVisible(false);
+                setDepositsVisible(false);
             }
         }
     }
@@ -318,6 +342,11 @@ public class BillableItemEditor extends CForm<BillableItem> {
                 extraDataPanel.setWidget(editor);
             }
         }
+    }
+
+    private void setDepositsVisible(boolean visible) {
+        depositPanel.setVisible(visible);
+        recalculateDeposits.setVisible(isEditable() && visible);
     }
 
     private boolean isMandatoryFeature(Product.ProductV<?> product) {
@@ -489,10 +518,10 @@ public class BillableItemEditor extends CForm<BillableItem> {
         @Override
         protected void addItem() {
             assert (leaseTermEditorView != null);
-            ((LeaseTermEditorView.Presenter) leaseTermEditorView.getPresenter()).retirveAvailableDeposits(new DefaultAsyncCallback<List<Deposit>>() {
+            ((LeaseTermEditorView.Presenter) leaseTermEditorView.getPresenter()).retirveAvailableDeposits(new DefaultAsyncCallback<DepositListDTO>() {
                 @Override
-                public void onSuccess(List<Deposit> result) {
-                    new EntitySelectorListDialog<Deposit>(i18n.tr("Select Deposits"), true, result) {
+                public void onSuccess(DepositListDTO result) {
+                    new EntitySelectorListDialog<Deposit>(i18n.tr("Select Deposits"), true, result.deposits()) {
                         @Override
                         public boolean onClickOk() {
                             for (Deposit item : getSelectedItems()) {

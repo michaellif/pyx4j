@@ -14,7 +14,7 @@
 package com.propertyvista.crm.server.services.lease.common;
 
 import java.math.BigDecimal;
-import java.util.Vector;
+import java.util.List;
 
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.collections4.Predicate;
@@ -40,6 +40,7 @@ import com.propertyvista.biz.financial.payment.PaymentMethodFacade;
 import com.propertyvista.biz.policy.PolicyFacade;
 import com.propertyvista.biz.tenant.OnlineApplicationFacade;
 import com.propertyvista.biz.tenant.lease.LeaseFacade;
+import com.propertyvista.crm.rpc.dto.lease.financial.DepositListDTO;
 import com.propertyvista.crm.rpc.services.lease.common.LeaseTermCrudService;
 import com.propertyvista.crm.server.util.CrmAppContext;
 import com.propertyvista.domain.financial.ARCode;
@@ -242,8 +243,8 @@ public class LeaseTermCrudServiceImpl extends AbstractVersionedCrudServiceDtoImp
     }
 
     @Override
-    public void retirveAvailableDeposits(AsyncCallback<Vector<Deposit>> callback, final BillableItem item) {
-        Vector<Deposit> deposits = new Vector<>(ServerSideFactory.create(DepositFacade.class).createRequiredDeposits(item));
+    public void retirveAvailableDeposits(AsyncCallback<DepositListDTO> callback, final BillableItem item) {
+        List<Deposit> deposits = ServerSideFactory.create(DepositFacade.class).createRequiredDeposits(item);
 
         // filter out already existing (the same type) ones:
         CollectionUtils.filter(deposits, new Predicate<Deposit>() {
@@ -258,7 +259,20 @@ public class LeaseTermCrudServiceImpl extends AbstractVersionedCrudServiceDtoImp
             }
         });
 
-        callback.onSuccess(deposits);
+        DepositListDTO result = EntityFactory.create(DepositListDTO.class);
+        result.deposits().addAll(deposits);
+        callback.onSuccess(result);
+    }
+
+    @Override
+    public void recalculateDeposits(AsyncCallback<DepositListDTO> callback, final BillableItem item) {
+        DepositListDTO result = EntityFactory.create(DepositListDTO.class);
+
+        for (Deposit deposit : item.deposits()) {
+            result.deposits().add(ServerSideFactory.create(DepositFacade.class).createDeposit(deposit.type().getValue(), item));
+        }
+
+        callback.onSuccess(result);
     }
 
     @Override

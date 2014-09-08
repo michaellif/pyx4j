@@ -13,9 +13,6 @@
  */
 package com.propertyvista.crm.client.activity.crud.lease.common;
 
-import java.util.List;
-import java.util.Vector;
-
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
@@ -30,6 +27,7 @@ import com.propertyvista.crm.client.CrmSite;
 import com.propertyvista.crm.client.activity.crud.CrmEditorActivity;
 import com.propertyvista.crm.client.ui.crud.lease.common.term.LeaseTermEditorView;
 import com.propertyvista.crm.rpc.CrmSiteMap;
+import com.propertyvista.crm.rpc.dto.lease.financial.DepositListDTO;
 import com.propertyvista.crm.rpc.services.lease.common.LeaseTermCrudService;
 import com.propertyvista.domain.financial.offering.ProductItem;
 import com.propertyvista.domain.property.asset.building.Building;
@@ -51,8 +49,8 @@ public class LeaseTermEditorActivity extends CrmEditorActivity<LeaseTermDTO> imp
     private final ReturnBehaviour returnBehaviour;
 
     public LeaseTermEditorActivity(CrudAppPlace place) {
-        super(LeaseTermDTO.class, place, CrmSite.getViewFactory().getView(LeaseTermEditorView.class),
-                GWT.<LeaseTermCrudService> create(LeaseTermCrudService.class));
+        super(LeaseTermDTO.class, place, CrmSite.getViewFactory().getView(LeaseTermEditorView.class), GWT
+                .<LeaseTermCrudService> create(LeaseTermCrudService.class));
 
         String val;
         if ((val = place.getFirstArg(ARG_NAME_RETURN_BH)) != null) {
@@ -128,13 +126,13 @@ public class LeaseTermEditorActivity extends CrmEditorActivity<LeaseTermDTO> imp
     }
 
     @Override
-    public void retirveAvailableDeposits(final AsyncCallback<List<Deposit>> callback, BillableItem item) {
-        ((LeaseTermCrudService) getService()).retirveAvailableDeposits(new DefaultAsyncCallback<Vector<Deposit>>() {
-            @Override
-            public void onSuccess(Vector<Deposit> result) {
-                callback.onSuccess(result);
-            }
-        }, item.<BillableItem> duplicate());
+    public void retirveAvailableDeposits(final AsyncCallback<DepositListDTO> callback, BillableItem item) {
+        ((LeaseTermCrudService) getService()).retirveAvailableDeposits(callback, item.<BillableItem> duplicate());
+    }
+
+    @Override
+    public void recalculateDeposits(final AsyncCallback<DepositListDTO> callback, BillableItem item) {
+        ((LeaseTermCrudService) getService()).recalculateDeposits(callback, item.<BillableItem> duplicate());
     }
 
     @Override
