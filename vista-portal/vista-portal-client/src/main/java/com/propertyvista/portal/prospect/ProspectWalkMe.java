@@ -51,6 +51,9 @@ public class ProspectWalkMe {
         if (SecurityController.check(PortalProspectBehavior.Guarantor)) {
             behaviors.push("Guarantor");
         }
+        if (SecurityController.check(PortalProspectBehavior.CanEditLeaseTerms)) {
+            behaviors.push("UnitSelectionEnabled");
+        }
         WalkMe.setupWalkMeVariables(behaviors);
     }
 
