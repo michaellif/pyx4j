@@ -268,8 +268,13 @@ public class LeaseTermCrudServiceImpl extends AbstractVersionedCrudServiceDtoImp
     public void recalculateDeposits(AsyncCallback<DepositListDTO> callback, final BillableItem item) {
         DepositListDTO result = EntityFactory.create(DepositListDTO.class);
 
-        for (Deposit deposit : item.deposits()) {
-            result.deposits().add(ServerSideFactory.create(DepositFacade.class).createDeposit(deposit.type().getValue(), item));
+        if (VistaFeatures.instance().yardiIntegration()) {
+            // deposits in Yardi mode non-ediable, so reload them from the scratch
+            result.deposits().addAll(ServerSideFactory.create(DepositFacade.class).createRequiredDeposits(item));
+        } else {
+            for (Deposit deposit : item.deposits()) {
+                result.deposits().add(ServerSideFactory.create(DepositFacade.class).createDeposit(deposit.type().getValue(), item));
+            }
         }
 
         callback.onSuccess(result);
