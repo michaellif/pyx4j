@@ -45,19 +45,20 @@ public class ProductDepositEditor extends CForm<ProductDeposit> {
         formPanel.append(Location.Left, proto().chargeCode(), chargeCodeSelector = new CEntityComboBox<ARCode>(ARCode.class)).decorate();
 
         formPanel.append(Location.Right, proto().valueType()).decorate().componentWidth(100);
-        final CMoneyPercentCombo moneyPct = new CMoneyPercentCombo() {
-
-            @Override
-            public ValueType getAmountType() {
-                return ProductDepositEditor.this.getValue().valueType().getValue();
-            }
-        };
+        final CMoneyPercentCombo moneyPct = new CMoneyPercentCombo();
         formPanel.append(Location.Right, proto().value(), moneyPct).decorate().componentWidth(100);
 
         formPanel.append(Location.Dual, proto().description()).decorate();
 
         // tweaks:
         chargeCodeSelector.addCriterion(PropertyCriterion.in(chargeCodeSelector.proto().type(), ARCode.Type.deposits()));
+
+        get(proto().valueType()).addValueChangeHandler(new ValueChangeHandler<ValueType>() {
+            @Override
+            public void onValueChange(ValueChangeEvent<ValueType> event) {
+                moneyPct.setAmountType(event.getValue());
+            }
+        });
 
         get(proto().enabled()).addValueChangeHandler(new ValueChangeHandler<Boolean>() {
             @Override

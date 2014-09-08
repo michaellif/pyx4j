@@ -367,11 +367,10 @@ public class BillableItemEditor extends CForm<BillableItem> {
             @Override
             protected IsWidget createContent() {
                 IsWidget content = super.createContent();
-                final CMoneyPercentCombo moneyPct = (CMoneyPercentCombo) get(proto().value());
                 get(proto().type()).addValueChangeHandler(new ValueChangeHandler<ValueType>() {
                     @Override
                     public void onValueChange(ValueChangeEvent<ValueType> event) {
-                        moneyPct.setAmountType(get(proto().type()).getValue());
+                        ((CMoneyPercentCombo) get(proto().value())).setAmountType(event.getValue());
                     }
                 });
                 return content;
