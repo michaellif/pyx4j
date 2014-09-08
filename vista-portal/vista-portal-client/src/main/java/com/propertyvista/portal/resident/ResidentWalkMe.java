@@ -45,13 +45,22 @@ public class ResidentWalkMe {
         JsArrayString behaviors = JavaScriptObject.createArray().cast();
         if (SecurityController.check(PortalResidentBehavior.ResidentPrimary)) {
             behaviors.push("ResidentPrimary");
+            todoBetter(behaviors);
         }
         if (SecurityController.check(PortalResidentBehavior.ResidentSecondary)) {
             behaviors.push("CoApplicant");
+            todoBetter(behaviors);
         }
         if (SecurityController.check(PortalResidentBehavior.Guarantor)) {
             behaviors.push("Guarantor");
         }
         WalkMe.setupWalkMeVariables(behaviors);
+    }
+
+    // TODO Derive base on application setup
+    private static void todoBetter(JsArrayString behaviors) {
+        behaviors.push("SetupAutoPay");
+        behaviors.push("TenantInsurance");
+        behaviors.push("MaintenanceRequests");
     }
 }
