@@ -20,24 +20,19 @@
  */
 package com.pyx4j.widgets.client.suggest;
 
-import com.google.gwt.user.client.ui.PopupPanel;
-
+import com.pyx4j.widgets.client.DropDownPanel;
 import com.pyx4j.widgets.client.style.theme.WidgetTheme;
 
-public class PickerPopup<E> extends PopupPanel {
+public class PickerPopup<E> extends DropDownPanel {
 
     private final ISelectorWidget<E> selectorWidget;
 
     private IPickerPanel<E> pickerPanel;
 
     public PickerPopup(final ISelectorWidget<E> parent) {
-        super(true, false);
+        super();
         this.selectorWidget = parent;
-        addAutoHidePartner(parent.getElement());
-
-        setPreviewingAllNativeEvents(true);
         addStyleName(WidgetTheme.StyleName.SuggestBoxPopup.name());
-
     }
 
     public ISelectorWidget<E> getSelectorWidget() {
@@ -55,13 +50,13 @@ public class PickerPopup<E> extends PopupPanel {
     }
 
     @Override
-    public void hide() {
+    public void hide(boolean autoClosed) {
         this.pickerPanel = null;
         if (pickerPanel != null) {
             pickerPanel.setPickerPopup(null);
         }
         setWidget(null);
-        super.hide();
+        super.hide(autoClosed);
     }
 
     public void moveSelectionDown() {
