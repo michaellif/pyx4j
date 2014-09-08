@@ -458,8 +458,9 @@ public class VistaServerSideConfiguration extends AbstractVistaServerSideConfigu
     }
 
     @Override
-    public boolean walkMeEnabled() {
-        return getConfigProperties().getBooleanValue("walkMeEnabled", true);
+    public boolean walkMeEnabled(VistaApplication application) {
+        return getConfigProperties().getBooleanValue("walkMeEnabled", true)
+                && getConfigProperties().getBooleanValue("walkMeEnabled." + application.name(), true);
     }
 
     @Override

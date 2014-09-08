@@ -288,7 +288,7 @@ public class VistaTestsServerSideConfiguration extends AbstractVistaServerSideCo
     }
 
     @Override
-    public boolean walkMeEnabled() {
+    public boolean walkMeEnabled(VistaApplication application) {
         return false;
     }
 

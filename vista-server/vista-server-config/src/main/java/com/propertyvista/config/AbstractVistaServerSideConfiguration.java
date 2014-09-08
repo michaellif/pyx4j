@@ -111,7 +111,7 @@ public abstract class AbstractVistaServerSideConfiguration extends EssentialsSer
         return true;
     }
 
-    public abstract boolean walkMeEnabled();
+    public abstract boolean walkMeEnabled(VistaApplication application);
 
     public abstract String walkMeJsAPIUrl(VistaApplication application);
 

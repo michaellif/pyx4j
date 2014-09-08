@@ -22,6 +22,7 @@ import com.pyx4j.security.server.ThrottleConfig;
 import com.pyx4j.server.contexts.ServerContext;
 
 import com.propertyvista.config.BankingSimulatorConfiguration;
+import com.propertyvista.domain.security.common.VistaApplication;
 import com.propertyvista.misc.VistaTODO;
 
 public class VistaServerSideConfigurationDev extends VistaServerSideConfiguration {
@@ -37,7 +38,7 @@ public class VistaServerSideConfigurationDev extends VistaServerSideConfiguratio
     }
 
     @Override
-    public boolean walkMeEnabled() {
+    public boolean walkMeEnabled(VistaApplication application) {
         return false;
     }
 
