@@ -54,6 +54,7 @@ public class ResidentWalkMe {
         if (SecurityController.check(PortalResidentBehavior.Guarantor)) {
             behaviors.push("Guarantor");
         }
+        behaviors.push("Offers");
         WalkMe.setupWalkMeVariables(behaviors);
     }
 
