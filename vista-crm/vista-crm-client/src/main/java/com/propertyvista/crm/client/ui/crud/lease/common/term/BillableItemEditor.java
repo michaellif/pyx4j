@@ -13,6 +13,7 @@
  */
 package com.propertyvista.crm.client.ui.crud.lease.common.term;
 
+import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.List;
 
@@ -84,12 +85,7 @@ public class BillableItemEditor extends CForm<BillableItem> {
     private final Button recalculateDeposits = new Button(i18n.tr("Recalculate Deposits"), new Command() {
         @Override
         public void execute() {
-            ((LeaseTermEditorView.Presenter) leaseTermEditorView.getPresenter()).recalculateDeposits(new DefaultAsyncCallback<DepositListDTO>() {
-                @Override
-                public void onSuccess(DepositListDTO result) {
-                    depositFolder.setValue(result.deposits());
-                }
-            }, BillableItemEditor.this.getValue());
+            recalculateDeposits();
         }
     });
 
@@ -147,8 +143,17 @@ public class BillableItemEditor extends CForm<BillableItem> {
         formPanel.append(Location.Left, proto().yardiChargeCode()).decorate().componentWidth(120);
         formPanel.append(Location.Left, proto().agreedPrice()).decorate().componentWidth(120);
 
-        formPanel.append(Location.Right, recalculateDeposits);
-        recalculateDeposits.getElement().getStyle().setMarginLeft(150, Unit.PX);
+        if (VistaFeatures.instance().yardiIntegration()) {
+            get(proto().agreedPrice()).addValueChangeHandler(new ValueChangeHandler<BigDecimal>() {
+                @Override
+                public void onValueChange(ValueChangeEvent<BigDecimal> event) {
+                    recalculateDeposits();
+                }
+            });
+        } else {
+            formPanel.append(Location.Right, recalculateDeposits);
+            recalculateDeposits.getElement().getStyle().setMarginLeft(150, Unit.PX);
+        }
 
         formPanel.append(Location.Right, proto().effectiveDate()).decorate().componentWidth(120);
         formPanel.append(Location.Right, proto().expirationDate()).decorate().componentWidth(120);
@@ -347,6 +352,15 @@ public class BillableItemEditor extends CForm<BillableItem> {
     private void setDepositsVisible(boolean visible) {
         depositPanel.setVisible(visible);
         recalculateDeposits.setVisible(isEditable() && visible);
+    }
+
+    private void recalculateDeposits() {
+        ((LeaseTermEditorView.Presenter) leaseTermEditorView.getPresenter()).recalculateDeposits(new DefaultAsyncCallback<DepositListDTO>() {
+            @Override
+            public void onSuccess(DepositListDTO result) {
+                depositFolder.setValue(result.deposits());
+            }
+        }, getValue());
     }
 
     private boolean isMandatoryFeature(Product.ProductV<?> product) {
