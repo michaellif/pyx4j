@@ -145,7 +145,8 @@ public class TreePickerPanel<E> extends ScrollPanel implements IPickerPanel<E> {
 
         @SuppressWarnings("unchecked")
         public E getSelection() {
-            return ((PickerTreeItem) getSelectedItem()).getValue();
+            PickerTreeItem selectedItem = (PickerTreeItem) getSelectedItem();
+            return selectedItem == null ? null : selectedItem.getValue();
         }
 
         class PickerTreeItem extends TreeItem {
