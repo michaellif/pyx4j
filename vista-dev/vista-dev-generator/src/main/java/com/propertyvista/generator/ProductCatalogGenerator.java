@@ -325,11 +325,14 @@ public class ProductCatalogGenerator {
     }
 
     private BigDecimal getDepositAmount(ProductDeposit deposit, ProductItem item) {
-        if (ValueType.Percentage.equals(deposit.valueType().getValue())) {
-            return DomainUtil.roundMoney(deposit.value().percent().getValue(BigDecimal.ZERO).multiply(item.price().getValue(BigDecimal.ZERO)));
-        } else {
-            return deposit.value().amount().getValue();
+        if (RandomUtil.randomBoolean()) {
+            if (ValueType.Percentage.equals(deposit.valueType().getValue())) {
+                return DomainUtil.roundMoney(deposit.value().percent().getValue(BigDecimal.ZERO).multiply(item.price().getValue(BigDecimal.ZERO)));
+            } else {
+                return deposit.value().amount().getValue();
+            }
         }
+        return null;
     }
 
     private static BigDecimal createUnitMarketRent(AptUnit unit) {

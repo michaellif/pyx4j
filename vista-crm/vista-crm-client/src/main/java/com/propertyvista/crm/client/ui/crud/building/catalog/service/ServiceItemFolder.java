@@ -160,9 +160,9 @@ class ServiceItemFolder extends VistaBoxFolder<ProductItem> {
             get(proto().yardiDepositLMR()).setVisible(false);
 
             if (isViewable()) {
-                get(proto().depositLMR()).setVisible(parent.getValue().version().depositLMR().enabled().getValue());
-                get(proto().depositMoveIn()).setVisible(parent.getValue().version().depositMoveIn().enabled().getValue());
-                get(proto().depositSecurity()).setVisible(parent.getValue().version().depositSecurity().enabled().getValue());
+                get(proto().depositLMR()).setVisible(parent.getValue().version().depositLMR().enabled().isBooleanTrue());
+                get(proto().depositMoveIn()).setVisible(parent.getValue().version().depositMoveIn().enabled().isBooleanTrue());
+                get(proto().depositSecurity()).setVisible(parent.getValue().version().depositSecurity().enabled().isBooleanTrue());
             }
 
             // Yardi mode visibility/editability correction:
