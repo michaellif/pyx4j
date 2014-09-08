@@ -34,7 +34,7 @@ import com.pyx4j.entity.shared.IMoneyPercentAmount;
 import com.pyx4j.entity.shared.IMoneyPercentAmount.ValueType;
 import com.pyx4j.i18n.shared.I18n;
 
-public abstract class CMoneyPercentCombo extends CTextFieldBase<IMoneyPercentAmount, NTextBox<IMoneyPercentAmount>> {
+public class CMoneyPercentCombo extends CTextFieldBase<IMoneyPercentAmount, NTextBox<IMoneyPercentAmount>> {
 
     static final I18n i18n = I18n.get(CMoneyPercentCombo.class);
 
@@ -44,27 +44,17 @@ public abstract class CMoneyPercentCombo extends CTextFieldBase<IMoneyPercentAmo
 
     private final NumberFormat pf = NumberFormat.getFormat(i18n.tr("#0.00%"));
 
+    private ValueType amountType;
+
     public CMoneyPercentCombo() {
         setFormatter(new MoneyPercentFormat());
         setParser(new MoneyPercentParser());
         setNativeComponent(new NTextBox<IMoneyPercentAmount>(this));
     }
 
-    public abstract ValueType getAmountType();
-
-    @Override
-    public boolean isValueEmpty() {
-        return getValue() == null || getValue().isNull() || ( //
-                BigDecimal.ZERO.compareTo(getValue().amount().getValue(BigDecimal.ZERO)) >= 0 && //
-                BigDecimal.ZERO.compareTo(getValue().percent().getValue(BigDecimal.ZERO)) >= 0 //
-                );
-    }
-
-    @Override
-    public boolean isValid() {
-        // this will call formatter that will set correct value field (amount/percent) based on value type (Monetary/Percentage)
-        setEditorValue(getValue());
-        return super.isValid();
+    public void setAmountType(ValueType type) {
+        amountType = type;
+        refresh(false);
     }
 
     @Override
@@ -83,7 +73,7 @@ public abstract class CMoneyPercentCombo extends CTextFieldBase<IMoneyPercentAmo
                 return nf.format(BigDecimal.ZERO);
             }
             String result = null;
-            switch (getAmountType()) {
+            switch (amountType) {
             case Monetary:
                 if (isEditable()) {
                     result = nf.format(value.amount().getValue(BigDecimal.ZERO));
@@ -112,12 +102,16 @@ public abstract class CMoneyPercentCombo extends CTextFieldBase<IMoneyPercentAmo
                 return value;
             }
             try {
-                value = EntityFactory.create(IMoneyPercentAmount.class);
                 BigDecimal amount = new BigDecimal(nf.parse(string)).setScale(2, RoundingMode.HALF_UP);
-                if (ValueType.Monetary.equals(getAmountType())) {
+                if (amountType == null) {
+                    throw new ParseException(i18n.tr("Invalid value. Select valid type."), 0);
+                }
+                switch (amountType) {
+                case Monetary:
                     value.amount().setValue(amount);
                     value.percent().setValue(null);
-                } else {
+                    break;
+                case Percentage:
                     value.percent().setValue(amount.divide(new BigDecimal("100")));
                     value.amount().setValue(null);
                 }
