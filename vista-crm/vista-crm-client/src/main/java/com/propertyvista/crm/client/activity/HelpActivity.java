@@ -18,9 +18,8 @@ import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
-import com.pyx4j.gwt.commons.layout.LayoutChangeRequestEvent;
-import com.pyx4j.gwt.commons.layout.LayoutChangeRequestEvent.ChangeType;
-import com.pyx4j.site.client.AppSite;
+import com.pyx4j.security.client.BehaviorChangeEvent;
+import com.pyx4j.security.client.BehaviorChangeHandler;
 
 import com.propertyvista.crm.client.CrmSite;
 import com.propertyvista.crm.client.ui.HelpView;
@@ -33,7 +32,6 @@ public class HelpActivity extends AbstractActivity implements HelpPresenter {
     public HelpActivity() {
         view = CrmSite.getViewFactory().getView(HelpView.class);
         view.setPresenter(this);
-        view.updateContextHelp();
     }
 
     public HelpActivity withPlace(Place place) {
@@ -43,6 +41,13 @@ public class HelpActivity extends AbstractActivity implements HelpPresenter {
     @Override
     public void start(AcceptsOneWidget panel, EventBus eventBus) {
         panel.setWidget(view);
+        view.updateContextHelp();
+        eventBus.addHandler(BehaviorChangeEvent.getType(), new BehaviorChangeHandler() {
+            @Override
+            public void onBehaviorChange(BehaviorChangeEvent event) {
+                view.updateContextHelp();
+            }
+        });
     }
 
 }

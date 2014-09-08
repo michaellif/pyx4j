@@ -38,7 +38,7 @@ public class VistaServerSideConfigurationDev extends VistaServerSideConfiguratio
 
     @Override
     public boolean walkMeEnabled() {
-        return true;
+        return false;
     }
 
     @Override

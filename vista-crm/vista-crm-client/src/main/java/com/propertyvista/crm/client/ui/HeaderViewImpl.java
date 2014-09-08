@@ -1,7 +1,6 @@
 package com.propertyvista.crm.client.ui;
 
 import java.util.List;
-import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,7 +15,6 @@ import com.google.gwt.event.dom.client.HasClickHandlers;
 import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.Window;
-import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.Image;
@@ -39,7 +37,6 @@ import com.pyx4j.widgets.client.Toolbar;
 import com.pyx4j.widgets.client.style.theme.WidgetTheme;
 
 import com.propertyvista.common.client.ClientLocaleUtils;
-import com.propertyvista.common.client.WalkMe;
 import com.propertyvista.common.client.theme.SiteViewTheme;
 import com.propertyvista.common.client.ui.components.MediaUtils;
 import com.propertyvista.crm.client.CrmSite;
@@ -71,12 +68,6 @@ public class HeaderViewImpl extends FlowPanel implements HeaderView {
     private Button communicationButton;
 
     private MenuItem support;
-
-    private Button walkMeHelpButton;
-
-    private MenuItem walkMeHelpMenuItem;
-
-    private ButtonMenuBar walkMeHelpMenuBar;
 
     private Button languageButton;
 
@@ -193,10 +184,6 @@ public class HeaderViewImpl extends FlowPanel implements HeaderView {
                 }
             }));
 
-            //TODO Make it Work....
-//            walkMeHelpMenuBar = new ButtonMenuBar();
-//            userButtonMenu.addItem(walkMeHelpMenuItem = new MenuItem(i18n.tr("Help"), walkMeHelpMenuBar));
-
             userButtonMenu.addItem(new MenuItem(i18n.tr("LogOut"), new Command() {
                 @Override
                 public void execute() {
@@ -241,10 +228,6 @@ public class HeaderViewImpl extends FlowPanel implements HeaderView {
             }, CrmAdministrationAccess.class);
             adminButton.ensureDebugId("administration");
 
-            walkMeHelpButton = new Button(i18n.tr("Help"));
-            walkMeHelpMenuBar = new ButtonMenuBar();
-            walkMeHelpButton.setMenu(walkMeHelpMenuBar);
-
             languageButton = new Button("");
 
             languageButtonMenu = new ButtonMenuBar();
@@ -255,7 +238,6 @@ public class HeaderViewImpl extends FlowPanel implements HeaderView {
             rightToolbar.addItem(exitAdminButton);
             rightToolbar.addItem(adminButton);
             rightToolbar.addItem(userButton);
-            rightToolbar.addItem(walkMeHelpButton);
             rightToolbar.addItem(languageButton);
             rightToolbar.addItem(communicationButton);
             add(rightToolbar);
@@ -369,7 +351,6 @@ public class HeaderViewImpl extends FlowPanel implements HeaderView {
         }
         setCommunicationMessagesCount(CrmClientCommunicationManager.instance().getLatestCommunicationNotification());
         communicationButton.setVisible(loggedIn);
-        calculateWalkthrusState();
     }
 
     @Override
@@ -401,33 +382,4 @@ public class HeaderViewImpl extends FlowPanel implements HeaderView {
         }
     }
 
-    private void calculateWalkthrusState() {
-        if (!loggedIn) {
-            walkMeHelpButton.setVisible(false);
-        } else {
-
-            WalkMe.obtainWalkthrus(new AsyncCallback<Map<Integer, String>>() {
-
-                @Override
-                public void onFailure(Throwable caught) {
-                    walkMeHelpButton.setVisible(false);
-                }
-
-                @Override
-                public void onSuccess(Map<Integer, String> result) {
-                    walkMeHelpMenuBar.clearItems();
-                    for (final Map.Entry<Integer, String> me : result.entrySet()) {
-                        walkMeHelpMenuBar.addItem(new MenuItem(me.getValue(), new Command() {
-                            @Override
-                            public void execute() {
-                                log.debug("call WalkThru {} '{}'", me.getKey(), me.getValue());
-                                WalkMe.startWalkthruById(me.getKey());
-                            }
-                        }));
-                    }
-                    walkMeHelpButton.setVisible(!walkMeHelpMenuBar.isMenuEmpty());
-                }
-            });
-        }
-    }
 }
