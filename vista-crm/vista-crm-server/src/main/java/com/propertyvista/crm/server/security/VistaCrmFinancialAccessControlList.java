@@ -38,6 +38,7 @@ import com.propertyvista.crm.rpc.services.billing.BillPrintService;
 import com.propertyvista.crm.rpc.services.billing.BillingCycleCrudService;
 import com.propertyvista.crm.rpc.services.billing.BillingExecutionService;
 import com.propertyvista.crm.rpc.services.financial.AggregatedTransferCrudService;
+import com.propertyvista.crm.rpc.services.financial.AggregatedTransferDownloadService;
 import com.propertyvista.crm.rpc.services.financial.AutoPayHistoryCrudService;
 import com.propertyvista.crm.rpc.services.financial.AutoPayReviewService;
 import com.propertyvista.crm.rpc.services.financial.MoneyInBatchCrudService;
@@ -83,6 +84,7 @@ class VistaCrmFinancialAccessControlList extends UIAclBuilder {
         grant(FinancialAggregatedTransfer, new IServiceExecutePermission(AggregatedTransferCrudService.class));
         grant(FinancialAggregatedTransfer, PaymentRecordDTO.class, READ);
         grant(FinancialAggregatedTransfer, new IServiceExecutePermission(PaymentRecordListService.class));
+        grant(FinancialAggregatedTransfer, new IServiceExecutePermission(AggregatedTransferDownloadService.class));
 
         // ------ Financial: Payments
 
