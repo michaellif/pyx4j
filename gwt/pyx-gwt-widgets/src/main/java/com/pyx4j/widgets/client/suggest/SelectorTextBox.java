@@ -48,7 +48,7 @@ public class SelectorTextBox<E> extends AbstractSelectorWidget<E> implements Has
     private final IPickerPanel<E> picker;
 
     public SelectorTextBox(final OptionsGrabber<E> optionsGrabber, IFormatter<E, String> valueFormatter, IFormatter<E, String[]> optionPathFormatter) {
-        super(new SelectorTextBoxValuePanel<E>());
+        super(new SelectorTextBoxValuePanel<E>(valueFormatter));
         this.valueFormatter = valueFormatter;
         this.optionPathFormatter = optionPathFormatter;
         textBox = (SelectorTextBoxValuePanel<E>) getViewerPanel();
@@ -106,6 +106,17 @@ public class SelectorTextBox<E> extends AbstractSelectorWidget<E> implements Has
     protected void showEverithingPicker() {
         picker.refreshOptions("");
         showPickerPopup(picker);
+    }
+
+    @Override
+    protected void showPickerPopup(IPickerPanel<E> pickerPanel) {
+        value = null;
+        super.showPickerPopup(pickerPanel);
+    }
+
+    @Override
+    public void resetQuery() {
+        textBox.showValue(value);
     }
 
     @Override

@@ -20,12 +20,20 @@
  */
 package com.pyx4j.widgets.client.suggest;
 
+import com.pyx4j.commons.IFormatter;
 import com.pyx4j.widgets.client.TextBox;
 
 public class SelectorTextBoxValuePanel<E> extends TextBox implements ISelectorValuePanel<E> {
 
-    public SelectorTextBoxValuePanel() {
+    private final IFormatter<E, String> valueFormatter;
 
+    public SelectorTextBoxValuePanel(IFormatter<E, String> valueFormatter) {
+        this.valueFormatter = valueFormatter;
+    }
+
+    @Override
+    public void showValue(E value) {
+        setText(valueFormatter.format(value));
     }
 
     @Override

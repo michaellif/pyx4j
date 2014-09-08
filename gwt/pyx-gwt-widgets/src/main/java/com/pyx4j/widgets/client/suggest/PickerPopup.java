@@ -56,6 +56,7 @@ public class PickerPopup<E> extends DropDownPanel {
             pickerPanel.setPickerPopup(null);
         }
         setWidget(null);
+        selectorWidget.resetQuery();
         super.hide(autoClosed);
     }
 

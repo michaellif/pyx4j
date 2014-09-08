@@ -30,4 +30,6 @@ public interface ISelectorWidget<E> extends IFocusWidget {
 
     ISelectorValuePanel<E> getViewerPanel();
 
+    void resetQuery();
+
 }
