@@ -74,8 +74,7 @@ public class LeaseAdjustmentForm extends CrmEntityForm<LeaseAdjustment> {
         formPanel.append(Location.Left, proto().overwriteDefaultTax()).decorate().componentWidth(80);
         get(proto().overwriteDefaultTax()).setVisible(isEditable());
         formPanel.append(Location.Left, proto().taxType()).decorate().componentWidth(100);
-        final CMoneyPercentCombo moneyPercent = new CMoneyPercentCombo();
-        formPanel.append(Location.Left, proto().tax(), moneyPercent).decorate().componentWidth(100);
+        formPanel.append(Location.Left, proto().tax(), new CMoneyPercentCombo()).decorate().componentWidth(100);
         if (!isEditable()) {
             formPanel.append(Location.Left, proto()._total()).decorate().componentWidth(120);
         }
@@ -90,7 +89,7 @@ public class LeaseAdjustmentForm extends CrmEntityForm<LeaseAdjustment> {
         get(proto().taxType()).addValueChangeHandler(new ValueChangeHandler<ValueType>() {
             @Override
             public void onValueChange(ValueChangeEvent<ValueType> event) {
-                moneyPercent.setAmountType(event.getValue());
+                ((CMoneyPercentCombo) get(proto().tax())).setAmountType(event.getValue());
             }
         });
         get(proto().executionType()).addValueChangeHandler(new ValueChangeHandler<ExecutionType>() {
@@ -134,6 +133,11 @@ public class LeaseAdjustmentForm extends CrmEntityForm<LeaseAdjustment> {
     @Override
     protected void onValueSet(boolean populate) {
         super.onValueSet(populate);
+
+        // sync tax type
+        if (getValue() != null) {
+            ((CMoneyPercentCombo) get(proto().tax())).setAmountType(getValue().taxType().getValue());
+        }
 
         recalculateTaxesAndTotal();
     }

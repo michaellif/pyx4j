@@ -32,13 +32,14 @@ public class ConcessionForm extends CrmEntityForm<Concession> {
 
     private static final I18n i18n = I18n.get(ConcessionForm.class);
 
+    private final CMoneyPercentCombo moneyPct = new CMoneyPercentCombo();
+
     public ConcessionForm(IForm<Concession> view) {
         super(Concession.class, view);
 
         FormPanel formPanel = new FormPanel(this);
 
         formPanel.append(Location.Left, proto().version().type()).decorate().componentWidth(120);
-        final CMoneyPercentCombo moneyPct = new CMoneyPercentCombo();
         formPanel.append(Location.Left, proto().version().value(), moneyPct).decorate().componentWidth(100);
         formPanel.append(Location.Left, proto().version().term()).decorate().componentWidth(120);
         formPanel.append(Location.Left, proto().version().condition()).decorate().componentWidth(100);
@@ -53,12 +54,25 @@ public class ConcessionForm extends CrmEntityForm<Concession> {
         get(proto().version().type()).addValueChangeHandler(new ValueChangeHandler<Type>() {
             @Override
             public void onValueChange(ValueChangeEvent<Type> event) {
-                moneyPct.setAmountType(Type.percentageOff.equals(event.getValue()) ? ValueType.Percentage : ValueType.Monetary);
-                moneyPct.setEnabled(!Type.free.equals(event.getValue()));
+                syncAmountType(event.getValue());
             }
         });
 
         selectTab(addTab(formPanel, i18n.tr("Concession")));
         setTabBarVisible(false);
+    }
+
+    @Override
+    public void onValueSet(boolean populate) {
+        super.onValueSet(populate);
+
+        if (getValue() != null) {
+            syncAmountType(getValue().version().type().getValue());
+        }
+    }
+
+    private void syncAmountType(Type type) {
+        moneyPct.setAmountType(Type.percentageOff.equals(type) ? ValueType.Percentage : ValueType.Monetary);
+        moneyPct.setEnabled(!Type.free.equals(type));
     }
 }

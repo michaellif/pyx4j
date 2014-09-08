@@ -30,8 +30,6 @@ import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.IList;
 import com.pyx4j.entity.core.IObject;
 import com.pyx4j.entity.shared.IMoneyPercentAmount.ValueType;
-import com.pyx4j.forms.client.events.PropertyChangeEvent;
-import com.pyx4j.forms.client.events.PropertyChangeHandler;
 import com.pyx4j.forms.client.ui.CComboBox;
 import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.CLabel;
@@ -64,6 +62,10 @@ public class LeaseBillingPolicyForm extends PolicyDTOTabPanelBasedForm<LeaseBill
 
     private final static I18n i18n = I18n.get(LeaseBillingPolicyForm.class);
 
+    private final CMoneyPercentCombo baseFee = new CMoneyPercentCombo();
+
+    private final CMoneyPercentCombo maxTotalFee = new CMoneyPercentCombo();
+
     public LeaseBillingPolicyForm(IForm<LeaseBillingPolicyDTO> view) {
         super(LeaseBillingPolicyDTO.class, view);
 
@@ -94,34 +96,39 @@ public class LeaseBillingPolicyForm extends PolicyDTOTabPanelBasedForm<LeaseBill
         FormPanel formPanel = new FormPanel(this);
 
         formPanel.append(Location.Left, proto().lateFee().baseFeeType()).decorate().componentWidth(120);
-        final CMoneyPercentCombo baseFee = new CMoneyPercentCombo();
         formPanel.append(Location.Left, proto().lateFee().baseFee(), baseFee).decorate().componentWidth(120);
 
         formPanel.append(Location.Left, proto().lateFee().maxTotalFeeType()).decorate().componentWidth(120);
-        final CMoneyPercentCombo maxTotalFee = new CMoneyPercentCombo();
         formPanel.append(Location.Left, proto().lateFee().maxTotalFee(), maxTotalFee).decorate().componentWidth(120);
 
         // add fee type control dependencies
         get(proto().lateFee().baseFeeType()).addValueChangeHandler(new ValueChangeHandler<BaseFeeType>() {
             @Override
             public void onValueChange(ValueChangeEvent<BaseFeeType> event) {
-                baseFee.setAmountType(BaseFeeType.FlatAmount.equals(event.getValue()) ? ValueType.Monetary : ValueType.Percentage);
+                syncBaseFeeType(event.getValue());
             }
         });
-        get(proto().lateFee().maxTotalFeeType()).addPropertyChangeHandler(new PropertyChangeHandler() {
+        get(proto().lateFee().maxTotalFeeType()).addValueChangeHandler(new ValueChangeHandler<MaxTotalFeeType>() {
             @Override
-            public void onPropertyChange(PropertyChangeEvent event) {
-                MaxTotalFeeType type = get(proto().lateFee().maxTotalFeeType()).getValue();
-                maxTotalFee.setAmountType(MaxTotalFeeType.PercentMonthlyRent.equals(type) ? ValueType.Percentage : ValueType.Monetary);
-                maxTotalFee.setVisible(!MaxTotalFeeType.Unlimited.equals(type));
-                if (MaxTotalFeeType.Unlimited.equals(type) && maxTotalFee.getValue() != null) {
-                    maxTotalFee.getValue().amount().setValue(null);
-                    maxTotalFee.getValue().percent().setValue(null);
-                }
+            public void onValueChange(ValueChangeEvent<MaxTotalFeeType> event) {
+                syncMaxTotalFeeType(event.getValue());
             }
         });
 
         return formPanel;
+    }
+
+    private void syncBaseFeeType(BaseFeeType type) {
+        baseFee.setAmountType(BaseFeeType.FlatAmount.equals(type) ? ValueType.Monetary : ValueType.Percentage);
+    }
+
+    private void syncMaxTotalFeeType(MaxTotalFeeType type) {
+        maxTotalFee.setAmountType(MaxTotalFeeType.PercentMonthlyRent.equals(type) ? ValueType.Percentage : ValueType.Monetary);
+        maxTotalFee.setVisible(!MaxTotalFeeType.Unlimited.equals(type));
+        if (MaxTotalFeeType.Unlimited.equals(type) && maxTotalFee.getValue() != null) {
+            maxTotalFee.getValue().amount().setValue(null);
+            maxTotalFee.getValue().percent().setValue(null);
+        }
     }
 
     private IsWidget createNsfFeesPanel() {
@@ -129,6 +136,17 @@ public class LeaseBillingPolicyForm extends PolicyDTOTabPanelBasedForm<LeaseBill
         formPanel.append(Location.Left, proto().nsfFees(), new NsfFeeItemFolder(isEditable()));
 
         return formPanel;
+    }
+
+    @Override
+    public void onValueSet(boolean populate) {
+        super.onValueSet(populate);
+
+        // sync value types
+        if (getValue() != null) {
+            syncBaseFeeType(getValue().lateFee().baseFeeType().getValue());
+            syncMaxTotalFeeType(getValue().lateFee().maxTotalFeeType().getValue());
+        }
     }
 
     class LeaseBillingTypeFolder extends VistaBoxFolder<LeaseBillingTypePolicyItem> {

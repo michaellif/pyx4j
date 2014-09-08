@@ -406,6 +406,16 @@ public class BillableItemEditor extends CForm<BillableItem> {
             }
 
             @Override
+            public void onValueSet(boolean populate) {
+                super.onValueSet(populate);
+
+                // sync amount type
+                if (getValue() != null) {
+                    ((CMoneyPercentCombo) get(proto().value())).setAmountType(getValue().type().getValue());
+                }
+            }
+
+            @Override
             public void addValidations() {
                 super.addValidations();
 
