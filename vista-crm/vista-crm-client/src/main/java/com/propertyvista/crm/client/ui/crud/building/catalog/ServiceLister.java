@@ -57,7 +57,7 @@ public class ServiceLister extends AbstractLister<Service> {
             setDataTableModel(new DataTableModel<Service>(//@formatter:off
                     new MemberColumnDescriptor.Builder(proto().code()).build(),
                     new MemberColumnDescriptor.Builder(proto().version().name()).build(),
-                    new MemberColumnDescriptor.Builder(proto().version().price()).build(),
+                    new MemberColumnDescriptor.Builder(proto().version().price()).visible(!VistaFeatures.instance().yardiIntegration()).build(),
                     new MemberColumnDescriptor.Builder(proto().version().versionNumber()).build(), 
                     new MemberColumnDescriptor.Builder(proto().version().availableOnline()).build(),
                     new MemberColumnDescriptor.Builder(proto().expiredFrom()).build()

@@ -131,8 +131,8 @@ public class ServiceForm extends CrmEntityForm<Service> {
         if (VistaFeatures.instance().yardiIntegration()) {
             get(proto().version().name()).setEditable(false);
             get(proto().version().description()).setEditable(false);
-            get(proto().version().price()).setEditable(false);
 
+            get(proto().version().price()).setVisible(false);
             get(proto().expiredFrom()).setVisible(false);
             get(proto().version().availableOnline()).setVisible(false);
         }
