@@ -57,14 +57,6 @@ public class CMoneyPercentCombo extends CTextFieldBase<IMoneyPercentAmount, NTex
         refresh(false);
     }
 
-    @Override
-    protected IMoneyPercentAmount preprocessValue(IMoneyPercentAmount value, boolean fireEvent, boolean populate) {
-        if (value != null) {
-            value = value.duplicate();
-        }
-        return super.preprocessValue(value, fireEvent, populate);
-    }
-
     class MoneyPercentFormat implements IFormatter<IMoneyPercentAmount, String> {
 
         @Override
