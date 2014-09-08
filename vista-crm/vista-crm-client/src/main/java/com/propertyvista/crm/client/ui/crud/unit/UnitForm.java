@@ -88,13 +88,8 @@ public class UnitForm extends CrmEntityForm<AptUnitDTO> {
         get(proto().financial()._unitRent()).setVisible(!getValue().financial()._unitRent().isNull());
         get(proto().reservedUntil()).setVisible(!getValue().reservedUntil().isNull());
 
-        if (VistaFeatures.instance().yardiIntegration()) {
-            catalogMarketPricesPanel.setVisible(false);
-            get(proto().financial()._marketRent()).setVisible(true);
-        } else {
-            get(proto().financial()._marketRent()).setVisible(false);
-            catalogMarketPricesPanel.setVisible(!getValue().building().defaultProductCatalog().getValue(false));
-        }
+        get(proto().financial()._marketRent()).setVisible(false);
+        catalogMarketPricesPanel.setVisible(!getValue().building().defaultProductCatalog().getValue(false));
 
         updateSelectedLegalAddress();
     }
@@ -141,11 +136,9 @@ public class UnitForm extends CrmEntityForm<AptUnitDTO> {
         formPanel.append(Location.Left, proto().financial()._unitRent()).decorate().componentWidth(80);
         formPanel.append(Location.Left, proto().financial()._marketRent()).decorate().componentWidth(100);
 
-        if (!VistaFeatures.instance().yardiIntegration()) {
-            catalogMarketPricesPanel.h1(proto().marketPrices().getMeta().getCaption());
-            catalogMarketPricesPanel.append(Location.Left, proto().marketPrices(), new UnitServicePriceFolder());
-            formPanel.append(Location.Dual, catalogMarketPricesPanel);
-        }
+        catalogMarketPricesPanel.h1(proto().marketPrices().getMeta().getCaption());
+        catalogMarketPricesPanel.append(Location.Left, proto().marketPrices(), new UnitServicePriceFolder());
+        formPanel.append(Location.Dual, catalogMarketPricesPanel);
 
         return formPanel;
     }
