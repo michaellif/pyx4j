@@ -86,7 +86,6 @@ public class SelectorTextBox<E> extends AbstractSelectorWidget<E> implements Has
             textBox.setText("");
         } else {
             textBox.setText(valueFormatter.format(value));
-            hidePickerPopup();
             fireValueChangeEvent(value);
         }
     }

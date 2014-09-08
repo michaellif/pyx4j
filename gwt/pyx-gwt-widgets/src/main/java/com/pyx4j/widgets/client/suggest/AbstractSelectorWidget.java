@@ -50,6 +50,12 @@ public abstract class AbstractSelectorWidget<E> extends Composite implements ISe
             @Override
             public void onKeyDown(KeyDownEvent event) {
                 switch (event.getNativeKeyCode()) {
+                case KeyCodes.KEY_DOWN:
+                    pickerPopup.moveSelectionDown();
+                    break;
+                case KeyCodes.KEY_UP:
+                    pickerPopup.moveSelectionUp();
+                    break;
                 case KeyCodes.KEY_ENTER:
                 case KeyCodes.KEY_TAB:
                     pickerPopup.pickSelection();

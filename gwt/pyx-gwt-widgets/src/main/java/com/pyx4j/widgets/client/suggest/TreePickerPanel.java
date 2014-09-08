@@ -23,7 +23,13 @@ package com.pyx4j.widgets.client.suggest;
 import java.util.Collection;
 
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.dom.client.Style.Unit;
+import com.google.gwt.core.client.Scheduler;
+import com.google.gwt.core.client.Scheduler.ScheduledCommand;
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.logical.shared.SelectionEvent;
+import com.google.gwt.event.logical.shared.SelectionHandler;
+import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.Tree;
@@ -37,7 +43,7 @@ public class TreePickerPanel<E> extends ScrollPanel implements IPickerPanel<E> {
 
     private static TreeImages images = GWT.create(TreeImages.class);
 
-    private PickerPopup<E> pickerPopup;
+    private HandlerRegistration handlerRegistration;
 
     private final OptionsGrabber<E> optionsGrabber;
 
@@ -56,9 +62,6 @@ public class TreePickerPanel<E> extends ScrollPanel implements IPickerPanel<E> {
 
         setStyleName(WidgetTheme.StyleName.SelectionPickerPanel.name());
 
-        getElement().getStyle().setProperty("overflowY", "auto");
-        getElement().getStyle().setProperty("overflowX", "hidden");
-
         if (optionPathFormatter == null) {
             tree = new PickerTree(images, true);
         } else {
@@ -67,17 +70,23 @@ public class TreePickerPanel<E> extends ScrollPanel implements IPickerPanel<E> {
         setWidget(tree);
 
         getElement().getStyle().setProperty("maxHeight", "200px");
+
     }
 
     @Override
-    public void setPickerPopup(PickerPopup<E> pickerPopup) {
-        this.pickerPopup = pickerPopup;
-    }
+    public void setPickerPopup(final PickerPopup<E> pickerPopup) {
+        if (handlerRegistration != null) {
+            handlerRegistration.removeHandler();
+        }
+        if (pickerPopup != null) {
+            handlerRegistration = tree.addSelectionHandler(new SelectionHandler<TreeItem>() {
 
-    @Override
-    public void pickSelection() {
-        // TODO Auto-generated method stub
-
+                @Override
+                public void onSelection(SelectionEvent<TreeItem> event) {
+                    pickerPopup.pickSelection();
+                }
+            });
+        }
     }
 
     @Override
@@ -94,56 +103,80 @@ public class TreePickerPanel<E> extends ScrollPanel implements IPickerPanel<E> {
 
     protected void showOptions(Collection<E> options, String query) {
         setVisible(false);
-        tree.clear();
 
-        for (E option : options) {
-            PickerTreeItem treeItem = new PickerTreeItem(option);
-            tree.addItem(treeItem);
+        tree.setOptions(options, query);
 
-            treeItem.setUserObject(option);
-
-            treeItem.getElement().getStyle().setPadding(1, Unit.PX);
-            treeItem.setStyleName(WidgetTheme.StyleName.SelectionPickerPanelItem.name());
-        }
         if (options.size() > 0) {
             setVisible(true);
         }
     }
 
-    class PickerTree extends Tree {
+    @Override
+    public void moveSelectionDown() {
+        // TODO Auto-generated method stub
 
-        public PickerTree(Resources resources, boolean useLeafImages) {
-            super(resources, useLeafImages);
-        }
+    }
+
+    @Override
+    public void moveSelectionUp() {
+
+    }
+
+    @Override
+    public E getSelection() {
+        return tree.getSelection();
+    }
+
+    class PickerTree extends Tree {
 
         public PickerTree() {
             super();
         }
 
-    }
-
-    class PickerTreeItem extends TreeItem {
-
-        private final E value;
-
-        public PickerTreeItem(E value) {
-            super();
-            this.value = value;
-            HTML label = new HTML(optionsFormatter.format(value));
-            setWidget(label);
-
+        public PickerTree(Resources resources, boolean useLeafImages) {
+            super(resources, useLeafImages);
         }
 
-        @Override
-        public void setSelected(boolean selected) {
-            super.setSelected(selected);
-            setStyleDependentName(WidgetTheme.StyleDependent.selected.name(), selected);
+        public void setOptions(Collection<E> options, String query) {
+            clear();
+
+            for (E option : options) {
+                PickerTreeItem treeItem = new PickerTreeItem(option);
+                addItem(treeItem);
+                treeItem.setUserObject(option);
+            }
         }
 
-        public E getValue() {
-            return value;
+        @SuppressWarnings("unchecked")
+        public E getSelection() {
+            return ((PickerTreeItem) getSelectedItem()).getValue();
         }
 
+        class PickerTreeItem extends TreeItem {
+
+            private final E value;
+
+            private final HTML label;
+
+            public PickerTreeItem(E value) {
+                super();
+                this.value = value;
+                label = new HTML(optionsFormatter.format(value));
+                label.setStyleName(WidgetTheme.StyleName.SelectionPickerPanelItem.name());
+                setWidget(label);
+            }
+
+            @Override
+            public void setSelected(boolean selected) {
+                super.setSelected(selected);
+                label.setStyleDependentName(WidgetTheme.StyleDependent.selected.name(), selected);
+            }
+
+            public E getValue() {
+                return value;
+            }
+
+        }
     }
 
 }

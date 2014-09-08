@@ -40,6 +40,9 @@ public class PickerPopup<E> extends DropDownPanel {
     }
 
     public void show(IPickerPanel<E> pickerPanel) {
+        if (this.pickerPanel != null) {
+            this.pickerPanel.setPickerPopup(null);
+        }
         this.pickerPanel = pickerPanel;
         pickerPanel.setPickerPopup(this);
         setWidget(pickerPanel.asWidget());
@@ -56,10 +59,21 @@ public class PickerPopup<E> extends DropDownPanel {
         super.hide(autoClosed);
     }
 
-    public void pickSelection() {
+    public void moveSelectionDown() {
         if (pickerPanel != null) {
-            pickerPanel.pickSelection();
+            pickerPanel.moveSelectionDown();
         }
+    }
+
+    public void moveSelectionUp() {
+        if (pickerPanel != null) {
+            pickerPanel.moveSelectionUp();
+        }
+    }
+
+    public void pickSelection() {
+        selectorWidget.setValue(pickerPanel.getSelection());
+        hide();
     };
 
     public void refreshSuggestions(String query) {

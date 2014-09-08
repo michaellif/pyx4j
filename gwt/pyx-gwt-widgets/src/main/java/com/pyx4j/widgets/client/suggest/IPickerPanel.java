@@ -26,7 +26,11 @@ public interface IPickerPanel<E> extends IsWidget {
 
     void setPickerPopup(PickerPopup<E> pickerPopup);
 
-    void pickSelection();
+    void moveSelectionDown();
+
+    void moveSelectionUp();
+
+    E getSelection();
 
     void refreshOptions(String query);
 
