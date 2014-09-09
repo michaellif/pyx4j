@@ -69,6 +69,7 @@ public class ExportAggregatedTransferDeferredProcess extends AbstractDeferredPro
                     AggregatedTransfer aggregateTransfer = transfers.next();
                     final EntityQueryCriteria<PaymentRecord> criteria = EntityQueryCriteria.create(PaymentRecord.class);
                     criteria.eq(criteria.proto().aggregatedTransfer(), aggregateTransfer);
+                    Persistence.service().retrieveMember(aggregateTransfer.payments());
                     List<PaymentRecord> payments = Persistence.service().query(criteria);
                     formatAggregatedTransfer(formatter, entityFormatter, aggregateTransfer, payments);
                     ++progress;
@@ -108,11 +109,17 @@ public class ExportAggregatedTransferDeferredProcess extends AbstractDeferredPro
     private void formatAggregatedTransfer(ReportTableFormatter formatter, EntityReportFormatter<AggregatedTransferFileExportModel> entityFormatter,
             AggregatedTransfer transfer, List<PaymentRecord> payments) {
 
-        if (payments.isEmpty()) {
+        int nPayments = payments.size();
+
+        if (nPayments == 0) {
             formatAggregatedTransferRecord(formatter, entityFormatter, transfer, null);
         } else {
-            for (PaymentRecord payment : payments) {
-                formatAggregatedTransferRecord(formatter, entityFormatter, transfer, payment);
+            formatAggregatedTransferRecord(formatter, entityFormatter, transfer, payments.get(0));
+            if (payments.size() > 1) {
+                payments.remove(0);
+                for (PaymentRecord payment : payments) {
+                    formatPaymentRecord(formatter, entityFormatter, transfer, payment);
+                }
             }
         }
 
@@ -124,6 +131,35 @@ public class ExportAggregatedTransferDeferredProcess extends AbstractDeferredPro
         AggregatedTransferFileExportModel model = EntityFactory.create(AggregatedTransferFileExportModel.class);
 
         // Set AggregatedTransfer common data
+        fillAggregatedTransferValues(transfer, model);
+
+        // Set Cards data
+        if (transfer instanceof CardsAggregatedTransfer) {
+            fillCardsAggregatedTransferValues(transfer, model);
+        }
+
+        // Set Eft data
+        if (transfer instanceof EftAggregatedTransfer) {
+            fillEftAggregatedTransferValues(transfer, model);
+        }
+
+        // Set Payment data
+        fillPaymentValues(payment, model);
+
+        entityFormatter.reportEntity(formatter, model);
+    }
+
+    private void formatPaymentRecord(ReportTableFormatter formatter, EntityReportFormatter<AggregatedTransferFileExportModel> entityFormatter,
+            AggregatedTransfer transfer, PaymentRecord payment) {
+
+        AggregatedTransferFileExportModel model = EntityFactory.create(AggregatedTransferFileExportModel.class);
+
+        fillPaymentValues(payment, model);
+
+        entityFormatter.reportEntity(formatter, model);
+    }
+
+    private void fillAggregatedTransferValues(AggregatedTransfer transfer, AggregatedTransferFileExportModel model) {
         model.paymentDate().setValue(transfer.paymentDate().getValue());
         model.status().setValue(transfer.status().getValue());
         model.merchantAccount().setValue(transfer.merchantAccount().getValue());
@@ -132,34 +168,38 @@ public class ExportAggregatedTransferDeferredProcess extends AbstractDeferredPro
         model.grossPaymentAmount().setValue(transfer.grossPaymentAmount().getValue());
         model.grossPaymentFee().setValue(transfer.grossPaymentFee().getValue());
         model.grossPaymentCount().setValue(transfer.grossPaymentCount().getValue());
+    }
 
-        // Set Cards data
-        if (transfer instanceof CardsAggregatedTransfer) {
-            model.visaDeposit().setValue(((CardsAggregatedTransfer) transfer).visaDeposit().getValue());
-            model.visaFee().setValue(((CardsAggregatedTransfer) transfer).visaFee().getValue());
-            model.mastercardDeposit().setValue(((CardsAggregatedTransfer) transfer).mastercardDeposit().getValue());
-            model.mastercardFee().setValue(((CardsAggregatedTransfer) transfer).mastercardFee().getValue());
-        }
+    private void fillCardsAggregatedTransferValues(AggregatedTransfer transfer, AggregatedTransferFileExportModel model) {
+        model.visaDeposit().setValue(((CardsAggregatedTransfer) transfer).visaDeposit().getValue());
+        model.visaFee().setValue(((CardsAggregatedTransfer) transfer).visaFee().getValue());
+        model.mastercardDeposit().setValue(((CardsAggregatedTransfer) transfer).mastercardDeposit().getValue());
+        model.mastercardFee().setValue(((CardsAggregatedTransfer) transfer).mastercardFee().getValue());
+    }
 
-        // Set Eft data
-        if (transfer instanceof EftAggregatedTransfer) {
-            model.rejectItemsAmount().setValue(((EftAggregatedTransfer) transfer).rejectItemsAmount().getValue());
-            model.rejectItemsFee().setValue(((EftAggregatedTransfer) transfer).rejectItemsFee().getValue());
-            model.rejectItemsCount().setValue(((EftAggregatedTransfer) transfer).rejectItemsCount().getValue());
-            model.returnItemsAmount().setValue(((EftAggregatedTransfer) transfer).returnItemsAmount().getValue());
-            model.returnItemsFee().setValue(((EftAggregatedTransfer) transfer).returnItemsFee().getValue());
-            model.returnItemsCount().setValue(((EftAggregatedTransfer) transfer).returnItemsCount().getValue());
-            model.previousBalance().setValue(((EftAggregatedTransfer) transfer).previousBalance().getValue());
-            model.merchantBalance().setValue(((EftAggregatedTransfer) transfer).merchantBalance().getValue());
-            model.fundsReleased().setValue(((EftAggregatedTransfer) transfer).fundsReleased().getValue());
-        }
+    private void fillEftAggregatedTransferValues(AggregatedTransfer transfer, AggregatedTransferFileExportModel model) {
+        model.rejectItemsAmount().setValue(((EftAggregatedTransfer) transfer).rejectItemsAmount().getValue());
+        model.rejectItemsFee().setValue(((EftAggregatedTransfer) transfer).rejectItemsFee().getValue());
+        model.rejectItemsCount().setValue(((EftAggregatedTransfer) transfer).rejectItemsCount().getValue());
+        model.returnItemsAmount().setValue(((EftAggregatedTransfer) transfer).returnItemsAmount().getValue());
+        model.returnItemsFee().setValue(((EftAggregatedTransfer) transfer).returnItemsFee().getValue());
+        model.returnItemsCount().setValue(((EftAggregatedTransfer) transfer).returnItemsCount().getValue());
+        model.previousBalance().setValue(((EftAggregatedTransfer) transfer).previousBalance().getValue());
+        model.merchantBalance().setValue(((EftAggregatedTransfer) transfer).merchantBalance().getValue());
+        model.fundsReleased().setValue(((EftAggregatedTransfer) transfer).fundsReleased().getValue());
+    }
 
-        // Set Payment data
+    private void fillPaymentValues(PaymentRecord payment, AggregatedTransferFileExportModel model) {
         if (payment != null) {
-            model.paymentMethod().setValue(payment.paymentMethod().getValue());
+            Persistence.service().retrieveMember(payment.billingAccount());
+            Persistence.service().retrieveMember(payment.billingAccount().lease());
+            Persistence.service().retrieveMember(payment.billingAccount().lease().unit().building());
+            model.leaseId().setValue(payment.billingAccount().lease().leaseId().getValue());
+            model.propertyCode().setValue(payment.billingAccount().lease().unit().building().propertyCode().getValue());
+            model.amount().setValue(payment.amount().getValue());
+            model.type().setValue(payment.paymentMethod().type().getValue());
+            model.receivedDate().setValue(payment.receivedDate().getValue());
             model.paymentStatus().setValue(payment.paymentStatus().getValue());
         }
-
-        entityFormatter.reportEntity(formatter, model);
     }
 }

@@ -54,8 +54,4 @@ public interface AggregatedTransferModel extends IEntity {
 
     IPrimitive<Integer> grossPaymentCount();
 
-//    IPrimitive<String> adjustments();
-//
-//    IPrimitive<String> chargebacks();
-
 }

@@ -13,20 +13,34 @@
  */
 package com.propertyvista.crm.server.services.financial.xlmodel;
 
+import java.math.BigDecimal;
+
+import com.pyx4j.commons.LogicalDate;
+import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.Editor.EditorType;
-import com.pyx4j.entity.annotations.ToString;
+import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.IPrimitive;
 
 import com.propertyvista.domain.financial.PaymentRecord.PaymentStatus;
-import com.propertyvista.domain.payment.LeasePaymentMethod;
+import com.propertyvista.domain.payment.PaymentType;
 
 public interface PaymentRecordModel extends IEntity {
 
-    LeasePaymentMethod paymentMethod();
+    IPrimitive<String> propertyCode();
 
-    @ToString(index = 2)
+    IPrimitive<String> leaseId();
+
+    @Format("#,##0.00")
+    @Editor(type = EditorType.money)
+    IPrimitive<BigDecimal> amount();
+
+    @Caption(name = "Payment Type")
+    IPrimitive<PaymentType> type();
+
+    IPrimitive<LogicalDate> receivedDate();
+
     @Editor(type = EditorType.label)
     IPrimitive<PaymentStatus> paymentStatus();
 }
