@@ -238,7 +238,7 @@ public class ExecutionMonitor {
     public Long getExpectedTotal(String sectionName) {
         ReportSectionId id = new ReportSectionId(sectionName, CompletionType.processed);
         ReportSection section = sections.get(id);
-        return section != null ? section.expectedTotal.getExpectedTotal() : null;
+        return (section == null || section.expectedTotal == null) ? null : section.expectedTotal.getExpectedTotal();
     }
 
     public IterationProgressCounter getIterationProgressCounter(String sectionName) {
