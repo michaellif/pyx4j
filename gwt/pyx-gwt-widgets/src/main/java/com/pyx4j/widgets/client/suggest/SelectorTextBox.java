@@ -35,7 +35,7 @@ import com.pyx4j.widgets.client.WatermarkComponent;
 import com.pyx4j.widgets.client.event.shared.PasteEvent;
 import com.pyx4j.widgets.client.event.shared.PasteHandler;
 
-public class SelectorTextBox<E> extends AbstractSelectorWidget<E> implements HasValueChangeHandlers<E>, IFocusWidget, WatermarkComponent {
+public class SelectorTextBox<E> extends AbstractSelectorWidget<E> implements HasValueChangeHandlers<E>, WatermarkComponent {
 
     private E value;
 
@@ -74,6 +74,7 @@ public class SelectorTextBox<E> extends AbstractSelectorWidget<E> implements Has
         textBox.setAction(new Command() {
             @Override
             public void execute() {
+
                 showEverithingPicker();
             }
         }, ImageFactory.getImages().action());
@@ -86,8 +87,13 @@ public class SelectorTextBox<E> extends AbstractSelectorWidget<E> implements Has
             textBox.setText("");
         } else {
             textBox.setText(valueFormatter.format(value));
-            fireValueChangeEvent(value);
         }
+    }
+
+    @Override
+    public void setSelection(E value) {
+        setValue(value);
+        fireValueChangeEvent(value);
     }
 
     @Override

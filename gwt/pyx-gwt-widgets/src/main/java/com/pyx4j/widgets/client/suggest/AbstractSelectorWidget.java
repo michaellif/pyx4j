@@ -34,8 +34,9 @@ import com.google.gwt.user.client.ui.Composite;
 
 import com.pyx4j.commons.IDebugId;
 import com.pyx4j.widgets.client.GroupFocusHandler;
+import com.pyx4j.widgets.client.IFocusWidget;
 
-public abstract class AbstractSelectorWidget<E> extends Composite implements ISelectorWidget<E> {
+public abstract class AbstractSelectorWidget<E> extends Composite implements ISelectorWidget<E>, IFocusWidget {
 
     private final ISelectorValuePanel<E> viewerPanel;
 

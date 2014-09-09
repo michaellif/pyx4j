@@ -63,7 +63,6 @@ public class TreePickerPanel<E> extends ScrollPanel implements IPickerPanel<E> {
         } else {
             tree = new PickerTree();
         }
-        tree.setTabIndex(-1);
         setWidget(tree);
 
         getElement().getStyle().setProperty("maxHeight", "200px");
