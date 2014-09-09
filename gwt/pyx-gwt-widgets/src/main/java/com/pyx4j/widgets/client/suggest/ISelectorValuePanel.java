@@ -24,7 +24,7 @@ import com.google.gwt.event.logical.shared.HasValueChangeHandlers;
 
 import com.pyx4j.widgets.client.IFocusWidget;
 
-public interface ISelectorValuePanel<E> extends IFocusWidget, HasValueChangeHandlers<String> {
+public interface ISelectorValuePanel extends IFocusWidget, HasValueChangeHandlers<String> {
 
     String getQuery();
 

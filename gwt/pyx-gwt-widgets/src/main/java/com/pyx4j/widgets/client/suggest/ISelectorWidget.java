@@ -26,7 +26,7 @@ public interface ISelectorWidget<E> extends IFocusWidget {
 
     void setSelection(E items);
 
-    ISelectorValuePanel<E> getViewerPanel();
+    ISelectorValuePanel getViewerPanel();
 
     void resetQuery();
 

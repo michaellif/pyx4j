@@ -38,7 +38,7 @@ import com.pyx4j.widgets.client.IFocusWidget;
 
 public abstract class AbstractSelectorWidget<E> extends Composite implements ISelectorWidget<E>, IFocusWidget {
 
-    private final ISelectorValuePanel<E> viewerPanel;
+    private final ISelectorValuePanel viewerPanel;
 
     private final PickerPopup<E> pickerPopup;
 
@@ -46,7 +46,7 @@ public abstract class AbstractSelectorWidget<E> extends Composite implements ISe
 
     private final GroupFocusHandler focusHandlerManager;
 
-    public AbstractSelectorWidget(final ISelectorValuePanel<E> viewerPanel) {
+    public AbstractSelectorWidget(final ISelectorValuePanel viewerPanel) {
         this.viewerPanel = viewerPanel;
         initWidget(viewerPanel.asWidget());
         pickerPopup = new PickerPopup<E>(this);
@@ -104,7 +104,7 @@ public abstract class AbstractSelectorWidget<E> extends Composite implements ISe
     }
 
     @Override
-    public ISelectorValuePanel<E> getViewerPanel() {
+    public ISelectorValuePanel getViewerPanel() {
         return viewerPanel;
     }
 

@@ -47,7 +47,7 @@ public class SelectorTextBox<E> extends AbstractSelectorWidget<E> implements Has
     private final IPickerPanel<E> picker;
 
     public SelectorTextBox(final OptionsGrabber<E> optionsGrabber, IFormatter<E, String> valueFormatter, IFormatter<E, String[]> optionPathFormatter) {
-        super(new SelectorTextBoxValuePanel<E>(valueFormatter));
+        super(new SelectorTextBoxValuePanel(valueFormatter));
         this.valueFormatter = valueFormatter;
         this.optionPathFormatter = optionPathFormatter;
         textBox = (SelectorTextBoxValuePanel<E>) getViewerPanel();
