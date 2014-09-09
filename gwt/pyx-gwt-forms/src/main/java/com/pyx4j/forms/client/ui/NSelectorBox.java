@@ -30,11 +30,10 @@ import com.pyx4j.commons.IFormatter;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.widgets.client.Label;
 import com.pyx4j.widgets.client.WatermarkComponent;
-import com.pyx4j.widgets.client.suggest.ISelectorWidget;
 import com.pyx4j.widgets.client.suggest.MultyWordSuggestOptionsGrabber;
 import com.pyx4j.widgets.client.suggest.SelectorTextBox;
 
-public class NSelectorBox<E extends IEntity> extends NFocusField<E, ISelectorWidget<E>, CSelectorBox<E>, HTML> implements WatermarkComponent {
+public class NSelectorBox<E extends IEntity> extends NFocusField<E, SelectorTextBox<E>, CSelectorBox<E>, HTML> implements WatermarkComponent {
 
     private final MultyWordSuggestOptionsGrabber<E> optionsGrabber;
 
@@ -59,7 +58,7 @@ public class NSelectorBox<E extends IEntity> extends NFocusField<E, ISelectorWid
     }
 
     @Override
-    protected ISelectorWidget<E> createEditor() {
+    protected SelectorTextBox<E> createEditor() {
         return new SelectorTextBox<E>(optionsGrabber, new IFormatter<E, String>() {
 
             @Override

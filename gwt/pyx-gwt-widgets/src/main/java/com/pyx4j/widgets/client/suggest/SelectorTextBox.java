@@ -29,7 +29,6 @@ import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.Command;
 
 import com.pyx4j.commons.IFormatter;
-import com.pyx4j.widgets.client.IFocusWidget;
 import com.pyx4j.widgets.client.ImageFactory;
 import com.pyx4j.widgets.client.WatermarkComponent;
 import com.pyx4j.widgets.client.event.shared.PasteEvent;
@@ -80,7 +79,6 @@ public class SelectorTextBox<E> extends AbstractSelectorWidget<E> implements Has
         }, ImageFactory.getImages().action());
     }
 
-    @Override
     public void setValue(E value) {
         this.value = value;
         if (value == null) {
@@ -96,7 +94,6 @@ public class SelectorTextBox<E> extends AbstractSelectorWidget<E> implements Has
         fireValueChangeEvent(value);
     }
 
-    @Override
     public E getValue() {
         return value;
     }
