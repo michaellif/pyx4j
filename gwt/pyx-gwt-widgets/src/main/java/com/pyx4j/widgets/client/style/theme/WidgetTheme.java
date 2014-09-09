@@ -127,6 +127,10 @@ public class WidgetTheme extends Theme {
         style.addProperty("width", "100%");
         addStyle(style);
 
+        style = new Style(".", StyleName.TextBox, ":focus");
+        style.addProperty("border-color", ThemeColor.foreground, 0.8);
+        addStyle(style);
+
         style = new Style(".", StyleName.TextBox, "-", StyleDependent.disabled);
         style.addProperty("background-color", ThemeColor.foreground, 0.1);
         style.addProperty("color", ThemeColor.foreground, 0.6);

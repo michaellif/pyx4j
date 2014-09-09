@@ -25,6 +25,7 @@ import com.google.gwt.event.dom.client.FocusHandler;
 import com.google.gwt.event.dom.client.HasBlurHandlers;
 import com.google.gwt.event.dom.client.HasFocusHandlers;
 import com.google.gwt.event.shared.HandlerRegistration;
+import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.ui.FocusPanel;
 import com.google.gwt.user.client.ui.Focusable;
 
@@ -87,6 +88,7 @@ public class PickerPopup<E> extends DropDownPanel implements Focusable, HasFocus
 
     public void pickSelection() {
         selectorWidget.setValue(pickerPanel.getSelection());
+        selectorWidget.setFocus(true);
         hide();
     };
 
