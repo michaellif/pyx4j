@@ -50,7 +50,7 @@ public class HelpViewImpl extends FlowPanel implements HelpView {
     public void updateContextHelp() {
         final FlowPanel context = new FlowPanel();
 
-        WalkMe.obtainWalkthrus(new AsyncCallback<Map<Integer, String>>() {
+        WalkMe.obtainWalkthrus("vista-help", new AsyncCallback<Map<Integer, String>>() {
 
             @Override
             public void onFailure(Throwable caught) {

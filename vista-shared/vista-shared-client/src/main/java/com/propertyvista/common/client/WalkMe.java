@@ -91,7 +91,7 @@ public class WalkMe {
 
     public native static void setupWalkMeVariables(JsArrayString behaviors) /*-{ $wnd.vistaWalkMeBehaviors = behaviors; }-*/;
 
-    public static void obtainWalkthrus(final AsyncCallback<Map<Integer, String>> callback) {
+    public static void obtainWalkthrus(final String tag, final AsyncCallback<Map<Integer, String>> callback) {
         load(new AsyncCallback<Void>() {
 
             @Override
@@ -101,7 +101,7 @@ public class WalkMe {
 
             @Override
             public void onSuccess(Void result) {
-                callback.onSuccess(getWalkthrus());
+                callback.onSuccess(getWalkthrus(tag));
             }
         });
     }
@@ -114,15 +114,26 @@ public class WalkMe {
         public final native int getId() /*-{  return this.Id; }-*/;
 
         public final native String getName() /*-{  return this.Name; }-*/;
+
+        public final native String getCustomField1() /*-{  return this.CustomField1; }-*/;
+
     }
 
     private native static JsArray<WalkThru> native_getWalkthrus() /*-{  return $wnd.WalkMeAPI.getWalkthrus(true); }-*/;
 
-    private static Map<Integer, String> getWalkthrus() {
+    private static Map<Integer, String> getWalkthrus(String tag) {
         Map<Integer, String> walkthrus = new HashMap<>();
         JsArray<WalkThru> nwt = native_getWalkthrus();
         for (int i = 0; i < nwt.length(); i++) {
             WalkThru wt = nwt.get(i);
+            if (tag != null) {
+                if (CommonsStringUtils.isEmpty(wt.getCustomField1())) {
+                    continue;
+                }
+                if (!wt.getCustomField1().contains(tag)) {
+                    continue;
+                }
+            }
             walkthrus.put(wt.getId(), wt.getName());
         }
         return walkthrus;
