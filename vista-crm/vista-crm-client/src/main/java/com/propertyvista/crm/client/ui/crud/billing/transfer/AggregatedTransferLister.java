@@ -54,7 +54,7 @@ public class AggregatedTransferLister extends AbstractLister<AggregatedTransfer>
                 new MemberColumnDescriptor.Builder(proto().returnedPayments().$().id()).searchableOnly().columnTitle(i18n.tr("Returned Payment Id")).build()
         ));
 
-        addActionItem(new Button(i18n.tr("Download"), new Command() {
+        addActionItem(new Button(i18n.tr("Export"), new Command() {
             @Override
             public void execute() {
                 onAggregateTransferDownload();

@@ -32,6 +32,9 @@ public interface PaymentRecordModel extends IEntity {
 
     IPrimitive<String> leaseId();
 
+    @Caption(name = "Tenant Id")
+    IPrimitive<String> participantId();
+
     @Format("#,##0.00")
     @Editor(type = EditorType.money)
     IPrimitive<BigDecimal> amount();

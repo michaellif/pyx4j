@@ -15,6 +15,7 @@ package com.propertyvista.crm.server.services.financial.xlmodel;
 
 import java.math.BigDecimal;
 
+import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.annotations.Format;
@@ -33,10 +34,12 @@ public interface CardsAggregatedTransferModel extends IEntity {
 
     @Format("#,##0.00")
     @Editor(type = EditorType.money)
+    @Caption(name = "Master*C*ard Deposit")
     IPrimitive<BigDecimal> mastercardDeposit();
 
     @Format("#,##0.00")
     @Editor(type = EditorType.money)
+    @Caption(name = "Master*C*ard Fee")
     IPrimitive<BigDecimal> mastercardFee();
 
 }

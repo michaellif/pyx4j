@@ -67,14 +67,21 @@ public class ExportAggregatedTransferDeferredProcess extends AbstractDeferredPro
             try {
                 while (transfers.hasNext()) {
                     AggregatedTransfer aggregateTransfer = transfers.next();
-                    final EntityQueryCriteria<PaymentRecord> criteria = EntityQueryCriteria.create(PaymentRecord.class);
-                    criteria.eq(criteria.proto().aggregatedTransfer(), aggregateTransfer);
-                    Persistence.service().retrieveMember(aggregateTransfer.payments());
-                    List<PaymentRecord> payments = Persistence.service().query(criteria);
+
+                    // Aggregated transfer records
+                    final EntityQueryCriteria<PaymentRecord> aggregatedTransferCriteria = EntityQueryCriteria.create(PaymentRecord.class);
+                    aggregatedTransferCriteria.eq(aggregatedTransferCriteria.proto().aggregatedTransfer(), aggregateTransfer);
+                    List<PaymentRecord> payments = Persistence.service().query(aggregatedTransferCriteria);
+
+                    // Returned Records
+                    final EntityQueryCriteria<PaymentRecord> returnedRecordsCriteria = EntityQueryCriteria.create(PaymentRecord.class);
+                    returnedRecordsCriteria.eq(returnedRecordsCriteria.proto().aggregatedTransferReturn(), aggregateTransfer);
+                    payments.addAll(Persistence.service().query(returnedRecordsCriteria));
+
                     formatAggregatedTransfer(formatter, entityFormatter, aggregateTransfer, payments);
                     ++progress;
                     if (transfers.hasNext()) {
-                        ((ReportTableXLSXFormatter) formatter).addSeparatorRow(IndexedColors.GREY_25_PERCENT);
+                        formatter.newRow();
                     }
                 }
             } finally {
@@ -109,24 +116,16 @@ public class ExportAggregatedTransferDeferredProcess extends AbstractDeferredPro
     private void formatAggregatedTransfer(ReportTableFormatter formatter, EntityReportFormatter<AggregatedTransferFileExportModel> entityFormatter,
             AggregatedTransfer transfer, List<PaymentRecord> payments) {
 
-        int nPayments = payments.size();
+        formatAggregatedTransferRecord(formatter, entityFormatter, transfer);
 
-        if (nPayments == 0) {
-            formatAggregatedTransferRecord(formatter, entityFormatter, transfer, null);
-        } else {
-            formatAggregatedTransferRecord(formatter, entityFormatter, transfer, payments.get(0));
-            if (payments.size() > 1) {
-                payments.remove(0);
-                for (PaymentRecord payment : payments) {
-                    formatPaymentRecord(formatter, entityFormatter, transfer, payment);
-                }
-            }
+        for (PaymentRecord payment : payments) {
+            formatPaymentRecord(formatter, entityFormatter, transfer, payment);
         }
 
     }
 
     private void formatAggregatedTransferRecord(ReportTableFormatter formatter, EntityReportFormatter<AggregatedTransferFileExportModel> entityFormatter,
-            AggregatedTransfer transfer, PaymentRecord payment) {
+            AggregatedTransfer transfer) {
 
         AggregatedTransferFileExportModel model = EntityFactory.create(AggregatedTransferFileExportModel.class);
 
@@ -143,10 +142,10 @@ public class ExportAggregatedTransferDeferredProcess extends AbstractDeferredPro
             fillEftAggregatedTransferValues(transfer, model);
         }
 
-        // Set Payment data
-        fillPaymentValues(payment, model);
+        entityFormatter.reportEntityNoEndRow(formatter, model);
 
-        entityFormatter.reportEntity(formatter, model);
+        ((ReportTableXLSXFormatter) formatter).fillBackGroundCurrentRow(IndexedColors.GREY_25_PERCENT);
+
     }
 
     private void formatPaymentRecord(ReportTableFormatter formatter, EntityReportFormatter<AggregatedTransferFileExportModel> entityFormatter,
@@ -194,6 +193,8 @@ public class ExportAggregatedTransferDeferredProcess extends AbstractDeferredPro
             Persistence.service().retrieveMember(payment.billingAccount());
             Persistence.service().retrieveMember(payment.billingAccount().lease());
             Persistence.service().retrieveMember(payment.billingAccount().lease().unit().building());
+            Persistence.service().retrieveMember(payment.leaseTermParticipant());
+            model.participantId().setValue(payment.leaseTermParticipant().leaseParticipant().participantId().getValue());
             model.leaseId().setValue(payment.billingAccount().lease().leaseId().getValue());
             model.propertyCode().setValue(payment.billingAccount().lease().unit().building().propertyCode().getValue());
             model.amount().setValue(payment.amount().getValue());
@@ -202,4 +203,5 @@ public class ExportAggregatedTransferDeferredProcess extends AbstractDeferredPro
             model.paymentStatus().setValue(payment.paymentStatus().getValue());
         }
     }
+
 }
