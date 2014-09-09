@@ -19,6 +19,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.GregorianCalendar;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -84,6 +85,7 @@ import com.propertyvista.yardi.YardiTrace;
 import com.propertyvista.yardi.beans.Properties;
 import com.propertyvista.yardi.mappers.BuildingsMapper;
 import com.propertyvista.yardi.mappers.MappingUtils;
+import com.propertyvista.yardi.mappers.UnitsMapper;
 import com.propertyvista.yardi.processors.YardiBuildingProcessor;
 import com.propertyvista.yardi.processors.YardiILSMarketingProcessor;
 import com.propertyvista.yardi.processors.YardiLeaseProcessor;
@@ -396,17 +398,15 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
 
             // properties:
             List<ResidentTransactions> transactions = getResidentTransactions(yc, executionMonitor, propertyCodes);
-            if (!executionMonitor.isTerminationRequested()) {
-                for (ResidentTransactions transaction : transactions) {
-                    if (executionMonitor.isTerminationRequested()) {
-                        break;
-                    }
-                    importedBuildings.addAll(importProperties(yardiInterfaceId, transaction, executionMonitor));
+            for (ResidentTransactions transaction : transactions) {
+                if (executionMonitor.isTerminationRequested()) {
+                    break;
                 }
+                importedBuildings.addAll(importProperties(yardiInterfaceId, transaction, executionMonitor));
             }
 
             // product catalog:
-            if (!executionMonitor.isTerminationRequested() && (ApplicationMode.isDevelopment() || !VistaTODO.pendingYardiConfigPatchILS)) {
+            if (ApplicationMode.isDevelopment() || !VistaTODO.pendingYardiConfigPatchILS) {
                 for (Building building : importedBuildings) {
                     if (executionMonitor.isTerminationRequested()) {
                         break;
@@ -424,23 +424,24 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
                 importLeases(rtd);
             }
 
-            // availability:
-            List<Building> newBuildings = new ArrayList<>();
-            List<PhysicalProperty> properties = Collections.emptyList();
-            if (!executionMonitor.isTerminationRequested() && (ApplicationMode.isDevelopment() || !VistaTODO.pendingYardiConfigPatchILS)) {
-                properties = getILSPropertyMarketing(yc, executionMonitor, propertyCodes);
+            // availability (+ potentially new buildings and units):
+            if (ApplicationMode.isDevelopment() || !VistaTODO.pendingYardiConfigPatchILS) {
+                List<PhysicalProperty> properties = Collections.emptyList();
+                if (!executionMonitor.isTerminationRequested()) {
+                    properties = getILSPropertyMarketing(yc, executionMonitor, propertyCodes);
+                }
+
+                Set<Building> newAndUpdatedBuildings = new HashSet<>();
+
                 for (PhysicalProperty property : properties) {
                     if (executionMonitor.isTerminationRequested()) {
                         break;
                     }
-                    newBuildings.addAll(importPropertyMarketingInfo(yardiInterfaceId, property, importedBuildings, executionMonitor));
+                    newAndUpdatedBuildings.addAll(importPropertyMarketingInfo(yardiInterfaceId, property, importedBuildings, executionMonitor));
                 }
-            }
 
-            // product catalog for new buildings (+ possible new units in old ones!):
-            if (!executionMonitor.isTerminationRequested() && (ApplicationMode.isDevelopment() || !VistaTODO.pendingYardiConfigPatchILS)) {
-                importedBuildings.addAll(newBuildings);
-                for (Building building : importedBuildings) {
+                // product catalog for new buildings (+ possible new units in old ones!):
+                for (Building building : newAndUpdatedBuildings) {
                     if (executionMonitor.isTerminationRequested()) {
                         break;
                     }
@@ -711,11 +712,11 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
     /*
      * Note: this method potentially creates(imports) new buildings (which it returns) and NEW units in old buildings (which is not so obvious!)
      */
-    private List<Building> importPropertyMarketingInfo(final Key yardiInterfaceId, PhysicalProperty propertyInfo, List<Building> importedBuildings,
+    private Set<Building> importPropertyMarketingInfo(final Key yardiInterfaceId, PhysicalProperty propertyInfo, List<Building> importedBuildings,
             final ExecutionMonitor executionMonitor) {
         log.debug("PropertyMarketing: import started...");
 
-        List<Building> newBuildings = new ArrayList<>();
+        Set<Building> newAndUpdatedBuildings = new HashSet<>(1);
 
         for (final com.yardi.entity.ils.Property property : propertyInfo.getProperty()) {
             if (executionMonitor != null) {
@@ -737,7 +738,8 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
                 Building building = MappingUtils.retrieveBuilding(yardiInterfaceId, propertyCode);
                 if (building == null || !importedBuildings.contains(building)) {
                     building = importBuiling(yardiInterfaceId, new YardiILSMarketingProcessor().fixPropertyID(property.getPropertyID()), executionMonitor);
-                    newBuildings.add(building);
+                    newAndUpdatedBuildings.add(building);
+                    log.debug("  - Building {} is NEW one", propertyCode);
                 }
                 executionMonitor.addProcessedEvent("Building");
 
@@ -749,6 +751,11 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
 
                 // process new availability data
                 for (ILSUnit ilsUnit : property.getILSUnit()) {
+                    if (!ifUnitExists(yardiInterfaceId, building, ilsUnit.getUnit())) {
+                        newAndUpdatedBuildings.add(building);
+                        log.debug("  - Building {} has been UPDATED", propertyCode);
+                    }
+
                     AptUnit aptUnit = importUnit(building, ilsUnit.getUnit(), executionMonitor);
                     if (updateAvailability(aptUnit, ilsUnit.getAvailability(), executionMonitor)) {
                         updateAvailabilityReport(aptUnit, ilsUnit, executionMonitor);
@@ -772,15 +779,25 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
 
         executionMonitor.addInfoEvent(
                 "ILSPropertyMarketing",
-                SimpleMessageFormat.format("import new buildings: {0}{0,choice,0#|0< [{1}]}", newBuildings.size(),
-                        ConverterUtils.convertCollection(newBuildings, new ToStringConverter<Building>() {
+                SimpleMessageFormat.format("import new buildings: {0}{0,choice,0#|0< [{1}]}", newAndUpdatedBuildings.size(),
+                        ConverterUtils.convertCollection(newAndUpdatedBuildings, new ToStringConverter<Building>() {
                             @Override
                             public String toString(Building value) {
                                 return value.propertyCode().getStringView();
                             }
                         })));
 
-        return newBuildings;
+        return newAndUpdatedBuildings;
+    }
+
+    private boolean ifUnitExists(Key yardiInterfaceId, Building building, Unit unit) {
+        EntityQueryCriteria<AptUnit> criteria = EntityQueryCriteria.create(AptUnit.class);
+
+        criteria.eq(criteria.proto().building(), building);
+        criteria.eq(criteria.proto().building().integrationSystemId(), yardiInterfaceId);
+        criteria.eq(criteria.proto().info().number(), UnitsMapper.getUnitID(unit));
+
+        return Persistence.service().exists(criteria);
     }
 
     private void clearUnitAvailability(final Set<AptUnit> units, ExecutionMonitor executionMonitor) throws YardiServiceException {
