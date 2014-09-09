@@ -28,6 +28,4 @@ public interface ISelectorValuePanel<E> extends IFocusWidget, HasValueChangeHand
 
     String getQuery();
 
-    void showValue(E value);
-
 }

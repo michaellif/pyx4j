@@ -31,7 +31,6 @@ public class SelectorTextBoxValuePanel<E> extends TextBox implements ISelectorVa
         this.valueFormatter = valueFormatter;
     }
 
-    @Override
     public void showValue(E value) {
         setText(valueFormatter.format(value));
     }
