@@ -20,6 +20,7 @@
  */
 package com.pyx4j.commons;
 
+import java.sql.Time;
 import java.util.Collection;
 import java.util.Date;
 import java.util.LinkedHashMap;
@@ -39,9 +40,9 @@ public class TimeUtils {
         } else {
             Date now = new Date();
             Date then = TimeUtils.createDate(now.getYear() - years, now.getMonth(), now.getDate());
-            // NOTE: Date.getDay() - return day of the WEEK!!?     
+            // NOTE: Date.getDay() - return day of the WEEK!!?
             return !bithday.after(then);
-            // NOTE: we want today birthday user has been validated!  
+            // NOTE: we want today birthday user has been validated!
         }
     }
 
@@ -206,6 +207,14 @@ public class TimeUtils {
             return 0;
         }
         return (System.currentTimeMillis() - start);
+    }
+
+    /**
+     * new Time(long) will add a current date to Time object, then create problems in comparison and equals
+     * this function helps to avoid this problem. Just like java.time.LocalTime
+     **/
+    public static Time logicalTime(Date date) {
+        return new Time(date.getHours(), date.getMinutes(), date.getSeconds());
     }
 
     public static Date createDate(int year, int month, int day) {
