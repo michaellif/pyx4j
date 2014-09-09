@@ -457,6 +457,23 @@ public class ReportTableXLSXFormatter implements ReportTableFormatter {
         }
 
         newRow();
+    }
+
+    public void fillBackGroundCurrentRow(IndexedColors color) {
+
+        for (int i = 0; i < columnsCount; i++) {
+            Cell cell = getCurentRow().getCell(i);
+            if (cell == null)
+                cell = getCurentRow().createCell(i);
+
+            CellStyle style = getWorkbook().createCellStyle();
+            style.setFillForegroundColor(color.getIndex());
+            style.setFillPattern(CellStyle.SOLID_FOREGROUND);
+            cell.setCellStyle(style);
+        }
+
+        newRow();
 
     }
+
 }
