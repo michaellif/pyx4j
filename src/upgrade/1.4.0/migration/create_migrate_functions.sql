@@ -3,12 +3,12 @@
 ***
 ***             @version $Revision$ ($Author$) $Date$
 ***
-***             version 1.1.4 PMC migration function
+***             version 1.4.0 PMC migration function
 ***
 ***     ======================================================================================================================
 **/
 
-CREATE OR REPLACE FUNCTION _dba_.migrate_pmc_114(v_schema_name TEXT) RETURNS VOID AS
+CREATE OR REPLACE FUNCTION _dba_.migrate_pmc_140(v_schema_name TEXT) RETURNS VOID AS
 $$
 DECLARE
         v_rowcount      INT     := 0;
@@ -1852,7 +1852,7 @@ BEGIN
         -- Finishing touch
         
         UPDATE  _admin_.admin_pmc
-        SET     schema_version = '1.1.4',
+        SET     schema_version = '1.4.0',
                 schema_data_upgrade_steps = NULL
         WHERE   namespace = v_schema_name;          
         
