@@ -34,6 +34,8 @@ import com.google.gwt.user.client.ui.ScrollPanel;
 
 import com.pyx4j.gwt.commons.layout.LayoutChangeEvent;
 import com.pyx4j.gwt.commons.layout.LayoutChangeHandler;
+import com.pyx4j.gwt.commons.layout.LayoutChangeRequestEvent;
+import com.pyx4j.gwt.commons.layout.LayoutChangeRequestEvent.ChangeType;
 import com.pyx4j.gwt.commons.layout.LayoutType;
 import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.site.client.AppSite;
@@ -119,6 +121,13 @@ public class CommunicationViewImpl extends FlowPanel implements CommunicationVie
         }
     }
 
+    private void doToggleHandler() {
+        LayoutType layout = LayoutType.getLayoutType(Window.getClientWidth());
+        if (LayoutType.phonePortrait.equals(layout) || LayoutType.phoneLandscape.equals(layout) || LayoutType.tabletPortrait.equals(layout)) {
+            AppSite.getEventBus().fireEvent(new LayoutChangeRequestEvent(ChangeType.toggleSideComm));
+        }
+    }
+
     class MessagePanel extends FlexTable {
 
         private final Image photoImage;
@@ -140,6 +149,7 @@ public class CommunicationViewImpl extends FlowPanel implements CommunicationVie
             addClickHandler(new ClickHandler() {
                 @Override
                 public void onClick(ClickEvent event) {
+                    doToggleHandler();
                     AppSite.getPlaceController().goTo(new ResidentPortalSiteMap.Message.MessagePage(message.getPrimaryKey()));
                 }
             });
@@ -180,6 +190,7 @@ public class CommunicationViewImpl extends FlowPanel implements CommunicationVie
 
                 @Override
                 public void execute() {
+                    doToggleHandler();
                     AppSite.getPlaceController().goTo(new ResidentPortalSiteMap.Message.MessageView());
                 }
             });
@@ -193,6 +204,7 @@ public class CommunicationViewImpl extends FlowPanel implements CommunicationVie
             writeActionImage.addClickHandler(new ClickHandler() {
                 @Override
                 public void onClick(ClickEvent event) {
+                    doToggleHandler();
                     AppSite.getPlaceController().goTo(new ResidentPortalSiteMap.Message.MessageWizard());
                 }
             });

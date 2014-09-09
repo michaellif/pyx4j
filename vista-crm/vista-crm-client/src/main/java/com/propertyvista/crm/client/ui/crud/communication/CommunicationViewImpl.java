@@ -34,6 +34,8 @@ import com.google.gwt.user.client.ui.ScrollPanel;
 
 import com.pyx4j.gwt.commons.layout.LayoutChangeEvent;
 import com.pyx4j.gwt.commons.layout.LayoutChangeHandler;
+import com.pyx4j.gwt.commons.layout.LayoutChangeRequestEvent;
+import com.pyx4j.gwt.commons.layout.LayoutChangeRequestEvent.ChangeType;
 import com.pyx4j.gwt.commons.layout.LayoutType;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.rpc.CrudAppPlace;
@@ -125,6 +127,13 @@ public class CommunicationViewImpl extends FlowPanel implements CommunicationVie
         setHeader(directMessagesNum, dispatchedMessagesNum);
     }
 
+    private void doToggleHandler() {
+        LayoutType layout = LayoutType.getLayoutType(Window.getClientWidth());
+        if (LayoutType.phonePortrait.equals(layout) || LayoutType.phoneLandscape.equals(layout) || LayoutType.tabletPortrait.equals(layout)) {
+            AppSite.getEventBus().fireEvent(new LayoutChangeRequestEvent(ChangeType.toggleSideComm));
+        }
+    }
+
     @Override
     public void setHeader(int directMessagesNum, int dispatchedMessagesNum) {
         headerHolder.setNumberOfMessages(directMessagesNum, dispatchedMessagesNum);
@@ -154,6 +163,7 @@ public class CommunicationViewImpl extends FlowPanel implements CommunicationVie
                     CrudAppPlace place = new CrmSiteMap.Communication.Message();
                     place.setType(Type.viewer);
                     AppSite.getPlaceController().goTo(place.formViewerPlace(message.getPrimaryKey()));
+                    doToggleHandler();
                 }
             });
             messageField = new Label(message.text().getStringView());
@@ -201,6 +211,7 @@ public class CommunicationViewImpl extends FlowPanel implements CommunicationVie
                     CrudAppPlace place = new CrmSiteMap.Communication.Message();
                     place.setType(Type.lister);
                     AppSite.getPlaceController().goTo(place);
+                    doToggleHandler();
                 }
             });
 
@@ -213,6 +224,7 @@ public class CommunicationViewImpl extends FlowPanel implements CommunicationVie
                 public void execute() {
                     CrudAppPlace place = new CrmSiteMap.Communication.Message(CategoryType.Ticket);
                     place.setType(Type.lister);
+                    doToggleHandler();
                     AppSite.getPlaceController().goTo(place);
                 }
             });
@@ -225,6 +237,7 @@ public class CommunicationViewImpl extends FlowPanel implements CommunicationVie
                 public void execute() {
                     CrudAppPlace place = new CrmSiteMap.Communication.Message();
                     place.setType(Type.editor);
+                    doToggleHandler();
                     AppSite.getPlaceController().goTo(place);
                 }
             });
@@ -237,6 +250,7 @@ public class CommunicationViewImpl extends FlowPanel implements CommunicationVie
                 public void execute() {
                     CrudAppPlace place = new CrmSiteMap.Communication.Message(CategoryType.Ticket);
                     place.setType(Type.editor);
+                    doToggleHandler();
                     AppSite.getPlaceController().goTo(place);
                 }
             });
@@ -254,10 +268,9 @@ public class CommunicationViewImpl extends FlowPanel implements CommunicationVie
             if (directMessagesNum > 0) {
                 StringBuffer statusLabel = new StringBuffer();
                 statusLabel.append(directMessagesNum);
-                messagesAnchor.setVisible(true);
                 messagesAnchor.setText("Messages (" + statusLabel.toString() + "), ");
             } else {
-                messagesAnchor.setVisible(false);
+                messagesAnchor.setText("Messages, ");
             }
 
             if (dispatchedMessagesNum > 0) {
