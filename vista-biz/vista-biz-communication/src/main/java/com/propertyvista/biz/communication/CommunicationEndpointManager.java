@@ -174,12 +174,21 @@ public class CommunicationEndpointManager {
             return "";
         }
         if (senders.size() == 1) {
-            return senders.get(0).getStringView();
+            return senderToStringView(senders.get(0));
         }
         if (senders.size() == 2) {
-            return senders.get(0).getStringView() + ", " + senders.get(1).getStringView();
+            return senderToStringView(senders.get(0)) + ", " + senderToStringView(senders.get(1));
         }
-        return senders.get(0).getStringView() + " ... " + senders.get(senders.size() - 1).getStringView();
+        return senderToStringView(senders.get(0)) + " ... " + senderToStringView(senders.get(senders.size() - 1));
+    }
+
+    private String senderToStringView(CommunicationEndpoint entity) {
+        if (entity.getInstanceValueClass().equals(Employee.class)) {
+            Employee e = entity.cast();
+            return e.name().getStringView();
+        }
+
+        return entity.getStringView();
     }
 
     public void buildRecipientList(Message bo, MessageDTO to, CommunicationThread thread) {
