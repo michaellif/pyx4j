@@ -28,7 +28,7 @@ import com.google.gwt.i18n.client.DateTimeFormat;
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.commons.IFormatter;
 import com.pyx4j.commons.IParser;
-import com.pyx4j.forms.client.validators.TextBoxParserValidator;
+import com.pyx4j.commons.TimeUtils;
 import com.pyx4j.i18n.shared.I18n;
 
 public class CTimeField extends CTextFieldBase<Time, NTextBox<Time>> {
@@ -81,7 +81,7 @@ public class CTimeField extends CTextFieldBase<Time, NTextBox<Time>> {
                 return null; // empty value case
             } else {
                 try {
-                    return new Time(parser.parseStrict(string).getTime());
+                    return TimeUtils.logicalTime(parser.parseStrict(string));
                 } catch (IllegalArgumentException e) {
                     if (timeFormat.equals(defaultTimeFormat)) {
                         throw new ParseException(i18n.tr("Invalid time format. Use 12:00 AM/PM format"), 0);

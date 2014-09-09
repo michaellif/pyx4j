@@ -22,6 +22,7 @@ package com.pyx4j.entity.core.impl;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.sql.Time;
 import java.util.Date;
 
 import com.pyx4j.commons.CommonsStringUtils;
@@ -30,6 +31,7 @@ import com.pyx4j.commons.Key;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.commons.Pair;
 import com.pyx4j.commons.SimpleMessageFormat;
+import com.pyx4j.commons.TimeUtils;
 import com.pyx4j.entity.core.AttachLevel;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.IPrimitive;
@@ -244,6 +246,14 @@ public class PrimitiveHandler<TYPE extends Serializable> extends ObjectHandler<T
                 return false;
             } else {
                 return ((BigDecimal) this.getValue()).compareTo(otherBigDecimalPrimitive.getValue()) == 0;
+            }
+        } else if (this.getValueClass().equals(Time.class)) {
+            @SuppressWarnings("unchecked")
+            IPrimitive<Time> otherTimePrimitive = (IPrimitive<Time>) other;
+            if (otherTimePrimitive.getValue() == null) {
+                return false;
+            } else {
+                return TimeUtils.logicalTime((Time) this.getValue()).equals(TimeUtils.logicalTime(otherTimePrimitive.getValue()));
             }
         } else {
             return this.getValue().equals(((IPrimitive<?>) other).getValue());

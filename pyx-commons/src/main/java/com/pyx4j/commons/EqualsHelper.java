@@ -21,6 +21,7 @@
 package com.pyx4j.commons;
 
 import java.math.BigDecimal;
+import java.sql.Time;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
@@ -40,6 +41,8 @@ public abstract class EqualsHelper {
             return CommonsStringUtils.equals((String) value2, value1);
         } else if (value1 instanceof BigDecimal && value2 instanceof BigDecimal) {
             return ((BigDecimal) value1).compareTo((BigDecimal) value2) == 0;
+        } else if (value1 instanceof Time && value2 instanceof Time) {
+            return TimeUtils.logicalTime((Time) value1).equals(TimeUtils.logicalTime((Time) value2));
         } else if (value1 instanceof List<?>) {
             return equals((List<?>) value1, (List<?>) value2);
         } else if (value1 instanceof Collection<?>) {
