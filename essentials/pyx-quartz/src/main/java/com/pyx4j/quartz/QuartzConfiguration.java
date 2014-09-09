@@ -22,5 +22,8 @@ package com.pyx4j.quartz;
 
 public interface QuartzConfiguration {
 
-    //TODO Place all the configuration options we need to define here.
+    // Place all the configuration options we need to define here.
+
+    Integer threadPoolThreadCount();
+
 }

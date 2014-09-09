@@ -85,7 +85,10 @@ public class SchedulerHelper {
 
         if (ServerSideConfiguration.instance() instanceof ServerSideConfigurationWithQuartz) {
             QuartzConfiguration quartzConfiguration = ((ServerSideConfigurationWithQuartz) ServerSideConfiguration.instance()).quartzConfiguration();
-            //TODO our configuration here
+            // our configuration here
+            if (quartzConfiguration.threadPoolThreadCount() != null) {
+                quartzProperties.put(StdSchedulerFactory.PROP_THREAD_POOL_PREFIX + ".threadCount", String.valueOf(quartzConfiguration.threadPoolThreadCount()));
+            }
         }
 
         quartzProperties.put(StdSchedulerFactory.PROP_SCHED_SKIP_UPDATE_CHECK, Boolean.TRUE.toString());
