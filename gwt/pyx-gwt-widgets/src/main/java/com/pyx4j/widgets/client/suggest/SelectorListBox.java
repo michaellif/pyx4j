@@ -30,11 +30,9 @@ import com.google.gwt.event.logical.shared.HasSelectionHandlers;
 import com.google.gwt.event.logical.shared.SelectionEvent;
 import com.google.gwt.event.logical.shared.SelectionHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
-import com.google.gwt.user.client.Command;
 
 import com.pyx4j.commons.IFormatter;
 import com.pyx4j.widgets.client.IFocusWidget;
-import com.pyx4j.widgets.client.ImageFactory;
 import com.pyx4j.widgets.client.WatermarkComponent;
 import com.pyx4j.widgets.client.event.shared.PasteEvent;
 import com.pyx4j.widgets.client.event.shared.PasteHandler;
@@ -43,7 +41,7 @@ public class SelectorListBox<E> extends AbstractSelectorWidget<E> implements Has
 
     private final ArrayList<E> value;
 
-    private final SelectorListBoxValuePanel<E> textBox;
+    private final SelectorListBoxValuePanel<E> listBox;
 
     private final IFormatter<E, String> valueFormatter;
 
@@ -51,18 +49,19 @@ public class SelectorListBox<E> extends AbstractSelectorWidget<E> implements Has
 
     private final IPickerPanel<E> picker;
 
+    @SuppressWarnings("unchecked")
     public SelectorListBox(final OptionsGrabber<E> optionsGrabber, IFormatter<E, String> valueFormatter, IFormatter<E, String[]> optionPathFormatter) {
         super(new SelectorListBoxValuePanel<E>(valueFormatter));
         this.valueFormatter = valueFormatter;
         this.optionPathFormatter = optionPathFormatter;
 
-        value = new ArrayList<>();
+        listBox = (SelectorListBoxValuePanel<E>) getViewerPanel();
 
-        textBox = (SelectorListBoxValuePanel<E>) getViewerPanel();
+        value = new ArrayList<>();
 
         picker = new TreePickerPanel<E>(optionsGrabber, valueFormatter, null);
 
-        textBox.addKeyUpHandler(new KeyUpHandler() {
+        listBox.addKeyUpHandler(new KeyUpHandler() {
 
             @Override
             public void onKeyUp(KeyUpEvent event) {
@@ -70,7 +69,7 @@ public class SelectorListBox<E> extends AbstractSelectorWidget<E> implements Has
             }
         });
 
-        textBox.addPasteHandler(new PasteHandler() {
+        listBox.addPasteHandler(new PasteHandler() {
 
             @Override
             public void onPaste(PasteEvent event) {
@@ -78,18 +77,20 @@ public class SelectorListBox<E> extends AbstractSelectorWidget<E> implements Has
             }
         });
 
-        textBox.setAction(new Command() {
-            @Override
-            public void execute() {
-                showEverithingPicker();
-            }
-        }, ImageFactory.getImages().action());
+//        listBox.setAction(new Command() {
+//            @Override
+//            public void execute() {
+//                showEverithingPicker();
+//            }
+//        }, ImageFactory.getImages().action());
     }
 
 
     public void setValue(Collection<E> value) {
         this.value.clear();
+        if(value!=null) {
         this.value.addAll(value);
+        }
 
 //        if (value == null) {
 //            textBox.setText("");
@@ -127,7 +128,7 @@ public class SelectorListBox<E> extends AbstractSelectorWidget<E> implements Has
 
     @Override
     public void resetQuery() {
-        textBox.showValue(value);
+        listBox.showValue(value);
     }
 
     @Override
@@ -141,12 +142,12 @@ public class SelectorListBox<E> extends AbstractSelectorWidget<E> implements Has
 
     @Override
     public void setWatermark(String watermark) {
-        textBox.setWatermark(watermark);
+        listBox.setWatermark(watermark);
     }
 
     @Override
     public String getWatermark() {
-        return textBox.getWatermark();
+        return listBox.getWatermark();
     }
 
 
