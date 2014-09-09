@@ -17,7 +17,6 @@ import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.yardi.entity.maintenance.ServiceRequest;
 import com.yardi.entity.mits.Information;
 import com.yardi.entity.mits.Unit;
 
@@ -38,17 +37,12 @@ public class UnitsMapper {
 
     private final static Logger log = LoggerFactory.getLogger(UnitsMapper.class);
 
-    static public String getUnitID(Unit unit) {
-        assert (!unit.getInformation().isEmpty());
-        return getUnitID(unit.getInformation().get(0));
+    static public String getUnitNumber(String number) {
+        return number.toUpperCase();
     }
 
-    static public String getUnitID(Information unitInfo) {
-        return unitInfo.getUnitID().toUpperCase();
-    }
-
-    static public String getUnitID(ServiceRequest maintenanceRequest) {
-        return maintenanceRequest.getUnitCode().toUpperCase();
+    static public String getUnitNumber(Unit unit) {
+        return getUnitNumber(unit.getInformation().get(0).getUnitID());
     }
 
     /**
@@ -58,7 +52,6 @@ public class UnitsMapper {
     public AptUnit map(Unit unit) {
         AptUnit unitTo = EntityFactory.create(AptUnit.class);
         Information info = unit.getInformation().get(0);
-
         if (StringUtils.isEmpty(info.getUnitID())) {
             throw new IllegalStateException("Illegal UnitId. Can not be empty or null");
         }
@@ -81,7 +74,7 @@ public class UnitsMapper {
         unitTo.floorplan().set(floorplan);
 
         // info
-        unitTo.info().number().setValue(getUnitID(info));
+        unitTo.info().number().setValue(getUnitNumber(unit));
         unitTo.info()._bedrooms().set(floorplan.bedrooms());
         unitTo.info()._bathrooms().set(floorplan.bathrooms());
         unitTo.info().area().set(floorplan.area());

@@ -252,7 +252,7 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
         for (PhysicalProperty propertyInfo : marketingInfo) {
             for (com.yardi.entity.ils.Property property : propertyInfo.getProperty()) {
                 String propertyCode = BuildingsMapper.getPropertyCode(property.getPropertyID());
-                if (propertyCode != null && propertyCode.equals(building.propertyCode().getValue())) {
+                if (propertyCode.equals(building.propertyCode().getValue())) {
                     return new YardiILSMarketingProcessor().getDepositInfo(property);
                 }
             }
@@ -394,7 +394,7 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
             ServerSideFactory.create(NotificationFacade.class).aggregateNotificationsStart();
 
             final Key yardiInterfaceId = yc.getPrimaryKey();
-            List<Building> importedBuildings = new ArrayList<>();
+            List<Building> importedBuildings = Collections.emptyList();
 
             // properties:
             List<ResidentTransactions> transactions = getResidentTransactions(yc, executionMonitor, propertyCodes);
@@ -402,7 +402,7 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
                 if (executionMonitor.isTerminationRequested()) {
                     break;
                 }
-                importedBuildings.addAll(importProperties(yardiInterfaceId, transaction, executionMonitor));
+                importedBuildings = importProperties(yardiInterfaceId, transaction, executionMonitor);
             }
 
             // product catalog:
@@ -751,12 +751,14 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
 
                 // process new availability data
                 for (ILSUnit ilsUnit : property.getILSUnit()) {
-                    if (!ifUnitExists(yardiInterfaceId, building, ilsUnit.getUnit())) {
+                    AptUnit aptUnit = MappingUtils.retrieveUnit(building, UnitsMapper.getUnitNumber(ilsUnit.getUnit()));
+                    if (aptUnit == null) {
+                        aptUnit = importUnit(building, ilsUnit.getUnit(), executionMonitor);
+
                         newAndUpdatedBuildings.add(building);
                         log.debug("  - Building {} has been UPDATED", propertyCode);
                     }
 
-                    AptUnit aptUnit = importUnit(building, ilsUnit.getUnit(), executionMonitor);
                     if (updateAvailability(aptUnit, ilsUnit.getAvailability(), executionMonitor)) {
                         updateAvailabilityReport(aptUnit, ilsUnit, executionMonitor);
                     }
@@ -788,16 +790,6 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
                         })));
 
         return newAndUpdatedBuildings;
-    }
-
-    private boolean ifUnitExists(Key yardiInterfaceId, Building building, Unit unit) {
-        EntityQueryCriteria<AptUnit> criteria = EntityQueryCriteria.create(AptUnit.class);
-
-        criteria.eq(criteria.proto().building(), building);
-        criteria.eq(criteria.proto().building().integrationSystemId(), yardiInterfaceId);
-        criteria.eq(criteria.proto().info().number(), UnitsMapper.getUnitID(unit));
-
-        return Persistence.service().exists(criteria);
     }
 
     private void clearUnitAvailability(final Set<AptUnit> units, ExecutionMonitor executionMonitor) throws YardiServiceException {

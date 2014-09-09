@@ -32,6 +32,7 @@ import com.propertyvista.domain.contact.InternationalAddress;
 import com.propertyvista.domain.customizations.CountryOfOperation;
 import com.propertyvista.domain.pmc.Pmc;
 import com.propertyvista.domain.property.asset.building.Building;
+import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.ref.ISOCountry;
 import com.propertyvista.domain.ref.ISOProvince;
 import com.propertyvista.domain.tenant.lease.Lease;
@@ -42,8 +43,17 @@ public class MappingUtils {
     public static Building retrieveBuilding(Key yardiInterfaceId, String propertyCode) {
         EntityQueryCriteria<Building> criteria = EntityQueryCriteria.create(Building.class);
 
-        criteria.eq(criteria.proto().propertyCode(), BuildingsMapper.getPropertyCode(propertyCode));
         criteria.eq(criteria.proto().integrationSystemId(), yardiInterfaceId);
+        criteria.eq(criteria.proto().propertyCode(), BuildingsMapper.getPropertyCode(propertyCode));
+
+        return Persistence.service().retrieve(criteria);
+    }
+
+    public static AptUnit retrieveUnit(Building building, String unitNumber) {
+        EntityQueryCriteria<AptUnit> criteria = EntityQueryCriteria.create(AptUnit.class);
+
+        criteria.eq(criteria.proto().building(), building);
+        criteria.eq(criteria.proto().info().number(), UnitsMapper.getUnitNumber(unitNumber));
 
         return Persistence.service().retrieve(criteria);
     }

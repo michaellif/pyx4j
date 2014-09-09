@@ -48,7 +48,7 @@ import com.propertyvista.domain.maintenance.MaintenanceRequestStatus;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.settings.PmcYardiCredential;
-import com.propertyvista.yardi.mappers.UnitsMapper;
+import com.propertyvista.yardi.mappers.MappingUtils;
 import com.propertyvista.yardi.services.YardiMaintenanceRequestsService;
 
 public class YardiMaintenanceProcessor {
@@ -149,10 +149,7 @@ public class YardiMaintenanceProcessor {
         MaintenanceRequestMetadata meta = ServerSideFactory.create(MaintenanceFacade.class).getMaintenanceMetadata(building);
         // unit
         if (request.getUnitCode() != null) {
-            EntityQueryCriteria<AptUnit> criteria = EntityQueryCriteria.create(AptUnit.class);
-            criteria.eq(criteria.proto().building(), mr.building());
-            criteria.eq(criteria.proto().info().number(), UnitsMapper.getUnitID(request));
-            AptUnit unit = Persistence.service().retrieve(criteria);
+            AptUnit unit = MappingUtils.retrieveUnit(mr.building(), request.getUnitCode());
             if (unit == null) {
                 throw new YardiServiceException("Request dropped - Unit not found: " + request.getUnitCode());
             } else {

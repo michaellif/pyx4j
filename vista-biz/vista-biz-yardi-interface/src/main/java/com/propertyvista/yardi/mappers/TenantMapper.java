@@ -17,6 +17,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -78,6 +79,10 @@ public class TenantMapper {
     }
 
     public LeaseTermTenant createTenant(YardiCustomer yardiCustomer, List<LeaseTermTenant> tenants) {
+        if (StringUtils.isEmpty(yardiCustomer.getCustomerID())) {
+            throw new IllegalStateException("Illegal TenantID. Can not be empty or null");
+        }
+
         LeaseTermTenant tenant = EntityFactory.create(LeaseTermTenant.class);
         boolean isEmailAlreadyUsed = isEmailAlreadyUsed(retrieveYardiCustomerEmail(yardiCustomer), tenants);
 

@@ -13,10 +13,7 @@
  */
 package com.propertyvista.yardi.mappers;
 
-import java.util.List;
-
-import org.apache.commons.collections4.CollectionUtils;
-import org.apache.commons.collections4.Transformer;
+import org.apache.commons.lang.StringUtils;
 
 import com.yardi.entity.mits.Identification;
 import com.yardi.entity.mits.PropertyIDType;
@@ -33,21 +30,12 @@ import com.propertyvista.domain.property.asset.building.Building;
  */
 public class BuildingsMapper {
 
-    static public String getPropertyCode(String propertyCode) {
-        return propertyCode.toLowerCase();
+    static public String getPropertyCode(String code) {
+        return code.toLowerCase();
     }
 
     static public String getPropertyCode(PropertyIDType propertyID) {
         return getPropertyCode(propertyID.getIdentification().getPrimaryID());
-    }
-
-    static public void normalizePropertyCodes(List<String> codes) {
-        CollectionUtils.transform(codes, new Transformer<String, String>() {
-            @Override
-            public String transform(String input) {
-                return getPropertyCode(input);
-            }
-        });
     }
 
     /**
@@ -59,8 +47,11 @@ public class BuildingsMapper {
      */
     public Building map(PropertyIDType propertyID) {
         Building building = EntityFactory.create(Building.class);
-
         Identification identification = propertyID.getIdentification();
+        if (StringUtils.isEmpty(identification.getPrimaryID())) {
+            throw new IllegalStateException("Illegal propertyId. Can not be empty or null");
+        }
+
         building.propertyCode().setValue(getPropertyCode(propertyID));
         building.info().name().setValue(identification.getLegalName());
         building.marketing().name().setValue(identification.getMarketingName());

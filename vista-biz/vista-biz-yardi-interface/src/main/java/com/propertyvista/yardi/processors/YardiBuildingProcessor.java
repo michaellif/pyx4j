@@ -23,7 +23,6 @@ import com.yardi.entity.mits.Unit;
 import com.pyx4j.commons.Key;
 import com.pyx4j.commons.SimpleMessageFormat;
 import com.pyx4j.entity.core.AttachLevel;
-import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.server.Persistence;
 
 import com.propertyvista.biz.ExecutionMonitor;
@@ -50,27 +49,22 @@ public class YardiBuildingProcessor {
     }
 
     public Building updateBuilding(Key yardiInterfaceId, PropertyIDType propertyId) throws YardiServiceException {
-        Building building = getBuilding(propertyId);
+        Building imported = getBuilding(propertyId);
 
-        building.integrationSystemId().setValue(yardiInterfaceId);
-        MappingUtils.ensureCountryOfOperation(building);
+        imported.integrationSystemId().setValue(yardiInterfaceId);
+        MappingUtils.ensureCountryOfOperation(imported);
 
-        return new BuildingsMerger().merge(building, MappingUtils.retrieveBuilding(yardiInterfaceId, building.propertyCode().getValue()));
+        Building existing = MappingUtils.retrieveBuilding(yardiInterfaceId, imported.propertyCode().getValue());
+        return new BuildingsMerger().merge(imported, existing);
     }
 
     public AptUnit updateUnit(Building building, Unit unit) throws YardiServiceException {
-        AptUnit importedUnit = new UnitsMapper().map(unit);
-        if (building.floorplans().getAttachLevel() != AttachLevel.Attached) {
-            Persistence.service().retrieveMember(building.floorplans(), AttachLevel.Attached);
-        }
-        return new UnitsMerger().merge(building, importedUnit, retrieveUnit(building, importedUnit.info().number().getValue()));
-    }
+        AptUnit imported = new UnitsMapper().map(unit);
 
-    private AptUnit retrieveUnit(Building building, String unitNumber) {
-        EntityQueryCriteria<AptUnit> criteria = EntityQueryCriteria.create(AptUnit.class);
-        criteria.eq(criteria.proto().building(), building);
-        criteria.eq(criteria.proto().info().number(), unitNumber);
-        return Persistence.service().retrieve(criteria);
+        Persistence.ensureRetrieve(building.floorplans(), AttachLevel.Attached);
+
+        AptUnit existing = MappingUtils.retrieveUnit(building, imported.info().number().getValue());
+        return new UnitsMerger().merge(building, imported, existing);
     }
 
     public Building getBuilding(PropertyIDType propertyId) {

@@ -25,6 +25,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -138,6 +139,10 @@ public class YardiLeaseProcessor {
     }
 
     private Lease createLease(String propertyCode, String leaseId, LeaseTransactionData ltd) throws YardiServiceException {
+        if (StringUtils.isEmpty(ltd.getResident().getCustomerID())) {
+            throw new IllegalStateException("Illegal LeaseID. Can not be empty or null");
+        }
+
         String unitNumber = YardiARIntegrationAgent.getUnitId(ltd.getResident());
         Validate.isTrue(CommonsStringUtils.isStringSet(unitNumber), "Unit number required");
         Validate.isTrue(CommonsStringUtils.isStringSet(propertyCode), "Property Code required");
@@ -565,8 +570,8 @@ public class YardiLeaseProcessor {
     private AptUnit retrieveUnit(Key yardiInterfaceId, String propertyCode, String unitNumber) {
         EntityQueryCriteria<AptUnit> criteria = EntityQueryCriteria.create(AptUnit.class);
 
-        criteria.eq(criteria.proto().building().propertyCode(), propertyCode);
         criteria.eq(criteria.proto().building().integrationSystemId(), yardiInterfaceId);
+        criteria.eq(criteria.proto().building().propertyCode(), propertyCode);
         criteria.eq(criteria.proto().info().number(), unitNumber);
 
         AptUnit unit = Persistence.service().retrieve(criteria);

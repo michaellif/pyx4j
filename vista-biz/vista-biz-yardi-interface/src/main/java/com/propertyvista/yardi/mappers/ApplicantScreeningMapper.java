@@ -43,8 +43,8 @@ public class ApplicantScreeningMapper {
         YardiCustomer yCustomer = applicant.getCustomers().getCustomer().get(0);
 
         customer.person().name().firstName().setValue(yCustomer.getName().getFirstName());
-        customer.person().name().lastName().setValue(yCustomer.getName().getLastName());
         customer.person().name().middleName().setValue(yCustomer.getName().getMiddleName());
+        customer.person().name().lastName().setValue(yCustomer.getName().getLastName());
 
         if (applicant.getASInformation().getBirthdate() != null) {
             customer.person().birthDate().setValue(new LogicalDate(applicant.getASInformation().getBirthdate()));
