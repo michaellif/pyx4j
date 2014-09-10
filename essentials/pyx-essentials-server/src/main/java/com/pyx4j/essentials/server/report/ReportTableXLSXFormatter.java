@@ -449,26 +449,30 @@ public class ReportTableXLSXFormatter implements ReportTableFormatter {
         }
     }
 
-    public void fillRowBackGround(int rowNum, int fromCellNo, int toCellNo, IndexedColors color, boolean endRow) {
+    public void fillRowBackGround(int rowNum, int fromCellNo, int toCellNo, IndexedColors color) {
 
-        if (curentSheet == null)
+        if (curentSheet == null) {
             newSheet("Data");
+        }
 
         Row targetRow = curentSheet.getRow(rowNum);
 
         for (int i = fromCellNo; i < toCellNo; i++) {
             Cell cell = targetRow.getCell(i);
-            if (cell == null)
+            // TODO Take care with merged cells
+            if (cell == null) {
                 cell = targetRow.createCell(i);
+            }
             setCellBackGround(color, cell);
         }
 
-        if (endRow)
-            newRow();
-
     }
 
-    private void setCellBackGround(IndexedColors color, Cell cell) {
+    public Cell getCellByNumber(int number) {
+        return getCurentRow().getCell(number);
+    }
+
+    public void setCellBackGround(IndexedColors color, Cell cell) {
         CellStyle style = getWorkbook().createCellStyle();
         style.cloneStyleFrom(cell.getCellStyle());
         style.setFillForegroundColor(color.getIndex());
