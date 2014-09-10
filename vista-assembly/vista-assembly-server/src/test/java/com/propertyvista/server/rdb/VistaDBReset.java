@@ -113,7 +113,7 @@ public class VistaDBReset {
                 Mail.getMailService().setDisabled(true);
                 ServerSideFactory.create(VistaSystemFacade.class).setCommunicationsDisabled(true);
                 log.info(preloaders.preloadAll());
-                ServerSideFactory.create(OperationsAlertFacade.class).record(null, "DBReset compleated");
+                ServerSideFactory.create(OperationsAlertFacade.class).record(null, "DBReset compleated {0}", TimeUtils.secSince(start));
             } finally {
                 ServerSideFactory.create(VistaSystemFacade.class).setCommunicationsDisabled(false);
                 Mail.getMailService().setDisabled(false);

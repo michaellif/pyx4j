@@ -421,8 +421,8 @@ public class DBResetServlet extends HttpServlet {
 
                                 o(out, "\nTotal time: " + TimeUtils.secSince(start));
                                 log.info("DB reset {} {}", type, TimeUtils.secSince(start));
-                                ServerSideFactory.create(OperationsAlertFacade.class)
-                                        .record(null, "DB operation {0} compleated {1}", TimeUtils.secSince(start));
+                                ServerSideFactory.create(OperationsAlertFacade.class).record(null, "DB operation {0} compleated {1}", type.name(),
+                                        TimeUtils.secSince(start));
                                 o(out, "Processing total time: " + TimeUtils.secSince(start) + "\n");
                             } catch (Throwable t) {
                                 log.error("", t);
