@@ -103,11 +103,16 @@ public class SideMenuList implements ISideMenuNode {
     }
 
     public SideMenuItem getSelectedLeaf() {
-        if (items == null)
+        if (items == null) {
             return null;
+        }
         for (SideMenuItem item : items) {
             if (item.isSelected()) {
-                return item.getSelectedLeaf();
+                if (item instanceof SideMenuFolderItem) {
+                    return ((SideMenuFolderItem) item).getSelectedLeaf();
+                } else {
+                    return item;
+                }
             }
         }
         return null;

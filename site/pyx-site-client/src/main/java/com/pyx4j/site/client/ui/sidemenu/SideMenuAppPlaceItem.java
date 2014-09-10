@@ -20,8 +20,6 @@
  */
 package com.pyx4j.site.client.ui.sidemenu;
 
-import com.google.gwt.user.client.Command;
-
 import com.pyx4j.commons.CompositeDebugId;
 import com.pyx4j.security.annotations.ActionId;
 import com.pyx4j.security.shared.ActionPermission;
@@ -60,11 +58,12 @@ public class SideMenuAppPlaceItem extends SideMenuItem {
     }
 
     public SideMenuAppPlaceItem(final AppPlace appPlace, String caption, ButtonImages images, Permission... permission) {
-        super(new Command() {
+        super(new SideMenuCommand() {
 
             @Override
-            public void execute() {
+            public boolean execute() {
                 AppSite.getPlaceController().goTo(appPlace);
+                return true;
             }
         }, caption == null ? AppSite.getHistoryMapper().getPlaceInfo(appPlace).getNavigLabel() : caption, images, permission);
         this.appPlace = appPlace;

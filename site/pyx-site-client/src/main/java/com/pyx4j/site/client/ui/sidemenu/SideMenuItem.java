@@ -28,8 +28,6 @@ import com.google.gwt.event.dom.client.MouseOutEvent;
 import com.google.gwt.event.dom.client.MouseOutHandler;
 import com.google.gwt.event.dom.client.MouseOverEvent;
 import com.google.gwt.event.dom.client.MouseOverHandler;
-import com.google.gwt.event.shared.HandlerRegistration;
-import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.ComplexPanel;
@@ -45,13 +43,12 @@ import com.pyx4j.gwt.commons.layout.LayoutType;
 import com.pyx4j.security.shared.Permission;
 import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.site.client.AppSite;
-import com.pyx4j.site.client.resources.SiteImages;
 import com.pyx4j.site.rpc.AppPlace;
 import com.pyx4j.widgets.client.images.ButtonImages;
 
 public class SideMenuItem implements ISideMenuNode {
 
-    private final ContentPanel contentPanel;
+    final ContentPanel contentPanel;
 
     private Image icon;
 
@@ -59,27 +56,17 @@ public class SideMenuItem implements ISideMenuNode {
 
     private boolean selected;
 
-    private boolean expanded;
-
-    private Command command;
+    private SideMenuCommand command;
 
     private final ButtonImages images;
 
-    private SideMenuList submenu;
-
-    private Image expantionHandler;
-
-    private final FlowPanel itemPanel;
-
-    private int indentation = 0;
+    final FlowPanel itemPanel;
 
     private SideMenuList parent;
 
-    private final HandlerRegistration toggleHandler;
-
     private Permission[] permission;
 
-    public SideMenuItem(final Command command, String caption, final ButtonImages images, Permission... permission) {
+    public SideMenuItem(final SideMenuCommand command, String caption, final ButtonImages images, Permission... permission) {
         super();
         this.command = command;
         this.images = images;
@@ -95,17 +82,13 @@ public class SideMenuItem implements ISideMenuNode {
             @Override
             public void onClick(ClickEvent event) {
                 if (SideMenuItem.this.command != null) {
-                    SideMenuItem.this.command.execute();
-                }
-            }
-        }, ClickEvent.getType());
-
-        toggleHandler = itemPanel.addDomHandler(new ClickHandler() {
-            @Override
-            public void onClick(ClickEvent event) {
-                LayoutType layout = LayoutType.getLayoutType(Window.getClientWidth());
-                if (LayoutType.phonePortrait.equals(layout) || LayoutType.phoneLandscape.equals(layout) || LayoutType.tabletPortrait.equals(layout)) {
-                    AppSite.getEventBus().fireEvent(new LayoutChangeRequestEvent(ChangeType.toggleSideMenu));
+                    boolean hideSideMenu = SideMenuItem.this.command.execute();
+                    if (hideSideMenu) {
+                        LayoutType layout = LayoutType.getLayoutType(Window.getClientWidth());
+                        if (LayoutType.phonePortrait.equals(layout) || LayoutType.phoneLandscape.equals(layout) || LayoutType.tabletPortrait.equals(layout)) {
+                            AppSite.getEventBus().fireEvent(new LayoutChangeRequestEvent(ChangeType.toggleSideMenu));
+                        }
+                    }
                 }
             }
         }, ClickEvent.getType());
@@ -145,46 +128,21 @@ public class SideMenuItem implements ISideMenuNode {
         setPermission(permission);
     }
 
-    public SideMenuItem(SideMenuList submenu, String caption, ButtonImages images, IDebugId debugId, Permission... permission) {
-        this((Command) null, caption, images, permission);
-        this.submenu = submenu;
-        if (submenu != null) {
-            contentPanel.add(submenu);
-            submenu.setParent(this);
-            setIndentation(indentation);
-
-            expantionHandler = new Image(SiteImages.INSTANCE.expand());
-            expantionHandler.setStyleName(SideMenuTheme.StyleName.SideMenuExpantionHandler.name());
-            itemPanel.add(expantionHandler);
-
-            if (toggleHandler != null) {
-                toggleHandler.removeHandler();
-            }
-            this.command = new Command() {
-                @Override
-                public void execute() {
-                    setExpanded(!expanded);
-                }
-            };
-
-            setExpanded(false);
-        }
-        if (debugId != null) {
-            setDebugId(debugId);
-        }
-    }
-
     @Override
     public Widget asWidget() {
         return contentPanel;
     }
 
-    protected void setDebugId(IDebugId debugId) {
+    public void setDebugId(IDebugId debugId) {
         itemPanel.ensureDebugId(debugId.debugId());
     }
 
     public void setCaption(String text) {
         label.setText(text);
+    }
+
+    protected void setCommand(SideMenuCommand command) {
+        this.command = command;
     }
 
     public void setSelected(boolean select) {
@@ -194,7 +152,6 @@ public class SideMenuItem implements ISideMenuNode {
             if (images != null) {
                 icon.setResource(images.active());
             }
-            setExpanded(true);
         } else {
             itemPanel.removeStyleDependentName(SideMenuTheme.StyleDependent.active.name());
             if (images != null) {
@@ -203,28 +160,6 @@ public class SideMenuItem implements ISideMenuNode {
         }
         if (getParent().getParent() != null) {
             getParent().getParent().setSelected(select);
-        }
-    }
-
-    public SideMenuItem getSelectedLeaf() {
-        if (submenu == null) {
-            return this;
-        } else {
-            return submenu.getSelectedLeaf();
-        }
-    }
-
-    public void setExpanded(boolean expanded) {
-        if (submenu != null) {
-            submenu.setVisible(expanded);
-            this.expanded = expanded;
-
-            if (expanded) {
-                expantionHandler.setResource(SiteImages.INSTANCE.collapse());
-            } else {
-                expantionHandler.setResource(SiteImages.INSTANCE.expand());
-            }
-
         }
     }
 
@@ -241,8 +176,16 @@ public class SideMenuItem implements ISideMenuNode {
         setVisible(contentPanel.isVisible());
     }
 
-    void setIndentation(int indentation) {
-        this.indentation = indentation;
+    @Override
+    public SideMenuList getParent() {
+        return parent;
+    }
+
+    public void setParent(SideMenuList parent) {
+        this.parent = parent;
+    }
+
+    protected void setIndentation(int indentation) {
         contentPanel.removeStyleDependentName(SideMenuTheme.StyleDependent.l1.name());
         contentPanel.removeStyleDependentName(SideMenuTheme.StyleDependent.l2.name());
         contentPanel.removeStyleDependentName(SideMenuTheme.StyleDependent.l3.name());
@@ -260,21 +203,9 @@ public class SideMenuItem implements ISideMenuNode {
             break;
         }
 
-        if (submenu != null) {
-            submenu.setIndentation(indentation + 1);
-        }
     }
 
-    @Override
-    public SideMenuList getParent() {
-        return parent;
-    }
-
-    public void setParent(SideMenuList parent) {
-        this.parent = parent;
-    }
-
-    private class ContentPanel extends ComplexPanel {
+    class ContentPanel extends ComplexPanel {
         private ContentPanel() {
             setElement(Document.get().createElement("li"));
             setStyleName(SideMenuTheme.StyleName.SideMenuItem.name());
@@ -290,9 +221,11 @@ public class SideMenuItem implements ISideMenuNode {
     }
 
     public void select(AppPlace appPlace) {
-        if (submenu != null) {
-            submenu.select(appPlace);
-        }
+    }
+
+    @Override
+    public String toString() {
+        return label.getText();
     }
 
 }

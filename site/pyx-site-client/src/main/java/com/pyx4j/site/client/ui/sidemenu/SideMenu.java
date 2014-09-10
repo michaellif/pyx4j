@@ -36,9 +36,9 @@ public class SideMenu extends ScrollPanel {
 
     public void select(AppPlace appPlace) {
         root.select(appPlace);
-        SideMenuItem selected = root.getSelectedLeaf();
-        if (selected != null && !isScrolledIntoView(selected.asWidget())) {
-            ensureVisible(selected.asWidget());
+        SideMenuItem selectedItem = root.getSelectedLeaf();
+        if (selectedItem != null && !isScrolledIntoView(selectedItem.asWidget())) {
+            ensureVisible(selectedItem.asWidget());
         }
     }
 
