@@ -190,19 +190,17 @@ public class ExportAggregatedTransferDeferredProcess extends AbstractDeferredPro
     }
 
     private void fillPaymentValues(PaymentRecord payment, AggregatedTransferFileExportModel model) {
-        if (payment != null) {
-            Persistence.service().retrieveMember(payment.billingAccount());
-            Persistence.service().retrieveMember(payment.billingAccount().lease());
-            Persistence.service().retrieveMember(payment.billingAccount().lease().unit().building());
-            Persistence.service().retrieveMember(payment.leaseTermParticipant());
-            model.participantId().setValue(payment.leaseTermParticipant().leaseParticipant().participantId().getValue());
-            model.leaseId().setValue(payment.billingAccount().lease().leaseId().getValue());
-            model.propertyCode().setValue(payment.billingAccount().lease().unit().building().propertyCode().getValue());
-            model.amount().setValue(payment.amount().getValue());
-            model.type().setValue(payment.paymentMethod().type().getValue());
-            model.receivedDate().setValue(payment.receivedDate().getValue());
-            model.paymentStatus().setValue(payment.paymentStatus().getValue());
-        }
+        Persistence.service().retrieveMember(payment.billingAccount());
+        Persistence.service().retrieveMember(payment.billingAccount().lease());
+        Persistence.service().retrieveMember(payment.billingAccount().lease().unit().building());
+        Persistence.service().retrieveMember(payment.leaseTermParticipant());
+        model.participantId().setValue(payment.leaseTermParticipant().leaseParticipant().participantId().getValue());
+        model.leaseId().setValue(payment.billingAccount().lease().leaseId().getValue());
+        model.propertyCode().setValue(payment.billingAccount().lease().unit().building().propertyCode().getValue());
+        model.amount().setValue(payment.amount().getValue());
+        model.type().setValue(payment.paymentMethod().type().getValue());
+        model.receivedDate().setValue(payment.receivedDate().getValue());
+        model.paymentStatus().setValue(payment.paymentStatus().getValue());
     }
 
 }
