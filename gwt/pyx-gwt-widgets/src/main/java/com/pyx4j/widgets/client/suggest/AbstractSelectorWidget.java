@@ -33,7 +33,6 @@ import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.ui.Composite;
 
 import com.pyx4j.commons.IDebugId;
-import com.pyx4j.widgets.client.GroupFocusHandler;
 import com.pyx4j.widgets.client.IFocusWidget;
 
 public abstract class AbstractSelectorWidget<E> extends Composite implements ISelectorWidget<E>, IFocusWidget {
@@ -43,8 +42,6 @@ public abstract class AbstractSelectorWidget<E> extends Composite implements ISe
     private final PickerPopup<E> pickerPopup;
 
     private String query = "";
-
-    private final GroupFocusHandler focusHandlerManager;
 
     public AbstractSelectorWidget(final ISelectorValuePanel viewerPanel) {
         this.viewerPanel = viewerPanel;
@@ -69,14 +66,6 @@ public abstract class AbstractSelectorWidget<E> extends Composite implements ISe
                 }
             }
         });
-
-        focusHandlerManager = new GroupFocusHandler(this);
-
-        viewerPanel.addFocusHandler(focusHandlerManager);
-        viewerPanel.addBlurHandler(focusHandlerManager);
-
-        pickerPopup.addFocusHandler(focusHandlerManager);
-        pickerPopup.addBlurHandler(focusHandlerManager);
 
         addFocusHandler(new FocusHandler() {
 
@@ -118,12 +107,12 @@ public abstract class AbstractSelectorWidget<E> extends Composite implements ISe
 
     @Override
     public HandlerRegistration addFocusHandler(FocusHandler handler) {
-        return focusHandlerManager.addFocusHandler(handler);
+        return viewerPanel.addFocusHandler(handler);
     }
 
     @Override
     public HandlerRegistration addBlurHandler(BlurHandler handler) {
-        return focusHandlerManager.addBlurHandler(handler);
+        return viewerPanel.addBlurHandler(handler);
     }
 
     @Override

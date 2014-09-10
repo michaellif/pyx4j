@@ -81,22 +81,6 @@ public abstract class TextBoxBase extends Composite implements ITextWidget, HasP
 
         focusHandlerManager = new GroupFocusHandler(this);
 
-        addFocusHandler(new FocusHandler() {
-
-            @Override
-            public void onFocus(FocusEvent event) {
-                System.out.println("+++++++++++++TextBoxBase onFocus");
-            }
-        });
-
-        addBlurHandler(new BlurHandler() {
-
-            @Override
-            public void onBlur(BlurEvent event) {
-                System.out.println("+++++++++++++TextBoxBase onBlur");
-            }
-        });
-
     }
 
     protected void setTextBoxWidget(com.google.gwt.user.client.ui.TextBoxBase textBoxWidget) {
@@ -113,6 +97,7 @@ public abstract class TextBoxBase extends Composite implements ITextWidget, HasP
 
         textBoxWidget.addFocusHandler(focusHandlerManager);
         textBoxWidget.addBlurHandler(focusHandlerManager);
+
     }
 
     protected com.google.gwt.user.client.ui.TextBoxBase getTextBoxWidget() {

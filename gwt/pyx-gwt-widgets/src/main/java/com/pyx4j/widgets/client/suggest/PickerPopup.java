@@ -20,32 +20,19 @@
  */
 package com.pyx4j.widgets.client.suggest;
 
-import com.google.gwt.event.dom.client.BlurHandler;
-import com.google.gwt.event.dom.client.FocusHandler;
-import com.google.gwt.event.dom.client.HasBlurHandlers;
-import com.google.gwt.event.dom.client.HasFocusHandlers;
-import com.google.gwt.event.shared.HandlerRegistration;
-import com.google.gwt.user.client.ui.FocusPanel;
-import com.google.gwt.user.client.ui.Focusable;
-
 import com.pyx4j.widgets.client.DropDownPanel;
 import com.pyx4j.widgets.client.style.theme.WidgetTheme;
 
-public class PickerPopup<E> extends DropDownPanel implements Focusable, HasFocusHandlers, HasBlurHandlers {
+public class PickerPopup<E> extends DropDownPanel {
 
     private final ISelectorWidget<E> selectorWidget;
 
     private IPickerPanel<E> pickerPanel;
 
-    private final FocusPanel focusPanel;
-
     public PickerPopup(final ISelectorWidget<E> parent) {
         super();
         this.selectorWidget = parent;
         addStyleName(WidgetTheme.StyleName.SuggestBoxPopup.name());
-
-        focusPanel = new FocusPanel();
-        setWidget(focusPanel);
     }
 
     public ISelectorWidget<E> getSelectorWidget() {
@@ -58,7 +45,7 @@ public class PickerPopup<E> extends DropDownPanel implements Focusable, HasFocus
         }
         this.pickerPanel = pickerPanel;
         pickerPanel.setPickerPopup(this);
-        focusPanel.setWidget(pickerPanel.asWidget());
+        setWidget(pickerPanel.asWidget());
         showRelativeTo(selectorWidget.asWidget());
     }
 
@@ -68,7 +55,7 @@ public class PickerPopup<E> extends DropDownPanel implements Focusable, HasFocus
         if (pickerPanel != null) {
             pickerPanel.setPickerPopup(null);
         }
-        focusPanel.setWidget(null);
+        setWidget(null);
         selectorWidget.resetQuery();
         super.hide(autoClosed);
     }
@@ -89,7 +76,7 @@ public class PickerPopup<E> extends DropDownPanel implements Focusable, HasFocus
         selectorWidget.setSelection(pickerPanel.getSelection());
         selectorWidget.setFocus(true);
         hide();
-    };
+    }
 
     public void refreshSuggestions(String query) {
         if (pickerPanel != null) {
@@ -100,36 +87,6 @@ public class PickerPopup<E> extends DropDownPanel implements Focusable, HasFocus
     @Override
     protected void onLoad() {
         setWidth(selectorWidget.asWidget().getOffsetWidth() + "px");
-    }
-
-    @Override
-    public int getTabIndex() {
-        return focusPanel.getTabIndex();
-    }
-
-    @Override
-    public void setAccessKey(char key) {
-        focusPanel.setAccessKey(key);
-    }
-
-    @Override
-    public void setFocus(boolean focused) {
-        focusPanel.setFocus(focused);
-    }
-
-    @Override
-    public void setTabIndex(int index) {
-        focusPanel.setTabIndex(index);
-    }
-
-    @Override
-    public HandlerRegistration addFocusHandler(FocusHandler handler) {
-        return focusPanel.addFocusHandler(handler);
-    }
-
-    @Override
-    public HandlerRegistration addBlurHandler(BlurHandler handler) {
-        return focusPanel.addBlurHandler(handler);
     }
 
 }
