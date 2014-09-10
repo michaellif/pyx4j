@@ -142,9 +142,11 @@ public class ExportAggregatedTransferDeferredProcess extends AbstractDeferredPro
             fillEftAggregatedTransferValues(transfer, model);
         }
 
-        entityFormatter.reportEntityNoEndRow(formatter, model);
+        //entityFormatter.reportEntityNoEndRow(formatter, model);
+        entityFormatter.reportEntity(formatter, model);
 
-        ((ReportTableXLSXFormatter) formatter).fillBackGroundCurrentRow(IndexedColors.GREY_25_PERCENT);
+        ((ReportTableXLSXFormatter) formatter).fillRowBackGround(formatter.getRowCount() - 2, 0, ((ReportTableXLSXFormatter) formatter).getColumnsCount(),
+                IndexedColors.GREY_25_PERCENT, false);
 
     }
 

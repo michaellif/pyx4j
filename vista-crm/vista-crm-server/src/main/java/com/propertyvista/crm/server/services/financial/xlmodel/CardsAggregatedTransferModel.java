@@ -34,12 +34,12 @@ public interface CardsAggregatedTransferModel extends IEntity {
 
     @Format("#,##0.00")
     @Editor(type = EditorType.money)
-    @Caption(name = "Master*C*ard Deposit")
+    @Caption(name = "MasterCard Deposit")
     IPrimitive<BigDecimal> mastercardDeposit();
 
     @Format("#,##0.00")
     @Editor(type = EditorType.money)
-    @Caption(name = "Master*C*ard Fee")
+    @Caption(name = "MasterCard Fee")
     IPrimitive<BigDecimal> mastercardFee();
 
 }
