@@ -201,6 +201,7 @@ public class ExportAggregatedTransferDeferredProcess extends AbstractDeferredPro
         model.type().setValue(payment.paymentMethod().type().getValue());
         model.receivedDate().setValue(payment.receivedDate().getValue());
         model.paymentStatus().setValue(payment.paymentStatus().getValue());
+        model.paymentId().setValue(payment.id().getValue());
     }
 
 }

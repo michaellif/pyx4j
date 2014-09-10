@@ -15,6 +15,7 @@ package com.propertyvista.crm.server.services.financial.xlmodel;
 
 import java.math.BigDecimal;
 
+import com.pyx4j.commons.Key;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Editor;
@@ -27,6 +28,9 @@ import com.propertyvista.domain.financial.PaymentRecord.PaymentStatus;
 import com.propertyvista.domain.payment.PaymentType;
 
 public interface PaymentRecordModel extends IEntity {
+
+    @Caption(name = "Payment Id")
+    IPrimitive<Key> paymentId();
 
     IPrimitive<String> propertyCode();
 
@@ -46,4 +50,5 @@ public interface PaymentRecordModel extends IEntity {
 
     @Editor(type = EditorType.label)
     IPrimitive<PaymentStatus> paymentStatus();
+
 }
