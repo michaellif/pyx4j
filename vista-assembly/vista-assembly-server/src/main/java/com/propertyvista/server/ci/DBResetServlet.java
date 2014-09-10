@@ -582,7 +582,7 @@ public class DBResetServlet extends HttpServlet {
 
         log.info("Preloaded PMC '{}' {}", pmcDnsName, TimeUtils.secSince(pmcStart));
         o(out, "Preloaded PMC '" + pmcDnsName + "' " + TimeUtils.secSince(pmcStart));
-        ServerSideFactory.create(OperationsAlertFacade.class).record(pmc, "Preloaded PMC '{0}' {1}", pmcDnsName, TimeUtils.secSince(pmcStart));
+        ServerSideFactory.create(OperationsAlertFacade.class).record(pmc, "Preloaded PMC ''{0}'' {1}", pmcDnsName, TimeUtils.secSince(pmcStart));
     }
 
     private void setPreloadConfigParameter(HttpServletRequest req, VistaDevPreloadConfig cfg) {
