@@ -394,7 +394,7 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
             ServerSideFactory.create(NotificationFacade.class).aggregateNotificationsStart();
 
             final Key yardiInterfaceId = yc.getPrimaryKey();
-            List<Building> importedBuildings = Collections.emptyList();
+            List<Building> importedBuildings = new ArrayList<>();
 
             // properties:
             List<ResidentTransactions> transactions = getResidentTransactions(yc, executionMonitor, propertyCodes);
@@ -402,7 +402,7 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
                 if (executionMonitor.isTerminationRequested()) {
                     break;
                 }
-                importedBuildings = importProperties(yardiInterfaceId, transaction, executionMonitor);
+                importedBuildings.addAll(importProperties(yardiInterfaceId, transaction, executionMonitor));
             }
 
             // product catalog:
