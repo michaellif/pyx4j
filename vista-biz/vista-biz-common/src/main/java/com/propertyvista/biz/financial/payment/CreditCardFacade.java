@@ -14,6 +14,7 @@
 package com.propertyvista.biz.financial.payment;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.core.IPrimitive;
@@ -26,7 +27,7 @@ public interface CreditCardFacade {
 
     /**
      * The reference number MUST be unique for each type of transaction we make from vista.
-     * 
+     *
      * the value should also be letters [A-Z]
      */
     public enum ReferenceNumberPrefix {
@@ -51,6 +52,8 @@ public interface CreditCardFacade {
     public boolean isNetworkError(String responseCode);
 
     public String getTransactionreferenceNumber(ReferenceNumberPrefix uniquePrefix, IPrimitive<Key> referenceNumber);
+
+    public List<String> getProdAndTestTransactionreferenceNumbers(ReferenceNumberPrefix uniquePrefix, IPrimitive<Key> referenceNumber);
 
     public Key getVistaRecordId(ReferenceNumberPrefix uniquePrefix, String transactionreferenceNumber);
 

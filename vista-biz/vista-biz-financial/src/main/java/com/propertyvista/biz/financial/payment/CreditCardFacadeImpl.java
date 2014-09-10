@@ -14,10 +14,13 @@
 package com.propertyvista.biz.financial.payment;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.core.IPrimitive;
 
+import com.propertyvista.config.VistaDeployment;
 import com.propertyvista.domain.payment.CreditCardInfo;
 import com.propertyvista.domain.payment.CreditCardInfo.CreditCardType;
 import com.propertyvista.dto.payment.ConvenienceFeeCalculationResponseTO;
@@ -31,7 +34,19 @@ public class CreditCardFacadeImpl implements CreditCardFacade {
 
     @Override
     public String getTransactionreferenceNumber(ReferenceNumberPrefix uniquePrefix, IPrimitive<Key> referenceNumber) {
-        return uniquePrefix.getValue() + PadTransactionUtils.toCaldeonTransactionId(referenceNumber);
+        return uniquePrefix.getValue() + PadTransactionUtils.toCaldeonTransactionId(referenceNumber, VistaDeployment.isVistaProduction());
+    }
+
+    @Override
+    public List<String> getProdAndTestTransactionreferenceNumbers(ReferenceNumberPrefix uniquePrefix, IPrimitive<Key> referenceNumber) {
+        List<String> numbers = new ArrayList<>();
+        if (VistaDeployment.isVistaProduction()) {
+            numbers.add(getTransactionreferenceNumber(uniquePrefix, referenceNumber));
+        } else {
+            numbers.add(uniquePrefix.getValue() + PadTransactionUtils.toCaldeonTransactionId(referenceNumber, true));
+            numbers.add(getTransactionreferenceNumber(uniquePrefix, referenceNumber));
+        }
+        return numbers;
     }
 
     @Override

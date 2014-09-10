@@ -41,7 +41,11 @@ public class PadTransactionUtils {
     private static final String transactionOffsetProperty = "_transaction_offset_";
 
     public static String toCaldeonTransactionId(IPrimitive<Key> paymentRecordId) {
-        if (VistaDeployment.isVistaProduction()) {
+        return toCaldeonTransactionId(paymentRecordId, VistaDeployment.isVistaProduction());
+    }
+
+    public static String toCaldeonTransactionId(IPrimitive<Key> paymentRecordId, boolean production) {
+        if (production) {
             return paymentRecordId.getStringView();
         } else {
             return readTestDBversionIdInOperations() + transactionSeparator + paymentRecordId.getStringView();
