@@ -21,7 +21,6 @@
 package com.pyx4j.widgets.client.suggest;
 
 import java.util.Collection;
-import java.util.List;
 
 import com.google.gwt.event.dom.client.BlurHandler;
 import com.google.gwt.event.dom.client.FocusHandler;
@@ -43,17 +42,29 @@ public class SelectorListBoxValuePanel<E> extends FlowPanel implements ISelector
     private final IFormatter<E, String> valueFormatter;
 
     private final  TextBox textBox;
+
     public SelectorListBoxValuePanel(IFormatter<E, String> valueFormatter) {
         this.valueFormatter = valueFormatter;
 
         textBox = new TextBox();
-
         add(textBox);
     }
 
 
-    public void showValue(Collection<E> value) {
-        textBox.setText(valueFormatter.format(((List<E>)value).get(value.size())));
+    public void showValue(Collection<E> value){
+        StringBuffer textBoxValue = new StringBuffer();
+
+        //TODO: check if is enabled
+
+        for(E val : value){
+            if(textBoxValue.length()==0){
+                textBoxValue.append(valueFormatter.format(val));
+            }else{
+                textBoxValue.append(",").append(valueFormatter.format(val));
+            }
+        }
+        textBox.setText(textBoxValue.toString());
+
     }
 
     @Override
@@ -71,113 +82,101 @@ public class SelectorListBoxValuePanel<E> extends FlowPanel implements ISelector
 
     @Override
     public boolean isEnabled() {
-        // TODO Auto-generated method stub
-        return false;
+        return textBox.isEnabled();
     }
 
 
     @Override
     public void setEditable(boolean editable) {
-        // TODO Auto-generated method stub
+        textBox.setEditable(editable);
 
     }
 
 
     @Override
     public boolean isEditable() {
-        // TODO Auto-generated method stub
-        return false;
+        return textBox.isEditable();
     }
 
 
     @Override
     public void setDebugId(IDebugId debugId) {
-        // TODO Auto-generated method stub
-
+        textBox.setDebugId(debugId);
     }
 
 
     @Override
     public int getTabIndex() {
-        // TODO Auto-generated method stub
-        return 0;
+        return textBox.getTabIndex();
     }
 
 
     @Override
     public void setAccessKey(char key) {
-        // TODO Auto-generated method stub
+        textBox.setAccessKey(key);
 
     }
 
 
     @Override
     public void setFocus(boolean focused) {
-        // TODO Auto-generated method stub
-
+        textBox.setFocus(focused);
     }
 
 
     @Override
     public void setTabIndex(int index) {
-        // TODO Auto-generated method stub
+        textBox.setTabIndex(index);
 
     }
 
 
     @Override
     public HandlerRegistration addFocusHandler(FocusHandler handler) {
-        // TODO Auto-generated method stub
-        return null;
+        return textBox.addFocusHandler(handler);
     }
 
 
     @Override
     public HandlerRegistration addBlurHandler(BlurHandler handler) {
-        // TODO Auto-generated method stub
-        return null;
+        return textBox.addBlurHandler(handler);
     }
 
 
     @Override
     public HandlerRegistration addKeyUpHandler(KeyUpHandler handler) {
-        // TODO Auto-generated method stub
-        return null;
+        return textBox.addKeyUpHandler(handler);
     }
 
 
     @Override
     public HandlerRegistration addKeyDownHandler(KeyDownHandler handler) {
-        // TODO Auto-generated method stub
-        return null;
+        return textBox.addKeyDownHandler(handler);
     }
 
 
     @Override
     public HandlerRegistration addKeyPressHandler(KeyPressHandler handler) {
-        // TODO Auto-generated method stub
-        return null;
+        return textBox.addKeyPressHandler(handler);
     }
 
 
     @Override
     public HandlerRegistration addValueChangeHandler(ValueChangeHandler<String> handler) {
-        // TODO Auto-generated method stub
-        return null;
+        return textBox.addValueChangeHandler(handler);
     }
 
 
     @Override
     public void setWatermark(String watermark) {
-        // TODO Auto-generated method stub
+        textBox.setWatermark(watermark);
 
     }
 
 
     @Override
     public String getWatermark() {
-        // TODO Auto-generated method stub
-        return null;
+        return textBox.getWatermark();
     }
 
 

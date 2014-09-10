@@ -104,7 +104,7 @@ public class SelectorListBox<E> extends AbstractSelectorWidget<E> implements Has
 
 
     public Collection<E> getValue() {
-        return value;
+        return this.value;
     }
 
     protected void showSuggestPicker() {

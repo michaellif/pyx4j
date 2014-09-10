@@ -77,6 +77,7 @@ public class NMultySelectorBox<E extends IEntity> extends NFocusField<Collection
     @Override
     public void setNativeValue(Collection<E> value) {
         if (isViewable()) {
+            //TODO:implement
 //            getViewer().setText(getCComponent().getFormatter().format(value));
         } else {
             getEditor().setValue(value);
