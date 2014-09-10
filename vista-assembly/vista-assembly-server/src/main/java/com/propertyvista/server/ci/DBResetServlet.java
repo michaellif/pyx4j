@@ -56,12 +56,13 @@ import com.pyx4j.i18n.annotations.Translate;
 import com.pyx4j.i18n.shared.I18nEnum;
 import com.pyx4j.quartz.SchedulerHelper;
 import com.pyx4j.security.shared.SecurityController;
-import com.pyx4j.server.contexts.ServerContext;
 import com.pyx4j.server.contexts.DevSession;
 import com.pyx4j.server.contexts.Lifecycle;
 import com.pyx4j.server.contexts.NamespaceManager;
+import com.pyx4j.server.contexts.ServerContext;
 import com.pyx4j.server.mail.Mail;
 
+import com.propertyvista.biz.system.OperationsAlertFacade;
 import com.propertyvista.biz.system.OperationsTriggerFacade;
 import com.propertyvista.biz.system.PmcFacade;
 import com.propertyvista.biz.system.VistaSystemFacade;
@@ -420,6 +421,8 @@ public class DBResetServlet extends HttpServlet {
 
                                 o(out, "\nTotal time: " + TimeUtils.secSince(start));
                                 log.info("DB reset {} {}", type, TimeUtils.secSince(start));
+                                ServerSideFactory.create(OperationsAlertFacade.class)
+                                        .record(null, "DB operation {0} compleated {1}", TimeUtils.secSince(start));
                                 o(out, "Processing total time: " + TimeUtils.secSince(start) + "\n");
                             } catch (Throwable t) {
                                 log.error("", t);
@@ -579,6 +582,7 @@ public class DBResetServlet extends HttpServlet {
 
         log.info("Preloaded PMC '{}' {}", pmcDnsName, TimeUtils.secSince(pmcStart));
         o(out, "Preloaded PMC '" + pmcDnsName + "' " + TimeUtils.secSince(pmcStart));
+        ServerSideFactory.create(OperationsAlertFacade.class).record(pmc, "Preloaded PMC '{0}' {1}", pmcDnsName, TimeUtils.secSince(pmcStart));
     }
 
     private void setPreloadConfigParameter(HttpServletRequest req, VistaDevPreloadConfig cfg) {

@@ -33,6 +33,7 @@ import com.pyx4j.server.contexts.Lifecycle;
 import com.pyx4j.server.contexts.NamespaceManager;
 import com.pyx4j.server.mail.Mail;
 
+import com.propertyvista.biz.system.OperationsAlertFacade;
 import com.propertyvista.biz.system.VistaSystemFacade;
 import com.propertyvista.domain.VistaNamespace;
 import com.propertyvista.domain.pmc.Pmc;
@@ -112,6 +113,7 @@ public class VistaDBReset {
                 Mail.getMailService().setDisabled(true);
                 ServerSideFactory.create(VistaSystemFacade.class).setCommunicationsDisabled(true);
                 log.info(preloaders.preloadAll());
+                ServerSideFactory.create(OperationsAlertFacade.class).record(null, "DBReset compleated");
             } finally {
                 ServerSideFactory.create(VistaSystemFacade.class).setCommunicationsDisabled(false);
                 Mail.getMailService().setDisabled(false);
