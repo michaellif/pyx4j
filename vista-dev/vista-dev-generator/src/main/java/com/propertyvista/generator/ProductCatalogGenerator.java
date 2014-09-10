@@ -325,7 +325,7 @@ public class ProductCatalogGenerator {
     }
 
     private BigDecimal getDepositAmount(ProductDeposit deposit, ProductItem item) {
-        if (RandomUtil.randomBoolean()) {
+        if (System.identityHashCode(deposit) % 2 == 0) {
             if (ValueType.Percentage.equals(deposit.valueType().getValue())) {
                 return DomainUtil.roundMoney(deposit.value().percent().getValue(BigDecimal.ZERO).multiply(item.price().getValue(BigDecimal.ZERO)));
             } else {
