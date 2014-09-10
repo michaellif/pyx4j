@@ -19,9 +19,10 @@ import com.pyx4j.commons.Key;
 import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.entity.security.DataModelPermission;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.site.client.ui.sidemenu.SideMenuItem;
 import com.pyx4j.site.client.ui.sidemenu.SideMenu;
 import com.pyx4j.site.client.ui.sidemenu.SideMenuAppPlaceItem;
-import com.pyx4j.site.client.ui.sidemenu.SideMenuItem;
+import com.pyx4j.site.client.ui.sidemenu.SideMenuFolderItem;
 import com.pyx4j.site.client.ui.sidemenu.SideMenuList;
 import com.pyx4j.site.rpc.AppPlace;
 
@@ -68,7 +69,7 @@ public class NavigAdministrationViewImpl extends Composite implements NavigAdmin
 
         {//Profile
             SideMenuList list = new SideMenuList();
-            root.addMenuItem(new SideMenuItem(list, i18n.tr("Profile"), null, null));
+            root.addMenuItem(new SideMenuFolderItem(list, i18n.tr("Profile"), null));
             list.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Administration.Profile.CompanyInfo().formViewerPlace(new Key(-1)), DataModelPermission
                     .permissionRead(PmcCompanyInfoDTO.class)));
             list.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Administration.Profile.PaymentMethods().formViewerPlace(new Key(-1)), DataModelPermission
@@ -78,7 +79,7 @@ public class NavigAdministrationViewImpl extends Composite implements NavigAdmin
         {//Settings
             if (VistaTODO.ENABLE_ONBOARDING_WIZARDS_IN_DEVELOPMENT && ApplicationMode.isDevelopment()) {
                 SideMenuList list = new SideMenuList();
-                root.addMenuItem(new SideMenuItem(list, i18n.tr("Settings"), null, null));
+                root.addMenuItem(new SideMenuFolderItem(list, i18n.tr("Settings"), null));
                 list.addMenuItem(new SideMenuAppPlaceItem(new Settings.OnlinePaymentSetup()));
                 list.addMenuItem(new SideMenuAppPlaceItem(new Settings.CreditCheck()));
 
@@ -95,7 +96,7 @@ public class NavigAdministrationViewImpl extends Composite implements NavigAdmin
 
         {//Security
             SideMenuList list = new SideMenuList();
-            root.addMenuItem(new SideMenuItem(list, i18n.tr("Security"), null, null));
+            root.addMenuItem(new SideMenuFolderItem(list, i18n.tr("Security"), null));
             list.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Administration.Security.AuditRecords(), DataModelPermission
                     .permissionRead(AuditRecordDTO.class)));
             list.addMenuItem(new SideMenuAppPlaceItem(new Security.UserRole(), DataModelPermission.permissionRead(CrmRole.class)));
@@ -111,7 +112,7 @@ public class NavigAdministrationViewImpl extends Composite implements NavigAdmin
 
         {//Financial
             SideMenuList list = new SideMenuList();
-            root.addMenuItem(new SideMenuItem(list, i18n.tr("Financial"), null, null));
+            root.addMenuItem(new SideMenuFolderItem(list, i18n.tr("Financial"), null));
 
             list.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Administration.Financial.ARCode(), DataModelPermission.permissionRead(ARCode.class)));
             if (!VistaFeatures.instance().yardiIntegration()) {
@@ -126,7 +127,7 @@ public class NavigAdministrationViewImpl extends Composite implements NavigAdmin
 
         {//Content Management
             SideMenuList list = new SideMenuList();
-            root.addMenuItem(new SideMenuItem(list, i18n.tr("Content Management"), null, null));
+            root.addMenuItem(new SideMenuFolderItem(list, i18n.tr("Content Management"), null));
 
             list.addMenuItem(new SideMenuAppPlaceItem(new ContentManagement.General(), CrmContentManagementAccess.class));
             list.addMenuItem(new SideMenuAppPlaceItem(new ContentManagement.Website(), CrmContentManagementAccess.class));
@@ -135,7 +136,7 @@ public class NavigAdministrationViewImpl extends Composite implements NavigAdmin
 
         {//Policies
             SideMenuList list = new SideMenuList();
-            root.addMenuItem(new SideMenuItem(list, i18n.tr("Policies"), null, null));
+            root.addMenuItem(new SideMenuFolderItem(list, i18n.tr("Policies"), null));
 
             list.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Administration.Policies.ApplicationDocumentation(),
                     CrmAdministrationPolicesOtherAccess.class));
@@ -158,7 +159,7 @@ public class NavigAdministrationViewImpl extends Composite implements NavigAdmin
             }
 
             SideMenuList legalList = new SideMenuList();
-            list.addMenuItem(new SideMenuItem(legalList, i18n.tr("Legal"), null, null));
+            list.addMenuItem(new SideMenuFolderItem(legalList, i18n.tr("Legal"), null));
 
             legalList.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Administration.Policies.AgreementLegalTerms(),
                     CrmAdministrationPolicesOtherAccess.class));
@@ -177,7 +178,7 @@ public class NavigAdministrationViewImpl extends Composite implements NavigAdmin
             }
 
             SideMenuList portalsList = new SideMenuList();
-            list.addMenuItem(new SideMenuItem(portalsList, i18n.tr("Portal"), null, null));
+            list.addMenuItem(new SideMenuFolderItem(portalsList, i18n.tr("Portal"), null));
             portalsList
                     .addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Administration.Policies.ProspectPortal(), CrmAdministrationPolicesOtherAccess.class));
             portalsList

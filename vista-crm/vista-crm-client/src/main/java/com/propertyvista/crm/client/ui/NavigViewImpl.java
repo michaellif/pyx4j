@@ -18,7 +18,6 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Vector;
 
-import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Composite;
 
@@ -33,6 +32,8 @@ import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.ui.sidemenu.SideMenu;
 import com.pyx4j.site.client.ui.sidemenu.SideMenuAppPlaceItem;
+import com.pyx4j.site.client.ui.sidemenu.SideMenuCommand;
+import com.pyx4j.site.client.ui.sidemenu.SideMenuFolderItem;
 import com.pyx4j.site.client.ui.sidemenu.SideMenuItem;
 import com.pyx4j.site.client.ui.sidemenu.SideMenuList;
 import com.pyx4j.site.rpc.AppPlace;
@@ -127,148 +128,176 @@ public class NavigViewImpl extends Composite implements NavigView {
 
         setHeight("100%");
 
-        {//User
-            SideMenuList list = new SideMenuList();
-            root.addMenuItem(userMenuItem = new SideMenuItem(list, "User", CrmImages.INSTANCE.userIcon(), null));
-            list.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Account.AccountData()));
+        SideMenuItem sideMenuItem;
 
-            list.addMenuItem(adminMenuItem = new SideMenuItem(new Command() {
+        SideMenuList sideMenuList;
+
+        {//User
+            sideMenuList = new SideMenuList();
+            root.addMenuItem(userMenuItem = new SideMenuFolderItem(sideMenuList, "User", CrmImages.INSTANCE.userIcon()));
+            sideMenuList.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Account.AccountData()));
+
+            sideMenuList.addMenuItem(adminMenuItem = new SideMenuItem(new SideMenuCommand() {
+
                 @Override
-                public void execute() {
+                public boolean execute() {
                     AppSite.getPlaceController().goTo(new CrmSiteMap.Administration.Financial.ARCode());
+                    return true;
                 }
             }, i18n.tr("Administration"), null));
 
-            list.addMenuItem(exitAdminMenuItem = new SideMenuItem(new Command() {
+            sideMenuList.addMenuItem(exitAdminMenuItem = new SideMenuItem(new SideMenuCommand() {
+
                 @Override
-                public void execute() {
+                public boolean execute() {
                     AppSite.getPlaceController().goTo(CrmSite.getDefaultPlace());
+                    return true;
                 }
             }, i18n.tr("Exit Administration"), null));
 
-            list.addMenuItem(new SideMenuItem(new Command() {
+            sideMenuList.addMenuItem(new SideMenuItem(new SideMenuCommand() {
                 @Override
-                public void execute() {
+                public boolean execute() {
                     presenter.getSatisfaction();
+                    return true;
                 }
             }, i18n.tr("Support"), null));
 
             languagesMenuList = new SideMenuList();
-            list.addMenuItem(new SideMenuItem(languagesMenuList, i18n.tr("Languages"), null, null));
+            sideMenuList.addMenuItem(new SideMenuFolderItem(languagesMenuList, i18n.tr("Languages"), null));
 
-            list.addMenuItem(new SideMenuItem(new Command() {
+            sideMenuList.addMenuItem(new SideMenuItem(new SideMenuCommand() {
                 @Override
-                public void execute() {
+                public boolean execute() {
                     presenter.logout();
+                    return true;
                 }
             }, i18n.tr("LogOut"), null));
         }
 
         {//Dashboards
-            SideMenuList list = new SideMenuList();
-            root.addMenuItem(new SideMenuItem(list, i18n.tr("Dashboards"), CrmImages.INSTANCE.dashboardsIcon(), null));
-            list.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Dashboard.Manage(), DataModelPermission.permissionRead(DashboardMetadata.class)));
+            sideMenuList = new SideMenuList();
+            root.addMenuItem(new SideMenuFolderItem(sideMenuList, i18n.tr("Dashboards"), CrmImages.INSTANCE.dashboardsIcon()));
+            sideMenuList.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Dashboard.Manage(), DataModelPermission.permissionRead(DashboardMetadata.class)));
 
             systemDashboard = new SideMenuAppPlaceItem(CrmSite.getSystemDashboardPlace(), DataModelPermission.permissionRead(DashboardMetadata.class));
-            list.addMenuItem(systemDashboard);
+            sideMenuList.addMenuItem(systemDashboard);
 
             customDashboards = new SideMenuList();
-            list.addMenuItem(new SideMenuItem(customDashboards, i18n.tr("Custom Dashboards"), null, null));
+            sideMenuList.addMenuItem(new SideMenuFolderItem(customDashboards, i18n.tr("Custom Dashboards"), null));
         }
 
         {//Properties
-            SideMenuList list = new SideMenuList();
-            root.addMenuItem(new SideMenuItem(list, i18n.tr("Properties"), CrmImages.INSTANCE.propertiesIcon(), CrmMainNavigationDebugId.Properties));
+            sideMenuList = new SideMenuList();
+
+            sideMenuItem = new SideMenuFolderItem(sideMenuList, i18n.tr("Properties"), CrmImages.INSTANCE.propertiesIcon());
+            sideMenuItem.setDebugId(CrmMainNavigationDebugId.Properties);
+            root.addMenuItem(sideMenuItem);
 
             if (!VistaFeatures.instance().yardiIntegration()) {
-                list.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Properties.Complex(), DataModelPermission.permissionRead(ComplexDTO.class)));
+                sideMenuList.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Properties.Complex(), DataModelPermission.permissionRead(ComplexDTO.class)));
             }
-            list.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Properties.Building(), DataModelPermission.permissionRead(BuildingDTO.class)));
-            list.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Properties.Unit(), DataModelPermission.permissionRead(AptUnitDTO.class)));
-            list.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Properties.Landlord(), DataModelPermission.permissionRead(LandlordDTO.class)));
+            sideMenuList.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Properties.Building(), DataModelPermission.permissionRead(BuildingDTO.class)));
+            sideMenuList.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Properties.Unit(), DataModelPermission.permissionRead(AptUnitDTO.class)));
+            sideMenuList.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Properties.Landlord(), DataModelPermission.permissionRead(LandlordDTO.class)));
         }
 
         {//Tenants
-            SideMenuList list = new SideMenuList();
-            root.addMenuItem(new SideMenuItem(list, i18n.tr("Tenants & Leases"), CrmImages.INSTANCE.tenantsIcon(), CrmMainNavigationDebugId.Leases));
+            sideMenuList = new SideMenuList();
 
-            list.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Tenants.Lease(), DataModelPermission.permissionRead(LeaseDTO.class)));
-            list.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Tenants.Tenant(), TenantListAction.class));
-            list.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Tenants.Guarantor(), DataModelPermission.permissionRead(GuarantorDTO.class)));
-            list.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Tenants.MaintenanceRequest(), DataModelPermission
+            sideMenuItem = new SideMenuFolderItem(sideMenuList, i18n.tr("Tenants & Leases"), CrmImages.INSTANCE.tenantsIcon());
+            sideMenuItem.setDebugId(CrmMainNavigationDebugId.Leases);
+            root.addMenuItem(sideMenuItem);
+
+            sideMenuList.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Tenants.Lease(), DataModelPermission.permissionRead(LeaseDTO.class)));
+            sideMenuList.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Tenants.Tenant(), TenantListAction.class));
+            sideMenuList.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Tenants.Guarantor(), DataModelPermission.permissionRead(GuarantorDTO.class)));
+            sideMenuList.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Tenants.MaintenanceRequest(), DataModelPermission
                     .permissionRead(MaintenanceRequestDTO.class)));
             if (!VistaFeatures.instance().yardiIntegration()) {
-                list.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Tenants.FormerLease(), FormerLeaseListAction.class));
-                list.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Tenants.FormerTenant(), FormerTenantListAction.class));
-                list.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Tenants.FormerGuarantor(), FormerGuarantorListAction.class));
+                sideMenuList.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Tenants.FormerLease(), FormerLeaseListAction.class));
+                sideMenuList.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Tenants.FormerTenant(), FormerTenantListAction.class));
+                sideMenuList.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Tenants.FormerGuarantor(), FormerGuarantorListAction.class));
             }
         }
 
         {//Marketing
-            SideMenuList list = new SideMenuList();
-            root.addMenuItem(new SideMenuItem(list, i18n.tr("Marketing & Rentals"), CrmImages.INSTANCE.marketingIcon(), CrmMainNavigationDebugId.Marketing));
+            sideMenuList = new SideMenuList();
 
-            list.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Marketing.Lead(), DataModelPermission.permissionRead(Lead.class)));
-            list.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Tenants.LeaseApplication(), DataModelPermission.permissionRead(LeaseApplicationDTO.class)));
-            list.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Marketing.PotentialTenant(), PotentialTenantListAction.class));
+            sideMenuItem = new SideMenuFolderItem(sideMenuList, i18n.tr("Marketing & Rentals"), CrmImages.INSTANCE.marketingIcon());
+            sideMenuItem.setDebugId(CrmMainNavigationDebugId.Marketing);
+            root.addMenuItem(sideMenuItem);
+
+            sideMenuList.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Marketing.Lead(), DataModelPermission.permissionRead(Lead.class)));
+            sideMenuList.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Tenants.LeaseApplication(), DataModelPermission
+                    .permissionRead(LeaseApplicationDTO.class)));
+            sideMenuList.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Marketing.PotentialTenant(), PotentialTenantListAction.class));
         }
 
         {//LegalAndCollections
-            SideMenuList list = new SideMenuList();
-            root.addMenuItem(new SideMenuItem(list, i18n.tr("Legal & Collections"), CrmImages.INSTANCE.legalIcon(), null));
+            sideMenuList = new SideMenuList();
 
-            list.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.LegalAndCollections.N4GenerationTool(), DataModelPermission
+            root.addMenuItem(new SideMenuFolderItem(sideMenuList, i18n.tr("Legal & Collections"), CrmImages.INSTANCE.legalIcon()));
+
+            sideMenuList.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.LegalAndCollections.N4GenerationTool(), DataModelPermission
                     .permissionCreate(LegalNoticeCandidateDTO.class)));
-            list.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.LegalAndCollections.N4DownloadTool(), DataModelPermission
+            sideMenuList.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.LegalAndCollections.N4DownloadTool(), DataModelPermission
                     .permissionRead(LegalNoticeCandidateDTO.class)));
             if (false) { // TODO L1 implementation
-                list.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.LegalAndCollections.L1GenerationTool()));
+                sideMenuList.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.LegalAndCollections.L1GenerationTool()));
             }
         }
 
         {//Finance
-            SideMenuList list = new SideMenuList();
-            root.addMenuItem(new SideMenuItem(list, i18n.tr("Finance"), CrmImages.INSTANCE.financeIcon(), CrmMainNavigationDebugId.Finance));
+            sideMenuList = new SideMenuList();
 
-            list.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Finance.AggregatedTransfer(), DataModelPermission.permissionRead(AggregatedTransfer.class)));
-            list.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Finance.AutoPay(), DataModelPermission.permissionRead(AutoPayHistoryDTO.class)));
-            list.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Finance.AutoPayReview(), DataModelPermission.permissionUpdate(PapReviewDTO.class)));
-            list.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Finance.MoneyIn(), DataModelPermission.permissionCreate(MoneyInBatchDTO.class)));
-            list.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Finance.MoneyIn.Batch(), DataModelPermission.permissionRead(MoneyInBatchDTO.class)));
-            list.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Finance.Payment(), DataModelPermission.permissionRead(PaymentRecordDTO.class)));
+            sideMenuItem = new SideMenuFolderItem(sideMenuList, i18n.tr("Finance"), CrmImages.INSTANCE.financeIcon());
+            sideMenuItem.setDebugId(CrmMainNavigationDebugId.Finance);
+            root.addMenuItem(sideMenuItem);
+
+            sideMenuList.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Finance.AggregatedTransfer(), DataModelPermission
+                    .permissionRead(AggregatedTransfer.class)));
+            sideMenuList.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Finance.AutoPay(), DataModelPermission.permissionRead(AutoPayHistoryDTO.class)));
+            sideMenuList
+                    .addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Finance.AutoPayReview(), DataModelPermission.permissionUpdate(PapReviewDTO.class)));
+            sideMenuList.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Finance.MoneyIn(), DataModelPermission.permissionCreate(MoneyInBatchDTO.class)));
+            sideMenuList
+                    .addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Finance.MoneyIn.Batch(), DataModelPermission.permissionRead(MoneyInBatchDTO.class)));
+            sideMenuList.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Finance.Payment(), DataModelPermission.permissionRead(PaymentRecordDTO.class)));
         }
 
         {//Organization
-            SideMenuList list = new SideMenuList();
-            root.addMenuItem(new SideMenuItem(list, i18n.tr("Organization"), CrmImages.INSTANCE.organizationIcon(), null));
+            sideMenuList = new SideMenuList();
+            root.addMenuItem(new SideMenuFolderItem(sideMenuList, i18n.tr("Organization"), CrmImages.INSTANCE.organizationIcon()));
 
-            list.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Organization.Employee(), EmployeeDirectoryList.class));
-            list.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Organization.Portfolio(), DataModelPermission.permissionRead(Portfolio.class)));
+            sideMenuList.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Organization.Employee(), EmployeeDirectoryList.class));
+            sideMenuList.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Organization.Portfolio(), DataModelPermission.permissionRead(Portfolio.class)));
             if (!VistaFeatures.instance().yardiIntegration()) {
-                list.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Organization.Vendor()));
+                sideMenuList.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Organization.Vendor()));
             }
         }
 
         {//Message Center
-            SideMenuList list = new SideMenuList();
-            root.addMenuItem(new SideMenuItem(list, i18n.tr("Message Center"), CrmImages.INSTANCE.messageCenterIcon(), null));
+            sideMenuList = new SideMenuList();
+            root.addMenuItem(new SideMenuFolderItem(sideMenuList, i18n.tr("Message Center"), CrmImages.INSTANCE.messageCenterIcon()));
 
-            list.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Communication.Message(), DataModelPermission.permissionRead(MessageDTO.class)));
+            sideMenuList.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Communication.Message(), DataModelPermission.permissionRead(MessageDTO.class)));
             if (ApplicationMode.isDevelopment() && VistaTODO.ADDITIONAL_COMMUNICATION_FEATURES) {
-                list.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Communication.Message(CategoryType.IVR), CategoryType.IVR.toString(), null,
+                sideMenuList.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Communication.Message(CategoryType.IVR), CategoryType.IVR.toString(), null,
                         DataModelPermission.permissionRead(MessageDTO.class)));
-                list.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Communication.Message(CategoryType.Notification),
-                        CategoryType.Notification.toString(), null, DataModelPermission.permissionRead(MessageDTO.class)));
-                list.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Communication.Message(CategoryType.SMS), CategoryType.SMS.toString(), null,
+                sideMenuList.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Communication.Message(CategoryType.Notification), CategoryType.Notification
+                        .toString(), null, DataModelPermission.permissionRead(MessageDTO.class)));
+                sideMenuList.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Communication.Message(CategoryType.SMS), CategoryType.SMS.toString(), null,
                         DataModelPermission.permissionRead(MessageDTO.class)));
             }
             communicationGroups = new SideMenuList();
-            list.addMenuItem(new SideMenuItem(communicationGroups, i18n.tr("Groups"), null, null, DataModelPermission.permissionRead(MessageCategory.class)));
+            sideMenuList.addMenuItem(new SideMenuFolderItem(communicationGroups, i18n.tr("Groups"), null, null, DataModelPermission
+                    .permissionRead(MessageCategory.class)));
         }
 
         {//Reports
             reports = new SideMenuList();
-            root.addMenuItem(new SideMenuItem(reports, i18n.tr("Reports"), CrmImages.INSTANCE.reportsIcon(), null));
+            root.addMenuItem(new SideMenuFolderItem(reports, i18n.tr("Reports"), CrmImages.INSTANCE.reportsIcon()));
 
 //            list.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Reports.AutoPayChanges()));
 //            list.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Reports.Availability()));
@@ -357,10 +386,11 @@ public class NavigViewImpl extends Composite implements NavigView {
         languagesMenuList.clear();
         CompiledLocale currentLocale = ClientLocaleUtils.getCurrentLocale();
         for (final CompiledLocale compiledLocale : localeList) {
-            languagesMenuList.addMenuItem(new SideMenuItem(new Command() {
+            languagesMenuList.addMenuItem(new SideMenuItem(new SideMenuCommand() {
                 @Override
-                public void execute() {
+                public boolean execute() {
                     presenter.setLocale(compiledLocale);
+                    return true;
                 }
             }, compiledLocale.getNativeDisplayName() + (currentLocale.equals(compiledLocale) ? " \u2713" : ""), null));
         }
