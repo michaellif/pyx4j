@@ -147,24 +147,4 @@ public class EntityReportFormatter<E extends IEntity> {
         reportEntityEnds(formatter, entity);
     }
 
-    public void reportEntityNoEndRow(ReportTableFormatter formatter, E entity) {
-        if (selectedMemberNames == null) {
-            selectMemebers();
-        }
-        EntityMeta em = entity.getEntityMeta();
-        for (String memberName : selectedMemberNames) {
-            MemberMeta memberMeta = em.getMemberMeta(memberName);
-            if (!reportMember(entity, memberName, memberMeta)) {
-                formatter.cell(null);
-                continue;
-            }
-            if (memberMeta.isEntity()) {
-                formatter.cell(((IEntity) entity.getMember(memberName)).getStringView());
-            } else if (IPrimitive.class.isAssignableFrom(memberMeta.getObjectClass())) {
-                formatter.cell(entity.getMember(memberName).getValue());
-            }
-        }
-
-    }
-
 }
