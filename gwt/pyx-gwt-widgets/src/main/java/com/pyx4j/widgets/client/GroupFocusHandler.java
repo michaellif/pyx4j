@@ -37,33 +37,44 @@ public class GroupFocusHandler extends HandlerManager implements FocusHandler, B
 
     private boolean groupFocus = false;
 
+    private GroupFocusHandler parentGroupFocusHandler;
+
     public GroupFocusHandler(Object source) {
         super(source);
     }
 
     @Override
     public void onFocus(FocusEvent e) {
-        focusLost = false;
-        if (!groupFocus) {
-            groupFocus = true;
-            fireEvent(e);
+        if (parentGroupFocusHandler != null) {
+            parentGroupFocusHandler.onFocus(e);
+        } else {
+            System.out.println("+++++++++++++++ onFocus " + System.identityHashCode(this));
+            focusLost = false;
+            if (!groupFocus) {
+                groupFocus = true;
+                fireEvent(e);
+            }
         }
     }
 
     @Override
     public void onBlur(final BlurEvent e) {
-        focusLost = true;
+        if (parentGroupFocusHandler != null) {
+            parentGroupFocusHandler.onBlur(e);
+        } else {
+            System.out.println("+++++++++++++++ onBlur " + System.identityHashCode(this));
+            focusLost = true;
+            Scheduler.get().scheduleDeferred(new ScheduledCommand() {
 
-        Scheduler.get().scheduleDeferred(new ScheduledCommand() {
-
-            @Override
-            public void execute() {
-                if (groupFocus && focusLost) {
-                    groupFocus = false;
-                    fireEvent(e);
+                @Override
+                public void execute() {
+                    if (groupFocus && focusLost) {
+                        groupFocus = false;
+                        fireEvent(e);
+                    }
                 }
-            }
-        });
+            });
+        }
 
     }
 
@@ -76,4 +87,19 @@ public class GroupFocusHandler extends HandlerManager implements FocusHandler, B
     public HandlerRegistration addBlurHandler(BlurHandler blurHandler) {
         return addHandler(BlurEvent.getType(), blurHandler);
     }
+
+    public void addFocusable(IFocusable focusable) {
+        if (focusable instanceof IGroupFocus) {
+            ((IGroupFocus) focusable).getGroupFocusHandler().setParentGroupFocusHandler(this);
+        }
+
+        focusable.addFocusHandler(this);
+        focusable.addBlurHandler(this);
+
+    }
+
+    private void setParentGroupFocusHandler(GroupFocusHandler parentGroupFocusHandler) {
+        this.parentGroupFocusHandler = parentGroupFocusHandler;
+    }
+
 }

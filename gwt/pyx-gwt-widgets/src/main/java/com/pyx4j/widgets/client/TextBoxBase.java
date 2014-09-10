@@ -24,10 +24,8 @@ import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.core.client.Scheduler.ScheduledCommand;
 import com.google.gwt.dom.client.Style.Position;
 import com.google.gwt.dom.client.Style.Unit;
-import com.google.gwt.event.dom.client.BlurEvent;
 import com.google.gwt.event.dom.client.BlurHandler;
 import com.google.gwt.event.dom.client.ChangeHandler;
-import com.google.gwt.event.dom.client.FocusEvent;
 import com.google.gwt.event.dom.client.FocusHandler;
 import com.google.gwt.event.dom.client.KeyDownHandler;
 import com.google.gwt.event.dom.client.KeyPressHandler;
@@ -49,7 +47,7 @@ import com.pyx4j.widgets.client.event.shared.PasteEvent;
 import com.pyx4j.widgets.client.event.shared.PasteHandler;
 import com.pyx4j.widgets.client.style.theme.WidgetTheme;
 
-public abstract class TextBoxBase extends Composite implements ITextWidget, HasPasteHandlers, WatermarkComponent {
+public abstract class TextBoxBase extends Composite implements ITextWidget, IGroupFocus, HasPasteHandlers, WatermarkComponent {
 
     private TextWatermark watermark;
 
@@ -63,7 +61,7 @@ public abstract class TextBoxBase extends Composite implements ITextWidget, HasP
 
     private IDebugId debugId;
 
-    private final GroupFocusHandler focusHandlerManager;
+    private final GroupFocusHandler groupFocusHandler;
 
     public TextBoxBase() {
         contentPanel = new FlowPanel();
@@ -79,8 +77,13 @@ public abstract class TextBoxBase extends Composite implements ITextWidget, HasP
 
         initWidget(contentPanel);
 
-        focusHandlerManager = new GroupFocusHandler(this);
+        groupFocusHandler = new GroupFocusHandler(this);
 
+    }
+
+    @Override
+    public GroupFocusHandler getGroupFocusHandler() {
+        return groupFocusHandler;
     }
 
     protected void setTextBoxWidget(com.google.gwt.user.client.ui.TextBoxBase textBoxWidget) {
@@ -95,8 +98,8 @@ public abstract class TextBoxBase extends Composite implements ITextWidget, HasP
 
         textBoxHolder.setWidget(textBoxWidget);
 
-        textBoxWidget.addFocusHandler(focusHandlerManager);
-        textBoxWidget.addBlurHandler(focusHandlerManager);
+        textBoxWidget.addFocusHandler(groupFocusHandler);
+        textBoxWidget.addBlurHandler(groupFocusHandler);
 
     }
 
@@ -127,8 +130,8 @@ public abstract class TextBoxBase extends Composite implements ITextWidget, HasP
 
             actionButton.setStyleName(WidgetTheme.StyleName.TextBoxActionButton.name());
 
-            actionButton.addFocusHandler(focusHandlerManager);
-            actionButton.addBlurHandler(focusHandlerManager);
+            actionButton.addFocusHandler(groupFocusHandler);
+            actionButton.addBlurHandler(groupFocusHandler);
 
             contentPanel.add(actionButton);
 
@@ -260,12 +263,12 @@ public abstract class TextBoxBase extends Composite implements ITextWidget, HasP
 
     @Override
     public HandlerRegistration addFocusHandler(FocusHandler handler) {
-        return focusHandlerManager.addFocusHandler(handler);
+        return groupFocusHandler.addFocusHandler(handler);
     }
 
     @Override
     public HandlerRegistration addBlurHandler(BlurHandler handler) {
-        return focusHandlerManager.addBlurHandler(handler);
+        return groupFocusHandler.addBlurHandler(handler);
     }
 
     @Override

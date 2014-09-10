@@ -20,18 +20,18 @@
  */
 package com.pyx4j.widgets.client.suggest;
 
+import com.google.gwt.core.client.Scheduler;
+import com.google.gwt.core.client.Scheduler.ScheduledCommand;
 import com.google.gwt.event.dom.client.BlurHandler;
 import com.google.gwt.event.dom.client.FocusHandler;
-import com.google.gwt.event.dom.client.HasBlurHandlers;
-import com.google.gwt.event.dom.client.HasFocusHandlers;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.ui.FocusPanel;
-import com.google.gwt.user.client.ui.Focusable;
 
 import com.pyx4j.widgets.client.DropDownPanel;
+import com.pyx4j.widgets.client.IFocusable;
 import com.pyx4j.widgets.client.style.theme.WidgetTheme;
 
-public class PickerPopup<E> extends DropDownPanel implements Focusable, HasFocusHandlers, HasBlurHandlers {
+public class PickerPopup<E> extends DropDownPanel implements IFocusable {
 
     private final ISelectorWidget<E> selectorWidget;
 
@@ -88,9 +88,18 @@ public class PickerPopup<E> extends DropDownPanel implements Focusable, HasFocus
     }
 
     public void pickSelection() {
-        selectorWidget.setSelection(pickerPanel.getSelection());
-        selectorWidget.setFocus(true);
-        hide();
+        if (pickerPanel != null) {
+            selectorWidget.setSelection(pickerPanel.getSelection());
+
+            //Wait for focus to be set on selectorWidget
+            Scheduler.get().scheduleDeferred(new ScheduledCommand() {
+                @Override
+                public void execute() {
+                    selectorWidget.setFocus(true);
+                    hide();
+                }
+            });
+        }
     }
 
     public void refreshSuggestions(String query) {

@@ -72,27 +72,9 @@ public abstract class AbstractSelectorWidget<E> extends Composite implements ISe
 
         focusHandlerManager = new GroupFocusHandler(this);
 
-        viewerPanel.addFocusHandler(focusHandlerManager);
-        viewerPanel.addBlurHandler(focusHandlerManager);
+        focusHandlerManager.addFocusable(viewerPanel);
+        focusHandlerManager.addFocusable(pickerPopup);
 
-        pickerPopup.addFocusHandler(focusHandlerManager);
-        pickerPopup.addBlurHandler(focusHandlerManager);
-
-        addFocusHandler(new FocusHandler() {
-
-            @Override
-            public void onFocus(FocusEvent event) {
-                System.out.println("+++++++++++++AbstractSelectorWidget onFocus");
-            }
-        });
-
-        addBlurHandler(new BlurHandler() {
-
-            @Override
-            public void onBlur(BlurEvent event) {
-                System.out.println("+++++++++++++AbstractSelectorWidget onBlur");
-            }
-        });
     }
 
     protected String getQuery() {
