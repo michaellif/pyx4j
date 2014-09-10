@@ -31,6 +31,7 @@ import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.commons.SimpleMessageFormat;
 import com.pyx4j.commons.UserRuntimeException;
 import com.pyx4j.config.server.ServerSideConfiguration;
+import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.config.server.SystemDateManager;
 import com.pyx4j.entity.core.AttachLevel;
 import com.pyx4j.entity.core.EntityFactory;
@@ -46,6 +47,7 @@ import com.pyx4j.server.mail.MailMessage;
 import com.pyx4j.server.mail.SMTPMailServiceConfig;
 
 import com.propertyvista.biz.ExecutionMonitor;
+import com.propertyvista.biz.occupancy.OccupancyFacade;
 import com.propertyvista.config.VistaDeployment;
 import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.payment.CreditCardInfo;
@@ -54,6 +56,7 @@ import com.propertyvista.domain.payment.PaymentType;
 import com.propertyvista.domain.pmc.Pmc;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
+import com.propertyvista.domain.property.asset.unit.occupancy.AptUnitOccupancySegment;
 import com.propertyvista.domain.security.AuditRecordEventType;
 import com.propertyvista.domain.security.CrmUser;
 import com.propertyvista.domain.security.CrmUserCredential;
@@ -254,6 +257,12 @@ class VistaBusinessStatsReport {
         {
             EntityQueryCriteria<AptUnit> criteria = EntityQueryCriteria.create(AptUnit.class);
             data.unitsCount().setValue(Persistence.service().count(criteria));
+        }
+        {
+            EntityQueryCriteria<AptUnit> criteria = EntityQueryCriteria.create(AptUnit.class);
+            criteria.add(ServerSideFactory.create(OccupancyFacade.class).buildAvalableCriteria(criteria.proto(), AptUnitOccupancySegment.Status.available,
+                    SystemDateManager.getDate(), null));
+            data.occupiedUnits().setValue(Persistence.service().count(criteria));
         }
         {
             EntityQueryCriteria<Customer> criteria = EntityQueryCriteria.create(Customer.class);

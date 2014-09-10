@@ -138,4 +138,6 @@ public interface VistaBusinessStatsPmcModel extends IEntity {
      */
     IPrimitive<Integer> payingLeases();
 
+    IPrimitive<Integer> occupiedUnits();
+
 }
