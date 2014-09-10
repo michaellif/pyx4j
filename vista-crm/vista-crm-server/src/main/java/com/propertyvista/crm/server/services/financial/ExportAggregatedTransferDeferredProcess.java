@@ -145,7 +145,7 @@ public class ExportAggregatedTransferDeferredProcess extends AbstractDeferredPro
         entityFormatter.reportEntity(formatter, model);
 
         ((ReportTableXLSXFormatter) formatter).fillRowBackGround(formatter.getRowCount() - 2, 0, ((ReportTableXLSXFormatter) formatter).getColumnsCount(),
-                IndexedColors.GREY_25_PERCENT, false);
+                IndexedColors.GREY_25_PERCENT);
 
     }
 
