@@ -20,10 +20,8 @@
  */
 package com.pyx4j.widgets.client;
 
-import java.util.Map;
-
 import com.google.gwt.core.client.Scheduler;
-import com.google.gwt.core.client.Scheduler.RepeatingCommand;
+import com.google.gwt.core.client.Scheduler.ScheduledCommand;
 import com.google.gwt.event.dom.client.BlurEvent;
 import com.google.gwt.event.dom.client.BlurHandler;
 import com.google.gwt.event.dom.client.FocusEvent;
@@ -56,7 +54,7 @@ public class GroupFocusHandler extends HandlerManager implements FocusHandler, B
     public void onBlur(final BlurEvent e) {
         focusLost = true;
 
-        Scheduler.get().scheduleDeferred(new Scheduler.ScheduledCommand() {
+        Scheduler.get().scheduleDeferred(new ScheduledCommand() {
 
             @Override
             public void execute() {

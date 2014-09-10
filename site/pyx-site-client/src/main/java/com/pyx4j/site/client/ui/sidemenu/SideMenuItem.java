@@ -48,7 +48,7 @@ import com.pyx4j.widgets.client.images.ButtonImages;
 
 public class SideMenuItem implements ISideMenuNode {
 
-    final ContentPanel contentPanel;
+    private final ContentPanel contentPanel;
 
     private Image icon;
 
@@ -60,7 +60,7 @@ public class SideMenuItem implements ISideMenuNode {
 
     private final ButtonImages images;
 
-    final FlowPanel itemPanel;
+    private final FlowPanel itemPanel;
 
     private SideMenuList parent;
 
@@ -228,4 +228,11 @@ public class SideMenuItem implements ISideMenuNode {
         return label.getText();
     }
 
+    ContentPanel getContentPanel() {
+        return contentPanel;
+    }
+
+    FlowPanel getItemPanel() {
+        return itemPanel;
+    }
 }

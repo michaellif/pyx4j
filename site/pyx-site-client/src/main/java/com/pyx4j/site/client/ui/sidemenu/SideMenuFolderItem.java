@@ -40,12 +40,12 @@ public class SideMenuFolderItem extends SideMenuItem {
         assert submenu != null;
 
         this.submenu = submenu;
-        contentPanel.add(submenu);
+        getContentPanel().add(submenu);
         submenu.setParent(this);
 
         expantionHandler = new Image(SiteImages.INSTANCE.expand());
         expantionHandler.setStyleName(SideMenuTheme.StyleName.SideMenuExpantionHandler.name());
-        itemPanel.add(expantionHandler);
+        getItemPanel().add(expantionHandler);
 
         setCommand(new SideMenuCommand() {
             @Override
