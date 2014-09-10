@@ -24,11 +24,9 @@ import com.pyx4j.widgets.client.IFocusWidget;
 
 public interface ISelectorWidget<E> extends IFocusWidget {
 
-    void setValue(E items);
+    void setSelection(E items);
 
-    E getValue();
-
-    ISelectorValuePanel<E> getViewerPanel();
+    ISelectorValuePanel getViewerPanel();
 
     void resetQuery();
 

@@ -20,7 +20,9 @@
  */
 package com.pyx4j.widgets.client.suggest;
 
+import com.google.gwt.event.dom.client.BlurEvent;
 import com.google.gwt.event.dom.client.BlurHandler;
+import com.google.gwt.event.dom.client.FocusEvent;
 import com.google.gwt.event.dom.client.FocusHandler;
 import com.google.gwt.event.dom.client.KeyCodes;
 import com.google.gwt.event.dom.client.KeyDownEvent;
@@ -31,16 +33,20 @@ import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.ui.Composite;
 
 import com.pyx4j.commons.IDebugId;
+import com.pyx4j.widgets.client.GroupFocusHandler;
+import com.pyx4j.widgets.client.IFocusWidget;
 
-public abstract class AbstractSelectorWidget<E> extends Composite implements ISelectorWidget<E> {
+public abstract class AbstractSelectorWidget<E> extends Composite implements ISelectorWidget<E>, IFocusWidget {
 
-    private final ISelectorValuePanel<E> viewerPanel;
+    private final ISelectorValuePanel viewerPanel;
 
     private final PickerPopup<E> pickerPopup;
 
     private String query = "";
 
-    public AbstractSelectorWidget(final ISelectorValuePanel<E> viewerPanel) {
+    private final GroupFocusHandler focusHandlerManager;
+
+    public AbstractSelectorWidget(final ISelectorValuePanel viewerPanel) {
         this.viewerPanel = viewerPanel;
         initWidget(viewerPanel.asWidget());
         pickerPopup = new PickerPopup<E>(this);
@@ -63,6 +69,30 @@ public abstract class AbstractSelectorWidget<E> extends Composite implements ISe
                 }
             }
         });
+
+        focusHandlerManager = new GroupFocusHandler(this);
+
+        viewerPanel.addFocusHandler(focusHandlerManager);
+        viewerPanel.addBlurHandler(focusHandlerManager);
+
+        pickerPopup.addFocusHandler(focusHandlerManager);
+        pickerPopup.addBlurHandler(focusHandlerManager);
+
+        addFocusHandler(new FocusHandler() {
+
+            @Override
+            public void onFocus(FocusEvent event) {
+                System.out.println("+++++++++++++AbstractSelectorWidget onFocus");
+            }
+        });
+
+        addBlurHandler(new BlurHandler() {
+
+            @Override
+            public void onBlur(BlurEvent event) {
+                System.out.println("+++++++++++++AbstractSelectorWidget onBlur");
+            }
+        });
     }
 
     protected String getQuery() {
@@ -74,7 +104,7 @@ public abstract class AbstractSelectorWidget<E> extends Composite implements ISe
     }
 
     @Override
-    public ISelectorValuePanel<E> getViewerPanel() {
+    public ISelectorValuePanel getViewerPanel() {
         return viewerPanel;
     }
 
@@ -88,12 +118,12 @@ public abstract class AbstractSelectorWidget<E> extends Composite implements ISe
 
     @Override
     public HandlerRegistration addFocusHandler(FocusHandler handler) {
-        return viewerPanel.addFocusHandler(handler);
+        return focusHandlerManager.addFocusHandler(handler);
     }
 
     @Override
     public HandlerRegistration addBlurHandler(BlurHandler handler) {
-        return viewerPanel.addBlurHandler(handler);
+        return focusHandlerManager.addBlurHandler(handler);
     }
 
     @Override

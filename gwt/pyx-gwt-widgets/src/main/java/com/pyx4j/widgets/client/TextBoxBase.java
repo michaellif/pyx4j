@@ -24,6 +24,7 @@ import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.core.client.Scheduler.ScheduledCommand;
 import com.google.gwt.dom.client.Style.Position;
 import com.google.gwt.dom.client.Style.Unit;
+import com.google.gwt.event.dom.client.BlurEvent;
 import com.google.gwt.event.dom.client.BlurHandler;
 import com.google.gwt.event.dom.client.ChangeHandler;
 import com.google.gwt.event.dom.client.FocusEvent;
@@ -62,6 +63,8 @@ public abstract class TextBoxBase extends Composite implements ITextWidget, HasP
 
     private IDebugId debugId;
 
+    private final GroupFocusHandler focusHandlerManager;
+
     public TextBoxBase() {
         contentPanel = new FlowPanel();
         contentPanel.setStyleName(WidgetTheme.StyleName.TextBoxContainer.name());
@@ -75,6 +78,25 @@ public abstract class TextBoxBase extends Composite implements ITextWidget, HasP
         sinkEvents(Event.ONPASTE);
 
         initWidget(contentPanel);
+
+        focusHandlerManager = new GroupFocusHandler(this);
+
+        addFocusHandler(new FocusHandler() {
+
+            @Override
+            public void onFocus(FocusEvent event) {
+                System.out.println("+++++++++++++TextBoxBase onFocus");
+            }
+        });
+
+        addBlurHandler(new BlurHandler() {
+
+            @Override
+            public void onBlur(BlurEvent event) {
+                System.out.println("+++++++++++++TextBoxBase onBlur");
+            }
+        });
+
     }
 
     protected void setTextBoxWidget(com.google.gwt.user.client.ui.TextBoxBase textBoxWidget) {
@@ -88,6 +110,9 @@ public abstract class TextBoxBase extends Composite implements ITextWidget, HasP
         }
 
         textBoxHolder.setWidget(textBoxWidget);
+
+        textBoxWidget.addFocusHandler(focusHandlerManager);
+        textBoxWidget.addBlurHandler(focusHandlerManager);
     }
 
     protected com.google.gwt.user.client.ui.TextBoxBase getTextBoxWidget() {
@@ -103,18 +128,6 @@ public abstract class TextBoxBase extends Composite implements ITextWidget, HasP
         } else {
             actionButton = new Button(imageResource, command) {
 
-                {
-                    setTabIndex(-1);
-
-                    addFocusHandler(new FocusHandler() {
-
-                        @Override
-                        public void onFocus(FocusEvent event) {
-                            textBoxWidget.setFocus(true);
-                        }
-                    });
-                }
-
                 @Override
                 protected void onAttach() {
                     super.onAttach();
@@ -128,6 +141,10 @@ public abstract class TextBoxBase extends Composite implements ITextWidget, HasP
             actionButton.getElement().getStyle().setRight(0, Unit.PX);
 
             actionButton.setStyleName(WidgetTheme.StyleName.TextBoxActionButton.name());
+
+            actionButton.addFocusHandler(focusHandlerManager);
+            actionButton.addBlurHandler(focusHandlerManager);
+
             contentPanel.add(actionButton);
 
             if (this.debugId != null) {
@@ -258,12 +275,12 @@ public abstract class TextBoxBase extends Composite implements ITextWidget, HasP
 
     @Override
     public HandlerRegistration addFocusHandler(FocusHandler handler) {
-        return textBoxWidget.addFocusHandler(handler);
+        return focusHandlerManager.addFocusHandler(handler);
     }
 
     @Override
     public HandlerRegistration addBlurHandler(BlurHandler handler) {
-        return textBoxWidget.addBlurHandler(handler);
+        return focusHandlerManager.addBlurHandler(handler);
     }
 
     @Override

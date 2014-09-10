@@ -23,7 +23,7 @@ package com.pyx4j.widgets.client.suggest;
 import com.pyx4j.commons.IFormatter;
 import com.pyx4j.widgets.client.TextBox;
 
-public class SelectorTextBoxValuePanel<E> extends TextBox implements ISelectorValuePanel<E> {
+public class SelectorTextBoxValuePanel<E> extends TextBox implements ISelectorValuePanel {
 
     private final IFormatter<E, String> valueFormatter;
 
@@ -31,7 +31,6 @@ public class SelectorTextBoxValuePanel<E> extends TextBox implements ISelectorVa
         this.valueFormatter = valueFormatter;
     }
 
-    @Override
     public void showValue(E value) {
         setText(valueFormatter.format(value));
     }

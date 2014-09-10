@@ -29,13 +29,12 @@ import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.Command;
 
 import com.pyx4j.commons.IFormatter;
-import com.pyx4j.widgets.client.IFocusWidget;
 import com.pyx4j.widgets.client.ImageFactory;
 import com.pyx4j.widgets.client.WatermarkComponent;
 import com.pyx4j.widgets.client.event.shared.PasteEvent;
 import com.pyx4j.widgets.client.event.shared.PasteHandler;
 
-public class SelectorTextBox<E> extends AbstractSelectorWidget<E> implements HasValueChangeHandlers<E>, IFocusWidget, WatermarkComponent {
+public class SelectorTextBox<E> extends AbstractSelectorWidget<E> implements HasValueChangeHandlers<E>, WatermarkComponent {
 
     private E value;
 
@@ -48,7 +47,7 @@ public class SelectorTextBox<E> extends AbstractSelectorWidget<E> implements Has
     private final IPickerPanel<E> picker;
 
     public SelectorTextBox(final OptionsGrabber<E> optionsGrabber, IFormatter<E, String> valueFormatter, IFormatter<E, String[]> optionPathFormatter) {
-        super(new SelectorTextBoxValuePanel<E>(valueFormatter));
+        super(new SelectorTextBoxValuePanel(valueFormatter));
         this.valueFormatter = valueFormatter;
         this.optionPathFormatter = optionPathFormatter;
         textBox = (SelectorTextBoxValuePanel<E>) getViewerPanel();
@@ -74,23 +73,27 @@ public class SelectorTextBox<E> extends AbstractSelectorWidget<E> implements Has
         textBox.setAction(new Command() {
             @Override
             public void execute() {
+
                 showEverithingPicker();
             }
         }, ImageFactory.getImages().action());
     }
 
-    @Override
     public void setValue(E value) {
         this.value = value;
         if (value == null) {
             textBox.setText("");
         } else {
             textBox.setText(valueFormatter.format(value));
-            fireValueChangeEvent(value);
         }
     }
 
     @Override
+    public void setSelection(E value) {
+        setValue(value);
+        fireValueChangeEvent(value);
+    }
+
     public E getValue() {
         return value;
     }

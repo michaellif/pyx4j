@@ -20,14 +20,20 @@
  */
 package com.pyx4j.widgets.client;
 
+import java.util.Map;
+
 import com.google.gwt.core.client.Scheduler;
+import com.google.gwt.core.client.Scheduler.RepeatingCommand;
 import com.google.gwt.event.dom.client.BlurEvent;
 import com.google.gwt.event.dom.client.BlurHandler;
 import com.google.gwt.event.dom.client.FocusEvent;
 import com.google.gwt.event.dom.client.FocusHandler;
+import com.google.gwt.event.dom.client.HasBlurHandlers;
+import com.google.gwt.event.dom.client.HasFocusHandlers;
 import com.google.gwt.event.shared.HandlerManager;
+import com.google.gwt.event.shared.HandlerRegistration;
 
-public class GroupFocusHandler extends HandlerManager implements FocusHandler, BlurHandler {
+public class GroupFocusHandler extends HandlerManager implements FocusHandler, BlurHandler, HasFocusHandlers, HasBlurHandlers {
 
     private boolean focusLost = true;
 
@@ -40,7 +46,6 @@ public class GroupFocusHandler extends HandlerManager implements FocusHandler, B
     @Override
     public void onFocus(FocusEvent e) {
         focusLost = false;
-
         if (!groupFocus) {
             groupFocus = true;
             fireEvent(e);
@@ -50,7 +55,8 @@ public class GroupFocusHandler extends HandlerManager implements FocusHandler, B
     @Override
     public void onBlur(final BlurEvent e) {
         focusLost = true;
-        Scheduler.get().scheduleFinally(new Scheduler.ScheduledCommand() {
+
+        Scheduler.get().scheduleDeferred(new Scheduler.ScheduledCommand() {
 
             @Override
             public void execute() {
@@ -61,5 +67,15 @@ public class GroupFocusHandler extends HandlerManager implements FocusHandler, B
             }
         });
 
+    }
+
+    @Override
+    public HandlerRegistration addFocusHandler(FocusHandler focusHandler) {
+        return addHandler(FocusEvent.getType(), focusHandler);
+    }
+
+    @Override
+    public HandlerRegistration addBlurHandler(BlurHandler blurHandler) {
+        return addHandler(BlurEvent.getType(), blurHandler);
     }
 }

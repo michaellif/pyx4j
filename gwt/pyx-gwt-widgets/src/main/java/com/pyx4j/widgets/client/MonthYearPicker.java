@@ -236,12 +236,12 @@ public class MonthYearPicker extends HorizontalPanel implements HasChangeHandler
 
     @Override
     public HandlerRegistration addFocusHandler(FocusHandler focusHandler) {
-        return focusHandlerManager.addHandler(FocusEvent.getType(), focusHandler);
+        return focusHandlerManager.addFocusHandler(focusHandler);
     }
 
     @Override
     public HandlerRegistration addBlurHandler(BlurHandler blurHandler) {
-        return focusHandlerManager.addHandler(BlurEvent.getType(), blurHandler);
+        return focusHandlerManager.addBlurHandler(blurHandler);
     }
 
     @Override
