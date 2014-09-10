@@ -194,6 +194,10 @@ public class ReportTableXLSXFormatter implements ReportTableFormatter {
         this.curentSheet = this.workbook.createSheet(sheetName);
     }
 
+    public int getColumnsCount() {
+        return columnsCount;
+    }
+
     @Override
     public void newRow() {
         if (this.curentSheet == null) {
@@ -445,35 +449,31 @@ public class ReportTableXLSXFormatter implements ReportTableFormatter {
         }
     }
 
-    public void addSeparatorRow(IndexedColors color) {
+    public void fillRowBackGround(int rowNum, int fromCellNo, int toCellNo, IndexedColors color, boolean endRow) {
 
-        for (int i = 0; i < columnsCount; i++) {
-            Cell cell = getCurentRow().createCell(i);
-            CellStyle style = getWorkbook().createCellStyle();
-            style.cloneStyleFrom(cell.getCellStyle());
-            style.setFillForegroundColor(color.getIndex());
-            style.setFillPattern(CellStyle.SOLID_FOREGROUND);
-            cell.setCellStyle(style);
+        if (curentSheet == null)
+            newSheet("Data");
+
+        Row targetRow = curentSheet.getRow(rowNum);
+
+        for (int i = fromCellNo; i < toCellNo; i++) {
+            Cell cell = targetRow.getCell(i);
+            if (cell == null)
+                cell = targetRow.createCell(i);
+            setCellBackGround(color, cell);
         }
 
-        newRow();
+        if (endRow)
+            newRow();
+
     }
 
-    public void fillBackGroundCurrentRow(IndexedColors color) {
-
-        for (int i = 0; i < columnsCount; i++) {
-            Cell cell = getCurentRow().getCell(i);
-            if (cell == null)
-                cell = getCurentRow().createCell(i);
-
-            CellStyle style = getWorkbook().createCellStyle();
-            style.setFillForegroundColor(color.getIndex());
-            style.setFillPattern(CellStyle.SOLID_FOREGROUND);
-            cell.setCellStyle(style);
-        }
-
-        newRow();
-
+    private void setCellBackGround(IndexedColors color, Cell cell) {
+        CellStyle style = getWorkbook().createCellStyle();
+        style.cloneStyleFrom(cell.getCellStyle());
+        style.setFillForegroundColor(color.getIndex());
+        style.setFillPattern(CellStyle.SOLID_FOREGROUND);
+        cell.setCellStyle(style);
     }
 
 }
