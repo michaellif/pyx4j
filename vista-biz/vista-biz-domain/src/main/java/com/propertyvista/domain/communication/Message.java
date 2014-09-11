@@ -44,7 +44,6 @@ public interface Message extends IEntity {
     @MemberColumn(notNull = true)
     CommunicationEndpoint sender();
 
-    @NotNull
     @Length(2048)
     @Editor(type = Editor.EditorType.textarea)
     @ToString(index = 1)

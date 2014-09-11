@@ -46,6 +46,13 @@ public interface MessageDTO extends Message {
     @NotNull
     CommunicationEndpointDTO sender();
 
+    @Override
+    @NotNull
+    @Length(2048)
+    @Editor(type = Editor.EditorType.textarea)
+    @ToString(index = 1)
+    IPrimitive<String> text();
+
     @Detached
     CommunicationEndpointDTO owner();
 

@@ -129,7 +129,7 @@ public class MessagePage extends CPortalEntityForm<MessageDTO> {
             decor.setCaptionFormatter(new IFormatter<MessageDTO, String>() {
                 @Override
                 public String format(MessageDTO value) {
-                    return SimpleMessageFormat.format("{0}, {1}:", value.date(), value.text());
+                    return SimpleMessageFormat.format("{0}, {1}:", value.date(), value.text().getValue(""));
                 }
             });
 
@@ -355,9 +355,9 @@ public class MessagePage extends CPortalEntityForm<MessageDTO> {
         private String buildReplyForwardText(boolean isForward) {
             CFolderItem<MessageDTO> current = (CFolderItem<MessageDTO>) getParent();
             if (isForward) {
-                return current == null ? null : "\nFwd:\n" + current.getValue().text().getValue();
+                return current == null ? null : "\nFwd:\n" + current.getValue().text().getValue("");
             }
-            return current == null ? null : "\nRe:\n" + current.getValue().text().getValue();
+            return current == null ? null : "\nRe:\n" + current.getValue().text().getValue("");
         }
 
         private MessageDTO getCurrent() {

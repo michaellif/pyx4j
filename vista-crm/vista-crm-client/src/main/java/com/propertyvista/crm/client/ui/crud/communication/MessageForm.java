@@ -142,7 +142,7 @@ public class MessageForm extends CrmEntityForm<MessageDTO> {
             decor.setCaptionFormatter(new IFormatter<MessageDTO, String>() {
                 @Override
                 public String format(MessageDTO value) {
-                    return SimpleMessageFormat.format("{0}, {1}:", value.date(), value.text());
+                    return SimpleMessageFormat.format("{0}, {1}:", value.date(), value.text().getValue(""));
                 }
             });
 
@@ -411,7 +411,7 @@ public class MessageForm extends CrmEntityForm<MessageDTO> {
                         MessageDTO currentMessage = getCurrent();
                         messagesFolder.addItem();
                         CFolderItem<MessageDTO> newItem = messagesFolder.getItem(messagesFolder.getItemCount() - 1);
-                        newItem.getValue().text().setValue(currentMessage == null ? null : "\nRe:\n" + currentMessage.text().getValue());
+                        newItem.getValue().text().setValue(currentMessage == null ? null : "\nRe:\n" + currentMessage.text().getValue(""));
 
                         if (!ClientContext.getUserVisit().getName().equals(currentMessage.header().sender().getValue())) {
                             newItem.getValue().to().add(currentMessage.sender());
