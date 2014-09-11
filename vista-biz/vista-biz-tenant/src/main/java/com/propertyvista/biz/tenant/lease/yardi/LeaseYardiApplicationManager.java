@@ -106,8 +106,20 @@ public class LeaseYardiApplicationManager extends LeaseAbstractManager {
 
             return lease;
         } catch (YardiServiceException e) {
-            throw new UserRuntimeException(i18n.tr("Posting Applicants to Yardi failed") + "\n" + e.getMessage(), e);
+            throw new UserRuntimeException(i18n.tr("Yardi Application approval failed") + "\n" + e.getMessage(), e);
         }
+    }
+
+    @Override
+    public void cancelApplication(Lease leaseId, Employee decidedBy, String decisionReason) {
+        // In current flow Lease application in Yardi created only upon approval, so no Yardi cancel is required before that
+        super.cancelApplication(leaseId, decidedBy, decisionReason);
+    }
+
+    @Override
+    public void declineApplication(Lease leaseId, Employee decidedBy, String decisionReason) {
+        // In current flow Lease application in Yardi created only upon approval, so no Yardi decline is required before that
+        super.declineApplication(leaseId, decidedBy, decisionReason);
     }
 
     @Override
@@ -203,7 +215,7 @@ public class LeaseYardiApplicationManager extends LeaseAbstractManager {
 
     @Override
     protected void markUnitOccupied(Lease lease, Status previousStatus) {
-        ServerSideFactory.create(OccupancyFacade.class).unreserveIfReservered(lease);
+        // Do nothing in Yardi mode - unit occupancy state managed by purely by Import procedure!
     }
 
     @Override
