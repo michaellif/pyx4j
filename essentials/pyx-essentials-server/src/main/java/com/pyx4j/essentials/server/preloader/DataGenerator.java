@@ -52,15 +52,21 @@ public class DataGenerator {
 
     private static class GeneratorContext {
 
+        private long seed;
+
         Random random = new Random();
 
         private Map<String, FIFO<Integer>> duplicates;
 
+        private Map<String, Random> randomSequences = new HashMap<>();
+
         private void setRandomSeed(long seed) {
+            this.seed = seed;
             random.setSeed(seed);
             if (duplicates != null) {
                 duplicates.clear();
             }
+            randomSequences.clear();
         }
 
         /**
@@ -91,6 +97,16 @@ public class DataGenerator {
             if (duplicates != null) {
                 duplicates.remove(duplicatesId);
             }
+        }
+
+        public Random random(String randomSequenceId) {
+            Random r = randomSequences.get(randomSequenceId);
+            if (r == null) {
+                r = new Random();
+                r.setSeed(seed);
+                randomSequences.put(randomSequenceId, r);
+            }
+            return r;
         }
     }
 
@@ -123,6 +139,17 @@ public class DataGenerator {
 
     protected static Random random() {
         return generatorLocal.get().random;
+    }
+
+    protected static Random random(String randomSequenceId) {
+        return generatorLocal.get().random(randomSequenceId);
+    }
+
+    /**
+     * Use individual randomSequence.
+     */
+    public static int nextInt(String randomSequenceId, int n) {
+        return random(randomSequenceId).nextInt(n);
     }
 
     public static int nextInt(int n, String duplicatesId, int resultsToRemeber) {
@@ -229,7 +256,7 @@ public class DataGenerator {
     }
 
     /**
-     * 
+     *
      * @param max
      * @param precision
      *            The number of decimal digits in created double
@@ -242,6 +269,15 @@ public class DataGenerator {
 
     public static boolean randomBoolean() {
         return random().nextBoolean();
+    }
+
+    /**
+     * Use individual randomSequence.
+     * Generator will randomly select true N% of the time.
+     */
+    public static boolean randomBoolean(String randomSequenceId, int percentageOfTrue) {
+        int i = random(randomSequenceId).nextInt(100);
+        return (i < percentageOfTrue);
     }
 
     public static <E extends Enum<E>> E randomEnum(Class<E> elementType) {
