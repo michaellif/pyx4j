@@ -27,10 +27,10 @@ import com.pyx4j.commons.Pair;
 import com.pyx4j.commons.css.IStyleDependent;
 import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.widgets.client.CaptchaComposite;
-import com.pyx4j.widgets.client.WatermarkComponent;
+import com.pyx4j.widgets.client.IWatermarkWidget;
 
 public class NCaptcha extends NFocusField<Pair<String, String>, CaptchaComposite, CCaptcha, CaptchaComposite> implements
-        INativeFocusField<Pair<String, String>>, WatermarkComponent {
+        INativeFocusField<Pair<String, String>>, IWatermarkWidget {
 
     public static enum StyleDependent implements IStyleDependent {
         invalid

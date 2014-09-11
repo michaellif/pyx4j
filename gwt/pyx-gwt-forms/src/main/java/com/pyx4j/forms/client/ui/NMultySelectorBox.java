@@ -29,11 +29,11 @@ import com.google.gwt.user.client.ui.HTML;
 import com.pyx4j.commons.IFormatter;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.widgets.client.Label;
-import com.pyx4j.widgets.client.WatermarkComponent;
+import com.pyx4j.widgets.client.IWatermarkWidget;
 import com.pyx4j.widgets.client.suggest.MultyWordSuggestOptionsGrabber;
 import com.pyx4j.widgets.client.suggest.SelectorListBox;
 
-public class NMultySelectorBox<E extends IEntity> extends NFocusField<Collection<E>, SelectorListBox<E>, CMultySelectorBox<E>, HTML> implements WatermarkComponent {
+public class NMultySelectorBox<E extends IEntity> extends NFocusField<Collection<E>, SelectorListBox<E>, CMultySelectorBox<E>, HTML> implements IWatermarkWidget {
 
     private final MultyWordSuggestOptionsGrabber<E> optionsGrabber;
 
@@ -96,15 +96,15 @@ public class NMultySelectorBox<E extends IEntity> extends NFocusField<Collection
 
     @Override
     public void setWatermark(String watermark) {
-        if (getEditor() instanceof WatermarkComponent) {
-            ((WatermarkComponent) getEditor()).setWatermark(watermark);
+        if (getEditor() instanceof IWatermarkWidget) {
+            ((IWatermarkWidget) getEditor()).setWatermark(watermark);
         }
     }
 
     @Override
     public String getWatermark() {
-        if (getEditor() instanceof WatermarkComponent) {
-            return ((WatermarkComponent) getEditor()).getWatermark();
+        if (getEditor() instanceof IWatermarkWidget) {
+            return ((IWatermarkWidget) getEditor()).getWatermark();
         } else {
             return null;
         }

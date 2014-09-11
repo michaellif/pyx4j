@@ -22,7 +22,7 @@ package com.pyx4j.forms.client.ui;
 
 import com.pyx4j.forms.client.validators.AbstractComponentValidator;
 import com.pyx4j.forms.client.validators.BasicValidationError;
-import com.pyx4j.widgets.client.WatermarkComponent;
+import com.pyx4j.widgets.client.IWatermarkWidget;
 
 public abstract class CTextComponent<DATA, WIDGET extends INativeFocusField<DATA>> extends CFocusComponent<DATA, WIDGET> implements IAcceptsWatermark {
 
@@ -43,8 +43,8 @@ public abstract class CTextComponent<DATA, WIDGET extends INativeFocusField<DATA
     @Override
     public void setWatermark(String watermark) {
         this.watermark = watermark;
-        if (asWidget() instanceof WatermarkComponent) {
-            ((WatermarkComponent) asWidget()).setWatermark(watermark);
+        if (asWidget() instanceof IWatermarkWidget) {
+            ((IWatermarkWidget) asWidget()).setWatermark(watermark);
         }
     }
 

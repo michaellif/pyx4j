@@ -14,30 +14,14 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on Sep 28, 2010
- * @author michaellif
+ * Created on Jan 21, 2011
+ * @author vlads
  * @version $Id$
  */
-package com.pyx4j.widgets.client;
+package com.pyx4j.forms.client.ui;
 
-import com.google.gwt.event.dom.client.BlurHandler;
-import com.google.gwt.event.dom.client.FocusHandler;
-import com.google.gwt.event.shared.HandlerRegistration;
+public interface IAcceptsText {
 
-public interface WatermarkComponent {
-
-    HandlerRegistration addFocusHandler(FocusHandler focusHandler);
-
-    HandlerRegistration addBlurHandler(BlurHandler blurHandler);
-
-    boolean isEnabled();
-
-    void addStyleDependentName(String string);
-
-    void removeStyleDependentName(String string);
-
-    void setWatermark(String watermark);
-
-    String getWatermark();
+    public void setValueByString(String name);
 
 }

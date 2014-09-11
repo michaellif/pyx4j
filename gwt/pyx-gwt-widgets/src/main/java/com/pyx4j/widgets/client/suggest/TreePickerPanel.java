@@ -40,7 +40,7 @@ public class TreePickerPanel<E> extends ScrollPanel implements IPickerPanel<E> {
 
     private HandlerRegistration handlerRegistration;
 
-    private final OptionsGrabber<E> optionsGrabber;
+    private final IOptionsGrabber<E> optionsGrabber;
 
     private final IFormatter<E, String> optionsFormatter;
 
@@ -50,7 +50,7 @@ public class TreePickerPanel<E> extends ScrollPanel implements IPickerPanel<E> {
 
     private final PickerTree tree;
 
-    public TreePickerPanel(OptionsGrabber<E> optionsGrabber, IFormatter<E, String> optionsFormatter, IFormatter<E, String[]> optionPathFormatter) {
+    public TreePickerPanel(IOptionsGrabber<E> optionsGrabber, IFormatter<E, String> optionsFormatter, IFormatter<E, String[]> optionPathFormatter) {
         this.optionsGrabber = optionsGrabber;
         this.optionsFormatter = optionsFormatter;
         this.optionPathFormatter = optionPathFormatter;
@@ -87,14 +87,14 @@ public class TreePickerPanel<E> extends ScrollPanel implements IPickerPanel<E> {
 
     @Override
     public void refreshOptions(String query) {
-        OptionsGrabber.Callback<E> callback = new OptionsGrabber.Callback<E>() {
+        IOptionsGrabber.Callback<E> callback = new IOptionsGrabber.Callback<E>() {
             @Override
-            public void onOptionsReady(OptionsGrabber.Request request, OptionsGrabber.Response<E> response) {
+            public void onOptionsReady(IOptionsGrabber.Request request, IOptionsGrabber.Response<E> response) {
                 showOptions(response.getOptions(), request.getQuery());
             }
         };
 
-        optionsGrabber.grabOptions(new OptionsGrabber.Request(query == null ? "" : query, limit), callback);
+        optionsGrabber.grabOptions(new IOptionsGrabber.Request(query == null ? "" : query, limit), callback);
     }
 
     protected void showOptions(Collection<E> options, String query) {

@@ -30,11 +30,11 @@ import com.google.gwt.user.client.Command;
 
 import com.pyx4j.commons.IFormatter;
 import com.pyx4j.widgets.client.ImageFactory;
-import com.pyx4j.widgets.client.WatermarkComponent;
+import com.pyx4j.widgets.client.IWatermarkWidget;
 import com.pyx4j.widgets.client.event.shared.PasteEvent;
 import com.pyx4j.widgets.client.event.shared.PasteHandler;
 
-public class SelectorTextBox<E> extends AbstractSelectorWidget<E> implements HasValueChangeHandlers<E>, WatermarkComponent {
+public class SelectorTextBox<E> extends AbstractSelectorWidget<E> implements HasValueChangeHandlers<E>, IWatermarkWidget {
 
     private E value;
 
@@ -46,7 +46,7 @@ public class SelectorTextBox<E> extends AbstractSelectorWidget<E> implements Has
 
     private final IPickerPanel<E> picker;
 
-    public SelectorTextBox(final OptionsGrabber<E> optionsGrabber, IFormatter<E, String> valueFormatter, IFormatter<E, String[]> optionPathFormatter) {
+    public SelectorTextBox(final IOptionsGrabber<E> optionsGrabber, IFormatter<E, String> valueFormatter, IFormatter<E, String[]> optionPathFormatter) {
         super(new SelectorTextBoxValuePanel(valueFormatter));
         this.valueFormatter = valueFormatter;
         this.optionPathFormatter = optionPathFormatter;

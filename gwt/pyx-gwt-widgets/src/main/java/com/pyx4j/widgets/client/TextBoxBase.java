@@ -47,7 +47,7 @@ import com.pyx4j.widgets.client.event.shared.PasteEvent;
 import com.pyx4j.widgets.client.event.shared.PasteHandler;
 import com.pyx4j.widgets.client.style.theme.WidgetTheme;
 
-public abstract class TextBoxBase extends Composite implements ITextWidget, IGroupFocus, HasPasteHandlers, WatermarkComponent {
+public abstract class TextBoxBase extends Composite implements ITextWidget, IGroupFocus, HasPasteHandlers, IWatermarkWidget {
 
     private TextWatermark watermark;
 

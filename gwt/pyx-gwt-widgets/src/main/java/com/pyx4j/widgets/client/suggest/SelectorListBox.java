@@ -33,11 +33,11 @@ import com.google.gwt.event.shared.HandlerRegistration;
 
 import com.pyx4j.commons.IFormatter;
 import com.pyx4j.widgets.client.IFocusWidget;
-import com.pyx4j.widgets.client.WatermarkComponent;
+import com.pyx4j.widgets.client.IWatermarkWidget;
 import com.pyx4j.widgets.client.event.shared.PasteEvent;
 import com.pyx4j.widgets.client.event.shared.PasteHandler;
 
-public class SelectorListBox<E> extends AbstractSelectorWidget<E> implements HasSelectionHandlers<E>, IFocusWidget, WatermarkComponent {
+public class SelectorListBox<E> extends AbstractSelectorWidget<E> implements HasSelectionHandlers<E>, IFocusWidget, IWatermarkWidget {
 
     private final ArrayList<E> value;
 
@@ -50,7 +50,7 @@ public class SelectorListBox<E> extends AbstractSelectorWidget<E> implements Has
     private final IPickerPanel<E> picker;
 
     @SuppressWarnings("unchecked")
-    public SelectorListBox(final OptionsGrabber<E> optionsGrabber, IFormatter<E, String> valueFormatter, IFormatter<E, String[]> optionPathFormatter) {
+    public SelectorListBox(final IOptionsGrabber<E> optionsGrabber, IFormatter<E, String> valueFormatter, IFormatter<E, String[]> optionPathFormatter) {
         super(new SelectorListBoxValuePanel<E>(valueFormatter));
         this.valueFormatter = valueFormatter;
         this.optionPathFormatter = optionPathFormatter;

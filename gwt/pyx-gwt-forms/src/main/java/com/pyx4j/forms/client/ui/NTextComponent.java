@@ -26,10 +26,10 @@ import com.google.gwt.event.dom.client.KeyDownHandler;
 import com.google.gwt.user.client.ui.HTML;
 
 import com.pyx4j.widgets.client.ITextWidget;
-import com.pyx4j.widgets.client.WatermarkComponent;
+import com.pyx4j.widgets.client.IWatermarkWidget;
 
 public abstract class NTextComponent<DATA, WIDGET extends ITextWidget, CCOMP extends CTextComponent<DATA, ?>> extends NFocusField<DATA, WIDGET, CCOMP, HTML>
-        implements INativeTextComponent<DATA>, WatermarkComponent {
+        implements INativeTextComponent<DATA>, IWatermarkWidget {
 
     public NTextComponent(CCOMP cComponent) {
         super(cComponent);
@@ -74,15 +74,15 @@ public abstract class NTextComponent<DATA, WIDGET extends ITextWidget, CCOMP ext
 
     @Override
     public void setWatermark(String watermark) {
-        if (getEditor() instanceof WatermarkComponent) {
-            ((WatermarkComponent) getEditor()).setWatermark(watermark);
+        if (getEditor() instanceof IWatermarkWidget) {
+            ((IWatermarkWidget) getEditor()).setWatermark(watermark);
         }
     }
 
     @Override
     public String getWatermark() {
-        if (getEditor() instanceof WatermarkComponent) {
-            return ((WatermarkComponent) getEditor()).getWatermark();
+        if (getEditor() instanceof IWatermarkWidget) {
+            return ((IWatermarkWidget) getEditor()).getWatermark();
         } else {
             return null;
         }

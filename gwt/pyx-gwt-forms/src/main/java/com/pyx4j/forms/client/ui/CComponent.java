@@ -764,8 +764,8 @@ public abstract class CComponent<SELF_TYPE extends CComponent<SELF_TYPE, DATA_TY
     }
 
     public void setMockValueByString(String value) {
-        if (this instanceof IAcceptText && isVisible() && isEditable() && isEnabled() && !isViewable() && isValueEmpty()) {
-            ((IAcceptText) this).setValueByString(value);
+        if (this instanceof IAcceptsText && isVisible() && isEditable() && isEnabled() && !isViewable() && isValueEmpty()) {
+            ((IAcceptsText) this).setValueByString(value);
             setVisited(true);
         }
     }

@@ -31,7 +31,7 @@ import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.forms.client.events.HasOptionsChangeHandlers;
 import com.pyx4j.forms.client.events.OptionsChangeEvent;
 import com.pyx4j.forms.client.events.OptionsChangeHandler;
-import com.pyx4j.widgets.client.WatermarkComponent;
+import com.pyx4j.widgets.client.IWatermarkWidget;
 
 public class CMultySelectorBox<E extends IEntity> extends CFocusComponent<Collection<E>, NMultySelectorBox<E>> implements IAcceptsWatermark, HasOptionsChangeHandlers<List<E>> {
 
@@ -100,8 +100,8 @@ public class CMultySelectorBox<E extends IEntity> extends CFocusComponent<Collec
     @Override
     public void setWatermark(String watermark) {
         this.watermark = watermark;
-        if (asWidget() instanceof WatermarkComponent) {
-            ((WatermarkComponent) asWidget()).setWatermark(watermark);
+        if (asWidget() instanceof IWatermarkWidget) {
+            ((IWatermarkWidget) asWidget()).setWatermark(watermark);
         }
     }
 

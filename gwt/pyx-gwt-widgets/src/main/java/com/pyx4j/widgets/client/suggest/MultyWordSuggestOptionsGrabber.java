@@ -27,7 +27,7 @@ import java.util.List;
 
 import com.pyx4j.commons.IFormatter;
 
-public class MultyWordSuggestOptionsGrabber<E> implements OptionsGrabber<E> {
+public class MultyWordSuggestOptionsGrabber<E> implements IOptionsGrabber<E> {
 
     private final IFormatter<E, String> formatter;
 

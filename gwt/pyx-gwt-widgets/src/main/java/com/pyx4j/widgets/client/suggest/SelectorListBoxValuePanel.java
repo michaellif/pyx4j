@@ -34,10 +34,10 @@ import com.google.gwt.user.client.ui.FlowPanel;
 import com.pyx4j.commons.IDebugId;
 import com.pyx4j.commons.IFormatter;
 import com.pyx4j.widgets.client.TextBox;
-import com.pyx4j.widgets.client.WatermarkComponent;
+import com.pyx4j.widgets.client.IWatermarkWidget;
 import com.pyx4j.widgets.client.event.shared.PasteHandler;
 
-public class SelectorListBoxValuePanel<E> extends FlowPanel implements ISelectorValuePanel, WatermarkComponent {
+public class SelectorListBoxValuePanel<E> extends FlowPanel implements ISelectorValuePanel, IWatermarkWidget {
 
     private final IFormatter<E, String> valueFormatter;
 

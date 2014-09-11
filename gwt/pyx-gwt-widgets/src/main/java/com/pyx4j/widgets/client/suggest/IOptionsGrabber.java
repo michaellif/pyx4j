@@ -22,7 +22,7 @@ package com.pyx4j.widgets.client.suggest;
 
 import java.util.Collection;
 
-public interface OptionsGrabber<E> {
+public interface IOptionsGrabber<E> {
 
     public interface Callback<E> {
         void onOptionsReady(Request request, Response<E> response);
