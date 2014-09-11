@@ -307,6 +307,20 @@ SET search_path = '_admin_';
         'tenantSureBusinessReport','Tenant Sure Business Report','allPmc',TRUE,
         DATE_TRUNC('second',current_timestamp)::timestamp);
         
+        INSERT INTO scheduler_trigger(id,trigger_type,name,population_type,
+        schedule_suspended,created) VALUES (nextval('public.scheduler_trigger_seq'),
+        'paymentsReceiveCardsReconciliation','P 8A - Payments Receive Cards Reconciliation from Caledon',
+        'none',TRUE,DATE_TRUNC('second',current_timestamp)::timestamp);
+        
+        INSERT INTO scheduler_trigger(id,trigger_type,name,population_type,
+        schedule_suspended,created) VALUES (nextval('public.scheduler_trigger_seq'),
+        'paymentsProcessCardsReconciliation',
+        'P 8B - Payments Process Cards Reconciliation (auto triggered by paymentsReceiveCardsReconciliation)',
+        'allPmc',TRUE,DATE_TRUNC('second',current_timestamp)::timestamp);
+        
+        
+        
+        
         UPDATE  scheduler_trigger
         SET     schedule_suspended = FALSE
         WHERE   schedule_suspended IS NULL;
