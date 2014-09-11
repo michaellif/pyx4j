@@ -25,6 +25,7 @@ import com.yardi.entity.leaseapp30.LeaseApplication;
 import com.propertyvista.biz.system.yardi.YardiInterfaceNotConfiguredException;
 import com.propertyvista.biz.system.yardi.YardiPropertyNoAccessException;
 import com.propertyvista.biz.system.yardi.YardiProspectNotEditableException;
+import com.propertyvista.biz.system.yardi.YardiProspectNotFoundException;
 import com.propertyvista.biz.system.yardi.YardiResponseException;
 import com.propertyvista.biz.system.yardi.YardiServiceException;
 import com.propertyvista.domain.settings.PmcYardiCredential;
@@ -166,7 +167,7 @@ class YardiILSGuestCardStubProxy extends YardiAbstractStubProxy implements Yardi
                 @Override
                 public boolean handle(Messages messages) throws YardiServiceException {
                     if (messages.hasErrorMessage(YardiHandledErrorMessages.errorMessage_GuestNotFound)) {
-                        return true;
+                        throw new YardiProspectNotFoundException(messages.getErrorMessage().getValue());
                     } else if (messages.hasErrorMessage(YardiHandledErrorMessages.errorMessage_NoAccess)) {
                         throw new YardiPropertyNoAccessException(messages.getErrorMessage().getValue());
                     }

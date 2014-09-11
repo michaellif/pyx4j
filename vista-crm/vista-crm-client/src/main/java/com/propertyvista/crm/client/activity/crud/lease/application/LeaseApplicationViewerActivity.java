@@ -156,6 +156,14 @@ public class LeaseApplicationViewerActivity extends LeaseViewerActivityBase<Leas
                         }
                         populate();
                     }
+
+                    @Override
+                    public void onDeferredError(DeferredProcessProgressResponse result) {
+                        super.onDeferredError(result);
+                        if (action.action().getValue() == Action.Approve) {
+                            populate();
+                        }
+                    }
                 };
                 d.show();
                 d.startProgress(deferredCorrelationId);

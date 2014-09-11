@@ -423,6 +423,10 @@ public class LeaseApplicationViewerViewImpl extends LeaseViewerViewImplBase<Leas
         termsButton.setVisible(!status.isDraft());
 
         documentsButton.setVisible(status.isDraft());
+
+        if (value.isYardiApproved().getValue(false)) {
+            // TODO - valdL: disable holdUnit/releaseUnit/decline and cancel(?)
+        }
     }
 
     private abstract class ActionBox extends ReasonBox {

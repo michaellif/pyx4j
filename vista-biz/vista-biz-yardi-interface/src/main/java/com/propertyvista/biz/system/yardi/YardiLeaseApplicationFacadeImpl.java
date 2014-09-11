@@ -20,6 +20,8 @@ import org.apache.commons.collections4.CollectionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.yardi.entity.guestcard40.EventTypes;
+
 import com.pyx4j.commons.Key;
 import com.pyx4j.commons.UserRuntimeException;
 import com.pyx4j.commons.Validate;
@@ -216,6 +218,22 @@ public class YardiLeaseApplicationFacadeImpl extends AbstractYardiFacadeImpl imp
     }
 
     @Override
+    public boolean isLeaseSigned(Lease leaseId) throws YardiServiceException {
+        final Lease lease = ServerSideFactory.create(LeaseFacade.class).load(leaseId, false);
+        Persistence.ensureRetrieve(lease.unit().building(), AttachLevel.ToStringMembers);
+        validateApplicationAcceptance(lease.unit().building());
+
+        try {
+            boolean leaseSigned = YardiGuestManagementService.getInstance().getWorkflowEvents(getPmcYardiCredential(lease), lease)
+                    .contains(EventTypes.LEASE_SIGN);
+            log.info("Lease application {} is {} editable", lease.leaseApplication().yardiApplicationId(), leaseSigned ? "not" : "still");
+            return !leaseSigned;
+        } catch (RemoteException e) {
+            throw new UserRuntimeException("Yardi communication error: " + e.getMessage(), e);
+        }
+    }
+
+    @Override
     public void validateApplicationAcceptance(Building buildingId) throws UserRuntimeException {
         Building building = Persistence.service().retrieve(Building.class, buildingId.getPrimaryKey());
         PmcYardiCredential yc = getPmcYardiCredential(building);
@@ -227,5 +245,4 @@ public class YardiLeaseApplicationFacadeImpl extends AbstractYardiFacadeImpl imp
             throw new UserRuntimeException("Yardi communication error: " + e.getMessage(), e);
         }
     }
-
 }

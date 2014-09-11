@@ -36,6 +36,9 @@ import com.pyx4j.security.shared.SecurityController;
 
 import com.propertyvista.biz.communication.CommunicationFacade;
 import com.propertyvista.biz.financial.billing.BillingFacade;
+import com.propertyvista.biz.system.yardi.YardiLeaseApplicationFacade;
+import com.propertyvista.biz.system.yardi.YardiProspectNotFoundException;
+import com.propertyvista.biz.system.yardi.YardiServiceException;
 import com.propertyvista.biz.tenant.OnlineApplicationFacade;
 import com.propertyvista.biz.tenant.ScreeningFacade;
 import com.propertyvista.biz.tenant.lease.LeaseFacade;
@@ -111,6 +114,21 @@ public class LeaseApplicationViewerCrudServiceImpl extends LeaseViewerCrudServic
                 ServerSideFactory.create(OnlineApplicationFacade.class).calculateOnlineApplicationStatus(to.leaseApplication().onlineApplication()));
 
         loadLeaseApplicationDocuments(to);
+
+        // indicates whether lease editing is still possible
+        if (Status.PendingDecision.equals(to.leaseApplication().status().getValue()) && VistaFeatures.instance().yardiIntegration()) {
+            try {
+                to.isYardiApproved().setValue(ServerSideFactory.create(YardiLeaseApplicationFacade.class).isLeaseSigned(lease));
+            } catch (YardiProspectNotFoundException pnf) {
+                // no lease in yardi yet
+                to.isYardiApproved().setValue(false);
+            } catch (YardiServiceException e) {
+                throw new UserRuntimeException(e.getMessage(), e);
+            }
+        } else {
+            to.isYardiApproved().setValue(false);
+        }
+
     }
 
     private void enhanceRetrievedCommon(Lease in, LeaseApplicationDTO dto) {

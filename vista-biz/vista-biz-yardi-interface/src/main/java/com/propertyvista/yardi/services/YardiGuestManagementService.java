@@ -395,6 +395,14 @@ public class YardiGuestManagementService extends YardiAbstractService {
         }
     }
 
+    public Set<EventTypes> getWorkflowEvents(PmcYardiCredential yc, Lease lease) throws YardiServiceException, RemoteException {
+        Persistence.ensureRetrieve(lease.unit().building(), AttachLevel.Attached);
+        String propertyCode = lease.unit().building().propertyCode().getValue();
+        String guestId = lease.getPrimaryKey().toString();
+
+        return getEvents(yc, propertyCode, guestId);
+    }
+
     /**
      * Check for Deposit charge code mapping
      * - get list of configured charge codes for GuestCard service (use GetAttachmentTypesAndChargeCodes)
@@ -493,9 +501,6 @@ public class YardiGuestManagementService extends YardiAbstractService {
 
     private String getTenantId(PmcYardiCredential yc, String propertyCode, String guestId, IdentityType type) throws YardiServiceException, RemoteException {
         LeadManagement guestActivity = YardiStubFactory.create(YardiILSGuestCardStub.class).findGuest(yc, propertyCode, guestId);
-        if (guestActivity == null || guestActivity.getProspects().getProspect().size() != 1) {
-            throw new YardiServiceException(SimpleMessageFormat.format("Prospect not found: {0}", guestId));
-        }
         Prospect p = guestActivity.getProspects().getProspect().get(0);
         for (Customer c : p.getCustomers().getCustomer()) {
             String tpId = null, tId = null;
@@ -515,9 +520,6 @@ public class YardiGuestManagementService extends YardiAbstractService {
 
     private Set<EventTypes> getEvents(PmcYardiCredential yc, String propertyCode, String guestId) throws YardiServiceException, RemoteException {
         LeadManagement guestActivity = YardiStubFactory.create(YardiILSGuestCardStub.class).findGuest(yc, propertyCode, guestId);
-        if (guestActivity == null || guestActivity.getProspects().getProspect().size() != 1) {
-            throw new YardiServiceException(SimpleMessageFormat.format("Prospect not found: {0}", guestId));
-        }
         Set<EventTypes> result = new HashSet<>();
         Prospect p = guestActivity.getProspects().getProspect().get(0);
         for (EventType c : p.getEvents().getEvent()) {
@@ -530,9 +532,6 @@ public class YardiGuestManagementService extends YardiAbstractService {
         Key tenantId = lease.getPrimaryKey();
         LeadManagement guestActivity = YardiStubFactory.create(YardiILSGuestCardStub.class).findGuest(yc, lease.unit().building().propertyCode().getValue(),
                 tenantId.toString());
-        if (guestActivity.getProspects().getProspect().size() != 1) {
-            throw new YardiServiceException(SimpleMessageFormat.format("Prospect not found: {0}", tenantId));
-        }
         Map<Key, String> participants = new HashMap<Key, String>();
         Prospect p = guestActivity.getProspects().getProspect().get(0);
         boolean tenantFound = false;
