@@ -46,7 +46,7 @@ public class LeaseAdjustmentPolicyForm extends PolicyDTOTabPanelBasedForm<LeaseA
 
     private IsWidget createItemsPanel() {
         FormPanel formPanel = new FormPanel(this);
-        formPanel.append(Location.Left, proto().policyItems(), new LeaseAdjustmentPolicyItemFolder(isEditable()));
+        formPanel.append(Location.Dual, proto().policyItems(), new LeaseAdjustmentPolicyItemFolder(isEditable()));
         return formPanel;
     }
 
@@ -98,7 +98,7 @@ public class LeaseAdjustmentPolicyForm extends PolicyDTOTabPanelBasedForm<LeaseA
                 get(proto().code()).setEditable(false);
 
                 formPanel.h3(proto().taxes().getMeta().getCaption());
-                formPanel.append(Location.Left, proto().taxes(), new TaxFolder(LeaseAdjustmentPolicyForm.this));
+                formPanel.append(Location.Dual, proto().taxes(), new TaxFolder(LeaseAdjustmentPolicyForm.this));
 
                 return formPanel;
             }
