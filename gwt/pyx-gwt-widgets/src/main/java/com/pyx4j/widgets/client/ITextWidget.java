@@ -24,8 +24,6 @@ import com.google.gwt.event.dom.client.ChangeHandler;
 import com.google.gwt.event.dom.client.HasAllKeyHandlers;
 import com.google.gwt.event.shared.HandlerRegistration;
 
-import com.pyx4j.widgets.client.event.shared.HasPasteHandlers;
-
 public interface ITextWidget extends IFocusWidget, HasAllKeyHandlers {
 
     String getText();

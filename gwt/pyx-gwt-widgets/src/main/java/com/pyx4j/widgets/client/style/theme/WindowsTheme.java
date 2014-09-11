@@ -29,7 +29,6 @@ import com.pyx4j.commons.css.Style;
 import com.pyx4j.commons.css.Theme;
 import com.pyx4j.commons.css.ThemeColor;
 import com.pyx4j.commons.css.ThemeId;
-import com.pyx4j.widgets.client.ImageFactory;
 import com.pyx4j.widgets.client.datepicker.images.DatePickerImages;
 
 public class WindowsTheme extends Theme {
