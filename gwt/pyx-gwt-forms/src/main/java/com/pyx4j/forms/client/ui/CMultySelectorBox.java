@@ -20,7 +20,6 @@
  */
 package com.pyx4j.forms.client.ui;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -32,19 +31,22 @@ import com.pyx4j.forms.client.events.HasOptionsChangeHandlers;
 import com.pyx4j.forms.client.events.OptionsChangeEvent;
 import com.pyx4j.forms.client.events.OptionsChangeHandler;
 import com.pyx4j.widgets.client.IWatermarkWidget;
+import com.pyx4j.widgets.client.suggest.IOptionsGrabber;
 
-public class CMultySelectorBox<E extends IEntity> extends CFocusComponent<Collection<E>, NMultySelectorBox<E>> implements IAcceptsWatermark, HasOptionsChangeHandlers<List<E>> {
+public class CMultySelectorBox<E extends IEntity> extends CFocusComponent<Collection<E>, NMultySelectorBox<E>> implements IAcceptsWatermark,
+        HasOptionsChangeHandlers<List<E>> {
 
     private String watermark;
 
     private IFormatter<E, String> formatter;
 
-    private List<E> options = new ArrayList<E>();
-
     private IFormatter<E, String[]> optionPathFormatter;
 
-    public CMultySelectorBox() {
+    private final IOptionsGrabber<E> optionsGrabber;
+
+    public CMultySelectorBox(IOptionsGrabber<E> optionsGrabber) {
         super();
+        this.optionsGrabber = optionsGrabber;
 
         setOptionPathFormatter(new IFormatter<E, String[]>() {
 
@@ -90,11 +92,8 @@ public class CMultySelectorBox<E extends IEntity> extends CFocusComponent<Collec
         return addHandler(handler, OptionsChangeEvent.getType());
     }
 
-    public void setOptions(Collection<E> opt) {
-        this.options = new ArrayList<E>(opt);
-        if (getNativeComponent() != null) {
-            getNativeComponent().processOptions(options);
-        }
+    public IOptionsGrabber<E> getOptionsGrabber() {
+        return optionsGrabber;
     }
 
     @Override

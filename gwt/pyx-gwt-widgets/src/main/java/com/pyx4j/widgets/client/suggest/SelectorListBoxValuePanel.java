@@ -33,38 +33,38 @@ import com.google.gwt.user.client.ui.FlowPanel;
 
 import com.pyx4j.commons.IDebugId;
 import com.pyx4j.commons.IFormatter;
-import com.pyx4j.widgets.client.TextBox;
 import com.pyx4j.widgets.client.IWatermarkWidget;
+import com.pyx4j.widgets.client.TextBox;
 import com.pyx4j.widgets.client.event.shared.PasteHandler;
 
 public class SelectorListBoxValuePanel<E> extends FlowPanel implements ISelectorValuePanel, IWatermarkWidget {
 
     private final IFormatter<E, String> valueFormatter;
 
-    private final  TextBox textBox;
+    private final TextBox textBox;
+
+    private final FlowPanel selectedCells;
+
+    private SelectorListBox<E> parent;
 
     public SelectorListBoxValuePanel(IFormatter<E, String> valueFormatter) {
-        this.valueFormatter = valueFormatter;
+        FlowPanel panel = new FlowPanel();
 
+        this.valueFormatter = valueFormatter;
+        this.selectedCells = new FlowPanel();
         textBox = new TextBox();
-        add(textBox);
+
+        panel.add(selectedCells);
+        panel.add(textBox);
+        this.add(panel);
     }
 
-
-    public void showValue(Collection<E> value){
-        StringBuffer textBoxValue = new StringBuffer();
-
-        //TODO: check if is enabled
-
-        for(E val : value){
-            if(textBoxValue.length()==0){
-                textBoxValue.append(valueFormatter.format(val));
-            }else{
-                textBoxValue.append(",").append(valueFormatter.format(val));
-            }
+    public void showValue(Collection<E> values) {
+        this.selectedCells.clear();
+        for (E val : values) {
+            this.selectedCells.add(new ItemHolder<E>(this, val, valueFormatter.format(val)));
         }
-        textBox.setText(textBoxValue.toString());
-
+        textBox.setText("");
     }
 
     @Override
@@ -72,19 +72,16 @@ public class SelectorListBoxValuePanel<E> extends FlowPanel implements ISelector
         return textBox.getText();
     }
 
-
     @Override
     public void setEnabled(boolean enabled) {
         // TODO Auto-generated method stub
 
     }
 
-
     @Override
     public boolean isEnabled() {
         return textBox.isEnabled();
     }
-
 
     @Override
     public void setEditable(boolean editable) {
@@ -92,24 +89,20 @@ public class SelectorListBoxValuePanel<E> extends FlowPanel implements ISelector
 
     }
 
-
     @Override
     public boolean isEditable() {
         return textBox.isEditable();
     }
-
 
     @Override
     public void setDebugId(IDebugId debugId) {
         textBox.setDebugId(debugId);
     }
 
-
     @Override
     public int getTabIndex() {
         return textBox.getTabIndex();
     }
-
 
     @Override
     public void setAccessKey(char key) {
@@ -117,12 +110,10 @@ public class SelectorListBoxValuePanel<E> extends FlowPanel implements ISelector
 
     }
 
-
     @Override
     public void setFocus(boolean focused) {
         textBox.setFocus(focused);
     }
-
 
     @Override
     public void setTabIndex(int index) {
@@ -130,42 +121,35 @@ public class SelectorListBoxValuePanel<E> extends FlowPanel implements ISelector
 
     }
 
-
     @Override
     public HandlerRegistration addFocusHandler(FocusHandler handler) {
         return textBox.addFocusHandler(handler);
     }
-
 
     @Override
     public HandlerRegistration addBlurHandler(BlurHandler handler) {
         return textBox.addBlurHandler(handler);
     }
 
-
     @Override
     public HandlerRegistration addKeyUpHandler(KeyUpHandler handler) {
         return textBox.addKeyUpHandler(handler);
     }
-
 
     @Override
     public HandlerRegistration addKeyDownHandler(KeyDownHandler handler) {
         return textBox.addKeyDownHandler(handler);
     }
 
-
     @Override
     public HandlerRegistration addKeyPressHandler(KeyPressHandler handler) {
         return textBox.addKeyPressHandler(handler);
     }
 
-
     @Override
     public HandlerRegistration addValueChangeHandler(ValueChangeHandler<String> handler) {
         return textBox.addValueChangeHandler(handler);
     }
-
 
     @Override
     public void setWatermark(String watermark) {
@@ -173,16 +157,25 @@ public class SelectorListBoxValuePanel<E> extends FlowPanel implements ISelector
 
     }
 
-
     @Override
     public String getWatermark() {
         return textBox.getWatermark();
     }
 
-
-
     public HandlerRegistration addPasteHandler(PasteHandler handler) {
         return null;
+    }
+
+    public void setText(String value) {
+        textBox.setText(value);
+    }
+
+    public final void removeItem(E item) {
+        this.parent.removeItem(item);
+    }
+
+    public void setParent(SelectorListBox<E> parent) {
+        this.parent = parent;
     }
 
 }

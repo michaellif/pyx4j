@@ -22,34 +22,20 @@ package com.pyx4j.forms.client.ui;
 
 import java.text.ParseException;
 import java.util.Collection;
-import java.util.Comparator;
 
 import com.google.gwt.user.client.ui.HTML;
 
 import com.pyx4j.commons.IFormatter;
 import com.pyx4j.entity.core.IEntity;
-import com.pyx4j.widgets.client.Label;
 import com.pyx4j.widgets.client.IWatermarkWidget;
-import com.pyx4j.widgets.client.suggest.MultyWordSuggestOptionsGrabber;
+import com.pyx4j.widgets.client.Label;
 import com.pyx4j.widgets.client.suggest.SelectorListBox;
 
-public class NMultySelectorBox<E extends IEntity> extends NFocusField<Collection<E>, SelectorListBox<E>, CMultySelectorBox<E>, HTML> implements IWatermarkWidget {
-
-    private final MultyWordSuggestOptionsGrabber<E> optionsGrabber;
+public class NMultySelectorBox<E extends IEntity> extends NFocusField<Collection<E>, SelectorListBox<E>, CMultySelectorBox<E>, HTML> implements
+        IWatermarkWidget {
 
     public NMultySelectorBox(final CMultySelectorBox<E> cSuggestBox) {
         super(cSuggestBox);
-        optionsGrabber = new MultyWordSuggestOptionsGrabber<E>(getCComponent().getFormatter());
-        optionsGrabber.setComparator(new Comparator<E>() {
-            @Override
-            public int compare(E paramT1, E paramT2) {
-                return paramT1.getStringView().compareTo(paramT2.getStringView());
-            }
-        });
-    }
-
-    void processOptions(Collection<E> options) {
-        optionsGrabber.setAllOptions(options);
     }
 
     @Override
@@ -59,7 +45,7 @@ public class NMultySelectorBox<E extends IEntity> extends NFocusField<Collection
 
     @Override
     protected SelectorListBox<E> createEditor() {
-        return new SelectorListBox<E>(optionsGrabber, new IFormatter<E, String>() {
+        return new SelectorListBox<E>(getCComponent().getOptionsGrabber(), new IFormatter<E, String>() {
 
             @Override
             public String format(E value) {
@@ -78,9 +64,18 @@ public class NMultySelectorBox<E extends IEntity> extends NFocusField<Collection
     public void setNativeValue(Collection<E> value) {
         if (isViewable()) {
             //TODO:implement
-//            getViewer().setText(getCComponent().getFormatter().format(value));
+            StringBuilder text = new StringBuilder();
+            for (E val : value) {
+                if (text.length() == 0) {
+                    text.append(getCComponent().getFormatter().format(val));
+                } else {
+                    text.append(",").append(getCComponent().getFormatter().format(val));
+                }
+            }
+            getViewer().setText(text.toString());
         } else {
-            getEditor().setValue(value);
+            //TODO :
+            //getEditor().setValue(value);
         }
     }
 
@@ -90,7 +85,7 @@ public class NMultySelectorBox<E extends IEntity> extends NFocusField<Collection
             assert false : "getNativeValue() shouldn't be called in viewable mode";
             return null;
         } else {
-            return getEditor().getValue();
+            return getEditor().getValues();
         }
     }
 
