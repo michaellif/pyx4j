@@ -46,8 +46,6 @@ public class CrmRoleForm extends CrmEntityForm<CrmRole> {
 
     private static final I18n i18n = I18n.get(CrmRoleForm.class);
 
-    private boolean prevTwoStepVerificationValue;
-
     public CrmRoleForm(IForm<CrmRole> view) {
         super(CrmRole.class, view);
 
@@ -87,12 +85,11 @@ public class CrmRoleForm extends CrmEntityForm<CrmRole> {
                 break;
             }
         }
+
         if (hasEquifax) {
-            prevTwoStepVerificationValue = getValue().requireTwoStepVerificationOnLogin().getValue(false);
             get(proto().requireTwoStepVerificationOnLogin()).setValue(true);
             get(proto().requireTwoStepVerificationOnLogin()).setEditable(false);
         } else {
-            get(proto().requireTwoStepVerificationOnLogin()).setValue(prevTwoStepVerificationValue);
             get(proto().requireTwoStepVerificationOnLogin()).setEditable(true);
         }
     }
