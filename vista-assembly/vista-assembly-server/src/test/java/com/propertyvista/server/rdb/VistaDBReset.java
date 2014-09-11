@@ -43,6 +43,7 @@ import com.propertyvista.operations.server.preloader.VistaOperationsDataPreloade
 import com.propertyvista.portal.server.preloader.PmcCreatorDev;
 import com.propertyvista.server.config.VistaServerSideConfiguration;
 import com.propertyvista.server.config.VistaServerSideConfigurationDev;
+import com.propertyvista.server.config.VistaServerSideConfigurationDevHSQL;
 import com.propertyvista.server.config.VistaServerSideConfigurationDevPostgreSQL;
 
 public class VistaDBReset {
@@ -57,6 +58,9 @@ public class VistaDBReset {
         if (arguments.contains("--postgre")) {
             log.info("Use PostgreSQL");
             conf = new VistaServerSideConfigurationDevPostgreSQL();
+        } else if (arguments.contains("--hsql")) {
+            log.info("Use HSQL");
+            conf = new VistaServerSideConfigurationDevHSQL();
         } else {
             log.info("Use MySQL");
             conf = new VistaServerSideConfigurationDev();

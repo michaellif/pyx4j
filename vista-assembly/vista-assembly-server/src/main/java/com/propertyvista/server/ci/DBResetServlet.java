@@ -42,6 +42,7 @@ import com.pyx4j.entity.cache.CacheService;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.core.criterion.PropertyCriterion;
 import com.pyx4j.entity.rdb.EntityPersistenceServiceRDB;
+import com.pyx4j.entity.rdb.IEntityPersistenceServiceRDB;
 import com.pyx4j.entity.rdb.RDBUtils;
 import com.pyx4j.entity.rdb.cfg.Configuration.DatabaseType;
 import com.pyx4j.entity.rdb.cfg.Configuration.MultitenancyType;
@@ -448,7 +449,7 @@ public class DBResetServlet extends HttpServlet {
                 } finally {
                     DataGenerator.cleanup();
                     CacheService.reset();
-                    log.warn("DBReset compleated from ip:{}, {}", ServerContext.getRequestRemoteAddr(),
+                    log.warn("DBReset completed from ip:{}, {}", ServerContext.getRequestRemoteAddr(),
                             DevSession.getSession().getAttribute(DevelopmentSecurity.OPENID_USER_EMAIL_ATTRIBUTE));
                 }
             }
@@ -463,7 +464,9 @@ public class DBResetServlet extends HttpServlet {
         NamespaceManager.setNamespace(VistaNamespace.operationsNamespace);
         try {
             CacheService.resetAll();
-            RDBUtils.resetSchema(pmc);
+            if (((IEntityPersistenceServiceRDB) Persistence.service()).getMultitenancyType() == MultitenancyType.SeparateSchemas) {
+                RDBUtils.resetSchema(pmc);
+            }
             Persistence.service().commit();
         } finally {
             NamespaceManager.setNamespace(requestNamespace);
