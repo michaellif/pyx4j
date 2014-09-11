@@ -155,7 +155,7 @@ public class ExtendedRichTextToolbar extends Composite {
 
         @Override
         public void onBlur(BlurEvent event) {
-            richText.setFocus(true);
+//            richText.setFocus(true);
         }
     }
 
