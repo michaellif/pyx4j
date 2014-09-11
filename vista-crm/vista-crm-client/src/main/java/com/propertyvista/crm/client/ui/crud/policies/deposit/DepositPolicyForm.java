@@ -35,8 +35,8 @@ public class DepositPolicyForm extends PolicyDTOTabPanelBasedForm<DepositPolicyD
     private IsWidget createItemsPanel() {
         FormPanel formPanel = new FormPanel(this);
 
-        formPanel.append(Location.Left, proto().annualInterestRate()).decorate();
-        formPanel.append(Location.Left, proto().securityDepositRefundWindow()).decorate();
+        formPanel.append(Location.Left, proto().annualInterestRate()).decorate().labelWidth(200).componentWidth(50);
+        formPanel.append(Location.Left, proto().securityDepositRefundWindow()).decorate().labelWidth(200).componentWidth(50);
 
         return formPanel;
     }

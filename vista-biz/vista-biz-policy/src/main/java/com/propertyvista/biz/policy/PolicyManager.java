@@ -45,7 +45,6 @@ import com.propertyvista.shared.config.VistaFeatures;
 class PolicyManager {
 
     // TODO keep this in some kind of "PoliciesHeriarchy" class, pass as dependency in the constructor
-    @SuppressWarnings("unchecked")
     private static final List<Class<? extends PolicyNode>> HIERARCHY = Arrays.asList(AptUnit.class, Floorplan.class, Building.class, Complex.class,
             ProvincePolicyNode.class, CountryPolicyNode.class, OrganizationPoliciesNode.class);
 

@@ -54,6 +54,8 @@ public abstract class GenericPolicyCrudService<POLICY extends Policy, POLICY_DTO
 
         setLowestNodeType(policyDTO);
 
+        policyDTO.node().set(EntityFactory.create(OrganizationPoliciesNode.class));
+
         return policyDTO;
     }
 

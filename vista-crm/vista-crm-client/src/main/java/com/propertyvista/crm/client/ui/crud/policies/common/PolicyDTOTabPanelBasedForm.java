@@ -26,8 +26,6 @@ import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.entity.core.EntityFactory;
-import com.pyx4j.forms.client.events.PropertyChangeEvent;
-import com.pyx4j.forms.client.events.PropertyChangeHandler;
 import com.pyx4j.forms.client.ui.CComboBox;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEntityComboBox;
@@ -35,6 +33,9 @@ import com.pyx4j.forms.client.ui.CField;
 import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.forms.client.ui.panels.FormPanel;
+import com.pyx4j.forms.client.validators.AbstractComponentValidator;
+import com.pyx4j.forms.client.validators.AbstractValidationError;
+import com.pyx4j.forms.client.validators.BasicValidationError;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.prime.form.IForm;
 
@@ -50,8 +51,6 @@ public abstract class PolicyDTOTabPanelBasedForm<POLICY_DTO extends PolicyDTOBas
 
     private static final I18n i18n = I18n.get(PolicyDTOTabPanelBasedForm.class);
 
-    private CComboBox<NodeType> selectPolicyScopeBox;
-
     @SuppressWarnings({ "unchecked", "rawtypes" })
     // This list MUST be ordered in descending order by the NodeType hierarchy
     private static final List<NodeType> AVAILABLE_NODE_TYPES = Arrays.asList( //
@@ -61,70 +60,35 @@ public abstract class PolicyDTOTabPanelBasedForm<POLICY_DTO extends PolicyDTOBas
             new NodeType.Builder(Building.class).build() //
             );
 
+    @SuppressWarnings("rawtypes")
+    private final CComboBox<NodeType> selectPolicyScopeBox = new CComboBox<NodeType>(true);
+
     public PolicyDTOTabPanelBasedForm(Class<POLICY_DTO> policyDTOClass, final IForm<POLICY_DTO> view) {
         super(policyDTOClass, view);
 
-        selectTab(addTab(createScopeTab(), i18n.tr("Scope")));
+        selectPolicyScopeBox.setViewable(isViewable());
 
+        selectTab(addTab(createScopeTab(), i18n.tr("Scope")));
     }
 
+    @SuppressWarnings("rawtypes")
     private IsWidget createScopeTab() {
         FormPanel formPanel = new FormPanel(this);
 
-        selectPolicyScopeBox = new CComboBox<NodeType>();
-        selectPolicyScopeBox.setMandatory(true);
-        selectPolicyScopeBox.setOptions(AVAILABLE_NODE_TYPES);
+        formPanel.append(Location.Dual, selectPolicyScopeBox).decorate().componentWidth(200).customLabel(i18n.tr("Scope"));
+        formPanel.append(Location.Dual, proto().node(), new PolicyNodeEditor());
+
         // add value change handler that resets the node when node type is changed
         selectPolicyScopeBox.addValueChangeHandler(new ValueChangeHandler<NodeType>() {
             @Override
             public void onValueChange(ValueChangeEvent<NodeType> event) {
                 if (event.getValue() != null) {
-                    // disable node selector if it's a root node (Organization/PMC)
+                    @SuppressWarnings("unchecked")
                     Class<? extends PolicyNode> selectedNodeType = event.getValue().getType();
-                    boolean isOrganizationPoliciesNodeSelected = selectedNodeType.equals(OrganizationPoliciesNode.class);
-                    get(proto().node()).setVisible(!isOrganizationPoliciesNodeSelected);
-
-                    // if selected node was changed, populate the polymorphic node editor with the empty node of the correct type
-                    if (isOrganizationPoliciesNodeSelected) {
-                        getValue().node().set(EntityFactory.create(OrganizationPoliciesNode.class));
-                    } else if (!selectedNodeType.equals(getValue().node().getInstanceValueClass())) {
-                        get(proto().node()).populate(EntityFactory.create(selectedNodeType));
-                    }
+                    get(proto().node()).populate(EntityFactory.create(selectedNodeType));
+                    get(proto().node()).setVisible(!selectedNodeType.equals(OrganizationPoliciesNode.class));
                 } else {
                     get(proto().node()).setVisible(false);
-                }
-            }
-        });
-
-        formPanel.append(Location.Dual, selectPolicyScopeBox).decorate().componentWidth(200).customLabel(i18n.tr("Scope"));
-        formPanel.append(Location.Dual, proto().node(), new PolicyNodeEditor());
-        selectPolicyScopeBox.setEditable(false);
-        selectPolicyScopeBox.setViewable(isViewable());
-        get(proto().node()).setEditable(false);
-        get(proto().node()).setViewable(isViewable());
-
-        // register handler that propagates scope/node type to the scope box on form population
-        addPropertyChangeHandler(new PropertyChangeHandler() {
-            @Override
-            public void onPropertyChange(PropertyChangeEvent event) {
-                if (event.getPropertyName().equals(PropertyChangeEvent.PropertyName.repopulated)) {
-                    NodeType<?> policyScope = null;
-                    Class<? extends PolicyNode> populatedType = OrganizationPoliciesNode.class;
-                    if (getValue() != null && !getValue().node().isNull()) {
-                        populatedType = (Class<? extends PolicyNode>) getValue().node().getInstanceValueClass();
-                    }
-                    for (NodeType<?> nodeType : AVAILABLE_NODE_TYPES) {
-                        if (nodeType.getType().equals(populatedType)) {
-                            policyScope = nodeType;
-                            break;
-                        }
-                    }
-                    if (policyScope == null) {
-                        throw new Error("got unsupported or unknown policy scope:" + getValue().getInstanceValueClass().getName());
-                    }
-
-                    selectPolicyScopeBox.setValue(policyScope, true);
-                    selectPolicyScopeBox.setEditable(isNewEntity());
                 }
             }
         });
@@ -136,26 +100,48 @@ public abstract class PolicyDTOTabPanelBasedForm<POLICY_DTO extends PolicyDTOBas
     protected void onValueSet(boolean populate) {
         super.onValueSet(populate);
 
-        selectPolicyScopeBox.setOptions(assignableTypes(AVAILABLE_NODE_TYPES));
-        selectPolicyScopeBox.setEditable(isNewEntity() && selectPolicyScopeBox.getOptions().size() > 1);
+        if (populate) {
+            populateScopeSelector();
+        }
 
         get(proto().node()).setEditable(isNewEntity());
-        if (isNewEntity()) {
-            get(proto().node()).populate(EntityFactory.create(OrganizationPoliciesNode.class));
+    }
+
+    @SuppressWarnings("unchecked")
+    private void populateScopeSelector() {
+        NodeType<?> policyScope = null;
+        Class<? extends PolicyNode> populatedType = OrganizationPoliciesNode.class;
+        if (getValue() != null && !getValue().node().isNull()) {
+            populatedType = (Class<? extends PolicyNode>) getValue().node().getInstanceValueClass();
         }
+        for (NodeType<?> nodeType : AVAILABLE_NODE_TYPES) {
+            if (nodeType.getType().equals(populatedType)) {
+                policyScope = nodeType;
+                break;
+            }
+        }
+        if (policyScope == null) {
+            throw new Error("got unsupported or unknown policy scope:" + getValue().getInstanceValueClass().getName());
+        }
+
+        selectPolicyScopeBox.populate(policyScope);
+        selectPolicyScopeBox.setOptions(assignableTypes(AVAILABLE_NODE_TYPES));
+        selectPolicyScopeBox.setEditable(isNewEntity() && selectPolicyScopeBox.getOptions().size() > 1);
     }
 
     private boolean isNewEntity() {
         return getValue().getPrimaryKey() == null;
     }
 
+    @SuppressWarnings("rawtypes")
     private Collection<NodeType> assignableTypes(List<NodeType> availableNodeTypes) {
         List<NodeType> assignableTypes = null;
+
         if (getValue().lowestNodeType().isNull()) {
             assignableTypes = availableNodeTypes;
         } else {
             String lowestNodeType = getValue().lowestNodeType().getValue();
-            assignableTypes = new ArrayList<PolicyDTOTabPanelBasedForm.NodeType>();
+            assignableTypes = new ArrayList<NodeType>();
             for (NodeType<?> t : availableNodeTypes) {
                 assignableTypes.add(t);
                 if (t.getType().getName().equals(lowestNodeType)) {
@@ -163,6 +149,7 @@ public abstract class PolicyDTOTabPanelBasedForm<POLICY_DTO extends PolicyDTOBas
                 }
             }
         }
+
         return assignableTypes;
     }
 
@@ -171,42 +158,95 @@ public abstract class PolicyDTOTabPanelBasedForm<POLICY_DTO extends PolicyDTOBas
      * 
      * @author ArtyomB
      */
-    private static class PolicyNodeEditor extends CForm<PolicyNode> {
+    private class PolicyNodeEditor extends CForm<PolicyNode> {
 
-        private Map<Class<? extends PolicyNode>, CField<? extends PolicyNode, ?>> nodeTypeToComponentMap;
+        private final Map<Class<? extends PolicyNode>, CField<? extends PolicyNode, ?>> nodeTypeToComponentMap = new HashMap<>();
 
         public PolicyNodeEditor() {
             super(PolicyNode.class);
+
         }
 
         @Override
-        public void applyEditabilityRules() {
-            super.applyEditabilityRules();
-            if (getValue() != null) {
-                Class<? extends PolicyNode> nodeType = (Class<? extends PolicyNode>) getValue().getInstanceValueClass();
-                CComponent<?, PolicyNode, ?> comp = (CComponent<?, PolicyNode, ?>) nodeTypeToComponentMap.get(nodeType);
-                if (comp != null) {
-                    comp.setEditable(isEditable());
-                }
+        public void setVisitedRecursive() {
+            super.setVisitedRecursive();
+
+            CField<? extends PolicyNode, ?> comp = getCurrentComponent();
+            if (comp != null) {
+                comp.setVisited(true);
             }
+        }
+
+        @Override
+        public boolean isValid() {
+            boolean isValid = super.isValid();
+
+            CField<? extends PolicyNode, ?> comp = getCurrentComponent();
+            if (comp != null) {
+                isValid &= comp.isValid();
+            }
+
+            return isValid;
+        }
+
+        @Override
+        protected IsWidget createContent() {
+            FormPanel formPanel = new FormPanel(this);
+
+            prepareNodeComponents();
+
+            for (CField<? extends PolicyNode, ?> nodeComponent : nodeTypeToComponentMap.values()) {
+                formPanel.append(Location.Left, nodeComponent).decorate().componentWidth(200).customLabel(i18n.tr("Applied to"));
+            }
+
+            return formPanel;
         }
 
         @SuppressWarnings("unchecked")
         @Override
-        protected IsWidget createContent() {
-            FormPanel internalFormPanel = new FormPanel(this);
+        protected void onValueSet(boolean populate) {
+            super.onValueSet(populate);
 
-            nodeTypeToComponentMap = new HashMap<Class<? extends PolicyNode>, CField<? extends PolicyNode, ?>>();
+            if (populate) {
+                Class<? extends PolicyNode> curType = (getValue() != null ? (Class<? extends PolicyNode>) getValue().getInstanceValueClass() : null);
+                for (Class<? extends PolicyNode> nodeType : nodeTypeToComponentMap.keySet()) {
+                    CField<? extends PolicyNode, ?> comp = nodeTypeToComponentMap.get(nodeType);
+                    boolean isCurType = nodeType.equals(curType);
+                    if (isCurType) {
+                        ((CComponent<?, PolicyNode, ?>) comp).populate((PolicyNode) getValue().cast());
+                    }
+                    comp.setVisible(isCurType);
+                }
+            }
+        }
+
+        @Override
+        public void addValidations() {
+            super.addValidations();
+
+            this.addComponentValidator(new AbstractComponentValidator<PolicyNode>() {
+                @Override
+                public AbstractValidationError isValid() {
+                    if (getValue() != null) {
+                        CField<? extends PolicyNode, ?> comp = getCurrentComponent();
+                        if (comp != null) {
+                            if (!comp.isValid()) {
+                                return new BasicValidationError(comp, i18n.tr("'Applied to' is Mandatory"));
+                            }
+                        }
+
+                    }
+                    return null;
+                }
+            });
+        }
+
+        @SuppressWarnings({ "unchecked", "rawtypes" })
+        private void prepareNodeComponents() {
             for (NodeType<?> nodeType : AVAILABLE_NODE_TYPES) {
                 if (!nodeType.hasOnlyOneInstance()) {
-                    CField<? extends PolicyNode, ?> comp = null;
-                    CEntityComboBox<? extends PolicyNode> comboBox = new CEntityComboBox(nodeType.getType());
-                    comboBox.addValueChangeHandler(new ValueChangeHandler() {
-                        @Override
-                        public void onValueChange(ValueChangeEvent event) {
-                            setValue((PolicyNode) event.getValue());
-                        }
-                    });
+                    CEntityComboBox<? extends PolicyNode> comboBox = new CEntityComboBox<>(nodeType.getType());
+
                     comboBox.setOptionsComparator(new Comparator() {
                         @Override
                         public int compare(Object o1, Object o2) {
@@ -216,41 +256,40 @@ public abstract class PolicyDTOTabPanelBasedForm<POLICY_DTO extends PolicyDTOBas
                             return ((PolicyNode) o1).getStringView().compareTo(((PolicyNode) o2).getStringView());
                         }
                     });
-                    comp = comboBox;
-                    comp.setEditable(false);
-                    comp.setViewable(isViewable());
-                    nodeTypeToComponentMap.put(nodeType.getType(), comp);
+                    comboBox.addValueChangeHandler(new ValueChangeHandler() {
+                        @Override
+                        public void onValueChange(ValueChangeEvent event) {
+                            setValue((PolicyNode) event.getValue());
+                        }
+                    });
+                    comboBox.setMandatory(true);
+                    comboBox.setEditable(isEditable());
+                    comboBox.setViewable(isViewable());
+
+                    nodeTypeToComponentMap.put(nodeType.getType(), comboBox);
                 }
             }
+        }
 
-            for (CField<? extends PolicyNode, ?> nodeComponent : nodeTypeToComponentMap.values()) {
-                internalFormPanel.append(Location.Left, nodeComponent).decorate().componentWidth(200).customLabel(i18n.tr("Applied to"));
-            }
+        CField<? extends PolicyNode, ?> getCurrentComponent() {
+            CField<? extends PolicyNode, ?> comp = null;
 
-            addPropertyChangeHandler(new PropertyChangeHandler() {
-                @Override
-                public void onPropertyChange(PropertyChangeEvent event) {
-                    if (event.getPropertyName().equals(PropertyChangeEvent.PropertyName.repopulated)) {
-                        Class<? extends PolicyNode> curType = (Class<? extends PolicyNode>) getValue().getInstanceValueClass();
-                        for (Class<? extends PolicyNode> nodeType : nodeTypeToComponentMap.keySet()) {
-                            CComponent<?, ?, ?> comp = nodeTypeToComponentMap.get(nodeType);
-                            boolean isCurType = curType.equals(nodeType);
-                            comp.setVisible(isCurType);
-                            comp.setMandatory(isCurType);
-                            comp.setEditable(isCurType && isEditable());
-                            if (isCurType) {
-                                ((CComponent<?, PolicyNode, ?>) comp).setValue((PolicyNode) getValue().cast());
-                            }
-                        }
+            @SuppressWarnings("unchecked")
+            Class<? extends PolicyNode> curType = (getValue() != null ? (Class<? extends PolicyNode>) getValue().getInstanceValueClass() : null);
+            if (nodeTypeToComponentMap != null) {
+                for (Class<? extends PolicyNode> nodeType : nodeTypeToComponentMap.keySet()) {
+                    if (nodeType.equals(curType)) {
+                        comp = nodeTypeToComponentMap.get(nodeType);
+                        break;
                     }
                 }
-            });
+            }
 
-            return internalFormPanel;
+            return comp;
         }
     }
 
-    public static class NodeType<T extends PolicyNode> {
+    private static class NodeType<T extends PolicyNode> {
 
         private final String toString;
 
