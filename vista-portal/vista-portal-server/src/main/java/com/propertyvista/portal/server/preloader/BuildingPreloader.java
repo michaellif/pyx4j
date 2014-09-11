@@ -30,6 +30,7 @@ import com.pyx4j.gwt.server.DateUtils;
 import com.propertyvista.biz.asset.BuildingFacade;
 import com.propertyvista.biz.financial.productcatalog.ProductCatalogFacade;
 import com.propertyvista.biz.preloader.DefaultProductCatalogFacade;
+import com.propertyvista.domain.DemoData;
 import com.propertyvista.domain.MediaFile;
 import com.propertyvista.domain.blob.MediaFileBlob;
 import com.propertyvista.domain.company.Portfolio;
@@ -112,7 +113,7 @@ public class BuildingPreloader extends BaseVistaDevDataPreloader {
 
         SharedGeoLocator.setMode(Mode.updateCache);
         int noGeoCount = 0;
-
+        int buildingCounter = 0;
         for (Building building : buildings) {
             if (building.info().location().isNull()) {
                 if (!SharedGeoLocator.populateGeo(building)) {
@@ -132,7 +133,14 @@ public class BuildingPreloader extends BaseVistaDevDataPreloader {
 
             ServerSideFactory.create(DefaultProductCatalogFacade.class).createFor(building);
             productCatalogGenerator.generateProductCatalog(building.productCatalog());
-            building.defaultProductCatalog().setValue(RandomUtil.randomBoolean());
+            building.defaultProductCatalog().setValue(RandomUtil.randomBoolean("UseDefaultProductCatalog", 70));
+            if (buildingCounter == 1) {
+                // This used for generated Lease in LeasePreloader, Also 'true' runs faster!
+                building.defaultProductCatalog().setValue(false);
+            } else if ((buildingCounter == 2) || (buildingCounter == 3)) {
+                // This is used in simulated leases, make them faster
+                building.defaultProductCatalog().setValue(true);
+            }
 
             if (merchantAccount != null) {
                 BuildingMerchantAccount bma = building.merchantAccounts().$();
@@ -248,7 +256,13 @@ public class BuildingPreloader extends BaseVistaDevDataPreloader {
             }
 
             // Units:
-            List<AptUnit> units = buildingGenerator.createUnits(building, floorplans, config().numFloors, config().numUnitsPerFloor);
+            List<AptUnit> units;
+            if (buildingCounter == 1) {
+                // This used for generated Lease in LeasePreloader, For fist building we have Full product catalog
+                units = buildingGenerator.createUnits(building, floorplans, 1, DemoData.UserType.TENANT.getDefaultMax());
+            } else {
+                units = buildingGenerator.createUnits(building, floorplans, config().numFloors, config().numUnitsPerFloor);
+            }
             try {
                 unitCount += units.size();
                 for (AptUnit unit : units) {
@@ -267,6 +281,8 @@ public class BuildingPreloader extends BaseVistaDevDataPreloader {
             if (true) {
                 PublicDataUpdater.updateIndexData(building);
             }
+
+            buildingCounter++;
         }
         SharedGeoLocator.save();
         if (noGeoCount > 0) {

@@ -96,6 +96,7 @@ public class BuildingsGenerator {
         String propertyCode = "B" + String.valueOf(counter);
 
         Building building = createBuilding(propertyCode, buildingType, website, address, email);
+
         // log.info("Created: " + building);
         ensureProvincePolicyNode(ISOProvince.forName(address.province().getValue(), address.country().getValue()));
         return building;

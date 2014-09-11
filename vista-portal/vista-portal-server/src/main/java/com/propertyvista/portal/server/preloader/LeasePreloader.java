@@ -24,7 +24,10 @@ import com.pyx4j.config.server.SystemDateManager;
 import com.pyx4j.entity.core.IVersionedEntity.SaveAction;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.core.criterion.PropertyCriterion;
+import com.pyx4j.entity.server.Executable;
 import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.entity.server.TransactionScopeOption;
+import com.pyx4j.entity.server.UnitOfWork;
 import com.pyx4j.essentials.server.preloader.DataGenerator;
 
 import com.propertyvista.biz.occupancy.OccupancyFacade;
@@ -64,7 +67,7 @@ public class LeasePreloader extends BaseVistaDevDataPreloader {
         int tGuarantorCount = 0;
         for (int i = 0; i < config().numTenants; i++) {
             AptUnit unit = makeAvailable(aptUnitSource.next());
-            Lease lease = generator.createLeaseWithTenants(unit);
+            final Lease lease = generator.createLeaseWithTenants(unit);
             LeaseGenerator.attachDocumentData(lease);
 
             if (i < DemoData.UserType.TENANT.getDefaultMax()) {
@@ -100,30 +103,37 @@ public class LeasePreloader extends BaseVistaDevDataPreloader {
 
             // Create normal Active Lease first for Shortcut users
             if (i < config().numOfLeasesWithNoSimulation) {
-                Date trDate = SystemDateManager.getDate();
-                Calendar cal = new GregorianCalendar();
-                cal.setTime(new LogicalDate(Math.min(new LogicalDate().getTime(), lease.currentTerm().termFrom().getValue().getTime())));
-                cal.add(Calendar.MONTH, -1);
-                SystemDateManager.setDate(cal.getTime());
-                lease = ServerSideFactory.create(LeaseFacade.class).persist(lease);
+                final Date trDate = SystemDateManager.getDate();
+                new UnitOfWork(TransactionScopeOption.RequiresNew).execute(new Executable<Void, RuntimeException>() {
 
-                for (LeaseTermTenant participant : lease.currentTerm().version().tenants()) {
-                    participant.leaseParticipant().customer().personScreening().saveAction().setValue(SaveAction.saveAsFinal);
-                    Persistence.service().persist(participant.leaseParticipant().customer().personScreening());
-                    Persistence.service().persist(participant.leaseParticipant().customer().personScreening().creditChecks());
-                }
-                for (LeaseTermGuarantor participant : lease.currentTerm().version().guarantors()) {
-                    participant.leaseParticipant().customer().personScreening().saveAction().setValue(SaveAction.saveAsFinal);
-                    Persistence.service().persist(participant.leaseParticipant().customer().personScreening());
-                    Persistence.service().persist(participant.leaseParticipant().customer().personScreening().creditChecks());
-                }
+                    @Override
+                    public Void execute() throws RuntimeException {
+                        Calendar cal = new GregorianCalendar();
+                        cal.setTime(new LogicalDate(Math.min(new LogicalDate().getTime(), lease.currentTerm().termFrom().getValue().getTime())));
+                        cal.add(Calendar.MONTH, -1);
+                        SystemDateManager.setDate(cal.getTime());
+                        lease.set(ServerSideFactory.create(LeaseFacade.class).persist(lease));
 
-                ServerSideFactory.create(LeaseFacade.class).approve(lease, null, null);
+                        for (LeaseTermTenant participant : lease.currentTerm().version().tenants()) {
+                            participant.leaseParticipant().customer().personScreening().saveAction().setValue(SaveAction.saveAsFinal);
+                            Persistence.service().persist(participant.leaseParticipant().customer().personScreening());
+                            Persistence.service().persist(participant.leaseParticipant().customer().personScreening().creditChecks());
+                        }
+                        for (LeaseTermGuarantor participant : lease.currentTerm().version().guarantors()) {
+                            participant.leaseParticipant().customer().personScreening().saveAction().setValue(SaveAction.saveAsFinal);
+                            Persistence.service().persist(participant.leaseParticipant().customer().personScreening());
+                            Persistence.service().persist(participant.leaseParticipant().customer().personScreening().creditChecks());
+                        }
 
-                if (lease.leaseFrom().getValue().compareTo(trDate) <= 0) {
-                    SystemDateManager.setDate(lease.leaseFrom().getValue());
-                    ServerSideFactory.create(LeaseFacade.class).activate(lease);
-                }
+                        ServerSideFactory.create(LeaseFacade.class).approve(lease, null, null);
+
+                        if (lease.leaseFrom().getValue().compareTo(trDate) <= 0) {
+                            SystemDateManager.setDate(lease.leaseFrom().getValue());
+                            ServerSideFactory.create(LeaseFacade.class).activate(lease);
+                        }
+                        return null;
+                    }
+                });
                 SystemDateManager.setDate(trDate);
             } else {
                 LeaseLifecycleSimulatorBuilder simBuilder = LeaseLifecycleSimulator.sim(random);
@@ -206,7 +216,7 @@ public class LeasePreloader extends BaseVistaDevDataPreloader {
 
                 simBuilder.create().generateRandomLifeCycle(lease);
                 // Add Turnover
-                lease = Persistence.service().retrieve(Lease.class, lease.getPrimaryKey());
+                lease.set(Persistence.service().retrieve(Lease.class, lease.getPrimaryKey()));
                 if (lease.status().getValue().isFormer()) {
                     // Create new Lease for the same unit
                     unit = makeAvailable(Persistence.service().retrieve(AptUnit.class, unit.getPrimaryKey()));
@@ -336,7 +346,14 @@ public class LeasePreloader extends BaseVistaDevDataPreloader {
         if (unit.availability().availableForRent().isNull()) {
             SystemDateManager.setDate(getStatusFromDate(unit));
             try {
-                ServerSideFactory.create(OccupancyFacade.class).scopeAvailable(unit.getPrimaryKey());
+                new UnitOfWork(TransactionScopeOption.RequiresNew).execute(new Executable<Void, RuntimeException>() {
+
+                    @Override
+                    public Void execute() throws RuntimeException {
+                        ServerSideFactory.create(OccupancyFacade.class).scopeAvailable(unit.getPrimaryKey());
+                        return null;
+                    }
+                });
             } finally {
                 SystemDateManager.resetDate();
             }

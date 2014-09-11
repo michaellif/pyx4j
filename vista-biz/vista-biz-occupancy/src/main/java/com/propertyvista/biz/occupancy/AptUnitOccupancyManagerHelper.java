@@ -19,6 +19,9 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.pyx4j.commons.Key;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.core.EntityFactory;
@@ -36,6 +39,8 @@ import com.propertyvista.domain.tenant.lease.Lease;
  * This class contains utility methods for unit occupancy manager.
  */
 public class AptUnitOccupancyManagerHelper {
+
+    private static final Logger log = LoggerFactory.getLogger(AptUnitOccupancyManagerHelper.class);
 
     public static void merge(AptUnit unit, LogicalDate startingAt, List<Status> relevantStatuses, MergeHandler handler) {
         merge(unit.getPrimaryKey(), startingAt, relevantStatuses, handler);
@@ -208,6 +213,14 @@ public class AptUnitOccupancyManagerHelper {
         }
 
         return Persistence.service().query(criteria);
+    }
+
+    public static void dumpOccupancy(Key unitPk) {
+        EntityQueryCriteria<AptUnitOccupancySegment> criteria = new EntityQueryCriteria<AptUnitOccupancySegment>(AptUnitOccupancySegment.class);
+        criteria.eq(criteria.proto().unit().id(), unitPk);
+        for (AptUnitOccupancySegment s : Persistence.service().query(criteria)) {
+            log.info("{} OccupancySegment: {} - {} {}; lease {}", unitPk, s.dateFrom(), s.dateTo(), s.status(), s.lease().getPrimaryKey());
+        }
     }
 
     public static boolean isOccupancyListEmpty(Key unitPk) {

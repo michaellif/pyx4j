@@ -42,7 +42,7 @@ public final class VistaDevPreloadConfig implements Serializable {
 
     public int maxAdmin = DemoData.UserType.ADMIN.getDefaultMax();
 
-    public int numTenants = DemoData.UserType.TENANT.getDefaultMax() + 50;
+    public int numTenants = DemoData.UserType.TENANT.getDefaultMax() + 30;
 
     /** make only one bill and one payment for the lease */
     public boolean oneBillOnePayment = false;

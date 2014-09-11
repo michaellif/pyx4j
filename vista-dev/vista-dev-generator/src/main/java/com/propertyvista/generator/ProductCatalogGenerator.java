@@ -179,7 +179,7 @@ public class ProductCatalogGenerator {
         feature.version().description().setValue("Feature description");
 
         feature.version().recurring().setValue(RandomUtil.randomBoolean() && !ARCode.Type.nonReccuringFeatures().contains(arCode.type()));
-        feature.version().mandatory().setValue(RandomUtil.randomBoolean() && !ARCode.Type.nonMandatoryFeatures().contains(arCode.type()));
+        feature.version().mandatory().setValue(RandomUtil.randomBoolean("FeatureMandatory", 20) && !ARCode.Type.nonMandatoryFeatures().contains(arCode.type()));
         feature.version().availableOnline().setValue(RandomUtil.randomBoolean());
         feature.version().price().setValue(new BigDecimal(100.10));
 
@@ -325,7 +325,7 @@ public class ProductCatalogGenerator {
     }
 
     private BigDecimal getDepositAmount(ProductDeposit deposit, ProductItem item) {
-        if (System.identityHashCode(deposit) % 2 == 0) {
+        if (RandomUtil.randomBoolean()) {
             if (ValueType.Percentage.equals(deposit.valueType().getValue())) {
                 return DomainUtil.roundMoney(deposit.value().percent().getValue(BigDecimal.ZERO).multiply(item.price().getValue(BigDecimal.ZERO)));
             } else {

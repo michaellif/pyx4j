@@ -344,7 +344,8 @@ public class OccupancyFacadeImpl implements OccupancyFacade {
 
             new AvailabilityReportManager(lease.unit().getPrimaryKey()).generateUnitAvailablity(now);
         } else {
-            throw new IllegalStateException("'approveLease' operation failed: a 'reserved' or 'available' segment was not found");
+            AptUnitOccupancyManagerHelper.dumpOccupancy(lease.unit().getPrimaryKey());
+            throw new IllegalStateException("'approveLease' operation failed: a 'reserved' or 'available' segment was not found for " + now);
         }
     }
 

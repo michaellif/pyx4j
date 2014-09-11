@@ -36,7 +36,10 @@ import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.IVersionedEntity.SaveAction;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.core.criterion.PropertyCriterion;
+import com.pyx4j.entity.server.Executable;
 import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.entity.server.TransactionScopeOption;
+import com.pyx4j.entity.server.UnitOfWork;
 import com.pyx4j.gwt.server.DateUtils;
 
 import com.propertyvista.biz.financial.ar.ARException;
@@ -70,7 +73,7 @@ import com.propertyvista.shared.util.CreditCardFormatter;
 
 public class LeaseLifecycleSimulator {
 
-    private static final Logger log = LoggerFactory.getLogger(LeaseLifecycleSimulator.class);
+    private final static Logger log = LoggerFactory.getLogger(LeaseLifecycleSimulator.class);
 
     private final static boolean debug = false;
 
@@ -145,7 +148,7 @@ public class LeaseLifecycleSimulator {
         return new LeaseLifecycleSimulatorBuilder(random);
     }
 
-    public void generateRandomLifeCycle(Lease lease) {
+    public void generateRandomLifeCycle(final Lease lease) {
         if (debug) {
             log.info("-- Start new RandomLifeCycle for Lease {} from {}", lease.getPrimaryKey(), simStart);
         }
@@ -156,7 +159,8 @@ public class LeaseLifecycleSimulator {
                 SystemDateManager.resetDate();
                 throw new IllegalStateException("lease simulation cannot be started because the unit is not available");
             } else {
-                ServerSideFactory.create(OccupancyFacade.class).scopeAvailable(lease.unit().getPrimaryKey());
+                // This is already called in LeasePreloader
+                // ServerSideFactory.create(OccupancyFacade.class).scopeAvailable(lease.unit().getPrimaryKey());
             }
         }
 
@@ -229,12 +233,20 @@ public class LeaseLifecycleSimulator {
     }
 
     private void processNextEvent() {
-        LeaseEventContainer container = events.poll();
+        final LeaseEventContainer container = events.poll();
         SystemDateManager.setDate(container.date());
         if (debug) {
             log.info("ProcessEvent: {} {}", container.date(), container.event().getClass().getSimpleName());
         }
-        container.event().exec();
+
+        new UnitOfWork(TransactionScopeOption.RequiresNew).execute(new Executable<Void, RuntimeException>() {
+
+            @Override
+            public Void execute() throws RuntimeException {
+                container.event().exec();
+                return null;
+            }
+        });
     }
 
     private boolean hasNextEvent() {
@@ -285,7 +297,7 @@ public class LeaseLifecycleSimulator {
                 papItem.billableItem().set(lease.currentTerm().version().leaseProducts().serviceItem());
                 papItem.amount().setValue(papItem.billableItem().agreedPrice().getValue());
                 pap.coveredItems().add(papItem);
-                pap.comments().setValue("Default preauthorization...");
+                pap.comments().setValue("Default PreAuthorization...");
 
                 pap.tenant().set(mainTenant.leaseParticipant());
                 Persistence.service().persist(pap);
@@ -303,7 +315,7 @@ public class LeaseLifecycleSimulator {
             }
 
             if (debug) {
-                log.info("" + now() + " begined lease: " + lease.leaseId().getValue() + " " + lease.currentTerm().termFrom().getValue() + " - "
+                log.info("" + now() + " began lease: " + lease.leaseId().getValue() + " " + lease.currentTerm().termFrom().getValue() + " - "
                         + lease.currentTerm().termTo().getValue());
                 log.debug(lease.toString());
                 log.info("***");
@@ -324,12 +336,15 @@ public class LeaseLifecycleSimulator {
 
         @Override
         public void exec() {
+            if (debug) {
+                log.info("" + now() + " approve lease: {} {} - {}", lease.leaseId(), lease.currentTerm().termFrom(), lease.currentTerm().termTo());
+            }
             ServerSideFactory.create(LeaseFacade.class).approve(lease, null, "simulation");
 
             if (debug) {
-                System.out.println("" + now() + " approved lease: " + lease.leaseId().getValue() + " " + lease.currentTerm().termFrom().getValue() + " - "
+                log.info("" + now() + " approved lease: " + lease.leaseId().getValue() + " " + lease.currentTerm().termFrom().getValue() + " - "
                         + lease.currentTerm().termTo().getValue());
-                System.out.println("***");
+                log.info("***");
             }
 
             queueEvent(lease.currentTerm().termFrom().getValue(), new Activate(lease));
@@ -346,9 +361,9 @@ public class LeaseLifecycleSimulator {
         public void exec() {
             ServerSideFactory.create(LeaseFacade.class).activate(lease);
             if (debug) {
-                System.out.println("" + now() + " activated lease: " + lease.leaseId().getValue() + " " + lease.currentTerm().termFrom().getValue() + " - "
+                log.info("" + now() + " activated lease: " + lease.leaseId().getValue() + " " + lease.currentTerm().termFrom().getValue() + " - "
                         + lease.currentTerm().termTo().getValue());
-                System.out.println("***");
+                log.info("***");
             }
 
             if (runBilling) {
@@ -416,7 +431,7 @@ public class LeaseLifecycleSimulator {
             if (bill != null && bill.totalDueAmount().getValue().compareTo(BigDecimal.ZERO) != 0) {
                 BigDecimal amount = tenantAgent.pay(bill);
                 if (debug) {
-                    System.out.println("" + now() + " paid " + amount);
+                    log.info("" + now() + " paid " + amount);
                 }
                 PaymentRecord payment = receivePayment(amount);
                 if (payment != null) {
@@ -502,14 +517,14 @@ public class LeaseLifecycleSimulator {
                             billing.runBilling(lease);
                             billing.confirmBill(billing.getLatestBill(lease));
                         } catch (Exception e) {
-                            // TODO re-think LeaseSimulation logic (make the same as billing unit test!!!????) 
+                            // TODO re-think LeaseSimulation logic (make the same as billing unit test!!!????)
                             log.error("Error", e);
                         }
 
                         if (debug) {
-                            System.out.println("" + now() + " executed run billing lease: " + lease.leaseId().getValue() + " "
+                            log.info("" + now() + " executed run billing lease: " + lease.leaseId().getValue() + " "
                                     + lease.currentTerm().termFrom().getValue() + " - " + lease.currentTerm().termTo().getValue());
-                            System.out.println("***");
+                            log.info("***");
                         }
 
                         Calendar cal = Calendar.getInstance();
@@ -752,7 +767,7 @@ public class LeaseLifecycleSimulator {
         // TODO create some kind of TimeSpan class and use it
         /**
          * Set the minimum and maximum term that will pass until lease will become reserved
-         * 
+         *
          * @param min
          *            minimum time
          * @param max
@@ -767,7 +782,7 @@ public class LeaseLifecycleSimulator {
 
         /**
          * Set the time constraints for the period between lease reservation and lease activation
-         * 
+         *
          * @param min
          *            minimum time
          * @param max
