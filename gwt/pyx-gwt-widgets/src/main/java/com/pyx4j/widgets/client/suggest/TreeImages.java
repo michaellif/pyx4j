@@ -14,29 +14,33 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on Jul 22, 2010
- * @author michaellif
+ * Created on Dec 26, 2009
+ * @author Michael
  * @version $Id$
  */
-package com.pyx4j.widgets.client.combobox;
+package com.pyx4j.widgets.client.suggest;
 
-import com.google.gwt.user.client.ui.ScrollPanel;
-import com.google.gwt.user.client.ui.Widget;
+import com.google.gwt.resources.client.ImageResource;
+import com.google.gwt.user.client.ui.Tree.Resources;
 
-public class PickerScrollPanel extends ScrollPanel {
+public interface TreeImages extends Resources {
 
-    public PickerScrollPanel(Widget widget) {
-        setWidget(widget);
-        getElement().getStyle().setProperty("overflowY", "auto");
-        getElement().getStyle().setProperty("overflowX", "hidden");
-
-    }
-
+    /**
+     * An image indicating a closed branch.
+     */
     @Override
-    protected void onLoad() {
-        super.onLoad();
-        if (getWidget().getOffsetHeight() > 200) {
-            setHeight("200px");
-        }
-    }
+    ImageResource treeClosed();
+
+    /**
+     * An image indicating a leaf.
+     */
+    @Override
+    ImageResource treeLeaf();
+
+    /**
+     * An image indicating an open branch.
+     */
+    @Override
+    ImageResource treeOpen();
+
 }

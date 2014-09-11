@@ -38,7 +38,6 @@ import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.RadioGroup;
-import com.pyx4j.widgets.client.combobox.ListBox;
 import com.pyx4j.widgets.client.datepicker.DatePickerComposite;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 import com.pyx4j.widgets.client.photoalbum.BasicPhotoAlbumModel;
@@ -98,96 +97,6 @@ public class NativeWidgetBasicViewImpl extends ScrollPanel implements NativeWidg
         formPanel.append(Location.Left, dialogButton);
 
         formPanel.hr();
-
-        {
-            ListBox<String> comboBox = new ListBox<String>(false, true);
-            List<String> options = new ArrayList<String>();
-
-            options.add("Item 1");
-            options.add("Item 2");
-
-            comboBox.setSelection("Item 1");
-
-            comboBox.setOptions(options);
-
-            comboBox.getElement().getStyle().setMargin(5, Unit.PX);
-
-            formPanel.append(Location.Left, comboBox);
-        }
-
-        {
-            ListBox<String> comboBox = new ListBox<String>(false, true);
-            List<String> options = new ArrayList<String>();
-
-            options.add("Item 1");
-            options.add("Item 2");
-            options.add("Item 3");
-            options.add("Item 444444444444444444");
-            options.add("Item 5");
-            options.add("Item 6");
-            options.add("Item 7");
-            options.add("Item 8");
-            options.add("Item 9");
-            options.add("Item 10");
-            options.add("Item 11");
-            options.add("Item 12");
-            options.add("Item 131313131313131313131313131313");
-            options.add("Item 14");
-            options.add("Item 15");
-
-            comboBox.setOptions(options);
-
-            comboBox.setSelection("Item 14");
-
-            comboBox.getElement().getStyle().setMargin(5, Unit.PX);
-
-            formPanel.append(Location.Left, comboBox);
-
-        }
-
-        {
-            ListBox<String> comboBox = new ListBox<String>(false, true);
-            List<String> options = new ArrayList<String>();
-
-            options.add("Item 1");
-            options.add("Item 2");
-            options.add("Item 3");
-            options.add("Item 4");
-            options.add("Item 5");
-            options.add("Item 6");
-            options.add("Item 7");
-            options.add("Item 8");
-            options.add("Item 9");
-
-            comboBox.setOptions(options);
-
-            comboBox.getElement().getStyle().setMargin(5, Unit.PX);
-
-            formPanel.append(Location.Left, comboBox);
-
-        }
-
-        {
-            ListBox<String> comboBox = new ListBox<String>(true, true);
-            List<String> options = new ArrayList<String>();
-
-            options.add("Item 1");
-            options.add("Item 2");
-            options.add("Item 3");
-            options.add("Item 4");
-            options.add("Item 5");
-            options.add("Item 6");
-            options.add("Item 7");
-            options.add("Item 8");
-            options.add("Item 9");
-
-            comboBox.setOptions(options);
-
-            comboBox.getElement().getStyle().setMargin(5, Unit.PX);
-
-            formPanel.append(Location.Left, comboBox);
-
-        }
 
         {
             PhotoAlbum photoAlbum = new PhotoAlbum() {

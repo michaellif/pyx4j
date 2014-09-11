@@ -37,7 +37,6 @@ import com.google.gwt.user.client.ui.Tree;
 import com.google.gwt.user.client.ui.TreeItem;
 
 import com.pyx4j.commons.IFormatter;
-import com.pyx4j.widgets.client.combobox.TreeImages;
 import com.pyx4j.widgets.client.style.theme.WidgetTheme;
 
 public class TreePickerPanel<E> extends ScrollPanel implements IPickerPanel<E> {
