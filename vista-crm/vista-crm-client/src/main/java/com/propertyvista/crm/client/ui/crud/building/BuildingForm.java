@@ -147,6 +147,7 @@ public class BuildingForm extends CrmEntityForm<BuildingDTO> {
             billingCyclesTab.setTabEnabled(false);
             catalogTab.setTabEnabled(false);
         }
+        get(proto().merchantAccount()).setVisible(false);
     }
 
     @Override
@@ -182,6 +183,7 @@ public class BuildingForm extends CrmEntityForm<BuildingDTO> {
         }
 
         fillMerchantAccountStatus(getValue().merchantAccount());
+        get(proto().merchantAccount()).setVisible(SecurityController.check(DataModelPermission.permissionRead(BuildingMerchantAccount.class)));
 
         ilsEmailProfilePanel.setVisible(getValue() != null && getValue().ilsEmailConfigured().getValue(false));
     }

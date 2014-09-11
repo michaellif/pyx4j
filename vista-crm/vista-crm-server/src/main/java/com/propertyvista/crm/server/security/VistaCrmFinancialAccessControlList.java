@@ -124,7 +124,7 @@ class VistaCrmFinancialAccessControlList extends UIAclBuilder {
         grant(FinancialFull, new IServiceExecutePermission(BillPreviewService.class));
         grant(FinancialFull, new IServiceExecutePermission(BillPrintService.class));
 
-        grant(FinancialFull, BuildingMerchantAccount.class, READ | UPDATE);
+        grant(FinancialFull, BuildingMerchantAccount.class, READ);
 
         grant(FinancialFull, LeasePaymentMethod.class, ALL);
 

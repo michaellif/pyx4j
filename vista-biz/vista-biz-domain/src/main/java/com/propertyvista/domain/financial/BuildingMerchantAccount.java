@@ -19,11 +19,13 @@ import com.pyx4j.entity.annotations.JoinColumn;
 import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.annotations.ReadOnly;
+import com.pyx4j.entity.annotations.SecurityEnabled;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.core.IEntity;
 
 import com.propertyvista.domain.property.asset.building.Building;
 
+@SecurityEnabled
 public interface BuildingMerchantAccount extends IEntity {
 
     @Owner
