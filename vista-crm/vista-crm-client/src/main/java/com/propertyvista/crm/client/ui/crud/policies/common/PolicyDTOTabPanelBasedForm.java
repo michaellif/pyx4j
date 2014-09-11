@@ -27,7 +27,6 @@ import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.forms.client.ui.CComboBox;
-import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEntityComboBox;
 import com.pyx4j.forms.client.ui.CField;
 import com.pyx4j.forms.client.ui.CForm;
@@ -103,8 +102,6 @@ public abstract class PolicyDTOTabPanelBasedForm<POLICY_DTO extends PolicyDTOBas
         if (populate) {
             populateScopeSelector();
         }
-
-        get(proto().node()).setEditable(isNewEntity());
     }
 
     @SuppressWarnings("unchecked")
@@ -164,29 +161,6 @@ public abstract class PolicyDTOTabPanelBasedForm<POLICY_DTO extends PolicyDTOBas
 
         public PolicyNodeEditor() {
             super(PolicyNode.class);
-
-        }
-
-        @Override
-        public void setVisitedRecursive() {
-            super.setVisitedRecursive();
-
-            CField<? extends PolicyNode, ?> comp = getCurrentComponent();
-            if (comp != null) {
-                comp.setVisited(true);
-            }
-        }
-
-        @Override
-        public boolean isValid() {
-            boolean isValid = super.isValid();
-
-            CField<? extends PolicyNode, ?> comp = getCurrentComponent();
-            if (comp != null) {
-                isValid &= comp.isValid();
-            }
-
-            return isValid;
         }
 
         @Override
@@ -202,20 +176,26 @@ public abstract class PolicyDTOTabPanelBasedForm<POLICY_DTO extends PolicyDTOBas
             return formPanel;
         }
 
+        @Override
+        public void onReset() {
+            super.onReset();
+
+            for (CField<? extends PolicyNode, ?> nodeComponent : nodeTypeToComponentMap.values()) {
+                nodeComponent.setVisible(false);
+                nodeComponent.setVisited(false);
+            }
+        }
+
         @SuppressWarnings("unchecked")
         @Override
         protected void onValueSet(boolean populate) {
             super.onValueSet(populate);
 
             if (populate) {
-                Class<? extends PolicyNode> curType = (getValue() != null ? (Class<? extends PolicyNode>) getValue().getInstanceValueClass() : null);
-                for (Class<? extends PolicyNode> nodeType : nodeTypeToComponentMap.keySet()) {
-                    CField<? extends PolicyNode, ?> comp = nodeTypeToComponentMap.get(nodeType);
-                    boolean isCurType = nodeType.equals(curType);
-                    if (isCurType) {
-                        ((CComponent<?, PolicyNode, ?>) comp).populate((PolicyNode) getValue().cast());
-                    }
-                    comp.setVisible(isCurType);
+                CField<? extends PolicyNode, ?> comp = getCurrentComponent();
+                if (comp != null) {
+                    ((CField<PolicyNode, ?>) comp).populate((PolicyNode) getValue().cast());
+                    comp.setVisible(true);
                 }
             }
         }
@@ -234,11 +214,20 @@ public abstract class PolicyDTOTabPanelBasedForm<POLICY_DTO extends PolicyDTOBas
                                 return new BasicValidationError(comp, i18n.tr("'Applied to' is Mandatory"));
                             }
                         }
-
                     }
                     return null;
                 }
             });
+        }
+
+        @Override
+        public void setVisitedRecursive() {
+            CField<? extends PolicyNode, ?> comp = getCurrentComponent();
+            if (comp != null) {
+                comp.setVisited(true);
+            }
+
+            super.setVisitedRecursive();
         }
 
         @SuppressWarnings({ "unchecked", "rawtypes" })
@@ -271,7 +260,7 @@ public abstract class PolicyDTOTabPanelBasedForm<POLICY_DTO extends PolicyDTOBas
             }
         }
 
-        CField<? extends PolicyNode, ?> getCurrentComponent() {
+        private CField<? extends PolicyNode, ?> getCurrentComponent() {
             CField<? extends PolicyNode, ?> comp = null;
 
             @SuppressWarnings("unchecked")
