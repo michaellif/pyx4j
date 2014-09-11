@@ -48,7 +48,6 @@ public class GroupFocusHandler extends HandlerManager implements FocusHandler, B
         if (parentGroupFocusHandler != null) {
             parentGroupFocusHandler.onFocus(e);
         } else {
-            System.out.println("+++++++++++++++ onFocus " + System.identityHashCode(this));
             focusLost = false;
             if (!groupFocus) {
                 groupFocus = true;
@@ -62,7 +61,6 @@ public class GroupFocusHandler extends HandlerManager implements FocusHandler, B
         if (parentGroupFocusHandler != null) {
             parentGroupFocusHandler.onBlur(e);
         } else {
-            System.out.println("+++++++++++++++ onBlur " + System.identityHashCode(this));
             focusLost = true;
             Scheduler.get().scheduleDeferred(new ScheduledCommand() {
 
