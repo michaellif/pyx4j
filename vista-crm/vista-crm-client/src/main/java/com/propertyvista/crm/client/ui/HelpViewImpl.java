@@ -60,6 +60,7 @@ public class HelpViewImpl extends FlowPanel implements HelpView {
 
             @Override
             public void onSuccess(Map<Integer, String> result) {
+                context.clear();
                 for (final Map.Entry<Integer, String> me : result.entrySet()) {
                     // USe this list to configure Permission
                     log.debug("got WalkThru {} '{}'", me.getKey(), me.getValue());
