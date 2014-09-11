@@ -98,8 +98,7 @@ public abstract class TextBoxBase extends Composite implements ITextWidget, IGro
 
         textBoxHolder.setWidget(textBoxWidget);
 
-        textBoxWidget.addFocusHandler(groupFocusHandler);
-        textBoxWidget.addBlurHandler(groupFocusHandler);
+        groupFocusHandler.addFocusable(textBoxWidget);
 
     }
 
@@ -130,8 +129,7 @@ public abstract class TextBoxBase extends Composite implements ITextWidget, IGro
 
             actionButton.setStyleName(WidgetTheme.StyleName.TextBoxActionButton.name());
 
-            actionButton.addFocusHandler(groupFocusHandler);
-            actionButton.addBlurHandler(groupFocusHandler);
+            groupFocusHandler.addFocusable(actionButton);
 
             contentPanel.add(actionButton);
 

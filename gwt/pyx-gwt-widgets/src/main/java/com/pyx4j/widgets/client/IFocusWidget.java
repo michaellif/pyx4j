@@ -20,8 +20,10 @@
  */
 package com.pyx4j.widgets.client;
 
+import com.google.gwt.event.dom.client.HasAllFocusHandlers;
 import com.google.gwt.event.dom.client.HasAllKeyHandlers;
+import com.google.gwt.user.client.ui.Focusable;
 
-public interface IFocusWidget extends IWidget, IFocusable, HasAllKeyHandlers {
+public interface IFocusWidget extends IWidget, Focusable, HasAllFocusHandlers, HasAllKeyHandlers {
 
 }

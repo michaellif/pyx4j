@@ -26,6 +26,7 @@ import com.google.gwt.event.dom.client.BlurEvent;
 import com.google.gwt.event.dom.client.BlurHandler;
 import com.google.gwt.event.dom.client.FocusEvent;
 import com.google.gwt.event.dom.client.FocusHandler;
+import com.google.gwt.event.dom.client.HasAllFocusHandlers;
 import com.google.gwt.event.dom.client.HasBlurHandlers;
 import com.google.gwt.event.dom.client.HasFocusHandlers;
 import com.google.gwt.event.shared.HandlerManager;
@@ -86,7 +87,7 @@ public class GroupFocusHandler extends HandlerManager implements FocusHandler, B
         return addHandler(BlurEvent.getType(), blurHandler);
     }
 
-    public void addFocusable(IFocusable focusable) {
+    public void addFocusable(HasAllFocusHandlers focusable) {
         if (focusable instanceof IGroupFocus) {
             ((IGroupFocus) focusable).getGroupFocusHandler().setParentGroupFocusHandler(this);
         }

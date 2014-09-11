@@ -24,14 +24,15 @@ import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.core.client.Scheduler.ScheduledCommand;
 import com.google.gwt.event.dom.client.BlurHandler;
 import com.google.gwt.event.dom.client.FocusHandler;
+import com.google.gwt.event.dom.client.HasAllFocusHandlers;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.ui.FocusPanel;
+import com.google.gwt.user.client.ui.Focusable;
 
 import com.pyx4j.widgets.client.DropDownPanel;
-import com.pyx4j.widgets.client.IFocusable;
 import com.pyx4j.widgets.client.style.theme.WidgetTheme;
 
-public class PickerPopup<E> extends DropDownPanel implements IFocusable {
+public class PickerPopup<E> extends DropDownPanel implements Focusable, HasAllFocusHandlers {
 
     private final ISelectorWidget<E> selectorWidget;
 
