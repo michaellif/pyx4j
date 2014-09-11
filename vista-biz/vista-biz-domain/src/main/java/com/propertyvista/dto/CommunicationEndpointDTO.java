@@ -14,6 +14,8 @@
 package com.propertyvista.dto;
 
 import com.pyx4j.entity.annotations.ReadOnly;
+import com.pyx4j.entity.annotations.ToString;
+import com.pyx4j.entity.annotations.ToStringFormat;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.core.IPrimitive;
@@ -21,13 +23,17 @@ import com.pyx4j.entity.core.IPrimitive;
 import com.propertyvista.domain.communication.CommunicationEndpoint;
 
 @Transient
+@ToStringFormat("{0} {1}")
 public interface CommunicationEndpointDTO extends CommunicationEndpoint {
+
     @NotNull
     @ReadOnly
+    @ToString(index = 0)
     IPrimitive<String> name();
 
     @NotNull
     @ReadOnly
+    @ToString(index = 1)
     IPrimitive<ContactType> type();
 
     @NotNull
