@@ -65,9 +65,9 @@ public class LeaseViewerViewImplBase<DTO extends LeaseDTO> extends CrmViewerView
 
     private final Button.ButtonMenuBar papsMenu;
 
-    private final SecureMenuItem reserveUnit;
+    protected final SecureMenuItem reserveUnit;
 
-    private final SecureMenuItem unreserveUnit;
+    protected final SecureMenuItem unreserveUnit;
 
     protected final SecureMenuItem newPaymentAction;
 

@@ -424,8 +424,13 @@ public class LeaseApplicationViewerViewImpl extends LeaseViewerViewImplBase<Leas
 
         documentsButton.setVisible(status.isDraft());
 
-        if (value.isYardiApproved().getValue(false)) {
-            // TODO - valdL: disable holdUnit/releaseUnit/decline and cancel(?)
+        // yardi mode overrides:
+        if (VistaFeatures.instance().yardiIntegration()) {
+            if (value.isYardiApproved().getValue(false)) {
+                setActionVisible(reserveUnit, false);
+                setActionVisible(unreserveUnit, false);
+                setActionVisible(declineAction, false);
+            }
         }
     }
 
