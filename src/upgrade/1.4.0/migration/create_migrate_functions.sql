@@ -1155,6 +1155,9 @@ BEGIN
         ***     ==========================================================================================================
         **/
         
+        
+       
+        
         -- delete all behaviours for old roles
         
         EXECUTE 'DELETE FROM '||v_schema_name||'.crm_role$behaviors ';
@@ -1203,6 +1206,14 @@ BEGIN
                 ||'FROM     '||v_schema_name||'.available_crm_report a, '
                 ||'         '||v_schema_name||'.crm_role r '
                 ||'WHERE    r.name = ''All'' )';
+        
+        
+         -- Rename role 'All' to 'Super Administrator'
+        
+        EXECUTE 'UPDATE '||v_schema_name||'.crm_role '
+                ||'SET  name = ''Super Administrator'' '
+                ||'WHERE    name = ''All'' ';
+        
         
         
         
