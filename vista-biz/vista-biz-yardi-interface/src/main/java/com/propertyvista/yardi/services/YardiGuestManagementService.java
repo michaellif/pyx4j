@@ -329,6 +329,7 @@ public class YardiGuestManagementService extends YardiAbstractService {
             if (yardiApp == null || guestProcessor.getApplicationCharges(yardiApp).isEmpty()) {
                 // do ImportApplication to push Deposits back to Yardi as App Fees
                 YardiStubFactory.create(YardiILSGuestCardStub.class).importApplication(yc, guestProcessor.getLeaseApplication(lease, tenantId, deposits));
+                log.info("Application Fees Submitted: {}", deposits.size());
             } else {
                 // TODO - what's the proper handling of existing application with possible app charges?
                 // Options: do nothing, add Master Deposit charges, or merge Master Deposit charges...

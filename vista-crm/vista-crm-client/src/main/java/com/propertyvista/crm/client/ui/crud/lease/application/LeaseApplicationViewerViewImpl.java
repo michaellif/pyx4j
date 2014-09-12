@@ -430,6 +430,7 @@ public class LeaseApplicationViewerViewImpl extends LeaseViewerViewImplBase<Leas
                 setActionVisible(reserveUnit, false);
                 setActionVisible(unreserveUnit, false);
                 setActionVisible(declineAction, false);
+                setActionVisible(cancelAction, false);
             }
         }
     }

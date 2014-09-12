@@ -227,7 +227,7 @@ public class YardiLeaseApplicationFacadeImpl extends AbstractYardiFacadeImpl imp
             boolean leaseSigned = YardiGuestManagementService.getInstance().getWorkflowEvents(getPmcYardiCredential(lease), lease)
                     .contains(EventTypes.LEASE_SIGN);
             log.info("Lease application {} is {} editable", lease.leaseApplication().yardiApplicationId(), leaseSigned ? "not" : "still");
-            return !leaseSigned;
+            return leaseSigned;
         } catch (RemoteException e) {
             throw new UserRuntimeException("Yardi communication error: " + e.getMessage(), e);
         }
