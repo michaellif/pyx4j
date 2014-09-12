@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011-2012 All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -18,6 +18,7 @@ import com.propertyvista.operations.server.upgrade.u_1_0_6.UpgradeProcedure106;
 import com.propertyvista.operations.server.upgrade.u_1_0_9.UpgradeProcedure109;
 import com.propertyvista.operations.server.upgrade.u_1_1_0.UpgradeProcedure110;
 import com.propertyvista.operations.server.upgrade.u_1_1_3.UpgradeProcedure113;
+import com.propertyvista.operations.server.upgrade.u_1_4_0.UpgradeProcedure140;
 
 class VistaUpgradeVersionSelector {
 
@@ -32,6 +33,8 @@ class VistaUpgradeVersionSelector {
             return new UpgradeProcedure110();
         } else if ("1.1.3".equals(schemaVersion)) {
             return new UpgradeProcedure113();
+        } else if ("1.4.0".equals(schemaVersion)) {
+            return new UpgradeProcedure140();
         } else {
             return null;
         }

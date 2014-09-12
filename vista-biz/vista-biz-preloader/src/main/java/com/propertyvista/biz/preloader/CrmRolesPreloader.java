@@ -74,6 +74,13 @@ public class CrmRolesPreloader extends AbstractDataPreloader {
         return Persistence.service().retrieve(criteria);
     }
 
+    public String createDefaultRolesDefinition() {
+        for (Entry<String, List<VistaCrmBehavior>> me : PermissionDescriptionLoader.getDefaultRolesDefinition().entrySet()) {
+            createRole(me.getKey(), me.getValue());
+        }
+        return "Created " + rolesCount + " Roles";
+    }
+
     @Override
     public String create() {
         List<VistaCrmBehavior> allRoles = new ArrayList<VistaCrmBehavior>(Arrays.asList(VistaCrmBehavior.values()));
@@ -81,9 +88,9 @@ public class CrmRolesPreloader extends AbstractDataPreloader {
         allRoles.remove(VistaCrmBehavior.OAPI_ILS);
 
         createRole(DEFAULT_ACCESS_ALL_ROLE_NAME, true, true, allRoles);
-        for (Entry<String, List<VistaCrmBehavior>> me : PermissionDescriptionLoader.getDefaultRolesDefinition().entrySet()) {
-            createRole(me.getKey(), me.getValue());
-        }
+
+        createDefaultRolesDefinition();
+
         Persistence.service().persist(
                 EntityCSVReciver.create(SecurityQuestion.class).loadResourceFile(IOUtils.resourceFileName("SecurityQuestion.csv", LocationsGenerator.class)));
 
