@@ -84,6 +84,7 @@ public abstract class PolicyDTOTabPanelBasedForm<POLICY_DTO extends PolicyDTOBas
                 if (event.getValue() != null) {
                     @SuppressWarnings("unchecked")
                     Class<? extends PolicyNode> selectedNodeType = event.getValue().getType();
+                    get(proto().node()).reset();
                     get(proto().node()).populate(EntityFactory.create(selectedNodeType));
                     get(proto().node()).setVisible(!selectedNodeType.equals(OrganizationPoliciesNode.class));
                 } else {
