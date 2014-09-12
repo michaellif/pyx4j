@@ -18,6 +18,7 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.gwt.dom.client.Style.Display;
 import com.google.gwt.dom.client.Style.TextAlign;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
@@ -67,6 +68,7 @@ public class HelpViewImpl extends FlowPanel implements HelpView {
 
                     Anchor anchor = new Anchor(me.getValue(), false);
                     anchor.getElement().getStyle().setTextAlign(TextAlign.LEFT);
+                    anchor.getElement().getStyle().setDisplay(Display.BLOCK);
                     anchor.addClickHandler(new ClickHandler() {
                         @Override
                         public void onClick(ClickEvent event) {
