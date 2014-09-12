@@ -36,7 +36,7 @@ import com.propertyvista.domain.security.VistaCrmBehavior;
 
 public class CrmRolesPreloader extends AbstractDataPreloader {
 
-    public static final String DEFAULT_ACCESS_ALL_ROLE_NAME = "All";
+    public static final String DEFAULT_ACCESS_ALL_ROLE_NAME = "Super Administrator";
 
     private final static Logger log = LoggerFactory.getLogger(CrmRolesPreloader.class);
 
