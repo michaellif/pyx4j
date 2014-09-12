@@ -298,7 +298,7 @@ SET search_path = '_admin_';
             accepted_visa = TRUE,
             accepted_visa_convenience_fee = TRUE,
             accepted_visa_debit = TRUE,
-            accepted_visa_debit_convenience_fee = TRUE;
+            accepted_visa_debit_convenience_fee = FALSE;
         
         --outgoing_mail_queue
         
