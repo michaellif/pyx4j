@@ -214,6 +214,11 @@ public class YardiLeaseProcessor {
 
     private Lease updateLease(String propertyCode, String leaseId, LeaseTransactionData ltd, Lease existingLease) throws YardiServiceException {
         Lease lease = ServerSideFactory.create(LeaseFacade.class).load(existingLease, true);
+        if (lease.status().getValue().isDraft()) {
+            log.warn("lease {} in propertyCode {} is in Draft state - can't import!", leaseId, propertyCode);
+            return lease;
+        }
+
         Persistence.ensureRetrieve(lease.currentTerm().version().tenants(), AttachLevel.Attached);
         log.debug("Updating lease {} in propertyCode {}", leaseId, propertyCode);
 
