@@ -51,6 +51,8 @@ public interface YardiLeaseApplicationFacade {
     /** Checks if lease can still be updated in Yardi */
     boolean isLeaseSigned(Lease leaseId) throws YardiServiceException;
 
+    String getLeaseId(Lease leaseId) throws YardiServiceException;
+
     /**
      * @param buildingId
      *            for which Online Applications will be enabled

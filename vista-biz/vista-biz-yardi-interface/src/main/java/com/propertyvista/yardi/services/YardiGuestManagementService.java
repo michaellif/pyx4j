@@ -320,7 +320,7 @@ public class YardiGuestManagementService extends YardiAbstractService {
         }
         log.info("Created Lease: {}", tenantId);
 
-        boolean useMasterDeposit = lease.currentTerm().version().leaseProducts().serviceItem().item().yardiDepositLMR().isNull();
+        boolean useMasterDeposit = true;//lease.currentTerm().version().leaseProducts().serviceItem().item().yardiDepositLMR().isNull();
         List<Deposit> deposits = getLeaseDeposits(lease);
         if (useMasterDeposit && !deposits.isEmpty()) {
             ensureDepositChargeCodesConfigured(yc, lease);
@@ -394,6 +394,14 @@ public class YardiGuestManagementService extends YardiAbstractService {
         if (msg.length() > 0) {
             throw new UserRuntimeException(msg.toString());
         }
+    }
+
+    public String getLeaseId(PmcYardiCredential yc, Lease lease) throws YardiServiceException, RemoteException {
+        Persistence.ensureRetrieve(lease.unit().building(), AttachLevel.Attached);
+        String propertyCode = lease.unit().building().propertyCode().getValue();
+        String guestId = lease.getPrimaryKey().toString();
+
+        return getTenantId(yc, propertyCode, guestId, IdentityType.Tenant);
     }
 
     public Set<EventTypes> getWorkflowEvents(PmcYardiCredential yc, Lease lease) throws YardiServiceException, RemoteException {

@@ -233,6 +233,18 @@ public class YardiLeaseApplicationFacadeImpl extends AbstractYardiFacadeImpl imp
         }
     }
 
+    public String getLeaseId(Lease leaseId) throws YardiServiceException {
+        final Lease lease = ServerSideFactory.create(LeaseFacade.class).load(leaseId, false);
+        Persistence.ensureRetrieve(lease.unit().building(), AttachLevel.ToStringMembers);
+        validateApplicationAcceptance(lease.unit().building());
+
+        try {
+            return YardiGuestManagementService.getInstance().getLeaseId(getPmcYardiCredential(lease), lease);
+        } catch (RemoteException e) {
+            throw new UserRuntimeException("Yardi communication error: " + e.getMessage(), e);
+        }
+    }
+
     @Override
     public void validateApplicationAcceptance(Building buildingId) throws UserRuntimeException {
         Building building = Persistence.service().retrieve(Building.class, buildingId.getPrimaryKey());
