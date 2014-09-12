@@ -22,6 +22,7 @@ package com.pyx4j.widgets.client;
 
 import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.core.client.Scheduler.ScheduledCommand;
+import com.google.gwt.dom.client.Style.Display;
 import com.google.gwt.dom.client.Style.Position;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.BlurHandler;
@@ -70,6 +71,7 @@ public abstract class TextBoxBase extends Composite implements ITextWidget, IGro
 
         textBoxHolder = new SimplePanel();
         textBoxHolder.getElement().getStyle().setMarginRight(0, Unit.PX);
+        textBoxHolder.getElement().getStyle().setDisplay(Display.INLINE);
 
         contentPanel.add(textBoxHolder);
 
@@ -87,11 +89,15 @@ public abstract class TextBoxBase extends Composite implements ITextWidget, IGro
     }
 
     protected void setTextBoxWidget(com.google.gwt.user.client.ui.TextBoxBase textBoxWidget) {
+        setTextBoxWidget(textBoxWidget, WidgetTheme.StyleName.TextBox.name());
+    }
+
+    protected void setTextBoxWidget(com.google.gwt.user.client.ui.TextBoxBase textBoxWidget, String styleName) {
         this.textBoxWidget = textBoxWidget;
         if (this.debugId != null) {
             this.textBoxWidget.ensureDebugId(this.debugId.debugId());
         }
-        textBoxWidget.setStyleName(WidgetTheme.StyleName.TextBox.name());
+        textBoxWidget.setStyleName(styleName);
         if (textBoxWidget instanceof com.google.gwt.user.client.ui.TextBox) {
             textBoxWidget.addStyleDependentName(WidgetTheme.StyleDependent.singleLine.name());
         }

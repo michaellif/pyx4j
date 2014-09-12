@@ -64,7 +64,9 @@ public class WidgetTheme extends Theme {
 
         CollapsablePanel, CollapsablePanelImage,
 
-        SuggestBox, SuggestBoxPopup, SelectionPickerPanel, SelectionPickerPanelItem;
+        SuggestBox, SuggestBoxPopup, SelectionPickerPanel, SelectionPickerPanelItem,
+
+        SelectedItemClose, SelectedItemHolder, SelectorTextBox;
     }
 
     public static enum StyleDependent implements IStyleDependent {
@@ -98,6 +100,9 @@ public class WidgetTheme extends Theme {
         initSlideshow();
         initCollapsablePanel();
         initSuggestBoxStyle();
+        initSelectedItemHolderStyle();
+        initSelectedItemCloseStyle();
+        initSelectorTextBoxStyle();
     }
 
     protected void initAnchorStyle() {
@@ -454,5 +459,47 @@ public class WidgetTheme extends Theme {
         style.addProperty("cursor", "hand");
         addStyle(style);
 
+    }
+
+    protected void initSelectedItemHolderStyle() {
+        Style style = new Style(".", StyleName.SelectedItemHolder);
+
+        style.addProperty("display", "inline-block");
+        style.addProperty("color", ThemeColor.foreground);
+        style.addProperty("background-color", "white");
+        style.addProperty("border-width", "1px");
+        style.addProperty("border-style", "solid");
+        style.addProperty("border-color", ThemeColor.foreground, 0.4);
+        style.addProperty("padding", "1px");
+        style.addProperty("box-sizing", "border-box");
+        style.addProperty("-moz-box-sizing", "border-box");
+        style.addProperty("-webkit-box-sizing", "border-box");
+        style.addProperty("font-family", "inherit");
+        style.addProperty("margin", "1px");
+        style.addProperty("border-radius", "3px");
+        addStyle(style);
+    }
+
+    protected void initSelectedItemCloseStyle() {
+
+        Style style = new Style(".", StyleName.SelectedItemClose);
+
+        style.addProperty("vertical-align", "left");
+        style.addProperty("padding", "1px");
+        style.addProperty("cursor", "pointer");
+        style.addProperty("font-weight", "bolder");
+        style.addProperty("display", "inline");
+        addStyle(style);
+    }
+
+    protected void initSelectorTextBoxStyle() {
+        Style style = new Style(".", StyleName.SelectorTextBox);
+
+        style.addProperty("display", "inline");
+        style.addProperty("border-width", "0px");
+        style.addProperty("padding", "1px");
+        //style.addProperty("width", "100%");
+
+        addStyle(style);
     }
 }

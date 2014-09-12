@@ -26,4 +26,8 @@ public class TextBox extends TextBoxBase {
         setTextBoxWidget(new com.google.gwt.user.client.ui.TextBox());
     }
 
+    public TextBox(String stylename) {
+        setTextBoxWidget(new com.google.gwt.user.client.ui.TextBox(), stylename);
+    }
+
 }

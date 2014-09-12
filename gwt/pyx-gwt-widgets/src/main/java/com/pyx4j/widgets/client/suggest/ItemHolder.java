@@ -20,15 +20,14 @@
  */
 package com.pyx4j.widgets.client.suggest;
 
-import com.google.gwt.dom.client.Style.Cursor;
 import com.google.gwt.dom.client.Style.Display;
-import com.google.gwt.dom.client.Style.FontWeight;
-import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.Label;
+
+import com.pyx4j.widgets.client.style.theme.WidgetTheme;
 
 public class ItemHolder<E> extends Composite {
 
@@ -43,6 +42,7 @@ public class ItemHolder<E> extends Composite {
 
         this.parent = parent;
         FlowPanel panel = new FlowPanel();
+        panel.setStyleName(WidgetTheme.StyleName.SelectedItemHolder.name());
         Label lbl = new Label(label);
         lbl.getElement().getStyle().setDisplay(Display.INLINE);
         lbl.addClickHandler(new ClickHandler() {
@@ -54,13 +54,9 @@ public class ItemHolder<E> extends Composite {
         });
         panel.add(lbl);
 
-        Label deleteItemAction = new Label("\u2716"); // 'heavy multiplication' symbol
+        Label deleteItemAction = new Label("\u2716");
         deleteItemAction.setTitle("Remove");
-        deleteItemAction.getElement().getStyle().setDisplay(Display.INLINE);
-        deleteItemAction.getElement().getStyle().setFontWeight(FontWeight.BOLD);
-        deleteItemAction.getElement().getStyle().setPaddingLeft(3, Unit.PX);
-        deleteItemAction.getElement().getStyle().setPaddingRight(3, Unit.PX);
-        deleteItemAction.getElement().getStyle().setCursor(Cursor.POINTER);
+        deleteItemAction.setStyleName(WidgetTheme.StyleName.SelectedItemClose.name());
         deleteItemAction.addClickHandler(new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {

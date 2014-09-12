@@ -22,6 +22,8 @@ package com.pyx4j.widgets.client.suggest;
 
 import java.util.Collection;
 
+import com.google.gwt.dom.client.Style.Display;
+import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.BlurHandler;
 import com.google.gwt.event.dom.client.FocusHandler;
 import com.google.gwt.event.dom.client.KeyDownHandler;
@@ -36,6 +38,7 @@ import com.pyx4j.commons.IFormatter;
 import com.pyx4j.widgets.client.IWatermarkWidget;
 import com.pyx4j.widgets.client.TextBox;
 import com.pyx4j.widgets.client.event.shared.PasteHandler;
+import com.pyx4j.widgets.client.style.theme.WidgetTheme;
 
 public class SelectorListBoxValuePanel<E> extends FlowPanel implements ISelectorValuePanel, IWatermarkWidget {
 
@@ -49,10 +52,15 @@ public class SelectorListBoxValuePanel<E> extends FlowPanel implements ISelector
 
     public SelectorListBoxValuePanel(IFormatter<E, String> valueFormatter) {
         FlowPanel panel = new FlowPanel();
+        panel.setStyleName(WidgetTheme.StyleName.ListBox.name());
 
         this.valueFormatter = valueFormatter;
-        this.selectedCells = new FlowPanel();
-        textBox = new TextBox();
+        selectedCells = new FlowPanel();
+        selectedCells.getElement().getStyle().setDisplay(Display.INLINE);
+        selectedCells.getElement().getStyle().setBorderWidth(0, Unit.PX);
+
+        textBox = new TextBox(WidgetTheme.StyleName.SelectorTextBox.name());
+        textBox.setStyleName(WidgetTheme.StyleName.SelectorTextBox.name());
 
         panel.add(selectedCells);
         panel.add(textBox);
