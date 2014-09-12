@@ -13,35 +13,63 @@
  */
 package com.propertyvista.biz.generator;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
+import java.util.EnumSet;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
-import org.apache.commons.collections4.map.CaseInsensitiveMap;
 import org.apache.commons.lang.StringUtils;
 
 import com.pyx4j.essentials.server.csv.EntityCSVReciver;
+import com.pyx4j.essentials.server.csv.XLSLoad;
 import com.pyx4j.gwt.server.IOUtils;
 
 import com.propertyvista.biz.generator.model.PermissionDescription;
+import com.propertyvista.domain.security.VistaCrmBehavior;
 import com.propertyvista.domain.security.VistaCrmBehaviorDTO;
 
 public class PermissionDescriptionLoader {
 
-    private static final String DESCRIPTIONS_FILE = "permission_descriptions.xls";
+    private static final String DESCRIPTIONS_FILE = "FunctionalBehaviours.xlsx";
 
     // Chars to be removed from description names to avoid inconsistencies
     public static final char[] IGNORING_CHARS = { ' ', ':' };
 
-    // CaseInsensitiveMap to avoid inconsistencies between permission names from xls file and permission name from DB
-    private static CaseInsensitiveMap<String, String> descriptionsMap;
+    private static Map<String, VistaCrmBehavior> behaviorsByName = initbehaviorsByName();
 
-    private static synchronized Map<String, String> getDescriptionsMap() {
+    // CaseInsensitiveMap to avoid inconsistencies between permission names from xls file and permission name from DB
+    private static Map<VistaCrmBehavior, String> descriptionsMap;
+
+    private static Map<String, List<VistaCrmBehavior>> behaviorsByRoleName;
+
+    private static synchronized Map<VistaCrmBehavior, String> getDescriptionsMap() {
         if (null == descriptionsMap) {
             initDescriptionsMap();
         }
-
         return descriptionsMap;
+    }
+
+    private static Map<String, VistaCrmBehavior> initbehaviorsByName() {
+        Map<String, VistaCrmBehavior> byNames = new HashMap<>();
+        for (VistaCrmBehavior b : EnumSet.allOf(VistaCrmBehavior.class)) {
+            byNames.put(b.name().toLowerCase(Locale.ENGLISH).replace(" ", ""), b);
+        }
+        return byNames;
+    }
+
+    public static Map<String, List<VistaCrmBehavior>> getDefaultRolesDefinition() {
+        // Initialize
+        getDescriptionsMap();
+        // TODO return behaviorsByRoleName;
+
+        Map<String, List<VistaCrmBehavior>> m = new HashMap<>();
+        // TODO  and Load and create this Map Once.
+        m.put("Basic Login", Arrays.asList(VistaCrmBehavior.BuildingBasic));
+        return m;
     }
 
     public static Collection<VistaCrmBehaviorDTO> enhanceDescriptions(Collection<VistaCrmBehaviorDTO> values) {
@@ -52,27 +80,71 @@ public class PermissionDescriptionLoader {
     }
 
     // Set description from XLS file to permission from DB
-    private static void setPermissions(Collection<VistaCrmBehaviorDTO> to, Map<String, String> from) {
-
+    private static void setPermissions(Collection<VistaCrmBehaviorDTO> to, Map<VistaCrmBehavior, String> from) {
         for (VistaCrmBehaviorDTO dto : to) {
-            // Ignore some chars from permission names from DB
-            String key = StringUtils.replaceChars(dto.permission().getValue(), new String(IGNORING_CHARS), null);
-            if (from.containsKey(key))
-                dto.description().setValue(from.get(key));
+            dto.description().setValue(from.get(dto.behavior().getValue()));
+        }
+    }
+
+    private static VistaCrmBehavior toBehavior(String verbalBehaviour) {
+        try {
+            verbalBehaviour = StringUtils.replaceChars(verbalBehaviour, new String(IGNORING_CHARS), null);
+            VistaCrmBehavior b = behaviorsByName.get(verbalBehaviour.toLowerCase(Locale.ENGLISH));
+            if (b != null) {
+                return b;
+            }
+            b = VistaCrmBehavior.valueOf(verbalBehaviour);
+            return b;
+        } catch (IllegalArgumentException ignore) {
+            return null;
         }
     }
 
     private static void initDescriptionsMap() {
-        List<PermissionDescription> descriptions = EntityCSVReciver.create(PermissionDescription.class).loadResourceFile(
-                IOUtils.resourceFileName(DESCRIPTIONS_FILE, PermissionDescriptionLoader.class));
+        EntityCSVReciver<PermissionDescription> descriptionReciver = EntityCSVReciver.create(PermissionDescription.class);
+        XLSLoad xls = XLSLoad.loadResourceFile(IOUtils.resourceFileName(DESCRIPTIONS_FILE, PermissionDescriptionLoader.class), true, descriptionReciver);
 
-        descriptionsMap = new CaseInsensitiveMap<String, String>(descriptions.size());
+        // Part One Load Description
+        List<PermissionDescription> descriptions = descriptionReciver.getEntities();
 
+        Map<VistaCrmBehavior, String> descriptionsMapLocal = new HashMap<>();
         for (PermissionDescription p : descriptions) {
             // Ignore some chars from permission names from XLS file
-            String permissionNameIgnoreChars = StringUtils.replaceChars(p.permission().getValue(), new String(IGNORING_CHARS), null);
-            descriptionsMap.put(permissionNameIgnoreChars, p.description().getValue());
+            VistaCrmBehavior b = toBehavior(p.permission().getValue());
+            if (b != null) {
+                descriptionsMapLocal.put(b, p.description().getValue());
+            }
         }
-    }
 
+        Map<String, List<VistaCrmBehavior>> behaviorsByRoleNameLocal = new HashMap<>();
+        // TODO
+        if (false) {
+
+            // Part 2 Load default Roles
+            for (int sheetNumber = 2; sheetNumber < xls.getNumberOfSheets(); sheetNumber++) {
+                // TODO Read new Entity Role Model.
+                String roleName = xls.getSheetName(sheetNumber);
+                if (roleName.equalsIgnoreCase("Super Administrator")) {
+                    break;
+                }
+                List<VistaCrmBehavior> permissions = new ArrayList<>();
+
+                //  public boolean loadSheet(Sheet sheet, CSVReciver reciver)
+                //for all rowns
+                {
+                    VistaCrmBehavior b = toBehavior("xx");
+                    if (b != null) {
+                        permissions.add(b);
+                    }
+                }
+
+                behaviorsByRoleName.put(roleName, permissions);
+            }
+
+        }
+
+        behaviorsByRoleName = behaviorsByRoleNameLocal;
+        descriptionsMap = descriptionsMapLocal;
+
+    }
 }
