@@ -72,7 +72,8 @@ public class MappingUtils {
     public static InternationalAddress getAddress(Address mitsAddress, StringBuilder error) {
         // TODO instantiate address parser according to the building country
         // extract street name and number
-        String[] streetNumName = mitsAddress.getAddress1().split("\\s+", 2);
+        String address1 = mitsAddress.getAddress1() == null ? "" : mitsAddress.getAddress1();
+        String[] streetNumName = address1.split("\\s+", 2);
         // combine address2 parts
         StringBuilder address2 = new StringBuilder();
         for (String addressPart : mitsAddress.getAddress2()) {
@@ -86,7 +87,7 @@ public class MappingUtils {
             address.streetNumber().setValue(streetNumName[0]);
             address.streetName().setValue(streetNumName[1]);
         } else {
-            address.streetName().setValue(mitsAddress.getAddress1());
+            address.streetName().setValue(address1);
         }
         address.suiteNumber().setValue(address2.toString());
 

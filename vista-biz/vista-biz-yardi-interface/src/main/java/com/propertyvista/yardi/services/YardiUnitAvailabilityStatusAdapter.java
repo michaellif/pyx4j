@@ -147,7 +147,7 @@ public class YardiUnitAvailabilityStatusAdapter {
                     }
                 }
             } else {
-                log.warn("Failed to set unit rent for unit pk={}: lease not found", unitId.getPrimaryKey());
+                log.debug("No lease found for unit pk={}: unit rent not set", unitId.getPrimaryKey());
             }
         }
     }
