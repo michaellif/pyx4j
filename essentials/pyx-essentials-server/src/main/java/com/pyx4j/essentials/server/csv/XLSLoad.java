@@ -57,19 +57,20 @@ public class XLSLoad {
 
     private FormulaEvaluator formulaEvaluator;
 
-    public static void loadResourceFile(String resourceName, boolean xlsx, CSVReciver reciver) {
+    public static XLSLoad loadResourceFile(String resourceName, boolean xlsx, CSVReciver reciver) {
         InputStream is = Thread.currentThread().getContextClassLoader().getResourceAsStream(resourceName);
         if (is == null) {
             throw new RuntimeException("Resource [" + resourceName + "] not found");
         }
-        loadFile(is, xlsx, reciver);
+        return loadFile(is, xlsx, reciver);
     }
 
-    public static void loadFile(InputStream is, boolean xlsx, CSVReciver reciver) {
+    public static XLSLoad loadFile(InputStream is, boolean xlsx, CSVReciver reciver) {
         try {
             XLSLoad l = new XLSLoad(is, xlsx);
             Sheet sheet = l.wb.getSheetAt(0);
             l.loadSheet(sheet, reciver);
+            return l;
         } catch (IOException ioe) {
             throw new RuntimeException("Load file error", ioe);
         }
