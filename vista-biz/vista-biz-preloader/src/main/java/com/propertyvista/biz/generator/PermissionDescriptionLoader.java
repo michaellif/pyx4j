@@ -23,16 +23,21 @@ import java.util.Locale;
 import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.pyx4j.essentials.server.csv.EntityCSVReciver;
 import com.pyx4j.essentials.server.csv.XLSLoad;
 import com.pyx4j.gwt.server.IOUtils;
 
+import com.propertyvista.biz.generator.model.Permission;
 import com.propertyvista.biz.generator.model.PermissionDescription;
 import com.propertyvista.domain.security.VistaCrmBehavior;
 import com.propertyvista.domain.security.VistaCrmBehaviorDTO;
 
 public class PermissionDescriptionLoader {
+
+    private static final Logger log = LoggerFactory.getLogger(PermissionDescriptionLoader.class);
 
     private static final String DESCRIPTIONS_FILE = "FunctionalBehaviours.xlsx";
 
@@ -113,34 +118,41 @@ public class PermissionDescriptionLoader {
             VistaCrmBehavior b = toBehavior(p.permission().getValue());
             if (b != null) {
                 descriptionsMapLocal.put(b, p.description().getValue());
+            } else {
+                log.info("Loading permission descriptions: '" + p.permission().getValue() + "' does not match");
             }
         }
 
         Map<String, List<VistaCrmBehavior>> behaviorsByRoleNameLocal = new HashMap<>();
         // TODO
         if (false) {
-
             // Part 2 Load default Roles
             for (int sheetNumber = 2; sheetNumber < xls.getNumberOfSheets(); sheetNumber++) {
+
                 // TODO Read new Entity Role Model.
+
                 String roleName = xls.getSheetName(sheetNumber);
                 if (roleName.equalsIgnoreCase("Super Administrator")) {
                     break;
                 }
-                List<VistaCrmBehavior> permissions = new ArrayList<>();
 
-                //  public boolean loadSheet(Sheet sheet, CSVReciver reciver)
-                //for all rowns
-                {
-                    VistaCrmBehavior b = toBehavior("xx");
-                    if (b != null) {
-                        permissions.add(b);
+                EntityCSVReciver<Permission> permissionsReceiver = EntityCSVReciver.create(Permission.class);
+                permissionsReceiver = EntityCSVReciver.create(Permission.class);
+                List<VistaCrmBehavior> permissions = new ArrayList<>();
+                xls.loadSheet(sheetNumber, permissionsReceiver);
+
+                if (!roleName.equalsIgnoreCase("Template")) {
+                    for (Permission permission : permissionsReceiver.getEntities()) {
+                        VistaCrmBehavior b = toBehavior(permission.permission().getValue());
+                        System.out.println();
+                        if (b != null) {
+                            permissions.add(b);
+                        }
                     }
                 }
 
-                behaviorsByRoleName.put(roleName, permissions);
+                behaviorsByRoleNameLocal.put(roleName, permissions);
             }
-
         }
 
         behaviorsByRoleName = behaviorsByRoleNameLocal;
