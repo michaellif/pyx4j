@@ -278,6 +278,16 @@ SET search_path = '_admin_';
         WHERE   sale_response_code = '0000';
         
         
+        -- direct_debit_record
+        
+        UPDATE  direct_debit_record
+        SET     trace_collection = TO_DATE(trace_collection_date,'DDMMYY');
+        
+        -- fee_default_equifax_fee
+        
+        UPDATE  fee_default_equifax_fee
+        SET     tax_rate = 0.1300;
+        
         -- fee_default_payment_fees
         
         UPDATE  fee_default_payment_fees

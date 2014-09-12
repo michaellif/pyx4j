@@ -15,7 +15,7 @@ CREATE TABLE _dba_.tmp_categories AS
 );
 
 
--- pg_dump -U psql_dba -h localhost -O -t _dba_.tmp_roles vista_trunk > insert_tmp_roles.sql
+-- pg_dump -U psql_dba -h localhost -O -t _dba_.tmp_roles vista_prod > insert_tmp_roles.sql
 -- pg_dump -U psql_dba -h localhost -O -t _dba_.tmp_categories vista_trunk > insert_tmp_categories.sql
 
 

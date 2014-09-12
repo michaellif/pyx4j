@@ -82,7 +82,6 @@ All	DashboardsGadgetsFull	t
 All	AdminGeneral	t
 All	AdminFinancial	t
 All	AdminContent	t
-PropertyVista Support	PropertyVistaSupport	f
 \.
 
 

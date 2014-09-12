@@ -365,6 +365,7 @@ BEGIN
         -- crm_role
         
         ALTER TABLE crm_role ALTER COLUMN name TYPE VARCHAR(55);
+        ALTER TABLE crm_role ADD COLUMN system_predefined BOOLEAN;
         
         -- customer_screening_income_info
         
@@ -1158,15 +1159,15 @@ BEGIN
         
         EXECUTE 'DELETE FROM '||v_schema_name||'.crm_role$behaviors ';
         
-        -- delete all from crm_user_credential$rls for roles not in ('All', 'propertyVista Support')
+        -- delete all from crm_user_credential$rls for roles other than 'All'
         EXECUTE 'DELETE FROM '||v_schema_name||'.crm_user_credential$rls '
                 ||'WHERE value IN ( SELECT id FROM '||v_schema_name||'.crm_role '
-                ||'                 WHERE name NOT IN (''All'', ''PropertyVista Support'' ))';
+                ||'                 WHERE name != ''All'')';
                 
         -- delete old roles
         
          EXECUTE 'DELETE FROM '||v_schema_name||'.crm_role '
-                ||'WHERE name  NOT IN (''All'', ''PropertyVista Support'' )';
+                ||'WHERE name  != ''All'' ';
         
         
         -- import new roles form tmp_table 
@@ -1177,8 +1178,14 @@ BEGIN
                 ||'         t.name,t.require_security_question_for_password_reset, '
                 ||'         date_trunc(''second'',current_timestamp)::timestamp '
                 ||'FROM     _dba_.tmp_roles t '
-                ||'WHERE    t.name NOT IN (''All'', ''PropertyVista Support'' ))';
-                
+                ||'WHERE    t.name != ''All'' )';
+        
+        -- update role 'All'
+        
+        EXECUTE 'UPDATE '||v_schema_name||'.crm_role '
+                ||'SET  system_predefined = TRUE '
+                ||'WHERE    name = ''All'' ';
+        
         -- import new role behaviours 
         
         EXECUTE 'INSERT INTO '||v_schema_name||'.crm_role$behaviors (id,owner,value) '
