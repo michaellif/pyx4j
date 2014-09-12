@@ -16,6 +16,7 @@ package com.propertyvista.biz.preloader;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map.Entry;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -28,6 +29,7 @@ import com.pyx4j.essentials.server.csv.EntityCSVReciver;
 import com.pyx4j.gwt.server.IOUtils;
 
 import com.propertyvista.biz.generator.LocationsGenerator;
+import com.propertyvista.biz.generator.PermissionDescriptionLoader;
 import com.propertyvista.domain.security.CrmRole;
 import com.propertyvista.domain.security.SecurityQuestion;
 import com.propertyvista.domain.security.VistaCrmBehavior;
@@ -40,14 +42,14 @@ public class CrmRolesPreloader extends AbstractDataPreloader {
 
     private int rolesCount;
 
-    private CrmRole createRole(String name, VistaCrmBehavior... behavior) {
-        return createRole(name, false, false, behavior);
+    private CrmRole createRole(String name, List<VistaCrmBehavior> behaviors) {
+        return createRole(name, false, false, behaviors);
     }
 
-    private CrmRole createRole(String name, boolean requireSecurityQuestionForPasswordReset, boolean systemPredefined, VistaCrmBehavior... behavior) {
+    private CrmRole createRole(String name, boolean requireSecurityQuestionForPasswordReset, boolean systemPredefined, List<VistaCrmBehavior> behaviors) {
         CrmRole role = EntityFactory.create(CrmRole.class);
         role.name().setValue(name);
-        role.behaviors().addAll(Arrays.asList(behavior));
+        role.behaviors().addAll(behaviors);
         role.systemPredefined().setValue(systemPredefined);
         role.requireSecurityQuestionForPasswordReset().setValue(requireSecurityQuestionForPasswordReset);
         Persistence.service().persist(role);
@@ -78,8 +80,10 @@ public class CrmRolesPreloader extends AbstractDataPreloader {
         allRoles.remove(VistaCrmBehavior.OAPI_Properties);
         allRoles.remove(VistaCrmBehavior.OAPI_ILS);
 
-        createRole(DEFAULT_ACCESS_ALL_ROLE_NAME, true, true, allRoles.toArray(new VistaCrmBehavior[allRoles.size()]));
-
+        createRole(DEFAULT_ACCESS_ALL_ROLE_NAME, true, true, allRoles);
+        for (Entry<String, List<VistaCrmBehavior>> me : PermissionDescriptionLoader.getDefaultRolesDefinition().entrySet()) {
+            createRole(me.getKey(), me.getValue());
+        }
         Persistence.service().persist(
                 EntityCSVReciver.create(SecurityQuestion.class).loadResourceFile(IOUtils.resourceFileName("SecurityQuestion.csv", LocationsGenerator.class)));
 
