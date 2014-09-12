@@ -31,7 +31,7 @@ import com.propertyvista.crm.rpc.services.financial.AggregatedTransferCrudServic
 import com.propertyvista.domain.financial.AggregatedTransfer;
 import com.propertyvista.domain.financial.CardsAggregatedTransfer;
 import com.propertyvista.domain.financial.EftAggregatedTransfer;
-import com.propertyvista.domain.security.VistaCrmBehavior;
+import com.propertyvista.domain.security.common.VistaBasicBehavior;
 import com.propertyvista.operations.domain.eft.cards.CardsReconciliationRecord;
 import com.propertyvista.server.TaskRunner;
 
@@ -70,7 +70,7 @@ public class AggregatedTransferCrudServiceImpl extends AbstractCrudServiceImpl<A
     @Override
     protected void enhanceRetrieved(final AggregatedTransfer bo, final AggregatedTransfer to, RetrieveTarget retrieveTarget) {
         if (to.isAssignableFrom(CardsAggregatedTransferDTO.class)) {
-            if (SecurityController.check(VistaCrmBehavior.PropertyVistaSupport)) {
+            if (SecurityController.check(VistaBasicBehavior.PropertyVistaSupport)) {
                 TaskRunner.runInOperationsNamespace(new Callable<Void>() {
                     @Override
                     public Void call() {

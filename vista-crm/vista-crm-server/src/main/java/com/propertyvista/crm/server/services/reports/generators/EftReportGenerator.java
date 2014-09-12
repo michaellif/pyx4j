@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011-2012 All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -27,10 +27,10 @@ import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.Path;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
+import com.pyx4j.entity.server.CrudEntityBinder;
 import com.pyx4j.entity.server.IEntityPersistenceService.ICursorIterator;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.utils.EntityComparatorFactory;
-import com.pyx4j.entity.server.CrudEntityBinder;
 import com.pyx4j.essentials.server.services.reports.ReportExporter;
 import com.pyx4j.essentials.server.services.reports.ReportProgressStatus;
 import com.pyx4j.gwt.server.IOUtils;
@@ -50,7 +50,7 @@ import com.propertyvista.domain.financial.billing.BillingCycle;
 import com.propertyvista.domain.payment.EcheckInfo;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.reports.EftReportMetadata;
-import com.propertyvista.domain.security.VistaCrmBehavior;
+import com.propertyvista.domain.security.common.VistaBasicBehavior;
 import com.propertyvista.domain.tenant.lease.Lease;
 
 public class EftReportGenerator implements ReportExporter {
@@ -100,7 +100,7 @@ public class EftReportGenerator implements ReportExporter {
                     EcheckInfo echeck = paymentRecord.paymentMethod().details().duplicate(EcheckInfo.class);
                     eftReportRecordDto.bankId().setValue(echeck.bankId().getValue());
                     eftReportRecordDto.transitNumber().setValue(echeck.branchTransitNumber().getValue());
-                    if (SecurityController.check(VistaCrmBehavior.PropertyVistaSupport)) {
+                    if (SecurityController.check(VistaBasicBehavior.PropertyVistaSupport)) {
                         eftReportRecordDto.accountNumber().setValue(echeck.accountNo().number().getValue());
                     } else {
                         eftReportRecordDto.accountNumber().setValue(echeck.accountNo().obfuscatedNumber().getValue());

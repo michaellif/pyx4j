@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011-2012 All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -28,7 +28,7 @@ import com.pyx4j.site.client.ui.prime.form.FieldDecoratorBuilder;
 
 import com.propertyvista.crm.client.ui.reports.eft.SelectedBuildingsFolder;
 import com.propertyvista.domain.reports.AutoPayChangesReportMetadata;
-import com.propertyvista.domain.security.VistaCrmBehavior;
+import com.propertyvista.domain.security.common.VistaBasicBehavior;
 
 public class AutoPayChangesReportSettingsForm extends CForm<AutoPayChangesReportMetadata> {
 
@@ -61,7 +61,7 @@ public class AutoPayChangesReportSettingsForm extends CForm<AutoPayChangesReport
         leftSidePanel.add(inject(proto().maximum(), new FieldDecoratorBuilder().componentWidth("100px").build()));
         get(proto().maximum()).asWidget().getElement().getStyle().setDisplay(Display.BLOCK);
 
-        if (SecurityController.check(VistaCrmBehavior.PropertyVistaSupport)) {
+        if (SecurityController.check(VistaBasicBehavior.PropertyVistaSupport)) {
             leftSidePanel.add(inject(proto().trace(), new FieldDecoratorBuilder().componentWidth("100px").build()));
         }
 

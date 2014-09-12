@@ -128,12 +128,7 @@ public class UserPreloader extends BaseVistaDevDataPreloader {
             emp.title().setValue("Executive");
             emp.email().setValue(email);
 
-            CrmRole additinalRole = null;
-            if (i == 2) {
-                additinalRole = CrmRolesPreloader.getSupportRole();
-            }
-
-            emp.user().set(createCrmUser(emp.name().getStringView(), email, email, defaultRole, additinalRole));
+            emp.user().set(createCrmUser(emp.name().getStringView(), email, email, defaultRole));
 
             Persistence.service().persist(emp);
 

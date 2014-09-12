@@ -223,7 +223,7 @@ public class VistaCrmAccessControlList extends ServletContainerAclBuilder {
             grant(VistaBasicBehavior.CRM, new EntityPermission("*", READ));
         }
 
-        grant(VistaCrmBehavior.PropertyVistaSupport, new IServiceExecutePermission("*"));
+        grant(VistaBasicBehavior.PropertyVistaSupport, new IServiceExecutePermission("*"));
 
         grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(DeferredProcessService.class));
         grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(ReferenceDataService.class));
@@ -300,9 +300,9 @@ public class VistaCrmAccessControlList extends ServletContainerAclBuilder {
         grant(VistaBasicBehavior.CRM, new EntityPermission(CommunityEvent.class, EntityPermission.ALL));
         grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(CommunityEventCrudService.class));
 
-        grant(VistaCrmBehavior.PropertyVistaSupport, new IServiceExecutePermission(UpdateUploadService.class));
-        grant(VistaCrmBehavior.PropertyVistaSupport, new IServiceExecutePermission(ImportBuildingDataService.class));
-        grant(VistaCrmBehavior.PropertyVistaSupport, new IServiceExecutePermission(ExportBuildingDataDownloadService.class));
+        grant(VistaBasicBehavior.PropertyVistaSupport, new IServiceExecutePermission(UpdateUploadService.class));
+        grant(VistaBasicBehavior.PropertyVistaSupport, new IServiceExecutePermission(ImportBuildingDataService.class));
+        grant(VistaBasicBehavior.PropertyVistaSupport, new IServiceExecutePermission(ExportBuildingDataDownloadService.class));
 
 // - Unit-related:
         grant(VistaBasicBehavior.CRM, new EntityPermission(AptUnit.class, EntityPermission.ALL));
@@ -378,8 +378,8 @@ public class VistaCrmAccessControlList extends ServletContainerAclBuilder {
         grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(PaymentRecordCrudService.class));
         grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(CreditCardValidationService.class));
 
-        grant(VistaCrmBehavior.PropertyVistaSupport, new IServiceExecutePermission(TenantPadFileDownloadService.class));
-        grant(VistaCrmBehavior.PropertyVistaSupport, new IServiceExecutePermission(TenantPadFileUploadService.class));
+        grant(VistaBasicBehavior.PropertyVistaSupport, new IServiceExecutePermission(TenantPadFileDownloadService.class));
+        grant(VistaBasicBehavior.PropertyVistaSupport, new IServiceExecutePermission(TenantPadFileUploadService.class));
 
         grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(PreauthorizedPaymentsVisorService.class));
 

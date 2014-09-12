@@ -23,7 +23,7 @@ import com.pyx4j.security.shared.SecurityController;
 
 import com.propertyvista.common.client.ui.components.VistaEditorsComponentFactory;
 import com.propertyvista.crm.rpc.dto.financial.CardsAggregatedTransferDTO;
-import com.propertyvista.domain.security.VistaCrmBehavior;
+import com.propertyvista.domain.security.common.VistaBasicBehavior;
 
 public class CardsAggregatedTransferForm extends CForm<CardsAggregatedTransferDTO> {
 
@@ -48,7 +48,7 @@ public class CardsAggregatedTransferForm extends CForm<CardsAggregatedTransferDT
         formPanel.append(Location.Right, proto().mastercardDeposit()).decorate().componentWidth(120);
         formPanel.append(Location.Right, proto().mastercardFee()).decorate().componentWidth(120);
 
-        if (SecurityController.check(VistaCrmBehavior.PropertyVistaSupport)) {
+        if (SecurityController.check(VistaBasicBehavior.PropertyVistaSupport)) {
             formPanel.h3("Vista Support Trace info");
             formPanel.append(Location.Dual, proto().fileMerchantTotal()).decorate();
             formPanel.append(Location.Dual, proto().fileCardTotal()).decorate();

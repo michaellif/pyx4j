@@ -483,7 +483,7 @@ public abstract class VistaAuthenticationServicesImpl<U extends AbstractUser, E 
 
         ar.setSystemWallMessage(systemWallMessage);
 
-        if (SecurityController.check(VistaCrmBehavior.PropertyVistaSupport)
+        if (SecurityController.check(VistaBasicBehavior.PropertyVistaSupport)
                 && ((systemId == VistaSystemIdentification.production) || (systemId == VistaSystemIdentification.demo))) {
             setVistaEmployeeCookie();
         }

@@ -26,7 +26,7 @@ import com.pyx4j.site.client.ui.prime.form.IForm;
 import com.propertyvista.crm.client.resources.CrmResources;
 import com.propertyvista.crm.client.ui.crud.policies.common.PolicyDTOTabPanelBasedForm;
 import com.propertyvista.domain.policy.dto.BackgroundCheckPolicyDTO;
-import com.propertyvista.domain.security.VistaCrmBehavior;
+import com.propertyvista.domain.security.common.VistaBasicBehavior;
 
 public class BackgroundCheckPolicyForm extends PolicyDTOTabPanelBasedForm<BackgroundCheckPolicyDTO> {
 
@@ -59,6 +59,6 @@ public class BackgroundCheckPolicyForm extends PolicyDTOTabPanelBasedForm<Backgr
     protected void onValueSet(boolean populate) {
         super.onValueSet(populate);
 
-        get(proto().strategyNumber()).setVisible(SecurityController.check(VistaCrmBehavior.PropertyVistaSupport));
+        get(proto().strategyNumber()).setVisible(SecurityController.check(VistaBasicBehavior.PropertyVistaSupport));
     }
 }

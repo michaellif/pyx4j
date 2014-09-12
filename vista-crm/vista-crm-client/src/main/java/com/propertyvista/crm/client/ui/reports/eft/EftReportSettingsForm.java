@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011-2012 All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -41,7 +41,7 @@ import com.propertyvista.crm.client.ui.crud.organisation.common.PortfolioFolder;
 import com.propertyvista.crm.rpc.dto.reports.EftReportRecordDTO;
 import com.propertyvista.domain.financial.BillingAccount.BillingPeriod;
 import com.propertyvista.domain.reports.EftReportMetadata;
-import com.propertyvista.domain.security.VistaCrmBehavior;
+import com.propertyvista.domain.security.common.VistaBasicBehavior;
 import com.propertyvista.shared.config.VistaFeatures;
 
 public class EftReportSettingsForm extends CForm<EftReportMetadata> {
@@ -78,7 +78,7 @@ public class EftReportSettingsForm extends CForm<EftReportMetadata> {
         column1.add(inject(proto().paymentStatus(), new FieldDecoratorBuilder().componentWidth(INPUT_FIELD_WIDTH).build()));
         column1.add(inject(proto().orderBy(), makeOrderByComboBox(), new FieldDecoratorBuilder().componentWidth(INPUT_FIELD_WIDTH).build()));
 
-        if (SecurityController.check(VistaCrmBehavior.PropertyVistaSupport)) {
+        if (SecurityController.check(VistaBasicBehavior.PropertyVistaSupport)) {
             column1.add(inject(proto().trace(), new FieldDecoratorBuilder().build()));
         }
 

@@ -21,7 +21,7 @@ import com.pyx4j.widgets.client.Button;
 
 import com.propertyvista.crm.client.ui.components.boxes.UpdateUploadDialog;
 import com.propertyvista.crm.client.ui.crud.CrmListerViewImplBase;
-import com.propertyvista.domain.security.VistaCrmBehavior;
+import com.propertyvista.domain.security.common.VistaBasicBehavior;
 import com.propertyvista.dto.BuildingDTO;
 
 public class BuildingListerViewImpl extends CrmListerViewImplBase<BuildingDTO> implements BuildingListerView {
@@ -35,7 +35,7 @@ public class BuildingListerViewImpl extends CrmListerViewImplBase<BuildingDTO> i
 
         // TODO implement Upload
         // This used to be shown when Leases was disabled.
-        if (false && SecurityController.check(VistaCrmBehavior.PropertyVistaSupport)) {
+        if (false && SecurityController.check(VistaBasicBehavior.PropertyVistaSupport)) {
             upload = new Button(i18n.tr("Upload Update"), new Command() {
 
                 @Override

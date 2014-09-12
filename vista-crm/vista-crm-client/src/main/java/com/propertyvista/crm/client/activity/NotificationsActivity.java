@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011- All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -35,7 +35,7 @@ import com.pyx4j.site.shared.domain.Notification.NotificationType;
 import com.propertyvista.common.client.config.VistaFeaturesCustomizationClient;
 import com.propertyvista.crm.client.CrmSite;
 import com.propertyvista.crm.client.ui.NotificationsView;
-import com.propertyvista.domain.security.VistaCrmBehavior;
+import com.propertyvista.domain.security.common.VistaBasicBehavior;
 import com.propertyvista.shared.config.VistaDemo;
 
 public class NotificationsActivity extends AbstractActivity implements NotificationsView.NotificationsPresenter {
@@ -94,7 +94,7 @@ public class NotificationsActivity extends AbstractActivity implements Notificat
     }
 
     private void updateAuthenticatedView() {
-        if (ClientContext.isAuthenticated() && SecurityController.check(VistaCrmBehavior.PropertyVistaSupport) && ApplicationBackend.isProductionBackend()) {
+        if (ClientContext.isAuthenticated() && SecurityController.check(VistaBasicBehavior.PropertyVistaSupport) && ApplicationBackend.isProductionBackend()) {
             notifications.add(productionNotification);
         } else {
             notifications.remove(productionNotification);

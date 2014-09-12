@@ -74,6 +74,7 @@ public class CrmRoleForm extends CrmEntityForm<CrmRole> {
         super.onValueSet(populate);
 
         enforceRequireTwoStepVerificationForEquifaxBehaviour();
+        get(proto().permissions()).setEditable(!getValue().systemPredefined().getValue(false));
     }
 
     private void enforceRequireTwoStepVerificationForEquifaxBehaviour() {

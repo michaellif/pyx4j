@@ -34,8 +34,8 @@ import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.crm.rpc.dto.financial.AutoPayHistoryDTO;
 import com.propertyvista.domain.payment.AutopayAgreement;
 import com.propertyvista.domain.payment.LeasePaymentMethod;
-import com.propertyvista.domain.security.VistaCrmBehavior;
 import com.propertyvista.domain.security.common.AbstractPmcUser;
+import com.propertyvista.domain.security.common.VistaBasicBehavior;
 import com.propertyvista.domain.tenant.lease.Tenant;
 
 public class AutoPayHistoryForm extends CrmEntityForm<AutoPayHistoryDTO> {
@@ -91,7 +91,7 @@ public class AutoPayHistoryForm extends CrmEntityForm<AutoPayHistoryDTO> {
 
         get(proto().updated()).setVisible(!getValue().updated().isNull());
 
-        boolean support = SecurityController.check(VistaCrmBehavior.PropertyVistaSupport);
+        boolean support = SecurityController.check(VistaBasicBehavior.PropertyVistaSupport);
         get(proto().updatedByTenant()).setVisible(support);
         get(proto().updatedBySystem()).setVisible(support);
 

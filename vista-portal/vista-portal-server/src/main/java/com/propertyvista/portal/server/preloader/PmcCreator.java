@@ -91,11 +91,7 @@ public class PmcCreator {
                 if (ApplicationMode.isDevelopment()) {
                     for (int i = 1; i <= DemoData.UserType.PM.getDefaultMax(); i++) {
                         String email = DemoData.UserType.PM.getEmail(i);
-                        CrmRole additinalRole = null;
-                        if (i == 2) {
-                            additinalRole = CrmRolesPreloader.getSupportRole();
-                        }
-                        createCrmEmployee(email, email, email, email, null, defaultRole, additinalRole);
+                        createCrmEmployee(email, email, email, email, null, defaultRole);
                     }
                 }
 
@@ -117,8 +113,7 @@ public class PmcCreator {
     }
 
     public static void createVistaSupportUsers() {
-        createCrmEmployee("Support", "PropertyVista", CrmUser.VISTA_SUPPORT_ACCOUNT_EMAIL, null, null, CrmRolesPreloader.getDefaultRole(),
-                CrmRolesPreloader.getSupportRole());
+        createCrmEmployee("Support", "PropertyVista", CrmUser.VISTA_SUPPORT_ACCOUNT_EMAIL, null, null, CrmRolesPreloader.getDefaultRole());
     }
 
     public static CrmUser createCrmEmployee(String firstName, String lastName, String email, String password, Key onboardingUserKey, CrmRole... roles) {

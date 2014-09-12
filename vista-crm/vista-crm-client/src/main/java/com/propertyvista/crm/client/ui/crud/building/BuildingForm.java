@@ -88,7 +88,7 @@ import com.propertyvista.domain.property.asset.building.BuildingAmenity;
 import com.propertyvista.domain.property.asset.building.BuildingFinancial;
 import com.propertyvista.domain.property.asset.building.BuildingMechanical;
 import com.propertyvista.domain.property.asset.building.BuildingUtility;
-import com.propertyvista.domain.security.VistaCrmBehavior;
+import com.propertyvista.domain.security.common.VistaBasicBehavior;
 import com.propertyvista.domain.settings.ILSConfig.ILSVendor;
 import com.propertyvista.dto.AptUnitDTO;
 import com.propertyvista.dto.BuildingDTO;
@@ -161,7 +161,7 @@ public class BuildingForm extends CrmEntityForm<BuildingDTO> {
 
         get(proto().complex()).setVisible(!getValue().complex().isNull());
         get(proto().externalId()).setVisible(!getValue().externalId().isNull());
-        get(proto().suspended()).setEditable(SecurityController.check(VistaCrmBehavior.PropertyVistaSupport));
+        get(proto().suspended()).setEditable(SecurityController.check(VistaBasicBehavior.PropertyVistaSupport));
 
         // tweak property code editing UI:
         if (isEditable()) {
@@ -171,7 +171,7 @@ public class BuildingForm extends CrmEntityForm<BuildingDTO> {
                     new DefaultAsyncCallback<DatesPolicy>() {
                         @Override
                         public void onSuccess(DatesPolicy result) {
-                            // set build year date picker range: 
+                            // set build year date picker range:
                             CComponent<?, ?, ?> comp = get(proto().info().structureBuildYear());
                             if (comp instanceof CMonthYearPicker) {
                                 int rangeStart = 1900 + result.yearRangeStart().getValue().getYear();

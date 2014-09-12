@@ -122,8 +122,6 @@ public enum VistaCrmBehavior implements Behavior {
 
     // --
 
-    PropertyVistaSupport,
-
     ;
 
     @Override

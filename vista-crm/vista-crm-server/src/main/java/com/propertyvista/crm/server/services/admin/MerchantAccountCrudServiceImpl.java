@@ -33,6 +33,7 @@ import com.propertyvista.domain.financial.MerchantAccount;
 import com.propertyvista.domain.financial.MerchantAccount.MerchantAccountActivationStatus;
 import com.propertyvista.domain.pmc.Pmc;
 import com.propertyvista.domain.security.VistaCrmBehavior;
+import com.propertyvista.domain.security.common.VistaBasicBehavior;
 import com.propertyvista.server.TaskRunner;
 
 public class MerchantAccountCrudServiceImpl extends AbstractCrudServiceImpl<MerchantAccount> implements MerchantAccountCrudService {
@@ -76,7 +77,7 @@ public class MerchantAccountCrudServiceImpl extends AbstractCrudServiceImpl<Merc
     @Override
     protected void enhanceRetrieved(MerchantAccount bo, MerchantAccount to, RetrieveTarget retrieveTarget) {
         setCalulatedFileds(bo, to);
-        if (SecurityController.check(VistaCrmBehavior.AdminFinancial, VistaCrmBehavior.PropertyVistaSupport)) {
+        if (SecurityController.check(VistaCrmBehavior.AdminFinancial, VistaBasicBehavior.PropertyVistaSupport)) {
             to.status().setValue(bo.status().getValue());
         }
     }
@@ -97,7 +98,7 @@ public class MerchantAccountCrudServiceImpl extends AbstractCrudServiceImpl<Merc
 
     private boolean isEditable(MerchantAccount bo) {
         return (bo.status().getValue(MerchantAccountActivationStatus.PendindAppoval) == MerchantAccountActivationStatus.PendindAppoval)
-                && SecurityController.check(VistaCrmBehavior.AdminFinancial, VistaCrmBehavior.PropertyVistaSupport);
+                && SecurityController.check(VistaCrmBehavior.AdminFinancial, VistaBasicBehavior.PropertyVistaSupport);
     }
 
     @Override

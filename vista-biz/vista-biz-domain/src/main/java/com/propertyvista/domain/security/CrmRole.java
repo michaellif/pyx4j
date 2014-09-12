@@ -48,6 +48,8 @@ public interface CrmRole extends IEntity {
     @Editor(type = EditorType.textarea)
     IPrimitive<String> description();
 
+    IPrimitive<Boolean> systemPredefined();
+
     @Caption(name = "Permissions")
     IPrimitiveSet<VistaCrmBehavior> behaviors();
 

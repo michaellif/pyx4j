@@ -22,7 +22,6 @@ import org.slf4j.LoggerFactory;
 
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
-import com.pyx4j.entity.core.criterion.PropertyCriterion;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.server.dataimport.AbstractDataPreloader;
 import com.pyx4j.essentials.server.csv.EntityCSVReciver;
@@ -37,20 +36,19 @@ public class CrmRolesPreloader extends AbstractDataPreloader {
 
     public static final String DEFAULT_ACCESS_ALL_ROLE_NAME = "All";
 
-    public static final String DEFAULT_SUPPORT_ROLE_NAME = "PropertyVista Support";
-
     private final static Logger log = LoggerFactory.getLogger(CrmRolesPreloader.class);
 
     private int rolesCount;
 
     private CrmRole createRole(String name, VistaCrmBehavior... behavior) {
-        return createRole(name, false, behavior);
+        return createRole(name, false, false, behavior);
     }
 
-    private CrmRole createRole(String name, boolean requireSecurityQuestionForPasswordReset, VistaCrmBehavior... behavior) {
+    private CrmRole createRole(String name, boolean requireSecurityQuestionForPasswordReset, boolean systemPredefined, VistaCrmBehavior... behavior) {
         CrmRole role = EntityFactory.create(CrmRole.class);
         role.name().setValue(name);
         role.behaviors().addAll(Arrays.asList(behavior));
+        role.systemPredefined().setValue(systemPredefined);
         role.requireSecurityQuestionForPasswordReset().setValue(requireSecurityQuestionForPasswordReset);
         Persistence.service().persist(role);
         rolesCount++;
@@ -60,15 +58,12 @@ public class CrmRolesPreloader extends AbstractDataPreloader {
     public static CrmRole getDefaultRole() {
         EntityQueryCriteria<CrmRole> criteria = EntityQueryCriteria.create(CrmRole.class);
         criteria.eq(criteria.proto().name(), CrmRolesPreloader.DEFAULT_ACCESS_ALL_ROLE_NAME);
+        criteria.eq(criteria.proto().systemPredefined(), true);
         return Persistence.service().retrieve(criteria);
     }
 
     public static CrmRole getSupportRole() {
-        EntityQueryCriteria<CrmRole> criteria = EntityQueryCriteria.create(CrmRole.class);
-        criteria.eq(criteria.proto().name(), CrmRolesPreloader.DEFAULT_SUPPORT_ROLE_NAME);
-        CrmRole role = Persistence.service().retrieve(criteria);
-        assert (role != null);
-        return role;
+        return getDefaultRole();
     }
 
     public static CrmRole getOapiRole() {
@@ -80,13 +75,10 @@ public class CrmRolesPreloader extends AbstractDataPreloader {
     @Override
     public String create() {
         List<VistaCrmBehavior> allRoles = new ArrayList<VistaCrmBehavior>(Arrays.asList(VistaCrmBehavior.values()));
-        allRoles.remove(VistaCrmBehavior.PropertyVistaSupport);
         allRoles.remove(VistaCrmBehavior.OAPI_Properties);
         allRoles.remove(VistaCrmBehavior.OAPI_ILS);
 
-        createRole(DEFAULT_ACCESS_ALL_ROLE_NAME, true, allRoles.toArray(new VistaCrmBehavior[allRoles.size()]));
-
-        createRole(DEFAULT_SUPPORT_ROLE_NAME, VistaCrmBehavior.PropertyVistaSupport);
+        createRole(DEFAULT_ACCESS_ALL_ROLE_NAME, true, true, allRoles.toArray(new VistaCrmBehavior[allRoles.size()]));
 
         Persistence.service().persist(
                 EntityCSVReciver.create(SecurityQuestion.class).loadResourceFile(IOUtils.resourceFileName("SecurityQuestion.csv", LocationsGenerator.class)));

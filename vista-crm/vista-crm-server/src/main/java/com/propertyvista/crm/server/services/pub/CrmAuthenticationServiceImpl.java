@@ -89,7 +89,11 @@ public class CrmAuthenticationServiceImpl extends VistaAuthenticationServicesImp
     @Override
     public String beginSession(CrmUser user, CrmUserCredential userCredential, Set<Behavior> behaviors, IEntity additionalConditions) {
         Set<Behavior> actualBehaviors;
-        if (behaviors.contains(VistaBasicBehavior.CRMPasswordChangeRequiresSecurityQuestion) && (!isAccountRecoveryOptionsConfigured(userCredential))) {
+        if (user.email().getValue().equals(CrmUser.VISTA_SUPPORT_ACCOUNT_EMAIL)) {
+            actualBehaviors = new HashSet<Behavior>();
+            actualBehaviors.add(VistaBasicBehavior.PropertyVistaSupport);
+            actualBehaviors.addAll(behaviors);
+        } else if (behaviors.contains(VistaBasicBehavior.CRMPasswordChangeRequiresSecurityQuestion) && (!isAccountRecoveryOptionsConfigured(userCredential))) {
             actualBehaviors = new HashSet<Behavior>();
             actualBehaviors.add(getVistaApplication());
             actualBehaviors.add(VistaBasicBehavior.CRMPasswordChangeRequiresSecurityQuestion);
