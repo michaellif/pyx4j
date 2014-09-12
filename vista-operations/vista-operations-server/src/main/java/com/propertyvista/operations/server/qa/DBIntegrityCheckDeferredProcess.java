@@ -53,8 +53,13 @@ public class DBIntegrityCheckDeferredProcess extends SearchReportDeferredProcess
 
     private final static Logger log = LoggerFactory.getLogger(DBIntegrityCheckDeferredProcess.class);
 
-    public DBIntegrityCheckDeferredProcess(ReportRequest request) {
+    private boolean dbUpgradeOnly;
+
+    public DBIntegrityCheckDeferredProcess(ReportRequest request, Boolean dbUpgradeOnly) {
         super(request);
+        if ((dbUpgradeOnly != null) && dbUpgradeOnly) {
+            this.dbUpgradeOnly = true;
+        }
     }
 
     @Override
@@ -89,30 +94,41 @@ public class DBIntegrityCheckDeferredProcess extends SearchReportDeferredProcess
         formatter.header("pmc");
         formatter.header("table");
         formatter.header("count");
+        formatter.header("info");
         formatter.newRow();
 
-        ((EntityPersistenceServiceRDB) Persistence.service()).resetMapping();
-        specificNamespaceIntegrityCheck(VistaNamespace.operationsNamespace);
-        specificNamespaceIntegrityCheck(VistaNamespace.expiringNamespace);
+        if (!dbUpgradeOnly) {
+            ((EntityPersistenceServiceRDB) Persistence.service()).resetMapping();
+            specificNamespaceIntegrityCheck(VistaNamespace.operationsNamespace);
+            specificNamespaceIntegrityCheck(VistaNamespace.expiringNamespace);
+        }
     }
 
     @Override
     protected void reportEntity(Pmc pmc) {
         try {
             NamespaceManager.setNamespace(pmc.namespace().getValue());
-            new UnitOfWork(TransactionScopeOption.RequiresNew, ConnectionTarget.BackgroundProcess).execute(new Executable<Void, RuntimeException>() {
+            if (!dbUpgradeOnly) {
+                new UnitOfWork(TransactionScopeOption.RequiresNew, ConnectionTarget.BackgroundProcess).execute(new Executable<Void, RuntimeException>() {
 
-                @Override
-                public Void execute() {
-                    RDBUtils.initAllEntityTables();
-                    return null;
-                }
+                    @Override
+                    public Void execute() {
+                        RDBUtils.initAllEntityTables();
+                        return null;
+                    }
 
-            });
-            log.debug("tables verified for {}", pmc.namespace().getValue());
-            commonNamespaceIntegrityCheck();
-            log.debug("tables count created for {}", pmc.namespace().getValue());
-            VistaUpgrade.upgradePmcData(pmc);
+                });
+                log.debug("tables verified for {}", pmc.namespace().getValue());
+                commonNamespaceIntegrityCheck();
+                log.debug("tables count created for {}", pmc.namespace().getValue());
+            }
+
+            formatter.cell(NamespaceManager.getNamespace());
+            formatter.cell(null);
+            formatter.cell(null);
+            formatter.cell(VistaUpgrade.upgradePmcData(pmc));
+            formatter.newRow();
+
         } finally {
             NamespaceManager.setNamespace(VistaNamespace.operationsNamespace);
         }

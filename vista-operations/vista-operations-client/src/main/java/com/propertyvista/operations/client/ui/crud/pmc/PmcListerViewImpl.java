@@ -80,5 +80,22 @@ public class PmcListerViewImpl extends OperationsListerViewImplBase<PmcDTO> impl
             addHeaderToolbarItem(downloadFull);
         }
 
+        {
+            Button downloadFull = new Button("DB Upgrade", new Command() {
+                @Override
+                public void execute() {
+                    EntityQueryCriteria<PmcDTO> criteria = EntityQueryCriteria.create(PmcDTO.class);
+
+                    HashMap<String, Serializable> parameters = new HashMap<String, Serializable>();
+                    parameters.put(DBIntegrityCheckService.PARAM_DB_UPGRADE, Boolean.TRUE);
+
+                    ReportDialog d = new ReportDialog("DB Upgrade", "Running DB Upgrade...");
+                    d.setDownloadServletPath(GWT.getModuleBaseURL() + DeploymentConsts.downloadServletMapping);
+                    d.start(GWT.<ReportService<?>> create(DBIntegrityCheckService.class), criteria, parameters);
+                }
+            });
+            addHeaderToolbarItem(downloadFull);
+        }
+
     }
 }

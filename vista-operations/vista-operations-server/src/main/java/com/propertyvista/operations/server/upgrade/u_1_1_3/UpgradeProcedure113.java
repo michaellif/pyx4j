@@ -36,7 +36,7 @@ public class UpgradeProcedure113 implements UpgradeProcedure {
     }
 
     @Override
-    public void runUpgradeStep(int upgradeStep) {
+    public String runUpgradeStep(int upgradeStep) {
         switch (upgradeStep) {
         case 1:
             runLegalTermsPolicyPreloaderPolicyGeneration();
@@ -45,6 +45,7 @@ public class UpgradeProcedure113 implements UpgradeProcedure {
         default:
             throw new IllegalArgumentException();
         }
+        return null;
     }
 
     private void runLegalTermsPolicyPreloaderPolicyGeneration() {

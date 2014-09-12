@@ -21,6 +21,6 @@ public interface UpgradeProcedure {
 
     public int getUpgradeStepsCount();
 
-    public void runUpgradeStep(int upgradeStep);
+    public String runUpgradeStep(int upgradeStep);
 
 }

@@ -420,7 +420,7 @@ public class DBResetServlet extends HttpServlet {
                                     criteria.add(PropertyCriterion.ne(criteria.proto().status(), PmcStatus.Created));
                                     criteria.asc(criteria.proto().namespace());
                                     reportdbo.setCriteria(criteria);
-                                    new DBIntegrityCheckDeferredProcess(reportdbo).execute();
+                                    new DBIntegrityCheckDeferredProcess(reportdbo, false).execute();
                                     break;
                                 default:
                                     throw new Error("unimplemented: " + type);

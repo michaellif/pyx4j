@@ -37,7 +37,9 @@ public class DBIntegrityCheckServiceImpl extends ReportServiceImpl<PmcDTO> imple
         criteria.add(PropertyCriterion.ne(criteria.proto().status(), PmcStatus.Created));
         criteria.asc(criteria.proto().namespace());
         reportdbo.setCriteria(criteria);
-        callback.onSuccess(DeferredProcessRegistry.fork(new DBIntegrityCheckDeferredProcess(reportdbo), ThreadPoolNames.DOWNLOADS));
-    }
 
+        Boolean dbUpgradeOnly = (Boolean) reportRequest.getParameters().get(DBIntegrityCheckService.PARAM_DB_UPGRADE);
+
+        callback.onSuccess(DeferredProcessRegistry.fork(new DBIntegrityCheckDeferredProcess(reportdbo, dbUpgradeOnly), ThreadPoolNames.DOWNLOADS));
+    }
 }

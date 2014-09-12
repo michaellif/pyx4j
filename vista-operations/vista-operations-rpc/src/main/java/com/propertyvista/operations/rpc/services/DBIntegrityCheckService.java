@@ -19,8 +19,10 @@ import com.propertyvista.operations.rpc.dto.PmcDTO;
 
 /**
  * Used for DB integrity checks.
- * 
+ *
  */
 public interface DBIntegrityCheckService extends ReportService<PmcDTO> {
+
+    public static String PARAM_DB_UPGRADE = "db-upgrade";
 
 }

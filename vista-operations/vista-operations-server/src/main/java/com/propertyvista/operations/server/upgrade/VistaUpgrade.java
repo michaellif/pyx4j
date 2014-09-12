@@ -34,14 +34,21 @@ public class VistaUpgrade {
 
     private final static Logger log = LoggerFactory.getLogger(VistaUpgrade.class);
 
-    public static void upgradePmcData(Pmc pmc) {
+    public static String upgradePmcData(Pmc pmc) {
         UpgradeProcedure procedure = VistaUpgradeVersionSelector.getUpgradeProcedure(pmc.schemaVersion().getValue());
         if (procedure != null) {
+            StringBuilder info = new StringBuilder();
             int stepsTotal = procedure.getUpgradeStepsCount();
             int startFrom = pmc.schemaDataUpgradeSteps().getValue(0) + 1;
             for (int step = startFrom; step <= stepsTotal; step++) {
                 try {
-                    runOneStepInTransaction(pmc, procedure, step);
+                    String message = runOneStepInTransaction(pmc, procedure, step);
+                    if (message != null) {
+                        if (info.length() > 0) {
+                            info.append("\n");
+                        }
+                        info.append(message);
+                    }
                 } catch (Throwable e) {
                     log.error("upgrade error", e);
                     if (e instanceof UserRuntimeException) {
@@ -51,6 +58,9 @@ public class VistaUpgrade {
                     }
                 }
             }
+            return info.toString();
+        } else {
+            return null;
         }
     }
 
@@ -63,15 +73,15 @@ public class VistaUpgrade {
         }
     }
 
-    private static void runOneStepInTransaction(final Pmc pmc, final UpgradeProcedure procedure, final int step) {
-        new UnitOfWork(TransactionScopeOption.RequiresNew, ConnectionTarget.BackgroundProcess).execute(new Executable<Void, RuntimeException>() {
+    private static String runOneStepInTransaction(final Pmc pmc, final UpgradeProcedure procedure, final int step) {
+        return new UnitOfWork(TransactionScopeOption.RequiresNew, ConnectionTarget.BackgroundProcess).execute(new Executable<String, RuntimeException>() {
 
             @Override
-            public Void execute() {
+            public String execute() {
                 log.info("Execute upgrade Step #{}", step);
                 Lifecycle.startElevatedUserContext();
                 try {
-                    procedure.runUpgradeStep(step);
+                    String message = procedure.runUpgradeStep(step);
 
                     TaskRunner.runInOperationsNamespace(new Callable<Void>() {
                         @Override
@@ -83,10 +93,11 @@ public class VistaUpgrade {
                         }
                     });
 
+                    return message;
+
                 } finally {
                     Lifecycle.endElevatedUserContext();
                 }
-                return null;
             }
 
         });

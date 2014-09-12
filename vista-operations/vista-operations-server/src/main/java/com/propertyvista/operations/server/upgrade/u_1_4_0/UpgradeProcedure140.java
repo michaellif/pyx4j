@@ -29,20 +29,21 @@ public class UpgradeProcedure140 implements UpgradeProcedure {
     }
 
     @Override
-    public void runUpgradeStep(int upgradeStep) {
+    public String runUpgradeStep(int upgradeStep) {
         switch (upgradeStep) {
         case 1:
-            runLegalTermsPolicyPreloaderPolicyGeneration();
-            break;
+            return runLegalTermsPolicyPreloaderPolicyGeneration();
         default:
             throw new IllegalArgumentException();
         }
     }
 
-    private void runLegalTermsPolicyPreloaderPolicyGeneration() {
+    private String runLegalTermsPolicyPreloaderPolicyGeneration() {
         log.info("Creating Default CrmRoles");
         CrmRolesPreloader rolesPreloader = new CrmRolesPreloader();
-        log.info("Finished Roles creation {}", rolesPreloader.createDefaultRolesDefinition());
+        String message = rolesPreloader.createDefaultRolesDefinition();
+        log.info("Finished Roles creation {}", message);
+        return message;
     }
 
 }
