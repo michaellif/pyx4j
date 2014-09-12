@@ -57,6 +57,8 @@ public class XLSLoad {
 
     private FormulaEvaluator formulaEvaluator;
 
+    private boolean ignoreCellValueErrors;
+
     public static XLSLoad loadResourceFile(String resourceName, boolean xlsx, CSVReciver reciver) {
         InputStream is = Thread.currentThread().getContextClassLoader().getResourceAsStream(resourceName);
         if (is == null) {
@@ -94,6 +96,14 @@ public class XLSLoad {
                 is = null;
             }
         }
+    }
+
+    public boolean isIgnoreCellValueErrors() {
+        return ignoreCellValueErrors;
+    }
+
+    public void setIgnoreCellValueErrors(boolean ignoreCellValueErrors) {
+        this.ignoreCellValueErrors = ignoreCellValueErrors;
     }
 
     public int getNumberOfSheets() {
@@ -189,7 +199,11 @@ public class XLSLoad {
         case Cell.CELL_TYPE_FORMULA:
             return getCellStringValue(cellnum, getFormulaEvaluator().evaluateInCell(cell));
         case Cell.CELL_TYPE_ERROR:
-            throw new Error("Cell value error " + cell.getErrorCellValue());
+            if (isIgnoreCellValueErrors()) {
+                return "";
+            } else {
+                throw new Error("Cell value error " + cell.getErrorCellValue());
+            }
         default:
             throw new Error("Unsupported Cell type");
         }
