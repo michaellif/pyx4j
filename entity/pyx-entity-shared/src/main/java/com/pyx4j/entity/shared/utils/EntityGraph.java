@@ -262,6 +262,10 @@ public class EntityGraph {
         if (processed.contains(ent1)) {
             return true;
         }
+        if ((!ent1.getInstanceValueClass().equals(ent2.getInstanceValueClass()))) {
+            return false;
+        }
+
         processed.add(ent1);
 
         EntityMeta em = ent1.getEntityMeta();
