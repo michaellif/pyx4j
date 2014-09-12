@@ -23,7 +23,6 @@ import com.pyx4j.forms.client.ui.CTextField;
 import com.pyx4j.forms.client.ui.RevalidationTrigger;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.forms.client.ui.panels.FormPanel;
-import com.pyx4j.site.client.ui.prime.form.FieldDecoratorBuilder;
 
 import com.propertyvista.common.client.ui.components.c.CCountryComboBox;
 import com.propertyvista.common.client.ui.components.c.CProvinceComboBox;
@@ -38,10 +37,6 @@ public abstract class InternationalAddressEditorBase<A extends InternationalAddr
     private boolean readOnlyCountry;
 
     public InternationalAddressEditorBase(Class<A> entityClass) {
-        this(entityClass, FieldDecoratorBuilder.LABEL_WIDTH, 20, FieldDecoratorBuilder.CONTENT_WIDTH);
-    }
-
-    public InternationalAddressEditorBase(Class<A> entityClass, double labelWidth, double maxCompWidth, double contentWidth) {
         super(entityClass);
     }
 
