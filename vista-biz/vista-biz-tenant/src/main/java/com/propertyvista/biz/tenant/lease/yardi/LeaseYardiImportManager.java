@@ -46,7 +46,7 @@ public class LeaseYardiImportManager extends LeaseAbstractManager {
 
     @Override
     protected void onLeaseApprovalError(Lease lease, String error) {
-        log.debug("Lease approval validation for lease pk='" + lease.getPrimaryKey() + "', id='" + lease.leaseId().getValue()
+        log.debug("Approval validation for lease pk='" + lease.getPrimaryKey() + "', id='" + lease.leaseId().getValue()
                 + "' has discovered the following errors: " + error);
     }
 

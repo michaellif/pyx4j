@@ -106,6 +106,14 @@ public class LeaseYardiApplicationManager extends LeaseAbstractManager {
 
             return lease;
         } catch (YardiServiceException e) {
+            // store decision info in case of:
+            Lease lease = load(leaseId, false);
+            lease.leaseApplication().approval().decidedBy().set(decidedBy);
+            lease.leaseApplication().approval().decisionReason().setValue(decisionReason);
+            lease.leaseApplication().approval().decisionDate().setValue(SystemDateManager.getLogicalDate());
+            Persistence.service().merge(lease);
+            Persistence.service().merge(creteLeaseNote(lease, "Approve Application", decisionReason, decidedBy));
+
             throw new UserRuntimeException(i18n.tr("Yardi Application approval failed") + "\n" + e.getMessage(), e);
         }
     }

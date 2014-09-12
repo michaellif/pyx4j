@@ -87,8 +87,6 @@ public class LeaseApplicationForm extends LeaseFormBase<LeaseApplicationDTO> {
         }
 
         // show processing result:
-        LeaseApplication.Status status = getValue().leaseApplication().status().getValue();
-
         get(proto().leaseApplication().submission()).setVisible(!getValue().leaseApplication().submission().isEmpty());
         get(proto().leaseApplication().validation()).setVisible(!getValue().leaseApplication().validation().isEmpty());
         get(proto().leaseApplication().approval()).setVisible(!getValue().leaseApplication().approval().isEmpty());

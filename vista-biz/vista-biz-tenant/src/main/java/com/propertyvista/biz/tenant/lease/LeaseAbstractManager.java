@@ -435,10 +435,13 @@ public abstract class LeaseAbstractManager {
 
         if (leaseStatus == Status.Application) {
             lease.leaseApplication().status().setValue(LeaseApplication.Status.Approved);
-            lease.leaseApplication().approval().decidedBy().set(decidedBy);
-            lease.leaseApplication().approval().decisionReason().setValue(decisionReason);
-            lease.leaseApplication().approval().decisionDate().setValue(SystemDateManager.getLogicalDate());
-            Persistence.service().merge(creteLeaseNote(lease, "Approve Application", decisionReason, decidedBy));
+
+            if (decidedBy != null) {
+                lease.leaseApplication().approval().decidedBy().set(decidedBy);
+                lease.leaseApplication().approval().decisionReason().setValue(decisionReason);
+                lease.leaseApplication().approval().decisionDate().setValue(SystemDateManager.getLogicalDate());
+                Persistence.service().merge(creteLeaseNote(lease, "Approve Application", decisionReason, decidedBy));
+            }
 
             ServerSideFactory.create(OnlineApplicationFacade.class).approveMasterOnlineApplication(lease.leaseApplication().onlineApplication());
 
@@ -1123,7 +1126,7 @@ public abstract class LeaseAbstractManager {
         }
     }
 
-    private NotesAndAttachments creteLeaseNote(Lease lease, String subject, String note, Employee employee) {
+    protected NotesAndAttachments creteLeaseNote(Lease lease, String subject, String note, Employee employee) {
         NotesAndAttachments naa = EntityFactory.create(NotesAndAttachments.class);
         naa.owner().set(lease);
 
