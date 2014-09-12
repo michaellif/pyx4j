@@ -14,7 +14,6 @@
 package com.propertyvista.biz.generator;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.EnumSet;
 import java.util.HashMap;
@@ -43,7 +42,7 @@ public class PermissionDescriptionLoader {
     private static final String DESCRIPTIONS_FILE = "FunctionalBehaviours.xlsx";
 
     // Chars to be removed from description names to avoid inconsistencies
-    public static final char[] IGNORING_CHARS = { ' ', ':' };
+    public static final char[] IGNORING_CHARS = { ' ', ':', '&', '\n' };
 
     private static Map<String, VistaCrmBehavior> behaviorsByName = initbehaviorsByName();
 
@@ -70,12 +69,9 @@ public class PermissionDescriptionLoader {
     public static Map<String, List<VistaCrmBehavior>> getDefaultRolesDefinition() {
         // Initialize
         getDescriptionsMap();
-        // TODO return behaviorsByRoleName;
 
-        Map<String, List<VistaCrmBehavior>> m = new HashMap<>();
-        // TODO  and Load and create this Map Once.
-        m.put("Basic Login", Arrays.asList(VistaCrmBehavior.BuildingBasic));
-        return m;
+        return behaviorsByRoleName;
+
     }
 
     public static Collection<VistaCrmBehaviorDTO> enhanceDescriptions(Collection<VistaCrmBehaviorDTO> values) {
