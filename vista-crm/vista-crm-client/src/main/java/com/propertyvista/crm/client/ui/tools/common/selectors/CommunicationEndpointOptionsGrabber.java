@@ -32,31 +32,25 @@ public class CommunicationEndpointOptionsGrabber implements IOptionsGrabber<Comm
 
     private final SelectCommunicationEndpointListService service;
 
-//    private EntityListCriteria<CommunicationEndpointDTO> prevCriteria;
-//    private final Vector<CommunicationEndpointDTO> cached;
-
     private List<CommunicationEndpointDTO> filtered;
 
     public CommunicationEndpointOptionsGrabber() {
         service = //createCachingProxy(
         GWT.<SelectCommunicationEndpointListService> create(SelectCommunicationEndpointListService.class);
         filtered = new LinkedList<CommunicationEndpointDTO>();
-//        cached = new Vector<CommunicationEndpointDTO>();
     }
 
     @Override
-    public void grabOptions(final IOptionsGrabber.Request request, IOptionsGrabber.Callback<CommunicationEndpointDTO> callback) {
+    public void grabOptions(final IOptionsGrabber.Request request, final IOptionsGrabber.Callback<CommunicationEndpointDTO> callback) {
+
         AsyncCallback<Vector<CommunicationEndpointDTO>> callbackOptionsGrabber = new DefaultAsyncCallback<Vector<CommunicationEndpointDTO>>() {
             @Override
             public void onSuccess(Vector<CommunicationEndpointDTO> result) {
                 filter(result, request.getQuery().toLowerCase());
+                callback.onOptionsReady(request, new Response<CommunicationEndpointDTO>(filtered));
             }
 
         };
-
-        Response<CommunicationEndpointDTO> response = new Response<CommunicationEndpointDTO>(filtered);
-
-        callback.onOptionsReady(request, response);
 
         EntityListCriteria<CommunicationEndpointDTO> criteria = EntityListCriteria.create(CommunicationEndpointDTO.class);
         criteria.setPageSize(SuggestiveSelector.SUGGESTIONS_PER_PAGE);
@@ -85,31 +79,4 @@ public class CommunicationEndpointOptionsGrabber implements IOptionsGrabber<Comm
             }
         }
     }
-
-//    private SelectCommunicationEndpointListService createCachingProxy(final SelectCommunicationEndpointListService service) {
-//        return new SelectCommunicationEndpointListService() {//@formatter:off
-//                private final SelectCommunicationEndpointListService delegatedService = service;
-//
-//                @Override public void getEndpointForSelection(final AsyncCallback<Vector<CommunicationEndpointDTO>> callback, final EntityListCriteria<CommunicationEndpointDTO> criteria) {
-//                    if (prevCriteria == null || !prevCriteria.equals(criteria)) {
-//                        delegatedService.getEndpointForSelection(new AsyncCallback<Vector<CommunicationEndpointDTO>>() {
-//                            @Override public void onSuccess(Vector<CommunicationEndpointDTO> result) {
-//                                prevCriteria = criteria;
-//                                cached = result;
-//                                callback.onSuccess(result);
-//                            }
-//
-//                            @Override public void onFailure(Throwable caught) { callback.onFailure(caught); }
-//                        }, criteria);
-//                    } else {
-//                        callback.onSuccess(cached);
-//                    }
-//                };
-//
-//                // we're not going to need these two methods
-//                @Override public void list(AsyncCallback<EntitySearchResult<CommunicationEndpoint>> callback, EntityListCriteria<CommunicationEndpoint> criteria) {}
-//                @Override public void delete(AsyncCallback<Boolean> callback, Key entityId) {}
-//            };//@formatter:off
-//        }
-
 }
