@@ -99,6 +99,7 @@ class SMTPMailServiceImpl implements IMailService {
     @Override
     public MailDeliveryStatus send(MailMessage mailMessage, IMailServiceConfigConfiguration mailConfig) {
         if (disabled) {
+            log.info("mailDelivery disabled");
             return MailDeliveryStatus.Success;
         }
 
