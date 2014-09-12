@@ -391,5 +391,14 @@ public class TenantInLeaseFolder extends LeaseTermParticipantFolder<LeaseTermTen
                 get(proto().createdBy()).setVisible(!getValue().createdBy().isNull());
             }
         }
+
+        @Override
+        public void onReset() {
+            super.onReset();
+            // disable any Notes
+            setNote(null);
+        }
+
     }
+
 }

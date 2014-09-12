@@ -454,6 +454,13 @@ public class LeaseTermForm extends CrmEntityForm<LeaseTermDTO> {
         get(proto().unit()).setNote(fullNote, NoteStyle.Warn);
     }
 
+    @Override
+    public void onReset() {
+        super.onReset();
+        // disable any Notes
+        get(proto().unit()).setNote(null);
+    }
+
     @SuppressWarnings("rawtypes")
     void setRestrictions(LeaseTermDTO value, boolean revalidate) {
         ((TenantInLeaseFolder) (LeaseTermParticipantFolder) get(proto().version().tenants())).setMaturedOccupantsAreApplicants(value

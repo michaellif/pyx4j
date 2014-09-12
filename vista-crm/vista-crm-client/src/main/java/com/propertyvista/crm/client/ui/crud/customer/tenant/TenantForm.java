@@ -99,20 +99,24 @@ public class TenantForm extends LeaseParticipantForm<TenantDTO> {
         get(proto().preauthorizedPayments()).setEditable(
                 getValue().electronicPaymentsAllowed().getValue(false) && !getValue().isMoveOutWithinNextBillingCycle().getValue(false));
 
-        // disable any payment-related editing if no electronic payments allowed:
-        get(proto().paymentMethods()).setNote(null);
-        get(proto().preauthorizedPayments()).setNote(null);
         if (!getValue().electronicPaymentsAllowed().getValue(false)) {
             get(proto().paymentMethods()).setNote(i18n.tr("Merchant Account is not set up to receive Electronic Payments"), NoteStyle.Warn);
             get(proto().preauthorizedPayments()).setNote(i18n.tr("Merchant Account is not set up to receive Electronic Payments"), NoteStyle.Warn);
         }
 
-        if (!getValue().nextAutopayApplicabilityMessage().isNull()) {
-            get(proto().nextScheduledPaymentDate()).setNote(getValue().nextAutopayApplicabilityMessage().getValue(), NoteStyle.Warn);
-        }
+        get(proto().nextScheduledPaymentDate()).setNote(getValue().nextAutopayApplicabilityMessage().getValue(), NoteStyle.Warn);
 
         updateTenantInsuranceTabControls();
 
+    }
+
+    @Override
+    public void onReset() {
+        super.onReset();
+        // disable any payment-related editing if no electronic payments allowed:
+        get(proto().paymentMethods()).setNote(null);
+        get(proto().preauthorizedPayments()).setNote(null);
+        get(proto().nextScheduledPaymentDate()).setNote(null);
     }
 
     @Override

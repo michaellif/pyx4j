@@ -115,6 +115,13 @@ public abstract class LeaseFormBase<DTO extends LeaseDTO> extends CrmEntityForm<
         tenantInLeaseFolder.setNextAutopayApplicabilityMessage(getValue().nextAutopayApplicabilityMessage().getValue());
     }
 
+    @Override
+    public void onReset() {
+        super.onReset();
+        // disable any Notes
+        get(proto().unit()).setNote(null);
+    }
+
     public void onTenantInsuranceOwnerClicked(Tenant tenantId) {
     }
 
