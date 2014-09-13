@@ -37,7 +37,6 @@ import com.pyx4j.entity.core.ICollection;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.IObject;
 import com.pyx4j.entity.core.ObjectClassType;
-import com.pyx4j.entity.rdb.EntityPersistenceServiceRDB;
 import com.pyx4j.entity.rdb.PersistenceContext;
 import com.pyx4j.entity.rdb.PersistenceTrace;
 import com.pyx4j.entity.rdb.SQLUtils;
@@ -162,7 +161,8 @@ public class TableModelCollections {
             sql.append(")");
 
             if (PersistenceTrace.traceWrite) {
-                log.info("DBWrite Insert {}\n{}", entity.getDebugExceptionInfoString(), PersistenceTrace.getCallOrigin());
+                log.info("{}{} DBWrite Insert {}\n{}", persistenceContext.txId(), Trace.id(), entity.getDebugExceptionInfoString(),
+                        PersistenceTrace.getCallOrigin());
             }
             if (PersistenceTrace.traceSql) {
                 log.debug("{}{} {}\n\tfrom:{}\t", persistenceContext.txId(), Trace.id(), sql, PersistenceTrace.getCallOrigin());
@@ -314,7 +314,8 @@ public class TableModelCollections {
                                         + "->" + valueIdx + ")", member.sqlName());
                             }
                             if (PersistenceTrace.traceWrite) {
-                                log.info("DBWrite Update {}\n{}", entity.getDebugExceptionInfoString(), PersistenceTrace.getCallOrigin());
+                                log.info("{}{} DBWrite Update {}\n{}", persistenceContext.txId(), Trace.id(), entity.getDebugExceptionInfoString(),
+                                        PersistenceTrace.getCallOrigin());
                             }
                             persistenceContext.setUncommittedChanges();
                             rs.updateInt(member.sqlOrderColumnName(), valueIdx);
@@ -335,11 +336,11 @@ public class TableModelCollections {
 
                     if (removeFromFoinTable) {
                         if (PersistenceTrace.traceWrite) {
-                            log.info("DBWrite Update {}\n{}", entity.getDebugExceptionInfoString(), PersistenceTrace.getCallOrigin());
+                            log.info("{}{} DBWrite Update {}\n{}", persistenceContext.txId(), Trace.id(), entity.getDebugExceptionInfoString(),
+                                    PersistenceTrace.getCallOrigin());
                         }
                         if (PersistenceTrace.traceSql) {
-                            log.debug("{}{} {}\n\tfrom:{}\t", persistenceContext.txId(), Trace.id(), "delete row from cursor",
-                                    PersistenceTrace.getCallOrigin());
+                            log.debug("{}{} {}\n\tfrom:{}\t", persistenceContext.txId(), Trace.id(), "delete row from cursor", PersistenceTrace.getCallOrigin());
                         }
                         persistenceContext.setUncommittedChanges();
                         rs.deleteRow();
@@ -434,8 +435,7 @@ public class TableModelCollections {
             @SuppressWarnings("unchecked")
             Collection<Object> collectionMember = (Collection<Object>) member.getMember(entity);
             if (!collectionMember.isEmpty()) {
-                log.warn("retrieving to not empty collection {}\n called from {}", member.getMemberPath(),
-                        PersistenceTrace.getCallOrigin());
+                log.warn("retrieving to not empty collection {}\n called from {}", member.getMemberPath(), PersistenceTrace.getCallOrigin());
             }
             while (rs.next()) {
                 Object value = member.getValueAdapter().retrieveValue(rs, member.sqlValueName());
