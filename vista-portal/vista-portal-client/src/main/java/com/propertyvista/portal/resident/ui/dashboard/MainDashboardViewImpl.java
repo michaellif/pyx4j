@@ -37,7 +37,9 @@ public class MainDashboardViewImpl extends FlowPanel implements MainDashboardVie
     @SuppressWarnings("unused")
     private static final I18n i18n = I18n.get(MainDashboardViewImpl.class);
 
-    private DashboardPresenter presenter;
+    private MainDashboardPresenter presenter;
+
+    private final GettingStartedGadget gettingStartedGadget;
 
     private final ProfileGadget profileGadget;
 
@@ -57,6 +59,9 @@ public class MainDashboardViewImpl extends FlowPanel implements MainDashboardVie
         profileGadget = new ProfileGadget(this);
         profileGadget.asWidget().setWidth("100%");
 
+        gettingStartedGadget = new GettingStartedGadget(this);
+        gettingStartedGadget.asWidget().setWidth("100%");
+
         billingGadget = new BillingSummaryGadget(this);
         billingGadget.getElement().getStyle().setFloat(Float.LEFT);
 
@@ -69,12 +74,15 @@ public class MainDashboardViewImpl extends FlowPanel implements MainDashboardVie
         insuranceGadget = new InsuranceGadget(this);
         insuranceGadget.getElement().getStyle().setFloat(Float.RIGHT);
 
-        add(profileGadget);
         if (SecurityController.check(PortalResidentBehavior.Resident)) {
+            add(gettingStartedGadget);
+            add(profileGadget);
             add(billingGadget);
             add(maintenanceGadget);
             add(insuranceGadget);
             add(offersGadget);
+        } else if (SecurityController.check(PortalResidentBehavior.Guarantor)) {
+            add(profileGadget);
         }
 
         doLayout(LayoutType.getLayoutType(Window.getClientWidth()));
@@ -110,11 +118,11 @@ public class MainDashboardViewImpl extends FlowPanel implements MainDashboardVie
     }
 
     @Override
-    public void setPresenter(DashboardPresenter presenter) {
+    public void setPresenter(MainDashboardPresenter presenter) {
         this.presenter = presenter;
     }
 
-    protected DashboardPresenter getPresenter() {
+    protected MainDashboardPresenter getPresenter() {
         return presenter;
     }
 

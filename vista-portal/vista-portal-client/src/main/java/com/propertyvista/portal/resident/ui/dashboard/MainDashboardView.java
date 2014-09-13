@@ -22,7 +22,7 @@ import com.propertyvista.portal.rpc.portal.resident.dto.maintenance.MaintenanceS
 
 public interface MainDashboardView extends IsView {
 
-    interface DashboardPresenter {
+    public interface MainDashboardPresenter {
 
         void payNow();
 
@@ -36,7 +36,7 @@ public interface MainDashboardView extends IsView {
 
     }
 
-    void setPresenter(DashboardPresenter presenter);
+    void setPresenter(MainDashboardPresenter presenter);
 
     void populateProfileGadget(ResidentSummaryDTO profileSummary);
 
