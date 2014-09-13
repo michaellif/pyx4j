@@ -618,7 +618,8 @@ public class TableModel {
             sql.append(sqlInsert());
 
             if (PersistenceTrace.traceWrite) {
-                log.info("DBWrite Insert {}\n{}", entity.getDebugExceptionInfoString(), PersistenceTrace.getCallOrigin());
+                log.info("{}{} DBWrite Insert {}\n{}", persistenceContext.txId(), Trace.id(), entity.getDebugExceptionInfoString(),
+                        PersistenceTrace.getCallOrigin());
             }
             if (PersistenceTrace.traceSql) {
                 log.debug("{}{} {}\n\tfrom:{}\t", persistenceContext.txId(), Trace.id(), sql, PersistenceTrace.getCallOrigin());
@@ -686,7 +687,8 @@ public class TableModel {
             sql.append(sqlUpdate());
 
             if (PersistenceTrace.traceWrite) {
-                log.info("DBWrite Update {}\n{}", entity.getDebugExceptionInfoString(), PersistenceTrace.getCallOrigin());
+                log.info("{}{} DBWrite Update {}\n{}", persistenceContext.txId(), Trace.id(), entity.getDebugExceptionInfoString(),
+                        PersistenceTrace.getCallOrigin());
             }
             if (PersistenceTrace.traceSql) {
                 log.debug("{}{} {}\n\tfrom:{}\t", persistenceContext.txId(), Trace.id(), sql, PersistenceTrace.getCallOrigin());

@@ -187,6 +187,7 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceServiceRDB
         CacheService.shutdown();
     }
 
+    @Override
     public void resetMapping() {
         mappings.reset();
     }
@@ -499,6 +500,7 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceServiceRDB
         }
     }
 
+    @Override
     public void dropTable(Class<? extends IEntity> entityClass) {
         startCallContext(ConnectionReason.forDDL);
         try {
@@ -1918,7 +1920,8 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceServiceRDB
             }
 
             if (PersistenceTrace.traceWrite) {
-                log.info("DBWrite Delete {}\n{}", cascadedeleteDataEntity.getDebugExceptionInfoString(), PersistenceTrace.getCallOrigin());
+                log.info("{}{} DBWrite Delete {}\n{}", getPersistenceContext().txId(), Trace.id(), cascadedeleteDataEntity.getDebugExceptionInfoString(),
+                        PersistenceTrace.getCallOrigin());
             }
 
             if (!tm.delete(getPersistenceContext(), primaryKey)) {
