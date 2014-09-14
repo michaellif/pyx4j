@@ -26,9 +26,11 @@ import com.google.gwt.user.client.ui.Label;
 import com.pyx4j.commons.css.ThemeColor;
 import com.pyx4j.gwt.commons.ClientEventBus;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.site.client.AppSite;
 import com.pyx4j.widgets.client.Anchor;
 
 import com.propertyvista.portal.resident.ui.ResidentPortalPointerId;
+import com.propertyvista.portal.rpc.portal.resident.ResidentPortalSiteMap;
 import com.propertyvista.portal.shared.events.PointerEvent;
 import com.propertyvista.portal.shared.resources.PortalImages;
 import com.propertyvista.portal.shared.themes.DashboardTheme;
@@ -63,13 +65,45 @@ public class GettingStartedGadget extends AbstractGadget<MainDashboardViewImpl> 
 
         HTMLPanel contentPanel = new HTMLPanel(contentHtmlBuilder.toSafeHtml());
 
-        contentPanel.addAndReplaceElement(new PointerLink(i18n.tr("Communicate to your Property Management Office."), ResidentPortalPointerId.communication),
-                communicationId);
-        contentPanel.addAndReplaceElement(new PointerLink(i18n.tr("Make a payment, setup Auto Pay or see your Billing history."),
-                ResidentPortalPointerId.billing), billingId);
-        contentPanel.addAndReplaceElement(new PointerLink(i18n.tr("Submit Maintanance Request."), ResidentPortalPointerId.maintanance), maintananceId);
-        contentPanel.addAndReplaceElement(new PointerLink(i18n.tr("Purchase Insurance."), ResidentPortalPointerId.insurance), insuranceId);
-        contentPanel.addAndReplaceElement(new PointerLink(i18n.tr("Update your Profile or Account."), ResidentPortalPointerId.profile), profileId);
+        contentPanel.addAndReplaceElement(new PointerLink(i18n.tr("Communicate to your Property Management Office."), new Command() {
+
+            @Override
+            public void execute() {
+                AppSite.getPlaceController().goTo(new ResidentPortalSiteMap.Message.MessageView());
+            }
+        }, ResidentPortalPointerId.communication), communicationId);
+
+        contentPanel.addAndReplaceElement(new PointerLink(i18n.tr("Make a payment, setup Auto Pay or see your Billing history."), new Command() {
+
+            @Override
+            public void execute() {
+                AppSite.getPlaceController().goTo(new ResidentPortalSiteMap.Financial());
+            }
+        }, ResidentPortalPointerId.billing), billingId);
+
+        contentPanel.addAndReplaceElement(new PointerLink(i18n.tr("Submit Maintanance Request."), new Command() {
+
+            @Override
+            public void execute() {
+                AppSite.getPlaceController().goTo(new ResidentPortalSiteMap.Maintenance());
+            }
+        }, ResidentPortalPointerId.maintanance), maintananceId);
+
+        contentPanel.addAndReplaceElement(new PointerLink(i18n.tr("Purchase Insurance."), new Command() {
+
+            @Override
+            public void execute() {
+                AppSite.getPlaceController().goTo(new ResidentPortalSiteMap.ResidentServices());
+            }
+        }, ResidentPortalPointerId.insurance), insuranceId);
+
+        contentPanel.addAndReplaceElement(new PointerLink(i18n.tr("Update your Profile."), new Command() {
+
+            @Override
+            public void execute() {
+                AppSite.getPlaceController().goTo(new ResidentPortalSiteMap.Profile());
+            }
+        }, ResidentPortalPointerId.profile), profileId);
 
         contentPanel.getElement().getStyle().setTextAlign(TextAlign.LEFT);
 
@@ -99,22 +133,29 @@ public class GettingStartedGadget extends AbstractGadget<MainDashboardViewImpl> 
 
     class PointerLink extends FlowPanel {
 
-        public PointerLink(String text, final PointerId pointerId) {
+        public PointerLink(String text, final Command command, final PointerId pointerId) {
             setStyleName(DashboardTheme.StyleName.PointerLink.name());
 
             Label label = new Label(text);
+            label.addClickHandler(new ClickHandler() {
+
+                @Override
+                public void onClick(ClickEvent event) {
+                    command.execute();
+                }
+            });
             add(label);
 
             Image icon = new Image(PortalImages.INSTANCE.showPointer());
-            add(icon);
-
-            addDomHandler(new ClickHandler() {
+            icon.addClickHandler(new ClickHandler() {
 
                 @Override
                 public void onClick(ClickEvent event) {
                     ClientEventBus.fireEvent(new PointerEvent(pointerId));
                 }
-            }, ClickEvent.getType());
+            });
+            add(icon);
+
         }
     }
 }
