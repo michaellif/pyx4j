@@ -257,6 +257,83 @@ public class YardiLeaseChargesTest extends YardiTestBase {
                 .lastRecordAmount(eval("1234.56"));
     }
 
+    @Test
+    public void testScheduledChagesTermination() throws Exception {
+        // Ensure PAP is active
+        new PaymentAgreementTester(getLease().billingAccount())//
+                .count(1)//
+                .activeCount(1)//
+                .lastRecordAmount(eval("1234.56 + 50"));
+
+        {
+            RtCustomerUpdater updater = new RtCustomerUpdater(PROPERTY_CODE, CUSTOOMER_ID)//
+                    .set(RtCustomerUpdater.YLEASE.LeaseToDate, DateUtils.detectDateformat("31-Jul-2015"));
+            MockEventBus.fireEvent(new RtCustomerUpdateEvent(updater));
+        }
+
+        setSysDate("2014-07-01"); // We ask for charges in next month
+
+        yardiImportAll(getYardiCredential(PROPERTY_CODE));
+        // Ensure feature removed
+        assertEquals(0, getLease().currentTerm().version().leaseProducts().featureItems().size());
+
+        // Ensure PAP NOT suspended but is Zero
+        new PaymentAgreementTester(getLease().billingAccount())//
+                .count(1)//
+                .activeCount(1)//
+                .lastRecordAmount("0");
+    }
+
+    // VISTA-4096 fixed in VISTA-4100  (was failing in Vista 1.1.3)
+    @Test
+    public void testScheduledRenewLeaseChages() throws Exception {
+        // Ensure PAP is active
+        new PaymentAgreementTester(getLease().billingAccount())//
+                .count(1)//
+                .activeCount(1)//
+                .lastRecordAmount(eval("1234.56 + 50"));
+
+        {
+            RtCustomerUpdater updater = new RtCustomerUpdater(PROPERTY_CODE, CUSTOOMER_ID)//
+                    .set(RtCustomerUpdater.YLEASE.LeaseToDate, DateUtils.detectDateformat("31-Jul-2015"));
+            MockEventBus.fireEvent(new RtCustomerUpdateEvent(updater));
+        }
+
+        setSysDate("2014-06-01");
+        yardiImportAll(getYardiCredential(PROPERTY_CODE));
+
+        {
+            // Do update in RT
+            RtCustomerUpdater updater = new RtCustomerUpdater(PROPERTY_CODE, CUSTOOMER_ID)//
+                    .set(RtCustomerUpdater.YLEASE.LeaseToDate, DateUtils.detectDateformat("01-Aug-2015"));
+            MockEventBus.fireEvent(new RtCustomerUpdateEvent(updater));
+        }
+
+        {
+
+            LeaseChargeUpdater updater = new LeaseChargeUpdater(PROPERTY_CODE, CUSTOOMER_ID, "rentNew") //
+                    .set(LeaseChargeUpdater.Name.ServiceFromDate, DateUtils.detectDateformat("2014-08-01"))//
+                    .set(LeaseChargeUpdater.Name.ChargeCode, "rrent")//
+                    .set(LeaseChargeUpdater.Name.GLAccountNumber, "40000301")//
+                    .set(LeaseChargeUpdater.Name.Amount, "2551.71")//
+                    .set(LeaseChargeUpdater.Name.Comment, "Rent (08/2014)");
+
+            MockEventBus.fireEvent(new LeaseChargeUpdateEvent(updater));
+        }
+
+        setSysDate("2014-07-01"); //  We ask Yardi for charges in next month  (nextCycle.billingCycleStartDate())
+
+        yardiImportAll(getYardiCredential(PROPERTY_CODE));
+        // Ensure feature removed
+        assertEquals(0, getLease().currentTerm().version().leaseProducts().featureItems().size());
+
+        // Ensure PAP NOT suspended
+        new PaymentAgreementTester(getLease().billingAccount())//
+                .count(1)//
+                .activeCount(1)//
+                .lastRecordAmount(eval("2551.71"));
+    }
+
     /**
      * Removing existing lease product: expect product removed from new term; PAD suspended
      */

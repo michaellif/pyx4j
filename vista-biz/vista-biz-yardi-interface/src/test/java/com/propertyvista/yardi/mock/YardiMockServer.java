@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011-2012 All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -22,6 +22,8 @@ import com.yardi.entity.guestcard40.RentableItems;
 import com.yardi.entity.resident.RTCustomer;
 import com.yardi.entity.resident.ResidentTransactions;
 import com.yardi.entity.resident.Transactions;
+
+import com.pyx4j.commons.LogicalDate;
 
 import com.propertyvista.biz.system.yardi.YardiServiceException;
 import com.propertyvista.test.mock.MockEventBus;
@@ -138,12 +140,12 @@ public class YardiMockServer implements TransactionChargeUpdateEvent.Handler, Pr
         return getExistingPropertyManagerRuntime(propertyId).getResidentTransactionsForTenant(tenantId);
     }
 
-    public ResidentTransactions getAllLeaseCharges(String propertyId) throws YardiServiceException {
-        return getExistingPropertyManagerRuntime(propertyId).getAllLeaseCharges();
+    public ResidentTransactions getAllLeaseCharges(String propertyId, LogicalDate date) throws YardiServiceException {
+        return getExistingPropertyManagerRuntime(propertyId).getAllLeaseCharges(date);
     }
 
-    public ResidentTransactions getLeaseChargesForTenant(String propertyId, String tenantId) throws YardiServiceException {
-        return getExistingPropertyManagerRuntime(propertyId).getLeaseChargesForTenant(tenantId);
+    public ResidentTransactions getLeaseChargesForTenant(String propertyId, String tenantId, LogicalDate date) throws YardiServiceException {
+        return getExistingPropertyManagerRuntime(propertyId).getLeaseChargesForTenant(tenantId, date);
     }
 
     public RentableItems getRentableItems(String propertyId) throws YardiServiceException {

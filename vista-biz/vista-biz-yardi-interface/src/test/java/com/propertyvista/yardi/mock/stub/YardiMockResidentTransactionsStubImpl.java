@@ -58,13 +58,14 @@ public class YardiMockResidentTransactionsStubImpl implements YardiResidentTrans
 
     @Override
     public ResidentTransactions getAllLeaseCharges(PmcYardiCredential yc, String propertyId, LogicalDate date) throws YardiServiceException {
-        return YardiMockUtils.dumpXml("getAllLeaseCharges", YardiMockServer.instance().getAllLeaseCharges(propertyId));
+        return YardiMockUtils.dumpXml("getAllLeaseCharges_" + propertyId + "_" + date, YardiMockServer.instance().getAllLeaseCharges(propertyId, date));
     }
 
     @Override
     public ResidentTransactions getLeaseChargesForTenant(PmcYardiCredential yc, String propertyId, String tenantId, LogicalDate date)
             throws YardiServiceException {
-        return YardiMockUtils.dumpXml("getLeaseChargesForTenant", YardiMockServer.instance().getLeaseChargesForTenant(propertyId, tenantId));
+        return YardiMockUtils.dumpXml("getLeaseChargesForTenant_" + propertyId + "_" + tenantId + "_" + date, YardiMockServer.instance()
+                .getLeaseChargesForTenant(propertyId, tenantId, date));
     }
 
     @Override

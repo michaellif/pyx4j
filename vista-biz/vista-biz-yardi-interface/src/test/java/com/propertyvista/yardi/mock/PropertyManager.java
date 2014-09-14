@@ -43,6 +43,7 @@ import com.yardi.entity.resident.RTUnit;
 import com.yardi.entity.resident.ResidentTransactions;
 import com.yardi.entity.resident.Transactions;
 
+import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.config.server.SystemDateManager;
 
 import com.propertyvista.yardi.mock.updater.CoTenantUpdater;
@@ -114,14 +115,14 @@ public class PropertyManager {
         return transaction;
     }
 
-    public ResidentTransactions getAllLeaseCharges() {
+    public ResidentTransactions getAllLeaseCharges(LogicalDate date) {
         ResidentTransactions retVal = new ResidentTransactions();
         com.yardi.entity.resident.Property rtProperty = new com.yardi.entity.resident.Property();
         retVal.getProperty().add(rtProperty);
 
         for (String customerId : leaseCharges.keySet()) {
 
-            RTCustomer rtCustomer = createRtCustomerWithCharges(leaseCharges.get(customerId));
+            RTCustomer rtCustomer = createRtCustomerWithCharges(leaseCharges.get(customerId), date);
             rtProperty.getRTCustomer().add(rtCustomer);
 
         }
@@ -129,7 +130,7 @@ public class PropertyManager {
         return retVal;
     }
 
-    public ResidentTransactions getLeaseChargesForTenant(String tenantId) {
+    public ResidentTransactions getLeaseChargesForTenant(String tenantId, LogicalDate date) {
         if (!leaseCharges.containsKey(tenantId)) {
             throw new RuntimeException("lease charges for tenantId " + tenantId + " not found");
         }
@@ -138,7 +139,7 @@ public class PropertyManager {
         com.yardi.entity.resident.Property rtProperty = new com.yardi.entity.resident.Property();
         retVal.getProperty().add(rtProperty);
 
-        RTCustomer rtCustomer = createRtCustomerWithCharges(leaseCharges.get(tenantId));
+        RTCustomer rtCustomer = createRtCustomerWithCharges(leaseCharges.get(tenantId), date);
         rtProperty.getRTCustomer().add(rtCustomer);
 
         return retVal;
@@ -152,7 +153,10 @@ public class PropertyManager {
         return retVal;
     }
 
-    private RTCustomer createRtCustomerWithCharges(Map<String, Charge> charges) {
+    private RTCustomer createRtCustomerWithCharges(Map<String, Charge> charges, LogicalDate date) {
+        if (date == null) {
+            date = SystemDateManager.getLogicalDate();
+        }
         RTCustomer rtCustomer = new RTCustomer();
 
         RTServiceTransactions st = new RTServiceTransactions();
@@ -163,11 +167,11 @@ public class PropertyManager {
             Charge charge = charges.get(chargeId);
 
             // Don't add future products  (now < fromDate)
-            if ((charge.getDetail().getServiceFromDate() != null) && SystemDateManager.getLogicalDate().lt(charge.getDetail().getServiceFromDate())) {
+            if ((charge.getDetail().getServiceFromDate() != null) && date.lt(charge.getDetail().getServiceFromDate())) {
                 continue;
             }
             // Don't add expired products   (now > toDate)
-            if ((charge.getDetail().getServiceToDate() != null) && SystemDateManager.getLogicalDate().gt(charge.getDetail().getServiceToDate())) {
+            if ((charge.getDetail().getServiceToDate() != null) && date.gt(charge.getDetail().getServiceToDate())) {
                 continue;
             }
             t.setCharge((Charge) SerializationUtils.clone(charge));
