@@ -39,7 +39,9 @@ public class PortalRootPaneTheme extends Theme {
 
         NotificationContainer, NotificationItem, NotificationItemTitle, NotificationItemCloseButton,
 
-        NotificationGadget, TermsGadget, TermsGadgetContent;
+        NotificationGadget, TermsGadget, TermsGadgetContent,
+
+        MenuPointer, ButtonPointer;
     }
 
     public static enum StyleDependent implements IStyleDependent {
@@ -56,7 +58,7 @@ public class PortalRootPaneTheme extends Theme {
         initPageNotificationStyles();
         initCommunicationStyles();
         initTermsGadgetStyles();
-
+        initPointerStyles();
     }
 
     private void initHeaderStyles() {
@@ -119,6 +121,7 @@ public class PortalRootPaneTheme extends Theme {
         style.addProperty("border-style", "solid");
         style.addProperty("border-width", "1px");
         style.addProperty("border-bottom-width", "0px");
+        style.addProperty("position", "relative");
         addStyle(style);
 
         style = new Style(".", StyleName.MainMenuNavigItem, ":first-child");
@@ -425,6 +428,57 @@ public class PortalRootPaneTheme extends Theme {
         style.addProperty("text-align", "left");
         style.addProperty("padding", "20px");
         addStyle(style);
+
+    }
+
+    private void initPointerStyles() {
+        Style style = new Style(".", StyleName.MenuPointer);
+        style.addProperty("position", "absolute");
+        style.addProperty("right", "-42px");
+        style.addProperty("height", "41px");
+        style.addProperty("z-index", "100");
+        style.addProperty("top", "3px");
+        style.addProperty("-webkit-animation", "bounceH 2s infinite");
+        style.addProperty("-moz-animation", "bounceH 2s infinite");
+        style.addProperty("-ms-animation", "bounceH 2s infinite");
+        style.addProperty("animation", "bounceH 2s infinite");
+        addStyle(style);
+
+        String keyframes = "\n\n@-webkit-keyframes bounceH {\n" + //
+                "0%, 20%, 50%, 80%, 100% {-webkit-transform: translateX(0); transform: translateX(0);}\n" + //
+                "40% {-webkit-transform: translateX(30px); transform: translateX(30px);}\n" + //);
+                "60% {-webkit-transform: translateX(15px); transform: translateX(15px);}\n }\n";
+        addAtRule(keyframes);
+
+        keyframes = "\n\n@keyframes bounceH {\n" + //
+                "0%, 20%, 50%, 80%, 100% {-webkit-transform: translateX(0); transform: translateX(0);}\n" + //
+                "40% {-webkit-transform: translateX(30px); transform: translateX(30px);}\n" + //);
+                "60% {-webkit-transform: translateX(15px); transform: translateX(15px);}\n }\n";
+        addAtRule(keyframes);
+
+        style = new Style(".", StyleName.ButtonPointer);
+        style.addProperty("position", "absolute");
+        style.addProperty("bottom", "-45px");
+        style.addProperty("z-index", "100");
+        style.addProperty("-webkit-animation", "bounceV 2s infinite");
+        style.addProperty("-moz-animation", "bounceV 2s infinite");
+        style.addProperty("-ms-animation", "bounceV 2s infinite");
+        style.addProperty("animation", "bounceV 2s infinite");
+        style.addProperty("width", "100%");
+        style.addProperty("left", "5px");
+        addStyle(style);
+
+        keyframes = "\n\n@-webkit-keyframes bounceV {\n" + //
+                "0%, 20%, 50%, 80%, 100% {-webkit-transform: translateY(0); transform: translateY(0);}\n" + //
+                "40% {-webkit-transform: translateY(30px); transform: translateY(30px);}\n" + //);
+                "60% {-webkit-transform: translateY(15px); transform: translateY(15px);}\n }\n";
+        addAtRule(keyframes);
+
+        keyframes = "\n\n@keyframes bounceV {\n" + //
+                "0%, 20%, 50%, 80%, 100% {-webkit-transform: translateY(0); transform: translateY(0);}\n" + //
+                "40% {-webkit-transform: translateY(30px); transform: translateY(30px);}\n" + //);
+                "60% {-webkit-transform: translateY(15px); transform: translateY(15px);}\n }\n";
+        addAtRule(keyframes);
 
     }
 

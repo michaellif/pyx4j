@@ -109,6 +109,14 @@ public interface PortalImages extends ClientBundle, FolderImages, WidgetsImageBu
     @Source("Dashboard-LocationIcon.png")
     ImageResource marker();
 
+    @ImageOptions(repeatStyle = RepeatStyle.Both)
+    @Source("pointerH.png")
+    ImageResource pointerH();
+
+    @ImageOptions(repeatStyle = RepeatStyle.Both)
+    @Source("pointerV.png")
+    ImageResource pointerV();
+
     //=============== SignUp ====================
 
     @ImageOptions(repeatStyle = RepeatStyle.Both)

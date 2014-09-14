@@ -47,6 +47,7 @@ import com.propertyvista.portal.resident.activity.PortalClientCommunicationManag
 import com.propertyvista.portal.rpc.shared.dto.communication.PortalCommunicationSystemNotification;
 import com.propertyvista.portal.shared.resources.PortalImages;
 import com.propertyvista.portal.shared.themes.PortalRootPaneTheme;
+import com.propertyvista.portal.shared.ui.ActionButton;
 import com.propertyvista.shared.i18n.CompiledLocale;
 
 public class ToolbarViewImpl extends FlowPanel implements ToolbarView {
@@ -160,14 +161,14 @@ public class ToolbarViewImpl extends FlowPanel implements ToolbarView {
         communicationButton.addStyleName(WidgetTheme.StyleName.Button.name());
 
         rightToolbar.addItem(loginButton);
-        rightToolbar.addItem(tenantButton);
+        rightToolbar.addItem(new ActionButton(tenantButton));
 
         //TODO implement lang selector
         if (false) {
             rightToolbar.addItem(languageButton);
         }
 
-        rightToolbar.addItem(communicationButton);
+        rightToolbar.addItem(new ActionButton(communicationButton));
         rightToolbar.getElement().getStyle().setPosition(Position.ABSOLUTE);
         rightToolbar.getElement().getStyle().setProperty("right", "0");
 

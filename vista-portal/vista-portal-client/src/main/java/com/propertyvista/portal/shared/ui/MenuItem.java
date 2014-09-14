@@ -18,7 +18,6 @@ import com.google.gwt.dom.client.Style.Cursor;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.Event;
-import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.ComplexPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.IsWidget;
@@ -27,9 +26,6 @@ import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.commons.css.StyleManager;
 import com.pyx4j.commons.css.ThemeColor;
-import com.pyx4j.gwt.commons.layout.LayoutChangeRequestEvent;
-import com.pyx4j.gwt.commons.layout.LayoutChangeRequestEvent.ChangeType;
-import com.pyx4j.gwt.commons.layout.LayoutType;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.rpc.AppPlace;
 import com.pyx4j.widgets.client.images.ButtonImages;
@@ -41,6 +37,8 @@ public class MenuItem implements IsWidget {
     private final ContentPanel contentPanel;
 
     private final Image icon;
+
+    private final ActionPointer pointer;
 
     private final Label label;
 
@@ -63,13 +61,15 @@ public class MenuItem implements IsWidget {
         selected = false;
 
         icon = new Image(images.regular());
-
         icon.setStyleName(PortalRootPaneTheme.StyleName.MainMenuIcon.name());
         contentPanel.add(icon);
 
         label = new Label(AppSite.getHistoryMapper().getPlaceInfo(appPlace).getNavigLabel());
         label.setStyleName(PortalRootPaneTheme.StyleName.MainMenuLabel.name());
         contentPanel.add(label);
+
+        pointer = new ActionPointer();
+        contentPanel.add(pointer);
 
     }
 

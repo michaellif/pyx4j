@@ -28,7 +28,7 @@ public abstract class PMSiteThemeBase extends Theme {
     public String getCssString(Palette palette) {
         StringBuilder stylesString = new StringBuilder();
         for (Style style : getAllStyles()) {
-            stylesString.append(style.toString(this, palette));
+            stylesString.append(style.getCss(this, palette));
         }
         return stylesString.toString();
     }

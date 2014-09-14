@@ -98,7 +98,7 @@ public class DashboardPrintHelper {
         DashboardPrintTheme theme = new DashboardPrintTheme();
         Palette palette = new DashboardPrintPalete();
         for (Style style : theme.getAllStyles()) {
-            stylesString.append(style.toString(theme, palette));
+            stylesString.append(style.getCss(theme, palette));
         }
         printTheme = stylesString.toString();
     }
