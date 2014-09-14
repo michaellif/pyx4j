@@ -161,7 +161,7 @@ public abstract class PortalSite extends VistaSite {
                 VistaFeaturesCustomizationClient.enviromentTitleVisible = descriptor.enviromentTitleVisible().getValue(Boolean.TRUE);
                 obtainAuthenticationData();
                 if (descriptor.walkMeEnabled().getValue(false)) {
-                    WalkMe.enable(descriptor.walkMeJsAPIUrl().getValue());
+                    //WalkMe.enable(descriptor.walkMeJsAPIUrl().getValue());
                 }
             }
 
