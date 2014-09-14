@@ -32,6 +32,7 @@ import com.pyx4j.gwt.server.DateUtils;
 
 import com.propertyvista.biz.ExecutionMonitor;
 import com.propertyvista.biz.financial.payment.PaymentMethodFacade;
+import com.propertyvista.domain.financial.PaymentRecord.PaymentStatus;
 import com.propertyvista.domain.payment.AutopayAgreement;
 import com.propertyvista.domain.payment.EcheckInfo;
 import com.propertyvista.domain.payment.LeasePaymentMethod;
@@ -47,6 +48,7 @@ import com.propertyvista.domain.tenant.lease.extradata.Vehicle;
 import com.propertyvista.test.integration.BillableItemTester;
 import com.propertyvista.test.integration.IntegrationTestBase.FunctionalTests;
 import com.propertyvista.test.integration.PaymentAgreementTester;
+import com.propertyvista.test.integration.PaymentRecordTester;
 import com.propertyvista.test.integration.PreauthorizedPaymentBuilder;
 import com.propertyvista.test.mock.MockEventBus;
 import com.propertyvista.yardi.YardiTestBase;
@@ -140,7 +142,7 @@ public class YardiLeaseChargesTest extends YardiTestBase {
             // @formatter:on
             MockEventBus.fireEvent(new LeaseChargeUpdateEvent(updater));
         }
-        setSysDate("25-May-2013");
+        setSysDate("2013-05-25");
 
         yardiImportAll(getYardiCredential(PROPERTY_CODE));
 
@@ -332,17 +334,21 @@ public class YardiLeaseChargesTest extends YardiTestBase {
      */
     @Test
     public void testExtendingTerm() throws Exception {
+        Lease originalLease = getLease();
+
         // Ensure PAP is active
-        new PaymentAgreementTester(getLease().billingAccount())//
+        new PaymentAgreementTester(originalLease.billingAccount())//
                 .count(1)//
                 .activeCount(1)//
                 .lastRecordAmount(eval("1234.56 + 50"));
 
-        // @formatter:off
-        new BillableItemTester(getLease().currentTerm().version().leaseProducts().featureItems().get(0)).
-        uid("rpark:1").
-        description("Parking A");
-        // @formatter:on
+        new BillableItemTester(originalLease.currentTerm().version().leaseProducts().featureItems().get(0)) //
+                .uid("rpark:1")//
+                .description("Parking A");
+
+        Persistence.ensureRetrieve(originalLease.leaseParticipants(), AttachLevel.Attached);
+        Persistence.ensureRetrieve(originalLease.currentTerm().version().tenants(), AttachLevel.Attached);
+        LeaseParticipant<?> originalFirstTenant = originalLease.leaseParticipants().iterator().next();
 
         // set expiration date one month forward
         LeaseChargeUpdater updater = new LeaseChargeUpdater(PROPERTY_CODE, CUSTOOMER_ID, "parkA");
@@ -351,18 +357,25 @@ public class YardiLeaseChargesTest extends YardiTestBase {
 
         yardiImportAll(getYardiCredential(PROPERTY_CODE));
 
-        // @formatter:off
-        new BillableItemTester(getLease().currentTerm().version().leaseProducts().featureItems().get(0)).
-        uid("rpark:1").
-        description("Parking A").
-        expirationDate("31-Aug-2014");
-        // @formatter:on
+        Lease updatedLease = getLease();
+
+        new BillableItemTester(updatedLease.currentTerm().version().leaseProducts().featureItems().get(0))//
+                .uid("rpark:1")//
+                .description("Parking A")//
+                .expirationDate("31-Aug-2014");
 
         // Ensure PAP is active
-        new PaymentAgreementTester(getLease().billingAccount())//
+        new PaymentAgreementTester(updatedLease.billingAccount())//
                 .count(1)//
                 .activeCount(1)//
                 .lastRecordAmount(eval("1234.56 + 50"));
+
+        Persistence.ensureRetrieve(updatedLease.leaseParticipants(), AttachLevel.Attached);
+        Persistence.ensureRetrieve(updatedLease.currentTerm().version().tenants(), AttachLevel.Attached);
+        LeaseParticipant<?> updatedFirstTenant = updatedLease.leaseParticipants().iterator().next();
+        Assert.assertEquals("Tenant is still the same", originalFirstTenant.getPrimaryKey(), updatedFirstTenant.getPrimaryKey());
+        Assert.assertEquals("Tenant is in current term", originalFirstTenant.id(), updatedLease.currentTerm().version().tenants().get(0).leaseParticipant()
+                .id());
     }
 
     public void testNewTermUnitMove() throws Exception {
@@ -400,6 +413,7 @@ public class YardiLeaseChargesTest extends YardiTestBase {
         LeaseParticipant<?> updatedFirstTenant = updatedLease.leaseParticipants().iterator().next();
         Assert.assertNotNull("updated Tenant is Ok", updatedFirstTenant.getPrimaryKey());
         Assert.assertEquals("Tenant is still the same", originalFirstTenant.getPrimaryKey(), updatedFirstTenant.getPrimaryKey());
+        Assert.assertEquals("Tenants are still the same", updatedLease.leaseParticipants(), updatedLease.leaseParticipants());
 
         Persistence.ensureRetrieve(updatedLease.currentTerm().version().tenants(), AttachLevel.Attached);
         Assert.assertEquals("Tenant is in current term", updatedFirstTenant.id(), updatedLease.currentTerm().version().tenants().get(0).leaseParticipant().id());
@@ -419,6 +433,15 @@ public class YardiLeaseChargesTest extends YardiTestBase {
         new PaymentAgreementTester((Tenant) updatedFirstTenant)//
                 .count(1)//
                 .activeCount(1)//
+                .lastRecordAmount(eval("1234.56 + 50"));
+
+        setPaymentBatchProcess();
+
+        advanceSysDate("2013-06-01");
+
+        new PaymentRecordTester(updatedLease.billingAccount())//
+                .count(1) //
+                .lastRecordStatus(PaymentStatus.Canceled)//  No Merchant Account
                 .lastRecordAmount(eval("1234.56 + 50"));
     }
 
