@@ -28,7 +28,9 @@ public class DashboardTheme extends Theme {
 
         PersonPhoto, PersonName,
 
-        LandingPage
+        LandingPage,
+
+        PointerLink,
     }
 
     public DashboardTheme() {
@@ -93,6 +95,25 @@ public class DashboardTheme extends Theme {
         style.addProperty("width", "250px");
         style.addProperty("background", "none");
         style.addProperty("margin", "10px 10px 0 10px");
+        addStyle(style);
+
+        style = new Style(".", StyleName.PointerLink);
+        style.addProperty("display", "inline");
+        style.addProperty("cursor", "pointer");
+        addStyle(style);
+
+        style = new Style(".", StyleName.PointerLink, " div");
+        style.addProperty("display", "inline-block");
+        style.addProperty("vertical-align", "middle");
+        style.addProperty("padding-right", "10px");
+        addStyle(style);
+
+        style = new Style(".", StyleName.PointerLink, " div:hover");
+        style.addProperty("text-decoration", "underline");
+        addStyle(style);
+
+        style = new Style(".", StyleName.PointerLink, " img");
+        style.addProperty("vertical-align", "middle");
         addStyle(style);
 
     }

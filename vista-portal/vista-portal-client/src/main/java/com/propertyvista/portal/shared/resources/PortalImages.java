@@ -117,6 +117,10 @@ public interface PortalImages extends ClientBundle, FolderImages, WidgetsImageBu
     @Source("pointerV.png")
     ImageResource pointerV();
 
+    @ImageOptions(repeatStyle = RepeatStyle.Both)
+    @Source("show-pointer.png")
+    ImageResource showPointer();
+
     //=============== SignUp ====================
 
     @ImageOptions(repeatStyle = RepeatStyle.Both)
