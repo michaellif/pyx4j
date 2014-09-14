@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011-2012 All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -18,12 +18,14 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 
+import org.junit.Assert;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
 
 import com.yardi.entity.mits.Customerinfo;
 
 import com.pyx4j.config.server.ServerSideFactory;
+import com.pyx4j.entity.core.AttachLevel;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.gwt.server.DateUtils;
@@ -39,6 +41,7 @@ import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.domain.tenant.lease.BillableItem;
 import com.propertyvista.domain.tenant.lease.Lease;
+import com.propertyvista.domain.tenant.lease.LeaseParticipant;
 import com.propertyvista.domain.tenant.lease.Tenant;
 import com.propertyvista.domain.tenant.lease.extradata.Vehicle;
 import com.propertyvista.test.integration.BillableItemTester;
@@ -85,7 +88,7 @@ public class YardiLeaseChargesTest extends YardiTestBase {
             set(PropertyUpdater.ADDRESS.Address1, "11 prop123 str").
             set(PropertyUpdater.ADDRESS.PostalCode, "A1B 2C3").
             set(PropertyUpdater.ADDRESS.State, "ON").
-            set(PropertyUpdater.ADDRESS.Country, "Canada");        
+            set(PropertyUpdater.ADDRESS.Country, "Canada");
             // @formatter:on
             MockEventBus.fireEvent(new PropertyUpdateEvent(updater));
         }
@@ -101,7 +104,7 @@ public class YardiLeaseChargesTest extends YardiTestBase {
             set(RtCustomerUpdater.YLEASE.CurrentRent, new BigDecimal("1234.56")).
             set(RtCustomerUpdater.YLEASE.LeaseFromDate, DateUtils.detectDateformat("01-Jun-2012")).
             set(RtCustomerUpdater.YLEASE.LeaseToDate, DateUtils.detectDateformat("31-Jul-2014")).
-            set(RtCustomerUpdater.YLEASE.ResponsibleForLease, true).         
+            set(RtCustomerUpdater.YLEASE.ResponsibleForLease, true).
             set(RtCustomerUpdater.UNITINFO.UnitType, "2bdrm").
             set(RtCustomerUpdater.UNITINFO.UnitBedrooms, new BigDecimal("2")).
             set(RtCustomerUpdater.UNITINFO.UnitBathrooms, new BigDecimal("1")).
@@ -121,7 +124,7 @@ public class YardiLeaseChargesTest extends YardiTestBase {
             set(LeaseChargeUpdater.Name.ChargeCode, "rrent").
             set(LeaseChargeUpdater.Name.GLAccountNumber, "40000301").
             set(LeaseChargeUpdater.Name.Amount, "1234.56").
-            set(LeaseChargeUpdater.Name.Comment, "Rent (05/2013)");        
+            set(LeaseChargeUpdater.Name.Comment, "Rent (05/2013)");
             // @formatter:on
             MockEventBus.fireEvent(new LeaseChargeUpdateEvent(updater));
         }
@@ -133,7 +136,7 @@ public class YardiLeaseChargesTest extends YardiTestBase {
             set(LeaseChargeUpdater.Name.ServiceToDate, DateUtils.detectDateformat("31-Jul-2014")).
             set(LeaseChargeUpdater.Name.ChargeCode, "rpark").
             set(LeaseChargeUpdater.Name.Amount, "50.00").
-            set(LeaseChargeUpdater.Name.Comment, "Parking A");        
+            set(LeaseChargeUpdater.Name.Comment, "Parking A");
             // @formatter:on
             MockEventBus.fireEvent(new LeaseChargeUpdateEvent(updater));
         }
@@ -198,7 +201,7 @@ public class YardiLeaseChargesTest extends YardiTestBase {
         new BillableItemTester(parking).
         uid("rpark:1").
         description("Parking A").
-        agreedPrice("55.00");  
+        agreedPrice("55.00");
         // @formatter:on
 
         // ensure BillableItemExtraData is intact
@@ -298,7 +301,7 @@ public class YardiLeaseChargesTest extends YardiTestBase {
             set(LeaseChargeUpdater.Name.ChargeCode, "rrent").
             set(LeaseChargeUpdater.Name.GLAccountNumber, "40000301").
             set(LeaseChargeUpdater.Name.Amount, "500.00").
-            set(LeaseChargeUpdater.Name.Comment, "Rent (05/2013)");        
+            set(LeaseChargeUpdater.Name.Comment, "Rent (05/2013)");
             // @formatter:on
             MockEventBus.fireEvent(new LeaseChargeUpdateEvent(updater));
         }
@@ -357,6 +360,63 @@ public class YardiLeaseChargesTest extends YardiTestBase {
 
         // Ensure PAP is active
         new PaymentAgreementTester(getLease().billingAccount())//
+                .count(1)//
+                .activeCount(1)//
+                .lastRecordAmount(eval("1234.56 + 50"));
+    }
+
+    public void testNewTermUnitMove() throws Exception {
+        Lease originalLease = getLease();
+
+        // Ensure PAP is active
+        new PaymentAgreementTester(originalLease.billingAccount())//
+                .count(1)//
+                .activeCount(1)//
+                .lastRecordAmount(eval("1234.56 + 50"));
+
+        new BillableItemTester(originalLease.currentTerm().version().leaseProducts().featureItems().get(0))//
+                .uid("rpark:1").description("Parking A");
+
+        Persistence.ensureRetrieve(originalLease.leaseParticipants(), AttachLevel.Attached);
+        LeaseParticipant<?> originalFirstTenant = originalLease.leaseParticipants().iterator().next();
+        Assert.assertNotNull("original Tenant is Ok", originalFirstTenant.getPrimaryKey());
+
+        Persistence.ensureRetrieve(originalLease.currentTerm().version().tenants(), AttachLevel.Attached);
+        Assert.assertEquals("Tenant is in current term", originalFirstTenant.id(), originalLease.currentTerm().version().tenants().get(0).leaseParticipant()
+                .id());
+
+        {
+            RtCustomerUpdater updater = new RtCustomerUpdater(PROPERTY_CODE, CUSTOOMER_ID) //
+                    .set(RtCustomerUpdater.UNITINFO.UnitID, "222");
+
+            MockEventBus.fireEvent(new RtCustomerUpdateEvent(updater));
+        }
+
+        yardiImportAll(getYardiCredential(PROPERTY_CODE));
+
+        Lease updatedLease = getLeaseById(CUSTOOMER_ID);
+
+        Persistence.ensureRetrieve(updatedLease.leaseParticipants(), AttachLevel.Attached);
+        LeaseParticipant<?> updatedFirstTenant = updatedLease.leaseParticipants().iterator().next();
+        Assert.assertNotNull("updated Tenant is Ok", updatedFirstTenant.getPrimaryKey());
+        Assert.assertEquals("Tenant is still the same", originalFirstTenant.getPrimaryKey(), updatedFirstTenant.getPrimaryKey());
+
+        Persistence.ensureRetrieve(updatedLease.currentTerm().version().tenants(), AttachLevel.Attached);
+        Assert.assertEquals("Tenant is in current term", updatedFirstTenant.id(), updatedLease.currentTerm().version().tenants().get(0).leaseParticipant().id());
+
+        new BillableItemTester(updatedLease.currentTerm().version().leaseProducts().featureItems().get(0))//
+                .uid("rpark:1")//
+                .description("Parking A")//
+                .effectiveDate("01-Jun-2012")//
+                .expirationDate("31-Jul-2014");
+
+        // Ensure PAP is active
+        new PaymentAgreementTester(updatedLease.billingAccount())//
+                .count(1)//
+                .activeCount(1)//
+                .lastRecordAmount(eval("1234.56 + 50"));
+
+        new PaymentAgreementTester((Tenant) updatedFirstTenant)//
                 .count(1)//
                 .activeCount(1)//
                 .lastRecordAmount(eval("1234.56 + 50"));
