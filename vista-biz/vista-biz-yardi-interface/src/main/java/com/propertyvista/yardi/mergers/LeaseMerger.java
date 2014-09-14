@@ -27,9 +27,11 @@ import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.commons.SimpleMessageFormat;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.config.server.SystemDateManager;
+import com.pyx4j.entity.core.AttachLevel;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.IPrimitive;
 import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.entity.shared.utils.EntityGraph;
 
 import com.propertyvista.biz.ExecutionMonitor;
 import com.propertyvista.biz.occupancy.OccupancyFacade;
@@ -43,6 +45,9 @@ import com.propertyvista.domain.tenant.lease.BillableItem;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.Lease.CompletionType;
 import com.propertyvista.domain.tenant.lease.LeaseTerm;
+import com.propertyvista.domain.tenant.lease.LeaseTermGuarantor;
+import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
+import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
 import com.propertyvista.yardi.YardiTrace;
 import com.propertyvista.yardi.processors.YardiLeaseProcessor;
 import com.propertyvista.yardi.services.ARCodeAdapter;
@@ -200,21 +205,42 @@ public class LeaseMerger {
     }
 
     public Lease updateUnit(AptUnit unit, Lease lease, boolean move) {
+        // create new term:
+        LeaseTerm term = EntityFactory.create(LeaseTerm.class);
+        term.status().setValue(LeaseTerm.Status.Current);
+        term.type().setValue(LeaseTerm.Type.FixedEx);
+        term.lease().set(lease);
+
+        // migrate participants:
+        Persistence.ensureRetrieve(lease.currentTerm().version().tenants(), AttachLevel.Attached);
+        for (LeaseTermTenant tenant : lease.currentTerm().version().tenants()) {
+            term.version().tenants().add(businessDuplicate(tenant));
+        }
+        Persistence.ensureRetrieve(lease.currentTerm().version().guarantors(), AttachLevel.Attached);
+        for (LeaseTermGuarantor guarantor : lease.currentTerm().version().guarantors()) {
+            term.version().guarantors().add(businessDuplicate(guarantor));
+        }
+
         // mark old term:
         lease.currentTerm().status().setValue(LeaseTerm.Status.Historic);
         lease.currentTerm().version().setValueDetached(); // TRICK (saving just non-versioned part)!..
         Persistence.service().merge(lease.currentTerm());
 
         // set new term:
-        lease.currentTerm().set(EntityFactory.create(LeaseTerm.class));
-        lease.currentTerm().status().setValue(LeaseTerm.Status.Current);
-        lease.currentTerm().type().setValue(LeaseTerm.Type.FixedEx);
-        lease.currentTerm().lease().set(lease);
+        lease.currentTerm().set(term);
 
-        // update lease unit:
+        // update lease unit (for new term):
         ServerSideFactory.create(LeaseFacade.class).setUnit(lease.currentTerm(), unit);
         ServerSideFactory.create(LeaseFacade.class).persist(lease.currentTerm());
         return lease;
+    }
+
+    protected <P extends LeaseTermParticipant<?>> P businessDuplicate(P leaseParticipant) {
+        // There are no own entities for now,
+        Persistence.retrieveOwned(leaseParticipant);
+        P copy = EntityGraph.businessDuplicate(leaseParticipant);
+        copy.screening().set(null);
+        return copy;
     }
 
     // internals
