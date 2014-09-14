@@ -45,7 +45,7 @@ public class PortalRootPaneTheme extends Theme {
     }
 
     public static enum StyleDependent implements IStyleDependent {
-        hover, active, sideMenu, collapsedMenu, sideComm, error, warning, info, confirm, alertOn
+        hover, active, sideMenu, collapsedMenu, sideComm, error, warning, info, confirm, alertOn, animationPaused
     }
 
     public PortalRootPaneTheme() {
@@ -439,9 +439,12 @@ public class PortalRootPaneTheme extends Theme {
         style.addProperty("z-index", "100");
         style.addProperty("top", "3px");
         style.addProperty("-webkit-animation", "bounceH 2s infinite");
-        style.addProperty("-moz-animation", "bounceH 2s infinite");
-        style.addProperty("-ms-animation", "bounceH 2s infinite");
         style.addProperty("animation", "bounceH 2s infinite");
+        addStyle(style);
+
+        style = new Style(".", StyleName.LeftPointer, "-", StyleDependent.animationPaused);
+        style.addProperty("-webkit-animation-play-state", "paused");
+        style.addProperty("animation-play-state", "paused");
         addStyle(style);
 
         String keyframes = "\n\n@-webkit-keyframes bounceH {\n" + //
@@ -461,11 +464,14 @@ public class PortalRootPaneTheme extends Theme {
         style.addProperty("bottom", "-45px");
         style.addProperty("z-index", "100");
         style.addProperty("-webkit-animation", "bounceV 2s infinite");
-        style.addProperty("-moz-animation", "bounceV 2s infinite");
-        style.addProperty("-ms-animation", "bounceV 2s infinite");
         style.addProperty("animation", "bounceV 2s infinite");
         style.addProperty("width", "100%");
         style.addProperty("left", "5px");
+        addStyle(style);
+
+        style = new Style(".", StyleName.TopPointer, "-", StyleDependent.animationPaused);
+        style.addProperty("-webkit-animation-play-state", "paused");
+        style.addProperty("animation-play-state", "paused");
         addStyle(style);
 
         keyframes = "\n\n@-webkit-keyframes bounceV {\n" + //

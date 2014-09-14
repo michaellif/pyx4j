@@ -67,4 +67,10 @@ public class ActionPointer extends SimplePanel {
             }
         });
     }
+
+    @Override
+    public void setVisible(boolean visible) {
+        ActionPointer.this.setStyleDependentName(PortalRootPaneTheme.StyleDependent.animationPaused.name(), !visible);
+        super.setVisible(visible);
+    }
 }
