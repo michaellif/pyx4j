@@ -99,7 +99,7 @@ public class Style {
         properties.add(new BoxShadowProperty(color, vibrance, value));
     }
 
-    public String toString(Theme theme, Palette palette) {
+    public String getCss(Theme theme, Palette palette) {
         StringBuilder builder = new StringBuilder();
 
         if (theme.getDiscriminator() != null) {

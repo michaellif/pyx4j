@@ -111,7 +111,7 @@ public abstract class AbstractReport<R extends ReportMetadata> extends AbstractP
         ReportPrintTheme theme = new ReportPrintTheme();
         Palette palette = new ReportPrintPalette();
         for (Style style : theme.getAllStyles()) {
-            stylesString.append(style.toString(theme, palette));
+            stylesString.append(style.getCss(theme, palette));
         }
         PRINT_THEME = stylesString.toString();
     }

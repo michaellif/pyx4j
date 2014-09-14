@@ -21,15 +21,15 @@
 package com.pyx4j.commons.css;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Vector;
 
 public abstract class Theme {
 
     private final ThemeDescriminator discriminator;
+
+    private final List<String> atRules;
 
     private final List<Style> styles;
 
@@ -42,11 +42,31 @@ public abstract class Theme {
     public Theme(ThemeDescriminator discriminator) {
         this.discriminator = discriminator;
 
+        atRules = new ArrayList<String>();
         styles = new ArrayList<Style>();
         mixinThemes = new LinkedHashMap<ThemeId, Theme>();
     }
 
     public abstract ThemeId getId();
+
+    public void addAtRule(String atRule) {
+        atRules.add(atRule);
+    }
+
+    public List<String> getAllAtRules() {
+        List<String> retValue = new ArrayList<String>(atRules);
+        for (Theme theme : mixinThemes.values()) {
+            retValue.addAll(theme.getAllAtRules());
+        }
+        return retValue;
+    }
+
+    public void addStyle(Style style) {
+        if (style == null) {
+            throw new Error("Style can't be null");
+        }
+        styles.add(style);
+    }
 
     public List<Style> getAllStyles() {
         List<Style> retValue = new ArrayList<Style>(styles);
@@ -54,24 +74,6 @@ public abstract class Theme {
             retValue.addAll(theme.getAllStyles());
         }
         return retValue;
-    }
-
-    public List<Style> getStyles(String selector) {
-        List<Style> r = new Vector<Style>();
-        for (Style style : styles) {
-            if (selector.equals(style.getSelector())) {
-                r.add(style);
-            }
-        }
-        return Collections.unmodifiableList(r);
-    }
-
-    public void addStyle(Style style) {
-        if (style == null) {
-            throw new Error("Style can't be null");
-        }
-
-        styles.add(style);
     }
 
     public void addTheme(Theme theme) {
@@ -90,4 +92,22 @@ public abstract class Theme {
         return discriminator;
     }
 
+    public String getCss(Palette palette) {
+        StringBuilder stylesString = new StringBuilder();
+
+        // Add do-not-print css: 
+        stylesString.append("@media print {");
+        stylesString.append("." + StyleManager.DO_NOT_PRINT_CLASS_NAME + ", ." + StyleManager.DO_NOT_PRINT_CLASS_NAME + " * {display: none !important;}");
+        stylesString.append("}");
+
+        for (String atRule : getAllAtRules()) {
+            stylesString.append(atRule);
+        }
+
+        for (Style style : getAllStyles()) {
+            stylesString.append(style.getCss(this, palette));
+        }
+
+        return stylesString.toString();
+    }
 }

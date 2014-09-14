@@ -90,7 +90,7 @@ public class StyleManager {
         instance().palette = palette;
         alternativeHostnameIdx = 0;
 
-        String themeStr = getThemeString();
+        String themeStr = theme.getCss(palette);
 
         cleanUpInjectedStyles();
         log.debug("install style {} ", theme.getClass().getName());
@@ -124,18 +124,4 @@ public class StyleManager {
         return instance().palette;
     }
 
-    public static String getThemeString() {
-        StringBuilder stylesString = new StringBuilder();
-
-        // Add do-not-print css: 
-        stylesString.append("@media print {");
-        stylesString.append("." + DO_NOT_PRINT_CLASS_NAME + ", ." + DO_NOT_PRINT_CLASS_NAME + " * {display: none !important;}");
-        stylesString.append("}");
-
-        for (Style style : instance().theme.getAllStyles()) {
-            stylesString.append(style.toString(instance().theme, instance().palette));
-        }
-
-        return stylesString.toString();
-    }
 }
