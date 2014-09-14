@@ -161,14 +161,14 @@ public class ToolbarViewImpl extends FlowPanel implements ToolbarView {
         communicationButton.addStyleName(WidgetTheme.StyleName.Button.name());
 
         rightToolbar.addItem(loginButton);
-        rightToolbar.addItem(new ActionButton(tenantButton));
+        rightToolbar.addItem(new ActionButton(tenantButton, ResidentPortalPointerId.profile));
 
         //TODO implement lang selector
         if (false) {
             rightToolbar.addItem(languageButton);
         }
 
-        rightToolbar.addItem(new ActionButton(communicationButton));
+        rightToolbar.addItem(new ActionButton(communicationButton, ResidentPortalPointerId.communication));
         rightToolbar.getElement().getStyle().setPosition(Position.ABSOLUTE);
         rightToolbar.getElement().getStyle().setProperty("right", "0");
 

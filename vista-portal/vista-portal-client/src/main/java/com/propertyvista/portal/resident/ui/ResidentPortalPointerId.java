@@ -13,7 +13,9 @@
  */
 package com.propertyvista.portal.resident.ui;
 
-public enum PointerId {
+import com.propertyvista.portal.shared.ui.PointerId;
+
+public enum ResidentPortalPointerId implements PointerId {
 
     communication, billing, maintanance, insurance, profile
 }

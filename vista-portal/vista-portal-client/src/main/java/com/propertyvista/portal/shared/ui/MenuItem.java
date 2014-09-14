@@ -51,6 +51,10 @@ public class MenuItem implements IsWidget {
     private final String color;
 
     public MenuItem(final AppPlace appPlace, ButtonImages images, ThemeColor color) {
+        this(appPlace, images, color, null);
+    }
+
+    public MenuItem(final AppPlace appPlace, ButtonImages images, ThemeColor color, PointerId pointerId) {
         super();
 
         contentPanel = new ContentPanel();
@@ -68,7 +72,7 @@ public class MenuItem implements IsWidget {
         label.setStyleName(PortalRootPaneTheme.StyleName.MainMenuLabel.name());
         contentPanel.add(label);
 
-        pointer = new ActionPointer();
+        pointer = new ActionPointer(pointerId, ActionPointer.Direction.left);
         contentPanel.add(pointer);
 
     }

@@ -15,30 +15,21 @@ package com.propertyvista.portal.shared.ui;
 
 import com.google.gwt.dom.client.Style.Position;
 import com.google.gwt.user.client.ui.FlowPanel;
-import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.IsWidget;
-import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.widgets.client.Button;
-
-import com.propertyvista.portal.shared.resources.PortalImages;
-import com.propertyvista.portal.shared.themes.PortalRootPaneTheme;
 
 public class ActionButton implements IsWidget {
 
     private final FlowPanel contentPanel;
 
-    public ActionButton(Button button) {
+    public ActionButton(Button button, final PointerId pointerId) {
         contentPanel = new FlowPanel();
         contentPanel.getElement().getStyle().setPosition(Position.RELATIVE);
-
         contentPanel.add(button);
 
-        SimplePanel pointerPanel = new SimplePanel(new Image(PortalImages.INSTANCE.pointerV()));
-        pointerPanel.setStyleName(PortalRootPaneTheme.StyleName.ButtonPointer.name());
-        pointerPanel.setVisible(false);
-
+        final ActionPointer pointerPanel = new ActionPointer(pointerId, ActionPointer.Direction.top);
         contentPanel.add(pointerPanel);
 
     }

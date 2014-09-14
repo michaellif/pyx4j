@@ -13,20 +13,58 @@
  */
 package com.propertyvista.portal.shared.ui;
 
+import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.SimplePanel;
 
+import com.propertyvista.portal.shared.PortalSite;
+import com.propertyvista.portal.shared.events.PointerEvent;
+import com.propertyvista.portal.shared.events.PointerHandler;
 import com.propertyvista.portal.shared.resources.PortalImages;
 import com.propertyvista.portal.shared.themes.PortalRootPaneTheme;
 
 public class ActionPointer extends SimplePanel {
 
-    public ActionPointer() {
+    public enum Direction {
+        left, top
+    }
+
+    public ActionPointer(final PointerId pointerId, Direction direction) {
         super();
 
-        setWidget(new Image(PortalImages.INSTANCE.pointerH()));
-        setStyleName(PortalRootPaneTheme.StyleName.MenuPointer.name());
+        Image image = null;
+        switch (direction) {
+        case left:
+            setWidget(image = new Image(PortalImages.INSTANCE.pointerH()));
+            setStyleName(PortalRootPaneTheme.StyleName.LeftPointer.name());
+            break;
+        case top:
+            setWidget(image = new Image(PortalImages.INSTANCE.pointerV()));
+            setStyleName(PortalRootPaneTheme.StyleName.TopPointer.name());
+            break;
+        }
+        image.getElement().getStyle().setOpacity(0.6);
 
         setVisible(false);
+
+        PortalSite.getEventBus().addHandler(PointerEvent.getType(), new PointerHandler() {
+
+            @Override
+            public void showPointer(PointerEvent event) {
+                if (event.getPointerId().equals(pointerId)) {
+                    ActionPointer.this.setVisible(true);
+                    Timer t = new Timer() {
+                        @Override
+                        public void run() {
+                            ActionPointer.this.setVisible(false);
+                        }
+                    };
+                    t.schedule(4000);
+
+                } else {
+                    ActionPointer.this.setVisible(false);
+                }
+            }
+        });
     }
 }

@@ -41,7 +41,7 @@ public class PortalRootPaneTheme extends Theme {
 
         NotificationGadget, TermsGadget, TermsGadgetContent,
 
-        MenuPointer, ButtonPointer;
+        LeftPointer, TopPointer;
     }
 
     public static enum StyleDependent implements IStyleDependent {
@@ -432,7 +432,7 @@ public class PortalRootPaneTheme extends Theme {
     }
 
     private void initPointerStyles() {
-        Style style = new Style(".", StyleName.MenuPointer);
+        Style style = new Style(".", StyleName.LeftPointer);
         style.addProperty("position", "absolute");
         style.addProperty("right", "-42px");
         style.addProperty("height", "41px");
@@ -456,7 +456,7 @@ public class PortalRootPaneTheme extends Theme {
                 "60% {-webkit-transform: translateX(15px); transform: translateX(15px);}\n }\n";
         addAtRule(keyframes);
 
-        style = new Style(".", StyleName.ButtonPointer);
+        style = new Style(".", StyleName.TopPointer);
         style.addProperty("position", "absolute");
         style.addProperty("bottom", "-45px");
         style.addProperty("z-index", "100");

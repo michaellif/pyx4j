@@ -13,11 +13,7 @@
  */
 package com.propertyvista.portal.resident.ui.dashboard;
 
-import com.google.gwt.dom.client.Style.Cursor;
-import com.google.gwt.dom.client.Style.Display;
 import com.google.gwt.dom.client.Style.TextAlign;
-import com.google.gwt.dom.client.Style.Unit;
-import com.google.gwt.dom.client.Style.VerticalAlign;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
@@ -28,13 +24,16 @@ import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
 
 import com.pyx4j.commons.css.ThemeColor;
+import com.pyx4j.gwt.commons.ClientEventBus;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.Anchor;
 
-import com.propertyvista.portal.resident.ui.PointerId;
+import com.propertyvista.portal.resident.ui.ResidentPortalPointerId;
+import com.propertyvista.portal.shared.events.PointerEvent;
 import com.propertyvista.portal.shared.resources.PortalImages;
 import com.propertyvista.portal.shared.themes.DashboardTheme;
 import com.propertyvista.portal.shared.ui.AbstractGadget;
+import com.propertyvista.portal.shared.ui.PointerId;
 import com.propertyvista.shared.config.VistaFeatures;
 
 public class GettingStartedGadget extends AbstractGadget<MainDashboardViewImpl> {
@@ -64,13 +63,13 @@ public class GettingStartedGadget extends AbstractGadget<MainDashboardViewImpl> 
 
         HTMLPanel contentPanel = new HTMLPanel(contentHtmlBuilder.toSafeHtml());
 
-        contentPanel
-                .addAndReplaceElement(new PointerLink(i18n.tr("Communicate to your Property Management Office."), PointerId.communication), communicationId);
-        contentPanel
-                .addAndReplaceElement(new PointerLink(i18n.tr("Make a payment, setup Auto Pay or see your Billing history."), PointerId.billing), billingId);
-        contentPanel.addAndReplaceElement(new PointerLink(i18n.tr("Submit Maintanance Request."), PointerId.maintanance), maintananceId);
-        contentPanel.addAndReplaceElement(new PointerLink(i18n.tr("Purchase Insurance."), PointerId.insurance), insuranceId);
-        contentPanel.addAndReplaceElement(new PointerLink(i18n.tr("Update your Profile or Account."), PointerId.profile), profileId);
+        contentPanel.addAndReplaceElement(new PointerLink(i18n.tr("Communicate to your Property Management Office."), ResidentPortalPointerId.communication),
+                communicationId);
+        contentPanel.addAndReplaceElement(new PointerLink(i18n.tr("Make a payment, setup Auto Pay or see your Billing history."),
+                ResidentPortalPointerId.billing), billingId);
+        contentPanel.addAndReplaceElement(new PointerLink(i18n.tr("Submit Maintanance Request."), ResidentPortalPointerId.maintanance), maintananceId);
+        contentPanel.addAndReplaceElement(new PointerLink(i18n.tr("Purchase Insurance."), ResidentPortalPointerId.insurance), insuranceId);
+        contentPanel.addAndReplaceElement(new PointerLink(i18n.tr("Update your Profile or Account."), ResidentPortalPointerId.profile), profileId);
 
         contentPanel.getElement().getStyle().setTextAlign(TextAlign.LEFT);
 
@@ -113,7 +112,7 @@ public class GettingStartedGadget extends AbstractGadget<MainDashboardViewImpl> 
 
                 @Override
                 public void onClick(ClickEvent event) {
-                    System.out.println("++++++++++++++++++" + pointerId);
+                    ClientEventBus.fireEvent(new PointerEvent(pointerId));
                 }
             }, ClickEvent.getType());
         }
