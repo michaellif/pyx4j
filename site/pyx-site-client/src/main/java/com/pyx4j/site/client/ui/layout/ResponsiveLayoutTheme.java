@@ -97,13 +97,13 @@ public class ResponsiveLayoutTheme extends Theme {
 
         style = new Style(".", StyleName.ResponsiveLayoutOverlayActionsTabDeck);
         style.addProperty("border-top", "4px solid");
-        style.addProperty("border-color", ThemeColor.object1, 1.0);
+        style.addProperty("border-color", ThemeColor.foreground, 1.2);
         style.addProperty("background-color", ThemeColor.foreground, 0.1);
         addStyle(style);
 
         style = new Style(".", StyleName.ResponsiveLayoutOverlayActions, " .", WidgetTheme.StyleName.ToolbarItem, "-", StyleDependent.selected, " .",
                 StyleName.ResponsiveLayoutOverlayActionsTabItem, ".", WidgetTheme.StyleName.Button);
-        style.addProperty("background-color", ThemeColor.object1, 1.0);
+        style.addProperty("background-color", ThemeColor.foreground, 1.2);
         addStyle(style);
 
     }
