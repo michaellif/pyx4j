@@ -169,7 +169,7 @@ public class YardiLeaseApplicationFacadeImpl extends AbstractYardiFacadeImpl imp
     }
 
     private Lease saveLeaseId(final Lease leaseId, SignLeaseResults signLeaseResults) {
-        final Lease lease = Persistence.service().retrieve(Lease.class, leaseId.getPrimaryKey());
+        final Lease lease = ServerSideFactory.create(LeaseFacade.class).load(leaseId, false);
         lease.leaseId().setValue(signLeaseResults.getLeaseId());
         Persistence.service().persist(lease);
 
@@ -233,6 +233,7 @@ public class YardiLeaseApplicationFacadeImpl extends AbstractYardiFacadeImpl imp
         }
     }
 
+    @Override
     public String getLeaseId(Lease leaseId) throws YardiServiceException {
         final Lease lease = ServerSideFactory.create(LeaseFacade.class).load(leaseId, false);
         Persistence.ensureRetrieve(lease.unit().building(), AttachLevel.ToStringMembers);

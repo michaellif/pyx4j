@@ -320,7 +320,7 @@ public class YardiGuestManagementService extends YardiAbstractService {
         }
         log.info("Created Lease: {}", tenantId);
 
-        boolean useMasterDeposit = true;//lease.currentTerm().version().leaseProducts().serviceItem().item().yardiDepositLMR().isNull();
+        boolean useMasterDeposit = lease.currentTerm().version().leaseProducts().serviceItem().item().yardiDepositLMR().isNull();
         List<Deposit> deposits = getLeaseDeposits(lease);
         if (useMasterDeposit && !deposits.isEmpty()) {
             ensureDepositChargeCodesConfigured(yc, lease);
