@@ -33,11 +33,11 @@ import com.pyx4j.widgets.client.IWatermarkWidget;
 import com.pyx4j.widgets.client.suggest.MultyWordSuggestOptionsGrabber;
 import com.pyx4j.widgets.client.suggest.SelectorTextBox;
 
-public class NSelectorBox<E extends IEntity> extends NFocusField<E, SelectorTextBox<E>, CSelectorBox<E>, HTML> implements IWatermarkWidget {
+public class NSelectorTextBox<E extends IEntity> extends NFocusField<E, SelectorTextBox<E>, CSelectorTextBox<E>, HTML> implements IWatermarkWidget {
 
     private final MultyWordSuggestOptionsGrabber<E> optionsGrabber;
 
-    public NSelectorBox(final CSelectorBox<E> cSuggestBox) {
+    public NSelectorTextBox(final CSelectorTextBox<E> cSuggestBox) {
         super(cSuggestBox);
         optionsGrabber = new MultyWordSuggestOptionsGrabber<E>(getCComponent().getFormatter());
         optionsGrabber.setComparator(new Comparator<E>() {

@@ -31,10 +31,10 @@ import com.pyx4j.widgets.client.IWatermarkWidget;
 import com.pyx4j.widgets.client.Label;
 import com.pyx4j.widgets.client.suggest.SelectorListBox;
 
-public class NMultySelectorBox<E extends IEntity> extends NFocusField<Collection<E>, SelectorListBox<E>, CMultySelectorBox<E>, HTML> implements
+public class NSelectorListBox<E extends IEntity> extends NFocusField<Collection<E>, SelectorListBox<E>, CSelectorListBox<E>, HTML> implements
         IWatermarkWidget {
 
-    public NMultySelectorBox(final CMultySelectorBox<E> cSuggestBox) {
+    public NSelectorListBox(final CSelectorListBox<E> cSuggestBox) {
         super(cSuggestBox);
     }
 

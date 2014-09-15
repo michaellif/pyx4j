@@ -33,7 +33,7 @@ import com.pyx4j.forms.client.events.OptionsChangeEvent;
 import com.pyx4j.forms.client.events.OptionsChangeHandler;
 import com.pyx4j.widgets.client.IWatermarkWidget;
 
-public class CSelectorBox<E extends IEntity> extends CFocusComponent<E, NSelectorBox<E>> implements IAcceptsWatermark, HasOptionsChangeHandlers<List<E>> {
+public class CSelectorTextBox<E extends IEntity> extends CFocusComponent<E, NSelectorTextBox<E>> implements IAcceptsWatermark, HasOptionsChangeHandlers<List<E>> {
 
     private String watermark;
 
@@ -43,7 +43,7 @@ public class CSelectorBox<E extends IEntity> extends CFocusComponent<E, NSelecto
 
     private IFormatter<E, String[]> optionPathFormatter;
 
-    public CSelectorBox() {
+    public CSelectorTextBox() {
         super();
 
         setOptionPathFormatter(new IFormatter<E, String[]>() {
@@ -54,7 +54,7 @@ public class CSelectorBox<E extends IEntity> extends CFocusComponent<E, NSelecto
             }
         });
 
-        setNativeComponent(new NSelectorBox<E>(this));
+        setNativeComponent(new NSelectorTextBox<E>(this));
     }
 
     public void setFormatter(IFormatter<E, String> formatter) {

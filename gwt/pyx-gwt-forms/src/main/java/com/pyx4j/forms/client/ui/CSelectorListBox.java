@@ -33,7 +33,7 @@ import com.pyx4j.forms.client.events.OptionsChangeHandler;
 import com.pyx4j.widgets.client.IWatermarkWidget;
 import com.pyx4j.widgets.client.suggest.IOptionsGrabber;
 
-public class CMultySelectorBox<E extends IEntity> extends CFocusComponent<Collection<E>, NMultySelectorBox<E>> implements IAcceptsWatermark,
+public class CSelectorListBox<E extends IEntity> extends CFocusComponent<Collection<E>, NSelectorListBox<E>> implements IAcceptsWatermark,
         HasOptionsChangeHandlers<List<E>> {
 
     private String watermark;
@@ -44,7 +44,7 @@ public class CMultySelectorBox<E extends IEntity> extends CFocusComponent<Collec
 
     private final IOptionsGrabber<E> optionsGrabber;
 
-    public CMultySelectorBox(IOptionsGrabber<E> optionsGrabber) {
+    public CSelectorListBox(IOptionsGrabber<E> optionsGrabber) {
         super();
         this.optionsGrabber = optionsGrabber;
 
@@ -56,7 +56,7 @@ public class CMultySelectorBox<E extends IEntity> extends CFocusComponent<Collec
             }
         });
 
-        setNativeComponent(new NMultySelectorBox<E>(this));
+        setNativeComponent(new NSelectorListBox<E>(this));
     }
 
     public void setFormatter(IFormatter<E, String> formatter) {
