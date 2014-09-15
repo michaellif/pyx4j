@@ -60,7 +60,7 @@ import com.propertyvista.crm.client.ui.components.boxes.EmployeeSelectorDialog;
 import com.propertyvista.crm.client.ui.components.boxes.PortfolioSelectorDialog;
 import com.propertyvista.crm.client.ui.components.boxes.TenantSelectorDialog;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
-import com.propertyvista.crm.client.ui.tools.common.selectors.CommunicationEndpointSelector;
+import com.propertyvista.crm.client.ui.tools.common.selectors.CommunicationEndpointSelector_OLD;
 import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.domain.communication.CommunicationEndpoint.ContactType;
 import com.propertyvista.domain.communication.CommunicationGroup;
@@ -195,7 +195,7 @@ public class MessageForm extends CrmEntityForm<MessageDTO> {
 
         private final Button actionsButton;
 
-        private CommunicationEndpointSelector communicationEndpointSelector;
+        private CommunicationEndpointSelector_OLD communicationEndpointSelector;
 
         public MessageFolderItem() {
             super(MessageDTO.class, new VistaViewersComponentFactory());
@@ -551,7 +551,7 @@ public class MessageForm extends CrmEntityForm<MessageDTO> {
         }
 
         private IsWidget createCommunicationEndpointSelector() {
-            return communicationEndpointSelector = new CommunicationEndpointSelector() {//@formatter:off
+            return communicationEndpointSelector = new CommunicationEndpointSelector_OLD() {//@formatter:off
                 @Override protected void onItemAdded(CommunicationEndpointDTO item) {
                     super.onItemAdded(item);
                     MessageFolderItem.this.addToItem(item);

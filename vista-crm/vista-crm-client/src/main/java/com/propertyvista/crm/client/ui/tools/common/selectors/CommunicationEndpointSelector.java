@@ -1,5 +1,5 @@
 /*
- * (C) Copyright Property Vista Software Inc. 2011-2012 All Rights Reserved.
+ * (C) Copyright Property Vista Software Inc. 2011-2015 All Rights Reserved.
  *
  * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
  * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
@@ -7,25 +7,20 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2013-12-09
- * @author ArtyomB
+ * Created on Sep 9, 2014
+ * @author arminea
  * @version $Id$
  */
 package com.propertyvista.crm.client.ui.tools.common.selectors;
 
-import com.pyx4j.commons.IFormatter;
-import com.pyx4j.widgets.client.selector.SuggestiveSelector;
+import com.pyx4j.forms.client.ui.CSelectorListBox;
 
 import com.propertyvista.dto.CommunicationEndpointDTO;
 
-public class CommunicationEndpointSelector extends SuggestiveSelector<CommunicationEndpointDTO> {
+public class CommunicationEndpointSelector extends CSelectorListBox<CommunicationEndpointDTO> {
 
     public CommunicationEndpointSelector() {
-        super(new IFormatter<CommunicationEndpointDTO, String>() {
-            @Override
-            public String format(CommunicationEndpointDTO value) {
-                return value.name().getValue();
-            }
-        }, new CommunicationEndpointSuggestionsProvider(), new CommunicationEndpointForSelectionCell(), true);
+        super(new CommunicationEndpointOptionsGrabber());
     }
+
 }
