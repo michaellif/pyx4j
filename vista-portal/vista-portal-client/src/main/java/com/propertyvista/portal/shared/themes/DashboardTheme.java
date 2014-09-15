@@ -102,18 +102,8 @@ public class DashboardTheme extends Theme {
         style.addProperty("cursor", "pointer");
         addStyle(style);
 
-        style = new Style(".", StyleName.PointerLink, " div");
-        style.addProperty("display", "inline-block");
-        style.addProperty("vertical-align", "middle");
-        style.addProperty("padding-right", "10px");
-        addStyle(style);
-
-        style = new Style(".", StyleName.PointerLink, " div:hover");
+        style = new Style(".", StyleName.PointerLink, ":hover");
         style.addProperty("text-decoration", "underline");
-        addStyle(style);
-
-        style = new Style(".", StyleName.PointerLink, " img");
-        style.addProperty("vertical-align", "middle");
         addStyle(style);
 
     }
