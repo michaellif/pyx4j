@@ -30,6 +30,7 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.SimplePanel;
 
 import com.pyx4j.site.client.ui.layout.ResponsiveLayoutPanel.DisplayType;
+import com.pyx4j.site.client.ui.layout.ResponsiveLayoutTheme;
 
 public class InlineExtraHolder extends SimplePanel {
 
@@ -59,15 +60,15 @@ public class InlineExtraHolder extends SimplePanel {
         contentPanel.setVisible(true);
 
         if (parent.getDisplay(DisplayType.extra1).getWidget() != null) {
-            contentPanel.add(new ExtraPanel(parent.getDisplay(DisplayType.extra1), extra1Caption));
+            contentPanel.add(new ExtraPanel(parent.getDisplay(DisplayType.extra1), extra1Caption, ResponsiveLayoutTheme.StyleDependent.extra1.name()));
         }
 
         if (parent.getDisplay(DisplayType.extra2).getWidget() != null) {
-            contentPanel.add(new ExtraPanel(parent.getDisplay(DisplayType.extra2), extra2Caption));
+            contentPanel.add(new ExtraPanel(parent.getDisplay(DisplayType.extra2), extra2Caption, ResponsiveLayoutTheme.StyleDependent.extra2.name()));
         }
 
         if (parent.getDisplay(DisplayType.extra3).getWidget() != null) {
-            contentPanel.add(new ExtraPanel(parent.getDisplay(DisplayType.extra3), null));
+            contentPanel.add(new ExtraPanel(parent.getDisplay(DisplayType.extra3), null, ResponsiveLayoutTheme.StyleDependent.extra3.name()));
         }
     }
 
@@ -112,9 +113,10 @@ public class InlineExtraHolder extends SimplePanel {
 
     class ExtraPanel extends FlowPanel {
 
-        ExtraPanel(IsWidget widget, String caption) {
+        ExtraPanel(IsWidget widget, String caption, String styleSuffix) {
             super();
             setStylePrimaryName(FrontOfficeLayoutTheme.StyleName.FrontOfficeLayoutInlineExtraPanel.name());
+            addStyleDependentName(styleSuffix);
 
             if (caption != null && !caption.trim().equals("")) {
                 HTML captionLabel = new HTML(caption);

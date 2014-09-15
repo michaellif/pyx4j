@@ -102,7 +102,7 @@ public class FrontOfficeLayoutTheme extends ResponsiveLayoutTheme {
         addStyle(style);
 
         style = new Style(".", StyleName.FrontOfficeLayoutInlineExtraPanelCaption);
-        style.addProperty("margin", "0 10px 10px 0");
+        style.addProperty("margin", "10px 10px 10px 0");
         style.addProperty("font-weight", "bold");
         style.addProperty(" text-align", "center");
         addStyle(style);

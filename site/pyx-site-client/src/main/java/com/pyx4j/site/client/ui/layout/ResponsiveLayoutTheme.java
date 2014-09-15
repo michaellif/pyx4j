@@ -38,7 +38,7 @@ public class ResponsiveLayoutTheme extends Theme {
     }
 
     public static enum StyleDependent implements IStyleDependent {
-        selected
+        selected, extra1, extra2, extra3
     }
 
     public ResponsiveLayoutTheme() {
