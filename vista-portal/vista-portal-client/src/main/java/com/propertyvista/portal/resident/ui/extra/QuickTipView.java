@@ -13,12 +13,10 @@
  */
 package com.propertyvista.portal.resident.ui.extra;
 
-import com.google.gwt.user.client.Command;
+import com.google.gwt.user.client.ui.HTMLPanel;
 
 import com.pyx4j.commons.css.ThemeColor;
 import com.pyx4j.site.client.IsView;
-
-import com.propertyvista.portal.shared.ui.PointerId;
 
 public interface QuickTipView extends IsView {
 
@@ -26,5 +24,5 @@ public interface QuickTipView extends IsView {
 
     }
 
-    void setQuickTip(String text, ThemeColor color, PointerId pointerId, Command command);
+    void setQuickTip(HTMLPanel contentPanel, ThemeColor background);
 }

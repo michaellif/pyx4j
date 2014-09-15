@@ -14,28 +14,21 @@
 package com.propertyvista.portal.resident.ui.dashboard;
 
 import com.google.gwt.dom.client.Style.TextAlign;
-import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTMLPanel;
-import com.google.gwt.user.client.ui.Image;
-import com.google.gwt.user.client.ui.Label;
 
 import com.pyx4j.commons.css.ThemeColor;
-import com.pyx4j.gwt.commons.ClientEventBus;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.widgets.client.Anchor;
 
+import com.propertyvista.portal.resident.ui.PointerLink;
 import com.propertyvista.portal.resident.ui.ResidentPortalPointerId;
 import com.propertyvista.portal.rpc.portal.resident.ResidentPortalSiteMap;
-import com.propertyvista.portal.shared.events.PointerEvent;
-import com.propertyvista.portal.shared.resources.PortalImages;
 import com.propertyvista.portal.shared.themes.DashboardTheme;
 import com.propertyvista.portal.shared.ui.AbstractGadget;
-import com.propertyvista.portal.shared.ui.PointerId;
 import com.propertyvista.shared.config.VistaFeatures;
 
 public class GettingStartedGadget extends AbstractGadget<MainDashboardViewImpl> {
@@ -131,31 +124,4 @@ public class GettingStartedGadget extends AbstractGadget<MainDashboardViewImpl> 
         }
     }
 
-    class PointerLink extends FlowPanel {
-
-        public PointerLink(String text, final Command command, final PointerId pointerId) {
-            setStyleName(DashboardTheme.StyleName.PointerLink.name());
-
-            Label label = new Label(text);
-            label.addClickHandler(new ClickHandler() {
-
-                @Override
-                public void onClick(ClickEvent event) {
-                    command.execute();
-                }
-            });
-            add(label);
-
-            Image icon = new Image(PortalImages.INSTANCE.showPointer());
-            icon.addClickHandler(new ClickHandler() {
-
-                @Override
-                public void onClick(ClickEvent event) {
-                    ClientEventBus.fireEvent(new PointerEvent(pointerId));
-                }
-            });
-            add(icon);
-
-        }
-    }
 }
