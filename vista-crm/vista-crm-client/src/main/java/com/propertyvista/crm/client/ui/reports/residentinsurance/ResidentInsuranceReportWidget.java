@@ -35,7 +35,7 @@ import com.google.gwt.user.client.ui.HTML;
 
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
-import com.pyx4j.site.client.backoffice.ui.prime.report.ReportWidget;
+import com.pyx4j.site.client.backoffice.ui.prime.report.IReportWidget;
 
 import com.propertyvista.crm.client.ui.reports.ColumnDescriptorAnchorTableColumnFormatter;
 import com.propertyvista.crm.client.ui.reports.ColumnDescriptorTableColumnFormatter;
@@ -45,7 +45,7 @@ import com.propertyvista.crm.client.ui.reports.NoResultsHtml;
 import com.propertyvista.crm.client.ui.reports.ScrollBarPositionMemento;
 import com.propertyvista.crm.rpc.dto.reports.ResidentInsuranceStatusDTO;
 
-public class ResidentInsuranceReportWidget extends Composite implements ReportWidget {
+public class ResidentInsuranceReportWidget extends Composite implements IReportWidget {
 
     private ScrollBarPositionMemento tableBodyScrollBarPositionMemento;
 

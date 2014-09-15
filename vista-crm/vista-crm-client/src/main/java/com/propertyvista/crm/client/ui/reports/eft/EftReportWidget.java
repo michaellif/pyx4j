@@ -45,7 +45,7 @@ import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.backoffice.ui.prime.report.AbstractReport;
-import com.pyx4j.site.client.backoffice.ui.prime.report.ReportWidget;
+import com.pyx4j.site.client.backoffice.ui.prime.report.IReportWidget;
 
 import com.propertyvista.crm.client.resources.CrmImages;
 import com.propertyvista.crm.client.ui.reports.ColumnDescriptorAnchorTableColumnFormatter;
@@ -57,7 +57,7 @@ import com.propertyvista.crm.client.ui.reports.ScrollBarPositionMemento;
 import com.propertyvista.crm.rpc.dto.reports.EftReportDataDTO;
 import com.propertyvista.crm.rpc.dto.reports.EftReportRecordDTO;
 
-public class EftReportWidget extends Composite implements ReportWidget {
+public class EftReportWidget extends Composite implements IReportWidget {
 
     private final static I18n i18n = I18n.get(EftReportWidget.class);
 

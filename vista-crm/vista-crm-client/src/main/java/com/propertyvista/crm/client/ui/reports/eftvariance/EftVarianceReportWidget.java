@@ -37,7 +37,7 @@ import com.google.gwt.user.client.ui.HTML;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.AppPlaceEntityMapper;
-import com.pyx4j.site.client.backoffice.ui.prime.report.ReportWidget;
+import com.pyx4j.site.client.backoffice.ui.prime.report.IReportWidget;
 import com.pyx4j.site.rpc.AppPlaceInfo;
 
 import com.propertyvista.crm.client.ui.reports.Column;
@@ -48,7 +48,7 @@ import com.propertyvista.crm.rpc.dto.reports.EftVarianceReportRecordDTO;
 import com.propertyvista.crm.rpc.dto.reports.EftVarianceReportRecordDetailsDTO;
 import com.propertyvista.domain.tenant.lease.Lease;
 
-public class EftVarianceReportWidget extends Composite implements ReportWidget {
+public class EftVarianceReportWidget extends Composite implements IReportWidget {
 
     private static final I18n i18n = I18n.get(EftVarianceReportWidget.class);
 

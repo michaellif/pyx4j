@@ -28,14 +28,14 @@ import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.backoffice.ui.prime.report.ReportWidget;
+import com.pyx4j.site.client.backoffice.ui.prime.report.IReportWidget;
 
 import com.propertyvista.crm.client.ui.reports.NoResultsHtml;
 import com.propertyvista.crm.client.ui.reports.ScrollBarPositionMemento;
 import com.propertyvista.crm.rpc.dto.reports.CustomerCreditCheckReportDataDTO;
 import com.propertyvista.domain.tenant.CustomerCreditCheck;
 
-public class CustomerCreditCheckReportWidget implements ReportWidget {
+public class CustomerCreditCheckReportWidget implements IReportWidget {
 
     private static final I18n i18n = I18n.get(CustomerCreditCheckReportWidget.class);
 
