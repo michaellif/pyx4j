@@ -13,8 +13,8 @@
  */
 package com.propertyvista.operations.client.ui.crud.fundstransfer.fundsreconciliationfile;
 
-import com.pyx4j.site.client.ui.backoffice.prime.lister.ILister;
-import com.pyx4j.site.client.ui.backoffice.prime.lister.ListerInternalViewImplBase;
+import com.pyx4j.site.client.backoffice.ui.prime.lister.ILister;
+import com.pyx4j.site.client.backoffice.ui.prime.lister.ListerInternalViewImplBase;
 
 import com.propertyvista.operations.client.ui.crud.OperationsViewerViewImplBase;
 import com.propertyvista.operations.rpc.dto.FundsReconciliationFileDTO;

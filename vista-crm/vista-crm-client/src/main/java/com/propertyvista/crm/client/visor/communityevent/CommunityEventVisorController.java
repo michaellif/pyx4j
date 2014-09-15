@@ -20,7 +20,7 @@ import com.pyx4j.commons.Key;
 import com.pyx4j.entity.core.criterion.EntityListCriteria;
 import com.pyx4j.entity.rpc.EntitySearchResult;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
-import com.pyx4j.site.client.activity.AbstractVisorController;
+import com.pyx4j.site.client.backoffice.activity.AbstractVisorController;
 import com.pyx4j.site.client.ui.IPane;
 
 import com.propertyvista.crm.rpc.services.building.communityevent.CommunityEventCrudService;

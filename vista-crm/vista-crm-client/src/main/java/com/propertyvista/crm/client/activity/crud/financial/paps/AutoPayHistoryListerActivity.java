@@ -18,7 +18,7 @@ import com.google.gwt.place.shared.Place;
 
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.criterion.EntityFiltersBuilder;
-import com.pyx4j.site.client.activity.AbstractListerActivity;
+import com.pyx4j.site.client.backoffice.activity.AbstractListerActivity;
 import com.pyx4j.site.rpc.AppPlace;
 
 import com.propertyvista.crm.client.CrmSite;

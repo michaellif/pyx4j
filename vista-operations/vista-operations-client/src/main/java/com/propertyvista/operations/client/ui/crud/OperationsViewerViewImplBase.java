@@ -21,8 +21,8 @@ import com.pyx4j.entity.core.IVersionedEntity;
 import com.pyx4j.entity.rpc.AbstractListCrudService;
 import com.pyx4j.entity.rpc.AbstractVersionDataListService;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.ui.backoffice.prime.IPrimePane;
-import com.pyx4j.site.client.ui.backoffice.prime.form.AbstractViewer;
+import com.pyx4j.site.client.backoffice.ui.prime.IPrimePane;
+import com.pyx4j.site.client.backoffice.ui.prime.form.AbstractViewer;
 import com.pyx4j.widgets.client.Button;
 
 import com.propertyvista.common.client.ui.components.versioning.VersionSelectorDialog;

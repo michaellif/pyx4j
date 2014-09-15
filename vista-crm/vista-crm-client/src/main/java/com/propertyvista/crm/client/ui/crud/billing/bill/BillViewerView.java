@@ -13,7 +13,7 @@
  */
 package com.propertyvista.crm.client.ui.crud.billing.bill;
 
-import com.pyx4j.site.client.ui.backoffice.prime.form.IViewer;
+import com.pyx4j.site.client.backoffice.ui.prime.form.IViewer;
 
 import com.propertyvista.crm.rpc.dto.billing.BillDataDTO;
 

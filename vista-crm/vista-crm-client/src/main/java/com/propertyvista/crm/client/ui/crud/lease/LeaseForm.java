@@ -19,7 +19,7 @@ import com.pyx4j.entity.security.DataModelPermission;
 import com.pyx4j.forms.client.ui.CViewer;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.forms.client.ui.panels.FormPanel;
-import com.pyx4j.site.client.ui.backoffice.prime.form.IForm;
+import com.pyx4j.site.client.backoffice.ui.prime.form.IForm;
 import com.pyx4j.widgets.client.tabpanel.Tab;
 
 import com.propertyvista.common.client.ui.components.TransactionHistoryViewerYardi;

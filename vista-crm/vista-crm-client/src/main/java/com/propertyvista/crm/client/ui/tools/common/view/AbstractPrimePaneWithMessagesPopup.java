@@ -15,7 +15,7 @@ package com.propertyvista.crm.client.ui.tools.common.view;
 
 import com.google.gwt.user.client.Command;
 
-import com.pyx4j.site.client.ui.backoffice.prime.AbstractPrimePane;
+import com.pyx4j.site.client.backoffice.ui.prime.AbstractPrimePane;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 import com.pyx4j.widgets.client.dialog.MessageDialog.Type;
 

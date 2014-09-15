@@ -16,7 +16,7 @@ package com.propertyvista.operations.client.activity.crud.fundstransfer.fundstra
 import com.google.gwt.core.client.GWT;
 
 import com.pyx4j.entity.rpc.AbstractCrudService;
-import com.pyx4j.site.client.activity.AbstractViewerActivity;
+import com.pyx4j.site.client.backoffice.activity.AbstractViewerActivity;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
 import com.propertyvista.operations.client.OperationsSite;

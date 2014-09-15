@@ -13,7 +13,7 @@
  */
 package com.propertyvista.crm.client.ui.tools.legal.l1;
 
-import com.pyx4j.site.client.ui.backoffice.prime.wizard.IWizard;
+import com.pyx4j.site.client.backoffice.ui.prime.wizard.IWizard;
 
 import com.propertyvista.crm.rpc.dto.legal.l1.L1FormDataReviewWizardDTO;
 

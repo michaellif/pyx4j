@@ -23,7 +23,7 @@ import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.activity.EntitySelectorTableVisorController;
+import com.pyx4j.site.client.backoffice.activity.EntitySelectorTableVisorController;
 import com.pyx4j.site.client.ui.IPane;
 
 public abstract class VersionSelectorDialog<V extends IVersionData<?>> extends EntitySelectorTableVisorController<V> {

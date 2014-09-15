@@ -13,7 +13,7 @@
  */
 package com.propertyvista.crm.client.ui.reports.eft;
 
-import com.pyx4j.site.client.ui.reports.AbstractReport;
+import com.pyx4j.site.client.backoffice.ui.prime.report.AbstractReport;
 
 import com.propertyvista.domain.reports.EftReportMetadata;
 

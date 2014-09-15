@@ -15,7 +15,7 @@ package com.propertyvista.crm.client.activity.crud.billing.cycle;
 
 import com.google.gwt.core.client.GWT;
 
-import com.pyx4j.site.client.activity.AbstractListerActivity;
+import com.pyx4j.site.client.backoffice.activity.AbstractListerActivity;
 import com.pyx4j.site.rpc.AppPlace;
 
 import com.propertyvista.crm.client.CrmSite;

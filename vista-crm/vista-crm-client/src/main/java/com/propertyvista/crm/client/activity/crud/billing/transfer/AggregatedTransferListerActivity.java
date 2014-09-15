@@ -22,7 +22,7 @@ import com.pyx4j.entity.core.criterion.PropertyCriterion;
 import com.pyx4j.essentials.rpc.report.ReportService;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ReportDialog;
-import com.pyx4j.site.client.activity.AbstractListerActivity;
+import com.pyx4j.site.client.backoffice.activity.AbstractListerActivity;
 
 import com.propertyvista.crm.client.CrmSite;
 import com.propertyvista.crm.client.ui.crud.billing.transfer.AggregatedTransferListerView;

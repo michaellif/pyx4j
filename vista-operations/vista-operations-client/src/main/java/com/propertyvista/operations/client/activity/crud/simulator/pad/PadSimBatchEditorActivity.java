@@ -19,7 +19,7 @@ import com.google.gwt.core.client.GWT;
 
 import com.pyx4j.entity.rpc.AbstractCrudService;
 import com.pyx4j.security.client.ClientContext;
-import com.pyx4j.site.client.activity.AbstractEditorActivity;
+import com.pyx4j.site.client.backoffice.activity.AbstractEditorActivity;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
 import com.propertyvista.operations.client.OperationsSite;

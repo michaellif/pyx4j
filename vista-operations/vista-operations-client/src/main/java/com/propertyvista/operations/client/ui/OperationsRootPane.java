@@ -19,7 +19,7 @@ import com.google.gwt.place.shared.Place;
 
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.RootPane;
-import com.pyx4j.site.client.ui.backoffice.layout.BackOfficeLayoutPanel;
+import com.pyx4j.site.client.backoffice.ui.layout.BackOfficeLayoutPanel;
 import com.pyx4j.site.client.ui.layout.ResponsiveLayoutPanel.DisplayType;
 import com.pyx4j.site.shared.meta.PublicPlace;
 

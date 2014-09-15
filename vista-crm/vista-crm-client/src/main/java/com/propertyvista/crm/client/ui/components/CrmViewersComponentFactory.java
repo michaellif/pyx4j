@@ -18,7 +18,7 @@ import com.pyx4j.entity.core.IObject;
 import com.pyx4j.entity.core.meta.MemberMeta;
 import com.pyx4j.forms.client.ui.CField;
 import com.pyx4j.site.client.AppPlaceEntityMapper;
-import com.pyx4j.site.client.ui.backoffice.prime.CEntityCrudHyperlink;
+import com.pyx4j.site.client.backoffice.ui.prime.CEntityCrudHyperlink;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
 import com.propertyvista.common.client.ui.components.VistaViewersComponentFactory;

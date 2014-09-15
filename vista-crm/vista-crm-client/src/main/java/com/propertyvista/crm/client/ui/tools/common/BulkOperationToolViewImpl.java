@@ -27,7 +27,7 @@ import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.IsView;
-import com.pyx4j.site.client.ui.backoffice.prime.AbstractPrimePane;
+import com.pyx4j.site.client.backoffice.ui.prime.AbstractPrimePane;
 import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 

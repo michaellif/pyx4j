@@ -51,8 +51,8 @@ import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.site.client.AppPlaceEntityMapper;
-import com.pyx4j.site.client.ui.backoffice.prime.CEntityCrudHyperlink;
-import com.pyx4j.site.client.ui.backoffice.prime.form.IForm;
+import com.pyx4j.site.client.backoffice.ui.prime.CEntityCrudHyperlink;
+import com.pyx4j.site.client.backoffice.ui.prime.form.IForm;
 import com.pyx4j.site.client.ui.dialogs.SelectEnumDialog;
 import com.pyx4j.widgets.client.tabpanel.Tab;
 

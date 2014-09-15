@@ -19,7 +19,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.rpc.shared.VoidSerializable;
 import com.pyx4j.site.client.IsView;
-import com.pyx4j.site.client.ui.backoffice.prime.lister.ILister;
+import com.pyx4j.site.client.backoffice.ui.prime.lister.ILister;
 
 import com.propertyvista.crm.client.ui.crud.lease.common.LeaseViewerViewBase;
 import com.propertyvista.crm.rpc.dto.LeaseApplicationActionDTO;

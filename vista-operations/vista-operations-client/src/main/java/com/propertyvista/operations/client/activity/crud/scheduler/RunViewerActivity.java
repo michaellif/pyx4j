@@ -20,8 +20,8 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.rpc.shared.VoidSerializable;
-import com.pyx4j.site.client.activity.ListerController;
-import com.pyx4j.site.client.ui.backoffice.prime.lister.ILister.Presenter;
+import com.pyx4j.site.client.backoffice.activity.ListerController;
+import com.pyx4j.site.client.backoffice.ui.prime.lister.ILister.Presenter;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
 import com.propertyvista.operations.client.OperationsSite;

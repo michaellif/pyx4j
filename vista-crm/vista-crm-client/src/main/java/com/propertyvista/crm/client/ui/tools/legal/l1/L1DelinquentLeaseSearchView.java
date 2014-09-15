@@ -16,7 +16,7 @@ package com.propertyvista.crm.client.ui.tools.legal.l1;
 import com.google.gwt.view.client.AbstractDataProvider;
 import com.google.gwt.view.client.SelectionModel;
 
-import com.pyx4j.site.client.ui.backoffice.prime.IPrimePane;
+import com.pyx4j.site.client.backoffice.ui.prime.IPrimePane;
 
 import com.propertyvista.crm.client.ui.tools.common.datagrid.SelectionPresetModel;
 import com.propertyvista.crm.rpc.dto.legal.common.LegalActionCandidateDTO;

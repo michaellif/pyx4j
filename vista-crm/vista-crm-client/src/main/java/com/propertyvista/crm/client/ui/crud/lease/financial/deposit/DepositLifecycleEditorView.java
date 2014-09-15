@@ -13,7 +13,7 @@
  */
 package com.propertyvista.crm.client.ui.crud.lease.financial.deposit;
 
-import com.pyx4j.site.client.ui.backoffice.prime.form.IEditor;
+import com.pyx4j.site.client.backoffice.ui.prime.form.IEditor;
 
 import com.propertyvista.dto.DepositLifecycleDTO;
 

@@ -26,7 +26,7 @@
  */
 package com.propertyvista.crm.client.ui.crud.administration.website.content.pages;
 
-import com.pyx4j.site.client.ui.backoffice.prime.form.IEditor;
+import com.pyx4j.site.client.backoffice.ui.prime.form.IEditor;
 
 import com.propertyvista.domain.site.PageDescriptor;
 

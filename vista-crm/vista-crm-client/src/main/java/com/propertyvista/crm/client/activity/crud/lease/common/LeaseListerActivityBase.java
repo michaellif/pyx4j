@@ -17,8 +17,8 @@ import com.google.gwt.place.shared.Place;
 
 import com.pyx4j.entity.core.criterion.EntityFiltersBuilder;
 import com.pyx4j.entity.rpc.AbstractListCrudService;
-import com.pyx4j.site.client.activity.AbstractListerActivity;
-import com.pyx4j.site.client.ui.backoffice.prime.lister.ILister;
+import com.pyx4j.site.client.backoffice.activity.AbstractListerActivity;
+import com.pyx4j.site.client.backoffice.ui.prime.lister.ILister;
 import com.pyx4j.site.rpc.AppPlace;
 
 import com.propertyvista.dto.LeaseDTO;

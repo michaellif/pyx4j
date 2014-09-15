@@ -13,7 +13,7 @@
  */
 package com.propertyvista.crm.client.ui.crud.customer.lead.appointment;
 
-import com.pyx4j.site.client.ui.backoffice.prime.lister.ListerInternalViewImplBase;
+import com.pyx4j.site.client.backoffice.ui.prime.lister.ListerInternalViewImplBase;
 
 import com.propertyvista.domain.tenant.lead.Appointment;
 

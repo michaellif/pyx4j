@@ -13,7 +13,7 @@
  */
 package com.propertyvista.operations.client.ui.crud.encryptedstorage;
 
-import com.pyx4j.site.client.ui.backoffice.prime.IPrimePane;
+import com.pyx4j.site.client.backoffice.ui.prime.IPrimePane;
 
 import com.propertyvista.operations.rpc.encryption.EncryptedStorageDTO;
 import com.propertyvista.operations.rpc.encryption.EncryptedStorageKeyDTO;

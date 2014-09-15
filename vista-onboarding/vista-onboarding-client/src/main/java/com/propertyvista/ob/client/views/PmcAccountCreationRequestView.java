@@ -15,7 +15,7 @@ package com.propertyvista.ob.client.views;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
-import com.pyx4j.site.client.ui.backoffice.prime.IPrimePane;
+import com.pyx4j.site.client.backoffice.ui.prime.IPrimePane;
 
 import com.propertyvista.ob.rpc.dto.PmcAccountCreationRequest;
 

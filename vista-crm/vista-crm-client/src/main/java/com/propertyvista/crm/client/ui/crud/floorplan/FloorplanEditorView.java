@@ -18,7 +18,7 @@ import java.util.Vector;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.commons.Key;
-import com.pyx4j.site.client.ui.backoffice.prime.form.IEditor;
+import com.pyx4j.site.client.backoffice.ui.prime.form.IEditor;
 
 import com.propertyvista.domain.settings.ILSConfig.ILSVendor;
 import com.propertyvista.dto.FloorplanDTO;

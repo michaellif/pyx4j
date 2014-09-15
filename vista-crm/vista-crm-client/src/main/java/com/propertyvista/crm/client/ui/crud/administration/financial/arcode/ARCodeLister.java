@@ -24,7 +24,7 @@ import com.pyx4j.forms.client.ui.datatable.DataTableModel;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor.Builder;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.ui.backoffice.prime.lister.AbstractLister;
+import com.pyx4j.site.client.backoffice.ui.prime.lister.AbstractLister;
 
 import com.propertyvista.domain.financial.ARCode;
 import com.propertyvista.shared.config.VistaFeatures;

@@ -27,7 +27,7 @@ import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.forms.client.ui.datatable.DataTableModel;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.ui.backoffice.prime.lister.AbstractLister;
+import com.pyx4j.site.client.backoffice.ui.prime.lister.AbstractLister;
 import com.pyx4j.site.rpc.AppPlace;
 import com.pyx4j.widgets.client.Button;
 
@@ -140,7 +140,7 @@ public class MessageLister extends AbstractLister<MessageDTO> {
 
     @Override
     protected EntityListCriteria<MessageDTO> updateCriteria(EntityListCriteria<MessageDTO> criteria) {
-        com.pyx4j.site.client.ui.backoffice.prime.IPrimePane.Presenter p = getPresenter();
+        com.pyx4j.site.client.backoffice.ui.prime.IPrimePane.Presenter p = getPresenter();
         AppPlace place = p.getPlace();
         Object placeCriteria = place instanceof Message ? ((Message) place).getCriteria() : null;
         CategoryType category = null;
@@ -204,7 +204,7 @@ public class MessageLister extends AbstractLister<MessageDTO> {
 
     @Override
     protected void onItemNew() {
-        com.pyx4j.site.client.ui.backoffice.prime.IPrimePane.Presenter p = getPresenter();
+        com.pyx4j.site.client.backoffice.ui.prime.IPrimePane.Presenter p = getPresenter();
         AppPlace place = p.getPlace();
         Object placeCriteria = place instanceof Message ? ((Message) place).getCriteria() : null;
 

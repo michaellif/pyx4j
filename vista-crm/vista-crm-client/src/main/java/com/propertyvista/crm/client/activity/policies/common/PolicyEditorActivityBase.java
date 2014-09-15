@@ -13,8 +13,8 @@
  */
 package com.propertyvista.crm.client.activity.policies.common;
 
-import com.pyx4j.site.client.activity.AbstractEditorActivity;
-import com.pyx4j.site.client.ui.backoffice.prime.form.IEditor;
+import com.pyx4j.site.client.backoffice.activity.AbstractEditorActivity;
+import com.pyx4j.site.client.backoffice.ui.prime.form.IEditor;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
 import com.propertyvista.crm.rpc.services.policies.policy.AbstractPolicyCrudService;

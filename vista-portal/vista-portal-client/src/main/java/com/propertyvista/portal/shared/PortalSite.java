@@ -32,7 +32,7 @@ import com.pyx4j.site.client.RootPane;
 import com.pyx4j.site.client.SingletonViewFactory;
 import com.pyx4j.site.client.events.NotificationEvent;
 import com.pyx4j.site.client.events.NotificationHandler;
-import com.pyx4j.site.client.ui.frontoffice.layout.FrontOfficeLayoutPanel;
+import com.pyx4j.site.client.frontoffice.ui.layout.FrontOfficeLayoutPanel;
 
 import com.propertyvista.common.client.ClientLocaleUtils;
 import com.propertyvista.common.client.WalkMe;

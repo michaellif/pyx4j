@@ -29,8 +29,8 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.site.client.AppPlaceEntityMapper;
 import com.pyx4j.site.client.AppSite;
-import com.pyx4j.site.client.ui.backoffice.prime.lister.EntityDataTablePanel;
-import com.pyx4j.site.client.ui.backoffice.prime.lister.ListerDataSource;
+import com.pyx4j.site.client.backoffice.ui.prime.lister.EntityDataTablePanel;
+import com.pyx4j.site.client.backoffice.ui.prime.lister.ListerDataSource;
 
 import com.propertyvista.crm.client.ui.gadgets.common.GadgetInstanceBase;
 import com.propertyvista.crm.client.ui.gadgets.forms.BuildingListerGadgetMetadataForm;

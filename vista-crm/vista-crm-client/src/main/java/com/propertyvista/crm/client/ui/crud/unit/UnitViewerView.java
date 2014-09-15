@@ -14,8 +14,8 @@
 package com.propertyvista.crm.client.ui.crud.unit;
 
 import com.pyx4j.commons.LogicalDate;
-import com.pyx4j.site.client.ui.backoffice.prime.form.IViewer;
-import com.pyx4j.site.client.ui.backoffice.prime.lister.ILister;
+import com.pyx4j.site.client.backoffice.ui.prime.form.IViewer;
+import com.pyx4j.site.client.backoffice.ui.prime.lister.ILister;
 
 import com.propertyvista.crm.rpc.dto.occupancy.opconstraints.MakeVacantConstraintsDTO;
 import com.propertyvista.domain.property.asset.unit.AptUnitItem;

@@ -17,7 +17,7 @@ import com.google.gwt.core.client.GWT;
 
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
-import com.pyx4j.site.client.activity.ListerController;
+import com.pyx4j.site.client.backoffice.activity.ListerController;
 
 import com.propertyvista.crm.client.ui.crud.customer.lead.showing.ShowingListerView;
 import com.propertyvista.crm.rpc.dto.tenant.ShowingDTO;

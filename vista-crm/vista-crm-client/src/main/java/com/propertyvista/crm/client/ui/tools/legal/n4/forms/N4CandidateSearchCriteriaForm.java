@@ -27,7 +27,7 @@ import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.forms.client.validators.AbstractComponentValidator;
 import com.pyx4j.forms.client.validators.BasicValidationError;
-import com.pyx4j.site.client.ui.backoffice.prime.form.FieldDecoratorBuilder;
+import com.pyx4j.site.client.backoffice.ui.prime.form.FieldDecoratorBuilder;
 
 import com.propertyvista.crm.client.ui.tools.common.selectors.BuildingSelector;
 import com.propertyvista.crm.client.ui.tools.common.selectors.PortfolioSelector;

@@ -15,7 +15,7 @@ package com.propertyvista.crm.client.ui.crud.billing.adjustments;
 
 import com.pyx4j.forms.client.ui.datatable.DataTableModel;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
-import com.pyx4j.site.client.ui.backoffice.prime.lister.AbstractLister;
+import com.pyx4j.site.client.backoffice.ui.prime.lister.AbstractLister;
 
 import com.propertyvista.domain.tenant.lease.LeaseAdjustment;
 

@@ -15,7 +15,7 @@ package com.propertyvista.crm.client.ui.crud.communication;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
-import com.pyx4j.site.client.ui.backoffice.prime.form.IEditor;
+import com.pyx4j.site.client.backoffice.ui.prime.form.IEditor;
 
 import com.propertyvista.domain.communication.MessageCategory;
 import com.propertyvista.domain.communication.MessageCategory.CategoryType;

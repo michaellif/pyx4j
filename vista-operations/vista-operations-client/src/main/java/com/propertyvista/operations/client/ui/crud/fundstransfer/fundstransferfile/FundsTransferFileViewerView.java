@@ -13,7 +13,7 @@
  */
 package com.propertyvista.operations.client.ui.crud.fundstransfer.fundstransferfile;
 
-import com.pyx4j.site.client.ui.backoffice.prime.form.IViewer;
+import com.pyx4j.site.client.backoffice.ui.prime.form.IViewer;
 
 import com.propertyvista.operations.rpc.dto.FundsTransferFileDTO;
 

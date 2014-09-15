@@ -19,7 +19,7 @@ import com.google.gwt.place.shared.Place;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.rpc.AbstractCrudService;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.activity.AbstractListerActivity;
+import com.pyx4j.site.client.backoffice.activity.AbstractListerActivity;
 
 import com.propertyvista.common.client.ui.components.UploadDialogBase;
 import com.propertyvista.common.client.ui.components.UploadResponseDownloadableReciver;

@@ -25,7 +25,7 @@ import com.google.gwt.user.client.ui.FlowPanel;
 
 import com.pyx4j.commons.css.IStyleName;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.ui.backoffice.prime.IMemento;
+import com.pyx4j.site.client.backoffice.ui.prime.IMemento;
 import com.pyx4j.site.client.ui.visor.IVisor;
 import com.pyx4j.widgets.client.Label;
 

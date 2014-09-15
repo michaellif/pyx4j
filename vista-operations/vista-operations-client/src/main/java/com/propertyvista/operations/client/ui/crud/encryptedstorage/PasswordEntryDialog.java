@@ -19,7 +19,7 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.validators.AbstractComponentValidator;
 import com.pyx4j.forms.client.validators.BasicValidationError;
-import com.pyx4j.site.client.ui.backoffice.prime.form.FieldDecoratorBuilder;
+import com.pyx4j.site.client.backoffice.ui.prime.form.FieldDecoratorBuilder;
 import com.pyx4j.widgets.client.dialog.OkCancelDialog;
 
 public abstract class PasswordEntryDialog extends OkCancelDialog {

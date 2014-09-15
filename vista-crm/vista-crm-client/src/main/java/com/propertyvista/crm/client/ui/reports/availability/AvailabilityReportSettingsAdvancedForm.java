@@ -20,7 +20,7 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
-import com.pyx4j.site.client.ui.reports.PropertyCriteriaFolder;
+import com.pyx4j.site.client.backoffice.ui.prime.report.PropertyCriteriaFolder;
 
 import com.propertyvista.common.client.resources.VistaImages;
 import com.propertyvista.domain.dashboard.gadgets.availability.UnitAvailabilityStatus;

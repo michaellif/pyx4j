@@ -16,7 +16,7 @@ package com.propertyvista.crm.client.activity.policies.leaseterms;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.place.shared.Place;
 
-import com.pyx4j.site.client.activity.AbstractListerActivity;
+import com.pyx4j.site.client.backoffice.activity.AbstractListerActivity;
 
 import com.propertyvista.crm.client.CrmSite;
 import com.propertyvista.crm.client.ui.crud.policies.leaseterms.LegalTermsPolicyListerView;

@@ -16,7 +16,7 @@ package com.propertyvista.crm.client.ui.tools.legal.n4;
 import com.google.gwt.view.client.HasData;
 import com.google.gwt.view.client.ProvidesKey;
 
-import com.pyx4j.site.client.ui.backoffice.prime.IPrimePane;
+import com.pyx4j.site.client.backoffice.ui.prime.IPrimePane;
 
 import com.propertyvista.crm.client.ui.tools.common.datagrid.SelectionPresetModel;
 import com.propertyvista.crm.client.ui.tools.common.view.HasMessages;

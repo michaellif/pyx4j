@@ -13,8 +13,8 @@
  */
 package com.propertyvista.operations.client.ui.crud.simulator.pad.file;
 
-import com.pyx4j.site.client.ui.backoffice.prime.form.IViewer;
-import com.pyx4j.site.client.ui.backoffice.prime.lister.ILister;
+import com.pyx4j.site.client.backoffice.ui.prime.form.IViewer;
+import com.pyx4j.site.client.backoffice.ui.prime.lister.ILister;
 
 import com.propertyvista.operations.domain.eft.caledoneft.simulator.PadSimBatch;
 import com.propertyvista.operations.domain.eft.caledoneft.simulator.PadSimFile;

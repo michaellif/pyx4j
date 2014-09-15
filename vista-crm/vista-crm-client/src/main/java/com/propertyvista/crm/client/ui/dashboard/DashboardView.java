@@ -15,7 +15,7 @@ package com.propertyvista.crm.client.ui.dashboard;
 
 import java.util.Vector;
 
-import com.pyx4j.site.client.ui.backoffice.prime.IPrimePane;
+import com.pyx4j.site.client.backoffice.ui.prime.IPrimePane;
 
 import com.propertyvista.domain.dashboard.DashboardMetadata;
 import com.propertyvista.domain.property.asset.building.Building;

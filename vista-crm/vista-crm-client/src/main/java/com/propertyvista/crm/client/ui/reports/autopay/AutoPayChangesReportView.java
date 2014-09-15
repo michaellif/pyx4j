@@ -14,10 +14,10 @@
 package com.propertyvista.crm.client.ui.reports.autopay;
 
 import com.pyx4j.site.client.IsView;
-import com.pyx4j.site.client.ui.reports.IReportsView;
+import com.pyx4j.site.client.backoffice.ui.prime.report.IReport;
 
 import com.propertyvista.domain.reports.AutoPayChangesReportMetadata;
 
-public interface AutoPayChangesReportView extends IReportsView<AutoPayChangesReportMetadata>, IsView {
+public interface AutoPayChangesReportView extends IReport<AutoPayChangesReportMetadata>, IsView {
 
 }

@@ -16,7 +16,7 @@ package com.propertyvista.operations.client.activity.crud.simulator.cardservice;
 import com.google.gwt.core.client.GWT;
 
 import com.pyx4j.site.client.AppSite;
-import com.pyx4j.site.client.activity.AbstractEditorActivity;
+import com.pyx4j.site.client.backoffice.activity.AbstractEditorActivity;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
 import com.propertyvista.operations.client.OperationsSite;
