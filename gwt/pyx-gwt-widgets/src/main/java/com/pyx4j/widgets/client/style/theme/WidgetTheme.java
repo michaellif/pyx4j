@@ -66,7 +66,9 @@ public class WidgetTheme extends Theme {
 
         SuggestBox, SuggestBoxPopup, SelectionPickerPanel, SelectionPickerPanelItem,
 
-        SelectedItemClose, SelectedItemHolder, SelectorTextBox;
+        SelectedItemClose, SelectedItemHolder, SelectorTextBox,
+
+        SelectorListBoxActionButton;
     }
 
     public static enum StyleDependent implements IStyleDependent {
@@ -500,6 +502,24 @@ public class WidgetTheme extends Theme {
         style.addProperty("padding", "1px");
         //style.addProperty("width", "100%");
 
+        addStyle(style);
+    }
+
+    protected void initSelectorListBoxActionButtonStyle() {
+        Style style = new Style(".", StyleName.SelectorListBoxActionButton);
+
+        style.addProperty("position", "absolute");
+        style.addProperty("display", "inline");
+        style.addProperty("vertical-align", "middle");
+        style.addProperty("margin", "0");
+        style.addProperty("height", "2em");
+        style.addProperty("cursor", "pointer");
+        style.addProperty("-webkit-touch-callout", "none");
+        style.addProperty("-webkit-user-select", "none");
+        style.addProperty("-khtml-user-select", "none");
+        style.addProperty("-moz-user-select", "none");
+        style.addProperty("-ms-user-select", "none");
+        style.addProperty("user-select", "none");
         addStyle(style);
     }
 }

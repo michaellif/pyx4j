@@ -29,10 +29,12 @@ import com.google.gwt.event.logical.shared.HasSelectionHandlers;
 import com.google.gwt.event.logical.shared.SelectionEvent;
 import com.google.gwt.event.logical.shared.SelectionHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
+import com.google.gwt.user.client.Command;
 
 import com.pyx4j.commons.IFormatter;
 import com.pyx4j.widgets.client.IFocusWidget;
 import com.pyx4j.widgets.client.IWatermarkWidget;
+import com.pyx4j.widgets.client.ImageFactory;
 import com.pyx4j.widgets.client.event.shared.PasteEvent;
 import com.pyx4j.widgets.client.event.shared.PasteHandler;
 
@@ -80,6 +82,14 @@ public class SelectorListBox<E> extends AbstractSelectorWidget<E> implements Has
                 showSuggestPicker();
             }
         });
+
+        listBox.setAction(new Command() {
+            @Override
+            public void execute() {
+
+                showEverithingPicker();
+            }
+        }, ImageFactory.getImages().action());
 
     }
 
