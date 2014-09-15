@@ -1165,12 +1165,12 @@ BEGIN
         -- delete all from crm_user_credential$rls for roles other than 'All'
         EXECUTE 'DELETE FROM '||v_schema_name||'.crm_user_credential$rls '
                 ||'WHERE value IN ( SELECT id FROM '||v_schema_name||'.crm_role '
-                ||'                 WHERE name != ''All'')';
+                ||'                 WHERE name NOT IN (''All'', ''PropertyVistaAccountOwner''))';
                 
         -- delete old roles
         
          EXECUTE 'DELETE FROM '||v_schema_name||'.crm_role '
-                ||'WHERE name  != ''All'' ';
+                ||'WHERE name  NOT IN (''All'', ''PropertyVistaAccountOwner'') ';
         
         
         -- import new roles form tmp_table 
