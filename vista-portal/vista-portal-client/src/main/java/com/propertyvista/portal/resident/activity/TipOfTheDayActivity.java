@@ -14,30 +14,27 @@
 package com.propertyvista.portal.resident.activity;
 
 import com.google.gwt.activity.shared.AbstractActivity;
-import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.place.shared.Place;
+import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
+import com.pyx4j.commons.css.ThemeColor;
 import com.pyx4j.gwt.commons.layout.LayoutChangeRequestEvent;
 import com.pyx4j.gwt.commons.layout.LayoutChangeRequestEvent.ChangeType;
-import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.site.client.AppSite;
 
 import com.propertyvista.portal.resident.ResidentPortalSite;
-import com.propertyvista.portal.resident.ui.extra.WeatherView;
-import com.propertyvista.portal.resident.ui.extra.WeatherView.WeatherPresenter;
-import com.propertyvista.portal.rpc.portal.resident.dto.WeatherGadgetDTO;
-import com.propertyvista.portal.rpc.portal.resident.services.ExtraActivityPortalService;
+import com.propertyvista.portal.resident.ui.ResidentPortalPointerId;
+import com.propertyvista.portal.resident.ui.extra.TipOfTheDayView;
+import com.propertyvista.portal.resident.ui.extra.TipOfTheDayView.TipOfTheDayPresenter;
 
-public class WeatherActivity extends AbstractActivity implements WeatherPresenter {
+public class TipOfTheDayActivity extends AbstractActivity implements TipOfTheDayPresenter {
 
-    private final WeatherView view;
+    private final TipOfTheDayView view;
 
-    private final ExtraActivityPortalService extraActivityService = (ExtraActivityPortalService) GWT.create(ExtraActivityPortalService.class);
-
-    public WeatherActivity(Place place) {
-        view = ResidentPortalSite.getViewFactory().getView(WeatherView.class);
+    public TipOfTheDayActivity(Place place) {
+        view = ResidentPortalSite.getViewFactory().getView(TipOfTheDayView.class);
     }
 
     @Override
@@ -45,14 +42,16 @@ public class WeatherActivity extends AbstractActivity implements WeatherPresente
         panel.setWidget(view);
         AppSite.getEventBus().fireEvent(new LayoutChangeRequestEvent(ChangeType.resizeComponents));
 
-        extraActivityService.retreiveWheather(new DefaultAsyncCallback<WeatherGadgetDTO>() {
+        view.setTipOfTheDay(
+                "Paying your rent by pre-authorized payments means eliminating the chore of writing cheques and ensuring your payment reaches Property Management Office by the due date. You'll never have to worry about remembering to make a payment or a possible late fee.",
+                ThemeColor.contrast4, ResidentPortalPointerId.billing, new Command() {
 
-            @Override
-            public void onSuccess(WeatherGadgetDTO result) {
-                view.populateWeather(result);
+                    @Override
+                    public void execute() {
+                        // TODO Auto-generated method stub
 
-            }
-        });
+                    }
+                });
 
     }
 

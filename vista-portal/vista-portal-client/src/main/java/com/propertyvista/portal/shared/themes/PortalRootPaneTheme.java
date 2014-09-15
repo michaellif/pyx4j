@@ -257,9 +257,10 @@ public class PortalRootPaneTheme extends Theme {
 
     private void initExtraGadgetStyles() {
         Style style = new Style(".", StyleName.ExtraGadget);
-        style.addProperty("width", "220px");
         style.addProperty("text-align", "center");
         style.addProperty("display", "inline-block");
+        style.addProperty("padding", "10px");
+        style.addProperty("height", "100%");
         addStyle(style);
 
     }

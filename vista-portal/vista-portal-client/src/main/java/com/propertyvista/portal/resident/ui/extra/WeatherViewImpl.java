@@ -29,17 +29,21 @@ public class WeatherViewImpl extends FlowPanel implements WeatherView {
     private static final I18n i18n = I18n.get(WeatherViewImpl.class);
 
     public WeatherViewImpl() {
-        setStyleName(PortalRootPaneTheme.StyleName.ExtraGadget.name());
 
     }
 
     @Override
     public void populateWeather(WeatherGadgetDTO gadgetDTO) {
         clear();
+
+        FlowPanel contentPanel = new FlowPanel();
+        contentPanel.setStyleName(PortalRootPaneTheme.StyleName.ExtraGadget.name());
+
         if (gadgetDTO != null) {
             HTML captionLabel = new HTML(i18n.tr("Today's Weather"));
             captionLabel.setStylePrimaryName(FrontOfficeLayoutTheme.StyleName.FrontOfficeLayoutInlineExtraPanelCaption.name());
             add(captionLabel);
+            add(contentPanel);
 
             Image image = new Image();
 
@@ -84,11 +88,12 @@ public class WeatherViewImpl extends FlowPanel implements WeatherView {
                 break;
             }
             image.setStyleName(ExtraGadgetsTheme.StyleName.WeatherIcon.name());
-            add(image);
+            contentPanel.add(image);
 
             FlowPanel weatherTextPanel = new FlowPanel();
+
             weatherTextPanel.setStyleName(ExtraGadgetsTheme.StyleName.WeatherText.name());
-            add(weatherTextPanel);
+            contentPanel.add(weatherTextPanel);
 
             HTML temperatureHTML = new HTML(gadgetDTO.temperature().getValue() + "&#176;");
             temperatureHTML.setStyleName(ExtraGadgetsTheme.StyleName.WeatherTemperature.name());
@@ -98,10 +103,11 @@ public class WeatherViewImpl extends FlowPanel implements WeatherView {
             weatherTypeHTML.setStyleName(ExtraGadgetsTheme.StyleName.WeatherType.name());
             weatherTextPanel.add(weatherTypeHTML);
         } else {
+            add(contentPanel);
             Image image = new Image(WeatherIcons.INSTANCE.fair());
             image.setStyleName(ExtraGadgetsTheme.StyleName.WeatherIcon.name());
-            add(image);
-            add(new HTML(i18n.tr("Sorry, service is currently not available.")));
+            contentPanel.add(image);
+            contentPanel.add(new HTML(i18n.tr("Sorry, service is currently not available.")));
         }
 
     }

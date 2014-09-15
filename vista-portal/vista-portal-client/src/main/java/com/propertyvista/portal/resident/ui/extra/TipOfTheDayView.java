@@ -13,16 +13,18 @@
  */
 package com.propertyvista.portal.resident.ui.extra;
 
+import com.google.gwt.user.client.Command;
+
+import com.pyx4j.commons.css.ThemeColor;
 import com.pyx4j.site.client.IsView;
 
-import com.propertyvista.portal.rpc.portal.resident.dto.WeatherGadgetDTO;
+import com.propertyvista.portal.shared.ui.PointerId;
 
-public interface WeatherView extends IsView {
+public interface TipOfTheDayView extends IsView {
 
-    public interface WeatherPresenter {
+    public interface TipOfTheDayPresenter {
 
     }
 
-    void populateWeather(WeatherGadgetDTO notification);
-
+    void setTipOfTheDay(String text, ThemeColor color, PointerId pointerId, Command command);
 }

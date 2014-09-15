@@ -2,6 +2,7 @@ eclipse.preferences.version=1
 encoding//src/main/java/com/propertyvista/portal/prospect/activity/application/RentalSummaryActivity.java=UTF-8
 encoding//src/main/java/com/propertyvista/portal/prospect/ui/landing/SignUpGadget.java=UTF-8
 encoding//src/main/java/com/propertyvista/portal/resident/activity/CommunityEventsActivity.java=UTF-8
+encoding//src/main/java/com/propertyvista/portal/resident/activity/TipOfTheDayActivity.java=UTF-8
 encoding//src/main/java/com/propertyvista/portal/resident/activity/WeatherActivity.java=UTF-8
 encoding//src/main/java/com/propertyvista/portal/resident/ui/movein/NewGuarantorWelcomeGadget.java=UTF-8
 encoding//src/main/java/com/propertyvista/portal/resident/ui/movein/NewTenantWelcomeGadget.java=UTF-8

@@ -26,6 +26,7 @@ import com.pyx4j.forms.client.ui.form.FormDecoratorTheme;
 import com.pyx4j.forms.client.ui.panels.FlexFormPanelTheme;
 import com.pyx4j.forms.client.ui.panels.FormPanelTheme;
 import com.pyx4j.site.client.ui.devconsole.DevConsoleTheme;
+import com.pyx4j.site.client.ui.layout.ResponsiveLayoutTheme;
 import com.pyx4j.site.client.ui.layout.frontoffice.FrontOfficeLayoutTheme;
 import com.pyx4j.widgets.client.datepicker.DatePickerTheme;
 import com.pyx4j.widgets.client.dialog.DialogTheme;
@@ -61,7 +62,15 @@ public class PortalTheme extends Theme {
                 style.addProperty("border-style", "solid");
                 style.addProperty("border-width", "1px");
                 style.addProperty("border-radius", "5px");
-                style.addProperty("padding", "10px ");
+                addStyle(style);
+
+                style = new Style(".", StyleName.FrontOfficeLayoutInlineExtraPanel, "-", ResponsiveLayoutTheme.StyleDependent.extra2, " ."
+                        + StyleName.FrontOfficeLayoutInlineExtraPanelCaption);
+                style.addProperty("display", "none");
+                addStyle(style);
+
+                style = new Style(".", StyleName.FrontOfficeLayoutInlineExtraPanel, " .", PortalRootPaneTheme.StyleName.ExtraGadget);
+                style.addProperty("width", "220px");
                 addStyle(style);
 
             }
