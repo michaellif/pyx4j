@@ -25,7 +25,7 @@ import com.google.gwt.place.shared.Place;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel;
 import com.pyx4j.gwt.commons.css.CssVariable;
 import com.pyx4j.gwt.commons.layout.LayoutType;
-import com.pyx4j.site.client.ui.AbstractPane;
+import com.pyx4j.site.client.backoffice.ui.AbstractPane;
 
 public class AbstractPrimePane extends AbstractPane implements IPrimePane {
 

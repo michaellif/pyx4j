@@ -22,7 +22,7 @@ package com.pyx4j.site.client.backoffice.ui.prime;
 
 import com.google.gwt.place.shared.Place;
 
-import com.pyx4j.site.client.ui.IPane;
+import com.pyx4j.site.client.backoffice.ui.IPane;
 import com.pyx4j.site.rpc.AppPlace;
 
 public interface IPrimePane extends IPane {

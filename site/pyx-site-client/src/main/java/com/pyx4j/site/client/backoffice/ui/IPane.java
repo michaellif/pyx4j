@@ -18,7 +18,7 @@
  * @author Vlad
  * @version $Id$
  */
-package com.pyx4j.site.client.ui;
+package com.pyx4j.site.client.backoffice.ui;
 
 import com.pyx4j.site.client.IsView;
 import com.pyx4j.site.client.ui.visor.IVisor;

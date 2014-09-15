@@ -18,7 +18,7 @@
  * @author michaellif
  * @version $Id$
  */
-package com.pyx4j.site.client.ui;
+package com.pyx4j.site.client.backoffice.ui;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -31,7 +31,6 @@ import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 
-import com.pyx4j.site.client.backoffice.ui.PaneTheme;
 import com.pyx4j.site.client.ui.visor.IVisor;
 import com.pyx4j.site.client.ui.visor.VisorHolder;
 import com.pyx4j.widgets.client.HasSecureConcern;

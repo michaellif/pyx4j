@@ -20,7 +20,7 @@
  */
 package com.pyx4j.site.client.backoffice.activity;
 
-import com.pyx4j.site.client.ui.IPane;
+import com.pyx4j.site.client.backoffice.ui.IPane;
 import com.pyx4j.site.client.ui.visor.IVisor;
 
 public abstract class AbstractVisorController implements IVisor.Controller {

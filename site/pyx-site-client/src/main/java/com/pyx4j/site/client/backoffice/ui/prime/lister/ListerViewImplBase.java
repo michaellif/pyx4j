@@ -30,8 +30,8 @@ import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.criterion.Criterion;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.site.client.AppSite;
+import com.pyx4j.site.client.backoffice.ui.AbstractPane;
 import com.pyx4j.site.client.backoffice.ui.prime.IMemento;
-import com.pyx4j.site.client.ui.AbstractPane;
 
 public class ListerViewImplBase<E extends IEntity> extends AbstractPane implements ILister<E> {
 

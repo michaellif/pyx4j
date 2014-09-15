@@ -18,7 +18,7 @@
  * @author michaellif
  * @version $Id$
  */
-package com.pyx4j.site.client.ui;
+package com.pyx4j.site.client.backoffice.ui;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,7 +35,6 @@ import com.google.gwt.user.client.ui.Label;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.site.client.AppPlaceEntityMapper;
 import com.pyx4j.site.client.AppSite;
-import com.pyx4j.site.client.backoffice.ui.PaneTheme;
 
 public class BreadcrumbsBar extends HorizontalPanel {
 

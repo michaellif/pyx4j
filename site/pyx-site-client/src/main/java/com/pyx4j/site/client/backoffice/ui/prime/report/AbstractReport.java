@@ -23,13 +23,12 @@ package com.pyx4j.site.client.backoffice.ui.prime.report;
 import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.dom.client.Style.Display;
-import com.google.gwt.dom.client.Style.Overflow;
 import com.google.gwt.dom.client.Style.Position;
-import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.SimplePanel;
 
 import com.pyx4j.commons.CommonsStringUtils;
@@ -45,6 +44,7 @@ import com.pyx4j.gwt.client.deferred.DeferredProgressListener;
 import com.pyx4j.gwt.client.deferred.DeferredProgressPanel;
 import com.pyx4j.gwt.commons.Print;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.site.client.backoffice.ui.PaneTheme;
 import com.pyx4j.site.client.backoffice.ui.prime.AbstractPrimePane;
 import com.pyx4j.site.rpc.ReportsAppPlace;
 import com.pyx4j.site.shared.domain.reports.ExportableReport;
@@ -57,54 +57,11 @@ import com.pyx4j.widgets.client.dialog.OkCancelDialog;
 
 public abstract class AbstractReport<R extends ReportMetadata> extends AbstractPrimePane implements IReport<R> {
 
-    public enum Styles {
-
-        ReportView, SettingsFormPanel, ReportPanel, ReportProgressControlPanel, ReportProgressErrorPanel;
-
-    }
-
     private enum MementoKeys {
 
         ReportMetadata, HasReportData, HorizontalScrollPosition, VerticalScrollPosition, ReportWidget
 
     }
-
-    public static class ReportPrintPalette extends Palette {
-
-    }
-
-    public static class ReportPrintTheme extends Theme {
-
-        public enum Styles implements IStyleName {
-
-            ReportNonPrintable, ReportPrintableOnly
-
-        }
-
-        public ReportPrintTheme() {
-            Style style = new Style("*");
-            style.addProperty("color", "black");
-            style.addProperty("font-size", "12px");
-            addStyle(style);
-
-            style = new Style("a, a:link, a:visited, a:hover, a:active");
-            style.addProperty("color", "black");
-            style.addProperty("text-decoration", "none");
-            addStyle(style);
-
-            style = new Style("." + Styles.ReportNonPrintable.name());
-            style.addProperty("display", "none");
-            addStyle(style);
-
-        }
-
-        @Override
-        public final ThemeId getId() {
-            return new ClassBasedThemeId(getClass());
-        }
-    }
-
-    private static String PRINT_THEME;
 
     static {
         StringBuilder stylesString = new StringBuilder();
@@ -116,13 +73,15 @@ public abstract class AbstractReport<R extends ReportMetadata> extends AbstractP
         PRINT_THEME = stylesString.toString();
     }
 
+    private static String PRINT_THEME;
+
     private static final I18n i18n = I18n.get(AbstractReport.class);
 
     private IReport.Presenter<R> presenter;
 
     private FlowPanel viewPanel;
 
-    private SimplePanel settingsFormPanel;
+    private FlowPanel settingsFormPanel;
 
     private SimplePanel reportPanel;
 
@@ -146,6 +105,9 @@ public abstract class AbstractReport<R extends ReportMetadata> extends AbstractP
 
     private CForm<R> advancedSettingsForm;
 
+    public AbstractReport() {
+    }
+
     /**
      * @param advancedSettingsForm
      *            this is optional, and in this case ReportMetadata has to implement HasAdvancedSettings
@@ -165,20 +127,12 @@ public abstract class AbstractReport<R extends ReportMetadata> extends AbstractP
         this.presenter = null;
 
         this.viewPanel = new FlowPanel();
-        this.viewPanel.setStyleName(Styles.ReportView.name());
+        this.viewPanel.setStyleName(PaneTheme.StyleName.ReportView.name());
         this.viewPanel.setWidth("100%");
         this.viewPanel.setHeight("100%");
 
-        settingsFormPanel = new SimplePanel();
-        settingsFormPanel.setStylePrimaryName(Styles.SettingsFormPanel.name());
-        settingsFormPanel.getElement().getStyle().setOverflow(Overflow.AUTO);
-        settingsFormPanel.getElement().getStyle().setPosition(Position.ABSOLUTE);
-        settingsFormPanel.getElement().getStyle().setLeft(0, Unit.PX);
-        settingsFormPanel.getElement().getStyle().setTop(0, Unit.PX);
-        settingsFormPanel.getElement().getStyle().setRight(0, Unit.PX);
-        settingsFormPanel.getElement().getStyle().setHeight(15, Unit.EM);
-
-        viewPanel.add(settingsFormPanel);
+        settingsFormPanel = new FlowPanel();
+        settingsFormPanel.setStylePrimaryName(PaneTheme.StyleName.ReportSettingsFormPanel.name());
 
         reportSettingsFormControlBar = new ReportSettingsFormControlBar() {
 
@@ -195,20 +149,12 @@ public abstract class AbstractReport<R extends ReportMetadata> extends AbstractP
             }
 
         };
-        reportSettingsFormControlBar.getElement().getStyle().setPosition(Position.ABSOLUTE);
-        reportSettingsFormControlBar.getElement().getStyle().setLeft(0, Unit.PX);
-        reportSettingsFormControlBar.getElement().getStyle().setTop(15, Unit.EM);
-        reportSettingsFormControlBar.getElement().getStyle().setRight(0, Unit.PX);
-        reportSettingsFormControlBar.getElement().getStyle().setHeight(3, Unit.EM);
-        viewPanel.add(reportSettingsFormControlBar);
+        settingsFormPanel.add(reportSettingsFormControlBar);
+
+        viewPanel.add(settingsFormPanel);
 
         reportProgressControlPanel = new FlowPanel();
-        reportProgressControlPanel.setStyleName(AbstractReport.Styles.ReportProgressControlPanel.name());
-        reportProgressControlPanel.getElement().getStyle().setPosition(Position.ABSOLUTE);
-        reportProgressControlPanel.getElement().getStyle().setLeft(0, Unit.PX);
-        reportProgressControlPanel.getElement().getStyle().setTop(18, Unit.EM);
-        reportProgressControlPanel.getElement().getStyle().setRight(0, Unit.PX);
-        reportProgressControlPanel.getElement().getStyle().setHeight(10, Unit.EM);
+        reportProgressControlPanel.setStyleName(PaneTheme.StyleName.ReportProgressControlPanel.name());
 
         reportProgressHolderPanel = new SimplePanel();
         reportProgressControlPanel.add(reportProgressHolderPanel);
@@ -225,22 +171,12 @@ public abstract class AbstractReport<R extends ReportMetadata> extends AbstractP
         viewPanel.add(reportProgressControlPanel);
 
         errorPanel = new FlowPanel();
-        errorPanel.setStyleName(AbstractReport.Styles.ReportProgressErrorPanel.name());
-        errorPanel.getElement().getStyle().setPosition(Position.ABSOLUTE);
-        errorPanel.getElement().getStyle().setLeft(0, Unit.PX);
-        errorPanel.getElement().getStyle().setTop(18, Unit.EM);
-        errorPanel.getElement().getStyle().setRight(0, Unit.PX);
-        errorPanel.getElement().getStyle().setHeight(10, Unit.EM);
+        errorPanel.setStyleName(PaneTheme.StyleName.ReportProgressErrorPanel.name());
         errorPanel.setVisible(false);
         viewPanel.add(errorPanel);
 
         reportPanel = new SimplePanel();
-        reportPanel.setStylePrimaryName(Styles.ReportPanel.name());
-        reportPanel.getElement().getStyle().setPosition(Position.ABSOLUTE);
-        reportPanel.getElement().getStyle().setLeft(0, Unit.PX);
-        reportPanel.getElement().getStyle().setTop(18, Unit.EM);
-        reportPanel.getElement().getStyle().setRight(0, Unit.PX);
-        reportPanel.getElement().getStyle().setBottom(0, Unit.PX);
+        reportPanel.setStylePrimaryName(PaneTheme.StyleName.ReportPanel.name());
         viewPanel.add(reportPanel);
 
         addHeaderToolbarItem(new Button(i18n.tr("Load..."), new Command() {
@@ -278,7 +214,7 @@ public abstract class AbstractReport<R extends ReportMetadata> extends AbstractP
             }
         }));
 
-        setContentPane(viewPanel);
+        setContentPane(new ScrollPanel(viewPanel));
     }
 
     @Override
@@ -291,7 +227,6 @@ public abstract class AbstractReport<R extends ReportMetadata> extends AbstractP
         hideVisor();
 
         this.activeSettingsForm = null;
-        this.settingsFormPanel.setWidget(null);
         this.reportSettingsFormControlBar.setEnabled(false);
         this.reportPanel.setWidget(null);
         this.errorPanel.setVisible(false);
@@ -441,6 +376,12 @@ public abstract class AbstractReport<R extends ReportMetadata> extends AbstractP
     }
 
     private void populateSettingsForm(R reportSettings) {
+        if (simpleSettingsForm != null) {
+            settingsFormPanel.remove(simpleSettingsForm);
+        }
+        if (advancedSettingsForm != null) {
+            settingsFormPanel.remove(advancedSettingsForm);
+        }
         if (advancedSettingsForm != null) {
             boolean isAdvancedMode = ((HasAdvancedSettings) reportSettings).isInAdvancedMode().getValue(false);
             activeSettingsForm = isAdvancedMode ? advancedSettingsForm : simpleSettingsForm;
@@ -449,7 +390,7 @@ public abstract class AbstractReport<R extends ReportMetadata> extends AbstractP
             activeSettingsForm = simpleSettingsForm;
             reportSettingsFormControlBar.disableModeToggle();
         }
-        settingsFormPanel.setWidget(activeSettingsForm);
+        settingsFormPanel.insert(activeSettingsForm, 0);
         activeSettingsForm.reset();
         activeSettingsForm.populate(reportSettings);
     }
@@ -526,6 +467,41 @@ public abstract class AbstractReport<R extends ReportMetadata> extends AbstractP
                     presenter.apply(true);
                 }
             });
+        }
+    }
+
+    public static class ReportPrintPalette extends Palette {
+
+    }
+
+    public static class ReportPrintTheme extends Theme {
+
+        public enum Styles implements IStyleName {
+
+            ReportNonPrintable, ReportPrintableOnly
+
+        }
+
+        public ReportPrintTheme() {
+            Style style = new Style("*");
+            style.addProperty("color", "black");
+            style.addProperty("font-size", "12px");
+            addStyle(style);
+
+            style = new Style("a, a:link, a:visited, a:hover, a:active");
+            style.addProperty("color", "black");
+            style.addProperty("text-decoration", "none");
+            addStyle(style);
+
+            style = new Style("." + Styles.ReportNonPrintable.name());
+            style.addProperty("display", "none");
+            addStyle(style);
+
+        }
+
+        @Override
+        public final ThemeId getId() {
+            return new ClassBasedThemeId(getClass());
         }
     }
 

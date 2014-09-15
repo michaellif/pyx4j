@@ -60,7 +60,9 @@ public class PaneTheme extends Theme {
 
         Visor,
 
-        VisorCloseButton
+        VisorCloseButton,
+
+        ReportView, ReportSettingsFormPanel, ReportPanel, ReportProgressControlPanel, ReportProgressErrorPanel
 
     }
 
@@ -76,6 +78,7 @@ public class PaneTheme extends Theme {
     protected void initStyles() {
         initGeneralStyles();
         initListerStyles();
+        initReportStyles();
     }
 
     private void initGeneralStyles() {
@@ -240,6 +243,33 @@ public class PaneTheme extends Theme {
         style = new Style(".", StyleName.ListerListPanel);
         style.addProperty("padding", "6px");
         style.addProperty("line-height", "1em");
+        addStyle(style);
+
+    }
+
+    private void initReportStyles() {
+        Style style = new Style(".", PaneTheme.StyleName.ReportSettingsFormPanel);
+        style.addProperty("background-color", ThemeColor.foreground, 0.1);
+        addStyle(style);
+
+        style = new Style(".", PaneTheme.StyleName.ReportSettingsFormPanel, " .EntityFolderTableDecorator");
+        style.addProperty("width", "30em");
+        addStyle(style);
+
+        style = new Style(".", PaneTheme.StyleName.ReportView.name(), " .FooterToolbar");
+        style.addProperty("height", "2em");
+        addStyle(style);
+
+        style = new Style(".", PaneTheme.StyleName.ReportProgressControlPanel.name());
+        style.addProperty("text-align", "center");
+        style.addProperty("width", "100%");
+        addStyle(style);
+
+        style = new Style(".", PaneTheme.StyleName.ReportProgressErrorPanel.name());
+        style.addProperty("text-align", "center");
+        style.addProperty("font-weight", "bold");
+        style.addProperty("color", "red");
+        style.addProperty("width", "100%");
         addStyle(style);
 
     }

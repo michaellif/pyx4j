@@ -67,7 +67,6 @@ public abstract class ReportSettingsFormControlBar extends Composite {
         }));
 
         SimplePanel toolbarHolder = new SimplePanel();
-        toolbarHolder.setStyleName(PaneTheme.StyleName.FooterToolbar.name());
         toolbarHolder.setWidget(controlPanelToolbar);
         initWidget(toolbarHolder);
     }

@@ -21,8 +21,8 @@
 package com.pyx4j.site.client.backoffice.ui.prime.wizard;
 
 import com.pyx4j.entity.core.IEntity;
+import com.pyx4j.site.client.backoffice.ui.IPane;
 import com.pyx4j.site.client.backoffice.ui.prime.IPrimePane;
-import com.pyx4j.site.client.ui.IPane;
 
 public interface IWizard<E extends IEntity> extends IPrimePane {
 
