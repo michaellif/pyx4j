@@ -28,8 +28,8 @@ import com.google.gwt.event.dom.client.MouseOverEvent;
 import com.google.gwt.event.dom.client.MouseOverHandler;
 import com.google.gwt.user.client.ui.Image;
 
+import com.pyx4j.site.client.backoffice.ui.PaneTheme;
 import com.pyx4j.site.client.ui.AbstractPane;
-import com.pyx4j.site.client.ui.PaneTheme;
 import com.pyx4j.site.client.ui.IPane;
 import com.pyx4j.widgets.client.ImageFactory;
 

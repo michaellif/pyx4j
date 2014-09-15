@@ -18,7 +18,7 @@
  * @author michaellif
  * @version $Id$
  */
-package com.pyx4j.site.client.ui;
+package com.pyx4j.site.client.backoffice.ui;
 
 import com.pyx4j.commons.css.ClassBasedThemeId;
 import com.pyx4j.commons.css.IStyleName;
@@ -32,9 +32,9 @@ public class PaneTheme extends Theme {
 
     public static enum StyleName implements IStyleName {
 
-        Header,
-
         HeaderCaption,
+
+        HeaderCaptionLabel,
 
         HeaderContainer,
 
@@ -86,7 +86,7 @@ public class PaneTheme extends Theme {
 
         initHighlightedButtonStyles("." + StyleName.HeaderToolbar);
 
-        Style style = new Style(".", StyleName.Header);
+        Style style = new Style(".", StyleName.HeaderCaption);
         style.addProperty("background-color", ThemeColor.object1, 1);
         style.addProperty("color", ThemeColor.object1, 0.1);
         style.addProperty("width", "100%");
@@ -103,7 +103,7 @@ public class PaneTheme extends Theme {
         style.addProperty("height", "100%");
         addStyle(style);
 
-        style = new Style(".", StyleName.HeaderCaption);
+        style = new Style(".", StyleName.HeaderCaptionLabel);
         style.addProperty("float", "left");
         style.addProperty("padding", "0 1em");
         addStyle(style);
@@ -157,7 +157,7 @@ public class PaneTheme extends Theme {
         style.addProperty("box-shadow", "10px 10px 5px rgba(0, 0, 0, 0.3)");
         addStyle(style);
 
-        style = new Style(".", StyleName.Visor, " .", StyleName.Header);
+        style = new Style(".", StyleName.Visor, " .", StyleName.HeaderCaption);
         style.addProperty("background-color", ThemeColor.object1, 0.8);
         addStyle(style);
 

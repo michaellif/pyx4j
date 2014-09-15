@@ -31,6 +31,7 @@ import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 
+import com.pyx4j.site.client.backoffice.ui.PaneTheme;
 import com.pyx4j.site.client.ui.visor.IVisor;
 import com.pyx4j.site.client.ui.visor.VisorHolder;
 import com.pyx4j.widgets.client.HasSecureConcern;
@@ -63,9 +64,9 @@ public abstract class AbstractPane extends DockLayoutPanel implements IPane {
 
         headerCaption = new FlowPanel();
         captionLabel = new Label();
-        captionLabel.setStyleName(PaneTheme.StyleName.HeaderCaption.name());
+        captionLabel.setStyleName(PaneTheme.StyleName.HeaderCaptionLabel.name());
         headerCaption.add(captionLabel);
-        headerCaption.setStyleName(PaneTheme.StyleName.Header.name());
+        headerCaption.setStyleName(PaneTheme.StyleName.HeaderCaption.name());
         addNorth(headerCaption, TOOLBAR_DEFAULT_HEIGHT);
 
         headerContainer = new FlowPanel();
