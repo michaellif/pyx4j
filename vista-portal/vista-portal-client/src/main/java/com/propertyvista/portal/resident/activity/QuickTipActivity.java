@@ -13,6 +13,8 @@
  */
 package com.propertyvista.portal.resident.activity;
 
+import java.util.Random;
+
 import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.dom.client.Style.Float;
 import com.google.gwt.dom.client.Style.TextAlign;
@@ -53,11 +55,27 @@ public class QuickTipActivity extends AbstractActivity implements QuickTipPresen
     public void start(AcceptsOneWidget panel, EventBus eventBus) {
         panel.setWidget(view);
         AppSite.getEventBus().fireEvent(new LayoutChangeRequestEvent(ChangeType.resizeComponents));
-        setPapTip();
+
+        int random = new Random().nextInt(3);
+        switch (random) {
+        case 0:
+            setPapTip();
+            break;
+        case 1:
+            setInsuranceTip();
+            break;
+        case 2:
+            setMaintenanceTip();
+            break;
+
+        default:
+            break;
+        }
+
     }
 
     private void setPapTip() {
-        setTip(i18n.tr("Pre-authorized payment"),
+        setTip(i18n.tr("Pre-authorized payments"),
                 i18n.tr("Paying your rent by pre-authorized payments means eliminating the chore of writing cheques and ensuring your payment reaches Property Management Office by the due date. You'll never have to worry about remembering to make a payment or a possible late fee."),
                 i18n.tr("Visit Billing & Payment page."), ThemeColor.contrast4, new Command() {
 
@@ -80,14 +98,27 @@ public class QuickTipActivity extends AbstractActivity implements QuickTipPresen
                 }, ResidentPortalPointerId.insurance);
     }
 
+    private void setMaintenanceTip() {
+        setTip(i18n.tr("Request repairs and maintenance as needed"),
+                i18n.tr("Submit and track the status of a maintenance request. Convenient, simple, easy."), i18n.tr("Visit Maintenance page."),
+                ThemeColor.contrast5, new Command() {
+
+                    @Override
+                    public void execute() {
+                        AppSite.getPlaceController().goTo(new ResidentPortalSiteMap.Maintenance());
+                    }
+                }, ResidentPortalPointerId.maintanance);
+    }
+
     private void setTip(String caption, String text, String visitText, ThemeColor color, Command command, PointerId pointerId) {
         SafeHtmlBuilder contentHtmlBuilder = new SafeHtmlBuilder();
 
         String imageId = HTMLPanel.createUniqueId();
-        contentHtmlBuilder.appendHtmlConstant("<div style='position:absolute'><span id=\"" + imageId + "\"></span></div>");
-        contentHtmlBuilder.appendHtmlConstant("<div style='display:inline-block; margin-left:45px;line-height:40px'>");
+        contentHtmlBuilder.appendHtmlConstant("<div style='min-height:45px; position:relative'><div style='position:absolute'><span id=\"" + imageId
+                + "\"></span></div>");
+        contentHtmlBuilder.appendHtmlConstant("<div style='display:inline-block; margin-left:45px'>");
         contentHtmlBuilder.appendHtmlConstant(caption);
-        contentHtmlBuilder.appendHtmlConstant("</div><p/><div style='font-size:0.8em'>");
+        contentHtmlBuilder.appendHtmlConstant("</div></div><p/><div style='font-size:0.8em'>");
         contentHtmlBuilder.appendHtmlConstant(text);
         contentHtmlBuilder.appendHtmlConstant("</div><p/>");
         String visitId = HTMLPanel.createUniqueId();
