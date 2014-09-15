@@ -37,13 +37,15 @@ public abstract class YardiHandledErrorMessages {
 
     public static final String errorMessage_PostMonthAccess2 = "Cannot  reverse  a receipt whose post month is outside your allowable range";
 
-    public static final String errorMessage_DoNotAccept = "Payments are not accepted for this resident";
+    public static final String errorMessage_DoNotAccept1 = "Payments are not accepted for this resident";
+
+    public static final String errorMessage_DoNotAccept2 = "Payments are not being accepted for this tenant";
 
     public static final String[] unableToPostReversalMessages = new String[] {
             //
             errorMessage_AlreadyNSF1, errorMessage_AlreadyNSF2, //
             errorMessage_AlreadyReversed, //
             errorMessage_PostMonthAccess1, errorMessage_PostMonthAccess2, //
-            errorMessage_DoNotAccept };
+            errorMessage_DoNotAccept1, errorMessage_DoNotAccept2 };
 
 }
