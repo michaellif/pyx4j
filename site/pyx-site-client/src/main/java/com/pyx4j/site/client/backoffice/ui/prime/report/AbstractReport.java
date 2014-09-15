@@ -132,15 +132,13 @@ public abstract class AbstractReport<R extends ReportMetadata> extends AbstractP
 
     private FlowPanel reportProgressControlPanel;
 
-    private Button abortReportGenerationButton;
-
     private SimplePanel reportProgressHolderPanel;
 
     private DeferredProgressPanel progressPanel;
 
     private FlowPanel errorPanel;
 
-    private ReportWidget reportWidget;
+    private IReportWidget reportWidget;
 
     private CForm<R> activeSettingsForm;
 
@@ -152,7 +150,7 @@ public abstract class AbstractReport<R extends ReportMetadata> extends AbstractP
      * @param advancedSettingsForm
      *            this is optional, and in this case ReportMetadata has to implement HasAdvancedSettings
      */
-    public void setReportWidget(ReportWidget reportWidget, CForm<R> simpleSettingsForm, CForm<R> advancedSettingsForm) {
+    public void setReportWidget(IReportWidget reportWidget, CForm<R> simpleSettingsForm, CForm<R> advancedSettingsForm) {
         setSize("100%", "100%");
 
         this.reportWidget = reportWidget;
@@ -215,7 +213,7 @@ public abstract class AbstractReport<R extends ReportMetadata> extends AbstractP
         reportProgressHolderPanel = new SimplePanel();
         reportProgressControlPanel.add(reportProgressHolderPanel);
 
-        reportProgressControlPanel.add(abortReportGenerationButton = new Button(i18n.tr("Abort"), new Command() {
+        reportProgressControlPanel.add(new Button(i18n.tr("Abort"), new Command() {
             @Override
             public void execute() {
                 progressPanel.cancelProgress();

@@ -14,18 +14,22 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on Aug 1, 2012
+ * Created on Jul 31, 2012
  * @author ArtyomB
  * @version $Id$
  */
 package com.pyx4j.site.client.backoffice.ui.prime.report;
 
-import com.pyx4j.forms.client.ui.CForm;
-import com.pyx4j.site.shared.domain.reports.HasAdvancedSettings;
-import com.pyx4j.site.shared.domain.reports.ReportMetadata;
+import com.google.gwt.user.client.Command;
+import com.google.gwt.user.client.ui.IsWidget;
 
-public interface HasAdvancedModeReportFactory<S extends ReportMetadata & HasAdvancedSettings> extends ReportFactory<S> {
+public interface IReportWidget extends IsWidget {
 
-    CForm<S> getAdvancedReportSettingsForm();
+    /** has to accept <code>null</code>, which means that the widget must reset it's state, i.e. clear everything */
+    void setData(Object data, Command onWidgetReady);
 
+    /** this is to be used along with data to store information about visual representation, i.e. scroll bar position */
+    Object getMemento();
+
+    void setMemento(Object memento, Command onWidgetReady);
 }
