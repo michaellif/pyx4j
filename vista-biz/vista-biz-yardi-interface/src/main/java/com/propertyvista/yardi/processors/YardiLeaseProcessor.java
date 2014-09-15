@@ -196,7 +196,7 @@ public class YardiLeaseProcessor {
         // TODO Need to find another lease to merge with
 
         // tenants:
-        new TenantMerger(rtd.getExecutionMonitor()).createTenants(yardiCustomers, lease.currentTerm());
+        new TenantMerger(rtd.getExecutionMonitor()).createTenants(yardiCustomers, lease);
 
         updateLeaseProducts(lease, ltd);
 
@@ -284,9 +284,8 @@ public class YardiLeaseProcessor {
 
         Persistence.ensureRetrieve(lease.currentTerm().version().tenants(), AttachLevel.Attached);
         Persistence.ensureRetrieve(lease.currentTerm().version().guarantors(), AttachLevel.Attached);
-        if (new TenantMerger(rtd.getExecutionMonitor()).isChanged(yardiCustomers, lease.currentTerm().version().tenants(), lease.currentTerm().version()
-                .guarantors())) {
-            lease.currentTerm().set(new TenantMerger(rtd.getExecutionMonitor()).updateTenants(yardiCustomers, lease.currentTerm()));
+        if (new TenantMerger(rtd.getExecutionMonitor()).isChanged(yardiCustomers, lease)) {
+            new TenantMerger(rtd.getExecutionMonitor()).updateTenants(yardiCustomers, lease);
             toFinalize = true;
             log.debug("        - Tenants Changed...");
         }

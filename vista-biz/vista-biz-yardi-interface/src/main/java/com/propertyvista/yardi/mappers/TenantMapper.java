@@ -38,6 +38,7 @@ import com.propertyvista.config.VistaDeployment;
 import com.propertyvista.config.VistaSystemsSimulationConfig;
 import com.propertyvista.domain.security.CustomerUser;
 import com.propertyvista.domain.tenant.Customer;
+import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
 import com.propertyvista.domain.tenant.lease.LeaseTermParticipant.Role;
 import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
@@ -78,13 +79,13 @@ public class TenantMapper {
         }
     }
 
-    public LeaseTermTenant createTenant(YardiCustomer yardiCustomer, List<LeaseTermTenant> tenants) {
+    public LeaseTermTenant createTenant(YardiCustomer yardiCustomer, Lease lease) {
         if (StringUtils.isEmpty(yardiCustomer.getCustomerID())) {
             throw new IllegalStateException("Illegal TenantID. Can not be empty or null");
         }
 
         LeaseTermTenant tenant = EntityFactory.create(LeaseTermTenant.class);
-        boolean isEmailAlreadyUsed = isEmailAlreadyUsed(retrieveYardiCustomerEmail(yardiCustomer), tenants);
+        boolean isEmailAlreadyUsed = isEmailAlreadyUsed(retrieveYardiCustomerEmail(yardiCustomer), lease.currentTerm().version().tenants());
 
         Customer customer = null;
         if (!isEmailAlreadyUsed) {
@@ -98,7 +99,8 @@ public class TenantMapper {
         tenant.leaseParticipant().participantId().setValue(getCustomerID(yardiCustomer));
 
         if (yardiCustomer.getLease().isResponsibleForLease()) {
-            tenant.role().setValue(isApplicantExists(tenants) ? Role.CoApplicant : Role.Applicant);
+            assert (!lease.leaseId().isNull());
+            tenant.role().setValue(lease.leaseId().getValue().equals(tenant.leaseParticipant().participantId().getValue()) ? Role.Applicant : Role.CoApplicant);
         } else {
             tenant.role().setValue(Role.Dependent);
         }
