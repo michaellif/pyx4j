@@ -59,6 +59,7 @@ import com.propertyvista.server.ci.bugs.MemoryLeakJAXBContextLifecycleListener;
 import com.propertyvista.server.common.security.VistaAntiBot;
 import com.propertyvista.server.security.VistaAccessControlList;
 import com.propertyvista.server.security.VistaAclRevalidator;
+import com.propertyvista.shared.config.VistaDemo;
 
 public class VistaServerSideConfiguration extends AbstractVistaServerSideConfiguration {
 
@@ -465,16 +466,26 @@ public class VistaServerSideConfiguration extends AbstractVistaServerSideConfigu
 
     @Override
     public String walkMeJsAPIUrl(VistaApplication application) {
+        boolean production = (!ApplicationMode.isDevelopment()) || (VistaDemo.isDemo());
+
+        String testPart = "";
+        if (!production) {
+            testPart = "test/";
+        }
+
         String defaultUrl;
         switch (application) {
         case crm:
-            defaultUrl = "https://d3b3ehuo35wzeh.cloudfront.net/users/941bfed7d73c45cea7192ffc17c15d77/test/walkme_941bfed7d73c45cea7192ffc17c15d77_https.js";
+            defaultUrl = "https://d3b3ehuo35wzeh.cloudfront.net/users/941bfed7d73c45cea7192ffc17c15d77/" + testPart
+                    + "walkme_941bfed7d73c45cea7192ffc17c15d77_https.js";
             break;
         case resident:
-            defaultUrl = "https://d3b3ehuo35wzeh.cloudfront.net/users/08186ae265d64e18953363c7294ab093/test/walkme_08186ae265d64e18953363c7294ab093_https.js";
+            defaultUrl = "https://d3b3ehuo35wzeh.cloudfront.net/users/08186ae265d64e18953363c7294ab093/" + testPart
+                    + "walkme_08186ae265d64e18953363c7294ab093_https.js";
             break;
         case prospect:
-            defaultUrl = "https://d3b3ehuo35wzeh.cloudfront.net/users/04168f1a4dfe43709d560b7942e16b97/test/walkme_04168f1a4dfe43709d560b7942e16b97_https.js";
+            defaultUrl = "https://d3b3ehuo35wzeh.cloudfront.net/users/04168f1a4dfe43709d560b7942e16b97/" + testPart
+                    + "walkme_04168f1a4dfe43709d560b7942e16b97_https.js";
             break;
         default:
             return null;
