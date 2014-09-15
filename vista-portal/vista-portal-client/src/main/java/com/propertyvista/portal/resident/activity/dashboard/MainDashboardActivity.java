@@ -41,6 +41,8 @@ public class MainDashboardActivity extends SecurityAwareActivity implements Main
 
     private final MainDashboardView view;
 
+    private static boolean optOutGettingStartedGadget = false;
+
     public MainDashboardActivity(Place place) {
         this.view = ResidentPortalSite.getViewFactory().getView(MainDashboardView.class);
     }
@@ -50,6 +52,7 @@ public class MainDashboardActivity extends SecurityAwareActivity implements Main
         super.start(panel, eventBus);
         panel.setWidget(view);
         view.setPresenter(this);
+        view.setGettingStartedGadgetVisible(!optOutGettingStartedGadget);
 
         populate();
     }
@@ -110,4 +113,11 @@ public class MainDashboardActivity extends SecurityAwareActivity implements Main
     public void createMaintenanceRequest() {
         AppSite.getPlaceController().goTo(new ResidentPortalSiteMap.Maintenance.MaintenanceRequestWizard());
     }
+
+    @Override
+    public void setGettingStartedGadgetOptOut(boolean optOut) {
+        optOutGettingStartedGadget = optOut;
+        view.setGettingStartedGadgetVisible(!optOut);
+    }
+
 }

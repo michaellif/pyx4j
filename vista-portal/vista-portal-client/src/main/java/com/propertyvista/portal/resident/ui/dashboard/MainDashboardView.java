@@ -34,6 +34,8 @@ public interface MainDashboardView extends IsView {
 
         void createMaintenanceRequest();
 
+        void setGettingStartedGadgetOptOut(boolean optOut);
+
     }
 
     void setPresenter(MainDashboardPresenter presenter);
@@ -45,5 +47,7 @@ public interface MainDashboardView extends IsView {
     void populateInsuranceGadget(InsuranceStatusDTO insuranceStatus);
 
     void populateMaintenanceGadget(MaintenanceSummaryDTO maintenanceSummary);
+
+    void setGettingStartedGadgetVisible(boolean visible);
 
 }

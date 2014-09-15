@@ -114,7 +114,7 @@ public class GettingStartedGadget extends AbstractGadget<MainDashboardViewImpl> 
 
                     @Override
                     public void execute() {
-
+                        getGadgetView().setGettingStartedGadgetOptOut(true);
                     }
                 });
                 anchor.setTitle(i18n.tr("You can use setting menu to show Getting Started again."));

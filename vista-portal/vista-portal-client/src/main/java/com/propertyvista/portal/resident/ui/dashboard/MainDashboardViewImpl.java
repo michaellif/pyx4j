@@ -145,4 +145,13 @@ public class MainDashboardViewImpl extends FlowPanel implements MainDashboardVie
     public void populateMaintenanceGadget(MaintenanceSummaryDTO maintenanceSummary) {
         maintenanceGadget.populate(maintenanceSummary);
     }
+
+    public void setGettingStartedGadgetOptOut(boolean optOut) {
+        presenter.setGettingStartedGadgetOptOut(optOut);
+    }
+
+    @Override
+    public void setGettingStartedGadgetVisible(boolean visible) {
+        gettingStartedGadget.setVisible(visible);
+    }
 }
