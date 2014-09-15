@@ -26,15 +26,15 @@ import com.pyx4j.site.client.AppSite;
 
 import com.propertyvista.portal.resident.ResidentPortalSite;
 import com.propertyvista.portal.resident.ui.ResidentPortalPointerId;
-import com.propertyvista.portal.resident.ui.extra.TipOfTheDayView;
-import com.propertyvista.portal.resident.ui.extra.TipOfTheDayView.TipOfTheDayPresenter;
+import com.propertyvista.portal.resident.ui.extra.QuickTipView;
+import com.propertyvista.portal.resident.ui.extra.QuickTipView.QuickTipPresenter;
 
-public class TipOfTheDayActivity extends AbstractActivity implements TipOfTheDayPresenter {
+public class QuickTipActivity extends AbstractActivity implements QuickTipPresenter {
 
-    private final TipOfTheDayView view;
+    private final QuickTipView view;
 
-    public TipOfTheDayActivity(Place place) {
-        view = ResidentPortalSite.getViewFactory().getView(TipOfTheDayView.class);
+    public QuickTipActivity(Place place) {
+        view = ResidentPortalSite.getViewFactory().getView(QuickTipView.class);
     }
 
     @Override
@@ -42,7 +42,7 @@ public class TipOfTheDayActivity extends AbstractActivity implements TipOfTheDay
         panel.setWidget(view);
         AppSite.getEventBus().fireEvent(new LayoutChangeRequestEvent(ChangeType.resizeComponents));
 
-        view.setTipOfTheDay(
+        view.setQuickTip(
                 "Paying your rent by pre-authorized payments means eliminating the chore of writing cheques and ensuring your payment reaches Property Management Office by the due date. You'll never have to worry about remembering to make a payment or a possible late fee.",
                 ThemeColor.contrast4, ResidentPortalPointerId.billing, new Command() {
 

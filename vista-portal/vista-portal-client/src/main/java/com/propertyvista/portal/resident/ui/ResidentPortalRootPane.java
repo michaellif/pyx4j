@@ -16,7 +16,7 @@ package com.propertyvista.portal.resident.ui;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.layout.ResponsiveLayoutPanel.DisplayType;
 
-import com.propertyvista.portal.resident.mvp.TipOfTheDayActivityMapper;
+import com.propertyvista.portal.resident.mvp.QuickTipActivityMapper;
 import com.propertyvista.portal.resident.mvp.CommunicationActivityMapper;
 import com.propertyvista.portal.resident.mvp.CommunityEventsActivityMapper;
 import com.propertyvista.portal.resident.mvp.ContentActivityMapper;
@@ -33,7 +33,7 @@ public class ResidentPortalRootPane extends PortalRootPane {
     private static final I18n i18n = I18n.get(ResidentPortalRootPane.class);
 
     public ResidentPortalRootPane() {
-        super(i18n.tr("Community Events"), i18n.tr("Tip of the Day"));
+        super(i18n.tr("Community Events"), i18n.tr("Quick Tip"));
 
         bind(new HeaderActivityMapper(), asWidget().getDisplay(DisplayType.header));
         bind(new ToolbarActivityMapper(), asWidget().getDisplay(DisplayType.toolbar));
@@ -42,7 +42,7 @@ public class ResidentPortalRootPane extends PortalRootPane {
         bind(new ContentActivityMapper(), asWidget().getDisplay(DisplayType.content));
         bind(new FooterActivityMapper(), asWidget().getDisplay(DisplayType.footer));
         bind(new CommunityEventsActivityMapper(), asWidget().getDisplay(DisplayType.extra1));
-        bind(new TipOfTheDayActivityMapper(), asWidget().getDisplay(DisplayType.extra2));
+        bind(new QuickTipActivityMapper(), asWidget().getDisplay(DisplayType.extra2));
         bind(new WeatherActivityMapper(), asWidget().getDisplay(DisplayType.extra3));
         bind(new NotificationActivityMapper(), asWidget().getDisplay(DisplayType.notification));
 

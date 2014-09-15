@@ -20,21 +20,18 @@ import com.google.gwt.user.client.ui.HTML;
 
 import com.pyx4j.commons.css.StyleManager;
 import com.pyx4j.commons.css.ThemeColor;
-import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.portal.shared.themes.PortalRootPaneTheme;
 import com.propertyvista.portal.shared.ui.PointerId;
 
-public class TipOfTheDayViewImpl extends FlowPanel implements TipOfTheDayView {
+public class QuickTipViewImpl extends FlowPanel implements QuickTipView {
 
-    private static final I18n i18n = I18n.get(TipOfTheDayViewImpl.class);
-
-    public TipOfTheDayViewImpl() {
+    public QuickTipViewImpl() {
         setStyleName(PortalRootPaneTheme.StyleName.ExtraGadget.name());
     }
 
     @Override
-    public void setTipOfTheDay(String text, ThemeColor color, PointerId pointerId, Command command) {
+    public void setQuickTip(String text, ThemeColor color, PointerId pointerId, Command command) {
         clear();
 
         getElement().getStyle().setProperty("background", StyleManager.getPalette().getThemeColor(color, 1));

@@ -19,19 +19,19 @@ import com.google.gwt.place.shared.Place;
 
 import com.pyx4j.security.client.ClientContext;
 
-import com.propertyvista.portal.resident.activity.TipOfTheDayActivity;
+import com.propertyvista.portal.resident.activity.QuickTipActivity;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap.Logout;
 import com.propertyvista.portal.rpc.portal.resident.ResidentPortalSiteMap;
 
-public class TipOfTheDayActivityMapper implements ActivityMapper {
+public class QuickTipActivityMapper implements ActivityMapper {
 
-    public TipOfTheDayActivityMapper() {
+    public QuickTipActivityMapper() {
     }
 
     @Override
     public Activity getActivity(Place place) {
         if (ClientContext.isAuthenticated() && !(place instanceof Logout) && !(place instanceof ResidentPortalSiteMap.LeaseContextSelection)) {
-            return new TipOfTheDayActivity(place);
+            return new QuickTipActivity(place);
         } else {
             return null;
         }

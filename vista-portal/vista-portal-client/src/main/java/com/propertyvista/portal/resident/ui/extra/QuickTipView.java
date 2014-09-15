@@ -20,11 +20,11 @@ import com.pyx4j.site.client.IsView;
 
 import com.propertyvista.portal.shared.ui.PointerId;
 
-public interface TipOfTheDayView extends IsView {
+public interface QuickTipView extends IsView {
 
-    public interface TipOfTheDayPresenter {
+    public interface QuickTipPresenter {
 
     }
 
-    void setTipOfTheDay(String text, ThemeColor color, PointerId pointerId, Command command);
+    void setQuickTip(String text, ThemeColor color, PointerId pointerId, Command command);
 }
