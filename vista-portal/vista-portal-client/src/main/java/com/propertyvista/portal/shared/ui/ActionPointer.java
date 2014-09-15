@@ -49,20 +49,25 @@ public class ActionPointer extends SimplePanel {
 
         PortalSite.getEventBus().addHandler(PointerEvent.getType(), new PointerHandler() {
 
+            Timer timer;
+
             @Override
             public void showPointer(PointerEvent event) {
+
                 if (event.getPointerId().equals(pointerId)) {
                     ActionPointer.this.setVisible(true);
-                    Timer t = new Timer() {
+                    timer = new Timer() {
                         @Override
                         public void run() {
                             ActionPointer.this.setVisible(false);
                         }
                     };
-                    t.schedule(4000);
-
+                    timer.schedule(4000);
                 } else {
                     ActionPointer.this.setVisible(false);
+                    if (timer != null) {
+                        timer.cancel();
+                    }
                 }
             }
         });
