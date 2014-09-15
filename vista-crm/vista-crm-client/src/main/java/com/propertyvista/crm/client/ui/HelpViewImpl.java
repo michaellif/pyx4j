@@ -37,9 +37,17 @@ public class HelpViewImpl extends FlowPanel implements HelpView {
 
     private HelpPresenter presenter;
 
+    final FlowPanel context;
+
     public HelpViewImpl() {
         super();
         setStyleName(SiteViewTheme.StyleName.SiteViewExtra.name());
+
+        this.context = new FlowPanel();
+        ScrollPanel scrollPanel = new ScrollPanel(context);
+        scrollPanel.setAlwaysShowScrollBars(false);
+        this.add(scrollPanel);
+
     }
 
     @Override
@@ -49,8 +57,6 @@ public class HelpViewImpl extends FlowPanel implements HelpView {
 
     @Override
     public void updateContextHelp() {
-        final FlowPanel context = new FlowPanel();
-
         WalkMe.obtainWalkthrus("vista-help", new AsyncCallback<Map<Integer, String>>() {
 
             @Override
@@ -63,7 +69,7 @@ public class HelpViewImpl extends FlowPanel implements HelpView {
             public void onSuccess(Map<Integer, String> result) {
                 context.clear();
                 for (final Map.Entry<Integer, String> me : result.entrySet()) {
-                    // USe this list to configure Permission
+                    // Use this list to configure Permission
                     log.debug("got WalkThru {} '{}'", me.getKey(), me.getValue());
 
                     Anchor anchor = new Anchor(me.getValue(), false);
@@ -80,10 +86,6 @@ public class HelpViewImpl extends FlowPanel implements HelpView {
                 }
             }
         });
-
-        ScrollPanel scrollPanel = new ScrollPanel(context);
-        scrollPanel.setAlwaysShowScrollBars(false);
-        this.add(scrollPanel);
     }
 
 }
