@@ -13,15 +13,23 @@
  */
 package com.propertyvista.operations.domain.eft.cards;
 
+import java.math.BigDecimal;
+import java.util.Date;
+
+import com.pyx4j.entity.annotations.Editor;
+import com.pyx4j.entity.annotations.Editor.EditorType;
+import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.Indexed;
 import com.pyx4j.entity.annotations.JoinColumn;
 import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.annotations.Table;
 import com.pyx4j.entity.core.IEntity;
+import com.pyx4j.entity.core.IPrimitive;
 import com.pyx4j.i18n.annotations.I18n;
 
 import com.propertyvista.domain.VistaNamespace;
+import com.propertyvista.domain.pmc.PmcMerchantAccountIndex;
 
 @Table(namespace = VistaNamespace.operationsNamespace)
 @I18n(strategy = I18n.I18nStrategy.IgnoreAll)
@@ -32,4 +40,24 @@ public interface CardsClearanceRecord extends IEntity {
     @Indexed
     @MemberColumn(notNull = true)
     CardsClearanceFile file();
+
+    //ID Copied from the file not used in Vista
+    IPrimitive<String> merchantID();
+
+    // found based on merchantTerminalId
+    @Indexed
+    PmcMerchantAccountIndex merchantAccount();
+
+    IPrimitive<CardsClearanceRecordProcessingStatus> status();
+
+    IPrimitive<Boolean> convenienceFeeAccount();
+
+    IPrimitive<String> referenceNumber();
+
+    @Editor(type = EditorType.label)
+    @Format("yyyy-MM-dd HH:mm:ss")
+    IPrimitive<Date> clearanceDate();
+
+    IPrimitive<BigDecimal> amount();
+
 }

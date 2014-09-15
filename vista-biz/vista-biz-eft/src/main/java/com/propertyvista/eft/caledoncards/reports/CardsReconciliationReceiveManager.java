@@ -29,6 +29,8 @@ import com.propertyvista.biz.system.OperationsAlertFacade;
 import com.propertyvista.biz.system.SftpTransportConnectionException;
 import com.propertyvista.config.AbstractVistaServerSideConfiguration;
 import com.propertyvista.config.CaledonFundsTransferConfiguration;
+import com.propertyvista.config.VistaDeployment;
+import com.propertyvista.config.VistaSystemsSimulationConfig;
 import com.propertyvista.eft.EftFileUtils;
 import com.propertyvista.operations.domain.eft.cards.to.CardsReconciliationTO;
 import com.propertyvista.server.sftp.SftpClient;
@@ -90,22 +92,25 @@ public class CardsReconciliationReceiveManager {
             } else {
                 EftFileUtils.move(new File(workdir, fileName), workdir, "processed");
 
-                try {
+                // Do not remove file from Production while running on QA server.
+                if (VistaDeployment.isVistaProduction() || VistaSystemsSimulationConfig.getConfiguration().useFundsTransferSimulator().getValue(Boolean.TRUE)) {
                     try {
-                        SftpClient.removeFile(configuration(), remoteDirectory, fileName);
-                    } catch (SftpTransportConnectionException noConnection) {
                         try {
-                            Thread.sleep(1000);
-                        } catch (InterruptedException e) {
-                            throw new RuntimeException(e);
+                            SftpClient.removeFile(configuration(), remoteDirectory, fileName);
+                        } catch (SftpTransportConnectionException noConnection) {
+                            try {
+                                Thread.sleep(1000);
+                            } catch (InterruptedException e) {
+                                throw new RuntimeException(e);
+                            }
+                            SftpClient.removeFile(configuration(), remoteDirectory, fileName);
                         }
-                        SftpClient.removeFile(configuration(), remoteDirectory, fileName);
-                    }
-                } catch (Throwable e) {
-                    log.warn("unable to remove remote file {}", fileName, e);
-                    ServerSideFactory.create(OperationsAlertFacade.class).record(null,
-                            "Unable to remove remote file Cards {} on caledon SFTP, Remove it manually", fileName);
+                    } catch (Throwable e) {
+                        log.warn("unable to remove remote file {}", fileName, e);
+                        ServerSideFactory.create(OperationsAlertFacade.class).record(null,
+                                "Unable to remove remote file Cards {} on caledon SFTP, Remove it manually", fileName);
 
+                    }
                 }
             }
         }

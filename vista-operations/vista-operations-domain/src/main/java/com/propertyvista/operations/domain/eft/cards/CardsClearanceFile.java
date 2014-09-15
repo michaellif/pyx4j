@@ -15,10 +15,15 @@ package com.propertyvista.operations.domain.eft.cards;
 
 import java.util.Date;
 
+import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.Format;
+import com.pyx4j.entity.annotations.OrderBy;
+import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.Table;
 import com.pyx4j.entity.annotations.Timestamp;
+import com.pyx4j.entity.core.AttachLevel;
 import com.pyx4j.entity.core.IEntity;
+import com.pyx4j.entity.core.IList;
 import com.pyx4j.entity.core.IPrimitive;
 import com.pyx4j.i18n.annotations.I18n;
 
@@ -36,5 +41,10 @@ public interface CardsClearanceFile extends IEntity {
     @Format("yyyy-MM-dd HH:mm")
     @Timestamp(Timestamp.Update.Created)
     IPrimitive<Date> received();
+
+    @Owned(cascade = {})
+    @Detached(level = AttachLevel.Detached)
+    @OrderBy(PrimaryKey.class)
+    IList<CardsClearanceRecord> records();
 
 }

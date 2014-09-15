@@ -71,10 +71,10 @@ public interface CardTransactionRecord extends IEntity {
 
     @Timestamp(Timestamp.Update.Created)
     @Editor(type = EditorType.label)
-    @Format("yyyy-MM-dd HH:mm")
+    @Format("yyyy-MM-dd HH:mm:ss")
     IPrimitive<Date> creationDate();
 
     @Editor(type = EditorType.label)
-    @Format("yyyy-MM-dd HH:mm")
+    @Format("yyyy-MM-dd HH:mm:ss")
     IPrimitive<Date> completionDate();
 }
