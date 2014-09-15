@@ -643,7 +643,7 @@
             <id>deploy-target-prod02main</id>
             <properties>
                 <deployContext>vista</deployContext>
-                <vista-tomcat-url>http://staging03.birchwoodsoftwaregroup.com</vista-tomcat-url>
+                <vista-tomcat-url>https://staging03.birchwoodsoftwaregroup.com</vista-tomcat-url>
                 <vista-app-ping-url>${vista-tomcat-url}/${deployContext}</vista-app-ping-url>
             </properties>
         </profile>
