@@ -51,7 +51,7 @@ public abstract class AbstractDevConsole extends FlowPanel {
 
     private final Image deviceImage;
 
-    abstract void setMockValues();
+    protected abstract void setMockValues();
 
     public AbstractDevConsole() {
 
@@ -116,7 +116,7 @@ public abstract class AbstractDevConsole extends FlowPanel {
         }
     }
 
-    class SetMocksButton extends Button {
+    public class SetMocksButton extends Button {
         public SetMocksButton() {
             super("Set Mock Values", new Command() {
 

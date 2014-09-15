@@ -38,8 +38,8 @@ import com.pyx4j.gwt.commons.UnrecoverableClientError;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.site.client.AppSite;
-import com.pyx4j.site.client.ui.prime.form.IEditor;
-import com.pyx4j.site.client.ui.prime.form.IEditor.EditMode;
+import com.pyx4j.site.client.ui.backoffice.prime.form.IEditor;
+import com.pyx4j.site.client.ui.backoffice.prime.form.IEditor.EditMode;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
 public abstract class AbstractEditorActivity<E extends IEntity> extends AbstractActivity implements IEditor.Presenter {

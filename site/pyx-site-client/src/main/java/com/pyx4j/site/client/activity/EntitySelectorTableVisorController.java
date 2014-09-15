@@ -29,7 +29,7 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.i18n.shared.I18nEnum;
 import com.pyx4j.site.client.ui.IPane;
 import com.pyx4j.site.client.ui.IShowable;
-import com.pyx4j.site.client.ui.prime.lister.AbstractLister;
+import com.pyx4j.site.client.ui.backoffice.prime.lister.AbstractLister;
 import com.pyx4j.site.client.ui.visor.AbstractVisorPane;
 import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.RadioGroup.Layout;

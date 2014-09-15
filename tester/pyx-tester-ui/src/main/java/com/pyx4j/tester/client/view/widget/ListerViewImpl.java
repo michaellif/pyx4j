@@ -36,8 +36,8 @@ import com.pyx4j.forms.client.ui.datatable.DataTableModel;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.forms.client.ui.panels.FormPanel;
-import com.pyx4j.site.client.ui.prime.lister.EntityDataTablePanel;
-import com.pyx4j.site.client.ui.prime.lister.ListerDataSource;
+import com.pyx4j.site.client.ui.backoffice.prime.lister.EntityDataTablePanel;
+import com.pyx4j.site.client.ui.backoffice.prime.lister.ListerDataSource;
 import com.pyx4j.tester.client.domain.test.DomainFactory;
 import com.pyx4j.tester.client.domain.test.ListerDataItem;
 

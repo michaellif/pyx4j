@@ -45,7 +45,7 @@ import com.pyx4j.gwt.client.deferred.DeferredProgressListener;
 import com.pyx4j.gwt.client.deferred.DeferredProgressPanel;
 import com.pyx4j.gwt.commons.Print;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.ui.prime.AbstractPrimePane;
+import com.pyx4j.site.client.ui.backoffice.prime.AbstractPrimePane;
 import com.pyx4j.site.rpc.ReportsAppPlace;
 import com.pyx4j.site.shared.domain.reports.ExportableReport;
 import com.pyx4j.site.shared.domain.reports.HasAdvancedSettings;

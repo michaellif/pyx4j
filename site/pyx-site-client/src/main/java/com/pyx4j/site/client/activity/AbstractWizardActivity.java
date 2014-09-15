@@ -35,7 +35,7 @@ import com.pyx4j.forms.client.ui.ReferenceDataManager;
 import com.pyx4j.gwt.commons.UnrecoverableClientError;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
-import com.pyx4j.site.client.ui.prime.wizard.IWizard;
+import com.pyx4j.site.client.ui.backoffice.prime.wizard.IWizard;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
 public abstract class AbstractWizardActivity<E extends IEntity> extends AbstractActivity implements IWizard.Presenter {

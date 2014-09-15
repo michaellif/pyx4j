@@ -33,7 +33,7 @@ import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.criterion.Criterion;
 import com.pyx4j.entity.core.criterion.EntityFiltersBuilder;
 import com.pyx4j.entity.rpc.AbstractListCrudService;
-import com.pyx4j.site.client.ui.prime.lister.ILister;
+import com.pyx4j.site.client.ui.backoffice.prime.lister.ILister;
 import com.pyx4j.site.rpc.AppPlace;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
