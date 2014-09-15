@@ -22,5 +22,9 @@ public interface MaintenanceViewerView extends IViewer<VistaSystemMaintenanceSta
     interface Presenter extends IViewer.Presenter {
 
         void resetGlobalCache();
+
+        void reloadProperties();
+
+        void resetDBConnection();
     }
 }

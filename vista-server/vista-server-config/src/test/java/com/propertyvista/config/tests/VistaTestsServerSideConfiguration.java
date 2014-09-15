@@ -258,6 +258,11 @@ public class VistaTestsServerSideConfiguration extends AbstractVistaServerSideCo
     }
 
     @Override
+    public void reloadProperties() {
+        getConfigProperties();
+    }
+
+    @Override
     public CaledonFundsTransferConfiguration getCaledonFundsTransferConfiguration() {
         return new CaledonFundsTransferConfigurationTests();
     }

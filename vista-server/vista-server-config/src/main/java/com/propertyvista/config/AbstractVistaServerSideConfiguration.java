@@ -37,6 +37,8 @@ public abstract class AbstractVistaServerSideConfiguration extends EssentialsSer
 
     public abstract PropertiesConfiguration getConfigProperties();
 
+    public abstract void reloadProperties();
+
     @Override
     public Collection<LifecycleListener> getLifecycleListeners() {
         Collection<LifecycleListener> rc = new ArrayList<LifecycleListener>(super.getLifecycleListeners());

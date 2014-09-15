@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011- All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -28,6 +28,10 @@ public class MaintenanceViewerViewImpl extends OperationsViewerViewImplBase<Vist
 
     private final Button btnResetCache;
 
+    private final Button btnReloadProperties;
+
+    private final Button btnResetDBConnection;
+
     public MaintenanceViewerViewImpl() {
         setForm(new MaintenanceForm(this));
 
@@ -39,5 +43,22 @@ public class MaintenanceViewerViewImpl extends OperationsViewerViewImplBase<Vist
             }
         });
         addHeaderToolbarItem(btnResetCache.asWidget());
+
+        btnReloadProperties = new Button(i18n.tr("Reload Properties"), new Command() {
+            @Override
+            public void execute() {
+                ((MaintenanceViewerActivity) getPresenter()).reloadProperties();
+            }
+        });
+        addHeaderToolbarItem(btnReloadProperties.asWidget());
+
+        btnResetDBConnection = new Button(i18n.tr("Reset DB Connection"), new Command() {
+            @Override
+            public void execute() {
+                ((MaintenanceViewerActivity) getPresenter()).resetDBConnection();
+            }
+        });
+        addHeaderToolbarItem(btnResetDBConnection.asWidget());
+
     }
 }

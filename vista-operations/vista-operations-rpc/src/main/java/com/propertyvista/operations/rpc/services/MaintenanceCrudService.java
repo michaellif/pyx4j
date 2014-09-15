@@ -25,4 +25,8 @@ public interface MaintenanceCrudService extends AbstractCrudService<VistaSystemM
     public void getSystemReadOnlyStatus(AsyncCallback<Boolean> callback);
 
     public void resetGlobalCache(AsyncCallback<VoidSerializable> callback);
+
+    public void reloadProperties(AsyncCallback<String> callback);
+
+    public void resetDBConnection(AsyncCallback<VoidSerializable> callback);
 }

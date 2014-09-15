@@ -133,6 +133,12 @@ public class VistaServerSideConfiguration extends AbstractVistaServerSideConfigu
     }
 
     @Override
+    public void reloadProperties() {
+        configProperties = null;
+        getConfigProperties();
+    }
+
+    @Override
     public String getMainApplicationURL() {
         return getApplicationDeploymentProtocol() + "://" + NamespaceManager.getNamespace() + getApplicationURLNamespace(true);
     }

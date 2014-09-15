@@ -20,6 +20,7 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.rpc.shared.VoidSerializable;
 import com.pyx4j.site.rpc.CrudAppPlace;
+import com.pyx4j.widgets.client.dialog.MessageDialog;
 
 import com.propertyvista.operations.client.OperationsSite;
 import com.propertyvista.operations.client.activity.crud.AdminViewerActivity;
@@ -42,6 +43,26 @@ public class MaintenanceViewerActivity extends AdminViewerActivity<VistaSystemMa
             @Override
             public void onSuccess(VoidSerializable result) {
                 Window.alert(i18n.tr("The global cache was reset successfully"));
+            }
+        });
+    }
+
+    @Override
+    public void reloadProperties() {
+        ((MaintenanceCrudService) getService()).reloadProperties(new DefaultAsyncCallback<String>() {
+            @Override
+            public void onSuccess(String differences) {
+                MessageDialog.info(i18n.tr("Properties have been reloaded successfully."), differences);
+            }
+        });
+    }
+
+    @Override
+    public void resetDBConnection() {
+        ((MaintenanceCrudService) getService()).resetDBConnection(new DefaultAsyncCallback<VoidSerializable>() {
+            @Override
+            public void onSuccess(VoidSerializable result) {
+                MessageDialog.info(i18n.tr("DB Connection has been reset successfully"));
             }
         });
     }
