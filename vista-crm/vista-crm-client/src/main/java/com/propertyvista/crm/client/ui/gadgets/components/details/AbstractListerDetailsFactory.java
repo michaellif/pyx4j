@@ -32,8 +32,8 @@ import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.forms.client.ui.datatable.DataTable.ItemZoomInCommand;
 import com.pyx4j.site.client.AppPlaceEntityMapper;
 import com.pyx4j.site.client.AppSite;
-import com.pyx4j.site.client.ui.prime.lister.EntityDataTablePanel;
-import com.pyx4j.site.client.ui.prime.lister.ListerDataSource;
+import com.pyx4j.site.client.ui.backoffice.prime.lister.EntityDataTablePanel;
+import com.pyx4j.site.client.ui.backoffice.prime.lister.ListerDataSource;
 
 import com.propertyvista.crm.client.ui.gadgets.common.CounterGadgetInstanceBase.CounterDetailsFactory;
 import com.propertyvista.crm.client.ui.gadgets.util.ListerUtils;

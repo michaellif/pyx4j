@@ -18,7 +18,7 @@ import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.Image;
 
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.ui.layout.frontoffice.FrontOfficeLayoutTheme;
+import com.pyx4j.site.client.ui.frontoffice.layout.FrontOfficeLayoutTheme;
 
 import com.propertyvista.portal.resident.themes.ExtraGadgetsTheme;
 import com.propertyvista.portal.rpc.portal.resident.dto.WeatherGadgetDTO;

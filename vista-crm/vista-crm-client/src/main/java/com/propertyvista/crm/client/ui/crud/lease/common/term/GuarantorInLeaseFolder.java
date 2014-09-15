@@ -40,8 +40,8 @@ import com.pyx4j.forms.client.validators.AbstractComponentValidator;
 import com.pyx4j.forms.client.validators.BasicValidationError;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.AppPlaceEntityMapper;
-import com.pyx4j.site.client.ui.prime.form.FieldDecoratorBuilder;
-import com.pyx4j.site.client.ui.prime.misc.CEntityCrudHyperlink;
+import com.pyx4j.site.client.ui.backoffice.prime.CEntityCrudHyperlink;
+import com.pyx4j.site.client.ui.backoffice.prime.form.FieldDecoratorBuilder;
 
 import com.propertyvista.common.client.policy.ClientPolicyManager;
 import com.propertyvista.common.client.ui.components.editors.NameEditor;

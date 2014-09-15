@@ -13,7 +13,7 @@
  */
 package com.propertyvista.operations.client.ui.crud.legal;
 
-import com.pyx4j.site.client.ui.prime.form.IEditor;
+import com.pyx4j.site.client.ui.backoffice.prime.form.IEditor;
 
 import com.propertyvista.operations.domain.legal.VistaTerms;
 

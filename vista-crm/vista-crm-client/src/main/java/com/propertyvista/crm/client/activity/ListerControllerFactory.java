@@ -17,7 +17,7 @@ import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.rpc.AbstractListCrudService;
 import com.pyx4j.site.client.activity.ListerController;
 import com.pyx4j.site.client.activity.SecureListerController;
-import com.pyx4j.site.client.ui.prime.lister.ILister;
+import com.pyx4j.site.client.ui.backoffice.prime.lister.ILister;
 
 public class ListerControllerFactory {
 

@@ -14,7 +14,7 @@
 package com.propertyvista.crm.client.ui.crud.administration.financial.arcode;
 
 import com.pyx4j.commons.UserRuntimeException;
-import com.pyx4j.site.client.ui.prime.form.IEditor;
+import com.pyx4j.site.client.ui.backoffice.prime.form.IEditor;
 
 import com.propertyvista.domain.financial.ARCode;
 

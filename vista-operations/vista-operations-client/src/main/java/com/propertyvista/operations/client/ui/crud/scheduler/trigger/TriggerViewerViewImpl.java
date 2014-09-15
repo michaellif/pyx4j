@@ -16,8 +16,8 @@ package com.propertyvista.operations.client.ui.crud.scheduler.trigger;
 import com.google.gwt.user.client.Command;
 
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.ui.prime.lister.ILister;
-import com.pyx4j.site.client.ui.prime.lister.ListerInternalViewImplBase;
+import com.pyx4j.site.client.ui.backoffice.prime.lister.ILister;
+import com.pyx4j.site.client.ui.backoffice.prime.lister.ListerInternalViewImplBase;
 import com.pyx4j.widgets.client.Button;
 
 import com.propertyvista.operations.client.ui.crud.OperationsViewerViewImplBase;

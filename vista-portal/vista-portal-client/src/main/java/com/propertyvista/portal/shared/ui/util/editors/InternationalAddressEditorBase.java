@@ -22,7 +22,7 @@ import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.CTextField;
 import com.pyx4j.forms.client.ui.RevalidationTrigger;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
-import com.pyx4j.site.client.ui.prime.form.FieldDecoratorBuilder;
+import com.pyx4j.site.client.ui.backoffice.prime.form.FieldDecoratorBuilder;
 
 import com.propertyvista.common.client.ui.components.c.CCountryComboBox;
 import com.propertyvista.common.client.ui.components.c.CProvinceComboBox;
@@ -31,6 +31,7 @@ import com.propertyvista.common.client.ui.components.editors.PostalCodeFormat;
 import com.propertyvista.common.client.ui.validators.ZipCodeValueValidator;
 import com.propertyvista.domain.contact.InternationalAddress;
 import com.propertyvista.domain.ref.ISOCountry;
+
 import com.pyx4j.forms.client.ui.panels.FormPanel;
 
 public class InternationalAddressEditorBase<A extends InternationalAddress> extends CForm<A> {

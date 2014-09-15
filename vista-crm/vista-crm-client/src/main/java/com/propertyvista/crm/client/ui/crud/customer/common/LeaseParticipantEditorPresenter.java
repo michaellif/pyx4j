@@ -17,7 +17,7 @@ import java.util.Vector;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
-import com.pyx4j.site.client.ui.prime.form.IEditor;
+import com.pyx4j.site.client.ui.backoffice.prime.form.IEditor;
 
 import com.propertyvista.domain.contact.InternationalAddress;
 import com.propertyvista.domain.payment.PaymentType;

@@ -21,7 +21,7 @@ import com.google.gwt.user.client.Command;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.forms.client.ui.datatable.DataTableModel;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
-import com.pyx4j.site.client.ui.prime.lister.AbstractLister;
+import com.pyx4j.site.client.ui.backoffice.prime.lister.AbstractLister;
 import com.pyx4j.widgets.client.Button;
 
 import com.propertyvista.operations.client.ui.crud.OperationsListerViewImplBase;

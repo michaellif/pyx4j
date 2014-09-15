@@ -39,9 +39,9 @@ import com.pyx4j.site.client.AppPlaceEntityMapper;
 import com.pyx4j.site.client.activity.EntitySelectorTableVisorController;
 import com.pyx4j.site.client.ui.IPane;
 import com.pyx4j.site.client.ui.IShowable;
-import com.pyx4j.site.client.ui.prime.form.IForm;
-import com.pyx4j.site.client.ui.prime.misc.CEntityCrudHyperlink;
-import com.pyx4j.site.client.ui.prime.misc.CEntitySelectorHyperlink;
+import com.pyx4j.site.client.ui.backoffice.prime.CEntityCrudHyperlink;
+import com.pyx4j.site.client.ui.backoffice.prime.CEntitySelectorHyperlink;
+import com.pyx4j.site.client.ui.backoffice.prime.form.IForm;
 import com.pyx4j.site.rpc.AppPlace;
 
 import com.propertyvista.common.client.ui.components.editors.InternationalAddressEditor;

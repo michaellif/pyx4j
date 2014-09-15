@@ -21,7 +21,7 @@ import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FlowPanel;
 
-import com.pyx4j.site.client.ui.prime.misc.IMemento;
+import com.pyx4j.site.client.ui.backoffice.prime.IMemento;
 import com.pyx4j.site.client.ui.visor.IVisor;
 
 import com.propertyvista.ob.client.forms.StepStatusIndicator;

@@ -15,7 +15,7 @@ package com.propertyvista.crm.client.ui.tools.financial.moneyin.datagrid;
 
 import com.pyx4j.forms.client.ui.datatable.DataTableModel;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
-import com.pyx4j.site.client.ui.prime.lister.AbstractLister;
+import com.pyx4j.site.client.ui.backoffice.prime.lister.AbstractLister;
 
 import com.propertyvista.crm.rpc.dto.financial.moneyin.MoneyInCandidateDTO;
 

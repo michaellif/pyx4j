@@ -15,7 +15,7 @@ package com.propertyvista.operations.client.ui.components;
 
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.site.client.AppPlaceEntityMapper;
-import com.pyx4j.site.client.ui.prime.misc.CEntityCrudHyperlink;
+import com.pyx4j.site.client.ui.backoffice.prime.CEntityCrudHyperlink;
 
 import com.propertyvista.common.client.ui.components.VistaEditorsComponentFactory;
 

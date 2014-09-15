@@ -13,7 +13,7 @@
  */
 package com.propertyvista.crm.client.ui.crud.lease.common.term;
 
-import com.pyx4j.site.client.ui.prime.form.IViewer;
+import com.pyx4j.site.client.ui.backoffice.prime.form.IViewer;
 
 import com.propertyvista.crm.client.visor.charges.ChargesVisorController;
 import com.propertyvista.dto.LeaseTermDTO;

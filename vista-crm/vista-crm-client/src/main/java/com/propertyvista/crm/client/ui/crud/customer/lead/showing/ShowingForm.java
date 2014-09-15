@@ -28,9 +28,9 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.site.client.AppPlaceEntityMapper;
 import com.pyx4j.site.client.ui.IShowable;
-import com.pyx4j.site.client.ui.prime.form.IForm;
-import com.pyx4j.site.client.ui.prime.misc.CEntityCrudHyperlink;
-import com.pyx4j.site.client.ui.prime.misc.CEntitySelectorHyperlink;
+import com.pyx4j.site.client.ui.backoffice.prime.CEntityCrudHyperlink;
+import com.pyx4j.site.client.ui.backoffice.prime.CEntitySelectorHyperlink;
+import com.pyx4j.site.client.ui.backoffice.prime.form.IForm;
 import com.pyx4j.site.rpc.AppPlace;
 
 import com.propertyvista.crm.client.ui.components.boxes.UnitSelectorDialog;

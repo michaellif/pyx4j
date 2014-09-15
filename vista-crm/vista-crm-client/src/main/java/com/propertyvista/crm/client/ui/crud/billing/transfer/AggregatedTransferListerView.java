@@ -13,7 +13,7 @@
  */
 package com.propertyvista.crm.client.ui.crud.billing.transfer;
 
-import com.pyx4j.site.client.ui.prime.lister.ILister;
+import com.pyx4j.site.client.ui.backoffice.prime.lister.ILister;
 
 import com.propertyvista.domain.financial.AggregatedTransfer;
 

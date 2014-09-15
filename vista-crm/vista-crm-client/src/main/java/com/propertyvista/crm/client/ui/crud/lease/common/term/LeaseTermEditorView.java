@@ -15,7 +15,7 @@ package com.propertyvista.crm.client.ui.crud.lease.common.term;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
-import com.pyx4j.site.client.ui.prime.form.IEditor;
+import com.pyx4j.site.client.ui.backoffice.prime.form.IEditor;
 
 import com.propertyvista.crm.client.activity.crud.lease.common.LeaseTermEditorActivity.ReturnBehaviour;
 import com.propertyvista.crm.rpc.dto.lease.financial.DepositListDTO;

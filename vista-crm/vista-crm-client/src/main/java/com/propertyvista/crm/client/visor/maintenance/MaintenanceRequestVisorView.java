@@ -16,8 +16,8 @@ package com.propertyvista.crm.client.visor.maintenance;
 import com.google.gwt.user.client.ui.ScrollPanel;
 
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.ui.prime.lister.ILister;
-import com.pyx4j.site.client.ui.prime.lister.ListerInternalViewImplBase;
+import com.pyx4j.site.client.ui.backoffice.prime.lister.ILister;
+import com.pyx4j.site.client.ui.backoffice.prime.lister.ListerInternalViewImplBase;
 import com.pyx4j.site.client.ui.visor.AbstractVisorPane;
 
 import com.propertyvista.crm.client.ui.crud.maintenance.MaintenanceRequestLister;

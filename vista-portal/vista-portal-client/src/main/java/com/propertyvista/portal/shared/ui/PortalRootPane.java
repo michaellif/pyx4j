@@ -18,7 +18,7 @@ import com.google.gwt.core.client.Scheduler.ScheduledCommand;
 import com.google.gwt.place.shared.Place;
 
 import com.pyx4j.site.client.RootPane;
-import com.pyx4j.site.client.ui.layout.frontoffice.FrontOfficeLayoutPanel;
+import com.pyx4j.site.client.ui.frontoffice.layout.FrontOfficeLayoutPanel;
 
 public class PortalRootPane extends RootPane<FrontOfficeLayoutPanel> {
 

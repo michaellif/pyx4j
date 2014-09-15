@@ -15,7 +15,7 @@ package com.propertyvista.ob.client.views;
 
 import java.util.List;
 
-import com.pyx4j.site.client.ui.prime.IPrimePane;
+import com.pyx4j.site.client.ui.backoffice.prime.IPrimePane;
 
 import com.propertyvista.ob.client.forms.StepStatusIndicator.StepStatus;
 import com.propertyvista.ob.rpc.dto.OnboardingCrmURL;

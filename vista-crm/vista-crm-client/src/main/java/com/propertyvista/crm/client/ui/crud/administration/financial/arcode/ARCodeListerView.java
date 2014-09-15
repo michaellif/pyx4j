@@ -13,7 +13,7 @@
  */
 package com.propertyvista.crm.client.ui.crud.administration.financial.arcode;
 
-import com.pyx4j.site.client.ui.prime.lister.ILister;
+import com.pyx4j.site.client.ui.backoffice.prime.lister.ILister;
 
 import com.propertyvista.domain.financial.ARCode;
 

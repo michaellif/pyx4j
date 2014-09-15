@@ -17,7 +17,7 @@ import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.Window;
 
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.ui.prime.wizard.AbstractWizard;
+import com.pyx4j.site.client.ui.backoffice.prime.wizard.AbstractWizard;
 
 import com.propertyvista.domain.pmc.fee.AbstractPaymentFees;
 import com.propertyvista.dto.vista2pmc.OnlinePaymentSetupDTO;

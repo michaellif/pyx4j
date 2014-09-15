@@ -15,7 +15,7 @@ package com.propertyvista.operations.client.ui.crud.encryptedstorage;
 
 import com.google.gwt.user.client.Command;
 
-import com.pyx4j.site.client.ui.prime.AbstractPrimePane;
+import com.pyx4j.site.client.ui.backoffice.prime.AbstractPrimePane;
 import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 

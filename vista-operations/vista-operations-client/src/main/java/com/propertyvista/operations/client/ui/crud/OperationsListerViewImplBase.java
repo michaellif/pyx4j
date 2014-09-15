@@ -14,7 +14,7 @@
 package com.propertyvista.operations.client.ui.crud;
 
 import com.pyx4j.entity.core.IEntity;
-import com.pyx4j.site.client.ui.prime.lister.ListerViewImplBase;
+import com.pyx4j.site.client.ui.backoffice.prime.lister.ListerViewImplBase;
 
 public class OperationsListerViewImplBase<E extends IEntity> extends ListerViewImplBase<E> {
 

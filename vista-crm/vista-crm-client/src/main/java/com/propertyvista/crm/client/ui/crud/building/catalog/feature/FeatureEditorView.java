@@ -13,7 +13,7 @@
  */
 package com.propertyvista.crm.client.ui.crud.building.catalog.feature;
 
-import com.pyx4j.site.client.ui.prime.form.IEditor;
+import com.pyx4j.site.client.ui.backoffice.prime.form.IEditor;
 
 import com.propertyvista.domain.financial.offering.Feature;
 

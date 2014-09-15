@@ -14,8 +14,8 @@
 package com.propertyvista.operations.client.ui.crud;
 
 import com.pyx4j.entity.core.IEntity;
-import com.pyx4j.site.client.ui.prime.form.IForm;
-import com.pyx4j.site.client.ui.prime.form.PrimeEntityForm;
+import com.pyx4j.site.client.ui.backoffice.prime.form.IForm;
+import com.pyx4j.site.client.ui.backoffice.prime.form.PrimeEntityForm;
 
 import com.propertyvista.operations.client.ui.components.OperationsEditorsComponentFactory;
 

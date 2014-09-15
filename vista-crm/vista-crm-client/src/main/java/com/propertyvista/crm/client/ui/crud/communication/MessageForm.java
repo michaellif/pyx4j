@@ -42,7 +42,7 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.site.client.AppSite;
-import com.pyx4j.site.client.ui.prime.form.IForm;
+import com.pyx4j.site.client.ui.backoffice.prime.form.IForm;
 import com.pyx4j.site.rpc.CrudAppPlace;
 import com.pyx4j.site.rpc.CrudAppPlace.Type;
 import com.pyx4j.widgets.client.Anchor;
@@ -466,7 +466,7 @@ public class MessageForm extends CrmEntityForm<MessageDTO> {
         }
 
         public void saveMessage(MessageDTO m, boolean refresh) {
-            com.pyx4j.site.client.ui.prime.IPrimePane.Presenter p = getParentView().getPresenter();
+            com.pyx4j.site.client.ui.backoffice.prime.IPrimePane.Presenter p = getParentView().getPresenter();
             if (p instanceof MessageEditorView.Presenter) {
 
                 ((MessageEditorView.Presenter) p).saveMessage(new DefaultAsyncCallback<MessageDTO>() {

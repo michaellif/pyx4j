@@ -15,7 +15,7 @@ package com.propertyvista.crm.client.ui.crud.complex;
 
 import java.util.List;
 
-import com.pyx4j.site.client.ui.prime.form.IViewer;
+import com.pyx4j.site.client.ui.backoffice.prime.form.IViewer;
 
 import com.propertyvista.crm.client.visor.dashboard.IDashboardVisorController;
 import com.propertyvista.domain.dashboard.DashboardMetadata;
