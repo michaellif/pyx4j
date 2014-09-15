@@ -27,6 +27,7 @@ import com.propertyvista.biz.ExecutionMonitor;
 import com.propertyvista.biz.asset.BuildingFacade;
 import com.propertyvista.biz.financial.payment.PadTransactionUtils;
 import com.propertyvista.biz.financial.payment.PaymentFacade;
+import com.propertyvista.domain.financial.BillingAccount.PaymentAccepted;
 import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.financial.PaymentRecord.PaymentStatus;
 import com.propertyvista.domain.payment.PaymentType;
@@ -41,6 +42,8 @@ import com.propertyvista.test.mock.models.LeaseDataModel;
 import com.propertyvista.test.mock.schedule.SchedulerMock;
 import com.propertyvista.yardi.mock.updater.PropertyUpdateEvent;
 import com.propertyvista.yardi.mock.updater.PropertyUpdater;
+import com.propertyvista.yardi.mock.updater.RtCustomerUpdateEvent;
+import com.propertyvista.yardi.mock.updater.RtCustomerUpdater;
 import com.propertyvista.yardi.services.YardiResidentTransactionsService;
 
 @Category(FunctionalTests.class)
@@ -128,7 +131,8 @@ public class PaymentReturnEcheckYardiTest extends PaymentYardiTestBase {
         SchedulerMock.runProcess(PmcProcessType.paymentsReceiveReconciliation, (Date) null);
 
         // Record not processed, Since building is not suspend, but we will try again
-        new PaymentRecordTester(lease11.billingAccount()).lastRecordStatus(PaymentStatus.Cleared);
+        new PaymentRecordTester(lease11.billingAccount())//
+                .lastRecordStatus(PaymentStatus.Cleared);
 
         Building building = loadBuildingToModel("prop123");
         ServerSideFactory.create(BuildingFacade.class).suspend(building);
@@ -137,5 +141,26 @@ public class PaymentReturnEcheckYardiTest extends PaymentYardiTestBase {
         SchedulerMock.runProcess(PmcProcessType.paymentsPadProcessReconciliation, (Date) null);
 
         new PaymentRecordTester(lease11.billingAccount()).lastRecordStatus(PaymentStatus.Returned);
+    }
+
+    public void testDoNotAcceptPaymentsReturn() throws Exception {
+        advanceSysDate("2011-01-02");
+        new PaymentRecordTester(lease11.billingAccount()).lastRecordStatus(PaymentStatus.Cleared);
+
+        {
+            RtCustomerUpdater updater = new RtCustomerUpdater(lease11.unit().building().propertyCode().getValue(), lease11.leaseId().getValue());
+            updater.set(RtCustomerUpdater.RTCUSTOMER.PaymentAccepted, String.valueOf(PaymentAccepted.DoNotAccept.paymentCode()));
+            MockEventBus.fireEvent(new RtCustomerUpdateEvent(updater));
+        }
+
+        MockEventBus.fireEvent(new ScheduledResponseReconciliation(PadTransactionUtils.toCaldeonTransactionId(paymentRecords.get(0).id()), "905", "Test"));
+
+        SchedulerMock.runProcess(PmcProcessType.paymentsReceiveReconciliation, (Date) null);
+
+        SchedulerMock.runProcess(PmcProcessType.paymentsPadProcessReconciliation, (Date) null);
+
+        new PaymentRecordTester(lease11.billingAccount())//
+                .lastRecordStatus(PaymentStatus.Returned)//
+                .lastRecordNotice("Payments are not being accepted");
     }
 }

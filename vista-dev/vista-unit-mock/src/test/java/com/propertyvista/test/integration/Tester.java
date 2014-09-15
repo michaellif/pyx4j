@@ -51,6 +51,21 @@ public class Tester {
         }
     }
 
+    protected void assertContains(String message, String expected, String actual) {
+        if ((expected == null) && (actual == null)) {
+            return;
+        }
+        if ((expected != null) && (actual != null) && (actual.contains(expected))) {
+            return;
+        }
+        log.error("test error {}", format(message, expected, actual));
+        if (continueOnError) {
+            System.out.println(new StringBuilder().append(format(message, expected, actual)).append("\nat ").append(Thread.currentThread().getStackTrace()[3]));
+        } else {
+            throw new AssertionFailedError(format(message, expected, actual));
+        }
+    }
+
     protected void assertEquals(String message, BigDecimal expected, BigDecimal actual) {
         if ((expected == null) && (actual == null)) {
             return;

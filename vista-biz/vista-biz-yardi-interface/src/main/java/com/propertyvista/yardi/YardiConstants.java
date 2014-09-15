@@ -24,7 +24,7 @@ public class YardiConstants {
 
         GetPropertyMarketingInfo, GetYardiRentableItems, GetYardiMarketingSources, GetYardiGuestActivity, GetYardiGuestSearch, GetApplication, ImportGuestInfo, ImportApplication,
 
-        ExportChartOfAccounts, GetVendors, GetVendor, OpenReceiptBatch, AddReceiptsToBatch, PostReceiptBatch, CancelReceiptBatch,
+        ExportChartOfAccounts, GetVendors, GetVendor, OpenReceiptBatch, AddReceiptsToBatch, AddReceiptsReversalToBatch, PostReceiptBatch, CancelReceiptBatch,
 
         GetServiceRequests, CreateOrEditServiceRequests, GetCustomValues
     }

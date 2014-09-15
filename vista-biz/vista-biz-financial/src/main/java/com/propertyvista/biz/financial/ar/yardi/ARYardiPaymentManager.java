@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011- All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -100,7 +100,7 @@ class ARYardiPaymentManager extends ARAbstractPaymentManager {
             try {
                 ServerSideFactory.create(YardiARFacade.class).updateLease(paymentRecord.billingAccount().lease(), null);
             } catch (Throwable ignoreDataRetrivalFromYardy) {
-                // We ignore error here because it will require unnecessary transaction reject 
+                // We ignore error here because it will require unnecessary transaction reject
                 log.debug("ignoreDataRetrivalFromYardy", ignoreDataRetrivalFromYardy);
             }
         }
@@ -144,7 +144,7 @@ class ARYardiPaymentManager extends ARAbstractPaymentManager {
                 throw new ARException(SimpleMessageFormat.format("Posting receipt {0} reversal to Yardi failed due to communication failure; Lease Id {1}", //
                         paymentRecord.id(), paymentRecord.billingAccount().lease().leaseId()), e);
             } catch (YardiUnableToPostReversalException e) {
-                paymentRecord.notice().setValue(e.getMessage());
+                paymentRecord.notice().setValue(SimpleMessageFormat.format("Posting receipt reversal to Yardi failed due to {0}", e.getMessage()));
                 Persistence.service().merge(paymentRecord);
                 ServerSideFactory.create(NotificationFacade.class).yardiUnableToRejectPayment(paymentRecord, applyNSF, e.getMessage());
             } catch (YardiPropertyNoAccessException e) {
