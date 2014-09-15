@@ -14,6 +14,7 @@
 package com.propertyvista.portal.resident.activity;
 
 import com.google.gwt.activity.shared.AbstractActivity;
+import com.google.gwt.dom.client.Style.Float;
 import com.google.gwt.dom.client.Style.TextAlign;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.place.shared.Place;
@@ -36,6 +37,7 @@ import com.propertyvista.portal.resident.ui.extra.QuickTipView;
 import com.propertyvista.portal.resident.ui.extra.QuickTipView.QuickTipPresenter;
 import com.propertyvista.portal.rpc.portal.resident.ResidentPortalSiteMap;
 import com.propertyvista.portal.shared.resources.PortalImages;
+import com.propertyvista.portal.shared.ui.PointerId;
 
 public class QuickTipActivity extends AbstractActivity implements QuickTipPresenter {
 
@@ -55,14 +57,39 @@ public class QuickTipActivity extends AbstractActivity implements QuickTipPresen
     }
 
     private void setPapTip() {
+        setTip(i18n.tr("Pre-authorized payment"),
+                i18n.tr("Paying your rent by pre-authorized payments means eliminating the chore of writing cheques and ensuring your payment reaches Property Management Office by the due date. You'll never have to worry about remembering to make a payment or a possible late fee."),
+                i18n.tr("Visit Billing & Payment page."), ThemeColor.contrast4, new Command() {
+
+                    @Override
+                    public void execute() {
+                        AppSite.getPlaceController().goTo(new ResidentPortalSiteMap.Financial());
+                    }
+                }, ResidentPortalPointerId.billing);
+    }
+
+    private void setInsuranceTip() {
+        setTip(i18n.tr("Don't have Tenant Insurance yet?"),
+                i18n.tr("We have teamed up with Highcourt Partners Limited, a licensed broker, to assist you in obtaining your Tenant Insurance."),
+                i18n.tr("Visit Resident Services page."), ThemeColor.contrast3, new Command() {
+
+                    @Override
+                    public void execute() {
+                        AppSite.getPlaceController().goTo(new ResidentPortalSiteMap.ResidentServices());
+                    }
+                }, ResidentPortalPointerId.insurance);
+    }
+
+    private void setTip(String caption, String text, String visitText, ThemeColor color, Command command, PointerId pointerId) {
         SafeHtmlBuilder contentHtmlBuilder = new SafeHtmlBuilder();
 
         String imageId = HTMLPanel.createUniqueId();
-        contentHtmlBuilder.appendHtmlConstant("<span id=\"" + imageId + "\"></span>");
-        contentHtmlBuilder
-                .appendHtmlConstant(i18n
-                        .tr("<div style='display:inline-block;'>Pre-authorized payment</div><p/><div style='font-size:0.8em'>Paying your rent by pre-authorized payments means eliminating the chore of writing cheques and ensuring your payment reaches Property Management Office by the due date. You'll never have to worry about remembering to make a payment or a possible late fee.</div>"));
-        contentHtmlBuilder.appendHtmlConstant("<p/>");
+        contentHtmlBuilder.appendHtmlConstant("<div style='position:absolute'><span id=\"" + imageId + "\"></span></div>");
+        contentHtmlBuilder.appendHtmlConstant("<div style='display:inline-block; margin-left:45px;line-height:40px'>");
+        contentHtmlBuilder.appendHtmlConstant(caption);
+        contentHtmlBuilder.appendHtmlConstant("</div><p/><div style='font-size:0.8em'>");
+        contentHtmlBuilder.appendHtmlConstant(text);
+        contentHtmlBuilder.appendHtmlConstant("</div><p/>");
         String visitId = HTMLPanel.createUniqueId();
         contentHtmlBuilder.appendHtmlConstant("<span id=\"" + visitId + "\"></span>");
 
@@ -71,15 +98,9 @@ public class QuickTipActivity extends AbstractActivity implements QuickTipPresen
 
         contentPanel.addAndReplaceElement(new Image(PortalImages.INSTANCE.tip()), imageId);
 
-        contentPanel.addAndReplaceElement(new PointerLink(i18n.tr("<i style='font-size:0.8em'>Visit Billing & Payment page.</i>"), new Command() {
+        contentPanel.addAndReplaceElement(new PointerLink(i18n.tr("<i style='font-size:0.8em'>" + visitText + "</i>"), command, pointerId), visitId);
 
-            @Override
-            public void execute() {
-                AppSite.getPlaceController().goTo(new ResidentPortalSiteMap.Financial());
-            }
-        }, ResidentPortalPointerId.billing), visitId);
-
-        view.setQuickTip(contentPanel, ThemeColor.contrast4);
+        view.setQuickTip(contentPanel, color);
 
     }
 }
