@@ -13,11 +13,11 @@
  */
 package com.propertyvista.portal.resident.ui.signup;
 
-import com.pyx4j.forms.client.ui.CSelectorBox;
+import com.pyx4j.forms.client.ui.CSelectorTextBox;
 
 import com.propertyvista.portal.rpc.portal.resident.dto.SelfRegistrationBuildingDTO;
 
-public class BuildingSuggestBox extends CSelectorBox<SelfRegistrationBuildingDTO> {
+public class BuildingSuggestBox extends CSelectorTextBox<SelfRegistrationBuildingDTO> {
 
     public BuildingSuggestBox() {
     }
