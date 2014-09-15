@@ -20,8 +20,6 @@ import java.util.Vector;
 import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.core.client.Scheduler.ScheduledCommand;
 import com.google.gwt.dom.client.Element;
-import com.google.gwt.dom.client.Style.Overflow;
-import com.google.gwt.dom.client.Style.Position;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ScrollEvent;
 import com.google.gwt.event.dom.client.ScrollHandler;
@@ -30,7 +28,6 @@ import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.EventListener;
-import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HTML;
 
 import com.pyx4j.entity.core.EntityFactory;
@@ -39,37 +36,23 @@ import com.pyx4j.site.client.backoffice.ui.prime.report.IReportWidget;
 
 import com.propertyvista.crm.client.ui.reports.ColumnDescriptorAnchorTableColumnFormatter;
 import com.propertyvista.crm.client.ui.reports.ColumnDescriptorTableColumnFormatter;
-import com.propertyvista.crm.client.ui.reports.CommonReportStyles;
 import com.propertyvista.crm.client.ui.reports.ITableColumnFormatter;
 import com.propertyvista.crm.client.ui.reports.NoResultsHtml;
 import com.propertyvista.crm.client.ui.reports.ScrollBarPositionMemento;
 import com.propertyvista.crm.rpc.dto.reports.ResidentInsuranceStatusDTO;
 
-public class ResidentInsuranceReportWidget extends Composite implements IReportWidget {
+public class ResidentInsuranceReportWidget extends HTML implements IReportWidget {
 
     private ScrollBarPositionMemento tableBodyScrollBarPositionMemento;
 
     private ScrollBarPositionMemento reportScrollBarPositionMemento;
 
-    private final HTML reportHtml;
-
     public ResidentInsuranceReportWidget() {
-        reportHtml = new HTML();
-        reportHtml.getElement().getStyle().setPosition(Position.ABSOLUTE);
-        reportHtml.getElement().getStyle().setLeft(0, Unit.PX);
-        reportHtml.getElement().getStyle().setRight(0, Unit.PX);
-        reportHtml.getElement().getStyle().setTop(0, Unit.PX);
-        reportHtml.getElement().getStyle().setBottom(0, Unit.PX);
-
-        reportHtml.getElement().getStyle().setOverflowX(Overflow.SCROLL);
-        reportHtml.getElement().getStyle().setOverflowY(Overflow.AUTO);
-
-        initWidget(reportHtml);
     }
 
     @Override
     public void setData(Object data, Command onWidgetReady) {
-        reportHtml.setHTML("");
+        setHTML("");
 
         if (data == null) {
             onWidgetReady.execute();
@@ -78,7 +61,7 @@ public class ResidentInsuranceReportWidget extends Composite implements IReportW
 
         Vector<ResidentInsuranceStatusDTO> reportData = (Vector<ResidentInsuranceStatusDTO>) data;
         if (reportData.isEmpty()) {
-            reportHtml.setHTML(NoResultsHtml.get());
+            setHTML(NoResultsHtml.get());
             onWidgetReady.execute();
             return;
         }
@@ -86,13 +69,8 @@ public class ResidentInsuranceReportWidget extends Composite implements IReportW
         SafeHtmlBuilder builder = new SafeHtmlBuilder();
         List<ITableColumnFormatter> columnDescriptors = initColumnDescriptors();
 
-        int totalWidth = 0;
-        for (ITableColumnFormatter formatter : columnDescriptors) {
-            totalWidth += formatter.getWidth();
-        }
-        builder.appendHtmlConstant("<table style=\"display: inline-block; position: absolute; left: 0px; width: " + totalWidth
-                + "px; top: 31px; bottom: 0px; border-collapse: separate; border-spacing: 0px;\" border=\"0\">");
-        builder.appendHtmlConstant("<thead class=\"" + CommonReportStyles.RReportTableFixedHeader.name() + "\">");
+        builder.appendHtmlConstant("<table border=\"0\">");
+        builder.appendHtmlConstant("<thead>");
         builder.appendHtmlConstant("<tr>");
         for (ITableColumnFormatter formatter : columnDescriptors) {
             builder.appendHtmlConstant("<th style=\"text-align: left; width: " + formatter.getWidth() + "px;\">");
@@ -102,7 +80,7 @@ public class ResidentInsuranceReportWidget extends Composite implements IReportW
         builder.appendHtmlConstant("</tr>");
         builder.appendHtmlConstant("</thead>");
 
-        builder.appendHtmlConstant("<tbody class=\"" + CommonReportStyles.RReportTableScrollableBody.name() + "\">");
+        builder.appendHtmlConstant("<tbody>");
         for (ResidentInsuranceStatusDTO insuranceStatus : reportData) {
             builder.appendHtmlConstant("<tr>");
             for (ITableColumnFormatter desc : columnDescriptors) {
@@ -114,26 +92,26 @@ public class ResidentInsuranceReportWidget extends Composite implements IReportW
         }
         builder.appendHtmlConstant("</tbody>");
 
-        reportHtml.setHTML(builder.toSafeHtml());
+        setHTML(builder.toSafeHtml());
 
-        reportHtml.addDomHandler(new ScrollHandler() {
+        addDomHandler(new ScrollHandler() {
             @Override
             public void onScroll(ScrollEvent event) {
-                reportScrollBarPositionMemento = new ScrollBarPositionMemento(reportHtml.getElement().getScrollLeft(), reportHtml.getElement().getScrollLeft());
+                reportScrollBarPositionMemento = new ScrollBarPositionMemento(getElement().getScrollLeft(), getElement().getScrollLeft());
             }
         }, ScrollEvent.getType());
 
         Scheduler.get().scheduleDeferred(new ScheduledCommand() {
             @Override
             public void execute() {
-                Element tableHead = reportHtml.getElement().getElementsByTagName("thead").getItem(0);
+                Element tableHead = getElement().getElementsByTagName("thead").getItem(0);
                 int tableHeadHeight = tableHead.getClientHeight();
 
-                final Element tableBody = reportHtml.getElement().getElementsByTagName("tbody").getItem(0);
+                final Element tableBody = getElement().getElementsByTagName("tbody").getItem(0);
                 tableBody.getStyle().setTop(tableHeadHeight + 1, Unit.PX);
 
-                DOM.sinkEvents((com.google.gwt.user.client.Element) tableBody, Event.ONSCROLL);
-                DOM.setEventListener((com.google.gwt.user.client.Element) tableBody, new EventListener() {
+                DOM.sinkEvents(tableBody, Event.ONSCROLL);
+                DOM.setEventListener(tableBody, new EventListener() {
                     @Override
                     public void onBrowserEvent(Event event) {
                         if (event.getTypeInt() == Event.ONSCROLL
@@ -151,25 +129,25 @@ public class ResidentInsuranceReportWidget extends Composite implements IReportW
 
     @Override
     public Object getMemento() {
-        return new Object[] { reportHtml.getHTML(), new ScrollBarPositionMemento[] { reportScrollBarPositionMemento, tableBodyScrollBarPositionMemento } };
+        return new Object[] { getHTML(), new ScrollBarPositionMemento[] { reportScrollBarPositionMemento, tableBodyScrollBarPositionMemento } };
     }
 
     @Override
     public void setMemento(final Object memento, Command onWidgetReady) {
         if (memento != null) {
             String html = (String) (((Object[]) memento)[0]);
-            reportHtml.setHTML(html);
+            setHTML(html);
             Scheduler.get().scheduleDeferred(new ScheduledCommand() {
                 @Override
                 public void execute() {
-                    final Element tableBody = reportHtml.getElement().getElementsByTagName("tbody").getItem(0);
+                    final Element tableBody = getElement().getElementsByTagName("tbody").getItem(0);
                     if (tableBody == null) {
                         return;
                     }
                     ScrollBarPositionMemento[] scrollBarPositionMementi = (ScrollBarPositionMemento[]) (((Object[]) memento)[1]);
                     if (scrollBarPositionMementi[0] != null) {
-                        reportHtml.getElement().setScrollLeft(scrollBarPositionMementi[0].posX);
-                        reportHtml.getElement().setScrollTop(scrollBarPositionMementi[0].posY);
+                        getElement().setScrollLeft(scrollBarPositionMementi[0].posX);
+                        getElement().setScrollTop(scrollBarPositionMementi[0].posY);
                     }
                     if (scrollBarPositionMementi[1] != null) {
                         tableBody.setScrollLeft(scrollBarPositionMementi[1].posX);

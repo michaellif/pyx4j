@@ -23,7 +23,7 @@ import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.forms.client.ui.CComboBox;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.ui.AbstractPane;
+import com.pyx4j.site.client.backoffice.ui.AbstractPane;
 import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.dialog.OkCancelDialog;
 import com.pyx4j.widgets.client.dialog.OkOptionText;

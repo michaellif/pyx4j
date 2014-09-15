@@ -26,7 +26,7 @@ import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.security.shared.AccessControlContext;
 import com.pyx4j.security.shared.Permission;
 import com.pyx4j.site.client.backoffice.activity.AbstractVisorController;
-import com.pyx4j.site.client.ui.IPane;
+import com.pyx4j.site.client.backoffice.ui.IPane;
 
 import com.propertyvista.crm.rpc.services.notes.NotesAndAttachmentsCrudService;
 import com.propertyvista.domain.note.HasNotesAndAttachments;

@@ -24,7 +24,7 @@ import com.pyx4j.forms.client.ui.CField;
 import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.folder.CFolderRowEditor;
 import com.pyx4j.forms.client.ui.folder.FolderColumnDescriptor;
-import com.pyx4j.site.client.ui.IPane;
+import com.pyx4j.site.client.backoffice.ui.IPane;
 
 import com.propertyvista.common.client.ui.components.folders.VistaTableFolder;
 import com.propertyvista.crm.client.ui.components.boxes.BuildingSelectorDialog;

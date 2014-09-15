@@ -26,7 +26,7 @@ import com.pyx4j.entity.rpc.AbstractListCrudService;
 import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.site.client.backoffice.activity.EntitySelectorTableVisorController;
-import com.pyx4j.site.client.ui.IPane;
+import com.pyx4j.site.client.backoffice.ui.IPane;
 
 import com.propertyvista.crm.rpc.services.selections.SelectProductCodeListService;
 import com.propertyvista.domain.financial.ARCode;

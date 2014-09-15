@@ -22,8 +22,6 @@ import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.core.client.Scheduler.RepeatingCommand;
 import com.google.gwt.core.client.Scheduler.ScheduledCommand;
 import com.google.gwt.dom.client.Element;
-import com.google.gwt.dom.client.Style.Overflow;
-import com.google.gwt.dom.client.Style.Position;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ScrollEvent;
 import com.google.gwt.event.dom.client.ScrollHandler;
@@ -36,7 +34,6 @@ import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.EventListener;
 import com.google.gwt.user.client.Window;
-import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HTML;
 
 import com.pyx4j.commons.CommonsStringUtils;
@@ -50,18 +47,15 @@ import com.pyx4j.site.client.backoffice.ui.prime.report.IReportWidget;
 import com.propertyvista.crm.client.resources.CrmImages;
 import com.propertyvista.crm.client.ui.reports.ColumnDescriptorAnchorTableColumnFormatter;
 import com.propertyvista.crm.client.ui.reports.ColumnDescriptorTableColumnFormatter;
-import com.propertyvista.crm.client.ui.reports.CommonReportStyles;
 import com.propertyvista.crm.client.ui.reports.ITableColumnFormatter;
 import com.propertyvista.crm.client.ui.reports.NoResultsHtml;
 import com.propertyvista.crm.client.ui.reports.ScrollBarPositionMemento;
 import com.propertyvista.crm.rpc.dto.reports.EftReportDataDTO;
 import com.propertyvista.crm.rpc.dto.reports.EftReportRecordDTO;
 
-public class EftReportWidget extends Composite implements IReportWidget {
+public class EftReportWidget extends HTML implements IReportWidget {
 
     private final static I18n i18n = I18n.get(EftReportWidget.class);
-
-    private final HTML reportHtml;
 
     private ScrollBarPositionMemento tableBodyScrollBarPositionMemento;
 
@@ -70,23 +64,13 @@ public class EftReportWidget extends Composite implements IReportWidget {
     private boolean isTableReady;
 
     public EftReportWidget() {
-        reportHtml = new HTML();
-        reportHtml.getElement().getStyle().setPosition(Position.ABSOLUTE);
-        reportHtml.getElement().getStyle().setLeft(0, Unit.PX);
-        reportHtml.getElement().getStyle().setRight(0, Unit.PX);
-        reportHtml.getElement().getStyle().setTop(0, Unit.PX);
-        reportHtml.getElement().getStyle().setBottom(0, Unit.PX);
-
-        reportHtml.getElement().getStyle().setOverflowX(Overflow.SCROLL);
-        reportHtml.getElement().getStyle().setOverflowY(Overflow.AUTO);
-        initWidget(reportHtml);
 
         isTableReady = false;
     }
 
     @Override
     public void setData(Object data, final Command onWidgetReady) {
-        reportHtml.setHTML("");
+        setHTML("");
         isTableReady = false;
 
         if (data == null) {
@@ -98,7 +82,7 @@ public class EftReportWidget extends Composite implements IReportWidget {
         final List<EftReportRecordDTO> paymentRecords = eftReportData.eftReportRecords();
 
         if (paymentRecords.isEmpty()) {
-            reportHtml.setHTML(NoResultsHtml.get());
+            setHTML(NoResultsHtml.get());
             onWidgetReady.execute();
             return;
         }
@@ -117,7 +101,7 @@ public class EftReportWidget extends Composite implements IReportWidget {
 
         builder.appendHtmlConstant("<table style=\"display: inline-block; position: absolute; left: 0px; width: " + totalWidth
                 + "px; top: 31px; bottom: 0px; border-collapse: separate; border-spacing: 0px;\" border=\"0\">");
-        builder.appendHtmlConstant("<thead class=\"" + CommonReportStyles.RReportTableFixedHeader.name() + "\">");
+        builder.appendHtmlConstant("<thead>");
         builder.appendHtmlConstant("<tr>");
 
         for (ITableColumnFormatter formatter : columnDescriptors) {
@@ -127,7 +111,7 @@ public class EftReportWidget extends Composite implements IReportWidget {
         }
         builder.appendHtmlConstant("</thead>");
 
-        builder.appendHtmlConstant("<tbody class=\"" + CommonReportStyles.RReportTableScrollableBody.name() + "\">");
+        builder.appendHtmlConstant("<tbody>");
         builder.appendHtmlConstant("</tr>");
 
         final NumberFormat currencyFormat = NumberFormat.getFormat(paymentRecords.get(0).amount().getMeta().getFormat());
@@ -147,7 +131,7 @@ public class EftReportWidget extends Composite implements IReportWidget {
             @Override
             public boolean execute() {
                 if (paymentRecordIterator.hasNext()) {
-                    reportHtml.setHTML(new SafeHtmlBuilder().appendHtmlConstant("<div style='text-align: center;'>")
+                    setHTML(new SafeHtmlBuilder().appendHtmlConstant("<div style='text-align: center;'>")
                             .appendEscaped(i18n.tr("Preparing report table (record {0} of {1})", progress, paymentRecords.size())).appendHtmlConstant("</div>")
                             .toSafeHtml());
                     int i = 0;
@@ -175,7 +159,7 @@ public class EftReportWidget extends Composite implements IReportWidget {
                     progress += i;
                     return true;
                 } else {
-                    reportHtml.setHTML(new SafeHtmlBuilder().appendHtmlConstant("<div style='text-align: center;'>").appendEscaped("Finished...")
+                    setHTML(new SafeHtmlBuilder().appendHtmlConstant("<div style='text-align: center;'>").appendEscaped("Finished...")
                             .appendHtmlConstant("</div>").toSafeHtml());
 
                     if (eftReportData.agregateByBuildings().getValue(false)) {
@@ -201,7 +185,7 @@ public class EftReportWidget extends Composite implements IReportWidget {
     @Override
     public Object getMemento() {
         if (isTableReady) {
-            return new Object[] { reportHtml.getHTML(), new ScrollBarPositionMemento[] { reportScrollBarPositionMemento, tableBodyScrollBarPositionMemento } };
+            return new Object[] { getHTML(), new ScrollBarPositionMemento[] { reportScrollBarPositionMemento, tableBodyScrollBarPositionMemento } };
         } else {
             return null;
         }
@@ -218,11 +202,11 @@ public class EftReportWidget extends Composite implements IReportWidget {
                     Scheduler.get().scheduleDeferred(new ScheduledCommand() {
                         @Override
                         public void execute() {
-                            final Element tableBody = reportHtml.getElement().getElementsByTagName("tbody").getItem(0);
+                            final Element tableBody = getElement().getElementsByTagName("tbody").getItem(0);
                             ScrollBarPositionMemento[] scrollBarPositionMementi = (ScrollBarPositionMemento[]) (((Object[]) memento)[1]);
                             if (scrollBarPositionMementi[0] != null) {
-                                reportHtml.getElement().setScrollLeft(scrollBarPositionMementi[0].posX);
-                                reportHtml.getElement().setScrollTop(scrollBarPositionMementi[0].posY);
+                                getElement().setScrollLeft(scrollBarPositionMementi[0].posX);
+                                getElement().setScrollTop(scrollBarPositionMementi[0].posY);
                             }
                             if (scrollBarPositionMementi[1] != null) {
                                 tableBody.setScrollLeft(scrollBarPositionMementi[1].posX);
@@ -239,25 +223,25 @@ public class EftReportWidget extends Composite implements IReportWidget {
     }
 
     private void setReportTable(String safeHtmlReportTable, final Command onSetComplete) {
-        reportHtml.setHTML(safeHtmlReportTable);
-        reportHtml.addDomHandler(new ScrollHandler() {
+        setHTML(safeHtmlReportTable);
+        addDomHandler(new ScrollHandler() {
             @Override
             public void onScroll(ScrollEvent event) {
-                reportScrollBarPositionMemento = new ScrollBarPositionMemento(reportHtml.getElement().getScrollLeft(), reportHtml.getElement().getScrollLeft());
+                reportScrollBarPositionMemento = new ScrollBarPositionMemento(getElement().getScrollLeft(), getElement().getScrollLeft());
             }
         }, ScrollEvent.getType());
 
         Scheduler.get().scheduleDeferred(new ScheduledCommand() {
             @Override
             public void execute() {
-                Element tableHead = reportHtml.getElement().getElementsByTagName("thead").getItem(0);
+                Element tableHead = getElement().getElementsByTagName("thead").getItem(0);
                 int tableHeadHeight = tableHead.getClientHeight();
 
-                final Element tableBody = reportHtml.getElement().getElementsByTagName("tbody").getItem(0);
+                final Element tableBody = getElement().getElementsByTagName("tbody").getItem(0);
                 tableBody.getStyle().setTop(tableHeadHeight + 1, Unit.PX);
 
-                DOM.sinkEvents((com.google.gwt.user.client.Element) tableBody, Event.ONSCROLL);
-                DOM.setEventListener((com.google.gwt.user.client.Element) tableBody, new EventListener() {
+                DOM.sinkEvents(tableBody, Event.ONSCROLL);
+                DOM.setEventListener(tableBody, new EventListener() {
                     @Override
                     public void onBrowserEvent(Event event) {
                         if (event.getTypeInt() == Event.ONSCROLL
@@ -349,7 +333,6 @@ public class EftReportWidget extends Composite implements IReportWidget {
                     new ColumnDescriptorAnchorTableColumnFormatter(shortColumnWidth, new MemberColumnDescriptor.Builder(proto.unit()).build()),
                     new ColumnDescriptorTableColumnFormatter(shortColumnWidth, new MemberColumnDescriptor.Builder(proto.participantId()).build()),
                     new ColumnDescriptorAnchorTableColumnFormatter(wideColumnWidth, new MemberColumnDescriptor.Builder(proto.customer()).build()),
-                    new ColumnDescriptorAnchorTableColumnFormatter(wideColumnWidth, CommonReportStyles.RCellNumber.name(), new MemberColumnDescriptor.Builder(proto.amount()).build(), true),
                     new ColumnDescriptorTableColumnFormatter(wideColumnWidth, new MemberColumnDescriptor.Builder(proto.paymentType()).build()),
                     new ColumnDescriptorTableColumnFormatter(wideColumnWidth, new MemberColumnDescriptor.Builder(proto.paymentStatus()).build())
         );//@formatter:on
@@ -358,10 +341,10 @@ public class EftReportWidget extends Composite implements IReportWidget {
 
     private final void appendRenderedTotalRow(SafeHtmlBuilder builder, NumberFormat totalFormat, String totalLineDescription, BigDecimal total) {
         builder.appendHtmlConstant("<tr>");
-        builder.appendHtmlConstant("<td colspan='9' style='text-align:right' class='" + CommonReportStyles.RRowTotal.name() + "'>");
+        builder.appendHtmlConstant("<td colspan='9' style='text-align:right'>");
         builder.appendEscaped(totalLineDescription);
         builder.appendHtmlConstant("</td>");
-        builder.appendHtmlConstant("<td style='text-align:right' class='" + CommonReportStyles.RRowTotal.name() + "'>");
+        builder.appendHtmlConstant("<td style='text-align:right'>");
         builder.appendEscaped(totalFormat.format(total));
         builder.appendHtmlConstant("</td>");
         builder.appendHtmlConstant("<td colspan='2'>");

@@ -33,8 +33,8 @@ import com.pyx4j.forms.client.ui.CComboBox;
 import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.security.shared.SecurityController;
+import com.pyx4j.site.client.backoffice.ui.IPane;
 import com.pyx4j.site.client.backoffice.ui.prime.form.FieldDecoratorBuilder;
-import com.pyx4j.site.client.ui.IPane;
 import com.pyx4j.site.shared.domain.reports.ReportOrderColumnMetadata;
 
 import com.propertyvista.crm.client.ui.crud.organisation.common.PortfolioFolder;

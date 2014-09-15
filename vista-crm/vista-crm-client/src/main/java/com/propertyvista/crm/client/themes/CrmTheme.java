@@ -52,7 +52,6 @@ import com.propertyvista.crm.client.ui.components.PmcSignatureForm;
 import com.propertyvista.crm.client.ui.gadgets.commonMk2.dashboard.AbstractDashboard;
 import com.propertyvista.crm.client.ui.gadgets.commonMk2.dashboard.AddGadgetDialog;
 import com.propertyvista.crm.client.ui.gadgets.forms.ArrearsGadgetSummaryForm;
-import com.propertyvista.crm.client.ui.reports.CommonReportStyles;
 import com.propertyvista.crm.client.ui.tools.common.BulkEditableEntityForm;
 import com.propertyvista.crm.client.ui.tools.common.BulkOperationToolViewImpl;
 import com.propertyvista.crm.client.ui.tools.common.ItemsHolderForm;
@@ -448,63 +447,9 @@ public class CrmTheme extends VistaTheme {
     }
 
     private void initReportsStyles() {
-        Style style = new Style("." + AbstractReport.Styles.SettingsFormPanel.name());
-        style.addProperty("background-color", ThemeColor.object1, 0.3);
-        addStyle(style);
 
-        style = new Style("." + AbstractReport.Styles.SettingsFormPanel.name(), " .EntityFolderTableDecorator");
-        style.addProperty("width", "30em");
-        addStyle(style);
-
-        style = new Style("." + AbstractReport.Styles.ReportView.name(), " .FooterToolbar");
-        style.addProperty("height", "2em");
-        addStyle(style);
-
-        style = new Style("." + AbstractReport.Styles.ReportProgressControlPanel.name());
-        style.addProperty("text-align", "center");
-        style.addProperty("width", "100%");
-        addStyle(style);
-
-        style = new Style("." + AbstractReport.Styles.ReportProgressErrorPanel.name());
-        style.addProperty("text-align", "center");
-        style.addProperty("font-weight", "bold");
-        style.addProperty("color", "red");
-        style.addProperty("width", "100%");
-        addStyle(style);
-
-        style = new Style("." + AbstractReport.ReportPrintTheme.Styles.ReportPrintableOnly.name());
+        Style style = new Style(".", AbstractReport.ReportPrintTheme.Styles.ReportPrintableOnly.name());
         style.addProperty("display", "none");
-        addStyle(style);
-
-        style = new Style("." + CommonReportStyles.RCellNumber.name());
-        style.addProperty("text-align", "right");
-        style.addProperty("padding-right", "5px");
-        addStyle(style);
-
-        style = new Style("." + CommonReportStyles.RRowTotal.name());
-        style.addProperty("background-color", ThemeColor.foreground, 0.5);
-        style.addProperty("font-weight", "bold");
-        addStyle(style);
-
-        style = new Style("." + CommonReportStyles.RReportTableFixedHeader.name());
-        style.addProperty("display", "block");
-        style.addProperty("overflow-y", "scroll");
-        addStyle(style);
-
-        style = new Style("." + CommonReportStyles.RReportTableFixedHeader.name() + " th");
-        addStyle(style);
-
-        style = new Style("." + CommonReportStyles.RReportTableScrollableBody.name());
-        style.addProperty("position", "absolute");
-        style.addProperty("top", "0px"); // this value has to be computed and set after the table header is drawn;
-        style.addProperty("bottom", "0px");
-        style.addProperty("left", "0px");
-        style.addProperty("width", "100%");
-        style.addProperty("display", "block");
-        style.addProperty("overflow-y", "scroll");
-        addStyle(style);
-
-        style = new Style("." + CommonReportStyles.RReportTableScrollableBody.name() + " td");
         addStyle(style);
 
     }

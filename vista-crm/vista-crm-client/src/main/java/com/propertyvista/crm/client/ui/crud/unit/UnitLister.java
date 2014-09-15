@@ -22,8 +22,8 @@ import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.forms.client.ui.datatable.DataTableModel;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.site.client.backoffice.ui.IPane;
 import com.pyx4j.site.client.backoffice.ui.prime.lister.AbstractLister;
-import com.pyx4j.site.client.ui.IPane;
 
 import com.propertyvista.crm.client.ui.components.boxes.BuildingSelectorDialog;
 import com.propertyvista.crm.rpc.services.unit.UnitCrudService;

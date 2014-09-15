@@ -26,7 +26,7 @@ import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.backoffice.activity.EntitySelectorTableVisorController;
-import com.pyx4j.site.client.ui.IPane;
+import com.pyx4j.site.client.backoffice.ui.IPane;
 
 import com.propertyvista.crm.rpc.services.selections.SelectUnitListService;
 import com.propertyvista.domain.property.asset.unit.AptUnit;

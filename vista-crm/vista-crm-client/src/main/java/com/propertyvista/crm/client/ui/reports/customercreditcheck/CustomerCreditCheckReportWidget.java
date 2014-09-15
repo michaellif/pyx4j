@@ -14,15 +14,11 @@
 package com.propertyvista.crm.client.ui.reports.customercreditcheck;
 
 import com.google.gwt.core.client.Scheduler;
-import com.google.gwt.dom.client.Style.Overflow;
-import com.google.gwt.dom.client.Style.Position;
-import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ScrollEvent;
 import com.google.gwt.event.dom.client.ScrollHandler;
 import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.HTML;
-import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
@@ -35,7 +31,7 @@ import com.propertyvista.crm.client.ui.reports.ScrollBarPositionMemento;
 import com.propertyvista.crm.rpc.dto.reports.CustomerCreditCheckReportDataDTO;
 import com.propertyvista.domain.tenant.CustomerCreditCheck;
 
-public class CustomerCreditCheckReportWidget implements IReportWidget {
+public class CustomerCreditCheckReportWidget extends HTML implements IReportWidget {
 
     private static final I18n i18n = I18n.get(CustomerCreditCheckReportWidget.class);
 
@@ -61,28 +57,11 @@ public class CustomerCreditCheckReportWidget implements IReportWidget {
         };
     }
 
-    HTML reportHtml;
-
     ScrollBarPositionMemento scrollBarPositionMemento;
-
-    {
-        reportHtml = new HTML();
-        reportHtml.getElement().getStyle().setPosition(Position.ABSOLUTE);
-        reportHtml.getElement().getStyle().setLeft(0, Unit.PX);
-        reportHtml.getElement().getStyle().setTop(0, Unit.PX);
-        reportHtml.getElement().getStyle().setRight(0, Unit.PX);
-        reportHtml.getElement().getStyle().setBottom(0, Unit.PX);
-        reportHtml.getElement().getStyle().setOverflow(Overflow.AUTO);
-    }
-
-    @Override
-    public Widget asWidget() {
-        return reportHtml;
-    }
 
     @Override
     public void setData(Object data, Command onWidgetReady) {
-        reportHtml.setHTML("");
+        setHTML("");
         if (data == null) {
             onWidgetReady.execute();
             return;
@@ -90,7 +69,7 @@ public class CustomerCreditCheckReportWidget implements IReportWidget {
         CustomerCreditCheckReportDataDTO reportData = (CustomerCreditCheckReportDataDTO) data;
         if (reportData.unitStatuses.isEmpty()) {
             onWidgetReady.execute();
-            reportHtml.setHTML(NoResultsHtml.get());
+            setHTML(NoResultsHtml.get());
             return;
         }
         SafeHtmlBuilder bb = new SafeHtmlBuilder();
@@ -120,11 +99,11 @@ public class CustomerCreditCheckReportWidget implements IReportWidget {
         }
         bb.appendHtmlConstant("</table>");
 
-        reportHtml.setHTML(bb.toSafeHtml());
-        reportHtml.addDomHandler(new ScrollHandler() {
+        setHTML(bb.toSafeHtml());
+        addDomHandler(new ScrollHandler() {
             @Override
             public void onScroll(ScrollEvent event) {
-                scrollBarPositionMemento = new ScrollBarPositionMemento(reportHtml.getElement().getScrollLeft(), reportHtml.getElement().getScrollTop());
+                scrollBarPositionMemento = new ScrollBarPositionMemento(getElement().getScrollLeft(), getElement().getScrollTop());
             }
         }, ScrollEvent.getType());
 
@@ -133,21 +112,21 @@ public class CustomerCreditCheckReportWidget implements IReportWidget {
 
     @Override
     public Object getMemento() {
-        return new Object[] { reportHtml.getHTML(), scrollBarPositionMemento };
+        return new Object[] { getHTML(), scrollBarPositionMemento };
     }
 
     @Override
     public void setMemento(final Object memento, Command onWidgetReady) {
         if (memento != null) {
             String html = (String) (((Object[]) memento)[0]);
-            reportHtml.setHTML(html);
+            setHTML(html);
             Scheduler.get().scheduleDeferred(new Scheduler.ScheduledCommand() {
                 @Override
                 public void execute() {
                     ScrollBarPositionMemento scrollBarPosition = (ScrollBarPositionMemento) (((Object[]) memento)[1]);
                     if (scrollBarPosition != null) {
-                        reportHtml.getElement().setScrollLeft(scrollBarPosition.posX);
-                        reportHtml.getElement().setScrollTop(scrollBarPosition.posY);
+                        getElement().setScrollLeft(scrollBarPosition.posX);
+                        getElement().setScrollTop(scrollBarPosition.posY);
                     }
                 }
             });

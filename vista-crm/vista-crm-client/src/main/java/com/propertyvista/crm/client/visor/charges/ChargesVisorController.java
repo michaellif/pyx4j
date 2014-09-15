@@ -20,7 +20,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.site.client.backoffice.activity.AbstractVisorController;
-import com.pyx4j.site.client.ui.IPane;
+import com.pyx4j.site.client.backoffice.ui.IPane;
 
 import com.propertyvista.crm.rpc.services.billing.BillPreviewService;
 import com.propertyvista.domain.tenant.lease.Lease;

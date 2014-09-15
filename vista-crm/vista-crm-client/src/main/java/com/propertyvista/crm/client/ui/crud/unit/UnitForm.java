@@ -37,10 +37,10 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.site.client.AppPlaceEntityMapper;
 import com.pyx4j.site.client.backoffice.activity.EntitySelectorTableVisorController;
+import com.pyx4j.site.client.backoffice.ui.IPane;
 import com.pyx4j.site.client.backoffice.ui.prime.CEntityCrudHyperlink;
 import com.pyx4j.site.client.backoffice.ui.prime.CEntitySelectorHyperlink;
 import com.pyx4j.site.client.backoffice.ui.prime.form.IForm;
-import com.pyx4j.site.client.ui.IPane;
 import com.pyx4j.site.client.ui.IShowable;
 import com.pyx4j.site.rpc.AppPlace;
 

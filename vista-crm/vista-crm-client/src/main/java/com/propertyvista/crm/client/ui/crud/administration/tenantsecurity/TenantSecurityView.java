@@ -13,7 +13,7 @@
  */
 package com.propertyvista.crm.client.ui.crud.administration.tenantsecurity;
 
-import com.pyx4j.site.client.ui.IPane;
+import com.pyx4j.site.client.backoffice.ui.IPane;
 
 import com.propertyvista.domain.communication.EmailTemplateType;
 import com.propertyvista.domain.tenant.access.PortalAccessSecutiryCodeReportType;

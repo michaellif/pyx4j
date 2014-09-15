@@ -16,52 +16,31 @@ package com.propertyvista.crm.client.ui.reports.availability;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-import com.google.gwt.dom.client.Style.Overflow;
-import com.google.gwt.dom.client.Style.Position;
-import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ScrollEvent;
 import com.google.gwt.event.dom.client.ScrollHandler;
 import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
-import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.backoffice.ui.prime.report.ReportTable;
 import com.pyx4j.site.client.backoffice.ui.prime.report.IReportWidget;
+import com.pyx4j.site.client.backoffice.ui.prime.report.ReportTable;
 import com.pyx4j.site.client.backoffice.ui.prime.report.ReportTable.CellFormatter;
 
 import com.propertyvista.crm.client.ui.reports.NoResultsHtml;
 import com.propertyvista.crm.client.ui.reports.ScrollBarPositionMemento;
 import com.propertyvista.crm.rpc.dto.reports.AvailabilityReportDataDTO;
 
-public class AvailabilityReportWidget implements IReportWidget {
+public class AvailabilityReportWidget extends FlowPanel implements IReportWidget {
 
     private static final I18n i18n = I18n.get(AvailabilityReportWidget.class);
 
-    FlowPanel reportPanel;
-
     ScrollBarPositionMemento scrollBarPositionMemento;
-
-    {
-        reportPanel = new FlowPanel();
-        reportPanel.getElement().getStyle().setPosition(Position.ABSOLUTE);
-        reportPanel.getElement().getStyle().setLeft(0, Unit.PX);
-        reportPanel.getElement().getStyle().setTop(0, Unit.PX);
-        reportPanel.getElement().getStyle().setRight(0, Unit.PX);
-        reportPanel.getElement().getStyle().setBottom(0, Unit.PX);
-        reportPanel.getElement().getStyle().setOverflow(Overflow.AUTO);
-    }
-
-    @Override
-    public Widget asWidget() {
-        return reportPanel;
-    }
 
     @Override
     public void setData(Object data, Command onWidgetReady) {
-        reportPanel.clear();
+        clear();
         if (data == null) {
             onWidgetReady.execute();
             return;
@@ -69,7 +48,7 @@ public class AvailabilityReportWidget implements IReportWidget {
 
         AvailabilityReportDataDTO reportData = (AvailabilityReportDataDTO) data;
         if (reportData.unitStatuses.isEmpty()) {
-            reportPanel.add(new HTML(NoResultsHtml.get()));
+            add(new HTML(NoResultsHtml.get()));
             onWidgetReady.execute();
             return;
         }
@@ -81,17 +60,17 @@ public class AvailabilityReportWidget implements IReportWidget {
         bb.appendEscaped(i18n.tr("As of Date: {0}", reportData.asOf));
         bb.appendHtmlConstant("</div>");
         HTML header = new HTML(bb.toSafeHtml());
-        reportPanel.add(header);
+        add(header);
 
         ReportTable reportTable = new ReportTable(Arrays.asList(AvailabilityReportTableColumnsHolder.AVAILABILITY_TABLE_COLUMNS),
                 new ArrayList<CellFormatter>());
         reportTable.populate(reportData.unitStatuses);
-        reportPanel.add(reportTable);
-        reportPanel.addDomHandler(new ScrollHandler() {
+        add(reportTable);
+        addDomHandler(new ScrollHandler() {
 
             @Override
             public void onScroll(ScrollEvent event) {
-                scrollBarPositionMemento = new ScrollBarPositionMemento(reportPanel.getElement().getScrollLeft(), reportPanel.getElement().getScrollTop());
+                scrollBarPositionMemento = new ScrollBarPositionMemento(getElement().getScrollLeft(), getElement().getScrollTop());
             }
         }, ScrollEvent.getType());
 
@@ -107,8 +86,8 @@ public class AvailabilityReportWidget implements IReportWidget {
     public void setMemento(Object memento, Command onWidgetReady) {
         if (memento != null) {
             ScrollBarPositionMemento scrollBarPosition = (ScrollBarPositionMemento) memento;
-            reportPanel.getElement().setScrollLeft(scrollBarPosition.posX);
-            reportPanel.getElement().setScrollTop(scrollBarPosition.posY);
+            getElement().setScrollLeft(scrollBarPosition.posX);
+            getElement().setScrollTop(scrollBarPosition.posY);
         }
 
         onWidgetReady.execute();

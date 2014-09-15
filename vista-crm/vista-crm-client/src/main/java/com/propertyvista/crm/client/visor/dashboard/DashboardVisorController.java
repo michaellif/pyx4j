@@ -22,7 +22,7 @@ import com.pyx4j.gwt.commons.UnrecoverableClientError;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.site.client.backoffice.activity.AbstractVisorController;
-import com.pyx4j.site.client.ui.IPane;
+import com.pyx4j.site.client.backoffice.ui.IPane;
 
 import com.propertyvista.crm.client.ui.gadgets.commonMk2.dashboard.DashboardPrinterDialog;
 import com.propertyvista.crm.rpc.services.dashboard.DashboardMetadataService;
