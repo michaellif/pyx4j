@@ -100,7 +100,7 @@ class PaymentCreditCard {
 
         if (saleResponse.success().getValue()) {
             log.debug("ccTransaction accepted {}", saleResponse.authorizationNumber());
-            paymentRecord.paymentStatus().setValue(PaymentRecord.PaymentStatus.Cleared);
+            paymentRecord.paymentStatus().setValue(PaymentRecord.PaymentStatus.Received);
             paymentRecord.lastStatusChangeDate().setValue(SystemDateManager.getLogicalDate());
             paymentRecord.transactionAuthorizationNumber().setValue(saleResponse.authorizationNumber().getValue());
             paymentRecord.convenienceFeeTransactionAuthorizationNumber().setValue(saleResponse.convenienceFeeAuthorizationNumber().getValue());

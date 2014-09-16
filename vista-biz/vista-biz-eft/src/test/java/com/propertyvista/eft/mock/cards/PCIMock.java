@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011-2012 All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -34,6 +34,7 @@ import com.propertyvista.eft.mock.cards.CardTransactionMock.TransactionStatus;
 import com.propertyvista.operations.domain.eft.cards.simulator.CardServiceSimulationTransaction;
 import com.propertyvista.operations.domain.eft.cards.to.CardsReconciliationTO;
 import com.propertyvista.operations.domain.eft.cards.to.CreditCardPaymentInstrument;
+import com.propertyvista.operations.domain.eft.cards.to.DailyReportTO;
 import com.propertyvista.operations.domain.eft.cards.to.Merchant;
 import com.propertyvista.operations.domain.eft.cards.to.PaymentInstrument;
 import com.propertyvista.operations.domain.eft.cards.to.PaymentRequest;
@@ -175,17 +176,45 @@ class PCIMock {
         List<CardServiceSimulationTransaction> transactions = new ArrayList<>();
         for (CardAccountMock account : accounts) {
             for (CardTransactionMock transactionMock : account.transactions.values()) {
-                if (transactionMock.date.equals(transactionsDate) && transactionMock.status == TransactionStatus.compleated) {
+                if (transactionMock.date.equals(transactionsDate) && !transactionMock.reconciliationSent
+                        && transactionMock.status == TransactionStatus.compleated) {
                     transactions.add(SimulationBridge.toSimulation(account, transactionMock));
+                    transactionMock.reconciliationSent = true;
                 }
             }
         }
-        CardsReconciliationTO to = new CardReconciliationSimulationManager().createReport(transactions);
+        if (transactions.size() == 0) {
+            return null;
+        } else {
+            CardsReconciliationTO to = new CardReconciliationSimulationManager().createReport(transactions);
 
-        to.fileNameMerchantTotal().setValue(UniqueInteger.getInstance("CardsReconciliationFile").nextAsString());
-        to.fileNameCardTotal().setValue(to.fileNameMerchantTotal().getValue());
-        to.remoteFileDateCardTotal().setValue(SystemDateManager.getDate());
-        to.remoteFileDateMerchantTotal().setValue(SystemDateManager.getDate());
-        return to;
+            to.fileNameMerchantTotal().setValue(UniqueInteger.getInstance("CardsReconciliationFile").nextAsString());
+            to.fileNameCardTotal().setValue(to.fileNameMerchantTotal().getValue());
+            to.remoteFileDateCardTotal().setValue(SystemDateManager.getDate());
+            to.remoteFileDateMerchantTotal().setValue(SystemDateManager.getDate());
+            return to;
+        }
+    }
+
+    public DailyReportTO receiveCardsDailyReportFile(String cardsReconciliationId) {
+        LogicalDate transactionsDate = DateUtils.daysAdd(SystemDateManager.getLogicalDate(), -1);
+        List<CardServiceSimulationTransaction> transactions = new ArrayList<>();
+        for (CardAccountMock account : accounts) {
+            for (CardTransactionMock transactionMock : account.transactions.values()) {
+                if (transactionMock.date.equals(transactionsDate) && !transactionMock.clearenceSent && transactionMock.status == TransactionStatus.compleated) {
+                    transactions.add(SimulationBridge.toSimulation(account, transactionMock));
+                    transactionMock.clearenceSent = true;
+                }
+            }
+        }
+        if (transactions.size() == 0) {
+            return null;
+        } else {
+            DailyReportTO to = new CardReconciliationSimulationManager().createDailyReport(transactions);
+
+            to.fileName().setValue(UniqueInteger.getInstance("DailyReportFile").nextAsString());
+            to.remoteFileDate().setValue(SystemDateManager.getDate());
+            return to;
+        }
     }
 }

@@ -33,6 +33,7 @@ import com.propertyvista.config.VistaDeployment;
 import com.propertyvista.config.VistaSystemsSimulationConfig;
 import com.propertyvista.eft.EftFileUtils;
 import com.propertyvista.operations.domain.eft.cards.to.CardsReconciliationTO;
+import com.propertyvista.operations.domain.eft.cards.to.DailyReportTO;
 import com.propertyvista.server.sftp.SftpClient;
 import com.propertyvista.server.sftp.SftpFile;
 
@@ -41,6 +42,36 @@ public class CardsReconciliationReceiveManager {
     private static final Logger log = LoggerFactory.getLogger(CardsReconciliationReceiveManager.class);
 
     public static final String remoteDirectory = "cards_out";
+
+    public DailyReportTO receiveCardsDailyReportFile(String cardsReconciliationId) throws SftpTransportConnectionException {
+        log.debug("pool DailyReport files for cardsReconciliationId {}", cardsReconciliationId);
+
+        File workdir = getLocalWorkir();
+
+        // files  20140531_003631_PROPERTYVISTA.CSV
+
+        SftpFile sftpFile = SftpClient.receiveFile(configuration(), new DailyReportRetrieveFilter(workdir, cardsReconciliationId), remoteDirectory);
+        if (sftpFile == null) {
+            return null;
+        }
+
+        DailyReportTO to = EntityFactory.create(DailyReportTO.class);
+
+        boolean parsOk = false;
+        try {
+            to.fileName().setValue(sftpFile.remoteName);
+            to.remoteFileDate().setValue(new Date(sftpFile.lastModified));
+            to.records().addAll(new DailyReportParser().parsReport(sftpFile.localFile));
+
+            parsOk = true;
+        } finally {
+            if (!parsOk) {
+                EftFileUtils.move(sftpFile.localFile, workdir, "error");
+            }
+        }
+
+        return to;
+    }
 
     public CardsReconciliationTO receiveCardsReconciliationFiles(String cardsReconciliationId) throws SftpTransportConnectionException {
         log.debug("pool Reconciliation files for cardsReconciliationId {}", cardsReconciliationId);
@@ -130,4 +161,5 @@ public class CardsReconciliationReceiveManager {
         }
         return padWorkdir;
     }
+
 }

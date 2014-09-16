@@ -79,6 +79,7 @@ public class PaymentProcessFacadeImpl implements PaymentProcessFacade {
 
     @Override
     public void processCardsReconciliation(ExecutionMonitor executionMonitor) {
+        new CardsDailyReportProcessor(executionMonitor).processPmcClearanceRecords();
         new CardsReconciliationProcessor(executionMonitor).processPmcReconciliation();
     }
 

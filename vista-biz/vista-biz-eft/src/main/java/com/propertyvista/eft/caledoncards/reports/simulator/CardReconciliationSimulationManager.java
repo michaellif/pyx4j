@@ -18,6 +18,7 @@ import java.io.FileOutputStream;
 import java.io.OutputStream;
 import java.math.BigDecimal;
 import java.nio.charset.StandardCharsets;
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Collection;
 import java.util.Date;
@@ -54,6 +55,10 @@ import com.propertyvista.operations.domain.eft.cards.to.CardsReconciliationCardT
 import com.propertyvista.operations.domain.eft.cards.to.CardsReconciliationMerchantTotalRecord;
 import com.propertyvista.operations.domain.eft.cards.to.CardsReconciliationMerchantTotalRecord.MerchantTotalRecordType;
 import com.propertyvista.operations.domain.eft.cards.to.CardsReconciliationTO;
+import com.propertyvista.operations.domain.eft.cards.to.DailyReportRecord;
+import com.propertyvista.operations.domain.eft.cards.to.DailyReportRecord.DailyReportCardType;
+import com.propertyvista.operations.domain.eft.cards.to.DailyReportRecord.DailyReportRecordType;
+import com.propertyvista.operations.domain.eft.cards.to.DailyReportTO;
 
 public class CardReconciliationSimulationManager {
 
@@ -68,13 +73,14 @@ public class CardReconciliationSimulationManager {
         criteria.ge(criteria.proto().transactionDate(), from);
         criteria.lt(criteria.proto().transactionDate(), DateUtils.addDays(to, +1));
 
-        final Collection<CardServiceSimulationReconciliationRecord> records = createReconciliationRecord(Persistence.service().query(criteria));
+        final List<CardServiceSimulationTransaction> transactions = Persistence.service().query(criteria);
+        final Collection<CardServiceSimulationReconciliationRecord> records = createReconciliationRecord(transactions);
 
         new UnitOfWork(TransactionScopeOption.RequiresNew).execute(new Executable<Void, RuntimeException>() {
 
             @Override
             public Void execute() {
-                createReportFiles(records);
+                createReportFiles(transactions, records);
                 Persistence.service().persist(records);
                 return null;
             }
@@ -95,6 +101,51 @@ public class CardReconciliationSimulationManager {
             addTransaction(record, transaction);
         }
         return records.values();
+    }
+
+    public DailyReportTO createDailyReport(List<CardServiceSimulationTransaction> transactions) {
+        DailyReportTO to = EntityFactory.create(DailyReportTO.class);
+        for (CardServiceSimulationTransaction transaction : transactions) {
+            DailyReportRecord record = EntityFactory.create(DailyReportRecord.class);
+
+            if (transaction.convenienceFee().isNull()) {
+                record.transactionType().setValue(DailyReportRecordType.SALE);
+            } else {
+                record.transactionType().setValue(DailyReportRecordType.PRCO);
+            }
+
+            record.terminalID().setValue(transaction.merchant().terminalID().getValue());
+            record.amount().setValue(transaction.amount().getValue());
+            record.date().setValue(transaction.transactionDate().getValue());
+
+            record.referenceNumber().setValue(transaction.reference().getValue());
+            switch (transaction.card().cardType().getValue()) {
+            case MasterCard:
+                record.cardType().setValue(DailyReportCardType.MCRD);
+                break;
+            case Visa:
+            case VisaDebit:
+                record.cardType().setValue(DailyReportCardType.VISA);
+                break;
+            }
+            record.cardNumber().setValue("***" + last4(transaction.card().number().getValue()));
+            record.expiry().setValue(new SimpleDateFormat("yyMM").format(transaction.card().expiryDate().getValue()));
+
+            record.approved().setValue(true);
+            record.voided().setValue(false);
+            record.oper().setValue("003");
+
+            to.records().add(record);
+        }
+        return to;
+    }
+
+    private String last4(String value) {
+        if (value != null && value.length() > 4) {
+            return value.substring(value.length() - 4);
+        } else {
+            return "####";
+        }
     }
 
     public CardsReconciliationTO createReport(List<CardServiceSimulationTransaction> transactions) {
@@ -202,7 +253,7 @@ public class CardReconciliationSimulationManager {
         return to;
     }
 
-    private void createReportFiles(Collection<CardServiceSimulationReconciliationRecord> records) {
+    private void createReportFiles(List<CardServiceSimulationTransaction> transactions, Collection<CardServiceSimulationReconciliationRecord> records) {
 
         String fileId = new SimpleDateFormat("yyyMMdd").format(new Date());
         int fileNo = 1;
@@ -214,6 +265,8 @@ public class CardReconciliationSimulationManager {
                 break;
             }
         }
+        String dailyfileId = fileId + "_" + new DecimalFormat("000000").format(fileNo);
+
         fileId += "." + fileNo;
 
         for (CardServiceSimulationReconciliationRecord record : records) {
@@ -227,6 +280,10 @@ public class CardReconciliationSimulationManager {
 
         createMerchantTotalsFile(cardsReconciliationId, fileId, to.merchantTotals());
         createCardTotalsFile(cardsReconciliationId, fileId, to.cardTotals());
+
+        DailyReportTO drTo = createDailyReport(transactions);
+
+        createDailyReportFile(cardsReconciliationId, dailyfileId, drTo.records());
     }
 
     private CardsReconciliationMerchantTotalRecord createMerchantTotal(CardServiceSimulationReconciliationRecord record) {
@@ -253,6 +310,31 @@ public class CardReconciliationSimulationManager {
         File dir = ServerSideConfiguration.instance(AbstractVistaServerSideConfiguration.class).getBankingSimulatorConfiguration()
                 .getCaledonSimulatorSftpDirectory();
         return new File(dir, CardsReconciliationReceiveManager.remoteDirectory);
+    }
+
+    private void createDailyReportFile(String cardsReconciliationId, String fileId, List<DailyReportRecord> records) {
+        ReportTableCSVFormatter formatter = new ReportTableCSVFormatter(StandardCharsets.US_ASCII);
+        formatter.setForceQuote(true);
+        formatter.setDateTimeFormatPattern("dd-MMM-yyyy HH:mm:ss");
+        EntityReportFormatter<DailyReportRecord> entityFormatter = new EntityReportFormatter<DailyReportRecord>(DailyReportRecord.class);
+        entityFormatter.createHeader(formatter);
+        entityFormatter.reportAll(formatter, records);
+
+        File file = new File(getSftpDir(), fileId + "_" + cardsReconciliationId + ".CSV");
+        if (file.exists()) {
+            file.delete();
+        }
+        OutputStream out = null;
+        try {
+            out = new FileOutputStream(file);
+            out.write(formatter.getBinaryData());
+            out.flush();
+        } catch (Throwable e) {
+            log.error("Unable write to file {}", file.getAbsolutePath(), e);
+            throw new Error(e);
+        } finally {
+            IOUtils.closeQuietly(out);
+        }
     }
 
     private void createMerchantTotalsFile(String cardsReconciliationId, String fileId, List<CardsReconciliationMerchantTotalRecord> merchantTotals) {
@@ -304,4 +386,5 @@ public class CardReconciliationSimulationManager {
             IOUtils.closeQuietly(out);
         }
     }
+
 }

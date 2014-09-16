@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011-2012 All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -82,10 +82,14 @@ public class CardsReconciliationTest extends LeaseFinancialTestBase {
             ServerSideFactory.create(PaymentFacade.class).processPayment(paymentRecordVista, null);
             Persistence.service().commit();
 
-            new PaymentRecordTester(getLease().billingAccount()).lastRecordStatus(PaymentStatus.Cleared);
+            new PaymentRecordTester(getLease().billingAccount()).lastRecordStatus(PaymentStatus.Received);
         }
 
         setSysDate("2011-04-02");
+        SchedulerMock.runProcess(PmcProcessType.paymentsReceiveCardsReconciliation, (Date) null);
+
+        new PaymentRecordTester(getLease().billingAccount()).lastRecordStatus(PaymentStatus.Cleared);
+
         SchedulerMock.runProcess(PmcProcessType.paymentsReceiveCardsReconciliation, (Date) null);
 
         Persistence.service().retrieve(paymentMethodVisa);
@@ -97,6 +101,7 @@ public class CardsReconciliationTest extends LeaseFinancialTestBase {
             assertEquals("AggregatedTransfer amounts", paymentRecordVista.amount().getValue(), at.grossPaymentAmount().getValue());
 
             assertEquals("Visa amounts", paymentRecordVista.amount().getValue(), at.visaDeposit().getValue());
+
         }
 
     }
@@ -117,7 +122,7 @@ public class CardsReconciliationTest extends LeaseFinancialTestBase {
             ServerSideFactory.create(PaymentFacade.class).processPayment(paymentRecordVista, null);
             Persistence.service().commit();
 
-            new PaymentRecordTester(getLease().billingAccount()).lastRecordStatus(PaymentStatus.Cleared);
+            new PaymentRecordTester(getLease().billingAccount()).lastRecordStatus(PaymentStatus.Received);
         }
 
         {
@@ -127,10 +132,14 @@ public class CardsReconciliationTest extends LeaseFinancialTestBase {
             ServerSideFactory.create(PaymentFacade.class).processPayment(paymentRecordMC, null);
             Persistence.service().commit();
 
-            new PaymentRecordTester(getLease().billingAccount()).lastRecordStatus(PaymentStatus.Cleared);
+            new PaymentRecordTester(getLease().billingAccount()).lastRecordStatus(PaymentStatus.Received);
         }
 
         setSysDate("2011-05-02");
+        SchedulerMock.runProcess(PmcProcessType.paymentsReceiveCardsReconciliation, (Date) null);
+
+        new PaymentRecordTester(getLease().billingAccount()).lastRecordStatus(PaymentStatus.Cleared);
+
         SchedulerMock.runProcess(PmcProcessType.paymentsReceiveCardsReconciliation, (Date) null);
 
         Persistence.service().retrieve(paymentMethodVisa);
@@ -145,6 +154,8 @@ public class CardsReconciliationTest extends LeaseFinancialTestBase {
 
             assertEquals("Visa amounts", paymentRecordVista.amount().getValue(), at.visaDeposit().getValue());
             assertEquals("MasterCard amounts", paymentRecordMC.amount().getValue(), at.mastercardDeposit().getValue());
+
+            new PaymentRecordTester(getLease().billingAccount()).lastRecordStatus(PaymentStatus.Cleared);
         }
 
     }

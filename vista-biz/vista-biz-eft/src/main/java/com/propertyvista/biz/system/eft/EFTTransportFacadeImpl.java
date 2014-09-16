@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011-2012 All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -24,6 +24,7 @@ import com.propertyvista.operations.domain.eft.caledoneft.FundsReconciliationFil
 import com.propertyvista.operations.domain.eft.caledoneft.FundsTransferFile;
 import com.propertyvista.operations.domain.eft.caledoneft.to.FundsTransferAckFile;
 import com.propertyvista.operations.domain.eft.cards.to.CardsReconciliationTO;
+import com.propertyvista.operations.domain.eft.cards.to.DailyReportTO;
 import com.propertyvista.operations.domain.eft.dbp.DirectDebitFile;
 
 public class EFTTransportFacadeImpl implements EFTTransportFacade {
@@ -61,6 +62,11 @@ public class EFTTransportFacadeImpl implements EFTTransportFacade {
     @Override
     public CardsReconciliationTO receiveCardsReconciliationFiles(String cardsReconciliationId) throws SftpTransportConnectionException {
         return new CardsReconciliationReceiveManager().receiveCardsReconciliationFiles(cardsReconciliationId);
+    }
+
+    @Override
+    public DailyReportTO receiveCardsDailyReportFile(String cardsReconciliationId) throws SftpTransportConnectionException {
+        return new CardsReconciliationReceiveManager().receiveCardsDailyReportFile(cardsReconciliationId);
     }
 
     @Override

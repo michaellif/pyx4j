@@ -16,6 +16,7 @@ package com.propertyvista.operations.domain.eft.cards.to;
 import java.math.BigDecimal;
 import java.util.Date;
 
+import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.core.IEntity;
@@ -32,6 +33,11 @@ public interface DailyReportRecord extends IEntity {
 
     public enum DailyReportRecordType {
 
+        /**
+         * the transactions will be included in the daily reconciliation reports based on the time of the "SALE" or "PRCO" transaction.
+         *
+         * "PRCO" transactions are only used for convenience fee transactions.
+         */
         PREA, PRCO, BALR, SETT, SALE, AUTH, VOID;
     }
 
@@ -48,11 +54,12 @@ public interface DailyReportRecord extends IEntity {
     IPrimitive<String> oper();
 
     @NotNull
-    @ImportColumn(names = "DATE/TIME", format = "dd-MMM-yyyy HH:mm:ss")
+    @ImportColumn(format = "dd-MMM-yyyy HH:mm:ss")
+    @Caption(name = "DATE/TIME")
     IPrimitive<Date> date();
 
-    @ImportColumn(names = "TRAN TYPE")
     @NotNull
+    @Caption(name = "TRAN TYPE")
     IPrimitive<DailyReportRecordType> transactionType();
 
     @ImportColumn(names = "CARD TYPE")

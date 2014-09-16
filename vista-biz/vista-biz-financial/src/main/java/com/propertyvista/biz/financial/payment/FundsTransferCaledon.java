@@ -50,6 +50,7 @@ import com.propertyvista.operations.domain.eft.caledoneft.FundsTransferFileCreat
 import com.propertyvista.operations.domain.eft.caledoneft.FundsTransferRecord;
 import com.propertyvista.operations.domain.eft.caledoneft.to.FundsTransferAckFile;
 import com.propertyvista.operations.domain.eft.cards.to.CardsReconciliationTO;
+import com.propertyvista.operations.domain.eft.cards.to.DailyReportTO;
 
 public class FundsTransferCaledon {
 
@@ -206,7 +207,7 @@ public class FundsTransferCaledon {
     /**
      * Length 6
      * Must be incremented by one for each file submitted to Caledon, Unique per Company ID and FundsTransferType
-     * 
+     *
      * @param fundsTransferType
      * @param consumeNumber
      *            the file is sent or attempt to send is made, the sequence is changed
@@ -368,6 +369,60 @@ public class FundsTransferCaledon {
     }
 
     public Integer receiveCardsReconciliation(final ExecutionMonitor executionMonitor) {
+        Integer r;
+        r = poolAndReceiveCardsDailyRepor(executionMonitor);
+        if (r != null) {
+            return r;
+        }
+        r = poolAndReceiveCardsReconciliation(executionMonitor);
+        if (r != null) {
+            return r;
+        }
+
+        return null;
+    }
+
+    Integer poolAndReceiveCardsDailyRepor(final ExecutionMonitor executionMonitor) {
+        // Process DailyReport to make records Cleared
+        final DailyReportTO dailyReportFile;
+        try {
+            dailyReportFile = ServerSideFactory.create(EFTTransportFacade.class).receiveCardsDailyReportFile(
+                    ServerSideConfiguration.instance(AbstractVistaServerSideConfiguration.class).getCaledonFundsTransferConfiguration()
+                            .getCardsReconciliationId());
+        } catch (SftpTransportConnectionException e) {
+            executionMonitor.addInfoEvent("Pooled, Can't connect to server", e.getMessage());
+            return null;
+        }
+        if (dailyReportFile == null) {
+            executionMonitor.addInfoEvent("Pooled, No dailyReport file found on server", null);
+        } else {
+            executionMonitor.addInfoEvent("received DailyReport file", dailyReportFile.fileName().getValue());
+
+            boolean processedOk = false;
+            try {
+                new UnitOfWork(TransactionScopeOption.RequiresNew).execute(new Executable<Void, RuntimeException>() {
+
+                    @Override
+                    public Void execute() {
+                        new CardsDailyReportAcceptor(executionMonitor).validateAndPersistFile(dailyReportFile);
+                        return null;
+                    }
+                });
+
+                processedOk = true;
+            } finally {
+                Collection<String> fileNames = new ArrayList<>();
+                fileNames.add(dailyReportFile.fileName().getValue());
+                ServerSideFactory.create(EFTTransportFacade.class).confirmReceivedCardsReconciliationFiles(fileNames, !processedOk);
+            }
+            return dailyReportFile.records().size();
+        }
+
+        return null;
+    }
+
+    // Then process Reconciliation
+    Integer poolAndReceiveCardsReconciliation(final ExecutionMonitor executionMonitor) {
         final CardsReconciliationTO reconciliationFile;
         try {
             reconciliationFile = ServerSideFactory.create(EFTTransportFacade.class).receiveCardsReconciliationFiles(
@@ -378,33 +433,31 @@ public class FundsTransferCaledon {
             return null;
         }
         if (reconciliationFile == null) {
-            executionMonitor.addInfoEvent("Pooled, No file found on server", null);
-            return null;
+            executionMonitor.addInfoEvent("Pooled, No reconciliation file found on server", null);
         } else {
             executionMonitor.addInfoEvent("received CardTotal file", reconciliationFile.fileNameCardTotal().getValue());
             executionMonitor.addInfoEvent("received MerchantTotal file", reconciliationFile.fileNameMerchantTotal().getValue());
+
+            boolean processedOk = false;
+            try {
+                new UnitOfWork(TransactionScopeOption.RequiresNew).execute(new Executable<Void, RuntimeException>() {
+
+                    @Override
+                    public Void execute() {
+                        new CardsReconciliationAcceptor(executionMonitor).validateAndPersistFile(reconciliationFile);
+                        return null;
+                    }
+                });
+
+                processedOk = true;
+            } finally {
+                Collection<String> fileNames = new ArrayList<>();
+                fileNames.add(reconciliationFile.fileNameCardTotal().getValue());
+                fileNames.add(reconciliationFile.fileNameMerchantTotal().getValue());
+                ServerSideFactory.create(EFTTransportFacade.class).confirmReceivedCardsReconciliationFiles(fileNames, !processedOk);
+            }
+            return reconciliationFile.merchantTotals().size();
         }
-
-        boolean processedOk = false;
-        try {
-            new UnitOfWork(TransactionScopeOption.RequiresNew).execute(new Executable<Void, RuntimeException>() {
-
-                @Override
-                public Void execute() {
-                    new CardsReconciliationAcceptor(executionMonitor).validateAndPersistFile(reconciliationFile);
-                    return null;
-                }
-            });
-
-            processedOk = true;
-        } finally {
-            Collection<String> fileNames = new ArrayList<>();
-            fileNames.add(reconciliationFile.fileNameCardTotal().getValue());
-            fileNames.add(reconciliationFile.fileNameMerchantTotal().getValue());
-            ServerSideFactory.create(EFTTransportFacade.class).confirmReceivedCardsReconciliationFiles(fileNames, !processedOk);
-        }
-        return reconciliationFile.merchantTotals().size();
-
+        return null;
     }
-
 }
