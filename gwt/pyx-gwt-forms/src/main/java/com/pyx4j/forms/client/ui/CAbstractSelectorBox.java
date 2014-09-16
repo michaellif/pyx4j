@@ -32,7 +32,7 @@ import com.pyx4j.forms.client.events.OptionsChangeHandler;
 import com.pyx4j.widgets.client.IWatermarkWidget;
 import com.pyx4j.widgets.client.suggest.IOptionsGrabber;
 
-public abstract class CSelectorBox<DATA, TYPE extends IEntity, WIDGET extends INativeFocusField<DATA>> extends CFocusComponent<DATA, WIDGET> implements
+public abstract class CAbstractSelectorBox<DATA, TYPE extends IEntity, WIDGET extends INativeFocusField<DATA>> extends CFocusComponent<DATA, WIDGET> implements
         IAcceptsWatermark, HasOptionsChangeHandlers<List<TYPE>> {
 
     private IFormatter<TYPE, String> formatter;
@@ -43,7 +43,7 @@ public abstract class CSelectorBox<DATA, TYPE extends IEntity, WIDGET extends IN
 
     private IFormatter<TYPE, String[]> optionPathFormatter;
 
-    public CSelectorBox(IOptionsGrabber<TYPE> optionsGrabber) {
+    public CAbstractSelectorBox(IOptionsGrabber<TYPE> optionsGrabber) {
         this.optionsGrabber = optionsGrabber;
 
         setOptionPathFormatter(new IFormatter<TYPE, String[]>() {
@@ -110,5 +110,11 @@ public abstract class CSelectorBox<DATA, TYPE extends IEntity, WIDGET extends IN
         StringBuilder info = new StringBuilder(super.getDebugInfo());
         info.append("watermark").append("=").append(getWatermark()).append(";");
         return info.toString();
+    }
+
+    @Override
+    protected void setEditorValue(DATA value) {
+        // TODO Auto-generated method stub
+        super.setEditorValue(value);
     }
 }

@@ -40,13 +40,9 @@ import com.pyx4j.widgets.client.event.shared.PasteHandler;
 
 public class SelectorListBox<E> extends AbstractSelectorWidget<E> implements HasSelectionHandlers<E>, IFocusWidget, IWatermarkWidget {
 
-    private final ArrayList<E> values;
-
-    private final ArrayList<String> strValues;
+    private final ArrayList<E> value;
 
     private final SelectorListBoxValuePanel<E> listBox;
-
-    private final IFormatter<E, String> valueFormatter;
 
     private final IFormatter<E, String[]> optionPathFormatter;
 
@@ -55,15 +51,12 @@ public class SelectorListBox<E> extends AbstractSelectorWidget<E> implements Has
     @SuppressWarnings("unchecked")
     public SelectorListBox(final IOptionsGrabber<E> optionsGrabber, IFormatter<E, String> valueFormatter, IFormatter<E, String[]> optionPathFormatter) {
         super(new SelectorListBoxValuePanel<E>(valueFormatter));
-        this.valueFormatter = valueFormatter;
         this.optionPathFormatter = optionPathFormatter;
 
         listBox = (SelectorListBoxValuePanel<E>) getViewerPanel();
         listBox.setParent(this);
 
-        values = new ArrayList<>();
-
-        strValues = new ArrayList<String>();
+        value = new ArrayList<>();
 
         picker = new TreePickerPanel<E>(optionsGrabber, valueFormatter, null);
 
@@ -89,23 +82,19 @@ public class SelectorListBox<E> extends AbstractSelectorWidget<E> implements Has
 
                 showEverithingPicker();
             }
-        }, ImageFactory.getImages().action());
+        });
 
     }
 
-    public boolean setValue(E value) {
+    public void setValue(Collection<E> value) {
+        this.value.clear();
         if (value != null) {
-            if (!strValues.contains(valueFormatter.format(value))) {
-                this.strValues.add(valueFormatter.format(value));
-                this.values.add(value);
-                return true;
-            }
+            this.value.addAll(value);
         }
-        return false;
     }
 
-    public Collection<E> getValues() {
-        return this.values;
+    public Collection<E> getValue() {
+        return new ArrayList<E>(this.value);
     }
 
     protected void showSuggestPicker() {
@@ -128,7 +117,7 @@ public class SelectorListBox<E> extends AbstractSelectorWidget<E> implements Has
 
     @Override
     public void resetQuery() {
-        listBox.showValue(values);
+        listBox.showValue(value);
     }
 
     @Override
@@ -151,17 +140,18 @@ public class SelectorListBox<E> extends AbstractSelectorWidget<E> implements Has
     }
 
     @Override
-    public void setSelection(E items) {
-        if (setValue(items)) {
-            fireSelectionEvent(items);
-        }
+    public void setSelection(E item) {
+        ArrayList<E> newValue = new ArrayList<>(value);
+        newValue.add(item);
+        setValue(newValue);
+        fireSelectionEvent(item);
     }
 
     public void removeItem(E item) {
         if (null != item) {
-            if (this.values.contains(item)) {
-                values.remove(item);
-                listBox.showValue(values);
+            if (this.value.contains(item)) {
+                value.remove(item);
+                listBox.showValue(value);
             }
 
         }

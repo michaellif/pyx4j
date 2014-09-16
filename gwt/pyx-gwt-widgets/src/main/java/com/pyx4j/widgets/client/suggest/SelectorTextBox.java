@@ -89,14 +89,14 @@ public class SelectorTextBox<E> extends AbstractSelectorWidget<E> implements Has
         }
     }
 
+    public E getValue() {
+        return value;
+    }
+
     @Override
     public void setSelection(E value) {
         setValue(value);
         fireValueChangeEvent(value);
-    }
-
-    public E getValue() {
-        return value;
     }
 
     protected void showSuggestPicker() {

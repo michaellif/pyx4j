@@ -527,7 +527,7 @@ public abstract class CComponent<SELF_TYPE extends CComponent<SELF_TYPE, DATA_TY
 
     /**
      * Attention! Fires onValueChange event
-     *
+     * 
      * @param value
      */
     public final void setValue(DATA_TYPE value) {
@@ -609,7 +609,6 @@ public abstract class CComponent<SELF_TYPE extends CComponent<SELF_TYPE, DATA_TY
             } catch (ParseException e) {
                 editorValue = null;
             }
-
             if (isValueEmpty() || !isValuesEqual(this.value, editorValue)) {
                 this.value = editorValue;
 

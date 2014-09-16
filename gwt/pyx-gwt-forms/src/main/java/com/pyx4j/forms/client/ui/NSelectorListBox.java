@@ -31,8 +31,7 @@ import com.pyx4j.widgets.client.IWatermarkWidget;
 import com.pyx4j.widgets.client.Label;
 import com.pyx4j.widgets.client.suggest.SelectorListBox;
 
-public class NSelectorListBox<E extends IEntity> extends NFocusField<Collection<E>, SelectorListBox<E>, CSelectorListBox<E>, HTML> implements
-        IWatermarkWidget {
+public class NSelectorListBox<E extends IEntity> extends NFocusField<Collection<E>, SelectorListBox<E>, CSelectorListBox<E>, HTML> implements IWatermarkWidget {
 
     public NSelectorListBox(final CSelectorListBox<E> cSuggestBox) {
         super(cSuggestBox);
@@ -63,7 +62,6 @@ public class NSelectorListBox<E extends IEntity> extends NFocusField<Collection<
     @Override
     public void setNativeValue(Collection<E> value) {
         if (isViewable()) {
-            //TODO:implement
             StringBuilder text = new StringBuilder();
             for (E val : value) {
                 if (text.length() == 0) {
@@ -74,8 +72,7 @@ public class NSelectorListBox<E extends IEntity> extends NFocusField<Collection<
             }
             getViewer().setText(text.toString());
         } else {
-            //TODO :
-            //getEditor().setValue(value);
+            getEditor().setValue(value);
         }
     }
 
@@ -85,7 +82,7 @@ public class NSelectorListBox<E extends IEntity> extends NFocusField<Collection<
             assert false : "getNativeValue() shouldn't be called in viewable mode";
             return null;
         } else {
-            return getEditor().getValues();
+            return getEditor().getValue();
         }
     }
 

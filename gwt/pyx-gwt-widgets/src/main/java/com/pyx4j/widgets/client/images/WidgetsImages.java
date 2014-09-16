@@ -40,6 +40,10 @@ public interface WidgetsImages extends ClientBundle {
     public ImageResource action();
 
     @ImageOptions(repeatStyle = RepeatStyle.Both)
+    @Source("add-action.png")
+    public ImageResource addAction();
+
+    @ImageOptions(repeatStyle = RepeatStyle.Both)
     public ImageResource comboBoxPicker();
 
     @ImageOptions(repeatStyle = RepeatStyle.Both)

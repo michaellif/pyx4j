@@ -25,7 +25,7 @@ import java.util.Collection;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.widgets.client.suggest.IOptionsGrabber;
 
-public class CSelectorListBox<E extends IEntity> extends CSelectorBox<Collection<E>, E, NSelectorListBox<E>> {
+public class CSelectorListBox<E extends IEntity> extends CAbstractSelectorBox<Collection<E>, E, NSelectorListBox<E>> {
 
     public CSelectorListBox(IOptionsGrabber<E> optionsGrabber) {
         super(optionsGrabber);

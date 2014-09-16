@@ -33,7 +33,6 @@ import com.google.gwt.event.dom.client.KeyPressHandler;
 import com.google.gwt.event.dom.client.KeyUpHandler;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
-import com.google.gwt.resources.client.ImageResource;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.FlowPanel;
 
@@ -41,6 +40,7 @@ import com.pyx4j.commons.IDebugId;
 import com.pyx4j.commons.IFormatter;
 import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.IWatermarkWidget;
+import com.pyx4j.widgets.client.ImageFactory;
 import com.pyx4j.widgets.client.TextBox;
 import com.pyx4j.widgets.client.event.shared.PasteHandler;
 import com.pyx4j.widgets.client.style.theme.WidgetTheme;
@@ -79,10 +79,10 @@ public class SelectorListBoxValuePanel<E> extends FlowPanel implements ISelector
         }, ClickEvent.getType());
     }
 
-    public void showValue(Collection<E> values) {
+    public void showValue(Collection<E> value) {
         this.cellsPanel.clear();
-        for (E val : values) {
-            this.cellsPanel.add(new ItemHolder<E>(this, val, valueFormatter.format(val)));
+        for (E item : value) {
+            this.cellsPanel.add(new ItemHolder<E>(this, item, valueFormatter.format(item)));
         }
         cellsPanel.add(textBox);
         textBox.setText("");
@@ -199,25 +199,26 @@ public class SelectorListBoxValuePanel<E> extends FlowPanel implements ISelector
         this.parent = parent;
     }
 
-    public void setAction(Command command, ImageResource imageResource) {
+    public void setAction(Command command) {
         if (actionButton != null) {
             remove(actionButton);
         }
         if (command == null) {
-            SelectorListBoxValuePanel.this.getElement().getStyle().setMarginRight(0, Unit.PX);
+            cellsPanel.getElement().getStyle().setMarginRight(0, Unit.PX);
         } else {
-            actionButton = new Button(imageResource, command) {
+            actionButton = new Button(ImageFactory.getImages().addAction(), command) {
 
                 @Override
                 protected void onAttach() {
                     super.onAttach();
-                    SelectorListBoxValuePanel.this.getElement().getStyle().setMarginRight(actionButton.getOffsetWidth(), Unit.PX);
-                    actionButton.getElement().getStyle().setRight(-actionButton.getOffsetWidth(), Unit.PX);
+                    cellsPanel.getElement().getStyle().setMarginRight(actionButton.getOffsetWidth(), Unit.PX);
+
                 }
 
             };
             actionButton.setEnabled(isEditable() && isEnabled());
 
+            actionButton.getElement().getStyle().setRight(0, Unit.PX);
             actionButton.getElement().getStyle().setTop(0, Unit.PX);
             actionButton.getElement().getStyle().setPosition(Position.ABSOLUTE);
 
