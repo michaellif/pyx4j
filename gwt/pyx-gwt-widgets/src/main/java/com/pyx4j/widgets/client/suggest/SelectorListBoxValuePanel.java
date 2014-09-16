@@ -86,6 +86,7 @@ public class SelectorListBoxValuePanel<E> extends FlowPanel implements ISelector
         }
         cellsPanel.add(textBox);
         textBox.setText("");
+        textBox.setFocus(true);
     }
 
     @Override

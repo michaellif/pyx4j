@@ -443,7 +443,7 @@ public class WidgetTheme extends Theme {
         Style style = new Style(".", StyleName.SelectedItemHolder);
         style.addProperty("display", "inline-block");
         style.addProperty("color", ThemeColor.foreground);
-        style.addProperty("background-color", "white");
+        style.addProperty("background-color", ThemeColor.object1, 0.2);
         style.addProperty("border-width", "1px");
         style.addProperty("border-style", "solid");
         style.addProperty("border-color", ThemeColor.foreground, 0.4);

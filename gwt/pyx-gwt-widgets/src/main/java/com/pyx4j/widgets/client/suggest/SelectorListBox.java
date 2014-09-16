@@ -34,7 +34,6 @@ import com.google.gwt.user.client.Command;
 import com.pyx4j.commons.IFormatter;
 import com.pyx4j.widgets.client.IFocusWidget;
 import com.pyx4j.widgets.client.IWatermarkWidget;
-import com.pyx4j.widgets.client.ImageFactory;
 import com.pyx4j.widgets.client.event.shared.PasteEvent;
 import com.pyx4j.widgets.client.event.shared.PasteHandler;
 
@@ -44,6 +43,8 @@ public class SelectorListBox<E> extends AbstractSelectorWidget<E> implements Has
 
     private final SelectorListBoxValuePanel<E> listBox;
 
+    private final IFormatter<E, String> optionsFormatter;
+
     private final IFormatter<E, String[]> optionPathFormatter;
 
     private final IPickerPanel<E> picker;
@@ -51,6 +52,9 @@ public class SelectorListBox<E> extends AbstractSelectorWidget<E> implements Has
     @SuppressWarnings("unchecked")
     public SelectorListBox(final IOptionsGrabber<E> optionsGrabber, IFormatter<E, String> valueFormatter, IFormatter<E, String[]> optionPathFormatter) {
         super(new SelectorListBoxValuePanel<E>(valueFormatter));
+
+        this.optionsFormatter = valueFormatter;
+
         this.optionPathFormatter = optionPathFormatter;
 
         listBox = (SelectorListBoxValuePanel<E>) getViewerPanel();
@@ -80,6 +84,7 @@ public class SelectorListBox<E> extends AbstractSelectorWidget<E> implements Has
             @Override
             public void execute() {
 
+//                showDialog();
                 showEverithingPicker();
             }
         });
@@ -91,6 +96,17 @@ public class SelectorListBox<E> extends AbstractSelectorWidget<E> implements Has
         if (value != null) {
             this.value.addAll(value);
         }
+    }
+
+    private boolean containsItem(Collection<E> value, E item) {
+
+        for (E currentItem : value) {
+            if (optionsFormatter.format(currentItem).equals(optionsFormatter.format(item))) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     public Collection<E> getValue() {
@@ -109,6 +125,11 @@ public class SelectorListBox<E> extends AbstractSelectorWidget<E> implements Has
         picker.refreshOptions("");
         showPickerPopup(picker);
     }
+
+//    protected void showDialog() {
+//        Dialog dialog = new SelectRecipientsDialog();
+//        dialog.show();
+//    }
 
     @Override
     protected void showPickerPopup(IPickerPanel<E> pickerPanel) {
@@ -141,10 +162,12 @@ public class SelectorListBox<E> extends AbstractSelectorWidget<E> implements Has
 
     @Override
     public void setSelection(E item) {
-        ArrayList<E> newValue = new ArrayList<>(value);
-        newValue.add(item);
-        setValue(newValue);
-        fireSelectionEvent(item);
+        if (!containsItem(this.value, item)) {
+            ArrayList<E> newValue = new ArrayList<>(value);
+            newValue.add(item);
+            setValue(newValue);
+            fireSelectionEvent(item);
+        }
     }
 
     public void removeItem(E item) {
