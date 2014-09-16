@@ -158,6 +158,7 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceServiceRDB
     public void reconnect() {
         endTransaction();
         try {
+            configuration = getRDBConfiguration();
             connectionProvider.reconnect(configuration);
         } catch (SQLException e) {
             log.error("RDB initialization error", e);
