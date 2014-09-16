@@ -16,7 +16,7 @@ TARGET_DIR="/tmp/";
 
 # Export all building data
 
-FILENAME=campaign_"$TARGET_DIR""$DATE".csv;
+FILENAME="$TARGET_DIR"campaign_"$DATE".csv;
 
 psql -q -t -d vista -c "COPY (SELECT * FROM _dba_.campaign_progress) TO '"$FILENAME"' CSV HEADER ";
 
