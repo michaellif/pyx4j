@@ -71,6 +71,18 @@ public class TenantInsuranceFacadeImpl implements TenantInsuranceFacade {
     }
 
     @Override
+    public boolean isInsurancePresent(Lease leaseId) {
+        EntityQueryCriteria<Tenant> criteria = EntityQueryCriteria.create(Tenant.class);
+        criteria.eq(criteria.proto().lease(), leaseId);
+        for (Tenant tenantId : Persistence.service().query(criteria, AttachLevel.IdOnly)) {
+            if (getInsuranceStatus(tenantId).status().getValue() != InsuranceStatusDTO.Status.noInsurance) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    @Override
     public InsuranceStatusDTO getInsuranceStatus(Tenant tenantId) {
 
         InsuranceStatusDTO insuranceStatusDTO = EntityFactory.create(InsuranceStatusDTO.class);

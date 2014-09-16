@@ -101,6 +101,8 @@ public interface PaymentMethodFacade {
 
     List<AutopayAgreement> retrieveAutopayAgreements(Lease lease);
 
+    boolean isAutopayAgreementsPresent(Lease lease);
+
     BillingCycle getNextAutopayBillingCycle(Lease lease);
 
     BillingCycle getNextAutopayBillingCycle(Building buildingId, BillingPeriod billingPeriod, Integer billingCycleStartDay);

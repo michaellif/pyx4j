@@ -199,6 +199,11 @@ public class PaymentMethodFacadeImpl implements PaymentMethodFacade {
     }
 
     @Override
+    public boolean isAutopayAgreementsPresent(Lease lease) {
+        return new AutopayAgreementMananger().isAutopayAgreementsPresent(lease);
+    }
+
+    @Override
     public BillingCycle getNextAutopayBillingCycle(Lease lease) {
         LogicalDate when = SystemDateManager.getLogicalDate();
         Persistence.ensureRetrieve(lease, AttachLevel.Attached);

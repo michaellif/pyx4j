@@ -239,6 +239,13 @@ class AutopayAgreementMananger {
         return Persistence.service().query(criteria);
     }
 
+    boolean isAutopayAgreementsPresent(Lease lease) {
+        EntityQueryCriteria<AutopayAgreement> criteria = EntityQueryCriteria.create(AutopayAgreement.class);
+        criteria.eq(criteria.proto().isDeleted(), Boolean.FALSE);
+        criteria.in(criteria.proto().tenant().lease(), lease);
+        return Persistence.service().exists(criteria);
+    }
+
     //If Tenant removes PAP - payment will NOT be canceled.
     void deleteAutopayAgreement(AutopayAgreement preauthorizedPaymentId, boolean sendNotification, String comments) {
         AutopayAgreement preauthorizedPayment = Persistence.service().retrieve(AutopayAgreement.class, preauthorizedPaymentId.getPrimaryKey());

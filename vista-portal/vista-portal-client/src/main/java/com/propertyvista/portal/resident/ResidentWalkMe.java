@@ -32,9 +32,11 @@ public class ResidentWalkMe {
 
             @Override
             public void onBehaviorChange(BehaviorChangeEvent event) {
-                if (SecurityController.check(PortalResidentBehavior.Resident)) {
+                if (SecurityController.check(PortalResidentBehavior.Resident, PortalResidentBehavior.Guarantor)) {
                     setupVariables();
                     WalkMe.load(null);
+                } else {
+                    setupVariables();
                 }
             }
 
@@ -53,6 +55,12 @@ public class ResidentWalkMe {
         }
         if (SecurityController.check(PortalResidentBehavior.Guarantor)) {
             behaviors.push("Guarantor");
+        }
+        if (SecurityController.check(PortalResidentBehavior.AutopayAgreementPresent)) {
+            behaviors.push("AutopayAgreementPresent");
+        }
+        if (SecurityController.check(PortalResidentBehavior.InsurancePresent)) {
+            behaviors.push("InsurancePresent");
         }
         behaviors.push("Offers");
         WalkMe.setupWalkMeVariables(behaviors);
