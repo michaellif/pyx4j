@@ -42,13 +42,13 @@ public interface PaymentTypeSelectionPolicy extends Policy {
     @Caption(name = "Direct Banking")
     IPrimitive<Boolean> acceptedDirectBanking();
 
-    @Caption(name = "Visa Credit Card")
+    @Caption(name = "Visa Credit")
     IPrimitive<Boolean> acceptedCreditCardVisa();
 
     @Caption(name = "MasterCard")
     IPrimitive<Boolean> acceptedCreditCardMasterCard();
 
-    @Caption(name = "Visa Debit Card")
+    @Caption(name = "Visa Debit")
     IPrimitive<Boolean> acceptedVisaDebit();
 
     @Caption(name = "Interac")
@@ -62,13 +62,13 @@ public interface PaymentTypeSelectionPolicy extends Policy {
     @Caption(name = "Direct Banking")
     IPrimitive<Boolean> residentPortalDirectBanking();
 
-    @Caption(name = "Visa Credit Card")
+    @Caption(name = "Visa Credit")
     IPrimitive<Boolean> residentPortalCreditCardVisa();
 
     @Caption(name = "MasterCard")
     IPrimitive<Boolean> residentPortalCreditCardMasterCard();
 
-    @Caption(name = "Visa Debit Card")
+    @Caption(name = "Visa Debit")
     IPrimitive<Boolean> residentPortalVisaDebit();
 
     @Caption(name = "Interac")
@@ -79,13 +79,13 @@ public interface PaymentTypeSelectionPolicy extends Policy {
     @Caption(name = "E-Check")
     IPrimitive<Boolean> prospectEcheck();
 
-    @Caption(name = "Visa Credit Card")
+    @Caption(name = "Visa Credit")
     IPrimitive<Boolean> prospectCreditCardVisa();
 
     @Caption(name = "MasterCard")
     IPrimitive<Boolean> prospectCreditCardMasterCard();
 
-    @Caption(name = "Visa Debit Card")
+    @Caption(name = "Visa Debit")
     IPrimitive<Boolean> prospectVisaDebit();
 
     //===== Accepted when cashEquivalent flag on BillingAccount.paymentAccepted is set to CashEquivalent
@@ -103,13 +103,13 @@ public interface PaymentTypeSelectionPolicy extends Policy {
     @Caption(name = "Direct Banking")
     IPrimitive<Boolean> cashEquivalentDirectBanking();
 
-    @Caption(name = "Visa Credit Card")
+    @Caption(name = "Visa Credit")
     IPrimitive<Boolean> cashEquivalentCreditCardVisa();
 
     @Caption(name = "MasterCard")
     IPrimitive<Boolean> cashEquivalentCreditCardMasterCard();
 
-    @Caption(name = "Visa Debit Card")
+    @Caption(name = "Visa Debit")
     IPrimitive<Boolean> cashEquivalentVisaDebit();
 
     @Caption(name = "Interac")
