@@ -524,7 +524,7 @@ public class EntityCSVReciver<E extends IEntity> implements CSVReciver {
     protected Object parsePrimitive(IObject<?> member, Class<?> valueClass, String value) {
         if (valueClass.isAssignableFrom(byte[].class)) {
             return new Base64().decode(value);
-        } else if (valueClass.isAssignableFrom(java.sql.Time.class)) {
+        } else if (java.sql.Time.class.isAssignableFrom(valueClass)) {
             SimpleDateFormat tFormat = new SimpleDateFormat("HH:mm:ss", Locale.ENGLISH);
             try {
                 return new java.sql.Time(tFormat.parse(value).getTime());
@@ -542,7 +542,7 @@ public class EntityCSVReciver<E extends IEntity> implements CSVReciver {
                     return new LogicalDate(parseAndValidate(value, importColumn.format()));
                 }
             }
-        } else if (valueClass.isAssignableFrom(Date.class)) {
+        } else if (Date.class.isAssignableFrom(valueClass)) {
             if ("".equals(value)) {
                 return null;
             } else {
@@ -574,7 +574,7 @@ public class EntityCSVReciver<E extends IEntity> implements CSVReciver {
         } catch (ParseException e) {
             throw new RuntimeException("undetected date format [" + value + "]");
         }
-        if (!value.equals(format.format(dateObj))) {
+        if (!value.equalsIgnoreCase(format.format(dateObj))) {
             throw new RuntimeException("Date value [" + value + "] does not match pattern [" + pattern + "]");
         }
         return dateObj;
