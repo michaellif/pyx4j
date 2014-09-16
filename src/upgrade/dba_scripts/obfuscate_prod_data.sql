@@ -4,8 +4,9 @@
 ***             @version $Revision$ ($Author$) $Date$
 ***
 ***             Function to obfuscate prod data
+***             This version accomodates for changes made in 1.1.4
 ***		
-***		Running any of these on production will result in a MAJOR DISASTER!
+***		        Running any of these on production will result in a MAJOR DISASTER!
 ***
 ***     ======================================================================================================================
 **/
@@ -92,8 +93,16 @@ DECLARE
 BEGIN
         
         UPDATE  _admin_.admin_pmc_merchant_account_index
+        SET     terminal_id = LPAD(id::text,8,'X')
+        WHERE   terminal_id IS NOT NULL; 
+        
+        UPDATE  _admin_.admin_pmc_merchant_account_index
+        SET     terminal_id_conv_fee = LPAD(id::text,8,'X')
+        WHERE   terminal_id_conv_fee IS NOT NULL; 
+        
+        UPDATE  _admin_.card_transaction_record 
         SET     merchant_terminal_id = LPAD(id::text,8,'X')
-        WHERE   merchant_terminal_id IS NOT NULL; 
+        WHERE   merchant_terminal_id IS NOT NULL;
         
         UPDATE  _admin_.funds_transfer_batch
         SET     account_number = LPAD(id::text,12,'0');
@@ -140,7 +149,8 @@ BEGIN
                         
                 EXECUTE 'UPDATE '||v_schema_name||'.merchant_account m '
                         ||'SET  account_number = LPAD(m.id::text,12,''0''),'
-                        ||'     merchant_terminal_id = a.merchant_terminal_id '
+                        ||'     merchant_terminal_id = a.terminal_id, '
+                        ||'     merchant_terminal_id_convenience_fee = a.terminal_id_conv_fee '
                         ||'FROM _admin_.admin_pmc_merchant_account_index a '
                         ||'WHERE m.id = a.merchant_account_key ';
                           
