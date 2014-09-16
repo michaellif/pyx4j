@@ -21,14 +21,8 @@
 package com.pyx4j.forms.client.ui;
 
 import java.util.Collection;
-import java.util.List;
 
-import com.google.gwt.event.shared.HandlerRegistration;
-
-import com.pyx4j.commons.IFormatter;
 import com.pyx4j.entity.core.IEntity;
-import com.pyx4j.forms.client.events.OptionsChangeEvent;
-import com.pyx4j.forms.client.events.OptionsChangeHandler;
 import com.pyx4j.widgets.client.suggest.IOptionsGrabber;
 
 public class CSelectorListBox<E extends IEntity> extends CSelectorBox<Collection<E>, E, NSelectorListBox<E>> {
