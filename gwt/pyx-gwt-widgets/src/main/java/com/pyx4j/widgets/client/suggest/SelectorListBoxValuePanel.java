@@ -22,7 +22,6 @@ package com.pyx4j.widgets.client.suggest;
 
 import java.util.Collection;
 
-import com.google.gwt.dom.client.Style.Display;
 import com.google.gwt.dom.client.Style.Position;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.BlurHandler;
