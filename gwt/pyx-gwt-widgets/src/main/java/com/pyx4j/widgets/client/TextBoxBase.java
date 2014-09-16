@@ -89,15 +89,11 @@ public abstract class TextBoxBase extends Composite implements ITextWidget, IGro
     }
 
     protected void setTextBoxWidget(com.google.gwt.user.client.ui.TextBoxBase textBoxWidget) {
-        setTextBoxWidget(textBoxWidget, WidgetTheme.StyleName.TextBox.name());
-    }
-
-    protected void setTextBoxWidget(com.google.gwt.user.client.ui.TextBoxBase textBoxWidget, String styleName) {
         this.textBoxWidget = textBoxWidget;
         if (this.debugId != null) {
             this.textBoxWidget.ensureDebugId(this.debugId.debugId());
         }
-        textBoxWidget.setStyleName(styleName);
+        textBoxWidget.setStyleName(WidgetTheme.StyleName.TextBox.name());
         if (textBoxWidget instanceof com.google.gwt.user.client.ui.TextBox) {
             textBoxWidget.addStyleDependentName(WidgetTheme.StyleDependent.singleLine.name());
         }

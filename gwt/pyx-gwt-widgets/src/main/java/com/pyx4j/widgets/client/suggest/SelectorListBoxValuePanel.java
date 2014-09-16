@@ -26,6 +26,8 @@ import com.google.gwt.dom.client.Style.Display;
 import com.google.gwt.dom.client.Style.Position;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.BlurHandler;
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.FocusHandler;
 import com.google.gwt.event.dom.client.KeyDownHandler;
 import com.google.gwt.event.dom.client.KeyPressHandler;
@@ -52,39 +54,38 @@ public class SelectorListBoxValuePanel<E> extends FlowPanel implements ISelector
 
     private Button actionButton;
 
-    private final FlowPanel selectedCells;
+    private final FlowPanel cellsPanel;
 
     private SelectorListBox<E> parent;
 
-    private final FlowPanel textHolder;
-
     public SelectorListBoxValuePanel(IFormatter<E, String> valueFormatter) {
 
-        this.setStyleName(WidgetTheme.StyleName.ListBox.name());
+        setStyleName(WidgetTheme.StyleName.SelectorListBoxValuePanel.name());
+        addStyleName(WidgetTheme.StyleName.ListBox.name());
 
         this.valueFormatter = valueFormatter;
-        selectedCells = new FlowPanel();
-        selectedCells.getElement().getStyle().setDisplay(Display.INLINE);
-        selectedCells.getElement().getStyle().setBorderWidth(0, Unit.PX);
+        cellsPanel = new FlowPanel();
 
-        textHolder = new FlowPanel();
+        textBox = new TextBox();
+        cellsPanel.add(textBox);
 
-        textHolder.setStyleName(WidgetTheme.StyleName.SelectorTextBox.name());
+        this.add(cellsPanel);
 
-        textBox = new TextBox(WidgetTheme.StyleName.SelectorTextBox.name());
-        textBox.setStyleName(WidgetTheme.StyleName.SelectorTextBox.name());
+        addDomHandler(new ClickHandler() {
 
-        textHolder.add(textBox);
-
-        this.add(selectedCells);
-        this.add(textHolder);
+            @Override
+            public void onClick(ClickEvent event) {
+                setFocus(true);
+            }
+        }, ClickEvent.getType());
     }
 
     public void showValue(Collection<E> values) {
-        this.selectedCells.clear();
+        this.cellsPanel.clear();
         for (E val : values) {
-            this.selectedCells.add(new ItemHolder<E>(this, val, valueFormatter.format(val)));
+            this.cellsPanel.add(new ItemHolder<E>(this, val, valueFormatter.format(val)));
         }
+        cellsPanel.add(textBox);
         textBox.setText("");
     }
 
@@ -95,8 +96,8 @@ public class SelectorListBoxValuePanel<E> extends FlowPanel implements ISelector
 
     @Override
     public void setEnabled(boolean enabled) {
-        // TODO Auto-generated method stub
-
+        textBox.setEnabled(enabled);
+        actionButton.setEnabled(enabled);
     }
 
     @Override
@@ -201,7 +202,7 @@ public class SelectorListBoxValuePanel<E> extends FlowPanel implements ISelector
 
     public void setAction(Command command, ImageResource imageResource) {
         if (actionButton != null) {
-            textHolder.remove(actionButton);
+            remove(actionButton);
         }
         if (command == null) {
             textBox.getElement().getStyle().setMarginRight(0, Unit.PX);
@@ -219,7 +220,7 @@ public class SelectorListBoxValuePanel<E> extends FlowPanel implements ISelector
             actionButton.getElement().getStyle().setPosition(Position.ABSOLUTE);
             actionButton.getElement().getStyle().setDisplay(Display.INLINE);
 
-            textHolder.add(actionButton);
+            //     add(actionButton);
 
         }
     }

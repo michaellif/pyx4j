@@ -64,11 +64,9 @@ public class WidgetTheme extends Theme {
 
         CollapsablePanel, CollapsablePanelImage,
 
-        SuggestBox, SuggestBoxPopup, SelectionPickerPanel, SelectionPickerPanelItem,
+        SuggestBoxPopup, SelectionPickerPanel, SelectionPickerPanelItem,
 
-        SelectedItemClose, SelectedItemHolder, SelectorTextBox,
-
-        SelectorListBoxActionButton;
+        SelectedItemClose, SelectedItemHolder, SelectorListBoxValuePanel, SelectorListBoxActionButton;
     }
 
     public static enum StyleDependent implements IStyleDependent {
@@ -101,10 +99,7 @@ public class WidgetTheme extends Theme {
         initImageSliderStyle();
         initSlideshow();
         initCollapsablePanel();
-        initSuggestBoxStyle();
-        initSelectedItemHolderStyle();
-        initSelectedItemCloseStyle();
-        initSelectorTextBoxStyle();
+        initSelectorBoxStyle();
     }
 
     protected void initAnchorStyle() {
@@ -443,29 +438,9 @@ public class WidgetTheme extends Theme {
         addStyle(style);
     }
 
-    protected void initSuggestBoxStyle() {
+    protected void initSelectorBoxStyle() {
 
-        Style style = new Style(".", StyleName.SuggestBox);
-        style.addProperty("vertical-align", "middle");
-        style.addProperty("width", "100%");
-        style.addProperty("margin-right", "21px");
-        addStyle(style);
-
-        style = new Style(".", StyleName.SelectionPickerPanel);
-        style.addProperty("background-color", "white");
-        style.addProperty("padding", "2px");
-        style.addProperty("border-color", ThemeColor.foreground, 0.4);
-        style.addProperty("border-style", "solid");
-        style.addProperty("border-width", "1px");
-        style.addProperty("cursor", "pointer");
-        style.addProperty("cursor", "hand");
-        addStyle(style);
-
-    }
-
-    protected void initSelectedItemHolderStyle() {
         Style style = new Style(".", StyleName.SelectedItemHolder);
-
         style.addProperty("display", "inline-block");
         style.addProperty("color", ThemeColor.foreground);
         style.addProperty("background-color", "white");
@@ -480,34 +455,35 @@ public class WidgetTheme extends Theme {
         style.addProperty("margin", "1px");
         style.addProperty("border-radius", "3px");
         addStyle(style);
-    }
 
-    protected void initSelectedItemCloseStyle() {
+        style = new Style(".", StyleName.SelectionPickerPanel);
+        style.addProperty("background-color", "white");
+        style.addProperty("padding", "2px");
+        style.addProperty("border-color", ThemeColor.foreground, 0.4);
+        style.addProperty("border-style", "solid");
+        style.addProperty("border-width", "1px");
+        style.addProperty("cursor", "pointer");
+        style.addProperty("cursor", "hand");
+        addStyle(style);
 
-        Style style = new Style(".", StyleName.SelectedItemClose);
-
+        style = new Style(".", StyleName.SelectedItemClose);
         style.addProperty("vertical-align", "left");
         style.addProperty("padding", "1px");
         style.addProperty("cursor", "pointer");
         style.addProperty("font-weight", "bolder");
         style.addProperty("display", "inline");
         addStyle(style);
-    }
 
-    protected void initSelectorTextBoxStyle() {
-        Style style = new Style(".", StyleName.SelectorTextBox);
-
-        style.addProperty("display", "inline");
-        style.addProperty("border-width", "0px");
-        style.addProperty("padding", "1px");
-        //style.addProperty("width", "100%");
-
+        style = new Style(".", StyleName.SelectorListBoxValuePanel, " .", StyleName.TextBoxContainer);
+        style.addProperty("display", "inline-block");
         addStyle(style);
-    }
 
-    protected void initSelectorListBoxActionButtonStyle() {
-        Style style = new Style(".", StyleName.SelectorListBoxActionButton);
+        style = new Style(".", StyleName.SelectorListBoxValuePanel, " .", StyleName.TextBox);
+        style.addProperty("border-width", "0px");
+        style.addProperty("width", "80px");
+        addStyle(style);
 
+        style = new Style(".", StyleName.SelectorListBoxActionButton);
         style.addProperty("position", "absolute");
         style.addProperty("display", "inline");
         style.addProperty("vertical-align", "middle");
@@ -521,5 +497,6 @@ public class WidgetTheme extends Theme {
         style.addProperty("-ms-user-select", "none");
         style.addProperty("user-select", "none");
         addStyle(style);
+
     }
 }
