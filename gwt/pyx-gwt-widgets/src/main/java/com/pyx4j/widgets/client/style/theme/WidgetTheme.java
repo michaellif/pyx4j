@@ -474,6 +474,10 @@ public class WidgetTheme extends Theme {
         style.addProperty("display", "inline");
         addStyle(style);
 
+        style = new Style(".", StyleName.SelectorListBoxValuePanel);
+        style.addProperty("position", "relative");
+        addStyle(style);
+
         style = new Style(".", StyleName.SelectorListBoxValuePanel, " .", StyleName.TextBoxContainer);
         style.addProperty("display", "inline-block");
         addStyle(style);

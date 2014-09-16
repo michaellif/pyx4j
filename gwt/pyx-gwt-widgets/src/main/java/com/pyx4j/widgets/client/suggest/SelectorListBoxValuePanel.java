@@ -205,22 +205,24 @@ public class SelectorListBoxValuePanel<E> extends FlowPanel implements ISelector
             remove(actionButton);
         }
         if (command == null) {
-            textBox.getElement().getStyle().setMarginRight(0, Unit.PX);
+            SelectorListBoxValuePanel.this.getElement().getStyle().setMarginRight(0, Unit.PX);
         } else {
             actionButton = new Button(imageResource, command) {
 
                 @Override
                 protected void onAttach() {
                     super.onAttach();
-                    textBox.getElement().getStyle().setMarginRight(actionButton.getOffsetWidth(), Unit.PX);
+                    SelectorListBoxValuePanel.this.getElement().getStyle().setMarginRight(actionButton.getOffsetWidth(), Unit.PX);
+                    actionButton.getElement().getStyle().setRight(-actionButton.getOffsetWidth(), Unit.PX);
                 }
 
             };
             actionButton.setEnabled(isEditable() && isEnabled());
-            actionButton.getElement().getStyle().setPosition(Position.ABSOLUTE);
-            actionButton.getElement().getStyle().setDisplay(Display.INLINE);
 
-            //     add(actionButton);
+            actionButton.getElement().getStyle().setTop(0, Unit.PX);
+            actionButton.getElement().getStyle().setPosition(Position.ABSOLUTE);
+
+            add(actionButton);
 
         }
     }
