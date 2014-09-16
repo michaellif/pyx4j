@@ -17,6 +17,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.EnumSet;
+import java.util.Map;
 import java.util.Set;
 
 import javax.servlet.ServletContext;
@@ -124,18 +125,21 @@ public class VistaServerSideConfiguration extends AbstractVistaServerSideConfigu
         return new File(new File(LoggerConfig.getContainerHome(), "conf"), LoggerConfig.getContextName());
     }
 
+    private Map<String, String> readProperties() {
+        return PropertiesConfiguration.loadProperties(new File(getConfigDirectory(), "config.properties"));
+    }
+
     @Override
     public PropertiesConfiguration getConfigProperties() {
         if (configProperties == null) {
-            configProperties = new PropertiesConfiguration(null, PropertiesConfiguration.loadProperties(new File(getConfigDirectory(), "config.properties")));
+            configProperties = new PropertiesConfiguration(null, readProperties());
         }
         return configProperties;
     }
 
     @Override
     public void reloadProperties() {
-        configProperties = null;
-        getConfigProperties();
+        getConfigProperties().reloadProperties(readProperties());
     }
 
     @Override

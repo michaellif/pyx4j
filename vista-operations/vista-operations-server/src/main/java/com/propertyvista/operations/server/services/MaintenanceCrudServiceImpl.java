@@ -13,6 +13,7 @@
  */
 package com.propertyvista.operations.server.services;
 
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
@@ -67,7 +68,8 @@ public class MaintenanceCrudServiceImpl extends AdminServiceImpl implements Main
 
     @Override
     public void reloadProperties(AsyncCallback<String> callback) {
-        Map<String, String> propertiesBefore = getPropertiesMap();
+        Map<String, String> propertiesBefore = new HashMap<>();
+        propertiesBefore.putAll(getPropertiesMap());
         ServerSideConfiguration.instance(AbstractVistaServerSideConfiguration.class).reloadProperties();
         Map<String, String> propertiesAfter = getPropertiesMap();
 
@@ -120,7 +122,7 @@ public class MaintenanceCrudServiceImpl extends AdminServiceImpl implements Main
 
     @Override
     public void resetDBConnection(AsyncCallback<VoidSerializable> callback) {
-        ((IEntityPersistenceServiceRDB) Persistence.service()).resetConnectionPool();
+        ((IEntityPersistenceServiceRDB) Persistence.service()).reconnect();
         callback.onSuccess(null);
     }
 

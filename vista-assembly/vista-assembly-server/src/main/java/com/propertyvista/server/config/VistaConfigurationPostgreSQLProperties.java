@@ -17,6 +17,7 @@ import java.io.File;
 import java.util.Map;
 
 import com.pyx4j.commons.Consts;
+import com.pyx4j.config.server.CanReloadProperties;
 import com.pyx4j.config.server.Credentials;
 import com.pyx4j.entity.rdb.cfg.ConfigurationPostgreSQLProperties;
 import com.pyx4j.entity.rdb.cfg.ConnectionPoolType;
@@ -25,10 +26,17 @@ import com.pyx4j.essentials.j2se.CredentialsFileStorage;
 
 import com.propertyvista.config.VistaDBNamingConvention;
 
-public class VistaConfigurationPostgreSQLProperties extends ConfigurationPostgreSQLProperties {
+public class VistaConfigurationPostgreSQLProperties extends ConfigurationPostgreSQLProperties implements CanReloadProperties {
+
+    private final File configDirectory;
 
     public VistaConfigurationPostgreSQLProperties(File configDirectory, Map<String, String> properties) {
+        this.configDirectory = configDirectory;
+        reloadProperties(properties);
+    }
 
+    @Override
+    public void reloadProperties(Map<String, String> properties) {
         this.properties.connectionPoolConfiguration(ConnectionPoolType.BackgroundProcess).unreturnedConnectionTimeout = 4 * Consts.HOURS2SEC;
         this.properties.allowForeignKeyDeferrable = true;
 
@@ -52,4 +60,5 @@ public class VistaConfigurationPostgreSQLProperties extends ConfigurationPostgre
     public NamingConvention namingConvention() {
         return new VistaDBNamingConvention();
     }
+
 }
