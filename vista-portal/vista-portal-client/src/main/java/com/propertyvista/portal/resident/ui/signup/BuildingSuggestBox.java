@@ -13,13 +13,34 @@
  */
 package com.propertyvista.portal.resident.ui.signup;
 
+import java.util.Collection;
+import java.util.Comparator;
+
 import com.pyx4j.forms.client.ui.CSelectorTextBox;
+import com.pyx4j.widgets.client.suggest.MultyWordSuggestOptionsGrabber;
 
 import com.propertyvista.portal.rpc.portal.resident.dto.SelfRegistrationBuildingDTO;
 
 public class BuildingSuggestBox extends CSelectorTextBox<SelfRegistrationBuildingDTO> {
 
+    private MultyWordSuggestOptionsGrabber<SelfRegistrationBuildingDTO> optionsGrabber;
+
+    @SuppressWarnings({ "rawtypes", "unchecked" })
     public BuildingSuggestBox() {
+        super(new MultyWordSuggestOptionsGrabber<SelfRegistrationBuildingDTO>());
+
+        MultyWordSuggestOptionsGrabber<SelfRegistrationBuildingDTO> optionsGrabber = ((MultyWordSuggestOptionsGrabber) getOptionsGrabber());
+        optionsGrabber.setFormatter(getFormatter());
+        optionsGrabber.setComparator(new Comparator<SelfRegistrationBuildingDTO>() {
+            @Override
+            public int compare(SelfRegistrationBuildingDTO paramT1, SelfRegistrationBuildingDTO paramT2) {
+                return paramT1.getStringView().compareTo(paramT2.getStringView());
+            }
+        });
+    }
+
+    public void setOptions(Collection<SelfRegistrationBuildingDTO> options) {
+        optionsGrabber.setAllOptions(options);
     }
 
     @Override
