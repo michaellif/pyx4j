@@ -29,17 +29,21 @@ import com.pyx4j.commons.IFormatter;
 
 public class MultyWordSuggestOptionsGrabber<E> implements IOptionsGrabber<E> {
 
-    private final IFormatter<E, String> formatter;
+    private IFormatter<E, String> formatter;
 
     private Comparator<E> comparator = null;
 
     private MultyWordSuggestTrie<E> trie;
 
-    public MultyWordSuggestOptionsGrabber(IFormatter<E, String> formatter) {
+    public MultyWordSuggestOptionsGrabber() {
+    }
+
+    public void setFormatter(IFormatter<E, String> formatter) {
         this.formatter = formatter;
     }
 
     public void setAllOptions(Collection<E> options) {
+        assert formatter != null;
         trie = new MultyWordSuggestTrie<E>(options, formatter);
     }
 

@@ -27,92 +27,15 @@ import com.google.gwt.event.shared.HandlerRegistration;
 
 import com.pyx4j.commons.IFormatter;
 import com.pyx4j.entity.core.IEntity;
-import com.pyx4j.forms.client.events.HasOptionsChangeHandlers;
 import com.pyx4j.forms.client.events.OptionsChangeEvent;
 import com.pyx4j.forms.client.events.OptionsChangeHandler;
-import com.pyx4j.widgets.client.IWatermarkWidget;
 import com.pyx4j.widgets.client.suggest.IOptionsGrabber;
 
-public class CSelectorListBox<E extends IEntity> extends CFocusComponent<Collection<E>, NSelectorListBox<E>> implements IAcceptsWatermark,
-        HasOptionsChangeHandlers<List<E>> {
-
-    private String watermark;
-
-    private IFormatter<E, String> formatter;
-
-    private IFormatter<E, String[]> optionPathFormatter;
-
-    private final IOptionsGrabber<E> optionsGrabber;
+public class CSelectorListBox<E extends IEntity> extends CSelectorBox<Collection<E>, E, NSelectorListBox<E>> {
 
     public CSelectorListBox(IOptionsGrabber<E> optionsGrabber) {
-        super();
-        this.optionsGrabber = optionsGrabber;
-
-        setOptionPathFormatter(new IFormatter<E, String[]>() {
-
-            @Override
-            public String[] format(E value) {
-                return null;
-            }
-        });
-
+        super(optionsGrabber);
         setNativeComponent(new NSelectorListBox<E>(this));
     }
 
-    public void setFormatter(IFormatter<E, String> formatter) {
-        this.formatter = formatter;
-    }
-
-    public final IFormatter<E, String> getFormatter() {
-        if (formatter == null) {
-            setFormatter(new IFormatter<E, String>() {
-                @Override
-                public String format(E value) {
-                    if (value == null) {
-                        return null;
-                    } else {
-                        return value.getStringView();
-                    }
-                }
-            });
-        }
-        return formatter;
-    }
-
-    public IFormatter<E, String[]> getOptionPathFormatter() {
-        return optionPathFormatter;
-    }
-
-    public void setOptionPathFormatter(IFormatter<E, String[]> formatter) {
-        this.optionPathFormatter = formatter;
-    }
-
-    @Override
-    public HandlerRegistration addOptionsChangeHandler(OptionsChangeHandler<List<E>> handler) {
-        return addHandler(handler, OptionsChangeEvent.getType());
-    }
-
-    public IOptionsGrabber<E> getOptionsGrabber() {
-        return optionsGrabber;
-    }
-
-    @Override
-    public void setWatermark(String watermark) {
-        this.watermark = watermark;
-        if (asWidget() instanceof IWatermarkWidget) {
-            ((IWatermarkWidget) asWidget()).setWatermark(watermark);
-        }
-    }
-
-    @Override
-    public String getWatermark() {
-        return watermark;
-    }
-
-    @Override
-    protected String getDebugInfo() {
-        StringBuilder info = new StringBuilder(super.getDebugInfo());
-        info.append("watermark").append("=").append(getWatermark()).append(";");
-        return info.toString();
-    }
 }

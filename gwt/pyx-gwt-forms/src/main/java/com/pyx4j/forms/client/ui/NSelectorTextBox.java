@@ -21,35 +21,19 @@
 package com.pyx4j.forms.client.ui;
 
 import java.text.ParseException;
-import java.util.Collection;
-import java.util.Comparator;
 
 import com.google.gwt.user.client.ui.HTML;
 
 import com.pyx4j.commons.IFormatter;
 import com.pyx4j.entity.core.IEntity;
-import com.pyx4j.widgets.client.Label;
 import com.pyx4j.widgets.client.IWatermarkWidget;
-import com.pyx4j.widgets.client.suggest.MultyWordSuggestOptionsGrabber;
+import com.pyx4j.widgets.client.Label;
 import com.pyx4j.widgets.client.suggest.SelectorTextBox;
 
 public class NSelectorTextBox<E extends IEntity> extends NFocusField<E, SelectorTextBox<E>, CSelectorTextBox<E>, HTML> implements IWatermarkWidget {
 
-    private final MultyWordSuggestOptionsGrabber<E> optionsGrabber;
-
     public NSelectorTextBox(final CSelectorTextBox<E> cSuggestBox) {
         super(cSuggestBox);
-        optionsGrabber = new MultyWordSuggestOptionsGrabber<E>(getCComponent().getFormatter());
-        optionsGrabber.setComparator(new Comparator<E>() {
-            @Override
-            public int compare(E paramT1, E paramT2) {
-                return paramT1.getStringView().compareTo(paramT2.getStringView());
-            }
-        });
-    }
-
-    void processOptions(Collection<E> options) {
-        optionsGrabber.setAllOptions(options);
     }
 
     @Override
@@ -59,7 +43,7 @@ public class NSelectorTextBox<E extends IEntity> extends NFocusField<E, Selector
 
     @Override
     protected SelectorTextBox<E> createEditor() {
-        return new SelectorTextBox<E>(optionsGrabber, new IFormatter<E, String>() {
+        return new SelectorTextBox<E>(getCComponent().getOptionsGrabber(), new IFormatter<E, String>() {
 
             @Override
             public String format(E value) {
