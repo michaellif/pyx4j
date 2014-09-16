@@ -30,7 +30,7 @@ import java.util.Properties;
 
 import com.pyx4j.commons.TimeUtils;
 
-public class PropertiesConfiguration {
+public class PropertiesConfiguration implements CanReloadProperties {
 
     private final String prefix;
 
@@ -43,6 +43,12 @@ public class PropertiesConfiguration {
     public PropertiesConfiguration(String prefix, Map<String, String> properties) {
         this.prefix = prefix;
         this.properties = properties;
+    }
+
+    @Override
+    public void reloadProperties(Map<String, String> properties) {
+        this.properties.clear();
+        this.properties.putAll(properties);
     }
 
     public Map<String, String> getProperties() {
