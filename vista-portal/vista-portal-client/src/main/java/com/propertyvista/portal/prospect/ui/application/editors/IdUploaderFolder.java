@@ -22,11 +22,14 @@ import com.google.gwt.user.client.ui.Label;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.IList;
 import com.pyx4j.entity.core.IObject;
+import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEntityLabel;
 import com.pyx4j.forms.client.ui.CForm;
+import com.pyx4j.forms.client.ui.folder.CFolder;
 import com.pyx4j.forms.client.ui.folder.CFolderItem;
 import com.pyx4j.forms.client.ui.folder.IFolderItemDecorator;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
+import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.forms.client.validators.AbstractComponentValidator;
 import com.pyx4j.forms.client.validators.BasicValidationError;
 import com.pyx4j.i18n.shared.I18n;
@@ -40,7 +43,6 @@ import com.propertyvista.domain.policy.policies.domain.IdentificationDocumentTyp
 import com.propertyvista.domain.util.ValidationUtils;
 import com.propertyvista.misc.CreditCardNumberGenerator;
 import com.propertyvista.portal.shared.ui.AccessoryEntityForm;
-import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.propertyvista.portal.shared.ui.util.PortalBoxFolder;
 
 public class IdUploaderFolder extends PortalBoxFolder<IdentificationDocumentFolder> {
@@ -72,8 +74,8 @@ public class IdUploaderFolder extends PortalBoxFolder<IdentificationDocumentFold
         }
     }
 
-    @Override
-    public void addValidations() {
+    // currently internal folder validation doesn't work - so this validation copied(moved) to the AboutYouStep.addValidations()
+    public void _addValidations() {
         super.addValidations();
 
         addComponentValidator(new AbstractComponentValidator<IList<IdentificationDocumentFolder>>() {
@@ -169,20 +171,8 @@ public class IdUploaderFolder extends PortalBoxFolder<IdentificationDocumentFold
             formPanel.append(Location.Left, proto().idNumber()).decorate();
             formPanel.append(Location.Left, proto().notes()).decorate();
 
-            IdentificationDocumentFolderUploaderFolder docPagesFolder = new IdentificationDocumentFolderUploaderFolder();
-            docPagesFolder.setNoDataLabel(i18n.tr("Please provide at least one document file"));
-            docPagesFolder.addComponentValidator(new AbstractComponentValidator<IList<IdentificationDocumentFile>>() {
-                @Override
-                public BasicValidationError isValid() {
-                    if (getComponent().getValue() != null && getComponent().getValue().size() < 1) {
-                        return new BasicValidationError(getComponent(), i18n.tr("At least one document file is required"));
-                    }
-                    return null;
-                }
-            });
-
             formPanel.h3(i18n.tr("Files"));
-            formPanel.append(Location.Left, proto().files(), docPagesFolder);
+            formPanel.append(Location.Left, proto().files(), new IdentificationDocumentFolderUploaderFolder());
             return formPanel;
         }
 
@@ -231,6 +221,18 @@ public class IdUploaderFolder extends PortalBoxFolder<IdentificationDocumentFold
                 }
             });
 
+            @SuppressWarnings("unchecked")
+            CFolder<IdentificationDocumentFile> folder = ((CFolder<IdentificationDocumentFile>) ((CComponent<?, ?, ?>) get(proto().files())));
+            folder.setNoDataLabel(i18n.tr("Please provide at least one document file"));
+            folder.addComponentValidator(new AbstractComponentValidator<IList<IdentificationDocumentFile>>() {
+                @Override
+                public BasicValidationError isValid() {
+                    if (getComponent().getValue() != null && getComponent().getValue().size() < 1) {
+                        return new BasicValidationError(getComponent(), i18n.tr("At least one document file is required"));
+                    }
+                    return null;
+                }
+            });
         }
 
         @Override

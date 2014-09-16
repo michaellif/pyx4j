@@ -13,6 +13,8 @@
  */
 package com.propertyvista.portal.prospect.ui.application.steps;
 
+import java.util.List;
+
 import com.google.gwt.core.shared.GWT;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
@@ -24,6 +26,7 @@ import com.pyx4j.commons.TimeUtils;
 import com.pyx4j.forms.client.ui.CImage;
 import com.pyx4j.forms.client.ui.RevalidationTrigger;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
+import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.forms.client.validators.AbstractComponentValidator;
 import com.pyx4j.forms.client.validators.BasicValidationError;
 import com.pyx4j.i18n.shared.I18n;
@@ -31,14 +34,17 @@ import com.pyx4j.i18n.shared.I18n;
 import com.propertyvista.common.client.VistaFileURLBuilder;
 import com.propertyvista.common.client.resources.VistaImages;
 import com.propertyvista.common.client.ui.validators.BirthdayDateValidator;
+import com.propertyvista.domain.media.IdentificationDocumentFolder;
 import com.propertyvista.domain.person.Name;
+import com.propertyvista.domain.policy.policies.ApplicationDocumentationPolicy;
+import com.propertyvista.domain.policy.policies.domain.IdentificationDocumentType;
+import com.propertyvista.domain.policy.policies.domain.IdentificationDocumentType.Importance;
 import com.propertyvista.domain.tenant.CustomerPicture;
 import com.propertyvista.domain.tenant.prospect.OnlineApplicationWizardStepMeta;
 import com.propertyvista.portal.prospect.ui.application.ApplicationWizardStep;
 import com.propertyvista.portal.prospect.ui.application.editors.IdUploaderFolder;
 import com.propertyvista.portal.rpc.portal.prospect.dto.OnlineApplicationDTO;
 import com.propertyvista.portal.rpc.portal.shared.services.CustomerPicturePortalUploadService;
-import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.propertyvista.portal.shared.ui.util.editors.NameEditor;
 
 public class AboutYouStep extends ApplicationWizardStep {
@@ -133,6 +139,41 @@ public class AboutYouStep extends ApplicationWizardStep {
 
             private boolean hasNoOtherPhone(OnlineApplicationDTO value) {
                 return (value.applicantData().person().homePhone().isNull() && value.applicantData().person().mobilePhone().isNull());
+            }
+        });
+
+        get(proto().applicantData().documents()).addComponentValidator(new AbstractComponentValidator<List<IdentificationDocumentFolder>>() {
+            @Override
+            public BasicValidationError isValid() {
+                ApplicationDocumentationPolicy documentationPolicy = getValue().applicantData().documentsPolicy();
+                if (getComponent().getValue() != null && documentationPolicy != null) {
+                    int requredDocsCount = documentationPolicy.numberOfRequiredIDs().getValue();
+                    int remainingDocsCount = requredDocsCount - getComponent().getValue().size();
+                    if (remainingDocsCount > 0) {
+                        return new BasicValidationError(getComponent(), i18n.tr(
+                                "You have to provide {0} identification document(s), {1} more document(s) is/are required", requredDocsCount,
+                                remainingDocsCount));
+                    }
+
+                    // 'Required' check:
+                    for (IdentificationDocumentType docType : documentationPolicy.allowedIDs()) {
+                        if (docType.importance().getValue() == Importance.Required) {
+                            boolean found = false;
+                            for (IdentificationDocumentFolder doc : getComponent().getValue()) {
+                                if (doc.idType().equals(docType)) {
+                                    found = true;
+                                    break;
+                                }
+                            }
+
+                            if (!found) {
+                                return new BasicValidationError(getComponent(), i18n.tr("You have to provide {0} identification document which is required",
+                                        docType.getStringView()));
+                            }
+                        }
+                    }
+                }
+                return null;
             }
         });
     }
