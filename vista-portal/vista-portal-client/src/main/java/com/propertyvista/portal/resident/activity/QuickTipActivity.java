@@ -13,10 +13,11 @@
  */
 package com.propertyvista.portal.resident.activity;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 import com.google.gwt.activity.shared.AbstractActivity;
-import com.google.gwt.dom.client.Style.Float;
 import com.google.gwt.dom.client.Style.TextAlign;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.place.shared.Place;
@@ -30,14 +31,20 @@ import com.pyx4j.commons.css.ThemeColor;
 import com.pyx4j.gwt.commons.layout.LayoutChangeRequestEvent;
 import com.pyx4j.gwt.commons.layout.LayoutChangeRequestEvent.ChangeType;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.site.client.AppSite;
+import com.pyx4j.site.rpc.AppPlace;
 
+import com.propertyvista.domain.security.PortalResidentBehavior;
 import com.propertyvista.portal.resident.ResidentPortalSite;
 import com.propertyvista.portal.resident.ui.PointerLink;
 import com.propertyvista.portal.resident.ui.ResidentPortalPointerId;
 import com.propertyvista.portal.resident.ui.extra.QuickTipView;
 import com.propertyvista.portal.resident.ui.extra.QuickTipView.QuickTipPresenter;
 import com.propertyvista.portal.rpc.portal.resident.ResidentPortalSiteMap;
+import com.propertyvista.portal.rpc.portal.resident.ResidentPortalSiteMap.Maintenance;
+import com.propertyvista.portal.rpc.portal.resident.ResidentPortalSiteMap.MoveIn;
+import com.propertyvista.portal.rpc.portal.resident.ResidentPortalSiteMap.ResidentServices;
 import com.propertyvista.portal.shared.resources.PortalImages;
 import com.propertyvista.portal.shared.ui.PointerId;
 
@@ -47,67 +54,86 @@ public class QuickTipActivity extends AbstractActivity implements QuickTipPresen
 
     private final QuickTipView view;
 
+    private final AppPlace place;
+
+    enum Tip {
+        pap, insurance, maintenance
+    }
+
     public QuickTipActivity(Place place) {
+        this.place = (AppPlace) place;
         view = ResidentPortalSite.getViewFactory().getView(QuickTipView.class);
     }
 
     @Override
     public void start(AcceptsOneWidget panel, EventBus eventBus) {
-        panel.setWidget(view);
-        AppSite.getEventBus().fireEvent(new LayoutChangeRequestEvent(ChangeType.resizeComponents));
+        List<Tip> tips = new ArrayList<>();
 
-        int random = new Random().nextInt(3);
-        switch (random) {
-        case 0:
-            setPapTip();
-            break;
-        case 1:
-            setInsuranceTip();
-            break;
-        case 2:
-            setMaintenanceTip();
-            break;
+        if (!place.getPlaceId().startsWith(new MoveIn().getPlaceId())) {
 
-        default:
-            break;
+            if (!SecurityController.check(PortalResidentBehavior.AutopayAgreementPresent)) {
+                tips.add(Tip.pap);
+            }
+
+            if (!SecurityController.check(PortalResidentBehavior.InsurancePresent) && !place.getPlaceId().startsWith(new ResidentServices().getPlaceId())) {
+                tips.add(Tip.insurance);
+            }
+
+            if (!place.getPlaceId().startsWith(new Maintenance().getPlaceId())) {
+                tips.add(Tip.maintenance);
+            }
+
+        }
+
+        if (tips.size() > 0) {
+            panel.setWidget(view);
+            AppSite.getEventBus().fireEvent(new LayoutChangeRequestEvent(ChangeType.resizeComponents));
+
+            int random = new Random().nextInt(tips.size());
+            setTip(tips.get(random));
         }
 
     }
 
-    private void setPapTip() {
-        setTip(i18n.tr("Pre-authorized payments"),
-                i18n.tr("Paying your rent by pre-authorized payments means eliminating the chore of writing cheques and ensuring your payment reaches Property Management Office by the due date. You'll never have to worry about remembering to make a payment or a possible late fee."),
-                i18n.tr("Visit Billing & Payment page."), ThemeColor.contrast4, new Command() {
+    private void setTip(Tip tip) {
+        switch (tip) {
+        case pap:
+            setTip(i18n.tr("Pre-authorized payments"),
+                    i18n.tr("Paying your rent by pre-authorized payments means eliminating the chore of writing cheques and ensuring your payment reaches Property Management Office by the due date. You'll never have to worry about remembering to make a payment or a possible late fee."),
+                    i18n.tr("Visit Billing & Payment page."), ThemeColor.contrast4, new Command() {
 
-                    @Override
-                    public void execute() {
-                        AppSite.getPlaceController().goTo(new ResidentPortalSiteMap.Financial());
-                    }
-                }, ResidentPortalPointerId.billing);
-    }
+                        @Override
+                        public void execute() {
+                            AppSite.getPlaceController().goTo(new ResidentPortalSiteMap.Financial());
+                        }
+                    }, ResidentPortalPointerId.billing);
+            break;
+        case insurance:
+            setTip(i18n.tr("Don't have Tenant Insurance yet?"),
+                    i18n.tr("We have teamed up with Highcourt Partners Limited, a licensed broker, to assist you in obtaining your Tenant Insurance."),
+                    i18n.tr("Visit Resident Services page."), ThemeColor.contrast3, new Command() {
 
-    private void setInsuranceTip() {
-        setTip(i18n.tr("Don't have Tenant Insurance yet?"),
-                i18n.tr("We have teamed up with Highcourt Partners Limited, a licensed broker, to assist you in obtaining your Tenant Insurance."),
-                i18n.tr("Visit Resident Services page."), ThemeColor.contrast3, new Command() {
+                        @Override
+                        public void execute() {
+                            AppSite.getPlaceController().goTo(new ResidentPortalSiteMap.ResidentServices());
+                        }
+                    }, ResidentPortalPointerId.insurance);
+            break;
+        case maintenance:
+            setTip(i18n.tr("Request repairs and maintenance as needed"),
+                    i18n.tr("Submit and track the status of a maintenance request. Convenient, simple, easy."), i18n.tr("Visit Maintenance page."),
+                    ThemeColor.contrast5, new Command() {
 
-                    @Override
-                    public void execute() {
-                        AppSite.getPlaceController().goTo(new ResidentPortalSiteMap.ResidentServices());
-                    }
-                }, ResidentPortalPointerId.insurance);
-    }
+                        @Override
+                        public void execute() {
+                            AppSite.getPlaceController().goTo(new ResidentPortalSiteMap.Maintenance());
+                        }
+                    }, ResidentPortalPointerId.maintanance);
+            break;
+        default:
+            break;
 
-    private void setMaintenanceTip() {
-        setTip(i18n.tr("Request repairs and maintenance as needed"),
-                i18n.tr("Submit and track the status of a maintenance request. Convenient, simple, easy."), i18n.tr("Visit Maintenance page."),
-                ThemeColor.contrast5, new Command() {
-
-                    @Override
-                    public void execute() {
-                        AppSite.getPlaceController().goTo(new ResidentPortalSiteMap.Maintenance());
-                    }
-                }, ResidentPortalPointerId.maintanance);
+        }
     }
 
     private void setTip(String caption, String text, String visitText, ThemeColor color, Command command, PointerId pointerId) {
