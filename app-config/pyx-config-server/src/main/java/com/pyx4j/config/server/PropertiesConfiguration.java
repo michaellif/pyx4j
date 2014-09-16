@@ -45,6 +45,11 @@ public class PropertiesConfiguration implements CanReloadProperties {
         this.properties = properties;
     }
 
+    public PropertiesConfiguration(String prefix, PropertiesConfiguration properties) {
+        this.prefix = prefix;
+        this.properties = properties.getProperties();
+    }
+
     @Override
     public void reloadProperties(Map<String, String> properties) {
         this.properties.clear();
