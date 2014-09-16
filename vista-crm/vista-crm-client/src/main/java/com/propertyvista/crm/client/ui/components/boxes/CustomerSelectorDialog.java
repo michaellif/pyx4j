@@ -58,6 +58,7 @@ public abstract class CustomerSelectorDialog extends EntitySelectorTableVisorCon
     @Override
     protected List<ColumnDescriptor> defineColumnDescriptors() {
         return Arrays.asList(//@formatter:off
+                new MemberColumnDescriptor.Builder(proto().customerId()).build(),
                 new MemberColumnDescriptor.Builder(proto().person().name()).searchable(false).build(),
                 new MemberColumnDescriptor.Builder(proto().person().name().firstName()).searchableOnly().build(),
                 new MemberColumnDescriptor.Builder(proto().person().name().lastName()).searchableOnly().build(),
