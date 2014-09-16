@@ -30,6 +30,7 @@ import java.util.List;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.security.server.UIAclBuilder;
 
+import com.propertyvista.crm.rpc.dto.tenant.ShowingDTO;
 import com.propertyvista.crm.rpc.security.LeaseTermEditOnApplicationInstanceAccess;
 import com.propertyvista.crm.rpc.services.lease.ac.ApplicationApprove;
 import com.propertyvista.crm.rpc.services.lease.ac.ApplicationCancel;
@@ -39,6 +40,7 @@ import com.propertyvista.crm.rpc.services.lease.ac.ApplicationOnlineApplication;
 import com.propertyvista.crm.rpc.services.lease.ac.ApplicationReserveUnit;
 import com.propertyvista.crm.rpc.services.lease.ac.ApplicationSubmit;
 import com.propertyvista.crm.rpc.services.lease.ac.ApplicationVerify;
+import com.propertyvista.domain.tenant.lead.Appointment;
 import com.propertyvista.domain.tenant.lead.Lead;
 import com.propertyvista.domain.tenant.prospect.LeaseApplicationDocument;
 import com.propertyvista.dto.LeaseApplicationDTO;
@@ -50,7 +52,7 @@ class VistaCrmLeaseApplicationAccessControlList extends UIAclBuilder {
     VistaCrmLeaseApplicationAccessControlList() {
 
         {// Lead:
-            List<Class<? extends IEntity>> entities = entities(Lead.class);
+            List<Class<? extends IEntity>> entities = entities(Lead.class, Appointment.class, ShowingDTO.class);
             grant(ApplicationBasic, entities, READ);
             grant(ApplicationFull, entities, ALL);
         }

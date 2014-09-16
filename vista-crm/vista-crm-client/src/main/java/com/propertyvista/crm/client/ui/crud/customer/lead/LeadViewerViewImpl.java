@@ -19,11 +19,13 @@ import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.MenuItem;
 
 import com.pyx4j.commons.UserRuntimeException;
+import com.pyx4j.entity.security.DataModelPermission;
 import com.pyx4j.essentials.client.ConfirmCommand;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.site.client.ui.dialogs.EntitySelectorListDialog;
 import com.pyx4j.site.client.ui.dialogs.EntitySelectorListDialog.Formatter;
+import com.pyx4j.widgets.client.Button.SecureMenuItem;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 
 import com.propertyvista.crm.client.ui.crud.CrmViewerViewImplBase;
@@ -46,7 +48,7 @@ public class LeadViewerViewImpl extends CrmViewerViewImplBase<Lead> implements L
     private final AppointmentListerView appointmentLister = new AppointmentListerViewImpl();
 
     public LeadViewerViewImpl() {
-        convertAction = new MenuItem(i18n.tr("Convert to Lease"), new Command() {
+        convertAction = new SecureMenuItem(i18n.tr("Convert to Lease"), new Command() {
             @Override
             public void execute() {
                 ((LeadViewerView.Presenter) getPresenter()).convertToLeaseApprisal(new DefaultAsyncCallback<ConvertToLeaseAppraisal>() {
@@ -89,18 +91,18 @@ public class LeadViewerViewImpl extends CrmViewerViewImplBase<Lead> implements L
                     }
                 });
             }
-        });
+        }, DataModelPermission.permissionUpdate(Lead.class));
         if (!VistaFeatures.instance().yardiIntegration()) {
             addAction(convertAction);
         }
 
-        closeAction = new MenuItem(i18n.tr("Close"), new ConfirmCommand(i18n.tr("Confirm"), i18n.tr("Do you really want to close the Lead?"), new Command() {
-            @Override
-            public void execute() {
-                ((LeadViewerView.Presenter) getPresenter()).close();
-            }
-        }));
-
+        closeAction = new SecureMenuItem(i18n.tr("Close"), new ConfirmCommand(i18n.tr("Confirm"), i18n.tr("Do you really want to close the Lead?"),
+                new Command() {
+                    @Override
+                    public void execute() {
+                        ((LeadViewerView.Presenter) getPresenter()).close();
+                    }
+                }), DataModelPermission.permissionUpdate(Lead.class));
         addAction(closeAction);
 
         // set main form here:

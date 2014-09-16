@@ -15,6 +15,7 @@ package com.propertyvista.crm.rpc.dto.tenant;
 
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.annotations.ExtendsBO;
+import com.pyx4j.entity.annotations.SecurityEnabled;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.core.IPrimitive;
 
@@ -23,6 +24,7 @@ import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.tenant.lead.Showing;
 
 @Transient
+@SecurityEnabled
 @ExtendsBO(Showing.class)
 public interface ShowingDTO extends Showing {
 

@@ -17,7 +17,9 @@ import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.MenuItem;
 
 import com.pyx4j.commons.CommonsStringUtils;
+import com.pyx4j.entity.security.DataModelPermission;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.widgets.client.Button.SecureMenuItem;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 
 import com.propertyvista.crm.client.ui.components.boxes.ReasonBox;
@@ -38,7 +40,7 @@ public class AppointmentViewerViewImpl extends CrmViewerViewImplBase<Appointment
     public AppointmentViewerViewImpl() {
         showingsLister = new ShowingListerViewImpl();
 
-        closeAction = new MenuItem(i18n.tr("Close"), new Command() {
+        closeAction = new SecureMenuItem(i18n.tr("Close"), new Command() {
             @Override
             public void execute() {
                 new ReasonBox(i18n.tr("Close Appointment")) {
@@ -53,7 +55,7 @@ public class AppointmentViewerViewImpl extends CrmViewerViewImplBase<Appointment
                     }
                 }.show();
             }
-        });
+        }, DataModelPermission.permissionUpdate(Appointment.class));
         addAction(closeAction);
 
         // set main form here:
