@@ -34,6 +34,10 @@ import com.propertyvista.test.mock.models.PmcDataModel;
 import com.propertyvista.test.mock.models.RestrictionsPolicyDataModel;
 import com.propertyvista.test.mock.models.TaxesDataModel;
 import com.propertyvista.yardi.YardiTestBase;
+import com.propertyvista.yardi.mock.model.YardiMock;
+import com.propertyvista.yardi.mock.model.manager.YardiBuildingManager;
+import com.propertyvista.yardi.mock.model.stub.impl.YardiMockResidentTransactionsStubImpl;
+import com.propertyvista.yardi.stubs.YardiResidentTransactionsStub;
 
 /*
  * TODO - implement
@@ -46,21 +50,22 @@ public class YardiLeaseApplicationTest extends YardiTestBase {
     @Override
     protected List<Class<? extends MockDataModel<?>>> getMockModelTypes() {
         List<Class<? extends MockDataModel<?>>> models = new ArrayList<Class<? extends MockDataModel<?>>>();
-        models.add(PmcDataModel.class);
-        models.add(CustomerDataModel.class);
-        models.add(LocationsDataModel.class);
-        models.add(TaxesDataModel.class);
-        models.add(GLCodeDataModel.class);
-        models.add(ARCodeDataModel.class);
-        models.add(BuildingDataModel.class);
-        models.add(IdAssignmentPolicyDataModel.class);
-        models.add(DepositPolicyDataModel.class);
-        models.add(ARPolicyDataModel.class);
-        models.add(LeaseBillingPolicyDataModel.class);
-        models.add(LeaseDataModel.class);
-        models.add(AgreementLegalPolicyDataModel.class);
-        models.add(RestrictionsPolicyDataModel.class);
-
+        if (false) {
+            models.add(PmcDataModel.class);
+            models.add(CustomerDataModel.class);
+            models.add(LocationsDataModel.class);
+            models.add(TaxesDataModel.class);
+            models.add(GLCodeDataModel.class);
+            models.add(ARCodeDataModel.class);
+            models.add(BuildingDataModel.class);
+            models.add(IdAssignmentPolicyDataModel.class);
+            models.add(DepositPolicyDataModel.class);
+            models.add(ARPolicyDataModel.class);
+            models.add(LeaseBillingPolicyDataModel.class);
+            models.add(LeaseDataModel.class);
+            models.add(AgreementLegalPolicyDataModel.class);
+            models.add(RestrictionsPolicyDataModel.class);
+        }
         return models;
     }
 
@@ -68,6 +73,9 @@ public class YardiLeaseApplicationTest extends YardiTestBase {
     protected void setUp() throws Exception {
         super.setUp();
         preloadData();
+
+        YardiMock.server().addManager(YardiBuildingManager.class);
+        YardiMock.server().addStub(YardiResidentTransactionsStub.class, YardiMockResidentTransactionsStubImpl.class);
     }
 
     /*
@@ -78,5 +86,9 @@ public class YardiLeaseApplicationTest extends YardiTestBase {
      * - Do import, check lease, ensure deposit charges
      */
     public void testLeaseApplication() {
+        YardiMock.server().getManager(YardiBuildingManager.class).addDefaultBuilding().setAddress("100 Avenue Rd");
+
+        assertTrue("prop123".equals(YardiMock.server().getModel().getBuildings().get(0).propertyID().getValue()));
+        assertTrue("Toronto".equals(YardiMock.server().getModel().getBuildings().get(0).address().city().getValue()));
     }
 }
