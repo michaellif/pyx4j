@@ -203,15 +203,6 @@ public class TenantMapper {
         return null;
     }
 
-    private boolean isApplicantExists(List<LeaseTermTenant> tenants) {
-        for (LeaseTermTenant tenant : tenants) {
-            if (tenant.role().getValue().equals(Role.Applicant)) {
-                return true;
-            }
-        }
-        return false;
-    }
-
     private void setPhone(Phone phone, IPrimitive<String> to) {
         if (CommonsStringUtils.isEmpty(phone.getExtension())) {
             to.setValue(phone.getPhoneNumber());
