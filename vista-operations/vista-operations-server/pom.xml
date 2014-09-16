@@ -102,6 +102,11 @@
         </dependency>
 
         <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+        </dependency>
+
+        <dependency>
             <groupId>net.tanesha.recaptcha4j</groupId>
             <artifactId>recaptcha4j</artifactId>
         </dependency>
