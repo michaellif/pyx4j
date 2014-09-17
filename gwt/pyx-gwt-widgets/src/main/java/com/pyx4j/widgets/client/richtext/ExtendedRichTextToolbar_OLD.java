@@ -29,25 +29,24 @@ import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Composite;
-import com.google.gwt.user.client.ui.FlowPanel;
-import com.google.gwt.user.client.ui.HTML;
+import com.google.gwt.user.client.ui.HorizontalPanel;
+import com.google.gwt.user.client.ui.Image;
+import com.google.gwt.user.client.ui.PushButton;
+import com.google.gwt.user.client.ui.ToggleButton;
+import com.google.gwt.user.client.ui.VerticalPanel;
 
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.widgets.client.Button;
-import com.pyx4j.widgets.client.CheckBox;
 import com.pyx4j.widgets.client.ImageFactory;
 import com.pyx4j.widgets.client.ImageFactory.WidgetsImageBundle;
 import com.pyx4j.widgets.client.ListBox;
 import com.pyx4j.widgets.client.RichTextArea;
-import com.pyx4j.widgets.client.Toolbar;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
-import com.pyx4j.widgets.client.style.theme.WidgetTheme;
 
 /**
  * A sample toolbar for use with {@link RichTextArea}. It provides a simple UI for all
  * rich text formatting, dynamically displayed only for the available functionality.
  */
-public class ExtendedRichTextToolbar extends Composite {
+public class ExtendedRichTextToolbar_OLD extends Composite {
     private static final I18n i18n = I18n.get(ExtendedRichTextToolbar_OLD.class);
 
     /**
@@ -79,6 +78,12 @@ public class ExtendedRichTextToolbar extends Composite {
                 formatter.toggleItalic();
             } else if (sender == underline) {
                 formatter.toggleUnderline();
+            } else if (sender == subscript) {
+                formatter.toggleSubscript();
+            } else if (sender == superscript) {
+                formatter.toggleSuperscript();
+            } else if (sender == strikethrough) {
+                formatter.toggleStrikethrough();
             } else if (sender == indent) {
                 formatter.rightIndent();
             } else if (sender == outdent) {
@@ -166,45 +171,47 @@ public class ExtendedRichTextToolbar extends Composite {
 
     private final RichTextArea.Formatter formatter;
 
-    private final FlowPanel toolBar = new FlowPanel();
+    private final VerticalPanel toolBar = new VerticalPanel();
 
-    private final FlowPanel buttonBarTop = new FlowPanel();
+    private final HorizontalPanel buttonBarTop = new HorizontalPanel();
 
-    private final FlowPanel buttonBarFont = new FlowPanel();
+    private final HorizontalPanel buttonBarBottom = new HorizontalPanel();
 
-    private final FlowPanel buttonBarInsert = new FlowPanel();
+    private ToggleButton bold;
 
-    private final FlowPanel buttonBarFormat = new FlowPanel();
+    private ToggleButton italic;
 
-    private Button bold;
+    private ToggleButton underline;
 
-    private Button italic;
+    private final ToggleButton subscript;
 
-    private Button underline;
+    private final ToggleButton superscript;
 
-    private Button indent;
+    private final ToggleButton strikethrough;
 
-    private Button outdent;
+    private PushButton indent;
 
-    private Button justifyLeft;
+    private PushButton outdent;
 
-    private Button justifyCenter;
+    private PushButton justifyLeft;
 
-    private Button justifyRight;
+    private PushButton justifyCenter;
 
-    private Button hr;
+    private PushButton justifyRight;
 
-    private Button ol;
+    private PushButton hr;
 
-    private Button ul;
+    private PushButton ol;
 
-    private Button insertImage;
+    private PushButton ul;
 
-    private Button createLink;
+    private final PushButton insertImage;
 
-    private Button removeLink;
+    private PushButton createLink;
 
-    private Button removeFormat;
+    private PushButton removeLink;
+
+    private PushButton removeFormat;
 
     private ListBox backColors;
 
@@ -216,17 +223,9 @@ public class ExtendedRichTextToolbar extends Composite {
 
     private RichTextImageProvider provider;
 
-    private final Button customButton = new Button(i18n.tr("MERGE"));
+    private final PushButton customButton = new PushButton();
 
     private RichTextAction customAction;
-
-    private Button fontButton;
-
-    private Button formatButton;
-
-    private Button insertButton;
-
-    private final CheckBox textHtmlSwitch = new CheckBox("HTML");
 
     /*
      * This is needed to help handling richTextArea onBlur events. When toolbar is inOperation state
@@ -242,30 +241,49 @@ public class ExtendedRichTextToolbar extends Composite {
      * @param richText
      *            the rich text area to be controlled
      */
-    public ExtendedRichTextToolbar(final RichTextArea richText) {
+    public ExtendedRichTextToolbar_OLD(RichTextArea richText) {
         this.richText = richText;
         this.formatter = richText.getFormatter();
 
         toolBar.add(buttonBarTop);
-        toolBar.add(buttonBarFormat);
-        toolBar.add(buttonBarFont);
-        toolBar.add(buttonBarInsert);
-
-        buttonBarFormat.setVisible(false);
-        buttonBarFont.setVisible(false);
-        buttonBarInsert.setVisible(false);
+        toolBar.add(buttonBarBottom);
 
         initWidget(toolBar);
         final String toolbarStyleName = "gwt-ExtRichTextToolbar";
         setStyleName(toolbarStyleName);
 
-        createFormatMenus();
+        buttonBarTop.add(bold = createToggleButton(images.bold(), "bold"));
+        buttonBarTop.add(italic = createToggleButton(images.italic(), "italic"));
+        buttonBarTop.add(underline = createToggleButton(images.underline(), "underline"));
 
-        createFontMenus();
+        subscript = createToggleButton(images.subscript(), "subscript");
+        //        topPanel.add(subscript);
 
-        createInsertMenu();
+        superscript = createToggleButton(images.superscript(), "superscript");
+        //        topPanel.add(superscript);
 
-        createTextHtmlSwitch(richText);
+        buttonBarTop.add(justifyLeft = createPushButton(images.justifyLeft(), "justifyLeft"));
+        buttonBarTop.add(justifyCenter = createPushButton(images.justifyCenter(), "justifyCenter"));
+        buttonBarTop.add(justifyRight = createPushButton(images.justifyRight(), "justifyRight"));
+
+        strikethrough = createToggleButton(images.strikeThrough(), "strikeThrough");
+        //topPanel.add(strikethrough);
+        buttonBarTop.add(indent = createPushButton(images.indent(), "indent"));
+        buttonBarTop.add(outdent = createPushButton(images.outdent(), "outdent"));
+        buttonBarTop.add(hr = createPushButton(images.hr(), "hr"));
+        buttonBarTop.add(ol = createPushButton(images.ol(), "ol"));
+        buttonBarTop.add(ul = createPushButton(images.ul(), "ul"));
+
+        buttonBarTop.add(insertImage = createPushButton(images.insertImage(), "insertImage"));
+        buttonBarTop.add(createLink = createPushButton(images.createLink(), "createLink"));
+        buttonBarTop.add(customButton);
+        buttonBarTop.add(removeLink = createPushButton(images.removeLink(), "removeLink"));
+        buttonBarTop.add(removeFormat = createPushButton(images.removeFormat(), "removeFormat"));
+
+        buttonBarBottom.add(foreColors = createColorList("Font Color"));
+        buttonBarBottom.add(backColors = createColorList("Highlight"));
+        buttonBarBottom.add(fonts = createFontList());
+        buttonBarBottom.add(fontSizes = createFontSizes());
 
         customButton.addBlurHandler(handler);
         customButton.addClickHandler(handler);
@@ -277,116 +295,6 @@ public class ExtendedRichTextToolbar extends Composite {
         richText.addClickHandler(handler);
 
         inOperation = false;
-    }
-
-    private void createTextHtmlSwitch(final RichTextArea richText) {
-        textHtmlSwitch.setTitle("Toggle HTML or Text mode");
-        textHtmlSwitch.addClickHandler(new ClickHandler() {
-            @Override
-            public void onClick(ClickEvent event) {
-                if (((CheckBox) event.getSource()).getValue()) {
-                    richText.setText(richText.getHTML());
-                    buttonBarFormat.setVisible(false);
-                    buttonBarFont.setVisible(false);
-                    buttonBarInsert.setVisible(false);
-
-                    formatButton.setVisible(false);
-                    fontButton.setVisible(false);
-                    insertButton.setVisible(false);
-                } else {
-                    richText.setHTML(richText.getText());
-                    buttonBarFormat.setVisible(false);
-                    buttonBarFont.setVisible(false);
-                    buttonBarInsert.setVisible(false);
-
-                    formatButton.setVisible(true);
-                    fontButton.setVisible(true);
-                    insertButton.setVisible(true);
-                    formatButton.toggleActive();
-                }
-            }
-        });
-        textHtmlSwitch.addBlurHandler(new BlurHandler() {
-            @Override
-            public void onBlur(BlurEvent event) {
-                richText.fireEvent(event);
-            }
-        });
-        buttonBarTop.add(textHtmlSwitch);
-    }
-
-    private void createInsertMenu() {
-        buttonBarTop.add(insertButton = new Button(i18n.tr("Insert"), new Command() {
-
-            @Override
-            public void execute() {
-                buttonBarInsert.setVisible(!buttonBarInsert.isVisible());
-                buttonBarFont.setVisible(false);
-                buttonBarFormat.setVisible(false);
-            }
-        }));
-
-        Toolbar linkPanel = new Toolbar();
-        linkPanel.addItem(createLink = createButton(images.createLink(), "createLink"));
-        linkPanel.addItem(removeLink = createButton(images.removeLink(), "removeLink"));
-        linkPanel.addItem(new HTML("&emsp;"));
-        buttonBarInsert.add(linkPanel);
-        buttonBarInsert.add(insertImage = createButton(images.insertImage(), "insertImage"));
-        buttonBarInsert.add(customButton);
-    }
-
-    private void createFontMenus() {
-        buttonBarTop.add(fontButton = new Button(i18n.tr("Font"), new Command() {
-
-            @Override
-            public void execute() {
-                buttonBarFont.setVisible(!buttonBarFont.isVisible());
-                buttonBarFormat.setVisible(false);
-                buttonBarInsert.setVisible(false);
-            }
-        }));
-
-        buttonBarFont.add(foreColors = createColorList("Font Color"));
-        buttonBarFont.add(backColors = createColorList("Highlight"));
-        buttonBarFont.add(fonts = createFontList());
-        buttonBarFont.add(fontSizes = createFontSizes());
-    }
-
-    private void createFormatMenus() {
-        buttonBarTop.add(formatButton = new Button(i18n.tr("Format"), new Command() {
-
-            @Override
-            public void execute() {
-                buttonBarFormat.setVisible(!buttonBarFormat.isVisible());
-                buttonBarFont.setVisible(false);
-                buttonBarInsert.setVisible(false);
-            }
-        }));
-        formatButton.toggleActive();
-
-        Toolbar formatPanel = new Toolbar();
-        formatPanel.addItem(bold = createButton(images.bold(), "bold"));
-        formatPanel.addItem(italic = createButton(images.italic(), "italic"));
-        formatPanel.addItem(underline = createButton(images.underline(), "underline"));
-        formatPanel.addItem(new HTML("&emsp;"));
-        formatPanel.addItem(justifyLeft = createButton(images.justifyLeft(), "justifyLeft"));
-        formatPanel.addItem(justifyCenter = createButton(images.justifyCenter(), "justifyCenter"));
-        formatPanel.addItem(justifyRight = createButton(images.justifyRight(), "justifyRight"));
-        formatPanel.addItem(new HTML("&emsp;"));
-
-        buttonBarFormat.add(formatPanel);
-
-        Toolbar indentPanel = new Toolbar();
-        indentPanel.addItem(indent = createButton(images.indent(), "indent"));
-        indentPanel.addItem(outdent = createButton(images.outdent(), "outdent"));
-        indentPanel.addItem(new HTML("&emsp;"));
-        indentPanel.addItem(hr = createButton(images.hr(), "hr"));
-        indentPanel.addItem(ol = createButton(images.ol(), "ol"));
-        indentPanel.addItem(new HTML("&emsp;"));
-        indentPanel.addItem(ul = createButton(images.ul(), "ul"));
-        indentPanel.addItem(new HTML("&emsp;"));
-        indentPanel.addItem(removeFormat = createButton(images.removeFormat(), "removeFormat"));
-        buttonBarFormat.add(indentPanel);
     }
 
     private ListBox createColorList(String caption) {
@@ -445,12 +353,21 @@ public class ExtendedRichTextToolbar extends Composite {
         return lb;
     }
 
-    private Button createButton(ImageResource img, String tip) {
-        Button tb = new Button(img);
+    private PushButton createPushButton(ImageResource img, String tip) {
+        PushButton pb = new PushButton(new Image(img));
+        pb.addClickHandler(handler);
+        pb.addBlurHandler(handler);
+        pb.setTitle(tip);
+        pb.setStyleName(RichTextEditorTheme.StyleName.rtePushButton.name());
+        return pb;
+    }
+
+    private ToggleButton createToggleButton(ImageResource img, String tip) {
+        ToggleButton tb = new ToggleButton(new Image(img));
         tb.addClickHandler(handler);
         tb.addBlurHandler(handler);
         tb.setTitle(tip);
-        tb.setStyleName(WidgetTheme.StyleName.Button.name());
+        tb.setStyleName(RichTextEditorTheme.StyleName.rteToggleButton.name());
         return tb;
     }
 
@@ -458,12 +375,12 @@ public class ExtendedRichTextToolbar extends Composite {
      * Updates the status of all the stateful buttons.
      */
     private void updateStatus() {
-        /*-bold.setDown(formatter.isBold());
+        bold.setDown(formatter.isBold());
         italic.setDown(formatter.isItalic());
         underline.setDown(formatter.isUnderlined());
         subscript.setDown(formatter.isSubscript());
         superscript.setDown(formatter.isSuperscript());
-        strikethrough.setDown(formatter.isStrikethrough());-*/
+        strikethrough.setDown(formatter.isStrikethrough());
         // set font properties
         if (foreColors.getSelectedIndex() > 0) {
             formatter.setForeColor(foreColors.getValue(foreColors.getSelectedIndex()));
@@ -503,7 +420,7 @@ public class ExtendedRichTextToolbar extends Composite {
         return inOperation;
     }
 
-    public Button getCustomButton() {
+    public PushButton getCustomButton() {
         // use this to setup button look
         return customButton;
     }
@@ -514,9 +431,5 @@ public class ExtendedRichTextToolbar extends Composite {
 
     private RichTextAction getCustomAction() {
         return customAction;
-    }
-
-    public boolean isHtmlMode() {
-        return !textHtmlSwitch.getValue();
     }
 }

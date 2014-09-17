@@ -21,12 +21,8 @@
 package com.pyx4j.widgets.client.richtext;
 
 import com.google.gwt.dom.client.Style.Unit;
-import com.google.gwt.dom.client.Style.Visibility;
-import com.google.gwt.event.dom.client.BlurEvent;
 import com.google.gwt.event.dom.client.BlurHandler;
 import com.google.gwt.event.dom.client.ChangeHandler;
-import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.FocusHandler;
 import com.google.gwt.event.dom.client.KeyDownHandler;
 import com.google.gwt.event.dom.client.KeyPressHandler;
@@ -35,14 +31,11 @@ import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.ui.DockPanel;
-import com.google.gwt.user.client.ui.HorizontalPanel;
-import com.google.gwt.user.client.ui.PushButton;
-import com.google.gwt.user.client.ui.ToggleButton;
 
 import com.pyx4j.commons.IDebugId;
+import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.ITextWidget;
 import com.pyx4j.widgets.client.RichTextArea;
-import com.pyx4j.widgets.client.richtext.ExtendedRichTextToolbar.RichTextAction;
 
 public class ExtendedRichTextArea extends DockPanel implements ITextWidget {
 
@@ -51,8 +44,6 @@ public class ExtendedRichTextArea extends DockPanel implements ITextWidget {
     private final ExtendedRichTextToolbar toolbar;
 
     private boolean editable;
-
-    private boolean textMode;
 
     public ExtendedRichTextArea() {
         super();
@@ -64,47 +55,10 @@ public class ExtendedRichTextArea extends DockPanel implements ITextWidget {
         toolbar = new ExtendedRichTextToolbar(richTextArea);
         toolbar.getElement().getStyle().setMarginLeft(2, Unit.PX);
 
-        HorizontalPanel toolPanel = new HorizontalPanel();
-        toolPanel.add(toolbar);
-        ToggleButton textHtmlSwitch = new ToggleButton("HTML", "RichText");
-        textHtmlSwitch.setTitle("Toggle HTML or Text mode");
-        textHtmlSwitch.setWidth("60px");
-        textHtmlSwitch.addClickHandler(new ClickHandler() {
-            @Override
-            public void onClick(ClickEvent event) {
-                if (((ToggleButton) event.getSource()).isDown()) {
-                    richTextArea.setText(richTextArea.getHTML());
-                    textMode = false;
-                    toolbar.getElement().getStyle().setVisibility(Visibility.HIDDEN);
-                } else {
-                    richTextArea.setHTML(richTextArea.getText());
-                    textMode = true;
-                    toolbar.getElement().getStyle().setVisibility(Visibility.VISIBLE);
-                }
-            }
-        });
-        /*
-         * When this button gets focus the textarea will ignore blur event and therefore
-         * will not update component value with any changes that were made.
-         * So, we need to fire onBlur for textarea to save changes when focus moves somewhere else.
-         */
-        textHtmlSwitch.addBlurHandler(new BlurHandler() {
-            @Override
-            public void onBlur(BlurEvent event) {
-                richTextArea.fireEvent(event);
-            }
-        });
-        toolPanel.setVerticalAlignment(ALIGN_BOTTOM);
-        toolPanel.setHorizontalAlignment(ALIGN_RIGHT);
-        toolPanel.add(textHtmlSwitch);
-        toolPanel.setWidth("100%");
-
-        add(toolPanel, NORTH);
-        add(richTextArea, CENTER);
+        add(toolbar, NORTH);
+        add(richTextArea, EAST);
         setCellHeight(richTextArea, "100%");
         setCellWidth(richTextArea, "100%");
-
-        getElement().getStyle().setProperty("resize", "none");
 
         toolbar.getElement().getStyle().setOpacity(0.3);
 
@@ -112,7 +66,6 @@ public class ExtendedRichTextArea extends DockPanel implements ITextWidget {
         sinkEvents(Event.ONMOUSEOUT);
 
         editable = true;
-        textMode = true;
     }
 
     public void scrollToBottom() {
@@ -156,7 +109,7 @@ public class ExtendedRichTextArea extends DockPanel implements ITextWidget {
         return html.replaceAll("<br>", "<br />");
     }
 
-    public PushButton getCustomButton() {
+    public Button getCustomButton() {
         return toolbar.getCustomButton();
     }
 
@@ -261,12 +214,12 @@ public class ExtendedRichTextArea extends DockPanel implements ITextWidget {
 
     @Override
     public String getText() {
-        return trimHtml(textMode ? richTextArea.getHTML() : richTextArea.getText());
+        return trimHtml(toolbar.isHtmlMode() ? richTextArea.getHTML() : richTextArea.getText());
     }
 
     @Override
     public void setText(String html) {
-        if (textMode) {
+        if (toolbar.isHtmlMode()) {
             richTextArea.setHTML(html);
         } else {
             richTextArea.setText(html);
