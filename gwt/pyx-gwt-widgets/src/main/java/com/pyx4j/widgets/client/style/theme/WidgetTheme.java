@@ -488,10 +488,10 @@ public class WidgetTheme extends Theme {
 
         style = new Style(".", StyleName.SelectorListBoxValuePanel, " .", StyleName.TextBoxContainer);
         style.addProperty("display", "inline-block");
+        style.addProperty("border-width", "0px");
         addStyle(style);
 
         style = new Style(".", StyleName.SelectorListBoxValuePanel, " .", StyleName.TextBox);
-        style.addProperty("border-width", "0px");
         style.addProperty("width", "80px");
         addStyle(style);
 
