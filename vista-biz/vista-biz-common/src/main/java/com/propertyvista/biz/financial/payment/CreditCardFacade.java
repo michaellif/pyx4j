@@ -53,9 +53,13 @@ public interface CreditCardFacade {
 
     public String getTransactionreferenceNumber(ReferenceNumberPrefix uniquePrefix, IPrimitive<Key> referenceNumber);
 
+    // ProdAndTest Version is for flows that runs on QA and can accept Production records
     public List<String> getProdAndTestTransactionreferenceNumbers(ReferenceNumberPrefix uniquePrefix, IPrimitive<Key> referenceNumber);
 
     public Key getVistaRecordId(ReferenceNumberPrefix uniquePrefix, String transactionreferenceNumber);
+
+    // ProdAndTest Version is for flows that runs on QA and can accept Production records
+    public Key getProdAndTestVistaRecordId(ReferenceNumberPrefix uniquePrefix, String transactionreferenceNumber);
 
     public void persistToken(String merchantTerminalId, CreditCardInfo cc);
 

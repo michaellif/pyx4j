@@ -173,6 +173,22 @@ class PaymentHealthMonitor {
             criteria.ge(criteria.proto().finalizeDate(), reportSince);
             criteria.le(criteria.proto().finalizeDate(), reportBefore);
             criteria.eq(criteria.proto().paymentMethod().type(), PaymentType.CreditCard);
+            criteria.eq(criteria.proto().paymentStatus(), PaymentRecord.PaymentStatus.Received);
+            criteria.isNull(criteria.proto().aggregatedTransfer());
+            int count = Persistence.service().count(criteria);
+            if (count > 0) {
+                PaymentRecord instance = Persistence.service().retrieve(criteria);
+                ServerSideFactory.create(OperationsAlertFacade.class).record(instance, "{0} Received Card Payment Records Are not Cleared", count);
+                executionMonitor.addFailedEvent("CardsAggregatedTransfer", instance.amount().getValue());
+            }
+        }
+        {
+            Date reportSince = com.pyx4j.gwt.server.DateUtils.detectDateformat("2014-06-17"); // DateUtils.addMonths(forDate, -2);
+            Date reportBefore = DateUtils.addDays(forDate, -2);
+            EntityQueryCriteria<PaymentRecord> criteria = EntityQueryCriteria.create(PaymentRecord.class);
+            criteria.ge(criteria.proto().finalizeDate(), reportSince);
+            criteria.le(criteria.proto().finalizeDate(), reportBefore);
+            criteria.eq(criteria.proto().paymentMethod().type(), PaymentType.CreditCard);
             criteria.eq(criteria.proto().paymentStatus(), PaymentRecord.PaymentStatus.Cleared);
             criteria.isNull(criteria.proto().aggregatedTransfer());
             int count = Persistence.service().count(criteria);

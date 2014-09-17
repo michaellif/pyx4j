@@ -18,6 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.pyx4j.commons.Key;
+import com.pyx4j.commons.Validate;
 import com.pyx4j.entity.core.IPrimitive;
 
 import com.propertyvista.config.VistaDeployment;
@@ -51,7 +52,16 @@ public class CreditCardFacadeImpl implements CreditCardFacade {
 
     @Override
     public Key getVistaRecordId(ReferenceNumberPrefix uniquePrefix, String transactionreferenceNumber) {
-        return PadTransactionUtils.toVistaPaymentRecordId(transactionreferenceNumber.substring(uniquePrefix.getValue().length()));
+        Validate.isTrue(transactionreferenceNumber.startsWith(uniquePrefix.getValue()), "Transaction Id {0} Has Unexpected Prefix, Expected {1}", uniquePrefix,
+                transactionreferenceNumber);
+        return PadTransactionUtils.toVistaPaymentRecordId(transactionreferenceNumber.substring(uniquePrefix.getValue().length()), true);
+    }
+
+    @Override
+    public Key getProdAndTestVistaRecordId(ReferenceNumberPrefix uniquePrefix, String transactionreferenceNumber) {
+        Validate.isTrue(transactionreferenceNumber.startsWith(uniquePrefix.getValue()), "Transaction Id {0} Has Unexpected Prefix, Expected {1}", uniquePrefix,
+                transactionreferenceNumber);
+        return PadTransactionUtils.toVistaPaymentRecordId(transactionreferenceNumber.substring(uniquePrefix.getValue().length()), false);
     }
 
     @Override

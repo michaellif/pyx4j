@@ -99,7 +99,7 @@ public class CardsDailyReportProcessor {
     protected void clearRecord(CardsClearanceRecord clearanceRecord) {
         PaymentRecord paymentRecord = Persistence.service().retrieve(
                 PaymentRecord.class,
-                ServerSideFactory.create(CreditCardFacade.class).getVistaRecordId(ReferenceNumberPrefix.RentPayments,
+                ServerSideFactory.create(CreditCardFacade.class).getProdAndTestVistaRecordId(ReferenceNumberPrefix.RentPayments,
                         clearanceRecord.referenceNumber().getValue()));
 
         if (paymentRecord == null) {

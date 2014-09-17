@@ -53,16 +53,20 @@ public class PadTransactionUtils {
     }
 
     static Key toVistaPaymentRecordId(IPrimitive<String> transactionId) {
-        return toVistaPaymentRecordId(transactionId.getValue());
+        return toVistaPaymentRecordId(transactionId.getValue(), true);
     }
 
-    static Key toVistaPaymentRecordId(String transactionId) {
+    static Key toVistaPaymentRecordId(String transactionId, boolean assertProduction) {
         if (VistaDeployment.isVistaProduction()) {
             return new Key(transactionId);
         } else {
             int separator = transactionId.indexOf(transactionSeparator);
             if (separator == -1) {
-                throw new Error("Unexpected production transactionId " + transactionId);
+                if (assertProduction) {
+                    throw new Error("Unexpected production transactionId " + transactionId);
+                } else {
+                    return new Key(transactionId);
+                }
             } else {
                 String versionId = transactionId.substring(0, separator);
                 if (!versionId.equals(readTestDBversionIdInOperations())) {
