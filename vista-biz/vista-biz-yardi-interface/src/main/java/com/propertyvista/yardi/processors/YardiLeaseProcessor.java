@@ -418,7 +418,7 @@ public class YardiLeaseProcessor {
     private static Lease retriveLease(Key yardiInterfaceId, String leaseId) {
         EntityQueryCriteria<Lease> criteria = EntityQueryCriteria.create(Lease.class);
 
-        criteria.eq(criteria.proto().leaseId(), leaseId);
+        criteria.eq(criteria.proto().leaseId(), getLeaseID(leaseId));
         criteria.eq(criteria.proto().integrationSystemId(), yardiInterfaceId);
 
         return Persistence.service().retrieve(criteria);
@@ -710,6 +710,7 @@ public class YardiLeaseProcessor {
         EntityQueryCriteria<Lease> criteria = EntityQueryCriteria.create(Lease.class);
 
         criteria.eq(criteria.proto().unit().building().integrationSystemId(), yardiInterfaceId);
+        criteria.in(criteria.proto().unit().building().suspended(), Boolean.FALSE);
         criteria.in(criteria.proto().status(), Lease.Status.active());
 
         return Persistence.service().query(criteria);
