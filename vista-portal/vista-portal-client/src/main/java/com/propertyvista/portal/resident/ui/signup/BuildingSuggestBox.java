@@ -29,7 +29,7 @@ public class BuildingSuggestBox extends CSelectorTextBox<SelfRegistrationBuildin
     public BuildingSuggestBox() {
         super(new MultyWordSuggestOptionsGrabber<SelfRegistrationBuildingDTO>());
 
-        MultyWordSuggestOptionsGrabber<SelfRegistrationBuildingDTO> optionsGrabber = ((MultyWordSuggestOptionsGrabber) getOptionsGrabber());
+        optionsGrabber = ((MultyWordSuggestOptionsGrabber) getOptionsGrabber());
         optionsGrabber.setFormatter(getFormatter());
         optionsGrabber.setComparator(new Comparator<SelfRegistrationBuildingDTO>() {
             @Override

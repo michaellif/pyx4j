@@ -110,6 +110,12 @@ public class VistaTheme extends Theme {
         style.addProperty("margin-left", "40px");
         style.addProperty("margin-right", "40px");
         addStyle(style);
+
+        style = new Style("select:-moz-focusring");
+        style.addProperty("color", "transparent");
+        style.addProperty("text-shadow", "0 0 0 #000");
+        addStyle(style);
+
     }
 
     protected void initBodyStyles() {

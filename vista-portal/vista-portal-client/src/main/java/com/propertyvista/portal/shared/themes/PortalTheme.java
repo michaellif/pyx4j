@@ -87,7 +87,7 @@ public class PortalTheme extends Theme {
             @Override
             protected void initTextBoxStyle() {
                 super.initTextBoxStyle();
-                Style style = new Style(".", StyleName.TextBox);
+                Style style = new Style(".", StyleName.TextBoxContainer);
                 style.addProperty("border-radius", "5px");
                 addStyle(style);
             };
