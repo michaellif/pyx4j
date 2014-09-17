@@ -25,13 +25,13 @@ import com.pyx4j.i18n.annotations.Translate;
 import com.pyx4j.i18n.shared.I18nEnum;
 import com.pyx4j.site.shared.domain.reports.HasAdvancedSettings;
 import com.pyx4j.site.shared.domain.reports.PropertyCriterionEntity;
-import com.pyx4j.site.shared.domain.reports.ReportMetadata;
+import com.pyx4j.site.shared.domain.reports.ReportTemplate;
 
 import com.propertyvista.domain.dashboard.gadgets.availability.UnitAvailabilityStatus;
 
 @Transient
 @Caption(name = "Availability Report")
-public interface AvailabilityReportMetadata extends ReportMetadata, HasAdvancedSettings {
+public interface AvailabilityReportMetadata extends ReportTemplate, HasAdvancedSettings {
 
     @I18n
     public enum RentedStatusPreset {

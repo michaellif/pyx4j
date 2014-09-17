@@ -14,12 +14,12 @@
 package com.propertyvista.crm.server.services.reports;
 
 import com.pyx4j.site.server.services.customization.CustomizationPersistenceService;
-import com.pyx4j.site.shared.domain.reports.ReportMetadata;
+import com.pyx4j.site.shared.domain.reports.ReportTemplate;
 
 import com.propertyvista.crm.rpc.services.reports.CrmReportsSettingsPersistenceService;
 import com.propertyvista.domain.customizations.ReportsSettingsHolder;
 
-public class CrmReportsSettingsPersistenceServiceImpl extends CustomizationPersistenceService<ReportMetadata> implements CrmReportsSettingsPersistenceService {
+public class CrmReportsSettingsPersistenceServiceImpl extends CustomizationPersistenceService<ReportTemplate> implements CrmReportsSettingsPersistenceService {
 
     public CrmReportsSettingsPersistenceServiceImpl() {
         super(ReportsSettingsHolder.class);

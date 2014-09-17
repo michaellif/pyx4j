@@ -16,7 +16,7 @@ package com.propertyvista.crm.rpc.services.reports;
 import java.util.HashMap;
 
 import com.pyx4j.site.rpc.ReportsAppPlace;
-import com.pyx4j.site.shared.domain.reports.ReportMetadata;
+import com.pyx4j.site.shared.domain.reports.ReportTemplate;
 
 import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.domain.reports.AvailableCrmReport.CrmReportType;
@@ -25,7 +25,7 @@ public class CrmReportsMapper {
 
     private static HashMap<CrmReportType, ReportsAppPlace<?>> places = new HashMap<>();
 
-    private static HashMap<Class<? extends ReportMetadata>, CrmReportType> types = new HashMap<>();
+    private static HashMap<Class<? extends ReportTemplate>, CrmReportType> types = new HashMap<>();
 
     protected static void register(CrmReportType type, ReportsAppPlace<?> place) {
         places.put(type, place);
@@ -36,7 +36,7 @@ public class CrmReportsMapper {
         return places.get(type);
     }
 
-    public static CrmReportType getReportType(Class<? extends ReportMetadata> reportMetadataClass) {
+    public static CrmReportType getReportType(Class<? extends ReportTemplate> reportMetadataClass) {
         return types.get(reportMetadataClass);
     }
 

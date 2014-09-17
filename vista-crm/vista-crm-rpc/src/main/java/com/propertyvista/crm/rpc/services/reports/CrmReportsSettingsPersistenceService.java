@@ -14,8 +14,8 @@
 package com.propertyvista.crm.rpc.services.reports;
 
 import com.pyx4j.site.rpc.customization.ICustomizationPersistenceService;
-import com.pyx4j.site.shared.domain.reports.ReportMetadata;
+import com.pyx4j.site.shared.domain.reports.ReportTemplate;
 
-public interface CrmReportsSettingsPersistenceService extends ICustomizationPersistenceService<ReportMetadata> {
+public interface CrmReportsSettingsPersistenceService extends ICustomizationPersistenceService<ReportTemplate> {
 
 }

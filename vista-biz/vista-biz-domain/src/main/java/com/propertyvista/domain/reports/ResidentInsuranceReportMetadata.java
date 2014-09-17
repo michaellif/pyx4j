@@ -16,11 +16,11 @@ package com.propertyvista.domain.reports;
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.core.IPrimitive;
-import com.pyx4j.site.shared.domain.reports.ReportMetadata;
+import com.pyx4j.site.shared.domain.reports.ReportTemplate;
 
 @Transient
 @Caption(name = "Resident Insurance Report")
-public interface ResidentInsuranceReportMetadata extends ReportMetadata {
+public interface ResidentInsuranceReportMetadata extends ReportTemplate {
 
     IPrimitive<Boolean> onlyLeasesWithInsurance();
 

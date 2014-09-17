@@ -29,7 +29,7 @@ import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.essentials.server.services.reports.ReportGenerator;
 import com.pyx4j.essentials.server.services.reports.ReportProgressStatus;
-import com.pyx4j.site.shared.domain.reports.ReportMetadata;
+import com.pyx4j.site.shared.domain.reports.ReportTemplate;
 
 import com.propertyvista.biz.financial.payment.PaymentReportFacade;
 import com.propertyvista.biz.financial.payment.PreauthorizedPaymentsReportCriteria;
@@ -42,7 +42,7 @@ import com.propertyvista.domain.reports.EftVarianceReportMetadata;
 public class EftVarianceReportGenerator implements ReportGenerator {
 
     @Override
-    public Serializable generateReport(ReportMetadata reportMetadata) {
+    public Serializable generateReport(ReportTemplate reportMetadata) {
         EftVarianceReportMetadata eftVarianceReportMetadata = (EftVarianceReportMetadata) reportMetadata;
 
         Vector<EftVarianceReportRecordDTO> varianceReportRecord = new Vector<EftVarianceReportRecordDTO>();

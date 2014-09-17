@@ -30,7 +30,7 @@ import com.pyx4j.essentials.server.services.reports.ReportExporter;
 import com.pyx4j.essentials.server.services.reports.ReportGenerator;
 import com.pyx4j.essentials.server.services.reports.ReportProgressStatus;
 import com.pyx4j.essentials.server.services.reports.ReportProgressStatusHolder;
-import com.pyx4j.site.shared.domain.reports.ReportMetadata;
+import com.pyx4j.site.shared.domain.reports.ReportTemplate;
 
 import com.propertyvista.biz.financial.payment.PaymentReportFacade;
 import com.propertyvista.biz.financial.payment.PreauthorizedPaymentsReportCriteria;
@@ -55,7 +55,7 @@ public class AutoPayChangesReportGenerator implements ReportGenerator, ReportExp
     }
 
     @Override
-    public Serializable generateReport(ReportMetadata reportMetadata) {
+    public Serializable generateReport(ReportTemplate reportMetadata) {
         AutoPayChangesReportMetadata autoPayChangesReportMetadata = (AutoPayChangesReportMetadata) reportMetadata;
         // query buildings to enforce portfolio:        
         List<Building> selectedBuildings = null;

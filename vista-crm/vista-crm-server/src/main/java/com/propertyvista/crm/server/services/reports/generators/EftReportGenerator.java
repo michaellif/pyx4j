@@ -36,7 +36,7 @@ import com.pyx4j.essentials.server.services.reports.ReportProgressStatus;
 import com.pyx4j.gwt.server.IOUtils;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.security.shared.SecurityController;
-import com.pyx4j.site.shared.domain.reports.ReportMetadata;
+import com.pyx4j.site.shared.domain.reports.ReportTemplate;
 
 import com.propertyvista.biz.ExecutionMonitor;
 import com.propertyvista.biz.financial.payment.PaymentReportFacade;
@@ -118,7 +118,7 @@ public class EftReportGenerator implements ReportExporter {
     }
 
     @Override
-    public Serializable generateReport(ReportMetadata metadata) {
+    public Serializable generateReport(ReportTemplate metadata) {
         reportProgressStatusHolder = new ReportProgressStatusHolderExectutionMonitorAdapter();
         reportProgressStatusHolder.set(new ReportProgressStatus(i18n.tr("Generating Report"), 1, 2, 0, 100));
 

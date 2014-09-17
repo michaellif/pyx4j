@@ -24,7 +24,7 @@ import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.essentials.server.services.reports.ReportGenerator;
 import com.pyx4j.essentials.server.services.reports.ReportProgressStatus;
-import com.pyx4j.site.shared.domain.reports.ReportMetadata;
+import com.pyx4j.site.shared.domain.reports.ReportTemplate;
 
 import com.propertyvista.crm.rpc.dto.reports.CustomerCreditCheckReportDataDTO;
 import com.propertyvista.domain.reports.CustomerCreditCheckReportMetadata;
@@ -40,7 +40,7 @@ public class CustomerCreditCheckReportGenerator implements ReportGenerator {
     }
 
     @Override
-    public Serializable generateReport(ReportMetadata reportMetadata) {
+    public Serializable generateReport(ReportTemplate reportMetadata) {
         // TODO Auto-generated method stub
         CustomerCreditCheckReportMetadata meta = (CustomerCreditCheckReportMetadata) reportMetadata;
 

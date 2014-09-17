@@ -20,7 +20,7 @@ import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.essentials.server.services.reports.ReportGenerator;
 import com.pyx4j.essentials.server.services.reports.ReportGeneratorFactory;
 import com.pyx4j.security.shared.SecurityViolationException;
-import com.pyx4j.site.shared.domain.reports.ReportMetadata;
+import com.pyx4j.site.shared.domain.reports.ReportTemplate;
 
 import com.propertyvista.crm.rpc.services.reports.CrmReportsMapper;
 import com.propertyvista.crm.server.services.reports.generators.AutoPayChangesReportGenerator;
@@ -38,10 +38,10 @@ import com.propertyvista.domain.reports.ResidentInsuranceReportMetadata;
 
 public class CrmReportGeneratorFactory extends ReportGeneratorFactory {
 
-    private static final Map<Class<? extends ReportMetadata>, Class<? extends ReportGenerator>> reportsGeneratorMap;
+    private static final Map<Class<? extends ReportTemplate>, Class<? extends ReportGenerator>> reportsGeneratorMap;
 
     static {
-        reportsGeneratorMap = new ConcurrentHashMap<Class<? extends ReportMetadata>, Class<? extends ReportGenerator>>();
+        reportsGeneratorMap = new ConcurrentHashMap<Class<? extends ReportTemplate>, Class<? extends ReportGenerator>>();
 
         reportsGeneratorMap.put(AvailabilityReportMetadata.class, AvailabilityReportsGenerator.class);
         reportsGeneratorMap.put(CustomerCreditCheckReportMetadata.class, CustomerCreditCheckReportGenerator.class);
@@ -52,7 +52,7 @@ public class CrmReportGeneratorFactory extends ReportGeneratorFactory {
     }
 
     @Override
-    public Class<? extends ReportGenerator> getReportGeneratorClass(Class<? extends ReportMetadata> reportMetadataClass) {
+    public Class<? extends ReportGenerator> getReportGeneratorClass(Class<? extends ReportTemplate> reportMetadataClass) {
 
         if (!CrmReportsSecurity.currentUserAvailableReportTypes().contains(CrmReportsMapper.getReportType(reportMetadataClass))) {
             if (ApplicationMode.isDevelopment()) {

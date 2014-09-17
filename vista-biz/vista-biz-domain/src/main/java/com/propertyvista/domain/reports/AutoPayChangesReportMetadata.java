@@ -20,13 +20,13 @@ import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.core.IList;
 import com.pyx4j.entity.core.IPrimitive;
 import com.pyx4j.site.shared.domain.reports.ExportableReport;
-import com.pyx4j.site.shared.domain.reports.ReportMetadata;
+import com.pyx4j.site.shared.domain.reports.ReportTemplate;
 
 import com.propertyvista.domain.property.asset.building.Building;
 
 @Transient
 @Caption(name = "AutoPay Changes Report")
-public interface AutoPayChangesReportMetadata extends ReportMetadata, ExportableReport {
+public interface AutoPayChangesReportMetadata extends ReportTemplate, ExportableReport {
 
     IPrimitive<Boolean> leasesOnNoticeOnly();
 

@@ -19,11 +19,11 @@ import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.core.IPrimitive;
-import com.pyx4j.site.shared.domain.reports.ReportMetadata;
+import com.pyx4j.site.shared.domain.reports.ReportTemplate;
 
 @Transient
 @Caption(name = "Customer Credit Check Report")
-public interface CustomerCreditCheckReportMetadata extends ReportMetadata {
+public interface CustomerCreditCheckReportMetadata extends ReportTemplate {
 
     IPrimitive<LogicalDate> minCreditCheckDate();
 

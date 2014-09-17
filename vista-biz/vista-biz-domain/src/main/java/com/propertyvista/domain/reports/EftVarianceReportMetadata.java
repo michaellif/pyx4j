@@ -18,11 +18,11 @@ import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.core.IPrimitive;
-import com.pyx4j.site.shared.domain.reports.ReportMetadata;
+import com.pyx4j.site.shared.domain.reports.ReportTemplate;
 
 @Transient
 @Caption(name = "EFT Variance Report")
-public interface EftVarianceReportMetadata extends ReportMetadata {
+public interface EftVarianceReportMetadata extends ReportTemplate {
 
     @NotNull
     IPrimitive<LogicalDate> billingCycleStartDate();

@@ -27,7 +27,7 @@ import com.pyx4j.essentials.server.services.reports.ReportGenerator;
 import com.pyx4j.essentials.server.services.reports.ReportProgressStatus;
 import com.pyx4j.gwt.server.IOUtils;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.shared.domain.reports.ReportMetadata;
+import com.pyx4j.site.shared.domain.reports.ReportTemplate;
 
 import com.propertyvista.biz.tenant.insurance.TenantInsuranceFacade;
 import com.propertyvista.crm.rpc.dto.reports.ResidentInsuranceStatusDTO;
@@ -52,7 +52,7 @@ public class ResidentInsuranceReportGenerator implements ReportGenerator {
     }
 
     @Override
-    public Serializable generateReport(ReportMetadata reportMetadata) {
+    public Serializable generateReport(ReportTemplate reportMetadata) {
         ResidentInsuranceReportMetadata residentInsuranceReportMetadata = (ResidentInsuranceReportMetadata) reportMetadata;
 
         EntityQueryCriteria<Lease> criteria = EntityQueryCriteria.create(Lease.class);

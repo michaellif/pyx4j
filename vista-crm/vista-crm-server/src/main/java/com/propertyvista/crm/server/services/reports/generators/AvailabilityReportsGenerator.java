@@ -28,7 +28,7 @@ import com.pyx4j.essentials.server.services.reports.ReportCriteriaBuilder;
 import com.pyx4j.essentials.server.services.reports.ReportGenerator;
 import com.pyx4j.essentials.server.services.reports.ReportProgressStatus;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.shared.domain.reports.ReportMetadata;
+import com.pyx4j.site.shared.domain.reports.ReportTemplate;
 
 import com.propertyvista.crm.rpc.dto.reports.AvailabilityReportDataDTO;
 import com.propertyvista.domain.dashboard.gadgets.availability.UnitAvailabilityStatus;
@@ -53,7 +53,7 @@ public class AvailabilityReportsGenerator implements ReportGenerator {
     }
 
     @Override
-    public Serializable generateReport(ReportMetadata reportMetadata) {
+    public Serializable generateReport(ReportTemplate reportMetadata) {
         AvailabilityReportMetadata meta = (AvailabilityReportMetadata) reportMetadata;
         if (meta.asOf().isNull()) {
             meta.asOf().setValue(new LogicalDate());
