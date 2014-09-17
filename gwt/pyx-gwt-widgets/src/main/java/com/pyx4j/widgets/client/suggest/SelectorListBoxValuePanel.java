@@ -28,6 +28,7 @@ import com.google.gwt.event.dom.client.BlurEvent;
 import com.google.gwt.event.dom.client.BlurHandler;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.dom.client.FocusEvent;
 import com.google.gwt.event.dom.client.FocusHandler;
 import com.google.gwt.event.dom.client.KeyDownHandler;
 import com.google.gwt.event.dom.client.KeyPressHandler;
@@ -78,7 +79,16 @@ public class SelectorListBoxValuePanel<E> extends FlowPanel implements ISelector
                 setFocus(true);
             }
         }, ClickEvent.getType());
-        this.addBlurHandler(new BlurHandler() {
+
+        addFocusHandler(new FocusHandler() {
+
+            @Override
+            public void onFocus(FocusEvent event) {
+                addStyleDependentName(WidgetTheme.StyleDependent.focused.name());
+            }
+        });
+
+        addBlurHandler(new BlurHandler() {
 
             @Override
             public void onBlur(BlurEvent event) {
@@ -142,9 +152,6 @@ public class SelectorListBoxValuePanel<E> extends FlowPanel implements ISelector
 
     @Override
     public void setFocus(boolean focused) {
-        if (focused) {
-            this.addStyleDependentName(WidgetTheme.StyleDependent.focused.name());
-        }
         textBox.setFocus(focused);
     }
 
