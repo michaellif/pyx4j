@@ -644,7 +644,7 @@ public class YardiLeaseProcessor {
 
     private static Lease activateLease(Lease lease) {
         ServerSideFactory.create(LeaseFacade.class).activate(lease);
-        log.debug("        Activate Lease");
+        log.debug("        Activate Lease {}", lease.leaseId().getValue());
         Persistence.service().retrieve(lease);
         return lease;
     }
@@ -652,14 +652,14 @@ public class YardiLeaseProcessor {
     private static Lease markLeaseOnNotice(Lease lease, YardiLease yardiLease) {
         ServerSideFactory.create(LeaseFacade.class).createCompletionEvent(lease, CompletionType.Notice, SystemDateManager.getLogicalDate(),
                 getLogicalDate(yardiLease.getExpectedMoveOutDate()), null);
-        log.debug("        Set NOTICE");
+        log.debug("        Set NOTICE, Lease {}", lease.leaseId().getValue());
         Persistence.service().retrieve(lease);
         return lease;
     }
 
     private static Lease cancelMarkLeaseOnNotice(Lease lease, YardiLease yardiLease) {
         ServerSideFactory.create(LeaseFacade.class).cancelCompletionEvent(lease, null, "Yardi notice rollback!");
-        log.debug("        Cancel NOTICE");
+        log.debug("        Cancel NOTICE, Lease {}", lease.leaseId().getValue());
         Persistence.service().retrieve(lease);
         return lease;
     }
@@ -673,6 +673,15 @@ public class YardiLeaseProcessor {
     }
 
     private static Lease completeLease(Lease lease, YardiLease yardiLease) {
+        // check the building for suspension first:
+        Persistence.ensureRetrieve(lease.unit().building(), AttachLevel.Attached);
+        if (lease.unit().building().suspended().isBooleanTrue()) {
+            log.debug("        Lease {} Completion ignored because of suspended building {}", lease.leaseId().getValue(), lease.unit().building()
+                    .propertyCode().getValue());
+            return lease;
+        }
+
+        // actual completion mechanics:
         Persistence.ensureRetrieve(lease, AttachLevel.Attached);
         if (lease.status().getValue() == Status.Approved) {
             ServerSideFactory.create(LeaseFacade.class).cancelLease(lease, null, "Yardi import lease cancellation.");
@@ -685,14 +694,14 @@ public class YardiLeaseProcessor {
             ServerSideFactory.create(LeaseFacade.class).moveOut(lease, getLogicalDate(yardiLease.getActualMoveOut()));
         }
 
-        log.debug("        Complete Lease");
+        log.debug("        Complete Lease {}", lease.leaseId().getValue());
         Persistence.service().retrieve(lease);
         return lease;
     }
 
     private static Lease cancelLeaseCompletion(Lease lease, YardiLease yardiLease) {
         ServerSideFactory.create(LeaseFacade.class).cancelCompletionEvent(lease, null, "Yardi move out rollback!");
-        log.debug("        Cancel Lease Completion");
+        log.debug("        Cancel Lease {} Completion", lease.leaseId().getValue());
         Persistence.service().retrieve(lease);
         return lease;
     }
@@ -706,17 +715,14 @@ public class YardiLeaseProcessor {
         return Persistence.service().query(criteria);
     }
 
-    private boolean removeLease(List<Lease> leases, final String leaseId) {
-        if (leaseId != null) {
-            Iterator<Lease> it = leases.iterator();
-            while (it.hasNext()) {
-                if (getLeaseID(leaseId).equals(it.next().leaseId().getValue())) {
-                    it.remove();
-                    return true;
-                }
+    private void removeLease(List<Lease> leases, final String leaseId) {
+        Iterator<Lease> it = leases.iterator();
+        while (it.hasNext()) {
+            if (getLeaseID(leaseId).equals(it.next().leaseId().getValue())) {
+                it.remove();
+                break;
             }
         }
-        return false;
     }
 
     private void closeLeases(List<Lease> leases) {
