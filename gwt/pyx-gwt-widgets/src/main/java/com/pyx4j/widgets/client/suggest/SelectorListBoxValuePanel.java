@@ -24,6 +24,7 @@ import java.util.Collection;
 
 import com.google.gwt.dom.client.Style.Position;
 import com.google.gwt.dom.client.Style.Unit;
+import com.google.gwt.event.dom.client.BlurEvent;
 import com.google.gwt.event.dom.client.BlurHandler;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
@@ -77,6 +78,13 @@ public class SelectorListBoxValuePanel<E> extends FlowPanel implements ISelector
                 setFocus(true);
             }
         }, ClickEvent.getType());
+        this.addBlurHandler(new BlurHandler() {
+
+            @Override
+            public void onBlur(BlurEvent event) {
+                removeStyleDependentName(WidgetTheme.StyleDependent.focused.name());
+            }
+        });
     }
 
     public void showValue(Collection<E> value) {
@@ -134,13 +142,15 @@ public class SelectorListBoxValuePanel<E> extends FlowPanel implements ISelector
 
     @Override
     public void setFocus(boolean focused) {
+        if (focused) {
+            this.addStyleDependentName(WidgetTheme.StyleDependent.focused.name());
+        }
         textBox.setFocus(focused);
     }
 
     @Override
     public void setTabIndex(int index) {
         textBox.setTabIndex(index);
-
     }
 
     @Override

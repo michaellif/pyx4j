@@ -486,6 +486,10 @@ public class WidgetTheme extends Theme {
         style.addProperty("position", "relative");
         addStyle(style);
 
+        style = new Style(".", StyleName.SelectorListBoxValuePanel, "-", StyleDependent.focused);
+        style.addProperty("border-color", ThemeColor.foreground, 0.8);
+        addStyle(style);
+
         style = new Style(".", StyleName.SelectorListBoxValuePanel, " .", StyleName.TextBoxContainer);
         style.addProperty("display", "inline-block");
         style.addProperty("border-width", "0px");
