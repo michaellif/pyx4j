@@ -28,7 +28,6 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.MenuBar;
 import com.google.gwt.user.client.ui.MenuItem;
 import com.google.gwt.user.client.ui.PopupPanel;
-import com.google.gwt.user.client.ui.PushButton;
 import com.google.gwt.user.client.ui.RichTextArea.Formatter;
 import com.google.gwt.user.client.ui.UIObject;
 
@@ -42,8 +41,9 @@ import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.backoffice.ui.prime.form.IForm;
+import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
-import com.pyx4j.widgets.client.richtext.ExtendedRichTextToolbar.RichTextAction;
+import com.pyx4j.widgets.client.richtext.RichTextAction;
 
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
 import com.propertyvista.crm.client.ui.components.cms.SiteImageResourceProvider;
@@ -131,8 +131,7 @@ public class EmailTemplatesPolicyForm extends PolicyDTOTabPanelBasedForm<EmailTe
                 formPanel.append(Location.Dual, proto().content(), editor).decorate();
                 if (isEditable()) {
                     // create variable selection button
-                    final PushButton pb = editor.getNativeComponent().getEditor().getCustomButton();
-                    pb.setText(i18n.tr("MERGE"));
+                    final Button pb = editor.getNativeComponent().getEditor().getCustomButton();
                     pb.getElement().getStyle().setColor("black");
                     pb.setVisible(true);
                     final TemplateVarSelector vm = new TemplateVarSelector();
