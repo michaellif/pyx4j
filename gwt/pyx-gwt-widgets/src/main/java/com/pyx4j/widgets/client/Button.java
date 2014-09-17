@@ -132,7 +132,7 @@ public class Button extends FocusPanel implements IFocusWidget, HasSecureConcern
         textLabel.setStyleName(WidgetTheme.StyleName.ButtonText.name());
 
         imageHolder = new SimplePanel();
-        imageHolder.getElement().getStyle().setProperty("height", "100%");
+        imageHolder.getElement().getStyle().setProperty("height", "90%");
 
         imageHolder.setWidget(textLabel);
 
