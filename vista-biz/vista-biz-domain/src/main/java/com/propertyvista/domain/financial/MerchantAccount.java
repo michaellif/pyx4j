@@ -15,6 +15,7 @@ package com.propertyvista.domain.financial;
 
 import java.util.Date;
 
+import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.DiscriminatorValue;
 import com.pyx4j.entity.annotations.Editor;
@@ -109,6 +110,7 @@ public interface MerchantAccount extends AbstractMerchantAccount, HasNotesAndAtt
     IPrimitive<String> operationsNotes();
 
     @ToString
+    @Caption(description = "Internal account name, visible only in CRM")
     IPrimitive<String> accountName();
 
     /**

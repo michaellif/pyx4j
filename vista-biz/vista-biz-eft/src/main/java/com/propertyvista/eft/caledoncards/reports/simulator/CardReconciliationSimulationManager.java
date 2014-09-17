@@ -66,7 +66,7 @@ public class CardReconciliationSimulationManager {
 
     public String createReports(CardServiceSimulationCompany company, LogicalDate from, LogicalDate to) {
         EntityQueryCriteria<CardServiceSimulationTransaction> criteria = EntityQueryCriteria.create(CardServiceSimulationTransaction.class);
-        criteria.eq(criteria.proto().transactionType(), SimpulationTransactionType.sale);
+        criteria.in(criteria.proto().transactionType(), SimpulationTransactionType.sale, SimpulationTransactionType.completion);
         criteria.eq(criteria.proto().merchant().company(), company);
         criteria.eq(criteria.proto().responseCode(), "0000");
         criteria.eq(criteria.proto().voided(), Boolean.FALSE);

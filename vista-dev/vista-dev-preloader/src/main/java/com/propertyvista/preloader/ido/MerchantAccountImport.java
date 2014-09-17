@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011- All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -12,6 +12,8 @@
  * @version $Id$
  */
 package com.propertyvista.preloader.ido;
+
+import java.math.BigDecimal;
 
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Transient;
@@ -24,6 +26,8 @@ import com.propertyvista.domain.financial.AbstractMerchantAccount;
 @I18n(strategy = I18n.I18nStrategy.IgnoreAll)
 @Transient
 public interface MerchantAccountImport extends AbstractMerchantAccount {
+
+    IPrimitive<Boolean> ignore();
 
     IPrimitive<String> companyId();
 
@@ -45,9 +49,9 @@ public interface MerchantAccountImport extends AbstractMerchantAccount {
     @Caption(name = "Account #")
     IPrimitive<String> accountNumber();
 
-    IPrimitive<String> transactionFee();
+    IPrimitive<BigDecimal> transactionFee();
 
-    IPrimitive<String> rejectFee();
+    IPrimitive<BigDecimal> rejectFee();
 
-    IPrimitive<String> returnFee();
+    IPrimitive<BigDecimal> returnFee();
 }

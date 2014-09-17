@@ -13,11 +13,12 @@
  */
 package com.propertyvista.preloader;
 
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Callable;
 
+import com.pyx4j.commons.CommonsStringUtils;
+import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
@@ -25,6 +26,7 @@ import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.essentials.server.csv.EntityCSVReciver;
 
 import com.propertyvista.biz.system.PmcFacade;
+import com.propertyvista.config.AbstractVistaServerSideConfiguration;
 import com.propertyvista.config.VistaDeployment;
 import com.propertyvista.domain.DemoData;
 import com.propertyvista.domain.DemoData.DemoPmc;
@@ -44,7 +46,7 @@ public class MerchantAccountPreloader extends BaseVistaDevDataPreloader {
         if (accountImport == null) {
             EntityCSVReciver<MerchantAccountImport> rcv = EntityCSVReciver.create(MerchantAccountImport.class);
             rcv.setHeaderIgnoreCase(true);
-            accountImport = rcv.loadResourceFile("MerchantAccountsImport.csv");
+            accountImport = rcv.loadResourceFile("MerchantAccountsImport.xlsx");
         }
 
         final Pmc pmc = VistaDeployment.getCurrentPmc().duplicate();
@@ -61,12 +63,16 @@ public class MerchantAccountPreloader extends BaseVistaDevDataPreloader {
                 } catch (IllegalArgumentException ignore) {
                 }
                 if (ordinal >= 0) {
-                    String caledonCompanyId = "BIRCHWOODTEST";
+                    String caledonCompanyId = ServerSideConfiguration.instance(AbstractVistaServerSideConfiguration.class)
+                            .getCaledonFundsTransferConfiguration().getIntefaceCompanyId();
                     List<MerchantAccountImport> companyImport = new ArrayList<MerchantAccountImport>();
                     for (MerchantAccountImport imp : accountImport) {
+                        if (imp.ignore().getValue(false)) {
+                            continue;
+                        }
                         if (caledonCompanyId.equals(imp.companyId().getValue())) {
                             companyImport.add(imp);
-                            pmc.paymentTypeInfo().eChequeFee().setValue(new BigDecimal(stripDollars(imp.transactionFee().getValue())));
+                            pmc.paymentTypeInfo().eChequeFee().setValue(imp.transactionFee().getValue());
                         }
                     }
                     Persistence.service().persist(pmc.paymentTypeInfo());
@@ -86,12 +92,13 @@ public class MerchantAccountPreloader extends BaseVistaDevDataPreloader {
                             MerchantAccount merchantAccount = EntityFactory.create(MerchantAccount.class);
                             merchantAccount.merchantTerminalId().setValue(imp.merchantTerminalId().getValue());
                             merchantAccount.merchantTerminalIdConvenienceFee().setValue(imp.merchantTerminalIdConvenienceFee().getValue());
-                            merchantAccount.bankId().setValue(imp.bankId().getValue());
+                            merchantAccount.bankId().setValue(CommonsStringUtils.d000(Integer.valueOf(imp.bankId().getValue())));
                             merchantAccount.branchTransitNumber().setValue(imp.branchTransitNumber().getValue());
                             merchantAccount.accountNumber().setValue(imp.accountNumber().getValue());
                             merchantAccount.chargeDescription().setValue("Pay for " + pmc.name().getValue() + " " + n);
                             merchantAccount.invalid().setValue(Boolean.FALSE);
                             merchantAccount.status().setValue(MerchantAccount.MerchantAccountActivationStatus.Active);
+                            merchantAccount.accountName().setValue("Caledon Enabled " + n);
 
                             merchantAccount.setup().acceptedEcheck().setValue(true);
                             merchantAccount.setup().acceptedDirectBanking().setValue(true);
@@ -101,6 +108,27 @@ public class MerchantAccountPreloader extends BaseVistaDevDataPreloader {
                             merchantAccount.setup().acceptedInterac().setValue(true);
 
                             ServerSideFactory.create(PmcFacade.class).persistMerchantAccount(pmc, merchantAccount);
+                        } else {
+                            MerchantAccount merchantAccount = EntityFactory.create(MerchantAccount.class);
+                            merchantAccount.merchantTerminalId().setValue("TSTR" + ordinal + n);
+                            merchantAccount.merchantTerminalIdConvenienceFee().setValue("TSTC" + ordinal + n);
+                            merchantAccount.bankId().setValue(ordinal + "01");
+                            merchantAccount.branchTransitNumber().setValue("1100" + n);
+                            merchantAccount.status().setValue(MerchantAccount.MerchantAccountActivationStatus.Active);
+
+                            merchantAccount.setup().acceptedEcheck().setValue(true);
+                            merchantAccount.setup().acceptedDirectBanking().setValue(true);
+                            merchantAccount.setup().acceptedCreditCard().setValue(true);
+                            merchantAccount.setup().acceptedCreditCardConvenienceFee().setValue(true);
+                            merchantAccount.setup().acceptedCreditCardVisaDebit().setValue(true);
+                            merchantAccount.setup().acceptedInterac().setValue(true);
+                            merchantAccount.accountName().setValue("Test MID t" + n);
+
+                            merchantAccount.accountNumber().setValue("91234567");
+                            merchantAccount.invalid().setValue(Boolean.FALSE);
+
+                            merchantAccount.chargeDescription().setValue("Pay for " + pmc.name().getValue() + " " + n);
+                            ServerSideFactory.create(PmcFacade.class).persistMerchantAccount(pmc, merchantAccount);
                         }
                     }
 
@@ -109,6 +137,7 @@ public class MerchantAccountPreloader extends BaseVistaDevDataPreloader {
                     for (int n = 0; n <= internalAccounts; n++) {
                         MerchantAccount merchantAccount = EntityFactory.create(MerchantAccount.class);
                         merchantAccount.merchantTerminalId().setValue("EBIRCH" + ordinal + n);
+                        merchantAccount.merchantTerminalIdConvenienceFee().setValue("EBIRCC" + ordinal + n);
                         merchantAccount.bankId().setValue(ordinal + "00");
                         merchantAccount.branchTransitNumber().setValue("0100" + n);
                         merchantAccount.status().setValue(MerchantAccount.MerchantAccountActivationStatus.Active);
@@ -119,6 +148,7 @@ public class MerchantAccountPreloader extends BaseVistaDevDataPreloader {
                         merchantAccount.setup().acceptedCreditCardConvenienceFee().setValue(true);
                         merchantAccount.setup().acceptedCreditCardVisaDebit().setValue(true);
                         merchantAccount.setup().acceptedInterac().setValue(true);
+                        merchantAccount.accountName().setValue("Test MID " + n);
 
                         // Make one ElectronicPaymentsAllowed FALSE
                         if (n == internalAccounts) {
@@ -150,6 +180,7 @@ public class MerchantAccountPreloader extends BaseVistaDevDataPreloader {
                         merchantAccount.setup().acceptedCreditCardConvenienceFee().setValue(true);
                         merchantAccount.setup().acceptedCreditCardVisaDebit().setValue(true);
                         merchantAccount.setup().acceptedInterac().setValue(true);
+                        merchantAccount.accountName().setValue("Test MID " + n);
 
                         // Make one ElectronicPaymentsAllowed FALSE
                         if (n == internalAccounts) {
@@ -170,14 +201,6 @@ public class MerchantAccountPreloader extends BaseVistaDevDataPreloader {
         });
 
         return null;
-    }
-
-    private static String stripDollars(String value) {
-        if (value.startsWith("$")) {
-            return value.substring(1);
-        } else {
-            return value;
-        }
     }
 
     @Override

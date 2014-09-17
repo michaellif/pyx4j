@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011-2012 All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -20,12 +20,14 @@ import java.util.Map;
 import java.util.Set;
 
 import com.pyx4j.commons.Validate;
+import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.core.criterion.OrCriterion;
 import com.pyx4j.entity.server.Persistence;
 
 import com.propertyvista.biz.ExecutionMonitor;
+import com.propertyvista.biz.system.Vista2PmcFacade;
 import com.propertyvista.domain.pmc.Pmc;
 import com.propertyvista.domain.pmc.PmcMerchantAccountIndex;
 import com.propertyvista.operations.domain.eft.cards.CardsReconciliationFile;
@@ -69,6 +71,8 @@ class CardsReconciliationAcceptor {
         fileCardTotal.remoteFileDate().setValue(reconciliationFile.remoteFileDateCardTotal().getValue());
         Persistence.service().persist(fileCardTotal);
 
+        Set<String> vistaAccountsTerminalId = loadVistaTerminalId();
+
         Set<Pmc> pmcCount = new HashSet<>();
         Map<String, CardsReconciliationRecord> recordsByMid = new HashMap<>();
 
@@ -83,7 +87,7 @@ class CardsReconciliationAcceptor {
                 reconciliationRecord.fileMerchantTotal().set(fileMerchantTotal);
                 reconciliationRecord.fileCardTotal().set(fileCardTotal);
 
-                {
+                if (!vistaAccountsTerminalId.contains(reconciliationRecord.merchantTerminalId().getValue())) {
                     EntityQueryCriteria<PmcMerchantAccountIndex> criteria = EntityQueryCriteria.create(PmcMerchantAccountIndex.class);
                     OrCriterion or = criteria.or();
                     or.left().eq(criteria.proto().terminalId(), reconciliationRecord.merchantTerminalId());
@@ -181,6 +185,13 @@ class CardsReconciliationAcceptor {
         }
 
         Persistence.service().persist(recordsByMid.values());
+    }
+
+    private Set<String> loadVistaTerminalId() {
+        Set<String> vistaAccountsTerminalId = new HashSet<>();
+        vistaAccountsTerminalId.add(ServerSideFactory.create(Vista2PmcFacade.class).getVistaMerchantTerminalId());
+        vistaAccountsTerminalId.add(ServerSideFactory.create(Vista2PmcFacade.class).getTenantSureMerchantTerminalId());
+        return vistaAccountsTerminalId;
     }
 
     private BigDecimal asCredit(CardsReconciliationMerchantTotalRecord record) {

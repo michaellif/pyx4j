@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011- All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -31,12 +31,13 @@ public class MerchantAccountListerViewImpl extends CrmListerViewImplBase<Merchan
         public MerchantAccountLister() {
             super(MerchantAccount.class, true);
 
-            setDataTableModel(new DataTableModel<MerchantAccount>(//@formatter:off
-                new MemberColumnDescriptor.Builder(proto().bankId()).build(),
-                new MemberColumnDescriptor.Builder(proto().branchTransitNumber()).build(),
-                new MemberColumnDescriptor.Builder(proto().accountNumber()).build(),
-                new MemberColumnDescriptor.Builder(proto().paymentsStatus()).searchable(false).sortable(false).build()
-            ));//@formatter:on
+            setDataTableModel(new DataTableModel<MerchantAccount>(//
+                    new MemberColumnDescriptor.Builder(proto().accountName()).build(),//
+                    new MemberColumnDescriptor.Builder(proto().bankId()).build(),//
+                    new MemberColumnDescriptor.Builder(proto().branchTransitNumber()).build(),//
+                    new MemberColumnDescriptor.Builder(proto().accountNumber()).build(),//
+                    new MemberColumnDescriptor.Builder(proto().paymentsStatus()).searchable(false).sortable(false).build() //
+            ));
         }
     }
 }

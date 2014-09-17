@@ -15,6 +15,7 @@ package com.propertyvista.biz.financial.payment;
 
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.List;
 
 import org.junit.Assert;
 import org.junit.experimental.categories.Category;
@@ -38,8 +39,11 @@ import com.propertyvista.eft.mock.efttransport.EFTTransportFacadeMock;
 import com.propertyvista.operations.domain.scheduler.PmcProcessType;
 import com.propertyvista.test.integration.IntegrationTestBase.FunctionalTests;
 import com.propertyvista.test.integration.PaymentRecordTester;
+import com.propertyvista.test.mock.MockDataModel;
 import com.propertyvista.test.mock.models.CustomerDataModel;
 import com.propertyvista.test.mock.models.LeaseDataModel;
+import com.propertyvista.test.mock.models.TenantSureMerchantAccountDataModel;
+import com.propertyvista.test.mock.models.VistaEquifaxMerchantAccountDataModel;
 import com.propertyvista.test.mock.schedule.OperationsTriggerFacadeMock;
 import com.propertyvista.test.mock.schedule.SchedulerMock;
 
@@ -66,6 +70,14 @@ public class CardsReconciliationTest extends LeaseFinancialTestBase {
         createLease("01-Feb-2011", "01-Sep-2012", new BigDecimal(100), BigDecimal.ZERO, customer);
         activateLease();
 
+    }
+
+    @Override
+    protected List<Class<? extends MockDataModel<?>>> getMockModelTypes() {
+        List<Class<? extends MockDataModel<?>>> models = super.getMockModelTypes();
+        models.add(TenantSureMerchantAccountDataModel.class);
+        models.add(VistaEquifaxMerchantAccountDataModel.class);
+        return models;
     }
 
     public void testSingleCardPayment() throws Exception {

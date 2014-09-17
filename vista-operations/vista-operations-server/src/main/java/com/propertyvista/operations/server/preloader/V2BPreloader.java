@@ -40,6 +40,7 @@ public class V2BPreloader extends AbstractDataPreloader {
             Persistence.service().persist(ma);
         }
         {
+            //  BIRCHWT6
             VistaMerchantAccount ma = EntityFactory.create(VistaMerchantAccount.class);
             ma.accountType().setValue(VistaMerchantAccount.AccountType.PaymentAggregation);
             ma.merchantTerminalId().setValue(null);

@@ -20,24 +20,26 @@ import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.server.Persistence;
 
 import com.propertyvista.operations.domain.vista2pmc.TenantSureMerchantAccount;
+import com.propertyvista.operations.domain.vista2pmc.VistaMerchantAccount;
 import com.propertyvista.server.TaskRunner;
 import com.propertyvista.test.mock.MockDataModel;
 
-public class TenantSureMerchantAccountDataModel extends MockDataModel<TenantSureMerchantAccount> {
+public class VistaEquifaxMerchantAccountDataModel extends MockDataModel<TenantSureMerchantAccount> {
 
     @Override
     protected void generate() {
         TaskRunner.runInOperationsNamespace(new Callable<Void>() {
             @Override
             public Void call() {
-                TenantSureMerchantAccount ma = Persistence.service().retrieve(EntityQueryCriteria.create(TenantSureMerchantAccount.class));
+                VistaMerchantAccount ma = Persistence.service().retrieve(EntityQueryCriteria.create(VistaMerchantAccount.class));
 
                 if (ma == null) {
-                    ma = EntityFactory.create(TenantSureMerchantAccount.class);
-                    ma.merchantTerminalId().setValue("TS0001");
-                    ma.bankId().setValue("000");
-                    ma.branchTransitNumber().setValue("00000");
-                    ma.accountNumber().setValue("000000000000");
+                    ma = EntityFactory.create(VistaMerchantAccount.class);
+                    ma.accountType().setValue(VistaMerchantAccount.AccountType.Equifax);
+                    ma.merchantTerminalId().setValue("ViEfx001");
+                    ma.bankId().setValue("010");
+                    ma.branchTransitNumber().setValue("00001");
+                    ma.accountNumber().setValue("700000010000");
                     Persistence.service().persist(ma);
                 }
 

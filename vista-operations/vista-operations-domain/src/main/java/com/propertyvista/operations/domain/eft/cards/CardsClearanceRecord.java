@@ -24,6 +24,7 @@ import com.pyx4j.entity.annotations.JoinColumn;
 import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.annotations.Table;
+import com.pyx4j.entity.annotations.Timestamp;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.IPrimitive;
 import com.pyx4j.i18n.annotations.I18n;
@@ -59,5 +60,10 @@ public interface CardsClearanceRecord extends IEntity {
     IPrimitive<Date> clearanceDate();
 
     IPrimitive<BigDecimal> amount();
+
+    @Timestamp(Timestamp.Update.Created)
+    @Editor(type = EditorType.label)
+    @Format("yyyy-MM-dd HH:mm:ss")
+    IPrimitive<Date> recordReceivedDate();
 
 }

@@ -38,6 +38,10 @@ import com.propertyvista.operations.domain.eft.caledoneft.FundsTransferFile;
 import com.propertyvista.operations.domain.eft.caledoneft.FundsTransferRecord;
 import com.propertyvista.operations.domain.eft.caledoneft.FundsTransferRecordProcessingStatus;
 import com.propertyvista.operations.domain.eft.cards.CardTransactionRecord;
+import com.propertyvista.operations.domain.eft.cards.CardsClearanceRecord;
+import com.propertyvista.operations.domain.eft.cards.CardsClearanceRecordProcessingStatus;
+import com.propertyvista.operations.domain.eft.cards.CardsReconciliationRecord;
+import com.propertyvista.operations.domain.eft.cards.CardsReconciliationRecordProcessingStatus;
 import com.propertyvista.server.TaskRunner;
 
 class PaymentHealthMonitor {
@@ -122,6 +126,36 @@ class PaymentHealthMonitor {
             }
         }
 
+        {
+            Date reportSince = DateUtils.addMonths(forDate, -2);
+            Date reportBefore = DateUtils.addDays(forDate, -2);
+            EntityQueryCriteria<CardsClearanceRecord> criteria = EntityQueryCriteria.create(CardsClearanceRecord.class);
+            criteria.eq(criteria.proto().status(), CardsClearanceRecordProcessingStatus.Received);
+            criteria.ge(criteria.proto().recordReceivedDate(), reportSince);
+            criteria.le(criteria.proto().recordReceivedDate(), reportBefore);
+            int count = Persistence.service().count(criteria);
+            if (count > 0) {
+                CardsClearanceRecord instance = Persistence.service().retrieve(criteria);
+                ServerSideFactory.create(OperationsAlertFacade.class).record(instance, "There are {0} UnPpocessed CardsClearanceRecord(s)", count);
+                executionMonitor.addFailedEvent("CardsClearanceRecord", instance.amount().getValue());
+            }
+        }
+
+        {
+            Date reportSince = DateUtils.addMonths(forDate, -2);
+            Date reportBefore = DateUtils.addDays(forDate, -2);
+            EntityQueryCriteria<CardsReconciliationRecord> criteria = EntityQueryCriteria.create(CardsReconciliationRecord.class);
+            criteria.eq(criteria.proto().status(), CardsReconciliationRecordProcessingStatus.Received);
+            criteria.ge(criteria.proto().recordReceivedDate(), reportSince);
+            criteria.le(criteria.proto().recordReceivedDate(), reportBefore);
+            int count = Persistence.service().count(criteria);
+            if (count > 0) {
+                CardsReconciliationRecord instance = Persistence.service().retrieve(criteria);
+                ServerSideFactory.create(OperationsAlertFacade.class).record(instance, "There are {0} UnPpocessed CardsReconciliationRecord(s)", count);
+                executionMonitor.addFailedEvent("CardsReconciliationRecord", instance.totalDeposit().getValue());
+            }
+        }
+
     }
 
     public void heathMonitorPmc(LogicalDate forDate) {
@@ -167,7 +201,7 @@ class PaymentHealthMonitor {
         final Pmc pmc = VistaDeployment.getCurrentPmc();
         // see if caledon created reconciliation report
         {
-            Date reportSince = com.pyx4j.gwt.server.DateUtils.detectDateformat("2014-06-17"); // DateUtils.addMonths(forDate, -2);
+            Date reportSince = com.pyx4j.gwt.server.DateUtils.detectDateformat("2014-06-09"); // DateUtils.addMonths(forDate, -2);
             Date reportBefore = DateUtils.addDays(forDate, -2);
             EntityQueryCriteria<PaymentRecord> criteria = EntityQueryCriteria.create(PaymentRecord.class);
             criteria.ge(criteria.proto().finalizeDate(), reportSince);
@@ -183,7 +217,7 @@ class PaymentHealthMonitor {
             }
         }
         {
-            Date reportSince = com.pyx4j.gwt.server.DateUtils.detectDateformat("2014-06-17"); // DateUtils.addMonths(forDate, -2);
+            Date reportSince = com.pyx4j.gwt.server.DateUtils.detectDateformat("2014-06-09"); // DateUtils.addMonths(forDate, -2);
             Date reportBefore = DateUtils.addDays(forDate, -2);
             EntityQueryCriteria<PaymentRecord> criteria = EntityQueryCriteria.create(PaymentRecord.class);
             criteria.ge(criteria.proto().finalizeDate(), reportSince);
