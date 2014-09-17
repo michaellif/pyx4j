@@ -43,7 +43,7 @@ public class SelectorListBox<E> extends AbstractSelectorWidget<E> implements Has
 
     private final SelectorListBoxValuePanel<E> listBox;
 
-    private final IFormatter<E, String> optionsFormatter;
+    private final IFormatter<E, String> valueFormatter;
 
     private final IFormatter<E, String[]> optionPathFormatter;
 
@@ -53,7 +53,7 @@ public class SelectorListBox<E> extends AbstractSelectorWidget<E> implements Has
     public SelectorListBox(final IOptionsGrabber<E> optionsGrabber, IFormatter<E, String> valueFormatter, IFormatter<E, String[]> optionPathFormatter) {
         super(new SelectorListBoxValuePanel<E>(valueFormatter));
 
-        this.optionsFormatter = valueFormatter;
+        this.valueFormatter = valueFormatter;
 
         this.optionPathFormatter = optionPathFormatter;
 
@@ -96,17 +96,6 @@ public class SelectorListBox<E> extends AbstractSelectorWidget<E> implements Has
         if (value != null) {
             this.value.addAll(value);
         }
-    }
-
-    private boolean containsItem(Collection<E> value, E item) {
-
-        for (E currentItem : value) {
-            if (optionsFormatter.format(currentItem).equals(optionsFormatter.format(item))) {
-                return true;
-            }
-        }
-
-        return false;
     }
 
     public Collection<E> getValue() {
@@ -162,7 +151,7 @@ public class SelectorListBox<E> extends AbstractSelectorWidget<E> implements Has
 
     @Override
     public void setSelection(E item) {
-        if (!containsItem(this.value, item)) {
+        if (!value.contains(item)) {
             ArrayList<E> newValue = new ArrayList<>(value);
             newValue.add(item);
             setValue(newValue);

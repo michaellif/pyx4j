@@ -124,6 +124,7 @@ public class WidgetTheme extends Theme {
         style.addProperty("font-family", "inherit");
         style.addProperty("border-width", "0");
         style.addProperty("width", "100%");
+        style.addProperty("outline", "0");
         addStyle(style);
 
         style = new Style(".", StyleName.TextBox, " td");
