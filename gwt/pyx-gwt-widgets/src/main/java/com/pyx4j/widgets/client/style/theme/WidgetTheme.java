@@ -70,7 +70,7 @@ public class WidgetTheme extends Theme {
     }
 
     public static enum StyleDependent implements IStyleDependent {
-        watermark, hover, readonly, disabled, active, semitransparent, singleLine, selected, playing, paused, left, right
+        watermark, hover, focused, readonly, disabled, active, semitransparent, singleLine, selected, playing, paused, left, right
     }
 
     public WidgetTheme() {
@@ -117,36 +117,13 @@ public class WidgetTheme extends Theme {
 
         Style style = new Style(".", StyleName.TextBox);
         style.addProperty("color", ThemeColor.foreground);
-        style.addProperty("background-color", "white");
-        style.addProperty("border-width", "1px");
-        style.addProperty("border-style", "solid");
-        style.addProperty("border-color", ThemeColor.foreground, 0.4);
-        style.addProperty("padding", "2px 5px");
+        style.addProperty("padding", "0 5px");
         style.addProperty("box-sizing", "border-box");
         style.addProperty("-moz-box-sizing", "border-box");
         style.addProperty("-webkit-box-sizing", "border-box");
         style.addProperty("font-family", "inherit");
+        style.addProperty("border-width", "0");
         style.addProperty("width", "100%");
-        addStyle(style);
-
-        style = new Style(".", StyleName.TextBox, ":focus");
-        style.addProperty("border-color", ThemeColor.foreground, 0.8);
-        addStyle(style);
-
-        style = new Style(".", StyleName.TextBox, "-", StyleDependent.disabled);
-        style.addProperty("background-color", ThemeColor.foreground, 0.1);
-        style.addProperty("color", ThemeColor.foreground, 0.6);
-        addStyle(style);
-
-        style = new Style(".", StyleName.TextBox, "-", StyleDependent.readonly);
-        style.addProperty("border-width", "1px");
-        style.addProperty("border-style", "solid");
-        style.addProperty("border-color", ThemeColor.foreground, 0.1);
-        style.addProperty("background-color", ThemeColor.foreground, 0);
-        addStyle(style);
-
-        style = new Style(".", StyleName.TextBox, "-", StyleDependent.singleLine);
-        style.addProperty("height", "2em");
         addStyle(style);
 
         style = new Style(".", StyleName.TextBox, " td");
@@ -157,9 +134,35 @@ public class WidgetTheme extends Theme {
         style.addProperty("color", ThemeColor.foreground, 0.5);
         addStyle(style);
 
+        style = new Style(".", StyleName.TextBoxContainer);
+        style.addProperty("background-color", "white");
+        style.addProperty("border-width", "1px");
+        style.addProperty("border-style", "solid");
+        style.addProperty("border-color", ThemeColor.foreground, 0.4);
+        style.addProperty("margin", "2px 0");
+        addStyle(style);
+
+        style = new Style(".", StyleName.TextBoxContainer, "-", StyleDependent.focused);
+        style.addProperty("border-color", ThemeColor.foreground, 0.8);
+        addStyle(style);
+
+        style = new Style(".", StyleName.TextBoxContainer, "-", StyleDependent.disabled);
+        style.addProperty("background-color", ThemeColor.foreground, 0.1);
+        style.addProperty("color", ThemeColor.foreground, 0.6);
+        addStyle(style);
+
+        style = new Style(".", StyleName.TextBoxContainer, "-", StyleDependent.readonly);
+        style.addProperty("background-color", ThemeColor.foreground, 0);
+        style.addProperty("border-color", ThemeColor.foreground, 0.1);
+        addStyle(style);
+
+        style = new Style(".", StyleName.TextBoxContainer, "-", StyleDependent.singleLine);
+        style.addProperty("height", "2em");
+        addStyle(style);
+
         style = new Style(".", StyleName.TextBoxActionButton);
         style.addProperty("vertical-align", "middle");
-        style.addProperty("margin", "0");
+        style.addProperty("margin", "0 4px");
         style.addProperty("height", "2em");
         style.addProperty("cursor", "pointer");
         style.addProperty("-webkit-touch-callout", "none");
@@ -199,6 +202,7 @@ public class WidgetTheme extends Theme {
         style.addProperty("-moz-box-sizing", "border-box");
         style.addProperty("-webkit-box-sizing", "border-box");
         style.addProperty("font-family", "inherit");
+        style.addProperty("outline", "none");
         addStyle(style);
 
         style = new Style(".", StyleName.ListBox, "-", StyleDependent.readonly);
@@ -214,6 +218,10 @@ public class WidgetTheme extends Theme {
 
         style = new Style(".", StyleName.ListBox, "-", StyleDependent.singleLine);
         style.addProperty("height", "2em");
+        addStyle(style);
+
+        style = new Style(".", StyleName.ListBox, ":focus");
+        style.addProperty("border-color", ThemeColor.foreground, 0.8);
         addStyle(style);
 
     }

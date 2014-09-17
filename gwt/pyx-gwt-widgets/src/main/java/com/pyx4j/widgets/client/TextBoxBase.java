@@ -22,11 +22,12 @@ package com.pyx4j.widgets.client;
 
 import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.core.client.Scheduler.ScheduledCommand;
-import com.google.gwt.dom.client.Style.Display;
 import com.google.gwt.dom.client.Style.Position;
 import com.google.gwt.dom.client.Style.Unit;
+import com.google.gwt.event.dom.client.BlurEvent;
 import com.google.gwt.event.dom.client.BlurHandler;
 import com.google.gwt.event.dom.client.ChangeHandler;
+import com.google.gwt.event.dom.client.FocusEvent;
 import com.google.gwt.event.dom.client.FocusHandler;
 import com.google.gwt.event.dom.client.KeyDownHandler;
 import com.google.gwt.event.dom.client.KeyPressHandler;
@@ -48,7 +49,7 @@ import com.pyx4j.widgets.client.event.shared.PasteEvent;
 import com.pyx4j.widgets.client.event.shared.PasteHandler;
 import com.pyx4j.widgets.client.style.theme.WidgetTheme;
 
-public abstract class TextBoxBase extends Composite implements ITextWidget, IGroupFocus, HasPasteHandlers, IWatermarkWidget {
+public abstract class TextBoxBase extends Composite implements ITextWidget, IFocusGroup, HasPasteHandlers, IWatermarkWidget {
 
     private TextWatermark watermark;
 
@@ -71,7 +72,6 @@ public abstract class TextBoxBase extends Composite implements ITextWidget, IGro
 
         textBoxHolder = new SimplePanel();
         textBoxHolder.getElement().getStyle().setMarginRight(0, Unit.PX);
-        textBoxHolder.getElement().getStyle().setDisplay(Display.INLINE);
 
         contentPanel.add(textBoxHolder);
 
@@ -88,15 +88,31 @@ public abstract class TextBoxBase extends Composite implements ITextWidget, IGro
         return groupFocusHandler;
     }
 
-    protected void setTextBoxWidget(com.google.gwt.user.client.ui.TextBoxBase textBoxWidget) {
+    protected void setTextBoxWidget(final com.google.gwt.user.client.ui.TextBoxBase textBoxWidget) {
         this.textBoxWidget = textBoxWidget;
         if (this.debugId != null) {
             this.textBoxWidget.ensureDebugId(this.debugId.debugId());
         }
         textBoxWidget.setStyleName(WidgetTheme.StyleName.TextBox.name());
         if (textBoxWidget instanceof com.google.gwt.user.client.ui.TextBox) {
-            textBoxWidget.addStyleDependentName(WidgetTheme.StyleDependent.singleLine.name());
+            contentPanel.addStyleDependentName(WidgetTheme.StyleDependent.singleLine.name());
         }
+
+        textBoxWidget.addFocusHandler(new FocusHandler() {
+
+            @Override
+            public void onFocus(FocusEvent event) {
+                contentPanel.addStyleDependentName(WidgetTheme.StyleDependent.focused.name());
+            }
+        });
+
+        textBoxWidget.addBlurHandler(new BlurHandler() {
+
+            @Override
+            public void onBlur(BlurEvent event) {
+                contentPanel.removeStyleDependentName(WidgetTheme.StyleDependent.focused.name());
+            }
+        });
 
         textBoxHolder.setWidget(textBoxWidget);
 
@@ -192,6 +208,7 @@ public abstract class TextBoxBase extends Composite implements ITextWidget, IGro
         if (actionButton != null) {
             actionButton.setEnabled(isEditable() && isEnabled());
         }
+        contentPanel.setStyleDependentName(WidgetTheme.StyleDependent.readonly.name(), !editable);
     }
 
     @Override
@@ -205,6 +222,7 @@ public abstract class TextBoxBase extends Composite implements ITextWidget, IGro
         if (actionButton != null) {
             actionButton.setEnabled(isEditable() && isEnabled());
         }
+        contentPanel.setStyleDependentName(WidgetTheme.StyleDependent.disabled.name(), !enabled);
     }
 
     @Override

@@ -88,8 +88,8 @@ public class GroupFocusHandler extends HandlerManager implements FocusHandler, B
     }
 
     public void addFocusable(HasAllFocusHandlers focusable) {
-        if (focusable instanceof IGroupFocus) {
-            ((IGroupFocus) focusable).getGroupFocusHandler().setParentGroupFocusHandler(this);
+        if (focusable instanceof IFocusGroup) {
+            ((IFocusGroup) focusable).getGroupFocusHandler().setParentGroupFocusHandler(this);
         }
 
         focusable.addFocusHandler(this);

@@ -52,6 +52,7 @@ public class DropDownPanel extends PopupPanel {
                 }
             }
         });
+
     }
 
     public void showRelativeTo(Widget anchor) {
