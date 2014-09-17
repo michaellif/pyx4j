@@ -85,7 +85,7 @@ SET search_path = '_admin_';
             file                        BIGINT                  NOT NULL,
             merchant_id                 VARCHAR(500),
             merchant_account            BIGINT,
-            status                      VARCHAR(500),
+            status                      VARCHAR(50),
             convenience_fee_account     BOOLEAN,
             reference_number            VARCHAR(500),
             clearance_date              TIMESTAMP,
