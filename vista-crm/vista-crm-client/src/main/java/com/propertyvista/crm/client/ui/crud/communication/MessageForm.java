@@ -414,7 +414,7 @@ public class MessageForm extends CrmEntityForm<MessageDTO> {
                         newItem.getValue().text().setValue(currentMessage == null ? null : "\nRe:\n" + currentMessage.text().getValue(""));
 
                         if (!ClientContext.getUserVisit().getName().equals(currentMessage.header().sender().getValue())) {
-                            newItem.getValue().to().add(currentMessage.sender());
+                            newItem.getValue().to().add(currentMessage.senderDTO());
                         }
 
                         for (int i = 0; i < messagesFolder.getItemCount(); i++) {

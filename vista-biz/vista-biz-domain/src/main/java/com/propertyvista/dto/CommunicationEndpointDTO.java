@@ -18,13 +18,15 @@ import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.ToStringFormat;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.annotations.validator.NotNull;
+import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.IPrimitive;
 
 import com.propertyvista.domain.communication.CommunicationEndpoint;
+import com.propertyvista.domain.communication.CommunicationEndpoint.ContactType;
 
 @Transient
 @ToStringFormat("{0} {1}")
-public interface CommunicationEndpointDTO extends CommunicationEndpoint {
+public interface CommunicationEndpointDTO extends IEntity {
 
     @NotNull
     @ReadOnly

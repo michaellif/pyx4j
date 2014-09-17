@@ -169,7 +169,7 @@ public class CommunicationViewImpl extends FlowPanel implements CommunicationVie
             messageField = new Label(message.text().getStringView());
 
             dateField = new Label(message.date().getStringView());
-            senderField = new Label(message.sender().getStringView());
+            senderField = new Label(message.senderDTO().getStringView());
 
             setWidget(0, 0, photoImage);
             getFlexCellFormatter().setRowSpan(0, 0, 2);

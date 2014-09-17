@@ -52,7 +52,7 @@ public class MessageTextBuilder {
 
         bodyText.append("\n---------- Forwarded message ----------");
         bodyText.append("\nFrom: ");
-        bodyText.append(forwardedMessage.sender().name().getValue());
+        bodyText.append(forwardedMessage.senderDTO().name().getValue());
         bodyText.append("\nDate: ");
         bodyText.append(forwardedMessage.date().getStringView());
         bodyText.append("\nSubject: ");

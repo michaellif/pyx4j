@@ -42,9 +42,8 @@ public interface MessageDTO extends Message {
     @NotNull
     IList<CommunicationEndpointDTO> to();
 
-    @Override
     @NotNull
-    CommunicationEndpointDTO sender();
+    CommunicationEndpointDTO senderDTO();
 
     @Override
     @NotNull

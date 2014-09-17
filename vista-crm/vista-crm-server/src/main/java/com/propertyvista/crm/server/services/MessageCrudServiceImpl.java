@@ -150,7 +150,7 @@ public class MessageCrudServiceImpl extends AbstractCrudServiceDtoImpl<Message, 
         dto.highImportance().setValue(false);
         dto.allowedReply().setValue(true);
         CommunicationMessageFacade communicationFacade = ServerSideFactory.create(CommunicationMessageFacade.class);
-        dto.sender().set(communicationFacade.generateEndpointDTO(CrmAppContext.getCurrentUserEmployee()));
+        dto.senderDTO().set(communicationFacade.generateEndpointDTO(CrmAppContext.getCurrentUserEmployee()));
 
         if (initializationData instanceof MessageInitializationData) {
             MessageInitializationData data = (MessageInitializationData) initializationData;
@@ -351,8 +351,8 @@ public class MessageCrudServiceImpl extends AbstractCrudServiceDtoImpl<Message, 
         messageDTO.attachments().set(m.attachments());
         messageDTO.hasAttachments().setValue(m.attachments().size() > 0);
         messageDTO.highImportance().set(m.highImportance());
-        messageDTO.sender().setAttachLevel(AttachLevel.Attached);
-        messageDTO.sender().set((communicationFacade.generateEndpointDTO(m.sender())));
+        messageDTO.senderDTO().setAttachLevel(AttachLevel.Attached);
+        messageDTO.senderDTO().set((communicationFacade.generateEndpointDTO(m.sender())));
         messageDTO.isRead().setValue(isRead);
         messageDTO.star().setValue(star);
         messageDTO.category().set(thread.category());
