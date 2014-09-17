@@ -82,7 +82,6 @@ class VistaCrmFinancialAccessControlList extends UIAclBuilder {
         grant(FinancialAggregatedTransfer, EftAggregatedTransfer.class, READ);
         grant(FinancialAggregatedTransfer, CardsAggregatedTransferDTO.class, READ);
         grant(FinancialAggregatedTransfer, new IServiceExecutePermission(AggregatedTransferCrudService.class));
-        grant(FinancialAggregatedTransfer, PaymentRecordDTO.class, READ);
         grant(FinancialAggregatedTransfer, new IServiceExecutePermission(PaymentRecordListService.class));
         grant(FinancialAggregatedTransfer, new IServiceExecutePermission(AggregatedTransferDownloadService.class));
 
