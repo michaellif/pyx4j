@@ -17,24 +17,23 @@ import java.math.BigDecimal;
 
 import com.pyx4j.entity.core.EntityFactory;
 
-import com.propertyvista.yardi.mock.model.YardiMock;
 import com.propertyvista.yardi.mock.model.domain.YardiAddress;
 import com.propertyvista.yardi.mock.model.domain.YardiBuilding;
 import com.propertyvista.yardi.mock.model.domain.YardiFloorplan;
 import com.propertyvista.yardi.mock.model.domain.YardiUnit;
 import com.propertyvista.yardi.mock.model.manager.YardiBuildingManager;
 
-public class YardiBuildingManagerImpl implements YardiBuildingManager {
+public class YardiBuildingManagerImpl extends YardiMockManagerBase implements YardiBuildingManager {
 
     @Override
     public BuildingBuilder addDefaultBuilding() {
         YardiBuilding building = EntityFactory.create(YardiBuilding.class);
-        building.propertyID().setValue(DEFAULT_PROPERTY_CODE);
+        building.buildingId().setValue(DEFAULT_PROPERTY_CODE);
         building.address().set(makeAddress(null));
         building.floorplans().add(makeFloorplan(DEFAULT_FP_NAME, DEFAULT_FP_BATHS, DEFAULT_FP_BEDS));
         building.units().add(makeUnit(DEFAULT_UNIT_NO, building.floorplans().get(0), new BigDecimal(DEFAULT_UNIT_RENT)));
         // save
-        YardiMock.server().getModel().getBuildings().add(building);
+        addBuilding(building);
 
         return new BuildingBuilderImpl(building);
     }
@@ -44,9 +43,9 @@ public class YardiBuildingManagerImpl implements YardiBuildingManager {
         assert propertyId != null : "propertyId cannot be null";
 
         YardiBuilding building = EntityFactory.create(YardiBuilding.class);
-        building.propertyID().setValue(propertyId);
-        // save
-        YardiMock.server().getModel().getBuildings().add(building);
+        building.buildingId().setValue(propertyId);
+
+        addBuilding(building);
 
         return new BuildingBuilderImpl(building);
     }
@@ -58,7 +57,7 @@ public class YardiBuildingManagerImpl implements YardiBuildingManager {
         assert unitRent != null : "unit rent cannot be null";
 
         YardiUnit unit = EntityFactory.create(YardiUnit.class);
-        unit.unitID().setValue(id);
+        unit.unitId().setValue(id);
         unit.floorplan().set(fp);
         unit.rent().setValue(unitRent);
         return unit;
@@ -68,7 +67,7 @@ public class YardiBuildingManagerImpl implements YardiBuildingManager {
         assert id != null : "floorplan id cannot be null";
 
         YardiFloorplan fp = EntityFactory.create(YardiFloorplan.class);
-        fp.floorplanID().setValue(id);
+        fp.floorplanId().setValue(id);
         fp.bathrooms().setValue(baths);
         fp.bedrooms().setValue(beds);
         return fp;
@@ -84,16 +83,6 @@ public class YardiBuildingManagerImpl implements YardiBuildingManager {
         address.country().setValue(parts.length > 3 ? parts[3].trim() : DEFAULT_ADDR_COUNTRY);
         address.postalCode().setValue(parts.length > 4 ? parts[4].trim() : DEFAULT_ADDR_POSTCODE);
         return address;
-    }
-
-    // Lookup methods
-    private YardiFloorplan findFloorplan(YardiBuilding building, String fpId) {
-        for (YardiFloorplan fp : building.floorplans()) {
-            if (fpId.equals(fp.floorplanID().getValue())) {
-                return fp;
-            }
-        }
-        return null;
     }
 
     public class BuildingBuilderImpl implements BuildingBuilder {

@@ -19,7 +19,7 @@ import com.pyx4j.entity.core.IPrimitive;
 
 public interface YardiBuilding extends IEntity {
 
-    IPrimitive<String> propertyID();
+    IPrimitive<String> buildingId();
 
     YardiAddress address();
 

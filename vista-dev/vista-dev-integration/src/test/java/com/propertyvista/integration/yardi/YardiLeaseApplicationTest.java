@@ -16,8 +16,6 @@ package com.propertyvista.integration.yardi;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.junit.Ignore;
-
 import com.propertyvista.test.mock.MockDataModel;
 import com.propertyvista.test.mock.models.ARCodeDataModel;
 import com.propertyvista.test.mock.models.ARPolicyDataModel;
@@ -36,6 +34,7 @@ import com.propertyvista.test.mock.models.TaxesDataModel;
 import com.propertyvista.yardi.YardiTestBase;
 import com.propertyvista.yardi.mock.model.YardiMock;
 import com.propertyvista.yardi.mock.model.manager.YardiBuildingManager;
+import com.propertyvista.yardi.mock.model.manager.YardiLeaseManager;
 import com.propertyvista.yardi.mock.model.stub.impl.YardiMockResidentTransactionsStubImpl;
 import com.propertyvista.yardi.stubs.YardiResidentTransactionsStub;
 
@@ -44,7 +43,7 @@ import com.propertyvista.yardi.stubs.YardiResidentTransactionsStub;
  * - YardiMockServerFacade to set up the test data
  * - YardiMockILSGuestCardStubImpl
  */
-@Ignore
+//@Ignore
 public class YardiLeaseApplicationTest extends YardiTestBase {
 
     @Override
@@ -75,6 +74,7 @@ public class YardiLeaseApplicationTest extends YardiTestBase {
         preloadData();
 
         YardiMock.server().addManager(YardiBuildingManager.class);
+        YardiMock.server().addManager(YardiLeaseManager.class);
         YardiMock.server().addStub(YardiResidentTransactionsStub.class, YardiMockResidentTransactionsStubImpl.class);
     }
 
@@ -86,9 +86,17 @@ public class YardiLeaseApplicationTest extends YardiTestBase {
      * - Do import, check lease, ensure deposit charges
      */
     public void testLeaseApplication() {
-        YardiMock.server().getManager(YardiBuildingManager.class).addDefaultBuilding().setAddress("100 Avenue Rd");
+        YardiMock.server().getManager(YardiBuildingManager.class)//
+                .addDefaultBuilding().setAddress("100 Avenue Rd");
 
-        assertTrue("prop123".equals(YardiMock.server().getModel().getBuildings().get(0).propertyID().getValue()));
+        assertTrue("prop123".equals(YardiMock.server().getModel().getBuildings().get(0).buildingId().getValue()));
         assertTrue("Toronto".equals(YardiMock.server().getModel().getBuildings().get(0).address().city().getValue()));
+
+        YardiMock.server().getManager(YardiLeaseManager.class) //
+                .addLease(YardiBuildingManager.DEFAULT_PROPERTY_CODE, YardiBuildingManager.DEFAULT_UNIT_NO, "lease1") //
+                .addTenant("tenant", "John Smith").done() //
+                .addCharge("parking", "50.00");
+        assertTrue("lease1".equals(YardiMock.server().getModel().getBuildings().get(0).leases().get(0).leaseId().getValue()));
+        assertTrue("parking".equals(YardiMock.server().getModel().getBuildings().get(0).leases().get(0).charges().get(0).chargeId().getValue()));
     }
 }

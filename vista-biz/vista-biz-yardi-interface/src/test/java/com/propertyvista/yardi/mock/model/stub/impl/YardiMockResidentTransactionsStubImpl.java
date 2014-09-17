@@ -57,7 +57,7 @@ public class YardiMockResidentTransactionsStubImpl extends YardiMockStubBase imp
         Properties properties = new Properties();
         for (YardiBuilding building : YardiMock.server().getModel().getBuildings()) {
             com.propertyvista.yardi.beans.Property property = new com.propertyvista.yardi.beans.Property();
-            property.setCode(building.propertyID().getValue());
+            property.setCode(building.buildingId().getValue());
             properties.getProperties().add(property);
         }
         return properties;
@@ -102,8 +102,8 @@ public class YardiMockResidentTransactionsStubImpl extends YardiMockStubBase imp
         PropertyID propertyID = new PropertyID();
         Identification identification = new Identification();
         identification.setType(Propertyidinfo.OTHER);
-        identification.setPrimaryID(building.propertyID().getValue());
-        identification.setMarketingName("Residential Property " + building.propertyID().getValue());
+        identification.setPrimaryID(building.buildingId().getValue());
+        identification.setMarketingName("Residential Property " + building.buildingId().getValue());
         propertyID.setIdentification(identification);
         propertyID.getAddress().add(getAddress(building.address()));
         property.getPropertyID().add(propertyID);

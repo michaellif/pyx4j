@@ -24,6 +24,10 @@ import com.pyx4j.entity.core.IPrimitive;
 @EmbeddedEntity
 public interface YardiLease extends IEntity {
 
+    IPrimitive<String> leaseId();
+
+    YardiUnit unit();
+
     IPrimitive<BigDecimal> currentRent();
 
     IPrimitive<LogicalDate> expectedMoveInDate();
@@ -38,7 +42,7 @@ public interface YardiLease extends IEntity {
 
     IPrimitive<LogicalDate> actualMoveOut();
 
-    IList<YardiCustomer> customers();
+    IList<YardiTenant> tenants();
 
     IList<YardiLeaseCharge> charges();
 

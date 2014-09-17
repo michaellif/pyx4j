@@ -16,9 +16,9 @@ package com.propertyvista.yardi.mock.model.domain;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.IPrimitive;
 
-public interface YardiCustomer extends IEntity {
+public interface YardiTenant extends IEntity {
 
-    IPrimitive<String> customerId();
+    IPrimitive<String> tenantId();
 
     IPrimitive<String> firstName();
 

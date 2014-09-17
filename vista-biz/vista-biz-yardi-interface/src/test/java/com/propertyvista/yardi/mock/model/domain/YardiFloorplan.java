@@ -18,7 +18,7 @@ import com.pyx4j.entity.core.IPrimitive;
 
 public interface YardiFloorplan extends IEntity {
 
-    IPrimitive<String> floorplanID();
+    IPrimitive<String> floorplanId();
 
     IPrimitive<String> name();
 

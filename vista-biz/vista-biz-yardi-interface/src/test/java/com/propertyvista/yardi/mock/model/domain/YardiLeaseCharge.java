@@ -21,6 +21,8 @@ import com.pyx4j.entity.core.IPrimitive;
 
 public interface YardiLeaseCharge extends IEntity {
 
+    IPrimitive<String> chargeId();
+
     IPrimitive<BigDecimal> amount();
 
     IPrimitive<LogicalDate> serviceToDate();
@@ -29,7 +31,7 @@ public interface YardiLeaseCharge extends IEntity {
 
     IPrimitive<String> chargeCode();
 
-    IPrimitive<String> gLAccountNumber();
+    IPrimitive<String> glAccountNumber();
 
     IPrimitive<String> description();
 

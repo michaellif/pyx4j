@@ -43,28 +43,32 @@ public class YardiMock {
 
     private final Map<Class<? extends YardiInterface>, YardiInterface> stubs = new HashMap<>();
 
-    public <M extends YardiMockManager> void addManager(Class<M> modelType) {
-        addManager(modelType, null);
+    public <M extends YardiMockManager> void addManager(Class<M> managerType) {
+        addManager(managerType, null);
     }
 
     @SuppressWarnings("unchecked")
-    public <M extends YardiMockManager> void addManager(Class<M> modelType, Class<? extends M> modelClass) {
+    public <M extends YardiMockManager> void addManager(Class<M> managerType, Class<? extends M> implClass) {
         try {
-            if (modelClass == null) {
-                String implClassName = modelType.getName();
+            if (implClass == null) {
+                String implClassName = managerType.getName();
                 int lastDot = implClassName.lastIndexOf(".");
                 implClassName = implClassName.subSequence(0, lastDot) + ".impl" + implClassName.substring(lastDot) + "Impl";
-                modelClass = (Class<? extends M>) Class.forName(implClassName);
+                implClass = (Class<? extends M>) Class.forName(implClassName);
             }
-            managers.put(modelType, modelClass.newInstance());
+            managers.put(managerType, implClass.newInstance());
         } catch (Exception e) {
-            throw new Error("Failed to instantiate Yardi Mock Model " + modelClass.getSimpleName(), e);
+            throw new Error("Failed to instantiate Yardi Mock Model " + implClass.getSimpleName(), e);
         }
     }
 
     @SuppressWarnings("unchecked")
-    public <M extends YardiMockManager> M getManager(Class<M> modelType) {
-        return (M) managers.get(modelType);
+    public <M extends YardiMockManager> M getManager(Class<M> managerType) {
+        try {
+            return (M) managers.get(managerType);
+        } catch (NullPointerException e) {
+            throw new Error("Manager not found: " + managerType.getSimpleName());
+        }
     }
 
     public <M extends YardiInterface> void addStub(Class<M> stubType, Class<? extends M> stubClass) {

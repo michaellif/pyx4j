@@ -20,7 +20,7 @@ import com.pyx4j.entity.core.IPrimitive;
 
 public interface YardiUnit extends IEntity {
 
-    IPrimitive<String> unitID();
+    IPrimitive<String> unitId();
 
     IPrimitive<BigDecimal> rent();
 
