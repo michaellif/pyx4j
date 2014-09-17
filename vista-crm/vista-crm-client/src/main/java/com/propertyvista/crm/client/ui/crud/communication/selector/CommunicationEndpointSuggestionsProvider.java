@@ -11,7 +11,7 @@
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.crm.client.ui.tools.common.selectors;
+package com.propertyvista.crm.client.ui.crud.communication.selector;
 
 import java.util.LinkedList;
 import java.util.List;

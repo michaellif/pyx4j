@@ -11,16 +11,27 @@
  * @author arminea
  * @version $Id$
  */
-package com.propertyvista.crm.client.ui.tools.common.selectors;
+package com.propertyvista.crm.client.ui.crud.communication.selector;
+
+import com.google.gwt.user.client.Command;
 
 import com.pyx4j.forms.client.ui.CSelectorListBox;
+import com.pyx4j.widgets.client.dialog.Dialog;
 
 import com.propertyvista.dto.CommunicationEndpointDTO;
 
 public class CommunicationEndpointSelector extends CSelectorListBox<CommunicationEndpointDTO> {
 
     public CommunicationEndpointSelector() {
-        super(new CommunicationEndpointOptionsGrabber());
+        super(new CommunicationEndpointOptionsGrabber(), new Command() {
+
+            @Override
+            public void execute() {
+                Dialog dialog = new SelectRecipientsDialog();
+                dialog.show();
+
+            }
+        });
     }
 
 }

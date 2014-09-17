@@ -11,7 +11,7 @@
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.crm.client.ui.tools.common.selectors;
+package com.propertyvista.crm.client.ui.crud.communication.selector;
 
 import com.pyx4j.commons.IFormatter;
 import com.pyx4j.widgets.client.selector.SuggestiveSelector;

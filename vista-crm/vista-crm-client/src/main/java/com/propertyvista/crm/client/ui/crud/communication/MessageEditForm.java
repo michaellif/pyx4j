@@ -26,7 +26,7 @@ import com.pyx4j.site.client.backoffice.ui.prime.form.IForm;
 
 import com.propertyvista.crm.client.activity.crud.communication.MessageEditorActivity;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
-import com.propertyvista.crm.client.ui.tools.common.selectors.CommunicationEndpointSelector;
+import com.propertyvista.crm.client.ui.crud.communication.selector.CommunicationEndpointSelector;
 import com.propertyvista.domain.communication.MessageCategory;
 import com.propertyvista.domain.communication.MessageCategory.CategoryType;
 import com.propertyvista.dto.CommunicationEndpointDTO;
