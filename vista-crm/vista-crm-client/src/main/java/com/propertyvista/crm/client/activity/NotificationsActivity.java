@@ -94,10 +94,9 @@ public class NotificationsActivity extends AbstractActivity implements Notificat
     }
 
     private void updateAuthenticatedView() {
+        notifications.remove(productionNotification);
         if (ClientContext.isAuthenticated() && SecurityController.check(VistaBasicBehavior.PropertyVistaSupport) && ApplicationBackend.isProductionBackend()) {
             notifications.add(productionNotification);
-        } else {
-            notifications.remove(productionNotification);
         }
     }
 
