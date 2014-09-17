@@ -25,6 +25,7 @@ import java.util.Date;
 
 import com.pyx4j.entity.annotations.AbstractEntity;
 import com.pyx4j.entity.annotations.Caption;
+import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.Length;
 import com.pyx4j.entity.annotations.RpcTransient;
 import com.pyx4j.entity.annotations.Timestamp;
@@ -55,10 +56,12 @@ public interface AbstractOutgoingMailQueue extends IEntity {
 
     IPrimitive<String> statusCallbackClass();
 
+    @Format("MM/dd/yyyy HH:mm")
     @Timestamp(Timestamp.Update.Created)
     IPrimitive<Date> created();
 
     // last delivery attempt
+    @Format("MM/dd/yyyy HH:mm")
     @Timestamp(Timestamp.Update.Updated)
     IPrimitive<Date> updated();
 
