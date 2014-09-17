@@ -55,7 +55,7 @@ public class TenantViewerActivity extends CrmViewerActivity<TenantDTO> implement
     @Override
     public void onPopulateSuccess(TenantDTO result) {
         super.onPopulateSuccess(result);
-    
+
         currentValue = result;
         currentTenantId = result.getPrimaryKey();
         currentBuildingId = result.lease().unit().building().id().getValue();
@@ -93,9 +93,12 @@ public class TenantViewerActivity extends CrmViewerActivity<TenantDTO> implement
     public void changePassword(Key tenantPrincipalPk, String tenantName) {
         if (tenantPrincipalPk != null) {
             AppPlace passwordChangePlace = new CrmSiteMap.PasswordChange();
+
             passwordChangePlace.queryArg(PasswordChangeView.PasswordChangePresenter.PRINCIPAL_PK_ARG, tenantPrincipalPk.toString());
             passwordChangePlace.queryArg(PasswordChangeView.PasswordChangePresenter.PRINCIPAL_NAME_ARG, tenantName);
-            passwordChangePlace.queryArg(PasswordChangeView.PasswordChangePresenter.PRINCIPAL_CLASS, PasswordChangeView.PasswordChangePresenter.PrincipalClass.TENANT.toString());
+            passwordChangePlace.queryArg(PasswordChangeView.PasswordChangePresenter.PRINCIPAL_CLASS,
+                    PasswordChangeView.PasswordChangePresenter.PrincipalClass.TENANT.toString());
+
             AppSite.getPlaceController().goTo(passwordChangePlace);
         }
     }
@@ -114,12 +117,10 @@ public class TenantViewerActivity extends CrmViewerActivity<TenantDTO> implement
     public void viewDeletedPaps() {
         AutopayAgreement proto = EntityFactory.getEntityPrototype(AutopayAgreement.class);
         CrudAppPlace place = AppPlaceEntityMapper.resolvePlace(AutopayAgreement.class);
+
         place.formListerPlace();
-
         place.queryArg(proto.tenant().lease().leaseId().getPath().toString(), currentValue.lease().leaseId().getValue().toString());
-
         place.queryArg(proto.tenant().participantId().getPath().toString(), currentValue.participantId().getValue().toString());
-
         place.queryArg(proto.isDeleted().getPath().toString(), Boolean.TRUE.toString());
 
         AppSite.getPlaceController().goTo(place);

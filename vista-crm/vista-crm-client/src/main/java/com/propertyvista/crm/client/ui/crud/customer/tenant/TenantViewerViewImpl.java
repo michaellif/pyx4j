@@ -140,8 +140,6 @@ public class TenantViewerViewImpl extends CrmViewerViewImplBase<TenantDTO> imple
 
         super.populate(value);
 
-        boolean leaseIsActive = value.lease().status().getValue().isActive();
-
         setViewVisible(screeningView, value.screening().getPrimaryKey() != null);
         setActionVisible(screeningAction, value.screening().getPrimaryKey() == null);
 
@@ -154,7 +152,7 @@ public class TenantViewerViewImpl extends CrmViewerViewImplBase<TenantDTO> imple
         setActionVisible(passwordAction, hasPortalAccess && !value.customer().user().isNull());
         setActionVisible(registrationView, hasPortalAccess && !value.customer().registeredInPortal().getValue(Boolean.FALSE));
 
-        setViewVisible(deletedPapsView, leaseIsActive);
+        setViewVisible(deletedPapsView, value.lease().status().getValue().isCurrent());
     }
 
     public boolean canCreateMaintenance(TenantDTO value) {
