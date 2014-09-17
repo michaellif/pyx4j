@@ -27,17 +27,17 @@ public class OutgoingMailLister extends AbstractLister<OutgoingMailQueueDTO> {
         setDataTableModel(new DataTableModel<OutgoingMailQueueDTO>(//@formatter:off
                     new MemberColumnDescriptor.Builder(proto().status()).build(),
                     new MemberColumnDescriptor.Builder(proto().namespace()).build(),
-                    new MemberColumnDescriptor.Builder(proto().configurationId()).build(),
+                    new MemberColumnDescriptor.Builder(proto().configurationId()).visible(false).build(),
                     new MemberColumnDescriptor.Builder(proto().statusCallbackClass()).visible(false).build(),
-                    new MemberColumnDescriptor.Builder(proto().created()).visible(false).build(),
-                    new MemberColumnDescriptor.Builder(proto().updated()).build(),
-                    new MemberColumnDescriptor.Builder(proto().attempts()).build(),
-                    new MemberColumnDescriptor.Builder(proto().priority()).build(),
+                    new MemberColumnDescriptor.Builder(proto().created()).build(),
+                    new MemberColumnDescriptor.Builder(proto().updated()).visible(false).build(),
+                    new MemberColumnDescriptor.Builder(proto().attempts()).visible(false).build(),
+                    new MemberColumnDescriptor.Builder(proto().priority()).visible(false).build(),
                     new MemberColumnDescriptor.Builder(proto().lastAttemptErrorMessage()).visible(false).build(),
                     new MemberColumnDescriptor.Builder(proto().sendTo()).build(),
-                    new MemberColumnDescriptor.Builder(proto().sentDate()).build(),
-                    new MemberColumnDescriptor.Builder(proto().messageId()).build(),
-                    new MemberColumnDescriptor.Builder(proto().keywords()).visible(false).build()
+                    new MemberColumnDescriptor.Builder(proto().sentDate()).visible(false).build(),
+                    new MemberColumnDescriptor.Builder(proto().messageId()).visible(false).build(),
+                    new MemberColumnDescriptor.Builder(proto().keywords()).build()
             ));//@formatter:on
     }
 }
