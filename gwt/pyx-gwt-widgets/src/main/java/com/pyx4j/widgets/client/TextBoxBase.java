@@ -27,6 +27,7 @@ import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.BlurEvent;
 import com.google.gwt.event.dom.client.BlurHandler;
 import com.google.gwt.event.dom.client.ChangeHandler;
+import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.FocusEvent;
 import com.google.gwt.event.dom.client.FocusHandler;
 import com.google.gwt.event.dom.client.KeyDownHandler;
@@ -130,6 +131,7 @@ public abstract class TextBoxBase extends Composite implements ITextWidget, IFoc
         }
         if (command == null) {
             textBoxHolder.getElement().getStyle().setMarginRight(0, Unit.PX);
+            actionButton = null;
         } else {
             actionButton = new Button(imageResource, command) {
 
@@ -154,6 +156,21 @@ public abstract class TextBoxBase extends Composite implements ITextWidget, IFoc
             if (this.debugId != null) {
                 this.actionButton.ensureDebugId(CompositeDebugId.debugId(this.debugId, WidgetDebugId.trigger));
             }
+        }
+
+    }
+
+    public boolean isActive() {
+        if (actionButton != null) {
+            return actionButton.isActive();
+        } else {
+            return false;
+        }
+    }
+
+    public void toggleActive() {
+        if (actionButton != null) {
+            actionButton.toggleActive();
         }
     }
 

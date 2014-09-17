@@ -29,76 +29,78 @@ import com.google.gwt.user.client.ui.PopupPanel;
 
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.forms.client.ImageFactory;
-import com.pyx4j.widgets.client.Button;
+import com.pyx4j.widgets.client.TextBox;
 
-public class NDatePicker extends NTextBox<LogicalDate> implements INativeTextComponent<LogicalDate> {
+public class NDatePicker extends NTextFieldBase<LogicalDate, TextBox, CDatePicker> implements INativeTextComponent<LogicalDate> {
 
     private DatePickerDropDownPanel datePickerDropDown;
 
     public NDatePicker(CDatePicker cComponent) {
         super(cComponent);
 
-        final Button triggerButton = new Button(ImageFactory.getImages().datePicker());
-        triggerButton.setCommand(new Command() {
-
-            @Override
-            public void execute() {
-                if (datePickerDropDown == null) {
-                    datePickerDropDown = new DatePickerDropDownPanel(NDatePicker.this) {
-                        @Override
-                        public void hideDatePicker() {
-                            super.hideDatePicker();
-                            if (triggerButton.isActive()) {
-                                triggerButton.toggleActive();
-                            }
-                        };
-
-                        @Override
-                        public void showDatePicker() {
-                            super.showDatePicker();
-                            if (!triggerButton.isActive()) {
-                                triggerButton.toggleActive();
-                            }
-                        };
-                    };
-                    datePickerDropDown.addFocusHandler(getGroupFocusHandler());
-                    datePickerDropDown.addBlurHandler(getGroupFocusHandler());
-
-                    datePickerDropDown.addCloseHandler(new CloseHandler<PopupPanel>() {
-
-                        @Override
-                        public void onClose(CloseEvent<PopupPanel> event) {
-                            if (triggerButton.isActive()) {
-                                triggerButton.toggleActive();
-                            }
-                        }
-                    });
-                }
-
-                if (triggerButton.isActive()) {
-                    datePickerDropDown.showDatePicker();
-                } else {
-                    datePickerDropDown.hideDatePicker();
-                }
-
-            }
-        });
-
-        setTriggerButton(triggerButton);
-
     }
 
     @Override
-    protected void onEditorCreate() {
-        super.onEditorCreate();
-        getEditor().addMouseDownHandler(new MouseDownHandler() {
-            @Override
-            public void onMouseDown(MouseDownEvent event) {
-                if (datePickerDropDown != null) {
-                    datePickerDropDown.hideDatePicker();
+    protected TextBox createEditor() {
+        return new DatePickerTextBox();
+    }
+
+    class DatePickerTextBox extends TextBox {
+        public DatePickerTextBox() {
+            setAction(new Command() {
+
+                @Override
+                public void execute() {
+                    if (datePickerDropDown == null) {
+                        datePickerDropDown = new DatePickerDropDownPanel(NDatePicker.this) {
+                            @Override
+                            public void hideDatePicker() {
+                                super.hideDatePicker();
+                                if (DatePickerTextBox.this.isActive()) {
+                                    DatePickerTextBox.this.toggleActive();
+                                }
+                            };
+
+                            @Override
+                            public void showDatePicker() {
+                                super.showDatePicker();
+                                if (!DatePickerTextBox.this.isActive()) {
+                                    DatePickerTextBox.this.toggleActive();
+                                }
+                            };
+                        };
+                        datePickerDropDown.addFocusHandler(getGroupFocusHandler());
+                        datePickerDropDown.addBlurHandler(getGroupFocusHandler());
+
+                        datePickerDropDown.addCloseHandler(new CloseHandler<PopupPanel>() {
+
+                            @Override
+                            public void onClose(CloseEvent<PopupPanel> event) {
+                                if (DatePickerTextBox.this.isActive()) {
+                                    DatePickerTextBox.this.toggleActive();
+                                }
+                            }
+                        });
+                    }
+
+                    if (DatePickerTextBox.this.isActive()) {
+                        datePickerDropDown.showDatePicker();
+                    } else {
+                        datePickerDropDown.hideDatePicker();
+                    }
+
                 }
-            }
-        });
+            }, ImageFactory.getImages().datePicker());
+
+            addMouseDownHandler(new MouseDownHandler() {
+                @Override
+                public void onMouseDown(MouseDownEvent event) {
+                    if (datePickerDropDown != null) {
+                        datePickerDropDown.hideDatePicker();
+                    }
+                }
+            });
+        }
     }
 
 }
