@@ -247,7 +247,6 @@ public class WidgetTheme extends Theme {
         style = new Style(".", StyleName.ButtonText);
         style.addProperty("display", "inline");
         style.addProperty("whiteSpace", "nowrap");
-        style.addProperty("position", "relative");
         style.addProperty("text-indent", "0");
         style.addProperty("height", "100%");
         style.addProperty("text-align", "center");
