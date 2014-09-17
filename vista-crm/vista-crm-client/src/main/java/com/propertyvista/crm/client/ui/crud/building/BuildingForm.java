@@ -148,6 +148,7 @@ public class BuildingForm extends CrmEntityForm<BuildingDTO> {
             catalogTab.setTabEnabled(false);
         }
         get(proto().merchantAccount()).setVisible(false);
+        get(proto().defaultProductCatalog()).setVisible(!VistaFeatures.instance().yardiIntegration());
     }
 
     @Override
