@@ -22,9 +22,9 @@ package com.pyx4j.site.client.backoffice.ui.prime.report;
 
 import com.google.gwt.user.client.ui.IsWidget;
 
-import com.pyx4j.site.shared.domain.reports.ReportMetadata;
+import com.pyx4j.site.shared.domain.reports.ReportTemplate;
 
-public interface IReportSettingsForm<E extends ReportMetadata> extends IsWidget {
+public interface IReportSettingsForm<E extends ReportTemplate> extends IsWidget {
 
     void populate(E reportSettings);
 

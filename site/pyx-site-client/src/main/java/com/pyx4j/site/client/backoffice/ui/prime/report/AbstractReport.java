@@ -41,21 +41,19 @@ import com.pyx4j.commons.css.Theme;
 import com.pyx4j.commons.css.ThemeId;
 import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.gwt.client.deferred.DeferredProgressListener;
-import com.pyx4j.gwt.client.deferred.DeferredProgressPanel;
 import com.pyx4j.gwt.commons.Print;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.backoffice.ui.PaneTheme;
 import com.pyx4j.site.client.backoffice.ui.prime.AbstractPrimePane;
 import com.pyx4j.site.rpc.ReportsAppPlace;
 import com.pyx4j.site.shared.domain.reports.ExportableReport;
-import com.pyx4j.site.shared.domain.reports.HasAdvancedSettings;
-import com.pyx4j.site.shared.domain.reports.ReportMetadata;
+import com.pyx4j.site.shared.domain.reports.ReportTemplate;
 import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.TextBox;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 import com.pyx4j.widgets.client.dialog.OkCancelDialog;
 
-public abstract class AbstractReport<R extends ReportMetadata> extends AbstractPrimePane implements IReport<R> {
+public abstract class AbstractReport<R extends ReportTemplate> extends AbstractPrimePane implements IReport<R> {
 
     private enum MementoKeys {
 
@@ -63,67 +61,37 @@ public abstract class AbstractReport<R extends ReportMetadata> extends AbstractP
 
     }
 
-    static {
-        StringBuilder stylesString = new StringBuilder();
-        ReportPrintTheme theme = new ReportPrintTheme();
-        Palette palette = new ReportPrintPalette();
-        for (Style style : theme.getAllStyles()) {
-            stylesString.append(style.getCss(theme, palette));
-        }
-        PRINT_THEME = stylesString.toString();
-    }
-
-    private static String PRINT_THEME;
-
     private static final I18n i18n = I18n.get(AbstractReport.class);
 
     private IReport.Presenter<R> presenter;
 
     private FlowPanel viewPanel;
 
-    private FlowPanel settingsFormPanel;
+    private ReportControlPanel<R> reportControlPanel;
 
     private SimplePanel reportPanel;
 
-    private ReportSettingsFormControlBar reportSettingsFormControlBar;
-
     private Button exportButton;
-
-    private FlowPanel reportProgressControlPanel;
-
-    private SimplePanel reportProgressHolderPanel;
-
-    private DeferredProgressPanel progressPanel;
 
     private FlowPanel errorPanel;
 
     private IReportWidget reportWidget;
-
-    private CForm<R> activeSettingsForm;
-
-    private CForm<R> simpleSettingsForm;
 
     private CForm<R> advancedSettingsForm;
 
     public AbstractReport() {
     }
 
-    /**
-     * @param advancedSettingsForm
-     *            this is optional, and in this case ReportMetadata has to implement HasAdvancedSettings
-     */
-    public void setReportWidget(IReportWidget reportWidget, CForm<R> simpleSettingsForm, CForm<R> advancedSettingsForm) {
+    public void setReportWidget(IReportWidget reportWidget, CForm<R> controlPanelForm, CForm<R> settingsForm) {
         setSize("100%", "100%");
 
         this.reportWidget = reportWidget;
-        this.simpleSettingsForm = simpleSettingsForm;
-        this.simpleSettingsForm.init();
-        this.advancedSettingsForm = advancedSettingsForm;
+
+        this.advancedSettingsForm = settingsForm;
         if (this.advancedSettingsForm != null) {
             this.advancedSettingsForm.init();
         }
 
-        this.activeSettingsForm = null;
         this.presenter = null;
 
         this.viewPanel = new FlowPanel();
@@ -131,44 +99,9 @@ public abstract class AbstractReport<R extends ReportMetadata> extends AbstractP
         this.viewPanel.setWidth("100%");
         this.viewPanel.setHeight("100%");
 
-        settingsFormPanel = new FlowPanel();
-        settingsFormPanel.setStylePrimaryName(PaneTheme.StyleName.ReportSettingsFormPanel.name());
+        reportControlPanel = new ReportControlPanel<>(this, controlPanelForm);
 
-        reportSettingsFormControlBar = new ReportSettingsFormControlBar() {
-
-            @Override
-            public void onApply() {
-                if (presenter != null & activeSettingsForm != null) {
-                    AbstractReport.this.apply();
-                }
-            }
-
-            @Override
-            public void onSettingsModeToggled(boolean isAdvanced) {
-                setSettingsMode(isAdvanced);
-            }
-
-        };
-        settingsFormPanel.add(reportSettingsFormControlBar);
-
-        viewPanel.add(settingsFormPanel);
-
-        reportProgressControlPanel = new FlowPanel();
-        reportProgressControlPanel.setStyleName(PaneTheme.StyleName.ReportProgressControlPanel.name());
-
-        reportProgressHolderPanel = new SimplePanel();
-        reportProgressControlPanel.add(reportProgressHolderPanel);
-
-        reportProgressControlPanel.add(new Button(i18n.tr("Abort"), new Command() {
-            @Override
-            public void execute() {
-                progressPanel.cancelProgress();
-                showReportWidget();
-                unlockReportSettings();
-            }
-        }));
-        reportProgressControlPanel.setVisible(false);
-        viewPanel.add(reportProgressControlPanel);
+        viewPanel.add(reportControlPanel);
 
         errorPanel = new FlowPanel();
         errorPanel.setStyleName(PaneTheme.StyleName.ReportProgressErrorPanel.name());
@@ -189,14 +122,14 @@ public abstract class AbstractReport<R extends ReportMetadata> extends AbstractP
         addHeaderToolbarItem(new Button(i18n.tr("Save As..."), new Command() {
             @Override
             public void execute() {
-                onSaveSettingsAsClicked();
+                saveSettingsAs();
             }
         }));
 
         addHeaderToolbarItem(new Button(i18n.tr("Save"), new Command() {
             @Override
             public void execute() {
-                onSaveSettingsClicked();
+                saveSettings();
             }
         }));
 
@@ -226,8 +159,6 @@ public abstract class AbstractReport<R extends ReportMetadata> extends AbstractP
     public void setReportMetadata(R reportMetadata) {
         hideVisor();
 
-        this.activeSettingsForm = null;
-        this.reportSettingsFormControlBar.setEnabled(false);
         this.reportPanel.setWidget(null);
         this.errorPanel.setVisible(false);
 
@@ -242,7 +173,6 @@ public abstract class AbstractReport<R extends ReportMetadata> extends AbstractP
             reportWidget.setData(null, new Command() {
                 @Override
                 public void execute() {
-                    unlockReportSettings();
                     resetCaption();
                 }
             });
@@ -253,22 +183,20 @@ public abstract class AbstractReport<R extends ReportMetadata> extends AbstractP
     }
 
     @Override
-    public R getReportMetadata() {
-        return activeSettingsForm.getValue();
+    public R getReportSettings() {
+        return reportControlPanel.getReportSettings();
     }
 
     @Override
     public void setReportData(Object data) {
         errorPanel.setVisible(false);
 
-        lockReportSettings();
         showReportWidget();
         if (data != null) {
             reportWidget.asWidget().setVisible(true);
             reportWidget.setData(data, new Command() {
                 @Override
                 public void execute() {
-                    unlockReportSettings();
                 }
             });
         }
@@ -276,7 +204,6 @@ public abstract class AbstractReport<R extends ReportMetadata> extends AbstractP
 
     @Override
     public void setError(String errorMessage) {
-        unlockReportSettings();
         errorPanel.clear();
         setReportData(null);
         if (errorMessage != null) {
@@ -289,22 +216,15 @@ public abstract class AbstractReport<R extends ReportMetadata> extends AbstractP
 
     @Override
     public void startReportGenerationProgress(String deferredProgressCorelationId, DeferredProgressListener deferredProgressListener) {
-        activeSettingsForm.setEnabled(false);
-        reportSettingsFormControlBar.setEnabled(false);
         reportPanel.setVisible(false);
         errorPanel.setVisible(false);
-
-        progressPanel = new DeferredProgressPanel(i18n.tr("Generating Report"), false, deferredProgressListener);
-        progressPanel.setSize("600px", "30px");
-        progressPanel.startProgress(deferredProgressCorelationId);
-        reportProgressHolderPanel.setWidget(progressPanel);
-        reportProgressControlPanel.setVisible(true);
+        reportControlPanel.onReportGenerationStarted(deferredProgressCorelationId, deferredProgressListener);
     }
 
     @Override
     public void onReportMetadataSaveFailed(String reason) {
         MessageDialog.error(i18n.tr("Save Failed"), reason);
-        activeSettingsForm.getValue().reportMetadataId().setValue(null);
+        reportControlPanel.getReportSettings().reportTemplateName().setValue(null);
         resetCaption();
     }
 
@@ -314,12 +234,101 @@ public abstract class AbstractReport<R extends ReportMetadata> extends AbstractP
         resetCaption();
     }
 
+    @Override
+    public void storeState(Place place) {
+        getMemento().setCurrentPlace(place);
+        getMemento().putObject(MementoKeys.ReportMetadata.name(), reportControlPanel.getReportSettings());
+        getMemento().putObject(MementoKeys.ReportWidget.name(), reportWidget.getMemento());
+    }
+
+    @Override
+    public void restoreState() {
+        if (getMemento().mayRestore()) {
+            R reportMetadata = (R) getMemento().getObject(MementoKeys.ReportMetadata.name());
+            setReportMetadata(reportMetadata);
+
+            Object reportMemento = getMemento().getObject(MementoKeys.ReportWidget.name());
+
+            reportWidget.setMemento(reportMemento, new Command() {
+                @Override
+                public void execute() {
+                    showReportWidget();
+                }
+            });
+        } else {
+            setReportMetadata((R) ((ReportsAppPlace<?>) getMemento().getCurrentPlace()).getReportMetadata());
+        }
+    }
+
+    private void populateSettingsForm(R reportSettings) {
+        reportControlPanel.populateReportSettings(reportSettings);
+    }
+
+    private void saveSettings() {
+        if (!CommonsStringUtils.isStringSet(reportControlPanel.getReportSettings().reportTemplateName().getValue())) {
+            saveSettingsAs();
+        } else {
+            presenter.saveReportMetadata();
+        }
+    }
+
+    private void saveSettingsAs() {
+        new OkCancelDialog(i18n.tr("Save current report settings as:")) {
+            private TextBox reportMetadataIdTextBox;
+
+            {
+                setBody(reportMetadataIdTextBox = new TextBox());
+            }
+
+            @Override
+            public boolean onClickOk() {
+                if (!reportMetadataIdTextBox.getText().isEmpty()) {
+                    reportControlPanel.getReportSettings().reportTemplateName().setValue(reportMetadataIdTextBox.getText());
+                    presenter.saveAsReportMetadata();
+                    return true;
+                } else {
+                    return false;
+                }
+            }
+        }.show();
+    }
+
+    private void resetCaption() {
+        R reportSettings = reportControlPanel.getReportSettings();
+        if (reportSettings == null) {
+            // TODO: maybe just throw an exception?
+            setCaption(i18n.tr("Non Defined Report"));
+        } else {
+            String reportStringView = reportSettings.isNull() ? i18n.tr("Untitled") : reportSettings.getStringView();
+            setCaption(SimpleMessageFormat.format("{0} - {1}", reportSettings.getEntityMeta().getCaption(), reportStringView));
+        }
+    }
+
+    void showReportWidget() {
+        reportPanel.setVisible(true);
+        reportControlPanel.onReportGenerationStopped();
+    }
+
+    void generateReport() {
+        if (presenter != null) {
+            if (reportControlPanel.isValid()) {
+                AbstractReport.this.reportWidget.asWidget().setVisible(false);
+                Scheduler.get().scheduleDeferred(new Scheduler.ScheduledCommand() {
+                    @Override
+                    public void execute() {
+                        presenter.generateReport();
+                    }
+                });
+            }
+        }
+    }
+
     public void print() {
         StringBuilder printableHtml = new StringBuilder();
         printableHtml.append("<html>");
         printableHtml.append("<head>");
         printableHtml.append("<style type=\"text/css\">");
-        printableHtml.append(PRINT_THEME);
+        printableHtml.append(ReportPrintTheme.getPrintTheme());
         printableHtml.append("</style>");
         printableHtml.append("</head>");
         printableHtml.append("<body>");
@@ -339,146 +348,21 @@ public abstract class AbstractReport<R extends ReportMetadata> extends AbstractP
         Print.preview(printableHtml.toString());
     }
 
-    @Override
-    public void storeState(Place place) {
-        getMemento().setCurrentPlace(place);
-        getMemento().putObject(MementoKeys.ReportMetadata.name(), activeSettingsForm.getValue());
-        getMemento().putObject(MementoKeys.ReportWidget.name(), reportWidget.getMemento());
-    }
-
-    @Override
-    public void restoreState() {
-        if (getMemento().mayRestore()) {
-            R reportMetadata = (R) getMemento().getObject(MementoKeys.ReportMetadata.name());
-            setReportMetadata(reportMetadata);
-
-            Object reportMemento = getMemento().getObject(MementoKeys.ReportWidget.name());
-
-            lockReportSettings();
-
-            reportWidget.setMemento(reportMemento, new Command() {
-                @Override
-                public void execute() {
-                    showReportWidget();
-                    unlockReportSettings();
-                }
-            });
-        } else {
-            setReportMetadata((R) ((ReportsAppPlace<?>) getMemento().getCurrentPlace()).getReportMetadata());
-        }
-    }
-
-    private void setSettingsMode(boolean isAdvanced) {
-        if (activeSettingsForm != null) {
-            ((HasAdvancedSettings) activeSettingsForm.getValue()).isInAdvancedMode().setValue(isAdvanced);
-            populateSettingsForm(activeSettingsForm.getValue());
-        }
-    }
-
-    private void populateSettingsForm(R reportSettings) {
-        if (simpleSettingsForm != null) {
-            settingsFormPanel.remove(simpleSettingsForm);
-        }
-        if (advancedSettingsForm != null) {
-            settingsFormPanel.remove(advancedSettingsForm);
-        }
-        if (advancedSettingsForm != null) {
-            boolean isAdvancedMode = ((HasAdvancedSettings) reportSettings).isInAdvancedMode().getValue(false);
-            activeSettingsForm = isAdvancedMode ? advancedSettingsForm : simpleSettingsForm;
-            reportSettingsFormControlBar.enableSettingsModeToggle(isAdvancedMode);
-        } else {
-            activeSettingsForm = simpleSettingsForm;
-            reportSettingsFormControlBar.disableModeToggle();
-        }
-        settingsFormPanel.insert(activeSettingsForm, 0);
-        activeSettingsForm.reset();
-        activeSettingsForm.populate(reportSettings);
-    }
-
-    private void onSaveSettingsAsClicked() {
-        new OkCancelDialog(i18n.tr("Save current report settings as:")) {
-            private TextBox reportMetadataIdTextBox;
-
-            {
-                setBody(reportMetadataIdTextBox = new TextBox());
-            }
-
-            @Override
-            public boolean onClickOk() {
-                if (!reportMetadataIdTextBox.getText().isEmpty()) {
-                    activeSettingsForm.getValue().reportMetadataId().setValue(reportMetadataIdTextBox.getText());
-                    presenter.saveAsReportMetadata();
-                    return true;
-                } else {
-                    return false;
-                }
-            }
-        }.show();
-    }
-
-    private void onSaveSettingsClicked() {
-        if (!CommonsStringUtils.isStringSet(activeSettingsForm.getValue().reportMetadataId().getValue())) {
-            onSaveSettingsAsClicked();
-        } else {
-            presenter.saveReportMetadata();
-        }
-    }
-
-    private void resetCaption() {
-        ReportMetadata reportMetadata = activeSettingsForm != null ? activeSettingsForm.getValue() : null;
-        if (reportMetadata == null) {
-            // TODO: maybe just throw an exception?
-            setCaption(i18n.tr("Non Defined Report"));
-        } else {
-            String reportStringView = reportMetadata.isNull() ? i18n.tr("Untitled") : reportMetadata.getStringView();
-            setCaption(SimpleMessageFormat.format("{0} - {1}", reportMetadata.getEntityMeta().getCaption(), reportStringView));
-        }
-    }
-
-    private void showReportWidget() {
-        reportPanel.setVisible(true);
-
-        reportProgressHolderPanel.setWidget(null);
-        reportProgressControlPanel.setVisible(false);
-        progressPanel = null;
-    }
-
-    private void unlockReportSettings() {
-        if (activeSettingsForm != null) {
-            activeSettingsForm.setEnabled(true);
-        }
-        reportSettingsFormControlBar.setEnabled(true);
-    }
-
-    private void lockReportSettings() {
-        if (activeSettingsForm != null) {
-            activeSettingsForm.setEnabled(false);
-        }
-        reportSettingsFormControlBar.setEnabled(false);
-    }
-
-    private void apply() {
-        activeSettingsForm.setVisitedRecursive();
-        if (activeSettingsForm.isValid()) {
-            AbstractReport.this.reportWidget.asWidget().setVisible(false);
-            Scheduler.get().scheduleDeferred(new Scheduler.ScheduledCommand() {
-                @Override
-                public void execute() {
-                    presenter.apply(true);
-                }
-            });
-        }
-    }
-
     public static class ReportPrintPalette extends Palette {
 
     }
 
     public static class ReportPrintTheme extends Theme {
 
+        private static String printTheme;
+
         public enum Styles implements IStyleName {
 
             ReportNonPrintable, ReportPrintableOnly
+
+        }
+
+        static {
 
         }
 
@@ -502,6 +386,19 @@ public abstract class AbstractReport<R extends ReportMetadata> extends AbstractP
         @Override
         public final ThemeId getId() {
             return new ClassBasedThemeId(getClass());
+        }
+
+        public static String getPrintTheme() {
+            if (printTheme == null) {
+                StringBuilder stylesString = new StringBuilder();
+                ReportPrintTheme theme = new ReportPrintTheme();
+                Palette palette = new ReportPrintPalette();
+                for (Style style : theme.getAllStyles()) {
+                    stylesString.append(style.getCss(theme, palette));
+                }
+                printTheme = stylesString.toString();
+            }
+            return printTheme;
         }
     }
 

@@ -42,9 +42,9 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.shared.VoidSerializable;
 import com.pyx4j.server.contexts.ServerContext;
 import com.pyx4j.site.rpc.reports.IReportsService;
-import com.pyx4j.site.shared.domain.reports.ReportMetadata;
+import com.pyx4j.site.shared.domain.reports.ReportTemplate;
 
-public abstract class AbstractReportsService<R extends ReportMetadata> implements IReportsService<R> {
+public abstract class AbstractReportsService<R extends ReportTemplate> implements IReportsService<R> {
 
     private static final String REPORT_SESSION_STORAGE_KEY = "REPORT_SESSION_STORAGE_KEY";
 
@@ -62,11 +62,11 @@ public abstract class AbstractReportsService<R extends ReportMetadata> implement
 
         private final ReportGenerator reportGenerator;
 
-        private final ReportMetadata reportMetadata;
+        private final ReportTemplate reportMetadata;
 
         private volatile Throwable error;
 
-        public GenerateReportDeferredProcess(ReportGenerator reportGenerator, ReportMetadata reportMetadata) {
+        public GenerateReportDeferredProcess(ReportGenerator reportGenerator, ReportTemplate reportMetadata) {
             this.cancelled = false;
             this.isReady = false;
             this.reportGenerator = reportGenerator;
@@ -137,7 +137,7 @@ public abstract class AbstractReportsService<R extends ReportMetadata> implement
 
         private final ReportGenerator reportGenerator;
 
-        private final ReportMetadata reportMetadata;
+        private final ReportTemplate reportMetadata;
 
         private volatile boolean cancelled;
 
@@ -147,7 +147,7 @@ public abstract class AbstractReportsService<R extends ReportMetadata> implement
 
         private volatile Throwable error;
 
-        public ExportReportDeferredProcess(ReportGenerator reportGenerator, ReportMetadata reportMetadata) {
+        public ExportReportDeferredProcess(ReportGenerator reportGenerator, ReportTemplate reportMetadata) {
             this.reportGenerator = reportGenerator;
             this.reportMetadata = reportMetadata;
             this.exported = null;
@@ -224,7 +224,7 @@ public abstract class AbstractReportsService<R extends ReportMetadata> implement
     @Override
     public void generateReport(AsyncCallback<Serializable> callback, R reportMetadata) {
         @SuppressWarnings("unchecked")
-        Class<? extends ReportMetadata> reportMetadataClass = (Class<? extends ReportMetadata>) reportMetadata.getInstanceValueClass();
+        Class<? extends ReportTemplate> reportMetadataClass = (Class<? extends ReportTemplate>) reportMetadata.getInstanceValueClass();
         ReportGenerator reportGenerator = reportGeneratorFactory.getReportGenerator(reportMetadataClass);
         callback.onSuccess(reportGenerator.generateReport(reportMetadata));
 
@@ -233,7 +233,7 @@ public abstract class AbstractReportsService<R extends ReportMetadata> implement
     @Override
     public void generateReportAsync(AsyncCallback<String> callback, R reportMetadata) {
         @SuppressWarnings("unchecked")
-        Class<? extends ReportMetadata> reportMetadataClass = (Class<? extends ReportMetadata>) reportMetadata.getInstanceValueClass();
+        Class<? extends ReportTemplate> reportMetadataClass = (Class<? extends ReportTemplate>) reportMetadata.getInstanceValueClass();
         ReportGenerator reportGenerator = reportGeneratorFactory.getReportGenerator(reportMetadataClass);
         callback.onSuccess(DeferredProcessRegistry.fork(new GenerateReportDeferredProcess(reportGenerator, reportMetadata),
                 DeferredProcessRegistry.THREAD_POOL_DOWNLOADS));
@@ -249,7 +249,7 @@ public abstract class AbstractReportsService<R extends ReportMetadata> implement
     @Override
     public void export(AsyncCallback<String> callback, R reportMetadata) {
         @SuppressWarnings("unchecked")
-        Class<? extends ReportMetadata> reportMetadataClass = (Class<? extends ReportMetadata>) reportMetadata.getInstanceValueClass();
+        Class<? extends ReportTemplate> reportMetadataClass = (Class<? extends ReportTemplate>) reportMetadata.getInstanceValueClass();
         ReportGenerator reportGenerator = reportGeneratorFactory.getReportGenerator(reportMetadataClass);
         callback.onSuccess(DeferredProcessRegistry.fork(new ExportReportDeferredProcess(reportGenerator, reportMetadata),
                 DeferredProcessRegistry.THREAD_POOL_DOWNLOADS));

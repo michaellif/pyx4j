@@ -26,9 +26,9 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.rpc.shared.IService;
 import com.pyx4j.rpc.shared.VoidSerializable;
-import com.pyx4j.site.shared.domain.reports.ReportMetadata;
+import com.pyx4j.site.shared.domain.reports.ReportTemplate;
 
-public interface IReportsService<R extends ReportMetadata> extends IService {
+public interface IReportsService<R extends ReportTemplate> extends IService {
 
     /** prepares and returns a report for the provided report metadata */
     void generateReport(AsyncCallback<Serializable> callback, R reportMetadata);

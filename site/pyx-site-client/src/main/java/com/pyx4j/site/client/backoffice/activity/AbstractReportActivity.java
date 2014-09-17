@@ -56,9 +56,9 @@ import com.pyx4j.site.rpc.ReportsAppPlace;
 import com.pyx4j.site.rpc.customization.CustomizationOverwriteAttemptException;
 import com.pyx4j.site.rpc.customization.ICustomizationPersistenceService;
 import com.pyx4j.site.rpc.reports.IReportsService;
-import com.pyx4j.site.shared.domain.reports.ReportMetadata;
+import com.pyx4j.site.shared.domain.reports.ReportTemplate;
 
-public abstract class AbstractReportActivity<R extends ReportMetadata> extends AbstractActivity implements IReport.Presenter<R> {
+public abstract class AbstractReportActivity<R extends ReportTemplate> extends AbstractActivity implements IReport.Presenter<R> {
 
     public class ReportSettingsManagementVizorController extends AbstractVisorController {
 
@@ -95,7 +95,7 @@ public abstract class AbstractReportActivity<R extends ReportMetadata> extends A
 
     private static class CachedReportData {
 
-        ReportMetadata reportMetadata;
+        ReportTemplate reportMetadata;
 
         Object data;
     }
@@ -110,7 +110,7 @@ public abstract class AbstractReportActivity<R extends ReportMetadata> extends A
 
     private final IReportsService<R> reportsService;
 
-    private final ICustomizationPersistenceService<ReportMetadata> reportsSettingsPersistenceService;
+    private final ICustomizationPersistenceService<ReportTemplate> reportsSettingsPersistenceService;
 
     private ReportSettingsManagementVizorController reportSettingsManagementVizorController;
 
@@ -123,7 +123,7 @@ public abstract class AbstractReportActivity<R extends ReportMetadata> extends A
     private final Class<R> reportMetadataClass;
 
     public AbstractReportActivity(Class<R> reportMetadataClass, ReportsAppPlace<R> place, IReportsService<R> reportsService,
-            ICustomizationPersistenceService<ReportMetadata> reportsSettingsPersistenceService, IReport<R> view, String dowloadServletPath) {
+            ICustomizationPersistenceService<ReportTemplate> reportsSettingsPersistenceService, IReport<R> view, String dowloadServletPath) {
         this.reportMetadataClass = reportMetadataClass;
         this.reportsService = reportsService;
         this.reportsSettingsPersistenceService = reportsSettingsPersistenceService;
@@ -166,7 +166,7 @@ public abstract class AbstractReportActivity<R extends ReportMetadata> extends A
     }
 
     @Override
-    public void apply(boolean forceRefresh) {
+    public void generateReport() {
         reportsService.generateReportAsync(new DefaultAsyncCallback<String>() {
             @Override
             public void onSuccess(String deferredProcessId) {
@@ -183,8 +183,8 @@ public abstract class AbstractReportActivity<R extends ReportMetadata> extends A
                                     public void onSuccess(Serializable result) {
                                         CachedReportData cachedReportData = new CachedReportData();
                                         cachedReportData.data = result;
-                                        cachedReportData.reportMetadata = view.getReportMetadata().duplicate();
-                                        reportDataCache.put(GWTJava5Helper.getSimpleName(view.getReportMetadata().getInstanceValueClass()), cachedReportData);
+                                        cachedReportData.reportMetadata = view.getReportSettings().duplicate();
+                                        reportDataCache.put(GWTJava5Helper.getSimpleName(view.getReportSettings().getInstanceValueClass()), cachedReportData);
                                         view.setReportData(result);
                                     }
 
@@ -205,7 +205,7 @@ public abstract class AbstractReportActivity<R extends ReportMetadata> extends A
                     }
                 });
             }
-        }, view.getReportMetadata());
+        }, view.getReportSettings());
     }
 
     @Override
@@ -218,7 +218,7 @@ public abstract class AbstractReportActivity<R extends ReportMetadata> extends A
         final String METADATA_KEY = "METADATA";
 
         HashMap<String, Serializable> parameters = new HashMap<>();
-        parameters.put(METADATA_KEY, view.getReportMetadata());
+        parameters.put(METADATA_KEY, view.getReportSettings());
 
         request.setParameters(parameters);
         d.start(new ReportService<IEntity>() {
@@ -238,10 +238,10 @@ public abstract class AbstractReportActivity<R extends ReportMetadata> extends A
 
     @Override
     public void loadReportMetadata(final String reportMetadataId) {
-        reportsSettingsPersistenceService.load(new DefaultAsyncCallback<ReportMetadata>() {
+        reportsSettingsPersistenceService.load(new DefaultAsyncCallback<ReportTemplate>() {
 
             @Override
-            public void onSuccess(ReportMetadata reportMetadata) {
+            public void onSuccess(ReportTemplate reportMetadata) {
                 place.define((R) reportMetadata);
                 view.setReportMetadata((R) reportMetadata);
                 onReportMetadataSet((R) reportMetadata);
@@ -265,21 +265,21 @@ public abstract class AbstractReportActivity<R extends ReportMetadata> extends A
 
             @Override
             public void onSuccess(VoidSerializable result) {
-                view.onReportMetadataSaveSucceed(view.getReportMetadata().reportMetadataId().getValue());
+                view.onReportMetadataSaveSucceed(view.getReportSettings().reportTemplateName().getValue());
             }
 
             @Override
             public void onFailure(Throwable caught) {
                 if (caught instanceof CustomizationOverwriteAttemptException) {
                     view.onReportMetadataSaveFailed(i18n.tr("Please choose a different name: a report settings preset named \"{0}\" already exists", view
-                            .getReportMetadata().reportMetadataId().getValue()));
+                            .getReportSettings().reportTemplateName().getValue()));
                 } else if (caught instanceof UserRuntimeException) {
                     view.onReportMetadataSaveFailed(((UserRuntimeException) caught).getMessage());
                 } else {
                     super.onFailure(caught);
                 }
             }
-        }, view.getReportMetadata().reportMetadataId().getValue(), view.getReportMetadata(), allowOverwrite);
+        }, view.getReportSettings().reportTemplateName().getValue(), view.getReportSettings(), allowOverwrite);
 
     }
 

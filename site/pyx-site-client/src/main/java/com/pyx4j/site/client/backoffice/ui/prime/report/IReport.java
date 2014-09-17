@@ -22,15 +22,15 @@ package com.pyx4j.site.client.backoffice.ui.prime.report;
 
 import com.pyx4j.gwt.client.deferred.DeferredProgressListener;
 import com.pyx4j.site.client.backoffice.ui.prime.IPrimePane;
-import com.pyx4j.site.shared.domain.reports.ReportMetadata;
+import com.pyx4j.site.shared.domain.reports.ReportTemplate;
 
-public interface IReport<R extends ReportMetadata> extends IPrimePane {
+public interface IReport<R extends ReportTemplate> extends IPrimePane {
 
     public interface Presenter<R> extends IPrimePane.Presenter {
 
         void export();
 
-        void apply(boolean forceRefresh);
+        void generateReport();
 
         void loadReportMetadata(String reportMetadataId);
 
@@ -48,7 +48,7 @@ public interface IReport<R extends ReportMetadata> extends IPrimePane {
 
     void setReportMetadata(R reportMetadtata);
 
-    R getReportMetadata();
+    R getReportSettings();
 
     void startReportGenerationProgress(String deferredProgressCorelationId, DeferredProgressListener deferredProgressListener);
 

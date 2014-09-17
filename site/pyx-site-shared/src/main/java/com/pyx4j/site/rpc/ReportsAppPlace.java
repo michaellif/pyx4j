@@ -22,10 +22,10 @@ package com.pyx4j.site.rpc;
 
 import com.pyx4j.i18n.annotations.I18n;
 import com.pyx4j.i18n.annotations.I18n.I18nStrategy;
-import com.pyx4j.site.shared.domain.reports.ReportMetadata;
+import com.pyx4j.site.shared.domain.reports.ReportTemplate;
 
 @I18n(strategy = I18nStrategy.IgnoreAll)
-public class ReportsAppPlace<R extends ReportMetadata> extends CrudAppPlace {
+public class ReportsAppPlace<R extends ReportTemplate> extends CrudAppPlace {
 
     private R metadata;
 
@@ -46,13 +46,13 @@ public class ReportsAppPlace<R extends ReportMetadata> extends CrudAppPlace {
 
     public ReportsAppPlace<R> define(R metadata) {
         this.metadata = metadata;
-        if (!this.metadata.reportMetadataId().isNull()) {
-            this.queryArg(ARG_NAME_ID, this.metadata.reportMetadataId().getValue());
+        if (!this.metadata.reportTemplateName().isNull()) {
+            this.queryArg(ARG_NAME_ID, this.metadata.reportTemplateName().getValue());
         }
         return this;
     }
 
-    public ReportMetadata getReportMetadata() {
+    public ReportTemplate getReportMetadata() {
         return metadata;
     }
 

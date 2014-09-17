@@ -22,13 +22,13 @@ package com.pyx4j.essentials.server.services.reports;
 
 import java.io.Serializable;
 
-import com.pyx4j.site.shared.domain.reports.ReportMetadata;
+import com.pyx4j.site.shared.domain.reports.ReportTemplate;
 
 public interface ReportGenerator {
 
     ReportProgressStatus getProgressStatus();
 
-    Serializable generateReport(ReportMetadata reportMetadata);
+    Serializable generateReport(ReportTemplate reportMetadata);
 
     void abort();
 

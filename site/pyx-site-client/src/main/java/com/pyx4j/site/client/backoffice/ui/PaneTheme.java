@@ -62,7 +62,7 @@ public class PaneTheme extends Theme {
 
         VisorCloseButton,
 
-        ReportView, ReportSettingsFormPanel, ReportPanel, ReportProgressControlPanel, ReportProgressErrorPanel
+        ReportView, ReportControlPanel, ReportControlPanelActionBar, ReportPanel, ReportProgressErrorPanel
 
     }
 
@@ -248,21 +248,21 @@ public class PaneTheme extends Theme {
     }
 
     private void initReportStyles() {
-        Style style = new Style(".", PaneTheme.StyleName.ReportSettingsFormPanel);
+        Style style = new Style(".", PaneTheme.StyleName.ReportControlPanel);
         style.addProperty("background-color", ThemeColor.foreground, 0.1);
         addStyle(style);
 
-        style = new Style(".", PaneTheme.StyleName.ReportSettingsFormPanel, " .EntityFolderTableDecorator");
+        style = new Style(".", PaneTheme.StyleName.ReportControlPanelActionBar);
+        style.addProperty("text-align", "center");
+        style.addProperty("padding-bottom", "10px");
+        addStyle(style);
+
+        style = new Style(".", PaneTheme.StyleName.ReportControlPanel, " .EntityFolderTableDecorator");
         style.addProperty("width", "30em");
         addStyle(style);
 
         style = new Style(".", PaneTheme.StyleName.ReportView.name(), " .FooterToolbar");
         style.addProperty("height", "2em");
-        addStyle(style);
-
-        style = new Style(".", PaneTheme.StyleName.ReportProgressControlPanel.name());
-        style.addProperty("text-align", "center");
-        style.addProperty("width", "100%");
         addStyle(style);
 
         style = new Style(".", PaneTheme.StyleName.ReportProgressErrorPanel.name());

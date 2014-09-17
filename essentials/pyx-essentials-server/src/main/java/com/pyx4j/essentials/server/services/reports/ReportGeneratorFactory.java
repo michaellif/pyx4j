@@ -20,13 +20,13 @@
  */
 package com.pyx4j.essentials.server.services.reports;
 
-import com.pyx4j.site.shared.domain.reports.ReportMetadata;
+import com.pyx4j.site.shared.domain.reports.ReportTemplate;
 
 public abstract class ReportGeneratorFactory {
 
-    public abstract Class<? extends ReportGenerator> getReportGeneratorClass(Class<? extends ReportMetadata> reportMetadataClass);
+    public abstract Class<? extends ReportGenerator> getReportGeneratorClass(Class<? extends ReportTemplate> reportMetadataClass);
 
-    public ReportGenerator getReportGenerator(Class<? extends ReportMetadata> reportMetadataClass) {
+    public ReportGenerator getReportGenerator(Class<? extends ReportTemplate> reportMetadataClass) {
         Class<? extends ReportGenerator> reportGeneratorClass = getReportGeneratorClass(reportMetadataClass);
         if (reportGeneratorClass != null) {
             ReportGenerator reportGenerator;

@@ -28,9 +28,8 @@ import com.pyx4j.entity.core.IPrimitive;
 
 @AbstractEntity
 @ToStringFormat(value = "{0,choice,null#Untitled|!null#{0}}", nil = "{0,choice,null#Untitled|!null#{0}}")
-public interface ReportMetadata extends IEntity {
+public interface ReportTemplate extends IEntity {
 
-    /** This name is used as identifier to of metadata for persistance, if <code>null</code> it means it's untitled and have never been saved */
     @ToString(index = 0)
-    IPrimitive<String> reportMetadataId();
+    IPrimitive<String> reportTemplateName();
 }
