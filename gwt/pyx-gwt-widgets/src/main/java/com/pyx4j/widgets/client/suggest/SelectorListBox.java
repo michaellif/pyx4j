@@ -49,8 +49,21 @@ public class SelectorListBox<E> extends AbstractSelectorWidget<E> implements Has
 
     private final IPickerPanel<E> picker;
 
-    @SuppressWarnings("unchecked")
+    private Command addItemCommand;
+
     public SelectorListBox(final IOptionsGrabber<E> optionsGrabber, IFormatter<E, String> valueFormatter, IFormatter<E, String[]> optionPathFormatter) {
+        this(optionsGrabber, null, valueFormatter, optionPathFormatter);
+        addItemCommand = new Command() {
+            @Override
+            public void execute() {
+                showEverithingPicker();
+            }
+        };
+    }
+
+    @SuppressWarnings("unchecked")
+    public SelectorListBox(final IOptionsGrabber<E> optionsGrabber, Command addItemCommand, IFormatter<E, String> valueFormatter,
+            IFormatter<E, String[]> optionPathFormatter) {
         super(new SelectorListBoxValuePanel<E>(valueFormatter));
 
         this.valueFormatter = valueFormatter;
@@ -80,14 +93,7 @@ public class SelectorListBox<E> extends AbstractSelectorWidget<E> implements Has
             }
         });
 
-        listBox.setAction(new Command() {
-            @Override
-            public void execute() {
-
-//                showDialog();
-                showEverithingPicker();
-            }
-        });
+        listBox.setAction(addItemCommand);
 
     }
 
@@ -114,11 +120,6 @@ public class SelectorListBox<E> extends AbstractSelectorWidget<E> implements Has
         picker.refreshOptions("");
         showPickerPopup(picker);
     }
-
-//    protected void showDialog() {
-//        Dialog dialog = new SelectRecipientsDialog();
-//        dialog.show();
-//    }
 
     @Override
     protected void showPickerPopup(IPickerPanel<E> pickerPanel) {

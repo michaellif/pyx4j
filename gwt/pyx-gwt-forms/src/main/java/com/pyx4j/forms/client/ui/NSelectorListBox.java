@@ -23,6 +23,7 @@ package com.pyx4j.forms.client.ui;
 import java.text.ParseException;
 import java.util.Collection;
 
+import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.HTML;
 
 import com.pyx4j.commons.IFormatter;
@@ -44,7 +45,7 @@ public class NSelectorListBox<E extends IEntity> extends NFocusField<Collection<
 
     @Override
     protected SelectorListBox<E> createEditor() {
-        return new SelectorListBox<E>(getCComponent().getOptionsGrabber(), new IFormatter<E, String>() {
+        return new SelectorListBox<E>(getCComponent().getOptionsGrabber(), getCComponent().getAddItemCommand(), new IFormatter<E, String>() {
 
             @Override
             public String format(E value) {

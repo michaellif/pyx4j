@@ -22,14 +22,23 @@ package com.pyx4j.forms.client.ui;
 
 import java.util.Collection;
 
+import com.google.gwt.user.client.Command;
+
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.widgets.client.suggest.IOptionsGrabber;
 
 public class CSelectorListBox<E extends IEntity> extends CAbstractSelectorBox<Collection<E>, E, NSelectorListBox<E>> {
 
-    public CSelectorListBox(IOptionsGrabber<E> optionsGrabber) {
+    private final Command addItemCommand;
+
+    public CSelectorListBox(IOptionsGrabber<E> optionsGrabber, Command addItemCommand) {
         super(optionsGrabber);
+        this.addItemCommand = addItemCommand;
         setNativeComponent(new NSelectorListBox<E>(this));
+    }
+
+    public Command getAddItemCommand() {
+        return addItemCommand;
     }
 
 }
