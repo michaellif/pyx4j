@@ -28,14 +28,14 @@ public class TenantSureLister extends AbstractLister<TenantSureDTO> {
                     new MemberColumnDescriptor.Builder(proto().pmc()).build(),
                     new MemberColumnDescriptor.Builder(proto().pmc().namespace()).visible(false).build(),
                     
-                    new MemberColumnDescriptor.Builder(proto().propertyCode()).build(),
+                    new MemberColumnDescriptor.Builder(proto().propertyCode()).searchable(false).build(),
                     new MemberColumnDescriptor.Builder(proto().certificateNumber()).build(),
                     
-                    new MemberColumnDescriptor.Builder(proto().policy().status()).build(),
-                    new MemberColumnDescriptor.Builder(proto().policy().cancellation()).build(),
-                    new MemberColumnDescriptor.Builder(proto().policy().cancellationDate()).build(),
-                    new MemberColumnDescriptor.Builder(proto().policy().certificate().inceptionDate()).build(),
-                    new MemberColumnDescriptor.Builder(proto().policy().tenant().customer().person().name()).build()
+                    new MemberColumnDescriptor.Builder(proto().policy().status()).searchable(false).build(),
+                    new MemberColumnDescriptor.Builder(proto().policy().cancellation()).searchable(false).build(),
+                    new MemberColumnDescriptor.Builder(proto().policy().cancellationDate()).searchable(false).build(),
+                    new MemberColumnDescriptor.Builder(proto().policy().certificate().inceptionDate()).searchable(false).build(),
+                    new MemberColumnDescriptor.Builder(proto().policy().tenant().customer().person().name()).searchable(false).build()
             ));//@formatter:on
     }
 }
