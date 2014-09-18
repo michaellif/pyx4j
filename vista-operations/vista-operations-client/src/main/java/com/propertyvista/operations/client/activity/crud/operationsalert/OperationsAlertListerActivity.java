@@ -16,7 +16,9 @@ package com.propertyvista.operations.client.activity.crud.operationsalert;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.place.shared.Place;
 
+import com.pyx4j.entity.core.criterion.EntityFiltersBuilder;
 import com.pyx4j.site.client.backoffice.activity.AbstractListerActivity;
+import com.pyx4j.site.rpc.AppPlace;
 
 import com.propertyvista.operations.client.OperationsSite;
 import com.propertyvista.operations.client.ui.crud.operationsalert.OperationsAlertListerView;
@@ -27,7 +29,14 @@ public class OperationsAlertListerActivity extends AbstractListerActivity<Operat
 
     public OperationsAlertListerActivity(Place place) {
         super(OperationsAlertDTO.class, place, OperationsSite.getViewFactory().getView(OperationsAlertListerView.class), GWT
-                        .<OperationsAlertCrudService> create(OperationsAlertCrudService.class));
+                .<OperationsAlertCrudService> create(OperationsAlertCrudService.class));
     }
 
+    @Override
+    protected void parseExternalFilters(AppPlace place, Class<OperationsAlertDTO> entityClass, EntityFiltersBuilder<OperationsAlertDTO> filters) {
+        super.parseExternalFilters(place, entityClass, filters);
+
+        // restrict lister to non-resolved alerts:  
+        filters.eq(filters.proto().resolved(), Boolean.FALSE);
+    }
 }
