@@ -69,12 +69,10 @@ public class EftReportWidget extends HTML implements IReportWidget {
     }
 
     @Override
-    public void setData(Object data, final Command onWidgetReady) {
+    public void setData(Object data) {
         setHTML("");
         isTableReady = false;
-
         if (data == null) {
-            onWidgetReady.execute();
             return;
         }
 
@@ -83,7 +81,6 @@ public class EftReportWidget extends HTML implements IReportWidget {
 
         if (paymentRecords.isEmpty()) {
             setHTML(NoResultsHtml.get());
-            onWidgetReady.execute();
             return;
         }
 
@@ -173,7 +170,6 @@ public class EftReportWidget extends HTML implements IReportWidget {
                     builder.appendHtmlConstant("</table>");
 
                     setReportTable(builder.toSafeHtml().asString(), null);
-                    onWidgetReady.execute();
                     return false;
                 }
             }
@@ -192,7 +188,7 @@ public class EftReportWidget extends HTML implements IReportWidget {
     }
 
     @Override
-    public void setMemento(final Object memento, Command onWidgetReady) {
+    public void setMemento(final Object memento) {
         isTableReady = false;
         if (memento != null) {
             String html = (String) (((Object[]) memento)[0]);
@@ -217,9 +213,8 @@ public class EftReportWidget extends HTML implements IReportWidget {
                 }
             });
         } else {
-            setData(null, onWidgetReady);
+            setData(null);
         }
-        onWidgetReady.execute();
     }
 
     private void setReportTable(String safeHtmlReportTable, final Command onSetComplete) {

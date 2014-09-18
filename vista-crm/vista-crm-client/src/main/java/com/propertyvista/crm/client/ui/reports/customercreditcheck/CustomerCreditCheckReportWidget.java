@@ -17,7 +17,6 @@ import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.event.dom.client.ScrollEvent;
 import com.google.gwt.event.dom.client.ScrollHandler;
 import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
-import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.HTML;
 
 import com.pyx4j.entity.core.EntityFactory;
@@ -60,15 +59,14 @@ public class CustomerCreditCheckReportWidget extends HTML implements IReportWidg
     ScrollBarPositionMemento scrollBarPositionMemento;
 
     @Override
-    public void setData(Object data, Command onWidgetReady) {
+    public void setData(Object data) {
         setHTML("");
         if (data == null) {
-            onWidgetReady.execute();
             return;
         }
+
         CustomerCreditCheckReportDataDTO reportData = (CustomerCreditCheckReportDataDTO) data;
         if (reportData.unitStatuses.isEmpty()) {
-            onWidgetReady.execute();
             setHTML(NoResultsHtml.get());
             return;
         }
@@ -107,7 +105,6 @@ public class CustomerCreditCheckReportWidget extends HTML implements IReportWidg
             }
         }, ScrollEvent.getType());
 
-        onWidgetReady.execute();
     }
 
     @Override
@@ -116,7 +113,7 @@ public class CustomerCreditCheckReportWidget extends HTML implements IReportWidg
     }
 
     @Override
-    public void setMemento(final Object memento, Command onWidgetReady) {
+    public void setMemento(final Object memento) {
         if (memento != null) {
             String html = (String) (((Object[]) memento)[0]);
             setHTML(html);
@@ -132,7 +129,6 @@ public class CustomerCreditCheckReportWidget extends HTML implements IReportWidg
             });
 
         }
-        onWidgetReady.execute();
     }
 
     private void cell(SafeHtmlBuilder bb, String data) {

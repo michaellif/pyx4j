@@ -19,7 +19,6 @@ import java.util.Arrays;
 import com.google.gwt.event.dom.client.ScrollEvent;
 import com.google.gwt.event.dom.client.ScrollHandler;
 import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
-import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
 
@@ -39,17 +38,15 @@ public class AvailabilityReportWidget extends FlowPanel implements IReportWidget
     ScrollBarPositionMemento scrollBarPositionMemento;
 
     @Override
-    public void setData(Object data, Command onWidgetReady) {
+    public void setData(Object data) {
         clear();
         if (data == null) {
-            onWidgetReady.execute();
             return;
         }
 
         AvailabilityReportDataDTO reportData = (AvailabilityReportDataDTO) data;
         if (reportData.unitStatuses.isEmpty()) {
             add(new HTML(NoResultsHtml.get()));
-            onWidgetReady.execute();
             return;
         }
         SafeHtmlBuilder bb = new SafeHtmlBuilder();
@@ -73,8 +70,6 @@ public class AvailabilityReportWidget extends FlowPanel implements IReportWidget
                 scrollBarPositionMemento = new ScrollBarPositionMemento(getElement().getScrollLeft(), getElement().getScrollTop());
             }
         }, ScrollEvent.getType());
-
-        onWidgetReady.execute();
     }
 
     @Override
@@ -83,14 +78,12 @@ public class AvailabilityReportWidget extends FlowPanel implements IReportWidget
     }
 
     @Override
-    public void setMemento(Object memento, Command onWidgetReady) {
+    public void setMemento(Object memento) {
         if (memento != null) {
             ScrollBarPositionMemento scrollBarPosition = (ScrollBarPositionMemento) memento;
             getElement().setScrollLeft(scrollBarPosition.posX);
             getElement().setScrollTop(scrollBarPosition.posY);
         }
-
-        onWidgetReady.execute();
     }
 
 }

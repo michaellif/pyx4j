@@ -24,7 +24,6 @@ import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ScrollEvent;
 import com.google.gwt.event.dom.client.ScrollHandler;
 import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
-import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.EventListener;
@@ -51,18 +50,15 @@ public class ResidentInsuranceReportWidget extends HTML implements IReportWidget
     }
 
     @Override
-    public void setData(Object data, Command onWidgetReady) {
+    public void setData(Object data) {
         setHTML("");
-
         if (data == null) {
-            onWidgetReady.execute();
             return;
         }
 
         Vector<ResidentInsuranceStatusDTO> reportData = (Vector<ResidentInsuranceStatusDTO>) data;
         if (reportData.isEmpty()) {
             setHTML(NoResultsHtml.get());
-            onWidgetReady.execute();
             return;
         }
 
@@ -123,8 +119,6 @@ public class ResidentInsuranceReportWidget extends HTML implements IReportWidget
 
             }
         });
-
-        onWidgetReady.execute();
     }
 
     @Override
@@ -133,7 +127,7 @@ public class ResidentInsuranceReportWidget extends HTML implements IReportWidget
     }
 
     @Override
-    public void setMemento(final Object memento, Command onWidgetReady) {
+    public void setMemento(final Object memento) {
         if (memento != null) {
             String html = (String) (((Object[]) memento)[0]);
             setHTML(html);
@@ -157,7 +151,6 @@ public class ResidentInsuranceReportWidget extends HTML implements IReportWidget
             });
 
         }
-        onWidgetReady.execute();
     }
 
     private List<ITableColumnFormatter> initColumnDescriptors() {
