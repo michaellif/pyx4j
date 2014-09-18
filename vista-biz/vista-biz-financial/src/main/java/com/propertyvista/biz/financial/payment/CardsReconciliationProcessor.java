@@ -74,6 +74,10 @@ class CardsReconciliationProcessor {
         this.pmc = VistaDeployment.getCurrentPmc();
     }
 
+    @SuppressWarnings("serial")
+    private static class ValidationFailedRollback extends RuntimeException {
+    }
+
     public void processPmcReconciliation() {
         List<CardsReconciliationRecord> unpocessedRecords = TaskRunner.runInOperationsNamespace(new Callable<List<CardsReconciliationRecord>>() {
             @Override
@@ -113,13 +117,15 @@ class CardsReconciliationProcessor {
                 executionMonitor.add(batchExecutionMonitor);
                 executionMonitor.addProcessedEvent("AggregatedTransfer", reconciliationRecord.totalDeposit().getValue());
 
+            } catch (ValidationFailedRollback e) {
+                log.error("AggregatedTransfer {} creation failed", reconciliationRecord.id().getValue(), e);
             } catch (Throwable e) {
                 log.error("AggregatedTransfer {} creation failed", reconciliationRecord.id().getValue(), e);
                 executionMonitor.addErredEvent(
                         "AggregatedTransfer",
                         reconciliationRecord.totalDeposit().getValue(),
-                        SimpleMessageFormat.format("AggregatedTransferReconciliation {0} {1}", reconciliationRecord.id(),
-                                reconciliationRecord.merchantTerminalId()), e);
+                        SimpleMessageFormat.format("AggregatedTransferReconciliation {0} {1} {2}", reconciliationRecord.id(),
+                                reconciliationRecord.merchantTerminalId(), reconciliationRecord.date()), e);
             }
         }
     }
@@ -164,24 +170,26 @@ class CardsReconciliationProcessor {
 
         if (reconciliationRecord.totalDeposit().getValue().compareTo(totals.totalAmount) != 0) {
             executionMonitor.addErredEvent("DailyTotals", totals.totalAmount.subtract(reconciliationRecord.totalDeposit().getValue()), //
-                    SimpleMessageFormat.format("Merchant {0} deposit {1} does not match transactions total {2}",//
-                            reconciliationRecord.merchantTerminalId(), reconciliationRecord.totalDeposit(), totals.totalAmount));
-            throw new RuntimeException("validation failed");
+                    SimpleMessageFormat.format("Merchant {0} {1} deposit {2} does not match transactions total {3}",//
+                            reconciliationRecord.merchantTerminalId(), reconciliationRecord.date(), reconciliationRecord.totalDeposit(), totals.totalAmount));
+            throw new ValidationFailedRollback();
         }
 
         // Validate Card Types Totals.
         if (reconciliationRecord.visaDeposit().getValue(BigDecimal.ZERO).compareTo(totals.visaAmount) != 0) {
             executionMonitor.addErredEvent("DailyTotals", totals.visaAmount.subtract(reconciliationRecord.visaDeposit().getValue(BigDecimal.ZERO)), //
-                    SimpleMessageFormat.format("Merchant {0} Visa Deposit {1} does not match transactions total {2}",//
-                            reconciliationRecord.merchantTerminalId(), reconciliationRecord.visaDeposit(), totals.visaAmount));
-            throw new RuntimeException("validation failed");
+                    SimpleMessageFormat.format("Merchant {0} {1} Visa Deposit {2} does not match transactions total {3}",//
+                            reconciliationRecord.merchantTerminalId(), reconciliationRecord.date(), reconciliationRecord.visaDeposit(), totals.visaAmount));
+            throw new ValidationFailedRollback();
         }
 
         if (reconciliationRecord.mastercardDeposit().getValue(BigDecimal.ZERO).compareTo(totals.mastercardAmount) != 0) {
             executionMonitor.addErredEvent("DailyTotals", totals.mastercardAmount.subtract(reconciliationRecord.mastercardDeposit().getValue(BigDecimal.ZERO)), //
-                    SimpleMessageFormat.format("Merchant {0} MasterCard Deposit {1} does not match transactions total {2}",//
-                            reconciliationRecord.merchantTerminalId(), reconciliationRecord.mastercardDeposit(), totals.mastercardAmount));
-            throw new RuntimeException("validation failed");
+                    SimpleMessageFormat.format(
+                            "Merchant {0} {1} MasterCard Deposit {2} does not match transactions total {3}",//
+                            reconciliationRecord.merchantTerminalId(), reconciliationRecord.date(), reconciliationRecord.mastercardDeposit(),
+                            totals.mastercardAmount));
+            throw new ValidationFailedRollback();
         }
     }
 
