@@ -143,7 +143,9 @@ public class YardiTestBase extends IntegrationTestBase {
         EntityQueryCriteria<Lease> criteria = EntityQueryCriteria.create(Lease.class);
         criteria.add(PropertyCriterion.eq(criteria.proto().leaseId(), leaseId));
         Lease lease = Persistence.service().retrieve(criteria);
-        Persistence.service().retrieve(lease.currentTerm().version().tenants());
+        if (lease != null) {
+            Persistence.service().retrieve(lease.currentTerm().version().tenants());
+        }
         return lease;
     }
 

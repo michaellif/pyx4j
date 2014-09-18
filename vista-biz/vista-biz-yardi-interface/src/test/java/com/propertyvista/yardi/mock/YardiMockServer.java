@@ -30,6 +30,7 @@ import com.propertyvista.test.mock.MockEventBus;
 import com.propertyvista.yardi.beans.Messages;
 import com.propertyvista.yardi.beans.Properties;
 import com.propertyvista.yardi.beans.Property;
+import com.propertyvista.yardi.mappers.BuildingsMapper;
 import com.propertyvista.yardi.mock.updater.CoTenantUpdateEvent;
 import com.propertyvista.yardi.mock.updater.CoTenantUpdater;
 import com.propertyvista.yardi.mock.updater.LeaseChargeUpdateEvent;
@@ -81,7 +82,7 @@ public class YardiMockServer implements TransactionChargeUpdateEvent.Handler, Pr
     }
 
     PropertyManager getExistingPropertyManagerSetup(String propertyId) throws YardiServiceException {
-        PropertyManager propertyManager = propertyManagers.get(propertyId);
+        PropertyManager propertyManager = propertyManagers.get(BuildingsMapper.getPropertyCode(propertyId));
         if (propertyManager == null) {
             throw new RuntimeException("Property '" + propertyId + "' not found");
         }
@@ -90,7 +91,7 @@ public class YardiMockServer implements TransactionChargeUpdateEvent.Handler, Pr
     }
 
     PropertyManager getExistingPropertyManagerRuntime(String propertyId) throws YardiServiceException {
-        PropertyManager propertyManager = propertyManagers.get(propertyId);
+        PropertyManager propertyManager = propertyManagers.get(BuildingsMapper.getPropertyCode(propertyId));
         if (propertyManager == null) {
             throw new RuntimeException("Property '" + propertyId + "' not found");
         }
@@ -120,14 +121,12 @@ public class YardiMockServer implements TransactionChargeUpdateEvent.Handler, Pr
     }
 
     public MarketingSources getMarketingSources(String propertyId) throws YardiServiceException {
-        MarketingSources marketingSources = new MarketingSources();
-
-        PropertyMarketingSources propertyMarketingSources = new PropertyMarketingSources();
-
         PropertyManager propertyManager = getExistingPropertyManagerRuntime(propertyId);
 
+        PropertyMarketingSources propertyMarketingSources = new PropertyMarketingSources();
         propertyMarketingSources.setPropertyCode(propertyManager.getPropertyId());
 
+        MarketingSources marketingSources = new MarketingSources();
         marketingSources.getProperty().add(propertyMarketingSources);
         return marketingSources;
     }
@@ -209,60 +208,60 @@ public class YardiMockServer implements TransactionChargeUpdateEvent.Handler, Pr
     @Override
     public void addOrUpdateProperty(PropertyUpdateEvent event) {
         PropertyUpdater updater = event.getUpdater();
-        String propertyId = updater.getPropertyID();
-        if (!propertyManagers.containsKey(propertyId)) {
-            PropertyManager propertyManager = new PropertyManager(propertyId);
-            propertyManagers.put(propertyId, propertyManager);
+        String key = BuildingsMapper.getPropertyCode(updater.getPropertyID());
+
+        if (!propertyManagers.containsKey(key)) {
+            propertyManagers.put(key, new PropertyManager(updater.getPropertyID()));
         }
-        propertyManagers.get(propertyId).updateProperty(updater);
+        propertyManagers.get(key).updateProperty(updater);
     }
 
     @Override
     public void addOrUpdateTransactionCharge(TransactionChargeUpdateEvent event) {
         TransactionChargeUpdater updater = event.getUpdater();
-        propertyManagers.get(updater.getPropertyID()).addOrUpdateTransactionCharge(updater);
+        propertyManagers.get(BuildingsMapper.getPropertyCode(updater.getPropertyID())).addOrUpdateTransactionCharge(updater);
     }
 
     @Override
     public void addOrUpdateRtCustomer(RtCustomerUpdateEvent event) {
         RtCustomerUpdater updater = event.getUpdater();
-        propertyManagers.get(updater.getPropertyID()).addOrUpdateRtCustomer(updater);
+        propertyManagers.get(BuildingsMapper.getPropertyCode(updater.getPropertyID())).addOrUpdateRtCustomer(updater);
     }
 
     @Override
     public void addOrUpdateCoTenant(CoTenantUpdateEvent event) {
         CoTenantUpdater updater = event.getUpdater();
-        propertyManagers.get(updater.getPropertyID()).addOrUpdateCoTenant(updater);
+        propertyManagers.get(BuildingsMapper.getPropertyCode(updater.getPropertyID())).addOrUpdateCoTenant(updater);
     }
 
     @Override
     public void addOrUpdateLeaseCharge(LeaseChargeUpdateEvent event) {
         LeaseChargeUpdater updater = event.getUpdater();
-        propertyManagers.get(updater.getPropertyID()).addOrUpdateLeaseCharge(updater);
+        propertyManagers.get(BuildingsMapper.getPropertyCode(updater.getPropertyID())).addOrUpdateLeaseCharge(updater);
     }
 
     @Override
     public void removeLeaseCharge(LeaseChargeUpdateEvent event) {
         LeaseChargeUpdater updater = event.getUpdater();
-        propertyManagers.get(updater.getPropertyID()).removeLeaseCharge(updater);
+        propertyManagers.get(BuildingsMapper.getPropertyCode(updater.getPropertyID())).removeLeaseCharge(updater);
     }
 
     @Override
     public void unitTransferSimulation(UnitTransferSimulatorEvent event) {
         UnitTransferSimulator updater = event.getUpdater();
-        propertyManagers.get(updater.getPropertyID()).unitTransferSimulation(updater);
+        propertyManagers.get(BuildingsMapper.getPropertyCode(updater.getPropertyID())).unitTransferSimulation(updater);
     }
 
     @Override
     public void addOrUpdateRentableItemType(RentableItemTypeUpdateEvent event) {
         RentableItemTypeUpdater updater = event.getUpdater();
-        propertyManagers.get(updater.getPropertyID()).addOrUpdateRentableItemType(updater);
+        propertyManagers.get(BuildingsMapper.getPropertyCode(updater.getPropertyID())).addOrUpdateRentableItemType(updater);
     }
 
     @Override
     public void removeRentableItemType(RentableItemTypeUpdateEvent event) {
         RentableItemTypeUpdater updater = event.getUpdater();
-        propertyManagers.get(updater.getPropertyID()).removeRentableItemType(updater);
+        propertyManagers.get(BuildingsMapper.getPropertyCode(updater.getPropertyID())).removeRentableItemType(updater);
     }
 
 }

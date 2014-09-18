@@ -20,6 +20,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.GregorianCalendar;
 import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -147,7 +148,7 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
      */
     public void updateAll(PmcYardiCredential yc, ExecutionMonitor executionMonitor) throws YardiServiceException, RemoteException {
         // retrieve list of property codes configured for PMC in Yardi
-        List<String> propertyCodes = ServerSideFactory.create(YardiConfigurationFacade.class).retrievePropertyCodes(yc, executionMonitor);
+        List<String> propertyCodes = new LinkedList<>(ServerSideFactory.create(YardiConfigurationFacade.class).retrievePropertyCodes(yc, executionMonitor));
 
         // Find buildings that are no longer in the list and suspend them
         EntityQueryCriteria<Building> criteria = EntityQueryCriteria.create(Building.class);
@@ -158,10 +159,11 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
             if (propertyCodes.contains(buildingCode)) {
                 if (suspended) {
                     // suspended buildings should be excluded from ILS property configuration
+                    propertyCodes.remove(buildingCode);
+
                     String error = "Suspended building '" + buildingCode + "' should be excluded from ILS property configuration.";
                     executionMonitor.addInfoEvent("YardiConfig", error);
                     ServerSideFactory.create(NotificationFacade.class).yardiConfigurationError(error);
-                    propertyCodes.remove(buildingCode);
                 }
             } else {
                 if (!suspended) {

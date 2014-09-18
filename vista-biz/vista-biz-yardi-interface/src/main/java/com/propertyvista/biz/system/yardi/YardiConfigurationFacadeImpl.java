@@ -26,6 +26,7 @@ import com.propertyvista.biz.ExecutionMonitor;
 import com.propertyvista.biz.communication.NotificationFacade;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.settings.PmcYardiCredential;
+import com.propertyvista.yardi.beans.Property;
 import com.propertyvista.yardi.mappers.BuildingsMapper;
 import com.propertyvista.yardi.stubs.YardiILSGuestCardStub;
 import com.propertyvista.yardi.stubs.YardiResidentTransactionsStub;
@@ -80,17 +81,13 @@ public class YardiConfigurationFacadeImpl implements YardiConfigurationFacade {
 
     @Override
     public List<String> retrievePropertyCodes(PmcYardiCredential yc, ExecutionMonitor executionMonitor) throws YardiServiceException, RemoteException {
-        // create master-list of all configured properties (this assumes that ILS is the master interface for property configurations)
-        List<String> masterPropertyList = new ArrayList<>();
-
-        for (com.propertyvista.yardi.beans.Property property : YardiStubFactory.create(YardiILSGuestCardStub.class).getPropertyConfigurations(yc)
-                .getProperties()) {
-            masterPropertyList.add(BuildingsMapper.getPropertyCode(property.getCode())); // lower case
-        }
-
         List<String> propertyCodes = new ArrayList<>();
+
         if (yc.propertyListCodes().isNull()) {
-            propertyCodes.addAll(masterPropertyList);
+            // create master-list of all configured properties (this assumes that ILS is the master interface for property configurations)
+            for (Property property : YardiStubFactory.create(YardiILSGuestCardStub.class).getPropertyConfigurations(yc).getProperties()) {
+                propertyCodes.add(BuildingsMapper.getPropertyCode(property.getCode()));
+            }
         } else {
             // validate and convert property list codes into a list of property codes
             for (String propertyListCode : yc.propertyListCodes().getValue().trim().split("\\s*,\\s*")) {
@@ -128,8 +125,7 @@ public class YardiConfigurationFacadeImpl implements YardiConfigurationFacade {
         if (propertyCodes.size() > 0) {
             // B&P sanity check - ensure selected properties available in B&P PropertyConfigurations
             List<String> bpPropertyList = new ArrayList<>();
-            for (com.propertyvista.yardi.beans.Property property : YardiStubFactory.create(YardiResidentTransactionsStub.class).getPropertyConfigurations(yc)
-                    .getProperties()) {
+            for (Property property : YardiStubFactory.create(YardiResidentTransactionsStub.class).getPropertyConfigurations(yc).getProperties()) {
                 bpPropertyList.add(BuildingsMapper.getPropertyCode(property.getCode()));
             }
 
