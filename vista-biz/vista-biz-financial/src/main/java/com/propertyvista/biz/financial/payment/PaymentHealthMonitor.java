@@ -133,6 +133,8 @@ class PaymentHealthMonitor {
             criteria.eq(criteria.proto().status(), CardsClearanceRecordProcessingStatus.Received);
             criteria.ge(criteria.proto().recordReceivedDate(), reportSince);
             criteria.le(criteria.proto().recordReceivedDate(), reportBefore);
+            // Ignore TenantSure and Equifax payment gracefully for now
+            criteria.isNull(criteria.proto().merchantAccount());
             int count = Persistence.service().count(criteria);
             if (count > 0) {
                 CardsClearanceRecord instance = Persistence.service().retrieve(criteria);
@@ -148,6 +150,8 @@ class PaymentHealthMonitor {
             criteria.eq(criteria.proto().status(), CardsReconciliationRecordProcessingStatus.Received);
             criteria.ge(criteria.proto().recordReceivedDate(), reportSince);
             criteria.le(criteria.proto().recordReceivedDate(), reportBefore);
+            // Ignore TenantSure and Equifax payment gracefully for now
+            criteria.isNull(criteria.proto().merchantAccount());
             int count = Persistence.service().count(criteria);
             if (count > 0) {
                 CardsReconciliationRecord instance = Persistence.service().retrieve(criteria);
@@ -164,7 +168,7 @@ class PaymentHealthMonitor {
     }
 
     private void verifyFundsTransferPmc(LogicalDate forDate) {
-        // see if we recived and processed reconciliation report
+        // see if we received and processed reconciliation report
         {
             Date reportSince = DateUtils.addMonths(forDate, -2);
             Date reportBefore = DateUtils.addDays(forDate, -2);
