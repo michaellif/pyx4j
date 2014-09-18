@@ -197,19 +197,9 @@ public abstract class AbstractEditor<E extends IEntity> extends AbstractForm<E> 
         MessageDialog.error(i18n.tr("Error"), i18n.tr("There has been an error. Please check your data and try again."));
     }
 
-    protected void setBtnCancelEnabled(boolean enabled) {
-        btnCancel.setEnabled(enabled);
-        btnCancel.setVisible(enabled);
-    }
-
-    protected void setBtnApplyEnabled(boolean enabled) {
+    protected void setApplyButtonVisible(boolean enabled) {
         btnApply.setEnabled(enabled);
         btnApply.setVisible(enabled);
-    }
-
-    protected void setBtnSaveEnabled(boolean enabled) {
-        btnSave.setEnabled(enabled);
-        btnSave.setVisible(enabled);
     }
 
     protected void setBtnCancelCaption(String caption) {

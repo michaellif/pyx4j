@@ -43,6 +43,7 @@ import com.pyx4j.gwt.commons.Print;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.backoffice.ui.PaneTheme;
 import com.pyx4j.site.client.backoffice.ui.prime.AbstractPrimePane;
+import com.pyx4j.site.client.backoffice.ui.prime.form.PrimeEntityForm;
 import com.pyx4j.site.rpc.ReportsAppPlace;
 import com.pyx4j.site.shared.domain.reports.ExportableReport;
 import com.pyx4j.site.shared.domain.reports.ReportTemplate;
@@ -73,19 +74,19 @@ public abstract class AbstractReport<R extends ReportTemplate> extends AbstractP
 
     private IReportWidget reportWidget;
 
-    private CForm<R> advancedSettingsForm;
+    private CForm<R> settingsForm;
 
     public AbstractReport() {
     }
 
-    public void setReportWidget(IReportWidget reportWidget, CForm<R> controlPanelForm, CForm<R> settingsForm) {
+    public void setReportWidget(IReportWidget reportWidget, PrimeEntityForm<R> settingsForm, CForm<R> controlPanelForm) {
         setSize("100%", "100%");
 
         this.reportWidget = reportWidget;
 
-        this.advancedSettingsForm = settingsForm;
-        if (this.advancedSettingsForm != null) {
-            this.advancedSettingsForm.init();
+        this.settingsForm = settingsForm;
+        if (this.settingsForm != null) {
+            this.settingsForm.init();
         }
 
         this.presenter = null;
