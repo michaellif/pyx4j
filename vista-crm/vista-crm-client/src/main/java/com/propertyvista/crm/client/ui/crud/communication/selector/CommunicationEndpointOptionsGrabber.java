@@ -22,7 +22,6 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.entity.core.criterion.EntityListCriteria;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
-import com.pyx4j.widgets.client.selector.SuggestiveSelector;
 import com.pyx4j.widgets.client.suggest.IOptionsGrabber;
 
 import com.propertyvista.crm.rpc.services.selections.SelectCommunicationEndpointListService;
@@ -53,7 +52,7 @@ public class CommunicationEndpointOptionsGrabber implements IOptionsGrabber<Comm
         };
 
         EntityListCriteria<CommunicationEndpointDTO> criteria = EntityListCriteria.create(CommunicationEndpointDTO.class);
-        criteria.setPageSize(SuggestiveSelector.SUGGESTIONS_PER_PAGE);
+        criteria.setPageSize(request.getLimit());
         criteria.eq(criteria.proto().name(), request.getQuery().toLowerCase());
         service.getEndpointForSelection(callbackOptionsGrabber, criteria);
 
