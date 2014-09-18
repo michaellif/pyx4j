@@ -25,7 +25,7 @@ public class MessageEditorViewImpl extends CrmEditorViewImplBase<MessageDTO> imp
     public MessageEditorViewImpl() {
         setForm(new MessageEditForm(this));
         setBtnSaveCaption(i18n.tr("Send"));
-        setBtnApplyEnabled(false);
+        setApplyButtonVisible(false);
 
     }
 
