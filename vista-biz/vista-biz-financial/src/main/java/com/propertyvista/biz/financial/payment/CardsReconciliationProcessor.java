@@ -217,7 +217,7 @@ class CardsReconciliationProcessor {
                 PaymentRecord paymentRecord = it.next();
                 paymentRecord.aggregatedTransfer().set(at);
                 Persistence.service().persist(paymentRecord);
-                log.debug("Add paymentRecord {}", paymentRecord.id());
+                log.debug("Add paymentRecord {} {}", paymentRecord.id(), paymentRecord.amount());
 
                 at.grossPaymentCount().setValue(at.grossPaymentCount().getValue() + 1);
                 at.grossPaymentAmount().setValue(at.grossPaymentAmount().getValue().add(paymentRecord.amount().getValue()));

@@ -13,40 +13,48 @@
  */
 package com.propertyvista.crm.client.ui.crud.lease.common;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
+import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.forms.client.ui.datatable.DataTableModel;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.site.client.backoffice.ui.prime.lister.AbstractLister;
 
 import com.propertyvista.dto.PaymentRecordDTO;
+import com.propertyvista.shared.config.VistaFeatures;
 
 public class PaymentLister extends AbstractLister<PaymentRecordDTO> {
 
     public PaymentLister() {
         super(PaymentRecordDTO.class, false);
 
-        setDataTableModel(new DataTableModel<PaymentRecordDTO>(//@formatter:off
-            new MemberColumnDescriptor.Builder(proto().id()).build(),
-            new MemberColumnDescriptor.Builder(proto().leaseTermParticipant().leaseParticipant().customer().customerId()).build(),
-            new MemberColumnDescriptor.Builder(proto().leaseTermParticipant().leaseParticipant().customer().person().name()).searchable(false).build(),
-            new MemberColumnDescriptor.Builder(proto().leaseTermParticipant().leaseParticipant().customer().person().name().firstName()).searchableOnly().build(),
-            new MemberColumnDescriptor.Builder(proto().leaseTermParticipant().leaseParticipant().customer().person().name().lastName()).searchableOnly().build(),
-            new MemberColumnDescriptor.Builder(proto().leaseTermParticipant().role()).build(),
-            new MemberColumnDescriptor.Builder(proto().amount()).build(),
-            new MemberColumnDescriptor.Builder(proto().convenienceFee(), false).build(),
-            new MemberColumnDescriptor.Builder(proto().paymentMethod().type()).build(),
-            new MemberColumnDescriptor.Builder(proto().createdDate()).build(),
-            new MemberColumnDescriptor.Builder(proto().receivedDate()).build(),
-            new MemberColumnDescriptor.Builder(proto().lastStatusChangeDate()).build(),
-            new MemberColumnDescriptor.Builder(proto().targetDate()).build(),
-            new MemberColumnDescriptor.Builder(proto().paymentStatus()).build(),
-            new MemberColumnDescriptor.Builder(proto().finalizeDate(), false).build(),
-            new MemberColumnDescriptor.Builder(proto().rejectedWithNSF()).visible(false).build(),
-            new MemberColumnDescriptor.Builder(proto().transactionErrorMessage()).visible(false).build()
-        ));//@formatter:on
+        List<ColumnDescriptor> cd = new ArrayList<>();
+        cd.add(new MemberColumnDescriptor.Builder(proto().id()).build());
+        if (VistaFeatures.instance().yardiIntegration()) {
+            cd.add(new MemberColumnDescriptor.Builder(proto().yardiDocumentNumber(), false).build());
+        }
+        cd.add(new MemberColumnDescriptor.Builder(proto().leaseTermParticipant().leaseParticipant().customer().customerId()).build());
+        cd.add(new MemberColumnDescriptor.Builder(proto().leaseTermParticipant().leaseParticipant().customer().person().name()).searchable(false).build());
+        cd.add(new MemberColumnDescriptor.Builder(proto().leaseTermParticipant().leaseParticipant().customer().person().name().firstName()).searchableOnly()
+                .build());
+        cd.add(new MemberColumnDescriptor.Builder(proto().leaseTermParticipant().leaseParticipant().customer().person().name().lastName()).searchableOnly()
+                .build());
+        cd.add(new MemberColumnDescriptor.Builder(proto().leaseTermParticipant().role()).build());
+        cd.add(new MemberColumnDescriptor.Builder(proto().amount()).build());
+        cd.add(new MemberColumnDescriptor.Builder(proto().convenienceFee(), false).build());
+        cd.add(new MemberColumnDescriptor.Builder(proto().paymentMethod().type()).build());
+        cd.add(new MemberColumnDescriptor.Builder(proto().createdDate()).build());
+        cd.add(new MemberColumnDescriptor.Builder(proto().receivedDate()).build());
+        cd.add(new MemberColumnDescriptor.Builder(proto().lastStatusChangeDate()).build());
+        cd.add(new MemberColumnDescriptor.Builder(proto().targetDate()).build());
+        cd.add(new MemberColumnDescriptor.Builder(proto().paymentStatus()).build());
+        cd.add(new MemberColumnDescriptor.Builder(proto().finalizeDate(), false).build());
+        cd.add(new MemberColumnDescriptor.Builder(proto().rejectedWithNSF()).visible(false).build());
+        cd.add(new MemberColumnDescriptor.Builder(proto().transactionErrorMessage()).visible(false).build());
+        setDataTableModel(new DataTableModel<PaymentRecordDTO>(cd));
     }
 
     @Override

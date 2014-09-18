@@ -92,6 +92,12 @@ class CardsDailyReportAcceptor {
                 record.clearanceDate().setValue(toRecord.date().getValue());
                 record.referenceNumber().setValue(toRecord.referenceNumber().getValue());
                 record.amount().setValue(toRecord.amount().getValue());
+
+                record.responseMessage().setValue(toRecord.response().getValue());
+                record.transactionAuthorizationNumber().setValue(toRecord.authNumber().getValue());
+                record.voided().setValue(toRecord.voided().getValue());
+                record.approved().setValue(toRecord.approved().getValue());
+
                 Persistence.service().persist(record);
             }
         }

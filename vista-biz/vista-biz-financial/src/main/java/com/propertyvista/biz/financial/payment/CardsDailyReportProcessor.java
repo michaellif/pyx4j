@@ -13,6 +13,7 @@
  */
 package com.propertyvista.biz.financial.payment;
 
+import java.util.EnumSet;
 import java.util.List;
 import java.util.concurrent.Callable;
 
@@ -70,7 +71,7 @@ public class CardsDailyReportProcessor {
 
                     @Override
                     public Void execute() {
-                        clearRecord(clearanceRecord);
+                        procesRecord(clearanceRecord);
 
                         TaskRunner.runInOperationsNamespace(new Callable<Void>() {
                             @Override
@@ -96,7 +97,7 @@ public class CardsDailyReportProcessor {
         }
     }
 
-    protected void clearRecord(CardsClearanceRecord clearanceRecord) {
+    protected void procesRecord(CardsClearanceRecord clearanceRecord) {
         PaymentRecord paymentRecord = Persistence.service().retrieve(
                 PaymentRecord.class,
                 ServerSideFactory.create(CreditCardFacade.class).getProdAndTestVistaRecordId(ReferenceNumberPrefix.RentPayments,
@@ -109,6 +110,20 @@ public class CardsDailyReportProcessor {
             throw new Error("Card paymentRecord '" + paymentRecord.id().getValue() + "' expected");
         }
 
+        if (clearanceRecord.approved().getValue() //
+                && !clearanceRecord.voided().getValue() //
+                && (!clearanceRecord.transactionAuthorizationNumber().isNull()) //
+                && (!clearanceRecord.responseMessage().getValue().equals("DECLINE"))) {
+            clearRecord(clearanceRecord, paymentRecord);
+        } else {
+            if (!EnumSet.of(PaymentRecord.PaymentStatus.Rejected, PaymentRecord.PaymentStatus.Void).contains(paymentRecord.paymentStatus().getValue())) {
+                throw new Error(paymentRecord.paymentStatus().getValue() + " paymentRecord '" + paymentRecord.id().getValue() + "' expected to be Rejected");
+            }
+        }
+    }
+
+    protected void clearRecord(CardsClearanceRecord clearanceRecord, PaymentRecord paymentRecord) {
+
         if (PaymentRecord.PaymentStatus.Received != paymentRecord.paymentStatus().getValue()) {
             throw new Error(paymentRecord.paymentStatus().getValue() + " paymentRecord '" + paymentRecord.id().getValue() + "' can't be cleared");
         }
@@ -119,6 +134,6 @@ public class CardsDailyReportProcessor {
         paymentRecord.lastStatusChangeDate().setValue(SystemDateManager.getLogicalDate());
         paymentRecord.finalizeDate().setValue(new LogicalDate(clearanceRecord.clearanceDate().getValue()));
         Persistence.service().merge(paymentRecord);
-        log.info("Payment {} {} {} Cleared", PaymentType.CreditCard, paymentRecord.id().getValue(), paymentRecord.amount().getValue());
+        log.info("Payment {} {} {} Cleared", PaymentType.CreditCard.name(), paymentRecord.id().getValue(), paymentRecord.amount().getValue());
     }
 }
