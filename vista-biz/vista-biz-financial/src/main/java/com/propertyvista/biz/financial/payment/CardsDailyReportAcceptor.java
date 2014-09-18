@@ -86,6 +86,7 @@ class CardsDailyReportAcceptor {
                     if (pmcCount.add(macc.pmc())) {
                         executionMonitor.addInfoEvent("Pmc", BigDecimal.ONE, null);
                     }
+                    executionMonitor.addProcessedEvent("CardClearance", record.amount().getValue());
                 }
 
                 record.clearanceDate().setValue(toRecord.date().getValue());
