@@ -454,7 +454,7 @@ public class LeaseApplicationViewerViewImpl extends LeaseViewerViewImplBase<Leas
     public interface ApprovalChecklist extends IEntity {
 
         @NotNull
-        IPrimitive<Boolean> informationCompoletness();
+        IPrimitive<Boolean> informationCompleteness();
 
         @NotNull
         IPrimitive<Boolean> creditCheck();
@@ -480,7 +480,7 @@ public class LeaseApplicationViewerViewImpl extends LeaseViewerViewImplBase<Leas
                 protected IsWidget createContent() {
                     FormPanel formPanel = new FormPanel(this);
 
-                    formPanel.append(Location.Left, proto().informationCompoletness()).decorate().labelWidth(250).componentWidth(30);
+                    formPanel.append(Location.Left, proto().informationCompleteness()).decorate().labelWidth(250).componentWidth(30);
                     formPanel.append(Location.Left, proto().creditCheck()).decorate().labelWidth(250).componentWidth(30);
                     formPanel.append(Location.Left, proto().employmentConfirmation()).decorate().labelWidth(250).componentWidth(30);
                     formPanel.append(Location.Left, proto().landlordConfirmation()).decorate().labelWidth(250).componentWidth(30);
