@@ -25,6 +25,23 @@
 
 SET client_min_messages = 'error';
 
+BEGIN TRANSACTION;
+
+    CREATE TABLE IF NOT EXISTS _expiring_.customer_credit_check_report_no_backup
+    (
+        id                      BIGINT                  NOT NULL,
+        pmc                     BIGINT                  NOT NULL,
+        public_key              BIGINT                  NOT NULL,
+        created                 TIMESTAMP               NOT NULL,
+        customer                BIGINT                  NOT NULL,
+        data                    BYTEA,
+            CONSTRAINT customer_credit_check_report_no_backup_pk PRIMARY KEY(id)
+    );
+    
+    ALTER TABLE _expiring_.customer_credit_check_report_no_backup OWNER TO vista;
+    
+COMMIT;
+
 
 BEGIN TRANSACTION;
         SELECT  'a' AS letter,
