@@ -60,7 +60,7 @@ import com.propertyvista.crm.client.ui.components.boxes.EmployeeSelectorDialog;
 import com.propertyvista.crm.client.ui.components.boxes.PortfolioSelectorDialog;
 import com.propertyvista.crm.client.ui.components.boxes.TenantSelectorDialog;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
-import com.propertyvista.crm.client.ui.crud.communication.selector.CommunicationEndpointSelector_OLD;
+import com.propertyvista.crm.client.ui.crud.communication.selector.CommunicationEndpointSelector;
 import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.domain.communication.CommunicationEndpoint.ContactType;
 import com.propertyvista.domain.communication.CommunicationGroup;
@@ -189,13 +189,11 @@ public class MessageForm extends CrmEntityForm<MessageDTO> {
 
         private FormPanel searchCriteriaPanel;
 
-        private Widget to;
-
         private Button.ButtonMenuBar subMenu;
 
         private final Button actionsButton;
 
-        private CommunicationEndpointSelector_OLD communicationEndpointSelector;
+        private final CommunicationEndpointSelector communicationEndpointSelector = createCommunicationEndpointSelector();
 
         public MessageFolderItem() {
             super(MessageDTO.class, new VistaViewersComponentFactory());
@@ -245,7 +243,6 @@ public class MessageForm extends CrmEntityForm<MessageDTO> {
             formPanel.append(Location.Dual, proto().header()).decorate().labelWidth(0).customLabel("").useLabelSemicolon(false).assistantWidget(statusToolBar);
             formPanel.br();
 
-            to = formPanel.h4("To");
             subMenu = new Button.ButtonMenuBar();
             subMenu.addItem(new MenuItem(i18n.tr("Tenant"), new Command() {
                 @Override
@@ -302,7 +299,7 @@ public class MessageForm extends CrmEntityForm<MessageDTO> {
 
             actionsButton.setMenu(subMenu);
             searchCriteriaPanel = new FormPanel(this);
-            searchCriteriaPanel.append(Location.Dual, createCommunicationEndpointSelector());
+            searchCriteriaPanel.append(Location.Dual, proto().to(), communicationEndpointSelector).decorate();
             searchCriteriaPanel.h4("", actionsButton);
             formPanel.append(Location.Dual, searchCriteriaPanel);
             formPanel.br();
@@ -354,7 +351,9 @@ public class MessageForm extends CrmEntityForm<MessageDTO> {
                 proto.endpoint().set(selected);
             }
 
-            communicationEndpointSelector.addItem(proto);
+            getValue().to().add(proto);
+            communicationEndpointSelector.getValue().add(proto);
+            communicationEndpointSelector.revalidate();
         }
 
         private MessageDTO getCurrent() {
@@ -425,7 +424,7 @@ public class MessageForm extends CrmEntityForm<MessageDTO> {
                         if (form != null && form instanceof MessageFolderItem) {
                             MessageFolderItem folderItemForm = (MessageFolderItem) form;
                             folderItemForm.setFocusForEditingText();
-                            folderItemForm.communicationEndpointSelector.addAll(newItem.getValue().to(), false);
+                            folderItemForm.communicationEndpointSelector.setValue(newItem.getValue().to());
                         }
 
                         newItem.asWidget().getElement().scrollIntoView();
@@ -491,12 +490,10 @@ public class MessageForm extends CrmEntityForm<MessageDTO> {
         protected void onValueSet(boolean populate) {
             super.onValueSet(populate);
             if (getValue().isPrototype() || getValue().date() == null || getValue().date().isNull()) {
-                communicationEndpointSelector.removeAll();
                 if (getValue().to().size() > 0) {
-                    communicationEndpointSelector.addAll(getValue().to(), false);
+                    communicationEndpointSelector.setValue(getValue().to());
                 }
                 searchCriteriaPanel.setVisible(true);
-                to.setVisible(true);
                 BoxFolderItemDecorator<DeliveryHandle> d = (BoxFolderItemDecorator<DeliveryHandle>) getParent().getDecorator();
                 d.setExpended(true);
                 setViewable(false);
@@ -516,7 +513,7 @@ public class MessageForm extends CrmEntityForm<MessageDTO> {
                 get(proto().highImportance()).setVisible(true);
                 statusToolBar.asWidget().setVisible(false);
                 subMenu.setVisible(true);
-                communicationEndpointSelector.setReadOnly(false);
+                //communicationEndpointSelector.setEnabled(true);
                 actionsButton.setVisible(true);
             } else {
                 setViewable(true);
@@ -525,12 +522,12 @@ public class MessageForm extends CrmEntityForm<MessageDTO> {
                 subMenu.setVisible(false);
                 actionsButton.setVisible(false);
                 if (getValue().to() != null && getValue().to().size() > 0) {
-                    communicationEndpointSelector.addAll(getValue().to(), true);
+                    searchCriteriaPanel.setVisible(true);
+                    communicationEndpointSelector.setValue(getValue().to());
                 } else {
                     searchCriteriaPanel.setVisible(false);
-                    to.setVisible(false);
                 }
-                communicationEndpointSelector.setReadOnly(true);
+                //communicationEndpointSelector.setEnabled(false);
                 btnSend.setVisible(false);
                 btnCancel.setVisible(false);
                 btnReply.setVisible(getValue().allowedReply().getValue(true));
@@ -550,17 +547,8 @@ public class MessageForm extends CrmEntityForm<MessageDTO> {
             }
         }
 
-        private IsWidget createCommunicationEndpointSelector() {
-            return communicationEndpointSelector = new CommunicationEndpointSelector_OLD() {//@formatter:off
-                @Override protected void onItemAdded(CommunicationEndpointDTO item) {
-                    super.onItemAdded(item);
-                    MessageFolderItem.this.addToItem(item);
-                }
-                @Override
-                protected void onItemRemoved(CommunicationEndpointDTO item) {
-                    MessageFolderItem.this.removeToItem(item);
-                }
-            };//@formatter:on
+        private CommunicationEndpointSelector createCommunicationEndpointSelector() {
+            return new CommunicationEndpointSelector();
         }
 
         public void addToItem(CommunicationEndpointDTO item) {
