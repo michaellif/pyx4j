@@ -20,6 +20,7 @@ import com.google.gwt.user.client.Command;
 
 import com.pyx4j.entity.core.IVersionedEntity;
 import com.pyx4j.entity.security.DataModelPermission;
+import com.pyx4j.entity.shared.utils.VersionedEntityUtils;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.backoffice.ui.PaneTheme;
 import com.pyx4j.widgets.client.Button;
@@ -42,17 +43,20 @@ public class LeaseTermViewerViewImpl extends CrmViewerViewImplBase<LeaseTermDTO>
 
     private Button offerAcceptButton;
 
+    private final Button chargesButton;
+
     public LeaseTermViewerViewImpl() {
         setForm(new LeaseTermForm(this));
         enableVersioning(LeaseTerm.LeaseTermV.class, GWT.<LeaseTermVersionService> create(LeaseTermVersionService.class));
 
+        chargesButton = new Button(i18n.tr("Charges"), new Command() {
+            @Override
+            public void execute() {
+                ((LeaseTermViewerView.Presenter) getPresenter()).getChargesVisorController().show();
+            }
+        }, DataModelPermission.permissionRead(BillDataDTO.class));
         if (!VistaFeatures.instance().yardiIntegration()) {
-            addHeaderToolbarItem(new Button(i18n.tr("Charges"), new Command() {
-                @Override
-                public void execute() {
-                    ((LeaseTermViewerView.Presenter) getPresenter()).getChargesVisorController().show();
-                }
-            }, DataModelPermission.permissionRead(BillDataDTO.class)));
+            addHeaderToolbarItem(chargesButton);
         }
 
         if (false) {
@@ -78,6 +82,9 @@ public class LeaseTermViewerViewImpl extends CrmViewerViewImplBase<LeaseTermDTO>
     @Override
     public void populate(LeaseTermDTO value) {
         super.populate(value);
+
+        chargesButton.setVisible(!VersionedEntityUtils.isDraft(value) && value.status().getValue() == Status.Current
+                && !value.lease().status().getValue().isFormer());
 
         if (value.lease().status().getValue() == Lease.Status.Application) {
             LeaseApplication.Status status = value.lease().leaseApplication().status().getValue();

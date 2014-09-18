@@ -145,6 +145,10 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
 
     private final MenuItem renewAction;
 
+    private final MenuItem legalStateAction;
+
+    private final MenuItem deletedPapsAction;
+
     private Button renewButton;
 
     private MenuItem offerAction;
@@ -215,7 +219,7 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
             }
         }, DataModelPermission.permissionRead(LeaseApplicationDTO.class)));
 
-        addView(new SecureMenuItem(i18n.tr("View Deleted AutoPays"), new Command() {
+        addView(deletedPapsAction = new SecureMenuItem(i18n.tr("View Deleted AutoPays"), new Command() {
             @Override
             public void execute() {
                 ((LeaseViewerView.Presenter) getPresenter()).viewDeletedPaps(null);
@@ -250,7 +254,7 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
         }, DataModelPermission.permissionCreate(MaintenanceRequestDTO.class)));
         maintenanceAction.ensureDebugId(VistaCrmDebugId.Maintenance.ActionCreateRequest.debugId());
 
-        addAction(new SecureMenuItem(i18n.tr("Manage Legal State"), new Command() {
+        addAction(legalStateAction = new SecureMenuItem(i18n.tr("Manage Legal State"), new Command() {
             @Override
             public void execute() {
                 ((LeaseViewerView.Presenter) getPresenter()).legalState();
@@ -603,8 +607,10 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
 
         setActionVisible(sendMailAction, status.isCurrent());
         setActionVisible(runBillAction, status.isCurrent());
+        setActionVisible(deletedPapsAction, status.isCurrent());
 
         setActionVisible(maintenanceAction, !status.isFormer());
+        setActionVisible(legalStateAction, !status.isFormer());
 
         setActionVisible(noticeAction, status == Status.Active && completion == null);
         setActionVisible(cancelNoticeAction, completion == CompletionType.Notice && value.actualMoveOut().isNull() && !status.isFormer());
