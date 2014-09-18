@@ -103,12 +103,6 @@ public class PickerPopup<E> extends DropDownPanel implements Focusable, HasAllFo
         }
     }
 
-    public void refreshSuggestions(String query) {
-        if (pickerPanel != null) {
-            pickerPanel.refreshOptions(query);
-        }
-    }
-
     @Override
     protected void onLoad() {
         setWidth(selectorWidget.asWidget().getOffsetWidth() + "px");

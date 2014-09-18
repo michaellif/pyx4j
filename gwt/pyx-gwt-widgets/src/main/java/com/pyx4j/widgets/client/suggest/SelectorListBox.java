@@ -111,13 +111,13 @@ public class SelectorListBox<E> extends AbstractSelectorWidget<E> implements Has
     protected void showSuggestPicker() {
         if (getQuery() != getViewerPanel().getQuery()) {
             setQuery(getViewerPanel().getQuery());
-            picker.refreshOptions(getQuery());
+            picker.refreshOptions(getQuery(), value);
             showPickerPopup(picker);
         }
     }
 
     protected void showEverithingPicker() {
-        picker.refreshOptions("");
+        picker.refreshOptions("", null);
         showPickerPopup(picker);
     }
 

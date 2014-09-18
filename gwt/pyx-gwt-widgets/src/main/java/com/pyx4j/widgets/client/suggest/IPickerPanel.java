@@ -20,6 +20,8 @@
  */
 package com.pyx4j.widgets.client.suggest;
 
+import java.util.Collection;
+
 import com.google.gwt.user.client.ui.IsWidget;
 
 public interface IPickerPanel<E> extends IsWidget {
@@ -32,6 +34,6 @@ public interface IPickerPanel<E> extends IsWidget {
 
     E getSelection();
 
-    void refreshOptions(String query);
+    void refreshOptions(String query, Collection<E> selected);
 
 }

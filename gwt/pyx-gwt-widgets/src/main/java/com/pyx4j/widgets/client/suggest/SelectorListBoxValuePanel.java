@@ -99,10 +99,16 @@ public class SelectorListBoxValuePanel<E> extends FlowPanel implements ISelector
 
     public void showValue(Collection<E> value) {
         this.cellsPanel.clear();
-        for (E item : value) {
-            this.cellsPanel.add(new ItemHolder<E>(this, item, valueFormatter.format(item)));
+        if (value.size() > 0) {
+            for (E item : value) {
+                if (item != null) {
+                    this.cellsPanel.add(new ItemHolder<E>(this, item, valueFormatter.format(item)));
+                }
+            }
         }
+
         cellsPanel.add(textBox);
+
         textBox.setText("");
         textBox.setFocus(true);
     }

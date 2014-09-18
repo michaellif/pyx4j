@@ -20,7 +20,9 @@
  */
 package com.pyx4j.widgets.client.suggest;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.logical.shared.SelectionEvent;
@@ -47,6 +49,8 @@ public class TreePickerPanel<E> extends ScrollPanel implements IPickerPanel<E> {
     private final IFormatter<E, String[]> optionPathFormatter;
 
     private final int limit = 20;
+
+    private final static int SUGGESTIONS_PER_PAGE = 14;
 
     private final PickerTree tree;
 
@@ -86,21 +90,29 @@ public class TreePickerPanel<E> extends ScrollPanel implements IPickerPanel<E> {
     }
 
     @Override
-    public void refreshOptions(String query) {
+    public void refreshOptions(String query, final Collection<E> ignoreOptions) {
+
         IOptionsGrabber.Callback<E> callback = new IOptionsGrabber.Callback<E>() {
             @Override
             public void onOptionsReady(IOptionsGrabber.Request request, IOptionsGrabber.Response<E> response) {
-                showOptions(response.getOptions(), request.getQuery());
+                showOptions(response.getOptions(), request.getQuery(), ignoreOptions);
             }
         };
 
-        optionsGrabber.grabOptions(new IOptionsGrabber.Request(query == null ? "" : query, limit), callback);
+        optionsGrabber.grabOptions(new IOptionsGrabber.Request(query == null ? "" : query, ignoreOptions != null ? limit + ignoreOptions.size() : limit),
+                callback);
     }
 
-    protected void showOptions(Collection<E> options, String query) {
+    protected void showOptions(Collection<E> options, String query, Collection<E> ignoreOptions) {
         setVisible(false);
 
-        tree.setOptions(options, query);
+        if (ignoreOptions != null && ignoreOptions.size() != 0 && options != null) {
+            options.removeAll(ignoreOptions);
+        }
+
+        List<E> suggestions = new ArrayList<E>(options);
+
+        tree.setOptions(suggestions.subList(0, suggestions.size() < SUGGESTIONS_PER_PAGE ? suggestions.size() : SUGGESTIONS_PER_PAGE), query);
 
         if (options.size() > 0) {
             setVisible(true);
