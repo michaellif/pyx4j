@@ -17,19 +17,19 @@ import java.util.Arrays;
 
 import com.google.gwt.user.client.ui.IsWidget;
 
-import com.pyx4j.forms.client.ui.CForm;
-import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
+import com.pyx4j.forms.client.ui.panels.FormPanel;
+import com.pyx4j.site.client.backoffice.ui.prime.form.PrimeEntityForm;
 import com.pyx4j.site.client.backoffice.ui.prime.report.PropertyCriteriaFolder;
 
 import com.propertyvista.common.client.resources.VistaImages;
 import com.propertyvista.domain.dashboard.gadgets.availability.UnitAvailabilityStatus;
 import com.propertyvista.domain.reports.AvailabilityReportMetadata;
 
-public class AvailabilityReportSettingsAdvancedForm extends CForm<AvailabilityReportMetadata> {
+public class AvailabilityReportSettingsAdvancedForm extends PrimeEntityForm<AvailabilityReportMetadata> {
 
     public AvailabilityReportSettingsAdvancedForm() {
-        super(AvailabilityReportMetadata.class);
+        super(AvailabilityReportMetadata.class, null);
     }
 
     @Override
