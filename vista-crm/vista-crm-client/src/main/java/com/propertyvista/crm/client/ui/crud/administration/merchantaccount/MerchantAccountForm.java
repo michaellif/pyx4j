@@ -16,7 +16,6 @@ package com.propertyvista.crm.client.ui.crud.administration.merchantaccount;
 import com.google.gwt.user.client.ui.HTML;
 
 import com.pyx4j.forms.client.ui.CEnumLabel;
-import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.i18n.shared.I18n;
@@ -40,9 +39,9 @@ public class MerchantAccountForm extends CrmEntityForm<MerchantAccount> {
         FormPanel formPanel = new FormPanel(this);
 
         formPanel.append(Location.Left, proto().paymentsStatus(), new CEnumLabel()).decorate();
-        formPanel.append(Location.Left, proto().bankId(), new CLabel<String>()).decorate().componentWidth(80);
-        formPanel.append(Location.Left, proto().branchTransitNumber(), new CLabel<String>()).decorate().componentWidth(80);
-        formPanel.append(Location.Left, proto().accountNumber(), new CLabel<String>()).decorate().componentWidth(180);
+        formPanel.append(Location.Left, proto().bankId()).decorate().componentWidth(80);
+        formPanel.append(Location.Left, proto().branchTransitNumber()).decorate().componentWidth(80);
+        formPanel.append(Location.Left, proto().accountNumber()).decorate().componentWidth(180);
         formPanel.append(Location.Left, proto().accountName()).decorate().componentWidth(180);
         formPanel.append(Location.Dual, proto().chargeDescription()).decorate();
 
