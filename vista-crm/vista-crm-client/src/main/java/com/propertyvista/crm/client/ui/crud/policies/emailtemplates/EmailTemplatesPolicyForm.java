@@ -127,7 +127,11 @@ public class EmailTemplatesPolicyForm extends PolicyDTOTabPanelBasedForm<EmailTe
                 formPanel.append(Location.Dual, proto().useHeader()).decorate();
                 formPanel.append(Location.Dual, proto().useFooter()).decorate();
                 CRichTextArea editor = new CRichTextArea();
-                editor.setImageProvider(new SiteImageResourceProvider());
+                if (false) {
+                    // Currently SiteImageResourceProvider does nothing and does not work properly.
+                    // So we allow to insert images by http URL into mail template
+                    editor.setImageProvider(new SiteImageResourceProvider());
+                }
                 formPanel.append(Location.Dual, proto().content(), editor).decorate();
                 if (isEditable()) {
                     // create variable selection button
