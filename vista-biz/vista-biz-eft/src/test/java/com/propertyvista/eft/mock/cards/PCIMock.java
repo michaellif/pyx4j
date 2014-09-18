@@ -108,7 +108,9 @@ class PCIMock {
                     ConvenienceFeeMock.instance().addFee(request);
                 }
                 accountsByTransaction.put(request.referenceNumber().getValue(), account);
-                return createResponse("0000", "OK");
+                PaymentResponse r = createResponse("0000", "OK");
+                r.authorizationNumber().setValue(account.getTransaction(request.referenceNumber().getValue()).authorizationNumber);
+                return r;
             } else {
                 return createResponse("0001", "Credit limit exceeded");
             }

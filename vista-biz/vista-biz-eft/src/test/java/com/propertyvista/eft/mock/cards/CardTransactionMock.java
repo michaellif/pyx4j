@@ -40,6 +40,8 @@ class CardTransactionMock {
 
     TransactionStatus status;
 
+    String authorizationNumber;
+
     boolean clearenceSent;
 
     boolean reconciliationSent;

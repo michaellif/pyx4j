@@ -18,7 +18,6 @@ import java.util.Date;
 import java.util.List;
 
 import org.junit.Assert;
-import org.junit.Ignore;
 import org.junit.experimental.categories.Category;
 
 import com.pyx4j.config.server.ServerSideFactory;
@@ -49,7 +48,6 @@ import com.propertyvista.test.mock.schedule.OperationsTriggerFacadeMock;
 import com.propertyvista.test.mock.schedule.SchedulerMock;
 
 @Category({ FunctionalTests.class })
-@Ignore
 public class CardsReconciliationTest extends LeaseFinancialTestBase {
 
     private CustomerDataModel customerDataModel;

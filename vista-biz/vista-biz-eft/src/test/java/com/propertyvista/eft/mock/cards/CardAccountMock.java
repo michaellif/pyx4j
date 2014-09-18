@@ -41,6 +41,10 @@ class CardAccountMock {
         this.ccinfo = ccinfo;
     }
 
+    CardTransactionMock getTransaction(String referenceNumber) {
+        return transactions.get(referenceNumber);
+    }
+
     boolean sale(String terminalID, BigDecimal amount, String referenceNumber) {
         if (transactions.containsKey(referenceNumber)) {
             throw new Error("Duplicate transaction " + referenceNumber);
@@ -55,6 +59,7 @@ class CardAccountMock {
             t.terminalID = terminalID;
             t.amount = amount;
             t.status = TransactionStatus.compleated;
+            t.authorizationNumber = UniqueInteger.getInstance("AuthorizationNumberMock").nextAsString();
             transactions.put(referenceNumber, t);
             return true;
         }

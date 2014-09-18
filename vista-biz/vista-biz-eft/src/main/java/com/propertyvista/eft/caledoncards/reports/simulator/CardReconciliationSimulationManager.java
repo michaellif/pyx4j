@@ -131,6 +131,8 @@ public class CardReconciliationSimulationManager {
             record.cardNumber().setValue("***" + last4(transaction.card().number().getValue()));
             record.expiry().setValue(new SimpleDateFormat("yyMM").format(transaction.card().expiryDate().getValue()));
 
+            record.authNumber().setValue(transaction.authorizationNumber().getValue());
+            record.response().setValue(transaction.authorizationNumber().getValue() + "   $" + record.amount().getValue());
             record.approved().setValue(true);
             record.voided().setValue(false);
             record.oper().setValue("003");

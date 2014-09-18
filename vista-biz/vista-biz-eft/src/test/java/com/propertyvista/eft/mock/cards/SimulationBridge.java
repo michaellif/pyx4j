@@ -28,6 +28,7 @@ class SimulationBridge {
         transaction.amount().setValue(transactionMock.amount);
         transaction.transactionDate().setValue(transactionMock.date);
         transaction.reference().setValue(transactionMock.referenceNumber);
+        transaction.authorizationNumber().setValue(transactionMock.authorizationNumber);
         return transaction;
     }
 

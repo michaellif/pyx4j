@@ -21,6 +21,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 import com.pyx4j.commons.UserRuntimeException;
+import com.pyx4j.entity.core.IObject;
 import com.pyx4j.essentials.server.csv.CSVLoad;
 import com.pyx4j.essentials.server.csv.CSVParser;
 import com.pyx4j.essentials.server.csv.EntityCSVReciver;
@@ -40,7 +41,25 @@ public class DailyReportParser {
     }
 
     List<DailyReportRecord> parsReport(InputStream is, String name) {
-        EntityCSVReciver<DailyReportRecord> reciver = EntityCSVReciver.create(DailyReportRecord.class);
+        EntityCSVReciver<DailyReportRecord> reciver = new EntityCSVReciver<DailyReportRecord>(DailyReportRecord.class) {
+
+            @Override
+            protected Object parsePrimitive(IObject<?> member, Class<?> valueClass, String value) {
+                if (valueClass == Boolean.class) {
+                    if ("y".equalsIgnoreCase(value)) {
+                        return true;
+                    } else if ("n".equalsIgnoreCase(value)) {
+                        return false;
+                    } else {
+                        throw new Error("Error parsing Boolean " + member.getMeta().getCaption() + " [" + value + "]");
+                    }
+
+                } else {
+                    return super.parsePrimitive(member, valueClass, value);
+                }
+            }
+
+        };
 
         reciver.headerIgnoreCase(true);
         reciver.setTrimValues(true);

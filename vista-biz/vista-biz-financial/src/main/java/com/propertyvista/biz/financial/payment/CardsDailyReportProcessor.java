@@ -29,6 +29,7 @@ import com.pyx4j.entity.server.Executable;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.server.TransactionScopeOption;
 import com.pyx4j.entity.server.UnitOfWork;
+import com.pyx4j.essentials.server.dev.DataDump;
 
 import com.propertyvista.biz.ExecutionMonitor;
 import com.propertyvista.biz.financial.payment.CreditCardFacade.ReferenceNumberPrefix;
@@ -90,7 +91,8 @@ public class CardsDailyReportProcessor {
                 executionMonitor.addProcessedEvent("CardClearance", clearanceRecord.amount().getValue());
 
             } catch (Throwable e) {
-                log.error("CardClearance {} {} failed", clearanceRecord.id().getValue(), clearanceRecord.referenceNumber(), e);
+                log.error("CardClearance {} {} failed; {}", clearanceRecord.id().getValue(), clearanceRecord.referenceNumber(),
+                        DataDump.xmlStringView(clearanceRecord), e);
                 executionMonitor.addErredEvent("CardClearance", clearanceRecord.amount().getValue(),
                         SimpleMessageFormat.format("CardClearance {0} {1}", clearanceRecord.referenceNumber(), clearanceRecord.merchantID()), e);
             }

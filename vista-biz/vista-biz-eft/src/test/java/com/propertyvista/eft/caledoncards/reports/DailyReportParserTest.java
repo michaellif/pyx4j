@@ -41,6 +41,8 @@ public class DailyReportParserTest {
             Assert.assertEquals(DailyReportCardType.VISA, r.cardType().getValue());
             Assert.assertEquals(new BigDecimal("964.07"), r.amount().getValue());
             Assert.assertEquals("R64227", r.referenceNumber().getValue());
+            Assert.assertEquals(true, r.approved().getValue());
+            Assert.assertEquals(false, r.voided().getValue());
         }
 
         {
