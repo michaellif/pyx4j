@@ -166,7 +166,7 @@ public abstract class AbstractReportActivity<R extends ReportTemplate> extends A
     }
 
     @Override
-    public void generateReport() {
+    public void runReportGeneration() {
         reportsService.generateReportAsync(new DefaultAsyncCallback<String>() {
             @Override
             public void onSuccess(String deferredProcessId) {
@@ -206,6 +206,11 @@ public abstract class AbstractReportActivity<R extends ReportTemplate> extends A
                 });
             }
         }, view.getReportSettings());
+    }
+
+    @Override
+    public void abortReportGeneration() {
+//TODO implement
     }
 
     @Override
@@ -265,7 +270,7 @@ public abstract class AbstractReportActivity<R extends ReportTemplate> extends A
 
             @Override
             public void onSuccess(VoidSerializable result) {
-                view.onReportMetadataSaveSucceed(view.getReportSettings().reportTemplateName().getValue());
+                view.onReportMetadataSaveSucceed();
             }
 
             @Override
@@ -290,14 +295,14 @@ public abstract class AbstractReportActivity<R extends ReportTemplate> extends A
 
             @Override
             public void onSuccess(VoidSerializable result) {
-                populateAvailableReportMetadata();
+                loadAvailableTemplates();
             }
 
         }, settings, EntityFactory.getEntityPrototype(reportMetadataClass));
     }
 
     @Override
-    public void populateAvailableReportMetadata() {
+    public void loadAvailableTemplates() {
         reportsSettingsPersistenceService.list(new DefaultAsyncCallback<Vector<String>>() {
 
             @Override

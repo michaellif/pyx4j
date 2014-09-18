@@ -51,10 +51,10 @@ public abstract class ReportControlPanelActionBar extends SimplePanel {
 
         controlPanelToolbar = new Toolbar();
 
-        controlPanelToolbar.addItem(generateReportButton = new Button(i18n.tr("Generate Report"), new Command() {
+        controlPanelToolbar.addItem(generateReportButton = new Button(i18n.tr("Run Report"), new Command() {
             @Override
             public void execute() {
-                generateReport();
+                runReportGeneration();
             }
         }));
 
@@ -63,7 +63,7 @@ public abstract class ReportControlPanelActionBar extends SimplePanel {
         controlPanelToolbar.addItem(abortButton = new Button(i18n.tr("Abort"), new Command() {
             @Override
             public void execute() {
-                showReportWidget();
+                abortReportGeneration();
             }
         }));
         abortButton.setVisible(false);
@@ -75,9 +75,9 @@ public abstract class ReportControlPanelActionBar extends SimplePanel {
         generateReportButton.setEnabled(isEnabled);
     }
 
-    public abstract void generateReport();
+    public abstract void runReportGeneration();
 
-    public abstract void showReportWidget();
+    public abstract void abortReportGeneration();
 
     public void onReportGenerationStarted(String deferredProgressCorelationId, DeferredProgressListener deferredProgressListener) {
         if (progressPanel != null) {
@@ -103,6 +103,7 @@ public abstract class ReportControlPanelActionBar extends SimplePanel {
                     progressPanelHolder.setWidget(null);
                 }
                 generateReportButton.setVisible(true);
+                abortButton.setVisible(false);
             }
         }.schedule(2000);
     }

@@ -30,7 +30,9 @@ public interface IReport<R extends ReportTemplate> extends IPrimePane {
 
         void export();
 
-        void generateReport();
+        void runReportGeneration();
+
+        void abortReportGeneration();
 
         void loadReportMetadata(String reportMetadataId);
 
@@ -40,7 +42,7 @@ public interface IReport<R extends ReportTemplate> extends IPrimePane {
 
         void deleteReportMetadata(String reportMetadataId);
 
-        void populateAvailableReportMetadata();
+        void loadAvailableTemplates();
 
     }
 
@@ -56,7 +58,7 @@ public interface IReport<R extends ReportTemplate> extends IPrimePane {
 
     void setError(String errorMessage);
 
-    void onReportMetadataSaveSucceed(String reportMetadataId);
+    void onReportMetadataSaveSucceed();
 
     void onReportMetadataSaveFailed(String errorMessage);
 

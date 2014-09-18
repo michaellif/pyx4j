@@ -42,13 +42,13 @@ public class ReportControlPanel<R extends ReportTemplate> extends FlowPanel {
         propertyFormControlBar = new ReportControlPanelActionBar() {
 
             @Override
-            public void generateReport() {
-                abstractReport.generateReport();
+            public void runReportGeneration() {
+                abstractReport.runReportGeneration();
             }
 
             @Override
-            public void showReportWidget() {
-                abstractReport.showReportWidget();
+            public void abortReportGeneration() {
+                abstractReport.abortReportGeneration();
             }
 
         };

@@ -20,16 +20,15 @@
  */
 package com.pyx4j.site.client.backoffice.ui.prime.report;
 
-import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.IsWidget;
 
 public interface IReportWidget extends IsWidget {
 
     /** has to accept <code>null</code>, which means that the widget must reset it's state, i.e. clear everything */
-    void setData(Object data, Command onWidgetReady);
+    void setData(Object data);
 
     /** this is to be used along with data to store information about visual representation, i.e. scroll bar position */
     Object getMemento();
 
-    void setMemento(Object memento, Command onWidgetReady);
+    void setMemento(Object memento);
 }

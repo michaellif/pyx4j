@@ -62,7 +62,7 @@ public class PaneTheme extends Theme {
 
         VisorCloseButton,
 
-        ReportView, ReportControlPanel, ReportControlPanelActionBar, ReportPanel, ReportProgressErrorPanel
+        ReportView, ReportControlPanel, ReportControlPanelActionBar, ReportProgressErrorPanel
 
     }
 

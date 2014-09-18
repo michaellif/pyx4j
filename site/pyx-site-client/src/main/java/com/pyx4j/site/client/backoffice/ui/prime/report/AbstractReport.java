@@ -20,7 +20,6 @@
  */
 package com.pyx4j.site.client.backoffice.ui.prime.report;
 
-import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.dom.client.Style.Display;
 import com.google.gwt.dom.client.Style.Position;
@@ -29,7 +28,6 @@ import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.ScrollPanel;
-import com.google.gwt.user.client.ui.SimplePanel;
 
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.commons.SimpleMessageFormat;
@@ -69,8 +67,6 @@ public abstract class AbstractReport<R extends ReportTemplate> extends AbstractP
 
     private ReportControlPanel<R> reportControlPanel;
 
-    private SimplePanel reportPanel;
-
     private Button exportButton;
 
     private FlowPanel errorPanel;
@@ -108,28 +104,12 @@ public abstract class AbstractReport<R extends ReportTemplate> extends AbstractP
         errorPanel.setVisible(false);
         viewPanel.add(errorPanel);
 
-        reportPanel = new SimplePanel();
-        reportPanel.setStylePrimaryName(PaneTheme.StyleName.ReportPanel.name());
-        viewPanel.add(reportPanel);
+        viewPanel.add(reportWidget);
 
-        addHeaderToolbarItem(new Button(i18n.tr("Load..."), new Command() {
+        addHeaderToolbarItem(new Button(i18n.tr("Customise..."), new Command() {
             @Override
             public void execute() {
-                presenter.populateAvailableReportMetadata();
-            }
-        }));
-
-        addHeaderToolbarItem(new Button(i18n.tr("Save As..."), new Command() {
-            @Override
-            public void execute() {
-                saveSettingsAs();
-            }
-        }));
-
-        addHeaderToolbarItem(new Button(i18n.tr("Save"), new Command() {
-            @Override
-            public void execute() {
-                saveSettings();
+                presenter.loadAvailableTemplates();
             }
         }));
 
@@ -159,7 +139,6 @@ public abstract class AbstractReport<R extends ReportTemplate> extends AbstractP
     public void setReportMetadata(R reportMetadata) {
         hideVisor();
 
-        this.reportPanel.setWidget(null);
         this.errorPanel.setVisible(false);
 
         if (reportMetadata != null) {
@@ -168,14 +147,9 @@ public abstract class AbstractReport<R extends ReportTemplate> extends AbstractP
             populateSettingsForm(reportMetadata);
 
             reportWidget.asWidget().getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
-            showReportWidget();
-            reportPanel.setWidget(reportWidget);
-            reportWidget.setData(null, new Command() {
-                @Override
-                public void execute() {
-                    resetCaption();
-                }
-            });
+
+            reportWidget.setData(null);
+            resetCaption();
         } else {
             resetCaption();
         }
@@ -190,15 +164,11 @@ public abstract class AbstractReport<R extends ReportTemplate> extends AbstractP
     @Override
     public void setReportData(Object data) {
         errorPanel.setVisible(false);
+        reportControlPanel.onReportGenerationStopped();
 
-        showReportWidget();
         if (data != null) {
             reportWidget.asWidget().setVisible(true);
-            reportWidget.setData(data, new Command() {
-                @Override
-                public void execute() {
-                }
-            });
+            reportWidget.setData(data);
         }
     }
 
@@ -216,7 +186,7 @@ public abstract class AbstractReport<R extends ReportTemplate> extends AbstractP
 
     @Override
     public void startReportGenerationProgress(String deferredProgressCorelationId, DeferredProgressListener deferredProgressListener) {
-        reportPanel.setVisible(false);
+        reportWidget.setData(null);
         errorPanel.setVisible(false);
         reportControlPanel.onReportGenerationStarted(deferredProgressCorelationId, deferredProgressListener);
     }
@@ -229,7 +199,7 @@ public abstract class AbstractReport<R extends ReportTemplate> extends AbstractP
     }
 
     @Override
-    public void onReportMetadataSaveSucceed(String reportSettingsId) {
+    public void onReportMetadataSaveSucceed() {
         MessageDialog.info(i18n.tr("Report settings were saved successfuly!"));
         resetCaption();
     }
@@ -249,12 +219,7 @@ public abstract class AbstractReport<R extends ReportTemplate> extends AbstractP
 
             Object reportMemento = getMemento().getObject(MementoKeys.ReportWidget.name());
 
-            reportWidget.setMemento(reportMemento, new Command() {
-                @Override
-                public void execute() {
-                    showReportWidget();
-                }
-            });
+            reportWidget.setMemento(reportMemento);
         } else {
             setReportMetadata((R) ((ReportsAppPlace<?>) getMemento().getCurrentPlace()).getReportMetadata());
         }
@@ -304,22 +269,17 @@ public abstract class AbstractReport<R extends ReportTemplate> extends AbstractP
         }
     }
 
-    void showReportWidget() {
-        reportPanel.setVisible(true);
-        reportControlPanel.onReportGenerationStopped();
-    }
-
-    void generateReport() {
+    void runReportGeneration() {
         if (presenter != null) {
             if (reportControlPanel.isValid()) {
-                AbstractReport.this.reportWidget.asWidget().setVisible(false);
-                Scheduler.get().scheduleDeferred(new Scheduler.ScheduledCommand() {
-                    @Override
-                    public void execute() {
-                        presenter.generateReport();
-                    }
-                });
+                presenter.runReportGeneration();
             }
+        }
+    }
+
+    void abortReportGeneration() {
+        if (presenter != null) {
+            presenter.abortReportGeneration();
         }
     }
 
@@ -332,7 +292,7 @@ public abstract class AbstractReport<R extends ReportTemplate> extends AbstractP
         printableHtml.append("</style>");
         printableHtml.append("</head>");
         printableHtml.append("<body>");
-        Element reportElement = (Element) reportPanel.getElement().getFirstChildElement().cloneNode(true);
+        Element reportElement = (Element) reportWidget.asWidget().getElement().cloneNode(true);
         reportElement.getStyle().setPosition(Position.STATIC);
         reportElement.getStyle().setDisplay(Display.BLOCK);
         reportElement.getStyle().clearOverflow();
