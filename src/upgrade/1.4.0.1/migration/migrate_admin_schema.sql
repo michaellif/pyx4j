@@ -81,19 +81,29 @@ SET search_path = '_admin_';
         
         CREATE TABLE cards_clearance_record
         (
-            id                          BIGINT                  NOT NULL,
-            file                        BIGINT                  NOT NULL,
-            merchant_id                 VARCHAR(500),
-            merchant_account            BIGINT,
-            status                      VARCHAR(50),
-            convenience_fee_account     BOOLEAN,
-            reference_number            VARCHAR(500),
-            clearance_date              TIMESTAMP,
-            amount                      NUMERIC(18,2),
+            id                                  BIGINT                  NOT NULL,
+            file                                BIGINT                  NOT NULL,
+            merchant_id                         VARCHAR(500),
+            merchant_account                    BIGINT,
+            status                              VARCHAR(50),
+            convenience_fee_account             BOOLEAN,
+            reference_number                    VARCHAR(500),
+            response_message                    VARCHAR(500),
+            transaction_authorization_number    VARCHAR(500),
+            voided                              BOOLEAN,
+            approved                            BOOLEAN,
+            clearance_date                      TIMESTAMP,
+            amount                              NUMERIC(18,2),
+            record_received_date                TIMESTAMP,
                 CONSTRAINT cards_clearance_record_pk PRIMARY KEY(id)
         );
         
         ALTER TABLE cards_clearance_record OWNER TO vista;
+        
+        
+        -- cards_reconciliation_record
+        
+        ALTER TABLE cards_reconciliation_record ADD COLUMN record_received_date TIMESTAMP;
         
         /**
         ***     ============================================================================================================
