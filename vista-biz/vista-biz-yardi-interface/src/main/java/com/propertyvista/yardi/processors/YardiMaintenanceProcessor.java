@@ -17,6 +17,7 @@ import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -314,7 +315,7 @@ public class YardiMaintenanceProcessor {
         if (oldParent.subCategories().getAttachLevel() != AttachLevel.Attached) {
             Persistence.service().retrieveMember(oldParent.subCategories());
         }
-        List<MaintenanceRequestCategory> toBeRemoved = new ArrayList<MaintenanceRequestCategory>();
+        List<MaintenanceRequestCategory> toBeRemoved = new LinkedList<>();
         Map<String, MaintenanceRequestCategory> oldMap = new HashMap<String, MaintenanceRequestCategory>();
         if (!oldParent.subCategories().isNull()) {
             toBeRemoved.addAll(oldParent.subCategories());

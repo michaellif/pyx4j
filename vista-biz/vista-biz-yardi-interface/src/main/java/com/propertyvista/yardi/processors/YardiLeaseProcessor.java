@@ -21,6 +21,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -95,7 +96,7 @@ public class YardiLeaseProcessor {
     public void process() throws YardiServiceException {
         List<Lease> nonProcessedLeases = Collections.emptyList();
         if (rtd.isCloseNonProcessedLeases()) {
-            nonProcessedLeases = retrieveActiveLeases(rtd.getYardiInterfaceId());
+            nonProcessedLeases = new LinkedList<>(retrieveActiveLeases(rtd.getYardiInterfaceId()));
         }
 
         for (final String propertyCode : rtd.getKeySet()) {
