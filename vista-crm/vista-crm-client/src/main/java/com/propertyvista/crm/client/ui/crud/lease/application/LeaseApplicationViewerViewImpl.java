@@ -36,6 +36,9 @@ import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.CTextArea;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.forms.client.ui.panels.FormPanel;
+import com.pyx4j.forms.client.validators.AbstractComponentValidator;
+import com.pyx4j.forms.client.validators.AbstractValidationError;
+import com.pyx4j.forms.client.validators.BasicValidationError;
 import com.pyx4j.gwt.rpc.upload.UploadService;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
@@ -453,16 +456,12 @@ public class LeaseApplicationViewerViewImpl extends LeaseViewerViewImplBase<Leas
 
     public interface ApprovalChecklist extends IEntity {
 
-        @NotNull
         IPrimitive<Boolean> informationCompleteness();
 
-        @NotNull
         IPrimitive<Boolean> creditCheck();
 
-        @NotNull
         IPrimitive<Boolean> employmentConfirmation();
 
-        @NotNull
         IPrimitive<Boolean> landlordConfirmation();
     }
 
@@ -480,10 +479,10 @@ public class LeaseApplicationViewerViewImpl extends LeaseViewerViewImplBase<Leas
                 protected IsWidget createContent() {
                     FormPanel formPanel = new FormPanel(this);
 
-                    formPanel.append(Location.Left, proto().informationCompleteness()).decorate().labelWidth(250).componentWidth(30);
-                    formPanel.append(Location.Left, proto().creditCheck()).decorate().labelWidth(250).componentWidth(30);
-                    formPanel.append(Location.Left, proto().employmentConfirmation()).decorate().labelWidth(250).componentWidth(30);
-                    formPanel.append(Location.Left, proto().landlordConfirmation()).decorate().labelWidth(250).componentWidth(30);
+                    formPanel.append(Location.Left, proto().informationCompleteness()).decorate().labelWidth(250).componentWidth(50);
+                    formPanel.append(Location.Left, proto().creditCheck()).decorate().labelWidth(250).componentWidth(50);
+                    formPanel.append(Location.Left, proto().employmentConfirmation()).decorate().labelWidth(250).componentWidth(50);
+                    formPanel.append(Location.Left, proto().landlordConfirmation()).decorate().labelWidth(250).componentWidth(50);
 
                     formPanel.h4(i18n.tr("Notes:"));
                     formPanel.append(Location.Left, notes);
@@ -491,10 +490,29 @@ public class LeaseApplicationViewerViewImpl extends LeaseViewerViewImplBase<Leas
 
                     return formPanel;
                 }
+
+                @Override
+                public void addValidations() {
+                    super.addValidations();
+
+                    get(proto().informationCompleteness()).addComponentValidator(new checkValidator());
+                    get(proto().creditCheck()).addComponentValidator(new checkValidator());
+                    get(proto().employmentConfirmation()).addComponentValidator(new checkValidator());
+                    get(proto().landlordConfirmation()).addComponentValidator(new checkValidator());
+                }
+
+                class checkValidator extends AbstractComponentValidator<Boolean> {
+                    @Override
+                    public AbstractValidationError isValid() {
+                        Boolean value = getComponent().getValue();
+                        return ((value == null || !value) ? new BasicValidationError(getComponent(), i18n.tr("Should be marked!")) : null);
+                    }
+                }
             };
 
             form.init();
             form.populateNew();
+
             setBody(form);
             setDialogPixelWidth(350);
         }
