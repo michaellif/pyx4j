@@ -112,9 +112,4 @@ public abstract class CAbstractSelectorBox<DATA, TYPE extends IEntity, WIDGET ex
         return info.toString();
     }
 
-    @Override
-    protected void setEditorValue(DATA value) {
-        // TODO Auto-generated method stub
-        super.setEditorValue(value);
-    }
 }
