@@ -32,6 +32,7 @@ import com.pyx4j.entity.server.IEntityPersistenceService.ICursorIterator;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.server.TransactionScopeOption;
 import com.pyx4j.entity.server.UnitOfWork;
+import com.pyx4j.essentials.server.dev.DataDump;
 
 import com.propertyvista.biz.ExecutionMonitor;
 import com.propertyvista.config.VistaDeployment;
@@ -118,9 +119,9 @@ class CardsReconciliationProcessor {
                 executionMonitor.addProcessedEvent("AggregatedTransfer", reconciliationRecord.totalDeposit().getValue());
 
             } catch (ValidationFailedRollback e) {
-                log.error("AggregatedTransfer {} creation failed", reconciliationRecord.id().getValue(), e);
+                log.error("AggregatedTransfer {} creation failed {}", reconciliationRecord.id().getValue(), DataDump.xmlStringView(reconciliationRecord), e);
             } catch (Throwable e) {
-                log.error("AggregatedTransfer {} creation failed", reconciliationRecord.id().getValue(), e);
+                log.error("AggregatedTransfer {} creation failed {}", reconciliationRecord.id().getValue(), DataDump.xmlStringView(reconciliationRecord), e);
                 executionMonitor.addErredEvent(
                         "AggregatedTransfer",
                         reconciliationRecord.totalDeposit().getValue(),
@@ -131,6 +132,8 @@ class CardsReconciliationProcessor {
     }
 
     private void createAggregatedTransfer(CardsReconciliationRecord reconciliationRecord, ExecutionMonitor batchExecutionMonitor) {
+        log.debug("creating CardsAggregatedTransfer {} {} {}", reconciliationRecord.merchantTerminalId(), reconciliationRecord.date(),
+                reconciliationRecord.totalDeposit());
         CardsAggregatedTransfer at = EntityFactory.create(CardsAggregatedTransfer.class);
         at.fundsTransferType().setValue(FundsTransferType.Cards);
         at.cardsReconciliationRecordKey().setValue(reconciliationRecord.getPrimaryKey());
@@ -207,7 +210,6 @@ class CardsReconciliationProcessor {
         } else {
             criteria.isNull(criteria.proto().convenienceFeeReferenceNumber());
         }
-        criteria.isNull(criteria.proto().aggregatedTransfer());
 
         ICursorIterator<PaymentRecord> it = Persistence.service().query(null, criteria, AttachLevel.Attached);
         try {
