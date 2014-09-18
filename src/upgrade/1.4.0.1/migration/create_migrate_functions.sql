@@ -78,6 +78,7 @@ BEGIN
                 ||'FROM '||v_schema_name||'.payment_method AS pm '
                 ||'WHERE    pm.id = p.payment_method '
                 ||'AND  pm.payment_type = ''CreditCard'' '
+                ||'AND  p.payment_status = ''Cleared'' '
                 ||'AND  p.finalize_date >= ''09-JUN-2014'' ';
         
         
