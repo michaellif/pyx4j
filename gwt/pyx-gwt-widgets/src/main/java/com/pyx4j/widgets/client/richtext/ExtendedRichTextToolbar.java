@@ -267,7 +267,7 @@ public class ExtendedRichTextToolbar extends Composite {
         createInsertMenu();
 
         createTextHtmlSwitch(richText);
-
+        customButton.setVisible(false);
         customButton.addBlurHandler(handler);
         customButton.addClickHandler(handler);
         customButton.setVisible(false);
