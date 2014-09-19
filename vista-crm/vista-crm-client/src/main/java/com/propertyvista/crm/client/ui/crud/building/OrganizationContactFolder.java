@@ -19,8 +19,8 @@ import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.entity.core.IObject;
 import com.pyx4j.forms.client.ui.CForm;
-import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
+import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
@@ -69,14 +69,16 @@ class OrganizationContactFolder extends VistaBoxFolder<OrganizationContact> {
             get(proto().person()).addValueChangeHandler(new ValueChangeHandler<Employee>() {
                 @Override
                 public void onValueChange(ValueChangeEvent<Employee> event) {
-                    getPresenter().retrieveEmployee(new DefaultAsyncCallback<Employee>() {
-                        @Override
-                        public void onSuccess(Employee result) {
-                            OrganizationContact value = getValue();
-                            value.set(value.person(), result);
-                            setValue(value, false);
-                        }
-                    }, event.getValue());
+                    if (event.getValue() != null) {
+                        getPresenter().retrieveEmployee(new DefaultAsyncCallback<Employee>() {
+                            @Override
+                            public void onSuccess(Employee result) {
+                                OrganizationContact value = getValue();
+                                value.set(value.person(), result);
+                                setValue(value, false);
+                            }
+                        }, event.getValue());
+                    }
                 }
             });
 
