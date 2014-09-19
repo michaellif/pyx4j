@@ -30,13 +30,13 @@ public interface YardiLease extends IEntity {
 
     IPrimitive<BigDecimal> currentRent();
 
-    IPrimitive<LogicalDate> expectedMoveInDate();
+    IPrimitive<LogicalDate> expectedMoveIn();
 
-    IPrimitive<LogicalDate> expectedMoveOutDate();
+    IPrimitive<LogicalDate> expectedMoveOut();
 
-    IPrimitive<LogicalDate> leaseFromDate();
+    IPrimitive<LogicalDate> leaseFrom();
 
-    IPrimitive<LogicalDate> leaseToDate();
+    IPrimitive<LogicalDate> leaseTo();
 
     IPrimitive<LogicalDate> actualMoveIn();
 
@@ -46,5 +46,5 @@ public interface YardiLease extends IEntity {
 
     IList<YardiLeaseCharge> charges();
 
-    IList<YardiTransaction> transactions();
+    IList<YardiTransactionCharge> transactions();
 }

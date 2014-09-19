@@ -19,7 +19,7 @@ import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.IPrimitive;
 
-public interface YardiTransaction extends IEntity {
+public interface YardiTransactionCharge extends IEntity {
 
     IPrimitive<String> transactionId();
 

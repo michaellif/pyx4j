@@ -13,8 +13,16 @@
  */
 package com.propertyvista.yardi.mock.model.stub.impl;
 
+import java.rmi.RemoteException;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
+
+import com.propertyvista.biz.system.yardi.YardiServiceException;
+import com.propertyvista.domain.settings.PmcYardiCredential;
+import com.propertyvista.yardi.beans.Properties;
+import com.propertyvista.yardi.mock.model.YardiMock;
+import com.propertyvista.yardi.mock.model.domain.YardiBuilding;
 
 public class YardiMockStubBase {
     private final Set<String> noAccess = new HashSet<>();
@@ -29,5 +37,34 @@ public class YardiMockStubBase {
 
     public boolean hasAccess(String propertyCode) {
         return !noAccess.contains(propertyCode);
+    }
+
+    public String ping(PmcYardiCredential yc) {
+        return "OK";
+    }
+
+    public String getPluginVersion(PmcYardiCredential yc) {
+        return null;
+    }
+
+    public void validate(PmcYardiCredential yc) throws YardiServiceException, RemoteException {
+    }
+
+    public Properties getPropertyConfigurations(PmcYardiCredential yc) throws YardiServiceException, RemoteException {
+        return getProperties();
+    }
+
+    List<YardiBuilding> getYardiBuildings() {
+        return YardiMock.server().getModel().getBuildings();
+    }
+
+    Properties getProperties() {
+        Properties properties = new Properties();
+        for (YardiBuilding building : getYardiBuildings()) {
+            com.propertyvista.yardi.beans.Property property = new com.propertyvista.yardi.beans.Property();
+            property.setCode(building.buildingId().getValue());
+            properties.getProperties().add(property);
+        }
+        return properties;
     }
 }

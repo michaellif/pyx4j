@@ -21,6 +21,8 @@ import com.pyx4j.entity.core.IPrimitive;
 public interface YardiAddress extends IEntity {
     IPrimitive<String> street();
 
+    IPrimitive<String> unit();
+
     IPrimitive<String> city();
 
     IPrimitive<String> province();

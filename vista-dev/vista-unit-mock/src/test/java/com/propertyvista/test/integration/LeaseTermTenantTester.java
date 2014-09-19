@@ -36,7 +36,7 @@ public class LeaseTermTenantTester extends Tester {
     }
 
     public LeaseTermTenantTester role(Role value) {
-        assertEquals("Last Name", value, tenant.role().getValue());
+        assertEquals("Role", value, tenant.role().getValue());
         return this;
     }
 
@@ -46,7 +46,7 @@ public class LeaseTermTenantTester extends Tester {
     }
 
     public LeaseTermTenantTester email(String value) {
-        assertEquals("E-mails", value, tenant.leaseParticipant().customer().person().email().getValue());
+        assertEquals("E-mail", value, tenant.leaseParticipant().customer().person().email().getValue());
         return this;
     }
 

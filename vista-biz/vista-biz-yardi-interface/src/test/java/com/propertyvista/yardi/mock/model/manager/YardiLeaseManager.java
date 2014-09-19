@@ -13,6 +13,8 @@
  */
 package com.propertyvista.yardi.mock.model.manager;
 
+import com.propertyvista.yardi.mock.model.domain.YardiTenant;
+
 public interface YardiLeaseManager extends YardiMockManager {
 
     public interface LeaseBuilder {
@@ -33,10 +35,14 @@ public interface YardiLeaseManager extends YardiMockManager {
 
         TenantBuilder addTenant(String tenantId, String name);
 
-        LeaseChargeBuilder addCharge(String chargeId, String amount);
+        LeaseChargeBuilder addCharge(String chargeId, String chargeCode, String amount);
+
+        LeaseChargeBuilder addRentCharge(String chargeId, String chargeCode);
     }
 
     public interface TenantBuilder {
+
+        TenantBuilder setType(YardiTenant.Type type);
 
         TenantBuilder setEmail(String email);
 
@@ -50,8 +56,6 @@ public interface YardiLeaseManager extends YardiMockManager {
         LeaseChargeBuilder setFromDate(String date);
 
         LeaseChargeBuilder setToDate(String date);
-
-        LeaseChargeBuilder setChargeCode(String chargeCode);
 
         LeaseChargeBuilder setGlAccountNumber(String account);
 

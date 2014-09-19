@@ -16,6 +16,14 @@ package com.propertyvista.integration.yardi;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.pyx4j.entity.server.Persistence;
+
+import com.propertyvista.domain.property.asset.building.Building;
+import com.propertyvista.domain.property.asset.unit.AptUnit;
+import com.propertyvista.domain.tenant.lease.Lease;
+import com.propertyvista.domain.tenant.lease.LeaseTermParticipant.Role;
+import com.propertyvista.test.integration.BillableItemTester;
+import com.propertyvista.test.integration.LeaseTermTenantTester;
 import com.propertyvista.test.mock.MockDataModel;
 import com.propertyvista.test.mock.models.ARCodeDataModel;
 import com.propertyvista.test.mock.models.ARPolicyDataModel;
@@ -35,7 +43,9 @@ import com.propertyvista.yardi.YardiTestBase;
 import com.propertyvista.yardi.mock.model.YardiMock;
 import com.propertyvista.yardi.mock.model.manager.YardiBuildingManager;
 import com.propertyvista.yardi.mock.model.manager.YardiLeaseManager;
+import com.propertyvista.yardi.mock.model.stub.impl.YardiMockILSGuestCardStubImpl;
 import com.propertyvista.yardi.mock.model.stub.impl.YardiMockResidentTransactionsStubImpl;
+import com.propertyvista.yardi.stubs.YardiILSGuestCardStub;
 import com.propertyvista.yardi.stubs.YardiResidentTransactionsStub;
 
 /*
@@ -43,13 +53,12 @@ import com.propertyvista.yardi.stubs.YardiResidentTransactionsStub;
  * - YardiMockServerFacade to set up the test data
  * - YardiMockILSGuestCardStubImpl
  */
-//@Ignore
 public class YardiLeaseApplicationTest extends YardiTestBase {
 
     @Override
     protected List<Class<? extends MockDataModel<?>>> getMockModelTypes() {
-        List<Class<? extends MockDataModel<?>>> models = new ArrayList<Class<? extends MockDataModel<?>>>();
         if (false) {
+            List<Class<? extends MockDataModel<?>>> models = new ArrayList<Class<? extends MockDataModel<?>>>();
             models.add(PmcDataModel.class);
             models.add(CustomerDataModel.class);
             models.add(LocationsDataModel.class);
@@ -64,8 +73,10 @@ public class YardiLeaseApplicationTest extends YardiTestBase {
             models.add(LeaseDataModel.class);
             models.add(AgreementLegalPolicyDataModel.class);
             models.add(RestrictionsPolicyDataModel.class);
+            return models;
+        } else {
+            return super.getMockModelTypes();
         }
-        return models;
     }
 
     @Override
@@ -73,9 +84,12 @@ public class YardiLeaseApplicationTest extends YardiTestBase {
         super.setUp();
         preloadData();
 
+        // managers
         YardiMock.server().addManager(YardiBuildingManager.class);
         YardiMock.server().addManager(YardiLeaseManager.class);
+        // stubs
         YardiMock.server().addStub(YardiResidentTransactionsStub.class, YardiMockResidentTransactionsStubImpl.class);
+        YardiMock.server().addStub(YardiILSGuestCardStub.class, YardiMockILSGuestCardStubImpl.class);
     }
 
     /*
@@ -85,18 +99,84 @@ public class YardiLeaseApplicationTest extends YardiTestBase {
      * - Create and approve Lease Application
      * - Do import, check lease, ensure deposit charges
      */
-    public void testLeaseApplication() {
-        YardiMock.server().getManager(YardiBuildingManager.class)//
+    public void testLeaseApplication() throws Exception {
+        // 1. Test setup
+        // -------------
+        final String BuildingID = YardiBuildingManager.DEFAULT_PROPERTY_CODE;
+        final String UnitID_1 = YardiBuildingManager.DEFAULT_UNIT_NO;
+        final String LeaseID_1 = "lease1";
+
+        YardiMock.server().getManager(YardiBuildingManager.class) //
                 .addDefaultBuilding().setAddress("100 Avenue Rd");
 
-        assertTrue("prop123".equals(YardiMock.server().getModel().getBuildings().get(0).buildingId().getValue()));
-        assertTrue("Toronto".equals(YardiMock.server().getModel().getBuildings().get(0).address().city().getValue()));
-
         YardiMock.server().getManager(YardiLeaseManager.class) //
-                .addLease(YardiBuildingManager.DEFAULT_PROPERTY_CODE, YardiBuildingManager.DEFAULT_UNIT_NO, "lease1") //
-                .addTenant("tenant", "John Smith").done() //
-                .addCharge("parking", "50.00");
-        assertTrue("lease1".equals(YardiMock.server().getModel().getBuildings().get(0).leases().get(0).leaseId().getValue()));
-        assertTrue("parking".equals(YardiMock.server().getModel().getBuildings().get(0).leases().get(0).charges().get(0).chargeId().getValue()));
+                .addLease(BuildingID, UnitID_1, LeaseID_1) //
+                .setRentAmount("1234.56") //
+                .setLeaseFrom("01-Jun-2012").setLeaseTo("31-Jul-2014") //
+
+                .addTenant("tenant", "John Smith").setEmail("john@smith.ca").done() //
+                .addTenant("co-tenant", "Jane Doe").setEmail("jane@doe.ca").done() //
+
+                .addRentCharge("rent", "rrent").setGlAccountNumber("40000301").done() //
+
+                .addCharge("parkA", "rinpark", "50.00") //
+                .setFromDate("01-Jun-2012").setToDate("31-Jul-2014") //
+                .setDescription("Parking A").setComment("Parking A").done() //
+
+                .addCharge("parkB", "rpark", "60.00") //
+                .setFromDate("01-Jun-2012").setToDate("31-Jul-2014") //
+                .setDescription("Parking B").setComment("Parking A").done();
+
+        // 2. Test execution
+        // -----------------
+        yardiImportAll(getYardiCredential(BuildingID));
+
+        // 3. Test assertion
+        // -----------------
+        Lease lease = getLeaseById(LeaseID_1);
+        assertNotNull("Lease not imported", lease);
+        assertEquals("Invalid Lease Status", Lease.Status.Active, lease.status().getValue());
+
+        Building building = getBuilding(BuildingID);
+        assertNotNull(building);
+
+        AptUnit unit = getUnit(building, UnitID_1);
+        assertNotNull(unit);
+
+        Persistence.service().retrieve(lease.currentTerm().version().tenants());
+
+        new LeaseTermTenantTester(lease.currentTerm().version().tenants().get(0)). //
+                firstName("John"). //
+                lastName("Smith"). //
+                role(Role.Applicant). //
+                email("john@smith.ca");
+
+        new LeaseTermTenantTester(lease.currentTerm().version().tenants().get(1)). //
+                firstName("Jane"). //
+                lastName("Doe"). //
+                role(Role.CoApplicant). //
+                email("jane@doe.ca");
+
+        new BillableItemTester(lease.currentTerm().version().leaseProducts().serviceItem()). //
+                effectiveDate("01-Jun-2012"). //
+                expirationDate("31-Jul-2014"). //
+                description("Regular Residential Unit"). //
+                agreedPrice("1234.56");
+
+        assertEquals(2, lease.currentTerm().version().leaseProducts().featureItems().size());
+
+        new BillableItemTester(lease.currentTerm().version().leaseProducts().featureItems().get(0)). //
+                uid("rinpark:1"). //
+                effectiveDate("01-Jun-2012"). //
+                expirationDate("31-Jul-2014"). //
+                description("Indoor Parking"). //
+                agreedPrice("50.00");
+
+        new BillableItemTester(lease.currentTerm().version().leaseProducts().featureItems().get(1)). //
+                uid("rpark:1"). //
+                effectiveDate("01-Jun-2012"). //
+                expirationDate("31-Jul-2014"). //
+                description("Parking B"). //
+                agreedPrice("60.00");
     }
 }

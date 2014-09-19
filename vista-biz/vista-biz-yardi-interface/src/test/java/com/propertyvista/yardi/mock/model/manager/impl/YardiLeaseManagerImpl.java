@@ -19,6 +19,7 @@ import com.propertyvista.yardi.mock.model.domain.YardiBuilding;
 import com.propertyvista.yardi.mock.model.domain.YardiLease;
 import com.propertyvista.yardi.mock.model.domain.YardiLeaseCharge;
 import com.propertyvista.yardi.mock.model.domain.YardiTenant;
+import com.propertyvista.yardi.mock.model.domain.YardiTenant.Type;
 import com.propertyvista.yardi.mock.model.domain.YardiUnit;
 import com.propertyvista.yardi.mock.model.manager.YardiLeaseManager;
 
@@ -75,37 +76,37 @@ public class YardiLeaseManagerImpl extends YardiMockManagerBase implements Yardi
 
         @Override
         public LeaseBuilder setLeaseFrom(String date) {
-            lease.leaseFromDate().setValue(toDate(date));
+            lease.leaseFrom().setValue(toLogicalDate(date));
             return this;
         }
 
         @Override
         public LeaseBuilder setLeaseTo(String date) {
-            lease.leaseToDate().setValue(toDate(date));
+            lease.leaseTo().setValue(toLogicalDate(date));
             return this;
         }
 
         @Override
         public LeaseBuilder setExpectedMoveIn(String date) {
-            lease.expectedMoveInDate().setValue(toDate(date));
+            lease.expectedMoveIn().setValue(toLogicalDate(date));
             return this;
         }
 
         @Override
         public LeaseBuilder setExpectedMoveOut(String date) {
-            lease.expectedMoveOutDate().setValue(toDate(date));
+            lease.expectedMoveOut().setValue(toLogicalDate(date));
             return this;
         }
 
         @Override
         public LeaseBuilder setActualMoveIn(String date) {
-            lease.actualMoveIn().setValue(toDate(date));
+            lease.actualMoveIn().setValue(toLogicalDate(date));
             return this;
         }
 
         @Override
         public LeaseBuilder setActualMoveOut(String date) {
-            lease.actualMoveOut().setValue(toDate(date));
+            lease.actualMoveOut().setValue(toLogicalDate(date));
             return this;
         }
 
@@ -119,16 +120,21 @@ public class YardiLeaseManagerImpl extends YardiMockManagerBase implements Yardi
             }
 
             YardiTenant tenant = EntityFactory.create(YardiTenant.class);
-            tenant.tenantId().setValue(tenantId);
+            // auto set customer id and type so that first added is the main tenant 
+            tenant.tenantId().setValue(lease.tenants().size() == 0 ? lease.leaseId().getValue() : tenantId);
+            tenant.type().setValue(lease.tenants().size() == 0 ? Type.CURRENT_RESIDENT : Type.CUSTOMER);
+            tenant.responsibleForLease().setValue(true);
+            // parse name
             String[] nameParts = name.split(" ", 2);
             tenant.firstName().setValue(nameParts[0]);
             tenant.lastName().setValue(nameParts.length > 1 ? nameParts[1] : "");
+
             lease.tenants().add(tenant);
             return new TenantBuilderImpl(tenant);
         }
 
         @Override
-        public LeaseChargeBuilder addCharge(String chargeId, String amount) {
+        public LeaseChargeBuilder addCharge(String chargeId, String chargeCode, String amount) {
             assert chargeId != null : "charge id cannot be null";
             assert amount != null : "amount cannot be null";
 
@@ -139,9 +145,18 @@ public class YardiLeaseManagerImpl extends YardiMockManagerBase implements Yardi
             YardiLeaseCharge charge = EntityFactory.create(YardiLeaseCharge.class);
             charge.chargeId().setValue(chargeId);
             charge.amount().setValue(toAmount(amount));
+            charge.chargeCode().setValue(chargeCode);
 
             lease.charges().add(charge);
             return new LeaseChargeBuilderImpl(charge);
+        }
+
+        @Override
+        public LeaseChargeBuilder addRentCharge(String chargeId, String chargeCode) {
+            return addCharge(chargeId, chargeCode, format(lease.currentRent().getValue())) //
+                    .setFromDate(format(lease.leaseFrom().getValue())) //
+                    .setToDate(format(lease.leaseTo().getValue())) //
+                    .setDescription("Monthly Rent");
         }
 
         public class TenantBuilderImpl implements TenantBuilder {
@@ -150,6 +165,12 @@ public class YardiLeaseManagerImpl extends YardiMockManagerBase implements Yardi
 
             TenantBuilderImpl(YardiTenant tenant) {
                 this.tenant = tenant;
+            }
+
+            @Override
+            public TenantBuilder setType(Type type) {
+                tenant.type().setValue(type);
+                return this;
             }
 
             @Override
@@ -180,19 +201,13 @@ public class YardiLeaseManagerImpl extends YardiMockManagerBase implements Yardi
 
             @Override
             public LeaseChargeBuilder setFromDate(String date) {
-                charge.serviceFromDate().setValue(toDate(date));
+                charge.serviceFromDate().setValue(toLogicalDate(date));
                 return this;
             }
 
             @Override
             public LeaseChargeBuilder setToDate(String date) {
-                charge.serviceToDate().setValue(toDate(date));
-                return this;
-            }
-
-            @Override
-            public LeaseChargeBuilder setChargeCode(String chargeCode) {
-                charge.chargeCode().setValue(chargeCode);
+                charge.serviceToDate().setValue(toLogicalDate(date));
                 return this;
             }
 

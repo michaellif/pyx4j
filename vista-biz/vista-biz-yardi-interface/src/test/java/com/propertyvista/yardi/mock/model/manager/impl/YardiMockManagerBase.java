@@ -15,10 +15,11 @@ package com.propertyvista.yardi.mock.model.manager.impl;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import com.pyx4j.commons.LogicalDate;
+import com.pyx4j.gwt.server.DateUtils;
 
 import com.propertyvista.yardi.mock.model.YardiMock;
 import com.propertyvista.yardi.mock.model.domain.YardiBuilding;
@@ -114,11 +115,19 @@ public class YardiMockManagerBase {
         return new BigDecimal(amount).setScale(2, RoundingMode.HALF_DOWN);
     }
 
-    LogicalDate toDate(String date) {
-        try {
-            return new LogicalDate(new SimpleDateFormat("yyyy-MM-dd").parse(date));
-        } catch (ParseException e) {
-            throw new Error("Invalid date format: " + date);
-        }
+    Date toDate(String date) {
+        return DateUtils.detectDateformat(date);
+    }
+
+    LogicalDate toLogicalDate(String date) {
+        return new LogicalDate(toDate(date));
+    }
+
+    String format(Date date) {
+        return new SimpleDateFormat("yyyy-MM-dd").format(date);
+    }
+
+    String format(BigDecimal amount) {
+        return amount.toPlainString();
     }
 }
