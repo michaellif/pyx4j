@@ -13,9 +13,11 @@
  */
 package com.propertyvista.crm.server.services.dashboard.gadgets;
 
+import com.pyx4j.entity.core.AttachLevel;
+import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.server.AbstractListServiceDtoImpl;
-import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.server.CrudEntityBinder;
+import com.pyx4j.entity.server.Persistence;
 
 import com.propertyvista.crm.rpc.services.dashboard.gadgets.PaymentRecordsGadgetListService;
 import com.propertyvista.domain.dashboard.gadgets.payments.PaymentRecordForReportDTO;
@@ -45,6 +47,12 @@ public class PaymentRecordsGadgetListServiceImpl extends AbstractListServiceDtoI
             bind(toProto.amount(), boProto.amount());
             bind(toProto.lastStatusChangeDate(), boProto.lastStatusChangeDate());
             bind(toProto.buildingFilterAnchor(), boProto.billingAccount().lease().unit().building());
+        }
+
+        @Override
+        protected boolean retriveDetachedMember(IEntity boMember) {
+            Persistence.ensureRetrieve(boMember, AttachLevel.Attached);
+            return true;
         }
 
     }
