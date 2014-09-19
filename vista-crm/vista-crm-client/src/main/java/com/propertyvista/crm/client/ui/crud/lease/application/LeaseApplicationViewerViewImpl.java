@@ -523,7 +523,7 @@ public class LeaseApplicationViewerViewImpl extends LeaseViewerViewImplBase<Leas
         public boolean onClickOk() {
             form.setVisitedRecursive();
             if (form.isValid()) {
-//                ((LeaseApplicationViewerView.Presenter) getPresenter()).applicationAction(actionValue(Action.Approve));
+                ((LeaseApplicationViewerView.Presenter) getPresenter()).applicationAction(actionValue(Action.Approve));
                 return true;
             } else {
                 return false;
