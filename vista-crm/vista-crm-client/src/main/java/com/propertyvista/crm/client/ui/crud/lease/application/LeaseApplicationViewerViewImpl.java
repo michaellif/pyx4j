@@ -454,6 +454,7 @@ public class LeaseApplicationViewerViewImpl extends LeaseViewerViewImplBase<Leas
         }
     }
 
+    @Transient
     public interface ApprovalChecklist extends IEntity {
 
         IPrimitive<Boolean> informationCompleteness();
@@ -511,6 +512,7 @@ public class LeaseApplicationViewerViewImpl extends LeaseViewerViewImplBase<Leas
             };
 
             form.init();
+            form.reset();
             form.populateNew();
 
             setBody(form);
@@ -521,7 +523,7 @@ public class LeaseApplicationViewerViewImpl extends LeaseViewerViewImplBase<Leas
         public boolean onClickOk() {
             form.setVisitedRecursive();
             if (form.isValid()) {
-                ((LeaseApplicationViewerView.Presenter) getPresenter()).applicationAction(actionValue(Action.Approve));
+//                ((LeaseApplicationViewerView.Presenter) getPresenter()).applicationAction(actionValue(Action.Approve));
                 return true;
             } else {
                 return false;
