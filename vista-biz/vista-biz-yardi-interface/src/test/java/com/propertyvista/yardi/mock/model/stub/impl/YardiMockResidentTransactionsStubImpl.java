@@ -77,8 +77,26 @@ public class YardiMockResidentTransactionsStubImpl extends YardiMockStubBase imp
     @Override
     public ResidentTransactions getResidentTransactionsForTenant(PmcYardiCredential yc, String propertyId, String tenantId) throws YardiServiceException,
             RemoteException {
-        // TODO Auto-generated method stub
-        return null;
+        ResidentTransactions rt = new ResidentTransactions();
+        for (YardiBuilding building : getYardiBuildings()) {
+            if (propertyId.equals(building.buildingId().getValue())) {
+                Property property = getProperty(building);
+                rt.getProperty().add(property);
+                // tenant
+                for (YardiLease lease : building.leases()) {
+                    if (tenantId.equals(lease.leaseId().getValue())) {
+                        RTCustomer rtCustomer = getRtCustomer(lease, building);
+                        property.getRTCustomer().add(rtCustomer);
+                        // transactions
+                        rtCustomer.setRTServiceTransactions(new RTServiceTransactions());
+                        rtCustomer.getRTServiceTransactions().getTransactions().addAll(getTransactions(lease));
+                        break;
+                    }
+                }
+                break;
+            }
+        }
+        return rt;
     }
 
     @Override
@@ -109,10 +127,30 @@ public class YardiMockResidentTransactionsStubImpl extends YardiMockStubBase imp
     @Override
     public ResidentTransactions getLeaseChargesForTenant(PmcYardiCredential yc, String propertyId, String tenantId, LogicalDate date)
             throws YardiServiceException, RemoteException {
-        // TODO Auto-generated method stub
-        return null;
+        ResidentTransactions rt = new ResidentTransactions();
+        for (YardiBuilding building : getYardiBuildings()) {
+            if (propertyId.equals(building.buildingId().getValue())) {
+                Property property = getProperty(building);
+                rt.getProperty().add(property);
+                // tenant
+                for (YardiLease lease : building.leases()) {
+                    if (tenantId.equals(lease.leaseId().getValue())) {
+                        RTCustomer rtCustomer = getRtCustomer(lease, building);
+                        property.getRTCustomer().add(rtCustomer);
+                        // transactions
+                        rtCustomer.setRTServiceTransactions(new RTServiceTransactions());
+                        rtCustomer.getRTServiceTransactions().getTransactions().addAll(getCharges(lease, building.buildingId().getValue()));
+                        break;
+                    }
+                }
+                break;
+            }
+        }
+        return rt;
     }
 
+    // private methods
+    // ---------------
     private Property getProperty(YardiBuilding building) {
         Property property = new Property();
         // set identifier

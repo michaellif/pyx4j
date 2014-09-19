@@ -33,7 +33,7 @@ public class YardiLeaseManagerImpl extends YardiMockManagerBase implements Yardi
     }
 
     @Override
-    public LeaseBuilder addLease(String buildingId, String unitId, String leaseId) {
+    public LeaseBuilder addLease(String leaseId, String buildingId, String unitId) {
         assert buildingId != null : "building id cannot be null";
         assert unitId != null : "unit id cannot be null";
         assert leaseId != null : "lease id cannot be null";
@@ -56,6 +56,20 @@ public class YardiLeaseManagerImpl extends YardiMockManagerBase implements Yardi
         lease.currentRent().set(unit.rent());
 
         building.leases().add(lease);
+
+        return new LeaseBuilderImpl(lease);
+    }
+
+    @Override
+    public LeaseBuilder getLease(String leaseId, String buildingId) {
+        YardiBuilding building = findBuilding(buildingId);
+        if (building == null) {
+            throw new Error("Building not found: " + buildingId);
+        }
+        YardiLease lease = findLease(building, leaseId);
+        if (lease == null) {
+            throw new Error("Lease not found: " + leaseId);
+        }
 
         return new LeaseBuilderImpl(lease);
     }
@@ -124,13 +138,9 @@ public class YardiLeaseManagerImpl extends YardiMockManagerBase implements Yardi
             tenant.tenantId().setValue(lease.tenants().size() == 0 ? lease.leaseId().getValue() : tenantId);
             tenant.type().setValue(lease.tenants().size() == 0 ? Type.CURRENT_RESIDENT : Type.CUSTOMER);
             tenant.responsibleForLease().setValue(true);
-            // parse name
-            String[] nameParts = name.split(" ", 2);
-            tenant.firstName().setValue(nameParts[0]);
-            tenant.lastName().setValue(nameParts.length > 1 ? nameParts[1] : "");
 
             lease.tenants().add(tenant);
-            return new TenantBuilderImpl(tenant);
+            return new TenantBuilderImpl(tenant).setName(name);
         }
 
         @Override
@@ -159,6 +169,30 @@ public class YardiLeaseManagerImpl extends YardiMockManagerBase implements Yardi
                     .setDescription("Monthly Rent");
         }
 
+        @Override
+        public TenantBuilder getTenant(String tenantId) {
+            assert tenantId != null : "tenant id cannot be null";
+
+            YardiTenant tenant = findTenant(lease, tenantId);
+            if (tenant == null) {
+                throw new Error("Tenant not found: " + tenantId);
+            }
+
+            return new TenantBuilderImpl(tenant);
+        }
+
+        @Override
+        public LeaseChargeBuilder getCharge(String chargeId) {
+            assert chargeId != null : "charge id cannot be null";
+
+            YardiLeaseCharge charge = findLeaseCharge(lease, chargeId);
+            if (charge == null) {
+                throw new Error("Charge not found: " + chargeId);
+            }
+
+            return new LeaseChargeBuilderImpl(charge);
+        }
+
         public class TenantBuilderImpl implements TenantBuilder {
 
             private final YardiTenant tenant;
@@ -170,6 +204,15 @@ public class YardiLeaseManagerImpl extends YardiMockManagerBase implements Yardi
             @Override
             public TenantBuilder setType(Type type) {
                 tenant.type().setValue(type);
+                return this;
+            }
+
+            @Override
+            public TenantBuilder setName(String name) {
+                // parse name
+                String[] nameParts = name.split(" ", 2);
+                tenant.firstName().setValue(nameParts[0]);
+                tenant.lastName().setValue(nameParts.length > 1 ? nameParts[1] : "");
                 return this;
             }
 
@@ -197,6 +240,18 @@ public class YardiLeaseManagerImpl extends YardiMockManagerBase implements Yardi
 
             LeaseChargeBuilderImpl(YardiLeaseCharge charge) {
                 this.charge = charge;
+            }
+
+            @Override
+            public LeaseChargeBuilder setAmount(String amount) {
+                charge.amount().setValue(toAmount(amount));
+                return this;
+            }
+
+            @Override
+            public LeaseChargeBuilder setChargeCode(String chargeCode) {
+                charge.chargeCode().setValue(chargeCode);
+                return this;
             }
 
             @Override

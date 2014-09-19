@@ -38,11 +38,17 @@ public interface YardiLeaseManager extends YardiMockManager {
         LeaseChargeBuilder addCharge(String chargeId, String chargeCode, String amount);
 
         LeaseChargeBuilder addRentCharge(String chargeId, String chargeCode);
+
+        TenantBuilder getTenant(String tenantId);
+
+        LeaseChargeBuilder getCharge(String chargeId);
     }
 
     public interface TenantBuilder {
 
         TenantBuilder setType(YardiTenant.Type type);
+
+        TenantBuilder setName(String name);
 
         TenantBuilder setEmail(String email);
 
@@ -52,6 +58,10 @@ public interface YardiLeaseManager extends YardiMockManager {
     }
 
     public interface LeaseChargeBuilder {
+
+        LeaseChargeBuilder setAmount(String amount);
+
+        LeaseChargeBuilder setChargeCode(String chargeCode);
 
         LeaseChargeBuilder setFromDate(String date);
 
@@ -68,5 +78,7 @@ public interface YardiLeaseManager extends YardiMockManager {
 
     LeaseBuilder addDefaultLease();
 
-    LeaseBuilder addLease(String buildingId, String unitId, String leaseId);
+    LeaseBuilder addLease(String leaseId, String buildingId, String unitId);
+
+    LeaseBuilder getLease(String leaseId, String buildingId);
 }

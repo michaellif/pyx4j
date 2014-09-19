@@ -20,7 +20,7 @@ import com.pyx4j.entity.core.IPrimitive;
 
 public interface YardiRentableItem extends IEntity {
 
-    IPrimitive<String> name();
+    IPrimitive<String> itemId();
 
     IPrimitive<String> description();
 

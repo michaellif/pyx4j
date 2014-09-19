@@ -17,11 +17,16 @@ import java.math.BigDecimal;
 
 import com.pyx4j.entity.core.EntityFactory;
 
+import com.propertyvista.yardi.mock.model.YardiMock;
 import com.propertyvista.yardi.mock.model.domain.YardiAddress;
 import com.propertyvista.yardi.mock.model.domain.YardiBuilding;
 import com.propertyvista.yardi.mock.model.domain.YardiFloorplan;
+import com.propertyvista.yardi.mock.model.domain.YardiLease;
+import com.propertyvista.yardi.mock.model.domain.YardiRentableItem;
 import com.propertyvista.yardi.mock.model.domain.YardiUnit;
 import com.propertyvista.yardi.mock.model.manager.YardiBuildingManager;
+import com.propertyvista.yardi.mock.model.manager.YardiLeaseManager;
+import com.propertyvista.yardi.mock.model.manager.YardiLeaseManager.LeaseBuilder;
 
 public class YardiBuildingManagerImpl extends YardiMockManagerBase implements YardiBuildingManager {
 
@@ -40,13 +45,24 @@ public class YardiBuildingManagerImpl extends YardiMockManagerBase implements Ya
 
     @Override
     public BuildingBuilder addBuilding(String propertyId) {
-        assert propertyId != null : "propertyId cannot be null";
+        assert propertyId != null : "property id cannot be null";
 
         YardiBuilding building = EntityFactory.create(YardiBuilding.class);
         building.buildingId().setValue(propertyId);
 
         addBuilding(building);
 
+        return new BuildingBuilderImpl(building);
+    }
+
+    @Override
+    public BuildingBuilder getBuilding(String propertyId) {
+        assert propertyId != null : "property id cannot be null";
+
+        YardiBuilding building = findBuilding(propertyId);
+        if (building == null) {
+            throw new Error("Building not found: " + propertyId);
+        }
         return new BuildingBuilderImpl(building);
     }
 
@@ -111,5 +127,48 @@ public class YardiBuildingManagerImpl extends YardiMockManagerBase implements Ya
             return this;
         }
 
+        @Override
+        public RentableItemBuilder addRentableItem(String itemId, String price, String chargeCode) {
+            assert itemId != null : "item id cannot be null";
+            assert price != null : "price cannot be null";
+            assert chargeCode != null : "charge code cannot be null";
+
+            YardiRentableItem item = EntityFactory.create(YardiRentableItem.class);
+            item.itemId().setValue(itemId);
+            item.price().setValue(toAmount(price));
+            item.chargeCode().setValue(chargeCode);
+
+            return new RentableItemBuilderImpl(item);
+        }
+
+        @Override
+        public LeaseBuilder getLease(String leaseId) {
+            YardiLease lease = findLease(building, leaseId);
+            if (lease == null) {
+                throw new Error("Lease not found: " + leaseId);
+            }
+
+            return ((YardiLeaseManagerImpl) YardiMock.server().getManager(YardiLeaseManager.class)).new LeaseBuilderImpl(lease);
+        }
+
+        public class RentableItemBuilderImpl implements RentableItemBuilder {
+
+            private final YardiRentableItem item;
+
+            RentableItemBuilderImpl(YardiRentableItem item) {
+                this.item = item;
+            }
+
+            @Override
+            public RentableItemBuilder setDescription(String text) {
+                item.description().setValue(text);
+                return this;
+            }
+
+            @Override
+            public BuildingBuilder done() {
+                return BuildingBuilderImpl.this;
+            }
+        }
     }
 }

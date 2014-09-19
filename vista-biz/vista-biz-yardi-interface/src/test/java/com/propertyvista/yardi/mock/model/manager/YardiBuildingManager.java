@@ -15,6 +15,8 @@ package com.propertyvista.yardi.mock.model.manager;
 
 import java.math.BigDecimal;
 
+import com.propertyvista.yardi.mock.model.manager.YardiLeaseManager.LeaseBuilder;
+
 public interface YardiBuildingManager extends YardiMockManager {
 
     public static final String DEFAULT_PROPERTY_CODE = "prop123";
@@ -40,14 +42,28 @@ public interface YardiBuildingManager extends YardiMockManager {
     public static final int DEFAULT_FP_BATHS = 1;
 
     public interface BuildingBuilder {
+
         BuildingBuilder setAddress(String address);
 
         BuildingBuilder addFloorplan(String id, int beds, int baths);
 
         BuildingBuilder addUnit(String id, String fpId, BigDecimal unitRent);
+
+        RentableItemBuilder addRentableItem(String itemId, String price, String chargeCode);
+
+        LeaseBuilder getLease(String leaseId);
+    }
+
+    public interface RentableItemBuilder {
+
+        RentableItemBuilder setDescription(String text);
+
+        BuildingBuilder done();
     }
 
     BuildingBuilder addDefaultBuilding();
 
     BuildingBuilder addBuilding(String propertyId);
+
+    BuildingBuilder getBuilding(String propertyId);
 }

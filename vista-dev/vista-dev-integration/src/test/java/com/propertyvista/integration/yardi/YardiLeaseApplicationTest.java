@@ -16,8 +16,11 @@ package com.propertyvista.integration.yardi;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.yardi.entity.resident.ResidentTransactions;
+
 import com.pyx4j.entity.server.Persistence;
 
+import com.propertyvista.biz.ExecutionMonitor;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.tenant.lease.Lease;
@@ -45,8 +48,10 @@ import com.propertyvista.yardi.mock.model.manager.YardiBuildingManager;
 import com.propertyvista.yardi.mock.model.manager.YardiLeaseManager;
 import com.propertyvista.yardi.mock.model.stub.impl.YardiMockILSGuestCardStubImpl;
 import com.propertyvista.yardi.mock.model.stub.impl.YardiMockResidentTransactionsStubImpl;
+import com.propertyvista.yardi.services.YardiResidentTransactionsService;
 import com.propertyvista.yardi.stubs.YardiILSGuestCardStub;
 import com.propertyvista.yardi.stubs.YardiResidentTransactionsStub;
+import com.propertyvista.yardi.stubs.YardiStubFactory;
 
 /*
  * TODO - implement
@@ -105,17 +110,18 @@ public class YardiLeaseApplicationTest extends YardiTestBase {
         final String BuildingID = YardiBuildingManager.DEFAULT_PROPERTY_CODE;
         final String UnitID_1 = YardiBuildingManager.DEFAULT_UNIT_NO;
         final String LeaseID_1 = "lease1";
+        final String TenantID = "tenant";
+        final String CoTenantID = "co-tenant";
 
-        YardiMock.server().getManager(YardiBuildingManager.class) //
-                .addDefaultBuilding().setAddress("100 Avenue Rd");
+        YardiMock.server().getManager(YardiBuildingManager.class).addDefaultBuilding();
 
         YardiMock.server().getManager(YardiLeaseManager.class) //
-                .addLease(BuildingID, UnitID_1, LeaseID_1) //
+                .addLease(LeaseID_1, BuildingID, UnitID_1) //
                 .setRentAmount("1234.56") //
                 .setLeaseFrom("01-Jun-2012").setLeaseTo("31-Jul-2014") //
 
-                .addTenant("tenant", "John Smith").setEmail("john@smith.ca").done() //
-                .addTenant("co-tenant", "Jane Doe").setEmail("jane@doe.ca").done() //
+                .addTenant(TenantID, "John Smith").setEmail("john@smith.ca").done() //
+                .addTenant(CoTenantID, "Jane Doe").setEmail("jane@doe.ca").done() //
 
                 .addRentCharge("rent", "rrent").setGlAccountNumber("40000301").done() //
 
@@ -178,5 +184,62 @@ public class YardiLeaseApplicationTest extends YardiTestBase {
                 expirationDate("31-Jul-2014"). //
                 description("Parking B"). //
                 agreedPrice("60.00");
+
+        // 4. Update lease
+        YardiMock.server().getManager(YardiLeaseManager.class) //
+                .getLease(LeaseID_1, BuildingID) //
+                .getCharge("rent").setAmount("1250.00").done() //
+                .getCharge("parkA").setDescription("Indoor Parking").done() //
+                .getCharge("parkB").setChargeCode("rlock").setAmount("150.00").setDescription("Locker B").done() //
+                .getTenant(CoTenantID).setName("Jane Smith").done();
+
+        YardiResidentTransactionsService.getInstance().updateAll(getYardiCredential(BuildingID), new ExecutionMonitor());
+
+        // 5. Assert changes
+        lease = getCurrentLease(unit);
+        Persistence.service().retrieveMember(lease.currentTerm().versions());
+        Persistence.service().retrieve(lease.currentTerm().version().tenants());
+
+        // @formatter:off
+        new LeaseTermTenantTester(lease.currentTerm().version().tenants().get(0)).
+        firstName("John").
+        lastName("Smith").
+        role(Role.Applicant);
+        // @formatter:on
+
+        // @formatter:off
+        new LeaseTermTenantTester(lease.currentTerm().version().tenants().get(1)).
+        firstName("Jane").
+        lastName("Smith").
+        role(Role.CoApplicant);
+        // @formatter:on
+
+        new BillableItemTester(lease.currentTerm().version().leaseProducts().serviceItem()).agreedPrice("1250.00");
+
+        // @formatter:off
+        new BillableItemTester(lease.currentTerm().version().leaseProducts().featureItems().get(0)).
+        uid("rinpark:1").
+        effectiveDate("01-Jun-2012").
+        expirationDate("31-Jul-2014").
+        description("Indoor Parking").
+        agreedPrice("50.00");
+        // @formatter:on
+
+        // @formatter:off
+        new BillableItemTester(lease.currentTerm().version().leaseProducts().featureItems().get(1)).
+        uid("rlock:1").
+        effectiveDate("01-Jun-2012").
+        expirationDate("31-Jul-2014").
+        description("Locker B").
+        agreedPrice("150.00");
+        // @formatter:on
+
+        // 6. Test single lease import
+        ResidentTransactions transactions = YardiStubFactory.create(YardiResidentTransactionsStub.class).getResidentTransactionsForTenant(
+                getYardiCredential(BuildingID), BuildingID, LeaseID_1);
+        assertNotNull(transactions);
+        assertEquals(1, transactions.getProperty().get(0).getRTCustomer().size());
+        assertEquals(LeaseID_1, transactions.getProperty().get(0).getRTCustomer().get(0).getCustomerID());
+
     }
 }
