@@ -30,6 +30,7 @@ import java.util.Vector;
 
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.IEntity;
+import com.pyx4j.entity.core.IObject;
 import com.pyx4j.entity.core.IPrimitive;
 import com.pyx4j.entity.core.meta.EntityMeta;
 import com.pyx4j.entity.core.meta.MemberMeta;
@@ -45,8 +46,18 @@ public class EntityReportFormatter<E extends IEntity> {
 
     private final Map<String, String> customMemberCaptions = new HashMap<String, String>();
 
+    private boolean memberValueUseStringView;
+
     public EntityReportFormatter(Class<? extends E> entityClass) {
         this.entityClass = entityClass;
+    }
+
+    public boolean isMemberValueUseStringView() {
+        return memberValueUseStringView;
+    }
+
+    public void setMemberValueUseStringView(boolean memberValueUseStringView) {
+        this.memberValueUseStringView = memberValueUseStringView;
     }
 
     public void selectMemebers() {
@@ -141,10 +152,18 @@ public class EntityReportFormatter<E extends IEntity> {
             if (memberMeta.isEntity()) {
                 formatter.cell(((IEntity) entity.getMember(memberName)).getStringView());
             } else if (IPrimitive.class.isAssignableFrom(memberMeta.getObjectClass())) {
-                formatter.cell(entity.getMember(memberName).getValue());
+                formatter.cell(memberValue(entity.getMember(memberName)));
             }
         }
         reportEntityEnds(formatter, entity);
+    }
+
+    public Object memberValue(IObject<?> member) {
+        if (memberValueUseStringView) {
+            return member.getStringView();
+        } else {
+            return member.getValue();
+        }
     }
 
 }
