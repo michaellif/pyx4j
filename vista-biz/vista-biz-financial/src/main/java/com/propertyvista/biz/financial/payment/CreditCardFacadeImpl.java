@@ -59,8 +59,8 @@ public class CreditCardFacadeImpl implements CreditCardFacade {
 
     @Override
     public Key getProdAndTestVistaRecordId(ReferenceNumberPrefix uniquePrefix, String transactionreferenceNumber) {
-        Validate.isTrue(transactionreferenceNumber.startsWith(uniquePrefix.getValue()), "Transaction Id {0} Has Unexpected Prefix, Expected {1}", uniquePrefix,
-                transactionreferenceNumber);
+        Validate.isTrue(transactionreferenceNumber.startsWith(uniquePrefix.getValue()), "Transaction Id {0} Has Unexpected Prefix, Expected {1}",
+                transactionreferenceNumber, uniquePrefix.getValue());
         return PadTransactionUtils.toVistaPaymentRecordId(transactionreferenceNumber.substring(uniquePrefix.getValue().length()), false);
     }
 
