@@ -33,7 +33,7 @@ public class CLeaseTermVHyperlink extends CEntityLabel<LeaseTermV> {
             @Override
             public void execute() {
                 if (!getValue().isNull()) {
-                    long versionNo = (getValue().versionNumber().isNull() ? 0 : getValue().versionNumber().getValue());
+                    long versionNo = (getValue().fromDate().isNull() ? 0L : getValue().fromDate().getValue().getTime());
                     Key leaseTermKey = new Key(getValue().holder().getPrimaryKey().asLong(), versionNo);
                     AppSite.getPlaceController().goTo(AppPlaceEntityMapper.resolvePlace(LeaseTerm.class).formViewerPlace(leaseTermKey));
                 }
@@ -49,7 +49,6 @@ public class CLeaseTermVHyperlink extends CEntityLabel<LeaseTermV> {
                     return null;
                 }
             }
-
         });
     }
 }
