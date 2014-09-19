@@ -37,7 +37,6 @@ import com.propertyvista.crm.rpc.services.billing.PaymentRecordCrudService;
 import com.propertyvista.crm.rpc.services.lease.LeaseApplicationViewerCrudService;
 import com.propertyvista.crm.rpc.services.lease.LeaseViewerCrudService;
 import com.propertyvista.crm.rpc.services.lease.common.LeaseViewerCrudServiceBase;
-import com.propertyvista.domain.financial.BillingAccount;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseTerm;
 import com.propertyvista.domain.tenant.lease.LeaseTermGuarantor;
@@ -59,13 +58,8 @@ public abstract class LeaseViewerActivityBase<DTO extends LeaseDTO> extends CrmV
     public LeaseViewerActivityBase(Class<DTO> entityClass, CrudAppPlace place, IViewer<DTO> view, AbstractCrudService<DTO> service) {
         super(entityClass, place, view, service);
 
-        paymentLister = new SecureListerController<PaymentRecordDTO>(PaymentRecordDTO.class, ((LeaseViewerViewBase) getView()).getPaymentListerView(),
-                GWT.<PaymentRecordCrudService> create(PaymentRecordCrudService.class)) {
-            @Override
-            public boolean canCreateNewItem() {
-                return super.canCreateNewItem() && (currentValue.billingAccount().paymentAccepted().getValue() != BillingAccount.PaymentAccepted.DoNotAccept);
-            }
-        };
+        paymentLister = new SecureListerController<PaymentRecordDTO>(PaymentRecordDTO.class, ((LeaseViewerViewBase<DTO>) getView()).getPaymentListerView(),
+                GWT.<PaymentRecordCrudService> create(PaymentRecordCrudService.class));
 
         if (service instanceof LeaseViewerCrudService) {
             returnBehaviour = ReturnBehaviour.Lease;

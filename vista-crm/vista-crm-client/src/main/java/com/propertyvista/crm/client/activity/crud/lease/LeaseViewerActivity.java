@@ -83,6 +83,8 @@ public class LeaseViewerActivity extends LeaseViewerActivityBase<LeaseDTO> imple
 
     private final ILister.Presenter<MaintenanceRequestDTO> maintenanceLister;
 
+    private boolean isFormerLease = false;
+
     public LeaseViewerActivity(CrudAppPlace place) {
         super(LeaseDTO.class, place, CrmSite.getViewFactory().getView(LeaseViewerView.class), GWT.<LeaseViewerCrudService> create(LeaseViewerCrudService.class));
 
@@ -92,15 +94,27 @@ public class LeaseViewerActivity extends LeaseViewerActivityBase<LeaseDTO> imple
         billLister = new BillListerController(((LeaseViewerView) getView()).getBillListerView());
 
         leaseAdjustmentLister = new SecureListerController<LeaseAdjustment>(LeaseAdjustment.class,
-                ((LeaseViewerView) getView()).getLeaseAdjustmentListerView(), GWT.<LeaseAdjustmentCrudService> create(LeaseAdjustmentCrudService.class));
+                ((LeaseViewerView) getView()).getLeaseAdjustmentListerView(), GWT.<LeaseAdjustmentCrudService> create(LeaseAdjustmentCrudService.class)) {
+            @Override
+            public boolean canCreateNewItem() {
+                return (super.canCreateNewItem() && !isFormerLease);
+            }
+        };
 
         maintenanceLister = new SecureListerController<MaintenanceRequestDTO>(MaintenanceRequestDTO.class,
-                ((LeaseViewerView) getView()).getMaintenanceListerView(), GWT.<MaintenanceCrudService> create(MaintenanceCrudService.class));
+                ((LeaseViewerView) getView()).getMaintenanceListerView(), GWT.<MaintenanceCrudService> create(MaintenanceCrudService.class)) {
+            @Override
+            public boolean canCreateNewItem() {
+                return (super.canCreateNewItem() && !isFormerLease);
+            }
+        };
     }
 
     @Override
     protected void onPopulateSuccess(LeaseDTO result) {
         super.onPopulateSuccess(result);
+
+        isFormerLease = result.status().getValue().isFormer();
 
         populateDeposits(result);
         populateBills(result);
