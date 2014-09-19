@@ -33,6 +33,7 @@ import com.pyx4j.entity.core.criterion.Criterion;
 import com.pyx4j.forms.client.ui.CCheckBox;
 import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.CLabel;
+import com.pyx4j.forms.client.ui.CRichTextArea;
 import com.pyx4j.forms.client.ui.folder.BoxFolderItemDecorator;
 import com.pyx4j.forms.client.ui.folder.CFolderItem;
 import com.pyx4j.forms.client.ui.folder.IFolderItemDecorator;
@@ -73,6 +74,7 @@ import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.tenant.lease.Tenant;
 import com.propertyvista.dto.CommunicationEndpointDTO;
 import com.propertyvista.dto.MessageDTO;
+import com.propertyvista.misc.VistaTODO;
 
 public class MessageForm extends CrmEntityForm<MessageDTO> {
 
@@ -187,8 +189,6 @@ public class MessageForm extends CrmEntityForm<MessageDTO> {
 
         MessageAttachmentFolder attachemnts;
 
-        private FormPanel searchCriteriaPanel;
-
         private Button.ButtonMenuBar subMenu;
 
         private final Button actionsButton;
@@ -298,15 +298,17 @@ public class MessageForm extends CrmEntityForm<MessageDTO> {
             }));
 
             actionsButton.setMenu(subMenu);
-            searchCriteriaPanel = new FormPanel(this);
-            searchCriteriaPanel.append(Location.Dual, proto().to(), communicationEndpointSelector).decorate();
-            searchCriteriaPanel.h4("", actionsButton);
-            formPanel.append(Location.Dual, searchCriteriaPanel);
+            formPanel.append(Location.Dual, proto().to(), communicationEndpointSelector).decorate().labelWidth(20);
+            formPanel.append(Location.Dual, actionsButton);
             formPanel.br();
 
             formPanel.append(Location.Dual, proto().highImportance(), new CCheckBox()).decorate();
-            formPanel.append(Location.Dual, proto().text()).decorate().labelWidth(0).customLabel("").useLabelSemicolon(false);
 
+            if (VistaTODO.USE_RTF_EDITOR_FOR_COMMUNICATION) {
+                formPanel.append(Location.Dual, proto().text(), new CRichTextArea()).decorate().labelWidth(0).customLabel("").useLabelSemicolon(false);
+            } else {
+                formPanel.append(Location.Dual, proto().text()).decorate().labelWidth(0).customLabel("").useLabelSemicolon(false);
+            }
             attachmentCaption = formPanel.h3("Attachments");
             formPanel.append(Location.Dual, proto().attachments(), attachemnts = new MessageAttachmentFolder());
             formPanel.br();
@@ -352,8 +354,12 @@ public class MessageForm extends CrmEntityForm<MessageDTO> {
             }
 
             getValue().to().add(proto);
-            communicationEndpointSelector.getValue().add(proto);
-            communicationEndpointSelector.revalidate();
+            updateSelector(communicationEndpointSelector, getValue());
+        }
+
+        private void updateSelector(CommunicationEndpointSelector selector, MessageDTO value) {
+            selector.setValue(value.to());
+            selector.refresh(true);
         }
 
         private MessageDTO getCurrent() {
@@ -420,11 +426,12 @@ public class MessageForm extends CrmEntityForm<MessageDTO> {
                             ((MessageFolderItem) messagesFolder.getItem(i).getEntityForm()).setCanReply(false);
                         }
                         newItem.refresh(false);
+
                         CForm<MessageDTO> form = newItem.getEntityForm();
                         if (form != null && form instanceof MessageFolderItem) {
                             MessageFolderItem folderItemForm = (MessageFolderItem) form;
                             folderItemForm.setFocusForEditingText();
-                            folderItemForm.communicationEndpointSelector.setValue(newItem.getValue().to());
+                            updateSelector(folderItemForm.communicationEndpointSelector, newItem.getValue());
                         }
 
                         newItem.asWidget().getElement().scrollIntoView();
@@ -490,10 +497,6 @@ public class MessageForm extends CrmEntityForm<MessageDTO> {
         protected void onValueSet(boolean populate) {
             super.onValueSet(populate);
             if (getValue().isPrototype() || getValue().date() == null || getValue().date().isNull()) {
-                if (getValue().to().size() > 0) {
-                    communicationEndpointSelector.setValue(getValue().to());
-                }
-                searchCriteriaPanel.setVisible(true);
                 BoxFolderItemDecorator<DeliveryHandle> d = (BoxFolderItemDecorator<DeliveryHandle>) getParent().getDecorator();
                 d.setExpended(true);
                 setViewable(false);
@@ -513,7 +516,6 @@ public class MessageForm extends CrmEntityForm<MessageDTO> {
                 get(proto().highImportance()).setVisible(true);
                 statusToolBar.asWidget().setVisible(false);
                 subMenu.setVisible(true);
-                //communicationEndpointSelector.setEnabled(true);
                 actionsButton.setVisible(true);
             } else {
                 setViewable(true);
@@ -521,13 +523,6 @@ public class MessageForm extends CrmEntityForm<MessageDTO> {
                 setEnabled(false);
                 subMenu.setVisible(false);
                 actionsButton.setVisible(false);
-                if (getValue().to() != null && getValue().to().size() > 0) {
-                    searchCriteriaPanel.setVisible(true);
-                    communicationEndpointSelector.setValue(getValue().to());
-                } else {
-                    searchCriteriaPanel.setVisible(false);
-                }
-                //communicationEndpointSelector.setEnabled(false);
                 btnSend.setVisible(false);
                 btnCancel.setVisible(false);
                 btnReply.setVisible(getValue().allowedReply().getValue(true));

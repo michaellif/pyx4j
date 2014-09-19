@@ -33,5 +33,11 @@ public class CommunicationEndpointSelector extends CSelectorListBox<Communicatio
             }
         });
     }
+/*-
+ @Override
+ public boolean isValuesEqual(Collection<CommunicationEndpointDTO> value1, Collection<CommunicationEndpointDTO> value2) {
 
+ return false;
+ }
+ -*/
 }

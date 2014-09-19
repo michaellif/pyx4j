@@ -19,11 +19,13 @@ import com.google.gwt.dom.client.Style.Unit;
 
 import com.pyx4j.commons.css.ThemeColor;
 import com.pyx4j.forms.client.ui.CCheckBox;
+import com.pyx4j.forms.client.ui.CRichTextArea;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.domain.property.PropertyContact;
+import com.propertyvista.misc.VistaTODO;
 import com.propertyvista.portal.rpc.portal.resident.communication.MessageDTO;
 import com.propertyvista.portal.shared.ui.CPortalEntityWizard;
 
@@ -50,8 +52,11 @@ public class MessageWizard extends CPortalEntityWizard<MessageDTO> {
         content.append(Location.Left, proto().highImportance(), new CCheckBox()).decorate();
         content.hr();
 
-        content.append(Location.Left, proto().text());
-
+        if (VistaTODO.USE_RTF_EDITOR_FOR_COMMUNICATION) {
+            content.append(Location.Dual, proto().text(), new CRichTextArea());
+        } else {
+            content.append(Location.Dual, proto().text());
+        }
         content.br();
         content.h3("Attachments");
         content.append(Location.Left, proto().attachments(), new MessageAttachmentFolder());

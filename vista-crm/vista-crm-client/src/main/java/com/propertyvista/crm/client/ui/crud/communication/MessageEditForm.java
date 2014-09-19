@@ -19,6 +19,7 @@ import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.entity.core.criterion.PropertyCriterion;
 import com.pyx4j.forms.client.ui.CEntityComboBox;
+import com.pyx4j.forms.client.ui.CRichTextArea;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.i18n.shared.I18n;
@@ -31,6 +32,7 @@ import com.propertyvista.domain.communication.MessageCategory;
 import com.propertyvista.domain.communication.MessageCategory.CategoryType;
 import com.propertyvista.dto.CommunicationEndpointDTO;
 import com.propertyvista.dto.MessageDTO;
+import com.propertyvista.misc.VistaTODO;
 
 public class MessageEditForm extends CrmEntityForm<MessageDTO> {
 
@@ -99,7 +101,12 @@ public class MessageEditForm extends CrmEntityForm<MessageDTO> {
         formPanel.append(Location.Left, proto().allowedReply()).decorate();
         formPanel.append(Location.Right, proto().highImportance()).decorate();
         formPanel.br();
-        formPanel.append(Location.Dual, proto().text()).decorate();
+
+        if (VistaTODO.USE_RTF_EDITOR_FOR_COMMUNICATION) {
+            formPanel.append(Location.Dual, proto().text(), new CRichTextArea()).decorate();
+        } else {
+            formPanel.append(Location.Dual, proto().text()).decorate();
+        }
         formPanel.append(Location.Dual, proto().attachments(), new MessageAttachmentFolder());
         formPanel.br();
 

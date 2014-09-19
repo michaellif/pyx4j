@@ -32,6 +32,7 @@ import com.pyx4j.forms.client.ui.CCheckBox;
 import com.pyx4j.forms.client.ui.CField;
 import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.CLabel;
+import com.pyx4j.forms.client.ui.CRichTextArea;
 import com.pyx4j.forms.client.ui.folder.BoxFolderItemDecorator;
 import com.pyx4j.forms.client.ui.folder.CFolderItem;
 import com.pyx4j.forms.client.ui.form.FormDecorator;
@@ -51,6 +52,7 @@ import com.propertyvista.common.client.ui.components.VistaViewersComponentFactor
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
 import com.propertyvista.domain.communication.DeliveryHandle;
 import com.propertyvista.domain.communication.MessageCategory;
+import com.propertyvista.misc.VistaTODO;
 import com.propertyvista.portal.resident.activity.PortalClientCommunicationManager;
 import com.propertyvista.portal.resident.events.CommunicationStatusUpdateEvent;
 import com.propertyvista.portal.resident.themes.CommunicationTheme;
@@ -239,8 +241,11 @@ public class MessagePage extends CPortalEntityForm<MessageDTO> {
             formPanel.append(Location.Left, proto().highImportance(), new CCheckBox()).decorate();
             formPanel.hr();
 
-            formPanel.append(Location.Left, proto().text());
-
+            if (VistaTODO.USE_RTF_EDITOR_FOR_COMMUNICATION) {
+                formPanel.append(Location.Left, proto().text(), new CRichTextArea());
+            } else {
+                formPanel.append(Location.Left, proto().text());
+            }
             attachmentBr = formPanel.br();
             attachmentCaption = formPanel.h3("Attachments");
             formPanel.append(Location.Left, proto().attachments(), attachemnts = new MessageAttachmentFolder());
