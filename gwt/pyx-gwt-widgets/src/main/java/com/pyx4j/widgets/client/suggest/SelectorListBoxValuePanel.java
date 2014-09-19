@@ -97,7 +97,7 @@ public class SelectorListBoxValuePanel<E> extends FlowPanel implements ISelector
         });
     }
 
-    public void showValue(Collection<E> value) {
+    public void showValue(Collection<E> value, boolean setFocus) {
         this.cellsPanel.clear();
         if (value.size() > 0) {
             for (E item : value) {
@@ -110,7 +110,9 @@ public class SelectorListBoxValuePanel<E> extends FlowPanel implements ISelector
         cellsPanel.add(textBox);
 
         textBox.setText("");
-        textBox.setFocus(true);
+        if (setFocus) {
+            textBox.setFocus(true);
+        }
     }
 
     @Override

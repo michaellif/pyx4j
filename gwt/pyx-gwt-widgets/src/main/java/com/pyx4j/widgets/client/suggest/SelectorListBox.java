@@ -101,6 +101,7 @@ public class SelectorListBox<E> extends AbstractSelectorWidget<E> implements Has
         this.value.clear();
         if (value != null) {
             this.value.addAll(value);
+            listBox.showValue(value, false);
         }
     }
 
@@ -128,7 +129,7 @@ public class SelectorListBox<E> extends AbstractSelectorWidget<E> implements Has
 
     @Override
     public void resetQuery() {
-        listBox.showValue(value);
+        listBox.showValue(value, true);
     }
 
     @Override
@@ -164,7 +165,7 @@ public class SelectorListBox<E> extends AbstractSelectorWidget<E> implements Has
         if (null != item) {
             if (this.value.contains(item)) {
                 value.remove(item);
-                listBox.showValue(value);
+                listBox.showValue(value, true);
             }
 
         }
