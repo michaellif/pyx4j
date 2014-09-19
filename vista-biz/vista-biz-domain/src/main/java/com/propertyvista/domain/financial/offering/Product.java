@@ -110,7 +110,6 @@ public interface Product<V extends ProductV<?>> extends IVersionedEntity<V>, ILo
         @EmbeddedEntity
         ProductDeposit depositSecurity();
 
-        @NotNull
         IPrimitive<Boolean> availableOnline();
     }
 }
