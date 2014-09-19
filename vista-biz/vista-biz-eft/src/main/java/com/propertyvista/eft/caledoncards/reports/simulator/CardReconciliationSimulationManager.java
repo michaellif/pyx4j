@@ -316,9 +316,9 @@ public class CardReconciliationSimulationManager {
 
     private void createDailyReportFile(String cardsReconciliationId, String fileId, List<DailyReportRecord> records) {
         ReportTableCSVFormatter formatter = new ReportTableCSVFormatter(StandardCharsets.US_ASCII);
-        formatter.setForceQuote(true);
-        formatter.setDateTimeFormatPattern("dd-MMM-yyyy HH:mm:ss");
+        formatter.setForceQuote(false);
         EntityReportFormatter<DailyReportRecord> entityFormatter = new EntityReportFormatter<DailyReportRecord>(DailyReportRecord.class);
+        entityFormatter.setMemberValueUseStringView(true);
         entityFormatter.createHeader(formatter);
         entityFormatter.reportAll(formatter, records);
 

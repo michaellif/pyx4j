@@ -17,6 +17,7 @@ import java.math.BigDecimal;
 import java.util.Date;
 
 import com.pyx4j.entity.annotations.Caption;
+import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.core.IEntity;
@@ -80,9 +81,11 @@ public interface DailyReportRecord extends IEntity {
     IPrimitive<String> pinpadId();
 
     @NotNull
+    @Format(messageFormat = true, value = "{0,choice,0#N|1#Y}")
     IPrimitive<Boolean> voided();
 
     @NotNull
+    @Format(messageFormat = true, value = "{0,choice,0#N|1#Y}")
     IPrimitive<Boolean> approved();
 
 }
