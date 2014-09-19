@@ -36,6 +36,7 @@ import com.pyx4j.server.mail.MailMessage;
 
 import com.propertyvista.biz.communication.mail.template.EmailTemplateManager;
 import com.propertyvista.biz.communication.mail.template.EmailTemplateRootObjectLoader;
+import com.propertyvista.biz.communication.mail.template.MessageKeywords;
 import com.propertyvista.biz.communication.mail.template.model.EmailTemplateContext;
 import com.propertyvista.biz.policy.PolicyFacade;
 import com.propertyvista.domain.blob.LeaseApplicationDocumentBlob;
@@ -68,7 +69,7 @@ class MessageTemplatesCustomizable {
 
     /**
      * Warning: can return <code>null</code> if the policy is not found.
-     * 
+     *
      * @param type
      * @param building
      * @return
@@ -327,7 +328,7 @@ class MessageTemplatesCustomizable {
             data.add(EmailTemplateRootObjectLoader.loadRootObject(tObj, context));
         }
 
-        email.addKeywords(paymentRecord.id().getStringView());
+        MessageKeywords.addToKeywords(email, paymentRecord);
 
         email.setSender(getSender());
         buildEmail(email, emailTemplate, context, data);
@@ -366,6 +367,8 @@ class MessageTemplatesCustomizable {
     private static MailMessage createTenantAutopay(EmailTemplateType templateType, AutopayAgreement autopayAgreement) {
         Persistence.ensureRetrieve(autopayAgreement.tenant(), AttachLevel.Attached);
         Persistence.ensureRetrieve(autopayAgreement.tenant().customer().user(), AttachLevel.Attached);
+        Persistence.ensureRetrieve(autopayAgreement.tenant().lease().unit().building(), AttachLevel.Attached);
+
         String customerEmail = autopayAgreement.tenant().customer().user().email().getValue();
         if (customerEmail == null) {
             //Do not send payment email when there are no email in tenant profile
@@ -380,6 +383,8 @@ class MessageTemplatesCustomizable {
         context.preauthorizedPayment().set(autopayAgreement);
         context.leaseParticipant().set(autopayAgreement.tenant());
         context.lease().set(autopayAgreement.tenant().lease());
+
+        MessageKeywords.addToKeywords(email, autopayAgreement, autopayAgreement.tenant().lease().unit().building());
 
         ArrayList<IEntity> data = new ArrayList<IEntity>();
         for (IEntity tObj : EmailTemplateManager.getTemplateDataObjects(templateType)) {
@@ -427,10 +432,10 @@ class MessageTemplatesCustomizable {
     private static void buildEmail(MailMessage email, EmailTemplate emailTemplate, EmailTemplateContext context, Collection<IEntity> data) {
         email.setSubject(EmailTemplateManager.parseTemplate(emailTemplate.subject().getValue(), data));
 
-        email.addKeywords(emailTemplate.type().getStringView());
+        MessageKeywords.addToKeywords(email, emailTemplate);
+
         if (!context.lease().isEmpty()) {
-            email.addKeywords(context.lease().id().getStringView());
-            email.addKeywords(context.lease().leaseId().getStringView());
+            MessageKeywords.addToKeywords(email, context.lease());
         }
 
         Object contentHtml = EmailTemplateManager.parseTemplate(emailTemplate.content().getValue(), data);

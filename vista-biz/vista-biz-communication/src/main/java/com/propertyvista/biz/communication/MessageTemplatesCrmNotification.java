@@ -27,6 +27,7 @@ import com.pyx4j.server.mail.MailMessage;
 import com.pyx4j.server.mail.MessageTemplate;
 import com.pyx4j.site.rpc.AppPlaceInfo;
 
+import com.propertyvista.biz.communication.mail.template.MessageKeywords;
 import com.propertyvista.config.VistaDeployment;
 import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.domain.financial.BillingAccount;
@@ -107,7 +108,7 @@ class MessageTemplatesCrmNotification {
         String tenantName = paymentRecord.leaseTermParticipant().leaseParticipant().customer().person().name().getStringView();
 
         String unitId = billingAccount.lease().unit().info().number().getValue();
-        Persistence.service().retrieve(billingAccount.lease().unit().building(), AttachLevel.ToStringMembers, false);
+        Persistence.service().retrieve(billingAccount.lease().unit().building());
         String buildingId = billingAccount.lease().unit().building().getStringView();
 
         String paymentRecordUrl = AppPlaceInfo.absoluteUrl(crmUrl, true, new CrmSiteMap.Finance.Payment().formViewerPlace(paymentRecord.getPrimaryKey()));
@@ -122,10 +123,8 @@ class MessageTemplatesCrmNotification {
         email.setSubject(i18n.tr("Payment Rejected Alert for Building {0}, Unit {1}, Lease {2}, Tenant {3} {4}", buildingId, unitId, leaseId, tenantId,
                 tenantName));
 
-        email.addKeywords(paymentRecord.id().getStringView());
-        email.addKeywords(buildingId);
-        email.addKeywords(leaseId);
-        email.addKeywords(tenantId);
+        MessageKeywords.addToKeywords(email, paymentRecord, billingAccount.lease().unit().building(), billingAccount.lease(), paymentRecord
+                .leaseTermParticipant().leaseParticipant());
 
         MessageTemplate template = new MessageTemplate("email/notification/payment-rejected-notification.html");
 
@@ -181,10 +180,8 @@ class MessageTemplatesCrmNotification {
         email.setSubject(i18n.tr("NSF Alert for Building {0}, Unit {1}, Lease {2}, Tenant {3} {4} -  failed to post into Yardi, needs to be posted manually",
                 buildingId, unitId, leaseId, tenantId, tenantName));
 
-        email.addKeywords(paymentRecord.id().getStringView());
-        email.addKeywords(buildingId);
-        email.addKeywords(leaseId);
-        email.addKeywords(tenantId);
+        MessageKeywords.addToKeywords(email, paymentRecord, billingAccount.lease().unit().building(), billingAccount.lease(), paymentRecord
+                .leaseTermParticipant().leaseParticipant());
 
         MessageTemplate template = new MessageTemplate("email/notification/payment-post-to-yardi-failed-notification.html");
 
@@ -232,7 +229,8 @@ class MessageTemplatesCrmNotification {
             } else {
                 email.setSubject(i18n.tr("Auto Pay Review Required for building {0}", buildingName));
             }
-            email.addKeywords(building.propertyCode().getStringView());
+
+            MessageKeywords.addToKeywords(email, building);
         }
 
         String crmUrl = VistaDeployment.getBaseApplicationURL(VistaDeployment.getCurrentPmc(), VistaApplication.crm, true);
@@ -245,8 +243,7 @@ class MessageTemplatesCrmNotification {
             }
             leaseLinks.append("<a href=\"" + leaseUrl + "\">" + lease.getStringView() + "</a>");
 
-            email.addKeywords(lease.id().getStringView());
-            email.addKeywords(lease.leaseId().getStringView());
+            MessageKeywords.addToKeywords(email, lease);
         }
 
         template.variable("${leaseLinks}", leaseLinks);
@@ -283,7 +280,8 @@ class MessageTemplatesCrmNotification {
             } else {
                 email.setSubject(i18n.tr("Auto Pay Cancelled in building {0}", buildingName));
             }
-            email.addKeywords(building.propertyCode().getStringView());
+
+            MessageKeywords.addToKeywords(email, building);
         }
 
         String crmUrl = VistaDeployment.getBaseApplicationURL(VistaDeployment.getCurrentPmc(), VistaApplication.crm, true);
@@ -301,8 +299,7 @@ class MessageTemplatesCrmNotification {
                 leaseLinks.append(" <a href=\"" + agreementUrl + "\">Agreement ID" + autopayAgreement.getPrimaryKey() + "</a>");
             }
 
-            email.addKeywords(lease.id().getStringView());
-            email.addKeywords(lease.leaseId().getStringView());
+            MessageKeywords.addToKeywords(email, lease);
         }
         template.variable("${leaseLinks}", leaseLinks);
 
@@ -334,9 +331,7 @@ class MessageTemplatesCrmNotification {
 
             email.setSubject(i18n.tr("Auto Pay Cancelled by Resident for lease {0}, building {0}", lease, buildingName));
 
-            email.addKeywords(lease.id().getStringView());
-            email.addKeywords(lease.leaseId().getStringView());
-            email.addKeywords(building.propertyCode().getStringView());
+            MessageKeywords.addToKeywords(email, lease, building);
         }
 
         String crmUrl = VistaDeployment.getBaseApplicationURL(VistaDeployment.getCurrentPmc(), VistaApplication.crm, true);
