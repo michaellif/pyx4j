@@ -30,7 +30,7 @@ public class DashboardTheme extends Theme {
 
         LandingPage,
 
-        PointerLink,
+        ContentLink,
     }
 
     public DashboardTheme() {
@@ -97,12 +97,12 @@ public class DashboardTheme extends Theme {
         style.addProperty("margin", "10px 10px 0 10px");
         addStyle(style);
 
-        style = new Style(".", StyleName.PointerLink);
+        style = new Style(".", StyleName.ContentLink);
         style.addProperty("display", "inline");
         style.addProperty("cursor", "pointer");
         addStyle(style);
 
-        style = new Style(".", StyleName.PointerLink, ":hover");
+        style = new Style(".", StyleName.ContentLink, ":hover");
         style.addProperty("text-decoration", "underline");
         addStyle(style);
 

@@ -37,8 +37,7 @@ import com.pyx4j.site.rpc.AppPlace;
 
 import com.propertyvista.domain.security.PortalResidentBehavior;
 import com.propertyvista.portal.resident.ResidentPortalSite;
-import com.propertyvista.portal.resident.ui.PointerLink;
-import com.propertyvista.portal.resident.ui.ResidentPortalPointerId;
+import com.propertyvista.portal.resident.ui.ContentLink;
 import com.propertyvista.portal.resident.ui.extra.QuickTipView;
 import com.propertyvista.portal.resident.ui.extra.QuickTipView.QuickTipPresenter;
 import com.propertyvista.portal.rpc.portal.resident.ResidentPortalSiteMap;
@@ -46,7 +45,6 @@ import com.propertyvista.portal.rpc.portal.resident.ResidentPortalSiteMap.Mainte
 import com.propertyvista.portal.rpc.portal.resident.ResidentPortalSiteMap.MoveIn;
 import com.propertyvista.portal.rpc.portal.resident.ResidentPortalSiteMap.ResidentServices;
 import com.propertyvista.portal.shared.resources.PortalImages;
-import com.propertyvista.portal.shared.ui.PointerId;
 
 public class QuickTipActivity extends AbstractActivity implements QuickTipPresenter {
 
@@ -106,7 +104,7 @@ public class QuickTipActivity extends AbstractActivity implements QuickTipPresen
                         public void execute() {
                             AppSite.getPlaceController().goTo(new ResidentPortalSiteMap.Financial());
                         }
-                    }, ResidentPortalPointerId.billing);
+                    });
             break;
         case insurance:
             setTip(i18n.tr("Don't have Tenant Insurance yet?"),
@@ -117,7 +115,7 @@ public class QuickTipActivity extends AbstractActivity implements QuickTipPresen
                         public void execute() {
                             AppSite.getPlaceController().goTo(new ResidentPortalSiteMap.ResidentServices());
                         }
-                    }, ResidentPortalPointerId.insurance);
+                    });
             break;
         case maintenance:
             setTip(i18n.tr("Request repairs and maintenance as needed"),
@@ -128,7 +126,7 @@ public class QuickTipActivity extends AbstractActivity implements QuickTipPresen
                         public void execute() {
                             AppSite.getPlaceController().goTo(new ResidentPortalSiteMap.Maintenance());
                         }
-                    }, ResidentPortalPointerId.maintanance);
+                    });
             break;
         default:
             break;
@@ -136,7 +134,7 @@ public class QuickTipActivity extends AbstractActivity implements QuickTipPresen
         }
     }
 
-    private void setTip(String caption, String text, String visitText, ThemeColor color, Command command, PointerId pointerId) {
+    private void setTip(String caption, String text, String visitText, ThemeColor color, Command command) {
         SafeHtmlBuilder contentHtmlBuilder = new SafeHtmlBuilder();
 
         String imageId = HTMLPanel.createUniqueId();
@@ -155,7 +153,7 @@ public class QuickTipActivity extends AbstractActivity implements QuickTipPresen
 
         contentPanel.addAndReplaceElement(new Image(PortalImages.INSTANCE.tip()), imageId);
 
-        contentPanel.addAndReplaceElement(new PointerLink(i18n.tr("<i style='font-size:0.8em'>" + visitText + "</i>"), command, pointerId), visitId);
+        contentPanel.addAndReplaceElement(new ContentLink(i18n.tr("<i style='font-size:0.8em'>" + visitText + "</i>"), command), visitId);
 
         view.setQuickTip(contentPanel, color);
 

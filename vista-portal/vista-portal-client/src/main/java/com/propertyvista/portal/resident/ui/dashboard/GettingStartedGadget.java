@@ -24,8 +24,7 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.widgets.client.Anchor;
 
-import com.propertyvista.portal.resident.ui.PointerLink;
-import com.propertyvista.portal.resident.ui.ResidentPortalPointerId;
+import com.propertyvista.portal.resident.ui.ContentLink;
 import com.propertyvista.portal.rpc.portal.resident.ResidentPortalSiteMap;
 import com.propertyvista.portal.shared.themes.DashboardTheme;
 import com.propertyvista.portal.shared.ui.AbstractGadget;
@@ -58,45 +57,45 @@ public class GettingStartedGadget extends AbstractGadget<MainDashboardViewImpl> 
 
         HTMLPanel contentPanel = new HTMLPanel(contentHtmlBuilder.toSafeHtml());
 
-        contentPanel.addAndReplaceElement(new PointerLink(i18n.tr("Communicate to your Property Management Office."), new Command() {
+        contentPanel.addAndReplaceElement(new ContentLink(i18n.tr("Communicate to your Property Management Office."), new Command() {
 
             @Override
             public void execute() {
                 AppSite.getPlaceController().goTo(new ResidentPortalSiteMap.Message.MessageView());
             }
-        }, ResidentPortalPointerId.communication), communicationId);
+        }), communicationId);
 
-        contentPanel.addAndReplaceElement(new PointerLink(i18n.tr("Make a payment, setup Auto Pay or see your Billing history."), new Command() {
+        contentPanel.addAndReplaceElement(new ContentLink(i18n.tr("Make a payment, setup Auto Pay or see your Billing history."), new Command() {
 
             @Override
             public void execute() {
                 AppSite.getPlaceController().goTo(new ResidentPortalSiteMap.Financial());
             }
-        }, ResidentPortalPointerId.billing), billingId);
+        }), billingId);
 
-        contentPanel.addAndReplaceElement(new PointerLink(i18n.tr("Submit Maintanance Request."), new Command() {
+        contentPanel.addAndReplaceElement(new ContentLink(i18n.tr("Submit Maintanance Request."), new Command() {
 
             @Override
             public void execute() {
                 AppSite.getPlaceController().goTo(new ResidentPortalSiteMap.Maintenance());
             }
-        }, ResidentPortalPointerId.maintanance), maintananceId);
+        }), maintananceId);
 
-        contentPanel.addAndReplaceElement(new PointerLink(i18n.tr("Purchase Insurance."), new Command() {
+        contentPanel.addAndReplaceElement(new ContentLink(i18n.tr("Purchase Insurance."), new Command() {
 
             @Override
             public void execute() {
                 AppSite.getPlaceController().goTo(new ResidentPortalSiteMap.ResidentServices());
             }
-        }, ResidentPortalPointerId.insurance), insuranceId);
+        }), insuranceId);
 
-        contentPanel.addAndReplaceElement(new PointerLink(i18n.tr("Update your Profile."), new Command() {
+        contentPanel.addAndReplaceElement(new ContentLink(i18n.tr("Update your Profile."), new Command() {
 
             @Override
             public void execute() {
                 AppSite.getPlaceController().goTo(new ResidentPortalSiteMap.Profile());
             }
-        }, ResidentPortalPointerId.profile), profileId);
+        }), profileId);
 
         contentPanel.getElement().getStyle().setTextAlign(TextAlign.LEFT);
 

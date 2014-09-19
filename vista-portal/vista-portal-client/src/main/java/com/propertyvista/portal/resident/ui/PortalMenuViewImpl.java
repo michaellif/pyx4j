@@ -67,17 +67,15 @@ public class PortalMenuViewImpl extends DockPanel implements PortalMenuView {
 
         mainHolder.addMenuItem(new MenuItem(new ResidentPortalSiteMap.Dashboard(), PortalImages.INSTANCE.dashboardMenu(), ThemeColor.contrast1));
 
-        mainHolder.addMenuItem(new MenuItem(new ResidentPortalSiteMap.Financial(), PortalImages.INSTANCE.billingMenu(), ThemeColor.contrast4,
-                ResidentPortalPointerId.billing));
+        mainHolder.addMenuItem(new MenuItem(new ResidentPortalSiteMap.Financial(), PortalImages.INSTANCE.billingMenu(), ThemeColor.contrast4));
 
         if (SecurityController.check(PortalResidentBehavior.Resident)) {
 
-            mainHolder.addMenuItem(new MenuItem(new ResidentPortalSiteMap.Maintenance(), PortalImages.INSTANCE.maintenanceMenu(), ThemeColor.contrast5,
-                    ResidentPortalPointerId.maintanance));
+            mainHolder.addMenuItem(new MenuItem(new ResidentPortalSiteMap.Maintenance(), PortalImages.INSTANCE.maintenanceMenu(), ThemeColor.contrast5));
 
             if (VistaFeatures.instance().countryOfOperation() == CountryOfOperation.Canada) {
                 mainHolder.addMenuItem(new MenuItem(new ResidentPortalSiteMap.ResidentServices(), PortalImages.INSTANCE.residentServicesMenu(),
-                        ThemeColor.contrast3, ResidentPortalPointerId.insurance));
+                        ThemeColor.contrast3));
             }
 
         }
