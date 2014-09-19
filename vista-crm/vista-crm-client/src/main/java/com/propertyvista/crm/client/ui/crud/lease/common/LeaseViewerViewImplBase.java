@@ -27,6 +27,7 @@ import com.pyx4j.entity.security.DataModelPermission;
 import com.pyx4j.forms.client.ui.CIntegerField;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
+import com.pyx4j.security.shared.BasicPermission;
 import com.pyx4j.security.shared.Permission;
 import com.pyx4j.site.client.backoffice.ui.prime.lister.ILister;
 import com.pyx4j.site.client.backoffice.ui.prime.lister.ListerInternalViewImplBase;
@@ -36,6 +37,7 @@ import com.pyx4j.widgets.client.Button.ButtonMenuBar;
 import com.pyx4j.widgets.client.Button.SecureMenuItem;
 import com.pyx4j.widgets.client.dialog.OkCancelDialog;
 
+import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.crm.client.ui.crud.CrmViewerViewImplBase;
 import com.propertyvista.crm.client.ui.crud.lease.LeaseViewerViewImpl;
 import com.propertyvista.crm.client.visor.paps.PreauthorizedPaymentsVisorController;
@@ -180,6 +182,11 @@ public class LeaseViewerViewImplBase<DTO extends LeaseDTO> extends CrmViewerView
         super.populate(value);
 
         Lease.Status status = value.status().getValue();
+
+        if (status.isFormer()) { // disable noted adding/editing
+            setNotesPermissions(DataModelPermission.permissionRead(((CrmEntityForm<DTO>) getForm()).getRootClass()), new BasicPermission(""));
+        }
+
         boolean reservationPreconditions = (!value.unit().isNull() && status.isDraft() && status != Lease.Status.ExistingLease);
         setActionVisible(reserveUnit, reservationPreconditions && !value.isUnitReserved().getValue(false));
         setActionVisible(unreserveUnit, reservationPreconditions && value.isUnitReserved().getValue(false));
