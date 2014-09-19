@@ -26,8 +26,12 @@ import com.pyx4j.forms.client.ui.CEntityLabel;
 import com.pyx4j.forms.client.ui.CNumberLabel;
 import com.pyx4j.forms.client.ui.form.FormDecorator;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
+import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.site.client.AppSite;
+import com.pyx4j.site.rpc.AppPlace;
 import com.pyx4j.widgets.client.Anchor;
+import com.pyx4j.widgets.client.Button;
 
 import com.propertyvista.common.client.resources.VistaImages;
 import com.propertyvista.common.client.theme.VistaTheme;
@@ -36,7 +40,6 @@ import com.propertyvista.dto.PaymentRecordDTO;
 import com.propertyvista.portal.resident.ui.financial.payment.PaymentConfirmationView.PaymentConfirmationPresenter;
 import com.propertyvista.portal.shared.ui.AbstractFormView;
 import com.propertyvista.portal.shared.ui.CPortalEntityForm;
-import com.pyx4j.forms.client.ui.panels.FormPanel;
 
 public class PaymentConfirmationForm extends CPortalEntityForm<PaymentRecordDTO> {
 
@@ -51,7 +54,13 @@ public class PaymentConfirmationForm extends CPortalEntityForm<PaymentRecordDTO>
     private Widget autoPaySignupPanel;
 
     public PaymentConfirmationForm(AbstractFormView<PaymentRecordDTO> view) {
-        super(PaymentRecordDTO.class, view, "", ThemeColor.contrast4);
+        super(PaymentRecordDTO.class, view, i18n.tr("Payment Submitted Successfully!"), new Button(i18n.tr("Continue"), new Command() {
+
+            @Override
+            public void execute() {
+                AppSite.getPlaceController().goTo(AppPlace.NOWHERE);
+            }
+        }), ThemeColor.contrast4);
     }
 
     @Override

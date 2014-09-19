@@ -20,22 +20,30 @@ import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.commons.css.ThemeColor;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
+import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.security.shared.SecurityController;
+import com.pyx4j.site.client.AppSite;
+import com.pyx4j.site.rpc.AppPlace;
 import com.pyx4j.widgets.client.Button;
 
 import com.propertyvista.domain.security.PortalResidentBehavior;
 import com.propertyvista.portal.rpc.portal.resident.dto.movein.LeaseAgreementConfirmationDTO;
 import com.propertyvista.portal.shared.ui.AbstractFormView;
 import com.propertyvista.portal.shared.ui.CPortalEntityForm;
-import com.pyx4j.forms.client.ui.panels.FormPanel;
 
 public class LeaseSigningConfirmationForm extends CPortalEntityForm<LeaseAgreementConfirmationDTO> {
 
     private static final I18n i18n = I18n.get(LeaseSigningConfirmationForm.class);
 
     public LeaseSigningConfirmationForm(AbstractFormView<LeaseAgreementConfirmationDTO> view) {
-        super(LeaseAgreementConfirmationDTO.class, view, i18n.tr("Lease Agreement Submitted"), ThemeColor.contrast4);
+        super(LeaseAgreementConfirmationDTO.class, view, i18n.tr("Lease Agreement Submitted"), new Button(i18n.tr("Continue"), new Command() {
+
+            @Override
+            public void execute() {
+                AppSite.getPlaceController().goTo(AppPlace.NOWHERE);
+            }
+        }), ThemeColor.contrast4);
     }
 
     @Override

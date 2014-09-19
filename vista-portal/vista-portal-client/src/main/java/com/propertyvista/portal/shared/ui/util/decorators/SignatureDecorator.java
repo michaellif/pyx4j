@@ -29,9 +29,9 @@ import com.pyx4j.forms.client.events.PropertyChangeHandler;
 import com.pyx4j.forms.client.ui.CComponentTheme;
 import com.pyx4j.forms.client.ui.CField;
 import com.pyx4j.forms.client.ui.CSignature;
-import com.pyx4j.forms.client.ui.decorators.WidgetDecoratorTheme;
 import com.pyx4j.forms.client.ui.decorators.FieldDecorator.DebugIds;
 import com.pyx4j.forms.client.ui.decorators.IFieldDecorator;
+import com.pyx4j.forms.client.ui.decorators.WidgetDecoratorTheme;
 
 public class SignatureDecorator extends FlowPanel implements IFieldDecorator {
 

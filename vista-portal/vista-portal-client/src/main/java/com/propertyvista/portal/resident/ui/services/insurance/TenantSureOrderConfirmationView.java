@@ -16,9 +16,9 @@ package com.propertyvista.portal.resident.ui.services.insurance;
 import com.propertyvista.portal.rpc.portal.resident.dto.insurance.TenantSureInsurancePolicyDTO;
 import com.propertyvista.portal.shared.ui.IViewerView;
 
-public interface TenantSureOrderConfirmationPageView extends IViewerView<TenantSureInsurancePolicyDTO> {
+public interface TenantSureOrderConfirmationView extends IViewerView<TenantSureInsurancePolicyDTO> {
 
-    public interface TenantSureOrderConfirmationPagePresenter extends IViewerView.IViewerPresenter<TenantSureInsurancePolicyDTO> {
+    public interface TenantSureOrderConfirmationPresenter extends IViewerView.IViewerPresenter<TenantSureInsurancePolicyDTO> {
 
         void back();
     }

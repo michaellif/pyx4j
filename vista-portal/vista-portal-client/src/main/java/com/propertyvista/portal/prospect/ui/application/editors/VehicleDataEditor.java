@@ -19,10 +19,10 @@ import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.IEditableComponentFactory;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
+import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.domain.tenant.lease.extradata.Vehicle;
-import com.pyx4j.forms.client.ui.panels.FormPanel;
 
 public class VehicleDataEditor extends CForm<Vehicle> {
 

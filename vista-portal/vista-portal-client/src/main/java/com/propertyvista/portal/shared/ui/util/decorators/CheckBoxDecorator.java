@@ -27,8 +27,8 @@ import com.google.gwt.user.client.ui.SimplePanel;
 import com.pyx4j.commons.IDebugId;
 import com.pyx4j.forms.client.ui.CCheckBox;
 import com.pyx4j.forms.client.ui.CField;
-import com.pyx4j.forms.client.ui.decorators.WidgetDecoratorTheme;
 import com.pyx4j.forms.client.ui.decorators.IFieldDecorator;
+import com.pyx4j.forms.client.ui.decorators.WidgetDecoratorTheme;
 import com.pyx4j.widgets.client.Label;
 
 public class CheckBoxDecorator extends FlowPanel implements IFieldDecorator {

@@ -23,22 +23,22 @@ import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.site.rpc.AppPlace;
 
 import com.propertyvista.portal.resident.ResidentPortalSite;
-import com.propertyvista.portal.resident.ui.services.insurance.TenantSureOrderConfirmationPageView;
-import com.propertyvista.portal.resident.ui.services.insurance.TenantSureOrderConfirmationPageView.TenantSureOrderConfirmationPagePresenter;
+import com.propertyvista.portal.resident.ui.services.insurance.TenantSureOrderConfirmationView;
+import com.propertyvista.portal.resident.ui.services.insurance.TenantSureOrderConfirmationView.TenantSureOrderConfirmationPresenter;
 import com.propertyvista.portal.rpc.portal.resident.dto.insurance.TenantSureInsurancePolicyDTO;
 import com.propertyvista.portal.rpc.portal.resident.services.services.TenantSureInsurancePolicyCrudService;
 import com.propertyvista.portal.shared.activity.SecurityAwareActivity;
 
-public class TenantSureOrderConfirmationPageActivity extends SecurityAwareActivity implements TenantSureOrderConfirmationPagePresenter {
+public class TenantSureOrderConfirmationPageActivity extends SecurityAwareActivity implements TenantSureOrderConfirmationPresenter {
 
-    private final TenantSureOrderConfirmationPageView view;
+    private final TenantSureOrderConfirmationView view;
 
     private final Key entityId;
 
     private final TenantSureInsurancePolicyCrudService service;
 
     public TenantSureOrderConfirmationPageActivity(AppPlace place) {
-        view = ResidentPortalSite.getViewFactory().getView(TenantSureOrderConfirmationPageView.class);
+        view = ResidentPortalSite.getViewFactory().getView(TenantSureOrderConfirmationView.class);
         view.setPresenter(this);
 
         service = GWT.create(TenantSureInsurancePolicyCrudService.class);

@@ -21,6 +21,7 @@ import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.forms.client.ui.CComboBox;
 import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
+import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.forms.client.validators.AbstractComponentValidator;
 import com.pyx4j.forms.client.validators.AbstractValidationError;
 import com.pyx4j.forms.client.validators.BasicValidationError;
@@ -31,7 +32,6 @@ import com.propertyvista.common.client.ui.components.tenantinsurance.YesNoComboB
 import com.propertyvista.misc.VistaTODO;
 import com.propertyvista.portal.rpc.portal.resident.dto.insurance.TenantSureAgreementParamsDTO;
 import com.propertyvista.portal.rpc.portal.resident.dto.insurance.TenantSureCoverageDTO;
-import com.pyx4j.forms.client.ui.panels.FormPanel;
 
 public class TenantSureCoverageRequestForm extends CForm<TenantSureCoverageDTO> {
 

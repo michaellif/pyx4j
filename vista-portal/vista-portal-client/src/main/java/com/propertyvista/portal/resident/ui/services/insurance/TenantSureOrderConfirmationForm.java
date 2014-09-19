@@ -13,22 +13,33 @@
  */
 package com.propertyvista.portal.resident.ui.services.insurance;
 
+import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.commons.css.ThemeColor;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.site.client.AppSite;
+import com.pyx4j.site.rpc.AppPlace;
+import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.Label;
 
 import com.propertyvista.portal.resident.themes.TenantSureTheme;
 import com.propertyvista.portal.rpc.portal.resident.dto.insurance.TenantSureInsurancePolicyDTO;
 import com.propertyvista.portal.shared.ui.CPortalEntityForm;
 
-public class TenantSureOrderConfirmationPage extends CPortalEntityForm<TenantSureInsurancePolicyDTO> {
+public class TenantSureOrderConfirmationForm extends CPortalEntityForm<TenantSureInsurancePolicyDTO> {
 
-    private static final I18n i18n = I18n.get(TenantSureOrderConfirmationPage.class);
+    private static final I18n i18n = I18n.get(TenantSureOrderConfirmationForm.class);
 
-    public TenantSureOrderConfirmationPage(TenantSureOrderConfirmationPageViewImpl view) {
-        super(TenantSureInsurancePolicyDTO.class, view, i18n.tr("Congratulations. Your TenantSure Insurance Policy has been processed!"), ThemeColor.contrast3);
+    public TenantSureOrderConfirmationForm(TenantSureOrderConfirmationViewImpl view) {
+        super(TenantSureInsurancePolicyDTO.class, view, i18n.tr("Congratulations. Your TenantSure Insurance Policy has been processed!"), new Button(
+                i18n.tr("Continue"), new Command() {
+
+                    @Override
+                    public void execute() {
+                        AppSite.getPlaceController().goTo(AppPlace.NOWHERE);
+                    }
+                }), ThemeColor.contrast3);
 
         inheritViewable(false);
     }

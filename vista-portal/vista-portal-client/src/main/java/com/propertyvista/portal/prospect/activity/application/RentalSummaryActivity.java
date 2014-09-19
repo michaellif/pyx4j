@@ -22,7 +22,6 @@ import com.pyx4j.gwt.commons.layout.LayoutChangeRequestEvent;
 import com.pyx4j.gwt.commons.layout.LayoutChangeRequestEvent.ChangeType;
 import com.pyx4j.site.client.AppSite;
 
-import com.propertyvista.portal.prospect.ProspectPortalSite;
 import com.propertyvista.portal.prospect.events.ApplicationWizardStateChangeEvent;
 import com.propertyvista.portal.prospect.events.ApplicationWizardStateChangeHandler;
 import com.propertyvista.portal.prospect.ui.application.RentalSummaryView;

@@ -16,46 +16,35 @@ package com.propertyvista.portal.prospect.ui.application;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.IsWidget;
 
-import com.pyx4j.commons.css.StyleManager;
 import com.pyx4j.commons.css.ThemeColor;
-import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.widgets.client.Button;
+import com.pyx4j.widgets.client.Label;
 
 import com.propertyvista.portal.rpc.portal.prospect.ProspectPortalSiteMap;
 import com.propertyvista.portal.rpc.portal.prospect.dto.OnlineApplicationConfirmationDTO;
 import com.propertyvista.portal.shared.ui.CPortalEntityForm;
-import com.pyx4j.forms.client.ui.panels.FormPanel;
 
 public class ApplicationConfirmationForm extends CPortalEntityForm<OnlineApplicationConfirmationDTO> {
 
     private static final I18n i18n = I18n.get(ApplicationConfirmationForm.class);
 
     public ApplicationConfirmationForm(ApplicationConfirmationView view) {
-        super(OnlineApplicationConfirmationDTO.class, view, i18n.tr("Application Submitted Successfully!"), ThemeColor.contrast2);
-    }
+        super(OnlineApplicationConfirmationDTO.class, view, i18n.tr("Application Submitted Successfully!"), new Button(i18n.tr("Continue"), new Command() {
 
-    @Override
-    protected IsWidget createContent() {
-        FormPanel formPanel = new FormPanel(this);
-        formPanel
-                .h4(i18n.tr("Your application has been successfully submitted. An email has been sent to you as well with all pertinent information. Once all applicants/guarantors (if applicable) have successfully submitted the application we will process your application and will advise you of our decision. The process can take between 1-3 business days. If you have any questions about the status of your application, please do not hesitate to contact us directly or check back here to see the latest status of your application."));
-
-        formPanel.br();
-
-        Button okButton = new Button(i18n.tr("OK"), new Command() {
             @Override
             public void execute() {
                 AppSite.getPlaceController().goTo(new ProspectPortalSiteMap.Status());
             }
-        });
-        okButton.getElement().getStyle().setProperty("background", StyleManager.getPalette().getThemeColor(ThemeColor.contrast2, 1));
-        formPanel.append(Location.Left, okButton);
+        }), ThemeColor.contrast2);
+    }
 
-        formPanel.br();
-
-        return formPanel;
+    @Override
+    protected IsWidget createContent() {
+        Label label = new Label(
+                i18n.tr("Your application has been successfully submitted. An email has been sent to you as well with all pertinent information. Once all applicants/guarantors (if applicable) have successfully submitted the application we will process your application and will advise you of our decision. The process can take between 1-3 business days. If you have any questions about the status of your application, please do not hesitate to contact us directly or check back here to see the latest status of your application."));
+        return label;
 
     }
 }

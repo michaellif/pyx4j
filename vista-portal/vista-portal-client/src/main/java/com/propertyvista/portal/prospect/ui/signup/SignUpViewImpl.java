@@ -24,7 +24,6 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 
-import com.propertyvista.portal.rpc.shared.EntityValidationException;
 import com.propertyvista.portal.shared.themes.DashboardTheme;
 
 public class SignUpViewImpl extends FlowPanel implements SignUpView {
