@@ -11,7 +11,7 @@
  * @author michaellif
  * @version $Id$
  */
-package com.propertyvista.portal.resident.ui.movein;
+package com.propertyvista.portal.resident.ui.leasesigning;
 
 import com.google.gwt.user.client.ui.IsWidget;
 
@@ -24,30 +24,30 @@ import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.forms.client.ui.panels.FlexFormPanelTheme;
 
 import com.propertyvista.domain.security.CustomerSignature;
-import com.propertyvista.domain.tenant.lease.SignedAgreementLegalTerm;
+import com.propertyvista.domain.tenant.lease.SignedAgreementConfirmationTerm;
 import com.propertyvista.portal.shared.ui.OriginalSignatureMock;
 import com.propertyvista.portal.shared.ui.OriginalSignatureValidator;
 import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.propertyvista.portal.shared.ui.util.PortalBoxFolder;
 
-public class LegalTermsFolder extends PortalBoxFolder<SignedAgreementLegalTerm> {
+public class ConfirmationTermsFolder extends PortalBoxFolder<SignedAgreementConfirmationTerm> {
 
-    public LegalTermsFolder() {
-        super(SignedAgreementLegalTerm.class);
+    public ConfirmationTermsFolder() {
+        super(SignedAgreementConfirmationTerm.class);
         setOrderable(false);
         setAddable(false);
         setRemovable(false);
     }
 
     @Override
-    protected CForm<SignedAgreementLegalTerm> createItemForm(IObject<?> member) {
+    protected CForm<SignedAgreementConfirmationTerm> createItemForm(IObject<?> member) {
         return new LegalTermForm();
     }
 
-    class LegalTermForm extends CForm<SignedAgreementLegalTerm> {
+    class LegalTermForm extends CForm<SignedAgreementConfirmationTerm> {
 
         public LegalTermForm() {
-            super(SignedAgreementLegalTerm.class);
+            super(SignedAgreementConfirmationTerm.class);
         }
 
         @Override

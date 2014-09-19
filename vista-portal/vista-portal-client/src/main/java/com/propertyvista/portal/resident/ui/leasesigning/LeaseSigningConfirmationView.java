@@ -7,19 +7,19 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Sep 11, 2013
- * @author michaellif
+ * Created on 2013-04-10
+ * @author VladL
  * @version $Id$
  */
-package com.propertyvista.portal.resident.ui.movein;
+package com.propertyvista.portal.resident.ui.leasesigning;
 
-import com.propertyvista.portal.rpc.portal.resident.dto.movein.LeaseAgreementDTO;
-import com.propertyvista.portal.shared.ui.IWizardView;
+import com.propertyvista.portal.rpc.portal.resident.dto.movein.LeaseAgreementConfirmationDTO;
+import com.propertyvista.portal.shared.ui.IViewerView;
 
-public interface LeaseSigningWizardView extends IWizardView<LeaseAgreementDTO> {
+public interface LeaseSigningConfirmationView extends IViewerView<LeaseAgreementConfirmationDTO> {
 
-    public interface LeaseSigningWizardPresenter extends IWizardFormPresenter<LeaseAgreementDTO> {
+    public interface LeaseSigningConfirmationPresenter extends IViewerPresenter<LeaseAgreementConfirmationDTO> {
 
+        void downloadAgreement();
     }
-
 }

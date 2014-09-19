@@ -13,6 +13,8 @@
  */
 package com.propertyvista.portal.shared.ui;
 
+import com.google.gwt.user.client.ui.IsWidget;
+
 import com.pyx4j.commons.css.StyleManager;
 import com.pyx4j.commons.css.ThemeColor;
 import com.pyx4j.entity.core.IEntity;
@@ -27,12 +29,19 @@ public abstract class CPortalEntityForm<E extends IEntity> extends CForm<E> {
 
     private final String headerCaption;
 
+    private IsWidget footerActionWidget;
+
     private final ThemeColor themeColor;
 
     public CPortalEntityForm(Class<E> clazz, IViewerView<? extends IEntity> view, String headerCaption, ThemeColor themeColor) {
+        this(clazz, view, headerCaption, null, themeColor);
+    }
+
+    public CPortalEntityForm(Class<E> clazz, IViewerView<? extends IEntity> view, String headerCaption, IsWidget footerActionWidget, ThemeColor themeColor) {
         super(clazz);
         this.view = view;
         this.headerCaption = headerCaption;
+        this.footerActionWidget = footerActionWidget;
         this.themeColor = themeColor;
         setViewable(true);
     }
@@ -61,7 +70,13 @@ public abstract class CPortalEntityForm<E extends IEntity> extends CForm<E> {
         decorator.getHeaderPanel().getElement().getStyle().setProperty("borderTopWidth", "5px");
         decorator.getHeaderPanel().getElement().getStyle().setProperty("borderTopColor", StyleManager.getPalette().getThemeColor(themeColor, 1));
 
-        decorator.getFooterPanel().setVisible(false);
+        if (footerActionWidget == null) {
+            decorator.getFooterPanel().setVisible(false);
+        } else {
+            decorator.addFooterToolbarWidget(footerActionWidget);
+            decorator.getFooterPanel().getElement().getStyle().setProperty("borderTopWidth", "5px");
+            decorator.getFooterPanel().getElement().getStyle().setProperty("borderTopColor", StyleManager.getPalette().getThemeColor(themeColor, 1));
+        }
 
         return decorator;
     }

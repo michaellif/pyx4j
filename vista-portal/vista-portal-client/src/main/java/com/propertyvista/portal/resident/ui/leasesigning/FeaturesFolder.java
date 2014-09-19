@@ -11,7 +11,7 @@
  * @author michaellif
  * @version $Id$
  */
-package com.propertyvista.portal.resident.ui.movein;
+package com.propertyvista.portal.resident.ui.leasesigning;
 
 import com.google.gwt.user.client.ui.IsWidget;
 

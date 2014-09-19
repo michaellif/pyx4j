@@ -22,4 +22,5 @@ public class AutoPayConfirmationViewImpl extends AbstractFormView<AutoPayDTO> im
         super();
         setForm(new AutoPayConfirmationForm());
     }
+
 }

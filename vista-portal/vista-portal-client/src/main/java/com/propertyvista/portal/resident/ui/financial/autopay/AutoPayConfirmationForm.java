@@ -13,6 +13,7 @@
  */
 package com.propertyvista.portal.resident.ui.financial.autopay;
 
+import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.commons.css.ThemeColor;
@@ -20,19 +21,28 @@ import com.pyx4j.forms.client.ui.CDateLabel;
 import com.pyx4j.forms.client.ui.CEntityLabel;
 import com.pyx4j.forms.client.ui.decorators.FieldDecorator.Builder.Alignment;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
+import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.site.client.AppSite;
+import com.pyx4j.site.rpc.AppPlace;
+import com.pyx4j.widgets.client.Button;
 
 import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.portal.rpc.portal.resident.dto.financial.AutoPayDTO;
 import com.propertyvista.portal.shared.ui.CPortalEntityForm;
-import com.pyx4j.forms.client.ui.panels.FormPanel;
 
 public class AutoPayConfirmationForm extends CPortalEntityForm<AutoPayDTO> {
 
     private static final I18n i18n = I18n.get(AutoPayConfirmationForm.class);
 
     public AutoPayConfirmationForm() {
-        super(AutoPayDTO.class, null, i18n.tr("Automatic Payment Submitted Successfully!"), ThemeColor.contrast4);
+        super(AutoPayDTO.class, null, i18n.tr("Automatic Payment Submitted Successfully!"), new Button(i18n.tr("Continue"), new Command() {
+
+            @Override
+            public void execute() {
+                AppSite.getPlaceController().goTo(AppPlace.NOWHERE);
+            }
+        }), ThemeColor.contrast4);
     }
 
     @Override
@@ -50,4 +60,5 @@ public class AutoPayConfirmationForm extends CPortalEntityForm<AutoPayDTO> {
 
         return formPanel;
     }
+
 }

@@ -39,9 +39,7 @@ import com.propertyvista.portal.shared.ui.MenuItem;
 import com.propertyvista.portal.shared.ui.MenuList;
 import com.propertyvista.shared.config.VistaFeatures;
 
-public class MenuViewImpl extends DockPanel implements MenuView {
-
-    private MenuPresenter presenter;
+public class PortalMenuViewImpl extends DockPanel implements PortalMenuView {
 
     private final HeaderHolder headerHolder;
 
@@ -53,7 +51,7 @@ public class MenuViewImpl extends DockPanel implements MenuView {
 
     private boolean mainMenuVisible = true;
 
-    public MenuViewImpl() {
+    public PortalMenuViewImpl() {
         setStyleName(PortalRootPaneTheme.StyleName.MainMenu.name());
 
         headerHolder = new HeaderHolder();
@@ -113,8 +111,7 @@ public class MenuViewImpl extends DockPanel implements MenuView {
     }
 
     @Override
-    public void setPresenter(MenuPresenter presenter) {
-        this.presenter = presenter;
+    public void setPresenter(PortalMenuPresenter presenter) {
         AppPlace currentPlace = AppSite.getPlaceController().getWhere();
         for (MenuItem item : mainHolder.getMenuItems()) {
             item.setSelected(currentPlace.getPlaceId().contains(item.getPlace().getPlaceId()));

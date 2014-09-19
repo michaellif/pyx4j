@@ -15,15 +15,15 @@ package com.propertyvista.portal.resident.ui;
 
 import com.pyx4j.site.client.IsView;
 
-public interface MenuView extends IsView {
+public interface PortalMenuView extends IsView {
 
-    public interface MenuPresenter {
+    public interface PortalMenuPresenter {
 
     }
 
-    void setUserName(String userName);
+    public void setPresenter(PortalMenuPresenter presenter);
 
-    public void setPresenter(MenuPresenter presenter);
+    void setUserName(String userName);
 
     public void setMenuVisible(boolean visible);
 

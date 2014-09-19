@@ -11,7 +11,7 @@
  * @author VladL
  * @version $Id$
  */
-package com.propertyvista.portal.resident.ui.movein;
+package com.propertyvista.portal.resident.ui.leasesigning;
 
 import com.google.gwt.dom.client.Style.TextAlign;
 import com.google.gwt.user.client.Command;

@@ -26,8 +26,8 @@ import com.pyx4j.site.rpc.AppPlace;
 
 import com.propertyvista.domain.tenant.lease.LeaseTermAgreementDocument;
 import com.propertyvista.portal.resident.ResidentPortalSite;
-import com.propertyvista.portal.resident.ui.movein.LeaseSigningConfirmationView;
-import com.propertyvista.portal.resident.ui.movein.LeaseSigningConfirmationView.LeaseSigningConfirmationPresenter;
+import com.propertyvista.portal.resident.ui.leasesigning.LeaseSigningConfirmationView;
+import com.propertyvista.portal.resident.ui.leasesigning.LeaseSigningConfirmationView.LeaseSigningConfirmationPresenter;
 import com.propertyvista.portal.rpc.DeploymentConsts;
 import com.propertyvista.portal.rpc.portal.resident.dto.movein.LeaseAgreementConfirmationDTO;
 import com.propertyvista.portal.rpc.portal.resident.services.movein.LeaseAgreementService;

@@ -19,8 +19,8 @@ import com.pyx4j.commons.Key;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.rpc.AppPlace;
 
-import com.propertyvista.portal.resident.ui.movein.LeaseSigningWizardView;
-import com.propertyvista.portal.resident.ui.movein.LeaseSigningWizardView.LeaseSigningWizardPresenter;
+import com.propertyvista.portal.resident.ui.leasesigning.LeaseSigningWizardView;
+import com.propertyvista.portal.resident.ui.leasesigning.LeaseSigningWizardView.LeaseSigningWizardPresenter;
 import com.propertyvista.portal.rpc.portal.resident.ResidentPortalSiteMap;
 import com.propertyvista.portal.rpc.portal.resident.dto.movein.LeaseAgreementDTO;
 import com.propertyvista.portal.rpc.portal.resident.services.movein.LeaseSigningCrudService;

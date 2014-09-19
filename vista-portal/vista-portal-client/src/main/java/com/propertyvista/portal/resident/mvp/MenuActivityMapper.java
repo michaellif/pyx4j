@@ -18,8 +18,11 @@ import com.google.gwt.activity.shared.ActivityMapper;
 import com.google.gwt.place.shared.Place;
 
 import com.pyx4j.security.client.ClientContext;
+import com.pyx4j.security.shared.SecurityController;
 
-import com.propertyvista.portal.resident.activity.MenuActivity;
+import com.propertyvista.domain.security.PortalResidentBehavior;
+import com.propertyvista.portal.resident.activity.PortalMenuActivity;
+import com.propertyvista.portal.resident.activity.WelcomeWizardMenuActivity;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap.Logout;
 
 public class MenuActivityMapper implements ActivityMapper {
@@ -30,7 +33,11 @@ public class MenuActivityMapper implements ActivityMapper {
     @Override
     public Activity getActivity(Place place) {
         if (ClientContext.isAuthenticated() && !(place instanceof Logout)) {
-            return new MenuActivity(place);
+            if (SecurityController.check(PortalResidentBehavior.LeaseAgreementSigningRequired)) {
+                return new WelcomeWizardMenuActivity(place);
+            } else {
+                return new PortalMenuActivity(place);
+            }
         } else {
             return null;
         }

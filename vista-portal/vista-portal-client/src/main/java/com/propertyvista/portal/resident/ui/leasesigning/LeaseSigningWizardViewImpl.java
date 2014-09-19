@@ -7,18 +7,19 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2013-04-10
- * @author VladL
+ * Created on Sep 11, 2013
+ * @author michaellif
  * @version $Id$
  */
-package com.propertyvista.portal.resident.ui.financial.autopay;
+package com.propertyvista.portal.resident.ui.leasesigning;
 
-import com.propertyvista.portal.rpc.portal.resident.dto.financial.AutoPayDTO;
-import com.propertyvista.portal.shared.ui.IViewerView;
+import com.propertyvista.portal.rpc.portal.resident.dto.movein.LeaseAgreementDTO;
+import com.propertyvista.portal.shared.ui.AbstractWizardView;
 
-public interface AutoPayConfirmationView extends IViewerView<AutoPayDTO> {
+public class LeaseSigningWizardViewImpl extends AbstractWizardView<LeaseAgreementDTO> implements LeaseSigningWizardView {
 
-    public interface AutoPayConfirmationPresenter extends IViewerView.IViewerPresenter<AutoPayDTO> {
-        void back();
+    public LeaseSigningWizardViewImpl() {
+        setWizard(new LeaseSigningWizard(this));
     }
+
 }

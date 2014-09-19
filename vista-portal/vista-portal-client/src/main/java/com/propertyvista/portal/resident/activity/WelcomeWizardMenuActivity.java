@@ -21,23 +21,22 @@ import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.pyx4j.gwt.commons.layout.LayoutChangeRequestEvent;
 import com.pyx4j.gwt.commons.layout.LayoutChangeRequestEvent.ChangeType;
 import com.pyx4j.security.client.ClientContext;
-import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.site.client.AppSite;
 
-import com.propertyvista.domain.security.PortalResidentBehavior;
 import com.propertyvista.portal.resident.ResidentPortalSite;
-import com.propertyvista.portal.resident.ui.MenuView;
+import com.propertyvista.portal.resident.ui.WelcomeWizardMenuView;
+import com.propertyvista.portal.resident.ui.WelcomeWizardMenuView.WelcomeWizardMenuPresenter;
 import com.propertyvista.portal.rpc.portal.resident.ResidentPortalSiteMap;
 
-public class MenuActivity extends AbstractActivity implements MenuView.MenuPresenter {
+public class WelcomeWizardMenuActivity extends AbstractActivity implements WelcomeWizardMenuPresenter {
 
-    private final MenuView view;
+    private final WelcomeWizardMenuView view;
 
     private final Place place;
 
-    public MenuActivity(Place place) {
+    public WelcomeWizardMenuActivity(Place place) {
         this.place = place;
-        this.view = ResidentPortalSite.getViewFactory().getView(MenuView.class);
+        this.view = ResidentPortalSite.getViewFactory().getView(WelcomeWizardMenuView.class);
         view.setPresenter(this);
     }
 
@@ -45,10 +44,7 @@ public class MenuActivity extends AbstractActivity implements MenuView.MenuPrese
     public void start(AcceptsOneWidget panel, EventBus eventBus) {
         panel.setWidget(view);
         view.setUserName(ClientContext.getUserVisit().getName());
-        view.setLeasesSelectorEnabled(SecurityController.check(PortalResidentBehavior.HasMultipleLeases));
-        view.setMenuVisible(!(place instanceof ResidentPortalSiteMap.MoveIn.MoveInWizard)
-                && !(place instanceof ResidentPortalSiteMap.MoveIn.NewTenantWelcomePage)
-                && !(place instanceof ResidentPortalSiteMap.MoveIn.NewGuarantorWelcomePage) && !(place instanceof ResidentPortalSiteMap.LeaseContextSelection));
+        view.setMenuVisible(place instanceof ResidentPortalSiteMap.MoveIn.MoveInWizard);
         AppSite.getEventBus().fireEvent(new LayoutChangeRequestEvent(ChangeType.resizeComponents));
     }
 

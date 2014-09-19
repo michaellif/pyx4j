@@ -11,15 +11,20 @@
  * @author VladL
  * @version $Id$
  */
-package com.propertyvista.portal.resident.ui.movein;
+package com.propertyvista.portal.resident.ui.leasesigning;
 
 import com.propertyvista.portal.rpc.portal.resident.dto.movein.LeaseAgreementConfirmationDTO;
-import com.propertyvista.portal.shared.ui.IViewerView;
+import com.propertyvista.portal.shared.ui.AbstractFormView;
 
-public interface LeaseSigningConfirmationView extends IViewerView<LeaseAgreementConfirmationDTO> {
+public class LeaseSigningConfirmationViewImpl extends AbstractFormView<LeaseAgreementConfirmationDTO> implements LeaseSigningConfirmationView {
 
-    public interface LeaseSigningConfirmationPresenter extends IViewerPresenter<LeaseAgreementConfirmationDTO> {
-
-        void downloadAgreement();
+    public LeaseSigningConfirmationViewImpl() {
+        super();
+        setForm(new LeaseSigningConfirmationForm(this) {
+            @Override
+            public void onDownloadAgreement() {
+                ((LeaseSigningConfirmationPresenter) getPresenter()).downloadAgreement();
+            }
+        });
     }
 }

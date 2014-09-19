@@ -11,7 +11,7 @@
  * @author michaellif
  * @version $Id$
  */
-package com.propertyvista.portal.resident.ui.movein;
+package com.propertyvista.portal.resident.ui.leasesigning;
 
 import com.google.gwt.user.client.ui.IsWidget;
 
@@ -87,14 +87,12 @@ public class LeaseSigningWizard extends CPortalEntityWizard<LeaseAgreementDTO> {
 
     public IsWidget createAgreementStep() {
         FormPanel formPanel = new FormPanel(this);
-//        formPanel.h1(i18n.tr("Agreement"));
         formPanel.append(Location.Left, proto().legalTerms(), new LegalTermsFolder());
         return formPanel;
     }
 
     public IsWidget createConfirmationStep() {
         FormPanel formPanel = new FormPanel(this);
-//        formPanel.h1(i18n.tr("Confirmation"));
         formPanel.append(Location.Left, proto().confirmationTerms(), new ConfirmationTermsFolder());
         return formPanel;
     }
