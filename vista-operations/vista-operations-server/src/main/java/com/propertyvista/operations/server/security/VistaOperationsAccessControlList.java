@@ -41,6 +41,7 @@ import com.propertyvista.operations.domain.eft.cards.simulator.CardServiceSimula
 import com.propertyvista.operations.domain.eft.dbp.DirectDebitRecord;
 import com.propertyvista.operations.domain.eft.dbp.simulator.DirectDebitSimFile;
 import com.propertyvista.operations.domain.eft.dbp.simulator.DirectDebitSimRecord;
+import com.propertyvista.operations.domain.imports.OapiConversion;
 import com.propertyvista.operations.domain.legal.LegalDocument;
 import com.propertyvista.operations.domain.legal.VistaTerms;
 import com.propertyvista.operations.domain.mail.DefaultOutgoingMailQueue;
@@ -73,6 +74,8 @@ import com.propertyvista.operations.rpc.services.FundsReconciliationSummaryCrudS
 import com.propertyvista.operations.rpc.services.ImportUploadService;
 import com.propertyvista.operations.rpc.services.MaintenanceCrudService;
 import com.propertyvista.operations.rpc.services.MerchantAccountFileUploadService;
+import com.propertyvista.operations.rpc.services.OapiConversionFileUploadService;
+import com.propertyvista.operations.rpc.services.OapiCrudService;
 import com.propertyvista.operations.rpc.services.OperationsAlertCrudService;
 import com.propertyvista.operations.rpc.services.OperationsAuthenticationService;
 import com.propertyvista.operations.rpc.services.OutgoingMailCrudService;
@@ -107,6 +110,7 @@ import com.propertyvista.operations.rpc.services.simulator.DirectDebitSimRecordC
 import com.propertyvista.operations.rpc.services.simulator.PadSimBatchCrudService;
 import com.propertyvista.operations.rpc.services.simulator.PadSimFileCrudService;
 import com.propertyvista.operations.rpc.services.simulator.SimulatedDataPreloadService;
+import com.propertyvista.operations.rpc.services.tools.oapi.OapiXMLFileDownloadService;
 import com.propertyvista.operations.rpc.services.version.VistaTermsVersionService;
 
 public class VistaOperationsAccessControlList extends ServletContainerAclBuilder {
@@ -123,6 +127,12 @@ public class VistaOperationsAccessControlList extends ServletContainerAclBuilder
         grant(VistaOperationsBehavior.SystemAdmin, new IServiceExecutePermission(MaintenanceCrudService.class));
         grant(VistaOperationsBehavior.SystemAdmin, new IServiceExecutePermission(SimulationService.class));
         grant(VistaOperationsBehavior.SystemAdmin, new IServiceExecutePermission(PmcCrudService.class));
+// TODO check these are permissions needed for OAPI
+        grant(VistaOperationsBehavior.SystemAdmin, new EntityPermission(OapiConversion.class, EntityPermission.ALL));
+        grant(VistaOperationsBehavior.SystemAdmin, new IServiceExecutePermission(OapiCrudService.class));
+        grant(VistaOperationsBehavior.SystemAdmin, new IServiceExecutePermission(OapiConversionFileUploadService.class));
+        grant(VistaOperationsBehavior.SystemAdmin, new IServiceExecutePermission(OapiXMLFileDownloadService.class));
+// TODO check these are permissions needed for OAPI
         grant(VistaOperationsBehavior.SystemAdmin, new IServiceExecutePermission(ImportUploadService.class));
         grant(VistaOperationsBehavior.SystemAdmin, new IServiceExecutePermission(PmcDataReportService.class));
         grant(VistaOperationsBehavior.SystemAdmin, new IServiceExecutePermission(DBIntegrityCheckService.class));

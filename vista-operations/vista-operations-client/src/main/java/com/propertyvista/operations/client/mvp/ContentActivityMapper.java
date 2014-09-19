@@ -101,6 +101,9 @@ import com.propertyvista.operations.client.activity.crud.systemdefaults.VistaSys
 import com.propertyvista.operations.client.activity.crud.systemdefaults.VistaSystemDefaultsViewerActivity;
 import com.propertyvista.operations.client.activity.crud.tenantsure.TenantSureListerActivity;
 import com.propertyvista.operations.client.activity.crud.tenantsure.TenantSureViewerActivity;
+import com.propertyvista.operations.client.activity.crud.tools.oapi.OapiEditorActivity;
+import com.propertyvista.operations.client.activity.crud.tools.oapi.OapiListerActivity;
+import com.propertyvista.operations.client.activity.crud.tools.oapi.OapiViewerActivity;
 import com.propertyvista.operations.client.activity.login.LoginActivity;
 import com.propertyvista.operations.client.activity.login.LoginWithTokenActivity;
 import com.propertyvista.operations.client.activity.security.PasswordChangeActivity;
@@ -123,7 +126,7 @@ public class ContentActivityMapper implements AppActivityMapper {
                 Activity activity = null;
                 if (place instanceof CrudAppPlace) {
                     CrudAppPlace crudPlace = (CrudAppPlace) place;
-// - Management:                    
+// - Management:
                     if (place instanceof OperationsSiteMap.Management.PMC) {
                         switch (crudPlace.getType()) {
                         case editor:
@@ -308,7 +311,22 @@ public class ContentActivityMapper implements AppActivityMapper {
                             activity = new OutgoingMailViewerActivity(crudPlace);
                             break;
                         }
-// - FundsTransfer:                        
+
+// - Tools
+                    } else if (place instanceof OperationsSiteMap.Tools.OAPIConversion) {
+                        switch (crudPlace.getType()) {
+                        case editor:
+                            activity = new OapiEditorActivity(crudPlace);
+                            break;
+                        case lister:
+                            activity = new OapiListerActivity(crudPlace);
+                            break;
+                        case viewer:
+                            activity = new OapiViewerActivity(crudPlace);
+                            break;
+                        }
+
+// - FundsTransfer:
 
                     } else if (place instanceof OperationsSiteMap.FundsTransfer.CardTransactionRecord) {
                         switch (crudPlace.getType()) {

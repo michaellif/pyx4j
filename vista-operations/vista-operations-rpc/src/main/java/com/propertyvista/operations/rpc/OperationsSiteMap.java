@@ -279,6 +279,13 @@ public class OperationsSiteMap implements SiteMap {
         }
     }
 
+    public static class Tools extends AppPlace {
+
+        @PlaceProperties(navigLabel = "OAPI Conversions")
+        public static class OAPIConversion extends CrmCrudAppPlace {
+        }
+    }
+
     public static class Simulator extends AppPlace {
 
         public static class CardServiceSimulation extends CrmCrudAppPlace implements DevelopmentOnlyPlace {

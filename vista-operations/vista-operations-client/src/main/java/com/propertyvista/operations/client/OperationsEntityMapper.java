@@ -40,6 +40,7 @@ import com.propertyvista.operations.rpc.dto.FundsReconciliationSummaryDTO;
 import com.propertyvista.operations.rpc.dto.FundsTransferBatchDTO;
 import com.propertyvista.operations.rpc.dto.FundsTransferFileDTO;
 import com.propertyvista.operations.rpc.dto.FundsTransferRecordDTO;
+import com.propertyvista.operations.rpc.dto.OapiConversionDTO;
 import com.propertyvista.operations.rpc.dto.OperationsAlertDTO;
 import com.propertyvista.operations.rpc.dto.OutgoingMailQueueDTO;
 import com.propertyvista.operations.rpc.dto.PmcDTO;
@@ -89,5 +90,8 @@ public class OperationsEntityMapper {
 
         register(TenantSureSubscribers.class, OperationsSiteMap.Administration.TenantSure.class, DEFAULT_IMAGE);
         register(OutgoingMailQueueDTO.class, OperationsSiteMap.Administration.OutgoingMail.class, DEFAULT_IMAGE);
+
+        register(OapiConversionDTO.class, OperationsSiteMap.Tools.OAPIConversion.class, DEFAULT_IMAGE);
+
     }
 }

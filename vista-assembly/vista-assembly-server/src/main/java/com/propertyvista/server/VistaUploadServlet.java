@@ -15,9 +15,9 @@ package com.propertyvista.server;
 
 import com.pyx4j.essentials.server.upload.AbstractUploadServlet;
 
-import com.propertyvista.crm.server.services.MessageAttachmentUploadServiceImpl;
 import com.propertyvista.crm.server.services.MediaUploadBuildingServiceImpl;
 import com.propertyvista.crm.server.services.MediaUploadFloorplanServiceImpl;
+import com.propertyvista.crm.server.services.MessageAttachmentUploadServiceImpl;
 import com.propertyvista.crm.server.services.NoteAttachmentUploadServiceImpl;
 import com.propertyvista.crm.server.services.PmcDocumentFileUploadServiceImpl;
 import com.propertyvista.crm.server.services.UpdateUploadServiceImpl;
@@ -38,6 +38,7 @@ import com.propertyvista.crm.server.services.organization.EmployeeSignatureUploa
 import com.propertyvista.operations.server.services.EncryptedStorageServicePrivateKeyUploadServiceImpl;
 import com.propertyvista.operations.server.services.ImportUploadServiceImpl;
 import com.propertyvista.operations.server.services.MerchantAccountFileUploadServiceImpl;
+import com.propertyvista.operations.server.services.OapiConversionFileUploadServiceImpl;
 import com.propertyvista.portal.server.portal.prospect.services.IdentificationDocumentProspectUploadServiceImpl;
 import com.propertyvista.portal.server.portal.prospect.services.ProofOfAssetDocumentProspectUploadServiceImpl;
 import com.propertyvista.portal.server.portal.prospect.services.ProofOfIncomeDocumentProspectUploadServiceImpl;
@@ -85,5 +86,7 @@ public class VistaUploadServlet extends AbstractUploadServlet {
         register(LeaseApplicationDocumentUploadServiceImpl.class);
 
         register(LegalLetterUploadServiceImpl.class);
+
+        register(OapiConversionFileUploadServiceImpl.class);
     }
 }
