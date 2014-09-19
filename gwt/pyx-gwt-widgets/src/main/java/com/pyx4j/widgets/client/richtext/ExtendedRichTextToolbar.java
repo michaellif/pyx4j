@@ -15,6 +15,7 @@
  */
 package com.pyx4j.widgets.client.richtext;
 
+import com.google.gwt.dom.client.Style.TextDecoration;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.BlurEvent;
 import com.google.gwt.event.dom.client.BlurHandler;
@@ -323,6 +324,11 @@ public class ExtendedRichTextToolbar extends Composite {
                 buttonBarInsert.setVisible(!buttonBarInsert.isVisible());
                 buttonBarFont.setVisible(false);
                 buttonBarFormat.setVisible(false);
+                insertButton.getElement().getStyle().setTextDecoration(buttonBarInsert.isVisible() ? TextDecoration.UNDERLINE : TextDecoration.NONE);
+                if (formatButton != null)
+                    formatButton.getElement().getStyle().setTextDecoration(TextDecoration.NONE);
+                if (fontButton != null)
+                    fontButton.getElement().getStyle().setTextDecoration(TextDecoration.NONE);
             }
         }));
 
@@ -343,6 +349,11 @@ public class ExtendedRichTextToolbar extends Composite {
                 buttonBarFont.setVisible(!buttonBarFont.isVisible());
                 buttonBarFormat.setVisible(false);
                 buttonBarInsert.setVisible(false);
+                fontButton.getElement().getStyle().setTextDecoration(buttonBarFont.isVisible() ? TextDecoration.UNDERLINE : TextDecoration.NONE);
+                if (formatButton != null)
+                    formatButton.getElement().getStyle().setTextDecoration(TextDecoration.NONE);
+                if (insertButton != null)
+                    insertButton.getElement().getStyle().setTextDecoration(TextDecoration.NONE);
             }
         }));
 
@@ -360,8 +371,14 @@ public class ExtendedRichTextToolbar extends Composite {
                 buttonBarFormat.setVisible(!buttonBarFormat.isVisible());
                 buttonBarFont.setVisible(false);
                 buttonBarInsert.setVisible(false);
+                formatButton.getElement().getStyle().setTextDecoration(buttonBarFormat.isVisible() ? TextDecoration.UNDERLINE : TextDecoration.NONE);
+                if (fontButton != null)
+                    fontButton.getElement().getStyle().setTextDecoration(TextDecoration.NONE);
+                if (insertButton != null)
+                    insertButton.getElement().getStyle().setTextDecoration(TextDecoration.NONE);
             }
         }));
+
         formatButton.toggleActive();
 
         Toolbar formatPanel = new Toolbar();
