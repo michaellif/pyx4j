@@ -26,8 +26,6 @@ import com.propertyvista.portal.shared.ui.NotificationPageView;
 
 public class NotificationPageActivity extends AbstractActivity implements NotificationPageView.NotificationPagePresenter {
 
-    private long started = System.currentTimeMillis();
-
     private final NotificationPageView view;
 
     private final NotificationAppPlace place;
@@ -39,7 +37,6 @@ public class NotificationPageActivity extends AbstractActivity implements Notifi
 
     @Override
     public void start(AcceptsOneWidget panel, EventBus eventBus) {
-        started = System.currentTimeMillis();
         view.setPresenter(this);
         view.populate(place.getNotification());
         panel.setWidget(view);

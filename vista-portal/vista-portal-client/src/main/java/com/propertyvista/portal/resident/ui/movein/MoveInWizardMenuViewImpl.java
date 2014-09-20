@@ -43,8 +43,6 @@ import com.propertyvista.portal.shared.ui.MenuList;
 
 public class MoveInWizardMenuViewImpl extends DockPanel implements MoveInWizardMenuView {
 
-    private static final I18n i18n = I18n.get(MoveInWizardMenuViewImpl.class);
-
     private final HeaderHolder headerHolder;
 
     private final WizardStepList mainHolder;
