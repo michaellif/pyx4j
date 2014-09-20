@@ -19,16 +19,16 @@ import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.pyx4j.site.rpc.AppPlace;
 
 import com.propertyvista.portal.resident.ResidentPortalSite;
-import com.propertyvista.portal.resident.ui.movein.MoveinWizardStepPreviewView;
-import com.propertyvista.portal.resident.ui.movein.MoveinWizardStepPreviewView.MoveinWizardStepPreviewPresenter;
+import com.propertyvista.portal.resident.ui.movein.MoveInWizardCompletionConfirmationView;
+import com.propertyvista.portal.resident.ui.movein.MoveInWizardCompletionConfirmationView.MoveInWizardCompletionConfirmationPresenter;
 import com.propertyvista.portal.shared.activity.SecurityAwareActivity;
 
-public class MoveinWizardStepPreviewActivity extends SecurityAwareActivity implements MoveinWizardStepPreviewPresenter {
+public class MoveInWizardCompletionConfirmationActivity extends SecurityAwareActivity implements MoveInWizardCompletionConfirmationPresenter {
 
-    private final MoveinWizardStepPreviewView view;
+    private final MoveInWizardCompletionConfirmationView view;
 
-    public MoveinWizardStepPreviewActivity(AppPlace place) {
-        this.view = ResidentPortalSite.getViewFactory().getView(MoveinWizardStepPreviewView.class);
+    public MoveInWizardCompletionConfirmationActivity(AppPlace place) {
+        this.view = ResidentPortalSite.getViewFactory().getView(MoveInWizardCompletionConfirmationView.class);
     }
 
     @Override

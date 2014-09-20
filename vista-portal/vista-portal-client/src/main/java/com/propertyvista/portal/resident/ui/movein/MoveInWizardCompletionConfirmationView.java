@@ -15,9 +15,9 @@ package com.propertyvista.portal.resident.ui.movein;
 
 import com.pyx4j.site.client.IsView;
 
-public interface MoveinWizardStepPreviewView extends IsView {
+public interface MoveInWizardCompletionConfirmationView extends IsView {
 
-    public interface MoveinWizardStepPreviewPresenter {
+    public interface MoveInWizardCompletionConfirmationPresenter {
 
     }
 

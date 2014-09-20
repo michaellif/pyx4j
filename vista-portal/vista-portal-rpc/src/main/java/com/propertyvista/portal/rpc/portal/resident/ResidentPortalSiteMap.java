@@ -199,6 +199,12 @@ public class ResidentPortalSiteMap extends PortalSiteMap {
         public static class NewGuarantorWelcomePage extends AppPlace {
         }
 
+        public static class MoveInWizardStepPreview extends AppPlace {
+        }
+
+        public static class MoveInWizardCompletionConfirmation extends AppPlace {
+        }
+
     }
 
     @PlaceProperties(navigLabel = "Perks")

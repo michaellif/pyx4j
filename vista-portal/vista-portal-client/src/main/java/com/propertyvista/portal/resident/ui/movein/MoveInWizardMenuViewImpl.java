@@ -40,9 +40,9 @@ import com.propertyvista.portal.shared.ui.AppPlaceMenuItem;
 import com.propertyvista.portal.shared.ui.MenuItem;
 import com.propertyvista.portal.shared.ui.MenuList;
 
-public class MoveinWizardMenuViewImpl extends DockPanel implements MoveinWizardMenuView {
+public class MoveInWizardMenuViewImpl extends DockPanel implements MoveInWizardMenuView {
 
-    private static final I18n i18n = I18n.get(MoveinWizardMenuViewImpl.class);
+    private static final I18n i18n = I18n.get(MoveInWizardMenuViewImpl.class);
 
     private final HeaderHolder headerHolder;
 
@@ -52,7 +52,7 @@ public class MoveinWizardMenuViewImpl extends DockPanel implements MoveinWizardM
 
     private boolean mainMenuVisible = true;
 
-    public MoveinWizardMenuViewImpl() {
+    public MoveInWizardMenuViewImpl() {
         setStyleName(PortalRootPaneTheme.StyleName.MainMenu.name());
 
         headerHolder = new HeaderHolder();
@@ -98,7 +98,7 @@ public class MoveinWizardMenuViewImpl extends DockPanel implements MoveinWizardM
     }
 
     @Override
-    public void setPresenter(MoveinWizardMenuPresenter presenter) {
+    public void setPresenter(MoveInWizardMenuPresenter presenter) {
         AppPlace currentPlace = AppSite.getPlaceController().getWhere();
         for (MenuItem<?> item : mainHolder.getMenuItems()) {
             if (item instanceof AppPlaceMenuItem) {

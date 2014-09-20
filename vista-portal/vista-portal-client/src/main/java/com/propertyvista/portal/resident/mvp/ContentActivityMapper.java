@@ -47,6 +47,8 @@ import com.propertyvista.portal.resident.activity.leasesigning.LeaseSigningWizar
 import com.propertyvista.portal.resident.activity.maintenance.MaintenanceDashboardActivity;
 import com.propertyvista.portal.resident.activity.maintenance.MaintenanceRequestPageActivity;
 import com.propertyvista.portal.resident.activity.maintenance.MaintenanceRequestWizardActivity;
+import com.propertyvista.portal.resident.activity.movein.MoveInWizardCompletionConfirmationActivity;
+import com.propertyvista.portal.resident.activity.movein.MoveInWizardStepPreviewActivity;
 import com.propertyvista.portal.resident.activity.movein.NewGuarantorWelcomePageActivity;
 import com.propertyvista.portal.resident.activity.movein.NewTenantWelcomePageActivity;
 import com.propertyvista.portal.resident.activity.offers.dashboard.OffersDashboardActivity;
@@ -169,6 +171,12 @@ public class ContentActivityMapper implements AppActivityMapper {
                         activity = new NewTenantWelcomePageActivity(appPlace);
                     } else if (place instanceof ResidentPortalSiteMap.MoveIn.NewGuarantorWelcomePage) {
                         activity = new NewGuarantorWelcomePageActivity(appPlace);
+                    } else if (place instanceof ResidentPortalSiteMap.MoveIn.MoveInWizardStepPreview) {
+                        activity = new MoveInWizardStepPreviewActivity(appPlace);
+                    } else if (place instanceof ResidentPortalSiteMap.MoveIn.MoveInWizardCompletionConfirmation) {
+                        activity = new MoveInWizardCompletionConfirmationActivity(appPlace);
+
+// LeaseSigning                        
                     } else if (place instanceof ResidentPortalSiteMap.LeaseSigning.LeaseSigningWizard) {
                         activity = new LeaseSigningWizardActivity(appPlace);
                     } else if (place instanceof ResidentPortalSiteMap.LeaseSigning.LeaseSigningWizardConfirmation) {

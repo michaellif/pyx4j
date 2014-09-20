@@ -32,7 +32,7 @@ import com.propertyvista.portal.shared.resources.PortalImages;
 import com.propertyvista.portal.shared.ui.AbstractGadget;
 import com.propertyvista.portal.shared.ui.GadgetToolbar;
 
-public class MoveinWizardCompletionConfirmationGadget extends AbstractGadget<MoveinWizardCompletionConfirmationView> {
+public class MoveInWizardCompletionConfirmationGadget extends AbstractGadget<MoveInWizardCompletionConfirmationView> {
 
     private static final I18n i18n = I18n.get(NewTenantWelcomeGadget.class);
 
@@ -40,7 +40,7 @@ public class MoveinWizardCompletionConfirmationGadget extends AbstractGadget<Mov
 
     private final Image helpImage;
 
-    public MoveinWizardCompletionConfirmationGadget(MoveinWizardCompletionConfirmationView view) {
+    public MoveInWizardCompletionConfirmationGadget(MoveInWizardCompletionConfirmationView view) {
         super(view, null, i18n.tr("Move-In Wizard"), ThemeColor.contrast2, 1);
         setActionsToolbar(new NewResidentWelcomeToolbar());
 

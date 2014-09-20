@@ -1,5 +1,5 @@
 /*
- * (C) Copyright Property Vista Software Inc. 2011-2012 All Rights Reserved.
+ * (C) Copyright Property Vista Software Inc. 2011- All Rights Reserved.
  *
  * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
  * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
@@ -7,18 +7,24 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Feb 13, 2014
- * @author michaellif
+ * Created on Feb 1, 2011
+ * @author Misha
  * @version $Id$
  */
 package com.propertyvista.portal.resident.ui.movein;
 
 import com.pyx4j.site.client.IsView;
 
-public interface MoveinWizardCompletionConfirmationView extends IsView {
+public interface MoveInWizardMenuView extends IsView {
 
-    public interface MoveinWizardCompletionConfirmationPresenter {
+    public interface MoveInWizardMenuPresenter {
 
     }
+
+    void setUserName(String userName);
+
+    void setMenuVisible(boolean visible);
+
+    public void setPresenter(MoveInWizardMenuPresenter presenter);
 
 }

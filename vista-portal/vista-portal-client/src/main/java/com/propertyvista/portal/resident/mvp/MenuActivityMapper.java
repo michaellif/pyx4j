@@ -22,7 +22,7 @@ import com.pyx4j.security.shared.SecurityController;
 
 import com.propertyvista.domain.security.PortalResidentBehavior;
 import com.propertyvista.portal.resident.activity.PortalMenuActivity;
-import com.propertyvista.portal.resident.activity.movein.MoveinWizardMenuActivity;
+import com.propertyvista.portal.resident.activity.movein.MoveInWizardMenuActivity;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap.Logout;
 
 public class MenuActivityMapper implements ActivityMapper {
@@ -34,7 +34,7 @@ public class MenuActivityMapper implements ActivityMapper {
     public Activity getActivity(Place place) {
         if (ClientContext.isAuthenticated() && !(place instanceof Logout)) {
             if (SecurityController.check(PortalResidentBehavior.LeaseAgreementSigningRequired)) {
-                return new MoveinWizardMenuActivity(place);
+                return new MoveInWizardMenuActivity(place);
             } else {
                 return new PortalMenuActivity(place);
             }

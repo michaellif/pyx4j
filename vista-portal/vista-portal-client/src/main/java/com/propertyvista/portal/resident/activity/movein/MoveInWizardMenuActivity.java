@@ -24,19 +24,19 @@ import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.site.client.AppSite;
 
 import com.propertyvista.portal.resident.ResidentPortalSite;
-import com.propertyvista.portal.resident.ui.movein.MoveinWizardMenuView;
-import com.propertyvista.portal.resident.ui.movein.MoveinWizardMenuView.MoveinWizardMenuPresenter;
+import com.propertyvista.portal.resident.ui.movein.MoveInWizardMenuView;
+import com.propertyvista.portal.resident.ui.movein.MoveInWizardMenuView.MoveInWizardMenuPresenter;
 import com.propertyvista.portal.rpc.portal.resident.ResidentPortalSiteMap;
 
-public class MoveinWizardMenuActivity extends AbstractActivity implements MoveinWizardMenuPresenter {
+public class MoveInWizardMenuActivity extends AbstractActivity implements MoveInWizardMenuPresenter {
 
-    private final MoveinWizardMenuView view;
+    private final MoveInWizardMenuView view;
 
     private final Place place;
 
-    public MoveinWizardMenuActivity(Place place) {
+    public MoveInWizardMenuActivity(Place place) {
         this.place = place;
-        this.view = ResidentPortalSite.getViewFactory().getView(MoveinWizardMenuView.class);
+        this.view = ResidentPortalSite.getViewFactory().getView(MoveInWizardMenuView.class);
         view.setPresenter(this);
     }
 

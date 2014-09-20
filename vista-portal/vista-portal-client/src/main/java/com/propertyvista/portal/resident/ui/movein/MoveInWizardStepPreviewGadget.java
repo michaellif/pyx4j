@@ -32,7 +32,7 @@ import com.propertyvista.portal.shared.resources.PortalImages;
 import com.propertyvista.portal.shared.ui.AbstractGadget;
 import com.propertyvista.portal.shared.ui.GadgetToolbar;
 
-public class MoveinWizardStepPreviewGadget extends AbstractGadget<MoveinWizardStepPreviewView> {
+public class MoveInWizardStepPreviewGadget extends AbstractGadget<MoveInWizardStepPreviewView> {
 
     private static final I18n i18n = I18n.get(NewTenantWelcomeGadget.class);
 
@@ -40,7 +40,7 @@ public class MoveinWizardStepPreviewGadget extends AbstractGadget<MoveinWizardSt
 
     private final Image helpImage;
 
-    public MoveinWizardStepPreviewGadget(MoveinWizardStepPreviewView view) {
+    public MoveInWizardStepPreviewGadget(MoveInWizardStepPreviewView view) {
         super(view, null, i18n.tr("Move-In Wizard"), ThemeColor.contrast2, 1);
         setActionsToolbar(new NewResidentWelcomeToolbar());
 

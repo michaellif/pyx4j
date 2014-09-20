@@ -4,7 +4,7 @@ encoding//src/main/java/com/propertyvista/portal/prospect/ui/landing/SignUpGadge
 encoding//src/main/java/com/propertyvista/portal/resident/activity/CommunityEventsActivity.java=UTF-8
 encoding//src/main/java/com/propertyvista/portal/resident/activity/QuickTipActivity.java=UTF-8
 encoding//src/main/java/com/propertyvista/portal/resident/activity/WeatherActivity.java=UTF-8
-encoding//src/main/java/com/propertyvista/portal/resident/ui/movein/MoveinWizardCompletionConfirmationGadget.java=UTF-8
-encoding//src/main/java/com/propertyvista/portal/resident/ui/movein/MoveinWizardStepPreviewGadget.java=UTF-8
+encoding//src/main/java/com/propertyvista/portal/resident/ui/movein/MoveInWizardCompletionConfirmationGadget.java=UTF-8
+encoding//src/main/java/com/propertyvista/portal/resident/ui/movein/MoveInWizardStepPreviewGadget.java=UTF-8
 encoding//src/main/java/com/propertyvista/portal/resident/ui/movein/NewGuarantorWelcomeGadget.java=UTF-8
 encoding//src/main/java/com/propertyvista/portal/resident/ui/movein/NewTenantWelcomeGadget.java=UTF-8

@@ -23,14 +23,14 @@ import com.pyx4j.site.client.AppSite;
 
 import com.propertyvista.portal.shared.themes.DashboardTheme;
 
-public class MoveinWizardCompletionConfirmationViewImpl extends FlowPanel implements MoveinWizardCompletionConfirmationView {
+public class MoveInWizardCompletionConfirmationViewImpl extends FlowPanel implements MoveInWizardCompletionConfirmationView {
 
-    private final MoveinWizardCompletionConfirmationGadget gadget;
+    private final MoveInWizardCompletionConfirmationGadget gadget;
 
-    public MoveinWizardCompletionConfirmationViewImpl() {
+    public MoveInWizardCompletionConfirmationViewImpl() {
         setStyleName(DashboardTheme.StyleName.Dashboard.name());
 
-        gadget = new MoveinWizardCompletionConfirmationGadget(this);
+        gadget = new MoveInWizardCompletionConfirmationGadget(this);
         add(gadget);
 
         doLayout(LayoutType.getLayoutType(Window.getClientWidth()));

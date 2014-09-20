@@ -23,14 +23,14 @@ import com.pyx4j.site.client.AppSite;
 
 import com.propertyvista.portal.shared.themes.DashboardTheme;
 
-public class MoveinWizardStepPreviewViewImpl extends FlowPanel implements MoveinWizardStepPreviewView {
+public class MoveInWizardStepPreviewViewImpl extends FlowPanel implements MoveInWizardStepPreviewView {
 
-    private final MoveinWizardStepPreviewGadget gadget;
+    private final MoveInWizardStepPreviewGadget gadget;
 
-    public MoveinWizardStepPreviewViewImpl() {
+    public MoveInWizardStepPreviewViewImpl() {
         setStyleName(DashboardTheme.StyleName.Dashboard.name());
 
-        gadget = new MoveinWizardStepPreviewGadget(this);
+        gadget = new MoveInWizardStepPreviewGadget(this);
         add(gadget);
 
         doLayout(LayoutType.getLayoutType(Window.getClientWidth()));
