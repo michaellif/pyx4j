@@ -82,7 +82,7 @@ public class NewTenantWelcomeGadget extends AbstractGadget<NewTenantWelcomePageV
             startButton = new Button(i18n.tr("Let's Get Started!"), new Command() {
                 @Override
                 public void execute() {
-                    AppSite.getPlaceController().goTo(new ResidentPortalSiteMap.LeaseSigning.LeaseSigningWizard());
+                    AppSite.getPlaceController().goTo(new ResidentPortalSiteMap.MoveIn.MoveInWizardStepPreview());
                 }
             });
             startButton.getElement().getStyle().setProperty("background", StyleManager.getPalette().getThemeColor(ThemeColor.contrast2, 1));

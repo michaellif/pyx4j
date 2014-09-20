@@ -66,7 +66,7 @@ public class MoveInWizardMenuViewImpl extends DockPanel implements MoveInWizardM
         add(footerHolder, DockPanel.SOUTH);
         setCellHeight(footerHolder, "1px");
 
-        mainHolder.addMenuItem(new WizardStepItem(i18n.tr("Signing Lease"), null, 0, StepStatus.notComplete));
+        mainHolder.addMenuItem(new WizardStepItem(i18n.tr("Lease Signing"), null, 0, StepStatus.notComplete));
 
         mainHolder.addMenuItem(new WizardStepItem(i18n.tr("PAP"), null, 1, StepStatus.notComplete));
 

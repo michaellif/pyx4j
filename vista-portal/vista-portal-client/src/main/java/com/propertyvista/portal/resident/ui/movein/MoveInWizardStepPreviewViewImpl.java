@@ -25,13 +25,28 @@ import com.propertyvista.portal.shared.themes.DashboardTheme;
 
 public class MoveInWizardStepPreviewViewImpl extends FlowPanel implements MoveInWizardStepPreviewView {
 
-    private final MoveInWizardStepPreviewGadget gadget;
+    private final MoveInWizardLeaseSigningPreviewGadget leaseSigningPreviewGadget;
+
+    private final MoveInWizardPapPreviewGadget papPreviewGadget;
+
+    private final MoveInWizardInsurancePreviewGadget insurancePreviewGadget;
+
+    private final MoveInWizardProfilePreviewGadget profilePreviewGadget;
 
     public MoveInWizardStepPreviewViewImpl() {
         setStyleName(DashboardTheme.StyleName.Dashboard.name());
 
-        gadget = new MoveInWizardStepPreviewGadget(this);
-        add(gadget);
+        leaseSigningPreviewGadget = new MoveInWizardLeaseSigningPreviewGadget(this);
+        add(leaseSigningPreviewGadget);
+
+        papPreviewGadget = new MoveInWizardPapPreviewGadget(this);
+        add(papPreviewGadget);
+
+        insurancePreviewGadget = new MoveInWizardInsurancePreviewGadget(this);
+        add(insurancePreviewGadget);
+
+        profilePreviewGadget = new MoveInWizardProfilePreviewGadget(this);
+        add(profilePreviewGadget);
 
         doLayout(LayoutType.getLayoutType(Window.getClientWidth()));
 
@@ -46,6 +61,8 @@ public class MoveInWizardStepPreviewViewImpl extends FlowPanel implements MoveIn
     }
 
     private void doLayout(LayoutType layoutType) {
-        gadget.doLayout(layoutType);
+        leaseSigningPreviewGadget.doLayout(layoutType);
+        papPreviewGadget.doLayout(layoutType);
+        insurancePreviewGadget.doLayout(layoutType);
     }
 }

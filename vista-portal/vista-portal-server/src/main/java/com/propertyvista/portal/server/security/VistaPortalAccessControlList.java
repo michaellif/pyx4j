@@ -196,9 +196,9 @@ public class VistaPortalAccessControlList extends ServletContainerAclBuilder {
 
         grant(PortalResidentBehavior.Resident, new IServiceExecutePermission(MaintenanceRequestCrudService.class));
 
-        grant(PortalResidentBehavior.LeaseAgreementSigningRequired, new IServiceExecutePermission(LeaseSigningCrudService.class));
-        grant(PortalResidentBehavior.LeaseAgreementSigningRequired, new IServiceExecutePermission(LeaseTermBlankAgreementDocumentDownloadService.class));
-        grant(PortalResidentBehavior.LeaseAgreementSigningRequired, new EntityPermission(AgreementDigitalSignatures.class, EntityPermission.CREATE));
+        grant(PortalResidentBehavior.MoveInWizardCompletionRequired, new IServiceExecutePermission(LeaseSigningCrudService.class));
+        grant(PortalResidentBehavior.MoveInWizardCompletionRequired, new IServiceExecutePermission(LeaseTermBlankAgreementDocumentDownloadService.class));
+        grant(PortalResidentBehavior.MoveInWizardCompletionRequired, new EntityPermission(AgreementDigitalSignatures.class, EntityPermission.CREATE));
 
         grant(PortalResidentBehavior.Resident, new IServiceExecutePermission(LeaseTermBlankAgreementDocumentDownloadService.class));
         grant(PortalProspectBehavior.Prospect, new IServiceExecutePermission(LeaseTermBlankAgreementDocumentDownloadService.class));

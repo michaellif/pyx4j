@@ -229,7 +229,7 @@ public class CustomerFacadeImpl implements CustomerFacade {
         if (lease.leaseApplication().status().getValue() == LeaseApplication.Status.Approved) {
             Persistence.ensureRetrieve(termParticipant.leaseParticipant().agreementSignatures(), AttachLevel.Attached);
             if (!termParticipant.leaseParticipant().agreementSignatures().hasValues()) {
-                behaviors.add(PortalResidentBehavior.LeaseAgreementSigningRequired);
+                behaviors.add(PortalResidentBehavior.MoveInWizardCompletionRequired);
             }
         }
 

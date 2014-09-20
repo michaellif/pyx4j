@@ -60,19 +60,13 @@ public class ResidentPortalSiteDispatcher extends AbstractAppPlaceDispatcher {
             return new PortalSiteMap.PasswordReset();
         } else if (SecurityController.check(PortalResidentBehavior.LeaseSelectionRequired)) {
             return new ResidentPortalSiteMap.LeaseContextSelection();
-        } else if (SecurityController.check(PortalResidentBehavior.LeaseAgreementSigningRequired)) {
-            if ((newPlace instanceof ResidentPortalSiteMap.LeaseSigning.LeaseSigningWizard)
-                    || (newPlace instanceof ResidentPortalSiteMap.LeaseSigning.LeaseSigningWizardConfirmation)) {
-                return newPlace;
-            }
-            if (!(newPlace instanceof ResidentPortalSiteMap.MoveIn.NewTenantWelcomePage
-                    || newPlace instanceof ResidentPortalSiteMap.MoveIn.NewGuarantorWelcomePage || newPlace == AppPlace.NOWHERE)) {
-                MessageDialog.info(i18n.tr("Sorry"), i18n.tr("In order to access that functionality you have to complete Move-In Wizard first."));
-            }
-            if (SecurityController.check(PortalResidentBehavior.Resident)) {
-                return new ResidentPortalSiteMap.MoveIn.NewTenantWelcomePage();
-            } else if (SecurityController.check(PortalResidentBehavior.Guarantor)) {
-                return new ResidentPortalSiteMap.MoveIn.NewGuarantorWelcomePage();
+        } else if (SecurityController.check(PortalResidentBehavior.MoveInWizardCompletionRequired)) {
+            if (newPlace == AppPlace.NOWHERE) {
+                if (SecurityController.check(PortalResidentBehavior.Resident)) {
+                    return new ResidentPortalSiteMap.MoveIn.NewTenantWelcomePage();
+                } else if (SecurityController.check(PortalResidentBehavior.Guarantor)) {
+                    return new ResidentPortalSiteMap.MoveIn.NewGuarantorWelcomePage();
+                }
             }
         }
         return newPlace;
