@@ -35,6 +35,7 @@ import com.propertyvista.portal.rpc.portal.PortalSiteMap;
 import com.propertyvista.portal.rpc.portal.resident.ResidentPortalSiteMap;
 import com.propertyvista.portal.shared.resources.PortalImages;
 import com.propertyvista.portal.shared.themes.PortalRootPaneTheme;
+import com.propertyvista.portal.shared.ui.AppPlaceMenuItem;
 import com.propertyvista.portal.shared.ui.MenuItem;
 import com.propertyvista.portal.shared.ui.MenuList;
 import com.propertyvista.shared.config.VistaFeatures;
@@ -43,11 +44,11 @@ public class PortalMenuViewImpl extends DockPanel implements PortalMenuView {
 
     private final HeaderHolder headerHolder;
 
-    private final MenuList mainHolder;
+    private final MenuList<MenuItem<?>> mainHolder;
 
-    private final MenuList footerHolder;
+    private final MenuList<MenuItem<?>> footerHolder;
 
-    private final MenuItem leaseSelectionMenu;
+    private final MenuItem<?> leaseSelectionMenu;
 
     private boolean mainMenuVisible = true;
 
@@ -55,8 +56,8 @@ public class PortalMenuViewImpl extends DockPanel implements PortalMenuView {
         setStyleName(PortalRootPaneTheme.StyleName.MainMenu.name());
 
         headerHolder = new HeaderHolder();
-        mainHolder = new MenuList();
-        footerHolder = new MenuList();
+        mainHolder = new MenuList<>();
+        footerHolder = new MenuList<>();
         footerHolder.asWidget().setStyleName(PortalRootPaneTheme.StyleName.MainMenuFooter.name());
 
         add(headerHolder, DockPanel.NORTH);
@@ -65,30 +66,31 @@ public class PortalMenuViewImpl extends DockPanel implements PortalMenuView {
         add(footerHolder, DockPanel.SOUTH);
         setCellHeight(footerHolder, "1px");
 
-        mainHolder.addMenuItem(new MenuItem(new ResidentPortalSiteMap.Dashboard(), PortalImages.INSTANCE.dashboardMenu(), ThemeColor.contrast1));
+        mainHolder.addMenuItem(new AppPlaceMenuItem(new ResidentPortalSiteMap.Dashboard(), PortalImages.INSTANCE.dashboardMenu(), ThemeColor.contrast1));
 
-        mainHolder.addMenuItem(new MenuItem(new ResidentPortalSiteMap.Financial(), PortalImages.INSTANCE.billingMenu(), ThemeColor.contrast4));
+        mainHolder.addMenuItem(new AppPlaceMenuItem(new ResidentPortalSiteMap.Financial(), PortalImages.INSTANCE.billingMenu(), ThemeColor.contrast4));
 
         if (SecurityController.check(PortalResidentBehavior.Resident)) {
 
-            mainHolder.addMenuItem(new MenuItem(new ResidentPortalSiteMap.Maintenance(), PortalImages.INSTANCE.maintenanceMenu(), ThemeColor.contrast5));
+            mainHolder
+                    .addMenuItem(new AppPlaceMenuItem(new ResidentPortalSiteMap.Maintenance(), PortalImages.INSTANCE.maintenanceMenu(), ThemeColor.contrast5));
 
             if (VistaFeatures.instance().countryOfOperation() == CountryOfOperation.Canada) {
-                mainHolder.addMenuItem(new MenuItem(new ResidentPortalSiteMap.ResidentServices(), PortalImages.INSTANCE.residentServicesMenu(),
+                mainHolder.addMenuItem(new AppPlaceMenuItem(new ResidentPortalSiteMap.ResidentServices(), PortalImages.INSTANCE.residentServicesMenu(),
                         ThemeColor.contrast3));
             }
 
         }
 
-        mainHolder.addMenuItem(new MenuItem(new ResidentPortalSiteMap.Offers(), PortalImages.INSTANCE.offersMenu(), ThemeColor.contrast6));
+        mainHolder.addMenuItem(new AppPlaceMenuItem(new ResidentPortalSiteMap.Offers(), PortalImages.INSTANCE.offersMenu(), ThemeColor.contrast6));
 
-        footerHolder.addMenuItem(new MenuItem(new ResidentPortalSiteMap.Profile(), PortalImages.INSTANCE.profileMenu(), ThemeColor.background));
-        footerHolder.addMenuItem(new MenuItem(new ResidentPortalSiteMap.Account(), PortalImages.INSTANCE.accountMenu(), ThemeColor.background));
+        footerHolder.addMenuItem(new AppPlaceMenuItem(new ResidentPortalSiteMap.Profile(), PortalImages.INSTANCE.profileMenu(), ThemeColor.background));
+        footerHolder.addMenuItem(new AppPlaceMenuItem(new ResidentPortalSiteMap.Account(), PortalImages.INSTANCE.accountMenu(), ThemeColor.background));
 
-        leaseSelectionMenu = new MenuItem(new ResidentPortalSiteMap.LeaseContextSelection(), PortalImages.INSTANCE.selectMenu(), ThemeColor.background);
+        leaseSelectionMenu = new AppPlaceMenuItem(new ResidentPortalSiteMap.LeaseContextSelection(), PortalImages.INSTANCE.selectMenu(), ThemeColor.background);
         footerHolder.addMenuItem(leaseSelectionMenu);
 
-        footerHolder.addMenuItem(new MenuItem(new PortalSiteMap.Logout(), PortalImages.INSTANCE.logoutMenu(), ThemeColor.background));
+        footerHolder.addMenuItem(new AppPlaceMenuItem(new PortalSiteMap.Logout(), PortalImages.INSTANCE.logoutMenu(), ThemeColor.background));
 
         doLayout(LayoutType.getLayoutType(Window.getClientWidth()));
 
@@ -111,8 +113,10 @@ public class PortalMenuViewImpl extends DockPanel implements PortalMenuView {
     @Override
     public void setPresenter(PortalMenuPresenter presenter) {
         AppPlace currentPlace = AppSite.getPlaceController().getWhere();
-        for (MenuItem item : mainHolder.getMenuItems()) {
-            item.setSelected(currentPlace.getPlaceId().contains(item.getPlace().getPlaceId()));
+        for (MenuItem<?> item : mainHolder.getMenuItems()) {
+            if (item instanceof AppPlaceMenuItem) {
+                item.setSelected(currentPlace.getPlaceId().contains(((AppPlaceMenuItem) item).getPlace().getPlaceId()));
+            }
         }
     }
 

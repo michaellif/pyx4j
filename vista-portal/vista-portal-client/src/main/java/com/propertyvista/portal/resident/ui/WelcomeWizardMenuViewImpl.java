@@ -25,27 +25,28 @@ import com.pyx4j.commons.css.ThemeColor;
 import com.pyx4j.gwt.commons.layout.LayoutChangeEvent;
 import com.pyx4j.gwt.commons.layout.LayoutChangeHandler;
 import com.pyx4j.gwt.commons.layout.LayoutType;
-import com.pyx4j.security.shared.SecurityController;
+import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.rpc.AppPlace;
 
-import com.propertyvista.domain.customizations.CountryOfOperation;
-import com.propertyvista.domain.security.PortalResidentBehavior;
+import com.propertyvista.portal.resident.ui.WizardStepItem.StepStatus;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
 import com.propertyvista.portal.rpc.portal.resident.ResidentPortalSiteMap;
 import com.propertyvista.portal.shared.resources.PortalImages;
 import com.propertyvista.portal.shared.themes.PortalRootPaneTheme;
+import com.propertyvista.portal.shared.ui.AppPlaceMenuItem;
 import com.propertyvista.portal.shared.ui.MenuItem;
 import com.propertyvista.portal.shared.ui.MenuList;
-import com.propertyvista.shared.config.VistaFeatures;
 
 public class WelcomeWizardMenuViewImpl extends DockPanel implements WelcomeWizardMenuView {
 
+    private static final I18n i18n = I18n.get(WelcomeWizardMenuViewImpl.class);
+
     private final HeaderHolder headerHolder;
 
-    private final MenuList mainHolder;
+    private final WizardStepList mainHolder;
 
-    private final MenuList footerHolder;
+    private final MenuList<MenuItem<?>> footerHolder;
 
     private boolean mainMenuVisible = true;
 
@@ -53,8 +54,8 @@ public class WelcomeWizardMenuViewImpl extends DockPanel implements WelcomeWizar
         setStyleName(PortalRootPaneTheme.StyleName.MainMenu.name());
 
         headerHolder = new HeaderHolder();
-        mainHolder = new MenuList();
-        footerHolder = new MenuList();
+        mainHolder = new WizardStepList();
+        footerHolder = new MenuList<>();
         footerHolder.asWidget().setStyleName(PortalRootPaneTheme.StyleName.MainMenuFooter.name());
 
         add(headerHolder, DockPanel.NORTH);
@@ -63,27 +64,18 @@ public class WelcomeWizardMenuViewImpl extends DockPanel implements WelcomeWizar
         add(footerHolder, DockPanel.SOUTH);
         setCellHeight(footerHolder, "1px");
 
-        mainHolder.addMenuItem(new MenuItem(new ResidentPortalSiteMap.Dashboard(), PortalImages.INSTANCE.dashboardMenu(), ThemeColor.contrast1));
+        mainHolder.addMenuItem(new WizardStepItem(i18n.tr("Signing Lease"), null, 0, StepStatus.notComplete));
 
-        mainHolder.addMenuItem(new MenuItem(new ResidentPortalSiteMap.Financial(), PortalImages.INSTANCE.billingMenu(), ThemeColor.contrast4));
+        mainHolder.addMenuItem(new WizardStepItem(i18n.tr("PAP"), null, 1, StepStatus.notComplete));
 
-        if (SecurityController.check(PortalResidentBehavior.Resident)) {
+        mainHolder.addMenuItem(new WizardStepItem(i18n.tr("Insurance"), null, 2, StepStatus.notComplete));
 
-            mainHolder.addMenuItem(new MenuItem(new ResidentPortalSiteMap.Maintenance(), PortalImages.INSTANCE.maintenanceMenu(), ThemeColor.contrast5));
+        mainHolder.addMenuItem(new WizardStepItem(i18n.tr("Profile Update"), null, 3, StepStatus.notComplete));
 
-            if (VistaFeatures.instance().countryOfOperation() == CountryOfOperation.Canada) {
-                mainHolder.addMenuItem(new MenuItem(new ResidentPortalSiteMap.ResidentServices(), PortalImages.INSTANCE.residentServicesMenu(),
-                        ThemeColor.contrast3));
-            }
+        footerHolder.addMenuItem(new AppPlaceMenuItem(new ResidentPortalSiteMap.Profile(), PortalImages.INSTANCE.profileMenu(), ThemeColor.background));
+        footerHolder.addMenuItem(new AppPlaceMenuItem(new ResidentPortalSiteMap.Account(), PortalImages.INSTANCE.accountMenu(), ThemeColor.background));
 
-        }
-
-        mainHolder.addMenuItem(new MenuItem(new ResidentPortalSiteMap.Offers(), PortalImages.INSTANCE.offersMenu(), ThemeColor.contrast6));
-
-        footerHolder.addMenuItem(new MenuItem(new ResidentPortalSiteMap.Profile(), PortalImages.INSTANCE.profileMenu(), ThemeColor.background));
-        footerHolder.addMenuItem(new MenuItem(new ResidentPortalSiteMap.Account(), PortalImages.INSTANCE.accountMenu(), ThemeColor.background));
-
-        footerHolder.addMenuItem(new MenuItem(new PortalSiteMap.Logout(), PortalImages.INSTANCE.logoutMenu(), ThemeColor.background));
+        footerHolder.addMenuItem(new AppPlaceMenuItem(new PortalSiteMap.Logout(), PortalImages.INSTANCE.logoutMenu(), ThemeColor.background));
 
         doLayout(LayoutType.getLayoutType(Window.getClientWidth()));
 
@@ -106,8 +98,10 @@ public class WelcomeWizardMenuViewImpl extends DockPanel implements WelcomeWizar
     @Override
     public void setPresenter(WelcomeWizardMenuPresenter presenter) {
         AppPlace currentPlace = AppSite.getPlaceController().getWhere();
-        for (MenuItem item : mainHolder.getMenuItems()) {
-            item.setSelected(currentPlace.getPlaceId().contains(item.getPlace().getPlaceId()));
+        for (MenuItem<?> item : mainHolder.getMenuItems()) {
+            if (item instanceof AppPlaceMenuItem) {
+                item.setSelected(currentPlace.getPlaceId().contains(((AppPlaceMenuItem) item).getPlace().getPlaceId()));
+            }
         }
     }
 

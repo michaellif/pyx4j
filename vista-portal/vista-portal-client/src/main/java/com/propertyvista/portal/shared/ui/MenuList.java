@@ -18,45 +18,39 @@ import java.util.List;
 
 import com.google.gwt.dom.client.Document;
 import com.google.gwt.user.client.ui.ComplexPanel;
-import com.google.gwt.user.client.ui.IsWidget;
-import com.google.gwt.user.client.ui.Widget;
 
 import com.propertyvista.portal.shared.themes.PortalRootPaneTheme;
 
-public class MenuList implements IsWidget {
+public class MenuList<E extends MenuItem<?>> extends ComplexPanel {
 
-    private final ContentPanel contentPanel;
-
-    private final List<MenuItem> items;
+    private final List<E> items;
 
     public MenuList() {
-        contentPanel = new ContentPanel();
+        setElement(Document.get().createElement("ul"));
+        setStyleName(PortalRootPaneTheme.StyleName.MainMenuHolder.name());
+
         items = new ArrayList<>();
     }
 
-    @Override
-    public Widget asWidget() {
-        return contentPanel;
-    }
-
-    public void addMenuItem(MenuItem menuItem) {
+    public void addMenuItem(E menuItem) {
         items.add(menuItem);
-        contentPanel.addNavigItem(menuItem);
+        addNavigItem(menuItem);
     }
 
+    @Override
     public void clear() {
         items.clear();
-        contentPanel.clear();
+        super.clear();
     }
 
-    public List<MenuItem> getMenuItems() {
+    public List<E> getMenuItems() {
         return items;
     }
 
-    public MenuItem getSelectedMenuItem() {
+    public E getSelectedMenuItem() {
         if (items == null)
             return null;
-        for (MenuItem item : items) {
+        for (E item : items) {
             if (item.isSelected()) {
                 return item;
             }
@@ -64,20 +58,8 @@ public class MenuList implements IsWidget {
         return null;
     }
 
-    public void setVisible(boolean visible) {
-        contentPanel.setVisible(visible);
-    }
-
-    private class ContentPanel extends ComplexPanel {
-        public ContentPanel() {
-            setElement(Document.get().createElement("ul"));
-            setStyleName(PortalRootPaneTheme.StyleName.MainMenuHolder.name());
-            setVisible(true);
-        }
-
-        public void addNavigItem(MenuItem menuItem) {
-            add(menuItem.asWidget(), getElement());
-        }
+    public void addNavigItem(E menuItem) {
+        add(menuItem.asWidget(), getElement());
     }
 
     public boolean isEmpty() {

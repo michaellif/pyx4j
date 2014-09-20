@@ -22,7 +22,7 @@ import com.pyx4j.commons.css.ThemeId;
 public class StepsTheme extends Theme {
 
     public enum StyleName implements IStyleName {
-        WizardStepPanel, WizardStepHandler, WizardStepHandlerCaption
+        WizardStepPanel, StepIndexLabel, WizardStepHandlerCaption
     }
 
     public StepsTheme() {
@@ -31,7 +31,7 @@ public class StepsTheme extends Theme {
         style.addProperty("padding", "10px 0 0");
         addStyle(style);
 
-        style = new Style(".", StepsTheme.StyleName.WizardStepHandler.name());
+        style = new Style(".", StepsTheme.StyleName.StepIndexLabel.name());
         style.addProperty("font-style", "italic");
         addStyle(style);
 

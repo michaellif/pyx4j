@@ -17,74 +17,71 @@ import com.google.gwt.dom.client.Document;
 import com.google.gwt.dom.client.Style.Cursor;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.ui.ComplexPanel;
-import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.commons.css.StyleManager;
 import com.pyx4j.commons.css.ThemeColor;
-import com.pyx4j.site.client.AppSite;
-import com.pyx4j.site.rpc.AppPlace;
-import com.pyx4j.widgets.client.images.ButtonImages;
 
 import com.propertyvista.portal.shared.themes.PortalRootPaneTheme;
 
-public class MenuItem implements IsWidget {
+public class MenuItem<ICON extends IsWidget> extends ComplexPanel {
 
-    private final ContentPanel contentPanel;
-
-    private final Image icon;
+    private final ICON icon;
 
     private final Label label;
 
     private boolean selected;
 
-    private final AppPlace appPlace;
-
-    private final ButtonImages images;
-
     private final String color;
 
-    public MenuItem(final AppPlace appPlace, ButtonImages images, ThemeColor color) {
+    public MenuItem(String caption, final Command command, ICON icon, ThemeColor color) {
         super();
+        setElement(Document.get().createElement("li"));
+        setStyleName(PortalRootPaneTheme.StyleName.MainMenuNavigItem.name());
+        sinkEvents(Event.ONCLICK);
+        getElement().getStyle().setCursor(Cursor.POINTER);
 
-        contentPanel = new ContentPanel();
+        addDomHandler(new ClickHandler() {
+            @Override
+            public void onClick(ClickEvent event) {
+                command.execute();
+            }
+        }, ClickEvent.getType());
 
-        this.appPlace = appPlace;
-        this.images = images;
         this.color = StyleManager.getPalette().getThemeColor(color, 1);
         selected = false;
 
-        icon = new Image(images.regular());
-        icon.setStyleName(PortalRootPaneTheme.StyleName.MainMenuIcon.name());
-        contentPanel.add(icon);
+        this.icon = icon;
+        add(icon);
 
-        label = new Label(AppSite.getHistoryMapper().getPlaceInfo(appPlace).getNavigLabel());
+        label = new Label(caption);
         label.setStyleName(PortalRootPaneTheme.StyleName.MainMenuLabel.name());
-        contentPanel.add(label);
-
+        add(label);
     }
 
-    @Override
-    public Widget asWidget() {
-        return contentPanel;
+    public ICON getIcon() {
+        return icon;
+    }
+
+    public String getColor() {
+        return color;
     }
 
     public void setSelected(boolean select) {
         selected = select;
         if (select) {
-            contentPanel.addStyleDependentName(PortalRootPaneTheme.StyleDependent.active.name());
-            contentPanel.getElement().getStyle().setProperty("background", color);
+            addStyleDependentName(PortalRootPaneTheme.StyleDependent.active.name());
+            getElement().getStyle().setProperty("background", color);
             label.getElement().getStyle().setProperty("background", color);
-            icon.setResource(images.active());
         } else {
-            contentPanel.removeStyleDependentName(PortalRootPaneTheme.StyleDependent.active.name());
-            contentPanel.getElement().getStyle().setProperty("background", "");
+            removeStyleDependentName(PortalRootPaneTheme.StyleDependent.active.name());
+            getElement().getStyle().setProperty("background", "");
             label.getElement().getStyle().setProperty("background", "");
-            icon.setResource(images.regular());
         }
     }
 
@@ -96,32 +93,9 @@ public class MenuItem implements IsWidget {
         return selected;
     }
 
-    public AppPlace getPlace() {
-        return appPlace;
-    }
-
-    public void setVisible(boolean visible) {
-        contentPanel.setVisible(visible);
-    }
-
-    private class ContentPanel extends ComplexPanel {
-        private ContentPanel() {
-            setElement(Document.get().createElement("li"));
-            setStyleName(PortalRootPaneTheme.StyleName.MainMenuNavigItem.name());
-            sinkEvents(Event.ONCLICK);
-            getElement().getStyle().setCursor(Cursor.POINTER);
-            addDomHandler(new ClickHandler() {
-                @Override
-                public void onClick(ClickEvent event) {
-                    AppSite.getPlaceController().goTo(appPlace);
-                }
-            }, ClickEvent.getType());
-        }
-
-        @Override
-        public void add(Widget w) {
-            super.add(w, getElement());
-        }
+    @Override
+    public void add(Widget w) {
+        super.add(w, getElement());
     }
 
 }

@@ -30,13 +30,13 @@ import com.pyx4j.gwt.commons.layout.LayoutChangeHandler;
 import com.pyx4j.gwt.commons.layout.LayoutType;
 import com.pyx4j.site.client.AppSite;
 
+import com.propertyvista.portal.prospect.ui.WizardStepItem.StepStatus;
 import com.propertyvista.portal.prospect.ui.application.ApplicationWizard;
-import com.propertyvista.portal.prospect.ui.application.NavigStepItem.StepStatus;
-import com.propertyvista.portal.prospect.ui.application.NavigStepList;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
 import com.propertyvista.portal.rpc.portal.prospect.ProspectPortalSiteMap;
 import com.propertyvista.portal.shared.resources.PortalImages;
 import com.propertyvista.portal.shared.themes.PortalRootPaneTheme;
+import com.propertyvista.portal.shared.ui.AppPlaceMenuItem;
 import com.propertyvista.portal.shared.ui.MenuItem;
 import com.propertyvista.portal.shared.ui.MenuList;
 
@@ -44,11 +44,11 @@ public class MenuViewImpl extends DockPanel implements MenuView {
 
     private final HeaderHolder headerHolder;
 
-    private final NavigStepList mainHolder;
+    private final WizardStepList mainHolder;
 
-    private final MenuList footerHolder;
+    private final MenuList<MenuItem<?>> footerHolder;
 
-    private final MenuItem applicationSelectionMenu;
+    private final MenuItem<?> applicationSelectionMenu;
 
     private ApplicationWizard applicationWizard;
 
@@ -56,8 +56,8 @@ public class MenuViewImpl extends DockPanel implements MenuView {
         setStyleName(PortalRootPaneTheme.StyleName.MainMenu.name());
 
         headerHolder = new HeaderHolder();
-        mainHolder = new NavigStepList();
-        footerHolder = new MenuList();
+        mainHolder = new WizardStepList();
+        footerHolder = new MenuList<>();
         footerHolder.asWidget().setStyleName(PortalRootPaneTheme.StyleName.MainMenuFooter.name());
 
         add(headerHolder, DockPanel.NORTH);
@@ -66,11 +66,11 @@ public class MenuViewImpl extends DockPanel implements MenuView {
         add(footerHolder, DockPanel.SOUTH);
         setCellHeight(footerHolder, "1px");
 
-        applicationSelectionMenu = new MenuItem(new ProspectPortalSiteMap.ApplicationContextSelection(), PortalImages.INSTANCE.selectMenu(),
+        applicationSelectionMenu = new AppPlaceMenuItem(new ProspectPortalSiteMap.ApplicationContextSelection(), PortalImages.INSTANCE.selectMenu(),
                 ThemeColor.background);
         footerHolder.addMenuItem(applicationSelectionMenu);
 
-        footerHolder.addMenuItem(new MenuItem(new PortalSiteMap.Logout(), PortalImages.INSTANCE.logoutMenu(), ThemeColor.background));
+        footerHolder.addMenuItem(new AppPlaceMenuItem(new PortalSiteMap.Logout(), PortalImages.INSTANCE.logoutMenu(), ThemeColor.background));
 
         doLayout(LayoutType.getLayoutType(Window.getClientWidth()));
 
