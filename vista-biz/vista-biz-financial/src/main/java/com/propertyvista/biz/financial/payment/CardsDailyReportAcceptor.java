@@ -17,14 +17,12 @@ import java.math.BigDecimal;
 import java.util.HashSet;
 import java.util.Set;
 
-import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.core.criterion.OrCriterion;
 import com.pyx4j.entity.server.Persistence;
 
 import com.propertyvista.biz.ExecutionMonitor;
-import com.propertyvista.biz.system.Vista2PmcFacade;
 import com.propertyvista.domain.pmc.Pmc;
 import com.propertyvista.domain.pmc.PmcMerchantAccountIndex;
 import com.propertyvista.operations.domain.eft.cards.CardsClearanceFile;
@@ -56,7 +54,7 @@ class CardsDailyReportAcceptor {
         clearanceFile.remoteFileDate().setValue(dailyReportFile.remoteFileDate().getValue());
         Persistence.service().persist(clearanceFile);
 
-        Set<String> vistaAccountsTerminalId = loadVistaTerminalId();
+        Set<String> vistaAccountsTerminalId = CardsReconciliationAcceptor.loadVistaTerminalId();
         Set<Pmc> pmcCount = new HashSet<>();
 
         for (DailyReportRecord toRecord : dailyReportFile.records()) {
@@ -101,13 +99,6 @@ class CardsDailyReportAcceptor {
                 Persistence.service().persist(record);
             }
         }
-    }
-
-    private Set<String> loadVistaTerminalId() {
-        Set<String> vistaAccountsTerminalId = new HashSet<>();
-        vistaAccountsTerminalId.add(ServerSideFactory.create(Vista2PmcFacade.class).getVistaMerchantTerminalId());
-        vistaAccountsTerminalId.add(ServerSideFactory.create(Vista2PmcFacade.class).getTenantSureMerchantTerminalId());
-        return vistaAccountsTerminalId;
     }
 
 }

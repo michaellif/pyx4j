@@ -187,10 +187,12 @@ class CardsReconciliationAcceptor {
         Persistence.service().persist(recordsByMid.values());
     }
 
-    private Set<String> loadVistaTerminalId() {
+    static Set<String> loadVistaTerminalId() {
         Set<String> vistaAccountsTerminalId = new HashSet<>();
         vistaAccountsTerminalId.add(ServerSideFactory.create(Vista2PmcFacade.class).getVistaMerchantTerminalId());
         vistaAccountsTerminalId.add(ServerSideFactory.create(Vista2PmcFacade.class).getTenantSureMerchantTerminalId());
+        //TODO figure it out
+        vistaAccountsTerminalId.add("PRVHIGH4");
         return vistaAccountsTerminalId;
     }
 
