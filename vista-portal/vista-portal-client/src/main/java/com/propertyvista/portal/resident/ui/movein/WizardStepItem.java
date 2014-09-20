@@ -11,12 +11,13 @@
  * @author michaellif
  * @version $Id$
  */
-package com.propertyvista.portal.resident.ui;
+package com.propertyvista.portal.resident.ui.movein;
 
 import com.google.gwt.user.client.Command;
 
 import com.pyx4j.commons.css.ThemeColor;
 
+import com.propertyvista.portal.rpc.portal.resident.services.movein.MoveinWizardStep;
 import com.propertyvista.portal.shared.ui.MenuItem;
 
 public class WizardStepItem extends MenuItem<StepIndexLabel> {
@@ -25,10 +26,20 @@ public class WizardStepItem extends MenuItem<StepIndexLabel> {
         notComplete, complete, current
     }
 
-    public WizardStepItem(String title, Command command, int index, StepStatus status) {
-        super(title, command, new StepIndexLabel(String.valueOf(index + 1)), ThemeColor.contrast2);
+    private final MoveinWizardStep step;
+
+    public WizardStepItem(MoveinWizardStep step, Command command, int index) {
+        super(step.toString(), command, new StepIndexLabel(String.valueOf(index + 1)), ThemeColor.contrast1);
+        this.step = step;
+    }
+
+    public void setStatus(StepStatus status) {
         getIcon().setStatus(status);
-        setSelected(StepStatus.current.equals(status));
+        super.setSelected(StepStatus.current.equals(status));
+    }
+
+    public MoveinWizardStep getStepType() {
+        return step;
     }
 
 }

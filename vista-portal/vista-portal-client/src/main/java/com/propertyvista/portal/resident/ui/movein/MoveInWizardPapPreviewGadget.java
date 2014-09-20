@@ -18,7 +18,6 @@ import com.google.gwt.user.client.ui.HTML;
 
 import com.pyx4j.commons.css.StyleManager;
 import com.pyx4j.commons.css.ThemeColor;
-import com.pyx4j.gwt.commons.layout.LayoutType;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.widgets.client.Button;
@@ -32,45 +31,37 @@ public class MoveInWizardPapPreviewGadget extends AbstractGadget<MoveInWizardSte
     private static final I18n i18n = I18n.get(NewTenantWelcomeGadget.class);
 
     public MoveInWizardPapPreviewGadget(MoveInWizardStepPreviewView view) {
-        super(view, null, i18n.tr("Pre-authorised Payment Setup"), ThemeColor.contrast2, 1);
-        setActionsToolbar(new MoveInWizardLeaseSigningPreviewToolbar());
+        super(view, null, i18n.tr("Pre-authorised Payment Setup"), ThemeColor.contrast4, 1);
+        setActionsToolbar(new ActionsToolbar());
 
         setContent(new HTML("Pre-authorised Payment Setup Explanantion"));
     }
 
-    class MoveInWizardLeaseSigningPreviewToolbar extends GadgetToolbar {
+    class ActionsToolbar extends GadgetToolbar {
 
-        public MoveInWizardLeaseSigningPreviewToolbar() {
+        public ActionsToolbar() {
+
+            Button skipButton = new Button(i18n.tr("Not now"), new Command() {
+                @Override
+                public void execute() {
+                    AppSite.getPlaceController().goTo(new ResidentPortalSiteMap.LeaseSigning.LeaseSigningWizard());
+                }
+            });
+            skipButton.getElement().getStyle().setProperty("color", StyleManager.getPalette().getThemeColor(ThemeColor.foreground, 0.7));
+            skipButton.getElement().getStyle().setProperty("borderColor", StyleManager.getPalette().getThemeColor(ThemeColor.contrast3, 0.7));
+            skipButton.getElement().getStyle().setProperty("border", "1px solid");
+            addItem(skipButton);
 
             Button continueButton = new Button(i18n.tr("Setup Pre-authorised Payment"), new Command() {
                 @Override
                 public void execute() {
-                    AppSite.getPlaceController().goTo(new ResidentPortalSiteMap.LeaseSigning.LeaseSigningWizard());
+                    AppSite.getPlaceController().goTo(new ResidentPortalSiteMap.Financial.PreauthorizedPayments.NewPreauthorizedPayment());
                 }
             });
-            continueButton.getElement().getStyle().setProperty("background", StyleManager.getPalette().getThemeColor(ThemeColor.contrast2, 1));
+            continueButton.getElement().getStyle().setProperty("background", StyleManager.getPalette().getThemeColor(ThemeColor.contrast4, 1));
             addItem(continueButton);
 
-            Button skipButton = new Button(i18n.tr("I will do it later"), new Command() {
-                @Override
-                public void execute() {
-                    AppSite.getPlaceController().goTo(new ResidentPortalSiteMap.LeaseSigning.LeaseSigningWizard());
-                }
-            });
-            skipButton.getElement().getStyle().setProperty("background", StyleManager.getPalette().getThemeColor(ThemeColor.contrast2, 0.7));
-            addItem(skipButton);
-
         }
     }
 
-    public void doLayout(LayoutType layoutType) {
-        switch (layoutType) {
-        case phonePortrait:
-        case phoneLandscape:
-            break;
-
-        default:
-            break;
-        }
-    }
 }

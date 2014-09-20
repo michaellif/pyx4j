@@ -15,10 +15,13 @@ package com.propertyvista.portal.resident.ui.movein;
 
 import com.pyx4j.site.client.IsView;
 
+import com.propertyvista.portal.rpc.portal.resident.services.movein.MoveinWizardStep;
+
 public interface MoveInWizardStepPreviewView extends IsView {
 
     public interface MoveInWizardStepPreviewPresenter {
 
     }
 
+    void setCurrentStep(MoveinWizardStep step);
 }

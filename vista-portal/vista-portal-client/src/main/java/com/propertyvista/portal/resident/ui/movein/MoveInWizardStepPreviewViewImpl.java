@@ -13,56 +13,41 @@
  */
 package com.propertyvista.portal.resident.ui.movein;
 
-import com.google.gwt.user.client.Window;
-import com.google.gwt.user.client.ui.FlowPanel;
+import java.util.HashMap;
+import java.util.Map;
 
-import com.pyx4j.gwt.commons.layout.LayoutChangeEvent;
-import com.pyx4j.gwt.commons.layout.LayoutChangeHandler;
-import com.pyx4j.gwt.commons.layout.LayoutType;
-import com.pyx4j.site.client.AppSite;
+import com.google.gwt.user.client.ui.SimplePanel;
 
+import com.propertyvista.portal.rpc.portal.resident.services.movein.MoveinWizardStep;
 import com.propertyvista.portal.shared.themes.DashboardTheme;
+import com.propertyvista.portal.shared.ui.AbstractGadget;
 
-public class MoveInWizardStepPreviewViewImpl extends FlowPanel implements MoveInWizardStepPreviewView {
+public class MoveInWizardStepPreviewViewImpl extends SimplePanel implements MoveInWizardStepPreviewView {
 
-    private final MoveInWizardLeaseSigningPreviewGadget leaseSigningPreviewGadget;
+    private final Map<MoveinWizardStep, AbstractGadget<?>> gadgets;
 
-    private final MoveInWizardPapPreviewGadget papPreviewGadget;
-
-    private final MoveInWizardInsurancePreviewGadget insurancePreviewGadget;
-
-    private final MoveInWizardProfilePreviewGadget profilePreviewGadget;
+    private AbstractGadget<?> currentGadget;
 
     public MoveInWizardStepPreviewViewImpl() {
         setStyleName(DashboardTheme.StyleName.Dashboard.name());
 
-        leaseSigningPreviewGadget = new MoveInWizardLeaseSigningPreviewGadget(this);
-        add(leaseSigningPreviewGadget);
+        gadgets = new HashMap<>();
 
-        papPreviewGadget = new MoveInWizardPapPreviewGadget(this);
-        add(papPreviewGadget);
+        AbstractGadget<?> gadget = new MoveInWizardLeaseSigningPreviewGadget(this);
+        gadgets.put(MoveinWizardStep.leaseSigning, gadget);
 
-        insurancePreviewGadget = new MoveInWizardInsurancePreviewGadget(this);
-        add(insurancePreviewGadget);
+        gadget = new MoveInWizardPapPreviewGadget(this);
+        gadgets.put(MoveinWizardStep.pap, gadget);
 
-        profilePreviewGadget = new MoveInWizardProfilePreviewGadget(this);
-        add(profilePreviewGadget);
+        gadget = new MoveInWizardInsurancePreviewGadget(this);
+        gadgets.put(MoveinWizardStep.insurance, gadget);
 
-        doLayout(LayoutType.getLayoutType(Window.getClientWidth()));
-
-        AppSite.getEventBus().addHandler(LayoutChangeEvent.TYPE, new LayoutChangeHandler() {
-
-            @Override
-            public void onLayoutChangeRerquest(LayoutChangeEvent event) {
-                doLayout(event.getLayoutType());
-            }
-
-        });
     }
 
-    private void doLayout(LayoutType layoutType) {
-        leaseSigningPreviewGadget.doLayout(layoutType);
-        papPreviewGadget.doLayout(layoutType);
-        insurancePreviewGadget.doLayout(layoutType);
+    @Override
+    public void setCurrentStep(MoveinWizardStep step) {
+        currentGadget = gadgets.get(step);
+        setWidget(currentGadget);
     }
+
 }

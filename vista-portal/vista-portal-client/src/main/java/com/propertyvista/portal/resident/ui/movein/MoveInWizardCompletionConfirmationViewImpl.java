@@ -13,13 +13,7 @@
  */
 package com.propertyvista.portal.resident.ui.movein;
 
-import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.FlowPanel;
-
-import com.pyx4j.gwt.commons.layout.LayoutChangeEvent;
-import com.pyx4j.gwt.commons.layout.LayoutChangeHandler;
-import com.pyx4j.gwt.commons.layout.LayoutType;
-import com.pyx4j.site.client.AppSite;
 
 import com.propertyvista.portal.shared.themes.DashboardTheme;
 
@@ -33,19 +27,6 @@ public class MoveInWizardCompletionConfirmationViewImpl extends FlowPanel implem
         gadget = new MoveInWizardCompletionConfirmationGadget(this);
         add(gadget);
 
-        doLayout(LayoutType.getLayoutType(Window.getClientWidth()));
-
-        AppSite.getEventBus().addHandler(LayoutChangeEvent.TYPE, new LayoutChangeHandler() {
-
-            @Override
-            public void onLayoutChangeRerquest(LayoutChangeEvent event) {
-                doLayout(event.getLayoutType());
-            }
-
-        });
     }
 
-    private void doLayout(LayoutType layoutType) {
-        gadget.doLayout(layoutType);
-    }
 }

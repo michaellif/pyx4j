@@ -11,7 +11,7 @@
  * @author michaellif
  * @version $Id$
  */
-package com.propertyvista.portal.resident.ui;
+package com.propertyvista.portal.resident.ui.movein;
 
 import com.google.gwt.dom.client.Style.Float;
 import com.google.gwt.dom.client.Style.TextAlign;
@@ -19,7 +19,7 @@ import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.dom.client.Style.VerticalAlign;
 import com.google.gwt.user.client.ui.HTML;
 
-import com.propertyvista.portal.resident.ui.WizardStepItem.StepStatus;
+import com.propertyvista.portal.resident.ui.movein.WizardStepItem.StepStatus;
 import com.propertyvista.portal.shared.themes.StepsTheme;
 
 public class StepIndexLabel extends HTML {

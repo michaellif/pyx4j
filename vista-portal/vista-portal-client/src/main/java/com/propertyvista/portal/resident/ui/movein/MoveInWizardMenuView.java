@@ -13,7 +13,11 @@
  */
 package com.propertyvista.portal.resident.ui.movein;
 
+import java.util.Collection;
+
 import com.pyx4j.site.client.IsView;
+
+import com.propertyvista.portal.rpc.portal.resident.services.movein.MoveinWizardStep;
 
 public interface MoveInWizardMenuView extends IsView {
 
@@ -26,5 +30,7 @@ public interface MoveInWizardMenuView extends IsView {
     void setMenuVisible(boolean visible);
 
     public void setPresenter(MoveInWizardMenuPresenter presenter);
+
+    void updateState(Collection<MoveinWizardStep> complete, MoveinWizardStep current);
 
 }

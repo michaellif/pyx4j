@@ -11,7 +11,7 @@
  * @author michaellif
  * @version $Id$
  */
-package com.propertyvista.portal.resident.ui;
+package com.propertyvista.portal.resident.ui.movein;
 
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.Window;
@@ -21,7 +21,7 @@ import com.pyx4j.gwt.commons.layout.LayoutChangeRequestEvent.ChangeType;
 import com.pyx4j.gwt.commons.layout.LayoutType;
 import com.pyx4j.site.client.AppSite;
 
-import com.propertyvista.portal.resident.ui.WizardStepItem.StepStatus;
+import com.propertyvista.portal.rpc.portal.resident.services.movein.MoveinWizardStep;
 import com.propertyvista.portal.shared.ui.MenuList;
 
 public class WizardStepList extends MenuList<WizardStepItem> {
@@ -30,8 +30,8 @@ public class WizardStepList extends MenuList<WizardStepItem> {
 
     }
 
-    public void addStepItem(String stepTitle, final int stepIndex, StepStatus stepStatus) {
-        WizardStepItem menuItem = new WizardStepItem(stepTitle, new Command() {
+    public void addStepItem(MoveinWizardStep step, final int stepIndex) {
+        WizardStepItem menuItem = new WizardStepItem(step, new Command() {
             @Override
             public void execute() {
                 System.out.println("++++++++++++++++++++++execute");
@@ -41,7 +41,7 @@ public class WizardStepList extends MenuList<WizardStepItem> {
                 }
 
             }
-        }, stepIndex, stepStatus);
+        }, stepIndex);
         addMenuItem(menuItem);
     }
 

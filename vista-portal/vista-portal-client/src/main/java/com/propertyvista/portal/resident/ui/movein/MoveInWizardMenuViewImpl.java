@@ -13,6 +13,8 @@
  */
 package com.propertyvista.portal.resident.ui.movein;
 
+import java.util.Collection;
+
 import com.google.gwt.dom.client.Style.Display;
 import com.google.gwt.dom.client.Style.Position;
 import com.google.gwt.user.client.Window;
@@ -29,11 +31,10 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.rpc.AppPlace;
 
-import com.propertyvista.portal.resident.ui.WizardStepItem;
-import com.propertyvista.portal.resident.ui.WizardStepList;
-import com.propertyvista.portal.resident.ui.WizardStepItem.StepStatus;
+import com.propertyvista.portal.resident.ui.movein.WizardStepItem.StepStatus;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
 import com.propertyvista.portal.rpc.portal.resident.ResidentPortalSiteMap;
+import com.propertyvista.portal.rpc.portal.resident.services.movein.MoveinWizardStep;
 import com.propertyvista.portal.shared.resources.PortalImages;
 import com.propertyvista.portal.shared.themes.PortalRootPaneTheme;
 import com.propertyvista.portal.shared.ui.AppPlaceMenuItem;
@@ -66,13 +67,9 @@ public class MoveInWizardMenuViewImpl extends DockPanel implements MoveInWizardM
         add(footerHolder, DockPanel.SOUTH);
         setCellHeight(footerHolder, "1px");
 
-        mainHolder.addMenuItem(new WizardStepItem(i18n.tr("Lease Signing"), null, 0, StepStatus.notComplete));
-
-        mainHolder.addMenuItem(new WizardStepItem(i18n.tr("PAP"), null, 1, StepStatus.notComplete));
-
-        mainHolder.addMenuItem(new WizardStepItem(i18n.tr("Insurance"), null, 2, StepStatus.notComplete));
-
-        mainHolder.addMenuItem(new WizardStepItem(i18n.tr("Profile Update"), null, 3, StepStatus.notComplete));
+        for (int i = 0; i < MoveinWizardStep.values().length; i++) {
+            mainHolder.addStepItem(MoveinWizardStep.values()[i], i);
+        }
 
         footerHolder.addMenuItem(new AppPlaceMenuItem(new ResidentPortalSiteMap.Profile(), PortalImages.INSTANCE.profileMenu(), ThemeColor.background));
         footerHolder.addMenuItem(new AppPlaceMenuItem(new ResidentPortalSiteMap.Account(), PortalImages.INSTANCE.accountMenu(), ThemeColor.background));
@@ -142,6 +139,19 @@ public class MoveInWizardMenuViewImpl extends DockPanel implements MoveInWizardM
     @Override
     public void setUserName(String userName) {
         headerHolder.setName(userName);
+    }
+
+    @Override
+    public void updateState(Collection<MoveinWizardStep> complete, MoveinWizardStep current) {
+        for (WizardStepItem step : mainHolder.getMenuItems()) {
+            if (step.getStepType().equals(current)) {
+                step.setStatus(StepStatus.current);
+            } else if (complete.contains(step.getStepType())) {
+                step.setStatus(StepStatus.complete);
+            } else {
+                step.setStatus(StepStatus.notComplete);
+            }
+        }
     }
 
     class HeaderHolder extends FlowPanel {

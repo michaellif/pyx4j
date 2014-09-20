@@ -13,10 +13,7 @@
  */
 package com.propertyvista.portal.resident.ui.movein;
 
-import com.google.gwt.dom.client.Style.Display;
-import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.client.Command;
-import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.Image;
 
@@ -28,7 +25,6 @@ import com.pyx4j.site.client.AppSite;
 import com.pyx4j.widgets.client.Button;
 
 import com.propertyvista.portal.rpc.portal.resident.ResidentPortalSiteMap;
-import com.propertyvista.portal.shared.resources.PortalImages;
 import com.propertyvista.portal.shared.ui.AbstractGadget;
 import com.propertyvista.portal.shared.ui.GadgetToolbar;
 
@@ -36,73 +32,36 @@ public class MoveInWizardCompletionConfirmationGadget extends AbstractGadget<Mov
 
     private static final I18n i18n = I18n.get(NewTenantWelcomeGadget.class);
 
-    private final Image buildingImage;
-
-    private final Image helpImage;
-
     public MoveInWizardCompletionConfirmationGadget(MoveInWizardCompletionConfirmationView view) {
-        super(view, null, i18n.tr("Move-In Wizard"), ThemeColor.contrast2, 1);
-        setActionsToolbar(new NewResidentWelcomeToolbar());
+        super(view, null, i18n.tr("Move-In Wizard Complete"), ThemeColor.contrast4, 1);
+        setActionsToolbar(new ActionsToolbar());
 
-        FlexTable welcomePanel = new FlexTable();
-        welcomePanel.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
-        welcomePanel.getElement().getStyle().setProperty("maxWidth", "500px");
-        welcomePanel.getElement().getStyle().setProperty("textAlign", "left");
-
-        buildingImage = new Image(PortalImages.INSTANCE.signUpBuilding());
-        buildingImage.getElement().getStyle().setPaddingRight(20, Unit.PX);
-        welcomePanel.setWidget(0, 0, buildingImage);
-
-        welcomePanel
-                .setWidget(
-                        0,
-                        1,
-                        new HTML(
-                                i18n.tr("<b>Congratulations You’ve been Approved!</b><p/><div style=text-align:left>Use this Move-In Wizard to ease your move-in experience . After a few simple steps you’ll be ready for your new home.</div>")));
-
-        helpImage = new Image(PortalImages.INSTANCE.signUpPersonal());
-        helpImage.getElement().getStyle().setPaddingRight(20, Unit.PX);
-        welcomePanel.setWidget(1, 0, helpImage);
-        welcomePanel
-                .setWidget(
-                        1,
-                        1,
-                        new HTML(
-                                i18n.tr("<b>We'll help you:</b><p/><ul style='margin: auto; text-align: left; display: inline-block;'><li>Sign your lease agreement</li><li>Purchase Tenant Insurance</li><li>Book your Move-In Day & Elevators</li><li>Set up Pre-Authorised Payments</li><li>Sign up for exclusive offers</li></ul>")));
-
-        setContent(welcomePanel);
+        setContent(new HTML("What next"));
     }
 
-    class NewResidentWelcomeToolbar extends GadgetToolbar {
+    class ActionsToolbar extends GadgetToolbar {
 
-        private final Button startButton;
+        public ActionsToolbar() {
 
-        public NewResidentWelcomeToolbar() {
-
-            startButton = new Button(i18n.tr("Let's Get Started!"), new Command() {
+            Button continueButton = new Button(i18n.tr("Continue to Portal"), new Command() {
                 @Override
                 public void execute() {
-                    AppSite.getPlaceController().goTo(new ResidentPortalSiteMap.LeaseSigning.LeaseSigningWizard());
+                    AppSite.getPlaceController().goTo(new ResidentPortalSiteMap.Financial.PreauthorizedPayments.NewPreauthorizedPayment());
                 }
             });
-            startButton.getElement().getStyle().setProperty("background", StyleManager.getPalette().getThemeColor(ThemeColor.contrast2, 1));
-            addItem(startButton);
+            continueButton.getElement().getStyle().setProperty("background", StyleManager.getPalette().getThemeColor(ThemeColor.contrast4, 1));
+            addItem(continueButton);
+
+            Button updateProfileButton = new Button(i18n.tr("Update Profile"), new Command() {
+                @Override
+                public void execute() {
+                    AppSite.getPlaceController().goTo(new ResidentPortalSiteMap.Financial.PreauthorizedPayments.NewPreauthorizedPayment());
+                }
+            });
+            updateProfileButton.getElement().getStyle().setProperty("background", StyleManager.getPalette().getThemeColor(ThemeColor.contrast4, 1));
+            addItem(updateProfileButton);
 
         }
     }
 
-    public void doLayout(LayoutType layoutType) {
-        switch (layoutType) {
-        case phonePortrait:
-        case phoneLandscape:
-            buildingImage.setVisible(false);
-            helpImage.setVisible(false);
-            break;
-
-        default:
-            buildingImage.setVisible(true);
-            helpImage.setVisible(true);
-            break;
-        }
-    }
 }

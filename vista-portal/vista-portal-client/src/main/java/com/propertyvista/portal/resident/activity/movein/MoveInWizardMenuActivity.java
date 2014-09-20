@@ -23,6 +23,7 @@ import com.pyx4j.gwt.commons.layout.LayoutChangeRequestEvent.ChangeType;
 import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.site.client.AppSite;
 
+import com.propertyvista.portal.resident.MoveInWizardManager;
 import com.propertyvista.portal.resident.ResidentPortalSite;
 import com.propertyvista.portal.resident.ui.movein.MoveInWizardMenuView;
 import com.propertyvista.portal.resident.ui.movein.MoveInWizardMenuView.MoveInWizardMenuPresenter;
@@ -44,6 +45,7 @@ public class MoveInWizardMenuActivity extends AbstractActivity implements MoveIn
     public void start(AcceptsOneWidget panel, EventBus eventBus) {
         panel.setWidget(view);
         view.setUserName(ClientContext.getUserVisit().getName());
+        view.updateState(MoveInWizardManager.getCompleteSteps(), MoveInWizardManager.getCurrentStep());
         view.setMenuVisible(!(place instanceof ResidentPortalSiteMap.MoveIn.NewGuarantorWelcomePage || place instanceof ResidentPortalSiteMap.MoveIn.NewTenantWelcomePage));
         AppSite.getEventBus().fireEvent(new LayoutChangeRequestEvent(ChangeType.resizeComponents));
     }

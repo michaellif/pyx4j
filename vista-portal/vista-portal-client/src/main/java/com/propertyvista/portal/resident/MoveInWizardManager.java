@@ -11,25 +11,29 @@
  * @author michaellif
  * @version $Id$
  */
-package com.propertyvista.portal.resident.activity.movein;
+package com.propertyvista.portal.resident;
 
 import java.util.ArrayList;
 import java.util.Collection;
 
+import com.propertyvista.portal.rpc.portal.resident.services.movein.MoveinWizardStep;
+
 public class MoveInWizardManager {
 
-    public enum MoveinWizardStep {
-        leaseSigning, pap, insurance, profile
+    private static Collection<MoveinWizardStep> completeSteps = new ArrayList<>();
+
+    static {
+        markStepComplete(MoveinWizardStep.leaseSigning);
+        markStepComplete(MoveinWizardStep.pap);
+        markStepComplete(MoveinWizardStep.insurance);
     }
 
-    private static Collection<MoveinWizardStep> completedSteps = new ArrayList<>();
-
     public static boolean isStepComplete(MoveinWizardStep step) {
-        return completedSteps.contains(step);
+        return completeSteps.contains(step);
     }
 
     public static void markStepComplete(MoveinWizardStep step) {
-        completedSteps.add(step);
+        completeSteps.add(step);
     }
 
     public static MoveinWizardStep getNextStep() {
@@ -38,6 +42,14 @@ public class MoveInWizardManager {
                 return step;
             }
         }
+        return null;
+    }
+
+    public static Collection<MoveinWizardStep> getCompleteSteps() {
+        return completeSteps;
+    }
+
+    public static MoveinWizardStep getCurrentStep() {
         return null;
     }
 }

@@ -18,6 +18,7 @@ import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
 import com.pyx4j.site.rpc.AppPlace;
 
+import com.propertyvista.portal.resident.MoveInWizardManager;
 import com.propertyvista.portal.resident.ResidentPortalSite;
 import com.propertyvista.portal.resident.ui.movein.MoveInWizardStepPreviewView;
 import com.propertyvista.portal.resident.ui.movein.MoveInWizardStepPreviewView.MoveInWizardStepPreviewPresenter;
@@ -35,6 +36,7 @@ public class MoveInWizardStepPreviewActivity extends SecurityAwareActivity imple
     public void start(AcceptsOneWidget panel, EventBus eventBus) {
         super.start(panel, eventBus);
         panel.setWidget(view);
+        view.setCurrentStep(MoveInWizardManager.getCurrentStep());
     }
 
 }

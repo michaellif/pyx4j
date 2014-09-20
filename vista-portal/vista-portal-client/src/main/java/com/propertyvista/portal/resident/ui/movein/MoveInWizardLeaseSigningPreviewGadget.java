@@ -18,7 +18,6 @@ import com.google.gwt.user.client.ui.HTML;
 
 import com.pyx4j.commons.css.StyleManager;
 import com.pyx4j.commons.css.ThemeColor;
-import com.pyx4j.gwt.commons.layout.LayoutType;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.widgets.client.Button;
@@ -56,14 +55,4 @@ public class MoveInWizardLeaseSigningPreviewGadget extends AbstractGadget<MoveIn
         }
     }
 
-    public void doLayout(LayoutType layoutType) {
-        switch (layoutType) {
-        case phonePortrait:
-        case phoneLandscape:
-            break;
-
-        default:
-            break;
-        }
-    }
 }

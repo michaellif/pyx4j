@@ -18,7 +18,6 @@ import com.google.gwt.user.client.ui.HTML;
 
 import com.pyx4j.commons.css.StyleManager;
 import com.pyx4j.commons.css.ThemeColor;
-import com.pyx4j.gwt.commons.layout.LayoutType;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.widgets.client.Button;
@@ -32,7 +31,7 @@ public class MoveInWizardInsurancePreviewGadget extends AbstractGadget<MoveInWiz
     private static final I18n i18n = I18n.get(NewTenantWelcomeGadget.class);
 
     public MoveInWizardInsurancePreviewGadget(MoveInWizardStepPreviewView view) {
-        super(view, null, i18n.tr("Get Insurane"), ThemeColor.contrast2, 1);
+        super(view, null, i18n.tr("Get Insurane"), ThemeColor.contrast3, 1);
         setActionsToolbar(new MoveInWizardLeaseSigningPreviewToolbar());
 
         setContent(new HTML("Insurane Explanantion"));
@@ -42,35 +41,27 @@ public class MoveInWizardInsurancePreviewGadget extends AbstractGadget<MoveInWiz
 
         public MoveInWizardLeaseSigningPreviewToolbar() {
 
+            Button skipButton = new Button(i18n.tr("Not now"), new Command() {
+                @Override
+                public void execute() {
+                    AppSite.getPlaceController().goTo(new ResidentPortalSiteMap.LeaseSigning.LeaseSigningWizard());
+                }
+            });
+            skipButton.getElement().getStyle().setProperty("color", StyleManager.getPalette().getThemeColor(ThemeColor.foreground, 0.7));
+            skipButton.getElement().getStyle().setProperty("borderColor", StyleManager.getPalette().getThemeColor(ThemeColor.contrast3, 0.7));
+            skipButton.getElement().getStyle().setProperty("border", "1px solid");
+            addItem(skipButton);
+
             Button continueButton = new Button(i18n.tr("Buy Insurane"), new Command() {
                 @Override
                 public void execute() {
-                    AppSite.getPlaceController().goTo(new ResidentPortalSiteMap.LeaseSigning.LeaseSigningWizard());
+                    AppSite.getPlaceController().goTo(new ResidentPortalSiteMap.ResidentServices.TenantInsurance.TenantSure.TenantSureWizard());
                 }
             });
-            continueButton.getElement().getStyle().setProperty("background", StyleManager.getPalette().getThemeColor(ThemeColor.contrast2, 1));
+            continueButton.getElement().getStyle().setProperty("background", StyleManager.getPalette().getThemeColor(ThemeColor.contrast3, 1));
             addItem(continueButton);
 
-            Button skipButton = new Button(i18n.tr("I will do it later"), new Command() {
-                @Override
-                public void execute() {
-                    AppSite.getPlaceController().goTo(new ResidentPortalSiteMap.LeaseSigning.LeaseSigningWizard());
-                }
-            });
-            skipButton.getElement().getStyle().setProperty("background", StyleManager.getPalette().getThemeColor(ThemeColor.contrast2, 0.7));
-            addItem(skipButton);
-
         }
     }
 
-    public void doLayout(LayoutType layoutType) {
-        switch (layoutType) {
-        case phonePortrait:
-        case phoneLandscape:
-            break;
-
-        default:
-            break;
-        }
-    }
 }

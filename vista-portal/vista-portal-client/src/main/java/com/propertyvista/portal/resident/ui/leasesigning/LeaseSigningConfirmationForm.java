@@ -43,7 +43,7 @@ public class LeaseSigningConfirmationForm extends CPortalEntityForm<LeaseAgreeme
             public void execute() {
                 AppSite.getPlaceController().goTo(AppPlace.NOWHERE);
             }
-        }), ThemeColor.contrast4);
+        }), ThemeColor.contrast2);
     }
 
     @Override
