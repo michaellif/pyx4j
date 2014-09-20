@@ -42,11 +42,11 @@ import com.propertyvista.portal.resident.activity.financial.payment.PaymentWizar
 import com.propertyvista.portal.resident.activity.financial.paymentmethod.PaymentMethodConfirmationActivity;
 import com.propertyvista.portal.resident.activity.financial.paymentmethod.PaymentMethodViewActivity;
 import com.propertyvista.portal.resident.activity.financial.paymentmethod.PaymentMethodWizardActivity;
+import com.propertyvista.portal.resident.activity.leasesigning.LeaseSigningConfirmationActivity;
+import com.propertyvista.portal.resident.activity.leasesigning.LeaseSigningWizardActivity;
 import com.propertyvista.portal.resident.activity.maintenance.MaintenanceDashboardActivity;
 import com.propertyvista.portal.resident.activity.maintenance.MaintenanceRequestPageActivity;
 import com.propertyvista.portal.resident.activity.maintenance.MaintenanceRequestWizardActivity;
-import com.propertyvista.portal.resident.activity.movein.LeaseSigningConfirmationActivity;
-import com.propertyvista.portal.resident.activity.movein.LeaseSigningWizardActivity;
 import com.propertyvista.portal.resident.activity.movein.NewGuarantorWelcomePageActivity;
 import com.propertyvista.portal.resident.activity.movein.NewTenantWelcomePageActivity;
 import com.propertyvista.portal.resident.activity.offers.dashboard.OffersDashboardActivity;

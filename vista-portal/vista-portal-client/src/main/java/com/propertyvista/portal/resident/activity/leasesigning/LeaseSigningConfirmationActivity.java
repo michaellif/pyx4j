@@ -11,7 +11,7 @@
  * @author VladL
  * @version $Id$
  */
-package com.propertyvista.portal.resident.activity.movein;
+package com.propertyvista.portal.resident.activity.leasesigning;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.shared.EventBus;

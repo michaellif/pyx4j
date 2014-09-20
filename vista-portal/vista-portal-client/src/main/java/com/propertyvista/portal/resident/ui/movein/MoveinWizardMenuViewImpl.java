@@ -11,7 +11,7 @@
  * @author Misha
  * @version $Id$
  */
-package com.propertyvista.portal.resident.ui;
+package com.propertyvista.portal.resident.ui.movein;
 
 import com.google.gwt.dom.client.Style.Display;
 import com.google.gwt.dom.client.Style.Position;
@@ -29,6 +29,8 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.rpc.AppPlace;
 
+import com.propertyvista.portal.resident.ui.WizardStepItem;
+import com.propertyvista.portal.resident.ui.WizardStepList;
 import com.propertyvista.portal.resident.ui.WizardStepItem.StepStatus;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
 import com.propertyvista.portal.rpc.portal.resident.ResidentPortalSiteMap;
@@ -38,9 +40,9 @@ import com.propertyvista.portal.shared.ui.AppPlaceMenuItem;
 import com.propertyvista.portal.shared.ui.MenuItem;
 import com.propertyvista.portal.shared.ui.MenuList;
 
-public class WelcomeWizardMenuViewImpl extends DockPanel implements WelcomeWizardMenuView {
+public class MoveinWizardMenuViewImpl extends DockPanel implements MoveinWizardMenuView {
 
-    private static final I18n i18n = I18n.get(WelcomeWizardMenuViewImpl.class);
+    private static final I18n i18n = I18n.get(MoveinWizardMenuViewImpl.class);
 
     private final HeaderHolder headerHolder;
 
@@ -50,7 +52,7 @@ public class WelcomeWizardMenuViewImpl extends DockPanel implements WelcomeWizar
 
     private boolean mainMenuVisible = true;
 
-    public WelcomeWizardMenuViewImpl() {
+    public MoveinWizardMenuViewImpl() {
         setStyleName(PortalRootPaneTheme.StyleName.MainMenu.name());
 
         headerHolder = new HeaderHolder();
@@ -96,7 +98,7 @@ public class WelcomeWizardMenuViewImpl extends DockPanel implements WelcomeWizar
     }
 
     @Override
-    public void setPresenter(WelcomeWizardMenuPresenter presenter) {
+    public void setPresenter(MoveinWizardMenuPresenter presenter) {
         AppPlace currentPlace = AppSite.getPlaceController().getWhere();
         for (MenuItem<?> item : mainHolder.getMenuItems()) {
             if (item instanceof AppPlaceMenuItem) {

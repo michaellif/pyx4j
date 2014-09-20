@@ -11,7 +11,7 @@
  * @author Misha
  * @version $Id$
  */
-package com.propertyvista.portal.resident.activity;
+package com.propertyvista.portal.resident.activity.movein;
 
 import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.event.shared.EventBus;
@@ -24,19 +24,19 @@ import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.site.client.AppSite;
 
 import com.propertyvista.portal.resident.ResidentPortalSite;
-import com.propertyvista.portal.resident.ui.WelcomeWizardMenuView;
-import com.propertyvista.portal.resident.ui.WelcomeWizardMenuView.WelcomeWizardMenuPresenter;
+import com.propertyvista.portal.resident.ui.movein.MoveinWizardMenuView;
+import com.propertyvista.portal.resident.ui.movein.MoveinWizardMenuView.MoveinWizardMenuPresenter;
 import com.propertyvista.portal.rpc.portal.resident.ResidentPortalSiteMap;
 
-public class WelcomeWizardMenuActivity extends AbstractActivity implements WelcomeWizardMenuPresenter {
+public class MoveinWizardMenuActivity extends AbstractActivity implements MoveinWizardMenuPresenter {
 
-    private final WelcomeWizardMenuView view;
+    private final MoveinWizardMenuView view;
 
     private final Place place;
 
-    public WelcomeWizardMenuActivity(Place place) {
+    public MoveinWizardMenuActivity(Place place) {
         this.place = place;
-        this.view = ResidentPortalSite.getViewFactory().getView(WelcomeWizardMenuView.class);
+        this.view = ResidentPortalSite.getViewFactory().getView(MoveinWizardMenuView.class);
         view.setPresenter(this);
     }
 
