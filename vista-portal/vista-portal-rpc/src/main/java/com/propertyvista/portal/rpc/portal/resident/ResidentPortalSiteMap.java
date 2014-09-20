@@ -179,6 +179,18 @@ public class ResidentPortalSiteMap extends PortalSiteMap {
         }
     }
 
+    public static class LeaseSigning extends AppPlace {
+
+        public static class LeaseSigningWizard extends AppPlace {
+        }
+
+        public static class LeaseSigningWizardConfirmation extends AppPlace {
+            {
+                setStable(false);
+            }
+        }
+    }
+
     public static class MoveIn extends AppPlace {
 
         public static class NewTenantWelcomePage extends AppPlace {
@@ -187,14 +199,6 @@ public class ResidentPortalSiteMap extends PortalSiteMap {
         public static class NewGuarantorWelcomePage extends AppPlace {
         }
 
-        public static class MoveInWizard extends AppPlace {
-        }
-
-        public static class MoveInWizardConfirmation extends AppPlace {
-            {
-                setStable(false);
-            }
-        }
     }
 
     @PlaceProperties(navigLabel = "Perks")

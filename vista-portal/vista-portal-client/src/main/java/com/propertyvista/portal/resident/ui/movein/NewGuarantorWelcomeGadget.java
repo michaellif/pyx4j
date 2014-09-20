@@ -70,7 +70,7 @@ public class NewGuarantorWelcomeGadget extends AbstractGadget<NewGuarantorWelcom
             startButton = new Button(i18n.tr("Sign Lease Agreement"), new Command() {
                 @Override
                 public void execute() {
-                    AppSite.getPlaceController().goTo(new ResidentPortalSiteMap.MoveIn.MoveInWizard());
+                    AppSite.getPlaceController().goTo(new ResidentPortalSiteMap.LeaseSigning.LeaseSigningWizard());
                 }
             });
             startButton.getElement().getStyle().setProperty("background", StyleManager.getPalette().getThemeColor(ThemeColor.contrast2, 1));

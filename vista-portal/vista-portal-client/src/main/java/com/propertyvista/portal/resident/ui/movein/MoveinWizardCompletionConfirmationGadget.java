@@ -82,7 +82,7 @@ public class MoveinWizardCompletionConfirmationGadget extends AbstractGadget<Mov
             startButton = new Button(i18n.tr("Let's Get Started!"), new Command() {
                 @Override
                 public void execute() {
-                    AppSite.getPlaceController().goTo(new ResidentPortalSiteMap.MoveIn.MoveInWizard());
+                    AppSite.getPlaceController().goTo(new ResidentPortalSiteMap.LeaseSigning.LeaseSigningWizard());
                 }
             });
             startButton.getElement().getStyle().setProperty("background", StyleManager.getPalette().getThemeColor(ThemeColor.contrast2, 1));

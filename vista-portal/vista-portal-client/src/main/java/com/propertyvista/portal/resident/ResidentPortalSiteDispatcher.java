@@ -61,7 +61,8 @@ public class ResidentPortalSiteDispatcher extends AbstractAppPlaceDispatcher {
         } else if (SecurityController.check(PortalResidentBehavior.LeaseSelectionRequired)) {
             return new ResidentPortalSiteMap.LeaseContextSelection();
         } else if (SecurityController.check(PortalResidentBehavior.LeaseAgreementSigningRequired)) {
-            if ((newPlace instanceof ResidentPortalSiteMap.MoveIn.MoveInWizard) || (newPlace instanceof ResidentPortalSiteMap.MoveIn.MoveInWizardConfirmation)) {
+            if ((newPlace instanceof ResidentPortalSiteMap.LeaseSigning.LeaseSigningWizard)
+                    || (newPlace instanceof ResidentPortalSiteMap.LeaseSigning.LeaseSigningWizardConfirmation)) {
                 return newPlace;
             }
             if (!(newPlace instanceof ResidentPortalSiteMap.MoveIn.NewTenantWelcomePage

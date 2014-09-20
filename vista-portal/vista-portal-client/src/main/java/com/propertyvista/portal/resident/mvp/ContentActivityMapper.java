@@ -169,9 +169,9 @@ public class ContentActivityMapper implements AppActivityMapper {
                         activity = new NewTenantWelcomePageActivity(appPlace);
                     } else if (place instanceof ResidentPortalSiteMap.MoveIn.NewGuarantorWelcomePage) {
                         activity = new NewGuarantorWelcomePageActivity(appPlace);
-                    } else if (place instanceof ResidentPortalSiteMap.MoveIn.MoveInWizard) {
+                    } else if (place instanceof ResidentPortalSiteMap.LeaseSigning.LeaseSigningWizard) {
                         activity = new LeaseSigningWizardActivity(appPlace);
-                    } else if (place instanceof ResidentPortalSiteMap.MoveIn.MoveInWizardConfirmation) {
+                    } else if (place instanceof ResidentPortalSiteMap.LeaseSigning.LeaseSigningWizardConfirmation) {
                         activity = new LeaseSigningConfirmationActivity(appPlace);
 // Communication
                     } else if (place instanceof ResidentPortalSiteMap.Message.MessageWizard) {

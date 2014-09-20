@@ -34,6 +34,6 @@ public class LeaseSigningWizardActivity extends AbstractWizardCrudActivity<Lease
 
     @Override
     protected void onFinish(Key result) {
-        AppSite.getPlaceController().goTo(new ResidentPortalSiteMap.MoveIn.MoveInWizardConfirmation());
+        AppSite.getPlaceController().goTo(new ResidentPortalSiteMap.LeaseSigning.LeaseSigningWizardConfirmation());
     }
 }

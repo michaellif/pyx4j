@@ -44,7 +44,7 @@ public class MoveinWizardMenuActivity extends AbstractActivity implements Movein
     public void start(AcceptsOneWidget panel, EventBus eventBus) {
         panel.setWidget(view);
         view.setUserName(ClientContext.getUserVisit().getName());
-        view.setMenuVisible(place instanceof ResidentPortalSiteMap.MoveIn.MoveInWizard);
+        view.setMenuVisible(place instanceof ResidentPortalSiteMap.LeaseSigning.LeaseSigningWizard);
         AppSite.getEventBus().fireEvent(new LayoutChangeRequestEvent(ChangeType.resizeComponents));
     }
 
