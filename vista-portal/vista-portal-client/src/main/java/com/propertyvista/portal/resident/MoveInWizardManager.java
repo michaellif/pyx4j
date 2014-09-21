@@ -23,9 +23,9 @@ public class MoveInWizardManager {
     private static Collection<MoveinWizardStep> completeSteps = new ArrayList<>();
 
     static {
-        markStepComplete(MoveinWizardStep.leaseSigning);
-        markStepComplete(MoveinWizardStep.pap);
-        markStepComplete(MoveinWizardStep.insurance);
+//        markStepComplete(MoveinWizardStep.leaseSigning);
+//        markStepComplete(MoveinWizardStep.pap);
+//        markStepComplete(MoveinWizardStep.insurance);
     }
 
     public static boolean isStepComplete(MoveinWizardStep step) {
@@ -50,6 +50,6 @@ public class MoveInWizardManager {
     }
 
     public static MoveinWizardStep getCurrentStep() {
-        return null;
+        return MoveinWizardStep.pap;
     }
 }

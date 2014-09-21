@@ -22,6 +22,7 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.widgets.client.Button;
 
+import com.propertyvista.portal.resident.themes.MoveInWizardTheme;
 import com.propertyvista.portal.rpc.portal.resident.ResidentPortalSiteMap;
 import com.propertyvista.portal.shared.ui.AbstractGadget;
 import com.propertyvista.portal.shared.ui.GadgetToolbar;
@@ -41,17 +42,6 @@ public class MoveInWizardPapPreviewGadget extends AbstractGadget<MoveInWizardSte
 
         public ActionsToolbar() {
 
-            Button skipButton = new Button(i18n.tr("Not now"), new Command() {
-                @Override
-                public void execute() {
-                    AppSite.getPlaceController().goTo(new ResidentPortalSiteMap.LeaseSigning.LeaseSigningWizard());
-                }
-            });
-            skipButton.getElement().getStyle().setProperty("color", StyleManager.getPalette().getThemeColor(ThemeColor.foreground, 0.7));
-            skipButton.getElement().getStyle().setProperty("borderColor", StyleManager.getPalette().getThemeColor(ThemeColor.contrast3, 0.7));
-            skipButton.getElement().getStyle().setProperty("border", "1px solid");
-            addItem(skipButton);
-
             Button continueButton = new Button(i18n.tr("Setup Pre-authorised Payment"), new Command() {
                 @Override
                 public void execute() {
@@ -60,6 +50,15 @@ public class MoveInWizardPapPreviewGadget extends AbstractGadget<MoveInWizardSte
             });
             continueButton.getElement().getStyle().setProperty("background", StyleManager.getPalette().getThemeColor(ThemeColor.contrast4, 1));
             addItem(continueButton);
+
+            Button skipButton = new Button(i18n.tr("Do it later"), new Command() {
+                @Override
+                public void execute() {
+                    AppSite.getPlaceController().goTo(new ResidentPortalSiteMap.LeaseSigning.LeaseSigningWizard());
+                }
+            });
+            skipButton.addStyleName(MoveInWizardTheme.StyleName.DoItLaterButton.name());
+            addItem(skipButton);
 
         }
     }

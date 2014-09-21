@@ -29,6 +29,7 @@ public class ResidentPortalTheme extends PortalTheme {
         addTheme(new ExtraGadgetsTheme());
         addTheme(new PortalRootPaneTheme());
         addTheme(new CommunicationTheme());
+        addTheme(new MoveInWizardTheme());
 
     }
 
