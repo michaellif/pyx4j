@@ -45,7 +45,7 @@ public class PortalRootPaneTheme extends Theme {
     }
 
     public static enum StyleDependent implements IStyleDependent {
-        hover, active, sideMenu, collapsedMenu, sideComm, error, warning, info, confirm, alertOn, animationPaused
+        hover, active, sideMenu, collapsedMenu, sideComm, error, disabled, warning, info, confirm, alertOn, animationPaused
     }
 
     public PortalRootPaneTheme() {
@@ -122,6 +122,7 @@ public class PortalRootPaneTheme extends Theme {
         style.addProperty("border-width", "1px");
         style.addProperty("border-bottom-width", "0px");
         style.addProperty("position", "relative");
+        style.addProperty("cursor", "pointer");
         addStyle(style);
 
         style = new Style(".", StyleName.MainMenuNavigItem, ":first-child");
@@ -137,8 +138,16 @@ public class PortalRootPaneTheme extends Theme {
         style.addProperty("color", ThemeColor.foreground, 0.01);
         addStyle(style);
 
+        style = new Style(".", StyleName.MainMenuNavigItem, "-", StyleDependent.disabled);
+        style.addProperty("cursor", "default");
+        addStyle(style);
+
         style = new Style(".", StyleName.MainMenuNavigItem, ":hover");
         style.addProperty("background", ThemeColor.foreground, 0.1);
+        addStyle(style);
+
+        style = new Style(".", StyleName.MainMenuNavigItem, "-", StyleDependent.disabled, ":hover");
+        style.addProperty("background", ThemeColor.foreground, 0.01);
         addStyle(style);
 
         style = new Style(".", StyleName.MainMenuLabel);

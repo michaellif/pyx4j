@@ -14,7 +14,6 @@
 package com.propertyvista.portal.shared.ui;
 
 import com.google.gwt.dom.client.Document;
-import com.google.gwt.dom.client.Style.Cursor;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.Command;
@@ -37,6 +36,8 @@ public class MenuItem<ICON extends IsWidget> extends ComplexPanel {
 
     private boolean selected;
 
+    private boolean enabled = true;
+
     private final String color;
 
     public MenuItem(String caption, final Command command, ICON icon, ThemeColor color) {
@@ -44,12 +45,13 @@ public class MenuItem<ICON extends IsWidget> extends ComplexPanel {
         setElement(Document.get().createElement("li"));
         setStyleName(PortalRootPaneTheme.StyleName.MainMenuNavigItem.name());
         sinkEvents(Event.ONCLICK);
-        getElement().getStyle().setCursor(Cursor.POINTER);
 
         addDomHandler(new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
-                command.execute();
+                if (enabled) {
+                    command.execute();
+                }
             }
         }, ClickEvent.getType());
 
@@ -85,12 +87,25 @@ public class MenuItem<ICON extends IsWidget> extends ComplexPanel {
         }
     }
 
-    public Label getLabel() {
-        return label;
-    }
-
     public boolean isSelected() {
         return selected;
+    }
+
+    public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
+        if (enabled) {
+            removeStyleDependentName(PortalRootPaneTheme.StyleDependent.disabled.name());
+        } else {
+            addStyleDependentName(PortalRootPaneTheme.StyleDependent.disabled.name());
+        }
+    }
+
+    public boolean isEnabled() {
+        return enabled;
+    }
+
+    public Label getLabel() {
+        return label;
     }
 
     @Override
