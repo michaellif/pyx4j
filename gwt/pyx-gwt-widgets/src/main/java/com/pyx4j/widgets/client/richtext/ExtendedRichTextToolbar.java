@@ -30,8 +30,11 @@ import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Composite;
+import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
+import com.google.gwt.user.client.ui.HasHorizontalAlignment;
+import com.google.gwt.user.client.ui.HasVerticalAlignment;
 
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.Button;
@@ -247,7 +250,9 @@ public class ExtendedRichTextToolbar extends Composite {
         this.richText = richText;
         this.formatter = richText.getFormatter();
 
-        toolBar.add(buttonBarTop);
+        FlexTable topMultiBar = new FlexTable();
+        topMultiBar.setWidget(0, 0, buttonBarTop);
+        toolBar.add(topMultiBar);
         toolBar.add(buttonBarFormat);
         toolBar.add(buttonBarFont);
         toolBar.add(buttonBarInsert);
@@ -266,7 +271,7 @@ public class ExtendedRichTextToolbar extends Composite {
 
         createInsertMenu();
 
-        createTextHtmlSwitch(richText);
+        createTextHtmlSwitch(topMultiBar, richText);
         customButton.setVisible(false);
         customButton.addBlurHandler(handler);
         customButton.addClickHandler(handler);
@@ -280,7 +285,7 @@ public class ExtendedRichTextToolbar extends Composite {
         inOperation = false;
     }
 
-    private void createTextHtmlSwitch(final RichTextArea richText) {
+    private void createTextHtmlSwitch(FlexTable topMultiBar, final RichTextArea richText) {
         textHtmlSwitch.setTitle("Toggle HTML or Text mode");
         textHtmlSwitch.addClickHandler(new ClickHandler() {
             @Override
@@ -313,7 +318,9 @@ public class ExtendedRichTextToolbar extends Composite {
                 richText.fireEvent(event);
             }
         });
-        buttonBarTop.add(textHtmlSwitch);
+        topMultiBar.setSize("100%", "100%");
+        topMultiBar.getFlexCellFormatter().setAlignment(0, 1, HasHorizontalAlignment.ALIGN_RIGHT, HasVerticalAlignment.ALIGN_MIDDLE);
+        topMultiBar.setWidget(0, 1, textHtmlSwitch);
     }
 
     private void createInsertMenu() {
