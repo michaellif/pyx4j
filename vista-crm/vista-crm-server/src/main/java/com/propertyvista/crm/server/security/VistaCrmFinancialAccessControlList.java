@@ -13,7 +13,9 @@
  */
 package com.propertyvista.crm.server.security;
 
+import static com.propertyvista.domain.security.VistaCrmBehavior.FinancialAdvanced;
 import static com.propertyvista.domain.security.VistaCrmBehavior.FinancialAggregatedTransfer;
+import static com.propertyvista.domain.security.VistaCrmBehavior.FinancialBasic;
 import static com.propertyvista.domain.security.VistaCrmBehavior.FinancialFull;
 import static com.propertyvista.domain.security.VistaCrmBehavior.FinancialMoneyIN;
 import static com.propertyvista.domain.security.VistaCrmBehavior.FinancialPayments;
@@ -53,7 +55,6 @@ import com.propertyvista.domain.financial.BuildingMerchantAccount;
 import com.propertyvista.domain.financial.EftAggregatedTransfer;
 import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.domain.property.asset.building.BuildingFinancial;
-import com.propertyvista.domain.security.VistaCrmBehavior;
 import com.propertyvista.domain.tenant.lease.LeaseAdjustment;
 import com.propertyvista.dto.BillDTO;
 import com.propertyvista.dto.DepositLifecycleDTO;
@@ -86,6 +87,14 @@ class VistaCrmFinancialAccessControlList extends UIAclBuilder {
         grant(FinancialAggregatedTransfer, new IServiceExecutePermission(PaymentRecordListService.class));
         grant(FinancialAggregatedTransfer, new IServiceExecutePermission(AggregatedTransferDownloadService.class));
 
+        // ------ Financial: Basic
+
+        grant(FinancialBasic, PreauthorizedPaymentDTO.class, READ);
+        grant(FinancialBasic, PreauthorizedPaymentsDTO.class, READ);
+
+        grant(FinancialBasic, PaymentRecordDTO.class, READ);
+        grant(FinancialBasic, new IServiceExecutePermission(PaymentRecordListService.class));
+
         // ------ Financial: Payments
 
         grant(FinancialPayments, LeasePaymentMethod.class, READ);
@@ -109,10 +118,17 @@ class VistaCrmFinancialAccessControlList extends UIAclBuilder {
 
         grant(FinancialPayments, TenantFinancialDTO.class, READ);
 
+        // ------ Financial: Advanced
+
+        grant(FinancialAdvanced, FinancialPayments);
+
+        grant(FinancialPayments, LeasePaymentMethod.class, ALL);
+        grant(FinancialPayments, PreauthorizedPaymentDTO.class, ALL);
+
         // ------ Financial: Full
-        grant(FinancialFull, VistaCrmBehavior.FinancialMoneyIN);
-        grant(FinancialFull, VistaCrmBehavior.FinancialAggregatedTransfer);
-        grant(FinancialFull, VistaCrmBehavior.FinancialPayments);
+        grant(FinancialFull, FinancialMoneyIN);
+        grant(FinancialFull, FinancialAggregatedTransfer);
+        grant(FinancialFull, FinancialPayments);
 
         grant(FinancialFull, BuildingFinancial.class, READ);
         grant(FinancialFull, BillingCycleDTO.class, READ);

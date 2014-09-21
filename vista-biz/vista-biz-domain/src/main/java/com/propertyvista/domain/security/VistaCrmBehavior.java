@@ -79,7 +79,9 @@ public enum VistaCrmBehavior implements Behavior {
 
     // --
 
-    FinancialMoneyIN, FinancialAggregatedTransfer, FinancialPayments, FinancialFull,
+    FinancialMoneyIN, FinancialAggregatedTransfer,
+
+    FinancialBasic, FinancialPayments, FinancialAdvanced, FinancialFull,
 
     // --
 
