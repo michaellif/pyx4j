@@ -20,13 +20,20 @@ public class CommunicationEndpointSelectorAddDialog extends Dialog implements Ok
 
     private final SelectRecipientsDialogForm selectForm;
 
-    public CommunicationEndpointSelectorAddDialog() {
+    private final CommunicationEndpointSelector parent;
+
+    public CommunicationEndpointSelectorAddDialog(CommunicationEndpointSelector parent) {
         super("Select recipients");
         this.setDialogOptions(this);
-
+        this.parent = parent;
         selectForm = new SelectRecipientsDialogForm();
         setDialogPixelWidth(1000);
         setBody(selectForm);
+
+    }
+
+    public CommunicationEndpointSelectorAddDialog() {
+        this(null);
 
     }
 

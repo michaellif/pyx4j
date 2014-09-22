@@ -25,8 +25,6 @@ import com.pyx4j.entity.core.criterion.EntityListCriteria;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria.VersionedCriteria;
 import com.pyx4j.forms.client.ui.CRadioGroupEnum;
-import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
-import com.pyx4j.forms.client.ui.datatable.DataTableModel;
 import com.pyx4j.site.client.backoffice.activity.EntitySelectorTableVisorController.VersionDisplayMode;
 import com.pyx4j.site.client.backoffice.ui.prime.lister.AbstractLister;
 import com.pyx4j.widgets.client.RadioGroup.Layout;
@@ -54,13 +52,6 @@ public class EntityLister<E extends IEntity> extends AbstractLister<E> {
             getDataTablePanel().addUpperActionItem(displayModeButton.asWidget());
         }
 
-    }
-
-    public void setDataTableModel(ColumnDescriptor... model) {
-        DataTableModel<E> dataTableModel = new DataTableModel<E>(model);
-        dataTableModel.setPageSize(PAGESIZE_SMALL);
-        dataTableModel.setMultipleSelection(true);
-        setDataTableModel(dataTableModel);
     }
 
     public VersionDisplayMode getVersionDisplayMode() {

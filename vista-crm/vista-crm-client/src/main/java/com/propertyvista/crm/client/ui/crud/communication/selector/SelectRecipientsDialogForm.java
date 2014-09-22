@@ -20,6 +20,9 @@
  */
 package com.propertyvista.crm.client.ui.crud.communication.selector;
 
+import java.util.ArrayList;
+import java.util.Collection;
+
 import com.google.gwt.dom.client.Style.Display;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
@@ -29,6 +32,11 @@ import com.google.gwt.user.client.ui.SimplePanel;
 
 import com.pyx4j.site.client.backoffice.ui.prime.lister.ILister;
 import com.pyx4j.widgets.client.Label;
+
+import com.propertyvista.domain.company.Employee;
+import com.propertyvista.domain.company.Portfolio;
+import com.propertyvista.domain.property.asset.building.Building;
+import com.propertyvista.domain.tenant.lease.Tenant;
 
 public class SelectRecipientsDialogForm extends FlowPanel {
 
@@ -40,17 +48,26 @@ public class SelectRecipientsDialogForm extends FlowPanel {
 
     private ILister lister;
 
-    private TenantListerController tenantListerController;
+    private SelectorDialogTenantListerController tenantListerController;
 
-    private CorporateListerController corporateListerController;
+    private SelectorDialogCorporateListerController corporateListerController;
 
-    private BuildingListerController buildingListerController;
+    private SelectorDialogBuildingListerController buildingListerController;
 
-    private PortfolioListerController portfolioListerController;
+    private SelectorDialogPortfolioListerController portfolioListerController;
+
+    private Collection<Tenant> selectedTenants;
+
+    private Collection<Employee> selectedEmployees;
+
+    private Collection<Building> selectedBuildings;
+
+    private Collection<Portfolio> selectedPortfolios;
 
     public SelectRecipientsDialogForm() {
         super();
         initForm();
+
     }
 
     private void initForm() {
@@ -68,8 +85,9 @@ public class SelectRecipientsDialogForm extends FlowPanel {
             @Override
             public void onClick(ClickEvent event) {
                 event.stopPropagation();
-                lister = new TenantLister(false);
-                tenantListerController = new TenantListerController(lister, ((TenantLister) lister).getSelectService());
+                grabSelectedItems();
+                lister = new SelectorDialogTenantLister(false, selectedTenants);
+                tenantListerController = new SelectorDialogTenantListerController(lister, ((SelectorDialogTenantLister) lister).getSelectService());
                 sp.clear();
                 sp.add(lister.asWidget());
             }
@@ -80,8 +98,9 @@ public class SelectRecipientsDialogForm extends FlowPanel {
             @Override
             public void onClick(ClickEvent event) {
                 event.stopPropagation();
-                lister = new CorporateLister(false);
-                corporateListerController = new CorporateListerController(lister, ((CorporateLister) lister).getSelectService());
+                grabSelectedItems();
+                lister = new SelectorDialogCorporateLister(false);
+                corporateListerController = new SelectorDialogCorporateListerController(lister, ((SelectorDialogCorporateLister) lister).getSelectService());
                 sp.clear();
                 sp.add(lister.asWidget());
             }
@@ -92,8 +111,9 @@ public class SelectRecipientsDialogForm extends FlowPanel {
             @Override
             public void onClick(ClickEvent event) {
                 event.stopPropagation();
-                lister = new BuildingLister(false);
-                buildingListerController = new BuildingListerController(lister, ((BuildingLister) lister).getSelectService());
+                grabSelectedItems();
+                lister = new SelectorDialogBuildingLister(false);
+                buildingListerController = new SelectorDialogBuildingListerController(lister, ((SelectorDialogBuildingLister) lister).getSelectService());
                 sp.clear();
                 sp.add(lister.asWidget());
             }
@@ -106,8 +126,9 @@ public class SelectRecipientsDialogForm extends FlowPanel {
             @Override
             public void onClick(ClickEvent event) {
                 event.stopPropagation();
-                lister = new PortfolioLister(false);
-                portfolioListerController = new PortfolioListerController(lister, ((PortfolioLister) lister).getSelectService());
+                grabSelectedItems();
+                lister = new SelectorDialogPortfolioLister(false);
+                portfolioListerController = new SelectorDialogPortfolioListerController(lister, ((SelectorDialogPortfolioLister) lister).getSelectService());
                 sp.clear();
                 sp.add(lister.asWidget());
             }
@@ -118,6 +139,23 @@ public class SelectRecipientsDialogForm extends FlowPanel {
         add(menuPanel);
         add(listPanel);
 
+    }
+
+    public void grabSelectedItems() {
+        if (null != lister) {
+            if (lister instanceof SelectorDialogTenantLister) {
+                selectedTenants = new ArrayList<Tenant>(((SelectorDialogTenantLister) lister).getSelectedItems());
+            }
+            if (lister instanceof SelectorDialogCorporateLister) {
+                selectedEmployees = new ArrayList<Employee>(((SelectorDialogCorporateLister) lister).getSelectedItems());
+            }
+            if (lister instanceof SelectorDialogBuildingLister) {
+                selectedBuildings = new ArrayList<Building>(((SelectorDialogBuildingLister) lister).getSelectedItems());
+            }
+            if (lister instanceof SelectorDialogPortfolioLister) {
+                selectedPortfolios = new ArrayList<Portfolio>(((SelectorDialogPortfolioLister) lister).getSelectedItems());
+            }
+        }
     }
 
 }

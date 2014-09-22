@@ -7,31 +7,79 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Sep 21, 2014
+ * Created on Sep 22, 2014
  * @author arminea
  * @version $Id$
  */
 package com.propertyvista.crm.client.ui.crud.communication.selector;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
+
+import com.google.gwt.core.client.GWT;
+
 import com.pyx4j.entity.core.EntityFactory;
+import com.pyx4j.entity.core.criterion.Criterion;
+import com.pyx4j.entity.core.criterion.PropertyCriterion;
 import com.pyx4j.entity.rpc.AbstractListCrudService;
 import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
+import com.pyx4j.forms.client.ui.datatable.DataTableModel;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
-import com.pyx4j.site.client.backoffice.activity.ListerController;
-import com.pyx4j.site.client.backoffice.ui.prime.lister.ILister;
+import com.pyx4j.site.client.backoffice.ui.prime.lister.ListerDataSource;
 
+import com.propertyvista.crm.rpc.services.selections.SelectBuildingListService;
 import com.propertyvista.domain.property.asset.building.Building;
 
-public class BuildingListerController extends ListerController<Building> {
+public class SelectorDialogBuildingLister extends EntityLister<Building> {
 
-    public BuildingListerController(ILister<Building> view, AbstractListCrudService<Building> service) {
-        super(Building.class, view, service);
-        ((EntityLister<Building>) view).setDataTableModel(defineColumnDescriptors());
-        this.populate();
+    public AbstractListCrudService<Building> selectService;
+
+    private final ListerDataSource<Building> dataSource;
+
+    private final Collection<Building> alreadySelected;
+
+    public SelectorDialogBuildingLister(boolean isVersioned) {
+        this(isVersioned, null);
     }
 
-    protected Building proto() {
-        return EntityFactory.getEntityPrototype(Building.class);
+    public SelectorDialogBuildingLister(boolean isVersioned, Collection<Building> alreadySelected) {
+        super(Building.class, isVersioned);
+        this.selectService = createSelectService();
+        setDataTableModel();
+        this.dataSource = new ListerDataSource<Building>(Building.class, this.selectService);
+        this.alreadySelected = (alreadySelected != null ? alreadySelected : Collections.<Building> emptyList());
+        setFilters(createRestrictionFilterForAlreadySelected());
+        setDataSource(dataSource);
+
+    }
+
+    protected AbstractListCrudService<Building> createSelectService() {
+        return GWT.<SelectBuildingListService> create(SelectBuildingListService.class);
+    }
+
+    public AbstractListCrudService<Building> getSelectService() {
+        return this.selectService;
+    }
+
+    public void setDataTableModel() {
+        DataTableModel<Building> dataTableModel = new DataTableModel<Building>(defineColumnDescriptors());
+        dataTableModel.setPageSize(PAGESIZE_SMALL);
+        dataTableModel.setMultipleSelection(true);
+        setDataTableModel(dataTableModel);
+    }
+
+    protected List<Criterion> createRestrictionFilterForAlreadySelected() {
+        List<Criterion> restrictAlreadySelected = new ArrayList<>(alreadySelected.size());
+
+        Building proto = EntityFactory.getEntityPrototype(Building.class);
+
+        for (Building entity : alreadySelected) {
+            restrictAlreadySelected.add(PropertyCriterion.ne(proto.id(), entity.getPrimaryKey()));
+        }
+
+        return restrictAlreadySelected;
     }
 
     protected ColumnDescriptor[] defineColumnDescriptors() {
@@ -70,5 +118,4 @@ public class BuildingListerController extends ListerController<Building> {
                 new MemberColumnDescriptor.Builder(proto().marketing().name(), false).title("Marketing Name").build()
         }; //@formatter:on
     }
-
 }
