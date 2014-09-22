@@ -101,8 +101,12 @@ public class ResponsiveLayoutTheme extends Theme {
         style.addProperty("background-color", ThemeColor.foreground, 0.1);
         addStyle(style);
 
-        style = new Style(".", StyleName.ResponsiveLayoutOverlayActions, " .", WidgetTheme.StyleName.ToolbarItem, "-", StyleDependent.selected, " .",
-                StyleName.ResponsiveLayoutOverlayActionsTabItem, ".", WidgetTheme.StyleName.Button);
+        style = new Style(".", StyleName.ResponsiveLayoutOverlayActionsTabItem, " .", WidgetTheme.StyleName.ButtonText);
+        style.addProperty("line-height", "normal");
+        addStyle(style);
+
+        style = new Style(".", WidgetTheme.StyleName.ToolbarItem, "-", StyleDependent.selected, " .", StyleName.ResponsiveLayoutOverlayActionsTabItem, ".",
+                WidgetTheme.StyleName.Button);
         style.addProperty("background-color", ThemeColor.foreground, 1.2);
         addStyle(style);
 
