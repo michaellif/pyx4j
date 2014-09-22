@@ -67,8 +67,7 @@
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
 				<reportElement positionType="Float" x="161" y="41" width="249" height="20"/>
 				<textElement verticalAlignment="Bottom"/>
-				<textFieldExpression><![CDATA[((com.propertyvista.domain.tenant.income.IEmploymentInfo
-)$F{details}.cast()).supervisorName().getValue()]]></textFieldExpression>
+				<textFieldExpression><![CDATA[((com.propertyvista.domain.tenant.income.IEmploymentInfo)$F{details}.cast()).supervisorName().getStringView()]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
 				<reportElement positionType="Float" x="161" y="0" width="249" height="20"/>
@@ -83,8 +82,7 @@
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
 				<reportElement positionType="Float" x="161" y="63" width="249" height="20"/>
 				<textElement verticalAlignment="Bottom"/>
-				<textFieldExpression><![CDATA[((com.propertyvista.domain.tenant.income.IEmploymentInfo
-)$F{details}.cast()).supervisorPhone().getValue()]]></textFieldExpression>
+				<textFieldExpression><![CDATA[((com.propertyvista.domain.tenant.income.IEmploymentInfo)$F{details}.cast()).supervisorPhone().getStringView()]]></textFieldExpression>
 			</textField>
 			<staticText>
 				<reportElement positionType="Float" x="2" y="63" width="159" height="20"/>
@@ -106,8 +104,7 @@
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
 				<reportElement positionType="Float" x="161" y="151" width="249" height="20"/>
 				<textElement verticalAlignment="Bottom"/>
-				<textFieldExpression><![CDATA[((com.propertyvista.domain.tenant.income.IEmploymentInfo
-)$F{details}.cast()).address().getMember("street1").getValue()]]></textFieldExpression>
+				<textFieldExpression><![CDATA[((com.propertyvista.domain.tenant.income.IEmploymentInfo)$F{details}.cast()).address().streetName().getStringView()]]></textFieldExpression>
 			</textField>
 			<line>
 				<reportElement x="4" y="150" width="406" height="1"/>
@@ -129,8 +126,7 @@
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
 				<reportElement positionType="Float" x="161" y="174" width="249" height="20"/>
 				<textElement verticalAlignment="Bottom"/>
-				<textFieldExpression><![CDATA[((com.propertyvista.domain.tenant.income.IEmploymentInfo
-)$F{details}.cast()).address().getMember("street2").getValue()]]></textFieldExpression>
+				<textFieldExpression><![CDATA[((com.propertyvista.domain.tenant.income.IEmploymentInfo)$F{details}.cast()).address().streetNumber().getStringView()]]></textFieldExpression>
 			</textField>
 			<line>
 				<reportElement positionType="Float" x="144" y="194" width="266" height="2"/>
@@ -141,8 +137,7 @@
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
 				<reportElement positionType="Float" x="161" y="196" width="249" height="20"/>
 				<textElement verticalAlignment="Bottom"/>
-				<textFieldExpression><![CDATA[((com.propertyvista.domain.tenant.income.IEmploymentInfo
-)$F{details}.cast()).address().getMember("city").getValue()]]></textFieldExpression>
+				<textFieldExpression><![CDATA[((com.propertyvista.domain.tenant.income.IEmploymentInfo)$F{details}.cast()).address().city().getStringView()]]></textFieldExpression>
 			</textField>
 			<staticText>
 				<reportElement positionType="Float" x="2" y="196" width="159" height="20"/>
@@ -154,8 +149,7 @@
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
 				<reportElement positionType="Float" x="161" y="218" width="249" height="20"/>
 				<textElement verticalAlignment="Bottom"/>
-				<textFieldExpression><![CDATA[((com.pyx4j.entity.core.IEntity)(((com.propertyvista.domain.tenant.income.IEmploymentInfo
-)$F{details}.cast()).address().getMember("province"))).getMember("name").getValue()]]></textFieldExpression>
+				<textFieldExpression><![CDATA[((com.propertyvista.domain.tenant.income.IEmploymentInfo)$F{details}.cast()).address().province().getStringView()]]></textFieldExpression>
 			</textField>
 			<line>
 				<reportElement positionType="Float" x="142" y="239" width="268" height="1"/>
@@ -170,8 +164,7 @@
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
 				<reportElement positionType="Float" x="161" y="240" width="249" height="20"/>
 				<textElement verticalAlignment="Bottom"/>
-				<textFieldExpression><![CDATA[((com.propertyvista.domain.tenant.income.IEmploymentInfo
-)$F{details}.cast()).address().getMember("postalCode").getValue()]]></textFieldExpression>
+				<textFieldExpression><![CDATA[((com.propertyvista.domain.tenant.income.IEmploymentInfo)$F{details}.cast()).address().postalCode().getStringView()]]></textFieldExpression>
 			</textField>
 			<line>
 				<reportElement positionType="Float" x="142" y="261" width="268" height="1"/>
@@ -193,8 +186,7 @@
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
 				<reportElement positionType="Float" x="161" y="262" width="249" height="20"/>
 				<textElement verticalAlignment="Bottom"/>
-				<textFieldExpression><![CDATA[((com.pyx4j.entity.core.IEntity)(((com.propertyvista.domain.tenant.income.IEmploymentInfo
-)$F{details}.cast()).address().getMember("country"))).getMember("name").getValue()]]></textFieldExpression>
+				<textFieldExpression><![CDATA[((com.propertyvista.domain.tenant.income.IEmploymentInfo)$F{details}.cast()).address().country().getStringView()]]></textFieldExpression>
 			</textField>
 			<line>
 				<reportElement positionType="Float" x="142" y="283" width="268" height="1"/>
@@ -222,8 +214,7 @@
 			<textField isStretchWithOverflow="true" pattern="¤ #,##0.00" isBlankWhenNull="true">
 				<reportElement positionType="Float" x="161" y="309" width="249" height="20"/>
 				<textElement verticalAlignment="Bottom"/>
-				<textFieldExpression><![CDATA[((com.propertyvista.domain.tenant.income.IEmploymentInfo
-)$F{details}.cast()).monthlyAmount().getValue()]]></textFieldExpression>
+				<textFieldExpression><![CDATA[((com.propertyvista.domain.tenant.income.IEmploymentInfo)$F{details}.cast()).monthlyAmount().getStringView()]]></textFieldExpression>
 			</textField>
 			<staticText>
 				<reportElement positionType="Float" x="2" y="331" width="159" height="20"/>
@@ -235,8 +226,7 @@
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
 				<reportElement positionType="Float" x="161" y="331" width="249" height="20"/>
 				<textElement verticalAlignment="Bottom"/>
-				<textFieldExpression><![CDATA[((com.propertyvista.domain.tenant.income.IEmploymentInfo
-)$F{details}.cast()).position().getValue()]]></textFieldExpression>
+				<textFieldExpression><![CDATA[((com.propertyvista.domain.tenant.income.IEmploymentInfo)$F{details}.cast()).position().getValue()]]></textFieldExpression>
 			</textField>
 			<line>
 				<reportElement positionType="Float" x="144" y="351" width="266" height="2"/>
@@ -281,8 +271,7 @@
 			<textField isStretchWithOverflow="true" pattern="#,##0.00;-#,##0.00" isBlankWhenNull="true">
 				<reportElement positionType="Float" x="159" y="83" width="249" height="20"/>
 				<textElement verticalAlignment="Bottom"/>
-				<textFieldExpression><![CDATA[((com.propertyvista.domain.tenant.income.IEmploymentInfo
-)$F{details}.cast()).employedForYears().getValue()]]></textFieldExpression>
+				<textFieldExpression><![CDATA[((com.propertyvista.domain.tenant.income.IEmploymentInfo)$F{details}.cast()).employedForYears().getValue()]]></textFieldExpression>
 			</textField>
 			<line>
 				<reportElement positionType="Float" x="140" y="104" width="268" height="1"/>
@@ -329,8 +318,7 @@
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
 				<reportElement positionType="Float" x="161" y="41" width="249" height="20"/>
 				<textElement verticalAlignment="Bottom"/>
-				<textFieldExpression><![CDATA[((com.propertyvista.domain.tenant.income.IEmploymentInfo
-)$F{details}.cast()).supervisorName().getValue()]]></textFieldExpression>
+				<textFieldExpression><![CDATA[((com.propertyvista.domain.tenant.income.IEmploymentInfo)$F{details}.cast()).supervisorName().getValue()]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
 				<reportElement positionType="Float" x="161" y="0" width="249" height="20"/>
@@ -345,8 +333,7 @@
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
 				<reportElement positionType="Float" x="161" y="63" width="249" height="20"/>
 				<textElement verticalAlignment="Bottom"/>
-				<textFieldExpression><![CDATA[((com.propertyvista.domain.tenant.income.IEmploymentInfo
-)$F{details}.cast()).supervisorPhone().getValue()]]></textFieldExpression>
+				<textFieldExpression><![CDATA[((com.propertyvista.domain.tenant.income.IEmploymentInfo)$F{details}.cast()).supervisorPhone().getValue()]]></textFieldExpression>
 			</textField>
 			<staticText>
 				<reportElement positionType="Float" x="2" y="63" width="159" height="20"/>
@@ -368,8 +355,7 @@
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
 				<reportElement positionType="Float" x="161" y="128" width="249" height="20"/>
 				<textElement verticalAlignment="Bottom"/>
-				<textFieldExpression><![CDATA[((com.propertyvista.domain.tenant.income.IEmploymentInfo
-)$F{details}.cast()).address().getMember("street1").getValue()]]></textFieldExpression>
+				<textFieldExpression><![CDATA[((com.propertyvista.domain.tenant.income.IEmploymentInfo)$F{details}.cast()).address().streetName().getValue()]]></textFieldExpression>
 			</textField>
 			<line>
 				<reportElement x="4" y="127" width="406" height="1"/>
@@ -391,8 +377,7 @@
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
 				<reportElement positionType="Float" x="161" y="151" width="249" height="20"/>
 				<textElement verticalAlignment="Bottom"/>
-				<textFieldExpression><![CDATA[((com.propertyvista.domain.tenant.income.IEmploymentInfo
-)$F{details}.cast()).address().getMember("street2").getValue()]]></textFieldExpression>
+				<textFieldExpression><![CDATA[((com.propertyvista.domain.tenant.income.IEmploymentInfo)$F{details}.cast()).address().streetNumber().getValue()]]></textFieldExpression>
 			</textField>
 			<line>
 				<reportElement positionType="Float" x="144" y="171" width="266" height="2"/>
@@ -403,8 +388,7 @@
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
 				<reportElement positionType="Float" x="161" y="173" width="249" height="20"/>
 				<textElement verticalAlignment="Bottom"/>
-				<textFieldExpression><![CDATA[((com.propertyvista.domain.tenant.income.IEmploymentInfo
-)$F{details}.cast()).address().getMember("city").getValue()]]></textFieldExpression>
+				<textFieldExpression><![CDATA[((com.propertyvista.domain.tenant.income.IEmploymentInfo)$F{details}.cast()).address().city().getValue()]]></textFieldExpression>
 			</textField>
 			<staticText>
 				<reportElement positionType="Float" x="2" y="173" width="159" height="20"/>
@@ -416,8 +400,7 @@
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
 				<reportElement positionType="Float" x="161" y="195" width="249" height="20"/>
 				<textElement verticalAlignment="Bottom"/>
-				<textFieldExpression><![CDATA[((com.pyx4j.entity.core.IEntity)(((com.propertyvista.domain.tenant.income.IEmploymentInfo
-)$F{details}.cast()).address().getMember("province"))).getMember("name").getValue()]]></textFieldExpression>
+				<textFieldExpression><![CDATA[((com.propertyvista.domain.tenant.income.IEmploymentInfo)$F{details}.cast()).address().province().getStringView()]]></textFieldExpression>
 			</textField>
 			<line>
 				<reportElement positionType="Float" x="142" y="216" width="268" height="1"/>
@@ -432,8 +415,7 @@
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
 				<reportElement positionType="Float" x="161" y="217" width="249" height="20"/>
 				<textElement verticalAlignment="Bottom"/>
-				<textFieldExpression><![CDATA[((com.propertyvista.domain.tenant.income.IEmploymentInfo
-)$F{details}.cast()).address().getMember("postalCode").getValue()]]></textFieldExpression>
+				<textFieldExpression><![CDATA[((com.propertyvista.domain.tenant.income.IEmploymentInfo)$F{details}.cast()).address().postalCode().getStringView()]]></textFieldExpression>
 			</textField>
 			<line>
 				<reportElement positionType="Float" x="142" y="238" width="268" height="1"/>
@@ -455,8 +437,7 @@
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
 				<reportElement positionType="Float" x="161" y="239" width="249" height="20"/>
 				<textElement verticalAlignment="Bottom"/>
-				<textFieldExpression><![CDATA[((com.pyx4j.entity.core.IEntity)(((com.propertyvista.domain.tenant.income.IEmploymentInfo
-)$F{details}.cast()).address().getMember("country"))).getMember("name").getValue()]]></textFieldExpression>
+				<textFieldExpression><![CDATA[((com.propertyvista.domain.tenant.income.IEmploymentInfo)$F{details}.cast()).address().country().getStringView()]]></textFieldExpression>
 			</textField>
 			<line>
 				<reportElement positionType="Float" x="142" y="260" width="268" height="1"/>
@@ -484,8 +465,7 @@
 			<textField isStretchWithOverflow="true" pattern="¤ #,##0.00" isBlankWhenNull="true">
 				<reportElement positionType="Float" x="161" y="286" width="249" height="20"/>
 				<textElement verticalAlignment="Bottom"/>
-				<textFieldExpression><![CDATA[((com.propertyvista.domain.tenant.income.IEmploymentInfo
-)$F{details}.cast()).monthlyAmount().getValue()]]></textFieldExpression>
+				<textFieldExpression><![CDATA[((com.propertyvista.domain.tenant.income.IEmploymentInfo)$F{details}.cast()).monthlyAmount().getValue()]]></textFieldExpression>
 			</textField>
 			<staticText>
 				<reportElement positionType="Float" x="0" y="403" width="159" height="20"/>
@@ -520,8 +500,7 @@
 			<textField isStretchWithOverflow="true" pattern="#,##0.00;-#,##0.00" isBlankWhenNull="true">
 				<reportElement positionType="Float" x="159" y="85" width="249" height="20"/>
 				<textElement verticalAlignment="Bottom"/>
-				<textFieldExpression><![CDATA[((com.propertyvista.domain.tenant.income.IEmploymentInfo
-)$F{details}.cast()).employedForYears().getValue()]]></textFieldExpression>
+				<textFieldExpression><![CDATA[((com.propertyvista.domain.tenant.income.IEmploymentInfo)$F{details}.cast()).employedForYears().getValue()]]></textFieldExpression>
 			</textField>
 			<staticText>
 				<reportElement positionType="Float" x="0" y="85" width="159" height="20"/>
@@ -536,8 +515,7 @@
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
 				<reportElement positionType="Float" x="161" y="306" width="249" height="20"/>
 				<textElement verticalAlignment="Bottom"/>
-				<textFieldExpression><![CDATA[((com.propertyvista.domain.tenant.income.IEmploymentInfo
-)$F{details}.cast()).position().getValue()]]></textFieldExpression>
+				<textFieldExpression><![CDATA[((com.propertyvista.domain.tenant.income.IEmploymentInfo)$F{details}.cast()).position().getValue()]]></textFieldExpression>
 			</textField>
 			<staticText>
 				<reportElement positionType="Float" x="2" y="306" width="159" height="20"/>
@@ -552,8 +530,7 @@
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
 				<reportElement positionType="Float" x="161" y="328" width="249" height="20"/>
 				<textElement verticalAlignment="Bottom"/>
-				<textFieldExpression><![CDATA[(((com.propertyvista.domain.tenant.income.IncomeInfoSelfEmployed
-)$F{details}.cast()).fullyOwned().getValue() == Boolean.TRUE) ? "Yes" : "No"]]></textFieldExpression>
+				<textFieldExpression><![CDATA[(((com.propertyvista.domain.tenant.income.IncomeInfoSelfEmployed)$F{details}.cast()).fullyOwned().getValue() == Boolean.TRUE) ? "Yes" : "No"]]></textFieldExpression>
 			</textField>
 			<line>
 				<reportElement positionType="Float" x="142" y="348" width="266" height="2"/>
@@ -637,8 +614,7 @@
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
 				<reportElement positionType="Float" x="161" y="41" width="249" height="20"/>
 				<textElement verticalAlignment="Bottom"/>
-				<textFieldExpression><![CDATA[((com.propertyvista.domain.tenant.income.IEmploymentInfo
-)$F{details}.cast()).supervisorName().getValue()]]></textFieldExpression>
+				<textFieldExpression><![CDATA[((com.propertyvista.domain.tenant.income.IEmploymentInfo)$F{details}.cast()).supervisorName().getValue()]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
 				<reportElement positionType="Float" x="161" y="0" width="249" height="20"/>
@@ -653,8 +629,7 @@
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
 				<reportElement positionType="Float" x="161" y="63" width="249" height="20"/>
 				<textElement verticalAlignment="Bottom"/>
-				<textFieldExpression><![CDATA[((com.propertyvista.domain.tenant.income.IEmploymentInfo
-)$F{details}.cast()).supervisorPhone().getValue()]]></textFieldExpression>
+				<textFieldExpression><![CDATA[((com.propertyvista.domain.tenant.income.IEmploymentInfo)$F{details}.cast()).supervisorPhone().getValue()]]></textFieldExpression>
 			</textField>
 			<staticText>
 				<reportElement positionType="Float" x="2" y="63" width="159" height="20"/>
@@ -676,8 +651,7 @@
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
 				<reportElement positionType="Float" x="161" y="126" width="249" height="20"/>
 				<textElement verticalAlignment="Bottom"/>
-				<textFieldExpression><![CDATA[((com.propertyvista.domain.tenant.income.IEmploymentInfo
-)$F{details}.cast()).address().getMember("street1").getValue()]]></textFieldExpression>
+				<textFieldExpression><![CDATA[((com.propertyvista.domain.tenant.income.IEmploymentInfo)$F{details}.cast()).address().streetName().getValue()]]></textFieldExpression>
 			</textField>
 			<line>
 				<reportElement x="4" y="125" width="406" height="1"/>
@@ -699,8 +673,7 @@
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
 				<reportElement positionType="Float" x="161" y="149" width="249" height="20"/>
 				<textElement verticalAlignment="Bottom"/>
-				<textFieldExpression><![CDATA[((com.propertyvista.domain.tenant.income.IEmploymentInfo
-)$F{details}.cast()).address().getMember("street2").getValue()]]></textFieldExpression>
+				<textFieldExpression><![CDATA[((com.propertyvista.domain.tenant.income.IEmploymentInfo)$F{details}.cast()).address().streetNumber().getValue()]]></textFieldExpression>
 			</textField>
 			<line>
 				<reportElement positionType="Float" x="144" y="169" width="266" height="2"/>
@@ -711,8 +684,7 @@
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
 				<reportElement positionType="Float" x="161" y="171" width="249" height="20"/>
 				<textElement verticalAlignment="Bottom"/>
-				<textFieldExpression><![CDATA[((com.propertyvista.domain.tenant.income.IEmploymentInfo
-)$F{details}.cast()).address().getMember("city").getValue()]]></textFieldExpression>
+				<textFieldExpression><![CDATA[((com.propertyvista.domain.tenant.income.IEmploymentInfo)$F{details}.cast()).address().city().getStringView()]]></textFieldExpression>
 			</textField>
 			<staticText>
 				<reportElement positionType="Float" x="2" y="171" width="159" height="20"/>
@@ -724,8 +696,7 @@
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
 				<reportElement positionType="Float" x="161" y="193" width="249" height="20"/>
 				<textElement verticalAlignment="Bottom"/>
-				<textFieldExpression><![CDATA[((com.pyx4j.entity.core.IEntity)(((com.propertyvista.domain.tenant.income.IEmploymentInfo
-)$F{details}.cast()).address().getMember("province"))).getMember("name").getValue()]]></textFieldExpression>
+				<textFieldExpression><![CDATA[((com.propertyvista.domain.tenant.income.IEmploymentInfo)$F{details}.cast()).address().province().getStringView()]]></textFieldExpression>
 			</textField>
 			<line>
 				<reportElement positionType="Float" x="142" y="214" width="268" height="1"/>
@@ -740,8 +711,7 @@
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
 				<reportElement positionType="Float" x="161" y="215" width="249" height="20"/>
 				<textElement verticalAlignment="Bottom"/>
-				<textFieldExpression><![CDATA[((com.propertyvista.domain.tenant.income.IEmploymentInfo
-)$F{details}.cast()).address().getMember("postalCode").getValue()]]></textFieldExpression>
+				<textFieldExpression><![CDATA[((com.propertyvista.domain.tenant.income.IEmploymentInfo)$F{details}.cast()).address().postalCode.getStringView()]]></textFieldExpression>
 			</textField>
 			<line>
 				<reportElement positionType="Float" x="142" y="236" width="268" height="1"/>
@@ -763,8 +733,7 @@
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
 				<reportElement positionType="Float" x="161" y="237" width="249" height="20"/>
 				<textElement verticalAlignment="Bottom"/>
-				<textFieldExpression><![CDATA[((com.pyx4j.entity.core.IEntity)(((com.propertyvista.domain.tenant.income.IEmploymentInfo
-)$F{details}.cast()).address().getMember("country"))).getMember("name").getValue()]]></textFieldExpression>
+				<textFieldExpression><![CDATA[((com.propertyvista.domain.tenant.income.IEmploymentInfo)$F{details}.cast()).address().country().getStringView()]]></textFieldExpression>
 			</textField>
 			<line>
 				<reportElement positionType="Float" x="142" y="258" width="268" height="1"/>
@@ -792,8 +761,7 @@
 			<textField isStretchWithOverflow="true" pattern="¤ #,##0.00" isBlankWhenNull="true">
 				<reportElement positionType="Float" x="161" y="284" width="249" height="20"/>
 				<textElement verticalAlignment="Bottom"/>
-				<textFieldExpression><![CDATA[((com.propertyvista.domain.tenant.income.IEmploymentInfo
-)$F{details}.cast()).monthlyAmount().getValue()]]></textFieldExpression>
+				<textFieldExpression><![CDATA[((com.propertyvista.domain.tenant.income.IEmploymentInfo)$F{details}.cast()).monthlyAmount().getValue()]]></textFieldExpression>
 			</textField>
 			<staticText>
 				<reportElement positionType="Float" x="2" y="306" width="159" height="20"/>
@@ -805,8 +773,7 @@
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
 				<reportElement positionType="Float" x="161" y="306" width="249" height="20"/>
 				<textElement verticalAlignment="Bottom"/>
-				<textFieldExpression><![CDATA[((com.propertyvista.domain.tenant.income.IEmploymentInfo
-)$F{details}.cast()).position().getValue()]]></textFieldExpression>
+				<textFieldExpression><![CDATA[((com.propertyvista.domain.tenant.income.IEmploymentInfo)$F{details}.cast()).position().getValue()]]></textFieldExpression>
 			</textField>
 			<line>
 				<reportElement positionType="Float" x="144" y="326" width="266" height="2"/>
@@ -851,8 +818,7 @@
 			<textField isStretchWithOverflow="true" pattern="#,##0.00;-#,##0.00" isBlankWhenNull="true">
 				<reportElement positionType="Float" x="159" y="83" width="249" height="20"/>
 				<textElement verticalAlignment="Bottom"/>
-				<textFieldExpression><![CDATA[((com.propertyvista.domain.tenant.income.IEmploymentInfo
-)$F{details}.cast()).employedForYears().getValue()]]></textFieldExpression>
+				<textFieldExpression><![CDATA[((com.propertyvista.domain.tenant.income.IEmploymentInfo)$F{details}.cast()).employedForYears().getValue()]]></textFieldExpression>
 			</textField>
 			<line>
 				<reportElement positionType="Float" x="140" y="104" width="268" height="1"/>
@@ -908,8 +874,7 @@
 			<textField isStretchWithOverflow="true" pattern="¤ #,##0.00" isBlankWhenNull="true">
 				<reportElement positionType="Float" x="161" y="42" width="245" height="20"/>
 				<textElement verticalAlignment="Bottom"/>
-				<textFieldExpression><![CDATA[((com.propertyvista.domain.tenant.income.CustomerScreeningIncomeInfo
-)$F{details}.cast()).monthlyAmount().getValue()]]></textFieldExpression>
+				<textFieldExpression><![CDATA[((com.propertyvista.domain.tenant.income.CustomerScreeningIncomeInfo)$F{details}.cast()).monthlyAmount().getValue()]]></textFieldExpression>
 			</textField>
 			<line>
 				<reportElement positionType="Float" x="161" y="62" width="249" height="2"/>
@@ -963,8 +928,7 @@
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
 				<reportElement positionType="Float" x="161" y="73" width="249" height="20"/>
 				<textElement verticalAlignment="Bottom"/>
-				<textFieldExpression><![CDATA[((com.propertyvista.domain.tenant.income.IncomeInfoStudentIncome
-)$F{details}.cast()).address().getMember("street1").getValue()]]></textFieldExpression>
+				<textFieldExpression><![CDATA[((com.propertyvista.domain.tenant.income.IncomeInfoStudentIncome)$F{details}.cast()).address().getMember("streetName").getValue()]]></textFieldExpression>
 			</textField>
 			<line>
 				<reportElement x="4" y="72" width="406" height="1"/>
@@ -986,8 +950,7 @@
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
 				<reportElement positionType="Float" x="161" y="96" width="249" height="20"/>
 				<textElement verticalAlignment="Bottom"/>
-				<textFieldExpression><![CDATA[((com.propertyvista.domain.tenant.income.IncomeInfoStudentIncome
-)$F{details}.cast()).address().getMember("street2").getValue()]]></textFieldExpression>
+				<textFieldExpression><![CDATA[((com.propertyvista.domain.tenant.income.IncomeInfoStudentIncome)$F{details}.cast()).address().streetNumber().getValue()]]></textFieldExpression>
 			</textField>
 			<line>
 				<reportElement positionType="Float" x="144" y="116" width="266" height="2"/>
@@ -998,8 +961,7 @@
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
 				<reportElement positionType="Float" x="161" y="118" width="249" height="20"/>
 				<textElement verticalAlignment="Bottom"/>
-				<textFieldExpression><![CDATA[((com.propertyvista.domain.tenant.income.IncomeInfoStudentIncome
-)$F{details}.cast()).address().getMember("city").getValue()]]></textFieldExpression>
+				<textFieldExpression><![CDATA[((com.propertyvista.domain.tenant.income.IncomeInfoStudentIncome)$F{details}.cast()).address().city().getValue()]]></textFieldExpression>
 			</textField>
 			<staticText>
 				<reportElement positionType="Float" x="2" y="118" width="159" height="20"/>
@@ -1011,8 +973,7 @@
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
 				<reportElement positionType="Float" x="161" y="140" width="249" height="20"/>
 				<textElement verticalAlignment="Bottom"/>
-				<textFieldExpression><![CDATA[((com.pyx4j.entity.core.IEntity)(((com.propertyvista.domain.tenant.income.IncomeInfoStudentIncome
-)$F{details}.cast()).address().getMember("province"))).getMember("name").getValue()]]></textFieldExpression>
+				<textFieldExpression><![CDATA[((com.propertyvista.domain.tenant.income.IncomeInfoStudentIncome)$F{details}.cast()).address().province().getStringView()]]></textFieldExpression>
 			</textField>
 			<line>
 				<reportElement positionType="Float" x="142" y="161" width="268" height="1"/>
@@ -1027,8 +988,7 @@
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
 				<reportElement positionType="Float" x="161" y="162" width="249" height="20"/>
 				<textElement verticalAlignment="Bottom"/>
-				<textFieldExpression><![CDATA[((com.propertyvista.domain.tenant.income.IncomeInfoStudentIncome
-)$F{details}.cast()).address().getMember("postalCode").getValue()]]></textFieldExpression>
+				<textFieldExpression><![CDATA[((com.propertyvista.domain.tenant.income.IncomeInfoStudentIncome)$F{details}.cast()).address().postalCode().getStringView()]]></textFieldExpression>
 			</textField>
 			<line>
 				<reportElement positionType="Float" x="142" y="183" width="268" height="1"/>
@@ -1050,8 +1010,7 @@
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
 				<reportElement positionType="Float" x="161" y="184" width="249" height="20"/>
 				<textElement verticalAlignment="Bottom"/>
-				<textFieldExpression><![CDATA[((com.pyx4j.entity.core.IEntity)(((com.propertyvista.domain.tenant.income.IncomeInfoStudentIncome
-)$F{details}.cast()).address().getMember("country"))).getMember("name").getValue()]]></textFieldExpression>
+				<textFieldExpression><![CDATA[((com.propertyvista.domain.tenant.income.IncomeInfoStudentIncome)$F{details}.cast()).address().country().getStringView()]]></textFieldExpression>
 			</textField>
 			<line>
 				<reportElement positionType="Float" x="142" y="205" width="268" height="1"/>
@@ -1079,8 +1038,7 @@
 			<textField isStretchWithOverflow="true" pattern="¤ #,##0.00" isBlankWhenNull="true">
 				<reportElement positionType="Float" x="161" y="240" width="249" height="20"/>
 				<textElement verticalAlignment="Bottom"/>
-				<textFieldExpression><![CDATA[((com.propertyvista.domain.tenant.income.IncomeInfoStudentIncome
-)$F{details}.cast()).monthlyAmount().getValue()]]></textFieldExpression>
+				<textFieldExpression><![CDATA[((com.propertyvista.domain.tenant.income.IncomeInfoStudentIncome)$F{details}.cast()).monthlyAmount().getValue()]]></textFieldExpression>
 			</textField>
 			<staticText>
 				<reportElement positionType="Float" x="2" y="262" width="159" height="20"/>
@@ -1092,8 +1050,7 @@
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
 				<reportElement positionType="Float" x="161" y="262" width="249" height="20"/>
 				<textElement verticalAlignment="Bottom"/>
-				<textFieldExpression><![CDATA[((com.propertyvista.domain.tenant.income.IncomeInfoStudentIncome
-)$F{details}.cast()).fieldOfStudy().getValue()]]></textFieldExpression>
+				<textFieldExpression><![CDATA[((com.propertyvista.domain.tenant.income.IncomeInfoStudentIncome)$F{details}.cast()).fieldOfStudy().getValue()]]></textFieldExpression>
 			</textField>
 			<line>
 				<reportElement positionType="Float" x="144" y="282" width="266" height="2"/>
@@ -1138,8 +1095,7 @@
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
 				<reportElement positionType="Float" x="161" y="284" width="249" height="20"/>
 				<textElement verticalAlignment="Bottom"/>
-				<textFieldExpression><![CDATA[((com.propertyvista.domain.tenant.income.IncomeInfoStudentIncome
-)$F{details}.cast()).program().getValue().toString()]]></textFieldExpression>
+				<textFieldExpression><![CDATA[((com.propertyvista.domain.tenant.income.IncomeInfoStudentIncome)$F{details}.cast()).program().getStringView()]]></textFieldExpression>
 			</textField>
 			<line>
 				<reportElement positionType="Float" x="144" y="304" width="266" height="2"/>
@@ -1154,8 +1110,7 @@
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
 				<reportElement positionType="Float" x="161" y="304" width="249" height="20"/>
 				<textElement verticalAlignment="Bottom"/>
-				<textFieldExpression><![CDATA[((com.propertyvista.domain.tenant.income.IncomeInfoStudentIncome
-)$F{details}.cast()).fundingChoices().getValue().toString()]]></textFieldExpression>
+				<textFieldExpression><![CDATA[((com.propertyvista.domain.tenant.income.IncomeInfoStudentIncome)$F{details}.cast()).fundingChoices().getStringView()]]></textFieldExpression>
 			</textField>
 			<line>
 				<reportElement positionType="Float" x="144" y="324" width="266" height="2"/>

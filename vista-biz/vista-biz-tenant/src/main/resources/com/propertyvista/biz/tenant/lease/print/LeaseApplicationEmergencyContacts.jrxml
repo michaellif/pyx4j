@@ -12,7 +12,7 @@
 	<field name="name" class="com.propertyvista.domain.person.Name"/>
 	<field name="sex" class="com.propertyvista.domain.person.Person.Sex"/>
 	<field name="birthDate" class="java.util.Date"/>
-	<field name="address" class="com.propertyvista.domain.contact.AddressSimple"/>
+	<field name="address" class="com.propertyvista.domain.contact.InternationalAddress"/>
 	<field name="relationship" class="com.propertyvista.domain.tenant.PersonRelationship"/>
 	<field name="homePhone" class="java.lang.String"/>
 	<field name="workPhone" class="java.lang.String"/>
@@ -263,7 +263,7 @@
 				<textElement verticalAlignment="Bottom">
 					<font isBold="false"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{address}.getMember(new com.pyx4j.entity.core.Path("address/street1")).getValue()]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{address}.getMember(new com.pyx4j.entity.core.Path("address/streetName")).getValue()]]></textFieldExpression>
 			</textField>
 			<line>
 				<reportElement positionType="Float" x="140" y="343" width="268" height="1"/>
@@ -292,7 +292,7 @@
 				<textElement verticalAlignment="Bottom">
 					<font isBold="false"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{address}.getMember(new com.pyx4j.entity.core.Path("address/street2")).getValue()]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{address}.getMember(new com.pyx4j.entity.core.Path("address/streetNumber")).getValue()]]></textFieldExpression>
 			</textField>
 			<line>
 				<reportElement positionType="Float" x="140" y="384" width="268" height="1"/>
@@ -346,7 +346,7 @@
 				<textElement verticalAlignment="Bottom">
 					<font isBold="false"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{address}.getMember(new com.pyx4j.entity.core.Path("address/province/name")).getValue()]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{address}.getMember(new com.pyx4j.entity.core.Path("address/province")).getStringView()]]></textFieldExpression>
 			</textField>
 			<staticText>
 				<reportElement positionType="Float" x="0" y="424" width="159" height="20"/>
@@ -364,7 +364,7 @@
 				<textElement verticalAlignment="Bottom">
 					<font isBold="false"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{address}.getMember(new com.pyx4j.entity.core.Path("address/country/name")).getValue()]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{address}.getMember(new com.pyx4j.entity.core.Path("address/country")).getStringView()]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>
