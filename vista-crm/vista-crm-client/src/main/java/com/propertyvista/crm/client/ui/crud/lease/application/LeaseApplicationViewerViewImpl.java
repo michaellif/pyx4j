@@ -480,10 +480,10 @@ public class LeaseApplicationViewerViewImpl extends LeaseViewerViewImplBase<Leas
                 protected IsWidget createContent() {
                     FormPanel formPanel = new FormPanel(this);
 
-                    formPanel.append(Location.Left, proto().informationCompleteness()).decorate().labelWidth(250).componentWidth(50);
-                    formPanel.append(Location.Left, proto().creditCheck()).decorate().labelWidth(250).componentWidth(50);
-                    formPanel.append(Location.Left, proto().employmentConfirmation()).decorate().labelWidth(250).componentWidth(50);
-                    formPanel.append(Location.Left, proto().landlordConfirmation()).decorate().labelWidth(250).componentWidth(50);
+                    formPanel.append(Location.Left, proto().informationCompleteness()).decorate().labelWidth(230).componentWidth(50);
+                    formPanel.append(Location.Left, proto().creditCheck()).decorate().labelWidth(230).componentWidth(50);
+                    formPanel.append(Location.Left, proto().employmentConfirmation()).decorate().labelWidth(230).componentWidth(50);
+                    formPanel.append(Location.Left, proto().landlordConfirmation()).decorate().labelWidth(230).componentWidth(50);
 
                     formPanel.h4(i18n.tr("Notes:"));
                     formPanel.append(Location.Left, notes);
@@ -496,17 +496,17 @@ public class LeaseApplicationViewerViewImpl extends LeaseViewerViewImplBase<Leas
                 public void addValidations() {
                     super.addValidations();
 
-                    get(proto().informationCompleteness()).addComponentValidator(new checkValidator());
-                    get(proto().creditCheck()).addComponentValidator(new checkValidator());
-                    get(proto().employmentConfirmation()).addComponentValidator(new checkValidator());
-                    get(proto().landlordConfirmation()).addComponentValidator(new checkValidator());
+                    get(proto().informationCompleteness()).addComponentValidator(new CheckValidator());
+                    get(proto().creditCheck()).addComponentValidator(new CheckValidator());
+                    get(proto().employmentConfirmation()).addComponentValidator(new CheckValidator());
+                    get(proto().landlordConfirmation()).addComponentValidator(new CheckValidator());
                 }
 
-                class checkValidator extends AbstractComponentValidator<Boolean> {
+                class CheckValidator extends AbstractComponentValidator<Boolean> {
                     @Override
                     public AbstractValidationError isValid() {
                         Boolean value = getComponent().getValue();
-                        return ((value == null || !value) ? new BasicValidationError(getComponent(), i18n.tr("Should be marked!")) : null);
+                        return ((value == null || value == Boolean.FALSE) ? new BasicValidationError(getComponent(), i18n.tr("Should be marked!")) : null);
                     }
                 }
             };
