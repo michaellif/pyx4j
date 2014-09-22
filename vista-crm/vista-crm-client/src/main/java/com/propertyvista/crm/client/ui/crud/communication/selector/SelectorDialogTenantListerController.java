@@ -25,6 +25,8 @@ public class SelectorDialogTenantListerController extends ListerController<Tenan
     public SelectorDialogTenantListerController(ILister<Tenant> view, AbstractListCrudService<Tenant> service) {
         super(Tenant.class, view, service);
         this.populate();
+
+        ((SelectorDialogTenantLister) view).setRowsSelected();
     }
 
     protected Tenant proto() {

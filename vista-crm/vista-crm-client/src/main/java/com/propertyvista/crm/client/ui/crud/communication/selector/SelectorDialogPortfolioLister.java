@@ -25,6 +25,7 @@ import com.pyx4j.entity.core.criterion.Criterion;
 import com.pyx4j.entity.core.criterion.PropertyCriterion;
 import com.pyx4j.entity.rpc.AbstractListCrudService;
 import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
+import com.pyx4j.forms.client.ui.datatable.DataItem;
 import com.pyx4j.forms.client.ui.datatable.DataTableModel;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.site.client.backoffice.ui.prime.lister.ListerDataSource;
@@ -88,4 +89,16 @@ public class SelectorDialogPortfolioLister extends EntityLister<Portfolio> {
         return restrictAlreadySelected;
     }
 
+    public void setRowsSelected(){
+
+        if(alreadySelected == null || alreadySelected.size() == 0)
+            return;
+        DataTableModel<Portfolio> model = getLister().getDataTablePanel().getDataTable().getDataTableModel();
+
+        for(DataItem<Portfolio> dataItem : model.getData()){
+            if(alreadySelected.contains(dataItem.getEntity())){
+                model.setRowSelected(true, model.indexOf(dataItem));
+            }
+        }
+    }
 }

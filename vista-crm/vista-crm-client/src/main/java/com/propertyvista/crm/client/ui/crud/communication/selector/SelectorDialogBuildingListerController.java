@@ -24,8 +24,8 @@ public class SelectorDialogBuildingListerController extends ListerController<Bui
 
     public SelectorDialogBuildingListerController(ILister<Building> view, AbstractListCrudService<Building> service) {
         super(Building.class, view, service);
-        // ((EntityLister<Building>) view).setDataTableModel(defineColumnDescriptors());
         this.populate();
+        ((SelectorDialogBuildingLister) view).setRowsSelected();
     }
 
     protected Building proto() {
