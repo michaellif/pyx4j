@@ -27,7 +27,7 @@ public class CommunicationEndpointSelector extends CSelectorListBox<Communicatio
 
             @Override
             public void execute() {
-                Dialog dialog = new SelectRecipientsDialog();
+                Dialog dialog = new CommunicationEndpointSelectorAddDialog();
                 dialog.show();
 
             }
