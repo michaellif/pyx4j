@@ -44,7 +44,7 @@ public class MoveInWizardCompletionConfirmationGadget extends AbstractGadget<Mov
             Button continueButton = new Button(i18n.tr("Continue to Portal"), new Command() {
                 @Override
                 public void execute() {
-                    AppSite.getPlaceController().goTo(new ResidentPortalSiteMap.Financial.PreauthorizedPayments.NewPreauthorizedPayment());
+                    AppSite.getPlaceController().goTo(new ResidentPortalSiteMap.Financial.PreauthorizedPayments.AutoPayWizard());
                 }
             });
             continueButton.getElement().getStyle().setProperty("background", StyleManager.getPalette().getThemeColor(ThemeColor.contrast4, 1));
@@ -53,7 +53,7 @@ public class MoveInWizardCompletionConfirmationGadget extends AbstractGadget<Mov
             Button updateProfileButton = new Button(i18n.tr("Update Profile"), new Command() {
                 @Override
                 public void execute() {
-                    AppSite.getPlaceController().goTo(new ResidentPortalSiteMap.Financial.PreauthorizedPayments.NewPreauthorizedPayment());
+                    AppSite.getPlaceController().goTo(new ResidentPortalSiteMap.Financial.PreauthorizedPayments.AutoPayWizard());
                 }
             });
             updateProfileButton.getElement().getStyle().setProperty("background", StyleManager.getPalette().getThemeColor(ThemeColor.contrast4, 1));

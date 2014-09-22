@@ -82,7 +82,7 @@ public class AutoPayWizardActivity extends AbstractWizardCrudActivity<AutoPayDTO
 
     @Override
     protected void onFinish(Key result) {
-        AppSite.getPlaceController().goTo(new ResidentPortalSiteMap.Financial.PreauthorizedPayments.PreauthorizedPaymentSubmitted(result));
+        AppSite.getPlaceController().goTo(new ResidentPortalSiteMap.Financial.PreauthorizedPayments.AutoPayConfirmation(result));
     }
 
 }

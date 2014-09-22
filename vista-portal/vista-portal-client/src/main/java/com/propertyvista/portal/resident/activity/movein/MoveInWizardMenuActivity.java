@@ -28,6 +28,7 @@ import com.propertyvista.portal.resident.ResidentPortalSite;
 import com.propertyvista.portal.resident.ui.movein.MoveInWizardMenuView;
 import com.propertyvista.portal.resident.ui.movein.MoveInWizardMenuView.MoveInWizardMenuPresenter;
 import com.propertyvista.portal.rpc.portal.resident.ResidentPortalSiteMap;
+import com.propertyvista.portal.rpc.portal.resident.services.movein.IMoveInPlace;
 
 public class MoveInWizardMenuActivity extends AbstractActivity implements MoveInWizardMenuPresenter {
 
@@ -45,7 +46,7 @@ public class MoveInWizardMenuActivity extends AbstractActivity implements MoveIn
     public void start(AcceptsOneWidget panel, EventBus eventBus) {
         panel.setWidget(view);
         view.setUserName(ClientContext.getUserVisit().getName());
-        view.updateState(MoveInWizardManager.getCompleteSteps(), MoveInWizardManager.getCurrentStep());
+        view.updateState(MoveInWizardManager.getCompleteSteps(), place instanceof IMoveInPlace ? MoveInWizardManager.getCurrentStep() : null);
         view.setMenuVisible(!(place instanceof ResidentPortalSiteMap.MoveIn.NewGuarantorWelcomePage || place instanceof ResidentPortalSiteMap.MoveIn.NewTenantWelcomePage));
         AppSite.getEventBus().fireEvent(new LayoutChangeRequestEvent(ChangeType.resizeComponents));
     }

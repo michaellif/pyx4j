@@ -20,6 +20,7 @@ import com.pyx4j.site.rpc.annotations.PlaceProperties;
 import com.pyx4j.site.shared.meta.PublicPlace;
 
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
+import com.propertyvista.portal.rpc.portal.resident.services.movein.IMoveInPlace;
 
 public class ResidentPortalSiteMap extends PortalSiteMap {
 
@@ -118,26 +119,26 @@ public class ResidentPortalSiteMap extends PortalSiteMap {
 
         public static class PreauthorizedPayments extends AppPlace {
 
-            @PlaceProperties(caption = "New Pre-Authorized Payment")
-            public static class NewPreauthorizedPayment extends CrudAppPlace {
+            @PlaceProperties(caption = "New Auto Pay Agreement")
+            public static class AutoPayWizard extends CrudAppPlace implements IMoveInPlace {
             }
 
-            @PlaceProperties(caption = "Pre-Authorized Payment")
-            public static class PreauthorizedPayment extends CrudAppPlace {
-            }
-
-            @PlaceProperties(caption = "Pre-Authorized Payment Submitted")
-            public static class PreauthorizedPaymentSubmitted extends AppPlace {
+            @PlaceProperties(caption = "Auto Pay Agreement Submitted")
+            public static class AutoPayConfirmation extends AppPlace implements IMoveInPlace {
                 {
                     setStable(false);
                 }
 
-                public PreauthorizedPaymentSubmitted() {
+                public AutoPayConfirmation() {
                 }
 
-                public PreauthorizedPaymentSubmitted(Key preauthorizedPaymentID) {
+                public AutoPayConfirmation(Key preauthorizedPaymentID) {
                     formPlace(preauthorizedPaymentID);
                 }
+            }
+
+            @PlaceProperties(caption = "Auto Pay Agreement")
+            public static class AutoPay extends CrudAppPlace {
             }
         }
 
@@ -181,10 +182,10 @@ public class ResidentPortalSiteMap extends PortalSiteMap {
 
     public static class LeaseSigning extends AppPlace {
 
-        public static class LeaseSigningWizard extends AppPlace {
+        public static class LeaseSigningWizard extends AppPlace implements IMoveInPlace {
         }
 
-        public static class LeaseSigningWizardConfirmation extends AppPlace {
+        public static class LeaseSigningWizardConfirmation extends AppPlace implements IMoveInPlace {
             {
                 setStable(false);
             }
@@ -193,16 +194,16 @@ public class ResidentPortalSiteMap extends PortalSiteMap {
 
     public static class MoveIn extends AppPlace {
 
-        public static class NewTenantWelcomePage extends AppPlace {
+        public static class NewTenantWelcomePage extends AppPlace implements IMoveInPlace {
         }
 
-        public static class NewGuarantorWelcomePage extends AppPlace {
+        public static class NewGuarantorWelcomePage extends AppPlace implements IMoveInPlace {
         }
 
-        public static class MoveInWizardStepPreview extends AppPlace {
+        public static class MoveInWizardStepPreview extends AppPlace implements IMoveInPlace {
         }
 
-        public static class MoveInWizardCompletionConfirmation extends AppPlace {
+        public static class MoveInWizardCompletionConfirmation extends AppPlace implements IMoveInPlace {
         }
 
     }
@@ -227,12 +228,12 @@ public class ResidentPortalSiteMap extends PortalSiteMap {
             public static class TenantSure {
 
                 @PlaceProperties(navigLabel = "Get TenantSure", caption = "Get TenantSure")
-                public static class TenantSureWizard extends AppPlace {
+                public static class TenantSureWizard extends AppPlace implements IMoveInPlace {
 
                 }
 
                 @PlaceProperties(navigLabel = "TenantSure Order Completed", caption = "TenantSure Order Completed")
-                public static class TenantSureWizardConfirmation extends AppPlace {
+                public static class TenantSureWizardConfirmation extends AppPlace implements IMoveInPlace {
                     {
                         setStable(false);
                     }

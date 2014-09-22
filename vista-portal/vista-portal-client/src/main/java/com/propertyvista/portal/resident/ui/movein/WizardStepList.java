@@ -16,12 +16,15 @@ package com.propertyvista.portal.resident.ui.movein;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.Window;
 
+import com.pyx4j.commons.css.ThemeColor;
 import com.pyx4j.gwt.commons.layout.LayoutChangeRequestEvent;
 import com.pyx4j.gwt.commons.layout.LayoutChangeRequestEvent.ChangeType;
 import com.pyx4j.gwt.commons.layout.LayoutType;
 import com.pyx4j.site.client.AppSite;
 
-import com.propertyvista.portal.rpc.portal.resident.services.movein.MoveinWizardStep;
+import com.propertyvista.portal.resident.MoveInWizardManager;
+import com.propertyvista.portal.rpc.portal.resident.ResidentPortalSiteMap;
+import com.propertyvista.portal.rpc.portal.resident.services.movein.MoveInWizardStep;
 import com.propertyvista.portal.shared.ui.MenuList;
 
 public class WizardStepList extends MenuList<WizardStepItem> {
@@ -30,18 +33,20 @@ public class WizardStepList extends MenuList<WizardStepItem> {
 
     }
 
-    public void addStepItem(MoveinWizardStep step, final int stepIndex) {
+    public void addStepItem(final MoveInWizardStep step, final int stepIndex, ThemeColor color) {
         WizardStepItem menuItem = new WizardStepItem(step, new Command() {
             @Override
             public void execute() {
-                System.out.println("++++++++++++++++++++++execute");
+                MoveInWizardManager.setCurrentStep(step);
+                AppSite.getPlaceController().goTo(new ResidentPortalSiteMap.MoveIn.MoveInWizardStepPreview());
+
                 LayoutType layout = LayoutType.getLayoutType(Window.getClientWidth());
                 if (LayoutType.phonePortrait.equals(layout) || (LayoutType.phoneLandscape.equals(layout))) {
                     AppSite.getEventBus().fireEvent(new LayoutChangeRequestEvent(ChangeType.toggleSideMenu));
                 }
 
             }
-        }, stepIndex);
+        }, stepIndex, color);
         addMenuItem(menuItem);
     }
 

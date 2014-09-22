@@ -17,7 +17,7 @@ import java.util.Collection;
 
 import com.pyx4j.site.client.IsView;
 
-import com.propertyvista.portal.rpc.portal.resident.services.movein.MoveinWizardStep;
+import com.propertyvista.portal.rpc.portal.resident.services.movein.MoveInWizardStep;
 
 public interface MoveInWizardMenuView extends IsView {
 
@@ -31,6 +31,6 @@ public interface MoveInWizardMenuView extends IsView {
 
     public void setPresenter(MoveInWizardMenuPresenter presenter);
 
-    void updateState(Collection<MoveinWizardStep> complete, MoveinWizardStep current);
+    void updateState(Collection<MoveInWizardStep> complete, MoveInWizardStep current);
 
 }

@@ -120,11 +120,11 @@ public class ContentActivityMapper implements AppActivityMapper {
                     } else if (appPlace instanceof ResidentPortalSiteMap.Financial.PaymentMethods.PaymentMethodSubmitted) {
                         activity = new PaymentMethodConfirmationActivity(appPlace);
 
-                    } else if (appPlace instanceof ResidentPortalSiteMap.Financial.PreauthorizedPayments.PreauthorizedPayment) {
+                    } else if (appPlace instanceof ResidentPortalSiteMap.Financial.PreauthorizedPayments.AutoPay) {
                         activity = new AutoPayActivity(appPlace);
-                    } else if (appPlace instanceof ResidentPortalSiteMap.Financial.PreauthorizedPayments.NewPreauthorizedPayment) {
+                    } else if (appPlace instanceof ResidentPortalSiteMap.Financial.PreauthorizedPayments.AutoPayWizard) {
                         activity = new AutoPayWizardActivity(appPlace);
-                    } else if (appPlace instanceof ResidentPortalSiteMap.Financial.PreauthorizedPayments.PreauthorizedPaymentSubmitted) {
+                    } else if (appPlace instanceof ResidentPortalSiteMap.Financial.PreauthorizedPayments.AutoPayConfirmation) {
                         activity = new AutoPayConfirmationActivity(appPlace);
 
                     } else if (appPlace instanceof ResidentPortalSiteMap.Financial.BillingHistory) {

@@ -27,14 +27,13 @@ import com.pyx4j.commons.css.ThemeColor;
 import com.pyx4j.gwt.commons.layout.LayoutChangeEvent;
 import com.pyx4j.gwt.commons.layout.LayoutChangeHandler;
 import com.pyx4j.gwt.commons.layout.LayoutType;
-import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.rpc.AppPlace;
 
 import com.propertyvista.portal.resident.ui.movein.WizardStepItem.StepStatus;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
 import com.propertyvista.portal.rpc.portal.resident.ResidentPortalSiteMap;
-import com.propertyvista.portal.rpc.portal.resident.services.movein.MoveinWizardStep;
+import com.propertyvista.portal.rpc.portal.resident.services.movein.MoveInWizardStep;
 import com.propertyvista.portal.shared.resources.PortalImages;
 import com.propertyvista.portal.shared.themes.PortalRootPaneTheme;
 import com.propertyvista.portal.shared.ui.AppPlaceMenuItem;
@@ -65,8 +64,24 @@ public class MoveInWizardMenuViewImpl extends DockPanel implements MoveInWizardM
         add(footerHolder, DockPanel.SOUTH);
         setCellHeight(footerHolder, "1px");
 
-        for (int i = 0; i < MoveinWizardStep.values().length; i++) {
-            mainHolder.addStepItem(MoveinWizardStep.values()[i], i);
+        for (int i = 0; i < MoveInWizardStep.values().length; i++) {
+            MoveInWizardStep step = MoveInWizardStep.values()[i];
+
+            ThemeColor color = ThemeColor.contrast2;
+            switch (step) {
+            case leaseSigning:
+                color = ThemeColor.contrast2;
+                break;
+            case pap:
+                color = ThemeColor.contrast4;
+                break;
+            case insurance:
+                color = ThemeColor.contrast3;
+                break;
+
+            }
+
+            mainHolder.addStepItem(step, i, color);
         }
 
         footerHolder.addMenuItem(new AppPlaceMenuItem(new ResidentPortalSiteMap.Profile(), PortalImages.INSTANCE.profileMenu(), ThemeColor.background));
@@ -140,14 +155,17 @@ public class MoveInWizardMenuViewImpl extends DockPanel implements MoveInWizardM
     }
 
     @Override
-    public void updateState(Collection<MoveinWizardStep> complete, MoveinWizardStep current) {
+    public void updateState(Collection<MoveInWizardStep> complete, MoveInWizardStep current) {
         for (WizardStepItem step : mainHolder.getMenuItems()) {
             if (step.getStepType().equals(current)) {
                 step.setStatus(StepStatus.current);
+                step.setEnabled(false);
             } else if (complete.contains(step.getStepType())) {
                 step.setStatus(StepStatus.complete);
+                step.setEnabled(false);
             } else {
                 step.setStatus(StepStatus.notComplete);
+                step.setEnabled(true);
             }
         }
     }

@@ -96,7 +96,7 @@ public class MainDashboardActivity extends SecurityAwareActivity implements Main
 
     @Override
     public void setAutopay() {
-        AppSite.getPlaceController().goTo(new ResidentPortalSiteMap.Financial.PreauthorizedPayments.NewPreauthorizedPayment());
+        AppSite.getPlaceController().goTo(new ResidentPortalSiteMap.Financial.PreauthorizedPayments.AutoPayWizard());
     }
 
     @Override

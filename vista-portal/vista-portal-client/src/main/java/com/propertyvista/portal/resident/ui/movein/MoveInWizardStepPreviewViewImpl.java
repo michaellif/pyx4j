@@ -18,13 +18,13 @@ import java.util.Map;
 
 import com.google.gwt.user.client.ui.SimplePanel;
 
-import com.propertyvista.portal.rpc.portal.resident.services.movein.MoveinWizardStep;
+import com.propertyvista.portal.rpc.portal.resident.services.movein.MoveInWizardStep;
 import com.propertyvista.portal.shared.themes.DashboardTheme;
 import com.propertyvista.portal.shared.ui.AbstractGadget;
 
 public class MoveInWizardStepPreviewViewImpl extends SimplePanel implements MoveInWizardStepPreviewView {
 
-    private final Map<MoveinWizardStep, AbstractGadget<?>> gadgets;
+    private final Map<MoveInWizardStep, AbstractGadget<?>> gadgets;
 
     private AbstractGadget<?> currentGadget;
 
@@ -34,18 +34,18 @@ public class MoveInWizardStepPreviewViewImpl extends SimplePanel implements Move
         gadgets = new HashMap<>();
 
         AbstractGadget<?> gadget = new MoveInWizardLeaseSigningPreviewGadget(this);
-        gadgets.put(MoveinWizardStep.leaseSigning, gadget);
+        gadgets.put(MoveInWizardStep.leaseSigning, gadget);
 
         gadget = new MoveInWizardPapPreviewGadget(this);
-        gadgets.put(MoveinWizardStep.pap, gadget);
+        gadgets.put(MoveInWizardStep.pap, gadget);
 
         gadget = new MoveInWizardInsurancePreviewGadget(this);
-        gadgets.put(MoveinWizardStep.insurance, gadget);
+        gadgets.put(MoveInWizardStep.insurance, gadget);
 
     }
 
     @Override
-    public void setCurrentStep(MoveinWizardStep step) {
+    public void setCurrentStep(MoveInWizardStep step) {
         currentGadget = gadgets.get(step);
         setWidget(currentGadget);
     }

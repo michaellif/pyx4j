@@ -127,7 +127,7 @@ public class FinancialDashboardActivity extends SecurityAwareActivity implements
 
     @Override
     public void addAutoPay() {
-        AppSite.getPlaceController().goTo(new ResidentPortalSiteMap.Financial.PreauthorizedPayments.NewPreauthorizedPayment());
+        AppSite.getPlaceController().goTo(new ResidentPortalSiteMap.Financial.PreauthorizedPayments.AutoPayWizard());
     }
 
     @Override
@@ -143,7 +143,7 @@ public class FinancialDashboardActivity extends SecurityAwareActivity implements
     @Override
     public void viewPreauthorizedPayment(AutoPayInfoDTO autoPay) {
         AppSite.getPlaceController().goTo(
-                new ResidentPortalSiteMap.Financial.PreauthorizedPayments.PreauthorizedPayment().formViewerPlace(autoPay.id().getValue()));
+                new ResidentPortalSiteMap.Financial.PreauthorizedPayments.AutoPay().formViewerPlace(autoPay.id().getValue()));
     }
 
     @Override

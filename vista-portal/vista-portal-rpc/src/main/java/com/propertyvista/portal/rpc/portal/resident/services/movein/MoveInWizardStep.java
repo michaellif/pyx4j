@@ -18,7 +18,7 @@ import com.pyx4j.i18n.annotations.Translate;
 import com.pyx4j.i18n.shared.I18nEnum;
 
 @I18n(context = "Bathroom Number")
-public enum MoveinWizardStep {
+public enum MoveInWizardStep {
 
     @Translate("Lease Signing")
     leaseSigning,

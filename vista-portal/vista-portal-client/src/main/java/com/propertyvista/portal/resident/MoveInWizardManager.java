@@ -16,11 +16,13 @@ package com.propertyvista.portal.resident;
 import java.util.ArrayList;
 import java.util.Collection;
 
-import com.propertyvista.portal.rpc.portal.resident.services.movein.MoveinWizardStep;
+import com.propertyvista.portal.rpc.portal.resident.services.movein.MoveInWizardStep;
 
 public class MoveInWizardManager {
 
-    private static Collection<MoveinWizardStep> completeSteps = new ArrayList<>();
+    private static Collection<MoveInWizardStep> completeSteps = new ArrayList<>();
+
+    private static MoveInWizardStep currentStep = MoveInWizardStep.leaseSigning;
 
     static {
 //        markStepComplete(MoveinWizardStep.leaseSigning);
@@ -28,16 +30,16 @@ public class MoveInWizardManager {
 //        markStepComplete(MoveinWizardStep.insurance);
     }
 
-    public static boolean isStepComplete(MoveinWizardStep step) {
+    public static boolean isStepComplete(MoveInWizardStep step) {
         return completeSteps.contains(step);
     }
 
-    public static void markStepComplete(MoveinWizardStep step) {
+    public static void markStepComplete(MoveInWizardStep step) {
         completeSteps.add(step);
     }
 
-    public static MoveinWizardStep getNextStep() {
-        for (MoveinWizardStep step : MoveinWizardStep.values()) {
+    public static MoveInWizardStep getNextStep() {
+        for (MoveInWizardStep step : MoveInWizardStep.values()) {
             if (!isStepComplete(step)) {
                 return step;
             }
@@ -45,11 +47,17 @@ public class MoveInWizardManager {
         return null;
     }
 
-    public static Collection<MoveinWizardStep> getCompleteSteps() {
+    public static Collection<MoveInWizardStep> getCompleteSteps() {
         return completeSteps;
     }
 
-    public static MoveinWizardStep getCurrentStep() {
-        return MoveinWizardStep.pap;
+    public static MoveInWizardStep getCurrentStep() {
+        return currentStep;
+    }
+
+    public static void setCurrentStep(MoveInWizardStep currentStep) {
+        if (!getCompleteSteps().contains(currentStep)) {
+            MoveInWizardManager.currentStep = currentStep;
+        }
     }
 }

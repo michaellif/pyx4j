@@ -17,7 +17,7 @@ import com.google.gwt.user.client.Command;
 
 import com.pyx4j.commons.css.ThemeColor;
 
-import com.propertyvista.portal.rpc.portal.resident.services.movein.MoveinWizardStep;
+import com.propertyvista.portal.rpc.portal.resident.services.movein.MoveInWizardStep;
 import com.propertyvista.portal.shared.ui.MenuItem;
 
 public class WizardStepItem extends MenuItem<StepIndexLabel> {
@@ -26,10 +26,10 @@ public class WizardStepItem extends MenuItem<StepIndexLabel> {
         notComplete, complete, current
     }
 
-    private final MoveinWizardStep step;
+    private final MoveInWizardStep step;
 
-    public WizardStepItem(MoveinWizardStep step, Command command, int index) {
-        super(step.toString(), command, new StepIndexLabel(String.valueOf(index + 1)), ThemeColor.contrast1);
+    public WizardStepItem(MoveInWizardStep step, Command command, int index, ThemeColor color) {
+        super(step.toString(), command, new StepIndexLabel(String.valueOf(index + 1)), color);
         this.step = step;
     }
 
@@ -38,7 +38,7 @@ public class WizardStepItem extends MenuItem<StepIndexLabel> {
         super.setSelected(StepStatus.current.equals(status));
     }
 
-    public MoveinWizardStep getStepType() {
+    public MoveInWizardStep getStepType() {
         return step;
     }
 
