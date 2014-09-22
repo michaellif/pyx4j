@@ -65,7 +65,7 @@ public class MoveInWizardServiceImpl implements MoveInWizardService {
     }
 
     @Override
-    public void skipSteps(AsyncCallback<Void> callback, MoveInWizardStep step) {
+    public void skipStep(AsyncCallback<Void> callback, MoveInWizardStep step) {
         switch (step) {
         case insurance:
             ServerSideFactory.create(CustomerFacade.class).skipMoveInAction(ResidentPortalContext.getLeaseParticipant(), MoveInActionType.insurance);

@@ -31,6 +31,6 @@ public interface MoveInWizardService extends IService {
 
     public void obtainIncompleteSteps(AsyncCallback<Vector<MoveInWizardStepTO>> callback);
 
-    public void skipSteps(AsyncCallback<Void> callback, MoveInWizardStep step);
+    public void skipStep(AsyncCallback<Void> callback, MoveInWizardStep step);
 
 }
