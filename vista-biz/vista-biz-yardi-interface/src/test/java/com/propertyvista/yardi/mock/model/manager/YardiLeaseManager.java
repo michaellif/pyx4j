@@ -14,6 +14,7 @@
 package com.propertyvista.yardi.mock.model.manager;
 
 import com.propertyvista.yardi.mock.model.domain.YardiTenant;
+import com.propertyvista.yardi.mock.model.manager.YardiBuildingManager.BuildingBuilder;
 
 public interface YardiLeaseManager extends YardiMockManager {
 
@@ -32,6 +33,8 @@ public interface YardiLeaseManager extends YardiMockManager {
         LeaseBuilder setActualMoveIn(String date);
 
         LeaseBuilder setActualMoveOut(String date);
+
+        BuildingBuilder done();
 
         TenantBuilder addTenant(String tenantId, String name);
 

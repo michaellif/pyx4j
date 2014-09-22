@@ -26,20 +26,21 @@ import com.propertyvista.yardi.mock.model.domain.YardiBuilding;
 import com.propertyvista.yardi.mock.model.domain.YardiFloorplan;
 import com.propertyvista.yardi.mock.model.domain.YardiLease;
 import com.propertyvista.yardi.mock.model.domain.YardiLeaseCharge;
+import com.propertyvista.yardi.mock.model.domain.YardiRentableItem;
 import com.propertyvista.yardi.mock.model.domain.YardiTenant;
 import com.propertyvista.yardi.mock.model.domain.YardiUnit;
 
-public class YardiMockManagerBase {
+public class YardiMockModelUtils {
 
     // Model manipulations
-    void addBuilding(YardiBuilding building) {
+    static void addBuilding(YardiBuilding building) {
         assert building != null : "building cannot be null";
 
         YardiMock.server().getModel().getBuildings().add(building);
     }
 
     // Lookup methods
-    YardiBuilding findBuilding(String buildingId) {
+    static YardiBuilding findBuilding(String buildingId) {
         assert buildingId != null : "building id cannot be null";
 
         for (YardiBuilding yb : YardiMock.server().getModel().getBuildings()) {
@@ -50,7 +51,7 @@ public class YardiMockManagerBase {
         return null;
     }
 
-    YardiFloorplan findFloorplan(YardiBuilding building, String fpId) {
+    static YardiFloorplan findFloorplan(YardiBuilding building, String fpId) {
         assert building != null : "building cannot be null";
         assert fpId != null : "floorplan id cannot be null";
 
@@ -62,7 +63,7 @@ public class YardiMockManagerBase {
         return null;
     }
 
-    YardiUnit findUnit(YardiBuilding building, String unitId) {
+    static YardiUnit findUnit(YardiBuilding building, String unitId) {
         assert building != null : "building cannot be null";
         assert unitId != null : "unit id cannot be null";
 
@@ -74,7 +75,19 @@ public class YardiMockManagerBase {
         return null;
     }
 
-    YardiLease findLease(YardiBuilding building, String leaseId) {
+    static YardiRentableItem findRentableItem(YardiBuilding building, String itemId) {
+        assert building != null : "building cannot be null";
+        assert itemId != null : "item id cannot be null";
+
+        for (YardiRentableItem fp : building.rentableItems()) {
+            if (itemId.equals(fp.itemId().getValue())) {
+                return fp;
+            }
+        }
+        return null;
+    }
+
+    static YardiLease findLease(YardiBuilding building, String leaseId) {
         assert building != null : "building cannot be null";
         assert leaseId != null : "lease id cannot be null";
 
@@ -86,7 +99,7 @@ public class YardiMockManagerBase {
         return null;
     }
 
-    YardiTenant findTenant(YardiLease lease, String tenantId) {
+    static YardiTenant findTenant(YardiLease lease, String tenantId) {
         assert lease != null : "lease cannot be null";
         assert tenantId != null : "tenant id cannot be null";
 
@@ -98,7 +111,7 @@ public class YardiMockManagerBase {
         return null;
     }
 
-    YardiLeaseCharge findLeaseCharge(YardiLease lease, String chargeId) {
+    static YardiLeaseCharge findLeaseCharge(YardiLease lease, String chargeId) {
         assert lease != null : "lease cannot be null";
         assert chargeId != null : "charge id cannot be null";
 
@@ -110,24 +123,24 @@ public class YardiMockManagerBase {
         return null;
     }
 
-    // Utilities
-    BigDecimal toAmount(String amount) {
+    // Conversions
+    static BigDecimal toAmount(String amount) {
         return new BigDecimal(amount).setScale(2, RoundingMode.HALF_DOWN);
     }
 
-    Date toDate(String date) {
+    static Date toDate(String date) {
         return DateUtils.detectDateformat(date);
     }
 
-    LogicalDate toLogicalDate(String date) {
+    static LogicalDate toLogicalDate(String date) {
         return new LogicalDate(toDate(date));
     }
 
-    String format(Date date) {
+    static String format(Date date) {
         return new SimpleDateFormat("yyyy-MM-dd").format(date);
     }
 
-    String format(BigDecimal amount) {
+    static String format(BigDecimal amount) {
         return amount.toPlainString();
     }
 }

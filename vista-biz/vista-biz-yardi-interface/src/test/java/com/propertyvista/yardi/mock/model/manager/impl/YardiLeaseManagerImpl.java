@@ -17,19 +17,18 @@ import com.pyx4j.entity.core.EntityFactory;
 
 import com.propertyvista.yardi.mock.model.domain.YardiBuilding;
 import com.propertyvista.yardi.mock.model.domain.YardiLease;
-import com.propertyvista.yardi.mock.model.domain.YardiLeaseCharge;
-import com.propertyvista.yardi.mock.model.domain.YardiTenant;
-import com.propertyvista.yardi.mock.model.domain.YardiTenant.Type;
 import com.propertyvista.yardi.mock.model.domain.YardiUnit;
+import com.propertyvista.yardi.mock.model.manager.YardiBuildingManager;
 import com.propertyvista.yardi.mock.model.manager.YardiLeaseManager;
 
-public class YardiLeaseManagerImpl extends YardiMockManagerBase implements YardiLeaseManager {
+public class YardiLeaseManagerImpl implements YardiLeaseManager {
 
     @Override
     public LeaseBuilder addDefaultLease() {
         YardiLease lease = EntityFactory.create(YardiLease.class);
+        YardiBuilding building = YardiMockModelUtils.findBuilding(YardiBuildingManager.DEFAULT_PROPERTY_CODE);
         // TODO - add default lease impl
-        return new LeaseBuilderImpl(lease);
+        return new LeaseBuilderImpl(lease, new BuildingBuilderImpl(building));
     }
 
     @Override
@@ -38,15 +37,15 @@ public class YardiLeaseManagerImpl extends YardiMockManagerBase implements Yardi
         assert unitId != null : "unit id cannot be null";
         assert leaseId != null : "lease id cannot be null";
 
-        YardiBuilding building = findBuilding(buildingId);
+        YardiBuilding building = YardiMockModelUtils.findBuilding(buildingId);
         if (building == null) {
             throw new Error("Building not found: " + buildingId);
         }
-        YardiUnit unit = findUnit(building, unitId);
+        YardiUnit unit = YardiMockModelUtils.findUnit(building, unitId);
         if (unit == null) {
             throw new Error("Unit not found: " + buildingId + ":" + unitId);
         }
-        if (findLease(building, leaseId) != null) {
+        if (YardiMockModelUtils.findLease(building, leaseId) != null) {
             throw new Error("Lease already exists: " + leaseId);
         }
 
@@ -57,237 +56,20 @@ public class YardiLeaseManagerImpl extends YardiMockManagerBase implements Yardi
 
         building.leases().add(lease);
 
-        return new LeaseBuilderImpl(lease);
+        return new LeaseBuilderImpl(lease, new BuildingBuilderImpl(building));
     }
 
     @Override
     public LeaseBuilder getLease(String leaseId, String buildingId) {
-        YardiBuilding building = findBuilding(buildingId);
+        YardiBuilding building = YardiMockModelUtils.findBuilding(buildingId);
         if (building == null) {
             throw new Error("Building not found: " + buildingId);
         }
-        YardiLease lease = findLease(building, leaseId);
+        YardiLease lease = YardiMockModelUtils.findLease(building, leaseId);
         if (lease == null) {
             throw new Error("Lease not found: " + leaseId);
         }
 
-        return new LeaseBuilderImpl(lease);
-    }
-
-    public class LeaseBuilderImpl implements LeaseBuilder {
-
-        private final YardiLease lease;
-
-        LeaseBuilderImpl(YardiLease lease) {
-            this.lease = lease;
-        }
-
-        @Override
-        public LeaseBuilder setRentAmount(String amount) {
-            lease.currentRent().setValue(toAmount(amount));
-            return this;
-        }
-
-        @Override
-        public LeaseBuilder setLeaseFrom(String date) {
-            lease.leaseFrom().setValue(toLogicalDate(date));
-            return this;
-        }
-
-        @Override
-        public LeaseBuilder setLeaseTo(String date) {
-            lease.leaseTo().setValue(toLogicalDate(date));
-            return this;
-        }
-
-        @Override
-        public LeaseBuilder setExpectedMoveIn(String date) {
-            lease.expectedMoveIn().setValue(toLogicalDate(date));
-            return this;
-        }
-
-        @Override
-        public LeaseBuilder setExpectedMoveOut(String date) {
-            lease.expectedMoveOut().setValue(toLogicalDate(date));
-            return this;
-        }
-
-        @Override
-        public LeaseBuilder setActualMoveIn(String date) {
-            lease.actualMoveIn().setValue(toLogicalDate(date));
-            return this;
-        }
-
-        @Override
-        public LeaseBuilder setActualMoveOut(String date) {
-            lease.actualMoveOut().setValue(toLogicalDate(date));
-            return this;
-        }
-
-        @Override
-        public TenantBuilder addTenant(String tenantId, String name) {
-            assert tenantId != null : "tenant id cannot be null";
-            assert name != null : "name cannot be null";
-
-            if (findTenant(lease, tenantId) != null) {
-                throw new Error("Tenant already exists: " + tenantId);
-            }
-
-            YardiTenant tenant = EntityFactory.create(YardiTenant.class);
-            // auto set customer id and type so that first added is the main tenant 
-            tenant.tenantId().setValue(lease.tenants().size() == 0 ? lease.leaseId().getValue() : tenantId);
-            tenant.type().setValue(lease.tenants().size() == 0 ? Type.CURRENT_RESIDENT : Type.CUSTOMER);
-            tenant.responsibleForLease().setValue(true);
-
-            lease.tenants().add(tenant);
-            return new TenantBuilderImpl(tenant).setName(name);
-        }
-
-        @Override
-        public LeaseChargeBuilder addCharge(String chargeId, String chargeCode, String amount) {
-            assert chargeId != null : "charge id cannot be null";
-            assert amount != null : "amount cannot be null";
-
-            if (findLeaseCharge(lease, chargeId) != null) {
-                throw new Error("Lease Charge already exists: " + chargeId);
-            }
-
-            YardiLeaseCharge charge = EntityFactory.create(YardiLeaseCharge.class);
-            charge.chargeId().setValue(chargeId);
-            charge.amount().setValue(toAmount(amount));
-            charge.chargeCode().setValue(chargeCode);
-
-            lease.charges().add(charge);
-            return new LeaseChargeBuilderImpl(charge);
-        }
-
-        @Override
-        public LeaseChargeBuilder addRentCharge(String chargeId, String chargeCode) {
-            return addCharge(chargeId, chargeCode, format(lease.currentRent().getValue())) //
-                    .setFromDate(format(lease.leaseFrom().getValue())) //
-                    .setToDate(format(lease.leaseTo().getValue())) //
-                    .setDescription("Monthly Rent");
-        }
-
-        @Override
-        public TenantBuilder getTenant(String tenantId) {
-            assert tenantId != null : "tenant id cannot be null";
-
-            YardiTenant tenant = findTenant(lease, tenantId);
-            if (tenant == null) {
-                throw new Error("Tenant not found: " + tenantId);
-            }
-
-            return new TenantBuilderImpl(tenant);
-        }
-
-        @Override
-        public LeaseChargeBuilder getCharge(String chargeId) {
-            assert chargeId != null : "charge id cannot be null";
-
-            YardiLeaseCharge charge = findLeaseCharge(lease, chargeId);
-            if (charge == null) {
-                throw new Error("Charge not found: " + chargeId);
-            }
-
-            return new LeaseChargeBuilderImpl(charge);
-        }
-
-        public class TenantBuilderImpl implements TenantBuilder {
-
-            private final YardiTenant tenant;
-
-            TenantBuilderImpl(YardiTenant tenant) {
-                this.tenant = tenant;
-            }
-
-            @Override
-            public TenantBuilder setType(Type type) {
-                tenant.type().setValue(type);
-                return this;
-            }
-
-            @Override
-            public TenantBuilder setName(String name) {
-                // parse name
-                String[] nameParts = name.split(" ", 2);
-                tenant.firstName().setValue(nameParts[0]);
-                tenant.lastName().setValue(nameParts.length > 1 ? nameParts[1] : "");
-                return this;
-            }
-
-            @Override
-            public TenantBuilder setEmail(String email) {
-                tenant.email().setValue(email);
-                return this;
-            }
-
-            @Override
-            public TenantBuilder setResponsibleForLease(boolean responsible) {
-                tenant.responsibleForLease().setValue(responsible);
-                return this;
-            }
-
-            @Override
-            public LeaseBuilder done() {
-                return LeaseBuilderImpl.this;
-            }
-        }
-
-        public class LeaseChargeBuilderImpl implements LeaseChargeBuilder {
-
-            private final YardiLeaseCharge charge;
-
-            LeaseChargeBuilderImpl(YardiLeaseCharge charge) {
-                this.charge = charge;
-            }
-
-            @Override
-            public LeaseChargeBuilder setAmount(String amount) {
-                charge.amount().setValue(toAmount(amount));
-                return this;
-            }
-
-            @Override
-            public LeaseChargeBuilder setChargeCode(String chargeCode) {
-                charge.chargeCode().setValue(chargeCode);
-                return this;
-            }
-
-            @Override
-            public LeaseChargeBuilder setFromDate(String date) {
-                charge.serviceFromDate().setValue(toLogicalDate(date));
-                return this;
-            }
-
-            @Override
-            public LeaseChargeBuilder setToDate(String date) {
-                charge.serviceToDate().setValue(toLogicalDate(date));
-                return this;
-            }
-
-            @Override
-            public LeaseChargeBuilder setGlAccountNumber(String account) {
-                charge.glAccountNumber().setValue(account);
-                return this;
-            }
-
-            @Override
-            public LeaseChargeBuilder setDescription(String text) {
-                charge.description().setValue(text);
-                return this;
-            }
-
-            @Override
-            public LeaseChargeBuilder setComment(String text) {
-                charge.comment().setValue(text);
-                return this;
-            }
-
-            @Override
-            public LeaseBuilder done() {
-                return LeaseBuilderImpl.this;
-            }
-        }
+        return new LeaseBuilderImpl(lease, new BuildingBuilderImpl(building));
     }
 }
