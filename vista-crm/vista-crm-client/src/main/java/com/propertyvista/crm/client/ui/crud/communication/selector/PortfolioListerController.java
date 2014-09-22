@@ -27,6 +27,7 @@ public class PortfolioListerController extends ListerController<Portfolio> {
     public PortfolioListerController(ILister<Portfolio> view, AbstractListCrudService<Portfolio> service) {
         super(Portfolio.class, view, service);
         ((EntityLister<Portfolio>) view).setDataTableModel(defineColumnDescriptors());
+        this.populate();
     }
 
     protected Portfolio proto() {

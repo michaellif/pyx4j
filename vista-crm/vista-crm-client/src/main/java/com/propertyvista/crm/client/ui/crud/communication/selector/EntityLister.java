@@ -93,4 +93,9 @@ public class EntityLister<E extends IEntity> extends AbstractLister<E> {
         }
         return super.updateCriteria(criteria);
     }
+
+//    @Override
+//    protected Collection<E> getSelectedItems(){
+//        return
+//    }
 }

@@ -27,6 +27,7 @@ public class BuildingListerController extends ListerController<Building> {
     public BuildingListerController(ILister<Building> view, AbstractListCrudService<Building> service) {
         super(Building.class, view, service);
         ((EntityLister<Building>) view).setDataTableModel(defineColumnDescriptors());
+        this.populate();
     }
 
     protected Building proto() {
@@ -69,4 +70,5 @@ public class BuildingListerController extends ListerController<Building> {
                 new MemberColumnDescriptor.Builder(proto().marketing().name(), false).title("Marketing Name").build()
         }; //@formatter:on
     }
+
 }

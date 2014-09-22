@@ -20,7 +20,6 @@
  */
 package com.propertyvista.crm.client.ui.crud.communication.selector;
 
-import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Style.Display;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
@@ -28,18 +27,8 @@ import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.SimplePanel;
 
-import com.pyx4j.entity.rpc.AbstractListCrudService;
 import com.pyx4j.site.client.backoffice.ui.prime.lister.ILister;
 import com.pyx4j.widgets.client.Label;
-
-import com.propertyvista.crm.rpc.services.selections.SelectBuildingListService;
-import com.propertyvista.crm.rpc.services.selections.SelectEmployeeListService;
-import com.propertyvista.crm.rpc.services.selections.SelectPortfolioListService;
-import com.propertyvista.crm.rpc.services.selections.SelectTenantListService;
-import com.propertyvista.domain.company.Employee;
-import com.propertyvista.domain.company.Portfolio;
-import com.propertyvista.domain.property.asset.building.Building;
-import com.propertyvista.domain.tenant.lease.Tenant;
 
 public class SelectRecipientsDialogForm extends FlowPanel {
 
@@ -49,6 +38,8 @@ public class SelectRecipientsDialogForm extends FlowPanel {
 
     private SimplePanel leftMenuPanel;
 
+    private ILister lister;
+
     private TenantListerController tenantListerController;
 
     private CorporateListerController corporateListerController;
@@ -56,8 +47,6 @@ public class SelectRecipientsDialogForm extends FlowPanel {
     private BuildingListerController buildingListerController;
 
     private PortfolioListerController portfolioListerController;
-
-    private ILister lister;
 
     public SelectRecipientsDialogForm() {
         super();
@@ -76,9 +65,10 @@ public class SelectRecipientsDialogForm extends FlowPanel {
             @Override
             public void onClick(ClickEvent event) {
                 event.stopPropagation();
-                listPanel.getElement().removeAllChildren();
-                lister = new EntityLister(Tenant.class, true);
-                tenantListerController = new TenantListerController(lister, getTenantSelectService());
+
+                lister = new TenantLister(true);
+                tenantListerController = new TenantListerController(lister, ((TenantLister) lister).getSelectService());
+                listPanel.clear();
                 listPanel.add(new ScrollPanel(lister.asWidget()));
             }
         });
@@ -88,9 +78,10 @@ public class SelectRecipientsDialogForm extends FlowPanel {
             @Override
             public void onClick(ClickEvent event) {
                 event.stopPropagation();
-                listPanel.getElement().removeAllChildren();
-                lister = new EntityLister(Employee.class, true);
-                corporateListerController = new CorporateListerController(lister, getCorporateSelectService());
+                //listPanel.getElement().removeAllChildren();
+                lister = new CorporateLister(true);
+                corporateListerController = new CorporateListerController(lister, ((CorporateLister) lister).getSelectService());
+                listPanel.clear();
                 listPanel.add(new ScrollPanel(lister.asWidget()));
             }
         });
@@ -100,9 +91,10 @@ public class SelectRecipientsDialogForm extends FlowPanel {
             @Override
             public void onClick(ClickEvent event) {
                 event.stopPropagation();
-                listPanel.getElement().removeAllChildren();
-                lister = new EntityLister(Building.class, true);
-                buildingListerController = new BuildingListerController(lister, getBuildingSelectService());
+                //listPanel.getElement().removeAllChildren();
+                lister = new BuildingLister(true);
+                buildingListerController = new BuildingListerController(lister, ((BuildingLister) lister).getSelectService());
+                listPanel.clear();
                 listPanel.add(new ScrollPanel(lister.asWidget()));
             }
         });
@@ -114,9 +106,10 @@ public class SelectRecipientsDialogForm extends FlowPanel {
             @Override
             public void onClick(ClickEvent event) {
                 event.stopPropagation();
-                listPanel.getElement().removeAllChildren();
-                lister = new EntityLister(Portfolio.class, true);
-                portfolioListerController = new PortfolioListerController(lister, getPortfolioSelectService());
+                //listPanel.getElement().removeAllChildren();
+                lister = new PortfolioLister(true);
+                portfolioListerController = new PortfolioListerController(lister, ((PortfolioLister) lister).getSelectService());
+                listPanel.clear();
                 listPanel.add(new ScrollPanel(lister.asWidget()));
             }
         });
@@ -128,19 +121,4 @@ public class SelectRecipientsDialogForm extends FlowPanel {
 
     }
 
-    protected AbstractListCrudService<Tenant> getTenantSelectService() {
-        return GWT.<SelectTenantListService> create(SelectTenantListService.class);
-    }
-
-    protected AbstractListCrudService<Employee> getCorporateSelectService() {
-        return GWT.<SelectEmployeeListService> create(SelectEmployeeListService.class);
-    }
-
-    protected AbstractListCrudService<Building> getBuildingSelectService() {
-        return GWT.<SelectBuildingListService> create(SelectBuildingListService.class);
-    }
-
-    protected AbstractListCrudService<Portfolio> getPortfolioSelectService() {
-        return GWT.<SelectPortfolioListService> create(SelectPortfolioListService.class);
-    }
 }

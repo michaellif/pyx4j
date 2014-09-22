@@ -26,8 +26,8 @@ public class CorporateListerController extends ListerController<Employee> {
 
     public CorporateListerController(ILister<Employee> view, AbstractListCrudService<Employee> service) {
         super(Employee.class, view, service);
-
         ((EntityLister<Employee>) view).setDataTableModel(defineColumnDescriptors());
+        this.populate();
     }
 
     protected Employee proto() {

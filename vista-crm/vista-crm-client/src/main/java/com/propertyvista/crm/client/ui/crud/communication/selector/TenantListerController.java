@@ -27,6 +27,7 @@ public class TenantListerController extends ListerController<Tenant> {
     public TenantListerController(ILister<Tenant> view, AbstractListCrudService<Tenant> service) {
         super(Tenant.class, view, service);
         ((EntityLister<Tenant>) view).setDataTableModel(defineColumnDescriptors());
+        this.populate();
     }
 
     protected Tenant proto() {
