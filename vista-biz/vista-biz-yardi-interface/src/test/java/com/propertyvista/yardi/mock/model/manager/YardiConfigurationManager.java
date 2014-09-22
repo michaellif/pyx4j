@@ -7,24 +7,12 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Sep 16, 2014
+ * Created on Sep 22, 2014
  * @author stanp
  * @version $Id$
  */
-package com.propertyvista.yardi.mock.model.domain;
+package com.propertyvista.yardi.mock.model.manager;
 
-import java.math.BigDecimal;
+public interface YardiConfigurationManager extends YardiMockManager {
 
-import com.pyx4j.entity.core.IEntity;
-import com.pyx4j.entity.core.IPrimitive;
-
-public interface YardiUnit extends IEntity {
-
-    IPrimitive<String> unitId();
-
-    IPrimitive<BigDecimal> rent();
-
-    IPrimitive<BigDecimal> depositLMR();
-
-    YardiFloorplan floorplan();
 }

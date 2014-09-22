@@ -40,7 +40,7 @@ public class YardiMockModelUtils {
     }
 
     // Lookup methods
-    static YardiBuilding findBuilding(String buildingId) {
+    public static YardiBuilding findBuilding(String buildingId) {
         assert buildingId != null : "building id cannot be null";
 
         for (YardiBuilding yb : YardiMock.server().getModel().getBuildings()) {
@@ -51,7 +51,7 @@ public class YardiMockModelUtils {
         return null;
     }
 
-    static YardiFloorplan findFloorplan(YardiBuilding building, String fpId) {
+    public static YardiFloorplan findFloorplan(YardiBuilding building, String fpId) {
         assert building != null : "building cannot be null";
         assert fpId != null : "floorplan id cannot be null";
 
@@ -63,7 +63,7 @@ public class YardiMockModelUtils {
         return null;
     }
 
-    static YardiUnit findUnit(YardiBuilding building, String unitId) {
+    public static YardiUnit findUnit(YardiBuilding building, String unitId) {
         assert building != null : "building cannot be null";
         assert unitId != null : "unit id cannot be null";
 
@@ -75,7 +75,7 @@ public class YardiMockModelUtils {
         return null;
     }
 
-    static YardiRentableItem findRentableItem(YardiBuilding building, String itemId) {
+    public static YardiRentableItem findRentableItem(YardiBuilding building, String itemId) {
         assert building != null : "building cannot be null";
         assert itemId != null : "item id cannot be null";
 
@@ -87,7 +87,7 @@ public class YardiMockModelUtils {
         return null;
     }
 
-    static YardiLease findLease(YardiBuilding building, String leaseId) {
+    public static YardiLease findLease(YardiBuilding building, String leaseId) {
         assert building != null : "building cannot be null";
         assert leaseId != null : "lease id cannot be null";
 
@@ -99,7 +99,7 @@ public class YardiMockModelUtils {
         return null;
     }
 
-    static YardiTenant findTenant(YardiLease lease, String tenantId) {
+    public static YardiTenant findTenant(YardiLease lease, String tenantId) {
         assert lease != null : "lease cannot be null";
         assert tenantId != null : "tenant id cannot be null";
 
@@ -111,7 +111,7 @@ public class YardiMockModelUtils {
         return null;
     }
 
-    static YardiLeaseCharge findLeaseCharge(YardiLease lease, String chargeId) {
+    public static YardiLeaseCharge findLeaseCharge(YardiLease lease, String chargeId) {
         assert lease != null : "lease cannot be null";
         assert chargeId != null : "charge id cannot be null";
 
@@ -124,23 +124,23 @@ public class YardiMockModelUtils {
     }
 
     // Conversions
-    static BigDecimal toAmount(String amount) {
+    public static BigDecimal toAmount(String amount) {
         return new BigDecimal(amount).setScale(2, RoundingMode.HALF_DOWN);
     }
 
-    static Date toDate(String date) {
+    public static Date toDate(String date) {
         return DateUtils.detectDateformat(date);
     }
 
-    static LogicalDate toLogicalDate(String date) {
+    public static LogicalDate toLogicalDate(String date) {
         return new LogicalDate(toDate(date));
     }
 
-    static String format(Date date) {
+    public static String format(Date date) {
         return new SimpleDateFormat("yyyy-MM-dd").format(date);
     }
 
-    static String format(BigDecimal amount) {
+    public static String format(BigDecimal amount) {
         return amount.toPlainString();
     }
 }

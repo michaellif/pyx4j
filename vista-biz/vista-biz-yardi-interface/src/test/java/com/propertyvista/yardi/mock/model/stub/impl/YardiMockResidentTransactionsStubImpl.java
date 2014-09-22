@@ -29,9 +29,7 @@ import com.yardi.entity.mits.YardiCustomer;
 import com.yardi.entity.mits.YardiCustomers;
 import com.yardi.entity.resident.Charge;
 import com.yardi.entity.resident.ChargeDetail;
-import com.yardi.entity.resident.Detail;
 import com.yardi.entity.resident.NumberOccupants;
-import com.yardi.entity.resident.Payment;
 import com.yardi.entity.resident.Property;
 import com.yardi.entity.resident.PropertyID;
 import com.yardi.entity.resident.RTCustomer;
@@ -50,7 +48,6 @@ import com.propertyvista.yardi.mock.model.domain.YardiLease;
 import com.propertyvista.yardi.mock.model.domain.YardiLeaseCharge;
 import com.propertyvista.yardi.mock.model.domain.YardiTenant;
 import com.propertyvista.yardi.mock.model.domain.YardiTransactionCharge;
-import com.propertyvista.yardi.mock.model.domain.YardiTransactionPayment;
 import com.propertyvista.yardi.mock.model.domain.YardiUnit;
 import com.propertyvista.yardi.stubs.YardiResidentTransactionsStub;
 
@@ -233,15 +230,6 @@ public class YardiMockResidentTransactionsStubImpl extends YardiMockStubBase imp
         detail.setUnitID(lease.unit().unitId().getValue());
         trans.setCharge(new Charge());
         trans.getCharge().setDetail(detail);
-        return trans;
-    }
-
-    private Transactions toTransaction(YardiTransactionPayment ytp, YardiLease lease) {
-        Transactions trans = new Transactions();
-        Detail detail = new Detail();
-        // TODO set payment detail from ytp
-        trans.setPayment(new Payment());
-        trans.getPayment().setDetail(detail);
         return trans;
     }
 

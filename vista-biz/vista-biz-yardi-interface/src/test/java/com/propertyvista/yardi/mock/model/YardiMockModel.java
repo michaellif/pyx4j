@@ -14,19 +14,30 @@
 package com.propertyvista.yardi.mock.model;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
+import com.propertyvista.yardi.YardiInterface;
 import com.propertyvista.yardi.mock.model.domain.YardiBuilding;
+import com.propertyvista.yardi.mock.model.domain.YardiInterfaceConfig;
 
 public class YardiMockModel {
 
     private final List<YardiBuilding> buildings;
 
+    private final Map<Class<? extends YardiInterface>, YardiInterfaceConfig> ifConfig;
+
     public YardiMockModel() {
         buildings = new ArrayList<>();
+        ifConfig = new HashMap<>();
     }
 
     public List<YardiBuilding> getBuildings() {
         return buildings;
+    }
+
+    public YardiInterfaceConfig getInterfaceConfig(Class<? extends YardiInterface> ifClass) {
+        return ifConfig.get(ifClass);
     }
 }

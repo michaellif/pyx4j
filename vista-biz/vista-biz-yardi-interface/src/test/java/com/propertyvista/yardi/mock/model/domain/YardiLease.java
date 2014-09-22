@@ -24,6 +24,10 @@ import com.pyx4j.entity.core.IPrimitive;
 @EmbeddedEntity
 public interface YardiLease extends IEntity {
 
+    public enum Status {
+        FUTURE, ACTIVE, NOTICE, CANCELED, COMPLETED;
+    }
+
     IPrimitive<String> leaseId();
 
     YardiUnit unit();
@@ -41,6 +45,8 @@ public interface YardiLease extends IEntity {
     IPrimitive<LogicalDate> actualMoveIn();
 
     IPrimitive<LogicalDate> actualMoveOut();
+
+    YardiLeaseApplication application();
 
     IList<YardiTenant> tenants();
 

@@ -58,6 +58,15 @@ public class YardiMockStubBase {
         return YardiMock.server().getModel().getBuildings();
     }
 
+    YardiBuilding getYardiBuilding(String propertyCode) {
+        for (YardiBuilding building : getYardiBuildings()) {
+            if (propertyCode.equals(building.buildingId().getValue())) {
+                return building;
+            }
+        }
+        return null;
+    }
+
     Properties getProperties() {
         Properties properties = new Properties();
         for (YardiBuilding building : getYardiBuildings()) {

@@ -7,24 +7,23 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Sep 16, 2014
+ * Created on Sep 22, 2014
  * @author stanp
  * @version $Id$
  */
-package com.propertyvista.yardi.mock.model.domain;
+package com.propertyvista.yardi.mock.model.manager;
 
-import java.math.BigDecimal;
+import com.propertyvista.yardi.mock.model.manager.YardiLeaseManager.TenantBuilder;
 
-import com.pyx4j.entity.core.IEntity;
-import com.pyx4j.entity.core.IPrimitive;
+// addGuest to building
+// addEvent to application
+// addFee to application
+public interface YardiGuestManager extends YardiMockManager {
 
-public interface YardiUnit extends IEntity {
+    interface GuestBuilder extends TenantBuilder {
 
-    IPrimitive<String> unitId();
+    }
 
-    IPrimitive<BigDecimal> rent();
+    GuestBuilder addGuest(String guestId, String name, String buildingId);
 
-    IPrimitive<BigDecimal> depositLMR();
-
-    YardiFloorplan floorplan();
 }
