@@ -41,7 +41,7 @@ class MoveInManager {
         Collection<PortalResidentBehavior> behaviors = new HashSet<>();
 
         if (leaseBehaviors.contains(PortalResidentBehavior.LeaseAgreementSigningRequired)) {
-            behaviors.add(PortalResidentBehavior.MoveInWizardCompletionRequired);
+            behaviors.add(PortalResidentBehavior.MoveInWizardCompletionAvailable);
         } else {
             Map<MoveInActionType, LeaseParticipantMoveInAction> moveInActionsByType = getMoveInActionsByType(termParticipant.leaseParticipant());
 
@@ -50,14 +50,14 @@ class MoveInManager {
             if (!leaseBehaviors.contains(PortalResidentBehavior.AutopayAgreementPresent)) {
                 LeaseParticipantMoveInAction a = getActiveMoveInAction(moveInActionsByType, MoveInActionType.autoPay);
                 if (a != null) {
-                    behaviors.add(PortalResidentBehavior.MoveInWizardCompletionRequired);
+                    behaviors.add(PortalResidentBehavior.MoveInWizardCompletionAvailable);
                 }
             }
 
             if (!leaseBehaviors.contains(PortalResidentBehavior.InsurancePresent)) {
                 LeaseParticipantMoveInAction a = getActiveMoveInAction(moveInActionsByType, MoveInActionType.insurance);
                 if (a != null) {
-                    behaviors.add(PortalResidentBehavior.MoveInWizardCompletionRequired);
+                    behaviors.add(PortalResidentBehavior.MoveInWizardCompletionAvailable);
                 }
             }
 
