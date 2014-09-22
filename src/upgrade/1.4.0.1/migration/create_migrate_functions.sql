@@ -83,6 +83,161 @@ BEGIN
         
         
         /**
+        *** ==============================================================================================================
+        ***
+        ***         ROLES UPDATE 
+        ***
+        *** ==============================================================================================================
+        **/
+        
+        -- Accounting
+        
+        EXECUTE 'DELETE FROM '||v_schema_name||'.crm_role$behaviors '
+                ||'WHERE OWNER IN ( SELECT id FROM '||v_schema_name||'.crm_role '
+                ||'                 WHERE   name = ''Accounting'' ) '
+                ||'AND  value = ''FinancialPayments'' ';
+                
+        EXECUTE 'UPDATE '||v_schema_name||'.crm_role$behaviors AS b '
+                ||'SET  value = ''TenantAdvanced'' '
+                ||'FROM     '||v_schema_name||'.crm_role r '
+                ||'WHERE    b.owner = r.id '
+                ||'AND      b.value = ''TenantBasic'' '
+                ||'AND      r.name = ''Accounting'' ';
+                
+        EXECUTE 'UPDATE '||v_schema_name||'.crm_role$behaviors AS b '
+                ||'SET  value = ''GuarantorAdvanced'' '
+                ||'FROM     '||v_schema_name||'.crm_role r '
+                ||'WHERE    b.owner = r.id '
+                ||'AND      b.value = ''GuarantorBasic'' '
+                ||'AND      r.name = ''Accounting'' ';
+        
+        
+        -- Leasing
+        
+        EXECUTE 'UPDATE '||v_schema_name||'.crm_role$behaviors AS b '
+                ||'SET  value = ''TenantAdvanced'' '
+                ||'FROM     '||v_schema_name||'.crm_role r '
+                ||'WHERE    b.owner = r.id '
+                ||'AND      b.value = ''TenantBasic'' '
+                ||'AND      r.name = ''Leasing'' ';
+                
+        EXECUTE 'INSERT INTO '||v_schema_name||'.crm_role$behaviors(id, owner,value) '
+                ||'(SELECT  nextval(''public.crm_role$behaviors_seq'') AS id, '
+                ||'         r.id AS owner, ''GuarantorAdvanced'' AS value '
+                ||'FROM '||v_schema_name||'.crm_role AS r '
+                ||'WHERE    r.name = ''Leasing'') ';
+                
+        -- Marketing
+        
+        EXECUTE 'UPDATE '||v_schema_name||'.crm_role$behaviors AS b '
+                ||'SET  value = ''FinancialBasic'' '
+                ||'FROM     '||v_schema_name||'.crm_role r '
+                ||'WHERE    b.owner = r.id '
+                ||'AND      b.value = ''FinancialPayments'' '
+                ||'AND      r.name = ''Marketing'' ';
+        
+        -- Property Administrator
+        
+        EXECUTE 'UPDATE '||v_schema_name||'.crm_role$behaviors AS b '
+                ||'SET  value = ''FinancialAdvanced'' '
+                ||'FROM     '||v_schema_name||'.crm_role r '
+                ||'WHERE    b.owner = r.id '
+                ||'AND      b.value = ''FinancialPayments'' '
+                ||'AND      r.name = ''Property Administrator'' ';
+                
+        -- Property Manager
+        
+        EXECUTE 'UPDATE '||v_schema_name||'.crm_role$behaviors AS b '
+                ||'SET  value = ''FinancialAdvanced'' '
+                ||'FROM     '||v_schema_name||'.crm_role r '
+                ||'WHERE    b.owner = r.id '
+                ||'AND      b.value = ''FinancialPayments'' '
+                ||'AND      r.name = ''Property Manager'' ';
+        
+        EXECUTE 'UPDATE '||v_schema_name||'.crm_role$behaviors AS b '
+                ||'SET  value = ''GuarantorAdvanced'' '
+                ||'FROM     '||v_schema_name||'.crm_role r '
+                ||'WHERE    b.owner = r.id '
+                ||'AND      b.value = ''GuarantorBasic'' '
+                ||'AND      r.name = ''Property Manager'' ';
+                
+        EXECUTE 'UPDATE '||v_schema_name||'.crm_role$behaviors AS b '
+                ||'SET  value = ''TenantAdvanced'' '
+                ||'FROM     '||v_schema_name||'.crm_role r '
+                ||'WHERE    b.owner = r.id '
+                ||'AND      b.value = ''TenantBasic'' '
+                ||'AND      r.name = ''Property Manager'' ';
+        
+        
+        -- Regional Administrator
+        
+        EXECUTE 'UPDATE '||v_schema_name||'.crm_role$behaviors AS b '
+                ||'SET  value = ''FinancialAdvanced'' '
+                ||'FROM     '||v_schema_name||'.crm_role r '
+                ||'WHERE    b.owner = r.id '
+                ||'AND      b.value = ''FinancialPayments'' '
+                ||'AND      r.name = ''Regional Administrator'' ';
+        
+        EXECUTE 'UPDATE '||v_schema_name||'.crm_role$behaviors AS b '
+                ||'SET  value = ''GuarantorAdvanced'' '
+                ||'FROM     '||v_schema_name||'.crm_role r '
+                ||'WHERE    b.owner = r.id '
+                ||'AND      b.value = ''GuarantorBasic'' '
+                ||'AND      r.name = ''Regional Administrator'' ';
+                
+        EXECUTE 'UPDATE '||v_schema_name||'.crm_role$behaviors AS b '
+                ||'SET  value = ''TenantAdvanced'' '
+                ||'FROM     '||v_schema_name||'.crm_role r '
+                ||'WHERE    b.owner = r.id '
+                ||'AND      b.value = ''TenantBasic'' '
+                ||'AND      r.name = ''Regional Administrator'' ';
+                
+        -- Regional Manager
+        
+        EXECUTE 'UPDATE '||v_schema_name||'.crm_role$behaviors AS b '
+                ||'SET  value = ''GuarantorAdvanced'' '
+                ||'FROM     '||v_schema_name||'.crm_role r '
+                ||'WHERE    b.owner = r.id '
+                ||'AND      b.value = ''GuarantorBasic'' '
+                ||'AND      r.name = ''Regional Manager'' ';
+                
+        EXECUTE 'UPDATE '||v_schema_name||'.crm_role$behaviors AS b '
+                ||'SET  value = ''TenantAdvanced'' '
+                ||'FROM     '||v_schema_name||'.crm_role r '
+                ||'WHERE    b.owner = r.id '
+                ||'AND      b.value = ''TenantBasic'' '
+                ||'AND      r.name = ''Regional Manager'' ';
+                
+        EXECUTE 'INSERT INTO '||v_schema_name||'.crm_role$behaviors(id, owner,value) '
+                ||'(SELECT  nextval(''public.crm_role$behaviors_seq'') AS id, '
+                ||'         r.id AS owner, ''FinancialAdvanced'' AS value '
+                ||'FROM '||v_schema_name||'.crm_role AS r '
+                ||'WHERE    r.name = ''Regional Manager'') ';
+    
+        -- Revenue Admin
+        
+         EXECUTE 'INSERT INTO '||v_schema_name||'.crm_role$behaviors(id, owner,value) '
+                ||'(SELECT  nextval(''public.crm_role$behaviors_seq'') AS id, '
+                ||'         r.id AS owner, ''GuarantorFull'' AS value '
+                ||'FROM '||v_schema_name||'.crm_role AS r '
+                ||'WHERE    r.name = ''Revenue Admin'') ';
+        
+        -- Super Administrator
+        
+        EXECUTE 'INSERT INTO '||v_schema_name||'.crm_role$behaviors(id, owner,value) '
+                ||'(SELECT  nextval(''public.crm_role$behaviors_seq'') AS id, '
+                ||'         r.id AS owner, ''FinancialAdvanced'' AS value '
+                ||'FROM '||v_schema_name||'.crm_role AS r '
+                ||'WHERE    r.name = ''Super Administrator'') ';
+                
+        EXECUTE 'INSERT INTO '||v_schema_name||'.crm_role$behaviors(id, owner,value) '
+                ||'(SELECT  nextval(''public.crm_role$behaviors_seq'') AS id, '
+                ||'         r.id AS owner, ''FinancialBasic'' AS value '
+                ||'FROM '||v_schema_name||'.crm_role AS r '
+                ||'WHERE    r.name = ''Super Administrator'') ';
+        
+        
+        /**
         ***     ==========================================================================================================
         ***
         ***             DROP TABLES AND COLUMNS
