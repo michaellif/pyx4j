@@ -15,6 +15,7 @@
  */
 package com.pyx4j.widgets.client.richtext;
 
+import com.google.gwt.dom.client.Style;
 import com.google.gwt.dom.client.Style.TextDecoration;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.BlurEvent;
@@ -343,8 +344,8 @@ public class ExtendedRichTextToolbar extends Composite {
         linkPanel.addItem(createLink = createButton(images.createLink(), "createLink"));
         linkPanel.addItem(removeLink = createButton(images.removeLink(), "removeLink"));
         linkPanel.addItem(new HTML("&emsp;"));
+        linkPanel.addItem(insertImage = createButton(images.insertImage(), "insertImage"));
         buttonBarInsert.add(linkPanel);
-        buttonBarInsert.add(insertImage = createButton(images.insertImage(), "insertImage"));
         buttonBarInsert.add(customButton);
     }
 
@@ -475,6 +476,10 @@ public class ExtendedRichTextToolbar extends Composite {
         tb.addBlurHandler(handler);
         tb.setTitle(tip);
         tb.setStyleName(WidgetTheme.StyleName.Button.name());
+        Style s = tb.getElement().getStyle();
+        s.setPaddingLeft(3, Unit.PX);
+        s.setPaddingRight(5, Unit.PX);
+
         return tb;
     }
 
