@@ -40,6 +40,7 @@ import com.pyx4j.i18n.annotations.I18n;
 import com.propertyvista.domain.communication.CommunicationEndpoint;
 import com.propertyvista.domain.note.HasNotesAndAttachments;
 import com.propertyvista.domain.tenant.Customer;
+import com.propertyvista.domain.tenant.marketing.LeaseParticipantMoveInAction;
 
 @Inheritance(strategy = Inheritance.InheritanceStrategy.SINGLE_TABLE)
 @AbstractEntity
@@ -75,6 +76,10 @@ public interface LeaseParticipant<E extends LeaseTermParticipant<?>> extends IEn
     @Owned(cascade = {})
     @Detached(level = AttachLevel.Detached)
     AgreementSignatures agreementSignatures();
+
+    @Owned(cascade = {})
+    @Detached(level = AttachLevel.Detached)
+    ISet<LeaseParticipantMoveInAction> moveInActions();
 
     //TODO
     @Transient

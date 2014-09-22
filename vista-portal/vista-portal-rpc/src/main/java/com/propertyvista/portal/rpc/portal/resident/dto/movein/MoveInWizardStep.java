@@ -11,19 +11,19 @@
  * @author michaellif
  * @version $Id$
  */
-package com.propertyvista.portal.rpc.portal.resident.services.movein;
+package com.propertyvista.portal.rpc.portal.resident.dto.movein;
 
 import com.pyx4j.i18n.annotations.I18n;
 import com.pyx4j.i18n.annotations.Translate;
 import com.pyx4j.i18n.shared.I18nEnum;
 
-@I18n(context = "Bathroom Number")
+@I18n
 public enum MoveInWizardStep {
 
     @Translate("Lease Signing")
     leaseSigning,
 
-    @Translate("PAP")
+    @Translate("Auto Pay")
     pap,
 
     @Translate("Insurance")

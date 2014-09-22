@@ -16,7 +16,7 @@ package com.propertyvista.portal.resident;
 import java.util.ArrayList;
 import java.util.Collection;
 
-import com.propertyvista.portal.rpc.portal.resident.services.movein.MoveInWizardStep;
+import com.propertyvista.portal.rpc.portal.resident.dto.movein.MoveInWizardStep;
 
 public class MoveInWizardManager {
 

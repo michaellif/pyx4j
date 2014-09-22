@@ -18,7 +18,7 @@ import java.util.Map;
 
 import com.google.gwt.user.client.ui.SimplePanel;
 
-import com.propertyvista.portal.rpc.portal.resident.services.movein.MoveInWizardStep;
+import com.propertyvista.portal.rpc.portal.resident.dto.movein.MoveInWizardStep;
 import com.propertyvista.portal.shared.themes.DashboardTheme;
 import com.propertyvista.portal.shared.ui.AbstractGadget;
 

@@ -17,7 +17,7 @@ import com.google.gwt.user.client.Command;
 
 import com.pyx4j.commons.css.ThemeColor;
 
-import com.propertyvista.portal.rpc.portal.resident.services.movein.MoveInWizardStep;
+import com.propertyvista.portal.rpc.portal.resident.dto.movein.MoveInWizardStep;
 import com.propertyvista.portal.shared.ui.MenuItem;
 
 public class WizardStepItem extends MenuItem<StepIndexLabel> {

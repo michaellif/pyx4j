@@ -26,6 +26,8 @@ public enum PortalResidentBehavior implements Behavior {
 
     MoveInWizardCompletionRequired,
 
+    LeaseAgreementSigningRequired,
+
     ResidentPrimary,
 
     ResidentSecondary,

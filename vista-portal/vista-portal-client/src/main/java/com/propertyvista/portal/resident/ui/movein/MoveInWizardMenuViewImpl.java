@@ -33,7 +33,7 @@ import com.pyx4j.site.rpc.AppPlace;
 import com.propertyvista.portal.resident.ui.movein.WizardStepItem.StepStatus;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
 import com.propertyvista.portal.rpc.portal.resident.ResidentPortalSiteMap;
-import com.propertyvista.portal.rpc.portal.resident.services.movein.MoveInWizardStep;
+import com.propertyvista.portal.rpc.portal.resident.dto.movein.MoveInWizardStep;
 import com.propertyvista.portal.shared.resources.PortalImages;
 import com.propertyvista.portal.shared.themes.PortalRootPaneTheme;
 import com.propertyvista.portal.shared.ui.AppPlaceMenuItem;

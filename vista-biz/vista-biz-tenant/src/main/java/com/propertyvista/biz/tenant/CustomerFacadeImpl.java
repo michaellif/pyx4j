@@ -38,9 +38,11 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.shared.UnRecoverableRuntimeException;
 import com.pyx4j.security.server.EmailValidator;
 
+import com.propertyvista.biz.financial.payment.PaymentMethodFacade;
 import com.propertyvista.biz.policy.IdAssignmentFacade;
 import com.propertyvista.biz.system.AuditFacade;
 import com.propertyvista.biz.system.encryption.PasswordEncryptorFacade;
+import com.propertyvista.biz.tenant.insurance.TenantInsuranceFacade;
 import com.propertyvista.domain.security.CustomerUser;
 import com.propertyvista.domain.security.CustomerUserCredential;
 import com.propertyvista.domain.security.PortalResidentBehavior;
@@ -49,10 +51,13 @@ import com.propertyvista.domain.tenant.CustomerAcceptedTerms;
 import com.propertyvista.domain.tenant.ResidentSelfRegistration;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseApplication;
+import com.propertyvista.domain.tenant.lease.LeaseParticipant;
 import com.propertyvista.domain.tenant.lease.LeaseTermGuarantor;
 import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
 import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
 import com.propertyvista.domain.tenant.lease.Tenant;
+import com.propertyvista.domain.tenant.marketing.LeaseParticipantMoveInAction;
+import com.propertyvista.domain.tenant.marketing.LeaseParticipantMoveInAction.MoveInActionType;
 import com.propertyvista.operations.domain.legal.VistaTerms.VistaTermsV;
 import com.propertyvista.portal.rpc.portal.resident.dto.ResidentSelfRegistrationDTO;
 import com.propertyvista.portal.rpc.shared.EntityValidationException;
@@ -209,7 +214,7 @@ public class CustomerFacadeImpl implements CustomerFacade {
             termParticipant = Persistence.service().retrieve(criteria);
         }
 
-        Collection<PortalResidentBehavior> behaviors = new HashSet<PortalResidentBehavior>();
+        Collection<PortalResidentBehavior> behaviors = new HashSet<>();
 
         switch (termParticipant.role().getValue()) {
         case Applicant:
@@ -229,11 +234,31 @@ public class CustomerFacadeImpl implements CustomerFacade {
         if (lease.leaseApplication().status().getValue() == LeaseApplication.Status.Approved) {
             Persistence.ensureRetrieve(termParticipant.leaseParticipant().agreementSignatures(), AttachLevel.Attached);
             if (!termParticipant.leaseParticipant().agreementSignatures().hasValues()) {
-                behaviors.add(PortalResidentBehavior.MoveInWizardCompletionRequired);
+                behaviors.add(PortalResidentBehavior.LeaseAgreementSigningRequired);
             }
         }
 
+        if (ServerSideFactory.create(PaymentMethodFacade.class).isAutopayAgreementsPresent(lease)) {
+            behaviors.add(PortalResidentBehavior.AutopayAgreementPresent);
+        }
+
+        if (ServerSideFactory.create(TenantInsuranceFacade.class).isInsurancePresent(lease)) {
+            behaviors.add(PortalResidentBehavior.InsurancePresent);
+        }
+
+        behaviors.addAll(new MoveInManager().getMoveInBehaviors(lease, termParticipant, behaviors));
+
         return behaviors;
+    }
+
+    @Override
+    public void skipMoveInAction(LeaseParticipant<?> leaseParticipant, MoveInActionType moveInActionType) {
+        new MoveInManager().skipMoveInAction(leaseParticipant, moveInActionType);
+    }
+
+    @Override
+    public Collection<LeaseParticipantMoveInAction> getActiveMoveInActions(LeaseParticipant<?> leaseParticipant) {
+        return new MoveInManager().getActiveMoveInActions(leaseParticipant);
     }
 
     @Override
@@ -278,7 +303,7 @@ public class CustomerFacadeImpl implements CustomerFacade {
         } catch (UniqueConstraintUserRuntimeException e) {
             throw EntityValidationException.make(ResidentSelfRegistrationDTO.class)//@formatter:off
                     .addError(selfRegistration.email(), i18n.tr("Your Email already registered, Contact Property Manager"))
-                    .build();//@formatter:on            
+                    .build();//@formatter:on
         }
 
         setCustomerPassword(tenant.customer(), selfRegistration.password().getValue());

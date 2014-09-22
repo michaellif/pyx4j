@@ -39,12 +39,10 @@ import com.pyx4j.security.shared.Behavior;
 
 import com.propertyvista.biz.communication.CommunicationFacade;
 import com.propertyvista.biz.financial.payment.PaymentFacade;
-import com.propertyvista.biz.financial.payment.PaymentMethodFacade;
 import com.propertyvista.biz.financial.payment.PaymentMethodTarget;
 import com.propertyvista.biz.policy.PolicyFacade;
 import com.propertyvista.biz.tenant.CustomerFacade;
 import com.propertyvista.biz.tenant.OnlineApplicationFacade;
-import com.propertyvista.biz.tenant.insurance.TenantInsuranceFacade;
 import com.propertyvista.config.VistaDeployment;
 import com.propertyvista.domain.payment.PaymentType;
 import com.propertyvista.domain.policy.policies.ResidentPortalPolicy;
@@ -180,14 +178,6 @@ public class ResidentAuthenticationServiceImpl extends VistaAuthenticationServic
                 default:
                     break;
                 }
-            }
-
-            if (ServerSideFactory.create(PaymentMethodFacade.class).isAutopayAgreementsPresent(selectedLease)) {
-                actualBehaviors.add(PortalResidentBehavior.AutopayAgreementPresent);
-            }
-
-            if (ServerSideFactory.create(TenantInsuranceFacade.class).isInsurancePresent(selectedLease)) {
-                actualBehaviors.add(PortalResidentBehavior.InsurancePresent);
             }
         }
 

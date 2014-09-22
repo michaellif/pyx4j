@@ -33,7 +33,7 @@ public class MenuActivityMapper implements ActivityMapper {
     @Override
     public Activity getActivity(Place place) {
         if (ClientContext.isAuthenticated() && !(place instanceof Logout)) {
-            if (SecurityController.check(PortalResidentBehavior.MoveInWizardCompletionRequired)) {
+            if (SecurityController.check(PortalResidentBehavior.LeaseAgreementSigningRequired)) {
                 return new MoveInWizardMenuActivity(place);
             } else {
                 return new PortalMenuActivity(place);

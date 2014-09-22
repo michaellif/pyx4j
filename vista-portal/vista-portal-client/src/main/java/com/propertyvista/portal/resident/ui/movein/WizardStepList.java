@@ -24,7 +24,7 @@ import com.pyx4j.site.client.AppSite;
 
 import com.propertyvista.portal.resident.MoveInWizardManager;
 import com.propertyvista.portal.rpc.portal.resident.ResidentPortalSiteMap;
-import com.propertyvista.portal.rpc.portal.resident.services.movein.MoveInWizardStep;
+import com.propertyvista.portal.rpc.portal.resident.dto.movein.MoveInWizardStep;
 import com.propertyvista.portal.shared.ui.MenuList;
 
 public class WizardStepList extends MenuList<WizardStepItem> {

@@ -23,6 +23,9 @@ import com.propertyvista.domain.security.PortalResidentBehavior;
 import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.domain.tenant.ResidentSelfRegistration;
 import com.propertyvista.domain.tenant.lease.Lease;
+import com.propertyvista.domain.tenant.lease.LeaseParticipant;
+import com.propertyvista.domain.tenant.marketing.LeaseParticipantMoveInAction;
+import com.propertyvista.domain.tenant.marketing.LeaseParticipantMoveInAction.MoveInActionType;
 
 public interface CustomerFacade {
 
@@ -41,5 +44,9 @@ public interface CustomerFacade {
     void setCustomerPassword(Customer customer, String password);
 
     void setCustomerPasswordHash(Customer customer, String passwordHash);
+
+    Collection<LeaseParticipantMoveInAction> getActiveMoveInActions(LeaseParticipant<?> leaseParticipant);
+
+    void skipMoveInAction(LeaseParticipant<?> leaseParticipant, MoveInActionType moveInActionType);
 
 }
