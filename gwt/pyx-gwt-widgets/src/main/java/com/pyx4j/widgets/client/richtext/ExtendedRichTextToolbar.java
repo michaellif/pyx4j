@@ -320,6 +320,7 @@ public class ExtendedRichTextToolbar extends Composite {
             }
         });
         topMultiBar.setSize("100%", "100%");
+        topMultiBar.getFlexCellFormatter().setAlignment(0, 0, HasHorizontalAlignment.ALIGN_LEFT, HasVerticalAlignment.ALIGN_MIDDLE);
         topMultiBar.getFlexCellFormatter().setAlignment(0, 1, HasHorizontalAlignment.ALIGN_RIGHT, HasVerticalAlignment.ALIGN_MIDDLE);
         topMultiBar.setWidget(0, 1, textHtmlSwitch);
     }
@@ -347,6 +348,7 @@ public class ExtendedRichTextToolbar extends Composite {
         linkPanel.addItem(insertImage = createButton(images.insertImage(), "insertImage"));
         buttonBarInsert.add(linkPanel);
         buttonBarInsert.add(customButton);
+        insertButton.getElement().getStyle().setColor("grey");
     }
 
     private void createFontMenus() {
@@ -369,6 +371,7 @@ public class ExtendedRichTextToolbar extends Composite {
         buttonBarFont.add(backColors = createColorList("Highlight"));
         buttonBarFont.add(fonts = createFontList());
         buttonBarFont.add(fontSizes = createFontSizes());
+        fontButton.getElement().getStyle().setColor("grey");
     }
 
     private void createFormatMenus() {
@@ -412,6 +415,7 @@ public class ExtendedRichTextToolbar extends Composite {
         indentPanel.addItem(new HTML("&emsp;"));
         indentPanel.addItem(removeFormat = createButton(images.removeFormat(), "removeFormat"));
         buttonBarFormat.add(indentPanel);
+        formatButton.getElement().getStyle().setColor("grey");
     }
 
     private ListBox createColorList(String caption) {
