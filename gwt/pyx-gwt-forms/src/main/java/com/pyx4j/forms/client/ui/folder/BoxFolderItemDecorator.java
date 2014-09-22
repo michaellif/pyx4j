@@ -31,6 +31,7 @@ import com.google.gwt.event.dom.client.MouseOverEvent;
 import com.google.gwt.event.dom.client.MouseOverHandler;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
+import com.google.gwt.safehtml.shared.SafeHtml;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.SimplePanel;
@@ -44,8 +45,8 @@ import com.pyx4j.forms.client.events.PropertyChangeEvent.PropertyName;
 import com.pyx4j.forms.client.events.PropertyChangeHandler;
 import com.pyx4j.forms.client.images.FolderImages;
 import com.pyx4j.forms.client.ui.decorators.DecoratorDebugIds;
-import com.pyx4j.forms.client.ui.decorators.WidgetDecoratorTheme;
 import com.pyx4j.forms.client.ui.decorators.EntityContainerDecoratorToolbar;
+import com.pyx4j.forms.client.ui.decorators.WidgetDecoratorTheme;
 import com.pyx4j.gwt.commons.BrowserType;
 import com.pyx4j.widgets.client.CollapsablePanel;
 import com.pyx4j.widgets.client.event.shared.ToggleEvent;
@@ -204,7 +205,7 @@ public class BoxFolderItemDecorator<E extends IEntity> extends BaseFolderItemDec
         toolbar.setActionsBar(actionsBar);
     }
 
-    public void setCaptionFormatter(IFormatter<E, String> formatter) {
+    public void setCaptionFormatter(IFormatter<E, SafeHtml> formatter) {
         toolbar.setCaptionFormatter(formatter);
     }
 }

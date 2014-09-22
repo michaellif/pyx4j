@@ -20,6 +20,7 @@
  */
 package com.pyx4j.forms.client.ui;
 
+import java.util.ArrayList;
 import java.util.Collection;
 
 import com.google.gwt.user.client.Command;
@@ -41,4 +42,8 @@ public class CSelectorListBox<E extends IEntity> extends CAbstractSelectorBox<Co
         return addItemCommand;
     }
 
+    @Override
+    protected Collection<E> preprocessValue(Collection<E> value, boolean fireEvent, boolean populate) {
+        return super.preprocessValue(new ArrayList<>(value), fireEvent, populate);
+    }
 }

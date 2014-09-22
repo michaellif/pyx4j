@@ -26,6 +26,7 @@ import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
+import com.google.gwt.safehtml.shared.SafeHtml;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.SimplePanel;
@@ -119,7 +120,7 @@ public class EntityContainerCollapsableDecorator<E extends IEntity> extends Coll
         contentHolder.setWidget(content);
     }
 
-    public void setCaptionFormatter(IFormatter<E, String> formatter) {
+    public void setCaptionFormatter(IFormatter<E, SafeHtml> formatter) {
         toolbar.setCaptionFormatter(formatter);
     }
 }

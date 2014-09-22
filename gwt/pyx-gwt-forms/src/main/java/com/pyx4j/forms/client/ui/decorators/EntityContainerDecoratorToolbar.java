@@ -24,10 +24,12 @@ import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.resources.client.ImageResource;
+import com.google.gwt.safehtml.shared.SafeHtml;
+import com.google.gwt.safehtml.shared.SafeHtmlUtils;
+import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.IsWidget;
-import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.SimplePanel;
 
 import com.pyx4j.commons.CompositeDebugId;
@@ -52,7 +54,7 @@ public class EntityContainerDecoratorToolbar<E extends IEntity> extends Horizont
 
     private final SimplePanel actionsPanelHolder;
 
-    private final Label caption;
+    private final HTML caption;
 
     private final Image warnImage;
 
@@ -60,17 +62,17 @@ public class EntityContainerDecoratorToolbar<E extends IEntity> extends Horizont
 
     private final HorizontalPanel captionHolder;
 
-    private IFormatter<E, String> captionFormatter;
+    private IFormatter<E, SafeHtml> captionFormatter;
 
     public EntityContainerDecoratorToolbar(WidgetsImages images) {
 
         setWidth("100%");
         setStyleName(WidgetDecoratorTheme.StyleName.EntityContainerDecoratorToolbar.name());
 
-        captionFormatter = new IFormatter<E, String>() {
+        captionFormatter = new IFormatter<E, SafeHtml>() {
             @Override
-            public String format(E value) {
-                return value.getStringView();
+            public SafeHtml format(E value) {
+                return SafeHtmlUtils.fromString(value.getStringView());
             }
         };
 
@@ -79,7 +81,7 @@ public class EntityContainerDecoratorToolbar<E extends IEntity> extends Horizont
         captionHolder.getElement().getStyle().setMarginRight(5, Unit.PX);
         captionHolder.getElement().getStyle().setLineHeight(2, Unit.EM);
 
-        caption = new Label("");
+        caption = new HTML("");
         caption.setStyleName(WidgetDecoratorTheme.StyleName.EntityContainerDecoratorCollapsedCaption.name());
 
         titleIcon = new Image();
@@ -132,6 +134,10 @@ public class EntityContainerDecoratorToolbar<E extends IEntity> extends Horizont
         }
     }
 
+    protected void setCaption(SafeHtml html) {
+        caption.setHTML(html);
+    }
+
     protected void setCaption(String text) {
         caption.setText(text);
     }
@@ -150,7 +156,7 @@ public class EntityContainerDecoratorToolbar<E extends IEntity> extends Horizont
         }
     }
 
-    public void setCaptionFormatter(IFormatter<E, String> formatter) {
+    public void setCaptionFormatter(IFormatter<E, SafeHtml> formatter) {
         this.captionFormatter = formatter;
     }
 }
