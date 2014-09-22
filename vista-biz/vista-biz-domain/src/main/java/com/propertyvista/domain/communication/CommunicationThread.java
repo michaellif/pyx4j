@@ -22,6 +22,8 @@ import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.OrderBy;
 import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.ReadOnly;
+import com.pyx4j.entity.annotations.ToString;
+import com.pyx4j.entity.annotations.ToStringFormat;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.IList;
@@ -30,6 +32,7 @@ import com.pyx4j.i18n.annotations.I18n;
 import com.pyx4j.i18n.shared.I18nEnum;
 
 @DiscriminatorValue("CommunicationThread")
+@ToStringFormat("{0}")
 public interface CommunicationThread extends IEntity {
 
     @I18n(context = "Communication Thread Status")
@@ -47,6 +50,7 @@ public interface CommunicationThread extends IEntity {
     @NotNull
     @ReadOnly
     @Length(78)
+    @ToString(index = 0)
     IPrimitive<String> subject();
 
     @ReadOnly

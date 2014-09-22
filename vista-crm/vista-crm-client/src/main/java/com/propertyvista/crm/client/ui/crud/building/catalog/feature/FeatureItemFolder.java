@@ -17,6 +17,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import com.google.gwt.safehtml.shared.SafeHtml;
+import com.google.gwt.safehtml.shared.SafeHtmlUtils;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.IsWidget;
 
@@ -66,10 +68,10 @@ class FeatureItemFolder extends VistaBoxFolder<ProductItem> {
     public IFolderItemDecorator<ProductItem> createItemDecorator() {
         BoxFolderItemDecorator<ProductItem> decor = (BoxFolderItemDecorator<ProductItem>) super.createItemDecorator();
         decor.setExpended(false);
-        decor.setCaptionFormatter(new IFormatter<ProductItem, String>() {
+        decor.setCaptionFormatter(new IFormatter<ProductItem, SafeHtml>() {
             @Override
-            public String format(ProductItem value) {
-                return value.name().getStringView() + ", Price: $" + value.price().getStringView();
+            public SafeHtml format(ProductItem value) {
+                return SafeHtmlUtils.fromString(value.name().getStringView() + ", Price: $" + value.price().getStringView());
             }
         });
         return decor;

@@ -47,9 +47,8 @@ public interface MessageDTO extends Message {
 
     @Override
     @NotNull
-    @Length(2048)
-    @Editor(type = Editor.EditorType.textarea)
-    @ToString(index = 1)
+    @Length(48000)
+    @Editor(type = Editor.EditorType.richtextarea)
     IPrimitive<String> text();
 
     @Detached

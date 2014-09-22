@@ -44,9 +44,8 @@ public interface Message extends IEntity {
     @MemberColumn(notNull = true)
     CommunicationEndpoint sender();
 
-    @Length(2048)
-    @Editor(type = Editor.EditorType.textarea)
-    @ToString(index = 1)
+    @Length(48000)
+    @Editor(type = Editor.EditorType.richtextarea)
     IPrimitive<String> text();
 
     @MemberColumn(name = "messageDate")
@@ -75,5 +74,6 @@ public interface Message extends IEntity {
     @MemberColumn(notNull = true)
     @JoinColumn
     @Indexed
+    @ToString(index = 1)
     CommunicationThread thread();
 }

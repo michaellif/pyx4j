@@ -18,6 +18,8 @@ import java.util.List;
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.safehtml.shared.SafeHtml;
+import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.IsWidget;
@@ -141,10 +143,15 @@ public class MessageForm extends CrmEntityForm<MessageDTO> {
         @Override
         public IFolderItemDecorator<MessageDTO> createItemDecorator() {
             BoxFolderItemDecorator<MessageDTO> decor = (BoxFolderItemDecorator<MessageDTO>) super.createItemDecorator();
-            decor.setCaptionFormatter(new IFormatter<MessageDTO, String>() {
+            decor.setCaptionFormatter(new IFormatter<MessageDTO, SafeHtml>() {
                 @Override
-                public String format(MessageDTO value) {
-                    return SimpleMessageFormat.format("{0}, {1}:", value.date(), value.text().getValue(""));
+                public SafeHtml format(MessageDTO value) {
+
+                    SafeHtmlBuilder loginTermsBuilder = new SafeHtmlBuilder();
+                    return loginTermsBuilder.appendHtmlConstant(SimpleMessageFormat.format("{0}, {1}:", value.header().sender().getValue(""), value.date()))
+                            .appendHtmlConstant("<br/>").appendHtmlConstant(value.text().getValue("")).toSafeHtml();
+
+                    //return SafeHtmlUtils.fromString(SimpleMessageFormat.format("{0}, {1}:", value.date(), value.text().getValue("")));
                 }
             });
 
@@ -299,7 +306,9 @@ public class MessageForm extends CrmEntityForm<MessageDTO> {
 
             actionsButton.setMenu(subMenu);
             formPanel.append(Location.Dual, proto().to(), communicationEndpointSelector).decorate().labelWidth(20);
-            formPanel.append(Location.Dual, actionsButton);
+            if (false) {
+                formPanel.append(Location.Dual, actionsButton);
+            }
             formPanel.br();
 
             formPanel.append(Location.Dual, proto().highImportance(), new CCheckBox()).decorate();
@@ -359,7 +368,7 @@ public class MessageForm extends CrmEntityForm<MessageDTO> {
 
         private void updateSelector(CommunicationEndpointSelector selector, MessageDTO value) {
             selector.setValue(value.to());
-            selector.refresh(true);
+            //selector.refresh(true);
         }
 
         private MessageDTO getCurrent() {

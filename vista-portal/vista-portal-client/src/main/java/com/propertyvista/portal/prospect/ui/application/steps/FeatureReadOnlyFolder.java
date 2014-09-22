@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011-2012 All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -13,6 +13,8 @@
  */
 package com.propertyvista.portal.prospect.ui.application.steps;
 
+import com.google.gwt.safehtml.shared.SafeHtml;
+import com.google.gwt.safehtml.shared.SafeHtmlUtils;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.commons.IFormatter;
@@ -43,11 +45,11 @@ public class FeatureReadOnlyFolder extends PortalBoxFolder<BillableItem> {
     @Override
     public BoxFolderItemDecorator<BillableItem> createItemDecorator() {
         BoxFolderItemDecorator<BillableItem> decor = super.createItemDecorator();
-        decor.setCaptionFormatter(new IFormatter<BillableItem, String>() {
+        decor.setCaptionFormatter(new IFormatter<BillableItem, SafeHtml>() {
             @Override
-            public String format(BillableItem value) {
-                return SimpleMessageFormat.format("{0}, Rent ${1}", (value.description().isNull() ? value.item().name() : value.description()),
-                        value.agreedPrice());
+            public SafeHtml format(BillableItem value) {
+                return SafeHtmlUtils.fromString(SimpleMessageFormat.format("{0}, Rent ${1}",
+                        (value.description().isNull() ? value.item().name() : value.description()), value.agreedPrice()));
             }
         });
 

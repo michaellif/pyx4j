@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011-2012 All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -18,6 +18,8 @@ import java.math.RoundingMode;
 
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
+import com.google.gwt.safehtml.shared.SafeHtml;
+import com.google.gwt.safehtml.shared.SafeHtmlUtils;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.commons.IFormatter;
@@ -50,12 +52,12 @@ public class PapCoveredItemDtoFolder extends PortalBoxFolder<PreauthorizedPaymen
     @Override
     public BoxFolderItemDecorator<PreauthorizedPaymentCoveredItemDTO> createItemDecorator() {
         BoxFolderItemDecorator<PreauthorizedPaymentCoveredItemDTO> decorator = super.createItemDecorator();
-        decorator.setCaptionFormatter(new IFormatter<PreauthorizedPaymentCoveredItemDTO, String>() {
+        decorator.setCaptionFormatter(new IFormatter<PreauthorizedPaymentCoveredItemDTO, SafeHtml>() {
             @Override
-            public String format(PreauthorizedPaymentCoveredItemDTO value) {
+            public SafeHtml format(PreauthorizedPaymentCoveredItemDTO value) {
                 String itemDescription = value.billableItem().description().isNull() ? value.billableItem().item().name().getValue() : value.billableItem()
                         .description().getValue();
-                return SimpleMessageFormat.format("{0} ({1}/{2})", itemDescription, value.amount(), value.billableItem().agreedPrice());
+                return SafeHtmlUtils.fromString(SimpleMessageFormat.format("{0} ({1}/{2})", itemDescription, value.amount(), value.billableItem().agreedPrice()));
             }
         });
         return decorator;

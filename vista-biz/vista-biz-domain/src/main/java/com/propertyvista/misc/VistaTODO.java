@@ -56,7 +56,7 @@ public class VistaTODO {
 
     public static boolean pendingYardiConfigPatchILS = false;
 
-    public static boolean USE_RTF_EDITOR_FOR_COMMUNICATION = false;
+    public static boolean USE_RTF_EDITOR_FOR_COMMUNICATION = true;
 
     public static boolean ADDITIONAL_COMMUNICATION_FEATURES = false;
 

@@ -17,6 +17,8 @@ import com.google.gwt.dom.client.Style.Position;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.safehtml.shared.SafeHtml;
+import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.Image;
@@ -128,10 +130,14 @@ public class MessagePage extends CPortalEntityForm<MessageDTO> {
         @Override
         public BoxFolderItemDecorator<MessageDTO> createItemDecorator() {
             BoxFolderItemDecorator<MessageDTO> decor = (BoxFolderItemDecorator<MessageDTO>) super.createItemDecorator();
-            decor.setCaptionFormatter(new IFormatter<MessageDTO, String>() {
+            decor.setCaptionFormatter(new IFormatter<MessageDTO, SafeHtml>() {
                 @Override
-                public String format(MessageDTO value) {
-                    return SimpleMessageFormat.format("{0}, {1}:", value.date(), value.text().getValue(""));
+                public SafeHtml format(MessageDTO value) {
+                    SafeHtmlBuilder loginTermsBuilder = new SafeHtmlBuilder();
+                    return loginTermsBuilder.appendHtmlConstant(SimpleMessageFormat.format("{0}, {1}:", value.header().sender().getValue(""), value.date()))
+                            .appendHtmlConstant("<br/>").appendHtmlConstant(value.text().getValue("")).toSafeHtml();
+
+                    //return SafeHtmlUtils.fromString(SimpleMessageFormat.format("{0}, {1}:", value.date(), value.text().getValue("")));
                 }
             });
 

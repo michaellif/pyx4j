@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011-2012 All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -14,6 +14,8 @@
 package com.propertyvista.portal.resident.ui.financial.autopay;
 
 import com.google.gwt.dom.client.Style.FontWeight;
+import com.google.gwt.safehtml.shared.SafeHtml;
+import com.google.gwt.safehtml.shared.SafeHtmlUtils;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.commons.IFormatter;
@@ -51,11 +53,11 @@ public class PapCoveredItemFolder extends PortalBoxFolder<AutopayAgreement.Autop
     @Override
     public BoxFolderItemDecorator<AutopayAgreementCoveredItem> createItemDecorator() {
         BoxFolderItemDecorator<AutopayAgreementCoveredItem> decor = super.createItemDecorator();
-        decor.setCaptionFormatter(new IFormatter<AutopayAgreementCoveredItem, String>() {
+        decor.setCaptionFormatter(new IFormatter<AutopayAgreementCoveredItem, SafeHtml>() {
             @Override
-            public String format(AutopayAgreementCoveredItem value) {
-                return SimpleMessageFormat.format("RENT: ${0}, Amount Paid: ${1}", value.billableItem().agreedPrice().getStringView(), value.amount()
-                        .getStringView());
+            public SafeHtml format(AutopayAgreementCoveredItem value) {
+                return SafeHtmlUtils.fromString(SimpleMessageFormat.format("RENT: ${0}, Amount Paid: ${1}", value.billableItem().agreedPrice().getStringView(),
+                        value.amount().getStringView()));
             }
         });
 
