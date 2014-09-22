@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011-2012 All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -293,7 +293,9 @@ public class LeaseApplicationDocumentDataCreatorFacadeImpl implements LeaseAppli
         residence.city().setValue(address.city().getValue());
         residence.province().setValue(address.province().getStringView());
         residence.postalCode().setValue(address.postalCode().getStringView());
-        residence.country().setValue(address.country().getValue().name);
+        if (!address.country().isNull()) {
+            residence.country().setValue(address.country().getValue().name);
+        }
 
         residence.moveInDate().setValue(address.moveInDate().getValue());
         residence.moveOutDate().setValue(address.moveOutDate().getValue());
