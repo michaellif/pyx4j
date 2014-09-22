@@ -57,6 +57,9 @@ public class SelectRecipientsDialogForm extends FlowPanel {
 
         final FlowPanel listPanel = new FlowPanel();
         listPanel.getElement().getStyle().setDisplay(Display.INLINE);
+        final ScrollPanel sp = new ScrollPanel();
+        sp.setHeight("400px");
+        listPanel.add(sp);
 
         FlowPanel menuPanel = new FlowPanel();
         menuPanel.getElement().getStyle().setDisplay(Display.INLINE);
@@ -65,11 +68,10 @@ public class SelectRecipientsDialogForm extends FlowPanel {
             @Override
             public void onClick(ClickEvent event) {
                 event.stopPropagation();
-
-                lister = new TenantLister(true);
+                lister = new TenantLister(false);
                 tenantListerController = new TenantListerController(lister, ((TenantLister) lister).getSelectService());
-                listPanel.clear();
-                listPanel.add(new ScrollPanel(lister.asWidget()));
+                sp.clear();
+                sp.add(lister.asWidget());
             }
         });
         menuPanel.add(tenant);
@@ -78,11 +80,10 @@ public class SelectRecipientsDialogForm extends FlowPanel {
             @Override
             public void onClick(ClickEvent event) {
                 event.stopPropagation();
-                //listPanel.getElement().removeAllChildren();
-                lister = new CorporateLister(true);
+                lister = new CorporateLister(false);
                 corporateListerController = new CorporateListerController(lister, ((CorporateLister) lister).getSelectService());
-                listPanel.clear();
-                listPanel.add(new ScrollPanel(lister.asWidget()));
+                sp.clear();
+                sp.add(lister.asWidget());
             }
         });
         menuPanel.add(community);
@@ -91,11 +92,10 @@ public class SelectRecipientsDialogForm extends FlowPanel {
             @Override
             public void onClick(ClickEvent event) {
                 event.stopPropagation();
-                //listPanel.getElement().removeAllChildren();
-                lister = new BuildingLister(true);
+                lister = new BuildingLister(false);
                 buildingListerController = new BuildingListerController(lister, ((BuildingLister) lister).getSelectService());
-                listPanel.clear();
-                listPanel.add(new ScrollPanel(lister.asWidget()));
+                sp.clear();
+                sp.add(lister.asWidget());
             }
         });
 
@@ -106,11 +106,10 @@ public class SelectRecipientsDialogForm extends FlowPanel {
             @Override
             public void onClick(ClickEvent event) {
                 event.stopPropagation();
-                //listPanel.getElement().removeAllChildren();
-                lister = new PortfolioLister(true);
+                lister = new PortfolioLister(false);
                 portfolioListerController = new PortfolioListerController(lister, ((PortfolioLister) lister).getSelectService());
-                listPanel.clear();
-                listPanel.add(new ScrollPanel(lister.asWidget()));
+                sp.clear();
+                sp.add(lister.asWidget());
             }
         });
 
