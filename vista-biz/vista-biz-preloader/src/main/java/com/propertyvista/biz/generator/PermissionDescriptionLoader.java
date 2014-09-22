@@ -17,9 +17,11 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.EnumSet;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Set;
 
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
@@ -50,6 +52,17 @@ public class PermissionDescriptionLoader {
     private static Map<VistaCrmBehavior, String> descriptionsMap;
 
     private static Map<String, List<VistaCrmBehavior>> behaviorsByRoleName;
+
+    private static Set<String> ignoreBehaviorsInExcel = createIgnoreBehaviorsInExcel();
+
+    private static Set<String> createIgnoreBehaviorsInExcel() {
+        Set<String> ignore = new HashSet<>();
+        ignore.add("Group:Permissions");
+        ignore.add("Login:Default");
+        ignore.add("Content: Full");
+        ignore.add("test");
+        return ignore;
+    }
 
     private static synchronized Map<VistaCrmBehavior, String> getDescriptionsMap() {
         if (null == descriptionsMap) {
@@ -115,8 +128,8 @@ public class PermissionDescriptionLoader {
             VistaCrmBehavior b = toBehavior(p.permission().getValue());
             if (b != null) {
                 descriptionsMapLocal.put(b, p.description().getValue());
-            } else {
-                log.info("Loading permission descriptions: '" + p.permission().getValue() + "' does not match");
+            } else if (!ignoreBehaviorsInExcel.contains(p.permission().getValue())) {
+                throw new Error("Error loading permission descriptions; Permission '" + p.permission().getValue() + "' does not match any VistaCrmBehavior");
             }
         }
 
