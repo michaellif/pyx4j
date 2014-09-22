@@ -7,19 +7,16 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Jul 16, 2014
- * @author vlads
+ * Created on Jul 17, 2014
+ * @author VladL
  * @version $Id$
  */
-package com.propertyvista.crm.rpc.security;
+package com.propertyvista.crm.rpc.services.customer.ac;
 
-import com.propertyvista.dto.TenantDTO;
+import com.pyx4j.security.annotations.ActionId;
 
-public class FormerTenantInstanceAccess extends FormerLeaseParticipantInstanceAccess<TenantDTO> {
+public class GuarantorListAction implements ActionId {
 
     private static final long serialVersionUID = 1L;
 
-    public FormerTenantInstanceAccess() {
-        super(TenantDTO.class);
-    }
 }

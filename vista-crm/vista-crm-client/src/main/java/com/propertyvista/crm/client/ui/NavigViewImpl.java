@@ -51,6 +51,7 @@ import com.propertyvista.crm.rpc.dto.financial.moneyin.batch.MoneyInBatchDTO;
 import com.propertyvista.crm.rpc.dto.legal.n4.LegalNoticeCandidateDTO;
 import com.propertyvista.crm.rpc.services.customer.ac.FormerGuarantorListAction;
 import com.propertyvista.crm.rpc.services.customer.ac.FormerTenantListAction;
+import com.propertyvista.crm.rpc.services.customer.ac.GuarantorListAction;
 import com.propertyvista.crm.rpc.services.customer.ac.PotentialTenantListAction;
 import com.propertyvista.crm.rpc.services.customer.ac.TenantListAction;
 import com.propertyvista.crm.rpc.services.lease.ac.FormerLeaseListAction;
@@ -67,7 +68,6 @@ import com.propertyvista.domain.tenant.lead.Lead;
 import com.propertyvista.dto.AptUnitDTO;
 import com.propertyvista.dto.BuildingDTO;
 import com.propertyvista.dto.ComplexDTO;
-import com.propertyvista.dto.GuarantorDTO;
 import com.propertyvista.dto.LandlordDTO;
 import com.propertyvista.dto.LeaseApplicationDTO;
 import com.propertyvista.dto.LeaseDTO;
@@ -211,7 +211,7 @@ public class NavigViewImpl extends Composite implements NavigView {
 
             sideMenuList.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Tenants.Lease(), DataModelPermission.permissionRead(LeaseDTO.class)));
             sideMenuList.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Tenants.Tenant(), TenantListAction.class));
-            sideMenuList.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Tenants.Guarantor(), DataModelPermission.permissionRead(GuarantorDTO.class)));
+            sideMenuList.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Tenants.Guarantor(), GuarantorListAction.class));
             sideMenuList.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Tenants.MaintenanceRequest(), DataModelPermission
                     .permissionRead(MaintenanceRequestDTO.class)));
             if (!VistaFeatures.instance().yardiIntegration()) {

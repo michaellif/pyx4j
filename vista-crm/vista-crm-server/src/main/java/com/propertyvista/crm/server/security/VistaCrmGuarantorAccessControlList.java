@@ -23,9 +23,14 @@ import static com.pyx4j.entity.security.AbstractCRUDPermission.UPDATE;
 import com.pyx4j.rpc.shared.IServiceExecutePermission;
 import com.pyx4j.security.server.UIAclBuilder;
 
+import com.propertyvista.crm.rpc.security.FormerGuarantorInstanceAccess;
+import com.propertyvista.crm.rpc.security.FormerLeaseParticipantScreeningInstanceAccess;
+import com.propertyvista.crm.rpc.security.GuarantorInstanceAccess;
+import com.propertyvista.crm.rpc.security.LeaseParticipantScreeningInstanceAccess;
 import com.propertyvista.crm.rpc.services.customer.GuarantorPasswordChangeService;
 import com.propertyvista.crm.rpc.services.customer.ac.FormerGuarantorListAction;
 import com.propertyvista.crm.rpc.services.customer.ac.GuarantorChangePassword;
+import com.propertyvista.crm.rpc.services.customer.ac.GuarantorListAction;
 import com.propertyvista.dto.GuarantorDTO;
 import com.propertyvista.dto.LeaseParticipantScreeningTO;
 
@@ -33,22 +38,40 @@ class VistaCrmGuarantorAccessControlList extends UIAclBuilder {
 
     VistaCrmGuarantorAccessControlList() {
 
-        grant(GuarantorBasic, GuarantorDTO.class, READ);
-        grant(GuarantorAdvanced, GuarantorDTO.class, READ | UPDATE);
-        grant(GuarantorFull, GuarantorDTO.class, READ | UPDATE);
+        grant(GuarantorBasic, GuarantorDTO.class, new GuarantorInstanceAccess(), READ);
+        grant(GuarantorAdvanced, GuarantorDTO.class, new GuarantorInstanceAccess(), READ | UPDATE);
+        grant(GuarantorFull, GuarantorDTO.class, new GuarantorInstanceAccess(), READ | UPDATE);
 
-        grant(GuarantorAdvanced, LeaseParticipantScreeningTO.class, READ);
-        grant(GuarantorFull, LeaseParticipantScreeningTO.class, ALL);
+        grant(GuarantorAdvanced, LeaseParticipantScreeningTO.class, new GuarantorInstanceAccess(), READ);
+        grant(GuarantorAdvanced, LeaseParticipantScreeningTO.class, new LeaseParticipantScreeningInstanceAccess(), READ);
+
+        grant(GuarantorFull, LeaseParticipantScreeningTO.class, new GuarantorInstanceAccess(), ALL);
+        grant(GuarantorFull, LeaseParticipantScreeningTO.class, new LeaseParticipantScreeningInstanceAccess(), ALL);
 
         // Actions:
+        grant(GuarantorBasic, GuarantorListAction.class);
+        grant(GuarantorAdvanced, GuarantorListAction.class);
+        grant(GuarantorFull, GuarantorListAction.class);
 
-        // access to former guarantors accordion menu
+        grant(GuarantorBasic, GuarantorChangePassword.class, new GuarantorInstanceAccess());
+        grant(GuarantorAdvanced, GuarantorChangePassword.class, new GuarantorInstanceAccess());
+        grant(GuarantorFull, GuarantorChangePassword.class, new GuarantorInstanceAccess());
+        grant(GuarantorBasic, GuarantorAdvanced, GuarantorFull, new IServiceExecutePermission(GuarantorPasswordChangeService.class));
+
+        // --------------------------------------------------------------------------------------------------------------------
+
+        // Former Guarantors:
+        grant(GuarantorAdvanced, GuarantorDTO.class, new FormerGuarantorInstanceAccess(), READ);
+        grant(GuarantorFull, GuarantorDTO.class, new FormerGuarantorInstanceAccess(), READ | UPDATE);
+
+        grant(GuarantorAdvanced, LeaseParticipantScreeningTO.class, new FormerGuarantorInstanceAccess(), READ);
+        grant(GuarantorAdvanced, LeaseParticipantScreeningTO.class, new FormerLeaseParticipantScreeningInstanceAccess(), READ);
+
+        grant(GuarantorFull, LeaseParticipantScreeningTO.class, new FormerGuarantorInstanceAccess(), READ | UPDATE);
+        grant(GuarantorFull, LeaseParticipantScreeningTO.class, new FormerLeaseParticipantScreeningInstanceAccess(), READ | UPDATE);
+
+        // Actions:
         grant(GuarantorAdvanced, FormerGuarantorListAction.class);
         grant(GuarantorFull, FormerGuarantorListAction.class);
-
-        grant(GuarantorBasic, GuarantorChangePassword.class);
-        grant(GuarantorAdvanced, GuarantorChangePassword.class);
-        grant(GuarantorFull, GuarantorChangePassword.class);
-        grant(GuarantorBasic, GuarantorAdvanced, GuarantorFull, new IServiceExecutePermission(GuarantorPasswordChangeService.class));
     }
 }

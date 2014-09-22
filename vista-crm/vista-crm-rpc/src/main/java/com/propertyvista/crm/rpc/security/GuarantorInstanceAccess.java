@@ -13,13 +13,13 @@
  */
 package com.propertyvista.crm.rpc.security;
 
-import com.propertyvista.dto.TenantDTO;
+import com.propertyvista.dto.GuarantorDTO;
 
-public class FormerTenantInstanceAccess extends FormerLeaseParticipantInstanceAccess<TenantDTO> {
+public class GuarantorInstanceAccess extends LeaseParticipantInstanceAccess<GuarantorDTO> {
 
     private static final long serialVersionUID = 1L;
 
-    public FormerTenantInstanceAccess() {
-        super(TenantDTO.class);
+    public GuarantorInstanceAccess() {
+        super(GuarantorDTO.class);
     }
 }

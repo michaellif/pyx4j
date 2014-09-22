@@ -23,10 +23,10 @@ import static com.pyx4j.entity.security.AbstractCRUDPermission.UPDATE;
 import com.pyx4j.rpc.shared.IServiceExecutePermission;
 import com.pyx4j.security.server.UIAclBuilder;
 
+import com.propertyvista.crm.rpc.security.FormerLeaseParticipantScreeningInstanceAccess;
 import com.propertyvista.crm.rpc.security.FormerTenantInstanceAccess;
-import com.propertyvista.crm.rpc.security.FormerTenantScreeningInstanceAccess;
+import com.propertyvista.crm.rpc.security.LeaseParticipantScreeningInstanceAccess;
 import com.propertyvista.crm.rpc.security.TenantInstanceAccess;
-import com.propertyvista.crm.rpc.security.TenantScreeningInstanceAccess;
 import com.propertyvista.crm.rpc.services.customer.TenantPasswordChangeService;
 import com.propertyvista.crm.rpc.services.customer.ac.FormerTenantListAction;
 import com.propertyvista.crm.rpc.services.customer.ac.TenantChangePassword;
@@ -43,10 +43,10 @@ class VistaCrmTenantAccessControlList extends UIAclBuilder {
         grant(TenantFull, TenantDTO.class, new TenantInstanceAccess(), READ | UPDATE);
 
         grant(TenantAdvanced, LeaseParticipantScreeningTO.class, new TenantInstanceAccess(), READ);
-        grant(TenantAdvanced, LeaseParticipantScreeningTO.class, new TenantScreeningInstanceAccess(), READ);
+        grant(TenantAdvanced, LeaseParticipantScreeningTO.class, new LeaseParticipantScreeningInstanceAccess(), READ);
 
         grant(TenantFull, LeaseParticipantScreeningTO.class, new TenantInstanceAccess(), ALL);
-        grant(TenantFull, LeaseParticipantScreeningTO.class, new TenantScreeningInstanceAccess(), ALL);
+        grant(TenantFull, LeaseParticipantScreeningTO.class, new LeaseParticipantScreeningInstanceAccess(), ALL);
 
         grant(TenantBasic, TenantPortalAccessInformationDTO.class, READ);
         grant(TenantAdvanced, TenantPortalAccessInformationDTO.class, READ);
@@ -69,10 +69,10 @@ class VistaCrmTenantAccessControlList extends UIAclBuilder {
         grant(TenantFull, TenantDTO.class, new FormerTenantInstanceAccess(), READ | UPDATE);
 
         grant(TenantAdvanced, LeaseParticipantScreeningTO.class, new FormerTenantInstanceAccess(), READ);
-        grant(TenantAdvanced, LeaseParticipantScreeningTO.class, new FormerTenantScreeningInstanceAccess(), READ);
+        grant(TenantAdvanced, LeaseParticipantScreeningTO.class, new FormerLeaseParticipantScreeningInstanceAccess(), READ);
 
         grant(TenantFull, LeaseParticipantScreeningTO.class, new FormerTenantInstanceAccess(), READ | UPDATE);
-        grant(TenantFull, LeaseParticipantScreeningTO.class, new FormerTenantScreeningInstanceAccess(), READ | UPDATE);
+        grant(TenantFull, LeaseParticipantScreeningTO.class, new FormerLeaseParticipantScreeningInstanceAccess(), READ | UPDATE);
 
         // Actions:
         grant(TenantAdvanced, FormerTenantListAction.class);
