@@ -711,7 +711,7 @@
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
 				<reportElement positionType="Float" x="161" y="215" width="249" height="20"/>
 				<textElement verticalAlignment="Bottom"/>
-				<textFieldExpression><![CDATA[((com.propertyvista.domain.tenant.income.IEmploymentInfo)$F{details}.cast()).address().postalCode.getStringView()]]></textFieldExpression>
+				<textFieldExpression><![CDATA[((com.propertyvista.domain.tenant.income.IEmploymentInfo)$F{details}.cast()).address().postalCode().getStringView()]]></textFieldExpression>
 			</textField>
 			<line>
 				<reportElement positionType="Float" x="142" y="236" width="268" height="1"/>
