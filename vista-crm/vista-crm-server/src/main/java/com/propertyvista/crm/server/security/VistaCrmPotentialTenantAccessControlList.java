@@ -40,7 +40,9 @@ class VistaCrmPotentialTenantAccessControlList extends UIAclBuilder {
         grant(PotentialTenantFull, TenantDTO.class, new PotentialTenantInstanceAccess(), READ | UPDATE);
         grant(PotentialTenantScreening, TenantDTO.class, new PotentialTenantInstanceAccess(), READ);
 
+        grant(PotentialTenantFull, LeaseParticipantScreeningTO.class, new PotentialTenantInstanceAccess(), ALL);
         grant(PotentialTenantFull, LeaseParticipantScreeningTO.class, new PotentialTenantScreeningInstanceAccess(), ALL);
+        grant(PotentialTenantScreening, LeaseParticipantScreeningTO.class, new PotentialTenantInstanceAccess(), ALL);
         grant(PotentialTenantScreening, LeaseParticipantScreeningTO.class, new PotentialTenantScreeningInstanceAccess(), ALL);
 
         // Actions:
