@@ -82,6 +82,9 @@ public class QuickTipActivity extends AbstractActivity implements QuickTipPresen
 
             @Override
             public void onSuccess(Vector<QuickTipTO> result) {
+                if (result == null) {
+                    return;
+                }
 
                 if (quickTips == null) {
                     quickTips = new Vector<QuickTipTO>();
@@ -101,7 +104,6 @@ public class QuickTipActivity extends AbstractActivity implements QuickTipPresen
                     }
 
                     tips.addAll(getTips(PortalResidentMarketingTarget.Other));
-
                 }
 
                 if (tips.size() > 0) {
@@ -111,9 +113,7 @@ public class QuickTipActivity extends AbstractActivity implements QuickTipPresen
                     int random = new Random().nextInt(tips.size());
                     setTip(tips.get(random));
                 }
-
             }
-
         });
 
     }

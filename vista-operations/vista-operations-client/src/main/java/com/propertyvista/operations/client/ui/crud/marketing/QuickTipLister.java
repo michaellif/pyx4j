@@ -38,6 +38,9 @@ public class QuickTipLister extends AbstractLister<PortalResidentMarketingTip> {
                 new MemberColumnDescriptor.Builder(proto().comments()).build(),
                 new MemberColumnDescriptor.Builder(proto().content()).visible(false).build()
             ));//@formatter:on
+
+        setAllowDelete(true);
+
     }
 
     @Override

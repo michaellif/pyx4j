@@ -17,7 +17,6 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.place.shared.Place;
 
 import com.pyx4j.entity.rpc.AbstractCrudService;
-import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.backoffice.activity.AbstractListerActivity;
 
 import com.propertyvista.domain.marketing.PortalResidentMarketingTip;
@@ -26,8 +25,6 @@ import com.propertyvista.operations.client.ui.crud.marketing.QuickTipListerView;
 import com.propertyvista.operations.rpc.services.QuickTipCrudService;
 
 public class QuickTipListerActivity extends AbstractListerActivity<PortalResidentMarketingTip> {
-
-    private static final I18n i18n = I18n.get(QuickTipListerActivity.class);
 
     public QuickTipListerActivity(Place place) {
         super(PortalResidentMarketingTip.class, place, OperationsSite.getViewFactory().getView(QuickTipListerView.class), GWT
