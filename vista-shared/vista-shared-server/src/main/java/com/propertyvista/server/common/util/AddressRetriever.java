@@ -13,9 +13,7 @@
  */
 package com.propertyvista.server.common.util;
 
-import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.entity.core.AttachLevel;
-import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.server.Persistence;
 
 import com.propertyvista.domain.contact.InternationalAddress;
@@ -37,10 +35,8 @@ public class AddressRetriever {
     public static InternationalAddress getUnitLegalAddress(AptUnit unit) {
         Persistence.ensureRetrieve(unit.building(), AttachLevel.Attached);
         if (!unit.info().legalAddressOverride().getValue(false)) {
-            InternationalAddress address = EntityFactory.create(InternationalAddress.class);
-            address.set(unit.building().info().address());
-            String line2 = address.suiteNumber().getValue();
-            address.suiteNumber().setValue((CommonsStringUtils.isEmpty(line2) ? "" : line2 + ", ") + "Apt " + unit.info().number().getValue());
+            InternationalAddress address = unit.building().info().address().duplicate();
+            address.suiteNumber().setValue(unit.info().number().getValue());
             return address;
         } else {
             return unit.info().legalAddress();

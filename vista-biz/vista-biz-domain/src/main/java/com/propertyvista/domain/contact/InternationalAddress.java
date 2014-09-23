@@ -26,7 +26,7 @@ import com.propertyvista.domain.ref.ISOCountry;
 
 @EmbeddedEntity
 @I18n(strategy = I18n.I18nStrategy.IgnoreThis)
-@ToStringFormat("{0,choice,null#|!null#{0} }{1}{2,choice,null#|!null# {2}}, {3}, {4} {5}, {6}")
+@ToStringFormat("{0,choice,null#|!null#{0} }{1}{2,choice,null#|!null#, Unit {2}}, {3}, {4} {5}, {6}")
 public interface InternationalAddress extends IEntity {
 
     @NotNull
