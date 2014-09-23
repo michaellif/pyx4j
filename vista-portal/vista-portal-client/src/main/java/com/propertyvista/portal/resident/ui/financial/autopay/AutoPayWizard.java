@@ -362,17 +362,21 @@ public class AutoPayWizard extends CPortalEntityWizard<AutoPayDTO> {
     }
 
     private Widget createLegalTermsPanel() {
-
         SafeHtmlBuilder legalTermsBuilder = new SafeHtmlBuilder();
         final String termsOfUseAnchorId = HTMLPanel.createUniqueId();
+        final String billingPolicyAnchorId = HTMLPanel.createUniqueId();
         final String preAuthorizedAgreementId = HTMLPanel.createUniqueId();
-        legalTermsBuilder.appendHtmlConstant(i18n.tr("Be informed that you are acknowledging our {0} and {1}.", "<span id=\"" + termsOfUseAnchorId
-                + "\"></span>", "<span id=\"" + preAuthorizedAgreementId + "\"></span>"));
+
+        legalTermsBuilder.appendHtmlConstant(i18n.tr("Be informed that you are acknowledging our {0}, {1} and {2}.", "<span id=\"" + termsOfUseAnchorId
+                + "\"></span>", "<span id=\"" + billingPolicyAnchorId + "\"></span>", "<span id=\"" + preAuthorizedAgreementId + "\"></span>"));
 
         final HTMLPanel legalTermsLinkPanel = new HTMLPanel(legalTermsBuilder.toSafeHtml());
 
         Anchor termsOfUseAnchor = new TermsAnchor(i18n.tr("Terms Of Use"), PortalSiteMap.PortalTerms.VistaTermsAndConditions.class);
         legalTermsLinkPanel.addAndReplaceElement(termsOfUseAnchor, termsOfUseAnchorId);
+
+        Anchor billingPolicyAnchor = new TermsAnchor(i18n.tr("Billing And Refund Policy"), PortalSiteMap.PortalTerms.BillingTerms.class);
+        legalTermsLinkPanel.addAndReplaceElement(billingPolicyAnchor, billingPolicyAnchorId);
 
         final TermsAnchor preAuthorizedAgreementAnchor = new TermsAnchor(i18n.tr("Pre-Authorized Agreement"), null);
         preAuthorizedAgreementAnchor.addClickHandler(new ClickHandler() {
@@ -392,7 +396,6 @@ public class AutoPayWizard extends CPortalEntityWizard<AutoPayDTO> {
                 DOM.eventPreventDefault((com.google.gwt.user.client.Event) event.getNativeEvent());
             }
         });
-
         legalTermsLinkPanel.addAndReplaceElement(preAuthorizedAgreementAnchor, preAuthorizedAgreementId);
 
         return legalTermsLinkPanel;

@@ -500,6 +500,7 @@ public class PaymentWizard extends CPortalEntityWizard<PaymentDTO> {
         SafeHtmlBuilder legalTermsBuilder = new SafeHtmlBuilder();
         final String termsOfUseAnchorId = HTMLPanel.createUniqueId();
         final String billingPolicyAnchorId = HTMLPanel.createUniqueId();
+
         legalTermsBuilder.appendHtmlConstant(i18n.tr("Be informed that you are acknowledging our {0} and {1}.", "<span id=\"" + termsOfUseAnchorId
                 + "\"></span>", "<span id=\"" + billingPolicyAnchorId + "\"></span>"));
 
