@@ -30,9 +30,11 @@ public class QuickTipViewImpl extends SimplePanel implements QuickTipView {
     @Override
     public void setQuickTip(HTMLPanel contentPanel, ThemeColor background) {
         setWidget(contentPanel);
-        getElement().getStyle().setProperty("background", StyleManager.getPalette().getThemeColor(background, 1));
-        getElement().getStyle().setProperty("color", StyleManager.getPalette().getThemeColor(background, 0.1));
 
+        if (background != null) {
+            getElement().getStyle().setProperty("background", StyleManager.getPalette().getThemeColor(background, 1));
+            getElement().getStyle().setProperty("color", StyleManager.getPalette().getThemeColor(background, 0.1));
+        }
     }
 
 }

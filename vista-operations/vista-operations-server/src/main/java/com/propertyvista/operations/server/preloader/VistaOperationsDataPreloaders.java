@@ -17,6 +17,7 @@ import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.entity.server.dataimport.DataPreloaderCollection;
 
 import com.propertyvista.preloader.EquifaxSimulationPreloader;
+import com.propertyvista.preloader.QuickTipDevPreloader;
 import com.propertyvista.preloader.VisaDebitRangesPreloader;
 import com.propertyvista.shared.config.VistaDemo;
 
@@ -32,6 +33,7 @@ public class VistaOperationsDataPreloaders extends DataPreloaderCollection {
         if (ApplicationMode.isDevelopment() || VistaDemo.isDemo()) {
             add(new EquifaxSimulationPreloader());
             add(new VisaDebitRangesPreloader());
+            add(new QuickTipDevPreloader());
         } else {
             // TODO remove when we switch to caledon API
             add(new VisaDebitRangesPreloader());

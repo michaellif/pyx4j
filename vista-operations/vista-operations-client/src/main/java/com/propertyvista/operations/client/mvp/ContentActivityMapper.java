@@ -55,6 +55,9 @@ import com.propertyvista.operations.client.activity.crud.legal.VistaTermsEditorA
 import com.propertyvista.operations.client.activity.crud.legal.VistaTermsViewerActivity;
 import com.propertyvista.operations.client.activity.crud.maintenance.MaintenanceEditorActivity;
 import com.propertyvista.operations.client.activity.crud.maintenance.MaintenanceViewerActivity;
+import com.propertyvista.operations.client.activity.crud.marketing.QuickTipEditorActivity;
+import com.propertyvista.operations.client.activity.crud.marketing.QuickTipListerActivity;
+import com.propertyvista.operations.client.activity.crud.marketing.QuickTipViewerActivity;
 import com.propertyvista.operations.client.activity.crud.operationsalert.OperationsAlertEditorActivity;
 import com.propertyvista.operations.client.activity.crud.operationsalert.OperationsAlertListerActivity;
 import com.propertyvista.operations.client.activity.crud.operationsalert.OperationsAlertViewerActivity;
@@ -323,6 +326,20 @@ public class ContentActivityMapper implements AppActivityMapper {
                             break;
                         case viewer:
                             activity = new OapiViewerActivity(crudPlace);
+                            break;
+                        }
+
+//- Marketing
+                    } else if (place instanceof OperationsSiteMap.QuickTip.QuickTipEditor) {
+                        switch (crudPlace.getType()) {
+                        case editor:
+                            activity = new QuickTipEditorActivity(crudPlace);
+                            break;
+                        case lister:
+                            activity = new QuickTipListerActivity(crudPlace);
+                            break;
+                        case viewer:
+                            activity = new QuickTipViewerActivity(crudPlace);
                             break;
                         }
 

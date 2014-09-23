@@ -7,25 +7,24 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Sep 19, 2014
- * @author vlads
+ * Created on Sep 22, 2014
+ * @author ernestog
  * @version $Id$
  */
-package com.propertyvista.domain.marketing;
+package com.propertyvista.shared.rpc;
 
-import com.pyx4j.entity.annotations.Editor;
-import com.pyx4j.entity.annotations.Length;
-import com.pyx4j.entity.annotations.Table;
+import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.IPrimitive;
+import com.pyx4j.i18n.annotations.I18n;
 
-import com.propertyvista.domain.VistaNamespace;
+import com.propertyvista.domain.marketing.PortalResidentMarketingTarget;
 
-@Table(namespace = VistaNamespace.operationsNamespace)
-public interface PortalResidentMarketingDocument extends IEntity {
+@Transient
+@I18n(strategy = I18n.I18nStrategy.IgnoreThis)
+public interface QuickTipTO extends IEntity {
 
-    @Editor(type = Editor.EditorType.richtextarea)
-    @Length(300000)
+    IPrimitive<PortalResidentMarketingTarget> target();
+
     IPrimitive<String> content();
-
 }

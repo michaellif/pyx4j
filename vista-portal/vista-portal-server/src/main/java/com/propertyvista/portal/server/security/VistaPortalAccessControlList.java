@@ -65,6 +65,7 @@ import com.propertyvista.portal.rpc.portal.resident.services.ExtraActivityPortal
 import com.propertyvista.portal.rpc.portal.resident.services.LeaseContextSelectionService;
 import com.propertyvista.portal.rpc.portal.resident.services.MessageAttachmentUploadPortalService;
 import com.propertyvista.portal.rpc.portal.resident.services.MessagePortalCrudService;
+import com.propertyvista.portal.rpc.portal.resident.services.QuickTipService;
 import com.propertyvista.portal.rpc.portal.resident.services.ResidentAuthenticationService;
 import com.propertyvista.portal.rpc.portal.resident.services.ResidentSelfRegistrationService;
 import com.propertyvista.portal.rpc.portal.resident.services.financial.AutoPayWizardService;
@@ -219,6 +220,8 @@ public class VistaPortalAccessControlList extends ServletContainerAclBuilder {
         grant(PortalResidentBehavior.Resident, new IServiceExecutePermission(DeferredProcessService.class));
 
         grant(PortalResidentBehavior.Resident, new EntityPermission(CustomerPicture.class, CRUD));
+
+        grant(PortalResidentBehavior.Resident, new IServiceExecutePermission(QuickTipService.class));
 
         // ========================= communication
         grant(PortalResidentBehavior.Resident, new IServiceExecutePermission(MessageAttachmentUploadPortalService.class));

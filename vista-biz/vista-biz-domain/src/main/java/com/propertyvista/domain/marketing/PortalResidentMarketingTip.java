@@ -13,11 +13,17 @@
  */
 package com.propertyvista.domain.marketing;
 
-import com.pyx4j.entity.annotations.Owned;
+import java.util.Date;
+
+import com.pyx4j.entity.annotations.Caption;
+import com.pyx4j.entity.annotations.Editor;
+import com.pyx4j.entity.annotations.Format;
+import com.pyx4j.entity.annotations.Length;
 import com.pyx4j.entity.annotations.Table;
+import com.pyx4j.entity.annotations.Timestamp;
 import com.pyx4j.entity.annotations.ToString;
+import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.core.IEntity;
-import com.pyx4j.entity.core.IList;
 import com.pyx4j.entity.core.IPrimitive;
 
 import com.propertyvista.domain.VistaNamespace;
@@ -25,9 +31,24 @@ import com.propertyvista.domain.VistaNamespace;
 @Table(namespace = VistaNamespace.operationsNamespace)
 public interface PortalResidentMarketingTip extends IEntity {
 
+    @Caption(name = "Created")
+    @Format("MM/dd/yyyy HH:mm")
+    @Timestamp(Timestamp.Update.Created)
+    IPrimitive<Date> created();
+
+    @Caption(name = "Updated")
+    @Format("MM/dd/yyyy HH:mm")
+    @Timestamp(Timestamp.Update.Updated)
+    IPrimitive<Date> updated();
+
+    @NotNull
     @ToString(index = 0)
     IPrimitive<PortalResidentMarketingTarget> target();
 
-    @Owned
-    IList<PortalResidentMarketingDocument> documents();
+    @ToString
+    IPrimitive<String> comments();
+
+    @Editor(type = Editor.EditorType.richtextarea)
+    @Length(300000)
+    IPrimitive<String> content();
 }

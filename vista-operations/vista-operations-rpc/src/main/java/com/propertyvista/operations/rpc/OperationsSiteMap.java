@@ -286,6 +286,13 @@ public class OperationsSiteMap implements SiteMap {
         }
     }
 
+    public static class QuickTip extends AppPlace {
+
+        @PlaceProperties(navigLabel = "Quick Tips")
+        public static class QuickTipEditor extends CrmCrudAppPlace {
+        }
+    }
+
     public static class Simulator extends AppPlace {
 
         public static class CardServiceSimulation extends CrmCrudAppPlace implements DevelopmentOnlyPlace {

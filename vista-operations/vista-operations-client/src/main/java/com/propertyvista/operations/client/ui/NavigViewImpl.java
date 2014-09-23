@@ -116,6 +116,12 @@ public class NavigViewImpl extends Composite implements NavigView {
             list.addMenuItem(new SideMenuAppPlaceItem(new OperationsSiteMap.Tools.OAPIConversion(), VistaOperationsBehavior.SystemAdmin));
         }
 
+        {//Marketing
+            SideMenuList list = new SideMenuList();
+            root.addMenuItem(new SideMenuFolderItem(list, i18n.tr("Marketing"), null));
+            list.addMenuItem(new SideMenuAppPlaceItem(new OperationsSiteMap.QuickTip.QuickTipEditor(), VistaOperationsBehavior.SystemAdmin));
+        }
+
         if (ApplicationMode.isDevelopment()) {//Dev Simulation
             SideMenuList list = new SideMenuList();
             root.addMenuItem(new SideMenuFolderItem(list, i18n.tr("Dev Simulation"), null));

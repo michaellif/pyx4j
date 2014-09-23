@@ -17,6 +17,7 @@ import static com.pyx4j.site.client.AppPlaceEntityMapper.register;
 
 import com.google.gwt.resources.client.ImageResource;
 
+import com.propertyvista.domain.marketing.PortalResidentMarketingTip;
 import com.propertyvista.operations.client.resources.OperationsImages;
 import com.propertyvista.operations.domain.eft.caledoneft.simulator.PadSimBatch;
 import com.propertyvista.operations.domain.eft.caledoneft.simulator.PadSimFile;
@@ -92,6 +93,7 @@ public class OperationsEntityMapper {
         register(OutgoingMailQueueDTO.class, OperationsSiteMap.Administration.OutgoingMail.class, DEFAULT_IMAGE);
 
         register(OapiConversionDTO.class, OperationsSiteMap.Tools.OAPIConversion.class, DEFAULT_IMAGE);
+        register(PortalResidentMarketingTip.class, OperationsSiteMap.QuickTip.QuickTipEditor.class, DEFAULT_IMAGE);
 
     }
 }

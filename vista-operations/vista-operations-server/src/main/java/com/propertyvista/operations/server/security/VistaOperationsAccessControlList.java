@@ -18,6 +18,7 @@ import com.pyx4j.gwt.rpc.deferred.DeferredProcessService;
 import com.pyx4j.rpc.shared.IServiceExecutePermission;
 import com.pyx4j.security.server.ServletContainerAclBuilder;
 
+import com.propertyvista.domain.marketing.PortalResidentMarketingTip;
 import com.propertyvista.domain.pmc.Pmc;
 import com.propertyvista.domain.pmc.PmcMerchantAccountIndex;
 import com.propertyvista.domain.pmc.payment.CustomerCreditCheckTransaction;
@@ -89,6 +90,7 @@ import com.propertyvista.operations.rpc.services.PmcCrudService;
 import com.propertyvista.operations.rpc.services.PmcDataReportService;
 import com.propertyvista.operations.rpc.services.PmcDirectDebitRecordCrudService;
 import com.propertyvista.operations.rpc.services.PmcMerchantAccountCrudService;
+import com.propertyvista.operations.rpc.services.QuickTipCrudService;
 import com.propertyvista.operations.rpc.services.SimulationService;
 import com.propertyvista.operations.rpc.services.TenantSureCrudService;
 import com.propertyvista.operations.rpc.services.Vista2PmcService;
@@ -172,6 +174,9 @@ public class VistaOperationsAccessControlList extends ServletContainerAclBuilder
 
         grant(VistaOperationsBehavior.Caledon, new EntityPermission(PadSimFile.class, EntityPermission.ALL));
         grant(VistaOperationsBehavior.Caledon, new EntityPermission(PadSimBatch.class, EntityPermission.ALL));
+
+        grant(VistaOperationsBehavior.SystemAdmin, new IServiceExecutePermission(QuickTipCrudService.class));
+        grant(VistaOperationsBehavior.SystemAdmin, new EntityPermission(PortalResidentMarketingTip.class, EntityPermission.ALL));
 
         grant(VistaOperationsBehavior.SystemAdmin, new IServiceExecutePermission(VistaTermsCrudService.class));
         grant(VistaOperationsBehavior.SystemAdmin, new IServiceExecutePermission(VistaTermsVersionService.class));
