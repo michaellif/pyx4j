@@ -513,7 +513,14 @@ public class LeaseApplicationViewerViewImpl extends LeaseViewerViewImplBase<Leas
 
             form.init();
             form.reset();
-            form.populateNew();
+
+            ApprovalChecklist ac = EntityFactory.create(ApprovalChecklist.class);
+            ac.informationCompleteness().setValue(false);
+            ac.creditCheck().setValue(false);
+            ac.employmentConfirmation().setValue(false);
+            ac.landlordConfirmation().setValue(false);
+
+            form.populate(ac);
 
             setBody(form);
             setDialogPixelWidth(350);
