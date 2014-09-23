@@ -21,8 +21,6 @@ import com.google.gwt.dom.client.Style.Position;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.safehtml.shared.SafeHtml;
-import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.DockLayoutPanel;
@@ -34,6 +32,7 @@ import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.RequiresResize;
 import com.google.gwt.user.client.ui.ScrollPanel;
 
+import com.pyx4j.commons.HtmlUtils;
 import com.pyx4j.gwt.commons.layout.LayoutChangeEvent;
 import com.pyx4j.gwt.commons.layout.LayoutChangeHandler;
 import com.pyx4j.gwt.commons.layout.LayoutChangeRequestEvent;
@@ -136,6 +135,8 @@ public class CommunicationViewImpl extends FlowPanel implements CommunicationVie
 
         private final Label subjectField;
 
+        private final Label messageField;
+
         private final Label dateField;
 
         private final Label senderField;
@@ -153,10 +154,7 @@ public class CommunicationViewImpl extends FlowPanel implements CommunicationVie
                     AppSite.getPlaceController().goTo(new ResidentPortalSiteMap.Message.MessagePage(message.getPrimaryKey()));
                 }
             });
-
-            SafeHtmlBuilder loginTermsBuilder = new SafeHtmlBuilder();
-            SafeHtml body = loginTermsBuilder.appendHtmlConstant(message.text().getValue("")).toSafeHtml();
-
+            messageField = new Label(HtmlUtils.removeHtmlTags(message.text().getStringView()));
             dateField = new Label(message.date().getStringView());
             senderField = new Label(message.sender().getStringView());
 
@@ -171,7 +169,7 @@ public class CommunicationViewImpl extends FlowPanel implements CommunicationVie
 
             setWidget(1, 0, subjectField);
             getFlexCellFormatter().setColSpan(1, 0, 2);
-            setHTML(2, 0, body);
+            setWidget(2, 0, messageField);
             getFlexCellFormatter().setColSpan(2, 0, 3);
 
         }

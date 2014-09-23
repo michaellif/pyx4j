@@ -26,6 +26,7 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.MenuItem;
 import com.google.gwt.user.client.ui.Widget;
 
+import com.pyx4j.commons.HtmlUtils;
 import com.pyx4j.commons.IFormatter;
 import com.pyx4j.commons.SimpleMessageFormat;
 import com.pyx4j.entity.core.EntityFactory;
@@ -149,9 +150,7 @@ public class MessageForm extends CrmEntityForm<MessageDTO> {
 
                     SafeHtmlBuilder loginTermsBuilder = new SafeHtmlBuilder();
                     return loginTermsBuilder.appendHtmlConstant(SimpleMessageFormat.format("{0}, {1}:", value.header().sender().getValue(""), value.date()))
-                            .appendHtmlConstant("<br/>").appendHtmlConstant(value.text().getValue("")).toSafeHtml();
-
-                    //return SafeHtmlUtils.fromString(SimpleMessageFormat.format("{0}, {1}:", value.date(), value.text().getValue("")));
+                            .appendHtmlConstant("<br/>").appendHtmlConstant(HtmlUtils.removeHtmlTags(value.text().getValue(""))).toSafeHtml();
                 }
             });
 
