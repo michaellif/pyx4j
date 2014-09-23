@@ -30,6 +30,7 @@ import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.IPrimitive;
 import com.pyx4j.entity.security.DataModelPermission;
+import com.pyx4j.forms.client.ui.CCheckBox;
 import com.pyx4j.forms.client.ui.CComboBox;
 import com.pyx4j.forms.client.ui.CFile;
 import com.pyx4j.forms.client.ui.CForm;
@@ -477,14 +478,20 @@ public class LeaseApplicationViewerViewImpl extends LeaseViewerViewImplBase<Leas
             super(i18n.tr("Application Approval Checklist"));
 
             form = new CForm<ApprovalChecklist>(ApprovalChecklist.class) {
+
                 @Override
                 protected IsWidget createContent() {
                     FormPanel formPanel = new FormPanel(this);
 
-                    formPanel.append(Location.Left, proto().informationCompleteness()).decorate().labelWidth(230).componentWidth(50);
-                    formPanel.append(Location.Left, proto().creditCheck()).decorate().labelWidth(230).componentWidth(50);
-                    formPanel.append(Location.Left, proto().employmentConfirmation()).decorate().labelWidth(230).componentWidth(50);
-                    formPanel.append(Location.Left, proto().landlordConfirmation()).decorate().labelWidth(230).componentWidth(50);
+                    formPanel.append(Location.Left, proto().informationCompleteness());
+                    formPanel.append(Location.Left, proto().creditCheck());
+                    formPanel.append(Location.Left, proto().employmentConfirmation());
+                    formPanel.append(Location.Left, proto().landlordConfirmation());
+
+                    ((CCheckBox) get(proto().informationCompleteness())).setDecorator(new CheckBoxDecorator());
+                    ((CCheckBox) get(proto().creditCheck())).setDecorator(new CheckBoxDecorator());
+                    ((CCheckBox) get(proto().employmentConfirmation())).setDecorator(new CheckBoxDecorator());
+                    ((CCheckBox) get(proto().landlordConfirmation())).setDecorator(new CheckBoxDecorator());
 
                     formPanel.h4(i18n.tr("Notes:"));
                     formPanel.append(Location.Left, notes);
