@@ -43,6 +43,7 @@ import com.propertyvista.biz.communication.NotificationFacade;
 import com.propertyvista.biz.financial.ar.ARException;
 import com.propertyvista.biz.financial.ar.ARFacade;
 import com.propertyvista.biz.financial.payment.CreditCardFacade.ReferenceNumberPrefix;
+import com.propertyvista.biz.policy.IdAssignmentFacade;
 import com.propertyvista.biz.system.AuditFacade;
 import com.propertyvista.biz.system.OperationsAlertFacade;
 import com.propertyvista.biz.system.VistaContext;
@@ -213,25 +214,9 @@ public class PaymentFacadeImpl implements PaymentFacade {
 
         Persistence.service().merge(paymentRecord);
         if (paymentRecord.yardiDocumentNumber().isNull()) {
+            ServerSideFactory.create(IdAssignmentFacade.class).assignDocumentNumber(paymentRecord);
             StringBuilder b = new StringBuilder();
-            if (paymentRecord.paymentMethod().type().getValue() == PaymentType.Echeck) {
-                switch (VistaDeployment.getCurrentPmc().features().countryOfOperation().getValue()) {
-                case Canada:
-                    b.append("eCheque (EFT)");
-                    break;
-                case US:
-                    b.append("eCheck (ACH)");
-                    break;
-                default:
-                    b.append("eCheck");
-                    break;
-                }
-            } else if (paymentRecord.paymentMethod().type().getValue() == PaymentType.CreditCard) {
-                CreditCardType cardType = paymentRecord.paymentMethod().details().<CreditCardInfo> cast().cardType().getValue();
-                b.append(cardType.name());
-            } else {
-                b.append(paymentRecord.paymentMethod().type().getValue().name());
-            }
+            b.append(paymentRecord.yardiDocumentNumber().getStringView());
             if (!VistaDeployment.isVistaProduction()) {
                 b.append(":t").append(PadTransactionUtils.readTestDBversionIdInOperations());
             }

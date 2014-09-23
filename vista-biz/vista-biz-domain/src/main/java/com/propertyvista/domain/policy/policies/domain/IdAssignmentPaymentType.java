@@ -38,12 +38,6 @@ public interface IdAssignmentPaymentType extends IEntity {
     @JoinColumn
     IdAssignmentPolicy policy();
 
-    @Length(3)
-    IPrimitive<String> autopayPrefix();
-
-    @Length(3)
-    IPrimitive<String> oneTimePrefix();
-
     @Length(9)
     IPrimitive<String> cashPrefix();
 
@@ -65,4 +59,9 @@ public interface IdAssignmentPaymentType extends IEntity {
     @Length(9)
     IPrimitive<String> visaDebitPrefix();
 
+    @Length(3)
+    IPrimitive<String> autopayPrefix();
+
+    @Length(3)
+    IPrimitive<String> oneTimePrefix();
 }
