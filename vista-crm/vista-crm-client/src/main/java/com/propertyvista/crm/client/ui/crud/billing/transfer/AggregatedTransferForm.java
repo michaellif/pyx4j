@@ -16,6 +16,8 @@ package com.propertyvista.crm.client.ui.crud.billing.transfer;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.google.gwt.user.client.ui.Widget;
+
 import com.pyx4j.forms.client.ui.folder.FolderColumnDescriptor;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.forms.client.ui.panels.FormPanel;
@@ -28,6 +30,7 @@ import com.propertyvista.crm.rpc.dto.financial.CardsAggregatedTransferDTO;
 import com.propertyvista.domain.financial.AggregatedTransfer;
 import com.propertyvista.domain.financial.AggregatedTransferAdjustment;
 import com.propertyvista.domain.financial.AggregatedTransferChargeback;
+import com.propertyvista.domain.financial.AggregatedTransferNonVistaTransactions;
 import com.propertyvista.domain.financial.CardsAggregatedTransfer;
 import com.propertyvista.domain.financial.EftAggregatedTransfer;
 
@@ -44,6 +47,8 @@ public class AggregatedTransferForm extends CrmEntityForm<AggregatedTransfer> {
     private final Tab returnedPaymentsTab;
 
     private final Tab rejectedBatchPaymentsTab;
+
+    private Widget nonVistaTransactionsLabel;
 
     public AggregatedTransferForm(AggregatedTransferViewerView view) {
         super(AggregatedTransfer.class, view);
@@ -90,6 +95,9 @@ public class AggregatedTransferForm extends CrmEntityForm<AggregatedTransfer> {
         tabPanel.h3(proto().chargebacks().getMeta().getCaption());
         tabPanel.append(Location.Dual, proto().chargebacks(), new AggregatedTransferChargebackFolder());
 
+        nonVistaTransactionsLabel = tabPanel.h3(proto().nonVistaTransactions().getMeta().getCaption());
+        tabPanel.append(Location.Dual, proto().nonVistaTransactions(), new AggregatedTransferNonVistaTransactionsFolder());
+
         return tabPanel;
     }
 
@@ -134,6 +142,9 @@ public class AggregatedTransferForm extends CrmEntityForm<AggregatedTransfer> {
         } else {
             assert false;
         }
+
+        nonVistaTransactionsLabel.setVisible(!getValue().nonVistaTransactions().isEmpty());
+        get(proto().nonVistaTransactions()).setVisible(!getValue().nonVistaTransactions().isEmpty());
     }
 
     @Override
@@ -142,6 +153,9 @@ public class AggregatedTransferForm extends CrmEntityForm<AggregatedTransfer> {
 
         cardsAggregatedTransferForm.reset();
         eftAggregatedTransferForm.reset();
+
+        nonVistaTransactionsLabel.setVisible(false);
+        get(proto().nonVistaTransactions()).setVisible(false);
     }
 
     private class AggregatedTransferAdjustmentFolder extends VistaTableFolder<AggregatedTransferAdjustment> {
@@ -168,6 +182,21 @@ public class AggregatedTransferForm extends CrmEntityForm<AggregatedTransfer> {
         public List<FolderColumnDescriptor> columns() {
             List<FolderColumnDescriptor> columns = new ArrayList<FolderColumnDescriptor>();
             columns.add(new FolderColumnDescriptor(proto().chargeback(), "15em"));
+            return columns;
+        }
+    }
+
+    private class AggregatedTransferNonVistaTransactionsFolder extends VistaTableFolder<AggregatedTransferNonVistaTransactions> {
+
+        public AggregatedTransferNonVistaTransactionsFolder() {
+            super(AggregatedTransferNonVistaTransactions.class, AggregatedTransferForm.this.isEditable());
+        }
+
+        @Override
+        public List<FolderColumnDescriptor> columns() {
+            List<FolderColumnDescriptor> columns = new ArrayList<FolderColumnDescriptor>();
+            columns.add(new FolderColumnDescriptor(proto().amount(), "15em"));
+            columns.add(new FolderColumnDescriptor(proto().details(), "15em"));
             return columns;
         }
     }
