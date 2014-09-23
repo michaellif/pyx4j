@@ -35,7 +35,6 @@ public class CCheckBox extends CFocusComponent<Boolean, NCheckBox> {
 
     public CCheckBox() {
         super();
-        populate(false);
         setFormat(new IFormatter<Boolean, String>() {
             @Override
             public String format(Boolean value) {
@@ -59,4 +58,13 @@ public class CCheckBox extends CFocusComponent<Boolean, NCheckBox> {
         this.format = format;
     }
 
+    @Override
+    protected Boolean preprocessValue(Boolean value, boolean fireEvent, boolean populate) {
+        return super.preprocessValue(value == null ? false : value, fireEvent, populate);
+    }
+
+    @Override
+    public boolean isValueEmpty() {
+        return false;
+    }
 }

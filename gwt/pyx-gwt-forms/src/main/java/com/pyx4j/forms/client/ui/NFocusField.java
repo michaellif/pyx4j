@@ -43,7 +43,7 @@ public abstract class NFocusField<DATA, EDITOR extends IFocusWidget, CCOMP exten
     @Override
     protected void onEditorCreate() {
         super.onEditorCreate();
-        getEditor().setTabIndex(getCComponent().getTabIndex());
+        setTabIndex(getCComponent().getTabIndex());
 
         getEditor().addFocusHandler(new FocusHandler() {
             @Override
