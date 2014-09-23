@@ -573,6 +573,17 @@ public class EntityGraph {
         }
     }
 
+    @SuppressWarnings("unchecked")
+    public static void setDefaults(IEntity src, IEntity dst, IPrimitive<?>... protoValues) {
+        for (IPrimitive<?> member : protoValues) {
+            String memberFieldName = member.getFieldName();
+            IPrimitive<Serializable> dstMember = (IPrimitive<Serializable>) dst.getMember(memberFieldName);
+            if (dstMember.isNull()) {
+                dstMember.setValue(src.getMemberValue(memberFieldName));
+            }
+        }
+    }
+
     /**
      * Set value only if the value is different
      *
