@@ -23,6 +23,7 @@ import com.pyx4j.forms.client.ui.CComboBox;
 import com.pyx4j.forms.client.ui.CEnumLabel;
 import com.pyx4j.forms.client.ui.CField;
 import com.pyx4j.forms.client.ui.CForm;
+import com.pyx4j.forms.client.ui.CTextComponent;
 import com.pyx4j.forms.client.ui.folder.CFolderRowEditor;
 import com.pyx4j.forms.client.ui.folder.FolderColumnDescriptor;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
@@ -35,6 +36,8 @@ import com.propertyvista.crm.client.ui.crud.policies.common.PolicyDTOTabPanelBas
 import com.propertyvista.domain.policy.dto.IdAssignmentPolicyDTO;
 import com.propertyvista.domain.policy.policies.domain.IdAssignmentItem;
 import com.propertyvista.domain.policy.policies.domain.IdAssignmentItem.IdAssignmentType;
+import com.propertyvista.domain.policy.policies.domain.IdAssignmentPaymentType;
+import com.propertyvista.shared.config.VistaFeatures;
 
 public class IdAssignmentPolicyForm extends PolicyDTOTabPanelBasedForm<IdAssignmentPolicyDTO> {
 
@@ -43,6 +46,9 @@ public class IdAssignmentPolicyForm extends PolicyDTOTabPanelBasedForm<IdAssignm
     public IdAssignmentPolicyForm(IForm<IdAssignmentPolicyDTO> view) {
         super(IdAssignmentPolicyDTO.class, view);
         addTab(createItemsPanel(), i18n.tr("Items"));
+        if (VistaFeatures.instance().yardiIntegration()) {
+            addTab(createPaymentTypesPanel(), i18n.tr("Payment Types"));
+        }
     }
 
     private IsWidget createItemsPanel() {
@@ -51,6 +57,41 @@ public class IdAssignmentPolicyForm extends PolicyDTOTabPanelBasedForm<IdAssignm
         formPanel.append(Location.Left, proto().editableItems(), new IdAssignmentItemFolder(isEditable()));
 
         return formPanel;
+    }
+
+    private IsWidget createPaymentTypesPanel() {
+        FormPanel formPanel = new FormPanel(this);
+
+        formPanel.append(Location.Left, proto().paymentTypes().cashPrefix()).decorate().labelWidth(200);
+        formPanel.append(Location.Left, proto().paymentTypes().checkPrefix()).decorate().labelWidth(200);
+        formPanel.append(Location.Left, proto().paymentTypes().echeckPrefix()).decorate().labelWidth(200);
+        formPanel.append(Location.Left, proto().paymentTypes().directBankingPrefix()).decorate().labelWidth(200);
+        formPanel.append(Location.Left, proto().paymentTypes().creditCardVisaPrefix()).decorate().labelWidth(200);
+        formPanel.append(Location.Left, proto().paymentTypes().creditCardMasterCardPrefix()).decorate().labelWidth(200);
+        formPanel.append(Location.Left, proto().paymentTypes().visaDebitPrefix()).decorate().labelWidth(200);
+        formPanel.append(Location.Left, proto().paymentTypes().autopayPrefix()).decorate().labelWidth(200);
+        formPanel.append(Location.Left, proto().paymentTypes().oneTimePrefix()).decorate().labelWidth(200);
+
+        return formPanel;
+    }
+
+    @Override
+    protected void onValueSet(boolean populate) {
+        super.onValueSet(populate);
+
+        if (VistaFeatures.instance().yardiIntegration() && isEditable()) {
+            IdAssignmentPaymentType defaults = getValue().paymentTypesDefaults();
+
+            ((CTextComponent<?, ?>) get(proto().paymentTypes().cashPrefix())).setWatermark(defaults.cashPrefix().getValue());
+            ((CTextComponent<?, ?>) get(proto().paymentTypes().checkPrefix())).setWatermark(defaults.checkPrefix().getValue());
+            ((CTextComponent<?, ?>) get(proto().paymentTypes().echeckPrefix())).setWatermark(defaults.echeckPrefix().getValue());
+            ((CTextComponent<?, ?>) get(proto().paymentTypes().directBankingPrefix())).setWatermark(defaults.directBankingPrefix().getValue());
+            ((CTextComponent<?, ?>) get(proto().paymentTypes().creditCardVisaPrefix())).setWatermark(defaults.creditCardVisaPrefix().getValue());
+            ((CTextComponent<?, ?>) get(proto().paymentTypes().creditCardMasterCardPrefix())).setWatermark(defaults.creditCardMasterCardPrefix().getValue());
+            ((CTextComponent<?, ?>) get(proto().paymentTypes().visaDebitPrefix())).setWatermark(defaults.visaDebitPrefix().getValue());
+            ((CTextComponent<?, ?>) get(proto().paymentTypes().autopayPrefix())).setWatermark(defaults.autopayPrefix().getValue());
+            ((CTextComponent<?, ?>) get(proto().paymentTypes().oneTimePrefix())).setWatermark(defaults.oneTimePrefix().getValue());
+        }
     }
 
     private static class IdAssignmentItemFolder extends VistaTableFolder<IdAssignmentItem> {
