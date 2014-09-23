@@ -55,7 +55,7 @@ public class CBigDecimalField extends CNumberField<BigDecimal> {
                     return null; // empty value case
                 }
                 try {
-                    return new BigDecimal(string);
+                    return new BigDecimal(getNumberFormat().parse(string));
                 } catch (NumberFormatException e) {
                     throw new ParseException(i18n.tr("Should be a Decimal"), 0);
                 }
