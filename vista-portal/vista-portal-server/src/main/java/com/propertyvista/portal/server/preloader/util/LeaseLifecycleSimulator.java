@@ -185,6 +185,7 @@ public class LeaseLifecycleSimulator {
         queueEvent(max(leaseFrom, sub(leaseTo, LeaseLifecycleSimulatorUtils.rndBetween(random, MIN_NOTICE_TERM, MAX_NOTICE_TERM))), new Notice(lease));
         queueEvent(leaseTo, new MoveOut(lease));
         queueEvent(DateUtils.daysAdd(leaseTo, 1), new Complete(lease));
+        queueEvent(DateUtils.monthAdd(leaseTo, 1), new Close(lease));
 
         queueMaintenanceRequests(lease);
 
@@ -425,9 +426,7 @@ public class LeaseLifecycleSimulator {
         }
 
         private void performRandomPayment() {
-
             Bill bill = ServerSideFactory.create(BillingFacade.class).getLatestBill(lease);
-
             if (bill != null && bill.totalDueAmount().getValue().compareTo(BigDecimal.ZERO) != 0) {
                 BigDecimal amount = tenantAgent.pay(bill);
                 if (debug) {
@@ -499,7 +498,6 @@ public class LeaseLifecycleSimulator {
         @Override
         public void exec() {
             if (numOfBills != 0) {
-
                 if (now().before(lease.currentTerm().termTo().getValue()) && lease.status().getValue() != Lease.Status.Completed) {
 
                     Bill lastBill = ServerSideFactory.create(BillingFacade.class).getLatestBill(lease);
@@ -551,7 +549,6 @@ public class LeaseLifecycleSimulator {
 
         @Override
         public void exec() {
-            lease = Persistence.service().retrieve(Lease.class, lease.getPrimaryKey());
             ServerSideFactory.create(LeaseFacade.class).createCompletionEvent(lease, CompletionType.Notice, now(), lease.currentTerm().termTo().getValue(),
                     null);
         }
@@ -565,7 +562,6 @@ public class LeaseLifecycleSimulator {
 
         @Override
         public void exec() {
-            lease = Persistence.service().retrieve(Lease.class, lease.getPrimaryKey());
             ServerSideFactory.create(LeaseFacade.class).moveOut(lease, SystemDateManager.getLogicalDate());
         }
     }
@@ -578,8 +574,19 @@ public class LeaseLifecycleSimulator {
 
         @Override
         public void exec() {
-            lease = Persistence.service().retrieve(Lease.class, lease.getPrimaryKey());
             ServerSideFactory.create(LeaseFacade.class).complete(lease);
+        }
+    }
+
+    private class Close extends AbstractLeaseEvent {
+
+        public Close(Lease lease) {
+            super(600, lease);
+        }
+
+        @Override
+        public void exec() {
+            ServerSideFactory.create(LeaseFacade.class).close(lease);
         }
     }
 

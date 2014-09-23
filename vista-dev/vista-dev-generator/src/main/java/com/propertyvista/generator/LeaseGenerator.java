@@ -97,10 +97,12 @@ public class LeaseGenerator extends DataGenerator {
 
     private void addTenants(Lease lease) {
         LeaseTermTenant mainTenant = EntityFactory.create(LeaseTermTenant.class);
+
         mainTenant.leaseParticipant().customer().set(customerGenerator.createCustomer());
         mainTenant.leaseParticipant().customer().emergencyContacts().addAll(customerGenerator.createEmergencyContacts());
         mainTenant.leaseParticipant().customer().personScreening().set(screeningGenerator.createScreening());
         mainTenant.role().setValue(LeaseTermParticipant.Role.Applicant);
+
         lease.currentTerm().version().tenants().add(mainTenant);
 
         addPreathorisedPaymentMethod(mainTenant);
@@ -108,26 +110,27 @@ public class LeaseGenerator extends DataGenerator {
         int maxTenants = RandomUtil.randomInt(config.numTenantsInLease);
         for (int t = 0; t <= maxTenants; t++) {
             LeaseTermTenant tenant = EntityFactory.create(LeaseTermTenant.class);
+
             tenant.leaseParticipant().customer().set(customerGenerator.createCustomer());
             tenant.leaseParticipant().customer().emergencyContacts().addAll(customerGenerator.createEmergencyContacts());
             tenant.leaseParticipant().customer().personScreening().set(screeningGenerator.createScreening());
-
             tenant.role().setValue(RandomUtil.random(EnumSet.of(LeaseTermParticipant.Role.CoApplicant, LeaseTermParticipant.Role.Dependent)));
             tenant.relationship().setValue(RandomUtil.randomEnum(PersonRelationship.class));
 
             lease.currentTerm().version().tenants().add(tenant);
         }
 
-        if ((maxTenants == 0) && (RandomUtil.randomBoolean())) {
+        if (maxTenants == 0) {
             LeaseTermGuarantor guarantor = EntityFactory.create(LeaseTermGuarantor.class);
+
             guarantor.leaseParticipant().customer().set(customerGenerator.createCustomer());
             guarantor.leaseParticipant().customer().personScreening().set(screeningGenerator.createScreening());
             guarantor.role().setValue(LeaseTermParticipant.Role.Guarantor);
             guarantor.relationship().setValue(RandomUtil.randomEnum(PersonRelationship.class));
             guarantor.tenant().set(mainTenant.leaseParticipant());
+
             lease.currentTerm().version().guarantors().add(guarantor);
         }
-
     }
 
     private void addPreathorisedPaymentMethod(LeaseTermTenant tenant) {
