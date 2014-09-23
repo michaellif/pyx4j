@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011- All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -23,6 +23,7 @@ import com.pyx4j.entity.core.criterion.PropertyCriterion;
 import com.pyx4j.entity.server.Persistence;
 
 import com.propertyvista.domain.company.Employee;
+import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.maintenance.MaintenanceRequest;
 import com.propertyvista.domain.pmc.Pmc;
 import com.propertyvista.domain.policy.framework.OrganizationPoliciesNode;
@@ -30,6 +31,7 @@ import com.propertyvista.domain.policy.policies.IdAssignmentPolicy;
 import com.propertyvista.domain.policy.policies.domain.IdAssignmentItem;
 import com.propertyvista.domain.policy.policies.domain.IdAssignmentItem.IdAssignmentType;
 import com.propertyvista.domain.policy.policies.domain.IdAssignmentItem.IdTarget;
+import com.propertyvista.domain.policy.policies.domain.IdAssignmentPaymentType;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.domain.tenant.lead.Lead;
@@ -200,5 +202,16 @@ public class IdAssignmentFacadeImpl implements IdAssignmentFacade {
         } else {
             res.append(codes[(int) mod - 1]);
         }
+    }
+
+    @Override
+    public void assignDocumentNumber(PaymentRecord paymentRecord) {
+        new PaymentsIdAssignmentManager().assignDocumentNumber(paymentRecord);
+
+    }
+
+    @Override
+    public IdAssignmentPaymentType getPaymentTypesDefaults() {
+        return new PaymentsIdAssignmentManager().getPaymentTypesDefaults();
     }
 }

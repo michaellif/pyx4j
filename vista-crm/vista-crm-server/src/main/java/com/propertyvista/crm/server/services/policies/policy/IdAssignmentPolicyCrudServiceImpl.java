@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011- All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -16,6 +16,10 @@ package com.propertyvista.crm.server.services.policies.policy;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.pyx4j.config.server.ServerSideFactory;
+import com.pyx4j.entity.shared.utils.EntityGraph;
+
+import com.propertyvista.biz.policy.IdAssignmentFacade;
 import com.propertyvista.crm.rpc.services.policies.policy.IdAssignmentPolicyCrudService;
 import com.propertyvista.crm.server.services.policies.GenericPolicyCrudService;
 import com.propertyvista.domain.policy.dto.IdAssignmentPolicyDTO;
@@ -32,17 +36,32 @@ public class IdAssignmentPolicyCrudServiceImpl extends GenericPolicyCrudService<
     }
 
     @Override
-    protected void enhanceRetrieved(IdAssignmentPolicy entity, IdAssignmentPolicyDTO dto, RetrieveTarget retrieveTarget) {
+    protected void enhanceRetrieved(IdAssignmentPolicy bo, IdAssignmentPolicyDTO to, RetrieveTarget retrieveTarget) {
         // tune up UI items in case of YardyInegration mode:
         if (VistaFeatures.instance().yardiIntegration()) {
-            for (IdAssignmentItem item : entity.items()) {
+            for (IdAssignmentItem item : bo.items()) {
                 // filter out these IDs!..
                 if (!IdTarget.nonEditableWhenYardiIntergation().contains(item.target().getValue())) {
-                    dto.editableItems().add(item);
+                    to.editableItems().add(item);
                 }
             }
+            to.paymentTypesDefaults().set(ServerSideFactory.create(IdAssignmentFacade.class).getPaymentTypesDefaults());
+
+            if (retrieveTarget == RetrieveTarget.View) {
+                EntityGraph.setDefaults(to.paymentTypesDefaults(), to.paymentTypes()//
+                        , to.paymentTypes().autopayPrefix()//
+                        , to.paymentTypes().oneTimePrefix()//
+                        , to.paymentTypes().cashPrefix()//
+                        , to.paymentTypes().checkPrefix()//
+                        , to.paymentTypes().echeckPrefix()//
+                        , to.paymentTypes().directBankingPrefix()//
+                        , to.paymentTypes().creditCardVisaPrefix()//
+                        , to.paymentTypes().creditCardMasterCardPrefix()//
+                        , to.paymentTypes().visaDebitPrefix()//
+                        );
+            }
         } else {
-            dto.editableItems().addAll(entity.items());
+            to.editableItems().addAll(bo.items());
         }
     }
 

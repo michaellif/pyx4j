@@ -15,6 +15,7 @@ package com.propertyvista.domain.policy.policies.domain;
 
 import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.JoinColumn;
+import com.pyx4j.entity.annotations.Length;
 import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.annotations.ReadOnly;
@@ -37,22 +38,31 @@ public interface IdAssignmentPaymentType extends IEntity {
     @JoinColumn
     IdAssignmentPolicy policy();
 
-    IPrimitive<String> cashPrefix();
-
-    IPrimitive<String> acceptedCheckPrefix();
-
-    IPrimitive<String> echeckPrefix();
-
-    IPrimitive<String> directBankingPrefix();
-
-    IPrimitive<String> creditCardVisaPrefix();
-
-    IPrimitive<String> creditCardMasterCardPrefix();
-
-    IPrimitive<String> visaDebitPrefix();
-
+    @Length(3)
     IPrimitive<String> autopayPrefix();
 
+    @Length(3)
     IPrimitive<String> oneTimePrefix();
+
+    @Length(9)
+    IPrimitive<String> cashPrefix();
+
+    @Length(9)
+    IPrimitive<String> checkPrefix();
+
+    @Length(9)
+    IPrimitive<String> echeckPrefix();
+
+    @Length(9)
+    IPrimitive<String> directBankingPrefix();
+
+    @Length(9)
+    IPrimitive<String> creditCardVisaPrefix();
+
+    @Length(9)
+    IPrimitive<String> creditCardMasterCardPrefix();
+
+    @Length(9)
+    IPrimitive<String> visaDebitPrefix();
 
 }
