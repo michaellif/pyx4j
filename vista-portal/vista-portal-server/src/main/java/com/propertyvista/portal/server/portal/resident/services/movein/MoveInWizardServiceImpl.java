@@ -18,7 +18,6 @@ import java.util.Vector;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.config.server.ServerSideFactory;
-import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.security.shared.SecurityController;
 
@@ -27,36 +26,27 @@ import com.propertyvista.domain.security.PortalResidentBehavior;
 import com.propertyvista.domain.tenant.marketing.LeaseParticipantMoveInAction;
 import com.propertyvista.domain.tenant.marketing.LeaseParticipantMoveInAction.MoveInActionType;
 import com.propertyvista.portal.rpc.portal.resident.dto.movein.MoveInWizardStep;
-import com.propertyvista.portal.rpc.portal.resident.dto.movein.MoveInWizardStepTO;
 import com.propertyvista.portal.rpc.portal.resident.services.movein.MoveInWizardService;
 import com.propertyvista.portal.server.portal.resident.ResidentPortalContext;
 
 public class MoveInWizardServiceImpl implements MoveInWizardService {
 
     @Override
-    public void obtainIncompleteSteps(AsyncCallback<Vector<MoveInWizardStepTO>> callback) {
-        Vector<MoveInWizardStepTO> r = new Vector<>();
+    public void obtainIncompleteSteps(AsyncCallback<Vector<MoveInWizardStep>> callback) {
+        Vector<MoveInWizardStep> r = new Vector<>();
 
         if (SecurityController.check(PortalResidentBehavior.LeaseAgreementSigningRequired)) {
-            MoveInWizardStepTO to = EntityFactory.create(MoveInWizardStepTO.class);
-            to.step().setValue(MoveInWizardStep.leaseSigning);
-            to.canSkip().setValue(false);
-            r.add(to);
+            r.add(MoveInWizardStep.leaseSigning);
         }
 
         for (LeaseParticipantMoveInAction moveInAction : ServerSideFactory.create(CustomerFacade.class).getActiveMoveInActions(
                 ResidentPortalContext.getLeaseParticipant())) {
-            MoveInWizardStepTO to = EntityFactory.create(MoveInWizardStepTO.class);
             switch (moveInAction.type().getValue()) {
             case autoPay:
-                to.step().setValue(MoveInWizardStep.pap);
-                to.canSkip().setValue(true);
-                r.add(to);
+                r.add(MoveInWizardStep.pap);
                 break;
             case insurance:
-                to.step().setValue(MoveInWizardStep.insurance);
-                to.canSkip().setValue(true);
-                r.add(to);
+                r.add(MoveInWizardStep.insurance);
                 break;
             }
         }

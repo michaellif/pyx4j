@@ -20,16 +20,15 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.pyx4j.rpc.shared.IService;
 
 import com.propertyvista.portal.rpc.portal.resident.dto.movein.MoveInWizardStep;
-import com.propertyvista.portal.rpc.portal.resident.dto.movein.MoveInWizardStepTO;
 
 /**
- *
+ * 
  * This service is available when PortalResidentBehavior.MoveInWizardCompletionRequired is set.
- *
+ * 
  */
 public interface MoveInWizardService extends IService {
 
-    public void obtainIncompleteSteps(AsyncCallback<Vector<MoveInWizardStepTO>> callback);
+    public void obtainIncompleteSteps(AsyncCallback<Vector<MoveInWizardStep>> callback);
 
     public void skipStep(AsyncCallback<Void> callback, MoveInWizardStep step);
 
