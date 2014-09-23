@@ -13,6 +13,8 @@
  */
 package com.propertyvista.yardi.mock.model.manager;
 
+import com.propertyvista.yardi.mock.model.domain.YardiGuestEvent;
+import com.propertyvista.yardi.mock.model.manager.YardiLeaseManager.LeaseBuilder;
 import com.propertyvista.yardi.mock.model.manager.YardiLeaseManager.TenantBuilder;
 
 // addGuest to building
@@ -20,10 +22,38 @@ import com.propertyvista.yardi.mock.model.manager.YardiLeaseManager.TenantBuilde
 // addFee to application
 public interface YardiGuestManager extends YardiMockManager {
 
-    interface GuestBuilder extends TenantBuilder {
+    public interface ApplicationBuilder extends LeaseBuilder {
 
+        ApplicationBuilder setUnit(String unitId);
+
+        ApplicationBuilder addRentableItem(String itemId);
+
+        GuestBuilder addGuest(String guestId, String name);
+
+        GuestBuilder getGuest(String guestId);
+
+        GuestEventBuilder addEvent(YardiGuestEvent.Type type);
     }
 
-    GuestBuilder addGuest(String guestId, String name, String buildingId);
+    public interface GuestBuilder extends TenantBuilder {
 
+        @Override
+        ApplicationBuilder done();
+    }
+
+    public interface GuestEventBuilder {
+        GuestEventBuilder setEventId(String id);
+
+        GuestEventBuilder setDate(String date);
+
+        GuestEventBuilder setAgent(String name);
+
+        GuestEventBuilder setQuote(String amount);
+
+        ApplicationBuilder done();
+    }
+
+    ApplicationBuilder addApplication(String buildingId, String leaseId);
+
+    ApplicationBuilder getApplication(String buildingId, String leaseId);
 }

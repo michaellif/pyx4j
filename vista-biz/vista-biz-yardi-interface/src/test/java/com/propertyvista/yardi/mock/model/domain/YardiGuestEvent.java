@@ -13,8 +13,25 @@
  */
 package com.propertyvista.yardi.mock.model.domain;
 
+import java.math.BigDecimal;
+import java.util.Date;
+
 import com.pyx4j.entity.core.IEntity;
+import com.pyx4j.entity.core.IPrimitive;
 
 public interface YardiGuestEvent extends IEntity {
 
+    public enum Type {
+        APPLICATION, APPOINTMENT, APPROVE, CANCEL, CANCEL_APPLICATION, CONTACT, LEASE_SIGN, HOLD, RELEASE, OTHER
+    }
+
+    IPrimitive<String> eventId();
+
+    IPrimitive<Type> type();
+
+    IPrimitive<Date> date();
+
+    IPrimitive<String> agentName();
+
+    IPrimitive<BigDecimal> rentQuote();
 }

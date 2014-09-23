@@ -18,6 +18,8 @@ import com.pyx4j.entity.core.IList;
 
 public interface YardiLeaseApplication extends IEntity {
 
+    IList<YardiRentableItem> rentableItems();
+
     IList<YardiGuestEvent> events();
 
     IList<YardiFee> charges();

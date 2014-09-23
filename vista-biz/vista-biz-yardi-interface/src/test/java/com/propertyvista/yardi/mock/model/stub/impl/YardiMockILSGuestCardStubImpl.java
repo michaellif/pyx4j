@@ -15,16 +15,32 @@ package com.propertyvista.yardi.mock.model.stub.impl;
 
 import java.math.BigDecimal;
 import java.rmi.RemoteException;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import com.yardi.entity.guestcard40.AdditionalPreference;
+import com.yardi.entity.guestcard40.Agent;
+import com.yardi.entity.guestcard40.AgentName;
 import com.yardi.entity.guestcard40.AttachmentTypesAndChargeCodes;
 import com.yardi.entity.guestcard40.ChargeCode;
 import com.yardi.entity.guestcard40.ChargeCodes;
+import com.yardi.entity.guestcard40.CurrencyRangeType;
+import com.yardi.entity.guestcard40.Customer;
+import com.yardi.entity.guestcard40.CustomerInfo;
+import com.yardi.entity.guestcard40.Customers;
+import com.yardi.entity.guestcard40.EventType;
+import com.yardi.entity.guestcard40.EventTypes;
+import com.yardi.entity.guestcard40.Events;
 import com.yardi.entity.guestcard40.LeadManagement;
 import com.yardi.entity.guestcard40.MarketingSources;
+import com.yardi.entity.guestcard40.NameType;
 import com.yardi.entity.guestcard40.PropertyMarketingSources;
+import com.yardi.entity.guestcard40.Prospect;
+import com.yardi.entity.guestcard40.Prospects;
+import com.yardi.entity.guestcard40.Quote;
+import com.yardi.entity.guestcard40.Quotes;
 import com.yardi.entity.guestcard40.RentableItemType;
 import com.yardi.entity.guestcard40.RentableItems;
 import com.yardi.entity.ils.Amount;
@@ -50,15 +66,21 @@ import com.pyx4j.config.server.SystemDateManager;
 import com.propertyvista.biz.system.yardi.YardiServiceException;
 import com.propertyvista.domain.settings.PmcYardiCredential;
 import com.propertyvista.domain.util.DomainUtil;
+import com.propertyvista.yardi.beans.Messages;
 import com.propertyvista.yardi.mock.model.YardiMock;
 import com.propertyvista.yardi.mock.model.domain.YardiAddress;
 import com.propertyvista.yardi.mock.model.domain.YardiBuilding;
 import com.propertyvista.yardi.mock.model.domain.YardiChargeCode;
 import com.propertyvista.yardi.mock.model.domain.YardiFloorplan;
+import com.propertyvista.yardi.mock.model.domain.YardiGuestEvent;
 import com.propertyvista.yardi.mock.model.domain.YardiLease;
 import com.propertyvista.yardi.mock.model.domain.YardiRentableItem;
+import com.propertyvista.yardi.mock.model.domain.YardiTenant;
 import com.propertyvista.yardi.mock.model.domain.YardiUnit;
+import com.propertyvista.yardi.mock.model.manager.YardiGuestManager;
+import com.propertyvista.yardi.mock.model.manager.YardiGuestManager.ApplicationBuilder;
 import com.propertyvista.yardi.mock.model.manager.impl.YardiMockModelUtils;
+import com.propertyvista.yardi.services.YardiHandledErrorMessages;
 import com.propertyvista.yardi.stubs.YardiILSGuestCardStub;
 
 public class YardiMockILSGuestCardStubImpl extends YardiMockStubBase implements YardiILSGuestCardStub {
@@ -112,8 +134,92 @@ public class YardiMockILSGuestCardStubImpl extends YardiMockStubBase implements 
 
     @Override
     public LeadManagement findGuest(PmcYardiCredential yc, String propertyId, String guestId) throws YardiServiceException, RemoteException {
-        // TODO Auto-generated method stub
-        return null;
+        // find building
+        YardiBuilding building = getYardiBuilding(propertyId);
+        if (building == null) {
+            Messages.throwYardiResponseException(YardiHandledErrorMessages.errorMessage_NoAccess + ":" + propertyId);
+        }
+        // find guest
+        YardiTenant guest = null;
+        YardiLease lease = null;
+        for (YardiLease _lease : building.leases()) {
+            if ((guest = YardiMockModelUtils.findTenant(_lease, guestId)) != null) {
+                lease = _lease;
+                break;
+            }
+        }
+        if (guest == null) {
+            Messages.throwYardiResponseException(YardiHandledErrorMessages.errorMessage_GuestNotFound + ":" + guestId);
+        }
+        // build result
+        LeadManagement guestInfo = new LeadManagement();
+        guestInfo.setProspects(new Prospects());
+        Prospect guestCard = new Prospect();
+        guestInfo.getProspects().getProspect().add(guestCard);
+        // customers
+        guestCard.setCustomers(new Customers());
+        for (YardiTenant t : lease.tenants()) {
+            guestCard.getCustomers().getCustomer().add(getCustomer(t, building, lease));
+        }
+        // events
+        guestCard.setEvents(new Events());
+        for (YardiGuestEvent e : lease.application().events()) {
+            guestCard.getEvents().getEvent().add(toEvent(e));
+        }
+        // TODO - customer preferences (unit, rentable items)?
+        return guestInfo;
+    }
+
+    @Override
+    public void importGuestInfo(PmcYardiCredential yc, LeadManagement leadInfo) throws YardiServiceException, RemoteException {
+        YardiGuestManager guestManager = YardiMock.server().getManager(YardiGuestManager.class);
+        for (Prospect guestCard : leadInfo.getProspects().getProspect()) {
+            YardiBuilding building = null;
+            String guestCardId = null;
+            // add customers
+            for (Customer cust : guestCard.getCustomers().getCustomer()) {
+                String propertyId = findIdentity(cust.getIdentification(), "PropertyID");
+                if (propertyId == null) {
+                    Messages.throwYardiResponseException("Missing valid property identification");
+                }
+                // first customer should be the main tenant
+                if (CustomerInfo.PROSPECT.equals(cust.getType())) {
+                    building = getYardiBuilding(propertyId);
+                    if (building == null) {
+                        Messages.throwYardiResponseException(propertyId + ":" + YardiHandledErrorMessages.errorMessage_InvalidProperty);
+                    }
+                } else if (building == null || !propertyId.equals(building.buildingId().getValue())) {
+                    Messages.throwYardiResponseException(propertyId + ":" + YardiHandledErrorMessages.errorMessage_InvalidProperty);
+                }
+                String customerId = findIdentity(cust.getIdentification(), "ThirdPartyID");
+                if (customerId == null) {
+                    Messages.throwYardiResponseException("Missing valid prospect identification");
+                }
+                guestCardId = "p" + customerId;
+                guestManager.addApplication(propertyId, guestCardId) //
+                        .addGuest(guestCardId, cust.getName().getFirstName() + " " + cust.getName().getLastName()) //
+                        .setEmail(cust.getEmail()) //
+                        .setType(toTenantType(cust.getType())) //
+                        .setResponsibleForLease(true);
+            }
+            // set unit
+            ApplicationBuilder app = guestManager.getApplication(building.buildingId().getValue(), guestCardId);
+            if (guestCard.getCustomerPreferences().getDesiredUnit().size() > 0) {
+                app.setUnit(guestCard.getCustomerPreferences().getDesiredUnit().get(0).getMarketingName());
+            }
+            // rentable items
+            for (AdditionalPreference item : guestCard.getCustomerPreferences().getCustomerAdditionalPreferences()) {
+                app.addRentableItem(item.getAdditionalPreferenceType());
+            }
+            // events
+            for (EventType event : guestCard.getEvents().getEvent()) {
+                app.addEvent(toEventType(event.getEventType())) //
+                        .setEventId(event.getEventID().getIDValue()) //
+                        .setDate(YardiMockModelUtils.format(event.getEventDate())) //
+                        .setAgent(event.getAgent().getAgentName().getFirstName() + " " + event.getAgent().getAgentName().getLastName()) //
+                        .setQuote(event.getQuotes().getQuote().size() > 0 ? event.getQuotes().getQuote().get(0).getQuotedRent().getExact() : null);
+            }
+        }
     }
 
     @Override
@@ -123,18 +229,94 @@ public class YardiMockILSGuestCardStubImpl extends YardiMockStubBase implements 
     }
 
     @Override
-    public void importGuestInfo(PmcYardiCredential yc, LeadManagement leadInfo) throws YardiServiceException, RemoteException {
-        // TODO Auto-generated method stub
-
-    }
-
-    @Override
     public void importApplication(PmcYardiCredential yc, LeaseApplication leaseApp) throws YardiServiceException, RemoteException {
         // TODO Auto-generated method stub
 
     }
 
     // utility methods
+    private Customer getCustomer(YardiTenant guest, YardiBuilding building, YardiLease lease) {
+        Customer cust = new Customer();
+        cust.getIdentification().add(toIdentity(guest.tenantId().getValue(), "ThirdPartyID"));
+        cust.getIdentification().add(toIdentity(lease.leaseId().getValue(), "ProspectID"));
+        cust.getIdentification().add(toIdentity(building.buildingId().getValue(), "PropertyID"));
+        cust.setType(guest.tenantId().equals(lease.leaseId()) ? CustomerInfo.PROSPECT : CustomerInfo.ROOMMATE);
+        cust.setName(new NameType());
+        cust.getName().setFirstName(guest.firstName().getValue());
+        cust.getName().setLastName(guest.lastName().getValue());
+        return cust;
+    }
+
+    private com.yardi.entity.guestcard40.Identification toIdentity(String id, String type) {
+        com.yardi.entity.guestcard40.Identification identity = new com.yardi.entity.guestcard40.Identification();
+        identity.setIDValue(id);
+        identity.setIDType(type);
+        return identity;
+    }
+
+    private EventType toEvent(YardiGuestEvent ge) {
+        EventType event = new EventType();
+        event.setEventType(toEventType(ge.type().getValue()));
+        if (!ge.date().isNull()) {
+            event.setEventDate(new Timestamp(ge.date().getValue().getTime()));
+        }
+        if (!ge.eventId().isNull()) {
+            event.setEventID(toIdentity(ge.eventId().getValue(), ""));
+        }
+        if (!ge.agentName().isNull()) {
+            String[] names = ge.agentName().getValue().split(" ", 2);
+            event.setAgent(new Agent());
+            event.getAgent().setAgentName(new AgentName());
+            event.getAgent().getAgentName().setFirstName(names[0]);
+            event.getAgent().getAgentName().setLastName(names.length > 1 ? names[1] : null);
+        }
+        if (!ge.rentQuote().isNull()) {
+            event.setQuotes(new Quotes());
+            Quote quote = new Quote();
+            quote.setQuotedRent(new CurrencyRangeType());
+            quote.getQuotedRent().setExact(YardiMockModelUtils.format(ge.rentQuote().getValue()));
+            event.getQuotes().getQuote().add(quote);
+        }
+        return event;
+    }
+
+    private EventTypes toEventType(YardiGuestEvent.Type type) {
+        try {
+            return EventTypes.valueOf(type.name());
+        } catch (Exception ignore) {
+            return EventTypes.OTHER;
+        }
+    }
+
+    private YardiGuestEvent.Type toEventType(EventTypes type) {
+        try {
+            return YardiGuestEvent.Type.valueOf(type.name());
+        } catch (Exception ignore) {
+            return YardiGuestEvent.Type.OTHER;
+        }
+    }
+
+    private YardiTenant.Type toTenantType(CustomerInfo guestType) {
+        switch (guestType) {
+        case PROSPECT:
+            return YardiTenant.Type.PROSPECT;
+        default:
+            return YardiTenant.Type.GUEST;
+        }
+    }
+
+    private String findIdentity(List<com.yardi.entity.guestcard40.Identification> idList, String idType) {
+        if (idList == null || idList.isEmpty()) {
+            return null;
+        }
+        for (com.yardi.entity.guestcard40.Identification id : idList) {
+            if (idType.equals(id.getIDType())) {
+                return id.getIDValue();
+            }
+        }
+        return null;
+    }
+
     private ChargeCode getChargeCode(YardiChargeCode yardiCode) {
         ChargeCode chargeCode = new ChargeCode();
         chargeCode.setID(yardiCode.codeId().getValue());
