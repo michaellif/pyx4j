@@ -13,8 +13,9 @@
  */
 package com.propertyvista.portal.resident.ui.movein;
 
+import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
 import com.google.gwt.user.client.Command;
-import com.google.gwt.user.client.ui.HTML;
+import com.google.gwt.user.client.ui.HTMLPanel;
 
 import com.pyx4j.commons.css.StyleManager;
 import com.pyx4j.commons.css.ThemeColor;
@@ -32,17 +33,28 @@ public class MoveInWizardPapPreviewGadget extends AbstractGadget<MoveInWizardSte
     private static final I18n i18n = I18n.get(NewTenantWelcomeGadget.class);
 
     public MoveInWizardPapPreviewGadget(MoveInWizardStepPreviewView view) {
-        super(view, null, i18n.tr("Pre-authorised Payment Setup"), ThemeColor.contrast4, 1);
+        super(view, null, i18n.tr("AutoPay Setup (Pre-Authorized Payments)"), ThemeColor.contrast4, 1);
         setActionsToolbar(new ActionsToolbar());
 
-        setContent(new HTML("Pre-authorised Payment Setup Explanantion"));
+        SafeHtmlBuilder htmlBuilder = new SafeHtmlBuilder();
+
+        htmlBuilder.appendHtmlConstant("<div style='text-align:left'><div><b>");
+        htmlBuilder.appendEscaped(i18n.tr("Use a SAFER and MORE SECURE method to pay your rent."));
+        htmlBuilder.appendHtmlConstant("</b></div><div>");
+        htmlBuilder
+                .appendEscaped(i18n
+                        .tr("With our pre-authorized payment option, your rent payments are much more secure, saving you both time and worry regarding cheque duplication, fraudulent bank-account access and late payment issues."));
+        htmlBuilder.appendHtmlConstant("</div></div>");
+
+        HTMLPanel htmlPanel = new HTMLPanel(htmlBuilder.toSafeHtml());
+        setContent(htmlPanel);
     }
 
     class ActionsToolbar extends GadgetToolbar {
 
         public ActionsToolbar() {
 
-            Button continueButton = new Button(i18n.tr("Setup Pre-authorised Payment"), new Command() {
+            Button continueButton = new Button(i18n.tr("Setup AutoPay"), new Command() {
                 @Override
                 public void execute() {
                     AppSite.getPlaceController().goTo(new ResidentPortalSiteMap.Financial.PreauthorizedPayments.AutoPayWizard());
@@ -51,7 +63,7 @@ public class MoveInWizardPapPreviewGadget extends AbstractGadget<MoveInWizardSte
             continueButton.getElement().getStyle().setProperty("background", StyleManager.getPalette().getThemeColor(ThemeColor.contrast4, 1));
             addItem(continueButton);
 
-            Button skipButton = new Button(i18n.tr("Do it later"), new Command() {
+            Button skipButton = new Button(i18n.tr("later"), new Command() {
                 @Override
                 public void execute() {
                     AppSite.getPlaceController().goTo(new ResidentPortalSiteMap.LeaseSigning.LeaseSigningWizard());

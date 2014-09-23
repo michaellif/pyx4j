@@ -20,7 +20,7 @@ import com.pyx4j.i18n.shared.I18nEnum;
 @I18n
 public enum MoveInWizardStep {
 
-    @Translate("Lease Signing")
+    @Translate("Lease Agreement")
     leaseSigning,
 
     @Translate("Auto Pay")

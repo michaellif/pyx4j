@@ -13,12 +13,9 @@
  */
 package com.propertyvista.portal.resident.ui.movein;
 
-import com.google.gwt.dom.client.Style.Display;
-import com.google.gwt.dom.client.Style.Unit;
+import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
 import com.google.gwt.user.client.Command;
-import com.google.gwt.user.client.ui.FlexTable;
-import com.google.gwt.user.client.ui.HTML;
-import com.google.gwt.user.client.ui.Image;
+import com.google.gwt.user.client.ui.HTMLPanel;
 
 import com.pyx4j.commons.css.StyleManager;
 import com.pyx4j.commons.css.ThemeColor;
@@ -28,7 +25,6 @@ import com.pyx4j.site.client.AppSite;
 import com.pyx4j.widgets.client.Button;
 
 import com.propertyvista.portal.rpc.portal.resident.ResidentPortalSiteMap;
-import com.propertyvista.portal.shared.resources.PortalImages;
 import com.propertyvista.portal.shared.ui.AbstractGadget;
 import com.propertyvista.portal.shared.ui.GadgetToolbar;
 
@@ -36,41 +32,25 @@ public class NewTenantWelcomeGadget extends AbstractGadget<NewTenantWelcomePageV
 
     private static final I18n i18n = I18n.get(NewTenantWelcomeGadget.class);
 
-    private final Image buildingImage;
-
-    private final Image helpImage;
-
     public NewTenantWelcomeGadget(NewTenantWelcomePageViewImpl view) {
-        super(view, null, i18n.tr("Move-In Wizard"), ThemeColor.contrast2, 1);
+        super(view, null, i18n.tr("<b>Congratulations"), ThemeColor.contrast2, 1);
         setActionsToolbar(new NewResidentWelcomeToolbar());
 
-        FlexTable welcomePanel = new FlexTable();
-        welcomePanel.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
-        welcomePanel.getElement().getStyle().setProperty("maxWidth", "500px");
-        welcomePanel.getElement().getStyle().setProperty("textAlign", "left");
+        SafeHtmlBuilder htmlBuilder = new SafeHtmlBuilder();
 
-        buildingImage = new Image(PortalImages.INSTANCE.signUpBuilding());
-        buildingImage.getElement().getStyle().setPaddingRight(20, Unit.PX);
-        welcomePanel.setWidget(0, 0, buildingImage);
+        htmlBuilder.appendHtmlConstant("<div style='text-align:left'><div><b>");
+        htmlBuilder.appendEscaped(i18n.tr("Great News! Your lease application has been APPROVED."));
+        htmlBuilder.appendHtmlConstant("</b></div><div>");
+        htmlBuilder.appendEscaped(i18n
+                .tr("Getting your process finished and you to “move in ready” status can be 100% completed following our simple step-by-step online process."));
+        htmlBuilder.appendHtmlConstant("</div><br><div><b>");
+        htmlBuilder.appendEscaped(i18n.tr("You will need about 10 minutes to complete all the steps."));
+        htmlBuilder.appendHtmlConstant("</b></div><div>");
+        htmlBuilder.appendEscaped(i18n.tr("When you are ready simply click on the link below."));
+        htmlBuilder.appendHtmlConstant("</div></div>");
 
-        welcomePanel
-                .setWidget(
-                        0,
-                        1,
-                        new HTML(
-                                i18n.tr("<b>Congratulations You’ve been Approved!</b><p/><div style=text-align:left>Use this Move-In Wizard to ease your move-in experience . After a few simple steps you’ll be ready for your new home.</div>")));
-
-        helpImage = new Image(PortalImages.INSTANCE.signUpPersonal());
-        helpImage.getElement().getStyle().setPaddingRight(20, Unit.PX);
-        welcomePanel.setWidget(1, 0, helpImage);
-        welcomePanel
-                .setWidget(
-                        1,
-                        1,
-                        new HTML(
-                                i18n.tr("<b>We'll help you:</b><p/><ul style='margin: auto; text-align: left; display: inline-block;'><li>Sign your lease agreement</li><li>Purchase Tenant Insurance</li><li>Book your Move-In Day & Elevators</li><li>Set up Pre-Authorised Payments</li><li>Sign up for exclusive offers</li></ul>")));
-
-        setContent(welcomePanel);
+        HTMLPanel htmlPanel = new HTMLPanel(htmlBuilder.toSafeHtml());
+        setContent(htmlPanel);
     }
 
     class NewResidentWelcomeToolbar extends GadgetToolbar {
@@ -79,7 +59,7 @@ public class NewTenantWelcomeGadget extends AbstractGadget<NewTenantWelcomePageV
 
         public NewResidentWelcomeToolbar() {
 
-            startButton = new Button(i18n.tr("Let's Get Started!"), new Command() {
+            startButton = new Button(i18n.tr("I’m Ready. Let’s Go!"), new Command() {
                 @Override
                 public void execute() {
                     AppSite.getPlaceController().goTo(new ResidentPortalSiteMap.MoveIn.MoveInWizardStepPreview());
@@ -95,13 +75,9 @@ public class NewTenantWelcomeGadget extends AbstractGadget<NewTenantWelcomePageV
         switch (layoutType) {
         case phonePortrait:
         case phoneLandscape:
-            buildingImage.setVisible(false);
-            helpImage.setVisible(false);
             break;
 
         default:
-            buildingImage.setVisible(true);
-            helpImage.setVisible(true);
             break;
         }
     }

@@ -13,8 +13,9 @@
  */
 package com.propertyvista.portal.resident.ui.movein;
 
+import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
 import com.google.gwt.user.client.Command;
-import com.google.gwt.user.client.ui.HTML;
+import com.google.gwt.user.client.ui.HTMLPanel;
 
 import com.pyx4j.commons.css.StyleManager;
 import com.pyx4j.commons.css.ThemeColor;
@@ -31,10 +32,21 @@ public class MoveInWizardLeaseSigningPreviewGadget extends AbstractGadget<MoveIn
     private static final I18n i18n = I18n.get(NewTenantWelcomeGadget.class);
 
     public MoveInWizardLeaseSigningPreviewGadget(MoveInWizardStepPreviewView view) {
-        super(view, null, i18n.tr("Lease Signing"), ThemeColor.contrast2, 1);
+        super(view, null, i18n.tr("Lease Agreement "), ThemeColor.contrast2, 1);
         setActionsToolbar(new MoveInWizardLeaseSigningPreviewToolbar());
 
-        setContent(new HTML("Lease Signing Explanantion"));
+        SafeHtmlBuilder htmlBuilder = new SafeHtmlBuilder();
+
+        htmlBuilder.appendHtmlConstant("<div style='text-align:left'><div><b>");
+        htmlBuilder.appendEscaped(i18n.tr("Sign your Lease Agreement from the convenience of your computer."));
+        htmlBuilder.appendHtmlConstant("</b></div><div>");
+        htmlBuilder
+                .appendEscaped(i18n
+                        .tr("Our online signing process is fully secure and meets all the necessary legal requirements.  A copy of your completed lease for your own records will be also emailed to you once completed."));
+        htmlBuilder.appendHtmlConstant("</div></div>");
+
+        HTMLPanel htmlPanel = new HTMLPanel(htmlBuilder.toSafeHtml());
+        setContent(htmlPanel);
     }
 
     class MoveInWizardLeaseSigningPreviewToolbar extends GadgetToolbar {
@@ -43,7 +55,7 @@ public class MoveInWizardLeaseSigningPreviewGadget extends AbstractGadget<MoveIn
 
         public MoveInWizardLeaseSigningPreviewToolbar() {
 
-            startButton = new Button(i18n.tr("Sign the Lease"), new Command() {
+            startButton = new Button(i18n.tr("Sign Your Lease"), new Command() {
                 @Override
                 public void execute() {
                     AppSite.getPlaceController().goTo(new ResidentPortalSiteMap.LeaseSigning.LeaseSigningWizard());
