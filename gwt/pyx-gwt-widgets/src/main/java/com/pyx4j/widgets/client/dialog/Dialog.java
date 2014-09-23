@@ -156,7 +156,7 @@ public class Dialog implements ProvidesResize, IsWidget {
 
         popupPanel.setGlassEnabled(true);
         setCaption(caption);
-        popupPanel.setTitle(caption);
+        //popupPanel.setTitle(caption);
 
         content = new ContentPanel();
 
