@@ -139,4 +139,9 @@ public class HtmlUtils {
     public static String h6(String text) {
         return "<h6>" + text + "</h6>";
     }
+
+    public static String removeHtmlTags(String htmlText) {
+
+        return htmlText.replaceAll("\\<br[^>]*\\>", " ").replaceAll("\\<[^>]*>", "");
+    }
 }
