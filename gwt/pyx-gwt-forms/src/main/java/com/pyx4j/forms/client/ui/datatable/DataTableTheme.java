@@ -189,8 +189,8 @@ public class DataTableTheme extends Theme {
         style.addProperty("padding", "6px");
         addStyle(style);
 
-        style = new Style(".", StyleName.DataTableFilterItem, " td");
-        style.addProperty("padding", "2px 0px 2px 6px");
+        style = new Style(".", StyleName.DataTableFilterItem);
+        style.addProperty("max-width", "700px");
         addStyle(style);
 
         style = new Style(".", StyleName.DataTableCriteria);

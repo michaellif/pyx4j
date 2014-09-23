@@ -28,10 +28,13 @@ import java.util.Date;
 import java.util.EnumSet;
 import java.util.Iterator;
 
+import com.google.gwt.dom.client.Style.Display;
+import com.google.gwt.dom.client.Style.VerticalAlign;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.Command;
-import com.google.gwt.user.client.ui.HorizontalPanel;
+import com.google.gwt.user.client.ui.FlowPanel;
+import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.SimplePanel;
 
@@ -43,28 +46,38 @@ import com.pyx4j.entity.core.ObjectClassType;
 import com.pyx4j.entity.core.Path;
 import com.pyx4j.entity.core.criterion.PropertyCriterion;
 import com.pyx4j.entity.core.criterion.PropertyCriterion.Restriction;
+import com.pyx4j.forms.client.events.PropertyChangeEvent;
+import com.pyx4j.forms.client.events.PropertyChangeEvent.PropertyName;
+import com.pyx4j.forms.client.events.PropertyChangeHandler;
 import com.pyx4j.forms.client.images.FolderImages;
 import com.pyx4j.forms.client.ui.CComboBox;
 import com.pyx4j.forms.client.ui.CComponent;
+import com.pyx4j.forms.client.ui.CComponentTheme;
 import com.pyx4j.forms.client.ui.IEditableComponentFactory;
 import com.pyx4j.forms.client.ui.INativeField;
 import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.forms.client.ui.datatable.DataTableTheme;
+import com.pyx4j.forms.client.ui.decorators.WidgetDecoratorTheme;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.i18n.shared.I18nEnum;
 import com.pyx4j.widgets.client.IconButton;
 
-public class DataTableFilterItem<E extends IEntity> extends HorizontalPanel {
+public class DataTableFilterItem<E extends IEntity> extends FlowPanel {
 
     private static final I18n i18n = I18n.get(DataTableFilterItem.class);
 
-    protected final CComboBox<FieldData> fieldsList = new CComboBox<FieldData>(true);
+    protected final CComboBox<FieldData> fieldsList;
 
-    protected final CComboBox<Operator> operandsList = new CComboBox<Operator>(true);
+    protected final CComboBox<Operator> operandsList;
 
-    protected final SimplePanel valueHolder = new SimplePanel();
+    @SuppressWarnings("rawtypes")
+    protected CComponent valueComponent;
+
+    protected final SimplePanel valueHolder;
 
     private DataTableFilterGrid<E> parent;
+
+    private final HTML validationLabel;
 
     private final IEditableComponentFactory compFactory = new CriteriaEditableComponentFactory();
 
@@ -110,14 +123,13 @@ public class DataTableFilterItem<E extends IEntity> extends HorizontalPanel {
         laterThan(Restriction.GREATER_THAN, true),
 
         laterOrEqualThan(Restriction.GREATER_THAN_OR_EQUAL, true);
-//
-// TODO ? These criterias aren't supported by DB search engine currently, so postpone implementation ?
-//        contains,
-//        doesNotContain,
-//        beginsWith,
-//        endsWith,
-//
-        // internals:
+
+        // TODO These criterias aren't supported by DB search engine currently, so postpone implementation ?
+        //        contains,
+        //        doesNotContain,
+        //        beginsWith,
+        //        endsWith,
+        //
 
         private PropertyCriterion.Restriction criterion;
 
@@ -161,13 +173,30 @@ public class DataTableFilterItem<E extends IEntity> extends HorizontalPanel {
 
         setStyleName(DataTableTheme.StyleName.DataTableFilterItem.name());
 
-        Image btnDel = new IconButton(i18n.tr("Remove Filter"), FolderImages.INSTANCE.delButton(), new Command() {
+        fieldsList = new CComboBox<FieldData>(true);
+        fieldsList.asWidget().getElement().getStyle().setVerticalAlign(VerticalAlign.MIDDLE);
+        fieldsList.asWidget().getElement().getStyle().setProperty("paddingRight", "10px");
+        fieldsList.asWidget().setWidth("25%");
+
+        operandsList = new CComboBox<Operator>(true);
+        operandsList.asWidget().getElement().getStyle().setVerticalAlign(VerticalAlign.MIDDLE);
+        operandsList.asWidget().getElement().getStyle().setProperty("paddingRight", "10px");
+        operandsList.asWidget().setWidth("25%");
+
+        valueHolder = new SimplePanel();
+        valueHolder.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
+        valueHolder.getElement().getStyle().setVerticalAlign(VerticalAlign.MIDDLE);
+        valueHolder.asWidget().getElement().getStyle().setProperty("paddingRight", "10px");
+        valueHolder.setWidth("30%");
+
+        Image removeButton = new IconButton(i18n.tr("Remove Filter"), FolderImages.INSTANCE.delButton(), new Command() {
 
             @Override
             public void execute() {
                 parent.removeFilter(DataTableFilterItem.this);
             }
         });
+        removeButton.getElement().getStyle().setVerticalAlign(VerticalAlign.MIDDLE);
 
         Collection<FieldData> fds = new ArrayList<FieldData>();
         for (ColumnDescriptor cd : parent.getDataTablePanel().getDataTableModel().getColumnDescriptors()) {
@@ -179,7 +208,7 @@ public class DataTableFilterItem<E extends IEntity> extends HorizontalPanel {
         fieldsList.setOptions(fds);
         if (!fds.isEmpty()) {
             fieldsList.setValue(fds.iterator().next());
-            setValueHolder(fieldsList.getValue().getPath());
+            setValueHolder(fieldsList.getValue().getPath(), null);
         } else {
             operandsList.setOptions(EnumSet.allOf(Operator.class));
             operandsList.setValue(Operator.is);
@@ -187,29 +216,19 @@ public class DataTableFilterItem<E extends IEntity> extends HorizontalPanel {
         fieldsList.addValueChangeHandler(new ValueChangeHandler<FieldData>() {
             @Override
             public void onValueChange(ValueChangeEvent<FieldData> event) {
-                setValueHolder(event.getValue().getPath());
+                setValueHolder(event.getValue().getPath(), null);
             }
         });
-        fieldsList.asWidget().setWidth("100%");
+
+        validationLabel = new HTML();
+        validationLabel.setStyleName(CComponentTheme.StyleName.ValidationLabel.name());
 
         add(fieldsList);
-
-        setCellWidth(fieldsList, "35%");
-
-        operandsList.asWidget().setWidth("100%");
-
         add(operandsList);
-
-        setCellWidth(operandsList, "25%");
-        valueHolder.setWidth("100%");
-
         add(valueHolder);
+        add(removeButton);
+        add(validationLabel);
 
-        setCellWidth(valueHolder, "40%");
-
-        add(btnDel);
-
-        setWidth("100%");
     }
 
     public DataTableFilterItem(final DataTableFilterGrid<E> parent, PropertyCriterion filterData) {
@@ -247,19 +266,23 @@ public class DataTableFilterItem<E extends IEntity> extends HorizontalPanel {
         }
     }
 
-    private void setValueHolder(String valuePath) {
-        setValueHolder(valuePath, null);
-    }
-
-    // internals:
-
-    @SuppressWarnings({ "unchecked", "rawtypes" })
+    @SuppressWarnings({ "unchecked" })
     private void setValueHolder(String valuePath, Serializable value) {
         IObject<?> member = parent.getDataTablePanel().proto().getMember(new Path(valuePath));
 
-        CComponent comp = compFactory.create(member);
-        comp.setValue(value);
-        valueHolder.setWidget(comp);
+        valueComponent = compFactory.create(member);
+        valueComponent.asWidget().setWidth("100%");
+        valueComponent.addPropertyChangeHandler(new PropertyChangeHandler() {
+            @Override
+            public void onPropertyChange(PropertyChangeEvent event) {
+                if (event.isEventOfType(PropertyName.valid, PropertyName.editingInProgress, PropertyName.editingCompleted)) {
+                    renderValidationMessage();
+                }
+            }
+        });
+
+        valueComponent.setValue(value);
+        valueHolder.setWidget(valueComponent);
 
         Collection<Operator> options = getOperators(member);
         operandsList.setOptions(options);
@@ -301,5 +324,17 @@ public class DataTableFilterItem<E extends IEntity> extends HorizontalPanel {
 
     private static boolean isDate(Class<?> valueClass) {
         return (valueClass.equals(Date.class) || valueClass.equals(java.sql.Date.class) || valueClass.equals(LogicalDate.class));
+    }
+
+    private void renderValidationMessage() {
+        if (!valueComponent.isValid()) {
+            validationLabel.setHTML(valueComponent.getValidationResults().getValidationMessage(true));
+            valueComponent.asWidget().addStyleDependentName(WidgetDecoratorTheme.StyleDependent.invalid.name());
+            validationLabel.setVisible(true);
+        } else {
+            validationLabel.setText(null);
+            valueComponent.asWidget().removeStyleDependentName(WidgetDecoratorTheme.StyleDependent.invalid.name());
+            validationLabel.setVisible(false);
+        }
     }
 }

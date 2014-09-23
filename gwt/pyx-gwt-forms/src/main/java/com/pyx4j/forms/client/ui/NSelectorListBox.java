@@ -23,7 +23,6 @@ package com.pyx4j.forms.client.ui;
 import java.text.ParseException;
 import java.util.Collection;
 
-import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.HTML;
 
 import com.pyx4j.commons.IFormatter;
