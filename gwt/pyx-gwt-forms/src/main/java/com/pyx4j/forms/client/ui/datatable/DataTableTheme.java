@@ -27,6 +27,8 @@ import com.pyx4j.commons.css.Style;
 import com.pyx4j.commons.css.Theme;
 import com.pyx4j.commons.css.ThemeColor;
 import com.pyx4j.commons.css.ThemeId;
+import com.pyx4j.forms.client.ui.CComponentTheme;
+import com.pyx4j.forms.client.ui.decorators.WidgetDecoratorTheme.StyleName;
 import com.pyx4j.widgets.client.style.theme.WidgetTheme;
 
 public class DataTableTheme extends Theme {
@@ -191,6 +193,10 @@ public class DataTableTheme extends Theme {
 
         style = new Style(".", StyleName.DataTableFilterItem);
         style.addProperty("max-width", "700px");
+        addStyle(style);
+
+        style = new Style(".", StyleName.DataTableFilterItem, " .", CComponentTheme.StyleName.FieldEditorPanel);
+        style.addProperty("line-height", "2em");
         addStyle(style);
 
         style = new Style(".", StyleName.DataTableCriteria);
