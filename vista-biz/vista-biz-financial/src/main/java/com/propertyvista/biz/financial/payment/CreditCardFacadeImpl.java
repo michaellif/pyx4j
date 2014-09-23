@@ -15,6 +15,7 @@ package com.propertyvista.biz.financial.payment;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.EnumSet;
 import java.util.List;
 
 import com.pyx4j.commons.Key;
@@ -48,6 +49,16 @@ public class CreditCardFacadeImpl implements CreditCardFacade {
             numbers.add(getTransactionreferenceNumber(uniquePrefix, referenceNumber));
         }
         return numbers;
+    }
+
+    @Override
+    public boolean isVistaRecordId(String transactionreferenceNumber) {
+        for (ReferenceNumberPrefix uniquePrefix : EnumSet.allOf(ReferenceNumberPrefix.class)) {
+            if (transactionreferenceNumber.startsWith(uniquePrefix.getValue())) {
+                return true;
+            }
+        }
+        return false;
     }
 
     @Override

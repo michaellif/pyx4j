@@ -101,7 +101,7 @@ public interface AggregatedTransfer extends IEntity, HasNotesAndAttachments {
     @Owned
     @OrderBy(PrimaryKey.class)
     @Caption(name = "Non-Vista Transactions")
-    AggregatedTransferNonVistaTransactions nonVistaTransactions();
+    IList<AggregatedTransferNonVistaTransaction> nonVistaTransactions();
 
     @Detached(level = AttachLevel.Detached)
     @JoinTable(value = PaymentRecord.class, mappedBy = PaidOrRejectedAggregatedTransferId.class)

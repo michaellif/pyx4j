@@ -32,6 +32,7 @@ import com.pyx4j.i18n.annotations.I18n;
 
 import com.propertyvista.domain.VistaNamespace;
 import com.propertyvista.domain.pmc.PmcMerchantAccountIndex;
+import com.propertyvista.operations.domain.eft.cards.to.DailyReportRecord.DailyReportCardType;
 
 @Table(namespace = VistaNamespace.operationsNamespace)
 @I18n(strategy = I18n.I18nStrategy.IgnoreAll)
@@ -53,6 +54,8 @@ public interface CardsClearanceRecord extends IEntity {
     IPrimitive<CardsClearanceRecordProcessingStatus> status();
 
     IPrimitive<Boolean> convenienceFeeAccount();
+
+    IPrimitive<DailyReportCardType> cardType();
 
     IPrimitive<String> referenceNumber();
 

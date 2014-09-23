@@ -87,6 +87,7 @@ class CardsDailyReportAcceptor {
                     executionMonitor.addProcessedEvent("CardClearance", record.amount().getValue());
                 }
 
+                record.cardType().setValue(toRecord.cardType().getValue());
                 record.clearanceDate().setValue(toRecord.date().getValue());
                 record.referenceNumber().setValue(toRecord.referenceNumber().getValue());
                 record.amount().setValue(toRecord.amount().getValue());

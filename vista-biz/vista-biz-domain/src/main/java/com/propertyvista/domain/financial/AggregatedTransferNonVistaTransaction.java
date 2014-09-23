@@ -14,34 +14,43 @@
 package com.propertyvista.domain.financial;
 
 import java.math.BigDecimal;
+import java.util.Date;
 
+import com.pyx4j.commons.Key;
+import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.Indexed;
-import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.annotations.ReadOnly;
-import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.IPrimitive;
 import com.pyx4j.i18n.annotations.I18n;
 
 @I18n(strategy = I18n.I18nStrategy.IgnoreAll)
-public interface AggregatedTransferNonVistaTransactions extends IEntity {
+public interface AggregatedTransferNonVistaTransaction extends IEntity {
 
     @Owner
-    @NotNull
-    @MemberColumn(notNull = true)
-    @ReadOnly
+    @ReadOnly(allowOverrideNull = true)
     @Detached
     @Indexed
     AggregatedTransfer aggregatedTransfer();
 
+    IPrimitive<Key> cardsClearanceRecordKey();
+
     @Format("#,##0.00")
     @Editor(type = EditorType.money)
     IPrimitive<BigDecimal> amount();
+
+    @Editor(type = EditorType.label)
+    @Format("MM/dd/yyyy HH:mm:ss")
+    IPrimitive<Date> transactionDate();
+
+    @Editor(type = EditorType.label)
+    @Format("MM/dd/yyyy")
+    IPrimitive<LogicalDate> reconciliationDate();
 
     IPrimitive<String> details();
 }

@@ -20,10 +20,12 @@ import java.util.concurrent.Callable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.commons.SimpleMessageFormat;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.config.server.SystemDateManager;
+import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.server.Executable;
 import com.pyx4j.entity.server.Persistence;
@@ -34,6 +36,7 @@ import com.pyx4j.essentials.server.dev.DataDump;
 import com.propertyvista.biz.ExecutionMonitor;
 import com.propertyvista.biz.financial.payment.CreditCardFacade.ReferenceNumberPrefix;
 import com.propertyvista.config.VistaDeployment;
+import com.propertyvista.domain.financial.AggregatedTransferNonVistaTransaction;
 import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.payment.PaymentType;
 import com.propertyvista.domain.pmc.Pmc;
@@ -100,6 +103,33 @@ public class CardsDailyReportProcessor {
     }
 
     protected void procesRecord(CardsClearanceRecord clearanceRecord) {
+        if (ServerSideFactory.create(CreditCardFacade.class).isVistaRecordId(clearanceRecord.referenceNumber().getValue())) {
+            procesRentPaymentsRecord(clearanceRecord);
+        } else {
+            procesNonVistaTransaction(clearanceRecord);
+        }
+    }
+
+    protected void procesNonVistaTransaction(CardsClearanceRecord clearanceRecord) {
+        if (clearanceRecord.approved().getValue() //
+                && !clearanceRecord.voided().getValue() //
+                && (!clearanceRecord.transactionAuthorizationNumber().isNull()) //
+                && (!clearanceRecord.responseMessage().getValue().equals("DECLINE"))) {
+
+            AggregatedTransferNonVistaTransaction record = EntityFactory.create(AggregatedTransferNonVistaTransaction.class);
+
+            record.amount().setValue(clearanceRecord.amount().getValue());
+            record.transactionDate().setValue(clearanceRecord.clearanceDate().getValue());
+            record.reconciliationDate().setValue(new LogicalDate(clearanceRecord.clearanceDate().getValue()));
+            record.details().setValue(
+                    CommonsStringUtils.nvl_concat(clearanceRecord.cardType().getStringView(), clearanceRecord.referenceNumber().getStringView(), " "));
+            Persistence.service().merge(record);
+
+        }
+
+    }
+
+    protected void procesRentPaymentsRecord(CardsClearanceRecord clearanceRecord) {
         PaymentRecord paymentRecord = Persistence.service().retrieve(
                 PaymentRecord.class,
                 ServerSideFactory.create(CreditCardFacade.class).getProdAndTestVistaRecordId(ReferenceNumberPrefix.RentPayments,

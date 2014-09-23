@@ -61,6 +61,8 @@ public interface CreditCardFacade {
     // ProdAndTest Version is for flows that runs on QA and can accept Production records
     public Key getProdAndTestVistaRecordId(ReferenceNumberPrefix uniquePrefix, String transactionreferenceNumber);
 
+    public boolean isVistaRecordId(String transactionreferenceNumber);
+
     public void persistToken(String merchantTerminalId, CreditCardInfo cc);
 
     public CreditCardTransactionResponse realTimeSale(String merchantTerminalId, //

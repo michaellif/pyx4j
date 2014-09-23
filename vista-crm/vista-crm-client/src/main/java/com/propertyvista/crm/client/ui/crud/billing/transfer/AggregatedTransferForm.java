@@ -30,7 +30,7 @@ import com.propertyvista.crm.rpc.dto.financial.CardsAggregatedTransferDTO;
 import com.propertyvista.domain.financial.AggregatedTransfer;
 import com.propertyvista.domain.financial.AggregatedTransferAdjustment;
 import com.propertyvista.domain.financial.AggregatedTransferChargeback;
-import com.propertyvista.domain.financial.AggregatedTransferNonVistaTransactions;
+import com.propertyvista.domain.financial.AggregatedTransferNonVistaTransaction;
 import com.propertyvista.domain.financial.CardsAggregatedTransfer;
 import com.propertyvista.domain.financial.EftAggregatedTransfer;
 
@@ -186,10 +186,10 @@ public class AggregatedTransferForm extends CrmEntityForm<AggregatedTransfer> {
         }
     }
 
-    private class AggregatedTransferNonVistaTransactionsFolder extends VistaTableFolder<AggregatedTransferNonVistaTransactions> {
+    private class AggregatedTransferNonVistaTransactionsFolder extends VistaTableFolder<AggregatedTransferNonVistaTransaction> {
 
         public AggregatedTransferNonVistaTransactionsFolder() {
-            super(AggregatedTransferNonVistaTransactions.class, AggregatedTransferForm.this.isEditable());
+            super(AggregatedTransferNonVistaTransaction.class, AggregatedTransferForm.this.isEditable());
         }
 
         @Override
