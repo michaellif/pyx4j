@@ -28,6 +28,8 @@ public interface YardiGuestManager extends YardiMockManager {
 
         ApplicationBuilder addRentableItem(String itemId);
 
+        ApplicationBuilder addFee(String amount, String chargeCode, String description);
+
         GuestBuilder addGuest(String guestId, String name);
 
         GuestBuilder getGuest(String guestId);

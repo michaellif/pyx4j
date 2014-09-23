@@ -16,6 +16,7 @@ package com.propertyvista.yardi.mock.model.manager.impl;
 import com.pyx4j.entity.core.EntityFactory;
 
 import com.propertyvista.yardi.mock.model.domain.YardiBuilding;
+import com.propertyvista.yardi.mock.model.domain.YardiFee;
 import com.propertyvista.yardi.mock.model.domain.YardiGuestEvent;
 import com.propertyvista.yardi.mock.model.domain.YardiGuestEvent.Type;
 import com.propertyvista.yardi.mock.model.domain.YardiLease;
@@ -23,8 +24,8 @@ import com.propertyvista.yardi.mock.model.domain.YardiRentableItem;
 import com.propertyvista.yardi.mock.model.domain.YardiTenant;
 import com.propertyvista.yardi.mock.model.domain.YardiUnit;
 import com.propertyvista.yardi.mock.model.manager.YardiGuestManager.ApplicationBuilder;
-import com.propertyvista.yardi.mock.model.manager.YardiGuestManager.GuestEventBuilder;
 import com.propertyvista.yardi.mock.model.manager.YardiGuestManager.GuestBuilder;
+import com.propertyvista.yardi.mock.model.manager.YardiGuestManager.GuestEventBuilder;
 
 public class ApplicationBuilderImpl extends LeaseBuilderImpl implements ApplicationBuilder {
 
@@ -59,6 +60,20 @@ public class ApplicationBuilderImpl extends LeaseBuilderImpl implements Applicat
             throw new Error("Item not found: " + itemId);
         }
         lease.application().rentableItems().add(item);
+
+        return this;
+    }
+
+    @Override
+    public ApplicationBuilder addFee(String amount, String chargeCode, String description) {
+        assert amount != null : "amount cannot be null";
+        assert chargeCode != null : "charge code cannot be null";
+
+        YardiFee fee = EntityFactory.create(YardiFee.class);
+        fee.amount().setValue(YardiMockModelUtils.toAmount(amount));
+        fee.chargeCode().setValue(chargeCode);
+        fee.description().setValue(description);
+        lease.application().charges().add(fee);
 
         return this;
     }
