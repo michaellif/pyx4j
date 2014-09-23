@@ -76,6 +76,7 @@ import com.propertyvista.domain.tenant.lease.LeaseApplication;
 import com.propertyvista.domain.tenant.lease.LeaseApplication.Status;
 import com.propertyvista.domain.tenant.lease.LeaseTermGuarantor;
 import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
+import com.propertyvista.domain.tenant.lease.LeaseTermParticipant.Role;
 import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
 import com.propertyvista.domain.tenant.prospect.LeaseApplicationDocument;
 import com.propertyvista.dto.LeaseApplicationDTO;
@@ -586,7 +587,9 @@ public class LeaseApplicationViewerViewImpl extends LeaseViewerViewImplBase<Leas
     private List<LeaseTermParticipant<?>> getParticipants() {
         List<LeaseTermParticipant<?>> leaseTermPariticipants = new LinkedList<>();
         for (LeaseTermTenant leaseTermTenant : getForm().getValue().currentTerm().version().tenants()) {
-            leaseTermPariticipants.add(leaseTermTenant);
+            if (!Role.Dependent.equals(leaseTermTenant.role().getValue())) {
+                leaseTermPariticipants.add(leaseTermTenant);
+            }
         }
         for (LeaseTermGuarantor leaseTermGuarantor : getForm().getValue().currentTerm().version().guarantors()) {
             leaseTermPariticipants.add(leaseTermGuarantor);
