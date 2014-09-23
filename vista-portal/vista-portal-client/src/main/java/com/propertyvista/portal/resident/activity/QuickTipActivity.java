@@ -40,8 +40,8 @@ import com.propertyvista.portal.resident.ResidentPortalSite;
 import com.propertyvista.portal.resident.ui.extra.QuickTipView;
 import com.propertyvista.portal.resident.ui.extra.QuickTipView.QuickTipPresenter;
 import com.propertyvista.portal.rpc.portal.resident.ResidentPortalSiteMap.MoveIn;
+import com.propertyvista.portal.rpc.portal.resident.dto.QuickTipTO;
 import com.propertyvista.portal.rpc.portal.resident.services.QuickTipService;
-import com.propertyvista.shared.rpc.QuickTipTO;
 
 public class QuickTipActivity extends AbstractActivity implements QuickTipPresenter {
 

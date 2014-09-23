@@ -24,9 +24,9 @@ import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.server.Persistence;
 
 import com.propertyvista.domain.marketing.PortalResidentMarketingTip;
+import com.propertyvista.portal.rpc.portal.resident.dto.QuickTipTO;
 import com.propertyvista.portal.rpc.portal.resident.services.QuickTipService;
 import com.propertyvista.server.TaskRunner;
-import com.propertyvista.shared.rpc.QuickTipTO;
 
 public class QuickTipServiceImpl implements QuickTipService {
 

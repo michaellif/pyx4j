@@ -11,7 +11,7 @@
  * @author ernestog
  * @version $Id$
  */
-package com.propertyvista.shared.rpc;
+package com.propertyvista.portal.rpc.portal.resident.dto;
 
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.core.IEntity;

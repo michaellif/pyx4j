@@ -19,7 +19,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.rpc.shared.IService;
 
-import com.propertyvista.shared.rpc.QuickTipTO;
+import com.propertyvista.portal.rpc.portal.resident.dto.QuickTipTO;
 
 public interface QuickTipService extends IService {
 
