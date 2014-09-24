@@ -21,10 +21,11 @@
 package com.propertyvista.crm.client.ui.crud.communication.selector;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 
-import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.logical.shared.ValueChangeEvent;
+import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.ScrollPanel;
@@ -32,7 +33,7 @@ import com.google.gwt.user.client.ui.SimplePanel;
 
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.site.client.backoffice.ui.prime.lister.ILister;
-import com.pyx4j.widgets.client.Label;
+import com.pyx4j.widgets.client.RadioGroup;
 
 import com.propertyvista.domain.communication.CommunicationGroup;
 import com.propertyvista.domain.company.Employee;
@@ -83,64 +84,46 @@ public class SelectRecipientsDialogForm extends HorizontalPanel {
 
         FlowPanel menuPanel = new FlowPanel();
 
-        Label tenant = new Label("Tenant");
-        tenant.addClickHandler(new ClickHandler() {
+//        final RadioGroup<RadioButton> rg = new RadioGroup<RadioButton>(RadioGroup.Layout.VERTICAL);
+//        RadioButton readioTenant = new RadioButton("Tenant", "Tenant");
+//        RadioButton readioCorporate = new RadioButton("Corporate", "Corporate");
+//        RadioButton readioBuilding = new RadioButton("Building", "Building");
+//        RadioButton readioPortfolio = new RadioButton("Portfolio", "Portfolio");
+//
+//        rg.setOptions(Arrays.asList(readioTenant, readioCorporate, readioBuilding, readioPortfolio));
+
+        final RadioGroup<String> rg = new RadioGroup<String>(RadioGroup.Layout.VERTICAL);
+
+        rg.setOptions(Arrays.asList("Tenant", "Corporate", "Building", "Portfolio"));
+
+        menuPanel.add(rg);
+        rg.addValueChangeHandler(new ValueChangeHandler<String>() {
             @Override
-            public void onClick(ClickEvent event) {
-                event.stopPropagation();
+            public void onValueChange(ValueChangeEvent<String> event) {
                 grabSelectedItems();
-                lister = new SelectorDialogTenantLister(false, selectedTenants);
-                tenantListerController = new SelectorDialogTenantListerController(lister, ((SelectorDialogTenantLister) lister).getSelectService());
+                if (rg.getValue().equals("Tenant")) {
+                    lister = new SelectorDialogTenantLister(false, selectedTenants);
+                    tenantListerController = new SelectorDialogTenantListerController(lister, ((SelectorDialogTenantLister) lister).getSelectService());
+
+                } else if (rg.getValue().equals("Corporate")) {
+                    lister = new SelectorDialogCorporateLister(false, selectedEmployees);
+                    corporateListerController = new SelectorDialogCorporateListerController(lister, ((SelectorDialogCorporateLister) lister).getSelectService());
+
+                } else if (rg.getValue().equals("Building")) {
+                    lister = new SelectorDialogBuildingLister(false, selectedBuildings);
+                    buildingListerController = new SelectorDialogBuildingListerController(lister, ((SelectorDialogBuildingLister) lister).getSelectService());
+
+                } else if (rg.getValue().equals("Portfolio")) {
+                    lister = new SelectorDialogPortfolioLister(false, selectedPortfolios);
+                    portfolioListerController = new SelectorDialogPortfolioListerController(lister, ((SelectorDialogPortfolioLister) lister).getSelectService());
+                }
+
                 listPanel.clear();
                 listPanel.add(lister.asWidget());
             }
         });
 
-        menuPanel.add(tenant);
-        Label community = new Label("Corporate");
-        community.addClickHandler(new ClickHandler() {
-            @Override
-            public void onClick(ClickEvent event) {
-                event.stopPropagation();
-                grabSelectedItems();
-                lister = new SelectorDialogCorporateLister(false, selectedEmployees);
-                corporateListerController = new SelectorDialogCorporateListerController(lister, ((SelectorDialogCorporateLister) lister).getSelectService());
-                listPanel.clear();
-                listPanel.add(lister.asWidget());
-            }
-        });
-        menuPanel.add(community);
-        Label building = new Label("Building");
-        building.addClickHandler(new ClickHandler() {
-            @Override
-            public void onClick(ClickEvent event) {
-                event.stopPropagation();
-                grabSelectedItems();
-                lister = new SelectorDialogBuildingLister(false, selectedBuildings);
-                buildingListerController = new SelectorDialogBuildingListerController(lister, ((SelectorDialogBuildingLister) lister).getSelectService());
-                listPanel.clear();
-                listPanel.add(lister.asWidget());
-            }
-        });
-
-        menuPanel.add(building);
-
-        Label portfolio = new Label("Portfolio");
-        portfolio.addClickHandler(new ClickHandler() {
-            @Override
-            public void onClick(ClickEvent event) {
-                event.stopPropagation();
-                grabSelectedItems();
-                lister = new SelectorDialogPortfolioLister(false, selectedPortfolios);
-                portfolioListerController = new SelectorDialogPortfolioListerController(lister, ((SelectorDialogPortfolioLister) lister).getSelectService());
-                listPanel.clear();
-                listPanel.add(lister.asWidget());
-            }
-        });
-
-        menuPanel.add(portfolio);
         add(menuPanel);
-
         add(listPanel);
         setCellWidth(listPanel, "100%");
         dealSelectedRecepients(alreadySelected);
