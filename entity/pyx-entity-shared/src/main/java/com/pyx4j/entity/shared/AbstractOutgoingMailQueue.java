@@ -56,12 +56,12 @@ public interface AbstractOutgoingMailQueue extends IEntity {
 
     IPrimitive<String> statusCallbackClass();
 
-    @Format("MM/dd/yyyy HH:mm")
+    @Format("yyyy-MM-dd HH:mm:ss")
     @Timestamp(Timestamp.Update.Created)
     IPrimitive<Date> created();
 
     // last delivery attempt
-    @Format("MM/dd/yyyy HH:mm")
+    @Format("yyyy-MM-dd HH:mm:ss")
     @Timestamp(Timestamp.Update.Updated)
     IPrimitive<Date> updated();
 
