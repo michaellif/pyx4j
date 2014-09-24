@@ -141,6 +141,7 @@ public class SelectRecipientsDialogForm extends HorizontalPanel {
                 selectedPortfolios = new ArrayList<Portfolio>(((SelectorDialogPortfolioLister) lister).getSelectedItems());
             }
         }
+
     }
 
     public Collection<IEntity> getSelectedItems() {
@@ -153,6 +154,8 @@ public class SelectRecipientsDialogForm extends HorizontalPanel {
             selected.addAll(selectedBuildings);
         if (null != selectedPortfolios && selectedPortfolios.size() != 0)
             selected.addAll(selectedPortfolios);
+        if (null != selectedAll && selectedAll.size() != 0)
+            selected.addAll(selectedAll);
 
         return selected;
     }
