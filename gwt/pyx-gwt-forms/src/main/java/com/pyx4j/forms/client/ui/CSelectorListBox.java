@@ -32,13 +32,13 @@ public class CSelectorListBox<E extends IEntity> extends CAbstractSelectorBox<Co
 
     private Command addItemCommand;
 
-    public CSelectorListBox(IOptionsGrabber<E> optionsGrabber, Command addItemCommand) {
+    public CSelectorListBox(IOptionsGrabber<E> optionsGrabber) {
         super(optionsGrabber);
+        setNativeComponent(new NSelectorListBox<E>(this));
     }
 
     public void setCommand(Command addItemCommand) {
         this.addItemCommand = addItemCommand;
-        setNativeComponent(new NSelectorListBox<E>(this));
     }
 
     public Command getAddItemCommand() {
