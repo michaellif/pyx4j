@@ -57,20 +57,20 @@ public interface Run extends IEntity {
     @ToString(index = 0)
     @Timestamp(Timestamp.Update.Created)
     @ReadOnly
-    @Format("MM/dd/yyyy HH:mm")
+    @Format("yyyy-MM-dd HH:mm:ss")
     IPrimitive<Date> created();
 
-    @Format("MM/dd/yyyy HH:mm")
+    @Format("yyyy-MM-dd HH:mm:ss")
     @Timestamp(Timestamp.Update.Updated)
     IPrimitive<Date> updated();
 
-    @Format("MM/dd/yyyy HH:mm")
+    @Format("yyyy-MM-dd HH:mm:ss")
     IPrimitive<Date> forDate();
 
-    @Format("MM/dd/yyyy HH:mm")
+    @Format("yyyy-MM-dd HH:mm:ss")
     IPrimitive<Date> started();
 
-    @Format("MM/dd/yyyy HH:mm")
+    @Format("yyyy-MM-dd HH:mm:ss")
     IPrimitive<Date> completed();
 
     OperationsUser startedBy();
