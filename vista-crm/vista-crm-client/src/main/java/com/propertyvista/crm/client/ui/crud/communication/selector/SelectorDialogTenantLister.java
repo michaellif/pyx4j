@@ -100,6 +100,13 @@ public class SelectorDialogTenantLister extends EntityLister<Tenant> {
         };
     }
 
+
+    @Override
+    protected void onObtainSuccess() {
+        super.onObtainSuccess();
+        setRowsSelected();
+    }
+
     public void setRowsSelected(){
 
         if(alreadySelected == null || alreadySelected.size() == 0)
@@ -108,7 +115,7 @@ public class SelectorDialogTenantLister extends EntityLister<Tenant> {
 
         for(DataItem<Tenant> dataItem : model.getData()){
             if(alreadySelected.contains(dataItem.getEntity())){
-                model.setRowSelected(true, model.indexOf(dataItem));
+                model.selectRow(true, model.indexOf(dataItem));
             }
         }
     }

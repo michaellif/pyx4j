@@ -120,6 +120,12 @@ public class SelectorDialogBuildingLister extends EntityLister<Building> {
         }; //@formatter:on
     }
 
+    @Override
+    protected void onObtainSuccess() {
+        super.onObtainSuccess();
+        setRowsSelected();
+    }
+
     public void setRowsSelected() {
 
         if (alreadySelected == null || alreadySelected.size() == 0)
@@ -128,7 +134,7 @@ public class SelectorDialogBuildingLister extends EntityLister<Building> {
 
         for (DataItem<Building> dataItem : model.getData()) {
             if (alreadySelected.contains(dataItem.getEntity())) {
-                model.setRowSelected(true, model.indexOf(dataItem));
+                model.selectRow(true, model.indexOf(dataItem));
             }
         }
     }

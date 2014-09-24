@@ -25,7 +25,6 @@ public class SelectorDialogPortfolioListerController extends ListerController<Po
     public SelectorDialogPortfolioListerController(ILister<Portfolio> view, AbstractListCrudService<Portfolio> service) {
         super(Portfolio.class, view, service);
         this.populate();
-        ((SelectorDialogPortfolioLister) view).setRowsSelected();
     }
 
     protected Portfolio proto() {

@@ -13,8 +13,8 @@
  */
 package com.propertyvista.crm.client.ui.crud.communication.selector;
 
+import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.IEntity;
@@ -42,7 +42,7 @@ public class CommunicationEndpointSelectorAddDialog extends Dialog implements Ok
         super("Select recipients");
         this.setDialogOptions(this);
         this.parent = parent;
-        this.alreadySelected = (alreadySelected != null ? alreadySelected : Collections.<CommunicationEndpointDTO> emptyList());
+        this.alreadySelected = (alreadySelected != null ? alreadySelected : new ArrayList<CommunicationEndpointDTO>());
         selectForm = new SelectRecipientsDialogForm();
         setDialogPixelWidth(1000);
         setBody(selectForm);
@@ -50,12 +50,12 @@ public class CommunicationEndpointSelectorAddDialog extends Dialog implements Ok
     }
 
     public CommunicationEndpointSelectorAddDialog(Collection<CommunicationEndpointDTO> alreadySelected) {
-        this(null, (alreadySelected != null ? alreadySelected : Collections.<CommunicationEndpointDTO> emptyList()));
+        this(null, alreadySelected);
 
     }
 
     public CommunicationEndpointSelectorAddDialog() {
-        this(null, Collections.<CommunicationEndpointDTO> emptyList());
+        this(null, null);
 
     }
 
@@ -67,6 +67,7 @@ public class CommunicationEndpointSelectorAddDialog extends Dialog implements Ok
 
     @Override
     public boolean onClickOk() {
+        selectForm.grabSelectedItems();
         setSelectedItems(selectForm.getSelectedItems());
         this.hide(true);
         return true;
@@ -80,35 +81,35 @@ public class CommunicationEndpointSelectorAddDialog extends Dialog implements Ok
                 }
             }
         }
+
+        updateSelector(parent, alreadySelected);
     }
 
     private void addRecipient(IEntity selected) {
         CommunicationEndpointDTO proto = EntityFactory.create(CommunicationEndpointDTO.class);
-        Class<? extends IEntity> epType = selected.getInstanceValueClass();
-        if (epType.equals(Building.class)) {
+        //Class<? extends IEntity> epType = selected.getInstanceValueClass();
+        if (selected instanceof Building) {
             proto.name().set(((Building) selected).propertyCode());
             proto.type().setValue(ContactType.Building);
             CommunicationGroup cg = EntityFactory.create(CommunicationGroup.class);
             cg.building().set(selected);
             proto.endpoint().set(cg);
-        } else if (epType.equals(Portfolio.class)) {
+        } else if (selected instanceof Portfolio) {
             proto.name().set(((Portfolio) selected).name());
             proto.type().setValue(ContactType.Portfolio);
             CommunicationGroup cg = EntityFactory.create(CommunicationGroup.class);
             cg.portfolio().set(selected);
             proto.endpoint().set(cg);
-        } else if (epType.equals(Employee.class)) {
+        } else if (selected instanceof Employee) {
             proto.name().setValue(((Employee) selected).name().getStringView());
             proto.type().setValue(ContactType.Employee);
             proto.endpoint().set(selected);
-        } else if (epType.equals(Tenant.class)) {
+        } else if (selected instanceof Tenant) {
             proto.name().setValue(((Tenant) selected).customer().person().name().getStringView());
             proto.type().setValue(ContactType.Tenant);
             proto.endpoint().set(selected);
         }
-
         alreadySelected.add(proto);
-        updateSelector(parent, alreadySelected);
     }
 
     private void updateSelector(CommunicationEndpointSelector selector, Collection<CommunicationEndpointDTO> value) {

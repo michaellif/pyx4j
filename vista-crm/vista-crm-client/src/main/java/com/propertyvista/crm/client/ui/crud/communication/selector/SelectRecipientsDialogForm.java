@@ -23,10 +23,10 @@ package com.propertyvista.crm.client.ui.crud.communication.selector;
 import java.util.ArrayList;
 import java.util.Collection;
 
-import com.google.gwt.dom.client.Style.Display;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.ui.FlowPanel;
+import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.SimplePanel;
 
@@ -39,7 +39,7 @@ import com.propertyvista.domain.company.Portfolio;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.tenant.lease.Tenant;
 
-public class SelectRecipientsDialogForm extends FlowPanel {
+public class SelectRecipientsDialogForm extends HorizontalPanel {
 
     private ScrollPanel rightScrollPanel;
 
@@ -67,6 +67,7 @@ public class SelectRecipientsDialogForm extends FlowPanel {
 
     public SelectRecipientsDialogForm() {
         super();
+
         initForm();
 
     }
@@ -74,23 +75,20 @@ public class SelectRecipientsDialogForm extends FlowPanel {
     private void initForm() {
 
         final FlowPanel listPanel = new FlowPanel();
-        listPanel.getElement().getStyle().setDisplay(Display.INLINE);
-        final ScrollPanel sp = new ScrollPanel();
-        sp.setHeight("400px");
-        listPanel.add(sp);
+        listPanel.setWidth("100%");
 
         FlowPanel menuPanel = new FlowPanel();
-        menuPanel.getElement().getStyle().setDisplay(Display.INLINE);
+
         Label tenant = new Label("Tenant");
         tenant.addClickHandler(new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
                 event.stopPropagation();
                 grabSelectedItems();
-                lister = new SelectorDialogTenantLister(false, selectedTenants);
+                lister = new SelectorDialogTenantLister(true, selectedTenants);
                 tenantListerController = new SelectorDialogTenantListerController(lister, ((SelectorDialogTenantLister) lister).getSelectService());
-                sp.clear();
-                sp.add(lister.asWidget());
+                listPanel.clear();
+                listPanel.add(lister.asWidget());
             }
         });
 
@@ -101,10 +99,10 @@ public class SelectRecipientsDialogForm extends FlowPanel {
             public void onClick(ClickEvent event) {
                 event.stopPropagation();
                 grabSelectedItems();
-                lister = new SelectorDialogCorporateLister(false);
+                lister = new SelectorDialogCorporateLister(false, selectedEmployees);
                 corporateListerController = new SelectorDialogCorporateListerController(lister, ((SelectorDialogCorporateLister) lister).getSelectService());
-                sp.clear();
-                sp.add(lister.asWidget());
+                listPanel.clear();
+                listPanel.add(lister.asWidget());
             }
         });
         menuPanel.add(community);
@@ -114,10 +112,10 @@ public class SelectRecipientsDialogForm extends FlowPanel {
             public void onClick(ClickEvent event) {
                 event.stopPropagation();
                 grabSelectedItems();
-                lister = new SelectorDialogBuildingLister(false);
+                lister = new SelectorDialogBuildingLister(false, selectedBuildings);
                 buildingListerController = new SelectorDialogBuildingListerController(lister, ((SelectorDialogBuildingLister) lister).getSelectService());
-                sp.clear();
-                sp.add(lister.asWidget());
+                listPanel.clear();
+                listPanel.add(lister.asWidget());
             }
         });
 
@@ -129,18 +127,18 @@ public class SelectRecipientsDialogForm extends FlowPanel {
             public void onClick(ClickEvent event) {
                 event.stopPropagation();
                 grabSelectedItems();
-                lister = new SelectorDialogPortfolioLister(false);
+                lister = new SelectorDialogPortfolioLister(false, selectedPortfolios);
                 portfolioListerController = new SelectorDialogPortfolioListerController(lister, ((SelectorDialogPortfolioLister) lister).getSelectService());
-                sp.clear();
-                sp.add(lister.asWidget());
+                listPanel.clear();
+                listPanel.add(lister.asWidget());
             }
         });
 
         menuPanel.add(portfolio);
-
         add(menuPanel);
-        add(listPanel);
 
+        add(listPanel);
+        setCellWidth(listPanel, "100%");
     }
 
     public void grabSelectedItems() {

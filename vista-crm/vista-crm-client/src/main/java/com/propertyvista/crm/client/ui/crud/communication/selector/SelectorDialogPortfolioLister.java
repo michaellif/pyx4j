@@ -89,6 +89,12 @@ public class SelectorDialogPortfolioLister extends EntityLister<Portfolio> {
         return restrictAlreadySelected;
     }
 
+    @Override
+    protected void onObtainSuccess() {
+        super.onObtainSuccess();
+        setRowsSelected();
+    }
+
     public void setRowsSelected(){
 
         if(alreadySelected == null || alreadySelected.size() == 0)
@@ -97,7 +103,7 @@ public class SelectorDialogPortfolioLister extends EntityLister<Portfolio> {
 
         for(DataItem<Portfolio> dataItem : model.getData()){
             if(alreadySelected.contains(dataItem.getEntity())){
-                model.setRowSelected(true, model.indexOf(dataItem));
+                model.selectRow(true, model.indexOf(dataItem));
             }
         }
     }

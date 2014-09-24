@@ -25,7 +25,6 @@ public class SelectorDialogCorporateListerController extends ListerController<Em
     public SelectorDialogCorporateListerController(ILister<Employee> view, AbstractListCrudService<Employee> service) {
         super(Employee.class, view, service);
         this.populate();
-        ((SelectorDialogCorporateLister) view).setRowsSelected();
     }
 
     protected Employee proto() {
