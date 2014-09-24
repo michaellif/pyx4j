@@ -13,13 +13,12 @@
  */
 package com.propertyvista.portal.server.portal.resident.services.movein;
 
-import java.util.Vector;
-
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.rpc.shared.VoidSerializable;
 import com.pyx4j.security.shared.SecurityController;
 
 import com.propertyvista.biz.tenant.CustomerFacade;
@@ -66,7 +65,7 @@ public class MoveInWizardServiceImpl implements MoveInWizardService {
     }
 
     @Override
-    public void skipStep(AsyncCallback<Void> callback, MoveInWizardStep step) {
+    public void skipStep(AsyncCallback<VoidSerializable> callback, MoveInWizardStep step) {
         switch (step) {
         case insurance:
             ServerSideFactory.create(CustomerFacade.class).skipMoveInAction(ResidentPortalContext.getLeaseParticipant(), MoveInActionType.insurance);
