@@ -15,6 +15,8 @@ package com.propertyvista.operations.rpc.dto;
 
 import java.io.Serializable;
 
+import com.pyx4j.commons.CommonsStringUtils;
+
 @SuppressWarnings("serial")
 public class ConnectionTestResultDTO implements Serializable {
 
@@ -31,11 +33,11 @@ public class ConnectionTestResultDTO implements Serializable {
     public static final String OK = " <span style=\"color:#00CC33\">OK</span>";
 
     public static String htmlError(String text) {
-        return "<span style=\"color:red\"> " + ((text != null) ? text.replace("\n", CR) : "") + " </span>";
+        return "<span style=\"color:red\"> " + (CommonsStringUtils.isStringSet(text) ? text.replace("\n", CR) : "{error empty}") + " </span>";
     }
 
     public static String htmlWarn(String text) {
-        return "<span style=\"color:#FF9933\"> " + text + " </span>";
+        return "<span style=\"color:#FF9933\"> " + (CommonsStringUtils.isStringSet(text) ? text : "{warning empty}") + " </span>";
     }
 
     public ConnectionTestResultDTO append(String message) {
