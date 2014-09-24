@@ -236,7 +236,7 @@ public class PropertyFinder {
             Building building = it.next();
             EntityQueryCriteria<Floorplan> fpCriteria = EntityQueryCriteria.create(Floorplan.class);
             fpCriteria.eq(fpCriteria.proto().building(), building);
-            if (!updateFloorplanQueryCriteria(fpCriteria, searchCriteria)) {
+            if (searchCriteria != null && !updateFloorplanQueryCriteria(fpCriteria, searchCriteria)) {
                 it.remove();
                 continue;
             }
