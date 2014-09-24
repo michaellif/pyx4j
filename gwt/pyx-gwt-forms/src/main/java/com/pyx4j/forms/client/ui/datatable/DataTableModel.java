@@ -272,6 +272,17 @@ public class DataTableModel<E extends IEntity> {
         fireTableChanged(new DataTableModelEvent(DataTableModelEvent.Type.SELECTION));
     }
 
+    public void selectRow(boolean checked, int rowIndex) {
+        if (!checked) {
+            selected.remove(data.get(rowIndex));
+        } else {
+            if (!multipleSelection) {
+                selected.clear();
+            }
+            selected.add(data.get(rowIndex));
+        }
+    }
+
     public void setAllRowsSelected(boolean checked) {
         selected.clear();
         if (checked) {
