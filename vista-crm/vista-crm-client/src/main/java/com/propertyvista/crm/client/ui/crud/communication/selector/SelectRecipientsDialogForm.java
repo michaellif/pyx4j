@@ -68,6 +68,8 @@ public class SelectRecipientsDialogForm extends HorizontalPanel {
 
     private Collection<Portfolio> selectedPortfolios;
 
+    private Collection<CommunicationEndpointDTO> selectedAll;
+
     public SelectRecipientsDialogForm() {
         this(null);
     }
@@ -84,17 +86,9 @@ public class SelectRecipientsDialogForm extends HorizontalPanel {
 
         FlowPanel menuPanel = new FlowPanel();
 
-//        final RadioGroup<RadioButton> rg = new RadioGroup<RadioButton>(RadioGroup.Layout.VERTICAL);
-//        RadioButton readioTenant = new RadioButton("Tenant", "Tenant");
-//        RadioButton readioCorporate = new RadioButton("Corporate", "Corporate");
-//        RadioButton readioBuilding = new RadioButton("Building", "Building");
-//        RadioButton readioPortfolio = new RadioButton("Portfolio", "Portfolio");
-//
-//        rg.setOptions(Arrays.asList(readioTenant, readioCorporate, readioBuilding, readioPortfolio));
-
         final RadioGroup<String> rg = new RadioGroup<String>(RadioGroup.Layout.VERTICAL);
 
-        rg.setOptions(Arrays.asList("Tenant", "Corporate", "Building", "Portfolio"));
+        rg.setOptions(Arrays.asList("Tenant", "Corporate", "Building", "Portfolio", "Selected"));
 
         menuPanel.add(rg);
         rg.addValueChangeHandler(new ValueChangeHandler<String>() {
@@ -116,6 +110,9 @@ public class SelectRecipientsDialogForm extends HorizontalPanel {
                 } else if (rg.getValue().equals("Portfolio")) {
                     lister = new SelectorDialogPortfolioLister(false, selectedPortfolios);
                     portfolioListerController = new SelectorDialogPortfolioListerController(lister, ((SelectorDialogPortfolioLister) lister).getSelectService());
+                } else if (rg.getValue().equals("Selected")) {
+                    //lister = new SelectorDialogAllSelectedLister(false, selectedAll);
+                    //portfolioListerController = new SelectorDialogPortfolioListerController(lister, ((SelectorDialogPortfolioLister) lister).getSelectService());
                 }
 
                 listPanel.clear();
@@ -161,6 +158,16 @@ public class SelectRecipientsDialogForm extends HorizontalPanel {
     }
 
     private void dealSelectedRecepients(Collection<CommunicationEndpointDTO> selected) {
+        if (null == selected) {
+            return;
+        }
+        if (null != selectedAll) {
+            selectedAll.clear();
+            selectedAll.addAll(selected);
+        } else {
+            selectedAll = new ArrayList<CommunicationEndpointDTO>(selected);
+        }
+
         for (CommunicationEndpointDTO current : selected) {
             if (current.endpoint().getInstanceValueClass().equals(Tenant.class)) {
                 if (selectedTenants == null) {
