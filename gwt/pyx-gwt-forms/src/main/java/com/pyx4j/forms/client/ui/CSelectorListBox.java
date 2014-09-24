@@ -30,10 +30,13 @@ import com.pyx4j.widgets.client.suggest.IOptionsGrabber;
 
 public class CSelectorListBox<E extends IEntity> extends CAbstractSelectorBox<Collection<E>, E, NSelectorListBox<E>> {
 
-    private final Command addItemCommand;
+    private Command addItemCommand;
 
     public CSelectorListBox(IOptionsGrabber<E> optionsGrabber, Command addItemCommand) {
         super(optionsGrabber);
+    }
+
+    public void setCommand(Command addItemCommand) {
         this.addItemCommand = addItemCommand;
         setNativeComponent(new NSelectorListBox<E>(this));
     }
@@ -46,4 +49,5 @@ public class CSelectorListBox<E extends IEntity> extends CAbstractSelectorBox<Co
     protected Collection<E> preprocessValue(Collection<E> value, boolean fireEvent, boolean populate) {
         return super.preprocessValue(new ArrayList<>(value), fireEvent, populate);
     }
+
 }
