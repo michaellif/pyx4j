@@ -15,16 +15,20 @@ package com.propertyvista.portal.resident.ui.movein;
 
 import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
 import com.google.gwt.user.client.Command;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.HTMLPanel;
 
 import com.pyx4j.commons.css.StyleManager;
 import com.pyx4j.commons.css.ThemeColor;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.rpc.shared.VoidSerializable;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.widgets.client.Button;
 
+import com.propertyvista.portal.resident.activity.movein.MoveInWizardManager;
 import com.propertyvista.portal.resident.themes.MoveInWizardTheme;
 import com.propertyvista.portal.rpc.portal.resident.ResidentPortalSiteMap;
+import com.propertyvista.portal.rpc.portal.resident.dto.movein.MoveInWizardStep;
 import com.propertyvista.portal.shared.ui.AbstractGadget;
 import com.propertyvista.portal.shared.ui.GadgetToolbar;
 
@@ -77,7 +81,18 @@ public class MoveInWizardInsurancePreviewGadget extends AbstractGadget<MoveInWiz
             Button skipButton = new Button(i18n.tr("later"), new Command() {
                 @Override
                 public void execute() {
-                    AppSite.getPlaceController().goTo(new ResidentPortalSiteMap.MoveIn.MoveInWizard());
+                    MoveInWizardManager.skipStep(MoveInWizardStep.insurance, new AsyncCallback<VoidSerializable>() {
+
+                        @Override
+                        public void onSuccess(VoidSerializable result) {
+                            AppSite.getPlaceController().goTo(new ResidentPortalSiteMap.MoveIn.MoveInWizard());
+                        }
+
+                        @Override
+                        public void onFailure(Throwable caught) {
+                            AppSite.getPlaceController().goTo(new ResidentPortalSiteMap.MoveIn.MoveInWizard());
+                        }
+                    });
                 }
             });
             skipButton.addStyleName(MoveInWizardTheme.StyleName.DoItLaterButton.name());

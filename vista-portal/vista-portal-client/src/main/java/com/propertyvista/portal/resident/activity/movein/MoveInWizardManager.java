@@ -19,6 +19,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.gwt.commons.ClientEventBus;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.rpc.shared.VoidSerializable;
 import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.site.client.AppSite;
 
@@ -53,7 +54,7 @@ public class MoveInWizardManager {
                         @Override
                         public void onSuccess(MoveInWizardStatusTO result) {
                             wizardStatus = result;
-                            setCurrentStep(event.getNewPlace() instanceof IMoveInPlace ? getCurrentStep() : null);
+                            setCurrentStep(event.getNewPlace() instanceof IMoveInPlace ? currentStep : null);
                             ClientEventBus.instance.fireEvent(new MoveInWizardStateChangeEvent());
                             started = true;
                         }
@@ -94,8 +95,8 @@ public class MoveInWizardManager {
         return false;
     }
 
-    public static void markStepComplete(MoveInWizardStep step) {
-        GWT.<MoveInWizardService> create(MoveInWizardService.class).skipStep(null, step);
+    public static void skipStep(MoveInWizardStep step, AsyncCallback<VoidSerializable> callback) {
+        GWT.<MoveInWizardService> create(MoveInWizardService.class).skipStep(callback, step);
     }
 
     private static void nextStep() {
@@ -120,13 +121,11 @@ public class MoveInWizardManager {
     }
 
     public static void setCurrentStep(MoveInWizardStep step) {
-        System.out.println("+++++++++setCurrentStep before " + currentStep);
         if (step != null && !isStepComplete(step)) {
             currentStep = step;
         } else {
             nextStep();
         }
-        System.out.println("+++++++++setCurrentStep after " + currentStep);
     }
 
 }
