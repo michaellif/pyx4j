@@ -17,11 +17,20 @@ import com.pyx4j.site.client.IsView;
 
 import com.propertyvista.portal.rpc.portal.resident.dto.movein.MoveInWizardStep;
 
-public interface MoveInWizardStepPreviewView extends IsView {
+public interface MoveInWizardView extends IsView {
 
-    public interface MoveInWizardStepPreviewPresenter {
+    public interface MoveInWizardPresenter {
 
     }
 
-    void setCurrentStep(MoveInWizardStep step);
+    void showStepPreview(MoveInWizardStep step);
+
+    void showTenantWelcomeScreen();
+
+    void showGuarantorWelcomeScreen();
+
+    void showCompletionConfirmationScreen();
+
+    void showProgressScreen();
+
 }

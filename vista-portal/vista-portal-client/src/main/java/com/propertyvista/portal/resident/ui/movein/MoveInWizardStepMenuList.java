@@ -22,23 +22,22 @@ import com.pyx4j.gwt.commons.layout.LayoutChangeRequestEvent.ChangeType;
 import com.pyx4j.gwt.commons.layout.LayoutType;
 import com.pyx4j.site.client.AppSite;
 
-import com.propertyvista.portal.resident.MoveInWizardManager;
+import com.propertyvista.portal.resident.activity.movein.MoveInWizardManager;
 import com.propertyvista.portal.rpc.portal.resident.ResidentPortalSiteMap;
 import com.propertyvista.portal.rpc.portal.resident.dto.movein.MoveInWizardStep;
 import com.propertyvista.portal.shared.ui.MenuList;
 
-public class WizardStepList extends MenuList<WizardStepItem> {
+public class MoveInWizardStepMenuList extends MenuList<MoveInWizardStepMenuItem> {
 
-    public WizardStepList() {
-
+    public MoveInWizardStepMenuList() {
     }
 
     public void addStepItem(final MoveInWizardStep step, final int stepIndex, ThemeColor color) {
-        WizardStepItem menuItem = new WizardStepItem(step, new Command() {
+        MoveInWizardStepMenuItem menuItem = new MoveInWizardStepMenuItem(step, new Command() {
             @Override
             public void execute() {
                 MoveInWizardManager.setCurrentStep(step);
-                AppSite.getPlaceController().goTo(new ResidentPortalSiteMap.MoveIn.MoveInWizardStepPreview());
+                AppSite.getPlaceController().goTo(new ResidentPortalSiteMap.MoveIn.MoveInWizard());
 
                 LayoutType layout = LayoutType.getLayoutType(Window.getClientWidth());
                 if (LayoutType.phonePortrait.equals(layout) || (LayoutType.phoneLandscape.equals(layout))) {

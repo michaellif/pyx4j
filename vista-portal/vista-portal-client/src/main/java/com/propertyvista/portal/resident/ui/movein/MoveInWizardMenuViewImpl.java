@@ -13,8 +13,6 @@
  */
 package com.propertyvista.portal.resident.ui.movein;
 
-import java.util.Collection;
-
 import com.google.gwt.dom.client.Style.Display;
 import com.google.gwt.dom.client.Style.Position;
 import com.google.gwt.user.client.Window;
@@ -30,7 +28,8 @@ import com.pyx4j.gwt.commons.layout.LayoutType;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.rpc.AppPlace;
 
-import com.propertyvista.portal.resident.ui.movein.WizardStepItem.StepStatus;
+import com.propertyvista.portal.resident.activity.movein.MoveInWizardManager;
+import com.propertyvista.portal.resident.ui.movein.MoveInWizardStepMenuItem.StepStatus;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
 import com.propertyvista.portal.rpc.portal.resident.ResidentPortalSiteMap;
 import com.propertyvista.portal.rpc.portal.resident.dto.movein.MoveInWizardStep;
@@ -44,7 +43,7 @@ public class MoveInWizardMenuViewImpl extends DockPanel implements MoveInWizardM
 
     private final HeaderHolder headerHolder;
 
-    private final WizardStepList mainHolder;
+    private final MoveInWizardStepMenuList mainHolder;
 
     private final MenuList<MenuItem<?>> footerHolder;
 
@@ -54,7 +53,7 @@ public class MoveInWizardMenuViewImpl extends DockPanel implements MoveInWizardM
         setStyleName(PortalRootPaneTheme.StyleName.MainMenu.name());
 
         headerHolder = new HeaderHolder();
-        mainHolder = new WizardStepList();
+        mainHolder = new MoveInWizardStepMenuList();
         footerHolder = new MenuList<>();
         footerHolder.asWidget().setStyleName(PortalRootPaneTheme.StyleName.MainMenuFooter.name());
 
@@ -89,6 +88,8 @@ public class MoveInWizardMenuViewImpl extends DockPanel implements MoveInWizardM
 
         footerHolder.addMenuItem(new AppPlaceMenuItem(new PortalSiteMap.Logout(), PortalImages.INSTANCE.logoutMenu(), ThemeColor.background));
 
+        setMenuVisible(false);
+
         doLayout(LayoutType.getLayoutType(Window.getClientWidth()));
 
         AppSite.getEventBus().addHandler(LayoutChangeEvent.TYPE, new LayoutChangeHandler() {
@@ -101,7 +102,6 @@ public class MoveInWizardMenuViewImpl extends DockPanel implements MoveInWizardM
         });
     }
 
-    @Override
     public void setMenuVisible(boolean visible) {
         mainMenuVisible = visible;
         doLayout(LayoutType.getLayoutType(Window.getClientWidth()));
@@ -155,19 +155,28 @@ public class MoveInWizardMenuViewImpl extends DockPanel implements MoveInWizardM
     }
 
     @Override
-    public void updateState(Collection<MoveInWizardStep> complete, MoveInWizardStep current) {
-        for (WizardStepItem step : mainHolder.getMenuItems()) {
-            if (step.getStepType().equals(current)) {
+    public void updateState() {
+        for (MoveInWizardStepMenuItem step : mainHolder.getMenuItems()) {
+            if (step.getStepType().equals(MoveInWizardManager.getCurrentStep())) {
                 step.setStatus(StepStatus.current);
                 step.setEnabled(false);
-            } else if (complete.contains(step.getStepType())) {
+                step.setVisible(true);
+            } else if (MoveInWizardManager.isStepIncluded(step.getStepType())) {
+                step.setStatus(StepStatus.notComplete);
+                step.setEnabled(false);
+                step.setVisible(false);
+            } else if (MoveInWizardManager.isStepComplete(step.getStepType())) {
                 step.setStatus(StepStatus.complete);
                 step.setEnabled(false);
+                step.setVisible(true);
             } else {
                 step.setStatus(StepStatus.notComplete);
                 step.setEnabled(true);
+                step.setVisible(true);
             }
         }
+
+        setMenuVisible(MoveInWizardManager.isStarted() && !MoveInWizardManager.isCompleted());
     }
 
     class HeaderHolder extends FlowPanel {

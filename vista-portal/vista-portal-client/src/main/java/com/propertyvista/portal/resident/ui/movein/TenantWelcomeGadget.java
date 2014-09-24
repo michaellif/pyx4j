@@ -24,15 +24,16 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.widgets.client.Button;
 
+import com.propertyvista.portal.resident.activity.movein.MoveInWizardManager;
 import com.propertyvista.portal.rpc.portal.resident.ResidentPortalSiteMap;
 import com.propertyvista.portal.shared.ui.AbstractGadget;
 import com.propertyvista.portal.shared.ui.GadgetToolbar;
 
-public class NewTenantWelcomeGadget extends AbstractGadget<NewTenantWelcomePageView> {
+public class TenantWelcomeGadget extends AbstractGadget<MoveInWizardView> {
 
-    private static final I18n i18n = I18n.get(NewTenantWelcomeGadget.class);
+    private static final I18n i18n = I18n.get(TenantWelcomeGadget.class);
 
-    public NewTenantWelcomeGadget(NewTenantWelcomePageViewImpl view) {
+    public TenantWelcomeGadget(MoveInWizardView view) {
         super(view, null, i18n.tr("<b>Congratulations"), ThemeColor.contrast2, 1);
         setActionsToolbar(new NewResidentWelcomeToolbar());
 
@@ -62,7 +63,8 @@ public class NewTenantWelcomeGadget extends AbstractGadget<NewTenantWelcomePageV
             startButton = new Button(i18n.tr("I’m Ready. Let’s Go!"), new Command() {
                 @Override
                 public void execute() {
-                    AppSite.getPlaceController().goTo(new ResidentPortalSiteMap.MoveIn.MoveInWizardStepPreview());
+                    MoveInWizardManager.nextStep();
+                    AppSite.getPlaceController().goTo(new ResidentPortalSiteMap.MoveIn.MoveInWizard());
                 }
             });
             startButton.getElement().getStyle().setProperty("background", StyleManager.getPalette().getThemeColor(ThemeColor.contrast2, 1));

@@ -28,7 +28,7 @@ import com.propertyvista.portal.shared.ui.GadgetToolbar;
 
 public class MoveInWizardCompletionConfirmationGadget extends AbstractGadget<MoveInWizardCompletionConfirmationView> {
 
-    private static final I18n i18n = I18n.get(NewTenantWelcomeGadget.class);
+    private static final I18n i18n = I18n.get(TenantWelcomeGadget.class);
 
     public MoveInWizardCompletionConfirmationGadget(MoveInWizardCompletionConfirmationView view) {
         super(view, null, i18n.tr("Move-In Wizard Complete"), ThemeColor.contrast4, 1);

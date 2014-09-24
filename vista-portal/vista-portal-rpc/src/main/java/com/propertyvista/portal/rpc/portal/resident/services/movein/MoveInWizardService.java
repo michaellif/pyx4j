@@ -13,12 +13,11 @@
  */
 package com.propertyvista.portal.rpc.portal.resident.services.movein;
 
-import java.util.Vector;
-
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.rpc.shared.IService;
 
+import com.propertyvista.portal.rpc.portal.resident.dto.movein.MoveInWizardStatusTO;
 import com.propertyvista.portal.rpc.portal.resident.dto.movein.MoveInWizardStep;
 
 /**
@@ -28,7 +27,7 @@ import com.propertyvista.portal.rpc.portal.resident.dto.movein.MoveInWizardStep;
  */
 public interface MoveInWizardService extends IService {
 
-    public void obtainIncompleteSteps(AsyncCallback<Vector<MoveInWizardStep>> callback);
+    public void obtainIncompleteSteps(AsyncCallback<MoveInWizardStatusTO> callback);
 
     public void skipStep(AsyncCallback<Void> callback, MoveInWizardStep step);
 

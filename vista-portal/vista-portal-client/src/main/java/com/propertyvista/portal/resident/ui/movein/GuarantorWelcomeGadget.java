@@ -32,13 +32,13 @@ import com.propertyvista.portal.shared.resources.PortalImages;
 import com.propertyvista.portal.shared.ui.AbstractGadget;
 import com.propertyvista.portal.shared.ui.GadgetToolbar;
 
-public class NewGuarantorWelcomeGadget extends AbstractGadget<NewGuarantorWelcomePageView> {
+public class GuarantorWelcomeGadget extends AbstractGadget<MoveInWizardView> {
 
-    private static final I18n i18n = I18n.get(NewGuarantorWelcomeGadget.class);
+    private static final I18n i18n = I18n.get(GuarantorWelcomeGadget.class);
 
     private final Image buildingImage;
 
-    public NewGuarantorWelcomeGadget(NewGuarantorWelcomePageViewImpl view) {
+    public GuarantorWelcomeGadget(MoveInWizardView view) {
         super(view, null, i18n.tr("Lease Agreement Signing Wizard for Guarantor"), ThemeColor.contrast2, 1);
         setActionsToolbar(new NewResidentWelcomeToolbar());
 
@@ -70,7 +70,7 @@ public class NewGuarantorWelcomeGadget extends AbstractGadget<NewGuarantorWelcom
             startButton = new Button(i18n.tr("Sign Lease Agreement"), new Command() {
                 @Override
                 public void execute() {
-                    AppSite.getPlaceController().goTo(new ResidentPortalSiteMap.MoveIn.MoveInWizardStepPreview());
+                    AppSite.getPlaceController().goTo(new ResidentPortalSiteMap.MoveIn.MoveInWizard());
                 }
             });
             startButton.getElement().getStyle().setProperty("background", StyleManager.getPalette().getThemeColor(ThemeColor.contrast2, 1));

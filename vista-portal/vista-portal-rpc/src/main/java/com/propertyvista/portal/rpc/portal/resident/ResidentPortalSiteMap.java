@@ -194,16 +194,7 @@ public class ResidentPortalSiteMap extends PortalSiteMap {
 
     public static class MoveIn extends AppPlace {
 
-        public static class NewTenantWelcomePage extends AppPlace implements IMoveInPlace {
-        }
-
-        public static class NewGuarantorWelcomePage extends AppPlace implements IMoveInPlace {
-        }
-
-        public static class MoveInWizardStepPreview extends AppPlace implements IMoveInPlace {
-        }
-
-        public static class MoveInWizardCompletionConfirmation extends AppPlace implements IMoveInPlace {
+        public static class MoveInWizard extends AppPlace implements IMoveInPlace {
         }
 
     }

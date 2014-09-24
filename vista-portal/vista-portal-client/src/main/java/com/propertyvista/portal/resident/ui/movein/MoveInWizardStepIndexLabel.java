@@ -19,12 +19,12 @@ import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.dom.client.Style.VerticalAlign;
 import com.google.gwt.user.client.ui.HTML;
 
-import com.propertyvista.portal.resident.ui.movein.WizardStepItem.StepStatus;
+import com.propertyvista.portal.resident.ui.movein.MoveInWizardStepMenuItem.StepStatus;
 import com.propertyvista.portal.shared.themes.StepsTheme;
 
-public class StepIndexLabel extends HTML {
+public class MoveInWizardStepIndexLabel extends HTML {
 
-    public StepIndexLabel(String label) {
+    public MoveInWizardStepIndexLabel(String label) {
         super(label);
 
         setStyleName(StepsTheme.StyleName.StepIndexLabel.name());

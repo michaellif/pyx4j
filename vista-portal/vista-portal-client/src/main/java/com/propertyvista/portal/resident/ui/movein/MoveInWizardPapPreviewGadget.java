@@ -28,11 +28,11 @@ import com.propertyvista.portal.rpc.portal.resident.ResidentPortalSiteMap;
 import com.propertyvista.portal.shared.ui.AbstractGadget;
 import com.propertyvista.portal.shared.ui.GadgetToolbar;
 
-public class MoveInWizardPapPreviewGadget extends AbstractGadget<MoveInWizardStepPreviewView> {
+public class MoveInWizardPapPreviewGadget extends AbstractGadget<MoveInWizardView> {
 
-    private static final I18n i18n = I18n.get(NewTenantWelcomeGadget.class);
+    private static final I18n i18n = I18n.get(TenantWelcomeGadget.class);
 
-    public MoveInWizardPapPreviewGadget(MoveInWizardStepPreviewView view) {
+    public MoveInWizardPapPreviewGadget(MoveInWizardView view) {
         super(view, null, i18n.tr("AutoPay Setup (Pre-Authorized Payments)"), ThemeColor.contrast4, 1);
         setActionsToolbar(new ActionsToolbar());
 

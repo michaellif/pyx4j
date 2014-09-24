@@ -18,6 +18,7 @@ import java.util.Vector;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.config.server.ServerSideFactory;
+import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.security.shared.SecurityController;
 
@@ -25,33 +26,43 @@ import com.propertyvista.biz.tenant.CustomerFacade;
 import com.propertyvista.domain.security.PortalResidentBehavior;
 import com.propertyvista.domain.tenant.marketing.LeaseParticipantMoveInAction;
 import com.propertyvista.domain.tenant.marketing.LeaseParticipantMoveInAction.MoveInActionType;
+import com.propertyvista.portal.rpc.portal.resident.dto.movein.MoveInWizardStatusTO;
 import com.propertyvista.portal.rpc.portal.resident.dto.movein.MoveInWizardStep;
+import com.propertyvista.portal.rpc.portal.resident.dto.movein.MoveInWizardStepStatusTO;
 import com.propertyvista.portal.rpc.portal.resident.services.movein.MoveInWizardService;
 import com.propertyvista.portal.server.portal.resident.ResidentPortalContext;
 
 public class MoveInWizardServiceImpl implements MoveInWizardService {
 
     @Override
-    public void obtainIncompleteSteps(AsyncCallback<Vector<MoveInWizardStep>> callback) {
-        Vector<MoveInWizardStep> r = new Vector<>();
+    public void obtainIncompleteSteps(AsyncCallback<MoveInWizardStatusTO> callback) {
+        MoveInWizardStatusTO wizardStatus = EntityFactory.create(MoveInWizardStatusTO.class);
 
         if (SecurityController.check(PortalResidentBehavior.LeaseAgreementSigningRequired)) {
-            r.add(MoveInWizardStep.leaseSigning);
+            MoveInWizardStepStatusTO stepStatus = EntityFactory.create(MoveInWizardStepStatusTO.class);
+            stepStatus.step().setValue(MoveInWizardStep.leaseSigning);
+            stepStatus.complete().setValue(false);
+            wizardStatus.steps().add(stepStatus);
         }
 
         for (LeaseParticipantMoveInAction moveInAction : ServerSideFactory.create(CustomerFacade.class).getActiveMoveInActions(
                 ResidentPortalContext.getLeaseParticipant())) {
+            MoveInWizardStepStatusTO stepStatus = EntityFactory.create(MoveInWizardStepStatusTO.class);
             switch (moveInAction.type().getValue()) {
             case autoPay:
-                r.add(MoveInWizardStep.pap);
+                stepStatus.step().setValue(MoveInWizardStep.pap);
+                stepStatus.complete().setValue(false);
+                wizardStatus.steps().add(stepStatus);
                 break;
             case insurance:
-                r.add(MoveInWizardStep.insurance);
+                stepStatus.step().setValue(MoveInWizardStep.insurance);
+                stepStatus.complete().setValue(false);
+                wizardStatus.steps().add(stepStatus);
                 break;
             }
         }
 
-        callback.onSuccess(r);
+        callback.onSuccess(wizardStatus);
     }
 
     @Override

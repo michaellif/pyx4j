@@ -23,11 +23,11 @@ import com.pyx4j.gwt.commons.layout.LayoutChangeRequestEvent.ChangeType;
 import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.site.client.AppSite;
 
-import com.propertyvista.portal.resident.MoveInWizardManager;
 import com.propertyvista.portal.resident.ResidentPortalSite;
+import com.propertyvista.portal.resident.events.MoveInWizardStateChangeEvent;
+import com.propertyvista.portal.resident.events.MoveInWizardStateChangeHandler;
 import com.propertyvista.portal.resident.ui.movein.MoveInWizardMenuView;
 import com.propertyvista.portal.resident.ui.movein.MoveInWizardMenuView.MoveInWizardMenuPresenter;
-import com.propertyvista.portal.rpc.portal.resident.ResidentPortalSiteMap;
 import com.propertyvista.portal.rpc.portal.resident.services.movein.IMoveInPlace;
 
 public class MoveInWizardMenuActivity extends AbstractActivity implements MoveInWizardMenuPresenter {
@@ -43,11 +43,19 @@ public class MoveInWizardMenuActivity extends AbstractActivity implements MoveIn
     }
 
     @Override
-    public void start(AcceptsOneWidget panel, EventBus eventBus) {
-        panel.setWidget(view);
+    public void start(final AcceptsOneWidget panel, EventBus eventBus) {
+
         view.setUserName(ClientContext.getUserVisit().getName());
-        view.updateState(MoveInWizardManager.getCompleteSteps(), place instanceof IMoveInPlace ? MoveInWizardManager.getCurrentStep() : null);
-        view.setMenuVisible(!(place instanceof ResidentPortalSiteMap.MoveIn.NewGuarantorWelcomePage || place instanceof ResidentPortalSiteMap.MoveIn.NewTenantWelcomePage));
-        AppSite.getEventBus().fireEvent(new LayoutChangeRequestEvent(ChangeType.resizeComponents));
+        panel.setWidget(view);
+
+        eventBus.addHandler(MoveInWizardStateChangeEvent.getType(), new MoveInWizardStateChangeHandler() {
+
+            @Override
+            public void onStateChange(MoveInWizardStateChangeEvent event) {
+                view.updateState();
+                AppSite.getEventBus().fireEvent(new LayoutChangeRequestEvent(ChangeType.resizeComponents));
+            }
+        });
+
     }
 }

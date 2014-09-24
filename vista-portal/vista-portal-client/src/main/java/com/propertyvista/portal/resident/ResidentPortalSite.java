@@ -22,6 +22,7 @@ import com.pyx4j.site.shared.domain.Notification;
 
 import com.propertyvista.domain.security.common.VistaApplication;
 import com.propertyvista.portal.resident.activity.PortalClientCommunicationManager;
+import com.propertyvista.portal.resident.activity.movein.MoveInWizardManager;
 import com.propertyvista.portal.resident.themes.ResidentPortalTheme;
 import com.propertyvista.portal.resident.ui.ResidentPortalRootPane;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
@@ -43,6 +44,7 @@ public class ResidentPortalSite extends PortalSite {
         super.onSiteLoad();
 
         PortalClientCommunicationManager.instance();
+        MoveInWizardManager.init();
         ResidentWalkMe.init();
     }
 

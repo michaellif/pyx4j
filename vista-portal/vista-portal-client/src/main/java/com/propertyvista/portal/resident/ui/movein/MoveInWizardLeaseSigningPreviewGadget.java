@@ -27,11 +27,11 @@ import com.propertyvista.portal.rpc.portal.resident.ResidentPortalSiteMap;
 import com.propertyvista.portal.shared.ui.AbstractGadget;
 import com.propertyvista.portal.shared.ui.GadgetToolbar;
 
-public class MoveInWizardLeaseSigningPreviewGadget extends AbstractGadget<MoveInWizardStepPreviewView> {
+public class MoveInWizardLeaseSigningPreviewGadget extends AbstractGadget<MoveInWizardView> {
 
-    private static final I18n i18n = I18n.get(NewTenantWelcomeGadget.class);
+    private static final I18n i18n = I18n.get(TenantWelcomeGadget.class);
 
-    public MoveInWizardLeaseSigningPreviewGadget(MoveInWizardStepPreviewView view) {
+    public MoveInWizardLeaseSigningPreviewGadget(MoveInWizardView view) {
         super(view, null, i18n.tr("Lease Agreement "), ThemeColor.contrast2, 1);
         setActionsToolbar(new MoveInWizardLeaseSigningPreviewToolbar());
 

@@ -20,7 +20,7 @@ import com.pyx4j.commons.css.ThemeColor;
 import com.propertyvista.portal.rpc.portal.resident.dto.movein.MoveInWizardStep;
 import com.propertyvista.portal.shared.ui.MenuItem;
 
-public class WizardStepItem extends MenuItem<StepIndexLabel> {
+public class MoveInWizardStepMenuItem extends MenuItem<MoveInWizardStepIndexLabel> {
 
     public static enum StepStatus {
         notComplete, complete, current
@@ -28,8 +28,8 @@ public class WizardStepItem extends MenuItem<StepIndexLabel> {
 
     private final MoveInWizardStep step;
 
-    public WizardStepItem(MoveInWizardStep step, Command command, int index, ThemeColor color) {
-        super(step.toString(), command, new StepIndexLabel(String.valueOf(index + 1)), color);
+    public MoveInWizardStepMenuItem(MoveInWizardStep step, Command command, int index, ThemeColor color) {
+        super(step.toString(), command, new MoveInWizardStepIndexLabel(String.valueOf(index + 1)), color);
         this.step = step;
     }
 

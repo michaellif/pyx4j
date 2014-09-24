@@ -21,6 +21,7 @@ import com.pyx4j.site.shared.meta.PublicPlace;
 
 import com.propertyvista.domain.security.PortalResidentBehavior;
 import com.propertyvista.domain.security.common.VistaBasicBehavior;
+import com.propertyvista.portal.resident.activity.movein.MoveInWizardManager;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
 import com.propertyvista.portal.rpc.portal.resident.ResidentPortalSiteMap;
 
@@ -56,13 +57,9 @@ public class ResidentPortalSiteDispatcher extends AbstractAppPlaceDispatcher {
             return new PortalSiteMap.PasswordReset();
         } else if (SecurityController.check(PortalResidentBehavior.LeaseSelectionRequired)) {
             return new ResidentPortalSiteMap.LeaseContextSelection();
-        } else if (SecurityController.check(PortalResidentBehavior.LeaseAgreementSigningRequired)) {
+        } else if (SecurityController.check(PortalResidentBehavior.MoveInWizardCompletionAvailable)) {
             if (newPlace == AppPlace.NOWHERE) {
-                if (SecurityController.check(PortalResidentBehavior.Resident)) {
-                    return new ResidentPortalSiteMap.MoveIn.NewTenantWelcomePage();
-                } else if (SecurityController.check(PortalResidentBehavior.Guarantor)) {
-                    return new ResidentPortalSiteMap.MoveIn.NewGuarantorWelcomePage();
-                }
+                return new ResidentPortalSiteMap.MoveIn.MoveInWizard();
             }
         }
         return newPlace;

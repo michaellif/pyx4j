@@ -47,10 +47,7 @@ import com.propertyvista.portal.resident.activity.leasesigning.LeaseSigningWizar
 import com.propertyvista.portal.resident.activity.maintenance.MaintenanceDashboardActivity;
 import com.propertyvista.portal.resident.activity.maintenance.MaintenanceRequestPageActivity;
 import com.propertyvista.portal.resident.activity.maintenance.MaintenanceRequestWizardActivity;
-import com.propertyvista.portal.resident.activity.movein.MoveInWizardCompletionConfirmationActivity;
-import com.propertyvista.portal.resident.activity.movein.MoveInWizardStepPreviewActivity;
-import com.propertyvista.portal.resident.activity.movein.NewGuarantorWelcomePageActivity;
-import com.propertyvista.portal.resident.activity.movein.NewTenantWelcomePageActivity;
+import com.propertyvista.portal.resident.activity.movein.MoveInWizardActivity;
 import com.propertyvista.portal.resident.activity.offers.dashboard.OffersDashboardActivity;
 import com.propertyvista.portal.resident.activity.profile.AccountPageActivity;
 import com.propertyvista.portal.resident.activity.profile.ProfilePageActivity;
@@ -167,14 +164,8 @@ public class ContentActivityMapper implements AppActivityMapper {
                         activity = new MaintenanceRequestPageActivity(appPlace);
 
 // Move-in
-                    } else if (place instanceof ResidentPortalSiteMap.MoveIn.NewTenantWelcomePage) {
-                        activity = new NewTenantWelcomePageActivity(appPlace);
-                    } else if (place instanceof ResidentPortalSiteMap.MoveIn.NewGuarantorWelcomePage) {
-                        activity = new NewGuarantorWelcomePageActivity(appPlace);
-                    } else if (place instanceof ResidentPortalSiteMap.MoveIn.MoveInWizardStepPreview) {
-                        activity = new MoveInWizardStepPreviewActivity(appPlace);
-                    } else if (place instanceof ResidentPortalSiteMap.MoveIn.MoveInWizardCompletionConfirmation) {
-                        activity = new MoveInWizardCompletionConfirmationActivity(appPlace);
+                    } else if (place instanceof ResidentPortalSiteMap.MoveIn.MoveInWizard) {
+                        activity = new MoveInWizardActivity(appPlace);
 
 // LeaseSigning                        
                     } else if (place instanceof ResidentPortalSiteMap.LeaseSigning.LeaseSigningWizard) {
