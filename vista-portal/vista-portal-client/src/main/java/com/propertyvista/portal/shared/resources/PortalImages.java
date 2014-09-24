@@ -58,6 +58,10 @@ public interface PortalImages extends ClientBundle, FolderImages, WidgetsImageBu
     ImageResource menu();
 
     @ImageOptions(repeatStyle = RepeatStyle.Both)
+    @Source("help.png")
+    ImageResource help();
+
+    @ImageOptions(repeatStyle = RepeatStyle.Both)
     @Source("Header_Logo-myCommunity.png")
     ImageResource myCommunityHeaderLogo();
 

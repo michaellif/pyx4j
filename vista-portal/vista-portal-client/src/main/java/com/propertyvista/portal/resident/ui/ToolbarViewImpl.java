@@ -61,6 +61,8 @@ public class ToolbarViewImpl extends FlowPanel implements ToolbarView {
 
     private final Button communicationButton;
 
+    private final Button helpButton;
+
     private final MenuItem myProfileMenu;
 
     private final MenuItem myAccountMenu;
@@ -130,6 +132,14 @@ public class ToolbarViewImpl extends FlowPanel implements ToolbarView {
 
         tenantButton.setMenu(tenantButtonMenu);
 
+        helpButton = new Button(PortalImages.INSTANCE.help(), new Command() {
+            @Override
+            public void execute() {
+
+            }
+        });
+        helpButton.ensureDebugId("help");
+
         loginButton = new Button(i18n.tr("Log In"), new Command() {
             @Override
             public void execute() {
@@ -160,6 +170,7 @@ public class ToolbarViewImpl extends FlowPanel implements ToolbarView {
         communicationButton.addStyleName(WidgetTheme.StyleName.Button.name());
 
         rightToolbar.addItem(loginButton);
+        rightToolbar.addItem(helpButton);
         rightToolbar.addItem(tenantButton);
 
         //TODO implement lang selector
@@ -281,12 +292,14 @@ public class ToolbarViewImpl extends FlowPanel implements ToolbarView {
         case phoneLandscape:
             sideMenuButton.setVisible(loggedIn);
             tenantButton.setVisible(false);
+            helpButton.setVisible(false);
             languageButton.setVisible(false);
             brandHolder.getElement().getStyle().setProperty("margin", "0 50%");
             brandImage.getElement().getStyle().setProperty("margin", "5px -25px 0");
             break;
         default:
             sideMenuButton.setVisible(false);
+            helpButton.setVisible(true);
             tenantButton.setVisible(loggedIn);
             languageButton.setVisible(true);
             brandHolder.getElement().getStyle().setProperty("margin", "0");

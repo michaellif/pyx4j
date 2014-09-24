@@ -77,13 +77,14 @@ public class PortalRootPaneTheme extends Theme {
         addStyle(style);
 
         style = new Style(".", StyleName.MainToolbar, " .", WidgetTheme.StyleName.Toolbar);
-        style.addProperty("margin", "8px 10px 0 8px");
+        style.addProperty("margin", "9px 10px 0 8px");
         style.addProperty("display", "inline-block");
         style.addProperty("vertical-align", "top");
         addStyle(style);
 
         style = new Style(".", StyleName.MainToolbar, " .", WidgetTheme.StyleName.ToolbarItem);
         style.addProperty("font-size", "1em");
+        style.addProperty("vertical-align", "top");
         addStyle(style);
 
         style = new Style(".", StyleName.BrandImage);
