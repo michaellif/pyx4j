@@ -26,13 +26,14 @@ import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.security.shared.UserVisit;
-import com.pyx4j.server.contexts.ServerContext;
 import com.pyx4j.server.contexts.NamespaceManager;
+import com.pyx4j.server.contexts.ServerContext;
 import com.pyx4j.server.contexts.Visit;
 import com.pyx4j.server.mail.Mail;
 import com.pyx4j.server.mail.MailMessage;
 
 import com.propertyvista.config.AbstractVistaServerSideConfiguration;
+import com.propertyvista.config.VistaDeployment;
 import com.propertyvista.domain.VistaNamespace;
 import com.propertyvista.operations.domain.vista2pmc.OperationsAlert;
 import com.propertyvista.server.TaskRunner;
@@ -75,7 +76,7 @@ public class OperationsAlertFacadeImpl implements OperationsAlertFacade {
                     MailMessage m = new MailMessage();
                     m.addToList("support_team@propertyvista.com,support-payments@propertyvista.com");
                     m.setSender(ServerSideConfiguration.instance().getApplicationEmailSender());
-                    m.setSubject("Vista Operations Alert");
+                    m.setSubject(subjectPrefix() + "Vista Operations Alert");
                     m.setTextBody(details);
                     Mail.queueUofW(m, null, ServerSideConfiguration.instance(AbstractVistaServerSideConfiguration.class)
                             .getOperationsAlertMailServiceConfiguration());
@@ -91,7 +92,7 @@ public class OperationsAlertFacadeImpl implements OperationsAlertFacade {
             MailMessage m = new MailMessage();
             m.addToList("support_team@propertyvista.com,support-payments@propertyvista.com");
             m.setSender(ServerSideConfiguration.instance().getApplicationEmailSender());
-            m.setSubject("Vista Operations Alert " + subject);
+            m.setSubject(subjectPrefix() + "Vista Operations Alert " + subject);
             m.setTextBody(SimpleMessageFormat.format(messageFormat, args));
             Mail.queueUofW(m, null, ServerSideConfiguration.instance(AbstractVistaServerSideConfiguration.class).getOperationsAlertMailServiceConfiguration());
         }
@@ -125,4 +126,16 @@ public class OperationsAlertFacadeImpl implements OperationsAlertFacade {
         }
     }
 
+    private String subjectPrefix() {
+        if (VistaDeployment.isVistaProduction()) {
+            return "";
+        } else {
+            Integer enviromentId = ServerSideConfiguration.instance(AbstractVistaServerSideConfiguration.class).enviromentId();
+            if (enviromentId != null) {
+                return SimpleMessageFormat.format("Test on Env{0} : ", enviromentId);
+            } else {
+                return "Test : ";
+            }
+        }
+    }
 }
