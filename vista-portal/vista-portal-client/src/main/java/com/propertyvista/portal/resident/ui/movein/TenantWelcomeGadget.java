@@ -63,7 +63,6 @@ public class TenantWelcomeGadget extends AbstractGadget<MoveInWizardView> {
             startButton = new Button(i18n.tr("I’m Ready. Let’s Go!"), new Command() {
                 @Override
                 public void execute() {
-                    MoveInWizardManager.nextStep();
                     AppSite.getPlaceController().goTo(new ResidentPortalSiteMap.MoveIn.MoveInWizard());
                 }
             });

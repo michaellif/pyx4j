@@ -77,7 +77,7 @@ public class MoveInWizardInsurancePreviewGadget extends AbstractGadget<MoveInWiz
             Button skipButton = new Button(i18n.tr("later"), new Command() {
                 @Override
                 public void execute() {
-                    AppSite.getPlaceController().goTo(new ResidentPortalSiteMap.LeaseSigning.LeaseSigningWizard());
+                    AppSite.getPlaceController().goTo(new ResidentPortalSiteMap.MoveIn.MoveInWizard());
                 }
             });
             skipButton.addStyleName(MoveInWizardTheme.StyleName.DoItLaterButton.name());

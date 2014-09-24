@@ -53,10 +53,9 @@ public class MoveInWizardManager {
                         @Override
                         public void onSuccess(MoveInWizardStatusTO result) {
                             wizardStatus = result;
-
                             setCurrentStep(event.getNewPlace() instanceof IMoveInPlace ? getCurrentStep() : null);
-
                             ClientEventBus.instance.fireEvent(new MoveInWizardStateChangeEvent());
+                            started = true;
                         }
 
                         @Override
@@ -99,11 +98,10 @@ public class MoveInWizardManager {
         GWT.<MoveInWizardService> create(MoveInWizardService.class).skipStep(null, step);
     }
 
-    public static void nextStep() {
-        started = true;
+    private static void nextStep() {
         for (MoveInWizardStepStatusTO step : wizardStatus.steps()) {
             if (!isStepComplete(step.step().getValue())) {
-                setCurrentStep(step.step().getValue());
+                currentStep = step.step().getValue();
                 return;
             }
         }
@@ -122,9 +120,13 @@ public class MoveInWizardManager {
     }
 
     public static void setCurrentStep(MoveInWizardStep step) {
-        if (!isStepComplete(step)) {
-            MoveInWizardManager.currentStep = step;
+        System.out.println("+++++++++setCurrentStep before " + currentStep);
+        if (step != null && !isStepComplete(step)) {
+            currentStep = step;
+        } else {
+            nextStep();
         }
+        System.out.println("+++++++++setCurrentStep after " + currentStep);
     }
 
 }
