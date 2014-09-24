@@ -34,10 +34,12 @@ import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.site.client.backoffice.ui.prime.lister.ILister;
 import com.pyx4j.widgets.client.Label;
 
+import com.propertyvista.domain.communication.CommunicationGroup;
 import com.propertyvista.domain.company.Employee;
 import com.propertyvista.domain.company.Portfolio;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.tenant.lease.Tenant;
+import com.propertyvista.dto.CommunicationEndpointDTO;
 
 public class SelectRecipientsDialogForm extends HorizontalPanel {
 
@@ -66,13 +68,15 @@ public class SelectRecipientsDialogForm extends HorizontalPanel {
     private Collection<Portfolio> selectedPortfolios;
 
     public SelectRecipientsDialogForm() {
-        super();
-
-        initForm();
-
+        this(null);
     }
 
-    private void initForm() {
+    public SelectRecipientsDialogForm(Collection<CommunicationEndpointDTO> alreadySelected) {
+        super();
+        initForm(alreadySelected);
+    }
+
+    private void initForm(Collection<CommunicationEndpointDTO> alreadySelected) {
 
         final FlowPanel listPanel = new FlowPanel();
         listPanel.setWidth("100%");
@@ -85,7 +89,7 @@ public class SelectRecipientsDialogForm extends HorizontalPanel {
             public void onClick(ClickEvent event) {
                 event.stopPropagation();
                 grabSelectedItems();
-                lister = new SelectorDialogTenantLister(true, selectedTenants);
+                lister = new SelectorDialogTenantLister(false, selectedTenants);
                 tenantListerController = new SelectorDialogTenantListerController(lister, ((SelectorDialogTenantLister) lister).getSelectService());
                 listPanel.clear();
                 listPanel.add(lister.asWidget());
@@ -139,6 +143,7 @@ public class SelectRecipientsDialogForm extends HorizontalPanel {
 
         add(listPanel);
         setCellWidth(listPanel, "100%");
+        dealSelectedRecepients(alreadySelected);
     }
 
     public void grabSelectedItems() {
@@ -172,4 +177,40 @@ public class SelectRecipientsDialogForm extends HorizontalPanel {
         return selected;
     }
 
+    private void dealSelectedRecepients(Collection<CommunicationEndpointDTO> selected) {
+        for (CommunicationEndpointDTO current : selected) {
+            if (current.endpoint().getInstanceValueClass().equals(Tenant.class)) {
+                if (selectedTenants == null) {
+                    selectedTenants = new ArrayList<Tenant>();
+                }
+                Tenant t = current.endpoint().cast();
+                selectedTenants.add(t);
+            } else if (current.endpoint().getInstanceValueClass().equals(Employee.class)) {
+                if (selectedEmployees == null) {
+                    selectedEmployees = new ArrayList<Employee>();
+                }
+                Employee e = current.endpoint().cast();
+                selectedEmployees.add(e);
+            } else if (current.endpoint().getInstanceValueClass().equals(CommunicationGroup.class)) {
+                CommunicationGroup cg = current.endpoint().cast();
+                if (cg.portfolio() != null && !cg.portfolio().isNull() && !cg.portfolio().isEmpty()) {
+                    if (selectedPortfolios == null) {
+                        selectedPortfolios = new ArrayList<Portfolio>();
+                    }
+                    Portfolio p = cg.portfolio().cast();
+                    selectedPortfolios.add(p);
+
+                } else {
+                    if (selectedBuildings == null) {
+                        selectedBuildings = new ArrayList<Building>();
+                    }
+                    Building b = cg.building().cast();
+                    selectedBuildings.add(b);
+
+                }
+
+            }
+
+        }
+    }
 }

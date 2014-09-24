@@ -38,29 +38,14 @@ public class CommunicationEndpointSelectorAddDialog extends Dialog implements Ok
 
     private final CommunicationEndpointSelector parent;
 
-    public CommunicationEndpointSelectorAddDialog(CommunicationEndpointSelector parent, Collection<CommunicationEndpointDTO> alreadySelected) {
+    public CommunicationEndpointSelectorAddDialog(CommunicationEndpointSelector parent) {
         super("Select recipients");
-        this.setDialogOptions(this);
         this.parent = parent;
-        this.alreadySelected = (alreadySelected != null ? alreadySelected : new ArrayList<CommunicationEndpointDTO>());
-        selectForm = new SelectRecipientsDialogForm();
+        alreadySelected = (parent.getValue() != null ? parent.getValue() : new ArrayList<CommunicationEndpointDTO>());
+        selectForm = new SelectRecipientsDialogForm(alreadySelected);
+        setDialogOptions(this);
         setDialogPixelWidth(1000);
         setBody(selectForm);
-
-    }
-
-    public CommunicationEndpointSelectorAddDialog(CommunicationEndpointSelector parent) {
-        this(parent, parent.getValue());
-    }
-
-    public CommunicationEndpointSelectorAddDialog(Collection<CommunicationEndpointDTO> alreadySelected) {
-        this(null, alreadySelected);
-
-    }
-
-    public CommunicationEndpointSelectorAddDialog() {
-        this(null, null);
-
     }
 
     @Override
@@ -78,6 +63,9 @@ public class CommunicationEndpointSelectorAddDialog extends Dialog implements Ok
     }
 
     private void setSelectedItems(Collection<? extends IEntity> eps) {
+        if (alreadySelected != null) {
+            alreadySelected.clear();
+        }
         if (eps != null && eps.size() > 0) {
             for (IEntity selected : eps) {
                 if (!ClientContext.getUserVisit().getPrincipalPrimaryKey().equals(selected.getPrimaryKey())) {
