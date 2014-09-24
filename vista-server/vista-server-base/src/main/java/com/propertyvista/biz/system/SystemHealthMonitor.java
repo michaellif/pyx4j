@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011-2012 All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -13,7 +13,9 @@
  */
 package com.propertyvista.biz.system;
 
+import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 
 import org.apache.commons.lang.time.DateUtils;
 
@@ -83,9 +85,18 @@ class SystemHealthMonitor {
         for (Trigger trigger : Persistence.service().query(criteria)) {
             Date verifyDay = DateUtils.addDays(forDate, -7);
             while (verifyDay.before(forDate)) {
+                Calendar dayStart = new GregorianCalendar();
+                dayStart.setTime(verifyDay);
+                com.pyx4j.gwt.server.DateUtils.dayStart(dayStart);
+
+                Calendar dayEnd = new GregorianCalendar();
+                dayEnd.setTime(verifyDay);
+                com.pyx4j.gwt.server.DateUtils.dayEnd(dayEnd);
+
                 EntityQueryCriteria<Run> criteria2 = EntityQueryCriteria.create(Run.class);
                 criteria2.eq(criteria2.proto().status(), RunStatus.Completed);
-                criteria2.eq(criteria2.proto().forDate(), new LogicalDate(verifyDay));
+                criteria2.ge(criteria2.proto().forDate(), dayStart);
+                criteria2.le(criteria2.proto().forDate(), dayEnd);
                 criteria2.eq(criteria2.proto().trigger(), trigger);
 
                 if (!Persistence.service().exists(criteria2)) {
