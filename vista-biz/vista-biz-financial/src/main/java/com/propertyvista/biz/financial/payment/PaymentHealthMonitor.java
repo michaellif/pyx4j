@@ -14,6 +14,7 @@
 package com.propertyvista.biz.financial.payment;
 
 import java.util.Date;
+import java.util.EnumSet;
 import java.util.concurrent.Callable;
 
 import org.apache.commons.lang.time.DateUtils;
@@ -254,7 +255,8 @@ class PaymentHealthMonitor {
                         executionMonitor.addFailedEvent("CardTransaction", paymentRecord.amount().getValue());
                     } else {
                         boolean statusMismatch = false;
-                        if (paymentRecord.paymentStatus().getValue() == PaymentRecord.PaymentStatus.Cleared) {
+                        if (EnumSet.of(PaymentRecord.PaymentStatus.Cleared, PaymentRecord.PaymentStatus.Received).contains(
+                                paymentRecord.paymentStatus().getValue())) {
                             if (!"0000".equals(cardTransactionRecord.saleResponseCode().getValue())) {
                                 statusMismatch = true;
                             }
