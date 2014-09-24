@@ -17,8 +17,11 @@ import java.util.Vector;
 
 import com.google.gwt.dom.client.Style.Cursor;
 import com.google.gwt.dom.client.Style.Display;
+import com.google.gwt.dom.client.Style.Overflow;
 import com.google.gwt.dom.client.Style.Position;
+import com.google.gwt.dom.client.Style.TextOverflow;
 import com.google.gwt.dom.client.Style.Unit;
+import com.google.gwt.dom.client.Style.WhiteSpace;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.Command;
@@ -116,7 +119,7 @@ public class CommunicationViewImpl extends FlowPanel implements CommunicationVie
         int dispatchedMessagesNum = 0;
         if (messages != null && messages.size() > 0) {
             for (final MessageDTO message : messages) {
-                boolean isDirect = message.isDirect().getValue(false);//MessageGroupCategory.Custom.toString().equals(message.topic().category().getValue().toString());
+                boolean isDirect = message.isDirect().getValue(false);
                 mainHolder.add(new MessagePanel(message, isDirect));
                 if (isDirect) {
                     directMessagesNum++;
@@ -168,6 +171,10 @@ public class CommunicationViewImpl extends FlowPanel implements CommunicationVie
                 }
             });
             messageField = new Label(HtmlUtils.removeHtmlTags(message.text().getStringView()));
+            messageField.getElement().getStyle().setWidth(300, Unit.PX);
+            messageField.getElement().getStyle().setWhiteSpace(WhiteSpace.NOWRAP);
+            messageField.getElement().getStyle().setOverflow(Overflow.HIDDEN);
+            messageField.getElement().getStyle().setTextOverflow(TextOverflow.ELLIPSIS);
 
             dateField = new Label(message.date().getStringView());
             senderField = new Label(message.senderDTO().getStringView());

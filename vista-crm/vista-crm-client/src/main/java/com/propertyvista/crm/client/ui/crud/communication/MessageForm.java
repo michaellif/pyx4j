@@ -148,9 +148,11 @@ public class MessageForm extends CrmEntityForm<MessageDTO> {
                 @Override
                 public SafeHtml format(MessageDTO value) {
 
+                    String body = HtmlUtils.removeHtmlTags(value.text().getValue(""));
+                    body = body.length() > 100 ? body.substring(0, 100) + " ..." : body;
                     SafeHtmlBuilder loginTermsBuilder = new SafeHtmlBuilder();
                     return loginTermsBuilder.appendHtmlConstant(SimpleMessageFormat.format("{0}, {1}:", value.header().sender().getValue(""), value.date()))
-                            .appendHtmlConstant("<br/>").appendHtmlConstant(HtmlUtils.removeHtmlTags(value.text().getValue(""))).toSafeHtml();
+                            .appendHtmlConstant(body).toSafeHtml();
                 }
             });
 

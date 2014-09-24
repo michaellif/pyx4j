@@ -17,8 +17,11 @@ import java.util.Vector;
 
 import com.google.gwt.dom.client.Style.Cursor;
 import com.google.gwt.dom.client.Style.Display;
+import com.google.gwt.dom.client.Style.Overflow;
 import com.google.gwt.dom.client.Style.Position;
+import com.google.gwt.dom.client.Style.TextOverflow;
 import com.google.gwt.dom.client.Style.Unit;
+import com.google.gwt.dom.client.Style.WhiteSpace;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.Command;
@@ -154,7 +157,13 @@ public class CommunicationViewImpl extends FlowPanel implements CommunicationVie
                     AppSite.getPlaceController().goTo(new ResidentPortalSiteMap.Message.MessagePage(message.getPrimaryKey()));
                 }
             });
+
             messageField = new Label(HtmlUtils.removeHtmlTags(message.text().getStringView()));
+            messageField.getElement().getStyle().setWidth(350, Unit.PX);
+            messageField.getElement().getStyle().setWhiteSpace(WhiteSpace.NOWRAP);
+            messageField.getElement().getStyle().setOverflow(Overflow.HIDDEN);
+            messageField.getElement().getStyle().setTextOverflow(TextOverflow.ELLIPSIS);
+
             dateField = new Label(message.date().getStringView());
             senderField = new Label(message.sender().getStringView());
 
