@@ -49,7 +49,7 @@ public class GeoLocationEditor extends CForm<GeoLocation> {
     protected IsWidget createContent() {
         FormPanel formPanel = new FormPanel(this);
 
-        formPanel.append(Location.Left, proto().latitude()).decorate().componentWidth(120);
+        formPanel.append(Location.Left, proto().latitude()).decorate().componentWidth(100);
         formPanel.append(Location.Left, proto().latitudeType()).decorate().componentWidth(100).customLabel("Latitude Direction");
 
         formPanel.append(Location.Right, proto().longitude()).decorate().componentWidth(100);
