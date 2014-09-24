@@ -299,7 +299,7 @@ public class ToolbarViewImpl extends FlowPanel implements ToolbarView {
             break;
         default:
             sideMenuButton.setVisible(false);
-            helpButton.setVisible(true);
+            helpButton.setVisible(loggedIn);
             tenantButton.setVisible(loggedIn);
             languageButton.setVisible(true);
             brandHolder.getElement().getStyle().setProperty("margin", "0");
