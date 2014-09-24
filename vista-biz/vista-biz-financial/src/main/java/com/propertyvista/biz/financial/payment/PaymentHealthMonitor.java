@@ -206,7 +206,7 @@ class PaymentHealthMonitor {
         // see if caledon created reconciliation report
         {
             Date reportSince = com.pyx4j.gwt.server.DateUtils.detectDateformat("2014-06-09"); // DateUtils.addMonths(forDate, -2);
-            Date reportBefore = DateUtils.addDays(forDate, -2);
+            Date reportBefore = DateUtils.addDays(forDate, -3);
             EntityQueryCriteria<PaymentRecord> criteria = EntityQueryCriteria.create(PaymentRecord.class);
             criteria.ge(criteria.proto().finalizeDate(), reportSince);
             criteria.le(criteria.proto().finalizeDate(), reportBefore);
@@ -222,7 +222,7 @@ class PaymentHealthMonitor {
         }
         {
             Date reportSince = com.pyx4j.gwt.server.DateUtils.detectDateformat("2014-06-09"); // DateUtils.addMonths(forDate, -2);
-            Date reportBefore = DateUtils.addDays(forDate, -2);
+            Date reportBefore = DateUtils.addDays(forDate, -4);
             EntityQueryCriteria<PaymentRecord> criteria = EntityQueryCriteria.create(PaymentRecord.class);
             criteria.ge(criteria.proto().finalizeDate(), reportSince);
             criteria.le(criteria.proto().finalizeDate(), reportBefore);
