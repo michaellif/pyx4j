@@ -23,11 +23,7 @@ import com.propertyvista.dto.CommunicationEndpointDTO;
 public class CommunicationEndpointSelector extends CSelectorListBox<CommunicationEndpointDTO> {
 
     public CommunicationEndpointSelector() {
-        super(new CommunicationEndpointOptionsGrabber(), null);
-        init();
-    }
-
-    private void init() {
+        super(new CommunicationEndpointOptionsGrabber());
         setCommand(new Command() {
 
             @Override
@@ -39,4 +35,5 @@ public class CommunicationEndpointSelector extends CSelectorListBox<Communicatio
         });
 
     }
+
 }
