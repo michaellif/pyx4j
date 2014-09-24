@@ -42,7 +42,12 @@ public class PapCoveredItemDtoFolder extends PortalBoxFolder<PreauthorizedPaymen
     static final I18n i18n = I18n.get(PapCoveredItemDtoFolder.class);
 
     public PapCoveredItemDtoFolder() {
-        super(PreauthorizedPaymentCoveredItemDTO.class, false);
+        this(false);
+    }
+
+    public PapCoveredItemDtoFolder(boolean modifiable) {
+        super(PreauthorizedPaymentCoveredItemDTO.class, modifiable);
+        setOrderable(false);
         setExpended(true);
     }
 
@@ -78,13 +83,11 @@ public class PapCoveredItemDtoFolder extends PortalBoxFolder<PreauthorizedPaymen
         protected IsWidget createContent() {
             FormPanel formPanel = new FormPanel(this);
 
-            formPanel.append(Location.Left, proto().billableItem(), new PapBillableItemLabel()).decorate().componentWidth(200)
-                    .customLabel(i18n.tr("Lease Charge"));
-            formPanel.append(Location.Left, proto().billableItem().agreedPrice(), new CMoneyLabel()).decorate().componentWidth(100)
-                    .customLabel(i18n.tr("Price"));
-            formPanel.append(Location.Left, proto().covered(), new CMoneyLabel()).decorate().componentWidth(100);
+            formPanel.append(Location.Left, proto().billableItem(), new PapBillableItemLabel()).decorate().customLabel(i18n.tr("Lease Charge"));
+            formPanel.append(Location.Left, proto().billableItem().agreedPrice(), new CMoneyLabel()).decorate().customLabel(i18n.tr("Price"));
+            formPanel.append(Location.Left, proto().covered(), new CMoneyLabel()).decorate();
             formPanel.append(Location.Left, proto().amount()).decorate().componentWidth(100).customLabel(i18n.tr("Payment"));
-            formPanel.append(Location.Left, proto().percent(), new CPercentageLabel()).decorate().componentWidth(100);
+            formPanel.append(Location.Left, proto().percent(), new CPercentageLabel()).decorate();
 
             // tweaks:
             get(proto().amount()).addValueChangeHandler(new ValueChangeHandler<BigDecimal>() {

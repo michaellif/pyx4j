@@ -41,8 +41,9 @@ public class PapCoveredItemFolder extends PortalBoxFolder<AutopayAgreement.Autop
         this(false);
     }
 
-    public PapCoveredItemFolder(boolean editable) {
-        super(AutopayAgreement.AutopayAgreementCoveredItem.class, editable);
+    public PapCoveredItemFolder(boolean modifiable) {
+        super(AutopayAgreement.AutopayAgreementCoveredItem.class, modifiable);
+        setOrderable(false);
     }
 
     @Override
@@ -77,11 +78,9 @@ public class PapCoveredItemFolder extends PortalBoxFolder<AutopayAgreement.Autop
         protected IsWidget createContent() {
             FormPanel formPanel = new FormPanel(this);
 
-            formPanel.append(Location.Left, proto().billableItem(), new PapBillableItemLabel()).decorate().componentWidth(200)
-                    .customLabel(i18n.tr("Lease Charge"));
-            formPanel.append(Location.Left, proto().billableItem().agreedPrice(), new CMoneyLabel()).decorate().componentWidth(100)
-                    .customLabel(i18n.tr("Price"));
-            formPanel.append(Location.Left, proto().amount(), new CMoneyLabel()).decorate().componentWidth(100).customLabel(i18n.tr("Payment"));
+            formPanel.append(Location.Left, proto().billableItem(), new PapBillableItemLabel()).decorate().customLabel(i18n.tr("Lease Charge"));
+            formPanel.append(Location.Left, proto().billableItem().agreedPrice(), new CMoneyLabel()).decorate().customLabel(i18n.tr("Price"));
+            formPanel.append(Location.Left, proto().amount(), new CMoneyLabel()).decorate().customLabel(i18n.tr("Payment"));
 
             get(proto().amount()).asWidget().getElement().getStyle().setFontWeight(FontWeight.BOLD);
 

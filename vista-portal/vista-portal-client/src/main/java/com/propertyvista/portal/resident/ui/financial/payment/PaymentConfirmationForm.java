@@ -40,6 +40,7 @@ import com.propertyvista.dto.PaymentRecordDTO;
 import com.propertyvista.portal.resident.ui.financial.payment.PaymentConfirmationView.PaymentConfirmationPresenter;
 import com.propertyvista.portal.shared.ui.AbstractFormView;
 import com.propertyvista.portal.shared.ui.CPortalEntityForm;
+import com.propertyvista.portal.shared.ui.util.CCurrencyMoneyLabel;
 
 public class PaymentConfirmationForm extends CPortalEntityForm<PaymentRecordDTO> {
 
@@ -69,7 +70,7 @@ public class PaymentConfirmationForm extends CPortalEntityForm<PaymentRecordDTO>
 
         formPanel.append(Location.Left, proto().id(), new CNumberLabel()).decorate().customLabel(i18n.tr("Reference Number"));
         formPanel.append(Location.Left, proto().paymentMethod(), new CEntityLabel<LeasePaymentMethod>()).decorate();
-        formPanel.append(Location.Left, proto().amount()).decorate();
+        formPanel.append(Location.Left, proto().amount(), new CCurrencyMoneyLabel(i18n.tr("CAD $"))).decorate();
         formPanel.append(Location.Left, proto().transactionAuthorizationNumber()).decorate();
         formPanel.append(Location.Left, proto().convenienceFee()).decorate();
         formPanel.append(Location.Left, proto().convenienceFeeTransactionAuthorizationNumber()).decorate();

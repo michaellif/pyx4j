@@ -43,6 +43,7 @@ import com.pyx4j.forms.client.ui.CDateLabel;
 import com.pyx4j.forms.client.ui.CEntityLabel;
 import com.pyx4j.forms.client.ui.CRadioGroupEnum;
 import com.pyx4j.forms.client.ui.CSimpleEntityComboBox;
+import com.pyx4j.forms.client.ui.decorators.FieldDecorator.Builder.Alignment;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.forms.client.ui.wizard.WizardStep;
@@ -70,6 +71,7 @@ import com.propertyvista.portal.rpc.portal.resident.ResidentPortalSiteMap.Reside
 import com.propertyvista.portal.rpc.portal.resident.dto.financial.AutoPayDTO;
 import com.propertyvista.portal.shared.ui.CPortalEntityWizard;
 import com.propertyvista.portal.shared.ui.TermsAnchor;
+import com.propertyvista.portal.shared.ui.util.CCurrencyMoneyLabel;
 import com.propertyvista.portal.shared.ui.util.decorators.FieldDecoratorBuilder;
 import com.propertyvista.portal.shared.ui.util.editors.PortalPaymentMethodEditor;
 
@@ -144,7 +146,8 @@ public class AutoPayWizard extends CPortalEntityWizard<AutoPayDTO> {
         addStep(createSelectPaymentMethodStep(), i18n.tr("Payment Method Selection"));
         comfirmationStep = addStep(createConfirmationStep(), i18n.tr("Confirmation"));
 
-        totalWidget = inject(proto().total(), new FieldDecoratorBuilder(100).build());
+        totalWidget = inject(proto().total(), new CCurrencyMoneyLabel(i18n.tr("CAD $")),
+                new FieldDecoratorBuilder().useLabelSemicolon(true).labelAlignment(Alignment.right).build());
     }
 
     private IsWidget createDetailsStep() {
@@ -243,7 +246,7 @@ public class AutoPayWizard extends CPortalEntityWizard<AutoPayDTO> {
         formPanel.append(Location.Left, proto().coveredItems(), new PapCoveredItemFolder());
         formPanel.append(Location.Left, confirmationTotalHolder);
         formPanel.br();
-        formPanel.append(Location.Left, proto().nextPaymentDate(), new CDateLabel()).decorate().componentWidth(100).labelWidth(250);
+        formPanel.append(Location.Left, proto().nextPaymentDate(), new CDateLabel()).decorate().componentWidth(100);
         formPanel.hr();
         formPanel.append(Location.Left, createLegalTermsPanel());
 

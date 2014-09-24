@@ -402,7 +402,7 @@ public class PaymentWizard extends CPortalEntityWizard<PaymentDTO> {
         panel.add(new HTML("<br/>"));
 
         panel.add(createDecorator(i18n.tr("Payment Method:"), get(proto().paymentMethod()).getValue().getStringView()));
-        panel.add(createDecorator(i18n.tr("Amount to pay:"), ((CTextFieldBase<?, ?>) get(proto().amount())).getFormattedValue()));
+        panel.add(createDecorator(i18n.tr("Amount to pay:"), "CAD " + ((CTextFieldBase<?, ?>) get(proto().amount())).getFormattedValue()));
 
         get(proto().convenienceFeeSignedTerm().signature()).setVisible(false);
 
@@ -413,8 +413,8 @@ public class PaymentWizard extends CPortalEntityWizard<PaymentDTO> {
             @Override
             public void onSuccess(ConvenienceFeeCalculationResponseTO result) {
                 if (result != null) {
-                    panel.add(createDecorator(i18n.tr("Web Payment Fee:"), result.feeAmount().getStringView()));
-                    panel.add(createDecorator(i18n.tr("Payment Total:"), result.total().getStringView()));
+                    panel.add(createDecorator(i18n.tr("Web Payment Fee:"), "CAD " + result.feeAmount().getStringView()));
+                    panel.add(createDecorator(i18n.tr("Payment Total:"), "CAD " + result.total().getStringView()));
 
                     get(proto().convenienceFeeSignedTerm().signature()).setVisible(true);
 

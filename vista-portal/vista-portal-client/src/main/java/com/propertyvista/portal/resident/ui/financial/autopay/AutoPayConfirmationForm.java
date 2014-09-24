@@ -19,7 +19,6 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.pyx4j.commons.css.ThemeColor;
 import com.pyx4j.forms.client.ui.CDateLabel;
 import com.pyx4j.forms.client.ui.CEntityLabel;
-import com.pyx4j.forms.client.ui.decorators.FieldDecorator.Builder.Alignment;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.i18n.shared.I18n;
@@ -30,6 +29,7 @@ import com.pyx4j.widgets.client.Button;
 import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.portal.rpc.portal.resident.dto.financial.AutoPayDTO;
 import com.propertyvista.portal.shared.ui.CPortalEntityForm;
+import com.propertyvista.portal.shared.ui.util.CCurrencyMoneyLabel;
 
 public class AutoPayConfirmationForm extends CPortalEntityForm<AutoPayDTO> {
 
@@ -49,16 +49,12 @@ public class AutoPayConfirmationForm extends CPortalEntityForm<AutoPayDTO> {
     protected IsWidget createContent() {
         FormPanel formPanel = new FormPanel(this);
 
-        formPanel.append(Location.Left, proto().paymentMethod(), new CEntityLabel<LeasePaymentMethod>()).decorate().componentWidth(200)
-                .labelAlignment(Alignment.left);
+        formPanel.append(Location.Left, proto().paymentMethod(), new CEntityLabel<LeasePaymentMethod>()).decorate();
         formPanel.append(Location.Left, proto().coveredItems(), new PapCoveredItemFolder());
-        formPanel.append(Location.Left, proto().total()).decorate().componentWidth(100);
-
+        formPanel.append(Location.Left, proto().total(), new CCurrencyMoneyLabel(i18n.tr("CAD $"))).decorate();
         formPanel.br();
-
         formPanel.append(Location.Left, proto().nextPaymentDate(), new CDateLabel()).decorate().componentWidth(100);
 
         return formPanel;
     }
-
 }
