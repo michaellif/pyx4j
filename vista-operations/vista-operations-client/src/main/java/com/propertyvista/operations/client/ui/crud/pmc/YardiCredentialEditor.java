@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011-2012 All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -51,6 +51,8 @@ class YardiCredentialEditor extends CForm<PmcYardiCredential> {
         FormPanel formPanel = new FormPanel(this);
 
         formPanel.h1(i18n.tr("Yardi Credentials"));
+        formPanel.append(Location.Left, proto().updated()).decorate();
+        formPanel.append(Location.Right, proto().created()).decorate();
         formPanel.append(Location.Dual, proto().serviceURLBase()).decorate();
         formPanel.append(Location.Dual, proto().residentTransactionsServiceURL()).decorate();
         formPanel.append(Location.Dual, proto().sysBatchServiceURL()).decorate();

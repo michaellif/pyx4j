@@ -13,10 +13,13 @@
  */
 package com.propertyvista.domain.settings;
 
+import java.util.Date;
+
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.Editor.EditorType;
+import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.Indexed;
 import com.pyx4j.entity.annotations.JoinColumn;
 import com.pyx4j.entity.annotations.Length;
@@ -24,6 +27,7 @@ import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.annotations.ReadOnly;
 import com.pyx4j.entity.annotations.Table;
+import com.pyx4j.entity.annotations.Timestamp;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.IPrimitive;
 import com.pyx4j.i18n.annotations.I18n;
@@ -47,6 +51,16 @@ public interface PmcYardiCredential extends IEntity {
     public enum Platform {
         SQL, Oracle
     }
+
+    @Caption(name = "Created")
+    @Format("MM/dd/yyyy HH:mm")
+    @Timestamp(Timestamp.Update.Created)
+    IPrimitive<Date> created();
+
+    @Caption(name = "Updated")
+    @Format("MM/dd/yyyy HH:mm")
+    @Timestamp(Timestamp.Update.Updated)
+    IPrimitive<Date> updated();
 
     IPrimitive<String> serviceURLBase();
 
@@ -72,7 +86,7 @@ public interface PmcYardiCredential extends IEntity {
 
     IPrimitive<Platform> platform();
 
-    //TODO rename to Property Lists 
+    //TODO rename to Property Lists
     @Length(4000)
     @Editor(type = EditorType.textarea)
     @MemberColumn(name = "property_code")

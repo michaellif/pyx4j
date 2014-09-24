@@ -30,9 +30,11 @@ import com.pyx4j.forms.client.ui.CPersonalIdentityField;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.site.client.AppPlaceEntityMapper;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.backoffice.ui.prime.form.IForm;
 import com.pyx4j.site.client.backoffice.ui.prime.lister.ListerDataSource;
+import com.pyx4j.site.rpc.CrudAppPlace;
 import com.pyx4j.widgets.client.Anchor;
 
 import com.propertyvista.common.client.ui.components.PasswordIdentityFormat;
@@ -51,6 +53,7 @@ import com.propertyvista.operations.domain.eft.cards.CardTransactionRecord;
 import com.propertyvista.operations.domain.eft.dbp.DirectDebitRecord;
 import com.propertyvista.operations.domain.vista2pmc.DefaultPaymentFees;
 import com.propertyvista.operations.rpc.OperationsSiteMap;
+import com.propertyvista.operations.rpc.dto.AuditRecordOperationsDTO;
 import com.propertyvista.operations.rpc.dto.PmcDTO;
 import com.propertyvista.operations.rpc.dto.PmcMerchantAccountDTO;
 
@@ -65,6 +68,8 @@ public class PmcForm extends OperationsEntityForm<PmcDTO> {
     private DirectDebitRecordLister directDebitRecordLister;
 
     private Anchor approvalLink;
+
+    private Anchor auditRecordsLink;
 
     public PmcForm(IForm<PmcDTO> view) {
         super(PmcDTO.class, view);
@@ -181,6 +186,24 @@ public class PmcForm extends OperationsEntityForm<PmcDTO> {
             }
 
         });
+
+        auditRecordsLink = new Anchor(i18n.tr("Audit Records for this PMC"));
+
+        auditRecordsLink.addClickHandler(new ClickHandler() {
+            @Override
+            public void onClick(ClickEvent event) {
+                CrudAppPlace place = AppPlaceEntityMapper.resolvePlace(AuditRecordOperationsDTO.class);
+
+                place.formListerPlace().queryArg(EntityFactory.getEntityPrototype(AuditRecordOperationsDTO.class).pmc().getPath().toString(),
+                        getValue().id().getValue().toString());
+
+                AppSite.getPlaceController().goTo(place);
+            }
+        });
+
+        formPanel.br();
+        formPanel.append(Location.Dual, auditRecordsLink);
+        formPanel.br();
 
         formPanel.h1(proto().features().getMeta().getCaption());
         formPanel.append(Location.Left, proto().features().countryOfOperation()).decorate();
