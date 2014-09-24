@@ -23,21 +23,20 @@ import com.propertyvista.dto.CommunicationEndpointDTO;
 public class CommunicationEndpointSelector extends CSelectorListBox<CommunicationEndpointDTO> {
 
     public CommunicationEndpointSelector() {
-        super(new CommunicationEndpointOptionsGrabber(), new Command() {
+        super(new CommunicationEndpointOptionsGrabber(), null);
+        init();
+    }
+
+    private void init() {
+        setCommand(new Command() {
 
             @Override
             public void execute() {
-                Dialog dialog = new CommunicationEndpointSelectorAddDialog();
+                Dialog dialog = new CommunicationEndpointSelectorAddDialog(CommunicationEndpointSelector.this);
                 dialog.show();
 
             }
         });
-    }
-/*-
- @Override
- public boolean isValuesEqual(Collection<CommunicationEndpointDTO> value1, Collection<CommunicationEndpointDTO> value2) {
 
- return false;
- }
- -*/
+    }
 }

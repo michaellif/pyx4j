@@ -49,6 +49,10 @@ public class CommunicationEndpointSelectorAddDialog extends Dialog implements Ok
 
     }
 
+    public CommunicationEndpointSelectorAddDialog(CommunicationEndpointSelector parent) {
+        this(parent, parent.getValue());
+    }
+
     public CommunicationEndpointSelectorAddDialog(Collection<CommunicationEndpointDTO> alreadySelected) {
         this(null, alreadySelected);
 
