@@ -67,11 +67,14 @@ public class GeoLocationEditor extends CForm<GeoLocation> {
             @Override
             public BasicValidationError isValid() {
                 Double value = getComponent().getValue();
-                return (value == null || (value >= 0 && value <= 90)) ? null : new BasicValidationError(getComponent(), i18n
-                        .tr("Latitude may be in range [0-90] degree"));
+                if (value != null) {
+                    return (value >= 0 && value <= 90) ? null : new BasicValidationError(getComponent(), i18n.tr("Latitude may be in range [0-90] degree"));
+                }
+                return (get(proto().longitude()).getValue() == null ? null : new BasicValidationError(getComponent(), i18n.tr("Latitude can't be empty")));
             }
         });
         get(proto().latitude()).addValueChangeHandler(new RevalidationTrigger<Double>(get(proto().latitudeType())));
+        get(proto().latitude()).addValueChangeHandler(new RevalidationTrigger<Double>(get(proto().longitude())));
 
         get(proto().latitudeType()).addComponentValidator(new AbstractComponentValidator<LatitudeType>() {
             @Override
@@ -90,11 +93,14 @@ public class GeoLocationEditor extends CForm<GeoLocation> {
             @Override
             public BasicValidationError isValid() {
                 Double value = getComponent().getValue();
-                return (value == null || (value >= 0 && value <= 180)) ? null : new BasicValidationError(getComponent(), i18n
-                        .tr("Longitude may be in range [0-180] degree"));
+                if (value != null) {
+                    return (value >= 0 && value <= 180) ? null : new BasicValidationError(getComponent(), i18n.tr("Longitude may be in range [0-180] degree"));
+                }
+                return (get(proto().latitude()).getValue() == null ? null : new BasicValidationError(getComponent(), i18n.tr("Longitude can't be empty")));
             }
         });
         get(proto().longitude()).addValueChangeHandler(new RevalidationTrigger<Double>(get(proto().longitudeType())));
+        get(proto().longitude()).addValueChangeHandler(new RevalidationTrigger<Double>(get(proto().latitude())));
 
         get(proto().longitudeType()).addComponentValidator(new AbstractComponentValidator<LongitudeType>() {
             @Override
