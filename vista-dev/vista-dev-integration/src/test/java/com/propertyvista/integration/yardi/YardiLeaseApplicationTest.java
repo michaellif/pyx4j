@@ -13,38 +13,38 @@
  */
 package com.propertyvista.integration.yardi;
 
-import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import com.yardi.entity.resident.ResidentTransactions;
 
+import com.pyx4j.config.server.ServerSideFactory;
+import com.pyx4j.entity.core.AttachLevel;
 import com.pyx4j.entity.server.Persistence;
 
 import com.propertyvista.biz.ExecutionMonitor;
+import com.propertyvista.biz.tenant.lease.LeaseFacade;
+import com.propertyvista.domain.financial.ARCode;
+import com.propertyvista.domain.financial.offering.ProductCatalog;
+import com.propertyvista.domain.financial.offering.ProductItem;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
+import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseTermParticipant.Role;
+import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
 import com.propertyvista.test.integration.BillableItemTester;
 import com.propertyvista.test.integration.LeaseTermTenantTester;
 import com.propertyvista.test.mock.MockDataModel;
 import com.propertyvista.test.mock.models.ARCodeDataModel;
-import com.propertyvista.test.mock.models.ARPolicyDataModel;
-import com.propertyvista.test.mock.models.AgreementLegalPolicyDataModel;
-import com.propertyvista.test.mock.models.BuildingDataModel;
+import com.propertyvista.test.mock.models.ARCodeDataModel.Code;
 import com.propertyvista.test.mock.models.CustomerDataModel;
-import com.propertyvista.test.mock.models.DepositPolicyDataModel;
-import com.propertyvista.test.mock.models.GLCodeDataModel;
-import com.propertyvista.test.mock.models.IdAssignmentPolicyDataModel;
-import com.propertyvista.test.mock.models.LeaseBillingPolicyDataModel;
 import com.propertyvista.test.mock.models.LeaseDataModel;
-import com.propertyvista.test.mock.models.LocationsDataModel;
-import com.propertyvista.test.mock.models.PmcDataModel;
-import com.propertyvista.test.mock.models.RestrictionsPolicyDataModel;
-import com.propertyvista.test.mock.models.TaxesDataModel;
 import com.propertyvista.yardi.YardiTestBase;
 import com.propertyvista.yardi.mock.model.YardiMock;
 import com.propertyvista.yardi.mock.model.manager.YardiBuildingManager;
+import com.propertyvista.yardi.mock.model.manager.YardiConfigurationManager;
+import com.propertyvista.yardi.mock.model.manager.YardiGuestManager;
 import com.propertyvista.yardi.mock.model.manager.YardiLeaseManager;
 import com.propertyvista.yardi.mock.model.stub.impl.YardiMockILSGuestCardStubImpl;
 import com.propertyvista.yardi.mock.model.stub.impl.YardiMockResidentTransactionsStubImpl;
@@ -62,26 +62,10 @@ public class YardiLeaseApplicationTest extends YardiTestBase {
 
     @Override
     protected List<Class<? extends MockDataModel<?>>> getMockModelTypes() {
-        if (false) {
-            List<Class<? extends MockDataModel<?>>> models = new ArrayList<Class<? extends MockDataModel<?>>>();
-            models.add(PmcDataModel.class);
-            models.add(CustomerDataModel.class);
-            models.add(LocationsDataModel.class);
-            models.add(TaxesDataModel.class);
-            models.add(GLCodeDataModel.class);
-            models.add(ARCodeDataModel.class);
-            models.add(BuildingDataModel.class);
-            models.add(IdAssignmentPolicyDataModel.class);
-            models.add(DepositPolicyDataModel.class);
-            models.add(ARPolicyDataModel.class);
-            models.add(LeaseBillingPolicyDataModel.class);
-            models.add(LeaseDataModel.class);
-            models.add(AgreementLegalPolicyDataModel.class);
-            models.add(RestrictionsPolicyDataModel.class);
-            return models;
-        } else {
-            return super.getMockModelTypes();
-        }
+        List<Class<? extends MockDataModel<?>>> models = super.getMockModelTypes();
+        models.add(CustomerDataModel.class);
+        models.add(LeaseDataModel.class);
+        return models;
     }
 
     @Override
@@ -92,6 +76,8 @@ public class YardiLeaseApplicationTest extends YardiTestBase {
         // managers
         YardiMock.server().addManager(YardiBuildingManager.class);
         YardiMock.server().addManager(YardiLeaseManager.class);
+        YardiMock.server().addManager(YardiGuestManager.class);
+        YardiMock.server().addManager(YardiConfigurationManager.class);
         // stubs
         YardiMock.server().addStub(YardiResidentTransactionsStub.class, YardiMockResidentTransactionsStubImpl.class);
         YardiMock.server().addStub(YardiILSGuestCardStub.class, YardiMockILSGuestCardStubImpl.class);
@@ -105,6 +91,72 @@ public class YardiLeaseApplicationTest extends YardiTestBase {
      * - Do import, check lease, ensure deposit charges
      */
     public void testLeaseApplication() throws Exception {
+        // 1. Setup
+        // --------
+        final String BuildingID = YardiBuildingManager.DEFAULT_PROPERTY_CODE;
+        final String UnitID = YardiBuildingManager.DEFAULT_UNIT_NO;
+        final String lmrChargeCode = "rlmr";
+
+        YardiMock.server().getManager(YardiBuildingManager.class).addDefaultBuilding();
+
+        // 2. Execution: first import
+        // -------------------------------
+        yardiImportAll(getYardiCredential(BuildingID));
+
+        // 3. Assertion: building, unit, product catalog
+        // ---------------------------------------------
+        Building building = getBuilding(BuildingID);
+        assertNotNull(building);
+
+        AptUnit unit = getUnit(building, UnitID);
+        assertNotNull(unit);
+
+        Persistence.ensureRetrieve(building.productCatalog(), AttachLevel.Attached);
+        ProductCatalog catalog = building.productCatalog();
+        assertEquals(1, catalog.services().size());
+
+        // 4. Execution: enable LMR
+        // ------------------------
+        Persistence.ensureRetrieve(catalog.services(), AttachLevel.Attached);
+        catalog.services().get(0).version().depositLMR().enabled().setValue(true);
+        Persistence.service().persist(catalog.services().get(0));
+        // configure yardi deposit code
+        ARCode deposit = getDataModel(ARCodeDataModel.class).getARCode(Code.depositLMR);
+        getDataModel(ARCodeDataModel.class).addYardiCode(deposit, lmrChargeCode);
+        // in yardi
+        YardiMock.server().getManager(YardiConfigurationManager.class).addChargeCode(YardiILSGuestCardStub.class, lmrChargeCode);
+
+        // 5. Execution: create and approve lease application
+        // --------------------------------------------------
+        // tenant and co-tenant
+        getDataModel(CustomerDataModel.class).addCustomer();
+        getDataModel(CustomerDataModel.class).addCustomer();
+        // lease application
+        List<Customer> customers = getDataModel(CustomerDataModel.class).getAllItems();
+        Persistence.ensureRetrieve(catalog.services().get(0).version().items(), AttachLevel.Attached);
+        ProductItem serviceItem = catalog.services().get(0).version().items().get(0);
+        Lease lease = getDataModel(LeaseDataModel.class).addLease(building, "01-Jun-2012", "31-Jul-2014", null, null, customers, serviceItem);
+        assertNotNull(lease);
+        assertEquals(Lease.Status.Application, lease.status().getValue());
+
+        // approve lease application
+        ServerSideFactory.create(LeaseFacade.class).approve(lease, null, null);
+
+        // 6. Assertion: status approved, participantId have been set
+        lease = ServerSideFactory.create(LeaseFacade.class).load(lease, false);
+
+        assertEquals(Lease.Status.Approved, lease.status().getValue());
+
+        for (LeaseTermTenant tenant : lease.currentTerm().version().tenants()) {
+            assertTrue(tenant.leaseParticipant().participantId().getValue().matches("^[rt].*"));
+        }
+
+        // compare customers
+        assertEquals(customers.size(), lease.currentTerm().version().tenants().size());
+        int idx = 0;
+        for (Iterator<LeaseTermTenant> itTenant = lease.currentTerm().version().tenants().iterator(); itTenant.hasNext();) {
+            assertEquals(customers.get(idx++).getPrimaryKey(), itTenant.next().leaseParticipant().customer().getPrimaryKey());
+        }
     }
 
     public void testYardiImport() throws Exception {

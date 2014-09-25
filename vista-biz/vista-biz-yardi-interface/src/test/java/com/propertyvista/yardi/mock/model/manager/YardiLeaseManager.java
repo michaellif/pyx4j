@@ -49,6 +49,8 @@ public interface YardiLeaseManager extends YardiMockManager {
 
     public interface TenantBuilder {
 
+        TenantBuilder setProspectId(String prospectId);
+
         TenantBuilder setType(YardiTenant.Type type);
 
         TenantBuilder setName(String name);

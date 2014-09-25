@@ -125,6 +125,15 @@ public class ARCodeDataModel extends MockDataModel<ARCode> {
         return codeMap.get(code);
     }
 
+    public ARCode addYardiCode(ARCode arCode, String yardiCode) {
+        YardiChargeCode yardiChargeCode = EntityFactory.create(YardiChargeCode.class);
+        yardiChargeCode.yardiChargeCode().setValue(yardiCode);
+        arCode.yardiChargeCodes().add(yardiChargeCode);
+        Persistence.service().persist(arCode);
+
+        return arCode;
+    }
+
     private ARCode generateARCode(String name, ARCode.Type codeType, int glCodeId, int glCategoryId, boolean reserved) {
         return generateARCode(name, codeType, glCodeId, glCategoryId, reserved, null);
     }

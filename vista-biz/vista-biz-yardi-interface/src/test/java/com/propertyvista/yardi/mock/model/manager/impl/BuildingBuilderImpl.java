@@ -55,6 +55,19 @@ public class BuildingBuilderImpl implements BuildingBuilder {
     }
 
     @Override
+    public BuildingBuilder setDepositLMR(String unitId, String amount) {
+        assert unitId != null : "unit id cannot be null";
+
+        YardiUnit unit = YardiMockModelUtils.findUnit(building, unitId);
+        if (unit == null) {
+            throw new Error("Unit not found: " + unitId);
+        }
+
+        unit.depositLMR().setValue(YardiMockModelUtils.toAmount(amount));
+        return this;
+    }
+
+    @Override
     public RentableItemBuilder addRentableItem(String itemId, String price, String chargeCode) {
         assert itemId != null : "item id cannot be null";
         assert price != null : "price cannot be null";
@@ -71,11 +84,8 @@ public class BuildingBuilderImpl implements BuildingBuilder {
     @Override
     public RentableItemBuilder getRentableItem(String itemId) {
         YardiRentableItem item = YardiMockModelUtils.findRentableItem(building, itemId);
-        if (item == null) {
-            throw new Error("RentableItem not found: " + itemId);
-        }
 
-        return new RentableItemBuilderImpl(item, this);
+        return item == null ? null : new RentableItemBuilderImpl(item, this);
     }
 
     @Override
@@ -86,11 +96,8 @@ public class BuildingBuilderImpl implements BuildingBuilder {
     @Override
     public LeaseBuilder getLease(String leaseId) {
         YardiLease lease = YardiMockModelUtils.findLease(building, leaseId);
-        if (lease == null) {
-            throw new Error("Lease not found: " + leaseId);
-        }
 
-        return new LeaseBuilderImpl(lease, this);
+        return lease == null ? null : new LeaseBuilderImpl(lease, this);
     }
 
     // Factory methods

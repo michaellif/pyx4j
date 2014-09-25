@@ -30,6 +30,17 @@ public class TenantBuilderImpl implements TenantBuilder {
     }
 
     @Override
+    public TenantBuilder setProspectId(String prospectId) {
+        assert prospectId != null : "prospect id cannot be null";
+
+        if (!tenant.prospectId().isNull() && !prospectId.equals(tenant.prospectId().getValue())) {
+            throw new Error("Cannot override prospect id: " + tenant.prospectId().getValue() + " to " + prospectId);
+        }
+        tenant.prospectId().setValue(prospectId);
+        return this;
+    }
+
+    @Override
     public TenantBuilder setType(Type type) {
         tenant.type().setValue(type);
         return this;

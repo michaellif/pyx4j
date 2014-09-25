@@ -99,11 +99,8 @@ public class ApplicationBuilderImpl extends LeaseBuilderImpl implements Applicat
         assert guestId != null : "guest id cannot be null";
 
         YardiTenant guest = YardiMockModelUtils.findGuest(lease, guestId);
-        if (guest == null) {
-            throw new Error("Guest not found: " + guestId);
-        }
 
-        return new GuestBuilderImpl(guest, this);
+        return guest == null ? null : new GuestBuilderImpl(guest, this);
     }
 
     @Override
@@ -115,8 +112,16 @@ public class ApplicationBuilderImpl extends LeaseBuilderImpl implements Applicat
         lease.application().events().add(event);
 
         // process event
-        if (Type.LEASE_SIGN.equals(type) && !lease.tenants().isEmpty()) {
-            lease.tenants().get(0).tenantId().set(lease.leaseId());
+        if (Type.LEASE_SIGN.equals(type)) {
+            lease.leaseId().setValue(lease.leaseId().getValue().replaceFirst("p", "t"));
+            for (int i = 0; i < lease.tenants().size(); i++) {
+                YardiTenant tenant = lease.tenants().get(i);
+                if (i == 0) {
+                    tenant.tenantId().set(lease.leaseId());
+                } else {
+                    tenant.tenantId().setValue(tenant.prospectId().getValue().replaceFirst("p", "r"));
+                }
+            }
         }
 
         return new GuestEventBuilderImpl(event, this);

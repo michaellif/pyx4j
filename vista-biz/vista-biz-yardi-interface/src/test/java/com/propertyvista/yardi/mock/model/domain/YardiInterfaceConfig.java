@@ -14,11 +14,11 @@
 package com.propertyvista.yardi.mock.model.domain;
 
 import com.pyx4j.entity.core.IEntity;
-import com.pyx4j.entity.core.IList;
+import com.pyx4j.entity.core.IPrimitive;
 
 public interface YardiInterfaceConfig extends IEntity {
 
-    IList<YardiBuilding> buildings();
+    IPrimitive<String> properties();
 
-    IList<YardiChargeCode> chargeCodes();
+    IPrimitive<String> chargeCodes();
 }

@@ -18,6 +18,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.pyx4j.entity.core.EntityFactory;
+
 import com.propertyvista.yardi.YardiInterface;
 import com.propertyvista.yardi.mock.model.domain.YardiBuilding;
 import com.propertyvista.yardi.mock.model.domain.YardiInterfaceConfig;
@@ -38,6 +40,10 @@ public class YardiMockModel {
     }
 
     public YardiInterfaceConfig getInterfaceConfig(Class<? extends YardiInterface> ifClass) {
-        return ifConfig.get(ifClass);
+        YardiInterfaceConfig config = ifConfig.get(ifClass);
+        if (config == null) {
+            ifConfig.put(ifClass, config = EntityFactory.create(YardiInterfaceConfig.class));
+        }
+        return config;
     }
 }

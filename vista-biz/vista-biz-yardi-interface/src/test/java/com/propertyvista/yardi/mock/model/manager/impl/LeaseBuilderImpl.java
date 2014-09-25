@@ -138,11 +138,8 @@ public class LeaseBuilderImpl implements LeaseBuilder {
         assert tenantId != null : "tenant id cannot be null";
 
         YardiTenant tenant = YardiMockModelUtils.findTenant(lease, tenantId);
-        if (tenant == null) {
-            throw new Error("Tenant not found: " + tenantId);
-        }
 
-        return new TenantBuilderImpl(tenant, this);
+        return tenant == null ? null : new TenantBuilderImpl(tenant, this);
     }
 
     @Override
@@ -150,10 +147,7 @@ public class LeaseBuilderImpl implements LeaseBuilder {
         assert chargeId != null : "charge id cannot be null";
 
         YardiLeaseCharge charge = YardiMockModelUtils.findLeaseCharge(lease, chargeId);
-        if (charge == null) {
-            throw new Error("Charge not found: " + chargeId);
-        }
 
-        return new LeaseChargeBuilderImpl(charge, this);
+        return charge == null ? null : new LeaseChargeBuilderImpl(charge, this);
     }
 }

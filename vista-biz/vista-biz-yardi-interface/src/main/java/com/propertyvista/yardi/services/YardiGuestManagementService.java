@@ -106,9 +106,9 @@ public class YardiGuestManagementService extends YardiAbstractService {
         return SingletonHolder.INSTANCE;
     }
 
-    private static final String ILS_AGENT = YardiConstants.ILS_INTERFACE_ENTITY;
+    public static final String ILS_AGENT = YardiConstants.ILS_INTERFACE_ENTITY;
 
-    private static final String ILS_SOURCE = "ILS";
+    public static final String ILS_SOURCE = "ILS";
 
     public String createNewProspect(PmcYardiCredential yc, Lease lease) throws YardiServiceException, RemoteException {
         Persistence.ensureRetrieve(lease.unit().building(), AttachLevel.Attached);
@@ -124,7 +124,6 @@ public class YardiGuestManagementService extends YardiAbstractService {
                 .setEvent(guest, guestProcessor.getNewEvent(EventTypes.OTHER, true));
         submitGuest(yc, guest);
 
-        // do guest search to retrieve lease id
         // do tenant search to retrieve lease id
         String guestId = lease.getPrimaryKey().toString();
         String prospectId = getTenantId(yc, lease.unit().building().propertyCode().getValue(), guestId, IdentityType.Prospect);

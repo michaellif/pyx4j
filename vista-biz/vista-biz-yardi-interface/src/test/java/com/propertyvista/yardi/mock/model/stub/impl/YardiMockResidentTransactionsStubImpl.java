@@ -49,6 +49,7 @@ import com.propertyvista.yardi.mock.model.domain.YardiLeaseCharge;
 import com.propertyvista.yardi.mock.model.domain.YardiTenant;
 import com.propertyvista.yardi.mock.model.domain.YardiTransactionCharge;
 import com.propertyvista.yardi.mock.model.domain.YardiUnit;
+import com.propertyvista.yardi.mock.model.manager.impl.YardiMockModelUtils;
 import com.propertyvista.yardi.stubs.YardiResidentTransactionsStub;
 
 public class YardiMockResidentTransactionsStubImpl extends YardiMockStubBase implements YardiResidentTransactionsStub {
@@ -75,24 +76,15 @@ public class YardiMockResidentTransactionsStubImpl extends YardiMockStubBase imp
     public ResidentTransactions getResidentTransactionsForTenant(PmcYardiCredential yc, String propertyId, String tenantId) throws YardiServiceException,
             RemoteException {
         ResidentTransactions rt = new ResidentTransactions();
-        for (YardiBuilding building : getYardiBuildings()) {
-            if (propertyId.equals(building.buildingId().getValue())) {
-                Property property = getProperty(building);
-                rt.getProperty().add(property);
-                // tenant
-                for (YardiLease lease : building.leases()) {
-                    if (tenantId.equals(lease.leaseId().getValue())) {
-                        RTCustomer rtCustomer = getRtCustomer(lease, building);
-                        property.getRTCustomer().add(rtCustomer);
-                        // transactions
-                        rtCustomer.setRTServiceTransactions(new RTServiceTransactions());
-                        rtCustomer.getRTServiceTransactions().getTransactions().addAll(getTransactions(lease));
-                        break;
-                    }
-                }
-                break;
-            }
-        }
+        YardiBuilding building = getYardiBuilding(propertyId);
+        Property property = getProperty(building);
+        YardiLease lease = YardiMockModelUtils.findLease(building, tenantId);
+        RTCustomer rtCustomer = getRtCustomer(lease, building);
+        property.getRTCustomer().add(rtCustomer);
+        // transactions
+        rtCustomer.setRTServiceTransactions(new RTServiceTransactions());
+        rtCustomer.getRTServiceTransactions().getTransactions().addAll(getTransactions(lease));
+        rt.getProperty().add(property);
         return rt;
     }
 

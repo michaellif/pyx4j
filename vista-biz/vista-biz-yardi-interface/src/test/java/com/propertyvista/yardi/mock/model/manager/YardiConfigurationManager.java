@@ -13,6 +13,17 @@
  */
 package com.propertyvista.yardi.mock.model.manager;
 
+import java.util.Collection;
+
+import com.propertyvista.yardi.YardiInterface;
+
 public interface YardiConfigurationManager extends YardiMockManager {
 
+    void addProperty(Class<? extends YardiInterface> service, String propertyCode);
+
+    void addChargeCode(Class<? extends YardiInterface> service, String chargeCode);
+
+    Collection<String> getProperties(Class<? extends YardiInterface> service);
+
+    Collection<String> getChargeCodes(Class<? extends YardiInterface> service);
 }

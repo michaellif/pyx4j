@@ -47,6 +47,8 @@ public interface YardiBuildingManager extends YardiMockManager {
 
         BuildingBuilder addUnit(String id, String fpId, String unitRent, String depositLMR);
 
+        BuildingBuilder setDepositLMR(String unitId, String amount);
+
         RentableItemBuilder addRentableItem(String itemId, String price, String chargeCode);
 
         RentableItemBuilder getRentableItem(String itemId);
