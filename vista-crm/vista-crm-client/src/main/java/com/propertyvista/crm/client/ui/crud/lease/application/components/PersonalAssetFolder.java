@@ -13,6 +13,8 @@
  */
 package com.propertyvista.crm.client.ui.crud.lease.application.components;
 
+import java.math.BigDecimal;
+
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.ui.IsWidget;
@@ -71,9 +73,10 @@ public class PersonalAssetFolder extends VistaBoxFolder<CustomerScreeningPersona
         protected IsWidget createContent() {
             FormPanel main = new FormPanel(this);
 
-            main.append(Location.Dual, proto().assetType()).decorate().componentWidth(150);
-            main.append(Location.Dual, proto().percent()).decorate().componentWidth(50);
-            main.append(Location.Dual, proto().assetValue()).decorate().componentWidth(100);
+            main.append(Location.Left, proto().assetType()).decorate();
+            main.append(Location.Left, proto().ownership()).decorate().componentWidth(50);
+            main.append(Location.Left, proto().assetValue()).decorate().componentWidth(100);
+
             main.append(Location.Dual, proto().documents(), new ProofOfAssetUploaderFolder());
 
             return main;
@@ -81,20 +84,11 @@ public class PersonalAssetFolder extends VistaBoxFolder<CustomerScreeningPersona
 
         @Override
         public void addValidations() {
-            get(proto().percent()).addComponentValidator(new AbstractComponentValidator<Double>() {
-                @Override
-                public BasicValidationError isValid() {
-                    return (getComponent().getValue() == null) || ((getComponent().getValue() >= 0) && (getComponent().getValue() <= 100)) ? null
-                            : new BasicValidationError(getComponent(), i18n.tr("Value Should Be In Range Of 0-100%"));
-                }
-
-            });
-
             get(proto().assetType()).addValueChangeHandler(new ValueChangeHandler<CustomerScreeningPersonalAsset.AssetType>() {
                 @Override
                 public void onValueChange(ValueChangeEvent<AssetType> event) {
-                    if (get(proto().percent()).getValue() == null) {
-                        get(proto().percent()).setValue(100d);
+                    if (get(proto().ownership()).getValue() == null) {
+                        get(proto().ownership()).setValue(BigDecimal.ONE);
                     }
                 }
             });

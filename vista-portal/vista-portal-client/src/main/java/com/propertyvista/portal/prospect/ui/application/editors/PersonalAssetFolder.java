@@ -13,6 +13,8 @@
  */
 package com.propertyvista.portal.prospect.ui.application.editors;
 
+import java.math.BigDecimal;
+
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.ui.IsWidget;
@@ -80,7 +82,7 @@ public class PersonalAssetFolder extends PortalBoxFolder<CustomerScreeningPerson
             FormPanel formPanel = new FormPanel(this);
 
             formPanel.append(Location.Left, proto().assetType()).decorate().componentWidth(180);
-            formPanel.append(Location.Left, proto().percent()).decorate().componentWidth(60);
+            formPanel.append(Location.Left, proto().ownership()).decorate().componentWidth(60);
             formPanel.append(Location.Left, proto().assetValue()).decorate().componentWidth(100);
             formPanel.append(Location.Left, proto().documents(), new ProofOfAssetUploaderFolder());
 
@@ -89,20 +91,11 @@ public class PersonalAssetFolder extends PortalBoxFolder<CustomerScreeningPerson
 
         @Override
         public void addValidations() {
-            get(proto().percent()).addComponentValidator(new AbstractComponentValidator<Double>() {
-                @Override
-                public BasicValidationError isValid() {
-                    return (getComponent().getValue() == null) || ((getComponent().getValue() >= 0) && (getComponent().getValue() <= 100)) ? null
-                            : new BasicValidationError(getComponent(), i18n.tr("Value Should Be In Range Of 0-100%"));
-                }
-
-            });
-
             get(proto().assetType()).addValueChangeHandler(new ValueChangeHandler<CustomerScreeningPersonalAsset.AssetType>() {
                 @Override
                 public void onValueChange(ValueChangeEvent<AssetType> event) {
-                    if (get(proto().percent()).getValue() == null) {
-                        get(proto().percent()).setValue(100d);
+                    if (get(proto().ownership()).getValue() == null) {
+                        get(proto().ownership()).setValue(BigDecimal.ONE);
                     }
                 }
             });

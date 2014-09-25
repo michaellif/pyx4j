@@ -30,8 +30,8 @@ import com.pyx4j.forms.client.ui.CEntityLabel;
 import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.folder.CFolderItem;
 import com.pyx4j.forms.client.ui.folder.IFolderItemDecorator;
-import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
+import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.forms.client.validators.AbstractComponentValidator;
 import com.pyx4j.forms.client.validators.BasicValidationError;
 import com.pyx4j.i18n.shared.I18n;
@@ -161,8 +161,8 @@ public class IdUploaderFolder extends VistaBoxFolder<IdentificationDocumentFolde
             FormPanel formPanel = new FormPanel(this);
 
             formPanel.append(Location.Left, proto().idType(), new CEntityLabel<>()).decorate();
-            formPanel.append(Location.Left, proto().idNumber()).decorate();
-            formPanel.append(Location.Left, proto().notes()).decorate();
+            formPanel.append(Location.Dual, proto().idNumber()).decorate();
+            formPanel.append(Location.Dual, proto().notes()).decorate();
 
             IdentificationDocumentFileUploaderFolder docPagesFolder = new IdentificationDocumentFileUploaderFolder();
             if (!VistaTODO.VISTA_4498_Remove_Unnecessary_Validation_Screening_CRM) {

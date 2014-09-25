@@ -46,10 +46,8 @@ public class ProofOfIncomeDocumentFileFolder extends VistaBoxFolder<ProofOfIncom
         addComponentValidator(new AbstractComponentValidator<IList<ProofOfIncomeDocumentFile>>() {
             @Override
             public BasicValidationError isValid() {
-                if (getComponent().getValue() != null) {
-                    if (getValue().isEmpty()) {
-                        return new BasicValidationError(getComponent(), i18n.tr("Document file should be supplied"));
-                    }
+                if (getComponent().getValue() != null && getComponent().getValue().isEmpty() && getComponent().isVisited()) {
+                    return new BasicValidationError(getComponent(), i18n.tr("Document file should be supplied"));
                 }
                 return null;
             }

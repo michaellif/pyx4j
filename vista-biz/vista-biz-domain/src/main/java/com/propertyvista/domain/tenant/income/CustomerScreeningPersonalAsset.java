@@ -89,9 +89,8 @@ public interface CustomerScreeningPersonalAsset extends IEntity {
     IPrimitive<AssetType> assetType();
 
     @NotNull
-    @Caption(name = "% Ownership")
-    @MemberColumn(name = "prcnt")
-    IPrimitive<Double> percent();
+    @Editor(type = EditorType.percentage)
+    IPrimitive<BigDecimal> ownership();
 
     @NotNull
     @Format("#,##0.00")

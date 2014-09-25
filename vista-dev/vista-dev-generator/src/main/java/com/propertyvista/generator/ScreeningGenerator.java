@@ -211,7 +211,7 @@ public class ScreeningGenerator {
             CustomerScreeningPersonalAsset asset = EntityFactory.create(CustomerScreeningPersonalAsset.class);
 
             asset.assetType().setValue(RandomUtil.random(AssetType.values()));
-            asset.percent().setValue((double) RandomUtil.randomInt(100));
+            asset.ownership().setValue(new BigDecimal(RandomUtil.randomInt(100) / 100));
             asset.assetValue().setValue(BigDecimal.valueOf(500 + RandomUtil.randomDouble(500)));
             asset.documents().add(createProofOfAssetDocument());
 

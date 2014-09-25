@@ -27,7 +27,6 @@ import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.backoffice.ui.prime.form.IForm;
-import com.pyx4j.widgets.client.tabpanel.Tab;
 
 import com.propertyvista.common.client.ui.components.editors.PriorAddressEditor;
 import com.propertyvista.common.client.ui.validators.FutureDateIncludeTodayValidator;
@@ -61,14 +60,11 @@ public class CustomerScreeningForm extends CrmEntityForm<LeaseParticipantScreeni
     public CustomerScreeningForm(IForm<LeaseParticipantScreeningTO> view) {
         super(LeaseParticipantScreeningTO.class, view);
 
-        Tab tab = addTab(createIdentificationDocumentsTab(), i18n.tr("Identification Documents"));
-        selectTab(tab);
-
+        selectTab(addTab(createIdentificationDocumentsTab(), i18n.tr("Identification Documents")));
         addTab(createAddressesTab(), i18n.tr("Addresses"));
         addTab(createlegalQuestionsTab(), proto().screening().version().legalQuestions().getMeta().getCaption());
         addTab(createIncomesTab(), i18n.tr("Incomes"));
         addTab(createAssetsTab(), i18n.tr("Assets"));
-
     }
 
     private IEntity getPolicyEntity() {
