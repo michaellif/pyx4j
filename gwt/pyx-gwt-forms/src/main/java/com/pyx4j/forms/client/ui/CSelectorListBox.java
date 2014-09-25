@@ -22,6 +22,7 @@ package com.pyx4j.forms.client.ui;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Iterator;
 
 import com.google.gwt.user.client.Command;
 
@@ -47,7 +48,36 @@ public class CSelectorListBox<E extends IEntity> extends CAbstractSelectorBox<Co
 
     @Override
     protected Collection<E> preprocessValue(Collection<E> value, boolean fireEvent, boolean populate) {
-        return super.preprocessValue(new ArrayList<>(value), fireEvent, populate);
+        return super.preprocessValue(new SelectorList(value), fireEvent, populate);
+    }
+
+    class SelectorList extends ArrayList<E> {
+
+        private static final long serialVersionUID = 1L;
+
+        public SelectorList(Collection<? extends E> c) {
+            super(c);
+        }
+
+        @Override
+        public String toString() {
+            Iterator<E> it = iterator();
+            if (!it.hasNext()) {
+                return "[]";
+            }
+
+            StringBuilder sb = new StringBuilder();
+            sb.append('[');
+            for (;;) {
+                sb.append(it.next().getStringView());
+                if (!it.hasNext()) {
+                    return sb.append(']').toString();
+                }
+                sb.append(',').append(' ');
+            }
+
+        }
+
     }
 
 }
