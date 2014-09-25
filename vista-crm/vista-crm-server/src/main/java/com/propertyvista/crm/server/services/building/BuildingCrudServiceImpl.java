@@ -37,8 +37,8 @@ import com.propertyvista.config.ThreadPoolNames;
 import com.propertyvista.config.VistaDeployment;
 import com.propertyvista.crm.rpc.services.building.BuildingCrudService;
 import com.propertyvista.domain.GeoLocation;
-import com.propertyvista.domain.GeoLocation.LatitudeType;
-import com.propertyvista.domain.GeoLocation.LongitudeType;
+import com.propertyvista.domain.GeoLocation.LatitudeDirection;
+import com.propertyvista.domain.GeoLocation.LongitudeDirection;
 import com.propertyvista.domain.PublicVisibilityType;
 import com.propertyvista.domain.company.Employee;
 import com.propertyvista.domain.customizations.CountryOfOperation;
@@ -205,21 +205,22 @@ public class BuildingCrudServiceImpl extends AbstractCrudServiceDtoImpl<Building
 
     private void retrieveGeotagging(Building bo, BuildingDTO to) {
         to.geoLocation().set(EntityFactory.create(GeoLocation.class));
+
         if (!bo.info().location().isNull()) {
             double lat = bo.info().location().getValue().getLat();
             if (lat < 0) {
-                to.geoLocation().latitudeType().setValue(LatitudeType.South);
+                to.geoLocation().latitudeDirection().setValue(LatitudeDirection.South);
                 to.geoLocation().latitude().setValue(-lat);
             } else {
-                to.geoLocation().latitudeType().setValue(LatitudeType.North);
+                to.geoLocation().latitudeDirection().setValue(LatitudeDirection.North);
                 to.geoLocation().latitude().setValue(lat);
             }
             double lng = bo.info().location().getValue().getLng();
             if (lng < 0) {
-                to.geoLocation().longitudeType().setValue(LongitudeType.West);
+                to.geoLocation().longitudeDirection().setValue(LongitudeDirection.West);
                 to.geoLocation().longitude().setValue(-lng);
             } else {
-                to.geoLocation().longitudeType().setValue(LongitudeType.East);
+                to.geoLocation().longitudeDirection().setValue(LongitudeDirection.East);
                 to.geoLocation().longitude().setValue(lng);
             }
         }
@@ -229,14 +230,16 @@ public class BuildingCrudServiceImpl extends AbstractCrudServiceDtoImpl<Building
         if (!to.geoLocation().isNull()) {
             Double lat = to.geoLocation().latitude().getValue();
             Double lng = to.geoLocation().longitude().getValue();
-            if ((lng != null) && (lat != null)) {
-                if (LatitudeType.South.equals(to.geoLocation().latitudeType().getValue())) {
+            if (lng != null && lat != null) {
+                if (LatitudeDirection.South.equals(to.geoLocation().latitudeDirection().getValue())) {
                     lat = -lat;
                 }
-                if (LongitudeType.West.equals(to.geoLocation().longitudeType().getValue())) {
+                if (LongitudeDirection.West.equals(to.geoLocation().longitudeDirection().getValue())) {
                     lng = -lng;
                 }
                 bo.info().location().setValue(new GeoPoint(lat, lng));
+            } else {
+                SharedGeoLocator.populateGeo(to);
             }
         } else {
             if (to.info().location().isNull()) {

@@ -239,6 +239,10 @@ public class BuildingForm extends CrmEntityForm<BuildingDTO> {
         }
 
         formPanel.h1(proto().geoLocation().getMeta().getCaption());
+        if (isEditable()) {
+            formPanel
+                    .h4(i18n.tr("If any value is set empty - will be automatically generated based on address on Save/Apply. Can be manually adjusted after."));
+        }
         formPanel.append(Location.Dual, inject(proto().geoLocation(), new GeoLocationEditor()));
         return formPanel;
     }

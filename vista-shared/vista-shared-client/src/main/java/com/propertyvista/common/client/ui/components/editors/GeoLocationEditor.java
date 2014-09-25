@@ -21,7 +21,6 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.commons.IFormatter;
 import com.pyx4j.commons.IParser;
-import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.CTextFieldBase;
 import com.pyx4j.forms.client.ui.RevalidationTrigger;
@@ -32,8 +31,8 @@ import com.pyx4j.forms.client.validators.BasicValidationError;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.domain.GeoLocation;
-import com.propertyvista.domain.GeoLocation.LatitudeType;
-import com.propertyvista.domain.GeoLocation.LongitudeType;
+import com.propertyvista.domain.GeoLocation.LatitudeDirection;
+import com.propertyvista.domain.GeoLocation.LongitudeDirection;
 
 public class GeoLocationEditor extends CForm<GeoLocation> {
 
@@ -50,10 +49,10 @@ public class GeoLocationEditor extends CForm<GeoLocation> {
         FormPanel formPanel = new FormPanel(this);
 
         formPanel.append(Location.Left, proto().latitude()).decorate().componentWidth(100);
-        formPanel.append(Location.Left, proto().latitudeType()).decorate().componentWidth(100).customLabel("Latitude Direction");
+        formPanel.append(Location.Left, proto().latitudeDirection()).decorate().componentWidth(100);
 
         formPanel.append(Location.Right, proto().longitude()).decorate().componentWidth(100);
-        formPanel.append(Location.Right, proto().longitudeType()).decorate().componentWidth(100).customLabel("Longitude Direction");
+        formPanel.append(Location.Right, proto().longitudeDirection()).decorate().componentWidth(100);
 
         return formPanel;
     }
@@ -67,24 +66,20 @@ public class GeoLocationEditor extends CForm<GeoLocation> {
             @Override
             public BasicValidationError isValid() {
                 Double value = getComponent().getValue();
-                if (value != null) {
-                    return (value >= 0 && value <= 90) ? null : new BasicValidationError(getComponent(), i18n.tr("Latitude may be in range [0-90] degree"));
-                }
-                return (get(proto().longitude()).getValue() == null ? null : new BasicValidationError(getComponent(), i18n.tr("Latitude can't be empty")));
+                return (value == null || (value >= 0 && value <= 90)) ? null : new BasicValidationError(getComponent(), i18n
+                        .tr("Latitude may be in range [0-90] degree"));
             }
         });
-        get(proto().latitude()).addValueChangeHandler(new RevalidationTrigger<Double>(get(proto().latitudeType())));
-        get(proto().latitude()).addValueChangeHandler(new RevalidationTrigger<Double>(get(proto().longitude())));
+        get(proto().latitude()).addValueChangeHandler(new RevalidationTrigger<Double>(get(proto().latitudeDirection())));
 
-        get(proto().latitudeType()).addComponentValidator(new AbstractComponentValidator<LatitudeType>() {
+        get(proto().latitudeDirection()).addComponentValidator(new AbstractComponentValidator<LatitudeDirection>() {
             @Override
             public BasicValidationError isValid() {
-                CComponent<?, Double, ?> latitude = get(proto().latitude());
-                return (getComponent().getValue() != null || latitude.getValue() == null) ? null : new BasicValidationError(getComponent(), i18n
-                        .tr("This field is Mandatory"));
+                return (getComponent().getValue() != null || get(proto().latitude()).getValue() == null) ? null : new BasicValidationError(getComponent(), i18n
+                        .tr("Direction should be selected"));
             }
         });
-        get(proto().latitudeType()).addValueChangeHandler(new RevalidationTrigger<LatitudeType>(get(proto().latitude())));
+        get(proto().latitudeDirection()).addValueChangeHandler(new RevalidationTrigger<LatitudeDirection>(get(proto().latitude())));
 
         ((CTextFieldBase<Double, ?>) get(proto().longitude())).setFormatter(new GeoNumberFormatter());
         ((CTextFieldBase<Double, ?>) get(proto().longitude())).setParser(new GeoNumberParser());
@@ -93,24 +88,20 @@ public class GeoLocationEditor extends CForm<GeoLocation> {
             @Override
             public BasicValidationError isValid() {
                 Double value = getComponent().getValue();
-                if (value != null) {
-                    return (value >= 0 && value <= 180) ? null : new BasicValidationError(getComponent(), i18n.tr("Longitude may be in range [0-180] degree"));
-                }
-                return (get(proto().latitude()).getValue() == null ? null : new BasicValidationError(getComponent(), i18n.tr("Longitude can't be empty")));
+                return (value == null || (value >= 0 && value <= 180)) ? null : new BasicValidationError(getComponent(), i18n
+                        .tr("Longitude may be in range [0-180] degree"));
             }
         });
-        get(proto().longitude()).addValueChangeHandler(new RevalidationTrigger<Double>(get(proto().longitudeType())));
-        get(proto().longitude()).addValueChangeHandler(new RevalidationTrigger<Double>(get(proto().latitude())));
+        get(proto().longitude()).addValueChangeHandler(new RevalidationTrigger<Double>(get(proto().longitudeDirection())));
 
-        get(proto().longitudeType()).addComponentValidator(new AbstractComponentValidator<LongitudeType>() {
+        get(proto().longitudeDirection()).addComponentValidator(new AbstractComponentValidator<LongitudeDirection>() {
             @Override
             public BasicValidationError isValid() {
-                CComponent<?, Double, ?> longitude = get(proto().longitude());
-                return (getComponent().getValue() != null || longitude.getValue() == null) ? null : new BasicValidationError(getComponent(), i18n
-                        .tr("This field is Mandatory"));
+                return (getComponent().getValue() != null || get(proto().longitude()).getValue() == null) ? null : new BasicValidationError(getComponent(),
+                        i18n.tr("Direction should be selected"));
             }
         });
-        get(proto().longitudeType()).addValueChangeHandler(new RevalidationTrigger<LongitudeType>(get(proto().longitude())));
+        get(proto().longitudeDirection()).addValueChangeHandler(new RevalidationTrigger<LongitudeDirection>(get(proto().longitude())));
 
     }
 

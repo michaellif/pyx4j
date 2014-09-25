@@ -13,7 +13,6 @@
  */
 package com.propertyvista.domain;
 
-import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.ToStringFormat;
@@ -29,7 +28,7 @@ import com.pyx4j.i18n.shared.I18nEnum;
 public interface GeoLocation extends IEntity {
 
     @I18n
-    public enum LatitudeType {
+    public enum LatitudeDirection {
         North, South;
 
         @Override
@@ -39,7 +38,7 @@ public interface GeoLocation extends IEntity {
     }
 
     @I18n
-    public enum LongitudeType {
+    public enum LongitudeDirection {
         East, West;
 
         @Override
@@ -52,17 +51,15 @@ public interface GeoLocation extends IEntity {
 
     @ToString(index = 0)
     @Format("#0.000000")
-    @Caption(description = "Automatically generated based on address. Can be manually adjusted after creation of the building.")
     IPrimitive<Double> latitude();
 
     @ToString(index = 1)
-    IPrimitive<LatitudeType> latitudeType();
+    IPrimitive<LatitudeDirection> latitudeDirection();
 
     @ToString(index = 2)
     @Format("#0.000000")
-    @Caption(description = "Automatically generated based on address. Can be manually adjusted after creation of the building.")
     IPrimitive<Double> longitude();
 
     @ToString(index = 3)
-    IPrimitive<LongitudeType> longitudeType();
+    IPrimitive<LongitudeDirection> longitudeDirection();
 }
