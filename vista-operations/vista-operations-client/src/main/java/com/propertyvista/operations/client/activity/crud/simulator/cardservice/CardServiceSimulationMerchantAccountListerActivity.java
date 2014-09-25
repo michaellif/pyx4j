@@ -27,8 +27,7 @@ import com.propertyvista.operations.rpc.services.simulator.CardServiceSimulation
 public class CardServiceSimulationMerchantAccountListerActivity extends AbstractListerActivity<CardServiceSimulationMerchantAccount> {
 
     public CardServiceSimulationMerchantAccountListerActivity(Place place) {
-        super(CardServiceSimulationMerchantAccount.class, place, OperationsSite.getViewFactory().getView(CardServiceSimulationMerchantAccountListerView.class),
-                GWT
-                        .<AbstractCrudService<CardServiceSimulationMerchantAccount>> create(CardServiceSimulationMerchantAccountCrudService.class));
+        super(CardServiceSimulationMerchantAccount.class, place, OperationsSite.getViewFactory().getView(CardServiceSimulationMerchantAccountListerView.class)//
+                , GWT.<AbstractCrudService<CardServiceSimulationMerchantAccount>> create(CardServiceSimulationMerchantAccountCrudService.class));
     }
 }

@@ -17,12 +17,15 @@ import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.rpc.AbstractCrudService;
 
 import com.propertyvista.operations.domain.eft.cards.simulator.CardServiceSimulationCard;
+import com.propertyvista.operations.domain.eft.cards.simulator.CardServiceSimulationMerchantAccount;
 import com.propertyvista.operations.domain.eft.cards.simulator.CardServiceSimulationTransaction;
 
 public interface CardServiceSimulationTransactionCrudService extends AbstractCrudService<CardServiceSimulationTransaction> {
 
     @Transient
     public interface CardServiceSimulationTransactionInitializationData extends InitializationData {
+
+        CardServiceSimulationMerchantAccount merchantAccount();
 
         CardServiceSimulationCard card();
     }

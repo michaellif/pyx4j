@@ -23,7 +23,6 @@ import com.pyx4j.forms.client.events.DevShortcutHandler;
 import com.pyx4j.forms.client.ui.CTextFieldBase;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.forms.client.ui.panels.FormPanel;
-import com.pyx4j.site.client.backoffice.ui.prime.form.AbstractEditor;
 import com.pyx4j.site.client.backoffice.ui.prime.form.IForm;
 import com.pyx4j.site.client.backoffice.ui.prime.lister.ListerDataSource;
 import com.pyx4j.widgets.client.Button;
@@ -71,7 +70,7 @@ class CardServiceSimulationCardForm extends OperationsEntityForm<CardServiceSimu
                     MessageDialog.info("Save the Card Simulation First");
                     return;
                 }
-                getPresenter().addTransaction();
+                getParentView().addTransaction();
             }
         }));
         formPanel.append(Location.Dual, transactionLister);
@@ -83,9 +82,9 @@ class CardServiceSimulationCardForm extends OperationsEntityForm<CardServiceSimu
 
     }
 
-    @SuppressWarnings("unchecked")
-    CardServiceSimulationCardEditorView.Presenter getPresenter() {
-        return (CardServiceSimulationCardEditorView.Presenter) ((AbstractEditor<CardServiceSimulationCard>) getParentView()).getPresenter();
+    @Override
+    public CardServiceSimulationCardEditorView getParentView() {
+        return (CardServiceSimulationCardEditorView) super.getParentView();
     }
 
     @Override

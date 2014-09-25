@@ -23,4 +23,22 @@ public class CardServiceSimulationCardEditorViewImpl extends OperationsEditorVie
         setForm(new CardServiceSimulationCardForm(this));
     }
 
+    @Override
+    public CardServiceSimulationCardEditorView.Presenter getPresenter() {
+        return (CardServiceSimulationCardEditorView.Presenter) super.getPresenter();
+    }
+
+    @Override
+    public void addTransaction() {
+        new CardServiceSimulationMerchantAccountSelectorDialog() {
+
+            @Override
+            public boolean onClickOk() {
+                getPresenter().addTransaction(getSelectedItems().iterator().next());
+                return true;
+            }
+        }.show();
+
+    }
+
 }
