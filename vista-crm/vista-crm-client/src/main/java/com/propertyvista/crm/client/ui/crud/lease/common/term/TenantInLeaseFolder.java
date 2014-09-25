@@ -149,6 +149,15 @@ public class TenantInLeaseFolder extends LeaseTermParticipantFolder<LeaseTermTen
 
     @Override
     public void addValidations() {
+        this.addComponentValidator(new AbstractComponentValidator<IList<LeaseTermTenant>>() {
+            @Override
+            public BasicValidationError isValid() {
+                if (getComponent().getValue() != null && getComponent().getValue().isEmpty() && getComponent().isVisited()) {
+                    return new BasicValidationError(getComponent(), i18n.tr("At least one Person should be present!"));
+                }
+                return null;
+            }
+        });
 
         this.addComponentValidator(new AbstractComponentValidator<IList<LeaseTermTenant>>() {
             @Override
@@ -167,16 +176,6 @@ public class TenantInLeaseFolder extends LeaseTermParticipantFolder<LeaseTermTen
                     if (!applicant) {
                         return new BasicValidationError(getComponent(), i18n.tr("A person with role 'Tenant' should be present!"));
                     }
-                }
-                return null;
-            }
-        });
-
-        this.addComponentValidator(new AbstractComponentValidator<IList<LeaseTermTenant>>() {
-            @Override
-            public BasicValidationError isValid() {
-                if (getComponent().getValue() != null && getComponent().getValue().isEmpty()) {
-                    return new BasicValidationError(getComponent(), i18n.tr("At least one Person should be present!"));
                 }
                 return null;
             }

@@ -87,7 +87,6 @@ import com.propertyvista.domain.property.asset.unit.occupancy.UnitAvailabilityCr
 import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.domain.tenant.lease.BillableItem;
 import com.propertyvista.domain.tenant.lease.Lease;
-import com.propertyvista.domain.tenant.lease.LeaseTerm;
 import com.propertyvista.domain.tenant.lease.LeaseTerm.Status;
 import com.propertyvista.domain.tenant.lease.LeaseTerm.Type;
 import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
@@ -335,12 +334,34 @@ public class LeaseTermForm extends CrmEntityForm<LeaseTermDTO> {
         formPanel.append(Location.Dual, proto().version().guarantors(), guarantorsFolder);
 
         // tweaks:
+        if (VistaTODO.VISTA_2446_Periodic_Lease_Terms) {
+            get(proto().type()).addValueChangeHandler(new ValueChangeHandler<Type>() {
+                @Override
+                public void onValueChange(ValueChangeEvent<Type> event) {
+                    get(proto().termTo()).setMandatory(event.getValue() != Type.Periodic);
+                }
+            });
+        }
+
+        get(proto().termFrom()).addValueChangeHandler(new ValueChangeHandler<LogicalDate>() {
+            @Override
+            public void onValueChange(ValueChangeEvent<LogicalDate> event) {
+                LogicalDate endDate = new LogicalDate(event.getValue());
+
+                CalendarUtil.addMonthsToDate(endDate, 12);
+                CalendarUtil.addDaysToDate(endDate, -1);
+
+                get(proto().termTo()).setValue(endDate);
+            }
+        });
+
         tenantsFolder.addValueChangeHandler(new ValueChangeHandler<IList<LeaseTermTenant>>() {
             @Override
             public void onValueChange(ValueChangeEvent<IList<LeaseTermTenant>> event) {
                 guarantorsFolder.updateTenantList();
             }
         });
+
         return formPanel;
     }
 
@@ -384,27 +405,6 @@ public class LeaseTermForm extends CrmEntityForm<LeaseTermDTO> {
     @Override
     public void addValidations() {
         super.addValidations();
-
-        if (VistaTODO.VISTA_2446_Periodic_Lease_Terms) {
-            get(proto().type()).addValueChangeHandler(new ValueChangeHandler<LeaseTerm.Type>() {
-                @Override
-                public void onValueChange(ValueChangeEvent<Type> event) {
-                    get(proto().termTo()).setMandatory(event.getValue() != Type.Periodic);
-                }
-            });
-        }
-
-        get(proto().termFrom()).addValueChangeHandler(new ValueChangeHandler<LogicalDate>() {
-            @Override
-            public void onValueChange(ValueChangeEvent<LogicalDate> event) {
-                LogicalDate endDate = new LogicalDate(event.getValue());
-
-                CalendarUtil.addMonthsToDate(endDate, 12);
-                CalendarUtil.addDaysToDate(endDate, -1);
-
-                get(proto().termTo()).setValue(endDate);
-            }
-        });
 
         crossValidate(get(proto().termFrom()), get(proto().termTo()), null);
 
@@ -461,27 +461,25 @@ public class LeaseTermForm extends CrmEntityForm<LeaseTermDTO> {
         get(proto().unit()).setNote(null);
     }
 
-    @SuppressWarnings("rawtypes")
     void setRestrictions(LeaseTermDTO value, boolean revalidate) {
-        ((TenantInLeaseFolder) (LeaseTermParticipantFolder) get(proto().version().tenants())).setMaturedOccupantsAreApplicants(value
-                .maturedOccupantsAreApplicants().getValue());
-        ((LeaseTermParticipantFolder) get(proto().version().tenants())).setAgeOfMajority(value.ageOfMajority().getValue());
-        ((LeaseTermParticipantFolder) get(proto().version().tenants())).setEnforceAgeOfMajority(value.enforceAgeOfMajority().getValue());
+        tenantsFolder.setMaturedOccupantsAreApplicants(value.maturedOccupantsAreApplicants().getValue());
+        tenantsFolder.setAgeOfMajority(value.ageOfMajority().getValue());
+        tenantsFolder.setEnforceAgeOfMajority(value.enforceAgeOfMajority().getValue());
 
-        ((LeaseTermParticipantFolder) get(proto().version().guarantors())).setAgeOfMajority(value.ageOfMajority().getValue());
-        ((LeaseTermParticipantFolder) get(proto().version().guarantors())).setEnforceAgeOfMajority(value.enforceAgeOfMajority().getValue());
+        guarantorsFolder.setAgeOfMajority(value.ageOfMajority().getValue());
+        guarantorsFolder.setEnforceAgeOfMajority(value.enforceAgeOfMajority().getValue());
 
         if (revalidate) {
-            if (get(proto().version().tenants()).isVisited()) {
-                ((LeaseTermParticipantFolder) get(proto().version().tenants())).revalidate();
+            if (tenantsFolder.isVisited()) {
+                tenantsFolder.revalidate();
             }
-            if (get(proto().version().guarantors()).isVisited()) {
-                ((LeaseTermParticipantFolder) get(proto().version().guarantors())).revalidate();
+            if (guarantorsFolder.isVisited()) {
+                guarantorsFolder.revalidate();
             }
         }
 
         // set Guarantors folder visibility:
-        get(proto().version().guarantors()).setVisible(!value.noNeedGuarantors().getValue(false));
+        guarantorsFolder.setVisible(!value.noNeedGuarantors().getValue(false));
         guarantorsHeader.setVisible(!value.noNeedGuarantors().getValue(false));
     }
 
