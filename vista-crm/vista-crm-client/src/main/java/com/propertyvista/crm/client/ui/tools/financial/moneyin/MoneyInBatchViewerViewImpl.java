@@ -32,7 +32,6 @@ public class MoneyInBatchViewerViewImpl extends CrmViewerViewImplBase<MoneyInBat
     private Button cancelBatchButton;
 
     public MoneyInBatchViewerViewImpl() {
-        setBreadcrumbsBar(null);
         setForm(new MoneyInBatchForm(this) {
             @Override
             public void onShowToPaymentRecord(Key paymentRecordId) {

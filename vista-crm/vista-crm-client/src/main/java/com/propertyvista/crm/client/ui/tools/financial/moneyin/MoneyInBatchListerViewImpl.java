@@ -27,7 +27,6 @@ import com.propertyvista.crm.rpc.dto.financial.moneyin.batch.MoneyInBatchDTO;
 public class MoneyInBatchListerViewImpl extends CrmListerViewImplBase<MoneyInBatchDTO> {
 
     public MoneyInBatchListerViewImpl() {
-        setBreadcrumbsBar(null);
         setLister(new MoneyInBatchLister());
     }
 
