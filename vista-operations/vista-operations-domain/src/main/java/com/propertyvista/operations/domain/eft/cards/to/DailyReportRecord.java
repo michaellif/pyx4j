@@ -57,6 +57,7 @@ public interface DailyReportRecord extends IEntity {
     @NotNull
     @ImportColumn(format = "dd-MMM-yyyy HH:mm:ss")
     @Caption(name = "DATE/TIME")
+    @Format("dd-MMM-yyyy HH:mm:ss")
     IPrimitive<Date> date();
 
     @NotNull

@@ -98,7 +98,7 @@ public interface AggregatedTransfer extends IEntity, HasNotesAndAttachments {
     @OrderBy(PrimaryKey.class)
     IList<AggregatedTransferChargeback> chargebacks();
 
-    @Owned
+    @Owned(cascade = {})
     @OrderBy(PrimaryKey.class)
     @Caption(name = "Non-Vista Transactions")
     IList<AggregatedTransferNonVistaTransaction> nonVistaTransactions();

@@ -80,6 +80,7 @@ public interface CardServiceSimulationTransaction extends IEntity {
     @Length(60)
     IPrimitive<String> reference();
 
+    @Caption(description = "'0000' Is OK")
     IPrimitive<String> responseCode();
 
     IPrimitive<String> authorizationNumber();

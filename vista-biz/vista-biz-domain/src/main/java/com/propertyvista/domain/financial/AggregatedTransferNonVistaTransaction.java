@@ -23,12 +23,19 @@ import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.Indexed;
+import com.pyx4j.entity.annotations.JoinColumn;
+import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.annotations.ReadOnly;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.IPrimitive;
 import com.pyx4j.i18n.annotations.I18n;
 
+import com.propertyvista.domain.payment.CreditCardInfo.CreditCardType;
+
+/**
+ * This record initially created without owner, then attached to aggregatedTransfer
+ */
 @I18n(strategy = I18n.I18nStrategy.IgnoreAll)
 public interface AggregatedTransferNonVistaTransaction extends IEntity {
 
@@ -36,13 +43,21 @@ public interface AggregatedTransferNonVistaTransaction extends IEntity {
     @ReadOnly(allowOverrideNull = true)
     @Detached
     @Indexed
+    @JoinColumn
+    @MemberColumn(name = "agg_tf")
     AggregatedTransfer aggregatedTransfer();
+
+    @Detached
+    @Indexed
+    MerchantAccount merchantAccount();
 
     IPrimitive<Key> cardsClearanceRecordKey();
 
     @Format("#,##0.00")
     @Editor(type = EditorType.money)
     IPrimitive<BigDecimal> amount();
+
+    IPrimitive<CreditCardType> cardType();
 
     @Editor(type = EditorType.label)
     @Format("MM/dd/yyyy HH:mm:ss")

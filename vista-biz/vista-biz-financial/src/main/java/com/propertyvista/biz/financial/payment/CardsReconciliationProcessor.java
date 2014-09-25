@@ -26,7 +26,6 @@ import com.pyx4j.commons.SimpleMessageFormat;
 import com.pyx4j.entity.core.AttachLevel;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
-import com.pyx4j.entity.core.criterion.OrCriterion;
 import com.pyx4j.entity.server.Executable;
 import com.pyx4j.entity.server.IEntityPersistenceService.ICursorIterator;
 import com.pyx4j.entity.server.Persistence;
@@ -37,6 +36,7 @@ import com.pyx4j.essentials.server.dev.DataDump;
 import com.propertyvista.biz.ExecutionMonitor;
 import com.propertyvista.config.VistaDeployment;
 import com.propertyvista.domain.financial.AggregatedTransfer.AggregatedTransferStatus;
+import com.propertyvista.domain.financial.AggregatedTransferNonVistaTransaction;
 import com.propertyvista.domain.financial.CardsAggregatedTransfer;
 import com.propertyvista.domain.financial.FundsTransferType;
 import com.propertyvista.domain.financial.MerchantAccount;
@@ -77,6 +77,9 @@ class CardsReconciliationProcessor {
 
     @SuppressWarnings("serial")
     private static class ValidationFailedRollback extends RuntimeException {
+        ValidationFailedRollback(String message) {
+            super(message);
+        }
     }
 
     public void processPmcReconciliation() {
@@ -141,12 +144,8 @@ class CardsReconciliationProcessor {
         at.paymentDate().setValue(reconciliationRecord.date().getValue());
         // Find MerchantAccount
         {
-            EntityQueryCriteria<MerchantAccount> criteria = EntityQueryCriteria.create(MerchantAccount.class);
-            criteria.eq(criteria.proto().id(), reconciliationRecord.merchantAccount().merchantAccountKey());
-            OrCriterion or = criteria.or();
-            or.left().eq(criteria.proto().merchantTerminalId(), reconciliationRecord.merchantTerminalId());
-            or.right().eq(criteria.proto().merchantTerminalIdConvenienceFee(), reconciliationRecord.merchantTerminalId());
-            at.merchantAccount().set(Persistence.service().retrieve(criteria));
+            at.merchantAccount().set(
+                    Persistence.service().retrieve(MerchantAccount.class, reconciliationRecord.merchantAccount().merchantAccountKey().getValue()));
             if (at.merchantAccount().isNull()) {
                 throw new Error("Merchant Account '" + reconciliationRecord.merchantTerminalId().getValue() + "' not found");
             }
@@ -167,32 +166,32 @@ class CardsReconciliationProcessor {
 
         MerchantTotals totals = new MerchantTotals();
         attachPaymentRecords(at, reconciliationRecord, totals, batchExecutionMonitor);
+        attachNonVistaTransaction(at, reconciliationRecord, totals, batchExecutionMonitor);
 
         // AggregatedTransfer updated
         Persistence.service().persist(at);
 
         if (reconciliationRecord.totalDeposit().getValue().compareTo(totals.totalAmount) != 0) {
-            executionMonitor.addErredEvent("DailyTotals", totals.totalAmount.subtract(reconciliationRecord.totalDeposit().getValue()), //
-                    SimpleMessageFormat.format("Merchant {0} {1} deposit {2} does not match transactions total {3}",//
-                            reconciliationRecord.merchantTerminalId(), reconciliationRecord.date(), reconciliationRecord.totalDeposit(), totals.totalAmount));
-            throw new ValidationFailedRollback();
+            String m = SimpleMessageFormat.format("Merchant {0} {1} deposit {2} does not match transactions total {3}",//
+                    reconciliationRecord.merchantTerminalId(), reconciliationRecord.date(), reconciliationRecord.totalDeposit(), totals.totalAmount);
+            executionMonitor.addErredEvent("DailyTotals", totals.totalAmount.subtract(reconciliationRecord.totalDeposit().getValue()), m);
+            throw new ValidationFailedRollback(m);
         }
 
         // Validate Card Types Totals.
         if (reconciliationRecord.visaDeposit().getValue(BigDecimal.ZERO).compareTo(totals.visaAmount) != 0) {
-            executionMonitor.addErredEvent("DailyTotals", totals.visaAmount.subtract(reconciliationRecord.visaDeposit().getValue(BigDecimal.ZERO)), //
-                    SimpleMessageFormat.format("Merchant {0} {1} Visa Deposit {2} does not match transactions total {3}",//
-                            reconciliationRecord.merchantTerminalId(), reconciliationRecord.date(), reconciliationRecord.visaDeposit(), totals.visaAmount));
-            throw new ValidationFailedRollback();
+            String m = SimpleMessageFormat.format("Merchant {0} {1} Visa Deposit {2} does not match transactions total {3}",//
+                    reconciliationRecord.merchantTerminalId(), reconciliationRecord.date(), reconciliationRecord.visaDeposit(), totals.visaAmount);
+            executionMonitor.addErredEvent("DailyTotals", totals.visaAmount.subtract(reconciliationRecord.visaDeposit().getValue(BigDecimal.ZERO)), m);
+            throw new ValidationFailedRollback(m);
         }
 
         if (reconciliationRecord.mastercardDeposit().getValue(BigDecimal.ZERO).compareTo(totals.mastercardAmount) != 0) {
-            executionMonitor.addErredEvent("DailyTotals", totals.mastercardAmount.subtract(reconciliationRecord.mastercardDeposit().getValue(BigDecimal.ZERO)), //
-                    SimpleMessageFormat.format(
-                            "Merchant {0} {1} MasterCard Deposit {2} does not match transactions total {3}",//
-                            reconciliationRecord.merchantTerminalId(), reconciliationRecord.date(), reconciliationRecord.mastercardDeposit(),
-                            totals.mastercardAmount));
-            throw new ValidationFailedRollback();
+            String m = SimpleMessageFormat.format("Merchant {0} {1} MasterCard Deposit {2} does not match transactions total {3}",//
+                    reconciliationRecord.merchantTerminalId(), reconciliationRecord.date(), reconciliationRecord.mastercardDeposit(), totals.mastercardAmount);
+            executionMonitor.addErredEvent("DailyTotals", totals.mastercardAmount.subtract(reconciliationRecord.mastercardDeposit().getValue(BigDecimal.ZERO)),
+                    m);
+            throw new ValidationFailedRollback(m);
         }
     }
 
@@ -241,6 +240,42 @@ class CardsReconciliationProcessor {
         } finally {
             it.close();
         }
+    }
+
+    private void attachNonVistaTransaction(CardsAggregatedTransfer at, CardsReconciliationRecord reconciliationRecord, MerchantTotals totals,
+            ExecutionMonitor batchExecutionMonitor) {
+        LogicalDate transactionsDate = new LogicalDate(DateUtils.addDays(reconciliationRecord.date().getValue(), -1));
+        EntityQueryCriteria<AggregatedTransferNonVistaTransaction> criteria = EntityQueryCriteria.create(AggregatedTransferNonVistaTransaction.class);
+        criteria.eq(criteria.proto().reconciliationDate(), transactionsDate);
+        criteria.eq(criteria.proto().merchantAccount(), at.merchantAccount());
+        criteria.isNull(criteria.proto().aggregatedTransfer());
+
+        ICursorIterator<AggregatedTransferNonVistaTransaction> it = Persistence.service().query(null, criteria, AttachLevel.Attached);
+        try {
+            while (it.hasNext()) {
+                AggregatedTransferNonVistaTransaction paymentRecord = it.next();
+                paymentRecord.aggregatedTransfer().set(at);
+                Persistence.service().persist(paymentRecord);
+                log.debug("Add NonVistaTransaction {} {}", paymentRecord.id(), paymentRecord.amount());
+
+                totals.totalAmount = totals.totalAmount.add(paymentRecord.amount().getValue());
+
+                switch (paymentRecord.cardType().getValue()) {
+                case MasterCard:
+                    totals.mastercardAmount = totals.mastercardAmount.add(paymentRecord.amount().getValue());
+                    break;
+                case Visa:
+                case VisaDebit:
+                    totals.visaAmount = totals.visaAmount.add(paymentRecord.amount().getValue());
+                    break;
+                }
+
+                batchExecutionMonitor.addInfoEvent("NonVistaTransaction", paymentRecord.amount().getValue(), null);
+            }
+        } finally {
+            it.close();
+        }
+
     }
 
 }

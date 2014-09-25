@@ -39,10 +39,13 @@ import com.propertyvista.biz.financial.payment.CreditCardFacade.ReferenceNumberP
 import com.propertyvista.config.VistaDeployment;
 import com.propertyvista.domain.financial.AggregatedTransferNonVistaTransaction;
 import com.propertyvista.domain.financial.PaymentRecord;
+import com.propertyvista.domain.payment.CreditCardInfo;
+import com.propertyvista.domain.payment.CreditCardInfo.CreditCardType;
 import com.propertyvista.domain.payment.PaymentType;
 import com.propertyvista.domain.pmc.Pmc;
 import com.propertyvista.operations.domain.eft.cards.CardsClearanceRecord;
 import com.propertyvista.operations.domain.eft.cards.CardsClearanceRecordProcessingStatus;
+import com.propertyvista.operations.domain.eft.cards.to.DailyReportRecord.DailyReportCardType;
 import com.propertyvista.server.TaskRunner;
 
 public class CardsDailyReportProcessor {
@@ -118,16 +121,30 @@ public class CardsDailyReportProcessor {
                 && (!clearanceRecord.responseMessage().getValue().equals("DECLINE"))) {
 
             AggregatedTransferNonVistaTransaction record = EntityFactory.create(AggregatedTransferNonVistaTransaction.class);
-
+            record.cardsClearanceRecordKey().setValue(clearanceRecord.getPrimaryKey());
+            record.aggregatedTransfer().set(null);
+            record.merchantAccount().id().setValue(clearanceRecord.merchantAccount().merchantAccountKey().getValue());
             record.amount().setValue(clearanceRecord.amount().getValue());
+            record.cardType().setValue(getCardType(clearanceRecord.cardType().getValue()));
             record.transactionDate().setValue(clearanceRecord.clearanceDate().getValue());
             record.reconciliationDate().setValue(new LogicalDate(clearanceRecord.clearanceDate().getValue()));
             record.details().setValue(
                     CommonsStringUtils.nvl_concat(clearanceRecord.cardType().getStringView(), clearanceRecord.referenceNumber().getStringView(), " "));
-            Persistence.service().merge(record);
+            Persistence.service().persist(record);
 
         }
 
+    }
+
+    private CreditCardType getCardType(DailyReportCardType caledonCardType) {
+        switch (caledonCardType) {
+        case MCRD:
+            return CreditCardType.MasterCard;
+        case VISA:
+            return CreditCardType.Visa;
+        default:
+            throw new Error("Can't process type " + caledonCardType);
+        }
     }
 
     protected void procesRentPaymentsRecord(CardsClearanceRecord clearanceRecord) {
@@ -141,6 +158,18 @@ public class CardsDailyReportProcessor {
         }
         Validate.isEquals(PaymentType.CreditCard, paymentRecord.paymentMethod().type().getValue(), "PaymentRecord {0} type", paymentRecord.id());
         Validate.isEquals(paymentRecord.amount().getValue(), clearanceRecord.amount().getValue(), "PaymentRecord {0} amount", paymentRecord.id());
+
+        CreditCardType creditCardType = paymentRecord.paymentMethod().details().<CreditCardInfo> cast().cardType().getValue();
+        switch (clearanceRecord.cardType().getValue()) {
+        case MCRD:
+            Validate.contains(EnumSet.of(CreditCardType.MasterCard), creditCardType, "PaymentRecord {0} cardType", paymentRecord.id());
+            break;
+        case VISA:
+            Validate.contains(EnumSet.of(CreditCardType.Visa, CreditCardType.VisaDebit), creditCardType, "PaymentRecord {0} cardType", paymentRecord.id());
+            break;
+        default:
+            throw new Error("Can't process type " + clearanceRecord.cardType().getValue());
+        }
 
         if (clearanceRecord.approved().getValue() //
                 && !clearanceRecord.voided().getValue() //
