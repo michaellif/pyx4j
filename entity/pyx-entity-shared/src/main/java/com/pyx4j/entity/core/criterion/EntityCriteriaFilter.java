@@ -24,6 +24,7 @@ import java.util.List;
 
 import com.pyx4j.commons.EqualsHelper;
 import com.pyx4j.commons.Filter;
+import com.pyx4j.commons.SimpleRegExp;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.IObject;
 import com.pyx4j.entity.core.Path;
@@ -93,9 +94,9 @@ public class EntityCriteriaFilter<E extends IEntity> implements Filter<E> {
         if (value == null) {
             return false;
         } else if (hasLikeValue(pattern)) {
-            return value.toString().matches(pattern.replace(String.valueOf(PropertyCriterion.WILDCARD_CHAR), ".*?") + ".*");
+            return SimpleRegExp.matchCaseInsensitive(value.toString(), pattern.replace(String.valueOf(PropertyCriterion.WILDCARD_CHAR), ".*?") + ".*");
         } else {
-            return value.toString().matches(".*?" + pattern + ".*");
+            return SimpleRegExp.matchCaseInsensitive(value.toString(), ".*?" + pattern + ".*");
         }
     }
 }

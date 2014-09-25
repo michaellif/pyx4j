@@ -28,4 +28,8 @@ public class SimpleRegExp {
         return SimpleRegExpImpl.matches(input, pattern);
     }
 
+    public static boolean matchCaseInsensitive(String input, String pattern) {
+        return SimpleRegExpImpl.matchCaseInsensitive(input, pattern);
+    }
+
 }
