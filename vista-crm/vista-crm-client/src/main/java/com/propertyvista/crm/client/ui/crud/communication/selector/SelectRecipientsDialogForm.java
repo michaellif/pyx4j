@@ -68,7 +68,7 @@ public class SelectRecipientsDialogForm extends HorizontalPanel {
 
     private Collection<Portfolio> selectedPortfolios;
 
-    private Collection<CommunicationEndpointDTO> selectedAll;
+    //private Collection<CommunicationEndpointDTO> selectedAll;
 
     public SelectRecipientsDialogForm() {
         this(null);
@@ -154,22 +154,22 @@ public class SelectRecipientsDialogForm extends HorizontalPanel {
             selected.addAll(selectedBuildings);
         if (null != selectedPortfolios && selectedPortfolios.size() != 0)
             selected.addAll(selectedPortfolios);
-        if (null != selectedAll && selectedAll.size() != 0)
-            selected.addAll(selectedAll);
+//        if (null != selectedAll && selectedAll.size() != 0)
+//            selected.addAll(selectedAll);
 
         return selected;
     }
 
     private void dealSelectedRecepients(Collection<CommunicationEndpointDTO> selected) {
-        if (null == selected) {
-            return;
-        }
-        if (null != selectedAll) {
-            selectedAll.clear();
-            selectedAll.addAll(selected);
-        } else {
-            selectedAll = new ArrayList<CommunicationEndpointDTO>(selected);
-        }
+//        if (null == selected) {
+//            return;
+//        }
+//        if (null != selectedAll) {
+//            selectedAll.clear();
+//            selectedAll.addAll(selected);
+//        } else {
+//            selectedAll = new ArrayList<CommunicationEndpointDTO>(selected);
+//        }
 
         for (CommunicationEndpointDTO current : selected) {
             if (current.endpoint().getInstanceValueClass().equals(Tenant.class)) {

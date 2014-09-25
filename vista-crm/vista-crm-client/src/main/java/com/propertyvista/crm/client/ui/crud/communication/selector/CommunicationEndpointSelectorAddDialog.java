@@ -41,7 +41,7 @@ public class CommunicationEndpointSelectorAddDialog extends Dialog implements Ok
     public CommunicationEndpointSelectorAddDialog(CommunicationEndpointSelector parent) {
         super("Select recipients");
         this.parent = parent;
-        alreadySelected = (parent.getValue() != null ? parent.getValue() : new ArrayList<CommunicationEndpointDTO>());
+        alreadySelected = (parent.getRefreshedValue() != null ? parent.getRefreshedValue() : new ArrayList<CommunicationEndpointDTO>());
         selectForm = new SelectRecipientsDialogForm(alreadySelected);
         setDialogOptions(this);
         setDialogPixelWidth(1000);
