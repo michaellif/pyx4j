@@ -78,11 +78,11 @@ public abstract class AbstractVisorPane extends AbstractPane implements IVisor {
         return controller;
     }
 
-    protected void setParentPane(IPane parentPane) {
+    public void setParentPane(IPane parentPane) {
         this.parentPane = parentPane;
     }
 
-    protected IPane getParentPane() {
+    public IPane getParentPane() {
         return parentPane;
     }
 

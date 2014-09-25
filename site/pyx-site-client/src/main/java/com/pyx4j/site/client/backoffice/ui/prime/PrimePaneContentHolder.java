@@ -18,7 +18,7 @@
  * @author michaellif
  * @version $Id$
  */
-package com.pyx4j.site.client.ui.visor;
+package com.pyx4j.site.client.backoffice.ui.prime;
 
 import com.google.gwt.dom.client.Document;
 import com.google.gwt.dom.client.Style.Unit;
@@ -33,8 +33,10 @@ import com.google.gwt.user.client.ui.RequiresResize;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.site.client.backoffice.ui.IPane;
+import com.pyx4j.site.client.ui.visor.AbstractVisorPane;
+import com.pyx4j.site.client.ui.visor.IVisor;
 
-public class VisorHolder extends ComplexPanel implements RequiresResize, ProvidesResize {
+public class PrimePaneContentHolder extends ComplexPanel implements RequiresResize, ProvidesResize {
 
     private int animationDuration = 0;
 
@@ -44,8 +46,9 @@ public class VisorHolder extends ComplexPanel implements RequiresResize, Provide
 
     private final IPane parentPane;
 
-    public VisorHolder(IPane parentPane) {
+    public PrimePaneContentHolder(IPane parentPane) {
         this.parentPane = parentPane;
+        setAnimationDuration(500);
         setElement(Document.get().createDivElement());
         layout = new Layout(getElement());
     }

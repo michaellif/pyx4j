@@ -31,8 +31,8 @@ import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 
+import com.pyx4j.site.client.backoffice.ui.prime.PrimePaneContentHolder;
 import com.pyx4j.site.client.ui.visor.IVisor;
-import com.pyx4j.site.client.ui.visor.VisorHolder;
 import com.pyx4j.widgets.client.HasSecureConcern;
 import com.pyx4j.widgets.client.Toolbar;
 
@@ -40,7 +40,7 @@ public abstract class AbstractPane extends DockLayoutPanel implements IPane {
 
     private static final double TOOLBAR_DEFAULT_HEIGHT = 34;
 
-    private final VisorHolder contentHolder;
+    private final PrimePaneContentHolder contentHolder;
 
     private final Label captionLabel;
 
@@ -89,8 +89,8 @@ public abstract class AbstractPane extends DockLayoutPanel implements IPane {
         footerToolbarHolder.setWidget(footerToolbar);
         addSouth(footerToolbarHolder, 0);
 
-        contentHolder = new VisorHolder(this);
-        contentHolder.setAnimationDuration(500);
+        contentHolder = new PrimePaneContentHolder(this);
+
     }
 
     protected Collection<HasSecureConcern> secureConcerns() {
