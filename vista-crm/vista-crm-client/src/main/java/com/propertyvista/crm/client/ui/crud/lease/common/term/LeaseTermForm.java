@@ -472,8 +472,12 @@ public class LeaseTermForm extends CrmEntityForm<LeaseTermDTO> {
         ((LeaseTermParticipantFolder) get(proto().version().guarantors())).setEnforceAgeOfMajority(value.enforceAgeOfMajority().getValue());
 
         if (revalidate) {
-            ((LeaseTermParticipantFolder) get(proto().version().tenants())).revalidate();
-            ((LeaseTermParticipantFolder) get(proto().version().guarantors())).revalidate();
+            if (get(proto().version().tenants()).isVisited()) {
+                ((LeaseTermParticipantFolder) get(proto().version().tenants())).revalidate();
+            }
+            if (get(proto().version().guarantors()).isVisited()) {
+                ((LeaseTermParticipantFolder) get(proto().version().guarantors())).revalidate();
+            }
         }
 
         // set Guarantors folder visibility:
