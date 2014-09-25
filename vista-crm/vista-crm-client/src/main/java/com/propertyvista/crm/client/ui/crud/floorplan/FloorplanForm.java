@@ -76,25 +76,12 @@ public class FloorplanForm extends CrmEntityForm<FloorplanDTO> {
         }
     }
 
-    private CFolder<FloorplanAmenity> createAmenitiesListEditor() {
-        return new VistaTableFolder<FloorplanAmenity>(FloorplanAmenity.class, isEditable()) {
-            @Override
-            public List<FolderColumnDescriptor> columns() {
-                ArrayList<FolderColumnDescriptor> columns = new ArrayList<FolderColumnDescriptor>();
-                columns.add(new FolderColumnDescriptor(proto().type(), "15em"));
-                columns.add(new FolderColumnDescriptor(proto().name(), "15em"));
-                columns.add(new FolderColumnDescriptor(proto().description(), "45em"));
-                return columns;
-            }
-        };
-    }
-
     private IsWidget createGeneralTab() {
         FormPanel formPanel = new FormPanel(this);
 
         formPanel.h1(i18n.tr("Floorplan Information"));
 
-        formPanel.append(Location.Left, proto().name()).decorate().componentWidth(180);
+        formPanel.append(Location.Left, proto().name()).decorate();
         formPanel.append(Location.Right, proto().floorCount()).decorate().componentWidth(50);
         formPanel.append(Location.Dual, new HTML());
 
@@ -106,14 +93,28 @@ public class FloorplanForm extends CrmEntityForm<FloorplanDTO> {
         formPanel.append(Location.Right, proto().halfBath()).decorate().componentWidth(50);
         formPanel.append(Location.Dual, new HTML());
 
-        formPanel.append(Location.Left, proto().area()).decorate().componentWidth(120);
-        formPanel.append(Location.Right, proto().areaUnits()).decorate().componentWidth(120);
+        formPanel.append(Location.Left, proto().area()).decorate().componentWidth(100);
+        formPanel.append(Location.Right, proto().areaUnits()).decorate().componentWidth(100);
+
         formPanel.append(Location.Dual, proto().description()).decorate();
 
         formPanel.h1(proto().amenities().getMeta().getCaption());
         formPanel.append(Location.Dual, proto().amenities(), createAmenitiesListEditor());
 
         return formPanel;
+    }
+
+    private CFolder<FloorplanAmenity> createAmenitiesListEditor() {
+        return new VistaTableFolder<FloorplanAmenity>(FloorplanAmenity.class, isEditable()) {
+            @Override
+            public List<FolderColumnDescriptor> columns() {
+                ArrayList<FolderColumnDescriptor> columns = new ArrayList<FolderColumnDescriptor>();
+                columns.add(new FolderColumnDescriptor(proto().type(), "15em"));
+                columns.add(new FolderColumnDescriptor(proto().name(), "15em"));
+                columns.add(new FolderColumnDescriptor(proto().description(), "35em"));
+                return columns;
+            }
+        };
     }
 
     private IsWidget createMarketingTab() {
@@ -250,7 +251,7 @@ public class FloorplanForm extends CrmEntityForm<FloorplanDTO> {
                 FormPanel formPanel = new FormPanel(this);
 
                 formPanel.append(Location.Left, proto().vendor(), new CEnumLabel()).decorate();
-                formPanel.append(Location.Right, proto().priority()).decorate();
+                formPanel.append(Location.Right, proto().priority()).decorate().componentWidth(100);
 
                 return formPanel;
             }

@@ -107,25 +107,21 @@ public class UnitForm extends CrmEntityForm<AptUnitDTO> {
     private IsWidget createGeneralTab() {
         FormPanel formPanel = new FormPanel(this);
 
-        formPanel
-                .append(Location.Left, proto().building(),
-                        isEditable() ? new CEntityLabel<Building>() : new CEntityCrudHyperlink<Building>(AppPlaceEntityMapper.resolvePlace(Building.class)))
-                .decorate().componentWidth(200);
-        formPanel.append(Location.Right, proto().info().floor()).decorate().componentWidth(60);
+        formPanel.append(Location.Left, proto().building(),
+                isEditable() ? new CEntityLabel<Building>() : new CEntityCrudHyperlink<Building>(AppPlaceEntityMapper.resolvePlace(Building.class))).decorate();
+        formPanel.append(Location.Right, proto().info().floor()).decorate().componentWidth(100);
 
-        formPanel.append(Location.Left, proto().floorplan(), new FloorplanSelectorHyperlink()).decorate().componentWidth(150);
-        formPanel.append(Location.Right, proto().info().number()).decorate().componentWidth(60);
+        formPanel.append(Location.Left, proto().floorplan(), new FloorplanSelectorHyperlink()).decorate();
+        formPanel.append(Location.Right, proto().info().number()).decorate().componentWidth(100);
 
-        formPanel.append(Location.Left, proto().info().economicStatus()).decorate().componentWidth(150);
-        formPanel.append(Location.Right, proto().info()._bedrooms()).decorate().componentWidth(60);
+        formPanel.append(Location.Left, proto().info().economicStatus()).decorate();
+        formPanel.append(Location.Right, proto().info()._bedrooms()).decorate().componentWidth(100);
 
-        formPanel.append(Location.Left, proto().info().economicStatusDescription()).decorate().componentWidth(150);
-        formPanel.append(Location.Right, proto().info()._bathrooms()).decorate().componentWidth(60);
+        formPanel.append(Location.Left, proto().info().economicStatusDescription()).decorate();
+        formPanel.append(Location.Right, proto().info()._bathrooms()).decorate().componentWidth(100);
 
-        formPanel
-                .append(Location.Left, proto().lease(),
-                        isEditable() ? new CEntityLabel<Lease>() : new CEntityCrudHyperlink<Lease>(AppPlaceEntityMapper.resolvePlace(Lease.class))).decorate()
-                .componentWidth(150);
+        formPanel.append(Location.Left, proto().lease(),
+                isEditable() ? new CEntityLabel<Lease>() : new CEntityCrudHyperlink<Lease>(AppPlaceEntityMapper.resolvePlace(Lease.class))).decorate();
         formPanel.append(Location.Right, proto().info().area()).decorate().componentWidth(100);
 
         formPanel.append(Location.Left, proto().availability().availableForRent()).decorate().componentWidth(100);
@@ -133,7 +129,7 @@ public class UnitForm extends CrmEntityForm<AptUnitDTO> {
 
         formPanel.append(Location.Left, proto().reservedUntil()).decorate().componentWidth(100);
 
-        formPanel.append(Location.Left, proto().financial()._unitRent()).decorate().componentWidth(80);
+        formPanel.append(Location.Left, proto().financial()._unitRent()).decorate().componentWidth(100);
         formPanel.append(Location.Left, proto().financial()._marketRent()).decorate().componentWidth(100);
 
         catalogMarketPricesPanel.h1(proto().marketPrices().getMeta().getCaption());

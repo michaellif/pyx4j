@@ -13,8 +13,8 @@
  */
 package com.propertyvista.crm.client.ui.crud.unit;
 
-import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
+import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.backoffice.ui.prime.form.IForm;
 
@@ -31,14 +31,14 @@ public class UnitItemForm extends CrmEntityForm<AptUnitItem> {
 
         FormPanel formPanel = new FormPanel(this);
 
-        formPanel.h1(i18n.tr("General"));
-        formPanel.append(Location.Left, proto().type()).decorate().componentWidth(120);
+        formPanel.append(Location.Left, proto().type()).decorate();
+
         formPanel.append(Location.Dual, proto().description()).decorate();
         formPanel.append(Location.Dual, proto().conditionNotes()).decorate();
 
         formPanel.h1(i18n.tr("Details"));
 
-        formPanel.append(Location.Left, proto().wallColor()).decorate().componentWidth(180);
+        formPanel.append(Location.Left, proto().wallColor()).decorate();
 
         formPanel.h3(i18n.tr("Flooring"));
         formPanel.append(Location.Left, proto().flooringType()).decorate().componentWidth(120).customLabel(i18n.tr("Type"));
