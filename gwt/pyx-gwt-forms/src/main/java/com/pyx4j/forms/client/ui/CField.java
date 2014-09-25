@@ -29,7 +29,6 @@ import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.commons.IDebugId;
 import com.pyx4j.config.shared.ApplicationMode;
-import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.forms.client.events.PropertyChangeEvent;
 import com.pyx4j.forms.client.ui.decorators.IFieldDecorator;
 
@@ -162,11 +161,7 @@ public abstract class CField<DATA_TYPE, WIDGET_TYPE extends INativeField<DATA_TY
     @Override
     protected String getDebugInfo() {
         StringBuilder info = new StringBuilder(super.getDebugInfo());
-        if (getValue() instanceof IEntity) {
-            info.append("value").append("=").append(((IEntity) getValue()).getStringView()).append(";");
-        } else {
-            info.append("value").append("=").append(getValue()).append(";");
-        }
+        info.append("value").append("=").append(getValue()).append(";");
         return info.toString();
     }
 
