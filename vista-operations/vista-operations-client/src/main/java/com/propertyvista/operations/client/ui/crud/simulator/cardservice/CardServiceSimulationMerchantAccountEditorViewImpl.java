@@ -13,38 +13,11 @@
  */
 package com.propertyvista.operations.client.ui.crud.simulator.cardservice;
 
-import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
-import com.pyx4j.forms.client.ui.panels.FormPanel;
-import com.pyx4j.site.client.backoffice.ui.prime.form.IForm;
-
 import com.propertyvista.operations.client.ui.crud.OperationsEditorViewImplBase;
-import com.propertyvista.operations.client.ui.crud.OperationsEntityForm;
 import com.propertyvista.operations.domain.eft.cards.simulator.CardServiceSimulationMerchantAccount;
 
 public class CardServiceSimulationMerchantAccountEditorViewImpl extends OperationsEditorViewImplBase<CardServiceSimulationMerchantAccount> implements
         CardServiceSimulationMerchantAccountEditorView {
-
-    public static class CardServiceSimulationMerchantAccountForm extends OperationsEntityForm<CardServiceSimulationMerchantAccount> {
-
-        public CardServiceSimulationMerchantAccountForm(IForm<CardServiceSimulationMerchantAccount> view) {
-            super(CardServiceSimulationMerchantAccount.class, view);
-
-            FormPanel formPanel = new FormPanel(this);
-
-            formPanel.append(Location.Left, proto().company()).decorate();
-            formPanel.append(Location.Left, proto().terminalID()).decorate();
-            formPanel.append(Location.Left, proto().balance()).decorate();
-            formPanel.append(Location.Left, proto().responseCode()).decorate();
-            formPanel.append(Location.Left, proto().created()).decorate();
-
-            formPanel.append(Location.Left, proto().visaCreditConvenienceFee()).decorate();
-            formPanel.append(Location.Left, proto().masterCardConvenienceFee()).decorate();
-            formPanel.append(Location.Left, proto().visaDebitConvenienceFee()).decorate();
-
-            setTabBarVisible(false);
-            selectTab(addTab(formPanel, "Card Service Simulation"));
-        }
-    }
 
     public CardServiceSimulationMerchantAccountEditorViewImpl() {
         setForm(new CardServiceSimulationMerchantAccountForm(this));
