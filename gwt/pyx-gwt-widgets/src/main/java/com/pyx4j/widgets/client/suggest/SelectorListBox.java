@@ -164,8 +164,9 @@ public class SelectorListBox<E> extends AbstractSelectorWidget<E> implements Has
     public void removeItem(E item) {
         if (null != item) {
             if (this.value.contains(item)) {
-                value.remove(item);
-                listBox.showValue(value);
+                this.value.remove(item);
+                ArrayList<E> newValue = new ArrayList<>(value);
+                setValue(newValue);
             }
 
         }
