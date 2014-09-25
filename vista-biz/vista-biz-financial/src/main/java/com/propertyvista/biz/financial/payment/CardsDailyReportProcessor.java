@@ -23,6 +23,7 @@ import org.slf4j.LoggerFactory;
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.commons.SimpleMessageFormat;
+import com.pyx4j.commons.Validate;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.config.server.SystemDateManager;
 import com.pyx4j.entity.core.EntityFactory;
@@ -138,9 +139,8 @@ public class CardsDailyReportProcessor {
         if (paymentRecord == null) {
             throw new Error("Card Payment for transaction '" + clearanceRecord.referenceNumber().getValue() + "' not found");
         }
-        if (PaymentType.CreditCard != paymentRecord.paymentMethod().type().getValue()) {
-            throw new Error("Card paymentRecord '" + paymentRecord.id().getValue() + "' expected");
-        }
+        Validate.isEquals(PaymentType.CreditCard, paymentRecord.paymentMethod().type().getValue(), "PaymentRecord {0} type", paymentRecord.id());
+        Validate.isEquals(paymentRecord.amount().getValue(), clearanceRecord.amount().getValue(), "PaymentRecord {0} amount", paymentRecord.id());
 
         if (clearanceRecord.approved().getValue() //
                 && !clearanceRecord.voided().getValue() //
@@ -155,10 +155,7 @@ public class CardsDailyReportProcessor {
     }
 
     protected void clearRecord(CardsClearanceRecord clearanceRecord, PaymentRecord paymentRecord) {
-
-        if (PaymentRecord.PaymentStatus.Received != paymentRecord.paymentStatus().getValue()) {
-            throw new Error(paymentRecord.paymentStatus().getValue() + " paymentRecord '" + paymentRecord.id().getValue() + "' can't be cleared");
-        }
+        Validate.isEquals(PaymentRecord.PaymentStatus.Received, paymentRecord.paymentStatus().getValue(), "PaymentRecord {0} status", paymentRecord.id());
 
         paymentRecord.padReconciliationDebitRecordKey().setValue(clearanceRecord.getPrimaryKey());
 
