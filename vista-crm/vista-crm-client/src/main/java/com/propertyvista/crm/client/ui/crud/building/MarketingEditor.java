@@ -65,15 +65,17 @@ public class MarketingEditor extends CForm<Marketing> {
     protected IsWidget createContent() {
         FormPanel formPanel = new FormPanel(this);
 
-        formPanel.append(Location.Left, proto().name()).decorate().componentWidth(160);
-        formPanel.append(Location.Right, proto().visibility()).decorate().componentWidth(100);
+        formPanel.append(Location.Left, proto().name()).decorate();
+        formPanel.append(Location.Right, proto().visibility()).decorate();
 
         formPanel.append(Location.Dual, proto().description()).decorate();
 
         // marketing address
         formPanel.h1(proto().marketingAddress().getMeta().getCaption());
         formPanel.append(Location.Left, proto().useCustomAddress()).decorate();
+
         formPanel.append(Location.Dual, proto().marketingAddress(), addressEditor);
+
         get(proto().useCustomAddress()).addValueChangeHandler(new ValueChangeHandler<Boolean>() {
             @Override
             public void onValueChange(ValueChangeEvent<Boolean> event) {

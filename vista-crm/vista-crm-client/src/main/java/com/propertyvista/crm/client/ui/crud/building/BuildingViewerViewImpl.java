@@ -287,7 +287,7 @@ public class BuildingViewerViewImpl extends CrmViewerViewImplBase<BuildingDTO> i
             protected IsWidget createContent() {
                 FormPanel formPanel = new FormPanel(this);
 
-                formPanel.append(Location.Left, proto().merchantAccount()).decorate().componentWidth(180);
+                formPanel.append(Location.Dual, proto().merchantAccount()).decorate();
 
                 // tweak:
                 get(proto().merchantAccount()).addValueChangeHandler(new ValueChangeHandler<MerchantAccount>() {

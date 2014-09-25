@@ -43,19 +43,19 @@ import com.propertyvista.domain.person.Person;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.security.CrmUser;
 
-@ToStringFormat("{0}, {1}")
+@ToStringFormat("{0}, {1}, {2}")
 @DiscriminatorValue("Employee")
 public interface Employee extends Person, CommunicationEndpoint, HasNotesAndAttachments {
 
     @NotNull
-    @ToString(index = 63)
+    @ToString(index = 2)
     @Caption(name = "Id")
     @Length(14)
     @Indexed(uniqueConstraint = true, ignoreCase = true)
     @MemberColumn(sortAdapter = AlphanumIndexAdapter.class)
     IPrimitive<String> employeeId();
 
-    @ToString(index = 64)
+    @ToString(index = 1)
     IPrimitive<String> title();
 
     @Length(250)

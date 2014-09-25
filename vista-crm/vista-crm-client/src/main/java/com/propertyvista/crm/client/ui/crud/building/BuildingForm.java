@@ -206,29 +206,27 @@ public class BuildingForm extends CrmEntityForm<BuildingDTO> {
         FormPanel formPanel = new FormPanel(this);
 
         formPanel.h1(i18n.tr("Building Summary"));
-        formPanel.append(Location.Left, proto().propertyCode()).decorate().componentWidth(120);
-        formPanel.append(Location.Right, proto().info().shape()).decorate().componentWidth(90);
+        formPanel.append(Location.Left, proto().propertyCode()).decorate();
+        formPanel.append(Location.Right, proto().info().shape()).decorate().componentWidth(100);
 
-        formPanel.append(Location.Left, proto().info().name()).decorate().componentWidth(150);
+        formPanel.append(Location.Left, proto().info().name()).decorate();
         formPanel.append(Location.Right, proto().info().totalStoreys()).decorate().componentWidth(50);
 
-        formPanel.append(Location.Left, proto().info().type()).decorate().componentWidth(120);
+        formPanel.append(Location.Left, proto().info().type()).decorate();
         formPanel.append(Location.Right, proto().info().residentialStoreys()).decorate().componentWidth(50);
 
-        formPanel.append(Location.Right, proto().externalId()).decorate().componentWidth(150);
+        formPanel.append(Location.Right, proto().externalId()).decorate();
 
         if (isEditable()) {
-            formPanel.append(Location.Left, proto().complex(), new CEntityLabel<Complex>()).decorate().componentWidth(150);
+            formPanel.append(Location.Left, proto().complex(), new CEntityLabel<Complex>()).decorate();
         } else {
-            formPanel.append(Location.Left, proto().complex(), new CEntityCrudHyperlink<Complex>(AppPlaceEntityMapper.resolvePlace(Complex.class))).decorate()
-                    .componentWidth(150);
+            formPanel.append(Location.Left, proto().complex(), new CEntityCrudHyperlink<Complex>(AppPlaceEntityMapper.resolvePlace(Complex.class))).decorate();
         }
 
-        formPanel.append(Location.Left, proto().landlord(), new CEntityCrudHyperlink<Landlord>(AppPlaceEntityMapper.resolvePlace(Landlord.class))).decorate()
-                .componentWidth(150);
+        formPanel.append(Location.Left, proto().landlord(), new CEntityCrudHyperlink<Landlord>(AppPlaceEntityMapper.resolvePlace(Landlord.class))).decorate();
 
-        formPanel.append(Location.Right, proto().defaultProductCatalog()).decorate().componentWidth(50);
-        formPanel.append(Location.Right, proto().suspended()).decorate().componentWidth(50);
+        formPanel.append(Location.Right, proto().defaultProductCatalog()).decorate();
+        formPanel.append(Location.Right, proto().suspended()).decorate();
 
         formPanel.h1(proto().info().address().getMeta().getCaption());
         InternationalAddressEditor addressEditor = new InternationalAddressEditor();
@@ -252,19 +250,19 @@ public class BuildingForm extends CrmEntityForm<BuildingDTO> {
 
         formPanel.h1(i18n.tr("Information"));
 
-        formPanel.append(Location.Left, proto().info().structureType()).decorate().componentWidth(150);
-        formPanel.append(Location.Left, proto().info().structureBuildYear()).decorate().componentWidth(100);
-        formPanel.append(Location.Left, proto().info().constructionType()).decorate().componentWidth(150);
-        formPanel.append(Location.Left, proto().info().foundationType()).decorate().componentWidth(150);
-        formPanel.append(Location.Left, proto().info().floorType()).decorate().componentWidth(150);
-        formPanel.append(Location.Left, proto().contacts().website()).decorate().componentWidth(200);
+        formPanel.append(Location.Left, proto().info().structureType()).decorate();
+        formPanel.append(Location.Left, proto().info().structureBuildYear()).decorate();
+        formPanel.append(Location.Left, proto().info().constructionType()).decorate();
+        formPanel.append(Location.Left, proto().info().foundationType()).decorate();
+        formPanel.append(Location.Left, proto().info().floorType()).decorate();
+        formPanel.append(Location.Left, proto().contacts().website()).decorate();
 
-        formPanel.append(Location.Right, proto().info().landArea()).decorate().componentWidth(150);
-        formPanel.append(Location.Right, proto().info().waterSupply()).decorate().componentWidth(150);
-        formPanel.append(Location.Right, proto().info().centralAir()).decorate().componentWidth(150);
-        formPanel.append(Location.Right, proto().info().centralHeat()).decorate().componentWidth(150);
-        formPanel.append(Location.Right, proto().info().hasSprinklers()).decorate().componentWidth(150);
-        formPanel.append(Location.Right, proto().info().hasFireAlarm()).decorate().componentWidth(150);
+        formPanel.append(Location.Right, proto().info().landArea()).decorate();
+        formPanel.append(Location.Right, proto().info().waterSupply()).decorate();
+        formPanel.append(Location.Right, proto().info().centralAir()).decorate();
+        formPanel.append(Location.Right, proto().info().centralHeat()).decorate();
+        formPanel.append(Location.Right, proto().info().hasSprinklers()).decorate();
+        formPanel.append(Location.Right, proto().info().hasFireAlarm()).decorate();
 
         formPanel.h1(proto().amenities().getMeta().getCaption());
 
@@ -335,15 +333,15 @@ public class BuildingForm extends CrmEntityForm<BuildingDTO> {
         FormPanel formPanel = new FormPanel(this);
 
         formPanel.append(Location.Left, proto().financial().dateAcquired()).decorate().componentWidth(120);
-        formPanel.append(Location.Left, proto().financial().purchasePrice()).decorate().componentWidth(100);
-        formPanel.append(Location.Left, proto().financial().marketPrice()).decorate().componentWidth(100);
+        formPanel.append(Location.Left, proto().financial().purchasePrice()).decorate().componentWidth(120);
+        formPanel.append(Location.Left, proto().financial().marketPrice()).decorate().componentWidth(120);
 
         formPanel.append(Location.Right, proto().financial().lastAppraisalDate()).decorate().componentWidth(120);
-        formPanel.append(Location.Right, proto().financial().lastAppraisalValue()).decorate().componentWidth(100);
-        formPanel.append(Location.Right, proto().financial().currency().name()).decorate().componentWidth(100).customLabel(i18n.tr("Currency Name"));
+        formPanel.append(Location.Right, proto().financial().lastAppraisalValue()).decorate().componentWidth(120);
+        formPanel.append(Location.Right, proto().financial().currency().name()).decorate().componentWidth(120).customLabel(i18n.tr("Currency Name"));
 
         formPanel.br();
-        formPanel.append(Location.Left, proto().merchantAccount(), new CEntityLabel<MerchantAccount>()).decorate().componentWidth(180);
+        formPanel.append(Location.Dual, proto().merchantAccount(), new CEntityLabel<MerchantAccount>()).decorate();
 
         // tweak:
         get(proto().merchantAccount()).addValueChangeHandler(new ValueChangeHandler<MerchantAccount>() {

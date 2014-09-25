@@ -84,5 +84,12 @@ class OrganizationContactFolder extends VistaBoxFolder<OrganizationContact> {
 
             return formPanel;
         }
+
+        @Override
+        protected void onValueSet(boolean populate) {
+            super.onValueSet(populate);
+
+            get(proto().description()).setVisible(isEditable() || !getValue().description().isNull());
+        }
     }
 }

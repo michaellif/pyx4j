@@ -39,7 +39,7 @@ public interface Person extends IEntity {
         }
     }
 
-    @ToString(index = 1)
+    @ToString(index = 0)
     @BusinessEqualValue
     @EmbeddedEntity
     Name name();
