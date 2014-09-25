@@ -219,6 +219,7 @@ public class PaymentRecordForm extends CrmEntityForm<PaymentRecordDTO> {
                     public boolean onClickOk() {
                         CComponent<?, ?, ?> comp = get(PaymentRecordForm.this.proto().leaseTermParticipant());
                         ((CComponent<?, LeaseTermParticipant<? extends LeaseParticipant<?>>, ?>) comp).setValue(getSelectedItems().get(0));
+                        changeLeaseParticipant();
                         return true;
                     }
                 };
@@ -263,15 +264,6 @@ public class PaymentRecordForm extends CrmEntityForm<PaymentRecordDTO> {
         // ----------------------------------------------------------------------------------------
 
         // tweak UI:
-        CComponent<?, ?, ?> comp = get(proto().leaseTermParticipant());
-        ((CComponent<?, LeaseTermParticipant<? extends LeaseParticipant<?>>, ?>) comp)
-                .addValueChangeHandler(new ValueChangeHandler<LeaseTermParticipant<? extends LeaseParticipant<?>>>() {
-                    @Override
-                    public void onValueChange(ValueChangeEvent<LeaseTermParticipant<? extends LeaseParticipant<?>>> event) {
-                        changeLeaseParticipant();
-                    }
-                });
-
         get(proto().selectPaymentMethod()).addValueChangeHandler(new ValueChangeHandler<PaymentDataDTO.PaymentSelect>() {
             @Override
             public void onValueChange(ValueChangeEvent<PaymentDataDTO.PaymentSelect> event) {
