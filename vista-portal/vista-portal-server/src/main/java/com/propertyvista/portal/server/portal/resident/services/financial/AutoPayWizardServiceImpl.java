@@ -136,7 +136,9 @@ public class AutoPayWizardServiceImpl extends AbstractCrudServiceDtoImpl<Autopay
         to.nextPaymentDate().setValue(ServerSideFactory.create(PaymentMethodFacade.class).getNextAutopayDate(lease));
 
         updateCoveredItemsDto(to, lease);
-        fillCoveredItems(to, lease);
+        if (retrieveTarget == RetrieveTarget.Edit) {
+            fillCoveredItems(to, lease);
+        }
     }
 
     @Override
@@ -179,9 +181,9 @@ public class AutoPayWizardServiceImpl extends AbstractCrudServiceDtoImpl<Autopay
             Persistence.ensureRetrieve(billableItem.item().product(), AttachLevel.Attached);
             //@formatter:off
             if (ServerSideFactory.create(BillingFacade.class).getActualPrice(billableItem).compareTo(BigDecimal.ZERO) > 0                                                                            // non-free
-                && !ARCode.Type.nonReccuringFeatures().contains(billableItem.item().product().holder().code().type().getValue())                                       // recursive
-                && (billableItem.expirationDate().isNull() || billableItem.expirationDate().getValue().after(SystemDateManager.getLogicalDate()))     // non-expired 
-                && !isCoveredItemExist(papDto, billableItem)) {                                                                                                 // absent
+                && !ARCode.Type.nonReccuringFeatures().contains(billableItem.item().product().holder().code().type().getValue())                    // recursive
+                && (billableItem.expirationDate().isNull() || billableItem.expirationDate().getValue().after(SystemDateManager.getLogicalDate()))   // non-expired 
+                && !isCoveredItemExist(papDto, billableItem)) {                                                                                     // absent
             //@formatter:on
                 itemDto = createCoveredItemDTO(billableItem, lease);
                 papDto.coveredItemsDTO().add(itemDto);
