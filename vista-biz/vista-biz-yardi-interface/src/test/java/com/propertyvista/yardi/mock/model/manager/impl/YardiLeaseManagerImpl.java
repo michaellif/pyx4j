@@ -36,6 +36,7 @@ public class YardiLeaseManagerImpl implements YardiLeaseManager {
         assert buildingId != null : "building id cannot be null";
         assert unitId != null : "unit id cannot be null";
         assert leaseId != null : "lease id cannot be null";
+        assert leaseId.startsWith("t") : "lease is should start with 't'";
 
         YardiBuilding building = YardiMockModelUtils.findBuilding(buildingId);
         if (building == null) {

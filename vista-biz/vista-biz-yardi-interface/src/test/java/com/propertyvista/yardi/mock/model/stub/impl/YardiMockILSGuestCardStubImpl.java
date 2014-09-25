@@ -51,7 +51,9 @@ import com.yardi.entity.ils.MarketRentRange;
 import com.yardi.entity.ils.PhysicalProperty;
 import com.yardi.entity.ils.Property;
 import com.yardi.entity.ils.RoomType;
+import com.yardi.entity.leaseapp30.AccountingData;
 import com.yardi.entity.leaseapp30.Charge;
+import com.yardi.entity.leaseapp30.ChargeSet;
 import com.yardi.entity.leaseapp30.LALease;
 import com.yardi.entity.leaseapp30.LeaseApplication;
 import com.yardi.entity.mits.Address;
@@ -73,6 +75,7 @@ import com.propertyvista.yardi.mock.model.YardiMock;
 import com.propertyvista.yardi.mock.model.domain.YardiAddress;
 import com.propertyvista.yardi.mock.model.domain.YardiBuilding;
 import com.propertyvista.yardi.mock.model.domain.YardiChargeCode;
+import com.propertyvista.yardi.mock.model.domain.YardiFee;
 import com.propertyvista.yardi.mock.model.domain.YardiFloorplan;
 import com.propertyvista.yardi.mock.model.domain.YardiGuestEvent;
 import com.propertyvista.yardi.mock.model.domain.YardiLease;
@@ -152,7 +155,7 @@ public class YardiMockILSGuestCardStubImpl extends YardiMockStubBase implements 
         YardiTenant guest = null;
         YardiLease lease = null;
         for (YardiLease _lease : building.leases()) {
-            if ((guest = YardiMockModelUtils.findTenant(_lease, guestId)) != null) {
+            if ((guest = YardiMockModelUtils.findGuest(_lease, guestId)) != null) {
                 lease = _lease;
                 break;
             }
@@ -168,7 +171,7 @@ public class YardiMockILSGuestCardStubImpl extends YardiMockStubBase implements 
         // customers
         guestCard.setCustomers(new Customers());
         for (YardiTenant t : lease.tenants()) {
-            guestCard.getCustomers().getCustomer().add(getCustomer(t, building, lease));
+            guestCard.getCustomers().getCustomer().add(toCustomer(t, building, lease));
         }
         // events
         guestCard.setEvents(new Events());
@@ -233,8 +236,39 @@ public class YardiMockILSGuestCardStubImpl extends YardiMockStubBase implements 
 
     @Override
     public LeaseApplication getApplication(PmcYardiCredential yc, String propertyId, String prospectId) throws YardiServiceException, RemoteException {
-        // TODO Auto-generated method stub
-        return null;
+        LeaseApplication leaseApp = new LeaseApplication();
+        YardiBuilding building = getYardiBuilding(propertyId);
+        if (building == null) {
+            Messages.throwYardiResponseException(propertyId + ":Invalid Yardi Property Code");
+        }
+        // find lease
+        // TODO - we should keep both p-id, and t-id
+        YardiLease lease = null;
+        for (YardiLease _lease : building.leases()) {
+            if (YardiMockModelUtils.findProspect(_lease, prospectId) != null) {
+                lease = _lease;
+                break;
+            }
+        }
+        if (lease == null) {
+            // TODO - actually, yardi returns error inside data element here:
+            // <LeaseApplication><Error>Invalid prospect Id</Error></LeaseApplication>
+            // need a way to model that
+            Messages.throwYardiResponseException("Invalid prospect Id");
+        }
+
+        // for now just need app charges section
+        LALease laLease = new LALease();
+        laLease.setAccountingData(new AccountingData());
+        if (!lease.application().charges().isEmpty()) {
+            ChargeSet charges = new ChargeSet();
+            for (YardiFee appFee : lease.application().charges()) {
+                charges.getCharge().add(toCharge(appFee));
+            }
+            laLease.getAccountingData().getChargeSet().add(charges);
+        }
+        leaseApp.getLALease().add(laLease);
+        return leaseApp;
     }
 
     @Override
@@ -251,7 +285,7 @@ public class YardiMockILSGuestCardStubImpl extends YardiMockStubBase implements 
         String guestId = findLeaseIdentity(leaseInfo.getIdentification(), "thirdparty");
         YardiLease lease = null;
         for (YardiLease _lease : building.leases()) {
-            if (YardiMockModelUtils.findTenant(_lease, guestId) != null) {
+            if (YardiMockModelUtils.findGuest(_lease, guestId) != null) {
                 lease = _lease;
                 break;
             }
@@ -274,10 +308,20 @@ public class YardiMockILSGuestCardStubImpl extends YardiMockStubBase implements 
     }
 
     // utility methods
-    private Customer getCustomer(YardiTenant guest, YardiBuilding building, YardiLease lease) {
+    private Charge toCharge(YardiFee appFee) {
+        Charge charge = new Charge();
+        charge.setAmount(YardiMockModelUtils.format(appFee.amount().getValue()));
+        charge.setLabel(appFee.chargeCode().getValue());
+        com.yardi.entity.leaseapp30.Identification desc = new com.yardi.entity.leaseapp30.Identification();
+        desc.setOrganizationName(appFee.description().getValue());
+        charge.getIdentification().add(desc);
+        return charge;
+    }
+
+    private Customer toCustomer(YardiTenant guest, YardiBuilding building, YardiLease lease) {
         Customer cust = new Customer();
-        cust.getIdentification().add(toIdentity(guest.tenantId().getValue(), "ThirdPartyID"));
-        cust.getIdentification().add(toIdentity(lease.leaseId().getValue(), "ProspectID"));
+        cust.getIdentification().add(toIdentity(guest.guestId().getValue(), "ThirdPartyID"));
+        cust.getIdentification().add(toIdentity(guest.prospectId().getValue(), "ProspectID"));
         cust.getIdentification().add(toIdentity(building.buildingId().getValue(), "PropertyID"));
         cust.setType(guest.tenantId().equals(lease.leaseId()) ? CustomerInfo.PROSPECT : CustomerInfo.ROOMMATE);
         cust.setName(new NameType());

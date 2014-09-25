@@ -22,6 +22,10 @@ public interface YardiTenant extends IEntity {
         GUEST, APPLICANT, CUSTOMER, CURRENT_RESIDENT, FORMER_RESIDENT, FUTURE_RESIDENT, PROSPECT, OTHER;
     }
 
+    IPrimitive<String> guestId();
+
+    IPrimitive<String> prospectId();
+
     IPrimitive<String> tenantId();
 
     IPrimitive<Type> type();

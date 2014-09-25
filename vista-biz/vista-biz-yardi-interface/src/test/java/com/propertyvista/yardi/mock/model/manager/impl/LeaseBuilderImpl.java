@@ -85,6 +85,7 @@ public class LeaseBuilderImpl implements LeaseBuilder {
     @Override
     public TenantBuilder addTenant(String tenantId, String name) {
         assert tenantId != null : "tenant id cannot be null";
+        assert tenantId.startsWith("r") : "tenant id should start with 'r'";
         assert name != null : "name cannot be null";
 
         if (YardiMockModelUtils.findTenant(lease, tenantId) != null) {
@@ -92,9 +93,14 @@ public class LeaseBuilderImpl implements LeaseBuilder {
         }
 
         YardiTenant tenant = EntityFactory.create(YardiTenant.class);
-        // auto set customer id and type so that first added is the main tenant 
-        tenant.tenantId().setValue(lease.tenants().size() == 0 ? lease.leaseId().getValue() : tenantId);
-        tenant.type().setValue(lease.tenants().size() == 0 ? Type.CURRENT_RESIDENT : Type.CUSTOMER);
+        // auto set tenant id and type so that first added is the main tenant 
+        if (lease.tenants().isEmpty()) {
+            tenant.tenantId().set(lease.leaseId());
+            tenant.type().setValue(Type.CURRENT_RESIDENT);
+        } else {
+            tenant.tenantId().setValue(tenantId);
+            tenant.type().setValue(Type.CUSTOMER);
+        }
         tenant.responsibleForLease().setValue(true);
 
         lease.tenants().add(tenant);

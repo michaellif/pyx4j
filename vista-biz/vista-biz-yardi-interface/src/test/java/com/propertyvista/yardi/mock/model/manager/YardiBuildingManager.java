@@ -13,8 +13,6 @@
  */
 package com.propertyvista.yardi.mock.model.manager;
 
-import java.math.BigDecimal;
-
 import com.propertyvista.yardi.mock.model.manager.YardiLeaseManager.LeaseBuilder;
 
 public interface YardiBuildingManager extends YardiMockManager {
@@ -47,7 +45,7 @@ public interface YardiBuildingManager extends YardiMockManager {
 
         BuildingBuilder addFloorplan(String id, int beds, int baths);
 
-        BuildingBuilder addUnit(String id, String fpId, BigDecimal unitRent);
+        BuildingBuilder addUnit(String id, String fpId, String unitRent, String depositLMR);
 
         RentableItemBuilder addRentableItem(String itemId, String price, String chargeCode);
 

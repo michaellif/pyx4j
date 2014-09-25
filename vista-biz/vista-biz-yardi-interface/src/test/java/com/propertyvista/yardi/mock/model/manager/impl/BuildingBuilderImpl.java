@@ -13,8 +13,6 @@
  */
 package com.propertyvista.yardi.mock.model.manager.impl;
 
-import java.math.BigDecimal;
-
 import com.pyx4j.entity.core.EntityFactory;
 
 import com.propertyvista.yardi.mock.model.YardiMock;
@@ -51,8 +49,8 @@ public class BuildingBuilderImpl implements BuildingBuilder {
     }
 
     @Override
-    public BuildingBuilder addUnit(String id, String fpId, BigDecimal unitRent) {
-        building.units().add(makeUnit(id, YardiMockModelUtils.findFloorplan(building, fpId), unitRent));
+    public BuildingBuilder addUnit(String id, String fpId, String unitRent, String depositLMR) {
+        building.units().add(makeUnit(id, YardiMockModelUtils.findFloorplan(building, fpId), unitRent, depositLMR));
         return this;
     }
 
@@ -96,7 +94,7 @@ public class BuildingBuilderImpl implements BuildingBuilder {
     }
 
     // Factory methods
-    private YardiUnit makeUnit(String id, YardiFloorplan fp, BigDecimal unitRent) {
+    private YardiUnit makeUnit(String id, YardiFloorplan fp, String unitRent, String depositLMR) {
         assert id != null : "unit id cannot be null";
         assert fp != null : "floorplan cannot be null";
         assert unitRent != null : "unit rent cannot be null";
@@ -104,7 +102,8 @@ public class BuildingBuilderImpl implements BuildingBuilder {
         YardiUnit unit = EntityFactory.create(YardiUnit.class);
         unit.unitId().setValue(id);
         unit.floorplan().set(fp);
-        unit.rent().setValue(unitRent);
+        unit.rent().setValue(YardiMockModelUtils.toAmount(unitRent));
+        unit.depositLMR().setValue(YardiMockModelUtils.toAmount(depositLMR));
         return unit;
     }
 

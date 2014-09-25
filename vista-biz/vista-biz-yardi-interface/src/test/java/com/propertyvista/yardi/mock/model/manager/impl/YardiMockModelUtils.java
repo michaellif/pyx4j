@@ -111,6 +111,30 @@ public class YardiMockModelUtils {
         return null;
     }
 
+    public static YardiTenant findGuest(YardiLease lease, String guestId) {
+        assert lease != null : "lease cannot be null";
+        assert guestId != null : "guest id cannot be null";
+
+        for (YardiTenant yt : lease.tenants()) {
+            if (guestId.equals(yt.guestId().getValue())) {
+                return yt;
+            }
+        }
+        return null;
+    }
+
+    public static YardiTenant findProspect(YardiLease lease, String prospectId) {
+        assert lease != null : "lease cannot be null";
+        assert prospectId != null : "prospect id cannot be null";
+
+        for (YardiTenant yt : lease.tenants()) {
+            if (prospectId.equals(yt.prospectId().getValue())) {
+                return yt;
+            }
+        }
+        return null;
+    }
+
     public static YardiLeaseCharge findLeaseCharge(YardiLease lease, String chargeId) {
         assert lease != null : "lease cannot be null";
         assert chargeId != null : "charge id cannot be null";
@@ -125,22 +149,22 @@ public class YardiMockModelUtils {
 
     // Conversions
     public static BigDecimal toAmount(String amount) {
-        return new BigDecimal(amount).setScale(2, RoundingMode.HALF_DOWN);
+        return amount == null ? null : new BigDecimal(amount).setScale(2, RoundingMode.HALF_DOWN);
     }
 
     public static Date toDate(String date) {
-        return DateUtils.detectDateformat(date);
+        return date == null ? null : DateUtils.detectDateformat(date);
     }
 
     public static LogicalDate toLogicalDate(String date) {
-        return new LogicalDate(toDate(date));
+        return date == null ? null : new LogicalDate(toDate(date));
     }
 
     public static String format(Date date) {
-        return new SimpleDateFormat("yyyy-MM-dd").format(date);
+        return date == null ? null : new SimpleDateFormat("yyyy-MM-dd").format(date);
     }
 
     public static String format(BigDecimal amount) {
-        return amount.toPlainString();
+        return amount == null ? null : amount.toPlainString();
     }
 }

@@ -83,12 +83,12 @@ public class ApplicationBuilderImpl extends LeaseBuilderImpl implements Applicat
         assert guestId != null : "guest id cannot be null";
         assert name != null : "name cannot be null";
 
-        if (YardiMockModelUtils.findTenant(lease, guestId) != null) {
+        if (YardiMockModelUtils.findGuest(lease, guestId) != null) {
             throw new Error("Guest already exists: " + guestId);
         }
 
         YardiTenant tenant = EntityFactory.create(YardiTenant.class);
-        tenant.tenantId().setValue(guestId);
+        tenant.guestId().setValue(guestId);
         lease.tenants().add(tenant);
 
         return (GuestBuilder) new GuestBuilderImpl(tenant, this).setName(name);
@@ -98,7 +98,7 @@ public class ApplicationBuilderImpl extends LeaseBuilderImpl implements Applicat
     public GuestBuilder getGuest(String guestId) {
         assert guestId != null : "guest id cannot be null";
 
-        YardiTenant guest = YardiMockModelUtils.findTenant(lease, guestId);
+        YardiTenant guest = YardiMockModelUtils.findGuest(lease, guestId);
         if (guest == null) {
             throw new Error("Guest not found: " + guestId);
         }
@@ -113,6 +113,11 @@ public class ApplicationBuilderImpl extends LeaseBuilderImpl implements Applicat
         YardiGuestEvent event = EntityFactory.create(YardiGuestEvent.class);
         event.type().setValue(type);
         lease.application().events().add(event);
+
+        // process event
+        if (Type.LEASE_SIGN.equals(type) && !lease.tenants().isEmpty()) {
+            lease.tenants().get(0).tenantId().set(lease.leaseId());
+        }
 
         return new GuestEventBuilderImpl(event, this);
     }

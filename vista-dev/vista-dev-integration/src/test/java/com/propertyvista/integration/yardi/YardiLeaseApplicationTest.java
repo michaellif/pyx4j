@@ -105,13 +105,16 @@ public class YardiLeaseApplicationTest extends YardiTestBase {
      * - Do import, check lease, ensure deposit charges
      */
     public void testLeaseApplication() throws Exception {
+    }
+
+    public void testYardiImport() throws Exception {
         // 1. Test setup
         // -------------
         final String BuildingID = YardiBuildingManager.DEFAULT_PROPERTY_CODE;
         final String UnitID_1 = YardiBuildingManager.DEFAULT_UNIT_NO;
-        final String LeaseID_1 = "lease1";
-        final String TenantID = "tenant";
-        final String CoTenantID = "co-tenant";
+        final String LeaseID_1 = "t_lease1";
+        final String TenantID = "r_tenant";
+        final String CoTenantID = "r_cotenant";
 
         YardiMock.server().getManager(YardiBuildingManager.class).addDefaultBuilding();
 

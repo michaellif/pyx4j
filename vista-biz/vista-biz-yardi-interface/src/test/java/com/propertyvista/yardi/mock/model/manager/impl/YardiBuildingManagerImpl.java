@@ -13,8 +13,6 @@
  */
 package com.propertyvista.yardi.mock.model.manager.impl;
 
-import java.math.BigDecimal;
-
 import com.pyx4j.entity.core.EntityFactory;
 
 import com.propertyvista.yardi.mock.model.YardiMock;
@@ -33,7 +31,7 @@ public class YardiBuildingManagerImpl implements YardiBuildingManager {
         return new BuildingBuilderImpl(building) //
                 .setAddress(null) //
                 .addFloorplan(DEFAULT_FP_NAME, DEFAULT_FP_BATHS, DEFAULT_FP_BEDS) //
-                .addUnit(DEFAULT_UNIT_NO, DEFAULT_FP_NAME, new BigDecimal(DEFAULT_UNIT_RENT));
+                .addUnit(DEFAULT_UNIT_NO, DEFAULT_FP_NAME, DEFAULT_UNIT_RENT, null);
     }
 
     @Override
