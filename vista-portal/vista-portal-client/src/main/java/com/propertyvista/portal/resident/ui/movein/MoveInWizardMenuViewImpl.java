@@ -157,14 +157,14 @@ public class MoveInWizardMenuViewImpl extends DockPanel implements MoveInWizardM
     @Override
     public void updateState() {
         for (MoveInWizardStepMenuItem step : mainHolder.getMenuItems()) {
-            if (step.getStepType().equals(MoveInWizardManager.getCurrentStep())) {
-                step.setStatus(StepStatus.current);
-                step.setEnabled(false);
-                step.setVisible(true);
-            } else if (MoveInWizardManager.isStepIncluded(step.getStepType())) {
+            if (!MoveInWizardManager.isStepIncluded(step.getStepType())) {
                 step.setStatus(StepStatus.notComplete);
                 step.setEnabled(false);
                 step.setVisible(false);
+            } else if (step.getStepType().equals(MoveInWizardManager.getCurrentStep())) {
+                step.setStatus(StepStatus.current);
+                step.setEnabled(false);
+                step.setVisible(true);
             } else if (MoveInWizardManager.isStepComplete(step.getStepType())) {
                 step.setStatus(StepStatus.complete);
                 step.setEnabled(false);

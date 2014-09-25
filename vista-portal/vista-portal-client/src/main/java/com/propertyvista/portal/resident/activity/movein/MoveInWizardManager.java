@@ -76,7 +76,7 @@ public class MoveInWizardManager {
     public static boolean isStepComplete(MoveInWizardStep step) {
         if (wizardStatus != null) {
             for (MoveInWizardStepStatusTO stepStatus : wizardStatus.steps()) {
-                if (stepStatus.equals(step)) {
+                if (step.equals(stepStatus.step().getValue())) {
                     return stepStatus.complete().getValue();
                 }
             }
@@ -87,7 +87,7 @@ public class MoveInWizardManager {
     public static boolean isStepIncluded(MoveInWizardStep step) {
         if (wizardStatus != null) {
             for (MoveInWizardStepStatusTO stepStatus : wizardStatus.steps()) {
-                if (stepStatus.equals(step)) {
+                if (step.equals(stepStatus.step().getValue())) {
                     return true;
                 }
             }
@@ -121,7 +121,7 @@ public class MoveInWizardManager {
     }
 
     public static void setCurrentStep(MoveInWizardStep step) {
-        if (step != null && !isStepComplete(step)) {
+        if (step != null && isStepIncluded(step) && !isStepComplete(step)) {
             currentStep = step;
         } else {
             nextStep();
