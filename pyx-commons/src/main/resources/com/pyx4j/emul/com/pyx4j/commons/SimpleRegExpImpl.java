@@ -21,7 +21,6 @@
 package com.pyx4j.commons;
 
 import java.util.ArrayList;
-import java.util.regex.Pattern;
 
 import com.google.gwt.regexp.shared.MatchResult;
 import com.google.gwt.regexp.shared.RegExp;
@@ -40,8 +39,15 @@ class SimpleRegExpImpl {
 
     }
     
-    public static boolean matchCaseInsensitive(String input, String pattern) {
-        return RegExp.compile(pattern, "i").test(input);
+    public static boolean match(String input, String pattern, boolean caseInsensitive, boolean multiline) {
+        String flags = "";
+        if (caseInsensitive) {
+            flags += "i";
+        }
+        if (multiline) {
+            flags += "m";
+        }
+        return RegExp.compile(pattern, flags).test(input);
     }
 
 }

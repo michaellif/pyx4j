@@ -36,10 +36,11 @@ public class SimpleRegExpTest extends TestCase {
     }
 
     public void testmatchCaseInsensitive() {
-        assertTrue("exact ", SimpleRegExp.matchCaseInsensitive("A", "A"));
-        assertTrue("oposite 1", SimpleRegExp.matchCaseInsensitive("A", "a"));
-        assertTrue("oposite 2", SimpleRegExp.matchCaseInsensitive("a", "A"));
+        assertTrue("exact ", SimpleRegExp.match("A", "A", true, true));
+        assertTrue("oposite 1", SimpleRegExp.match("A", "a", true, true));
+        assertTrue("oposite 2", SimpleRegExp.match("a", "A", true, true));
 
-        assertTrue("bunny", SimpleRegExp.matchCaseInsensitive("bunny", ".*?bun.*"));
+        assertTrue("bunny", SimpleRegExp.match("bunny", ".*bun.*", true, true));
+        assertTrue("a\nbunny", SimpleRegExp.match("a\nbunny", ".*bun.*", true, true));
     }
 }

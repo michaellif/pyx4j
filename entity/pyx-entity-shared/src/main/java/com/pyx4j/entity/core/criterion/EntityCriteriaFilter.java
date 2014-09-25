@@ -94,9 +94,9 @@ public class EntityCriteriaFilter<E extends IEntity> implements Filter<E> {
         if (value == null) {
             return false;
         } else if (hasLikeValue(pattern)) {
-            return SimpleRegExp.matchCaseInsensitive(value.toString(), pattern.replace(String.valueOf(PropertyCriterion.WILDCARD_CHAR), ".*?") + ".*");
+            return SimpleRegExp.match(value.toString(), pattern.replace(String.valueOf(PropertyCriterion.WILDCARD_CHAR), ".*") + ".*", true, true);
         } else {
-            return SimpleRegExp.matchCaseInsensitive(value.toString(), ".*?" + pattern + ".*");
+            return SimpleRegExp.match(value.toString(), ".*" + pattern + ".*", true, true);
         }
     }
 }
