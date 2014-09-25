@@ -90,7 +90,7 @@ public abstract class AbstractPane extends DockLayoutPanel implements IPane {
         addSouth(footerToolbarHolder, 0);
 
         contentHolder = new PrimePaneContentHolder(this);
-
+        add(contentHolder);
     }
 
     protected Collection<HasSecureConcern> secureConcerns() {
@@ -111,7 +111,6 @@ public abstract class AbstractPane extends DockLayoutPanel implements IPane {
     protected void setContentPane(IsWidget widget) {
         assert contentHolder.getWidgetCount() == 0 : "Content Pane is already set";
         contentHolder.setContentPane(widget);
-        add(contentHolder);
     }
 
     @Override
