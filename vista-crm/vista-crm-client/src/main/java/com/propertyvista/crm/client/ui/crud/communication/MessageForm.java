@@ -16,6 +16,10 @@ package com.propertyvista.crm.client.ui.crud.communication;
 import java.util.Collection;
 import java.util.List;
 
+import com.google.gwt.dom.client.Style.Overflow;
+import com.google.gwt.dom.client.Style.TextOverflow;
+import com.google.gwt.dom.client.Style.Unit;
+import com.google.gwt.dom.client.Style.WhiteSpace;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.safehtml.shared.SafeHtml;
@@ -23,6 +27,7 @@ import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.IsWidget;
+import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.MenuItem;
 import com.google.gwt.user.client.ui.Widget;
 
@@ -148,11 +153,17 @@ public class MessageForm extends CrmEntityForm<MessageDTO> {
                 @Override
                 public SafeHtml format(MessageDTO value) {
 
-                    String body = HtmlUtils.removeHtmlTags(value.text().getValue(""));
-                    body = body.length() > 100 ? body.substring(0, 100) + " ..." : body;
+                    Label messageField = new Label(HtmlUtils.removeHtmlTags(value.text().getValue("")));
+                    messageField.getElement().getStyle().setWidth(100, Unit.PCT);
+                    messageField.getElement().getStyle().setWhiteSpace(WhiteSpace.NOWRAP);
+                    messageField.getElement().getStyle().setOverflow(Overflow.HIDDEN);
+                    messageField.getElement().getStyle().setTextOverflow(TextOverflow.ELLIPSIS);
+
+                    //String body = HtmlUtils.removeHtmlTags(value.text().getValue(""));
+                    //body = body.length() > 100 ? body.substring(0, 100) + " ..." : body;
                     SafeHtmlBuilder loginTermsBuilder = new SafeHtmlBuilder();
                     return loginTermsBuilder.appendHtmlConstant(SimpleMessageFormat.format("{0}, {1}:", value.header().sender().getValue(""), value.date()))
-                            .appendHtmlConstant(body).toSafeHtml();
+                            .appendHtmlConstant("<br/>").appendHtmlConstant(messageField.toString()).toSafeHtml();
                 }
             });
 
