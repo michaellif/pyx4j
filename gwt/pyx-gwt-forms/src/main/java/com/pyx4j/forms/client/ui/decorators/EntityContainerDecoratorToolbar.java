@@ -20,14 +20,21 @@
  */
 package com.pyx4j.forms.client.ui.decorators;
 
+import com.google.gwt.dom.client.Style.Display;
+import com.google.gwt.dom.client.Style.Float;
+import com.google.gwt.dom.client.Style.Overflow;
+import com.google.gwt.dom.client.Style.Position;
+import com.google.gwt.dom.client.Style.TextAlign;
+import com.google.gwt.dom.client.Style.TextOverflow;
 import com.google.gwt.dom.client.Style.Unit;
+import com.google.gwt.dom.client.Style.WhiteSpace;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.resources.client.ImageResource;
 import com.google.gwt.safehtml.shared.SafeHtml;
 import com.google.gwt.safehtml.shared.SafeHtmlUtils;
+import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
-import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.SimplePanel;
@@ -37,9 +44,10 @@ import com.pyx4j.commons.IDebugId;
 import com.pyx4j.commons.IFormatter;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.forms.client.ui.CForm;
+import com.pyx4j.widgets.client.Toolbar;
 import com.pyx4j.widgets.client.images.WidgetsImages;
 
-public class EntityContainerDecoratorToolbar<E extends IEntity> extends HorizontalPanel {
+public class EntityContainerDecoratorToolbar<E extends IEntity> extends FlowPanel {
 
     public static enum DebugIds implements IDebugId {
         Caption, Decorator, ImageWarn, TitleIcon;
@@ -60,13 +68,14 @@ public class EntityContainerDecoratorToolbar<E extends IEntity> extends Horizont
 
     private final Image titleIcon;
 
-    private final HorizontalPanel captionHolder;
+    private final FlowPanel captionHolder;
 
     private IFormatter<E, SafeHtml> captionFormatter;
 
     public EntityContainerDecoratorToolbar(WidgetsImages images) {
 
         setWidth("100%");
+        getElement().getStyle().setTextAlign(TextAlign.LEFT);
         setStyleName(WidgetDecoratorTheme.StyleName.EntityContainerDecoratorToolbar.name());
 
         captionFormatter = new IFormatter<E, SafeHtml>() {
@@ -76,15 +85,19 @@ public class EntityContainerDecoratorToolbar<E extends IEntity> extends Horizont
             }
         };
 
-        captionHolder = new HorizontalPanel();
-        captionHolder.getElement().getStyle().setMarginLeft(50, Unit.PX);
-        captionHolder.getElement().getStyle().setMarginRight(5, Unit.PX);
+        captionHolder = new FlowPanel();
+        captionHolder.getElement().getStyle().setMarginLeft(40, Unit.PX);
+        captionHolder.getElement().getStyle().setMarginRight(60, Unit.PX);
         captionHolder.getElement().getStyle().setLineHeight(2, Unit.EM);
 
         caption = new HTML("");
         caption.setStyleName(WidgetDecoratorTheme.StyleName.EntityContainerDecoratorCollapsedCaption.name());
+        caption.getElement().getStyle().setWhiteSpace(WhiteSpace.NOWRAP);
+        caption.getElement().getStyle().setOverflow(Overflow.HIDDEN);
+        caption.getElement().getStyle().setTextOverflow(TextOverflow.ELLIPSIS);
 
         titleIcon = new Image();
+        titleIcon.getElement().getStyle().setFloat(Float.LEFT);
         titleIcon.getElement().getStyle().setMarginTop(2, Unit.PX);
         titleIcon.getElement().getStyle().setPaddingRight(2, Unit.PX);
         titleIcon.setVisible(false);
@@ -93,18 +106,25 @@ public class EntityContainerDecoratorToolbar<E extends IEntity> extends Horizont
 
         captionHolder.add(caption);
 
-        add(captionHolder);
-        setCellVerticalAlignment(captionHolder, HorizontalPanel.ALIGN_MIDDLE);
-        setCellWidth(captionHolder, "100%");
+        SimplePanel captionPanel = new SimplePanel(captionHolder);
+        captionPanel.setWidth("100%");
+        captionPanel.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
+        captionPanel.getElement().getStyle().setTextAlign(TextAlign.LEFT);
+
+        Toolbar actionsPanel = new Toolbar();
+        actionsPanel.getElement().getStyle().setPosition(Position.ABSOLUTE);
+        actionsPanel.getElement().getStyle().setTop(0, Unit.PX);
+        actionsPanel.getElement().getStyle().setRight(0, Unit.PX);
+
+        actionsPanelHolder = new SimplePanel();
+        actionsPanel.addItem(actionsPanelHolder);
 
         warnImage = new Image(images.warn());
         warnImage.setVisible(false);
-        warnImage.getElement().getStyle().setMargin(2, Unit.PX);
-        warnImage.getElement().getStyle().setFloat(com.google.gwt.dom.client.Style.Float.RIGHT);
-        add(warnImage);
+        actionsPanel.addItem(warnImage);
 
-        actionsPanelHolder = new SimplePanel();
-        add(actionsPanelHolder);
+        add(captionPanel);
+        add(actionsPanel);
 
         caption.ensureDebugId(new CompositeDebugId(DecoratorDebugIds.BoxFolderItemToolbar, DebugIds.Caption).debugId());
         titleIcon.ensureDebugId(new CompositeDebugId(DecoratorDebugIds.BoxFolderItemToolbar, DebugIds.TitleIcon).debugId());
