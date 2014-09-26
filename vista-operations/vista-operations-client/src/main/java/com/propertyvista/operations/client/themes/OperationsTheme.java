@@ -29,6 +29,7 @@ import com.pyx4j.site.client.ui.devconsole.DevConsoleTheme;
 import com.pyx4j.site.client.ui.sidemenu.SideMenuTheme;
 import com.pyx4j.widgets.client.datepicker.DatePickerTheme;
 import com.pyx4j.widgets.client.dialog.DialogTheme;
+import com.pyx4j.widgets.client.richtext.RichTextEditorTheme;
 import com.pyx4j.widgets.client.style.theme.WidgetTheme;
 import com.pyx4j.widgets.client.tabpanel.TabTheme;
 
@@ -121,6 +122,7 @@ public class OperationsTheme extends VistaTheme {
         });
 
         addTheme(new SideMenuTheme());
+        addTheme(new RichTextEditorTheme());
 
         addTheme(new BackOfficeLayoutTheme());
 

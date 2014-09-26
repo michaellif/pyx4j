@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011- All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -30,6 +30,7 @@ import com.pyx4j.site.client.ui.devconsole.DevConsoleTheme;
 import com.pyx4j.site.client.ui.layout.ResponsiveLayoutTheme;
 import com.pyx4j.widgets.client.datepicker.DatePickerTheme;
 import com.pyx4j.widgets.client.dialog.DialogTheme;
+import com.pyx4j.widgets.client.richtext.RichTextEditorTheme;
 import com.pyx4j.widgets.client.style.theme.WidgetTheme;
 
 import com.propertyvista.common.client.theme.HorizontalAlignCenterMixin;
@@ -381,6 +382,7 @@ public class PortalTheme extends Theme {
         addTheme(new DashboardTheme());
         addTheme(new EntityViewTheme());
         addTheme(new StepsTheme());
+        addTheme(new RichTextEditorTheme());
 
         addTheme(new DevConsoleTheme());
 
