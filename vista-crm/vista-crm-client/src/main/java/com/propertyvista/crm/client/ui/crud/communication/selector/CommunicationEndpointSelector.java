@@ -13,8 +13,6 @@
  */
 package com.propertyvista.crm.client.ui.crud.communication.selector;
 
-import java.util.Collection;
-
 import com.google.gwt.user.client.Command;
 
 import com.pyx4j.forms.client.ui.CSelectorListBox;
@@ -37,17 +35,6 @@ public class CommunicationEndpointSelector extends CSelectorListBox<Communicatio
             }
         });
 
-    }
-
-    public Collection<CommunicationEndpointDTO> getRefreshedValue() {
-
-        //TODO: this is an idiotic workaround. Component doesn't get the freshest value on getValue().
-        try {
-            this.setValue(this.getNativeComponent().getNativeValue());
-        } catch (Exception e) {
-            System.err.println("Exception : " + e.getStackTrace());
-        }
-        return getValue();
     }
 
 }

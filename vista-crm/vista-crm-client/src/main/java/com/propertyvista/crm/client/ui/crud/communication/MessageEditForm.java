@@ -156,9 +156,7 @@ public class MessageEditForm extends CrmEntityForm<MessageDTO> {
     }
 
     private CommunicationEndpointSelector createCommunicationEndpointSelectorNew() {
-        return new CommunicationEndpointSelector() {//@formatter:off
-
-        };//@formatter:on
+        return new CommunicationEndpointSelector();
     }
 
 }
