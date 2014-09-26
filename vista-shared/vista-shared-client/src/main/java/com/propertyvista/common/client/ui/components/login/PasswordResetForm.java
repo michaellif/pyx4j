@@ -59,15 +59,14 @@ public class PasswordResetForm extends CForm<PasswordChangeRequest> {
 
     @Override
     protected IsWidget createContent() {
-
         FormPanel formPanel = new FormPanel(this);
 
-        formPanel.append(Location.Left, proto().securityQuestion()).decorate();
-        formPanel.append(Location.Left, proto().securityAnswer()).decorate();
+        formPanel.append(Location.Left, proto().securityQuestion()).decorate().labelWidth(200);
+        formPanel.append(Location.Left, proto().securityAnswer()).decorate().labelWidth(200);
 
         passwordStrengthWidget = new PasswordStrengthWidget(passwordStrengthRule);
-        formPanel.append(Location.Left, proto().newPassword()).decorate().assistantWidget(passwordStrengthWidget);
-        formPanel.append(Location.Left, proto().newPasswordConfirm()).decorate();
+        formPanel.append(Location.Left, proto().newPassword()).decorate().assistantWidget(passwordStrengthWidget).labelWidth(200);
+        formPanel.append(Location.Left, proto().newPasswordConfirm()).decorate().labelWidth(200);
 
         get(proto().securityQuestion()).setVisible(false);
         get(proto().securityAnswer()).setVisible(false);
