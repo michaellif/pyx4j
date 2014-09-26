@@ -159,8 +159,6 @@ public class MessageForm extends CrmEntityForm<MessageDTO> {
                     messageField.getElement().getStyle().setOverflow(Overflow.HIDDEN);
                     messageField.getElement().getStyle().setTextOverflow(TextOverflow.ELLIPSIS);
 
-                    //String body = HtmlUtils.removeHtmlTags(value.text().getValue(""));
-                    //body = body.length() > 100 ? body.substring(0, 100) + " ..." : body;
                     SafeHtmlBuilder loginTermsBuilder = new SafeHtmlBuilder();
                     return loginTermsBuilder.appendHtmlConstant(SimpleMessageFormat.format("{0}, {1}:", value.header().sender().getValue(""), value.date()))
                             .appendHtmlConstant("<br/>").appendHtmlConstant(messageField.toString()).toSafeHtml();

@@ -13,8 +13,11 @@
  */
 package com.propertyvista.portal.resident.ui.communication;
 
+import com.google.gwt.dom.client.Style.Overflow;
 import com.google.gwt.dom.client.Style.Position;
+import com.google.gwt.dom.client.Style.TextOverflow;
 import com.google.gwt.dom.client.Style.Unit;
+import com.google.gwt.dom.client.Style.WhiteSpace;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.safehtml.shared.SafeHtml;
@@ -23,6 +26,7 @@ import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.IsWidget;
+import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.commons.HtmlUtils;
@@ -134,18 +138,17 @@ public class MessagePage extends CPortalEntityForm<MessageDTO> {
             decor.setCaptionFormatter(new IFormatter<MessageDTO, SafeHtml>() {
                 @Override
                 public SafeHtml format(MessageDTO value) {
-                    /*-Label messageField = new Label(HtmlUtils.removeHtmlTags(value.text().getValue("")));
-                    messageField.getElement().getStyle().setWidth(250, Unit.PX);
+
+                    Label messageField = new Label(HtmlUtils.removeHtmlTags(value.text().getValue("")));
+                    messageField.getElement().getStyle().setWidth(100, Unit.PCT);
                     messageField.getElement().getStyle().setWhiteSpace(WhiteSpace.NOWRAP);
                     messageField.getElement().getStyle().setOverflow(Overflow.HIDDEN);
                     messageField.getElement().getStyle().setTextOverflow(TextOverflow.ELLIPSIS);
-                    -*/
 
-                    String body = HtmlUtils.removeHtmlTags(value.text().getValue(""));
-                    body = body.length() > 100 ? body.substring(0, 100) + " ..." : body;
                     SafeHtmlBuilder loginTermsBuilder = new SafeHtmlBuilder();
                     return loginTermsBuilder.appendHtmlConstant(SimpleMessageFormat.format("{0}, {1}:", value.header().sender().getValue(""), value.date()))
-                            .appendHtmlConstant(body).toSafeHtml();
+                            .appendHtmlConstant("<br/>").appendHtmlConstant(messageField.toString()).toSafeHtml();
+
                 }
             });
 
