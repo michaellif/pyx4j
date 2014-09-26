@@ -33,7 +33,6 @@ import com.google.gwt.resources.client.ImageResource;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
-import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
 
@@ -51,7 +50,7 @@ import com.pyx4j.widgets.client.style.theme.WidgetTheme;
  * A sample toolbar for use with {@link RichTextArea}. It provides a simple UI for all
  * rich text formatting, dynamically displayed only for the available functionality.
  */
-public class RichTextToolbar extends Composite {
+public class RichTextToolbar extends FlowPanel {
 
     private static final I18n i18n = I18n.get(RichTextToolbar.class);
 
@@ -171,17 +170,15 @@ public class RichTextToolbar extends Composite {
 
     private final RichTextArea.Formatter formatter;
 
-    private final FlowPanel toolBar;
-
     private FlowPanel topToolbar;
 
     private Toolbar topButtonBar;
 
-    private final FlowPanel fontToolbar = new FlowPanel();
+    private FlowPanel fontToolbar;
 
-    private final FlowPanel insertToolbar = new FlowPanel();
+    private FlowPanel insertToolbar;
 
-    private final FlowPanel formatToolbar = new FlowPanel();
+    private FlowPanel formatToolbar;
 
     private Button bold;
 
@@ -253,31 +250,19 @@ public class RichTextToolbar extends Composite {
         this.richText = richText;
         this.formatter = richText.getFormatter();
 
-        createTopToolbar();
+//TODO change to PYX Theme
+        setStyleName("gwt-ExtRichTextToolbar");
 
-        toolBar = new FlowPanel();
-        toolBar.add(topToolbar);
-        toolBar.add(formatToolbar);
-        toolBar.add(fontToolbar);
-        toolBar.add(insertToolbar);
+        initTopToolbar();
+        initFormatToolbar();
+        initFontToolbar();
+        initInsertToolbar();
 
-        formatToolbar.setVisible(false);
-        fontToolbar.setVisible(false);
-        insertToolbar.setVisible(false);
-
-        createFormatMenus();
-
-        createFontMenus();
-
-        createInsertMenu();
-
+//TODO move to initInsertToolbar
         customButton.setVisible(false);
         customButton.addBlurHandler(handler);
         customButton.addClickHandler(handler);
         customButton.setVisible(false);
-
-        initWidget(toolBar);
-        setStyleName("gwt-ExtRichTextToolbar");
 
         // We only use these listeners for updating status, so don't hook them up
         // unless at least basic editing is supported.
@@ -287,7 +272,7 @@ public class RichTextToolbar extends Composite {
         inOperation = false;
     }
 
-    private void createTopToolbar() {
+    private void initTopToolbar() {
         topToolbar = new FlowPanel();
         topToolbar.setWidth("100%");
 
@@ -331,9 +316,13 @@ public class RichTextToolbar extends Composite {
             }
         });
         topToolbar.add(textHtmlSwitch);
+        add(topToolbar);
     }
 
-    private void createInsertMenu() {
+    private void initInsertToolbar() {
+        insertToolbar = new FlowPanel();
+        insertToolbar.setVisible(false);
+
         topButtonBar.addItem(insertButton = new Button(i18n.tr("Insert"), new Command() {
 
             @Override
@@ -357,9 +346,13 @@ public class RichTextToolbar extends Composite {
         linkPanel.addItem(insertImage = createButton(images.insertImage(), "insertImage"));
         insertToolbar.add(linkPanel);
         insertToolbar.add(customButton);
+        add(insertToolbar);
     }
 
-    private void createFontMenus() {
+    private void initFontToolbar() {
+        fontToolbar = new FlowPanel();
+        fontToolbar.setVisible(false);
+
         topButtonBar.addItem(fontButton = new Button(i18n.tr("Font"), new Command() {
 
             @Override
@@ -379,10 +372,14 @@ public class RichTextToolbar extends Composite {
         fontToolbar.add(backColors = createColorList("Highlight"));
         fontToolbar.add(fonts = createFontList());
         fontToolbar.add(fontSizes = createFontSizes());
+        add(fontToolbar);
 
     }
 
-    private void createFormatMenus() {
+    private void initFormatToolbar() {
+        formatToolbar = new FlowPanel();
+        formatToolbar.setVisible(false);
+
         topButtonBar.addItem(formatButton = new Button(i18n.tr("Format"), new Command() {
 
             @Override
@@ -424,6 +421,8 @@ public class RichTextToolbar extends Composite {
         indentPanel.addItem(new HTML("&emsp;"));
         indentPanel.addItem(removeFormat = createButton(images.removeFormat(), "removeFormat"));
         formatToolbar.add(indentPanel);
+        add(formatToolbar);
+
     }
 
     private ListBox createColorList(String caption) {
