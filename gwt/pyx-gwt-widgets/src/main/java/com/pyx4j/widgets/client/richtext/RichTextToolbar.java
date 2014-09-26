@@ -58,7 +58,7 @@ public class RichTextToolbar extends FlowPanel {
      * We use an inner EventListener class to avoid exposing event methods on the
      * RichTextToolbar itself.
      */
-    private class EventHandler implements ClickHandler, ChangeHandler, KeyUpHandler {
+    private class EventHandler implements ClickHandler, ChangeHandler {
 
         @Override
         public void onChange(ChangeEvent event) {
@@ -123,11 +123,6 @@ public class RichTextToolbar extends FlowPanel {
                 formatter.insertUnorderedList();
             } else if (sender == removeFormat) {
                 formatter.removeFormat();
-            } else if (sender == richText) {
-                // We use the RichTextArea's onKeyUp event to update the toolbar status.
-                // This will catch any cases where the user moves the cursur using the
-                // keyboard, or uses one of the browser's built-in keyboard shortcuts.
-                updateStatus();
             } else if (sender == customButton) {
                 RichTextAction action = getCustomAction();
                 if (action != null) {
@@ -139,16 +134,6 @@ public class RichTextToolbar extends FlowPanel {
                         }
                     });
                 }
-            }
-        }
-
-        @Override
-        public void onKeyUp(KeyUpEvent event) {
-            if (event.getSource() == richText) {
-                // We use the RichTextArea's onKeyUp event to update the toolbar status.
-                // This will catch any cases where the user moves the cursur using the
-                // keyboard, or uses one of the browser's built-in keyboard shortcuts.
-                updateStatus();
             }
         }
 
@@ -254,6 +239,8 @@ public class RichTextToolbar extends FlowPanel {
         initFontToolbar();
         initInsertToolbar();
 
+        formatButton.toggleActive();
+
 //TODO move to initInsertToolbar
         customButton.setVisible(false);
         customButton.addClickHandler(handler);
@@ -261,8 +248,26 @@ public class RichTextToolbar extends FlowPanel {
 
         // We only use these listeners for updating status, so don't hook them up
         // unless at least basic editing is supported.
-        richText.addKeyUpHandler(handler);
-        richText.addClickHandler(handler);
+        richText.addKeyUpHandler(new KeyUpHandler() {
+
+            @Override
+            public void onKeyUp(KeyUpEvent event) {
+                // We use the RichTextArea's onKeyUp event to update the toolbar status.
+                // This will catch any cases where the user moves the cursur using the
+                // keyboard, or uses one of the browser's built-in keyboard shortcuts.
+                updateStatus();
+            }
+        });
+        richText.addClickHandler(new ClickHandler() {
+
+            @Override
+            public void onClick(ClickEvent event) {
+                // We use the RichTextArea's onKeyUp event to update the toolbar status.
+                // This will catch any cases where the user moves the cursur using the
+                // keyboard, or uses one of the browser's built-in keyboard shortcuts.
+                updateStatus();
+            }
+        });
 
         inOperation = false;
     }
@@ -390,8 +395,6 @@ public class RichTextToolbar extends FlowPanel {
             }
         }));
         formatButton.addStyleName(RichTextEditorTheme.StyleName.rteTopBarButton.name());
-
-        formatButton.toggleActive();
 
         Toolbar formatPanel = new Toolbar();
         formatPanel.addItem(bold = createButton(images.bold(), "bold"));
