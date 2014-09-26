@@ -55,6 +55,8 @@ public class CDatePicker extends CTextFieldBase<LogicalDate, NDatePicker> {
 
     public void setDateFormat(String pattern) {
         setFormatter(new DateFormatter(pattern));
+        setParser(new DateParser(pattern));
+        setWatermark(pattern.toUpperCase());
     }
 
     public void setDateConditionValidationMessage(String dateConditionValidationMessage) {
@@ -129,9 +131,9 @@ public class CDatePicker extends CTextFieldBase<LogicalDate, NDatePicker> {
                 return null; // empty value case
             }
             try {
-                return new LogicalDate(parser.parseStrict(string.replace('-', '/')));
+                return new LogicalDate(parser.parseStrict(string));
             } catch (IllegalArgumentException e) {
-                throw new ParseException(i18n.tr("Invalid date format. Use MM/DD/YYYY format"), 0);
+                throw new ParseException(i18n.tr("Invalid date format. Use {0} format", parser.getPattern()), 0);
             }
         }
     }

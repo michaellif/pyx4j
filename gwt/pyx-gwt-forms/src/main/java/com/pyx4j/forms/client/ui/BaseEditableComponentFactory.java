@@ -29,6 +29,8 @@ import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.core.IObject;
 import com.pyx4j.entity.core.meta.MemberMeta;
+import com.pyx4j.entity.shared.IUserPreferences;
+import com.pyx4j.security.shared.Context;
 import com.pyx4j.widgets.client.RadioGroup;
 
 public class BaseEditableComponentFactory implements IEditableComponentFactory {
@@ -143,16 +145,18 @@ public class BaseEditableComponentFactory implements IEditableComponentFactory {
             CComboBox comp = new CComboBox();
             comp.setOptions(EnumSet.allOf((Class<Enum>) mm.getValueClass()));
             return comp;
-        } else if (mm.getValueClass().equals(LogicalDate.class)) {
+        } else if (mm.getValueClass().equals(LogicalDate.class) || mm.getValueClass().equals(java.sql.Date.class)) {
             CDatePicker comp = new CDatePicker();
-            if (mm.getFormat() != null) {
-                comp.setDateFormat(mm.getFormat());
+            String format = getPreferedLogicalDateFormat(mm);
+            if (format != null) {
+                comp.setDateFormat(format);
             }
             return comp;
-        } else if (mm.getValueClass().equals(Date.class) || (mm.getValueClass().equals(java.sql.Date.class))) {
+        } else if (mm.getValueClass().equals(Date.class)) {
             CDateLabel comp = new CDateLabel();
-            if (mm.getFormat() != null) {
-                comp.setDateFormat(mm.getFormat());
+            String format = getPreferedDateTimeFormat(mm);
+            if (format != null) {
+                comp.setDateFormat(format);
             }
             return comp;
         } else if (mm.getValueClass().equals(Time.class)) {
@@ -179,5 +183,26 @@ public class BaseEditableComponentFactory implements IEditableComponentFactory {
             throw new Error("No Component factory for member '" + member.getMeta().getFieldName() + "' of class " + member.getValueClass());
         }
 
+    }
+
+    public static String getPreferedLogicalDateFormat(MemberMeta mm) {
+        if (Context.userPreferences(IUserPreferences.class).logicalDateFormat().isNull()) {
+            if (mm.getValueClass().equals(Date.class)) {
+                // TODO translate to logicalDate if possible, e.g. remove Time part
+                return null;
+            } else {
+                return mm.getFormat();
+            }
+        } else {
+            return Context.userPreferences(IUserPreferences.class).logicalDateFormat().getValue();
+        }
+    }
+
+    public static String getPreferedDateTimeFormat(MemberMeta mm) {
+        if (Context.userPreferences(IUserPreferences.class).dateTimeFormat().isNull()) {
+            return mm.getFormat();
+        } else {
+            return Context.userPreferences(IUserPreferences.class).dateTimeFormat().getValue();
+        }
     }
 }

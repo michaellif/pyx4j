@@ -13,7 +13,7 @@
  * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
  * License for the specific language governing permissions and limitations under
  * the License.
- * 
+ *
  * Created on 11-Sep-06
  * @author vlads
  * @version $Id$
@@ -27,12 +27,15 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import com.pyx4j.entity.core.EntityFactory;
+import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.gwt.server.ServletUtils;
 import com.pyx4j.security.shared.Context;
 import com.pyx4j.security.shared.UserVisit;
+import com.pyx4j.security.shared.UserVisitPreferences;
 
 /**
- * 
+ *
  */
 public class ServerContext extends Context {
 
@@ -80,7 +83,7 @@ public class ServerContext extends Context {
 
     /**
      * Convenience method to access custom UserVisit
-     * 
+     *
      * @param userVisitClass
      * @return
      */
@@ -95,9 +98,16 @@ public class ServerContext extends Context {
         }
     }
 
+    // TODO make instance of the class customizable in configuration base on UserVisit and Application type.
+    @Override
+    @SuppressWarnings("unchecked")
+    protected <E extends UserVisitPreferences> E defaultUserPreferences(Class<E> userPreferencesClass) {
+        return (E) EntityFactory.create((Class<IEntity>) userPreferencesClass);
+    }
+
     /**
      * @see Lifecycle#inheritUserContext(InheritableUserContext);
-     * 
+     *
      * @return
      */
     public static InheritableUserContext getInheritableUserContext() {
@@ -106,7 +116,7 @@ public class ServerContext extends Context {
 
     /**
      * TODO remove public.
-     * 
+     *
      * @return current HttpSession
      */
     public static HttpSession getSession() {

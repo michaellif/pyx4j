@@ -41,6 +41,8 @@ public class UserVisit implements Serializable {
 
     private String serverSideHashCode;
 
+    private UserVisitPreferences preferences;
+
     private transient boolean changed;
 
     @GWTSerializable
@@ -82,6 +84,14 @@ public class UserVisit implements Serializable {
 
     public void setPrincipalPrimaryKey(Key principalPrimaryKey) {
         this.principalPrimaryKey = principalPrimaryKey;
+    }
+
+    public UserVisitPreferences getPreferences() {
+        return preferences;
+    }
+
+    public void setPreferences(UserVisitPreferences preferences) {
+        this.preferences = preferences;
     }
 
     public boolean isChanged() {

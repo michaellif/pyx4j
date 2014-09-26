@@ -31,6 +31,21 @@ public abstract class Context {
         return instance().getUserVisit(userVisitClass);
     }
 
+    /**
+     * Never returns null
+     *
+     * @param userVisitClass
+     */
+    @SuppressWarnings("unchecked")
+    public static <E extends UserVisitPreferences> E userPreferences(Class<E> userPreferencesClass) {
+        UserVisit v = visit(UserVisit.class);
+        if ((v == null) || v.getPreferences() == null) {
+            return instance().defaultUserPreferences(userPreferencesClass);
+        } else {
+            return (E) v.getPreferences();
+        }
+    }
+
     private static final Context instance = init();
 
     private static final Context init() {
@@ -48,4 +63,6 @@ public abstract class Context {
     }
 
     protected abstract <E extends UserVisit> E getUserVisit(Class<E> userVisitClass);
+
+    protected abstract <E extends UserVisitPreferences> E defaultUserPreferences(Class<E> userPreferencesClass);
 }

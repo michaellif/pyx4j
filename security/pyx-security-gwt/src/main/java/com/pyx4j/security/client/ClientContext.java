@@ -44,6 +44,8 @@ import com.pyx4j.commons.TimeUtils;
 import com.pyx4j.config.client.ClientApplicationBackendConfig;
 import com.pyx4j.config.client.ClientApplicationVersion;
 import com.pyx4j.config.shared.ClientSystemInfo;
+import com.pyx4j.entity.core.EntityFactory;
+import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.gwt.commons.BrowserType;
 import com.pyx4j.gwt.commons.ClientEventBus;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
@@ -61,6 +63,7 @@ import com.pyx4j.security.rpc.UserVisitChangedSystemNotification;
 import com.pyx4j.security.shared.Context;
 import com.pyx4j.security.shared.CoreBehavior;
 import com.pyx4j.security.shared.UserVisit;
+import com.pyx4j.security.shared.UserVisitPreferences;
 import com.pyx4j.webstorage.client.HTML5Storage;
 
 public class ClientContext extends Context {
@@ -186,6 +189,13 @@ public class ClientContext extends Context {
     @SuppressWarnings("unchecked")
     protected <E extends UserVisit> E getUserVisit(Class<E> userVisitClass) {
         return (E) getUserVisit();
+    }
+
+    // TODO make instance of the class customizable in configuration base on UserVisit and Application type.
+    @Override
+    @SuppressWarnings("unchecked")
+    protected <E extends UserVisitPreferences> E defaultUserPreferences(Class<E> userPreferencesClass) {
+        return (E) EntityFactory.create((Class<IEntity>) userPreferencesClass);
     }
 
     public static ClientSystemInfo getClientSystemInfo() {

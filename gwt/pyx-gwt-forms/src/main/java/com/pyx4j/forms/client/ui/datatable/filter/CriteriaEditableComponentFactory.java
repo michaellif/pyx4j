@@ -31,6 +31,7 @@ import com.pyx4j.entity.core.IObject;
 import com.pyx4j.entity.core.ObjectClassType;
 import com.pyx4j.entity.core.meta.MemberMeta;
 import com.pyx4j.entity.shared.utils.EntityComparatorFactory;
+import com.pyx4j.forms.client.ui.BaseEditableComponentFactory;
 import com.pyx4j.forms.client.ui.CBigDecimalField;
 import com.pyx4j.forms.client.ui.CComboBox;
 import com.pyx4j.forms.client.ui.CComboBoxBoolean;
@@ -64,8 +65,20 @@ public class CriteriaEditableComponentFactory implements IEditableComponentFacto
             CComboBox comp = new CComboBox();
             comp.setOptions(EnumSet.allOf((Class<Enum>) mm.getValueClass()));
             return comp;
-        } else if (mm.getValueClass().equals(LogicalDate.class) || mm.getValueClass().equals(Date.class) || mm.getValueClass().equals(java.sql.Date.class)) {
-            return new CDatePicker();
+        } else if (mm.getValueClass().equals(LogicalDate.class) || mm.getValueClass().equals(java.sql.Date.class)) {
+            CDatePicker comp = new CDatePicker();
+            String format = BaseEditableComponentFactory.getPreferedLogicalDateFormat(mm);
+            if (format != null) {
+                comp.setDateFormat(format);
+            }
+            return comp;
+        } else if (mm.getValueClass().equals(Date.class)) {
+            CDatePicker comp = new CDatePicker();
+            String format = BaseEditableComponentFactory.getPreferedLogicalDateFormat(mm);
+            if (format != null) {
+                comp.setDateFormat(format);
+            }
+            return comp;
         } else if (mm.getValueClass().equals(Integer.class)) {
             return new CIntegerField();
         } else if (mm.getValueClass().equals(Key.class)) {
