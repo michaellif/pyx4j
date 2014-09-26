@@ -95,6 +95,8 @@ public class DeploymentContextHttpServletRequestWrapper extends HttpServletReque
         String forwardedContext = request.getHeader(ServletUtils.x_forwarded_context);
         if (forwardedContext != null) {
             return uri.substring(request.getContextPath().length());
+        } else if (request.getAttribute(ServletUtils.x_jetty_contextLess) != null) {
+            return request.getContextPath() + uri;
         } else {
             return uri;
         }

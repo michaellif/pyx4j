@@ -43,8 +43,8 @@ import com.pyx4j.gwt.server.ServletUtils;
 import com.pyx4j.rpc.shared.DevInfoUnRecoverableRuntimeException;
 import com.pyx4j.rpc.shared.RemoteService;
 import com.pyx4j.rpc.shared.UnRecoverableRuntimeException;
-import com.pyx4j.server.contexts.ServerContext;
 import com.pyx4j.server.contexts.Lifecycle;
+import com.pyx4j.server.contexts.ServerContext;
 
 @SuppressWarnings("serial")
 public class RemoteServiceServlet extends com.google.gwt.user.server.rpc.RemoteServiceServlet implements RemoteService {
@@ -96,9 +96,13 @@ public class RemoteServiceServlet extends com.google.gwt.user.server.rpc.RemoteS
 
         // Allow for redirected requests environments
         String forwardedPath = ServerContext.getRequest().getHeader(ServletUtils.x_forwarded_path);
+        if ((forwardedPath == null) && (ServerContext.getRequest().getAttribute(ServletUtils.x_jetty_contextLess) != null)) {
+            forwardedPath = ServerContext.getRequest().getContextPath();
+        }
         if (forwardedPath != null) {
             modulePath = forwardedPath + modulePath;
         }
+
         String moduleRelativePath;
         String contextPath = ServerContext.getRequest().getContextPath();
         if (modulePath.startsWith(contextPath)) {
@@ -117,6 +121,9 @@ public class RemoteServiceServlet extends com.google.gwt.user.server.rpc.RemoteS
         if (debug) {
             log.debug("moduleBaseURL orig {}", moduleBaseURL);
             RequestDebug.debug(request);
+        }
+        if ((forwardedPath == null) && (ServerContext.getRequest().getAttribute(ServletUtils.x_jetty_contextLess) != null)) {
+            forwardedPath = ServerContext.getRequest().getContextPath();
         }
         if (forwardedPath != null) {
             try {

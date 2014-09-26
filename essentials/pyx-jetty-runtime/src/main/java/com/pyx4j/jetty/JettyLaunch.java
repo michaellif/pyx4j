@@ -27,6 +27,7 @@ import java.util.TimeZone;
 import org.eclipse.jetty.annotations.AnnotationConfiguration;
 import org.eclipse.jetty.rewrite.handler.RedirectPatternRule;
 import org.eclipse.jetty.rewrite.handler.RewriteHandler;
+import org.eclipse.jetty.rewrite.handler.RewritePatternRule;
 import org.eclipse.jetty.security.HashLoginService;
 import org.eclipse.jetty.server.NCSARequestLog;
 import org.eclipse.jetty.server.Server;
@@ -42,6 +43,16 @@ import org.eclipse.jetty.webapp.WebXmlConfiguration;
 public abstract class JettyLaunch {
 
     public abstract String getContextPath();
+
+    /**
+     * Jetty will work like behind Apache HTTP server
+     *
+     * RewriteRule ^/(.*) http://localhost:8080/ContextPath/$1 [P,L]
+     *
+     */
+    protected boolean getRewriteRootToContext() {
+        return false;
+    }
 
     public int getServerPort() {
         return 8080;
@@ -166,17 +177,32 @@ public abstract class JettyLaunch {
 
         configure(webAppContext);
 
-        handlers.addHandler(webAppContext);
+        //handle default /  e.g.  Like behind  Apache HTTP server
+        if (getRewriteRootToContext()) {
+            RewriteHandler rewrite = new RewriteHandler();
+            rewrite.setRewriteRequestURI(false); // Jetty own redirect (site -> site/) will not work if changed, Fixed in DeploymentContextHttpServletRequestWrapper getRequestURI
+            rewrite.setRewritePathInfo(true);
 
-        //handle default /
-        RewriteHandler rewrite = new RewriteHandler();
-        rewrite.setRewriteRequestURI(false);
+            RewritePatternRule rewriteToRoot = new RewritePatternRule();
+            rewriteToRoot.setPattern("/*");
+            rewriteToRoot.setReplacement(getContextPath());
+            rewrite.addRule(rewriteToRoot);
+            // ServletUtils.x_jetty_contextLess
+            rewrite.setOriginalPathAttribute("jetty-rewrite-original-path");
 
-        RedirectPatternRule redirect = new RedirectPatternRule();
-        redirect.setPattern("/");
-        redirect.setLocation(getContextPath());
-        rewrite.addRule(redirect);
-        handlers.addHandler(rewrite);
+            handlers.addHandler(rewrite);
+            rewrite.setHandler(webAppContext);
+        } else {
+            RewriteHandler rewrite = new RewriteHandler();
+            rewrite.setRewriteRequestURI(false);
+            RedirectPatternRule redirect = new RedirectPatternRule();
+            redirect.setPattern("/");
+            redirect.setLocation(getContextPath());
+            rewrite.addRule(redirect);
+
+            handlers.addHandler(webAppContext);
+            handlers.addHandler(rewrite);
+        }
 
         server.setHandler(handlers);
 

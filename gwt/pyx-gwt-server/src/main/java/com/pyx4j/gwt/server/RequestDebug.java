@@ -33,7 +33,7 @@ public class RequestDebug {
 
     private final static Logger log = LoggerFactory.getLogger(RequestDebug.class);
 
-    public static void debug(ServletRequest request) {
+    public static String getServletDebug(ServletRequest request) {
         StringBuilder buf = new StringBuilder();
         buf.append('\n');
         buf.append("protocol           ").append(request.getProtocol()).append('\n');
@@ -90,6 +90,10 @@ public class RequestDebug {
             }
             buf.append('\n');
         }
-        log.debug("{}", buf.toString());
+        return buf.toString();
+    }
+
+    public static void debug(ServletRequest request) {
+        log.debug("{}", getServletDebug(request));
     }
 }
