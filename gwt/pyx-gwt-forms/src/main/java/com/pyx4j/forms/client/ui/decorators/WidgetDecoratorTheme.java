@@ -157,7 +157,7 @@ public abstract class WidgetDecoratorTheme extends Theme {
         addStyle(style);
 
         style = new Style(".", StyleName.EntityContainerDecoratorToolbar);
-        style.addProperty("height", "20px");
+        style.addProperty("min-height", "20px");
         addStyle(style);
 
         style = new Style(".", StyleName.EntityContainerDecorator);
