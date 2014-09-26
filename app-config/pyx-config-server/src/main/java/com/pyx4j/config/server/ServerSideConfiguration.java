@@ -38,11 +38,11 @@ import com.pyx4j.security.shared.AclRevalidator;
 
 /**
  * All methods can return null to use default implementation in framework.
- * 
+ *
  * This is the main configuration class you should override in application.
- * 
+ *
  * Example web.xml
- * 
+ *
  * <pre>
  * <web-app>
  *   ....
@@ -152,7 +152,7 @@ public class ServerSideConfiguration {
     /**
      * Allow to share GAE DB between applications. The same as @Table(prefix = "app1")
      * affects all Entity saved by application.
-     * 
+     *
      * @return non null value to prefix all table names in DB
      */
     public String persistenceNamePrefix() {
@@ -304,6 +304,14 @@ public class ServerSideConfiguration {
         }
     }
 
+    /**
+     *
+     * Specifies the time, in seconds, between client requests before the servlet container will invalidate UI session.
+     *
+     * An <tt>interval</tt> value of zero or less indicates that the session should never timeout.
+     *
+     * null indicates the default web.xml settings are taken
+     */
     public Integer getOverrideSessionMaxInactiveInterval() {
         return overrideSessionMaxInactiveInterval;
     }
