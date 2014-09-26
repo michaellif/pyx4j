@@ -45,7 +45,7 @@ import com.pyx4j.config.client.ClientApplicationBackendConfig;
 import com.pyx4j.config.client.ClientApplicationVersion;
 import com.pyx4j.config.shared.ClientSystemInfo;
 import com.pyx4j.entity.core.EntityFactory;
-import com.pyx4j.entity.core.IEntity;
+import com.pyx4j.entity.shared.IUserPreferences;
 import com.pyx4j.gwt.commons.BrowserType;
 import com.pyx4j.gwt.commons.ClientEventBus;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
@@ -195,7 +195,7 @@ public class ClientContext extends Context {
     @Override
     @SuppressWarnings("unchecked")
     protected <E extends UserVisitPreferences> E defaultUserPreferences(Class<E> userPreferencesClass) {
-        return (E) EntityFactory.create((Class<IEntity>) userPreferencesClass);
+        return (E) EntityFactory.create((Class<IUserPreferences>) userPreferencesClass);
     }
 
     public static ClientSystemInfo getClientSystemInfo() {

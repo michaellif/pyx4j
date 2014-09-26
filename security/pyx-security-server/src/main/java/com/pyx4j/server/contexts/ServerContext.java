@@ -28,7 +28,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import com.pyx4j.entity.core.EntityFactory;
-import com.pyx4j.entity.core.IEntity;
+import com.pyx4j.entity.shared.IUserPreferences;
 import com.pyx4j.gwt.server.ServletUtils;
 import com.pyx4j.security.shared.Context;
 import com.pyx4j.security.shared.UserVisit;
@@ -102,7 +102,7 @@ public class ServerContext extends Context {
     @Override
     @SuppressWarnings("unchecked")
     protected <E extends UserVisitPreferences> E defaultUserPreferences(Class<E> userPreferencesClass) {
-        return (E) EntityFactory.create((Class<IEntity>) userPreferencesClass);
+        return (E) EntityFactory.create((Class<IUserPreferences>) userPreferencesClass);
     }
 
     /**
