@@ -31,6 +31,8 @@ public class VistaServerSideConfigurationDev extends VistaServerSideConfiguratio
 
     public static String devContextPath = "/vista";
 
+    public static boolean devContextLess = false;
+
     @Override
     public boolean isVistaDemo() {
         return false;
@@ -148,7 +150,11 @@ public class VistaServerSideConfigurationDev extends VistaServerSideConfiguratio
             b.append(":").append(devServerPort);
         }
 
-        b.append(devContextPath).append("/");
+        if (!devContextLess) {
+            b.append(devContextPath);
+        }
+
+        b.append("/");
         return b.toString();
     }
 

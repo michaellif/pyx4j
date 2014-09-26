@@ -33,6 +33,7 @@ import com.pyx4j.config.server.ApplicationVersionServlet;
 import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.entity.server.servlet.InitializationServletContextListener;
 import com.pyx4j.essentials.server.admin.DeployVerificationServlet;
+import com.pyx4j.essentials.server.dev.DebugRequestEchoServlet;
 import com.pyx4j.essentials.server.dev.DebugServlet;
 import com.pyx4j.essentials.server.dev.DevDumpProxyServlet;
 import com.pyx4j.essentials.server.dev.OutOfMemorySimulationServlet;
@@ -288,6 +289,12 @@ public class VistaWebApplicationInitializer implements ServletContainerInitializ
                     sc.addMapping("/debug/*");
                     sc.addMapping("/o/debug/*");
                     sc.addMapping(allApplicationsUrlPatterns("/debug/*"));
+                }
+                {
+                    ServletRegistration.Dynamic sc = ctx.addServlet("DebugRequestEchoServlet", DebugRequestEchoServlet.class);
+                    sc.addMapping("/echo/*");
+                    sc.addMapping("/o/echo/*");
+                    sc.addMapping(allApplicationsUrlPatterns("/echo/*"));
                 }
 
                 //http://static.dev.birchwoodsoftwaregroup.com:8888/vista/o/wsp/yardi.starlightinvest.com/voyager6008sp17/webservices/itfresidenttransactions20.asmx
