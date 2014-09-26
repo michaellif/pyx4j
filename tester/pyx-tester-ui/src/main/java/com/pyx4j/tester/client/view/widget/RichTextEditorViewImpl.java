@@ -26,7 +26,7 @@ import com.google.gwt.user.client.ui.ScrollPanel;
 
 import com.pyx4j.widgets.client.dialog.CancelOption;
 import com.pyx4j.widgets.client.dialog.Dialog;
-import com.pyx4j.widgets.client.richtext.ExtendedRichTextArea;
+import com.pyx4j.widgets.client.richtext.RichTextEditor;
 import com.pyx4j.widgets.client.richtext.ImageGallery;
 import com.pyx4j.widgets.client.richtext.RichTextImageProvider;
 
@@ -78,7 +78,7 @@ public class RichTextEditorViewImpl extends ScrollPanel implements RichTextEdito
     public RichTextEditorViewImpl() {
         setSize("100%", "100%");
 
-        ExtendedRichTextArea editor = new ExtendedRichTextArea();
+        RichTextEditor editor = new RichTextEditor();
         editor.setSize("800px", "450px");
         editor.getElement().getStyle().setProperty("padding", "40px");
         add(editor);

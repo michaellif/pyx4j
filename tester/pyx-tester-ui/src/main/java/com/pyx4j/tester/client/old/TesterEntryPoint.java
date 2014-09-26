@@ -65,7 +65,6 @@ import com.pyx4j.widgets.client.dialog.GlueOption;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 import com.pyx4j.widgets.client.dialog.UnrecoverableErrorHandlerDialog;
 import com.pyx4j.widgets.client.dialog.YesNoCancelOption;
-import com.pyx4j.widgets.client.richtext.RichTextEditorDecorator;
 
 public class TesterEntryPoint implements EntryPoint {
 
@@ -124,8 +123,6 @@ public class TesterEntryPoint implements EntryPoint {
 
         RichTextArea pageEditor = new RichTextArea();
 
-        RichTextEditorDecorator editorDecorator = new RichTextEditorDecorator(pageEditor);
-
         TextArea htmlViewer = new TextArea();
 
         sendButton.addClickHandler(new MyHandler(htmlViewer, pageEditor));
@@ -164,7 +161,6 @@ public class TesterEntryPoint implements EntryPoint {
         }
 
         contentPanel.add(pageNameTextBox);
-        contentPanel.add(editorDecorator);
         contentPanel.add(sendButton);
         contentPanel.add(htmlViewer);
 

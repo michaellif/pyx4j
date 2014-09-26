@@ -23,10 +23,10 @@ package com.pyx4j.forms.client.ui;
 import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.ui.HTML;
 
-import com.pyx4j.widgets.client.richtext.ExtendedRichTextArea;
+import com.pyx4j.widgets.client.richtext.RichTextEditor;
 import com.pyx4j.widgets.client.richtext.RichTextImageProvider;
 
-public class NRichTextArea extends NTextComponent<String, ExtendedRichTextArea, CRichTextArea> {
+public class NRichTextArea extends NTextComponent<String, RichTextEditor, CRichTextArea> {
 
     public NRichTextArea(CRichTextArea textArea) {
         super(textArea);
@@ -43,8 +43,8 @@ public class NRichTextArea extends NTextComponent<String, ExtendedRichTextArea, 
     }
 
     @Override
-    protected ExtendedRichTextArea createEditor() {
-        ExtendedRichTextArea area = new ExtendedRichTextArea();
+    protected RichTextEditor createEditor() {
+        RichTextEditor area = new RichTextEditor();
         area.setHeight("20em");
         return area;
     }

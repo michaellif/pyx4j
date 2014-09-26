@@ -35,24 +35,23 @@ import com.google.gwt.user.client.ui.DockPanel;
 import com.pyx4j.commons.IDebugId;
 import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.ITextWidget;
-import com.pyx4j.widgets.client.RichTextArea;
 
-public class ExtendedRichTextArea extends DockPanel implements ITextWidget {
+public class RichTextEditor extends DockPanel implements ITextWidget {
 
     private final RichTextArea richTextArea;
 
-    private final ExtendedRichTextToolbar toolbar;
+    private final RichTextToolbar toolbar;
 
     private boolean editable;
 
-    public ExtendedRichTextArea() {
+    public RichTextEditor() {
         super();
 
         richTextArea = new RichTextArea();
         richTextArea.setWidth("100%");
         richTextArea.setHeight("100%");
 
-        toolbar = new ExtendedRichTextToolbar(richTextArea);
+        toolbar = new RichTextToolbar(richTextArea);
         toolbar.getElement().getStyle().setMarginLeft(2, Unit.PX);
 
         add(toolbar, NORTH);
