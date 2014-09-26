@@ -23,6 +23,8 @@ package com.pyx4j.forms.client.ui;
 import java.text.ParseException;
 import java.util.Collection;
 
+import com.google.gwt.event.logical.shared.SelectionEvent;
+import com.google.gwt.event.logical.shared.SelectionHandler;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.HTML;
 
@@ -36,6 +38,7 @@ public class NSelectorListBox<E extends IEntity> extends NFocusField<Collection<
 
     public NSelectorListBox(final CSelectorListBox<E> cSuggestBox) {
         super(cSuggestBox);
+
     }
 
     @Override
@@ -45,7 +48,7 @@ public class NSelectorListBox<E extends IEntity> extends NFocusField<Collection<
 
     @Override
     protected SelectorListBox<E> createEditor() {
-        return new SelectorListBox<E>(getCComponent().getOptionsGrabber(), new Command() {
+        SelectorListBox<E> editor = new SelectorListBox<E>(getCComponent().getOptionsGrabber(), new Command() {
 
             @Override
             public void execute() {
@@ -66,6 +69,16 @@ public class NSelectorListBox<E extends IEntity> extends NFocusField<Collection<
                 return getCComponent().getOptionPathFormatter().format(value);
             }
         });
+
+        editor.addSelectionHandler(new SelectionHandler<E>() {
+
+            @Override
+            public void onSelection(SelectionEvent<E> event) {
+                getCComponent().stopEditing();
+            }
+        });
+
+        return editor;
     }
 
     @Override

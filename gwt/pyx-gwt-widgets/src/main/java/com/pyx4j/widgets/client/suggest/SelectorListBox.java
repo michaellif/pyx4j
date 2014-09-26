@@ -23,6 +23,10 @@ package com.pyx4j.widgets.client.suggest;
 import java.util.ArrayList;
 import java.util.Collection;
 
+import com.google.gwt.event.dom.client.BlurEvent;
+import com.google.gwt.event.dom.client.BlurHandler;
+import com.google.gwt.event.dom.client.FocusEvent;
+import com.google.gwt.event.dom.client.FocusHandler;
 import com.google.gwt.event.dom.client.KeyUpEvent;
 import com.google.gwt.event.dom.client.KeyUpHandler;
 import com.google.gwt.event.logical.shared.HasSelectionHandlers;
@@ -94,6 +98,24 @@ public class SelectorListBox<E> extends AbstractSelectorWidget<E> implements Has
         });
 
         listBox.setAction(addItemCommand);
+
+        addFocusHandler(new FocusHandler() {
+
+            @Override
+            public void onFocus(FocusEvent event) {
+            //    System.out.println("++++++++++++++++++ onFocus");
+
+            }
+        });
+
+        addBlurHandler(new BlurHandler() {
+
+            @Override
+            public void onBlur(BlurEvent event) {
+            //    System.out.println("++++++++++++++++++ onBlur");
+
+            }
+        });
 
     }
 
