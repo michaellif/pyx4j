@@ -50,4 +50,8 @@ public class CSelectorListBox<E extends IEntity> extends CAbstractSelectorBox<Co
         return super.preprocessValue(new ArrayList<>(value), fireEvent, populate);
     }
 
+    @Override
+    public boolean isValueEmpty() {
+        return getValue() == null || getValue().size() == 0;
+    }
 }
