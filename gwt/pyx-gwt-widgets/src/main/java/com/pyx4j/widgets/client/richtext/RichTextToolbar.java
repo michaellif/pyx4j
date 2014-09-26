@@ -18,7 +18,6 @@ package com.pyx4j.widgets.client.richtext;
 import com.google.gwt.dom.client.Style;
 import com.google.gwt.dom.client.Style.Display;
 import com.google.gwt.dom.client.Style.Float;
-import com.google.gwt.dom.client.Style.FontStyle;
 import com.google.gwt.dom.client.Style.FontWeight;
 import com.google.gwt.dom.client.Style.TextDecoration;
 import com.google.gwt.dom.client.Style.Unit;
@@ -349,6 +348,7 @@ public class RichTextToolbar extends Composite {
                     fontButton.getElement().getStyle().setTextDecoration(TextDecoration.NONE);
             }
         }));
+        insertButton.addStyleName(RichTextEditorTheme.StyleName.rteTopBarButton.name());
 
         Toolbar linkPanel = new Toolbar();
         linkPanel.addItem(createLink = createButton(images.createLink(), "createLink"));
@@ -374,7 +374,7 @@ public class RichTextToolbar extends Composite {
                     insertButton.getElement().getStyle().setTextDecoration(TextDecoration.NONE);
             }
         }));
-
+        fontButton.addStyleName(RichTextEditorTheme.StyleName.rteTopBarButton.name());
         fontToolbar.add(foreColors = createColorList("Font Color"));
         fontToolbar.add(backColors = createColorList("Highlight"));
         fontToolbar.add(fonts = createFontList());
@@ -397,6 +397,7 @@ public class RichTextToolbar extends Composite {
                     insertButton.getElement().getStyle().setTextDecoration(TextDecoration.NONE);
             }
         }));
+        formatButton.addStyleName(RichTextEditorTheme.StyleName.rteTopBarButton.name());
 
         formatButton.toggleActive();
 
