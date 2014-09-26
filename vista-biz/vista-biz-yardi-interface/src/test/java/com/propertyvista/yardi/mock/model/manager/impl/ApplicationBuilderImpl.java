@@ -15,6 +15,7 @@ package com.propertyvista.yardi.mock.model.manager.impl;
 
 import com.pyx4j.entity.core.EntityFactory;
 
+import com.propertyvista.yardi.mock.model.YardiMock;
 import com.propertyvista.yardi.mock.model.domain.YardiBuilding;
 import com.propertyvista.yardi.mock.model.domain.YardiFee;
 import com.propertyvista.yardi.mock.model.domain.YardiGuestEvent;
@@ -111,15 +112,15 @@ public class ApplicationBuilderImpl extends LeaseBuilderImpl implements Applicat
         event.type().setValue(type);
         lease.application().events().add(event);
 
-        // process event
+        // process event; TODO - handle lease status
         if (Type.LEASE_SIGN.equals(type)) {
-            lease.leaseId().setValue(lease.leaseId().getValue().replaceFirst("p", "t"));
             for (int i = 0; i < lease.tenants().size(); i++) {
                 YardiTenant tenant = lease.tenants().get(i);
+                // set resident id; first prospect will be the main tenant
+                tenant.tenantId().setValue(YardiMock.server().getModel().toResidentId(tenant.prospectId().getValue(), i == 0));
                 if (i == 0) {
-                    tenant.tenantId().set(lease.leaseId());
-                } else {
-                    tenant.tenantId().setValue(tenant.prospectId().getValue().replaceFirst("p", "r"));
+                    // set lease id
+                    lease.leaseId().set(tenant.tenantId());
                 }
             }
         }

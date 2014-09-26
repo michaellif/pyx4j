@@ -24,13 +24,14 @@ import com.propertyvista.yardi.YardiInterface;
 import com.propertyvista.yardi.mock.model.domain.YardiBuilding;
 import com.propertyvista.yardi.mock.model.domain.YardiInterfaceConfig;
 
+// TODO add support for property lists
 public class YardiMockModel {
 
     private final List<YardiBuilding> buildings;
 
     private final Map<Class<? extends YardiInterface>, YardiInterfaceConfig> ifConfig;
 
-    public YardiMockModel() {
+    YardiMockModel() {
         buildings = new ArrayList<>();
         ifConfig = new HashMap<>();
     }
@@ -45,5 +46,17 @@ public class YardiMockModel {
             ifConfig.put(ifClass, config = EntityFactory.create(YardiInterfaceConfig.class));
         }
         return config;
+    }
+
+    public String toProspectId(String guestId) {
+        assert guestId != null : "guest id cannot be null";
+
+        return "p" + guestId;
+    }
+
+    public String toResidentId(String prospectId, boolean isTenant) {
+        assert prospectId != null && prospectId.startsWith("p") : "Invalid prospect id";
+
+        return prospectId.replaceFirst("p", isTenant ? "t" : "r");
     }
 }

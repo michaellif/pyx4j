@@ -229,7 +229,7 @@ public class YardiMockILSGuestCardStubImpl extends YardiMockStubBase implements 
                 if (guestId == null) {
                     Messages.throwYardiResponseException("Missing valid prospect identification");
                 }
-                String prospectId = "p_" + guestId;
+                String prospectId = YardiMock.server().getModel().toProspectId(guestId);
                 if (leaseApp == null) {
                     leaseAppId = prospectId;
                     leaseApp = guestManager.addApplication(propertyId, leaseAppId);

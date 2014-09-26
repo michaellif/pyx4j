@@ -13,7 +13,6 @@
  */
 package com.propertyvista.integration.yardi;
 
-import java.util.Iterator;
 import java.util.List;
 
 import com.yardi.entity.resident.ResidentTransactions;
@@ -53,11 +52,6 @@ import com.propertyvista.yardi.stubs.YardiILSGuestCardStub;
 import com.propertyvista.yardi.stubs.YardiResidentTransactionsStub;
 import com.propertyvista.yardi.stubs.YardiStubFactory;
 
-/*
- * TODO - implement
- * - YardiMockServerFacade to set up the test data
- * - YardiMockILSGuestCardStubImpl
- */
 public class YardiLeaseApplicationTest extends YardiTestBase {
 
     @Override
@@ -81,10 +75,11 @@ public class YardiLeaseApplicationTest extends YardiTestBase {
         // stubs
         YardiMock.server().addStub(YardiResidentTransactionsStub.class, YardiMockResidentTransactionsStubImpl.class);
         YardiMock.server().addStub(YardiILSGuestCardStub.class, YardiMockILSGuestCardStubImpl.class);
+
+        setSysDate("25-May-2013");
     }
 
     /*
-     * TODO - implement
      * - Create yardi building with a unit
      * - Do import, check product catalog, add deposits for service and features
      * - Create and approve Lease Application
@@ -128,14 +123,15 @@ public class YardiLeaseApplicationTest extends YardiTestBase {
 
         // 5. Execution: create and approve lease application
         // --------------------------------------------------
-        // tenant and co-tenant
+        // create tenant and co-tenant
         getDataModel(CustomerDataModel.class).addCustomer();
         getDataModel(CustomerDataModel.class).addCustomer();
-        // lease application
+        // create lease application
         List<Customer> customers = getDataModel(CustomerDataModel.class).getAllItems();
         Persistence.ensureRetrieve(catalog.services().get(0).version().items(), AttachLevel.Attached);
         ProductItem serviceItem = catalog.services().get(0).version().items().get(0);
         Lease lease = getDataModel(LeaseDataModel.class).addLease(building, "01-Jun-2012", "31-Jul-2014", null, null, customers, serviceItem);
+        // assert application status
         assertNotNull(lease);
         assertEquals(Lease.Status.Application, lease.status().getValue());
 
@@ -145,17 +141,15 @@ public class YardiLeaseApplicationTest extends YardiTestBase {
         // 6. Assertion: status approved, participantId have been set
         lease = ServerSideFactory.create(LeaseFacade.class).load(lease, false);
 
+        // assert application status
         assertEquals(Lease.Status.Approved, lease.status().getValue());
-
-        for (LeaseTermTenant tenant : lease.currentTerm().version().tenants()) {
-            assertTrue(tenant.leaseParticipant().participantId().getValue().matches("^[rt].*"));
-        }
-
-        // compare customers
+        // assert participants
         assertEquals(customers.size(), lease.currentTerm().version().tenants().size());
-        int idx = 0;
-        for (Iterator<LeaseTermTenant> itTenant = lease.currentTerm().version().tenants().iterator(); itTenant.hasNext();) {
-            assertEquals(customers.get(idx++).getPrimaryKey(), itTenant.next().leaseParticipant().customer().getPrimaryKey());
+        for (int i = 0; i < customers.size(); i++) {
+            Customer customer = customers.get(i);
+            LeaseTermTenant tenant = lease.currentTerm().version().tenants().get(i);
+            assertEquals(customer.getPrimaryKey(), tenant.leaseParticipant().customer().getPrimaryKey());
+            assertTrue(tenant.leaseParticipant().participantId().getValue().matches("^[rt].*"));
         }
     }
 

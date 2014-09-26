@@ -16,12 +16,10 @@ package com.propertyvista.yardi.mock.model.domain;
 import java.math.BigDecimal;
 
 import com.pyx4j.commons.LogicalDate;
-import com.pyx4j.entity.annotations.EmbeddedEntity;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.IList;
 import com.pyx4j.entity.core.IPrimitive;
 
-@EmbeddedEntity
 public interface YardiLease extends IEntity {
 
     public enum Status {

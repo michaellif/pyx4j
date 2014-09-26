@@ -42,6 +42,7 @@ import com.pyx4j.commons.LogicalDate;
 
 import com.propertyvista.biz.system.yardi.YardiServiceException;
 import com.propertyvista.domain.settings.PmcYardiCredential;
+import com.propertyvista.yardi.beans.Messages;
 import com.propertyvista.yardi.mock.model.domain.YardiAddress;
 import com.propertyvista.yardi.mock.model.domain.YardiBuilding;
 import com.propertyvista.yardi.mock.model.domain.YardiLease;
@@ -50,25 +51,28 @@ import com.propertyvista.yardi.mock.model.domain.YardiTenant;
 import com.propertyvista.yardi.mock.model.domain.YardiTransactionCharge;
 import com.propertyvista.yardi.mock.model.domain.YardiUnit;
 import com.propertyvista.yardi.mock.model.manager.impl.YardiMockModelUtils;
+import com.propertyvista.yardi.services.YardiHandledErrorMessages;
 import com.propertyvista.yardi.stubs.YardiResidentTransactionsStub;
 
 public class YardiMockResidentTransactionsStubImpl extends YardiMockStubBase implements YardiResidentTransactionsStub {
 
     @Override
-    public ResidentTransactions getAllResidentTransactions(PmcYardiCredential yc, String propertyListCode) throws YardiServiceException, RemoteException {
+    public ResidentTransactions getAllResidentTransactions(PmcYardiCredential yc, String propertyId) throws YardiServiceException, RemoteException {
         ResidentTransactions rt = new ResidentTransactions();
-        for (YardiBuilding building : getYardiBuildings()) {
-            Property property = getProperty(building);
-            rt.getProperty().add(property);
-            // tenants
-            for (YardiLease lease : building.leases()) {
-                RTCustomer rtCustomer = getRtCustomer(lease, building);
-                property.getRTCustomer().add(rtCustomer);
-                // transactions
-                rtCustomer.setRTServiceTransactions(new RTServiceTransactions());
-                rtCustomer.getRTServiceTransactions().getTransactions().addAll(getTransactions(lease));
-            }
+        YardiBuilding building = getYardiBuilding(propertyId);
+        if (building == null) {
+            Messages.throwYardiResponseException(YardiHandledErrorMessages.errorMessage_NoAccess + ":" + propertyId);
         }
+        Property property = getProperty(building);
+        // tenants
+        for (YardiLease lease : building.leases()) {
+            RTCustomer rtCustomer = getRtCustomer(lease, building);
+            property.getRTCustomer().add(rtCustomer);
+            // transactions
+            rtCustomer.setRTServiceTransactions(new RTServiceTransactions());
+            rtCustomer.getRTServiceTransactions().getTransactions().addAll(getTransactions(lease));
+        }
+        rt.getProperty().add(property);
         return rt;
     }
 
@@ -77,8 +81,14 @@ public class YardiMockResidentTransactionsStubImpl extends YardiMockStubBase imp
             RemoteException {
         ResidentTransactions rt = new ResidentTransactions();
         YardiBuilding building = getYardiBuilding(propertyId);
+        if (building == null) {
+            Messages.throwYardiResponseException(YardiHandledErrorMessages.errorMessage_NoAccess + ":" + propertyId);
+        }
         Property property = getProperty(building);
         YardiLease lease = YardiMockModelUtils.findLease(building, tenantId);
+        if (lease == null) {
+            Messages.throwYardiResponseException(YardiHandledErrorMessages.errorMessage_TenantNotFound);
+        }
         RTCustomer rtCustomer = getRtCustomer(lease, building);
         property.getRTCustomer().add(rtCustomer);
         // transactions
@@ -95,21 +105,22 @@ public class YardiMockResidentTransactionsStubImpl extends YardiMockStubBase imp
     }
 
     @Override
-    public ResidentTransactions getAllLeaseCharges(PmcYardiCredential yc, String propertyListCode, LogicalDate date) throws YardiServiceException,
-            RemoteException {
+    public ResidentTransactions getAllLeaseCharges(PmcYardiCredential yc, String propertyId, LogicalDate date) throws YardiServiceException, RemoteException {
         ResidentTransactions rt = new ResidentTransactions();
-        for (YardiBuilding building : getYardiBuildings()) {
-            Property property = getProperty(building);
-            rt.getProperty().add(property);
-            // tenants
-            for (YardiLease lease : building.leases()) {
-                RTCustomer rtCustomer = getRtCustomer(lease, building);
-                property.getRTCustomer().add(rtCustomer);
-                // lease charges
-                rtCustomer.setRTServiceTransactions(new RTServiceTransactions());
-                rtCustomer.getRTServiceTransactions().getTransactions().addAll(getCharges(lease, building.buildingId().getValue()));
-            }
+        YardiBuilding building = getYardiBuilding(propertyId);
+        if (building == null) {
+            Messages.throwYardiResponseException(YardiHandledErrorMessages.errorMessage_NoAccess + ":" + propertyId);
         }
+        Property property = getProperty(building);
+        // tenants
+        for (YardiLease lease : building.leases()) {
+            RTCustomer rtCustomer = getRtCustomer(lease, building);
+            property.getRTCustomer().add(rtCustomer);
+            // lease charges
+            rtCustomer.setRTServiceTransactions(new RTServiceTransactions());
+            rtCustomer.getRTServiceTransactions().getTransactions().addAll(getCharges(lease, building.buildingId().getValue(), date));
+        }
+        rt.getProperty().add(property);
         return rt;
     }
 
@@ -117,24 +128,23 @@ public class YardiMockResidentTransactionsStubImpl extends YardiMockStubBase imp
     public ResidentTransactions getLeaseChargesForTenant(PmcYardiCredential yc, String propertyId, String tenantId, LogicalDate date)
             throws YardiServiceException, RemoteException {
         ResidentTransactions rt = new ResidentTransactions();
-        for (YardiBuilding building : getYardiBuildings()) {
-            if (propertyId.equals(building.buildingId().getValue())) {
-                Property property = getProperty(building);
-                rt.getProperty().add(property);
-                // tenant
-                for (YardiLease lease : building.leases()) {
-                    if (tenantId.equals(lease.leaseId().getValue())) {
-                        RTCustomer rtCustomer = getRtCustomer(lease, building);
-                        property.getRTCustomer().add(rtCustomer);
-                        // transactions
-                        rtCustomer.setRTServiceTransactions(new RTServiceTransactions());
-                        rtCustomer.getRTServiceTransactions().getTransactions().addAll(getCharges(lease, building.buildingId().getValue()));
-                        break;
-                    }
-                }
-                break;
-            }
+        // building
+        YardiBuilding building = getYardiBuilding(propertyId);
+        if (building == null) {
+            Messages.throwYardiResponseException(YardiHandledErrorMessages.errorMessage_NoAccess + ":" + propertyId);
         }
+        Property property = getProperty(building);
+        // tenant
+        YardiLease lease = YardiMockModelUtils.findLease(building, tenantId);
+        if (lease == null) {
+            Messages.throwYardiResponseException(YardiHandledErrorMessages.errorMessage_TenantNotFound);
+        }
+        RTCustomer rtCustomer = getRtCustomer(lease, building);
+        property.getRTCustomer().add(rtCustomer);
+        // transactions
+        rtCustomer.setRTServiceTransactions(new RTServiceTransactions());
+        rtCustomer.getRTServiceTransactions().getTransactions().addAll(getCharges(lease, building.buildingId().getValue(), date));
+        rt.getProperty().add(property);
         return rt;
     }
 
@@ -182,9 +192,13 @@ public class YardiMockResidentTransactionsStubImpl extends YardiMockStubBase imp
         return transactions;
     }
 
-    private List<Transactions> getCharges(YardiLease lease, String propertyId) {
+    private List<Transactions> getCharges(YardiLease lease, String propertyId, LogicalDate date) {
         List<Transactions> charges = new ArrayList<>();
         for (YardiLeaseCharge ylc : lease.charges()) {
+            // filter future and expired charges
+            if (!ylc.serviceFromDate().isNull() && (date.lt(ylc.serviceFromDate().getValue()) || date.gt(ylc.serviceToDate().getValue()))) {
+                continue;
+            }
             charges.add(toTransaction(ylc, lease, propertyId));
         }
         return charges;
