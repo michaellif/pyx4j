@@ -234,6 +234,7 @@ public class YardiMockILSGuestCardStubImpl extends YardiMockStubBase implements 
                     leaseAppId = prospectId;
                     leaseApp = guestManager.addApplication(propertyId, leaseAppId);
                 }
+                // add prospect
                 GuestBuilder guest = leaseApp.getGuest(guestId);
                 if (guest == null) {
                     guest = leaseApp.addGuest(guestId, cust.getName().getFirstName() + " " + cust.getName().getLastName());
@@ -242,6 +243,16 @@ public class YardiMockILSGuestCardStubImpl extends YardiMockStubBase implements 
                         .setType(toTenantType(cust.getType())) //
                         .setEmail(cust.getEmail()) //
                         .setResponsibleForLease(true);
+                // add lease info
+                if (cust.getLease() != null) {
+                    Date date = null;
+                    if ((date = cust.getLease().getLeaseFromDate()) != null) {
+                        leaseApp.setLeaseFrom(YardiMockModelUtils.format(date));
+                    }
+                    if ((date = cust.getLease().getLeaseToDate()) != null) {
+                        leaseApp.setLeaseTo(YardiMockModelUtils.format(date));
+                    }
+                }
             }
             // set unit, rentable items
             if (guestCard.getCustomerPreferences() != null) {

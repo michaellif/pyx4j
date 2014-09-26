@@ -115,12 +115,16 @@ public class YardiMockResidentTransactionsStubImpl extends YardiMockStubBase imp
         // tenants
         for (YardiLease lease : building.leases()) {
             RTCustomer rtCustomer = getRtCustomer(lease, building);
-            property.getRTCustomer().add(rtCustomer);
             // lease charges
             rtCustomer.setRTServiceTransactions(new RTServiceTransactions());
             rtCustomer.getRTServiceTransactions().getTransactions().addAll(getCharges(lease, building.buildingId().getValue(), date));
+            if (!rtCustomer.getRTServiceTransactions().getTransactions().isEmpty()) {
+                property.getRTCustomer().add(rtCustomer);
+            }
         }
-        rt.getProperty().add(property);
+        if (!property.getRTCustomer().isEmpty()) {
+            rt.getProperty().add(property);
+        }
         return rt;
     }
 
@@ -140,11 +144,13 @@ public class YardiMockResidentTransactionsStubImpl extends YardiMockStubBase imp
             Messages.throwYardiResponseException(YardiHandledErrorMessages.errorMessage_TenantNotFound);
         }
         RTCustomer rtCustomer = getRtCustomer(lease, building);
-        property.getRTCustomer().add(rtCustomer);
         // transactions
         rtCustomer.setRTServiceTransactions(new RTServiceTransactions());
         rtCustomer.getRTServiceTransactions().getTransactions().addAll(getCharges(lease, building.buildingId().getValue(), date));
-        rt.getProperty().add(property);
+        if (!rtCustomer.getRTServiceTransactions().getTransactions().isEmpty()) {
+            property.getRTCustomer().add(rtCustomer);
+            rt.getProperty().add(property);
+        }
         return rt;
     }
 

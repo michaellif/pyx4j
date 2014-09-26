@@ -151,6 +151,11 @@ public class YardiLeaseApplicationTest extends YardiTestBase {
             assertEquals(customer.getPrimaryKey(), tenant.leaseParticipant().customer().getPrimaryKey());
             assertTrue(tenant.leaseParticipant().participantId().getValue().matches("^[rt].*"));
         }
+
+        // 7. Execution: second import
+        // -------------------------------
+        Persistence.service().commit(); // TODO wtf
+        yardiImportAll(getYardiCredential(BuildingID));
     }
 
     public void testYardiImport() throws Exception {

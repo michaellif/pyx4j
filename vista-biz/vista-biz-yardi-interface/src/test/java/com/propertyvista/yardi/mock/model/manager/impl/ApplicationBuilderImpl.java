@@ -114,14 +114,16 @@ public class ApplicationBuilderImpl extends LeaseBuilderImpl implements Applicat
 
         // process event; TODO - handle lease status
         if (Type.LEASE_SIGN.equals(type)) {
-            for (int i = 0; i < lease.tenants().size(); i++) {
-                YardiTenant tenant = lease.tenants().get(i);
-                // set resident id; first prospect will be the main tenant
-                tenant.tenantId().setValue(YardiMock.server().getModel().toResidentId(tenant.prospectId().getValue(), i == 0));
-                if (i == 0) {
-                    // set lease id
+            boolean isMainTenant = true;
+            for (YardiTenant tenant : lease.tenants()) {
+                // set resident id and type; first prospect will be the main tenant
+                tenant.tenantId().setValue(YardiMock.server().getModel().toResidentId(tenant.prospectId().getValue(), isMainTenant));
+                tenant.type().setValue(isMainTenant ? YardiTenant.Type.FUTURE_RESIDENT : YardiTenant.Type.CUSTOMER);
+                // set lease id to main tenant id
+                if (isMainTenant) {
                     lease.leaseId().set(tenant.tenantId());
                 }
+                isMainTenant = false;
             }
         }
 

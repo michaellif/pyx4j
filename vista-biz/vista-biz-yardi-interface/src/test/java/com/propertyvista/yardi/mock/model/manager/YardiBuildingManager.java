@@ -23,7 +23,7 @@ public interface YardiBuildingManager extends YardiMockManager {
 
     public static final String DEFAULT_ADDR_CITY = "Toronto";
 
-    public static final String DEFAULT_ADDR_PROV = "Ontario";
+    public static final String DEFAULT_ADDR_PROV = "ON";
 
     public static final String DEFAULT_ADDR_COUNTRY = "Canada";
 
