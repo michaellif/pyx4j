@@ -499,12 +499,6 @@ public class RichTextToolbar extends Composite {
      * Updates the status of all the stateful buttons.
      */
     private void updateStatus() {
-        /*-bold.setDown(formatter.isBold());
-        italic.setDown(formatter.isItalic());
-        underline.setDown(formatter.isUnderlined());
-        subscript.setDown(formatter.isSubscript());
-        superscript.setDown(formatter.isSuperscript());
-        strikethrough.setDown(formatter.isStrikethrough());-*/
         // set font properties
         if (foreColors.getSelectedIndex() > 0) {
             formatter.setForeColor(foreColors.getValue(foreColors.getSelectedIndex()));
