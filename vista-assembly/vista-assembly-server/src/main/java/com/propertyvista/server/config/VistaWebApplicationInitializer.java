@@ -14,8 +14,10 @@
 package com.propertyvista.server.config;
 
 import java.util.ArrayList;
+import java.util.EnumSet;
 import java.util.Set;
 
+import javax.servlet.DispatcherType;
 import javax.servlet.FilterRegistration;
 import javax.servlet.ServletContainerInitializer;
 import javax.servlet.ServletContext;
@@ -303,6 +305,13 @@ public class VistaWebApplicationInitializer implements ServletContainerInitializ
                     sc.addMapping("/o/wsp/*");
                 }
             }
+        }
+
+        // Local URLs mapping
+        {
+            EnumSet<DispatcherType> dispatcherTypes = EnumSet.of(DispatcherType.REQUEST);
+            FilterRegistration.Dynamic fc = ctx.addFilter("LocalURLsFilter", LocalURLsFilter.class);
+            fc.addMappingForUrlPatterns(dispatcherTypes, true, "/*");
         }
 
     }
