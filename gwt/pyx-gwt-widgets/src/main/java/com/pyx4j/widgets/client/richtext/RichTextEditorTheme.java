@@ -6,6 +6,7 @@ import com.pyx4j.commons.css.Style;
 import com.pyx4j.commons.css.Theme;
 import com.pyx4j.commons.css.ThemeColor;
 import com.pyx4j.commons.css.ThemeId;
+import com.pyx4j.widgets.client.style.theme.WidgetTheme;
 
 public class RichTextEditorTheme extends Theme {
 
@@ -24,8 +25,9 @@ public class RichTextEditorTheme extends Theme {
 
     protected void initStyles() {
         // Toggle Button
-        Style style = new Style(".", StyleName.rteTopBarButton);
+        Style style = new Style(".", WidgetTheme.StyleName.Button, ".", StyleName.rteTopBarButton);
         style.addProperty("color", ThemeColor.foreground);
+        style.addProperty("height", "auto");
         addStyle(style);
 
     }

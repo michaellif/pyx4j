@@ -175,7 +175,7 @@ public class RichTextToolbar extends Composite {
 
     private FlowPanel topToolbar;
 
-    private FlowPanel topButtonBar;
+    private Toolbar topButtonBar;
 
     private final FlowPanel fontToolbar = new FlowPanel();
 
@@ -291,7 +291,7 @@ public class RichTextToolbar extends Composite {
         topToolbar = new FlowPanel();
         topToolbar.setWidth("100%");
 
-        topButtonBar = new FlowPanel();
+        topButtonBar = new Toolbar();
         topButtonBar.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
         topButtonBar.getElement().getStyle().setFontWeight(FontWeight.BOLD);
         topToolbar.add(topButtonBar);
@@ -334,7 +334,7 @@ public class RichTextToolbar extends Composite {
     }
 
     private void createInsertMenu() {
-        topButtonBar.add(insertButton = new Button(i18n.tr("Insert"), new Command() {
+        topButtonBar.addItem(insertButton = new Button(i18n.tr("Insert"), new Command() {
 
             @Override
             public void execute() {
@@ -360,7 +360,7 @@ public class RichTextToolbar extends Composite {
     }
 
     private void createFontMenus() {
-        topButtonBar.add(fontButton = new Button(i18n.tr("Font"), new Command() {
+        topButtonBar.addItem(fontButton = new Button(i18n.tr("Font"), new Command() {
 
             @Override
             public void execute() {
@@ -383,7 +383,7 @@ public class RichTextToolbar extends Composite {
     }
 
     private void createFormatMenus() {
-        topButtonBar.add(formatButton = new Button(i18n.tr("Format"), new Command() {
+        topButtonBar.addItem(formatButton = new Button(i18n.tr("Format"), new Command() {
 
             @Override
             public void execute() {
