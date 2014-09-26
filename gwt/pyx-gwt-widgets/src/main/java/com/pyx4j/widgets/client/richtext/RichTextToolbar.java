@@ -58,7 +58,7 @@ public class RichTextToolbar extends FlowPanel {
      * We use an inner EventListener class to avoid exposing event methods on the
      * RichTextToolbar itself.
      */
-    private class EventHandler implements ClickHandler, ChangeHandler, KeyUpHandler, BlurHandler {
+    private class EventHandler implements ClickHandler, ChangeHandler, KeyUpHandler {
 
         @Override
         public void onChange(ChangeEvent event) {
@@ -152,10 +152,6 @@ public class RichTextToolbar extends FlowPanel {
             }
         }
 
-        @Override
-        public void onBlur(BlurEvent event) {
-//            richText.setFocus(true);
-        }
     }
 
     private static final RichTextArea.FontSize[] fontSizesConstants = new RichTextArea.FontSize[] { RichTextArea.FontSize.XX_SMALL,
@@ -260,7 +256,6 @@ public class RichTextToolbar extends FlowPanel {
 
 //TODO move to initInsertToolbar
         customButton.setVisible(false);
-        customButton.addBlurHandler(handler);
         customButton.addClickHandler(handler);
         customButton.setVisible(false);
 
@@ -428,7 +423,6 @@ public class RichTextToolbar extends FlowPanel {
     private ListBox createColorList(String caption) {
         ListBox lb = new ListBox();
         lb.addChangeHandler(handler);
-        lb.addBlurHandler(handler);
         lb.setVisibleItemCount(1);
 
         lb.addItem(caption, "");
@@ -446,7 +440,6 @@ public class RichTextToolbar extends FlowPanel {
     private ListBox createFontList() {
         ListBox lb = new ListBox();
         lb.addChangeHandler(handler);
-        lb.addBlurHandler(handler);
         lb.setVisibleItemCount(1);
 
         lb.addItem("Font Family", "");
@@ -465,7 +458,6 @@ public class RichTextToolbar extends FlowPanel {
     private ListBox createFontSizes() {
         ListBox lb = new ListBox();
         lb.addChangeHandler(handler);
-        lb.addBlurHandler(handler);
         lb.setVisibleItemCount(1);
 
         lb.addItem("Font Size");
@@ -484,7 +476,6 @@ public class RichTextToolbar extends FlowPanel {
     private Button createButton(ImageResource img, String tip) {
         Button tb = new Button(img);
         tb.addClickHandler(handler);
-        tb.addBlurHandler(handler);
         tb.setTitle(tip);
         tb.setStyleName(WidgetTheme.StyleName.Button.name());
         Style s = tb.getElement().getStyle();
