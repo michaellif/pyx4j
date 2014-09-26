@@ -53,7 +53,8 @@ import com.pyx4j.widgets.client.style.theme.WidgetTheme;
  * rich text formatting, dynamically displayed only for the available functionality.
  */
 public class ExtendedRichTextToolbar extends Composite {
-    private static final I18n i18n = I18n.get(ExtendedRichTextToolbar_OLD.class);
+
+    private static final I18n i18n = I18n.get(ExtendedRichTextToolbar.class);
 
     /**
      * We use an inner EventListener class to avoid exposing event methods on the
@@ -109,11 +110,11 @@ public class ExtendedRichTextToolbar extends Composite {
                         }
                     });
                 } else {
-                    onImageUrl(Window.prompt("Enter target image URL:", "http://"));
+                    onImageUrl(Window.prompt(i18n.tr("Enter target image URL:"), "http://"));
                 }
             } else if (sender == createLink) {
                 inOperation = true;
-                onLinkUrl(Window.prompt("Enter target page URL:", "http://"));
+                onLinkUrl(Window.prompt(i18n.tr("Enter target page URL:"), "http://"));
             } else if (sender == removeLink) {
                 formatter.removeLink();
             } else if (sender == hr) {
@@ -287,7 +288,7 @@ public class ExtendedRichTextToolbar extends Composite {
     }
 
     private void createTextHtmlSwitch(FlexTable topMultiBar, final RichTextArea richText) {
-        textHtmlSwitch.setTitle("Toggle HTML or Text mode");
+        textHtmlSwitch.setTitle(i18n.tr("Toggle HTML or Text mode"));
         textHtmlSwitch.addClickHandler(new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
