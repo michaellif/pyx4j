@@ -25,8 +25,7 @@ import java.util.Collection;
 import com.google.gwt.dom.client.Style.Position;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.BlurHandler;
-import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.dom.client.FocusEvent;
 import com.google.gwt.event.dom.client.FocusHandler;
 import com.google.gwt.event.dom.client.KeyDownHandler;
 import com.google.gwt.event.dom.client.KeyPressHandler;
@@ -36,6 +35,7 @@ import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.ui.FlowPanel;
+import com.google.gwt.user.client.ui.FocusPanel;
 
 import com.pyx4j.commons.IDebugId;
 import com.pyx4j.commons.IFormatter;
@@ -48,7 +48,9 @@ import com.pyx4j.widgets.client.TextBox;
 import com.pyx4j.widgets.client.event.shared.PasteHandler;
 import com.pyx4j.widgets.client.style.theme.WidgetTheme;
 
-public class SelectorListBoxValuePanel<E> extends FlowPanel implements ISelectorValuePanel, IFocusGroup, IWatermarkWidget {
+public class SelectorListBoxValuePanel<E> extends FocusPanel implements ISelectorValuePanel, IFocusGroup, IWatermarkWidget {
+
+    private final FlowPanel contentPanel;
 
     private final IFormatter<E, String> valueFormatter;
 
@@ -67,26 +69,28 @@ public class SelectorListBoxValuePanel<E> extends FlowPanel implements ISelector
         setStyleName(WidgetTheme.StyleName.SelectorListBoxValuePanel.name());
         addStyleName(WidgetTheme.StyleName.ListBox.name());
 
+        contentPanel = new FlowPanel();
+        setWidget(contentPanel);
+
         this.valueFormatter = valueFormatter;
         cellsPanel = new FlowPanel();
 
         queryBox = new TextBox();
         cellsPanel.add(queryBox);
 
-        this.add(cellsPanel);
-
-        sinkEvents(Event.ONCLICK);
+        contentPanel.add(cellsPanel);
 
         groupFocusHandler = new GroupFocusHandler(this);
         groupFocusHandler.addFocusable(queryBox);
+        groupFocusHandler.addFocusable(this);
 
-        addDomHandler(new ClickHandler() {
+        super.addFocusHandler(new FocusHandler() {
 
             @Override
-            public void onClick(ClickEvent event) {
-                setFocus(true);
+            public void onFocus(FocusEvent event) {
+                queryBox.setFocus(true);
             }
-        }, ClickEvent.getType());
+        });
 
     }
 
@@ -237,7 +241,7 @@ public class SelectorListBoxValuePanel<E> extends FlowPanel implements ISelector
             actionButton.getElement().getStyle().setTop(0, Unit.PX);
             actionButton.getElement().getStyle().setPosition(Position.ABSOLUTE);
 
-            add(actionButton);
+            contentPanel.add(actionButton);
             groupFocusHandler.addFocusable(actionButton);
 
         }

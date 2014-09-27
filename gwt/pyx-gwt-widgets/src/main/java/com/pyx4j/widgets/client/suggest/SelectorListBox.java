@@ -105,7 +105,7 @@ public class SelectorListBox<E> extends AbstractSelectorWidget<E> implements Has
             @Override
             public void onFocus(FocusEvent event) {
                 listBox.addStyleDependentName(WidgetTheme.StyleDependent.focused.name());
-                //  System.out.println("++++++++++++++++++ onFocus");
+                //   System.out.println("++++++++++++++++++ onFocus");
 
             }
         });
@@ -115,7 +115,7 @@ public class SelectorListBox<E> extends AbstractSelectorWidget<E> implements Has
             @Override
             public void onBlur(BlurEvent event) {
                 listBox.removeStyleDependentName(WidgetTheme.StyleDependent.focused.name());
-                //  System.out.println("++++++++++++++++++ onBlur");
+                //    System.out.println("++++++++++++++++++ onBlur");
 
             }
         });
