@@ -40,6 +40,7 @@ import com.pyx4j.widgets.client.IFocusWidget;
 import com.pyx4j.widgets.client.IWatermarkWidget;
 import com.pyx4j.widgets.client.event.shared.PasteEvent;
 import com.pyx4j.widgets.client.event.shared.PasteHandler;
+import com.pyx4j.widgets.client.style.theme.WidgetTheme;
 
 public class SelectorListBox<E> extends AbstractSelectorWidget<E> implements HasSelectionHandlers<E>, IFocusWidget, IWatermarkWidget {
 
@@ -103,7 +104,8 @@ public class SelectorListBox<E> extends AbstractSelectorWidget<E> implements Has
 
             @Override
             public void onFocus(FocusEvent event) {
-            //    System.out.println("++++++++++++++++++ onFocus");
+                listBox.addStyleDependentName(WidgetTheme.StyleDependent.focused.name());
+                //  System.out.println("++++++++++++++++++ onFocus");
 
             }
         });
@@ -112,7 +114,8 @@ public class SelectorListBox<E> extends AbstractSelectorWidget<E> implements Has
 
             @Override
             public void onBlur(BlurEvent event) {
-            //    System.out.println("++++++++++++++++++ onBlur");
+                listBox.removeStyleDependentName(WidgetTheme.StyleDependent.focused.name());
+                //  System.out.println("++++++++++++++++++ onBlur");
 
             }
         });

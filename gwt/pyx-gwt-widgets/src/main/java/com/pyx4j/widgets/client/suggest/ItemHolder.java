@@ -27,59 +27,33 @@ import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.Label;
 
+import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.style.theme.WidgetTheme;
 
 public class ItemHolder<E> extends Composite {
 
-    private final E item;
+    private static final I18n i18n = I18n.get(ItemHolder.class);
 
-    private final SelectorListBoxValuePanel<E> parent;
-
-    public ItemHolder(SelectorListBoxValuePanel<E> parent, E item, String label) {
+    public ItemHolder(final SelectorListBoxValuePanel<E> parent, final E item, String label) {
         super();
 
-        this.item = item;
-
-        this.parent = parent;
         FlowPanel panel = new FlowPanel();
         panel.setStyleName(WidgetTheme.StyleName.SelectedItemHolder.name());
         Label lbl = new Label(label);
         lbl.getElement().getStyle().setDisplay(Display.INLINE);
-        lbl.addClickHandler(new ClickHandler() {
-            @Override
-            public void onClick(ClickEvent event) {
-                event.stopPropagation();
-                setFocus(true);
-            }
-        });
         panel.add(lbl);
 
         Label deleteItemAction = new Label("\u2716");
-        deleteItemAction.setTitle("Remove");
+        deleteItemAction.setTitle(i18n.tr("Remove"));
         deleteItemAction.setStyleName(WidgetTheme.StyleName.SelectedItemClose.name());
         deleteItemAction.addClickHandler(new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
-                event.stopPropagation();
-                remove();
+                parent.removeItem(item);
             }
         });
         panel.add(deleteItemAction);
         this.initWidget(panel);
-    }
-
-    //}
-
-    public E getItem() {
-        return this.item;
-    }
-
-    public void remove() {
-        parent.removeItem(this.item);
-    }
-
-    public void setFocus(boolean focused) {
-        parent.setFocus(focused);
     }
 
 }

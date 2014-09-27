@@ -32,9 +32,9 @@ import com.google.gwt.user.client.ui.Composite;
 
 import com.pyx4j.commons.IDebugId;
 import com.pyx4j.widgets.client.GroupFocusHandler;
-import com.pyx4j.widgets.client.IFocusWidget;
+import com.pyx4j.widgets.client.IFocusGroup;
 
-public abstract class AbstractSelectorWidget<E> extends Composite implements ISelectorWidget<E>, IFocusWidget {
+public abstract class AbstractSelectorWidget<E> extends Composite implements ISelectorWidget<E>, IFocusGroup {
 
     private final ISelectorValuePanel viewerPanel;
 
@@ -42,7 +42,7 @@ public abstract class AbstractSelectorWidget<E> extends Composite implements ISe
 
     private String query = "";
 
-    private final GroupFocusHandler focusHandlerManager;
+    private final GroupFocusHandler groupFocusHandler;
 
     public AbstractSelectorWidget(final ISelectorValuePanel viewerPanel) {
         this.viewerPanel = viewerPanel;
@@ -68,10 +68,10 @@ public abstract class AbstractSelectorWidget<E> extends Composite implements ISe
             }
         });
 
-        focusHandlerManager = new GroupFocusHandler(this);
+        groupFocusHandler = new GroupFocusHandler(this);
 
-        focusHandlerManager.addFocusable(viewerPanel);
-        focusHandlerManager.addFocusable(pickerPopup);
+        groupFocusHandler.addFocusable(viewerPanel);
+        groupFocusHandler.addFocusable(pickerPopup);
 
     }
 
@@ -98,12 +98,12 @@ public abstract class AbstractSelectorWidget<E> extends Composite implements ISe
 
     @Override
     public HandlerRegistration addFocusHandler(FocusHandler handler) {
-        return focusHandlerManager.addFocusHandler(handler);
+        return groupFocusHandler.addFocusHandler(handler);
     }
 
     @Override
     public HandlerRegistration addBlurHandler(BlurHandler handler) {
-        return focusHandlerManager.addBlurHandler(handler);
+        return groupFocusHandler.addBlurHandler(handler);
     }
 
     @Override
@@ -169,4 +169,8 @@ public abstract class AbstractSelectorWidget<E> extends Composite implements ISe
         viewerPanel.setTabIndex(index);
     }
 
+    @Override
+    public GroupFocusHandler getGroupFocusHandler() {
+        return groupFocusHandler;
+    }
 }

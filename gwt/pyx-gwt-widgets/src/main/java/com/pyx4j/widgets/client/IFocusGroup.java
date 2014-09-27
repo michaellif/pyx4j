@@ -20,6 +20,6 @@
  */
 package com.pyx4j.widgets.client;
 
-public interface IFocusGroup {
+public interface IFocusGroup extends IFocusWidget {
     GroupFocusHandler getGroupFocusHandler();
 }
