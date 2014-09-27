@@ -33,7 +33,6 @@ import com.google.gwt.event.dom.client.KeyUpHandler;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.Command;
-import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.FocusPanel;
 
@@ -95,16 +94,19 @@ public class SelectorListBoxValuePanel<E> extends FocusPanel implements ISelecto
     }
 
     public void showValue(Collection<E> value) {
-        this.cellsPanel.clear();
+
+        for (int i = 0; i < cellsPanel.getWidgetCount() - 1; i++) {
+            cellsPanel.remove(i);
+        }
+
         if (value.size() > 0) {
             for (E item : value) {
                 if (item != null) {
-                    this.cellsPanel.add(new ItemHolder<E>(this, item, valueFormatter.format(item)));
+                    this.cellsPanel.insert(new ItemHolder<E>(this, item, valueFormatter.format(item)), cellsPanel.getWidgetCount() - 1);
                 }
             }
         }
 
-        cellsPanel.add(queryBox);
         queryBox.setText("");
     }
 
