@@ -95,7 +95,7 @@ public class SelectorListBoxValuePanel<E> extends FocusPanel implements ISelecto
 
     public void showValue(Collection<E> value) {
 
-        for (int i = 0; i < cellsPanel.getWidgetCount() - 1; i++) {
+        for (int i = cellsPanel.getWidgetCount() - 2; i >= 0; i--) {
             cellsPanel.remove(i);
         }
 
@@ -220,14 +220,21 @@ public class SelectorListBoxValuePanel<E> extends FocusPanel implements ISelecto
         this.parent = parent;
     }
 
-    public void setAction(Command command) {
+    public void setAction(final Command command) {
         if (actionButton != null) {
             remove(actionButton);
         }
         if (command == null) {
             cellsPanel.getElement().getStyle().setMarginRight(0, Unit.PX);
         } else {
-            actionButton = new Button(ImageFactory.getImages().addAction(), command) {
+            actionButton = new Button(ImageFactory.getImages().addAction(), new Command() {
+
+                @Override
+                public void execute() {
+                    parent.hidePickerPopup();
+                    command.execute();
+                }
+            }) {
 
                 @Override
                 protected void onAttach() {
