@@ -95,8 +95,8 @@ class SystemHealthMonitor {
 
                 EntityQueryCriteria<Run> criteria2 = EntityQueryCriteria.create(Run.class);
                 criteria2.eq(criteria2.proto().status(), RunStatus.Completed);
-                criteria2.ge(criteria2.proto().forDate(), dayStart);
-                criteria2.le(criteria2.proto().forDate(), dayEnd);
+                criteria2.ge(criteria2.proto().forDate(), dayStart.getTime());
+                criteria2.le(criteria2.proto().forDate(), dayEnd.getTime());
                 criteria2.eq(criteria2.proto().trigger(), trigger);
 
                 if (!Persistence.service().exists(criteria2)) {
