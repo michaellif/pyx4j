@@ -29,7 +29,6 @@ import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.Command;
 
 import com.pyx4j.commons.IFormatter;
-import com.pyx4j.widgets.client.GroupFocusHandler;
 import com.pyx4j.widgets.client.IWatermarkWidget;
 import com.pyx4j.widgets.client.ImageFactory;
 import com.pyx4j.widgets.client.event.shared.PasteEvent;
