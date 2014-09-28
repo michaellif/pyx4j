@@ -25,6 +25,8 @@ import java.util.Collection;
 
 import com.google.gwt.event.logical.shared.SelectionEvent;
 import com.google.gwt.event.logical.shared.SelectionHandler;
+import com.google.gwt.event.logical.shared.ValueChangeEvent;
+import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.HTML;
 
@@ -70,10 +72,10 @@ public class NSelectorListBox<E extends IEntity> extends NFocusField<Collection<
             }
         });
 
-        editor.addSelectionHandler(new SelectionHandler<E>() {
+        editor.addValueChangeHandler(new ValueChangeHandler<Collection<E>>() {
 
             @Override
-            public void onSelection(SelectionEvent<E> event) {
+            public void onValueChange(ValueChangeEvent<Collection<E>> event) {
                 getCComponent().stopEditing();
             }
         });

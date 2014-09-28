@@ -54,4 +54,5 @@ public class CSelectorListBox<E extends IEntity> extends CAbstractSelectorBox<Co
     public boolean isValueEmpty() {
         return getValue() == null || getValue().size() == 0;
     }
+
 }

@@ -29,9 +29,9 @@ import com.google.gwt.event.dom.client.FocusEvent;
 import com.google.gwt.event.dom.client.FocusHandler;
 import com.google.gwt.event.dom.client.KeyUpEvent;
 import com.google.gwt.event.dom.client.KeyUpHandler;
-import com.google.gwt.event.logical.shared.HasSelectionHandlers;
-import com.google.gwt.event.logical.shared.SelectionEvent;
-import com.google.gwt.event.logical.shared.SelectionHandler;
+import com.google.gwt.event.logical.shared.HasValueChangeHandlers;
+import com.google.gwt.event.logical.shared.ValueChangeEvent;
+import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.Command;
 
@@ -42,7 +42,7 @@ import com.pyx4j.widgets.client.event.shared.PasteEvent;
 import com.pyx4j.widgets.client.event.shared.PasteHandler;
 import com.pyx4j.widgets.client.style.theme.WidgetTheme;
 
-public class SelectorListBox<E> extends AbstractSelectorWidget<E> implements HasSelectionHandlers<E>, IFocusWidget, IWatermarkWidget {
+public class SelectorListBox<E> extends AbstractSelectorWidget<E> implements HasValueChangeHandlers<Collection<E>>, IFocusWidget, IWatermarkWidget {
 
     private final ArrayList<E> value;
 
@@ -154,12 +154,12 @@ public class SelectorListBox<E> extends AbstractSelectorWidget<E> implements Has
     }
 
     @Override
-    public HandlerRegistration addSelectionHandler(SelectionHandler<E> handler) {
-        return addHandler(handler, SelectionEvent.getType());
+    public HandlerRegistration addValueChangeHandler(ValueChangeHandler<Collection<E>> handler) {
+        return addHandler(handler, ValueChangeEvent.getType());
     }
 
-    private void fireSelectionEvent(E value) {
-        SelectionEvent.fire(this, value);
+    private void fireValueChangeEvent() {
+        ValueChangeEvent.fire(this, value);
     }
 
     @Override
@@ -178,18 +178,18 @@ public class SelectorListBox<E> extends AbstractSelectorWidget<E> implements Has
             ArrayList<E> newValue = new ArrayList<>(value);
             newValue.add(item);
             setValue(newValue);
-            fireSelectionEvent(item);
+            fireValueChangeEvent();
         }
     }
 
     public void removeItem(E item) {
         if (null != item) {
             if (this.value.contains(item)) {
-                this.value.remove(item);
                 ArrayList<E> newValue = new ArrayList<>(value);
+                newValue.remove(item);
                 setValue(newValue);
+                fireValueChangeEvent();
             }
-
         }
     }
 
