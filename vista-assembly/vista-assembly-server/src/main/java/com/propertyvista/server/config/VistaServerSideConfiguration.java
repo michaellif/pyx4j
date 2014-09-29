@@ -470,8 +470,14 @@ public class VistaServerSideConfiguration extends AbstractVistaServerSideConfigu
 
     @Override
     public boolean walkMeEnabled(VistaApplication application) {
+        boolean defaultVistaApplicationEnabled = true;
+
+        // walkMe disabled in Online Application for now
+        if (application == VistaApplication.prospect) {
+            defaultVistaApplicationEnabled = false;
+        }
         return getConfigProperties().getBooleanValue("walkMeEnabled", true)
-                && getConfigProperties().getBooleanValue("walkMeEnabled." + application.name(), true);
+                && getConfigProperties().getBooleanValue("walkMeEnabled." + application.name(), defaultVistaApplicationEnabled);
     }
 
     @Override

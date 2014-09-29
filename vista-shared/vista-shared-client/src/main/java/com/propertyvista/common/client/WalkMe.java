@@ -31,6 +31,8 @@ import com.pyx4j.gwt.commons.AjaxJSLoader;
 /**
  * http://support.walkme.com/customer/portal/articles/1561564-walkme-api
  *
+ * http://support.walkme.com/customer/portal/articles/1561606-player-api
+ *
  */
 public class WalkMe {
 
@@ -90,6 +92,12 @@ public class WalkMe {
     private native static boolean isWalkMeJSLoaded() /*-{ return typeof $wnd.vista_walkme_loaded != "undefined"; }-*/;
 
     public native static void setupWalkMeVariables(JsArrayString behaviors) /*-{ $wnd.vistaWalkMeBehaviors = behaviors; }-*/;
+
+    public static native void toggleMenu() /*-{  $wnd.WalkMePlayerAPI.toggleMenu(); }-*/;
+
+    public static native void showPlayer() /*-{  $wnd.WalkMePlayerAPI.showPlayer(); }-*/;
+
+    public static native void hidePlayer() /*-{  $wnd.WalkMePlayerAPI.hidePlayer(); }-*/;
 
     public static void obtainWalkthrus(final String tag, final AsyncCallback<Map<Integer, String>> callback) {
         load(new AsyncCallback<Void>() {

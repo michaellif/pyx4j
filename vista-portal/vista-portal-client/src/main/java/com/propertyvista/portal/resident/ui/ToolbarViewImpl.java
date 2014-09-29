@@ -23,6 +23,7 @@ import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.Window;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.MenuItem;
@@ -42,8 +43,10 @@ import com.pyx4j.widgets.client.Toolbar;
 import com.pyx4j.widgets.client.style.theme.WidgetTheme;
 
 import com.propertyvista.common.client.ClientLocaleUtils;
+import com.propertyvista.common.client.WalkMe;
 import com.propertyvista.domain.security.PortalResidentBehavior;
 import com.propertyvista.portal.resident.activity.PortalClientCommunicationManager;
+import com.propertyvista.portal.rpc.portal.resident.ac.HelpAction;
 import com.propertyvista.portal.rpc.shared.dto.communication.PortalCommunicationSystemNotification;
 import com.propertyvista.portal.shared.resources.PortalImages;
 import com.propertyvista.portal.shared.themes.PortalRootPaneTheme;
@@ -135,10 +138,11 @@ public class ToolbarViewImpl extends FlowPanel implements ToolbarView {
         helpButton = new Button(PortalImages.INSTANCE.help(), new Command() {
             @Override
             public void execute() {
-
+                WalkMe.toggleMenu();
             }
-        });
+        }, HelpAction.class);
         helpButton.ensureDebugId("help");
+        helpButton.setVisible(false);
 
         loginButton = new Button(i18n.tr("Log In"), new Command() {
             @Override
@@ -299,11 +303,25 @@ public class ToolbarViewImpl extends FlowPanel implements ToolbarView {
             break;
         default:
             sideMenuButton.setVisible(false);
-            helpButton.setVisible(loggedIn);
             tenantButton.setVisible(loggedIn);
             languageButton.setVisible(true);
             brandHolder.getElement().getStyle().setProperty("margin", "0");
             brandImage.getElement().getStyle().setProperty("margin", "5px 0 0 10px");
+
+            if (loggedIn) {
+                WalkMe.load(new AsyncCallback<Void>() {
+
+                    @Override
+                    public void onSuccess(Void result) {
+                        helpButton.setVisible(loggedIn);
+                    }
+
+                    @Override
+                    public void onFailure(Throwable ignore) {
+                    }
+                });
+            }
+
             break;
         }
         loginButton.setVisible(!loggedIn && !hideLoginButton);

@@ -19,7 +19,7 @@ import com.pyx4j.entity.security.EntityPermission;
 import com.pyx4j.entity.security.InstanceAccess;
 import com.pyx4j.gwt.rpc.deferred.DeferredProcessService;
 import com.pyx4j.rpc.shared.IServiceExecutePermission;
-import com.pyx4j.security.server.ServletContainerAclBuilder;
+import com.pyx4j.security.server.UIAclBuilder;
 
 import com.propertyvista.domain.communication.CommunicationThread;
 import com.propertyvista.domain.communication.DeliveryHandle;
@@ -61,6 +61,7 @@ import com.propertyvista.portal.rpc.portal.prospect.services.ProofOfAssetDocumen
 import com.propertyvista.portal.rpc.portal.prospect.services.ProofOfIncomeDocumentProspectUploadService;
 import com.propertyvista.portal.rpc.portal.prospect.services.ProspectAuthenticationService;
 import com.propertyvista.portal.rpc.portal.prospect.services.ProspectSignUpService;
+import com.propertyvista.portal.rpc.portal.resident.ac.HelpAction;
 import com.propertyvista.portal.rpc.portal.resident.services.CommunityEventPortalCrudService;
 import com.propertyvista.portal.rpc.portal.resident.services.ExtraActivityPortalService;
 import com.propertyvista.portal.rpc.portal.resident.services.LeaseContextSelectionService;
@@ -113,7 +114,7 @@ import com.propertyvista.portal.server.security.access.resident.PaymentRecordTen
 import com.propertyvista.server.common.security.UserEntityInstanceAccess;
 import com.propertyvista.shared.services.dev.MockDataGenerator;
 
-public class VistaPortalAccessControlList extends ServletContainerAclBuilder {
+public class VistaPortalAccessControlList extends UIAclBuilder {
 
     private final static int CRUD = EntityPermission.CREATE | EntityPermission.READ | EntityPermission.UPDATE;
 
@@ -174,6 +175,8 @@ public class VistaPortalAccessControlList extends ServletContainerAclBuilder {
         grant(PortalResidentBehavior.Guarantor, new IServiceExecutePermission(ResidentAccountCrudService.class));
 
         //========================= Resident Portal
+
+        grant(VistaAccessGrantedBehavior.ResidentPortal, HelpAction.class);
 
         grant(PortalResidentBehavior.Resident, new IServiceExecutePermission(BillingService.class));
         grant(PortalResidentBehavior.Resident, new IServiceExecutePermission(
