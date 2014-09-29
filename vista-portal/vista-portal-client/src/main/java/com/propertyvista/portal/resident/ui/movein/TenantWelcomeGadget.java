@@ -34,7 +34,7 @@ public class TenantWelcomeGadget extends AbstractGadget<MoveInWizardView> {
 
     public TenantWelcomeGadget(MoveInWizardView view) {
         super(view, null, i18n.tr("<b>Congratulations"), ThemeColor.contrast2, 1);
-        setActionsToolbar(new NewResidentWelcomeToolbar());
+        setActionsToolbar(new ActionsToolbar());
 
         SafeHtmlBuilder htmlBuilder = new SafeHtmlBuilder();
 
@@ -53,11 +53,11 @@ public class TenantWelcomeGadget extends AbstractGadget<MoveInWizardView> {
         setContent(htmlPanel);
     }
 
-    class NewResidentWelcomeToolbar extends GadgetToolbar {
+    class ActionsToolbar extends GadgetToolbar {
 
         private final Button startButton;
 
-        public NewResidentWelcomeToolbar() {
+        public ActionsToolbar() {
 
             startButton = new Button(i18n.tr("I’m Ready. Let’s Go!"), new Command() {
                 @Override

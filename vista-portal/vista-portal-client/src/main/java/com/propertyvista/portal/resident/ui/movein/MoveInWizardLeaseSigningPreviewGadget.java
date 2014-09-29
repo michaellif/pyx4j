@@ -33,7 +33,7 @@ public class MoveInWizardLeaseSigningPreviewGadget extends AbstractGadget<MoveIn
 
     public MoveInWizardLeaseSigningPreviewGadget(MoveInWizardView view) {
         super(view, null, i18n.tr("Lease Agreement "), ThemeColor.contrast2, 1);
-        setActionsToolbar(new MoveInWizardLeaseSigningPreviewToolbar());
+        setActionsToolbar(new ActionsToolbar());
 
         SafeHtmlBuilder htmlBuilder = new SafeHtmlBuilder();
 
@@ -49,11 +49,11 @@ public class MoveInWizardLeaseSigningPreviewGadget extends AbstractGadget<MoveIn
         setContent(htmlPanel);
     }
 
-    class MoveInWizardLeaseSigningPreviewToolbar extends GadgetToolbar {
+    class ActionsToolbar extends GadgetToolbar {
 
         private final Button startButton;
 
-        public MoveInWizardLeaseSigningPreviewToolbar() {
+        public ActionsToolbar() {
 
             startButton = new Button(i18n.tr("Sign Your Lease"), new Command() {
                 @Override

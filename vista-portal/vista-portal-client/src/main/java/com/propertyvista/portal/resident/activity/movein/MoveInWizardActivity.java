@@ -45,13 +45,13 @@ public class MoveInWizardActivity extends SecurityAwareActivity implements MoveI
 
             @Override
             public void onStateChange(MoveInWizardStateChangeEvent event) {
-                if (!MoveInWizardManager.isStarted()) {
+                if (!MoveInWizardManager.isAttemptStarted()) {
                     if (SecurityController.check(PortalResidentBehavior.Resident)) {
                         view.showTenantWelcomeScreen();
                     } else if (SecurityController.check(PortalResidentBehavior.Guarantor)) {
                         view.showGuarantorWelcomeScreen();
                     }
-                } else if (MoveInWizardManager.isCompleted()) {
+                } else if (MoveInWizardManager.isAttemptCompleted()) {
                     view.showCompletionConfirmationScreen();
                 } else {
                     view.showStepPreview(MoveInWizardManager.getCurrentStep());

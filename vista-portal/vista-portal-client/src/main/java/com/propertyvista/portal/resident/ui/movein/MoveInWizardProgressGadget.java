@@ -26,12 +26,12 @@ import com.propertyvista.portal.rpc.portal.resident.ResidentPortalSiteMap;
 import com.propertyvista.portal.shared.ui.AbstractGadget;
 import com.propertyvista.portal.shared.ui.GadgetToolbar;
 
-public class MoveInWizardCompletionConfirmationGadget extends AbstractGadget<MoveInWizardView> {
+public class MoveInWizardProgressGadget extends AbstractGadget<MoveInWizardView> {
 
     private static final I18n i18n = I18n.get(TenantWelcomeGadget.class);
 
-    public MoveInWizardCompletionConfirmationGadget(MoveInWizardView view) {
-        super(view, null, i18n.tr("Move-In Wizard Complete"), ThemeColor.contrast4, 1);
+    public MoveInWizardProgressGadget(MoveInWizardView view) {
+        super(view, null, i18n.tr("Continue Move-In Wizard"), ThemeColor.contrast4, 1);
         setActionsToolbar(new ActionsToolbar());
 
         setContent(new HTML("What next"));
@@ -41,23 +41,14 @@ public class MoveInWizardCompletionConfirmationGadget extends AbstractGadget<Mov
 
         public ActionsToolbar() {
 
-            Button continueButton = new Button(i18n.tr("Continue to Portal"), new Command() {
+            Button continueButton = new Button(i18n.tr("Continue"), new Command() {
                 @Override
                 public void execute() {
-                    AppSite.getPlaceController().goTo(new ResidentPortalSiteMap.Financial.PreauthorizedPayments.AutoPayWizard());
+                    AppSite.getPlaceController().goTo(new ResidentPortalSiteMap.MoveIn.MoveInWizard());
                 }
             });
             continueButton.getElement().getStyle().setProperty("background", StyleManager.getPalette().getThemeColor(ThemeColor.contrast4, 1));
             addItem(continueButton);
-
-            Button updateProfileButton = new Button(i18n.tr("Update Profile"), new Command() {
-                @Override
-                public void execute() {
-                    AppSite.getPlaceController().goTo(new ResidentPortalSiteMap.Financial.PreauthorizedPayments.AutoPayWizard());
-                }
-            });
-            updateProfileButton.getElement().getStyle().setProperty("background", StyleManager.getPalette().getThemeColor(ThemeColor.contrast4, 1));
-            addItem(updateProfileButton);
 
         }
     }

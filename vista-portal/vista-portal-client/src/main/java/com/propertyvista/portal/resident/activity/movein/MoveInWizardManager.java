@@ -16,6 +16,7 @@ package com.propertyvista.portal.resident.activity.movein;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.place.shared.PlaceChangeEvent;
 import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.google.web.bindery.event.shared.HandlerRegistration;
 
 import com.pyx4j.gwt.commons.ClientEventBus;
 import com.pyx4j.i18n.shared.I18n;
@@ -39,12 +40,14 @@ public class MoveInWizardManager {
 
     private static MoveInWizardStep currentStep;
 
-    private static boolean started;
+    private static boolean attemptStarted;
 
-    private static boolean completed;
+    private static boolean attemptCompleted;
+
+    private static HandlerRegistration handlerRegistration;
 
     public static void init() {
-        AppSite.getEventBus().addHandler(PlaceChangeEvent.TYPE, new PlaceChangeEvent.Handler() {
+        handlerRegistration = AppSite.getEventBus().addHandler(PlaceChangeEvent.TYPE, new PlaceChangeEvent.Handler() {
             @Override
             public void onPlaceChange(final PlaceChangeEvent event) {
                 if (SecurityController.check(PortalResidentBehavior.MoveInWizardCompletionRequired)) {
@@ -55,8 +58,9 @@ public class MoveInWizardManager {
                         public void onSuccess(MoveInWizardStatusTO result) {
                             wizardStatus = result;
                             setCurrentStep(event.getNewPlace() instanceof IMoveInPlace ? currentStep : null);
+
                             ClientEventBus.instance.fireEvent(new MoveInWizardStateChangeEvent());
-                            started = true;
+                            attemptStarted = true;
                         }
 
                         @Override
@@ -108,12 +112,12 @@ public class MoveInWizardManager {
         }
     }
 
-    public static boolean isStarted() {
-        return started;
+    public static boolean isAttemptStarted() {
+        return attemptStarted;
     }
 
-    public static boolean isCompleted() {
-        return completed;
+    public static boolean isAttemptCompleted() {
+        return attemptCompleted;
     }
 
     public static MoveInWizardStep getCurrentStep() {

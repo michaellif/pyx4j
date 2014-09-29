@@ -52,14 +52,12 @@ public class MoveInWizardViewImpl extends SimplePanel implements MoveInWizardVie
 
     @Override
     public void showCompletionConfirmationScreen() {
-        // TODO Auto-generated method stub
-
+        setWidget(new MoveInWizardCompletionConfirmationGadget(this));
     }
 
     @Override
     public void showProgressScreen() {
-        // TODO Auto-generated method stub
-
+        setWidget(new MoveInWizardProgressGadget(this));
     }
 
 }

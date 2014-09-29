@@ -38,7 +38,7 @@ public class MoveInWizardInsurancePreviewGadget extends AbstractGadget<MoveInWiz
 
     public MoveInWizardInsurancePreviewGadget(MoveInWizardView view) {
         super(view, null, i18n.tr("Renters Insurance"), ThemeColor.contrast3, 1);
-        setActionsToolbar(new MoveInWizardLeaseSigningPreviewToolbar());
+        setActionsToolbar(new ActionsToolbar());
 
         SafeHtmlBuilder htmlBuilder = new SafeHtmlBuilder();
 
@@ -65,9 +65,9 @@ public class MoveInWizardInsurancePreviewGadget extends AbstractGadget<MoveInWiz
         setContent(htmlPanel);
     }
 
-    class MoveInWizardLeaseSigningPreviewToolbar extends GadgetToolbar {
+    class ActionsToolbar extends GadgetToolbar {
 
-        public MoveInWizardLeaseSigningPreviewToolbar() {
+        public ActionsToolbar() {
 
             Button continueButton = new Button(i18n.tr("Buy Insurance"), new Command() {
                 @Override
