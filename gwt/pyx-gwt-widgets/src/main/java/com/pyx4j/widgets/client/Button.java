@@ -160,6 +160,12 @@ public class Button extends FocusPanel implements IFocusWidget, HasSecureConcern
                     if (isEnabled() && (command != null)) {
                         active = !active;
                         command.execute();
+                        if (isActive()) {
+                            addStyleDependentName(WidgetTheme.StyleDependent.active.name());
+                        } else {
+                            removeStyleDependentName(WidgetTheme.StyleDependent.active.name());
+
+                        }
                     }
                 }
             }
@@ -397,7 +403,7 @@ public class Button extends FocusPanel implements IFocusWidget, HasSecureConcern
         @Override
         public void onMouseDown(MouseDownEvent event) {
             if (button.isEnabled()) {
-                if (!button.active) {
+                if (!button.isActive()) {
                     button.removeStyleDependentName(WidgetTheme.StyleDependent.hover.name());
                     button.addStyleDependentName(WidgetTheme.StyleDependent.active.name());
                 }
@@ -407,7 +413,9 @@ public class Button extends FocusPanel implements IFocusWidget, HasSecureConcern
         @Override
         public void onMouseUp(MouseUpEvent event) {
             if (button.isEnabled()) {
-                if (!button.active) {
+                if (button.isActive()) {
+                    button.addStyleDependentName(WidgetTheme.StyleDependent.active.name());
+                } else {
                     button.removeStyleDependentName(WidgetTheme.StyleDependent.active.name());
                     button.addStyleDependentName(WidgetTheme.StyleDependent.hover.name());
                 }
@@ -417,6 +425,7 @@ public class Button extends FocusPanel implements IFocusWidget, HasSecureConcern
         @Override
         public void onClick(ClickEvent event) {
             // fix for Buttons remain in Mouse Over position after they are clicked.
+
             button.removeStyleDependentName(WidgetTheme.StyleDependent.hover.name());
 
         }

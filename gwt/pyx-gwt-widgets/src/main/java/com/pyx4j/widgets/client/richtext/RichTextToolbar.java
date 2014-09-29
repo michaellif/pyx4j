@@ -15,14 +15,9 @@
  */
 package com.pyx4j.widgets.client.richtext;
 
-import com.google.gwt.dom.client.Style;
 import com.google.gwt.dom.client.Style.Display;
-import com.google.gwt.dom.client.Style.Float;
 import com.google.gwt.dom.client.Style.FontWeight;
-import com.google.gwt.dom.client.Style.TextDecoration;
 import com.google.gwt.dom.client.Style.Unit;
-import com.google.gwt.event.dom.client.BlurEvent;
-import com.google.gwt.event.dom.client.BlurHandler;
 import com.google.gwt.event.dom.client.ChangeEvent;
 import com.google.gwt.event.dom.client.ChangeHandler;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -31,10 +26,10 @@ import com.google.gwt.event.dom.client.KeyUpEvent;
 import com.google.gwt.event.dom.client.KeyUpHandler;
 import com.google.gwt.resources.client.ImageResource;
 import com.google.gwt.user.client.Command;
-import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
+import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.Button;
@@ -42,9 +37,10 @@ import com.pyx4j.widgets.client.CheckBox;
 import com.pyx4j.widgets.client.ImageFactory;
 import com.pyx4j.widgets.client.ImageFactory.WidgetsImageBundle;
 import com.pyx4j.widgets.client.ListBox;
+import com.pyx4j.widgets.client.TextBox;
 import com.pyx4j.widgets.client.Toolbar;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
-import com.pyx4j.widgets.client.style.theme.WidgetTheme;
+import com.pyx4j.widgets.client.dialog.OkCancelDialog;
 
 /**
  * A sample toolbar for use with {@link RichTextArea}. It provides a simple UI for all
@@ -54,98 +50,11 @@ public class RichTextToolbar extends FlowPanel {
 
     private static final I18n i18n = I18n.get(RichTextToolbar.class);
 
-    /**
-     * We use an inner EventListener class to avoid exposing event methods on the
-     * RichTextToolbar itself.
-     */
-    private class EventHandler implements ClickHandler, ChangeHandler {
-
-        @Override
-        public void onChange(ChangeEvent event) {
-            Object sender = event.getSource();
-            if (sender == backColors) {
-                formatter.setBackColor(backColors.getValue(backColors.getSelectedIndex()));
-            } else if (sender == foreColors) {
-                formatter.setForeColor(foreColors.getValue(foreColors.getSelectedIndex()));
-            } else if (sender == fonts) {
-                formatter.setFontName(fonts.getValue(fonts.getSelectedIndex()));
-            } else if (sender == fontSizes) {
-                formatter.setFontSize(fontSizesConstants[fontSizes.getSelectedIndex() - 1]);
-            }
-        }
-
-        @Override
-        public void onClick(ClickEvent event) {
-            Object sender = event.getSource();
-            if (sender == bold) {
-                formatter.toggleBold();
-            } else if (sender == italic) {
-                formatter.toggleItalic();
-            } else if (sender == underline) {
-                formatter.toggleUnderline();
-            } else if (sender == indent) {
-                formatter.rightIndent();
-            } else if (sender == outdent) {
-                formatter.leftIndent();
-            } else if (sender == justifyLeft) {
-                formatter.setJustification(RichTextArea.Justification.LEFT);
-            } else if (sender == justifyCenter) {
-                formatter.setJustification(RichTextArea.Justification.CENTER);
-            } else if (sender == justifyRight) {
-                formatter.setJustification(RichTextArea.Justification.RIGHT);
-            } else if (sender == insertImage) {
-                inOperation = true;
-                if (provider != null) {
-                    provider.selectImage(new AsyncCallback<String>() {
-                        @Override
-                        public void onFailure(Throwable caught) {
-                            MessageDialog.error(i18n.tr("Action Failed"), caught.getMessage());
-                        }
-
-                        @Override
-                        public void onSuccess(String result) {
-                            onImageUrl(result);
-                        }
-                    });
-                } else {
-                    onImageUrl(Window.prompt(i18n.tr("Enter target image URL:"), "http://"));
-                }
-            } else if (sender == createLink) {
-                inOperation = true;
-                onLinkUrl(Window.prompt(i18n.tr("Enter target page URL:"), "http://"));
-            } else if (sender == removeLink) {
-                formatter.removeLink();
-            } else if (sender == hr) {
-                formatter.insertHorizontalRule();
-            } else if (sender == ol) {
-                formatter.insertOrderedList();
-            } else if (sender == ul) {
-                formatter.insertUnorderedList();
-            } else if (sender == removeFormat) {
-                formatter.removeFormat();
-            } else if (sender == customButton) {
-                RichTextAction action = getCustomAction();
-                if (action != null) {
-                    inOperation = true;
-                    action.perform(formatter, new Command() {
-                        @Override
-                        public void execute() {
-                            inOperation = false;
-                        }
-                    });
-                }
-            }
-        }
-
-    }
-
     private static final RichTextArea.FontSize[] fontSizesConstants = new RichTextArea.FontSize[] { RichTextArea.FontSize.XX_SMALL,
             RichTextArea.FontSize.X_SMALL, RichTextArea.FontSize.SMALL, RichTextArea.FontSize.MEDIUM, RichTextArea.FontSize.LARGE,
             RichTextArea.FontSize.X_LARGE, RichTextArea.FontSize.XX_LARGE };
 
     private final WidgetsImageBundle images = ImageFactory.getImages();
-
-    private final EventHandler handler = new EventHandler();
 
     private final RichTextArea richText;
 
@@ -161,36 +70,6 @@ public class RichTextToolbar extends FlowPanel {
 
     private FlowPanel formatToolbar;
 
-    private Button bold;
-
-    private Button italic;
-
-    private Button underline;
-
-    private Button indent;
-
-    private Button outdent;
-
-    private Button justifyLeft;
-
-    private Button justifyCenter;
-
-    private Button justifyRight;
-
-    private Button hr;
-
-    private Button ol;
-
-    private Button ul;
-
-    private Button insertImage;
-
-    private Button createLink;
-
-    private Button removeLink;
-
-    private Button removeFormat;
-
     private ListBox backColors;
 
     private ListBox foreColors;
@@ -201,9 +80,9 @@ public class RichTextToolbar extends FlowPanel {
 
     private RichTextImageProvider provider;
 
-    private final Button customButton = new Button(i18n.tr("MERGE"));
+    private Button templateActionButton;
 
-    private RichTextAction customAction;
+    private RichTextTemplateAction templateAction;
 
     private Button fontButton;
 
@@ -212,6 +91,12 @@ public class RichTextToolbar extends FlowPanel {
     private Button insertButton;
 
     private CheckBox textHtmlSwitch;
+
+    private Button boldButton;
+
+    private Button italicButton;
+
+    private Button underlineButton;
 
     /*
      * This is needed to help handling richTextArea onBlur events. When toolbar is inOperation state
@@ -231,20 +116,12 @@ public class RichTextToolbar extends FlowPanel {
         this.richText = richText;
         this.formatter = richText.getFormatter();
 
-//TODO change to PYX Theme
-        setStyleName("gwt-ExtRichTextToolbar");
-
         initTopToolbar();
         initFormatToolbar();
         initFontToolbar();
         initInsertToolbar();
 
         formatButton.toggleActive();
-
-//TODO move to initInsertToolbar
-        customButton.setVisible(false);
-        customButton.addClickHandler(handler);
-        customButton.setVisible(false);
 
         // We only use these listeners for updating status, so don't hook them up
         // unless at least basic editing is supported.
@@ -270,6 +147,7 @@ public class RichTextToolbar extends FlowPanel {
         });
 
         inOperation = false;
+
     }
 
     private void initTopToolbar() {
@@ -281,8 +159,8 @@ public class RichTextToolbar extends FlowPanel {
         topButtonBar.getElement().getStyle().setFontWeight(FontWeight.BOLD);
         topToolbar.add(topButtonBar);
 
-        textHtmlSwitch = new CheckBox("HTML");
-        textHtmlSwitch.getElement().getStyle().setFloat(Float.RIGHT);
+        textHtmlSwitch = new CheckBox(i18n.tr("HTML"));
+        textHtmlSwitch.addStyleName(RichTextEditorTheme.StyleName.RteCheckBox.name());
         textHtmlSwitch.setTitle(i18n.tr("Toggle HTML or Text mode"));
         textHtmlSwitch.addClickHandler(new ClickHandler() {
             @Override
@@ -309,12 +187,7 @@ public class RichTextToolbar extends FlowPanel {
                 }
             }
         });
-        textHtmlSwitch.addBlurHandler(new BlurHandler() {
-            @Override
-            public void onBlur(BlurEvent event) {
-                richText.fireEvent(event);
-            }
-        });
+
         topToolbar.add(textHtmlSwitch);
         add(topToolbar);
     }
@@ -323,29 +196,105 @@ public class RichTextToolbar extends FlowPanel {
         insertToolbar = new FlowPanel();
         insertToolbar.setVisible(false);
 
-        topButtonBar.addItem(insertButton = new Button(i18n.tr("Insert"), new Command() {
+        topButtonBar.addItem(insertButton = createButton(i18n.tr("Insert"), i18n.tr("Insert"), new Command() {
 
             @Override
             public void execute() {
-                insertToolbar.setVisible(!insertToolbar.isVisible());
-                fontToolbar.setVisible(false);
-                formatToolbar.setVisible(false);
-                insertButton.getElement().getStyle().setTextDecoration(insertToolbar.isVisible() ? TextDecoration.UNDERLINE : TextDecoration.NONE);
-                if (formatButton != null)
-                    formatButton.getElement().getStyle().setTextDecoration(TextDecoration.NONE);
-                if (fontButton != null)
-                    fontButton.getElement().getStyle().setTextDecoration(TextDecoration.NONE);
+                if (insertButton.isActive()) {
+                    if (fontButton.isActive()) {
+                        fontButton.toggleActive();
+                    }
+                    if (formatButton.isActive()) {
+                        formatButton.toggleActive();
+                    }
+                }
+                insertToolbar.setVisible(insertButton.isActive());
             }
-        }));
-        insertButton.addStyleName(RichTextEditorTheme.StyleName.rteTopBarButton.name());
+        }, true));
+        insertButton.addStyleName(RichTextEditorTheme.StyleName.RteToolbarButton.name());
 
         Toolbar linkPanel = new Toolbar();
-        linkPanel.addItem(createLink = createButton(images.createLink(), "createLink"));
-        linkPanel.addItem(removeLink = createButton(images.removeLink(), "removeLink"));
+        linkPanel.addItem(createButton(images.createLink(), i18n.tr("Create Link"), new Command() {
+
+            @Override
+            public void execute() {
+                inOperation = true;
+                new EditUrlDialog(i18n.tr("Enter target resource URL:")) {
+
+                    @Override
+                    public boolean onClickOk() {
+                        if (!getInput().isEmpty()) {
+                            onLinkUrl(getInput());
+                            return true;
+                        } else {
+                            return false;
+                        }
+                    }
+                }.show();
+            }
+        }, false));
+        linkPanel.addItem(createButton(images.removeLink(), i18n.tr("Remove Link"), new Command() {
+
+            @Override
+            public void execute() {
+                formatter.removeLink();
+            }
+        }, false));
         linkPanel.addItem(new HTML("&emsp;"));
-        linkPanel.addItem(insertImage = createButton(images.insertImage(), "insertImage"));
+        linkPanel.addItem(createButton(images.insertImage(), i18n.tr("Insert Image"), new Command() {
+
+            @Override
+            public void execute() {
+
+                inOperation = true;
+                if (provider != null) {
+                    provider.selectImage(new AsyncCallback<String>() {
+                        @Override
+                        public void onFailure(Throwable caught) {
+                            MessageDialog.error(i18n.tr("Action Failed"), caught.getMessage());
+                        }
+
+                        @Override
+                        public void onSuccess(String result) {
+                            onImageUrl(result);
+                        }
+                    });
+                } else {
+                    new EditUrlDialog(i18n.tr("Enter target image URL:")) {
+
+                        @Override
+                        public boolean onClickOk() {
+                            if (!getInput().isEmpty()) {
+                                onImageUrl(getInput());
+                                return true;
+                            } else {
+                                return false;
+                            }
+                        }
+                    }.show();
+                }
+            }
+        }, false));
+
+        linkPanel.addItem(new HTML("&emsp;"));
+        linkPanel.addItem(templateActionButton = createButton(images.mergeImage(), i18n.tr("Merge"), new Command() {
+
+            @Override
+            public void execute() {
+                RichTextTemplateAction action = getTemplateAction();
+                if (action != null) {
+                    inOperation = true;
+                    action.perform(formatter, new Command() {
+                        @Override
+                        public void execute() {
+                            inOperation = false;
+                        }
+                    }, templateActionButton);
+                }
+            }
+        }, false));
+        templateActionButton.setVisible(false);
         insertToolbar.add(linkPanel);
-        insertToolbar.add(customButton);
         add(insertToolbar);
     }
 
@@ -353,23 +302,36 @@ public class RichTextToolbar extends FlowPanel {
         fontToolbar = new FlowPanel();
         fontToolbar.setVisible(false);
 
-        topButtonBar.addItem(fontButton = new Button(i18n.tr("Font"), new Command() {
+        topButtonBar.addItem(fontButton = createButton(i18n.tr("Font"), i18n.tr("Font"), new Command() {
 
             @Override
             public void execute() {
-                fontToolbar.setVisible(!fontToolbar.isVisible());
-                formatToolbar.setVisible(false);
-                insertToolbar.setVisible(false);
-                fontButton.getElement().getStyle().setTextDecoration(fontToolbar.isVisible() ? TextDecoration.UNDERLINE : TextDecoration.NONE);
-                if (formatButton != null)
-                    formatButton.getElement().getStyle().setTextDecoration(TextDecoration.NONE);
-                if (insertButton != null)
-                    insertButton.getElement().getStyle().setTextDecoration(TextDecoration.NONE);
+                if (fontButton.isActive()) {
+                    if (insertButton.isActive()) {
+                        insertButton.toggleActive();
+                    }
+                    if (formatButton.isActive()) {
+                        formatButton.toggleActive();
+                    }
+                }
+                fontToolbar.setVisible(fontButton.isActive());
+            }
+        }, true));
+        fontButton.addStyleName(RichTextEditorTheme.StyleName.RteToolbarButton.name());
+        fontToolbar.add(foreColors = createColorList(i18n.tr("Font Color"), new ChangeHandler() {
+
+            @Override
+            public void onChange(ChangeEvent event) {
+                formatter.setForeColor(foreColors.getValue(foreColors.getSelectedIndex()));
             }
         }));
-        fontButton.addStyleName(RichTextEditorTheme.StyleName.rteTopBarButton.name());
-        fontToolbar.add(foreColors = createColorList("Font Color"));
-        fontToolbar.add(backColors = createColorList("Highlight"));
+        fontToolbar.add(backColors = createColorList(i18n.tr("Highlight"), new ChangeHandler() {
+
+            @Override
+            public void onChange(ChangeEvent event) {
+                formatter.setBackColor(backColors.getValue(backColors.getSelectedIndex()));
+            }
+        }));
         fontToolbar.add(fonts = createFontList());
         fontToolbar.add(fontSizes = createFontSizes());
         add(fontToolbar);
@@ -380,61 +342,135 @@ public class RichTextToolbar extends FlowPanel {
         formatToolbar = new FlowPanel();
         formatToolbar.setVisible(false);
 
-        topButtonBar.addItem(formatButton = new Button(i18n.tr("Format"), new Command() {
+        topButtonBar.addItem(formatButton = createButton(i18n.tr("Format"), i18n.tr("Format"), new Command() {
 
             @Override
             public void execute() {
-                formatToolbar.setVisible(!formatToolbar.isVisible());
-                fontToolbar.setVisible(false);
-                insertToolbar.setVisible(false);
-                formatButton.getElement().getStyle().setTextDecoration(formatToolbar.isVisible() ? TextDecoration.UNDERLINE : TextDecoration.NONE);
-                if (fontButton != null)
-                    fontButton.getElement().getStyle().setTextDecoration(TextDecoration.NONE);
-                if (insertButton != null)
-                    insertButton.getElement().getStyle().setTextDecoration(TextDecoration.NONE);
+                if (formatButton.isActive()) {
+                    if (fontButton.isActive()) {
+                        fontButton.toggleActive();
+                    }
+                    if (insertButton.isActive()) {
+                        insertButton.toggleActive();
+                    }
+                }
+                formatToolbar.setVisible(formatButton.isActive());
             }
-        }));
-        formatButton.addStyleName(RichTextEditorTheme.StyleName.rteTopBarButton.name());
+        }, true));
+        formatButton.addStyleName(RichTextEditorTheme.StyleName.RteToolbarButton.name());
 
         Toolbar formatPanel = new Toolbar();
-        formatPanel.addItem(bold = createButton(images.bold(), "bold"));
-        formatPanel.addItem(italic = createButton(images.italic(), "italic"));
-        formatPanel.addItem(underline = createButton(images.underline(), "underline"));
+
+        formatPanel.addItem(boldButton = createButton(images.bold(), i18n.tr("Bold"), new Command() {
+
+            @Override
+            public void execute() {
+                formatter.toggleBold();
+            }
+        }, true));
+        formatPanel.addItem(italicButton = createButton(images.italic(), i18n.tr("Italic"), new Command() {
+
+            @Override
+            public void execute() {
+                formatter.toggleItalic();
+            }
+        }, true));
+        formatPanel.addItem(underlineButton = createButton(images.underline(), i18n.tr("Underline"), new Command() {
+
+            @Override
+            public void execute() {
+                formatter.toggleUnderline();
+            }
+        }, true));
         formatPanel.addItem(new HTML("&emsp;"));
-        formatPanel.addItem(justifyLeft = createButton(images.justifyLeft(), "justifyLeft"));
-        formatPanel.addItem(justifyCenter = createButton(images.justifyCenter(), "justifyCenter"));
-        formatPanel.addItem(justifyRight = createButton(images.justifyRight(), "justifyRight"));
+        formatPanel.addItem(createButton(images.justifyLeft(), i18n.tr("Justify Left"), new Command() {
+
+            @Override
+            public void execute() {
+                formatter.setJustification(RichTextArea.Justification.LEFT);
+            }
+        }, false));
+        formatPanel.addItem(createButton(images.justifyCenter(), i18n.tr("Justify Center"), new Command() {
+
+            @Override
+            public void execute() {
+                formatter.setJustification(RichTextArea.Justification.CENTER);
+            }
+        }, false));
+        formatPanel.addItem(createButton(images.justifyRight(), i18n.tr("Justify Right"), new Command() {
+
+            @Override
+            public void execute() {
+                formatter.setJustification(RichTextArea.Justification.RIGHT);
+            }
+        }, false));
         formatPanel.addItem(new HTML("&emsp;"));
 
         formatToolbar.add(formatPanel);
 
         Toolbar indentPanel = new Toolbar();
-        indentPanel.addItem(indent = createButton(images.indent(), "indent"));
-        indentPanel.addItem(outdent = createButton(images.outdent(), "outdent"));
+        indentPanel.addItem(createButton(images.indent(), i18n.tr("Indent More"), new Command() {
+
+            @Override
+            public void execute() {
+                formatter.rightIndent();
+            }
+        }, false));
+        indentPanel.addItem(createButton(images.outdent(), i18n.tr("Indent Less"), new Command() {
+
+            @Override
+            public void execute() {
+                formatter.leftIndent();
+            }
+        }, false));
         indentPanel.addItem(new HTML("&emsp;"));
-        indentPanel.addItem(hr = createButton(images.hr(), "hr"));
-        indentPanel.addItem(ol = createButton(images.ol(), "ol"));
+        indentPanel.addItem(createButton(images.hr(), "Horizontal Rule", new Command() {
+
+            @Override
+            public void execute() {
+                formatter.insertHorizontalRule();
+            }
+        }, false));
         indentPanel.addItem(new HTML("&emsp;"));
-        indentPanel.addItem(ul = createButton(images.ul(), "ul"));
+        indentPanel.addItem(createButton(images.ol(), i18n.tr("Numbered List"), new Command() {
+
+            @Override
+            public void execute() {
+                formatter.insertOrderedList();
+            }
+        }, false));
+        indentPanel.addItem(createButton(images.ul(), i18n.tr("Bulleted List"), new Command() {
+
+            @Override
+            public void execute() {
+                formatter.insertUnorderedList();
+            }
+        }, false));
         indentPanel.addItem(new HTML("&emsp;"));
-        indentPanel.addItem(removeFormat = createButton(images.removeFormat(), "removeFormat"));
+        indentPanel.addItem(createButton(images.removeFormat(), i18n.tr("Remove Format"), new Command() {
+
+            @Override
+            public void execute() {
+                formatter.removeFormat();
+            }
+        }, false));
         formatToolbar.add(indentPanel);
         add(formatToolbar);
 
     }
 
-    private ListBox createColorList(String caption) {
+    private ListBox createColorList(String caption, ChangeHandler handler) {
         ListBox lb = new ListBox();
         lb.addChangeHandler(handler);
         lb.setVisibleItemCount(1);
 
         lb.addItem(caption, "");
-        lb.addItem("White", "white");
-        lb.addItem("Black", "black");
-        lb.addItem("Red", "red");
-        lb.addItem("Green", "green");
-        lb.addItem("Yellow", "yellow");
-        lb.addItem("Blue", "blue");
+        lb.addItem(i18n.tr("White"), "white");
+        lb.addItem(i18n.tr("Black"), "black");
+        lb.addItem(i18n.tr("Red"), "red");
+        lb.addItem(i18n.tr("Green"), "green");
+        lb.addItem(i18n.tr("Yellow"), "yellow");
+        lb.addItem(i18n.tr("Blue"), "blue");
 
         lb.getElement().getStyle().setMarginRight(4, Unit.PX);
         return lb;
@@ -442,17 +478,23 @@ public class RichTextToolbar extends FlowPanel {
 
     private ListBox createFontList() {
         ListBox lb = new ListBox();
-        lb.addChangeHandler(handler);
+        lb.addChangeHandler(new ChangeHandler() {
+
+            @Override
+            public void onChange(ChangeEvent event) {
+                formatter.setFontName(fonts.getValue(fonts.getSelectedIndex()));
+            }
+        });
         lb.setVisibleItemCount(1);
 
-        lb.addItem("Font Family", "");
-        lb.addItem("Normal", "");
-        lb.addItem("Times New Roman", "Times New Roman");
-        lb.addItem("Arial", "Arial");
-        lb.addItem("Courier New", "Courier New");
-        lb.addItem("Georgia", "Georgia");
-        lb.addItem("Trebuchet", "Trebuchet");
-        lb.addItem("Verdana", "Verdana");
+        lb.addItem(i18n.tr("Font Family"), "");
+        lb.addItem(i18n.tr("Normal"), "");
+        lb.addItem(i18n.tr("Times New Roman"), "Times New Roman");
+        lb.addItem(i18n.tr("Arial"), "Arial");
+        lb.addItem(i18n.tr("Courier New"), "Courier New");
+        lb.addItem(i18n.tr("Georgia"), "Georgia");
+        lb.addItem(i18n.tr("Trebuchet"), "Trebuchet");
+        lb.addItem(i18n.tr("Verdana"), "Verdana");
 
         lb.getElement().getStyle().setMarginRight(4, Unit.PX);
         return lb;
@@ -460,50 +502,70 @@ public class RichTextToolbar extends FlowPanel {
 
     private ListBox createFontSizes() {
         ListBox lb = new ListBox();
-        lb.addChangeHandler(handler);
+        lb.addChangeHandler(new ChangeHandler() {
+
+            @Override
+            public void onChange(ChangeEvent event) {
+                formatter.setFontSize(fontSizesConstants[fontSizes.getSelectedIndex() - 1]);
+            }
+        });
         lb.setVisibleItemCount(1);
 
-        lb.addItem("Font Size");
-        lb.addItem("XX-Small");
-        lb.addItem("X-Small");
-        lb.addItem("Small");
-        lb.addItem("Medium");
-        lb.addItem("Large");
-        lb.addItem("X-Large");
-        lb.addItem("XX-Large");
+        lb.addItem(i18n.tr("Font Size"));
+        lb.addItem(i18n.tr("XX-Small"));
+        lb.addItem(i18n.tr("X-Small"));
+        lb.addItem(i18n.tr("Small"));
+        lb.addItem(i18n.tr("Medium"));
+        lb.addItem(i18n.tr("Large"));
+        lb.addItem(i18n.tr("X-Large"));
+        lb.addItem(i18n.tr("XX-Large"));
 
         lb.getElement().getStyle().setMarginRight(4, Unit.PX);
         return lb;
     }
 
-    private Button createButton(ImageResource img, String tip) {
-        Button tb = new Button(img);
-        tb.addClickHandler(handler);
-        tb.setTitle(tip);
-        tb.setStyleName(WidgetTheme.StyleName.Button.name());
-        Style s = tb.getElement().getStyle();
-        s.setPaddingLeft(3, Unit.PX);
-        s.setPaddingRight(5, Unit.PX);
+    private Button createButton(String text, String tip, Command command, boolean toggleable) {
+        return createButton(text, null, tip, command, toggleable);
+    }
 
-        return tb;
+    private Button createButton(ImageResource img, String tip, Command command, boolean toggleable) {
+        return createButton(null, img, tip, command, toggleable);
+    }
+
+    private Button createButton(String text, ImageResource img, String tip, Command command, final boolean toggleable) {
+        Button button = text == null ? new Button(img, command) : new Button(text, command) {
+            @Override
+            public boolean isActive() {
+                if (toggleable) {
+                    return super.isActive();
+                }
+                return false;
+            }
+        };
+
+        button.addStyleName(toggleable ? RichTextEditorTheme.StyleName.RteToolbarButton.name() : RichTextEditorTheme.StyleName.RteToolbarButtonNoToggle.name());
+        button.setTitle(tip);
+
+        return button;
     }
 
     /**
      * Updates the status of all the stateful buttons.
      */
     private void updateStatus() {
-        // set font properties
-        if (foreColors.getSelectedIndex() > 0) {
-            formatter.setForeColor(foreColors.getValue(foreColors.getSelectedIndex()));
+        if (formatter.isBold() != boldButton.isActive()) {
+            boldButton.toggleActive();//will switch active status, but will call click handle, so need to re-toggle
+            formatter.toggleBold();
         }
-        if (backColors.getSelectedIndex() > 0) {
-            formatter.setBackColor(backColors.getValue(backColors.getSelectedIndex()));
+
+        if (formatter.isItalic() != italicButton.isActive()) {
+            italicButton.toggleActive();//will switch active status, but will call click handle, so need to re-toggle
+            formatter.toggleItalic();
         }
-        if (fonts.getSelectedIndex() > 0) {
-            formatter.setFontName(fonts.getValue(fonts.getSelectedIndex()));
-        }
-        if (fontSizes.getSelectedIndex() > 0) {
-            formatter.setFontSize(fontSizesConstants[fontSizes.getSelectedIndex() - 1]);
+
+        if (formatter.isUnderlined() != underlineButton.isActive()) {
+            underlineButton.toggleActive();//will switch active status, but will call click handle, so need to re-toggle
+            formatter.toggleUnderline();
         }
     }
 
@@ -516,6 +578,7 @@ public class RichTextToolbar extends FlowPanel {
     }
 
     public void onImageUrl(String url) {
+
         formatter.insertImage(url);
         // make sure the richTextArea will receive focus and will handle onBlur after this method completes.
         inOperation = false;
@@ -531,20 +594,44 @@ public class RichTextToolbar extends FlowPanel {
         return inOperation;
     }
 
-    public Button getCustomButton() {
-        // use this to setup button look
-        return customButton;
+    public void setTemplateAction(RichTextTemplateAction action) {
+        templateAction = action;
+        if (templateAction != null) {
+            templateActionButton.setVisible(true);
+        }
+
     }
 
-    public void setCustomAction(RichTextAction action) {
-        customAction = action;
-    }
-
-    private RichTextAction getCustomAction() {
-        return customAction;
+    private RichTextTemplateAction getTemplateAction() {
+        return templateAction;
     }
 
     public boolean isHtmlMode() {
         return !textHtmlSwitch.getValue();
+    }
+
+    private abstract class EditUrlDialog extends OkCancelDialog {
+        private TextBox inputTextBox;
+
+        public EditUrlDialog(String labelText) {
+            super(i18n.tr("Edit Link"));
+            setBody(initBody(labelText));
+        }
+
+        private IsWidget initBody(String labelText) {
+            FlowPanel body = new FlowPanel();
+            body.getElement().getStyle().setProperty("padding", "20px 10px");
+            body.add(new HTML(labelText));
+            body.add(new HTML("<br/>"));
+            inputTextBox = new TextBox();
+            inputTextBox.setText("http://");
+            body.add(inputTextBox);
+
+            return body;
+        }
+
+        public String getInput() {
+            return inputTextBox.getText();
+        }
     }
 }

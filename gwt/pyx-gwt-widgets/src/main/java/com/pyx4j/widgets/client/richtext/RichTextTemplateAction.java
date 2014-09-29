@@ -21,7 +21,8 @@
 package com.pyx4j.widgets.client.richtext;
 
 import com.google.gwt.user.client.Command;
+import com.google.gwt.user.client.ui.UIObject;
 
-public interface RichTextAction {
-    void perform(RichTextArea.Formatter formatter, Command onComplete);
+public interface RichTextTemplateAction {
+    void perform(RichTextArea.Formatter formatter, Command onComplete, final UIObject target);
 }

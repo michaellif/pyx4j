@@ -20,9 +20,10 @@
  */
 package com.pyx4j.widgets.client.richtext;
 
-import com.google.gwt.dom.client.Style.BorderStyle;
-import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.BlurEvent;
+import com.google.gwt.event.dom.client.BlurHandler;
+import com.google.gwt.event.dom.client.FocusEvent;
+import com.google.gwt.event.dom.client.FocusHandler;
 import com.google.gwt.event.shared.GwtEvent;
 
 import com.pyx4j.widgets.client.style.theme.WidgetTheme;
@@ -31,10 +32,24 @@ public class RichTextArea extends com.google.gwt.user.client.ui.RichTextArea {
     private boolean ignoreBlur;
 
     public RichTextArea() {
-        setStyleName(WidgetTheme.StyleName.TextBox.name());
-        getElement().getStyle().setBorderStyle(BorderStyle.SOLID);
-        getElement().getStyle().setBorderWidth(1, Unit.PX);
-        getElement().getStyle().setBackgroundColor("white");
+        setStyleName(WidgetTheme.StyleName.TextBoxContainer.name());
+
+        addFocusHandler(new FocusHandler() {
+
+            @Override
+            public void onFocus(FocusEvent event) {
+                addStyleDependentName(WidgetTheme.StyleDependent.focused.name());
+            }
+        });
+
+        addBlurHandler(new BlurHandler() {
+
+            @Override
+            public void onBlur(BlurEvent event) {
+                removeStyleDependentName(WidgetTheme.StyleDependent.focused.name());
+            }
+        });
+
         ignoreBlur = false;
     }
 

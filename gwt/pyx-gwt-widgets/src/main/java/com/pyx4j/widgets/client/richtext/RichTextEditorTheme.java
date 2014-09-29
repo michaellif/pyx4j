@@ -11,7 +11,7 @@ import com.pyx4j.widgets.client.style.theme.WidgetTheme;
 public class RichTextEditorTheme extends Theme {
 
     public static enum StyleName implements IStyleName {
-        rteTopBarButton
+        ReachTextEditor, ReachTextArea, RteToolbar, RteToolbarButton, RteToolbarButtonNoToggle, RteCheckBox
     }
 
     public RichTextEditorTheme() {
@@ -25,10 +25,56 @@ public class RichTextEditorTheme extends Theme {
 
     protected void initStyles() {
         // Toggle Button
-        Style style = new Style(".", WidgetTheme.StyleName.Button, ".", StyleName.rteTopBarButton);
+        Style style = new Style(".", StyleName.ReachTextEditor, " .", WidgetTheme.StyleName.Button, ".", StyleName.RteToolbarButton);
         style.addProperty("color", ThemeColor.foreground);
-        style.addProperty("height", "auto");
+        style.addProperty("height", "1.5em");
+        style.addProperty("line-height", "1.2em");
+        style.addProperty("padding", "2px 3px");
+        style.addProperty("margin", "2px");
         addStyle(style);
 
+        style = new Style(".", StyleName.ReachTextEditor, " .", WidgetTheme.StyleName.Button, ".", StyleName.RteToolbarButton);
+        style.addProperty("border", "1px solid");
+        style.addProperty("border-color", ThemeColor.background);
+        addStyle(style);
+
+        style = new Style(".", StyleName.ReachTextEditor, " .", WidgetTheme.StyleName.Button, ".", StyleName.RteToolbarButton, " .",
+                WidgetTheme.StyleName.ButtonText);
+        style.addProperty("line-height", "1.5em");
+        addStyle(style);
+
+        style = new Style(".", StyleName.ReachTextEditor, " .", StyleName.RteToolbarButton, ".", WidgetTheme.StyleName.Button, "-",
+                WidgetTheme.StyleDependent.active);
+        style.addProperty("border-color", ThemeColor.foreground, 0.3);
+        addStyle(style);
+
+        style = new Style(".", StyleName.ReachTextEditor, " .", WidgetTheme.StyleName.Button, ".", StyleName.RteToolbarButtonNoToggle);
+        style.addProperty("color", ThemeColor.foreground);
+        style.addProperty("height", "1.5em");
+        style.addProperty("line-height", "1.2em");
+        style.addProperty("padding", "2px 3px");
+        style.addProperty("margin", "2px");
+        addStyle(style);
+
+        style = new Style(".", StyleName.ReachTextEditor, " .", WidgetTheme.StyleName.Button, ".", StyleName.RteToolbarButtonNoToggle);
+        style.addProperty("border", "1px solid");
+        style.addProperty("border-color", ThemeColor.background);
+        addStyle(style);
+
+        style = new Style(".", StyleName.ReachTextEditor, " .", WidgetTheme.StyleName.Button, ".", StyleName.RteToolbarButtonNoToggle, " .",
+                WidgetTheme.StyleName.ButtonText);
+        style.addProperty("line-height", "1.5em");
+        addStyle(style);
+
+        style = new Style(".", StyleName.ReachTextEditor, " .", StyleName.RteToolbarButtonNoToggle, ".", WidgetTheme.StyleName.Button, "-",
+                WidgetTheme.StyleDependent.active);
+        style.addProperty("border", "1px solid");
+        style.addProperty("border-color", ThemeColor.background);
+        addStyle(style);
+
+        style = new Style(".", StyleName.ReachTextEditor, " .", WidgetTheme.StyleName.CheckBox, ".", StyleName.RteCheckBox);
+        style.addProperty("padding", "5px 1px");
+        style.addProperty("float", "right");
+        addStyle(style);
     }
 }

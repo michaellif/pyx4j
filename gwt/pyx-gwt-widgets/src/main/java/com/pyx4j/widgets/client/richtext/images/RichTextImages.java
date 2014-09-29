@@ -43,6 +43,9 @@ public interface RichTextImages extends ClientBundle {
     @Source("44753.png")
     ImageResource insertImage();
 
+    @Source("insert.png")
+    ImageResource mergeImage();
+
     @Source("text_italic.png")
     ImageResource italic();
 
@@ -67,7 +70,7 @@ public interface RichTextImages extends ClientBundle {
     @Source("29083.png")
     ImageResource removeFormat();
 
-    @Source("image.png")
+    @Source("remove_link.png")
     ImageResource removeLink();
 
     @Source("text_strikethrough.png")

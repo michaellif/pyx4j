@@ -33,7 +33,6 @@ import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.ui.DockPanel;
 
 import com.pyx4j.commons.IDebugId;
-import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.ITextWidget;
 
 public class RichTextEditor extends DockPanel implements ITextWidget {
@@ -46,6 +45,8 @@ public class RichTextEditor extends DockPanel implements ITextWidget {
 
     public RichTextEditor() {
         super();
+
+        setStyleName(RichTextEditorTheme.StyleName.ReachTextEditor.name());
 
         richTextArea = new RichTextArea();
         richTextArea.setWidth("100%");
@@ -108,12 +109,8 @@ public class RichTextEditor extends DockPanel implements ITextWidget {
         return html.replaceAll("<br>", "<br />");
     }
 
-    public Button getCustomButton() {
-        return toolbar.getCustomButton();
-    }
-
-    public void setCustomAction(RichTextAction action) {
-        toolbar.setCustomAction(action);
+    public void setTemplateAction(RichTextTemplateAction action) {
+        toolbar.setTemplateAction(action);
     }
 
     public void setImageProvider(RichTextImageProvider provider) {
@@ -190,20 +187,17 @@ public class RichTextEditor extends DockPanel implements ITextWidget {
 
     @Override
     public int getTabIndex() {
-        // TODO Auto-generated method stub
-        return 0;
+        return richTextArea.getTabIndex();
     }
 
     @Override
     public void setTabIndex(int index) {
-        // TODO Auto-generated method stub
-
+        richTextArea.setTabIndex(index);
     }
 
     @Override
     public void setAccessKey(char key) {
-        // TODO Auto-generated method stub
-
+        richTextArea.setAccessKey(key);
     }
 
     @Override
