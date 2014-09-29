@@ -138,6 +138,10 @@ public class YardiLeaseApplicationTest extends YardiTestBase {
         // approve lease application
         ServerSideFactory.create(LeaseFacade.class).approve(lease, null, null);
 
+        // do second import
+        Persistence.service().commit();
+        yardiImportAll(getYardiCredential(BuildingID));
+
         // 6. Assertion: status approved, participantId have been set
         lease = ServerSideFactory.create(LeaseFacade.class).load(lease, false);
 
@@ -151,11 +155,6 @@ public class YardiLeaseApplicationTest extends YardiTestBase {
             assertEquals(customer.getPrimaryKey(), tenant.leaseParticipant().customer().getPrimaryKey());
             assertTrue(tenant.leaseParticipant().participantId().getValue().matches("^[rt].*"));
         }
-
-        // 7. Execution: second import
-        // -------------------------------
-        Persistence.service().commit(); // TODO wtf
-        yardiImportAll(getYardiCredential(BuildingID));
     }
 
     public void testYardiImport() throws Exception {
