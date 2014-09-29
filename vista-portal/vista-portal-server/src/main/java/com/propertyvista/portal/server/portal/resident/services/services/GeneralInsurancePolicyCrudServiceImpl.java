@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011-2012 All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -22,10 +22,13 @@ import com.pyx4j.entity.core.criterion.EntityListCriteria;
 import com.pyx4j.entity.rpc.EntitySearchResult;
 import com.pyx4j.entity.server.AbstractCrudServiceDtoImpl;
 import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.security.shared.SecurityController;
+import com.pyx4j.server.contexts.ServerContext;
 
 import com.propertyvista.biz.policy.PolicyFacade;
 import com.propertyvista.biz.tenant.insurance.GeneralInsuranceFacade;
 import com.propertyvista.domain.policy.policies.TenantInsurancePolicy;
+import com.propertyvista.domain.security.PortalResidentBehavior;
 import com.propertyvista.domain.tenant.insurance.GeneralInsuranceCertificate;
 import com.propertyvista.domain.tenant.insurance.GeneralInsurancePolicy;
 import com.propertyvista.domain.tenant.lease.Lease;
@@ -55,6 +58,10 @@ public class GeneralInsurancePolicyCrudServiceImpl extends AbstractCrudServiceDt
     @Override
     protected void create(GeneralInsurancePolicy bo, GeneralInsurancePolicyDTO to) {
         ServerSideFactory.create(GeneralInsuranceFacade.class).createGeneralTenantInsurance(ResidentPortalContext.getTenant(), to.certificate());
+        // We now have Insurance
+        if (!SecurityController.check(PortalResidentBehavior.InsurancePresent)) {
+            ServerContext.getVisit().setAclRevalidationRequired();
+        }
     }
 
     @Override

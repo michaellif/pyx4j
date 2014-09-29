@@ -35,28 +35,33 @@ import com.propertyvista.portal.server.portal.resident.ResidentPortalContext;
 public class MoveInWizardServiceImpl implements MoveInWizardService {
 
     @Override
-    public void obtainIncompleteSteps(AsyncCallback<MoveInWizardStatusTO> callback) {
+    public void obtainSteps(AsyncCallback<MoveInWizardStatusTO> callback) {
         MoveInWizardStatusTO wizardStatus = EntityFactory.create(MoveInWizardStatusTO.class);
 
-        if (SecurityController.check(PortalResidentBehavior.LeaseAgreementSigningRequired)) {
+        if (ServerSideFactory.create(CustomerFacade.class).hasLeaseAgreementSigning(ResidentPortalContext.getLeaseIdStub())) {
             MoveInWizardStepStatusTO stepStatus = EntityFactory.create(MoveInWizardStepStatusTO.class);
             stepStatus.step().setValue(MoveInWizardStep.leaseSigning);
-            stepStatus.complete().setValue(false);
+
+            if (SecurityController.check(PortalResidentBehavior.LeaseAgreementSigningRequired)) {
+                stepStatus.complete().setValue(false);
+            } else {
+                stepStatus.complete().setValue(true);
+            }
+
             wizardStatus.steps().add(stepStatus);
         }
 
-        for (LeaseParticipantMoveInAction moveInAction : ServerSideFactory.create(CustomerFacade.class).getActiveMoveInActions(
+        for (LeaseParticipantMoveInAction moveInAction : ServerSideFactory.create(CustomerFacade.class).getMoveInActions(
                 ResidentPortalContext.getLeaseParticipant())) {
             MoveInWizardStepStatusTO stepStatus = EntityFactory.create(MoveInWizardStepStatusTO.class);
+            stepStatus.complete().setValue(moveInAction.status().getValue() != null);
             switch (moveInAction.type().getValue()) {
             case autoPay:
                 stepStatus.step().setValue(MoveInWizardStep.pap);
-                stepStatus.complete().setValue(false);
                 wizardStatus.steps().add(stepStatus);
                 break;
             case insurance:
                 stepStatus.step().setValue(MoveInWizardStep.insurance);
-                stepStatus.complete().setValue(false);
                 wizardStatus.steps().add(stepStatus);
                 break;
             }

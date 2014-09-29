@@ -45,7 +45,12 @@ public interface CustomerFacade {
 
     void setCustomerPasswordHash(Customer customer, String passwordHash);
 
-    Collection<LeaseParticipantMoveInAction> getActiveMoveInActions(LeaseParticipant<?> leaseParticipant);
+    /**
+     * Approved LeaseApplication Signed or not.
+     */
+    boolean hasLeaseAgreementSigning(Lease leaseId);
+
+    Collection<LeaseParticipantMoveInAction> getMoveInActions(LeaseParticipant<?> leaseParticipant);
 
     void skipMoveInAction(LeaseParticipant<?> leaseParticipant, MoveInActionType moveInActionType);
 

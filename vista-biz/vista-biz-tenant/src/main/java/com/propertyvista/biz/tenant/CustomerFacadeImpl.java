@@ -235,7 +235,7 @@ public class CustomerFacadeImpl implements CustomerFacade {
             EntityQueryCriteria<LeaseApplication> criteria = EntityQueryCriteria.create(LeaseApplication.class);
             criteria.eq(criteria.proto().lease(), leaseId);
             LeaseApplication leaseApplication = Persistence.service().retrieve(criteria);
-            if (leaseApplication.status().getValue() == LeaseApplication.Status.Approved) {
+            if (leaseApplication != null && leaseApplication.status().getValue() == LeaseApplication.Status.Approved) {
                 Persistence.ensureRetrieve(termParticipant.leaseParticipant().agreementSignatures(), AttachLevel.Attached);
                 if (!termParticipant.leaseParticipant().agreementSignatures().hasValues()) {
                     behaviors.add(PortalResidentBehavior.LeaseAgreementSigningRequired);
@@ -257,13 +257,21 @@ public class CustomerFacadeImpl implements CustomerFacade {
     }
 
     @Override
+    public boolean hasLeaseAgreementSigning(Lease leaseId) {
+        EntityQueryCriteria<LeaseApplication> criteria = EntityQueryCriteria.create(LeaseApplication.class);
+        criteria.eq(criteria.proto().lease(), leaseId);
+        LeaseApplication leaseApplication = Persistence.service().retrieve(criteria);
+        return (leaseApplication != null && leaseApplication.status().getValue() == LeaseApplication.Status.Approved);
+    }
+
+    @Override
     public void skipMoveInAction(LeaseParticipant<?> leaseParticipant, MoveInActionType moveInActionType) {
         new MoveInManager().skipMoveInAction(leaseParticipant, moveInActionType);
     }
 
     @Override
-    public Collection<LeaseParticipantMoveInAction> getActiveMoveInActions(LeaseParticipant<?> leaseParticipant) {
-        return new MoveInManager().getActiveMoveInActions(leaseParticipant);
+    public Collection<LeaseParticipantMoveInAction> getMoveInActions(LeaseParticipant<?> leaseParticipant) {
+        return new MoveInManager().getMoveInActions(leaseParticipant);
     }
 
     @Override

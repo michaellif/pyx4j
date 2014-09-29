@@ -28,7 +28,7 @@ import com.propertyvista.portal.rpc.portal.resident.dto.movein.MoveInWizardStep;
  */
 public interface MoveInWizardService extends IService {
 
-    public void obtainIncompleteSteps(AsyncCallback<MoveInWizardStatusTO> callback);
+    public void obtainSteps(AsyncCallback<MoveInWizardStatusTO> callback);
 
     public void skipStep(AsyncCallback<VoidSerializable> callback, MoveInWizardStep step);
 

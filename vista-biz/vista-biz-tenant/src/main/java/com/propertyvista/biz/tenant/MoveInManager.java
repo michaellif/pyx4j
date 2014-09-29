@@ -66,37 +66,48 @@ class MoveInManager {
         return behaviors;
     }
 
-    Collection<LeaseParticipantMoveInAction> getActiveMoveInActions(LeaseParticipant<?> leaseParticipant) {
-        Collection<LeaseParticipantMoveInAction> r = new ArrayList<>();
-        Map<MoveInActionType, LeaseParticipantMoveInAction> moveInActionsByType = getMoveInActionsByType(leaseParticipant);
-
-        if (!ServerSideFactory.create(PaymentMethodFacade.class).isAutopayAgreementsPresent(leaseParticipant.lease())) {
-            LeaseParticipantMoveInAction a = getActiveMoveInAction(moveInActionsByType, MoveInActionType.autoPay);
-            if (a != null) {
-                r.add(a);
-            }
+    private LeaseParticipantMoveInAction getActiveMoveInAction(Map<MoveInActionType, LeaseParticipantMoveInAction> moveInActionsByType,
+            MoveInActionType moveInActionType) {
+        LeaseParticipantMoveInAction a = getMoveInAction(moveInActionsByType, moveInActionType);
+        if (a.status().getValue() != null) {
+            return null;
+        } else {
+            return a;
         }
-
-        if (!ServerSideFactory.create(TenantInsuranceFacade.class).isInsurancePresent(leaseParticipant.lease())) {
-            LeaseParticipantMoveInAction a = getActiveMoveInAction(moveInActionsByType, MoveInActionType.insurance);
-            if (a != null) {
-                r.add(a);
-            }
-        }
-
-        return r;
     }
 
-    private LeaseParticipantMoveInAction getActiveMoveInAction(Map<MoveInActionType, LeaseParticipantMoveInAction> moveInActionsByType,
+    private LeaseParticipantMoveInAction getMoveInAction(Map<MoveInActionType, LeaseParticipantMoveInAction> moveInActionsByType,
             MoveInActionType moveInActionType) {
         LeaseParticipantMoveInAction a = moveInActionsByType.get(moveInActionType);
         if (a == null) {
             a = EntityFactory.create(LeaseParticipantMoveInAction.class);
             a.type().setValue(moveInActionType);
-        } else if (a.status().getValue() == MoveInActionStatus.doItLater) {
-            return null;
+            a.status().setValue(null);
         }
         return a;
+    }
+
+    Collection<LeaseParticipantMoveInAction> getMoveInActions(LeaseParticipant<?> leaseParticipant) {
+        Collection<LeaseParticipantMoveInAction> r = new ArrayList<>();
+        Map<MoveInActionType, LeaseParticipantMoveInAction> moveInActionsByType = getMoveInActionsByType(leaseParticipant);
+
+        {
+            LeaseParticipantMoveInAction a = getMoveInAction(moveInActionsByType, MoveInActionType.autoPay);
+            if (ServerSideFactory.create(PaymentMethodFacade.class).isAutopayAgreementsPresent(leaseParticipant.lease())) {
+                a.status().setValue(MoveInActionStatus.completed);
+            }
+            r.add(a);
+        }
+
+        {
+            LeaseParticipantMoveInAction a = getMoveInAction(moveInActionsByType, MoveInActionType.insurance);
+            if (ServerSideFactory.create(TenantInsuranceFacade.class).isInsurancePresent(leaseParticipant.lease())) {
+                a.status().setValue(MoveInActionStatus.completed);
+            }
+            r.add(a);
+        }
+
+        return r;
     }
 
     void skipMoveInAction(LeaseParticipant<?> leaseParticipant, MoveInActionType moveInActionType) {
