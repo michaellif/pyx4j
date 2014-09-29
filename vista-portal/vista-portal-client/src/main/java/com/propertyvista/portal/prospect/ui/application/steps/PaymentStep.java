@@ -36,7 +36,6 @@ import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.widgets.client.Label;
 import com.pyx4j.widgets.client.RadioGroup;
-import com.pyx4j.widgets.client.dialog.MessageDialog;
 
 import com.propertyvista.common.client.theme.VistaTheme.StyleName;
 import com.propertyvista.domain.payment.CreditCardInfo.CreditCardType;
@@ -95,6 +94,8 @@ public class PaymentStep extends ApplicationWizardStep {
 
     private final Label noPaymentRequiredLabel = new Label(i18n.tr("No Payment Required"));
 
+    private final Label noPaymentAcceptLabel = new Label(i18n.tr("Can not accept payment - please contact the office"));
+
     public PaymentStep() {
         super(OnlineApplicationWizardStepMeta.Payment);
 
@@ -148,7 +149,6 @@ public class PaymentStep extends ApplicationWizardStep {
 
                         if (getValue().payment().allowedPaymentsSetup().allowedPaymentTypes().isEmpty()) {
                             paymentMethodEditor.initNew(null);
-                            MessageDialog.warn(i18n.tr("Warning"), i18n.tr("There are no payment methods allowed!"));
                         } else {
                             // set preferred value:
                             if (getValue().payment().allowedPaymentsSetup().allowedPaymentTypes().contains(PaymentType.Echeck)) {
@@ -222,18 +222,23 @@ public class PaymentStep extends ApplicationWizardStep {
         paymentMethodEditor.setEnabled(isPaymentRequired);
 
         if (isPaymentRequired) {
-            paymentMethodPanel.setVisible(true);
-            paymentMethodHolder.setWidget(paymentMethodPanel);
-            loadProfiledPaymentMethods(new DefaultAsyncCallback<Void>() {
-                @Override
-                public void onSuccess(Void result) {
-                    boolean hasProfiledMethods = !profiledPaymentMethodsCombo.getOptions().isEmpty();
+            if (getValue().payment().allowedPaymentsSetup().allowedPaymentTypes().isEmpty()) {
+                paymentMethodPanel.setVisible(false);
+                paymentMethodHolder.setWidget(noPaymentAcceptLabel);
+            } else {
+                paymentMethodPanel.setVisible(true);
+                paymentMethodHolder.setWidget(paymentMethodPanel);
+                loadProfiledPaymentMethods(new DefaultAsyncCallback<Void>() {
+                    @Override
+                    public void onSuccess(Void result) {
+                        boolean hasProfiledMethods = !profiledPaymentMethodsCombo.getOptions().isEmpty();
 
-                    get(proto().payment().selectPaymentMethod()).reset();
-                    get(proto().payment().selectPaymentMethod()).setEnabled(hasProfiledMethods);
-                    get(proto().payment().selectPaymentMethod()).setValue(hasProfiledMethods ? PaymentSelect.Profiled : PaymentSelect.New, true, populate);
-                }
-            });
+                        get(proto().payment().selectPaymentMethod()).reset();
+                        get(proto().payment().selectPaymentMethod()).setEnabled(hasProfiledMethods);
+                        get(proto().payment().selectPaymentMethod()).setValue(hasProfiledMethods ? PaymentSelect.Profiled : PaymentSelect.New, true, populate);
+                    }
+                });
+            }
         } else {
             paymentMethodPanel.setVisible(false);
             paymentMethodHolder.setWidget(noPaymentRequiredLabel);
