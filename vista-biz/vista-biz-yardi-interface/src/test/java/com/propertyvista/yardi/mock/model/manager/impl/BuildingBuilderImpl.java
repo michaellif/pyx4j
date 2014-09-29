@@ -73,10 +73,16 @@ public class BuildingBuilderImpl implements BuildingBuilder {
         assert price != null : "price cannot be null";
         assert chargeCode != null : "charge code cannot be null";
 
+        if (YardiMockModelUtils.findRentableItem(building, itemId) != null) {
+            throw new Error("Rentable Item already exists: " + itemId);
+        }
+
         YardiRentableItem item = EntityFactory.create(YardiRentableItem.class);
         item.itemId().setValue(itemId);
         item.price().setValue(YardiMockModelUtils.toAmount(price));
         item.chargeCode().setValue(chargeCode);
+
+        building.rentableItems().add(item);
 
         return new RentableItemBuilderImpl(item, this);
     }

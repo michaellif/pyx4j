@@ -13,6 +13,8 @@
  */
 package com.propertyvista.yardi.mock.model.manager.impl;
 
+import java.math.BigDecimal;
+
 import com.pyx4j.entity.core.EntityFactory;
 
 import com.propertyvista.yardi.mock.model.domain.YardiLease;
@@ -148,6 +150,9 @@ public class LeaseBuilderImpl implements LeaseBuilder {
         trans.transactionId().setValue(transId);
         trans.amount().setValue(YardiMockModelUtils.toAmount(amount));
         trans.chargeCode().setValue(chargeCode);
+        // defaults
+        trans.amountPaid().setValue(BigDecimal.ZERO);
+        trans.balanceDue().set(trans.amount());
 
         lease.transactions().add(trans);
         return new TransactionBuilderImpl(trans, this);

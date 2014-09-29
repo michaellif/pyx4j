@@ -15,25 +15,21 @@ package com.propertyvista.integration.yardi;
 
 import java.util.List;
 
-import com.yardi.entity.resident.ResidentTransactions;
-
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.core.AttachLevel;
 import com.pyx4j.entity.server.Persistence;
 
-import com.propertyvista.biz.ExecutionMonitor;
 import com.propertyvista.biz.tenant.lease.LeaseFacade;
 import com.propertyvista.domain.financial.ARCode;
 import com.propertyvista.domain.financial.offering.ProductCatalog;
 import com.propertyvista.domain.financial.offering.ProductItem;
+import com.propertyvista.domain.financial.yardi.YardiDebit;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.domain.tenant.lease.Lease;
-import com.propertyvista.domain.tenant.lease.LeaseTermParticipant.Role;
 import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
-import com.propertyvista.test.integration.BillableItemTester;
-import com.propertyvista.test.integration.LeaseTermTenantTester;
+import com.propertyvista.test.integration.InvoiceLineItemTester;
 import com.propertyvista.test.mock.MockDataModel;
 import com.propertyvista.test.mock.models.ARCodeDataModel;
 import com.propertyvista.test.mock.models.ARCodeDataModel.Code;
@@ -47,10 +43,8 @@ import com.propertyvista.yardi.mock.model.manager.YardiGuestManager;
 import com.propertyvista.yardi.mock.model.manager.YardiLeaseManager;
 import com.propertyvista.yardi.mock.model.stub.impl.YardiMockILSGuestCardStubImpl;
 import com.propertyvista.yardi.mock.model.stub.impl.YardiMockResidentTransactionsStubImpl;
-import com.propertyvista.yardi.services.YardiResidentTransactionsService;
 import com.propertyvista.yardi.stubs.YardiILSGuestCardStub;
 import com.propertyvista.yardi.stubs.YardiResidentTransactionsStub;
-import com.propertyvista.yardi.stubs.YardiStubFactory;
 
 public class YardiLeaseApplicationTest extends YardiTestBase {
 
@@ -75,6 +69,7 @@ public class YardiLeaseApplicationTest extends YardiTestBase {
         super.setUp();
         preloadData();
 
+        YardiMock.server().reset();
         // managers
         YardiMock.server().addManager(YardiBuildingManager.class);
         YardiMock.server().addManager(YardiLeaseManager.class);
@@ -83,12 +78,6 @@ public class YardiLeaseApplicationTest extends YardiTestBase {
         // stubs
         YardiMock.server().addStub(YardiResidentTransactionsStub.class, YardiMockResidentTransactionsStubImpl.class);
         YardiMock.server().addStub(YardiILSGuestCardStub.class, YardiMockILSGuestCardStubImpl.class);
-    }
-
-    @Override
-    protected void tearDown() throws Exception {
-        super.tearDown();
-        YardiMock.server().reset();
     }
 
     /*
@@ -149,9 +138,9 @@ public class YardiLeaseApplicationTest extends YardiTestBase {
 
         // approve lease application
         ServerSideFactory.create(LeaseFacade.class).approve(lease, null, null);
+        Persistence.service().commit();
 
         // do second import
-        Persistence.service().commit();
         yardiImportAll(getYardiCredential(BuildingID));
 
         // 6. Assertion: status approved, participantId have been set
@@ -167,215 +156,10 @@ public class YardiLeaseApplicationTest extends YardiTestBase {
             assertEquals(customer.getPrimaryKey(), tenant.leaseParticipant().customer().getPrimaryKey());
             assertTrue(tenant.leaseParticipant().participantId().getValue().matches("^[rt].*"));
         }
-    }
 
-    public void testYardiImport() throws Exception {
-        // 1. Test setup
-        // -------------
-
-        setSysDate("25-May-2013");
-
-        YardiMock.server().getManager(YardiBuildingManager.class).addDefaultBuilding();
-
-        YardiMock.server().getManager(YardiLeaseManager.class) //
-                .addLease(TenantID, BuildingID, UnitID) //
-                .setRentAmount("1234.56") //
-                .setLeaseFrom("01-Jun-2012").setLeaseTo("31-Jul-2014") //
-
-                .addTenant(TenantID, "John Smith").setEmail("john@smith.ca").done() //
-                .addTenant(CoTenantID, "Jane Doe").setEmail("jane@doe.ca").done() //
-
-                .addRentCharge("rent", "rrent").setGlAccountNumber("40000301").done() //
-
-                .addCharge("parkA", "rinpark", "50.00") //
-                .setFromDate("01-Jun-2012").setToDate("31-Jul-2014") //
-                .setDescription("Parking A").setComment("Parking A").done() //
-
-                .addCharge("parkB", "rpark", "60.00") //
-                .setFromDate("01-Jun-2012").setToDate("31-Jul-2014") //
-                .setDescription("Parking B").setComment("Parking A").done();
-
-        // 2. Test execution
-        // -----------------
-        yardiImportAll(getYardiCredential(BuildingID));
-
-        // 3. Test assertion
-        // -----------------
-        Lease lease = getLeaseById(TenantID);
-        assertNotNull("Lease not imported", lease);
-        assertEquals("Invalid Lease Status", Lease.Status.Active, lease.status().getValue());
-
-        Building building = getBuilding(BuildingID);
-        assertNotNull(building);
-
-        AptUnit unit = getUnit(building, UnitID);
-        assertNotNull(unit);
-
-        Persistence.service().retrieve(lease.currentTerm().version().tenants());
-
-        new LeaseTermTenantTester(lease.currentTerm().version().tenants().get(0)). //
-                firstName("John"). //
-                lastName("Smith"). //
-                role(Role.Applicant). //
-                email("john@smith.ca");
-
-        new LeaseTermTenantTester(lease.currentTerm().version().tenants().get(1)). //
-                firstName("Jane"). //
-                lastName("Doe"). //
-                role(Role.CoApplicant). //
-                email("jane@doe.ca");
-
-        new BillableItemTester(lease.currentTerm().version().leaseProducts().serviceItem()). //
-                effectiveDate("01-Jun-2012"). //
-                expirationDate("31-Jul-2014"). //
-                description("Regular Residential Unit"). //
-                agreedPrice("1234.56");
-
-        assertEquals(2, lease.currentTerm().version().leaseProducts().featureItems().size());
-
-        new BillableItemTester(lease.currentTerm().version().leaseProducts().featureItems().get(0)). //
-                uid("rinpark:1"). //
-                effectiveDate("01-Jun-2012"). //
-                expirationDate("31-Jul-2014"). //
-                description("Indoor Parking"). //
-                agreedPrice("50.00");
-
-        new BillableItemTester(lease.currentTerm().version().leaseProducts().featureItems().get(1)). //
-                uid("rpark:1"). //
-                effectiveDate("01-Jun-2012"). //
-                expirationDate("31-Jul-2014"). //
-                description("Parking B"). //
-                agreedPrice("60.00");
-
-        // 4. Update lease
-        YardiMock.server().getManager(YardiLeaseManager.class) //
-                .getLease(TenantID, BuildingID) //
-                .getCharge("rent").setAmount("1250.00").done() //
-                .getCharge("parkA").setDescription("Indoor Parking").done() //
-                .getCharge("parkB").setChargeCode("rlock").setAmount("150.00").setDescription("Locker B").done() //
-                .getTenant(CoTenantID).setName("Jane Smith").done();
-
-        YardiResidentTransactionsService.getInstance().updateAll(getYardiCredential(BuildingID), new ExecutionMonitor());
-
-        // 5. Assert changes
-        lease = getCurrentLease(unit);
-        Persistence.service().retrieveMember(lease.currentTerm().versions());
-        Persistence.service().retrieve(lease.currentTerm().version().tenants());
-
-        // @formatter:off
-        new LeaseTermTenantTester(lease.currentTerm().version().tenants().get(0)).
-        firstName("John").
-        lastName("Smith").
-        role(Role.Applicant);
-        // @formatter:on
-
-        // @formatter:off
-        new LeaseTermTenantTester(lease.currentTerm().version().tenants().get(1)).
-        firstName("Jane").
-        lastName("Smith").
-        role(Role.CoApplicant);
-        // @formatter:on
-
-        new BillableItemTester(lease.currentTerm().version().leaseProducts().serviceItem()).agreedPrice("1250.00");
-
-        // @formatter:off
-        new BillableItemTester(lease.currentTerm().version().leaseProducts().featureItems().get(0)).
-        uid("rinpark:1").
-        effectiveDate("01-Jun-2012").
-        expirationDate("31-Jul-2014").
-        description("Indoor Parking").
-        agreedPrice("50.00");
-        // @formatter:on
-
-        // @formatter:off
-        new BillableItemTester(lease.currentTerm().version().leaseProducts().featureItems().get(1)).
-        uid("rlock:1").
-        effectiveDate("01-Jun-2012").
-        expirationDate("31-Jul-2014").
-        description("Locker B").
-        agreedPrice("150.00");
-        // @formatter:on
-
-        // 6. Test single lease import
-        ResidentTransactions transactions = YardiStubFactory.create(YardiResidentTransactionsStub.class).getResidentTransactionsForTenant(
-                getYardiCredential(BuildingID), BuildingID, TenantID);
-        assertNotNull(transactions);
-        assertEquals(1, transactions.getProperty().get(0).getRTCustomer().size());
-        assertEquals(TenantID, transactions.getProperty().get(0).getRTCustomer().get(0).getCustomerID());
-
-    }
-
-    private void leaseSetup() {
-        YardiMock.server().getManager(YardiBuildingManager.class).addDefaultBuilding();
-
-        YardiMock.server().getManager(YardiLeaseManager.class) //
-                .addLease(TenantID, BuildingID, UnitID) //
-                .setRentAmount("1234.56") //
-                .setLeaseFrom("01-Jun-2012").setLeaseTo("31-Jul-2014") //
-
-                .addTenant(TenantID, "John Smith").setEmail("john@smith.ca").done() //
-                .addTenant(CoTenantID, "Jane Doe").setEmail("jane@doe.ca").done() //
-
-                .addRentCharge("rent", "rrent").setGlAccountNumber("40000301").done() //
-
-                .addCharge("parkA", "rinpark", "50.00") //
-                .setFromDate("01-Jun-2012").setToDate("31-Jul-2014") //
-                .setDescription("Parking A").setComment("Parking A").done() //
-
-                .addCharge("parkB", "rpark", "60.00") //
-                .setFromDate("01-Jun-2012").setToDate("31-Jul-2014") //
-                .setDescription("Parking B").setComment("Parking B").done() //
-
-                .addTransaction("rent", "rrent", "987.65") //
-                .setTransactionDate("01-May-2013") //
-                .setGlAccountNumber("40000301") //
-                .setAmountPaid("1.00").setBalanceDue("986.65") //
-                .setComment("Rent (05/2013)").done();
-    }
-
-    public void testGetResidentTransactionsForTenant() throws Exception {
-        // 1. Test setup
-        // -------------
-        leaseSetup();
-
-        // 2. Test execution
-        // -----------------
-        ResidentTransactions transactions = YardiStubFactory.create(YardiResidentTransactionsStub.class).getResidentTransactionsForTenant(
-                getYardiCredential(BuildingID), BuildingID, TenantID);
-
-        // 3. Test assertion
-        // -----------------
-        assertNotNull(transactions);
-        assertEquals(1, transactions.getProperty().get(0).getRTCustomer().size());
-        assertEquals(TenantID, transactions.getProperty().get(0).getRTCustomer().get(0).getCustomerID());
-        assertNotNull(transactions.getProperty().get(0).getRTCustomer().get(0).getRTServiceTransactions());
-        assertEquals(1, transactions.getProperty().get(0).getRTCustomer().get(0).getRTServiceTransactions().getTransactions().size());
-    }
-
-    public void testGetLeaseChargesForTenant() throws Exception {
-        // 1. Test setup
-        // -------------
-        leaseSetup();
-
-        // 2. Test execution
-        // -----------------
-        ResidentTransactions transactions = YardiStubFactory.create(YardiResidentTransactionsStub.class).getLeaseChargesForTenant(
-                getYardiCredential(BuildingID), BuildingID, TenantID, null);
-
-        // 3. Test assertion
-        // -----------------
-        assertEquals("Has LeaseCharges", 0, transactions.getProperty().size());
-
-        setSysDate("01-Jun-2012");
-
-        transactions = YardiStubFactory.create(YardiResidentTransactionsStub.class).getLeaseChargesForTenant(getYardiCredential(BuildingID), BuildingID,
-                TenantID, null);
-        assertEquals("Has LeaseCharges", 3, transactions.getProperty().get(0).getRTCustomer().get(0).getRTServiceTransactions().getTransactions().size());
-
-        setSysDate("01-Aug-2014");
-
-        transactions = YardiStubFactory.create(YardiResidentTransactionsStub.class).getLeaseChargesForTenant(getYardiCredential(BuildingID), BuildingID,
-                TenantID, null);
-        assertEquals("Has LeaseCharges", 0, transactions.getProperty().size());
+        // assert deposit charges: ensure one charge equals to rent amount
+        new InvoiceLineItemTester(lease) //
+                .count(YardiDebit.class, 1) //
+                .lastRecordAmount(YardiDebit.class, YardiBuildingManager.DEFAULT_UNIT_RENT);
     }
 }

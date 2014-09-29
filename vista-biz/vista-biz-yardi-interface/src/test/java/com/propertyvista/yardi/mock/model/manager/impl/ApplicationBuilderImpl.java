@@ -13,6 +13,7 @@
  */
 package com.propertyvista.yardi.mock.model.manager.impl;
 
+import com.pyx4j.config.server.SystemDateManager;
 import com.pyx4j.entity.core.EntityFactory;
 
 import com.propertyvista.yardi.mock.model.YardiMock;
@@ -75,6 +76,10 @@ public class ApplicationBuilderImpl extends LeaseBuilderImpl implements Applicat
         fee.chargeCode().setValue(chargeCode);
         fee.description().setValue(description);
         lease.application().charges().add(fee);
+
+        addTransaction("appFee" + lease.application().charges().size(), chargeCode, amount) //
+                .setTransactionDate(YardiMockModelUtils.format(SystemDateManager.getLogicalDate())) //
+                .setDescription(description);
 
         return this;
     }
