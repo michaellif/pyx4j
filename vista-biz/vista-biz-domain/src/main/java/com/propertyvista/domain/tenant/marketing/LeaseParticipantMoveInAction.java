@@ -52,6 +52,7 @@ public interface LeaseParticipantMoveInAction extends IEntity {
     @MemberColumn(notNull = true)
     LeaseParticipant<?> leaseParticipant();
 
+    @MemberColumn(name = "tp", notNull = true)
     IPrimitive<MoveInActionType> type();
 
     IPrimitive<MoveInActionStatus> status();

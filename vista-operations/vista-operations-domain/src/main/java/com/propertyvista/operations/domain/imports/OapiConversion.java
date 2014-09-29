@@ -16,6 +16,7 @@ package com.propertyvista.operations.domain.imports;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Format;
+import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.OrderBy;
 import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.ReadOnly;
@@ -50,6 +51,7 @@ public interface OapiConversion extends IEntity {
     @ToString
     IPrimitive<String> name();
 
+    @MemberColumn(name = "tp")
     IPrimitive<Type> type();
 
     IPrimitive<String> description();
