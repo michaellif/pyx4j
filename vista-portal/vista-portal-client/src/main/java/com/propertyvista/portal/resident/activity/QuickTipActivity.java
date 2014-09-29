@@ -53,9 +53,7 @@ public class QuickTipActivity extends AbstractActivity implements QuickTipPresen
 
     private static Vector<QuickTipTO> quickTips = null;
 
-    enum Tip {
-        pap, insurance, maintenance
-    }
+    private static int currentQuickTipIndex = -1;
 
     public QuickTipActivity(Place place) {
         this.place = (AppPlace) place;
@@ -109,13 +107,27 @@ public class QuickTipActivity extends AbstractActivity implements QuickTipPresen
                 if (tips.size() > 0) {
                     panel.setWidget(view);
                     AppSite.getEventBus().fireEvent(new LayoutChangeRequestEvent(ChangeType.resizeComponents));
-
-                    int random = new Random().nextInt(tips.size());
+                    int random = getRandomTip(currentQuickTipIndex, tips.size());
                     setTip(tips.get(random));
                 }
             }
         });
 
+    }
+
+    private int getRandomTip(int current, int size) {
+
+        int random = new Random().nextInt(size);
+
+        if (size > 1) {
+            while (random == currentQuickTipIndex) {
+                random = new Random().nextInt(size);
+            }
+        }
+
+        currentQuickTipIndex = random;
+
+        return random;
     }
 
     private List<QuickTipTO> getTips(PortalResidentMarketingTarget target) {
