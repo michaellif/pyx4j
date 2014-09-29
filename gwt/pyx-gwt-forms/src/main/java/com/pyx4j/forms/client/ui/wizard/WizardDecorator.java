@@ -22,6 +22,7 @@ package com.pyx4j.forms.client.ui.wizard;
 
 import com.google.gwt.user.client.Command;
 
+import com.pyx4j.commons.IDebugId;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.form.FormDecorator;
@@ -31,6 +32,16 @@ import com.pyx4j.widgets.client.Button;
 public class WizardDecorator<E extends IEntity> extends FormDecorator<E> {
 
     private static final I18n i18n = I18n.get(WizardDecorator.class);
+
+    public static enum WizardDebugIds implements IDebugId {
+
+        WizardPrevious, WizardNext, WizardCancel;
+
+        @Override
+        public String debugId() {
+            return name();
+        }
+    }
 
     private final Button btnPrevious;
 
@@ -58,6 +69,7 @@ public class WizardDecorator<E extends IEntity> extends FormDecorator<E> {
                 getComponent().cancel();
             }
         });
+        btnCancel.setDebugId(WizardDebugIds.WizardCancel);
         addFooterToolbarWidget(btnCancel);
 
         btnPrevious = new Button(i18n.tr("Previous"), new Command() {
@@ -67,6 +79,7 @@ public class WizardDecorator<E extends IEntity> extends FormDecorator<E> {
                 calculateButtonsState();
             }
         });
+        btnPrevious.setDebugId(WizardDebugIds.WizardPrevious);
         addFooterToolbarWidget(btnPrevious);
 
         btnNext = new Button(i18n.tr("Next"), new Command() {
@@ -80,6 +93,7 @@ public class WizardDecorator<E extends IEntity> extends FormDecorator<E> {
                 }
             }
         });
+        btnNext.setDebugId(WizardDebugIds.WizardNext);
         addFooterToolbarWidget(btnNext);
 
         setWidth("100%");
