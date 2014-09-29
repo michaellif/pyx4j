@@ -36,6 +36,11 @@ public class YardiMockModel {
         ifConfig = new HashMap<>();
     }
 
+    public void reset() {
+        buildings.clear();
+        ifConfig.clear();
+    }
+
     public List<YardiBuilding> getBuildings() {
         return buildings;
     }

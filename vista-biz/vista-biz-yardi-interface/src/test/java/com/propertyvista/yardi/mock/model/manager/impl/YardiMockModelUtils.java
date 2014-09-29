@@ -28,6 +28,7 @@ import com.propertyvista.yardi.mock.model.domain.YardiLease;
 import com.propertyvista.yardi.mock.model.domain.YardiLeaseCharge;
 import com.propertyvista.yardi.mock.model.domain.YardiRentableItem;
 import com.propertyvista.yardi.mock.model.domain.YardiTenant;
+import com.propertyvista.yardi.mock.model.domain.YardiTransaction;
 import com.propertyvista.yardi.mock.model.domain.YardiUnit;
 
 public class YardiMockModelUtils {
@@ -142,6 +143,18 @@ public class YardiMockModelUtils {
         for (YardiLeaseCharge ylc : lease.charges()) {
             if (chargeId.equals(ylc.chargeId().getValue())) {
                 return ylc;
+            }
+        }
+        return null;
+    }
+
+    public static YardiTransaction findTransaction(YardiLease lease, String transId) {
+        assert lease != null : "lease cannot be null";
+        assert transId != null : "transaction id cannot be null";
+
+        for (YardiTransaction yt : lease.transactions()) {
+            if (transId.equals(yt.transactionId().getValue())) {
+                return yt;
             }
         }
         return null;

@@ -19,10 +19,12 @@ import com.propertyvista.yardi.mock.model.domain.YardiLease;
 import com.propertyvista.yardi.mock.model.domain.YardiLeaseCharge;
 import com.propertyvista.yardi.mock.model.domain.YardiTenant;
 import com.propertyvista.yardi.mock.model.domain.YardiTenant.Type;
+import com.propertyvista.yardi.mock.model.domain.YardiTransaction;
 import com.propertyvista.yardi.mock.model.manager.YardiBuildingManager.BuildingBuilder;
 import com.propertyvista.yardi.mock.model.manager.YardiLeaseManager.LeaseBuilder;
 import com.propertyvista.yardi.mock.model.manager.YardiLeaseManager.LeaseChargeBuilder;
 import com.propertyvista.yardi.mock.model.manager.YardiLeaseManager.TenantBuilder;
+import com.propertyvista.yardi.mock.model.manager.YardiLeaseManager.TransactionBuilder;
 
 public class LeaseBuilderImpl implements LeaseBuilder {
 
@@ -134,6 +136,24 @@ public class LeaseBuilderImpl implements LeaseBuilder {
     }
 
     @Override
+    public TransactionBuilder addTransaction(String transId, String chargeCode, String amount) {
+        assert transId != null : "transaction id cannot be null";
+        assert amount != null : "amount cannot be null";
+
+        if (YardiMockModelUtils.findTransaction(lease, transId) != null) {
+            throw new Error("Transaction already exists: " + transId);
+        }
+
+        YardiTransaction trans = EntityFactory.create(YardiTransaction.class);
+        trans.transactionId().setValue(transId);
+        trans.amount().setValue(YardiMockModelUtils.toAmount(amount));
+        trans.chargeCode().setValue(chargeCode);
+
+        lease.transactions().add(trans);
+        return new TransactionBuilderImpl(trans, this);
+    }
+
+    @Override
     public TenantBuilder getTenant(String tenantId) {
         assert tenantId != null : "tenant id cannot be null";
 
@@ -149,5 +169,14 @@ public class LeaseBuilderImpl implements LeaseBuilder {
         YardiLeaseCharge charge = YardiMockModelUtils.findLeaseCharge(lease, chargeId);
 
         return charge == null ? null : new LeaseChargeBuilderImpl(charge, this);
+    }
+
+    @Override
+    public TransactionBuilder getTransaction(String transId) {
+        assert transId != null : "transaction id cannot be null";
+
+        YardiTransaction charge = YardiMockModelUtils.findTransaction(lease, transId);
+
+        return charge == null ? null : new TransactionBuilderImpl(charge, this);
     }
 }

@@ -43,6 +43,12 @@ public class YardiMock {
 
     private final Map<Class<? extends YardiInterface>, YardiInterface> stubs = new HashMap<>();
 
+    public void reset() {
+        mockModel.reset();
+        managers.clear();
+        stubs.clear();
+    }
+
     public <M extends YardiMockManager> void addManager(Class<M> managerType) {
         addManager(managerType, null);
     }

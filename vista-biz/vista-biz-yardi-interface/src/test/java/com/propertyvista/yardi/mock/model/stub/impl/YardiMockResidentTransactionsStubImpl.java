@@ -39,6 +39,7 @@ import com.yardi.entity.resident.ResidentTransactions;
 import com.yardi.entity.resident.Transactions;
 
 import com.pyx4j.commons.LogicalDate;
+import com.pyx4j.config.server.SystemDateManager;
 
 import com.propertyvista.biz.system.yardi.YardiServiceException;
 import com.propertyvista.domain.settings.PmcYardiCredential;
@@ -48,7 +49,7 @@ import com.propertyvista.yardi.mock.model.domain.YardiBuilding;
 import com.propertyvista.yardi.mock.model.domain.YardiLease;
 import com.propertyvista.yardi.mock.model.domain.YardiLeaseCharge;
 import com.propertyvista.yardi.mock.model.domain.YardiTenant;
-import com.propertyvista.yardi.mock.model.domain.YardiTransactionCharge;
+import com.propertyvista.yardi.mock.model.domain.YardiTransaction;
 import com.propertyvista.yardi.mock.model.domain.YardiUnit;
 import com.propertyvista.yardi.mock.model.manager.impl.YardiMockModelUtils;
 import com.propertyvista.yardi.services.YardiHandledErrorMessages;
@@ -69,8 +70,11 @@ public class YardiMockResidentTransactionsStubImpl extends YardiMockStubBase imp
             RTCustomer rtCustomer = getRtCustomer(lease, building);
             property.getRTCustomer().add(rtCustomer);
             // transactions
-            rtCustomer.setRTServiceTransactions(new RTServiceTransactions());
-            rtCustomer.getRTServiceTransactions().getTransactions().addAll(getTransactions(lease));
+            RTServiceTransactions svcTrans = new RTServiceTransactions();
+            svcTrans.getTransactions().addAll(getTransactions(lease));
+            if (!svcTrans.getTransactions().isEmpty()) {
+                rtCustomer.setRTServiceTransactions(svcTrans);
+            }
         }
         rt.getProperty().add(property);
         return rt;
@@ -91,10 +95,13 @@ public class YardiMockResidentTransactionsStubImpl extends YardiMockStubBase imp
         }
         RTCustomer rtCustomer = getRtCustomer(lease, building);
         property.getRTCustomer().add(rtCustomer);
-        // transactions
-        rtCustomer.setRTServiceTransactions(new RTServiceTransactions());
-        rtCustomer.getRTServiceTransactions().getTransactions().addAll(getTransactions(lease));
         rt.getProperty().add(property);
+        // transactions
+        RTServiceTransactions svcTrans = new RTServiceTransactions();
+        svcTrans.getTransactions().addAll(getTransactions(lease));
+        if (!svcTrans.getTransactions().isEmpty()) {
+            rtCustomer.setRTServiceTransactions(svcTrans);
+        }
         return rt;
     }
 
@@ -192,13 +199,16 @@ public class YardiMockResidentTransactionsStubImpl extends YardiMockStubBase imp
 
     private List<Transactions> getTransactions(YardiLease lease) {
         List<Transactions> transactions = new ArrayList<>();
-        for (YardiTransactionCharge yt : lease.transactions()) {
+        for (YardiTransaction yt : lease.transactions()) {
             transactions.add(toTransaction(yt, lease));
         }
         return transactions;
     }
 
     private List<Transactions> getCharges(YardiLease lease, String propertyId, LogicalDate date) {
+        if (date == null) {
+            date = SystemDateManager.getLogicalDate();
+        }
         List<Transactions> charges = new ArrayList<>();
         for (YardiLeaseCharge ylc : lease.charges()) {
             // filter future and expired charges
@@ -227,7 +237,7 @@ public class YardiMockResidentTransactionsStubImpl extends YardiMockStubBase imp
         return trans;
     }
 
-    private Transactions toTransaction(YardiTransactionCharge ytc, YardiLease lease) {
+    private Transactions toTransaction(YardiTransaction ytc, YardiLease lease) {
         Transactions trans = new Transactions();
         ChargeDetail detail = new ChargeDetail();
         detail.setAmount(ytc.amount().getValue().toPlainString());

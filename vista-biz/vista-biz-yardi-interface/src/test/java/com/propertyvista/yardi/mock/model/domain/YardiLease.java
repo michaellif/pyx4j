@@ -50,5 +50,5 @@ public interface YardiLease extends IEntity {
 
     IList<YardiLeaseCharge> charges();
 
-    IList<YardiTransactionCharge> transactions();
+    IList<YardiTransaction> transactions();
 }
