@@ -845,7 +845,7 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
         }
 
         if (!dto.applicationFee().isNull() && dto.applicationFee().getValue().compareTo(BigDecimal.ZERO) <= 0) {
-            dto.applicationFee().setValue(null); // zero payment is required!..
+            dto.applicationFee().setValue(null); // mark that no/zero payment is required!..
         }
 
         to.payment().set(dto);
