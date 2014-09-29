@@ -41,9 +41,8 @@ import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.backoffice.ui.prime.form.IForm;
-import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
-import com.pyx4j.widgets.client.richtext.RichTextAction;
+import com.pyx4j.widgets.client.richtext.RichTextTemplateAction;
 
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
 import com.propertyvista.crm.client.ui.components.cms.SiteImageResourceProvider;
@@ -134,14 +133,10 @@ public class EmailTemplatesPolicyForm extends PolicyDTOTabPanelBasedForm<EmailTe
                 }
                 formPanel.append(Location.Dual, proto().content(), editor).decorate();
                 if (isEditable()) {
-                    // create variable selection button
-                    final Button pb = editor.getNativeComponent().getEditor().getCustomButton();
-                    pb.getElement().getStyle().setColor("black");
-                    pb.setVisible(true);
                     final TemplateVarSelector vm = new TemplateVarSelector();
-                    editor.getNativeComponent().getEditor().setCustomAction(new RichTextAction() {
+                    editor.getNativeComponent().getEditor().setTemplateAction(new RichTextTemplateAction() {
                         @Override
-                        public void perform(final Formatter formatter, final Command onComplete) {
+                        public void perform(final Formatter formatter, final Command onComplete, final UIObject target) {
                             if (vm.isShowing()) {
                                 vm.hide();
                             } else {
@@ -152,7 +147,7 @@ public class EmailTemplatesPolicyForm extends PolicyDTOTabPanelBasedForm<EmailTe
                                         onComplete.execute();
                                     }
                                 });
-                                vm.showBelow(pb);
+                                vm.showBelow(target);
                             }
                         }
                     });
