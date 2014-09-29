@@ -24,7 +24,6 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.widgets.client.Button;
 
-import com.propertyvista.portal.resident.activity.movein.MoveInWizardManager;
 import com.propertyvista.portal.rpc.portal.resident.ResidentPortalSiteMap;
 import com.propertyvista.portal.shared.ui.AbstractGadget;
 import com.propertyvista.portal.shared.ui.GadgetToolbar;
@@ -47,7 +46,7 @@ public class TenantWelcomeGadget extends AbstractGadget<MoveInWizardView> {
         htmlBuilder.appendHtmlConstant("</div><br><div><b>");
         htmlBuilder.appendEscaped(i18n.tr("You will need about 10 minutes to complete all the steps."));
         htmlBuilder.appendHtmlConstant("</b></div><div>");
-        htmlBuilder.appendEscaped(i18n.tr("When you are ready simply click on the link below."));
+        htmlBuilder.appendEscaped(i18n.tr("When you are ready simply click on the button below."));
         htmlBuilder.appendHtmlConstant("</div></div>");
 
         HTMLPanel htmlPanel = new HTMLPanel(htmlBuilder.toSafeHtml());
