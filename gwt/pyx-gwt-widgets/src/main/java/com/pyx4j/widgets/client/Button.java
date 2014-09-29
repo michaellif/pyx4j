@@ -95,6 +95,12 @@ public class Button extends FocusPanel implements IFocusWidget, HasSecureConcern
         this.command = command;
     }
 
+    public Button(ImageResource imageResource, Command command, Class<? extends ActionId> actionId) {
+        this(imageResource);
+        this.command = command;
+        this.setPermission(new ActionPermission(actionId));
+    }
+
     public Button(String text, Command command) {
         this((ImageResource) null, text);
         this.command = command;
