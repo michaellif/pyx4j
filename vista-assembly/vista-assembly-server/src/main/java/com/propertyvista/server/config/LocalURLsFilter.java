@@ -71,7 +71,7 @@ public class LocalURLsFilter implements Filter {
         String serverName = httprequest.getServerName(); // sample: vista-crm.dev.birchwoodsoftwaregroup.com
         serverName = serverName.toLowerCase(Locale.ENGLISH);
 
-        if (serverName.equals("localhost") || isAlreadyMapped(requestPath)) {
+        if (serverName.equals("localhost")) { // || isAlreadyMapped(requestPath)) {
             // Request is already mapped (I think this case never happens... Still have to think about this)
             chain.doFilter(request, response);
         } else {
@@ -129,8 +129,13 @@ public class LocalURLsFilter implements Filter {
      */
     private String getNewURLRequest(HttpServletRequest httprequest, VistaApplication app) {
         String requestPath = httprequest.getServletPath();
-        String subRequestPath = VistaServerSideConfigurationDev.devContextLess ? "/" : VistaServerSideConfigurationDev.devContextPath;
-        subRequestPath = "/" + app.toString() + requestPath;
+        //String subRequestPath = VistaServerSideConfigurationDev.devContextLess ? "" : VistaServerSideConfigurationDev.devContextPath;
+        String subRequestPath = "";
+
+        if (app != VistaApplication.prospect) {
+            subRequestPath += "/" + app.toString();
+        }
+        subRequestPath += requestPath;
         String newUri = subRequestPath + (httprequest.getQueryString() != null ? "?" + httprequest.getQueryString() : "");
 
         return newUri;
@@ -163,8 +168,8 @@ public class LocalURLsFilter implements Filter {
             if (appByDomainTokens[1].equalsIgnoreCase("portal")) {
                 String[] appByPathTokens = path.split("/");
                 // If request path starts with "/prospect", portal is prospect
-                if (appByPathTokens.length >= 1) {
-                    if (appByPathTokens[0].equalsIgnoreCase("prospect")) {
+                if (appByPathTokens.length >= 2) {
+                    if (appByPathTokens[1].equalsIgnoreCase("prospect")) {
                         return VistaApplication.prospect;
                     }
                 }
