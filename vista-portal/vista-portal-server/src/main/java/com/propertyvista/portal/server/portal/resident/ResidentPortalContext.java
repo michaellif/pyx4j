@@ -36,7 +36,7 @@ public class ResidentPortalContext extends PortalVistaContext {
     }
 
     public static Lease getLeaseIdStub() {
-        return ServerContext.visit(ResidentUserVisit.class).getLease();
+        return ServerContext.visit(ResidentUserVisit.class).getLeaseId();
     }
 
     public static Lease getLease() {

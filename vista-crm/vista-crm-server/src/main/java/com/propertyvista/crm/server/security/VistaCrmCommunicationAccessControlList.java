@@ -34,29 +34,29 @@ import com.propertyvista.domain.communication.MessageAttachment;
 import com.propertyvista.domain.communication.MessageCategory;
 import com.propertyvista.domain.communication.SystemEndpoint;
 import com.propertyvista.domain.communication.ThreadPolicyHandle;
-import com.propertyvista.domain.security.common.VistaBasicBehavior;
+import com.propertyvista.domain.security.common.VistaAccessGrantedBehavior;
 import com.propertyvista.dto.MessageDTO;
 
 class VistaCrmCommunicationAccessControlList extends UIAclBuilder {
 
     VistaCrmCommunicationAccessControlList() {
-        grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(MessageCategoryCrudService.class));
+        grant(VistaAccessGrantedBehavior.CRM, new IServiceExecutePermission(MessageCategoryCrudService.class));
 
-        grant(VistaBasicBehavior.CRM, new MessageCategoryAccessRule(), MessageCategory.class);
-        grant(VistaBasicBehavior.CRM, new EntityPermission(SystemEndpoint.class, READ));
-        grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(MessageCrudService.class));
-        grant(VistaBasicBehavior.CRM, new MessageAccessRule(), Message.class);
-        grant(VistaBasicBehavior.CRM, new EntityPermission(Message.class, ALL));
-        grant(VistaBasicBehavior.CRM, new EntityPermission(MessageAttachment.class, ALL));
-        grant(VistaBasicBehavior.CRM, new EntityPermission(CommunicationThread.class, ALL));
-        grant(VistaBasicBehavior.CRM, new EntityPermission(ThreadPolicyHandle.class, ALL));
-        grant(VistaBasicBehavior.CRM, new CommunicationThreadAccessRule(), CommunicationThread.class);
-        grant(VistaBasicBehavior.CRM, new ThreadPolicyHandleAccessRule(), ThreadPolicyHandle.class);
-        grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(MessageAttachmentUploadService.class));
-        grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(SelectCommunicationEndpointListService.class));
+        grant(VistaAccessGrantedBehavior.CRM, new MessageCategoryAccessRule(), MessageCategory.class);
+        grant(VistaAccessGrantedBehavior.CRM, new EntityPermission(SystemEndpoint.class, READ));
+        grant(VistaAccessGrantedBehavior.CRM, new IServiceExecutePermission(MessageCrudService.class));
+        grant(VistaAccessGrantedBehavior.CRM, new MessageAccessRule(), Message.class);
+        grant(VistaAccessGrantedBehavior.CRM, new EntityPermission(Message.class, ALL));
+        grant(VistaAccessGrantedBehavior.CRM, new EntityPermission(MessageAttachment.class, ALL));
+        grant(VistaAccessGrantedBehavior.CRM, new EntityPermission(CommunicationThread.class, ALL));
+        grant(VistaAccessGrantedBehavior.CRM, new EntityPermission(ThreadPolicyHandle.class, ALL));
+        grant(VistaAccessGrantedBehavior.CRM, new CommunicationThreadAccessRule(), CommunicationThread.class);
+        grant(VistaAccessGrantedBehavior.CRM, new ThreadPolicyHandleAccessRule(), ThreadPolicyHandle.class);
+        grant(VistaAccessGrantedBehavior.CRM, new IServiceExecutePermission(MessageAttachmentUploadService.class));
+        grant(VistaAccessGrantedBehavior.CRM, new IServiceExecutePermission(SelectCommunicationEndpointListService.class));
 
-        grant(VistaBasicBehavior.CRM, MessageCategory.class, READ);
-        grant(VistaBasicBehavior.CRM, MessageDTO.class, ALL);
+        grant(VistaAccessGrantedBehavior.CRM, MessageCategory.class, READ);
+        grant(VistaAccessGrantedBehavior.CRM, MessageDTO.class, ALL);
 
         // Administration is granted in VistaCrmAdministrationAccessControlList
     }

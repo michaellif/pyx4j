@@ -34,7 +34,7 @@ public class ProspectPortalContext extends PortalVistaContext {
     }
 
     public static OnlineApplication getOnlineApplicationIdStub() {
-        return ServerContext.visit(ProspectUserVisit.class).getOnlineApplication();
+        return ServerContext.visit(ProspectUserVisit.class).getOnlineApplicationId();
     }
 
     public static OnlineApplication getOnlineApplication() {

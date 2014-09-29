@@ -51,25 +51,26 @@ import com.pyx4j.rpc.shared.IgnoreSessionToken;
 import com.pyx4j.rpc.shared.VoidSerializable;
 import com.pyx4j.security.rpc.AuthenticationRequest;
 import com.pyx4j.security.rpc.AuthenticationResponse;
+import com.pyx4j.security.rpc.AuthorizationUpdatedSystemNotification;
 import com.pyx4j.security.rpc.ChallengeVerificationRequired;
 import com.pyx4j.security.rpc.PasswordRetrievalRequest;
 import com.pyx4j.security.rpc.SystemWallMessage;
+import com.pyx4j.security.server.AclRevalidator;
 import com.pyx4j.security.server.EmailValidator;
-import com.pyx4j.security.shared.AclRevalidator;
 import com.pyx4j.security.shared.Behavior;
+import com.pyx4j.security.shared.Context;
 import com.pyx4j.security.shared.SecurityController;
-import com.pyx4j.security.shared.UserVisit;
-import com.pyx4j.server.contexts.ServerContext;
 import com.pyx4j.server.contexts.Lifecycle;
+import com.pyx4j.server.contexts.ServerContext;
+import com.pyx4j.server.contexts.Visit;
 
 import com.propertyvista.biz.system.AuditFacade;
-import com.propertyvista.biz.system.VistaContext;
 import com.propertyvista.biz.system.encryption.PasswordEncryptorFacade;
 import com.propertyvista.config.AbstractVistaServerSideConfiguration;
 import com.propertyvista.config.VistaDeployment;
-import com.propertyvista.domain.security.VistaCrmBehavior;
 import com.propertyvista.domain.security.common.AbstractUser;
 import com.propertyvista.domain.security.common.AbstractUserCredential;
+import com.propertyvista.domain.security.common.VistaAccessGrantedBehavior;
 import com.propertyvista.domain.security.common.VistaApplication;
 import com.propertyvista.domain.security.common.VistaBasicBehavior;
 import com.propertyvista.portal.rpc.DeploymentConsts;
@@ -77,7 +78,7 @@ import com.propertyvista.shared.VistaSystemIdentification;
 import com.propertyvista.shared.VistaUserVisit;
 import com.propertyvista.shared.exceptions.LoginTokenExpiredUserRuntimeException;
 
-public abstract class VistaAuthenticationServicesImpl<U extends AbstractUser, E extends AbstractUserCredential<U>> extends
+public abstract class VistaAuthenticationServicesImpl<U extends AbstractUser, V extends VistaUserVisit<U>, E extends AbstractUserCredential<U>> extends
         com.pyx4j.security.server.AuthenticationServiceImpl implements AclRevalidator {
 
     private final static Logger log = LoggerFactory.getLogger(VistaAuthenticationServicesImpl.class);
@@ -91,16 +92,19 @@ public abstract class VistaAuthenticationServicesImpl<U extends AbstractUser, E 
 
     protected final Class<E> credentialClass;
 
-    protected VistaAuthenticationServicesImpl(Class<U> userClass, Class<E> credentialClass) {
+    protected final Class<V> userVisitClass;
+
+    protected VistaAuthenticationServicesImpl(Class<U> userClass, Class<V> userVisitClass, Class<E> credentialClass) {
         this.userClass = userClass;
+        this.userVisitClass = userVisitClass;
         this.credentialClass = credentialClass;
     }
 
     protected abstract VistaApplication getVistaApplication();
 
-    protected abstract VistaBasicBehavior getApplicationBehavior();
+    protected abstract VistaAccessGrantedBehavior getApplicationAccessGrantedBehavior();
 
-    protected abstract VistaUserVisit<U> createUserVisit(U user);
+    protected abstract V createUserVisit(U user);
 
     protected abstract Behavior getPasswordChangeRequiredBehavior();
 
@@ -110,7 +114,7 @@ public abstract class VistaAuthenticationServicesImpl<U extends AbstractUser, E 
 
     protected abstract void sendPasswordRetrievalToken(U user);
 
-    protected Set<Behavior> getBehaviors(E userCredential) {
+    protected Set<Behavior> getBehaviors(E userCredential, V visit) {
         return Collections.emptySet();
     }
 
@@ -118,16 +122,12 @@ public abstract class VistaAuthenticationServicesImpl<U extends AbstractUser, E 
         return true;
     }
 
-    protected boolean isDynamicBehaviours() {
-        return false;
-    }
-
     protected boolean isSessionValid() {
         boolean sessionValid = SecurityController.check(getVistaApplication())
-                && (SecurityController.check(getApplicationBehavior()) || SecurityController.check(getAccountSetupRequiredBehaviors()));
+                && (SecurityController.check(getApplicationAccessGrantedBehavior()) || SecurityController.check(getAccountSetupRequiredBehaviors()));
         if ((!sessionValid) && (ServerContext.getSession() != null)) {
             log.warn("sessionInvalid: {} {}", getVistaApplication(), SecurityController.check(getVistaApplication()));
-            log.warn("sessionInvalid: {} {}", getApplicationBehavior(), SecurityController.check(getApplicationBehavior()));
+            log.warn("sessionInvalid: {} {}", getApplicationAccessGrantedBehavior(), SecurityController.check(getApplicationAccessGrantedBehavior()));
             log.warn("sessionInvalid: {} {}", getAccountSetupRequiredBehaviors(), SecurityController.check(getAccountSetupRequiredBehaviors()));
         }
         return sessionValid;
@@ -224,14 +224,14 @@ public abstract class VistaAuthenticationServicesImpl<U extends AbstractUser, E 
         if (token.behaviorPasswordChangeRequired) {
             behaviors.add(getPasswordChangeRequiredBehavior());
         } else {
-            behaviors.addAll(getBehaviors(cr));
-            behaviors.add(getApplicationBehavior());
+            behaviors.addAll(getBehaviors(cr, null));
+            behaviors.add(getApplicationAccessGrantedBehavior());
             // This is one time login, reset token
             cr.accessKey().setValue(null);
             Persistence.service().persist(cr);
             Persistence.service().commit();
         }
-        UserVisit visit = createUserVisit(user);
+        V visit = createUserVisit(user);
         log.info("authenticated {} as {}", user.email().getValue(), behaviors);
 
         String sessionToken = Lifecycle.beginSession(visit, behaviors);
@@ -308,20 +308,19 @@ public abstract class VistaAuthenticationServicesImpl<U extends AbstractUser, E 
             Persistence.service().persist(cr);
             Persistence.service().commit();
         }
+        V visit = createUserVisit(user);
         if (cr.requiredPasswordChangeOnNextLogIn().getValue(false)) {
             Set<Behavior> behaviors = new HashSet<Behavior>();
             behaviors.add(getVistaApplication());
             behaviors.add(getPasswordChangeRequiredBehavior());
-            UserVisit visit = createUserVisit(user);
             String token = Lifecycle.beginSession(visit, behaviors);
             ServerSideFactory.create(AuditFacade.class).login(getVistaApplication());
             return token;
         } else {
             Set<Behavior> behaviors = new HashSet<Behavior>();
-            behaviors.addAll(getBehaviors(cr));
+            behaviors.addAll(getBehaviors(cr, visit));
             behaviors.add(getVistaApplication());
-            behaviors.add(getApplicationBehavior());
-            return beginSession(user, cr, behaviors, null);
+            return beginApplicationSession(visit, cr, behaviors, null);
         }
     }
 
@@ -343,47 +342,36 @@ public abstract class VistaAuthenticationServicesImpl<U extends AbstractUser, E 
         E userCredential = Persistence.service().retrieve(credentialClass, principalPrimaryKey);
         if ((userCredential == null) || (!userCredential.enabled().getValue(false))) {
             return null;
-        } else if (containsAnyBehavior(currentBehaviours, getAccountSetupRequiredBehaviors())) {
-            return currentBehaviours;
-        } else if (isDynamicBehaviours()) {
-            return currentBehaviours;
+        }
+        if (userCredential.requiredPasswordChangeOnNextLogIn().getValue(false)) {
+            Set<Behavior> behaviors = new HashSet<Behavior>();
+            behaviors.add(getVistaApplication());
+            behaviors.add(getPasswordChangeRequiredBehavior());
+            return behaviors;
         } else {
             Set<Behavior> behaviors = new HashSet<Behavior>();
-            behaviors.addAll(getBehaviors(userCredential));
             behaviors.add(getVistaApplication());
-            behaviors.add(getApplicationBehavior());
+            behaviors.addAll(getBehaviors(userCredential, Context.visit(userVisitClass)));
             return behaviors;
         }
     }
 
-    public final AuthenticationResponse authenticate(E credentials, IEntity additionalConditions) {
-        U user = Persistence.service().retrieve(userClass, credentials.getPrimaryKey());
-        // Try to begin Session
-        Set<Behavior> behaviors = new HashSet<Behavior>();
-        behaviors.addAll(getBehaviors(credentials));
-        behaviors.add(getVistaApplication());
-        behaviors.add(getApplicationBehavior());
-        String sessionToken = beginSession(user, credentials, behaviors, additionalConditions);
-        if (!isSessionValid()) {
-            Lifecycle.endSession();
-            throw new UserRuntimeException(AbstractAntiBot.GENERIC_LOGIN_FAILED_MESSAGE);
-        }
-        return createAuthenticationResponse(sessionToken);
-    }
-
-    public final AuthenticationResponse reAuthorize(IEntity additionalConditions) {
-        E credentials = Persistence.service().retrieve(credentialClass, VistaContext.getCurrentUserPrimaryKey());
-        return authenticate(credentials, additionalConditions);
+    @Override
+    public final void reAuthorizeCurrentVisit(Set<Behavior> behaviours) {
+        // TODO its impl does not belong here.
+        Visit visit = ServerContext.getVisit();
+        String token = Lifecycle.beginSession(visit.getUserVisit(), behaviours);
+        visit.setAclChanged(true);
+        ServerContext.addResponseSystemNotification(new AuthorizationUpdatedSystemNotification(createAuthenticationResponse(token)));
     }
 
     //TODO  Change the implementation to use Authorization functions
-    protected String beginSession(U user, E credentials, Set<Behavior> behaviors, IEntity additionalConditions) {
+    protected String beginApplicationSession(V visit, E credentials, Set<Behavior> behaviors, IEntity additionalConditions) {
         // Only default ApplicationBehavior assigned is error. User have no roles
-        if (behaviors.isEmpty() || ((behaviors.size() == 2) && (behaviors.contains(getApplicationBehavior())) && (behaviors.contains(getVistaApplication())))) {
+        if (behaviors.isEmpty() || ((behaviors.size() == 1) && (behaviors.contains(getVistaApplication())))) {
             throw new UserRuntimeException(AbstractAntiBot.GENERIC_LOGIN_FAILED_MESSAGE);
         }
-        UserVisit visit = createUserVisit(user);
-        log.info("authenticated {} as {}", user.email().getValue(), behaviors);
+        log.info("authenticated {} as {}", visit.getEmail(), behaviors);
         String token = Lifecycle.beginSession(visit, behaviors);
         try {
             ServerSideFactory.create(AuditFacade.class).login(getVistaApplication());
@@ -402,8 +390,8 @@ public abstract class VistaAuthenticationServicesImpl<U extends AbstractUser, E 
         try {
             ServerSideFactory.create(AuditFacade.class).logout(getVistaApplication());
         } catch (DatastoreReadOnlyRuntimeException readOnly) {
-            //TODO remove this when we have second Audit connection 
-            // ignore logout 
+            //TODO remove this when we have second Audit connection
+            // ignore logout
         }
         super.logout(callback);
     }

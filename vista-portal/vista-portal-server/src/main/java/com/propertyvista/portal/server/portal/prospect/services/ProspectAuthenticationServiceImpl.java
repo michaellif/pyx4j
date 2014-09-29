@@ -15,7 +15,6 @@ package com.propertyvista.portal.server.portal.prospect.services;
 
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.EnumSet;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -24,9 +23,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.commons.UserRuntimeException;
 import com.pyx4j.config.server.ServerSideFactory;
-import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.config.shared.ClientSystemInfo;
-import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.core.criterion.PropertyCriterion;
 import com.pyx4j.entity.server.Persistence;
@@ -40,28 +37,28 @@ import com.propertyvista.biz.tenant.OnlineApplicationFacade;
 import com.propertyvista.domain.security.CustomerUser;
 import com.propertyvista.domain.security.CustomerUserCredential;
 import com.propertyvista.domain.security.PortalProspectBehavior;
+import com.propertyvista.domain.security.common.VistaAccessGrantedBehavior;
 import com.propertyvista.domain.security.common.VistaApplication;
 import com.propertyvista.domain.security.common.VistaBasicBehavior;
 import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.domain.tenant.prospect.OnlineApplication;
 import com.propertyvista.portal.rpc.portal.prospect.ProspectUserVisit;
 import com.propertyvista.portal.rpc.portal.prospect.services.ProspectAuthenticationService;
-import com.propertyvista.portal.server.portal.prospect.ProspectPortalContext;
 import com.propertyvista.server.common.security.VistaAuthenticationServicesImpl;
 import com.propertyvista.shared.exceptions.LoginTokenExpiredUserRuntimeException;
 
-public class ProspectAuthenticationServiceImpl extends VistaAuthenticationServicesImpl<CustomerUser, CustomerUserCredential> implements
+public class ProspectAuthenticationServiceImpl extends VistaAuthenticationServicesImpl<CustomerUser, ProspectUserVisit, CustomerUserCredential> implements
         ProspectAuthenticationService {
 
     private static final I18n i18n = I18n.get(ProspectAuthenticationServiceImpl.class);
 
     public ProspectAuthenticationServiceImpl() {
-        super(CustomerUser.class, CustomerUserCredential.class);
+        super(CustomerUser.class, ProspectUserVisit.class, CustomerUserCredential.class);
     }
 
     @Override
-    protected boolean isDynamicBehaviours() {
-        return true;
+    protected ProspectUserVisit createUserVisit(CustomerUser user) {
+        return new ProspectUserVisit(getVistaApplication(), user);
     }
 
     @Override
@@ -70,8 +67,8 @@ public class ProspectAuthenticationServiceImpl extends VistaAuthenticationServic
     }
 
     @Override
-    protected VistaBasicBehavior getApplicationBehavior() {
-        return VistaBasicBehavior.ProspectPortal;
+    protected VistaAccessGrantedBehavior getApplicationAccessGrantedBehavior() {
+        return VistaAccessGrantedBehavior.ProspectPortal;
     }
 
     @Override
@@ -85,59 +82,37 @@ public class ProspectAuthenticationServiceImpl extends VistaAuthenticationServic
     }
 
     @Override
-    protected ProspectUserVisit createUserVisit(CustomerUser user) {
-        return new ProspectUserVisit(getVistaApplication(), user);
-    }
+    public Set<Behavior> getBehaviors(CustomerUserCredential credentials, ProspectUserVisit visit) {
+        Set<Behavior> behaviors = new HashSet<Behavior>();
 
-    @Override
-    public String beginSession(CustomerUser user, CustomerUserCredential credentials, Set<Behavior> behaviors, IEntity additionalConditions) {
-        Set<Behavior> actualBehaviors = new HashSet<Behavior>();
-        actualBehaviors.add(getVistaApplication());
+        OnlineApplication selectedApplicationId = visit.getOnlineApplicationId();
 
         // See if active Application exists
-        List<OnlineApplication> applications = ServerSideFactory.create(OnlineApplicationFacade.class).getOnlineApplications(user);
-
-        OnlineApplication selectedApplication = null;
-        // Get application set in ApplicationSelectionService
-        if ((additionalConditions instanceof OnlineApplication) && (applications.contains(additionalConditions))) {
-            selectedApplication = applications.get(applications.indexOf(additionalConditions));
+        List<OnlineApplication> applications = ServerSideFactory.create(OnlineApplicationFacade.class).getOnlineApplications(visit.getCurrentUser());
+        if ((selectedApplicationId != null) && !applications.contains(selectedApplicationId)) {
+            selectedApplicationId = null;
         } else if (applications.size() == 1) {
-            selectedApplication = applications.get(0);
+            // Auto Select first, But do not auto switch to this lease if such condition will occur
+            selectedApplicationId = applications.get(0);
         }
+        visit.setOnlineApplication(selectedApplicationId);
 
-        if (applications.size() == 0) {
-            if (ApplicationMode.isDevelopment()) {
-                throw new Error("Application not found for user " + user.getStringView());
-            } else {
-                throw new UserRuntimeException(i18n.tr(GENERIC_FAILED_MESSAGE));
-            }
-        } else if (selectedApplication != null) {
-            EnumSet<PortalProspectBehavior> applicationBehaviors = ServerSideFactory.create(OnlineApplicationFacade.class).getOnlineApplicationBehavior(
-                    selectedApplication);
-            if (applicationBehaviors.isEmpty()) {
-                if (ApplicationMode.isDevelopment()) {
-                    throw new Error("User Not Authorized to access application, " + user.getStringView());
-                } else {
-                    throw new UserRuntimeException(i18n.tr(GENERIC_FAILED_MESSAGE));
+        if (selectedApplicationId != null) {
+            Collection<PortalProspectBehavior> applicationBehaviors = ServerSideFactory.create(OnlineApplicationFacade.class).getOnlineApplicationBehavior(
+                    selectedApplicationId);
+            if (!applicationBehaviors.isEmpty()) {
+                behaviors.add(getApplicationAccessGrantedBehavior());
+                behaviors.addAll(applicationBehaviors);
+                if (applications.size() > 1) {
+                    behaviors.add(PortalProspectBehavior.HasMultipleApplications);
                 }
             }
-            actualBehaviors.addAll(applicationBehaviors);
-            actualBehaviors.addAll(behaviors);
-            if (applications.size() > 1) {
-                actualBehaviors.add(PortalProspectBehavior.HasMultipleApplications);
-            }
-        } else {
-            actualBehaviors.add(PortalProspectBehavior.ApplicationSelectionRequired);
+
+        } else if (applications.size() > 0) {
+            behaviors.add(PortalProspectBehavior.ApplicationSelectionRequired);
         }
 
-        String sessionToken = super.beginSession(user, credentials, actualBehaviors, additionalConditions);
-
-        // set application in context here:
-        if (selectedApplication != null) {
-            ProspectPortalContext.setOnlineApplication(selectedApplication);
-        }
-
-        return sessionToken;
+        return behaviors;
     }
 
     @Override
@@ -151,7 +126,7 @@ public class ProspectAuthenticationServiceImpl extends VistaAuthenticationServic
         // See if Application exists
         if (ServerSideFactory.create(OnlineApplicationFacade.class).getOnlineApplications(user).size() > 0) {
             ServerSideFactory.create(CommunicationFacade.class).sendProspectPasswordRetrievalToken(customer);
-        } else if (ServerSideFactory.create(CustomerFacade.class).getActiveLeases(user).size() > 0) {
+        } else if (ServerSideFactory.create(CustomerFacade.class).getActiveLeasesId(user).size() > 0) {
             ServerSideFactory.create(CommunicationFacade.class).sendTenantPasswordRetrievalToken(customer);
         } else {
             throw new UserRuntimeException(

@@ -73,7 +73,7 @@ import com.propertyvista.domain.DemoData.DemoPmc;
 import com.propertyvista.domain.VistaNamespace;
 import com.propertyvista.domain.pmc.Pmc;
 import com.propertyvista.domain.pmc.Pmc.PmcStatus;
-import com.propertyvista.domain.security.common.VistaBasicBehavior;
+import com.propertyvista.domain.security.common.VistaAccessGrantedBehavior;
 import com.propertyvista.misc.VistaDataPreloaderParameter;
 import com.propertyvista.misc.VistaDevPreloadConfig;
 import com.propertyvista.operations.domain.scheduler.PmcProcessType;
@@ -243,7 +243,7 @@ public class DBResetServlet extends HttpServlet {
                 try {
                     AbstractVistaServerSideConfiguration conf = (AbstractVistaServerSideConfiguration) ServerSideConfiguration.instance();
                     if (!conf.openDBReset()) {
-                        if (!SecurityController.check(VistaBasicBehavior.Operations)) {
+                        if (!SecurityController.check(VistaAccessGrantedBehavior.Operations)) {
                             response.sendError(HttpServletResponse.SC_BAD_REQUEST);
                             return;
                         }

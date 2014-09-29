@@ -43,7 +43,7 @@ import com.propertyvista.domain.communication.SystemEndpoint.SystemEndpointName;
 import com.propertyvista.domain.company.Employee;
 import com.propertyvista.domain.security.VistaDataAccessBehavior;
 import com.propertyvista.domain.security.common.VistaApplication;
-import com.propertyvista.domain.security.common.VistaBasicBehavior;
+import com.propertyvista.domain.security.common.VistaAccessGrantedBehavior;
 import com.propertyvista.domain.tenant.lease.LeaseParticipant;
 import com.propertyvista.portal.rpc.portal.CustomerUserVisit;
 import com.propertyvista.portal.rpc.portal.resident.ResidentUserVisit;
@@ -114,7 +114,8 @@ public class CommunicationManager {
         if (ep == null) {
             return null;
         }
-        if (VistaApplication.crm.equals(Context.visit(VistaUserVisit.class).getApplication()) && !SecurityController.check(VistaBasicBehavior.CRM)) {
+        if (VistaApplication.crm.equals(Context.visit(VistaUserVisit.class).getApplication())
+                && !SecurityController.check(VistaAccessGrantedBehavior.CRM)) {
             return null;
         }
 
@@ -238,7 +239,7 @@ public class CommunicationManager {
         if (VistaApplication.resident.equals(Context.visit(VistaUserVisit.class).getApplication())) {
 
             EntityQueryCriteria<LeaseParticipant> criteria = EntityQueryCriteria.create(LeaseParticipant.class);
-            criteria.eq(criteria.proto().lease(), ServerContext.visit(ResidentUserVisit.class).getLease());
+            criteria.eq(criteria.proto().lease(), ServerContext.visit(ResidentUserVisit.class).getLeaseId());
             criteria.eq(criteria.proto().customer().user(), ServerContext.visit(CustomerUserVisit.class).getCurrentUser());
             return Persistence.service().retrieve(criteria);
 

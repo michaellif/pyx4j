@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011- All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -22,9 +22,8 @@ import com.pyx4j.commons.UserRuntimeException;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
-import com.pyx4j.security.client.ClientContext;
+import com.pyx4j.rpc.shared.VoidSerializable;
 import com.pyx4j.security.rpc.AbstractPasswordResetService;
-import com.pyx4j.security.rpc.AuthenticationResponse;
 import com.pyx4j.security.rpc.PasswordChangeRequest;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.rpc.AppPlace;
@@ -55,11 +54,10 @@ public class PasswordResetActivity extends AbstractWizardActivity<PasswordChange
 
     @Override
     public void finish() {
-        GWT.<AbstractPasswordResetService> create(PortalPasswordResetService.class).resetPassword(new DefaultAsyncCallback<AuthenticationResponse>() {
+        GWT.<AbstractPasswordResetService> create(PortalPasswordResetService.class).resetPassword(new DefaultAsyncCallback<VoidSerializable>() {
             @Override
-            public void onSuccess(AuthenticationResponse result) {
+            public void onSuccess(VoidSerializable result) {
                 getView().reset();
-                ClientContext.authenticated(result);
                 Notification message = new Notification(null, i18n.tr("Your password has been reset successfully!"), NotificationType.INFO);
                 PortalSite.getPlaceController().showNotification(message);
             }

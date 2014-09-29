@@ -31,9 +31,9 @@ public interface CustomerFacade {
 
     void persistCustomer(Customer customer);
 
-    List<Lease> getActiveLeases(CustomerUser customerUserId);
+    List<Lease> getActiveLeasesId(CustomerUser customerUserId);
 
-    Collection<PortalResidentBehavior> getLeaseBehavior(CustomerUser customerUser, Lease lease);
+    Collection<PortalResidentBehavior> getLeaseBehavior(CustomerUser customerUser, Lease leaseId);
 
     boolean hasToAcceptTerms(CustomerUser customerUser);
 

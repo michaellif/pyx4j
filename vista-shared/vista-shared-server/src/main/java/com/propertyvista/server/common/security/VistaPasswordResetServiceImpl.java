@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011- All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -26,8 +26,8 @@ import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.essentials.server.AbstractAntiBot;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.rpc.shared.VoidSerializable;
 import com.pyx4j.security.rpc.AbstractPasswordResetService;
-import com.pyx4j.security.rpc.AuthenticationResponse;
 import com.pyx4j.security.rpc.PasswordChangeRequest;
 import com.pyx4j.security.rpc.PasswordResetQuestion;
 import com.pyx4j.server.contexts.ServerContext;
@@ -49,8 +49,6 @@ public abstract class VistaPasswordResetServiceImpl<E extends AbstractUserCreden
         this.credentialClass = credentialClass;
     }
 
-    protected abstract AuthenticationResponse authorize(E credentials);
-
     @Override
     public void obtainPasswordResetQuestion(AsyncCallback<PasswordResetQuestion> callback) {
         PasswordResetQuestion response = EntityFactory.create(PasswordResetQuestion.class);
@@ -63,28 +61,33 @@ public abstract class VistaPasswordResetServiceImpl<E extends AbstractUserCreden
     }
 
     @Override
-    public void resetPassword(AsyncCallback<AuthenticationResponse> callback, PasswordChangeRequest request) {
-        E credentials = Persistence.service().retrieve(credentialClass, VistaContext.getCurrentUserPrimaryKey());
-        if (credentials == null) {
-            throw new UserRuntimeException(i18n.tr("Invalid User Account. Please Contact Support"));
-        }
-        if (!credentials.enabled().getValue(false)) {
-            throw new UserRuntimeException(AbstractAntiBot.GENERIC_LOGIN_FAILED_MESSAGE);
-        }
+    public void resetPassword(AsyncCallback<VoidSerializable> callback, PasswordChangeRequest request) {
+        // TODO Move this to UserManagementFacade
+        {
+            E credentials = Persistence.service().retrieve(credentialClass, VistaContext.getCurrentUserPrimaryKey());
+            if (credentials == null) {
+                throw new UserRuntimeException(i18n.tr("Invalid User Account. Please Contact Support"));
+            }
+            if (!credentials.enabled().getValue(false)) {
+                throw new UserRuntimeException(AbstractAntiBot.GENERIC_LOGIN_FAILED_MESSAGE);
+            }
 
-        if ((!credentials.securityQuestion().isNull()) && (!credentials.securityAnswer().equals(request.securityAnswer()))) {
-            throw new UserRuntimeException(i18n.tr("The answer to security question is incorrect"));
+            if ((!credentials.securityQuestion().isNull()) && (!credentials.securityAnswer().equals(request.securityAnswer()))) {
+                throw new UserRuntimeException(i18n.tr("The answer to security question is incorrect"));
+            }
+
+            credentials.accessKey().setValue(null);
+            credentials.credential().setValue(ServerSideFactory.create(PasswordEncryptorFacade.class).encryptUserPassword(request.newPassword().getValue()));
+            credentials.passwordUpdated().setValue(new Date());
+            credentials.requiredPasswordChangeOnNextLogIn().setValue(Boolean.FALSE);
+            Persistence.service().persist(credentials);
+            Persistence.service().commit();
+            log.info("password changed by user {} {}", ServerContext.getVisit().getUserVisit().getEmail(), VistaContext.getCurrentUserPrimaryKey());
+
         }
+        ServerContext.getVisit().setAclRevalidationRequired();
 
-        credentials.accessKey().setValue(null);
-        credentials.credential().setValue(ServerSideFactory.create(PasswordEncryptorFacade.class).encryptUserPassword(request.newPassword().getValue()));
-        credentials.passwordUpdated().setValue(new Date());
-        credentials.requiredPasswordChangeOnNextLogIn().setValue(Boolean.FALSE);
-        Persistence.service().persist(credentials);
-        Persistence.service().commit();
-        log.info("password changed by user {} {}", ServerContext.getVisit().getUserVisit().getEmail(), VistaContext.getCurrentUserPrimaryKey());
-
-        callback.onSuccess(authorize(credentials));
+        callback.onSuccess(null);
     }
 
 }

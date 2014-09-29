@@ -39,7 +39,7 @@ import com.propertyvista.domain.MediaFile;
 import com.propertyvista.domain.PublicVisibilityType;
 import com.propertyvista.domain.blob.MediaFileBlob;
 import com.propertyvista.domain.media.ThumbnailSize;
-import com.propertyvista.domain.security.common.VistaBasicBehavior;
+import com.propertyvista.domain.security.common.VistaAccessGrantedBehavior;
 import com.propertyvista.portal.rpc.DeploymentConsts;
 import com.propertyvista.portal.rpc.portal.ImageConsts;
 import com.propertyvista.portal.rpc.portal.ImageConsts.ImageTarget;
@@ -50,7 +50,7 @@ import com.propertyvista.server.domain.FileImageThumbnailBlobDTO;
 
 /**
  * This service does extra read from DB to read BlobKey, We may decide in future not to do this.
- * 
+ *
  * @see com.propertyvista.portal.rpc.DeploymentConsts#mediaImagesServletMapping
  */
 @SuppressWarnings("serial")
@@ -95,7 +95,7 @@ public class PublicMediaServlet extends HttpServlet {
             if (holder != null) {
                 file = holder.file();
                 if (!PublicVisibilityType.global.equals(holder.visibility().getValue())) {
-                    if (!SecurityController.check(VistaBasicBehavior.CRM)) {
+                    if (!SecurityController.check(VistaAccessGrantedBehavior.CRM)) {
                         response.setStatus(HttpServletResponse.SC_FORBIDDEN);
                         return;
                     }

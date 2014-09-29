@@ -43,7 +43,7 @@ import com.pyx4j.unit.server.mock.TestLifecycle;
 import com.propertyvista.biz.communication.NotificationFacade;
 import com.propertyvista.config.tests.VistaDBTestBase;
 import com.propertyvista.config.tests.VistaTestDBSetup;
-import com.propertyvista.domain.security.common.VistaBasicBehavior;
+import com.propertyvista.domain.security.common.VistaAccessGrantedBehavior;
 import com.propertyvista.operations.domain.scheduler.PmcProcessType;
 import com.propertyvista.test.integration.IntegrationTestBase.TaskScheduler.Schedule;
 import com.propertyvista.test.mock.MockConfig;
@@ -79,7 +79,7 @@ public abstract class IntegrationTestBase extends VistaDBTestBase {
         NamespaceManager.setNamespace(PmcDataModel.uniqueNamespaceId());
         VistaTestDBSetup.initNamespace();
 
-        TestLifecycle.testSession(null, VistaBasicBehavior.CRM);
+        TestLifecycle.testSession(null, VistaAccessGrantedBehavior.CRM);
         TestLifecycle.testNamespace(NamespaceManager.getNamespace());
         TestLifecycle.beginRequest();
 

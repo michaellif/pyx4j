@@ -32,7 +32,7 @@ public class ResidentUserVisit extends CustomerUserVisit {
         super(application, user);
     }
 
-    public Lease getLease() {
+    public Lease getLeaseId() {
         return selectedLease;
     }
 

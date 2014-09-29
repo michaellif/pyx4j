@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011-2012 All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -25,7 +25,9 @@ import com.pyx4j.commons.UserRuntimeException;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.essentials.server.AbstractAntiBot;
+import com.pyx4j.essentials.server.AbstractAntiBot.LoginType;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.security.rpc.ChallengeVerificationRequired;
 import com.pyx4j.security.rpc.PasswordChangeRequest;
 import com.pyx4j.security.shared.Behavior;
 import com.pyx4j.server.contexts.ServerContext;
@@ -49,7 +51,7 @@ public class UserManagementFacadeImpl implements UserManagementFacade {
 
     @Override
     public <E extends AbstractUserCredential<? extends AbstractUser>> void selfChangePassword(Class<E> credentialClass, PasswordChangeRequest request) {
-        E credential = Persistence.service().retrieve(credentialClass, request.userPk().getValue());
+        E credential = Persistence.service().retrieve(credentialClass, VistaContext.getCurrentUserPrimaryKey());
 
         if (credential == null) {
             throw new UserRuntimeException(i18n.tr("Invalid User Account. Please Contact Support"));
@@ -58,10 +60,27 @@ public class UserManagementFacadeImpl implements UserManagementFacade {
             throw new UserRuntimeException(AbstractAntiBot.GENERIC_LOGIN_FAILED_MESSAGE);
         }
 
+        AbstractAntiBot.assertLogin(LoginType.userLogin, credential.user().email().getValue(), null);
+        if (!ServerSideFactory.create(PasswordEncryptorFacade.class)
+                .checkUserPassword(request.currentPassword().getValue(), credential.credential().getValue())) {
+            log.info("Invalid password for user {}", ServerContext.getVisit().getUserVisit().getEmail());
+            if (AbstractAntiBot.authenticationFailed(LoginType.userLogin, ServerContext.getVisit().getUserVisit().getEmail())) {
+                throw new ChallengeVerificationRequired(i18n.tr("Too Many Failed Log In Attempts"));
+            } else {
+                throw new UserRuntimeException(true, AbstractAntiBot.GENERIC_LOGIN_FAILED_MESSAGE);
+            }
+        }
+        if (ServerSideFactory.create(PasswordEncryptorFacade.class).checkUserPassword(request.newPassword().getValue(), credential.credential().getValue())) {
+            throw new UserRuntimeException(true, i18n.tr("Your password cannot repeat your previous password"));
+        }
+
         credential.accessKey().setValue(null);
         credential.credential().setValue(ServerSideFactory.create(PasswordEncryptorFacade.class).encryptUserPassword(request.newPassword().getValue()));
         credential.passwordUpdated().setValue(new Date());
         credential.requiredPasswordChangeOnNextLogIn().setValue(Boolean.FALSE);
+
+        ServerSideFactory.create(AuditFacade.class).credentialsUpdated(credential.user());
+
         Persistence.service().persist(credential);
         Persistence.service().commit();
 

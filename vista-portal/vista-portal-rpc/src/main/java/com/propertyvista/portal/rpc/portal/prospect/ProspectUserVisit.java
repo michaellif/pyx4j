@@ -32,7 +32,7 @@ public class ProspectUserVisit extends CustomerUserVisit {
         super(application, user);
     }
 
-    public OnlineApplication getOnlineApplication() {
+    public OnlineApplication getOnlineApplicationId() {
         return onlineApplication;
     }
 

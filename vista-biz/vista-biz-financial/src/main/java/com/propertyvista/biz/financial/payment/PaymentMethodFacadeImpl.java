@@ -199,8 +199,8 @@ public class PaymentMethodFacadeImpl implements PaymentMethodFacade {
     }
 
     @Override
-    public boolean isAutopayAgreementsPresent(Lease lease) {
-        return new AutopayAgreementMananger().isAutopayAgreementsPresent(lease);
+    public boolean isAutopayAgreementsPresent(Lease leaseId) {
+        return new AutopayAgreementMananger().isAutopayAgreementsPresent(leaseId);
     }
 
     @Override

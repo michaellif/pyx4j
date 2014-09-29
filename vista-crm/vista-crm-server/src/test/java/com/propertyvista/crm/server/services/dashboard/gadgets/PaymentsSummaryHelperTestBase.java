@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011- All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -38,7 +38,7 @@ import com.propertyvista.domain.policy.policies.IdAssignmentPolicy;
 import com.propertyvista.domain.policy.policies.domain.IdAssignmentItem;
 import com.propertyvista.domain.policy.policies.domain.IdAssignmentItem.IdAssignmentType;
 import com.propertyvista.domain.policy.policies.domain.IdAssignmentItem.IdTarget;
-import com.propertyvista.domain.security.common.VistaBasicBehavior;
+import com.propertyvista.domain.security.common.VistaAccessGrantedBehavior;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
 import com.propertyvista.test.helper.LightWeightLeaseManagement;
@@ -54,7 +54,7 @@ public class PaymentsSummaryHelperTestBase extends VistaDBTestBase {
     @Override
     protected void setUp() throws Exception {
         super.setUp();
-        TestLifecycle.testSession(new UserVisit(new Key(-101), "Neo The Accountant"), VistaBasicBehavior.CRM);
+        TestLifecycle.testSession(new UserVisit(new Key(-101), "Neo The Accountant"), VistaAccessGrantedBehavior.CRM);
         TestLifecycle.beginRequest();
 
         OrganizationPoliciesNode policyNode = EntityFactory.create(OrganizationPoliciesNode.class);

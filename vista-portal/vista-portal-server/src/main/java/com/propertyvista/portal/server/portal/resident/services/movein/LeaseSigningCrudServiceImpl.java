@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011-2012 All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -21,8 +21,6 @@ import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.criterion.EntityListCriteria;
 import com.pyx4j.entity.rpc.EntitySearchResult;
 import com.pyx4j.entity.server.Persistence;
-import com.pyx4j.security.rpc.AuthorizationChangedSystemNotification;
-import com.pyx4j.security.rpc.AuthorizationChangedSystemNotification.ChangeType;
 import com.pyx4j.server.contexts.ServerContext;
 
 import com.propertyvista.domain.policy.policies.domain.LeaseAgreementConfirmationTerm;
@@ -36,7 +34,6 @@ import com.propertyvista.domain.tenant.lease.SignedAgreementLegalTerm;
 import com.propertyvista.portal.rpc.portal.resident.dto.movein.LeaseAgreementDTO;
 import com.propertyvista.portal.rpc.portal.resident.services.movein.LeaseSigningCrudService;
 import com.propertyvista.portal.server.portal.resident.ResidentPortalContext;
-import com.propertyvista.portal.server.portal.resident.services.ResidentAuthenticationServiceImpl;
 
 public class LeaseSigningCrudServiceImpl implements LeaseSigningCrudService {
 
@@ -85,8 +82,7 @@ public class LeaseSigningCrudServiceImpl implements LeaseSigningCrudService {
         Persistence.secureSave(agreementSignatures);
         Persistence.service().commit();
 
-        new ResidentAuthenticationServiceImpl().reAuthorize(ResidentPortalContext.getLeaseIdStub());
-        ServerContext.addResponseSystemNotification(new AuthorizationChangedSystemNotification(ChangeType.behavioursChanged));
+        ServerContext.getVisit().setAclRevalidationRequired();
         callback.onSuccess(null);
     }
 

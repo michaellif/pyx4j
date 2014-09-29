@@ -17,11 +17,7 @@ import com.pyx4j.security.shared.Behavior;
 
 public enum VistaBasicBehavior implements Behavior {
 
-    Onboarding,
-
     System,
-
-    CRM,
 
     CRMPasswordChangeRequired,
 
@@ -32,15 +28,9 @@ public enum VistaBasicBehavior implements Behavior {
 
     PropertyVistaSupport,
 
-    ProspectPortal,
-
     ProspectPortalPasswordChangeRequired,
 
-    ResidentPortal,
-
     ResidentPortalPasswordChangeRequired,
-
-    Operations,
 
     OperationsPasswordChangeRequired,
 

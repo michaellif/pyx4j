@@ -35,7 +35,7 @@ import com.propertyvista.crm.rpc.services.dashboard.gadgets.UnitAvailabilityStat
 import com.propertyvista.domain.dashboard.gadgets.availability.UnitAvailabilityStatus;
 import com.propertyvista.domain.dashboard.gadgets.availability.UnitAvailabilityStatus.Vacancy;
 import com.propertyvista.domain.dashboard.gadgets.common.AsOfDateCriterion;
-import com.propertyvista.domain.security.common.VistaBasicBehavior;
+import com.propertyvista.domain.security.common.VistaAccessGrantedBehavior;
 
 public class UnitAvailabilityStatusListServiceTestBase extends VistaDBTestBase {
 
@@ -48,7 +48,7 @@ public class UnitAvailabilityStatusListServiceTestBase extends VistaDBTestBase {
     @Override
     public void setUp() throws Exception {
         super.setUp();
-        TestLifecycle.testSession(new UserVisit(new Key(-101), "Neo"), VistaBasicBehavior.CRM);
+        TestLifecycle.testSession(new UserVisit(new Key(-101), "Neo"), VistaAccessGrantedBehavior.CRM);
         TestLifecycle.beginRequest();
 
         UnitAvailabilityStatus status = EntityFactory.create(UnitAvailabilityStatus.class);

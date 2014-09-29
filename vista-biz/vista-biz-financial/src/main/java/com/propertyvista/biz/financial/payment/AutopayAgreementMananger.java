@@ -239,10 +239,10 @@ class AutopayAgreementMananger {
         return Persistence.service().query(criteria);
     }
 
-    boolean isAutopayAgreementsPresent(Lease lease) {
+    boolean isAutopayAgreementsPresent(Lease leaseId) {
         EntityQueryCriteria<AutopayAgreement> criteria = EntityQueryCriteria.create(AutopayAgreement.class);
         criteria.eq(criteria.proto().isDeleted(), Boolean.FALSE);
-        criteria.in(criteria.proto().tenant().lease(), lease);
+        criteria.in(criteria.proto().tenant().lease(), leaseId);
         return Persistence.service().exists(criteria);
     }
 

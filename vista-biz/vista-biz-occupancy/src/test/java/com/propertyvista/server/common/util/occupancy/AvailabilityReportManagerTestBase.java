@@ -47,7 +47,7 @@ import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.property.asset.unit.occupancy.AptUnitOccupancySegment;
 import com.propertyvista.domain.property.asset.unit.occupancy.AptUnitOccupancySegment.OffMarketType;
 import com.propertyvista.domain.property.asset.unit.occupancy.AptUnitOccupancySegment.Status;
-import com.propertyvista.domain.security.common.VistaBasicBehavior;
+import com.propertyvista.domain.security.common.VistaAccessGrantedBehavior;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.test.helper.LightWeightLeaseManagement;
 
@@ -62,7 +62,7 @@ public class AvailabilityReportManagerTestBase {
     @Before
     public void setUp() {
         VistaTestDBSetup.init();
-        TestLifecycle.testSession(new UserVisit(new Key(-101), "Neo"), VistaBasicBehavior.CRM);
+        TestLifecycle.testSession(new UserVisit(new Key(-101), "Neo"), VistaAccessGrantedBehavior.CRM);
         TestLifecycle.beginRequest();
 
         unit = EntityFactory.create(AptUnit.class);

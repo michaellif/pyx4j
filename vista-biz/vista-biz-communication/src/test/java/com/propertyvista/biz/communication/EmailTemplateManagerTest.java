@@ -85,7 +85,7 @@ import com.propertyvista.domain.ref.ISOProvince;
 import com.propertyvista.domain.ref.ProvincePolicyNode;
 import com.propertyvista.domain.security.CrmUser;
 import com.propertyvista.domain.security.common.VistaApplication;
-import com.propertyvista.domain.security.common.VistaBasicBehavior;
+import com.propertyvista.domain.security.common.VistaAccessGrantedBehavior;
 import com.propertyvista.domain.settings.PmcCompanyInfo;
 import com.propertyvista.domain.site.SiteDescriptor;
 import com.propertyvista.domain.site.SiteTitles;
@@ -172,7 +172,7 @@ public class EmailTemplateManagerTest extends VistaDBTestBase {
         VistaTestDBSetup.initNamespace();
         registerFacadeMock(PasswordEncryptorFacade.class, PasswordEncryptorFacadeMock.class);
 
-        TestLifecycle.testSession(null, VistaBasicBehavior.CRM);
+        TestLifecycle.testSession(null, VistaAccessGrantedBehavior.CRM);
         TestLifecycle.beginRequest();
 
         createPmc();

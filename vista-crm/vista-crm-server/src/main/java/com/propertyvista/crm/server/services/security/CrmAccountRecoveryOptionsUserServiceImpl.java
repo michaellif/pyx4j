@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011- All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -29,8 +29,8 @@ import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.essentials.server.AbstractAntiBot;
 import com.pyx4j.essentials.server.AbstractAntiBot.LoginType;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.rpc.shared.VoidSerializable;
 import com.pyx4j.security.rpc.AuthenticationRequest;
-import com.pyx4j.security.rpc.AuthenticationResponse;
 import com.pyx4j.security.rpc.ChallengeVerificationRequired;
 import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.server.contexts.ServerContext;
@@ -39,7 +39,6 @@ import com.propertyvista.biz.system.AuditFacade;
 import com.propertyvista.biz.system.VistaContext;
 import com.propertyvista.biz.system.encryption.PasswordEncryptorFacade;
 import com.propertyvista.crm.rpc.services.security.CrmAccountRecoveryOptionsUserService;
-import com.propertyvista.crm.server.services.pub.CrmAuthenticationServiceImpl;
 import com.propertyvista.domain.security.CrmUserCredential;
 import com.propertyvista.domain.security.SecurityQuestion;
 import com.propertyvista.domain.security.common.VistaBasicBehavior;
@@ -73,8 +72,7 @@ public class CrmAccountRecoveryOptionsUserServiceImpl implements CrmAccountRecov
         }
 
         result.useSecurityQuestionChallengeForPasswordReset().setValue(
-                !isEmpty(credential.securityQuestion().getValue())
-                        || SecurityController.check(VistaBasicBehavior.CRMPasswordChangeRequiresSecurityQuestion));
+                !isEmpty(credential.securityQuestion().getValue()) || SecurityController.check(VistaBasicBehavior.CRMPasswordChangeRequiresSecurityQuestion));
 
         result.securityQuestion().setValue(credential.securityQuestion().getValue());
         result.securityAnswer().setValue(credential.securityAnswer().getValue());
@@ -84,7 +82,7 @@ public class CrmAccountRecoveryOptionsUserServiceImpl implements CrmAccountRecov
     }
 
     @Override
-    public void updateRecoveryOptions(AsyncCallback<AuthenticationResponse> callback, AccountRecoveryOptionsDTO request) {
+    public void updateRecoveryOptions(AsyncCallback<VoidSerializable> callback, AccountRecoveryOptionsDTO request) {
         CrmUserCredential credentials = Persistence.service().retrieve(CrmUserCredential.class, VistaContext.getCurrentUserPrimaryKey());
 
         if (!SecurityController.check(VistaBasicBehavior.CRMSetupAccountRecoveryOptionsRequired)) {
@@ -117,10 +115,9 @@ public class CrmAccountRecoveryOptionsUserServiceImpl implements CrmAccountRecov
         log.info("AccountRecoveryOptions changed by user {} {}", ServerContext.getVisit().getUserVisit().getEmail(), VistaContext.getCurrentUserPrimaryKey());
 
         if (SecurityController.check(VistaBasicBehavior.CRMSetupAccountRecoveryOptionsRequired)) {
-            callback.onSuccess(new CrmAuthenticationServiceImpl().authenticate(credentials, null));
-        } else {
-            callback.onSuccess(null);
+            ServerContext.getVisit().setAclRevalidationRequired();
         }
+        callback.onSuccess(null);
     }
 
     private void assertIsDefined(IPrimitive<String> str) {

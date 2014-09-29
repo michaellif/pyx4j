@@ -66,7 +66,7 @@ import com.propertyvista.crm.rpc.services.pub.CrmAuthenticationService;
 import com.propertyvista.domain.dashboard.DashboardMetadata;
 import com.propertyvista.domain.financial.ARCode;
 import com.propertyvista.domain.security.common.VistaApplication;
-import com.propertyvista.domain.security.common.VistaBasicBehavior;
+import com.propertyvista.domain.security.common.VistaAccessGrantedBehavior;
 import com.propertyvista.portal.rpc.DeploymentConsts;
 import com.propertyvista.portal.rpc.portal.SiteDefinitionsDTO;
 import com.propertyvista.portal.rpc.portal.shared.services.SiteThemeServices;
@@ -132,7 +132,7 @@ public class CrmSite extends VistaSite {
 
             @Override
             public void onBehaviorChange(BehaviorChangeEvent event) {
-                if (SecurityController.check(VistaBasicBehavior.CRM)) {
+                if (SecurityController.check(VistaAccessGrantedBehavior.CRM)) {
                     if (VistaFeaturesCustomizationClient.isGoogleAnalyticDisableForEmployee() && hasVistaSupportCookie()) {
                         // Do not track Vista Support Employee
                     } else {

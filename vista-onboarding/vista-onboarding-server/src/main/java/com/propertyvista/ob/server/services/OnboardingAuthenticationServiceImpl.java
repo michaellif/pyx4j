@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011-2012 All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -28,14 +28,14 @@ import com.pyx4j.essentials.server.EssentialsServerSideConfiguration;
 import com.pyx4j.rpc.shared.IgnoreSessionToken;
 import com.pyx4j.security.rpc.AuthenticationRequest;
 import com.pyx4j.security.rpc.AuthenticationResponse;
-import com.pyx4j.security.shared.AclRevalidator;
+import com.pyx4j.security.server.AclRevalidator;
 import com.pyx4j.security.shared.Behavior;
-import com.pyx4j.server.contexts.ServerContext;
 import com.pyx4j.server.contexts.Lifecycle;
+import com.pyx4j.server.contexts.ServerContext;
 
 import com.propertyvista.domain.pmc.Pmc;
+import com.propertyvista.domain.security.common.VistaAccessGrantedBehavior;
 import com.propertyvista.domain.security.common.VistaApplication;
-import com.propertyvista.domain.security.common.VistaBasicBehavior;
 import com.propertyvista.ob.rpc.dto.OnboardingApplicationStatus;
 import com.propertyvista.ob.rpc.dto.OnboardingUserVisit;
 import com.propertyvista.ob.rpc.services.OnboardingAuthenticationService;
@@ -48,8 +48,8 @@ public class OnboardingAuthenticationServiceImpl extends com.pyx4j.security.serv
         return VistaApplication.onboarding;
     }
 
-    protected VistaBasicBehavior getApplicationBehavior() {
-        return VistaBasicBehavior.Onboarding;
+    protected VistaAccessGrantedBehavior getApplicationBehavior() {
+        return VistaAccessGrantedBehavior.Onboarding;
     }
 
     @Override
@@ -110,5 +110,10 @@ public class OnboardingAuthenticationServiceImpl extends com.pyx4j.security.serv
     @Override
     public Set<Behavior> getCurrentBehaviours(Key principalPrimaryKey, Set<Behavior> currentBehaviours, long aclTimeStamp) {
         return currentBehaviours;
+    }
+
+    @Override
+    public void reAuthorizeCurrentVisit(Set<Behavior> behaviours) {
+        // TODO Auto-generated method stub
     }
 }

@@ -37,9 +37,9 @@ import com.pyx4j.entity.server.dataimport.DataPreloaderCollection;
 import com.pyx4j.essentials.rpc.admin.SystemMaintenanceState;
 import com.pyx4j.essentials.server.AbstractAntiBot;
 import com.pyx4j.log4j.LoggerConfig;
+import com.pyx4j.security.server.AclRevalidator;
 import com.pyx4j.security.server.ThrottleConfig;
 import com.pyx4j.security.shared.AclCreator;
-import com.pyx4j.security.shared.AclRevalidator;
 import com.pyx4j.server.contexts.NamespaceManager;
 
 import com.propertyvista.config.AbstractVistaServerSideConfiguration;

@@ -20,6 +20,7 @@ import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.rpc.shared.VoidSerializable;
 import com.pyx4j.security.shared.SecurityController;
+import com.pyx4j.server.contexts.ServerContext;
 
 import com.propertyvista.biz.tenant.CustomerFacade;
 import com.propertyvista.domain.security.PortalResidentBehavior;
@@ -78,6 +79,7 @@ public class MoveInWizardServiceImpl implements MoveInWizardService {
         default:
             throw new IllegalArgumentException();
         }
+        ServerContext.getVisit().setAclRevalidationRequired();
         callback.onSuccess(null);
     }
 

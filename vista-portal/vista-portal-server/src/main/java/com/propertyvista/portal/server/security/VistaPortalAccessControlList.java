@@ -45,6 +45,7 @@ import com.propertyvista.domain.ref.ProvincePolicyNode;
 import com.propertyvista.domain.security.PortalProspectBehavior;
 import com.propertyvista.domain.security.PortalResidentBehavior;
 import com.propertyvista.domain.security.VistaDataAccessBehavior;
+import com.propertyvista.domain.security.common.VistaAccessGrantedBehavior;
 import com.propertyvista.domain.security.common.VistaBasicBehavior;
 import com.propertyvista.domain.tenant.CustomerPicture;
 import com.propertyvista.domain.tenant.insurance.GeneralInsurancePolicy;
@@ -144,8 +145,8 @@ public class VistaPortalAccessControlList extends ServletContainerAclBuilder {
         grant(VistaBasicBehavior.ResidentPortalPasswordChangeRequired, new IServiceExecutePermission(PortalPasswordResetService.class));
         grant(VistaBasicBehavior.ProspectPortalPasswordChangeRequired, new IServiceExecutePermission(PortalPasswordResetService.class));
 
-        grant(VistaBasicBehavior.ResidentPortal, new IServiceExecutePermission(PasswordChangeUserService.class));
-        grant(VistaBasicBehavior.ProspectPortal, new IServiceExecutePermission(PasswordChangeUserService.class));
+        grant(VistaAccessGrantedBehavior.ResidentPortal, new IServiceExecutePermission(PasswordChangeUserService.class));
+        grant(VistaAccessGrantedBehavior.ProspectPortal, new IServiceExecutePermission(PasswordChangeUserService.class));
 
         // Old TODO remove
         grant(PortalProspectBehavior.Prospect, new IServiceExecutePermission(ReferenceDataService.class));
@@ -198,7 +199,7 @@ public class VistaPortalAccessControlList extends ServletContainerAclBuilder {
 
         grant(PortalResidentBehavior.Resident, new IServiceExecutePermission(MaintenanceRequestCrudService.class));
 
-        grant(PortalResidentBehavior.MoveInWizardCompletionAvailable, new IServiceExecutePermission(MoveInWizardService.class));
+        grant(PortalResidentBehavior.MoveInWizardCompletionRequired, new IServiceExecutePermission(MoveInWizardService.class));
         grant(PortalResidentBehavior.LeaseAgreementSigningRequired, new IServiceExecutePermission(LeaseSigningCrudService.class));
         grant(PortalResidentBehavior.LeaseAgreementSigningRequired, new IServiceExecutePermission(LeaseTermBlankAgreementDocumentDownloadService.class));
         grant(PortalResidentBehavior.LeaseAgreementSigningRequired, new EntityPermission(AgreementDigitalSignatures.class, EntityPermission.CREATE));

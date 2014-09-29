@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011- All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -30,7 +30,7 @@ import com.propertyvista.crm.server.security.access.CustomerDatasetAccessRule;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.security.CrmUser;
 import com.propertyvista.domain.security.CrmUserBuildings;
-import com.propertyvista.domain.security.common.VistaBasicBehavior;
+import com.propertyvista.domain.security.common.VistaAccessGrantedBehavior;
 import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
@@ -56,7 +56,7 @@ public class AccessRulesTest extends VistaDBTestBase {
     public void XtestTenantDatasetNewEntityAccess() {
         String setId = uniqueString();
 
-        TestLifecycle.testSession(new UserVisit(new Key(-101), "bob"), VistaBasicBehavior.CRM);
+        TestLifecycle.testSession(new UserVisit(new Key(-101), "bob"), VistaAccessGrantedBehavior.CRM);
         TestLifecycle.beginRequest();
 
         {
@@ -98,7 +98,7 @@ public class AccessRulesTest extends VistaDBTestBase {
         user.name().setValue(uniqueString());
         Persistence.service().persist(user);
 
-        TestLifecycle.testSession(new UserVisit(user.getPrimaryKey(), "bob"), VistaBasicBehavior.CRM);
+        TestLifecycle.testSession(new UserVisit(user.getPrimaryKey(), "bob"), VistaAccessGrantedBehavior.CRM);
         TestLifecycle.beginRequest();
 
         Customer t1 = EntityFactory.create(Customer.class);

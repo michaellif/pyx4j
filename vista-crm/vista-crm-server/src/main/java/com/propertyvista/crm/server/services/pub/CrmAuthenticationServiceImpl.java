@@ -34,16 +34,21 @@ import com.propertyvista.crm.rpc.CrmUserVisit;
 import com.propertyvista.crm.rpc.services.pub.CrmAuthenticationService;
 import com.propertyvista.domain.security.CrmUser;
 import com.propertyvista.domain.security.CrmUserCredential;
+import com.propertyvista.domain.security.common.VistaAccessGrantedBehavior;
 import com.propertyvista.domain.security.common.VistaApplication;
 import com.propertyvista.domain.security.common.VistaBasicBehavior;
 import com.propertyvista.server.common.security.CrmUserBuildingDatasetAccessBuilder;
 import com.propertyvista.server.common.security.VistaAuthenticationServicesImpl;
-import com.propertyvista.shared.VistaUserVisit;
 
-public class CrmAuthenticationServiceImpl extends VistaAuthenticationServicesImpl<CrmUser, CrmUserCredential> implements CrmAuthenticationService {
+public class CrmAuthenticationServiceImpl extends VistaAuthenticationServicesImpl<CrmUser, CrmUserVisit, CrmUserCredential> implements CrmAuthenticationService {
 
     public CrmAuthenticationServiceImpl() {
-        super(CrmUser.class, CrmUserCredential.class);
+        super(CrmUser.class, CrmUserVisit.class, CrmUserCredential.class);
+    }
+
+    @Override
+    protected CrmUserVisit createUserVisit(CrmUser user) {
+        return new CrmUserVisit(getVistaApplication(), user);
     }
 
     @Override
@@ -52,8 +57,8 @@ public class CrmAuthenticationServiceImpl extends VistaAuthenticationServicesImp
     }
 
     @Override
-    protected VistaBasicBehavior getApplicationBehavior() {
-        return VistaBasicBehavior.CRM;
+    protected VistaAccessGrantedBehavior getApplicationAccessGrantedBehavior() {
+        return VistaAccessGrantedBehavior.CRM;
     }
 
     @Override
@@ -82,34 +87,25 @@ public class CrmAuthenticationServiceImpl extends VistaAuthenticationServicesImp
     }
 
     @Override
-    protected VistaUserVisit<CrmUser> createUserVisit(CrmUser user) {
-        return new CrmUserVisit(getVistaApplication(), user);
-    }
-
-    @Override
-    public String beginSession(CrmUser user, CrmUserCredential userCredential, Set<Behavior> behaviors, IEntity additionalConditions) {
-        Set<Behavior> actualBehaviors;
-        if (user.email().getValue().equals(CrmUser.VISTA_SUPPORT_ACCOUNT_EMAIL)) {
-            actualBehaviors = new HashSet<Behavior>();
-            actualBehaviors.add(VistaBasicBehavior.PropertyVistaSupport);
-            actualBehaviors.addAll(behaviors);
-        } else if (behaviors.contains(VistaBasicBehavior.CRMPasswordChangeRequiresSecurityQuestion) && (!isAccountRecoveryOptionsConfigured(userCredential))) {
-            actualBehaviors = new HashSet<Behavior>();
-            actualBehaviors.add(getVistaApplication());
-            actualBehaviors.add(VistaBasicBehavior.CRMPasswordChangeRequiresSecurityQuestion);
-            actualBehaviors.add(VistaBasicBehavior.CRMSetupAccountRecoveryOptionsRequired);
-        } else {
-            actualBehaviors = behaviors;
-        }
-        return super.beginSession(user, userCredential, actualBehaviors, additionalConditions);
-    }
-
-    @Override
-    protected Set<Behavior> getBehaviors(CrmUserCredential userCredential) {
-        Set<Behavior> behaviors = ServerSideFactory.create(UserManagementFacade.class).getBehaviors(userCredential);
+    public String beginApplicationSession(CrmUserVisit visit, CrmUserCredential userCredential, Set<Behavior> behaviors, IEntity additionalConditions) {
         if (!userCredential.accessAllBuildings().getValue(false)) {
             CrmUserBuildingDatasetAccessBuilder.updateAccessList(userCredential.user());
         }
+        return super.beginApplicationSession(visit, userCredential, behaviors, additionalConditions);
+    }
+
+    @Override
+    protected Set<Behavior> getBehaviors(CrmUserCredential userCredential, CrmUserVisit visit) {
+        Set<Behavior> behaviors = new HashSet<Behavior>();
+        behaviors.addAll(ServerSideFactory.create(UserManagementFacade.class).getBehaviors(userCredential));
+        if (visit.getEmail().equals(CrmUser.VISTA_SUPPORT_ACCOUNT_EMAIL)) {
+            behaviors.add(VistaBasicBehavior.PropertyVistaSupport);
+        } else if (behaviors.contains(VistaBasicBehavior.CRMPasswordChangeRequiresSecurityQuestion) && (!isAccountRecoveryOptionsConfigured(userCredential))) {
+            behaviors.add(getVistaApplication());
+            behaviors.add(VistaBasicBehavior.CRMPasswordChangeRequiresSecurityQuestion);
+            behaviors.add(VistaBasicBehavior.CRMSetupAccountRecoveryOptionsRequired);
+        }
+        behaviors.add(getApplicationAccessGrantedBehavior());
         return behaviors;
     }
 

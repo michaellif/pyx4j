@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011- All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -16,7 +16,8 @@ package com.propertyvista.biz.tenant;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.ArrayList;
-import java.util.EnumSet;
+import java.util.Collection;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 
@@ -138,8 +139,10 @@ public class OnlineApplicationFacadeImpl implements OnlineApplicationFacade {
     }
 
     @Override
-    public EnumSet<PortalProspectBehavior> getOnlineApplicationBehavior(OnlineApplication application) {
-        EnumSet<PortalProspectBehavior> retVal = EnumSet.noneOf(PortalProspectBehavior.class);
+    public Collection<PortalProspectBehavior> getOnlineApplicationBehavior(OnlineApplication application) {
+        Persistence.ensureRetrieve(application.customer(), AttachLevel.Attached);
+
+        Collection<PortalProspectBehavior> retVal = new HashSet<>();
 
         {
             EntityQueryCriteria<LeaseTermTenant> criteria = EntityQueryCriteria.create(LeaseTermTenant.class);
@@ -180,7 +183,7 @@ public class OnlineApplicationFacadeImpl implements OnlineApplicationFacade {
         application.status().setValue(OnlineApplication.Status.Submitted);
         Persistence.service().merge(application);
 
-// TODO: update behavior somehow: 
+// TODO: update behavior somehow:
 //            CustomerUser user = application.customer().user();
 //            CustomerUserCredential credential = Persistence.service().retrieve(CustomerUserCredential.class, user.getPrimaryKey());
 //            boolean isApplicant = false;

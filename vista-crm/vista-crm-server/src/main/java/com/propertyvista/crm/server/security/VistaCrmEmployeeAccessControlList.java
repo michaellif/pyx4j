@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011-2012 All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -44,16 +44,17 @@ import com.propertyvista.domain.company.Portfolio;
 import com.propertyvista.domain.security.CrmRole;
 import com.propertyvista.domain.security.UserAuditingConfigurationDTO;
 import com.propertyvista.domain.security.VistaCrmBehavior;
+import com.propertyvista.domain.security.common.VistaAccessGrantedBehavior;
 import com.propertyvista.domain.security.common.VistaBasicBehavior;
 
 class VistaCrmEmployeeAccessControlList extends UIAclBuilder {
 
     VistaCrmEmployeeAccessControlList() {
 
-        // -- Crm Users, Self management ==  All Users 
-        grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(CrmUserService.class));
-        grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(CrmPasswordChangeUserService.class));
-        grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(CrmAccountRecoveryOptionsUserService.class));
+        // -- Crm Users, Self management ==  All Users
+        grant(VistaAccessGrantedBehavior.CRM, new IServiceExecutePermission(CrmUserService.class));
+        grant(VistaAccessGrantedBehavior.CRM, new IServiceExecutePermission(CrmPasswordChangeUserService.class));
+        grant(VistaAccessGrantedBehavior.CRM, new IServiceExecutePermission(CrmAccountRecoveryOptionsUserService.class));
         grant(VistaBasicBehavior.CRMSetupAccountRecoveryOptionsRequired, new IServiceExecutePermission(CrmAccountRecoveryOptionsUserService.class));
 
         // ------ Account Self management
@@ -61,7 +62,7 @@ class VistaCrmEmployeeAccessControlList extends UIAclBuilder {
 
         //-- back-end
         {
-            grant(VistaBasicBehavior.CRM, EmployeeDTO.class, new EmployeeSelfInstanceAccess(), READ);
+            grant(VistaAccessGrantedBehavior.CRM, EmployeeDTO.class, new EmployeeSelfInstanceAccess(), READ);
 
             grant(VistaCrmBehavior.AccountSelf, EmployeeDTO.class, new EmployeeSelfInstanceAccess(), READ | UPDATE);
             grant(VistaCrmBehavior.AccountSelf, Notification.class, new EmployeeSelfInstanceAccess(), READ | UPDATE);

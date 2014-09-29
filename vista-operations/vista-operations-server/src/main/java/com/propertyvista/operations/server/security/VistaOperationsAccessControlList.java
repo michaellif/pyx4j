@@ -23,6 +23,7 @@ import com.propertyvista.domain.pmc.Pmc;
 import com.propertyvista.domain.pmc.PmcMerchantAccountIndex;
 import com.propertyvista.domain.pmc.payment.CustomerCreditCheckTransaction;
 import com.propertyvista.domain.security.VistaOperationsBehavior;
+import com.propertyvista.domain.security.common.VistaAccessGrantedBehavior;
 import com.propertyvista.domain.security.common.VistaBasicBehavior;
 import com.propertyvista.domain.tenant.insurance.TenantSureInsurancePolicy;
 import com.propertyvista.operations.domain.eft.caledoneft.FundsReconciliationFile;
@@ -121,7 +122,7 @@ public class VistaOperationsAccessControlList extends ServletContainerAclBuilder
         grant(new IServiceExecutePermission(OperationsAuthenticationService.class));
         grant(VistaBasicBehavior.OperationsPasswordChangeRequired, new IServiceExecutePermission(AdminPasswordResetService.class));
 
-        grant(VistaBasicBehavior.Operations, new OperationsUserAccountAccesRule(), OperationsUserCredential.class);
+        grant(VistaAccessGrantedBehavior.Operations, new OperationsUserAccountAccesRule(), OperationsUserCredential.class);
 
         grant(VistaOperationsBehavior.SystemAdmin, new EntityPermission(Pmc.class, EntityPermission.ALL));
         grant(VistaOperationsBehavior.SystemAdmin, new IServiceExecutePermission(DeferredProcessService.class));
@@ -146,7 +147,7 @@ public class VistaOperationsAccessControlList extends ServletContainerAclBuilder
         //TODO review and grant to VistaOperationsBehavior.SecurityAdmin
         grant(VistaOperationsBehavior.SystemAdmin, new IServiceExecutePermission(AdminPasswordChangeUserService.class));
         grant(VistaOperationsBehavior.SystemAdmin, new IServiceExecutePermission(AdminPasswordChangeManagedService.class));
-        grant(VistaBasicBehavior.Operations, new IServiceExecutePermission(AdminUserService.class));
+        grant(VistaAccessGrantedBehavior.Operations, new IServiceExecutePermission(AdminUserService.class));
         grant(VistaOperationsBehavior.SystemAdmin, new IServiceExecutePermission(AdminUserCrudService.class));
 
         //TODO remove

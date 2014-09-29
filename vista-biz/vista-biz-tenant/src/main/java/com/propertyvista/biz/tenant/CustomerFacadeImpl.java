@@ -111,7 +111,7 @@ public class CustomerFacadeImpl implements CustomerFacade {
     }
 
     @Override
-    public List<Lease> getActiveLeases(CustomerUser customerUserId) {
+    public List<Lease> getActiveLeasesId(CustomerUser customerUserId) {
         Validate.isFalse(customerUserId.isNull(), "Customer User can't be null");
 
         List<Lease> leases = new ArrayList<Lease>();
@@ -121,7 +121,7 @@ public class CustomerFacadeImpl implements CustomerFacade {
             criteria.eq(criteria.proto().unit().building().suspended(), false);
             criteria.eq(criteria.proto().currentTerm().version().tenants().$().leaseParticipant().customer().user(), customerUserId);
             criteria.in(criteria.proto().currentTerm().version().tenants().$().role(), LeaseTermParticipant.Role.portalAccess());
-            leases.addAll(Persistence.service().query(criteria));
+            leases.addAll(Persistence.service().query(criteria, AttachLevel.IdOnly));
         }
         // guarantors in portal
         {
@@ -129,7 +129,7 @@ public class CustomerFacadeImpl implements CustomerFacade {
             criteria.in(criteria.proto().status(), Lease.Status.current());
             criteria.eq(criteria.proto().unit().building().suspended(), false);
             criteria.eq(criteria.proto().currentTerm().version().guarantors().$().leaseParticipant().customer().user(), customerUserId);
-            leases.addAll(Persistence.service().query(criteria));
+            leases.addAll(Persistence.service().query(criteria, AttachLevel.IdOnly));
         }
 
         return leases;
@@ -194,12 +194,12 @@ public class CustomerFacadeImpl implements CustomerFacade {
     }
 
     @Override
-    public Collection<PortalResidentBehavior> getLeaseBehavior(CustomerUser customerUser, Lease lease) {
+    public Collection<PortalResidentBehavior> getLeaseBehavior(CustomerUser customerUser, Lease leaseId) {
         LeaseTermParticipant<?> termParticipant;
         {
             EntityQueryCriteria<LeaseTermTenant> criteria = EntityQueryCriteria.create(LeaseTermTenant.class);
             criteria.eq(criteria.proto().leaseParticipant().customer().user(), customerUser);
-            criteria.eq(criteria.proto().leaseParticipant().lease(), lease);
+            criteria.eq(criteria.proto().leaseParticipant().lease(), leaseId);
             criteria.eq(criteria.proto().leaseTermV().holder(), criteria.proto().leaseTermV().holder().lease().currentTerm());
             criteria.isCurrent(criteria.proto().leaseTermV());
             termParticipant = Persistence.service().retrieve(criteria);
@@ -208,7 +208,7 @@ public class CustomerFacadeImpl implements CustomerFacade {
         if (termParticipant == null) {
             EntityQueryCriteria<LeaseTermGuarantor> criteria = EntityQueryCriteria.create(LeaseTermGuarantor.class);
             criteria.eq(criteria.proto().leaseParticipant().customer().user(), customerUser);
-            criteria.eq(criteria.proto().leaseParticipant().lease(), lease);
+            criteria.eq(criteria.proto().leaseParticipant().lease(), leaseId);
             criteria.eq(criteria.proto().leaseTermV().holder(), criteria.proto().leaseTermV().holder().lease().currentTerm());
             criteria.isCurrent(criteria.proto().leaseTermV());
             termParticipant = Persistence.service().retrieve(criteria);
@@ -231,22 +231,27 @@ public class CustomerFacadeImpl implements CustomerFacade {
         }
 
         // Do not ask existing leases to Sign Agreement (Welcome wizard)
-        if (lease.leaseApplication().status().getValue() == LeaseApplication.Status.Approved) {
-            Persistence.ensureRetrieve(termParticipant.leaseParticipant().agreementSignatures(), AttachLevel.Attached);
-            if (!termParticipant.leaseParticipant().agreementSignatures().hasValues()) {
-                behaviors.add(PortalResidentBehavior.LeaseAgreementSigningRequired);
+        {
+            EntityQueryCriteria<LeaseApplication> criteria = EntityQueryCriteria.create(LeaseApplication.class);
+            criteria.eq(criteria.proto().lease(), leaseId);
+            LeaseApplication leaseApplication = Persistence.service().retrieve(criteria);
+            if (leaseApplication.status().getValue() == LeaseApplication.Status.Approved) {
+                Persistence.ensureRetrieve(termParticipant.leaseParticipant().agreementSignatures(), AttachLevel.Attached);
+                if (!termParticipant.leaseParticipant().agreementSignatures().hasValues()) {
+                    behaviors.add(PortalResidentBehavior.LeaseAgreementSigningRequired);
+                }
             }
         }
 
-        if (ServerSideFactory.create(PaymentMethodFacade.class).isAutopayAgreementsPresent(lease)) {
+        if (ServerSideFactory.create(PaymentMethodFacade.class).isAutopayAgreementsPresent(leaseId)) {
             behaviors.add(PortalResidentBehavior.AutopayAgreementPresent);
         }
 
-        if (ServerSideFactory.create(TenantInsuranceFacade.class).isInsurancePresent(lease)) {
+        if (ServerSideFactory.create(TenantInsuranceFacade.class).isInsurancePresent(leaseId)) {
             behaviors.add(PortalResidentBehavior.InsurancePresent);
         }
 
-        behaviors.addAll(new MoveInManager().getMoveInBehaviors(lease, termParticipant, behaviors));
+        behaviors.addAll(new MoveInManager().getMoveInBehaviors(leaseId, termParticipant, behaviors));
 
         return behaviors;
     }

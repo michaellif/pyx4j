@@ -250,12 +250,12 @@ public class LeasePreloader extends BaseVistaDevDataPreloader {
             LeaseGenerator.attachDocumentData(lease);
 
             //Set users that can login using UI
-            boolean mustHaveApplication = false;
+            boolean mustHaveOnlineApplication = false;
             boolean mustSelectUnitInApplication = false;
             if (i < DemoData.UserType.PTENANT.getDefaultMax()) {
                 LeaseTermTenant mainTenant = lease.currentTerm().version().tenants().get(0);
                 String email = DemoData.UserType.PTENANT.getEmail(i + 1);
-                mustHaveApplication = true;
+                mustHaveOnlineApplication = true;
                 mainTenant.leaseParticipant().customer().person().email().setValue(email);
 
                 // Make one (Third) Customer with Two Applications
@@ -268,6 +268,7 @@ public class LeasePreloader extends BaseVistaDevDataPreloader {
                 }
 
             } else if (i == DemoData.UserType.PTENANT.getDefaultMax()) {
+                mustHaveOnlineApplication = true;
                 LeaseTermTenant mainTenant = lease.currentTerm().version().tenants().get(0);
                 mainTenant.leaseParticipant().customer().set(dualPotentialCustomer);
             }
@@ -302,7 +303,7 @@ public class LeasePreloader extends BaseVistaDevDataPreloader {
                 participant.leaseParticipant().customer().personScreening().saveAction().setValue(SaveAction.saveAsFinal);
                 Persistence.service().persist(participant.leaseParticipant().customer().personScreening());
             }
-            if (mustHaveApplication || RandomUtil.randomBoolean()) {
+            if (mustHaveOnlineApplication || RandomUtil.randomBoolean()) {
                 if (mustSelectUnitInApplication) {
                     ServerSideFactory.create(LeaseFacade.class).createMasterOnlineApplication(lease, lease.unit().building(), null);
                 } else {

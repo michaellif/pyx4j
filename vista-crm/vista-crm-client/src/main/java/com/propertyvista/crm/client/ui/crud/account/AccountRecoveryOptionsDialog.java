@@ -19,7 +19,7 @@ import com.google.gwt.user.client.ui.Composite;
 import com.pyx4j.commons.UserRuntimeException;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
-import com.pyx4j.security.rpc.AuthenticationResponse;
+import com.pyx4j.rpc.shared.VoidSerializable;
 import com.pyx4j.widgets.client.dialog.Dialog;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 import com.pyx4j.widgets.client.dialog.OkCancelOption;
@@ -82,7 +82,7 @@ public class AccountRecoveryOptionsDialog extends Composite {
         dialog.show();
     }
 
-    protected void onUpdateRecoveryOptionsSuccess(AuthenticationResponse result) {
+    protected void onUpdateRecoveryOptionsSuccess() {
 
     }
 
@@ -94,11 +94,11 @@ public class AccountRecoveryOptionsDialog extends Composite {
         this.cancellationTimer.cancel();
         AccountRecoveryOptionsDTO recoveryOptions = recoveryOptionsForm.getValue().duplicate(AccountRecoveryOptionsDTO.class);
         recoveryOptions.password().setValue(password);
-        service.updateRecoveryOptions(new DefaultAsyncCallback<AuthenticationResponse>() {
+        service.updateRecoveryOptions(new DefaultAsyncCallback<VoidSerializable>() {
             @Override
-            public void onSuccess(AuthenticationResponse result) {
+            public void onSuccess(VoidSerializable result) {
                 MessageDialog.info(i18n.tr("Account recovery options were updated successfully."));
-                onUpdateRecoveryOptionsSuccess(result);
+                onUpdateRecoveryOptionsSuccess();
             }
 
             @Override

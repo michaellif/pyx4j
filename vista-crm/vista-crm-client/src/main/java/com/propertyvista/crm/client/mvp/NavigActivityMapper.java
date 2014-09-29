@@ -27,7 +27,7 @@ import com.propertyvista.crm.client.activity.NavigAdministrationActivity;
 import com.propertyvista.crm.client.event.BoardUpdateEvent;
 import com.propertyvista.crm.client.event.BoardUpdateHandler;
 import com.propertyvista.crm.rpc.CrmSiteMap;
-import com.propertyvista.domain.security.common.VistaBasicBehavior;
+import com.propertyvista.domain.security.common.VistaAccessGrantedBehavior;
 
 public class NavigActivityMapper implements ActivityMapper, BoardUpdateHandler {
 
@@ -56,7 +56,7 @@ public class NavigActivityMapper implements ActivityMapper, BoardUpdateHandler {
 
     @Override
     public Activity getActivity(Place place) {
-        if (SecurityController.check(VistaBasicBehavior.CRM)) {
+        if (SecurityController.check(VistaAccessGrantedBehavior.CRM)) {
             if (place.getClass().getName().contains(CrmSiteMap.Administration.class.getName())) {
                 if (navigSettingsActivity == null) {
                     navigSettingsActivity = new NavigAdministrationActivity();

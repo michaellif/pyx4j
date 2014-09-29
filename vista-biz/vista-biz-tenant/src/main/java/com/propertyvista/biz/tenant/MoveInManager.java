@@ -36,12 +36,12 @@ import com.propertyvista.domain.tenant.marketing.LeaseParticipantMoveInAction.Mo
 
 class MoveInManager {
 
-    Collection<PortalResidentBehavior> getMoveInBehaviors(Lease lease, LeaseTermParticipant<?> termParticipant,
+    Collection<PortalResidentBehavior> getMoveInBehaviors(Lease leaseId, LeaseTermParticipant<?> termParticipant,
             Collection<PortalResidentBehavior> leaseBehaviors) {
         Collection<PortalResidentBehavior> behaviors = new HashSet<>();
 
         if (leaseBehaviors.contains(PortalResidentBehavior.LeaseAgreementSigningRequired)) {
-            behaviors.add(PortalResidentBehavior.MoveInWizardCompletionAvailable);
+            behaviors.add(PortalResidentBehavior.MoveInWizardCompletionRequired);
         } else {
             Map<MoveInActionType, LeaseParticipantMoveInAction> moveInActionsByType = getMoveInActionsByType(termParticipant.leaseParticipant());
 
@@ -50,14 +50,14 @@ class MoveInManager {
             if (!leaseBehaviors.contains(PortalResidentBehavior.AutopayAgreementPresent)) {
                 LeaseParticipantMoveInAction a = getActiveMoveInAction(moveInActionsByType, MoveInActionType.autoPay);
                 if (a != null) {
-                    behaviors.add(PortalResidentBehavior.MoveInWizardCompletionAvailable);
+                    behaviors.add(PortalResidentBehavior.MoveInWizardCompletionRequired);
                 }
             }
 
             if (!leaseBehaviors.contains(PortalResidentBehavior.InsurancePresent)) {
                 LeaseParticipantMoveInAction a = getActiveMoveInAction(moveInActionsByType, MoveInActionType.insurance);
                 if (a != null) {
-                    behaviors.add(PortalResidentBehavior.MoveInWizardCompletionAvailable);
+                    behaviors.add(PortalResidentBehavior.MoveInWizardCompletionRequired);
                 }
             }
 

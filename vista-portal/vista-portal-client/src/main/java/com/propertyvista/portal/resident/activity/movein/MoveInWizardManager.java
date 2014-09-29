@@ -47,7 +47,7 @@ public class MoveInWizardManager {
         AppSite.getEventBus().addHandler(PlaceChangeEvent.TYPE, new PlaceChangeEvent.Handler() {
             @Override
             public void onPlaceChange(final PlaceChangeEvent event) {
-                if (SecurityController.check(PortalResidentBehavior.MoveInWizardCompletionAvailable)) {
+                if (SecurityController.check(PortalResidentBehavior.MoveInWizardCompletionRequired)) {
 
                     GWT.<MoveInWizardService> create(MoveInWizardService.class).obtainIncompleteSteps(new AsyncCallback<MoveInWizardStatusTO>() {
 
