@@ -24,7 +24,6 @@ import com.pyx4j.forms.client.ui.decorators.FieldDecorator;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel;
 import com.pyx4j.gwt.commons.css.CssVariable;
 import com.pyx4j.gwt.commons.layout.LayoutType;
-import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.backoffice.ui.prime.AbstractPrimePane;
 
 import com.propertyvista.crm.client.ui.gadgets.common.IGadgetFactory;
@@ -36,8 +35,6 @@ import com.propertyvista.domain.property.asset.building.Building;
 
 public class DashboardViewImpl extends AbstractPrimePane implements DashboardView {
 
-    private static final I18n i18n = I18n.get(DashboardViewImpl.class);
-
     private final BuildingsSelectionToolbar buildingsFilterProvider;
 
     private final AbstractDashboard dashboard;
@@ -46,10 +43,7 @@ public class DashboardViewImpl extends AbstractPrimePane implements DashboardVie
 
     private final DockLayoutPanel panel;
 
-    private boolean isReadOnly;
-
     public DashboardViewImpl() {
-        this.isReadOnly = true;
 
         this.buildingsFilterProvider = new BuildingsSelectionToolbar(this);
         this.dashboard = new AbstractDashboard(//@formatter:off
@@ -93,7 +87,6 @@ public class DashboardViewImpl extends AbstractPrimePane implements DashboardVie
 
     @Override
     public void setReadOnly(boolean isReadOnly) {
-        this.isReadOnly = isReadOnly;
         this.dashboard.setReadOnly(isReadOnly);
         this.updateCaption();
     }

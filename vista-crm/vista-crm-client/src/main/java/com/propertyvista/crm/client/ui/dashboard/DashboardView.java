@@ -15,18 +15,14 @@ package com.propertyvista.crm.client.ui.dashboard;
 
 import java.util.Vector;
 
-import com.pyx4j.site.client.backoffice.ui.prime.IPrimePane;
+import com.pyx4j.site.client.backoffice.ui.prime.dashboard.IDashboard;
 
 import com.propertyvista.domain.dashboard.DashboardMetadata;
 import com.propertyvista.domain.property.asset.building.Building;
 
-public interface DashboardView extends IPrimePane {
+public interface DashboardView extends IDashboard {
 
-    public interface Presenter extends IPrimePane.Presenter {
-
-        void save();
-
-        void print();
+    public interface Presenter extends IDashboard.Presenter {
 
     }
 
@@ -38,5 +34,4 @@ public interface DashboardView extends IPrimePane {
 
     Vector<Building> getSelectedBuildingsStubs();
 
-    void setReadOnly(boolean isReadOnly);
 }
