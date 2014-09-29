@@ -58,6 +58,7 @@ import com.pyx4j.security.rpc.AuthenticationRequest;
 import com.pyx4j.security.rpc.AuthenticationResponse;
 import com.pyx4j.security.rpc.AuthenticationService;
 import com.pyx4j.security.rpc.AuthorizationChangedSystemNotification;
+import com.pyx4j.security.rpc.AuthorizationUpdatedSystemNotification;
 import com.pyx4j.security.rpc.SystemWallMessage;
 import com.pyx4j.security.rpc.UserVisitChangedSystemNotification;
 import com.pyx4j.security.shared.Context;
@@ -127,7 +128,9 @@ public class ClientContext extends Context {
         RPCManager.addSystemNotificationHandler(new SystemNotificationHandler() {
             @Override
             public void onSystemNotificationReceived(SystemNotificationEvent event) {
-                if (event.getSystemNotification() instanceof AuthorizationChangedSystemNotification) {
+                if (event.getSystemNotification() instanceof AuthorizationUpdatedSystemNotification) {
+                    ClientContext.authenticated(((AuthorizationUpdatedSystemNotification) event.getSystemNotification()).getAuthenticationResponse());
+                } else if (event.getSystemNotification() instanceof AuthorizationChangedSystemNotification) {
                     switch (((AuthorizationChangedSystemNotification) event.getSystemNotification()).getChangeType()) {
                     case sessionTerminated:
                         log.debug("Session terminated");

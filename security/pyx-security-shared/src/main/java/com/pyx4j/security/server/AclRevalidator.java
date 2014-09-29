@@ -18,21 +18,24 @@
  * @author vlads
  * @version $Id$
  */
-package com.pyx4j.security.shared;
+package com.pyx4j.security.server;
 
 import java.util.Set;
 
 import com.pyx4j.commons.Key;
+import com.pyx4j.security.shared.Behavior;
 
 public interface AclRevalidator {
 
     /**
      * Find changes in user credentials.
-     * 
+     *
      * @param principalPrimaryKey
      * @param aclTimeStamp
      * @return null if the user is no-longer active;currentBehaviours if no changes are required
      */
     public Set<Behavior> getCurrentBehaviours(Key principalPrimaryKey, Set<Behavior> currentBehaviours, long aclTimeStamp);
+
+    public void reAuthorizeCurrentVisit(Set<Behavior> behaviours);
 
 }

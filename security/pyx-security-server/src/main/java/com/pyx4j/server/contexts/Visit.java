@@ -47,7 +47,7 @@ public class Visit implements Serializable {
 
     protected long aclRevalidationTimeStamp;
 
-    private static final long aclRevalidationDelayMillis = 4 * Consts.MIN2MSEC;
+    private static final long aclRevalidationDelayMillis = 1 * Consts.MIN2MSEC;
 
     private final Hashtable<String, Serializable> attributes;
 
@@ -191,7 +191,7 @@ public class Visit implements Serializable {
 
     /**
      * This only guards RPC Requests for now.
-     * 
+     *
      * @return
      */
     public ReadWriteLock getSessionGuardLock() {

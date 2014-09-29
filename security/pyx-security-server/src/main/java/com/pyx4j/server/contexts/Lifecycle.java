@@ -47,7 +47,7 @@ import com.pyx4j.rpc.shared.RemoteService;
 import com.pyx4j.security.rpc.AuthorizationChangedSystemNotification;
 import com.pyx4j.security.rpc.AuthorizationChangedSystemNotification.ChangeType;
 import com.pyx4j.security.server.AclCreatorAllowAll;
-import com.pyx4j.security.shared.AclRevalidator;
+import com.pyx4j.security.server.AclRevalidator;
 import com.pyx4j.security.shared.Behavior;
 import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.security.shared.UserVisit;
@@ -72,40 +72,47 @@ public class Lifecycle {
                 throw new RuntimeException("namespace access error");
             }
             ServerContext.setVisit(visit);
-            String clientAclTimeStamp = httprequest.getHeader(RemoteService.SESSION_ACL_TIMESTAMP_HEADER);
+
             if ((visit != null) && visit.isUserLoggedIn()) {
                 LoggerConfig.mdcPut(LoggerConfig.MDC_userID, visit.getUserVisit().toString());
-                if (visit.isAclRevalidationRequired(clientAclTimeStamp)) {
-                    AclRevalidator acv = ServerSideConfiguration.instance().getAclRevalidator();
-                    if (acv != null) {
-                        Set<Behavior> behaviours = acv.getCurrentBehaviours(visit.getUserVisit().getPrincipalPrimaryKey(), visit.getAcl().getBehaviours(),
-                                visit.getAclTimeStamp());
-                        if (behaviours == null) {
-                            endSession(session);
-                            ServerContext.addResponseSystemNotification(new AuthorizationChangedSystemNotification(ChangeType.sessionTerminated));
-                        } else {
-                            Set<Behavior> assignedBehaviours = SecurityController.instance().getAllBehaviors(behaviours);
-                            if (!EqualsHelper.equals(assignedBehaviours, visit.getAcl().getBehaviours())) {
-                                log.info("AuthorizationChanged {} -> {}", visit.getAcl().getBehaviours(), assignedBehaviours);
-                                visit.beginSession(visit.getUserVisit(), SecurityController.instance().authorize(behaviours));
-                                visit.setAclChanged(true);
-                                ServerContext.addResponseSystemNotification(new AuthorizationChangedSystemNotification(ChangeType.behavioursChanged));
-                            } else {
-                                if ((clientAclTimeStamp != null) && (visit.getAclTimeStamp() != Long.parseLong(clientAclTimeStamp))) {
-                                    log.info("AuthorizationChanged client needs sync {}", visit.getAcl().getBehaviours());
-                                    ServerContext.addResponseSystemNotification(new AuthorizationChangedSystemNotification(ChangeType.syncRequired));
-                                }
-                                visit.aclRevalidated();
-                            }
-                        }
-                    }
-                }
+                revalidateAclIfRequired();
             }
+
         }
 
         //log.debug("beginRequest, took {}ms", (int) (System.nanoTime() - start) / Consts.MSEC2NANO);
         for (LifecycleListener lifecycleListener : ServerSideConfiguration.instance().getLifecycleListeners()) {
             lifecycleListener.onRequestBegin();
+        }
+    }
+
+    public static void revalidateAclIfRequired() {
+        Visit visit = ServerContext.getVisit();
+        if ((visit != null) && visit.isUserLoggedIn()) {
+            String clientAclTimeStamp = ServerContext.getRequestHeader(RemoteService.SESSION_ACL_TIMESTAMP_HEADER);
+            if (visit.isAclRevalidationRequired(clientAclTimeStamp)) {
+                AclRevalidator acv = ServerSideConfiguration.instance().getAclRevalidator();
+                if (acv != null) {
+                    Set<Behavior> behaviours = acv.getCurrentBehaviours(visit.getUserVisit().getPrincipalPrimaryKey(), visit.getAcl().getBehaviours(),
+                            visit.getAclTimeStamp());
+                    if (behaviours == null) {
+                        endSession();
+                        ServerContext.addResponseSystemNotification(new AuthorizationChangedSystemNotification(ChangeType.sessionTerminated));
+                    } else {
+                        Set<Behavior> assignedBehaviours = SecurityController.instance().getAllBehaviors(behaviours);
+                        if (!EqualsHelper.equals(assignedBehaviours, visit.getAcl().getBehaviours())) {
+                            log.info("AuthorizationChanged {} -> {}", visit.getAcl().getBehaviours(), assignedBehaviours);
+                            acv.reAuthorizeCurrentVisit(behaviours);
+                        } else {
+                            if ((clientAclTimeStamp != null) && (visit.getAclTimeStamp() != Long.parseLong(clientAclTimeStamp))) {
+                                log.info("AuthorizationChanged client needs sync {}", visit.getAcl().getBehaviours());
+                                ServerContext.addResponseSystemNotification(new AuthorizationChangedSystemNotification(ChangeType.syncRequired));
+                            }
+                            visit.aclRevalidated();
+                        }
+                    }
+                }
+            }
         }
     }
 
@@ -226,7 +233,7 @@ public class Lifecycle {
             beginSession(newSession);
 
             if (userVisit != null) {
-                //"Guessed User name" org.apache.catalina.manager.util.SessionUtils 
+                //"Guessed User name" org.apache.catalina.manager.util.SessionUtils
                 newSession.setAttribute("User", userVisit);
             }
         }

@@ -52,6 +52,7 @@ import com.pyx4j.security.rpc.UserVisitChangedSystemNotification;
 import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.security.shared.SecurityViolationException;
 import com.pyx4j.security.shared.UserVisit;
+import com.pyx4j.server.contexts.Lifecycle;
 import com.pyx4j.server.contexts.ServerContext;
 import com.pyx4j.server.contexts.Visit;
 
@@ -150,6 +151,8 @@ public class RemoteServiceImpl implements RemoteService {
                         returnValue = li.previous().filterOutgoing(clazz, returnValue);
                     }
                 }
+
+                Lifecycle.revalidateAclIfRequired();
 
                 // Ignores the case when user visit was created in this request.
                 if ((userVisit != null) && ((userVisit.isChanged() || (!String.valueOf(userVisit.hashCode()).equals(userVisitHashCode))))) {

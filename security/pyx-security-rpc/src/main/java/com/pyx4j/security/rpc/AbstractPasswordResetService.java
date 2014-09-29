@@ -23,6 +23,7 @@ package com.pyx4j.security.rpc;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.rpc.shared.IService;
+import com.pyx4j.rpc.shared.VoidSerializable;
 
 public interface AbstractPasswordResetService extends IService {
 
@@ -31,5 +32,5 @@ public interface AbstractPasswordResetService extends IService {
     /**
      * Expects new password for current user.
      */
-    public void resetPassword(AsyncCallback<AuthenticationResponse> callback, PasswordChangeRequest request);
+    public void resetPassword(AsyncCallback<VoidSerializable> callback, PasswordChangeRequest request);
 }
