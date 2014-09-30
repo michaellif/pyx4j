@@ -38,6 +38,10 @@ public interface OnlineApplicationFacade {
 
     void cancelMasterOnlineApplication(MasterOnlineApplication masterOnlineApplication);
 
+    void submitOnlineApplication(OnlineApplication application);
+
+    void resendInvitationEmail(LeaseTermParticipant<?> leaseParticipant);
+
     List<OnlineApplication> getOnlineApplications(CustomerUser customerUser);
 
     Collection<PortalProspectBehavior> getOnlineApplicationBehavior(OnlineApplication applicationId);
@@ -46,12 +50,9 @@ public interface OnlineApplicationFacade {
 
     List<SignedOnlineApplicationConfirmationTerm> getOnlineApplicationConfirmationTerms(OnlineApplication application);
 
-    void submitOnlineApplication(OnlineApplication application);
-
-    void resendInvitationEmail(LeaseTermParticipant<?> leaseParticipant);
+    Building getOnlineApplicationPolicyNode(OnlineApplication app);
 
     MasterOnlineApplicationStatus calculateOnlineApplicationStatus(MasterOnlineApplication masterOnlineApplication);
 
-    Building getOnlineApplicationPolicyNode(OnlineApplication app);
-
+    void initOnlineApplicationFeeData(MasterOnlineApplication masterOnlineApplication);
 }

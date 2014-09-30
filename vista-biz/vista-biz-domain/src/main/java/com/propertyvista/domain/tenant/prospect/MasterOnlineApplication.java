@@ -13,6 +13,7 @@
  */
 package com.propertyvista.domain.tenant.prospect;
 
+import java.math.BigDecimal;
 import java.util.Collection;
 import java.util.EnumSet;
 
@@ -20,6 +21,9 @@ import javax.xml.bind.annotation.XmlType;
 
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.annotations.Detached;
+import com.pyx4j.entity.annotations.Editor;
+import com.pyx4j.entity.annotations.Editor.EditorType;
+import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.Owner;
@@ -31,6 +35,7 @@ import com.pyx4j.entity.core.ISet;
 import com.pyx4j.i18n.annotations.I18n;
 import com.pyx4j.i18n.shared.I18nEnum;
 
+import com.propertyvista.domain.policy.policies.ProspectPortalPolicy.FeePayment;
 import com.propertyvista.domain.property.asset.Floorplan;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.tenant.lease.LeaseApplication;
@@ -84,6 +89,14 @@ public interface MasterOnlineApplication extends IEntity {
 
     @Detached
     Floorplan ilsFloorplan();
+
+    // -----------------------------------------------
+    // Application fee:
+    IPrimitive<FeePayment> feePayment();
+
+    @Format("#,##0.00")
+    @Editor(type = EditorType.moneylabel)
+    IPrimitive<BigDecimal> feeAmount();
 
     // -----------------------------------------------
 

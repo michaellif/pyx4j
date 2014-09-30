@@ -36,6 +36,7 @@ import com.propertyvista.biz.communication.CommunicationFacade;
 import com.propertyvista.biz.policy.PolicyFacade;
 import com.propertyvista.biz.tenant.lease.LeaseFacade;
 import com.propertyvista.domain.policy.policies.LeaseApplicationLegalPolicy;
+import com.propertyvista.domain.policy.policies.ProspectPortalPolicy;
 import com.propertyvista.domain.policy.policies.domain.LeaseApplicationConfirmationTerm;
 import com.propertyvista.domain.policy.policies.domain.LeaseApplicationLegalTerm;
 import com.propertyvista.domain.policy.policies.domain.LeaseApplicationLegalTerm.TargetRole;
@@ -67,12 +68,76 @@ public class OnlineApplicationFacadeImpl implements OnlineApplicationFacade {
     private static final I18n i18n = I18n.get(OnlineApplicationFacadeImpl.class);
 
     @Override
+    public void prospectSignUp(ProspectSignUp request) {
+        // Minimal Validation first
+        Validate.isFalse(request.firstName().isNull(), "First name required");
+        Validate.isFalse(request.lastName().isNull(), "Last name required");
+        Validate.isFalse(request.email().isNull(), "Email required");
+
+        request.email().setValue(EmailValidator.normalizeEmailAddress(request.email().getValue()));
+        {
+            EntityQueryCriteria<CustomerUser> criteria = EntityQueryCriteria.create(CustomerUser.class);
+            criteria.eq(criteria.proto().email(), request.email());
+            if (Persistence.service().count(criteria) > 0) {
+                throw new UserRuntimeException(true, i18n.tr("E-mail address already registered, please login to your account"));
+            }
+        }
+        // Validate Building and floorplan
+        Building building;
+        Floorplan floorplan = null;
+        AptUnit unit = null;
+        {
+            EntityQueryCriteria<Building> criteria = EntityQueryCriteria.create(Building.class);
+            criteria.eq(criteria.proto().propertyCode(), request.ilsBuildingId());
+            criteria.eq(criteria.proto().suspended(), false);
+            building = Persistence.service().retrieve(criteria);
+            Validate.notNull(building, "building {0} required or not found", request.ilsBuildingId());
+        }
+        if (!request.ilsFloorplanId().isNull()) {
+            EntityQueryCriteria<Floorplan> criteria = EntityQueryCriteria.create(Floorplan.class);
+            criteria.eq(criteria.proto().name(), request.ilsFloorplanId());
+            criteria.eq(criteria.proto().building(), building);
+            floorplan = Persistence.service().retrieve(criteria);
+        }
+        if (!request.ilsUnitId().isNull()) {
+            EntityQueryCriteria<AptUnit> criteria = EntityQueryCriteria.create(AptUnit.class);
+            criteria.eq(criteria.proto().info().number(), request.ilsUnitId());
+            criteria.eq(criteria.proto().building(), building);
+            unit = Persistence.service().retrieve(criteria);
+            Validate.notNull(unit, "unit {0} {1} not found", request.ilsBuildingId(), request.ilsUnitId());
+        }
+
+        //Start application creation
+        Lease lease = ServerSideFactory.create(LeaseFacade.class).create(Status.Application);
+        if (unit != null) {
+            ServerSideFactory.create(LeaseFacade.class).setUnit(lease, unit);
+        }
+
+        LeaseTermTenant mainTenant = lease.currentTerm().version().tenants().$();
+        lease.currentTerm().version().tenants().add(mainTenant);
+
+        mainTenant.leaseParticipant().customer().person().name().firstName().setValue(request.firstName().getValue());
+        mainTenant.leaseParticipant().customer().person().name().middleName().setValue(request.middleName().getValue());
+        mainTenant.leaseParticipant().customer().person().name().lastName().setValue(request.lastName().getValue());
+        mainTenant.leaseParticipant().customer().person().email().setValue(request.email().getValue());
+
+        mainTenant.role().setValue(LeaseTermParticipant.Role.Applicant);
+
+        ServerSideFactory.create(LeaseFacade.class).persist(lease);
+
+        ServerSideFactory.create(LeaseFacade.class).createMasterOnlineApplication(lease, building, floorplan);
+
+        ServerSideFactory.create(CustomerFacade.class).setCustomerPassword(mainTenant.leaseParticipant().customer(), request.password().getValue());
+    }
+
+    @Override
     public void createMasterOnlineApplication(MasterOnlineApplication masterOnlineApplication, Building building, Floorplan floorplan) {
         Persistence.ensureRetrieve(masterOnlineApplication, AttachLevel.Attached);
 
         masterOnlineApplication.status().setValue(MasterOnlineApplication.Status.Incomplete);
         masterOnlineApplication.ilsBuilding().set(building);
         masterOnlineApplication.ilsFloorplan().set(floorplan);
+        initOnlineApplicationFeeData(masterOnlineApplication);
         Persistence.service().persist(masterOnlineApplication);
 
         for (LeaseTermTenant tenant : masterOnlineApplication.leaseApplication().lease().currentTerm().version().tenants()) {
@@ -115,6 +180,79 @@ public class OnlineApplicationFacadeImpl implements OnlineApplicationFacade {
 
             Persistence.service().persist(masterOnlineApplication);
         }
+    }
+
+    @Override
+    public void submitOnlineApplication(OnlineApplication application) {
+        application.status().setValue(OnlineApplication.Status.Submitted);
+        Persistence.service().merge(application);
+
+        // TODO: update behavior somehow:
+        //            CustomerUser user = application.customer().user();
+        //            CustomerUserCredential credential = Persistence.service().retrieve(CustomerUserCredential.class, user.getPrimaryKey());
+        //            boolean isApplicant = false;
+        //            boolean isCoApplicant = false;
+        //            boolean isGuarantor = false;
+        //
+        //        boolean isApplicant = credential.behaviors().contains(VistaCustomerBehavior.ProspectiveApplicant);
+        //        boolean isCoApplicant = credential.behaviors().contains(VistaCustomerBehavior.ProspectiveCoApplicant);
+        //        boolean isGuarantor = credential.behaviors().contains(VistaCustomerBehavior.Guarantor);
+        //
+        //        credential.behaviors().clear();
+        //        credential.behaviors().add(VistaCustomerBehavior.ProspectiveSubmitted);
+        //        if (isApplicant) {
+        //            credential.behaviors().add(VistaCustomerBehavior.ProspectiveSubmittedApplicant);
+        //        } else if (isGuarantor) {
+        //            credential.behaviors().add(VistaCustomerBehavior.GuarantorSubmitted);
+        //        } else if (isCoApplicant) {
+        //            credential.behaviors().add(VistaCustomerBehavior.ProspectiveSubmittedCoApplicant);
+        //        }
+        //            Persistence.service().persist(credential);
+
+        MasterOnlineApplication ma = application.masterOnlineApplication();
+        Persistence.service().retrieve(ma);
+        Persistence.service().retrieve(ma.leaseApplication().lease());
+        ma.leaseApplication().lease().currentTerm()
+                .set(Persistence.service().retrieve(LeaseTerm.class, ma.leaseApplication().lease().currentTerm().getPrimaryKey().asDraftKey()));
+
+        // Invite customers:
+        switch (application.role().getValue()) {
+        case Applicant:
+            inviteCoApplicants(ma.leaseApplication().lease());
+            inviteGuarantors(ma.leaseApplication().lease(), application.customer());
+            break;
+        case CoApplicant:
+            inviteGuarantors(ma.leaseApplication().lease(), application.customer());
+            break;
+        case Guarantor:
+            break;
+        }
+
+        // check application completeness:
+        // Load again since new applications may have been added.
+        Persistence.service().retrieve(ma);
+        boolean allApplicationsSubmited = true;
+        Persistence.service().retrieve(ma.applications());
+
+        for (OnlineApplication app : ma.applications()) {
+            if (app.status().getValue() != OnlineApplication.Status.Submitted) {
+                allApplicationsSubmited = false;
+                break;
+            }
+        }
+        if (allApplicationsSubmited) {
+            ma.status().setValue(MasterOnlineApplication.Status.Submitted);
+            Persistence.service().merge(ma);
+
+            ma.leaseApplication().status().setValue(LeaseApplication.Status.Submitted);
+            Persistence.service().merge(ma.leaseApplication());
+        }
+    }
+
+    @Override
+    public void resendInvitationEmail(LeaseTermParticipant leaseParticipant) {
+        // TODO Auto-generated method stub
+
     }
 
     @Override
@@ -179,76 +317,59 @@ public class OnlineApplicationFacadeImpl implements OnlineApplicationFacade {
     }
 
     @Override
-    public void submitOnlineApplication(OnlineApplication application) {
-        application.status().setValue(OnlineApplication.Status.Submitted);
-        Persistence.service().merge(application);
+    public List<SignedOnlineApplicationLegalTerm> getOnlineApplicationLegalTerms(OnlineApplication app) {
+        Building policyNode = getOnlineApplicationPolicyNode(app);
 
-// TODO: update behavior somehow:
-//            CustomerUser user = application.customer().user();
-//            CustomerUserCredential credential = Persistence.service().retrieve(CustomerUserCredential.class, user.getPrimaryKey());
-//            boolean isApplicant = false;
-//            boolean isCoApplicant = false;
-//            boolean isGuarantor = false;
-//
-//        boolean isApplicant = credential.behaviors().contains(VistaCustomerBehavior.ProspectiveApplicant);
-//        boolean isCoApplicant = credential.behaviors().contains(VistaCustomerBehavior.ProspectiveCoApplicant);
-//        boolean isGuarantor = credential.behaviors().contains(VistaCustomerBehavior.Guarantor);
-//
-//        credential.behaviors().clear();
-//        credential.behaviors().add(VistaCustomerBehavior.ProspectiveSubmitted);
-//        if (isApplicant) {
-//            credential.behaviors().add(VistaCustomerBehavior.ProspectiveSubmittedApplicant);
-//        } else if (isGuarantor) {
-//            credential.behaviors().add(VistaCustomerBehavior.GuarantorSubmitted);
-//        } else if (isCoApplicant) {
-//            credential.behaviors().add(VistaCustomerBehavior.ProspectiveSubmittedCoApplicant);
-//        }
-//            Persistence.service().persist(credential);
-
-        MasterOnlineApplication ma = application.masterOnlineApplication();
-        Persistence.service().retrieve(ma);
-        Persistence.service().retrieve(ma.leaseApplication().lease());
-        ma.leaseApplication().lease().currentTerm()
-                .set(Persistence.service().retrieve(LeaseTerm.class, ma.leaseApplication().lease().currentTerm().getPrimaryKey().asDraftKey()));
-
-        // Invite customers:
-        switch (application.role().getValue()) {
-        case Applicant:
-            inviteCoApplicants(ma.leaseApplication().lease());
-            inviteGuarantors(ma.leaseApplication().lease(), application.customer());
-            break;
-        case CoApplicant:
-            inviteGuarantors(ma.leaseApplication().lease(), application.customer());
-            break;
-        case Guarantor:
-            break;
-        }
-
-        // check application completeness:
-        // Load again since new applications may have been added.
-        Persistence.service().retrieve(ma);
-        boolean allApplicationsSubmited = true;
-        Persistence.service().retrieve(ma.applications());
-
-        for (OnlineApplication app : ma.applications()) {
-            if (app.status().getValue() != OnlineApplication.Status.Submitted) {
-                allApplicationsSubmited = false;
-                break;
+        LeaseApplicationLegalPolicy leaseApplicationPolicy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(policyNode,
+                LeaseApplicationLegalPolicy.class);
+        List<SignedOnlineApplicationLegalTerm> terms = new ArrayList<SignedOnlineApplicationLegalTerm>();
+        for (LeaseApplicationLegalTerm term : leaseApplicationPolicy.legalTerms()) {
+            TargetRole termRole = term.applyToRole().getValue();
+            if (termRole.matchesApplicationRole(app.role().getValue())) {
+                SignedOnlineApplicationLegalTerm signedTerm = EntityFactory.create(SignedOnlineApplicationLegalTerm.class);
+                signedTerm.term().set(term);
+                signedTerm.signature().signatureFormat().set(term.signatureFormat());
+                terms.add(signedTerm);
             }
         }
-        if (allApplicationsSubmited) {
-            ma.status().setValue(MasterOnlineApplication.Status.Submitted);
-            Persistence.service().merge(ma);
-
-            ma.leaseApplication().status().setValue(LeaseApplication.Status.Submitted);
-            Persistence.service().merge(ma.leaseApplication());
-        }
+        return terms;
     }
 
     @Override
-    public void resendInvitationEmail(LeaseTermParticipant leaseParticipant) {
-        // TODO Auto-generated method stub
+    public List<SignedOnlineApplicationConfirmationTerm> getOnlineApplicationConfirmationTerms(OnlineApplication app) {
+        Building building = getOnlineApplicationPolicyNode(app);
 
+        List<SignedOnlineApplicationConfirmationTerm> terms = new ArrayList<SignedOnlineApplicationConfirmationTerm>();
+
+        LeaseApplicationLegalPolicy leaseApplicationPolicy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(building,
+                LeaseApplicationLegalPolicy.class);
+        for (LeaseApplicationConfirmationTerm term : leaseApplicationPolicy.confirmationTerms()) {
+            TargetRole termRole = term.applyToRole().getValue();
+            if (termRole.matchesApplicationRole(app.role().getValue())) {
+                SignedOnlineApplicationConfirmationTerm signedTerm = EntityFactory.create(SignedOnlineApplicationConfirmationTerm.class);
+                signedTerm.term().set(term);
+                signedTerm.signature().signatureFormat().set(term.signatureFormat());
+                terms.add(signedTerm);
+            }
+        }
+        return terms;
+    }
+
+    @Override
+    public Building getOnlineApplicationPolicyNode(OnlineApplication app) {
+        Building building;
+        {
+            EntityQueryCriteria<Building> criteria = EntityQueryCriteria.create(Building.class);
+            criteria.eq(criteria.proto().units().$().leases().$().leaseApplication().onlineApplication(), app.masterOnlineApplication());
+            building = Persistence.service().retrieve(criteria, AttachLevel.IdOnly);
+        }
+        if (building != null) {
+            return building;
+        } else {
+            // Case of ILS link
+            Persistence.ensureRetrieve(app.masterOnlineApplication(), AttachLevel.Attached);
+            return app.masterOnlineApplication().ilsBuilding();
+        }
     }
 
     @Override
@@ -294,6 +415,21 @@ public class OnlineApplicationFacadeImpl implements OnlineApplicationFacade {
     }
 
     // implementation internals
+
+    @Override
+    public void initOnlineApplicationFeeData(MasterOnlineApplication masterOnlineApplication) {
+        Building building = masterOnlineApplication.ilsBuilding().duplicate();
+
+        if (building == null) {
+            Persistence.ensureRetrieve(masterOnlineApplication.leaseApplication().lease().unit().building(), AttachLevel.IdOnly);
+            building = masterOnlineApplication.leaseApplication().lease().unit().building();
+        }
+        if (building != null) {
+            ProspectPortalPolicy policy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(building, ProspectPortalPolicy.class);
+            masterOnlineApplication.feePayment().setValue(policy.feePayment().getValue());
+            masterOnlineApplication.feeAmount().setValue(policy.feeAmount().getValue());
+        }
+    }
 
     private BigDecimal calculateProgress(OnlineApplication app) {
         switch (app.status().getValue()) {
@@ -368,124 +504,5 @@ public class OnlineApplicationFacadeImpl implements OnlineApplicationFacade {
         Persistence.service().persist(app);
 
         return app;
-    }
-
-    @Override
-    public void prospectSignUp(ProspectSignUp request) {
-        // Minimal Validation first
-        Validate.isFalse(request.firstName().isNull(), "First name required");
-        Validate.isFalse(request.lastName().isNull(), "Last name required");
-        Validate.isFalse(request.email().isNull(), "Email required");
-
-        request.email().setValue(EmailValidator.normalizeEmailAddress(request.email().getValue()));
-        {
-            EntityQueryCriteria<CustomerUser> criteria = EntityQueryCriteria.create(CustomerUser.class);
-            criteria.eq(criteria.proto().email(), request.email());
-            if (Persistence.service().count(criteria) > 0) {
-                throw new UserRuntimeException(true, i18n.tr("E-mail address already registered, please login to your account"));
-            }
-        }
-        // Validate Building and floorplan
-        Building building;
-        Floorplan floorplan = null;
-        AptUnit unit = null;
-        {
-            EntityQueryCriteria<Building> criteria = EntityQueryCriteria.create(Building.class);
-            criteria.eq(criteria.proto().propertyCode(), request.ilsBuildingId());
-            criteria.eq(criteria.proto().suspended(), false);
-            building = Persistence.service().retrieve(criteria);
-            Validate.notNull(building, "building {0} required or not found", request.ilsBuildingId());
-        }
-        if (!request.ilsFloorplanId().isNull()) {
-            EntityQueryCriteria<Floorplan> criteria = EntityQueryCriteria.create(Floorplan.class);
-            criteria.eq(criteria.proto().name(), request.ilsFloorplanId());
-            criteria.eq(criteria.proto().building(), building);
-            floorplan = Persistence.service().retrieve(criteria);
-        }
-        if (!request.ilsUnitId().isNull()) {
-            EntityQueryCriteria<AptUnit> criteria = EntityQueryCriteria.create(AptUnit.class);
-            criteria.eq(criteria.proto().info().number(), request.ilsUnitId());
-            criteria.eq(criteria.proto().building(), building);
-            unit = Persistence.service().retrieve(criteria);
-            Validate.notNull(unit, "unit {0} {1} not found", request.ilsBuildingId(), request.ilsUnitId());
-        }
-
-        //Start application creation
-        Lease lease = ServerSideFactory.create(LeaseFacade.class).create(Status.Application);
-        if (unit != null) {
-            ServerSideFactory.create(LeaseFacade.class).setUnit(lease, unit);
-        }
-
-        LeaseTermTenant mainTenant = lease.currentTerm().version().tenants().$();
-        lease.currentTerm().version().tenants().add(mainTenant);
-
-        mainTenant.leaseParticipant().customer().person().name().firstName().setValue(request.firstName().getValue());
-        mainTenant.leaseParticipant().customer().person().name().middleName().setValue(request.middleName().getValue());
-        mainTenant.leaseParticipant().customer().person().name().lastName().setValue(request.lastName().getValue());
-        mainTenant.leaseParticipant().customer().person().email().setValue(request.email().getValue());
-
-        mainTenant.role().setValue(LeaseTermParticipant.Role.Applicant);
-
-        ServerSideFactory.create(LeaseFacade.class).persist(lease);
-
-        ServerSideFactory.create(LeaseFacade.class).createMasterOnlineApplication(lease, building, floorplan);
-
-        ServerSideFactory.create(CustomerFacade.class).setCustomerPassword(mainTenant.leaseParticipant().customer(), request.password().getValue());
-    }
-
-    @Override
-    public Building getOnlineApplicationPolicyNode(OnlineApplication app) {
-        Building building;
-        {
-            EntityQueryCriteria<Building> criteria = EntityQueryCriteria.create(Building.class);
-            criteria.eq(criteria.proto().units().$().leases().$().leaseApplication().onlineApplication(), app.masterOnlineApplication());
-            building = Persistence.service().retrieve(criteria, AttachLevel.IdOnly);
-        }
-        if (building != null) {
-            return building;
-        } else {
-            // Case of ILS link
-            Persistence.ensureRetrieve(app.masterOnlineApplication(), AttachLevel.Attached);
-            return app.masterOnlineApplication().ilsBuilding();
-        }
-    }
-
-    @Override
-    public List<SignedOnlineApplicationLegalTerm> getOnlineApplicationLegalTerms(OnlineApplication app) {
-        Building policyNode = getOnlineApplicationPolicyNode(app);
-
-        LeaseApplicationLegalPolicy leaseApplicationPolicy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(policyNode,
-                LeaseApplicationLegalPolicy.class);
-        List<SignedOnlineApplicationLegalTerm> terms = new ArrayList<SignedOnlineApplicationLegalTerm>();
-        for (LeaseApplicationLegalTerm term : leaseApplicationPolicy.legalTerms()) {
-            TargetRole termRole = term.applyToRole().getValue();
-            if (termRole.matchesApplicationRole(app.role().getValue())) {
-                SignedOnlineApplicationLegalTerm signedTerm = EntityFactory.create(SignedOnlineApplicationLegalTerm.class);
-                signedTerm.term().set(term);
-                signedTerm.signature().signatureFormat().set(term.signatureFormat());
-                terms.add(signedTerm);
-            }
-        }
-        return terms;
-    }
-
-    @Override
-    public List<SignedOnlineApplicationConfirmationTerm> getOnlineApplicationConfirmationTerms(OnlineApplication app) {
-        Building building = getOnlineApplicationPolicyNode(app);
-
-        List<SignedOnlineApplicationConfirmationTerm> terms = new ArrayList<SignedOnlineApplicationConfirmationTerm>();
-
-        LeaseApplicationLegalPolicy leaseApplicationPolicy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(building,
-                LeaseApplicationLegalPolicy.class);
-        for (LeaseApplicationConfirmationTerm term : leaseApplicationPolicy.confirmationTerms()) {
-            TargetRole termRole = term.applyToRole().getValue();
-            if (termRole.matchesApplicationRole(app.role().getValue())) {
-                SignedOnlineApplicationConfirmationTerm signedTerm = EntityFactory.create(SignedOnlineApplicationConfirmationTerm.class);
-                signedTerm.term().set(term);
-                signedTerm.signature().signatureFormat().set(term.signatureFormat());
-                terms.add(signedTerm);
-            }
-        }
-        return terms;
     }
 }
