@@ -35,6 +35,9 @@ class TestYardiConnectionDeferredProcess extends AbstractDeferredProcess {
 
     @Override
     public void execute() {
+        if (!credential.enabled().getValue(false)) {
+
+        }
         ServerSideFactory.create(YardiOperationsFacade.class).verifyInterface(credential, result);
         completed = true;
     }

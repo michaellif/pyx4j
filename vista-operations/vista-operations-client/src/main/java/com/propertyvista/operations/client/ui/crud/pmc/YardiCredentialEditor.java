@@ -53,6 +53,7 @@ class YardiCredentialEditor extends CForm<PmcYardiCredential> {
         formPanel.h1(i18n.tr("Yardi Credentials"));
         formPanel.append(Location.Left, proto().updated()).decorate();
         formPanel.append(Location.Right, proto().created()).decorate();
+        formPanel.append(Location.Dual, proto().enabled()).decorate();
         formPanel.append(Location.Dual, proto().serviceURLBase()).decorate();
         formPanel.append(Location.Dual, proto().residentTransactionsServiceURL()).decorate();
         formPanel.append(Location.Dual, proto().sysBatchServiceURL()).decorate();

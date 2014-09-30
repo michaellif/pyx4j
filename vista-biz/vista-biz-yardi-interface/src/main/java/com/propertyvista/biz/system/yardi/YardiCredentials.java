@@ -16,7 +16,9 @@ package com.propertyvista.biz.system.yardi;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.pyx4j.commons.UserRuntimeException;
 import com.pyx4j.config.server.ServerSideFactory;
+import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.biz.system.encryption.PasswordEncryptorFacade;
 import com.propertyvista.config.VistaDeployment;
@@ -24,6 +26,10 @@ import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.settings.PmcYardiCredential;
 
 public class YardiCredentials {
+
+    private static I18n i18n = I18n.get(YardiCredentials.class);
+
+    private static final String YARDI_CREDENTIALS_ERROR = "No available Yardi connection found. Please check Yardi settings.";
 
     private static ThreadLocal<List<PmcYardiCredential>> ycCache = new ThreadLocal<>();
 
@@ -33,11 +39,11 @@ public class YardiCredentials {
             return retrieveCredential(building);
         } else {
             for (PmcYardiCredential yc : ycCache.get()) {
-                if (yc.getPrimaryKey().equals(building.integrationSystemId().getValue())) {
+                if (yc.getPrimaryKey().equals(building.integrationSystemId().getValue()) && yc.enabled().getValue(false)) {
                     return yc;
                 }
             }
-            return null;
+            throw new UserRuntimeException(i18n.tr(YARDI_CREDENTIALS_ERROR));
         }
     }
 
@@ -60,12 +66,19 @@ public class YardiCredentials {
 
     private static PmcYardiCredential retrieveCredential(Building building) {
         PmcYardiCredential yc = VistaDeployment.getPmcYardiCredential(building);
+        if (yc == null) {
+            throw new UserRuntimeException(i18n.tr(YARDI_CREDENTIALS_ERROR));
+        }
+
         yc.password().number().setValue(ServerSideFactory.create(PasswordEncryptorFacade.class).decryptPassword(yc.password()));
         return yc;
     }
 
     private static List<PmcYardiCredential> retrieveCredentials() {
         List<PmcYardiCredential> ycList = VistaDeployment.getPmcYardiCredentials();
+        if (ycList == null || ycList.isEmpty()) {
+            throw new UserRuntimeException(i18n.tr(YARDI_CREDENTIALS_ERROR));
+        }
         for (PmcYardiCredential yc : ycList) {
             yc.password().number().setValue(ServerSideFactory.create(PasswordEncryptorFacade.class).decryptPassword(yc.password()));
         }

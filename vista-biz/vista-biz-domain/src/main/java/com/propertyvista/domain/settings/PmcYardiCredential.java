@@ -62,6 +62,8 @@ public interface PmcYardiCredential extends IEntity {
     @Timestamp(Timestamp.Update.Updated)
     IPrimitive<Date> updated();
 
+    IPrimitive<Boolean> enabled();
+
     IPrimitive<String> serviceURLBase();
 
     IPrimitive<String> residentTransactionsServiceURL();

@@ -301,6 +301,9 @@ public class PmcCrudServiceImpl extends AbstractCrudServiceDtoImpl<Pmc, PmcDTO> 
 
     @Override
     public void testYardiConnectionDeferred(AsyncCallback<String> callback, PmcYardiCredential credential) {
+        if (!credential.enabled().getValue(false)) {
+            throw new UserRuntimeException("The Interface is disabled");
+        }
         if (!credential.password().newNumber().isNull()) {
             ServerSideFactory.create(PasswordEncryptorFacade.class).encryptPassword(credential.password(), credential.password().newNumber().getValue());
         } else if (credential.getPrimaryKey() != null) {
