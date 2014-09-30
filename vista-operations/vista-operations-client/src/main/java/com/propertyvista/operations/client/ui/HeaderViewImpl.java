@@ -23,10 +23,12 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.Button.ButtonMenuBar;
+import com.pyx4j.widgets.client.Button.SecureMenuItem;
 import com.pyx4j.widgets.client.Toolbar;
 
 import com.propertyvista.common.client.theme.SiteViewTheme;
 import com.propertyvista.operations.client.resources.OperationsImages;
+import com.propertyvista.operations.rpc.ac.UserSelfAccountAndSettings;
 
 public class HeaderViewImpl extends FlowPanel implements HeaderView {
 
@@ -109,12 +111,12 @@ public class HeaderViewImpl extends FlowPanel implements HeaderView {
         ButtonMenuBar userButtonMenu = new ButtonMenuBar();
         userButton.setMenu(userButtonMenu);
 
-        userButtonMenu.addItem(new MenuItem(i18n.tr("Account"), new Command() {
+        userButtonMenu.addItem(new SecureMenuItem(i18n.tr("Account"), new Command() {
             @Override
             public void execute() {
                 presenter.showAccount();
             }
-        }));
+        }, UserSelfAccountAndSettings.class));
 
         userButtonMenu.addItem(new MenuItem(i18n.tr("LogOut"), new Command() {
             @Override

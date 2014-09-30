@@ -16,7 +16,7 @@ package com.propertyvista.operations.server.security;
 import com.pyx4j.entity.security.EntityPermission;
 import com.pyx4j.gwt.rpc.deferred.DeferredProcessService;
 import com.pyx4j.rpc.shared.IServiceExecutePermission;
-import com.pyx4j.security.server.ServletContainerAclBuilder;
+import com.pyx4j.security.server.UIAclBuilder;
 
 import com.propertyvista.domain.marketing.PortalResidentMarketingTip;
 import com.propertyvista.domain.pmc.Pmc;
@@ -60,6 +60,7 @@ import com.propertyvista.operations.domain.security.OperationsUser;
 import com.propertyvista.operations.domain.security.OperationsUserCredential;
 import com.propertyvista.operations.domain.tenantsure.TenantSureSubscribers;
 import com.propertyvista.operations.domain.vista2pmc.OperationsAlert;
+import com.propertyvista.operations.rpc.ac.UserSelfAccountAndSettings;
 import com.propertyvista.operations.rpc.services.AdminPasswordChangeManagedService;
 import com.propertyvista.operations.rpc.services.AdminPasswordChangeUserService;
 import com.propertyvista.operations.rpc.services.AdminPasswordResetService;
@@ -116,13 +117,14 @@ import com.propertyvista.operations.rpc.services.simulator.SimulatedDataPreloadS
 import com.propertyvista.operations.rpc.services.tools.oapi.OapiXMLFileDownloadService;
 import com.propertyvista.operations.rpc.services.version.VistaTermsVersionService;
 
-public class VistaOperationsAccessControlList extends ServletContainerAclBuilder {
+public class VistaOperationsAccessControlList extends UIAclBuilder {
 
     public VistaOperationsAccessControlList() {
         grant(new IServiceExecutePermission(OperationsAuthenticationService.class));
         grant(VistaBasicBehavior.OperationsPasswordChangeRequired, new IServiceExecutePermission(AdminPasswordResetService.class));
 
         grant(VistaAccessGrantedBehavior.Operations, new OperationsUserAccountAccesRule(), OperationsUserCredential.class);
+        grant(VistaAccessGrantedBehavior.Operations, UserSelfAccountAndSettings.class);
 
         grant(VistaOperationsBehavior.SystemAdmin, new EntityPermission(Pmc.class, EntityPermission.ALL));
         grant(VistaOperationsBehavior.SystemAdmin, new IServiceExecutePermission(DeferredProcessService.class));
