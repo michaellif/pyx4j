@@ -64,7 +64,8 @@ SET search_path = '_admin_';
         -- admin_pmc_yardi_credential
         
         ALTER TABLE admin_pmc_yardi_credential  ADD COLUMN created TIMESTAMP,
-                                                ADD COLUMN updated TIMESTAMP;
+                                                ADD COLUMN updated TIMESTAMP,
+                                                ADD COLUMN enabled BOOLEAN;
                                                 
                                                 
         -- cards_clearance_record
@@ -145,7 +146,10 @@ SET search_path = '_admin_';
         ***     ============================================================================================================
         **/
 
-
+        -- admin_pmc_yardi_credential
+        
+        UPDATE  admin_pmc_yardi_credential
+        SET     enabled = TRUE;
        
 
         /**

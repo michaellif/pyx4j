@@ -25,10 +25,10 @@ BEGIN
         
         -- foreign keys
         
-        --ALTER TABLE aggregated_transfer$adjustments DROP CONSTRAINT aggregated_transfer$adjustments_owner_fk;
-        --ALTER TABLE aggregated_transfer$adjustments DROP CONSTRAINT aggregated_transfer$adjustments_value_fk;
-        --ALTER TABLE aggregated_transfer$chargebacks DROP CONSTRAINT aggregated_transfer$chargebacks_owner_fk;
-        --ALTER TABLE aggregated_transfer$chargebacks DROP CONSTRAINT aggregated_transfer$chargebacks_value_fk;
+        ALTER TABLE aggregated_transfer$adjustments DROP CONSTRAINT aggregated_transfer$adjustments_owner_fk;
+        ALTER TABLE aggregated_transfer$adjustments DROP CONSTRAINT aggregated_transfer$adjustments_value_fk;
+        ALTER TABLE aggregated_transfer$chargebacks DROP CONSTRAINT aggregated_transfer$chargebacks_owner_fk;
+        ALTER TABLE aggregated_transfer$chargebacks DROP CONSTRAINT aggregated_transfer$chargebacks_value_fk;
 
         
         /**
@@ -140,11 +140,17 @@ BEGIN
             id                              BIGINT              NOT NULL,
             lease_participant               BIGINT              NOT NULL,
             lease_participant_discriminator VARCHAR(50)         NOT NULL,
-            tp                              VARCHAR(50),
-            status                          VARCHAR(50)
+            tp                              VARCHAR(50)         NOT NULL,
+            status                          VARCHAR(50),
+                CONSTRAINT lease_participant_move_in_action_pk PRIMARY KEY(id)
         );
         
         ALTER TABLE lease_participant_move_in_action OWNER TO vista;
+        
+        -- master_online_application
+        
+        ALTER TABLE master_online_application   ADD COLUMN fee_payment VARCHAR(50),
+                                                ADD COLUMN fee_amount  NUMERIC(18,2);
         
         /**
         ***     =====================================================================================================
@@ -154,8 +160,34 @@ BEGIN
         ***     =====================================================================================================
         **/
         
+        -- aggregated_transfer_adjustment
         
+        EXECUTE 'UPDATE '||v_schema_name||'.aggregated_transfer_adjustment AS a '
+                ||'SET  aggregated_transfer = t.owner '
+                ||'FROM     '||v_schema_name||'.aggregated_transfer$adjustments AS t '
+                ||'WHERE    a.id = t.value ';
         
+         EXECUTE 'UPDATE '||v_schema_name||'.aggregated_transfer_adjustment AS a '
+                ||'SET  aggregated_transfer_discriminator = t.id_discriminator '
+                ||'FROM     '||v_schema_name||'.aggregated_transfer AS t '
+                ||'WHERE    t.id = a.aggregated_transfer ';
+        
+        -- aggregated_transfer_chargeback
+        
+        EXECUTE 'UPDATE '||v_schema_name||'.aggregated_transfer_chargeback AS c '
+                ||'SET  aggregated_transfer = t.owner '
+                ||'FROM     '||v_schema_name||'.aggregated_transfer$chargebacks AS t '
+                ||'WHERE    c.id = t.value ';
+        
+        EXECUTE 'UPDATE '||v_schema_name||'.aggregated_transfer_chargeback AS c '
+                ||'SET  aggregated_transfer_discriminator = t.id_discriminator '
+                ||'FROM     '||v_schema_name||'.aggregated_transfer AS t '
+                ||'WHERE    t.id = c.aggregated_transfer ';
+        
+        -- customer_screening_personal_asset
+        
+        EXECUTE 'UPDATE '||v_schema_name||'.customer_screening_personal_asset '
+                ||'SET  ownership = prcnt::numeric(18,2) ';
         
         /**
         ***     ==========================================================================================================
@@ -164,6 +196,20 @@ BEGIN
         ***
         ***     ==========================================================================================================
         **/
+        
+        --  aggregated_transfer$adjustments
+        
+        DROP TABLE aggregated_transfer$adjustments;
+        
+        
+        -- aggregated_transfer$chargebacks
+        
+        DROP TABLE aggregated_transfer$chargebacks;
+        
+        
+        -- customer_screening_personal_asset 
+        
+        ALTER TABLE customer_screening_personal_asset DROP COLUMN prcnt;
         
        
         /**
@@ -191,12 +237,32 @@ BEGIN
             REFERENCES lease_participant(id)  DEFERRABLE INITIALLY DEFERRED;
 
         
+        -- check constraints
+        
+        ALTER TABLE aggregated_transfer_adjustment ADD CONSTRAINT aggregated_transfer_adjustment_aggregated_transfer_discr_d_ck 
+            CHECK ((aggregated_transfer_discriminator) IN ('CardsAggregatedTransfer', 'EftAggregatedTransfer'));
+        ALTER TABLE aggregated_transfer_chargeback ADD CONSTRAINT aggregated_transfer_chargeback_aggregated_transfer_discr_d_ck 
+            CHECK ((aggregated_transfer_discriminator) IN ('CardsAggregatedTransfer', 'EftAggregatedTransfer'));
+        ALTER TABLE aggregated_transfer_non_vista_transaction ADD CONSTRAINT aggregated_transfer_non_vista_transaction_agg_tf_discr_d_ck 
+            CHECK ((agg_tf_discriminator) IN ('CardsAggregatedTransfer', 'EftAggregatedTransfer'));
+        ALTER TABLE aggregated_transfer_non_vista_transaction ADD CONSTRAINT aggregated_transfer_non_vista_transaction_card_type_e_ck 
+            CHECK ((card_type) IN ('MasterCard', 'Visa', 'VisaDebit'));
+        ALTER TABLE lease_participant_move_in_action ADD CONSTRAINT lease_participant_move_in_action_lease_participant_discr_d_ck 
+            CHECK ((lease_participant_discriminator) IN ('Guarantor', 'Tenant'));
+        ALTER TABLE lease_participant_move_in_action ADD CONSTRAINT lease_participant_move_in_action_status_e_ck 
+            CHECK ((status) IN ('completed', 'doItLater'));
+        ALTER TABLE lease_participant_move_in_action ADD CONSTRAINT lease_participant_move_in_action_tp_e_ck 
+            CHECK ((tp) IN ('autoPay', 'insurance'));
+        ALTER TABLE master_online_application ADD CONSTRAINT master_online_application_fee_payment_e_ck 
+            CHECK ((fee_payment) IN ('none', 'perApplicant', 'perLease'));
+
+        
         -- not null
         
-        -- ALTER TABLE aggregated_transfer_adjustment ALTER COLUMN aggregated_transfer SET NOT NULL;
-        -- ALTER TABLE aggregated_transfer_adjustment ALTER COLUMN aggregated_transfer_discriminator SET NOT NULL;
-        -- ALTER TABLE aggregated_transfer_chargeback ALTER COLUMN aggregated_transfer SET NOT NULL;
-        -- ALTER TABLE aggregated_transfer_chargeback ALTER COLUMN aggregated_transfer_discriminator SET NOT NULL;
+        ALTER TABLE aggregated_transfer_adjustment ALTER COLUMN aggregated_transfer SET NOT NULL;
+        ALTER TABLE aggregated_transfer_adjustment ALTER COLUMN aggregated_transfer_discriminator SET NOT NULL;
+        ALTER TABLE aggregated_transfer_chargeback ALTER COLUMN aggregated_transfer SET NOT NULL;
+        ALTER TABLE aggregated_transfer_chargeback ALTER COLUMN aggregated_transfer_discriminator SET NOT NULL;
         
         
         /**
@@ -207,6 +273,16 @@ BEGIN
         ***     ====================================================================================================
         **/
         
+        CREATE INDEX aggregated_transfer_adjustment_aggregated_transfer_discr_idx ON aggregated_transfer_adjustment USING btree (aggregated_transfer_discriminator);
+        CREATE INDEX aggregated_transfer_adjustment_aggregated_transfer_idx ON aggregated_transfer_adjustment USING btree (aggregated_transfer);
+        CREATE INDEX aggregated_transfer_chargeback_aggregated_transfer_discr_idx ON aggregated_transfer_chargeback USING btree (aggregated_transfer_discriminator);
+        CREATE INDEX aggregated_transfer_chargeback_aggregated_transfer_idx ON aggregated_transfer_chargeback USING btree (aggregated_transfer);
+        CREATE INDEX aggregated_transfer_non_vista_transaction_agg_tf_discr_idx ON aggregated_transfer_non_vista_transaction USING btree (agg_tf_discriminator);
+        CREATE INDEX aggregated_transfer_non_vista_transaction_agg_tf_idx ON aggregated_transfer_non_vista_transaction USING btree (agg_tf);
+        CREATE INDEX aggregated_transfer_non_vista_transaction_merchant_account_idx ON aggregated_transfer_non_vista_transaction USING btree (merchant_account);
+        CREATE INDEX lease_participant_move_in_action_lease_participant_discr_idx ON lease_participant_move_in_action USING btree (lease_participant_discriminator);
+        CREATE INDEX lease_participant_move_in_action_lease_participant_idx ON lease_participant_move_in_action USING btree (lease_participant);
+
 
         
         -- billing_arrears_snapshot -GiST index!
