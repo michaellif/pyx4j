@@ -52,9 +52,17 @@ public class TenantsFolder extends PortalBoxFolder<LeaseTermTenant> {
             FormPanel formPanel = new FormPanel(this);
             formPanel.append(Location.Left, proto().leaseParticipant().customer().person().name(), new CEntityLabel<Name>()).decorate();
             formPanel.append(Location.Left, proto().role(), new CEnumLabel()).decorate();
+            formPanel.append(Location.Left, proto().relationship(), new CEnumLabel()).decorate();
             formPanel.append(Location.Left, proto().leaseParticipant().customer().person().email(), new CLabel<String>()).decorate();
 
             return formPanel;
+        }
+
+        @Override
+        protected void onValueSet(boolean populate) {
+            super.onValueSet(populate);
+
+            get(proto().relationship()).setVisible(!getValue().relationship().isNull());
         }
     }
 }

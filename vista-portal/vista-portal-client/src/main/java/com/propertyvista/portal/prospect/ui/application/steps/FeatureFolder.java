@@ -117,7 +117,7 @@ public class FeatureFolder extends PortalBoxFolder<BillableItem> {
             FormPanel formPanel = new FormPanel(this);
 
             formPanel.append(Location.Left, proto().item().name(), new CLabel<String>()).decorate();
-            formPanel.append(Location.Left, proto().agreedPrice(), new CMoneyLabel()).decorate().customLabel(i18n.tr("Monthly Price"));
+            formPanel.append(Location.Left, proto().agreedPrice(), new CMoneyLabel()).decorate().customLabel(i18n.tr("Price"));
             formPanel.append(Location.Left, proto().description(), new CLabel<String>()).decorate();
             formPanel.append(Location.Left, extraDataPanel);
 

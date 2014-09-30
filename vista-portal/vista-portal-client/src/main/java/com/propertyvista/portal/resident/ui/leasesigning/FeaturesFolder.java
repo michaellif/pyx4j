@@ -13,21 +13,27 @@
  */
 package com.propertyvista.portal.resident.ui.leasesigning;
 
+import com.google.gwt.safehtml.shared.SafeHtml;
+import com.google.gwt.safehtml.shared.SafeHtmlUtils;
 import com.google.gwt.user.client.ui.IsWidget;
 
+import com.pyx4j.commons.IFormatter;
+import com.pyx4j.commons.SimpleMessageFormat;
 import com.pyx4j.entity.core.IObject;
-import com.pyx4j.forms.client.ui.CEntityLabel;
 import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.forms.client.ui.CMoneyLabel;
+import com.pyx4j.forms.client.ui.folder.BoxFolderItemDecorator;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.forms.client.ui.panels.FormPanel;
+import com.pyx4j.i18n.shared.I18n;
 
-import com.propertyvista.domain.financial.offering.ProductItem;
 import com.propertyvista.domain.tenant.lease.BillableItem;
 import com.propertyvista.portal.shared.ui.util.PortalBoxFolder;
 
 public class FeaturesFolder extends PortalBoxFolder<BillableItem> {
+
+    private static final I18n i18n = I18n.get(FeaturesFolder.class);
 
     public FeaturesFolder() {
         super(BillableItem.class, false);
@@ -38,7 +44,22 @@ public class FeaturesFolder extends PortalBoxFolder<BillableItem> {
         return new FeatureForm();
     }
 
-    class FeatureForm extends CForm<BillableItem> {
+    @Override
+    public BoxFolderItemDecorator<BillableItem> createItemDecorator() {
+        BoxFolderItemDecorator<BillableItem> decor = super.createItemDecorator();
+
+        decor.setCaptionFormatter(new IFormatter<BillableItem, SafeHtml>() {
+            @Override
+            public SafeHtml format(BillableItem value) {
+                return SafeHtmlUtils.fromString(SimpleMessageFormat.format("{0}, Rent: ${1}",
+                        (value.description().isNull() ? value.item().name() : value.description()), value.agreedPrice()));
+            }
+        });
+
+        return decor;
+    }
+
+    private class FeatureForm extends CForm<BillableItem> {
 
         public FeatureForm() {
             super(BillableItem.class);
@@ -47,9 +68,11 @@ public class FeaturesFolder extends PortalBoxFolder<BillableItem> {
         @Override
         protected IsWidget createContent() {
             FormPanel formPanel = new FormPanel(this);
-            formPanel.append(Location.Left, proto().item(), new CEntityLabel<ProductItem>()).decorate();
-            formPanel.append(Location.Left, proto().agreedPrice(), new CMoneyLabel()).decorate();
+
+            formPanel.append(Location.Left, proto().item().name(), new CLabel<String>()).decorate();
+            formPanel.append(Location.Left, proto().agreedPrice(), new CMoneyLabel()).decorate().customLabel(i18n.tr("Price"));
             formPanel.append(Location.Left, proto().description(), new CLabel<String>()).decorate();
+
             return formPanel;
         }
     }
