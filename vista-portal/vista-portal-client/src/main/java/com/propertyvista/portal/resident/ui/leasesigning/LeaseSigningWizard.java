@@ -30,6 +30,8 @@ import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.portal.rpc.portal.resident.dto.movein.LeaseAgreementDTO;
 import com.propertyvista.portal.shared.ui.CPortalEntityWizard;
+import com.propertyvista.portal.shared.ui.util.folders.FeatureReadOnlyFolder;
+import com.propertyvista.portal.shared.ui.util.folders.TenantsReadonlyFolder;
 
 public class LeaseSigningWizard extends CPortalEntityWizard<LeaseAgreementDTO> {
 
@@ -77,10 +79,10 @@ public class LeaseSigningWizard extends CPortalEntityWizard<LeaseAgreementDTO> {
 
         formPanel.append(Location.Left, featurePanel = new FormPanel(this));
         featurePanel.h3(i18n.tr("Lease Options"));
-        featurePanel.append(Location.Left, proto().leaseTerm().version().leaseProducts().featureItems(), new FeaturesFolder());
+        featurePanel.append(Location.Left, proto().leaseTerm().version().leaseProducts().featureItems(), new FeatureReadOnlyFolder());
 
         formPanel.h3(i18n.tr("Tenants"));
-        formPanel.append(Location.Left, proto().leaseTerm().version().tenants(), new TenantsFolder());
+        formPanel.append(Location.Left, proto().leaseTerm().version().tenants(), new TenantsReadonlyFolder());
 
         return formPanel;
     }

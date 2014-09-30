@@ -15,7 +15,7 @@ package com.propertyvista.portal.prospect.ui.application.steps.summary;
 
 import com.propertyvista.domain.tenant.prospect.OnlineApplicationWizardStepMeta;
 import com.propertyvista.portal.prospect.ui.application.steps.EmergencyContactsStep;
-import com.propertyvista.portal.shared.ui.util.editors.EmergencyContactFolder;
+import com.propertyvista.portal.shared.ui.util.folders.EmergencyContactFolder;
 
 public class EmergencyContactsSectionPanel extends AbstractSectionPanel {
 

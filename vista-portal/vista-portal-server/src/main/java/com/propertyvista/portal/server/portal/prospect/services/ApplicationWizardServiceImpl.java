@@ -95,7 +95,6 @@ import com.propertyvista.portal.rpc.portal.prospect.dto.GuarantorDTO;
 import com.propertyvista.portal.rpc.portal.prospect.dto.LeaseChargesDataDTO;
 import com.propertyvista.portal.rpc.portal.prospect.dto.OnlineApplicationDTO;
 import com.propertyvista.portal.rpc.portal.prospect.dto.PaymentDTO;
-import com.propertyvista.portal.rpc.portal.prospect.dto.TenantDTO;
 import com.propertyvista.portal.rpc.portal.prospect.dto.UnitOptionsSelectionDTO;
 import com.propertyvista.portal.rpc.portal.prospect.dto.UnitSelectionDTO;
 import com.propertyvista.portal.rpc.portal.prospect.dto.UnitSelectionDTO.BathroomNumber;
@@ -268,7 +267,8 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
 
         to.leaseChargesData().set(createLeaseChargesData(term));
 
-        fillTenants(bo, to);
+        Persistence.ensureRetrieve(term.version().tenants(), AttachLevel.Attached);
+        to.tenants().addAll(term.version().tenants());
     }
 
     public LeaseChargesDataDTO createLeaseChargesData(LeaseTerm term) {
@@ -286,24 +286,6 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
         fillDeposits(result);
 
         return result;
-    }
-
-    private void fillTenants(OnlineApplication bo, OnlineApplicationDTO to) {
-        EntityQueryCriteria<LeaseTermTenant> criteria = new EntityQueryCriteria<LeaseTermTenant>(LeaseTermTenant.class);
-        criteria.eq(criteria.proto().leaseTermV().holder(), bo.masterOnlineApplication().leaseApplication().lease().currentTerm());
-
-        for (LeaseTermTenant ltt : Persistence.service().query(criteria)) {
-            TenantDTO tenant = EntityFactory.create(TenantDTO.class);
-
-            tenant.name().set(ltt.leaseParticipant().customer().person().name());
-            tenant.role().setValue(ltt.role().getValue());
-
-            // remember corresponding tenant: 
-            tenant.set(tenant.tenantId(), ltt);
-            tenant.tenantId().setAttachLevel(AttachLevel.IdOnly);
-
-            to.tenants().add(tenant);
-        }
     }
 
     private void fillApplicantData(OnlineApplication bo, OnlineApplicationDTO to) {

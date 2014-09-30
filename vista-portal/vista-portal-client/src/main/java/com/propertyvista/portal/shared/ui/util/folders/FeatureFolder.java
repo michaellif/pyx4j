@@ -11,7 +11,7 @@
  * @author VladL
  * @version $Id$
  */
-package com.propertyvista.portal.prospect.ui.application.steps;
+package com.propertyvista.portal.shared.ui.util.folders;
 
 import com.google.gwt.safehtml.shared.SafeHtml;
 import com.google.gwt.safehtml.shared.SafeHtmlUtils;
@@ -47,6 +47,8 @@ import com.propertyvista.domain.tenant.lease.extradata.Pet;
 import com.propertyvista.domain.tenant.lease.extradata.Vehicle;
 import com.propertyvista.portal.prospect.ui.application.editors.PetDataEditor;
 import com.propertyvista.portal.prospect.ui.application.editors.VehicleDataEditor;
+import com.propertyvista.portal.prospect.ui.application.steps.AdjustmentFolder;
+import com.propertyvista.portal.prospect.ui.application.steps.DepositFolder;
 import com.propertyvista.portal.shared.ui.util.PortalBoxFolder;
 
 public class FeatureFolder extends PortalBoxFolder<BillableItem> {
@@ -91,7 +93,7 @@ public class FeatureFolder extends PortalBoxFolder<BillableItem> {
         decor.setCaptionFormatter(new IFormatter<BillableItem, SafeHtml>() {
             @Override
             public SafeHtml format(BillableItem value) {
-                return SafeHtmlUtils.fromString(SimpleMessageFormat.format("{0}, Rent: ${1}",
+                return SafeHtmlUtils.fromString(SimpleMessageFormat.format("{0}: ${1}",
                         (value.description().isNull() ? value.item().name() : value.description()), value.agreedPrice()));
             }
         });

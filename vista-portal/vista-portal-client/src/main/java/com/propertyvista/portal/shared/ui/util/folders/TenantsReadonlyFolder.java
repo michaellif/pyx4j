@@ -11,7 +11,7 @@
  * @author michaellif
  * @version $Id$
  */
-package com.propertyvista.portal.resident.ui.leasesigning;
+package com.propertyvista.portal.shared.ui.util.folders;
 
 import com.google.gwt.user.client.ui.IsWidget;
 
@@ -28,11 +28,11 @@ import com.propertyvista.domain.person.Name;
 import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
 import com.propertyvista.portal.shared.ui.util.PortalBoxFolder;
 
-public class TenantsFolder extends PortalBoxFolder<LeaseTermTenant> {
+public class TenantsReadonlyFolder extends PortalBoxFolder<LeaseTermTenant> {
 
-    private static final I18n i18n = I18n.get(TenantsFolder.class);
+    private static final I18n i18n = I18n.get(TenantsReadonlyFolder.class);
 
-    public TenantsFolder() {
+    public TenantsReadonlyFolder() {
         super(LeaseTermTenant.class, i18n.tr("Tenant"), false);
     }
 

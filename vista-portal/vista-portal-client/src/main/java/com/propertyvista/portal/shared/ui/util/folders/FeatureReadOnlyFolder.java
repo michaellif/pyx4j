@@ -11,7 +11,7 @@
  * @author VladL
  * @version $Id$
  */
-package com.propertyvista.portal.prospect.ui.application.steps;
+package com.propertyvista.portal.shared.ui.util.folders;
 
 import com.google.gwt.safehtml.shared.SafeHtml;
 import com.google.gwt.safehtml.shared.SafeHtmlUtils;
@@ -26,11 +26,14 @@ import com.pyx4j.forms.client.ui.CMoneyLabel;
 import com.pyx4j.forms.client.ui.folder.BoxFolderItemDecorator;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.forms.client.ui.panels.FormPanel;
+import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.domain.tenant.lease.BillableItem;
 import com.propertyvista.portal.shared.ui.util.PortalBoxFolder;
 
 public class FeatureReadOnlyFolder extends PortalBoxFolder<BillableItem> {
+
+    private static final I18n i18n = I18n.get(FeatureReadOnlyFolder.class);
 
     public FeatureReadOnlyFolder() {
         super(BillableItem.class, false);
@@ -48,7 +51,7 @@ public class FeatureReadOnlyFolder extends PortalBoxFolder<BillableItem> {
         decor.setCaptionFormatter(new IFormatter<BillableItem, SafeHtml>() {
             @Override
             public SafeHtml format(BillableItem value) {
-                return SafeHtmlUtils.fromString(SimpleMessageFormat.format("{0}, Rent ${1}",
+                return SafeHtmlUtils.fromString(SimpleMessageFormat.format("{0}: ${1}",
                         (value.description().isNull() ? value.item().name() : value.description()), value.agreedPrice()));
             }
         });
@@ -66,7 +69,7 @@ public class FeatureReadOnlyFolder extends PortalBoxFolder<BillableItem> {
         protected IsWidget createContent() {
             FormPanel formPanel = new FormPanel(this);
             formPanel.append(Location.Left, proto().item().name(), new CLabel<String>()).decorate();
-            formPanel.append(Location.Left, proto().agreedPrice(), new CMoneyLabel()).decorate();
+            formPanel.append(Location.Left, proto().agreedPrice(), new CMoneyLabel()).decorate().customLabel(i18n.tr("Price"));
             formPanel.append(Location.Left, proto().description(), new CLabel<String>()).decorate();
 
             return formPanel;

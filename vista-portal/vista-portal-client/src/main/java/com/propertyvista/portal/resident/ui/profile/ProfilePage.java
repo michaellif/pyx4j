@@ -39,7 +39,7 @@ import com.propertyvista.portal.rpc.portal.resident.dto.ResidentProfileDTO;
 import com.propertyvista.portal.rpc.portal.shared.services.CustomerPicturePortalUploadService;
 import com.propertyvista.portal.shared.themes.EntityViewTheme;
 import com.propertyvista.portal.shared.ui.CPortalEntityEditor;
-import com.propertyvista.portal.shared.ui.util.editors.EmergencyContactFolder;
+import com.propertyvista.portal.shared.ui.util.folders.EmergencyContactFolder;
 import com.propertyvista.shared.config.VistaFeatures;
 
 public class ProfilePage extends CPortalEntityEditor<ResidentProfileDTO> {

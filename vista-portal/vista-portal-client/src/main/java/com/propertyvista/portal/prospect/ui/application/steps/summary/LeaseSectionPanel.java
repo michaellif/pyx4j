@@ -18,9 +18,9 @@ import com.pyx4j.security.shared.SecurityController;
 
 import com.propertyvista.domain.security.PortalProspectBehavior;
 import com.propertyvista.domain.tenant.prospect.OnlineApplicationWizardStepMeta;
-import com.propertyvista.portal.prospect.ui.application.steps.FeatureReadOnlyFolder;
 import com.propertyvista.portal.prospect.ui.application.steps.LeaseStep;
-import com.propertyvista.portal.prospect.ui.application.steps.TenantsReadonlyFolder;
+import com.propertyvista.portal.shared.ui.util.folders.FeatureReadOnlyFolder;
+import com.propertyvista.portal.shared.ui.util.folders.TenantsReadonlyFolder;
 
 public class LeaseSectionPanel extends AbstractSectionPanel {
 

@@ -26,6 +26,7 @@ import com.propertyvista.domain.person.Name;
 import com.propertyvista.domain.policy.policies.ProspectPortalPolicy.FeePayment;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
+import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
 import com.propertyvista.domain.tenant.prospect.OnlineApplicationWizardStepStatus;
 import com.propertyvista.domain.tenant.prospect.SignedOnlineApplicationConfirmationTerm;
 import com.propertyvista.domain.tenant.prospect.SignedOnlineApplicationLegalTerm;
@@ -51,7 +52,7 @@ public interface OnlineApplicationDTO extends IEntity {
     @Editor(type = EditorType.label)
     IPrimitive<LogicalDate> leaseTo();
 
-    IList<TenantDTO> tenants();
+    IList<LeaseTermTenant> tenants();
 
     Building policyNode();
 

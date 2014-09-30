@@ -20,7 +20,7 @@ import com.pyx4j.forms.client.ui.panels.FormPanel;
 
 import com.propertyvista.domain.tenant.prospect.OnlineApplicationWizardStepMeta;
 import com.propertyvista.portal.prospect.ui.application.ApplicationWizardStep;
-import com.propertyvista.portal.shared.ui.util.editors.EmergencyContactFolder;
+import com.propertyvista.portal.shared.ui.util.folders.EmergencyContactFolder;
 
 public class EmergencyContactsStep extends ApplicationWizardStep {
 

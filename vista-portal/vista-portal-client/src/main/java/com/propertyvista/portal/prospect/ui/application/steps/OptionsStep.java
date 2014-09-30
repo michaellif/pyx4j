@@ -37,6 +37,7 @@ import com.propertyvista.portal.prospect.events.ApplicationWizardStateChangeEven
 import com.propertyvista.portal.prospect.ui.application.ApplicationWizardStep;
 import com.propertyvista.portal.rpc.portal.prospect.dto.LeaseChargesDataDTO;
 import com.propertyvista.portal.rpc.portal.prospect.dto.UnitOptionsSelectionDTO;
+import com.propertyvista.portal.shared.ui.util.folders.FeatureFolder;
 
 public class OptionsStep extends ApplicationWizardStep {
 

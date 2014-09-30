@@ -11,7 +11,7 @@
  * @author michaellif
  * @version $Id$
  */
-package com.propertyvista.portal.shared.ui.util.editors;
+package com.propertyvista.portal.shared.ui.util.folders;
 
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.IsWidget;
@@ -30,6 +30,7 @@ import com.propertyvista.common.client.ui.validators.BirthdayDateValidator;
 import com.propertyvista.domain.tenant.EmergencyContact;
 import com.propertyvista.domain.tenant.PersonRelationship;
 import com.propertyvista.portal.shared.ui.util.PortalBoxFolder;
+import com.propertyvista.portal.shared.ui.util.editors.NameEditor;
 
 public class EmergencyContactFolder extends PortalBoxFolder<EmergencyContact> {
 
