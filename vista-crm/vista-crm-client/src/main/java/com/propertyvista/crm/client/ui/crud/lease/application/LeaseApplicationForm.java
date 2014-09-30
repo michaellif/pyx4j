@@ -34,6 +34,7 @@ import com.propertyvista.crm.client.ui.crud.lease.application.components.InfoVie
 import com.propertyvista.crm.client.ui.crud.lease.application.components.LeaseApplicationDocumentFolder;
 import com.propertyvista.crm.client.ui.crud.lease.common.LeaseFormBase;
 import com.propertyvista.domain.customizations.CountryOfOperation;
+import com.propertyvista.domain.policy.policies.ProspectPortalPolicy.FeePayment;
 import com.propertyvista.domain.tenant.lease.LeaseApplication;
 import com.propertyvista.domain.tenant.prospect.LeaseApplicationDocument;
 import com.propertyvista.dto.LeaseApplicationDTO;
@@ -45,6 +46,8 @@ import com.propertyvista.shared.config.VistaFeatures;
 public class LeaseApplicationForm extends LeaseFormBase<LeaseApplicationDTO> {
 
     private FormPanel onlineStatusPanel;
+
+    private FormPanel onlineAppFeePanel;
 
     private final Tab chargesTab;
 
@@ -84,6 +87,7 @@ public class LeaseApplicationForm extends LeaseFormBase<LeaseApplicationDTO> {
 
         if (onlineStatusPanel != null) {
             onlineStatusPanel.setVisible(!getValue().leaseApplication().onlineApplication().isNull());
+            onlineAppFeePanel.setVisible(!FeePayment.none.equals(getValue().leaseApplication().onlineApplication().feePayment().getValue()));
         }
 
         // show processing result:
@@ -183,8 +187,14 @@ public class LeaseApplicationForm extends LeaseFormBase<LeaseApplicationDTO> {
         formPanel.append(Location.Left, proto().leaseApplication().onlineApplication().status()).decorate();
         formPanel.append(Location.Left, proto().masterApplicationStatus().progress()).decorate();
 
-        formPanel.br();
+        formPanel.h4(i18n.tr("Status Details per customer"));
         formPanel.append(Location.Dual, proto().masterApplicationStatus().individualApplications(), new ApplicationStatusFolder());
+
+        onlineAppFeePanel = new FormPanel(this);
+        onlineAppFeePanel.h4(i18n.tr("Application Fee to check"));
+        onlineAppFeePanel.append(Location.Left, proto().leaseApplication().onlineApplication().feeAmount()).decorate();
+        onlineAppFeePanel.append(Location.Left, proto().leaseApplication().onlineApplication().feePayment()).decorate();
+        formPanel.append(Location.Dual, onlineAppFeePanel);
 
         return formPanel;
     }

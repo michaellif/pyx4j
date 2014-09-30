@@ -92,11 +92,11 @@ public interface MasterOnlineApplication extends IEntity {
 
     // -----------------------------------------------
     // Application fee:
-    IPrimitive<FeePayment> feePayment();
-
     @Format("#,##0.00")
     @Editor(type = EditorType.moneylabel)
     IPrimitive<BigDecimal> feeAmount();
+
+    IPrimitive<FeePayment> feePayment();
 
     // -----------------------------------------------
 
