@@ -57,12 +57,11 @@ public class ResidentPortalSiteDispatcher extends AbstractAppPlaceDispatcher {
             return new PortalSiteMap.PasswordReset();
         } else if (SecurityController.check(PortalResidentBehavior.LeaseSelectionRequired)) {
             return new ResidentPortalSiteMap.LeaseContextSelection();
-        } else if (SecurityController.check(PortalResidentBehavior.MoveInWizardCompletionRequired)) {
+        } else if (SecurityController.check(PortalResidentBehavior.MoveInWizardCompletionRequired) || MoveInWizardManager.isCompletionConfirmationTurn()) {
             if (newPlace == AppPlace.NOWHERE) {
                 return new ResidentPortalSiteMap.MoveIn.MoveInWizard();
             }
         }
         return newPlace;
     }
-
 }

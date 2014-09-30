@@ -176,7 +176,7 @@ public class MoveInWizardMenuViewImpl extends DockPanel implements MoveInWizardM
             }
         }
 
-        setMenuVisible(MoveInWizardManager.isAttemptStarted() && !MoveInWizardManager.isAttemptCompleted());
+        setMenuVisible(MoveInWizardManager.isAttemptStarted() && !MoveInWizardManager.isCompletionConfirmationTurn());
     }
 
     class HeaderHolder extends FlowPanel {

@@ -21,6 +21,8 @@ import com.google.web.bindery.event.shared.HandlerRegistration;
 import com.pyx4j.gwt.commons.ClientEventBus;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.shared.VoidSerializable;
+import com.pyx4j.security.client.BehaviorChangeEvent;
+import com.pyx4j.security.client.BehaviorChangeHandler;
 import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.site.client.AppSite;
 
@@ -42,35 +44,49 @@ public class MoveInWizardManager {
 
     private static boolean attemptStarted;
 
-    private static boolean attemptCompleted;
-
     private static HandlerRegistration handlerRegistration;
 
     public static void init() {
-        handlerRegistration = AppSite.getEventBus().addHandler(PlaceChangeEvent.TYPE, new PlaceChangeEvent.Handler() {
+
+        AppSite.getEventBus().addHandler(BehaviorChangeEvent.getType(), new BehaviorChangeHandler() {
+
             @Override
-            public void onPlaceChange(final PlaceChangeEvent event) {
+            public void onBehaviorChange(BehaviorChangeEvent event) {
                 if (SecurityController.check(PortalResidentBehavior.MoveInWizardCompletionRequired)) {
-
-                    GWT.<MoveInWizardService> create(MoveInWizardService.class).obtainSteps(new AsyncCallback<MoveInWizardStatusTO>() {
-
+                    handlerRegistration = AppSite.getEventBus().addHandler(PlaceChangeEvent.TYPE, new PlaceChangeEvent.Handler() {
                         @Override
-                        public void onSuccess(MoveInWizardStatusTO result) {
-                            wizardStatus = result;
-                            setCurrentStep(event.getNewPlace() instanceof IMoveInPlace ? currentStep : null);
+                        public void onPlaceChange(final PlaceChangeEvent event) {
+                            if (SecurityController.check(PortalResidentBehavior.MoveInWizardCompletionRequired)) {
 
-                            ClientEventBus.instance.fireEvent(new MoveInWizardStateChangeEvent());
-                            attemptStarted = true;
-                        }
+                                GWT.<MoveInWizardService> create(MoveInWizardService.class).obtainSteps(new AsyncCallback<MoveInWizardStatusTO>() {
 
-                        @Override
-                        public void onFailure(Throwable caught) {
-                            throw new Error(i18n.tr("Something went wrong! Try again later."));
+                                    @Override
+                                    public void onSuccess(MoveInWizardStatusTO result) {
+                                        wizardStatus = result;
+                                        setCurrentStep(event.getNewPlace() instanceof IMoveInPlace ? currentStep : null);
+
+                                        ClientEventBus.instance.fireEvent(new MoveInWizardStateChangeEvent());
+                                        attemptStarted = true;
+                                    }
+
+                                    @Override
+                                    public void onFailure(Throwable caught) {
+                                        throw new Error(i18n.tr("Something went wrong! Try again later."));
+                                    }
+                                });
+                            }
                         }
                     });
+                } else {
+                    if (handlerRegistration != null) {
+                        handlerRegistration.removeHandler();
+                        handlerRegistration = null;
+                    }
                 }
             }
+
         });
+
     }
 
     public static MoveInWizardStatusTO getMoveInWizardStatus() {
@@ -116,10 +132,6 @@ public class MoveInWizardManager {
         return attemptStarted;
     }
 
-    public static boolean isAttemptCompleted() {
-        return attemptCompleted;
-    }
-
     public static MoveInWizardStep getCurrentStep() {
         return currentStep;
     }
@@ -132,4 +144,16 @@ public class MoveInWizardManager {
         }
     }
 
+    public static boolean isCompletionConfirmationTurn() {
+        if (wizardStatus != null) {
+            for (MoveInWizardStepStatusTO stepStatus : wizardStatus.steps()) {
+                if (!stepStatus.complete().getValue()) {
+                    return false;
+                }
+            }
+            return true;
+        } else {
+            return false;
+        }
+    }
 }

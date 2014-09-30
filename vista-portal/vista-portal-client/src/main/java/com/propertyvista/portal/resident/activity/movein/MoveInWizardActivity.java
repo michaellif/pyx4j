@@ -51,7 +51,7 @@ public class MoveInWizardActivity extends SecurityAwareActivity implements MoveI
                     } else if (SecurityController.check(PortalResidentBehavior.Guarantor)) {
                         view.showGuarantorWelcomeScreen();
                     }
-                } else if (MoveInWizardManager.isAttemptCompleted()) {
+                } else if (MoveInWizardManager.isCompletionConfirmationTurn()) {
                     view.showCompletionConfirmationScreen();
                 } else {
                     view.showStepPreview(MoveInWizardManager.getCurrentStep());
