@@ -13,8 +13,9 @@
  */
 package com.propertyvista.portal.resident.ui.movein;
 
+import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
 import com.google.gwt.user.client.Command;
-import com.google.gwt.user.client.ui.HTML;
+import com.google.gwt.user.client.ui.HTMLPanel;
 
 import com.pyx4j.commons.css.StyleManager;
 import com.pyx4j.commons.css.ThemeColor;
@@ -34,7 +35,17 @@ public class MoveInWizardProgressGadget extends AbstractGadget<MoveInWizardView>
         super(view, null, i18n.tr("Continue Move-In Wizard"), ThemeColor.contrast4, 1);
         setActionsToolbar(new ActionsToolbar());
 
-        setContent(new HTML("What next"));
+        SafeHtmlBuilder htmlBuilder = new SafeHtmlBuilder();
+
+        htmlBuilder.appendHtmlConstant("<div style='text-align:left'><div><b>");
+        htmlBuilder.appendEscaped(i18n.tr("Your process is in PROGRESS."));
+        htmlBuilder.appendHtmlConstant("</b></div><div>");
+        htmlBuilder.appendEscaped(i18n.tr("To complete the step by step process click on the button below."));
+        htmlBuilder.appendHtmlConstant("</div></div>");
+
+        HTMLPanel htmlPanel = new HTMLPanel(htmlBuilder.toSafeHtml());
+        setContent(htmlPanel);
+
     }
 
     class ActionsToolbar extends GadgetToolbar {

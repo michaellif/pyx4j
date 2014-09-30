@@ -31,6 +31,7 @@ import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.SimplePanel;
 
+import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.site.client.backoffice.ui.prime.lister.ILister;
 import com.pyx4j.widgets.client.RadioGroup;
@@ -41,6 +42,7 @@ import com.propertyvista.domain.company.Portfolio;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.tenant.lease.Tenant;
 import com.propertyvista.dto.CommunicationEndpointDTO;
+import com.propertyvista.dto.MessageDTO;
 
 public class SelectRecipientsDialogForm extends HorizontalPanel {
 
@@ -68,7 +70,7 @@ public class SelectRecipientsDialogForm extends HorizontalPanel {
 
     private Collection<Portfolio> selectedPortfolios;
 
-    //private Collection<CommunicationEndpointDTO> selectedAll;
+    private MessageDTO selectedAll;
 
     public SelectRecipientsDialogForm() {
         this(null);
@@ -85,6 +87,7 @@ public class SelectRecipientsDialogForm extends HorizontalPanel {
         listPanel.setWidth("100%");
 
         FlowPanel menuPanel = new FlowPanel();
+        menuPanel.setHeight("500px");
 
         final RadioGroup<String> rg = new RadioGroup<String>(RadioGroup.Layout.VERTICAL);
 
@@ -98,25 +101,28 @@ public class SelectRecipientsDialogForm extends HorizontalPanel {
                 if (rg.getValue().equals("Tenant")) {
                     lister = new SelectorDialogTenantLister(false, selectedTenants);
                     tenantListerController = new SelectorDialogTenantListerController(lister, ((SelectorDialogTenantLister) lister).getSelectService());
-
+                    listPanel.clear();
+                    listPanel.add(lister.asWidget());
                 } else if (rg.getValue().equals("Corporate")) {
                     lister = new SelectorDialogCorporateLister(false, selectedEmployees);
                     corporateListerController = new SelectorDialogCorporateListerController(lister, ((SelectorDialogCorporateLister) lister).getSelectService());
-
+                    listPanel.clear();
+                    listPanel.add(lister.asWidget());
                 } else if (rg.getValue().equals("Building")) {
                     lister = new SelectorDialogBuildingLister(false, selectedBuildings);
                     buildingListerController = new SelectorDialogBuildingListerController(lister, ((SelectorDialogBuildingLister) lister).getSelectService());
-
+                    listPanel.clear();
+                    listPanel.add(lister.asWidget());
                 } else if (rg.getValue().equals("Portfolio")) {
                     lister = new SelectorDialogPortfolioLister(false, selectedPortfolios);
                     portfolioListerController = new SelectorDialogPortfolioListerController(lister, ((SelectorDialogPortfolioLister) lister).getSelectService());
+                    listPanel.clear();
+                    listPanel.add(lister.asWidget());
                 } else if (rg.getValue().equals("Selected")) {
-                    //lister = new SelectorDialogAllSelectedLister(false, selectedAll);
-                    //portfolioListerController = new SelectorDialogPortfolioListerController(lister, ((SelectorDialogPortfolioLister) lister).getSelectService());
+                    SelectorDialogSelectedForm selectedForm = new SelectorDialogSelectedForm();
+                    listPanel.clear();
+                    listPanel.add(selectedForm.asWidget());
                 }
-
-                listPanel.clear();
-                listPanel.add(lister.asWidget());
             }
         });
 
@@ -124,6 +130,7 @@ public class SelectRecipientsDialogForm extends HorizontalPanel {
         add(listPanel);
         setCellWidth(listPanel, "100%");
         dealSelectedRecepients(alreadySelected);
+        wrapIt(alreadySelected);
     }
 
     public void grabSelectedItems() {
@@ -154,22 +161,13 @@ public class SelectRecipientsDialogForm extends HorizontalPanel {
             selected.addAll(selectedBuildings);
         if (null != selectedPortfolios && selectedPortfolios.size() != 0)
             selected.addAll(selectedPortfolios);
-//        if (null != selectedAll && selectedAll.size() != 0)
-//            selected.addAll(selectedAll);
-
         return selected;
     }
 
     private void dealSelectedRecepients(Collection<CommunicationEndpointDTO> selected) {
-//        if (null == selected) {
-//            return;
-//        }
-//        if (null != selectedAll) {
-//            selectedAll.clear();
-//            selectedAll.addAll(selected);
-//        } else {
-//            selectedAll = new ArrayList<CommunicationEndpointDTO>(selected);
-//        }
+        if (null == selected) {
+            return;
+        }
 
         for (CommunicationEndpointDTO current : selected) {
             if (current.endpoint().getInstanceValueClass().equals(Tenant.class)) {
@@ -199,11 +197,15 @@ public class SelectRecipientsDialogForm extends HorizontalPanel {
                     }
                     Building b = cg.building().cast();
                     selectedBuildings.add(b);
-
                 }
-
             }
+        }
+    }
 
+    private void wrapIt(Collection<CommunicationEndpointDTO> selected) {
+        selectedAll = EntityFactory.create(MessageDTO.class);
+        if (selected != null) {
+            selectedAll.to().addAll(selected);
         }
     }
 }
