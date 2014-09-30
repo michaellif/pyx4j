@@ -832,15 +832,21 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
 
         // current balance: -------------------------------------------------------------------------------------------------------
 
-        // calculate fee:
-        ProspectPortalPolicy policy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(to.policyNode(), ProspectPortalPolicy.class);
-        if (policy.feePayment().getValue() == FeePayment.perApplicant) {
+        // calculate fee based on MasterOnlineApplication info.
+        // note: if it's still empty - load from policy and save:
+        if (bo.masterOnlineApplication().feePayment().isNull()) {
+            ServerSideFactory.create(OnlineApplicationFacade.class).initOnlineApplicationFeeData(bo.masterOnlineApplication());
+            Persistence.service().persist(bo.masterOnlineApplication());
+            Persistence.service().commit();
+        }
+
+        if (bo.masterOnlineApplication().feePayment().getValue() == FeePayment.perApplicant) {
             if (!SecurityController.check(PortalProspectBehavior.Guarantor)) {
-                dto.applicationFee().setValue(policy.feeAmount().getValue());
+                dto.applicationFee().setValue(bo.masterOnlineApplication().feeAmount().getValue());
             }
-        } else if (policy.feePayment().getValue() == FeePayment.perLease) {
+        } else if (bo.masterOnlineApplication().feePayment().getValue() == FeePayment.perLease) {
             if (SecurityController.check(PortalProspectBehavior.Applicant)) {
-                dto.applicationFee().setValue(policy.feeAmount().getValue());
+                dto.applicationFee().setValue(bo.masterOnlineApplication().feeAmount().getValue());
             }
         }
 
