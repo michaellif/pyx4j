@@ -26,6 +26,7 @@ import com.propertyvista.biz.ExecutionMonitor;
 import com.propertyvista.biz.communication.NotificationFacade;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.settings.PmcYardiCredential;
+import com.propertyvista.yardi.beans.Properties;
 import com.propertyvista.yardi.beans.Property;
 import com.propertyvista.yardi.mappers.BuildingsMapper;
 import com.propertyvista.yardi.stubs.YardiILSGuestCardStub;
@@ -125,8 +126,11 @@ public class YardiConfigurationFacadeImpl implements YardiConfigurationFacade {
         if (propertyCodes.size() > 0) {
             // B&P sanity check - ensure selected properties available in B&P PropertyConfigurations
             List<String> bpPropertyList = new ArrayList<>();
-            for (Property property : YardiStubFactory.create(YardiResidentTransactionsStub.class).getPropertyConfigurations(yc).getProperties()) {
-                bpPropertyList.add(BuildingsMapper.getPropertyCode(property.getCode()));
+            Properties propList = YardiStubFactory.create(YardiResidentTransactionsStub.class).getPropertyConfigurations(yc);
+            if (propList != null) {
+                for (Property property : propList.getProperties()) {
+                    bpPropertyList.add(BuildingsMapper.getPropertyCode(property.getCode()));
+                }
             }
 
             List<String> bpMissingList = new ArrayList<>();
