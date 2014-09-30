@@ -14,6 +14,7 @@
 package com.propertyvista.yardi.stubs;
 
 import java.rmi.RemoteException;
+import java.util.EnumSet;
 
 import com.yardi.entity.maintenance.ServiceRequests;
 import com.yardi.entity.maintenance.meta.YardiMaintenanceConfigMeta;
@@ -23,6 +24,7 @@ import com.propertyvista.biz.system.yardi.YardiInterfaceNotConfiguredForProperty
 import com.propertyvista.biz.system.yardi.YardiResponseException;
 import com.propertyvista.biz.system.yardi.YardiServiceException;
 import com.propertyvista.domain.settings.PmcYardiCredential;
+import com.propertyvista.yardi.beans.Message.MessageType;
 import com.propertyvista.yardi.beans.Properties;
 
 class YardiMaintenanceRequestsStubProxy extends YardiAbstractStubProxy implements YardiMaintenanceRequestsStub {
@@ -97,7 +99,7 @@ class YardiMaintenanceRequestsStubProxy extends YardiAbstractStubProxy implement
         try {
             getStub(yc).validate(yc);
         } catch (YardiResponseException e) {
-            validateResponseXml(e.getResponse());
+            validateResponseXml(e.getResponse(), EnumSet.allOf(MessageType.class));
         }
     }
 

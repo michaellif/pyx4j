@@ -22,7 +22,7 @@ public class YardiServiceMessageException extends YardiServiceException {
     private final Messages messages;
 
     public YardiServiceMessageException(Messages messages) {
-        super(messages.getPrettyErrorMessageText());
+        super(messages.toString());
         this.messages = messages;
     }
 

@@ -40,11 +40,7 @@ public class Message {
 
     @Override
     public String toString() {
-        StringBuilder sb = new StringBuilder();
-
-        sb.append(value);
-
-        return sb.toString();
+        return new StringBuilder(type.name()).append(": ").append(value).toString();
     }
 
     public String getValue() {

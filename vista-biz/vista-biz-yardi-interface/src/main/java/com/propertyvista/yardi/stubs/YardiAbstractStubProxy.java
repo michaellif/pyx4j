@@ -13,6 +13,9 @@
  */
 package com.propertyvista.yardi.stubs;
 
+import java.util.EnumSet;
+import java.util.Set;
+
 import javax.xml.bind.JAXBException;
 
 import org.slf4j.Logger;
@@ -24,12 +27,13 @@ import com.propertyvista.biz.system.yardi.YardiPropertyNoAccessException;
 import com.propertyvista.biz.system.yardi.YardiServiceException;
 import com.propertyvista.domain.settings.PmcYardiCredential;
 import com.propertyvista.yardi.YardiInterface;
+import com.propertyvista.yardi.beans.Message.MessageType;
 import com.propertyvista.yardi.beans.Messages;
 import com.propertyvista.yardi.services.YardiHandledErrorMessages;
 
 class YardiAbstractStubProxy {
 
-    private final static Logger log = LoggerFactory.getLogger(YardiResidentTransactionsStubProxy.class);
+    private final static Logger log = LoggerFactory.getLogger(YardiAbstractStubProxy.class);
 
     public static final String GENERIC_YARDI_ERROR = "Unexpected Yardi response";
 
@@ -59,12 +63,16 @@ class YardiAbstractStubProxy {
     }
 
     void validateResponseXml(String xml) throws YardiServiceException {
+        validateResponseXml(xml, EnumSet.of(MessageType.Error));
+    }
+
+    void validateResponseXml(String xml, Set<MessageType> errorTypes) throws YardiServiceException {
         try {
             Messages messages = MarshallUtil.unmarshal(Messages.class, xml);
-            if (messages.isError()) {
+            if (messages.isError(errorTypes)) {
                 YardiLicense.handleVendorLicenseError(messages);
                 if (messageErrorHandler == null || !messageErrorHandler.handle(messages)) {
-                    throw new YardiServiceException(messages.toString());
+                    throw new YardiServiceMessageException(messages);
                 }
             } else {
                 log.info(messages.toString());

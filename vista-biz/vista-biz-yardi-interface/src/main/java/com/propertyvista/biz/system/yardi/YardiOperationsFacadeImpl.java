@@ -20,7 +20,10 @@ import com.propertyvista.domain.settings.PmcYardiCredential;
 import com.propertyvista.operations.rpc.dto.ConnectionTestResultDTO;
 import com.propertyvista.yardi.YardiInterface;
 import com.propertyvista.yardi.YardiInterfaceType;
+import com.propertyvista.yardi.beans.Message;
+import com.propertyvista.yardi.beans.Message.MessageType;
 import com.propertyvista.yardi.stubs.YardiLicense;
+import com.propertyvista.yardi.stubs.YardiServiceMessageException;
 import com.propertyvista.yardi.stubs.YardiStubFactory;
 
 public class YardiOperationsFacadeImpl implements YardiOperationsFacade {
@@ -79,6 +82,14 @@ public class YardiOperationsFacadeImpl implements YardiOperationsFacade {
             try {
                 stub.validate(yc);
                 result.ok();
+            } catch (YardiServiceMessageException e) {
+                for (Message msg : e.getMessages().getMessages()) {
+                    if (MessageType.FYI.equals(msg.getType())) {
+                        result.warn(msg.getValue());
+                    } else {
+                        result.error(msg.getValue());
+                    }
+                }
             } catch (Throwable t) {
                 result.error(t.getMessage());
             }

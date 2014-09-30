@@ -15,7 +15,9 @@ package com.propertyvista.yardi.beans;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.EnumSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.annotation.XmlElement;
@@ -57,7 +59,7 @@ public class Messages {
         for (Message message : messages) {
             if (StringUtils.isNotEmpty(message.getValue())) {
                 if (message.getType() != null) {
-                    sb.append(message.getType()).append(" ");
+                    sb.append(message.getType()).append(": ");
                 }
                 sb.append(message.getValue()).append("\n");
             }
@@ -76,12 +78,16 @@ public class Messages {
     }
 
     public boolean isError() {
+        return isError(EnumSet.of(MessageType.Error));
+    }
+
+    public boolean isError(Set<MessageType> errorLevel) {
         if (messages.size() == 0) {
             throw new Error("Can't parse Message");
         }
 
         for (Message message : messages) {
-            if (message.getType() == MessageType.Error) {
+            if (errorLevel.contains(message.getType())) {
                 return true;
             }
         }
