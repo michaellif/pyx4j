@@ -886,35 +886,33 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
     }
 
     private void savePaymentData(OnlineApplication bo, OnlineApplicationDTO to) {
-        Lease lease = bo.masterOnlineApplication().leaseApplication().lease();
-        PaymentDTO pto = to.payment();
-        PaymentRecord pbo = new CrudEntityBinder<PaymentRecord, PaymentDTO>(PaymentRecord.class, PaymentDTO.class) {
-            @Override
-            protected void bind() {
-                bindCompleteObject();
-            }
-        }.createBO(pto);
+        if (!to.payment().allowedPaymentsSetup().allowedPaymentTypes().isEmpty() && to.payment().amount().getValue().compareTo(BigDecimal.ZERO) > 0) {
+            PaymentRecord pbo = new CrudEntityBinder<PaymentRecord, PaymentDTO>(PaymentRecord.class, PaymentDTO.class) {
+                @Override
+                protected void bind() {
+                    bindCompleteObject();
+                }
+            }.createBO(to.payment());
 
-        if (pto.amount().getValue().compareTo(BigDecimal.ZERO) > 0) {
             pbo.paymentMethod().customer().set(ResidentPortalContext.getCustomer());
-            pbo.billingAccount().set(lease.billingAccount());
+            pbo.billingAccount().set(bo.masterOnlineApplication().leaseApplication().lease().billingAccount());
 
             // Do not change profile methods
             if (pbo.paymentMethod().id().isNull()) {
-                if (pto.storeInProfile().getValue(false) && PaymentType.availableInProfile().contains(pto.paymentMethod().type().getValue())) {
+                if (to.payment().storeInProfile().getValue(false) && PaymentType.availableInProfile().contains(to.payment().paymentMethod().type().getValue())) {
                     pbo.paymentMethod().isProfiledMethod().setValue(Boolean.TRUE);
                 } else {
                     pbo.paymentMethod().isProfiledMethod().setValue(Boolean.FALSE);
                 }
 
                 // some corrections for particular method types:
-                if (pto.paymentMethod().type().getValue() == PaymentType.Echeck) {
+                if (to.payment().paymentMethod().type().getValue() == PaymentType.Echeck) {
                     pbo.paymentMethod().isProfiledMethod().setValue(Boolean.TRUE);
                 }
             }
 
-            ServerSideFactory.create(PaymentFacade.class).validatePaymentMethod(lease.billingAccount(), pbo.paymentMethod(),
-                    PaymentMethodTarget.OneTimePayment, VistaApplication.prospect);
+            ServerSideFactory.create(PaymentFacade.class).validatePaymentMethod(pbo.billingAccount(), pbo.paymentMethod(), PaymentMethodTarget.OneTimePayment,
+                    VistaApplication.prospect);
             ServerSideFactory.create(PaymentFacade.class).validatePayment(pbo, VistaApplication.prospect);
             ServerSideFactory.create(PaymentFacade.class).persistPayment(pbo);
         }
