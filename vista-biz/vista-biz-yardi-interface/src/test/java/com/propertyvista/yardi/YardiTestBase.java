@@ -162,6 +162,7 @@ public class YardiTestBase extends IntegrationTestBase {
                 yc = EntityFactory.create(PmcYardiCredential.class);
                 yc.pmc().set(getDataModel(PmcDataModel.class).getItem(0));
                 yc.propertyListCodes().setValue(propertyCode);
+                yc.enabled().setValue(true);
                 Persistence.service().persist(yc);
                 log.info("Created Yardi interface {} for Property codes {}", yc.getPrimaryKey(), propertyCode);
             }

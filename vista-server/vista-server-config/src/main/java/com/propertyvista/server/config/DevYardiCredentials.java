@@ -124,6 +124,7 @@ public class DevYardiCredentials {
             cr.serverName().setValue(yc.serverName);
             cr.database().setValue(yc.database);
             cr.platform().setValue(PmcYardiCredential.Platform.SQL);
+            cr.enabled().setValue(true);
         }
 
         return cr;
