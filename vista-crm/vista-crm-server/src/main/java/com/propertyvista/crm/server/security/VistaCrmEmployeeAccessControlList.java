@@ -36,6 +36,7 @@ import com.propertyvista.crm.rpc.services.organization.EmployeeCrudService;
 import com.propertyvista.crm.rpc.services.organization.ManagedCrmUserService;
 import com.propertyvista.crm.rpc.services.organization.PortfolioCrudService;
 import com.propertyvista.crm.rpc.services.organization.SelectCrmRoleListService;
+import com.propertyvista.crm.rpc.services.organization.ac.EmployeeSelfAccountAndSettings;
 import com.propertyvista.crm.rpc.services.security.CrmAccountRecoveryOptionsUserService;
 import com.propertyvista.crm.rpc.services.security.CrmPasswordChangeUserService;
 import com.propertyvista.domain.company.Employee;
@@ -59,6 +60,7 @@ class VistaCrmEmployeeAccessControlList extends UIAclBuilder {
 
         // ------ Account Self management
         // There are no UI Permissions, UI bound to  VistaCrmBehavior.AccountSelf
+        grant(VistaAccessGrantedBehavior.CRM, EmployeeSelfAccountAndSettings.class);
 
         //-- back-end
         {

@@ -33,6 +33,7 @@ import com.pyx4j.security.shared.Context;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.Button.ButtonMenuBar;
+import com.pyx4j.widgets.client.Button.SecureMenuItem;
 import com.pyx4j.widgets.client.Toolbar;
 import com.pyx4j.widgets.client.style.theme.WidgetTheme;
 
@@ -46,6 +47,7 @@ import com.propertyvista.crm.client.themes.CommunicationCrmTheme;
 import com.propertyvista.crm.rpc.CrmUserVisit;
 import com.propertyvista.crm.rpc.dto.communication.CrmCommunicationSystemNotification;
 import com.propertyvista.crm.rpc.services.admin.ac.CrmAdministrationAccess;
+import com.propertyvista.crm.rpc.services.organization.ac.EmployeeSelfAccountAndSettings;
 import com.propertyvista.dto.MessageDTO;
 import com.propertyvista.shared.i18n.CompiledLocale;
 
@@ -164,18 +166,18 @@ public class HeaderViewImpl extends FlowPanel implements HeaderView {
             ButtonMenuBar userButtonMenu = new ButtonMenuBar();
             userButton.setMenu(userButtonMenu);
 
-            userButtonMenu.addItem(new MenuItem(i18n.tr("Account"), new Command() {
+            userButtonMenu.addItem(new SecureMenuItem(i18n.tr("Account"), new Command() {
                 @Override
                 public void execute() {
                     presenter.showAccount();
                 }
-            }));
-            userButtonMenu.addItem(new MenuItem(i18n.tr("Settings"), new Command() {
+            }, EmployeeSelfAccountAndSettings.class));
+            userButtonMenu.addItem(new SecureMenuItem(i18n.tr("Settings"), new Command() {
                 @Override
                 public void execute() {
                     presenter.showProperties();
                 }
-            }));
+            }, EmployeeSelfAccountAndSettings.class));
 
             userButtonMenu.addItem(support = new MenuItem(i18n.tr("Support"), new Command() {
                 @Override
