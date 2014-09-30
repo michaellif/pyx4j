@@ -420,11 +420,11 @@ public class OnlineApplicationFacadeImpl implements OnlineApplicationFacade {
     public void initOnlineApplicationFeeData(MasterOnlineApplication masterOnlineApplication) {
         Building building = masterOnlineApplication.ilsBuilding().duplicate();
 
-        if (building == null) {
+        if (building.isNull()) {
             Persistence.ensureRetrieve(masterOnlineApplication.leaseApplication().lease().unit().building(), AttachLevel.IdOnly);
             building = masterOnlineApplication.leaseApplication().lease().unit().building();
         }
-        if (building != null) {
+        if (!building.isNull()) {
             ProspectPortalPolicy policy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(building, ProspectPortalPolicy.class);
             masterOnlineApplication.feePayment().setValue(policy.feePayment().getValue());
             masterOnlineApplication.feeAmount().setValue(policy.feeAmount().getValue());
