@@ -30,6 +30,8 @@ import com.propertyvista.domain.property.asset.Floorplan;
 import com.propertyvista.domain.security.PortalProspectBehavior;
 import com.propertyvista.domain.tenant.prospect.OnlineApplicationWizardStepMeta;
 import com.propertyvista.portal.prospect.ui.application.ApplicationWizardStep;
+import com.propertyvista.portal.shared.ui.util.folders.AdjustmentFolder;
+import com.propertyvista.portal.shared.ui.util.folders.DepositFolder;
 import com.propertyvista.portal.shared.ui.util.folders.FeatureFolder;
 import com.propertyvista.portal.shared.ui.util.folders.TenantsReadonlyFolder;
 import com.propertyvista.shared.config.VistaFeatures;

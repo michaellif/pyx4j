@@ -45,11 +45,9 @@ import com.propertyvista.domain.tenant.lease.BillableItem;
 import com.propertyvista.domain.tenant.lease.BillableItemExtraData;
 import com.propertyvista.domain.tenant.lease.extradata.Pet;
 import com.propertyvista.domain.tenant.lease.extradata.Vehicle;
-import com.propertyvista.portal.prospect.ui.application.editors.PetDataEditor;
-import com.propertyvista.portal.prospect.ui.application.editors.VehicleDataEditor;
-import com.propertyvista.portal.prospect.ui.application.steps.AdjustmentFolder;
-import com.propertyvista.portal.prospect.ui.application.steps.DepositFolder;
 import com.propertyvista.portal.shared.ui.util.PortalBoxFolder;
+import com.propertyvista.portal.shared.ui.util.editors.PetDataEditor;
+import com.propertyvista.portal.shared.ui.util.editors.VehicleDataEditor;
 
 public class FeatureFolder extends PortalBoxFolder<BillableItem> {
 

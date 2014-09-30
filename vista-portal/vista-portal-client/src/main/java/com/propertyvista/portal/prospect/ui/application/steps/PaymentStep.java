@@ -46,6 +46,7 @@ import com.propertyvista.domain.tenant.prospect.OnlineApplicationWizardStepMeta;
 import com.propertyvista.dto.PaymentDataDTO.PaymentSelect;
 import com.propertyvista.portal.prospect.ui.application.ApplicationWizardStep;
 import com.propertyvista.portal.shared.ui.util.editors.PortalPaymentMethodEditor;
+import com.propertyvista.portal.shared.ui.util.folders.DepositFolder;
 
 public class PaymentStep extends ApplicationWizardStep {
 
