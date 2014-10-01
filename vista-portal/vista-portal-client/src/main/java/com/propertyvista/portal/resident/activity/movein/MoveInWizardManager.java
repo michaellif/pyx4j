@@ -52,29 +52,28 @@ public class MoveInWizardManager {
 
             @Override
             public void onBehaviorChange(BehaviorChangeEvent event) {
+
                 if (SecurityController.check(PortalResidentBehavior.MoveInWizardCompletionRequired)) {
                     handlerRegistration = AppSite.getEventBus().addHandler(PlaceChangeEvent.TYPE, new PlaceChangeEvent.Handler() {
                         @Override
                         public void onPlaceChange(final PlaceChangeEvent event) {
-                            if (SecurityController.check(PortalResidentBehavior.MoveInWizardCompletionRequired)) {
+                            GWT.<MoveInWizardService> create(MoveInWizardService.class).obtainSteps(new AsyncCallback<MoveInWizardStatusTO>() {
 
-                                GWT.<MoveInWizardService> create(MoveInWizardService.class).obtainSteps(new AsyncCallback<MoveInWizardStatusTO>() {
+                                @Override
+                                public void onSuccess(MoveInWizardStatusTO result) {
+                                    wizardStatus = result;
 
-                                    @Override
-                                    public void onSuccess(MoveInWizardStatusTO result) {
-                                        wizardStatus = result;
-                                        setCurrentStep(event.getNewPlace() instanceof IMoveInPlace ? currentStep : null);
+                                    setCurrentStep(event.getNewPlace() instanceof IMoveInPlace ? currentStep : null);
 
-                                        ClientEventBus.instance.fireEvent(new MoveInWizardStateChangeEvent());
-                                        attemptStarted = true;
-                                    }
+                                    ClientEventBus.instance.fireEvent(new MoveInWizardStateChangeEvent());
+                                    attemptStarted = true;
+                                }
 
-                                    @Override
-                                    public void onFailure(Throwable caught) {
-                                        throw new Error(i18n.tr("Something went wrong! Try again later."));
-                                    }
-                                });
-                            }
+                                @Override
+                                public void onFailure(Throwable caught) {
+                                    throw new Error(i18n.tr("Something went wrong! Try again later."));
+                                }
+                            });
                         }
                     });
                 } else {
@@ -83,6 +82,7 @@ public class MoveInWizardManager {
                         handlerRegistration = null;
                     }
                 }
+
             }
 
         });
@@ -144,7 +144,7 @@ public class MoveInWizardManager {
         }
     }
 
-    public static boolean isCompletionConfirmationTurn() {
+    public static boolean isCompletionConfirmationStage() {
         if (wizardStatus != null) {
             for (MoveInWizardStepStatusTO stepStatus : wizardStatus.steps()) {
                 if (!stepStatus.complete().getValue()) {
@@ -152,6 +152,23 @@ public class MoveInWizardManager {
                 }
             }
             return true;
+        } else {
+            return false;
+        }
+    }
+
+    public static boolean isProgressStage() {
+        boolean complete = false;
+        boolean notComplete = false;
+        if (wizardStatus != null && !attemptStarted) {
+            for (MoveInWizardStepStatusTO stepStatus : wizardStatus.steps()) {
+                if (stepStatus.complete().getValue()) {
+                    complete = true;
+                } else {
+                    notComplete = true;
+                }
+            }
+            return complete && notComplete;
         } else {
             return false;
         }
