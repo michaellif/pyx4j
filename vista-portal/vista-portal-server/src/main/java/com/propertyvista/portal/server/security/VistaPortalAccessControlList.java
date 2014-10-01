@@ -206,7 +206,7 @@ public class VistaPortalAccessControlList extends UIAclBuilder {
 
         grant(PortalResidentBehavior.Resident, new IServiceExecutePermission(MaintenanceRequestCrudService.class));
 
-        grant(PortalResidentBehavior.MoveInWizardCompletionRequired, new IServiceExecutePermission(MoveInWizardService.class));
+        grant(PortalResidentBehavior.Resident, new IServiceExecutePermission(MoveInWizardService.class));
         grant(PortalResidentBehavior.LeaseAgreementSigningRequired, new IServiceExecutePermission(LeaseSigningCrudService.class));
         grant(PortalResidentBehavior.LeaseAgreementSigningRequired, new IServiceExecutePermission(LeaseTermBlankAgreementDocumentDownloadService.class));
         grant(PortalResidentBehavior.LeaseAgreementSigningRequired, new EntityPermission(AgreementDigitalSignatures.class, EntityPermission.CREATE));
