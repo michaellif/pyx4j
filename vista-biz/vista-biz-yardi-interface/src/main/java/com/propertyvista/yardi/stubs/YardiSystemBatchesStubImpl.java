@@ -77,7 +77,7 @@ class YardiSystemBatchesStubImpl extends AbstractYardiStub implements YardiSyste
     @Override
     public void addReceiptsReversalToBatch(PmcYardiCredential yc, long batchId, ResidentTransactions residentTransactions) throws YardiServiceException,
             RemoteException {
-        init(Action.AddReceiptsReversalToBatch);
+        init(yc, Action.AddReceiptsReversalToBatch);
         addReceiptsToBatchImpl(yc, batchId, residentTransactions);
     }
 

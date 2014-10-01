@@ -469,6 +469,11 @@ public class VistaServerSideConfiguration extends AbstractVistaServerSideConfigu
     }
 
     @Override
+    public PropertiesConfiguration yardiInterfaceProperties() {
+        return new PropertiesConfiguration("yardiInterface", getConfigProperties());
+    }
+
+    @Override
     public boolean walkMeEnabled(VistaApplication application) {
         boolean defaultVistaApplicationEnabled = true;
 

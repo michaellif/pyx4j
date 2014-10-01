@@ -101,6 +101,8 @@ public abstract class AbstractVistaServerSideConfiguration extends EssentialsSer
     //(in seconds)
     public abstract int yardiConnectionTimeout();
 
+    public abstract PropertiesConfiguration yardiInterfaceProperties();
+
     public boolean isGoogleAnalyticDisableForEmployee() {
         return false;
     }

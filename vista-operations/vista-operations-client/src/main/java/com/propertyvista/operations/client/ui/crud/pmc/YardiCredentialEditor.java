@@ -23,6 +23,7 @@ import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.forms.client.events.DevShortcutEvent;
 import com.pyx4j.forms.client.events.DevShortcutHandler;
 import com.pyx4j.forms.client.ui.CForm;
+import com.pyx4j.forms.client.ui.CNumberLabel;
 import com.pyx4j.forms.client.ui.CPersonalIdentityField;
 import com.pyx4j.forms.client.ui.CTextFieldBase;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
@@ -51,9 +52,10 @@ class YardiCredentialEditor extends CForm<PmcYardiCredential> {
         FormPanel formPanel = new FormPanel(this);
 
         formPanel.h1(i18n.tr("Yardi Credentials"));
+        formPanel.append(Location.Left, proto().enabled()).decorate();
+        formPanel.append(Location.Right, proto().id(), new CNumberLabel()).decorate();
         formPanel.append(Location.Left, proto().updated()).decorate();
         formPanel.append(Location.Right, proto().created()).decorate();
-        formPanel.append(Location.Dual, proto().enabled()).decorate();
         formPanel.append(Location.Dual, proto().serviceURLBase()).decorate();
         formPanel.append(Location.Dual, proto().residentTransactionsServiceURL()).decorate();
         formPanel.append(Location.Dual, proto().sysBatchServiceURL()).decorate();

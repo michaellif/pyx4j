@@ -293,6 +293,11 @@ public class VistaTestsServerSideConfiguration extends AbstractVistaServerSideCo
     }
 
     @Override
+    public PropertiesConfiguration yardiInterfaceProperties() {
+        return new PropertiesConfiguration(Collections.<String, String> emptyMap());
+    }
+
+    @Override
     public boolean walkMeEnabled(VistaApplication application) {
         return false;
     }
