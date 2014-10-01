@@ -14,12 +14,20 @@
 package com.propertyvista.domain.security;
 
 import com.pyx4j.entity.annotations.Caption;
+import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.DiscriminatorValue;
+import com.pyx4j.entity.annotations.Owned;
+import com.pyx4j.entity.core.AttachLevel;
 
 import com.propertyvista.domain.security.common.AbstractPmcUser;
+import com.propertyvista.domain.tenant.CustomerPreferences;
 
 @Caption(name = "User")
 @DiscriminatorValue("CustomerUser")
 public interface CustomerUser extends AbstractPmcUser {
+
+    @Owned
+    @Detached(level = AttachLevel.Detached)
+    CustomerPreferences preferences();
 
 }

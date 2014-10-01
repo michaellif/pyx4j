@@ -28,6 +28,7 @@ import com.pyx4j.commons.UserRuntimeException;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.config.shared.ClientSystemInfo;
+import com.pyx4j.entity.core.AttachLevel;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.core.criterion.PropertyCriterion;
@@ -74,7 +75,10 @@ public class ResidentAuthenticationServiceImpl extends VistaAuthenticationServic
 
     @Override
     protected ResidentUserVisit createUserVisit(CustomerUser user) {
-        return new ResidentUserVisit(getVistaApplication(), user);
+        ResidentUserVisit visit = new ResidentUserVisit(getVistaApplication(), user.<CustomerUser> duplicate());
+        Persistence.ensureRetrieve(user.preferences(), AttachLevel.Attached);
+        visit.setPreferences(user.preferences());
+        return visit;
     }
 
     @Override
