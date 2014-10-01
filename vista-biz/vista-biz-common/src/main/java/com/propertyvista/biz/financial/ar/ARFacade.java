@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011- All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -50,12 +50,14 @@ public interface ARFacade {
 
     /**
      * Batch is open, after this call it should be posted or canceled
-     * 
+     *
      * @param building
      *            for with the batch should be created
      * @throws ARException
      */
     PaymentBatchContext createPaymentBatchContext(Building building) throws ARException;
+
+    void validateCreditCardPayment(PaymentRecord paymentRecord, PaymentBatchContext paymentBatchContext) throws ARException;
 
     /**
      * @param payment

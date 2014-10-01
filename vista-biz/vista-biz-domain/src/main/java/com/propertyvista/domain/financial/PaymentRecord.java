@@ -119,6 +119,10 @@ public interface PaymentRecord extends IEntity, HasNotesAndAttachments {
             return EnumSet.of(Submitted, Scheduled, PendingAction, Queued);
         }
 
+        public static Collection<PaymentStatus> arPostable() {
+            return EnumSet.of(Queued, Received, Cleared);
+        }
+
         /**
          * Applicable only for Check
          */

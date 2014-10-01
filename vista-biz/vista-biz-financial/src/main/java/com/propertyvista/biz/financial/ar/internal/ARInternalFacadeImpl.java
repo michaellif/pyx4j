@@ -27,6 +27,7 @@ import com.pyx4j.entity.rpc.EntitySearchResult;
 
 import com.propertyvista.biz.communication.NotificationFacade;
 import com.propertyvista.biz.financial.ar.ARArrearsManager;
+import com.propertyvista.biz.financial.ar.ARException;
 import com.propertyvista.biz.financial.ar.ARFacade;
 import com.propertyvista.biz.financial.billing.BillingUtils;
 import com.propertyvista.biz.financial.billing.LeaseProductsPriceEstimator;
@@ -66,6 +67,11 @@ public class ARInternalFacadeImpl implements ARFacade {
     @Override
     public PaymentBatchContext createPaymentBatchContext(Building building) {
         return ARInternalPaymentManager.instance().createPaymentBatchContext(null);
+    }
+
+    @Override
+    public void validateCreditCardPayment(PaymentRecord paymentRecord, PaymentBatchContext paymentBatchContext) throws ARException {
+        // do nothing for now
     }
 
     @Override

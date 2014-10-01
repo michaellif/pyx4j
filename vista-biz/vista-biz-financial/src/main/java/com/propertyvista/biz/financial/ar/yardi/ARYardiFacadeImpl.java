@@ -64,6 +64,11 @@ public class ARYardiFacadeImpl implements ARFacade {
     }
 
     @Override
+    public void validateCreditCardPayment(PaymentRecord paymentRecord, PaymentBatchContext paymentBatchContext) throws ARException {
+        // TODO
+    }
+
+    @Override
     public void postPayment(PaymentRecord paymentRecord, PaymentBatchContext paymentBatchContext) throws ARException {
         ARYardiPaymentManager.instance().postPayment(paymentRecord, paymentBatchContext);
     }

@@ -276,6 +276,7 @@ public class PaymentFacadeImpl implements PaymentFacade {
         }
 
         paymentRecord.lastStatusChangeDate().setValue(SystemDateManager.getLogicalDate());
+
         paymentRecord.merchantAccount().set(PaymentUtils.retrieveMerchantAccount(paymentRecord));
         if (paymentRecord.merchantAccount().isNull()
                 && (PaymentRecord.merchantAccountIsRequedForPayments || PaymentType.electronicPayments().contains(
@@ -292,8 +293,19 @@ public class PaymentFacadeImpl implements PaymentFacade {
             paymentRecord.paymentStatus().setValue(PaymentRecord.PaymentStatus.Received);
             break;
         case CreditCard:
-            // The credit card processing is done in new transaction and committed regardless of results
-            PaymentCreditCard.processPayment(paymentRecord);
+            boolean arOkWithThisTransaction = false;
+            try {
+                ServerSideFactory.create(ARFacade.class).validateCreditCardPayment(paymentRecord, paymentBatchContext);
+                arOkWithThisTransaction = true;
+            } catch (ARException e) {
+                log.error("can't process payment", e);
+                paymentRecord.paymentStatus().setValue(PaymentRecord.PaymentStatus.Canceled);
+                paymentRecord.transactionErrorMessage().setValue(e.getMessage());
+            }
+            if (arOkWithThisTransaction) {
+                // The credit card processing is done in new transaction and committed regardless of results
+                PaymentCreditCard.processPayment(paymentRecord);
+            }
             break;
         case Echeck:
             paymentRecord.paymentStatus().setValue(PaymentRecord.PaymentStatus.Queued);
@@ -314,7 +326,7 @@ public class PaymentFacadeImpl implements PaymentFacade {
 
         Persistence.service().merge(paymentRecord);
 
-        if (paymentRecord.paymentStatus().getValue() != PaymentRecord.PaymentStatus.Rejected) {
+        if (PaymentRecord.PaymentStatus.arPostable().contains(paymentRecord.paymentStatus().getValue())) {
             try {
                 ServerSideFactory.create(ARFacade.class).postPayment(paymentRecord, paymentBatchContext);
 
