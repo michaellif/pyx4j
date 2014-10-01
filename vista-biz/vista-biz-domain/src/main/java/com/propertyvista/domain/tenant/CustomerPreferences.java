@@ -15,6 +15,7 @@ package com.propertyvista.domain.tenant;
 
 import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.JoinColumn;
+import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.annotations.ReadOnly;
 import com.pyx4j.entity.core.ISet;
@@ -30,6 +31,7 @@ public interface CustomerPreferences extends IUserPreferences {
     @ReadOnly
     CustomerUser customerUser();
 
+    @Owned
     ISet<CustomerPreferencesPortalHidable> hiddenPortalElements();
 
 }
