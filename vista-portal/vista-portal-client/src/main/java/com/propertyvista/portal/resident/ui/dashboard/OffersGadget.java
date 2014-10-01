@@ -33,7 +33,7 @@ public class OffersGadget extends AbstractGadget<MainDashboardViewImpl> {
     private static final I18n i18n = I18n.get(OffersGadget.class);
 
     OffersGadget(MainDashboardViewImpl form) {
-        super(form, PortalImages.INSTANCE.offersIcon(), i18n.tr("My Perks & Offers"), ThemeColor.contrast6, 1);
+        super(form, PortalImages.INSTANCE.offersIcon(), i18n.tr("My Perks"), ThemeColor.contrast6, 1);
         setActionsToolbar(new ResidentServicesToolbar());
         FlowPanel contentPanel = new FlowPanel();
         contentPanel.add(new HTML("Great news! As a resident , we've got some great local offers and deals just for you."));
@@ -48,7 +48,7 @@ public class OffersGadget extends AbstractGadget<MainDashboardViewImpl> {
     class ResidentServicesToolbar extends GadgetToolbar {
         public ResidentServicesToolbar() {
 
-            Button offersButton = new Button("View my Perks & Offers", new Command() {
+            Button offersButton = new Button("View my Perks", new Command() {
 
                 @Override
                 public void execute() {

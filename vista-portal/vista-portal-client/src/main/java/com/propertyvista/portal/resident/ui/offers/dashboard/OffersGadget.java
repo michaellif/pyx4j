@@ -26,9 +26,9 @@ public class OffersGadget extends AbstractGadget<OffersDashboardViewImpl> {
     private static final I18n i18n = I18n.get(OffersGadget.class);
 
     OffersGadget(OffersDashboardViewImpl form) {
-        super(form, PortalImages.INSTANCE.offersIcon(), i18n.tr("Offers"), ThemeColor.contrast6, 1);
+        super(form, PortalImages.INSTANCE.offersIcon(), i18n.tr("Perks"), ThemeColor.contrast6, 1);
 
-        setContent(new HTML("Perks & Offers Coming Soon!"));
+        setContent(new HTML("Perks Coming Soon!"));
     }
 
 }
