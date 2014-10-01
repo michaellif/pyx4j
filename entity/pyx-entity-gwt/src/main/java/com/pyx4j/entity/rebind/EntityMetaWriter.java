@@ -319,6 +319,8 @@ public class EntityMetaWriter {
 
         int validationErrors = 0;
 
+        boolean embeddedType = (interfaceType.getAnnotation(EmbeddedEntity.class) != null);
+
         for (JMethod method : allMethods) {
             if (!contextHelper.isEntityMember(method)) {
                 continue;
@@ -391,9 +393,9 @@ public class EntityMetaWriter {
             if (I18nAnnotation.DEFAULT_VALUE.equals(memberCaption)) {
                 memberCaption = EnglishGrammar.capitalize(method.getName());
             }
-
+            data.embedded = (valueClass.getAnnotation(EmbeddedEntity.class) != null) || (method.getAnnotation(EmbeddedEntity.class) != null);
             data.persistenceTransient = (method.getAnnotation(Transient.class) != null);
-            if ((!data.persistenceTransient) && (contextHelper.validateReservedKeywordsMembers)) {
+            if ((!embeddedType) && (!data.embedded) && (!data.persistenceTransient) && (contextHelper.validateReservedKeywordsMembers)) {
                 if (!ReservedWords.validate(logger, interfaceType, method, data.objectClassType)) {
                     validationErrors++;
                 }
@@ -412,7 +414,6 @@ public class EntityMetaWriter {
 
             Owned aOwned = method.getAnnotation(Owned.class);
 
-            data.embedded = (valueClass.getAnnotation(EmbeddedEntity.class) != null) || (method.getAnnotation(EmbeddedEntity.class) != null);
             data.ownedRelationships = (aOwned != null) || (data.embedded) || (data.objectClassType == ObjectClassType.PrimitiveSet);
 
             data.owner = (method.getAnnotation(Owner.class) != null);
