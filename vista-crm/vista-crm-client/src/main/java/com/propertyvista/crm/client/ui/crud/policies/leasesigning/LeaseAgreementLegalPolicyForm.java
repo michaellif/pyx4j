@@ -80,7 +80,7 @@ public class LeaseAgreementLegalPolicyForm extends PolicyDTOTabPanelBasedForm<Le
                 FormPanel formPanel = new FormPanel(this);
 
                 formPanel.append(Location.Left, proto().title()).decorate().componentWidth(200);
-                formPanel.append(Location.Dual, proto().body()).decorate();
+                formPanel.append(Location.Dual, proto().content()).decorate();
                 formPanel.append(Location.Left, proto().signatureFormat()).decorate().componentWidth(200);
                 return formPanel;
             }
@@ -109,7 +109,7 @@ public class LeaseAgreementLegalPolicyForm extends PolicyDTOTabPanelBasedForm<Le
                 FormPanel formPanel = new FormPanel(this);
 
                 formPanel.append(Location.Left, proto().title()).decorate().componentWidth(200);
-                formPanel.append(Location.Dual, proto().body()).decorate();
+                formPanel.append(Location.Dual, proto().content()).decorate();
                 formPanel.append(Location.Left, proto().signatureFormat()).decorate().componentWidth(200);
                 return formPanel;
             }

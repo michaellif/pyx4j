@@ -349,7 +349,7 @@ public class LeaseApplicationDocumentDataCreatorFacadeImpl implements LeaseAppli
         for (SignedOnlineApplicationLegalTerm signedLegalTerm : signedLegalTerms) {
             LeaseApplicationDocumentDataLegalTermDTO legalTerm = EntityFactory.create(LeaseApplicationDocumentDataLegalTermDTO.class);
             legalTerm.title().setValue(signedLegalTerm.term().title().getValue());
-            legalTerm.wordingHtml().setValue(signedLegalTerm.term().body().getValue());
+            legalTerm.wordingHtml().setValue(signedLegalTerm.term().content().getValue());
             Persistence.ensureRetrieve(signedLegalTerm.signature(), AttachLevel.Attached);
             legalTerm.signature().set(signedLegalTerm.signature().duplicate());
             legalTerm.makeWithSignaturePlaceholder().setValue(makeWithSignaturePlaceholders);

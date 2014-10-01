@@ -236,9 +236,9 @@ public class MaintenanceRequestWizard extends CPortalEntityWizard<MaintenanceReq
         while (category.subCategories().size() > 0) {
             MaintenanceRequestCategory tmp;
             do {
-                // get unit-related category 
+                // get unit-related category
                 tmp = category.subCategories().get(new Random().nextInt(category.subCategories().size()));
-            } while (!tmp.type().isNull() && tmp.type().getValue() != IssueElementType.ApartmentUnit);
+            } while (!tmp.elementType().isNull() && tmp.elementType().getValue() != IssueElementType.ApartmentUnit);
             category = tmp;
         }
         return category;

@@ -76,7 +76,7 @@ public class LeaseApplicationPolicyForm extends PolicyDTOTabPanelBasedForm<Lease
 
                 formPanel.append(Location.Left, proto().applyToRole()).decorate().componentWidth(200);
                 formPanel.append(Location.Left, proto().title()).decorate().componentWidth(200);
-                formPanel.append(Location.Left, proto().body()).decorate().componentWidth(200);
+                formPanel.append(Location.Left, proto().content()).decorate().componentWidth(200);
                 formPanel.append(Location.Left, proto().signatureFormat()).decorate().componentWidth(200);
                 return formPanel;
             }
@@ -106,7 +106,7 @@ public class LeaseApplicationPolicyForm extends PolicyDTOTabPanelBasedForm<Lease
 
                 formPanel.append(Location.Left, proto().applyToRole()).decorate().componentWidth(200);
                 formPanel.append(Location.Left, proto().title()).decorate().componentWidth(200);
-                formPanel.append(Location.Left, proto().body()).decorate().componentWidth(200);
+                formPanel.append(Location.Left, proto().content()).decorate().componentWidth(200);
                 formPanel.append(Location.Left, proto().signatureFormat()).decorate().componentWidth(200);
                 return formPanel;
             }

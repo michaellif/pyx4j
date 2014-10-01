@@ -67,7 +67,7 @@ public interface LeaseApplicationLegalTerm extends IEntity {
     @NotNull
     @Editor(type = Editor.EditorType.richtextarea)
     @Length(48000)
-    IPrimitive<String> body();
+    IPrimitive<String> content();
 
     @NotNull
     IPrimitive<SignatureFormat> signatureFormat();

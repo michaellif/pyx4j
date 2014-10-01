@@ -86,7 +86,7 @@ public class ReferenceDataPreloader extends AbstractDataPreloader {
                 root.subCategories().add(element);
             }
             // only high level categories have type value initialized; sub-trees of these are computed according to the parent type
-            element.type().setValue(type);
+            element.elementType().setValue(type);
             // Find or create  Subject
             MaintenanceRequestCategory subject = null;
             for (MaintenanceRequestCategory subj : element.subCategories()) {

@@ -39,7 +39,7 @@ public interface MaintenanceRequestCategory extends IEntity {
     IPrimitive<Integer> level();
 
     @ReadOnly
-    IPrimitive<IssueElementType> type();
+    IPrimitive<IssueElementType> elementType();
 
     @ToString(index = 0)
     IPrimitive<String> name();

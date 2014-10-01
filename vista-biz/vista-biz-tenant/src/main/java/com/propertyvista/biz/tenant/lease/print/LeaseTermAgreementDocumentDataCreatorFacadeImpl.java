@@ -267,7 +267,7 @@ public class LeaseTermAgreementDocumentDataCreatorFacadeImpl implements LeaseTer
         LeaseAgreementDocumentLegalTerm4PrintDTO legalTerm4Print = EntityFactory.create(LeaseAgreementDocumentLegalTerm4PrintDTO.class);
         legalTerm4Print.id().setValue(legalTerm.id().getValue());
         legalTerm4Print.title().setValue(legalTerm.title().getValue());
-        legalTerm4Print.body().setValue(legalTerm.body().getValue());
+        legalTerm4Print.body().setValue(legalTerm.content().getValue());
 
         List<LeaseTermParticipant<?>> leaseTermParticipants = new ArrayList<>();
         leaseTermParticipants.addAll(leaseTerm.version().tenants());

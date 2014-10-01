@@ -61,7 +61,7 @@ public class LegalTermsFolder extends PortalBoxFolder<SignedOnlineApplicationLeg
             CLabel<String> caption = new CLabel<String>();
             caption.asWidget().addStyleName(FlexFormPanelTheme.StyleName.FormFlexPanelH1Label.name());
             formPanel.append(Location.Left, proto().term().title(), caption);
-            formPanel.append(Location.Left, proto().term().body(), new CHtml<String>());
+            formPanel.append(Location.Left, proto().term().content(), new CHtml<String>());
 
             formPanel.append(Location.Left, proto().signature()).decorate().customLabel("").labelPosition(LabelPosition.hidden).componentWidth(250);
 

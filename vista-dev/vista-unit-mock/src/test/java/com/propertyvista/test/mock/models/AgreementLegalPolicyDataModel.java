@@ -44,7 +44,7 @@ public class AgreementLegalPolicyDataModel extends MockDataModel<LeaseAgreementL
 
         term.signatureFormat().setValue(format);
         term.title().setValue("Ut ut pellentesque nulla.");
-        term.body().setValue("Lorem ipsum dolor sit amet, consectetur adipiscing elit. In accumsan aliquam tellus at congue.");
+        term.content().setValue("Lorem ipsum dolor sit amet, consectetur adipiscing elit. In accumsan aliquam tellus at congue.");
 
         return term;
     }

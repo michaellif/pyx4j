@@ -234,8 +234,8 @@ public class MaintenanceRequestCategoryChoice extends CComboBox<MaintenanceReque
         }
         List<MaintenanceRequestCategory> categories = new ArrayList<MaintenanceRequestCategory>();
         for (MaintenanceRequestCategory c : subCategories) {
-            if ((c.type() == null || c.type().isNull() || (c.type().getValue().equals(IssueElementType.ApartmentUnit) && isForUnit) || (!isForUnit && !c.type()
-                    .getValue().equals(IssueElementType.ApartmentUnit))))
+            if ((c.elementType() == null || c.elementType().isNull() || (c.elementType().getValue().equals(IssueElementType.ApartmentUnit) && isForUnit) || (!isForUnit && !c
+                    .elementType().getValue().equals(IssueElementType.ApartmentUnit))))
                 categories.add(c);
         }
         return categories;

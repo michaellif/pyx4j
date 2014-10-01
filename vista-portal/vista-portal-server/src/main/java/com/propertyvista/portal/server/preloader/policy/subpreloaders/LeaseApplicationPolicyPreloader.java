@@ -58,7 +58,7 @@ public class LeaseApplicationPolicyPreloader extends AbstractPolicyPreloader<Lea
         LeaseApplicationLegalTerm term = EntityFactory.create(LeaseApplicationLegalTerm.class);
         term.applyToRole().setValue(role);
         term.title().setValue(caption);
-        term.body().setValue(termsContent);
+        term.content().setValue(termsContent);
         term.signatureFormat().setValue(format);
         return term;
     }
@@ -69,7 +69,7 @@ public class LeaseApplicationPolicyPreloader extends AbstractPolicyPreloader<Lea
         LeaseApplicationConfirmationTerm term = EntityFactory.create(LeaseApplicationConfirmationTerm.class);
         term.applyToRole().setValue(role);
         term.title().setValue(caption);
-        term.body().setValue(termsContent);
+        term.content().setValue(termsContent);
         term.signatureFormat().setValue(format);
         return term;
     }
