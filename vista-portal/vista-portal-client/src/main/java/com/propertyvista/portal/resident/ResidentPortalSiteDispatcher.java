@@ -58,7 +58,7 @@ public class ResidentPortalSiteDispatcher extends AbstractAppPlaceDispatcher {
         } else if (SecurityController.check(PortalResidentBehavior.LeaseSelectionRequired)) {
             return new ResidentPortalSiteMap.LeaseContextSelection();
         } else if (SecurityController.check(PortalResidentBehavior.MoveInWizardCompletionRequired) || MoveInWizardManager.isCompletionConfirmationStage()) {
-            if (newPlace == AppPlace.NOWHERE) {
+            if (newPlace == AppPlace.NOWHERE || !MoveInWizardManager.isAttemptStarted()) {
                 return new ResidentPortalSiteMap.MoveIn.MoveInWizard();
             }
         }

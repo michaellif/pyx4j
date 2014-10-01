@@ -28,16 +28,12 @@ import com.propertyvista.portal.resident.events.MoveInWizardStateChangeEvent;
 import com.propertyvista.portal.resident.events.MoveInWizardStateChangeHandler;
 import com.propertyvista.portal.resident.ui.movein.MoveInWizardMenuView;
 import com.propertyvista.portal.resident.ui.movein.MoveInWizardMenuView.MoveInWizardMenuPresenter;
-import com.propertyvista.portal.rpc.portal.resident.services.movein.IMoveInPlace;
 
 public class MoveInWizardMenuActivity extends AbstractActivity implements MoveInWizardMenuPresenter {
 
     private final MoveInWizardMenuView view;
 
-    private final Place place;
-
     public MoveInWizardMenuActivity(Place place) {
-        this.place = place;
         this.view = ResidentPortalSite.getViewFactory().getView(MoveInWizardMenuView.class);
         view.setPresenter(this);
     }
