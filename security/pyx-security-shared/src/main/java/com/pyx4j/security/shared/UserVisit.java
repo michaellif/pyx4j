@@ -92,6 +92,7 @@ public class UserVisit implements Serializable {
 
     public void setPreferences(UserVisitPreferences preferences) {
         this.preferences = preferences;
+        setChanged();
     }
 
     public boolean isChanged() {
