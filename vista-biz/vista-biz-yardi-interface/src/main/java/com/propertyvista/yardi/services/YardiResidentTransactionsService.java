@@ -100,7 +100,6 @@ import com.propertyvista.yardi.services.YardiResidentTransactionsData.LeaseTrans
 import com.propertyvista.yardi.services.YardiResidentTransactionsData.PropertyTransactionData;
 import com.propertyvista.yardi.stubs.YardiILSGuestCardStub;
 import com.propertyvista.yardi.stubs.YardiResidentTransactionsStub;
-import com.propertyvista.yardi.stubs.YardiServiceMessageException;
 import com.propertyvista.yardi.stubs.YardiStubFactory;
 
 /**
@@ -306,10 +305,9 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
                     transactions.add(residentTransactions);
                 }
                 executionMonitor.addInfoEvent("Property", propertyCode);
-            } catch (YardiServiceMessageException e) {
-                if (e.getMessages().hasErrorMessage(YardiHandledErrorMessages.errorMessage_TenantNotFound)) {
-                    // All Ok there are no transactions
-                }
+            } catch (YardiNoTenantsExistException e) {
+                // Just send a note that there is no tenants here
+                ServerSideFactory.create(NotificationFacade.class).yardiConfigurationError("No tenants found for property code: " + propertyCode);
             } catch (YardiPropertyNoAccessException e) {
                 if (suspendBuilding(yardiInterfaceId, propertyCode)) {
                     executionMonitor.addErredEvent("BuildingSuspended", e);
