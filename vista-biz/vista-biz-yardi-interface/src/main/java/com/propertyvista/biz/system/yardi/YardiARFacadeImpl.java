@@ -17,6 +17,9 @@ import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.core.AttachLevel;
 import com.pyx4j.entity.server.Persistence;
@@ -26,8 +29,6 @@ import com.propertyvista.biz.financial.ar.ARException;
 import com.propertyvista.biz.financial.payment.PaymentBatchContext;
 import com.propertyvista.biz.system.AbstractYardiFacadeImpl;
 import com.propertyvista.biz.system.YardiPaymentBatchContext;
-import com.propertyvista.biz.system.yardi.YardiARFacade;
-import com.propertyvista.biz.system.yardi.YardiServiceException;
 import com.propertyvista.biz.tenant.lease.LeaseFacade;
 import com.propertyvista.domain.financial.yardi.YardiReceipt;
 import com.propertyvista.domain.financial.yardi.YardiReceiptReversal;
@@ -45,11 +46,25 @@ import com.propertyvista.yardi.services.YardiSystemBatchesService;
 
 public class YardiARFacadeImpl extends AbstractYardiFacadeImpl implements YardiARFacade {
 
+    private static final Logger log = LoggerFactory.getLogger(YardiARFacadeImpl.class);
+
     @Override
     public void doAllImport(ExecutionMonitor executionMonitor) throws YardiServiceException, RemoteException {
         assert VistaFeatures.instance().yardiIntegration();
+        StringBuilder errors = new StringBuilder();
         for (PmcYardiCredential yc : getPmcYardiCredentials()) {
-            YardiResidentTransactionsService.getInstance().updateAll(yc, executionMonitor);
+            try {
+                YardiResidentTransactionsService.getInstance().updateAll(yc, executionMonitor);
+            } catch (YardiServiceException e) {
+                executionMonitor.addFailedEvent("Yardi Interface", yc.serviceURLBase().getValue(), e);
+                errors.append(e.getMessage() + "\n");
+            } catch (RemoteException e) {
+                executionMonitor.addFailedEvent("Yardi Interface", yc.serviceURLBase().getValue(), e);
+                errors.append("Connection failed\n");
+            }
+        }
+        if (errors.length() > 0) {
+            throw new YardiServiceException(errors.toString());
         }
     }
 
@@ -129,8 +144,20 @@ public class YardiARFacadeImpl extends AbstractYardiFacadeImpl implements YardiA
     public List<YardiPropertyConfiguration> getPropertyConfigurations() throws YardiServiceException, RemoteException {
         List<YardiPropertyConfiguration> propertyConfigurations = new ArrayList<YardiPropertyConfiguration>();
 
+        StringBuilder errors = new StringBuilder();
         for (PmcYardiCredential yc : getPmcYardiCredentials()) {
-            propertyConfigurations.addAll(YardiResidentTransactionsService.getInstance().getPropertyConfigurations(yc));
+            try {
+                propertyConfigurations.addAll(YardiResidentTransactionsService.getInstance().getPropertyConfigurations(yc));
+            } catch (YardiServiceException e) {
+                log.error("Yardi Interface: {} {}", yc.serviceURLBase().getValue(), e);
+                errors.append(e.getMessage() + "\n");
+            } catch (RemoteException e) {
+                log.error("Yardi Interface: {} {}", yc.serviceURLBase().getValue(), e);
+                errors.append("Connection failed\n");
+            }
+        }
+        if (errors.length() > 0) {
+            throw new YardiServiceException(errors.toString());
         }
 
         return propertyConfigurations;

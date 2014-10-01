@@ -16,15 +16,18 @@ package com.propertyvista.biz.system.yardi;
 import java.rmi.RemoteException;
 import java.util.Date;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.propertyvista.biz.system.AbstractYardiFacadeImpl;
-import com.propertyvista.biz.system.yardi.YardiMaintenanceFacade;
-import com.propertyvista.biz.system.yardi.YardiServiceException;
 import com.propertyvista.domain.maintenance.MaintenanceRequest;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.settings.PmcYardiCredential;
 import com.propertyvista.yardi.services.YardiMaintenanceRequestsService;
 
 public class YardiMaintenanceFacadeImpl extends AbstractYardiFacadeImpl implements YardiMaintenanceFacade {
+
+    private static final Logger log = LoggerFactory.getLogger(YardiMaintenanceFacadeImpl.class);
 
     @Override
     public Date getMetaTimestamp(Building building) {
@@ -44,8 +47,20 @@ public class YardiMaintenanceFacadeImpl extends AbstractYardiFacadeImpl implemen
     @Override
     public void loadMaintenanceRequests(Building building) throws YardiServiceException, RemoteException {
         if (building == null) {
+            StringBuilder errors = new StringBuilder();
             for (PmcYardiCredential yc : getPmcYardiCredentials()) {
-                YardiMaintenanceRequestsService.getInstance().loadMaintenanceRequests(yc);
+                try {
+                    YardiMaintenanceRequestsService.getInstance().loadMaintenanceRequests(yc);
+                } catch (YardiServiceException e) {
+                    log.error("Yardi Interface: {} {}", yc.serviceURLBase().getValue(), e);
+                    errors.append(e.getMessage() + "\n");
+                } catch (RemoteException e) {
+                    log.error("Yardi Interface: {} {}", yc.serviceURLBase().getValue(), e);
+                    errors.append("Connection Failed\n");
+                }
+            }
+            if (errors.length() > 0) {
+                throw new YardiServiceException(errors.toString());
             }
         } else {
             YardiMaintenanceRequestsService.getInstance().loadMaintenanceRequests(getPmcYardiCredential(building));
