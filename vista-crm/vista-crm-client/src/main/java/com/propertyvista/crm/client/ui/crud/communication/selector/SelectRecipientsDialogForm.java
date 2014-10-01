@@ -32,7 +32,6 @@ import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.SimplePanel;
 
 import com.pyx4j.entity.core.EntityFactory;
-import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.site.client.backoffice.ui.prime.lister.ILister;
 import com.pyx4j.widgets.client.RadioGroup;
 
@@ -148,17 +147,8 @@ public class SelectRecipientsDialogForm extends HorizontalPanel {
 
     }
 
-    public Collection<IEntity> getSelectedItems() {
-        Collection<IEntity> selected = new ArrayList<IEntity>();
-        if (null != selectedTenants && selectedTenants.size() != 0)
-            selected.addAll(selectedTenants);
-        if (null != selectedEmployees && selectedEmployees.size() != 0)
-            selected.addAll(selectedEmployees);
-        if (null != selectedBuildings && selectedBuildings.size() != 0)
-            selected.addAll(selectedBuildings);
-        if (null != selectedPortfolios && selectedPortfolios.size() != 0)
-            selected.addAll(selectedPortfolios);
-        return selected;
+    public Collection<CommunicationEndpointDTO> getSelectedItems() {
+        return selectedAll.to();
     }
 
     private void dealSelectedRecepients(Collection<CommunicationEndpointDTO> selected) {

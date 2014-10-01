@@ -31,4 +31,10 @@ public class SelectorDialogCorporateListerController extends ListerController<Em
         return EntityFactory.getEntityPrototype(Employee.class);
     }
 
+    @Override
+    public void refresh() {
+        super.refresh();
+        ((SelectorDialogCorporateLister) getView()).setRowsSelected();
+    }
+
 }

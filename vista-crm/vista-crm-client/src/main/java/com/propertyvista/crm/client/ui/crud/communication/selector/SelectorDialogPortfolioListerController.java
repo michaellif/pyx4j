@@ -31,4 +31,10 @@ public class SelectorDialogPortfolioListerController extends ListerController<Po
         return EntityFactory.getEntityPrototype(Portfolio.class);
     }
 
+    @Override
+    public void refresh() {
+        super.refresh();
+        ((SelectorDialogPortfolioLister) getView()).setRowsSelected();
+    }
+
 }

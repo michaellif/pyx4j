@@ -31,4 +31,9 @@ public class SelectorDialogTenantListerController extends ListerController<Tenan
         return EntityFactory.getEntityPrototype(Tenant.class);
     }
 
+    @Override
+    public void refresh() {
+        super.refresh();
+        ((SelectorDialogTenantLister) getView()).setRowsSelected();
+    }
 }

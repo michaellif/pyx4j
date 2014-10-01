@@ -31,4 +31,10 @@ public class SelectorDialogBuildingListerController extends ListerController<Bui
         return EntityFactory.getEntityPrototype(Building.class);
     }
 
+    @Override
+    public void refresh() {
+        super.refresh();
+        ((SelectorDialogBuildingLister) getView()).setRowsSelected();
+    }
+
 }
