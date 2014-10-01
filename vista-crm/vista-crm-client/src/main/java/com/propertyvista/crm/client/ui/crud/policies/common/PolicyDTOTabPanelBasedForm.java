@@ -32,9 +32,6 @@ import com.pyx4j.forms.client.ui.CField;
 import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.forms.client.ui.panels.FormPanel;
-import com.pyx4j.forms.client.validators.AbstractComponentValidator;
-import com.pyx4j.forms.client.validators.AbstractValidationError;
-import com.pyx4j.forms.client.validators.BasicValidationError;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.backoffice.ui.prime.form.IForm;
 
@@ -182,8 +179,8 @@ public abstract class PolicyDTOTabPanelBasedForm<POLICY_DTO extends PolicyDTOBas
             super.onReset();
 
             for (CField<? extends PolicyNode, ?> nodeComponent : nodeTypeToComponentMap.values()) {
+                nodeComponent.reset();
                 nodeComponent.setVisible(false);
-                nodeComponent.setVisited(false);
             }
         }
 
@@ -202,23 +199,12 @@ public abstract class PolicyDTOTabPanelBasedForm<POLICY_DTO extends PolicyDTOBas
         }
 
         @Override
-        public void addValidations() {
-            super.addValidations();
-
-            this.addComponentValidator(new AbstractComponentValidator<PolicyNode>() {
-                @Override
-                public AbstractValidationError isValid() {
-                    if (getValue() != null) {
-                        CField<? extends PolicyNode, ?> comp = getCurrentComponent();
-                        if (comp != null) {
-                            if (!comp.isValid()) {
-                                return new BasicValidationError(comp, i18n.tr("'Applied to' is Mandatory"));
-                            }
-                        }
-                    }
-                    return null;
-                }
-            });
+        public boolean isValid() {
+            CField<? extends PolicyNode, ?> comp = getCurrentComponent();
+            if (comp != null) {
+                return (comp.isValid() && super.isValid());
+            }
+            return super.isValid();
         }
 
         @Override
