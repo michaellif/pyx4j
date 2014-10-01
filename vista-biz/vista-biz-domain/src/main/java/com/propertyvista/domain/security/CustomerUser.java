@@ -13,6 +13,8 @@
  */
 package com.propertyvista.domain.security;
 
+import javax.xml.bind.annotation.XmlTransient;
+
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.DiscriminatorValue;
@@ -28,6 +30,7 @@ public interface CustomerUser extends AbstractPmcUser {
 
     @Owned
     @Detached(level = AttachLevel.Detached)
+    @XmlTransient
     CustomerPreferences preferences();
 
 }
