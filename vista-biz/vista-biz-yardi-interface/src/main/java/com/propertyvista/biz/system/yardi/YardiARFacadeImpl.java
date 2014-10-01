@@ -43,6 +43,8 @@ import com.propertyvista.yardi.processors.YardiLeaseProcessor;
 import com.propertyvista.yardi.services.YardiILSGuestCardService;
 import com.propertyvista.yardi.services.YardiResidentTransactionsService;
 import com.propertyvista.yardi.services.YardiSystemBatchesService;
+import com.propertyvista.yardi.stubs.YardiStubFactory;
+import com.propertyvista.yardi.stubs.YardiSystemBatchesStub;
 
 public class YardiARFacadeImpl extends AbstractYardiFacadeImpl implements YardiARFacade {
 
@@ -168,4 +170,11 @@ public class YardiARFacadeImpl extends AbstractYardiFacadeImpl implements YardiA
         YardiILSGuestCardService.getInstance().updateUnitAvailability(getPmcYardiCredential(aptUnit.building()), aptUnit);
     }
 
+    @Override
+    public void validateCreditCardAcceptance(Lease lease) throws YardiServiceException, RemoteException {
+        Persistence.ensureRetrieve(lease.unit().building(), AttachLevel.Attached);
+        PmcYardiCredential yc = YardiCredentials.get(lease.unit().building());
+        // Just ping the interface for now
+        YardiStubFactory.create(YardiSystemBatchesStub.class).ping(yc);
+    }
 }

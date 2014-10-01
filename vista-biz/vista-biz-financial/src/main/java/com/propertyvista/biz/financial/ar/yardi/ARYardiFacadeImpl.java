@@ -14,6 +14,7 @@
 package com.propertyvista.biz.financial.ar.yardi;
 
 import java.math.BigDecimal;
+import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
@@ -23,6 +24,7 @@ import java.util.Vector;
 
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.config.server.ServerSideFactory;
+import com.pyx4j.entity.core.AttachLevel;
 import com.pyx4j.entity.core.criterion.Criterion;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
@@ -36,6 +38,8 @@ import com.propertyvista.biz.financial.ar.ARException;
 import com.propertyvista.biz.financial.ar.ARFacade;
 import com.propertyvista.biz.financial.billing.LeaseProductsPriceEstimator;
 import com.propertyvista.biz.financial.payment.PaymentBatchContext;
+import com.propertyvista.biz.system.yardi.YardiARFacade;
+import com.propertyvista.biz.system.yardi.YardiServiceException;
 import com.propertyvista.domain.financial.ARCode;
 import com.propertyvista.domain.financial.ARCode.Type;
 import com.propertyvista.domain.financial.BillingAccount;
@@ -65,7 +69,12 @@ public class ARYardiFacadeImpl implements ARFacade {
 
     @Override
     public void validateCreditCardPayment(PaymentRecord paymentRecord, PaymentBatchContext paymentBatchContext) throws ARException {
-        // TODO
+        Persistence.ensureRetrieve(paymentRecord.billingAccount().lease(), AttachLevel.Attached);
+        try {
+            ServerSideFactory.create(YardiARFacade.class).validateCreditCardAcceptance(paymentRecord.billingAccount().lease());
+        } catch (YardiServiceException | RemoteException e) {
+            throw new ARException(e);
+        }
     }
 
     @Override

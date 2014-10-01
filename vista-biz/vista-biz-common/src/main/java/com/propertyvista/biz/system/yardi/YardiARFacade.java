@@ -30,6 +30,8 @@ public interface YardiARFacade {
 
     void doAllImport(ExecutionMonitor executionMonitor) throws YardiServiceException, RemoteException;
 
+    public void validateCreditCardAcceptance(Lease lease) throws YardiServiceException, RemoteException;
+
     /**
      * set the same uid as during import so the pap will not be suspended.
      */
@@ -43,8 +45,8 @@ public interface YardiARFacade {
 
     void postReceipt(YardiReceipt receipt, PaymentBatchContext paymentBatchContext) throws ARException, YardiServiceException, RemoteException;
 
-    void postReceiptReversal(YardiReceiptReversal reversal) throws YardiUnableToPostReversalException, YardiPropertyNoAccessException,
-            YardiServiceException, RemoteException;
+    void postReceiptReversal(YardiReceiptReversal reversal) throws YardiUnableToPostReversalException, YardiPropertyNoAccessException, YardiServiceException,
+            RemoteException;
 
     List<YardiPropertyConfiguration> getPropertyConfigurations() throws YardiServiceException, RemoteException;
 
