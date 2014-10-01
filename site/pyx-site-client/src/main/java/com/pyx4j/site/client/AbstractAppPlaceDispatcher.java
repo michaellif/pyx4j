@@ -23,6 +23,9 @@ package com.pyx4j.site.client;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.gwt.core.client.Scheduler;
+import com.google.gwt.core.client.Scheduler.ScheduledCommand;
+
 import com.pyx4j.security.client.BehaviorChangeEvent;
 import com.pyx4j.security.client.BehaviorChangeHandler;
 import com.pyx4j.security.client.ClientContext;
@@ -44,14 +47,20 @@ public abstract class AbstractAppPlaceDispatcher implements AppPlaceDispatcher {
                 if (AppSite.getViewFactory() instanceof SingletonViewFactory) {
                     ((SingletonViewFactory) AppSite.getViewFactory()).invalidate();
                 }
-                AppPlace current = AppSite.getPlaceController().getWhere();
-                if ((current instanceof PublicPlace) || (!ClientContext.isAuthenticated())) {
-                    AppSite.getPlaceController().goTo(AppPlace.NOWHERE, false);
-                } else {
-                    if (!isPlaceNavigable(current)) {
-                        AppSite.getPlaceController().goTo(AppPlace.NOWHERE, false);
+                Scheduler.get().scheduleDeferred(new ScheduledCommand() {
+
+                    @Override
+                    public void execute() {
+                        AppPlace current = AppSite.getPlaceController().getWhere();
+                        if ((current instanceof PublicPlace) || (!ClientContext.isAuthenticated())) {
+                            AppSite.getPlaceController().goTo(AppPlace.NOWHERE, false);
+                        } else {
+                            if (!isPlaceNavigable(current)) {
+                                AppSite.getPlaceController().goTo(AppPlace.NOWHERE, false);
+                            }
+                        }
                     }
-                }
+                });
 
             }
 
