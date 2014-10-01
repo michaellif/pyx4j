@@ -27,4 +27,6 @@ public interface MoveInWizardMenuView extends IsView {
 
     void updateState();
 
+    void setMenuVisible(boolean visible);
+
 }

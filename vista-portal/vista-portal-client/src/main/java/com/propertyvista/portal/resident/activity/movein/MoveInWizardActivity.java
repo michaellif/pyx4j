@@ -21,6 +21,7 @@ import com.pyx4j.site.rpc.AppPlace;
 
 import com.propertyvista.domain.security.PortalResidentBehavior;
 import com.propertyvista.portal.resident.ResidentPortalSite;
+import com.propertyvista.portal.resident.activity.movein.MoveInWizardManager.MoveInWizardState;
 import com.propertyvista.portal.resident.events.MoveInWizardStateChangeEvent;
 import com.propertyvista.portal.resident.events.MoveInWizardStateChangeHandler;
 import com.propertyvista.portal.resident.ui.movein.MoveInWizardView;
@@ -45,8 +46,8 @@ public class MoveInWizardActivity extends SecurityAwareActivity implements MoveI
 
             @Override
             public void onStateChange(MoveInWizardStateChangeEvent event) {
-                if (!MoveInWizardManager.isAttemptStarted()) {
-                    if (MoveInWizardManager.isProgressStage()) {
+                if (MoveInWizardManager.getMoveInWizardState() == MoveInWizardState.preface) {
+                    if (MoveInWizardManager.isPartiallyComplete()) {
                         view.showProgressScreen();
                     } else {
                         if (SecurityController.check(PortalResidentBehavior.Resident)) {
@@ -55,7 +56,7 @@ public class MoveInWizardActivity extends SecurityAwareActivity implements MoveI
                             view.showGuarantorWelcomeScreen();
                         }
                     }
-                } else if (MoveInWizardManager.isCompletionConfirmationStage()) {
+                } else if (MoveInWizardManager.getMoveInWizardState() == MoveInWizardState.confirmation) {
                     view.showCompletionConfirmationScreen();
                 } else {
                     view.showStepPreview(MoveInWizardManager.getCurrentStep());

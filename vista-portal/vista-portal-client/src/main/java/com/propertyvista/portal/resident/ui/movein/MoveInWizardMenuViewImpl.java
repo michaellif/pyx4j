@@ -102,6 +102,7 @@ public class MoveInWizardMenuViewImpl extends DockPanel implements MoveInWizardM
         });
     }
 
+    @Override
     public void setMenuVisible(boolean visible) {
         mainMenuVisible = visible;
         doLayout(LayoutType.getLayoutType(Window.getClientWidth()));
@@ -176,7 +177,6 @@ public class MoveInWizardMenuViewImpl extends DockPanel implements MoveInWizardM
             }
         }
 
-        setMenuVisible(MoveInWizardManager.isAttemptStarted() && !MoveInWizardManager.isCompletionConfirmationStage());
     }
 
     class HeaderHolder extends FlowPanel {

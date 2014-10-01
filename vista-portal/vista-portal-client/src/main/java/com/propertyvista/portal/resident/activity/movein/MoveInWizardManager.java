@@ -36,13 +36,17 @@ import com.propertyvista.portal.rpc.portal.resident.services.movein.MoveInWizard
 
 public class MoveInWizardManager {
 
+    public enum MoveInWizardState {
+        preface, wizard, confirmation
+    }
+
     private static final I18n i18n = I18n.get(MoveInWizardManager.class);
 
     private static MoveInWizardStatusTO wizardStatus;
 
     private static MoveInWizardStep currentStep;
 
-    private static boolean attemptStarted;
+    private static MoveInWizardState moveInWizardState;
 
     private static HandlerRegistration handlerRegistration;
 
@@ -54,6 +58,8 @@ public class MoveInWizardManager {
             public void onBehaviorChange(BehaviorChangeEvent event) {
 
                 if (SecurityController.check(PortalResidentBehavior.MoveInWizardCompletionRequired)) {
+                    moveInWizardState = MoveInWizardState.preface;
+
                     handlerRegistration = AppSite.getEventBus().addHandler(PlaceChangeEvent.TYPE, new PlaceChangeEvent.Handler() {
                         @Override
                         public void onPlaceChange(final PlaceChangeEvent event) {
@@ -65,8 +71,16 @@ public class MoveInWizardManager {
 
                                     setCurrentStep(event.getNewPlace() instanceof IMoveInPlace ? currentStep : null);
 
+                                    if (isComplete()) {
+                                        moveInWizardState = MoveInWizardState.confirmation;
+                                    }
+
                                     ClientEventBus.instance.fireEvent(new MoveInWizardStateChangeEvent());
-                                    attemptStarted = true;
+
+                                    if (moveInWizardState == MoveInWizardState.preface) {
+                                        moveInWizardState = MoveInWizardState.wizard;
+                                    }
+
                                 }
 
                                 @Override
@@ -76,21 +90,12 @@ public class MoveInWizardManager {
                             });
                         }
                     });
-                } else {
-                    if (handlerRegistration != null) {
-                        handlerRegistration.removeHandler();
-                        handlerRegistration = null;
-                    }
                 }
 
             }
 
         });
 
-    }
-
-    public static MoveInWizardStatusTO getMoveInWizardStatus() {
-        return wizardStatus;
     }
 
     public static boolean isStepComplete(MoveInWizardStep step) {
@@ -100,6 +105,29 @@ public class MoveInWizardManager {
                     return stepStatus.complete().getValue();
                 }
             }
+        }
+        return false;
+    }
+
+    public static boolean isPartiallyComplete() {
+        if (wizardStatus != null) {
+            for (MoveInWizardStepStatusTO stepStatus : wizardStatus.steps()) {
+                if (stepStatus.complete().getValue()) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    public static boolean isComplete() {
+        if (wizardStatus != null) {
+            for (MoveInWizardStepStatusTO stepStatus : wizardStatus.steps()) {
+                if (!stepStatus.complete().getValue()) {
+                    return false;
+                }
+            }
+            return true;
         }
         return false;
     }
@@ -128,8 +156,8 @@ public class MoveInWizardManager {
         }
     }
 
-    public static boolean isAttemptStarted() {
-        return attemptStarted;
+    public static MoveInWizardState getMoveInWizardState() {
+        return moveInWizardState;
     }
 
     public static MoveInWizardStep getCurrentStep() {
@@ -144,33 +172,15 @@ public class MoveInWizardManager {
         }
     }
 
-    public static boolean isCompletionConfirmationStage() {
-        if (wizardStatus != null) {
-            for (MoveInWizardStepStatusTO stepStatus : wizardStatus.steps()) {
-                if (!stepStatus.complete().getValue()) {
-                    return false;
-                }
-            }
-            return true;
-        } else {
-            return false;
+    public static void reset() {
+        if (handlerRegistration != null) {
+            handlerRegistration.removeHandler();
+            handlerRegistration = null;
+            moveInWizardState = MoveInWizardState.confirmation;
         }
+        wizardStatus = null;
+        moveInWizardState = null;
+        currentStep = null;
     }
 
-    public static boolean isProgressStage() {
-        boolean complete = false;
-        boolean notComplete = false;
-        if (wizardStatus != null && !attemptStarted) {
-            for (MoveInWizardStepStatusTO stepStatus : wizardStatus.steps()) {
-                if (stepStatus.complete().getValue()) {
-                    complete = true;
-                } else {
-                    notComplete = true;
-                }
-            }
-            return complete && notComplete;
-        } else {
-            return false;
-        }
-    }
 }

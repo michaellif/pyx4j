@@ -24,6 +24,7 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.widgets.client.Button;
 
+import com.propertyvista.portal.resident.activity.movein.MoveInWizardManager;
 import com.propertyvista.portal.rpc.portal.resident.ResidentPortalSiteMap;
 import com.propertyvista.portal.shared.ui.AbstractGadget;
 import com.propertyvista.portal.shared.ui.GadgetToolbar;
@@ -57,7 +58,8 @@ public class MoveInWizardCompletionConfirmationGadget extends AbstractGadget<Mov
             Button continueButton = new Button(i18n.tr("Continue to Portal"), new Command() {
                 @Override
                 public void execute() {
-                    AppSite.getPlaceController().goTo(new ResidentPortalSiteMap.Financial.PreauthorizedPayments.AutoPayWizard());
+                    MoveInWizardManager.reset();
+                    AppSite.getPlaceController().goTo(new ResidentPortalSiteMap.Dashboard());
                 }
             });
             continueButton.getElement().getStyle().setProperty("background", StyleManager.getPalette().getThemeColor(ThemeColor.contrast4, 1));
@@ -66,7 +68,8 @@ public class MoveInWizardCompletionConfirmationGadget extends AbstractGadget<Mov
             Button updateProfileButton = new Button(i18n.tr("Update Profile"), new Command() {
                 @Override
                 public void execute() {
-                    AppSite.getPlaceController().goTo(new ResidentPortalSiteMap.Financial.PreauthorizedPayments.AutoPayWizard());
+                    MoveInWizardManager.reset();
+                    AppSite.getPlaceController().goTo(new ResidentPortalSiteMap.Profile());
                 }
             });
             updateProfileButton.getElement().getStyle().setProperty("background", StyleManager.getPalette().getThemeColor(ThemeColor.contrast4, 1));

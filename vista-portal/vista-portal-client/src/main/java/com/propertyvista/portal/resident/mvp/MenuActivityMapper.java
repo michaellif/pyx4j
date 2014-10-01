@@ -22,6 +22,7 @@ import com.pyx4j.security.shared.SecurityController;
 
 import com.propertyvista.domain.security.PortalResidentBehavior;
 import com.propertyvista.portal.resident.activity.PortalMenuActivity;
+import com.propertyvista.portal.resident.activity.movein.MoveInWizardManager;
 import com.propertyvista.portal.resident.activity.movein.MoveInWizardMenuActivity;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap.Logout;
 
@@ -33,7 +34,7 @@ public class MenuActivityMapper implements ActivityMapper {
     @Override
     public Activity getActivity(Place place) {
         if (ClientContext.isAuthenticated() && !(place instanceof Logout)) {
-            if (SecurityController.check(PortalResidentBehavior.MoveInWizardCompletionRequired)) {
+            if (SecurityController.check(PortalResidentBehavior.MoveInWizardCompletionRequired) || MoveInWizardManager.getMoveInWizardState() != null) {
                 return new MoveInWizardMenuActivity(place);
             } else {
                 return new PortalMenuActivity(place);

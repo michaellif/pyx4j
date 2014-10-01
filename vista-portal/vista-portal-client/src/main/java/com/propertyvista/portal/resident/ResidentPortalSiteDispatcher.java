@@ -22,6 +22,7 @@ import com.pyx4j.site.shared.meta.PublicPlace;
 import com.propertyvista.domain.security.PortalResidentBehavior;
 import com.propertyvista.domain.security.common.VistaBasicBehavior;
 import com.propertyvista.portal.resident.activity.movein.MoveInWizardManager;
+import com.propertyvista.portal.resident.activity.movein.MoveInWizardManager.MoveInWizardState;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
 import com.propertyvista.portal.rpc.portal.resident.ResidentPortalSiteMap;
 
@@ -57,8 +58,9 @@ public class ResidentPortalSiteDispatcher extends AbstractAppPlaceDispatcher {
             return new PortalSiteMap.PasswordReset();
         } else if (SecurityController.check(PortalResidentBehavior.LeaseSelectionRequired)) {
             return new ResidentPortalSiteMap.LeaseContextSelection();
-        } else if (SecurityController.check(PortalResidentBehavior.MoveInWizardCompletionRequired) || MoveInWizardManager.isCompletionConfirmationStage()) {
-            if (newPlace == AppPlace.NOWHERE || !MoveInWizardManager.isAttemptStarted()) {
+        } else if (SecurityController.check(PortalResidentBehavior.MoveInWizardCompletionRequired)
+                || MoveInWizardManager.getMoveInWizardState() == MoveInWizardState.confirmation) {
+            if (newPlace == AppPlace.NOWHERE || MoveInWizardManager.getMoveInWizardState() == MoveInWizardState.preface) {
                 return new ResidentPortalSiteMap.MoveIn.MoveInWizard();
             }
         }
