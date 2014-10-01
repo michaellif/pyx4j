@@ -39,7 +39,30 @@ public interface DailyReportRecord extends IEntity {
          *
          * "PRCO" transactions are only used for convenience fee transactions.
          */
-        PREA, PRCO, BALR, SETT, SALE, AUTH, VOID;
+        PREA, PRCO, BALR, SETT, SALE, AUTH, VOID, POST, RETU, MRVD;
+
+        /**
+         * "SALE" - Sale transaction
+         *
+         * "POST" - Force Post is a transaction which has not been authorized online; this transaction type is not expected to be included in Property Vista
+         * processing
+         *
+         * "RETU" - Return/refund transaction
+         *
+         * "PREA" - Pre-Authorization transaction
+         *
+         * "VOID" - Void of Sale transaction
+         *
+         * "MRVD" - Void of Return transaction
+         *
+         * "PRCO" - Completion transaction
+         *
+         * "AUTH" - Authorize Only; this transaction type is not expected to be included in Property Vista processing
+         *
+         * "BALR" - Balance Request
+         *
+         * "SETT" - Settlement
+         */
     }
 
     public enum DailyReportCardType {
