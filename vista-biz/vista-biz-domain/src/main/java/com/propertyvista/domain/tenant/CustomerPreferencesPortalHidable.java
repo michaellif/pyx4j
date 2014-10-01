@@ -15,7 +15,11 @@ package com.propertyvista.domain.tenant;
 
 import java.io.Serializable;
 
+import com.pyx4j.entity.annotations.Detached;
+import com.pyx4j.entity.annotations.JoinColumn;
 import com.pyx4j.entity.annotations.MemberColumn;
+import com.pyx4j.entity.annotations.Owner;
+import com.pyx4j.entity.annotations.ReadOnly;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.IPrimitive;
 
@@ -26,6 +30,12 @@ public interface CustomerPreferencesPortalHidable extends IEntity {
         GettingStartedGadget,
 
     }
+
+    @Owner
+    @Detached
+    @JoinColumn
+    @ReadOnly
+    CustomerPreferences customerPreferences();
 
     @MemberColumn(name = "tp")
     IPrimitive<Type> type();
