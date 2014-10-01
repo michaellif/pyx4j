@@ -57,9 +57,8 @@ public class MoveInWizardManager {
             @Override
             public void onBehaviorChange(BehaviorChangeEvent event) {
 
-                if (SecurityController.check(PortalResidentBehavior.MoveInWizardCompletionRequired)) {
+                if (handlerRegistration == null && SecurityController.check(PortalResidentBehavior.MoveInWizardCompletionRequired)) {
                     moveInWizardState = MoveInWizardState.preface;
-
                     handlerRegistration = AppSite.getEventBus().addHandler(PlaceChangeEvent.TYPE, new PlaceChangeEvent.Handler() {
                         @Override
                         public void onPlaceChange(final PlaceChangeEvent event) {
