@@ -28,6 +28,7 @@ import com.pyx4j.site.client.AppSite;
 
 import com.propertyvista.domain.security.PortalResidentBehavior;
 import com.propertyvista.portal.resident.events.MoveInWizardStateChangeEvent;
+import com.propertyvista.portal.rpc.portal.resident.ResidentPortalSiteMap;
 import com.propertyvista.portal.rpc.portal.resident.dto.movein.MoveInWizardStatusTO;
 import com.propertyvista.portal.rpc.portal.resident.dto.movein.MoveInWizardStep;
 import com.propertyvista.portal.rpc.portal.resident.dto.movein.MoveInWizardStepStatusTO;
@@ -68,7 +69,9 @@ public class MoveInWizardManager {
                                 public void onSuccess(MoveInWizardStatusTO result) {
                                     wizardStatus = result;
 
-                                    setCurrentStep(event.getNewPlace() instanceof IMoveInPlace ? currentStep : null);
+                                    if (event.getNewPlace() instanceof ResidentPortalSiteMap.MoveIn.MoveInWizard) {
+                                        nextStep();
+                                    }
 
                                     if (isComplete()) {
                                         moveInWizardState = MoveInWizardState.confirmation;
