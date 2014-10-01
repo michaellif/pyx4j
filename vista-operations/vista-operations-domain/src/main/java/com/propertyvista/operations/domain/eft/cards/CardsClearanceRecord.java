@@ -38,6 +38,16 @@ import com.propertyvista.operations.domain.eft.cards.to.DailyReportRecord.DailyR
 @I18n(strategy = I18n.I18nStrategy.IgnoreAll)
 public interface CardsClearanceRecord extends IEntity {
 
+    public enum CardsClearanceRecordType {
+
+        Completion,
+
+        Sale,
+
+        Return,
+
+    }
+
     @Owner
     @JoinColumn
     @Indexed
@@ -56,6 +66,9 @@ public interface CardsClearanceRecord extends IEntity {
     IPrimitive<Boolean> convenienceFeeAccount();
 
     IPrimitive<DailyReportCardType> cardType();
+
+    @MemberColumn(notNull = true)
+    IPrimitive<CardsClearanceRecordType> transactionType();
 
     IPrimitive<String> referenceNumber();
 

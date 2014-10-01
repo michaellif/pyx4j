@@ -27,6 +27,7 @@ import com.propertyvista.domain.pmc.Pmc;
 import com.propertyvista.domain.pmc.PmcMerchantAccountIndex;
 import com.propertyvista.operations.domain.eft.cards.CardsClearanceFile;
 import com.propertyvista.operations.domain.eft.cards.CardsClearanceRecord;
+import com.propertyvista.operations.domain.eft.cards.CardsClearanceRecord.CardsClearanceRecordType;
 import com.propertyvista.operations.domain.eft.cards.CardsClearanceRecordProcessingStatus;
 import com.propertyvista.operations.domain.eft.cards.to.DailyReportRecord;
 import com.propertyvista.operations.domain.eft.cards.to.DailyReportRecord.DailyReportRecordType;
@@ -58,7 +59,7 @@ class CardsDailyReportAcceptor {
         Set<Pmc> pmcCount = new HashSet<>();
 
         for (DailyReportRecord toRecord : dailyReportFile.records()) {
-            if ((toRecord.transactionType().getValue() == DailyReportRecordType.SALE) || (toRecord.transactionType().getValue() == DailyReportRecordType.PRCO)) {
+            if (DailyReportRecordType.vistaProcessing().contains(toRecord.transactionType().getValue())) {
                 CardsClearanceRecord record = EntityFactory.create(CardsClearanceRecord.class);
                 record.file().set(clearanceFile);
                 record.status().setValue(CardsClearanceRecordProcessingStatus.Received);
@@ -96,6 +97,20 @@ class CardsDailyReportAcceptor {
                 record.transactionAuthorizationNumber().setValue(toRecord.authNumber().getValue());
                 record.voided().setValue(toRecord.voided().getValue());
                 record.approved().setValue(toRecord.approved().getValue());
+
+                switch (toRecord.transactionType().getValue()) {
+                case SALE:
+                    record.transactionType().setValue(CardsClearanceRecordType.Sale);
+                    break;
+                case PRCO:
+                    record.transactionType().setValue(CardsClearanceRecordType.Completion);
+                    break;
+                case RETU:
+                    record.transactionType().setValue(CardsClearanceRecordType.Return);
+                    break;
+                default:
+                    throw new Error("Unhandeld type " + toRecord.transactionType().getValue());
+                }
 
                 Persistence.service().persist(record);
             }

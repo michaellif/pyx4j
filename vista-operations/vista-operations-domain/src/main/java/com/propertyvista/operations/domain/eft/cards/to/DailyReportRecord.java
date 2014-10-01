@@ -14,7 +14,9 @@
 package com.propertyvista.operations.domain.eft.cards.to;
 
 import java.math.BigDecimal;
+import java.util.Collection;
 import java.util.Date;
+import java.util.EnumSet;
 
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Format;
@@ -63,6 +65,10 @@ public interface DailyReportRecord extends IEntity {
          *
          * "SETT" - Settlement
          */
+
+        public static Collection<DailyReportRecordType> vistaProcessing() {
+            return EnumSet.of(SALE, PRCO, RETU);
+        }
     }
 
     public enum DailyReportCardType {
