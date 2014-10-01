@@ -48,6 +48,7 @@ import com.propertyvista.domain.security.VistaDataAccessBehavior;
 import com.propertyvista.domain.security.common.VistaAccessGrantedBehavior;
 import com.propertyvista.domain.security.common.VistaBasicBehavior;
 import com.propertyvista.domain.tenant.CustomerPicture;
+import com.propertyvista.domain.tenant.CustomerPreferences;
 import com.propertyvista.domain.tenant.insurance.GeneralInsurancePolicy;
 import com.propertyvista.domain.tenant.insurance.InsuranceCertificateScan;
 import com.propertyvista.domain.tenant.lease.AgreementDigitalSignatures;
@@ -79,6 +80,7 @@ import com.propertyvista.portal.rpc.portal.resident.services.movein.LeaseSigning
 import com.propertyvista.portal.rpc.portal.resident.services.movein.LeaseTermBlankAgreementDocumentDownloadService;
 import com.propertyvista.portal.rpc.portal.resident.services.movein.MoveInWizardService;
 import com.propertyvista.portal.rpc.portal.resident.services.profile.ResidentAccountCrudService;
+import com.propertyvista.portal.rpc.portal.resident.services.profile.ResidentPreferencesCrudService;
 import com.propertyvista.portal.rpc.portal.resident.services.profile.ResidentProfileCrudService;
 import com.propertyvista.portal.rpc.portal.resident.services.profile.ResidentSummaryService;
 import com.propertyvista.portal.rpc.portal.resident.services.services.GeneralInsurancePolicyCrudService;
@@ -94,6 +96,7 @@ import com.propertyvista.portal.rpc.portal.shared.services.PortalTermsAndPolicie
 import com.propertyvista.portal.rpc.portal.shared.services.SiteThemeServices;
 import com.propertyvista.portal.rpc.shared.services.CreditCardValidationService;
 import com.propertyvista.portal.server.security.access.prospect.CustomerPictureProspectDatasetAccessRule;
+import com.propertyvista.portal.server.security.access.prospect.CustomerPreferencesDatasetAccessRule;
 import com.propertyvista.portal.server.security.access.prospect.IdentificationDocumentFileProspectDatasetAccessRule;
 import com.propertyvista.portal.server.security.access.prospect.LeasePaymentMethodProspectDatasetAccessRule;
 import com.propertyvista.portal.server.security.access.prospect.LeaseTermTenantProspectDatasetAccessRule;
@@ -170,6 +173,7 @@ public class VistaPortalAccessControlList extends UIAclBuilder {
 
         grant(PortalResidentBehavior.Resident, new IServiceExecutePermission(ResidentProfileCrudService.class));
         grant(PortalResidentBehavior.Resident, new IServiceExecutePermission(ResidentAccountCrudService.class));
+        grant(PortalResidentBehavior.Resident, new IServiceExecutePermission(ResidentPreferencesCrudService.class));
 
         grant(PortalResidentBehavior.Guarantor, new IServiceExecutePermission(ResidentProfileCrudService.class));
         grant(PortalResidentBehavior.Guarantor, new IServiceExecutePermission(ResidentAccountCrudService.class));
@@ -328,6 +332,7 @@ public class VistaPortalAccessControlList extends UIAclBuilder {
 
         grant(PortalProspectBehavior.Prospect, VistaDataAccessBehavior.ProspectInPortal);
         grant(VistaDataAccessBehavior.ProspectInPortal, new CustomerPictureProspectDatasetAccessRule(), CustomerPicture.class);
+        grant(VistaDataAccessBehavior.ProspectInPortal, new CustomerPreferencesDatasetAccessRule(), CustomerPreferences.class);
         grant(VistaDataAccessBehavior.ProspectInPortal, new IdentificationDocumentFileProspectDatasetAccessRule(), IdentificationDocumentFile.class);
         grant(VistaDataAccessBehavior.ProspectInPortal, new ProofOfIncomeDocumentFileProspectDatasetAccessRule(), ProofOfIncomeDocumentFile.class);
         grant(VistaDataAccessBehavior.ProspectInPortal, new ProofOfAssetDocumentFileProspectDatasetAccessRule(), ProofOfAssetDocumentFile.class);

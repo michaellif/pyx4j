@@ -7,22 +7,16 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Sep 13, 2014
- * @author michaellif
+ * Created on Oct 1, 2014
+ * @author vlads
  * @version $Id$
  */
-package com.propertyvista.domain.tenant;
+package com.propertyvista.portal.rpc.portal.resident.services.profile;
 
-import com.pyx4j.entity.annotations.EmbeddedEntity;
-import com.pyx4j.entity.core.IEntity;
-import com.pyx4j.entity.core.IPrimitive;
+import com.pyx4j.entity.rpc.AbstractCrudService;
 
-@EmbeddedEntity
-public interface PortalHidable extends IEntity {
+import com.propertyvista.domain.tenant.CustomerPreferences;
 
-    public enum Type {
-        GettingStartedGadget,
-    }
+public interface ResidentPreferencesCrudService extends AbstractCrudService<CustomerPreferences> {
 
-    IPrimitive<Type> type();
 }

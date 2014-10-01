@@ -20,5 +20,7 @@ import com.pyx4j.rpc.shared.IService;
 import com.propertyvista.portal.rpc.portal.resident.dto.CommunityEventsGadgetDTO;
 
 public interface CommunityEventPortalCrudService extends IService {
+
     void retreiveCommunityEvents(AsyncCallback<CommunityEventsGadgetDTO> callback);
+
 }
