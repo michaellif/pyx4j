@@ -66,6 +66,9 @@ public class YardiMockResidentTransactionsStubImpl extends YardiMockStubBase imp
         }
         Property property = getProperty(building);
         // tenants
+        if (building.leases().isEmpty()) {
+            Messages.throwYardiResponseException(YardiHandledErrorMessages.errorMessage_TenantNotFound);
+        }
         for (YardiLease lease : building.leases()) {
             RTCustomer rtCustomer = getRtCustomer(lease, building);
             property.getRTCustomer().add(rtCustomer);
