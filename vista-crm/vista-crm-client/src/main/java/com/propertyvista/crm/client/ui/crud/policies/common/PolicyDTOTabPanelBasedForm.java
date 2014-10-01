@@ -163,10 +163,9 @@ public abstract class PolicyDTOTabPanelBasedForm<POLICY_DTO extends PolicyDTOBas
 
         @Override
         protected IsWidget createContent() {
-            FormPanel formPanel = new FormPanel(this);
-
             prepareNodeComponents();
 
+            FormPanel formPanel = new FormPanel(this);
             for (CField<? extends PolicyNode, ?> nodeComponent : nodeTypeToComponentMap.values()) {
                 formPanel.append(Location.Left, nodeComponent).decorate().componentWidth(200).customLabel(i18n.tr("Applied to"));
             }
@@ -189,12 +188,10 @@ public abstract class PolicyDTOTabPanelBasedForm<POLICY_DTO extends PolicyDTOBas
         protected void onValueSet(boolean populate) {
             super.onValueSet(populate);
 
-            if (populate) {
-                CField<? extends PolicyNode, ?> comp = getCurrentComponent();
-                if (comp != null) {
-                    ((CField<PolicyNode, ?>) comp).populate((PolicyNode) getValue().cast());
-                    comp.setVisible(true);
-                }
+            CField<? extends PolicyNode, ?> comp = getCurrentComponent();
+            if (comp != null) {
+                ((CField<PolicyNode, ?>) comp).setValue((PolicyNode) getValue().cast(), !populate, populate);
+                comp.setVisible(true);
             }
         }
 
@@ -219,6 +216,7 @@ public abstract class PolicyDTOTabPanelBasedForm<POLICY_DTO extends PolicyDTOBas
 
         @SuppressWarnings({ "unchecked", "rawtypes" })
         private void prepareNodeComponents() {
+            nodeTypeToComponentMap.clear();
             for (NodeType<?> nodeType : AVAILABLE_NODE_TYPES) {
                 if (!nodeType.hasOnlyOneInstance()) {
                     CEntityComboBox<? extends PolicyNode> comboBox = new CEntityComboBox<>(nodeType.getType());
@@ -250,9 +248,9 @@ public abstract class PolicyDTOTabPanelBasedForm<POLICY_DTO extends PolicyDTOBas
         private CField<? extends PolicyNode, ?> getCurrentComponent() {
             CField<? extends PolicyNode, ?> comp = null;
 
-            @SuppressWarnings("unchecked")
-            Class<? extends PolicyNode> curType = (getValue() != null ? (Class<? extends PolicyNode>) getValue().getInstanceValueClass() : null);
-            if (nodeTypeToComponentMap != null) {
+            if (getValue() != null) {
+                @SuppressWarnings("unchecked")
+                Class<? extends PolicyNode> curType = (Class<? extends PolicyNode>) getValue().getInstanceValueClass();
                 for (Class<? extends PolicyNode> nodeType : nodeTypeToComponentMap.keySet()) {
                     if (nodeType.equals(curType)) {
                         comp = nodeTypeToComponentMap.get(nodeType);
