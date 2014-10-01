@@ -42,7 +42,7 @@ public interface ThreadPolicyHandle extends IEntity {
     @Owner
     @Detached
     @NotNull
-    @MemberColumn(notNull = true)
+    @MemberColumn(name = "thrd", notNull = true)
     @JoinColumn
     @Indexed
     @ToString(index = 0)
