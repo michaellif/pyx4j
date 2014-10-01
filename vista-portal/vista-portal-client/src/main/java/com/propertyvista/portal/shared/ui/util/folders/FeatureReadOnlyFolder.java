@@ -51,8 +51,7 @@ public class FeatureReadOnlyFolder extends PortalBoxFolder<BillableItem> {
         decor.setCaptionFormatter(new IFormatter<BillableItem, SafeHtml>() {
             @Override
             public SafeHtml format(BillableItem value) {
-                return SafeHtmlUtils.fromString(SimpleMessageFormat.format("{0}: ${1}",
-                        (value.description().isNull() ? value.item().name() : value.description()), value.agreedPrice()));
+                return SafeHtmlUtils.fromString(SimpleMessageFormat.format("{0}: ${1}", value.item().name(), value.agreedPrice()));
             }
         });
 

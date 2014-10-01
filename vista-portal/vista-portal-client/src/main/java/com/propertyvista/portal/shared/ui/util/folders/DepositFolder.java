@@ -13,12 +13,17 @@
  */
 package com.propertyvista.portal.shared.ui.util.folders;
 
+import com.google.gwt.safehtml.shared.SafeHtml;
+import com.google.gwt.safehtml.shared.SafeHtmlUtils;
 import com.google.gwt.user.client.ui.IsWidget;
 
+import com.pyx4j.commons.IFormatter;
+import com.pyx4j.commons.SimpleMessageFormat;
 import com.pyx4j.entity.core.IObject;
 import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.forms.client.ui.CMoneyLabel;
+import com.pyx4j.forms.client.ui.folder.BoxFolderItemDecorator;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.forms.client.ui.panels.FormPanel;
 
@@ -29,6 +34,20 @@ public class DepositFolder extends PortalBoxFolder<Deposit> {
 
     public DepositFolder() {
         super(Deposit.class, false);
+    }
+
+    @Override
+    public BoxFolderItemDecorator<Deposit> createItemDecorator() {
+        BoxFolderItemDecorator<Deposit> decor = super.createItemDecorator();
+
+        decor.setCaptionFormatter(new IFormatter<Deposit, SafeHtml>() {
+            @Override
+            public SafeHtml format(Deposit value) {
+                return SafeHtmlUtils.fromString(SimpleMessageFormat.format("{0}: ${1}", value.type(), value.amount()));
+            }
+        });
+
+        return decor;
     }
 
     @Override
