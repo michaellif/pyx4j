@@ -42,7 +42,6 @@ import com.propertyvista.domain.company.Portfolio;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.tenant.lease.Tenant;
 import com.propertyvista.dto.CommunicationEndpointDTO;
-import com.propertyvista.dto.MessageDTO;
 
 public class SelectRecipientsDialogForm extends HorizontalPanel {
 
@@ -70,7 +69,7 @@ public class SelectRecipientsDialogForm extends HorizontalPanel {
 
     private Collection<Portfolio> selectedPortfolios;
 
-    private MessageDTO selectedAll;
+    private CommunicationEndpointCollection selectedAll;
 
     public SelectRecipientsDialogForm() {
         this(null);
@@ -98,29 +97,27 @@ public class SelectRecipientsDialogForm extends HorizontalPanel {
             @Override
             public void onValueChange(ValueChangeEvent<String> event) {
                 grabSelectedItems();
+                listPanel.clear();
                 if (rg.getValue().equals("Tenant")) {
                     lister = new SelectorDialogTenantLister(false, selectedTenants);
                     tenantListerController = new SelectorDialogTenantListerController(lister, ((SelectorDialogTenantLister) lister).getSelectService());
-                    listPanel.clear();
                     listPanel.add(lister.asWidget());
                 } else if (rg.getValue().equals("Corporate")) {
                     lister = new SelectorDialogCorporateLister(false, selectedEmployees);
                     corporateListerController = new SelectorDialogCorporateListerController(lister, ((SelectorDialogCorporateLister) lister).getSelectService());
-                    listPanel.clear();
                     listPanel.add(lister.asWidget());
                 } else if (rg.getValue().equals("Building")) {
                     lister = new SelectorDialogBuildingLister(false, selectedBuildings);
                     buildingListerController = new SelectorDialogBuildingListerController(lister, ((SelectorDialogBuildingLister) lister).getSelectService());
-                    listPanel.clear();
                     listPanel.add(lister.asWidget());
                 } else if (rg.getValue().equals("Portfolio")) {
                     lister = new SelectorDialogPortfolioLister(false, selectedPortfolios);
                     portfolioListerController = new SelectorDialogPortfolioListerController(lister, ((SelectorDialogPortfolioLister) lister).getSelectService());
-                    listPanel.clear();
                     listPanel.add(lister.asWidget());
                 } else if (rg.getValue().equals("Selected")) {
                     SelectorDialogSelectedForm selectedForm = new SelectorDialogSelectedForm();
-                    listPanel.clear();
+                    selectedForm.init();
+                    selectedForm.populate(selectedAll);
                     listPanel.add(selectedForm.asWidget());
                 }
             }
@@ -203,7 +200,7 @@ public class SelectRecipientsDialogForm extends HorizontalPanel {
     }
 
     private void wrapIt(Collection<CommunicationEndpointDTO> selected) {
-        selectedAll = EntityFactory.create(MessageDTO.class);
+        selectedAll = EntityFactory.create(CommunicationEndpointCollection.class);
         if (selected != null) {
             selectedAll.to().addAll(selected);
         }

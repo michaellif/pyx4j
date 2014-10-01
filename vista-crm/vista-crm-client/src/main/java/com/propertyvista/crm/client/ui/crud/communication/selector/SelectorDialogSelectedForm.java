@@ -19,18 +19,16 @@ import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.forms.client.ui.panels.FormPanel;
 
-import com.propertyvista.dto.MessageDTO;
-
-public class SelectorDialogSelectedForm extends CForm<MessageDTO> {
+public class SelectorDialogSelectedForm extends CForm<CommunicationEndpointCollection> {
 
     public SelectorDialogSelectedForm() {
-        super(MessageDTO.class);
+        super(CommunicationEndpointCollection.class);
     }
 
     @Override
     protected IsWidget createContent() {
         FormPanel formPanel = new FormPanel(this);
-        formPanel.append(Location.Dual, proto().to(), new SelectorDialogMessageDTOFolder());
+        formPanel.append(Location.Dual, proto().to(), new CommunicationEndpointCollectionFolder());
         return formPanel;
     }
 

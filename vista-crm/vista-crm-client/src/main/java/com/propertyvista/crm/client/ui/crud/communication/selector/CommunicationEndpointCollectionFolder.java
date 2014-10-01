@@ -13,15 +13,12 @@
  */
 package com.propertyvista.crm.client.ui.crud.communication.selector;
 
-import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.user.client.ui.IsWidget;
 
-import com.pyx4j.commons.IDebugId;
-import com.pyx4j.entity.core.IList;
 import com.pyx4j.entity.core.IObject;
 import com.pyx4j.forms.client.ui.CForm;
-import com.pyx4j.forms.client.ui.folder.BaseFolderDecorator;
-import com.pyx4j.forms.client.ui.folder.BaseFolderItemDecorator;
+import com.pyx4j.forms.client.ui.folder.BoxFolderDecorator;
+import com.pyx4j.forms.client.ui.folder.BoxFolderItemDecorator;
 import com.pyx4j.forms.client.ui.folder.CFolder;
 import com.pyx4j.forms.client.ui.folder.IFolderDecorator;
 import com.pyx4j.forms.client.ui.folder.IFolderItemDecorator;
@@ -31,39 +28,20 @@ import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.propertyvista.common.client.resources.VistaImages;
 import com.propertyvista.dto.CommunicationEndpointDTO;
 
-public class SelectorDialogMessageDTOFolder extends CFolder<CommunicationEndpointDTO> {
+public class CommunicationEndpointCollectionFolder extends CFolder<CommunicationEndpointDTO> {
 
-    public SelectorDialogMessageDTOFolder() {
+    public CommunicationEndpointCollectionFolder() {
         super(CommunicationEndpointDTO.class);
-        setAddable(true);
-        setOrderable(true);
+        setAddable(false);
+        setOrderable(false);
         setRemovable(true);
-
     }
 
     @Override
     protected IFolderItemDecorator<CommunicationEndpointDTO> createItemDecorator() {
-        return new BaseFolderItemDecorator<CommunicationEndpointDTO>(VistaImages.INSTANCE) {
-
-            @Override
-            public void setActionsState(boolean remove, boolean up, boolean down) {
-                // TODO Auto-generated method stub
-
-            }
-
-            @Override
-            public void adoptItemActionsBar() {
-                // TODO Auto-generated method stub
-
-            }
-
-            @Override
-            public void onSetDebugId(IDebugId parentDebugId) {
-                // TODO Auto-generated method stub
-
-            }
-
-        };
+        BoxFolderItemDecorator<CommunicationEndpointDTO> itemDecorator = new BoxFolderItemDecorator<CommunicationEndpointDTO>(VistaImages.INSTANCE);
+        itemDecorator.setExpended(false);
+        return itemDecorator;
     }
 
     @Override
@@ -73,14 +51,7 @@ public class SelectorDialogMessageDTOFolder extends CFolder<CommunicationEndpoin
 
     @Override
     protected IFolderDecorator<CommunicationEndpointDTO> createFolderDecorator() {
-        return new BaseFolderDecorator<CommunicationEndpointDTO>(VistaImages.INSTANCE, "", true) {
-
-            @Override
-            public void onValueChange(ValueChangeEvent<IList<CommunicationEndpointDTO>> event) {
-                // TODO Auto-generated method stub
-            }
-
-        };
+        return new BoxFolderDecorator<CommunicationEndpointDTO>(VistaImages.INSTANCE, "", true);
     }
 
     private class CommunicationEndpointDTOPresenter extends CForm<CommunicationEndpointDTO> {
