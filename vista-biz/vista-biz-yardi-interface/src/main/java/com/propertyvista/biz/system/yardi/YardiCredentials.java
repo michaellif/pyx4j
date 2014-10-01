@@ -29,7 +29,7 @@ public class YardiCredentials {
 
     private static I18n i18n = I18n.get(YardiCredentials.class);
 
-    private static final String YARDI_CREDENTIALS_ERROR = "No available Yardi connection found. Please check Yardi settings.";
+    private static final String YARDI_CREDENTIALS_ERROR = "Yardi interface is temporarily disabled.";
 
     private static ThreadLocal<List<PmcYardiCredential>> ycCache = new ThreadLocal<>();
 

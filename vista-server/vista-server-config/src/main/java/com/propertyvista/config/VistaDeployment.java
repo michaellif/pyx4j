@@ -184,6 +184,7 @@ public class VistaDeployment {
                 NamespaceManager.setNamespace(VistaNamespace.operationsNamespace);
                 EntityQueryCriteria<PmcYardiCredential> criteria = EntityQueryCriteria.create(PmcYardiCredential.class);
                 criteria.eq(criteria.proto().id(), yardiInterfaceId);
+                criteria.eq(criteria.proto().enabled(), true);
                 criteria.eq(criteria.proto().pmc().namespace(), namespace);
                 return Persistence.service().retrieve(criteria);
             } else {
@@ -200,6 +201,7 @@ public class VistaDeployment {
         try {
             NamespaceManager.setNamespace(VistaNamespace.operationsNamespace);
             EntityQueryCriteria<PmcYardiCredential> criteria = EntityQueryCriteria.create(PmcYardiCredential.class);
+            criteria.eq(criteria.proto().enabled(), true);
             criteria.eq(criteria.proto().pmc().namespace(), namespace);
             return Persistence.service().query(criteria);
         } finally {
