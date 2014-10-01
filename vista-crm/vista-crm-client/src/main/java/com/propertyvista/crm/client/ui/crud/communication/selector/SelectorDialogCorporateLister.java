@@ -37,19 +37,20 @@ public class SelectorDialogCorporateLister extends EntityLister<Employee> {
 
     public AbstractListCrudService<Employee> selectService;
 
-    private final ListerDataSource<Employee> dataSource;
-
     private final Collection<Employee> alreadySelected;
 
-    public SelectorDialogCorporateLister(boolean isVersioned) {
-        this(isVersioned, null);
+    private final SelectRecipientsDialogForm parent;
+
+    public SelectorDialogCorporateLister(SelectRecipientsDialogForm parent, boolean isVersioned) {
+        this(parent, null);
     }
 
-    public SelectorDialogCorporateLister(boolean isVersioned, Collection<Employee> alreadySelected) {
-        super(Employee.class, isVersioned);
+    public SelectorDialogCorporateLister(SelectRecipientsDialogForm parent, Collection<Employee> alreadySelected) {
+        super(Employee.class, false);
+
+        this.parent = parent;
         this.selectService = createSelectService();
         setDataTableModel();
-        this.dataSource = new ListerDataSource<Employee>(Employee.class, this.selectService);
         this.alreadySelected = (alreadySelected != null ? alreadySelected : Collections.<Employee> emptyList());
         setFilters(createRestrictionFilterForAlreadySelected());
         setDataSource(new ListerDataSource<Employee>(Employee.class, this.selectService));

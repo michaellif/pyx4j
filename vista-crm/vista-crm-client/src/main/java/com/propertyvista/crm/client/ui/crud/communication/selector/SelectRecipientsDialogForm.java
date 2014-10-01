@@ -32,9 +32,11 @@ import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.SimplePanel;
 
 import com.pyx4j.entity.core.EntityFactory;
+import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.site.client.backoffice.ui.prime.lister.ILister;
 import com.pyx4j.widgets.client.RadioGroup;
 
+import com.propertyvista.domain.communication.CommunicationEndpoint.ContactType;
 import com.propertyvista.domain.communication.CommunicationGroup;
 import com.propertyvista.domain.company.Employee;
 import com.propertyvista.domain.company.Portfolio;
@@ -98,19 +100,19 @@ public class SelectRecipientsDialogForm extends HorizontalPanel {
                 grabSelectedItems();
                 listPanel.clear();
                 if (rg.getValue().equals("Tenant")) {
-                    lister = new SelectorDialogTenantLister(false, selectedTenants);
+                    lister = new SelectorDialogTenantLister(SelectRecipientsDialogForm.this, selectedTenants);
                     tenantListerController = new SelectorDialogTenantListerController(lister, ((SelectorDialogTenantLister) lister).getSelectService());
                     listPanel.add(lister.asWidget());
                 } else if (rg.getValue().equals("Corporate")) {
-                    lister = new SelectorDialogCorporateLister(false, selectedEmployees);
+                    lister = new SelectorDialogCorporateLister(SelectRecipientsDialogForm.this, selectedEmployees);
                     corporateListerController = new SelectorDialogCorporateListerController(lister, ((SelectorDialogCorporateLister) lister).getSelectService());
                     listPanel.add(lister.asWidget());
                 } else if (rg.getValue().equals("Building")) {
-                    lister = new SelectorDialogBuildingLister(false, selectedBuildings);
+                    lister = new SelectorDialogBuildingLister(SelectRecipientsDialogForm.this, selectedBuildings);
                     buildingListerController = new SelectorDialogBuildingListerController(lister, ((SelectorDialogBuildingLister) lister).getSelectService());
                     listPanel.add(lister.asWidget());
                 } else if (rg.getValue().equals("Portfolio")) {
-                    lister = new SelectorDialogPortfolioLister(false, selectedPortfolios);
+                    lister = new SelectorDialogPortfolioLister(SelectRecipientsDialogForm.this, selectedPortfolios);
                     portfolioListerController = new SelectorDialogPortfolioListerController(lister, ((SelectorDialogPortfolioLister) lister).getSelectService());
                     listPanel.add(lister.asWidget());
                 } else if (rg.getValue().equals("Selected")) {
@@ -194,5 +196,42 @@ public class SelectRecipientsDialogForm extends HorizontalPanel {
         if (selected != null) {
             selectedAll.to().addAll(selected);
         }
+    }
+
+    public void addSelected(IEntity selected) {
+        CommunicationEndpointDTO proto = EntityFactory.create(CommunicationEndpointDTO.class);
+        if (selected instanceof Building) {
+            proto.name().set(((Building) selected).propertyCode());
+            proto.type().setValue(ContactType.Building);
+            CommunicationGroup cg = EntityFactory.create(CommunicationGroup.class);
+            cg.building().set(selected);
+            proto.endpoint().set(cg);
+        } else if (selected instanceof Portfolio) {
+            proto.name().set(((Portfolio) selected).name());
+            proto.type().setValue(ContactType.Portfolio);
+            CommunicationGroup cg = EntityFactory.create(CommunicationGroup.class);
+            cg.portfolio().set(selected);
+            proto.endpoint().set(cg);
+        } else if (selected instanceof Employee) {
+            proto.name().setValue(((Employee) selected).name().getStringView());
+            proto.type().setValue(ContactType.Employee);
+            proto.endpoint().set(selected);
+        } else if (selected instanceof Tenant) {
+            proto.name().setValue(((Tenant) selected).customer().person().name().getStringView());
+            proto.type().setValue(ContactType.Tenant);
+            proto.endpoint().set(selected);
+        }
+        selectedAll.to().add(proto);
+    }
+
+    public void removeSelected(IEntity selected, Class<? extends IEntity> type) {
+
+        for (CommunicationEndpointDTO current : selectedAll.to())
+            if (current.endpoint().getInstanceValueClass().equals(type)) {
+                if (current.endpoint().businessEquals(selected)) {
+                    selectedAll.to().remove(current);
+                    break;
+                }
+            }
     }
 }

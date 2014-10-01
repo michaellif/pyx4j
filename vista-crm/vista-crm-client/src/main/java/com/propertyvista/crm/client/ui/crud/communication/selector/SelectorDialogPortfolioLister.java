@@ -37,19 +37,19 @@ public class SelectorDialogPortfolioLister extends EntityLister<Portfolio> {
 
     public AbstractListCrudService<Portfolio> selectService;
 
-    // private final ListerDataSource<Portfolio> dataSource;
-
     private final Collection<Portfolio> alreadySelected;
 
-    public SelectorDialogPortfolioLister(boolean isVersioned) {
-        this(isVersioned, null);
+    private final SelectRecipientsDialogForm parent;
+
+    public SelectorDialogPortfolioLister(SelectRecipientsDialogForm parent) {
+        this(parent, null);
     }
 
-    public SelectorDialogPortfolioLister(boolean isVersioned, Collection<Portfolio> alreadySelected) {
-        super(Portfolio.class, isVersioned);
+    public SelectorDialogPortfolioLister(SelectRecipientsDialogForm parent, Collection<Portfolio> alreadySelected) {
+        super(Portfolio.class, false);
+        this.parent = parent;
         this.selectService = createSelectService();
         setDataTableModel();
-        //this.dataSource = new ListerDataSource<Portfolio>(Portfolio.class, this.selectService);
         this.alreadySelected = (alreadySelected != null ? alreadySelected : Collections.<Portfolio> emptyList());
         setFilters(createRestrictionFilterForAlreadySelected());
         setDataSource(new ListerDataSource<Portfolio>(Portfolio.class, this.selectService));

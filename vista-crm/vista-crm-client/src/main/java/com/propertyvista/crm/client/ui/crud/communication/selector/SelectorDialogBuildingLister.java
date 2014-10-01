@@ -37,22 +37,23 @@ public class SelectorDialogBuildingLister extends EntityLister<Building> {
 
     public AbstractListCrudService<Building> selectService;
 
-    private final ListerDataSource<Building> dataSource;
-
     private final Collection<Building> alreadySelected;
 
-    public SelectorDialogBuildingLister(boolean isVersioned) {
-        this(isVersioned, null);
+    private final SelectRecipientsDialogForm parent;
+
+    public SelectorDialogBuildingLister(SelectRecipientsDialogForm parent) {
+        this(parent, null);
     }
 
-    public SelectorDialogBuildingLister(boolean isVersioned, Collection<Building> alreadySelected) {
-        super(Building.class, isVersioned);
+    public SelectorDialogBuildingLister(SelectRecipientsDialogForm parent, Collection<Building> alreadySelected) {
+        super(Building.class, false);
+
+        this.parent = parent;
         this.selectService = createSelectService();
         setDataTableModel();
-        this.dataSource = new ListerDataSource<Building>(Building.class, this.selectService);
         this.alreadySelected = (alreadySelected != null ? alreadySelected : Collections.<Building> emptyList());
         setFilters(createRestrictionFilterForAlreadySelected());
-        setDataSource(dataSource);
+        setDataSource(new ListerDataSource<Building>(Building.class, this.selectService));
 
     }
 
