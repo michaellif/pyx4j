@@ -506,7 +506,9 @@ public class RichTextToolbar extends FlowPanel {
 
             @Override
             public void onChange(ChangeEvent event) {
-                formatter.setFontSize(fontSizesConstants[fontSizes.getSelectedIndex() - 1]);
+                if (fontSizes.getSelectedIndex() > 0) {
+                    formatter.setFontSize(fontSizesConstants[fontSizes.getSelectedIndex() - 1]);
+                }
             }
         });
         lb.setVisibleItemCount(1);
