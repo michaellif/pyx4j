@@ -188,10 +188,12 @@ public abstract class PolicyDTOTabPanelBasedForm<POLICY_DTO extends PolicyDTOBas
         protected void onValueSet(boolean populate) {
             super.onValueSet(populate);
 
-            CField<? extends PolicyNode, ?> comp = getCurrentComponent();
-            if (comp != null) {
-                ((CField<PolicyNode, ?>) comp).setValue((PolicyNode) getValue().cast(), !populate, populate);
-                comp.setVisible(true);
+            if (populate) {
+                CField<? extends PolicyNode, ?> comp = getCurrentComponent();
+                if (comp != null) {
+                    ((CField<PolicyNode, ?>) comp).setValue((PolicyNode) getValue().cast(), false);
+                    comp.setVisible(true);
+                }
             }
         }
 
@@ -210,7 +212,6 @@ public abstract class PolicyDTOTabPanelBasedForm<POLICY_DTO extends PolicyDTOBas
             if (comp != null) {
                 comp.setVisited(true);
             }
-
             super.setVisitedRecursive();
         }
 
