@@ -72,6 +72,8 @@ public class SelectRecipientsDialogForm extends HorizontalPanel {
 
     private CommunicationEndpointCollection selectedAll;
 
+    SelectorDialogSelectedForm selectedForm;
+
     public SelectRecipientsDialogForm() {
         this(null);
     }
@@ -116,7 +118,7 @@ public class SelectRecipientsDialogForm extends HorizontalPanel {
                     portfolioListerController = new SelectorDialogPortfolioListerController(lister, ((SelectorDialogPortfolioLister) lister).getSelectService());
                     listPanel.add(lister.asWidget());
                 } else if (rg.getValue().equals("Selected")) {
-                    SelectorDialogSelectedForm selectedForm = new SelectorDialogSelectedForm();
+                    selectedForm = new SelectorDialogSelectedForm();
                     selectedForm.init();
                     selectedForm.populate(selectedAll);
                     listPanel.add(selectedForm.asWidget());
@@ -127,26 +129,12 @@ public class SelectRecipientsDialogForm extends HorizontalPanel {
         add(menuPanel);
         add(listPanel);
         setCellWidth(listPanel, "100%");
-        dealSelectedRecepients(alreadySelected);
         wrapIt(alreadySelected);
+        grabSelectedItems();
     }
 
     public void grabSelectedItems() {
-        if (null != lister) {
-            if (lister instanceof SelectorDialogTenantLister) {
-                selectedTenants = new ArrayList<Tenant>(((SelectorDialogTenantLister) lister).getSelectedItems());
-            }
-            if (lister instanceof SelectorDialogCorporateLister) {
-                selectedEmployees = new ArrayList<Employee>(((SelectorDialogCorporateLister) lister).getSelectedItems());
-            }
-            if (lister instanceof SelectorDialogBuildingLister) {
-                selectedBuildings = new ArrayList<Building>(((SelectorDialogBuildingLister) lister).getSelectedItems());
-            }
-            if (lister instanceof SelectorDialogPortfolioLister) {
-                selectedPortfolios = new ArrayList<Portfolio>(((SelectorDialogPortfolioLister) lister).getSelectedItems());
-            }
-        }
-
+        dealSelectedRecepients(selectedAll.to());
     }
 
     public Collection<CommunicationEndpointDTO> getSelectedItems() {
@@ -157,33 +145,40 @@ public class SelectRecipientsDialogForm extends HorizontalPanel {
         if (null == selected) {
             return;
         }
+        if (selectedTenants == null) {
+            selectedTenants = new ArrayList<Tenant>();
+        } else {
+            selectedTenants.clear();
+        }
+        if (selectedEmployees == null) {
+            selectedEmployees = new ArrayList<Employee>();
+        } else {
+            selectedEmployees.clear();
+        }
+        if (selectedBuildings == null) {
+            selectedBuildings = new ArrayList<Building>();
+        } else {
+            selectedBuildings.clear();
+        }
+        if (selectedPortfolios == null) {
+            selectedPortfolios = new ArrayList<Portfolio>();
+        } else {
+            selectedPortfolios.clear();
+        }
 
         for (CommunicationEndpointDTO current : selected) {
             if (current.endpoint().getInstanceValueClass().equals(Tenant.class)) {
-                if (selectedTenants == null) {
-                    selectedTenants = new ArrayList<Tenant>();
-                }
                 Tenant t = current.endpoint().cast();
                 selectedTenants.add(t);
             } else if (current.endpoint().getInstanceValueClass().equals(Employee.class)) {
-                if (selectedEmployees == null) {
-                    selectedEmployees = new ArrayList<Employee>();
-                }
                 Employee e = current.endpoint().cast();
                 selectedEmployees.add(e);
             } else if (current.endpoint().getInstanceValueClass().equals(CommunicationGroup.class)) {
                 CommunicationGroup cg = current.endpoint().cast();
                 if (cg.portfolio() != null && !cg.portfolio().isNull() && !cg.portfolio().isEmpty()) {
-                    if (selectedPortfolios == null) {
-                        selectedPortfolios = new ArrayList<Portfolio>();
-                    }
                     Portfolio p = cg.portfolio().cast();
                     selectedPortfolios.add(p);
-
                 } else {
-                    if (selectedBuildings == null) {
-                        selectedBuildings = new ArrayList<Building>();
-                    }
                     Building b = cg.building().cast();
                     selectedBuildings.add(b);
                 }
