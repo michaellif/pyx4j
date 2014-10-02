@@ -85,6 +85,7 @@ public abstract class PolicyDTOTabPanelBasedForm<POLICY_DTO extends PolicyDTOBas
                     get(proto().node()).populate(EntityFactory.create(selectedNodeType));
                     get(proto().node()).setVisible(!selectedNodeType.equals(OrganizationPoliciesNode.class));
                 } else {
+                    get(proto().node()).reset();
                     get(proto().node()).setVisible(false);
                 }
             }
@@ -183,15 +184,15 @@ public abstract class PolicyDTOTabPanelBasedForm<POLICY_DTO extends PolicyDTOBas
             }
         }
 
-        @SuppressWarnings("unchecked")
         @Override
+        @SuppressWarnings("unchecked")
         protected void onValueSet(boolean populate) {
             super.onValueSet(populate);
 
             if (populate) {
                 CField<? extends PolicyNode, ?> comp = getCurrentComponent();
                 if (comp != null) {
-                    ((CField<PolicyNode, ?>) comp).setValue((PolicyNode) getValue().cast(), false);
+                    ((CField<PolicyNode, ?>) comp).setValue(getValue().<PolicyNode> cast(), false);
                     comp.setVisible(true);
                 }
             }
@@ -234,12 +235,14 @@ public abstract class PolicyDTOTabPanelBasedForm<POLICY_DTO extends PolicyDTOBas
                     comboBox.addValueChangeHandler(new ValueChangeHandler() {
                         @Override
                         public void onValueChange(ValueChangeEvent event) {
-                            setValue((PolicyNode) event.getValue());
+                            if (event.getValue() != null) {
+                                setValue((PolicyNode) event.getValue());
+                            }
                         }
                     });
-                    comboBox.setMandatory(true);
                     comboBox.setEditable(isEditable());
                     comboBox.setViewable(isViewable());
+                    comboBox.setMandatory(true);
 
                     nodeTypeToComponentMap.put(nodeType.getType(), comboBox);
                 }
