@@ -26,8 +26,10 @@ import java.io.IOException;
 import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Properties;
 
+import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.commons.TimeUtils;
 
 public class PropertiesConfiguration implements CanReloadProperties {
@@ -191,4 +193,25 @@ public class PropertiesConfiguration implements CanReloadProperties {
         return m;
     }
 
+    public static String stringView(String prefix, Map<String, String> properties) {
+        int max_key = 0;
+        for (String key : properties.keySet()) {
+            int len = key.length();
+            if (len > max_key) {
+                max_key = len;
+            }
+        }
+
+        StringBuffer b = new StringBuffer();
+
+        for (Entry<String, String> me : properties.entrySet()) {
+            b.append(prefix);
+            b.append(CommonsStringUtils.paddingRight(me.getKey(), max_key, ' '));
+            b.append(" : ");
+            b.append(me.getValue());
+            b.append('\n');
+        }
+
+        return b.toString();
+    }
 }
