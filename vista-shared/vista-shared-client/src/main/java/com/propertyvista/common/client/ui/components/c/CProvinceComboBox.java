@@ -19,6 +19,7 @@ import java.util.List;
 
 import com.google.gwt.event.shared.HandlerRegistration;
 
+import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.forms.client.events.HasNValueChangeHandlers;
 import com.pyx4j.forms.client.events.HasOptionsChangeHandlers;
 import com.pyx4j.forms.client.events.NValueChangeEvent;
@@ -42,6 +43,11 @@ public class CProvinceComboBox extends CFocusComponent<String, NProvinceComboBox
         NProvinceComboBox nativeComboBox = new NProvinceComboBox(this);
         nativeComboBox.refreshOptions();
         setNativeComponent(nativeComboBox);
+    }
+
+    @Override
+    public boolean isValueEmpty() {
+        return CommonsStringUtils.isEmpty(getValue());
     }
 
     public String convertOption(ISOProvince prov) {
