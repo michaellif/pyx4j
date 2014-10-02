@@ -23,6 +23,7 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.backoffice.ui.prime.lister.AbstractLister;
 
 import com.propertyvista.domain.property.asset.building.Building;
+import com.propertyvista.shared.config.VistaFeatures;
 
 public class BuildingLister extends AbstractLister<Building> {
 
@@ -35,6 +36,7 @@ public class BuildingLister extends AbstractLister<Building> {
                 new MemberColumnDescriptor.Builder(proto().propertyCode(), true).build(),
                 new MemberColumnDescriptor.Builder(proto().complex(), false).build(),
                 new MemberColumnDescriptor.Builder(proto().externalId(), false).build(),
+                new MemberColumnDescriptor.Builder(proto().integrationSystemId(), VistaFeatures.instance().yardiIntegration()).build(),
                 new MemberColumnDescriptor.Builder(proto().info().name(), true).build(),
                 new MemberColumnDescriptor.Builder(proto().info().type(), true).build(),
                 new MemberColumnDescriptor.Builder(proto().info().shape(), false).build(),

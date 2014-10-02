@@ -25,7 +25,6 @@ public class MerchantAccountViewerViewImpl extends CrmViewerViewImplBase<Merchan
     private final ILister<Building> buildingLister;
 
     public MerchantAccountViewerViewImpl() {
-
         buildingLister = new ListerInternalViewImplBase<Building>(new BuildingLister());
 
         setForm(new MerchantAccountForm(this));

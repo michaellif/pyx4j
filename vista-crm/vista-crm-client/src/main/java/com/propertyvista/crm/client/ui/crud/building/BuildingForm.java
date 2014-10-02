@@ -161,7 +161,11 @@ public class BuildingForm extends CrmEntityForm<BuildingDTO> {
         }
 
         get(proto().complex()).setVisible(!getValue().complex().isNull());
+        get(proto().landlord()).setVisible(!getValue().landlord().isNull());
+
         get(proto().externalId()).setVisible(!getValue().externalId().isNull());
+        get(proto().integrationSystemId()).setVisible(VistaFeatures.instance().yardiIntegration());
+
         get(proto().suspended()).setEditable(SecurityController.check(VistaBasicBehavior.PropertyVistaSupport));
 
         // tweak property code editing UI:
@@ -207,23 +211,20 @@ public class BuildingForm extends CrmEntityForm<BuildingDTO> {
 
         formPanel.h1(i18n.tr("Building Summary"));
         formPanel.append(Location.Left, proto().propertyCode()).decorate();
-        formPanel.append(Location.Right, proto().info().shape()).decorate().componentWidth(100);
-
+        formPanel.append(Location.Left, proto().externalId()).decorate();
+        formPanel.append(Location.Left, proto().integrationSystemId()).decorate();
         formPanel.append(Location.Left, proto().info().name()).decorate();
-        formPanel.append(Location.Right, proto().info().totalStoreys()).decorate().componentWidth(50);
-
         formPanel.append(Location.Left, proto().info().type()).decorate();
-        formPanel.append(Location.Right, proto().info().residentialStoreys()).decorate().componentWidth(50);
-
-        formPanel.append(Location.Right, proto().externalId()).decorate();
-
         if (isEditable()) {
             formPanel.append(Location.Left, proto().complex(), new CEntityLabel<Complex>()).decorate();
         } else {
             formPanel.append(Location.Left, proto().complex(), new CEntityCrudHyperlink<Complex>(AppPlaceEntityMapper.resolvePlace(Complex.class))).decorate();
         }
-
         formPanel.append(Location.Left, proto().landlord(), new CEntityCrudHyperlink<Landlord>(AppPlaceEntityMapper.resolvePlace(Landlord.class))).decorate();
+
+        formPanel.append(Location.Right, proto().info().shape()).decorate().componentWidth(100);
+        formPanel.append(Location.Right, proto().info().totalStoreys()).decorate().componentWidth(50);
+        formPanel.append(Location.Right, proto().info().residentialStoreys()).decorate().componentWidth(50);
 
         formPanel.append(Location.Right, proto().defaultProductCatalog()).decorate();
         formPanel.append(Location.Right, proto().suspended()).decorate();
@@ -242,6 +243,10 @@ public class BuildingForm extends CrmEntityForm<BuildingDTO> {
                     .h4(i18n.tr("If any value is set empty - will be automatically generated based on address on Save/Apply. Can be manually adjusted after."));
         }
         formPanel.append(Location.Dual, inject(proto().geoLocation(), new GeoLocationEditor()));
+
+        // tweaks:
+        get(proto().integrationSystemId()).setEditable(false);
+
         return formPanel;
     }
 
