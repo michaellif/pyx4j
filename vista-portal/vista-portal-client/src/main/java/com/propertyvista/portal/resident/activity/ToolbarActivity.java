@@ -62,6 +62,8 @@ public class ToolbarActivity extends AbstractActivity implements ToolbarPresente
         view.setPresenter(this);
         if (place instanceof ResidentPortalSiteMap.Dashboard) {
             view.setGettingStartedVisible(PortalHidablePreferenceManager.isHidden(CustomerPreferencesPortalHidable.Type.GettingStartedGadget));
+        } else {
+            view.setGettingStartedVisible(false);
         }
     }
 

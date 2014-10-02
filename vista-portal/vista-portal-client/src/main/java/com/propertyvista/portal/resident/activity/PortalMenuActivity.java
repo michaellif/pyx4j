@@ -46,6 +46,8 @@ public class PortalMenuActivity extends AbstractActivity implements PortalMenuPr
         view.setPresenter(this);
         if (place instanceof ResidentPortalSiteMap.Dashboard) {
             view.setGettingStartedVisible(PortalHidablePreferenceManager.isHidden(CustomerPreferencesPortalHidable.Type.GettingStartedGadget));
+        } else {
+            view.setGettingStartedVisible(false);
         }
 
     }
