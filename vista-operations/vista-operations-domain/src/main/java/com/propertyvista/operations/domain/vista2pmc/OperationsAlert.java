@@ -51,9 +51,6 @@ public interface OperationsAlert extends IEntity {
     @Editor(type = EditorType.textarea)
     IPrimitive<String> operationsNotes();
 
-    @Editor(type = EditorType.label)
-    IPrimitive<Key> admin();
-
     @Length(39)
     @Editor(type = EditorType.label)
     IPrimitive<String> remoteAddr();

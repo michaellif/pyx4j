@@ -317,7 +317,7 @@ public class CardServiceSimulationProcessor {
                 caledonResponse.text = "TOKEN NOT FOUND";
             } else {
                 if (CommonsStringUtils.isStringSet(caledonRequest.creditCardNumber)) {
-                    token.card().number().setValue(caledonRequest.creditCardNumber);
+                    token.card().cardNumber().setValue(caledonRequest.creditCardNumber);
                 }
                 if (CommonsStringUtils.isStringSet(caledonRequest.expiryDate)) {
                     token.card().expiryDate().setValue(CardServiceSimulationUtils.parsDate(caledonRequest.expiryDate));
@@ -557,7 +557,7 @@ public class CardServiceSimulationProcessor {
 
     private static CardServiceSimulationCard createCard(CaledonRequest caledonRequest) {
         CardServiceSimulationCard card = EntityFactory.create(CardServiceSimulationCard.class);
-        card.number().setValue(caledonRequest.creditCardNumber);
+        card.cardNumber().setValue(caledonRequest.creditCardNumber);
         card.cardType().setValue(CardServiceSimulationUtils.detectCardType(caledonRequest.creditCardNumber));
         card.expiryDate().setValue(CardServiceSimulationUtils.parsDate(caledonRequest.expiryDate));
         card.creditLimit().setValue(new BigDecimal("-10000.00"));
@@ -570,12 +570,12 @@ public class CardServiceSimulationProcessor {
         CardServiceSimulationCard card;
         {
             EntityQueryCriteria<CardServiceSimulationCard> criteria = EntityQueryCriteria.create(CardServiceSimulationCard.class);
-            criteria.eq(criteria.proto().number(), caledonRequest.creditCardNumber);
+            criteria.eq(criteria.proto().cardNumber(), caledonRequest.creditCardNumber);
             card = Persistence.service().retrieve(criteria);
         }
         if (card == null) {
             EntityQueryCriteria<CardServiceSimulationCard> criteria = EntityQueryCriteria.create(CardServiceSimulationCard.class);
-            criteria.eq(criteria.proto().number(), caledonRequest.creditCardNumber);
+            criteria.eq(criteria.proto().cardNumber(), caledonRequest.creditCardNumber);
             //criteria.notExists(criteria.proto().tokens());
             card = Persistence.service().retrieve(criteria);
         }

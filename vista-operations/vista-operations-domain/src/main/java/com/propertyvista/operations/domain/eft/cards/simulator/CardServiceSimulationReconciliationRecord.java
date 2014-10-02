@@ -32,7 +32,7 @@ public interface CardServiceSimulationReconciliationRecord extends IEntity {
 
     IPrimitive<String> fileId();
 
-    IPrimitive<LogicalDate> date();
+    IPrimitive<LogicalDate> depositDate();
 
     CardServiceSimulationMerchantAccount merchant();
 

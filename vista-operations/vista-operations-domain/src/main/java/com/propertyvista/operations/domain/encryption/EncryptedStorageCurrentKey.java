@@ -25,5 +25,5 @@ import com.propertyvista.domain.VistaNamespace;
 @I18n(strategy = I18n.I18nStrategy.IgnoreAll)
 public interface EncryptedStorageCurrentKey extends IEntity {
 
-    EncryptedStoragePublicKey current();
+    EncryptedStoragePublicKey currentKey();
 }

@@ -35,7 +35,7 @@ public interface TenantSureHQUpdateFile extends IEntity {
 
     @Owned(cascade = {})
     @Detached(level = AttachLevel.Detached)
-    ISet<TenantSureHQUpdateRecord> batches();
+    ISet<TenantSureHQUpdateRecord> records();
 
     @Timestamp(Timestamp.Update.Created)
     IPrimitive<Date> received();

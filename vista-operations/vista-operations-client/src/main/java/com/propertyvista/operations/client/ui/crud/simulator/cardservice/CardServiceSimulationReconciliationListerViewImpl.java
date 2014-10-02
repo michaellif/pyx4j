@@ -37,7 +37,7 @@ public class CardServiceSimulationReconciliationListerViewImpl extends Operation
             setDataTableModel(new DataTableModel<CardServiceSimulationReconciliationRecord>(//@formatter:off
                     new MemberColumnDescriptor.Builder(proto().id()).build(),
                     new MemberColumnDescriptor.Builder(proto().fileId()).build(),
-                    new MemberColumnDescriptor.Builder(proto().date()).build(),
+                    new MemberColumnDescriptor.Builder(proto().depositDate()).build(),
                     new MemberColumnDescriptor.Builder(proto().merchant()).build(),
                     new MemberColumnDescriptor.Builder(proto().merchant().company()).build(),
                     new MemberColumnDescriptor.Builder(proto().totalDeposit()).build(),

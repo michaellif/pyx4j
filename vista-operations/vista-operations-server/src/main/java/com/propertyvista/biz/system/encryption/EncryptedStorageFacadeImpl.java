@@ -114,7 +114,7 @@ public class EncryptedStorageFacadeImpl implements EncryptedStorageFacade {
             }
         });
         if (current != null) {
-            return current.current().getPrimaryKey();
+            return current.currentKey().getPrimaryKey();
         } else {
             return null;
         }
@@ -288,7 +288,7 @@ public class EncryptedStorageFacadeImpl implements EncryptedStorageFacade {
             keyDto.created().set(publicKey.created());
             keyDto.expired().set(publicKey.expired());
 
-            if ((current != null) && publicKey.getPrimaryKey().equals(current.current().getPrimaryKey())) {
+            if ((current != null) && publicKey.getPrimaryKey().equals(current.currentKey().getPrimaryKey())) {
                 keyDto.isCurrent().setValue(Boolean.TRUE);
             }
             keyDto.decryptionEnabled().setValue(activeKeys.get(publicKey.getPrimaryKey()) != null);
@@ -376,7 +376,7 @@ public class EncryptedStorageFacadeImpl implements EncryptedStorageFacade {
                 if (current == null) {
                     current = EntityFactory.create(EncryptedStorageCurrentKey.class);
                 }
-                current.current().setPrimaryKey(publicKeyKey);
+                current.currentKey().setPrimaryKey(publicKeyKey);
                 Persistence.service().persist(current);
                 return null;
             }

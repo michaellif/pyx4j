@@ -48,7 +48,7 @@ class CardServiceSimulationCardForm extends OperationsEntityForm<CardServiceSimu
         FormPanel formPanel = new FormPanel(this);
 
         formPanel.append(Location.Left, proto().cardType()).decorate();
-        formPanel.append(Location.Left, proto().number()).decorate();
+        formPanel.append(Location.Left, proto().cardNumber()).decorate();
         formPanel.append(Location.Left, proto().expiryDate()).decorate();
         formPanel.append(Location.Left, proto().creditLimit()).decorate();
         formPanel.append(Location.Left, proto().balance()).decorate();
@@ -112,7 +112,7 @@ class CardServiceSimulationCardForm extends OperationsEntityForm<CardServiceSimu
         if (get(proto().cardType()).getValue() == null) {
             get(proto().cardType()).setValue(CreditCardType.Visa);
         }
-        ((CTextFieldBase<?, ?>) get(proto().number())).setValueByString(CreditCardNumberGenerator.generateCardNumber(get(proto().cardType()).getValue()));
+        ((CTextFieldBase<?, ?>) get(proto().cardNumber())).setValueByString(CreditCardNumberGenerator.generateCardNumber(get(proto().cardType()).getValue()));
 
         LogicalDate nextMonth = new LogicalDate();
         TimeUtils.addDays(nextMonth, 31);

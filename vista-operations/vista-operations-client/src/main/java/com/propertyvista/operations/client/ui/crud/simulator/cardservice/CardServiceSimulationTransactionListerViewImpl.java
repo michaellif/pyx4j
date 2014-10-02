@@ -33,7 +33,7 @@ public class CardServiceSimulationTransactionListerViewImpl extends OperationsLi
             super(CardServiceSimulationTransaction.class, false, true);
             setDataTableModel(new DataTableModel<CardServiceSimulationTransaction>(//@formatter:off
                     new MemberColumnDescriptor.Builder(proto().id()).build(),
-                    new MemberColumnDescriptor.Builder(proto().card().number()).columnTitle("Card Number").build(),
+                    new MemberColumnDescriptor.Builder(proto().card().cardNumber()).columnTitle("Card Number").build(),
                     new MemberColumnDescriptor.Builder(proto().merchant()).build(),
                     new MemberColumnDescriptor.Builder(proto().merchant().company()).build(),
                     new MemberColumnDescriptor.Builder(proto().transactionType() ).build(),

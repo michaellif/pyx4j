@@ -129,19 +129,19 @@ class CardsReconciliationProcessor {
                         "AggregatedTransfer",
                         reconciliationRecord.totalDeposit().getValue(),
                         SimpleMessageFormat.format("AggregatedTransferReconciliation {0} {1} {2}", reconciliationRecord.id(),
-                                reconciliationRecord.merchantTerminalId(), reconciliationRecord.date()), e);
+                                reconciliationRecord.merchantTerminalId(), reconciliationRecord.depositDate()), e);
             }
         }
     }
 
     private void createAggregatedTransfer(CardsReconciliationRecord reconciliationRecord, ExecutionMonitor batchExecutionMonitor) {
-        log.debug("creating CardsAggregatedTransfer {} {} {}", reconciliationRecord.merchantTerminalId(), reconciliationRecord.date(),
+        log.debug("creating CardsAggregatedTransfer {} {} {}", reconciliationRecord.merchantTerminalId(), reconciliationRecord.depositDate(),
                 reconciliationRecord.totalDeposit());
         CardsAggregatedTransfer at = EntityFactory.create(CardsAggregatedTransfer.class);
         at.fundsTransferType().setValue(FundsTransferType.Cards);
         at.cardsReconciliationRecordKey().setValue(reconciliationRecord.getPrimaryKey());
         at.status().setValue(AggregatedTransferStatus.Paid);
-        at.paymentDate().setValue(reconciliationRecord.date().getValue());
+        at.paymentDate().setValue(reconciliationRecord.depositDate().getValue());
         // Find MerchantAccount
         {
             at.merchantAccount().set(
@@ -173,7 +173,7 @@ class CardsReconciliationProcessor {
 
         if (reconciliationRecord.totalDeposit().getValue().compareTo(totals.totalAmount) != 0) {
             String m = SimpleMessageFormat.format("Merchant {0} {1} deposit {2} does not match transactions total {3}",//
-                    reconciliationRecord.merchantTerminalId(), reconciliationRecord.date(), reconciliationRecord.totalDeposit(), totals.totalAmount);
+                    reconciliationRecord.merchantTerminalId(), reconciliationRecord.depositDate(), reconciliationRecord.totalDeposit(), totals.totalAmount);
             executionMonitor.addErredEvent("DailyTotals", totals.totalAmount.subtract(reconciliationRecord.totalDeposit().getValue()), m);
             throw new ValidationFailedRollback(m);
         }
@@ -181,14 +181,14 @@ class CardsReconciliationProcessor {
         // Validate Card Types Totals.
         if (reconciliationRecord.visaDeposit().getValue(BigDecimal.ZERO).compareTo(totals.visaAmount) != 0) {
             String m = SimpleMessageFormat.format("Merchant {0} {1} Visa Deposit {2} does not match transactions total {3}",//
-                    reconciliationRecord.merchantTerminalId(), reconciliationRecord.date(), reconciliationRecord.visaDeposit(), totals.visaAmount);
+                    reconciliationRecord.merchantTerminalId(), reconciliationRecord.depositDate(), reconciliationRecord.visaDeposit(), totals.visaAmount);
             executionMonitor.addErredEvent("DailyTotals", totals.visaAmount.subtract(reconciliationRecord.visaDeposit().getValue(BigDecimal.ZERO)), m);
             throw new ValidationFailedRollback(m);
         }
 
         if (reconciliationRecord.mastercardDeposit().getValue(BigDecimal.ZERO).compareTo(totals.mastercardAmount) != 0) {
             String m = SimpleMessageFormat.format("Merchant {0} {1} MasterCard Deposit {2} does not match transactions total {3}",//
-                    reconciliationRecord.merchantTerminalId(), reconciliationRecord.date(), reconciliationRecord.mastercardDeposit(), totals.mastercardAmount);
+                    reconciliationRecord.merchantTerminalId(), reconciliationRecord.depositDate(), reconciliationRecord.mastercardDeposit(), totals.mastercardAmount);
             executionMonitor.addErredEvent("DailyTotals", totals.mastercardAmount.subtract(reconciliationRecord.mastercardDeposit().getValue(BigDecimal.ZERO)),
                     m);
             throw new ValidationFailedRollback(m);
@@ -197,7 +197,7 @@ class CardsReconciliationProcessor {
 
     private void attachPaymentRecords(CardsAggregatedTransfer at, CardsReconciliationRecord reconciliationRecord, MerchantTotals totals,
             ExecutionMonitor batchExecutionMonitor) {
-        LogicalDate transactionsDate = new LogicalDate(DateUtils.addDays(reconciliationRecord.date().getValue(), -1));
+        LogicalDate transactionsDate = new LogicalDate(DateUtils.addDays(reconciliationRecord.depositDate().getValue(), -1));
         EntityQueryCriteria<PaymentRecord> criteria = EntityQueryCriteria.create(PaymentRecord.class);
         criteria.eq(criteria.proto().finalizeDate(), transactionsDate);
         criteria.eq(criteria.proto().paymentMethod().type(), PaymentType.CreditCard);
@@ -244,7 +244,7 @@ class CardsReconciliationProcessor {
 
     private void attachNonVistaTransaction(CardsAggregatedTransfer at, CardsReconciliationRecord reconciliationRecord, MerchantTotals totals,
             ExecutionMonitor batchExecutionMonitor) {
-        LogicalDate transactionsDate = new LogicalDate(DateUtils.addDays(reconciliationRecord.date().getValue(), -1));
+        LogicalDate transactionsDate = new LogicalDate(DateUtils.addDays(reconciliationRecord.depositDate().getValue(), -1));
         EntityQueryCriteria<AggregatedTransferNonVistaTransaction> criteria = EntityQueryCriteria.create(AggregatedTransferNonVistaTransaction.class);
         criteria.eq(criteria.proto().reconciliationDate(), transactionsDate);
         criteria.eq(criteria.proto().merchantAccount(), at.merchantAccount());

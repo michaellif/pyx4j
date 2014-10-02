@@ -37,14 +37,14 @@ public class DirectDebitSimRecordCrudServiceImpl extends AbstractCrudServiceImpl
     @Override
     protected void create(DirectDebitSimRecord entity, DirectDebitSimRecord dto) {
         // find or create file
-        if (entity.file().isNull()) {
+        if (entity.directDebitFile().isNull()) {
             EntityQueryCriteria<DirectDebitSimFile> criteria = EntityQueryCriteria.create(DirectDebitSimFile.class);
             criteria.eq(criteria.proto().status(), DirectDebitSimFileStatus.New);
             DirectDebitSimFile directDebitSimFile = Persistence.service().retrieve(criteria);
             if (directDebitSimFile == null) {
                 directDebitSimFile = DirectDebitSimFileCrudServiceImpl.createNewFile(EntityFactory.create(DirectDebitSimFile.class));
             }
-            entity.file().set(directDebitSimFile);
+            entity.directDebitFile().set(directDebitSimFile);
         }
         super.create(entity, dto);
     }

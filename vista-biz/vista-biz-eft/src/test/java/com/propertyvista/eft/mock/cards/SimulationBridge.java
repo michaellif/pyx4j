@@ -22,7 +22,7 @@ class SimulationBridge {
     static CardServiceSimulationTransaction toSimulation(CardAccountMock account, CardTransactionMock transactionMock) {
         CardServiceSimulationTransaction transaction = EntityFactory.create(CardServiceSimulationTransaction.class);
         transaction.card().cardType().setValue(account.ccinfo.cardType().getValue());
-        transaction.card().number().setValue(account.ccinfo.creditCardNumber().getValue());
+        transaction.card().cardNumber().setValue(account.ccinfo.creditCardNumber().getValue());
         transaction.card().expiryDate().setValue(account.ccinfo.creditCardExpiryDate().getValue());
         transaction.merchant().terminalID().setValue(transactionMock.terminalID);
         transaction.amount().setValue(transactionMock.amount);

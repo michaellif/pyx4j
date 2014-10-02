@@ -49,7 +49,7 @@ public interface CardServiceSimulationCard extends IEntity {
     IPrimitive<CreditCardType> cardType();
 
     @ToString
-    IPrimitive<String> number();
+    IPrimitive<String> cardNumber();
 
     @Owned
     IList<CardServiceSimulationToken> tokens();

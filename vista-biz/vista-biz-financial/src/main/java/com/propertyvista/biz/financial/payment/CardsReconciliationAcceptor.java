@@ -81,7 +81,7 @@ class CardsReconciliationAcceptor {
             if (reconciliationRecord == null) {
                 reconciliationRecord = EntityFactory.create(CardsReconciliationRecord.class);
                 reconciliationRecord.status().setValue(CardsReconciliationRecordProcessingStatus.Received);
-                reconciliationRecord.date().setValue(merchantTotal.date().getValue());
+                reconciliationRecord.depositDate().setValue(merchantTotal.date().getValue());
                 reconciliationRecord.merchantID().setValue(merchantTotal.merchantID().getValue());
                 reconciliationRecord.merchantTerminalId().setValue(merchantTotal.terminalID().getValue());
                 reconciliationRecord.fileMerchantTotal().set(fileMerchantTotal);
@@ -111,7 +111,7 @@ class CardsReconciliationAcceptor {
 
                 {
                     EntityQueryCriteria<CardsReconciliationRecord> criteria = EntityQueryCriteria.create(CardsReconciliationRecord.class);
-                    criteria.eq(criteria.proto().date(), reconciliationRecord.date());
+                    criteria.eq(criteria.proto().depositDate(), reconciliationRecord.depositDate());
                     criteria.eq(criteria.proto().merchantTerminalId(), reconciliationRecord.merchantTerminalId());
                     if (Persistence.service().count(criteria) > 0) {
                         throw new Error("Duplicate reconciliation record received " + reconciliationRecord.getStringView());

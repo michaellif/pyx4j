@@ -36,7 +36,7 @@ import com.propertyvista.domain.pmc.PmcMerchantAccountIndex;
 @I18n(strategy = I18n.I18nStrategy.IgnoreAll)
 public interface CardsReconciliationRecord extends IEntity {
 
-    IPrimitive<LogicalDate> date();
+    IPrimitive<LogicalDate> depositDate();
 
     //ID Copied from the file not used in Vista
     IPrimitive<String> merchantID();

@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011-2012 All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -30,13 +30,12 @@ public class OperationsAlertLister extends AbstractLister<OperationsAlertDTO> {
 
         setDataTableModel(new DataTableModel<OperationsAlertDTO>(//@formatter:off
                 new MemberColumnDescriptor.Builder(proto().namespace()).build(),
-                new MemberColumnDescriptor.Builder(proto().admin()).build(),
                 new MemberColumnDescriptor.Builder(proto().remoteAddr()).build(),
                 new MemberColumnDescriptor.Builder(proto().created()).build(),
                 new MemberColumnDescriptor.Builder(proto().app()).build(),
                 new MemberColumnDescriptor.Builder(proto().entityId()).build(),
                 new MemberColumnDescriptor.Builder(proto().entityClass()).build(),
-                new MemberColumnDescriptor.Builder(proto().details()).build(),                
+                new MemberColumnDescriptor.Builder(proto().details()).build(),
                 new MemberColumnDescriptor.Builder(proto().user()).build(),
                 new MemberColumnDescriptor.Builder(proto().resolved()).build(),
                 new MemberColumnDescriptor.Builder(proto().operationsNotes()).build()

@@ -44,7 +44,7 @@ public interface DirectDebitRecord extends IEntity {
     @MemberColumn(notNull = true)
     @JoinColumn
     @Indexed
-    DirectDebitFile file();
+    DirectDebitFile directDebitFile();
 
     @NotNull
     @Length(14)

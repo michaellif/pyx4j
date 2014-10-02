@@ -43,7 +43,7 @@ public interface DirectDebitSimRecord extends IEntity {
     @Owner
     @JoinColumn
     @Indexed
-    DirectDebitSimFile file();
+    DirectDebitSimFile directDebitFile();
 
     @NotNull
     @Length(14)

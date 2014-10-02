@@ -33,7 +33,7 @@ public interface TenantSureHQUpdateRecord extends IEntity {
     @JoinColumn
     @Indexed
     @MemberColumn(notNull = true)
-    TenantSureHQUpdateFile file();
+    TenantSureHQUpdateFile owner();
 
     public enum RequestType {
 

@@ -29,7 +29,7 @@ public class CardServiceSimulationCardListerViewImpl extends OperationsListerVie
             super(CardServiceSimulationCard.class, true, true);
             setDataTableModel(new DataTableModel<CardServiceSimulationCard>(//@formatter:off
                     new MemberColumnDescriptor.Builder(proto().cardType()).build(),
-                    new MemberColumnDescriptor.Builder(proto().number()).build(),
+                    new MemberColumnDescriptor.Builder(proto().cardNumber()).build(),
                     new MemberColumnDescriptor.Builder(proto().expiryDate()).build(),
                     new MemberColumnDescriptor.Builder(proto().balance()).build(),
                     new MemberColumnDescriptor.Builder(proto().creditLimit(), false).build(),

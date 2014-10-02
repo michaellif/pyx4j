@@ -51,6 +51,7 @@ public interface ExecutionReportSection extends IEntity {
 
     IPrimitive<Long> counter();
 
+    @MemberColumn(name = "val")
     IPrimitive<BigDecimal> value();
 
     @Owned

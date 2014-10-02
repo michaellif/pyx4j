@@ -52,7 +52,7 @@ public interface CardsClearanceRecord extends IEntity {
     @JoinColumn
     @Indexed
     @MemberColumn(notNull = true)
-    CardsClearanceFile file();
+    CardsClearanceFile clearanceFile();
 
     //ID Copied from the file not used in Vista
     IPrimitive<String> merchantID();

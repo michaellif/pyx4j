@@ -61,7 +61,7 @@ class CardsDailyReportAcceptor {
         for (DailyReportRecord toRecord : dailyReportFile.records()) {
             if (DailyReportRecordType.vistaProcessing().contains(toRecord.transactionType().getValue())) {
                 CardsClearanceRecord record = EntityFactory.create(CardsClearanceRecord.class);
-                record.file().set(clearanceFile);
+                record.clearanceFile().set(clearanceFile);
                 record.status().setValue(CardsClearanceRecordProcessingStatus.Received);
                 record.merchantID().setValue(toRecord.terminalID().getValue());
 

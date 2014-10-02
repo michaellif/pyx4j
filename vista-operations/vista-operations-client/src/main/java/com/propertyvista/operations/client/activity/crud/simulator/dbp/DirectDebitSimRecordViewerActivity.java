@@ -45,8 +45,8 @@ public class DirectDebitSimRecordViewerActivity extends AdminViewerActivity<Dire
 
     @Override
     protected void onPopulateSuccess(DirectDebitSimRecord result) {
-        canEdit = result.file().status().getValue() == DirectDebitSimFileStatus.New;
-        file = result.file();
+        canEdit = result.directDebitFile().status().getValue() == DirectDebitSimFileStatus.New;
+        file = result.directDebitFile();
         super.onPopulateSuccess(result);
 
     }

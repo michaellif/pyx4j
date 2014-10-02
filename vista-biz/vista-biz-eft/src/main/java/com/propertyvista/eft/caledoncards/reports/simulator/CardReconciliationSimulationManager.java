@@ -128,7 +128,7 @@ public class CardReconciliationSimulationManager {
                 record.cardType().setValue(DailyReportCardType.VISA);
                 break;
             }
-            record.cardNumber().setValue("***" + last4(transaction.card().number().getValue()));
+            record.cardNumber().setValue("***" + last4(transaction.card().cardNumber().getValue()));
             record.expiry().setValue(new SimpleDateFormat("yyMM").format(transaction.card().expiryDate().getValue()));
 
             record.authNumber().setValue(transaction.authorizationNumber().getValue());
@@ -163,7 +163,7 @@ public class CardReconciliationSimulationManager {
     private CardServiceSimulationReconciliationRecord createReportRecord(Date transactionDate, CardServiceSimulationMerchantAccount merchant) {
         CardServiceSimulationReconciliationRecord record = EntityFactory.create(CardServiceSimulationReconciliationRecord.class);
         record.merchant().set(merchant);
-        record.date().setValue(new LogicalDate(new LogicalDate(DateUtils.addDays(transactionDate, +1))));
+        record.depositDate().setValue(new LogicalDate(new LogicalDate(DateUtils.addDays(transactionDate, +1))));
         record.totalDeposit().setValue(BigDecimal.ZERO);
         record.totalFee().setValue(BigDecimal.ZERO);
         record.visaTransactions().setValue(0);
@@ -290,7 +290,7 @@ public class CardReconciliationSimulationManager {
 
     private CardsReconciliationMerchantTotalRecord createMerchantTotal(CardServiceSimulationReconciliationRecord record) {
         CardsReconciliationMerchantTotalRecord merchantTotal = EntityFactory.create(CardsReconciliationMerchantTotalRecord.class);
-        merchantTotal.date().setValue(record.date().getValue());
+        merchantTotal.date().setValue(record.depositDate().getValue());
         merchantTotal.merchantID().setValue(record.merchant().id().getStringView());
         merchantTotal.terminalID().setValue(record.merchant().terminalID().getValue());
         merchantTotal.credit().setValue(BigDecimal.ZERO);
@@ -300,7 +300,7 @@ public class CardReconciliationSimulationManager {
 
     private CardsReconciliationCardTotalRecord createCardTotal(CardServiceSimulationReconciliationRecord record) {
         CardsReconciliationCardTotalRecord cardTotal = EntityFactory.create(CardsReconciliationCardTotalRecord.class);
-        cardTotal.date().setValue(record.date().getValue());
+        cardTotal.date().setValue(record.depositDate().getValue());
         cardTotal.merchantID().setValue(record.merchant().id().getStringView());
         cardTotal.terminalID().setValue(record.merchant().terminalID().getValue());
         cardTotal.credit().setValue(BigDecimal.ZERO);
