@@ -13,19 +13,12 @@
  */
 package com.propertyvista.crm.client.ui.crud.communication.selector;
 
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
 
 import com.google.gwt.core.client.GWT;
 
-import com.pyx4j.entity.core.EntityFactory;
-import com.pyx4j.entity.core.criterion.Criterion;
-import com.pyx4j.entity.core.criterion.PropertyCriterion;
 import com.pyx4j.entity.rpc.AbstractListCrudService;
 import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
-import com.pyx4j.forms.client.ui.datatable.DataItem;
 import com.pyx4j.forms.client.ui.datatable.DataTableModel;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.site.client.backoffice.ui.prime.lister.ListerDataSource;
@@ -37,24 +30,16 @@ public class SelectorDialogBuildingLister extends EntityLister<Building> {
 
     public AbstractListCrudService<Building> selectService;
 
-    private final Collection<Building> alreadySelected;
-
-    private final SelectRecipientsDialogForm parent;
-
     public SelectorDialogBuildingLister(SelectRecipientsDialogForm parent) {
         this(parent, null);
     }
 
     public SelectorDialogBuildingLister(SelectRecipientsDialogForm parent, Collection<Building> alreadySelected) {
-        super(Building.class, false);
+        super(Building.class, false, parent, alreadySelected);
 
-        this.parent = parent;
         this.selectService = createSelectService();
         setDataTableModel();
-        this.alreadySelected = (alreadySelected != null ? alreadySelected : Collections.<Building> emptyList());
-        setFilters(createRestrictionFilterForAlreadySelected());
         setDataSource(new ListerDataSource<Building>(Building.class, this.selectService));
-
     }
 
     protected AbstractListCrudService<Building> createSelectService() {
@@ -70,18 +55,6 @@ public class SelectorDialogBuildingLister extends EntityLister<Building> {
         dataTableModel.setPageSize(PAGESIZE_SMALL);
         dataTableModel.setMultipleSelection(true);
         setDataTableModel(dataTableModel);
-    }
-
-    protected List<Criterion> createRestrictionFilterForAlreadySelected() {
-        List<Criterion> restrictAlreadySelected = new ArrayList<>(alreadySelected.size());
-
-        Building proto = EntityFactory.getEntityPrototype(Building.class);
-
-        for (Building entity : alreadySelected) {
-            restrictAlreadySelected.add(PropertyCriterion.ne(proto.id(), entity.getPrimaryKey()));
-        }
-
-        return restrictAlreadySelected;
     }
 
     protected ColumnDescriptor[] defineColumnDescriptors() {
@@ -119,24 +92,5 @@ public class SelectorDialogBuildingLister extends EntityLister<Building> {
                 new MemberColumnDescriptor.Builder(proto().financial().currency().name(), false).title(proto().financial().currency()).build(),
                 new MemberColumnDescriptor.Builder(proto().marketing().name(), false).title("Marketing Name").build()
         }; //@formatter:on
-    }
-
-    @Override
-    protected void onObtainSuccess() {
-        super.onObtainSuccess();
-        setRowsSelected();
-    }
-
-    public void setRowsSelected() {
-
-        if (alreadySelected == null || alreadySelected.size() == 0)
-            return;
-        DataTableModel<Building> model = getLister().getDataTablePanel().getDataTable().getDataTableModel();
-
-        for (DataItem<Building> dataItem : model.getData()) {
-            if (alreadySelected.contains(dataItem.getEntity())) {
-                model.selectRow(true, model.indexOf(dataItem));
-            }
-        }
     }
 }

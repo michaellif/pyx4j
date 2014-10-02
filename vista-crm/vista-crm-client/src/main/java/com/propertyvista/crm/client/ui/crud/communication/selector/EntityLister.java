@@ -15,16 +15,22 @@ package com.propertyvista.crm.client.ui.crud.communication.selector;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 
+import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.IEntity;
+import com.pyx4j.entity.core.criterion.Criterion;
 import com.pyx4j.entity.core.criterion.EntityListCriteria;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria.VersionedCriteria;
+import com.pyx4j.entity.core.criterion.PropertyCriterion;
 import com.pyx4j.forms.client.ui.CRadioGroupEnum;
+import com.pyx4j.forms.client.ui.datatable.DataItem;
+import com.pyx4j.forms.client.ui.datatable.DataTableModel;
 import com.pyx4j.site.client.backoffice.activity.EntitySelectorTableVisorController.VersionDisplayMode;
 import com.pyx4j.site.client.backoffice.ui.prime.lister.AbstractLister;
 import com.pyx4j.widgets.client.RadioGroup.Layout;
@@ -32,6 +38,14 @@ import com.pyx4j.widgets.client.RadioGroup.Layout;
 public class EntityLister<E extends IEntity> extends AbstractLister<E> {
 
     private VersionDisplayMode versionDisplayMode = VersionDisplayMode.displayFinal;
+
+    private final Collection<E> alreadySelected;
+
+    private final Collection<E> selectedOnTab;
+
+    private final SelectRecipientsDialogForm parent;
+
+    private final Class<E> entityClass;
 
     private final CRadioGroupEnum<VersionDisplayMode> displayModeButton = new CRadioGroupEnum<VersionDisplayMode>(VersionDisplayMode.class, Layout.HORISONTAL);
     {
@@ -44,14 +58,24 @@ public class EntityLister<E extends IEntity> extends AbstractLister<E> {
         });
     }
 
-    public EntityLister(Class<E> clazz, boolean isVersioned) {
+    public EntityLister(Class<E> clazz, boolean isVersioned, SelectRecipientsDialogForm parent, Collection<E> alreadySelected) {
         super(clazz);
+        this.entityClass = clazz;
+        this.parent = parent;
+        this.selectedOnTab = new ArrayList<E>();
+        this.alreadySelected = (alreadySelected != null ? alreadySelected : new ArrayList<E>());
 
         getDataTablePanel().setPageSizeOptions(Arrays.asList(new Integer[] { PAGESIZE_SMALL, PAGESIZE_MEDIUM }));
         if (isVersioned) {
             getDataTablePanel().addUpperActionItem(displayModeButton.asWidget());
         }
 
+        addItemSelectionHandler(new ItemSelectionHandler<E>() {
+            @Override
+            public void onSelect(E selectedItem) {
+                identifySelected();
+            }
+        });
     }
 
     public VersionDisplayMode getVersionDisplayMode() {
@@ -85,4 +109,75 @@ public class EntityLister<E extends IEntity> extends AbstractLister<E> {
         return super.updateCriteria(criteria);
     }
 
+    protected List<Criterion> createRestrictionFilterForAlreadySelected() {
+        List<Criterion> restrictAlreadySelected = new ArrayList<>(alreadySelected.size());
+
+        E proto = EntityFactory.getEntityPrototype(entityClass);
+
+        for (E entity : alreadySelected) {
+            restrictAlreadySelected.add(PropertyCriterion.ne(proto.id(), entity.getPrimaryKey()));
+        }
+
+        return restrictAlreadySelected;
+    }
+
+    @Override
+    protected void onObtainSuccess() {
+        super.onObtainSuccess();
+        setRowsSelected();
+        setOnTabSelected();
+    }
+
+    private void setOnTabSelected() {
+        selectedOnTab.clear();
+        for (DataItem<E> dataItem : getLister().getDataTablePanel().getDataTable().getDataTableModel().getSelectedRows()) {
+            selectedOnTab.add(dataItem.getEntity());
+        }
+    }
+
+    public void setRowsSelected() {
+
+        if (alreadySelected == null || alreadySelected.size() == 0)
+            return;
+        DataTableModel<E> model = getLister().getDataTablePanel().getDataTable().getDataTableModel();
+
+        for (DataItem<E> dataItem : model.getData()) {
+            if (alreadySelected.contains(dataItem.getEntity())) {
+                model.selectRow(true, model.indexOf(dataItem));
+            }
+        }
+    }
+
+    private void identifySelected() {
+        Collection<E> changed = new ArrayList<E>();
+
+        for (DataItem<E> dataItem : getLister().getDataTablePanel().getDataTable().getDataTableModel().getSelectedRows()) {
+            changed.add(dataItem.getEntity());
+        }
+
+        if (changed.size() > selectedOnTab.size()) {
+            changed.removeAll(selectedOnTab);
+            if (changed.size() != 0) {
+                addItem(((ArrayList<E>) changed).get(0));
+            }
+        } else {
+            selectedOnTab.removeAll(changed);
+            if (selectedOnTab.size() != 0) {
+                removeItem(((ArrayList<E>) selectedOnTab).get(0));
+            }
+            selectedOnTab.addAll(changed);
+        }
+    }
+
+    private void addItem(E addItem) {
+        selectedOnTab.add(addItem);
+        alreadySelected.add(addItem);
+        parent.addSelected(addItem);
+    }
+
+    private void removeItem(E removeItem) {
+        selectedOnTab.remove(removeItem);
+        alreadySelected.remove(removeItem);
+        parent.removeSelected(removeItem, entityClass);
+    }
 }
