@@ -449,9 +449,11 @@ public class LeaseApplicationViewerViewImpl extends LeaseViewerViewImplBase<Leas
 
         public LeaseApplicationActionDTO actionValue(Action status) {
             LeaseApplicationActionDTO action = EntityFactory.create(LeaseApplicationActionDTO.class);
+
             action.leaseId().set(getForm().getValue().createIdentityStub());
             action.decisionReason().setValue(getReason());
             action.action().setValue(status);
+
             return action;
         }
     }

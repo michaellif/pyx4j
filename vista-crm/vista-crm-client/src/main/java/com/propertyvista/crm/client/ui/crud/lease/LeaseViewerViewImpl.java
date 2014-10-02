@@ -57,6 +57,7 @@ import com.pyx4j.widgets.client.Button.SecureMenuItem;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 import com.pyx4j.widgets.client.dialog.OkCancelDialog;
 
+import com.propertyvista.common.client.ui.MiscUtils;
 import com.propertyvista.common.client.ui.validators.DateInPeriodValidation;
 import com.propertyvista.common.client.ui.validators.StartEndDateValidation;
 import com.propertyvista.crm.client.ui.components.boxes.LeaseTermSelectorDialog;
@@ -803,7 +804,6 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
         @Override
         protected Widget initBody(boolean isMultiselectAllowed, List<LeaseTermParticipant<?>> data) {
             VerticalPanel body = new VerticalPanel();
-            body.setSpacing(4);
 
             body.add(new HTML(i18n.tr("Email Type:")));
             body.add(initEmailTypes(Arrays.asList(EmailTemplateType.TenantInvitation)));
@@ -813,6 +813,7 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
             body.add(new HTML(i18n.tr("Recipient(s):")));
             body.add(super.initBody(isMultiselectAllowed, data));
 
+            MiscUtils.setPanelSpacing(body, 4);
             body.setWidth("100%");
             return body;
         }
@@ -941,12 +942,12 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
         protected Widget createBody() {
             VerticalPanel body = new VerticalPanel();
             body.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
-            body.setWidth("100%");
-            body.setSpacing(4);
 
             body.add(new HTML(i18n.tr("Select new Lease End date:")));
             body.add(endLeaseDate);
 
+            MiscUtils.setPanelSpacing(body, 4);
+            body.setWidth("100%");
             return body;
         }
 

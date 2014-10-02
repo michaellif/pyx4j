@@ -22,6 +22,8 @@ import com.pyx4j.forms.client.ui.CTextArea;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.dialog.OkCancelDialog;
 
+import com.propertyvista.common.client.ui.MiscUtils;
+
 public abstract class ReasonBox extends OkCancelDialog {
 
     private static final I18n i18n = I18n.get(ReasonBox.class);
@@ -36,13 +38,13 @@ public abstract class ReasonBox extends OkCancelDialog {
 
     protected Widget createBody() {
         VerticalPanel content = new VerticalPanel();
-        content.setSpacing(4);
         content.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
 
         content.add(new HTML(i18n.tr("Please fill the reason") + ":"));
         content.add(reason);
 
-        reason.asWidget().setWidth("334px");
+        MiscUtils.setPanelSpacing(content, 3);
+        reason.asWidget().setWidth("100%");
         content.setWidth("100%");
         return content.asWidget();
     }

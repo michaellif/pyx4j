@@ -44,6 +44,7 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.IFocusWidget;
 import com.pyx4j.widgets.client.Label;
 
+import com.propertyvista.common.client.ui.MiscUtils;
 import com.propertyvista.domain.pmc.CreditCheckReportType;
 
 public class CreditCheckReportTypeSelector extends Composite implements IFocusWidget, HasValueChangeHandlers<CreditCheckReportType> {
@@ -137,7 +138,6 @@ public class CreditCheckReportTypeSelector extends Composite implements IFocusWi
     public CreditCheckReportTypeSelector(ReportTypeDetailsResources reportDetailsResources) {
         reportTypePanels = new HashMap<CreditCheckReportType, CreditCheckReportTypeSelector.ReportTypeConditionsPanel>();
         HorizontalPanel typeSelectorPanel = new HorizontalPanel();
-        typeSelectorPanel.setSpacing(5);
 
         ReportTypeConditionsPanel panel = makePanel(CreditCheckReportType.RecomendationReport, reportDetailsResources.recommendationReportDescription()
                 .getText(), reportDetailsResources.equifaxLogo());
@@ -149,6 +149,7 @@ public class CreditCheckReportTypeSelector extends Composite implements IFocusWi
         typeSelectorPanel.add(panel);
         typeSelectorPanel.setCellWidth(panel, "50%");
 
+        MiscUtils.setPanelSpacing(typeSelectorPanel, 5);
         initWidget(typeSelectorPanel);
     }
 

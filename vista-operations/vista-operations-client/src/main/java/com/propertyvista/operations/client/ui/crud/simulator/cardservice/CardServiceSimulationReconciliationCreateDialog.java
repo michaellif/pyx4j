@@ -27,6 +27,7 @@ import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.widgets.client.dialog.OkCancelDialog;
 import com.pyx4j.widgets.client.dialog.OkOptionText;
 
+import com.propertyvista.common.client.ui.MiscUtils;
 import com.propertyvista.operations.rpc.services.simulator.CardServiceSimulationReconciliationCreateTO;
 
 public class CardServiceSimulationReconciliationCreateDialog extends OkCancelDialog implements OkOptionText {
@@ -63,11 +64,13 @@ public class CardServiceSimulationReconciliationCreateDialog extends OkCancelDia
 
     private IsWidget createBody() {
         VerticalPanel body = new VerticalPanel();
+
         body.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
         body.add(new HTML("Select Report interval"));
         body.add(form);
+
+        MiscUtils.setPanelSpacing(body, 4);
         body.setWidth("100%");
-        body.setSpacing(4);
         return body;
     }
 

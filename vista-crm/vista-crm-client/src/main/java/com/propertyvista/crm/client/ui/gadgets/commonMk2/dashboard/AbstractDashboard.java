@@ -48,6 +48,7 @@ import com.pyx4j.widgets.client.dashboard.IBoard;
 import com.pyx4j.widgets.client.dashboard.IGadget;
 import com.pyx4j.widgets.client.dashboard.IGadgetIterator;
 
+import com.propertyvista.common.client.ui.MiscUtils;
 import com.propertyvista.crm.client.resources.CrmImages;
 import com.propertyvista.crm.client.ui.dashboard.printing.DashboardPrintHelper;
 import com.propertyvista.crm.client.ui.gadgets.common.IGadgetFactory;
@@ -317,7 +318,8 @@ public abstract class AbstractDashboard extends ResizeComposite {
         actionsWidget.add(addGadget);
 
         actionsWidget.add(printButton);
-        actionsWidget.setSpacing(4);
+
+        MiscUtils.setPanelSpacing(actionsWidget, 4);
 
         return actionsWidget;
     }

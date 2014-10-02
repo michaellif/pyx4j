@@ -27,6 +27,7 @@ import com.pyx4j.forms.client.validators.BasicValidationError;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.Label;
 
+import com.propertyvista.common.client.ui.MiscUtils;
 import com.propertyvista.domain.pmc.info.PmcSignature;
 
 public class PmcSignatureForm extends CForm<PmcSignature> {
@@ -62,7 +63,6 @@ public class PmcSignatureForm extends CForm<PmcSignature> {
     protected IsWidget createContent() {
         HorizontalPanel contentPanel = new HorizontalPanel();
         contentPanel.setVerticalAlignment(HasVerticalAlignment.ALIGN_MIDDLE);
-        contentPanel.setSpacing(20);
 
         FlowPanel nameLabelPanel = new FlowPanel();
         nameLabel = new Label();
@@ -97,6 +97,7 @@ public class PmcSignatureForm extends CForm<PmcSignature> {
         contentPanel.add(inject(proto().ipAddress()));
         get(proto().ipAddress()).setViewable(true);
 
+        MiscUtils.setPanelSpacing(contentPanel, 4);
         return contentPanel;
     }
 }

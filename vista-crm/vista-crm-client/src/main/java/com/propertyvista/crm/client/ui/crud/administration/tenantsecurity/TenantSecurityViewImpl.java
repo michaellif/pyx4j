@@ -28,6 +28,7 @@ import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.dialog.OkCancelDialog;
 import com.pyx4j.widgets.client.dialog.OkOptionText;
 
+import com.propertyvista.common.client.ui.MiscUtils;
 import com.propertyvista.domain.communication.EmailTemplateType;
 import com.propertyvista.domain.tenant.access.PortalAccessSecutiryCodeReportType;
 
@@ -81,11 +82,13 @@ public class TenantSecurityViewImpl extends AbstractPane implements TenantSecuri
 
         protected Widget createBody() {
             VerticalPanel body = new VerticalPanel();
-            body.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
+
             body.add(new HTML(i18n.tr("Select Email template to send to unregistered tenants:")));
             body.add(emailType);
+
+            body.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
+            MiscUtils.setPanelSpacing(body, 4);
             body.setWidth("100%");
-            body.setSpacing(4);
             return body;
         }
 
