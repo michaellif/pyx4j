@@ -120,7 +120,9 @@ public class ConfirmationStep extends ApplicationWizardStep {
     private Widget createPaymentDetailsPanel() {
         final VerticalPanel panel = new VerticalPanel();
 
-        panel.add(createDecorator(i18n.tr("Payment Method:"), get(proto().payment().paymentMethod()).getValue().getStringView()));
+        if (!get(proto().payment().paymentMethod()).isValueEmpty()) {
+            panel.add(createDecorator(i18n.tr("Payment Method:"), get(proto().payment().paymentMethod()).getValue().getStringView()));
+        }
         panel.add(createDecorator(i18n.tr("Amount to pay:"), ((CLabel<?>) get(proto().payment().amount())).getFormattedValue()));
 
         get(proto().payment().convenienceFeeSignature()).setVisible(false);

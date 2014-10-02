@@ -95,7 +95,7 @@ public class PaymentStep extends ApplicationWizardStep {
 
     private final Label noPaymentRequiredLabel = new Label(i18n.tr("No Payment Required"));
 
-    private final Label noPaymentAcceptLabel = new Label(i18n.tr("Can not accept payment - please contact the office"));
+    private final Label noPaymentAcceptLabel = new Label(i18n.tr("Can not accept payment now - you will be contacted by the office"));
 
     public PaymentStep() {
         super(OnlineApplicationWizardStepMeta.Payment);
@@ -225,6 +225,11 @@ public class PaymentStep extends ApplicationWizardStep {
 
         if (isPaymentRequired) {
             if (getValue().payment().allowedPaymentsSetup().allowedPaymentTypes().isEmpty()) {
+                get(proto().payment().storeInProfile()).setEnabled(false);
+                get(proto().payment().selectPaymentMethod()).setEnabled(false);
+                profiledPaymentMethodsCombo.setEnabled(false);
+                paymentMethodEditor.setEnabled(false);
+
                 paymentMethodPanel.setVisible(false);
                 paymentMethodHolder.setWidget(noPaymentAcceptLabel);
             } else {
