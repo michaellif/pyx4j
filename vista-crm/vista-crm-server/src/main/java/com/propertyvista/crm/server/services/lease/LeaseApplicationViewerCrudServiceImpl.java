@@ -113,6 +113,17 @@ public class LeaseApplicationViewerCrudServiceImpl extends LeaseViewerCrudServic
         to.masterApplicationStatus().set(
                 ServerSideFactory.create(OnlineApplicationFacade.class).calculateOnlineApplicationStatus(to.leaseApplication().onlineApplication()));
 
+        // note: if it's still empty - load from policy and save:
+        if (!lease.leaseApplication().onlineApplication().isNull() && lease.leaseApplication().onlineApplication().status().getValue().isInProgress()
+                && lease.leaseApplication().onlineApplication().feePayment().isNull()) {
+            ServerSideFactory.create(OnlineApplicationFacade.class).initOnlineApplicationFeeData(lease.leaseApplication().onlineApplication());
+            Persistence.service().persist(lease.leaseApplication().onlineApplication());
+            Persistence.service().commit();
+            // propagate to DTO:
+            to.leaseApplication().onlineApplication().feeAmount().setValue(lease.leaseApplication().onlineApplication().feeAmount().getValue());
+            to.leaseApplication().onlineApplication().feePayment().setValue(lease.leaseApplication().onlineApplication().feePayment().getValue());
+        }
+
         loadLeaseApplicationDocuments(to);
 
         // indicates whether lease editing is still possible
@@ -128,7 +139,6 @@ public class LeaseApplicationViewerCrudServiceImpl extends LeaseViewerCrudServic
         } else {
             to.isYardiApproved().setValue(false);
         }
-
     }
 
     private void enhanceRetrievedCommon(Lease in, LeaseApplicationDTO dto) {
