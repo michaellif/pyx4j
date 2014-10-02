@@ -54,8 +54,6 @@ public class PeopleStep extends ApplicationWizardStep {
 
     private static final I18n i18n = I18n.get(PeopleStep.class);
 
-    private final CEntityLabel<Name> applicant = new CEntityLabel<Name>();
-
     public PeopleStep() {
         super(OnlineApplicationWizardStepMeta.People);
     }
@@ -69,8 +67,8 @@ public class PeopleStep extends ApplicationWizardStep {
         formPanel.append(Location.Left, message);
 
         formPanel.h3(i18n.tr("Applicant"));
-        formPanel.append(Location.Left, proto().applicant(), applicant);
-        applicant.asWidget().getElement().getStyle().setFontWeight(FontWeight.BOLDER);
+        formPanel.append(Location.Left, proto().applicant(), new CEntityLabel<Name>());
+        get(proto().applicant()).asWidget().getElement().getStyle().setFontWeight(FontWeight.BOLDER);
 
         formPanel.h3(i18n.tr("Co-Applicants"));
         formPanel.append(Location.Left, proto().coapplicants(), new CoapplicantsFolder(getWizard()));
@@ -79,12 +77,6 @@ public class PeopleStep extends ApplicationWizardStep {
         formPanel.append(Location.Left, proto().dependents(), new DependentsFolder(getWizard()));
 
         return formPanel;
-    }
-
-    @Override
-    public void onStepSelected() {
-        super.onStepSelected();
-        applicant.setValue(getValue().applicant());
     }
 
     private class CoapplicantsFolder extends PortalBoxFolder<CoapplicantDTO> {

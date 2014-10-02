@@ -103,6 +103,7 @@ public class PaymentStep extends ApplicationWizardStep {
         paymentMethodEditor.setBillingAddressAsCurrentDisplay(false);
 
         noPaymentRequiredLabel.setStyleName(StyleName.InfoMessage.name());
+        noPaymentAcceptLabel.setStyleName(StyleName.WarningMessage.name());
     }
 
     @Override
