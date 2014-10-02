@@ -41,6 +41,7 @@ import com.pyx4j.widgets.client.Anchor;
 import com.pyx4j.widgets.client.Label;
 
 import com.propertyvista.common.client.theme.VistaTheme.StyleName;
+import com.propertyvista.common.client.ui.MiscUtils;
 import com.propertyvista.domain.security.PortalProspectBehavior;
 import com.propertyvista.domain.tenant.lease.Deposit;
 import com.propertyvista.domain.tenant.prospect.OnlineApplicationWizardStepMeta;
@@ -121,7 +122,6 @@ public class ConfirmationStep extends ApplicationWizardStep {
 
     private Widget createPaymentDetailsPanel() {
         final VerticalPanel panel = new VerticalPanel();
-        panel.setSpacing(5);
 
         if (!get(proto().payment().paymentMethod()).isValueEmpty()) {
             panel.add(createDecorator(i18n.tr("Payment Method:"), get(proto().payment().paymentMethod()).getValue().getStringView()));
@@ -150,13 +150,13 @@ public class ConfirmationStep extends ApplicationWizardStep {
             if (get(proto().payment().paymentMethod()).isValueEmpty()) {
                 Label noPaymentAcceptLabel = new Label(i18n.tr("Can not accept payment at this time - you will be contacted by the office"));
                 noPaymentAcceptLabel.setStyleName(StyleName.WarningMessage.name());
-//                noPaymentAcceptLabel.getElement().getStyle().setMarginTop(5, Unit.PX);
 
                 panel.add(createDecorator(i18n.tr("Amount to pay:"), ((CLabel<?>) get(proto().payment().amount())).getFormattedValue()));
                 panel.add(noPaymentAcceptLabel);
             }
         }
 
+        MiscUtils.setPanelSpacing(panel, 4);
         return panel;
     }
 
