@@ -7,28 +7,15 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Feb 1, 2011
- * @author Misha
+ * Created on Feb 15, 2011
+ * @author michaellif
  * @version $Id$
  */
-package com.propertyvista.portal.resident.ui;
+package com.propertyvista.portal.resident.events;
 
-import com.pyx4j.site.client.IsView;
+import com.google.gwt.event.shared.EventHandler;
 
-public interface PortalMenuView extends IsView {
+public interface PortalHidableHandler extends EventHandler {
 
-    public interface PortalMenuPresenter {
-
-    }
-
-    public void setPresenter(PortalMenuPresenter presenter);
-
-    void setUserName(String userName);
-
-    void setGettingStartedVisible(boolean visible);
-
-    public void setMenuVisible(boolean visible);
-
-    void setLeasesSelectorEnabled(boolean enabled);
-
+    void onUpdate(PortalHidableEvent event);
 }

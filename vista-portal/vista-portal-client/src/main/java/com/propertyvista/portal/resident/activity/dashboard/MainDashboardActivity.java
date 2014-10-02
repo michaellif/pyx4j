@@ -23,7 +23,10 @@ import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.site.client.AppSite;
 
 import com.propertyvista.domain.security.PortalResidentBehavior;
+import com.propertyvista.domain.tenant.CustomerPreferencesPortalHidable;
 import com.propertyvista.portal.resident.ResidentPortalSite;
+import com.propertyvista.portal.resident.events.PortalHidableEvent;
+import com.propertyvista.portal.resident.events.PortalHidableHandler;
 import com.propertyvista.portal.resident.ui.dashboard.MainDashboardView;
 import com.propertyvista.portal.resident.ui.dashboard.MainDashboardView.MainDashboardPresenter;
 import com.propertyvista.portal.rpc.portal.resident.ResidentPortalSiteMap;
@@ -36,12 +39,11 @@ import com.propertyvista.portal.rpc.portal.resident.services.maintenance.Mainten
 import com.propertyvista.portal.rpc.portal.resident.services.profile.ResidentSummaryService;
 import com.propertyvista.portal.rpc.portal.resident.services.services.InsuranceService;
 import com.propertyvista.portal.shared.activity.SecurityAwareActivity;
+import com.propertyvista.portal.shared.ui.util.PortalHidablePreferenceManager;
 
 public class MainDashboardActivity extends SecurityAwareActivity implements MainDashboardPresenter {
 
     private final MainDashboardView view;
-
-    private static boolean optOutGettingStartedGadget = false;
 
     public MainDashboardActivity(Place place) {
         this.view = ResidentPortalSite.getViewFactory().getView(MainDashboardView.class);
@@ -52,8 +54,17 @@ public class MainDashboardActivity extends SecurityAwareActivity implements Main
         super.start(panel, eventBus);
         panel.setWidget(view);
         view.setPresenter(this);
-        view.setGettingStartedGadgetVisible(!optOutGettingStartedGadget);
+        view.setGettingStartedGadgetVisible(!PortalHidablePreferenceManager.isHidden(CustomerPreferencesPortalHidable.Type.GettingStartedGadget));
 
+        eventBus.addHandler(PortalHidableEvent.getType(), new PortalHidableHandler() {
+
+            @Override
+            public void onUpdate(PortalHidableEvent event) {
+                if (CustomerPreferencesPortalHidable.Type.GettingStartedGadget.equals(event.getPreferenceType())) {
+                    setGettingStartedGadgetOptOut(event.getPreferenceValue());
+                }
+            }
+        });
         populate();
     }
 
@@ -116,8 +127,6 @@ public class MainDashboardActivity extends SecurityAwareActivity implements Main
 
     @Override
     public void setGettingStartedGadgetOptOut(boolean optOut) {
-        optOutGettingStartedGadget = optOut;
         view.setGettingStartedGadgetVisible(!optOut);
     }
-
 }

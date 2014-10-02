@@ -49,6 +49,8 @@ public interface ToolbarView extends IsView {
 
     void setLeasesSelectorEnabled(boolean enabled);
 
+    void setGettingStartedVisible(boolean visible);
+
     void updateCommunicationMessagesCount(PortalCommunicationSystemNotification communicationStatus);
 
 }

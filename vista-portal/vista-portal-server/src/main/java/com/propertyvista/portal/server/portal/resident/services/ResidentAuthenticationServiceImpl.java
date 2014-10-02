@@ -56,6 +56,7 @@ import com.propertyvista.domain.security.common.VistaAccessGrantedBehavior;
 import com.propertyvista.domain.security.common.VistaApplication;
 import com.propertyvista.domain.security.common.VistaBasicBehavior;
 import com.propertyvista.domain.tenant.Customer;
+import com.propertyvista.domain.tenant.CustomerPreferences;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.portal.rpc.portal.resident.ResidentUserVisit;
 import com.propertyvista.portal.rpc.portal.resident.services.ResidentAuthenticationService;
@@ -77,7 +78,7 @@ public class ResidentAuthenticationServiceImpl extends VistaAuthenticationServic
     protected ResidentUserVisit createUserVisit(CustomerUser user) {
         ResidentUserVisit visit = new ResidentUserVisit(getVistaApplication(), user.<CustomerUser> duplicate());
         Persistence.ensureRetrieve(user.preferences(), AttachLevel.Attached);
-        visit.setPreferences(user.preferences());
+        visit.setPreferences(user.preferences().<CustomerPreferences> detach());
         return visit;
     }
 

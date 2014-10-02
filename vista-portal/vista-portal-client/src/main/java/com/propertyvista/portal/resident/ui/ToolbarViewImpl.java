@@ -45,11 +45,13 @@ import com.pyx4j.widgets.client.style.theme.WidgetTheme;
 import com.propertyvista.common.client.ClientLocaleUtils;
 import com.propertyvista.common.client.WalkMe;
 import com.propertyvista.domain.security.PortalResidentBehavior;
+import com.propertyvista.domain.tenant.CustomerPreferencesPortalHidable;
 import com.propertyvista.portal.resident.activity.PortalClientCommunicationManager;
 import com.propertyvista.portal.rpc.portal.resident.ac.HelpAction;
 import com.propertyvista.portal.rpc.shared.dto.communication.PortalCommunicationSystemNotification;
 import com.propertyvista.portal.shared.resources.PortalImages;
 import com.propertyvista.portal.shared.themes.PortalRootPaneTheme;
+import com.propertyvista.portal.shared.ui.util.PortalHidablePreferenceManager;
 import com.propertyvista.shared.i18n.CompiledLocale;
 
 public class ToolbarViewImpl extends FlowPanel implements ToolbarView {
@@ -71,6 +73,8 @@ public class ToolbarViewImpl extends FlowPanel implements ToolbarView {
     private final MenuItem myAccountMenu;
 
     private final MenuItem logoutMenu;
+
+    private final MenuItem showGettingStartedGadgetMenu;
 
     private final MenuItem leaseSelectionMenu;
 
@@ -124,6 +128,15 @@ public class ToolbarViewImpl extends FlowPanel implements ToolbarView {
             }
         });
         tenantButtonMenu.addItem(myAccountMenu);
+
+        showGettingStartedGadgetMenu = new MenuItem(i18n.tr("Show Getting Started"), new Command() {
+            @Override
+            public void execute() {
+                PortalHidablePreferenceManager.updatePreference(CustomerPreferencesPortalHidable.Type.GettingStartedGadget, false);
+            }
+        });
+        setGettingStartedVisible(false);
+        tenantButtonMenu.addItem(showGettingStartedGadgetMenu);
 
         logoutMenu = new MenuItem(i18n.tr("Logout"), new Command() {
             @Override
@@ -355,5 +368,10 @@ public class ToolbarViewImpl extends FlowPanel implements ToolbarView {
             communicationButton.removeStyleDependentName(PortalRootPaneTheme.StyleDependent.alertOn.name());
         }
 
+    }
+
+    @Override
+    public void setGettingStartedVisible(boolean visible) {
+        showGettingStartedGadgetMenu.setVisible(visible);
     }
 }

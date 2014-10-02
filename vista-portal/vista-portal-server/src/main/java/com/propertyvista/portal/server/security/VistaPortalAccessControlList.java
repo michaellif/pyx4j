@@ -235,6 +235,7 @@ public class VistaPortalAccessControlList extends UIAclBuilder {
         grant(PortalResidentBehavior.Resident, new IServiceExecutePermission(MessageAttachmentUploadPortalService.class));
         grant(PortalResidentBehavior.Guarantor, new IServiceExecutePermission(MessageAttachmentUploadPortalService.class));
 
+        grant(PortalResidentBehavior.Resident, new EntityPermission(CustomerPreferences.class, CRUD));
         grant(PortalResidentBehavior.Resident, new EntityPermission(DeliveryHandle.class, CRUD));
         grant(PortalResidentBehavior.Resident, new EntityPermission(MessageAttachment.class, CRUD));
         grant(PortalResidentBehavior.Resident, new EntityPermission(CommunicationThread.class, CRUD));
@@ -243,6 +244,7 @@ public class VistaPortalAccessControlList extends UIAclBuilder {
         grant(PortalResidentBehavior.Resident, new EntityPermission(MessageCategory.class, CRUD));
         grant(PortalResidentBehavior.Resident, new EntityPermission(ThreadPolicyHandle.class, CRUD));
 
+        grant(PortalResidentBehavior.Guarantor, new EntityPermission(CustomerPreferences.class, CRUD));
         grant(PortalResidentBehavior.Guarantor, new EntityPermission(DeliveryHandle.class, CRUD));
         grant(PortalResidentBehavior.Guarantor, new EntityPermission(MessageAttachment.class, CRUD));
         grant(PortalResidentBehavior.Guarantor, new EntityPermission(CommunicationThread.class, CRUD));

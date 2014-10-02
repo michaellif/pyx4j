@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011- All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -15,6 +15,7 @@ package com.propertyvista.portal.resident.ui;
 
 import com.google.gwt.dom.client.Style.Display;
 import com.google.gwt.dom.client.Style.Position;
+import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.DockPanel;
 import com.google.gwt.user.client.ui.FlowPanel;
@@ -25,12 +26,14 @@ import com.pyx4j.commons.css.ThemeColor;
 import com.pyx4j.gwt.commons.layout.LayoutChangeEvent;
 import com.pyx4j.gwt.commons.layout.LayoutChangeHandler;
 import com.pyx4j.gwt.commons.layout.LayoutType;
+import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.rpc.AppPlace;
 
 import com.propertyvista.domain.customizations.CountryOfOperation;
 import com.propertyvista.domain.security.PortalResidentBehavior;
+import com.propertyvista.domain.tenant.CustomerPreferencesPortalHidable;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
 import com.propertyvista.portal.rpc.portal.resident.ResidentPortalSiteMap;
 import com.propertyvista.portal.shared.resources.PortalImages;
@@ -38,9 +41,12 @@ import com.propertyvista.portal.shared.themes.PortalRootPaneTheme;
 import com.propertyvista.portal.shared.ui.AppPlaceMenuItem;
 import com.propertyvista.portal.shared.ui.MenuItem;
 import com.propertyvista.portal.shared.ui.MenuList;
+import com.propertyvista.portal.shared.ui.NotNavigableMenuItem;
+import com.propertyvista.portal.shared.ui.util.PortalHidablePreferenceManager;
 import com.propertyvista.shared.config.VistaFeatures;
 
 public class PortalMenuViewImpl extends DockPanel implements PortalMenuView {
+    private static final I18n i18n = I18n.get(PortalMenuViewImpl.class);
 
     private final HeaderHolder headerHolder;
 
@@ -49,6 +55,8 @@ public class PortalMenuViewImpl extends DockPanel implements PortalMenuView {
     private final MenuList<MenuItem<?>> footerHolder;
 
     private final MenuItem<?> leaseSelectionMenu;
+
+    private final MenuItem<?> showGettingStartedGadgetMenu;
 
     private boolean mainMenuVisible = true;
 
@@ -89,6 +97,15 @@ public class PortalMenuViewImpl extends DockPanel implements PortalMenuView {
 
         leaseSelectionMenu = new AppPlaceMenuItem(new ResidentPortalSiteMap.LeaseContextSelection(), PortalImages.INSTANCE.selectMenu(), ThemeColor.background);
         footerHolder.addMenuItem(leaseSelectionMenu);
+
+        showGettingStartedGadgetMenu = new NotNavigableMenuItem(i18n.tr("Show Getting Started"), PortalImages.INSTANCE.dashboardMenu(), ThemeColor.background,
+                new Command() {
+                    @Override
+                    public void execute() {
+                        PortalHidablePreferenceManager.updatePreference(CustomerPreferencesPortalHidable.Type.GettingStartedGadget, false);
+                    }
+                });
+        footerHolder.addMenuItem(showGettingStartedGadgetMenu);
 
         footerHolder.addMenuItem(new AppPlaceMenuItem(new PortalSiteMap.Logout(), PortalImages.INSTANCE.logoutMenu(), ThemeColor.background));
 
@@ -190,6 +207,11 @@ public class PortalMenuViewImpl extends DockPanel implements PortalMenuView {
         public void setName(String name) {
             nameLabel.setText(name);
         }
+    }
+
+    @Override
+    public void setGettingStartedVisible(boolean visible) {
+        showGettingStartedGadgetMenu.setVisible(visible);
     }
 
 }

@@ -36,6 +36,7 @@ import com.propertyvista.domain.security.CrmUser;
 import com.propertyvista.domain.security.CrmUserCredential;
 import com.propertyvista.domain.security.CustomerUser;
 import com.propertyvista.domain.security.CustomerUserCredential;
+import com.propertyvista.domain.tenant.CustomerPreferences;
 import com.propertyvista.generator.SecurityGenerator;
 import com.propertyvista.generator.util.CommonsGenerator;
 import com.propertyvista.preloader.BaseVistaDevDataPreloader;
@@ -61,6 +62,9 @@ public class UserPreloader extends BaseVistaDevDataPreloader {
         user.email().setValue(email);
 
         Persistence.service().persist(user);
+        CustomerPreferences preferences = EntityFactory.create(CustomerPreferences.class);
+        preferences.customerUser().set(user);
+        Persistence.service().persist(preferences);
 
         CustomerUserCredential credential = EntityFactory.create(CustomerUserCredential.class);
         credential.setPrimaryKey(user.getPrimaryKey());

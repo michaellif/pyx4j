@@ -25,10 +25,14 @@ import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.site.client.AppSite;
 
 import com.propertyvista.domain.security.PortalResidentBehavior;
+import com.propertyvista.domain.tenant.CustomerPreferencesPortalHidable;
 import com.propertyvista.portal.resident.ResidentPortalSite;
+import com.propertyvista.portal.resident.events.PortalHidableEvent;
+import com.propertyvista.portal.resident.events.PortalHidableHandler;
 import com.propertyvista.portal.resident.ui.PortalMenuView;
 import com.propertyvista.portal.resident.ui.PortalMenuView.PortalMenuPresenter;
 import com.propertyvista.portal.rpc.portal.resident.ResidentPortalSiteMap;
+import com.propertyvista.portal.shared.ui.util.PortalHidablePreferenceManager;
 
 public class PortalMenuActivity extends AbstractActivity implements PortalMenuPresenter {
 
@@ -40,6 +44,10 @@ public class PortalMenuActivity extends AbstractActivity implements PortalMenuPr
         this.place = place;
         this.view = ResidentPortalSite.getViewFactory().getView(PortalMenuView.class);
         view.setPresenter(this);
+        if (place instanceof ResidentPortalSiteMap.Dashboard) {
+            view.setGettingStartedVisible(PortalHidablePreferenceManager.isHidden(CustomerPreferencesPortalHidable.Type.GettingStartedGadget));
+        }
+
     }
 
     @Override
@@ -49,6 +57,16 @@ public class PortalMenuActivity extends AbstractActivity implements PortalMenuPr
         view.setLeasesSelectorEnabled(SecurityController.check(PortalResidentBehavior.HasMultipleLeases));
         view.setMenuVisible(!(place instanceof ResidentPortalSiteMap.LeaseContextSelection));
         AppSite.getEventBus().fireEvent(new LayoutChangeRequestEvent(ChangeType.resizeComponents));
+        AppSite.getEventBus().addHandler(PortalHidableEvent.getType(), new PortalHidableHandler() {
+
+            @Override
+            public void onUpdate(PortalHidableEvent event) {
+                if (place instanceof ResidentPortalSiteMap.Dashboard
+                        && CustomerPreferencesPortalHidable.Type.GettingStartedGadget.equals(event.getPreferenceType())) {
+                    view.setGettingStartedVisible(event.getPreferenceValue());
+                }
+            }
+        });
     }
 
 }

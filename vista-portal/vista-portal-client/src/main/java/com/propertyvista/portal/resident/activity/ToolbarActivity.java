@@ -29,9 +29,12 @@ import com.pyx4j.site.client.AppSite;
 
 import com.propertyvista.common.client.ClientLocaleUtils;
 import com.propertyvista.domain.security.PortalResidentBehavior;
+import com.propertyvista.domain.tenant.CustomerPreferencesPortalHidable;
 import com.propertyvista.portal.resident.ResidentPortalSite;
 import com.propertyvista.portal.resident.events.CommunicationStatusUpdateEvent;
 import com.propertyvista.portal.resident.events.CommunicationStatusUpdateHandler;
+import com.propertyvista.portal.resident.events.PortalHidableEvent;
+import com.propertyvista.portal.resident.events.PortalHidableHandler;
 import com.propertyvista.portal.resident.ui.ToolbarView;
 import com.propertyvista.portal.resident.ui.ToolbarView.ToolbarPresenter;
 import com.propertyvista.portal.resident.ui.communication.CommunicationView;
@@ -40,6 +43,7 @@ import com.propertyvista.portal.rpc.portal.resident.ResidentPortalSiteMap;
 import com.propertyvista.portal.rpc.portal.resident.communication.MessageDTO;
 import com.propertyvista.portal.rpc.portal.resident.services.MessagePortalCrudService;
 import com.propertyvista.portal.rpc.shared.dto.communication.PortalCommunicationSystemNotification;
+import com.propertyvista.portal.shared.ui.util.PortalHidablePreferenceManager;
 import com.propertyvista.shared.i18n.CompiledLocale;
 
 public class ToolbarActivity extends AbstractActivity implements ToolbarPresenter {
@@ -56,6 +60,9 @@ public class ToolbarActivity extends AbstractActivity implements ToolbarPresente
         assert (view != null);
         communicationService = (MessagePortalCrudService) GWT.create(MessagePortalCrudService.class);
         view.setPresenter(this);
+        if (place instanceof ResidentPortalSiteMap.Dashboard) {
+            view.setGettingStartedVisible(PortalHidablePreferenceManager.isHidden(CustomerPreferencesPortalHidable.Type.GettingStartedGadget));
+        }
     }
 
     @Override
@@ -78,7 +85,16 @@ public class ToolbarActivity extends AbstractActivity implements ToolbarPresente
                 updateCommunicationMessagesCount(event.getCommunicationSystemNotification());
             }
         });
+        eventBus.addHandler(PortalHidableEvent.getType(), new PortalHidableHandler() {
 
+            @Override
+            public void onUpdate(PortalHidableEvent event) {
+                if (place instanceof ResidentPortalSiteMap.Dashboard
+                        && CustomerPreferencesPortalHidable.Type.GettingStartedGadget.equals(event.getPreferenceType())) {
+                    view.setGettingStartedVisible(event.getPreferenceValue());
+                }
+            }
+        });
         AppSite.getEventBus().fireEvent(new LayoutChangeRequestEvent(ChangeType.resizeComponents));
     }
 
