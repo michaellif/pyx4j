@@ -53,7 +53,7 @@ public class ExportAutoPayAgreementDataRetriever {
                 itemModel.amount().setValue(item.amount().getValue());
                 itemModel.chargeAmount().setValue(ServerSideFactory.create(BillingFacade.class).getActualPrice(item.billableItem()));
 
-                itemModel.chargeId().setValue(item.billableItem().uid().getStringView());
+                itemModel.chargeId().setValue(item.billableItem().uuid().getStringView());
                 itemModel.chargeCode().setValue(item.billableItem().yardiChargeCode().getValue());
                 if (!item.billableItem().item().product().holder().code().type().isNull()) {
                     itemModel.chargeARCodeType().setValue(item.billableItem().item().product().holder().code().type().getValue().name());

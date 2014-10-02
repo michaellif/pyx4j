@@ -215,7 +215,7 @@ public class AutoPayWizardServiceImpl extends AbstractCrudServiceDtoImpl<Autopay
         // calculate already covered amount by other tenants/paps:
         EntityQueryCriteria<AutopayAgreementCoveredItem> criteria = new EntityQueryCriteria<AutopayAgreementCoveredItem>(AutopayAgreementCoveredItem.class);
         criteria.eq(criteria.proto().pap().tenant().lease(), lease);
-        criteria.eq(criteria.proto().billableItem().uid(), billableItem.uid());
+        criteria.eq(criteria.proto().billableItem().uuid(), billableItem.uuid());
         criteria.eq(criteria.proto().pap().isDeleted(), Boolean.FALSE);
 
         itemDto.covered().setValue(BigDecimal.ZERO);
@@ -258,7 +258,7 @@ public class AutoPayWizardServiceImpl extends AbstractCrudServiceDtoImpl<Autopay
         EntityQueryCriteria<AutopayAgreementCoveredItem> criteria = new EntityQueryCriteria<AutopayAgreementCoveredItem>(AutopayAgreementCoveredItem.class);
         criteria.ne(criteria.proto().pap(), itemDto.pap());
         criteria.eq(criteria.proto().pap().tenant().lease(), lease);
-        criteria.eq(criteria.proto().billableItem().uid(), itemDto.billableItem().uid());
+        criteria.eq(criteria.proto().billableItem().uuid(), itemDto.billableItem().uuid());
         criteria.eq(criteria.proto().pap().isDeleted(), Boolean.FALSE);
 
         itemDto.covered().setValue(BigDecimal.ZERO);

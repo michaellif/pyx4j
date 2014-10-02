@@ -40,16 +40,16 @@ public class BillingBulkRunTest extends LeaseFinancialTestBase {
         addServiceAdjustment("-25", ValueType.Monetary);
 
         BillableItem parking1 = addOutdoorParking();
-        addFeatureAdjustment(parking1.uid().getValue(), "-10", ValueType.Monetary);
+        addFeatureAdjustment(parking1.uuid().getValue(), "-10", ValueType.Monetary);
 
         BillableItem parking2 = addOutdoorParking("23-Apr-2011", "03-Aug-2011");
-        addFeatureAdjustment(parking2.uid().getValue(), "-10", ValueType.Monetary);
+        addFeatureAdjustment(parking2.uuid().getValue(), "-10", ValueType.Monetary);
 
         BillableItem locker1 = addLargeLocker();
-        addFeatureAdjustment(locker1.uid().getValue(), "-0.2", ValueType.Percentage);
+        addFeatureAdjustment(locker1.uuid().getValue(), "-0.2", ValueType.Percentage);
 
         BillableItem pet1 = addCat();
-        addFeatureAdjustment(pet1.uid().getValue(), "-1", ValueType.Percentage);
+        addFeatureAdjustment(pet1.uuid().getValue(), "-1", ValueType.Percentage);
 
         //==================== RUN 1 ======================//
 

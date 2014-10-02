@@ -441,7 +441,7 @@ public class OnlineApplicationFacadeImpl implements OnlineApplicationFacade {
             }
             BigDecimal sum = BigDecimal.ZERO;
             for (OnlineApplicationWizardStepStatus stepStatus : app.stepsStatuses()) {
-                if (stepStatus.complete().getValue(false)) {
+                if (stepStatus.completed().getValue(false)) {
                     sum = sum.add(new BigDecimal(1));
                 } else if (stepStatus.visited().getValue(false)) {
                     sum = sum.add(new BigDecimal(0.5));

@@ -1011,7 +1011,7 @@ public class TenantPadProcessor {
             }
 
             if (matchingBillableItem != null) {
-                billableItems.remove(matchingBillableItem.uid().getValue());
+                billableItems.remove(matchingBillableItem.uuid().getValue());
                 billableItemsUnprocessed.remove(matchingBillableItem);
                 billableItemsProcesed.add(matchingBillableItem);
 

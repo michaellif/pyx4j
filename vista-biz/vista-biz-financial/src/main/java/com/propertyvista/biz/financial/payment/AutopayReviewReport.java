@@ -216,7 +216,7 @@ class AutopayReviewReport {
                 Persistence.ensureRetrieve(preauthorizedPayment.reviewOfPap(), AttachLevel.Attached);
 
                 for (AutopayAgreementCoveredItem coveredItem : preauthorizedPayment.reviewOfPap().coveredItems()) {
-                    coveredItemItemsPrevious.put(coveredItem.billableItem().uid().getValue(), coveredItem);
+                    coveredItemItemsPrevious.put(coveredItem.billableItem().uuid().getValue(), coveredItem);
                 }
             }
         }
@@ -229,7 +229,7 @@ class AutopayReviewReport {
             chargeReview.current().payment().setValue(coveredItem.amount().getValue());
             calulatePercent(chargeReview.current());
 
-            AutopayAgreementCoveredItem coveredItemItemPrevious = coveredItemItemsPrevious.remove(coveredItem.billableItem().uid().getValue());
+            AutopayAgreementCoveredItem coveredItemItemPrevious = coveredItemItemsPrevious.remove(coveredItem.billableItem().uuid().getValue());
             if (coveredItemItemPrevious != null) {
                 chargeReview.previous().billableItem().set(coveredItemItemPrevious.billableItem().createIdentityStub());
                 chargeReview.previous().totalPrice()

@@ -28,7 +28,7 @@ public interface OnlineApplicationWizardStepStatus extends IEntity {
 
     IPrimitive<OnlineApplicationWizardStepMeta> step();
 
-    IPrimitive<Boolean> complete();
+    IPrimitive<Boolean> completed();
 
     IPrimitive<Boolean> visited();
 

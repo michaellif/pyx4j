@@ -26,7 +26,7 @@ public class BillableItemTester extends Tester {
     }
 
     public BillableItemTester uid(String value) {
-        assertEquals("uid", value, billableItem.uid().getValue());
+        assertEquals("uid", value, billableItem.uuid().getValue());
         return this;
     }
 

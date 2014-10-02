@@ -196,7 +196,7 @@ public class LeaseMerger {
         Iterator<BillableItem> it = items.iterator();
         while (it.hasNext()) {
             BillableItem leaseItem = it.next();
-            if (item.uid().compareTo(leaseItem.uid()) == 0) {
+            if (item.uuid().compareTo(leaseItem.uuid()) == 0) {
                 it.remove();
                 return leaseItem;
             }
@@ -250,7 +250,7 @@ public class LeaseMerger {
     }
 
     private boolean compareBillableItems(BillableItem item1, BillableItem item2) {
-        if (item1.uid().compareTo(item2.uid()) != 0) {
+        if (item1.uuid().compareTo(item2.uuid()) != 0) {
             return false;
         }
         if (item1.expirationDate().compareTo(item2.expirationDate()) != 0 || item1.effectiveDate().compareTo(item2.effectiveDate()) != 0) {

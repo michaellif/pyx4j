@@ -31,16 +31,19 @@ import com.pyx4j.entity.core.IPrimitive;
 import com.propertyvista.domain.property.asset.building.Building;
 
 public interface CommunityEvent extends IEntity {
+
     IPrimitive<String> caption();
 
     IPrimitive<String> location();
 
     @NotNull
+    @MemberColumn(name = "event_date")
     IPrimitive<LogicalDate> date();
 
     @Editor(type = EditorType.timepicker)
     @Format("h:mm a")
     @NotNull
+    @MemberColumn(name = "event_time")
     IPrimitive<Time> time();
 
     @NotNull

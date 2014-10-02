@@ -28,9 +28,9 @@ public class PaymentBillableUtils {
 
     public static Map<String, BillableItem> getAllBillableItems(LeaseTerm.LeaseTermV leaseTermV) {
         Map<String, BillableItem> billableItems = new LinkedHashMap<String, BillableItem>();
-        billableItems.put(leaseTermV.leaseProducts().serviceItem().uid().getValue(), leaseTermV.leaseProducts().serviceItem());
+        billableItems.put(leaseTermV.leaseProducts().serviceItem().uuid().getValue(), leaseTermV.leaseProducts().serviceItem());
         for (BillableItem bi : leaseTermV.leaseProducts().featureItems()) {
-            billableItems.put(bi.uid().getValue(), bi);
+            billableItems.put(bi.uuid().getValue(), bi);
         }
         return billableItems;
     }

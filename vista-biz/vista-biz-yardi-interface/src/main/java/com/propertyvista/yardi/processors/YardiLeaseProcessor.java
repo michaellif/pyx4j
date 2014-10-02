@@ -369,13 +369,13 @@ public class YardiLeaseProcessor {
             String uid = billableItemUid(tr.getCharge().getDetail().getChargeCode(), chargeCodeItemNo);
             BillableItem newItem = null;
             for (BillableItem leaseItem : currentItems) {
-                if (!leaseItem.uid().isNull() && uid.compareTo(leaseItem.uid().getValue()) == 0) {
+                if (!leaseItem.uuid().isNull() && uid.compareTo(leaseItem.uuid().getValue()) == 0) {
                     newItem = EntityGraph.businessDuplicate(leaseItem);
                 }
             }
             if (newItem == null) {
                 newItem = EntityFactory.create(BillableItem.class);
-                newItem.uid().setValue(uid);
+                newItem.uuid().setValue(uid);
             }
 
             if (YardiTrace.trace) {
@@ -539,7 +539,7 @@ public class YardiLeaseProcessor {
             }
             chargeCodeItemsCount.put(chargeCode, chargeCodeItemNo);
 
-            bi.uid().setValue(billableItemUid(chargeCode, chargeCodeItemNo));
+            bi.uuid().setValue(billableItemUid(chargeCode, chargeCodeItemNo));
         }
     }
 

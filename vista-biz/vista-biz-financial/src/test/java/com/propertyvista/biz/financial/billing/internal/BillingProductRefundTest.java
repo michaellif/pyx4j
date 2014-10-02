@@ -99,7 +99,7 @@ public class BillingProductRefundTest extends LeaseFinancialTestBase {
 
         // Current period adjustment
         advanceSysDate("20-Mar-2011");
-        addFeatureAdjustment(parking.uid().getValue(), "-10", ValueType.Monetary, "20-Mar-2011", "10-Apr-2011");
+        addFeatureAdjustment(parking.uuid().getValue(), "-10", ValueType.Monetary, "20-Mar-2011", "10-Apr-2011");
 
         //==================== RUN 3 ======================//
 
@@ -128,7 +128,7 @@ public class BillingProductRefundTest extends LeaseFinancialTestBase {
 
         // cancel feature for previous period
         advanceSysDate("20-Apr-2011");
-        cancelBillableItem(parking.uid().getValue(), "21-Apr-2011");
+        cancelBillableItem(parking.uuid().getValue(), "21-Apr-2011");
 
         //==================== RUN 4 ======================//
 

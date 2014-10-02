@@ -137,7 +137,7 @@ public class ApplicationWizardActivity extends AbstractWizardActivity<OnlineAppl
             ApplicationWizardStep appStep = (ApplicationWizardStep) step;
             OnlineApplicationWizardStepStatus status = EntityFactory.create(OnlineApplicationWizardStepStatus.class);
             status.step().setValue(appStep.getOnlineApplicationWizardStepMeta());
-            status.complete().setValue(appStep.isStepComplete());
+            status.completed().setValue(appStep.isStepComplete());
             status.visited().setValue(appStep.isStepVisited());
             getView().getValue().stepsStatuses().add(status);
         }

@@ -75,7 +75,7 @@ public interface LeaseAdjustment extends IEntity {
     }
 
     @GeneratedValue(type = GeneratedValue.GenerationType.randomUUID)
-    IPrimitive<String> uid();
+    IPrimitive<String> uuid();
 
     @NotNull
     IPrimitive<Status> status();

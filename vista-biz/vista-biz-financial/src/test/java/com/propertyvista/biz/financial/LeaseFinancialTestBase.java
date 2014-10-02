@@ -434,13 +434,13 @@ public abstract class LeaseFinancialTestBase extends IntegrationTestBase {
 
     protected BillableItemAdjustment addServiceAdjustment(String value, ValueType adjustmentType, String effectiveDate, String expirationDate) {
         Lease lease = retrieveLease();
-        return addBillableItemAdjustment(lease.currentTerm().version().leaseProducts().serviceItem().uid().getValue(), value, adjustmentType,
+        return addBillableItemAdjustment(lease.currentTerm().version().leaseProducts().serviceItem().uuid().getValue(), value, adjustmentType,
                 getDate(effectiveDate), getDate(expirationDate));
     }
 
     protected BillableItemAdjustment addServiceAdjustment(String value, ValueType adjustmentType) {
         Lease lease = retrieveLease();
-        return addBillableItemAdjustment(lease.currentTerm().version().leaseProducts().serviceItem().uid().getValue(), value, adjustmentType, lease
+        return addBillableItemAdjustment(lease.currentTerm().version().leaseProducts().serviceItem().uuid().getValue(), value, adjustmentType, lease
                 .currentTerm().termFrom().getValue(), lease.currentTerm().termTo().getValue());
     }
 
@@ -620,11 +620,11 @@ public abstract class LeaseFinancialTestBase extends IntegrationTestBase {
     }
 
     private BillableItem findBillableItem(String billableItemId, Lease lease) {
-        if (lease.currentTerm().version().leaseProducts().serviceItem().uid().getValue().equals(billableItemId)) {
+        if (lease.currentTerm().version().leaseProducts().serviceItem().uuid().getValue().equals(billableItemId)) {
             return lease.currentTerm().version().leaseProducts().serviceItem();
         } else {
             for (BillableItem item : lease.currentTerm().version().leaseProducts().featureItems()) {
-                if (item.uid().getValue().equals(billableItemId)) {
+                if (item.uuid().getValue().equals(billableItemId)) {
                     return item;
                 }
             }
@@ -634,13 +634,13 @@ public abstract class LeaseFinancialTestBase extends IntegrationTestBase {
 
     private BillableItemAdjustment findBillableItemAdjustment(String billableItemAdjustmentId, Lease lease) {
         for (BillableItemAdjustment itemAdjustment : lease.currentTerm().version().leaseProducts().serviceItem().adjustments()) {
-            if (itemAdjustment.uid().getValue().equals(billableItemAdjustmentId)) {
+            if (itemAdjustment.uuid().getValue().equals(billableItemAdjustmentId)) {
                 return itemAdjustment;
             }
         }
         for (BillableItem item : lease.currentTerm().version().leaseProducts().featureItems()) {
             for (BillableItemAdjustment itemAdjustment : item.adjustments()) {
-                if (itemAdjustment.uid().getValue().equals(billableItemAdjustmentId)) {
+                if (itemAdjustment.uuid().getValue().equals(billableItemAdjustmentId)) {
                     return itemAdjustment;
                 }
             }

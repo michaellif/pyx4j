@@ -52,7 +52,7 @@ public class BillableItemAdjustmentTest extends LeaseFinancialTestBase {
         BillableItemAdjustment svcAdj_3 = addServiceAdjustment("-31", ValueType.Monetary, "15-May-2011", "14-Jun-2011");
 
         BillableItem park = addOutdoorParking();
-        BillableItemAdjustment parkAdj_1 = addFeatureAdjustment(park.uid().getValue(), "-30", ValueType.Monetary);
+        BillableItemAdjustment parkAdj_1 = addFeatureAdjustment(park.uuid().getValue(), "-30", ValueType.Monetary);
 
         //==================== RUN 1 ======================//
         // Service = 900 after $30.30 adjustment; parking = 50 after $30 adjustment
@@ -80,7 +80,7 @@ public class BillableItemAdjustmentTest extends LeaseFinancialTestBase {
 
         activateLease();
 
-        changeBillableItemAdjustment(parkAdj_1.uid().getValue(), "01-Mar-2011", "31-Mar-2011");
+        changeBillableItemAdjustment(parkAdj_1.uuid().getValue(), "01-Mar-2011", "31-Mar-2011");
 
         advanceSysDate("18-Mar-2011");
 
@@ -122,7 +122,7 @@ public class BillableItemAdjustmentTest extends LeaseFinancialTestBase {
         //==================== RUN 4 ======================//
         // Service = $869.00 after $30.30 + $31.00 adjustment (changed till EOM)
 
-        changeBillableItemAdjustment(svcAdj_3.uid().getValue(), "01-Jun-2011", "30-Jun-2011");
+        changeBillableItemAdjustment(svcAdj_3.uuid().getValue(), "01-Jun-2011", "30-Jun-2011");
 
         advanceSysDate("18-May-2011");
 

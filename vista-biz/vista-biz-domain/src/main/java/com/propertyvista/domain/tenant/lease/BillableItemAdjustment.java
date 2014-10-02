@@ -38,7 +38,7 @@ import com.propertyvista.domain.company.Employee;
 public interface BillableItemAdjustment extends IEntity {
 
     @GeneratedValue(type = GeneratedValue.GenerationType.randomUUID)
-    IPrimitive<String> uid();
+    IPrimitive<String> uuid();
 
     @Caption(name = "Last Updated")
     @Timestamp

@@ -46,16 +46,16 @@ public class BillingFeatureEagerScenarioTest extends LeaseFinancialTestBase {
         createLease("23-Mar-2011", "03-Aug-2011");
 
         BillableItem parking1 = addOutdoorParking();
-        addFeatureAdjustment(parking1.uid().getValue(), "-10", ValueType.Monetary);
+        addFeatureAdjustment(parking1.uuid().getValue(), "-10", ValueType.Monetary);
 
         BillableItem parking2 = addOutdoorParking("23-Apr-2011", null);
-        addFeatureAdjustment(parking2.uid().getValue(), "-10", ValueType.Monetary);
+        addFeatureAdjustment(parking2.uuid().getValue(), "-10", ValueType.Monetary);
 
         BillableItem locker1 = addLargeLocker();
-        addFeatureAdjustment(locker1.uid().getValue(), "-0.2", ValueType.Percentage);
+        addFeatureAdjustment(locker1.uuid().getValue(), "-0.2", ValueType.Percentage);
 
         BillableItem pet1 = addCat();
-        addFeatureAdjustment(pet1.uid().getValue(), "-1", ValueType.Percentage);
+        addFeatureAdjustment(pet1.uuid().getValue(), "-1", ValueType.Percentage);
 
         //==================== RUN 1 ======================//
 
@@ -98,7 +98,7 @@ public class BillingFeatureEagerScenarioTest extends LeaseFinancialTestBase {
 
         setSysDate("18-Apr-2011");
         addCat("10-Apr-2011", null);
-        changeBillableItem(parking1.uid().getValue(), null, "20-May-2011");
+        changeBillableItem(parking1.uuid().getValue(), null, "20-May-2011");
         finalizeLeaseAdendum();
 
         bill = runBilling(true);
@@ -119,7 +119,7 @@ public class BillingFeatureEagerScenarioTest extends LeaseFinancialTestBase {
 
         setSysDate("18-May-2011");
         //TODO calculate arrears
-        changeBillableItem(parking1.uid().getValue(), null, "10-May-2011");
+        changeBillableItem(parking1.uuid().getValue(), null, "10-May-2011");
         finalizeLeaseAdendum();
 
         bill = runBilling(true);

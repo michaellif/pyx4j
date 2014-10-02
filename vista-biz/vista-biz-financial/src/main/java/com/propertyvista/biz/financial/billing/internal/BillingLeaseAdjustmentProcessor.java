@@ -56,7 +56,7 @@ public class BillingLeaseAdjustmentProcessor extends AbstractBillingProcessor<In
                         charges.addAll(BillingUtils.getLineItemsForType(getBillProducer().getPreviousPeriodBill(), InvoiceAccountCharge.class));
                         charges.addAll(BillingUtils.getLineItemsForType(getBillProducer().getCurrentPeriodBill(), InvoiceAccountCharge.class));
                         for (InvoiceAccountCharge charge : charges) {
-                            if (charge.adjustment().uid().equals(adjustment.uid())) {
+                            if (charge.adjustment().uuid().equals(adjustment.uuid())) {
                                 attachedToPreviousBill = true;
                             }
                         }
@@ -68,7 +68,7 @@ public class BillingLeaseAdjustmentProcessor extends AbstractBillingProcessor<In
                         credits.addAll(BillingUtils.getLineItemsForType(getBillProducer().getPreviousPeriodBill(), InvoiceAccountCredit.class));
                         credits.addAll(BillingUtils.getLineItemsForType(getBillProducer().getCurrentPeriodBill(), InvoiceAccountCredit.class));
                         for (InvoiceAccountCredit credit : credits) {
-                            if (credit.adjustment().uid().equals(adjustment.uid())) {
+                            if (credit.adjustment().uuid().equals(adjustment.uuid())) {
                                 attachedToPreviousBill = true;
                             }
                         }

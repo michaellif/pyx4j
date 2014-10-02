@@ -53,7 +53,7 @@ public class ImportAutoPayAgreementsDataProcessor {
                         + " not found");
                 return;
             }
-            billableItems.remove(matchingBillableItem.uid().getValue());
+            billableItems.remove(matchingBillableItem.uuid().getValue());
 
             AutopayAgreementCoveredItem padItem = EntityFactory.create(AutopayAgreementCoveredItem.class);
             padItem.billableItem().set(matchingBillableItem);

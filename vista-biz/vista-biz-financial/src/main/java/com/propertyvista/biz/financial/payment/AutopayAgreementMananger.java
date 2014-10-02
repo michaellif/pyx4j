@@ -334,14 +334,14 @@ class AutopayAgreementMananger {
             Map<String, BillableItem> papBillableItemsCurrent = new LinkedHashMap<String, BillableItem>(billableItemsCurrent);
 
             for (AutopayAgreementCoveredItem coveredItemOriginal : pap.coveredItems()) {
-                BillableItem billableItemCurrent = papBillableItemsCurrent.get(coveredItemOriginal.billableItem().uid().getValue());
+                BillableItem billableItemCurrent = papBillableItemsCurrent.get(coveredItemOriginal.billableItem().uuid().getValue());
                 if ((billableItemCurrent == null) || (!PaymentBillableUtils.isBillableItemPapable(billableItemCurrent, nextCycle))) {
                     // Not found, item removed
                     reviewRequired = true;
-                    log.debug("removed BillableItem {} {}, paid {}", coveredItemOriginal.billableItem().uid(), coveredItemOriginal.billableItem(),
+                    log.debug("removed BillableItem {} {}, paid {}", coveredItemOriginal.billableItem().uuid(), coveredItemOriginal.billableItem(),
                             coveredItemOriginal.amount());
                 } else {
-                    papBillableItemsCurrent.remove(coveredItemOriginal.billableItem().uid().getValue());
+                    papBillableItemsCurrent.remove(coveredItemOriginal.billableItem().uuid().getValue());
 
                     // Update the price if required
                     AutopayAgreementCoveredItem newCoveredItem = EntityFactory.create(AutopayAgreementCoveredItem.class);
@@ -360,7 +360,7 @@ class AutopayAgreementMananger {
                             newCoveredItem.amount().setValue(originalPaymentAmount);
                         } else {
                             newCoveredItem.amount().setValue(calulateNewPaymentValue(originalPaymentAmount, priceOriginal, priceCurrent, changeRule));
-                            log.debug("update BillableItem {} {}, pay {}, paid {}", billableItemCurrent.uid(), billableItemCurrent, newCoveredItem.amount(),
+                            log.debug("update BillableItem {} {}, pay {}, paid {}", billableItemCurrent.uuid(), billableItemCurrent, newCoveredItem.amount(),
                                     coveredItemOriginal.amount());
                         }
                     } else {
@@ -380,7 +380,7 @@ class AutopayAgreementMananger {
                 newCoveredItem.amount().setValue(BigDecimal.ZERO);
                 newCoveredItem.billableItem().set(billableItemCurrent);
                 newCoveredItems.add(newCoveredItem);
-                log.debug("new BillableItem {} {}, pay {}", billableItemCurrent.uid(), billableItemCurrent, newCoveredItem.amount());
+                log.debug("new BillableItem {} {}, pay {}", billableItemCurrent.uuid(), billableItemCurrent, newCoveredItem.amount());
             }
 
             pap.coveredItems().clear();
