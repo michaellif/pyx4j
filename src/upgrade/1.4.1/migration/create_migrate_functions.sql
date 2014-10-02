@@ -29,6 +29,15 @@ BEGIN
         ALTER TABLE aggregated_transfer$adjustments DROP CONSTRAINT aggregated_transfer$adjustments_value_fk;
         ALTER TABLE aggregated_transfer$chargebacks DROP CONSTRAINT aggregated_transfer$chargebacks_owner_fk;
         ALTER TABLE aggregated_transfer$chargebacks DROP CONSTRAINT aggregated_transfer$chargebacks_value_fk;
+        ALTER TABLE communication_message DROP CONSTRAINT communication_message_thread_fk;
+        ALTER TABLE communication_thread_policy_handle DROP CONSTRAINT communication_thread_policy_handle_thread_fk;
+
+
+        -- check constraints
+        
+        ALTER TABLE maintenance_request_category DROP CONSTRAINT maintenance_request_category_type_e_ck;
+        ALTER TABLE maintenance_request_priority DROP CONSTRAINT maintenance_request_priority_level_e_ck;
+        ALTER TABLE online_application DROP CONSTRAINT online_application_role_e_ck;
 
         
         /**
@@ -38,8 +47,10 @@ BEGIN
         ***
         ***     ======================================================================================================
         **/
-        
        
+        DROP INDEX communication_message_thread_idx;
+        DROP INDEX communication_thread_policy_handle_thread_idx;
+
         
         /**
         ***    ======================================================================================================
@@ -101,6 +112,14 @@ BEGIN
         
         ALTER TABLE aggregated_transfer_non_vista_transaction OWNER TO vista;
         
+        -- billable_item
+        
+        ALTER TABLE billable_item RENAME COLUMN uid TO uuid;
+        
+        -- billable_item_adjustment
+        
+        ALTER TABLE billable_item_adjustment RENAME COLUMN uid TO uuid;
+        
         -- billing_invoice_line_item
         
         ALTER TABLE billing_invoice_line_item RENAME COLUMN comment  TO cmt;
@@ -115,6 +134,11 @@ BEGIN
         
         ALTER TABLE communication_thread_policy_handle RENAME COLUMN thread TO thrd;
         
+        
+        -- community_event
+        
+        ALTER TABLE community_event RENAME COLUMN date TO event_date;
+        ALTER TABLE community_event RENAME COLUMN time TO event_time;
         
         -- customer_preferences
         
@@ -147,6 +171,10 @@ BEGIN
         ALTER TABLE customer_screening_personal_asset ADD COLUMN ownership NUMERIC(18,2);
         
         
+        -- deposit_interest_adjustment
+        
+        ALTER TABLE deposit_interest_adjustment RENAME COLUMN date TO collection_date;
+        
         -- email_templates_policy
         
         ALTER TABLE email_templates_policy RENAME COLUMN header TO hdr;
@@ -170,6 +198,10 @@ BEGIN
         );
         
         ALTER TABLE id_assignment_payment_type OWNER TO vista;
+        
+        -- lease_adjustment
+        
+        ALTER TABLE lease_adjustment RENAME COLUMN uid TO uuid;
         
         -- lease_agreement_confirmation_term
         
@@ -214,6 +246,16 @@ BEGIN
         
         ALTER TABLE master_online_application   ADD COLUMN fee_payment VARCHAR(50),
                                                 ADD COLUMN fee_amount  NUMERIC(18,2);
+                                                
+                                                
+        -- online_application
+        
+        ALTER TABLE online_application RENAME COLUMN role TO participant_role;
+        
+        
+        -- online_application_wizard_step_status
+        
+        ALTER TABLE online_application_wizard_step_status RENAME COLUMN complete TO completed;
         
         /**
         ***     =====================================================================================================
@@ -287,6 +329,10 @@ BEGIN
         
         ALTER TABLE customer_screening_personal_asset DROP COLUMN prcnt;
         
+        -- id_assignment_policy
+        
+        ALTER TABLE id_assignment_policy DROP COLUMN x;
+        
        
         /**
         ***     ======================================================================================================
@@ -306,7 +352,14 @@ BEGIN
             REFERENCES aggregated_transfer(id)  DEFERRABLE INITIALLY DEFERRED;
         ALTER TABLE aggregated_transfer_non_vista_transaction ADD CONSTRAINT aggregated_transfer_non_vista_transaction_merchant_account_fk FOREIGN KEY(merchant_account) 
             REFERENCES merchant_account(id)  DEFERRABLE INITIALLY DEFERRED;
-        -- ALTER TABLE customer_settings ADD CONSTRAINT customer_settings_customer_user_fk FOREIGN KEY(customer_user) REFERENCES customer_user(id)  DEFERRABLE INITIALLY DEFERRED;
+        ALTER TABLE communication_message ADD CONSTRAINT communication_message_thrd_fk FOREIGN KEY(thrd) 
+            REFERENCES communication_thread(id)  DEFERRABLE INITIALLY DEFERRED;
+        ALTER TABLE communication_thread_policy_handle ADD CONSTRAINT communication_thread_policy_handle_thrd_fk FOREIGN KEY(thrd) 
+            REFERENCES communication_thread(id)  DEFERRABLE INITIALLY DEFERRED;
+        ALTER TABLE customer_preferences ADD CONSTRAINT customer_preferences_customer_user_fk FOREIGN KEY(customer_user) 
+            REFERENCES customer_user(id)  DEFERRABLE INITIALLY DEFERRED;
+        ALTER TABLE customer_preferences_portal_hidable ADD CONSTRAINT customer_preferences_portal_hidable_customer_preferences_fk FOREIGN KEY(customer_preferences) 
+            REFERENCES customer_preferences(id)  DEFERRABLE INITIALLY DEFERRED;
         ALTER TABLE id_assignment_payment_type ADD CONSTRAINT id_assignment_payment_type_policy_fk FOREIGN KEY(policy) 
             REFERENCES id_assignment_policy(id)  DEFERRABLE INITIALLY DEFERRED;
         ALTER TABLE lease_participant_move_in_action ADD CONSTRAINT lease_participant_move_in_action_lease_participant_fk FOREIGN KEY(lease_participant) 
@@ -323,15 +376,23 @@ BEGIN
             CHECK ((agg_tf_discriminator) IN ('CardsAggregatedTransfer', 'EftAggregatedTransfer'));
         ALTER TABLE aggregated_transfer_non_vista_transaction ADD CONSTRAINT aggregated_transfer_non_vista_transaction_card_type_e_ck 
             CHECK ((card_type) IN ('MasterCard', 'Visa', 'VisaDebit'));
+        ALTER TABLE customer_preferences_portal_hidable ADD CONSTRAINT customer_preferences_portal_hidable_tp_e_ck CHECK (tp = 'GettingStartedGadget');
         ALTER TABLE lease_participant_move_in_action ADD CONSTRAINT lease_participant_move_in_action_lease_participant_discr_d_ck 
             CHECK ((lease_participant_discriminator) IN ('Guarantor', 'Tenant'));
         ALTER TABLE lease_participant_move_in_action ADD CONSTRAINT lease_participant_move_in_action_status_e_ck 
             CHECK ((status) IN ('completed', 'doItLater'));
         ALTER TABLE lease_participant_move_in_action ADD CONSTRAINT lease_participant_move_in_action_tp_e_ck 
             CHECK ((tp) IN ('autoPay', 'insurance'));
+        ALTER TABLE maintenance_request_category ADD CONSTRAINT maintenance_request_category_element_type_e_ck 
+            CHECK ((element_type) IN ('Amenities', 'ApartmentUnit', 'Exterior'));
+        ALTER TABLE maintenance_request_priority ADD CONSTRAINT maintenance_request_priority_lvl_e_ck 
+            CHECK ((lvl) IN ('EMERGENCY', 'STANDARD'));
+        ALTER TABLE online_application ADD CONSTRAINT online_application_participant_role_e_ck 
+            CHECK ((participant_role) IN ('Applicant', 'CoApplicant', 'Dependent', 'Guarantor'));
         ALTER TABLE master_online_application ADD CONSTRAINT master_online_application_fee_payment_e_ck 
             CHECK ((fee_payment) IN ('none', 'perApplicant', 'perLease'));
-
+        
+ 
         
         -- not null
         
@@ -356,6 +417,8 @@ BEGIN
         CREATE INDEX aggregated_transfer_non_vista_transaction_agg_tf_discr_idx ON aggregated_transfer_non_vista_transaction USING btree (agg_tf_discriminator);
         CREATE INDEX aggregated_transfer_non_vista_transaction_agg_tf_idx ON aggregated_transfer_non_vista_transaction USING btree (agg_tf);
         CREATE INDEX aggregated_transfer_non_vista_transaction_merchant_account_idx ON aggregated_transfer_non_vista_transaction USING btree (merchant_account);
+        CREATE INDEX communication_message_thrd_idx ON communication_message USING btree (thrd);
+        CREATE INDEX communication_thread_policy_handle_thrd_idx ON communication_thread_policy_handle USING btree (thrd);
         CREATE INDEX lease_participant_move_in_action_lease_participant_discr_idx ON lease_participant_move_in_action USING btree (lease_participant_discriminator);
         CREATE INDEX lease_participant_move_in_action_lease_participant_idx ON lease_participant_move_in_action USING btree (lease_participant);
 

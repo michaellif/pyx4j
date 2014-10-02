@@ -32,6 +32,14 @@ SET search_path = '_admin_';
         ***
         ***     ======================================================================================================
         **/
+        
+        -- foreign keys
+        
+        ALTER TABLE cards_clearance_record DROP CONSTRAINT cards_clearance_record_file_fk;
+        ALTER TABLE dev_direct_debit_sim_record DROP CONSTRAINT dev_direct_debit_sim_record_file_fk;
+        ALTER TABLE direct_debit_record DROP CONSTRAINT direct_debit_record_file_fk;
+        ALTER TABLE encrypted_storage_current_key DROP CONSTRAINT encrypted_storage_current_key_current_fk;
+        ALTER TABLE tenant_sure_hqupdate_record DROP CONSTRAINT tenant_sure_hqupdate_record_file_fk;
 
 
         /**
@@ -41,6 +49,11 @@ SET search_path = '_admin_';
         ***
         ***     ======================================================================================================
         **/
+
+        DROP INDEX cards_clearance_record_file_idx;
+        DROP INDEX dev_direct_debit_sim_record_file_idx;
+        DROP INDEX direct_debit_record_file_idx;
+        DROP INDEX tenant_sure_hqupdate_record_file_idx;
 
        
         /**
@@ -71,6 +84,35 @@ SET search_path = '_admin_';
         -- cards_clearance_record
         
         ALTER TABLE cards_clearance_record ADD COLUMN card_type VARCHAR(50);
+        ALTER TABLE cards_clearance_record RENAME COLUMN file TO clearance_file;
+        
+        -- cards_reconciliation_record
+        
+        ALTER TABLE cards_reconciliation_record RENAME COLUMN date TO deposit_date;
+        
+        
+        -- dev_card_service_simulation_card
+        
+        ALTER TABLE dev_card_service_simulation_card RENAME COLUMN number TO card_number;
+        
+        
+        -- dev_card_service_simulation_reconciliation_record
+        
+        ALTER TABLE dev_card_service_simulation_reconciliation_record RENAME COLUMN date TO deposit_date;
+        
+        
+        -- dev_direct_debit_sim_record
+        
+        ALTER TABLE dev_direct_debit_sim_record RENAME COLUMN file TO direct_debit_file;
+        
+        
+        -- direct_debit_record
+        
+        ALTER TABLE direct_debit_record RENAME COLUMN file TO direct_debit_file;
+        
+        -- encrypted_storage_current_key
+        
+        ALTER TABLE encrypted_storage_current_key RENAME COLUMN current TO current_key;
         
         -- oapi_conversion
         
@@ -122,6 +164,10 @@ SET search_path = '_admin_';
         ALTER TABLE oapi_conversion_file OWNER TO vista;
         
         
+        -- onboarding_user
+        
+        ALTER TABLE onboarding_user RENAME COLUMN password TO credential;
+        
         -- portal_resident_marketing_tip
         
         CREATE TABLE portal_resident_marketing_tip
@@ -136,6 +182,16 @@ SET search_path = '_admin_';
         );
         
         ALTER TABLE portal_resident_marketing_tip OWNER TO vista;
+        
+        
+        -- scheduler_execution_report_section
+        
+        ALTER TABLE scheduler_execution_report_section RENAME COLUMN value TO val;
+        
+        
+        -- tenant_sure_hqupdate_record
+        
+        ALTER TABLE tenant_sure_hqupdate_record RENAME COLUMN file TO owner;
         
         
         /**
@@ -156,7 +212,9 @@ SET search_path = '_admin_';
         ***     ==========================================================================================================
         **/
 
-
+        -- operations_alert
+        
+        ALTER TABLE operations_alert DROP COLUMN admin;
 
 
         /**
@@ -168,7 +226,16 @@ SET search_path = '_admin_';
         **/
 
         -- foreign keys
-        
+        ALTER TABLE cards_clearance_record ADD CONSTRAINT cards_clearance_record_clearance_file_fk FOREIGN KEY(clearance_file) 
+            REFERENCES cards_clearance_file(id)  DEFERRABLE INITIALLY DEFERRED;
+        ALTER TABLE dev_direct_debit_sim_record ADD CONSTRAINT dev_direct_debit_sim_record_direct_debit_file_fk FOREIGN KEY(direct_debit_file) 
+            REFERENCES dev_direct_debit_sim_file(id)  DEFERRABLE INITIALLY DEFERRED;
+        ALTER TABLE direct_debit_record ADD CONSTRAINT direct_debit_record_direct_debit_file_fk FOREIGN KEY(direct_debit_file) 
+            REFERENCES direct_debit_file(id)  DEFERRABLE INITIALLY DEFERRED;
+        ALTER TABLE encrypted_storage_current_key ADD CONSTRAINT encrypted_storage_current_key_current_key_fk FOREIGN KEY(current_key) 
+            REFERENCES encrypted_storage_public_key(id)  DEFERRABLE INITIALLY DEFERRED;
+        ALTER TABLE tenant_sure_hqupdate_record ADD CONSTRAINT tenant_sure_hqupdate_record_owner_fk FOREIGN KEY(owner) 
+            REFERENCES tenant_sure_hqupdate_file(id)  DEFERRABLE INITIALLY DEFERRED;
         ALTER TABLE oapi_conversion_file ADD CONSTRAINT oapi_conversion_file_oapi_fk FOREIGN KEY(oapi) 
             REFERENCES oapi_conversion(id)  DEFERRABLE INITIALLY DEFERRED;
 
@@ -192,6 +259,12 @@ SET search_path = '_admin_';
         ***
         ***     ============================================================================================================
         **/
+    
+        CREATE INDEX cards_clearance_record_clearance_file_idx ON cards_clearance_record USING btree (clearance_file);
+        CREATE INDEX dev_direct_debit_sim_record_direct_debit_file_idx ON dev_direct_debit_sim_record USING btree (direct_debit_file);
+        CREATE INDEX direct_debit_record_direct_debit_file_idx ON direct_debit_record USING btree (direct_debit_file);
+        CREATE INDEX tenant_sure_hqupdate_record_owner_idx ON tenant_sure_hqupdate_record USING btree (owner);
+
 
 
 
