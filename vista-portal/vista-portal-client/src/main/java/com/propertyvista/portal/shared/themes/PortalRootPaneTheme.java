@@ -35,7 +35,7 @@ public class PortalRootPaneTheme extends Theme {
 
         Comm, CommContent, CommCallout, CommHeader, CommHeaderTitle, CommHeaderWriteAction, CommMessage, AllertButton,
 
-        ExtraGadget,
+        ExtraGadget, QuickTipGadget,
 
         NotificationContainer, NotificationItem, NotificationItemTitle, NotificationItemCloseButton,
 
@@ -273,6 +273,9 @@ public class PortalRootPaneTheme extends Theme {
         style.addProperty("height", "100%");
         addStyle(style);
 
+        style = new Style(".", StyleName.QuickTipGadget);
+        style.addProperty("width", "240px");
+        addStyle(style);
     }
 
     private void initCommunicationStyles() {

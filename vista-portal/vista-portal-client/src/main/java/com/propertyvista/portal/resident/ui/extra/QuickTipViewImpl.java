@@ -24,7 +24,7 @@ import com.propertyvista.portal.shared.themes.PortalRootPaneTheme;
 public class QuickTipViewImpl extends SimplePanel implements QuickTipView {
 
     public QuickTipViewImpl() {
-        setStyleName(PortalRootPaneTheme.StyleName.ExtraGadget.name());
+        setStyleName(PortalRootPaneTheme.StyleName.QuickTipGadget.name());
     }
 
     @Override
