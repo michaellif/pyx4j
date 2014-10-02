@@ -45,7 +45,7 @@ public class ReservedWords {
         if (interfaceType.getAnnotation(Transient.class) != null) {
             return true;
         }
-        if (true || (objectClassType != ObjectClassType.Entity) && (objectClassType != ObjectClassType.Primitive)) {
+        if ((objectClassType != ObjectClassType.Entity) && (objectClassType != ObjectClassType.Primitive)) {
             return true;
         }
         // Ignore members that are managed as additional tables
