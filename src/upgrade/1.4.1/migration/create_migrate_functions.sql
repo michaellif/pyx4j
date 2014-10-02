@@ -101,16 +101,55 @@ BEGIN
         
         ALTER TABLE aggregated_transfer_non_vista_transaction OWNER TO vista;
         
+        -- billing_invoice_line_item
+        
+        ALTER TABLE billing_invoice_line_item RENAME COLUMN comment  TO cmt;
         
         -- communication_message
         
         ALTER TABLE communication_message ALTER COLUMN text TYPE VARCHAR(48000);
+        ALTER TABLE communication_message RENAME COLUMN thread TO thrd;
         
+        
+        -- communication_thread_policy_handle
+        
+        ALTER TABLE communication_thread_policy_handle RENAME COLUMN thread TO thrd;
+        
+        
+        -- customer_preferences
+        
+        CREATE TABLE customer_preferences
+        (
+            id                              BIGINT              NOT NULL,
+            logical_date_format             VARCHAR(500),
+            date_time_format                VARCHAR(500),
+            customer_user                   BIGINT,
+                CONSTRAINT customer_preferences_pk PRIMARY KEY(id)
+        );
+        
+        ALTER TABLE customer_preferences OWNER TO vista;
+        
+        
+        -- customer_preferences_portal_hidable
+        
+        CREATE TABLE customer_preferences_portal_hidable
+        (
+            id                              BIGINT              NOT NULL,
+            customer_preferences            BIGINT,
+            tp                              VARCHAR(50),
+                CONSTRAINT customer_preferences_portal_hidable_pk PRIMARY KEY(id)
+        );
+        
+        ALTER TABLE customer_preferences_portal_hidable OWNER TO vista;
         
         -- customer_screening_personal_asset
         
         ALTER TABLE customer_screening_personal_asset ADD COLUMN ownership NUMERIC(18,2);
         
+        
+        -- email_templates_policy
+        
+        ALTER TABLE email_templates_policy RENAME COLUMN header TO hdr;
         
         -- id_assignment_payment_type
         
@@ -132,6 +171,21 @@ BEGIN
         
         ALTER TABLE id_assignment_payment_type OWNER TO vista;
         
+        -- lease_agreement_confirmation_term
+        
+        ALTER TABLE lease_agreement_confirmation_term RENAME COLUMN body TO content;
+        
+        -- lease_agreement_legal_term
+        
+        ALTER TABLE lease_agreement_legal_term RENAME COLUMN body TO content;
+        
+        -- lease_application_confirmation_term
+        
+        ALTER TABLE lease_application_confirmation_term RENAME COLUMN body TO content;
+        
+        -- lease_application_legal_term
+        
+        ALTER TABLE lease_application_legal_term RENAME COLUMN body TO content;
         
         -- lease_participant_move_in_action
         
@@ -146,6 +200,15 @@ BEGIN
         );
         
         ALTER TABLE lease_participant_move_in_action OWNER TO vista;
+        
+        
+        -- maintenance_request_category
+        
+        ALTER TABLE maintenance_request_category RENAME COLUMN type TO element_type;
+        
+        -- maintenance_request_priority
+        
+        ALTER TABLE maintenance_request_priority RENAME COLUMN level TO lvl;
         
         -- master_online_application
         
@@ -188,6 +251,19 @@ BEGIN
         
         EXECUTE 'UPDATE '||v_schema_name||'.customer_screening_personal_asset '
                 ||'SET  ownership = prcnt::numeric(18,2) ';
+        
+        
+        /**
+        *** -------------------------------------------------------------------------------------
+        ***
+        ***     prospect_portal_policy cleanup
+        ***
+        *** --------------------------------------------------------------------------------------
+        **/
+        
+        EXECUTE 'DELETE FROM '||v_schema_name||'.prospect_portal_policy '
+                ||'WHERE id NOT IN  (SELECT MIN(id) FROM '||v_schema_name||'.prospect_portal_policy) ';
+        
         
         /**
         ***     ==========================================================================================================
