@@ -275,6 +275,7 @@ public class PortalRootPaneTheme extends Theme {
 
         style = new Style(".", StyleName.QuickTipGadget);
         style.addProperty("width", "240px");
+        style.addProperty("overflow", "hidden");
         addStyle(style);
     }
 
