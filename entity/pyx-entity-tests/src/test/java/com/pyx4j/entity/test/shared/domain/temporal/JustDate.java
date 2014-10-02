@@ -23,6 +23,7 @@ package com.pyx4j.entity.test.shared.domain.temporal;
 import java.util.Date;
 
 import com.pyx4j.entity.annotations.Format;
+import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.Table;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.IPrimitive;
@@ -35,5 +36,6 @@ public interface JustDate extends IEntity {
     IPrimitive<String> name();
 
     @Format("yyyy-MM-dd HH:mm:ss")
+    @MemberColumn(name = "val")
     IPrimitive<Date> value();
 }

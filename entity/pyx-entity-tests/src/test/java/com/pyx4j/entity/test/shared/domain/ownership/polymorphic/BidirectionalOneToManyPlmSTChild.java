@@ -24,6 +24,7 @@ import com.pyx4j.entity.annotations.AbstractEntity;
 import com.pyx4j.entity.annotations.Inheritance;
 import com.pyx4j.entity.annotations.Inheritance.InheritanceStrategy;
 import com.pyx4j.entity.annotations.JoinColumn;
+import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.OrderColumn;
 import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.annotations.Table;
@@ -41,6 +42,7 @@ public interface BidirectionalOneToManyPlmSTChild extends IEntity {
 
     IPrimitive<String> testId();
 
+    @MemberColumn(name = "val")
     IPrimitive<String> value();
 
     @OrderColumn

@@ -23,6 +23,7 @@ package com.pyx4j.entity.test.shared.domain.inherit.single;
 import com.pyx4j.entity.annotations.ColumnId;
 import com.pyx4j.entity.annotations.DiscriminatorValue;
 import com.pyx4j.entity.annotations.JoinColumn;
+import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.core.IPrimitive;
 
 @DiscriminatorValue("C2")
@@ -34,5 +35,6 @@ public interface SConcrete2 extends SBase {
     }
 
     @JoinColumn(ReferenceMasterColumnId.class)
+    @MemberColumn(name = "mstr")
     SReferenceToSubType master();
 }

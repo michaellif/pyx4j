@@ -20,6 +20,7 @@
  */
 package com.pyx4j.entity.test.shared.domain.ownership.polymorphic;
 
+import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.Table;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.IPrimitive;
@@ -29,6 +30,7 @@ public interface ManagedChild extends IEntity {
 
     IPrimitive<String> testId();
 
+    @MemberColumn(name = "val")
     IPrimitive<String> value();
 
 }

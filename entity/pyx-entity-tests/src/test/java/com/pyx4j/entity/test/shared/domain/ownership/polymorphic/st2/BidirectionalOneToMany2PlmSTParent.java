@@ -20,6 +20,7 @@
  */
 package com.pyx4j.entity.test.shared.domain.ownership.polymorphic.st2;
 
+import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.Table;
 import com.pyx4j.entity.core.IEntity;
@@ -34,6 +35,7 @@ public interface BidirectionalOneToMany2PlmSTParent extends IEntity {
 
     IPrimitive<String> testId();
 
+    @MemberColumn(name = "val")
     IPrimitive<String> value();
 
     @Owned
