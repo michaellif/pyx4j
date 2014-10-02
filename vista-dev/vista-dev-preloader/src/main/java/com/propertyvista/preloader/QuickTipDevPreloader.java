@@ -23,15 +23,15 @@ public class QuickTipDevPreloader extends BaseVistaDevDataPreloader {
 
     public static final String INSURANCE_TIP_COMMENTS = "Insurance Sample";
 
-    public static final String INSURANCE_TIP_CONTENT = "<b>Don't have Tenant Insurance yet?</b><p style=\"font-size:0.8em\">We have teamed up with Highcourt Partners Limited, a licensed broker, to assist you in obtaining your Tenant Insurance.</p><i style=\"font-size:0.8em\">Visit Resident Services page.</i>";
+    public static final String INSURANCE_TIP_CONTENT = "<div style=\"padding: 10px\"><div align=\"center\"><b>Don't have Tenant Insurance yet?</b></div><p style=\"font-size:0.8em\">We have teamed up with Highcourt Partners Limited, a licensed broker, to assist you in obtaining your Tenant Insurance.</p><div align=\"center\"><a href=\"#resident_services\" style=\"text-align: center\"><i style=\"font-size:0.8em\">Visit Resident Services page</i></a></div></div>";
 
     public static final String AUTOPAY_TIP_COMMENTS = "Autopay Sample";
 
-    public static final String AUTOPAY_CONTENT = "<b>Pre-authorized payments</b><p style=\"font-size:0.8em\">Paying your rent by pre-authorized payments means eliminating the chore of writing cheques and ensuring your payment reaches Property Management Office by the due date. You'll never have to worry about remembering to make a payment or a possible late fee.</p><i style=\"font-size:0.8em\">Visit Billing &amp; Payment page.</i>";
+    public static final String AUTOPAY_CONTENT = "<div style=\"padding: 10px\"><div align=\"center\"><b>Pre-authorized payments</b></div><p style=\"font-size:0.8em\">Paying your rent by pre-authorized payments means eliminating the chore of writing cheques and ensuring your payment reaches Property Management Office by the due date. You'll never have to worry about remembering to make a payment or a possible late fee.</p><div align=\"center\"><a href=\"#financial\" style=\"text-align: center\"><i style=\"font-size:0.8em\">Visit Billing &amp; Payment page.</i></a></div></div>";
 
     public static final String OTHER_TIP_COMMENTS = "Other Sample";
 
-    public static final String OTHER_CONTENT = "<b>Request repairs and maintenance as needed</b><p style=\"font-size:0.8em\">Submit and track the status of a maintenance request. Convenient, simple, easy.</p><i style=\"font-size:0.8em\">Visit Maintenance page.</i>";
+    public static final String OTHER_CONTENT = "<div style=\"padding: 10px\"><div align=\"center\"><b>Request repairs and maintenance as needed</b></div><p style=\"font-size:0.8em\">Submit and track the status of a maintenance request. Convenient, simple, easy.</p><div align=\"center\"><a href=\"#maintenance\" style=\"text-align: center\"><i style=\"font-size:0.8em\">Visit Maintenance page</i></a></div></div>";
 
     @Override
     public String create() {
