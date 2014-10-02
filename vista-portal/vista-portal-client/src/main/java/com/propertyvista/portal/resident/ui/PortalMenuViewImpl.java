@@ -34,6 +34,7 @@ import com.pyx4j.site.rpc.AppPlace;
 import com.propertyvista.domain.customizations.CountryOfOperation;
 import com.propertyvista.domain.security.PortalResidentBehavior;
 import com.propertyvista.domain.tenant.CustomerPreferencesPortalHidable;
+import com.propertyvista.portal.resident.ui.utils.PortalHidablePreferenceManager;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
 import com.propertyvista.portal.rpc.portal.resident.ResidentPortalSiteMap;
 import com.propertyvista.portal.shared.resources.PortalImages;
@@ -42,7 +43,6 @@ import com.propertyvista.portal.shared.ui.AppPlaceMenuItem;
 import com.propertyvista.portal.shared.ui.MenuItem;
 import com.propertyvista.portal.shared.ui.MenuList;
 import com.propertyvista.portal.shared.ui.NotNavigableMenuItem;
-import com.propertyvista.portal.shared.ui.util.PortalHidablePreferenceManager;
 import com.propertyvista.shared.config.VistaFeatures;
 
 public class PortalMenuViewImpl extends DockPanel implements PortalMenuView {

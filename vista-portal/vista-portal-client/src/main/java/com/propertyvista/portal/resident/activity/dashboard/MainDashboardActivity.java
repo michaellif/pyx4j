@@ -29,6 +29,7 @@ import com.propertyvista.portal.resident.events.PortalHidableEvent;
 import com.propertyvista.portal.resident.events.PortalHidableHandler;
 import com.propertyvista.portal.resident.ui.dashboard.MainDashboardView;
 import com.propertyvista.portal.resident.ui.dashboard.MainDashboardView.MainDashboardPresenter;
+import com.propertyvista.portal.resident.ui.utils.PortalHidablePreferenceManager;
 import com.propertyvista.portal.rpc.portal.resident.ResidentPortalSiteMap;
 import com.propertyvista.portal.rpc.portal.resident.dto.ResidentSummaryDTO;
 import com.propertyvista.portal.rpc.portal.resident.dto.financial.BillingSummaryDTO;
@@ -39,7 +40,6 @@ import com.propertyvista.portal.rpc.portal.resident.services.maintenance.Mainten
 import com.propertyvista.portal.rpc.portal.resident.services.profile.ResidentSummaryService;
 import com.propertyvista.portal.rpc.portal.resident.services.services.InsuranceService;
 import com.propertyvista.portal.shared.activity.SecurityAwareActivity;
-import com.propertyvista.portal.shared.ui.util.PortalHidablePreferenceManager;
 
 public class MainDashboardActivity extends SecurityAwareActivity implements MainDashboardPresenter {
 

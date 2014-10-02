@@ -47,11 +47,11 @@ import com.propertyvista.common.client.WalkMe;
 import com.propertyvista.domain.security.PortalResidentBehavior;
 import com.propertyvista.domain.tenant.CustomerPreferencesPortalHidable;
 import com.propertyvista.portal.resident.activity.PortalClientCommunicationManager;
+import com.propertyvista.portal.resident.ui.utils.PortalHidablePreferenceManager;
 import com.propertyvista.portal.rpc.portal.resident.ac.HelpAction;
 import com.propertyvista.portal.rpc.shared.dto.communication.PortalCommunicationSystemNotification;
 import com.propertyvista.portal.shared.resources.PortalImages;
 import com.propertyvista.portal.shared.themes.PortalRootPaneTheme;
-import com.propertyvista.portal.shared.ui.util.PortalHidablePreferenceManager;
 import com.propertyvista.shared.i18n.CompiledLocale;
 
 public class ToolbarViewImpl extends FlowPanel implements ToolbarView {

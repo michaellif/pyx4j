@@ -31,8 +31,8 @@ import com.propertyvista.portal.resident.events.PortalHidableEvent;
 import com.propertyvista.portal.resident.events.PortalHidableHandler;
 import com.propertyvista.portal.resident.ui.PortalMenuView;
 import com.propertyvista.portal.resident.ui.PortalMenuView.PortalMenuPresenter;
+import com.propertyvista.portal.resident.ui.utils.PortalHidablePreferenceManager;
 import com.propertyvista.portal.rpc.portal.resident.ResidentPortalSiteMap;
-import com.propertyvista.portal.shared.ui.util.PortalHidablePreferenceManager;
 
 public class PortalMenuActivity extends AbstractActivity implements PortalMenuPresenter {
 

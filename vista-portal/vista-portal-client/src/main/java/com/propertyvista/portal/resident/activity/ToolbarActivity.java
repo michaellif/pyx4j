@@ -38,12 +38,12 @@ import com.propertyvista.portal.resident.events.PortalHidableHandler;
 import com.propertyvista.portal.resident.ui.ToolbarView;
 import com.propertyvista.portal.resident.ui.ToolbarView.ToolbarPresenter;
 import com.propertyvista.portal.resident.ui.communication.CommunicationView;
+import com.propertyvista.portal.resident.ui.utils.PortalHidablePreferenceManager;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
 import com.propertyvista.portal.rpc.portal.resident.ResidentPortalSiteMap;
 import com.propertyvista.portal.rpc.portal.resident.communication.MessageDTO;
 import com.propertyvista.portal.rpc.portal.resident.services.MessagePortalCrudService;
 import com.propertyvista.portal.rpc.shared.dto.communication.PortalCommunicationSystemNotification;
-import com.propertyvista.portal.shared.ui.util.PortalHidablePreferenceManager;
 import com.propertyvista.shared.i18n.CompiledLocale;
 
 public class ToolbarActivity extends AbstractActivity implements ToolbarPresenter {

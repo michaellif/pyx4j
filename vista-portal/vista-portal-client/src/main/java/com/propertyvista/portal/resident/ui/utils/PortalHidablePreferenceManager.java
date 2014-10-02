@@ -11,7 +11,7 @@
  * @author smolka
  * @version $Id$
  */
-package com.propertyvista.portal.shared.ui.util;
+package com.propertyvista.portal.resident.ui.utils;
 
 import com.google.gwt.core.client.GWT;
 
