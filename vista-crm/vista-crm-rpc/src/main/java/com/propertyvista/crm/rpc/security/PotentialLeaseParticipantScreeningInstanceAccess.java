@@ -18,11 +18,11 @@ import com.pyx4j.entity.security.ForTypesAccessRule;
 
 import com.propertyvista.dto.LeaseParticipantScreeningTO;
 
-public class PotentialTenantScreeningInstanceAccess extends ForTypesAccessRule {
+public class PotentialLeaseParticipantScreeningInstanceAccess extends ForTypesAccessRule {
 
     private static final long serialVersionUID = 1L;
 
-    public PotentialTenantScreeningInstanceAccess() {
+    public PotentialLeaseParticipantScreeningInstanceAccess() {
         super(LeaseParticipantScreeningTO.class);
     }
 

@@ -16,18 +16,17 @@ package com.propertyvista.crm.rpc.security;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.security.ForTypesAccessRule;
 
-import com.propertyvista.dto.LeaseParticipantScreeningTO;
+import com.propertyvista.domain.tenant.lease.LeaseParticipant;
 
-public class FormerTenantScreeningInstanceAccess extends ForTypesAccessRule {
+@SuppressWarnings("serial")
+public abstract class PotentialLeaseParticipantInstanceAccess<P extends LeaseParticipant<?>> extends ForTypesAccessRule {
 
-    private static final long serialVersionUID = 1L;
-
-    public FormerTenantScreeningInstanceAccess() {
-        super(LeaseParticipantScreeningTO.class);
+    public PotentialLeaseParticipantInstanceAccess(Class<P> participantClass) {
+        super(participantClass);
     }
 
     @Override
     public boolean implies(IEntity contextEntity) {
-        return super.implies(contextEntity) && ((LeaseParticipantScreeningTO) contextEntity).leaseStatus().getValue().isFormer();
+        return super.implies(contextEntity) && ((LeaseParticipant<?>) contextEntity).lease().status().getValue().isDraft();
     }
 }
