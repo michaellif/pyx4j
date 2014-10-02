@@ -95,7 +95,7 @@ public class PaymentStep extends ApplicationWizardStep {
 
     private final Label noPaymentRequiredLabel = new Label(i18n.tr("No Payment Required"));
 
-    private final Label noPaymentAcceptLabel = new Label(i18n.tr("Can not accept payment now - you will be contacted by the office"));
+    private final Label noPaymentAcceptLabel = new Label(i18n.tr("Can not accept payment at this time - you will be contacted by the office"));
 
     public PaymentStep() {
         super(OnlineApplicationWizardStepMeta.Payment);

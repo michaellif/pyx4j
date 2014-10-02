@@ -38,7 +38,9 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.widgets.client.Anchor;
+import com.pyx4j.widgets.client.Label;
 
+import com.propertyvista.common.client.theme.VistaTheme.StyleName;
 import com.propertyvista.domain.security.PortalProspectBehavior;
 import com.propertyvista.domain.tenant.lease.Deposit;
 import com.propertyvista.domain.tenant.prospect.OnlineApplicationWizardStepMeta;
@@ -119,33 +121,41 @@ public class ConfirmationStep extends ApplicationWizardStep {
 
     private Widget createPaymentDetailsPanel() {
         final VerticalPanel panel = new VerticalPanel();
+        panel.setSpacing(5);
 
         if (!get(proto().payment().paymentMethod()).isValueEmpty()) {
             panel.add(createDecorator(i18n.tr("Payment Method:"), get(proto().payment().paymentMethod()).getValue().getStringView()));
-        }
-        panel.add(createDecorator(i18n.tr("Amount to pay:"), ((CLabel<?>) get(proto().payment().amount())).getFormattedValue()));
+            panel.add(createDecorator(i18n.tr("Amount to pay:"), ((CLabel<?>) get(proto().payment().amount())).getFormattedValue()));
 
-        get(proto().payment().convenienceFeeSignature()).setVisible(false);
+            PaymentConvenienceFeeDTO inData = EntityFactory.create(PaymentConvenienceFeeDTO.class);
+            inData.paymentMethod().set(getValue().payment().paymentMethod());
+            inData.amount().setValue(getValue().payment().amount().getValue());
+            getWizard().getPresenter().getConvenienceFee(new DefaultAsyncCallback<ConvenienceFeeCalculationResponseTO>() {
+                @Override
+                public void onSuccess(ConvenienceFeeCalculationResponseTO result) {
+                    if (result != null) {
+                        panel.add(createDecorator(i18n.tr("Web Payment Fee:"), result.feeAmount().getStringView()));
+                        panel.add(createDecorator(i18n.tr("Payment Total:"), result.total().getStringView()));
 
-        PaymentConvenienceFeeDTO inData = EntityFactory.create(PaymentConvenienceFeeDTO.class);
-        inData.paymentMethod().set(getValue().payment().paymentMethod());
-        inData.amount().setValue(getValue().payment().amount().getValue());
-        getWizard().getPresenter().getConvenienceFee(new DefaultAsyncCallback<ConvenienceFeeCalculationResponseTO>() {
-            @Override
-            public void onSuccess(ConvenienceFeeCalculationResponseTO result) {
-                if (result != null) {
-                    panel.add(createDecorator(i18n.tr("Web Payment Fee:"), result.feeAmount().getStringView()));
-                    panel.add(createDecorator(i18n.tr("Payment Total:"), result.total().getStringView()));
+                        panel.add(new HTML("<br/>"));
 
-                    panel.add(new HTML("<br/>"));
+                        get(proto().payment().convenienceFeeSignature()).setVisible(true);
 
-                    get(proto().payment().convenienceFeeSignature()).setVisible(true);
-
-                    getValue().payment().convenienceFee().setValue(result.feeAmount().getValue());
-                    getValue().payment().convenienceFeeReferenceNumber().setValue(result.transactionNumber().getValue());
+                        getValue().payment().convenienceFee().setValue(result.feeAmount().getValue());
+                        getValue().payment().convenienceFeeReferenceNumber().setValue(result.transactionNumber().getValue());
+                    }
                 }
+            }, inData);
+        } else {
+            if (get(proto().payment().paymentMethod()).isValueEmpty()) {
+                Label noPaymentAcceptLabel = new Label(i18n.tr("Can not accept payment at this time - you will be contacted by the office"));
+                noPaymentAcceptLabel.setStyleName(StyleName.WarningMessage.name());
+//                noPaymentAcceptLabel.getElement().getStyle().setMarginTop(5, Unit.PX);
+
+                panel.add(createDecorator(i18n.tr("Amount to pay:"), ((CLabel<?>) get(proto().payment().amount())).getFormattedValue()));
+                panel.add(noPaymentAcceptLabel);
             }
-        }, inData);
+        }
 
         return panel;
     }
