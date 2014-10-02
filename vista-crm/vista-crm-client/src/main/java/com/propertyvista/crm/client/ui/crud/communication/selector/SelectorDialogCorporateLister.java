@@ -17,6 +17,7 @@ import java.util.Collection;
 
 import com.google.gwt.core.client.GWT;
 
+import com.pyx4j.entity.core.criterion.EntityListCriteria;
 import com.pyx4j.entity.rpc.AbstractListCrudService;
 import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.forms.client.ui.datatable.DataTableModel;
@@ -25,6 +26,7 @@ import com.pyx4j.site.client.backoffice.ui.prime.lister.ListerDataSource;
 
 import com.propertyvista.crm.rpc.services.selections.SelectEmployeeListService;
 import com.propertyvista.domain.company.Employee;
+import com.propertyvista.domain.security.CrmUser;
 
 public class SelectorDialogCorporateLister extends EntityLister<Employee> {
 
@@ -68,5 +70,12 @@ public class SelectorDialogCorporateLister extends EntityLister<Employee> {
                 new MemberColumnDescriptor.Builder(proto().email(), false).build(),
                 new MemberColumnDescriptor.Builder(proto().updated(), false).build()
         }; //@formatter:on
+    }
+
+    @Override
+    protected EntityListCriteria<Employee> updateCriteria(EntityListCriteria<Employee> criteria) {
+        EntityListCriteria<Employee> result = super.updateCriteria(criteria);
+        criteria.ne(criteria.proto().user().email(), CrmUser.VISTA_SUPPORT_ACCOUNT_EMAIL);
+        return result;
     }
 }

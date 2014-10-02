@@ -33,6 +33,7 @@ import com.propertyvista.domain.communication.CommunicationGroup;
 import com.propertyvista.domain.company.Employee;
 import com.propertyvista.domain.company.Portfolio;
 import com.propertyvista.domain.property.asset.building.Building;
+import com.propertyvista.domain.security.CrmUser;
 import com.propertyvista.domain.tenant.lease.LeaseParticipant;
 import com.propertyvista.dto.CommunicationEndpointDTO;
 
@@ -99,6 +100,7 @@ public class SelectCommunicationEndpointListServiceImpl extends AbstractListServ
         } else if (entityClass.equals(Employee.class)) {
             criteria.like(((EntityListCriteria<Employee>) criteria).proto().user().name(), namePattern);
             criteria.eq(((EntityListCriteria<Employee>) criteria).proto().user().credential().enabled(), true);
+            criteria.ne(((EntityListCriteria<Employee>) criteria).proto().user().email(), CrmUser.VISTA_SUPPORT_ACCOUNT_EMAIL);
         } else if (entityClass.equals(Building.class)) {
             criteria.like(((EntityListCriteria<Building>) criteria).proto().propertyCode(), namePattern);
         } else if (entityClass.equals(Portfolio.class)) {
