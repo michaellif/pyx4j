@@ -102,7 +102,7 @@ class SystemHealthMonitor {
                 if (!Persistence.service().exists(criteria2)) {
                     executionMonitor.addFailedEvent("MissingTriggerRun", "Trigger {0} misfire occurred on {1,date,EEEE, MMMM d, yyyy}", trigger.name(),
                             verifyDay);
-                    ServerSideFactory.create(OperationsAlertFacade.class).sendEmailAlert("MissingTriggerRun", //
+                    ServerSideFactory.create(OperationsAlertFacade.class).sendEmailAlert("MissingTriggerRun" + trigger.name(), //
                             "Trigger {0} misfire occurred on {1,date,EEEE, MMMM d, yyyy}", trigger.name(), verifyDay);
                 }
 
