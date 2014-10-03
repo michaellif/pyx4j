@@ -30,7 +30,7 @@ import com.pyx4j.site.client.resources.SiteImages;
 import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.Toolbar;
 
-public class OverlayHolder implements IsWidget {
+public abstract class AbstractOverlayHolder implements IsWidget {
 
     private final FlowPanel mainPanel;
 
@@ -40,7 +40,7 @@ public class OverlayHolder implements IsWidget {
 
     private final Button closeButton;
 
-    public OverlayHolder() {
+    public AbstractOverlayHolder() {
 
         mainPanel = new FlowPanel();
         mainPanel.setStylePrimaryName(ResponsiveLayoutTheme.StyleName.ResponsiveLayoutOverlayActions.name());
@@ -61,7 +61,6 @@ public class OverlayHolder implements IsWidget {
         mainPanel.add(closeButton);
 
         tabPanel = new DeckLayoutPanel();
-        tabPanel.setHeight("200px");
         tabPanel.addStyleName(ResponsiveLayoutTheme.StyleName.ResponsiveLayoutOverlayActionsTabDeck.name());
         tabPanel.setVisible(false);
         mainPanel.add(tabPanel);

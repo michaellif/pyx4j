@@ -27,7 +27,7 @@ import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.site.client.ui.devconsole.AbstractDevConsole;
 import com.pyx4j.site.client.ui.layout.ResponsiveLayoutPanel.DisplayType;
 
-public class OverlayExtraHolder extends OverlayHolder {
+public class OverlayExtraHolder extends AbstractOverlayHolder {
 
     private final ResponsiveLayoutPanel parent;
 
@@ -35,7 +35,9 @@ public class OverlayExtraHolder extends OverlayHolder {
 
     private final LayoutPanel overlayExtra2Holder;
 
-    public OverlayExtraHolder(ResponsiveLayoutPanel parent, String extra1Caption, String extra2Caption, AbstractDevConsole devConsole) {
+    private final LayoutPanel overlayExtra4Holder;
+
+    public OverlayExtraHolder(ResponsiveLayoutPanel parent, String extra1Caption, String extra2Caption, String extra4Caption, AbstractDevConsole devConsole) {
         this.parent = parent;
         if (ApplicationMode.isDevelopment()) {
             addTab(devConsole, "Dev.");
@@ -50,6 +52,12 @@ public class OverlayExtraHolder extends OverlayHolder {
         overlayExtra2Holder.getElement().getStyle().setTextAlign(TextAlign.CENTER);
         addTab(overlayExtra2Holder, extra2Caption == null ? "" : extra2Caption);
         setTabVisible(getTabIndex(overlayExtra2Holder), false);
+
+        overlayExtra4Holder = new LayoutPanel();
+        overlayExtra4Holder.getElement().getStyle().setTextAlign(TextAlign.CENTER);
+        addTab(overlayExtra4Holder, extra4Caption == null ? "" : extra4Caption);
+        setTabVisible(getTabIndex(overlayExtra4Holder), false);
+
     }
 
     public void layout() {
@@ -64,6 +72,12 @@ public class OverlayExtraHolder extends OverlayHolder {
             setTabVisible(getTabIndex(overlayExtra2Holder), true);
             if (overlayExtra2Holder.getWidgetCount() == 0) {
                 overlayExtra2Holder.add(parent.getDisplay(DisplayType.extra2));
+            }
+        }
+        if (parent.getDisplay(DisplayType.extra4).getWidget() != null) {
+            setTabVisible(getTabIndex(overlayExtra4Holder), true);
+            if (overlayExtra4Holder.getWidgetCount() == 0) {
+                overlayExtra4Holder.add(parent.getDisplay(DisplayType.extra4));
             }
         }
     }

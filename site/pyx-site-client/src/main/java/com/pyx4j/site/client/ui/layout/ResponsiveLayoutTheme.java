@@ -99,6 +99,7 @@ public class ResponsiveLayoutTheme extends Theme {
         style.addProperty("border-top", "4px solid");
         style.addProperty("border-color", ThemeColor.foreground, 1.2);
         style.addProperty("background-color", ThemeColor.foreground, 0.1);
+        style.addProperty("height", "200px");
         addStyle(style);
 
         style = new Style(".", StyleName.ResponsiveLayoutOverlayActionsTabItem, " .", WidgetTheme.StyleName.ButtonText);

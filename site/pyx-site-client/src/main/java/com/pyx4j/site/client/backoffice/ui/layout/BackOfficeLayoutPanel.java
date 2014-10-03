@@ -56,7 +56,7 @@ public class BackOfficeLayoutPanel extends ResponsiveLayoutPanel {
 
     private final OverlayExtraHolder overlayExtraHolder;
 
-    public BackOfficeLayoutPanel(String extra1Caption, String extra2Caption) {
+    public BackOfficeLayoutPanel(String extra1Caption, String extra2Caption, String extra4Caption) {
 
         pageHolder = new DockLayoutPanel(Unit.PX);
 
@@ -70,7 +70,7 @@ public class BackOfficeLayoutPanel extends ResponsiveLayoutPanel {
 
         pageHolder.addWest(inlineNavigationHolder, 200);
 
-        overlayExtraHolder = new OverlayExtraHolder(this, extra1Caption, extra2Caption, new BackOfficeDevConsole(this));
+        overlayExtraHolder = new OverlayExtraHolder(this, extra1Caption, extra2Caption, extra4Caption, new BackOfficeDevConsole(this));
 
         ContentHolder contentHolder = new ContentHolder(this, overlayExtraHolder);
 

@@ -24,7 +24,6 @@ import com.google.gwt.dom.client.Style.Unit;
 
 import com.pyx4j.site.client.frontoffice.ui.layout.FrontOfficeLayoutPanel;
 import com.pyx4j.site.client.ui.devconsole.AbstractDevConsole;
-import com.pyx4j.site.client.ui.devconsole.AbstractDevConsole.SetMocksButton;
 import com.pyx4j.widgets.client.Toolbar;
 
 public class FrontOfficeDevConsole extends AbstractDevConsole {

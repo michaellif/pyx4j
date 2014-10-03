@@ -86,7 +86,7 @@ public class FrontOfficeLayoutPanel extends ResponsiveLayoutPanel {
 
     private boolean sideCommVisible = false;
 
-    public FrontOfficeLayoutPanel(String extra1Caption, String extra2Caption) {
+    public FrontOfficeLayoutPanel(String extra1Caption, String extra2Caption, String extra4Caption) {
 
         pageHolder = new FlowPanel();
 
@@ -161,7 +161,7 @@ public class FrontOfficeLayoutPanel extends ResponsiveLayoutPanel {
         pagePanel.add(centerPanel);
         pagePanel.add(footerHolder);
 
-        overlayExtraHolder = new OverlayExtraHolder(this, extra1Caption, extra2Caption, new FrontOfficeDevConsole(this));
+        overlayExtraHolder = new OverlayExtraHolder(this, extra1Caption, extra2Caption, extra4Caption, new FrontOfficeDevConsole(this));
 
         pageHolder.add(overlayExtraHolder);
 
