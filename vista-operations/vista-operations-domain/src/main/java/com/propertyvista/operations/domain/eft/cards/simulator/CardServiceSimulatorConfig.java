@@ -30,7 +30,7 @@ import com.propertyvista.domain.VistaNamespace;
 @Table(prefix = "dev", namespace = VistaNamespace.operationsNamespace)
 public interface CardServiceSimulatorConfig extends IEntity {
 
-    public enum SimpulationType {
+    public enum SimulationType {
 
         SimulateTransations,
 
@@ -44,7 +44,7 @@ public interface CardServiceSimulatorConfig extends IEntity {
     }
 
     @NotNull
-    IPrimitive<SimpulationType> responseType();
+    IPrimitive<SimulationType> responseType();
 
     IPrimitive<String> responseCode();
 

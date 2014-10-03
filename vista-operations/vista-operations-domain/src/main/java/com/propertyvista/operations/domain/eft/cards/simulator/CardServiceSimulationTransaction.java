@@ -41,7 +41,7 @@ import com.propertyvista.domain.VistaNamespace;
 @Table(prefix = "dev", namespace = VistaNamespace.operationsNamespace)
 public interface CardServiceSimulationTransaction extends IEntity {
 
-    public enum SimpulationTransactionType {
+    public enum SimulationTransactionType {
 
         Sale,
 
@@ -66,7 +66,7 @@ public interface CardServiceSimulationTransaction extends IEntity {
     CardServiceSimulationMerchantAccount merchant();
 
     @MemberColumn(name = "tp")
-    IPrimitive<SimpulationTransactionType> transactionType();
+    IPrimitive<SimulationTransactionType> transactionType();
 
     @Caption(description = "Force rejection code on next transaction (of this type)")
     IPrimitive<Boolean> scheduledSimulatedResponce();

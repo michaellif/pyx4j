@@ -35,7 +35,7 @@ import com.propertyvista.domain.util.ValidationUtils;
 import com.propertyvista.eft.caledoncards.CaledonTokenAction;
 import com.propertyvista.eft.caledoncards.CaledonTransactionType;
 import com.propertyvista.eft.caledoncards.dev.VisaDebitInternalValidator;
-import com.propertyvista.operations.domain.eft.cards.simulator.CardServiceSimulationTransaction.SimpulationTransactionType;
+import com.propertyvista.operations.domain.eft.cards.simulator.CardServiceSimulationTransaction.SimulationTransactionType;
 import com.propertyvista.operations.domain.eft.cards.simulator.CardServiceSimulatorConfig;
 
 public class CardServiceSimulationUtils {
@@ -46,7 +46,7 @@ public class CardServiceSimulationUtils {
             simulatorConfig = EntityFactory.create(CardServiceSimulatorConfig.class);
         }
         if (simulatorConfig.responseType().isNull()) {
-            simulatorConfig.responseType().setValue(CardServiceSimulatorConfig.SimpulationType.SimulateTransations);
+            simulatorConfig.responseType().setValue(CardServiceSimulatorConfig.SimulationType.SimulateTransations);
         }
         if (simulatorConfig.acceptCardExpiryFrom().isNull()) {
             simulatorConfig.acceptCardExpiryFrom().setValue(new LogicalDate(CardServiceSimulationUtils.getExpiryMonthStart()));
@@ -122,24 +122,24 @@ public class CardServiceSimulationUtils {
         throw new Error("Invalid transactionType '" + transactionTypeChar + "'");
     }
 
-    static SimpulationTransactionType toSimTransactionType(String transactionTypeChar) {
+    static SimulationTransactionType toSimTransactionType(String transactionTypeChar) {
         return toSimTransactionType(toCaledonTransactionType(transactionTypeChar));
     }
 
-    static SimpulationTransactionType toSimTransactionType(CaledonTransactionType transactionType) {
+    static SimulationTransactionType toSimTransactionType(CaledonTransactionType transactionType) {
         switch (transactionType) {
         case SALE:
-            return SimpulationTransactionType.Sale;
+            return SimulationTransactionType.Sale;
         case PREAUTH:
-            return SimpulationTransactionType.PreAuthorization;
+            return SimulationTransactionType.PreAuthorization;
         case AUTH_REVERSE:
-            return SimpulationTransactionType.PreAuthorizationReversal;
+            return SimulationTransactionType.PreAuthorizationReversal;
         case COMPLETION:
-            return SimpulationTransactionType.Completion;
+            return SimulationTransactionType.Completion;
         case VOID:
-            return SimpulationTransactionType.Void;
+            return SimulationTransactionType.Void;
         case RETURN_VOID:
-            return SimpulationTransactionType.Return;
+            return SimulationTransactionType.Return;
         default:
             throw new Error("Unsupported transactionType '" + transactionType + "'");
         }

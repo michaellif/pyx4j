@@ -315,6 +315,29 @@ public class CaledonPaymentProcessor implements CreditCardPaymentProcessorFacade
     }
 
     @Override
+    public PaymentResponse returnTransaction(Merchant merchant, PaymentRequest request) {
+        if (request.convenienceFee().isNull() && request.convenienceFeeReferenceNumber().isNull()) {
+            return returnTransactionSimple(merchant, request);
+        } else {
+            throw new UnsupportedOperationException();
+        }
+    }
+
+    private PaymentResponse returnTransactionSimple(Merchant merchant, PaymentRequest request) {
+        CaledonRequest crequest = createRequestInstrument(request.paymentInstrument().<PaymentInstrument> cast());
+
+        crequest.terminalID = merchant.terminalID().getValue();
+        crequest.transactionType = CaledonTransactionType.RETURN.getValue();
+        crequest.referenceNumber = request.referenceNumber().getValue();
+
+        crequest.setAmount(request.amount().getValue());
+
+        CaledonResponse cresponse = caledonCardsClient().transaction(crequest);
+
+        return createResponse(cresponse);
+    }
+
+    @Override
     public PaymentResponse voidTransaction(Merchant merchant, PaymentRequest request) {
         if (request.convenienceFee().isNull() && request.convenienceFeeReferenceNumber().isNull()) {
             return voidTransactionSimple(merchant, request);

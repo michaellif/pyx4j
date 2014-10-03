@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011- All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -33,7 +33,7 @@ public class CaledonTokenTest extends CaledonTestBase {
         CreditCardPaymentProcessorFacade proc = new CaledonPaymentProcessor();
         TokenPaymentInstrument token = EntityFactory.create(TokenPaymentInstrument.class);
         token.code().setValue(String.valueOf(System.currentTimeMillis()));
-        PaymentResponse pr = proc.createToken(testMerchant, super.createCCInformation(TestData.CARD_MC1, "2015-01"), token);
+        PaymentResponse pr = proc.createToken(testMerchant, super.createCCInformation(TestData.CARD_MC1, "2017-01"), token);
         log.debug("responce code {}", pr.code().getValue());
         assertEquals(CaledonTokenResponse.TOKEN_SUCCESS.getValue(), pr.code().getValue());
 
@@ -43,8 +43,8 @@ public class CaledonTokenTest extends CaledonTestBase {
     public void testCreateTokenWithSecurityCode() {
         CreditCardPaymentProcessorFacade proc = new CaledonPaymentProcessor();
         TokenPaymentInstrument token = EntityFactory.create(TokenPaymentInstrument.class);
-        token.code().setValue(String.valueOf(System.currentTimeMillis()));
-        PaymentResponse pr = proc.createToken(testMerchant, super.createCCInformation(TestData.CARD_MC1, "2015-01", "1234"), token);
+        token.code().setValue("ut" + String.valueOf(System.currentTimeMillis()));
+        PaymentResponse pr = proc.createToken(testMerchant, super.createCCInformation(TestData.CARD_MC1, "2019-01", "123"), token);
         log.debug("responce code {}", pr.code().getValue());
         assertEquals(CaledonTokenResponse.TOKEN_SUCCESS.getValue(), pr.code().getValue());
 
@@ -54,7 +54,7 @@ public class CaledonTokenTest extends CaledonTestBase {
     public void testTokenTransaction() {
         CreditCardPaymentProcessorFacade proc = new CaledonPaymentProcessor();
         TokenPaymentInstrument token = EntityFactory.create(TokenPaymentInstrument.class);
-        token.code().setValue(String.valueOf(System.currentTimeMillis()));
+        token.code().setValue("ut" + String.valueOf(System.currentTimeMillis()));
 
         log.debug("Token value", token.code().getValue());
         PaymentResponse pr = proc.createToken(testMerchant, super.createCCInformation(TestData.CARD_MC1, "2017-09"), token);

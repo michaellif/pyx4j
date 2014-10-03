@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011- All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -18,8 +18,11 @@ import java.text.SimpleDateFormat;
 import junit.framework.TestCase;
 
 import com.pyx4j.commons.LogicalDate;
+import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.entity.core.EntityFactory;
 
+import com.propertyvista.config.VistaSystemsSimulationConfig;
+import com.propertyvista.eft.caledoncards.config.VistaCaledonTestsServerSideConfiguration;
 import com.propertyvista.operations.domain.eft.cards.to.CreditCardPaymentInstrument;
 import com.propertyvista.operations.domain.eft.cards.to.Merchant;
 
@@ -28,6 +31,13 @@ public abstract class CaledonTestBase extends TestCase {
     static Merchant testMerchant = createTestCaledonMerchant(TestData.TEST_TERMID);
 
     static Merchant testMerchantError = createTestCaledonMerchant(TestData.TEST_TERMID_ERROR);
+
+    @Override
+    protected void setUp() throws Exception {
+        super.setUp();
+        ServerSideConfiguration.setInstance(new VistaCaledonTestsServerSideConfiguration());
+        VistaSystemsSimulationConfig.getConfiguration().useCardServiceSimulator().setValue(Boolean.FALSE);
+    }
 
     static CreditCardPaymentInstrument createCCInformation(String creditCardNumber, String exp) {
         return createCCInformation(creditCardNumber, exp, null);

@@ -20,7 +20,7 @@ import com.pyx4j.entity.server.Persistence;
 import com.propertyvista.operations.domain.eft.cards.simulator.CardServiceSimulationCard;
 import com.propertyvista.operations.domain.eft.cards.simulator.CardServiceSimulationMerchantAccount;
 import com.propertyvista.operations.domain.eft.cards.simulator.CardServiceSimulationTransaction;
-import com.propertyvista.operations.domain.eft.cards.simulator.CardServiceSimulationTransaction.SimpulationTransactionType;
+import com.propertyvista.operations.domain.eft.cards.simulator.CardServiceSimulationTransaction.SimulationTransactionType;
 import com.propertyvista.operations.rpc.services.simulator.CardServiceSimulationTransactionCrudService;
 
 public class CardServiceSimulationTransactionCrudServiceImpl extends AbstractCrudServiceImpl<CardServiceSimulationTransaction> implements
@@ -53,7 +53,7 @@ public class CardServiceSimulationTransactionCrudServiceImpl extends AbstractCru
             tx.card().set(returnOf.card());
             tx.merchant().set(returnOf.merchant());
 
-            tx.transactionType().setValue(SimpulationTransactionType.Return);
+            tx.transactionType().setValue(SimulationTransactionType.Return);
             tx.amount().setValue(returnOf.amount().getValue());
             tx.authorizationNumber().setValue("RETURN  $" + returnOf.amount().getValue());
             tx.responseCode().setValue("0000");

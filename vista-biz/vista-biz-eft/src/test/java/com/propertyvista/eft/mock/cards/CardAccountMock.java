@@ -58,11 +58,27 @@ class CardAccountMock {
             t.referenceNumber = referenceNumber;
             t.terminalID = terminalID;
             t.amount = amount;
-            t.status = TransactionStatus.compleated;
+            t.status = TransactionStatus.Compleated;
             t.authorizationNumber = UniqueInteger.getInstance("AuthorizationNumberMock").nextAsString();
             transactions.put(referenceNumber, t);
             return true;
         }
+    }
+
+    boolean returnTransaction(String terminalID, BigDecimal amount, String referenceNumber) {
+        if (transactions.containsKey(referenceNumber)) {
+            throw new Error("Duplicate transaction " + referenceNumber);
+        }
+        BigDecimal newBalance = balance.add(amount);
+        balance = newBalance;
+        CardTransactionMock t = new CardTransactionMock();
+        t.referenceNumber = referenceNumber;
+        t.terminalID = terminalID;
+        t.amount = amount;
+        t.status = TransactionStatus.Compleated;
+        t.authorizationNumber = UniqueInteger.getInstance("AuthorizationNumberMock").nextAsString();
+        transactions.put(referenceNumber, t);
+        return true;
     }
 
     boolean preAuthorization(BigDecimal amount, String referenceNumber) {
@@ -89,12 +105,12 @@ class CardAccountMock {
 
     boolean voidTransaction(BigDecimal amount, String referenceNumber) {
         CardTransactionMock t = transactions.get(referenceNumber);
-        if ((t == null) || (t.status != TransactionStatus.compleated)) {
+        if ((t == null) || (t.status != TransactionStatus.Compleated)) {
             return false;
         } else {
             BigDecimal newBalance = balance.add(amount);
             balance = newBalance;
-            t.status = TransactionStatus.voided;
+            t.status = TransactionStatus.Voided;
             return true;
         }
     }

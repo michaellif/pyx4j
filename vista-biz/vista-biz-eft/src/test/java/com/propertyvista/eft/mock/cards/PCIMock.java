@@ -148,6 +148,33 @@ class PCIMock {
         }
     }
 
+    public PaymentResponse returnTransaction(Merchant merchant, PaymentRequest request) {
+        boolean convenienceFee = true;
+        if (request.convenienceFee().isNull() && request.convenienceFeeReferenceNumber().isNull()) {
+            convenienceFee = false;
+        } else {
+            throw new UnsupportedOperationException();
+        }
+        CardAccountMock account = getAccount(request.paymentInstrument());
+        if (account == null) {
+            return createResponse("1101", "TOKEN NOT FOUND");
+        } else {
+            if (account.returnTransaction(merchant.terminalID().getValue(), request.amount().getValue(), request.referenceNumber().getValue())) {
+                if (convenienceFee) {
+                    account.returnTransaction(null, request.convenienceFee().getValue(), request.convenienceFeeReferenceNumber().getValue());
+                    ConvenienceFeeMock.instance().addFee(request);
+                }
+                accountsByTransaction.put(request.referenceNumber().getValue(), account);
+                PaymentResponse r = createResponse("0000", "RETURN        $" + request.amount().getValue());
+                //r.authorizationNumber().setValue(account.getTransaction(request.referenceNumber().getValue()).authorizationNumber);
+                return r;
+            } else {
+                return createResponse("0001", "Credit limit exceeded");
+            }
+
+        }
+    }
+
     public PaymentResponse voidTransaction(Merchant merchant, PaymentRequest request) {
         boolean convenienceFee = true;
         if (request.convenienceFee().isNull() && request.convenienceFeeReferenceNumber().isNull()) {
@@ -178,8 +205,8 @@ class PCIMock {
         List<CardServiceSimulationTransaction> transactions = new ArrayList<>();
         for (CardAccountMock account : accounts) {
             for (CardTransactionMock transactionMock : account.transactions.values()) {
-                if (transactionMock.date.equals(transactionsDate) && !transactionMock.reconciliationSent
-                        && transactionMock.status == TransactionStatus.compleated) {
+                if (transactionMock.date.equals(transactionsDate) && !transactionMock.reconciliationSent //
+                        && (transactionMock.status == TransactionStatus.Compleated || transactionMock.status == TransactionStatus.Return)) {
                     transactions.add(SimulationBridge.toSimulation(account, transactionMock));
                     transactionMock.reconciliationSent = true;
                 }
@@ -203,7 +230,7 @@ class PCIMock {
         List<CardServiceSimulationTransaction> transactions = new ArrayList<>();
         for (CardAccountMock account : accounts) {
             for (CardTransactionMock transactionMock : account.transactions.values()) {
-                if (transactionMock.date.equals(transactionsDate) && !transactionMock.clearenceSent && transactionMock.status == TransactionStatus.compleated) {
+                if (transactionMock.date.equals(transactionsDate) && !transactionMock.clearenceSent) {
                     transactions.add(SimulationBridge.toSimulation(account, transactionMock));
                     transactionMock.clearenceSent = true;
                 }

@@ -49,7 +49,7 @@ import com.propertyvista.operations.domain.eft.cards.simulator.CardServiceSimula
 import com.propertyvista.operations.domain.eft.cards.simulator.CardServiceSimulationMerchantAccount;
 import com.propertyvista.operations.domain.eft.cards.simulator.CardServiceSimulationReconciliationRecord;
 import com.propertyvista.operations.domain.eft.cards.simulator.CardServiceSimulationTransaction;
-import com.propertyvista.operations.domain.eft.cards.simulator.CardServiceSimulationTransaction.SimpulationTransactionType;
+import com.propertyvista.operations.domain.eft.cards.simulator.CardServiceSimulationTransaction.SimulationTransactionType;
 import com.propertyvista.operations.domain.eft.cards.to.CardsReconciliationCardTotalRecord;
 import com.propertyvista.operations.domain.eft.cards.to.CardsReconciliationCardTotalRecord.CardTotalRecordType;
 import com.propertyvista.operations.domain.eft.cards.to.CardsReconciliationMerchantTotalRecord;
@@ -66,8 +66,8 @@ public class CardReconciliationSimulationManager {
 
     public String createReports(CardServiceSimulationCompany company, LogicalDate from, LogicalDate to) {
         EntityQueryCriteria<CardServiceSimulationTransaction> criteria = EntityQueryCriteria.create(CardServiceSimulationTransaction.class);
-        criteria.in(criteria.proto().transactionType(), SimpulationTransactionType.Sale, SimpulationTransactionType.Completion,
-                SimpulationTransactionType.Return);
+        criteria.in(criteria.proto().transactionType(), SimulationTransactionType.Sale, SimulationTransactionType.Completion,
+                SimulationTransactionType.Return);
         criteria.eq(criteria.proto().merchant().company(), company);
         criteria.eq(criteria.proto().responseCode(), "0000");
         criteria.eq(criteria.proto().voided(), Boolean.FALSE);
@@ -109,7 +109,7 @@ public class CardReconciliationSimulationManager {
         for (CardServiceSimulationTransaction transaction : transactions) {
             DailyReportRecord record = EntityFactory.create(DailyReportRecord.class);
 
-            if (transaction.transactionType().getValue() == SimpulationTransactionType.Return) {
+            if (transaction.transactionType().getValue() == SimulationTransactionType.Return) {
                 record.transactionType().setValue(DailyReportRecordType.RETU);
             } else {
                 if (transaction.convenienceFee().isNull()) {
@@ -181,20 +181,25 @@ public class CardReconciliationSimulationManager {
     }
 
     private void addTransaction(CardServiceSimulationReconciliationRecord record, CardServiceSimulationTransaction transaction) {
+        BigDecimal amount = transaction.amount().getValue();
+        if (transaction.transactionType().getValue() == SimulationTransactionType.Return) {
+            amount = amount.negate();
+        }
+
         switch (transaction.card().cardType().getValue()) {
         case MasterCard:
-            add(record.mastercardDeposit(), transaction.amount().getValue());
+            add(record.mastercardDeposit(), amount);
             add(record.mastercardFee(), transaction.convenienceFee().getValue());
             inc(record.mastercardTransactions());
             break;
         case Visa:
         case VisaDebit:
-            add(record.visaDeposit(), transaction.amount().getValue());
+            add(record.visaDeposit(), amount);
             add(record.visaFee(), transaction.convenienceFee().getValue());
             inc(record.visaTransactions());
             break;
         }
-        add(record.totalDeposit(), transaction.amount().getValue());
+        add(record.totalDeposit(), amount);
         add(record.totalFee(), transaction.convenienceFee().getValue());
     }
 

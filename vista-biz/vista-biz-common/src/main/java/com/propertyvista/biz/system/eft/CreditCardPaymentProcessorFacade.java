@@ -28,6 +28,8 @@ public interface CreditCardPaymentProcessorFacade {
 
     PaymentResponse realTimeSale(Merchant merchant, PaymentRequest request);
 
+    PaymentResponse returnTransaction(Merchant merchant, PaymentRequest request);
+
     PaymentResponse realTimePreAuthorization(Merchant merchant, PaymentRequest request);
 
     PaymentResponse realTimePreAuthorizationReversal(Merchant merchant, PaymentRequest request);

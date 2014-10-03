@@ -16,6 +16,7 @@ package com.propertyvista.eft.mock.cards;
 import com.pyx4j.entity.core.EntityFactory;
 
 import com.propertyvista.operations.domain.eft.cards.simulator.CardServiceSimulationTransaction;
+import com.propertyvista.operations.domain.eft.cards.simulator.CardServiceSimulationTransaction.SimulationTransactionType;
 
 class SimulationBridge {
 
@@ -29,6 +30,22 @@ class SimulationBridge {
         transaction.transactionDate().setValue(transactionMock.date);
         transaction.reference().setValue(transactionMock.referenceNumber);
         transaction.authorizationNumber().setValue(transactionMock.authorizationNumber);
+
+        switch (transactionMock.status) {
+        case Compleated:
+            transaction.transactionType().setValue(SimulationTransactionType.Sale);
+            break;
+        case PreAuthorization:
+            transaction.transactionType().setValue(SimulationTransactionType.PreAuthorization);
+            break;
+        case Return:
+            transaction.transactionType().setValue(SimulationTransactionType.Return);
+            break;
+        case Voided:
+            transaction.transactionType().setValue(SimulationTransactionType.Void);
+            break;
+        }
+
         return transaction;
     }
 

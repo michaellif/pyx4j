@@ -22,7 +22,7 @@ import com.pyx4j.site.client.backoffice.ui.prime.form.IForm;
 
 import com.propertyvista.operations.client.ui.crud.OperationsEntityForm;
 import com.propertyvista.operations.domain.eft.cards.simulator.CardServiceSimulatorConfig;
-import com.propertyvista.operations.domain.eft.cards.simulator.CardServiceSimulatorConfig.SimpulationType;
+import com.propertyvista.operations.domain.eft.cards.simulator.CardServiceSimulatorConfig.SimulationType;
 import com.propertyvista.operations.rpc.dto.CardServiceSimulatorConfigDTO;
 
 public class CardServiceSimulatorConfigForm extends OperationsEntityForm<CardServiceSimulatorConfigDTO> {
@@ -42,10 +42,10 @@ public class CardServiceSimulatorConfigForm extends OperationsEntityForm<CardSer
         formPanel.append(Location.Left, proto().acceptCardExpiryFrom()).decorate().componentWidth(180);
         formPanel.append(Location.Left, proto().acceptCardExpiryTo()).decorate().componentWidth(180);
 
-        get(proto().responseType()).addValueChangeHandler(new ValueChangeHandler<CardServiceSimulatorConfig.SimpulationType>() {
+        get(proto().responseType()).addValueChangeHandler(new ValueChangeHandler<CardServiceSimulatorConfig.SimulationType>() {
 
             @Override
-            public void onValueChange(ValueChangeEvent<SimpulationType> event) {
+            public void onValueChange(ValueChangeEvent<SimulationType> event) {
                 updatecardServiceVisibility();
             }
 

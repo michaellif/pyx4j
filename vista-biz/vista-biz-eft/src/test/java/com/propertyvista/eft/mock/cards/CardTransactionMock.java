@@ -22,11 +22,13 @@ class CardTransactionMock {
 
     public enum TransactionStatus {
 
-        preAuthorization,
+        PreAuthorization,
 
-        compleated,
+        Compleated,
 
-        voided;
+        Voided,
+
+        Return;
 
     }
 
