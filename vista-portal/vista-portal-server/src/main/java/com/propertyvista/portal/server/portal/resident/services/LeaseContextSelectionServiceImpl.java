@@ -40,8 +40,13 @@ public class LeaseContextSelectionServiceImpl implements LeaseContextSelectionSe
 
         for (Lease lease : activeLeases) {
             LeaseContextChoiceDTO choice = EntityFactory.create(LeaseContextChoiceDTO.class);
+
             choice.leaseId().set(lease.createIdentityStub());
             choice.leasedUnitAddress().setValue(AddressRetriever.getLeaseAddress(lease).getStringView());
+            choice.leaseFrom().setValue(lease.leaseFrom().getValue());
+            choice.leaseTo().setValue(lease.leaseTo().getValue());
+            choice.status().setValue(lease.status().getValue());
+
             choices.add(choice);
         }
 
@@ -54,5 +59,4 @@ public class LeaseContextSelectionServiceImpl implements LeaseContextSelectionSe
         ServerContext.getVisit().setAclRevalidationRequired();
         callback.onSuccess(null);
     }
-
 }

@@ -13,12 +13,14 @@
  */
 package com.propertyvista.portal.rpc.portal.resident.dto;
 
+import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.IPrimitive;
 
 import com.propertyvista.domain.tenant.lease.Lease;
+import com.propertyvista.domain.tenant.lease.Lease.Status;
 
 @Transient
 public interface LeaseContextChoiceDTO extends IEntity {
@@ -29,4 +31,9 @@ public interface LeaseContextChoiceDTO extends IEntity {
     @Caption(name = "Unit Address")
     IPrimitive<String> leasedUnitAddress();
 
+    IPrimitive<LogicalDate> leaseFrom();
+
+    IPrimitive<LogicalDate> leaseTo();
+
+    IPrimitive<Status> status();
 }
