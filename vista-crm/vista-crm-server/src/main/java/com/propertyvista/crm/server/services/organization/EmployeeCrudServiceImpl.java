@@ -81,13 +81,6 @@ public class EmployeeCrudServiceImpl extends AbstractCrudServiceDtoImpl<Employee
                 to.privileges().behaviors().addAll(role.behaviors());
             }
         }
-
-        if (SecurityController.check(DataModelPermission.permissionRead(Notification.class))) {
-            Persistence.service().retrieveMember(bo.notifications());
-            for (Notification notification : bo.notifications()) {
-                to.notificationTypes().add(notification.type().getValue());
-            }
-        }
     }
 
     @Override
@@ -118,24 +111,6 @@ public class EmployeeCrudServiceImpl extends AbstractCrudServiceDtoImpl<Employee
                 }
             }
         }
-
-        if (SecurityController.check(DataModelPermission.permissionRead(Notification.class))) {
-            PropertyCriterion notificationsCriteria = toCriteria.getCriterion(toCriteria.proto().notificationTypes());
-            while (notificationsCriteria != null) {
-                toCriteria.getFilters().remove(notificationsCriteria);
-                if (notificationsCriteria.getRestriction() == Restriction.EQUAL) {
-                    boCriteria.eq(boCriteria.proto().notifications().$().type(), notificationsCriteria.getValue());
-                } else if (notificationsCriteria.getRestriction() == Restriction.NOT_EQUAL) {
-                    boCriteria.notExists(boCriteria.proto().notifications(),
-                            PropertyCriterion.eq(boCriteria.proto().notifications().$().type(), notificationsCriteria.getValue()));
-                } else {
-                    throw new IllegalArgumentException();
-                }
-                notificationsCriteria = toCriteria.getCriterion(toCriteria.proto().notificationTypes());
-            }
-
-        }
-
         super.enhanceListCriteria(boCriteria, toCriteria);
     }
 
