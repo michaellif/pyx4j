@@ -44,6 +44,7 @@ import com.propertyvista.domain.financial.billing.BillingCycle;
 import com.propertyvista.domain.financial.billing.BillingType;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.tenant.lease.Lease;
+import com.propertyvista.portal.rpc.shared.BillingException;
 
 public class BillingProcessManager {
 
@@ -148,6 +149,8 @@ public class BillingProcessManager {
                         return null;
                     }
                 });
+            } catch (BillingException e) {
+                executionMonitor.addFailedEvent("Bill", e.getMessage());
             } catch (Throwable t) {
                 executionMonitor.addErredEvent("Billing Types", t);
             }

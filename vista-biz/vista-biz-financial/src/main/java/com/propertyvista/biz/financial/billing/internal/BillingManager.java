@@ -83,44 +83,36 @@ public class BillingManager {
     }
 
     Bill runBilling(Lease lease, BillingCycle billingCycle, boolean preview) {
-        if (validateBillingRunPreconditions(billingCycle, lease, preview)) {
-            InternalBillProducer producer = new InternalBillProducer(billingCycle, lease, preview);
-            return producer.produceBill();
-        } else {
-            throw new BillingException(i18n.tr("Bill Run Precondition Validation failed"));
-        }
+        validateBillingRunPreconditions(billingCycle, lease, preview);
+        InternalBillProducer producer = new InternalBillProducer(billingCycle, lease, preview);
+        return producer.produceBill();
     }
 
-    boolean validateBillingRunPreconditions(BillingCycle billingCycle, Lease lease, boolean preview) {
+    void validateBillingRunPreconditions(BillingCycle billingCycle, Lease lease, boolean preview) {
 
         BillingCycle nextCycle = getNextBillBillingCycle(lease);
         if (!billingCycle.equals(nextCycle)) {
-            log.warn(i18n.tr("Invalid billing cycle: {0}; expected: {1}; lease end: {2}", billingCycle.billingCycleStartDate().getValue(), nextCycle
-                    .billingCycleStartDate().getValue(), lease.leaseTo().getValue()));
-            return false;
+            throw new BillingException(i18n.tr("Invalid billing cycle: {0}; expected: {1}; lease end: {2}", billingCycle.billingCycleStartDate().getValue(),
+                    nextCycle.billingCycleStartDate().getValue(), lease.leaseTo().getValue()));
         }
 
         if (VersionedEntityUtils.isDraft(lease.currentTerm()) && !preview) {
-            log.warn(i18n.tr("Lease Term is in draft state. Billing can run only in preview mode."));
-            return false;
+            throw new BillingException(i18n.tr("Lease Term is in draft state. Billing can run only in preview mode."));
         }
 
         if (lease.status().getValue() == Lease.Status.Closed) {
-            log.warn(i18n.tr("Lease is closed"));
-            return false;
+            throw new BillingException(i18n.tr("Lease is closed"));
         }
 
         Bill previousBill = getLatestBill(lease);
         if (previousBill != null) {
             if (BillStatus.notConfirmed(previousBill.billStatus().getValue())) {
-                log.warn(i18n.tr("Can't run billing on Account with non-confirmed bills"));
-                return false;
+                throw new BillingException(i18n.tr("Can't run billing on Account with non-confirmed bills"));
             }
         }
 
         if (lease.status().getValue() == Lease.Status.Completed && previousBill.billType().getValue().equals(BillType.Final)) {
-            log.warn(i18n.tr("Final bill has been already issued"));
-            return false;
+            throw new BillingException(i18n.tr("Final bill has been already issued"));
         }
 
         Bill previousConfirmedBill = getLatestConfirmedBill(lease);
@@ -132,19 +124,15 @@ public class BillingManager {
 
             //previous bill wasn't the last one so we are dealing here with the regular bill which can't run before executionTargetDate
             if (!isPreviousConfirmedBillTheLast && SystemDateManager.getDate().compareTo(billingCycle.targetBillExecutionDate().getValue()) < 0) {
-                log.warn(i18n.tr("Regular billing can't run before target execution date"));
-                return false;
+                throw new BillingException(i18n.tr("Regular billing can't run before target execution date"));
             }
 
             //previous bill was the last one so we have to run a final bill but not before lease end date or lease move-out date whatever is first
             if (isPreviousConfirmedBillTheLast && (SystemDateManager.getDate().compareTo(lease.leaseTo().getValue()) < 0)
                     && (lease.expectedMoveOut().isNull() || (SystemDateManager.getDate().compareTo(lease.expectedMoveOut().getValue()) < 0))) {
-                log.warn(i18n.tr("Final billing can't run before both lease end date and move-out date"));
-                return false;
+                throw new BillingException(i18n.tr("Final billing can't run before both lease end date and move-out date"));
             }
         }
-
-        return true;
     }
 
     Bill confirmBill(Bill billStub) {
