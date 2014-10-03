@@ -81,6 +81,11 @@ public class EmployeeCrudServiceImpl extends AbstractCrudServiceDtoImpl<Employee
                 to.privileges().behaviors().addAll(role.behaviors());
             }
         }
+
+        if (SecurityController.check(DataModelPermission.permissionRead(Notification.class))) {
+            Persistence.service().retrieveMember(bo.notifications());
+            to.notifications().set(bo.notifications());
+        }
     }
 
     @Override
