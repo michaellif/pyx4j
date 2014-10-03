@@ -32,6 +32,7 @@ import com.propertyvista.crm.client.mvp.HelpActivityMapper;
 import com.propertyvista.crm.client.mvp.NavigActivityMapper;
 import com.propertyvista.crm.client.mvp.NotificationsActivityMapper;
 import com.propertyvista.crm.client.mvp.ShortCutsActivityMapper;
+import com.propertyvista.crm.client.mvp.SiteFeedbackMapper;
 import com.propertyvista.crm.rpc.CrmSiteMap;
 
 public class CrmRootPane extends RootPane<BackOfficeLayoutPanel> {
@@ -43,7 +44,7 @@ public class CrmRootPane extends RootPane<BackOfficeLayoutPanel> {
     public static final int NOTIFICATION_HEIGHT = 40;
 
     public CrmRootPane() {
-        super(new BackOfficeLayoutPanel(i18n.tr("Shortcuts"), i18n.tr("Help")));
+        super(new BackOfficeLayoutPanel(i18n.tr("Shortcuts"), i18n.tr("Help"), i18n.tr("Feedback")));
 
         asWidget().setHeaderHeight(HEADER_HEIGHT);
 
@@ -55,6 +56,7 @@ public class CrmRootPane extends RootPane<BackOfficeLayoutPanel> {
         bind(new CommunicationActivityMapper(), asWidget().getDisplay(DisplayType.communication));
         bind(new ShortCutsActivityMapper(), asWidget().getDisplay(DisplayType.extra1));
         bind(new HelpActivityMapper(), asWidget().getDisplay(DisplayType.extra2));
+        bind(new SiteFeedbackMapper(), asWidget().getDisplay(DisplayType.extra4));
         bind(new ContentActivityMapper(), asWidget().getDisplay(DisplayType.content));
         bind(new NotificationsActivityMapper(), asWidget().getDisplay(DisplayType.notification));
     }

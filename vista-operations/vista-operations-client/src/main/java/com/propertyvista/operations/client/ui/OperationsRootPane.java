@@ -40,7 +40,7 @@ public class OperationsRootPane extends RootPane<BackOfficeLayoutPanel> {
     public static String DEFAULT_STYLE_PREFIX = "SiteView";
 
     public OperationsRootPane() {
-        super(new BackOfficeLayoutPanel(i18n.tr("Shortcuts"), null));
+        super(new BackOfficeLayoutPanel(i18n.tr("Shortcuts"), null, null));
 
         asWidget().setHeaderHeight(HEADER_HEIGHT);
         asWidget().setStyleName(SiteViewTheme.StyleName.SiteView.name());

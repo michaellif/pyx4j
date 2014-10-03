@@ -21,6 +21,7 @@ import com.propertyvista.portal.prospect.mvp.MenuActivityMapper;
 import com.propertyvista.portal.prospect.mvp.RentChargesActivityMapper;
 import com.propertyvista.portal.prospect.mvp.RentDetailsActivityMapper;
 import com.propertyvista.portal.prospect.mvp.ToolbarActivityMapper;
+import com.propertyvista.portal.prospect.mvp.SiteFeedbackMapper;
 import com.propertyvista.portal.shared.mvp.FooterActivityMapper;
 import com.propertyvista.portal.shared.mvp.HeaderActivityMapper;
 import com.propertyvista.portal.shared.mvp.NotificationActivityMapper;
@@ -31,7 +32,7 @@ public class ProspectPortalRootPane extends PortalRootPane {
     private static final I18n i18n = I18n.get(ProspectPortalRootPane.class);
 
     public ProspectPortalRootPane() {
-        super(i18n.tr("Rental Summary"), i18n.tr("Rent Charges"));
+        super(i18n.tr("Rental Summary"), i18n.tr("Rent Charges"), i18n.tr("Feedback"));
 
         bind(new HeaderActivityMapper(), asWidget().getDisplay(DisplayType.header));
         bind(new ToolbarActivityMapper(), asWidget().getDisplay(DisplayType.toolbar));
@@ -40,6 +41,7 @@ public class ProspectPortalRootPane extends PortalRootPane {
         bind(new FooterActivityMapper(), asWidget().getDisplay(DisplayType.footer));
         bind(new RentDetailsActivityMapper(), asWidget().getDisplay(DisplayType.extra1));
         bind(new RentChargesActivityMapper(), asWidget().getDisplay(DisplayType.extra2));
+        bind(new SiteFeedbackMapper(), asWidget().getDisplay(DisplayType.extra4));
         bind(new NotificationActivityMapper(), asWidget().getDisplay(DisplayType.notification));
     }
 

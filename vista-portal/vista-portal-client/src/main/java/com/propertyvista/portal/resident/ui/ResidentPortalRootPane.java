@@ -21,6 +21,7 @@ import com.propertyvista.portal.resident.mvp.CommunityEventsActivityMapper;
 import com.propertyvista.portal.resident.mvp.ContentActivityMapper;
 import com.propertyvista.portal.resident.mvp.MenuActivityMapper;
 import com.propertyvista.portal.resident.mvp.QuickTipActivityMapper;
+import com.propertyvista.portal.resident.mvp.SiteFeedbackMapper;
 import com.propertyvista.portal.resident.mvp.ToolbarActivityMapper;
 import com.propertyvista.portal.resident.mvp.WeatherActivityMapper;
 import com.propertyvista.portal.shared.mvp.FooterActivityMapper;
@@ -33,7 +34,7 @@ public class ResidentPortalRootPane extends PortalRootPane {
     private static final I18n i18n = I18n.get(ResidentPortalRootPane.class);
 
     public ResidentPortalRootPane() {
-        super(i18n.tr("Community Events"), i18n.tr("Quick Tip"));
+        super(i18n.tr("Community Events"), i18n.tr("Quick Tip"), i18n.tr("Feedback"));
 
         bind(new HeaderActivityMapper(), asWidget().getDisplay(DisplayType.header));
         bind(new ToolbarActivityMapper(), asWidget().getDisplay(DisplayType.toolbar));
@@ -44,6 +45,7 @@ public class ResidentPortalRootPane extends PortalRootPane {
         bind(new CommunityEventsActivityMapper(), asWidget().getDisplay(DisplayType.extra1));
         bind(new QuickTipActivityMapper(), asWidget().getDisplay(DisplayType.extra2));
         bind(new WeatherActivityMapper(), asWidget().getDisplay(DisplayType.extra3));
+        bind(new SiteFeedbackMapper(), asWidget().getDisplay(DisplayType.extra4));
         bind(new NotificationActivityMapper(), asWidget().getDisplay(DisplayType.notification));
 
     }

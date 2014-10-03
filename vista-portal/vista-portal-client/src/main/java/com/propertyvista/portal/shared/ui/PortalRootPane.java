@@ -22,8 +22,8 @@ import com.pyx4j.site.client.frontoffice.ui.layout.FrontOfficeLayoutPanel;
 
 public class PortalRootPane extends RootPane<FrontOfficeLayoutPanel> {
 
-    public PortalRootPane(String extra1Caption, String extra2Caption) {
-        super(new FrontOfficeLayoutPanel(extra1Caption, extra2Caption));
+    public PortalRootPane(String extra1Caption, String extra2Caption, String extra4Caption) {
+        super(new FrontOfficeLayoutPanel(extra1Caption, extra2Caption, extra4Caption));
 
     }
 
