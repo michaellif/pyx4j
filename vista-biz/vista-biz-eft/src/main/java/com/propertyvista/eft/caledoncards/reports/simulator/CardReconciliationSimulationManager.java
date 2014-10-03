@@ -66,7 +66,8 @@ public class CardReconciliationSimulationManager {
 
     public String createReports(CardServiceSimulationCompany company, LogicalDate from, LogicalDate to) {
         EntityQueryCriteria<CardServiceSimulationTransaction> criteria = EntityQueryCriteria.create(CardServiceSimulationTransaction.class);
-        criteria.in(criteria.proto().transactionType(), SimpulationTransactionType.sale, SimpulationTransactionType.completion);
+        criteria.in(criteria.proto().transactionType(), SimpulationTransactionType.Sale, SimpulationTransactionType.Completion,
+                SimpulationTransactionType.Return);
         criteria.eq(criteria.proto().merchant().company(), company);
         criteria.eq(criteria.proto().responseCode(), "0000");
         criteria.eq(criteria.proto().voided(), Boolean.FALSE);
@@ -108,10 +109,14 @@ public class CardReconciliationSimulationManager {
         for (CardServiceSimulationTransaction transaction : transactions) {
             DailyReportRecord record = EntityFactory.create(DailyReportRecord.class);
 
-            if (transaction.convenienceFee().isNull()) {
-                record.transactionType().setValue(DailyReportRecordType.SALE);
+            if (transaction.transactionType().getValue() == SimpulationTransactionType.Return) {
+                record.transactionType().setValue(DailyReportRecordType.RETU);
             } else {
-                record.transactionType().setValue(DailyReportRecordType.PRCO);
+                if (transaction.convenienceFee().isNull()) {
+                    record.transactionType().setValue(DailyReportRecordType.SALE);
+                } else {
+                    record.transactionType().setValue(DailyReportRecordType.PRCO);
+                }
             }
 
             record.terminalID().setValue(transaction.merchant().terminalID().getValue());

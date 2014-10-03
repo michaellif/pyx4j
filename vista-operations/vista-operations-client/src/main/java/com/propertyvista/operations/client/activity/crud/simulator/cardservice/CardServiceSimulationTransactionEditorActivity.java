@@ -15,19 +15,31 @@ package com.propertyvista.operations.client.activity.crud.simulator.cardservice;
 
 import com.google.gwt.core.client.GWT;
 
+import com.pyx4j.entity.core.EntityFactory;
+import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.backoffice.activity.AbstractEditorActivity;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
 import com.propertyvista.operations.client.OperationsSite;
 import com.propertyvista.operations.client.ui.crud.simulator.cardservice.CardServiceSimulationTransactionEditorView;
 import com.propertyvista.operations.domain.eft.cards.simulator.CardServiceSimulationTransaction;
+import com.propertyvista.operations.rpc.OperationsSiteMap;
 import com.propertyvista.operations.rpc.services.simulator.CardServiceSimulationTransactionCrudService;
+import com.propertyvista.operations.rpc.services.simulator.CardServiceSimulationTransactionCrudService.CardServiceSimulationTransactionInitializationData;
 
-public class CardServiceSimulationTransactionEditorActivity extends AbstractEditorActivity<CardServiceSimulationTransaction> {
+public class CardServiceSimulationTransactionEditorActivity extends AbstractEditorActivity<CardServiceSimulationTransaction> implements
+        CardServiceSimulationTransactionEditorView.Presenter {
 
     public CardServiceSimulationTransactionEditorActivity(CrudAppPlace place) {
         super(CardServiceSimulationTransaction.class, place, OperationsSite.getViewFactory().getView(CardServiceSimulationTransactionEditorView.class)//
                 , GWT.<CardServiceSimulationTransactionCrudService> create(CardServiceSimulationTransactionCrudService.class));
+    }
+
+    @Override
+    public void createReturn() {
+        CardServiceSimulationTransactionInitializationData init = EntityFactory.create(CardServiceSimulationTransactionInitializationData.class);
+        init.returnOf().set(getView().getValue().createIdentityStub());
+        AppSite.getPlaceController().goTo(new OperationsSiteMap.Simulator.CardServiceSimulation.CardServiceSimulationTransaction().formNewItemPlace(init));
     }
 
 }

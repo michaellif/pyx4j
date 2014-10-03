@@ -13,14 +13,31 @@
  */
 package com.propertyvista.operations.client.ui.crud.simulator.cardservice;
 
+import com.google.gwt.user.client.Command;
+
+import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.widgets.client.Button;
+
 import com.propertyvista.operations.client.ui.crud.OperationsEditorViewImplBase;
 import com.propertyvista.operations.domain.eft.cards.simulator.CardServiceSimulationTransaction;
 
 public class CardServiceSimulationTransactionEditorViewImpl extends OperationsEditorViewImplBase<CardServiceSimulationTransaction> implements
         CardServiceSimulationTransactionEditorView {
 
+    private static final I18n i18n = I18n.get(CardServiceSimulationTransactionEditorViewImpl.class);
+
+    Button createReturn;
+
     public CardServiceSimulationTransactionEditorViewImpl() {
         setForm(new CardServiceSimulationTransactionForm(this));
+
+        createReturn = new Button(i18n.tr("Create Return"), new Command() {
+            @Override
+            public void execute() {
+                ((CardServiceSimulationTransactionEditorView.Presenter) getPresenter()).createReturn();
+            }
+        });
+        addHeaderToolbarItem(createReturn);
     }
 
 }

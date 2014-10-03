@@ -129,15 +129,17 @@ public class CardServiceSimulationUtils {
     static SimpulationTransactionType toSimTransactionType(CaledonTransactionType transactionType) {
         switch (transactionType) {
         case SALE:
-            return SimpulationTransactionType.sale;
+            return SimpulationTransactionType.Sale;
         case PREAUTH:
-            return SimpulationTransactionType.preAuthorization;
+            return SimpulationTransactionType.PreAuthorization;
         case AUTH_REVERSE:
-            return SimpulationTransactionType.preAuthorizationReversal;
+            return SimpulationTransactionType.PreAuthorizationReversal;
         case COMPLETION:
-            return SimpulationTransactionType.completion;
+            return SimpulationTransactionType.Completion;
         case VOID:
-            return SimpulationTransactionType.returnVoid;
+            return SimpulationTransactionType.Void;
+        case RETURN_VOID:
+            return SimpulationTransactionType.Return;
         default:
             throw new Error("Unsupported transactionType '" + transactionType + "'");
         }

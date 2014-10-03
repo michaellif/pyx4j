@@ -25,6 +25,8 @@ public interface CardServiceSimulationTransactionCrudService extends AbstractCru
     @Transient
     public interface CardServiceSimulationTransactionInitializationData extends InitializationData {
 
+        CardServiceSimulationTransaction returnOf();
+
         CardServiceSimulationMerchantAccount merchantAccount();
 
         CardServiceSimulationCard card();

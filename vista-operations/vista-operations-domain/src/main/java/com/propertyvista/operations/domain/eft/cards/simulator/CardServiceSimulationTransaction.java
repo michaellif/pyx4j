@@ -43,15 +43,17 @@ public interface CardServiceSimulationTransaction extends IEntity {
 
     public enum SimpulationTransactionType {
 
-        sale,
+        Sale,
 
-        returnVoid,
+        Void,
 
-        preAuthorization,
+        Return,
 
-        preAuthorizationReversal,
+        PreAuthorization,
 
-        completion;
+        PreAuthorizationReversal,
+
+        Completion;
 
     }
 
