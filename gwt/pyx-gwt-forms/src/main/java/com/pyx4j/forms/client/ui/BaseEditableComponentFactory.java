@@ -119,8 +119,14 @@ public class BaseEditableComponentFactory implements IEditableComponentFactory {
                 } else if (mm.getValueClass().equals(Date.class) || (mm.getValueClass().equals(java.sql.Date.class))
                         || (mm.getValueClass().equals(LogicalDate.class))) {
                     CDateLabel comp = new CDateLabel();
-                    if (mm.getFormat() != null) {
-                        comp.setDateFormat(mm.getFormat());
+                    String format = null;
+                    if (mm.getValueClass().equals(Date.class)) {
+                        format = getPreferedDateTimeFormat(mm);
+                    } else {
+                        format = getPreferedLogicalDateFormat(mm);
+                    }
+                    if (format != null) {
+                        comp.setDateFormat(format);
                     }
                     return comp;
                 } else if (mm.getValueClass() == Boolean.class) {
