@@ -44,6 +44,7 @@ import com.propertyvista.domain.payment.CreditCardInfo.CreditCardType;
 import com.propertyvista.domain.payment.PaymentType;
 import com.propertyvista.domain.pmc.Pmc;
 import com.propertyvista.operations.domain.eft.cards.CardsClearanceRecord;
+import com.propertyvista.operations.domain.eft.cards.CardsClearanceRecord.CardsClearanceRecordType;
 import com.propertyvista.operations.domain.eft.cards.CardsClearanceRecordProcessingStatus;
 import com.propertyvista.operations.domain.eft.cards.to.DailyReportRecord.DailyReportCardType;
 import com.propertyvista.server.TaskRunner;
@@ -115,24 +116,28 @@ public class CardsDailyReportProcessor {
     }
 
     protected void procesNonVistaTransaction(CardsClearanceRecord clearanceRecord) {
-        if (clearanceRecord.approved().getValue() //
-                && !clearanceRecord.voided().getValue() //
-                && (!clearanceRecord.transactionAuthorizationNumber().isNull()) //
-                && (!clearanceRecord.responseMessage().getValue().equals("DECLINE"))) {
-
-            AggregatedTransferNonVistaTransaction record = EntityFactory.create(AggregatedTransferNonVistaTransaction.class);
-            record.cardsClearanceRecordKey().setValue(clearanceRecord.getPrimaryKey());
-            record.aggregatedTransfer().set(null);
-            record.merchantAccount().id().setValue(clearanceRecord.merchantAccount().merchantAccountKey().getValue());
-            record.amount().setValue(clearanceRecord.amount().getValue());
-            record.cardType().setValue(getCardType(clearanceRecord.cardType().getValue()));
-            record.transactionDate().setValue(clearanceRecord.clearanceDate().getValue());
-            record.reconciliationDate().setValue(new LogicalDate(clearanceRecord.clearanceDate().getValue()));
-            record.details().setValue(
-                    CommonsStringUtils.nvl_concat(clearanceRecord.cardType().getStringView(), clearanceRecord.referenceNumber().getStringView(), " "));
-            Persistence.service().persist(record);
-
+        if (!clearanceRecord.approved().getValue() || clearanceRecord.voided().getValue()) {
+            log.debug("NonVistaTransaction clearanceRecord ignored {}", clearanceRecord);
+            return;
         }
+
+        if ((clearanceRecord.transactionType().getValue() != CardsClearanceRecordType.Return) //
+                && ((clearanceRecord.transactionAuthorizationNumber().isNull()) //
+                || (clearanceRecord.responseMessage().getValue().equals("DECLINE")))) {
+            log.debug("NonVistaTransaction clearanceRecord ignored {}", clearanceRecord);
+        }
+
+        AggregatedTransferNonVistaTransaction record = EntityFactory.create(AggregatedTransferNonVistaTransaction.class);
+        record.cardsClearanceRecordKey().setValue(clearanceRecord.getPrimaryKey());
+        record.aggregatedTransfer().set(null);
+        record.merchantAccount().id().setValue(clearanceRecord.merchantAccount().merchantAccountKey().getValue());
+        record.amount().setValue(clearanceRecord.amount().getValue());
+        record.cardType().setValue(getCardType(clearanceRecord.cardType().getValue()));
+        record.transactionDate().setValue(clearanceRecord.clearanceDate().getValue());
+        record.reconciliationDate().setValue(new LogicalDate(clearanceRecord.clearanceDate().getValue()));
+        record.details().setValue(
+                CommonsStringUtils.nvl_concat(clearanceRecord.cardType().getStringView(), clearanceRecord.referenceNumber().getStringView(), " "));
+        Persistence.service().persist(record);
 
     }
 
@@ -179,6 +184,8 @@ public class CardsDailyReportProcessor {
         } else {
             if (!EnumSet.of(PaymentRecord.PaymentStatus.Rejected, PaymentRecord.PaymentStatus.Void).contains(paymentRecord.paymentStatus().getValue())) {
                 throw new Error(paymentRecord.paymentStatus().getValue() + " paymentRecord '" + paymentRecord.id().getValue() + "' expected to be Rejected");
+            } else {
+                log.debug("clearanceRecord ignored {}", clearanceRecord);
             }
         }
     }

@@ -25,6 +25,7 @@ import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.annotations.Table;
 import com.pyx4j.entity.annotations.Timestamp;
+import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.IPrimitive;
@@ -68,8 +69,10 @@ public interface CardsClearanceRecord extends IEntity {
     IPrimitive<DailyReportCardType> cardType();
 
     @MemberColumn(notNull = true)
+    @ToString
     IPrimitive<CardsClearanceRecordType> transactionType();
 
+    @ToString
     IPrimitive<String> referenceNumber();
 
     IPrimitive<String> responseMessage();
@@ -84,8 +87,10 @@ public interface CardsClearanceRecord extends IEntity {
 
     @Editor(type = EditorType.label)
     @Format("yyyy-MM-dd HH:mm:ss")
+    @ToString
     IPrimitive<Date> clearanceDate();
 
+    @ToString
     IPrimitive<BigDecimal> amount();
 
     @Timestamp(Timestamp.Update.Created)

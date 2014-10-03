@@ -13,6 +13,8 @@
  */
 package com.propertyvista.operations.client.ui.crud.simulator.cardservice;
 
+import com.google.gwt.event.logical.shared.ValueChangeEvent;
+import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.IsWidget;
@@ -48,6 +50,17 @@ public class CardServiceSimulationReconciliationCreateDialog extends OkCancelDia
                 content.append(Location.Left, proto().company()).decorate();
                 content.append(Location.Left, proto().fromDate()).decorate();
                 content.append(Location.Right, proto().toDate()).decorate();
+
+                get(proto().fromDate()).addValueChangeHandler(new ValueChangeHandler<LogicalDate>() {
+
+                    @Override
+                    public void onValueChange(ValueChangeEvent<LogicalDate> event) {
+                        if (getValue().toDate().getValue().before(event.getValue())) {
+                            get(proto().toDate()).populate(event.getValue());
+                        }
+                    }
+                });
+
                 return content;
             }
         };

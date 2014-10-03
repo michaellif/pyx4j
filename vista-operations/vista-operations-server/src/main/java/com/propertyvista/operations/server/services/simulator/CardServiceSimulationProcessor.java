@@ -21,6 +21,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.pyx4j.commons.CommonsStringUtils;
+import com.pyx4j.config.server.SystemDateManager;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.server.Executable;
@@ -379,6 +380,7 @@ public class CardServiceSimulationProcessor {
         transaction.amount().setValue(CardServiceSimulationUtils.parsAmount(caledonRequest.amount));
         transaction.reference().setValue(caledonRequest.referenceNumber);
         transaction.transactionType().setValue(CardServiceSimulationUtils.toSimTransactionType(transactionType));
+        transaction.transactionDate().setValue(SystemDateManager.getDate());
 
         CardServiceSimulationMerchantAccount convenienceFeeMerchantAccount = null;
         if (caledonRequest instanceof CaledonRequestTokenWithFee) {

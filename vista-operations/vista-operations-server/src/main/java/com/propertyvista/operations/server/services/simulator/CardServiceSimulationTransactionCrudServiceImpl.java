@@ -13,6 +13,7 @@
  */
 package com.propertyvista.operations.server.services.simulator;
 
+import com.pyx4j.config.server.SystemDateManager;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.server.AbstractCrudServiceImpl;
 import com.pyx4j.entity.server.Persistence;
@@ -59,6 +60,7 @@ public class CardServiceSimulationTransactionCrudServiceImpl extends AbstractCru
             tx.responseCode().setValue("0000");
             tx.reference().setValue(returnOf.reference().getValue());
         }
+        tx.transactionDate().setValue(SystemDateManager.getDate());
         return tx;
     }
 }

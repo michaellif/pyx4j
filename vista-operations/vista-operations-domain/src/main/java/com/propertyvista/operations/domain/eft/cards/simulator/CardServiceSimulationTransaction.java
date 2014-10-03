@@ -27,8 +27,6 @@ import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.annotations.RequireFeature;
 import com.pyx4j.entity.annotations.Table;
-import com.pyx4j.entity.annotations.Timestamp;
-import com.pyx4j.entity.annotations.Timestamp.Update;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.IPrimitive;
@@ -90,8 +88,6 @@ public interface CardServiceSimulationTransaction extends IEntity {
     @NotNull
     IPrimitive<Boolean> voided();
 
-    @Timestamp(Update.Updated)
     @Format("MM/dd/yyyy HH:mm.ss")
-    @Editor(type = EditorType.label)
     IPrimitive<Date> transactionDate();
 }

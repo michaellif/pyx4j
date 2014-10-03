@@ -205,9 +205,7 @@ public class CardsReconciliationTest extends LeaseFinancialTestBase {
                 request.amount().setValue(BigDecimal.TEN);
 
                 CreditCardPaymentInstrument ccInfo = EntityFactory.create(CreditCardPaymentInstrument.class);
-//            ccInfo.creditCardNumber().setValue(cc.card().newNumber().getValue());
                 ccInfo.creditCardExpiryDate().setValue(new LogicalDate());
-//            ccInfo.securityCode().setValue(cc.securityCode().getValue());
                 ccInfo.cardType().setValue(CreditCardType.MasterCard);
 
                 request.paymentInstrument().set(ccInfo);

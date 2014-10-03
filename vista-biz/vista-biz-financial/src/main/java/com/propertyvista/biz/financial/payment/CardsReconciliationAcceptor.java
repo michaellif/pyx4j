@@ -123,15 +123,13 @@ class CardsReconciliationAcceptor {
 
             switch (merchantTotal.type().getValue()) {
             case Deposit:
-                Validate.isTrue(merchantTotal.debit().getValue().compareTo(BigDecimal.ZERO) == 0, "Debit ZERO expected for {0}", merchantTotal);
                 Validate.isTrue(reconciliationRecord.totalDeposit().isNull(), "Duplicate Deposit {0}", merchantTotal);
-                reconciliationRecord.totalDeposit().setValue(merchantTotal.credit().getValue());
+                reconciliationRecord.totalDeposit().setValue(asCredit(merchantTotal));
                 executionMonitor.addProcessedEvent("Merchant Deposit", reconciliationRecord.totalDeposit().getValue());
                 break;
             case Fees:
-                Validate.isTrue(merchantTotal.credit().getValue().compareTo(BigDecimal.ZERO) == 0, "Credit ZERO expected for {0}", merchantTotal);
                 Validate.isTrue(reconciliationRecord.totalFee().isNull(), "Duplicate Fees {0}", merchantTotal);
-                reconciliationRecord.totalFee().setValue(merchantTotal.debit().getValue());
+                reconciliationRecord.totalFee().setValue(asDebit(merchantTotal));
                 executionMonitor.addProcessedEvent("Merchant Fee", reconciliationRecord.totalFee().getValue());
                 break;
             case Adjustment:
@@ -154,24 +152,20 @@ class CardsReconciliationAcceptor {
 
             switch (cardTotal.type().getValue()) {
             case VisaDeposit:
-                Validate.isTrue(cardTotal.debit().getValue().compareTo(BigDecimal.ZERO) == 0, "Debit ZERO expected for {0}", cardTotal);
                 Validate.isTrue(record.visaDeposit().isNull(), "Duplicate VisaDeposit {0}", cardTotal);
-                record.visaDeposit().setValue(cardTotal.credit().getValue());
+                record.visaDeposit().setValue(asCredit(cardTotal));
                 break;
             case VisaFees:
-                Validate.isTrue(cardTotal.credit().getValue().compareTo(BigDecimal.ZERO) == 0, "Credit ZERO expected for {0}", cardTotal);
                 Validate.isTrue(record.visaFee().isNull(), "Duplicate VisaFees {0}", cardTotal);
-                record.visaFee().setValue(cardTotal.debit().getValue());
+                record.visaFee().setValue(asDebit(cardTotal));
                 break;
             case MastercardDeposit:
-                Validate.isTrue(cardTotal.debit().getValue().compareTo(BigDecimal.ZERO) == 0, "Debit ZERO expected for {0}", cardTotal);
                 Validate.isTrue(record.mastercardDeposit().isNull(), "Duplicate MastercardDeposit {0}", cardTotal);
-                record.mastercardDeposit().setValue(cardTotal.credit().getValue());
+                record.mastercardDeposit().setValue(asCredit(cardTotal));
                 break;
             case MastercardFees:
-                Validate.isTrue(cardTotal.credit().getValue().compareTo(BigDecimal.ZERO) == 0, "Credit ZERO expected for {0}", cardTotal);
                 Validate.isTrue(record.mastercardFee().isNull(), "Duplicate MastercardFees {0}", cardTotal);
-                record.mastercardFee().setValue(cardTotal.debit().getValue());
+                record.mastercardFee().setValue(asDebit(cardTotal));
                 break;
             case Adjustment:
                 Validate.isTrue(record.adjustments().contains(asCredit(cardTotal)), "Adjustment mismatch to total for {0}", cardTotal);
@@ -200,8 +194,16 @@ class CardsReconciliationAcceptor {
         return record.credit().getValue().subtract(record.debit().getValue());
     }
 
+    private BigDecimal asDebit(CardsReconciliationMerchantTotalRecord record) {
+        return record.debit().getValue().subtract(record.credit().getValue());
+    }
+
     private BigDecimal asCredit(CardsReconciliationCardTotalRecord record) {
         return record.credit().getValue().subtract(record.debit().getValue());
+    }
+
+    private BigDecimal asDebit(CardsReconciliationCardTotalRecord record) {
+        return record.debit().getValue().subtract(record.credit().getValue());
     }
 
     private String key(CardsReconciliationMerchantTotalRecord record) {

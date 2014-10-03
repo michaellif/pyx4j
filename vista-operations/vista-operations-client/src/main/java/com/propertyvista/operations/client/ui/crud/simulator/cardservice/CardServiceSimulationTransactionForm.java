@@ -13,8 +13,11 @@
  */
 package com.propertyvista.operations.client.ui.crud.simulator.cardservice;
 
+import com.pyx4j.entity.shared.IUserPreferences;
+import com.pyx4j.forms.client.ui.CDateTimeTextField;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.forms.client.ui.panels.FormPanel;
+import com.pyx4j.security.shared.Context;
 import com.pyx4j.site.client.backoffice.ui.prime.form.IForm;
 
 import com.propertyvista.operations.client.ui.components.OperationsEditorsComponentFactory;
@@ -48,7 +51,9 @@ class CardServiceSimulationTransactionForm extends OperationsEntityForm<CardServ
         formPanel.append(Location.Left, proto().responseCode()).decorate();
         formPanel.append(Location.Left, proto().authorizationNumber()).decorate();
         formPanel.append(Location.Left, proto().voided()).decorate();
-        formPanel.append(Location.Left, proto().transactionDate()).decorate();
+        CDateTimeTextField dt = new CDateTimeTextField();
+        dt.setDateTimeFormat(Context.userPreferences(IUserPreferences.class).dateTimeFormat().getValue());
+        formPanel.append(Location.Left, proto().transactionDate(), dt).decorate();
 
         selectTab(addTab(formPanel, "Card Service Simulation"));
         setTabBarVisible(false);
