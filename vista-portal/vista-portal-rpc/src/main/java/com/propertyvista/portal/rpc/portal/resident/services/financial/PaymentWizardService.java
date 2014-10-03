@@ -17,6 +17,7 @@ import java.util.Vector;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
+import com.pyx4j.commons.Key;
 import com.pyx4j.entity.rpc.AbstractCrudService;
 
 import com.propertyvista.domain.contact.InternationalAddress;
@@ -32,4 +33,6 @@ public interface PaymentWizardService extends AbstractCrudService<PaymentDTO> {
     void getProfiledPaymentMethods(AsyncCallback<Vector<LeasePaymentMethod>> callback);
 
     void getConvenienceFee(AsyncCallback<ConvenienceFeeCalculationResponseTO> callback, PaymentConvenienceFeeDTO inData);
+
+    void processPayment(AsyncCallback<String> callback, Key paymentRecordID);
 }

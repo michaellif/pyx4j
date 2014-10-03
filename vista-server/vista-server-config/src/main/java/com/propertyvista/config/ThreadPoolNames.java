@@ -25,4 +25,5 @@ public class ThreadPoolNames {
 
     public static final String BILL_BUILDING = "BillingB";
 
+    public static final String PAYMENTS = "Payment";
 }
