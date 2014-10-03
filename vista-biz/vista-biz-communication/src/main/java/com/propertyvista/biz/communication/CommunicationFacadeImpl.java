@@ -247,6 +247,13 @@ public class CommunicationFacadeImpl implements CommunicationFacade {
     }
 
     @Override
+    public void sendAutoPayCreatedByResidentNotification(List<String> targetEmails, Lease leaseId, AutopayAgreement createdAgreement) {
+        MailMessage m = MessageTemplatesCrmNotification.createAutoPayCreatedByResidentNotificationEmail(leaseId, createdAgreement);
+        m.setTo(targetEmails);
+        Mail.queue(m, null, null);
+    }
+
+    @Override
     public void sendTenantOneTimePaymentSubmitted(PaymentRecord paymentRecord) {
         MailMessage m = MessageTemplatesCustomizable.createTenantOneTimePaymentSubmitted(paymentRecord);
         if (m != null) {

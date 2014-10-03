@@ -43,6 +43,8 @@ public interface Notification extends IEntity {
 
         AutoPayCanceledByResident,
 
+        AutoPayCreatedByResident,
+
         MaintenanceRequest,
 
         /** Available only for PropertyVistaAccountOwner **/

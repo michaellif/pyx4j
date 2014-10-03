@@ -354,4 +354,50 @@ class MessageTemplatesCrmNotification {
         email.setHtmlBody(template.getWrappedBody(wrapperTextResourceName));
         return email;
     }
+
+    public static MailMessage createAutoPayCreatedByResidentNotificationEmail(Lease leaseId, AutopayAgreement createdAgreement) {
+        MailMessage email = new MailMessage();
+        email.setSender(getSender());
+
+        MessageTemplate template = new MessageTemplate("email/notification/autopay-created-by-resident-notification.html");
+        {
+            Lease lease = Persistence.service().retrieve(Lease.class, leaseId.getPrimaryKey());
+            Building building;
+            {
+                EntityQueryCriteria<Building> criteria = EntityQueryCriteria.create(Building.class);
+                criteria.eq(criteria.proto().units(), lease.unit());
+                building = Persistence.service().retrieve(criteria);
+            }
+
+            String buildingName = building.info().name().getStringView();
+            if (StringUtils.isEmpty(buildingName)) {
+                buildingName = building.propertyCode().getStringView();
+            }
+
+            template.variable("${buildingName}", buildingName);
+            template.variable("${buildingAddress}", building.info().address().getStringView());
+
+            email.setSubject(i18n.tr("Auto Pay Created by Resident for lease {0}, building {0}", lease, buildingName));
+
+            MessageKeywords.addToKeywords(email, lease, building);
+        }
+
+        String crmUrl = VistaDeployment.getBaseApplicationURL(VistaDeployment.getCurrentPmc(), VistaApplication.crm, true);
+        StringBuilder leaseLinks = new StringBuilder();
+        {
+            String leaseUrl = AppPlaceInfo.absoluteUrl(crmUrl, true, new CrmSiteMap.Tenants.Lease().formViewerPlace(leaseId.getPrimaryKey()));
+            Lease lease = Persistence.service().retrieve(Lease.class, leaseId.getPrimaryKey());
+            if (leaseLinks.length() > 0) {
+                leaseLinks.append("<p/>");
+            }
+            leaseLinks.append("<a href=\"" + leaseUrl + "\">" + lease.getStringView() + "</a>");
+            String agreementUrl = AppPlaceInfo.absoluteUrl(crmUrl, true, new CrmSiteMap.Finance.AutoPay().formViewerPlace(createdAgreement.getPrimaryKey()));
+
+            leaseLinks.append(" <a href=\"" + agreementUrl + "\">Agreement ID" + createdAgreement.getPrimaryKey() + "</a>");
+        }
+        template.variable("${leaseLinks}", leaseLinks);
+
+        email.setHtmlBody(template.getWrappedBody(wrapperTextResourceName));
+        return email;
+    }
 }

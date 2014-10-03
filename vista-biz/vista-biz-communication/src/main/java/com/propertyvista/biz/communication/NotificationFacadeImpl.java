@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011-2012 All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -23,6 +23,7 @@ import com.pyx4j.config.server.ServerSideFactory;
 import com.propertyvista.biz.communication.notifications.AbstractNotification;
 import com.propertyvista.biz.communication.notifications.AutoPayCancelledByResidentNotification;
 import com.propertyvista.biz.communication.notifications.AutoPayCancelledBySystemNotification;
+import com.propertyvista.biz.communication.notifications.AutoPayCreatedByResidentNotification;
 import com.propertyvista.biz.communication.notifications.AutoPayReviewRequiredNotification;
 import com.propertyvista.biz.communication.notifications.NotificationsAggregator;
 import com.propertyvista.biz.communication.notifications.PostToYardiFailedNotification;
@@ -125,6 +126,7 @@ public class NotificationFacadeImpl implements NotificationFacade {
 
     @Override
     public void autoPaySetupCompleted(AutopayAgreement autopayAgreement) {
+        aggregateOrSend(new AutoPayCreatedByResidentNotification(autopayAgreement.tenant().lease(), autopayAgreement));
         ServerSideFactory.create(CommunicationFacade.class).sendTenantAutoPaySetupCompleted(autopayAgreement);
     }
 
