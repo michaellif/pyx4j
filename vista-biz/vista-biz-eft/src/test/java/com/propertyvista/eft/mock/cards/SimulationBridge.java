@@ -34,6 +34,7 @@ class SimulationBridge {
         switch (transactionMock.status) {
         case Compleated:
             transaction.transactionType().setValue(SimulationTransactionType.Sale);
+            transaction.responseCode().setValue("0000");
             break;
         case PreAuthorization:
             transaction.transactionType().setValue(SimulationTransactionType.PreAuthorization);
