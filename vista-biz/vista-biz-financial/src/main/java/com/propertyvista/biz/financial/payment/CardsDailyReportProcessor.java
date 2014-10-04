@@ -131,7 +131,13 @@ public class CardsDailyReportProcessor {
         record.cardsClearanceRecordKey().setValue(clearanceRecord.getPrimaryKey());
         record.aggregatedTransfer().set(null);
         record.merchantAccount().id().setValue(clearanceRecord.merchantAccount().merchantAccountKey().getValue());
-        record.amount().setValue(clearanceRecord.amount().getValue());
+
+        if (clearanceRecord.transactionType().getValue() == CardsClearanceRecordType.Return) {
+            record.amount().setValue(clearanceRecord.amount().getValue().negate());
+        } else {
+            record.amount().setValue(clearanceRecord.amount().getValue());
+        }
+
         record.cardType().setValue(getCardType(clearanceRecord.cardType().getValue()));
         record.transactionDate().setValue(clearanceRecord.clearanceDate().getValue());
         record.reconciliationDate().setValue(new LogicalDate(clearanceRecord.clearanceDate().getValue()));

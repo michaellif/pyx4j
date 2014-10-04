@@ -193,44 +193,43 @@ public class CardsReconciliationTest extends LeaseFinancialTestBase {
         return merchant;
     }
 
-    public void X_testNonVistaTransactions() {
+    public void testNonVistaTransactions() {
         setSysDate("2011-04-01");
 
-        if (false) {
-            // Make NonVistaTransaction
-            {
+        // Make NonVistaTransaction
+        {
 
-                PaymentRequest request = EntityFactory.create(PaymentRequest.class);
-                request.referenceNumber().setValue("1234");
-                request.amount().setValue(BigDecimal.TEN);
+            PaymentRequest request = EntityFactory.create(PaymentRequest.class);
+            request.referenceNumber().setValue("1234");
+            request.amount().setValue(BigDecimal.TEN);
 
-                CreditCardPaymentInstrument ccInfo = EntityFactory.create(CreditCardPaymentInstrument.class);
-                ccInfo.creditCardExpiryDate().setValue(new LogicalDate());
-                ccInfo.cardType().setValue(CreditCardType.MasterCard);
+            CreditCardPaymentInstrument ccInfo = EntityFactory.create(CreditCardPaymentInstrument.class);
+            ccInfo.creditCardExpiryDate().setValue(new LogicalDate());
+            ccInfo.cardType().setValue(CreditCardType.MasterCard);
 
-                request.paymentInstrument().set(ccInfo);
+            request.paymentInstrument().set(ccInfo);
 
-                ServerSideFactory.create(CreditCardPaymentProcessorFacade.class).realTimeSale(getMerchant(), request);
-            }
+            ServerSideFactory.create(CreditCardPaymentProcessorFacade.class).realTimeSale(getMerchant(), request);
+        }
 
-            setSysDate("2011-04-02");
-            SchedulerMock.runProcess(PmcProcessType.paymentsReceiveCardsReconciliation, 0, 0);
-            SchedulerMock.runProcess(PmcProcessType.paymentsReceiveCardsReconciliation, 0, 0);
+        setSysDate("2011-04-02");
+        SchedulerMock.runProcess(PmcProcessType.paymentsReceiveCardsReconciliation, 0, 0);
+        SchedulerMock.runProcess(PmcProcessType.paymentsReceiveCardsReconciliation, 0, 0);
 
-            {
-                EntityQueryCriteria<CardsAggregatedTransfer> criteria = EntityQueryCriteria.create(CardsAggregatedTransfer.class);
-                CardsAggregatedTransfer at = Persistence.service().retrieve(criteria);
-                Assert.assertNotNull("AggregatedTransfer created", at);
-                assertEquals("AggregatedTransfer amounts", BigDecimal.TEN, at.netAmount().getValue());
-                assertEquals("AggregatedTransfer amounts", BigDecimal.ZERO, at.grossPaymentAmount().getValue());
+        CardsAggregatedTransfer at1;
+        {
+            EntityQueryCriteria<CardsAggregatedTransfer> criteria = EntityQueryCriteria.create(CardsAggregatedTransfer.class);
+            at1 = Persistence.service().retrieve(criteria);
+            Assert.assertNotNull("AggregatedTransfer created", at1);
+            assertEquals("AggregatedTransfer amounts", BigDecimal.TEN, at1.netAmount().getValue());
+            assertEquals("AggregatedTransfer amounts", BigDecimal.ZERO, at1.grossPaymentAmount().getValue());
 
-                assertEquals("Visa amounts", BigDecimal.ZERO, at.visaDeposit().getValue());
-                assertEquals("MasterCard amounts", BigDecimal.TEN, at.mastercardDeposit().getValue());
+            assertEquals("Visa amounts", BigDecimal.ZERO, at1.visaDeposit().getValue());
+            assertEquals("MasterCard amounts", BigDecimal.TEN, at1.mastercardDeposit().getValue());
 
-                assertEquals("Has Non Vista Transactions", 1, at.nonVistaTransactions().size());
-                assertEquals("Non Vista Transaction", BigDecimal.TEN, at.nonVistaTransactions().get(0).amount().getValue());
+            assertEquals("Has Non Vista Transactions", 1, at1.nonVistaTransactions().size());
+            assertEquals("Non Vista Transaction", BigDecimal.TEN, at1.nonVistaTransactions().get(0).amount().getValue());
 
-            }
         }
 
         // Make NonVistaTransaction, return
@@ -255,6 +254,7 @@ public class CardsReconciliationTest extends LeaseFinancialTestBase {
 
         {
             EntityQueryCriteria<CardsAggregatedTransfer> criteria = EntityQueryCriteria.create(CardsAggregatedTransfer.class);
+            criteria.ne(criteria.proto().id(), at1);
             CardsAggregatedTransfer at = Persistence.service().retrieve(criteria);
             Assert.assertNotNull("AggregatedTransfer created", at);
             assertEquals("AggregatedTransfer amounts", BigDecimal.TEN.negate(), at.netAmount().getValue());

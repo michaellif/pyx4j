@@ -75,7 +75,7 @@ class CardAccountMock {
         t.referenceNumber = referenceNumber;
         t.terminalID = terminalID;
         t.amount = amount;
-        t.status = TransactionStatus.Compleated;
+        t.status = TransactionStatus.Return;
         t.authorizationNumber = UniqueInteger.getInstance("AuthorizationNumberMock").nextAsString();
         transactions.put(referenceNumber, t);
         return true;
