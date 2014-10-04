@@ -148,14 +148,13 @@ public class ResidentAuthenticationServiceImpl extends VistaAuthenticationServic
         } else {
             Collection<Lease> activeLeases = CollectionUtils.select(leases, new Predicate<Lease>() {
                 @Override
-                public boolean evaluate(Lease object) {
-                    Persistence.ensureRetrieve(object, AttachLevel.Attached);
-                    return object.status().getValue().isActive();
+                public boolean evaluate(Lease lease) {
+                    Persistence.ensureRetrieve(lease, AttachLevel.Attached);
+                    return lease.status().getValue().isActive();
                 }
             });
             if (activeLeases.size() == 1) {
                 selectedLeaseId = activeLeases.iterator().next();
-                behaviors.add(PortalResidentBehavior.HasMultipleLeases);
             }
         }
 
