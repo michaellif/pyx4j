@@ -19,6 +19,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.collections4.Predicate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -143,7 +145,20 @@ public class ResidentAuthenticationServiceImpl extends VistaAuthenticationServic
         } else if (leases.size() == 1) {
             // Auto Select first Lease, But do not auto switch to this lease if such condition will occur
             selectedLeaseId = leases.get(0);
+        } else {
+            Collection<Lease> activeLeases = CollectionUtils.select(leases, new Predicate<Lease>() {
+                @Override
+                public boolean evaluate(Lease object) {
+                    Persistence.ensureRetrieve(object, AttachLevel.Attached);
+                    return object.status().getValue().isActive();
+                }
+            });
+            if (activeLeases.size() == 1) {
+                selectedLeaseId = activeLeases.iterator().next();
+                behaviors.add(PortalResidentBehavior.HasMultipleLeases);
+            }
         }
+
         visit.setLease(selectedLeaseId);
 
         if (selectedLeaseId != null) {
