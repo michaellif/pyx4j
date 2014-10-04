@@ -13,6 +13,8 @@
  */
 package com.propertyvista.eft.mock.cards;
 
+import java.math.BigDecimal;
+
 import com.pyx4j.entity.core.EntityFactory;
 
 import com.propertyvista.operations.domain.eft.cards.simulator.CardServiceSimulationTransaction;
@@ -30,6 +32,10 @@ class SimulationBridge {
         transaction.transactionDate().setValue(transactionMock.date);
         transaction.reference().setValue(transactionMock.referenceNumber);
         transaction.authorizationNumber().setValue(transactionMock.authorizationNumber);
+
+        transaction.merchant().visaDebitFee().setValue(BigDecimal.ZERO);
+        transaction.merchant().visaCreditFee().setValue(BigDecimal.ZERO);
+        transaction.merchant().masterCardFee().setValue(BigDecimal.ZERO);
 
         switch (transactionMock.status) {
         case Compleated:

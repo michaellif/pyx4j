@@ -78,6 +78,21 @@ public interface CardServiceSimulationMerchantAccount extends IEntity {
     @MemberColumn(scale = 4)
     IPrimitive<BigDecimal> visaDebitConvenienceFee();
 
+    @Editor(type = EditorType.percentage)
+    @Format("#,##0.00")
+    @MemberColumn(scale = 4)
+    IPrimitive<BigDecimal> visaCreditFee();
+
+    @Editor(type = EditorType.percentage)
+    @Format("#,##0.00")
+    @MemberColumn(scale = 4)
+    IPrimitive<BigDecimal> masterCardFee();
+
+    @Editor(type = EditorType.percentage)
+    @Format("#,##0.00")
+    @MemberColumn(scale = 4)
+    IPrimitive<BigDecimal> visaDebitFee();
+
     @Timestamp(Update.Created)
     @Format("MM/dd/yyyy HH:mm")
     IPrimitive<Date> created();

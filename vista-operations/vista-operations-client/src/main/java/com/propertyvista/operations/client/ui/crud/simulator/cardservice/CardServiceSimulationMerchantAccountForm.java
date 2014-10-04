@@ -13,8 +13,8 @@
  */
 package com.propertyvista.operations.client.ui.crud.simulator.cardservice;
 
-import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
+import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.site.client.backoffice.ui.prime.form.IForm;
 
 import com.propertyvista.operations.client.ui.crud.OperationsEntityForm;
@@ -33,9 +33,15 @@ public class CardServiceSimulationMerchantAccountForm extends OperationsEntityFo
         formPanel.append(Location.Left, proto().responseCode()).decorate();
         formPanel.append(Location.Left, proto().created()).decorate();
 
+        formPanel.h2("Convenience Fee");
         formPanel.append(Location.Left, proto().visaCreditConvenienceFee()).decorate();
         formPanel.append(Location.Left, proto().masterCardConvenienceFee()).decorate();
         formPanel.append(Location.Left, proto().visaDebitConvenienceFee()).decorate();
+
+        formPanel.h2("Processing Fee");
+        formPanel.append(Location.Left, proto().visaCreditFee()).decorate();
+        formPanel.append(Location.Left, proto().masterCardFee()).decorate();
+        formPanel.append(Location.Left, proto().visaDebitFee()).decorate();
 
         setTabBarVisible(false);
         selectTab(addTab(formPanel, "Card Service Simulation"));

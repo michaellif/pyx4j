@@ -249,6 +249,10 @@ public class CardServiceSimulationProcessor {
             merchantAccount.visaCreditConvenienceFee().setValue(new BigDecimal(".03"));
             merchantAccount.masterCardConvenienceFee().setValue(new BigDecimal(".02"));
 
+            merchantAccount.visaDebitFee().setValue(new BigDecimal(".0077"));
+            merchantAccount.visaCreditFee().setValue(new BigDecimal(".0150"));
+            merchantAccount.masterCardFee().setValue(new BigDecimal(".0222"));
+
             Persistence.service().persist(merchantAccount);
         }
         return merchantAccount;

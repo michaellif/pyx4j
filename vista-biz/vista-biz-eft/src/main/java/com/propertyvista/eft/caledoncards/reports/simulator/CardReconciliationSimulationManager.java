@@ -17,6 +17,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.OutputStream;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.nio.charset.StandardCharsets;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
@@ -187,21 +188,45 @@ public class CardReconciliationSimulationManager {
             return;
         }
 
+        BigDecimal fee = BigDecimal.ZERO;
+
+        if (transaction.convenienceFee().isNull()) {
+            BigDecimal feePercent;
+            switch (transaction.card().cardType().getValue()) {
+            case MasterCard:
+                feePercent = transaction.merchant().masterCardFee().getValue();
+                break;
+            case Visa:
+                feePercent = transaction.merchant().visaCreditFee().getValue();
+                break;
+            case VisaDebit:
+                feePercent = transaction.merchant().visaDebitFee().getValue();
+                break;
+            default:
+                throw new Error();
+            }
+            fee = amount.multiply(feePercent).setScale(2, RoundingMode.HALF_UP);
+        }
+
         switch (transaction.card().cardType().getValue()) {
         case MasterCard:
             add(record.mastercardDeposit(), amount);
-            add(record.mastercardFee(), transaction.convenienceFee().getValue());
+            add(record.mastercardFee(), fee);
             inc(record.mastercardTransactions());
             break;
         case Visa:
+            add(record.visaDeposit(), amount);
+            add(record.visaFee(), fee);
+            inc(record.visaTransactions());
+            break;
         case VisaDebit:
             add(record.visaDeposit(), amount);
-            add(record.visaFee(), transaction.convenienceFee().getValue());
+            add(record.visaFee(), fee);
             inc(record.visaTransactions());
             break;
         }
         add(record.totalDeposit(), amount);
-        add(record.totalFee(), transaction.convenienceFee().getValue());
+        add(record.totalFee(), fee);
     }
 
     private void inc(IPrimitive<Integer> total) {
