@@ -182,6 +182,9 @@ public class CardReconciliationSimulationManager {
         BigDecimal amount = transaction.amount().getValue();
         if (transaction.transactionType().getValue() == SimulationTransactionType.Return) {
             amount = amount.negate();
+        } else if (!"0000".equals(transaction.responseCode().getValue()) || transaction.voided().getValue(false)) {
+            // Ignore non processed transactions
+            return;
         }
 
         switch (transaction.card().cardType().getValue()) {
