@@ -30,8 +30,10 @@ import com.propertyvista.biz.communication.notifications.PostToYardiFailedNotifi
 import com.propertyvista.biz.communication.notifications.RejectPaymentNotification;
 import com.propertyvista.biz.communication.notifications.YardiConfigurationNotification;
 import com.propertyvista.biz.system.OperationsAlertFacade;
+import com.propertyvista.biz.system.VistaContext;
 import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.payment.AutopayAgreement;
+import com.propertyvista.domain.security.CustomerUser;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
 
@@ -126,7 +128,9 @@ public class NotificationFacadeImpl implements NotificationFacade {
 
     @Override
     public void autoPaySetupCompleted(AutopayAgreement autopayAgreement) {
-        aggregateOrSend(new AutoPayCreatedByResidentNotification(autopayAgreement.tenant().lease(), autopayAgreement));
+        if (VistaContext.getCurrentUserIfAvalable() instanceof CustomerUser) {
+            aggregateOrSend(new AutoPayCreatedByResidentNotification(autopayAgreement.tenant().lease(), autopayAgreement));
+        }
         ServerSideFactory.create(CommunicationFacade.class).sendTenantAutoPaySetupCompleted(autopayAgreement);
     }
 
