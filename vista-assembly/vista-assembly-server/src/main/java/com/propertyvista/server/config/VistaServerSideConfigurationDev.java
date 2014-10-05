@@ -125,13 +125,34 @@ public class VistaServerSideConfigurationDev extends VistaServerSideConfiguratio
     }
 
     @Override
-    public boolean isAppsContextlessDepoyment() {
+    public boolean isDepoymentUseNewDevDomains() {
         return false;
+    }
+
+    @Override
+    public boolean isDepoymentApplicationDispatcher() {
+        if (devContextLess) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    @Override
+    public boolean isAppsContextlessDepoyment() {
+        if (devContextLess) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
     @Override
     public String getApplicationURLNamespace(boolean secure) {
         String hostPrefix = ".dev";
+        if (isDepoymentUseNewDevDomains()) {
+            hostPrefix = ".local";
+        }
         if (ServerContext.getRequest() != null) {
             // 192.168.179.1  -> .h.birchwoodsoftwaregroup.com
             // 10.0.2.2  -> .m.birchwoodsoftwaregroup.com
@@ -144,7 +165,11 @@ public class VistaServerSideConfigurationDev extends VistaServerSideConfiguratio
         }
         StringBuilder b = new StringBuilder();
         b.append(hostPrefix);
-        b.append(".birchwoodsoftwaregroup.com");
+        if (isDepoymentUseNewDevDomains()) {
+            b.append(".devpv.com");
+        } else {
+            b.append(".birchwoodsoftwaregroup.com");
+        }
 
         if (!enableHttps() || !secure) {
             b.append(":").append(devServerPort);

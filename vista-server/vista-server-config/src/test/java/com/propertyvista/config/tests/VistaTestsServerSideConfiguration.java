@@ -162,6 +162,16 @@ public class VistaTestsServerSideConfiguration extends AbstractVistaServerSideCo
     }
 
     @Override
+    public boolean isDepoymentApplicationDispatcher() {
+        return false;
+    }
+
+    @Override
+    public boolean isDepoymentUseNewDevDomains() {
+        return false;
+    }
+
+    @Override
     public boolean isAppsContextlessDepoyment() {
         return true;
     }

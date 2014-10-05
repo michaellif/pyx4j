@@ -161,8 +161,22 @@ public class VistaServerSideConfiguration extends AbstractVistaServerSideConfigu
     }
 
     @Override
+    public boolean isDepoymentApplicationDispatcher() {
+        return getConfigProperties().getBooleanValue("vista.depoymentApplicationDispatcher", false);
+    }
+
+    @Override
+    public boolean isDepoymentUseNewDevDomains() {
+        return getConfigProperties().getBooleanValue("vista.depoymentUseNewDevDomains", false);
+    }
+
+    @Override
     public String getApplicationURLNamespace(boolean secure) {
-        return ".birchwoodsoftwaregroup.com/";
+        if (isDepoymentUseNewDevDomains()) {
+            return ".devpv.com/";
+        } else {
+            return ".birchwoodsoftwaregroup.com/";
+        }
     }
 
     protected String getAppUrlSeparator() {

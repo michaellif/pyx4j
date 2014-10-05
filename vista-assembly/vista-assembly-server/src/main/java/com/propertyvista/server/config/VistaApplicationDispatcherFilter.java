@@ -27,37 +27,32 @@ import javax.servlet.http.HttpServletRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.pyx4j.config.server.ServerSideConfiguration;
+
+import com.propertyvista.config.AbstractVistaServerSideConfiguration;
 import com.propertyvista.domain.security.common.VistaApplication;
 
-public class LocalURLsFilter implements Filter {
+public class VistaApplicationDispatcherFilter implements Filter {
 
-    private static Logger log = LoggerFactory.getLogger(LocalURLsFilter.class);
-
-    private FilterConfig filterConfig = null;
+    private static Logger log = LoggerFactory.getLogger(VistaApplicationDispatcherFilter.class);
 
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
-        this.filterConfig = filterConfig;
     }
 
     @Override
     public void destroy() {
-        this.filterConfig = null;
     }
 
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
-
-        boolean FILTER_ACTIVATED = false;
-
-        if (FILTER_ACTIVATED) {
+        if (ServerSideConfiguration.instance(AbstractVistaServerSideConfiguration.class).isDepoymentApplicationDispatcher()) {
             // Do something
             map(request, response, chain);
         } else {
             // Do nothing. Let chain continue...
             chain.doFilter(request, response);
         }
-
     }
 
     public void map(final ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
@@ -71,25 +66,23 @@ public class LocalURLsFilter implements Filter {
         String serverName = httprequest.getServerName(); // sample: vista-crm.dev.birchwoodsoftwaregroup.com
         serverName = serverName.toLowerCase(Locale.ENGLISH);
 
-        if (serverName.equals("localhost")) { // || isAlreadyMapped(requestPath)) {
-            // Request is already mapped (I think this case never happens... Still have to think about this)
-            chain.doFilter(request, response);
-        } else {
-
-            // Redirect requests
-            String[] serverNameParts = serverName.split("\\.");
-            if (serverNameParts.length > 0) {
-                String appByDomain = serverNameParts[0];
-
-                VistaApplication app = getAppByDomainOrPath(appByDomain, requestPath);
-                if (app != null) {
-                    String urlForward = getNewURLRequest(httprequest, app);
-                    log.info("forwarding to: " + "\"" + urlForward + "\"");
-                    request.getRequestDispatcher(urlForward).forward(request, response);
-                }
-
-            }
+        // Redirect requests
+        VistaApplication app = null;
+        String[] serverNameParts = serverName.split("\\.");
+        if (serverNameParts.length > 0) {
+            String appByDomain = serverNameParts[0];
+            app = getAppByDomainOrPath(appByDomain, requestPath);
         }
+
+        if (app != null) {
+            String urlForward = getNewURLRequest(httprequest, app);
+            log.info("***ADF*** forwarding to: " + "\"" + urlForward + "\"");
+            request.getRequestDispatcher(urlForward).forward(request, response);
+        } else {
+            log.info("***ADF*** NOT forwarding");
+            chain.doFilter(request, response);
+        }
+
     }
 
 //    Sample to build the complete URI from from request/httprequest object

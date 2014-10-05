@@ -58,6 +58,7 @@ public class VistaNamespaceResolver implements NamespaceResolver {
         prodSystemDnsBase.add("propertyvista.com");
 
         testSystemDnsBase.add("birchwoodsoftwaregroup.com");
+        testSystemDnsBase.add("devpv.com");
         testSystemDnsBase.add("pyx4j.com");
         testSystemDnsBase.add("propertyvista.biz");
         // Old names not used
@@ -88,6 +89,7 @@ public class VistaNamespaceResolver implements NamespaceResolver {
         }
 
         // Dev: Get the 4th part of URL.
+        // {PMC}-crm.local.devpv.com
         // {PMC}-crm.dev.birchwoodsoftwaregroup.com
 
         // Support wildcard HTTPS on dev

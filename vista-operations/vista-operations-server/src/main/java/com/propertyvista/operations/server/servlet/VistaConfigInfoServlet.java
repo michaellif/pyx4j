@@ -48,6 +48,8 @@ public class VistaConfigInfoServlet extends ConfigInfoServlet {
         AbstractVistaServerSideConfiguration conf = ServerSideConfiguration.instance(AbstractVistaServerSideConfiguration.class);
 
         b.append("  enviromentId                        : ").append(conf.enviromentId()).append("\n");
+        b.append("  isDepoymentApplicationDispatcher    : ").append(conf.isDepoymentApplicationDispatcher()).append("\n");
+        b.append("  isDepoymentUseNewDevDomains         : ").append(conf.isDepoymentUseNewDevDomains()).append("\n");
         b.append("  openDBReset                         : ").append(conf.openDBReset()).append("\n");
         b.append("  openIdRequired                      : ").append(conf.openIdRequired()).append("\n");
         b.append("  openIdDomain                        : ").append(conf.openIdDomain()).append("\n");

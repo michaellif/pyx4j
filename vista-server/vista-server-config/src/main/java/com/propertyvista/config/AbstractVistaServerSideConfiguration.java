@@ -66,6 +66,10 @@ public abstract class AbstractVistaServerSideConfiguration extends EssentialsSer
 
     public abstract String openIdProviderDomain();
 
+    public abstract boolean isDepoymentApplicationDispatcher();
+
+    public abstract boolean isDepoymentUseNewDevDomains();
+
     public abstract boolean isAppsContextlessDepoyment();
 
     public abstract IMailServiceConfigConfiguration getOperationsAlertMailServiceConfiguration();

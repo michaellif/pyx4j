@@ -15,7 +15,7 @@ package com.propertyvista.server.config;
 
 /**
  * See the files https://svn.pyx4j.com/svn-configs/trunk/vista/testenv/apps/catalina.base/tomcatA/conf/vista33
- * 
+ *
  */
 public class VistaServerSideConfiguration77 extends VistaServerSideConfigurationCustom {
 
@@ -41,7 +41,11 @@ public class VistaServerSideConfiguration77 extends VistaServerSideConfiguration
 
     @Override
     public String getApplicationURLNamespace(boolean secure) {
-        return "-77.birchwoodsoftwaregroup.com/";
+        if (isDepoymentUseNewDevDomains()) {
+            return "-77.devpv.com/";
+        } else {
+            return "-77.birchwoodsoftwaregroup.com/";
+        }
     }
 
     @Override

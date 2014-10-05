@@ -64,7 +64,11 @@ public class VistaServerSideConfiguration11 extends VistaServerSideConfiguration
 
     @Override
     public String getApplicationURLNamespace(boolean secure) {
-        return "-11.birchwoodsoftwaregroup.com/";
+        if (isDepoymentUseNewDevDomains()) {
+            return "-11.devpv.com/";
+        } else {
+            return "-11.birchwoodsoftwaregroup.com/";
+        }
     }
 
     @Override

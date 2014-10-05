@@ -310,7 +310,7 @@ public class VistaWebApplicationInitializer implements ServletContainerInitializ
         // Local URLs mapping
         {
             EnumSet<DispatcherType> dispatcherTypes = EnumSet.of(DispatcherType.REQUEST);
-            FilterRegistration.Dynamic fc = ctx.addFilter("LocalURLsFilter", LocalURLsFilter.class);
+            FilterRegistration.Dynamic fc = ctx.addFilter("VistaApplicationDispatcherFilter", VistaApplicationDispatcherFilter.class);
             fc.addMappingForUrlPatterns(dispatcherTypes, true, "/*");
         }
 
