@@ -83,6 +83,9 @@ public class RequestDebug {
             String[] arr = request.getParameterValues(name);
             if (arr != null) {
                 for (int i = 0; i < arr.length; i++) {
+                    if (i > 0) {
+                        buf.append("; ");
+                    }
                     buf.append(arr[i]);
                 }
             } else {
