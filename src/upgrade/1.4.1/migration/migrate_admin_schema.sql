@@ -42,6 +42,10 @@ SET search_path = '_admin_';
         ALTER TABLE tenant_sure_hqupdate_record DROP CONSTRAINT tenant_sure_hqupdate_record_file_fk;
 
 
+        -- check constraints
+        
+        ALTER TABLE dev_card_service_simulation_transaction DROP CONSTRAINT dev_card_service_simulation_transaction_tp_e_ck;
+
         /**
         ***     ======================================================================================================
         ***
@@ -94,6 +98,13 @@ SET search_path = '_admin_';
         -- dev_card_service_simulation_card
         
         ALTER TABLE dev_card_service_simulation_card RENAME COLUMN number TO card_number;
+        
+        
+        -- dev_card_service_simulation_merchant_account
+        
+        ALTER TABLE dev_card_service_simulation_merchant_account    ADD COLUMN master_card_fee NUMERIC(18,4),
+                                                                    ADD COLUMN visa_credit_fee NUMERIC(18,4),
+                                                                    ADD COLUMN visa_debit_fee NUMERIC(18,4);
         
         
         -- dev_card_service_simulation_reconciliation_record
@@ -248,6 +259,8 @@ SET search_path = '_admin_';
         ALTER TABLE oapi_conversion ADD CONSTRAINT oapi_conversion_tp_e_ck CHECK (tp = 'Base');
         ALTER TABLE oapi_conversion_file ADD CONSTRAINT oapi_conversion_file_tp_e_ck 
             CHECK ((tp) IN ('AnotherIO', 'BuildingIO'));
+        ALTER TABLE dev_card_service_simulation_transaction ADD CONSTRAINT dev_card_service_simulation_transaction_tp_e_ck 
+            CHECK ((tp) IN ('Completion', 'PreAuthorization', 'PreAuthorizationReversal', 'Return', 'Sale', 'Void'));
         ALTER TABLE portal_resident_marketing_tip ADD CONSTRAINT portal_resident_marketing_tip_target_e_ck 
             CHECK ((target) IN ('AutopayAgreementNotSetup', 'InsuranceMissing', 'Other'));
 

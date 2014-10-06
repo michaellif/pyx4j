@@ -31,6 +31,7 @@ BEGIN
         ALTER TABLE aggregated_transfer$chargebacks DROP CONSTRAINT aggregated_transfer$chargebacks_value_fk;
         ALTER TABLE communication_message DROP CONSTRAINT communication_message_thread_fk;
         ALTER TABLE communication_thread_policy_handle DROP CONSTRAINT communication_thread_policy_handle_thread_fk;
+        ALTER TABLE notification DROP CONSTRAINT notification_tp_e_ck;
 
 
         -- check constraints
@@ -391,6 +392,10 @@ BEGIN
             CHECK ((participant_role) IN ('Applicant', 'CoApplicant', 'Dependent', 'Guarantor'));
         ALTER TABLE master_online_application ADD CONSTRAINT master_online_application_fee_payment_e_ck 
             CHECK ((fee_payment) IN ('none', 'perApplicant', 'perLease'));
+        ALTER TABLE notification ADD CONSTRAINT notification_tp_e_ck 
+            CHECK ((tp) IN ('AutoPayCanceledByResident', 'AutoPayCreatedByResident', 'AutoPayReviewRequired', 'BillingAlert', 'ElectronicPaymentRejectedNsf', 
+                            'MaintenanceRequest', 'YardiSynchronization'));
+
         
  
         
