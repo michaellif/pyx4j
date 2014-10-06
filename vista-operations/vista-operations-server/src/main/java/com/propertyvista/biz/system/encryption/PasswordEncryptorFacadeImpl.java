@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011-2012 All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -26,6 +26,7 @@ import org.jasypt.util.text.BasicTextEncryptor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.pyx4j.commons.Validate;
 import com.pyx4j.config.server.Credentials;
 import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.config.shared.ApplicationMode;
@@ -73,6 +74,8 @@ public class PasswordEncryptorFacadeImpl implements PasswordEncryptorFacade {
 
     @Override
     public String encryptUserPassword(String userPassword) {
+        Validate.notNull(userPassword, "Password can't be null");
+        Validate.isTrue(userPassword.length() > 0, "Password can't be empty");
         return getPasswordEncryptor().encryptPassword(userPassword);
     }
 
