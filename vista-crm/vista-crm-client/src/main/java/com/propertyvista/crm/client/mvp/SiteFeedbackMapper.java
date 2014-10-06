@@ -19,20 +19,19 @@ import com.google.gwt.place.shared.Place;
 
 import com.pyx4j.security.shared.SecurityController;
 
-import com.propertyvista.crm.client.activity.FeedbackActivity;
 import com.propertyvista.domain.security.common.VistaAccessGrantedBehavior;
 
 public class SiteFeedbackMapper implements ActivityMapper {
-
-    private final FeedbackActivity activity = new FeedbackActivity();
 
     public SiteFeedbackMapper() {
     }
 
     @Override
     public Activity getActivity(Place place) {
+
         if (SecurityController.check(VistaAccessGrantedBehavior.CRM)) {
-            return activity.withPlace(place);
+            //TODO return activitiy
+            return null;
         } else {
             return null;
         }
