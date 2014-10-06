@@ -31,7 +31,7 @@ import com.pyx4j.security.shared.Acl;
 import com.pyx4j.security.shared.UserVisit;
 
 /**
- * The way to access the session is Context.getVisit()
+ * The way to access the session is ServerContext.getVisit()
  */
 public class Visit implements Serializable {
 
@@ -54,6 +54,8 @@ public class Visit implements Serializable {
     private transient Hashtable<String, Object> transientAttributes;
 
     private long requestIDCount = 0;
+
+    private boolean loginViaAccessToken;
 
     private transient boolean changed;
 
@@ -148,6 +150,18 @@ public class Visit implements Serializable {
 
     public String getSessionToken() {
         return sessionToken;
+    }
+
+    public boolean isLoginViaAccessToken() {
+        return loginViaAccessToken;
+    }
+
+    public void setLoginViaAccessToken() {
+        this.loginViaAccessToken = true;
+    }
+
+    public void resetLoginViaAccessToken() {
+        this.loginViaAccessToken = true;
     }
 
     public Serializable getAttribute(String name) {
