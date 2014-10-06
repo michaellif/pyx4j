@@ -85,6 +85,7 @@ public abstract class VistaPasswordResetServiceImpl<E extends AbstractUserCreden
             log.info("password changed by user {} {}", ServerContext.getVisit().getUserVisit().getEmail(), VistaContext.getCurrentUserPrimaryKey());
 
         }
+        ServerContext.getVisit().resetLoginViaAccessToken();
         ServerContext.getVisit().setAclRevalidationRequired();
 
         callback.onSuccess(null);

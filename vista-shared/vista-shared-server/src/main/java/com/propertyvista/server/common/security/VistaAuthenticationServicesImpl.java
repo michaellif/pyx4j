@@ -235,6 +235,7 @@ public abstract class VistaAuthenticationServicesImpl<U extends AbstractUser, V 
         log.info("authenticated {} as {}", user.email().getValue(), behaviors);
 
         String sessionToken = Lifecycle.beginSession(visit, behaviors);
+        ServerContext.getVisit().setLoginViaAccessToken();
         ServerSideFactory.create(AuditFacade.class).login(getVistaApplication());
         callback.onSuccess(createAuthenticationResponse(sessionToken));
     }
@@ -343,7 +344,7 @@ public abstract class VistaAuthenticationServicesImpl<U extends AbstractUser, V 
         if ((userCredential == null) || (!userCredential.enabled().getValue(false))) {
             return null;
         }
-        if (userCredential.requiredPasswordChangeOnNextLogIn().getValue(false)) {
+        if (userCredential.requiredPasswordChangeOnNextLogIn().getValue(false) || ServerContext.getVisit().isLoginViaAccessToken()) {
             Set<Behavior> behaviors = new HashSet<Behavior>();
             behaviors.add(getVistaApplication());
             behaviors.add(getPasswordChangeRequiredBehavior());
