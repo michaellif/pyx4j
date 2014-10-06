@@ -40,7 +40,7 @@ public class Validate {
 
     public static void notNull(Object object, String messageFormat, Object... arguments) {
         if (object == null) {
-            throw new IllegalArgumentException(SimpleMessageFormat.format("expected [null]\n actual: [{0}]\n", object)
+            throw new IllegalArgumentException(SimpleMessageFormat.format("expected [not null]\n actual: [{0}]\n", object)
                     + SimpleMessageFormat.format(messageFormat, arguments));
         }
     }
