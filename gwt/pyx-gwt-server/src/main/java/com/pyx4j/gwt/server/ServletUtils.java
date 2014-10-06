@@ -146,12 +146,16 @@ public class ServletUtils {
      * Handle the mapping of '/app/part' to root
      */
     public static String getRelativeServletPath(HttpServletRequest request, String servletPath) {
-        String forwardedContext = request.getHeader(x_forwarded_context);
+        String forwardedContext = getForwardedURI(request);
+        //String forwardedContext = request.getHeader(x_forwarded_context);
         if (forwardedContext == null) {
             return request.getContextPath() + servletPath;
         } else {
             String forwardedPath = request.getHeader(ServletUtils.x_forwarded_path);
             if (forwardedPath != null) {
+                if (forwardedPath.startsWith(request.getContextPath())) {
+                    forwardedPath = forwardedPath.substring(request.getContextPath().length());
+                }
                 if (!servletPath.startsWith(forwardedPath)) {
                     throw new Error("Unreachable path" + servletPath + " when " + forwardedPath + " forwarded");
                 }
