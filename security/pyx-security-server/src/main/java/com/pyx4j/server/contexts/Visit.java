@@ -161,7 +161,7 @@ public class Visit implements Serializable {
     }
 
     public void resetLoginViaAccessToken() {
-        this.loginViaAccessToken = true;
+        this.loginViaAccessToken = false;
     }
 
     public Serializable getAttribute(String name) {
