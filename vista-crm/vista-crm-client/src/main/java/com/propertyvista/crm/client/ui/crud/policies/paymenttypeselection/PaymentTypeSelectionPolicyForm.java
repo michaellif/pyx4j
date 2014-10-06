@@ -222,14 +222,14 @@ public class PaymentTypeSelectionPolicyForm extends PolicyDTOTabPanelBasedForm<P
         setEnabled(membersVisaDebit(), pmcPaymentSetup().acceptedVisaDebit().getValue());
 
         // update visibility:
-        setCashAccepted(getValue().acceptedCash().getValue());
-        setCheckAccepted(getValue().acceptedCheck().getValue());
-        setECheckAccepted(getValue().acceptedEcheck().getValue());
-        setDirectBankingAccepted(getValue().acceptedDirectBanking().getValue());
-        setMasterCardAccepted(getValue().acceptedCreditCardMasterCard().getValue());
-        setVisaAccepted(getValue().acceptedCreditCardVisa().getValue());
-        setVisaDebitAccepted(getValue().acceptedVisaDebit().getValue());
-        setInteracAccepted(getValue().acceptedInterac().getValue());
+        setCashAccepted(getValue().acceptedCash().getValue(false));
+        setCheckAccepted(getValue().acceptedCheck().getValue(false));
+        setECheckAccepted(getValue().acceptedEcheck().getValue(false));
+        setDirectBankingAccepted(getValue().acceptedDirectBanking().getValue(false));
+        setMasterCardAccepted(getValue().acceptedCreditCardMasterCard().getValue(false));
+        setVisaAccepted(getValue().acceptedCreditCardVisa().getValue(false));
+        setVisaDebitAccepted(getValue().acceptedVisaDebit().getValue(false));
+        setInteracAccepted(getValue().acceptedInterac().getValue(false));
     }
 
     private AbstractPaymentSetup pmcPaymentSetup() {
