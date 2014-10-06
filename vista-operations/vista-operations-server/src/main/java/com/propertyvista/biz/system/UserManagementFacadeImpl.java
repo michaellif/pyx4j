@@ -23,6 +23,7 @@ import org.slf4j.LoggerFactory;
 
 import com.pyx4j.commons.UserRuntimeException;
 import com.pyx4j.config.server.ServerSideFactory;
+import com.pyx4j.entity.core.AttachLevel;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.essentials.server.AbstractAntiBot;
 import com.pyx4j.essentials.server.AbstractAntiBot.LoginType;
@@ -59,7 +60,7 @@ public class UserManagementFacadeImpl implements UserManagementFacade {
         if (!credential.enabled().getValue(false)) {
             throw new UserRuntimeException(AbstractAntiBot.GENERIC_LOGIN_FAILED_MESSAGE);
         }
-
+        Persistence.ensureRetrieve(credential.user(), AttachLevel.Attached);
         AbstractAntiBot.assertLogin(LoginType.userLogin, credential.user().email().getValue(), null);
         if (!ServerSideFactory.create(PasswordEncryptorFacade.class)
                 .checkUserPassword(request.currentPassword().getValue(), credential.credential().getValue())) {
