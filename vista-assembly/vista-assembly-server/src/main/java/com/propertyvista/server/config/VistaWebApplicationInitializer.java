@@ -94,27 +94,35 @@ public class VistaWebApplicationInitializer implements ServletContainerInitializ
         ctx.addListener(VistaInitializationServletContextListener.class);
         ctx.addListener(AuditSessionListener.class);
 
+        // URLs mapping to application
+        {
+            FilterRegistration.Dynamic fc = ctx.addFilter("VistaApplicationDispatcherFilter", VistaApplicationDispatcherFilter.class);
+            fc.addMappingForUrlPatterns(EnumSet.of(DispatcherType.REQUEST), true, "/*");
+        }
+
+        // TODO make them handle only forwarded requested once transition complete.
+        EnumSet<DispatcherType> appFiltersDispatcherTypes = EnumSet.of(DispatcherType.REQUEST, DispatcherType.FORWARD);
         {
             FilterRegistration.Dynamic fc = ctx.addFilter("GWTCacheFilter", GWTCacheFilter.class);
             fc.setInitParameter(GWTCacheFilter.PARAM_cacheExpiresHours, "20");
-            fc.addMappingForUrlPatterns(null, true, "/*");
+            fc.addMappingForUrlPatterns(appFiltersDispatcherTypes, true, "/*");
         }
 
         {
             FilterRegistration.Dynamic fc = ctx.addFilter("RobotsFilter", RobotsFilter.class);
-            fc.addMappingForUrlPatterns(null, true, "/*");
+            fc.addMappingForUrlPatterns(appFiltersDispatcherTypes, true, "/*");
         }
 
         {
             FilterRegistration.Dynamic fc = ctx.addFilter("LifecycleFilter", LifecycleFilter.class);
-            fc.addMappingForUrlPatterns(null, true, "/*");
+            fc.addMappingForUrlPatterns(appFiltersDispatcherTypes, true, "/*");
         }
 
         // Open Id; client and server
         {
             {
                 FilterRegistration.Dynamic fc = ctx.addFilter("OpenIdFilter", OpenIdFilter.class);
-                fc.addMappingForUrlPatterns(null, true, "/*");
+                fc.addMappingForUrlPatterns(appFiltersDispatcherTypes, true, "/*");
             }
 
             {
@@ -145,11 +153,11 @@ public class VistaWebApplicationInitializer implements ServletContainerInitializ
         {
             {
                 FilterRegistration.Dynamic fc = ctx.addFilter("PMSiteRobotsTxtFilter", PMSiteRobotsTxtFilter.class);
-                fc.addMappingForUrlPatterns(null, true, urlPattern(VistaApplication.site, "/robots.txt"));
+                fc.addMappingForUrlPatterns(appFiltersDispatcherTypes, true, urlPattern(VistaApplication.site, "/robots.txt"));
             }
             {
                 FilterRegistration.Dynamic fc = ctx.addFilter("PMSiteFilter", PMSiteFilter.class);
-                fc.addMappingForUrlPatterns(null, true, urlPattern(VistaApplication.site, "/*"));
+                fc.addMappingForUrlPatterns(appFiltersDispatcherTypes, true, urlPattern(VistaApplication.site, "/*"));
                 fc.setInitParameter(WicketFilter.FILTER_MAPPING_PARAM, urlPattern(VistaApplication.site, "/*"));
                 fc.setInitParameter(ContextParamWebApplicationFactory.APP_CLASS_PARAM, PMSiteApplication.class.getName());
                 // TODO use java constants in the code
@@ -166,7 +174,7 @@ public class VistaWebApplicationInitializer implements ServletContainerInitializ
         {
             {
                 FilterRegistration.Dynamic fc = ctx.addFilter("OAPIFilter", OAPIFilter.class);
-                fc.addMappingForUrlPatterns(null, true, "/interfaces/oapi/v1/*");
+                fc.addMappingForUrlPatterns(appFiltersDispatcherTypes, true, "/interfaces/oapi/v1/*");
             }
 
             if (!VistaTODO.removedForProductionOAPI) {
@@ -190,7 +198,7 @@ public class VistaWebApplicationInitializer implements ServletContainerInitializ
 
             {
                 FilterRegistration.Dynamic fc = ctx.addFilter("ILSAuthFilter", ILSAuthFilter.class);
-                fc.addMappingForUrlPatterns(null, true, "/interfaces/ils/*");
+                fc.addMappingForUrlPatterns(appFiltersDispatcherTypes, true, "/interfaces/ils/*");
             }
             {
                 ServletRegistration.Dynamic sc = ctx.addServlet("ILSKijijiService", ServletContainer.class);
@@ -305,13 +313,6 @@ public class VistaWebApplicationInitializer implements ServletContainerInitializ
                     sc.addMapping("/o/wsp/*");
                 }
             }
-        }
-
-        // Local URLs mapping
-        {
-            EnumSet<DispatcherType> dispatcherTypes = EnumSet.of(DispatcherType.REQUEST);
-            FilterRegistration.Dynamic fc = ctx.addFilter("VistaApplicationDispatcherFilter", VistaApplicationDispatcherFilter.class);
-            fc.addMappingForUrlPatterns(dispatcherTypes, true, "/*");
         }
 
     }

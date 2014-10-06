@@ -28,6 +28,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.pyx4j.config.server.ServerSideConfiguration;
+import com.pyx4j.gwt.server.ServletUtils;
 
 import com.propertyvista.config.AbstractVistaServerSideConfiguration;
 import com.propertyvista.domain.security.common.VistaApplication;
@@ -35,6 +36,8 @@ import com.propertyvista.domain.security.common.VistaApplication;
 public class VistaApplicationDispatcherFilter implements Filter {
 
     private static Logger log = LoggerFactory.getLogger(VistaApplicationDispatcherFilter.class);
+
+    private static String REQUEST_DISPATCHED_REQUEST_ATR = VistaApplicationDispatcherFilter.class.getName();
 
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
@@ -47,10 +50,13 @@ public class VistaApplicationDispatcherFilter implements Filter {
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
         if (ServerSideConfiguration.instance(AbstractVistaServerSideConfiguration.class).isDepoymentApplicationDispatcher()) {
-            // Do something
-            map(request, response, chain);
+            if (request.getAttribute(REQUEST_DISPATCHED_REQUEST_ATR) == null) {
+                request.setAttribute(REQUEST_DISPATCHED_REQUEST_ATR, Boolean.TRUE);
+                map(request, response, chain);
+            } else {
+                chain.doFilter(request, response);
+            }
         } else {
-            // Do nothing. Let chain continue...
             chain.doFilter(request, response);
         }
     }
@@ -75,8 +81,11 @@ public class VistaApplicationDispatcherFilter implements Filter {
         }
 
         if (app != null) {
+            httprequest.setAttribute(VistaApplication.class.getName(), app);
+            String forwardedPath = getPathToForwarded(httprequest, app);
+            httprequest.setAttribute(ServletUtils.x_forwarded_path, forwardedPath);
             String urlForward = getNewURLRequest(httprequest, app);
-            log.info("***ADF*** forwarding to: " + "\"" + urlForward + "\"");
+            log.info("***ADF*** \"{}\" forwarding to \"{}\" ", requestUri, urlForward);
             request.getRequestDispatcher(urlForward).forward(request, response);
         } else {
             log.info("***ADF*** NOT forwarding");
@@ -113,6 +122,14 @@ public class VistaApplicationDispatcherFilter implements Filter {
 //
 //    }
 
+    private String getPathToForwarded(HttpServletRequest httprequest, VistaApplication app) {
+        if (app != VistaApplication.prospect) {
+            return "/" + app.name();
+        } else {
+            return "";
+        }
+    }
+
     /**
      * Builds the URL to forward to right Vista Application, adding request path
      *
@@ -129,7 +146,7 @@ public class VistaApplicationDispatcherFilter implements Filter {
             subRequestPath += "/" + app.toString();
         }
         subRequestPath += requestPath;
-        String newUri = subRequestPath + (httprequest.getQueryString() != null ? "?" + httprequest.getQueryString() : "");
+        String newUri = subRequestPath;
 
         return newUri;
     }
@@ -179,32 +196,6 @@ public class VistaApplicationDispatcherFilter implements Filter {
         }
 
         return app;
-    }
-
-    /**
-     * Checks if string path contains some application mapping
-     *
-     * @param requestPath
-     * @return true if has been already mapped. False otherwise.
-     */
-    private boolean isAlreadyMapped(String requestPath) {
-
-        String[] pathTokens = requestPath.split("/");
-
-        if (pathTokens.length == 0) {
-            return false;
-        } else {
-            String app = pathTokens[1];
-            try {
-                if (VistaApplication.valueOf(app) != null) {
-                    return true;
-                }
-            } catch (IllegalArgumentException e) {
-                return false;
-            }
-        }
-
-        return false;
     }
 
 }
