@@ -15,7 +15,6 @@ package com.propertyvista.portal.resident.ui.communication;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.concurrent.TimeUnit;
 
 import com.google.gwt.dom.client.Style.Overflow;
 import com.google.gwt.dom.client.Style.Position;
@@ -165,7 +164,8 @@ public class MessagePage extends CPortalEntityForm<MessageDTO> {
         private String dateToGoogleStyle(IPrimitive<Date> date) {
             long now = System.currentTimeMillis();
             long diff = now - date.getValue().getTime();
-            if (TimeUnit.MILLISECONDS.toDays(diff) > 0) {
+            long diffDays = diff / (24 * 60 * 60 * 1000);
+            if (diffDays > 0) {
                 return date.getStringView();
             }
 
