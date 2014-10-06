@@ -23,6 +23,7 @@ package com.pyx4j.gwt.server;
 import java.util.Enumeration;
 
 import javax.servlet.ServletRequest;
+import javax.servlet.ServletRequestWrapper;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 
@@ -63,6 +64,7 @@ public class RequestDebug {
             buf.append("requestedSessionId ").append(hrequest.getRequestedSessionId()).append('\n');
 
             buf.append("HTTP Headers:\n");
+            buf.append('\t').append(ServletUtils.x_forwarded_path).append('=').append(hrequest.getHeader(ServletUtils.x_forwarded_path)).append('\n');
             for (Enumeration<?> en = hrequest.getHeaderNames(); en.hasMoreElements();) {
                 String name = (String) en.nextElement();
                 buf.append('\t').append(name).append('=');
@@ -92,6 +94,10 @@ public class RequestDebug {
                 buf.append("{null}");
             }
             buf.append('\n');
+        }
+        if (request instanceof ServletRequestWrapper) {
+            buf.append("\n\nWrapped request object:\n");
+            buf.append(getServletDebug(((ServletRequestWrapper) request).getRequest()));
         }
         return buf.toString();
     }

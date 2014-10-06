@@ -80,6 +80,7 @@ public class RemoteServiceServlet extends com.google.gwt.user.server.rpc.RemoteS
     // GWT makes it impossible to Override any other method in RemoteServiceServlet and access moduleBaseURL from RCP request.
     @Override
     protected void onBeforeRequestDeserialized(String serializedRequest) {
+        //log.info("**RPC {}", serializedRequest);
         // 6|1|12|http://localhost:8888/g.site/|2005C2913F3EF6EE0AB1510ECABAE604|_|
         int beginModuleBaseURL = 0;
         for (int i = 0; i < 3; i++) {
@@ -96,9 +97,6 @@ public class RemoteServiceServlet extends com.google.gwt.user.server.rpc.RemoteS
 
         // Allow for redirected requests environments
         String forwardedPath = ServerContext.getRequest().getHeader(ServletUtils.x_forwarded_path);
-        if ((forwardedPath == null) && (ServerContext.getRequest().getAttribute(ServletUtils.x_jetty_contextLess) != null)) {
-            forwardedPath = ServerContext.getRequest().getContextPath();
-        }
         if (forwardedPath != null) {
             modulePath = forwardedPath + modulePath;
         }
@@ -117,15 +115,13 @@ public class RemoteServiceServlet extends com.google.gwt.user.server.rpc.RemoteS
     protected SerializationPolicy doGetSerializationPolicy(HttpServletRequest request, String moduleBaseURL, String strongName) {
         // Allow for redirected requests environments, consider the context is mapped to root.
         String forwardedPath = request.getHeader(ServletUtils.x_forwarded_path);
-        final boolean debug = false;
+        final boolean debug = true;
         if (debug) {
-            log.debug("moduleBaseURL orig {}", moduleBaseURL);
+            log.info("**RPCSerialization moduleBaseURL orig {}", moduleBaseURL);
             RequestDebug.debug(request);
         }
-        if ((forwardedPath == null) && (ServerContext.getRequest().getAttribute(ServletUtils.x_jetty_contextLess) != null)) {
-            forwardedPath = ServerContext.getRequest().getContextPath();
-        }
         if (forwardedPath != null) {
+            //Make moduleBaseURL like this: "http://app.local.pyx4j.com:8888/warContext/gwtAppContext/";
             try {
                 URL url = new URL(moduleBaseURL);
                 String modulePath = url.getPath();
@@ -134,7 +130,7 @@ public class RemoteServiceServlet extends com.google.gwt.user.server.rpc.RemoteS
                     moduleBaseURL += modulePath;
                 }
                 if (debug) {
-                    log.debug("moduleBaseURL corrected {}", moduleBaseURL);
+                    log.info("**RPCSerialization moduleBaseURL corrected {}", moduleBaseURL);
                 }
             } catch (MalformedURLException e) {
                 log.error("Malformed moduleBaseURL {} ", moduleBaseURL, e);

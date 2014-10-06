@@ -84,7 +84,7 @@ public class LifecycleFilter implements Filter {
         }
 
         try {
-            if (!(request instanceof HttpServletRequest)) {
+            if ((!(request instanceof HttpServletRequest)) || ((request instanceof DeploymentContextHttpServletRequestWrapper))) {
                 chain.doFilter(request, response);
             } else {
                 HttpServletRequest httprequest = new DeploymentContextHttpServletRequestWrapper((HttpServletRequest) request);

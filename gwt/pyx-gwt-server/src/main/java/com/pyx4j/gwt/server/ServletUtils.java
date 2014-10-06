@@ -58,6 +58,27 @@ public class ServletUtils {
         }
     }
 
+    public static String getForwardedURI(HttpServletRequest request) {
+        String applicationDispatcherForwardedPath = (String) request.getAttribute(ServletUtils.x_forwarded_path);
+        if (applicationDispatcherForwardedPath != null) {
+            StringBuilder forwardedPath = new StringBuilder();
+
+            String forwardedContext = request.getHeader(ServletUtils.x_forwarded_context); // "/warContext/appContext"
+            if (forwardedContext != null) {
+                forwardedPath.append(forwardedContext);
+            } else {
+                // Local development
+                if (request.getAttribute(ServletUtils.x_jetty_contextLess) != null) {
+                    forwardedPath.append(request.getContextPath()); // + "/warContext"
+                }
+            }
+            forwardedPath.append(applicationDispatcherForwardedPath);
+            return forwardedPath.toString();
+        } else {
+            return request.getHeader(x_forwarded_context);
+        }
+    }
+
     public static String getActualRequestURL(HttpServletRequest request) {
         return getActualRequestURL(request, false);
     }
@@ -72,14 +93,29 @@ public class ServletUtils {
                 forwardedProtocol = "http";
             }
             receivingURL.append(forwardedProtocol).append("://").append(forwarded);
-            String forwardedContext = request.getHeader(x_forwarded_context);
+            String forwardedContext = getForwardedURI(request);
             if (forwardedContext != null) {
                 receivingURL.append(request.getRequestURI().substring(forwardedContext.length()));
             } else {
                 receivingURL.append(request.getRequestURI());
             }
         } else {
-            receivingURL = request.getRequestURL();
+            String forwardedContext = getForwardedURI(request);
+            if (forwardedContext != null) {
+                receivingURL = new StringBuffer();
+                receivingURL.append(request.getScheme()).append("://").append(request.getServerName());
+
+                {
+                    int port = request.getServerPort();
+                    String scheme = request.getScheme();
+                    if (port > 0 && (("http".equalsIgnoreCase(scheme) && port != 80) || ("https".equalsIgnoreCase(scheme) && port != 443))) {
+                        receivingURL.append(':').append(port);
+                    }
+                }
+                receivingURL.append(request.getRequestURI().substring(forwardedContext.length()));
+            } else {
+                receivingURL = request.getRequestURL();
+            }
         }
         if (queryString) {
             String query = request.getQueryString();
@@ -104,41 +140,6 @@ public class ServletUtils {
         }
         buf.append(request.getContextPath());
         return buf.toString();
-    }
-
-    @Deprecated
-    public static String getActualRequestBaseURL(HttpServletRequest request) {
-        String receivingURL;
-        String forwarded = getForwardedHost(request);
-        if (forwarded != null) {
-            String forwardedProtocol = request.getHeader(x_forwarded_protocol);
-            if (forwardedProtocol == null) {
-                forwardedProtocol = "http";
-            }
-            receivingURL = forwardedProtocol + "://" + forwarded;
-            String forwardedContext = request.getHeader(x_forwarded_context);
-            if (forwardedContext == null) {
-                receivingURL += request.getContextPath();
-            }
-        } else {
-            receivingURL = request.getRequestURL().toString();
-            if (request.getServletPath().length() > 1) {
-                int idx = receivingURL.indexOf(request.getServletPath());
-                if (idx > 0) {
-                    receivingURL = receivingURL.substring(0, idx);
-                }
-            }
-        }
-        return receivingURL;
-    }
-
-    public static String getActualRequestContextPath(HttpServletRequest request) {
-        String forwardedContext = request.getHeader(x_forwarded_context);
-        if (forwardedContext == null) {
-            return request.getContextPath();
-        } else {
-            return "";
-        }
     }
 
     /**
