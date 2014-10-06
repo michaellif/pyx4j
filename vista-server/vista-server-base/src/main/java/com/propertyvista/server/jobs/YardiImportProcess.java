@@ -24,6 +24,7 @@ import com.pyx4j.config.server.ServerSideFactory;
 
 import com.propertyvista.biz.ExecutionMonitor;
 import com.propertyvista.biz.system.yardi.YardiARFacade;
+import com.propertyvista.biz.system.yardi.YardiCredentialDisabledException;
 import com.propertyvista.biz.system.yardi.YardiServiceException;
 import com.propertyvista.domain.settings.PmcVistaFeatures;
 import com.propertyvista.operations.domain.scheduler.CompletionType;
@@ -52,6 +53,9 @@ public class YardiImportProcess implements PmcProcess {
         if (VistaFeatures.instance().yardiIntegration()) {
             try {
                 ServerSideFactory.create(YardiARFacade.class).doAllImport(executionMonitor);
+            } catch (YardiCredentialDisabledException ignore) {
+                // don't fail the execution
+                executionMonitor.addInfoEvent("Yardi Interface", "Yardi Credentials Disabled");
             } catch (RemoteException e) {
                 throw new RuntimeException(e);
             } catch (YardiServiceException e) {

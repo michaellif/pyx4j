@@ -20,6 +20,7 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.pyx4j.commons.UserRuntimeException;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.core.AttachLevel;
 import com.pyx4j.entity.server.Persistence;
@@ -57,7 +58,7 @@ public class YardiARFacadeImpl extends AbstractYardiFacadeImpl implements YardiA
         for (PmcYardiCredential yc : getPmcYardiCredentials()) {
             try {
                 YardiResidentTransactionsService.getInstance().updateAll(yc, executionMonitor);
-            } catch (YardiServiceException e) {
+            } catch (YardiServiceException | UserRuntimeException e) {
                 executionMonitor.addFailedEvent("Yardi Interface", yc.serviceURLBase().getValue(), e);
                 errors.append(e.getMessage() + "\n");
             } catch (RemoteException e) {
