@@ -115,7 +115,7 @@ public class RemoteServiceServlet extends com.google.gwt.user.server.rpc.RemoteS
     protected SerializationPolicy doGetSerializationPolicy(HttpServletRequest request, String moduleBaseURL, String strongName) {
         // Allow for redirected requests environments, consider the context is mapped to root.
         String forwardedPath = request.getHeader(ServletUtils.x_forwarded_path);
-        final boolean debug = true;
+        final boolean debug = false;
         if (debug) {
             log.info("**RPCSerialization moduleBaseURL orig {}", moduleBaseURL);
             RequestDebug.debug(request);
