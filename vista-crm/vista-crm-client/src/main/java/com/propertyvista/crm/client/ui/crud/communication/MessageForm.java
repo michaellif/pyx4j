@@ -13,8 +13,11 @@
  */
 package com.propertyvista.crm.client.ui.crud.communication;
 
+import java.text.SimpleDateFormat;
 import java.util.Collection;
+import java.util.Date;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import com.google.gwt.dom.client.Style.Overflow;
 import com.google.gwt.dom.client.Style.TextOverflow;
@@ -37,6 +40,7 @@ import com.pyx4j.commons.SimpleMessageFormat;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.IObject;
+import com.pyx4j.entity.core.IPrimitive;
 import com.pyx4j.entity.core.criterion.Criterion;
 import com.pyx4j.forms.client.ui.CCheckBox;
 import com.pyx4j.forms.client.ui.CForm;
@@ -160,13 +164,25 @@ public class MessageForm extends CrmEntityForm<MessageDTO> {
                     messageField.getElement().getStyle().setTextOverflow(TextOverflow.ELLIPSIS);
 
                     SafeHtmlBuilder loginTermsBuilder = new SafeHtmlBuilder();
-                    return loginTermsBuilder.appendHtmlConstant(SimpleMessageFormat.format("{0}, {1}:", value.header().sender().getValue(""), value.date()))
+                    return loginTermsBuilder
+                            .appendHtmlConstant(SimpleMessageFormat.format("{0}, {1}:", value.header().sender().getValue(""), dateToGoogleStyle(value.date())))
                             .appendHtmlConstant("<br/>").appendHtmlConstant(messageField.toString()).toSafeHtml();
                 }
             });
 
             decor.setExpended(false);
             return decor;
+        }
+
+        private String dateToGoogleStyle(IPrimitive<Date> date) {
+            long now = System.currentTimeMillis();
+            long diff = now - date.getValue().getTime();
+            if (TimeUnit.MILLISECONDS.toDays(diff) > 0) {
+                return date.getStringView();
+            }
+
+            SimpleDateFormat format = new SimpleDateFormat("HH:mm");
+            return format.format(date.getValue());
         }
 
         @Override
