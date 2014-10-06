@@ -15,5 +15,5 @@ package com.propertyvista.oapi;
 
 public enum ServiceType {
 
-    Read, Write, List
+    Read, Write
 }

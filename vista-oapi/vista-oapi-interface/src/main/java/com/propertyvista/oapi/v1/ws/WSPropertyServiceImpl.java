@@ -44,7 +44,7 @@ public class WSPropertyServiceImpl implements WSPropertyService {
 
     @Override
     public BuildingListIO listAllBuildings() {
-        PropertyServiceProcessor processor = new PropertyServiceProcessor(ServiceType.List);
+        PropertyServiceProcessor processor = new PropertyServiceProcessor(ServiceType.Read);
         try {
             return processor.getBuildings();
         } finally {
@@ -69,7 +69,7 @@ public class WSPropertyServiceImpl implements WSPropertyService {
 
     @Override
     public UnitListIO listAllBuildingUnits(String buildingCode) {
-        PropertyServiceProcessor processor = new PropertyServiceProcessor(ServiceType.List);
+        PropertyServiceProcessor processor = new PropertyServiceProcessor(ServiceType.Read);
         try {
             return processor.getUnitsByPropertyCode(buildingCode);
         } finally {

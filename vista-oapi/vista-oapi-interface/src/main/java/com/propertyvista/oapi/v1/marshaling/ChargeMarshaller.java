@@ -36,7 +36,7 @@ public class ChargeMarshaller extends AbstractMarshaller<ChargeDTO, ChargeIO> {
     }
 
     @Override
-    public ChargeIO marshal(ChargeDTO charge) {
+    protected ChargeIO marshal(ChargeDTO charge) {
         if (charge == null || charge.isNull()) {
             return null;
         }
@@ -52,7 +52,7 @@ public class ChargeMarshaller extends AbstractMarshaller<ChargeDTO, ChargeIO> {
     }
 
     @Override
-    public ChargeDTO unmarshal(ChargeIO chargeIO) {
+    protected ChargeDTO unmarshal(ChargeIO chargeIO) {
         ChargeDTO charge = EntityFactory.create(ChargeDTO.class);
         charge.transactionId().setValue(chargeIO.transactionId);
         charge.leaseId().setValue(chargeIO.leaseId);
@@ -63,5 +63,4 @@ public class ChargeMarshaller extends AbstractMarshaller<ChargeDTO, ChargeIO> {
         setValue(charge.toDate(), chargeIO.toDate); // Transaction.ChargeDetail.ServiceToDate
         return charge;
     }
-
 }

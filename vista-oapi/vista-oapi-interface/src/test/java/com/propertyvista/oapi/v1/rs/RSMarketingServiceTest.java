@@ -95,7 +95,7 @@ public class RSMarketingServiceTest extends RSOapiTestBase {
     public void testGetBuildings() {
         BuildingListIO buildings = target("marketing/getBuildingList").queryParam("province", building.info().address().province().getValue()).request()
                 .get(BuildingListIO.class);
-        Assert.assertEquals(1, buildings.buildingList.size());
+        Assert.assertEquals(1, buildings.size());
     }
 
     @Test

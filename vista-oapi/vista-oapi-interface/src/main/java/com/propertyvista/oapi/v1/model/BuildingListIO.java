@@ -13,17 +13,30 @@
  */
 package com.propertyvista.oapi.v1.model;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
+import com.propertyvista.oapi.xml.AbstractListIO;
+import com.propertyvista.oapi.xml.Note;
+
 @XmlType(name = "BuildingList")
 @XmlRootElement(name = "buildings")
-public class BuildingListIO {
+public class BuildingListIO extends AbstractListIO<BuildingIO> {
 
+    public BuildingListIO() {
+        super();
+    }
+
+    public BuildingListIO(Note note) {
+        super(note);
+    }
+
+    @Override
     @XmlElement(name = "building")
-    public List<BuildingIO> buildingList = new ArrayList<BuildingIO>();
+    public List<BuildingIO> getList() {
+        return super.getList();
+    };
 }

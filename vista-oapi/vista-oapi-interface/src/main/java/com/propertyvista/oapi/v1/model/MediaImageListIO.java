@@ -13,7 +13,7 @@
  */
 package com.propertyvista.oapi.v1.model;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -36,7 +36,7 @@ public class MediaImageListIO extends AbstractListIO<MediaImageIO> {
 
     @Override
     @XmlElement(name = "media")
-    public ArrayList<MediaImageIO> getList() {
+    public List<MediaImageIO> getList() {
         return super.getList();
     };
 }

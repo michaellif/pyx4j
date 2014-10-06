@@ -41,7 +41,7 @@ public class WSMarketingServiceImpl implements MarketingService {
 
     @Override
     public BuildingListIO getBuildingList(@WebParam(name = "criteria") PropertySearchCriteriaIO criteria) {
-        MarketingServiceProcessor processor = new MarketingServiceProcessor(ServiceType.List);
+        MarketingServiceProcessor processor = new MarketingServiceProcessor(ServiceType.Read);
         try {
             return processor.getBuildingList(criteria);
         } finally {
@@ -82,7 +82,7 @@ public class WSMarketingServiceImpl implements MarketingService {
     @Override
     public List<FloorplanAvailabilityIO> getFloorplanAvailability(@WebParam(name = "propertyId") String propertyId,
             @WebParam(name = "floorplanId") String fpId, @WebParam(name = "moveinDate") LogicalDate date) {
-        MarketingServiceProcessor processor = new MarketingServiceProcessor(ServiceType.List);
+        MarketingServiceProcessor processor = new MarketingServiceProcessor(ServiceType.Read);
         try {
             return processor.getFloorplanAvailability(propertyId, fpId, date);
         } finally {

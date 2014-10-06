@@ -34,7 +34,7 @@ public class MarketingMarshaller extends AbstractMarshaller<Marketing, Marketing
     }
 
     @Override
-    public MarketingIO marshal(Marketing marketing) {
+    protected MarketingIO marshal(Marketing marketing) {
         if (marketing == null || marketing.isNull()) {
             return null;
         }
@@ -47,7 +47,7 @@ public class MarketingMarshaller extends AbstractMarshaller<Marketing, Marketing
     }
 
     @Override
-    public Marketing unmarshal(MarketingIO marketingIO) {
+    protected Marketing unmarshal(MarketingIO marketingIO) {
         Marketing marketing = EntityFactory.create(Marketing.class);
         marketing.name().setValue(marketingIO.name);
         setValue(marketing.description(), marketingIO.description);

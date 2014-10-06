@@ -45,15 +45,8 @@ public class PropertyServiceProcessor extends AbstractProcessor {
 
         EntityQueryCriteria<Building> buildingCriteria = EntityQueryCriteria.create(Building.class);
         buildingCriteria.asc(buildingCriteria.proto().propertyCode());
-        List<Building> buildings = Persistence.service().query(buildingCriteria);
 
-        BuildingListIO buildingsRs = new BuildingListIO();
-
-        for (Building building : buildings) {
-            buildingsRs.buildingList.add(BuildingMarshaller.getInstance().marshal(building));
-        }
-
-        return buildingsRs;
+        return BuildingMarshaller.getInstance().marshalCollection(BuildingListIO.class, Persistence.service().query(buildingCriteria));
     }
 
     public BuildingIO getBuildingByPropertyCode(String propertyCode) {
@@ -64,11 +57,11 @@ public class PropertyServiceProcessor extends AbstractProcessor {
         if (buildings == null || buildings.isEmpty()) {
             return null;
         }
-        return BuildingMarshaller.getInstance().marshal(buildings.get(0));
+        return BuildingMarshaller.getInstance().marshalItem(buildings.get(0));
     }
 
     public void updateBuilding(BuildingIO buildingIO) throws Exception {
-        Building building = BuildingMarshaller.getInstance().unmarshal(buildingIO);
+        Building building = BuildingMarshaller.getInstance().unmarshalItem(buildingIO);
 
         new BuildingPersister().persist(building);
 
@@ -78,20 +71,9 @@ public class PropertyServiceProcessor extends AbstractProcessor {
     }
 
     public UnitListIO getUnitsByPropertyCode(String propertyCode) {
-        UnitListIO unitsRS = new UnitListIO();
-
-        List<AptUnit> units;
-        {
-            EntityQueryCriteria<AptUnit> criteria = EntityQueryCriteria.create(AptUnit.class);
-            criteria.eq(criteria.proto().building().propertyCode(), propertyCode);
-            units = Persistence.service().query(criteria);
-        }
-        for (AptUnit unit : units) {
-            Persistence.service().retrieve(unit.floorplan());
-            UnitIO unitIO = UnitMarshaller.getInstance().marshal(unit);
-            unitsRS.getList().add(unitIO);
-        }
-        return unitsRS;
+        EntityQueryCriteria<AptUnit> criteria = EntityQueryCriteria.create(AptUnit.class);
+        criteria.eq(criteria.proto().building().propertyCode(), propertyCode);
+        return UnitMarshaller.getInstance().marshalCollection(UnitListIO.class, Persistence.service().query(criteria));
     }
 
     public UnitIO getUnitByNumber(String propertyCode, String unitNumber) {
@@ -105,12 +87,12 @@ public class PropertyServiceProcessor extends AbstractProcessor {
         AptUnit unit = units.get(0);
         Persistence.service().retrieve(unit.floorplan());
         Persistence.service().retrieve(unit.building());
-        return UnitMarshaller.getInstance().marshal(unit);
+        return UnitMarshaller.getInstance().marshalItem(unit);
 
     }
 
     public void updateUnit(UnitIO unitIO) {
-        AptUnit unitDTO = UnitMarshaller.getInstance().unmarshal(unitIO);
+        AptUnit unitDTO = UnitMarshaller.getInstance().unmarshalItem(unitIO);
 
         new UnitPersister().persist(unitDTO);
 

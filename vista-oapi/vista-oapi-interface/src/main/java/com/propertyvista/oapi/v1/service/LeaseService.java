@@ -16,15 +16,17 @@ package com.propertyvista.oapi.v1.service;
 import java.util.List;
 
 import com.propertyvista.oapi.v1.model.LeaseIO;
+import com.propertyvista.oapi.v1.model.LeaseListIO;
 import com.propertyvista.oapi.v1.model.TenantIO;
+import com.propertyvista.oapi.v1.model.TenantListIO;
 
 public interface LeaseService extends OAPIService {
 
-    List<LeaseIO> getLeases(String propertyCode);
+    LeaseListIO getLeases(String propertyCode);
 
     LeaseIO getLeaseById(String leaseId);
 
-    List<TenantIO> getTenants(String leaseId);
+    TenantListIO getTenants(String leaseId);
 
     void updateLease(LeaseIO leaseIO);
 

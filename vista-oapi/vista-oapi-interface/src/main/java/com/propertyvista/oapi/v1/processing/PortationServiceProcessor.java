@@ -15,7 +15,6 @@ package com.propertyvista.oapi.v1.processing;
 
 import com.pyx4j.entity.core.EntityFactory;
 
-import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.dto.PropertySearchCriteria;
 import com.propertyvista.oapi.ServiceType;
 import com.propertyvista.oapi.v1.marshaling.BuildingMarshaller;
@@ -30,10 +29,7 @@ public class PortationServiceProcessor extends AbstractProcessor {
     }
 
     public BuildingListIO exportBuildings() {
-        BuildingListIO result = new BuildingListIO();
-        for (Building building : PropertyFinder.getPropertyList(EntityFactory.create(PropertySearchCriteria.class))) {
-            result.buildingList.add(BuildingMarshaller.getInstance().marshal(building));
-        }
-        return result;
+        return BuildingMarshaller.getInstance().marshalCollection(BuildingListIO.class,
+                PropertyFinder.getPropertyList(EntityFactory.create(PropertySearchCriteria.class)));
     }
 }

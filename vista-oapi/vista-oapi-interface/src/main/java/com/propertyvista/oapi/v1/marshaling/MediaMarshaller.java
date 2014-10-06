@@ -39,7 +39,7 @@ public class MediaMarshaller extends AbstractMarshaller<MediaFile, MediaImageIO>
     }
 
     @Override
-    public MediaImageIO marshal(MediaFile media) {
+    protected MediaImageIO marshal(MediaFile media) {
         if (media == null || media.isNull()) {
             return null;
         }
@@ -50,7 +50,7 @@ public class MediaMarshaller extends AbstractMarshaller<MediaFile, MediaImageIO>
     }
 
     @Override
-    public MediaFile unmarshal(MediaImageIO mediaIO) {
+    protected MediaFile unmarshal(MediaImageIO mediaIO) {
         MediaFile media = EntityFactory.create(MediaFile.class);
         setValue(media.caption(), mediaIO.caption);
         return media;

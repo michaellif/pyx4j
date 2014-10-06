@@ -35,7 +35,7 @@ public class AddressMarshaller extends AbstractMarshaller<InternationalAddress, 
     }
 
     @Override
-    public AddressIO marshal(InternationalAddress address) {
+    protected AddressIO marshal(InternationalAddress address) {
         if (address == null || address.isNull()) {
             return null;
         }
@@ -52,7 +52,7 @@ public class AddressMarshaller extends AbstractMarshaller<InternationalAddress, 
     }
 
     @Override
-    public InternationalAddress unmarshal(AddressIO addressIO) {
+    protected InternationalAddress unmarshal(AddressIO addressIO) {
         InternationalAddress address = EntityFactory.create(InternationalAddress.class);
 
         if (addressIO.country != null) {

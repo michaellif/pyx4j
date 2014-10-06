@@ -33,7 +33,7 @@ public class RSPortationServiceImpl implements PortationService {
     @Path("exportBuildings")
     @Produces(MediaType.APPLICATION_XML)
     public BuildingListIO exportBuildings() {
-        PortationServiceProcessor processor = new PortationServiceProcessor(ServiceType.List);
+        PortationServiceProcessor processor = new PortationServiceProcessor(ServiceType.Read);
         try {
             return processor.exportBuildings();
         } finally {

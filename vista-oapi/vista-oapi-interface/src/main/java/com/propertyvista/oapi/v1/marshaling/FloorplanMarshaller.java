@@ -32,16 +32,15 @@ import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.property.asset.unit.occupancy.AptUnitOccupancySegment;
 import com.propertyvista.oapi.AbstractMarshaller;
-import com.propertyvista.oapi.ServiceType;
 import com.propertyvista.oapi.v1.model.FloorplanAmenityListIO;
 import com.propertyvista.oapi.v1.model.FloorplanIO;
 import com.propertyvista.oapi.v1.model.MediaImageListIO;
 import com.propertyvista.oapi.v1.processing.AbstractProcessor;
 import com.propertyvista.oapi.v1.service.PortationService;
-import com.propertyvista.oapi.xml.Note;
 import com.propertyvista.oapi.xml.BigDecimalIO;
 import com.propertyvista.oapi.xml.IntegerIO;
 import com.propertyvista.oapi.xml.LogicalDateIO;
+import com.propertyvista.oapi.xml.Note;
 import com.propertyvista.oapi.xml.StringIO;
 import com.propertyvista.server.common.util.PropertyFinder;
 
@@ -59,7 +58,7 @@ public class FloorplanMarshaller extends AbstractMarshaller<Floorplan, Floorplan
     }
 
     @Override
-    public FloorplanIO marshal(Floorplan fp) {
+    protected FloorplanIO marshal(Floorplan fp) {
         if (fp == null || fp.isNull()) {
             return null;
         }
@@ -77,7 +76,7 @@ public class FloorplanMarshaller extends AbstractMarshaller<Floorplan, Floorplan
 
         Persistence.ensureRetrieve(fp.amenities(), AttachLevel.Attached);
         fpIO.amenities = FloorplanAmenityMarshaller.getInstance().marshalCollection(FloorplanAmenityListIO.class, fp.amenities());
-        if (AbstractProcessor.getServiceType() != ServiceType.List || AbstractProcessor.getServiceClass() == PortationService.class) {
+        if (AbstractProcessor.getServiceClass() == PortationService.class || !getContext().isInCollection()) {
             Persistence.ensureRetrieve(fp.media(), AttachLevel.Attached);
             fpIO.medias = MediaMarshaller.getInstance().marshalCollection(MediaImageListIO.class, fp.media());
         } else {
@@ -97,7 +96,7 @@ public class FloorplanMarshaller extends AbstractMarshaller<Floorplan, Floorplan
     }
 
     @Override
-    public Floorplan unmarshal(FloorplanIO fpIO) {
+    protected Floorplan unmarshal(FloorplanIO fpIO) {
         Floorplan fp = EntityFactory.create(Floorplan.class);
         fp.name().setValue(fpIO.name);
 

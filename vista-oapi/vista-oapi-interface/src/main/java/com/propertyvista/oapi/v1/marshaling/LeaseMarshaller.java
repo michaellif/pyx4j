@@ -34,6 +34,7 @@ import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
 import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
 import com.propertyvista.oapi.AbstractMarshaller;
 import com.propertyvista.oapi.v1.model.LeaseIO;
+import com.propertyvista.oapi.v1.model.TenantListIO;
 import com.propertyvista.oapi.v1.model.types.LeaseStatusIO;
 import com.propertyvista.oapi.v1.model.types.PaymentFrequencyIO;
 import com.propertyvista.oapi.xml.LogicalDateIO;
@@ -52,7 +53,7 @@ public class LeaseMarshaller extends AbstractMarshaller<Lease, LeaseIO> {
     }
 
     @Override
-    public LeaseIO marshal(Lease lease) {
+    protected LeaseIO marshal(Lease lease) {
         if (lease == null || lease.isNull()) {
             return null;
         }
@@ -73,12 +74,12 @@ public class LeaseMarshaller extends AbstractMarshaller<Lease, LeaseIO> {
             persons.add(person);
         }
 
-        leaseIO.tenants = TenantMarshaller.getInstance().marshal(persons);
+        leaseIO.tenants = TenantMarshaller.getInstance().marshalCollection(TenantListIO.class, persons);
         return leaseIO;
     }
 
     @Override
-    public Lease unmarshal(LeaseIO leaseIO) {
+    protected Lease unmarshal(LeaseIO leaseIO) {
 
         // unit
         AptUnit unit;
@@ -123,7 +124,7 @@ public class LeaseMarshaller extends AbstractMarshaller<Lease, LeaseIO> {
 
         boolean asApplicant = true;
 
-        List<Person> persons = TenantMarshaller.getInstance().unmarshal(leaseIO.tenants);
+        List<Person> persons = TenantMarshaller.getInstance().unmarshalCollection(leaseIO.tenants);
         for (Person person : persons) {
             Customer customer = EntityFactory.create(Customer.class);
             customer.person().set(person);

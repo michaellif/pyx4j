@@ -36,7 +36,7 @@ public class ParkingMarshaller extends AbstractMarshaller<Parking, ParkingIO> {
     }
 
     @Override
-    public ParkingIO marshal(Parking parking) {
+    protected ParkingIO marshal(Parking parking) {
         if (parking == null || parking.isNull()) {
             return null;
         }
@@ -49,7 +49,7 @@ public class ParkingMarshaller extends AbstractMarshaller<Parking, ParkingIO> {
     }
 
     @Override
-    public Parking unmarshal(ParkingIO parkingIO) {
+    protected Parking unmarshal(ParkingIO parkingIO) {
         Parking parking = EntityFactory.create(Parking.class);
         parking.name().setValue(parkingIO.name);
         setValue(parking.description(), parkingIO.description);

@@ -35,7 +35,7 @@ public class PaymentMarshaller extends AbstractMarshaller<PaymentDTO, PaymentIO>
     }
 
     @Override
-    public PaymentIO marshal(PaymentDTO payment) {
+    protected PaymentIO marshal(PaymentDTO payment) {
         if (payment == null || payment.isNull()) {
             return null;
         }
@@ -50,7 +50,7 @@ public class PaymentMarshaller extends AbstractMarshaller<PaymentDTO, PaymentIO>
     }
 
     @Override
-    public PaymentDTO unmarshal(PaymentIO io) {
+    protected PaymentDTO unmarshal(PaymentIO io) {
         PaymentDTO dto = EntityFactory.create(PaymentDTO.class);
         dto.transactionId().setValue(io.transactionId);
         dto.leaseId().setValue(io.leaseId);

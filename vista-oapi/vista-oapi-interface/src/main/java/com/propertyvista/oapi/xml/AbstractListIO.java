@@ -14,6 +14,7 @@
 package com.propertyvista.oapi.xml;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlType;
@@ -34,7 +35,7 @@ public class AbstractListIO<E> implements ElementIO {
         list = new ArrayList<>();
     }
 
-    public ArrayList<E> getList() {
+    public List<E> getList() {
         return list;
     }
 

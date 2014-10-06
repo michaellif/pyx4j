@@ -13,6 +13,8 @@
  */
 package com.propertyvista.oapi.v1.rs;
 
+import java.util.Iterator;
+
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -63,20 +65,17 @@ public class RSPropertyServiceImpl implements PropertyService {
     @GET
     @Produces({ MediaType.APPLICATION_XML })
     public BuildingListIO getBuildingList(@QueryParam("province") String province) {
-        PropertyServiceProcessor processor = new PropertyServiceProcessor(ServiceType.List);
+        PropertyServiceProcessor processor = new PropertyServiceProcessor(ServiceType.Read);
         try {
             BuildingListIO allBuildings = processor.getBuildings();
-            if (province == null) {
-                return allBuildings;
-            }
-            BuildingListIO filteredBuildings = new BuildingListIO();
-
-            for (BuildingIO building : allBuildings.buildingList) {
-                if (building.address.province.getValue().equals(province)) {
-                    filteredBuildings.buildingList.add(building);
+            if (province != null) {
+                for (Iterator<BuildingIO> it = allBuildings.getList().iterator(); it.hasNext();) {
+                    if (!it.next().address.province.getValue().equals(province)) {
+                        it.remove();
+                    }
                 }
             }
-            return filteredBuildings;
+            return allBuildings;
         } finally {
             processor.destroy();
         }
@@ -104,7 +103,7 @@ public class RSPropertyServiceImpl implements PropertyService {
     @Path("/{propertyCode}/units")
     @Produces({ MediaType.APPLICATION_XML })
     public UnitListIO getUnitList(@PathParam("propertyCode") String propertyCode, @QueryParam("floorplan") String floorplan) {
-        PropertyServiceProcessor processor = new PropertyServiceProcessor(ServiceType.List);
+        PropertyServiceProcessor processor = new PropertyServiceProcessor(ServiceType.Read);
         try {
             UnitListIO allUnits = processor.getUnitsByPropertyCode(propertyCode);
             UnitListIO filteredUnits = new UnitListIO();

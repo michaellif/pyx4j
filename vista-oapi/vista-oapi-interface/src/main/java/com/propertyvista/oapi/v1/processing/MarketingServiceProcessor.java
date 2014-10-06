@@ -57,26 +57,20 @@ public class MarketingServiceProcessor extends AbstractProcessor {
     }
 
     public BuildingListIO getBuildingList(PropertySearchCriteriaIO criteria) {
-        BuildingListIO result = new BuildingListIO();
-        for (Building building : PropertyFinder.getPropertyList(criteria.getDbCriteria())) {
-            result.buildingList.add(BuildingMarshaller.getInstance().marshal(building));
-        }
-        return result;
+        return BuildingMarshaller.getInstance().marshalCollection(BuildingListIO.class, PropertyFinder.getPropertyList(criteria.getDbCriteria()));
     }
 
     public BuildingIO getPropertyInfo(String propertyId) {
-        return BuildingMarshaller.getInstance().marshal(PropertyFinder.getBuildingDetails(propertyId));
+        return BuildingMarshaller.getInstance().marshalItem(PropertyFinder.getBuildingDetails(propertyId));
     }
 
     public FloorplanListIO getFloorplanList(String propertyId) {
-        FloorplanListIO result = new FloorplanListIO();
         Building building = PropertyFinder.getBuildingDetails(propertyId);
         if (building != null) {
-            for (Floorplan floorplan : PropertyFinder.getBuildingFloorplans(building).keySet()) {
-                result.getList().add(FloorplanMarshaller.getInstance().marshal(floorplan));
-            }
+            return FloorplanMarshaller.getInstance().marshalCollection(FloorplanListIO.class, PropertyFinder.getBuildingFloorplans(building).keySet());
+        } else {
+            return new FloorplanListIO();
         }
-        return result;
     }
 
     public FloorplanIO getFloorplanInfo(String propertyId, String fpId) {
@@ -84,7 +78,7 @@ public class MarketingServiceProcessor extends AbstractProcessor {
         dbCriteria.eq(dbCriteria.proto().name(), fpId);
         dbCriteria.eq(dbCriteria.proto().building().propertyCode(), propertyId);
         Floorplan fp = Persistence.service().retrieve(dbCriteria);
-        return fp == null ? null : FloorplanMarshaller.getInstance().marshal(PropertyFinder.getFloorplanDetails(fp.getPrimaryKey().asLong()));
+        return fp == null ? null : FloorplanMarshaller.getInstance().marshalItem(PropertyFinder.getFloorplanDetails(fp.getPrimaryKey().asLong()));
     }
 
     public List<FloorplanAvailabilityIO> getFloorplanAvailability(String propertyId, String fpId, LogicalDate date) {
@@ -98,6 +92,7 @@ public class MarketingServiceProcessor extends AbstractProcessor {
         criteria.add(ServerSideFactory.create(OccupancyFacade.class).buildAvalableCriteria(criteria.proto(), AptUnitOccupancySegment.Status.available, date,
                 null));
         criteria.sort(new Sort(criteria.proto().availability().availableForRent(), false));
+        // TODO create FloorplanAvailabilityMarshaller and use marshalCollection()
         for (AptUnit unit : Persistence.service().query(criteria)) {
             FloorplanAvailabilityIO avail = new FloorplanAvailabilityIO();
             avail.floorplanName = fpId;

@@ -34,7 +34,7 @@ public class ContactMarshaller extends AbstractMarshaller<PropertyContact, Conta
     }
 
     @Override
-    public ContactIO marshal(PropertyContact contact) {
+    protected ContactIO marshal(PropertyContact contact) {
         if (contact == null || contact.isNull()) {
             return null;
         }
@@ -47,7 +47,7 @@ public class ContactMarshaller extends AbstractMarshaller<PropertyContact, Conta
     }
 
     @Override
-    public PropertyContact unmarshal(ContactIO contactIO) {
+    protected PropertyContact unmarshal(ContactIO contactIO) {
 
         PropertyContact contact = EntityFactory.create(PropertyContact.class);
         contact.name().setValue(contactIO.name);

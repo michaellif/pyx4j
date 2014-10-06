@@ -59,7 +59,7 @@ public class RSMarketingServiceImpl implements MarketingService {
 
     @Override
     public BuildingListIO getBuildingList(PropertySearchCriteriaIO criteria) {
-        MarketingServiceProcessor processor = new MarketingServiceProcessor(ServiceType.List);
+        MarketingServiceProcessor processor = new MarketingServiceProcessor(ServiceType.Read);
         try {
             return processor.getBuildingList(criteria);
         } finally {
@@ -85,7 +85,7 @@ public class RSMarketingServiceImpl implements MarketingService {
     @Produces(MediaType.APPLICATION_XML)
     @Override
     public FloorplanListIO getFloorplanList(@QueryParam("prId") String propertyId) {
-        MarketingServiceProcessor processor = new MarketingServiceProcessor(ServiceType.List);
+        MarketingServiceProcessor processor = new MarketingServiceProcessor(ServiceType.Read);
         try {
             return processor.getFloorplanList(propertyId);
         } finally {
@@ -112,7 +112,7 @@ public class RSMarketingServiceImpl implements MarketingService {
     @Override
     public List<FloorplanAvailabilityIO> getFloorplanAvailability(@QueryParam("prId") String prId, @QueryParam("fpId") String fpId,
             @QueryParam("moveIn") LogicalDate date) {
-        MarketingServiceProcessor processor = new MarketingServiceProcessor(ServiceType.List);
+        MarketingServiceProcessor processor = new MarketingServiceProcessor(ServiceType.Read);
         try {
             return processor.getFloorplanAvailability(prId, fpId, date);
         } finally {

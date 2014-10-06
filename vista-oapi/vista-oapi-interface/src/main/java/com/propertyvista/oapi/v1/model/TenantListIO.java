@@ -16,25 +16,27 @@ package com.propertyvista.oapi.v1.model;
 import java.util.List;
 
 import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
 import com.propertyvista.oapi.xml.AbstractListIO;
 import com.propertyvista.oapi.xml.Note;
 
-@XmlType(name = "FloorplanAmenityList")
-public class FloorplanAmenityListIO extends AbstractListIO<FloorplanAmenityIO> {
+@XmlType(name = "TenantList")
+@XmlRootElement(name = "tenants")
+public class TenantListIO extends AbstractListIO<TenantIO> {
 
-    public FloorplanAmenityListIO() {
+    public TenantListIO() {
         super();
     }
 
-    public FloorplanAmenityListIO(Note note) {
+    public TenantListIO(Note note) {
         super(note);
     }
 
     @Override
-    @XmlElement(name = "amenity")
-    public List<FloorplanAmenityIO> getList() {
+    @XmlElement(name = "tenant")
+    public List<TenantIO> getList() {
         return super.getList();
     };
 }

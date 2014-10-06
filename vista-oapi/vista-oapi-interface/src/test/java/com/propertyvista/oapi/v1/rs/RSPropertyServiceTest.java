@@ -79,13 +79,13 @@ public class RSPropertyServiceTest extends RSOapiTestBase {
     @Test
     public void testGetBuildings() {
         BuildingListIO response = target("buildings").queryParam("province", "Ontario").request().get(BuildingListIO.class);
-        Assert.assertEquals(1, response.buildingList.size());
+        Assert.assertEquals(1, response.size());
     }
 
     @Test
     public void testGetBuildingsByProvince_NonExistingProvince() {
         BuildingListIO buildings = target("buildings").queryParam("province", "NonExisting").request().get(BuildingListIO.class);
-        Assert.assertTrue(buildings.buildingList.isEmpty());
+        Assert.assertTrue(buildings.size() == 0);
     }
 
     @Test

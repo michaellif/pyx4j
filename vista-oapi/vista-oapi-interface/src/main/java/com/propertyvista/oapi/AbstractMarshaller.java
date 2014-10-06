@@ -22,41 +22,53 @@ import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.IPrimitive;
 
 import com.propertyvista.oapi.xml.AbstractListIO;
-import com.propertyvista.oapi.xml.Note;
 import com.propertyvista.oapi.xml.ElementIO;
+import com.propertyvista.oapi.xml.Note;
 import com.propertyvista.oapi.xml.PrimitiveIO;
 
 public abstract class AbstractMarshaller<ValueType extends IEntity, BoundType> {
 
-    public abstract BoundType marshal(ValueType v);
+    private static ThreadLocal<MarshallingContext> context = new ThreadLocal<MarshallingContext>();
 
-    public abstract ValueType unmarshal(BoundType v);
+    protected abstract BoundType marshal(ValueType v);
 
-    public ArrayList<BoundType> marshal(Collection<ValueType> collection) {
-        ArrayList<BoundType> ioList = new ArrayList<BoundType>();
-        for (ValueType item : collection) {
-            ioList.add(marshal(item));
-        }
-        return ioList;
+    protected abstract ValueType unmarshal(BoundType v);
+
+    private void setContext(ValueType element) {
+        context.set(new MarshallingContext(element == null ? null : element.getInstanceValueClass(), context.get()));
     }
 
-    public List<ValueType> unmarshal(ArrayList<BoundType> listIO) {
-        List<ValueType> list = new ArrayList<ValueType>();
-        for (BoundType ioItem : listIO) {
-            list.add(unmarshal(ioItem));
+    private void restoreContext() {
+        if (context.get() != null) {
+            context.set(context.get().getParent());
         }
-        return list;
+    }
+
+    protected MarshallingContext getContext() {
+        return context.get();
     }
 
     public <C extends AbstractListIO<BoundType>> C marshalCollection(Class<C> collectionClass, Collection<ValueType> collection) {
+        setContext(null);
         try {
             C ioList = collectionClass.newInstance();
             for (ValueType item : collection) {
-                ioList.add(marshal(item));
+                ioList.add(marshalItem(item));
             }
             return ioList;
         } catch (Exception e) {
             throw new RuntimeException(e);
+        } finally {
+            restoreContext();
+        }
+    }
+
+    public BoundType marshalItem(ValueType item) {
+        setContext(item);
+        try {
+            return marshal(item);
+        } finally {
+            restoreContext();
         }
     }
 
@@ -66,6 +78,10 @@ public abstract class AbstractMarshaller<ValueType extends IEntity, BoundType> {
             list.add(unmarshal(ioItem));
         }
         return list;
+    }
+
+    public ValueType unmarshalItem(BoundType v) {
+        return unmarshal(v);
     }
 
     /**

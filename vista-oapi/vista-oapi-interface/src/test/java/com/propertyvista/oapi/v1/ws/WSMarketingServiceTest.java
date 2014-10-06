@@ -135,7 +135,7 @@ public class WSMarketingServiceTest extends WSOapiTestBase {
     public void testGetBuildings() {
         PropertySearchCriteriaIO crit = new PropertySearchCriteriaIO();
         crit.province = "Ontario";
-        Assert.assertEquals(1, service.getBuildingList(crit).buildingList.size());
+        Assert.assertEquals(1, service.getBuildingList(crit).size());
     }
 
     @Test

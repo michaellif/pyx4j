@@ -13,7 +13,7 @@
  */
 package com.propertyvista.oapi.v1.model;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -36,7 +36,7 @@ public class UtilityListIO extends AbstractListIO<UtilityIO> {
 
     @Override
     @XmlElement(name = "utility")
-    public ArrayList<UtilityIO> getList() {
+    public List<UtilityIO> getList() {
         return super.getList();
     };
 }

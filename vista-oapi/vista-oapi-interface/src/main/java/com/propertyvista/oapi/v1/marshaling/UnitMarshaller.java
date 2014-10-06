@@ -41,7 +41,7 @@ public class UnitMarshaller extends AbstractMarshaller<AptUnit, UnitIO> {
     }
 
     @Override
-    public UnitIO marshal(AptUnit unit) {
+    protected UnitIO marshal(AptUnit unit) {
         if (unit == null || unit.isNull()) {
             return null;
         }
@@ -56,7 +56,7 @@ public class UnitMarshaller extends AbstractMarshaller<AptUnit, UnitIO> {
     }
 
     @Override
-    public AptUnit unmarshal(UnitIO unitIO) {
+    protected AptUnit unmarshal(UnitIO unitIO) {
         AptUnit unit = EntityFactory.create(AptUnit.class);
         unit.info().number().setValue(unitIO.number);
 

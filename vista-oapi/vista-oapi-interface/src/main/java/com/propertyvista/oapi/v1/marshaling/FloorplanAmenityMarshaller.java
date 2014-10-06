@@ -17,7 +17,6 @@ import com.pyx4j.entity.core.EntityFactory;
 
 import com.propertyvista.domain.property.asset.FloorplanAmenity;
 import com.propertyvista.oapi.AbstractMarshaller;
-import com.propertyvista.oapi.ServiceType;
 import com.propertyvista.oapi.v1.model.FloorplanAmenityIO;
 import com.propertyvista.oapi.v1.model.types.FloorplanAmenityTypeIO;
 import com.propertyvista.oapi.v1.processing.AbstractProcessor;
@@ -38,14 +37,14 @@ public class FloorplanAmenityMarshaller extends AbstractMarshaller<FloorplanAmen
     }
 
     @Override
-    public FloorplanAmenityIO marshal(FloorplanAmenity amenity) {
+    protected FloorplanAmenityIO marshal(FloorplanAmenity amenity) {
         if (amenity == null || amenity.isNull()) {
             return null;
         }
         FloorplanAmenityIO amenityIO = new FloorplanAmenityIO();
 
         amenityIO.name = getValue(amenity.name());
-        if (AbstractProcessor.getServiceType() != ServiceType.List || AbstractProcessor.getServiceClass() == PortationService.class) {
+        if (AbstractProcessor.getServiceClass() == PortationService.class || !getContext().isInCollection()) {
             amenityIO.description = createIo(StringIO.class, amenity.description());
             amenityIO.type = createIo(FloorplanAmenityTypeIO.class, amenity.type());
         }
@@ -53,7 +52,7 @@ public class FloorplanAmenityMarshaller extends AbstractMarshaller<FloorplanAmen
     }
 
     @Override
-    public FloorplanAmenity unmarshal(FloorplanAmenityIO amenityIO) {
+    protected FloorplanAmenity unmarshal(FloorplanAmenityIO amenityIO) {
         FloorplanAmenity amenity = EntityFactory.create(FloorplanAmenity.class);
         amenity.name().setValue(amenityIO.name);
         setValue(amenity.description(), amenityIO.description);

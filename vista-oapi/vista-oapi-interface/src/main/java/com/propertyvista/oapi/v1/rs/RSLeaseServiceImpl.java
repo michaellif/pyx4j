@@ -13,7 +13,7 @@
  */
 package com.propertyvista.oapi.v1.rs;
 
-import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import javax.ws.rs.Consumes;
@@ -29,7 +29,9 @@ import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.oapi.ServiceType;
 import com.propertyvista.oapi.v1.model.LeaseIO;
+import com.propertyvista.oapi.v1.model.LeaseListIO;
 import com.propertyvista.oapi.v1.model.TenantIO;
+import com.propertyvista.oapi.v1.model.TenantListIO;
 import com.propertyvista.oapi.v1.processing.LeaseServiceProcessor;
 import com.propertyvista.oapi.v1.service.LeaseService;
 
@@ -60,20 +62,18 @@ public class RSLeaseServiceImpl implements LeaseService {
     @Override
     @GET
     @Produces({ MediaType.APPLICATION_XML })
-    public List<LeaseIO> getLeases(@QueryParam("propertyCode") String propertyCode) {
-        LeaseServiceProcessor processor = new LeaseServiceProcessor(ServiceType.List);
+    public LeaseListIO getLeases(@QueryParam("propertyCode") String propertyCode) {
+        LeaseServiceProcessor processor = new LeaseServiceProcessor(ServiceType.Read);
         try {
-            List<LeaseIO> allLeases = processor.getLeases();
-            if (propertyCode == null) {
-                return allLeases;
-            }
-            List<LeaseIO> filteredLeases = new ArrayList<LeaseIO>();
-            for (LeaseIO lease : allLeases) {
-                if (lease.propertyCode.equals(propertyCode)) {
-                    filteredLeases.add(lease);
+            LeaseListIO allLeases = processor.getLeases();
+            if (propertyCode != null) {
+                for (Iterator<LeaseIO> it = allLeases.getList().iterator(); it.hasNext();) {
+                    if (!propertyCode.equals(it.next().propertyCode)) {
+                        it.remove();
+                    }
                 }
             }
-            return filteredLeases;
+            return allLeases;
         } finally {
             processor.destroy();
         }
@@ -100,8 +100,8 @@ public class RSLeaseServiceImpl implements LeaseService {
     @GET
     @Path("/{leaseId}/tenants")
     @Produces({ MediaType.APPLICATION_XML })
-    public List<TenantIO> getTenants(@PathParam("leaseId") String leaseId) {
-        LeaseServiceProcessor processor = new LeaseServiceProcessor(ServiceType.List);
+    public TenantListIO getTenants(@PathParam("leaseId") String leaseId) {
+        LeaseServiceProcessor processor = new LeaseServiceProcessor(ServiceType.Read);
         try {
             return processor.getTenants(leaseId);
         } finally {
