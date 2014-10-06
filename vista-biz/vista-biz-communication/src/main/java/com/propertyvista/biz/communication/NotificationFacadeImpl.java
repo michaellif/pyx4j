@@ -25,6 +25,7 @@ import com.propertyvista.biz.communication.notifications.AutoPayCancelledByResid
 import com.propertyvista.biz.communication.notifications.AutoPayCancelledBySystemNotification;
 import com.propertyvista.biz.communication.notifications.AutoPayCreatedByResidentNotification;
 import com.propertyvista.biz.communication.notifications.AutoPayReviewRequiredNotification;
+import com.propertyvista.biz.communication.notifications.BillingAlertNotification;
 import com.propertyvista.biz.communication.notifications.NotificationsAggregator;
 import com.propertyvista.biz.communication.notifications.PostToYardiFailedNotification;
 import com.propertyvista.biz.communication.notifications.RejectPaymentNotification;
@@ -93,6 +94,11 @@ public class NotificationFacadeImpl implements NotificationFacade {
     @Override
     public void yardiUnableToPostPaymentBatch(final String errorMessage) {
         aggregateOrSend(new YardiConfigurationNotification(errorMessage));
+    }
+
+    @Override
+    public void billingAlertNotification(Lease leaseId, String alert) {
+        aggregateOrSend(new BillingAlertNotification(leaseId, alert));
     }
 
     @Override

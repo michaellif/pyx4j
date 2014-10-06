@@ -38,6 +38,7 @@ import com.pyx4j.entity.server.TransactionScopeOption;
 import com.pyx4j.entity.server.UnitOfWork;
 
 import com.propertyvista.biz.ExecutionMonitor;
+import com.propertyvista.biz.communication.NotificationFacade;
 import com.propertyvista.biz.financial.billingcycle.BillingCycleFacade;
 import com.propertyvista.domain.financial.billing.Bill;
 import com.propertyvista.domain.financial.billing.BillingCycle;
@@ -134,6 +135,7 @@ public class BillingProcessManager {
     }
 
     private void runBilling(final BillingCycle billingCycle, final Iterator<Lease> leasesIterator, final ExecutionMonitor executionMonitor) {
+        ServerSideFactory.create(NotificationFacade.class).aggregateNotificationsStart();
         while (leasesIterator.hasNext()) {
             try {
                 new UnitOfWork(TransactionScopeOption.RequiresNew).execute(new Executable<Void, RuntimeException>() {
@@ -151,10 +153,14 @@ public class BillingProcessManager {
                 });
             } catch (BillingException e) {
                 executionMonitor.addFailedEvent("Bill", e.getMessage());
+                if (e.getLeaseId() != null) {
+                    ServerSideFactory.create(NotificationFacade.class).billingAlertNotification(e.getLeaseId(), e.getMessage());
+                }
             } catch (Throwable t) {
                 executionMonitor.addErredEvent("Billing Types", t);
             }
         }
+        ServerSideFactory.create(NotificationFacade.class).aggregatedNotificationsSend();
     }
 
 }

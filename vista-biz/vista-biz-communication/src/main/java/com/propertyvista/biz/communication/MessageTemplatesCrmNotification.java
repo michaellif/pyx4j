@@ -400,4 +400,58 @@ class MessageTemplatesCrmNotification {
         email.setHtmlBody(template.getWrappedBody(wrapperTextResourceName));
         return email;
     }
+
+    public static MailMessage createBillingAlertNotificationEmail(List<Lease> leaseIds, Map<Lease, List<String>> billingAlerts) {
+        MailMessage email = new MailMessage();
+        email.setSender(getSender());
+
+        MessageTemplate template = new MessageTemplate("email/notification/billing-alert-notification.html");
+        {
+            Lease lease = Persistence.service().retrieve(Lease.class, leaseIds.get(0).getPrimaryKey());
+            Building building;
+            {
+                EntityQueryCriteria<Building> criteria = EntityQueryCriteria.create(Building.class);
+                criteria.eq(criteria.proto().units(), lease.unit());
+                building = Persistence.service().retrieve(criteria);
+            }
+
+            String buildingName = building.info().name().getStringView();
+            if (StringUtils.isEmpty(buildingName)) {
+                buildingName = building.propertyCode().getStringView();
+            }
+
+            template.variable("${buildingName}", buildingName);
+            template.variable("${buildingAddress}", building.info().address().getStringView());
+
+            if (leaseIds.size() == 1) {
+                email.setSubject(i18n.tr("Billing Alert for lease {0}, building {0}", lease, buildingName));
+            } else {
+                email.setSubject(i18n.tr("Billing Alerts in building {0}", buildingName));
+            }
+
+            MessageKeywords.addToKeywords(email, building);
+        }
+
+        String crmUrl = VistaDeployment.getBaseApplicationURL(VistaDeployment.getCurrentPmc(), VistaApplication.crm, true);
+        StringBuilder leaseLinks = new StringBuilder();
+        for (Lease leaseId : leaseIds) {
+            String leaseUrl = AppPlaceInfo.absoluteUrl(crmUrl, true, new CrmSiteMap.Tenants.Lease().formViewerPlace(leaseId.getPrimaryKey()));
+            Lease lease = Persistence.service().retrieve(Lease.class, leaseId.getPrimaryKey());
+            if (leaseLinks.length() > 0) {
+                leaseLinks.append("<p/>");
+            }
+            leaseLinks.append("<a href=\"" + leaseUrl + "\">Lease " + lease.getStringView() + "</a>");
+            leaseLinks.append("<ul>");
+            for (String billingAlert : billingAlerts.get(leaseId)) {
+                leaseLinks.append("<li>" + billingAlert + "</li>");
+            }
+            leaseLinks.append("</ul>");
+
+            MessageKeywords.addToKeywords(email, lease);
+        }
+        template.variable("${leaseLinks}", leaseLinks);
+
+        email.setHtmlBody(template.getWrappedBody(wrapperTextResourceName));
+        return email;
+    }
 }

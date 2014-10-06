@@ -15,17 +15,30 @@ package com.propertyvista.portal.rpc.shared;
 
 import com.pyx4j.commons.UserRuntimeException;
 
+import com.propertyvista.domain.tenant.lease.Lease;
+
 @Deprecated
 //TODO BillingException should be checked exception of Billing module
 public class BillingException extends UserRuntimeException {
 
     private static final long serialVersionUID = 1L;
 
+    private Lease lease;
+
     public BillingException() {
     }
 
     public BillingException(String message) {
         super(message);
+    }
+
+    public BillingException(String message, Lease lease) {
+        super(message);
+        this.lease = lease;
+    }
+
+    public Lease getLeaseId() {
+        return lease;
     }
 
 }

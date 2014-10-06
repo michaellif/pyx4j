@@ -39,6 +39,8 @@ public interface NotificationFacade {
 
     public void yardiConfigurationError(String errorMessage);
 
+    public void billingAlertNotification(Lease leaseId, String alert);
+
     public void autoPaySetupCompleted(AutopayAgreement autopayAgreement);
 
     public void autoPayChanges(AutopayAgreement autopayAgreement);

@@ -255,8 +255,12 @@ public class EmployeeForm extends CrmEntityForm<EmployeeDTO> {
         protected void addItem() {
 
             Collection<NotificationType> types = EnumSet.allOf(NotificationType.class);
-            if (!VistaFeatures.instance().yardiIntegration() || !SecurityController.check(VistaCrmBehavior.AdminGeneral)) {
-                types.remove(NotificationType.YardiSynchronization);
+            if (VistaFeatures.instance().yardiIntegration()) {
+                types.remove(NotificationType.BillingAlert);
+            } else {
+                if (!SecurityController.check(VistaCrmBehavior.AdminGeneral)) {
+                    types.remove(NotificationType.YardiSynchronization);
+                }
             }
 
             new SelectEnumDialog<NotificationType>(i18n.tr("Select Notification Type"), types) {

@@ -93,26 +93,26 @@ public class BillingManager {
         BillingCycle nextCycle = getNextBillBillingCycle(lease);
         if (!billingCycle.equals(nextCycle)) {
             throw new BillingException(i18n.tr("Invalid billing cycle: {0}; expected: {1}; lease end: {2}", billingCycle.billingCycleStartDate().getValue(),
-                    nextCycle.billingCycleStartDate().getValue(), lease.leaseTo().getValue()));
+                    nextCycle.billingCycleStartDate().getValue(), lease.leaseTo().getValue()), lease);
         }
 
         if (VersionedEntityUtils.isDraft(lease.currentTerm()) && !preview) {
-            throw new BillingException(i18n.tr("Lease Term is in draft state. Billing can run only in preview mode."));
+            throw new BillingException(i18n.tr("Lease Term is in draft state. Billing can run only in preview mode."), lease);
         }
 
         if (lease.status().getValue() == Lease.Status.Closed) {
-            throw new BillingException(i18n.tr("Lease is closed"));
+            throw new BillingException(i18n.tr("Lease is closed"), lease);
         }
 
         Bill previousBill = getLatestBill(lease);
         if (previousBill != null) {
             if (BillStatus.notConfirmed(previousBill.billStatus().getValue())) {
-                throw new BillingException(i18n.tr("Can't run billing on Account with non-confirmed bills"));
+                throw new BillingException(i18n.tr("Can't run billing on Account with non-confirmed bills"), lease);
             }
         }
 
         if (lease.status().getValue() == Lease.Status.Completed && previousBill.billType().getValue().equals(BillType.Final)) {
-            throw new BillingException(i18n.tr("Final bill has been already issued"));
+            throw new BillingException(i18n.tr("Final bill has been already issued"), lease);
         }
 
         Bill previousConfirmedBill = getLatestConfirmedBill(lease);
@@ -124,13 +124,13 @@ public class BillingManager {
 
             //previous bill wasn't the last one so we are dealing here with the regular bill which can't run before executionTargetDate
             if (!isPreviousConfirmedBillTheLast && SystemDateManager.getDate().compareTo(billingCycle.targetBillExecutionDate().getValue()) < 0) {
-                throw new BillingException(i18n.tr("Regular billing can't run before target execution date"));
+                throw new BillingException(i18n.tr("Regular billing can't run before target execution date"), lease);
             }
 
             //previous bill was the last one so we have to run a final bill but not before lease end date or lease move-out date whatever is first
             if (isPreviousConfirmedBillTheLast && (SystemDateManager.getDate().compareTo(lease.leaseTo().getValue()) < 0)
                     && (lease.expectedMoveOut().isNull() || (SystemDateManager.getDate().compareTo(lease.expectedMoveOut().getValue()) < 0))) {
-                throw new BillingException(i18n.tr("Final billing can't run before both lease end date and move-out date"));
+                throw new BillingException(i18n.tr("Final billing can't run before both lease end date and move-out date"), lease);
             }
         }
     }

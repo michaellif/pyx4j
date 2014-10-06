@@ -87,4 +87,8 @@ public class NotificationFacadeMock implements NotificationFacade {
     public void directDebitAccountChanged(LeaseTermTenant tenant) {
     }
 
+    @Override
+    public void billingAlertNotification(Lease leaseId, String alert) {
+    }
+
 }

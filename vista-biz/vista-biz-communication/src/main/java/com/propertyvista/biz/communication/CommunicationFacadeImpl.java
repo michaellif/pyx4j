@@ -313,6 +313,13 @@ public class CommunicationFacadeImpl implements CommunicationFacade {
     }
 
     @Override
+    public void sendBillingAlertNotification(List<String> targetEmails, List<Lease> leaseIds, Map<Lease, List<String>> billingAlerts) {
+        MailMessage m = MessageTemplatesCrmNotification.createBillingAlertNotificationEmail(leaseIds, billingAlerts);
+        m.setTo(targetEmails);
+        Mail.queue(m, null, null);
+    }
+
+    @Override
     public void sendMaintenanceRequestCreatedPMC(MaintenanceRequest request) {
         for (Employee employee : NotificationsUtils.getNotificationTraget(request.building(), Notification.NotificationType.MaintenanceRequest)) {
             sendMaintenanceRequestEmail(employee.email().getValue(), EmailTemplateType.MaintenanceRequestCreatedPMC, request);

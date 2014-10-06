@@ -106,6 +106,8 @@ public interface CommunicationFacade {
 
     void sendOnlinePaymentSetupCompletedEmail(String userName, String userEmail);
 
+    void sendBillingAlertNotification(List<String> targetEmails, List<Lease> leaseIds, Map<Lease, List<String>> billingAlerts);
+
     //void sendCustomerMessage(CustomerCustomMessageTemplate customMessageTemplate, Customer customer);
 
     //void sendEmployeeMessage(EmployeeMessageType employeeMessageType, Employee employee);

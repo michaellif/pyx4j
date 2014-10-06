@@ -47,6 +47,9 @@ public interface Notification extends IEntity {
 
         MaintenanceRequest,
 
+        /** Available only in non-Yardi mode **/
+        BillingAlert,
+
         /** Available only for PropertyVistaAccountOwner **/
         YardiSynchronization;
 
