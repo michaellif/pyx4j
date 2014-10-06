@@ -31,7 +31,7 @@ public class VistaServerSideConfigurationDev extends VistaServerSideConfiguratio
 
     public static String devContextPath = "/vista";
 
-    public static boolean devContextLess = false;
+    public static boolean devContextLess = true;
 
     @Override
     public boolean isVistaDemo() {
