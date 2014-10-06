@@ -44,7 +44,7 @@ public class ProspectPortalSiteDispatcher extends AbstractAppPlaceDispatcher {
     @Override
     protected boolean isPlaceNavigable(AppPlace targetPlace) {
         if (targetPlace instanceof ProspectPortalSiteMap.ApplicationContextSelection) {
-            return SecurityController.check(PortalProspectBehavior.HasMultipleApplications);
+            return SecurityController.check(PortalProspectBehavior.ApplicationSelectionRequired, PortalProspectBehavior.HasMultipleApplications);
         } else {
             return true;
         }
