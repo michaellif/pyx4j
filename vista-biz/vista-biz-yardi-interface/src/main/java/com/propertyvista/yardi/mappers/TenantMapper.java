@@ -194,13 +194,28 @@ public class TenantMapper {
     }
 
     private Customer findCustomer(YardiCustomer yardiCustomer) {
+        EntityQueryCriteria<Customer> criteria = EntityQueryCriteria.create(Customer.class);
+        Customer customer = null;
+
         String email = retrieveYardiCustomerEmail(yardiCustomer);
         if (!CommonsStringUtils.isEmpty(email) && EmailValidator.isValid(email)) {
-            EntityQueryCriteria<Customer> criteria = EntityQueryCriteria.create(Customer.class);
+            // try to by e-mail first:
             criteria.eq(criteria.proto().person().email(), EmailValidator.normalizeEmailAddress(email));
-            return Persistence.service().retrieve(criteria);
+            customer = Persistence.service().retrieve(criteria);
+            if (customer != null) {
+                log.info("Customer {} found  by e-mail", yardiCustomer.getCustomerID());
+            }
+        } else {
+            // then try to find by Name + LastName:
+            criteria.eq(criteria.proto().person().name().firstName(), yardiCustomer.getName().getFirstName());
+            criteria.eq(criteria.proto().person().name().lastName(), yardiCustomer.getName().getLastName());
+            customer = Persistence.service().retrieve(criteria);
+            if (customer != null) {
+                log.info("Customer {} found  by name", yardiCustomer.getCustomerID());
+            }
         }
-        return null;
+
+        return customer;
     }
 
     private void setPhone(Phone phone, IPrimitive<String> to) {
