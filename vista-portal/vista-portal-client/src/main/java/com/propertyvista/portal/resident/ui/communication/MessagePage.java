@@ -13,7 +13,6 @@
  */
 package com.propertyvista.portal.resident.ui.communication;
 
-import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import com.google.gwt.dom.client.Style.Overflow;
@@ -35,6 +34,7 @@ import com.google.gwt.user.client.ui.Widget;
 import com.pyx4j.commons.HtmlUtils;
 import com.pyx4j.commons.IFormatter;
 import com.pyx4j.commons.SimpleMessageFormat;
+import com.pyx4j.commons.TimeUtils;
 import com.pyx4j.commons.css.ThemeColor;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.IObject;
@@ -169,8 +169,7 @@ public class MessagePage extends CPortalEntityForm<MessageDTO> {
                 return date.getStringView();
             }
 
-            SimpleDateFormat format = new SimpleDateFormat("HH:mm");
-            return format.format(date.getValue());
+            return TimeUtils.simpleFormat(date.getValue(), "HH:mm");
         }
 
         @Override
