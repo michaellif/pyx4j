@@ -44,7 +44,8 @@ public class BuildingAmenityMarshaller extends AbstractMarshaller<BuildingAmenit
         BuildingAmenityIO amenityIO = new BuildingAmenityIO();
 
         amenityIO.name = getValue(amenity.name());
-        if (AbstractProcessor.getServiceClass() == PortationService.class || !getContext().isInCollection()) {
+        if (true || AbstractProcessor.getServiceClass() == PortationService.class || !getContext().isInCollection()) {
+            // TODO implement detachable primitive 
             amenityIO.description = createIo(StringIO.class, amenity.description());
             amenityIO.type = createIo(BuildingAmenityTypeIO.class, amenity.type());
         }

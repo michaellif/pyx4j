@@ -59,7 +59,7 @@ public class BuildingPersistenceTest extends WSOapiTestBase {
 
         log.debug("++++++++++ {}", building);
 
-        BuildingIO buildingIO2 = BuildingMarshaller.getInstance().marshal(building);
+        BuildingIO buildingIO2 = BuildingMarshaller.getInstance().marshalItem(building);
 
         assertEquals(buildingIO.propertyCode, buildingIO2.propertyCode);
 
