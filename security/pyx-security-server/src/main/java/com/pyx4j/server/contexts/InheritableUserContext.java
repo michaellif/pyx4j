@@ -24,6 +24,8 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.Locale;
 
+import javax.servlet.http.HttpSession;
+
 import com.pyx4j.config.server.SystemDateManager;
 import com.pyx4j.i18n.server.I18nManager;
 
@@ -36,6 +38,8 @@ public class InheritableUserContext implements Serializable {
 
     final Locale locale;
 
+    final HttpSession session;
+
     final DevSession devSession;
 
     final Date sysDate;
@@ -44,6 +48,7 @@ public class InheritableUserContext implements Serializable {
         this.abstractVisit = abstractVisit;
         namespace = NamespaceManager.getNamespace();
         locale = I18nManager.getThreadLocale();
+        session = ServerContext.getSession();
         devSession = DevSession.getSession();
         if (SystemDateManager.isDateSet()) {
             sysDate = SystemDateManager.getDate();

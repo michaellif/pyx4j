@@ -265,6 +265,7 @@ public class Lifecycle {
 
     public static void inheritUserContext(InheritableUserContext inheritableUserContext) {
         ServerContext.setVisit(inheritableUserContext.abstractVisit);
+        ServerContext.setSession(inheritableUserContext.session);
         ServerContext.setDevSession(inheritableUserContext.devSession);
         NamespaceManager.setNamespace(inheritableUserContext.namespace);
         I18nManager.setThreadLocale(inheritableUserContext.locale);
