@@ -86,6 +86,7 @@ public class SelectRecipientsDialogForm extends HorizontalPanel {
     private void initForm(Collection<CommunicationEndpointDTO> alreadySelected) {
 
         final FlowPanel listPanel = new FlowPanel();
+        listPanel.setHeight("500px");
         listPanel.setWidth("100%");
 
         FlowPanel menuPanel = new FlowPanel();
