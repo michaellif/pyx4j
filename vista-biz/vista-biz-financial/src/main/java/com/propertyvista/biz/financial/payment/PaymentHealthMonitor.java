@@ -206,11 +206,11 @@ class PaymentHealthMonitor {
         final Pmc pmc = VistaDeployment.getCurrentPmc();
         // see if caledon created reconciliation report
         {
-            Date reportSince = com.pyx4j.gwt.server.DateUtils.detectDateformat("2014-06-09"); // DateUtils.addMonths(forDate, -2);
+            Date reportSince = DateUtils.addMonths(forDate, -2);
             Date reportBefore = DateUtils.addDays(forDate, -3);
             EntityQueryCriteria<PaymentRecord> criteria = EntityQueryCriteria.create(PaymentRecord.class);
-            criteria.ge(criteria.proto().finalizeDate(), reportSince);
-            criteria.le(criteria.proto().finalizeDate(), reportBefore);
+            criteria.ge(criteria.proto().createdDate(), reportSince);
+            criteria.le(criteria.proto().createdDate(), reportBefore);
             criteria.eq(criteria.proto().paymentMethod().type(), PaymentType.CreditCard);
             criteria.eq(criteria.proto().paymentStatus(), PaymentRecord.PaymentStatus.Received);
             criteria.isNull(criteria.proto().aggregatedTransfer());
@@ -222,7 +222,7 @@ class PaymentHealthMonitor {
             }
         }
         {
-            Date reportSince = com.pyx4j.gwt.server.DateUtils.detectDateformat("2014-06-09"); // DateUtils.addMonths(forDate, -2);
+            Date reportSince = DateUtils.addMonths(forDate, -2);
             Date reportBefore = DateUtils.addDays(forDate, -4);
             EntityQueryCriteria<PaymentRecord> criteria = EntityQueryCriteria.create(PaymentRecord.class);
             criteria.ge(criteria.proto().finalizeDate(), reportSince);
@@ -240,9 +240,9 @@ class PaymentHealthMonitor {
         }
 
         {
-            Date reportSince = DateUtils.addDays(forDate, -7);
+            Date reportSince = DateUtils.addMonths(forDate, -2);
             EntityQueryCriteria<PaymentRecord> criteria = EntityQueryCriteria.create(PaymentRecord.class);
-            criteria.ge(criteria.proto().finalizeDate(), reportSince);
+            criteria.ge(criteria.proto().createdDate(), reportSince);
             criteria.eq(criteria.proto().paymentMethod().type(), PaymentType.CreditCard);
             ICursorIterator<PaymentRecord> iterator = Persistence.service().query(null, criteria, AttachLevel.Attached);
             try {
@@ -257,10 +257,10 @@ class PaymentHealthMonitor {
                         boolean statusMismatch = false;
                         if (EnumSet.of(PaymentRecord.PaymentStatus.Cleared, PaymentRecord.PaymentStatus.Received).contains(
                                 paymentRecord.paymentStatus().getValue())) {
-                            if (!"0000".equals(cardTransactionRecord.saleResponseCode().getValue())) {
+                            if (!"0000".equals(cardTransactionRecord.saleResponseCode().getValue()) || cardTransactionRecord.voided().getValue(false)) {
                                 statusMismatch = true;
                             }
-                        } else if ("0000".equals(cardTransactionRecord.saleResponseCode().getValue())) {
+                        } else if (("0000".equals(cardTransactionRecord.saleResponseCode().getValue())) && !cardTransactionRecord.voided().getValue(false)) {
                             statusMismatch = true;
                         }
                         if (statusMismatch) {

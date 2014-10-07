@@ -42,6 +42,7 @@ public class CardTransactionRecordLister extends AbstractLister<CardTransactionR
                 new MemberColumnDescriptor.Builder(proto().paymentTransactionId()).build(),
                 new MemberColumnDescriptor.Builder(proto().completionDate()).build(),
                 new MemberColumnDescriptor.Builder(proto().saleResponseCode()).build(),
+                new MemberColumnDescriptor.Builder(proto().voided()).build(),
                 new MemberColumnDescriptor.Builder(proto().feeResponseCode()).build(),
                 new MemberColumnDescriptor.Builder(proto().creationDate()).build()
             ));//@formatter:on
@@ -53,6 +54,7 @@ public class CardTransactionRecordLister extends AbstractLister<CardTransactionR
                     new MemberColumnDescriptor.Builder(proto().paymentTransactionId()).build(),
                     new MemberColumnDescriptor.Builder(proto().completionDate()).build(),
                     new MemberColumnDescriptor.Builder(proto().saleResponseCode()).build(),
+                    new MemberColumnDescriptor.Builder(proto().voided()).build(),
                     new MemberColumnDescriptor.Builder(proto().feeResponseCode()).build(),
                     new MemberColumnDescriptor.Builder(proto().creationDate()).build()
             ));//@formatter:on

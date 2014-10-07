@@ -125,14 +125,7 @@ class PaymentCreditCard {
 
                         if (voidResponse.success().getValue()) {
                             log.info("transaction {} successfully voided {}", paymentRecord.id(), voidResponse.message());
-                            PaymentRecord record = Persistence.service().retrieve(PaymentRecord.class, paymentRecord.getPrimaryKey());
-                            record.transactionAuthorizationNumber().setValue(saleResponse.authorizationNumber().getValue());
-                            record.paymentStatus().setValue(PaymentRecord.PaymentStatus.Void);
-                            LogicalDate now = SystemDateManager.getLogicalDate();
-                            record.lastStatusChangeDate().setValue(now);
-                            record.receivedDate().setValue(now);
-                            record.finalizeDate().setValue(now);
-                            Persistence.service().persist(record);
+                            saveVodedStatus(transactionRecord, paymentRecord, saleResponse);
                         } else {
                             log.error("Unable to void Card transaction {} {} {}; response {} {}", //
                                     merchantTerminalId, //
@@ -162,8 +155,30 @@ class PaymentCreditCard {
 
                     return null;
                 }
+
             });
         }
+
+    }
+
+    private static void saveVodedStatus(final CardTransactionRecord transactionRecord, PaymentRecord paymentRecord, CreditCardTransactionResponse saleResponse) {
+        TaskRunner.runUnitOfWorkInOperationstNamespace(TransactionScopeOption.RequiresNew, new Executable<Void, RuntimeException>() {
+            @Override
+            public Void execute() {
+                transactionRecord.voided().setValue(true);
+                Persistence.service().persist(transactionRecord);
+                return null;
+            }
+        });
+
+        PaymentRecord record = Persistence.service().retrieve(PaymentRecord.class, paymentRecord.getPrimaryKey());
+        record.transactionAuthorizationNumber().setValue(saleResponse.authorizationNumber().getValue());
+        record.paymentStatus().setValue(PaymentRecord.PaymentStatus.Void);
+        LogicalDate now = SystemDateManager.getLogicalDate();
+        record.lastStatusChangeDate().setValue(now);
+        record.receivedDate().setValue(now);
+        record.finalizeDate().setValue(now);
+        Persistence.service().persist(record);
 
     }
 }

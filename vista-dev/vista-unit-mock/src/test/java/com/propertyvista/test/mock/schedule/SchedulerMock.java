@@ -20,6 +20,7 @@ import org.junit.Assert;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.pyx4j.config.server.SystemDateManager;
 import com.pyx4j.entity.server.ConnectionTarget;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.server.TransactionScopeOption;
@@ -45,8 +46,12 @@ public class SchedulerMock {
         return runProcess(processType, DateUtils.detectDateformat(forDateStr));
     }
 
-    public static ExecutionMonitor runProcess(PmcProcessType processType, int expectedErred, int expectedFailed) {
-        ExecutionMonitor executionMonitor = runProcess(processType, (Date) null);
+    public static ExecutionMonitor runProcess(PmcProcessType processType, String forDateStr, int expectedErred, int expectedFailed) {
+        return runProcess(processType, DateUtils.detectDateformat(forDateStr), expectedErred, expectedFailed);
+    }
+
+    public static ExecutionMonitor runProcess(PmcProcessType processType, Date forDate, int expectedErred, int expectedFailed) {
+        ExecutionMonitor executionMonitor = runProcess(processType, forDate);
         Assert.assertEquals(processType + " Erred", Long.valueOf(expectedErred), executionMonitor.getErred());
         Assert.assertEquals(processType + " Failed", Long.valueOf(expectedFailed), executionMonitor.getFailed());
         return executionMonitor;
@@ -59,6 +64,10 @@ public class SchedulerMock {
         try {
             requestNamspaceLocal.set(NamespaceManager.getNamespace());
             Persistence.service().startTransaction(TransactionScopeOption.Suppress, ConnectionTarget.BackgroundProcess);
+
+            if (forDate == null) {
+                forDate = SystemDateManager.getDate();
+            }
 
             final PmcProcessContext sharedContext = new PmcProcessContext(forDate);
             final PmcProcess pmcProcess = PmcProcessFactory.createPmcProcess(processType);

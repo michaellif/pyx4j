@@ -27,6 +27,7 @@ import com.propertyvista.biz.financial.payment.PadPaymentPercentAmountValidation
 import com.propertyvista.biz.financial.payment.PadProcessingTest;
 import com.propertyvista.biz.financial.payment.PadTransactionUtilsTest;
 import com.propertyvista.biz.financial.payment.PaymentAcceptanceUtilsTest;
+import com.propertyvista.biz.financial.payment.PaymentHealthMonitorTest;
 import com.propertyvista.biz.financial.payment.PaymentMethodPersistenceCardsTest;
 import com.propertyvista.biz.financial.payment.PaymentMethodPersistenceEcheckTest;
 import com.propertyvista.biz.financial.payment.PreauthorizedPaymentChangeReviewInternalTest;
@@ -48,7 +49,8 @@ import com.propertyvista.biz.financial.payment.PreauthorizedPaymentCyclesTest;
         FundsTransferProcessErrorRecoveryTest.class, //
         PadTransactionUtilsTest.class, //
         PreauthorizedPaymentChangeReviewInternalTest.class, //
-        PreauthorizedPaymentCyclesTest.class })
+        PreauthorizedPaymentCyclesTest.class,//
+        PaymentHealthMonitorTest.class })
 public class PaymentSuite {
 
 }

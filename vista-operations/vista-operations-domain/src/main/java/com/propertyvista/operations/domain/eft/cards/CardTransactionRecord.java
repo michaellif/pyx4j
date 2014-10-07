@@ -69,6 +69,8 @@ public interface CardTransactionRecord extends IEntity {
 
     IPrimitive<String> feeResponseCode();
 
+    IPrimitive<Boolean> voided();
+
     @Timestamp(Timestamp.Update.Created)
     @Editor(type = EditorType.label)
     @Format("yyyy-MM-dd HH:mm:ss")

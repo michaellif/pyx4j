@@ -30,7 +30,6 @@ public class CardTransactionRecordForm extends OperationsEntityForm<CardTransact
 
         FormPanel formPanel = new FormPanel(this);
 
-        //formPanel.append(Location.Left, proto().pmc().name(), new FieldDecoratorBuilder().customLabel("PMC:").build()));
         formPanel.append(Location.Left, proto().pmc().name()).decorate().customLabel("PMC:");
         formPanel.append(Location.Left, proto().merchantTerminalId()).decorate();
 
@@ -41,6 +40,7 @@ public class CardTransactionRecordForm extends OperationsEntityForm<CardTransact
         formPanel.append(Location.Left, proto().feeAmount()).decorate();
 
         formPanel.append(Location.Left, proto().saleResponseCode()).decorate();
+        formPanel.append(Location.Left, proto().voided()).decorate();
         formPanel.append(Location.Left, proto().saleResponseText()).decorate();
 
         formPanel.append(Location.Left, proto().feeResponseCode()).decorate();

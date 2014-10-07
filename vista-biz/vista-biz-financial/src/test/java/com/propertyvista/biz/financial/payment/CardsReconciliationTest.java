@@ -213,8 +213,8 @@ public class CardsReconciliationTest extends LeaseFinancialTestBase {
         }
 
         setSysDate("2011-04-02");
-        SchedulerMock.runProcess(PmcProcessType.paymentsReceiveCardsReconciliation, 0, 0);
-        SchedulerMock.runProcess(PmcProcessType.paymentsReceiveCardsReconciliation, 0, 0);
+        SchedulerMock.runProcess(PmcProcessType.paymentsReceiveCardsReconciliation, (Date) null, 0, 0);
+        SchedulerMock.runProcess(PmcProcessType.paymentsReceiveCardsReconciliation, (Date) null, 0, 0);
 
         CardsAggregatedTransfer at1;
         {
@@ -249,8 +249,8 @@ public class CardsReconciliationTest extends LeaseFinancialTestBase {
         }
 
         setSysDate("2011-04-03");
-        SchedulerMock.runProcess(PmcProcessType.paymentsReceiveCardsReconciliation, 0, 0);
-        SchedulerMock.runProcess(PmcProcessType.paymentsReceiveCardsReconciliation, 0, 0);
+        SchedulerMock.runProcess(PmcProcessType.paymentsReceiveCardsReconciliation, (Date) null, 0, 0);
+        SchedulerMock.runProcess(PmcProcessType.paymentsReceiveCardsReconciliation, (Date) null, 0, 0);
 
         {
             EntityQueryCriteria<CardsAggregatedTransfer> criteria = EntityQueryCriteria.create(CardsAggregatedTransfer.class);
