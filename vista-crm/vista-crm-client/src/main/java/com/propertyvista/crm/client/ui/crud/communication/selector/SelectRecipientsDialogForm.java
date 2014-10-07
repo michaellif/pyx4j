@@ -85,9 +85,9 @@ public class SelectRecipientsDialogForm extends HorizontalPanel {
 
     private void initForm(Collection<CommunicationEndpointDTO> alreadySelected) {
 
-        final FlowPanel listPanel = new FlowPanel();
-        listPanel.setHeight("500px");
-        listPanel.setWidth("100%");
+        final ScrollPanel listScrollPanel = new ScrollPanel();
+        listScrollPanel.setHeight("500px");
+        listScrollPanel.setWidth("100%");
 
         FlowPanel menuPanel = new FlowPanel();
         menuPanel.setHeight("500px");
@@ -101,35 +101,36 @@ public class SelectRecipientsDialogForm extends HorizontalPanel {
             @Override
             public void onValueChange(ValueChangeEvent<String> event) {
                 grabSelectedItems();
-                listPanel.clear();
+                listScrollPanel.clear();
                 if (rg.getValue().equals("Tenant")) {
                     lister = new SelectorDialogTenantLister(SelectRecipientsDialogForm.this, selectedTenants);
                     tenantListerController = new SelectorDialogTenantListerController(lister, ((SelectorDialogTenantLister) lister).getSelectService());
-                    listPanel.add(lister.asWidget());
+                    listScrollPanel.add(lister.asWidget());
                 } else if (rg.getValue().equals("Corporate")) {
                     lister = new SelectorDialogCorporateLister(SelectRecipientsDialogForm.this, selectedEmployees);
                     corporateListerController = new SelectorDialogCorporateListerController(lister, ((SelectorDialogCorporateLister) lister).getSelectService());
-                    listPanel.add(lister.asWidget());
+                    listScrollPanel.add(lister.asWidget());
                 } else if (rg.getValue().equals("Building")) {
                     lister = new SelectorDialogBuildingLister(SelectRecipientsDialogForm.this, selectedBuildings);
                     buildingListerController = new SelectorDialogBuildingListerController(lister, ((SelectorDialogBuildingLister) lister).getSelectService());
-                    listPanel.add(lister.asWidget());
+                    listScrollPanel.add(lister.asWidget());
                 } else if (rg.getValue().equals("Portfolio")) {
                     lister = new SelectorDialogPortfolioLister(SelectRecipientsDialogForm.this, selectedPortfolios);
                     portfolioListerController = new SelectorDialogPortfolioListerController(lister, ((SelectorDialogPortfolioLister) lister).getSelectService());
-                    listPanel.add(lister.asWidget());
+                    listScrollPanel.add(lister.asWidget());
                 } else if (rg.getValue().equals("Selected")) {
                     selectedForm = new SelectorDialogSelectedForm();
                     selectedForm.init();
                     selectedForm.populate(selectedAll);
-                    listPanel.add(selectedForm.asWidget());
+                    selectedForm.asWidget().setHeight("100%");
+                    listScrollPanel.add(selectedForm.asWidget());
                 }
             }
         });
 
         add(menuPanel);
-        add(listPanel);
-        setCellWidth(listPanel, "100%");
+        add(listScrollPanel);
+        setCellWidth(listScrollPanel, "100%");
         wrapIt(alreadySelected);
         grabSelectedItems();
     }
@@ -194,40 +195,50 @@ public class SelectRecipientsDialogForm extends HorizontalPanel {
         }
     }
 
-    public void addSelected(IEntity selected) {
-        CommunicationEndpointDTO proto = EntityFactory.create(CommunicationEndpointDTO.class);
-        if (selected instanceof Building) {
-            proto.name().set(((Building) selected).propertyCode());
-            proto.type().setValue(ContactType.Building);
-            CommunicationGroup cg = EntityFactory.create(CommunicationGroup.class);
-            cg.building().set(selected);
-            proto.endpoint().set(cg);
-        } else if (selected instanceof Portfolio) {
-            proto.name().set(((Portfolio) selected).name());
-            proto.type().setValue(ContactType.Portfolio);
-            CommunicationGroup cg = EntityFactory.create(CommunicationGroup.class);
-            cg.portfolio().set(selected);
-            proto.endpoint().set(cg);
-        } else if (selected instanceof Employee) {
-            proto.name().setValue(((Employee) selected).name().getStringView());
-            proto.type().setValue(ContactType.Employee);
-            proto.endpoint().set(selected);
-        } else if (selected instanceof Tenant) {
-            proto.name().setValue(((Tenant) selected).customer().person().name().getStringView());
-            proto.type().setValue(ContactType.Tenant);
-            proto.endpoint().set(selected);
+    public void addSelected(Collection<IEntity> selectedItems) {
+
+        if (selectedItems == null || selectedItems.size() == 0) {
+            return;
         }
-        selectedAll.to().add(proto);
+        for (IEntity selected : selectedItems) {
+            CommunicationEndpointDTO proto = EntityFactory.create(CommunicationEndpointDTO.class);
+            if (selected instanceof Building) {
+                proto.name().set(((Building) selected).propertyCode());
+                proto.type().setValue(ContactType.Building);
+                CommunicationGroup cg = EntityFactory.create(CommunicationGroup.class);
+                cg.building().set(selected);
+                proto.endpoint().set(cg);
+            } else if (selected instanceof Portfolio) {
+                proto.name().set(((Portfolio) selected).name());
+                proto.type().setValue(ContactType.Portfolio);
+                CommunicationGroup cg = EntityFactory.create(CommunicationGroup.class);
+                cg.portfolio().set(selected);
+                proto.endpoint().set(cg);
+            } else if (selected instanceof Employee) {
+                proto.name().setValue(((Employee) selected).name().getStringView());
+                proto.type().setValue(ContactType.Employee);
+                proto.endpoint().set(selected);
+            } else if (selected instanceof Tenant) {
+                proto.name().setValue(((Tenant) selected).customer().person().name().getStringView());
+                proto.type().setValue(ContactType.Tenant);
+                proto.endpoint().set(selected);
+            }
+            selectedAll.to().add(proto);
+        }
     }
 
-    public void removeSelected(IEntity selected, Class<? extends IEntity> type) {
-
-        for (CommunicationEndpointDTO current : selectedAll.to())
-            if (current.endpoint().getInstanceValueClass().equals(type)) {
-                if (current.endpoint().businessEquals(selected)) {
-                    selectedAll.to().remove(current);
-                    break;
+    public void removeSelected(Collection<IEntity> deselectedItems, Class<? extends IEntity> type) {
+        if (deselectedItems == null || deselectedItems.size() == 0) {
+            return;
+        }
+        for (IEntity deselected : deselectedItems) {
+            for (CommunicationEndpointDTO current : selectedAll.to())
+                if (current.endpoint().getInstanceValueClass().equals(type)) {
+                    if (current.endpoint().businessEquals(deselected)) {
+                        selectedAll.to().remove(current);
+                        break;
+                    }
                 }
-            }
+        }
     }
 }

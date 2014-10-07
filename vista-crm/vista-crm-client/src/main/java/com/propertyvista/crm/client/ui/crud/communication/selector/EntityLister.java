@@ -84,10 +84,7 @@ public class EntityLister<E extends IEntity> extends AbstractLister<E> {
 
     @Override
     public List<Sort> getDefaultSorting() {
-        List<Sort> sort = new ArrayList<Sort>();//EntitySelectorTableVisorController.this.getDefaultSorting();
-//        if (sort == null) {
-//            sort = super.getDefaultSorting();
-//        }
+        List<Sort> sort = new ArrayList<Sort>();
         return sort;
     }
 
@@ -157,27 +154,22 @@ public class EntityLister<E extends IEntity> extends AbstractLister<E> {
 
         if (changed.size() > selectedOnTab.size()) {
             changed.removeAll(selectedOnTab);
-            if (changed.size() != 0) {
-                addItem(((ArrayList<E>) changed).get(0));
-            }
+            addItems((changed));
         } else {
             selectedOnTab.removeAll(changed);
-            if (selectedOnTab.size() != 0) {
-                removeItem(((ArrayList<E>) selectedOnTab).get(0));
-            }
-            selectedOnTab.addAll(changed);
+            removeItems(new ArrayList<E>(selectedOnTab));
         }
     }
 
-    private void addItem(E addItem) {
-        selectedOnTab.add(addItem);
-        alreadySelected.add(addItem);
-        parent.addSelected(addItem);
+    private void addItems(Collection<E> addItems) {
+        selectedOnTab.addAll(addItems);
+        alreadySelected.addAll(addItems);
+        parent.addSelected((Collection<IEntity>) addItems);
     }
 
-    private void removeItem(E removeItem) {
-        selectedOnTab.remove(removeItem);
-        alreadySelected.remove(removeItem);
-        parent.removeSelected(removeItem, entityClass);
+    private void removeItems(Collection<E> removeItems) {
+        selectedOnTab.removeAll(removeItems);
+        alreadySelected.removeAll(removeItems);
+        parent.removeSelected((Collection<IEntity>) removeItems, entityClass);
     }
 }
