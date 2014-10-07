@@ -264,17 +264,13 @@ public class LeaseTermForm extends CrmEntityForm<LeaseTermDTO> {
             idHolder.add(inject(proto().lease().leaseApplication().applicationId(), new FieldDecoratorBuilder(15).build()));
             formPanel.append(Location.Right, idHolder);
         } else {
-
             final CEntityCrudHyperlink<Lease> leaseHyperlink = new CEntityCrudHyperlink<Lease>(null);
-
             leaseHyperlink.setFormatter(new IFormatter<Lease, String>() {
                 @Override
                 public String format(Lease value) {
                     return ((value != null) ? value.leaseId().getStringView() : null);
                 }
-
             });
-
             leaseHyperlink.setNavigationCommand(new Command() {
                 @Override
                 public void execute() {
@@ -287,8 +283,10 @@ public class LeaseTermForm extends CrmEntityForm<LeaseTermDTO> {
                     }
                 }
             });
-
             formPanel.append(Location.Right, proto().lease(), leaseHyperlink).decorate().componentWidth(180);
+        }
+        if (VistaFeatures.instance().yardiIntegration()) {
+            formPanel.append(Location.Right, proto().yardiLeasePk(), new CEnumLabel()).decorate().componentWidth(180);
         }
         formPanel.append(Location.Right, proto().lease().type(), new CEnumLabel()).decorate().componentWidth(180).customLabel(i18n.tr("Lease Type"));
         formPanel.append(Location.Right, proto().lease().status(), new CEnumLabel()).decorate().componentWidth(180).customLabel(i18n.tr("Lease Status"));

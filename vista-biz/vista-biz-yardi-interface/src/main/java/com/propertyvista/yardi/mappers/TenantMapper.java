@@ -39,6 +39,7 @@ import com.propertyvista.config.VistaSystemsSimulationConfig;
 import com.propertyvista.domain.security.CustomerUser;
 import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.domain.tenant.lease.Lease;
+import com.propertyvista.domain.tenant.lease.LeaseParticipant;
 import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
 import com.propertyvista.domain.tenant.lease.LeaseTermParticipant.Role;
 import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
@@ -194,24 +195,37 @@ public class TenantMapper {
     }
 
     private Customer findCustomer(YardiCustomer yardiCustomer) {
-        EntityQueryCriteria<Customer> criteria = EntityQueryCriteria.create(Customer.class);
         Customer customer = null;
 
         String email = retrieveYardiCustomerEmail(yardiCustomer);
         if (!CommonsStringUtils.isEmpty(email) && EmailValidator.isValid(email)) {
             // try to by e-mail first:
-            criteria.eq(criteria.proto().person().email(), EmailValidator.normalizeEmailAddress(email));
-            customer = Persistence.service().retrieve(criteria);
+            EntityQueryCriteria<Customer> emailCriteria = EntityQueryCriteria.create(Customer.class);
+            emailCriteria.eq(emailCriteria.proto().person().email(), EmailValidator.normalizeEmailAddress(email));
+            customer = Persistence.service().retrieve(emailCriteria);
             if (customer != null) {
-                log.info("Customer {} found  by e-mail", yardiCustomer.getCustomerID());
+                log.info("Customer {} ({}) found by e-mail", yardiCustomer.getCustomerID(), customer.getStringView());
             }
         } else {
-            // then try to find by Name + LastName:
-            criteria.eq(criteria.proto().person().name().firstName(), yardiCustomer.getName().getFirstName());
-            criteria.eq(criteria.proto().person().name().lastName(), yardiCustomer.getName().getLastName());
-            customer = Persistence.service().retrieve(criteria);
+            // then try to find by Yardi CustomerId:
+            @SuppressWarnings("rawtypes")
+            EntityQueryCriteria<LeaseParticipant> participantIdCriteria = EntityQueryCriteria.create(LeaseParticipant.class);
+            participantIdCriteria.eq(participantIdCriteria.proto().participantId(), getCustomerID(yardiCustomer));
+            LeaseParticipant<?> participant = Persistence.service().retrieve(participantIdCriteria);
+            if (participant != null) {
+                customer = participant.customer();
+            }
             if (customer != null) {
-                log.info("Customer {} found  by name", yardiCustomer.getCustomerID());
+                log.info("Customer {} ({}) found by participant Id", yardiCustomer.getCustomerID(), customer.getStringView());
+            } else {
+                // ant last - try to find by Name + LastName:
+                EntityQueryCriteria<Customer> nameCriteria = EntityQueryCriteria.create(Customer.class);
+                nameCriteria.eq(nameCriteria.proto().person().name().firstName(), yardiCustomer.getName().getFirstName());
+                nameCriteria.eq(nameCriteria.proto().person().name().lastName(), yardiCustomer.getName().getLastName());
+                customer = Persistence.service().retrieve(nameCriteria);
+                if (customer != null) {
+                    log.info("Customer {} ({}) found by full name", yardiCustomer.getCustomerID(), customer.getStringView());
+                }
             }
         }
 
@@ -240,7 +254,7 @@ public class TenantMapper {
         }
         // Mass email testing
         if (!VistaDeployment.isVistaProduction() && VistaSystemsSimulationConfig.getConfiguration().yardiAllTenantsToHaveEmails().getValue(false)) {
-            return TenantMapper.getCustomerID(yardiCustomer) + "@pyx4j.com";
+            return getCustomerID(yardiCustomer) + "@pyx4j.com";
         } else {
             return null;
         }
