@@ -83,10 +83,6 @@ class ARYardiPaymentManager extends ARAbstractPaymentManager {
         Persistence.ensureRetrieve(paymentRecord.billingAccount().lease(), AttachLevel.Attached);
 
         try {
-            // Do not update Lease in Batch posting process, It is done as separate process
-            if (paymentBatchContext == null) {
-                ServerSideFactory.create(YardiARFacade.class).updateLease(paymentRecord.billingAccount().lease(), null);
-            }
             ServerSideFactory.create(YardiARFacade.class).postReceipt(receipt, paymentBatchContext);
         } catch (RemoteException e) {
             throw new ARException(SimpleMessageFormat.format("Posting receipt {0} to Yardi failed due to communication failure; Lease Id {1}", //
@@ -95,16 +91,6 @@ class ARYardiPaymentManager extends ARAbstractPaymentManager {
             throw new ARException(SimpleMessageFormat.format("Posting receipt {0} to Yardi failed; Lease Id {1}", //
                     paymentRecord.id(), paymentRecord.billingAccount().lease().leaseId()), e);
         }
-
-        if (paymentBatchContext == null) {
-            try {
-                ServerSideFactory.create(YardiARFacade.class).updateLease(paymentRecord.billingAccount().lease(), null);
-            } catch (Throwable ignoreDataRetrivalFromYardy) {
-                // We ignore error here because it will require unnecessary transaction reject
-                log.debug("ignoreDataRetrivalFromYardy", ignoreDataRetrivalFromYardy);
-            }
-        }
-
     }
 
     @Override

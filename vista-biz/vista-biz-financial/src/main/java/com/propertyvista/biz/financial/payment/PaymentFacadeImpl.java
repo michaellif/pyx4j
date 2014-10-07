@@ -471,8 +471,8 @@ public class PaymentFacadeImpl implements PaymentFacade {
         cal.add(Calendar.MONTH, -3);
         LogicalDate dateFrom = new LogicalDate(cal.getTime());
         EntityQueryCriteria<PaymentRecord> criteria = EntityQueryCriteria.create(PaymentRecord.class);
-        criteria.add(PropertyCriterion.eq(criteria.proto().billingAccount(), billingAccount));
-        criteria.add(PropertyCriterion.gt(criteria.proto().receivedDate(), dateFrom));
+        criteria.eq(criteria.proto().billingAccount(), billingAccount);
+        criteria.gt(criteria.proto().receivedDate(), dateFrom);
         List<PaymentRecord> result = Persistence.service().query(criteria);
         // sort recent first
         Collections.sort(result, new Comparator<PaymentRecord>() {

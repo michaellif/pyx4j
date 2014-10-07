@@ -20,19 +20,25 @@ import com.pyx4j.entity.server.Executable;
 import com.pyx4j.entity.server.TransactionScopeOption;
 import com.pyx4j.entity.server.UnitOfWork;
 import com.pyx4j.gwt.server.deferred.AbstractDeferredProcess;
+import com.pyx4j.gwt.server.deferred.DeferredProcessRegistry;
+import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.biz.financial.payment.PaymentException;
 import com.propertyvista.biz.financial.payment.PaymentFacade;
+import com.propertyvista.config.ThreadPoolNames;
 import com.propertyvista.domain.financial.PaymentRecord;
+import com.propertyvista.shared.config.VistaFeatures;
 
 class PaymentDeferredProcess extends AbstractDeferredProcess {
 
+    private static final I18n i18n = I18n.get(PaymentDeferredProcess.class);
+
     private static final long serialVersionUID = 1L;
 
-    private final PaymentRecord paymentRecordStub;
+    private final PaymentRecord paymentRecordId;
 
-    public PaymentDeferredProcess(PaymentRecord paymentRecordStub) {
-        this.paymentRecordStub = paymentRecordStub;
+    public PaymentDeferredProcess(PaymentRecord paymentRecordId) {
+        this.paymentRecordId = paymentRecordId;
     }
 
     @Override
@@ -41,9 +47,13 @@ class PaymentDeferredProcess extends AbstractDeferredProcess {
             @Override
             public Void execute() throws RuntimeException {
                 try {
-                    ServerSideFactory.create(PaymentFacade.class).processPayment(paymentRecordStub, null);
+                    ServerSideFactory.create(PaymentFacade.class).processPayment(paymentRecordId, null);
                 } catch (PaymentException e) {
-                    throw new UserRuntimeException(PaymentWizardServiceImpl.i18n.tr("Payment processing has been Failed!"), e);
+                    throw new UserRuntimeException(i18n.tr("Payment processing has failed!"), e);
+                }
+
+                if (false && VistaFeatures.instance().yardiIntegration()) {
+                    DeferredProcessRegistry.fork(new LeaseYardiUpdateDeferredProcess(paymentRecordId), ThreadPoolNames.IMPORTS);
                 }
                 return null;
             }
