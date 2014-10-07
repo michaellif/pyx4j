@@ -102,6 +102,7 @@ public interface LeaseTerm extends IVersionedEntity<LeaseTermV> {
      * happens, a new person record (MITS:Description node) will be created with the new property info, unit info, etc., but it will still point to that same
      * tenant code
      */
+    @Editor(type = EditorType.label)
     IPrimitive<String> yardiLeasePk();
 
     @NotNull

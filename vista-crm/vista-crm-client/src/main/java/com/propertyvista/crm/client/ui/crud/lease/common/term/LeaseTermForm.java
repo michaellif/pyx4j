@@ -285,9 +285,6 @@ public class LeaseTermForm extends CrmEntityForm<LeaseTermDTO> {
             });
             formPanel.append(Location.Right, proto().lease(), leaseHyperlink).decorate().componentWidth(180);
         }
-        if (VistaFeatures.instance().yardiIntegration()) {
-            formPanel.append(Location.Right, proto().yardiLeasePk(), new CEnumLabel()).decorate().componentWidth(180);
-        }
         formPanel.append(Location.Right, proto().lease().type(), new CEnumLabel()).decorate().componentWidth(180).customLabel(i18n.tr("Lease Type"));
         formPanel.append(Location.Right, proto().lease().status(), new CEnumLabel()).decorate().componentWidth(180).customLabel(i18n.tr("Lease Status"));
         formPanel.append(Location.Right, proto().lease().completion(), new CEnumLabel()).decorate().componentWidth(180)
@@ -298,6 +295,9 @@ public class LeaseTermForm extends CrmEntityForm<LeaseTermDTO> {
         formPanel.append(Location.Left, proto().termFrom()).decorate().componentWidth(120);
         formPanel.append(Location.Left, proto().termTo()).decorate().componentWidth(120);
         formPanel.append(Location.Right, proto().creationDate()).decorate().componentWidth(120);
+        if (VistaFeatures.instance().yardiIntegration()) {
+            formPanel.append(Location.Right, proto().yardiLeasePk(), new CEnumLabel()).decorate().componentWidth(180);
+        }
 
         formPanel.br();
         formPanel.append(Location.Left, inject(proto().carryforwardBalance(), new FieldDecoratorBuilder(9).build()));
