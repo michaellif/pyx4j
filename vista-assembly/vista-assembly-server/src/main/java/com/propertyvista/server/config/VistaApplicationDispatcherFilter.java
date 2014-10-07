@@ -39,6 +39,8 @@ public class VistaApplicationDispatcherFilter implements Filter {
 
     private static String REQUEST_DISPATCHED_REQUEST_ATR = VistaApplicationDispatcherFilter.class.getName();
 
+    private static final String regExTwoDigits = "\\d\\d";
+
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
     }
@@ -94,34 +96,6 @@ public class VistaApplicationDispatcherFilter implements Filter {
 
     }
 
-//    Sample to build the complete URI from from request/httprequest object
-//    String newUrl = httprequest.getScheme()
-//              + "://"
-//              + request.getServerName() +
-//              ("http".equals(httprequest.getScheme()) && httprequest.getServerPort() == 80 || "https".equals(httprequest.getScheme())
-//                      && httprequest.getServerPort() == 443 ? "" : ":" + httprequest.getServerPort()) + httprequest.getRequestURI()
-//              + (httprequest.getQueryString() != null ? "?" + httprequest.getQueryString() : "");
-//    }
-
-//    Sample to wrap Request and change some param
-//    public class MyRequest extends HttpServletRequestWrapper {
-//
-//        public MyRequest(HttpServletRequest request) {
-//            super(request);
-//        }
-//
-//        @Override
-//        public String getContextPath() {
-//            return "/vista/crm/"; // TODO: implement accordingly.
-//        }
-//
-//        @Override
-//        public String getRequestURI() {
-//            return "/vista"; // TODO: implement accordingly.
-//        }
-//
-//    }
-
     private String getPathToForwarded(HttpServletRequest httprequest, VistaApplication app) {
         if (app != VistaApplication.prospect) {
             return "/" + app.name();
@@ -142,11 +116,20 @@ public class VistaApplicationDispatcherFilter implements Filter {
         //String subRequestPath = VistaServerSideConfigurationDev.devContextLess ? "" : VistaServerSideConfigurationDev.devContextPath;
         String subRequestPath = "";
 
+        if ((app == VistaApplication.site) && (!httprequest.getRequestURI().equalsIgnoreCase("/"))) {
+            String requestUri = httprequest.getRequestURI();
+            if (requestUri.startsWith("/vista/site")) {
+                requestPath = requestUri.replaceFirst("/vista/site", "");
+            }
+        }
+
         if (app != VistaApplication.prospect) {
             subRequestPath += "/" + app.toString();
         }
+
         subRequestPath += requestPath;
-        String newUri = subRequestPath;
+
+        String newUri = (subRequestPath.charAt(subRequestPath.length() - 1) == '/') ? subRequestPath : subRequestPath + "/";
 
         return newUri;
     }
@@ -173,7 +156,9 @@ public class VistaApplicationDispatcherFilter implements Filter {
             }
         }
 
-        // Domains type : http://PMC-XXX.dev.birchwoodsoftwaregroup.com:8888 and http://PMC-XXX-nn.birchwoodsoftwaregroup.com:8888
+        // Domains type : http://PMC-XXX.dev.birchwoodsoftwaregroup.com:8888,
+        //http://XXX-nn.dev.birchwoodsoftwaregroup.com:8888 and
+        //http://PMC-XXX-nn.birchwoodsoftwaregroup.com:8888
         if (appByDomainTokens.length >= 2) {
             if (appByDomainTokens[1].equalsIgnoreCase("portal")) {
                 String[] appByPathTokens = path.split("/");
@@ -189,10 +174,12 @@ public class VistaApplicationDispatcherFilter implements Filter {
             }
 
             try {
-                app = VistaApplication.valueOf(appByDomainTokens[1]);
+                int index = appByDomainTokens[1].matches(regExTwoDigits) ? 0 : 1;
+                app = VistaApplication.valueOf(appByDomainTokens[index]);
             } catch (IllegalArgumentException e) {
-                // do noghing, app = null
+                // do nothing, app = null
             }
+
         }
 
         return app;
