@@ -53,8 +53,102 @@ public class MockHttpServletRequest implements HttpServletRequest {
 
     protected Hashtable<String, Object> attributes = new Hashtable<String, Object>();
 
-    public MockHttpServletRequest() {
+    protected String _url;
 
+    protected String _scheme;
+
+    protected String _contextPath;
+
+    protected String _httpMethodString;
+
+    protected String _pathInfo;
+
+    protected int _port;
+
+    protected String _queryString;
+
+    protected String _requestURI;
+
+    protected String _serverName;
+
+    protected String _servletPath;
+
+    public MockHttpServletRequest() {
+    }
+
+    public MockHttpServletRequest(String url) {
+        splitUrl(url);
+    }
+
+    public void setContextPath(String context) {
+        this._contextPath = context;
+    }
+
+    protected void splitUrl(String url) {
+        checkUrlPattern(url);
+        setScheme();
+        setServerAndPort();
+        setRequestURIParts();
+    }
+
+    protected void setServerAndPort() {
+
+        String urlNoScheme = _url.replaceFirst(this._scheme, "");
+        urlNoScheme = urlNoScheme.substring(3, (urlNoScheme.length() - 1));
+
+        String[] urlTokens = urlNoScheme.split("/");
+        String serverName = urlTokens[0];
+
+        String[] domainTokens = serverName.split(":");
+        _serverName = domainTokens[0];
+
+        if (domainTokens.length > 1) {
+            _port = Integer.valueOf(domainTokens[1]).intValue();
+        } else {
+            _port = 80;
+        }
+    }
+
+    protected void setScheme() {
+        if (_url.startsWith("https")) {
+            _scheme = "https";
+        } else {
+            _scheme = "http";
+        }
+    }
+
+    protected void setRequestURIParts() {
+        String[] urlParts = _url.split("/");
+
+        if (urlParts.length <= 2) {
+            _requestURI = "/";
+            _queryString = "";
+        } else {
+            String domainUrl = urlParts[0] + "//" + urlParts[2] + "/";
+            if (_url.contains("?")) {
+                _requestURI = "/" + (_url.replaceFirst(domainUrl, "")).split("?")[0];
+                _queryString = (_url.replaceFirst(domainUrl, "")).split("?")[1];
+            } else {
+                _requestURI = "/" + _url.replaceFirst(domainUrl, "");
+            }
+        }
+
+        if (_contextPath != null) {
+            _servletPath = _requestURI.replace(_contextPath, "");
+        } else {
+            _servletPath = _requestURI;
+        }
+
+    }
+
+    @SuppressWarnings("unused")
+    protected void checkUrlPattern(String url) {
+        // TODO Look for URL pattern in PYX and checks against that to see if URL is well formed
+        if (false) {
+            throw new Error("URL has not a valid URL format");
+        } else {
+            this._url = url;
+        }
     }
 
     @Override
@@ -130,12 +224,20 @@ public class MockHttpServletRequest implements HttpServletRequest {
 
     @Override
     public String getScheme() {
-        throw new UnsupportedOperationException();
+        if (_url != null) {
+            return _scheme;
+        } else {
+            throw new Error("URL for this mock request has not been set yet");
+        }
     }
 
     @Override
     public String getServerName() {
-        throw new UnsupportedOperationException();
+        if (_url != null) {
+            return _serverName;
+        } else {
+            throw new Error("URL for this mock request has not been set yet");
+        }
     }
 
     @Override
@@ -200,7 +302,11 @@ public class MockHttpServletRequest implements HttpServletRequest {
 
     @Override
     public int getLocalPort() {
-        throw new UnsupportedOperationException();
+        if (_url != null) {
+            return _port;
+        } else {
+            throw new Error("URL for this mock request has not been set yet");
+        }
     }
 
     @Override
@@ -259,12 +365,20 @@ public class MockHttpServletRequest implements HttpServletRequest {
 
     @Override
     public String getContextPath() {
-        throw new UnsupportedOperationException();
+        if (_url != null) {
+            return _contextPath;
+        } else {
+            throw new Error("URL for this mock request has not been set yet");
+        }
     }
 
     @Override
     public String getQueryString() {
-        throw new UnsupportedOperationException();
+        if (_url != null) {
+            return _queryString;
+        } else {
+            throw new Error("URL for this mock request has not been set yet");
+        }
     }
 
     @Override
@@ -289,7 +403,11 @@ public class MockHttpServletRequest implements HttpServletRequest {
 
     @Override
     public String getRequestURI() {
-        throw new UnsupportedOperationException();
+        if (_url != null) {
+            return _requestURI;
+        } else {
+            throw new Error("URL for this mock request has not been set yet");
+        }
     }
 
     @Override
@@ -299,7 +417,11 @@ public class MockHttpServletRequest implements HttpServletRequest {
 
     @Override
     public String getServletPath() {
-        throw new UnsupportedOperationException();
+        if (_url != null) {
+            return _servletPath;
+        } else {
+            throw new Error("URL for this mock request has not been set yet");
+        }
     }
 
     @Override
