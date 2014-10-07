@@ -87,5 +87,5 @@ ORDER BY    p.scode,t.sunitcode;
 //Filter
 //Type, DataTyp,    Name,             Caption, Key,                         List,                       Val1, Val2, Man, Multi, Title Label_Left Field_Left Field_Top Field_Width Label_Width Help
      C,       T,   hProp,            Property List,    ,                           61,           P.hMy = #hProp# ,     ,   Y,     Y,     Y,          ,          ,         ,           ,           ,    ,
-     0,    		A,   idate,     Lease Charge To Date,                       ,      ,      ,,				y,       	y,    	Y,                  Y,
+     0,    		A,   idate,     Lease Charge From Date,                       ,      ,      ,,				y,       	y,    	Y,                  Y,
 //end filter
