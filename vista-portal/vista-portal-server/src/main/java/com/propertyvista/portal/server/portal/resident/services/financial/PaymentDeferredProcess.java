@@ -52,7 +52,7 @@ class PaymentDeferredProcess extends AbstractDeferredProcess {
                     throw new UserRuntimeException(i18n.tr("Payment processing has failed!"), e);
                 }
 
-                if (false && VistaFeatures.instance().yardiIntegration()) {
+                if (VistaFeatures.instance().yardiIntegration()) {
                     DeferredProcessRegistry.fork(new LeaseYardiUpdateDeferredProcess(paymentRecordId), ThreadPoolNames.IMPORTS);
                 }
                 return null;
