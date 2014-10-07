@@ -173,7 +173,7 @@ public class VistaApplicationDispatcherFilter implements Filter {
             }
         }
 
-        // Domains type : http://PMC-XXX.dev.birchwoodsoftwaregroup.com:8888
+        // Domains type : http://PMC-XXX.dev.birchwoodsoftwaregroup.com:8888 and http://PMC-XXX-nn.birchwoodsoftwaregroup.com:8888
         if (appByDomainTokens.length >= 2) {
             if (appByDomainTokens[1].equalsIgnoreCase("portal")) {
                 String[] appByPathTokens = path.split("/");
