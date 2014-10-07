@@ -1,30 +1,18 @@
-SELECT	        ct.SCODE AS charge_code,
-                c.hmy AS charge_id,
-                CASE WHEN ISNULL(c.BACH,-1) = -1  THEN 'true' ELSE 'false' END AS pap_applicable,
-                CASE WHEN ISNULL(e.bRecur,-1) = -1 THEN 'true' ELSE 'false' END AS recurring_eft,
-                CASE WHEN ISNULL(t.bach,0) = -1 THEN 'true' ELSE 'false' END AS tenant_eft,
-		CAST(c.destimated AS NUMERIC(18,2)) AS estimated_charge,
-		ISNULL(CAST(a.dPercentAllocated AS VARCHAR(50)),'') AS percentage,
-		t.SCODE AS lease_id,
-		ISNULL(r.UCODE,'') tenant_id,
-		p.scode AS property_id,
-		e.HBANK,
-		SUBSTRING (e.STRANSIT,2,3) AS bank_id,
-		SUBSTRING (e.STRANSIT,5,LEN(e.STRANSIT)) AS transit_number,
-		REPLACE(e.SACCT,'-','') AS SACCT,
-		e.bDefault "achDefault",
-		e.HMY "achId",
-		ISNULL(t.SFIRSTNAME, '') + ' ' + t.SLASTNAME AS tenant,
-		ISNULL(r.SFIRSTNAME, '') + ' ' + r.ULASTNAME AS roommate,
-		e.SNAME AS bank_account_holder,
-		t.SRENT,
-		t.DTotalCharges,
-		t.SUNITCODE,
-		t.SADDR1,
-		t.SCITY,
-		t.SSTATE,
-		t.SZIPCODE,
-		pl.SADDR1 AS property_list
+SELECT	        
+                NULL AS "Ignore",
+                p.scode AS "Property Code",
+                t.SUNITCODE AS "Unit Number",
+                t.SCODE AS "Lease Id",
+                ISNULL(r.UCODE,'') AS "Tenant Id",
+                e.SNAME AS "Bank Account Holder",
+                SUBSTRING (e.STRANSIT,2,3) AS "Institution",
+                SUBSTRING (e.STRANSIT,5,LEN(e.STRANSIT)) AS "Transit",
+                REPLACE(e.SACCT,'-','') AS "Account",
+                t.DTotalCharges AS "Amount",
+                ISNULL(CAST(a.dPercentAllocated AS VARCHAR(50)),'') AS "Percentage",
+                CAST(c.destimated AS NUMERIC(18,2)) AS "Yardi Lease Charge",
+                ct.SCODE AS "Charge Code",
+                 CASE WHEN ISNULL(e.bRecur,-1) = -1 THEN 'true' ELSE 'false' END AS "Recurring EFT"
 FROM CAMRULE C
 JOIN chargtyp ct ON (ct.hmy = c.HCHARGECODE)
 JOIN TENANT t ON (c.HTENANT = t.HMYPERSON)
@@ -38,4 +26,5 @@ LEFT JOIN PERSON r ON (e.hRoommate = r.HMY)
 WHERE	(ISNULL(c.dtto,'01-JAN-2020') >= '01-NOV-2014' AND c.DTFROM <= '01-NOV-2014')
 AND		ts.status IN ('Current','Notice')
 AND		pl.SADDR1 LIKE '%Vista%'
-AND		e.SACCT NOT IN ('0','1');
+AND		e.SACCT NOT IN ('0','1')
+ORDER BY    p.scode,t.sunitcode;
