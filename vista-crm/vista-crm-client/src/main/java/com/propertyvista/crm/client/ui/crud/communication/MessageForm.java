@@ -174,6 +174,9 @@ public class MessageForm extends CrmEntityForm<MessageDTO> {
         }
 
         private String dateToGoogleStyle(IPrimitive<Date> date) {
+            if (date == null || date.getValue() == null) {
+                return "";
+            }
             long now = System.currentTimeMillis();
             long diff = now - date.getValue().getTime();
             long diffDays = diff / (24 * 60 * 60 * 1000);
