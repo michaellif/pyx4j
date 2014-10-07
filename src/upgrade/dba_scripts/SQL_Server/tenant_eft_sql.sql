@@ -12,7 +12,7 @@ SELECT
                 ISNULL(CAST(a.dPercentAllocated AS VARCHAR(50)),'') AS "Percentage",
                 CAST(c.destimated AS NUMERIC(18,2)) AS "Yardi Lease Charge",
                 ct.SCODE AS "Charge Code",
-                 CASE WHEN ISNULL(e.bRecur,-1) = -1 THEN 'true' ELSE 'false' END AS "Recurring EFT"
+                CASE WHEN ISNULL(e.bRecur,-1) = -1 THEN 'true' ELSE 'false' END AS "Recurring EFT"
 FROM CAMRULE C
 JOIN chargtyp ct ON (ct.hmy = c.HCHARGECODE)
 JOIN TENANT t ON (c.HTENANT = t.HMYPERSON)
