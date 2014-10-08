@@ -385,7 +385,6 @@ public class LeaseApplicationViewerViewImpl extends LeaseViewerViewImplBase<Leas
         setActionVisible(cancelAction, false);
 
         editButton.setVisible(false);
-        documentsButton.setVisible(false);
 
         super.reset();
     }
@@ -426,8 +425,6 @@ public class LeaseApplicationViewerViewImpl extends LeaseViewerViewImplBase<Leas
         // edit/view terms enabling logic:
         editButton.setVisible(status.isDraft() && status != Status.PendingDecision && (!isOnlineApplication || noPtAppProgress));
         termsButton.setVisible(!status.isDraft());
-
-        documentsButton.setVisible(status.isDraft());
 
         // yardi mode overrides:
         if (VistaFeatures.instance().yardiIntegration()) {

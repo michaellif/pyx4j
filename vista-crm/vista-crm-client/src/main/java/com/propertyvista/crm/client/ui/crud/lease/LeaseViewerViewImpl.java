@@ -587,8 +587,6 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
         setActionVisible(closeAction, false);
         setActionVisible(cancelAction, false);
 
-        leaseAgreementButton.setVisible(false);
-
         super.reset();
     }
 
@@ -639,8 +637,6 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
         } else if (VistaTODO.VISTA_2242_Simple_Lease_Renewal) {
             setActionVisible(renewAction, status == Status.Active && completion == null);
         }
-
-        leaseAgreementButton.setVisible(status.isDraft());
     }
 
     @Override
