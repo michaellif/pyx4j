@@ -114,6 +114,7 @@ public class VistaApplicationDispatcherFilter implements Filter {
     }
 
     private String getPathToForwarded(HttpServletRequest httprequest, ApplicationType app) {
+        // TODO what if ApplicationType = development?
         if (app != ApplicationType.prospect) {
             return "/" + app.name();
         } else {
@@ -140,7 +141,7 @@ public class VistaApplicationDispatcherFilter implements Filter {
             }
         }
 
-        if (app != ApplicationType.prospect) {
+        if (app != ApplicationType.prospect && app != ApplicationType.development) {
             subRequestPath += "/" + app.toString();
         }
 
@@ -166,10 +167,14 @@ public class VistaApplicationDispatcherFilter implements Filter {
 
         // Domains type : http://XXX.dev.birchwoodsoftwaregroup.com:8888
         if (appByDomainTokens.length == 1) {
+            if (appByDomain.equalsIgnoreCase("static")) {
+                return ApplicationType.development;
+            }
+
             try {
                 app = ApplicationType.valueOf(appByDomain);
             } catch (IllegalArgumentException e) {
-                // do noghing, app = null
+
             }
         }
 
@@ -192,6 +197,9 @@ public class VistaApplicationDispatcherFilter implements Filter {
 
             try {
                 int index = appByDomainTokens[1].matches(regExTwoDigits) ? 0 : 1;
+                if (appByDomainTokens[index].equalsIgnoreCase("static")) {
+                    return ApplicationType.development;
+                }
                 app = ApplicationType.valueOf(appByDomainTokens[index]);
             } catch (IllegalArgumentException e) {
                 // do nothing, app = null

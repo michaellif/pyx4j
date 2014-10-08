@@ -73,7 +73,7 @@ public class VistaApplicationDispatcherFilterTest {
         testMapping("http://operations.dev.birchwoodsoftwaregroup.com:8888/", false, ApplicationType.operations);
 
         // DB Reset
-        //testMapping("http://static.dev.birchwoodsoftwaregroup.com:8888/o/db-reset", false, null);
+        testMapping("http://static.dev.birchwoodsoftwaregroup.com:8888/o/db-reset", false, ApplicationType.development);
 
         // SITE
         testMapping("http://vista-site.dev.birchwoodsoftwaregroup.com:8888/", false, ApplicationType.site);
@@ -102,7 +102,7 @@ public class VistaApplicationDispatcherFilterTest {
         testMapping("https://operations-22.birchwoodsoftwaregroup.com/", false, ApplicationType.operations);
 
         // DB-Reset
-        //testMapping("http://static-22.birchwoodsoftwaregroup.com/o/db-reset", false, VistaApplication.);
+        testMapping("http://static-22.birchwoodsoftwaregroup.com/o/db-reset", false, ApplicationType.development);
 
         // SITE
         testMapping("https://vista-site-22.birchwoodsoftwaregroup.com/", false, ApplicationType.site);
@@ -158,7 +158,11 @@ public class VistaApplicationDispatcherFilterTest {
         mockChain.verify();
 
         if ((!followChain) && (app != null)) {
-            Assert.assertTrue("Wrong forwarded URL for application '" + app + "'", req.getForwardUrl().startsWith("/" + app));
+            if (app == ApplicationType.development) {
+                Assert.assertTrue("Wrong forwarded URL for application '" + app + "'", req.getForwardUrl().startsWith(req.getRequestURI()));
+            } else {
+                Assert.assertTrue("Wrong forwarded URL for application '" + app + "'", req.getForwardUrl().startsWith("/" + app));
+            }
         }
     }
 
