@@ -67,7 +67,7 @@ public class BuildingMarshaller extends AbstractMarshaller<Building, BuildingIO>
         Persistence.service().retrieveMember(building.amenities());
         buildingIO.amenities = BuildingAmenityMarshaller.getInstance().marshalCollection(BuildingAmenityListIO.class, building.amenities());
 
-        if (AbstractProcessor.getServiceClass() == PortationService.class || !getContext().isInCollection()) {
+        if (AbstractProcessor.getServiceClass() == PortationService.class || !getContext().isCollectionContext()) {
             Persistence.ensureRetrieve(building.parkings(), AttachLevel.Attached);
             buildingIO.parkings = ParkingMarshaller.getInstance().marshalCollection(ParkingListIO.class, building.parkings());
         } else {
@@ -79,7 +79,7 @@ public class BuildingMarshaller extends AbstractMarshaller<Building, BuildingIO>
 
         if (AbstractProcessor.getServiceClass() == MarketingService.class) {
             buildingIO.units = new UnitListIO(Note.contentDetached);
-        } else if (AbstractProcessor.getServiceClass() == PortationService.class || !getContext().isInCollection()) {
+        } else if (AbstractProcessor.getServiceClass() == PortationService.class || !getContext().isCollectionContext()) {
             Persistence.ensureRetrieve(building.units(), AttachLevel.Attached);
             buildingIO.units = UnitMarshaller.getInstance().marshalCollection(UnitListIO.class, building.units());
         } else {

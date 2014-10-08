@@ -13,41 +13,47 @@
  */
 package com.propertyvista.oapi.v1.model.types;
 
+import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlType;
 import javax.xml.bind.annotation.XmlValue;
 
 import com.propertyvista.domain.property.asset.building.BuildingAmenity;
-import com.propertyvista.domain.property.asset.building.BuildingAmenity.Type;
 import com.propertyvista.oapi.xml.Note;
 import com.propertyvista.oapi.xml.PrimitiveIO;
 
 @XmlType(name = "BuildingAmenityTypeHolder")
 public class BuildingAmenityTypeIO implements PrimitiveIO<BuildingAmenity.Type> {
 
-    private BuildingAmenity.Type value;
-
     private Note note;
+
+    private BuildingAmenity.Type value;
 
     public BuildingAmenityTypeIO() {
     }
 
     public BuildingAmenityTypeIO(BuildingAmenity.Type value) {
-        this.value = value;
+        setValue(value);
+    }
+
+    @XmlAttribute
+    @Override
+    public Note getNote() {
+        return note;
     }
 
     @Override
+    public void setNote(Note note) {
+        this.note = note;
+    }
+
     @XmlValue
-    public Type getValue() {
+    @Override
+    public BuildingAmenity.Type getValue() {
         return value;
     }
 
     @Override
-    public void setValue(Type value) {
+    public void setValue(BuildingAmenity.Type value) {
         this.value = value;
-    }
-
-    @Override
-    public Note getNote() {
-        return note;
     }
 }

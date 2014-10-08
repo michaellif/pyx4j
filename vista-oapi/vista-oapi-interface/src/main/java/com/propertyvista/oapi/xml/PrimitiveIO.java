@@ -15,9 +15,6 @@ package com.propertyvista.oapi.xml;
 
 import java.io.Serializable;
 
-import javax.xml.bind.annotation.XmlType;
-
-@XmlType(name = "PrimitiveBase")
 public interface PrimitiveIO<E extends Serializable> extends ElementIO {
 
     E getValue();

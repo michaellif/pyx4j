@@ -13,6 +13,7 @@
  */
 package com.propertyvista.oapi.xml;
 
+import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlSchemaType;
 import javax.xml.bind.annotation.XmlType;
 import javax.xml.bind.annotation.XmlValue;
@@ -32,7 +33,18 @@ public class LogicalDateIO implements PrimitiveIO<LogicalDate> {
     }
 
     public LogicalDateIO(LogicalDate value) {
-        this.value = value;
+        setValue(value);
+    }
+
+    @XmlAttribute
+    @Override
+    public Note getNote() {
+        return note;
+    }
+
+    @Override
+    public void setNote(Note note) {
+        this.note = note;
     }
 
     @Override
@@ -46,10 +58,5 @@ public class LogicalDateIO implements PrimitiveIO<LogicalDate> {
     @Override
     public void setValue(LogicalDate value) {
         this.value = value;
-    }
-
-    @Override
-    public Note getNote() {
-        return note;
     }
 }

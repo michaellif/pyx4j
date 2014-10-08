@@ -13,6 +13,7 @@
  */
 package com.propertyvista.oapi.v1.model.types;
 
+import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlType;
 import javax.xml.bind.annotation.XmlValue;
 
@@ -23,19 +24,30 @@ import com.propertyvista.oapi.xml.PrimitiveIO;
 @XmlType(name = "LeaseTerm")
 public class LeaseTermIO implements PrimitiveIO<Lead.LeaseTerm> {
 
-    private Lead.LeaseTerm value;
-
     private Note note;
+
+    private Lead.LeaseTerm value;
 
     public LeaseTermIO() {
     }
 
     public LeaseTermIO(Lead.LeaseTerm value) {
-        this.value = value;
+        setValue(value);
+    }
+
+    @XmlAttribute
+    @Override
+    public Note getNote() {
+        return note;
     }
 
     @Override
+    public void setNote(Note note) {
+        this.note = note;
+    }
+
     @XmlValue
+    @Override
     public Lead.LeaseTerm getValue() {
         return value;
     }
@@ -43,10 +55,5 @@ public class LeaseTermIO implements PrimitiveIO<Lead.LeaseTerm> {
     @Override
     public void setValue(Lead.LeaseTerm value) {
         this.value = value;
-    }
-
-    @Override
-    public Note getNote() {
-        return note;
     }
 }

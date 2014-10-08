@@ -21,9 +21,12 @@ public class MarshallingContext {
 
     private final Class<? extends IEntity> element;
 
-    MarshallingContext(Class<? extends IEntity> element, MarshallingContext parent) {
+    private final boolean inCollection;
+
+    MarshallingContext(Class<? extends IEntity> element, boolean inCollection, MarshallingContext parent) {
         this.parent = parent;
-        this.element = element; // null indicates collection marshalling
+        this.element = element;
+        this.inCollection = inCollection;
     }
 
     public MarshallingContext getParent() {
@@ -34,12 +37,26 @@ public class MarshallingContext {
         return element;
     }
 
-    public boolean isInCollection() {
-        if (element == null) {
-            // called on collection marshaller
-            return true;
-        } else {
-            return parent == null ? false : parent.isInCollection(); // called on item marshaller
+    public boolean isCollectionContext() {
+        return inCollection;
+    }
+
+    public boolean hasParentOf(Class<? extends IEntity> element) {
+        return findParentContext(element) != null;
+    }
+
+    public boolean hasParentCollectionOf(Class<? extends IEntity> element) {
+        MarshallingContext result = findParentContext(element);
+        return result == null ? false : result.isCollectionContext();
+    }
+
+    private MarshallingContext findParentContext(Class<? extends IEntity> element) {
+        MarshallingContext result = this;
+        while ((result = result.getParent()) != null) {
+            if (result.getElement().equals(element)) {
+                return result;
+            }
         }
+        return null;
     }
 }

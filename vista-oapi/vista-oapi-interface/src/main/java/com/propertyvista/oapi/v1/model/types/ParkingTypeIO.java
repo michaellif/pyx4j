@@ -13,6 +13,7 @@
  */
 package com.propertyvista.oapi.v1.model.types;
 
+import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlType;
 import javax.xml.bind.annotation.XmlValue;
 
@@ -23,19 +24,30 @@ import com.propertyvista.oapi.xml.PrimitiveIO;
 @XmlType(name = "ParkingTypeHolder")
 public class ParkingTypeIO implements PrimitiveIO<Parking.Type> {
 
-    private Parking.Type value;
-
     private Note note;
+
+    private Parking.Type value;
 
     public ParkingTypeIO() {
     }
 
     public ParkingTypeIO(Parking.Type value) {
-        this.value = value;
+        setValue(value);
+    }
+
+    @XmlAttribute
+    @Override
+    public Note getNote() {
+        return note;
     }
 
     @Override
+    public void setNote(Note note) {
+        this.note = note;
+    }
+
     @XmlValue
+    @Override
     public Parking.Type getValue() {
         return value;
     }
@@ -43,10 +55,5 @@ public class ParkingTypeIO implements PrimitiveIO<Parking.Type> {
     @Override
     public void setValue(Parking.Type value) {
         this.value = value;
-    }
-
-    @Override
-    public Note getNote() {
-        return note;
     }
 }

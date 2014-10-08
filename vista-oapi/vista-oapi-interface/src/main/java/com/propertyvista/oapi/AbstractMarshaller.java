@@ -34,8 +34,8 @@ public abstract class AbstractMarshaller<ValueType extends IEntity, BoundType> {
 
     protected abstract ValueType unmarshal(BoundType v);
 
-    private void setContext(ValueType element) {
-        context.set(new MarshallingContext(element == null ? null : element.getInstanceValueClass(), context.get()));
+    private void setContext(ValueType element, boolean inCollection) {
+        context.set(new MarshallingContext(element == null ? null : element.getInstanceValueClass(), inCollection, context.get()));
     }
 
     private void restoreContext() {
@@ -48,23 +48,24 @@ public abstract class AbstractMarshaller<ValueType extends IEntity, BoundType> {
         return context.get();
     }
 
-    public <C extends AbstractListIO<BoundType>> C marshalCollection(Class<C> collectionClass, Collection<ValueType> collection) {
-        setContext(null);
+    public final <C extends AbstractListIO<BoundType>> C marshalCollection(Class<C> collectionClass, Collection<ValueType> collection) {
         try {
             C ioList = collectionClass.newInstance();
             for (ValueType item : collection) {
-                ioList.add(marshalItem(item));
+                ioList.add(marshalItem(item, true));
             }
             return ioList;
         } catch (Exception e) {
             throw new RuntimeException(e);
-        } finally {
-            restoreContext();
         }
     }
 
-    public BoundType marshalItem(ValueType item) {
-        setContext(item);
+    public final BoundType marshalItem(ValueType item) {
+        return this.marshalItem(item, false);
+    }
+
+    private BoundType marshalItem(ValueType item, boolean inCollection) {
+        setContext(item, inCollection);
         try {
             return marshal(item);
         } finally {
@@ -72,7 +73,7 @@ public abstract class AbstractMarshaller<ValueType extends IEntity, BoundType> {
         }
     }
 
-    public <C extends AbstractListIO<BoundType>> List<ValueType> unmarshalCollection(C listIO) {
+    public final <C extends AbstractListIO<BoundType>> List<ValueType> unmarshalCollection(C listIO) {
         List<ValueType> list = new ArrayList<ValueType>();
         for (BoundType ioItem : listIO.getList()) {
             list.add(unmarshal(ioItem));
@@ -80,7 +81,7 @@ public abstract class AbstractMarshaller<ValueType extends IEntity, BoundType> {
         return list;
     }
 
-    public ValueType unmarshalItem(BoundType v) {
+    public final ValueType unmarshalItem(BoundType v) {
         return unmarshal(v);
     }
 
@@ -141,6 +142,16 @@ public abstract class AbstractMarshaller<ValueType extends IEntity, BoundType> {
             return primitiveIO;
         }
         return null;
+    }
+
+    public <T extends Serializable, E extends PrimitiveIO<T>> E detachedIo(Class<E> classIO) {
+        try {
+            E primitiveIO = classIO.newInstance();
+            primitiveIO.setNote(Note.contentDetached);
+            return primitiveIO;
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 
     /**

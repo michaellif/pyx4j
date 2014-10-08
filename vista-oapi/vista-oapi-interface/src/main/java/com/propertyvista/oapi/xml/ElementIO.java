@@ -13,10 +13,9 @@
  */
 package com.propertyvista.oapi.xml;
 
-import javax.xml.bind.annotation.XmlType;
-
-@XmlType(name = "ElementBase")
 public interface ElementIO {
 
     Note getNote();
+
+    void setNote(Note note);
 }

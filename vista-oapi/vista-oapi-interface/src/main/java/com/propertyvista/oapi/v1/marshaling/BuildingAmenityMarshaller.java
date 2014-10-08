@@ -15,12 +15,14 @@ package com.propertyvista.oapi.v1.marshaling;
 
 import com.pyx4j.entity.core.EntityFactory;
 
+import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.building.BuildingAmenity;
 import com.propertyvista.oapi.AbstractMarshaller;
 import com.propertyvista.oapi.v1.model.BuildingAmenityIO;
 import com.propertyvista.oapi.v1.model.types.BuildingAmenityTypeIO;
 import com.propertyvista.oapi.v1.processing.AbstractProcessor;
 import com.propertyvista.oapi.v1.service.PortationService;
+import com.propertyvista.oapi.xml.Note;
 import com.propertyvista.oapi.xml.StringIO;
 
 public class BuildingAmenityMarshaller extends AbstractMarshaller<BuildingAmenity, BuildingAmenityIO> {
@@ -44,10 +46,11 @@ public class BuildingAmenityMarshaller extends AbstractMarshaller<BuildingAmenit
         BuildingAmenityIO amenityIO = new BuildingAmenityIO();
 
         amenityIO.name = getValue(amenity.name());
-        if (true || AbstractProcessor.getServiceClass() == PortationService.class || !getContext().isInCollection()) {
-            // TODO implement detachable primitive 
+        if (AbstractProcessor.getServiceClass() == PortationService.class || !getContext().hasParentCollectionOf(Building.class)) {
             amenityIO.description = createIo(StringIO.class, amenity.description());
             amenityIO.type = createIo(BuildingAmenityTypeIO.class, amenity.type());
+        } else {
+            amenityIO.setNote(Note.contentDetached);
         }
         return amenityIO;
     }

@@ -15,12 +15,14 @@ package com.propertyvista.oapi.v1.marshaling;
 
 import com.pyx4j.entity.core.EntityFactory;
 
+import com.propertyvista.domain.property.asset.Floorplan;
 import com.propertyvista.domain.property.asset.FloorplanAmenity;
 import com.propertyvista.oapi.AbstractMarshaller;
 import com.propertyvista.oapi.v1.model.FloorplanAmenityIO;
 import com.propertyvista.oapi.v1.model.types.FloorplanAmenityTypeIO;
 import com.propertyvista.oapi.v1.processing.AbstractProcessor;
 import com.propertyvista.oapi.v1.service.PortationService;
+import com.propertyvista.oapi.xml.Note;
 import com.propertyvista.oapi.xml.StringIO;
 
 public class FloorplanAmenityMarshaller extends AbstractMarshaller<FloorplanAmenity, FloorplanAmenityIO> {
@@ -44,9 +46,11 @@ public class FloorplanAmenityMarshaller extends AbstractMarshaller<FloorplanAmen
         FloorplanAmenityIO amenityIO = new FloorplanAmenityIO();
 
         amenityIO.name = getValue(amenity.name());
-        if (AbstractProcessor.getServiceClass() == PortationService.class || !getContext().isInCollection()) {
+        if (AbstractProcessor.getServiceClass() == PortationService.class || !getContext().hasParentCollectionOf(Floorplan.class)) {
             amenityIO.description = createIo(StringIO.class, amenity.description());
             amenityIO.type = createIo(FloorplanAmenityTypeIO.class, amenity.type());
+        } else {
+            amenityIO.setNote(Note.contentDetached);
         }
         return amenityIO;
     }

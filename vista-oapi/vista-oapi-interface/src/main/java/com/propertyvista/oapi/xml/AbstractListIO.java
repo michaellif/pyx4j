@@ -45,8 +45,9 @@ public class AbstractListIO<E> implements ElementIO {
         return note;
     }
 
-    public void setAction(Note action) {
-        this.note = action;
+    @Override
+    public void setNote(Note note) {
+        this.note = note;
     }
 
     public E get(int index) {

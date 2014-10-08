@@ -13,6 +13,7 @@
  */
 package com.propertyvista.oapi.v1.model.types;
 
+import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlType;
 import javax.xml.bind.annotation.XmlValue;
 
@@ -23,19 +24,30 @@ import com.propertyvista.oapi.xml.PrimitiveIO;
 @XmlType(name = "SexType")
 public class SexTypeIO implements PrimitiveIO<Person.Sex> {
 
-    private Person.Sex value;
-
     private Note note;
+
+    private Person.Sex value;
 
     public SexTypeIO() {
     }
 
     public SexTypeIO(Person.Sex value) {
-        this.value = value;
+        setValue(value);
+    }
+
+    @XmlAttribute
+    @Override
+    public Note getNote() {
+        return note;
     }
 
     @Override
+    public void setNote(Note note) {
+        this.note = note;
+    }
+
     @XmlValue
+    @Override
     public Person.Sex getValue() {
         return value;
     }
@@ -43,10 +55,5 @@ public class SexTypeIO implements PrimitiveIO<Person.Sex> {
     @Override
     public void setValue(Person.Sex value) {
         this.value = value;
-    }
-
-    @Override
-    public Note getNote() {
-        return note;
     }
 }

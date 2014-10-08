@@ -19,14 +19,18 @@ import javax.xml.bind.annotation.XmlType;
 @XmlType(name = "AbstractElement")
 public abstract class AbstractElementIO implements ElementIO {
 
-    @XmlAttribute
     private Note note;
 
     public AbstractElementIO() {
     }
 
+    @XmlAttribute
     @Override
     public Note getNote() {
         return note;
+    }
+
+    public void setNote(Note note) {
+        this.note = note;
     }
 }

@@ -13,6 +13,7 @@
  */
 package com.propertyvista.oapi.v1.model.types;
 
+import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlType;
 import javax.xml.bind.annotation.XmlValue;
 
@@ -23,19 +24,30 @@ import com.propertyvista.oapi.xml.PrimitiveIO;
 @XmlType(name = "PaymentFrequencyType")
 public class PaymentFrequencyIO implements PrimitiveIO<BillingPeriod> {
 
-    private BillingPeriod value;
-
     private Note note;
+
+    private BillingPeriod value;
 
     public PaymentFrequencyIO() {
     }
 
     public PaymentFrequencyIO(BillingPeriod value) {
-        this.value = value;
+        setValue(value);
+    }
+
+    @XmlAttribute
+    @Override
+    public Note getNote() {
+        return note;
     }
 
     @Override
+    public void setNote(Note note) {
+        this.note = note;
+    }
+
     @XmlValue
+    @Override
     public BillingPeriod getValue() {
         return value;
     }
@@ -43,10 +55,5 @@ public class PaymentFrequencyIO implements PrimitiveIO<BillingPeriod> {
     @Override
     public void setValue(BillingPeriod value) {
         this.value = value;
-    }
-
-    @Override
-    public Note getNote() {
-        return note;
     }
 }

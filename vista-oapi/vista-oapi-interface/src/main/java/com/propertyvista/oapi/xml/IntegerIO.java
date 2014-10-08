@@ -20,15 +20,26 @@ import javax.xml.bind.annotation.XmlValue;
 @XmlType(name = "IntegerBase")
 public class IntegerIO implements PrimitiveIO<Integer> {
 
-    private Integer value;
-
     private Note note;
+
+    private Integer value;
 
     public IntegerIO() {
     }
 
     public IntegerIO(Integer value) {
-        this.value = value;
+        setValue(value);
+    }
+
+    @XmlAttribute
+    @Override
+    public Note getNote() {
+        return note;
+    }
+
+    @Override
+    public void setNote(Note note) {
+        this.note = note;
     }
 
     @Override
@@ -40,11 +51,5 @@ public class IntegerIO implements PrimitiveIO<Integer> {
     @Override
     public void setValue(Integer value) {
         this.value = value;
-    }
-
-    @Override
-    @XmlAttribute
-    public Note getNote() {
-        return note;
     }
 }

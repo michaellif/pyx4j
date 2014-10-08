@@ -13,6 +13,7 @@
  */
 package com.propertyvista.oapi.v1.model.types;
 
+import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlType;
 import javax.xml.bind.annotation.XmlValue;
 
@@ -23,19 +24,30 @@ import com.propertyvista.oapi.xml.PrimitiveIO;
 @XmlType(name = "WaterSupplyType")
 public class WaterSupplyTypeIO implements PrimitiveIO<WaterSupply> {
 
-    private WaterSupply value;
-
     private Note note;
+
+    private WaterSupply value;
 
     public WaterSupplyTypeIO() {
     }
 
     public WaterSupplyTypeIO(WaterSupply value) {
-        this.value = value;
+        setValue(value);
+    }
+
+    @XmlAttribute
+    @Override
+    public Note getNote() {
+        return note;
     }
 
     @Override
+    public void setNote(Note note) {
+        this.note = note;
+    }
+
     @XmlValue
+    @Override
     public WaterSupply getValue() {
         return value;
     }
@@ -43,10 +55,5 @@ public class WaterSupplyTypeIO implements PrimitiveIO<WaterSupply> {
     @Override
     public void setValue(WaterSupply value) {
         this.value = value;
-    }
-
-    @Override
-    public Note getNote() {
-        return note;
     }
 }

@@ -20,19 +20,30 @@ import javax.xml.bind.annotation.XmlValue;
 @XmlType(name = "StringBase")
 public class StringIO implements PrimitiveIO<String> {
 
-    private String value;
-
     private Note note;
+
+    private String value;
 
     public StringIO() {
     }
 
     public StringIO(String value) {
-        this.value = value;
+        setValue(value);
+    }
+
+    @XmlAttribute
+    @Override
+    public Note getNote() {
+        return note;
     }
 
     @Override
+    public void setNote(Note note) {
+        this.note = note;
+    }
+
     @XmlValue
+    @Override
     public String getValue() {
         return value;
     }
@@ -41,11 +52,4 @@ public class StringIO implements PrimitiveIO<String> {
     public void setValue(String value) {
         this.value = value;
     }
-
-    @Override
-    @XmlAttribute
-    public Note getNote() {
-        return note;
-    }
-
 }
