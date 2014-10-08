@@ -134,13 +134,6 @@ public class VistaApplicationDispatcherFilter implements Filter {
         //String subRequestPath = VistaServerSideConfigurationDev.devContextLess ? "" : VistaServerSideConfigurationDev.devContextPath;
         String subRequestPath = "";
 
-        if ((app == ApplicationType.site) && (!httprequest.getRequestURI().equalsIgnoreCase("/"))) {
-            String requestUri = httprequest.getRequestURI();
-            if (requestUri.startsWith("/vista/site")) {
-                requestPath = requestUri.replaceFirst("/vista/site", "");
-            }
-        }
-
         if (app != ApplicationType.prospect && app != ApplicationType.development) {
             subRequestPath += "/" + app.toString();
         }

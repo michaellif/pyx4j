@@ -158,11 +158,11 @@ public class VistaApplicationDispatcherFilterTest {
         mockChain.verify();
 
         if ((!followChain) && (app != null)) {
+            String targetUrl = "/" + app;
             if (app == ApplicationType.development) {
-                Assert.assertTrue("Wrong forwarded URL for application '" + app + "'", req.getForwardUrl().startsWith(req.getRequestURI()));
-            } else {
-                Assert.assertTrue("Wrong forwarded URL for application '" + app + "'", req.getForwardUrl().startsWith("/" + app));
+                targetUrl = req.getRequestURI();
             }
+            Assert.assertTrue("Wrong forwarded URL for application '" + app + "'", req.getForwardUrl().startsWith(targetUrl));
         }
     }
 
