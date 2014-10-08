@@ -70,6 +70,7 @@ public class YardiSystemBatchesService extends YardiAbstractService {
 
         boolean success = false;
         try {
+            log.debug("Receipt {} - adding to batch {} {}", receipt.paymentRecord().yardiDocumentNumber(), propertyCode, paymentBatchContext.getBatchId());
 
             YardiPaymentProcessor paymentProcessor = new YardiPaymentProcessor();
             ResidentTransactions residentTransactions = paymentProcessor.createTransactions(paymentProcessor.createTransactionForPayment(receipt));
@@ -81,6 +82,7 @@ public class YardiSystemBatchesService extends YardiAbstractService {
                 paymentBatchContext.postBatch();
             }
             success = true;
+            log.debug("Receipt {} - added to batch {} {}", receipt.paymentRecord().yardiDocumentNumber(), propertyCode, paymentBatchContext.getBatchId());
         } finally {
             if (singleTrasactionBatch && !success) {
                 log.debug("Single transaction {} failed, call CancelReceiptBatch", receipt.id().getValue());
@@ -100,11 +102,15 @@ public class YardiSystemBatchesService extends YardiAbstractService {
 
         paymentBatchContext.ensureOpenBatch(yc, propertyCode);
 
+        log.debug("Reversal {} - adding to batch {} {}", reversal.paymentRecord().yardiDocumentNumber(), propertyCode, paymentBatchContext.getBatchId());
+
         YardiPaymentProcessor paymentProcessor = new YardiPaymentProcessor();
         ResidentTransactions residentTransactions = paymentProcessor.createTransactions(paymentProcessor.createTransactionForReversal(reversal));
         YardiStubFactory.create(YardiSystemBatchesStub.class).addReceiptsReversalToBatch(yc, paymentBatchContext.getBatchId(), residentTransactions);
 
         paymentBatchContext.incrementRecordCount();
+
+        log.debug("Reversal {} - added to batch {} {}", reversal.paymentRecord().yardiDocumentNumber(), propertyCode, paymentBatchContext.getBatchId());
 
         if (singleTrasactionBatch) {
             paymentBatchContext.postBatch();

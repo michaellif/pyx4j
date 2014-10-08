@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011-2012 All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -16,6 +16,8 @@ package com.propertyvista.biz.system;
 import java.rmi.RemoteException;
 
 import org.apache.commons.lang.Validate;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.pyx4j.commons.SimpleMessageFormat;
 import com.pyx4j.config.server.ServerSideFactory;
@@ -28,6 +30,8 @@ import com.propertyvista.domain.settings.PmcYardiCredential;
 import com.propertyvista.yardi.services.YardiSystemBatchesService;
 
 public class YardiPaymentBatchContext implements PaymentBatchContext {
+
+    private final static Logger log = LoggerFactory.getLogger(YardiPaymentBatchContext.class);
 
     private PmcYardiCredential yc;
 
@@ -72,7 +76,9 @@ public class YardiPaymentBatchContext implements PaymentBatchContext {
         } else {
             String error = null;
             try {
+                log.debug("batch {} {} - posting", propertyCode, batchId);
                 YardiSystemBatchesService.getInstance().postBatch(yc, this);
+                log.debug("batch {} {} - posted", propertyCode, batchId);
             } catch (RemoteException e) {
                 error = new SimpleMessageFormat("Unable to post Batch {0} ({1}) to Yardi due to communication failure.").format(batchId, propertyCode);
                 throw new ARException(error, e);
@@ -91,7 +97,9 @@ public class YardiPaymentBatchContext implements PaymentBatchContext {
     public void cancelBatch() throws ARException {
         String error = null;
         try {
+            log.debug("batch {} {} - canceling", propertyCode, batchId);
             YardiSystemBatchesService.getInstance().cancelBatch(yc, this);
+            log.debug("batch {} {} - canceled", propertyCode, batchId);
         } catch (RemoteException e) {
             error = new SimpleMessageFormat("Unable to cancel Yardi Batch {0} ({1}) due to communication failure").format(batchId, propertyCode);
             throw new ARException(error, e);
