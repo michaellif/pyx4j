@@ -23,6 +23,7 @@ package com.propertyvista.crm.client.ui.crud.communication.selector;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Iterator;
 
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
@@ -232,13 +233,29 @@ public class SelectRecipientsDialogForm extends HorizontalPanel {
             return;
         }
         for (IEntity deselected : deselectedItems) {
-            for (CommunicationEndpointDTO current : selectedAll.to())
-                if (current.endpoint().getInstanceValueClass().equals(type)) {
+            Iterator<CommunicationEndpointDTO> iter = selectedAll.to().iterator();
+            while (iter.hasNext()) {
+                CommunicationEndpointDTO current = iter.next();
+                Class<? extends IEntity> currentClass = current.endpoint().getInstanceValueClass();
+                if (currentClass.equals(CommunicationGroup.class)) {
+                    CommunicationGroup cg = (current.endpoint()).cast();
+                    if (type.equals(Building.class) && (cg.building() != null && !cg.building().isNull() && !cg.building().isEmpty())
+                            && cg.building().businessEquals(deselected)) {
+                        iter.remove();
+                        break;
+                    }
+                    if (type.equals(Portfolio.class) && (cg.portfolio() != null && !cg.portfolio().isNull() && !cg.portfolio().isEmpty())
+                            && cg.portfolio().businessEquals(deselected)) {
+                        iter.remove();
+                        break;
+                    }
+                } else if (currentClass.equals(type)) {
                     if (current.endpoint().businessEquals(deselected)) {
-                        selectedAll.to().remove(current);
+                        iter.remove();
                         break;
                     }
                 }
+            }
         }
     }
 }

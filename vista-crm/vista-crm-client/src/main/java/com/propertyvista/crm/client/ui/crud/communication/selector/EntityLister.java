@@ -158,6 +158,8 @@ public class EntityLister<E extends IEntity> extends AbstractLister<E> {
         } else {
             selectedOnTab.removeAll(changed);
             removeItems(new ArrayList<E>(selectedOnTab));
+            selectedOnTab.clear();
+            selectedOnTab.addAll(changed);
         }
     }
 
@@ -168,7 +170,6 @@ public class EntityLister<E extends IEntity> extends AbstractLister<E> {
     }
 
     private void removeItems(Collection<E> removeItems) {
-        selectedOnTab.removeAll(removeItems);
         alreadySelected.removeAll(removeItems);
         parent.removeSelected((Collection<IEntity>) removeItems, entityClass);
     }
