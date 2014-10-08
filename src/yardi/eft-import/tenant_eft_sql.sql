@@ -1,5 +1,5 @@
 SELECT
-                NULL AS "Ignore",
+                'false' AS "Ignore",
                 p.scode AS "Property Code",
                 t.SUNITCODE AS "Unit Number",
                 t.SCODE AS "Lease Id",
