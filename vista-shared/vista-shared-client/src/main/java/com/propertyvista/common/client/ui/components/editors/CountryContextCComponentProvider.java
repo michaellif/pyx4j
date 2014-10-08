@@ -17,7 +17,7 @@ import com.pyx4j.forms.client.ui.CComponent;
 
 import com.propertyvista.domain.ref.ISOCountry;
 
-public class CountryContextCComponentProvider implements PostalCodeFormat.ICountryContextProvider {
+public class CountryContextCComponentProvider implements PostalCodeFormatter.ICountryContextProvider {
 
     private final CComponent<?, ISOCountry, ?> component;
 

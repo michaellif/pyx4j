@@ -13,16 +13,11 @@
  */
 package com.propertyvista.common.client.ui.components.editors;
 
-import java.text.ParseException;
-
-import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.commons.IFormatter;
-import com.pyx4j.commons.IParser;
 
 import com.propertyvista.domain.ref.ISOCountry;
-import com.propertyvista.domain.util.ValidationUtils;
 
-public class PostalCodeFormat implements IFormatter<String, String>, IParser<String> {
+public class PostalCodeFormatter implements IFormatter<String, String> {
 
     /** returns country name in English converted to lower case */
     interface ICountryContextProvider {
@@ -33,7 +28,7 @@ public class PostalCodeFormat implements IFormatter<String, String>, IParser<Str
 
     private final ICountryContextProvider countryContextProvider;
 
-    public PostalCodeFormat(ICountryContextProvider countryContextProvider) {
+    public PostalCodeFormatter(ICountryContextProvider countryContextProvider) {
         this.countryContextProvider = countryContextProvider;
     }
 
@@ -57,26 +52,6 @@ public class PostalCodeFormat implements IFormatter<String, String>, IParser<Str
             formattedValue = value;
         }
         return formattedValue;
-    }
-
-    @Override
-    public String parse(String postalCode) throws ParseException {
-        if (CommonsStringUtils.isEmpty(postalCode)) {
-            return null;
-        }
-
-        ISOCountry country = countryContextProvider.getCountry();
-
-        String unformattedPostalCode = postalCode;
-        if (ISOCountry.Canada.equals(country)) {
-            unformattedPostalCode = removeWhitespace(unformattedPostalCode);
-            if (!ValidationUtils.isCanadianPostalCodeValid(unformattedPostalCode)) {
-                // TODO there already should be a an attached validator so this is redundant and in case of wrong format the field will complain about "field is empty"
-                // throw new ParseException(i18n.tr("Canadian postal code must have ANA NAN format (A - alphabetic character, N - numeric character)"), 0);
-            }
-        }
-
-        return format(unformattedPostalCode);
     }
 
     private static String removeWhitespace(String str) {
