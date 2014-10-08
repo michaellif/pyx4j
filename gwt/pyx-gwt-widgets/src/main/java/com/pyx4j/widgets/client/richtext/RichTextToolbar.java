@@ -47,7 +47,6 @@ import com.pyx4j.widgets.client.dialog.OkCancelDialog;
  * rich text formatting, dynamically displayed only for the available functionality.
  */
 public class RichTextToolbar extends FlowPanel {
-
     private static final I18n i18n = I18n.get(RichTextToolbar.class);
 
     private static final RichTextArea.FontSize[] fontSizesConstants = new RichTextArea.FontSize[] { RichTextArea.FontSize.XX_SMALL,
@@ -165,6 +164,8 @@ public class RichTextToolbar extends FlowPanel {
         textHtmlSwitch.addClickHandler(new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
+
+                richText.restoreSelectionAndRange();
                 if (((CheckBox) event.getSource()).getValue()) {
                     richText.setText(richText.getHTML());
                     formatToolbar.setVisible(false);
@@ -200,6 +201,7 @@ public class RichTextToolbar extends FlowPanel {
 
             @Override
             public void execute() {
+                richText.restoreSelectionAndRange();
                 if (insertButton.isActive()) {
                     if (fontButton.isActive()) {
                         fontButton.toggleActive();
@@ -306,6 +308,7 @@ public class RichTextToolbar extends FlowPanel {
 
             @Override
             public void execute() {
+                richText.restoreSelectionAndRange();
                 if (fontButton.isActive()) {
                     if (insertButton.isActive()) {
                         insertButton.toggleActive();
@@ -346,6 +349,7 @@ public class RichTextToolbar extends FlowPanel {
 
             @Override
             public void execute() {
+                richText.restoreSelectionAndRange();
                 if (formatButton.isActive()) {
                     if (fontButton.isActive()) {
                         fontButton.toggleActive();
@@ -365,21 +369,30 @@ public class RichTextToolbar extends FlowPanel {
 
             @Override
             public void execute() {
-                formatter.toggleBold();
+                if (!inOperation) {
+                    richText.restoreSelectionAndRange();
+                    formatter.toggleBold();
+                }
             }
         }, true));
         formatPanel.addItem(italicButton = createButton(images.italic(), i18n.tr("Italic"), new Command() {
 
             @Override
             public void execute() {
-                formatter.toggleItalic();
+                if (!inOperation) {
+                    richText.restoreSelectionAndRange();
+                    formatter.toggleItalic();
+                }
             }
         }, true));
         formatPanel.addItem(underlineButton = createButton(images.underline(), i18n.tr("Underline"), new Command() {
 
             @Override
             public void execute() {
-                formatter.toggleUnderline();
+                if (!inOperation) {
+                    richText.restoreSelectionAndRange();
+                    formatter.toggleUnderline();
+                }
             }
         }, true));
         formatPanel.addItem(new HTML("&emsp;"));
@@ -387,6 +400,7 @@ public class RichTextToolbar extends FlowPanel {
 
             @Override
             public void execute() {
+                richText.restoreSelectionAndRange();
                 formatter.setJustification(RichTextArea.Justification.LEFT);
             }
         }, false));
@@ -394,6 +408,7 @@ public class RichTextToolbar extends FlowPanel {
 
             @Override
             public void execute() {
+                richText.restoreSelectionAndRange();
                 formatter.setJustification(RichTextArea.Justification.CENTER);
             }
         }, false));
@@ -401,6 +416,7 @@ public class RichTextToolbar extends FlowPanel {
 
             @Override
             public void execute() {
+                richText.restoreSelectionAndRange();
                 formatter.setJustification(RichTextArea.Justification.RIGHT);
             }
         }, false));
@@ -413,6 +429,7 @@ public class RichTextToolbar extends FlowPanel {
 
             @Override
             public void execute() {
+                richText.restoreSelectionAndRange();
                 formatter.rightIndent();
             }
         }, false));
@@ -420,6 +437,7 @@ public class RichTextToolbar extends FlowPanel {
 
             @Override
             public void execute() {
+                richText.restoreSelectionAndRange();
                 formatter.leftIndent();
             }
         }, false));
@@ -428,6 +446,7 @@ public class RichTextToolbar extends FlowPanel {
 
             @Override
             public void execute() {
+                richText.restoreSelectionAndRange();
                 formatter.insertHorizontalRule();
             }
         }, false));
@@ -436,6 +455,7 @@ public class RichTextToolbar extends FlowPanel {
 
             @Override
             public void execute() {
+                richText.restoreSelectionAndRange();
                 formatter.insertOrderedList();
             }
         }, false));
@@ -443,6 +463,7 @@ public class RichTextToolbar extends FlowPanel {
 
             @Override
             public void execute() {
+                richText.restoreSelectionAndRange();
                 formatter.insertUnorderedList();
             }
         }, false));
@@ -451,6 +472,7 @@ public class RichTextToolbar extends FlowPanel {
 
             @Override
             public void execute() {
+                richText.restoreSelectionAndRange();
                 formatter.removeFormat();
             }
         }, false));
@@ -482,6 +504,7 @@ public class RichTextToolbar extends FlowPanel {
 
             @Override
             public void onChange(ChangeEvent event) {
+                richText.restoreSelectionAndRange();
                 formatter.setFontName(fonts.getValue(fonts.getSelectedIndex()));
             }
         });
@@ -506,6 +529,7 @@ public class RichTextToolbar extends FlowPanel {
 
             @Override
             public void onChange(ChangeEvent event) {
+                richText.restoreSelectionAndRange();
                 if (fontSizes.getSelectedIndex() > 0) {
                     formatter.setFontSize(fontSizesConstants[fontSizes.getSelectedIndex() - 1]);
                 }
@@ -555,23 +579,24 @@ public class RichTextToolbar extends FlowPanel {
      * Updates the status of all the stateful buttons.
      */
     private void updateStatus() {
+        inOperation = true;
         if (formatter.isBold() != boldButton.isActive()) {
-            boldButton.toggleActive();//will switch active status, but will call click handle, so need to re-toggle
-            formatter.toggleBold();
+            boldButton.toggleActive();
         }
 
         if (formatter.isItalic() != italicButton.isActive()) {
-            italicButton.toggleActive();//will switch active status, but will call click handle, so need to re-toggle
-            formatter.toggleItalic();
+            italicButton.toggleActive();
         }
 
         if (formatter.isUnderlined() != underlineButton.isActive()) {
-            underlineButton.toggleActive();//will switch active status, but will call click handle, so need to re-toggle
-            formatter.toggleUnderline();
+            underlineButton.toggleActive();
         }
+        inOperation = false;
     }
 
     public void onLinkUrl(String url) {
+
+        richText.restoreSelectionAndRange();
         formatter.createLink(url);
         // make sure the richTextArea will receive focus and will handle onBlur after this method completes.
         inOperation = false;
@@ -581,6 +606,7 @@ public class RichTextToolbar extends FlowPanel {
 
     public void onImageUrl(String url) {
 
+        richText.restoreSelectionAndRange();
         formatter.insertImage(url);
         // make sure the richTextArea will receive focus and will handle onBlur after this method completes.
         inOperation = false;
