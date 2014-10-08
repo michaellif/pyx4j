@@ -71,7 +71,7 @@ public class ResponsiveLayoutTheme extends Theme {
         style.addProperty("color", ThemeColor.background, 1.0);
         style.addProperty("cursor", "pointer");
         style.addProperty("background", "transparent");
-        style.addProperty("background-color", ThemeColor.foreground, 1.0);
+        style.addProperty("background-color", ThemeColor.foreground, 0.8);
         style.addProperty("white-space", "nowrap");
         style.addProperty("outline", "none");
         style.addProperty("border", "0px");
@@ -84,11 +84,12 @@ public class ResponsiveLayoutTheme extends Theme {
         style.addProperty("height", "28px");
         style.addProperty("cursor", "pointer");
         style.addProperty("background", "transparent");
-        style.addProperty("background-color", ThemeColor.foreground, 1.0);
+        style.addProperty("background-color", ThemeColor.foreground, 0.8);
         style.addProperty("outline", "none");
         style.addProperty("margin-top", "-28px");
         style.addProperty("border", "0px");
         style.addProperty("border-radius", "0px");
+        style.addProperty("padding", "0 3px");
         addStyle(style);
 
         style = new Style(".", StyleName.ResponsiveLayoutOverlayActionsCloseButton, " img");

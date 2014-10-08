@@ -20,7 +20,6 @@
  */
 package com.pyx4j.commons.css;
 
-
 public class ColorUtil {
 
     public static int hsbToRgb(float hue, float saturation, float brightness) {
@@ -116,9 +115,14 @@ public class ColorUtil {
         assert vibrance >= 0 && vibrance <= 2 : "vibrance should be between 0 and 2";
 
         if (vibrance > 1) {
-            float ns = saturation + (1 - saturation) * (vibrance - 1);
-            float nb = brightness - brightness * (vibrance - 1);
-            return hsbToRgb(hue, ns, nb);
+            if (saturation == 0) {
+                float nb = brightness - brightness * (vibrance - 1);
+                return hsbToRgb(hue, 0, nb);
+            } else {
+                float ns = saturation + (1 - saturation) * (vibrance - 1);
+                float nb = brightness - brightness * (vibrance - 1);
+                return hsbToRgb(hue, ns, nb);
+            }
         } else {
             float ns = saturation * vibrance;
             float nb = 1 - (1 - brightness) * vibrance;
@@ -171,9 +175,9 @@ public class ColorUtil {
     public static int hslToRgb(double hue, double saturation, double lightness) {
         double m2 = (lightness <= 0.5) ? lightness * (saturation + 1) : lightness + saturation - lightness * saturation;
         double m1 = lightness * 2 - m2;
-    	int r = (int) Math.round(convertHUEtoRGB(m1, m2, hue + 0.33333) * 255);
-    	int g = (int) Math.round(convertHUEtoRGB(m1, m2, hue) * 255);
-    	int b = (int) Math.round(convertHUEtoRGB(m1, m2, hue - 0.33333) * 255);
+        int r = (int) Math.round(convertHUEtoRGB(m1, m2, hue + 0.33333) * 255);
+        int g = (int) Math.round(convertHUEtoRGB(m1, m2, hue) * 255);
+        int b = (int) Math.round(convertHUEtoRGB(m1, m2, hue - 0.33333) * 255);
         return (r << 16) | (g << 8) | (b << 0);
     }
 

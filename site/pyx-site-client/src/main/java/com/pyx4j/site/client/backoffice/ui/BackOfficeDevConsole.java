@@ -22,7 +22,6 @@ package com.pyx4j.site.client.backoffice.ui;
 
 import com.pyx4j.site.client.backoffice.ui.layout.BackOfficeLayoutPanel;
 import com.pyx4j.site.client.ui.devconsole.AbstractDevConsole;
-import com.pyx4j.site.client.ui.devconsole.AbstractDevConsole.SetMocksButton;
 
 public class BackOfficeDevConsole extends AbstractDevConsole {
 
