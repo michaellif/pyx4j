@@ -26,7 +26,7 @@ import com.pyx4j.unit.server.mock.MockHttpServletResponse;
 import com.pyx4j.unit.server.mock.filter.MockFilterChain;
 import com.pyx4j.unit.server.mock.filter.MockHttpServletRequestFilter;
 
-import com.propertyvista.domain.security.common.VistaApplication;
+import com.propertyvista.server.config.VistaApplicationDispatcherFilter.ApplicationType;
 
 public class VistaApplicationDispatcherFilterTest {
 
@@ -62,59 +62,59 @@ public class VistaApplicationDispatcherFilterTest {
         //                      LOCAL ENVIRONMENTS
         //
         // URL Formats:
-        // http://XXX.dev.birchwoodsoftwaregroup.com:8888
-        // http://PMC-XXX.dev.birchwoodsoftwaregroup.com:8888
+        // http://APP.dev.birchwoodsoftwaregroup.com:8888
+        // http://PMC-APP.dev.birchwoodsoftwaregroup.com:8888
         // **************************************************************
 
         // Onboarding
-        testMapping("http://onboarding.dev.birchwoodsoftwaregroup.com:8888/", false, VistaApplication.onboarding);
+        testMapping("http://onboarding.dev.birchwoodsoftwaregroup.com:8888/", false, ApplicationType.onboarding);
 
         // Operations
-        testMapping("http://operations.dev.birchwoodsoftwaregroup.com:8888/", false, VistaApplication.operations);
+        testMapping("http://operations.dev.birchwoodsoftwaregroup.com:8888/", false, ApplicationType.operations);
 
         // DB Reset
-//        testMapping("http://static.dev.birchwoodsoftwaregroup.com:8888/o/db-reset", false, null);
+        //testMapping("http://static.dev.birchwoodsoftwaregroup.com:8888/o/db-reset", false, null);
 
         // SITE
-        testMapping("http://vista-site.dev.birchwoodsoftwaregroup.com:8888/", false, VistaApplication.site);
+        testMapping("http://vista-site.dev.birchwoodsoftwaregroup.com:8888/", false, ApplicationType.site);
 
         // CRM
-        testMapping("http://vista-crm.dev.birchwoodsoftwaregroup.com:8888/", false, VistaApplication.crm);
+        testMapping("http://vista-crm.dev.birchwoodsoftwaregroup.com:8888/", false, ApplicationType.crm);
 
         // Resident
-        testMapping("http://vista-portal.dev.birchwoodsoftwaregroup.com:8888/", false, VistaApplication.resident);
+        testMapping("http://vista-portal.dev.birchwoodsoftwaregroup.com:8888/", false, ApplicationType.resident);
 
         // Prospect
-        testMapping("http://vista-portal.dev.birchwoodsoftwaregroup.com:8888/prospect", false, VistaApplication.prospect);
+        testMapping("http://vista-portal.dev.birchwoodsoftwaregroup.com:8888/prospect", false, ApplicationType.prospect);
 
         // **************************************************************
         //                       TEST ENVIRONMENTS
         //
         // URL Formats:
-        // http://XXX-nn.dev.birchwoodsoftwaregroup.com:8888
-        // http://PMC-XXX-nn.birchwoodsoftwaregroup.com:8888
+        // http://APP-nn.dev.birchwoodsoftwaregroup.com:8888
+        // http://PMC-APP-nn.birchwoodsoftwaregroup.com:8888
         // **************************************************************
 
         // Onboarding
-        testMapping("https://onboarding-22.birchwoodsoftwaregroup.com/", false, VistaApplication.onboarding);
+        testMapping("https://onboarding-22.birchwoodsoftwaregroup.com/", false, ApplicationType.onboarding);
 
         // Operations
-        testMapping("https://operations-22.birchwoodsoftwaregroup.com/", false, VistaApplication.operations);
+        testMapping("https://operations-22.birchwoodsoftwaregroup.com/", false, ApplicationType.operations);
 
         // DB-Reset
         //testMapping("http://static-22.birchwoodsoftwaregroup.com/o/db-reset", false, VistaApplication.);
 
         // SITE
-        testMapping("https://vista-site-22.birchwoodsoftwaregroup.com/", false, VistaApplication.site);
+        testMapping("https://vista-site-22.birchwoodsoftwaregroup.com/", false, ApplicationType.site);
 
         // CRM
-        testMapping("https://vista-crm-22.birchwoodsoftwaregroup.com/", false, VistaApplication.crm);
+        testMapping("https://vista-crm-22.birchwoodsoftwaregroup.com/", false, ApplicationType.crm);
 
         // Resident
-        testMapping("https://vista-portal-22.birchwoodsoftwaregroup.com/", false, VistaApplication.resident);
+        testMapping("https://vista-portal-22.birchwoodsoftwaregroup.com/", false, ApplicationType.resident);
 
         // Prospect
-        testMapping("https://vista-portal-22.birchwoodsoftwaregroup.com/prospect", false, VistaApplication.prospect);
+        testMapping("https://vista-portal-22.birchwoodsoftwaregroup.com/prospect", false, ApplicationType.prospect);
 
     }
 
@@ -151,15 +151,14 @@ public class VistaApplicationDispatcherFilterTest {
      * @throws IOException
      * @throws ServletException
      */
-    protected void testMapping(String url, boolean followChain, VistaApplication app) throws IOException, ServletException {
+    protected void testMapping(String url, boolean followChain, ApplicationType app) throws IOException, ServletException {
         req = new MockHttpServletRequestFilter(url);
         mockChain.setExpectedInvocation(followChain);
         filterUnderTest.map(req, resp, mockChain);
         mockChain.verify();
 
         if ((!followChain) && (app != null)) {
-            String targetUrl = "/" + app + "/";
-            Assert.assertTrue("Forwarded URL error for application '" + app + "'", req.getForwardUrl().equalsIgnoreCase(targetUrl));
+            Assert.assertTrue("Wrong forwarded URL for application '" + app + "'", req.getForwardUrl().startsWith("/" + app));
         }
     }
 

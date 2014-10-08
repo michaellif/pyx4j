@@ -31,13 +31,30 @@ import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.gwt.server.ServletUtils;
 
 import com.propertyvista.config.AbstractVistaServerSideConfiguration;
-import com.propertyvista.domain.security.common.VistaApplication;
 
 public class VistaApplicationDispatcherFilter implements Filter {
 
     private static Logger log = LoggerFactory.getLogger(VistaApplicationDispatcherFilter.class);
 
     private static String REQUEST_DISPATCHED_REQUEST_ATR = VistaApplicationDispatcherFilter.class.getName();
+
+    public enum ApplicationType {
+
+        development,
+
+        operations,
+
+        crm,
+
+        site,
+
+        resident,
+
+        prospect,
+
+        onboarding;
+
+    }
 
     private static final String regExTwoDigits = "\\d\\d";
 
@@ -75,7 +92,7 @@ public class VistaApplicationDispatcherFilter implements Filter {
         serverName = serverName.toLowerCase(Locale.ENGLISH);
 
         // Redirect requests
-        VistaApplication app = null;
+        ApplicationType app = null;
         String[] serverNameParts = serverName.split("\\.");
         if (serverNameParts.length > 0) {
             String appByDomain = serverNameParts[0];
@@ -83,7 +100,7 @@ public class VistaApplicationDispatcherFilter implements Filter {
         }
 
         if (app != null) {
-            httprequest.setAttribute(VistaApplication.class.getName(), app);
+            httprequest.setAttribute(ApplicationType.class.getName(), app);
             String forwardedPath = getPathToForwarded(httprequest, app);
             httprequest.setAttribute(ServletUtils.x_forwarded_path, forwardedPath);
             String urlForward = getNewURLRequest(httprequest, app);
@@ -96,8 +113,8 @@ public class VistaApplicationDispatcherFilter implements Filter {
 
     }
 
-    private String getPathToForwarded(HttpServletRequest httprequest, VistaApplication app) {
-        if (app != VistaApplication.prospect) {
+    private String getPathToForwarded(HttpServletRequest httprequest, ApplicationType app) {
+        if (app != ApplicationType.prospect) {
             return "/" + app.name();
         } else {
             return "";
@@ -111,25 +128,25 @@ public class VistaApplicationDispatcherFilter implements Filter {
      * @param app
      * @return
      */
-    private String getNewURLRequest(HttpServletRequest httprequest, VistaApplication app) {
+    private String getNewURLRequest(HttpServletRequest httprequest, ApplicationType app) {
         String requestPath = httprequest.getServletPath();
         //String subRequestPath = VistaServerSideConfigurationDev.devContextLess ? "" : VistaServerSideConfigurationDev.devContextPath;
         String subRequestPath = "";
 
-        if ((app == VistaApplication.site) && (!httprequest.getRequestURI().equalsIgnoreCase("/"))) {
+        if ((app == ApplicationType.site) && (!httprequest.getRequestURI().equalsIgnoreCase("/"))) {
             String requestUri = httprequest.getRequestURI();
             if (requestUri.startsWith("/vista/site")) {
                 requestPath = requestUri.replaceFirst("/vista/site", "");
             }
         }
 
-        if (app != VistaApplication.prospect) {
+        if (app != ApplicationType.prospect) {
             subRequestPath += "/" + app.toString();
         }
 
         subRequestPath += requestPath;
 
-        String newUri = (subRequestPath.charAt(subRequestPath.length() - 1) == '/') ? subRequestPath : subRequestPath + "/";
+        String newUri = subRequestPath;
 
         return newUri;
     }
@@ -143,14 +160,14 @@ public class VistaApplicationDispatcherFilter implements Filter {
      *            request path for this request
      * @return Vista application
      */
-    private VistaApplication getAppByDomainOrPath(String appByDomain, String path) {
+    private ApplicationType getAppByDomainOrPath(String appByDomain, String path) {
         String[] appByDomainTokens = appByDomain.split("-");
-        VistaApplication app = null;
+        ApplicationType app = null;
 
         // Domains type : http://XXX.dev.birchwoodsoftwaregroup.com:8888
         if (appByDomainTokens.length == 1) {
             try {
-                app = VistaApplication.valueOf(appByDomain);
+                app = ApplicationType.valueOf(appByDomain);
             } catch (IllegalArgumentException e) {
                 // do noghing, app = null
             }
@@ -165,17 +182,17 @@ public class VistaApplicationDispatcherFilter implements Filter {
                 // If request path starts with "/prospect", portal is prospect
                 if (appByPathTokens.length >= 2) {
                     if (appByPathTokens[1].equalsIgnoreCase("prospect")) {
-                        return VistaApplication.prospect;
+                        return ApplicationType.prospect;
                     }
                 }
 
                 // Default "portal" application is "resident" (no request path required)
-                return VistaApplication.resident;
+                return ApplicationType.resident;
             }
 
             try {
                 int index = appByDomainTokens[1].matches(regExTwoDigits) ? 0 : 1;
-                app = VistaApplication.valueOf(appByDomainTokens[index]);
+                app = ApplicationType.valueOf(appByDomainTokens[index]);
             } catch (IllegalArgumentException e) {
                 // do nothing, app = null
             }
