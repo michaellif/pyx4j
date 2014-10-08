@@ -40,6 +40,7 @@ import com.propertyvista.domain.security.CustomerUser;
 import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseParticipant;
+import com.propertyvista.domain.tenant.lease.LeaseTerm;
 import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
 import com.propertyvista.domain.tenant.lease.LeaseTermParticipant.Role;
 import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
@@ -49,6 +50,8 @@ public class TenantMapper {
     private final static Logger log = LoggerFactory.getLogger(TenantMapper.class);
 
     private final ExecutionMonitor executionMonitor;
+
+    private final static boolean allowGlobalSearchCustomerByName = false;
 
     private final static Set<String> ignoredEmailLocalParts = new HashSet<String>();
 
@@ -80,21 +83,19 @@ public class TenantMapper {
         }
     }
 
-    public LeaseTermTenant createTenant(YardiCustomer yardiCustomer, Lease lease) {
+    public LeaseTermTenant createTenant(YardiCustomer yardiCustomer, Lease lease, LeaseTerm originalLeaseTerm) {
         if (StringUtils.isEmpty(yardiCustomer.getCustomerID())) {
             throw new IllegalStateException("Illegal TenantID. Can not be empty or null");
         }
 
-        LeaseTermTenant tenant = EntityFactory.create(LeaseTermTenant.class);
-        boolean isEmailAlreadyUsed = isEmailAlreadyUsed(retrieveYardiCustomerEmail(yardiCustomer), lease.currentTerm().version().tenants());
+        boolean isEmailAlreadyUsed = isEmailAlreadyUsed(getYardiCustomerEmail(yardiCustomer), lease.currentTerm().version().tenants());
 
-        Customer customer = null;
-        if (!isEmailAlreadyUsed) {
-            customer = findCustomer(yardiCustomer);
-        }
+        Customer customer = findCustomer(yardiCustomer, isEmailAlreadyUsed, originalLeaseTerm);
         if (customer == null) {
             customer = EntityFactory.create(Customer.class);
         }
+
+        LeaseTermTenant tenant = EntityFactory.create(LeaseTermTenant.class);
 
         tenant.leaseParticipant().customer().set(mapCustomer(yardiCustomer, customer));
         tenant.leaseParticipant().participantId().setValue(getCustomerID(yardiCustomer));
@@ -120,7 +121,7 @@ public class TenantMapper {
         customer.set(mapCustomer(yardiCustomer, customer));
 
         if (!isFormerLease(yardiCustomer) && customer.user().isNull()) {
-            String email = retrieveYardiCustomerEmail(yardiCustomer);
+            String email = getYardiCustomerEmail(yardiCustomer);
             if (!CommonsStringUtils.isEmpty(email) && !isEmailRegistered(email)) {
                 setEmail(yardiCustomer, customer);
             }
@@ -194,38 +195,64 @@ public class TenantMapper {
         return false;
     }
 
-    private Customer findCustomer(YardiCustomer yardiCustomer) {
+    private Customer findCustomer(YardiCustomer yardiCustomer, boolean doNotUseEmail, LeaseTerm originalLeaseTerm) {
         Customer customer = null;
 
-        String email = retrieveYardiCustomerEmail(yardiCustomer);
-        if (!CommonsStringUtils.isEmpty(email) && EmailValidator.isValid(email)) {
-            // try to by e-mail first:
-            EntityQueryCriteria<Customer> emailCriteria = EntityQueryCriteria.create(Customer.class);
-            emailCriteria.eq(emailCriteria.proto().person().email(), EmailValidator.normalizeEmailAddress(email));
-            customer = Persistence.service().retrieve(emailCriteria);
-            if (customer != null) {
-                log.info("Customer {} ({}) found by e-mail", yardiCustomer.getCustomerID(), customer.getStringView());
+        // try to by e-mail first:
+        if (!doNotUseEmail) {
+            String email = getYardiCustomerEmail(yardiCustomer);
+            if (!CommonsStringUtils.isEmpty(email) && EmailValidator.isValid(email)) {
+                EntityQueryCriteria<Customer> criteria = EntityQueryCriteria.create(Customer.class);
+                criteria.eq(criteria.proto().person().email(), EmailValidator.normalizeEmailAddress(email));
+                customer = Persistence.service().retrieve(criteria);
+                if (customer != null) {
+                    log.info("Customer {} ({}) found by e-mail", yardiCustomer.getCustomerID(), customer.getStringView());
+                    return customer;
+                }
             }
-        } else {
-            // then try to find by Yardi CustomerId:
+        }
+
+        // then by Yardi CustomerId:
+        {
             @SuppressWarnings("rawtypes")
-            EntityQueryCriteria<LeaseParticipant> participantIdCriteria = EntityQueryCriteria.create(LeaseParticipant.class);
-            participantIdCriteria.eq(participantIdCriteria.proto().participantId(), getCustomerID(yardiCustomer));
-            LeaseParticipant<?> participant = Persistence.service().retrieve(participantIdCriteria);
+            EntityQueryCriteria<LeaseParticipant> criteria = EntityQueryCriteria.create(LeaseParticipant.class);
+            criteria.eq(criteria.proto().participantId(), getCustomerID(yardiCustomer));
+            LeaseParticipant<?> participant = Persistence.service().retrieve(criteria);
             if (participant != null) {
                 customer = participant.customer();
             }
             if (customer != null) {
                 log.info("Customer {} ({}) found by participant Id", yardiCustomer.getCustomerID(), customer.getStringView());
-            } else {
-                // ant last - try to find by Name + LastName:
-                EntityQueryCriteria<Customer> nameCriteria = EntityQueryCriteria.create(Customer.class);
-                nameCriteria.eq(nameCriteria.proto().person().name().firstName(), yardiCustomer.getName().getFirstName());
-                nameCriteria.eq(nameCriteria.proto().person().name().lastName(), yardiCustomer.getName().getLastName());
-                customer = Persistence.service().retrieve(nameCriteria);
-                if (customer != null) {
-                    log.info("Customer {} ({}) found by full name", yardiCustomer.getCustomerID(), customer.getStringView());
-                }
+                return customer;
+            }
+        }
+
+        // or by name in original term participants (if present):
+        if (originalLeaseTerm != null) {
+            @SuppressWarnings("rawtypes")
+            EntityQueryCriteria<LeaseTermParticipant> criteria = EntityQueryCriteria.create(LeaseTermParticipant.class);
+            criteria.eq(criteria.proto().leaseTermV().holder(), originalLeaseTerm);
+            criteria.eq(criteria.proto().leaseParticipant().customer().person().name().firstName(), yardiCustomer.getName().getFirstName());
+            criteria.eq(criteria.proto().leaseParticipant().customer().person().name().lastName(), yardiCustomer.getName().getLastName());
+            LeaseTermParticipant<?> termParticipant = Persistence.service().retrieve(criteria);
+            if (termParticipant != null) {
+                customer = termParticipant.leaseParticipant().customer();
+            }
+            if (customer != null) {
+                log.info("Customer {} ({}) found by original term participant name", yardiCustomer.getCustomerID(), customer.getStringView());
+                return customer;
+            }
+        }
+
+        // and last - try global search by full name (Name + LastName):
+        if (allowGlobalSearchCustomerByName) {
+            EntityQueryCriteria<Customer> criteria = EntityQueryCriteria.create(Customer.class);
+            criteria.eq(criteria.proto().person().name().firstName(), yardiCustomer.getName().getFirstName());
+            criteria.eq(criteria.proto().person().name().lastName(), yardiCustomer.getName().getLastName());
+            customer = Persistence.service().retrieve(criteria);
+            if (customer != null) {
+                log.info("Customer {} ({}) found by full name", yardiCustomer.getCustomerID(), customer.getStringView());
+                return customer;
             }
         }
 
@@ -240,7 +267,7 @@ public class TenantMapper {
         }
     }
 
-    private String retrieveYardiCustomerEmail(YardiCustomer yardiCustomer) {
+    private String getYardiCustomerEmail(YardiCustomer yardiCustomer) {
         if (!yardiCustomer.getAddress().isEmpty()) {
             String email = yardiCustomer.getAddress().get(0).getEmail();
             if (!CommonsStringUtils.isEmpty(email)) {
@@ -261,7 +288,7 @@ public class TenantMapper {
     }
 
     private void setEmail(YardiCustomer yardiCustomer, Customer customer) {
-        String email = retrieveYardiCustomerEmail(yardiCustomer);
+        String email = getYardiCustomerEmail(yardiCustomer);
         if (!CommonsStringUtils.isEmpty(email)) {
             email = email.trim();
             if (EmailValidator.isValid(email)) {

@@ -194,10 +194,10 @@ public class YardiLeaseProcessor {
         lease.billingAccount().paymentAccepted().setValue(BillingAccount.PaymentAccepted.getPaymentType(ltd.getResident().getPaymentAccepted()));
 
         lease.currentTerm().yardiLeasePk().setValue(getYardiLeasePk(yardiCustomers));
-        // TODO Need to find another lease to merge with
+        LeaseTerm originalLeaseTerm = retrieveOriginalTerm(getYardiLeasePk(yardiCustomers));
 
         // tenants:
-        new TenantMerger(rtd.getExecutionMonitor()).createTenants(yardiCustomers, lease);
+        new TenantMerger(rtd.getExecutionMonitor()).createTenants(yardiCustomers, lease, originalLeaseTerm);
 
         updateLeaseProducts(lease, ltd);
 
@@ -239,10 +239,11 @@ public class YardiLeaseProcessor {
         YardiLease yardiLease = yardiCustomers.get(0).getLease();
 
         boolean leaseMove = false;
+        LeaseTerm originalLeaseTerm = null;
         if (!lease.currentTerm().yardiLeasePk().isNull()
                 && !EqualsHelper.equals(lease.currentTerm().yardiLeasePk().getValue(), getYardiLeasePk(yardiCustomers))) {
-            // TODO Need to find another lease to merge with
             leaseMove = true;
+            originalLeaseTerm = retrieveOriginalTerm(getYardiLeasePk(yardiCustomers));
             log.info("- Lease {} Moving...", lease.leaseId().getStringView());
         }
 
@@ -286,7 +287,7 @@ public class YardiLeaseProcessor {
         Persistence.ensureRetrieve(lease.currentTerm().version().tenants(), AttachLevel.Attached);
         Persistence.ensureRetrieve(lease.currentTerm().version().guarantors(), AttachLevel.Attached);
         if (new TenantMerger(rtd.getExecutionMonitor()).isChanged(yardiCustomers, lease)) {
-            new TenantMerger(rtd.getExecutionMonitor()).updateTenants(yardiCustomers, lease);
+            new TenantMerger(rtd.getExecutionMonitor()).updateTenants(yardiCustomers, lease, originalLeaseTerm);
             toFinalize = true;
             log.debug("        - Tenants Changed...");
         }
@@ -586,6 +587,14 @@ public class YardiLeaseProcessor {
             throw new Error("Unit " + unitNumber + " not found in building " + propertyCode);
         }
         return unit;
+    }
+
+    private LeaseTerm retrieveOriginalTerm(String yardiLeasePk) {
+        EntityQueryCriteria<LeaseTerm> criteria = EntityQueryCriteria.create(LeaseTerm.class);
+
+        criteria.eq(criteria.proto().yardiLeasePk(), yardiLeasePk);
+
+        return Persistence.service().retrieve(criteria);
     }
 
     private BillableItem fillBillableItem(ChargeDetail detail, BillableItem newItem) {
