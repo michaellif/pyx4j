@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011-2012 All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -17,11 +17,7 @@ import org.junit.experimental.categories.Category;
 
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.core.EntityFactory;
-import com.pyx4j.entity.server.Executable;
 import com.pyx4j.entity.server.Persistence;
-import com.pyx4j.entity.server.TransactionScopeOption;
-import com.pyx4j.entity.server.UnitOfWork;
-import com.pyx4j.gwt.server.DateUtils;
 
 import com.propertyvista.biz.financial.payment.PaymentFacade;
 import com.propertyvista.domain.financial.PaymentRecord;
@@ -34,12 +30,7 @@ import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.Tenant;
 import com.propertyvista.test.integration.IntegrationTestBase.FunctionalTests;
 import com.propertyvista.test.integration.PaymentRecordTester;
-import com.propertyvista.test.mock.MockEventBus;
 import com.propertyvista.test.mock.models.LeaseDataModel;
-import com.propertyvista.yardi.mock.updater.LeaseChargeUpdateEvent;
-import com.propertyvista.yardi.mock.updater.LeaseChargeUpdater;
-import com.propertyvista.yardi.mock.updater.RtCustomerUpdateEvent;
-import com.propertyvista.yardi.mock.updater.RtCustomerUpdater;
 
 @Category(FunctionalTests.class)
 public class PaymentPostingCheckYardiTest extends PaymentYardiTestBase {
@@ -87,107 +78,8 @@ public class PaymentPostingCheckYardiTest extends PaymentYardiTestBase {
         // test Reject
         ServerSideFactory.create(PaymentFacade.class).reject(paymentRecord, true);
         Persistence.service().commit();
+
+        new PaymentRecordTester(getLease().billingAccount()).lastRecordStatus(PaymentStatus.Rejected);
     }
 
-    public void testPaymentPostingWithTriggeredLeaseUpdate() throws Exception {
-        final PaymentRecord paymentRecord = getDataModel(LeaseDataModel.class).createPaymentRecord(getLease(), createCheckPaymentMethod(tenant.customer()),
-                "100");
-        Persistence.service().commit();
-
-        {
-            Lease leaseCurrent = Persistence.service().retrieve(Lease.class, lease.getPrimaryKey());
-            assertEquals("initial lease version", Integer.valueOf(1), leaseCurrent.currentTerm().version().versionNumber().getValue());
-        }
-
-        // Make change in Yardi before posting payment.
-        {
-            RtCustomerUpdater updater = new RtCustomerUpdater("prop1", "t000111"). //
-                    set(RtCustomerUpdater.YLEASE.LeaseToDate, DateUtils.detectDateformat("2015-12-31"));
-            MockEventBus.fireEvent(new RtCustomerUpdateEvent(updater));
-        }
-        {
-            LeaseChargeUpdater updater = new LeaseChargeUpdater("prop1", "t000111", "rent"). //
-                    set(LeaseChargeUpdater.Name.Amount, "1500.00");
-            MockEventBus.fireEvent(new LeaseChargeUpdateEvent(updater));
-        }
-
-        new UnitOfWork(TransactionScopeOption.RequiresNew).execute(new Executable<Void, Exception>() {
-            @Override
-            public Void execute() throws Exception {
-                ServerSideFactory.create(PaymentFacade.class).processPayment(paymentRecord, null);
-                return null;
-            }
-        });
-
-        {
-            Lease leaseCurrent = Persistence.service().retrieve(Lease.class, lease.getPrimaryKey());
-            assertEquals("update lease version", Integer.valueOf(2), leaseCurrent.currentTerm().version().versionNumber().getValue());
-        }
-
-        new PaymentRecordTester(getLease().billingAccount()).lastRecordStatus(PaymentStatus.Received);
-
-        // test Reject while there are pending updates
-        {
-            RtCustomerUpdater updater = new RtCustomerUpdater("prop1", "t000111"). //
-                    set(RtCustomerUpdater.YLEASE.LeaseToDate, DateUtils.detectDateformat("2016-12-31"));
-            MockEventBus.fireEvent(new RtCustomerUpdateEvent(updater));
-        }
-        {
-            LeaseChargeUpdater updater = new LeaseChargeUpdater("prop1", "t000111", "rent"). //
-                    set(LeaseChargeUpdater.Name.Amount, "1400.00");
-            MockEventBus.fireEvent(new LeaseChargeUpdateEvent(updater));
-        }
-
-        new UnitOfWork(TransactionScopeOption.RequiresNew).execute(new Executable<Void, Exception>() {
-            @Override
-            public Void execute() throws Exception {
-                ServerSideFactory.create(PaymentFacade.class).reject(paymentRecord, true);
-                return null;
-            }
-        });
-
-        {
-            Lease leaseCurrent = Persistence.service().retrieve(Lease.class, lease.getPrimaryKey());
-            assertEquals("update lease version", Integer.valueOf(3), leaseCurrent.currentTerm().version().versionNumber().getValue());
-        }
-
-    }
-
-    public void testPaymentPostingWithTriggeredLeaseChargeRemove() throws Exception {
-        final PaymentRecord paymentRecord = getDataModel(LeaseDataModel.class).createPaymentRecord(getLease(), createCheckPaymentMethod(tenant.customer()),
-                "100");
-        Persistence.service().commit();
-
-        {
-            Lease leaseCurrent = Persistence.service().retrieve(Lease.class, lease.getPrimaryKey());
-            assertEquals("initial lease version", Integer.valueOf(1), leaseCurrent.currentTerm().version().versionNumber().getValue());
-        }
-
-        // Make change in Yardi before posting payment.
-        {
-            LeaseChargeUpdater updater = new LeaseChargeUpdater("prop1", "t000111", "rent"). //
-                    set(LeaseChargeUpdater.Name.ServiceToDate, DateUtils.detectDateformat("2010-12-31"));
-            MockEventBus.fireEvent(new LeaseChargeUpdateEvent(updater));
-        }
-        {
-            LeaseChargeUpdater updater = new LeaseChargeUpdater("prop1", "t000111", "park"). //
-                    set(LeaseChargeUpdater.Name.ServiceToDate, DateUtils.detectDateformat("2010-12-31"));
-            MockEventBus.fireEvent(new LeaseChargeUpdateEvent(updater));
-        }
-
-        new UnitOfWork(TransactionScopeOption.RequiresNew).execute(new Executable<Void, Exception>() {
-            @Override
-            public Void execute() throws Exception {
-                ServerSideFactory.create(PaymentFacade.class).processPayment(paymentRecord, null);
-                return null;
-            }
-        });
-
-        {
-            Lease leaseCurrent = Persistence.service().retrieve(Lease.class, lease.getPrimaryKey());
-            assertEquals("update lease version", Integer.valueOf(2), leaseCurrent.currentTerm().version().versionNumber().getValue());
-        }
-
-        new PaymentRecordTester(getLease().billingAccount()).lastRecordStatus(PaymentStatus.Received);
-    }
 }
