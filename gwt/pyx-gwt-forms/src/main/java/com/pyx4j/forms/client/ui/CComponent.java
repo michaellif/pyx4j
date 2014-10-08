@@ -609,19 +609,18 @@ public abstract class CComponent<SELF_TYPE extends CComponent<SELF_TYPE, DATA_TY
             } catch (ParseException e) {
                 editorValue = null;
             }
-            if (isValueEmpty() || !isValuesEqual(this.value, editorValue)) {
-                this.value = editorValue;
 
-                revalidate();
-                //Overwrite native value with the value that has been formatted by getNativeValue()
-                if (isValid()) {
-                    setEditorValue(this.value);
-                }
-                if (getParent() != null) {
-                    getParent().updateContainer(this);
-                }
-                ValueChangeEvent.fire(this, this.value);
+            this.value = editorValue;
+
+            revalidate();
+            //Overwrite native value with the value that has been formatted by getNativeValue()
+            if (isValid()) {
+                setEditorValue(this.value);
             }
+            if (getParent() != null) {
+                getParent().updateContainer(this);
+            }
+            ValueChangeEvent.fire(this, this.value);
 
             if (!wasEmpty || (wasEmpty && !isValueEmpty())) {
                 setVisited(true);
