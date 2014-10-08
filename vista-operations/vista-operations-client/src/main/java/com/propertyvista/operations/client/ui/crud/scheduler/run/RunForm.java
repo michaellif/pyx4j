@@ -53,6 +53,7 @@ public class RunForm extends OperationsEntityForm<Run> {
         formPanel.append(Location.Right, proto().executionReport().totalDuration()).decorate().componentWidth(120);
         formPanel.append(Location.Left, proto().executionReport().failed()).decorate().componentWidth(120);
         formPanel.append(Location.Left, proto().executionReport().erred()).decorate().componentWidth(120);
+        formPanel.append(Location.Left, proto().executionReport().detailsErred()).decorate();
 
         formPanel.append(Location.Dual, proto().executionReport().message()).decorate();
         formPanel.append(Location.Dual, proto().errorMessage()).decorate();

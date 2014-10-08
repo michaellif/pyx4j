@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011-2012 All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -28,7 +28,6 @@ import org.slf4j.LoggerFactory;
 import com.pyx4j.commons.Consts;
 import com.pyx4j.entity.core.AttachLevel;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
-import com.pyx4j.entity.core.criterion.PropertyCriterion;
 import com.pyx4j.entity.server.ConnectionTarget;
 import com.pyx4j.entity.server.Executable;
 import com.pyx4j.entity.server.IEntityPersistenceService.ICursorIterator;
@@ -71,38 +70,43 @@ class PmcProcessExecutor {
             RunStatus runStatus = RunStatus.Completed;
 
             EntityQueryCriteria<RunData> criteria = EntityQueryCriteria.create(RunData.class);
-            criteria.add(PropertyCriterion.eq(criteria.proto().execution(), run));
-            criteria.add(PropertyCriterion.eq(criteria.proto().status(), RunDataStatus.NeverRan));
+            criteria.eq(criteria.proto().execution(), run);
+            criteria.eq(criteria.proto().status(), RunDataStatus.NeverRan);
             ICursorIterator<RunData> it = Persistence.service().query(null, criteria, AttachLevel.Attached);
-            while (it.hasNext() && (!PmcProcessMonitor.isPendingTermination(run))) {
-                final RunData runData = it.next();
-                if (runData.status().equals(RunDataStatus.Canceled)) {
-                    continue;
-                }
-                runData.updated().setValue(new Date());
-                runData.started().setValue(new Date());
-                runData.status().setValue(RunDataStatus.Running);
-                Persistence.service().persist(runData);
-
-                executeOneRunData(executorService, pmcProcess, runData, run.forDate().getValue());
-
-                new UnitOfWork(TransactionScopeOption.RequiresNew, ConnectionTarget.TransactionProcessing).execute(new Executable<Void, RuntimeException>() {
-
-                    @Override
-                    public Void execute() {
-                        addRunDataStatsToRunStats(run.executionReport(), startTimeNano, runData);
-                        Persistence.service().persist(runData);
-                        return null;
+            try {
+                while (it.hasNext() && (!PmcProcessMonitor.isPendingTermination(run))) {
+                    final RunData runData = it.next();
+                    if (runData.status().equals(RunDataStatus.Canceled)) {
+                        continue;
                     }
+                    runData.updated().setValue(new Date());
+                    runData.started().setValue(new Date());
+                    runData.status().setValue(RunDataStatus.Running);
+                    Persistence.service().persist(runData);
 
-                });
+                    executeOneRunData(executorService, pmcProcess, runData, run.forDate().getValue());
 
-                if (runData.status().getValue() != RunDataStatus.Processed) {
-                    runStatus = RunStatus.PartiallyCompleted;
+                    new UnitOfWork(TransactionScopeOption.RequiresNew, ConnectionTarget.TransactionProcessing)
+                            .execute(new Executable<Void, RuntimeException>() {
+
+                                @Override
+                                public Void execute() {
+                                    addRunDataStatsToRunStats(run.executionReport(), startTimeNano, runData);
+                                    Persistence.service().persist(runData);
+                                    return null;
+                                }
+
+                            });
+
+                    if (runData.status().getValue() != RunDataStatus.Processed) {
+                        runStatus = RunStatus.PartiallyCompleted;
+                    }
+                    if ((runData.executionReport().erred().getValue(0L) > 0) || (runData.executionReport().detailsErred().getValue(0L) > 0)) {
+                        runStatus = RunStatus.PartiallyCompleted;
+                    }
                 }
-                if (runData.executionReport().erred().getValue(0L) > 0) {
-                    runStatus = RunStatus.PartiallyCompleted;
-                }
+            } finally {
+                it.close();
             }
 
             // Completion
@@ -133,6 +137,7 @@ class PmcProcessExecutor {
         DomainUtil.nvlAddLong(stats.processed(), runData.executionReport().processed());
         DomainUtil.nvlAddLong(stats.failed(), runData.executionReport().failed());
         DomainUtil.nvlAddLong(stats.erred(), runData.executionReport().erred());
+        DomainUtil.nvlAddLong(stats.detailsErred(), runData.executionReport().detailsErred());
 
         stats.totalDuration().setValue(durationNano / Consts.MSEC2NANO);
         if ((!stats.total().isNull()) && (stats.total().getValue() != 0)) {
@@ -237,6 +242,8 @@ class PmcProcessExecutor {
             runData.errorMessage().setValue(ExecutionMonitor.truncErrorMessage(ExceptionMessagesExtractor.getAllMessages(executionException)));
         } else if (context.getExecutionMonitor().isTerminationRequested()) {
             runData.status().setValue(RunDataStatus.Terminated);
+        } else if ((runData.executionReport().erred().getValue(0L) > 0) || (runData.executionReport().detailsErred().getValue(0L) > 0)) {
+            runData.status().setValue(RunDataStatus.PartiallyProcessed);
         } else {
             runData.status().setValue(RunDataStatus.Processed);
         }

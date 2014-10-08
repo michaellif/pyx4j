@@ -43,6 +43,7 @@ public class RunLister extends AbstractLister<Run> {
                 new MemberColumnDescriptor.Builder(proto.executionReport().processed()).build(),
                 new MemberColumnDescriptor.Builder(proto.executionReport().failed()).build(),
                 new MemberColumnDescriptor.Builder(proto.executionReport().erred()).build(),
+                new MemberColumnDescriptor.Builder(proto.executionReport().detailsErred()).build(),
                 new MemberColumnDescriptor.Builder(proto.executionReport().averageDuration()).build(),
                 new MemberColumnDescriptor.Builder(proto.executionReport().totalDuration()).build(),
                 new MemberColumnDescriptor.Builder(proto.created()).build(),

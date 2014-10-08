@@ -440,6 +440,12 @@
                 <version>2.2.7</version>
             </dependency>
 
+            <dependency>
+                <groupId>com.googlecode.jatl</groupId>
+                <artifactId>jatl</artifactId>
+                <version>0.2.2</version>
+            </dependency>
+
         </dependencies>
     </dependencyManagement>
 

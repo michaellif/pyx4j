@@ -57,6 +57,7 @@ public class RunDataForm extends OperationsEntityForm<RunData> {
         formPanel.append(Location.Right, proto().executionReport().totalDuration()).decorate();
         formPanel.append(Location.Left, proto().executionReport().failed()).decorate();
         formPanel.append(Location.Left, proto().executionReport().erred()).decorate();
+        formPanel.append(Location.Left, proto().executionReport().detailsErred()).decorate();
 
         formPanel.append(Location.Dual, proto().executionReport().message()).decorate();
         formPanel.append(Location.Dual, proto().errorMessage()).decorate();

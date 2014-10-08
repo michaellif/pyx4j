@@ -13,12 +13,17 @@
  */
 package com.propertyvista.operations.server.proc;
 
+import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.List;
+
+import com.googlecode.jatl.Html;
 
 import com.pyx4j.commons.SimpleMessageFormat;
 import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.config.server.ServerSideFactory;
+import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
+import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.server.mail.Mail;
 import com.pyx4j.server.mail.MailMessage;
 import com.pyx4j.site.rpc.AppPlaceInfo;
@@ -29,6 +34,8 @@ import com.propertyvista.config.VistaDeployment;
 import com.propertyvista.domain.security.common.VistaApplication;
 import com.propertyvista.operations.domain.scheduler.PmcProcessOptions;
 import com.propertyvista.operations.domain.scheduler.Run;
+import com.propertyvista.operations.domain.scheduler.RunData;
+import com.propertyvista.operations.domain.scheduler.RunDataStatus;
 import com.propertyvista.operations.domain.scheduler.Trigger;
 import com.propertyvista.operations.domain.scheduler.TriggerNotification;
 import com.propertyvista.operations.domain.scheduler.TriggerNotificationEvent;
@@ -80,29 +87,58 @@ public class JobNotifications {
         m.setSender(ServerSideConfiguration.instance().getApplicationEmailSender());
         m.setSubject(SimpleMessageFormat.format("Trigger Run notification {0} {1}", trigger.name(), run.status()));
 
-        String message = "<html><body>";
+        StringWriter stringWriter = new StringWriter();
+        Html html = new Html(stringWriter);
 
         // Distinguish test environments
         Integer enviromentId = ServerSideConfiguration.instance(AbstractVistaServerSideConfiguration.class).enviromentId();
         if (enviromentId != null) {
-            message += SimpleMessageFormat.format("Env{0}<br/>\n", enviromentId);
+            html.text(SimpleMessageFormat.format("Env{0}", enviromentId)).br();
         }
 
-        message += SimpleMessageFormat.format("Execution of process {0} is {1},<br/>\n", trigger.name(), run.status());
+        html.text(SimpleMessageFormat.format("Execution of process {0} is {1},", trigger.name(), run.status())).br();
         if (trigger.triggerType().getValue().hasOption(PmcProcessOptions.RunForDay)) {
-            message += SimpleMessageFormat.format("For Date: {0}<br/>\n", run.forDate());
+            html.text(SimpleMessageFormat.format("For Date: {0}", run.forDate())).br();
         }
-        message += SimpleMessageFormat.format("Statistics: {0}<br/>\n", run.executionReport().getStringView());
+        html.text(SimpleMessageFormat.format("Statistics: {0}", run.executionReport().getStringView())).br();
         if (!run.errorMessage().isNull()) {
-            message += SimpleMessageFormat.format("Error Message: {0}<br/>\n", run.errorMessage());
+            html.text(SimpleMessageFormat.format("Error Message: {0}", run.errorMessage())).br();
         }
 
-        message += SimpleMessageFormat.format("Execution details <a style=\"color:#929733\" href=\"{0}\">here</a>", //
-                AppPlaceInfo.absoluteUrl(VistaDeployment.getBaseApplicationURL(VistaApplication.operations, true), true,
-                        new OperationsSiteMap.Management.TriggerRun().formViewerPlace(run.getPrimaryKey())));
+        EntityQueryCriteria<RunData> criteria = EntityQueryCriteria.create(RunData.class);
+        criteria.eq(criteria.proto().execution(), run);
+        criteria.ne(criteria.proto().status(), RunDataStatus.Processed);
+        List<RunData> failedPmcData = Persistence.service().query(criteria);
+        if (failedPmcData.size() > 0) {
+            html.br();
+            html.table().style("border: 1px solid rgb(221, 221, 221); border-collapse: collapse");
 
-        message += "</body></html>";
-        m.setHtmlBody(message);
+            String headStyle = "color: #666666; background-color: rgb(248, 248, 248); padding: 0 2px; border: 1px solid rgb(221, 221, 221);";
+            String rowStyle = "border: 1px solid rgb(221, 221, 221);";
+
+            html.th().style(headStyle).align("left").text("Pmc").end();
+            html.th().style(headStyle).align("left").text("Status").end();
+            html.th().style(headStyle).align("left").text("Stats").end();
+            html.th().style(headStyle).align("left").text("ErrorMessage").end();
+
+            for (RunData data : failedPmcData) {
+                html.tr();
+                html.td().style(rowStyle).text(data.pmc().name().getStringView()).end();
+                html.td().style(rowStyle).text(data.status().getStringView()).end();
+                html.td().style(rowStyle).text(data.executionReport().getStringView()).end();
+                html.td().style(rowStyle).text(data.errorMessage().getStringView()).end();
+                html.end();
+            }
+            html.end();
+        }
+
+        html.br();
+
+        html.raw(SimpleMessageFormat.format("Execution details <a style=\"color:#929733\" href=\"{0}\">here</a>", //
+                AppPlaceInfo.absoluteUrl(VistaDeployment.getBaseApplicationURL(VistaApplication.operations, true), true,
+                        new OperationsSiteMap.Management.TriggerRun().formViewerPlace(run.getPrimaryKey()))));
+
+        m.setHtmlBody(stringWriter.getBuffer().toString());
 
         boolean important = false;
         switch (run.status().getValue()) {
@@ -113,7 +149,7 @@ public class JobNotifications {
         default:
             break;
         }
-        if (run.executionReport().erred().getValue(0L) > 0) {
+        if ((run.executionReport().erred().getValue(0L) > 0) || (run.executionReport().detailsErred().getValue(0L) > 0)) {
             important = true;
         }
 

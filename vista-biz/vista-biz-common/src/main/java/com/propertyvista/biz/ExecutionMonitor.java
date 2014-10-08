@@ -463,6 +463,16 @@ public class ExecutionMonitor {
         }
     }
 
+    public long getSectionsCounter(CompletionType type) {
+        long counter = 0;
+        for (Map.Entry<ReportSectionId, ReportSection> section : sections.entrySet()) {
+            if (section.getKey().type == type) {
+                counter += section.getValue().counter;
+            }
+        }
+        return counter;
+    }
+
     public void updateExecutionReport(ExecutionReport dbReport) {
         updateExecutionReportMajorStats(dbReport);
 
@@ -548,6 +558,7 @@ public class ExecutionMonitor {
         executionReport.processed().setValue(getProcessed());
         executionReport.failed().setValue(getFailed());
         executionReport.erred().setValue(getErred());
+        executionReport.detailsErred().setValue(getSectionsCounter(CompletionType.erred));
     }
 
     @Override

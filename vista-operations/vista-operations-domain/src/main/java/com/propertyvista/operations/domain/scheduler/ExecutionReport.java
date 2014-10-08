@@ -26,7 +26,7 @@ import com.pyx4j.entity.core.ISet;
 
 import com.propertyvista.domain.VistaNamespace;
 
-@ToStringFormat("Total {0}, Processed {1}, Failed {2}, Erred {3}, Avg {4}")
+@ToStringFormat("Total {0}, Processed {1}, Failed {2}, Erred {3}, Details Erred {4}, Avg {5}")
 @Table(prefix = "scheduler", namespace = VistaNamespace.operationsNamespace)
 public interface ExecutionReport extends IEntity {
 
@@ -42,9 +42,12 @@ public interface ExecutionReport extends IEntity {
     @ToString(index = 3)
     IPrimitive<Long> erred();
 
+    @ToString(index = 4)
+    IPrimitive<Long> detailsErred();
+
     IPrimitive<String> message();
 
-    @ToString(index = 4)
+    @ToString(index = 5)
     @Format(value = "{0,duration}", messageFormat = true)
     IPrimitive<Long> averageDuration();
 
