@@ -194,10 +194,10 @@ public class YardiLeaseProcessor {
         lease.billingAccount().paymentAccepted().setValue(BillingAccount.PaymentAccepted.getPaymentType(ltd.getResident().getPaymentAccepted()));
 
         lease.currentTerm().yardiLeasePk().setValue(getYardiLeasePk(yardiCustomers));
-        LeaseTerm originalLeaseTerm = retrieveOriginalTerm(getYardiLeasePk(yardiCustomers));
+        LeaseTerm previousTerm = retrieveLeaseTermByYardiLeasePk(rtd.getYardiInterfaceId(), getYardiLeasePk(yardiCustomers));
 
         // tenants:
-        new TenantMerger(rtd.getExecutionMonitor()).createTenants(yardiCustomers, lease, originalLeaseTerm);
+        new TenantMerger(rtd.getExecutionMonitor()).createTenants(yardiCustomers, lease, previousTerm);
 
         updateLeaseProducts(lease, ltd);
 
@@ -238,17 +238,21 @@ public class YardiLeaseProcessor {
         List<YardiCustomer> yardiCustomers = ltd.getResident().getCustomers().getCustomer();
         YardiLease yardiLease = yardiCustomers.get(0).getLease();
 
-        boolean leaseMove = false;
-        LeaseTerm originalLeaseTerm = null;
-        if (!lease.currentTerm().yardiLeasePk().isNull()
-                && !EqualsHelper.equals(lease.currentTerm().yardiLeasePk().getValue(), getYardiLeasePk(yardiCustomers))) {
-            leaseMove = true;
-            originalLeaseTerm = retrieveOriginalTerm(getYardiLeasePk(yardiCustomers));
-            log.info("- Lease {} Moving...", lease.leaseId().getStringView());
-        }
+        LeaseTerm previousTerm = null;
 
         boolean toPersist = false;
         boolean toFinalize = false;
+        boolean leaseMove = false;
+
+        if (lease.currentTerm().yardiLeasePk().isNull()) {
+            lease.currentTerm().yardiLeasePk().setValue(getYardiLeasePk(yardiCustomers));
+            Persistence.service().merge(lease.currentTerm()); // just memorize yardiLeasePk for older leases (before feature was introduced)
+        } else if (!EqualsHelper.equals(lease.currentTerm().yardiLeasePk().getValue(), getYardiLeasePk(yardiCustomers))) {
+            // it seems we are moving by Yardi Unit Transfer method!.. 
+            previousTerm = lease.currentTerm().duplicate();
+            leaseMove = true;
+            log.info("- Lease {} Moving...", lease.leaseId().getStringView());
+        }
 
         // if unit update is occurred:
         String unitNumber = YardiARIntegrationAgent.getUnitId(ltd.getResident());
@@ -262,40 +266,40 @@ public class YardiLeaseProcessor {
                             unit.getStringView()));
 
             lease = new LeaseMerger().updateUnit(unit, lease, leaseMove);
+            lease.currentTerm().yardiLeasePk().setValue(getYardiLeasePk(yardiCustomers));
             toFinalize = true;
-            log.debug("        - Lease Unit Changed...");
+            log.debug("- Lease Unit Changed...");
         }
 
         if (LeaseMerger.isLeaseDatesChanged(yardiLease, lease)) {
             lease = new LeaseMerger().mergeLeaseDates(yardiLease, lease);
             toPersist = true;
-            log.debug("        - Lease Dates Changed...");
+            log.debug("- Lease Dates Changed...");
         }
 
         if (LeaseMerger.isTermDatesChanged(yardiLease, lease.currentTerm())) {
             lease.currentTerm().set(new LeaseMerger().mergeTermDates(yardiLease, lease.currentTerm()));
             toPersist = true;
-            log.debug("        - Term Dates Changed...");
+            log.debug("- Term Dates Changed...");
         }
 
         if (new LeaseMerger().isPaymentTypeChanged(ltd.getResident(), lease)) {
             new LeaseMerger().mergePaymentType(ltd.getResident(), lease);
             toPersist = true;
-            log.debug("        - Payment Type Changed...");
+            log.debug("- Payment Type Changed...");
         }
 
         Persistence.ensureRetrieve(lease.currentTerm().version().tenants(), AttachLevel.Attached);
         Persistence.ensureRetrieve(lease.currentTerm().version().guarantors(), AttachLevel.Attached);
         if (new TenantMerger(rtd.getExecutionMonitor()).isChanged(yardiCustomers, lease)) {
-            new TenantMerger(rtd.getExecutionMonitor()).updateTenants(yardiCustomers, lease, originalLeaseTerm);
+            new TenantMerger(rtd.getExecutionMonitor()).updateTenants(yardiCustomers, lease, previousTerm);
             toFinalize = true;
-            log.debug("        - Tenants Changed...");
+            log.debug("- Tenants Changed...");
         }
 
-        lease.currentTerm().yardiLeasePk().setValue(getYardiLeasePk(yardiCustomers));
         if (new TenantMerger(rtd.getExecutionMonitor()).updateTenantsData(yardiCustomers, lease.currentTerm())) {
             toFinalize = true;
-            log.debug("        - Tenant Data Changed...");
+            log.debug("- Tenant Data Changed...");
         }
 
         toFinalize |= updateLeaseProducts(lease, ltd);
@@ -309,7 +313,7 @@ public class YardiLeaseProcessor {
             rtd.getExecutionMonitor().addInfoEvent("Lease",
                     SimpleMessageFormat.format("lease {0} updated (no version changes)", lease.leaseId().getStringView()));
         } else {
-            log.debug("        No lease changes detected");
+            log.debug("= No lease changes detected");
         }
 
         new YardiLeaseFinancialProcessor(rtd.getExecutionMonitor()).processLease(leaseId, ltd.getResident(), rtd.getYardiInterfaceId());
@@ -424,6 +428,29 @@ public class YardiLeaseProcessor {
         criteria.eq(criteria.proto().integrationSystemId(), yardiInterfaceId);
 
         return Persistence.service().retrieve(criteria);
+    }
+
+    private LeaseTerm retrieveLeaseTermByYardiLeasePk(Key yardiInterfaceId, String yardiLeasePk) {
+        EntityQueryCriteria<LeaseTerm> criteria = EntityQueryCriteria.create(LeaseTerm.class);
+
+        criteria.eq(criteria.proto().lease().integrationSystemId(), yardiInterfaceId);
+        criteria.eq(criteria.proto().yardiLeasePk(), yardiLeasePk);
+
+        return Persistence.service().retrieve(criteria);
+    }
+
+    private AptUnit retrieveUnit(Key yardiInterfaceId, String propertyCode, String unitNumber) {
+        EntityQueryCriteria<AptUnit> criteria = EntityQueryCriteria.create(AptUnit.class);
+
+        criteria.eq(criteria.proto().building().integrationSystemId(), yardiInterfaceId);
+        criteria.eq(criteria.proto().building().propertyCode(), propertyCode);
+        criteria.eq(criteria.proto().info().number(), unitNumber);
+
+        AptUnit unit = Persistence.service().retrieve(criteria);
+        if (unit == null) {
+            throw new Error("Unit " + unitNumber + " not found in building " + propertyCode);
+        }
+        return unit;
     }
 
     public static boolean isEligibleForProcessing(RTCustomer rtCustomer) {
@@ -573,28 +600,6 @@ public class YardiLeaseProcessor {
     private static String getLeaseChargeDescription(ChargeDetail detail) {
         ARCode arCode = new ARCodeAdapter().retrieveARCode(ActionType.Debit, detail.getChargeCode());
         return arCode == null ? detail.getDescription() : arCode.name().getValue();
-    }
-
-    private AptUnit retrieveUnit(Key yardiInterfaceId, String propertyCode, String unitNumber) {
-        EntityQueryCriteria<AptUnit> criteria = EntityQueryCriteria.create(AptUnit.class);
-
-        criteria.eq(criteria.proto().building().integrationSystemId(), yardiInterfaceId);
-        criteria.eq(criteria.proto().building().propertyCode(), propertyCode);
-        criteria.eq(criteria.proto().info().number(), unitNumber);
-
-        AptUnit unit = Persistence.service().retrieve(criteria);
-        if (unit == null) {
-            throw new Error("Unit " + unitNumber + " not found in building " + propertyCode);
-        }
-        return unit;
-    }
-
-    private LeaseTerm retrieveOriginalTerm(String yardiLeasePk) {
-        EntityQueryCriteria<LeaseTerm> criteria = EntityQueryCriteria.create(LeaseTerm.class);
-
-        criteria.eq(criteria.proto().yardiLeasePk(), yardiLeasePk);
-
-        return Persistence.service().retrieve(criteria);
     }
 
     private BillableItem fillBillableItem(ChargeDetail detail, BillableItem newItem) {

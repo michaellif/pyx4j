@@ -61,13 +61,13 @@ public class TenantMerger {
         return false;
     }
 
-    public void createTenants(List<YardiCustomer> yardiCustomers, Lease lease, LeaseTerm originalLeaseTerm) {
+    public void createTenants(List<YardiCustomer> yardiCustomers, Lease lease, LeaseTerm previousTerm) {
         for (YardiCustomer yardiCustomer : yardiCustomers) {
-            lease.currentTerm().version().tenants().add(new TenantMapper(executionMonitor).createTenant(yardiCustomer, lease, originalLeaseTerm));
+            lease.currentTerm().version().tenants().add(new TenantMapper(executionMonitor).createTenant(yardiCustomer, lease, previousTerm));
         }
     }
 
-    public void updateTenants(List<YardiCustomer> yardiCustomers, Lease lease, LeaseTerm originalLeaseTerm) {
+    public void updateTenants(List<YardiCustomer> yardiCustomers, Lease lease, LeaseTerm previousTerm) {
         Set<String> currentCustomerIDs = new HashSet<String>();
 
         for (YardiCustomer customer : yardiCustomers) {
@@ -75,7 +75,7 @@ public class TenantMerger {
 
             if (findParticipant(lease.currentTerm(), TenantMapper.getCustomerID(customer)) == null) {
                 // New tenant,  TODO implement new guarantor
-                lease.currentTerm().version().tenants().add(new TenantMapper(executionMonitor).createTenant(customer, lease, originalLeaseTerm));
+                lease.currentTerm().version().tenants().add(new TenantMapper(executionMonitor).createTenant(customer, lease, previousTerm));
             }
         }
 

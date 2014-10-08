@@ -83,14 +83,14 @@ public class TenantMapper {
         }
     }
 
-    public LeaseTermTenant createTenant(YardiCustomer yardiCustomer, Lease lease, LeaseTerm originalLeaseTerm) {
+    public LeaseTermTenant createTenant(YardiCustomer yardiCustomer, Lease lease, LeaseTerm previousTerm) {
         if (StringUtils.isEmpty(yardiCustomer.getCustomerID())) {
             throw new IllegalStateException("Illegal TenantID. Can not be empty or null");
         }
 
         boolean isEmailAlreadyUsed = isEmailAlreadyUsed(getYardiCustomerEmail(yardiCustomer), lease.currentTerm().version().tenants());
 
-        Customer customer = findCustomer(yardiCustomer, isEmailAlreadyUsed, originalLeaseTerm);
+        Customer customer = findCustomer(yardiCustomer, isEmailAlreadyUsed, previousTerm);
         if (customer == null) {
             customer = EntityFactory.create(Customer.class);
         }
@@ -195,7 +195,7 @@ public class TenantMapper {
         return false;
     }
 
-    private Customer findCustomer(YardiCustomer yardiCustomer, boolean doNotUseEmail, LeaseTerm originalLeaseTerm) {
+    private Customer findCustomer(YardiCustomer yardiCustomer, boolean doNotUseEmail, LeaseTerm previousTerm) {
         Customer customer = null;
 
         // try to by e-mail first:
@@ -227,11 +227,11 @@ public class TenantMapper {
             }
         }
 
-        // or by name in original term participants (if present):
-        if (originalLeaseTerm != null) {
+        // or by name in previous term participants (if present):
+        if (previousTerm != null) {
             @SuppressWarnings("rawtypes")
             EntityQueryCriteria<LeaseTermParticipant> criteria = EntityQueryCriteria.create(LeaseTermParticipant.class);
-            criteria.eq(criteria.proto().leaseTermV().holder(), originalLeaseTerm);
+            criteria.eq(criteria.proto().leaseTermV().holder(), previousTerm);
             criteria.eq(criteria.proto().leaseParticipant().customer().person().name().firstName(), yardiCustomer.getName().getFirstName());
             criteria.eq(criteria.proto().leaseParticipant().customer().person().name().lastName(), yardiCustomer.getName().getLastName());
             LeaseTermParticipant<?> termParticipant = Persistence.service().retrieve(criteria);
@@ -244,7 +244,7 @@ public class TenantMapper {
             }
         }
 
-        // and last - try global search by full name (Name + LastName):
+        // and at last - try global search by full name (Name + LastName):
         if (allowGlobalSearchCustomerByName) {
             EntityQueryCriteria<Customer> criteria = EntityQueryCriteria.create(Customer.class);
             criteria.eq(criteria.proto().person().name().firstName(), yardiCustomer.getName().getFirstName());
@@ -256,6 +256,9 @@ public class TenantMapper {
             }
         }
 
+        if (customer == null) {
+            log.info("No Customer for {} has been found!?", yardiCustomer.getCustomerID());
+        }
         return customer;
     }
 
