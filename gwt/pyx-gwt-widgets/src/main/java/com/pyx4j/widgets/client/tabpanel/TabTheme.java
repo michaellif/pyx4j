@@ -95,9 +95,9 @@ public class TabTheme extends Theme {
         style.addProperty("cursor", "default");
         style.addGradient(ThemeColor.foreground, 0.1, ThemeColor.foreground, 0.3);
         style.addProperty("color", "#333");
-        style.addProperty("border-right-color", ThemeColor.foreground, 0.6);
-        style.addProperty("border-left-color", ThemeColor.foreground, 0.6);
-        style.addProperty("border-top-color", ThemeColor.foreground, 0.6);
+        style.addProperty("border-right-color", ThemeColor.foreground, 0.4);
+        style.addProperty("border-left-color", ThemeColor.foreground, 0.4);
+        style.addProperty("border-top-color", ThemeColor.foreground, 0.4);
         addStyle(style);
 
         style = new Style(".", StyleName.TabBarItem, "-", StyleDependent.disabled);
