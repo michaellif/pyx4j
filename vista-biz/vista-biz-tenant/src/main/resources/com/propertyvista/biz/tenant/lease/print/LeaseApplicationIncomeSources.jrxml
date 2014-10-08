@@ -104,7 +104,7 @@
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
 				<reportElement positionType="Float" x="161" y="151" width="249" height="20"/>
 				<textElement verticalAlignment="Bottom"/>
-				<textFieldExpression><![CDATA[((com.propertyvista.domain.tenant.income.IEmploymentInfo)$F{details}.cast()).address().streetName().getStringView()]]></textFieldExpression>
+				<textFieldExpression><![CDATA[((com.propertyvista.domain.tenant.income.IEmploymentInfo)$F{details}.cast()).address().streetNumber().getStringView() + " " + ((com.propertyvista.domain.tenant.income.IEmploymentInfo)$F{details}.cast()).address().streetName().getStringView()]]></textFieldExpression>
 			</textField>
 			<line>
 				<reportElement x="4" y="150" width="406" height="1"/>
@@ -126,7 +126,7 @@
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
 				<reportElement positionType="Float" x="161" y="174" width="249" height="20"/>
 				<textElement verticalAlignment="Bottom"/>
-				<textFieldExpression><![CDATA[((com.propertyvista.domain.tenant.income.IEmploymentInfo)$F{details}.cast()).address().streetNumber().getStringView()]]></textFieldExpression>
+				<textFieldExpression><![CDATA[((com.propertyvista.domain.tenant.income.IEmploymentInfo)$F{details}.cast()).address().suiteNumber().getStringView()]]></textFieldExpression>
 			</textField>
 			<line>
 				<reportElement positionType="Float" x="144" y="194" width="266" height="2"/>
@@ -355,7 +355,7 @@
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
 				<reportElement positionType="Float" x="161" y="128" width="249" height="20"/>
 				<textElement verticalAlignment="Bottom"/>
-				<textFieldExpression><![CDATA[((com.propertyvista.domain.tenant.income.IEmploymentInfo)$F{details}.cast()).address().streetName().getValue()]]></textFieldExpression>
+				<textFieldExpression><![CDATA[((com.propertyvista.domain.tenant.income.IEmploymentInfo)$F{details}.cast()).address().streetNumber().getValue() + " " + ((com.propertyvista.domain.tenant.income.IEmploymentInfo)$F{details}.cast()).address().streetName().getValue()]]></textFieldExpression>
 			</textField>
 			<line>
 				<reportElement x="4" y="127" width="406" height="1"/>
@@ -377,7 +377,7 @@
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
 				<reportElement positionType="Float" x="161" y="151" width="249" height="20"/>
 				<textElement verticalAlignment="Bottom"/>
-				<textFieldExpression><![CDATA[((com.propertyvista.domain.tenant.income.IEmploymentInfo)$F{details}.cast()).address().streetNumber().getValue()]]></textFieldExpression>
+				<textFieldExpression><![CDATA[((com.propertyvista.domain.tenant.income.IEmploymentInfo)$F{details}.cast()).address().suiteNumber().getValue()]]></textFieldExpression>
 			</textField>
 			<line>
 				<reportElement positionType="Float" x="144" y="171" width="266" height="2"/>
@@ -651,7 +651,7 @@
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
 				<reportElement positionType="Float" x="161" y="126" width="249" height="20"/>
 				<textElement verticalAlignment="Bottom"/>
-				<textFieldExpression><![CDATA[((com.propertyvista.domain.tenant.income.IEmploymentInfo)$F{details}.cast()).address().streetName().getValue()]]></textFieldExpression>
+				<textFieldExpression><![CDATA[((com.propertyvista.domain.tenant.income.IEmploymentInfo)$F{details}.cast()).address().streetNumber().getValue() + " " + ((com.propertyvista.domain.tenant.income.IEmploymentInfo)$F{details}.cast()).address().streetName().getValue()]]></textFieldExpression>
 			</textField>
 			<line>
 				<reportElement x="4" y="125" width="406" height="1"/>
@@ -673,7 +673,7 @@
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
 				<reportElement positionType="Float" x="161" y="149" width="249" height="20"/>
 				<textElement verticalAlignment="Bottom"/>
-				<textFieldExpression><![CDATA[((com.propertyvista.domain.tenant.income.IEmploymentInfo)$F{details}.cast()).address().streetNumber().getValue()]]></textFieldExpression>
+				<textFieldExpression><![CDATA[((com.propertyvista.domain.tenant.income.IEmploymentInfo)$F{details}.cast()).address().suiteNumber().getValue()]]></textFieldExpression>
 			</textField>
 			<line>
 				<reportElement positionType="Float" x="144" y="169" width="266" height="2"/>
@@ -928,7 +928,7 @@
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
 				<reportElement positionType="Float" x="161" y="73" width="249" height="20"/>
 				<textElement verticalAlignment="Bottom"/>
-				<textFieldExpression><![CDATA[((com.propertyvista.domain.tenant.income.IncomeInfoStudentIncome)$F{details}.cast()).address().getMember("streetName").getValue()]]></textFieldExpression>
+				<textFieldExpression><![CDATA[((com.propertyvista.domain.tenant.income.IncomeInfoStudentIncome)$F{details}.cast()).address().getMember("streetNumber").getValue() + " " + ((com.propertyvista.domain.tenant.income.IncomeInfoStudentIncome)$F{details}.cast()).address().getMember("streetName").getValue()]]></textFieldExpression>
 			</textField>
 			<line>
 				<reportElement x="4" y="72" width="406" height="1"/>
@@ -938,7 +938,7 @@
 				<textElement verticalAlignment="Bottom">
 					<font isItalic="true"/>
 				</textElement>
-				<text><![CDATA[Address:]]></text>
+				<text><![CDATA[Address 1:]]></text>
 			</staticText>
 			<staticText>
 				<reportElement positionType="Float" x="2" y="96" width="159" height="20"/>
@@ -950,7 +950,7 @@
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
 				<reportElement positionType="Float" x="161" y="96" width="249" height="20"/>
 				<textElement verticalAlignment="Bottom"/>
-				<textFieldExpression><![CDATA[((com.propertyvista.domain.tenant.income.IncomeInfoStudentIncome)$F{details}.cast()).address().streetNumber().getValue()]]></textFieldExpression>
+				<textFieldExpression><![CDATA[((com.propertyvista.domain.tenant.income.IncomeInfoStudentIncome)$F{details}.cast()).address().suiteNumber().getValue()]]></textFieldExpression>
 			</textField>
 			<line>
 				<reportElement positionType="Float" x="144" y="116" width="266" height="2"/>

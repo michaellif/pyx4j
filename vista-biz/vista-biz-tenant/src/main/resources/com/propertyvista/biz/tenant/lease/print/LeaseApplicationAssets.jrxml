@@ -10,7 +10,7 @@
 	<parameter name="applicants" class="com.pyx4j.entity.core.IList"/>
 	<parameter name="landlordAgentsSignatures" class="java.util.List"/>
 	<field name="assetType" class="com.propertyvista.domain.tenant.income.CustomerScreeningPersonalAsset.AssetType"/>
-	<field name="percent" class="java.lang.Double"/>
+	<field name="ownership" class="java.math.BigDecimal"/>
 	<field name="assetValue" class="java.math.BigDecimal"/>
 	<title>
 		<band height="24">
@@ -56,10 +56,10 @@
 				</textElement>
 				<text><![CDATA[% Ownership:]]></text>
 			</staticText>
-			<textField isStretchWithOverflow="true" pattern="###0.00" isBlankWhenNull="true">
+			<textField isStretchWithOverflow="true" pattern="###0" isBlankWhenNull="true">
 				<reportElement positionType="Float" x="159" y="22" width="249" height="20"/>
 				<textElement verticalAlignment="Bottom"/>
-				<textFieldExpression><![CDATA[$F{percent}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{ownership}.multiply(new BigDecimal(100))]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" pattern="¤ #,##0.00" isBlankWhenNull="true">
 				<reportElement positionType="Float" x="159" y="43" width="249" height="20"/>

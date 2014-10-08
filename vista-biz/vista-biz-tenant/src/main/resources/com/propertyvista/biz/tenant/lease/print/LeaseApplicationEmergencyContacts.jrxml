@@ -263,7 +263,7 @@
 				<textElement verticalAlignment="Bottom">
 					<font isBold="false"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{address}.getMember(new com.pyx4j.entity.core.Path("address/streetName")).getValue()]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{address}.getMember(new com.pyx4j.entity.core.Path("address/streetNumber")).getValue() + " " + $F{address}.getMember(new com.pyx4j.entity.core.Path("address/streetName")).getValue()]]></textFieldExpression>
 			</textField>
 			<line>
 				<reportElement positionType="Float" x="140" y="343" width="268" height="1"/>
@@ -292,7 +292,7 @@
 				<textElement verticalAlignment="Bottom">
 					<font isBold="false"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{address}.getMember(new com.pyx4j.entity.core.Path("address/streetNumber")).getValue()]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{address}.getMember(new com.pyx4j.entity.core.Path("address/suiteNumber")).getValue()]]></textFieldExpression>
 			</textField>
 			<line>
 				<reportElement positionType="Float" x="140" y="384" width="268" height="1"/>
