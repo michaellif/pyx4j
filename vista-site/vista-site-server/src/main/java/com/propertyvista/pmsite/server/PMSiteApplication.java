@@ -54,7 +54,6 @@ import org.apache.wicket.request.http.handler.RedirectRequestHandler;
 import org.apache.wicket.request.mapper.MountedMapper;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.request.resource.caching.NoOpResourceCachingStrategy;
-import org.apache.wicket.settings.IRequestCycleSettings.RenderStrategy;
 import org.apache.wicket.util.string.StringValue;
 import org.apache.wicket.util.time.Duration;
 import org.slf4j.Logger;
@@ -282,8 +281,6 @@ public class PMSiteApplication extends AuthenticatedWebApplication {
             }
         });
 
-        // to avoid send render part of request in browser that produces a redirect
-        getRequestCycleSettings().setRenderStrategy(RenderStrategy.ONE_PASS_RENDER);
     }
 
     public Exception getInternalError() {
