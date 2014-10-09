@@ -20,31 +20,33 @@
  */
 package com.pyx4j.essentials.server.report;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.Vector;
 
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.IObject;
 import com.pyx4j.entity.core.IPrimitive;
+import com.pyx4j.entity.core.Path;
 import com.pyx4j.entity.core.meta.EntityMeta;
 import com.pyx4j.entity.core.meta.MemberMeta;
+import com.pyx4j.entity.shared.utils.EntityMetaUtils;
 import com.pyx4j.essentials.rpc.report.ReportColumn;
 
 public class EntityReportFormatter<E extends IEntity> {
 
     private final Class<? extends E> entityClass;
 
-    private List<String> selectedMemberNames;
+    private List<Path> selectedMemberNames;
 
-    private final Set<String> ignoreMembers = new HashSet<String>();
+    private final Set<Path> ignoreMembers = new HashSet<>();
 
-    private final Map<String, String> customMemberCaptions = new HashMap<String, String>();
+    private final Map<Path, String> customMemberCaptions = new HashMap<>();
 
     private boolean memberValueUseStringView;
 
@@ -60,43 +62,47 @@ public class EntityReportFormatter<E extends IEntity> {
         this.memberValueUseStringView = memberValueUseStringView;
     }
 
+    protected List<Path> getAllEntityMembers() {
+        return EntityMetaUtils.getDirectMembers(entityClass);
+    }
+
     public void selectMemebers() {
-        selectedMemberNames = new Vector<String>();
+        selectedMemberNames = new ArrayList<>();
         EntityMeta em = EntityFactory.getEntityMeta(entityClass);
-        for (String memberName : em.getMemberNames()) {
-            MemberMeta memberMeta = em.getMemberMeta(memberName);
-            if (em.getMemberMeta(memberName).isRpcTransient()) {
+        for (Path memberPath : getAllEntityMembers()) {
+            MemberMeta memberMeta = em.getMemberMeta(memberPath);
+            if (memberMeta.isRpcTransient()) {
                 continue;
             }
             ReportColumn reportColumn = memberMeta.getAnnotation(ReportColumn.class);
             if ((reportColumn != null) && reportColumn.ignore()) {
                 continue;
             }
-            if (!acceptMember(memberName, memberMeta)) {
+            if (!acceptMember(memberPath, memberMeta)) {
                 continue;
             }
             if (memberMeta.isEntity()) {
-                selectedMemberNames.add(memberName);
+                selectedMemberNames.add(memberPath);
             } else if (IPrimitive.class.isAssignableFrom(memberMeta.getObjectClass())) {
-                selectedMemberNames.add(memberName);
+                selectedMemberNames.add(memberPath);
             }
         }
     }
 
-    protected boolean acceptMember(String memberName, MemberMeta memberMeta) {
-        return (!ignoreMembers.contains(memberName));
+    protected boolean acceptMember(Path memberPath, MemberMeta memberMeta) {
+        return (!ignoreMembers.contains(memberPath));
     }
 
-    public void addIgnoreMember(String memberName) {
-        ignoreMembers.add(memberName);
+    public void addIgnoreMember(Path memberPath) {
+        ignoreMembers.add(memberPath);
     }
 
-    public void addMemberCaption(String memberName, String caption) {
-        customMemberCaptions.put(memberName, caption);
+    public void addMemberCaption(Path memberPath, String caption) {
+        customMemberCaptions.put(memberPath, caption);
     }
 
-    protected String getMemberCaption(String memberName, MemberMeta memberMeta) {
-        String caption = customMemberCaptions.get(memberName);
+    protected String getMemberCaption(Path memberPath, MemberMeta memberMeta) {
+        String caption = customMemberCaptions.get(memberPath);
         if (caption != null) {
             return caption;
         } else {
@@ -113,18 +119,18 @@ public class EntityReportFormatter<E extends IEntity> {
             selectMemebers();
         }
         EntityMeta em = EntityFactory.getEntityMeta(entityClass);
-        for (String memberName : selectedMemberNames) {
-            MemberMeta memberMeta = em.getMemberMeta(memberName);
+        for (Path memberPath : selectedMemberNames) {
+            MemberMeta memberMeta = em.getMemberMeta(memberPath);
             if (memberMeta.isEntity()) {
-                formatter.header(getMemberCaption(memberName, memberMeta));
+                formatter.header(getMemberCaption(memberPath, memberMeta));
             } else if (IPrimitive.class.isAssignableFrom(memberMeta.getObjectClass())) {
-                formatter.header(getMemberCaption(memberName, memberMeta));
+                formatter.header(getMemberCaption(memberPath, memberMeta));
             }
         }
         createHeaderEnds(formatter);
     }
 
-    protected boolean reportMember(E entity, String memberName, MemberMeta memberMeta) {
+    protected boolean reportMember(E entity, Path memberPath, MemberMeta memberMeta) {
         return true;
     }
 
@@ -143,16 +149,16 @@ public class EntityReportFormatter<E extends IEntity> {
             selectMemebers();
         }
         EntityMeta em = entity.getEntityMeta();
-        for (String memberName : selectedMemberNames) {
-            MemberMeta memberMeta = em.getMemberMeta(memberName);
-            if (!reportMember(entity, memberName, memberMeta)) {
+        for (Path memberPath : selectedMemberNames) {
+            MemberMeta memberMeta = em.getMemberMeta(memberPath);
+            if (!reportMember(entity, memberPath, memberMeta)) {
                 formatter.cell(null);
                 continue;
             }
             if (memberMeta.isEntity()) {
-                formatter.cell(((IEntity) entity.getMember(memberName)).getStringView());
+                formatter.cell(((IEntity) entity.getMember(memberPath)).getStringView());
             } else if (IPrimitive.class.isAssignableFrom(memberMeta.getObjectClass())) {
-                formatter.cell(memberValue(entity.getMember(memberName)));
+                formatter.cell(memberValue(entity.getMember(memberPath)));
             }
         }
         reportEntityEnds(formatter, entity);
