@@ -84,8 +84,9 @@ public class MessageViewImpl extends SimplePanel implements MessageView {
     private static class MessageLister extends EntityDataTablePanel<MessageDTO> {
 
         public MessageLister() {
-            super(MessageDTO.class, false, false);
+            super(MessageDTO.class, true, false);
             getDataTablePanel().setFilteringEnabled(false);
+            //getDataTablePanel().getAddButton().asWidget().setStyleName(DataTableTheme.StyleName.ListerButton.name());
             // No filtering work for it
             getDataTablePanel().getDataTable().setHasColumnClickSorting(false);
             //@formatter:off
@@ -99,6 +100,12 @@ public class MessageViewImpl extends SimplePanel implements MessageView {
                     new MemberColumnDescriptor.Builder(proto().messagesInThread()).build(),
                     new MemberColumnDescriptor.Builder(proto().date()).build()));
           //@formatter:on
+        }
+
+        @Override
+        protected void onItemNew() {
+            AppSite.getPlaceController().goTo(new ResidentPortalSiteMap.Message.MessageWizard());
+
         }
 
         @Override
