@@ -356,7 +356,8 @@ public class PMSiteApplication extends AuthenticatedWebApplication {
             public String encodeRedirectURL(CharSequence url) {
                 // This logic deals with the rules from HttpServletResponse#sendRedirect(url)
                 HttpServletRequest httpRequest = (HttpServletRequest) webRequest.getContainerRequest();
-                return ServletUtils.getRelativeServletPath(httpRequest, httpRequest.getServletPath() + url);
+                String pathBase = httpRequest.getServletPath().replaceAll("/[^/]*$", "/");
+                return ServletUtils.getRelativeServletPath(httpRequest, pathBase + url);
             }
         };
     }
