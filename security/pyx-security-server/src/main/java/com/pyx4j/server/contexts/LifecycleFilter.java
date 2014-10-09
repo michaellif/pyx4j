@@ -54,14 +54,13 @@ public class LifecycleFilter implements Filter {
 
     private static Logger log = LoggerFactory.getLogger(LifecycleFilter.class);
 
-    private AntiDoS antiDoS;
+    private static String LIFECYCLE_SETUP_REQUEST_ATR = LifecycleFilter.class.getName();
 
-    private boolean developmentDebugResponse = false;
+    private AntiDoS antiDoS;
 
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
         antiDoS = new AntiDoS();
-        developmentDebugResponse = "true".equals(filterConfig.getInitParameter("developmentDebugResponse"));
     }
 
     @Override
@@ -84,14 +83,12 @@ public class LifecycleFilter implements Filter {
         }
 
         try {
-            if ((!(request instanceof HttpServletRequest)) || ((request instanceof DeploymentContextHttpServletRequestWrapper))) {
+            if (!(request instanceof HttpServletRequest) || (request.getAttribute(LIFECYCLE_SETUP_REQUEST_ATR) != null)) {
                 chain.doFilter(request, response);
             } else {
-                HttpServletRequest httprequest = new DeploymentContextHttpServletRequestWrapper((HttpServletRequest) request);
+                request.setAttribute(LIFECYCLE_SETUP_REQUEST_ATR, Boolean.TRUE);
+                HttpServletRequest httprequest = (HttpServletRequest) request;
                 HttpServletResponse httpresponse = (HttpServletResponse) response;
-                if (developmentDebugResponse) {
-                    httpresponse = new DevDebugHttpServletResponseWrapper(httpresponse);
-                }
                 if (!allowRequest(httprequest, httpresponse)) {
                     return;
                 }
