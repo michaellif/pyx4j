@@ -86,6 +86,7 @@ public class PaymentWizardActivity extends AbstractWizardCrudActivity<PaymentDTO
                 };
                 d.getCancelButton().setVisible(false);
                 d.show();
+                d.startProgress(deferredCorrelationId);
             }
         }, paymentRecordId);
     }
