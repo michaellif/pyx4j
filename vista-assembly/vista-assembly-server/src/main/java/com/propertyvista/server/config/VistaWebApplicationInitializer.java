@@ -43,6 +43,7 @@ import com.pyx4j.essentials.server.download.DownloadServlet;
 import com.pyx4j.gwt.server.GWTCacheFilter;
 import com.pyx4j.log4j.LoggerConfig;
 import com.pyx4j.rpc.server.RemoteServiceServlet;
+import com.pyx4j.server.contexts.DeploymentContextFilter;
 import com.pyx4j.server.contexts.LifecycleFilter;
 
 import com.propertyvista.biz.system.AuditSessionListener;
@@ -93,6 +94,13 @@ public class VistaWebApplicationInitializer implements ServletContainerInitializ
         ctx.setInitParameter(ServerSideConfiguration.class.getName(), VistaServerSideConfiguration.class.getName());
         ctx.addListener(VistaInitializationServletContextListener.class);
         ctx.addListener(AuditSessionListener.class);
+
+        // Understands URLs of our forwarding proxy server
+        {
+            FilterRegistration.Dynamic fc = ctx.addFilter("DeploymentContextFilter", DeploymentContextFilter.class);
+            fc.setInitParameter(DeploymentContextFilter.PARAM_developmentDebugResponse, "false");
+            fc.addMappingForUrlPatterns(EnumSet.of(DispatcherType.REQUEST), true, "/*");
+        }
 
         // URLs mapping to application
         {

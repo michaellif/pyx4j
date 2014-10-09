@@ -15,4 +15,18 @@ package com.propertyvista.server.config;
 
 public class VistaServerSideConfigurationDevForApache extends VistaServerSideConfigurationDevPostgreSQL {
 
+    @Override
+    public boolean isDepoymentApplicationDispatcher() {
+        return true;
+    }
+
+    @Override
+    public boolean isAppsContextlessDepoyment() {
+        return true;
+    }
+
+    @Override
+    public String getApplicationURLNamespace(boolean secure) {
+        return "-00.devpv.com/";
+    }
 }

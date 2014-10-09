@@ -121,6 +121,7 @@ public class VistaApplicationDispatcherFilterTest extends TestCase {
 
         // CRM
         testMapping("https://vista-crm-22.birchwoodsoftwaregroup.com/", false, VistaApplication.crm);
+        testMapping("http://vista-crm-00.devpv.com/", false, VistaApplication.crm);
 
         // Resident
         testMapping("https://vista-portal-22.birchwoodsoftwaregroup.com/", false, VistaApplication.resident);
