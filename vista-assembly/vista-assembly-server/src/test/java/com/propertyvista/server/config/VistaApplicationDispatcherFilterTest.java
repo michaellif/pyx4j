@@ -17,6 +17,8 @@ import java.io.IOException;
 
 import javax.servlet.ServletException;
 
+import junit.framework.TestCase;
+
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
@@ -28,9 +30,9 @@ import com.pyx4j.unit.server.mock.MockHttpServletResponse;
 import com.pyx4j.unit.server.mock.filter.MockFilterChain;
 import com.pyx4j.unit.server.mock.filter.MockHttpServletRequestFilter;
 
-import com.propertyvista.server.config.VistaApplicationDispatcherFilter.ApplicationType;
+import com.propertyvista.domain.security.common.VistaApplication;
 
-public class VistaApplicationDispatcherFilterTest {//extends TestCase {
+public class VistaApplicationDispatcherFilterTest extends TestCase {
 
     private final static Logger log = LoggerFactory.getLogger(VistaApplicationDispatcherFilterTest.class);
 
@@ -42,6 +44,7 @@ public class VistaApplicationDispatcherFilterTest {//extends TestCase {
 
     MockFilterChain mockChain;
 
+    @Override
     @Before
     public void setUp() throws Exception {
         mockChain = new MockFilterChain();
@@ -50,6 +53,7 @@ public class VistaApplicationDispatcherFilterTest {//extends TestCase {
         log.info("VistaApplicationDispatcherFilterTest initialized");
     }
 
+    @Override
     @After
     public void tearDown() throws Exception {
     }
@@ -72,25 +76,25 @@ public class VistaApplicationDispatcherFilterTest {//extends TestCase {
         // **************************************************************
 
         // Onboarding
-        testMapping("http://onboarding.dev.birchwoodsoftwaregroup.com:8888/", false, ApplicationType.onboarding);
+        testMapping("http://onboarding.dev.birchwoodsoftwaregroup.com:8888/", false, VistaApplication.onboarding);
 
         // Operations
-        testMapping("http://operations.dev.birchwoodsoftwaregroup.com:8888/", false, ApplicationType.operations);
+        testMapping("http://operations.dev.birchwoodsoftwaregroup.com:8888/", false, VistaApplication.operations);
 
         // DB Reset
-        testMapping("http://static.dev.birchwoodsoftwaregroup.com:8888/o/db-reset", false, ApplicationType.development);
+        testMapping("http://static.dev.birchwoodsoftwaregroup.com:8888/o/db-reset", false, VistaApplication.noApp);
 
         // SITE
-        testMapping("http://vista-site.dev.birchwoodsoftwaregroup.com:8888/", false, ApplicationType.site);
+        testMapping("http://vista-site.dev.birchwoodsoftwaregroup.com:8888/", false, VistaApplication.site);
 
         // CRM
-        testMapping("http://vista-crm.dev.birchwoodsoftwaregroup.com:8888/", false, ApplicationType.crm);
+        testMapping("http://vista-crm.dev.birchwoodsoftwaregroup.com:8888/", false, VistaApplication.crm);
 
         // Resident
-        testMapping("http://vista-portal.dev.birchwoodsoftwaregroup.com:8888/", false, ApplicationType.resident);
+        testMapping("http://vista-portal.dev.birchwoodsoftwaregroup.com:8888/", false, VistaApplication.resident);
 
         // Prospect
-        testMapping("http://vista-portal.dev.birchwoodsoftwaregroup.com:8888/prospect", false, ApplicationType.prospect);
+        testMapping("http://vista-portal.dev.birchwoodsoftwaregroup.com:8888/prospect", false, VistaApplication.prospect);
 
         // **************************************************************
         //                       TEST ENVIRONMENTS
@@ -101,28 +105,28 @@ public class VistaApplicationDispatcherFilterTest {//extends TestCase {
         // **************************************************************
 
         // Onboarding
-        testMapping("https://onboarding-22.birchwoodsoftwaregroup.com/", false, ApplicationType.onboarding);
+        testMapping("https://onboarding-22.birchwoodsoftwaregroup.com/", false, VistaApplication.onboarding);
 
         // Operations
-        testMapping("https://operations-22.birchwoodsoftwaregroup.com/", false, ApplicationType.operations);
+        testMapping("https://operations-22.birchwoodsoftwaregroup.com/", false, VistaApplication.operations);
 
         // DB-Reset
-        testMapping("http://static-22.birchwoodsoftwaregroup.com/o/db-reset", false, ApplicationType.development);
+        testMapping("http://static-22.birchwoodsoftwaregroup.com/o/db-reset", false, VistaApplication.noApp);
 
         // Logs
-        testMapping("https://static-22.birchwoodsoftwaregroup.com/logs/", false, ApplicationType.development);
+        testMapping("https://static-22.birchwoodsoftwaregroup.com/logs/", false, VistaApplication.noApp);
 
         // SITE
-        testMapping("https://vista-site-22.birchwoodsoftwaregroup.com/", false, ApplicationType.site);
+        testMapping("https://vista-site-22.birchwoodsoftwaregroup.com/", false, VistaApplication.site);
 
         // CRM
-        testMapping("https://vista-crm-22.birchwoodsoftwaregroup.com/", false, ApplicationType.crm);
+        testMapping("https://vista-crm-22.birchwoodsoftwaregroup.com/", false, VistaApplication.crm);
 
         // Resident
-        testMapping("https://vista-portal-22.birchwoodsoftwaregroup.com/", false, ApplicationType.resident);
+        testMapping("https://vista-portal-22.birchwoodsoftwaregroup.com/", false, VistaApplication.resident);
 
         // Prospect
-        testMapping("https://vista-portal-22.birchwoodsoftwaregroup.com/prospect", false, ApplicationType.prospect);
+        testMapping("https://vista-portal-22.birchwoodsoftwaregroup.com/prospect", false, VistaApplication.prospect);
 
     }
 
@@ -159,7 +163,7 @@ public class VistaApplicationDispatcherFilterTest {//extends TestCase {
      * @throws IOException
      * @throws ServletException
      */
-    protected void testMapping(String url, boolean followChain, ApplicationType app) throws IOException, ServletException {
+    protected void testMapping(String url, boolean followChain, VistaApplication app) throws IOException, ServletException {
         req = new MockHttpServletRequestFilter(url);
         mockChain.setExpectedInvocation(followChain);
         filterUnderTest.map(req, resp, mockChain);
@@ -167,7 +171,7 @@ public class VistaApplicationDispatcherFilterTest {//extends TestCase {
 
         if ((!followChain) && (app != null)) {
             String targetUrl = "/" + app;
-            if (app == ApplicationType.development) {
+            if (app == VistaApplication.noApp) {
                 targetUrl = req.getRequestURI();
             }
             Assert.assertTrue("Wrong forwarded URL for application '" + app + "'. Forward URL is '" + req.getForwardUrl() + "' and expected URL is '"
