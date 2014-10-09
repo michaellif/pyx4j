@@ -1061,53 +1061,54 @@ public abstract class LeaseAbstractManager {
     private void persistCustomers(LeaseTerm leaseTerm) {
         for (LeaseTermTenant tenant : leaseTerm.version().tenants()) {
             if (!tenant.isValueDetached()) {
-                persistLeaseCustomer(leaseTerm, tenant, Tenant.class);
+                persistLeaseParticipant(leaseTerm, tenant, Tenant.class);
             }
         }
         for (LeaseTermGuarantor guarantor : leaseTerm.version().guarantors()) {
             if (!guarantor.isValueDetached()) {
-                persistLeaseCustomer(leaseTerm, guarantor, Guarantor.class);
+                persistLeaseParticipant(leaseTerm, guarantor, Guarantor.class);
             }
         }
     }
 
-    private <E extends LeaseParticipant<?>, P extends LeaseTermParticipant<?>> void persistLeaseCustomer(LeaseTerm leaseTerm, P leaseParticipant,
-            Class<E> leaseCustomerClass) {
-        boolean newCustomer = leaseParticipant.leaseParticipant().customer().id().isNull();
+    private <E extends LeaseParticipant<?>, P extends LeaseTermParticipant<?>> void persistLeaseParticipant(LeaseTerm leaseTerm, P leaseTermParticipant,
+            Class<E> leaseParticipantClass) {
+        boolean newCustomer = leaseTermParticipant.leaseParticipant().customer().id().isNull();
 
-        if (!leaseParticipant.leaseParticipant().customer().isValueDetached()) {
-            ServerSideFactory.create(CustomerFacade.class).persistCustomer(leaseParticipant.leaseParticipant().customer());
+        if (!leaseTermParticipant.leaseParticipant().customer().isValueDetached()) {
+            ServerSideFactory.create(CustomerFacade.class).persistCustomer(leaseTermParticipant.leaseParticipant().customer());
         }
 
         // Is new LeaseCustomer find or create new
-        if (leaseParticipant.leaseParticipant().id().isNull()) {
-            E leaseCustomer = null;
+        if (leaseTermParticipant.leaseParticipant().id().isNull()) {
+            E leaseParticipant = null;
 
             if (!newCustomer) {
-                EntityQueryCriteria<E> criteria = EntityQueryCriteria.create(leaseCustomerClass);
-                criteria.add(PropertyCriterion.eq(criteria.proto().lease(), leaseTerm.lease()));
-                criteria.add(PropertyCriterion.eq(criteria.proto().customer(), leaseParticipant.leaseParticipant().customer()));
-                leaseCustomer = Persistence.service().retrieve(criteria);
+                // Find returning Lease Participant (if exist): 
+                EntityQueryCriteria<E> criteria = EntityQueryCriteria.create(leaseParticipantClass);
+                criteria.eq(criteria.proto().lease(), leaseTerm.lease());
+                criteria.eq(criteria.proto().customer(), leaseTermParticipant.leaseParticipant().customer());
+                leaseParticipant = Persistence.service().retrieve(criteria);
             }
 
-            if (leaseCustomer == null) {
-                Customer customer = leaseParticipant.leaseParticipant().customer();
-                leaseCustomer = EntityFactory.create(leaseCustomerClass);
-                leaseCustomer.lease().set(leaseTerm.lease());
-                leaseCustomer.customer().set(customer);
-                ServerSideFactory.create(IdAssignmentFacade.class).assignId(leaseCustomer);
+            if (leaseParticipant == null) {
+                Customer customer = leaseTermParticipant.leaseParticipant().customer();
+                leaseParticipant = EntityFactory.create(leaseParticipantClass);
+                leaseParticipant.lease().set(leaseTerm.lease());
+                leaseParticipant.customer().set(customer);
+                ServerSideFactory.create(IdAssignmentFacade.class).assignId(leaseParticipant);
                 // case of user-assignable ID:
-                if (leaseCustomer.participantId().isNull() && !leaseParticipant.leaseParticipant().participantId().isNull()) {
-                    leaseCustomer.participantId().set(leaseParticipant.leaseParticipant().participantId());
+                if (leaseParticipant.participantId().isNull() && !leaseTermParticipant.leaseParticipant().participantId().isNull()) {
+                    leaseParticipant.participantId().set(leaseTermParticipant.leaseParticipant().participantId());
                 }
 
-                Persistence.service().persist(leaseCustomer);
+                Persistence.service().persist(leaseParticipant);
             }
 
             // Copy value to member and update other references in graph
-            leaseParticipant.leaseParticipant().id().set(leaseCustomer.id());
-            leaseParticipant.leaseParticipant().lease().set(leaseTerm.lease());
-            leaseParticipant.leaseParticipant().participantId().set(leaseCustomer.participantId());
+            leaseTermParticipant.leaseParticipant().id().set(leaseParticipant.id());
+            leaseTermParticipant.leaseParticipant().lease().set(leaseTerm.lease());
+            leaseTermParticipant.leaseParticipant().participantId().set(leaseParticipant.participantId());
         }
     }
 
