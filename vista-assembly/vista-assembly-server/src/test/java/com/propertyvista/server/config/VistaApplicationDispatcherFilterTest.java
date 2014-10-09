@@ -76,25 +76,25 @@ public class VistaApplicationDispatcherFilterTest extends TestCase {
         // **************************************************************
 
         // Onboarding
-        testMapping("http://onboarding.dev.birchwoodsoftwaregroup.com:8888/", false, VistaApplication.onboarding);
+        testForward("http://onboarding.dev.birchwoodsoftwaregroup.com:8888/", VistaApplication.onboarding);
 
         // Operations
-        testMapping("http://operations.dev.birchwoodsoftwaregroup.com:8888/", false, VistaApplication.operations);
+        testForward("http://operations.dev.birchwoodsoftwaregroup.com:8888/", VistaApplication.operations);
 
         // DB Reset
-        testMapping("http://static.dev.birchwoodsoftwaregroup.com:8888/o/db-reset", false, VistaApplication.noApp);
+        testForward("http://static.dev.birchwoodsoftwaregroup.com:8888/o/db-reset", VistaApplication.noApp);
 
         // SITE
-        testMapping("http://vista-site.dev.birchwoodsoftwaregroup.com:8888/", false, VistaApplication.site);
+        testForward("http://vista-site.dev.birchwoodsoftwaregroup.com:8888/", VistaApplication.site);
 
         // CRM
-        testMapping("http://vista-crm.dev.birchwoodsoftwaregroup.com:8888/", false, VistaApplication.crm);
+        testForward("http://vista-crm.dev.birchwoodsoftwaregroup.com:8888/", VistaApplication.crm);
 
         // Resident
-        testMapping("http://vista-portal.dev.birchwoodsoftwaregroup.com:8888/", false, VistaApplication.resident);
+        testForward("http://vista-portal.dev.birchwoodsoftwaregroup.com:8888/", VistaApplication.resident);
 
         // Prospect
-        testMapping("http://vista-portal.dev.birchwoodsoftwaregroup.com:8888/prospect", false, VistaApplication.prospect);
+        testForward("http://vista-portal.dev.birchwoodsoftwaregroup.com:8888/prospect", VistaApplication.prospect);
 
         // **************************************************************
         //                       TEST ENVIRONMENTS
@@ -105,29 +105,29 @@ public class VistaApplicationDispatcherFilterTest extends TestCase {
         // **************************************************************
 
         // Onboarding
-        testMapping("https://onboarding-22.birchwoodsoftwaregroup.com/", false, VistaApplication.onboarding);
+        testForward("https://onboarding-22.birchwoodsoftwaregroup.com/", VistaApplication.onboarding);
 
         // Operations
-        testMapping("https://operations-22.birchwoodsoftwaregroup.com/", false, VistaApplication.operations);
+        testForward("https://operations-22.birchwoodsoftwaregroup.com/", VistaApplication.operations);
 
         // DB-Reset
-        testMapping("http://static-22.birchwoodsoftwaregroup.com/o/db-reset", false, VistaApplication.noApp);
+        testForward("http://static-22.birchwoodsoftwaregroup.com/o/db-reset", VistaApplication.noApp);
 
         // Logs
-        testMapping("https://static-22.birchwoodsoftwaregroup.com/logs/", false, VistaApplication.noApp);
+        testForward("https://static-22.birchwoodsoftwaregroup.com/logs/", VistaApplication.noApp);
 
         // SITE
-        testMapping("https://vista-site-22.birchwoodsoftwaregroup.com/", false, VistaApplication.site);
+        testForward("https://vista-site-22.birchwoodsoftwaregroup.com/", VistaApplication.site);
 
         // CRM
-        testMapping("https://vista-crm-22.birchwoodsoftwaregroup.com/", false, VistaApplication.crm);
+        testForward("https://vista-crm-22.birchwoodsoftwaregroup.com/", VistaApplication.crm);
         testMapping("http://vista-crm-00.devpv.com/", false, VistaApplication.crm);
 
         // Resident
-        testMapping("https://vista-portal-22.birchwoodsoftwaregroup.com/", false, VistaApplication.resident);
+        testForward("https://vista-portal-22.birchwoodsoftwaregroup.com/", VistaApplication.resident);
 
         // Prospect
-        testMapping("https://vista-portal-22.birchwoodsoftwaregroup.com/prospect", false, VistaApplication.prospect);
+        testForward("https://vista-portal-22.birchwoodsoftwaregroup.com/prospect", VistaApplication.prospect);
 
     }
 
@@ -141,14 +141,42 @@ public class VistaApplicationDispatcherFilterTest extends TestCase {
     @Test
     public final void testFollowChain() throws IOException, ServletException {
 
-        testMapping("https://portale-22.birchwoodsoftwaregroup.com/prospect", true, null);
+        testChain("https://portale-22.birchwoodsoftwaregroup.com/prospect");
 
-        testMapping("https://portal-vista-22.birchwoodsoftwaregroup.com/", true, null);
+        testChain("https://portal-vista-22.birchwoodsoftwaregroup.com/");
 
-        testMapping("https://site-vista-999.birchwoodsoftwaregroup.com/", true, null);
+        testChain("https://site-vista-999.birchwoodsoftwaregroup.com/");
 
-        testMapping("http://onboardingg.dev.birchwoodsoftwaregroup.com:8888/", true, null);
+        testChain("http://onboardingg.dev.birchwoodsoftwaregroup.com:8888/");
 
+    }
+
+    /**
+     * Test forward function
+     *
+     * @param url
+     *            to map
+     * @param app
+     *            application
+     * @throws IOException
+     * @throws ServletException
+     */
+    protected void testForward(String url, VistaApplication app) throws IOException, ServletException {
+        testMapping(url, false, app);
+    }
+
+    /**
+     * Test doChain function
+     *
+     * @param url
+     *            to map
+     * @param app
+     *            application
+     * @throws IOException
+     * @throws ServletException
+     */
+    protected void testChain(String url) throws IOException, ServletException {
+        testMapping(url, true, null);
     }
 
     /**
