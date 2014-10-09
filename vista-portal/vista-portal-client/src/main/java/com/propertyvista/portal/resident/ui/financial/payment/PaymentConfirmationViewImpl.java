@@ -19,7 +19,6 @@ import com.propertyvista.portal.shared.ui.AbstractFormView;
 public class PaymentConfirmationViewImpl extends AbstractFormView<PaymentRecordDTO> implements PaymentConfirmationView {
 
     public PaymentConfirmationViewImpl() {
-        super();
         setForm(new PaymentConfirmationForm(this));
     }
 }

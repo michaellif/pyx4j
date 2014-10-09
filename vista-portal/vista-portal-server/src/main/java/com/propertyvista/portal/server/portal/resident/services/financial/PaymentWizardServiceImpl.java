@@ -20,7 +20,6 @@ import java.util.concurrent.Callable;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
-import com.pyx4j.commons.Key;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.config.server.SystemDateManager;
 import com.pyx4j.entity.core.EntityFactory;
@@ -30,6 +29,7 @@ import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.ISignature.SignatureFormat;
 import com.pyx4j.gwt.server.deferred.DeferredProcessRegistry;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.server.contexts.ServerContext;
 
 import com.propertyvista.biz.financial.ar.ARFacade;
 import com.propertyvista.biz.financial.payment.PaymentFacade;
@@ -47,6 +47,7 @@ import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.util.DomainUtil;
 import com.propertyvista.dto.payment.ConvenienceFeeCalculationResponseTO;
 import com.propertyvista.operations.domain.legal.VistaTerms;
+import com.propertyvista.portal.rpc.portal.resident.ResidentUserVisit;
 import com.propertyvista.portal.rpc.portal.resident.dto.financial.PaymentDTO;
 import com.propertyvista.portal.rpc.portal.resident.services.financial.PaymentWizardService;
 import com.propertyvista.portal.rpc.portal.shared.dto.PaymentConvenienceFeeDTO;
@@ -141,7 +142,9 @@ public class PaymentWizardServiceImpl extends AbstractCrudServiceDtoImpl<Payment
         ServerSideFactory.create(PaymentFacade.class).validatePaymentMethod(lease.billingAccount(), bo.paymentMethod(), PaymentMethodTarget.OneTimePayment,
                 VistaApplication.resident);
         ServerSideFactory.create(PaymentFacade.class).validatePayment(bo, VistaApplication.resident);
-        ServerSideFactory.create(PaymentFacade.class).persistPayment(bo);
+
+        ServerContext.visit(ResidentUserVisit.class).setPaymentDeferredCorrelationId(
+                DeferredProcessRegistry.fork(new PaymentDeferredProcess(bo), ThreadPoolNames.PAYMENTS));
 
         return true;
     }
@@ -171,11 +174,5 @@ public class PaymentWizardServiceImpl extends AbstractCrudServiceDtoImpl<Payment
             }
         }
         callback.onSuccess(result);
-    }
-
-    @Override
-    public void processPayment(AsyncCallback<String> callback, Key paymentRecordId) {
-        callback.onSuccess(DeferredProcessRegistry.fork(new PaymentDeferredProcess(EntityFactory.createIdentityStub(PaymentRecord.class, paymentRecordId)),
-                ThreadPoolNames.PAYMENTS));
     }
 }

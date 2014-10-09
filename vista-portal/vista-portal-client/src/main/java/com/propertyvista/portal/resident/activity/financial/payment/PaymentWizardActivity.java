@@ -20,8 +20,6 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.commons.Key;
-import com.pyx4j.gwt.client.deferred.DeferredProcessDialog;
-import com.pyx4j.gwt.rpc.deferred.DeferredProcessProgressResponse;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.site.client.AppSite;
@@ -72,22 +70,6 @@ public class PaymentWizardActivity extends AbstractWizardCrudActivity<PaymentDTO
 
     @Override
     protected void onFinish(final Key paymentRecordId) {
-        // run deferred process for actual payment processing:  
-        ((PaymentWizardService) getService()).processPayment(new DefaultAsyncCallback<String>() {
-            @Override
-            public void onSuccess(String deferredCorrelationId) {
-                DeferredProcessDialog d = new DeferredProcessDialog(i18n.tr("Payment Processing..."), null, false) {
-                    @Override
-                    public void onDeferredSuccess(final DeferredProcessProgressResponse result) {
-                        super.onDeferredSuccess(result);
-                        hide(); // automatically hide dialog on completion...
-                        AppSite.getPlaceController().goTo(new Payment.PaymentSubmitting(paymentRecordId));
-                    }
-                };
-                d.getCancelButton().setVisible(false);
-                d.show();
-                d.startProgress(deferredCorrelationId);
-            }
-        }, paymentRecordId);
+        AppSite.getPlaceController().goTo(new Payment.PaymentSubmitting());
     }
 }

@@ -25,12 +25,16 @@ import com.propertyvista.portal.resident.activity.movein.MoveInWizardManager;
 import com.propertyvista.portal.resident.activity.movein.MoveInWizardManager.MoveInWizardState;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
 import com.propertyvista.portal.rpc.portal.resident.ResidentPortalSiteMap;
+import com.propertyvista.portal.rpc.portal.resident.ResidentUserVisit;
 
 public class ResidentPortalSiteDispatcher extends AbstractAppPlaceDispatcher {
 
     @Override
     protected AppPlace obtainDefaultPlace() {
         if (ClientContext.isAuthenticated()) {
+            if (ClientContext.visit(ResidentUserVisit.class).getPaymentDeferredCorrelationId() != null) {
+                new ResidentPortalSiteMap.Financial.Payment.PaymentSubmitting();
+            }
             return new ResidentPortalSiteMap.Dashboard();
         } else {
             return new PortalSiteMap.Login();

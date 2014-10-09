@@ -110,10 +110,6 @@ public class ResidentPortalSiteMap extends PortalSiteMap {
 
                 public PaymentSubmitting() {
                 }
-
-                public PaymentSubmitting(Key paymentRecordID) {
-                    formPlace(paymentRecordID);
-                }
             }
         }
 

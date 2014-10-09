@@ -46,7 +46,7 @@ public class PaymentConfirmationForm extends CPortalEntityForm<PaymentRecordDTO>
 
     private static final I18n i18n = I18n.get(PaymentConfirmationForm.class);
 
-    private static final String headerUndefined = i18n.tr("Payment Status Undefined...");
+    private static final String headerUndefined = i18n.tr("Waiting for Payment Processing...");
 
     private static final String headerSuccess = i18n.tr("Payment Submitted Successfully!");
 
@@ -56,7 +56,6 @@ public class PaymentConfirmationForm extends CPortalEntityForm<PaymentRecordDTO>
 
     public PaymentConfirmationForm(AbstractFormView<PaymentRecordDTO> view) {
         super(PaymentRecordDTO.class, view, i18n.tr("Payment Submitted Successfully!"), new Button(i18n.tr("Continue"), new Command() {
-
             @Override
             public void execute() {
                 AppSite.getPlaceController().goTo(AppPlace.NOWHERE);
@@ -110,8 +109,9 @@ public class PaymentConfirmationForm extends CPortalEntityForm<PaymentRecordDTO>
         super.onReset();
 
         if (getDecorator() instanceof FormDecorator) {
-            FormDecorator decorator = ((FormDecorator) getDecorator());
+            FormDecorator<?> decorator = ((FormDecorator<?>) getDecorator());
             decorator.setCaption(headerUndefined);
+            decorator.getCaptionLabel().addStyleName(VistaTheme.StyleName.WarningMessage.name());
             decorator.getCaptionLabel().removeStyleName(VistaTheme.StyleName.ErrorMessage.name());
         }
 
@@ -126,7 +126,8 @@ public class PaymentConfirmationForm extends CPortalEntityForm<PaymentRecordDTO>
         super.onValueSet(populate);
 
         if (getDecorator() instanceof FormDecorator) {
-            FormDecorator decorator = ((FormDecorator) getDecorator());
+            FormDecorator<?> decorator = ((FormDecorator<?>) getDecorator());
+            decorator.getCaptionLabel().removeStyleName(VistaTheme.StyleName.WarningMessage.name());
             if (getValue().paymentStatus().getValue().isFailed()) {
                 decorator.setCaption(headerFailed);
                 decorator.getCaptionLabel().addStyleName(VistaTheme.StyleName.ErrorMessage.name());

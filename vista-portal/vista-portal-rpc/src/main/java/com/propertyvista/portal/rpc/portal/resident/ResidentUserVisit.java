@@ -13,6 +13,7 @@
  */
 package com.propertyvista.portal.rpc.portal.resident;
 
+import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.security.CustomerUser;
 import com.propertyvista.domain.security.common.VistaApplication;
 import com.propertyvista.domain.tenant.lease.Lease;
@@ -21,7 +22,11 @@ import com.propertyvista.portal.rpc.portal.CustomerUserVisit;
 @SuppressWarnings("serial")
 public class ResidentUserVisit extends CustomerUserVisit {
 
-    private Lease selectedLease;
+    private Lease selectedLeaseId;
+
+    private String paymentDeferredCorrelationId;
+
+    private PaymentRecord paymentRecordId;
 
     // to make it GWT Serializable ?
     public ResidentUserVisit() {
@@ -32,22 +37,43 @@ public class ResidentUserVisit extends CustomerUserVisit {
         super(application, user);
     }
 
-    public Lease getLeaseId() {
-        return selectedLease;
-    }
-
-    public void setLease(Lease lease) {
-        if (lease != null) {
-            this.selectedLease = lease.createIdentityStub();
-        } else {
-            this.selectedLease = null;
-        }
-        setChanged();
-    }
-
     @Override
     public String toString() {
         return "Resident " + super.toString();
     }
 
+    public Lease getLeaseId() {
+        return selectedLeaseId;
+    }
+
+    public void setLease(Lease lease) {
+        if (lease != null) {
+            this.selectedLeaseId = lease.createIdentityStub();
+        } else {
+            this.selectedLeaseId = null;
+        }
+        setChanged();
+    }
+
+    public String getPaymentDeferredCorrelationId() {
+        return paymentDeferredCorrelationId;
+    }
+
+    public void setPaymentDeferredCorrelationId(String deferredCorrelationId) {
+        this.paymentDeferredCorrelationId = deferredCorrelationId;
+        setChanged();
+    }
+
+    public PaymentRecord getPaymentRecord() {
+        return paymentRecordId;
+    }
+
+    public void setPaymentRecord(PaymentRecord paymentRecord) {
+        if (paymentRecord != null) {
+            this.paymentRecordId = paymentRecord.createIdentityStub();
+        } else {
+            this.paymentRecordId = null;
+        }
+        setChanged();
+    }
 }
