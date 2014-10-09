@@ -56,13 +56,12 @@ public class PaymentRecordListServiceImpl extends AbstractCrudServiceDtoImpl<Pay
     @Override
     protected void enhanceListRetrieved(PaymentRecord bo, PaymentRecordDTO to) {
         super.enhanceListRetrieved(bo, to);
-        Persistence.service().retrieve(to.billingAccount());
-        Persistence.service().retrieve(to.billingAccount().lease());
-        Persistence.service().retrieve(to.billingAccount().lease().unit().building());
-        Persistence.service().retrieve(to.paymentMethod().customer());
-        Persistence.ensureRetrieve(to.leaseTermParticipant(), AttachLevel.Attached);
 
+        Persistence.ensureRetrieve(to.billingAccount().lease().unit().building(), AttachLevel.Attached);
+        Persistence.ensureRetrieve(to.paymentMethod().customer(), AttachLevel.Attached);
+        Persistence.ensureRetrieve(to.leaseTermParticipant(), AttachLevel.Attached);
         Persistence.ensureRetrieve(bo.invoicePaymentBackOut(), AttachLevel.Attached);
+
         if (!bo.invoicePaymentBackOut().isNull()) {
             to.rejectedWithNSF().setValue(bo.invoicePaymentBackOut().applyNSF().getValue());
         }

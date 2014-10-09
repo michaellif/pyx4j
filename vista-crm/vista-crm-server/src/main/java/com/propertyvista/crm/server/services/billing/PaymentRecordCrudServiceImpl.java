@@ -101,13 +101,10 @@ public class PaymentRecordCrudServiceImpl extends AbstractCrudServiceDtoImpl<Pay
     protected void enhanceListRetrieved(PaymentRecord bo, PaymentRecordDTO to) {
         super.enhanceListRetrieved(bo, to);
 
-        Persistence.service().retrieve(to.billingAccount());
-        Persistence.service().retrieve(to.billingAccount().lease());
-        Persistence.service().retrieve(to.billingAccount().lease().unit());
-        Persistence.service().retrieve(to.billingAccount().lease().unit().building());
-        Persistence.service().retrieve(to.leaseTermParticipant());
-        Persistence.service().retrieve(to.paymentMethod());
-        Persistence.service().retrieve(to.preauthorizedPayment());
+        Persistence.ensureRetrieve(to.billingAccount().lease().unit().building(), AttachLevel.Attached);
+        Persistence.ensureRetrieve(to.paymentMethod().customer(), AttachLevel.Attached);
+        Persistence.ensureRetrieve(to.leaseTermParticipant(), AttachLevel.Attached);
+        Persistence.ensureRetrieve(to.preauthorizedPayment(), AttachLevel.Attached);
 
         to.leaseId().set(to.billingAccount().lease().leaseId());
         to.leaseStatus().set(to.billingAccount().lease().status());
