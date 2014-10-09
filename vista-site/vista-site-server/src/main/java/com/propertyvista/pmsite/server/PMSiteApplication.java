@@ -62,6 +62,7 @@ import org.slf4j.LoggerFactory;
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.config.shared.ApplicationMode;
+import com.pyx4j.gwt.server.ServletUtils;
 import com.pyx4j.security.rpc.AuthenticationService;
 
 import com.propertyvista.config.VistaDeployment;
@@ -353,7 +354,9 @@ public class PMSiteApplication extends AuthenticatedWebApplication {
 
             @Override
             public String encodeRedirectURL(CharSequence url) {
-                return url.toString();
+                // This logic deals with the rules from HttpServletResponse#sendRedirect(url)
+                HttpServletRequest httpRequest = (HttpServletRequest) webRequest.getContainerRequest();
+                return ServletUtils.getRelativeServletPath(httpRequest, httpRequest.getServletPath() + url);
             }
         };
     }
