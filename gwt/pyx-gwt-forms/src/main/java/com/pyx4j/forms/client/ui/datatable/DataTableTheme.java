@@ -28,7 +28,6 @@ import com.pyx4j.commons.css.Theme;
 import com.pyx4j.commons.css.ThemeColor;
 import com.pyx4j.commons.css.ThemeId;
 import com.pyx4j.forms.client.ui.CComponentTheme;
-import com.pyx4j.forms.client.ui.decorators.WidgetDecoratorTheme.StyleName;
 import com.pyx4j.widgets.client.style.theme.WidgetTheme;
 
 public class DataTableTheme extends Theme {
@@ -126,6 +125,11 @@ public class DataTableTheme extends Theme {
         style.addProperty("border-color", ThemeColor.foreground, 0.3);
         style.addProperty("padding", "6px 0");
         style.addProperty("background-color", ThemeColor.foreground, 0.05);
+        addStyle(style);
+
+        style = new Style("." + StyleName.DataTableToolBar, " .", WidgetTheme.StyleName.ToolbarItem);
+        style.addProperty("float", "left");
+        style.addProperty("display", "inline-block");
         addStyle(style);
 
         style = new Style(".", StyleName.DataTableActionsBar, " .", WidgetTheme.StyleName.Button);
