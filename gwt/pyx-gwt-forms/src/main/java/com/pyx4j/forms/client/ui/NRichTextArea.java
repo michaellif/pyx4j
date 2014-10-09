@@ -70,7 +70,12 @@ public class NRichTextArea extends NTextComponent<String, RichTextEditor, CRichT
     @Override
     public void setNativeValue(String value) {
         if (isViewable()) {
-            getViewer().setHTML(value);
+            String v = value;
+            if (v != null) {
+                //VISTA-5364 - RTF editor inserts <blockquote> tags on text indent
+                v = value.replace("<blockquote>", "<span style=\"padding: 0 40px\"></span>").replace("<blockquote/>", "");
+            }
+            getViewer().setHTML(v);
         } else {
             getEditor().setText(value);
         }
