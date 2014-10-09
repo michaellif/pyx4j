@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011-2012 All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -26,8 +26,8 @@ import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.forms.client.ui.folder.CFolderRowEditor;
 import com.pyx4j.forms.client.ui.folder.FolderColumnDescriptor;
-import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
+import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.backoffice.ui.prime.form.IForm;
 
@@ -114,17 +114,18 @@ public class MoneyInBatchForm extends CrmEntityForm<MoneyInBatchDTO> {
         formPanel.h2(i18n.tr("Payments"));
         formPanel.append(Location.Dual, proto().payments(), new DepositSlipPaymentRecordFolder());
 
-        get(proto().building()).setViewable(true);
-        get(proto().depositSlipNumber()).setViewable(true);
-        get(proto().totalReceivedAmount()).setViewable(true);
-        get(proto().numberOfReceipts()).setViewable(true);
-        get(proto().postingStatus()).setViewable(true);
-        get(proto().payments()).setViewable(true);
+        get(proto().building()).setEditable(false);
+        get(proto().depositSlipNumber()).setEditable(false);
+        get(proto().totalReceivedAmount()).setEditable(false);
+        get(proto().numberOfReceipts()).setEditable(false);
+        get(proto().postingStatus()).setEditable(false);
+        get(proto().batchNumber()).setEditable(false);
+        get(proto().payments()).setEditable(false);
 
-        get(proto().bankId()).setViewable(true);
-        get(proto().bankTransitNumber()).setViewable(true);
-        get(proto().bankAccountNumber()).setViewable(true);
-        get(proto().bankAccountName()).setViewable(true);
+        get(proto().bankId()).setEditable(false);
+        get(proto().bankTransitNumber()).setEditable(false);
+        get(proto().bankAccountNumber()).setEditable(false);
+        get(proto().bankAccountName()).setEditable(false);
 
         return formPanel.asWidget();
     }
