@@ -82,6 +82,7 @@ public class MockHttpServletRequest implements HttpServletRequest {
 
     public void setContextPath(String context) {
         this._contextPath = context;
+        updateServletPath();
     }
 
     protected void splitUrl(String url) {
@@ -89,6 +90,12 @@ public class MockHttpServletRequest implements HttpServletRequest {
         setScheme();
         setServerAndPort();
         setRequestURIParts();
+    }
+
+    protected void updateServletPath() {
+        if (_contextPath != null) {
+            _servletPath = _requestURI.replace(_contextPath, "");
+        }
     }
 
     protected void setServerAndPort() {
@@ -297,7 +304,12 @@ public class MockHttpServletRequest implements HttpServletRequest {
 
     @Override
     public String getLocalAddr() {
-        throw new UnsupportedOperationException();
+        if (_url != null) {
+            // Default local address
+            return "127.0.0.1";
+        } else {
+            throw new Error("URL for this mock request has not been set yet");
+        }
     }
 
     @Override
