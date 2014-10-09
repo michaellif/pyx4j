@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011- All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -13,13 +13,9 @@
  */
 package com.propertyvista.portal.shared.ui.landing;
 
-import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
-import com.pyx4j.essentials.client.crud.CrudDebugId;
 import com.pyx4j.forms.client.validators.password.PasswordStrengthRule;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.security.rpc.PasswordResetQuestion;
@@ -38,24 +34,9 @@ public class PasswordResetWizardViewImpl extends VerticalPanel implements Passwo
     public PasswordResetWizardViewImpl() {
         setWidth("100%");
         setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
-        form = new PasswordResetForm();
+        form = new PasswordResetForm(this);
         form.init();
         add(form);
-
-        final Button submitButton = new Button(i18n.tr("Submit"), new ClickHandler() {
-            @Override
-            public void onClick(ClickEvent event) {
-                if (form.isValid()) {
-                    presenter.resetPassword(form.getValue());
-                } else {
-                    // here we hope that because the focus left the form and moved to submitButton,
-                    // we get the relevant validation error on the form. 
-                }
-            }
-        });
-        submitButton.ensureDebugId(CrudDebugId.Criteria_Submit.toString());
-        add(submitButton);
-
     }
 
     @Override
@@ -85,6 +66,11 @@ public class PasswordResetWizardViewImpl extends VerticalPanel implements Passwo
     @Override
     public void setPasswordStrengthRule(PasswordStrengthRule passwordStrengthRule) {
         form.setPasswordStrengthRule(passwordStrengthRule);
+    }
+
+    @Override
+    public Presenter getPresenter() {
+        return this.presenter;
     }
 
 }

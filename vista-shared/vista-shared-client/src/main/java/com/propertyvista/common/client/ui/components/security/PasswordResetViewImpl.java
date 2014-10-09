@@ -13,13 +13,9 @@
  */
 package com.propertyvista.common.client.ui.components.security;
 
-import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
-import com.pyx4j.essentials.client.crud.CrudDebugId;
 import com.pyx4j.forms.client.validators.password.PasswordStrengthRule;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.security.rpc.PasswordResetQuestion;
@@ -37,25 +33,9 @@ public class PasswordResetViewImpl extends VerticalPanel implements PasswordRese
     public PasswordResetViewImpl() {
         setWidth("100%");
         setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
-        form = new PasswordResetForm();
+        form = new PasswordResetForm(this);
         form.init();
         add(form);
-
-        final Button submitButton = new Button(i18n.tr("Submit"), new ClickHandler() {
-            @Override
-            public void onClick(ClickEvent event) {
-                form.setVisitedRecursive();
-                if (form.isValid()) {
-                    presenter.resetPassword(form.getValue());
-                } else {
-                    // here we hope that because the focus left the form and moved to submitButton,
-                    // we get the relevant validation error on the form.
-                }
-            }
-        });
-        submitButton.ensureDebugId(CrudDebugId.Criteria_Submit.toString()); // TODO why we need this???
-        add(submitButton);
-
     }
 
     @Override
@@ -85,6 +65,11 @@ public class PasswordResetViewImpl extends VerticalPanel implements PasswordRese
     @Override
     public void reset() {
         form.reset();
+    }
+
+    @Override
+    public Presenter getPresenter() {
+        return this.presenter;
     }
 
 }

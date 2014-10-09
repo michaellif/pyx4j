@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011- All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -14,6 +14,7 @@
 package com.propertyvista.common.client.ui.components.login;
 
 import com.google.gwt.dom.client.Style.Unit;
+import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.forms.client.events.NValueChangeEvent;
@@ -31,8 +32,10 @@ import com.pyx4j.forms.client.validators.password.PasswordStrengthValueValidator
 import com.pyx4j.forms.client.validators.password.PasswordStrengthWidget;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.security.rpc.PasswordChangeRequest;
+import com.pyx4j.widgets.client.Button;
 
 import com.propertyvista.common.client.theme.HorizontalAlignCenterMixin;
+import com.propertyvista.common.client.ui.components.security.PasswordResetView;
 
 public class PasswordResetForm extends CForm<PasswordChangeRequest> {
 
@@ -44,17 +47,15 @@ public class PasswordResetForm extends CForm<PasswordChangeRequest> {
 
     private PasswordStrengthValueValidator passwordStrengthValidator;
 
-    public PasswordResetForm(PasswordStrengthRule passwordStrengthRule) {
+    private final PasswordResetView view;
+
+    public PasswordResetForm(PasswordResetView view) {
         super(PasswordChangeRequest.class);
-        this.passwordStrengthRule = passwordStrengthRule;
+        this.view = view;
         asWidget().setStyleName(HorizontalAlignCenterMixin.StyleName.HorizontalAlignCenter.name(), true);
         asWidget().getElement().getStyle().setMarginTop(50, Unit.PX);
         asWidget().getElement().getStyle().setMarginBottom(50, Unit.PX);
 
-    }
-
-    public PasswordResetForm() {
-        this(null);
     }
 
     @Override
@@ -67,11 +68,29 @@ public class PasswordResetForm extends CForm<PasswordChangeRequest> {
         passwordStrengthWidget = new PasswordStrengthWidget(passwordStrengthRule);
         formPanel.append(Location.Left, proto().newPassword()).decorate().assistantWidget(passwordStrengthWidget).labelWidth(200);
         formPanel.append(Location.Left, proto().newPasswordConfirm()).decorate().labelWidth(200);
+        formPanel.append(Location.Left, createSubmitButton());
 
         get(proto().securityQuestion()).setVisible(false);
         get(proto().securityAnswer()).setVisible(false);
 
         return formPanel;
+    }
+
+    private Button createSubmitButton() {
+        final Button submitButton = new Button(i18n.tr("Submit"), new Command() {
+
+            @Override
+            public void execute() {
+                setVisitedRecursive();
+                if (isValid()) {
+                    view.getPresenter().resetPassword(getValue());
+                } else {
+                    // here we hope that because the focus left the form and moved to submitButton,
+                    // we get the relevant validation error on the form.
+                }
+            }
+        });
+        return submitButton;
     }
 
     @Override
