@@ -131,7 +131,6 @@ public class VistaApplicationDispatcherFilter implements Filter {
      */
     private String getNewURLRequest(HttpServletRequest httprequest, ApplicationType app) {
         String requestPath = httprequest.getServletPath();
-        //String subRequestPath = VistaServerSideConfigurationDev.devContextLess ? "" : VistaServerSideConfigurationDev.devContextPath;
         String subRequestPath = "";
 
         if (app != ApplicationType.prospect && app != ApplicationType.development) {

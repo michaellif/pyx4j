@@ -21,6 +21,8 @@ import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.pyx4j.unit.server.mock.MockHttpServletResponse;
 import com.pyx4j.unit.server.mock.filter.MockFilterChain;
@@ -28,7 +30,9 @@ import com.pyx4j.unit.server.mock.filter.MockHttpServletRequestFilter;
 
 import com.propertyvista.server.config.VistaApplicationDispatcherFilter.ApplicationType;
 
-public class VistaApplicationDispatcherFilterTest {
+public class VistaApplicationDispatcherFilterTest {//extends TestCase {
+
+    private final static Logger log = LoggerFactory.getLogger(VistaApplicationDispatcherFilterTest.class);
 
     VistaApplicationDispatcherFilter filterUnderTest;
 
@@ -43,6 +47,7 @@ public class VistaApplicationDispatcherFilterTest {
         mockChain = new MockFilterChain();
         filterUnderTest = new VistaApplicationDispatcherFilter();
         resp = new MockHttpServletResponse();
+        log.info("VistaApplicationDispatcherFilterTest initialized");
     }
 
     @After
@@ -104,6 +109,9 @@ public class VistaApplicationDispatcherFilterTest {
         // DB-Reset
         testMapping("http://static-22.birchwoodsoftwaregroup.com/o/db-reset", false, ApplicationType.development);
 
+        // Logs
+        testMapping("https://static-22.birchwoodsoftwaregroup.com/logs/", false, ApplicationType.development);
+
         // SITE
         testMapping("https://vista-site-22.birchwoodsoftwaregroup.com/", false, ApplicationType.site);
 
@@ -162,7 +170,8 @@ public class VistaApplicationDispatcherFilterTest {
             if (app == ApplicationType.development) {
                 targetUrl = req.getRequestURI();
             }
-            Assert.assertTrue("Wrong forwarded URL for application '" + app + "'", req.getForwardUrl().startsWith(targetUrl));
+            Assert.assertTrue("Wrong forwarded URL for application '" + app + "'. Forward URL is '" + req.getForwardUrl() + "' and expected URL is '"
+                    + targetUrl + "'", req.getForwardUrl().startsWith(targetUrl));
         }
     }
 
