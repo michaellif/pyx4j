@@ -169,7 +169,8 @@ public class VistaWebApplicationInitializer implements ServletContainerInitializ
                 fc.setInitParameter(WicketFilter.FILTER_MAPPING_PARAM, urlPattern(VistaApplication.site, "/*"));
                 fc.setInitParameter(ContextParamWebApplicationFactory.APP_CLASS_PARAM, PMSiteApplication.class.getName());
                 // TODO use java constants in the code
-                fc.setInitParameter(PMSiteFilter.IGNORE_URLS_PARAM, "/robots.txt,/favicon.ico,/sitegwt/\\w*,/vista/https/*,/media/*,/o/*,*.siteimgrc,/debug/*");
+                fc.setInitParameter(PMSiteFilter.IGNORE_URLS_PARAM,
+                        "/robots.txt,/favicon.ico,/sitegwt/\\w*,/vista/https/*,/media/*,/o/*,*.siteimgrc,/debug/*,/echo/*");
             }
 
             {
