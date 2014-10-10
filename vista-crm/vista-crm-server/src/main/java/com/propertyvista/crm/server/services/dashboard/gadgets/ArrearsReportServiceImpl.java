@@ -49,7 +49,6 @@ import com.propertyvista.domain.dashboard.gadgets.arrears.ArrearsYOYComparisonDa
 import com.propertyvista.domain.dashboard.gadgets.arrears.LeaseArrearsSnapshotDTO;
 import com.propertyvista.domain.financial.ARCode;
 import com.propertyvista.domain.financial.billing.AgingBuckets;
-import com.propertyvista.domain.financial.billing.ArrearsSnapshot;
 import com.propertyvista.domain.financial.billing.LeaseArrearsSnapshot;
 import com.propertyvista.domain.property.asset.building.Building;
 
@@ -176,22 +175,9 @@ public class ArrearsReportServiceImpl implements ArrearsReportService {
     private BigDecimal totalArrears(Vector<Building> buildings, LogicalDate asOf) {
         BigDecimal totalArrears = new BigDecimal("0.00");
 
-        LogicalDate today = SystemDateManager.getLogicalDate();
-
-        if (!asOf.after(today)) { // if we asked for the future value of total arrears return 0            
-
-            ARFacade facade = ServerSideFactory.create(ARFacade.class);
-
-            for (Building b : buildings) {
-                ArrearsSnapshot<?> snapshot = facade.getArrearsSnapshot(b, asOf, true);
-                if (snapshot != null) {
-                    for (AgingBuckets<?> buckets : snapshot.agingBuckets()) {
-                        if (buckets.arCode().isNull()) {
-                            totalArrears = totalArrears.add(buckets.totalBalance().getValue());
-                            break;
-                        }
-                    }
-                }
+        if (!asOf.after(SystemDateManager.getLogicalDate())) { // if we asked for the future value of total arrears return 0            
+            for (AgingBuckets<?> buckets : ServerSideFactory.create(ARFacade.class).getAgingBuckets(buildings, asOf, true)) {
+                totalArrears = totalArrears.add(buckets.totalBalance().getValue());
             }
         }
 

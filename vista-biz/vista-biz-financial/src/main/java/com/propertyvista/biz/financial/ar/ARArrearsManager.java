@@ -87,6 +87,20 @@ public class ARArrearsManager {
         return Persistence.service().retrieve(criteria);
     }
 
+    public List<BuildingAgingBuckets> retriveAgingBuckets(List<Building> buildings, LogicalDate date, boolean secure) {
+        EntityQueryCriteria<BuildingAgingBuckets> criteria = EntityQueryCriteria.create(BuildingAgingBuckets.class);
+
+        criteria.in(criteria.proto().arrearsSnapshot().building(), buildings);
+        criteria.ge(criteria.proto().arrearsSnapshot().toDate(), date);
+        criteria.le(criteria.proto().arrearsSnapshot().fromDate(), date);
+        criteria.isNull(criteria.proto().arCode());
+        if (secure) {
+            Persistence.applyDatasetAccessRule(criteria);
+        }
+
+        return Persistence.service().query(criteria);
+    }
+
     /**
      * @return a list of arrearsSnapshots per billing accounts of the selected buildings.
      */

@@ -45,6 +45,7 @@ import com.propertyvista.domain.financial.ARCode.Type;
 import com.propertyvista.domain.financial.BillingAccount;
 import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.financial.billing.BillingCycle;
+import com.propertyvista.domain.financial.billing.BuildingAgingBuckets;
 import com.propertyvista.domain.financial.billing.BuildingArrearsSnapshot;
 import com.propertyvista.domain.financial.billing.DebitCreditLink;
 import com.propertyvista.domain.financial.billing.InvoiceCredit;
@@ -169,6 +170,11 @@ public class ARYardiFacadeImpl implements ARFacade {
     }
 
     @Override
+    public List<BuildingAgingBuckets> getAgingBuckets(List<Building> buildings, LogicalDate asOf, boolean secure) {
+        return ARArrearsManager.instance().retriveAgingBuckets(buildings, asOf, secure);
+    }
+
+    @Override
     public LeaseArrearsSnapshot getArrearsSnapshot(BillingAccount billingAccount, LogicalDate asOf) {
         return ARArrearsManager.instance().retrieveArrearsSnapshot(billingAccount, asOf);
     }
@@ -193,5 +199,4 @@ public class ARYardiFacadeImpl implements ARFacade {
     public List<InvoiceProductCharge> estimateLeaseCharges(BillingCycle billingCycle, Lease lease) {
         return new LeaseProductsPriceEstimator(billingCycle, lease).calculateCharges();
     }
-
 }

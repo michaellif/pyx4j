@@ -28,6 +28,7 @@ import com.propertyvista.domain.financial.ARCode;
 import com.propertyvista.domain.financial.BillingAccount;
 import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.financial.billing.BillingCycle;
+import com.propertyvista.domain.financial.billing.BuildingAgingBuckets;
 import com.propertyvista.domain.financial.billing.BuildingArrearsSnapshot;
 import com.propertyvista.domain.financial.billing.DebitCreditLink;
 import com.propertyvista.domain.financial.billing.InvoiceCredit;
@@ -86,6 +87,8 @@ public interface ARFacade {
     Collection<LeaseAgingBuckets> getAgingBuckets(BillingAccount billingAccount);
 
     BigDecimal getCurrentBalance(BillingAccount billingAccount);
+
+    List<BuildingAgingBuckets> getAgingBuckets(List<Building> buildings, LogicalDate asOf, boolean secure);
 
     BuildingArrearsSnapshot getArrearsSnapshot(Building buildingStub, LogicalDate asOf, boolean secure);
 
