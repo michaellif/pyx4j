@@ -31,6 +31,8 @@ import javax.servlet.http.HttpServletResponse;
 
 public class MockHttpServletResponse implements HttpServletResponse {
 
+    protected String _redirectUrl;
+
     public MockHttpServletResponse() {
 
     }
@@ -157,7 +159,7 @@ public class MockHttpServletResponse implements HttpServletResponse {
 
     @Override
     public void sendRedirect(String location) throws IOException {
-        throw new UnsupportedOperationException();
+        this._redirectUrl = location;
     }
 
     @Override
@@ -221,4 +223,8 @@ public class MockHttpServletResponse implements HttpServletResponse {
         throw new UnsupportedOperationException();
     }
 
+    public String getRedirectUrl() {
+        assert _redirectUrl != null : "Response has not been already redirected";
+        return _redirectUrl;
+    }
 }
