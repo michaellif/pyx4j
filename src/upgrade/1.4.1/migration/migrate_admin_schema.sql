@@ -43,8 +43,11 @@ SET search_path = '_admin_';
 
 
         -- check constraints
-        
+        ALTER TABLE audit_record DROP CONSTRAINT audit_record_app_e_ck;
         ALTER TABLE dev_card_service_simulation_transaction DROP CONSTRAINT dev_card_service_simulation_transaction_tp_e_ck;
+        ALTER TABLE operations_alert DROP CONSTRAINT operations_alert_app_e_ck;
+        ALTER TABLE scheduler_run_data DROP CONSTRAINT scheduler_run_data_status_e_ck;
+        
 
         /**
         ***     ======================================================================================================
@@ -94,6 +97,10 @@ SET search_path = '_admin_';
         
         ALTER TABLE cards_reconciliation_record RENAME COLUMN date TO deposit_date;
         
+        
+        -- card_transaction_record
+        
+        ALTER TABLE card_transaction_record ADD COLUMN voided BOOLEAN;
         
         -- dev_card_service_simulation_card
         
@@ -195,6 +202,10 @@ SET search_path = '_admin_';
         ALTER TABLE portal_resident_marketing_tip OWNER TO vista;
         
         
+        -- scheduler_execution_report
+        
+        ALTER TABLE scheduler_execution_report ADD COLUMN details_erred BIGINT;
+        
         -- scheduler_execution_report_section
         
         ALTER TABLE scheduler_execution_report_section RENAME COLUMN value TO val;
@@ -254,15 +265,21 @@ SET search_path = '_admin_';
 
         -- check constraints
         
+        ALTER TABLE audit_record ADD CONSTRAINT audit_record_app_e_ck 
+            CHECK ((app) IN ('crm', 'noApp', 'onboarding', 'operations', 'prospect', 'resident', 'site'));
         ALTER TABLE cards_clearance_record ADD CONSTRAINT cards_clearance_record_card_type_e_ck 
             CHECK ((card_type) IN ('CREDIT', 'MCRD', 'VISA'));
+        ALTER TABLE dev_card_service_simulation_transaction ADD CONSTRAINT dev_card_service_simulation_transaction_tp_e_ck 
+            CHECK ((tp) IN ('Completion', 'PreAuthorization', 'PreAuthorizationReversal', 'Return', 'Sale', 'Void'));
         ALTER TABLE oapi_conversion ADD CONSTRAINT oapi_conversion_tp_e_ck CHECK (tp = 'Base');
         ALTER TABLE oapi_conversion_file ADD CONSTRAINT oapi_conversion_file_tp_e_ck 
             CHECK ((tp) IN ('AnotherIO', 'BuildingIO'));
-        ALTER TABLE dev_card_service_simulation_transaction ADD CONSTRAINT dev_card_service_simulation_transaction_tp_e_ck 
-            CHECK ((tp) IN ('Completion', 'PreAuthorization', 'PreAuthorizationReversal', 'Return', 'Sale', 'Void'));
+        ALTER TABLE operations_alert ADD CONSTRAINT operations_alert_app_e_ck 
+            CHECK ((app) IN ('crm', 'noApp', 'onboarding', 'operations', 'prospect', 'resident', 'site'));
         ALTER TABLE portal_resident_marketing_tip ADD CONSTRAINT portal_resident_marketing_tip_target_e_ck 
             CHECK ((target) IN ('AutopayAgreementNotSetup', 'InsuranceMissing', 'Other'));
+        ALTER TABLE scheduler_run_data ADD CONSTRAINT scheduler_run_data_status_e_ck 
+            CHECK ((status) IN ('Canceled', 'Erred', 'Failed', 'NeverRan', 'PartiallyProcessed', 'Processed', 'Running', 'Terminated'));
 
 
         /**
