@@ -90,7 +90,7 @@ public class EftVarianceReportWidget extends HTML implements IReportWidget {
         for (Column c : columns) {
             tableWidth += c.getEffectiveWidth();
         }
-        builder.appendHtmlConstant("<table style=\"display: inline-block; position: absolute; left: 0px; width: " + tableWidth
+        builder.appendHtmlConstant("<table style=\"display: inline-block; width: " + tableWidth
                 + "px; top: 31px; bottom: 0px; border-collapse: separate; border-spacing: 0px;\" border=\"0\">");
 
         builder.appendHtmlConstant("<thead>");
