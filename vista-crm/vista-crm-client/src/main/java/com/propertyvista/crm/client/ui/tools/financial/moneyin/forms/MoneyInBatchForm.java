@@ -94,10 +94,12 @@ public class MoneyInBatchForm extends CrmEntityForm<MoneyInBatchDTO> {
     public MoneyInBatchForm(IForm<MoneyInBatchDTO> view) {
         super(MoneyInBatchDTO.class, view);
         selectTab(addTab(createGeneralTab(), i18n.tr("Batch Details")));
+        setTabBarVisible(false);
     }
 
     private Widget createGeneralTab() {
         FormPanel formPanel = new FormPanel(this);
+        formPanel.h2(i18n.tr("Batch Details"));
         formPanel.append(Location.Left, proto().building()).decorate();
         formPanel.append(Location.Left, proto().totalReceivedAmount()).decorate();
         formPanel.append(Location.Left, proto().numberOfReceipts()).decorate();
