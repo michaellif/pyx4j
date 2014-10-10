@@ -14,10 +14,7 @@
 package com.propertyvista.common.client.ui.components.login;
 
 import com.google.gwt.dom.client.Style.Unit;
-import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.Command;
-import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.IsWidget;
@@ -27,6 +24,7 @@ import com.pyx4j.forms.client.ui.CCaptcha;
 import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.security.rpc.PasswordRetrievalRequest;
+import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.CaptchaComposite;
 
 import com.propertyvista.common.client.theme.HorizontalAlignCenterMixin;
@@ -35,13 +33,13 @@ public class RetrievePasswordForm extends CForm<PasswordRetrievalRequest> {
 
     private static final I18n i18n = I18n.get(RetrievePasswordForm.class);
 
-    private final Command onSubmitCommand;
-
     private final HTML passwordResetFailedMessage;
 
-    public RetrievePasswordForm(Command onSubmitCommand) {
+    private final PasswordResetRequestView view;
+
+    public RetrievePasswordForm(PasswordResetRequestView view) {//Command onSubmitCommand) {
         super(PasswordRetrievalRequest.class);
-        this.onSubmitCommand = onSubmitCommand;
+        this.view = view;
         this.passwordResetFailedMessage = new HTML(i18n.tr("Failed to reset password. Check that email and captcha you provided are correct."));
         asWidget().setWidth("30em");
         asWidget().setStyleName(HorizontalAlignCenterMixin.StyleName.HorizontalAlignCenter.name(), true);
@@ -66,14 +64,7 @@ public class RetrievePasswordForm extends CForm<PasswordRetrievalRequest> {
         passwordResetFailedMessage.getElement().getStyle().setMarginTop(1, Unit.EM);
         passwordResetFailedMessage.setVisible(false);
 
-        Button retrievePasswordButton = new Button(i18n.tr("Reset"));
-        // retrievePasswordButton.ensureDebugId(VistaFormsDebugId.Auth_RetrivePassword.toString());
-        retrievePasswordButton.addClickHandler(new ClickHandler() {
-            @Override
-            public void onClick(ClickEvent event) {
-                onSubmitCommand.execute();
-            }
-        });
+        Button retrievePasswordButton = createResetButton();
 
         retrievePasswordButton.getElement().getStyle().setMarginLeft(9, Unit.EM);
         retrievePasswordButton.getElement().getStyle().setMarginRight(1, Unit.EM);
@@ -84,6 +75,23 @@ public class RetrievePasswordForm extends CForm<PasswordRetrievalRequest> {
         main.getElement().getStyle().setMarginBottom(1, Unit.EM);
 
         return main;
+    }
+
+    private Button createResetButton() {
+        final Button submitButton = new Button(i18n.tr("Reset"), new Command() {
+
+            @Override
+            public void execute() {
+                setVisitedRecursive();
+                if (isValid()) {
+                    view.getPresenter().requestPasswordReset(getValue());
+                } else {
+                    // here we hope that because the focus left the form and moved to submitButton,
+                    // we get the relevant validation error on the form.
+                }
+            }
+        });
+        return submitButton;
     }
 
     public void createNewCaptchaChallenge() {
