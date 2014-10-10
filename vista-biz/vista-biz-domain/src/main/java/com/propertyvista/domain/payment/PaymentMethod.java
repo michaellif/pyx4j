@@ -15,6 +15,8 @@ package com.propertyvista.domain.payment;
 
 import com.pyx4j.entity.annotations.AbstractEntity;
 import com.pyx4j.entity.annotations.Detached;
+import com.pyx4j.entity.annotations.Editor;
+import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.annotations.Inheritance;
 import com.pyx4j.entity.annotations.ReadOnly;
 import com.pyx4j.entity.annotations.Table;
@@ -28,6 +30,7 @@ import com.propertyvista.domain.security.common.AbstractPmcUser;
 public interface PaymentMethod extends AbstractPaymentMethod {
 
     @ReadOnly
+    @Editor(type = EditorType.label)
     @Detached(level = AttachLevel.ToStringMembers)
     AbstractPmcUser createdBy();
 }

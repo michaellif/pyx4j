@@ -82,6 +82,7 @@ import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
 import com.propertyvista.domain.tenant.lease.Tenant;
 import com.propertyvista.dto.PaymentDataDTO;
 import com.propertyvista.dto.PaymentRecordDTO;
+import com.propertyvista.shared.config.VistaFeatures;
 
 public class PaymentRecordForm extends CrmEntityForm<PaymentRecordDTO> {
 
@@ -198,7 +199,6 @@ public class PaymentRecordForm extends CrmEntityForm<PaymentRecordDTO> {
         formPanel.append(Location.Left, proto().leaseId()).decorate().componentWidth(120);
         formPanel.append(Location.Left, proto().leaseStatus()).decorate().componentWidth(120);
         formPanel.append(Location.Left, proto().billingAccount().accountNumber(), new CLabel<String>()).decorate().componentWidth(120);
-
         formPanel.append(Location.Left, proto().leaseTermParticipant(), new CEntitySelectorHyperlink<LeaseTermParticipant<? extends LeaseParticipant<?>>>() {
             @Override
             protected AppPlace getTargetPlace() {
@@ -247,13 +247,17 @@ public class PaymentRecordForm extends CrmEntityForm<PaymentRecordDTO> {
         // ----------------------------------------------------------------------------------------
 
         formPanel.append(Location.Right, proto().amount()).decorate().componentWidth(120);
-        formPanel.append(Location.Right, proto().createdBy(), new CEntityLabel<AbstractPmcUser>()).decorate().componentWidth(120);
+        formPanel.append(Location.Right, proto().createdBy()).decorate();
         formPanel.append(Location.Right, proto().createdDate()).decorate().componentWidth(120);
         formPanel.append(Location.Right, proto().updated()).decorate().componentWidth(120);
         formPanel.append(Location.Right, proto().targetDate()).decorate().componentWidth(120);
         formPanel.append(Location.Right, proto().receivedDate()).decorate().componentWidth(120);
         formPanel.append(Location.Right, proto().finalizeDate()).decorate().componentWidth(120);
-        formPanel.append(Location.Right, proto().paymentStatus()).decorate().componentWidth(120);
+        formPanel.append(Location.Right, proto().paymentStatus()).decorate();
+        if (VistaFeatures.instance().yardiIntegration()) {
+            formPanel.append(Location.Right, proto().yardiDocumentNumber(), new CLabel<String>()).decorate();
+            formPanel.append(Location.Right, proto().batch().externalBatchNumber(), new CLabel<String>()).decorate();
+        }
         formPanel.append(Location.Right, proto().rejectedWithNSF()).decorate().componentWidth(60);
         formPanel.append(Location.Right, proto().lastStatusChangeDate()).decorate().componentWidth(120);
         formPanel.append(Location.Right, proto().transactionAuthorizationNumber()).decorate().componentWidth(120);
@@ -351,6 +355,10 @@ public class PaymentRecordForm extends CrmEntityForm<PaymentRecordDTO> {
 
         get(proto().id()).setVisible(true);
         get(proto().paymentStatus()).setVisible(true);
+        if (VistaFeatures.instance().yardiIntegration()) {
+            get(proto().yardiDocumentNumber()).setVisible(true);
+            get(proto().batch().externalBatchNumber()).setVisible(true);
+        }
         get(proto().rejectedWithNSF()).setVisible(false);
         get(proto().lastStatusChangeDate()).setVisible(true);
         get(proto().finalizeDate()).setVisible(true);
@@ -391,6 +399,10 @@ public class PaymentRecordForm extends CrmEntityForm<PaymentRecordDTO> {
         if (isEditable()) {
             if (isNew) {
                 get(proto().leaseTermParticipant()).setEditable(true);
+                if (VistaFeatures.instance().yardiIntegration()) {
+                    get(proto().yardiDocumentNumber()).setVisible(false);
+                    get(proto().batch().externalBatchNumber()).setVisible(false);
+                }
             } else {
                 get(proto().leaseTermParticipant()).setEditable(false);
 
@@ -456,7 +468,7 @@ public class PaymentRecordForm extends CrmEntityForm<PaymentRecordDTO> {
         get(proto().amount()).addComponentValidator(new AbstractComponentValidator<BigDecimal>() {
             @Override
             public BasicValidationError isValid() {
-                if (getComponent().getValue() != null) {
+                if (getComponent().getValue() != null && getComponent().isVisited()) {
                     return (getComponent().getValue().compareTo(BigDecimal.ZERO) > 0 ? null : new BasicValidationError(getComponent(), i18n
                             .tr("Payment amount should be greater than zero!")));
                 }

@@ -187,8 +187,10 @@ public interface PaymentRecord extends IEntity, HasNotesAndAttachments {
     IPrimitive<Key> id();
 
     // There is Max length in Yardi table trans.sUserDefined1 nvarchar(24)
-    @Length(24)
     @ReadOnly
+    @Length(24)
+    @Editor(type = EditorType.label)
+    @Caption(name = "Yardi Check #")
     IPrimitive<String> yardiDocumentNumber();
 
     // The latest of receivedDate or Check.targetDate is Post to yardi as TransactionDate
@@ -241,14 +243,16 @@ public interface PaymentRecord extends IEntity, HasNotesAndAttachments {
 
     IPrimitive<String> transactionErrorMessage();
 
+    @Editor(type = EditorType.label)
     @Caption(name = "Transaction Authorization #")
     IPrimitive<String> transactionAuthorizationNumber();
 
+    @Editor(type = EditorType.label)
     @Caption(name = "Web Payment Fee Authorization #")
     IPrimitive<String> convenienceFeeTransactionAuthorizationNumber();
 
-    @Detached(level = AttachLevel.IdOnly)
     @JoinColumn
+    @Detached(level = AttachLevel.IdOnly)
     PaymentPostingBatch batch();
 
     interface PaidOrRejectedAggregatedTransferId extends ColumnId {
@@ -292,6 +296,7 @@ public interface PaymentRecord extends IEntity, HasNotesAndAttachments {
     IPrimitive<Date> createdDate();
 
     @ReadOnly
+    @Editor(type = EditorType.label)
     @Detached(level = AttachLevel.ToStringMembers)
     AbstractPmcUser createdBy();
 

@@ -16,6 +16,7 @@ package com.propertyvista.domain.financial;
 import java.util.Date;
 
 import com.pyx4j.commons.LogicalDate;
+import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.DiscriminatorValue;
 import com.pyx4j.entity.annotations.Editor;
@@ -29,6 +30,7 @@ import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.annotations.ReadOnly;
 import com.pyx4j.entity.annotations.Timestamp;
 import com.pyx4j.entity.annotations.Timestamp.Update;
+import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.core.AttachLevel;
 import com.pyx4j.entity.core.IEntity;
@@ -69,8 +71,12 @@ public interface PaymentPostingBatch extends IEntity, HasNotesAndAttachments {
     Building building();
 
     /** This is external batch number i.e. in Yardi */
+    @ToString(index = 0)
+    @Editor(type = EditorType.label)
+    @Caption(name = "Yardi Batch #")
     IPrimitive<String> externalBatchNumber();
 
+    @ToString(index = 1)
     IPrimitive<PostingStatus> status();
 
     @ReadOnly

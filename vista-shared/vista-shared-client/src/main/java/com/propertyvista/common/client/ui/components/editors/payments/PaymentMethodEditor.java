@@ -26,7 +26,6 @@ import com.google.gwt.user.client.ui.Widget;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.forms.client.ui.CComboBox;
 import com.pyx4j.forms.client.ui.CComponent;
-import com.pyx4j.forms.client.ui.CEntityLabel;
 import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.CNumberLabel;
 import com.pyx4j.forms.client.ui.IEditableComponentFactory;
@@ -48,7 +47,6 @@ import com.propertyvista.domain.payment.PaymentDetails;
 import com.propertyvista.domain.payment.PaymentMethod;
 import com.propertyvista.domain.payment.PaymentType;
 import com.propertyvista.domain.pmc.PmcPaymentMethod;
-import com.propertyvista.domain.security.common.AbstractPmcUser;
 
 public class PaymentMethodEditor<E extends AbstractPaymentMethod> extends CForm<E> {
 
@@ -83,7 +81,7 @@ public class PaymentMethodEditor<E extends AbstractPaymentMethod> extends CForm<
 
         formPanel.append(Location.Left, proto().type(), new CComboBox<PaymentType>()).decorate().componentWidth(200);
         if (proto() instanceof PaymentMethod) {
-            formPanel.append(Location.Right, ((PaymentMethod) proto()).createdBy(), new CEntityLabel<AbstractPmcUser>()).decorate().componentWidth(200);
+            formPanel.append(Location.Right, ((PaymentMethod) proto()).createdBy()).decorate();
         }
 
         paymentDetailsHeader = formPanel.h3(proto().details().getMeta().getCaption());

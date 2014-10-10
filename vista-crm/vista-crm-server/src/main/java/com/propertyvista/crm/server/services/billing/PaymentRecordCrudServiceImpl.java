@@ -89,12 +89,13 @@ public class PaymentRecordCrudServiceImpl extends AbstractCrudServiceDtoImpl<Pay
         super.enhanceRetrieved(bo, to, retrieveTarget);
         enhanceListRetrieved(bo, to);
 
+        Persistence.ensureRetrieve(to.batch(), AttachLevel.ToStringMembers);
+
         to.allowedPaymentsSetup().set(
                 ServerSideFactory.create(PaymentFacade.class).getAllowedPaymentsSetup(to.billingAccount(), PaymentMethodTarget.OneTimePayment,
                         VistaApplication.crm));
 
         to.participants().addAll(retrievePayableUsers(to.billingAccount().lease()));
-
     }
 
     @Override
