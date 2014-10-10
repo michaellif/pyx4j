@@ -85,7 +85,6 @@ public class DashboardTheme extends Theme {
         style = new Style(".", StyleName.Gadget, " .", WidgetTheme.StyleName.Toolbar);
         style.addProperty("white-space", "normal");
         style.addProperty("text-align", "center");
-        style.addProperty("width", "100%");
         addStyle(style);
 
         style = new Style(".", StyleName.Gadget, " .", WidgetTheme.StyleName.ToolbarItem);
