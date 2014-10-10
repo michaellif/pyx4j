@@ -39,7 +39,7 @@ public class VistaPortalJettyLaunch extends JettyLaunch {
 
     @Override
     public int getServerSslPort() {
-        if (VistaServerSideConfigurationDev.devTestHttps || VistaTODO.codeBaseIsProdBranch) {
+        if (!VistaServerSideConfigurationDev.devTestHttps || VistaTODO.codeBaseIsProdBranch) {
             return 0;
         }
         if (OSValidator.isWindows()) {
