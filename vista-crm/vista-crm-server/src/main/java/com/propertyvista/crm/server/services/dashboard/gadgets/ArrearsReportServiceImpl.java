@@ -163,46 +163,8 @@ public class ArrearsReportServiceImpl implements ArrearsReportService {
                 arrearsValue.totalArrears().setValue(totalArrears(buildings, new LogicalDate(cal.getTime())));
 
                 yoyComparison.values().add(arrearsValue);
-                ///
-//                yoyComparison.values().add((ArrearsValueDTO) arrearsValue.duplicate());
-//                yoyComparison.values().add((ArrearsValueDTO) arrearsValue.duplicate());
-//                yoyComparison.values().add((ArrearsValueDTO) arrearsValue.duplicate());
-//                yoyComparison.values().add((ArrearsValueDTO) arrearsValue.duplicate());
-//                yoyComparison.values().add((ArrearsValueDTO) arrearsValue.duplicate());
-//                yoyComparison.values().add((ArrearsValueDTO) arrearsValue.duplicate());
-//                yoyComparison.values().add((ArrearsValueDTO) arrearsValue.duplicate());
-//                yoyComparison.values().add((ArrearsValueDTO) arrearsValue.duplicate());
-//                yoyComparison.values().add((ArrearsValueDTO) arrearsValue.duplicate());
-//                yoyComparison.values().add((ArrearsValueDTO) arrearsValue.duplicate());
-//                yoyComparison.values().add((ArrearsValueDTO) arrearsValue.duplicate());
-//                yoyComparison.values().add((ArrearsValueDTO) arrearsValue.duplicate());
-//                yoyComparison.values().add((ArrearsValueDTO) arrearsValue.duplicate());
-//                yoyComparison.values().add((ArrearsValueDTO) arrearsValue.duplicate());
-//                yoyComparison.values().add((ArrearsValueDTO) arrearsValue.duplicate());
-//                yoyComparison.values().add((ArrearsValueDTO) arrearsValue.duplicate());
-//                yoyComparison.values().add((ArrearsValueDTO) arrearsValue.duplicate());
-//                yoyComparison.values().add((ArrearsValueDTO) arrearsValue.duplicate());
-//                yoyComparison.values().add((ArrearsValueDTO) arrearsValue.duplicate());
-//                yoyComparison.values().add((ArrearsValueDTO) arrearsValue.duplicate());
             }
             comparisonData.comparisonsByMonth().add(yoyComparison);
-            ///
-//            comparisonData.comparisonsByMonth().add((ArrearsComparisonDTO) yoyComparison.duplicate());
-//            comparisonData.comparisonsByMonth().add((ArrearsComparisonDTO) yoyComparison.duplicate());
-//            comparisonData.comparisonsByMonth().add((ArrearsComparisonDTO) yoyComparison.duplicate());
-//            comparisonData.comparisonsByMonth().add((ArrearsComparisonDTO) yoyComparison.duplicate());
-//            comparisonData.comparisonsByMonth().add((ArrearsComparisonDTO) yoyComparison.duplicate());
-//            comparisonData.comparisonsByMonth().add((ArrearsComparisonDTO) yoyComparison.duplicate());
-//            comparisonData.comparisonsByMonth().add((ArrearsComparisonDTO) yoyComparison.duplicate());
-//            comparisonData.comparisonsByMonth().add((ArrearsComparisonDTO) yoyComparison.duplicate());
-//            comparisonData.comparisonsByMonth().add((ArrearsComparisonDTO) yoyComparison.duplicate());
-//            comparisonData.comparisonsByMonth().add((ArrearsComparisonDTO) yoyComparison.duplicate());
-//            comparisonData.comparisonsByMonth().add((ArrearsComparisonDTO) yoyComparison.duplicate());
-//            comparisonData.comparisonsByMonth().add((ArrearsComparisonDTO) yoyComparison.duplicate());
-//            comparisonData.comparisonsByMonth().add((ArrearsComparisonDTO) yoyComparison.duplicate());
-//            comparisonData.comparisonsByMonth().add((ArrearsComparisonDTO) yoyComparison.duplicate());
-//            comparisonData.comparisonsByMonth().add((ArrearsComparisonDTO) yoyComparison.duplicate());
-
         }
 
         callback.onSuccess(comparisonData);
