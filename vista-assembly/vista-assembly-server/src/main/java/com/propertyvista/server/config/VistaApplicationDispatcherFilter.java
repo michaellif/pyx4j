@@ -23,6 +23,7 @@ import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -51,6 +52,13 @@ public class VistaApplicationDispatcherFilter implements Filter {
 
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
+        if (ServerSideConfiguration.instance(AbstractVistaServerSideConfiguration.class).isDepoymentHttps()) {
+            if (isHttpsRedirectionNeeded(request)) {
+                ((HttpServletResponse) response).sendRedirect(getHttpsUrl(((HttpServletRequest) request).getRequestURL()));
+                return;
+            }
+        }
+
         if (ServerSideConfiguration.instance(AbstractVistaServerSideConfiguration.class).isDepoymentApplicationDispatcher()) {
             if (request.getAttribute(REQUEST_DISPATCHED_REQUEST_ATR) == null) {
                 request.setAttribute(REQUEST_DISPATCHED_REQUEST_ATR, Boolean.TRUE);
@@ -61,6 +69,10 @@ public class VistaApplicationDispatcherFilter implements Filter {
         } else {
             chain.doFilter(request, response);
         }
+    }
+
+    private String getHttpsUrl(StringBuffer url) {
+        return url.replace(0, 4, "https").toString();
     }
 
     public void map(final ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
@@ -74,13 +86,7 @@ public class VistaApplicationDispatcherFilter implements Filter {
         String serverName = httprequest.getServerName(); // sample: vista-crm.dev.birchwoodsoftwaregroup.com
         serverName = serverName.toLowerCase(Locale.ENGLISH);
 
-        // Redirect requests
-        VistaApplication app = null;
-        String[] serverNameParts = serverName.split("\\.");
-        if (serverNameParts.length > 0) {
-            String appByDomain = serverNameParts[0];
-            app = getAppByDomainOrPath(appByDomain, requestPath);
-        }
+        VistaApplication app = getAppByRequest(httprequest);
 
         if (app != null) {
             httprequest.setAttribute(VistaApplication.class.getName(), app);
@@ -94,6 +100,61 @@ public class VistaApplicationDispatcherFilter implements Filter {
             chain.doFilter(request, response);
         }
 
+    }
+
+    public boolean isHttpsRedirectionNeeded(ServletRequest request) {
+        HttpServletRequest httpRequest = (HttpServletRequest) request;
+        boolean redirect = false;
+
+        if (!httpRequest.getScheme().equalsIgnoreCase("http")) {
+            return redirect;
+        }
+
+        VistaApplication app = getAppByRequest(httpRequest);
+        if (app != null && app != VistaApplication.site && app != VistaApplication.noApp) {
+            redirect = true;
+        }
+
+        return redirect;
+    }
+
+    /**
+     * Checks if it is first request to app (request to root app or only context present in requestURI)
+     *
+     * @param request
+     * @return true if request is first request; false otherwise
+     */
+    private boolean isRootAppRequest(HttpServletRequest request) {
+        String servletPath = request.getServletPath();
+        if (servletPath.equals("") || servletPath.equals("/") || (servletPath.equals("/prospect") && (getAppByRequest(request) == VistaApplication.prospect))) {
+            return true;
+        }
+        return false;
+    }
+
+    private boolean isHttp(HttpServletRequest request) {
+        return request.getScheme().equalsIgnoreCase("http");
+    }
+
+    private VistaApplication getAppByRequest(ServletRequest request) {
+        HttpServletRequest httpRequest = (HttpServletRequest) request;
+        return getAppByRequest(httpRequest);
+    }
+
+    private VistaApplication getAppByRequest(HttpServletRequest httpRequest) {
+
+        String serverName = httpRequest.getServerName();
+        String requestPath = httpRequest.getServletPath();
+
+        VistaApplication app = null;
+
+        String[] serverNameParts = serverName.split("\\.");
+        if (serverNameParts.length > 0) {
+            String appByDomain = serverNameParts[0];
+            app = getAppByDomainOrPath(appByDomain, requestPath);
+        }
+
+        return app;
     }
 
     private String getPathToForwarded(HttpServletRequest httprequest, VistaApplication app) {

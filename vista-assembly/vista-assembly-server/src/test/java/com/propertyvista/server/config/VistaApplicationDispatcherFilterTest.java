@@ -26,6 +26,7 @@ import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.pyx4j.unit.server.mock.MockHttpServletRequest;
 import com.pyx4j.unit.server.mock.MockHttpServletResponse;
 import com.pyx4j.unit.server.mock.filter.MockFilterChain;
 import com.pyx4j.unit.server.mock.filter.MockHttpServletRequestFilter;
@@ -38,7 +39,7 @@ public class VistaApplicationDispatcherFilterTest extends TestCase {
 
     VistaApplicationDispatcherFilter filterUnderTest;
 
-    MockHttpServletRequestFilter req;
+    MockHttpServletRequest req;
 
     MockHttpServletResponse resp;
 
@@ -56,6 +57,44 @@ public class VistaApplicationDispatcherFilterTest extends TestCase {
     @Override
     @After
     public void tearDown() throws Exception {
+    }
+
+    /**
+     * Test if redirection to HTTPS must be done (all sites
+     *
+     * @throws IOException
+     * @throws ServletException
+     */
+    @Test
+    public final void testHttpsRedirections() throws IOException, ServletException {
+        // Onboarding
+        testRedirect("http://onboarding.dev.birchwoodsoftwaregroup.com:8888/", true);
+        testRedirect("https://onboarding.dev.birchwoodsoftwaregroup.com:8888/", false);
+
+        // Operations
+        testRedirect("http://operations.dev.birchwoodsoftwaregroup.com:8888/", true);
+        testRedirect("https://operations.dev.birchwoodsoftwaregroup.com:8888/", false);
+
+        // DB Reset
+        testRedirect("http://static.dev.birchwoodsoftwaregroup.com:8888/o/db-reset", false);
+        testRedirect("https://static.dev.birchwoodsoftwaregroup.com:8888/o/db-reset", false);
+
+        // SITE
+        testRedirect("http://vista-site.dev.birchwoodsoftwaregroup.com:8888/", false);
+        testRedirect("http://vista-site.dev.birchwoodsoftwaregroup.com:8888/", false);
+
+        // CRM
+        testRedirect("http://vista-crm.dev.birchwoodsoftwaregroup.com:8888/", true);
+        testRedirect("https://vista-crm.dev.birchwoodsoftwaregroup.com:8888/", false);
+        testRedirect("http://vista-crm.dev.birchwoodsoftwaregroup.com:8888/dashboard/", true);
+
+        // Resident
+        testRedirect("http://vista-portal.dev.birchwoodsoftwaregroup.com:8888/", true);
+        testRedirect("https://vista-portal.dev.birchwoodsoftwaregroup.com:8888/", false);
+
+        // Prospect
+        testRedirect("http://vista-portal.dev.birchwoodsoftwaregroup.com:8888/prospect", true);
+        testRedirect("https://vista-portal.dev.birchwoodsoftwaregroup.com:8888/prospect", false);
     }
 
     /**
@@ -151,6 +190,21 @@ public class VistaApplicationDispatcherFilterTest extends TestCase {
 
     }
 
+    protected void testRedirect(String url, boolean redirectExpected) throws IOException, ServletException {
+        req = new MockHttpServletRequest(url);
+        resp = new MockHttpServletResponse();
+
+        boolean condition = filterUnderTest.isHttpsRedirectionNeeded(req) == redirectExpected;
+        Assert.assertTrue("Redirection " + (redirectExpected ? "expected" : "not expected") + " for url '" + url + "'",
+                filterUnderTest.isHttpsRedirectionNeeded(req) == redirectExpected);
+
+//        if (redirectExpected) {
+//            filterUnderTest.doFilter(req, resp, mockChain);
+//            Assert.assertTrue("Redirect URL does not match with expected", url.replaceFirst("http", "https").equalsIgnoreCase(resp.getRedirectUrl()));
+//        }
+
+    }
+
     /**
      * Test forward function
      *
@@ -203,8 +257,8 @@ public class VistaApplicationDispatcherFilterTest extends TestCase {
             if (app == VistaApplication.noApp) {
                 targetUrl = req.getRequestURI();
             }
-            Assert.assertTrue("Wrong forwarded URL for application '" + app + "'. Forward URL is '" + req.getForwardUrl() + "' and expected URL is '"
-                    + targetUrl + "'", req.getForwardUrl().startsWith(targetUrl));
+            Assert.assertTrue("Wrong forwarded URL for application '" + app + "'. Forward URL is '" + ((MockHttpServletRequestFilter) req).getForwardUrl()
+                    + "' and expected URL is '" + targetUrl + "'", ((MockHttpServletRequestFilter) req).getForwardUrl().startsWith(targetUrl));
         }
     }
 

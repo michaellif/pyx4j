@@ -23,6 +23,8 @@ import com.pyx4j.security.shared.Behavior;
  */
 public enum VistaApplication implements Behavior {
 
+    interfaces,
+
     noApp,
 
     operations,
