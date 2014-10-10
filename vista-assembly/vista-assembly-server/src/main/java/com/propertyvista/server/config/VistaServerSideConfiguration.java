@@ -161,6 +161,11 @@ public class VistaServerSideConfiguration extends AbstractVistaServerSideConfigu
     }
 
     @Override
+    public boolean isDepoymentHttps() {
+        return getConfigProperties().getBooleanValue("vista.depoymentHttps", true);
+    }
+
+    @Override
     public boolean isDepoymentApplicationDispatcher() {
         return getConfigProperties().getBooleanValue("vista.depoymentApplicationDispatcher", false);
     }

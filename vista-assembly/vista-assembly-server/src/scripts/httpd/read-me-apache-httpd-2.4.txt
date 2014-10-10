@@ -5,20 +5,20 @@ Downloading the Apache HTTP Server   (64 bit version for windows is herehttps://
     For Windows:  Apache 2.4.10 with OpenSSL 1.0.1h   (httpd-2.4.10-x64-vc11.zip  and  VSU_4\vcredist_x64.exe)
 
     See http://httpd.apache.org/docs/2.4/platform/windows.html  how it can be started.
-    
+
     Working with:
-       symlink c:\apache24  to Apache distribution
+       symlink c:\Apache24  to Apache distribution
        symlink conf\conf-vista  to vista-assembly-server\src\scripts\httpd\conf-vista
-    
-    As Admin:
+
+    Instal Service as Admin:
         httpd.exe -k install -n "Apache24"
-    
-    Make it run on port 80 and 443
-    
+
+    Run Vista in Eclipse using /vista-assembly-server/vista-server-ForApache.launch
+
 
 All *.local.devpv.com are already local.
 
-To do more tests he may edit the file /etc/hosts and add
+To do more tests edit the file /etc/hosts and add
 
 127.0.0.1 env-00.devpv.com
 127.0.0.1 onboarding-00.devpv.com
@@ -28,3 +28,5 @@ To do more tests he may edit the file /etc/hosts and add
 127.0.0.1 vista-site-00.devpv.com
 127.0.0.1 vista-portal-00.devpv.com
 
+
+   Go to  http://static-00.devpv.com

@@ -33,6 +33,8 @@ public class VistaServerSideConfigurationDev extends VistaServerSideConfiguratio
 
     public static boolean devContextLess = false;
 
+    public static boolean devTestHttps = false;
+
     @Override
     public boolean isVistaDemo() {
         return false;
@@ -50,13 +52,14 @@ public class VistaServerSideConfigurationDev extends VistaServerSideConfiguratio
         return this;
     }
 
-    private boolean enableHttps() {
-        return false;
+    @Override
+    public boolean isDepoymentHttps() {
+        return devTestHttps;
     }
 
     @Override
     protected String getApplicationDeploymentProtocol() {
-        if (enableHttps()) {
+        if (isDepoymentHttps()) {
             return "https";
         } else {
             return "http";
@@ -171,7 +174,7 @@ public class VistaServerSideConfigurationDev extends VistaServerSideConfiguratio
             b.append(".birchwoodsoftwaregroup.com");
         }
 
-        if (!enableHttps() || !secure) {
+        if (!isDepoymentHttps() || !secure) {
             b.append(":").append(devServerPort);
         }
 

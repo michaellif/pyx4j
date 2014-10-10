@@ -66,6 +66,8 @@ public abstract class AbstractVistaServerSideConfiguration extends EssentialsSer
 
     public abstract String openIdProviderDomain();
 
+    public abstract boolean isDepoymentHttps();
+
     public abstract boolean isDepoymentApplicationDispatcher();
 
     public abstract boolean isDepoymentUseNewDevDomains();

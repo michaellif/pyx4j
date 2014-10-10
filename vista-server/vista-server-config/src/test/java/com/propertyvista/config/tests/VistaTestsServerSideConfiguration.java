@@ -162,6 +162,11 @@ public class VistaTestsServerSideConfiguration extends AbstractVistaServerSideCo
     }
 
     @Override
+    public boolean isDepoymentHttps() {
+        return false;
+    }
+
+    @Override
     public boolean isDepoymentApplicationDispatcher() {
         return false;
     }
