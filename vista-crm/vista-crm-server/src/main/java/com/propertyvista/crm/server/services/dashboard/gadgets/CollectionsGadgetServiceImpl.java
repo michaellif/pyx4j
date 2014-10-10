@@ -27,7 +27,6 @@ import com.pyx4j.entity.core.IPrimitive;
 import com.pyx4j.entity.core.Path;
 import com.pyx4j.entity.core.criterion.EntityListCriteria;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
-import com.pyx4j.entity.core.criterion.PropertyCriterion;
 import com.pyx4j.entity.server.IEntityPersistenceService.ICursorIterator;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.gwt.server.IOUtils;
@@ -73,13 +72,13 @@ public class CollectionsGadgetServiceImpl implements CollectionsGadgetService {
         LogicalDate thisMonthStartDay = Util.beginningOfMonth(today);
 
         if (buildingsFilter != null && !buildingsFilter.isEmpty()) {
-            criteria.add(PropertyCriterion.in(criteria.proto().unit().building(), buildingsFilter));
+            criteria.in(criteria.proto().unit().building(), buildingsFilter);
         }
-        criteria.add(PropertyCriterion.ne(criteria.proto().billingAccount().payments().$().paymentStatus(), PaymentRecord.PaymentStatus.Submitted));
-        criteria.add(PropertyCriterion.ne(criteria.proto().billingAccount().payments().$().paymentStatus(), PaymentRecord.PaymentStatus.Canceled));
-        criteria.add(PropertyCriterion.ne(criteria.proto().billingAccount().payments().$().paymentStatus(), PaymentRecord.PaymentStatus.Rejected));
-        criteria.add(PropertyCriterion.ge(criteria.proto().billingAccount().payments().$().createdDate(), thisMonthStartDay));
-        criteria.add(PropertyCriterion.le(criteria.proto().billingAccount().payments().$().createdDate(), today));
+        criteria.ne(criteria.proto().billingAccount().payments().$().paymentStatus(), PaymentRecord.PaymentStatus.Submitted);
+        criteria.ne(criteria.proto().billingAccount().payments().$().paymentStatus(), PaymentRecord.PaymentStatus.Canceled);
+        criteria.ne(criteria.proto().billingAccount().payments().$().paymentStatus(), PaymentRecord.PaymentStatus.Rejected);
+        criteria.ge(criteria.proto().billingAccount().payments().$().createdDate(), thisMonthStartDay);
+        criteria.le(criteria.proto().billingAccount().payments().$().createdDate(), today);
 
         return criteria;
     }
@@ -88,7 +87,7 @@ public class CollectionsGadgetServiceImpl implements CollectionsGadgetService {
             Vector<Building> buildingsFilter, String fundsFilter) {
 
         if (buildingsFilter != null && !buildingsFilter.isEmpty()) {
-            criteria.add(PropertyCriterion.in(criteria.proto().billingAccount().lease().unit().building(), buildingsFilter));
+            criteria.in(criteria.proto().billingAccount().lease().unit().building(), buildingsFilter);
         }
 
         CollectionsGadgetDataDTO proto = EntityFactory.getEntityPrototype(CollectionsGadgetDataDTO.class);
@@ -97,16 +96,16 @@ public class CollectionsGadgetServiceImpl implements CollectionsGadgetService {
         LogicalDate today = Util.dayOfCurrentTransaction();
         LogicalDate thisMonthStartDay = Util.beginningOfMonth(today);
 
-        criteria.add(PropertyCriterion.ge(criteria.proto().createdDate(), thisMonthStartDay));
-        criteria.add(PropertyCriterion.le(criteria.proto().createdDate(), today));
+        criteria.ge(criteria.proto().createdDate(), thisMonthStartDay);
+        criteria.le(criteria.proto().createdDate(), today);
 
-        criteria.add(PropertyCriterion.ne(criteria.proto().paymentStatus(), PaymentRecord.PaymentStatus.Submitted));
-        criteria.add(PropertyCriterion.ne(criteria.proto().paymentStatus(), PaymentRecord.PaymentStatus.Canceled));
-        criteria.add(PropertyCriterion.ne(criteria.proto().paymentStatus(), PaymentRecord.PaymentStatus.Rejected));
+        criteria.ne(criteria.proto().paymentStatus(), PaymentRecord.PaymentStatus.Submitted);
+        criteria.ne(criteria.proto().paymentStatus(), PaymentRecord.PaymentStatus.Canceled);
+        criteria.ne(criteria.proto().paymentStatus(), PaymentRecord.PaymentStatus.Rejected);
         if (proto.fundsCollectedThisMonth() == fundsFilterProto) {
 
         } else if (proto.fundsInProcessing() == fundsFilterProto) {
-            criteria.add(PropertyCriterion.in(criteria.proto().paymentStatus(), EnumSet.complementOf(EnumSet.copyOf(PaymentRecord.PaymentStatus.processed()))));
+            criteria.in(criteria.proto().paymentStatus(), EnumSet.complementOf(EnumSet.copyOf(PaymentRecord.PaymentStatus.processed())));
         } else {
             throw new RuntimeException("unknown filter preset: " + fundsFilter);
         }

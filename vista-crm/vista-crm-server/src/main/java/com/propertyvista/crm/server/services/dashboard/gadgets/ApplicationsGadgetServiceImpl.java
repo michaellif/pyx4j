@@ -24,7 +24,6 @@ import com.pyx4j.entity.core.IPrimitive;
 import com.pyx4j.entity.core.Path;
 import com.pyx4j.entity.core.criterion.EntityListCriteria;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
-import com.pyx4j.entity.core.criterion.PropertyCriterion;
 import com.pyx4j.entity.server.Persistence;
 
 import com.propertyvista.crm.rpc.dto.gadgets.ApplicationsGadgetDataDTO;
@@ -60,11 +59,11 @@ public class ApplicationsGadgetServiceImpl implements ApplicationsGadgetService 
     <Criteria extends EntityQueryCriteria<? extends Lease>> Criteria applicationsCriteria(Criteria criteria, Vector<Building> builidngsFilter,
             String applicationsFilter) {
 
-        criteria.add(PropertyCriterion.ge(criteria.proto().creationDate(), Util.beginningOfMonth(Util.dayOfCurrentTransaction())));
-        criteria.add(PropertyCriterion.le(criteria.proto().creationDate(), Util.dayOfCurrentTransaction()));
+        criteria.ge(criteria.proto().creationDate(), Util.beginningOfMonth(Util.dayOfCurrentTransaction()));
+        criteria.le(criteria.proto().creationDate(), Util.dayOfCurrentTransaction());
 
         if (builidngsFilter != null && !builidngsFilter.isEmpty()) {
-            criteria.add(PropertyCriterion.in(criteria.proto().unit().building(), builidngsFilter));
+            criteria.in(criteria.proto().unit().building(), builidngsFilter);
         }
 
         ApplicationsGadgetDataDTO proto = EntityFactory.getEntityPrototype(ApplicationsGadgetDataDTO.class);
@@ -73,16 +72,16 @@ public class ApplicationsGadgetServiceImpl implements ApplicationsGadgetService 
         if (proto.applications() == applicationsFilterMember) {
             criteria.in(criteria.proto().leaseApplication().status(), EnumSet.allOf(LeaseApplication.Status.class));
         } else if (proto.inProgress() == applicationsFilterMember) {
-            criteria.add(PropertyCriterion.in(criteria.proto().leaseApplication().status(), LeaseApplication.Status.InProgress));
+            criteria.in(criteria.proto().leaseApplication().status(), LeaseApplication.Status.InProgress);
         } else if (proto.pending() == applicationsFilterMember) {
-            criteria.add(PropertyCriterion.in(criteria.proto().leaseApplication().status(),
-                    EnumSet.of(LeaseApplication.Status.Submitted, LeaseApplication.Status.PendingFurtherInformation, LeaseApplication.Status.PendingDecision)));
+            criteria.in(criteria.proto().leaseApplication().status(),
+                    EnumSet.of(LeaseApplication.Status.Submitted, LeaseApplication.Status.PendingFurtherInformation, LeaseApplication.Status.PendingDecision));
         } else if (proto.approved() == applicationsFilterMember) {
-            criteria.add(PropertyCriterion.eq(criteria.proto().leaseApplication().status(), LeaseApplication.Status.Approved));
+            criteria.eq(criteria.proto().leaseApplication().status(), LeaseApplication.Status.Approved);
         } else if (proto.declined() == applicationsFilterMember) {
-            criteria.add(PropertyCriterion.eq(criteria.proto().leaseApplication().status(), LeaseApplication.Status.Declined));
+            criteria.eq(criteria.proto().leaseApplication().status(), LeaseApplication.Status.Declined);
         } else if (proto.cancelled() == applicationsFilterMember) {
-            criteria.add(PropertyCriterion.eq(criteria.proto().leaseApplication().status(), LeaseApplication.Status.Cancelled));
+            criteria.eq(criteria.proto().leaseApplication().status(), LeaseApplication.Status.Cancelled);
         } else {
             throw new IllegalStateException("Unknown filter property: '" + applicationsFilter + "'");
         }

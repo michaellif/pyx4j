@@ -33,7 +33,6 @@ import com.pyx4j.entity.core.criterion.Criterion;
 import com.pyx4j.entity.core.criterion.EntityListCriteria;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
-import com.pyx4j.entity.core.criterion.PropertyCriterion;
 import com.pyx4j.entity.rpc.EntitySearchResult;
 import com.pyx4j.entity.server.Persistence;
 
@@ -67,21 +66,24 @@ public class ARArrearsManager {
 
     public LeaseArrearsSnapshot retrieveArrearsSnapshot(BillingAccount billingAccount, LogicalDate date) {
         EntityQueryCriteria<LeaseArrearsSnapshot> criteria = EntityQueryCriteria.create(LeaseArrearsSnapshot.class);
-        criteria.add(PropertyCriterion.eq(criteria.proto().billingAccount(), billingAccount));
-        criteria.add(PropertyCriterion.ge(criteria.proto().toDate(), date));
-        criteria.add(PropertyCriterion.le(criteria.proto().fromDate(), date));
-        LeaseArrearsSnapshot snapshot = Persistence.service().retrieve(criteria);
-        return snapshot;
+
+        criteria.eq(criteria.proto().billingAccount(), billingAccount);
+        criteria.ge(criteria.proto().toDate(), date);
+        criteria.le(criteria.proto().fromDate(), date);
+
+        return Persistence.service().retrieve(criteria);
     }
 
     public BuildingArrearsSnapshot retrieveArrearsSnapshot(Building building, LogicalDate date, boolean secure) {
         EntityQueryCriteria<BuildingArrearsSnapshot> criteria = EntityQueryCriteria.create(BuildingArrearsSnapshot.class);
-        criteria.add(PropertyCriterion.eq(criteria.proto().building(), building));
-        criteria.add(PropertyCriterion.ge(criteria.proto().toDate(), date));
-        criteria.add(PropertyCriterion.le(criteria.proto().fromDate(), date));
+
+        criteria.eq(criteria.proto().building(), building);
+        criteria.ge(criteria.proto().toDate(), date);
+        criteria.le(criteria.proto().fromDate(), date);
         if (secure) {
             Persistence.applyDatasetAccessRule(criteria);
         }
+
         return Persistence.service().retrieve(criteria);
     }
 
@@ -96,7 +98,7 @@ public class ARArrearsManager {
 
         EntityListCriteria<LeaseArrearsSnapshot> criteria = new EntityListCriteria<LeaseArrearsSnapshot>(LeaseArrearsSnapshot.class);
         if (!buildings.isEmpty()) {
-            criteria.add(PropertyCriterion.in(criteria.proto().billingAccount().lease().unit().building(), new Vector<Building>(buildings)));
+            criteria.in(criteria.proto().billingAccount().lease().unit().building(), new Vector<Building>(buildings));
         }
 
         // TODO this looks like a hack and i don't like it
@@ -105,8 +107,8 @@ public class ARArrearsManager {
             criteria.setPageSize(pageSize);
         }
 
-        criteria.add(PropertyCriterion.ge(criteria.proto().toDate(), asOf));
-        criteria.add(PropertyCriterion.le(criteria.proto().fromDate(), asOf));
+        criteria.ge(criteria.proto().toDate(), asOf);
+        criteria.le(criteria.proto().fromDate(), asOf);
 
         criteria.addAll(searchCriteria);
         criteria.setSorts(sortCriteria);
@@ -245,7 +247,7 @@ public class ARArrearsManager {
 
     private BuildingArrearsSnapshot takeArrearsSnapshot(Building building) {
         EntityQueryCriteria<BillingAccount> billingAccountsCriteria = EntityQueryCriteria.create(BillingAccount.class);
-        billingAccountsCriteria.add(PropertyCriterion.eq(billingAccountsCriteria.proto().lease().unit().building(), building));
+        billingAccountsCriteria.eq(billingAccountsCriteria.proto().lease().unit().building(), building);
         Iterator<BillingAccount> billingAccountsIter = Persistence.service().query(null, billingAccountsCriteria, AttachLevel.IdOnly);
 
         // initialize accumulators - we accumulate aging buckets for each category separately in order to increase performance

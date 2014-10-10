@@ -28,14 +28,15 @@ import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.commons.UserRuntimeException;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.config.server.SystemDateManager;
+import com.pyx4j.entity.core.AttachLevel;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.Path;
 import com.pyx4j.entity.core.criterion.Criterion;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.entity.rpc.EntitySearchResult;
-import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.server.CrudEntityBinder;
+import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.biz.financial.ar.ARFacade;
@@ -129,11 +130,8 @@ public class ArrearsReportServiceImpl implements ArrearsReportService {
         Vector<Building> buildings = Persistence.secureQuery(criteria);
 
         final LogicalDate now = SystemDateManager.getLogicalDate();
-
         final GregorianCalendar cal = new GregorianCalendar();
         cal.setTime(now);
-
-        final ArrearsYOYComparisonDataDTO comparisonData = EntityFactory.create(ArrearsYOYComparisonDataDTO.class);
 
         final int thisYear = cal.get(Calendar.YEAR);
         final int thisMonth = cal.get(Calendar.MONTH);
@@ -143,6 +141,8 @@ public class ArrearsReportServiceImpl implements ArrearsReportService {
         final int lastMonth = cal.getActualMaximum(Calendar.MONTH);
         final int lastYear = cal.get(Calendar.YEAR);
         final int firstYear = lastYear - yearsAgo;
+
+        final ArrearsYOYComparisonDataDTO comparisonData = EntityFactory.create(ArrearsYOYComparisonDataDTO.class);
 
         // we assume Gregorian calendar with constant number of 12 month (Hebrew calendar with its pregnant year will NOT work here)
         for (int month = firstMonth; month <= lastMonth; ++month) {
@@ -163,9 +163,45 @@ public class ArrearsReportServiceImpl implements ArrearsReportService {
                 arrearsValue.totalArrears().setValue(totalArrears(buildings, new LogicalDate(cal.getTime())));
 
                 yoyComparison.values().add(arrearsValue);
-
+                ///
+//                yoyComparison.values().add((ArrearsValueDTO) arrearsValue.duplicate());
+//                yoyComparison.values().add((ArrearsValueDTO) arrearsValue.duplicate());
+//                yoyComparison.values().add((ArrearsValueDTO) arrearsValue.duplicate());
+//                yoyComparison.values().add((ArrearsValueDTO) arrearsValue.duplicate());
+//                yoyComparison.values().add((ArrearsValueDTO) arrearsValue.duplicate());
+//                yoyComparison.values().add((ArrearsValueDTO) arrearsValue.duplicate());
+//                yoyComparison.values().add((ArrearsValueDTO) arrearsValue.duplicate());
+//                yoyComparison.values().add((ArrearsValueDTO) arrearsValue.duplicate());
+//                yoyComparison.values().add((ArrearsValueDTO) arrearsValue.duplicate());
+//                yoyComparison.values().add((ArrearsValueDTO) arrearsValue.duplicate());
+//                yoyComparison.values().add((ArrearsValueDTO) arrearsValue.duplicate());
+//                yoyComparison.values().add((ArrearsValueDTO) arrearsValue.duplicate());
+//                yoyComparison.values().add((ArrearsValueDTO) arrearsValue.duplicate());
+//                yoyComparison.values().add((ArrearsValueDTO) arrearsValue.duplicate());
+//                yoyComparison.values().add((ArrearsValueDTO) arrearsValue.duplicate());
+//                yoyComparison.values().add((ArrearsValueDTO) arrearsValue.duplicate());
+//                yoyComparison.values().add((ArrearsValueDTO) arrearsValue.duplicate());
+//                yoyComparison.values().add((ArrearsValueDTO) arrearsValue.duplicate());
+//                yoyComparison.values().add((ArrearsValueDTO) arrearsValue.duplicate());
+//                yoyComparison.values().add((ArrearsValueDTO) arrearsValue.duplicate());
             }
             comparisonData.comparisonsByMonth().add(yoyComparison);
+            ///
+//            comparisonData.comparisonsByMonth().add((ArrearsComparisonDTO) yoyComparison.duplicate());
+//            comparisonData.comparisonsByMonth().add((ArrearsComparisonDTO) yoyComparison.duplicate());
+//            comparisonData.comparisonsByMonth().add((ArrearsComparisonDTO) yoyComparison.duplicate());
+//            comparisonData.comparisonsByMonth().add((ArrearsComparisonDTO) yoyComparison.duplicate());
+//            comparisonData.comparisonsByMonth().add((ArrearsComparisonDTO) yoyComparison.duplicate());
+//            comparisonData.comparisonsByMonth().add((ArrearsComparisonDTO) yoyComparison.duplicate());
+//            comparisonData.comparisonsByMonth().add((ArrearsComparisonDTO) yoyComparison.duplicate());
+//            comparisonData.comparisonsByMonth().add((ArrearsComparisonDTO) yoyComparison.duplicate());
+//            comparisonData.comparisonsByMonth().add((ArrearsComparisonDTO) yoyComparison.duplicate());
+//            comparisonData.comparisonsByMonth().add((ArrearsComparisonDTO) yoyComparison.duplicate());
+//            comparisonData.comparisonsByMonth().add((ArrearsComparisonDTO) yoyComparison.duplicate());
+//            comparisonData.comparisonsByMonth().add((ArrearsComparisonDTO) yoyComparison.duplicate());
+//            comparisonData.comparisonsByMonth().add((ArrearsComparisonDTO) yoyComparison.duplicate());
+//            comparisonData.comparisonsByMonth().add((ArrearsComparisonDTO) yoyComparison.duplicate());
+//            comparisonData.comparisonsByMonth().add((ArrearsComparisonDTO) yoyComparison.duplicate());
 
         }
 
@@ -176,7 +212,6 @@ public class ArrearsReportServiceImpl implements ArrearsReportService {
      * @return the sum of total arrears of the chosen buildings on <b>asOf</b> date, if <b>asOf</b> is in the future return $0.0,
      */
     private BigDecimal totalArrears(Vector<Building> buildings, LogicalDate asOf) {
-
         BigDecimal totalArrears = new BigDecimal("0.00");
 
         LogicalDate today = SystemDateManager.getLogicalDate();
@@ -202,15 +237,12 @@ public class ArrearsReportServiceImpl implements ArrearsReportService {
     }
 
     private LeaseArrearsSnapshotDTO toSnapshotDTO(ARCode.Type arrearsCategory, LeaseArrearsSnapshot snapshot) {
-        Persistence.service().retrieve(snapshot.billingAccount());
-        Persistence.service().retrieve(snapshot.billingAccount().lease());
-        Persistence.service().retrieve(snapshot.billingAccount().lease().unit());
-        Persistence.service().retrieve(snapshot.billingAccount().lease().unit().building());
+        Persistence.ensureRetrieve(snapshot.billingAccount().lease().unit().building(), AttachLevel.Attached);
 
         LeaseArrearsSnapshotDTO snapshotDTO = dtoBinder.createTO(snapshot);
 
-        AgingBuckets selectedBuckets = null;
-        for (AgingBuckets buckets : snapshot.agingBuckets()) {
+        AgingBuckets<?> selectedBuckets = null;
+        for (AgingBuckets<?> buckets : snapshot.agingBuckets()) {
             if (buckets.arCode().getValue() == arrearsCategory) {
                 selectedBuckets = buckets.duplicate();
             }
@@ -247,5 +279,4 @@ public class ArrearsReportServiceImpl implements ArrearsReportService {
         return new EntityDto2DboCriteriaConverter<LeaseArrearsSnapshot, LeaseArrearsSnapshotDTO>(LeaseArrearsSnapshot.class, LeaseArrearsSnapshotDTO.class,
                 makeMapper(dtoBinder), bucketMapper);
     }
-
 }

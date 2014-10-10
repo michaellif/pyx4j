@@ -22,7 +22,6 @@ import com.google.gwt.dom.client.Style.Overflow;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.LayoutPanel;
-import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.i18n.shared.I18n;
@@ -47,19 +46,16 @@ public class ArrearsYOYAnalysisChartGadget extends GadgetInstanceBase<ArrearsYOY
     /** Sets graph height in <i>EMs</i>. */
     private static final double GRAPH_HEIGHT = 20.0;
 
+    private final ArrearsReportService service = GWT.create(ArrearsReportService.class);
+
+    private final SvgFactoryForGwt factory = new SvgFactoryForGwt();
+
+    private ArrearsYOYComparisonDataDTO data = null;
+
     private LayoutPanel graphPanel;
-
-    private final ArrearsReportService service;
-
-    private ArrearsYOYComparisonDataDTO data;
-
-    private final SvgFactoryForGwt factory;
 
     public ArrearsYOYAnalysisChartGadget(ArrearsYOYAnalysisChartGadgetMetadata gmd) {
         super(gmd, ArrearsYOYAnalysisChartGadgetMetadata.class, new ArrearsYoyAnalysisGadgetMetadataForm());
-        service = GWT.create(ArrearsReportService.class);
-        data = null;
-        factory = new SvgFactoryForGwt();
         setDefaultPopulator(new Populator() {
             @Override
             public void populate() {
@@ -93,6 +89,7 @@ public class ArrearsYOYAnalysisChartGadget extends GadgetInstanceBase<ArrearsYOY
     @Override
     public void setContainerBoard(IBuildingFilterContainer board) {
         super.setContainerBoard(board);
+
         board.addBuildingSelectionChangedEventHandler(new BuildingSelectionChangedEventHandler() {
             @Override
             public void onBuildingSelectionChanged(BuildingSelectionChangedEvent event) {
@@ -133,7 +130,6 @@ public class ArrearsYOYAnalysisChartGadget extends GadgetInstanceBase<ArrearsYOY
         graphPanel.clear();
 
         if (!(data == null || data.isEmpty())) {
-
             Scheduler.get().scheduleDeferred(new ScheduledCommand() {
                 @Override
                 public void execute() {
@@ -144,13 +140,13 @@ public class ArrearsYOYAnalysisChartGadget extends GadgetInstanceBase<ArrearsYOY
                     graphPanel.add((Widget) new ArrearsYoyAnalysisChartFactory(factory).createChart(data, width, height));
                 }
             });
+
         } else {
             // TODO make it look better
             // TODO maybe this kind of functionality should be provided by the base class
             Label noData = new Label(i18n.tr("Data unavailable"));
             graphPanel.add(noData);
         }
-
     }
 
     @Override

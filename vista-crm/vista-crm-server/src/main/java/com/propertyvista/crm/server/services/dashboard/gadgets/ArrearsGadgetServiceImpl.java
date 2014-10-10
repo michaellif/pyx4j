@@ -31,7 +31,6 @@ import com.pyx4j.entity.core.IPrimitive;
 import com.pyx4j.entity.core.Path;
 import com.pyx4j.entity.core.criterion.EntityListCriteria;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
-import com.pyx4j.entity.core.criterion.PropertyCriterion;
 import com.pyx4j.entity.server.IEntityPersistenceService.ICursorIterator;
 import com.pyx4j.entity.server.Persistence;
 
@@ -161,17 +160,17 @@ public class ArrearsGadgetServiceImpl implements ArrearsGadgetService {
         IObject<?> member = proto.getMember(new Path(criteriaPreset));
 
         if (proto.buckets().totalBalance() == member | proto.delinquentLeases() == member) {
-            criteria.add(PropertyCriterion.gt(criteria.proto().arrears().arrearsAmount(), BigDecimal.ZERO));
+            criteria.gt(criteria.proto().arrears().arrearsAmount(), BigDecimal.ZERO);
         } else if (proto.buckets().bucketThisMonth() == member | proto.outstandingThisMonthCount() == member) {
-            criteria.add(PropertyCriterion.gt(criteria.proto().arrears().bucketThisMonth(), BigDecimal.ZERO));
+            criteria.gt(criteria.proto().arrears().bucketThisMonth(), BigDecimal.ZERO);
         } else if (proto.buckets().bucket30() == member | proto.outstanding1to30DaysCount() == member) {
-            criteria.add(PropertyCriterion.gt(criteria.proto().arrears().bucket30(), BigDecimal.ZERO));
+            criteria.gt(criteria.proto().arrears().bucket30(), BigDecimal.ZERO);
         } else if (proto.buckets().bucket60() == member | proto.outstanding31to60DaysCount() == member) {
-            criteria.add(PropertyCriterion.gt(criteria.proto().arrears().bucket60(), BigDecimal.ZERO));
+            criteria.gt(criteria.proto().arrears().bucket60(), BigDecimal.ZERO);
         } else if (proto.buckets().bucket90() == member | proto.outstanding61to90DaysCount() == member) {
-            criteria.add(PropertyCriterion.gt(criteria.proto().arrears().bucket90(), BigDecimal.ZERO));
+            criteria.gt(criteria.proto().arrears().bucket90(), BigDecimal.ZERO);
         } else if (proto.buckets().bucketOver90() == member | proto.outstanding91andMoreDaysCount() == member) {
-            criteria.add(PropertyCriterion.gt(criteria.proto().arrears().bucketOver90(), BigDecimal.ZERO));
+            criteria.gt(criteria.proto().arrears().bucketOver90(), BigDecimal.ZERO);
         }
 
         return criteria;
