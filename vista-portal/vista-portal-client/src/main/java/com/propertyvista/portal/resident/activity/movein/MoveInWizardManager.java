@@ -92,6 +92,8 @@ public class MoveInWizardManager {
                             });
                         }
                     });
+                } else if (handlerRegistration != null && !SecurityController.check(PortalResidentBehavior.MoveInWizardCompletionRequired)) {
+                    reset();
                 }
 
             }
