@@ -94,48 +94,16 @@ public class RemoteServiceServlet extends com.google.gwt.user.server.rpc.RemoteS
             log.error("error", e);
             throw new IncompatibleRemoteServiceException();
         }
-
         // Allow for redirected requests environments
-        String forwardedPath = ServerContext.getRequest().getHeader(ServletUtils.x_forwarded_path);
-        if (forwardedPath != null) {
-            modulePath = forwardedPath + modulePath;
-        }
-
-        String moduleRelativePath;
-        String contextPath = ServerContext.getRequest().getContextPath();
-        if (modulePath.startsWith(contextPath)) {
-            moduleRelativePath = modulePath.substring(contextPath.length());
-        } else {
-            moduleRelativePath = modulePath;
-        }
+        String moduleRelativePath = ServletUtils.toServletContainerInternalURI(ServerContext.getRequest(), modulePath);
+        moduleRelativePath = moduleRelativePath.substring(ServerContext.getRequest().getContextPath().length());
         ServicePolicy.loadServicePolicyToRequest(this.getServletContext(), moduleRelativePath);
     }
 
     @Override
     protected SerializationPolicy doGetSerializationPolicy(HttpServletRequest request, String moduleBaseURL, String strongName) {
         // Allow for redirected requests environments, consider the context is mapped to root.
-        String forwardedPath = request.getHeader(ServletUtils.x_forwarded_path);
-        final boolean debug = false;
-        if (debug) {
-            log.info("**RPCSerialization moduleBaseURL orig {}", moduleBaseURL);
-            RequestDebug.debug(request);
-        }
-        if (forwardedPath != null) {
-            //Make moduleBaseURL like this: "http://app.local.pyx4j.com:8888/warContext/gwtAppContext/";
-            try {
-                URL url = new URL(moduleBaseURL);
-                String modulePath = url.getPath();
-                moduleBaseURL = url.getProtocol() + "://" + url.getAuthority() + forwardedPath;
-                if (modulePath != null) {
-                    moduleBaseURL += modulePath;
-                }
-                if (debug) {
-                    log.info("**RPCSerialization moduleBaseURL corrected {}", moduleBaseURL);
-                }
-            } catch (MalformedURLException e) {
-                log.error("Malformed moduleBaseURL {} ", moduleBaseURL, e);
-            }
-        }
+        moduleBaseURL = ServletUtils.toServletContainerInternalURL(request, moduleBaseURL);
         return super.doGetSerializationPolicy(request, moduleBaseURL, strongName);
     }
 
