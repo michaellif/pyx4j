@@ -87,16 +87,13 @@ public class ARArrearsManager {
         return Persistence.service().retrieve(criteria);
     }
 
-    public List<BuildingAgingBuckets> retriveAgingBuckets(List<Building> buildings, LogicalDate date, boolean secure) {
+    public List<BuildingAgingBuckets> retriveSummaryAgingBuckets(List<Building> buildings, LogicalDate date) {
         EntityQueryCriteria<BuildingAgingBuckets> criteria = EntityQueryCriteria.create(BuildingAgingBuckets.class);
 
         criteria.in(criteria.proto().arrearsSnapshot().building(), buildings);
         criteria.ge(criteria.proto().arrearsSnapshot().toDate(), date);
         criteria.le(criteria.proto().arrearsSnapshot().fromDate(), date);
-        criteria.isNull(criteria.proto().arCode());
-        if (secure) {
-            Persistence.applyDatasetAccessRule(criteria);
-        }
+        criteria.isNull(criteria.proto().arCode()); // this is summary buckets for snapshot!..
 
         return Persistence.service().query(criteria);
     }

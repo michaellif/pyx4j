@@ -170,8 +170,8 @@ public class ARYardiFacadeImpl implements ARFacade {
     }
 
     @Override
-    public List<BuildingAgingBuckets> getAgingBuckets(List<Building> buildings, LogicalDate asOf, boolean secure) {
-        return ARArrearsManager.instance().retriveAgingBuckets(buildings, asOf, secure);
+    public List<BuildingAgingBuckets> getSummaryAgingBuckets(List<Building> buildings, LogicalDate asOf) {
+        return ARArrearsManager.instance().retriveSummaryAgingBuckets(buildings, asOf);
     }
 
     @Override

@@ -176,7 +176,7 @@ public class ArrearsReportServiceImpl implements ArrearsReportService {
         BigDecimal totalArrears = new BigDecimal("0.00");
 
         if (!asOf.after(SystemDateManager.getLogicalDate())) { // if we asked for the future value of total arrears return 0            
-            for (AgingBuckets<?> buckets : ServerSideFactory.create(ARFacade.class).getAgingBuckets(buildings, asOf, true)) {
+            for (AgingBuckets<?> buckets : ServerSideFactory.create(ARFacade.class).getSummaryAgingBuckets(buildings, asOf)) {
                 totalArrears = totalArrears.add(buckets.totalBalance().getValue());
             }
         }

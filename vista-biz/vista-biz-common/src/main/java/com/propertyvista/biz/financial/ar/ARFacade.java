@@ -88,7 +88,7 @@ public interface ARFacade {
 
     BigDecimal getCurrentBalance(BillingAccount billingAccount);
 
-    List<BuildingAgingBuckets> getAgingBuckets(List<Building> buildings, LogicalDate asOf, boolean secure);
+    List<BuildingAgingBuckets> getSummaryAgingBuckets(List<Building> buildings, LogicalDate asOf);
 
     BuildingArrearsSnapshot getArrearsSnapshot(Building buildingStub, LogicalDate asOf, boolean secure);
 
