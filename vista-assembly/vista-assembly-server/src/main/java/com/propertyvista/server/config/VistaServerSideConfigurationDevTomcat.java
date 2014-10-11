@@ -14,6 +14,7 @@
 package com.propertyvista.server.config;
 
 import com.pyx4j.config.server.IPersistenceConfiguration;
+import com.pyx4j.security.server.ThrottleConfig;
 
 public class VistaServerSideConfigurationDevTomcat extends VistaServerSideConfigurationDev {
 
@@ -24,7 +25,7 @@ public class VistaServerSideConfigurationDevTomcat extends VistaServerSideConfig
 
     @Override
     public boolean isDepoymentApplicationDispatcher() {
-        return true;
+        return getConfigProperties().getBooleanValue("vista.depoymentApplicationDispatcher", false);
     }
 
     @Override
@@ -46,5 +47,10 @@ public class VistaServerSideConfigurationDevTomcat extends VistaServerSideConfig
     public int interfaceSSHDPort() {
         //return super.interfaceSSHDPort();
         return 0;
+    }
+
+    @Override
+    public ThrottleConfig getThrottleConfig() {
+        return null;
     }
 }

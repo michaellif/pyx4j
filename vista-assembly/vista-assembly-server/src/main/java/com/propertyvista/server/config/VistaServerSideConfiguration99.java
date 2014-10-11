@@ -13,6 +13,8 @@
  */
 package com.propertyvista.server.config;
 
+import com.pyx4j.security.server.ThrottleConfig;
+
 /**
  * See the files https://svn.pyx4j.com/svn-configs/trunk/vista/testenv/apps/catalina.base/tomcatA/conf/vista99
  *
@@ -53,4 +55,8 @@ public class VistaServerSideConfiguration99 extends VistaServerSideConfiguration
         return "\"Vista Support 99\" <support.www99@birchwoodsoftwaregroup.com>";
     }
 
+    @Override
+    public ThrottleConfig getThrottleConfig() {
+        return null;
+    }
 }

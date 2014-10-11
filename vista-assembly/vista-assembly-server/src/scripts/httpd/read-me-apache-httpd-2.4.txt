@@ -1,17 +1,17 @@
 #version $Revision$ ($Author$)  $Date$
 
-Downloading the Apache HTTP Server   (64 bit version for windows is herehttps://www.apachehaus.com)
+Downloading the Apache HTTP Server   (64 bit version for windows is here https://www.apachehaus.com)
 
     For Windows:  Apache 2.4.10 with OpenSSL 1.0.1h   (httpd-2.4.10-x64-vc11.zip  and  VSU_4\vcredist_x64.exe)
 
     See http://httpd.apache.org/docs/2.4/platform/windows.html  how it can be started.
+    e.g. Instal Service as Admin:
+        httpd.exe -k install -n "Apache24"
 
     Working with:
        symlink c:\Apache24  to Apache distribution
        symlink conf\conf-vista  to vista-assembly-server\src\scripts\httpd\conf-vista
 
-    Instal Service as Admin:
-        httpd.exe -k install -n "Apache24"
 
     Run Vista in Eclipse using /vista-assembly-server/vista-server-ForApache.launch
 
