@@ -163,6 +163,10 @@ class CreditCardProcessor {
     static boolean validateVisaDebit(CreditCardInfo cc) {
         if (cc.cardType().getValue() != CreditCardType.VisaDebit) {
             return false;
+        } else if (!ValidationUtils.isCreditCardNumberIinValid(CreditCardType.VisaDebit.iinsPatterns, cc.card().newNumber().getValue())) {
+            return false;
+        } else if (!ValidationUtils.isCreditCardNumberValid(cc.card().newNumber().getValue())) {
+            return false;
         } else {
             CreditCardPaymentInstrument ccInfo = EntityFactory.create(CreditCardPaymentInstrument.class);
             ccInfo.creditCardNumber().setValue(cc.card().newNumber().getValue());
@@ -175,14 +179,11 @@ class CreditCardProcessor {
     static boolean validateCreditCard(CreditCardInfo cc) {
         if (cc.card().newNumber().isNull() || cc.cardType().isNull() || cc.expiryDate().isNull()) {
             return false;
-        }
-        if (!ValidationUtils.isCreditCardNumberValid(cc.card().newNumber().getValue())) {
+        } else if (!ValidationUtils.isCreditCardNumberIinValid(cc.cardType().getValue().iinsPatterns, cc.card().newNumber().getValue())) {
             return false;
-        }
-        if (!ValidationUtils.isCreditCardNumberIinValid(cc.cardType().getValue().iinsPatterns, cc.card().newNumber().getValue())) {
+        } else if (!ValidationUtils.isCreditCardNumberValid(cc.card().newNumber().getValue())) {
             return false;
-        }
-        if ((cc.cardType().getValue() == CreditCardType.VisaDebit) && (!validateVisaDebit(cc))) {
+        } else if ((cc.cardType().getValue() == CreditCardType.VisaDebit) && (!validateVisaDebit(cc))) {
             return false;
         }
         return true;
