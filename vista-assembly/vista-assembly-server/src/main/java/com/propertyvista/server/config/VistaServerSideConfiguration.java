@@ -295,23 +295,27 @@ public class VistaServerSideConfiguration extends AbstractVistaServerSideConfigu
 
     @Override
     public ThrottleConfig getThrottleConfig() {
-        return new ThrottleConfig() {
+        if (getConfigProperties().getBooleanValue("vista.hrottleOff", false)) {
+            return null;
+        } else {
+            return new ThrottleConfig() {
 
-            @Override
-            public long getInterval() {
-                return 1 * Consts.MIN2MSEC;
-            }
+                @Override
+                public long getInterval() {
+                    return 1 * Consts.MIN2MSEC;
+                }
 
-            @Override
-            public long getMaxTimeUsage() {
-                return 2 * Consts.MIN2MSEC;
-            }
+                @Override
+                public long getMaxTimeUsage() {
+                    return 2 * Consts.MIN2MSEC;
+                }
 
-            @Override
-            public long getMaxRequests() {
-                return 1000;
-            }
-        };
+                @Override
+                public long getMaxRequests() {
+                    return 1000;
+                }
+            };
+        }
     }
 
     @Override
