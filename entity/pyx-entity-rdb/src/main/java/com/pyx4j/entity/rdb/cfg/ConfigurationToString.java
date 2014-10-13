@@ -21,6 +21,7 @@
 package com.pyx4j.entity.rdb.cfg;
 
 import com.pyx4j.commons.CommonsStringUtils;
+import com.pyx4j.commons.TimeUtils;
 import com.pyx4j.entity.rdb.cfg.Configuration.ConnectionPoolConfiguration;
 
 public class ConfigurationToString {
@@ -41,8 +42,10 @@ public class ConfigurationToString {
             b.append(CommonsStringUtils.paddingRight(ct.name() + ".initialPoolSize", 50, ' ')).append(": ").append(cpc.initialPoolSize()).append("\n");
             b.append(CommonsStringUtils.paddingRight(ct.name() + ".minPoolSize", 50, ' ')).append(": ").append(cpc.minPoolSize()).append("\n");
             b.append(CommonsStringUtils.paddingRight(ct.name() + ".maxPoolSize", 50, ' ')).append(": ").append(cpc.maxPoolSize()).append("\n");
+            b.append(CommonsStringUtils.paddingRight(ct.name() + ".checkoutTimeout", 50, ' ')).append(": ")
+                    .append(TimeUtils.durationFormatSeconds(cpc.getCheckoutTimeout())).append("\n");
             b.append(CommonsStringUtils.paddingRight(ct.name() + ".unreturnedConnectionTimeout", 50, ' ')).append(": ")
-                    .append(cpc.unreturnedConnectionTimeout()).append("\n");
+                    .append(TimeUtils.durationFormatSeconds(cpc.unreturnedConnectionTimeout())).append("\n");
             b.append(CommonsStringUtils.paddingRight(ct.name() + ".maxPoolPreparedStatements", 50, ' ')).append(": ").append(cpc.maxPoolPreparedStatements())
                     .append("\n");
         }
