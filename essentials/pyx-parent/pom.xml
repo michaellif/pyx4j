@@ -128,7 +128,7 @@
 
         <jettyVersion>9.2.3.v20140905</jettyVersion>
 
-        <slf4jVersion>1.7.6</slf4jVersion>
+        <slf4jVersion>1.7.7</slf4jVersion>
 
         <jasperreportsVersion>5.2.0</jasperreportsVersion>
         <dynamicreportsVersion>3.1.6</dynamicreportsVersion>
@@ -298,13 +298,13 @@
             <dependency>
                 <groupId>mysql</groupId>
                 <artifactId>mysql-connector-java</artifactId>
-                <version>5.1.29</version>
+                <version>5.1.33</version>
             </dependency>
 
             <dependency>
                 <groupId>org.postgresql</groupId>
                 <artifactId>postgresql</artifactId>
-                <version>9.3-1101-jdbc41</version>
+                <version>9.3-1102-jdbc41-dls</version>
             </dependency>
 
             <dependency>
@@ -317,13 +317,13 @@
             <dependency>
                 <groupId>com.h2database</groupId>
                 <artifactId>h2</artifactId>
-                <version>1.4.178</version>
+                <version>1.4.181</version>
             </dependency>
 
             <dependency>
                 <groupId>org.apache.commons</groupId>
                 <artifactId>commons-dbcp2</artifactId>
-                <version>2.0</version>
+                <version>2.0.1</version>
             </dependency>
 
             <dependency>
