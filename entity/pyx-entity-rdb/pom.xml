@@ -205,6 +205,7 @@
                         <artifactId>maven-surefire-plugin</artifactId>
                         <configuration>
                             <excludes>
+                                <exclude>**/*LongTest.*</exclude>
                                 <exclude>**/mysql/*.*</exclude>
                                 <exclude>**/oracle/*.*</exclude>
                                 <exclude>**/postgresql/*.*</exclude>

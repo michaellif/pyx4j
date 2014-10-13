@@ -423,7 +423,7 @@ public class PersistenceContext {
             }
             connection = null;
             if (isExplicitTransaction() && uncommittedChanges) {
-                throw new Error("There are uncommitted changes in Database");
+                throw new AssertionError("There are uncommitted changes in Database");
             }
         }
         timeNow = null;
