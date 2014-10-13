@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011-2012 All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -24,6 +24,7 @@ import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.core.AttachLevel;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.server.CompensationHandler;
+import com.pyx4j.entity.server.ConnectionTarget;
 import com.pyx4j.entity.server.Executable;
 import com.pyx4j.entity.server.IEntityPersistenceService.ICursorIterator;
 import com.pyx4j.entity.server.Persistence;
@@ -55,7 +56,7 @@ class PaymentBatchPosting {
     }
 
     /**
-     * 
+     *
      * @param criteria
      *            should be sorted by building
      * @param canCancel
@@ -79,95 +80,96 @@ class PaymentBatchPosting {
                 final AtomicReference<String> curentBuildingCode = new AtomicReference<String>();
 
                 try {
-                    batchNumber = new UnitOfWork(TransactionScopeOption.RequiresNew).execute(new Executable<String, ARException>() {
-
-                        @Override
-                        public String execute() throws ARException {
-
-                            PaymentRecord firstPaymentRecord = iteratorPushBack.get();
-                            if (firstPaymentRecord == null) {
-                                firstPaymentRecord = paymentRecordIterator.next();
-                            } else {
-                                iteratorPushBack.set(null);
-                            }
-
-                            if (canCancel && shouldBeCanceled(firstPaymentRecord, executionMonitor)) {
-                                return null;
-                            }
-
-                            Building batchBuilding = getBuilding(firstPaymentRecord);
-                            curentBuildingCode.set(batchBuilding.propertyCode().getValue());
-
-                            // Ignore all the records in failed building
-                            if (batchBuilding.equals(lastFailedBuilding.get())) {
-                                executionMonitor.addFailedEvent("Skipped", firstPaymentRecord.amount().getValue());
-                                return null;
-                            }
-
-                            // Create Batch
-                            final PaymentBatchContext paymentBatchContext;
-                            try {
-                                paymentBatchContext = ServerSideFactory.create(ARFacade.class).createPaymentBatchContext(batchBuilding);
-                            } catch (ARException e) {
-                                // We may get error "Interface Entity does not have access to Yardi Property ZZZZZZ"
-                                // Ignore all the records in same building
-                                lastFailedBuilding.set(batchBuilding);
-                                throw e;
-                            }
-                            lastFailedBuilding.set(null);
-
-                            UnitOfWork.addTransactionCompensationHandler(new CompensationHandler() {
+                    batchNumber = new UnitOfWork(TransactionScopeOption.RequiresNew, ConnectionTarget.BackgroundProcess)
+                            .execute(new Executable<String, ARException>() {
 
                                 @Override
-                                public Void execute() {
-                                    try {
-                                        paymentBatchContext.cancelBatch();
-                                    } catch (Throwable e) {
-                                        log.error("Unable to cancel batch", e);
-                                        executionMonitor.addErredEvent("Batch", e);
+                                public String execute() throws ARException {
+
+                                    PaymentRecord firstPaymentRecord = iteratorPushBack.get();
+                                    if (firstPaymentRecord == null) {
+                                        firstPaymentRecord = paymentRecordIterator.next();
+                                    } else {
+                                        iteratorPushBack.set(null);
                                     }
-                                    return null;
+
+                                    if (canCancel && shouldBeCanceled(firstPaymentRecord, executionMonitor)) {
+                                        return null;
+                                    }
+
+                                    Building batchBuilding = getBuilding(firstPaymentRecord);
+                                    curentBuildingCode.set(batchBuilding.propertyCode().getValue());
+
+                                    // Ignore all the records in failed building
+                                    if (batchBuilding.equals(lastFailedBuilding.get())) {
+                                        executionMonitor.addFailedEvent("Skipped", firstPaymentRecord.amount().getValue());
+                                        return null;
+                                    }
+
+                                    // Create Batch
+                                    final PaymentBatchContext paymentBatchContext;
+                                    try {
+                                        paymentBatchContext = ServerSideFactory.create(ARFacade.class).createPaymentBatchContext(batchBuilding);
+                                    } catch (ARException e) {
+                                        // We may get error "Interface Entity does not have access to Yardi Property ZZZZZZ"
+                                        // Ignore all the records in same building
+                                        lastFailedBuilding.set(batchBuilding);
+                                        throw e;
+                                    }
+                                    lastFailedBuilding.set(null);
+
+                                    UnitOfWork.addTransactionCompensationHandler(new CompensationHandler() {
+
+                                        @Override
+                                        public Void execute() {
+                                            try {
+                                                paymentBatchContext.cancelBatch();
+                                            } catch (Throwable e) {
+                                                log.error("Unable to cancel batch", e);
+                                                executionMonitor.addErredEvent("Batch", e);
+                                            }
+                                            return null;
+                                        }
+                                    });
+
+                                    //ExecutionMonitor that will be copied to main ExecutionMonitor for each successful batch
+                                    ExecutionMonitor batchExecutionMonitor = new ExecutionMonitor();
+
+                                    processPaymentTransaction(firstPaymentRecord, paymentBatchContext, batchExecutionMonitor);
+
+                                    while ((!paymentBatchContext.isBatchFull()) && paymentRecordIterator.hasNext()) {
+                                        PaymentRecord paymentRecord = paymentRecordIterator.next();
+
+                                        if (!batchBuilding.equals(getBuilding(paymentRecord))) {
+                                            iteratorPushBack.set(paymentRecord);
+                                            break;
+                                        }
+
+                                        if (canCancel && shouldBeCanceled(paymentRecord, executionMonitor)) {
+                                            //
+                                        } else {
+                                            processPaymentTransaction(paymentRecord, paymentBatchContext, batchExecutionMonitor);
+                                        }
+
+                                        if (executionMonitor.isTerminationRequested()) {
+                                            break;
+                                        }
+                                    }
+
+                                    try {
+                                        paymentBatchContext.postBatch();
+                                        executionMonitor.addInfoEvent("Batch", null);
+
+                                        executionMonitor.add(batchExecutionMonitor);
+
+                                    } catch (ARException e) {
+                                        log.error("Unable to post batch for propertyCode {}", curentBuildingCode.get(), e);
+                                        executionMonitor.addErredEvent("Batch", null, "propertyCode " + curentBuildingCode.get(), e);
+                                    }
+                                    curentBuildingCode.set(null);
+                                    return paymentBatchContext.getBatchNumber();
                                 }
                             });
-
-                            //ExecutionMonitor that will be copied to main ExecutionMonitor for each successful batch 
-                            ExecutionMonitor batchExecutionMonitor = new ExecutionMonitor();
-
-                            processPaymentTransaction(firstPaymentRecord, paymentBatchContext, batchExecutionMonitor);
-
-                            while ((!paymentBatchContext.isBatchFull()) && paymentRecordIterator.hasNext()) {
-                                PaymentRecord paymentRecord = paymentRecordIterator.next();
-
-                                if (!batchBuilding.equals(getBuilding(paymentRecord))) {
-                                    iteratorPushBack.set(paymentRecord);
-                                    break;
-                                }
-
-                                if (canCancel && shouldBeCanceled(paymentRecord, executionMonitor)) {
-                                    // 
-                                } else {
-                                    processPaymentTransaction(paymentRecord, paymentBatchContext, batchExecutionMonitor);
-                                }
-
-                                if (executionMonitor.isTerminationRequested()) {
-                                    break;
-                                }
-                            }
-
-                            try {
-                                paymentBatchContext.postBatch();
-                                executionMonitor.addInfoEvent("Batch", null);
-
-                                executionMonitor.add(batchExecutionMonitor);
-
-                            } catch (ARException e) {
-                                log.error("Unable to post batch for propertyCode {}", curentBuildingCode.get(), e);
-                                executionMonitor.addErredEvent("Batch", null, "propertyCode " + curentBuildingCode.get(), e);
-                            }
-                            curentBuildingCode.set(null);
-                            return paymentBatchContext.getBatchNumber();
-                        }
-                    });
 
                 } catch (Throwable e) {
                     log.error("Unable to create batch for propertyCode {}", curentBuildingCode.get(), e);
