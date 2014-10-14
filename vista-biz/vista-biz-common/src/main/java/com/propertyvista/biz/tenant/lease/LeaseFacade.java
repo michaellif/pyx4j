@@ -19,6 +19,7 @@ import com.pyx4j.commons.LogicalDate;
 
 import com.propertyvista.domain.company.Employee;
 import com.propertyvista.domain.financial.offering.ProductItem;
+import com.propertyvista.domain.policy.framework.PolicyNode;
 import com.propertyvista.domain.property.asset.Floorplan;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
@@ -126,9 +127,11 @@ public interface LeaseFacade {
      */
     void simpleLeaseRenew(Lease leaseId, LogicalDate leaseEndDate);
 
+    PolicyNode getLeasePolicyNode(Lease leaseId);
+
     /**
      * @param leaseId
      * @return buildingId
      */
-    Building getLeasePolicyNode(Lease leaseId);
+    Building getLeaseBuilding(Lease leaseId);
 }

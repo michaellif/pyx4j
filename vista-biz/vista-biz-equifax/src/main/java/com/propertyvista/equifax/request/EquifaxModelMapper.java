@@ -66,7 +66,6 @@ import com.propertyvista.equifax.model.ResidentialStatus;
 import com.propertyvista.equifax.model.StrategyNumber;
 import com.propertyvista.equifax.model.TimeAtPresentAddress;
 import com.propertyvista.equifax.model.TimeAtPresentEmployer;
-import com.propertyvista.misc.BusinessRules;
 
 public class EquifaxModelMapper {
 
@@ -142,7 +141,7 @@ public class EquifaxModelMapper {
         // previousAddress {
         {
             PriorAddress previousAddress = pcc.screening().version().previousAddress();
-            if (!previousAddress.isEmpty() && BusinessRules.infoPageNeedPreviousAddress(pcc.screening().version().currentAddress().moveInDate().getValue())) {
+            if (!previousAddress.isEmpty()) {
                 Address efxAddress = factory.createAddressesTypeAddress();
                 addresses.getAddress().add(efxAddress);
                 efxAddress.setAddressType("FORM");

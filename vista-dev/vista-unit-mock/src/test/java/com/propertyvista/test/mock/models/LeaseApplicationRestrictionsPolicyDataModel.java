@@ -25,6 +25,7 @@ public class LeaseApplicationRestrictionsPolicyDataModel extends MockDataModel<R
     protected void generate() {
         RestrictionsPolicy policy = EntityFactory.create(RestrictionsPolicy.class);
 
+        policy.yearsToForcingPreviousAddress().setValue(3);
         policy.noNeedGuarantors().setValue(false);
         policy.maturedOccupantsAreApplicants().setValue(false);
         policy.occupantsPerBedRoom().setValue(2d);

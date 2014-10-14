@@ -66,6 +66,7 @@ import com.propertyvista.domain.financial.offering.Feature;
 import com.propertyvista.domain.financial.offering.ProductItem;
 import com.propertyvista.domain.financial.offering.Service;
 import com.propertyvista.domain.note.NotesAndAttachments;
+import com.propertyvista.domain.policy.framework.PolicyNode;
 import com.propertyvista.domain.policy.policies.AutoPayPolicy;
 import com.propertyvista.domain.policy.policies.LeaseAgreementLegalPolicy;
 import com.propertyvista.domain.policy.policies.LeaseBillingPolicy;
@@ -1316,7 +1317,11 @@ public abstract class LeaseAbstractManager {
         return false;
     }
 
-    public Building getLeasePolicyNode(Lease leaseId) {
+    public PolicyNode getLeasePolicyNode(Lease leaseId) {
+        return getLeaseBuilding(leaseId);
+    }
+
+    public Building getLeaseBuilding(Lease leaseId) {
         if (!leaseId.unit().building().isValueDetached()) {
             return leaseId.unit().building();
         } else {

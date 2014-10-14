@@ -65,6 +65,8 @@ public interface OnlineApplicationDTO extends IEntity {
 
     IPrimitive<Boolean> noNeedGuarantors();
 
+    IPrimitive<Integer> yearsToForcingPreviousAddress();
+
     //--------------------------------------------
     // read and update data:
 

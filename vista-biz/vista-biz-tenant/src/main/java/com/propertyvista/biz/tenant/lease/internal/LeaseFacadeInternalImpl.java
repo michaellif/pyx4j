@@ -20,6 +20,7 @@ import com.pyx4j.commons.LogicalDate;
 import com.propertyvista.biz.tenant.lease.LeaseFacade;
 import com.propertyvista.domain.company.Employee;
 import com.propertyvista.domain.financial.offering.ProductItem;
+import com.propertyvista.domain.policy.framework.PolicyNode;
 import com.propertyvista.domain.property.asset.Floorplan;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
@@ -208,8 +209,12 @@ public class LeaseFacadeInternalImpl implements LeaseFacade {
     }
 
     @Override
-    public Building getLeasePolicyNode(Lease leaseId) {
+    public PolicyNode getLeasePolicyNode(Lease leaseId) {
         return new LeaseInternalManager().getLeasePolicyNode(leaseId);
     }
 
+    @Override
+    public Building getLeaseBuilding(Lease leaseId) {
+        return new LeaseInternalManager().getLeaseBuilding(leaseId);
+    }
 }

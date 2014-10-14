@@ -37,4 +37,6 @@ public interface TenantInfoDTO extends CustomerScreening {
 
     @Length(3)
     IList<EmergencyContact> emergencyContacts();
+
+    IPrimitive<Integer> yearsToForcingPreviousAddress();
 }

@@ -37,6 +37,8 @@ public class RestrictionsPolicyPreloader extends AbstractPolicyPreloader<Restric
 
     private static final boolean NO_NEED_GUARANTORS = false;
 
+    private static final int YEARS_TO_FORCING_PREVIOUS_ADDRESS = 3;
+
     private Integer ageOfMajority;
 
     private String provinceCode;
@@ -81,6 +83,7 @@ public class RestrictionsPolicyPreloader extends AbstractPolicyPreloader<Restric
     protected RestrictionsPolicy createPolicy(StringBuilder log) {
         RestrictionsPolicy policy = EntityFactory.create(RestrictionsPolicy.class);
 
+        policy.yearsToForcingPreviousAddress().setValue(YEARS_TO_FORCING_PREVIOUS_ADDRESS);
         policy.noNeedGuarantors().setValue(NO_NEED_GUARANTORS);
         policy.maturedOccupantsAreApplicants().setValue(OCCUPANTS_OVER_18_ARE_APPLICANTS);
         policy.occupantsPerBedRoom().setValue(OCCUPANTS_PER_BEDROOM);

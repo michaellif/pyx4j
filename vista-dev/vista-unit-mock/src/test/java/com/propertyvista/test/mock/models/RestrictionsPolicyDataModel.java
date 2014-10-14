@@ -38,6 +38,7 @@ public class RestrictionsPolicyDataModel extends MockDataModel<RestrictionsPolic
         policy.enforceAgeOfMajority().setValue(false);
         policy.maturedOccupantsAreApplicants().setValue(false);
         policy.noNeedGuarantors().setValue(false);
+        policy.yearsToForcingPreviousAddress().setValue(3);
         policy.node().set(getDataModel(PmcDataModel.class).getOrgNode());
         Persistence.service().persist(policy);
         addItem(policy);

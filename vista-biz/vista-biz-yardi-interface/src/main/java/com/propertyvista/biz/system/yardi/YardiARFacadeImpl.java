@@ -111,7 +111,7 @@ public class YardiARFacadeImpl extends AbstractYardiFacadeImpl implements YardiA
         Persistence.ensureRetrieve(receipt.billingAccount(), AttachLevel.Attached);
 
         if (VistaTODO.POSTING_SPEED) {
-            Building buildingId = ServerSideFactory.create(LeaseFacade.class).getLeasePolicyNode(receipt.billingAccount().lease());
+            Building buildingId = ServerSideFactory.create(LeaseFacade.class).getLeaseBuilding(receipt.billingAccount().lease());
             String propertyCode = Persistence.service().retrieveMember(buildingId.propertyCode());
 
             YardiSystemBatchesService.getInstance().postReceipt(YardiCredentials.get(buildingId), receipt, propertyCode,

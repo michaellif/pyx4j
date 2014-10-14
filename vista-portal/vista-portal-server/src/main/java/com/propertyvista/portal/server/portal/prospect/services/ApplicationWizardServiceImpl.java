@@ -990,6 +990,7 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
         to.enforceAgeOfMajority().setValue(restrictionsPolicy.enforceAgeOfMajority().getValue());
         to.maturedOccupantsAreApplicants().setValue(restrictionsPolicy.maturedOccupantsAreApplicants().getValue());
         to.noNeedGuarantors().setValue(restrictionsPolicy.noNeedGuarantors().getValue());
+        to.yearsToForcingPreviousAddress().setValue(restrictionsPolicy.yearsToForcingPreviousAddress().getValue());
     }
 
     // ================================================================================================================

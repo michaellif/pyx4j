@@ -13,19 +13,5 @@
  */
 package com.propertyvista.misc;
 
-import java.util.Date;
-
-import com.pyx4j.commons.TimeUtils;
-
 public class BusinessRules {
-
-    public static boolean infoPageNeedPreviousAddress(java.sql.Date currentAddressMoveInDate) {
-        if (currentAddressMoveInDate == null) {
-            return false;
-        }
-        Date now = TimeUtils.today();
-        @SuppressWarnings("deprecation")
-        Date needPreviousAddress = TimeUtils.createDate(now.getYear() - 3, now.getMonth(), now.getDate());
-        return needPreviousAddress.before(currentAddressMoveInDate);
-    }
 }

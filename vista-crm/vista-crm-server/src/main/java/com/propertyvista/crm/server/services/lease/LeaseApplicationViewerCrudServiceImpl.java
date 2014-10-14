@@ -36,6 +36,7 @@ import com.pyx4j.security.shared.SecurityController;
 
 import com.propertyvista.biz.communication.CommunicationFacade;
 import com.propertyvista.biz.financial.billing.BillingFacade;
+import com.propertyvista.biz.policy.PolicyFacade;
 import com.propertyvista.biz.system.yardi.YardiLeaseApplicationFacade;
 import com.propertyvista.biz.system.yardi.YardiProspectNotFoundException;
 import com.propertyvista.biz.system.yardi.YardiServiceException;
@@ -50,6 +51,8 @@ import com.propertyvista.crm.server.services.lease.common.LeaseViewerCrudService
 import com.propertyvista.crm.server.util.CrmAppContext;
 import com.propertyvista.domain.company.Employee;
 import com.propertyvista.domain.pmc.PmcEquifaxStatus;
+import com.propertyvista.domain.policy.framework.PolicyNode;
+import com.propertyvista.domain.policy.policies.RestrictionsPolicy;
 import com.propertyvista.domain.tenant.CustomerCreditCheck;
 import com.propertyvista.domain.tenant.CustomerCreditCheck.CreditCheckResult;
 import com.propertyvista.domain.tenant.CustomerScreening;
@@ -225,6 +228,7 @@ public class LeaseApplicationViewerCrudServiceImpl extends LeaseViewerCrudServic
                 TenantInfoDTO tenantInfoDTO = new TenantConverter.LeaseParticipant2TenantInfo().createTO(termParticipant);
                 new TenantConverter.TenantScreening2TenantInfo().copyBOtoTO(screening, tenantInfoDTO);
                 dto.tenantInfo().add(fillQuickSummary(tenantInfoDTO));
+                loadRestrictions(tenantInfoDTO, lease);
             }
 
             {
@@ -251,6 +255,13 @@ public class LeaseApplicationViewerCrudServiceImpl extends LeaseViewerCrudServic
 
             dto.leaseApproval().participants().add(approval);
         }
+    }
+
+    private void loadRestrictions(TenantInfoDTO to, Lease lease) {
+        PolicyNode policyNode = ServerSideFactory.create(LeaseFacade.class).getLeasePolicyNode(lease);
+        RestrictionsPolicy restrictionsPolicy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(policyNode, RestrictionsPolicy.class);
+
+        to.yearsToForcingPreviousAddress().setValue(restrictionsPolicy.yearsToForcingPreviousAddress().getValue());
     }
 
     private void loadLeaseApplicationDocuments(LeaseApplicationDTO application) {

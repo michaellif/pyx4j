@@ -40,8 +40,8 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.site.client.AppPlaceEntityMapper;
 import com.pyx4j.site.client.backoffice.ui.prime.CEntityCollectionCrudHyperlink;
-import com.pyx4j.site.client.backoffice.ui.prime.CEntityCrudHyperlink;
 import com.pyx4j.site.client.backoffice.ui.prime.CEntityCollectionCrudHyperlink.AppPlaceBuilder;
+import com.pyx4j.site.client.backoffice.ui.prime.CEntityCrudHyperlink;
 import com.pyx4j.site.client.backoffice.ui.prime.form.IEditor;
 import com.pyx4j.site.client.backoffice.ui.prime.form.IForm;
 import com.pyx4j.site.rpc.AppPlace;
@@ -156,7 +156,7 @@ public class LeaseParticipantForm<P extends LeaseParticipantDTO<?>> extends CrmE
         formPanel.append(Location.Left, proto().customer().person().sex()).decorate().componentWidth(100);
         formPanel.append(Location.Left, proto().customer().person().homePhone()).decorate().componentWidth(200);
         formPanel.append(Location.Left, proto().customer().person().mobilePhone()).decorate().componentWidth(200);
-        formPanel.append(Location.Right, proto().customer().person().birthDate()).decorate().componentWidth(150);
+        formPanel.append(Location.Right, proto().customer().person().birthDate()).decorate().componentWidth(120);
         formPanel.append(Location.Right, proto().customer().person().workPhone()).decorate().componentWidth(200);
         formPanel.append(Location.Right, proto().customer().person().email()).decorate().componentWidth(200);
 

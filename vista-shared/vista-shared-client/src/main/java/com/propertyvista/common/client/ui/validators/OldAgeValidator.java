@@ -13,25 +13,23 @@
  */
 package com.propertyvista.common.client.ui.validators;
 
-import java.util.Date;
-
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.forms.client.validators.AbstractComponentValidator;
 import com.pyx4j.forms.client.validators.BasicValidationError;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.security.client.ClientContext;
 
 public class OldAgeValidator extends AbstractComponentValidator<LogicalDate> {
 
     private static final I18n i18n = I18n.get(OldAgeValidator.class);
 
-    @SuppressWarnings("deprecation")
     @Override
     public BasicValidationError isValid() {
         LogicalDate value = getComponent().getValue();
         if (value == null) {
             return null;
         }
-        Date current = new Date();
+        LogicalDate current = new LogicalDate(ClientContext.getServerDate());
         return current.getYear() - value.getYear() < 150 ? null : new BasicValidationError(getComponent(), i18n.tr("Age cannot be greater than 150 years"));
     }
 

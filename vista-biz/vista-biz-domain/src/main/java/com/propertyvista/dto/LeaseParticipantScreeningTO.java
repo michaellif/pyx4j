@@ -41,6 +41,8 @@ public interface LeaseParticipantScreeningTO extends IVersionedEntity<LeaseParti
 
     IPrimitive<Lease.Status> leaseStatus();
 
+    IPrimitive<Integer> yearsToForcingPreviousAddress();
+
     @Transient
     public interface LeaseParticipantScreeningTOV extends IVersionData<LeaseParticipantScreeningTO> {
     }

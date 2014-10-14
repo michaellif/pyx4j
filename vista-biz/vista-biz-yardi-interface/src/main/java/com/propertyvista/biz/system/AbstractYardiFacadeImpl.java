@@ -26,7 +26,7 @@ import com.propertyvista.domain.tenant.lease.Lease;
 public class AbstractYardiFacadeImpl {
 
     public static PmcYardiCredential getPmcYardiCredential(Lease leaseId) {
-        return getPmcYardiCredential(ServerSideFactory.create(LeaseFacade.class).getLeasePolicyNode(leaseId));
+        return getPmcYardiCredential(ServerSideFactory.create(LeaseFacade.class).getLeaseBuilding(leaseId));
     }
 
     public static PmcYardiCredential getPmcYardiCredential(Building buildingId) {

@@ -23,10 +23,12 @@ import com.pyx4j.entity.server.AbstractVersionedCrudServiceDtoImpl;
 import com.pyx4j.entity.server.CrudEntityBinder;
 import com.pyx4j.entity.server.Persistence;
 
+import com.propertyvista.biz.policy.PolicyFacade;
 import com.propertyvista.biz.tenant.ScreeningFacade;
 import com.propertyvista.biz.tenant.lease.LeaseFacade;
 import com.propertyvista.crm.rpc.services.customer.screening.LeaseParticipantScreeningCrudService;
-import com.propertyvista.domain.property.asset.building.Building;
+import com.propertyvista.domain.policy.framework.PolicyNode;
+import com.propertyvista.domain.policy.policies.RestrictionsPolicy;
 import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.domain.tenant.CustomerScreening;
 import com.propertyvista.domain.tenant.lease.LeaseParticipant;
@@ -86,9 +88,7 @@ public class LeaseParticipantScreeningCrudServiceImpl extends AbstractVersionedC
 
     private CustomerScreening retrivePersonScreeningDraftForEdit(LeaseParticipant<?> leaseParticipantId) {
         LeaseParticipant<?> leaseParticipant = Persistence.service().retrieve(LeaseParticipant.class, leaseParticipantId.getPrimaryKey());
-
-        Building policyNode = ServerSideFactory.create(LeaseFacade.class).getLeasePolicyNode(leaseParticipant.lease());
-
+        PolicyNode policyNode = ServerSideFactory.create(LeaseFacade.class).getLeasePolicyNode(leaseParticipant.lease());
         CustomerScreening screening = ServerSideFactory.create(ScreeningFacade.class).retrivePersonScreeningDraftForEdit(leaseParticipant.customer(),
                 policyNode);
         Persistence.ensureRetrieve(screening.version().incomes(), AttachLevel.Attached);
@@ -112,6 +112,8 @@ public class LeaseParticipantScreeningCrudServiceImpl extends AbstractVersionedC
             to.screening().version().documents().clear();
         }
 
+        loadRestrictions(to, to.leaseParticipantId());
+
         return to;
     }
 
@@ -133,5 +135,14 @@ public class LeaseParticipantScreeningCrudServiceImpl extends AbstractVersionedC
             to.screening().set(retrivePersonScreeningDraftForEdit(to.leaseParticipantId()));
             Persistence.service().retrieve(to.screening().screene(), AttachLevel.ToStringMembers, false);
         }
+        loadRestrictions(to, to.leaseParticipantId());
+    }
+
+    private void loadRestrictions(LeaseParticipantScreeningTO to, LeaseParticipant<?> leaseParticipantId) {
+        LeaseParticipant<?> leaseParticipant = Persistence.service().retrieve(LeaseParticipant.class, leaseParticipantId.getPrimaryKey());
+        PolicyNode policyNode = ServerSideFactory.create(LeaseFacade.class).getLeasePolicyNode(leaseParticipant.lease());
+        RestrictionsPolicy restrictionsPolicy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(policyNode, RestrictionsPolicy.class);
+
+        to.yearsToForcingPreviousAddress().setValue(restrictionsPolicy.yearsToForcingPreviousAddress().getValue());
     }
 }

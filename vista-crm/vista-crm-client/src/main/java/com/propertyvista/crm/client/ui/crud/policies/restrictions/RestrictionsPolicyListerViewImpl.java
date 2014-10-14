@@ -40,7 +40,8 @@ public class RestrictionsPolicyListerViewImpl extends CrmListerViewImplBase<Rest
                     new MemberColumnDescriptor.Builder(proto().ageOfMajority()).build(),
                     new MemberColumnDescriptor.Builder(proto().enforceAgeOfMajority()).build(), 
                     new MemberColumnDescriptor.Builder(proto().maturedOccupantsAreApplicants()).build(),
-                    new MemberColumnDescriptor.Builder(proto().noNeedGuarantors()).build() 
+                    new MemberColumnDescriptor.Builder(proto().noNeedGuarantors()).build(), 
+                    new MemberColumnDescriptor.Builder(proto().yearsToForcingPreviousAddress()).build() 
             )); // @formatter:on
         }
     }

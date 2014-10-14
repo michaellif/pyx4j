@@ -29,6 +29,7 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.backoffice.ui.prime.form.IForm;
 
 import com.propertyvista.common.client.ui.components.editors.PriorAddressEditor;
+import com.propertyvista.common.client.ui.validators.ClientBusinessRules;
 import com.propertyvista.common.client.ui.validators.FutureDateIncludeTodayValidator;
 import com.propertyvista.common.client.ui.validators.PastDateIncludeTodayValidator;
 import com.propertyvista.common.client.ui.validators.PastDateValidator;
@@ -40,7 +41,6 @@ import com.propertyvista.crm.client.ui.crud.lease.application.components.Persona
 import com.propertyvista.crm.client.ui.crud.lease.application.components.PersonalIncomeFolder;
 import com.propertyvista.domain.PriorAddress;
 import com.propertyvista.dto.LeaseParticipantScreeningTO;
-import com.propertyvista.misc.BusinessRules;
 import com.propertyvista.misc.VistaTODO;
 
 public class CustomerScreeningForm extends CrmEntityForm<LeaseParticipantScreeningTO> {
@@ -92,6 +92,7 @@ public class CustomerScreeningForm extends CrmEntityForm<LeaseParticipantScreeni
         super.addValidations();
 
         // ------------------------------------------------------------------------------------------------
+        @SuppressWarnings("unchecked")
         CForm<PriorAddress> currentAF = ((CForm<PriorAddress>) get(proto().screening().version().currentAddress()));
 
         currentAF.get(currentAF.proto().moveInDate()).addComponentValidator(new PastDateIncludeTodayValidator());
@@ -107,6 +108,7 @@ public class CustomerScreeningForm extends CrmEntityForm<LeaseParticipantScreeni
         });
 
         // ------------------------------------------------------------------------------------------------
+        @SuppressWarnings("unchecked")
         CForm<PriorAddress> previousAF = ((CForm<PriorAddress>) get(proto().screening().version().previousAddress()));
 
         previousAF.get(previousAF.proto().moveInDate()).addComponentValidator(new PastDateValidator());
@@ -161,7 +163,8 @@ public class CustomerScreeningForm extends CrmEntityForm<LeaseParticipantScreeni
     }
 
     private void enablePreviousAddress() {
-        previousAddress.setVisible(BusinessRules.infoPageNeedPreviousAddress(getValue().screening().version().currentAddress().moveInDate().getValue()));
+        previousAddress.setVisible(ClientBusinessRules.needPreviousAddress(getValue().screening().version().currentAddress().moveInDate().getValue(),
+                getValue().yearsToForcingPreviousAddress().getValue()));
     }
 
 // Financial: ------------------------------------------------------------------------------------------------

@@ -49,4 +49,7 @@ public interface RestrictionsPolicy extends Policy, TenantsAccessiblePolicy {
 
     @Caption(name = "Guarantors are optional", description = "If Guarantors are not necessary")
     IPrimitive<Boolean> noNeedGuarantors();
+
+    @NotNull
+    IPrimitive<Integer> yearsToForcingPreviousAddress();
 }

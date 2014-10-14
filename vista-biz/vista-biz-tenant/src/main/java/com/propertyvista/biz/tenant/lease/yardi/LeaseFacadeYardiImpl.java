@@ -23,6 +23,7 @@ import com.propertyvista.biz.tenant.lease.LeaseAbstractManager;
 import com.propertyvista.biz.tenant.lease.LeaseFacade;
 import com.propertyvista.domain.company.Employee;
 import com.propertyvista.domain.financial.offering.ProductItem;
+import com.propertyvista.domain.policy.framework.PolicyNode;
 import com.propertyvista.domain.property.asset.Floorplan;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
@@ -215,8 +216,13 @@ public class LeaseFacadeYardiImpl implements LeaseFacade {
     }
 
     @Override
-    public Building getLeasePolicyNode(Lease leaseId) {
+    public PolicyNode getLeasePolicyNode(Lease leaseId) {
         return getLeaseYardiManager(retrieveLeseStatus(leaseId)).getLeasePolicyNode(leaseId);
+    }
+
+    @Override
+    public Building getLeaseBuilding(Lease leaseId) {
+        return getLeaseYardiManager(retrieveLeseStatus(leaseId)).getLeaseBuilding(leaseId);
     }
 
     // internals:

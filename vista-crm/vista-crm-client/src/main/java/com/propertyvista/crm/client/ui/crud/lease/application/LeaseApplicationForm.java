@@ -30,8 +30,8 @@ import com.pyx4j.widgets.client.tabpanel.Tab;
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
 import com.propertyvista.crm.client.ui.crud.lease.application.components.ApplicationStatusFolder;
 import com.propertyvista.crm.client.ui.crud.lease.application.components.FinancialViewForm;
-import com.propertyvista.crm.client.ui.crud.lease.application.components.InfoViewForm;
 import com.propertyvista.crm.client.ui.crud.lease.application.components.LeaseApplicationDocumentFolder;
+import com.propertyvista.crm.client.ui.crud.lease.application.components.TenantInfoViewForm;
 import com.propertyvista.crm.client.ui.crud.lease.common.LeaseFormBase;
 import com.propertyvista.domain.customizations.CountryOfOperation;
 import com.propertyvista.domain.policy.policies.ProspectPortalPolicy.FeePayment;
@@ -114,7 +114,7 @@ public class LeaseApplicationForm extends LeaseFormBase<LeaseApplicationDTO> {
         VistaBoxFolder<TenantInfoDTO> folder = new VistaBoxFolder<TenantInfoDTO>(TenantInfoDTO.class, false) {
             @Override
             protected CForm<TenantInfoDTO> createItemForm(IObject<?> member) {
-                return new InfoViewForm(true);
+                return new TenantInfoViewForm();
             }
 
             @Override

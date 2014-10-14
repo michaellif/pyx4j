@@ -26,6 +26,7 @@ import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.security.shared.SecurityController;
 
+import com.propertyvista.common.client.ui.validators.ClientBusinessRules;
 import com.propertyvista.common.client.ui.validators.FutureDateIncludeTodayValidator;
 import com.propertyvista.common.client.ui.validators.PastDateIncludeTodayValidator;
 import com.propertyvista.common.client.ui.validators.PastDateValidator;
@@ -34,7 +35,6 @@ import com.propertyvista.common.client.ui.validators.StartEndDateWithinPeriodVal
 import com.propertyvista.domain.PriorAddress;
 import com.propertyvista.domain.security.PortalProspectBehavior;
 import com.propertyvista.domain.tenant.prospect.OnlineApplicationWizardStepMeta;
-import com.propertyvista.misc.BusinessRules;
 import com.propertyvista.portal.prospect.themes.AdditionalInfoStepTheme;
 import com.propertyvista.portal.prospect.ui.application.ApplicationWizardStep;
 import com.propertyvista.portal.prospect.ui.application.editors.PriorAddressEditor;
@@ -76,19 +76,22 @@ public class AdditionalInfoStep extends ApplicationWizardStep {
 
         questionsPanel.append(Location.Left, inject(proto().applicantData().legalQuestions().suedForRent(), new LegalQuestionWidgetDecoratorBuilder().build()));
 
-        questionsPanel.append(Location.Left, inject(proto().applicantData().legalQuestions().suedForDamages(), new LegalQuestionWidgetDecoratorBuilder().build()));
+        questionsPanel.append(Location.Left,
+                inject(proto().applicantData().legalQuestions().suedForDamages(), new LegalQuestionWidgetDecoratorBuilder().build()));
 
         questionsPanel.append(Location.Left, inject(proto().applicantData().legalQuestions().everEvicted(), new LegalQuestionWidgetDecoratorBuilder().build()));
 
-        questionsPanel
-                .append(Location.Left, inject(proto().applicantData().legalQuestions().defaultedOnLease(), new LegalQuestionWidgetDecoratorBuilder().build()));
+        questionsPanel.append(Location.Left,
+                inject(proto().applicantData().legalQuestions().defaultedOnLease(), new LegalQuestionWidgetDecoratorBuilder().build()));
 
         questionsPanel.append(Location.Left,
                 inject(proto().applicantData().legalQuestions().convictedOfFelony(), new LegalQuestionWidgetDecoratorBuilder().build()));
 
-        questionsPanel.append(Location.Left, inject(proto().applicantData().legalQuestions().legalTroubles(), new LegalQuestionWidgetDecoratorBuilder().build()));
+        questionsPanel.append(Location.Left,
+                inject(proto().applicantData().legalQuestions().legalTroubles(), new LegalQuestionWidgetDecoratorBuilder().build()));
 
-        questionsPanel.append(Location.Left, inject(proto().applicantData().legalQuestions().filedBankruptcy(), new LegalQuestionWidgetDecoratorBuilder().build()));
+        questionsPanel.append(Location.Left,
+                inject(proto().applicantData().legalQuestions().filedBankruptcy(), new LegalQuestionWidgetDecoratorBuilder().build()));
 
         formPanel.append(Location.Left, questionsPanel);
 
@@ -113,6 +116,7 @@ public class AdditionalInfoStep extends ApplicationWizardStep {
         super.addValidations();
 
         // ------------------------------------------------------------------------------------------------
+        @SuppressWarnings("unchecked")
         CForm<PriorAddress> currentAF = ((CForm<PriorAddress>) get(proto().applicantData().currentAddress()));
 
         currentAF.get(currentAF.proto().moveInDate()).addComponentValidator(new PastDateIncludeTodayValidator());
@@ -128,6 +132,7 @@ public class AdditionalInfoStep extends ApplicationWizardStep {
         });
 
         // ------------------------------------------------------------------------------------------------
+        @SuppressWarnings("unchecked")
         CForm<PriorAddress> previousAF = ((CForm<PriorAddress>) get(proto().applicantData().previousAddress()));
 
         previousAF.get(previousAF.proto().moveInDate()).addComponentValidator(new PastDateValidator());
@@ -141,7 +146,8 @@ public class AdditionalInfoStep extends ApplicationWizardStep {
     }
 
     private void enablePreviousAddress() {
-        previousAddress.setVisible(BusinessRules.infoPageNeedPreviousAddress(getValue().applicantData().currentAddress().moveInDate().getValue()));
+        previousAddress.setVisible(ClientBusinessRules.needPreviousAddress(getValue().applicantData().currentAddress().moveInDate().getValue(), getValue()
+                .yearsToForcingPreviousAddress().getValue()));
     }
 
     class LegalQuestionWidgetDecoratorBuilder extends RadioButtonGroupDecoratorBuilder {
