@@ -52,7 +52,7 @@ class PaymentBatchPosting {
     private final boolean paymentBatchAsSingleTransaction;
 
     PaymentBatchPosting() {
-        this.paymentBatchAsSingleTransaction = !VistaFeatures.instance().yardiIntegration();
+        this.paymentBatchAsSingleTransaction = VistaFeatures.instance().yardiIntegration();
     }
 
     /**
@@ -156,16 +156,11 @@ class PaymentBatchPosting {
                                         }
                                     }
 
-                                    try {
-                                        paymentBatchContext.postBatch();
-                                        executionMonitor.addInfoEvent("Batch", null);
+                                    paymentBatchContext.postBatch();
+                                    executionMonitor.addInfoEvent("Batch", null);
 
-                                        executionMonitor.add(batchExecutionMonitor);
+                                    executionMonitor.add(batchExecutionMonitor);
 
-                                    } catch (ARException e) {
-                                        log.error("Unable to post batch for propertyCode {}", curentBuildingCode.get(), e);
-                                        executionMonitor.addErredEvent("Batch", null, "propertyCode " + curentBuildingCode.get(), e);
-                                    }
                                     curentBuildingCode.set(null);
                                     return paymentBatchContext.getBatchNumber();
                                 }

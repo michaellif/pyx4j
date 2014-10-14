@@ -106,8 +106,10 @@ class PaymentBatchManager {
         state = State.Canceled;
     }
 
-    public void postReceiptBatch() {
-
+    public void postReceiptBatch() throws YardiServiceException {
+        if (propertyManager.mockFeatures.isBlockBatchPost()) {
+            Messages.throwYardiResponseException("Unable to post Batch  " + id + " for Yardi Property " + propertyManager.getPropertyId());
+        }
         log.debug("postReceiptBatch #{} of size {}", id, transactions.size());
         Validate.isTrue(state == State.New);
         for (Transactions transaction : transactions) {

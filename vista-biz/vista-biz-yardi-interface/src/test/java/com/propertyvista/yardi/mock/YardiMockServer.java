@@ -103,9 +103,6 @@ public class YardiMockServer implements TransactionChargeUpdateEvent.Handler, Pr
         if (propertyManager.mockFeatures.isBlockAccess()) {
             Messages.throwYardiResponseException(YardiHandledErrorMessages.errorMessage_NoAccess + " " + propertyManager.getPropertyId());
         }
-        if (propertyManager.mockFeatures.isBlockBatchOpening()) {
-            Messages.throwYardiResponseException("Cannot open Batch for Yardi Property " + propertyManager.getPropertyId());
-        }
     }
 
     public Properties getPropertyConfigurations() {
@@ -155,6 +152,9 @@ public class YardiMockServer implements TransactionChargeUpdateEvent.Handler, Pr
         // per yardi spec, this method returns 0 or negative batch id in case of an error
         try {
             PropertyManager propertyManager = getExistingPropertyManagerRuntime(propertyId);
+            if (propertyManager.mockFeatures.isBlockBatchOpening()) {
+                Messages.throwYardiResponseException("Cannot open Batch for Yardi Property " + propertyManager.getPropertyId());
+            }
             PaymentBatchManager b = new PaymentBatchManager(propertyManager);
             openBatches.put(b.getId(), b);
             return b.getId();

@@ -175,4 +175,56 @@ public class PaymentBatchSingleBuildingCreditCardYardiTest extends PaymentYardiT
         new InvoiceLineItemTester(lease13).count(YardiPayment.class, 1).lastRecordAmount(YardiPayment.class, "-103.00");
     }
 
+    public void testFailedBatchPosting() throws Exception {
+        // Make a payment
+        final List<PaymentRecord> paymentRecords = new ArrayList<PaymentRecord>();
+        paymentRecords.add(getDataModel(LeaseDataModel.class).schedulePaymentRecord(lease11, PaymentType.CreditCard, "101.00", "2011-01-02"));
+        paymentRecords.add(getDataModel(LeaseDataModel.class).schedulePaymentRecord(lease12, PaymentType.CreditCard, "102.00", "2011-01-02"));
+        paymentRecords.add(getDataModel(LeaseDataModel.class).schedulePaymentRecord(lease13, PaymentType.CreditCard, "103.00", "2011-01-02"));
+        Persistence.service().commit();
+
+        {
+            PropertyUpdater updater = new PropertyUpdater("prop123")//
+                    .set(PropertyUpdater.MockFeatures.BlockBatchPost, true);
+            MockEventBus.fireEvent(new PropertyUpdateEvent(updater));
+        }
+
+        setSysDate("2011-01-02");
+
+        //Run the batch process
+        SchedulerMock.runProcess(PmcProcessType.paymentsScheduledCreditCards, "2011-01-02");
+
+        new PaymentRecordTester(lease11.billingAccount()).lastRecordStatus(PaymentStatus.Void).count(1);
+        new PaymentRecordTester(lease12.billingAccount()).lastRecordStatus(PaymentStatus.Void).count(1);
+        new PaymentRecordTester(lease13.billingAccount()).lastRecordStatus(PaymentStatus.Void).count(1);
+
+        YardiResidentTransactionsService.getInstance().updateAll(getYardiCredential("prop123"), new ExecutionMonitor());
+
+        new InvoiceLineItemTester(lease11).count(YardiPayment.class, 0);
+        new InvoiceLineItemTester(lease12).count(YardiPayment.class, 0);
+        new InvoiceLineItemTester(lease13).count(YardiPayment.class, 0);
+
+        // TODO Nothing happens!
+
+        // Recover from Error and try again.
+        {
+            PropertyUpdater updater = new PropertyUpdater("prop123")//
+                    .set(PropertyUpdater.MockFeatures.BlockBatchPost, false);
+            MockEventBus.fireEvent(new PropertyUpdateEvent(updater));
+        }
+
+        setSysDate("2011-01-03");
+        SchedulerMock.runProcess(PmcProcessType.paymentsScheduledCreditCards, "2011-01-03");
+
+        new PaymentRecordTester(lease11.billingAccount()).lastRecordStatus(PaymentStatus.Void).count(1);
+        new PaymentRecordTester(lease12.billingAccount()).lastRecordStatus(PaymentStatus.Void).count(1);
+        new PaymentRecordTester(lease13.billingAccount()).lastRecordStatus(PaymentStatus.Void).count(1);
+
+//        YardiResidentTransactionsService.getInstance().updateAll(getYardiCredential("prop123"), new ExecutionMonitor());
+//
+//        new InvoiceLineItemTester(lease11).count(YardiPayment.class, 1).lastRecordAmount(YardiPayment.class, "-101.00");
+//        new InvoiceLineItemTester(lease12).count(YardiPayment.class, 1).lastRecordAmount(YardiPayment.class, "-102.00");
+//        new InvoiceLineItemTester(lease13).count(YardiPayment.class, 1).lastRecordAmount(YardiPayment.class, "-103.00");
+
+    }
 }

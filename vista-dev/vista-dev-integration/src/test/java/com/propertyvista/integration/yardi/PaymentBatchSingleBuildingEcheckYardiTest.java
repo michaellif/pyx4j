@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011-2012 All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -182,5 +182,56 @@ public class PaymentBatchSingleBuildingEcheckYardiTest extends PaymentYardiTestB
         Persistence.service().commit();
 
         new InvoiceLineItemTester(lease11).count(YardiPayment.class, 0);
+    }
+
+    public void testFailedBatchPosting() throws Exception {
+        // Make a payment
+        final List<PaymentRecord> paymentRecords = new ArrayList<PaymentRecord>();
+        paymentRecords.add(getDataModel(LeaseDataModel.class).schedulePaymentRecord(lease11, PaymentType.Echeck, "101.00", "2011-01-02"));
+        paymentRecords.add(getDataModel(LeaseDataModel.class).schedulePaymentRecord(lease12, PaymentType.Echeck, "102.00", "2011-01-02"));
+        paymentRecords.add(getDataModel(LeaseDataModel.class).schedulePaymentRecord(lease13, PaymentType.Echeck, "103.00", "2011-01-02"));
+        Persistence.service().commit();
+
+        {
+            PropertyUpdater updater = new PropertyUpdater("prop123")//
+                    .set(PropertyUpdater.MockFeatures.BlockBatchPost, true);
+            MockEventBus.fireEvent(new PropertyUpdateEvent(updater));
+        }
+
+        setSysDate("2011-01-02");
+
+        //Run the batch process
+        SchedulerMock.runProcess(PmcProcessType.paymentsScheduledEcheck, "2011-01-02");
+
+        new PaymentRecordTester(lease11.billingAccount()).lastRecordStatus(PaymentStatus.Scheduled);
+        new PaymentRecordTester(lease12.billingAccount()).lastRecordStatus(PaymentStatus.Scheduled);
+        new PaymentRecordTester(lease13.billingAccount()).lastRecordStatus(PaymentStatus.Scheduled);
+
+        YardiResidentTransactionsService.getInstance().updateAll(getYardiCredential("prop123"), new ExecutionMonitor());
+
+        new InvoiceLineItemTester(lease11).count(YardiPayment.class, 0);
+        new InvoiceLineItemTester(lease12).count(YardiPayment.class, 0);
+        new InvoiceLineItemTester(lease13).count(YardiPayment.class, 0);
+
+        // Recover from Error and try again.
+        {
+            PropertyUpdater updater = new PropertyUpdater("prop123")//
+                    .set(PropertyUpdater.MockFeatures.BlockBatchPost, false);
+            MockEventBus.fireEvent(new PropertyUpdateEvent(updater));
+        }
+
+        setSysDate("2011-01-03");
+        SchedulerMock.runProcess(PmcProcessType.paymentsScheduledEcheck, "2011-01-03");
+
+        new PaymentRecordTester(lease11.billingAccount()).lastRecordStatus(PaymentStatus.Queued);
+        new PaymentRecordTester(lease12.billingAccount()).lastRecordStatus(PaymentStatus.Queued);
+        new PaymentRecordTester(lease13.billingAccount()).lastRecordStatus(PaymentStatus.Queued);
+
+        YardiResidentTransactionsService.getInstance().updateAll(getYardiCredential("prop123"), new ExecutionMonitor());
+
+        new InvoiceLineItemTester(lease11).count(YardiPayment.class, 1).lastRecordAmount(YardiPayment.class, "-101.00");
+        new InvoiceLineItemTester(lease12).count(YardiPayment.class, 1).lastRecordAmount(YardiPayment.class, "-102.00");
+        new InvoiceLineItemTester(lease13).count(YardiPayment.class, 1).lastRecordAmount(YardiPayment.class, "-103.00");
+
     }
 }
