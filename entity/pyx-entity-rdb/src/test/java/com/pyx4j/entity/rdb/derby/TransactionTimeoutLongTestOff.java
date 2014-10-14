@@ -20,11 +20,14 @@
  */
 package com.pyx4j.entity.rdb.derby;
 
+import org.junit.Ignore;
+
 import com.pyx4j.entity.rdb.PersistenceEnvironmentFactory;
 import com.pyx4j.entity.rdb.TransactionTimeoutLongTestCase;
 import com.pyx4j.entity.test.server.PersistenceEnvironment;
 
-public class TransactionTimeoutLongTest extends TransactionTimeoutLongTestCase {
+@Ignore
+public class TransactionTimeoutLongTestOff extends TransactionTimeoutLongTestCase {
 
     @Override
     protected PersistenceEnvironment getPersistenceEnvironment() {

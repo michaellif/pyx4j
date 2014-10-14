@@ -159,13 +159,13 @@ public abstract class TransactionTimeoutLongTestCase extends DatastoreTestBase {
                                 // Timeout error will happen here
                                 if ((errorCondition == ErrorCondition.Nested) && (nextedId == maxNested - 1)) {
                                     try {
-                                        Thread.sleep(Consts.MIN2MSEC * 2);
+                                        Thread.sleep(Consts.MIN2MSEC * 1);
                                     } catch (InterruptedException e) {
                                         throw new RuntimeException(e);
                                     }
 
                                     srv.persist(createEntity(setId, "2.x"));
-                                    Assert.fail("Should throw Exception");
+                                    Assert.fail("Should throw Exception in Nested transaction");
                                 }
                                 return null;
                             }
@@ -173,7 +173,7 @@ public abstract class TransactionTimeoutLongTestCase extends DatastoreTestBase {
                     }
 
                     try {
-                        Thread.sleep(Consts.MIN2MSEC * 2);
+                        Thread.sleep(Consts.MIN2MSEC * 1);
                     } catch (InterruptedException e) {
                         throw new RuntimeException(e);
                     }
@@ -182,7 +182,7 @@ public abstract class TransactionTimeoutLongTestCase extends DatastoreTestBase {
                     if (errorCondition == ErrorCondition.MainFlow) {
                         srv.persist(createEntity(setId, "1.1"));
 
-                        Assert.fail("Should throw Exception");
+                        Assert.fail("Should throw Exception in MainFlow");
                     }
 
                     return null;
