@@ -178,8 +178,10 @@ public class MaintenanceRequestForm extends CrmEntityForm<MaintenanceRequestDTO>
         panel.append(Location.Left, inject(proto().building(), buildingSelector)).decorate().componentWidth(200);
 
         panel.append(Location.Right, inject(proto().reporter(), reporterSelector)).decorate().componentWidth(200);
+        panel.append(Location.Right, inject(proto().reporterName())).decorate().componentWidth(200);
         panel.append(Location.Right, inject(proto().reporterPhone())).decorate().componentWidth(200);
         panel.append(Location.Right, inject(proto().phoneType())).decorate().componentWidth(100);
+        get(proto().reporterName()).setVisible(false);
         get(proto().reporter()).addValueChangeHandler(new ValueChangeHandler<Tenant>() {
             @Override
             public void onValueChange(ValueChangeEvent<Tenant> event) {
@@ -453,6 +455,12 @@ public class MaintenanceRequestForm extends CrmEntityForm<MaintenanceRequestDTO>
         MaintenanceRequestDTO mr = getValue();
         if (mr == null) {
             return;
+        }
+
+        if (VistaFeatures.instance().yardiIntegration()) {
+            // if reporter (tenant) not set (Yardi-originated requests), we just show the name
+            get(proto().reporter()).setVisible(!mr.reporter().isNull());
+            get(proto().reporterName()).setVisible(mr.reporter().isNull());
         }
 
         get(proto().reportedDate()).setEditable(mr.id().isNull());

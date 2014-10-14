@@ -49,6 +49,7 @@ import com.propertyvista.domain.maintenance.MaintenanceRequestStatus;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.settings.PmcYardiCredential;
+import com.propertyvista.domain.tenant.lease.Tenant;
 import com.propertyvista.yardi.mappers.MappingUtils;
 import com.propertyvista.yardi.services.YardiMaintenanceRequestsService;
 
@@ -81,6 +82,10 @@ public class YardiMaintenanceProcessor {
             req.setUnitCode(mr.unit().<AptUnit> cast().info().number().getValue());
         }
 
+        if (!mr.reporter().isNull()) {
+            Persistence.ensureRetrieve(mr.reporter().lease(), AttachLevel.ToStringMembers);
+            req.setTenantCode(mr.reporter().lease().leaseId().getValue());
+        }
         req.setRequestorName(mr.reporterName().getValue());
         req.setRequestorEmail(mr.reporterEmail().getValue());
         Long requestorPhone = null;
@@ -223,13 +228,35 @@ public class YardiMaintenanceProcessor {
         } else {
             mr.priority().set(null);
         }
-        // other data
+        // request id
         mr.requestId().setValue(request.getServiceRequestId().toString());
+        // tenant
         if (mr.reporter().isNull()) {
+            if (request.getTenantCode() != null) {
+                // try to identify tenant by tenantCode; the tenantCode (leaseId) is set if the MR is originated from PV CRM
+                Tenant tenant = null;
+                EntityQueryCriteria<Tenant> crit = EntityQueryCriteria.create(Tenant.class);
+                crit.eq(crit.proto().lease().leaseId(), request.getTenantCode());
+                // try to match lease participants name; if not, use main tenant
+                for (Tenant t : Persistence.service().query(crit)) {
+                    com.propertyvista.domain.person.Name name = t.customer().person().name();
+                    if (request.getRequestorName() != null && //
+                            !name.firstName().isNull() && request.getRequestorName().contains(name.firstName().getValue()) && //
+                            !name.lastName().isNull() && request.getRequestorName().contains(name.lastName().getValue()) //
+                    ) {
+                        tenant = t;
+                        break;
+                    } else if (request.getTenantCode().equals(t.participantId().getValue())) {
+                        tenant = t;
+                    }
+                }
+                mr.reporter().set(tenant);
+            }
             mr.reporterName().setValue(request.getRequestorName());
             mr.reporterPhone().setValue(request.getRequestorPhoneNumber() == null ? null : request.getRequestorPhoneNumber().toString());
             mr.reporterEmail().setValue(request.getRequestorEmail());
         }
+        // other details
         mr.summary().setValue(request.getServiceRequestBriefDescription());
 // TODO choose between FullDescription and DescriptionNotes
 //        mr.description().setValue(request.getServiceRequestFullDescription());
@@ -240,6 +267,7 @@ public class YardiMaintenanceProcessor {
             mr.submitted().setValue(request.getServiceRequestDate());
         }
         mr.updated().setValue(request.getUpdateDate());
+        // TODO status history
 
         return mr;
     }
