@@ -73,6 +73,7 @@ public class HelpViewImpl extends FlowPanel implements HelpView {
                     log.debug("got WalkThru {} '{}'", me.getKey(), me.getValue());
 
                     Anchor anchor = new Anchor(me.getValue(), false);
+                    anchor.setStyleName(SiteViewTheme.StyleName.SiteViewExtraItem.name());
                     anchor.getElement().getStyle().setTextAlign(TextAlign.LEFT);
                     anchor.getElement().getStyle().setDisplay(Display.BLOCK);
                     anchor.addClickHandler(new ClickHandler() {
