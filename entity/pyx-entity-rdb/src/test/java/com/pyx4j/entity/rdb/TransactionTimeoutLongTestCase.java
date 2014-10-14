@@ -28,6 +28,7 @@ import org.junit.Assert;
 import com.pyx4j.commons.Consts;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
+import com.pyx4j.entity.server.CompensationHandler;
 import com.pyx4j.entity.server.ConnectionTarget;
 import com.pyx4j.entity.server.Executable;
 import com.pyx4j.entity.server.TransactionScopeOption;
@@ -61,7 +62,7 @@ public abstract class TransactionTimeoutLongTestCase extends DatastoreTestBase {
         srv.startTransaction(TransactionScopeOption.RequiresNew, ConnectionTarget.Web);
         try {
             srv.persist(createEntity(setId, "1.0"));
-            Thread.sleep(Consts.SEC2MSEC * (60 + 30));
+            Thread.sleep(Consts.MIN2MSEC * 2);
 
             // Timeout error will happen here
             try {
@@ -101,7 +102,17 @@ public abstract class TransactionTimeoutLongTestCase extends DatastoreTestBase {
                 public Void execute() throws RuntimeException {
                     srv.persist(createEntity(setId, "1.0"));
 
-                    for (int i = 0; i < 7; i++) {
+                    UnitOfWork.addTransactionCompensationHandler(new CompensationHandler() {
+
+                        @Override
+                        public Void execute() {
+                            System.out.println("*** CompensationHandler");
+                            srv.persist(createEntity2(setId, "Compensation-2.0"));
+                            return null;
+                        }
+                    });
+
+                    for (int i = 0; i < 1; i++) {
                         final int nextedId = i;
                         new UnitOfWork(TransactionScopeOption.Nested).execute(new Executable<Void, RuntimeException>() {
 
@@ -114,7 +125,7 @@ public abstract class TransactionTimeoutLongTestCase extends DatastoreTestBase {
                     }
 
                     try {
-                        Thread.sleep(Consts.SEC2MSEC * (60 + 30));
+                        Thread.sleep(Consts.MIN2MSEC * 2);
                     } catch (InterruptedException e) {
                         throw new RuntimeException(e);
                     }
@@ -135,11 +146,15 @@ public abstract class TransactionTimeoutLongTestCase extends DatastoreTestBase {
 
         makeManyCommits(otherTransactionScopeOption);
 
+        //TODO Verify CompensationHandler fired
+        //assertExists2(setId, "Compensation-2.0");
+
         for (int i = 0; i < 7; i++) {
             assertNotExists(setId, "2." + i);
         }
         assertNotExists(setId, "1.0");
         assertNotExists(setId, "1.1");
+
     }
 
     // *******  Test helpers  **********

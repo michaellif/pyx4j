@@ -22,7 +22,6 @@ package com.pyx4j.entity.rdb;
 
 import java.sql.Connection;
 import java.sql.SQLException;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.EmptyStackException;
 import java.util.HashSet;
@@ -71,6 +70,8 @@ public class PersistenceContext {
     int savepoints = 0;
 
     private long transactionStart = -1;
+
+    private long transactionUncommittedChangesStart = -1;
 
     private final Stack<TransactionContext> transactionContexts = new Stack<TransactionContext>();
 
@@ -220,7 +221,8 @@ public class PersistenceContext {
     public Connection getConnection() {
         if (connection == null) {
             connection = connectionProvider.getConnection(getConnectionTarget());
-            transactionStart = -1;
+            transactionUncommittedChangesStart = -1;
+            transactionStart = System.currentTimeMillis();
             if (isExplicitTransaction()) {
                 try {
                     connection.setAutoCommit(false);
@@ -231,7 +233,6 @@ public class PersistenceContext {
                     throw new RuntimeException(e);
                 }
             }
-
             if (PersistenceTrace.traceOpenSession) {
                 log.info("*** connection open  {} {} {}", Integer.toHexString(System.identityHashCode(this)), transactionType, getConnectionTarget());
                 synchronized (openSessionLock) {
@@ -291,8 +292,8 @@ public class PersistenceContext {
     }
 
     public void setUncommittedChanges() {
-        if (this.transactionStart <= 0) {
-            this.transactionStart = System.currentTimeMillis();
+        if (this.transactionUncommittedChangesStart <= 0) {
+            this.transactionUncommittedChangesStart = System.currentTimeMillis();
         }
         transactionContexts.peek().setUncommittedChanges();
     }
@@ -365,6 +366,7 @@ public class PersistenceContext {
                 try {
                     connection.commit();
                     transactionStart = -1;
+                    transactionUncommittedChangesStart = -1;
                 } catch (SQLException e) {
                     if (connectionProvider.getDialect().isIntegrityConstraintException(e)) {
                         throw new IntegrityConstraintUserRuntimeException(i18n.tr("Unable to update/delete record referenced by another records."), null);
@@ -383,27 +385,28 @@ public class PersistenceContext {
             log.info("{} rollback\n\tfrom:{}\t", txId(), PersistenceTrace.getCallOrigin());
         }
         assertTransactionManangementCallOrigin();
-        transactionContexts.peek().rollback(connection);
-        SQLException exception = null;
-        if (isDirectTransactionControl() && connection != null) {
-            boolean ok = false;
-            try {
-                log.warn("rollback transaction changes since {}", new SimpleDateFormat("yyyy-MM-dd HH:mm:ss:SSS").format(new Date(transactionStart)));
-                connection.rollback();
-                transactionStart = -1;
-                ok = true;
-            } catch (SQLException e) {
-                exception = e;
-            } finally {
-                if (!ok) {
-                    log.error("rollback failed");
-                }
+        try {
+            transactionContexts.peek().rollback(connection);
+            if (isDirectTransactionControl() && connection != null) {
+                boolean ok = false;
+                try {
+                    log.warn("rollback transaction since {}; changes since {}", //
+                            PersistenceTrace.traceTime(transactionStart), PersistenceTrace.traceTime(transactionUncommittedChangesStart));
+                    connection.rollback();
+                    transactionStart = -1;
+                    transactionUncommittedChangesStart = -1;
+                    ok = true;
+                } catch (SQLException e) {
+                    throw new RuntimeException(e);
+                } finally {
+                    if (!ok) {
+                        log.error("rollback failed");
+                    }
 
+                }
             }
-        }
-        transactionContexts.peek().fireCompensationHandlers();
-        if (exception != null) {
-            throw new RuntimeException(exception);
+        } finally {
+            transactionContexts.peek().fireCompensationHandlers();
         }
     }
 

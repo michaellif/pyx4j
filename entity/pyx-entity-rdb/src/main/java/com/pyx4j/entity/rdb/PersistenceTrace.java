@@ -20,9 +20,12 @@
  */
 package com.pyx4j.entity.rdb;
 
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 
+import com.pyx4j.commons.TimeUtils;
 import com.pyx4j.config.server.Trace;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.server.Persistence;
@@ -69,6 +72,14 @@ public final class PersistenceTrace {
 
     public static String getCallOrigin() {
         return Trace.getCallOrigin(EntityPersistenceServiceRDB.class, UnitOfWork.class, Persistence.class);
+    }
+
+    public static String traceTime(long startTime) {
+        if (startTime > 0) {
+            return new SimpleDateFormat("yyyy-MM-dd HH:mm:ss:SSS").format(new Date(startTime)) + " (" + TimeUtils.secSince(startTime) + ")";
+        } else {
+            return "n/a";
+        }
     }
 
 }

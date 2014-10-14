@@ -177,6 +177,8 @@ class TransactionContext {
             }
 
             compensationHandlers.clear();
+        } else if (PersistenceTrace.traceTransaction) {
+            log.info("has no CompensationHandlers to fire");
         }
     }
 

@@ -4,7 +4,7 @@
 <configuration debug="false">
 
     <property name="logs-name" value="test-logs" />
-    <property name="logs-dir" value="./target" />
+    <property name="logs-dir" value="./target/logs" />
 
     <conversionRule conversionWord="message" converterClass="com.pyx4j.logback.IStringViewMessageConverter" />
 
