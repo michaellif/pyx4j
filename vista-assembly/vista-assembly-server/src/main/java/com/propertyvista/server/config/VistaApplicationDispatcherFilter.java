@@ -54,7 +54,13 @@ public class VistaApplicationDispatcherFilter implements Filter {
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
         if (ServerSideConfiguration.instance(AbstractVistaServerSideConfiguration.class).isDepoymentHttps()) {
             if (isHttpsRedirectionNeeded(request)) {
-                ((HttpServletResponse) response).sendRedirect(getHttpsUrl(((HttpServletRequest) request).getRequestURL()));
+
+                HttpServletRequest httpRequest = (HttpServletRequest) request;
+                String uri = httpRequest.getScheme() + "://" + httpRequest.getServerName() + httpRequest.getRequestURI()
+                        + (httpRequest.getQueryString() != null ? "?" + httpRequest.getQueryString() : "");
+
+                String httpsUrl = getHttpsUrl(new StringBuffer(uri));
+                ((HttpServletResponse) response).sendRedirect(httpsUrl);
                 return;
             }
         }
@@ -88,16 +94,20 @@ public class VistaApplicationDispatcherFilter implements Filter {
 
         VistaApplication app = getAppByRequest(httprequest);
 
-        if (app != null) {
+        if (app == null) {
+            log.info("***ADF*** NOT forwarding");
+            chain.doFilter(request, response);
+        } else if (app == VistaApplication.prospect && isRootAppRequest(httprequest)) {
+            String urlForward = getNewURLRequest(httprequest, app);
+            ((HttpServletResponse) response).sendRedirect(urlForward);
+            return;
+        } else {
             httprequest.setAttribute(VistaApplication.class.getName(), app);
             String forwardedPath = getPathToForwarded(httprequest, app);
             httprequest.setAttribute(ServletUtils.x_forwarded_path, forwardedPath);
             String urlForward = getNewURLRequest(httprequest, app);
             log.info("***ADF*** \"{}\" forwarding to \"{}\" ", requestUri, urlForward);
             request.getRequestDispatcher(urlForward).forward(request, response);
-        } else {
-            log.info("***ADF*** NOT forwarding");
-            chain.doFilter(request, response);
         }
 
     }
@@ -126,7 +136,8 @@ public class VistaApplicationDispatcherFilter implements Filter {
      */
     private boolean isRootAppRequest(HttpServletRequest request) {
         String servletPath = request.getServletPath();
-        if (servletPath.equals("") || servletPath.equals("/") || (servletPath.equals("/prospect") && (getAppByRequest(request) == VistaApplication.prospect))) {
+        if (servletPath.equals("") || servletPath.equals("/")
+                || (servletPath.equals("/" + VistaApplication.prospect) && (getAppByRequest(request) == VistaApplication.prospect))) {
             return true;
         }
         return false;
@@ -158,7 +169,7 @@ public class VistaApplicationDispatcherFilter implements Filter {
     }
 
     private String getPathToForwarded(HttpServletRequest httprequest, VistaApplication app) {
-        // TODO what if ApplicationType = development?
+        // TODO what if ApplicationType = noApp?
         if (app != VistaApplication.prospect) {
             return "/" + app.name();
         } else {
@@ -182,6 +193,11 @@ public class VistaApplicationDispatcherFilter implements Filter {
         }
 
         subRequestPath += requestPath;
+
+        // Hack in case of first request to Prospect app (default behavior reading directories different in tomcat than jetty)
+        if (app == VistaApplication.prospect && requestPath.equalsIgnoreCase("/" + VistaApplication.prospect.name())) {
+            subRequestPath += "/";
+        }
 
         String newUri = subRequestPath;
 

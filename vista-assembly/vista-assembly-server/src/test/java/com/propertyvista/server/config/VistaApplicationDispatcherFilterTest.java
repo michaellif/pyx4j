@@ -68,37 +68,43 @@ public class VistaApplicationDispatcherFilterTest extends TestCase {
     @Test
     public final void testHttpsRedirections() throws IOException, ServletException {
         // Onboarding
-        testRedirect("http://onboarding.dev.birchwoodsoftwaregroup.com:8888/", true);
-        testRedirect("https://onboarding.dev.birchwoodsoftwaregroup.com:8888/", false);
+        testHttpsRedirect("http://onboarding.dev.birchwoodsoftwaregroup.com:8888/", true);
+        testHttpsRedirect("https://onboarding.dev.birchwoodsoftwaregroup.com:8888/", false);
 
         // Operations
-        testRedirect("http://operations.dev.birchwoodsoftwaregroup.com:8888/", true);
-        testRedirect("https://operations.dev.birchwoodsoftwaregroup.com:8888/", false);
+        testHttpsRedirect("http://operations.dev.birchwoodsoftwaregroup.com:8888/", true);
+        testHttpsRedirect("https://operations.dev.birchwoodsoftwaregroup.com:8888/", false);
 
         // DB Reset
-        testRedirect("http://static.dev.birchwoodsoftwaregroup.com:8888/o/db-reset", false);
-        testRedirect("https://static.dev.birchwoodsoftwaregroup.com:8888/o/db-reset", false);
+        testHttpsRedirect("http://static.dev.birchwoodsoftwaregroup.com:8888/o/db-reset", false);
+        testHttpsRedirect("https://static.dev.birchwoodsoftwaregroup.com:8888/o/db-reset", false);
 
         // SITE
-        testRedirect("http://vista-site.dev.birchwoodsoftwaregroup.com:8888/", false);
-        testRedirect("http://vista-site.dev.birchwoodsoftwaregroup.com:8888/", false);
+        testHttpsRedirect("http://vista-site.dev.birchwoodsoftwaregroup.com:8888/", false);
+        testHttpsRedirect("http://vista-site.dev.birchwoodsoftwaregroup.com:8888/", false);
 
         // CRM
-        testRedirect("http://vista-crm.dev.birchwoodsoftwaregroup.com:8888/", true);
-        testRedirect("https://vista-crm.dev.birchwoodsoftwaregroup.com:8888/", false);
-        testRedirect("http://vista-crm.dev.birchwoodsoftwaregroup.com:8888/dashboard/", true);
+        testHttpsRedirect("http://vista-crm.dev.birchwoodsoftwaregroup.com:8888/", true);
+        testHttpsRedirect("https://vista-crm.dev.birchwoodsoftwaregroup.com:8888/", false);
+        testHttpsRedirect("http://vista-crm.dev.birchwoodsoftwaregroup.com/#dashboard/view?Id=-1", true);
 
         // Resident
-        testRedirect("http://vista-portal.dev.birchwoodsoftwaregroup.com:8888/", true);
-        testRedirect("https://vista-portal.dev.birchwoodsoftwaregroup.com:8888/", false);
+        testHttpsRedirect("http://vista-portal.dev.birchwoodsoftwaregroup.com:8888/", true);
+        testHttpsRedirect("https://vista-portal.dev.birchwoodsoftwaregroup.com:8888/", false);
 
         // Prospect
-        testRedirect("http://vista-portal.dev.birchwoodsoftwaregroup.com:8888/prospect", true);
-        testRedirect("https://vista-portal.dev.birchwoodsoftwaregroup.com:8888/prospect", false);
+        testHttpsRedirect("http://vista-portal.dev.birchwoodsoftwaregroup.com:8888/prospect", true);
+        testHttpsRedirect("https://vista-portal.dev.birchwoodsoftwaregroup.com:8888/prospect", false);
+
+        // Gondor crm
+        testHttpsRedirect("http://gondor-crm-99.devpv.com/", true);
+        testHttpsRedirect("https://gondor-crm-99.devpv.com/", false);
+
     }
 
     /**
-     * Test well format URL. Should do forward in all cases.
+     * Test mappings for URL request. In case of first request to Prospect application without "/" at the end, it should redirect to client instead of
+     * forwarding.
      *
      * @throws IOException
      * @throws ServletException
@@ -133,7 +139,8 @@ public class VistaApplicationDispatcherFilterTest extends TestCase {
         testForward("http://vista-portal.dev.birchwoodsoftwaregroup.com:8888/", VistaApplication.resident);
 
         // Prospect
-        testForward("http://vista-portal.dev.birchwoodsoftwaregroup.com:8888/prospect", VistaApplication.prospect);
+        testRedirect("http://vista-portal.dev.birchwoodsoftwaregroup.com:8888/prospect", encloseSlash(VistaApplication.prospect.name()));
+        testForward("http://vista-portal.dev.birchwoodsoftwaregroup.com:8888/prospect/", VistaApplication.prospect);
 
         // **************************************************************
         //                       TEST ENVIRONMENTS
@@ -166,7 +173,9 @@ public class VistaApplicationDispatcherFilterTest extends TestCase {
         testForward("https://vista-portal-22.birchwoodsoftwaregroup.com/", VistaApplication.resident);
 
         // Prospect
-        testForward("https://vista-portal-22.birchwoodsoftwaregroup.com/prospect", VistaApplication.prospect);
+        testRedirect("https://vista-portal-22.birchwoodsoftwaregroup.com/prospect", encloseSlash(VistaApplication.prospect.name()));
+        testForward("https://vista-portal-99.devpv.com/prospect/", VistaApplication.prospect);
+        testRedirect("https://vista-portal-99.devpv.com/prospect", encloseSlash(VistaApplication.prospect.name()));
 
     }
 
@@ -190,7 +199,27 @@ public class VistaApplicationDispatcherFilterTest extends TestCase {
 
     }
 
-    protected void testRedirect(String url, boolean redirectExpected) throws IOException, ServletException {
+    protected void testRedirect(String url, String urlRedirection) throws IOException, ServletException {
+        req = new MockHttpServletRequest(url);
+        resp = new MockHttpServletResponse();
+        mockChain.setExpectedInvocation(false);
+
+        filterUnderTest.map(req, resp, mockChain);
+
+        Assert.assertTrue("Expected redirection from '" + url + "' to " + urlRedirection + "'", resp.getRedirectUrl().equalsIgnoreCase(urlRedirection));
+    }
+
+    /**
+     * Tests if a redirection to https should be done
+     *
+     * @param url
+     *            the url to test
+     * @param redirectExpected
+     *            if redirection to https protocol is expected
+     * @throws IOException
+     * @throws ServletException
+     */
+    protected void testHttpsRedirect(String url, boolean redirectExpected) throws IOException, ServletException {
         req = new MockHttpServletRequest(url);
         resp = new MockHttpServletResponse();
 
@@ -260,6 +289,10 @@ public class VistaApplicationDispatcherFilterTest extends TestCase {
             Assert.assertTrue("Wrong forwarded URL for application '" + app + "'. Forward URL is '" + ((MockHttpServletRequestFilter) req).getForwardUrl()
                     + "' and expected URL is '" + targetUrl + "'", ((MockHttpServletRequestFilter) req).getForwardUrl().startsWith(targetUrl));
         }
+    }
+
+    protected String encloseSlash(String url) {
+        return "/" + url + "/";
     }
 
 }
