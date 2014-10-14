@@ -19,6 +19,7 @@ import java.util.Map;
 import java.util.Set;
 
 import com.google.gwt.dom.client.Style.Float;
+import com.google.gwt.dom.client.Style.FontWeight;
 import com.google.gwt.dom.client.Style.Position;
 import com.google.gwt.dom.client.Style.TextAlign;
 import com.google.gwt.dom.client.Style.Unit;
@@ -231,6 +232,7 @@ public abstract class CounterGadgetInstanceBase<Data extends IEntity, Query, Gad
         detailsTitle.getElement().getStyle().setFloat(Float.LEFT);
         detailsTitle.getElement().getStyle().setWidth(100, Unit.PCT);
         detailsTitle.getElement().getStyle().setTextAlign(TextAlign.CENTER);
+        detailsTitle.getElement().getStyle().setFontWeight(FontWeight.BOLD);
 
         detailsTitlePanel.add(detailsTitle);
 
