@@ -345,22 +345,22 @@ public class CrmTheme extends VistaTheme {
         Style style = new Style(Selector.valueOf(prefix));
         addStyle(style);
 
-        style = new Style(Selector.valueOf(prefix, AbstractDashboard.StyleSuffix.filtersDescription));
+        style = new Style("." + prefix + AbstractDashboard.StyleSuffix.actionsPanel);
+        style.addGradient(ThemeColor.foreground, 0.1, ThemeColor.foreground, 0.3);
+        style.addProperty("color", ThemeColor.foreground);
+        style.addProperty("padding", "4px");
+        addStyle(style);
+
+        style = new Style("." + prefix + AbstractDashboard.StyleSuffix.filtersDescription);
         style.addProperty("color", ThemeColor.foreground, 0.95);
         style.addProperty("font-weight", "bold");
         style.addProperty("font-size", "1.1em");
+        style.addProperty("margin-top", "5px");
+        style.addProperty("float", "left");
         addStyle(style);
 
-        style = new Style(Selector.valueOf(prefix, AbstractDashboard.StyleSuffix.filtersPanel));
-        style.addGradient(ThemeColor.foreground, 0.1, ThemeColor.foreground, 0.3);
-        style.addProperty("color", ThemeColor.foreground);
-        style.addProperty("border-bottom", "1px solid #ccc");
-        addStyle(style);
-
-        style = new Style(Selector.valueOf(prefix, AbstractDashboard.StyleSuffix.actionsPanel));
-        style.addGradient(ThemeColor.foreground, 0.1, ThemeColor.foreground, 0.3);
-        style.addProperty("color", ThemeColor.foreground);
-        style.addProperty("margin-bottom", "0.2em");
+        style = new Style("." + prefix + AbstractDashboard.StyleSuffix.filtersButtons);
+        style.addProperty("float", "right");
         addStyle(style);
     }
 

@@ -59,7 +59,7 @@ final class BuildingsSelectionToolbar extends Composite implements IBuildingFilt
 
     private Button allBuilidngsButton;
 
-    private Button chooseBuildingsButton;
+    private Button selectBuildingsButton;
 
     private final IPane parentView;
 
@@ -70,18 +70,14 @@ final class BuildingsSelectionToolbar extends Composite implements IBuildingFilt
 
         bar = new FlowPanel();
         bar.setStyleName(AbstractDashboard.DEFAULT_STYLE_PREFIX + AbstractDashboard.StyleSuffix.actionsPanel);
-        bar.getElement().getStyle().setProperty("padding", "4px 4px 0 8px");
-        bar.setHeight("100%");
 
         buildingsView = new HTML("");
         buildingsView.setStyleName(AbstractDashboard.DEFAULT_STYLE_PREFIX + AbstractDashboard.StyleSuffix.filtersDescription);
-        buildingsView.getElement().getStyle().setFloat(Float.LEFT);
-
         bar.add(buildingsView);
 
         FlowPanel buttons = new FlowPanel();
-        buttons.getElement().getStyle().setFloat(Float.RIGHT);
-        buttons.add(chooseBuildingsButton = new Button("", new Command() {
+        buttons.setStyleName(AbstractDashboard.DEFAULT_STYLE_PREFIX + AbstractDashboard.StyleSuffix.filtersButtons);
+        buttons.add(selectBuildingsButton = new Button("", new Command() {
             @Override
             public void execute() {
                 selectBuildings();
@@ -95,7 +91,7 @@ final class BuildingsSelectionToolbar extends Composite implements IBuildingFilt
         }));
         for (Widget w : buttons) {
             w.getElement().getStyle().setFloat(Float.LEFT);
-            w.getElement().getStyle().setMarginLeft(10, Unit.PX);
+            w.getElement().getStyle().setMarginLeft(4, Unit.PX);
         }
         bar.add(buttons);
 
@@ -160,7 +156,7 @@ final class BuildingsSelectionToolbar extends Composite implements IBuildingFilt
         buildingsView.setHTML(buildingsLabel.toSafeHtml());
 
         allBuilidngsButton.setVisible(!buildings.isEmpty());
-        chooseBuildingsButton.setCaption(!buildings.isEmpty() ? i18n.tr("Add...") : i18n.tr("Filter..."));
+        selectBuildingsButton.setCaption(!buildings.isEmpty() ? i18n.tr("Add...") : i18n.tr("Filter..."));
 
         // notify interested entities
         eventBus.fireEvent(new BuildingSelectionChangedEvent(getSelectedBuildingsStubs()));

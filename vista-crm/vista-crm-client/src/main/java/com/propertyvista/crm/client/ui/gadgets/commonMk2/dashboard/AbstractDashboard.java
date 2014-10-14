@@ -62,7 +62,7 @@ public abstract class AbstractDashboard extends ResizeComposite {
     public static String DEFAULT_STYLE_PREFIX = "vista_DashboardView";
 
     public enum StyleSuffix implements IStyleName {
-        filtersDescription, filtersPanel, actionsPanel;
+        filtersDescription, filtersButtons, actionsPanel;
     }
 
     private static final I18n i18n = I18n.get(AbstractDashboard.class);
