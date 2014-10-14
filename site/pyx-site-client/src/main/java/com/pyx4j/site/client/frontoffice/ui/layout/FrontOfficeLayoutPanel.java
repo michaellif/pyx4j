@@ -38,7 +38,6 @@ import com.pyx4j.gwt.commons.BrowserType;
 import com.pyx4j.gwt.commons.layout.LayoutChangeRequestEvent;
 import com.pyx4j.gwt.commons.layout.LayoutType;
 import com.pyx4j.site.client.AppSite;
-import com.pyx4j.site.client.DisplayPanel;
 import com.pyx4j.site.client.frontoffice.ui.FrontOfficeDevConsole;
 import com.pyx4j.site.client.ui.layout.OverlayExtraHolder;
 import com.pyx4j.site.client.ui.layout.ResponsiveLayoutPanel;
@@ -55,6 +54,8 @@ public class FrontOfficeLayoutPanel extends ResponsiveLayoutPanel {
     }
 
     private final FlowPanel pageHolder;
+
+    private final SimplePanel headerHolder;
 
     private final InlineToolbarHolder inlineToolbarHolder;
 
@@ -93,16 +94,21 @@ public class FrontOfficeLayoutPanel extends ResponsiveLayoutPanel {
         pagePanel = new FlowPanel();
         pagePanel.setStyleName(FrontOfficeLayoutTheme.StyleName.ResponsiveLayoutMainHolder.name());
 
+        headerHolder = new SimplePanel(getDisplay(DisplayType.header));
+        headerHolder.setStyleName(FrontOfficeLayoutTheme.StyleName.ResponsiveLayoutHeaderHolder.name());
+
         pageScroll = new ScrollPanel(pagePanel);
         pageScroll.addScrollHandler(new ScrollHandler() {
 
             @Override
             public void onScroll(ScrollEvent event) {
-                DisplayPanel headerDisplay = getDisplay(DisplayType.header);
-                if (pageScroll.getVerticalScrollPosition() <= headerDisplay.getOffsetHeight()) {
-                    headerDisplay.getElement().getStyle().setOpacity(1 - (double) pageScroll.getVerticalScrollPosition() / headerDisplay.getOffsetHeight());
+                if (pageScroll.getVerticalScrollPosition() <= headerHolder.getOffsetHeight()) {
+                    headerHolder.getElement().getStyle()
+                            .setOpacity(1 - Math.pow((double) pageScroll.getVerticalScrollPosition() / headerHolder.getOffsetHeight(), 4));
+                    headerHolder.getWidget().getElement().getStyle()
+                            .setProperty("transform", "translate(0px, " + pageScroll.getVerticalScrollPosition() / 2 + "px)");
                 } else {
-                    headerDisplay.getElement().getStyle().setOpacity(1);
+                    headerHolder.getElement().getStyle().setOpacity(1);
                 }
             }
         });
@@ -156,7 +162,7 @@ public class FrontOfficeLayoutPanel extends ResponsiveLayoutPanel {
         getDisplay(DisplayType.footer).getElement().getStyle().setProperty("maxWidth", MAX_WIDTH + "px");
         getDisplay(DisplayType.footer).addStyleName(HorizontalAlignCenterMixin.StyleName.HorizontalAlignCenter.name());
 
-        pagePanel.add(getDisplay(DisplayType.header));
+        pagePanel.add(headerHolder);
         pagePanel.add(inlineToolbarHolder);
         pagePanel.add(centerPanel);
         pagePanel.add(footerHolder);
@@ -211,14 +217,14 @@ public class FrontOfficeLayoutPanel extends ResponsiveLayoutPanel {
         case phoneLandscape:
             sideMenuHolder.setDisplay(getDisplay(DisplayType.menu));
             sideCommHolder.setDisplay(getDisplay(DisplayType.communication));
-            getDisplay(DisplayType.header).setVisible(false);
+            headerHolder.setVisible(false);
             break;
         default:
             setSideMenuVisible(false);
             setSideCommVisible(false);
             inlineMenuHolder.setMenuDisplay(getDisplay(DisplayType.menu));
             popupCommHolder.setWidget(getDisplay(DisplayType.communication));
-            getDisplay(DisplayType.header).setVisible(true);
+            headerHolder.setVisible(true);
             break;
         }
 
@@ -378,8 +384,8 @@ public class FrontOfficeLayoutPanel extends ResponsiveLayoutPanel {
     }
 
     public void scrollToTop(int originalSchrollPosition) {
-        if (originalSchrollPosition >= getDisplay(DisplayType.header).getOffsetHeight()) {
-            pageScroll.setVerticalScrollPosition(getDisplay(DisplayType.header).getOffsetHeight());
+        if (originalSchrollPosition >= headerHolder.getOffsetHeight()) {
+            pageScroll.setVerticalScrollPosition(headerHolder.getOffsetHeight());
         }
     }
 

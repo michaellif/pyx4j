@@ -28,7 +28,7 @@ import com.pyx4j.site.client.ui.layout.ResponsiveLayoutTheme;
 public class FrontOfficeLayoutTheme extends ResponsiveLayoutTheme {
 
     public static enum StyleName implements IStyleName {
-        ResponsiveLayoutMainHolder, ResponsiveLayoutStickyToolbarHolder, ResponsiveLayoutInlineToolbarHolder, ResponsiveLayoutStickyMessageHolder,
+        ResponsiveLayoutMainHolder, ResponsiveLayoutHeaderHolder, ResponsiveLayoutStickyToolbarHolder, ResponsiveLayoutInlineToolbarHolder, ResponsiveLayoutStickyMessageHolder,
 
         ResponsiveLayoutFooterHolder, ResponsiveLayoutContentHolder, ResponsiveLayoutContentBackground,
 
@@ -72,6 +72,10 @@ public class FrontOfficeLayoutTheme extends ResponsiveLayoutTheme {
 
         Style style = new Style(".", StyleName.ResponsiveLayoutMainHolder);
         style.addProperty("min-width", "320px");
+        addStyle(style);
+
+        style = new Style(".", StyleName.ResponsiveLayoutHeaderHolder);
+        style.addProperty("overflow", "hidden");
         addStyle(style);
 
         style = new Style(".", StyleName.ResponsiveLayoutInlineToolbarHolder);

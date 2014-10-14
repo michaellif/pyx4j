@@ -42,7 +42,9 @@ public enum ThemeColor {
 
     background("#FFFFFF"),
 
-    foreground("#000000");
+    foreground("#000000"),
+
+    info("#000000");
 
     private String defaultColor;
 
