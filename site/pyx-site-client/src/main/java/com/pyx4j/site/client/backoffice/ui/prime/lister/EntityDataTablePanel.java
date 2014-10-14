@@ -44,11 +44,12 @@ import com.pyx4j.entity.core.criterion.EntityListCriteria;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.entity.core.criterion.PropertyCriterion;
 import com.pyx4j.entity.rpc.EntitySearchResult;
+import com.pyx4j.forms.client.ui.IEditableComponentFactory;
 import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.forms.client.ui.datatable.DataTable;
-import com.pyx4j.forms.client.ui.datatable.DataTableModel;
 import com.pyx4j.forms.client.ui.datatable.DataTable.ItemZoomInCommand;
 import com.pyx4j.forms.client.ui.datatable.DataTable.SortChangeHandler;
+import com.pyx4j.forms.client.ui.datatable.DataTableModel;
 import com.pyx4j.forms.client.ui.datatable.DataTablePanel;
 import com.pyx4j.forms.client.ui.datatable.criteria.ICriteriaForm;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
@@ -300,6 +301,10 @@ public class EntityDataTablePanel<E extends IEntity> extends ScrollPanel {
 
     public void resetFilters() {
         setFilters(getDefaultFilters());
+    }
+
+    public void setFilterComponentFactory(IEditableComponentFactory compFactory) {
+        getDataTablePanel().setFilterComponentFactory(compFactory);
     }
 
     /**

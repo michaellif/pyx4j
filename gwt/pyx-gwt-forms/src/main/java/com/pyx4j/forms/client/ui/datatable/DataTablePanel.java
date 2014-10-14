@@ -34,10 +34,12 @@ import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.criterion.Criterion;
 import com.pyx4j.entity.core.meta.EntityMeta;
 import com.pyx4j.forms.client.images.FolderImages;
+import com.pyx4j.forms.client.ui.IEditableComponentFactory;
 import com.pyx4j.forms.client.ui.datatable.DataTable.ItemSelectionHandler;
 import com.pyx4j.forms.client.ui.datatable.DataTable.ItemZoomInCommand;
 import com.pyx4j.forms.client.ui.datatable.criteria.DataTableCriteriaPanel;
 import com.pyx4j.forms.client.ui.datatable.criteria.ICriteriaForm;
+import com.pyx4j.forms.client.ui.datatable.filter.CriteriaEditableComponentFactory;
 import com.pyx4j.forms.client.ui.datatable.filter.DataTableFilterItem;
 import com.pyx4j.forms.client.ui.datatable.filter.DataTableFilterPanel;
 import com.pyx4j.i18n.shared.I18n;
@@ -61,6 +63,8 @@ public class DataTablePanel<E extends IEntity> extends FlowPanel implements Requ
     private DataTableCriteriaPanel<E> criteriaPanel;
 
     private final DataTableFilterPanel<E> filterPanel;
+
+    private IEditableComponentFactory compFactory = new CriteriaEditableComponentFactory();
 
     private WidgetsImages images;
 
@@ -142,6 +146,14 @@ public class DataTablePanel<E extends IEntity> extends FlowPanel implements Requ
 
     public E proto() {
         return entityPrototype;
+    }
+
+    public void setFilterComponentFactory(IEditableComponentFactory compFactory) {
+        this.compFactory = compFactory;
+    }
+
+    public IEditableComponentFactory getFilterComponentFactory() {
+        return compFactory;
     }
 
     public void setAddActionCommand(Command addActionCommand) {

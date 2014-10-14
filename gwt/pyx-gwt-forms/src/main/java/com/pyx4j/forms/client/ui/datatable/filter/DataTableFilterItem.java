@@ -53,7 +53,6 @@ import com.pyx4j.forms.client.images.FolderImages;
 import com.pyx4j.forms.client.ui.CComboBox;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CComponentTheme;
-import com.pyx4j.forms.client.ui.IEditableComponentFactory;
 import com.pyx4j.forms.client.ui.INativeField;
 import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.forms.client.ui.datatable.DataTableTheme;
@@ -78,8 +77,6 @@ public class DataTableFilterItem<E extends IEntity> extends FlowPanel {
     private DataTableFilterGrid<E> parent;
 
     private final HTML validationLabel;
-
-    private final IEditableComponentFactory compFactory = new CriteriaEditableComponentFactory();
 
     private class FieldData {
 
@@ -270,7 +267,7 @@ public class DataTableFilterItem<E extends IEntity> extends FlowPanel {
     private void setValueHolder(String valuePath, Serializable value) {
         IObject<?> member = parent.getDataTablePanel().proto().getMember(new Path(valuePath));
 
-        valueComponent = compFactory.create(member);
+        valueComponent = parent.getDataTablePanel().getFilterComponentFactory().create(member);
         valueComponent.asWidget().setWidth("100%");
         valueComponent.addPropertyChangeHandler(new PropertyChangeHandler() {
             @Override
