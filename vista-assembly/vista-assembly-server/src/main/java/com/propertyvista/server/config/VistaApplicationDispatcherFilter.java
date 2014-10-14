@@ -60,6 +60,7 @@ public class VistaApplicationDispatcherFilter implements Filter {
                         + (httpRequest.getQueryString() != null ? "?" + httpRequest.getQueryString() : "");
 
                 String httpsUrl = getHttpsUrl(new StringBuffer(uri));
+                log.info("***ADF*** NOT forwarding. Sending redirect from 'http' to 'https' to browser");
                 ((HttpServletResponse) response).sendRedirect(httpsUrl);
                 return;
             }
@@ -99,6 +100,7 @@ public class VistaApplicationDispatcherFilter implements Filter {
             chain.doFilter(request, response);
         } else if (app == VistaApplication.prospect && isRootAppRequest(httprequest)) {
             String urlForward = getNewURLRequest(httprequest, app);
+            log.info("***ADF*** NOT forwarding. Sending redirect from '/prospect' to '/prospect/' to browser");
             ((HttpServletResponse) response).sendRedirect(urlForward);
             return;
         } else {
