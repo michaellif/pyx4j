@@ -41,7 +41,7 @@ public abstract class TransactionTimeoutLongTestCase extends DatastoreTestBase {
 
     @Override
     protected void setUp() throws Exception {
-        TestsConnectionPoolConfiguration.overrideUnreturnedConnectionTimeout.set(Consts.MIN2SEC);
+        TestsConnectionPoolConfiguration.overrideUnreturnedConnectionTimeout.set(30);
         super.setUp();
         // Initialize table before tests for postgresql to work, TODO fix this
         srv.count(EntityQueryCriteria.create(Simple1.class));
