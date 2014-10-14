@@ -228,7 +228,7 @@ public class VistaApplicationDispatcherFilter implements Filter {
             try {
                 app = VistaApplication.valueOf(appByDomain);
             } catch (IllegalArgumentException e) {
-
+                // do nothing, app = null
             }
         }
 
