@@ -23,6 +23,7 @@ import com.propertyvista.misc.VistaDataPreloaderParameter;
 import com.propertyvista.misc.VistaDevPreloadConfig;
 import com.propertyvista.portal.server.preloader.site.demo.DemoSitePreloader;
 import com.propertyvista.portal.server.preloader.site.gondor.GondorSitePreloader;
+import com.propertyvista.portal.server.preloader.site.metcup.MetCapSitePreloader;
 import com.propertyvista.portal.server.preloader.site.prod.ProdSitePreloader;
 import com.propertyvista.portal.server.preloader.site.redridge.RedridgeSitePreloader;
 import com.propertyvista.portal.server.preloader.site.rockville.RockvilleSitePreloader;
@@ -68,6 +69,7 @@ public class VistaDataPreloaders extends DataPreloaderCollection {
         } else {
             switch (demoPmc) {
             case vista:
+                //add(new MetCapSitePreloader());
                 add(new VistaSitePreloader());
                 break;
             case star:
@@ -81,6 +83,9 @@ public class VistaDataPreloaders extends DataPreloaderCollection {
                 break;
             case gondor:
                 add(new GondorSitePreloader());
+                break;
+            case metcap:
+                add(new MetCapSitePreloader());
                 break;
             case demo:
                 add(new DemoSitePreloader());
