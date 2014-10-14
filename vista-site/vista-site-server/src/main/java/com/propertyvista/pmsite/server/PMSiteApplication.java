@@ -364,7 +364,11 @@ public class PMSiteApplication extends AuthenticatedWebApplication {
                     if (urlStr.startsWith(pathBase)) {
                         pathBase = "";
                     }
-                    return ServletUtils.getRelativeServletPath(httpRequest, pathBase + urlStr);
+                    String urlPath = ServletUtils.getRelativeServletPath(httpRequest, pathBase + urlStr);
+                    String urlBase = VistaDeployment.getBaseApplicationURL(VistaApplication.site, httpRequest.isSecure());
+                    // strip off the path portion
+                    urlBase = urlBase.substring(0, urlBase.indexOf('/', 8));
+                    return urlBase + urlPath;
                 }
             }
         };
