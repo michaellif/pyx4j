@@ -100,7 +100,7 @@ public class ProductTaxPolicyForm extends PolicyDTOTabPanelBasedForm<ProductTaxP
                 get(proto().productCode()).setViewable(true);
 
                 formPanel.h3(proto().taxes().getMeta().getCaption());
-                formPanel.append(Location.Left, proto().taxes(), new TaxFolder(ProductTaxPolicyForm.this));
+                formPanel.append(Location.Dual, proto().taxes(), new TaxFolder(ProductTaxPolicyForm.this));
 
                 return formPanel;
             }

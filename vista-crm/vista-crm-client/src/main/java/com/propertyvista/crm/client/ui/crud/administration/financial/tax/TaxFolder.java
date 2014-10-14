@@ -19,6 +19,7 @@ import java.util.HashSet;
 import java.util.List;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.entity.core.IObject;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
@@ -26,42 +27,47 @@ import com.pyx4j.entity.rpc.AbstractListCrudService;
 import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
-import com.pyx4j.forms.client.ui.folder.CFolderRowEditor;
+import com.pyx4j.forms.client.ui.folder.BoxFolderDecorator;
+import com.pyx4j.forms.client.ui.folder.BoxFolderItemDecorator;
+import com.pyx4j.forms.client.ui.folder.CFolder;
 import com.pyx4j.forms.client.ui.folder.FolderColumnDescriptor;
+import com.pyx4j.forms.client.ui.folder.IFolderDecorator;
+import com.pyx4j.forms.client.ui.folder.IFolderItemDecorator;
+import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
+import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.backoffice.activity.EntitySelectorTableVisorController;
 import com.pyx4j.site.client.backoffice.ui.IPane;
 
-import com.propertyvista.common.client.ui.components.folders.VistaTableFolder;
+import com.propertyvista.common.client.resources.VistaImages;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.crm.rpc.services.selections.SelectTaxListService;
 import com.propertyvista.domain.financial.tax.Tax;
 
-public class TaxFolder extends VistaTableFolder<Tax> {
+public class TaxFolder extends CFolder<Tax> {
 
     private static final I18n i18n = I18n.get(TaxFolder.class);
 
     private final CrmEntityForm<?> parentForm;
 
     public TaxFolder(CrmEntityForm<?> parentForm) {
-        super(Tax.class, parentForm.isEditable());
+        super(Tax.class);
         this.parentForm = parentForm;
     }
 
-    @Override
     public List<FolderColumnDescriptor> columns() {
         List<FolderColumnDescriptor> columns;
         columns = new ArrayList<FolderColumnDescriptor>();
-        columns.add(new FolderColumnDescriptor(proto().authority(), "10em"));
-        columns.add(new FolderColumnDescriptor(proto().name(), "20em"));
-        columns.add(new FolderColumnDescriptor(proto().rate(), "7em"));
-        columns.add(new FolderColumnDescriptor(proto().compound(), "7em"));
+        columns.add(new FolderColumnDescriptor(proto().authority(), "8em"));
+        columns.add(new FolderColumnDescriptor(proto().name(), "10em"));
+        columns.add(new FolderColumnDescriptor(proto().rate(), "6em"));
+        columns.add(new FolderColumnDescriptor(proto().compound(), "5em"));
         return columns;
     }
 
     @Override
     protected CForm<Tax> createItemForm(IObject<?> member) {
-        return new ChargeCodeTaxEditor();
+        return new TaxInfoEditor();
     }
 
     @Override
@@ -69,11 +75,26 @@ public class TaxFolder extends VistaTableFolder<Tax> {
         new TaxSelectorDialog(parentForm.getParentView()).show();
     }
 
-    private class ChargeCodeTaxEditor extends CFolderRowEditor<Tax> {
+    private class TaxInfoEditor extends CForm<Tax> {
 
-        public ChargeCodeTaxEditor() {
-            super(Tax.class, columns());
-            setViewable(true);
+        public TaxInfoEditor() {
+            super(Tax.class);
+
+        }
+
+        @Override
+        protected IsWidget createContent() {
+            FormPanel formPanel = new FormPanel(this);
+            formPanel.append(Location.Left, proto().authority()).decorate();
+            formPanel.append(Location.Right, proto().name()).decorate();
+            formPanel.append(Location.Left, proto().rate()).decorate();
+            formPanel.append(Location.Right, proto().compound()).decorate();
+
+            get(proto().authority()).setViewable(true);
+            get(proto().name()).setViewable(true);
+            get(proto().rate()).setViewable(true);
+            get(proto().compound()).setViewable(true);
+            return formPanel;
         }
 
     }
@@ -111,5 +132,17 @@ public class TaxFolder extends VistaTableFolder<Tax> {
             return GWT.<AbstractListCrudService<Tax>> create(SelectTaxListService.class);
         }
 
+    }
+
+    @Override
+    protected IFolderItemDecorator<Tax> createItemDecorator() {
+        BoxFolderItemDecorator<Tax> itemDecorator = new BoxFolderItemDecorator<Tax>(VistaImages.INSTANCE);
+        itemDecorator.setExpended(false);
+        return itemDecorator;
+    }
+
+    @Override
+    protected IFolderDecorator<Tax> createFolderDecorator() {
+        return new BoxFolderDecorator<Tax>(VistaImages.INSTANCE, "", true);
     }
 }
