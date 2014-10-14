@@ -363,20 +363,27 @@ public class PersistenceContext {
         transactionContexts.peek().commit(connection, getDialect());
         if (isDirectTransactionControl()) {
             if (connection != null) {
+                boolean ok = false;
                 try {
                     connection.commit();
                     transactionStart = -1;
                     transactionUncommittedChangesStart = -1;
+                    ok = true;
                 } catch (SQLException e) {
                     if (connectionProvider.getDialect().isIntegrityConstraintException(e)) {
                         throw new IntegrityConstraintUserRuntimeException(i18n.tr("Unable to update/delete record referenced by another records."), null);
                     } else {
                         throw new RuntimeException(e);
                     }
+                } finally {
+                    if (!ok) {
+                        log.error("commit failed");
+                    }
                 }
             }
             transactionContexts.peek().fireCompletionHandlers();
         }
+        transactionContexts.peek().commitWasSuccessful();
         timeNow = null;
     }
 
@@ -402,7 +409,6 @@ public class PersistenceContext {
                     if (!ok) {
                         log.error("rollback failed");
                     }
-
                 }
             }
         } finally {
@@ -463,6 +469,11 @@ public class PersistenceContext {
         } else {
             log.info("*** traceOpenSession compiled out");
         }
+    }
+
+    @Override
+    public String toString() {
+        return transactionType + " " + txId() + " " + super.toString();
     }
 
 }

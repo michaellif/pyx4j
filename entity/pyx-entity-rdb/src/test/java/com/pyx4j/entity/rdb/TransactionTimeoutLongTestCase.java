@@ -41,10 +41,17 @@ public abstract class TransactionTimeoutLongTestCase extends DatastoreTestBase {
 
     @Override
     protected void setUp() throws Exception {
+        TestsConnectionPoolConfiguration.overrideUnreturnedConnectionTimeout.set(Consts.MIN2SEC);
         super.setUp();
         // Initialize table before tests for postgresql to work, TODO fix this
         srv.count(EntityQueryCriteria.create(Simple1.class));
         srv.count(EntityQueryCriteria.create(Simple2.class));
+    }
+
+    @Override
+    protected void tearDown() throws Exception {
+        TestsConnectionPoolConfiguration.overrideUnreturnedConnectionTimeout.remove();
+        super.tearDown();
     }
 
     public void testTransactionTimeoutOtherAutoCommit() throws InterruptedException {
@@ -83,18 +90,39 @@ public abstract class TransactionTimeoutLongTestCase extends DatastoreTestBase {
         assertNotExists(setId, "1.1");
     }
 
-    public void testUnitOfWorkTimeoutOtherAutoCommit() throws InterruptedException {
-        runUnitOfWorkTimeout(TransactionScopeOption.Suppress);
+    enum ErrorCondition {
+        MainFlow, Nested, Commit,
     }
 
-    public void testUnitOfWorkTimeoutOtherNoAutoCommit() throws InterruptedException {
-        runUnitOfWorkTimeout(TransactionScopeOption.RequiresNew);
+    public void testUnitOfWorkTimeoutOtherAutoCommitErrorInMainFlow() throws InterruptedException {
+        runUnitOfWorkTimeout(TransactionScopeOption.Suppress, ErrorCondition.MainFlow);
     }
 
-    private void runUnitOfWorkTimeout(TransactionScopeOption otherTransactionScopeOption) throws InterruptedException {
+    public void testUnitOfWorkTimeoutOtherAutoCommitErrorInNested() throws InterruptedException {
+        runUnitOfWorkTimeout(TransactionScopeOption.Suppress, ErrorCondition.Nested);
+    }
+
+    public void testUnitOfWorkTimeoutOtherAutoCommitErrorInCommit() throws InterruptedException {
+        runUnitOfWorkTimeout(TransactionScopeOption.Suppress, ErrorCondition.Commit);
+    }
+
+    public void testUnitOfWorkTimeoutOtherNoAutoCommitErrorInMainFlow() throws InterruptedException {
+        runUnitOfWorkTimeout(TransactionScopeOption.RequiresNew, ErrorCondition.MainFlow);
+    }
+
+    public void testUnitOfWorkTimeoutOtherNoAutoCommitErrorInNested() throws InterruptedException {
+        runUnitOfWorkTimeout(TransactionScopeOption.RequiresNew, ErrorCondition.Nested);
+    }
+
+    public void testUnitOfWorkTimeoutOtherNoAutoCommitErrorInCommit() throws InterruptedException {
+        runUnitOfWorkTimeout(TransactionScopeOption.RequiresNew, ErrorCondition.Commit);
+    }
+
+    private void runUnitOfWorkTimeout(TransactionScopeOption otherTransactionScopeOption, final ErrorCondition errorCondition) throws InterruptedException {
         final String setId = uniqueString();
         srv.endTransaction();
 
+        final int maxNested = 4;
         try {
             new UnitOfWork(TransactionScopeOption.RequiresNew, ConnectionTarget.Web).execute(new Executable<Void, RuntimeException>() {
 
@@ -106,19 +134,39 @@ public abstract class TransactionTimeoutLongTestCase extends DatastoreTestBase {
 
                         @Override
                         public Void execute() {
-                            System.out.println("*** CompensationHandler");
-                            srv.persist(createEntity2(setId, "Compensation-2.0"));
+                            srv.persist(createEntity2(setId, "Compensation-1.0"));
                             return null;
                         }
                     });
 
-                    for (int i = 0; i < 1; i++) {
+                    for (int i = 0; i < maxNested; i++) {
                         final int nextedId = i;
                         new UnitOfWork(TransactionScopeOption.Nested).execute(new Executable<Void, RuntimeException>() {
 
                             @Override
                             public Void execute() {
                                 srv.persist(createEntity(setId, "2." + nextedId));
+
+                                UnitOfWork.addTransactionCompensationHandler(new CompensationHandler() {
+
+                                    @Override
+                                    public Void execute() {
+                                        srv.persist(createEntity2(setId, "Compensation-2." + nextedId));
+                                        return null;
+                                    }
+                                });
+
+                                // Timeout error will happen here
+                                if ((errorCondition == ErrorCondition.Nested) && (nextedId == maxNested - 1)) {
+                                    try {
+                                        Thread.sleep(Consts.MIN2MSEC * 2);
+                                    } catch (InterruptedException e) {
+                                        throw new RuntimeException(e);
+                                    }
+
+                                    srv.persist(createEntity(setId, "2.x"));
+                                    Assert.fail("Should throw Exception");
+                                }
                                 return null;
                             }
                         });
@@ -131,11 +179,10 @@ public abstract class TransactionTimeoutLongTestCase extends DatastoreTestBase {
                     }
 
                     // Timeout error will happen here
-                    try {
+                    if (errorCondition == ErrorCondition.MainFlow) {
                         srv.persist(createEntity(setId, "1.1"));
 
                         Assert.fail("Should throw Exception");
-                    } catch (RuntimeException connectionDoesNotExistOk) {
                     }
 
                     return null;
@@ -146,11 +193,12 @@ public abstract class TransactionTimeoutLongTestCase extends DatastoreTestBase {
 
         makeManyCommits(otherTransactionScopeOption);
 
-        //TODO Verify CompensationHandler fired
-        //assertExists2(setId, "Compensation-2.0");
+        // Verify CompensationHandler fired
+        assertExists2(setId, "Compensation-1.0");
 
-        for (int i = 0; i < 7; i++) {
+        for (int i = 0; i < maxNested; i++) {
             assertNotExists(setId, "2." + i);
+            assertExists2(setId, "Compensation-2." + i);
         }
         assertNotExists(setId, "1.0");
         assertNotExists(setId, "1.1");

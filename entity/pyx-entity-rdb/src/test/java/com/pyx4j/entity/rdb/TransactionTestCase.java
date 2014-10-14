@@ -133,7 +133,34 @@ public abstract class TransactionTestCase extends DatastoreTestBase {
         assertTransactionNotPresent();
     }
 
-    public void testNestedTransactionRollback() {
+    public void testNestedTransactionSingleRollback() {
+        String setId = uniqueString();
+        srv.endTransaction();
+
+        // Tx1
+        srv.startTransaction(TransactionScopeOption.RequiresNew, ConnectionTarget.Web);
+        {
+            srv.persist(createEntity(setId, "1.0"));
+
+            // Tx2
+            srv.startTransaction(TransactionScopeOption.Nested, ConnectionTarget.Web);
+            {
+                srv.persist(createEntity(setId, "2.0"));
+                srv.commit();
+            }
+            srv.endTransaction();
+
+            srv.persist(createEntity(setId, "1.1"));
+            srv.rollback();
+        }
+        srv.endTransaction();
+
+        assertNotExists(setId, "1.0");
+        assertNotExists(setId, "1.1");
+        assertNotExists(setId, "2.0");
+    }
+
+    public void testNestedTransactionRollbacks() {
         String setId = uniqueString();
         Simple1 emp1 = createEntity(setId, "1.0");
 

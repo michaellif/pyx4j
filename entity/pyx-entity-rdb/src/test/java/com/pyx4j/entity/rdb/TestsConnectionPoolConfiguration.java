@@ -26,10 +26,15 @@ import com.pyx4j.entity.rdb.cfg.ConnectionPoolType;
 
 public class TestsConnectionPoolConfiguration extends ConnectionPoolConfiguration {
 
+    static final ThreadLocal<Integer> overrideUnreturnedConnectionTimeout = new ThreadLocal<Integer>();
+
     public TestsConnectionPoolConfiguration(ConnectionPoolType connectionType) {
         super(connectionType);
         minPoolSize = 1;
         maxPoolSize = 5;
+        if (overrideUnreturnedConnectionTimeout.get() != null) {
+            unreturnedConnectionTimeout = overrideUnreturnedConnectionTimeout.get();
+        }
         if (unreturnedConnectionTimeout != 0) {
             switch (connectionType) {
             case BackgroundProcess:

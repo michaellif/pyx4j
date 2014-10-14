@@ -217,6 +217,9 @@ class TransactionContext {
             }
         }
         uncommittedChanges = false;
+    }
+
+    public void commitWasSuccessful() {
         if (compensationHandlersCommited == null) {
             compensationHandlersCommited = compensationHandlers;
             compensationHandlers = null;
@@ -232,6 +235,11 @@ class TransactionContext {
             completionHandlersCommited.addAll(completionHandlers);
             completionHandlers.clear();
         }
+    }
+
+    @Override
+    public String toString() {
+        return savepointName + " " + super.toString();
     }
 
 }
