@@ -18,7 +18,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import com.google.gwt.dom.client.Style.Display;
 import com.google.gwt.dom.client.Style.Float;
 import com.google.gwt.dom.client.Style.Position;
 import com.google.gwt.dom.client.Style.TextAlign;
@@ -217,21 +216,18 @@ public abstract class CounterGadgetInstanceBase<Data extends IEntity, Query, Gad
         detailsTitlePanel.getElement().getStyle().setPosition(Position.RELATIVE);
         detailsTitlePanel.setWidth("100%");
 
-        Button returnButton = new Button(i18n.tr("return to summary"), new Command() {
+        Button returnButton = new Button(i18n.tr("Return to Summary"), new Command() {
             @Override
             public void execute() {
                 switchToDisplayMode(null);
             }
         });
-        returnButton.getElement().getStyle().setPosition(Position.ABSOLUTE);
-        returnButton.getElement().getStyle().setLeft(0, Unit.PX);
-        returnButton.getElement().getStyle().setWidth(150, Unit.PX);
-        returnButton.getElement().getStyle().setTop(0, Unit.PX);
+        returnButton.getElement().getStyle().setFloat(Float.RIGHT);
+        returnButton.getElement().getStyle().setMarginRight(0.5, Unit.EM);
         detailsTitlePanel.add(returnButton);
 
         detailsTitle = new HTML();
         detailsTitle.setStyleName(StyleNames.CounterGadgetCaption.name());
-        detailsTitle.getElement().getStyle().setDisplay(Display.INLINE);
         detailsTitle.getElement().getStyle().setFloat(Float.LEFT);
         detailsTitle.getElement().getStyle().setWidth(100, Unit.PCT);
         detailsTitle.getElement().getStyle().setTextAlign(TextAlign.CENTER);

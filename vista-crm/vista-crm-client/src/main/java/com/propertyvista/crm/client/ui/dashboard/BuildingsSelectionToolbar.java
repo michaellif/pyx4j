@@ -81,6 +81,7 @@ final class BuildingsSelectionToolbar extends Composite implements IBuildingFilt
 
         FlowPanel buttons = new FlowPanel();
         buttons.getElement().getStyle().setFloat(Float.RIGHT);
+        buttons.getElement().getStyle().setMarginRight(1, Unit.EM);
 
         buttons.add(chooseBuildingsButton = new Button("", new Command() {
             @Override
