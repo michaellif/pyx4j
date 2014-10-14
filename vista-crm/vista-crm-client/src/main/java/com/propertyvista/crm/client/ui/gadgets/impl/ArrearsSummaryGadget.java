@@ -43,9 +43,7 @@ public class ArrearsSummaryGadget extends CounterGadgetInstanceBase<ArrearsGadge
 
     private final static I18n i18n = I18n.get(ArrearsSummaryGadget.class);
 
-    ICriteriaProvider<DelinquentLeaseDTO, CounterGadgetFilter> criteriaProvider;
-
-    ArrearsGadgetService service = GWT.create(ArrearsGadgetService.class);
+    private final ArrearsGadgetService service = GWT.create(ArrearsGadgetService.class);
 
     public ArrearsSummaryGadget(ArrearsSummaryGadgetMetadata metadata) {
         super(//@formatter:off

@@ -64,6 +64,25 @@ public class ARArrearsManager {
         return SingletonHolder.INSTANCE;
     }
 
+    public List<BuildingAgingBuckets> retriveAgingBuckets(List<Building> buildings, LogicalDate date, ARCode.Type category) {
+        EntityQueryCriteria<BuildingAgingBuckets> criteria = EntityQueryCriteria.create(BuildingAgingBuckets.class);
+
+        criteria.in(criteria.proto().arrearsSnapshot().building(), buildings);
+        criteria.ge(criteria.proto().arrearsSnapshot().toDate(), date);
+        criteria.le(criteria.proto().arrearsSnapshot().fromDate(), date);
+        if (category == null) {
+            criteria.isNull(criteria.proto().arCode()); // this is total counter buckets for snapshot!..
+        } else {
+            criteria.eq(criteria.proto().arCode(), category);
+        }
+
+        return Persistence.service().query(criteria);
+    }
+
+    public List<BuildingAgingBuckets> retriveTotalAgingBuckets(List<Building> buildings, LogicalDate date) {
+        return retriveAgingBuckets(buildings, date, null);
+    }
+
     public LeaseArrearsSnapshot retrieveArrearsSnapshot(BillingAccount billingAccount, LogicalDate date) {
         EntityQueryCriteria<LeaseArrearsSnapshot> criteria = EntityQueryCriteria.create(LeaseArrearsSnapshot.class);
 
@@ -85,17 +104,6 @@ public class ARArrearsManager {
         }
 
         return Persistence.service().retrieve(criteria);
-    }
-
-    public List<BuildingAgingBuckets> retriveSummaryAgingBuckets(List<Building> buildings, LogicalDate date) {
-        EntityQueryCriteria<BuildingAgingBuckets> criteria = EntityQueryCriteria.create(BuildingAgingBuckets.class);
-
-        criteria.in(criteria.proto().arrearsSnapshot().building(), buildings);
-        criteria.ge(criteria.proto().arrearsSnapshot().toDate(), date);
-        criteria.le(criteria.proto().arrearsSnapshot().fromDate(), date);
-        criteria.isNull(criteria.proto().arCode()); // this is summary buckets for snapshot!..
-
-        return Persistence.service().query(criteria);
     }
 
     /**

@@ -19,8 +19,8 @@ import com.pyx4j.entity.core.criterion.Criterion;
 import com.pyx4j.entity.core.criterion.EntityListCriteria;
 import com.pyx4j.entity.core.criterion.PropertyCriterion;
 import com.pyx4j.entity.server.AbstractCrudServiceDtoImpl;
-import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.server.CrudEntityBinder;
+import com.pyx4j.entity.server.Persistence;
 
 import com.propertyvista.crm.rpc.dto.gadgets.DelinquentLeaseDTO;
 import com.propertyvista.crm.rpc.services.dashboard.gadgets.DelinquentLeaseListService;
@@ -62,7 +62,6 @@ public class DelinquentLeaseListServiceImpl extends AbstractCrudServiceDtoImpl<L
             bind(toProto.legalStatus(), boProto.arrearsSnapshot().legalStatus());
             bind(toProto.legalStatusDate(), boProto.arrearsSnapshot().legalStatusDate());
         }
-
     }
 
     public DelinquentLeaseListServiceImpl() {
@@ -71,6 +70,7 @@ public class DelinquentLeaseListServiceImpl extends AbstractCrudServiceDtoImpl<L
 
     public EntityListCriteria<LeaseAgingBuckets> convertCriteria(EntityListCriteria<DelinquentLeaseDTO> dtoCriteria) {
         EntityListCriteria<LeaseAgingBuckets> dboCriteria = EntityListCriteria.create(LeaseAgingBuckets.class);
+
         enhanceListCriteria(dboCriteria, dtoCriteria);
         Persistence.applyDatasetAccessRule(dboCriteria);
 
@@ -101,8 +101,8 @@ public class DelinquentLeaseListServiceImpl extends AbstractCrudServiceDtoImpl<L
                 }
             }
         }
-        super.enhanceListCriteria(dbCriteria, dtoCriteria);
 
+        super.enhanceListCriteria(dbCriteria, dtoCriteria);
     }
 
     @Override

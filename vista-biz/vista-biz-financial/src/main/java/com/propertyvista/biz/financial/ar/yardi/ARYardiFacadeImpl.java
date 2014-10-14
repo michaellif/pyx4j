@@ -170,8 +170,13 @@ public class ARYardiFacadeImpl implements ARFacade {
     }
 
     @Override
-    public List<BuildingAgingBuckets> getSummaryAgingBuckets(List<Building> buildings, LogicalDate asOf) {
-        return ARArrearsManager.instance().retriveSummaryAgingBuckets(buildings, asOf);
+    public List<BuildingAgingBuckets> getTotalAgingBuckets(List<Building> buildings, LogicalDate asOf) {
+        return ARArrearsManager.instance().retriveTotalAgingBuckets(buildings, asOf);
+    }
+
+    @Override
+    public List<BuildingAgingBuckets> getAgingBuckets(List<Building> buildings, LogicalDate asOf, Type category) {
+        return ARArrearsManager.instance().retriveAgingBuckets(buildings, asOf, category);
     }
 
     @Override
@@ -180,8 +185,8 @@ public class ARYardiFacadeImpl implements ARFacade {
     }
 
     @Override
-    public BuildingArrearsSnapshot getArrearsSnapshot(Building buildingStub, LogicalDate asOf, boolean secure) {
-        return ARArrearsManager.instance().retrieveArrearsSnapshot(buildingStub, asOf, secure);
+    public BuildingArrearsSnapshot getArrearsSnapshot(Building building, LogicalDate asOf, boolean secure) {
+        return ARArrearsManager.instance().retrieveArrearsSnapshot(building, asOf, secure);
     }
 
     @Override

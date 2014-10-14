@@ -39,7 +39,7 @@ import com.propertyvista.dto.PaymentRecordDTO;
 
 public class CollectionsGadget extends CounterGadgetInstanceBase<CollectionsGadgetDataDTO, Vector<Building>, CollectionsGadgetMetadata> {
 
-    private final CollectionsGadgetService collectionsGadgetService;
+    private final CollectionsGadgetService collectionsGadgetService = GWT.<CollectionsGadgetService> create(CollectionsGadgetService.class);
 
     public CollectionsGadget(CollectionsGadgetMetadata metadata) {
         super(//@formatter:off
@@ -49,7 +49,6 @@ public class CollectionsGadget extends CounterGadgetInstanceBase<CollectionsGadg
                 metadata,
                 CollectionsGadgetMetadata.class
         );//@formatter:on
-        collectionsGadgetService = GWT.<CollectionsGadgetService> create(CollectionsGadgetService.class);
     }
 
     @Override

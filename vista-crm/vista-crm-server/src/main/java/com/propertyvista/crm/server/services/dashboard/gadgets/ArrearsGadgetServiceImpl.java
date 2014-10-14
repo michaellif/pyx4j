@@ -13,9 +13,8 @@
  */
 package com.propertyvista.crm.server.services.dashboard.gadgets;
 
-import java.io.Closeable;
-import java.io.IOException;
 import java.math.BigDecimal;
+import java.util.List;
 import java.util.Vector;
 
 import org.slf4j.Logger;
@@ -31,7 +30,6 @@ import com.pyx4j.entity.core.IPrimitive;
 import com.pyx4j.entity.core.Path;
 import com.pyx4j.entity.core.criterion.EntityListCriteria;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
-import com.pyx4j.entity.server.IEntityPersistenceService.ICursorIterator;
 import com.pyx4j.entity.server.Persistence;
 
 import com.propertyvista.biz.financial.ar.ARFacade;
@@ -39,14 +37,15 @@ import com.propertyvista.crm.rpc.dto.gadgets.ArrearsGadgetDataDTO;
 import com.propertyvista.crm.rpc.dto.gadgets.ArrearsGadgetQueryDataDTO;
 import com.propertyvista.crm.rpc.dto.gadgets.DelinquentLeaseDTO;
 import com.propertyvista.crm.rpc.services.dashboard.gadgets.ArrearsGadgetService;
-import com.propertyvista.domain.financial.billing.AgingBuckets;
-import com.propertyvista.domain.financial.billing.ArrearsSnapshot;
+import com.propertyvista.domain.financial.billing.BuildingAgingBuckets;
 import com.propertyvista.domain.financial.billing.LeaseAgingBuckets;
 import com.propertyvista.domain.property.asset.building.Building;
 
 public class ArrearsGadgetServiceImpl implements ArrearsGadgetService {
 
     private static final Logger log = LoggerFactory.getLogger(ArrearsGadgetServiceImpl.class);
+
+    private final DelinquentLeaseListServiceImpl criteriaService = new DelinquentLeaseListServiceImpl();
 
     @Override
     public void countData(AsyncCallback<ArrearsGadgetDataDTO> callback, ArrearsGadgetQueryDataDTO query) {
@@ -83,6 +82,7 @@ public class ArrearsGadgetServiceImpl implements ArrearsGadgetService {
             aggregatedBuckets.creditAmount().setValue(null);
             return;
         }
+
         aggregatedBuckets.bucketThisMonth().setValue(BigDecimal.ZERO);
         aggregatedBuckets.bucketCurrent().setValue(BigDecimal.ZERO);
         aggregatedBuckets.bucket30().setValue(BigDecimal.ZERO);
@@ -93,65 +93,40 @@ public class ArrearsGadgetServiceImpl implements ArrearsGadgetService {
         aggregatedBuckets.totalBalance().setValue(BigDecimal.ZERO);
         aggregatedBuckets.creditAmount().setValue(BigDecimal.ZERO);
 
-        ARFacade arFacade = ServerSideFactory.create(ARFacade.class);
-
         EntityQueryCriteria<Building> criteria = EntityQueryCriteria.create(Building.class);
         if (!query.buildingsFilter().isEmpty()) {
-            criteria.in(criteria.proto().id(), new Vector<Building>(query.buildingsFilter()));
+            criteria.in(criteria.proto().id(), query.buildingsFilter());
         }
-        ICursorIterator<Building> i = Persistence.secureQuery(null, criteria, AttachLevel.IdOnly);
-        while (i.hasNext()) {
-            Building b = i.next();
-            ArrearsSnapshot<?> snapshot = arFacade.getArrearsSnapshot(b, query.asOf().getValue(), true);
-            if (snapshot == null) {
-                continue;
-            } else {
-                AgingBuckets<?> buckets = null;
+        Vector<Building> buildings = Persistence.secureQuery(criteria, AttachLevel.IdOnly);
 
-                foundBuckets: for (AgingBuckets<?> bucketsCandidate : snapshot.agingBuckets()) {
-                    if (bucketsCandidate.arCode().getValue() == query.category().getValue()) {
-                        buckets = bucketsCandidate;
-                        break foundBuckets;
-                    }
-                }
-                if (buckets == null) {
-                    continue;
-                }
+        List<BuildingAgingBuckets> agingBuckets = ServerSideFactory.create(ARFacade.class).getAgingBuckets(buildings, query.asOf().getValue(),
+                query.category().getValue());
 
-                if (!buckets.bucketThisMonth().isNull()) {
-                    add(aggregatedBuckets.bucketThisMonth(), buckets.bucketThisMonth());
-                }
-                add(aggregatedBuckets.bucketCurrent(), buckets.bucketCurrent());
-                add(aggregatedBuckets.bucket30(), buckets.bucket30());
-                add(aggregatedBuckets.bucket60(), buckets.bucket60());
-                add(aggregatedBuckets.bucket90(), buckets.bucket90());
-                add(aggregatedBuckets.bucketOver90(), buckets.bucketOver90());
-                add(aggregatedBuckets.arrearsAmount(), buckets.arrearsAmount());
-                add(aggregatedBuckets.totalBalance(), buckets.totalBalance());
-                add(aggregatedBuckets.creditAmount(), buckets.creditAmount());
-            }
-        }
-        try {
-            ((Closeable) i).close();
-        } catch (IOException e) {
-            log.warn("Warning", e);
+        for (BuildingAgingBuckets buckets : agingBuckets) {
+            add(aggregatedBuckets.bucketThisMonth(), buckets.bucketThisMonth());
+            add(aggregatedBuckets.bucketCurrent(), buckets.bucketCurrent());
+            add(aggregatedBuckets.bucket30(), buckets.bucket30());
+            add(aggregatedBuckets.bucket60(), buckets.bucket60());
+            add(aggregatedBuckets.bucket90(), buckets.bucket90());
+            add(aggregatedBuckets.bucketOver90(), buckets.bucketOver90());
+            add(aggregatedBuckets.arrearsAmount(), buckets.arrearsAmount());
+            add(aggregatedBuckets.totalBalance(), buckets.totalBalance());
+            add(aggregatedBuckets.creditAmount(), buckets.creditAmount());
         }
     }
 
     private void count(IPrimitive<Integer> counter, ArrearsGadgetQueryDataDTO query) {
-        counter.setValue(Persistence.service().count(
-                new DelinquentLeaseListServiceImpl().convertCriteria(delinquentLeasesCriteria(query, counter.getPath().toString()))));
+        counter.setValue(Persistence.service().count(criteriaService.convertCriteria(delinquentLeasesCriteria(query, counter.getPath().toString()))));
     }
 
     private EntityListCriteria<DelinquentLeaseDTO> delinquentLeasesCriteria(ArrearsGadgetQueryDataDTO query, String criteriaPreset) {
-
         EntityListCriteria<DelinquentLeaseDTO> criteria = EntityListCriteria.create(DelinquentLeaseDTO.class);
+
         if (!query.buildingsFilter().isEmpty()) {
             criteria.in(criteria.proto().building(), query.buildingsFilter());
         }
         criteria.eq(criteria.proto().arrears().arCode(), query.category().getValue());
         criteria.eq(criteria.proto().asOf(), query.asOf().getValue());
-
         if (!query.legalStatus().isNull()) {
             criteria.eq(criteria.proto().legalStatus(), query.legalStatus().getValue());
         }

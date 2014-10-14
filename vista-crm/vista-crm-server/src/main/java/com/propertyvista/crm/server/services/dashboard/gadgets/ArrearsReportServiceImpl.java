@@ -49,6 +49,7 @@ import com.propertyvista.domain.dashboard.gadgets.arrears.ArrearsYOYComparisonDa
 import com.propertyvista.domain.dashboard.gadgets.arrears.LeaseArrearsSnapshotDTO;
 import com.propertyvista.domain.financial.ARCode;
 import com.propertyvista.domain.financial.billing.AgingBuckets;
+import com.propertyvista.domain.financial.billing.BuildingAgingBuckets;
 import com.propertyvista.domain.financial.billing.LeaseArrearsSnapshot;
 import com.propertyvista.domain.property.asset.building.Building;
 
@@ -126,7 +127,7 @@ public class ArrearsReportServiceImpl implements ArrearsReportService {
         if (!buildingsFilter.isEmpty()) {
             criteria.in(criteria.proto().id(), buildingsFilter);
         }
-        Vector<Building> buildings = Persistence.secureQuery(criteria);
+        Vector<Building> buildings = Persistence.secureQuery(criteria, AttachLevel.IdOnly);
 
         final LogicalDate now = SystemDateManager.getLogicalDate();
         final GregorianCalendar cal = new GregorianCalendar();
@@ -176,7 +177,7 @@ public class ArrearsReportServiceImpl implements ArrearsReportService {
         BigDecimal totalArrears = new BigDecimal("0.00");
 
         if (!asOf.after(SystemDateManager.getLogicalDate())) { // if we asked for the future value of total arrears return 0            
-            for (AgingBuckets<?> buckets : ServerSideFactory.create(ARFacade.class).getSummaryAgingBuckets(buildings, asOf)) {
+            for (BuildingAgingBuckets buckets : ServerSideFactory.create(ARFacade.class).getTotalAgingBuckets(buildings, asOf)) {
                 totalArrears = totalArrears.add(buckets.totalBalance().getValue());
             }
         }
