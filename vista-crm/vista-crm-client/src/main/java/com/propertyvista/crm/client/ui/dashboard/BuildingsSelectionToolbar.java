@@ -70,8 +70,8 @@ final class BuildingsSelectionToolbar extends Composite implements IBuildingFilt
 
         bar = new FlowPanel();
         bar.setStyleName(AbstractDashboard.DEFAULT_STYLE_PREFIX + AbstractDashboard.StyleSuffix.actionsPanel);
-        bar.setSize("100%", "100%");
-        bar.getElement().getStyle().setProperty("padding", "4px 10px");
+        bar.getElement().getStyle().setProperty("padding", "4px 4px 0 8px");
+        bar.setHeight("100%");
 
         buildingsView = new HTML("");
         buildingsView.setStyleName(AbstractDashboard.DEFAULT_STYLE_PREFIX + AbstractDashboard.StyleSuffix.filtersDescription);
@@ -81,8 +81,6 @@ final class BuildingsSelectionToolbar extends Composite implements IBuildingFilt
 
         FlowPanel buttons = new FlowPanel();
         buttons.getElement().getStyle().setFloat(Float.RIGHT);
-        buttons.getElement().getStyle().setMarginRight(1, Unit.EM);
-
         buttons.add(chooseBuildingsButton = new Button("", new Command() {
             @Override
             public void execute() {
