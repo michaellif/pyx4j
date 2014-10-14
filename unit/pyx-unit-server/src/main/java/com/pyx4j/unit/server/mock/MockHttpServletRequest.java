@@ -126,8 +126,8 @@ public class MockHttpServletRequest implements HttpServletRequest {
         } else {
             String domainUrl = urlParts[0] + "//" + urlParts[2] + "/";
             if (url.contains("?")) {
-                requestURI = "/" + (url.replaceFirst(domainUrl, "")).split("?")[0];
-                queryString = (url.replaceFirst(domainUrl, "")).split("?")[1];
+                requestURI = "/" + (url.replaceFirst(domainUrl, "")).split("\\?")[0];
+                queryString = (url.replaceFirst(domainUrl, "")).split("\\?")[1];
             } else {
                 requestURI = "/" + url.replaceFirst(domainUrl, "");
             }
