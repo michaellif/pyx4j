@@ -40,6 +40,11 @@ public @interface MemberColumn {
      */
     boolean notNull() default false;
 
+    /**
+     * Disable automatic Entity Foreign Key creation
+     */
+    boolean createForeignKey() default true;
+
     @SuppressWarnings("rawtypes")
     Class<? extends PersistenceAdapter> persistenceAdapter() default PersistenceAdapter.class;
 
@@ -56,7 +61,7 @@ public @interface MemberColumn {
 
     /**
      * The precision for a decimal (exact numeric) column. (Applies only if a decimal column is used.)
-     * 
+     *
      * For example, precision = 7 and scale 2 is a number that has 5 digits before the decimal and 2 digits after the decimal
      */
     public int precision() default -1;

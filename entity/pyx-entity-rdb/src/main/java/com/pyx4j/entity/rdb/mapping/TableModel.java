@@ -41,6 +41,7 @@ import com.pyx4j.entity.annotations.AbstractEntity;
 import com.pyx4j.entity.annotations.DiscriminatorValue;
 import com.pyx4j.entity.annotations.Indexed;
 import com.pyx4j.entity.annotations.Inheritance;
+import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.Table;
 import com.pyx4j.entity.annotations.Table.PrimaryKeyStrategy;
 import com.pyx4j.entity.annotations.validator.NotNull;
@@ -257,6 +258,11 @@ public class TableModel {
             if (!member.getMemberMeta().isEntity()) {
                 continue;
             }
+            MemberColumn memberColumn = member.getMemberMeta().getAnnotation(MemberColumn.class);
+            if ((memberColumn != null) && (!memberColumn.createForeignKey())) {
+                continue;
+            }
+
             @SuppressWarnings("unchecked")
             Class<? extends IEntity> entityClass = (Class<IEntity>) member.getMemberMeta().getValueClass();
             EntityMeta entityMeta = EntityFactory.getEntityMeta(entityClass);
