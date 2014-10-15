@@ -191,7 +191,7 @@ public class YardiPaymentBatchContext implements PaymentBatchContext {
             public Void execute() throws RuntimeException {
                 batch = EntityFactory.create(YardiPaymentPostingBatch.class);
 
-                batch.externalBatchNumber().setValue(getBatchId());
+                batch.externalBatchNumber().setValue(String.valueOf(getBatchId()));
                 batch.building().set(building);
                 batch.status().setValue(YardiPostingStatus.Open);
 

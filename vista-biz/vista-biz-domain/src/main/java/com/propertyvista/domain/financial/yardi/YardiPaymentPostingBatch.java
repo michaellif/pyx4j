@@ -69,7 +69,7 @@ public interface YardiPaymentPostingBatch extends IEntity {
     @ToString(index = 0)
     @Editor(type = EditorType.label)
     @Caption(name = "Yardi Batch #")
-    IPrimitive<Long> externalBatchNumber();
+    IPrimitive<String> externalBatchNumber();
 
     @ToString(index = 1)
     IPrimitive<YardiPostingStatus> status();
