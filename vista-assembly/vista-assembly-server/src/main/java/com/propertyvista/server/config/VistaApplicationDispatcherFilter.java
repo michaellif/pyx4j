@@ -56,9 +56,7 @@ public class VistaApplicationDispatcherFilter implements Filter {
             if (isHttpsRedirectionNeeded(request)) {
 
                 HttpServletRequest httpRequest = (HttpServletRequest) request;
-                String uri = httpRequest.getScheme() + "://" + httpRequest.getServerName() + httpRequest.getRequestURI()
-                        + (httpRequest.getQueryString() != null ? "?" + httpRequest.getQueryString() : "");
-
+                String uri = getCompleteURL(httpRequest);
                 String httpsUrl = getHttpsUrl(new StringBuffer(uri));
                 log.info("***ADF*** NOT forwarding. Sending redirect from 'http' to 'https' to browser");
                 ((HttpServletResponse) response).sendRedirect(httpsUrl);
@@ -99,9 +97,10 @@ public class VistaApplicationDispatcherFilter implements Filter {
             log.info("***ADF*** NOT forwarding");
             chain.doFilter(request, response);
         } else if (app == VistaApplication.prospect && isRootAppRequest(httprequest)) {
-            String urlForward = getNewURLRequest(httprequest, app);
-            log.info("***ADF*** NOT forwarding. Sending redirect from '/prospect' to '/prospect/' to browser");
-            ((HttpServletResponse) response).sendRedirect(urlForward);
+            String pathToForward = getNewURLRequest(httprequest, app);
+            String urlToForward = getCompleteURLToForward(httprequest, pathToForward);
+            log.info("***ADF*** NOT forwarding. Sending redirect from '/prospect' to '" + urlToForward + "' to browser");
+            ((HttpServletResponse) response).sendRedirect(urlToForward);
             return;
         } else {
             httprequest.setAttribute(VistaApplication.class.getName(), app);
@@ -111,7 +110,24 @@ public class VistaApplicationDispatcherFilter implements Filter {
             log.info("***ADF*** \"{}\" forwarding to \"{}\" ", requestUri, urlForward);
             request.getRequestDispatcher(urlForward).forward(request, response);
         }
+    }
 
+    public String getCompleteURL(HttpServletRequest httpRequest) {
+        return getServerURL(httpRequest) + httpRequest.getRequestURI() + (httpRequest.getQueryString() != null ? "?" + httpRequest.getQueryString() : "");
+    }
+
+    public String getCompleteURLToForward(HttpServletRequest request, String forwardPath) {
+        String uri = getServerURL(request);
+        uri += forwardPath;
+        return uri;
+    }
+
+    public String getServerURL(HttpServletRequest httpRequest) {
+        return httpRequest.getScheme()
+                + "://"
+                + httpRequest.getServerName()
+                + ("http".equals(httpRequest.getScheme()) && httpRequest.getServerPort() == 80 || "https".equals(httpRequest.getScheme())
+                        && httpRequest.getServerPort() == 443 ? "" : ":" + httpRequest.getServerPort());
     }
 
     public boolean isHttpsRedirectionNeeded(ServletRequest request) {

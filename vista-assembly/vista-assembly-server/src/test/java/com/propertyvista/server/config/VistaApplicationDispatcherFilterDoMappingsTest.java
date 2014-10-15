@@ -60,7 +60,8 @@ public class VistaApplicationDispatcherFilterDoMappingsTest extends VistaApplica
         testForward("http://vista-portal.dev.birchwoodsoftwaregroup.com:8888/", VistaApplication.resident);
 
         // Prospect
-        testRedirect("http://vista-portal.dev.birchwoodsoftwaregroup.com:8888/prospect", encloseSlash(VistaApplication.prospect.name()));
+        String prospectUrlHttp = "http://vista-portal.dev.birchwoodsoftwaregroup.com:8888/prospect";
+        testRedirect(prospectUrlHttp, getProspectRedirectUrl(prospectUrlHttp));
         testForward("http://vista-portal.dev.birchwoodsoftwaregroup.com:8888/prospect/", VistaApplication.prospect);
 
         // **************************************************************
@@ -94,9 +95,17 @@ public class VistaApplicationDispatcherFilterDoMappingsTest extends VistaApplica
         testForward("https://vista-portal-22.birchwoodsoftwaregroup.com/", VistaApplication.resident);
 
         // Prospect
-        testRedirect("https://vista-portal-22.birchwoodsoftwaregroup.com/prospect", encloseSlash(VistaApplication.prospect.name()));
-        testForward("https://vista-portal-99.devpv.com/prospect/", VistaApplication.prospect);
-        testRedirect("https://vista-portal-99.devpv.com/prospect", encloseSlash(VistaApplication.prospect.name()));
+        String prospectUrlHttps = "https://vista-portal-22.birchwoodsoftwaregroup.com/prospect";
+        testRedirect(prospectUrlHttps, getProspectRedirectUrl(prospectUrlHttps));
 
+        testForward("https://vista-portal-99.devpv.com/prospect/", VistaApplication.prospect);
+
+        prospectUrlHttps = "https://vista-portal-99.devpv.com/prospect";
+        testRedirect(prospectUrlHttps, getProspectRedirectUrl(prospectUrlHttps));
+    }
+
+	// In case of "prospect", filter should send to browser absolute redirect instead of relative
+    protected String getProspectRedirectUrl(String url) {
+        return url.replace("/prospect", "/prospect/");
     }
 }
