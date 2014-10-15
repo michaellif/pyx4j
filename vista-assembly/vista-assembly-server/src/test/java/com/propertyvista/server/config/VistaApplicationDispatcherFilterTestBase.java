@@ -32,7 +32,7 @@ import com.propertyvista.domain.security.common.VistaApplication;
 
 public class VistaApplicationDispatcherFilterTestBase {
 
-    private final static Logger log = LoggerFactory.getLogger(VistaApplicationDispatcherFilterTestBase.class);
+    protected final static Logger log = LoggerFactory.getLogger(VistaApplicationDispatcherFilterTestBase.class);
 
     VistaApplicationDispatcherFilter filterUnderTest;
 
@@ -47,7 +47,6 @@ public class VistaApplicationDispatcherFilterTestBase {
         mockChain = new MockFilterChain();
         filterUnderTest = new VistaApplicationDispatcherFilter();
         resp = new MockHttpServletResponse();
-        log.info("VistaApplicationDispatcherFilterTest initialized");
     }
 
     @After

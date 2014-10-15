@@ -23,6 +23,12 @@ import com.propertyvista.domain.security.common.VistaApplication;
 
 public class VistaApplicationDispatcherFilterInterfacesTest extends VistaApplicationDispatcherFilterTestBase {
 
+    @Override
+    public void setUp() throws Exception {
+        super.setUp();
+        log.info("VistaApplicationDispatcherFilterInterfacesTest initialized");
+    }
+
     @Test
     public final void testInterfaces() throws IOException, ServletException {
         // ***********************************************************************************************

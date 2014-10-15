@@ -42,6 +42,8 @@ public class VistaApplicationDispatcherFilter implements Filter {
 
     private static final String regExTwoDigits = "\\d\\d";
 
+    private boolean isDeploymentHttps = false;
+
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
     }
@@ -52,21 +54,12 @@ public class VistaApplicationDispatcherFilter implements Filter {
 
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
-        if (ServerSideConfiguration.instance(AbstractVistaServerSideConfiguration.class).isDepoymentHttps()) {
-            if (isHttpsRedirectionNeeded(request)) {
-
-                HttpServletRequest httpRequest = (HttpServletRequest) request;
-                String uri = getCompleteURL(httpRequest);
-                String httpsUrl = getHttpsUrl(new StringBuffer(uri));
-                log.info("***ADF*** redirecting. Sending redirect from 'http' to 'https' to browser {}", httpsUrl);
-                ((HttpServletResponse) response).sendRedirect(httpsUrl);
-                return;
-            }
-        }
-
         if (ServerSideConfiguration.instance(AbstractVistaServerSideConfiguration.class).isDepoymentApplicationDispatcher()) {
             if (request.getAttribute(REQUEST_DISPATCHED_REQUEST_ATR) == null) {
                 request.setAttribute(REQUEST_DISPATCHED_REQUEST_ATR, Boolean.TRUE);
+                if (ServerSideConfiguration.instance(AbstractVistaServerSideConfiguration.class).isDepoymentHttps()) {
+                    isDeploymentHttps = true;
+                }
                 map(request, response, chain);
             } else {
                 chain.doFilter(request, response);
@@ -93,13 +86,23 @@ public class VistaApplicationDispatcherFilter implements Filter {
 
         VistaApplication app = getAppByRequest(httprequest);
 
+        //TODO BASED ON PMC and APP, DO FORWARD OR REDIRECT
+
         if (app == null) {
             log.info("***ADF*** NOT forwarding");
             chain.doFilter(request, response);
+        } else if (isDeploymentHttps && isHttpsRedirectionNeeded(request)) {
+            // TODO Redo and redirect only with information about PMC and APP
+            HttpServletRequest httpRequest = (HttpServletRequest) request;
+            String uri = getCompleteURLNoContextPath(httpRequest);
+            String httpsUrl = getHttpsUrl(new StringBuffer(uri));
+            log.info("***ADF*** redirecting. Sending redirect from 'http' to '{}' to browser", httpsUrl);
+            ((HttpServletResponse) response).sendRedirect(httpsUrl);
+            return;
         } else if (app == VistaApplication.prospect && isRootAppRequest(httprequest)) {
             String pathToForward = getNewURLRequest(httprequest, app);
             String urlToForward = getCompleteURLToForward(httprequest, pathToForward);
-            log.info("***ADF*** NOT forwarding. Sending redirect from '/prospect' to '" + urlToForward + "' to browser");
+            log.info("***ADF*** redirecting. Sending redirect from '/prospect' to  to '{}' to browser", urlToForward);
             ((HttpServletResponse) response).sendRedirect(urlToForward);
             return;
         } else {
@@ -112,8 +115,18 @@ public class VistaApplicationDispatcherFilter implements Filter {
         }
     }
 
-    public String getCompleteURL(HttpServletRequest httpRequest) {
-        return getServerURL(httpRequest) + httpRequest.getRequestURI() + (httpRequest.getQueryString() != null ? "?" + httpRequest.getQueryString() : "");
+    public String getCompleteURLNoContextPath(HttpServletRequest httpRequest) {
+        return getCompleteURL(httpRequest, false);
+    }
+
+    public String getCompleteURL(HttpServletRequest httpRequest, boolean returnWithContextPath) {
+        String requestUri = httpRequest.getRequestURI();
+        if (!returnWithContextPath) {
+            String contextPath = httpRequest.getContextPath();
+            requestUri = requestUri.replaceFirst(contextPath, "");
+        }
+
+        return getServerURL(httpRequest) + requestUri + (httpRequest.getQueryString() != null ? "?" + httpRequest.getQueryString() : "");
     }
 
     public String getCompleteURLToForward(HttpServletRequest request, String forwardPath) {
@@ -134,7 +147,7 @@ public class VistaApplicationDispatcherFilter implements Filter {
         HttpServletRequest httpRequest = (HttpServletRequest) request;
         boolean redirect = false;
 
-        if (!httpRequest.getScheme().equalsIgnoreCase("http")) {
+        if (httpRequest.isSecure()) {
             return redirect;
         }
 
@@ -232,6 +245,7 @@ public class VistaApplicationDispatcherFilter implements Filter {
      * @return Vista application
      */
     private VistaApplication getAppByDomainOrPath(String appByDomain, String path) {
+        // TODO Extract method to a new class. Create new return type including data from VistaApplication and PMC. Redo vistaNameSpace resolver (common tasks)
         String[] appByDomainTokens = appByDomain.split("-");
         VistaApplication app = null;
 

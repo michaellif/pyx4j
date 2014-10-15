@@ -20,6 +20,13 @@ import javax.servlet.ServletException;
 import org.junit.Test;
 
 public class VistaApplicationDispatcherFilterFollowChainTest extends VistaApplicationDispatcherFilterTestBase {
+
+    @Override
+    public void setUp() throws Exception {
+        super.setUp();
+        log.info("VistaApplicationDispatcherFilterFollowChainTest initialized");
+    }
+
     /**
      * Test wrong addresses. Should do chain in all cases.
      *

@@ -21,6 +21,12 @@ import org.junit.Test;
 
 public class VistaApplicationDispatcherFilterHttpRedirectionsTest extends VistaApplicationDispatcherFilterTestBase {
 
+    @Override
+    public void setUp() throws Exception {
+        super.setUp();
+        log.info("VistaApplicationDispatcherFilterHttpRedirectionsTest initialized");
+    }
+
     /**
      * Test if redirection to HTTPS must be done
      *

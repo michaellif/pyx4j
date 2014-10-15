@@ -23,6 +23,12 @@ import com.propertyvista.domain.security.common.VistaApplication;
 
 public class VistaApplicationDispatcherFilterDoMappingsTest extends VistaApplicationDispatcherFilterTestBase {
 
+    @Override
+    public void setUp() throws Exception {
+        super.setUp();
+        log.info("VistaApplicationDispatcherFilterDoMappingsTest initialized");
+    }
+
     /**
      * Test mappings for URL request. In case of first request to Prospect application without "/" at the end, it should redirect to client instead of
      * forwarding.
@@ -104,7 +110,7 @@ public class VistaApplicationDispatcherFilterDoMappingsTest extends VistaApplica
         testRedirect(prospectUrlHttps, getProspectRedirectUrl(prospectUrlHttps));
     }
 
-	// In case of "prospect", filter should send to browser absolute redirect instead of relative
+    // In case of "prospect", filter should send to browser absolute redirect instead of relative
     protected String getProspectRedirectUrl(String url) {
         return url.replace("/prospect", "/prospect/");
     }
