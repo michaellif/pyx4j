@@ -26,7 +26,6 @@ import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.core.IPrimitive;
 
 import com.propertyvista.domain.ref.ISOCountry;
-import com.propertyvista.domain.ref.ISOProvince;
 import com.propertyvista.domain.tenant.lease.BillableItemExtraData;
 
 @Table(name = "pt_vehicle")
@@ -52,8 +51,8 @@ public interface Vehicle extends BillableItemExtraData {
     IPrimitive<LogicalDate> year();
 
     @NotNull
-    @Caption(name = "Province/State")
-    IPrimitive<ISOProvince> province();
+    @Caption(name = "Province/State/Region")
+    IPrimitive<String> province();
 
     @NotNull
     IPrimitive<ISOCountry> country();
