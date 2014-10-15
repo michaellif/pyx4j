@@ -74,6 +74,7 @@ public class PaymentReturnEcheckYardiTest extends PaymentYardiTestBase {
         paymentRecords = new ArrayList<PaymentRecord>();
         paymentRecords.add(getDataModel(LeaseDataModel.class).createPaymentRecord(lease11, PaymentType.Echeck, "101.00"));
         paymentRecords.add(getDataModel(LeaseDataModel.class).createPaymentRecord(lease12, PaymentType.Echeck, "102.00"));
+        Persistence.service().commit();
 
         ServerSideFactory.create(PaymentFacade.class).processPayment(paymentRecords.get(0), null);
         ServerSideFactory.create(PaymentFacade.class).processPayment(paymentRecords.get(1), null);
