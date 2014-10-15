@@ -58,7 +58,7 @@ public class VistaApplicationDispatcherFilter implements Filter {
                 HttpServletRequest httpRequest = (HttpServletRequest) request;
                 String uri = getCompleteURL(httpRequest);
                 String httpsUrl = getHttpsUrl(new StringBuffer(uri));
-                log.info("***ADF*** NOT forwarding. Sending redirect from 'http' to 'https' to browser");
+                log.info("***ADF*** redirecting. Sending redirect from 'http' to 'https' to browser {}", httpsUrl);
                 ((HttpServletResponse) response).sendRedirect(httpsUrl);
                 return;
             }
