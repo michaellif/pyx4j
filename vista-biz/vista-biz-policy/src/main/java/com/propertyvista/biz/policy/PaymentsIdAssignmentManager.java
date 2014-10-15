@@ -34,7 +34,7 @@ class PaymentsIdAssignmentManager {
 
         IdAssignmentPaymentType paymentTypes = policy.paymentTypes();
 
-        EntityGraph.setDefaults(paymentTypes, getPaymentTypesDefaults()//
+        EntityGraph.setDefaults(getPaymentTypesDefaults(), paymentTypes//
                 , paymentTypes.autopayPrefix()//
                 , paymentTypes.oneTimePrefix()//
                 , paymentTypes.cashPrefix()//
