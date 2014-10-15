@@ -50,6 +50,8 @@ import com.pyx4j.i18n.shared.I18nEnum;
 
 import com.propertyvista.domain.financial.billing.BillingCycle;
 import com.propertyvista.domain.financial.billing.InvoicePaymentBackOut;
+import com.propertyvista.domain.financial.yardi.YardiPaymentPostingBatch;
+import com.propertyvista.domain.financial.yardi.YardiPaymentPostingBatchRecord;
 import com.propertyvista.domain.note.HasNotesAndAttachments;
 import com.propertyvista.domain.payment.AutopayAgreement;
 import com.propertyvista.domain.payment.AutopayAgreement.AutopayAgreementCoveredItem;
@@ -307,4 +309,8 @@ public interface PaymentRecord extends IEntity, HasNotesAndAttachments {
     @Detached(level = AttachLevel.Detached)
     @JoinTable(value = InvoicePaymentBackOut.class, mappedBy = InvoicePaymentBackOut.PaymentRecordColumnId.class)
     InvoicePaymentBackOut invoicePaymentBackOut();
+
+    @Detached(level = AttachLevel.Detached)
+    @JoinTable(value = YardiPaymentPostingBatchRecord.class, mappedBy = YardiPaymentPostingBatchRecord.PaymentRecordColumnId.class)
+    ISet<YardiPaymentPostingBatch> yardiBatches();
 }

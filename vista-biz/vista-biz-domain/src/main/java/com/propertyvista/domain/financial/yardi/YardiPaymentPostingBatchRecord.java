@@ -15,6 +15,7 @@ package com.propertyvista.domain.financial.yardi;
 
 import java.util.Date;
 
+import com.pyx4j.entity.annotations.ColumnId;
 import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.Indexed;
 import com.pyx4j.entity.annotations.JoinColumn;
@@ -53,6 +54,11 @@ public interface YardiPaymentPostingBatchRecord extends IEntity {
     @NotNull
     IPrimitive<Boolean> reversal();
 
-    @MemberColumn(notNull = true)
+    interface PaymentRecordColumnId extends ColumnId {
+    }
+
+    // TODO PostgreSQL 9.3 FOR NO KEY UPDATE
+    @JoinColumn(PaymentRecordColumnId.class)
+    @MemberColumn(notNull = true, createForeignKey = false)
     PaymentRecord paymentRecord();
 }
