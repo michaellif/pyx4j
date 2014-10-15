@@ -88,14 +88,8 @@ abstract class AbstractYardiStub implements ExternalInterfaceLoggingStub {
         testSystemsUrl.add("http://192.168.50.10");
     }
 
-    @Deprecated
-    protected void init(Action currentAction) {
-        this.transactionId = TransactionLog.getNextNumber();
-        this.currentAction = currentAction;
-    }
-
     protected void init(PmcYardiCredential yc, Action currentAction) {
-        // Assert interface avalability,  allow to block individual interface in yardi in case of emergencies
+        // Assert interface availability,  allow to block individual interface in yardi in case of emergencies
         // Example:  add to configuration file  config.properties
         // yardiInterface.783.AddReceiptsReversalToBatch.blocked=true
 

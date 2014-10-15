@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011-2012 All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -64,7 +64,7 @@ class YardiResidentTransactionsStubImpl extends AbstractYardiStub implements Yar
     @Override
     public String ping(PmcYardiCredential yc) {
         try {
-            init(Action.Ping);
+            init(yc, Action.Ping);
             PingResponse response = getResidentTransactionsService(yc).ping(new Ping());
             return response.getPingResult();
         } catch (RemoteException e) {
@@ -75,7 +75,7 @@ class YardiResidentTransactionsStubImpl extends AbstractYardiStub implements Yar
     @Override
     public String getPluginVersion(PmcYardiCredential yc) {
         try {
-            init(Action.GetVersionNumber);
+            init(yc, Action.GetVersionNumber);
             GetVersionNumberResponse response = getResidentTransactionsService(yc).getVersionNumber(new GetVersionNumber());
             return response.getGetVersionNumberResult();
         } catch (RemoteException e) {
@@ -91,7 +91,7 @@ class YardiResidentTransactionsStubImpl extends AbstractYardiStub implements Yar
 
     @Override
     public Properties getPropertyConfigurations(PmcYardiCredential yc) throws YardiServiceException, RemoteException {
-        init(Action.GetPropertyConfigurations);
+        init(yc, Action.GetPropertyConfigurations);
 
         GetPropertyConfigurations request = new GetPropertyConfigurations();
         request.setUserName(yc.username().getValue());
@@ -109,7 +109,7 @@ class YardiResidentTransactionsStubImpl extends AbstractYardiStub implements Yar
 
     @Override
     public ResidentTransactions getAllResidentTransactions(PmcYardiCredential yc, String propertyId) throws YardiServiceException, RemoteException {
-        init(Action.GetResidentTransactions);
+        init(yc, Action.GetResidentTransactions);
 
         GetResidentTransactions_Login request = new GetResidentTransactions_Login();
         request.setUserName(yc.username().getValue());
@@ -129,7 +129,7 @@ class YardiResidentTransactionsStubImpl extends AbstractYardiStub implements Yar
     @Override
     public ResidentTransactions getResidentTransactionsForTenant(PmcYardiCredential yc, String propertyId, String tenantId) throws YardiServiceException,
             RemoteException {
-        init(Action.GetResidentTransaction);
+        init(yc, Action.GetResidentTransaction);
 
         GetResidentTransaction_Login request = new GetResidentTransaction_Login();
         request.setUserName(yc.username().getValue());
@@ -149,7 +149,7 @@ class YardiResidentTransactionsStubImpl extends AbstractYardiStub implements Yar
 
     @Override
     public void importResidentTransactions(PmcYardiCredential yc, ResidentTransactions reversalTransactions) throws YardiServiceException, RemoteException {
-        init(Action.ImportResidentTransactions);
+        init(yc, Action.ImportResidentTransactions);
 
         ImportResidentTransactions_Login request = new ImportResidentTransactions_Login();
         request.setUserName(yc.username().getValue());
@@ -180,7 +180,7 @@ class YardiResidentTransactionsStubImpl extends AbstractYardiStub implements Yar
     @Override
     public ResidentTransactions getAllLeaseCharges(PmcYardiCredential yc, String propertyListCode, LogicalDate date) throws YardiServiceException,
             RemoteException {
-        init(Action.GetResidentsLeaseCharges);
+        init(yc, Action.GetResidentsLeaseCharges);
 
         Calendar calendar = GregorianCalendar.getInstance();
         calendar.setTime(date);
@@ -204,7 +204,7 @@ class YardiResidentTransactionsStubImpl extends AbstractYardiStub implements Yar
     @Override
     public ResidentTransactions getLeaseChargesForTenant(PmcYardiCredential yc, String propertyId, String tenantId, LogicalDate date)
             throws YardiServiceException, RemoteException {
-        init(Action.GetResidentLeaseCharges);
+        init(yc, Action.GetResidentLeaseCharges);
 
         Calendar calendar = GregorianCalendar.getInstance();
         calendar.setTime(date);

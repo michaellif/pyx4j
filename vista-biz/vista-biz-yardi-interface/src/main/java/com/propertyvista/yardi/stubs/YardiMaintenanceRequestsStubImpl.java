@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011-2012 All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -59,7 +59,7 @@ class YardiMaintenanceRequestsStubImpl extends AbstractYardiStub implements Yard
 
     @Override
     public Properties getPropertyConfigurations(PmcYardiCredential yc) throws YardiServiceException, RemoteException {
-        init(Action.GetPropertyConfigurations);
+        init(yc, Action.GetPropertyConfigurations);
 
         GetPropertyConfigurations request = new GetPropertyConfigurations();
         request.setUserName(yc.username().getValue());
@@ -77,7 +77,7 @@ class YardiMaintenanceRequestsStubImpl extends AbstractYardiStub implements Yard
 
     @Override
     public YardiMaintenanceConfigMeta getMaintenanceConfigMeta(PmcYardiCredential yc) throws YardiServiceException, RemoteException {
-        init(Action.GetCustomValues);
+        init(yc, Action.GetCustomValues);
 
         GetCustomValues request = new GetCustomValues();
         request.setUserName(yc.username().getValue());
@@ -96,7 +96,7 @@ class YardiMaintenanceRequestsStubImpl extends AbstractYardiStub implements Yard
 
     @Override
     public ServiceRequests getRequestsByParameters(PmcYardiCredential yc, GetServiceRequest_Search request) throws YardiServiceException, RemoteException {
-        init(Action.GetServiceRequests);
+        init(yc, Action.GetServiceRequests);
 
         request.setUserName(yc.username().getValue());
         request.setPassword(yc.password().number().getValue());
@@ -115,7 +115,7 @@ class YardiMaintenanceRequestsStubImpl extends AbstractYardiStub implements Yard
     public ServiceRequests postMaintenanceRequests(PmcYardiCredential yc, ServiceRequests requests) throws YardiServiceException, RemoteException {
         Validate.notNull(requests, "requests can not be null");
 
-        init(Action.CreateOrEditServiceRequests);
+        init(yc, Action.CreateOrEditServiceRequests);
         validateWriteAccess(yc);
 
         CreateOrEditServiceRequests request = new CreateOrEditServiceRequests();
@@ -148,7 +148,7 @@ class YardiMaintenanceRequestsStubImpl extends AbstractYardiStub implements Yard
     @Override
     public String ping(PmcYardiCredential yc) {
         try {
-            init(Action.Ping);
+            init(yc, Action.Ping);
             PingResponse response = getMaintenanceRequestsService(yc).ping(new Ping());
             return response.getPingResult();
         } catch (RemoteException e) {
@@ -159,7 +159,7 @@ class YardiMaintenanceRequestsStubImpl extends AbstractYardiStub implements Yard
     @Override
     public String getPluginVersion(PmcYardiCredential yc) {
         try {
-            init(Action.GetVersionNumber);
+            init(yc, Action.GetVersionNumber);
             GetVersionNumberResponse response = getMaintenanceRequestsService(yc).getVersionNumber(new GetVersionNumber());
             return response.getGetVersionNumberResult();
         } catch (RemoteException e) {

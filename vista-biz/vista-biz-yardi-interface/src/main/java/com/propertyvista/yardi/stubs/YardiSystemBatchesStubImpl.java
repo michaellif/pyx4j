@@ -50,7 +50,7 @@ class YardiSystemBatchesStubImpl extends AbstractYardiStub implements YardiSyste
 
     @Override
     public long openReceiptBatch(PmcYardiCredential yc, String propertyId) throws RemoteException {
-        init(Action.OpenReceiptBatch);
+        init(yc, Action.OpenReceiptBatch);
         validateWriteAccess(yc);
 
         OpenReceiptBatch request = new OpenReceiptBatch();
@@ -70,7 +70,7 @@ class YardiSystemBatchesStubImpl extends AbstractYardiStub implements YardiSyste
     @Override
     public void addReceiptsToBatch(PmcYardiCredential yc, long batchId, ResidentTransactions residentTransactions) throws YardiServiceException,
             RemoteException {
-        init(Action.AddReceiptsToBatch);
+        init(yc, Action.AddReceiptsToBatch);
         addReceiptsToBatchImpl(yc, batchId, residentTransactions);
     }
 
@@ -113,7 +113,7 @@ class YardiSystemBatchesStubImpl extends AbstractYardiStub implements YardiSyste
 
     @Override
     public void postReceiptBatch(PmcYardiCredential yc, long batchId) throws YardiServiceException, RemoteException {
-        init(Action.PostReceiptBatch);
+        init(yc, Action.PostReceiptBatch);
         validateWriteAccess(yc);
 
         PostReceiptBatch request = new PostReceiptBatch();
@@ -133,7 +133,7 @@ class YardiSystemBatchesStubImpl extends AbstractYardiStub implements YardiSyste
 
     @Override
     public void cancelReceiptBatch(PmcYardiCredential yc, long batchId) throws YardiServiceException, RemoteException {
-        init(Action.CancelReceiptBatch);
+        init(yc, Action.CancelReceiptBatch);
         validateWriteAccess(yc);
 
         CancelReceiptBatch request = new CancelReceiptBatch();
@@ -154,7 +154,7 @@ class YardiSystemBatchesStubImpl extends AbstractYardiStub implements YardiSyste
     @Override
     public String ping(PmcYardiCredential yc) {
         try {
-            init(Action.Ping);
+            init(yc, Action.Ping);
             PingResponse pr = getResidentTransactionsSysBatchService(yc).ping(new Ping());
             return pr.getPingResult();
         } catch (RemoteException e) {
@@ -170,7 +170,7 @@ class YardiSystemBatchesStubImpl extends AbstractYardiStub implements YardiSyste
     @Override
     public String getPluginVersion(PmcYardiCredential yc) {
         try {
-            init(Action.GetVersionNumber);
+            init(yc, Action.GetVersionNumber);
             GetVersionNumberResponse response = getResidentTransactionsSysBatchService(yc).getVersionNumber(new GetVersionNumber());
             return response.getGetVersionNumberResult();
         } catch (RemoteException e) {

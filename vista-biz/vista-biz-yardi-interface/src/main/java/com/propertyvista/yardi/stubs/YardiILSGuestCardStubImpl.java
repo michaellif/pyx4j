@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011-2012 All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -76,7 +76,7 @@ class YardiILSGuestCardStubImpl extends AbstractYardiStub implements YardiILSGue
 
     @Override
     public Properties getPropertyConfigurations(PmcYardiCredential yc) throws YardiServiceException, RemoteException {
-        init(Action.GetPropertyConfigurations);
+        init(yc, Action.GetPropertyConfigurations);
 
         GetPropertyConfigurations request = new GetPropertyConfigurations();
 
@@ -96,7 +96,7 @@ class YardiILSGuestCardStubImpl extends AbstractYardiStub implements YardiILSGue
 
     @Override
     public AttachmentTypesAndChargeCodes getConfiguredAttachmentsAndCharges(PmcYardiCredential yc) throws YardiServiceException, RemoteException {
-        init(Action.GetConfiguredAttachmentsAndCharges);
+        init(yc, Action.GetConfiguredAttachmentsAndCharges);
 
         GetAttachmentTypesAndChargeCodes request = new GetAttachmentTypesAndChargeCodes();
 
@@ -116,7 +116,7 @@ class YardiILSGuestCardStubImpl extends AbstractYardiStub implements YardiILSGue
 
     @Override
     public RentableItems getRentableItems(PmcYardiCredential yc, String propertyId) throws YardiServiceException, RemoteException {
-        init(Action.GetYardiRentableItems);
+        init(yc, Action.GetYardiRentableItems);
 
         GetYardiRentableItems_Login request = new GetYardiRentableItems_Login();
 
@@ -139,7 +139,7 @@ class YardiILSGuestCardStubImpl extends AbstractYardiStub implements YardiILSGue
 
     @Override
     public MarketingSources getYardiMarketingSources(PmcYardiCredential yc, String propertyId) throws YardiServiceException, RemoteException {
-        init(Action.GetYardiMarketingSources);
+        init(yc, Action.GetYardiMarketingSources);
 
         GetYardiAgentsSourcesResults_Login request = new GetYardiAgentsSourcesResults_Login();
 
@@ -162,7 +162,7 @@ class YardiILSGuestCardStubImpl extends AbstractYardiStub implements YardiILSGue
 
     @Override
     public PhysicalProperty getPropertyMarketingInfo(PmcYardiCredential yc, String propertyId) throws YardiServiceException, RemoteException {
-        init(Action.GetPropertyMarketingInfo);
+        init(yc, Action.GetPropertyMarketingInfo);
 
         UnitAvailability_Login request = new UnitAvailability_Login();
 
@@ -185,7 +185,7 @@ class YardiILSGuestCardStubImpl extends AbstractYardiStub implements YardiILSGue
 
     @Override
     public LeadManagement getGuestActivity(PmcYardiCredential yc, String propertyId) throws YardiServiceException, RemoteException {
-        init(Action.GetYardiGuestActivity);
+        init(yc, Action.GetYardiGuestActivity);
 
         GetYardiGuestActivity_Login request = new GetYardiGuestActivity_Login();
 
@@ -208,7 +208,7 @@ class YardiILSGuestCardStubImpl extends AbstractYardiStub implements YardiILSGue
 
     @Override
     public LeaseApplication getApplication(PmcYardiCredential yc, String propertyId, String prospectId) throws YardiServiceException, RemoteException {
-        init(Action.GetApplication);
+        init(yc, Action.GetApplication);
 
         GetApplication_Login request = new GetApplication_Login();
 
@@ -232,7 +232,7 @@ class YardiILSGuestCardStubImpl extends AbstractYardiStub implements YardiILSGue
 
     @Override
     public LeadManagement findGuest(PmcYardiCredential yc, String propertyId, String guestId) throws YardiServiceException, RemoteException {
-        init(Action.GetYardiGuestSearch);
+        init(yc, Action.GetYardiGuestSearch);
 
         GetYardiGuestActivity_Search request = new GetYardiGuestActivity_Search();
 
@@ -264,7 +264,7 @@ class YardiILSGuestCardStubImpl extends AbstractYardiStub implements YardiILSGue
 
     @Override
     public void importGuestInfo(PmcYardiCredential yc, LeadManagement leadInfo) throws YardiServiceException, RemoteException {
-        init(Action.ImportGuestInfo);
+        init(yc, Action.ImportGuestInfo);
         validateWriteAccess(yc);
 
         ImportYardiGuest_Login request = new ImportYardiGuest_Login();
@@ -299,7 +299,7 @@ class YardiILSGuestCardStubImpl extends AbstractYardiStub implements YardiILSGue
 
     @Override
     public void importApplication(PmcYardiCredential yc, LeaseApplication leaseApp) throws YardiServiceException, RemoteException {
-        init(Action.ImportApplication);
+        init(yc, Action.ImportApplication);
         validateWriteAccess(yc);
 
         ImportApplication_Login request = new ImportApplication_Login();
@@ -334,7 +334,7 @@ class YardiILSGuestCardStubImpl extends AbstractYardiStub implements YardiILSGue
     @Override
     public String ping(PmcYardiCredential yc) {
         try {
-            init(Action.Ping);
+            init(yc, Action.Ping);
             PingResponse response = getILSGuestCardService(yc).ping(new Ping());
             return response.getPingResult();
         } catch (RemoteException e) {
@@ -352,7 +352,7 @@ class YardiILSGuestCardStubImpl extends AbstractYardiStub implements YardiILSGue
     @Override
     public String getPluginVersion(PmcYardiCredential yc) {
         try {
-            init(Action.GetVersionNumber);
+            init(yc, Action.GetVersionNumber);
             GetVersionNumberResponse response = getILSGuestCardService(yc).getVersionNumber(new GetVersionNumber());
             return response.getGetVersionNumberResult();
         } catch (RemoteException e) {
