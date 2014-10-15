@@ -40,6 +40,7 @@ import com.pyx4j.server.mail.Mail;
 
 import com.propertyvista.domain.VistaNamespace;
 import com.propertyvista.domain.blob.LeaseTermAgreementDocumentBlob;
+import com.propertyvista.domain.financial.yardi.YardiPaymentPostingBatch;
 import com.propertyvista.domain.note.NotesAndAttachments;
 import com.propertyvista.domain.policy.policies.YardiInterfacePolicy;
 import com.propertyvista.domain.security.CustomerUserCredential;
@@ -114,6 +115,7 @@ public class VistaTestDBSetup {
                 classes.add(LeaseTermAgreementDocumentBlob.class);
                 classes.add(NotesAndAttachments.class);
                 classes.add(YardiInterfacePolicy.class);
+                classes.add(YardiPaymentPostingBatch.class);
                 classes.add(CustomerUserCredential.class);
                 ((IEntityPersistenceServiceRDB) Persistence.service()).ensureSchemaModel(classes);
                 return null;

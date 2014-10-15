@@ -25,6 +25,7 @@ import com.propertyvista.biz.system.YardiPaymentBatchContext;
 import com.propertyvista.biz.system.yardi.YardiServiceException;
 import com.propertyvista.domain.financial.yardi.YardiReceipt;
 import com.propertyvista.domain.financial.yardi.YardiReceiptReversal;
+import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.settings.PmcYardiCredential;
 import com.propertyvista.yardi.processors.YardiPaymentProcessor;
 import com.propertyvista.yardi.stubs.YardiStubFactory;
@@ -57,7 +58,7 @@ public class YardiSystemBatchesService extends YardiAbstractService {
         YardiStubFactory.create(YardiSystemBatchesStub.class).postReceiptBatch(yc, paymentBatchContext.getBatchId());
     }
 
-    public void postReceipt(PmcYardiCredential yc, YardiReceipt receipt, String propertyCode, YardiPaymentBatchContext paymentBatchContext)
+    public void postReceipt(PmcYardiCredential yc, YardiReceipt receipt, Building building, YardiPaymentBatchContext paymentBatchContext)
             throws YardiServiceException, RemoteException, ARException {
 
         boolean singleTrasactionBatch = false;
@@ -66,32 +67,36 @@ public class YardiSystemBatchesService extends YardiAbstractService {
             singleTrasactionBatch = true;
         }
 
-        paymentBatchContext.ensureOpenBatch(yc, propertyCode);
+        paymentBatchContext.ensureOpenBatch(yc, building);
 
         boolean success = false;
         try {
-            log.debug("Receipt {} - adding to batch {} {}", receipt.paymentRecord().yardiDocumentNumber(), propertyCode, paymentBatchContext.getBatchId());
+            log.debug("Receipt {} - adding to batch {} {}", receipt.paymentRecord().yardiDocumentNumber(), building.propertyCode(),
+                    paymentBatchContext.getBatchId());
+            paymentBatchContext.addRecord(receipt);
 
             YardiPaymentProcessor paymentProcessor = new YardiPaymentProcessor();
             ResidentTransactions residentTransactions = paymentProcessor.createTransactions(paymentProcessor.createTransactionForPayment(receipt));
             YardiStubFactory.create(YardiSystemBatchesStub.class).addReceiptsToBatch(yc, paymentBatchContext.getBatchId(), residentTransactions);
 
             paymentBatchContext.incrementRecordCount();
+            paymentBatchContext.confirmedRecord(receipt);
 
             if (singleTrasactionBatch) {
                 paymentBatchContext.postBatch();
             }
             success = true;
-            log.debug("Receipt {} - added to batch {} {}", receipt.paymentRecord().yardiDocumentNumber(), propertyCode, paymentBatchContext.getBatchId());
+            log.debug("Receipt {} - added to batch {} {}", receipt.paymentRecord().yardiDocumentNumber(), building.propertyCode(),
+                    paymentBatchContext.getBatchId());
         } finally {
             if (singleTrasactionBatch && !success) {
-                log.debug("Single transaction {} failed, call CancelReceiptBatch", receipt.id().getValue());
+                log.debug("Single transaction {} failed, call CancelReceiptBatch", receipt.paymentRecord().id().getValue());
                 paymentBatchContext.cancelBatch();
             }
         }
     }
 
-    public void postReceiptReversal(PmcYardiCredential yc, YardiReceiptReversal reversal, String propertyCode, YardiPaymentBatchContext paymentBatchContext)
+    public void postReceiptReversal(PmcYardiCredential yc, YardiReceiptReversal reversal, Building building, YardiPaymentBatchContext paymentBatchContext)
             throws YardiServiceException, RemoteException, ARException {
 
         boolean singleTrasactionBatch = false;
@@ -100,20 +105,32 @@ public class YardiSystemBatchesService extends YardiAbstractService {
             singleTrasactionBatch = true;
         }
 
-        paymentBatchContext.ensureOpenBatch(yc, propertyCode);
+        paymentBatchContext.ensureOpenBatch(yc, building);
 
-        log.debug("Reversal {} - adding to batch {} {}", reversal.paymentRecord().yardiDocumentNumber(), propertyCode, paymentBatchContext.getBatchId());
+        boolean success = false;
+        try {
+            log.debug("Reversal {} - adding to batch {} {}", reversal.paymentRecord().yardiDocumentNumber(), building.propertyCode(),
+                    paymentBatchContext.getBatchId());
+            paymentBatchContext.addRecord(reversal);
 
-        YardiPaymentProcessor paymentProcessor = new YardiPaymentProcessor();
-        ResidentTransactions residentTransactions = paymentProcessor.createTransactions(paymentProcessor.createTransactionForReversal(reversal));
-        YardiStubFactory.create(YardiSystemBatchesStub.class).addReceiptsReversalToBatch(yc, paymentBatchContext.getBatchId(), residentTransactions);
+            YardiPaymentProcessor paymentProcessor = new YardiPaymentProcessor();
+            ResidentTransactions residentTransactions = paymentProcessor.createTransactions(paymentProcessor.createTransactionForReversal(reversal));
+            YardiStubFactory.create(YardiSystemBatchesStub.class).addReceiptsReversalToBatch(yc, paymentBatchContext.getBatchId(), residentTransactions);
 
-        paymentBatchContext.incrementRecordCount();
+            paymentBatchContext.incrementRecordCount();
+            paymentBatchContext.confirmedRecord(reversal);
 
-        log.debug("Reversal {} - added to batch {} {}", reversal.paymentRecord().yardiDocumentNumber(), propertyCode, paymentBatchContext.getBatchId());
-
-        if (singleTrasactionBatch) {
-            paymentBatchContext.postBatch();
+            if (singleTrasactionBatch) {
+                paymentBatchContext.postBatch();
+            }
+            success = true;
+            log.debug("Reversal {} - added to batch {} {}", reversal.paymentRecord().yardiDocumentNumber(), building.propertyCode(),
+                    paymentBatchContext.getBatchId());
+        } finally {
+            if (singleTrasactionBatch && !success) {
+                log.debug("Single transaction {} failed, call CancelReversalBatch", reversal.paymentRecord().id().getValue());
+                paymentBatchContext.cancelBatch();
+            }
         }
     }
 

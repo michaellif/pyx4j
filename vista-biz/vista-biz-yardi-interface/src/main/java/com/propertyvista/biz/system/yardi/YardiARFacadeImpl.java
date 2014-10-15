@@ -99,7 +99,7 @@ public class YardiARFacadeImpl extends AbstractYardiFacadeImpl implements YardiA
         assert VistaFeatures.instance().yardiIntegration();
 
         YardiPaymentBatchContext paymentBatchContext = new YardiPaymentBatchContext();
-        paymentBatchContext.ensureOpenBatch(getPmcYardiCredential(building), building.propertyCode().getValue());
+        paymentBatchContext.ensureOpenBatch(getPmcYardiCredential(building), building);
 
         return paymentBatchContext;
     }
@@ -114,12 +114,12 @@ public class YardiARFacadeImpl extends AbstractYardiFacadeImpl implements YardiA
             Building buildingId = ServerSideFactory.create(LeaseFacade.class).getLeaseBuilding(receipt.billingAccount().lease());
             String propertyCode = Persistence.service().retrieveMember(buildingId.propertyCode());
 
-            YardiSystemBatchesService.getInstance().postReceipt(YardiCredentials.get(buildingId), receipt, propertyCode,
+            YardiSystemBatchesService.getInstance().postReceipt(YardiCredentials.get(buildingId), receipt, buildingId,
                     (YardiPaymentBatchContext) paymentBatchContext);
         } else {
             Persistence.ensureRetrieve(receipt.billingAccount().lease().unit().building(), AttachLevel.Attached);
             Building building = receipt.billingAccount().lease().unit().building();
-            YardiSystemBatchesService.getInstance().postReceipt(YardiCredentials.get(building), receipt, building.propertyCode().getValue(),
+            YardiSystemBatchesService.getInstance().postReceipt(YardiCredentials.get(building), receipt, building,
                     (YardiPaymentBatchContext) paymentBatchContext);
         }
     }
@@ -136,7 +136,7 @@ public class YardiARFacadeImpl extends AbstractYardiFacadeImpl implements YardiA
             try {
                 Persistence.ensureRetrieve(reversal.billingAccount().lease().unit().building(), AttachLevel.Attached);
                 YardiSystemBatchesService.getInstance().postReceiptReversal(getPmcYardiCredential(reversal.billingAccount().lease()), reversal,
-                        reversal.billingAccount().lease().unit().building().propertyCode().getValue(), null);
+                        reversal.billingAccount().lease().unit().building(), null);
             } catch (ARException e) {
                 throw new YardiServiceException(e);
             }
