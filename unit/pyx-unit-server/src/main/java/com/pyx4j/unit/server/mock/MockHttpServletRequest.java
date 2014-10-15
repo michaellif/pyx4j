@@ -107,6 +107,13 @@ public class MockHttpServletRequest implements HttpServletRequest {
         this.scheme = u.getProtocol();
         this.serverName = u.getHost();
         this.port = u.getPort();
+        if (u.getPort() == -1) {
+            if (this.scheme.equalsIgnoreCase("http")) {
+                this.port = 80;
+            } else if (this.scheme.equalsIgnoreCase("https")) {
+                this.port = 443;
+            }
+        }
 
         setRequestURIParts();
     }
