@@ -110,10 +110,10 @@ public class PortalTheme extends Theme {
 
                 Style style = new Style(" .", WidgetTheme.StyleName.Button);
                 style.addProperty("height", "2.6em");
-                style.addGradient(ThemeColor.foreground, 1, ThemeColor.foreground, 0.95);
-                style.addProperty("background", ThemeColor.foreground, 0.7);
+                style.addGradient(ThemeColor.object2, 1, ThemeColor.object2, 0.95);
+                style.addProperty("background", ThemeColor.object2, 0.7);
                 style.addProperty("border", "none");
-                style.addProperty("border-color", ThemeColor.foreground, 0.75);
+                style.addProperty("border-color", ThemeColor.object2, 0.75);
                 style.addProperty("border-radius", "5px");
                 style.addProperty("margin", "0  0 0 10px");
                 style.addProperty("color", "#fff");
