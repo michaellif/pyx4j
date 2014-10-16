@@ -84,8 +84,8 @@ import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.ref.ISOProvince;
 import com.propertyvista.domain.ref.ProvincePolicyNode;
 import com.propertyvista.domain.security.CrmUser;
-import com.propertyvista.domain.security.common.VistaApplication;
 import com.propertyvista.domain.security.common.VistaAccessGrantedBehavior;
+import com.propertyvista.domain.security.common.VistaApplication;
 import com.propertyvista.domain.settings.PmcCompanyInfo;
 import com.propertyvista.domain.site.SiteDescriptor;
 import com.propertyvista.domain.site.SiteTitles;
@@ -1233,7 +1233,7 @@ public class EmailTemplateManagerTest extends VistaDBTestBase {
 
         guarantorApp = EntityFactory.create(OnlineApplication.class);
         guarantorApp.masterOnlineApplication().set(mApp);
-        guarantorApp.customer().set(coApplicant.leaseParticipant().customer());
+        guarantorApp.customer().set(guarantor.leaseParticipant().customer());
         Persistence.service().persist(guarantorApp);
         guarantor.application().set(guarantorApp);
         Persistence.service().merge(guarantor);
