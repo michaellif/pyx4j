@@ -13,8 +13,12 @@
  */
 package com.propertyvista.dto;
 
+import com.pyx4j.entity.annotations.Caption;
+import com.pyx4j.entity.annotations.Editor;
+import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.annotations.ExtendsBO;
 import com.pyx4j.entity.annotations.SecurityEnabled;
+import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.core.IList;
 import com.pyx4j.entity.core.IPrimitive;
@@ -31,5 +35,13 @@ public interface PaymentRecordDTO extends PaymentDataDTO, PaymentRecord {
     IList<LeaseTermParticipant<? extends LeaseParticipant<?>>> participants();
 
     IPrimitive<Boolean> rejectedWithNSF();
+
+    @Editor(type = EditorType.label)
+    @Caption(name = "Yardi Batch #")
+    IPrimitive<String> externalBatchNumber();
+
+    @Editor(type = EditorType.label)
+    @Caption(name = "Yardi Reversal Batch #")
+    IPrimitive<String> externalBatchNumberReversal();
 
 }

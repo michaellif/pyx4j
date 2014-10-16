@@ -23,6 +23,7 @@ import org.slf4j.LoggerFactory;
 import com.pyx4j.commons.UserRuntimeException;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.core.AttachLevel;
+import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.server.Persistence;
 
 import com.propertyvista.biz.ExecutionMonitor;
@@ -31,6 +32,9 @@ import com.propertyvista.biz.financial.payment.PaymentBatchContext;
 import com.propertyvista.biz.system.AbstractYardiFacadeImpl;
 import com.propertyvista.biz.system.YardiPaymentBatchContext;
 import com.propertyvista.biz.tenant.lease.LeaseFacade;
+import com.propertyvista.domain.financial.PaymentRecord;
+import com.propertyvista.domain.financial.yardi.YardiPaymentPostingBatch;
+import com.propertyvista.domain.financial.yardi.YardiPaymentPostingBatch.YardiPostingStatus;
 import com.propertyvista.domain.financial.yardi.YardiReceipt;
 import com.propertyvista.domain.financial.yardi.YardiReceiptReversal;
 import com.propertyvista.domain.property.asset.building.Building;
@@ -177,5 +181,17 @@ public class YardiARFacadeImpl extends AbstractYardiFacadeImpl implements YardiA
         PmcYardiCredential yc = YardiCredentials.get(lease.unit().building());
         // Just ping the interface for now
         YardiStubFactory.create(YardiSystemBatchesStub.class).ping(yc);
+    }
+
+    @Override
+    public String getExternalBatchNumber(PaymentRecord paymentRecord, boolean reversal) {
+        EntityQueryCriteria<YardiPaymentPostingBatch> criteria = new EntityQueryCriteria<>(YardiPaymentPostingBatch.class);
+
+        criteria.eq(criteria.proto().status(), YardiPostingStatus.Posted);
+        criteria.eq(criteria.proto().records().$().paymentRecord(), paymentRecord);
+        criteria.eq(criteria.proto().records().$().reversal(), reversal);
+
+        YardiPaymentPostingBatch batch = Persistence.service().retrieve(criteria);
+        return (batch != null ? batch.externalBatchNumber().getValue() : null);
     }
 }

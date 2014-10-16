@@ -247,23 +247,24 @@ public class PaymentRecordForm extends CrmEntityForm<PaymentRecordDTO> {
         // ----------------------------------------------------------------------------------------
 
         formPanel.append(Location.Right, proto().amount()).decorate().componentWidth(120);
+        formPanel.append(Location.Right, proto().targetDate()).decorate().componentWidth(120);
+        formPanel.append(Location.Right, proto().notes()).decorate();
         formPanel.append(Location.Right, proto().createdBy()).decorate();
         formPanel.append(Location.Right, proto().createdDate()).decorate().componentWidth(120);
         formPanel.append(Location.Right, proto().updated()).decorate().componentWidth(120);
-        formPanel.append(Location.Right, proto().targetDate()).decorate().componentWidth(120);
         formPanel.append(Location.Right, proto().receivedDate()).decorate().componentWidth(120);
         formPanel.append(Location.Right, proto().finalizeDate()).decorate().componentWidth(120);
         formPanel.append(Location.Right, proto().paymentStatus()).decorate();
+        formPanel.append(Location.Right, proto().lastStatusChangeDate()).decorate().componentWidth(120);
         if (VistaFeatures.instance().yardiIntegration()) {
-            formPanel.append(Location.Right, proto().yardiDocumentNumber(), new CLabel<String>()).decorate();
-            formPanel.append(Location.Right, proto().batch().externalBatchNumber(), new CLabel<String>()).decorate();
+            formPanel.append(Location.Right, proto().yardiDocumentNumber()).decorate();
+            formPanel.append(Location.Right, proto().externalBatchNumber()).decorate();
+            formPanel.append(Location.Right, proto().externalBatchNumberReversal()).decorate();
         }
         formPanel.append(Location.Right, proto().rejectedWithNSF()).decorate().componentWidth(60);
-        formPanel.append(Location.Right, proto().lastStatusChangeDate()).decorate().componentWidth(120);
         formPanel.append(Location.Right, proto().transactionAuthorizationNumber()).decorate().componentWidth(120);
         formPanel.append(Location.Right, proto().convenienceFeeTransactionAuthorizationNumber()).decorate().componentWidth(120);
         formPanel.append(Location.Right, proto().transactionErrorMessage()).decorate();
-        formPanel.append(Location.Right, proto().notes()).decorate();
 
         // ----------------------------------------------------------------------------------------
 
@@ -357,7 +358,8 @@ public class PaymentRecordForm extends CrmEntityForm<PaymentRecordDTO> {
         get(proto().paymentStatus()).setVisible(true);
         if (VistaFeatures.instance().yardiIntegration()) {
             get(proto().yardiDocumentNumber()).setVisible(true);
-            get(proto().batch().externalBatchNumber()).setVisible(true);
+            get(proto().externalBatchNumber()).setVisible(!isEditable());
+            get(proto().externalBatchNumberReversal()).setVisible(!isEditable());
         }
         get(proto().rejectedWithNSF()).setVisible(false);
         get(proto().lastStatusChangeDate()).setVisible(true);
@@ -385,7 +387,7 @@ public class PaymentRecordForm extends CrmEntityForm<PaymentRecordDTO> {
         get(proto().paymentStatus()).setVisible(!isNew);
         get(proto().rejectedWithNSF()).setVisible(!isNew && !getValue().rejectedWithNSF().isNull());
         get(proto().lastStatusChangeDate()).setVisible(!isNew);
-        get(proto().finalizeDate()).setVisible(!isEditable());
+        get(proto().finalizeDate()).setVisible(!getValue().finalizeDate().isNull());
         get(proto().updated()).setVisible(!getValue().updated().isNull());
         get(proto().createdBy()).setVisible(!getValue().createdBy().isNull());
         get(proto().convenienceFee()).setVisible(!getValue().convenienceFee().isNull());
@@ -401,7 +403,6 @@ public class PaymentRecordForm extends CrmEntityForm<PaymentRecordDTO> {
                 get(proto().leaseTermParticipant()).setEditable(true);
                 if (VistaFeatures.instance().yardiIntegration()) {
                     get(proto().yardiDocumentNumber()).setVisible(false);
-                    get(proto().batch().externalBatchNumber()).setVisible(false);
                 }
             } else {
                 get(proto().leaseTermParticipant()).setEditable(false);

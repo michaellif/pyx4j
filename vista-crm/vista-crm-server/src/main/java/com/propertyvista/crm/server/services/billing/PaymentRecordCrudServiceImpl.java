@@ -38,6 +38,7 @@ import com.propertyvista.biz.financial.payment.PaymentException;
 import com.propertyvista.biz.financial.payment.PaymentFacade;
 import com.propertyvista.biz.financial.payment.PaymentMethodFacade;
 import com.propertyvista.biz.financial.payment.PaymentMethodTarget;
+import com.propertyvista.biz.system.yardi.YardiARFacade;
 import com.propertyvista.crm.rpc.services.billing.PaymentRecordCrudService;
 import com.propertyvista.domain.contact.InternationalAddress;
 import com.propertyvista.domain.financial.BillingAccount;
@@ -52,6 +53,7 @@ import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
 import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
 import com.propertyvista.dto.PaymentRecordDTO;
 import com.propertyvista.server.common.util.AddressRetriever;
+import com.propertyvista.shared.config.VistaFeatures;
 
 public class PaymentRecordCrudServiceImpl extends AbstractCrudServiceDtoImpl<PaymentRecord, PaymentRecordDTO> implements PaymentRecordCrudService {
 
@@ -96,6 +98,11 @@ public class PaymentRecordCrudServiceImpl extends AbstractCrudServiceDtoImpl<Pay
                         VistaApplication.crm));
 
         to.participants().addAll(retrievePayableUsers(to.billingAccount().lease()));
+
+        if (VistaFeatures.instance().yardiIntegration()) {
+            to.externalBatchNumber().setValue(ServerSideFactory.create(YardiARFacade.class).getExternalBatchNumber(bo, false));
+            to.externalBatchNumberReversal().setValue(ServerSideFactory.create(YardiARFacade.class).getExternalBatchNumber(bo, true));
+        }
     }
 
     @Override

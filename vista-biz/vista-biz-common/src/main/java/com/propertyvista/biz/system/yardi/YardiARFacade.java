@@ -19,6 +19,7 @@ import java.util.List;
 import com.propertyvista.biz.ExecutionMonitor;
 import com.propertyvista.biz.financial.ar.ARException;
 import com.propertyvista.biz.financial.payment.PaymentBatchContext;
+import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.financial.yardi.YardiReceipt;
 import com.propertyvista.domain.financial.yardi.YardiReceiptReversal;
 import com.propertyvista.domain.property.asset.building.Building;
@@ -30,7 +31,7 @@ public interface YardiARFacade {
 
     void doAllImport(ExecutionMonitor executionMonitor) throws YardiServiceException, RemoteException;
 
-    public void validateCreditCardAcceptance(Lease lease) throws YardiServiceException, RemoteException;
+    void validateCreditCardAcceptance(Lease lease) throws YardiServiceException, RemoteException;
 
     /**
      * set the same uid as during import so the pap will not be suspended.
@@ -51,4 +52,6 @@ public interface YardiARFacade {
     List<YardiPropertyConfiguration> getPropertyConfigurations() throws YardiServiceException, RemoteException;
 
     void updateUnitAvailability(AptUnit aptUnit) throws YardiServiceException, RemoteException;
+
+    String getExternalBatchNumber(PaymentRecord paymentRecord, boolean reversal);
 }
