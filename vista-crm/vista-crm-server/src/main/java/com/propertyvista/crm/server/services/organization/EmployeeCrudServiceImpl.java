@@ -13,6 +13,9 @@
  */
 package com.propertyvista.crm.server.services.organization;
 
+import java.util.Iterator;
+import java.util.Set;
+
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.commons.CommonsStringUtils;
@@ -92,27 +95,35 @@ public class EmployeeCrudServiceImpl extends AbstractCrudServiceDtoImpl<Employee
     protected void enhanceListCriteria(EntityListCriteria<Employee> boCriteria, EntityListCriteria<EmployeeDTO> toCriteria) {
         toCriteria.removeAllCriterions(toCriteria.proto().user().credential());
         if (SecurityController.check(DataModelPermission.permissionRead(EmployeePrivilegesDTO.class))) {
-            PropertyCriterion roleCriteria = toCriteria.getCriterion(toCriteria.proto().privileges().roles());
-            if (roleCriteria != null) {
-                toCriteria.getFilters().remove(roleCriteria);
-                if (roleCriteria.getRestriction() == Restriction.EQUAL) {
-                    boCriteria.eq(boCriteria.proto().user().credential().roles(), roleCriteria.getValue());
-                } else if (roleCriteria.getRestriction() == Restriction.NOT_EQUAL) {
-                    boCriteria.ne(boCriteria.proto().user().credential().roles(), roleCriteria.getValue());
-                } else {
-                    throw new IllegalArgumentException();
+            Set<PropertyCriterion> rolesCriteria = toCriteria.getCriterions(toCriteria.proto().privileges().roles());
+            if (rolesCriteria != null) {
+                Iterator<PropertyCriterion> iterator = rolesCriteria.iterator();
+                while (iterator.hasNext()) {
+                    PropertyCriterion roleCriteria = iterator.next();
+                    toCriteria.removeCriterions(roleCriteria);
+                    if (roleCriteria.getRestriction() == Restriction.EQUAL) {
+                        boCriteria.eq(boCriteria.proto().user().credential().roles(), roleCriteria.getValue());
+                    } else if (roleCriteria.getRestriction() == Restriction.NOT_EQUAL) {
+                        boCriteria.ne(boCriteria.proto().user().credential().roles(), roleCriteria.getValue());
+                    } else {
+                        throw new IllegalArgumentException();
+                    }
                 }
             }
-            PropertyCriterion behaviorsCriteria = toCriteria.getCriterion(toCriteria.proto().privileges().behaviors());
+            Set<PropertyCriterion> behaviorsCriteria = toCriteria.getCriterions(toCriteria.proto().privileges().behaviors());
             if (behaviorsCriteria != null) {
-                toCriteria.getFilters().remove(behaviorsCriteria);
-                if (behaviorsCriteria.getRestriction() == Restriction.EQUAL) {
-                    boCriteria.eq(boCriteria.proto().user().credential().roles().$().behaviors(), behaviorsCriteria.getValue());
-                } else if (behaviorsCriteria.getRestriction() == Restriction.NOT_EQUAL) {
-                    boCriteria.notExists(boCriteria.proto().user().credential().roles(),
-                            PropertyCriterion.eq(boCriteria.proto().user().credential().roles().$().behaviors(), behaviorsCriteria.getValue()));
-                } else {
-                    throw new IllegalArgumentException();
+                Iterator<PropertyCriterion> iterator = behaviorsCriteria.iterator();
+                while (iterator.hasNext()) {
+                    PropertyCriterion behaviorCriteria = iterator.next();
+                    toCriteria.removeCriterions(behaviorCriteria);
+                    if (behaviorCriteria.getRestriction() == Restriction.EQUAL) {
+                        boCriteria.eq(boCriteria.proto().user().credential().roles().$().behaviors(), behaviorCriteria.getValue());
+                    } else if (behaviorCriteria.getRestriction() == Restriction.NOT_EQUAL) {
+                        boCriteria.notExists(boCriteria.proto().user().credential().roles(),
+                                PropertyCriterion.eq(boCriteria.proto().user().credential().roles().$().behaviors(), behaviorCriteria.getValue()));
+                    } else {
+                        throw new IllegalArgumentException();
+                    }
                 }
             }
         }
