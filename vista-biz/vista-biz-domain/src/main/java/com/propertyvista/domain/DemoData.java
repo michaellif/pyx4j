@@ -23,7 +23,7 @@ public class DemoData {
     public static final boolean vistaDemo = VistaDemo.isDemo();
 
     public static enum DemoPmc {
-        vista, redridge, rockville, star, gondor, metcap, demo;
+        vista, redridge, rockville, star, gondor, metcap, timbercreek, demo;
     }
 
     //We need E-mail delivery during tests. All E-mails goes to us!

@@ -27,7 +27,7 @@ public class MetCapSitePreloader extends AbstractSitePreloader {
 
     @Override
     protected Skin skin() {
-        return Skin.skin5;
+        return Skin.skin1;
     }
 
     @Override

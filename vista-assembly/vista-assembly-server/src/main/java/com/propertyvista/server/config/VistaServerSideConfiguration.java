@@ -360,7 +360,7 @@ public class VistaServerSideConfiguration extends AbstractVistaServerSideConfigu
 
     @Override
     public Set<DemoPmc> dbResetPreloadPmc() {
-        return EnumSet.of(DemoPmc.vista, DemoPmc.star, DemoPmc.redridge, DemoPmc.rockville, DemoPmc.gondor, DemoPmc.metcap);
+        return EnumSet.of(DemoPmc.vista, DemoPmc.star, DemoPmc.redridge, DemoPmc.rockville, DemoPmc.gondor, DemoPmc.metcap, DemoPmc.timbercreek);
     }
 
     @Override

@@ -27,7 +27,7 @@ public class TimbercreekSitePreloader extends AbstractSitePreloader {
 
     @Override
     protected Skin skin() {
-        return Skin.skin5;
+        return Skin.skin2;
     }
 
     @Override
@@ -42,32 +42,32 @@ public class TimbercreekSitePreloader extends AbstractSitePreloader {
 
     @Override
     protected Integer contrast1() {
-        return 60;
+        return 330;
     }
 
     @Override
     protected Integer contrast2() {
-        return 60;
+        return 330;
     }
 
     @Override
     protected Integer contrast3() {
-        return 60;
+        return 330;
     }
 
     @Override
     protected Integer contrast4() {
-        return 60;
+        return 330;
     }
 
     @Override
     protected Integer contrast5() {
-        return 60;
+        return 330;
     }
 
     @Override
     protected Integer contrast6() {
-        return 60;
+        return 330;
     }
 
     @Override
