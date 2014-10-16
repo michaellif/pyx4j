@@ -119,9 +119,6 @@ public class PreauthorizedPaymentsForm extends CForm<PreauthorizedPaymentsDTO> {
                 FormPanel formPanel = new FormPanel(this);
 
                 formPanel.append(Location.Left, proto().id(), new CNumberLabel()).decorate().componentWidth(120);
-                formPanel.append(Location.Left, proto().creationDate()).decorate().componentWidth(180);
-                formPanel.append(Location.Right, proto().createdBy(), new CEntityLabel<AbstractPmcUser>()).decorate().componentWidth(200);
-                formPanel.append(Location.Left, proto().updated()).decorate().componentWidth(180);
                 formPanel.append(Location.Left, proto().paymentMethod(), new CEntitySelectorLabel<LeasePaymentMethod>() {
                     @Override
                     protected AbstractEntitySelectorDialog<LeasePaymentMethod> getSelectorDialog() {
@@ -134,9 +131,13 @@ public class PreauthorizedPaymentsForm extends CForm<PreauthorizedPaymentsDTO> {
                             }
                         };
                     }
-                }).decorate().componentWidth(300);
+                }).decorate();
 
-                formPanel.br();
+                formPanel.append(Location.Right, proto().createdBy(), new CEntityLabel<AbstractPmcUser>()).decorate();
+                formPanel.append(Location.Right, proto().creationDate()).decorate().componentWidth(180);
+                formPanel.append(Location.Right, proto().updated()).decorate().componentWidth(180);
+
+                formPanel.append(Location.Dual, proto().comments()).decorate();
                 formPanel.append(Location.Dual, proto().coveredItemsDTO(), new PapCoveredItemDtoFolder());
 
                 return formPanel;

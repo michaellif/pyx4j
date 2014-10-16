@@ -50,6 +50,8 @@ public class AutoPayHistoryLister extends AbstractLister<AutoPayHistoryDTO> {
                 new MemberColumnDescriptor.Builder(proto().paymentMethod()).searchable(false).build(),
                 new MemberColumnDescriptor.Builder(proto().paymentMethod().type()).title(i18n.tr("Payment Method Type")).visible(false).build(),
                 
+                new MemberColumnDescriptor.Builder(proto().comments()).build(),
+                
                 new MemberColumnDescriptor.Builder(proto().effectiveFrom()).build(),
                 new MemberColumnDescriptor.Builder(proto().expiredFrom()).build(),
                 

@@ -58,17 +58,8 @@ public class AutoPayHistoryForm extends CrmEntityForm<AutoPayHistoryDTO> {
         formPanel.append(Location.Left, proto().effectiveFrom(), new CDateLabel()).decorate().componentWidth(120);
         formPanel.append(Location.Left, proto().expiredFrom(), new CDateLabel()).decorate().componentWidth(120);
 
-        formPanel.append(Location.Left, proto().createdBy(), new CEntityLabel<AbstractPmcUser>()).decorate().componentWidth(200);
-        formPanel.append(Location.Left, proto().creationDate()).decorate().componentWidth(180);
-        formPanel.append(Location.Left, proto().auditDetails()).decorate();
-
-        formPanel.append(Location.Right, proto().updatedByTenant()).decorate().componentWidth(120);
-        formPanel.append(Location.Right, proto().updatedBySystem()).decorate().componentWidth(120);
-
-        formPanel.append(Location.Right, proto().updated()).decorate().componentWidth(180);
-        formPanel.append(Location.Right, proto().isDeleted()).decorate().componentWidth(70);
         CLabel<Key> reviewOfPapLink = new CLabel<Key>();
-        formPanel.append(Location.Right, proto().reviewOfPap().id(), reviewOfPapLink).decorate().componentWidth(150).customLabel(i18n.tr("Reviewed AutoPay"));
+        formPanel.append(Location.Left, proto().reviewOfPap().id(), reviewOfPapLink).decorate().componentWidth(150).customLabel(i18n.tr("Reviewed AutoPay"));
         reviewOfPapLink.setNavigationCommand(new Command() {
             @Override
             public void execute() {
@@ -77,8 +68,16 @@ public class AutoPayHistoryForm extends CrmEntityForm<AutoPayHistoryDTO> {
             }
         });
 
-        formPanel.append(Location.Right, proto().comments()).decorate();
+        formPanel.append(Location.Right, proto().updatedByTenant()).decorate().componentWidth(120);
+        formPanel.append(Location.Right, proto().updatedBySystem()).decorate().componentWidth(120);
 
+        formPanel.append(Location.Right, proto().createdBy(), new CEntityLabel<AbstractPmcUser>()).decorate().componentWidth(200);
+        formPanel.append(Location.Right, proto().creationDate()).decorate().componentWidth(180);
+        formPanel.append(Location.Right, proto().updated()).decorate().componentWidth(180);
+        formPanel.append(Location.Right, proto().isDeleted()).decorate().componentWidth(70);
+
+        formPanel.append(Location.Dual, proto().comments()).decorate();
+        formPanel.append(Location.Dual, proto().auditDetails()).decorate();
         formPanel.append(Location.Dual, proto().coveredItems(), new PapCoveredItemFolder());
 
         selectTab(addTab(formPanel, i18n.tr("AutoPay")));
@@ -90,6 +89,7 @@ public class AutoPayHistoryForm extends CrmEntityForm<AutoPayHistoryDTO> {
         super.onValueSet(populate);
 
         get(proto().updated()).setVisible(!getValue().updated().isNull());
+        get(proto().reviewOfPap().id()).setVisible(!getValue().reviewOfPap().isNull());
 
         boolean support = SecurityController.check(VistaBasicBehavior.PropertyVistaSupport);
         get(proto().updatedByTenant()).setVisible(support);
