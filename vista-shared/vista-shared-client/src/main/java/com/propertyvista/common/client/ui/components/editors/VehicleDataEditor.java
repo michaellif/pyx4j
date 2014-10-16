@@ -87,6 +87,7 @@ public class VehicleDataEditor extends CForm<Vehicle> {
         get(proto().year()).setMockValue(new LogicalDate());
         get(proto().plateNumber()).setMockValue("LastTimeDrive");
         get(proto().province()).setMockValueByString("Ontario");
+        get(proto().country()).setMockValueByString("Canada");
     }
 
     @Override
