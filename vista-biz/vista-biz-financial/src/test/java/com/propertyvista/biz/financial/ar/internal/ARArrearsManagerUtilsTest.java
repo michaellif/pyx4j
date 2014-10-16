@@ -30,7 +30,7 @@ import com.propertyvista.domain.financial.billing.LeaseArrearsSnapshot;
 public class ARArrearsManagerUtilsTest extends TestCase {
 
     public void testAddInPlace() {
-        AgingBuckets buckets1 = EntityFactory.create(AgingBuckets.class);
+        AgingBuckets<?> buckets1 = EntityFactory.create(AgingBuckets.class);
         buckets1.bucketThisMonth().setValue(new BigDecimal("1.00"));
         buckets1.bucketCurrent().setValue(new BigDecimal("10.00"));
         buckets1.bucket30().setValue(new BigDecimal("100.00"));
@@ -41,7 +41,7 @@ public class ARArrearsManagerUtilsTest extends TestCase {
         buckets1.creditAmount().setValue(new BigDecimal("10000000.00"));
         buckets1.totalBalance().setValue(new BigDecimal("100000000.00"));
 
-        AgingBuckets buckets2 = EntityFactory.create(AgingBuckets.class);
+        AgingBuckets<?> buckets2 = EntityFactory.create(AgingBuckets.class);
         buckets2.bucketThisMonth().setValue(new BigDecimal("2.00"));
         buckets2.bucketCurrent().setValue(new BigDecimal("20.00"));
         buckets2.bucket30().setValue(new BigDecimal("200.00"));

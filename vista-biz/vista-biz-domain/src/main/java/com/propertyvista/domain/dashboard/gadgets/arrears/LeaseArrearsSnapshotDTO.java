@@ -25,6 +25,6 @@ import com.propertyvista.domain.financial.billing.LeaseArrearsSnapshot;
 @Transient
 public interface LeaseArrearsSnapshotDTO extends LeaseArrearsSnapshot {
 
-    AgingBuckets selectedBuckets();
+    AgingBuckets<?> selectedBuckets();
 
 }

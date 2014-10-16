@@ -72,7 +72,7 @@ public class TransactionHistoryPrinter {
             out.write(convertToCell("Type", 14, true) + convertToCell("Current", 14, true) + convertToCell("1-30 Days", 14, true)
                     + convertToCell("31-60 Days", 14, true) + convertToCell("61-90 Days", 14, true) + convertToCell("Over 90 Days", 14, true));
             out.newLine();
-            for (AgingBuckets agingBuckets : transactionHistory.agingBuckets()) {
+            for (AgingBuckets<?> agingBuckets : transactionHistory.agingBuckets()) {
                 out.write(createAgingBucketsLine(agingBuckets));
                 out.newLine();
             }
@@ -121,7 +121,7 @@ public class TransactionHistoryPrinter {
                 + convertToCell(lineItem.description().isNull() ? "" : lineItem.description().getValue().toString(), 60, true) + debits + credits + balance;
     }
 
-    private static String createAgingBucketsLine(AgingBuckets agingBuckets) {
+    private static String createAgingBucketsLine(AgingBuckets<?> agingBuckets) {
         String bucketName = agingBuckets.arCode().isNull() ? "Total" : agingBuckets.arCode().getValue().toString();
         return convertToCell(bucketName, 14, true) + convertToCell(agingBuckets.bucketCurrent().getValue().toString(), 14, true)
                 + convertToCell(agingBuckets.bucket30().getValue().toString(), 14, true)

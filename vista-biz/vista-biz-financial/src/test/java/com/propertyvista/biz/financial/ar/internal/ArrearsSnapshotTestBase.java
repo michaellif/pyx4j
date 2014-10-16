@@ -156,9 +156,9 @@ public abstract class ArrearsSnapshotTestBase extends LeaseFinancialTestBase {
         assertArrearsCategory(null, expectedCurrent, expected30, expected60, expected90, expectedOver90);
     }
 
-    private AgingBuckets expectedAgingBuckets(ARCode.Type debitType, String expectedCurrent, String expected30, String expected60, String expected90,
+    private AgingBuckets<?> expectedAgingBuckets(ARCode.Type debitType, String expectedCurrent, String expected30, String expected60, String expected90,
             String expectedOver90) {
-        AgingBuckets expected = EntityFactory.create(AgingBuckets.class);
+        AgingBuckets<?> expected = EntityFactory.create(AgingBuckets.class);
         expected.arCode().setValue(debitType);
         expected.bucketCurrent().setValue(new BigDecimal(expectedCurrent));
         expected.bucket30().setValue(new BigDecimal(expected30));
@@ -166,7 +166,7 @@ public abstract class ArrearsSnapshotTestBase extends LeaseFinancialTestBase {
         expected.bucket90().setValue(new BigDecimal(expected90));
         expected.bucketOver90().setValue(new BigDecimal(expectedOver90));
 
-        AgingBuckets cachedExpected = prevExpectedAgingBuckets.get(debitType);
+        AgingBuckets<?> cachedExpected = prevExpectedAgingBuckets.get(debitType);
         if (cachedExpected == null) {
             String bucketsKey = debitType == null ? "TOTAL" : debitType.name();
             prevExpectedAgingBuckets.put(bucketsKey, expected);
@@ -181,7 +181,7 @@ public abstract class ArrearsSnapshotTestBase extends LeaseFinancialTestBase {
 
     }
 
-    private void assertAgingBuckets(AgingBuckets expected, AgingBuckets actual) {
+    private void assertAgingBuckets(AgingBuckets<?> expected, AgingBuckets<?> actual) {
         assertEquals("bucket current", expected.bucketCurrent().getValue(), actual.bucketCurrent().getValue());
         assertEquals("bucket 30", expected.bucket30().getValue(), actual.bucket30().getValue());
         assertEquals("bucket 60", expected.bucket60().getValue(), actual.bucket60().getValue());

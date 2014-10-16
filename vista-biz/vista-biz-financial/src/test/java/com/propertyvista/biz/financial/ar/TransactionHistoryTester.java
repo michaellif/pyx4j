@@ -84,7 +84,7 @@ public class TransactionHistoryTester extends Tester {
     }
 
     public TransactionHistoryTester agingBucketsCurrent(BigDecimal amount, ARCode.Type debitType) {
-        AgingBuckets buckets = getAgingBucketsOfType(debitType);
+        AgingBuckets<?> buckets = getAgingBucketsOfType(debitType);
         if (buckets != null) {
             assertEquals("Aging Buckets Current amount", amount, buckets.bucketCurrent().getValue());
         } else {
@@ -94,7 +94,7 @@ public class TransactionHistoryTester extends Tester {
     }
 
     public TransactionHistoryTester agingBuckets30(BigDecimal amount, ARCode.Type debitType) {
-        AgingBuckets buckets = getAgingBucketsOfType(debitType);
+        AgingBuckets<?> buckets = getAgingBucketsOfType(debitType);
         if (buckets != null) {
             assertEquals("bucket30 amount", amount, buckets.bucket30().getValue());
         } else {
@@ -104,7 +104,7 @@ public class TransactionHistoryTester extends Tester {
     }
 
     public TransactionHistoryTester agingBuckets60(BigDecimal amount, ARCode.Type debitType) {
-        AgingBuckets buckets = getAgingBucketsOfType(debitType);
+        AgingBuckets<?> buckets = getAgingBucketsOfType(debitType);
         if (buckets != null) {
             assertEquals("bucket60 amount", amount, buckets.bucket60().getValue());
         } else {
@@ -114,7 +114,7 @@ public class TransactionHistoryTester extends Tester {
     }
 
     public TransactionHistoryTester agingBuckets90(BigDecimal amount, ARCode.Type debitType) {
-        AgingBuckets buckets = getAgingBucketsOfType(debitType);
+        AgingBuckets<?> buckets = getAgingBucketsOfType(debitType);
         if (buckets != null) {
             assertEquals("bucket90 amount", amount, buckets.bucket90().getValue());
         } else {
@@ -124,7 +124,7 @@ public class TransactionHistoryTester extends Tester {
     }
 
     public TransactionHistoryTester agingBucketOver90(BigDecimal amount, ARCode.Type debitType) {
-        AgingBuckets buckets = getAgingBucketsOfType(debitType);
+        AgingBuckets<?> buckets = getAgingBucketsOfType(debitType);
         if (buckets != null) {
             assertEquals("bucketOver90 amount", amount, buckets.bucketOver90().getValue());
         } else {
@@ -133,11 +133,11 @@ public class TransactionHistoryTester extends Tester {
         return this;
     }
 
-    private AgingBuckets getAgingBucketsOfType(ARCode.Type debitType) {
+    private AgingBuckets<?> getAgingBucketsOfType(ARCode.Type debitType) {
         if (debitType == null) {
             return transactionHistory.totalAgingBuckets();
         }
-        for (AgingBuckets buckets : transactionHistory.agingBuckets()) {
+        for (AgingBuckets<?> buckets : transactionHistory.agingBuckets()) {
             if (debitType == buckets.arCode().getValue()) {
                 return buckets;
             }
