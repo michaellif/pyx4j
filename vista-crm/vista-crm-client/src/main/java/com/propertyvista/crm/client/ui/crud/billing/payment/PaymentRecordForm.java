@@ -248,19 +248,23 @@ public class PaymentRecordForm extends CrmEntityForm<PaymentRecordDTO> {
 
         formPanel.append(Location.Right, proto().amount()).decorate().componentWidth(120);
         formPanel.append(Location.Right, proto().targetDate()).decorate().componentWidth(120);
-        formPanel.append(Location.Right, proto().notes()).decorate();
-        formPanel.append(Location.Right, proto().createdBy()).decorate();
-        formPanel.append(Location.Right, proto().createdDate()).decorate().componentWidth(120);
-        formPanel.append(Location.Right, proto().updated()).decorate().componentWidth(120);
         formPanel.append(Location.Right, proto().receivedDate()).decorate().componentWidth(120);
         formPanel.append(Location.Right, proto().finalizedDate()).decorate().componentWidth(120);
         formPanel.append(Location.Right, proto().paymentStatus()).decorate();
         formPanel.append(Location.Right, proto().lastStatusChangeDate()).decorate().componentWidth(120);
+
+        formPanel.append(Location.Right, proto().createdBy()).decorate();
+        formPanel.append(Location.Right, proto().createdDate()).decorate().componentWidth(120);
+        formPanel.append(Location.Right, proto().updated()).decorate().componentWidth(120);
+
+        formPanel.append(Location.Right, proto().notes()).decorate();
+
         if (VistaFeatures.instance().yardiIntegration()) {
             formPanel.append(Location.Right, proto().yardiDocumentNumber()).decorate();
             formPanel.append(Location.Right, proto().externalBatchNumber()).decorate();
             formPanel.append(Location.Right, proto().externalBatchNumberReversal()).decorate();
         }
+
         formPanel.append(Location.Right, proto().rejectedWithNSF()).decorate().componentWidth(60);
         formPanel.append(Location.Right, proto().transactionAuthorizationNumber()).decorate().componentWidth(120);
         formPanel.append(Location.Right, proto().convenienceFeeTransactionAuthorizationNumber()).decorate().componentWidth(120);
