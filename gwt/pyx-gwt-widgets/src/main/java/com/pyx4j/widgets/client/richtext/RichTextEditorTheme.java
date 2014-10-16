@@ -35,7 +35,7 @@ public class RichTextEditorTheme extends Theme {
 
         style = new Style(".", StyleName.ReachTextEditor, " .", WidgetTheme.StyleName.Button, ".", StyleName.RteToolbarButton);
         style.addProperty("border", "1px solid");
-        style.addProperty("border-color", ThemeColor.background);
+        style.addProperty("border-color", ThemeColor.formBackground);
         addStyle(style);
 
         style = new Style(".", StyleName.ReachTextEditor, " .", WidgetTheme.StyleName.Button, ".", StyleName.RteToolbarButton, " .",
@@ -58,7 +58,7 @@ public class RichTextEditorTheme extends Theme {
 
         style = new Style(".", StyleName.ReachTextEditor, " .", WidgetTheme.StyleName.Button, ".", StyleName.RteToolbarButtonNoToggle);
         style.addProperty("border", "1px solid");
-        style.addProperty("border-color", ThemeColor.background);
+        style.addProperty("border-color", ThemeColor.formBackground);
         addStyle(style);
 
         style = new Style(".", StyleName.ReachTextEditor, " .", WidgetTheme.StyleName.Button, ".", StyleName.RteToolbarButtonNoToggle, " .",
@@ -69,7 +69,7 @@ public class RichTextEditorTheme extends Theme {
         style = new Style(".", StyleName.ReachTextEditor, " .", StyleName.RteToolbarButtonNoToggle, ".", WidgetTheme.StyleName.Button, "-",
                 WidgetTheme.StyleDependent.active);
         style.addProperty("border", "1px solid");
-        style.addProperty("border-color", ThemeColor.background);
+        style.addProperty("border-color", ThemeColor.formBackground);
         addStyle(style);
 
         style = new Style(".", StyleName.ReachTextEditor, " .", WidgetTheme.StyleName.CheckBox, ".", StyleName.RteCheckBox);

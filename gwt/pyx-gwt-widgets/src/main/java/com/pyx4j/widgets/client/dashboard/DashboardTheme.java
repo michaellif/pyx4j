@@ -68,7 +68,7 @@ public class DashboardTheme extends Theme {
         addStyle(style);
 
         style = new Style(".", StyleName.DashboardGadgetHolder);
-        style.addProperty("background-color", ThemeColor.background);
+        style.addProperty("background-color", ThemeColor.formBackground);
         style.addProperty("border", "1px solid #ccc");
         style.addProperty("margin", "5px");
         addStyle(style);

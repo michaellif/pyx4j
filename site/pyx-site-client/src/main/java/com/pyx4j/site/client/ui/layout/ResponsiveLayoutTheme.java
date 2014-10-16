@@ -68,7 +68,7 @@ public class ResponsiveLayoutTheme extends Theme {
         style.addProperty("line-height", "30px");
         style.addProperty("padding", "0 10px");
         style.addProperty("height", "30px");
-        style.addProperty("color", ThemeColor.background, 1.0);
+        style.addProperty("color", ThemeColor.formBackground, 1.0);
         style.addProperty("cursor", "pointer");
         style.addProperty("background", "transparent");
         style.addProperty("background-color", ThemeColor.foreground, 0.8);

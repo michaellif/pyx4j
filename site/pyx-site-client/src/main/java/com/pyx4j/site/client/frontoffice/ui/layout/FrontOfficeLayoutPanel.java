@@ -92,10 +92,10 @@ public class FrontOfficeLayoutPanel extends ResponsiveLayoutPanel {
         pageHolder = new FlowPanel();
 
         pagePanel = new FlowPanel();
-        pagePanel.setStyleName(FrontOfficeLayoutTheme.StyleName.ResponsiveLayoutMainHolder.name());
+        pagePanel.setStyleName(FrontOfficeLayoutTheme.StyleName.FrontOfficeLayoutMainHolder.name());
 
         headerHolder = new SimplePanel(getDisplay(DisplayType.header));
-        headerHolder.setStyleName(FrontOfficeLayoutTheme.StyleName.ResponsiveLayoutHeaderHolder.name());
+        headerHolder.setStyleName(FrontOfficeLayoutTheme.StyleName.FrontOfficeLayoutHeaderHolder.name());
 
         pageScroll = new ScrollPanel(pagePanel);
         pageScroll.addScrollHandler(new ScrollHandler() {
@@ -158,7 +158,7 @@ public class FrontOfficeLayoutPanel extends ResponsiveLayoutPanel {
         popupCommHolder = new DropDownPanel();
 
         footerHolder = new SimplePanel(getDisplay(DisplayType.footer));
-        footerHolder.setStyleName(FrontOfficeLayoutTheme.StyleName.ResponsiveLayoutFooterHolder.name());
+        footerHolder.setStyleName(FrontOfficeLayoutTheme.StyleName.FrontOfficeLayoutFooterHolder.name());
         getDisplay(DisplayType.footer).getElement().getStyle().setProperty("maxWidth", MAX_WIDTH + "px");
         getDisplay(DisplayType.footer).addStyleName(HorizontalAlignCenterMixin.StyleName.HorizontalAlignCenter.name());
 

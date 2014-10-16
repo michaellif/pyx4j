@@ -30,7 +30,7 @@ public class CenterPanel extends FlowPanel {
 
     public CenterPanel(FlowPanel contentPanel, InlineMenuHolder inlineMenuHolder) {
         ensureDebugId(getClass().getSimpleName());
-        setStyleName(FrontOfficeLayoutTheme.StyleName.ResponsiveLayoutContentHolder.name());
+        setStyleName(FrontOfficeLayoutTheme.StyleName.FrontOfficeLayoutContentHolder.name());
         getElement().getStyle().setProperty("maxWidth", FrontOfficeLayoutPanel.MAX_WIDTH + "px");
         addStyleName(HorizontalAlignCenterMixin.StyleName.HorizontalAlignCenter.name());
         getElement().getStyle().setPosition(Position.RELATIVE);
@@ -41,7 +41,7 @@ public class CenterPanel extends FlowPanel {
         backgroundPanel.getElement().getStyle().setProperty("bottom", "0");
         backgroundPanel.getElement().getStyle().setProperty("left", "0");
         backgroundPanel.getElement().getStyle().setProperty("right", "0");
-        backgroundPanel.setStyleName(FrontOfficeLayoutTheme.StyleName.ResponsiveLayoutContentBackground.name());
+        backgroundPanel.setStyleName(FrontOfficeLayoutTheme.StyleName.FrontOfficeLayoutContentBackground.name());
         add(backgroundPanel);
 
         FlowPanel containerPanel = new FlowPanel();

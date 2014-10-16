@@ -30,7 +30,7 @@ public class TesterPalette extends Palette {
         putThemeColor(ThemeColor.object2, "B26C1F");
         putThemeColor(ThemeColor.contrast1, "red");
         putThemeColor(ThemeColor.contrast2, "orange");
-        putThemeColor(ThemeColor.background, "#fefefe");
+        putThemeColor(ThemeColor.formBackground, "#fefefe");
         putThemeColor(ThemeColor.foreground, "#666666");
     }
 }

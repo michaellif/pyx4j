@@ -55,7 +55,7 @@ public class DevConsoleTheme extends Theme {
         style.addProperty("padding", "0 10px");
         style.addProperty("height", "34px");
         style.addProperty("float", "right");
-        style.addProperty("color", ThemeColor.background, 1.0);
+        style.addProperty("color", ThemeColor.formBackground, 1.0);
         style.addProperty("cursor", "pointer");
         style.addProperty("background-color", ThemeColor.foreground, 1.0);
         addStyle(style);
@@ -76,7 +76,7 @@ public class DevConsoleTheme extends Theme {
         style.addProperty("margin", "0 20px");
         style.addProperty("border", "1px solid");
         style.addProperty("border-color", ThemeColor.foreground, 1.0);
-        style.addProperty("background-color", ThemeColor.background, 1.0);
+        style.addProperty("background-color", ThemeColor.formBackground, 1.0);
         style.addProperty("opacity", "0.9");
         style.addProperty("height", "50px");
         addStyle(style);

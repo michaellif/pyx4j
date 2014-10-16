@@ -32,7 +32,7 @@ public class InlineToolbarHolder extends SimplePanel {
     public InlineToolbarHolder(FrontOfficeLayoutPanel parent) {
         this.parent = parent;
 
-        setStyleName(FrontOfficeLayoutTheme.StyleName.ResponsiveLayoutInlineToolbarHolder.name());
+        setStyleName(FrontOfficeLayoutTheme.StyleName.FrontOfficeLayoutInlineToolbarHolder.name());
 
     }
 

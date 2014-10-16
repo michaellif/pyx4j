@@ -40,17 +40,21 @@ public enum ThemeColor {
 
     contrast6("#E76B6B"),
 
-    background("#FFFFFF"),
+    formBackground("#FFFFFF"),
+
+    siteBackground("#FFFFFF"),
 
     foreground("#000000"),
 
-    info("#000000");
+    info("#000000"),
+
+    confirm("#000000"),
+
+    warning("#000000"),
+
+    error("#000000");
 
     private String defaultColor;
-
-    private ThemeColor() {
-        this("ffffff");
-    }
 
     private ThemeColor(String defaultColor) {
         this.defaultColor = defaultColor;

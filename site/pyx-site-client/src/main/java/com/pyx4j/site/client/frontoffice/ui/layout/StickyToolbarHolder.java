@@ -36,7 +36,7 @@ public class StickyToolbarHolder extends SimplePanel implements RequiresResize {
 
         getElement().getStyle().setZIndex(10);
 
-        setStyleName(FrontOfficeLayoutTheme.StyleName.ResponsiveLayoutStickyToolbarHolder.name());
+        setStyleName(FrontOfficeLayoutTheme.StyleName.FrontOfficeLayoutStickyToolbarHolder.name());
 
         getElement().getStyle().setTop(0, Unit.PX);
         getElement().getStyle().setLeft(0, Unit.PX);

@@ -73,7 +73,7 @@ public class DialogTheme extends Theme {
         addStyle(style);
 
         style = new Style(".", StyleName.DialogContent);
-        style.addProperty("background-color", ThemeColor.background);
+        style.addProperty("background-color", ThemeColor.formBackground);
         style.addProperty("width", "100%");
         style.addProperty("height", "100%");
         addStyle(style);

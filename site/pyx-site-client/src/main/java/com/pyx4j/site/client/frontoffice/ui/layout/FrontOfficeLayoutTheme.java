@@ -28,9 +28,11 @@ import com.pyx4j.site.client.ui.layout.ResponsiveLayoutTheme;
 public class FrontOfficeLayoutTheme extends ResponsiveLayoutTheme {
 
     public static enum StyleName implements IStyleName {
-        ResponsiveLayoutMainHolder, ResponsiveLayoutHeaderHolder, ResponsiveLayoutStickyToolbarHolder, ResponsiveLayoutInlineToolbarHolder, ResponsiveLayoutStickyMessageHolder,
+        FrontOfficeLayoutMainHolder, FrontOfficeLayoutHeaderHolder, FrontOfficeLayoutStickyToolbarHolder,
 
-        ResponsiveLayoutFooterHolder, ResponsiveLayoutContentHolder, ResponsiveLayoutContentBackground,
+        FrontOfficeLayoutInlineToolbarHolder, FrontOfficeLayoutStickyMessageHolder,
+
+        FrontOfficeLayoutFooterHolder, FrontOfficeLayoutContentHolder, FrontOfficeLayoutContentBackground,
 
         FrontOfficeLayoutInlineExtraPanel, FrontOfficeLayoutInlineExtraPanelCaption;
     }
@@ -70,30 +72,30 @@ public class FrontOfficeLayoutTheme extends ResponsiveLayoutTheme {
 
         initScrollStyles();
 
-        Style style = new Style(".", StyleName.ResponsiveLayoutMainHolder);
+        Style style = new Style(".", StyleName.FrontOfficeLayoutMainHolder);
         style.addProperty("min-width", "320px");
         addStyle(style);
 
-        style = new Style(".", StyleName.ResponsiveLayoutHeaderHolder);
+        style = new Style(".", StyleName.FrontOfficeLayoutHeaderHolder);
         style.addProperty("overflow", "hidden");
         addStyle(style);
 
-        style = new Style(".", StyleName.ResponsiveLayoutInlineToolbarHolder);
-        style.addGradient(ThemeColor.foreground, 1, ThemeColor.foreground, 0.95);
+        style = new Style(".", StyleName.FrontOfficeLayoutInlineToolbarHolder);
+        style.addGradient(ThemeColor.object2, 1, ThemeColor.object2, 0.95);
         style.addProperty("min-width", "320px");
         style.addProperty("height", "60px");
         addStyle(style);
 
-        style = new Style(".", StyleName.ResponsiveLayoutStickyToolbarHolder);
-        style.addGradient(ThemeColor.foreground, 1, ThemeColor.foreground, 0.95);
+        style = new Style(".", StyleName.FrontOfficeLayoutStickyToolbarHolder);
+        style.addGradient(ThemeColor.object2, 1, ThemeColor.object2, 0.95);
         style.addProperty("min-width", "320px");
         addStyle(style);
 
-        style = new Style(".", StyleName.ResponsiveLayoutFooterHolder);
-        style.addGradient(ThemeColor.foreground, 0.7, ThemeColor.foreground, 0.65);
+        style = new Style(".", StyleName.FrontOfficeLayoutFooterHolder);
+        style.addGradient(ThemeColor.object1, 1, ThemeColor.object1, 0.95);
         addStyle(style);
 
-        style = new Style(".", StyleName.ResponsiveLayoutContentHolder);
+        style = new Style(".", StyleName.FrontOfficeLayoutContentHolder);
         style.addProperty("min-height", "500px");
         addStyle(style);
 

@@ -191,7 +191,7 @@ public class TesterTheme extends Theme {
 
     protected void initBodyStyles() {
         Style style = new Style("body");
-        style.addProperty("background-color", ThemeColor.background, 1);
+        style.addProperty("background-color", ThemeColor.formBackground, 1);
         style.addProperty("color", ThemeColor.foreground);
         style.addProperty("margin", "0");
         style.addProperty("border", "none");
@@ -408,10 +408,10 @@ public class TesterTheme extends Theme {
         // Push Button
         gwtButton = ".gwt-PushButton";
         style = new Style(gwtButton);
-        style.addProperty("color", ThemeColor.background);
+        style.addProperty("color", ThemeColor.formBackground);
         style.addProperty("border-width", "1px");
         style.addProperty("border-style", "solid");
-        style.addProperty("border-color", ThemeColor.background);
+        style.addProperty("border-color", ThemeColor.formBackground);
         style.addProperty("margin", "0.2em 0.2em");
         style.addProperty("padding", "0.2em 0.5em");
         style.addProperty("text-align", "center");
