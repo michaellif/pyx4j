@@ -273,6 +273,7 @@ public abstract class VistaAuthenticationServicesImpl<U extends AbstractUser, V 
             if (AbstractAntiBot.authenticationFailed(LoginType.userLogin, email)) {
                 throw new ChallengeVerificationRequired(i18n.tr("Too Many Failed Log In Attempts"));
             } else {
+                ServerSideFactory.create(AuditFacade.class).loginAttemptFailed(getVistaApplication(), email);
                 throw new UserRuntimeException(true, AbstractAntiBot.GENERIC_LOGIN_FAILED_MESSAGE);
             }
         }

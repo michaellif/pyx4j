@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011- All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -28,8 +28,8 @@ import com.pyx4j.entity.server.TransactionScopeOption;
 import com.pyx4j.entity.server.UnitOfWork;
 import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.security.shared.UserVisit;
-import com.pyx4j.server.contexts.ServerContext;
 import com.pyx4j.server.contexts.NamespaceManager;
+import com.pyx4j.server.contexts.ServerContext;
 import com.pyx4j.server.contexts.Visit;
 
 import com.propertyvista.domain.VistaNamespace;
@@ -68,12 +68,14 @@ public class AuditFacadeImpl implements AuditFacade {
 
     @Override
     public void loginFailed(VistaApplication application, AbstractUser user) {
-        AuditRecord record = EntityFactory.create(AuditRecord.class);
-        record.event().setValue(AuditRecordEventType.LoginFailed);
-        record.namespace().setValue(NamespaceManager.getNamespace());
-        record.app().setValue(application);
-        record.remoteAddr().setValue(getRequestRemoteAddr());
-        setPrincipalUser(record, user);
+        AuditRecord record = loginFail(application, user);
+        record(record);
+    }
+
+    @Override
+    public void loginAttemptFailed(VistaApplication application, String email) {
+        AuditRecord record = loginFail(application, null);
+        record.details().setValue("No such user: '" + email + "'");
         record(record);
     }
 
@@ -200,6 +202,18 @@ public class AuditFacadeImpl implements AuditFacade {
             info.append("User-Agent: ").append(ServerContext.getRequest().getHeader("User-Agent"));
             return info.toString();
         }
+    }
+
+    private AuditRecord loginFail(VistaApplication application, AbstractUser user) {
+        AuditRecord record = EntityFactory.create(AuditRecord.class);
+        record.event().setValue(AuditRecordEventType.LoginFailed);
+        record.namespace().setValue(NamespaceManager.getNamespace());
+        record.app().setValue(application);
+        record.remoteAddr().setValue(getRequestRemoteAddr());
+        if (user != null) {
+            setPrincipalUser(record, user);
+        }
+        return record;
     }
 
 }
