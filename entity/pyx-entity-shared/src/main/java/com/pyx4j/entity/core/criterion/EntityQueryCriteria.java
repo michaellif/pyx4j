@@ -22,8 +22,10 @@ package com.pyx4j.entity.core.criterion;
 
 import java.io.Serializable;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 import java.util.Vector;
 
 import com.pyx4j.commons.EqualsHelper;
@@ -35,7 +37,7 @@ import com.pyx4j.entity.core.IObject;
 
 /**
  * Representation of a query criterion.
- * 
+ *
  * Translates to org.hibernate.Criteria in RDBMS or Query in GAE
  */
 public class EntityQueryCriteria<E extends IEntity> extends FiltersBuilder implements Serializable, IHaveServiceCallMarker, ICloneable<EntityQueryCriteria<E>> {
@@ -220,6 +222,19 @@ public class EntityQueryCriteria<E extends IEntity> extends FiltersBuilder imple
         return null;
     }
 
+    public Set<PropertyCriterion> getCriterions(IObject<?> member) {
+        Set<PropertyCriterion> criterions = null;
+        if (getFilters() != null) {
+            criterions = new HashSet<PropertyCriterion>();
+            for (Criterion citerion : getFilters()) {
+                if ((citerion instanceof PropertyCriterion) && (member.getPath().toString().equals(((PropertyCriterion) citerion).getPropertyPath()))) {
+                    criterions.add((PropertyCriterion) citerion);
+                }
+            }
+        }
+        return criterions;
+    }
+
     public void removeCriterion(IObject<?> member) {
         PropertyCriterion citerion = getCriterion(member);
         if (citerion != null) {
@@ -241,6 +256,21 @@ public class EntityQueryCriteria<E extends IEntity> extends FiltersBuilder imple
 
     public List<Criterion> getFilters() {
         return filters;
+    }
+
+    /**
+     * Removes all occurrences of one criterion in list of filters
+     *
+     * @param criterion
+     *            the criterion instance to remove
+     * @return true if at least one criterion has been deleted; false otherwise.
+     */
+    public boolean removeCriterions(Criterion criterion) {
+        boolean deleted = false;
+        while (deleted = filters.remove(criterion)) {
+            deleted = true;
+        }
+        return deleted;
     }
 
     public List<Sort> getSorts() {
