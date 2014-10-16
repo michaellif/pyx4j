@@ -224,6 +224,7 @@ public abstract class CounterGadgetInstanceBase<Data extends IEntity, Query, Gad
             }
         });
         returnButton.getElement().getStyle().setFloat(Float.RIGHT);
+        returnButton.getElement().getStyle().setMarginTop(0.5, Unit.EM);
         returnButton.getElement().getStyle().setMarginRight(0.5, Unit.EM);
         detailsTitlePanel.add(returnButton);
 
