@@ -62,7 +62,6 @@ public class MoveInWizardManager {
                     handlerRegistration = AppSite.getEventBus().addHandler(PlaceChangeEvent.TYPE, new PlaceChangeEvent.Handler() {
                         @Override
                         public void onPlaceChange(final PlaceChangeEvent event) {
-                            System.out.println("++++++++++++++onPlaceChange");
                             GWT.<MoveInWizardService> create(MoveInWizardService.class).obtainSteps(new AsyncCallback<MoveInWizardStatusTO>() {
 
                                 @Override
@@ -172,7 +171,6 @@ public class MoveInWizardManager {
     }
 
     public static void setCurrentStep(MoveInWizardStep step) {
-        System.out.println("+++++++++++" + step);
         if (step != null && isStepIncluded(step) && !isStepComplete(step)) {
             currentStep = step;
         } else {
