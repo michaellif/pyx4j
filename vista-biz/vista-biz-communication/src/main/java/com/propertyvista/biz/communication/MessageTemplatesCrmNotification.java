@@ -79,7 +79,7 @@ class MessageTemplatesCrmNotification {
     public static MailMessage createYardiConfigurationNotificationEmail(String message) {
         MailMessage email = new MailMessage();
         email.setSender(getSender());
-        email.setSubject(i18n.tr("Yardi Configuration Notice"));
+        email.setSubject(i18n.tr("Yardi Configuration Notice: {0}", VistaDeployment.getCurrentPmc().name().getValue()));
 
         MessageTemplate template = new MessageTemplate();
         template.setBodyTemplate(message);
