@@ -71,7 +71,7 @@ public interface MaintenanceRequestStatus extends IEntity {
     @JoinColumn
     MaintenanceRequestMetadata meta();
 
-    @ToString(index = 0)
+//    @ToString(index = 0)
     IPrimitive<StatusPhase> phase();
 
     @ToString

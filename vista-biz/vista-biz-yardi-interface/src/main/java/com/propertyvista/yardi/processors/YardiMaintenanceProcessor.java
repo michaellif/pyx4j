@@ -46,6 +46,7 @@ import com.propertyvista.domain.maintenance.MaintenanceRequestCategory;
 import com.propertyvista.domain.maintenance.MaintenanceRequestMetadata;
 import com.propertyvista.domain.maintenance.MaintenanceRequestPriority;
 import com.propertyvista.domain.maintenance.MaintenanceRequestStatus;
+import com.propertyvista.domain.maintenance.MaintenanceRequestStatusRecord;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.settings.PmcYardiCredential;
@@ -83,7 +84,7 @@ public class YardiMaintenanceProcessor {
         }
 
         if (!mr.reporter().isNull()) {
-            Persistence.ensureRetrieve(mr.reporter().lease(), AttachLevel.ToStringMembers);
+            Persistence.ensureRetrieve(mr.reporter().lease(), AttachLevel.Attached);
             req.setTenantCode(mr.reporter().lease().leaseId().getValue());
         }
         req.setRequestorName(mr.reporterName().getValue());
@@ -267,9 +268,35 @@ public class YardiMaintenanceProcessor {
             mr.submitted().setValue(request.getServiceRequestDate());
         }
         mr.updated().setValue(request.getUpdateDate());
-        // TODO status history
+        // status history
+        mergeHistory(mr, request.getStatusHistory().getStatus(), meta);
 
         return mr;
+    }
+
+    public void mergeHistory(MaintenanceRequest mr, List<com.yardi.entity.maintenance.Status> history, MaintenanceRequestMetadata meta) {
+        // TODO implement
+        Persistence.ensureRetrieve(mr.statusHistory(), AttachLevel.Attached);
+        for (com.yardi.entity.maintenance.Status status : history) {
+            boolean found = false;
+            for (MaintenanceRequestStatusRecord sr : mr.statusHistory()) {
+                if (sr.newStatus().name().getValue().equals(status.getType()) && //
+                        sr.created().getValue().equals(status.getTimeStamp()) //
+                ) {
+                    found = true;
+                    break;
+                }
+            }
+            if (!found) {
+                MaintenanceRequestStatusRecord sr = EntityFactory.create(MaintenanceRequestStatusRecord.class);
+                MaintenanceRequestStatus newStatus = findStatus(status.getType(), meta);
+                if (newStatus != null) {
+                    sr.created().setValue(status.getTimeStamp());
+                    sr.newStatus().set(newStatus);
+                    mr.statusHistory().add(sr);
+                }
+            }
+        }
     }
 
     public List<MaintenanceRequestStatus> mergeStatuses(Statuses statuses, MaintenanceRequestMetadata meta) {
