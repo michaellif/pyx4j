@@ -42,28 +42,32 @@ public class MoveInWizardActivity extends SecurityAwareActivity implements MoveI
 
         panel.setWidget(view);
 
-        eventBus.addHandler(MoveInWizardStateChangeEvent.getType(), new MoveInWizardStateChangeHandler() {
+        if (MoveInWizardManager.getMoveInWizardState() == MoveInWizardState.confirmation) {
+            view.showCompletionConfirmationScreen();
+        } else {
 
-            @Override
-            public void onStateChange(MoveInWizardStateChangeEvent event) {
-                if (MoveInWizardManager.getMoveInWizardState() == MoveInWizardState.preface) {
-                    if (MoveInWizardManager.isPartiallyComplete()) {
-                        view.showProgressScreen();
-                    } else {
-                        if (SecurityController.check(PortalResidentBehavior.Resident)) {
-                            view.showTenantWelcomeScreen();
-                        } else if (SecurityController.check(PortalResidentBehavior.Guarantor)) {
-                            view.showGuarantorWelcomeScreen();
+            eventBus.addHandler(MoveInWizardStateChangeEvent.getType(), new MoveInWizardStateChangeHandler() {
+
+                @Override
+                public void onStateChange(MoveInWizardStateChangeEvent event) {
+                    if (MoveInWizardManager.getMoveInWizardState() == MoveInWizardState.preface) {
+                        if (MoveInWizardManager.isPartiallyComplete()) {
+                            view.showProgressScreen();
+                        } else {
+                            if (SecurityController.check(PortalResidentBehavior.Resident)) {
+                                view.showTenantWelcomeScreen();
+                            } else if (SecurityController.check(PortalResidentBehavior.Guarantor)) {
+                                view.showGuarantorWelcomeScreen();
+                            }
                         }
+                    } else if (MoveInWizardManager.getMoveInWizardState() == MoveInWizardState.confirmation) {
+                        view.showCompletionConfirmationScreen();
+                    } else {
+                        view.showStepPreview(MoveInWizardManager.getCurrentStep());
                     }
-                } else if (MoveInWizardManager.getMoveInWizardState() == MoveInWizardState.confirmation) {
-                    view.showCompletionConfirmationScreen();
-                } else {
-                    view.showStepPreview(MoveInWizardManager.getCurrentStep());
                 }
-            }
-        });
-
+            });
+        }
     }
 
 }

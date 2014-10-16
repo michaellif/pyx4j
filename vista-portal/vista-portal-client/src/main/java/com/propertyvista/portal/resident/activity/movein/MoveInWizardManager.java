@@ -94,7 +94,6 @@ public class MoveInWizardManager {
                 } else if (handlerRegistration != null && !SecurityController.check(PortalResidentBehavior.MoveInWizardCompletionRequired)) {
                     reset();
                 }
-
             }
 
         });
@@ -183,9 +182,10 @@ public class MoveInWizardManager {
             handlerRegistration.removeHandler();
             handlerRegistration = null;
             moveInWizardState = MoveInWizardState.confirmation;
+        } else {
+            moveInWizardState = null;
         }
         wizardStatus = null;
-        moveInWizardState = null;
         currentStep = null;
     }
 
