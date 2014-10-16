@@ -87,6 +87,10 @@ public class PortalRootPaneTheme extends Theme {
         style.addProperty("vertical-align", "top");
         addStyle(style);
 
+        style = new Style(".", StyleName.MainToolbar, " .", WidgetTheme.StyleName.Button);
+        style.addProperty("background", ThemeColor.object2, 0.7);
+        addStyle(style);
+
         style = new Style(".", StyleName.BrandImage);
         style.addProperty("display", "inline-block");
         style.addProperty("vertical-align", "top");
