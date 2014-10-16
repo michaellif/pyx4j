@@ -69,8 +69,8 @@ public class VistaDataPreloaders extends DataPreloaderCollection {
         } else {
             switch (demoPmc) {
             case vista:
-                add(new TimbercreekSitePreloader());
-                //add(new MetCapSitePreloader());
+                //add(new TimbercreekSitePreloader());
+                add(new MetCapSitePreloader());
                 //add(new VistaSitePreloader());
                 break;
             case star:

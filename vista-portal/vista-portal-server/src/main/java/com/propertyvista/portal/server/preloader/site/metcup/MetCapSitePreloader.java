@@ -42,32 +42,32 @@ public class MetCapSitePreloader extends AbstractSitePreloader {
 
     @Override
     protected Integer contrast1() {
-        return 209;
+        return 123;
     }
 
     @Override
     protected Integer contrast2() {
-        return 209;
+        return 123;
     }
 
     @Override
     protected Integer contrast3() {
-        return 209;
+        return 123;
     }
 
     @Override
     protected Integer contrast4() {
-        return 209;
+        return 123;
     }
 
     @Override
     protected Integer contrast5() {
-        return 209;
+        return 123;
     }
 
     @Override
     protected Integer contrast6() {
-        return 209;
+        return 123;
     }
 
     @Override
