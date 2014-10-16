@@ -125,7 +125,8 @@ public class VistaApplicationDispatcherFilter implements Filter {
         String requestUri = httpRequest.getRequestURI();
         if (!returnWithContextPath) {
             String contextPath = httpRequest.getContextPath();
-            requestUri = requestUri.replaceFirst(contextPath, "");
+            //requestUri = requestUri.replaceFirst(contextPath, "");
+            requestUri = requestUri.replaceAll(contextPath, ""); // hack for duplicate context on request
             log.info("updatedRequestUri -> " + requestUri);
         }
 
