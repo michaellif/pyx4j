@@ -53,6 +53,10 @@ public class GeneralForm extends CrmEntityForm<SiteDescriptorDTO> {
         formPanel.append(Location.Left, proto().sitePalette().object2()).decorate().componentWidth(120);
         formPanel.append(Location.Left, proto().sitePalette().contrast1()).decorate().componentWidth(120);
         formPanel.append(Location.Left, proto().sitePalette().contrast2()).decorate().componentWidth(120);
+        formPanel.append(Location.Left, proto().sitePalette().contrast3()).decorate().componentWidth(120);
+        formPanel.append(Location.Left, proto().sitePalette().contrast4()).decorate().componentWidth(120);
+        formPanel.append(Location.Left, proto().sitePalette().contrast5()).decorate().componentWidth(120);
+        formPanel.append(Location.Left, proto().sitePalette().contrast6()).decorate().componentWidth(120);
 
         // ---------------------------------------------------------------------------------------------------------------
 

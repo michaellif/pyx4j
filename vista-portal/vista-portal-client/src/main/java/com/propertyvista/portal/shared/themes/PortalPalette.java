@@ -13,22 +13,28 @@
  */
 package com.propertyvista.portal.shared.themes;
 
-import com.pyx4j.commons.css.Palette;
 import com.pyx4j.commons.css.ThemeColor;
 
-public class PortalPalette extends Palette {
+import com.propertyvista.common.client.theme.VistaPalette;
+import com.propertyvista.portal.rpc.portal.SiteDefinitionsDTO;
 
-    public PortalPalette() {
-        putThemeColor(ThemeColor.object1, "#315EAF");
-        putThemeColor(ThemeColor.object2, "B26C1F");
-        putThemeColor(ThemeColor.contrast1, "#ffcb00");
-        putThemeColor(ThemeColor.contrast2, "#f68308");
-        putThemeColor(ThemeColor.contrast3, "#ef231b");
-        putThemeColor(ThemeColor.contrast4, "#60a11b");
-        putThemeColor(ThemeColor.contrast5, "#0091dc");
-        putThemeColor(ThemeColor.contrast6, "#a41f8f");
-        putThemeColor(ThemeColor.background, "#efefef");
-        putThemeColor(ThemeColor.foreground, "#4f565a");
+public class PortalPalette extends VistaPalette {
+
+    public PortalPalette(SiteDefinitionsDTO siteDefinitions) {
+        super(new Builder(siteDefinitions)//
+                .addColor(ThemeColor.object1, 100, 67)//
+                .addColor(ThemeColor.object2, 94, 60)//
+                .addColor(ThemeColor.contrast1, 78, 84)//
+                .addColor(ThemeColor.contrast2, 78, 84)//
+                .addColor(ThemeColor.contrast3, 78, 84)//
+                .addColor(ThemeColor.contrast4, 78, 84)//
+                .addColor(ThemeColor.contrast5, 78, 84)//
+                .addColor(ThemeColor.contrast6, 78, 84)//
+                .addColor(ThemeColor.foreground, 30, 20)//
+                .addColor(ThemeColor.formBackground, 30, 70)//
+                .addColor(ThemeColor.siteBackground, 100, 67)//
+        );
+
     }
 
 }

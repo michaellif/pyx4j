@@ -59,13 +59,13 @@ public class OnboardingTheme extends Theme {
         addTheme(new FlexFormPanelTheme() {
             @Override
             protected ThemeColor getBackgroundColor() {
-                return ThemeColor.background;
+                return ThemeColor.formBackground;
             }
         });
         addTheme(new FormPanelTheme() {
             @Override
             protected ThemeColor getBackgroundColor() {
-                return ThemeColor.background;
+                return ThemeColor.formBackground;
             }
 
             @Override
@@ -81,7 +81,7 @@ public class OnboardingTheme extends Theme {
         addTheme(new FolderTheme() {
             @Override
             protected ThemeColor getBackgroundColor() {
-                return ThemeColor.background;
+                return ThemeColor.formBackground;
             }
         });
         addTheme(new RichTextEditorTheme());

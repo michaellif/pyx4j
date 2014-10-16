@@ -31,6 +31,9 @@ public interface PmcVistaFeatures extends IEntity {
     IPrimitive<Boolean> onlineApplication();
 
     @NotNull
+    IPrimitive<Boolean> whiteLabelPortal();
+
+    @NotNull
     IPrimitive<CountryOfOperation> countryOfOperation();
 
     @NotNull

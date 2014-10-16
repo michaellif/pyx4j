@@ -25,7 +25,7 @@ public class OperationsPalette extends Palette {
         putThemeColor(ThemeColor.contrast1, "#666666");
         putThemeColor(ThemeColor.contrast2, "#666666");
         putThemeColor(ThemeColor.foreground, "#666666");
-        putThemeColor(ThemeColor.background, "#ffffff");
+        putThemeColor(ThemeColor.formBackground, "#ffffff");
 
     }
 }

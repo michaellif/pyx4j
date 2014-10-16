@@ -33,9 +33,24 @@ public interface SitePalette extends IEntity {
     IPrimitive<Integer> contrast2();
 
     @Editor(type = EditorType.hue)
-    IPrimitive<Integer> background();
+    IPrimitive<Integer> contrast3();
+
+    @Editor(type = EditorType.hue)
+    IPrimitive<Integer> contrast4();
+
+    @Editor(type = EditorType.hue)
+    IPrimitive<Integer> contrast5();
+
+    @Editor(type = EditorType.hue)
+    IPrimitive<Integer> contrast6();
 
     @Editor(type = EditorType.hue)
     IPrimitive<Integer> foreground();
+
+    @Editor(type = EditorType.hue)
+    IPrimitive<Integer> formBackground();
+
+    @Editor(type = EditorType.hue)
+    IPrimitive<Integer> siteBackground();
 
 }

@@ -58,10 +58,10 @@ public class StylesheetTemplateModel extends LoadableDetachableModel<Map<String,
                         (float) skin.getColorProperties()[7] / 100));
         palette.putThemeColor(
                 ThemeColor.foreground,
-                ColorUtil.hsbToRgb((float) sitePalette.background().getValue() / 360, (float) skin.getColorProperties()[8] / 100,
+                ColorUtil.hsbToRgb((float) sitePalette.formBackground().getValue() / 360, (float) skin.getColorProperties()[8] / 100,
                         (float) skin.getColorProperties()[9] / 100));
         palette.putThemeColor(
-                ThemeColor.background,
+                ThemeColor.formBackground,
                 ColorUtil.hsbToRgb((float) sitePalette.foreground().getValue() / 360, (float) skin.getColorProperties()[10] / 100,
                         (float) skin.getColorProperties()[11] / 100));
 
@@ -74,7 +74,7 @@ public class StylesheetTemplateModel extends LoadableDetachableModel<Map<String,
         varModel.putAll(generateColorMap("object2", ThemeColor.object2));
         varModel.putAll(generateColorMap("contrast1", ThemeColor.contrast1));
         varModel.putAll(generateColorMap("contrast2", ThemeColor.contrast2));
-        varModel.putAll(generateColorMap("background", ThemeColor.background));
+        varModel.putAll(generateColorMap("background", ThemeColor.formBackground));
         varModel.putAll(generateColorMap("foreground", ThemeColor.foreground));
 
         varModel.put("image_building_xsmall_height", ImageConsts.BUILDING_XSMALL.height + "px");

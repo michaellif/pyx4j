@@ -13,6 +13,7 @@
  */
 package com.propertyvista.portal.resident.themes;
 
+import com.propertyvista.portal.rpc.portal.SiteDefinitionsDTO;
 import com.propertyvista.portal.shared.themes.PortalRootPaneTheme;
 import com.propertyvista.portal.shared.themes.PortalTheme;
 
@@ -23,8 +24,8 @@ public class ResidentPortalTheme extends PortalTheme {
     }
 
     @Override
-    protected void initStyles() {
-        super.initStyles();
+    public void initStyles(SiteDefinitionsDTO siteDefinitions) {
+        super.initStyles(siteDefinitions);
         addTheme(new TenantSureTheme());
         addTheme(new ExtraGadgetsTheme());
         addTheme(new PortalRootPaneTheme());

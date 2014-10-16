@@ -117,7 +117,7 @@ public class NewPaymentMethodEditorTheme extends Theme {
         addStyle(style);
 
         style = new Style(".", StyleName.PaymentEditorLegalTermsHeader);
-        style.addProperty("background-color", ThemeColor.background, 0.1);
+        style.addProperty("background-color", ThemeColor.formBackground, 0.1);
         style.addProperty("color", ThemeColor.foreground, 0.8);
 
         style.addProperty("border-bottom", "solid 2px #666");

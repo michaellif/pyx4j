@@ -42,6 +42,7 @@ public class PmcCreatorDev {
         pmc.dnsName().setValue(pmcName);
 
         pmc.features().onlineApplication().setValue(Boolean.TRUE);
+        pmc.features().whiteLabelPortal().setValue(pmcName.equals(DemoPmc.metcap.name()));
         pmc.features().yardiIntegration().setValue(Boolean.FALSE);
         pmc.features().tenantSureIntegration().setValue(Boolean.TRUE);
 

@@ -29,7 +29,7 @@ public class BlockMixin extends Theme {
     public BlockMixin() {
         Style style = new Style(".", StyleName.PortalBlock);
         style.addProperty("background", ThemeColor.foreground, 0.01);
-        style.addProperty("border-color", ThemeColor.foreground, 0.3);
+        style.addProperty("border-color", ThemeColor.object1, 0.9);
         style.addProperty("border-style", "solid");
         style.addProperty("border-width", "1px");
         style.addProperty("border-radius", "5px");

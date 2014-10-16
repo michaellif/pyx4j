@@ -114,7 +114,7 @@ public class VistaTheme extends Theme {
 
     protected void initBodyStyles() {
         Style style = new Style("body");
-        style.addProperty("background-color", ThemeColor.background);
+        style.addProperty("background-color", ThemeColor.formBackground);
         style.addProperty("color", ThemeColor.foreground);
         style.addProperty("margin", "0");
         style.addProperty("border", "none");

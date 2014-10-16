@@ -97,6 +97,7 @@ public class PmcRegistrationServiceImpl implements PmcRegistrationService {
 
                 pmc.features().countryOfOperation().setValue(request.countryOfOperation().getValue());
                 pmc.features().onlineApplication().setValue(Boolean.FALSE);
+                pmc.features().whiteLabelPortal().setValue(Boolean.FALSE);
 
                 pmc.features().tenantSureIntegration().setValue(Boolean.TRUE);
 

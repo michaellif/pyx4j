@@ -33,6 +33,11 @@ public class VistaFeaturesCustomizationClient implements VistaFeaturesCustomizat
     }
 
     @Override
+    public boolean whiteLabelPortal() {
+        return features.whiteLabelPortal().getValue(Boolean.FALSE);
+    }
+
+    @Override
     public boolean yardiIntegration() {
         return features.yardiIntegration().getValue(Boolean.FALSE);
     }

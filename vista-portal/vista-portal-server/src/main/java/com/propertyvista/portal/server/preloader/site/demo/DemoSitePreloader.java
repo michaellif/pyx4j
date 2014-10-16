@@ -51,12 +51,37 @@ public class DemoSitePreloader extends AbstractSitePreloader {
     }
 
     @Override
+    protected Integer contrast3() {
+        return 194;
+    }
+
+    @Override
+    protected Integer contrast4() {
+        return 194;
+    }
+
+    @Override
+    protected Integer contrast5() {
+        return 194;
+    }
+
+    @Override
+    protected Integer contrast6() {
+        return 194;
+    }
+
+    @Override
     protected Integer foreground() {
         return 220;
     }
 
     @Override
-    protected Integer background() {
+    protected Integer formBackground() {
+        return 270;
+    }
+
+    @Override
+    protected Integer siteBackground() {
         return 270;
     }
 

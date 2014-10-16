@@ -36,15 +36,18 @@ import com.pyx4j.widgets.client.style.theme.WidgetTheme;
 import com.propertyvista.common.client.theme.HorizontalAlignCenterMixin;
 import com.propertyvista.common.client.theme.TransactionHistoryViewerTheme;
 import com.propertyvista.common.client.theme.VistaTheme.StyleName;
+import com.propertyvista.portal.rpc.portal.SiteDefinitionsDTO;
 import com.propertyvista.portal.shared.resources.PortalImages;
 
 public class PortalTheme extends Theme {
 
+    private SiteDefinitionsDTO siteDefinitions;
+
     public PortalTheme() {
-        initStyles();
     }
 
-    protected void initStyles() {
+    public void initStyles(SiteDefinitionsDTO siteDefinitions) {
+        this.siteDefinitions = siteDefinitions;
         initGeneralStyles();
         initBodyStyles();
         initMenuBarStyles();
@@ -59,7 +62,7 @@ public class PortalTheme extends Theme {
 
                 Style style = new Style(".", StyleName.FrontOfficeLayoutInlineExtraPanel);
                 style.addProperty("background", ThemeColor.foreground, 0.01);
-                style.addProperty("border-color", ThemeColor.foreground, 0.3);
+                style.addProperty("border-color", ThemeColor.object1, 0.9);
                 style.addProperty("border-style", "solid");
                 style.addProperty("border-width", "1px");
                 style.addProperty("border-radius", "5px");
@@ -251,11 +254,11 @@ public class PortalTheme extends Theme {
                 addStyle(style);
 
                 style = new Style(" .", StyleName.DatePickerWeekdayLabel, " .", StyleName.DatePickerWeekendLabel);
-                style.addProperty("background-color", ThemeColor.background);
+                style.addProperty("background-color", ThemeColor.formBackground);
                 addStyle(style);
 
                 style = new Style(".", StyleName.DatePickerWeekendDayLabel);
-                style.addProperty("color", ThemeColor.background);
+                style.addProperty("color", ThemeColor.formBackground);
                 addStyle(style);
             };
 
@@ -390,17 +393,21 @@ public class PortalTheme extends Theme {
 
     private void initBackground() {
 
-        Style style = new Style(".", FrontOfficeLayoutTheme.StyleName.ResponsiveLayoutMainHolder.name());
-        style.addProperty("background-image", "url('" + PortalImages.INSTANCE.background().getSafeUri().asString() + "')");
+        Style style = new Style(".", FrontOfficeLayoutTheme.StyleName.FrontOfficeLayoutMainHolder.name());
+        if (siteDefinitions == null) {
+            style.addProperty("background-image", "url('" + PortalImages.INSTANCE.background().getSafeUri().asString() + "')");
+        } else {
+            style.addProperty("background-color", ThemeColor.siteBackground);
+        }
         addStyle(style);
 
-        style = new Style(".", FrontOfficeLayoutTheme.StyleName.ResponsiveLayoutContentBackground.name());
-        style.addProperty("background-color", ThemeColor.background);
+        style = new Style(".", FrontOfficeLayoutTheme.StyleName.FrontOfficeLayoutContentBackground.name());
+        style.addProperty("background-color", ThemeColor.formBackground);
         style.addProperty("opacity", "0");
         addStyle(style);
 
-        style = new Style(".", FrontOfficeLayoutTheme.StyleName.ResponsiveLayoutFooterHolder.name());
-        style.addProperty("background-color", ThemeColor.background);
+        style = new Style(".", FrontOfficeLayoutTheme.StyleName.FrontOfficeLayoutFooterHolder.name());
+        style.addProperty("background-color", ThemeColor.formBackground);
         style.addProperty("opacity", "0.9");
         addStyle(style);
     }

@@ -22,6 +22,7 @@ import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.RootLayoutPanel;
 
+import com.pyx4j.commons.css.Palette;
 import com.pyx4j.commons.css.StyleManager;
 import com.pyx4j.gwt.commons.UncaughtHandler;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
@@ -47,6 +48,7 @@ import com.propertyvista.portal.rpc.portal.SiteDefinitionsDTO;
 import com.propertyvista.portal.rpc.portal.shared.services.PortalPolicyRetrieveService;
 import com.propertyvista.portal.rpc.portal.shared.services.SiteThemeServices;
 import com.propertyvista.portal.rpc.shared.services.PolicyRetrieveService;
+import com.propertyvista.portal.shared.themes.MyCommunityPortalPalette;
 import com.propertyvista.portal.shared.themes.PortalPalette;
 import com.propertyvista.portal.shared.themes.PortalTheme;
 
@@ -153,15 +155,26 @@ public abstract class PortalSite extends VistaSite {
     private void initSiteTheme() {
         GWT.<SiteThemeServices> create(SiteThemeServices.class).retrieveSiteDescriptor(new DefaultAsyncCallback<SiteDefinitionsDTO>() {
             @Override
-            public void onSuccess(SiteDefinitionsDTO descriptor) {
+            public void onSuccess(SiteDefinitionsDTO siteDefinitions) {
                 hideLoadingIndicator();
-                StyleManager.installTheme(portalTheme, new PortalPalette());
-                VistaFeaturesCustomizationClient.setVistaFeatures(descriptor.features());
-                VistaFeaturesCustomizationClient.setGoogleAnalyticDisableForEmployee(descriptor.isGoogleAnalyticDisableForEmployee().getValue());
-                VistaFeaturesCustomizationClient.enviromentTitleVisible = descriptor.enviromentTitleVisible().getValue(Boolean.TRUE);
+
+                Palette palette;
+
+                if (siteDefinitions.features().whiteLabelPortal().getValue(Boolean.FALSE)) {
+                    palette = new PortalPalette(siteDefinitions);
+                    portalTheme.initStyles(siteDefinitions);
+                } else {
+                    palette = new MyCommunityPortalPalette();
+                    portalTheme.initStyles(null);
+                }
+
+                StyleManager.installTheme(portalTheme, palette);
+                VistaFeaturesCustomizationClient.setVistaFeatures(siteDefinitions.features());
+                VistaFeaturesCustomizationClient.setGoogleAnalyticDisableForEmployee(siteDefinitions.isGoogleAnalyticDisableForEmployee().getValue());
+                VistaFeaturesCustomizationClient.enviromentTitleVisible = siteDefinitions.enviromentTitleVisible().getValue(Boolean.TRUE);
                 obtainAuthenticationData();
-                if (descriptor.walkMeEnabled().getValue(false)) {
-                    WalkMe.enable(descriptor.walkMeJsAPIUrl().getValue());
+                if (siteDefinitions.walkMeEnabled().getValue(false)) {
+                    WalkMe.enable(siteDefinitions.walkMeJsAPIUrl().getValue());
                 }
             }
 

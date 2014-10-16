@@ -92,13 +92,13 @@ public class PortalMenuViewImpl extends DockPanel implements PortalMenuView {
 
         mainHolder.addMenuItem(new AppPlaceMenuItem(new ResidentPortalSiteMap.Offers(), PortalImages.INSTANCE.offersMenu(), ThemeColor.contrast6));
 
-        footerHolder.addMenuItem(new AppPlaceMenuItem(new ResidentPortalSiteMap.Profile(), PortalImages.INSTANCE.profileMenu(), ThemeColor.background));
-        footerHolder.addMenuItem(new AppPlaceMenuItem(new ResidentPortalSiteMap.Account(), PortalImages.INSTANCE.accountMenu(), ThemeColor.background));
+        footerHolder.addMenuItem(new AppPlaceMenuItem(new ResidentPortalSiteMap.Profile(), PortalImages.INSTANCE.profileMenu(), ThemeColor.formBackground));
+        footerHolder.addMenuItem(new AppPlaceMenuItem(new ResidentPortalSiteMap.Account(), PortalImages.INSTANCE.accountMenu(), ThemeColor.formBackground));
 
-        leaseSelectionMenu = new AppPlaceMenuItem(new ResidentPortalSiteMap.LeaseContextSelection(), PortalImages.INSTANCE.selectMenu(), ThemeColor.background);
+        leaseSelectionMenu = new AppPlaceMenuItem(new ResidentPortalSiteMap.LeaseContextSelection(), PortalImages.INSTANCE.selectMenu(), ThemeColor.formBackground);
         footerHolder.addMenuItem(leaseSelectionMenu);
 
-        showGettingStartedGadgetMenu = new NotNavigableMenuItem(i18n.tr("Show Getting Started"), PortalImages.INSTANCE.dashboardMenu(), ThemeColor.background,
+        showGettingStartedGadgetMenu = new NotNavigableMenuItem(i18n.tr("Show Getting Started"), PortalImages.INSTANCE.dashboardMenu(), ThemeColor.formBackground,
                 new Command() {
                     @Override
                     public void execute() {
@@ -107,7 +107,7 @@ public class PortalMenuViewImpl extends DockPanel implements PortalMenuView {
                 });
         footerHolder.addMenuItem(showGettingStartedGadgetMenu);
 
-        footerHolder.addMenuItem(new AppPlaceMenuItem(new PortalSiteMap.Logout(), PortalImages.INSTANCE.logoutMenu(), ThemeColor.background));
+        footerHolder.addMenuItem(new AppPlaceMenuItem(new PortalSiteMap.Logout(), PortalImages.INSTANCE.logoutMenu(), ThemeColor.formBackground));
 
         doLayout(LayoutType.getLayoutType(Window.getClientWidth()));
 

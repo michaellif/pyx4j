@@ -35,6 +35,7 @@ public class PmcFeaturesForm extends CForm<PmcVistaFeatures> {
         FormPanel formPanel = new FormPanel(this);
         formPanel.append(Location.Left, proto().countryOfOperation()).decorate();
         formPanel.append(Location.Left, proto().onlineApplication()).decorate().componentWidth(90);
+        formPanel.append(Location.Left, proto().whiteLabelPortal()).decorate().componentWidth(90);
         formPanel.append(Location.Left, proto().yardiIntegration()).decorate().componentWidth(90);
         formPanel.append(Location.Left, proto().yardiMaintenance()).decorate().componentWidth(90);
         formPanel.append(Location.Left, proto().tenantSureIntegration()).decorate().componentWidth(90);

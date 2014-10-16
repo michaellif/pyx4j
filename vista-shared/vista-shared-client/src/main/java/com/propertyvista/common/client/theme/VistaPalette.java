@@ -1,54 +1,97 @@
 /*
- * (C) Copyright Property Vista Software Inc. 2011- All Rights Reserved.
+ * (C) Copyright Property Vista Software Inc. 2011-2015 All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Oct 5, 2011
+ * Created on Oct 15, 2014
  * @author michaellif
  * @version $Id$
  */
 package com.propertyvista.common.client.theme;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import com.pyx4j.commons.css.ColorUtil;
 import com.pyx4j.commons.css.Palette;
 import com.pyx4j.commons.css.ThemeColor;
 
-import com.propertyvista.domain.site.SiteDescriptor;
-import com.propertyvista.domain.site.SitePalette;
+import com.propertyvista.portal.rpc.portal.SiteDefinitionsDTO;
 
 public class VistaPalette extends Palette {
 
-    public VistaPalette(SitePalette palette) {
-
-        putThemeColor(ThemeColor.object1, ColorUtil.hsbToRgb((float) palette.object1().getValue() / 360,
-                (float) SiteDescriptor.Skin.crm.getColorProperties()[0] / 100, (float) SiteDescriptor.Skin.crm.getColorProperties()[1] / 100));
-        putThemeColor(ThemeColor.object2, ColorUtil.hsbToRgb((float) palette.object2().getValue() / 360,
-                (float) SiteDescriptor.Skin.crm.getColorProperties()[2] / 100, (float) SiteDescriptor.Skin.crm.getColorProperties()[3] / 100));
-        putThemeColor(ThemeColor.contrast1, ColorUtil.hsbToRgb((float) palette.contrast1().getValue() / 360,
-                (float) SiteDescriptor.Skin.crm.getColorProperties()[4] / 100, (float) SiteDescriptor.Skin.crm.getColorProperties()[5] / 100));
-        putThemeColor(ThemeColor.contrast2, ColorUtil.hsbToRgb((float) palette.contrast2().getValue() / 360,
-                (float) SiteDescriptor.Skin.crm.getColorProperties()[6] / 100, (float) SiteDescriptor.Skin.crm.getColorProperties()[7] / 100));
-        putThemeColor(ThemeColor.foreground, ColorUtil.hsbToRgb((float) palette.background().getValue() / 360,
-                (float) SiteDescriptor.Skin.crm.getColorProperties()[8] / 100, (float) SiteDescriptor.Skin.crm.getColorProperties()[9] / 100));
-        putThemeColor(ThemeColor.background, ColorUtil.hsbToRgb((float) palette.foreground().getValue() / 360,
-                (float) SiteDescriptor.Skin.crm.getColorProperties()[10] / 100, (float) SiteDescriptor.Skin.crm.getColorProperties()[11] / 100));
-
+    protected VistaPalette() {
     }
 
-    private VistaPalette() {
-        putThemeColor(ThemeColor.object1, "#315EAF");
-        putThemeColor(ThemeColor.object2, "B26C1F");
-        putThemeColor(ThemeColor.contrast1, "red");
-        putThemeColor(ThemeColor.contrast2, "orange");
-        putThemeColor(ThemeColor.background, "#fefefe");
-        putThemeColor(ThemeColor.foreground, "#333333");
+    protected VistaPalette(Builder builder) {
+        for (ThemeColor themeColor : builder.themeColors.keySet()) {
+            putThemeColor(themeColor, builder.themeColors.get(themeColor));
+        }
     }
 
-    public static VistaPalette getServerUnavailablePalette() {
-        return new VistaPalette();
+    public static class Builder {
+
+        private final SiteDefinitionsDTO siteDefinitions;
+
+        private final Map<ThemeColor, Integer> themeColors;
+
+        public Builder(SiteDefinitionsDTO siteDefinitions) {
+            this.siteDefinitions = siteDefinitions;
+            themeColors = new HashMap<ThemeColor, Integer>();
+        }
+
+        public VistaPalette build() {
+            return new VistaPalette(this);
+        }
+
+        public Builder addColor(ThemeColor color, int saturation, int brightness) {
+            Integer hue = 0;
+            switch (color) {
+            case object1:
+                hue = siteDefinitions.palette().object1().getValue();
+                break;
+            case object2:
+                hue = siteDefinitions.palette().object2().getValue();
+                break;
+            case contrast1:
+                hue = siteDefinitions.palette().contrast1().getValue();
+                break;
+            case contrast2:
+                hue = siteDefinitions.palette().contrast2().getValue();
+                break;
+            case contrast3:
+                hue = siteDefinitions.palette().contrast3().getValue();
+                break;
+            case contrast4:
+                hue = siteDefinitions.palette().contrast4().getValue();
+                break;
+            case contrast5:
+                hue = siteDefinitions.palette().contrast5().getValue();
+                break;
+            case contrast6:
+                hue = siteDefinitions.palette().contrast6().getValue();
+                break;
+            case foreground:
+                hue = siteDefinitions.palette().foreground().getValue();
+                break;
+            case formBackground:
+                hue = siteDefinitions.palette().formBackground().getValue();
+                break;
+            case siteBackground:
+                hue = siteDefinitions.palette().siteBackground().getValue();
+                break;
+            default:
+                break;
+
+            }
+
+            themeColors.put(color, ColorUtil.hsbToRgb((float) hue / 360, (float) saturation / 100, (float) brightness / 100));
+            return this;
+        }
     }
+
 }

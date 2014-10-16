@@ -32,22 +32,42 @@ public class MetCapSitePreloader extends AbstractSitePreloader {
 
     @Override
     protected Integer object1() {
-        return 205;
+        return 207;
     }
 
     @Override
     protected Integer object2() {
-        return 205;
+        return 123;
     }
 
     @Override
     protected Integer contrast1() {
-        return 0;
+        return 209;
     }
 
     @Override
     protected Integer contrast2() {
-        return 194;
+        return 209;
+    }
+
+    @Override
+    protected Integer contrast3() {
+        return 209;
+    }
+
+    @Override
+    protected Integer contrast4() {
+        return 209;
+    }
+
+    @Override
+    protected Integer contrast5() {
+        return 209;
+    }
+
+    @Override
+    protected Integer contrast6() {
+        return 209;
     }
 
     @Override
@@ -56,8 +76,13 @@ public class MetCapSitePreloader extends AbstractSitePreloader {
     }
 
     @Override
-    protected Integer background() {
+    protected Integer formBackground() {
         return 270;
+    }
+
+    @Override
+    protected Integer siteBackground() {
+        return 207;
     }
 
     @SuppressWarnings("deprecation")

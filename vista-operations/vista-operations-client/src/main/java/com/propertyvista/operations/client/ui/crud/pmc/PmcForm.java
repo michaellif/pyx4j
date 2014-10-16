@@ -209,6 +209,7 @@ public class PmcForm extends OperationsEntityForm<PmcDTO> {
         formPanel.append(Location.Left, proto().features().countryOfOperation()).decorate();
 
         formPanel.append(Location.Left, proto().features().onlineApplication()).decorate();
+        formPanel.append(Location.Left, proto().features().whiteLabelPortal()).decorate();
 
         formPanel.append(Location.Left, proto().features().yardiIntegration()).decorate();
         formPanel.append(Location.Right, proto().features().yardiMaintenance()).decorate();

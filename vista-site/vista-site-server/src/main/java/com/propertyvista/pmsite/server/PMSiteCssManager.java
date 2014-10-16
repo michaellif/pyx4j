@@ -129,10 +129,10 @@ public class PMSiteCssManager {
                         (float) skin.getColorProperties()[7] / 100));
         palette.putThemeColor(
                 ThemeColor.foreground,
-                ColorUtil.hsbToRgb((float) sitePalette.background().getValue() / 360, (float) skin.getColorProperties()[8] / 100,
+                ColorUtil.hsbToRgb((float) sitePalette.formBackground().getValue() / 360, (float) skin.getColorProperties()[8] / 100,
                         (float) skin.getColorProperties()[9] / 100));
         palette.putThemeColor(
-                ThemeColor.background,
+                ThemeColor.formBackground,
                 ColorUtil.hsbToRgb((float) sitePalette.foreground().getValue() / 360, (float) skin.getColorProperties()[10] / 100,
                         (float) skin.getColorProperties()[11] / 100));
 

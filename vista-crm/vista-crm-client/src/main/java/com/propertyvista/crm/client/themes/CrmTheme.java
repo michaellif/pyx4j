@@ -299,10 +299,10 @@ public class CrmTheme extends VistaTheme {
         // Push Button
         buttonEx = ".gwt-PushButton";
         style = new Style(buttonEx);
-        style.addProperty("color", ThemeColor.background);
+        style.addProperty("color", ThemeColor.formBackground);
         style.addProperty("border-width", "1px");
         style.addProperty("border-style", "solid");
-        style.addProperty("border-color", ThemeColor.background);
+        style.addProperty("border-color", ThemeColor.formBackground);
         style.addProperty("margin", "0.2em 0.2em");
         style.addProperty("padding", "0.2em 0.5em");
         style.addProperty("text-align", "center");
@@ -524,7 +524,7 @@ public class CrmTheme extends VistaTheme {
         style = new Style("." + LegalTermsContentViewer.Styles.LegalTermsContentViewerHolder);
         style.addProperty("border-width", "1px");
         style.addProperty("border-style", "inset");
-        style.addProperty("border-color", ThemeColor.background);
+        style.addProperty("border-color", ThemeColor.formBackground);
         addStyle(style);
 
         style = new Style("." + LegalTermsContentViewer.Styles.LegalTermsContentViewerContent);
@@ -795,7 +795,7 @@ public class CrmTheme extends VistaTheme {
         addStyle(style);
 
         style = new Style("." + SuggestiveSelector.Styles.SuggestionsPopup.name());
-        style.addProperty("background-color", ThemeColor.background);
+        style.addProperty("background-color", ThemeColor.formBackground);
         style.addProperty("padding", "5px");
         style.addProperty("border-color", ThemeColor.foreground);
         style.addProperty("border-width", "1px");

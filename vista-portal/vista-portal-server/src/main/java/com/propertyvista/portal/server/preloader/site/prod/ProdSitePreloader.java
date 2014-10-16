@@ -83,13 +83,37 @@ public class ProdSitePreloader extends AbstractSitePreloader {
     }
 
     @Override
+    protected Integer contrast3() {
+        return 194;
+    }
+
+    @Override
+    protected Integer contrast4() {
+        return 194;
+    }
+
+    @Override
+    protected Integer contrast5() {
+        return 194;
+    }
+
+    @Override
+    protected Integer contrast6() {
+        return 194;
+    }
+
+    @Override
     protected Integer foreground() {
         return 250;
     }
 
     @Override
-    protected Integer background() {
+    protected Integer formBackground() {
         return 300;
     }
 
+    @Override
+    protected Integer siteBackground() {
+        return 270;
+    }
 }

@@ -79,6 +79,7 @@ public class PmcCrudServiceImpl extends AbstractCrudServiceDtoImpl<Pmc, PmcDTO> 
         PmcDTO entity = EntityFactory.create(PmcDTO.class);
 
         entity.features().onlineApplication().setValue(Boolean.FALSE);
+        entity.features().whiteLabelPortal().setValue(Boolean.FALSE);
         entity.features().yardiIntegration().setValue(Boolean.FALSE);
         entity.features().countryOfOperation().setValue(CountryOfOperation.Canada);
         entity.features().tenantSureIntegration().setValue(Boolean.TRUE);

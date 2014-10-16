@@ -106,9 +106,19 @@ public abstract class AbstractSitePreloader extends AbstractVistaDataPreloader {
 
     protected abstract Integer contrast2();
 
+    protected abstract Integer contrast3();
+
+    protected abstract Integer contrast4();
+
+    protected abstract Integer contrast5();
+
+    protected abstract Integer contrast6();
+
     protected abstract Integer foreground();
 
-    protected abstract Integer background();
+    protected abstract Integer formBackground();
+
+    protected abstract Integer siteBackground();
 
     protected abstract String copyright();
 
@@ -139,7 +149,12 @@ public abstract class AbstractSitePreloader extends AbstractVistaDataPreloader {
         site.sitePalette().object2().setValue(object2());
         site.sitePalette().contrast1().setValue(contrast1());
         site.sitePalette().contrast2().setValue(contrast2());
-        site.sitePalette().background().setValue(background());
+        site.sitePalette().contrast3().setValue(contrast3());
+        site.sitePalette().contrast4().setValue(contrast4());
+        site.sitePalette().contrast5().setValue(contrast5());
+        site.sitePalette().contrast6().setValue(contrast6());
+        site.sitePalette().formBackground().setValue(formBackground());
+        site.sitePalette().siteBackground().setValue(siteBackground());
         site.sitePalette().foreground().setValue(foreground());
 
         site.enabled().setValue(Boolean.TRUE);

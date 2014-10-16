@@ -28,6 +28,8 @@ public class VistaFeatures {
 
         boolean onlineApplication();
 
+        boolean whiteLabelPortal();
+
         CountryOfOperation countryOfOperation();
 
         boolean yardiIntegration();

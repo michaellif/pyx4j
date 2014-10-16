@@ -118,7 +118,7 @@ public class PortalRootPaneTheme extends Theme {
         style.addProperty("font-weight", "bold");
         style.addProperty("padding", "6px");
         style.addProperty("list-style", "none");
-        style.addProperty("border-color", ThemeColor.foreground, 0.3);
+        style.addProperty("border-color", ThemeColor.object1, 0.9);
         style.addProperty("border-style", "solid");
         style.addProperty("border-width", "1px");
         style.addProperty("border-bottom-width", "0px");

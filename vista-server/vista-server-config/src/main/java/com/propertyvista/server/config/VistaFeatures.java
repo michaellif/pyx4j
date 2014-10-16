@@ -71,6 +71,11 @@ public class VistaFeatures {
         }
 
         @Override
+        public boolean whiteLabelPortal() {
+            return threadLocale.get().whiteLabelPortal().getValue(Boolean.FALSE);
+        }
+
+        @Override
         public boolean yardiIntegration() {
             return threadLocale.get().yardiIntegration().getValue(Boolean.FALSE);
         }

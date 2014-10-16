@@ -52,8 +52,9 @@ import com.propertyvista.common.client.handlers.VistaUnrecoverableErrorHandler;
 import com.propertyvista.common.client.policy.ClientPolicyManager;
 import com.propertyvista.common.client.site.VistaBrowserRequirments;
 import com.propertyvista.common.client.site.VistaSite;
-import com.propertyvista.common.client.theme.VistaPalette;
 import com.propertyvista.crm.client.activity.CrmClientCommunicationManager;
+import com.propertyvista.crm.client.themes.CrmNoServerPalette;
+import com.propertyvista.crm.client.themes.CrmPalette;
 import com.propertyvista.crm.client.themes.CrmTheme;
 import com.propertyvista.crm.client.ui.CrmRootPane;
 import com.propertyvista.crm.client.ui.HeaderViewImpl;
@@ -65,8 +66,9 @@ import com.propertyvista.crm.rpc.services.policies.CrmPolicyRetrieveService;
 import com.propertyvista.crm.rpc.services.pub.CrmAuthenticationService;
 import com.propertyvista.domain.dashboard.DashboardMetadata;
 import com.propertyvista.domain.financial.ARCode;
-import com.propertyvista.domain.security.common.VistaApplication;
 import com.propertyvista.domain.security.common.VistaAccessGrantedBehavior;
+import com.propertyvista.domain.security.common.VistaApplication;
+import com.propertyvista.domain.site.SiteDescriptor.Skin;
 import com.propertyvista.portal.rpc.DeploymentConsts;
 import com.propertyvista.portal.rpc.portal.SiteDefinitionsDTO;
 import com.propertyvista.portal.rpc.portal.shared.services.SiteThemeServices;
@@ -156,7 +158,7 @@ public class CrmSite extends VistaSite {
                 hideLoadingIndicator();
                 HeaderViewImpl.temporaryWayToSetTitle(descriptor.siteTitles().crmHeader().getStringView(), descriptor.logoAvalable().getValue(false));
                 Window.setTitle(i18n.tr("Property Vista") + " - " + descriptor.siteTitles().crmHeader().getStringView());
-                StyleManager.installTheme(new CrmTheme(), new VistaPalette(descriptor.palette()));
+                StyleManager.installTheme(new CrmTheme(), new CrmPalette(descriptor));
                 VistaFeaturesCustomizationClient.setVistaFeatures(descriptor.features());
                 VistaFeaturesCustomizationClient.setGoogleAnalyticDisableForEmployee(descriptor.isGoogleAnalyticDisableForEmployee().getValue());
                 VistaFeaturesCustomizationClient.enviromentTitleVisible = descriptor.enviromentTitleVisible().getValue(Boolean.TRUE);
@@ -170,7 +172,7 @@ public class CrmSite extends VistaSite {
             @Override
             public void onFailure(Throwable caught) {
                 hideLoadingIndicator();
-                StyleManager.installTheme(new CrmTheme(), VistaPalette.getServerUnavailablePalette());
+                StyleManager.installTheme(new CrmTheme(), new CrmNoServerPalette());
                 super.onFailure(caught);
             }
         }, VistaApplication.crm, ClientLocaleUtils.getCurrentLocale());
