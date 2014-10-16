@@ -237,8 +237,29 @@ public class IdUploaderFolder extends PortalBoxFolder<IdentificationDocumentFold
 
         @Override
         public void generateMockData() {
-            if (getValue().idType().type().getValue() == IdentificationDocumentType.Type.canadianSIN) {
-                get(proto().idNumber()).setMockValue(CreditCardNumberGenerator.generateCanadianSin());
+            if (get(proto().idType()).getValue() != null) {
+                switch (get(proto().idType()).getValue().type().getValue()) {
+                case canadianSIN:
+                    get(proto().idNumber()).setMockValue(CreditCardNumberGenerator.generateCanadianSin());
+                    break;
+                case citizenship:
+                    get(proto().idNumber()).setMockValue("CS1234567890");
+                    break;
+                case immigration:
+                    get(proto().idNumber()).setMockValue("IM1234567890");
+                    break;
+                case license:
+                    get(proto().idNumber()).setMockValue("LS1234567890");
+                    break;
+                case other:
+                    get(proto().idNumber()).setMockValue("OR1234567890");
+                    break;
+                case passport:
+                    get(proto().idNumber()).setMockValue("PT1234567890");
+                    break;
+                default:
+                    break;
+                }
             }
         }
     }
