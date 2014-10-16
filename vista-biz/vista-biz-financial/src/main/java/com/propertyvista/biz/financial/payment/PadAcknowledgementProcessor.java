@@ -91,7 +91,7 @@ class PadAcknowledgementProcessor extends AbstractAcknowledgementProcessor {
         }
         paymentRecord.paymentStatus().setValue(PaymentRecord.PaymentStatus.Rejected);
         paymentRecord.lastStatusChangeDate().setValue(SystemDateManager.getLogicalDate());
-        paymentRecord.finalizeDate().setValue(SystemDateManager.getLogicalDate());
+        paymentRecord.finalizedDate().setValue(SystemDateManager.getLogicalDate());
 
         paymentRecord.transactionErrorMessage().setValue(getAcknowledgmentErrorMessage(debitRecord));
 

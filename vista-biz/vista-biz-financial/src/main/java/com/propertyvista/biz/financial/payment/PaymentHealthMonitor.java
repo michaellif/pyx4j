@@ -174,8 +174,8 @@ class PaymentHealthMonitor {
             Date reportSince = DateUtils.addMonths(forDate, -2);
             Date reportBefore = DateUtils.addDays(forDate, -2);
             EntityQueryCriteria<PaymentRecord> criteria = EntityQueryCriteria.create(PaymentRecord.class);
-            criteria.ge(criteria.proto().finalizeDate(), reportSince);
-            criteria.le(criteria.proto().finalizeDate(), reportBefore);
+            criteria.ge(criteria.proto().finalizedDate(), reportSince);
+            criteria.le(criteria.proto().finalizedDate(), reportBefore);
             criteria.in(criteria.proto().paymentMethod().type(), PaymentType.Echeck, PaymentType.DirectBanking);
             criteria.in(criteria.proto().paymentStatus(), PaymentRecord.PaymentStatus.Cleared, PaymentRecord.PaymentStatus.Queued,
                     PaymentRecord.PaymentStatus.Received);
@@ -225,8 +225,8 @@ class PaymentHealthMonitor {
             Date reportSince = DateUtils.addMonths(forDate, -2);
             Date reportBefore = DateUtils.addDays(forDate, -4);
             EntityQueryCriteria<PaymentRecord> criteria = EntityQueryCriteria.create(PaymentRecord.class);
-            criteria.ge(criteria.proto().finalizeDate(), reportSince);
-            criteria.le(criteria.proto().finalizeDate(), reportBefore);
+            criteria.ge(criteria.proto().finalizedDate(), reportSince);
+            criteria.le(criteria.proto().finalizedDate(), reportBefore);
             criteria.eq(criteria.proto().paymentMethod().type(), PaymentType.CreditCard);
             criteria.eq(criteria.proto().paymentStatus(), PaymentRecord.PaymentStatus.Cleared);
             criteria.isNull(criteria.proto().aggregatedTransfer());

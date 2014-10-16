@@ -283,7 +283,7 @@ class VistaBusinessStatsReport {
         {
             EntityQueryCriteria<LeaseParticipant> criteria = EntityQueryCriteria.create(LeaseParticipant.class);
             criteria.in(criteria.proto().lease().billingAccount().payments().$().paymentMethod().type(), PaymentType.electronicPaymentsActually());
-            criteria.ge(criteria.proto().lease().billingAccount().payments().$().finalizeDate(), monthlyPeriod);
+            criteria.ge(criteria.proto().lease().billingAccount().payments().$().finalizedDate(), monthlyPeriod);
             criteria.eq(criteria.proto().lease().billingAccount().payments().$().leaseTermParticipant().leaseParticipant().id(), criteria.proto().id());
             data.payingTenants().setValue(Persistence.service().count(criteria));
         }
@@ -291,7 +291,7 @@ class VistaBusinessStatsReport {
         {
             EntityQueryCriteria<Lease> criteria = EntityQueryCriteria.create(Lease.class);
             criteria.in(criteria.proto().billingAccount().payments().$().paymentMethod().type(), PaymentType.electronicPaymentsActually());
-            criteria.ge(criteria.proto().billingAccount().payments().$().finalizeDate(), monthlyPeriod);
+            criteria.ge(criteria.proto().billingAccount().payments().$().finalizedDate(), monthlyPeriod);
             data.payingLeases().setValue(Persistence.service().count(criteria));
         }
 
@@ -307,7 +307,7 @@ class VistaBusinessStatsReport {
             EntityQueryCriteria<PaymentRecord> criteria = EntityQueryCriteria.create(PaymentRecord.class);
             criteria.eq(criteria.proto().paymentStatus(), PaymentRecord.PaymentStatus.Cleared);
             criteria.eq(criteria.proto().paymentMethod().type(), PaymentType.Echeck);
-            criteria.ge(criteria.proto().finalizeDate(), monthlyPeriod);
+            criteria.ge(criteria.proto().finalizedDate(), monthlyPeriod);
             List<PaymentRecord> records = Persistence.service().query(criteria);
             BigDecimal amount = BigDecimal.ZERO;
             for (PaymentRecord record : records) {
@@ -331,7 +331,7 @@ class VistaBusinessStatsReport {
             EntityQueryCriteria<PaymentRecord> criteria = EntityQueryCriteria.create(PaymentRecord.class);
             criteria.eq(criteria.proto().paymentStatus(), PaymentRecord.PaymentStatus.Cleared);
             criteria.eq(criteria.proto().paymentMethod().type(), PaymentType.DirectBanking);
-            criteria.ge(criteria.proto().finalizeDate(), monthlyPeriod);
+            criteria.ge(criteria.proto().finalizedDate(), monthlyPeriod);
             List<PaymentRecord> records = Persistence.service().query(criteria);
             BigDecimal amount = BigDecimal.ZERO;
             for (PaymentRecord record : records) {
@@ -345,7 +345,7 @@ class VistaBusinessStatsReport {
             EntityQueryCriteria<PaymentRecord> criteria = EntityQueryCriteria.create(PaymentRecord.class);
             criteria.eq(criteria.proto().paymentStatus(), PaymentRecord.PaymentStatus.Cleared);
             criteria.eq(criteria.proto().paymentMethod().type(), PaymentType.Interac);
-            criteria.ge(criteria.proto().finalizeDate(), monthlyPeriod);
+            criteria.ge(criteria.proto().finalizedDate(), monthlyPeriod);
             List<PaymentRecord> records = Persistence.service().query(criteria);
             BigDecimal amount = BigDecimal.ZERO;
             for (PaymentRecord record : records) {
@@ -361,7 +361,7 @@ class VistaBusinessStatsReport {
             EntityQueryCriteria<PaymentRecord> criteria = EntityQueryCriteria.create(PaymentRecord.class);
             criteria.eq(criteria.proto().paymentStatus(), PaymentRecord.PaymentStatus.Cleared);
             criteria.eq(criteria.proto().paymentMethod().type(), PaymentType.CreditCard);
-            criteria.ge(criteria.proto().finalizeDate(), monthlyPeriod);
+            criteria.ge(criteria.proto().finalizedDate(), monthlyPeriod);
             criteria.eq(criteria.proto().paymentMethod().details(), CreditCardInfo.class);
             List<PaymentRecord> records = Persistence.service().query(criteria);
 
@@ -423,7 +423,7 @@ class VistaBusinessStatsReport {
             EntityQueryCriteria<PaymentRecord> criteria = EntityQueryCriteria.create(PaymentRecord.class);
             criteria.eq(criteria.proto().paymentStatus(), PaymentRecord.PaymentStatus.Cleared);
             criteria.eq(criteria.proto().paymentMethod().type(), PaymentType.Interac);
-            criteria.ge(criteria.proto().finalizeDate(), monthlyPeriod);
+            criteria.ge(criteria.proto().finalizedDate(), monthlyPeriod);
             List<PaymentRecord> records = Persistence.service().query(criteria);
             BigDecimal amount = BigDecimal.ZERO;
             for (PaymentRecord record : records) {

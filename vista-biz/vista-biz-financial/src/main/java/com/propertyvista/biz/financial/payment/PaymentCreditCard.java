@@ -177,7 +177,7 @@ class PaymentCreditCard {
         LogicalDate now = SystemDateManager.getLogicalDate();
         record.lastStatusChangeDate().setValue(now);
         record.receivedDate().setValue(now);
-        record.finalizeDate().setValue(now);
+        record.finalizedDate().setValue(now);
         Persistence.service().persist(record);
 
     }

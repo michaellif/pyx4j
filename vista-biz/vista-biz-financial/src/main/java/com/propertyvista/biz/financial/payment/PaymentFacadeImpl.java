@@ -287,7 +287,7 @@ public class PaymentFacadeImpl implements PaymentFacade {
         switch (paymentRecord.paymentMethod().type().getValue()) {
         case Cash:
             paymentRecord.paymentStatus().setValue(PaymentRecord.PaymentStatus.Cleared);
-            paymentRecord.finalizeDate().setValue(SystemDateManager.getLogicalDate());
+            paymentRecord.finalizedDate().setValue(SystemDateManager.getLogicalDate());
             break;
         case Check:
             paymentRecord.paymentStatus().setValue(PaymentRecord.PaymentStatus.Received);
@@ -371,7 +371,7 @@ public class PaymentFacadeImpl implements PaymentFacade {
 
         paymentRecord.paymentStatus().setValue(PaymentRecord.PaymentStatus.Canceled);
         paymentRecord.lastStatusChangeDate().setValue(SystemDateManager.getLogicalDate());
-        paymentRecord.finalizeDate().setValue(SystemDateManager.getLogicalDate());
+        paymentRecord.finalizedDate().setValue(SystemDateManager.getLogicalDate());
         Persistence.service().merge(paymentRecord);
 
         if (incommingStatus == PaymentRecord.PaymentStatus.Queued) {
@@ -406,7 +406,7 @@ public class PaymentFacadeImpl implements PaymentFacade {
 
         paymentRecord.paymentStatus().setValue(PaymentRecord.PaymentStatus.Cleared);
         paymentRecord.lastStatusChangeDate().setValue(SystemDateManager.getLogicalDate());
-        paymentRecord.finalizeDate().setValue(SystemDateManager.getLogicalDate());
+        paymentRecord.finalizedDate().setValue(SystemDateManager.getLogicalDate());
         Persistence.service().merge(paymentRecord);
 
         ServerSideFactory.create(AuditFacade.class).updated(paymentRecord, "Cleared");
@@ -435,7 +435,7 @@ public class PaymentFacadeImpl implements PaymentFacade {
 
         paymentRecord.paymentStatus().setValue(PaymentRecord.PaymentStatus.Rejected);
         paymentRecord.lastStatusChangeDate().setValue(SystemDateManager.getLogicalDate());
-        paymentRecord.finalizeDate().setValue(SystemDateManager.getLogicalDate());
+        paymentRecord.finalizedDate().setValue(SystemDateManager.getLogicalDate());
         Persistence.service().merge(paymentRecord);
 
         try {

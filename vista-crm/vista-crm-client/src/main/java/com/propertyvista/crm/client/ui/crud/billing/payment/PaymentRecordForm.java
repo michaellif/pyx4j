@@ -253,7 +253,7 @@ public class PaymentRecordForm extends CrmEntityForm<PaymentRecordDTO> {
         formPanel.append(Location.Right, proto().createdDate()).decorate().componentWidth(120);
         formPanel.append(Location.Right, proto().updated()).decorate().componentWidth(120);
         formPanel.append(Location.Right, proto().receivedDate()).decorate().componentWidth(120);
-        formPanel.append(Location.Right, proto().finalizeDate()).decorate().componentWidth(120);
+        formPanel.append(Location.Right, proto().finalizedDate()).decorate().componentWidth(120);
         formPanel.append(Location.Right, proto().paymentStatus()).decorate();
         formPanel.append(Location.Right, proto().lastStatusChangeDate()).decorate().componentWidth(120);
         if (VistaFeatures.instance().yardiIntegration()) {
@@ -363,7 +363,7 @@ public class PaymentRecordForm extends CrmEntityForm<PaymentRecordDTO> {
         }
         get(proto().rejectedWithNSF()).setVisible(false);
         get(proto().lastStatusChangeDate()).setVisible(true);
-        get(proto().finalizeDate()).setVisible(true);
+        get(proto().finalizedDate()).setVisible(true);
         get(proto().createdBy()).setVisible(true);
         get(proto().convenienceFee()).setVisible(true);
         get(proto().notes()).setVisible(true);
@@ -387,7 +387,7 @@ public class PaymentRecordForm extends CrmEntityForm<PaymentRecordDTO> {
         get(proto().paymentStatus()).setVisible(!isNew);
         get(proto().rejectedWithNSF()).setVisible(!isNew && !getValue().rejectedWithNSF().isNull());
         get(proto().lastStatusChangeDate()).setVisible(!isNew);
-        get(proto().finalizeDate()).setVisible(!getValue().finalizeDate().isNull());
+        get(proto().finalizedDate()).setVisible(!getValue().finalizedDate().isNull());
         get(proto().updated()).setVisible(!getValue().updated().isNull());
         get(proto().createdBy()).setVisible(!getValue().createdBy().isNull());
         get(proto().convenienceFee()).setVisible(!getValue().convenienceFee().isNull());

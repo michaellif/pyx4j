@@ -159,7 +159,7 @@ class PadReconciliationProcessor extends AbstractReconciliationProcessor {
 
         paymentRecord.paymentStatus().setValue(PaymentRecord.PaymentStatus.Rejected);
         paymentRecord.lastStatusChangeDate().setValue(SystemDateManager.getLogicalDate());
-        paymentRecord.finalizeDate().setValue(SystemDateManager.getLogicalDate());
+        paymentRecord.finalizedDate().setValue(SystemDateManager.getLogicalDate());
 
         paymentRecord.transactionErrorMessage().setValue(
                 CommonsStringUtils.nvl_concat(debitRecord.reasonCode().getValue(), debitRecord.reasonText().getValue(), " "));
@@ -182,7 +182,7 @@ class PadReconciliationProcessor extends AbstractReconciliationProcessor {
 
         paymentRecord.paymentStatus().setValue(PaymentRecord.PaymentStatus.Returned);
         paymentRecord.lastStatusChangeDate().setValue(SystemDateManager.getLogicalDate());
-        paymentRecord.finalizeDate().setValue(SystemDateManager.getLogicalDate());
+        paymentRecord.finalizedDate().setValue(SystemDateManager.getLogicalDate());
 
         paymentRecord.transactionErrorMessage().setValue(
                 CommonsStringUtils.nvl_concat(debitRecord.reasonCode().getValue(), debitRecord.reasonText().getValue(), " "));

@@ -203,7 +203,7 @@ public class CardsDailyReportProcessor {
 
         paymentRecord.paymentStatus().setValue(PaymentRecord.PaymentStatus.Cleared);
         paymentRecord.lastStatusChangeDate().setValue(SystemDateManager.getLogicalDate());
-        paymentRecord.finalizeDate().setValue(new LogicalDate(clearanceRecord.clearanceDate().getValue()));
+        paymentRecord.finalizedDate().setValue(new LogicalDate(clearanceRecord.clearanceDate().getValue()));
         Persistence.service().merge(paymentRecord);
         log.info("Payment {} {} {} Cleared", PaymentType.CreditCard.name(), paymentRecord.id().getValue(), paymentRecord.amount().getValue());
     }

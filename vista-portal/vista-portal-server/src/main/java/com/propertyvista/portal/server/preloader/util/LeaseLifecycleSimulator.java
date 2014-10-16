@@ -451,7 +451,7 @@ public class LeaseLifecycleSimulator {
                 paymentRecord.createdDate().setValue(now());
                 paymentRecord.receivedDate().setValue(now());
                 paymentRecord.targetDate().setValue(now());
-                paymentRecord.finalizeDate().setValue(now());
+                paymentRecord.finalizedDate().setValue(now());
                 paymentRecord.lastStatusChangeDate().setValue(now());
                 paymentRecord.amount().setValue(amount);
                 paymentRecord.paymentStatus().setValue(PaymentRecord.PaymentStatus.Received);

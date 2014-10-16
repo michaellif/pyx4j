@@ -52,7 +52,7 @@ public class PaymentLister extends AbstractLister<PaymentRecordDTO> {
         cd.add(new MemberColumnDescriptor.Builder(proto().lastStatusChangeDate()).build());
         cd.add(new MemberColumnDescriptor.Builder(proto().targetDate()).build());
         cd.add(new MemberColumnDescriptor.Builder(proto().paymentStatus()).build());
-        cd.add(new MemberColumnDescriptor.Builder(proto().finalizeDate(), false).build());
+        cd.add(new MemberColumnDescriptor.Builder(proto().finalizedDate(), false).build());
         cd.add(new MemberColumnDescriptor.Builder(proto().rejectedWithNSF()).visible(false).build());
         cd.add(new MemberColumnDescriptor.Builder(proto().transactionErrorMessage()).visible(false).build());
         setDataTableModel(new DataTableModel<PaymentRecordDTO>(cd));

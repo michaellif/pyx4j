@@ -199,7 +199,7 @@ class CardsReconciliationProcessor {
             ExecutionMonitor batchExecutionMonitor) {
         LogicalDate transactionsDate = new LogicalDate(DateUtils.addDays(reconciliationRecord.depositDate().getValue(), -1));
         EntityQueryCriteria<PaymentRecord> criteria = EntityQueryCriteria.create(PaymentRecord.class);
-        criteria.eq(criteria.proto().finalizeDate(), transactionsDate);
+        criteria.eq(criteria.proto().finalizedDate(), transactionsDate);
         criteria.eq(criteria.proto().paymentMethod().type(), PaymentType.CreditCard);
         criteria.eq(criteria.proto().paymentStatus(), PaymentRecord.PaymentStatus.Cleared);
         criteria.eq(criteria.proto().merchantAccount(), at.merchantAccount());
