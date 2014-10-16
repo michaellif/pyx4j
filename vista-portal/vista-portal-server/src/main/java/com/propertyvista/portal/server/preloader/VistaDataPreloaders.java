@@ -28,6 +28,7 @@ import com.propertyvista.portal.server.preloader.site.prod.ProdSitePreloader;
 import com.propertyvista.portal.server.preloader.site.redridge.RedridgeSitePreloader;
 import com.propertyvista.portal.server.preloader.site.rockville.RockvilleSitePreloader;
 import com.propertyvista.portal.server.preloader.site.star.StarlightSitePreloader;
+import com.propertyvista.portal.server.preloader.site.timbercreek.TimbercreekSitePreloader;
 import com.propertyvista.portal.server.preloader.site.vista.VistaSitePreloader;
 import com.propertyvista.preloader.CrmRolesDevPreloader;
 import com.propertyvista.preloader.MerchantAccountPreloader;
@@ -69,8 +70,9 @@ public class VistaDataPreloaders extends DataPreloaderCollection {
         } else {
             switch (demoPmc) {
             case vista:
+                add(new TimbercreekSitePreloader());
                 //add(new MetCapSitePreloader());
-                add(new VistaSitePreloader());
+                //add(new VistaSitePreloader());
                 break;
             case star:
                 add(new StarlightSitePreloader());
