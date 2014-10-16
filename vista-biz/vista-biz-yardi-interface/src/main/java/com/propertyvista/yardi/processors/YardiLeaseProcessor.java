@@ -242,7 +242,7 @@ public class YardiLeaseProcessor {
 
         boolean toPersist = false;
         boolean toFinalize = false;
-        boolean leaseMove = false;
+        boolean yardiUnitTransfer = false;
 
         if (lease.currentTerm().yardiLeasePk().isNull()) {
             lease.currentTerm().yardiLeasePk().setValue(getYardiLeasePk(yardiCustomers));
@@ -250,14 +250,14 @@ public class YardiLeaseProcessor {
         } else if (!EqualsHelper.equals(lease.currentTerm().yardiLeasePk().getValue(), getYardiLeasePk(yardiCustomers))) {
             // it seems we are moving by Yardi Unit Transfer method!.. 
             previousTerm = lease.currentTerm().duplicate();
-            leaseMove = true;
+            yardiUnitTransfer = true;
             log.info("- Lease {} Moving...", lease.leaseId().getStringView());
         }
 
         // if unit update is occurred:
         String unitNumber = YardiARIntegrationAgent.getUnitId(ltd.getResident());
         Validate.isTrue(CommonsStringUtils.isStringSet(unitNumber), "Unit number required");
-        if (leaseMove || !unitNumber.equals(lease.unit().info().number().getValue())) {
+        if (yardiUnitTransfer || !unitNumber.equals(lease.unit().info().number().getValue())) {
             Validate.isTrue(CommonsStringUtils.isStringSet(propertyCode), "Property Code required");
             AptUnit unit = retrieveUnit(rtd.getYardiInterfaceId(), propertyCode, unitNumber);
             rtd.getExecutionMonitor().addInfoEvent(
@@ -265,7 +265,7 @@ public class YardiLeaseProcessor {
                     SimpleMessageFormat.format("lease {0}: updating unit {1} to unit {2}", lease.leaseId().getStringView(), lease.unit().getStringView(),
                             unit.getStringView()));
 
-            lease = new LeaseMerger().updateUnit(unit, lease, leaseMove);
+            lease = new LeaseMerger().updateUnit(unit, lease, yardiUnitTransfer);
             lease.currentTerm().yardiLeasePk().setValue(getYardiLeasePk(yardiCustomers));
             toFinalize = true;
             log.debug("- Lease Unit Changed...");
@@ -293,6 +293,11 @@ public class YardiLeaseProcessor {
         Persistence.ensureRetrieve(lease.currentTerm().version().guarantors(), AttachLevel.Attached);
         if (new TenantMerger(rtd.getExecutionMonitor()).isChanged(yardiCustomers, lease)) {
             new TenantMerger(rtd.getExecutionMonitor()).updateTenants(yardiCustomers, lease, previousTerm);
+            if (yardiUnitTransfer) {
+                // TODO: hack to update newly created tenants with old customers:  
+                ServerSideFactory.create(LeaseFacade.class).persist(lease.currentTerm());
+                new TenantMerger(rtd.getExecutionMonitor()).updateTenants(yardiCustomers, lease, previousTerm);
+            }
             toFinalize = true;
             log.debug("- Tenants Changed...");
         }

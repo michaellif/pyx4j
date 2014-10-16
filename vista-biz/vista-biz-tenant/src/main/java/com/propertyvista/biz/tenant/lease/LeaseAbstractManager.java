@@ -235,7 +235,7 @@ public abstract class LeaseAbstractManager {
     }
 
     public LeaseTerm persist(LeaseTerm leaseTerm) {
-        persistCustomers(leaseTerm);
+        persistLeaseParticipants(leaseTerm);
 
         switch (leaseTerm.type().getValue()) {
         case Fixed:
@@ -1059,7 +1059,7 @@ public abstract class LeaseAbstractManager {
 
     // Internals: -----------------------------------------------------------------------------------------------------
 
-    private void persistCustomers(LeaseTerm leaseTerm) {
+    private void persistLeaseParticipants(LeaseTerm leaseTerm) {
         for (LeaseTermTenant tenant : leaseTerm.version().tenants()) {
             if (!tenant.isValueDetached()) {
                 persistLeaseParticipant(leaseTerm, tenant, Tenant.class);
