@@ -120,10 +120,13 @@ public class VistaApplicationDispatcherFilter implements Filter {
     }
 
     public String getCompleteURL(HttpServletRequest httpRequest, boolean returnWithContextPath) {
+        log.info("requestUri -> " + httpRequest.getRequestURI());
+        log.info("contextPath -> " + httpRequest.getContextPath());
         String requestUri = httpRequest.getRequestURI();
         if (!returnWithContextPath) {
             String contextPath = httpRequest.getContextPath();
             requestUri = requestUri.replaceFirst(contextPath, "");
+            log.info("updatedRequestUri -> " + requestUri);
         }
 
         return getServerURL(httpRequest) + requestUri + (httpRequest.getQueryString() != null ? "?" + httpRequest.getQueryString() : "");
