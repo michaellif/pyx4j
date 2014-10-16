@@ -257,7 +257,7 @@ public class TenantMapper {
         }
 
         if (customer == null) {
-            log.info("No Customer for {} has been found!?", yardiCustomer.getCustomerID());
+            log.debug("No Customer for {} has been found", yardiCustomer.getCustomerID());
         }
         return customer;
     }
