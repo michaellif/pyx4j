@@ -49,6 +49,10 @@ public class DashboardTheme extends Theme {
         style.addProperty("text-align", "left");
         addStyle(style);
 
+        style = new Style(".", StyleName.LandingPage);
+        style.addProperty("padding", "40px 0");
+        addStyle(style);
+
         style = new Style(".", StyleName.LandingPage, " .", StyleName.GadgetContainer);
         style.addProperty("margin", "10px");
         addStyle(style);
