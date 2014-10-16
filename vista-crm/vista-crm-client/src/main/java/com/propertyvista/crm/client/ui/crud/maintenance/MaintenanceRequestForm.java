@@ -457,7 +457,7 @@ public class MaintenanceRequestForm extends CrmEntityForm<MaintenanceRequestDTO>
             return;
         }
 
-        if (VistaFeatures.instance().yardiIntegration()) {
+        if (VistaFeatures.instance().yardiIntegration() && !mr.id().isNull()) {
             // if reporter (tenant) not set (Yardi-originated requests), we just show the name
             get(proto().reporter()).setVisible(!mr.reporter().isNull());
             get(proto().reporterName()).setVisible(mr.reporter().isNull());
