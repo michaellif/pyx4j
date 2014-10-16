@@ -76,6 +76,9 @@ public class VistaApplicationDispatcherFilter implements Filter {
     public void map(final ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
         HttpServletRequest httprequest = (HttpServletRequest) request;
 
+        log.info("Complete URL Request -> {}", getCompleteURLWithContextPath(httprequest));
+        log.info("Complete URL Request without context -> {}", getCompleteURLNoContextPath(httprequest));
+
         // sample url -> http://vista-crm.dev.birchwoodsoftwaregroup.com:8888/vista/crm/tip.png?width=23
 
         String requestUri = httprequest.getRequestURI(); // sample: /vista/crm/tip.png
@@ -119,24 +122,34 @@ public class VistaApplicationDispatcherFilter implements Filter {
         return getCompleteURL(httpRequest, false);
     }
 
+    public String getCompleteURLWithContextPath(HttpServletRequest httpRequest) {
+        return getCompleteURL(httpRequest, true);
+    }
+
     public String getCompleteURL(HttpServletRequest httpRequest, boolean returnWithContextPath) {
         log.info("requestUri -> " + httpRequest.getRequestURI());
         log.info("contextPath -> " + httpRequest.getContextPath());
         String requestUri = httpRequest.getRequestURI();
-        if (!returnWithContextPath) {
+        if (!returnWithContextPath && requestUri != null) {
             String contextPath = httpRequest.getContextPath();
-            //requestUri = requestUri.replaceFirst(contextPath, "");
-            requestUri = requestUri.replaceAll(contextPath, ""); // hack for duplicate context on request
-            log.info("updatedRequestUri -> " + requestUri);
+            if (contextPath != null) {
+                requestUri = requestUri.replaceAll(contextPath, ""); // hack for duplicate context on request
+                log.info("updatedRequestUri -> " + requestUri);
+            }
         }
 
         return getServerURL(httpRequest) + requestUri + (httpRequest.getQueryString() != null ? "?" + httpRequest.getQueryString() : "");
     }
 
     public String getCompleteURLToForward(HttpServletRequest request, String forwardPath) {
-        String uri = getServerURL(request);
-        uri += forwardPath;
-        return uri;
+        StringBuffer uri = new StringBuffer(getServerURL(request));
+        uri.append(forwardPath);
+
+        String queryStr = request.getQueryString();
+        if (queryStr != null && !queryStr.isEmpty()) {
+            uri.append("?").append(queryStr);
+        }
+        return uri.toString();
     }
 
     public String getServerURL(HttpServletRequest httpRequest) {
@@ -171,15 +184,12 @@ public class VistaApplicationDispatcherFilter implements Filter {
      */
     private boolean isRootAppRequest(HttpServletRequest request) {
         String servletPath = request.getServletPath();
+
         if (servletPath.equals("") || servletPath.equals("/")
                 || (servletPath.equals("/" + VistaApplication.prospect) && (getAppByRequest(request) == VistaApplication.prospect))) {
             return true;
         }
         return false;
-    }
-
-    private boolean isHttp(HttpServletRequest request) {
-        return request.getScheme().equalsIgnoreCase("http");
     }
 
     private VistaApplication getAppByRequest(ServletRequest request) {
