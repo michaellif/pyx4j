@@ -23,6 +23,7 @@ import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.server.Persistence;
 
+import com.propertyvista.domain.financial.AggregatedTransfer;
 import com.propertyvista.domain.financial.AggregatedTransfer.AggregatedTransferStatus;
 import com.propertyvista.domain.financial.CardsAggregatedTransfer;
 import com.propertyvista.domain.financial.EftAggregatedTransfer;
@@ -37,7 +38,6 @@ public class AggregatedTransfersDevPreloader extends BaseVistaDevDataPreloader {
     @Override
     public String create() {
 
-        // TODO group by By Lease, By Type and By Day. Question = how to group by with your framework?
         // Retrieve Echeck payment records
         EntityQueryCriteria<PaymentRecord> eCheckePaymentsCriteria = EntityQueryCriteria.create(PaymentRecord.class);
         eCheckePaymentsCriteria.eq(eCheckePaymentsCriteria.proto().paymentMethod().type(), PaymentType.Echeck);
@@ -52,13 +52,27 @@ public class AggregatedTransfersDevPreloader extends BaseVistaDevDataPreloader {
         List<PaymentRecord> creditCardPayments = Persistence.service().query(cardPaymentsCriteria);
         log.info("There are {} payments of type 'CreditCard'", creditCardPayments.size());
 
-        // Based on results above, create a couple of Aggregated Transfers which first 2 payment records
-        // (they have same lease, same date and same payment type)
-        EftAggregatedTransfer eftAggTransfer = createEftAggregatedTransfer(eChequePayments.subList(0, 2));
-        Persistence.service().persist(eftAggTransfer);
+        // Based on results above, create a couple of Aggregated Transfers with first 2 payment records
+        // (they should be same lease, same date and same payment type according to lease preloading)
+        if (eChequePayments.size() >= 2) {
+            List<PaymentRecord> paymentsForEft = eChequePayments.subList(0, 2);
+            EftAggregatedTransfer eftAggTransfer = createEftAggregatedTransfer(paymentsForEft);
+            Persistence.service().persist(eftAggTransfer);
+            updatePaymentRecords(paymentsForEft, eftAggTransfer);
+            log.info("Created one EftAggregatedTrasnfer");
+        } else {
+            log.info("EftAggregatedTrasnfer no created. No enough payment records of type 'echeck' in db.");
+        }
 
-        EftAggregatedTransfer cardAggTransfer = createEftAggregatedTransfer(creditCardPayments.subList(0, 2));
-        Persistence.service().persist(cardAggTransfer);
+        if (creditCardPayments.size() >= 2) {
+            List<PaymentRecord> paymentsForCard = creditCardPayments.subList(0, 2);
+            CardsAggregatedTransfer cardAggTransfer = createCardAggregatedTransfer(paymentsForCard);
+            Persistence.service().persist(cardAggTransfer);
+            updatePaymentRecords(paymentsForCard, cardAggTransfer);
+            log.info("Created one CardAggregatedTrasnfer");
+        } else {
+            log.info("CardAggregatedTrasnfer no created. No enough payment records of type 'credit card' in db.");
+        }
 
         return "Aggregated transfers preloaded";
     }
@@ -118,6 +132,14 @@ public class AggregatedTransfersDevPreloader extends BaseVistaDevDataPreloader {
 //        at.mastercardFee().setValue(reconciliationRecord.mastercardFee().getValue(BigDecimal.ZERO));
 
         return at;
+    }
+
+    private void updatePaymentRecords(List<PaymentRecord> eChequePayments, AggregatedTransfer aggTransfer) {
+        for (int i = 0; i < 2; i++) {
+            PaymentRecord payment = eChequePayments.get(i);
+            payment.aggregatedTransfer().set(aggTransfer);
+            Persistence.service().persist(payment);
+        }
     }
 
     @Override
