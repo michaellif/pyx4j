@@ -144,6 +144,10 @@ public class ServletUtils {
         return receivingURL.toString();
     }
 
+    public static String getRequestWarBaseURL(HttpServletRequest request) {
+        return getRequestBaseURL(request) + getRelativeServletPath(request, "/");
+    }
+
     // This is bridge for RPC RemoteServiceServlet to load serialization policy
     // Created URL can be used in getServletContext().getResourceAsStream(url.getPath() - ContextPath);
     public static String toServletContainerInternalURL(HttpServletRequest request, String externalUrs) {
