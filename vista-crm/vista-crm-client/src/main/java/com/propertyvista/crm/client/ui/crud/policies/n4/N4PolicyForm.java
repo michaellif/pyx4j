@@ -167,8 +167,6 @@ public class N4PolicyForm extends PolicyDTOTabPanelBasedForm<N4PolicyDTO> {
 
     public static class N4PolicyDTOARCodeHolderForm extends CForm<N4PolicyDTOARCodeHolderDTO> {
 
-        private final CEntityLabel<ARCode> arCodeComp = new CEntityLabel<ARCode>();
-
         public N4PolicyDTOARCodeHolderForm() {
             super(N4PolicyDTOARCodeHolderDTO.class);
         }
@@ -177,7 +175,7 @@ public class N4PolicyForm extends PolicyDTOTabPanelBasedForm<N4PolicyDTO> {
         protected IsWidget createContent() {
             FormPanel panel = new FormPanel(this);
 
-            panel.append(Location.Dual, proto().arCode(), arCodeComp).decorate().labelWidth(100);
+            panel.append(Location.Dual, proto().arCode(), new CEntityLabel<ARCode>()).decorate().labelWidth(100);
 
             return panel;
         }
@@ -187,9 +185,10 @@ public class N4PolicyForm extends PolicyDTOTabPanelBasedForm<N4PolicyDTO> {
             super.onValueSet(populate);
 
             if (!getValue().arCode().yardiChargeCodes().isEmpty()) {
-                arCodeComp.setNote(i18n.tr("Includes the following Yardi charge codes: {0}", yardiChargeCodesLabel(getValue().arCode().yardiChargeCodes())));
+                get(proto().arCode()).setNote(
+                        i18n.tr("Includes the following Yardi charge codes: {0}", yardiChargeCodesLabel(getValue().arCode().yardiChargeCodes())));
             } else {
-                arCodeComp.setNote(null);
+                get(proto().arCode()).setNote(null);
             }
         }
     }
