@@ -121,8 +121,15 @@ public class N4PolicyForm extends PolicyDTOTabPanelBasedForm<N4PolicyDTO> {
         protected void addItem() {
             new EntitySelectorListDialog<ARCode>(i18n.tr("Select AR Code(s)"), true, getCurrentArCodeOptions(), new Formatter<ARCode>() {
                 @Override
-                public String format(ARCode code) {
-                    return formatARCode(code);
+                public String format(ARCode o) {
+                    String result = "";
+                    if (o != null) {
+                        result = o.getStringView();
+                        if (!o.yardiChargeCodes().isEmpty()) {
+                            result += " " + i18n.tr("(Includes Yardi charge codes: {0})", yardiChargeCodesLabel(o.yardiChargeCodes()));
+                        }
+                    }
+                    return result;
                 }
             }) {
                 @Override
@@ -158,25 +165,9 @@ public class N4PolicyForm extends PolicyDTOTabPanelBasedForm<N4PolicyDTO> {
         return builder.toString();
     }
 
-    private static String formatARCode(ARCode o) {
-        String result = "";
-        if (o != null) {
-            result = o.getStringView();
-            if (!o.yardiChargeCodes().isEmpty()) {
-                result += " " + i18n.tr("(Yardi charge codes: {0})", yardiChargeCodesLabel(o.yardiChargeCodes()));
-            }
-        }
-        return result;
-    }
-
     public static class N4PolicyDTOARCodeHolderForm extends CForm<N4PolicyDTOARCodeHolderDTO> {
 
-        private final CEntityLabel<ARCode> arCodeComp = new CEntityLabel<ARCode>() {
-            @Override
-            public String format(ARCode code) {
-                return formatARCode(code);
-            }
-        };
+        private final CEntityLabel<ARCode> arCodeComp = new CEntityLabel<ARCode>();
 
         public N4PolicyDTOARCodeHolderForm() {
             super(N4PolicyDTOARCodeHolderDTO.class);
@@ -196,8 +187,7 @@ public class N4PolicyForm extends PolicyDTOTabPanelBasedForm<N4PolicyDTO> {
             super.onValueSet(populate);
 
             if (!getValue().arCode().yardiChargeCodes().isEmpty()) {
-                arCodeComp.setNote(i18n.tr("Includes the following Yardi charge codes: {0}", yardiChargeCodesLabel(getValue().arCode().yardiChargeCodes())),
-                        NoteStyle.Warn);
+                arCodeComp.setNote(i18n.tr("Includes the following Yardi charge codes: {0}", yardiChargeCodesLabel(getValue().arCode().yardiChargeCodes())));
             } else {
                 arCodeComp.setNote(null);
             }
