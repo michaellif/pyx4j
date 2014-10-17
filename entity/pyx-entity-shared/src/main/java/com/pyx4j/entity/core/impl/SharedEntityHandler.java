@@ -357,7 +357,7 @@ public abstract class SharedEntityHandler extends ObjectHandler<Map<String, Seri
         while (it.hasNext()) {
             Entry<String, Serializable> me = it.next();
             String memberName = me.getKey();
-            if (memberName.startsWith(IEntity.ATTR_PREFIX)) {
+            if (memberName.startsWith(IEntity.ATTR_PREFIX) || (me.getValue() == null)) {
                 continue;
             }
             MemberMeta memberMeta = root.getEntityMeta().getMemberMeta(memberName);
