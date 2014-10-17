@@ -36,18 +36,18 @@ import com.pyx4j.widgets.client.style.theme.WidgetTheme;
 import com.propertyvista.common.client.theme.HorizontalAlignCenterMixin;
 import com.propertyvista.common.client.theme.TransactionHistoryViewerTheme;
 import com.propertyvista.common.client.theme.VistaTheme.StyleName;
-import com.propertyvista.portal.rpc.portal.SiteDefinitionsDTO;
+import com.propertyvista.domain.site.SiteDescriptor.Skin;
 import com.propertyvista.portal.shared.resources.PortalImages;
 
 public class PortalTheme extends Theme {
 
-    private SiteDefinitionsDTO siteDefinitions;
+    private Skin skin;
 
     public PortalTheme() {
     }
 
-    public void initStyles(SiteDefinitionsDTO siteDefinitions) {
-        this.siteDefinitions = siteDefinitions;
+    public void initStyles(Skin skin) {
+        this.skin = skin;
         initGeneralStyles();
         initBodyStyles();
         initMenuBarStyles();
@@ -389,12 +389,15 @@ public class PortalTheme extends Theme {
 
         addTheme(new DevConsoleTheme());
 
+        //Call last
+        addTheme(new SkinTheme(skin));
+
     }
 
     private void initBackground() {
 
         Style style = new Style(".", FrontOfficeLayoutTheme.StyleName.FrontOfficeLayoutMainHolder.name());
-        if (siteDefinitions == null) {
+        if (skin == null) {
             style.addProperty("background-image", "url('" + PortalImages.INSTANCE.background().getSafeUri().asString() + "')");
         } else {
             style.addProperty("background-color", ThemeColor.siteBackground);

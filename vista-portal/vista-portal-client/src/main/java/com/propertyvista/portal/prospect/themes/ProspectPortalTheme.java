@@ -15,7 +15,7 @@ package com.propertyvista.portal.prospect.themes;
 
 import com.pyx4j.commons.css.Style;
 
-import com.propertyvista.portal.rpc.portal.SiteDefinitionsDTO;
+import com.propertyvista.domain.site.SiteDescriptor.Skin;
 import com.propertyvista.portal.shared.themes.PortalRootPaneTheme;
 import com.propertyvista.portal.shared.themes.PortalTheme;
 
@@ -26,8 +26,8 @@ public class ProspectPortalTheme extends PortalTheme {
     }
 
     @Override
-    public void initStyles(SiteDefinitionsDTO siteDefinitions) {
-        super.initStyles(siteDefinitions);
+    public void initStyles(Skin skin) {
+        super.initStyles(skin);
 
         addTheme(new RentalSummaryTheme());
         addTheme(new AdditionalInfoStepTheme());

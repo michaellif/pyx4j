@@ -166,7 +166,7 @@ public abstract class PortalSite extends VistaSite {
 
                 if (siteDefinitions.features().whiteLabelPortal().getValue(Boolean.FALSE)) {
                     palette = new PortalPalette(siteDefinitions);
-                    portalTheme.initStyles(siteDefinitions);
+                    portalTheme.initStyles(siteDefinitions.skin().getValue());
                 } else {
                     palette = new MyCommunityPortalPalette();
                     portalTheme.initStyles(null);
