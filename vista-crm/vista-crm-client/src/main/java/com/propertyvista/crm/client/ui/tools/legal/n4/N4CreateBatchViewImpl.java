@@ -72,12 +72,12 @@ public class N4CreateBatchViewImpl extends AbstractPrimePaneWithMessagesPopup im
         viewPanel = initViewPanel();
 
         viewPanel.add(searchBar = initSearchBar());
-        viewPanel.setWidgetTopHeight(searchBar, 0, Unit.PX, 100, Unit.PX);
+        viewPanel.setWidgetTopHeight(searchBar, 0, Unit.PX, 110, Unit.PX);
         viewPanel.setWidgetLeftRight(searchBar, 0, Unit.PX, 0, Unit.PX);
 
         gridsHolder = new LayoutPanel();
         viewPanel.add(gridsHolder);
-        viewPanel.setWidgetTopBottom(gridsHolder, 101, Unit.PX, 0, Unit.PX);
+        viewPanel.setWidgetTopBottom(gridsHolder, 111, Unit.PX, 0, Unit.PX);
         viewPanel.setWidgetLeftRight(gridsHolder, 0, Unit.PX, 0, Unit.PX);
 
         {
@@ -203,7 +203,7 @@ public class N4CreateBatchViewImpl extends AbstractPrimePaneWithMessagesPopup im
         searchBar.setWidgetLeftRight(searchCriteriaForm, 0, Unit.PX, 100, Unit.PX);
 
         Toolbar searchToolbar = new Toolbar();
-        searchToolbar.getElement().getStyle().setHeight(100, Unit.PX);
+        searchToolbar.getElement().getStyle().setHeight(110, Unit.PX);
         searchToolbar.getElement().getStyle().setProperty("display", "table-cell");
         searchToolbar.getElement().getStyle().setVerticalAlign(VerticalAlign.MIDDLE);
 
