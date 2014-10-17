@@ -15,9 +15,6 @@ package com.propertyvista.server.common.util;
 
 import java.text.ParseException;
 
-import com.propertyvista.domain.contact.AddressStructured.StreetDirection;
-import com.propertyvista.domain.contact.AddressStructured.StreetType;
-
 public interface StreetAddressParser {
 
     public final class StreetAddress {
@@ -26,13 +23,13 @@ public interface StreetAddressParser {
 
         public final String streetName;
 
-        public final StreetType streetType;
+        public final String streetType;
 
-        public final StreetDirection streetDirection;
+        public final String streetDirection;
 
         public final String streetNumber;
 
-        public StreetAddress(String unitNumber, String streetNumber, String streetName, StreetType streetType, StreetDirection streetDirection) {
+        public StreetAddress(String unitNumber, String streetNumber, String streetName, String streetType, String streetDirection) {
             this.unitNumber = unitNumber;
             this.streetNumber = streetNumber;
             this.streetName = streetName;

@@ -209,7 +209,7 @@ public class CanadianStreetAddressParser implements StreetAddressParser {
             throw new ParseException("Parsed street address validation didn't pass! Parsing attempt failed", 0);
         }
 
-        return new StreetAddress(unitNumber, streetNumber, streetName.toString(), streetType, streetDirection);
+        return new StreetAddress(unitNumber, streetNumber, streetName, streetType.toString(), streetDirection.toString());
     }
 
     private String normalizeStreetTypeToken(String token) {
