@@ -25,6 +25,7 @@ import com.google.gwt.user.client.ui.RequiresResize;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 
+import com.pyx4j.site.client.frontoffice.ui.layout.RequiresScroll;
 import com.pyx4j.site.client.ui.layout.ResponsiveLayoutPanel.DisplayType;
 
 public class DisplayPanel extends SimplePanel implements RequiresResize, ProvidesResize {
@@ -38,6 +39,12 @@ public class DisplayPanel extends SimplePanel implements RequiresResize, Provide
         Widget child = getWidget();
         if ((child != null) && (child instanceof RequiresResize)) {
             ((RequiresResize) child).onResize();
+        }
+    }
+
+    public void onScroll(int scrollPosition) {
+        if (getWidget() instanceof RequiresScroll) {
+            ((RequiresScroll) getWidget()).onScroll(scrollPosition);
         }
     }
 

@@ -98,20 +98,6 @@ public class FrontOfficeLayoutPanel extends ResponsiveLayoutPanel {
         headerHolder.setStyleName(FrontOfficeLayoutTheme.StyleName.FrontOfficeLayoutHeaderHolder.name());
 
         pageScroll = new ScrollPanel(pagePanel);
-        pageScroll.addScrollHandler(new ScrollHandler() {
-
-            @Override
-            public void onScroll(ScrollEvent event) {
-                if (pageScroll.getVerticalScrollPosition() <= headerHolder.getOffsetHeight()) {
-                    headerHolder.getElement().getStyle()
-                            .setOpacity(1 - Math.pow((double) pageScroll.getVerticalScrollPosition() / headerHolder.getOffsetHeight(), 4));
-                    headerHolder.getWidget().getElement().getStyle()
-                            .setProperty("transform", "translate(0px, " + pageScroll.getVerticalScrollPosition() / 2 + "px)");
-                } else {
-                    headerHolder.getElement().getStyle().setOpacity(1);
-                }
-            }
-        });
         pageScroll.getElement().getStyle().setOverflowY(Overflow.SCROLL);
         pageScroll.setHeight("100%");
         pageHolder.add(pageScroll);
@@ -203,6 +189,8 @@ public class FrontOfficeLayoutPanel extends ResponsiveLayoutPanel {
         AppSite.getEventBus().addHandler(LayoutChangeRequestEvent.TYPE, this);
 
         forceLayout(0);
+        FrontOfficeLayoutPanel.this.onScroll();
+
     }
 
     SimplePanel getFooterHolder() {
@@ -275,6 +263,9 @@ public class FrontOfficeLayoutPanel extends ResponsiveLayoutPanel {
             }
         } else if (stickyToolbarHolder.getWidget() == null) {
             stickyToolbarHolder.setDisplay();
+        }
+        for (DisplayType displayType : DisplayType.values()) {
+            getDisplay(displayType).onScroll(pageScroll.getVerticalScrollPosition());
         }
     }
 

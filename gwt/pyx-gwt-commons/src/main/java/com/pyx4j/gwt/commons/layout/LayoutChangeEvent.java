@@ -26,11 +26,6 @@ public class LayoutChangeEvent extends GwtEvent<LayoutChangeHandler> {
 
     public static Type<LayoutChangeHandler> TYPE = new Type<LayoutChangeHandler>();
 
-    public static enum ChangeType {
-
-        toggleSideMenu;
-    }
-
     private final LayoutType type;
 
     public LayoutChangeEvent(LayoutType type) {
