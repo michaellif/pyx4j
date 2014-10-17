@@ -21,11 +21,11 @@
 package com.pyx4j.entity.core.criterion;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashSet;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Set;
 import java.util.Vector;
 
 import com.pyx4j.commons.EqualsHelper;
@@ -222,23 +222,17 @@ public class EntityQueryCriteria<E extends IEntity> extends FiltersBuilder imple
         return null;
     }
 
-    public Set<PropertyCriterion> getCriterions(IObject<?> member) {
-        Set<PropertyCriterion> criterions = null;
+    public List<PropertyCriterion> getCriterions(IObject<?> member) {
         if (getFilters() != null) {
-            criterions = new HashSet<PropertyCriterion>();
+            List<PropertyCriterion> criterions = new ArrayList<>();
             for (Criterion citerion : getFilters()) {
                 if ((citerion instanceof PropertyCriterion) && (member.getPath().toString().equals(((PropertyCriterion) citerion).getPropertyPath()))) {
                     criterions.add((PropertyCriterion) citerion);
                 }
             }
-        }
-        return criterions;
-    }
-
-    public void removeCriterion(IObject<?> member) {
-        PropertyCriterion citerion = getCriterion(member);
-        if (citerion != null) {
-            getFilters().remove(citerion);
+            return criterions;
+        } else {
+            return Collections.emptyList();
         }
     }
 

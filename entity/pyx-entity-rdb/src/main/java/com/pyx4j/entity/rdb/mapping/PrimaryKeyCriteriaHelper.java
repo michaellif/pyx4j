@@ -29,8 +29,8 @@ import java.util.List;
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
-import com.pyx4j.entity.core.criterion.PropertyCriterion;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria.VersionedCriteria;
+import com.pyx4j.entity.core.criterion.PropertyCriterion;
 import com.pyx4j.entity.core.criterion.PropertyCriterion.Restriction;
 
 class PrimaryKeyCriteriaHelper {
@@ -41,17 +41,19 @@ class PrimaryKeyCriteriaHelper {
 
     PrimaryKeyCriteriaHelper(EntityQueryCriteria<?> criteria) {
         this.criteria = criteria;
-        PropertyCriterion pkCriteria = criteria.getCriterion(criteria.proto().id());
-        if ((pkCriteria != null) && (EnumSet.of(Restriction.EQUAL, Restriction.IN).contains(pkCriteria.getRestriction()))) {
-            Serializable value = pkCriteria.getValue();
-            if (value instanceof Collection) {
-                criteriaPrimaryKeys = keysConvertor((Collection<?>) value);
-            } else {
-                criteriaPrimaryKeys = keyConvertor(value);
+        Object criteriaPrimaryKeys = null;
+        for (PropertyCriterion pkCriteria : criteria.getCriterions(criteria.proto().id())) {
+            if ((EnumSet.of(Restriction.EQUAL, Restriction.IN).contains(pkCriteria.getRestriction()))) {
+                Serializable value = pkCriteria.getValue();
+                if (value instanceof Collection) {
+                    criteriaPrimaryKeys = keysConvertor((Collection<?>) value);
+                } else {
+                    criteriaPrimaryKeys = keyConvertor(value);
+                }
+                break;
             }
-        } else {
-            criteriaPrimaryKeys = null;
         }
+        this.criteriaPrimaryKeys = criteriaPrimaryKeys;
     }
 
     private static Collection<Key> keysConvertor(Collection<?> values) {
