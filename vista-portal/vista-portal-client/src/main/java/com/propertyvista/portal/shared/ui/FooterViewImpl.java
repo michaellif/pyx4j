@@ -118,7 +118,7 @@ public class FooterViewImpl extends FlowPanel implements FooterView {
     @Override
     public void setContent(PortalContentDTO content) {
         pmcInfoPanel.setPmcInfo(content.pmcInfo().html().getValue());
-        pmcInfoPanel.setPmcLogo(MediaUtils.createSiteImageResourceUrl(content.logoSmall()));
+        pmcInfoPanel.setPmcLogo(MediaUtils.createSiteImageResourceUrl(content.logoLarge()));
 
         followUsPanel.setSocialLinks(content.socialLinks());
 
