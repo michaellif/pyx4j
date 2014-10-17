@@ -118,7 +118,6 @@ class AutopayAgreementMananger {
                         preauthorizedPayment.expiredFrom().setValue(null);
                     }
                     preauthorizedPayment.isDeleted().setValue(Boolean.FALSE);
-                    preauthorizedPayment.effectiveFrom().setValue(nextPaymentCycle.billingCycleStartDate().getValue());
                 } else {
                     log.debug("no changes detected in AutopayAgreement");
                     ok = true;
@@ -128,8 +127,12 @@ class AutopayAgreementMananger {
                 isNewEntity = true;
                 isNewAgreement = true;
                 preauthorizedPayment.isDeleted().setValue(Boolean.FALSE);
-                preauthorizedPayment.effectiveFrom().setValue(nextPaymentCycle.billingCycleStartDate().getValue());
                 preauthorizedPayment.createdBy().set(VistaContext.getCurrentUserIfAvalable());
+            }
+
+            if (preauthorizedPayment.effectiveFrom().isNull()
+                    || preauthorizedPayment.effectiveFrom().getValue().before(nextPaymentCycle.billingCycleStartDate().getValue())) {
+                preauthorizedPayment.effectiveFrom().setValue(nextPaymentCycle.billingCycleStartDate().getValue());
             }
 
             //Set Tenant intervention flag
