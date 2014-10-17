@@ -786,11 +786,7 @@ public class CrmTheme extends VistaTheme {
 
         style = new Style("." + SelectedItemHolder.Styles.SuperSelectedItemHolder.name()); // should be similar to a regular text box
         style.addProperty("display", "inline-block");
-        style.addProperty("padding", "1px 3px");
-        style.addProperty("border-width", "1px");
-        style.addProperty("border-style", "solid");
-        style.addProperty("border-color", "grey");
-        style.addProperty("border-radius", "3px");
+        style.addProperty("padding", "0 2px");
         style.addProperty("cursor", "default");
         addStyle(style);
 

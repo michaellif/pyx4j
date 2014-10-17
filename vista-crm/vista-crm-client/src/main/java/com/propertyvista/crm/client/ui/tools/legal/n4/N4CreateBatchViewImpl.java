@@ -195,7 +195,7 @@ public class N4CreateBatchViewImpl extends AbstractPrimePaneWithMessagesPopup im
         };
         searchCriteriaForm.init();
         searchCriteriaForm.populateNew();
-        searchCriteriaForm.asWidget().getElement().getStyle().setPadding(5, Unit.PX);
+        searchCriteriaForm.asWidget().getElement().getStyle().setPadding(4, Unit.PX);
         searchCriteriaForm.asWidget().getElement().getStyle().setOverflow(Overflow.AUTO);
 
         searchBar.add(searchCriteriaForm);
@@ -203,9 +203,8 @@ public class N4CreateBatchViewImpl extends AbstractPrimePaneWithMessagesPopup im
         searchBar.setWidgetLeftRight(searchCriteriaForm, 0, Unit.PX, 100, Unit.PX);
 
         Toolbar searchToolbar = new Toolbar();
-        searchToolbar.getElement().getStyle().setHeight(115, Unit.PX);
+        searchToolbar.asWidget().getElement().getStyle().setPadding(6, Unit.PX);
         searchToolbar.getElement().getStyle().setProperty("display", "table-cell");
-        searchToolbar.getElement().getStyle().setVerticalAlign(VerticalAlign.MIDDLE);
 
         searchButton = new Button(i18n.tr("Search"), new Command() {
             @Override

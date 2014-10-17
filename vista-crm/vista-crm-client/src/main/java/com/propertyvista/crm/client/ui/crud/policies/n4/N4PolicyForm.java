@@ -15,9 +15,6 @@ package com.propertyvista.crm.client.ui.crud.policies.n4;
 
 import java.util.List;
 
-import com.google.gwt.dom.client.Style.FontStyle;
-import com.google.gwt.dom.client.Style.Unit;
-import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.entity.core.IObject;
@@ -30,7 +27,6 @@ import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.backoffice.ui.prime.form.IForm;
-import com.pyx4j.widgets.client.Label;
 import com.pyx4j.widgets.client.dialog.OkCancelDialog;
 
 import com.propertyvista.common.client.ui.components.editors.InternationalAddressEditor;
@@ -68,7 +64,7 @@ public class N4PolicyForm extends PolicyDTOTabPanelBasedForm<N4PolicyDTO> {
 
         FormPanel arCodesFormPanel = new FormPanel(this);
         arCodesFormPanel.h1(i18n.tr("Use the following AR Codes for calculation of charged vs. owed rent amount:"));
-        arCodesFormPanel.append(Location.Left, proto().arCodes(), arCodeFolder = new ARCodeFolder());
+        arCodesFormPanel.append(Location.Dual, proto().arCodes(), arCodeFolder = new ARCodeFolder());
 
         FormPanel deliveryFormPanel = new FormPanel(this);
         deliveryFormPanel.h1(i18n.tr("Termination date calculation:"));
@@ -173,8 +169,6 @@ public class N4PolicyForm extends PolicyDTOTabPanelBasedForm<N4PolicyDTO> {
 
         private final boolean inlineARCodes;
 
-        private Label yardiChargeCodesLabel;
-
         public N4PolicyDTOARCodeHolderForm(List<ARCode> codeOptions, final boolean inlineARCodes) {
             super(N4PolicyDTOARCodeHolderDTO.class);
             this.inlineARCodes = inlineARCodes;
@@ -190,29 +184,25 @@ public class N4PolicyForm extends PolicyDTOTabPanelBasedForm<N4PolicyDTO> {
                 }
             };
             this.arCodeBox.setOptions(codeOptions);
-            this.yardiChargeCodesLabel = new Label();
-            this.yardiChargeCodesLabel.getElement().getStyle().setPaddingLeft(4, Unit.EM);
-            this.yardiChargeCodesLabel.getElement().getStyle().setFontStyle(FontStyle.ITALIC);
         }
 
         @Override
         protected IsWidget createContent() {
-            FlowPanel panel = new FlowPanel();
-            panel.add(inject(proto().arCode(), arCodeBox));
-            panel.add(yardiChargeCodesLabel);
+            FormPanel panel = new FormPanel(this);
+            panel.append(Location.Dual, proto().arCode(), arCodeBox).decorate().labelWidth(100);
             return panel;
         }
 
         @Override
         protected void onValueSet(boolean populate) {
             super.onValueSet(populate);
+
             if (!inlineARCodes && !getValue().arCode().yardiChargeCodes().isEmpty()) {
-                yardiChargeCodesLabel.setVisible(true);
-                yardiChargeCodesLabel.setText(i18n.tr("Warning! Includes the following Yardi charge codes: {0}", yardiChargeCodesLabel(getValue().arCode()
-                        .yardiChargeCodes())));
+                arCodeBox.setNote(
+                        i18n.tr("Warning! Includes the following Yardi charge codes: {0}", yardiChargeCodesLabel(getValue().arCode().yardiChargeCodes())),
+                        NoteStyle.Warn);
             } else {
-                yardiChargeCodesLabel.setVisible(false);
-                yardiChargeCodesLabel.setText("");
+                arCodeBox.setNote(null);
             }
         }
 
@@ -235,5 +225,4 @@ public class N4PolicyForm extends PolicyDTOTabPanelBasedForm<N4PolicyDTO> {
             return builder.toString();
         }
     }
-
 }

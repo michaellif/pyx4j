@@ -28,6 +28,7 @@ import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.forms.client.validators.AbstractComponentValidator;
 import com.pyx4j.forms.client.validators.BasicValidationError;
+import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.backoffice.ui.prime.form.FieldDecoratorBuilder;
 import com.pyx4j.widgets.client.Label;
 
@@ -38,6 +39,8 @@ import com.propertyvista.crm.rpc.dto.selections.BuildingForSelectionDTO;
 import com.propertyvista.crm.rpc.dto.selections.PortfolioForSelectionDTO;
 
 public class N4CandidateSearchCriteriaForm extends CForm<N4CandidateSearchCriteriaDTO> {
+
+    public static final I18n i18n = I18n.get(N4CandidateSearchCriteriaForm.class);
 
     private CLabel<String> policyErrorsLabel;
 
@@ -53,22 +56,25 @@ public class N4CandidateSearchCriteriaForm extends CForm<N4CandidateSearchCriter
 
         policyErrorsLabel = new CLabel<String>();
         policyErrorsLabel.asWidget().getElement().getStyle().setTextAlign(TextAlign.CENTER);
-        policyErrorsLabel.asWidget().getElement().getStyle().setPaddingTop(2, Unit.EM);
-        policyErrorsLabel.asWidget().getElement().getStyle().setPaddingBottom(2, Unit.EM);
+        policyErrorsLabel.asWidget().getElement().getStyle().setPaddingTop(1, Unit.EM);
+        policyErrorsLabel.asWidget().getElement().getStyle().setPaddingBottom(1, Unit.EM);
         policyErrorsLabel.asWidget().getElement().getStyle().setProperty("marginLeft", "auto");
         policyErrorsLabel.asWidget().getElement().getStyle().setProperty("marginRight", "auto");
 
-        Widget label;
+        Widget label, selector;
 
-        panel.setWidget(0, 0, label = new Label("Portfolios:"));
+        panel.setWidget(0, 0, label = new Label(i18n.tr("Portfolios:")));
         label.setStyleName(WidgetDecoratorLabel.name());
         panel.getFlexCellFormatter().setWidth(1, 0, "150px");
-        panel.setWidget(0, 1, createPortfolioSelector());
 
-        panel.setWidget(1, 0, label = new Label("Buildings:"));
+        panel.setWidget(0, 1, selector = createPortfolioSelector().asWidget());
+        selector.getElement().getStyle().setMarginBottom(2, Unit.PX);
+
+        panel.setWidget(1, 0, label = new Label(i18n.tr("Buildings:")));
         label.setStyleName(WidgetDecoratorLabel.name());
         panel.getFlexCellFormatter().setWidth(1, 0, "150px");
-        panel.setWidget(1, 1, createBuildingSelector());
+
+        panel.setWidget(1, 1, selector = createBuildingSelector().asWidget());
 
         panel.setWidget(2, 0, 2, inject(proto().minAmountOwed(), new FieldDecoratorBuilder().componentWidth("150px").labelWidth("150px").build()));
         panel.getFlexCellFormatter().setHorizontalAlignment(2, 0, HasHorizontalAlignment.ALIGN_LEFT);
