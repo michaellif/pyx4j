@@ -13,15 +13,21 @@
  */
 package com.propertyvista.server.common.util;
 
+import java.text.ParseException;
+
 import com.pyx4j.entity.core.AttachLevel;
+import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.server.Persistence;
 
 import com.propertyvista.domain.contact.InternationalAddress;
+import com.propertyvista.domain.contact.LegalAddress;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
+import com.propertyvista.domain.ref.ISOCountry;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseParticipant;
 import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
 import com.propertyvista.domain.tenant.prospect.OnlineApplication;
+import com.propertyvista.server.common.util.StreetAddressParser.StreetAddress;
 
 public class AddressRetriever {
 
@@ -32,15 +38,42 @@ public class AddressRetriever {
         return getUnitLegalAddress(lease.unit());
     }
 
-    public static InternationalAddress getUnitLegalAddress(AptUnit unit) {
-        Persistence.ensureRetrieve(unit.building(), AttachLevel.Attached);
+    public static LegalAddress getUnitLegalAddress(AptUnit unit) {
         if (!unit.info().legalAddressOverride().getValue(false)) {
+            Persistence.ensureRetrieve(unit.building(), AttachLevel.Attached);
             InternationalAddress address = unit.building().info().address().duplicate();
             address.suiteNumber().setValue(unit.info().number().getValue());
-            return address;
+            return toLegalAddress(address);
         } else {
             return unit.info().legalAddress();
         }
+    }
+
+    public static LegalAddress toLegalAddress(InternationalAddress address) {
+        LegalAddress legal = EntityFactory.create(LegalAddress.class);
+        legal.city().set(address.city());
+        legal.province().set(address.province());
+        legal.country().set(address.country());
+        legal.postalCode().set(address.postalCode());
+
+        legal.streetNumber().set(address.streetNumber());
+        legal.streetName().set(address.streetName());
+        legal.suiteNumber().set(address.suiteNumber());
+
+        if (ISOCountry.Canada.equals(address.country().getValue())) {
+            try {
+                StreetAddress sa = new CanadianLegalAddressParser().parse(address.streetNumber().getValue() + " " + address.streetName().getValue(), address
+                        .suiteNumber().getValue());
+                legal.streetNumber().setValue(sa.streetNumber);
+                legal.streetName().setValue(sa.streetName);
+                legal.suiteNumber().setValue(sa.unitNumber);
+                legal.streetType().setValue(sa.streetType);
+                legal.streetDirection().setValue(sa.streetDirection);
+            } catch (ParseException ignore) {
+            }
+        }
+
+        return legal;
     }
 
     // Simple form address retrieving: 

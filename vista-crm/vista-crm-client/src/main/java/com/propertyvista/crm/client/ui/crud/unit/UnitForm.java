@@ -23,7 +23,6 @@ import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.IsWidget;
-import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
@@ -44,7 +43,7 @@ import com.pyx4j.site.client.backoffice.ui.prime.form.IForm;
 import com.pyx4j.site.client.ui.IShowable;
 import com.pyx4j.site.rpc.AppPlace;
 
-import com.propertyvista.common.client.ui.components.editors.InternationalAddressEditor;
+import com.propertyvista.common.client.ui.components.editors.LegalAddressEditor;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.crm.rpc.services.selections.SelectFloorplanListService;
 import com.propertyvista.domain.property.asset.Floorplan;
@@ -56,10 +55,6 @@ import com.propertyvista.shared.config.VistaFeatures;
 public class UnitForm extends CrmEntityForm<AptUnitDTO> {
 
     private static final I18n i18n = I18n.get(UnitForm.class);
-
-    private Widget buildingLegalAddressLabel;
-
-    private Widget unitLegalAddressLabel;
 
     private final FormPanel catalogMarketPricesPanel;
 
@@ -75,8 +70,6 @@ public class UnitForm extends CrmEntityForm<AptUnitDTO> {
                     .setTabEnabled(!isEditable());
         }
         addTab(createLegalAddresslTab(), i18n.tr("Legal Address"));
-        // TODO Hided till further investigation:
-        // addTab(createMarketingTab(), i18n.tr("Marketing"));
     }
 
     @Override
@@ -98,10 +91,8 @@ public class UnitForm extends CrmEntityForm<AptUnitDTO> {
         boolean customLegalAddress = getValue().info().legalAddressOverride().getValue(false);
         // unit custom address visibility
         get(proto().info().legalAddress()).setVisible(customLegalAddress);
-        unitLegalAddressLabel.setVisible(customLegalAddress);
         // building legal address visibility is opposite to unit custom address above
         get(proto().buildingLegalAddress()).setVisible(!customLegalAddress);
-        buildingLegalAddressLabel.setVisible(!customLegalAddress);
     }
 
     private IsWidget createGeneralTab() {
@@ -143,11 +134,9 @@ public class UnitForm extends CrmEntityForm<AptUnitDTO> {
         FormPanel formPanel = new FormPanel(this);
 
         formPanel.append(Location.Dual, proto().info().legalAddressOverride()).decorate().labelWidth("240px");
-        unitLegalAddressLabel = formPanel.h1(proto().info().legalAddress().getMeta().getCaption());
-        formPanel.append(Location.Dual, proto().info().legalAddress(), new InternationalAddressEditor());
-
-        buildingLegalAddressLabel = formPanel.h1(proto().buildingLegalAddress().getMeta().getCaption());
-        formPanel.append(Location.Dual, proto().buildingLegalAddress(), new InternationalAddressEditor());
+        formPanel.h1(proto().info().legalAddress().getMeta().getCaption());
+        formPanel.append(Location.Dual, proto().info().legalAddress(), new LegalAddressEditor());
+        formPanel.append(Location.Dual, proto().buildingLegalAddress(), new LegalAddressEditor());
         get(proto().buildingLegalAddress()).setEditable(false);
 
         get(proto().info().legalAddressOverride()).addValueChangeHandler(new ValueChangeHandler<Boolean>() {

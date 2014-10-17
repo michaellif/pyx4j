@@ -72,6 +72,7 @@ import com.propertyvista.biz.system.yardi.YardiNoTenantsExistException;
 import com.propertyvista.biz.system.yardi.YardiPropertyNoAccessException;
 import com.propertyvista.biz.system.yardi.YardiServiceException;
 import com.propertyvista.biz.tenant.lease.LeaseFacade;
+import com.propertyvista.domain.contact.InternationalAddress;
 import com.propertyvista.domain.dashboard.gadgets.availability.UnitAvailabilityStatus;
 import com.propertyvista.domain.financial.ARCode;
 import com.propertyvista.domain.financial.BillingAccount.BillingPeriod;
@@ -86,6 +87,7 @@ import com.propertyvista.domain.tenant.lease.LeaseApplication;
 import com.propertyvista.domain.tenant.lease.LeaseApplication.Status;
 import com.propertyvista.misc.VistaTODO;
 import com.propertyvista.operations.domain.scheduler.CompletionType;
+import com.propertyvista.server.common.util.AddressRetriever;
 import com.propertyvista.yardi.YardiTrace;
 import com.propertyvista.yardi.beans.Properties;
 import com.propertyvista.yardi.mappers.BuildingsMapper;
@@ -632,11 +634,14 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
         importedAddressToString.append(")");
 
         StringBuilder addrErr = new StringBuilder();
-        unit.info().legalAddress().set(MappingUtils.getAddress(address, addrErr));
+        InternationalAddress ia = MappingUtils.getAddress(address, addrErr);
         if (addrErr.length() > 0) {
             String msg = SimpleMessageFormat.format("Unit pk={0}: got invalid address {1}", unit.getPrimaryKey(), addrErr);
             executionMonitor.addInfoEvent("ParseAddress", msg);
             log.warn(msg);
+        } else {
+            unit.info().legalAddress().set(AddressRetriever.toLegalAddress(ia));
+            unit.info().legalAddressOverride().setValue(true);
         }
     }
 

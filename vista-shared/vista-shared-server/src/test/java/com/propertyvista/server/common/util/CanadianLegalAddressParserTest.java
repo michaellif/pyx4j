@@ -100,6 +100,8 @@ public class CanadianLegalAddressParserTest extends TestCase {
     public void testUnitNumberParsingInAddressLine2() {
         a = parse("1065      Eglinton   Avenue  Northeast", "Apt 10");
         assertEquals("10", a.unitNumber);
+        a = parse("1065      Eglinton   Avenue  Northeast", "10");
+        assertEquals("10", a.unitNumber);
     }
 
     public void testCivicNumberParsingWithUnit() {

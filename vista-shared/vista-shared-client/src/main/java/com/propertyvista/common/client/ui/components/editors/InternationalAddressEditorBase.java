@@ -32,9 +32,9 @@ import com.propertyvista.domain.ref.ISOCountry;
 
 public abstract class InternationalAddressEditorBase<A extends InternationalAddress> extends CForm<A> {
 
-    private final CProvinceComboBox province = new CProvinceComboBox();
+    protected final CProvinceComboBox province = new CProvinceComboBox();
 
-    private boolean readOnlyCountry;
+    protected boolean readOnlyCountry;
 
     public InternationalAddressEditorBase(Class<A> entityClass) {
         super(entityClass);
@@ -86,11 +86,11 @@ public abstract class InternationalAddressEditorBase<A extends InternationalAddr
         get(proto().country()).setEditable(!(readOnlyCountry && !getValue().country().isNull()));
     }
 
-    private void onCountrySelected(ISOCountry country) {
+    protected void onCountrySelected(ISOCountry country) {
         province.setCountry(country);
         if (country == null) {
-            applyDefaultSettings();
             showDetails(false);
+            applyDefaultSettings();
         } else {
             showDetails(true);
             switch (country) {
@@ -124,7 +124,7 @@ public abstract class InternationalAddressEditorBase<A extends InternationalAddr
         }
     }
 
-    private void showDetails(boolean visible) {
+    protected void showDetails(boolean visible) {
         get(proto().streetNumber()).setVisible(visible);
         get(proto().streetName()).setVisible(visible);
         get(proto().suiteNumber()).setVisible(visible);
@@ -135,7 +135,7 @@ public abstract class InternationalAddressEditorBase<A extends InternationalAddr
     }
 
     // International
-    private void applyDefaultSettings() {
+    protected void applyDefaultSettings() {
         get(proto().streetNumber()).setVisible(false);
         get(proto().streetName()).setTitle("Address Line 1");
         get(proto().suiteNumber()).setTitle("Address Line 2");

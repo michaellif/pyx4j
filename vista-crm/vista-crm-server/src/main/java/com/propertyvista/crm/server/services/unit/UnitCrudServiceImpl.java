@@ -63,7 +63,7 @@ public class UnitCrudServiceImpl extends AbstractCrudServiceDtoImpl<AptUnit, Apt
         UnitInitializationdata initData = (UnitInitializationdata) initializationData;
         AptUnitDTO newUnit = EntityFactory.create(AptUnitDTO.class);
         newUnit.building().set(Persistence.service().retrieve(Building.class, initData.parent().getPrimaryKey()));
-        newUnit.buildingLegalAddress().set(newUnit.building().info().address());
+        newUnit.buildingLegalAddress().set(AddressRetriever.getUnitLegalAddress(newUnit));
         return newUnit;
     }
 

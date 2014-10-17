@@ -22,6 +22,7 @@ import com.pyx4j.entity.core.IList;
 import com.pyx4j.entity.core.IPrimitive;
 
 import com.propertyvista.domain.contact.InternationalAddress;
+import com.propertyvista.domain.contact.LegalAddress;
 import com.propertyvista.domain.legal.ltbcommon.RentOwingForPeriod;
 import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
 
@@ -34,7 +35,7 @@ public interface N4LeaseData extends IEntity {
 
     IList<LeaseTermTenant> leaseTenants();
 
-    InternationalAddress rentalUnitAddress();
+    LegalAddress rentalUnitAddress();
 
     IPrimitive<LogicalDate> terminationDate();
 

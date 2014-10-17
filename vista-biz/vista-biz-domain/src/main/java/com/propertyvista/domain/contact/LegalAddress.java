@@ -14,11 +14,13 @@
 package com.propertyvista.domain.contact;
 
 import com.pyx4j.entity.annotations.EmbeddedEntity;
+import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.core.IPrimitive;
 
 @EmbeddedEntity
 public interface LegalAddress extends InternationalAddress {
 
+    @NotNull
     IPrimitive<String> streetType();
 
     IPrimitive<String> streetDirection();
