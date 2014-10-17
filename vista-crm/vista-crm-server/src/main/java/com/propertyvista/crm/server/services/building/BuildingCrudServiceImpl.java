@@ -133,14 +133,14 @@ public class BuildingCrudServiceImpl extends AbstractCrudServiceDtoImpl<Building
 
     @Override
     protected void enhanceListCriteria(EntityListCriteria<Building> dbCriteria, EntityListCriteria<BuildingDTO> dtoCriteria) {
-        PropertyCriterion merchantAccountPresentCriteria = dtoCriteria.getCriterion(dtoCriteria.proto().merchantAccountPresent());
-        if (merchantAccountPresentCriteria != null) {
-            dtoCriteria.getFilters().remove(merchantAccountPresentCriteria);
-
-            if (merchantAccountPresentCriteria.getValue() == Boolean.FALSE) {
-                dbCriteria.notExists(dbCriteria.proto().merchantAccounts());
-            } else {
-                dbCriteria.isNotNull(dbCriteria.proto().merchantAccounts());
+        for (PropertyCriterion merchantAccountPresentCriteria : dtoCriteria.getCriterions(dtoCriteria.proto().merchantAccountPresent())) {
+            if (merchantAccountPresentCriteria != null) {
+                dtoCriteria.removeCriterions(merchantAccountPresentCriteria);
+                if (merchantAccountPresentCriteria.getValue() == Boolean.FALSE) {
+                    dbCriteria.notExists(dbCriteria.proto().merchantAccounts());
+                } else {
+                    dbCriteria.isNotNull(dbCriteria.proto().merchantAccounts());
+                }
             }
         }
 

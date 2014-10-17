@@ -85,17 +85,18 @@ public class LeaseViewerCrudServiceImpl extends LeaseViewerCrudServiceBaseImpl<L
 
     @Override
     protected void enhanceListCriteria(EntityListCriteria<Lease> dbCriteria, EntityListCriteria<LeaseDTO> dtoCriteria) {
-        PropertyCriterion papCriteria = dtoCriteria.getCriterion(dtoCriteria.proto().preauthorizedPaymentPresent());
-        if (papCriteria != null) {
-            dtoCriteria.getFilters().remove(papCriteria);
-
-            AndCriterion notDeleted = new AndCriterion();
-            notDeleted.eq(dbCriteria.proto().currentTerm().version().tenants().$().leaseParticipant().preauthorizedPayments().$().isDeleted(), Boolean.FALSE);
-            if (papCriteria.getValue() == Boolean.FALSE) {
-                dbCriteria.notExists(dbCriteria.proto().currentTerm().version().tenants().$().leaseParticipant().preauthorizedPayments(), notDeleted);
-            } else {
-                dbCriteria.add(notDeleted);
-                dbCriteria.isNotNull(dbCriteria.proto().currentTerm().version().tenants().$().leaseParticipant().preauthorizedPayments());
+        for (PropertyCriterion papCriteria : dtoCriteria.getCriterions(dtoCriteria.proto().preauthorizedPaymentPresent())) {
+            if (papCriteria != null) {
+                dtoCriteria.removeCriterions(papCriteria);
+                AndCriterion notDeleted = new AndCriterion();
+                notDeleted.eq(dbCriteria.proto().currentTerm().version().tenants().$().leaseParticipant().preauthorizedPayments().$().isDeleted(),
+                        Boolean.FALSE);
+                if (papCriteria.getValue() == Boolean.FALSE) {
+                    dbCriteria.notExists(dbCriteria.proto().currentTerm().version().tenants().$().leaseParticipant().preauthorizedPayments(), notDeleted);
+                } else {
+                    dbCriteria.add(notDeleted);
+                    dbCriteria.isNotNull(dbCriteria.proto().currentTerm().version().tenants().$().leaseParticipant().preauthorizedPayments());
+                }
             }
         }
 
