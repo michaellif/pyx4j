@@ -15,14 +15,9 @@ package com.propertyvista.portal.shared.activity;
 
 import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.activity.shared.Activity;
-import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
-import com.pyx4j.rpc.client.DefaultAsyncCallback;
-
-import com.propertyvista.portal.rpc.portal.resident.dto.PortalContentDTO;
-import com.propertyvista.portal.rpc.portal.shared.services.PortalContentService;
 import com.propertyvista.portal.shared.PortalSite;
 import com.propertyvista.portal.shared.ui.HeaderView;
 
@@ -30,19 +25,10 @@ public class HeaderActivity extends AbstractActivity {
 
     private final HeaderView view;
 
-    private final PortalContentService service;
-
     private static final HeaderActivity instance = new HeaderActivity();
 
     private HeaderActivity() {
         view = PortalSite.getViewFactory().getView(HeaderView.class);
-        service = GWT.<PortalContentService> create(PortalContentService.class);
-        service.getPortalContent(new DefaultAsyncCallback<PortalContentDTO>() {
-            @Override
-            public void onSuccess(PortalContentDTO content) {
-                view.setContent(content);
-            }
-        });
     }
 
     @Override

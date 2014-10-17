@@ -25,9 +25,11 @@ public interface DeploymentConsts {
 
     public static final String siteImageResourceServletMapping = "/vista.siteimgrc";
 
-    public static final String portalLogo = "logo-large.png";
+    public static final String portalLogoLarge = "logo-large.png";
 
     public static final String portalLogoSmall = "logo-small.png";
+
+    public static final String portalLogoLabel = "logo-label.png";
 
     public static final String crmLogo = "logo-crm.png";
 

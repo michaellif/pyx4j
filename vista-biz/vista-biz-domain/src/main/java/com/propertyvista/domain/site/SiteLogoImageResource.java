@@ -22,6 +22,9 @@ public interface SiteLogoImageResource extends IEntity {
     AvailableLocale locale();
 
     SiteImageResource small();
-    
+
+    SiteImageResource logoLabel();
+
     SiteImageResource large();
+
 }

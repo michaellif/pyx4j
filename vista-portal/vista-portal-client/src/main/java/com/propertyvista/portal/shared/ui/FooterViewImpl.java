@@ -39,6 +39,7 @@ import com.propertyvista.common.client.ui.components.MediaUtils;
 import com.propertyvista.domain.site.SocialLink;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
 import com.propertyvista.portal.rpc.portal.resident.dto.PortalContentDTO;
+import com.propertyvista.portal.shared.PortalSite;
 import com.propertyvista.portal.shared.resources.PortalImages;
 import com.propertyvista.portal.shared.themes.PortalRootPaneTheme;
 
@@ -63,6 +64,7 @@ public class FooterViewImpl extends FlowPanel implements FooterView {
         pmcInfoPanel.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
         pmcInfoPanel.getElement().getStyle().setVerticalAlign(VerticalAlign.TOP);
         pmcInfoPanel.setWidth("50%");
+        pmcInfoPanel.setPmcLogo(MediaUtils.createSiteImageResourceUrl(PortalSite.getSiteDefinitions().logoLarge()));
 
         actionsPanel = new FlowPanel();
         actionsPanel.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
@@ -113,15 +115,13 @@ public class FooterViewImpl extends FlowPanel implements FooterView {
             }
 
         });
+
     }
 
     @Override
     public void setContent(PortalContentDTO content) {
         pmcInfoPanel.setPmcInfo(content.pmcInfo().html().getValue());
-        pmcInfoPanel.setPmcLogo(MediaUtils.createSiteImageResourceUrl(content.logoLarge()));
-
         followUsPanel.setSocialLinks(content.socialLinks());
-
     }
 
     private void doLayout(LayoutType layoutType) {

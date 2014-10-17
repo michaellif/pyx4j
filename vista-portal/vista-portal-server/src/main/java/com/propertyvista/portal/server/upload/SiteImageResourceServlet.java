@@ -93,7 +93,30 @@ public class SiteImageResourceServlet extends HttpServlet {
                 // TODO define default locale per PMC; use first one for now
                 file = descriptor.logo().get(0).small().file();
             }
-        } else if (segments[1].startsWith(DeploymentConsts.portalLogo)) {
+        } else if (segments[1].startsWith(DeploymentConsts.portalLogoLabel)) {
+            // portal logo label
+            SiteDescriptor descriptor = SiteThemeServicesImpl.getSiteDescriptorFromCache();
+            if (descriptor.logo().size() == 0) {
+                log.debug("descriptor has no logos");
+                response.setStatus(HttpServletResponse.SC_GONE);
+                return;
+            }
+            // see if locale is given
+            String locale = request.getParameter("locale");
+            if (locale != null && locale.length() > 0) {
+                for (SiteLogoImageResource logo : descriptor.logo()) {
+                    if (logo.locale().lang().getValue().name().equals(locale)) {
+                        file = logo.logoLabel().file();
+                        break;
+                    }
+                }
+            }
+            // if still no logo found, get default
+            if (file == null) {
+                // TODO define default locale per PMC; use first one for now
+                file = descriptor.logo().get(0).logoLabel().file();
+            }
+        } else if (segments[1].startsWith(DeploymentConsts.portalLogoLarge)) {
             // portal logo
             SiteDescriptor descriptor = SiteThemeServicesImpl.getSiteDescriptorFromCache();
             if (descriptor.logo().size() == 0) {

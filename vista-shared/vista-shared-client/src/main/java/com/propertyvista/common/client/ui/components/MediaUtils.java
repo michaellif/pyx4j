@@ -55,7 +55,7 @@ public class MediaUtils {
     }
 
     public static String createSiteLargeLogoUrl() {
-        return ClientLocaleUtils.getDeploymentBaseURL() + "/" + DeploymentConsts.portalLogo + DeploymentConsts.siteImageResourceServletMapping;
+        return ClientLocaleUtils.getDeploymentBaseURL() + "/" + DeploymentConsts.portalLogoLarge + DeploymentConsts.siteImageResourceServletMapping;
     }
 
     public static String createCrmLogoUrl() {

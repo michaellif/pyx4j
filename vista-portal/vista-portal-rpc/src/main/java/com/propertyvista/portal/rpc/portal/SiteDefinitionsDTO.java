@@ -20,6 +20,8 @@ import com.pyx4j.i18n.annotations.I18n;
 
 import com.propertyvista.domain.settings.PmcVistaFeatures;
 import com.propertyvista.domain.site.SiteDescriptor.Skin;
+import com.propertyvista.domain.site.PortalBannerImage;
+import com.propertyvista.domain.site.SiteImageResource;
 import com.propertyvista.domain.site.SitePalette;
 import com.propertyvista.domain.site.SiteTitles;
 
@@ -34,6 +36,14 @@ public interface SiteDefinitionsDTO extends IEntity {
     SiteTitles siteTitles();
 
     IPrimitive<Boolean> logoAvalable();
+
+    SiteImageResource logoSmall();
+
+    SiteImageResource logoLarge();
+
+    SiteImageResource logoLabel();
+
+    PortalBannerImage portalBanner();
 
     PmcVistaFeatures features();
 

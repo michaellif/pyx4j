@@ -1055,7 +1055,7 @@ public class EmailTemplateManagerTest extends VistaDBTestBase {
             //@formatter:off
             String[] args = {
                 siteHomeUrl,
-                siteHomeUrl + "/" + DeploymentConsts.portalLogo + DeploymentConsts.siteImageResourceServletMapping,
+                siteHomeUrl + "/" + DeploymentConsts.portalLogoLarge + DeploymentConsts.siteImageResourceServletMapping,
                 company,
                 copyright };
             //@formatter:on

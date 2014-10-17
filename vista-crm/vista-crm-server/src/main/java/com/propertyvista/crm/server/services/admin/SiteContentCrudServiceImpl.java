@@ -69,6 +69,7 @@ public class SiteContentCrudServiceImpl extends AbstractCrudServiceDtoImpl<SiteD
         for (SiteLogoImageResource images : dbo.logo()) {
             SiteImageResourcePersister.persist(images.large());
             SiteImageResourcePersister.persist(images.small());
+            SiteImageResourcePersister.persist(images.logoLabel());
         }
 
         return super.persist(dbo, in);

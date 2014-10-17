@@ -555,13 +555,15 @@ public abstract class AbstractSitePreloader extends AbstractVistaDataPreloader {
     private void createLogo(SiteDescriptor site, List<LocaleInfo> siteLocale) {
         String cType = "image/png";
         SiteImageResource logoSmall = makeSiteImage(DeploymentConsts.portalLogoSmall, cType);
-        SiteImageResource logoLarge = makeSiteImage(DeploymentConsts.portalLogo, cType);
+        SiteImageResource logoLarge = makeSiteImage(DeploymentConsts.portalLogoLarge, cType);
+        SiteImageResource logoLabel = makeSiteImage(DeploymentConsts.portalLogoLabel, cType);
         if (logoSmall != null || logoLarge != null) {
             for (LocaleInfo li : siteLocale) {
                 SiteLogoImageResource res = site.logo().$();
                 res.locale().set(li.aLocale);
                 res.small().set(logoSmall);
                 res.large().set(logoLarge);
+                res.logoLabel().set(logoLabel);
                 site.logo().add(res);
             }
         }

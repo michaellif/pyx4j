@@ -105,7 +105,7 @@ public class EmailTemplateRootObjectLoader {
             t.DirectBankingHelpUrl().setValue(
                     AppPlaceInfo.absoluteUrl(VistaDeployment.getBaseApplicationURL(VistaApplication.resident, true), true,
                             ResidentPortalSiteMap.PortalTerms.DirectBankingInstruction.class));
-            t.CompanyLogo().setValue(t.SiteHomeUrl().getValue() + "/" + DeploymentConsts.portalLogo + DeploymentConsts.siteImageResourceServletMapping);
+            t.CompanyLogo().setValue(t.SiteHomeUrl().getValue() + "/" + DeploymentConsts.portalLogoLarge + DeploymentConsts.siteImageResourceServletMapping);
 
             // TODO use SiteThemeServicesImpl.getSiteDescriptorFromCache()
             // TODO use proper locale

@@ -34,18 +34,21 @@ import com.pyx4j.gwt.commons.layout.LayoutChangeRequestEvent.ChangeType;
 import com.pyx4j.gwt.commons.layout.LayoutType;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.AppSite;
+import com.pyx4j.site.client.frontoffice.ui.layout.RequiresScroll;
 import com.pyx4j.site.rpc.AppPlace;
 import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.Button.ButtonMenuBar;
 import com.pyx4j.widgets.client.Toolbar;
 
 import com.propertyvista.common.client.ClientLocaleUtils;
+import com.propertyvista.common.client.ui.components.MediaUtils;
 import com.propertyvista.portal.rpc.portal.prospect.ProspectPortalSiteMap;
+import com.propertyvista.portal.shared.PortalSite;
 import com.propertyvista.portal.shared.resources.PortalImages;
 import com.propertyvista.portal.shared.themes.PortalRootPaneTheme;
 import com.propertyvista.shared.i18n.CompiledLocale;
 
-public class ToolbarViewImpl extends FlowPanel implements ToolbarView {
+public class ToolbarViewImpl extends FlowPanel implements ToolbarView, RequiresScroll {
 
     private static final I18n i18n = I18n.get(ToolbarViewImpl.class);
 
@@ -143,13 +146,24 @@ public class ToolbarViewImpl extends FlowPanel implements ToolbarView {
         leftToolbar.getElement().getStyle().setPosition(Position.ABSOLUTE);
         leftToolbar.getElement().getStyle().setProperty("left", "0");
 
-        brandImage = new Image(PortalImages.INSTANCE.myCommunityHeaderLogo());
+        brandImage = new Image();
+        if (PortalSite.getSiteDefinitions().features().whiteLabelPortal().getValue(Boolean.FALSE)) {
+            brandImage.setUrl(MediaUtils.createSiteImageResourceUrl(PortalSite.getSiteDefinitions().logoSmall()));
+        } else {
+            brandImage.setResource(PortalImages.INSTANCE.myCommunityHeaderLogo());
+        }
         brandImage.getElement().getStyle().setFloat(Float.LEFT);
         brandImage.getElement().getStyle().setProperty("borderRadius", "4px");
         brandImage.getElement().getStyle().setCursor(Cursor.POINTER);
         brandImage.setTitle("Home");
 
-        brandLabel = new Image(PortalImages.INSTANCE.myApplicationHeaderLogoLabel());
+        brandLabel = new Image();
+        if (PortalSite.getSiteDefinitions().features().whiteLabelPortal().getValue(Boolean.FALSE)) {
+            brandLabel.setUrl(MediaUtils.createSiteImageResourceUrl(PortalSite.getSiteDefinitions().logoLabel()));
+        } else {
+            brandLabel.setResource(PortalImages.INSTANCE.myCommunityHeaderLogoLabel());
+        }
+
         brandLabel.getElement().getStyle().setFloat(Float.RIGHT);
         brandLabel.getElement().getStyle().setProperty("margin", "0 0 0 10px");
         brandLabel.getElement().getStyle().setCursor(Cursor.POINTER);
@@ -268,4 +282,16 @@ public class ToolbarViewImpl extends FlowPanel implements ToolbarView {
         }
     }
 
+    @Override
+    public void onScroll(int scrollPosition) {
+        if (PortalSite.getSiteDefinitions().features().whiteLabelPortal().getValue(Boolean.FALSE)) {
+            if (getAbsoluteTop() > 0) {
+                brandImage.getElement().getStyle().setOpacity(0);
+                brandLabel.getElement().getStyle().setOpacity(0);
+            } else {
+                brandImage.getElement().getStyle().setOpacity(1);
+                brandLabel.getElement().getStyle().setOpacity(1);
+            }
+        }
+    }
 }

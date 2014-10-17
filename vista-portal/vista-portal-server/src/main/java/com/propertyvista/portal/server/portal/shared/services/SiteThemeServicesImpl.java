@@ -13,6 +13,8 @@
  */
 package com.propertyvista.portal.server.portal.shared.services;
 
+import java.util.Locale;
+
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.commons.Key;
@@ -25,13 +27,16 @@ import com.pyx4j.entity.server.NamespaceNotFoundException;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.essentials.rpc.SystemState;
 import com.pyx4j.essentials.server.admin.SystemMaintenance;
+import com.pyx4j.i18n.server.I18nManager;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.shared.IgnoreSessionToken;
 
 import com.propertyvista.config.AbstractVistaServerSideConfiguration;
 import com.propertyvista.config.VistaDeployment;
 import com.propertyvista.domain.security.common.VistaApplication;
+import com.propertyvista.domain.site.PortalBannerImage;
 import com.propertyvista.domain.site.SiteDescriptor;
+import com.propertyvista.domain.site.SiteLogoImageResource;
 import com.propertyvista.domain.site.SiteTitles;
 import com.propertyvista.portal.rpc.portal.SiteDefinitionsDTO;
 import com.propertyvista.portal.rpc.portal.shared.services.SiteThemeServices;
@@ -106,6 +111,26 @@ public class SiteThemeServicesImpl implements SiteThemeServices {
                     def.siteTitles().setValue(t.getValue());
                     break;
                 }
+            }
+        }
+
+        // logoSmall();
+        // logoLarge();
+        String lang = I18nManager.getThreadLocale().getLanguage();
+        for (SiteLogoImageResource logo : descriptor.logo()) {
+            if (new Locale(logo.locale().lang().getValue().name()).getLanguage().equals(lang)) {
+                def.logoSmall().set(logo.small().duplicate());
+                def.logoLarge().set(logo.large().duplicate());
+                def.logoLabel().set(logo.logoLabel().duplicate());
+                break;
+            }
+        }
+
+        // portalBanner();
+        for (PortalBannerImage banner : descriptor.portalBanner()) {
+            if (lang.equals(banner.locale().lang().getValue().getLanguage())) {
+                def.portalBanner().set(banner);
+                break;
             }
         }
 

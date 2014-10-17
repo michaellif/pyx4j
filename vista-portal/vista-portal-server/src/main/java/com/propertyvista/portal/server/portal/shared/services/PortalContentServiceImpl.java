@@ -39,35 +39,14 @@ public class PortalContentServiceImpl implements PortalContentService {
 
         PortalContentDTO portalContentDto = EntityFactory.create(PortalContentDTO.class);
 
-        portalContentDto.skin().set(site.skin());
-        portalContentDto.sitePalette().set(site.sitePalette());
-
         // logoSmall();
         // logoLarge();
         String lang = I18nManager.getThreadLocale().getLanguage();
-        for (SiteLogoImageResource logo : site.logo()) {
-            if (new Locale(logo.locale().lang().getValue().name()).getLanguage().equals(lang)) {
-                portalContentDto.logoSmall().set(logo.small().duplicate());
-                portalContentDto.logoLarge().set(logo.large().duplicate());
-                break;
-            }
-        }
-        if (portalContentDto.logoSmall().isNull()) {
-            // TODO throw exception logo image for current locale not found???
-        }
 
         // pmcInfo();
         for (HtmlContent cont : site.pmcInfo()) {
             if (lang.equals(cont.locale().lang().getValue().getLanguage())) {
                 portalContentDto.pmcInfo().set(cont);
-                break;
-            }
-        }
-
-        // portalBanner();
-        for (PortalBannerImage banner : site.portalBanner()) {
-            if (lang.equals(banner.locale().lang().getValue().getLanguage())) {
-                portalContentDto.portalBanner().set(banner);
                 break;
             }
         }

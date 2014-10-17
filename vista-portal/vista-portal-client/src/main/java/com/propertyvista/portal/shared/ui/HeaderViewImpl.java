@@ -22,13 +22,14 @@ import com.google.gwt.user.client.ui.SimplePanel;
 import com.pyx4j.gwt.commons.layout.LayoutChangeRequestEvent;
 import com.pyx4j.gwt.commons.layout.LayoutChangeRequestEvent.ChangeType;
 import com.pyx4j.site.client.AppSite;
+import com.pyx4j.site.client.frontoffice.ui.layout.RequiresScroll;
 
 import com.propertyvista.common.client.theme.HorizontalAlignCenterMixin;
 import com.propertyvista.common.client.ui.components.MediaUtils;
-import com.propertyvista.portal.rpc.portal.resident.dto.PortalContentDTO;
+import com.propertyvista.portal.shared.PortalSite;
 import com.propertyvista.portal.shared.themes.PortalRootPaneTheme;
 
-public class HeaderViewImpl extends SimplePanel implements HeaderView {
+public class HeaderViewImpl extends SimplePanel implements HeaderView, RequiresScroll {
 
     private final Image bannerImage;
 
@@ -50,18 +51,26 @@ public class HeaderViewImpl extends SimplePanel implements HeaderView {
 
         bannerImage.addStyleName(HorizontalAlignCenterMixin.StyleName.HorizontalAlignCenter.name());
 
-        setWidget(bannerImage);
-
-    }
-
-    @Override
-    public void setContent(PortalContentDTO content) {
-        if (!content.portalBanner().image().isNull()) {
-            bannerImage.setUrl(MediaUtils.createSiteImageResourceUrl(content.portalBanner().image()));
+        if (!PortalSite.getSiteDefinitions().portalBanner().image().isNull()) {
+            bannerImage.setUrl(MediaUtils.createSiteImageResourceUrl(PortalSite.getSiteDefinitions().portalBanner().image()));
             bannerImage.getElement().getStyle().setDisplay(Display.BLOCK);
         } else {
             bannerImage.setUrl("");
             bannerImage.getElement().getStyle().setDisplay(Display.NONE);
         }
+
+        setWidget(bannerImage);
+
     }
+
+    @Override
+    public void onScroll(int scrollPosition) {
+        if (scrollPosition <= getOffsetHeight()) {
+            getElement().getStyle().setOpacity(1 - Math.pow((double) scrollPosition / getOffsetHeight(), 4));
+            getElement().getStyle().setProperty("transform", "translate(0px, " + scrollPosition / 2 + "px)");
+        } else {
+            getElement().getStyle().setOpacity(1);
+        }
+    }
+
 }

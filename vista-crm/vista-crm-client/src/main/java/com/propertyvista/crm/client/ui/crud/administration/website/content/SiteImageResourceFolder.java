@@ -94,14 +94,20 @@ public class SiteImageResourceFolder extends VistaBoxFolder<SiteLogoImageResourc
 
         private final CImage smallLogo;
 
+        private final CImage logoLabel;
+
         private final CImage largeLogo;
 
         public PortalImageResourceEditor() {
             super(SiteLogoImageResource.class);
 
             smallLogo = new CImage(GWT.<SiteImageResourceUploadService> create(SiteImageResourceUploadService.class), new SiteImageResourceFileURLBuilder());
-            smallLogo.setImageSize(150, 100);
+            smallLogo.setImageSize(60, 50);
             smallLogo.setScaleMode(ScaleMode.Contain);
+
+            logoLabel = new CImage(GWT.<SiteImageResourceUploadService> create(SiteImageResourceUploadService.class), new SiteImageResourceFileURLBuilder());
+            logoLabel.setImageSize(245, 44);
+            logoLabel.setScaleMode(ScaleMode.Contain);
 
             largeLogo = new CImage(GWT.<SiteImageResourceUploadService> create(SiteImageResourceUploadService.class), new SiteImageResourceFileURLBuilder());
             largeLogo.setImageSize(300, 150);
@@ -116,6 +122,7 @@ public class SiteImageResourceFolder extends VistaBoxFolder<SiteLogoImageResourc
             locale.setEditable(false);
             formPanel.append(Location.Left, proto().locale()).decorate();
             formPanel.append(Location.Left, proto().small().file(), smallLogo).decorate().customLabel(i18n.tr("Small Logo"));
+            formPanel.append(Location.Left, proto().logoLabel().file(), smallLogo).decorate().customLabel(i18n.tr("Logo Label"));
             formPanel.append(Location.Dual, proto().large().file(), largeLogo).decorate().customLabel(i18n.tr("Large Logo"));
 
             return formPanel;

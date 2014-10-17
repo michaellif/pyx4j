@@ -60,6 +60,8 @@ public abstract class PortalSite extends VistaSite {
 
     private final PortalTheme portalTheme;
 
+    private SiteDefinitionsDTO siteDefinitions;
+
     private int windowHeight;
 
     private boolean canHideAddrBar = false;
@@ -156,6 +158,8 @@ public abstract class PortalSite extends VistaSite {
         GWT.<SiteThemeServices> create(SiteThemeServices.class).retrieveSiteDescriptor(new DefaultAsyncCallback<SiteDefinitionsDTO>() {
             @Override
             public void onSuccess(SiteDefinitionsDTO siteDefinitions) {
+                PortalSite.this.siteDefinitions = siteDefinitions;
+
                 hideLoadingIndicator();
 
                 Palette palette;
@@ -209,6 +213,10 @@ public abstract class PortalSite extends VistaSite {
 
     public static void scrollToTop() {
         instance().rootPane.asWidget().scrollToTop();
+    }
+
+    public static SiteDefinitionsDTO getSiteDefinitions() {
+        return instance().siteDefinitions;
     }
 
     //  portalRootPane
