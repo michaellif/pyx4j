@@ -39,6 +39,8 @@ BEGIN
         ALTER TABLE maintenance_request_category DROP CONSTRAINT maintenance_request_category_type_e_ck;
         ALTER TABLE maintenance_request_priority DROP CONSTRAINT maintenance_request_priority_level_e_ck;
         ALTER TABLE online_application DROP CONSTRAINT online_application_role_e_ck;
+        ALTER TABLE pt_vehicle DROP CONSTRAINT pt_vehicle_province_e_ck;
+        ALTER TABLE site_descriptor DROP CONSTRAINT site_descriptor_skin_e_ck;
 
         
         /**
@@ -258,6 +260,63 @@ BEGIN
         
         ALTER TABLE online_application_wizard_step_status RENAME COLUMN complete TO completed;
         
+        -- payment_record
+        
+        ALTER TABLE payment_record RENAME COLUMN finalize_date TO finalized_date;
+        
+        -- pt_vehicle
+        
+        ALTER TABLE pt_vehicle ALTER COLUMN province TYPE VARCHAR(500);
+        
+        -- restrictions_policy
+        
+        ALTER TABLE restrictions_policy ADD COLUMN years_to_forcing_previous_address INTEGER;
+        
+        -- site_palette
+        
+        ALTER TABLE site_palette    ADD COLUMN contrast3 INTEGER,
+                                    ADD COLUMN contrast4 INTEGER,
+                                    ADD COLUMN contrast5 INTEGER,
+                                    ADD COLUMN contrast6 INTEGER,
+                                    ADD COLUMN form_background INTEGER,
+                                    ADD COLUMN site_background INTEGER;
+                                    
+        -- yardi_payment_posting_batch
+        
+        CREATE TABLE yardi_payment_posting_batch
+        (
+            id                          BIGINT                      NOT NULL,
+            building                    BIGINT                      NOT NULL,
+            external_batch_number       VARCHAR(500),
+            status                      VARCHAR(50),
+            creation_date               TIMESTAMP,
+            finalize_date               TIMESTAMP,
+            post_failed                 BOOLEAN,
+            post_failed_error_message   VARCHAR(500),
+            cancel_failed               BOOLEAN,
+            cancel_failed_error_message VARCHAR(500),
+                CONSTRAINT yardi_payment_posting_batch_pk PRIMARY KEY(id)
+        );
+        
+        ALTER TABLE yardi_payment_posting_batch OWNER TO vista;
+        
+        
+        -- yardi_payment_posting_batch_record
+        
+        CREATE TABLE yardi_payment_posting_batch_record
+        (
+            id                          BIGINT                  NOT NULL,
+            batch                       BIGINT                  NOT NULL,
+            updated                     TIMESTAMP,
+            created                     TIMESTAMP,
+            added                       BOOLEAN,
+            reversal                    BOOLEAN,
+            payment_record              BIGINT                  NOT NULL,
+                CONSTRAINT yardi_payment_posting_batch_record_pk PRIMARY KEY(id)
+        );
+        
+        ALTER TABLE yardi_payment_posting_batch_record OWNER TO vista;
+        
         /**
         ***     =====================================================================================================
         ***
@@ -294,6 +353,12 @@ BEGIN
         
         EXECUTE 'UPDATE '||v_schema_name||'.customer_screening_personal_asset '
                 ||'SET  ownership = prcnt::numeric(18,2) ';
+                
+        
+        -- restrictions_policy
+        
+        EXECUTE 'UPDATE '||v_schema_name||'.restrictions_policy '
+                ||'SET  years_to_forcing_previous_address = 3';
         
         
         /**
@@ -365,6 +430,11 @@ BEGIN
             REFERENCES id_assignment_policy(id)  DEFERRABLE INITIALLY DEFERRED;
         ALTER TABLE lease_participant_move_in_action ADD CONSTRAINT lease_participant_move_in_action_lease_participant_fk FOREIGN KEY(lease_participant) 
             REFERENCES lease_participant(id)  DEFERRABLE INITIALLY DEFERRED;
+        ALTER TABLE yardi_payment_posting_batch ADD CONSTRAINT yardi_payment_posting_batch_building_fk FOREIGN KEY(building) 
+            REFERENCES building(id)  DEFERRABLE INITIALLY DEFERRED;
+        ALTER TABLE yardi_payment_posting_batch_record ADD CONSTRAINT yardi_payment_posting_batch_record_batch_fk FOREIGN KEY(batch) 
+            REFERENCES yardi_payment_posting_batch(id)  DEFERRABLE INITIALLY DEFERRED;
+
 
         
         -- check constraints
@@ -388,13 +458,17 @@ BEGIN
             CHECK ((element_type) IN ('Amenities', 'ApartmentUnit', 'Exterior'));
         ALTER TABLE maintenance_request_priority ADD CONSTRAINT maintenance_request_priority_lvl_e_ck 
             CHECK ((lvl) IN ('EMERGENCY', 'STANDARD'));
-        ALTER TABLE online_application ADD CONSTRAINT online_application_participant_role_e_ck 
-            CHECK ((participant_role) IN ('Applicant', 'CoApplicant', 'Dependent', 'Guarantor'));
         ALTER TABLE master_online_application ADD CONSTRAINT master_online_application_fee_payment_e_ck 
             CHECK ((fee_payment) IN ('none', 'perApplicant', 'perLease'));
         ALTER TABLE notification ADD CONSTRAINT notification_tp_e_ck 
             CHECK ((tp) IN ('AutoPayCanceledByResident', 'AutoPayCreatedByResident', 'AutoPayReviewRequired', 'BillingAlert', 'ElectronicPaymentRejectedNsf', 
                             'MaintenanceRequest', 'YardiSynchronization'));
+        ALTER TABLE online_application ADD CONSTRAINT online_application_participant_role_e_ck 
+            CHECK ((participant_role) IN ('Applicant', 'CoApplicant', 'Dependent', 'Guarantor'));
+        ALTER TABLE site_descriptor ADD CONSTRAINT site_descriptor_skin_e_ck 
+            CHECK ((skin) IN ('skin1', 'skin2', 'skin3', 'skin4', 'skin5', 'skin6'));
+        ALTER TABLE yardi_payment_posting_batch ADD CONSTRAINT yardi_payment_posting_batch_status_e_ck 
+            CHECK ((status) IN ('Canceled', 'Open', 'Posted'));
 
         
  
@@ -426,7 +500,8 @@ BEGIN
         CREATE INDEX communication_thread_policy_handle_thrd_idx ON communication_thread_policy_handle USING btree (thrd);
         CREATE INDEX lease_participant_move_in_action_lease_participant_discr_idx ON lease_participant_move_in_action USING btree (lease_participant_discriminator);
         CREATE INDEX lease_participant_move_in_action_lease_participant_idx ON lease_participant_move_in_action USING btree (lease_participant);
-
+        CREATE INDEX yardi_payment_posting_batch_building_idx ON yardi_payment_posting_batch USING btree (building);
+        CREATE INDEX yardi_payment_posting_batch_record_batch_idx ON yardi_payment_posting_batch_record USING btree (batch);
 
         
         -- billing_arrears_snapshot -GiST index!

@@ -27,6 +27,9 @@ BEGIN TRANSACTION;
     CREATE SEQUENCE oapi_conversion_file_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;
     CREATE SEQUENCE oapi_conversion_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;
     CREATE SEQUENCE portal_resident_marketing_tip_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;
+    CREATE SEQUENCE yardi_payment_posting_batch_record_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;
+    CREATE SEQUENCE yardi_payment_posting_batch_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;
+
   
     -- Change owner to vista
     ALTER SEQUENCE aggregated_transfer_non_vista_transaction_seq OWNER TO vista ;
@@ -38,7 +41,9 @@ BEGIN TRANSACTION;
     ALTER SEQUENCE oapi_conversion_file_seq OWNER TO vista ;
     ALTER SEQUENCE oapi_conversion_seq OWNER TO vista ;
     ALTER SEQUENCE portal_resident_marketing_tip_seq OWNER TO vista ;
-    
+    ALTER SEQUENCE yardi_payment_posting_batch_record_seq OWNER TO vista ;
+    ALTER SEQUENCE yardi_payment_posting_batch_seq OWNER TO vista ;
+
        
 COMMIT;
 
