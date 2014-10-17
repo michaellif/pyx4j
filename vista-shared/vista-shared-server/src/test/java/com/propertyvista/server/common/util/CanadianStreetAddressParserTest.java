@@ -32,35 +32,35 @@ public class CanadianStreetAddressParserTest extends TestCase {
         Assert.assertNull(a.unitNumber);
         Assert.assertEquals("1065", a.streetNumber);
         Assert.assertEquals("Eglinton", a.streetName);
-        Assert.assertEquals(StreetType.avenue, a.streetType);
-        Assert.assertEquals(StreetDirection.east, a.streetDirection);
+        Assert.assertEquals(StreetType.avenue.name(), a.streetType);
+        Assert.assertEquals(StreetDirection.east.name(), a.streetDirection);
 
         a = parse("    1065      Eglinton   Avenue    E    ", null);
         Assert.assertNull(a.unitNumber);
         Assert.assertEquals("1065", a.streetNumber);
         Assert.assertEquals("Eglinton", a.streetName);
-        Assert.assertEquals(StreetType.avenue, a.streetType);
-        Assert.assertEquals(StreetDirection.east, a.streetDirection);
+        Assert.assertEquals(StreetType.avenue.name(), a.streetType);
+        Assert.assertEquals(StreetDirection.east.name(), a.streetDirection);
 
         a = parse("    1065      Eglinton   Avenue    Northeast", null);
         Assert.assertNull(a.unitNumber);
         Assert.assertEquals("1065", a.streetNumber);
         Assert.assertEquals("Eglinton", a.streetName);
-        Assert.assertEquals(StreetType.avenue, a.streetType);
-        Assert.assertEquals(StreetDirection.northEast, a.streetDirection);
+        Assert.assertEquals(StreetType.avenue.name(), a.streetType);
+        Assert.assertEquals(StreetDirection.northEast.name(), a.streetDirection);
 
         a = parse("    1065      Eglinton   Avenue  ", null);
         Assert.assertNull(a.unitNumber);
         Assert.assertEquals("1065", a.streetNumber);
         Assert.assertEquals("Eglinton", a.streetName);
-        Assert.assertEquals(StreetType.avenue, a.streetType);
+        Assert.assertEquals(StreetType.avenue.name(), a.streetType);
         Assert.assertNull(a.streetDirection);
 
         a = parse("1065 Eglinton  CarambA", null);
         Assert.assertNull(a.unitNumber);
         Assert.assertEquals("1065", a.streetNumber);
         Assert.assertEquals("Eglinton CarambA", a.streetName);
-        Assert.assertEquals(StreetType.other, a.streetType);
+        Assert.assertEquals(StreetType.other.name(), a.streetType);
         Assert.assertNull(a.streetDirection);
     }
 
@@ -79,21 +79,21 @@ public class CanadianStreetAddressParserTest extends TestCase {
         Assert.assertNull(a.unitNumber);
         Assert.assertEquals("1065", a.streetNumber);
         Assert.assertEquals("Eglinton", a.streetName);
-        Assert.assertEquals(StreetType.avenue, a.streetType);
+        Assert.assertEquals(StreetType.avenue.name(), a.streetType);
         Assert.assertNull(a.streetDirection);
 
         a = parse("1065 Eglinton Ave.", null);
         Assert.assertNull(a.unitNumber);
         Assert.assertEquals("1065", a.streetNumber);
         Assert.assertEquals("Eglinton", a.streetName);
-        Assert.assertEquals(StreetType.avenue, a.streetType);
+        Assert.assertEquals(StreetType.avenue.name(), a.streetType);
         Assert.assertNull(a.streetDirection);
 
         a = parse("1065 Eglinton AVENU", null);
         Assert.assertNull(a.unitNumber);
         Assert.assertEquals("1065", a.streetNumber);
         Assert.assertEquals("Eglinton", a.streetName);
-        Assert.assertEquals(StreetType.avenue, a.streetType);
+        Assert.assertEquals(StreetType.avenue.name(), a.streetType);
         Assert.assertNull(a.streetDirection);
 
         // Not supported by vista StreetTypes but present in refference
@@ -101,7 +101,7 @@ public class CanadianStreetAddressParserTest extends TestCase {
         Assert.assertNull(a.unitNumber);
         Assert.assertEquals("1065", a.streetNumber);
         Assert.assertEquals("Eglinton Plaza", a.streetName);
-        Assert.assertEquals(StreetType.other, a.streetType);
+        Assert.assertEquals(StreetType.other.name(), a.streetType);
         Assert.assertNull(a.streetDirection);
     }
 
@@ -112,7 +112,7 @@ public class CanadianStreetAddressParserTest extends TestCase {
 
     public void testDirectionWithComplexStreetName() {
         StreetAddress a = parse("10-1065 Wild Wild West Street North", null);
-        Assert.assertEquals(StreetDirection.north, a.streetDirection);
+        Assert.assertEquals(StreetDirection.north.name(), a.streetDirection);
     }
 
     public void testComplexStreetNameNoDirection() {
@@ -158,30 +158,30 @@ public class CanadianStreetAddressParserTest extends TestCase {
     public void test4AvenueRoad() {
         StreetAddress a = parse("1065 Avenue Road", null);
         Assert.assertEquals("Avenue", a.streetName);
-        Assert.assertEquals(StreetType.road, a.streetType);
+        Assert.assertEquals(StreetType.road.name(), a.streetType);
     }
 
     public void testTheStreetName() {
         StreetAddress a = parse("1065 The Avenue", null);
         Assert.assertEquals("The Avenue", a.streetName);
-        Assert.assertEquals(StreetType.avenue, a.streetType);
+        Assert.assertEquals(StreetType.avenue.name(), a.streetType);
 
         StreetAddress a2 = parse("1065 The Parkway", null);
         Assert.assertEquals("The Parkway", a2.streetName);
-        Assert.assertEquals(StreetType.parkway, a2.streetType);
+        Assert.assertEquals(StreetType.parkway.name(), a2.streetType);
 
         StreetAddress a3 = parse("1065 The Chunga-Changa Street", null);
         Assert.assertEquals("The Chunga-Changa", a3.streetName);
-        Assert.assertEquals(StreetType.street, a3.streetType);
+        Assert.assertEquals(StreetType.street.name(), a3.streetType);
 
         StreetAddress a4 = parse("1065 The Chunga-Changa", null);
         Assert.assertEquals("The Chunga-Changa", a4.streetName);
-        Assert.assertEquals(StreetType.other, a4.streetType);
+        Assert.assertEquals(StreetType.other.name(), a4.streetType);
 
         StreetAddress a5 = parse("1065 The Chunga-Changa Street North", null);
         Assert.assertEquals("The Chunga-Changa", a5.streetName);
-        Assert.assertEquals(StreetType.street, a5.streetType);
-        Assert.assertEquals(StreetDirection.north, a5.streetDirection);
+        Assert.assertEquals(StreetType.street.name(), a5.streetType);
+        Assert.assertEquals(StreetDirection.north.name(), a5.streetDirection);
 
     }
 
