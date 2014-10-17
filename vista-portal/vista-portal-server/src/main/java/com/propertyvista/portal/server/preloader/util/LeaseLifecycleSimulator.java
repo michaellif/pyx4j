@@ -20,7 +20,9 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Comparator;
 import java.util.GregorianCalendar;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.PriorityQueue;
 import java.util.Random;
 
@@ -56,7 +58,9 @@ import com.propertyvista.domain.payment.AutopayAgreement;
 import com.propertyvista.domain.payment.AutopayAgreement.AutopayAgreementCoveredItem;
 import com.propertyvista.domain.payment.CreditCardInfo;
 import com.propertyvista.domain.payment.CreditCardInfo.CreditCardType;
+import com.propertyvista.domain.payment.EcheckInfo;
 import com.propertyvista.domain.payment.LeasePaymentMethod;
+import com.propertyvista.domain.payment.PaymentDetails;
 import com.propertyvista.domain.payment.PaymentType;
 import com.propertyvista.domain.tenant.lease.BillableItem;
 import com.propertyvista.domain.tenant.lease.Lease;
@@ -69,6 +73,7 @@ import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
 import com.propertyvista.domain.tenant.lease.Tenant;
 import com.propertyvista.generator.util.CommonsGenerator;
 import com.propertyvista.generator.util.RandomUtil;
+import com.propertyvista.shared.util.AccountNumberFormatter;
 import com.propertyvista.shared.util.CreditCardFormatter;
 
 public class LeaseLifecycleSimulator {
@@ -116,6 +121,10 @@ public class LeaseLifecycleSimulator {
     private Random random;
 
     private TenantAgent tenantAgent;
+
+    private static Map<String, PaymentDone> payments = new HashMap<String, PaymentDone>();
+
+    private static PaymentType lastLeasePaymentType = null;
 
     private LeaseLifecycleSimulator(Random random) {
         this.random = random;
@@ -447,38 +456,62 @@ public class LeaseLifecycleSimulator {
             if (amount == null) {
                 return null;
             } else {
+
+                LogicalDate currentRecordDate = now();
+                String leaseKey = lease.leaseId().getValue();
+
+                if (!payments.isEmpty()) {
+                    // If payments contains same lease, add 3 payments more for same date
+                    if (payments.containsKey(leaseKey)) {
+                        PaymentDone paymentDone = payments.get(leaseKey);
+                        if (paymentDone.getNPayments() <= 3) {
+                            currentRecordDate = paymentDone.getReferenceDate();
+                        } else {
+                            lastLeasePaymentType = paymentDone.getPaymentType();
+                        }
+                    }
+                }
+
                 PaymentRecord paymentRecord = EntityFactory.create(PaymentRecord.class);
-                paymentRecord.createdDate().setValue(now());
-                paymentRecord.receivedDate().setValue(now());
-                paymentRecord.targetDate().setValue(now());
-                paymentRecord.finalizedDate().setValue(now());
-                paymentRecord.lastStatusChangeDate().setValue(now());
+                paymentRecord.createdDate().setValue(currentRecordDate);
+                paymentRecord.receivedDate().setValue(currentRecordDate);
+                paymentRecord.targetDate().setValue(currentRecordDate);
+                paymentRecord.finalizedDate().setValue(currentRecordDate);
+                paymentRecord.lastStatusChangeDate().setValue(currentRecordDate);
                 paymentRecord.amount().setValue(amount);
                 paymentRecord.paymentStatus().setValue(PaymentRecord.PaymentStatus.Received);
                 paymentRecord.billingAccount().set(lease.billingAccount());
-                paymentRecord.paymentMethod().set(createPaymentMethod(lease.currentTerm().version().tenants().get(0)));
+
+                PaymentType defaultPayment = PaymentType.CreditCard;
+
+                if (lastLeasePaymentType != null && lastLeasePaymentType == PaymentType.CreditCard) {
+                    defaultPayment = PaymentType.Echeck;
+                }
+
+                paymentRecord.paymentMethod().set(createPaymentMethod(lease.currentTerm().version().tenants().get(0), defaultPayment));
+
                 paymentRecord.leaseTermParticipant().set(lease.currentTerm().version().tenants().get(0));
 
                 Persistence.service().persist(paymentRecord.paymentMethod());
                 Persistence.service().persist(paymentRecord);
+
+                if (payments.containsKey(leaseKey)) {
+                    PaymentDone p = payments.get(leaseKey);
+                    // Payment already exists. Increment payments
+                    p.addPayment();
+                    payments.put(leaseKey, p);
+                } else {
+                    payments.put(leaseKey, new PaymentDone(paymentRecord));
+                }
+
                 return paymentRecord;
             }
         }
 
-        public LeasePaymentMethod createPaymentMethod(LeaseTermParticipant tenant) {
+        public LeasePaymentMethod createPaymentMethod(LeaseTermParticipant tenant, PaymentType paymentType) {
             LeasePaymentMethod m = EntityFactory.create(LeasePaymentMethod.class);
-            m.type().setValue(PaymentType.CreditCard);
-
-            // create new payment method details:
-            CreditCardInfo details = EntityFactory.create(CreditCardInfo.class);
-            details.cardType().setValue(CreditCardType.MasterCard);
-            details.card().newNumber().setValue("00" + CommonsStringUtils.d00(RandomUtil.randomInt(99)) + CommonsStringUtils.d00(RandomUtil.randomInt(99)));
-            details.card().obfuscatedNumber().setValue(new CreditCardFormatter().obfuscate(details.card().newNumber().getValue()));
-
-            details.nameOn().setValue(tenant.leaseParticipant().customer().person().name().getStringView());
-            details.expiryDate().setValue(RandomUtil.randomLogicalDate(2012, 2015));
-            m.details().set(details);
-
+            m.type().setValue(paymentType);
+            m.details().set(createPaymentDetails(tenant, paymentType));
             m.customer().set(tenant.leaseParticipant().customer());
             m.isProfiledMethod().setValue(Boolean.FALSE);
             m.sameAsCurrent().setValue(Boolean.FALSE);
@@ -487,6 +520,62 @@ public class LeaseLifecycleSimulator {
             return m;
         }
 
+        public PaymentDetails createPaymentDetails(LeaseTermParticipant tenant, PaymentType type) {
+            switch (type) {
+            case CreditCard:
+                CreditCardInfo creditCardDetails = EntityFactory.create(CreditCardInfo.class);
+                creditCardDetails.cardType().setValue(CreditCardType.MasterCard);
+                creditCardDetails.card().newNumber()
+                        .setValue("00" + CommonsStringUtils.d00(RandomUtil.randomInt(99)) + CommonsStringUtils.d00(RandomUtil.randomInt(99)));
+                creditCardDetails.card().obfuscatedNumber().setValue(new CreditCardFormatter().obfuscate(creditCardDetails.card().newNumber().getValue()));
+                creditCardDetails.nameOn().setValue(tenant.leaseParticipant().customer().person().name().getStringView());
+                creditCardDetails.expiryDate().setValue(RandomUtil.randomLogicalDate(2012, 2015));
+                return creditCardDetails;
+
+            case Echeck:
+                EcheckInfo eCheckDetails = EntityFactory.create(EcheckInfo.class);
+                eCheckDetails.nameOn().setValue(tenant.leaseParticipant().customer().person().name().getStringView());
+                eCheckDetails.bankId().setValue(CommonsStringUtils.paddZerro(RandomUtil.randomInt(999), 3));
+                eCheckDetails.branchTransitNumber().setValue(CommonsStringUtils.paddZerro(RandomUtil.randomInt(99999), 5));
+                eCheckDetails.accountNo().number().setValue(Integer.toString(RandomUtil.randomInt(99999)) + Integer.toString(RandomUtil.randomInt(999999)));
+                eCheckDetails.accountNo().obfuscatedNumber().setValue(new AccountNumberFormatter().obfuscate(eCheckDetails.accountNo().number().getValue()));
+                return eCheckDetails;
+
+            default:
+                throw new Error("Payment method of type '" + type + "' not implemented yet in preload");
+            }
+
+        }
+
+    }
+
+    // Class to store number of payments related to one lease
+    private class PaymentDone {
+
+        private int nPaymentesRelated = 0;
+
+        private PaymentRecord originalPayment;
+
+        public PaymentDone(PaymentRecord payment) {
+            this.originalPayment = payment;
+            nPaymentesRelated++;
+        }
+
+        public void addPayment() {
+            this.nPaymentesRelated++;
+        }
+
+        public int getNPayments() {
+            return this.nPaymentesRelated;
+        }
+
+        public LogicalDate getReferenceDate() {
+            return this.originalPayment.receivedDate().getValue();
+        }
+
+        public PaymentType getPaymentType() {
+            return this.originalPayment.paymentMethod().type().getValue();
+        }
     }
 
     private class RunBillingRecurrent extends AbstractLeaseEvent {

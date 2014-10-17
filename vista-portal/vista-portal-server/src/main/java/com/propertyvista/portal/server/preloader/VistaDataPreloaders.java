@@ -30,6 +30,7 @@ import com.propertyvista.portal.server.preloader.site.rockville.RockvilleSitePre
 import com.propertyvista.portal.server.preloader.site.star.StarlightSitePreloader;
 import com.propertyvista.portal.server.preloader.site.timbercreek.TimbercreekSitePreloader;
 import com.propertyvista.portal.server.preloader.site.vista.VistaSitePreloader;
+import com.propertyvista.preloader.AggregatedTransfersDevPreloader;
 import com.propertyvista.preloader.CrmRolesDevPreloader;
 import com.propertyvista.preloader.MerchantAccountPreloader;
 import com.propertyvista.preloader.policy.PaymentMethodSelectionPolicyDevPreloader;
@@ -119,6 +120,7 @@ public class VistaDataPreloaders extends DataPreloaderCollection {
             }
 
             add(new LeasePreloader());
+            add(new AggregatedTransfersDevPreloader());
             add(new PreloadNewTenantsAndLeads());
             add(new UpdateArrearsHistoryDevPreloader());
             add(new MaintenanceRequestsMockupPreloader());
