@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011-2012 All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -94,7 +94,7 @@ class AutopayManager {
                 criteria.in(criteria.proto().building().suspended(), false);
             }
         }
-        // calculate total 
+        // calculate total
         {
             ICursorIterator<BillingCycle> billingCycleIterator = Persistence.secureQuery(null, criteria, AttachLevel.Attached);
             try {
@@ -262,7 +262,7 @@ class AutopayManager {
             criteria.asc(criteria.proto().leaseParticipant().participantId());
             leaseParticipants = Persistence.service().query(criteria);
 
-            // Make Applicant first 
+            // Make Applicant first
             for (int i = 0; i < leaseParticipants.size(); i++) {
                 LeaseTermTenant leaseParticipant = leaseParticipants.get(i);
                 if (leaseParticipant.role().getValue() == LeaseTermParticipant.Role.Applicant) {
@@ -303,6 +303,9 @@ class AutopayManager {
                 PreauthorizedAmount record = new PreauthorizedAmount();
                 record.leaseTermTenant = leaseParticipant;
                 record.preauthorizedPayment = pap;
+                if (!pap.comments().isNull()) {
+                    record.notice = pap.comments().getValue();
+                }
 
                 record.amount = BigDecimal.ZERO;
                 for (AutopayAgreementCoveredItem item : pap.coveredItems()) {
@@ -320,7 +323,7 @@ class AutopayManager {
     private void createNoticeMessage(PaymentRecord paymentRecord, String calulationsNotice) {
         StringBuilder m = new StringBuilder();
         if (!PaymentUtils.isElectronicPaymentsSetup(paymentRecord.billingAccount())) {
-            m.append(i18n.tr("No active merchantAccount found to process the payment."));
+            m.append("Important:" + i18n.tr("No active merchantAccount found to process the payment."));
         }
         if (calulationsNotice != null) {
             if (m.length() > 0) {
