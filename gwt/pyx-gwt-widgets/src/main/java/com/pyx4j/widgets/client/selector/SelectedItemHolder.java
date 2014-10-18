@@ -63,9 +63,10 @@ public class SelectedItemHolder<C> extends Composite {
             deleteItemAction.setTitle(i18n.tr("Remove"));
             deleteItemAction.getElement().getStyle().setDisplay(Display.INLINE);
             deleteItemAction.getElement().getStyle().setFontWeight(FontWeight.BOLD);
-            deleteItemAction.getElement().getStyle().setPaddingLeft(3, Unit.PX);
-            deleteItemAction.getElement().getStyle().setPaddingRight(3, Unit.PX);
+            deleteItemAction.getElement().getStyle().setPaddingLeft(1, Unit.PX);
+            deleteItemAction.getElement().getStyle().setPaddingRight(2, Unit.PX);
             deleteItemAction.getElement().getStyle().setCursor(Cursor.POINTER);
+            deleteItemAction.getElement().getStyle().setColor("#880000");
             deleteItemAction.addClickHandler(new ClickHandler() {
                 @Override
                 public void onClick(ClickEvent event) {
@@ -76,7 +77,6 @@ public class SelectedItemHolder<C> extends Composite {
             panel.add(deleteItemAction);
         }
         initWidget(panel);
-
     }
 
     public C getItem() {
