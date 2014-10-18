@@ -54,11 +54,9 @@ public class TenantSureOrderWizardActivity extends AbstractWizardCrudActivity<Te
 
     @Override
     public void getNewQuote() {
-
         TenantSureCoverageDTO coverageRequest = getView().getValue().tenantSureCoverageRequest().<TenantSureCoverageDTO> duplicate();
         if (isValid(coverageRequest)) {
             getView().waitForQuote();
-
             ((TenantSureInsurancePolicyCrudService) getService()).getQuote(new DefaultAsyncCallback<TenantSureQuoteDTO>() {
                 @Override
                 public void onSuccess(TenantSureQuoteDTO quote) {

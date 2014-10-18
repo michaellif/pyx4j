@@ -127,11 +127,13 @@ public class TenantSureOrderWizard extends CPortalEntityWizard<TenantSureInsuran
         FormPanel formPanel = new FormPanel(this);
 
         formPanel.append(Location.Left, proto().tenantSureCoverageRequest(), coverageRequestForm = new TenantSureCoverageRequestForm());
-        get(proto().tenantSureCoverageRequest()).addValueChangeHandler(new ValueChangeHandler<TenantSureCoverageDTO>() {
+        coverageRequestForm.addValueChangeHandler(new ValueChangeHandler<TenantSureCoverageDTO>() {
             @Override
             public void onValueChange(ValueChangeEvent<TenantSureCoverageDTO> event) {
-                get(proto().tenantSureCoverageRequestConfirmation()).setValue(event.getValue(), false);
-                presenter.getNewQuote();
+                if (coverageRequestForm.isReadyForQuote()) {
+                    get(proto().tenantSureCoverageRequestConfirmation()).setValue(event.getValue(), false);
+                    presenter.getNewQuote();
+                }
             }
         });
 
@@ -184,6 +186,7 @@ public class TenantSureOrderWizard extends CPortalEntityWizard<TenantSureInsuran
         pleaseFillOutTheFormMessage.setVisible(false);
         get(proto().quote()).setVisible(false);
         quoteSendButton.setVisible(false);
+        wizardDecorator.getBtnNext().setEnabled(false);
     }
 
     public void setQuote(TenantSureQuoteDTO quote) {

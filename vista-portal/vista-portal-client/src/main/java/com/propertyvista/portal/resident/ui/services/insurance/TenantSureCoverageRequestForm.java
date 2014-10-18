@@ -98,4 +98,14 @@ public class TenantSureCoverageRequestForm extends CForm<TenantSureCoverageDTO> 
             }
         });
     }
+
+    public boolean isReadyForQuote() {
+        //@formatter:off
+        return (!getValue().personalLiabilityCoverage().isNull() && 
+                !getValue().contentsCoverage().isNull() && 
+                !getValue().deductible().isNull() && 
+                !getValue().smoker().isNull() && 
+                !getValue().numberOfPreviousClaims().isNull());
+        //@formatter:on
+    }
 }
