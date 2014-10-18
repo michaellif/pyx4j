@@ -155,17 +155,17 @@ public class EftReportGenerator implements ReportExporter {
                 paymentRecords.addAll(ServerSideFactory.create(PaymentReportFacade.class).reportPreauthorisedPayments(reportCriteria,
                         reportProgressStatusHolder.getExecutionMonitor()));
             }
+            
+            for (PaymentRecord paymentRecord : paymentRecords) {
+                enhancePaymentRecord(paymentRecord);
+                reportData.eftReportRecords().add(dtoBinder.createTO(paymentRecord));
+            }
 
             if (!reportMetadata.orderBy().isNull()) {
                 Collections.sort(
                         paymentRecords,
                         EntityComparatorFactory.createMemberComparator(dtoBinder.getBoundBOMemberPath(new Path(reportMetadata.orderBy().memberPath()
                                 .getValue()))));
-            }
-
-            for (PaymentRecord paymentRecord : paymentRecords) {
-                enhancePaymentRecord(paymentRecord);
-                reportData.eftReportRecords().add(dtoBinder.createTO(paymentRecord));
             }
 
         } else {
