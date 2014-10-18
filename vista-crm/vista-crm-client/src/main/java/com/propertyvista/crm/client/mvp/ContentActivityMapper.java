@@ -271,7 +271,7 @@ import com.propertyvista.crm.client.activity.tools.financial.moneyin.MoneyInBatc
 import com.propertyvista.crm.client.activity.tools.financial.moneyin.MoneyInBatchViewerActivity;
 import com.propertyvista.crm.client.activity.tools.financial.moneyin.MoneyInCreateBatchActivity;
 import com.propertyvista.crm.client.activity.tools.legal.l1.L1DelinquentLeaseSearchActivity;
-import com.propertyvista.crm.client.activity.tools.legal.n4.N4CreateBatchActivityMk2;
+import com.propertyvista.crm.client.activity.tools.legal.n4.N4CreateBatchActivity;
 import com.propertyvista.crm.client.activity.tools.legal.n4.N4DownloadToolActivity;
 import com.propertyvista.crm.client.activity.wizard.creditcheck.CreditCheckActivity;
 import com.propertyvista.crm.client.activity.wizard.creditcheck.CreditCheckStatusViewerActivity;
@@ -721,7 +721,7 @@ public class ContentActivityMapper implements AppActivityMapper {
 
 // - Legal-related:
                     } else if (crudPlace instanceof LegalAndCollections.N4GenerationTool) {
-                        activity = new N4CreateBatchActivityMk2(crudPlace);
+                        activity = new N4CreateBatchActivity(crudPlace);
 
                     } else if (crudPlace instanceof LegalAndCollections.N4DownloadTool) {
                         activity = new N4DownloadToolActivity(crudPlace);
