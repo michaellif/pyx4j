@@ -38,6 +38,7 @@ import com.propertyvista.domain.financial.ARCode;
 import com.propertyvista.domain.financial.offering.YardiChargeCode;
 import com.propertyvista.domain.policy.dto.N4PolicyDTO;
 import com.propertyvista.domain.policy.dto.N4PolicyDTOARCodeHolderDTO;
+import com.propertyvista.shared.config.VistaFeatures;
 
 public class N4PolicyForm extends PolicyDTOTabPanelBasedForm<N4PolicyDTO> {
 
@@ -125,7 +126,7 @@ public class N4PolicyForm extends PolicyDTOTabPanelBasedForm<N4PolicyDTO> {
                     String result = "";
                     if (o != null) {
                         result = o.getStringView();
-                        if (!o.yardiChargeCodes().isEmpty()) {
+                        if (VistaFeatures.instance().yardiIntegration() && !o.yardiChargeCodes().isEmpty()) {
                             result += " " + i18n.tr("(Includes Yardi charge codes: {0})", yardiChargeCodesLabel(o.yardiChargeCodes()));
                         }
                     }
@@ -184,11 +185,13 @@ public class N4PolicyForm extends PolicyDTOTabPanelBasedForm<N4PolicyDTO> {
         protected void onValueSet(boolean populate) {
             super.onValueSet(populate);
 
-            if (!getValue().arCode().yardiChargeCodes().isEmpty()) {
-                get(proto().arCode()).setNote(
-                        i18n.tr("Includes the following Yardi charge codes: {0}", yardiChargeCodesLabel(getValue().arCode().yardiChargeCodes())));
-            } else {
-                get(proto().arCode()).setNote(null);
+            if (VistaFeatures.instance().yardiIntegration()) {
+                if (!getValue().arCode().yardiChargeCodes().isEmpty()) {
+                    get(proto().arCode()).setNote(
+                            i18n.tr("Includes the following Yardi charge codes: {0}", yardiChargeCodesLabel(getValue().arCode().yardiChargeCodes())));
+                } else {
+                    get(proto().arCode()).setNote(null);
+                }
             }
         }
     }
