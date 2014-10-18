@@ -146,9 +146,9 @@ public class ServletUtils {
 
     public static String getRequestWarBaseURL(HttpServletRequest request) {
         if (hasForwardedURL(request)) {
-            return getRequestBaseURL(request) + request.getContextPath();
-        } else {
             return getRequestBaseURL(request);
+        } else {
+            return getRequestBaseURL(request) + request.getContextPath();
         }
     }
 
