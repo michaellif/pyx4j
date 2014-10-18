@@ -165,8 +165,8 @@ public class EftReportWidget extends HTML implements IReportWidget {
                     if (eftReportData.agregateByBuildings().getValue(false)) {
                         appendBreak(builder);
                         appendRenderedTotalRow(builder, currencyFormat, i18n.tr("Total $ for Building {0}:", currentPropertyCode), propertyCodeTotal);
-                        appendBreak(builder);
                     }
+                    appendBreak(builder);
                     appendRenderedTotalRow(builder, NumberFormat.getFormat("#,##0"), i18n.tr("Total # of Payment Records:"),
                             new BigDecimal(paymentRecords.size()));
                     appendRenderedTotalRow(builder, currencyFormat, i18n.tr("Total $:"), overallTotal);
