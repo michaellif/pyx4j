@@ -145,7 +145,11 @@ public class ServletUtils {
     }
 
     public static String getRequestWarBaseURL(HttpServletRequest request) {
-        return getRequestBaseURL(request) + getRelativeServletPath(request, "/");
+        if (hasForwardedURL(request)) {
+            return getRequestBaseURL(request) + request.getContextPath();
+        } else {
+            return getRequestBaseURL(request);
+        }
     }
 
     // This is bridge for RPC RemoteServiceServlet to load serialization policy
