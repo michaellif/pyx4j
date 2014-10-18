@@ -16,6 +16,7 @@ package com.propertyvista.portal.rpc.portal.resident.dto.insurance;
 import java.math.BigDecimal;
 
 import com.pyx4j.commons.LogicalDate;
+import com.pyx4j.entity.annotations.BusinessEqualValue;
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.Editor.EditorType;
@@ -73,10 +74,12 @@ public interface TenantSureCoverageDTO extends TenantSureCoverage {
     // -- Personal & Contact Information
 
     @NotNull
+    @BusinessEqualValue
     @Caption(name = "Name")
     IPrimitive<String> tenantName();
 
     @NotNull
+    @BusinessEqualValue
     @Editor(type = EditorType.phone)
     @Caption(name = "Phone")
     IPrimitive<String> tenantPhone();
@@ -86,19 +89,23 @@ public interface TenantSureCoverageDTO extends TenantSureCoverage {
     @Format("#,##0")
     @Editor(type = EditorType.money)
     @NotNull
+    @BusinessEqualValue
     IPrimitive<BigDecimal> personalLiabilityCoverage();
 
     @Format("#,##0")
     @Editor(type = EditorType.money)
     @NotNull
+    @BusinessEqualValue
     IPrimitive<BigDecimal> contentsCoverage();
 
     @Caption(name = "Deductible (per claim)")
     @NotNull
+    @BusinessEqualValue
     IPrimitive<BigDecimal> deductible();
 
     // these are statement of fact questions
     @NotNull
+    @BusinessEqualValue
     @Caption(name = "Number of previous claims")
     IPrimitive<PreviousClaims> numberOfPreviousClaims();
 

@@ -29,9 +29,7 @@ public class TenantSureOrderWizardViewImpl extends AbstractWizardView<TenantSure
     private TenantSureOrderWizard wizard;
 
     public TenantSureOrderWizardViewImpl() {
-        super();
         setWizard(wizard = new TenantSureOrderWizard(this, i18n.tr("Submit")));
-
     }
 
     @Override
@@ -42,11 +40,13 @@ public class TenantSureOrderWizardViewImpl extends AbstractWizardView<TenantSure
 
     @Override
     public void waitForQuote() {
+        System.out.println("- waitForQuote");
         wizard.waitForQuote();
     }
 
     @Override
     public void setQuote(TenantSureQuoteDTO quote) {
+        System.out.println("+ setQuote");
         wizard.setQuote(quote);
     }
 

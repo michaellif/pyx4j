@@ -54,6 +54,7 @@ public class TenantSureCoverageRequestForm extends CForm<TenantSureCoverageDTO> 
         FormPanel formPanel = new FormPanel(this);
 
         formPanel.append(Location.Left, proto().inceptionDate()).decorate();
+
         formPanel.h1(i18n.tr("Coverage"));
         formPanel.append(Location.Left, proto().personalLiabilityCoverage(), new MoneyComboBox()).decorate();
         formPanel.append(Location.Left, proto().contentsCoverage(), new MoneyComboBox()).decorate();
@@ -71,7 +72,20 @@ public class TenantSureCoverageRequestForm extends CForm<TenantSureCoverageDTO> 
         return formPanel;
     }
 
+    // checks the data readiness for quote
+    // look at @link TenantSureOrderWizardActivity.isValidForQuote() also!
+    public boolean isReadyForQuote() {
+        //@formatter:off
+        return (!getValue().personalLiabilityCoverage().isNull() && 
+                !getValue().contentsCoverage().isNull() && 
+                !getValue().deductible().isNull() && 
+                !getValue().smoker().isNull() && 
+                !getValue().numberOfPreviousClaims().isNull());
+        //@formatter:on
+    }
+
     /** resets the form and sets pre-defined options for filling the from */
+    @SuppressWarnings("unchecked")
     public void setCoverageParams(TenantSureAgreementParamsDTO params) {
         ((CComboBox<BigDecimal>) (get(proto().personalLiabilityCoverage()))).setOptions(params.generalLiabilityCoverageOptions());
         ((CComboBox<BigDecimal>) (get(proto().contentsCoverage()))).setOptions(params.contentsCoverageOptions());
@@ -97,15 +111,5 @@ public class TenantSureCoverageRequestForm extends CForm<TenantSureCoverageDTO> 
                 return null;
             }
         });
-    }
-
-    public boolean isReadyForQuote() {
-        //@formatter:off
-        return (!getValue().personalLiabilityCoverage().isNull() && 
-                !getValue().contentsCoverage().isNull() && 
-                !getValue().deductible().isNull() && 
-                !getValue().smoker().isNull() && 
-                !getValue().numberOfPreviousClaims().isNull());
-        //@formatter:on
     }
 }

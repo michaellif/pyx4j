@@ -185,6 +185,7 @@ public class TenantSureOrderWizard extends CPortalEntityWizard<TenantSureInsuran
         retrievingQuoteMessage.setVisible(true);
         pleaseFillOutTheFormMessage.setVisible(false);
         get(proto().quote()).setVisible(false);
+
         quoteSendButton.setVisible(false);
         wizardDecorator.getBtnNext().setEnabled(false);
     }
@@ -196,11 +197,10 @@ public class TenantSureOrderWizard extends CPortalEntityWizard<TenantSureInsuran
         // we don't want to to show quote send button unless we get a quote with an id
         // because we can get a 'manual quote' i.e. tenant is asked to call HighCourt
         quoteSendButton.setVisible(quote != null && !quote.quoteId().isNull());
+        wizardDecorator.getBtnNext().setEnabled(quote != null && !quote.quoteId().isNull());
 
         get(proto().quote()).setValue(quote);
         get(proto().quoteConfirmation()).setValue(quote.duplicate(TenantSureQuoteDTO.class));
-
-        wizardDecorator.getBtnNext().setEnabled(quote != null && !quote.quoteId().isNull());
     }
 
     public void setBillingAddress(InternationalAddress billingAddress) {

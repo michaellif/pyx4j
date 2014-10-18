@@ -13,6 +13,7 @@
  */
 package com.propertyvista.domain.tenant.insurance;
 
+import com.pyx4j.entity.annotations.BusinessEqualValue;
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.core.IEntity;
@@ -26,10 +27,11 @@ public interface TenantSureCoverage extends IEntity {
 
     // -- Coverage Qualification Questions
 
+    @BusinessEqualValue
     IPrimitive<Integer> previousClaims();
 
-    @Caption(name = "Is any tenant a smoker?")
     @NotNull
+    @BusinessEqualValue
+    @Caption(name = "Is any tenant a smoker?")
     IPrimitive<Boolean> smoker();
-
 }

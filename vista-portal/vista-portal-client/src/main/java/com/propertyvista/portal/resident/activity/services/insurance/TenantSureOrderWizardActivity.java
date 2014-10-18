@@ -16,6 +16,7 @@ package com.propertyvista.portal.resident.activity.services.insurance;
 import com.google.gwt.core.client.GWT;
 
 import com.pyx4j.commons.Key;
+import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.rpc.AppPlace;
@@ -31,6 +32,8 @@ import com.propertyvista.portal.shared.activity.AbstractWizardCrudActivity;
 
 public class TenantSureOrderWizardActivity extends AbstractWizardCrudActivity<TenantSureInsurancePolicyDTO, TenantSureOrderWizardView> implements
         TenantSureOrderWizardView.TenantSureOrderWizardPersenter {
+
+    private final TenantSureCoverageDTO previousCoverageRequest = EntityFactory.create(TenantSureCoverageDTO.class);
 
     public TenantSureOrderWizardActivity(AppPlace place) {
         super(TenantSureOrderWizardView.class, GWT.<TenantSureInsurancePolicyCrudService> create(TenantSureInsurancePolicyCrudService.class),
@@ -55,7 +58,9 @@ public class TenantSureOrderWizardActivity extends AbstractWizardCrudActivity<Te
     @Override
     public void getNewQuote() {
         TenantSureCoverageDTO coverageRequest = getView().getValue().tenantSureCoverageRequest().<TenantSureCoverageDTO> duplicate();
-        if (isValid(coverageRequest)) {
+        if (isValidForQuote(coverageRequest) && !previousCoverageRequest.businessEquals(coverageRequest)) {
+            previousCoverageRequest.set(coverageRequest);
+
             getView().waitForQuote();
             ((TenantSureInsurancePolicyCrudService) getService()).getQuote(new DefaultAsyncCallback<TenantSureQuoteDTO>() {
                 @Override
@@ -64,7 +69,6 @@ public class TenantSureOrderWizardActivity extends AbstractWizardCrudActivity<Te
                 }
             }, coverageRequest);
         }
-
     }
 
     @Override
@@ -77,7 +81,9 @@ public class TenantSureOrderWizardActivity extends AbstractWizardCrudActivity<Te
         });
     }
 
-    private boolean isValid(TenantSureCoverageDTO coverageRequest) {//@formatter:off
+    // checks the data validness for quote
+    // look at @link TenantSureCoverageRequestForm.isReadyForQuote() also!
+    private boolean isValidForQuote(TenantSureCoverageDTO coverageRequest) {//@formatter:off
         return !(coverageRequest.tenantName().isNull() 
                 || coverageRequest.tenantPhone().isNull()
                 || coverageRequest.personalLiabilityCoverage().isNull()
@@ -88,5 +94,4 @@ public class TenantSureOrderWizardActivity extends AbstractWizardCrudActivity<Te
                 || coverageRequest.smoker().isNull()
                 || coverageRequest.paymentSchedule().isNull());
     }//@formatter:on
-
 }
