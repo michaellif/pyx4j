@@ -88,7 +88,7 @@ class AutopayManager {
             criteria = EntityQueryCriteria.create(BillingCycle.class);
             criteria.eq(criteria.proto().targetAutopayExecutionDate(), runDate);
             criteria.isNull(criteria.proto().actualAutopayExecutionDate());
-            if (!reportCriteria.getSelectedBuildings().isEmpty()) {
+            if ((reportCriteria != null) && reportCriteria.getSelectedBuildings() != null && !reportCriteria.getSelectedBuildings().isEmpty()) {
                 criteria.in(criteria.proto().building(), reportCriteria.getSelectedBuildings());
             } else {
                 criteria.in(criteria.proto().building().suspended(), false);
