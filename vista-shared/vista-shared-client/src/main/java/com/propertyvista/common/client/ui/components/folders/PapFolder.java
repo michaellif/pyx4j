@@ -98,8 +98,8 @@ public class PapFolder extends VistaBoxFolder<PreauthorizedPaymentDTO> {
                     };
                 }
             }).decorate();
-            formPanel.append(Location.Dual, proto().comments()).decorate();
             formPanel.append(Location.Dual, proto().coveredItemsDTO(), new PapCoveredItemDtoFolder());
+            formPanel.append(Location.Dual, proto().comments()).decorate();
 
             return formPanel;
         }
