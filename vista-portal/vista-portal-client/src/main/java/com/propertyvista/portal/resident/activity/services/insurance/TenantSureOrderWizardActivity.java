@@ -58,6 +58,8 @@ public class TenantSureOrderWizardActivity extends AbstractWizardCrudActivity<Te
     @Override
     public void getNewQuote() {
         TenantSureCoverageDTO coverageRequest = getView().getValue().tenantSureCoverageRequest().<TenantSureCoverageDTO> duplicate();
+
+        // validate quote request data and avoid multiple quotation for the same data:
         if (isValidForQuote(coverageRequest) && !previousCoverageRequest.businessEquals(coverageRequest)) {
             previousCoverageRequest.set(coverageRequest);
 
