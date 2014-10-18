@@ -53,6 +53,7 @@ public class TenantLister extends AbstractLister<TenantDTO> {
             
             new Builder(proto().lease()).searchable(false).build(),
             new Builder(proto().lease().leaseId()).columnTitle(i18n.tr("Lease Id")).searchableOnly().build(),
+            new Builder(proto().lease().status()).columnTitle(i18n.tr("Lease Status")).build(),
             
             new Builder(proto().lease().unit().info().number()).columnTitle(i18n.tr("Unit #")).build(),
             new Builder(proto().lease().unit().building().propertyCode()).visible(false).build(),
