@@ -21,9 +21,9 @@ import com.propertyvista.domain.property.asset.building.Building;
 
 public final class PreauthorizedPaymentsReportCriteria {
 
-    public final LogicalDate padGenerationDate;
+    private final LogicalDate padGenerationDate;
 
-    public final List<Building> selectedBuildings;
+    private final List<Building> selectedBuildings;
 
     private boolean hasExpectedMoveOutFilter;
 
@@ -36,8 +36,11 @@ public final class PreauthorizedPaymentsReportCriteria {
     private boolean trace;
 
     public PreauthorizedPaymentsReportCriteria(LogicalDate padGenerationDate, List<Building> selectedBuildings) {
+        assert (selectedBuildings != null);
+
         this.padGenerationDate = padGenerationDate;
         this.selectedBuildings = selectedBuildings;
+
         this.hasExpectedMoveOutFilter = false;
         this.minExpectedMoveOut = null;
         this.maxExpectedMoveOut = null;

@@ -42,8 +42,8 @@ class PaymentReportEftVariance {
         ICursorIterator<BillingAccount> billingAccountIterator;
         { //TODO->Closure
             EntityQueryCriteria<BillingAccount> criteria = EntityQueryCriteria.create(BillingAccount.class);
-            if (reportCriteria.selectedBuildings != null) {
-                criteria.in(criteria.proto().lease().unit().building(), reportCriteria.selectedBuildings);
+            if (!reportCriteria.getSelectedBuildings().isEmpty()) {
+                criteria.in(criteria.proto().lease().unit().building(), reportCriteria.getSelectedBuildings());
             }
             criteria.eq(criteria.proto().lease().currentTerm().version().tenants().$().leaseParticipant().preauthorizedPayments().$().isDeleted(), false);
 

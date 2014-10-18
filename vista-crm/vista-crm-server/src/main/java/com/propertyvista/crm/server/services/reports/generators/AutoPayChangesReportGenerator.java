@@ -57,9 +57,9 @@ public class AutoPayChangesReportGenerator implements ReportGenerator, ReportExp
     @Override
     public Serializable generateReport(ReportTemplate reportMetadata) {
         AutoPayChangesReportMetadata autoPayChangesReportMetadata = (AutoPayChangesReportMetadata) reportMetadata;
-        // query buildings to enforce portfolio:        
-        List<Building> selectedBuildings = null;
 
+        List<Building> selectedBuildings;
+        // query buildings to enforce portfolio:        
         if (!autoPayChangesReportMetadata.buildings().isEmpty()) {
             Vector<Key> buildingKeys = new Vector<Key>(autoPayChangesReportMetadata.buildings().size());
             for (Building b : autoPayChangesReportMetadata.buildings()) {

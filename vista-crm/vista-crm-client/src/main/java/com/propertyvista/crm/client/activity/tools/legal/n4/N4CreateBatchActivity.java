@@ -139,6 +139,8 @@ public class N4CreateBatchActivity extends AbstractActivity implements N4CreateB
         searchResultsProvider.getList().clear();
         searchResultsProvider.flush();
 
+        selectionModel.clear();
+
         service.searchForItems(new DefaultAsyncCallback<String>() {
             @Override
             public void onSuccess(String deferredProcessCorellationId) {

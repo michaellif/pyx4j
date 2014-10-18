@@ -51,10 +51,12 @@ public class N4CandidateSearcher {
         Vector<LegalNoticeCandidateDTO> n4CandidateDtos = new Vector<LegalNoticeCandidateDTO>();
 
         List<Building> buildingsFilter = buildingCriteriaNormalizer.normalizeDto(searchCriteria.portfolios(), searchCriteria.buildings());
-        if (buildingsFilter == null) {
+        if (buildingsFilter.isEmpty() && searchCriteria.portfolios().isEmpty()) {
+            // process all building in case of empty criteria:
             buildingsFilter = Persistence.secureQuery(EntityQueryCriteria.create(Building.class));
         }
-        if (buildingsFilter != null) {
+
+        if (!buildingsFilter.isEmpty()) {
             List<LegalNoticeCandidate> n4Candidates = ServerSideFactory.create(N4ManagementFacade.class).getN4Candidates(
                     searchCriteria.minAmountOwed().getValue(), buildingsFilter, this.progressMonitor);
 
@@ -70,6 +72,7 @@ public class N4CandidateSearcher {
                 progressMonitor.addProcessedEvent("Load N4 candidate details");
             }
         }
+
         if (!progressMonitor.isTerminationRequested()) {
             this.candidates = n4CandidateDtos;
         }

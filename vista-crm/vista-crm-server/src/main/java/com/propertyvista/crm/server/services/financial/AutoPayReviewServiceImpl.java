@@ -60,9 +60,8 @@ public class AutoPayReviewServiceImpl implements AutoPayReviewService {
     }
 
     private PreauthorizedPaymentsReportCriteria makeCriteria(AutoPayChangesReportMetadata filterSettings) {
+        List<Building> selectedBuildings;
         // query buildings to enforce portfolio:
-        List<Building> selectedBuildings = null;
-
         if (!filterSettings.buildings().isEmpty()) {
             Vector<Key> buildingKeys = new Vector<Key>(filterSettings.buildings().size());
             for (Building b : filterSettings.buildings()) {

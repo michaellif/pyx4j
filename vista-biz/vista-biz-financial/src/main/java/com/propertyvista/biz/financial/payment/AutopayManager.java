@@ -72,7 +72,7 @@ class AutopayManager {
     List<PaymentRecord> reportPreauthorisedPayments(PreauthorizedPaymentsReportCriteria reportCriteria, ExecutionMonitor executionMonitor) {
         trace = reportCriteria.isTrace();
         List<PaymentRecord> paymentRecords = new ArrayList<PaymentRecord>();
-        createPreauthorisedPayments(executionMonitor, reportCriteria.padGenerationDate, true, paymentRecords, reportCriteria);
+        createPreauthorisedPayments(executionMonitor, reportCriteria.getPadGenerationDate(), true, paymentRecords, reportCriteria);
         return paymentRecords;
     }
 
@@ -88,8 +88,8 @@ class AutopayManager {
             criteria = EntityQueryCriteria.create(BillingCycle.class);
             criteria.eq(criteria.proto().targetAutopayExecutionDate(), runDate);
             criteria.isNull(criteria.proto().actualAutopayExecutionDate());
-            if ((reportCriteria != null) && (reportCriteria.selectedBuildings != null)) {
-                criteria.in(criteria.proto().building(), reportCriteria.selectedBuildings);
+            if (!reportCriteria.getSelectedBuildings().isEmpty()) {
+                criteria.in(criteria.proto().building(), reportCriteria.getSelectedBuildings());
             } else {
                 criteria.in(criteria.proto().building().suspended(), false);
             }
