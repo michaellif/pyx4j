@@ -32,6 +32,10 @@ import com.pyx4j.security.rpc.ChallengeVerificationRequired;
  */
 public abstract class AbstractAntiBot {
 
+    /**
+     * use AbstractAntiBot.cannedLoginFailedMessage()
+     */
+    @Deprecated
     public static final String GENERIC_LOGIN_FAILED_MESSAGE = "Invalid login/password";
 
     private static final I18n i18n = I18n.get(AbstractAntiBot.class);
@@ -43,21 +47,29 @@ public abstract class AbstractAntiBot {
         accessToken
     }
 
+    public String loginFailedMessage() {
+        return i18n.tr("Invalid login/password");
+    }
+
     public abstract void assertCaptcha(String challenge, String response);
 
     protected abstract boolean isCaptchaRequired(LoginType loginType, String email);
 
     protected abstract boolean onAuthenticationFailed(LoginType loginType, String email);
 
+    public static String cannedLoginFailedMessage() {
+        return ServerSideConfiguration.instance(EssentialsServerSideConfiguration.class).getAntiBot().loginFailedMessage();
+    }
+
     /**
      * Verify if there are may login attempts with this email
-     * 
+     *
      * @param email
      * @param challengeResponse
      *            is optional
      */
     public static void assertLogin(LoginType loginType, String email, Pair<String, String> challengeResponse) {
-        AbstractAntiBot ab = ((EssentialsServerSideConfiguration) ServerSideConfiguration.instance()).getAntiBot();
+        AbstractAntiBot ab = ServerSideConfiguration.instance(EssentialsServerSideConfiguration.class).getAntiBot();
         if (ab == null) {
             throw new UserRuntimeException(GENERIC_LOGIN_FAILED_MESSAGE);
         }
@@ -73,8 +85,8 @@ public abstract class AbstractAntiBot {
         if (challengeRresponse == null) {
             throw new UserRuntimeException(GENERIC_LOGIN_FAILED_MESSAGE);
         }
-        ((EssentialsServerSideConfiguration) ServerSideConfiguration.instance()).getAntiBot().assertCaptcha(challengeRresponse.getA(),
-                challengeRresponse.getB());
+        ServerSideConfiguration.instance(EssentialsServerSideConfiguration.class).getAntiBot()
+                .assertCaptcha(challengeRresponse.getA(), challengeRresponse.getB());
     }
 
     /**
