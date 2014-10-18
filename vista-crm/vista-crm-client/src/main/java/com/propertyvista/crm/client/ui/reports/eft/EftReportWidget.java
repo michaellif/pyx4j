@@ -91,12 +91,12 @@ public class EftReportWidget extends HTML implements IReportWidget {
         for (ITableColumnFormatter formatter : columnDescriptors) {
             totalWidth += formatter.getWidth();
         }
-        builder.appendHtmlConstant("<div style=\"position: absolute; left:0px; width: " + totalWidth
+        builder.appendHtmlConstant("<div style=\"position: relative; left:0px; width: " + totalWidth
                 + "px; top: 0px; height: 30px; text-align: center; font-size: 22pt; line-height:22pt\">");
         builder.appendEscaped(i18n.tr("EFT Report"));
         builder.appendHtmlConstant("</div>");
 
-        builder.appendHtmlConstant("<table style=\"display: inline-block; position: absolute; left: 0px; width: " + totalWidth
+        builder.appendHtmlConstant("<table style=\"display: inline-block; position: relative; left: 0px; width: " + totalWidth
                 + "px; top: 31px; bottom: 0px; border-collapse: separate; border-spacing: 0px;\" border=\"0\">");
         builder.appendHtmlConstant("<thead>");
         builder.appendHtmlConstant("<tr>");

@@ -101,7 +101,7 @@ public class AutoPayChangesReportWidget extends HTML implements IReportWidget {
         }
         // header
         SafeHtmlBuilder builder = new SafeHtmlBuilder();
-        builder.appendHtmlConstant("<table style=\"display: block; position: absolute; left:0px; width: " + tableWidth
+        builder.appendHtmlConstant("<table style=\"display: block; position: relative; left:0px; width: " + tableWidth
                 + "px; top: 0px; bottom: 0px; border-collapse: separate; border-spacing: 0px;\" border='1'>");
 
         builder.appendHtmlConstant("<thead>");
