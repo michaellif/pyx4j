@@ -252,7 +252,7 @@ public abstract class VistaAuthenticationServicesImpl<U extends AbstractUser, V 
 
         if (CommonsStringUtils.isEmpty(request.email().getValue()) || !EmailValidator.isValid(request.email().getValue())
                 || CommonsStringUtils.isEmpty(request.password().getValue())) {
-            throw new UserRuntimeException(true, AbstractAntiBot.GENERIC_LOGIN_FAILED_MESSAGE);
+            throw new UserRuntimeException(true, AbstractAntiBot.cannedLoginFailedMessage());
         }
         String email = EmailValidator.normalizeEmailAddress(request.email().getValue());
         if (VistaDeployment.isVistaStaging()) {
@@ -274,7 +274,7 @@ public abstract class VistaAuthenticationServicesImpl<U extends AbstractUser, V 
                 throw new ChallengeVerificationRequired(i18n.tr("Too Many Failed Log In Attempts"));
             } else {
                 ServerSideFactory.create(AuditFacade.class).loginAttemptFailed(getVistaApplication(), email);
-                throw new UserRuntimeException(true, AbstractAntiBot.GENERIC_LOGIN_FAILED_MESSAGE);
+                throw new UserRuntimeException(true, AbstractAntiBot.cannedLoginFailedMessage());
             }
         }
         U user = users.get(0);
@@ -288,14 +288,14 @@ public abstract class VistaAuthenticationServicesImpl<U extends AbstractUser, V 
             }
             if (!cr.enabled().getValue(false)) {
                 log.warn("Invalid log-in attempt {} : disabled user", email);
-                throw new UserRuntimeException(true, AbstractAntiBot.GENERIC_LOGIN_FAILED_MESSAGE);
+                throw new UserRuntimeException(true, AbstractAntiBot.cannedLoginFailedMessage());
             }
             if (!checkPassword(user, cr, email, request.password().getValue(), cr.credential().getValue())) {
                 log.info("Invalid password for user {}", email);
                 if (AbstractAntiBot.authenticationFailed(LoginType.userLogin, email)) {
                     throw new ChallengeVerificationRequired(i18n.tr("Too Many Failed Log In Attempts"));
                 } else {
-                    throw new UserRuntimeException(true, AbstractAntiBot.GENERIC_LOGIN_FAILED_MESSAGE);
+                    throw new UserRuntimeException(true, AbstractAntiBot.cannedLoginFailedMessage());
                 }
             }
             credentialsOk = true;
