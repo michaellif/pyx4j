@@ -167,7 +167,6 @@ public class EftReportGenerator implements ReportExporter {
                         EntityComparatorFactory.createMemberComparator(dtoBinder.getBoundBOMemberPath(new Path(reportMetadata.orderBy().memberPath()
                                 .getValue()))));
             }
-
         } else {
             EntityQueryCriteria<PaymentRecord> criteria = makeCriteria(reportMetadata);
             int count = Persistence.service().count(criteria);
@@ -210,7 +209,6 @@ public class EftReportGenerator implements ReportExporter {
 
     @Override
     public ExportedReport export(Serializable report) {
-        @SuppressWarnings("unchecked")
         EftReportDataDTO reportData = (EftReportDataDTO) report;
         return new EftReportExport().createReport(reportData, reportProgressStatusHolder);
     }
@@ -263,13 +261,9 @@ public class EftReportGenerator implements ReportExporter {
     }
 
     private void enhancePaymentRecord(PaymentRecord paymentRecord) {
-        Persistence.service().retrieve(paymentRecord.preauthorizedPayment().tenant());
+        Persistence.ensureRetrieve(paymentRecord.preauthorizedPayment().tenant().lease().unit().building(), AttachLevel.Attached);
+        Lease lease = paymentRecord.preauthorizedPayment().tenant().lease().duplicate();
 
-        Lease lease = Persistence.service().retrieve(Lease.class, paymentRecord.preauthorizedPayment().tenant().lease().getPrimaryKey());
-        Persistence.service().retrieve(lease.unit());
-        Persistence.service().retrieve(lease.unit().building());
-
-        paymentRecord.preauthorizedPayment().tenant().lease().set(lease.duplicate());
         // Clear unused values
         paymentRecord.preauthorizedPayment().tenant().lease().billingAccount().setValueDetached();
         paymentRecord.preauthorizedPayment().tenant().lease().currentTerm().setValueDetached();
