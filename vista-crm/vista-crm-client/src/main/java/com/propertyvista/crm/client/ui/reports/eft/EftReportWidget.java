@@ -137,7 +137,10 @@ public class EftReportWidget extends HTML implements IReportWidget {
                         EftReportRecordDTO paymentRecord = paymentRecordIterator.next();
                         if (eftReportData.agregateByBuildings().getValue(false)) {
                             if (!currentPropertyCode.equals(paymentRecord.building().getValue())) {
-                                appendRenderedTotalRow(builder, currencyFormat, i18n.tr("Total for Building {0}:", currentPropertyCode), propertyCodeTotal);
+                                appendBreak(builder);
+                                appendRenderedTotalRow(builder, currencyFormat, i18n.tr("Total $ for Building {0}:", currentPropertyCode), propertyCodeTotal);
+                                appendBreak(builder);
+
                                 currentPropertyCode = paymentRecord.building().getValue();
                                 propertyCodeTotal = new BigDecimal("0.00");
                             }
@@ -160,7 +163,9 @@ public class EftReportWidget extends HTML implements IReportWidget {
                             .appendHtmlConstant("</div>").toSafeHtml());
 
                     if (eftReportData.agregateByBuildings().getValue(false)) {
+                        appendBreak(builder);
                         appendRenderedTotalRow(builder, currencyFormat, i18n.tr("Total $ for Building {0}:", currentPropertyCode), propertyCodeTotal);
+                        appendBreak(builder);
                     }
                     appendRenderedTotalRow(builder, NumberFormat.getFormat("#,##0"), i18n.tr("Total # of Payment Records:"),
                             new BigDecimal(paymentRecords.size()));
@@ -332,6 +337,14 @@ public class EftReportWidget extends HTML implements IReportWidget {
                     new ColumnDescriptorTableColumnFormatter(wideColumnWidth, new MemberColumnDescriptor.Builder(proto.paymentStatus()).build())
         );//@formatter:on
         return columnDescriptors;
+    }
+
+    private final void appendBreak(SafeHtmlBuilder builder) {
+        builder.appendHtmlConstant("<tr>");
+        builder.appendHtmlConstant("<td colspan='12'>");
+        builder.appendHtmlConstant("<div>&nbsp</div>");
+        builder.appendHtmlConstant("</td>");
+        builder.appendHtmlConstant("</tr>");
     }
 
     private final void appendRenderedTotalRow(SafeHtmlBuilder builder, NumberFormat totalFormat, String totalLineDescription, BigDecimal total) {
