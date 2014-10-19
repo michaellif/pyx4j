@@ -21,7 +21,6 @@ import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.ui.FlexTable;
-import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HasVerticalAlignment;
 import com.google.gwt.user.client.ui.IsWidget;
 
@@ -112,12 +111,14 @@ public class EftReportSettingsForm extends CForm<EftReportMetadata> {
             }
         });
 
-        FlowPanel buildingFilterPanel = new FlowPanel();
-        buildingFilterPanel.getElement().getStyle().setPaddingLeft(1, Unit.EM);
-        buildingFilterPanel.add(inject(proto().filterByPortfolio(), new FieldDecoratorBuilder(LABEL_WIDTH, INPUT_WIDTH).build()));
-        buildingFilterPanel.add(inject(proto().selectedPortfolios(), new SelectPortfolioFolder(parentView)));
-        buildingFilterPanel.add(inject(proto().filterByBuildings(), new FieldDecoratorBuilder(LABEL_WIDTH, INPUT_WIDTH).build()));
-        buildingFilterPanel.add(inject(proto().selectedBuildings(), new SelectedBuildingsFolder(parentView)));
+        row = 0; // ----------------------------------------------------------------------------------------------------------------
+
+        FlexTable column3 = new FlexTable();
+        column3.getElement().getStyle().setMarginLeft(1, Unit.EM);
+        column3.setWidget(row++, 0, inject(proto().filterByPortfolio(), new FieldDecoratorBuilder(INPUT_WIDTH, INPUT_WIDTH).build()));
+        column3.setWidget(row++, 0, inject(proto().selectedPortfolios(), new SelectPortfolioFolder(parentView)));
+        column3.setWidget(row++, 0, inject(proto().filterByBuildings(), new FieldDecoratorBuilder(INPUT_WIDTH, INPUT_WIDTH).build()));
+        column3.setWidget(row++, 0, inject(proto().selectedBuildings(), new SelectedBuildingsFolder(parentView)));
 
         get(proto().filterByPortfolio()).addValueChangeHandler(new ValueChangeHandler<Boolean>() {
             @Override
@@ -137,7 +138,7 @@ public class EftReportSettingsForm extends CForm<EftReportMetadata> {
 
         panel.setWidget(0, 0, column1);
         panel.setWidget(0, 1, column2);
-        panel.setWidget(0, 2, buildingFilterPanel);
+        panel.setWidget(0, 2, column3);
 
         panel.getFlexCellFormatter().setVerticalAlignment(0, 0, HasVerticalAlignment.ALIGN_TOP);
         panel.getFlexCellFormatter().setVerticalAlignment(0, 1, HasVerticalAlignment.ALIGN_TOP);

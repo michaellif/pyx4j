@@ -43,7 +43,7 @@ public class SelectPortfolioFolder extends VistaTableFolder<Portfolio> {
 
     @Override
     public List<FolderColumnDescriptor> columns() {
-        return Arrays.asList(new FolderColumnDescriptor(proto().name(), "20em"));
+        return Arrays.asList(new FolderColumnDescriptor(proto().name(), "15em"));
     }
 
     @Override
