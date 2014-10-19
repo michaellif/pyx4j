@@ -408,7 +408,7 @@ public class PaymentFacadeImpl implements PaymentFacade {
             new UnitOfWork(TransactionScopeOption.RequiresNew, ConnectionTarget.TransactionProcessing).execute(new Executable<Void, RuntimeException>() {
                 @Override
                 public Void execute() throws RuntimeException {
-                    completeRealTimePayment(paymentRecord);
+                    paymentRecord.set(completeRealTimePayment(paymentRecord));
                     return null;
                 }
             });

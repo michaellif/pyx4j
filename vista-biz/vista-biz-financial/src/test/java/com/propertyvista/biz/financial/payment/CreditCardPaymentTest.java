@@ -82,7 +82,7 @@ public class CreditCardPaymentTest extends LeaseFinancialTestBase {
 
             ServerSideFactory.create(PaymentFacade.class).processPaymentUnitOfWork(paymentRecord, true);
 
-            new PaymentRecordTester(getLease().billingAccount()).lastRecordStatus(PaymentStatus.ProcessingReject);
+            new PaymentRecordTester(getLease().billingAccount()).lastRecordStatus(PaymentStatus.Rejected);
         }
 
         assertEquals(ServerSideFactory.create(CreditCardMockFacade.class).getAccountBalance(paymentMethod), new BigDecimal("-100.00"));
