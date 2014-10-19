@@ -116,6 +116,7 @@ public class EftVarianceReportWidget extends HTML implements IReportWidget {
             // building totals:
             if (!buildingId.equals(record.building().getValue())) {
                 addBuildingTotals(builder, totalFormat, buildingId, buildingEftTotal, buildingChargesTotal, buildingDifferenceTotal);
+                appendBreak(builder);
 
                 buildingId = record.building().getValue();
                 buildingEftTotal = new BigDecimal("0.00");
@@ -173,21 +174,10 @@ public class EftVarianceReportWidget extends HTML implements IReportWidget {
 
             }
             // lease totals:
-            builder.appendHtmlConstant("<tr>");
-            builder.appendHtmlConstant("<td colspan='2'></td>");
-            builder.appendHtmlConstant("<td colspan='3' style='text-align:left;'>");
-            builder.appendEscaped(i18n.tr("Total for lease:"));
-            builder.appendHtmlConstant("</td>");
-            builder.appendHtmlConstant("<td>");
-            builder.appendEscaped(record.leaseTotals().totalEft().getStringView());
-            builder.appendHtmlConstant("</td>");
-            builder.appendHtmlConstant("<td>");
-            builder.appendEscaped(record.leaseTotals().charges().getStringView());
-            builder.appendHtmlConstant("</td>");
-            builder.appendHtmlConstant("<td>");
-            builder.appendEscaped(record.leaseTotals().difference().getStringView());
-            builder.appendHtmlConstant("</td>");
-            builder.appendHtmlConstant("</tr>");
+            appendBreak(builder);
+            addLeaseTotals(builder, totalFormat, record.leaseTotals().totalEft().getValue(), record.leaseTotals().charges().getValue(), record.leaseTotals()
+                    .difference().getValue());
+            appendBreak(builder);
 
             buildingEftTotal = buildingEftTotal.add(record.leaseTotals().totalEft().getValue());
             buildingChargesTotal = record.leaseTotals().charges().isNull() ? buildingChargesTotal : buildingChargesTotal.add(record.leaseTotals().charges()
@@ -196,6 +186,7 @@ public class EftVarianceReportWidget extends HTML implements IReportWidget {
                     .difference().getValue());
         }
         addBuildingTotals(builder, totalFormat, buildingId, buildingEftTotal, buildingChargesTotal, buildingDifferenceTotal);
+        appendBreak(builder);
 
         builder.appendHtmlConstant("</table>");
         setHTML(builder.toSafeHtml());
@@ -258,12 +249,40 @@ public class EftVarianceReportWidget extends HTML implements IReportWidget {
         }
     }
 
+    private final void appendBreak(SafeHtmlBuilder builder) {
+        builder.appendHtmlConstant("<tr>");
+        builder.appendHtmlConstant("<td colspan='8'>");
+        builder.appendHtmlConstant("<div>&nbsp</div>");
+        builder.appendHtmlConstant("</td>");
+        builder.appendHtmlConstant("</tr>");
+    }
+
+    private void addLeaseTotals(SafeHtmlBuilder builder, NumberFormat totalFormat, BigDecimal totalEft, BigDecimal totalCharges, BigDecimal totalDifference) {
+
+        builder.appendHtmlConstant("<tr>");
+        builder.appendHtmlConstant("<td colspan='4'></td>");
+        builder.appendHtmlConstant("<td style='text-align:center;'>");
+        builder.appendEscaped(i18n.tr("Total $ for lease:"));
+        builder.appendHtmlConstant("</td>");
+        builder.appendHtmlConstant("<td>");
+        builder.appendEscaped(totalFormat.format(totalEft));
+        builder.appendHtmlConstant("</td>");
+        builder.appendHtmlConstant("<td>");
+        builder.appendEscaped(totalFormat.format(totalCharges));
+        builder.appendHtmlConstant("</td>");
+        builder.appendHtmlConstant("<td>");
+        builder.appendEscaped(totalFormat.format(totalDifference));
+        builder.appendHtmlConstant("</td>");
+        builder.appendHtmlConstant("</tr>");
+    }
+
     private void addBuildingTotals(SafeHtmlBuilder builder, NumberFormat totalFormat, String buildingId, BigDecimal totalEft, BigDecimal totalCharges,
             BigDecimal totalDifference) {
 
         builder.appendHtmlConstant("<tr>");
-        builder.appendHtmlConstant("<td colspan='5' style='text-align:left;'>");
-        builder.appendEscaped(i18n.tr("Total for building {0}:", buildingId));
+        builder.appendHtmlConstant("<td colspan='4'></td>");
+        builder.appendHtmlConstant("<td style='text-align:center;'>");
+        builder.appendEscaped(i18n.tr("Total $ for Building {0}:", buildingId));
         builder.appendHtmlConstant("</td>");
         builder.appendHtmlConstant("<td>");
         builder.appendEscaped(totalFormat.format(totalEft));
