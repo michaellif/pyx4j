@@ -58,14 +58,21 @@ public class EftReportSettingsForm extends CForm<EftReportMetadata> {
 
     @Override
     protected IsWidget createContent() {
-        FlexTable panel = new FlexTable();
+        final String LABEL_WIDTH = "180px";
+        final String INPUT_WIDTH = "120px";
 
-        FlowPanel column1 = new FlowPanel();
-        final String CHECKBOX_WIDTH = "100px";
-        final String INPUT_FIELD_WIDTH = "150px";
+        int row = 0;
 
-        column1.add(inject(proto().leasesOnNoticeOnly(), new FieldDecoratorBuilder().build()));
-        column1.add(inject(proto().forthcomingEft(), new FieldDecoratorBuilder().build()));
+        FlexTable column1 = new FlexTable();
+        column1.setWidget(row++, 0, inject(proto().leasesOnNoticeOnly(), new FieldDecoratorBuilder(LABEL_WIDTH, INPUT_WIDTH).build()));
+        column1.setWidget(row++, 0, inject(proto().forthcomingEft(), new FieldDecoratorBuilder(LABEL_WIDTH, INPUT_WIDTH).build()));
+        column1.setWidget(row++, 0, inject(proto().onlyWithNotice(), new FieldDecoratorBuilder(LABEL_WIDTH, INPUT_WIDTH).build()));
+        column1.setWidget(row++, 0, inject(proto().paymentStatus(), new FieldDecoratorBuilder(LABEL_WIDTH, INPUT_WIDTH).build()));
+        if (SecurityController.check(VistaBasicBehavior.PropertyVistaSupport)) {
+            column1.setWidget(row++, 0, inject(proto().trace(), new FieldDecoratorBuilder(LABEL_WIDTH, INPUT_WIDTH).build()));
+        }
+        column1.setWidget(row++, 0, inject(proto().orderBy(), makeOrderByComboBox(), new FieldDecoratorBuilder(LABEL_WIDTH, INPUT_WIDTH).build()));
+
         get(proto().forthcomingEft()).addValueChangeHandler(new ValueChangeHandler<Boolean>() {
             @Override
             public void onValueChange(ValueChangeEvent<Boolean> event) {
@@ -75,16 +82,18 @@ public class EftReportSettingsForm extends CForm<EftReportMetadata> {
                 get(proto().onlyWithNotice()).setVisible(event.getValue() != true);
             }
         });
-        column1.add(inject(proto().onlyWithNotice(), new FieldDecoratorBuilder().build()));
-        column1.add(inject(proto().paymentStatus(), new FieldDecoratorBuilder().componentWidth(INPUT_FIELD_WIDTH).build()));
-        column1.add(inject(proto().orderBy(), makeOrderByComboBox(), new FieldDecoratorBuilder().componentWidth(INPUT_FIELD_WIDTH).build()));
 
-        if (SecurityController.check(VistaBasicBehavior.PropertyVistaSupport)) {
-            column1.add(inject(proto().trace(), new FieldDecoratorBuilder().build()));
-        }
+        row = 0; // ----------------------------------------------------------------------------------------------------------------
 
-        FlowPanel column2 = new FlowPanel();
-        column2.add(inject(proto().filterByBillingCycle(), new FieldDecoratorBuilder().componentWidth(CHECKBOX_WIDTH).build()));
+        FlexTable column2 = new FlexTable();
+        column2.setWidget(row++, 0, inject(proto().filterByBillingCycle(), new FieldDecoratorBuilder(LABEL_WIDTH, INPUT_WIDTH).build()));
+        column2.setWidget(row++, 0, inject(proto().billingPeriod(), new FieldDecoratorBuilder(LABEL_WIDTH, INPUT_WIDTH).build()));
+        column2.setWidget(row++, 0, inject(proto().billingCycleStartDate(), new FieldDecoratorBuilder(LABEL_WIDTH, INPUT_WIDTH).build()));
+        column2.setWidget(row++, 0, inject(proto().filterByExpectedMoveOut(), new FieldDecoratorBuilder(LABEL_WIDTH, INPUT_WIDTH).build()));
+        column2.setWidget(row++, 0, inject(proto().minimum(), new FieldDecoratorBuilder(LABEL_WIDTH, INPUT_WIDTH).build()));
+        column2.setWidget(row++, 0, inject(proto().maximum(), new FieldDecoratorBuilder(LABEL_WIDTH, INPUT_WIDTH).build()));
+
+        get(proto().billingPeriod()).setEnabled(!VistaFeatures.instance().yardiIntegration());
         get(proto().filterByBillingCycle()).addValueChangeHandler(new ValueChangeHandler<Boolean>() {
             @Override
             public void onValueChange(ValueChangeEvent<Boolean> event) {
@@ -95,18 +104,6 @@ public class EftReportSettingsForm extends CForm<EftReportMetadata> {
                 get(proto().billingCycleStartDate()).setVisible(event.getValue());
             }
         });
-
-        FlowPanel billingCycleFilterPanel = new FlowPanel();
-        billingCycleFilterPanel.getElement().getStyle().setPaddingLeft(3, Unit.EM);
-        billingCycleFilterPanel.getElement().getStyle().setPaddingBottom(1, Unit.EM);
-
-        billingCycleFilterPanel.add(inject(proto().billingPeriod(), new FieldDecoratorBuilder().componentWidth(INPUT_FIELD_WIDTH).build()));
-        get(proto().billingPeriod()).setEnabled(!VistaFeatures.instance().yardiIntegration());
-
-        billingCycleFilterPanel.add(inject(proto().billingCycleStartDate(), new FieldDecoratorBuilder().componentWidth(INPUT_FIELD_WIDTH).build()));
-        column2.add(billingCycleFilterPanel);
-
-        column2.add(inject(proto().filterByExpectedMoveOut(), new FieldDecoratorBuilder().componentWidth(CHECKBOX_WIDTH).build()));
         get(proto().filterByExpectedMoveOut()).addValueChangeHandler(new ValueChangeHandler<Boolean>() {
             @Override
             public void onValueChange(ValueChangeEvent<Boolean> event) {
@@ -114,43 +111,45 @@ public class EftReportSettingsForm extends CForm<EftReportMetadata> {
                 get(proto().maximum()).setVisible(event.getValue());
             }
         });
-        FlowPanel expectedMoveOutFilterPanel = new FlowPanel();
-        expectedMoveOutFilterPanel.getElement().getStyle().setPaddingLeft(3, Unit.EM);
-        expectedMoveOutFilterPanel.add(inject(proto().minimum(), new FieldDecoratorBuilder().componentWidth(INPUT_FIELD_WIDTH).build()));
-        expectedMoveOutFilterPanel.add(inject(proto().maximum(), new FieldDecoratorBuilder().componentWidth(INPUT_FIELD_WIDTH).build()));
-        column2.add(expectedMoveOutFilterPanel);
 
         FlowPanel buildingFilterPanel = new FlowPanel();
-        buildingFilterPanel.add(inject(proto().filterByPortfolio(), new FieldDecoratorBuilder().build()));
+        buildingFilterPanel.getElement().getStyle().setPaddingLeft(1, Unit.EM);
+        buildingFilterPanel.add(inject(proto().filterByPortfolio(), new FieldDecoratorBuilder(LABEL_WIDTH, INPUT_WIDTH).build()));
         buildingFilterPanel.add(inject(proto().selectedPortfolios(), new SelectPortfolioFolder(parentView)));
+        buildingFilterPanel.add(inject(proto().filterByBuildings(), new FieldDecoratorBuilder(LABEL_WIDTH, INPUT_WIDTH).build()));
+        buildingFilterPanel.add(inject(proto().selectedBuildings(), new SelectedBuildingsFolder(parentView)));
+
         get(proto().filterByPortfolio()).addValueChangeHandler(new ValueChangeHandler<Boolean>() {
             @Override
             public void onValueChange(ValueChangeEvent<Boolean> event) {
                 get(proto().selectedPortfolios()).setVisible(event.getValue());
             }
         });
-
-        buildingFilterPanel.add(inject(proto().filterByBuildings(), new FieldDecoratorBuilder().build()));
         get(proto().filterByBuildings()).addValueChangeHandler(new ValueChangeHandler<Boolean>() {
             @Override
             public void onValueChange(ValueChangeEvent<Boolean> event) {
                 get(proto().selectedBuildings()).setVisible(event.getValue());
             }
         });
-        buildingFilterPanel.add(inject(proto().selectedBuildings(), new SelectedBuildingsFolder(parentView)));
+
+        // combine it all together: ------------------------------------------------------------------------------------------------
+        FlexTable panel = new FlexTable();
 
         panel.setWidget(0, 0, column1);
         panel.setWidget(0, 1, column2);
         panel.setWidget(0, 2, buildingFilterPanel);
+
         panel.getFlexCellFormatter().setVerticalAlignment(0, 0, HasVerticalAlignment.ALIGN_TOP);
         panel.getFlexCellFormatter().setVerticalAlignment(0, 1, HasVerticalAlignment.ALIGN_TOP);
         panel.getFlexCellFormatter().setVerticalAlignment(0, 2, HasVerticalAlignment.ALIGN_TOP);
+
         return panel;
     }
 
     @Override
     protected void onValueSet(boolean populate) {
         super.onValueSet(populate);
+
         get(proto().billingPeriod()).setVisible(getValue().filterByBillingCycle().getValue(false));
         get(proto().billingCycleStartDate()).setVisible(getValue().filterByBillingCycle().getValue(false));
 
@@ -159,23 +158,12 @@ public class EftReportSettingsForm extends CForm<EftReportMetadata> {
 
         get(proto().minimum()).setVisible(getValue().filterByExpectedMoveOut().getValue(false));
         get(proto().maximum()).setVisible(getValue().filterByExpectedMoveOut().getValue(false));
+
+        get(proto().orderBy()).setValue(null);
     }
 
     private CComboBox<ReportOrderColumnMetadata> makeOrderByComboBox() {
         CComboBox<ReportOrderColumnMetadata> orderByComboBox = new CComboBox<ReportOrderColumnMetadata>();
-        orderByComboBox.setFormat(new IFormatter<ReportOrderColumnMetadata, String>() {
-
-            @Override
-            public String format(ReportOrderColumnMetadata o) {
-                if (o != null && !o.memberPath().isNull()) {
-                    String direction = o.isDesc().getValue(false) ? "\u21E7" : "\u21E9";
-                    return direction + " "
-                            + EntityFactory.getEntityMeta(EftReportRecordDTO.class).getMemberMeta(new Path(o.memberPath().getValue())).getCaption();
-                } else {
-                    return i18n.tr("Default");
-                }
-            }
-        });
 
         ArrayList<ReportOrderColumnMetadata> reportColumnOptions = new ArrayList<ReportOrderColumnMetadata>();
         EftReportRecordDTO reportRecordProto = EntityFactory.getEntityPrototype(EftReportRecordDTO.class);
@@ -190,7 +178,6 @@ public class EftReportSettingsForm extends CForm<EftReportMetadata> {
             }
         }
         Collections.sort(reportColumnOptions, new Comparator<ReportOrderColumnMetadata>() {
-
             @Override
             public int compare(ReportOrderColumnMetadata o1, ReportOrderColumnMetadata o2) {
                 EntityMeta meta = EntityFactory.getEntityMeta(EftReportRecordDTO.class);
@@ -201,9 +188,21 @@ public class EftReportSettingsForm extends CForm<EftReportMetadata> {
                 }
                 return cmp;
             }
-
         });
+
         orderByComboBox.setOptions(reportColumnOptions);
+        orderByComboBox.setFormat(new IFormatter<ReportOrderColumnMetadata, String>() {
+            @Override
+            public String format(ReportOrderColumnMetadata o) {
+                if (o != null && !o.memberPath().isNull()) {
+                    String direction = o.isDesc().getValue(false) ? "\u21E7" : "\u21E9";
+                    return direction + " "
+                            + EntityFactory.getEntityMeta(EftReportRecordDTO.class).getMemberMeta(new Path(o.memberPath().getValue())).getCaption();
+                } else {
+                    return i18n.tr("Default");
+                }
+            }
+        });
 
         return orderByComboBox;
     }
