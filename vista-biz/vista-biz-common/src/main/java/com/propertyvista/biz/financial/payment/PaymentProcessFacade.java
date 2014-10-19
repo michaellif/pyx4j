@@ -51,6 +51,10 @@ public interface PaymentProcessFacade {
 
     void processPmcScheduledPayments(ExecutionMonitor executionMonitor, PaymentType paymentType, LogicalDate forDate);
 
+    void cardsSend(ExecutionMonitor executionMonitor);
+
+    void cardsPostRejected(ExecutionMonitor executionMonitor);
+
     void deleteExpiringAutopayAgreement(ExecutionMonitor executionMonitor, LogicalDate forDate);
 
     void verifyYardiPaymentIntegration(ExecutionMonitor executionMonitor, LogicalDate forDate);

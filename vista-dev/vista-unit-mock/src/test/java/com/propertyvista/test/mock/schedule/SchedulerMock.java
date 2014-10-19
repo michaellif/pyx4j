@@ -84,8 +84,8 @@ public class SchedulerMock {
 
                     PmcProcessContext pmcContext = new PmcProcessContext(forDate);
                     pmcProcess.executePmcJob(pmcContext);
-                    log.debug("PmcProcess: date={}, process={}, \n executionMonitor={}", forDate, pmcProcess.getClass().getSimpleName(),
-                            pmcContext.getExecutionMonitor());
+                    log.debug("Completed PmcProcess: date={}, process={} ({}), \n executionMonitor={}", forDate, processType, pmcProcess.getClass()
+                            .getSimpleName(), pmcContext.getExecutionMonitor());
                     executionMonitor = pmcContext.getExecutionMonitor();
                 } else {
                     executionMonitor = sharedContext.getExecutionMonitor();

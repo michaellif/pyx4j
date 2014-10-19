@@ -34,7 +34,6 @@ import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.biz.financial.ar.ARFacade;
-import com.propertyvista.biz.financial.payment.PaymentException;
 import com.propertyvista.biz.financial.payment.PaymentFacade;
 import com.propertyvista.biz.financial.payment.PaymentMethodFacade;
 import com.propertyvista.biz.financial.payment.PaymentMethodTarget;
@@ -217,12 +216,8 @@ public class PaymentRecordCrudServiceImpl extends AbstractCrudServiceDtoImpl<Pay
 
     @Override
     public void processPayment(AsyncCallback<PaymentRecordDTO> callback, Key entityId) {
-        try {
-            ServerSideFactory.create(PaymentFacade.class).processPayment(EntityFactory.createIdentityStub(PaymentRecord.class, entityId), null);
-        } catch (PaymentException e) {
-            throw new UserRuntimeException(i18n.tr("Payment Failed"), e);
-        }
-        Persistence.service().commit();
+        Persistence.service().endTransaction();
+        ServerSideFactory.create(PaymentFacade.class).processPaymentUnitOfWork(EntityFactory.createIdentityStub(PaymentRecord.class, entityId), false);
         retrieve(callback, entityId, RetrieveTarget.View);
     }
 

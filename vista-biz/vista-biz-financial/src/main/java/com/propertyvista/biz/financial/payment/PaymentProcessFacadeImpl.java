@@ -94,6 +94,16 @@ public class PaymentProcessFacadeImpl implements PaymentProcessFacade {
     }
 
     @Override
+    public void cardsSend(ExecutionMonitor executionMonitor) {
+        new PaymentProcessCardsSend(executionMonitor).cardsSend();
+    }
+
+    @Override
+    public void cardsPostRejected(ExecutionMonitor executionMonitor) {
+        new PaymentProcessPostRejected(executionMonitor).cardsPostRejected();
+    }
+
+    @Override
     public void deleteExpiringAutopayAgreement(ExecutionMonitor executionMonitor, LogicalDate forDate) {
         new AutopayAgreementMananger().deleteExpiringAutopayAgreement(executionMonitor, forDate);
     }

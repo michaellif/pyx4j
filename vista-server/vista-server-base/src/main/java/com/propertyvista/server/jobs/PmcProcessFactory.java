@@ -48,13 +48,18 @@ public class PmcProcessFactory {
 
         case paymentsIssue:
             return new PaymentsIssueProcess();
-        case paymentsScheduledCreditCards:
+        case paymentsScheduledCards:
             return new PaymentsScheduledProcess(PaymentType.CreditCard);
         case paymentsScheduledEcheck:
             return new PaymentsScheduledProcess(PaymentType.Echeck);
 
         case paymentsLastMonthSuspend:
             return new PaymentsAutopayLastMonthSuspendProcess();
+
+        case paymentsCardsSend:
+            return new PaymentsCardsSendProcess();
+        case paymentsCardsPostRejected:
+            return new PaymentsCardsPostRejectedProcess();
 
         case paymentsBmoReceive:
             return new PaymentsBmoReceiveProcess();

@@ -98,8 +98,7 @@ public class CardsReconciliationTest extends LeaseFinancialTestBase {
             paymentRecordVista = getDataModel(LeaseDataModel.class).createPaymentRecord(getLease(), paymentMethodVisa, "100");
             Persistence.service().commit();
 
-            ServerSideFactory.create(PaymentFacade.class).processPayment(paymentRecordVista, null);
-            Persistence.service().commit();
+            ServerSideFactory.create(PaymentFacade.class).processPaymentUnitOfWork(paymentRecordVista, true);
 
             new PaymentRecordTester(getLease().billingAccount()).lastRecordStatus(PaymentStatus.Received);
         }
@@ -138,8 +137,7 @@ public class CardsReconciliationTest extends LeaseFinancialTestBase {
             paymentRecordVista = getDataModel(LeaseDataModel.class).createPaymentRecord(getLease(), paymentMethodVisa, "100");
             Persistence.service().commit();
 
-            ServerSideFactory.create(PaymentFacade.class).processPayment(paymentRecordVista, null);
-            Persistence.service().commit();
+            ServerSideFactory.create(PaymentFacade.class).processPaymentUnitOfWork(paymentRecordVista, true);
 
             new PaymentRecordTester(getLease().billingAccount()).lastRecordStatus(PaymentStatus.Received);
         }
@@ -148,8 +146,7 @@ public class CardsReconciliationTest extends LeaseFinancialTestBase {
             paymentRecordMC = getDataModel(LeaseDataModel.class).createPaymentRecord(getLease(), paymentMethodMC, "248.10");
             Persistence.service().commit();
 
-            ServerSideFactory.create(PaymentFacade.class).processPayment(paymentRecordMC, null);
-            Persistence.service().commit();
+            ServerSideFactory.create(PaymentFacade.class).processPaymentUnitOfWork(paymentRecordMC, true);
 
             new PaymentRecordTester(getLease().billingAccount()).lastRecordStatus(PaymentStatus.Received);
         }

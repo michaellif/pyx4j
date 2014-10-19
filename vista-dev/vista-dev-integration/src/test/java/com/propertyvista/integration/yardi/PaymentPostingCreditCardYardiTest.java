@@ -18,12 +18,10 @@ import java.math.BigDecimal;
 import org.junit.Assert;
 import org.junit.experimental.categories.Category;
 
+import com.pyx4j.commons.UserRuntimeException;
 import com.pyx4j.config.server.ServerSideFactory;
-import com.pyx4j.entity.server.Executable;
 import com.pyx4j.entity.server.Persistence;
-import com.pyx4j.entity.server.UnitOfWork;
 
-import com.propertyvista.biz.financial.payment.PaymentException;
 import com.propertyvista.biz.financial.payment.PaymentFacade;
 import com.propertyvista.biz.system.eft.CreditCardPaymentProcessorFacade;
 import com.propertyvista.domain.financial.PaymentRecord;
@@ -80,16 +78,15 @@ public class PaymentPostingCreditCardYardiTest extends PaymentYardiTestBase {
             PaymentRecord paymentRecord = getDataModel(LeaseDataModel.class).createPaymentRecord(getLease(), paymentMethod, "100");
             Persistence.service().commit();
 
-            ServerSideFactory.create(PaymentFacade.class).processPayment(paymentRecord, null);
-            Persistence.service().commit();
+            ServerSideFactory.create(PaymentFacade.class).processPaymentUnitOfWork(paymentRecord, true);
 
             new PaymentRecordTester(getLease().billingAccount()).lastRecordStatus(PaymentStatus.Received);
         }
 
-        assertEquals(ServerSideFactory.create(CreditCardMockFacade.class).getAccountBalance(paymentMethod), new BigDecimal("-100.00"));
+        assertEquals("Card Balance", ServerSideFactory.create(CreditCardMockFacade.class).getAccountBalance(paymentMethod), new BigDecimal("-100.00"));
     }
 
-    public void testFailedPostingVoidTransaction() throws Exception {
+    public void testFailedPostingCancelTransaction() throws Exception {
         {
             PropertyUpdater updater = new PropertyUpdater("prop1")//
                     .set(PropertyUpdater.MockFeatures.BlockTransactionPostLeases, getLease().leaseId().getValue());
@@ -100,26 +97,20 @@ public class PaymentPostingCreditCardYardiTest extends PaymentYardiTestBase {
         {
             final PaymentRecord paymentRecord = getDataModel(LeaseDataModel.class).createPaymentRecord(getLease(), paymentMethod, "100");
             Persistence.service().commit();
-            try {
-                new UnitOfWork().execute(new Executable<Void, PaymentException>() {
 
-                    @Override
-                    public Void execute() throws PaymentException {
-                        ServerSideFactory.create(PaymentFacade.class).processPayment(paymentRecord, null);
-                        return null;
-                    }
-                });
+            try {
+                ServerSideFactory.create(PaymentFacade.class).processPaymentUnitOfWork(paymentRecord, true);
                 Assert.fail("Payment should fail");
-            } catch (PaymentException expected) {
+            } catch (UserRuntimeException expected) {
             }
 
-            new PaymentRecordTester(getLease().billingAccount()).lastRecordStatus(PaymentStatus.Void);
+            new PaymentRecordTester(getLease().billingAccount()).lastRecordStatus(PaymentStatus.Canceled);
         }
 
-        assertEquals(ServerSideFactory.create(CreditCardMockFacade.class).getAccountBalance(paymentMethod), new BigDecimal("0.00"));
+        assertEquals("Card Balance", ServerSideFactory.create(CreditCardMockFacade.class).getAccountBalance(paymentMethod), new BigDecimal("0.00"));
     }
 
-    public void testConvenienceFeeFailedPostingVoidTransaction() throws Exception {
+    public void testConvenienceFeeFailedPostingCancelTransaction() throws Exception {
         {
             PropertyUpdater updater = new PropertyUpdater("prop1")//
                     .set(PropertyUpdater.MockFeatures.BlockTransactionPostLeases, getLease().leaseId().getValue());
@@ -141,21 +132,14 @@ public class PaymentPostingCreditCardYardiTest extends PaymentYardiTestBase {
             }
             Persistence.service().commit();
             try {
-                new UnitOfWork().execute(new Executable<Void, PaymentException>() {
-
-                    @Override
-                    public Void execute() throws PaymentException {
-                        ServerSideFactory.create(PaymentFacade.class).processPayment(paymentRecord, null);
-                        return null;
-                    }
-                });
+                ServerSideFactory.create(PaymentFacade.class).processPaymentUnitOfWork(paymentRecord, true);
                 Assert.fail("Payment should fail");
-            } catch (PaymentException expected) {
+            } catch (UserRuntimeException expected) {
             }
 
-            new PaymentRecordTester(getLease().billingAccount()).lastRecordStatus(PaymentStatus.Void);
+            new PaymentRecordTester(getLease().billingAccount()).lastRecordStatus(PaymentStatus.Canceled);
         }
-        assertEquals(ServerSideFactory.create(CreditCardMockFacade.class).getConvenienceFeeBalance(), new BigDecimal("0.00"));
-        assertEquals(ServerSideFactory.create(CreditCardMockFacade.class).getAccountBalance(paymentMethod), new BigDecimal("0.00"));
+        assertEquals("Card Balance", ServerSideFactory.create(CreditCardMockFacade.class).getConvenienceFeeBalance(), new BigDecimal("0.00"));
+        assertEquals("Card Balance", ServerSideFactory.create(CreditCardMockFacade.class).getAccountBalance(paymentMethod), new BigDecimal("0.00"));
     }
 }

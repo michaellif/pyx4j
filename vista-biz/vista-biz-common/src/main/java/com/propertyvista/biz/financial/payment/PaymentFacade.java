@@ -67,24 +67,45 @@ public interface PaymentFacade {
     PaymentRecord schedulePayment(PaymentRecord paymentId);
 
     /**
+     * old:
      * Cash: automatically -> Received (AR. Posted)
      * Check: Submitted, -> by targetDate Processing (AR. Posted), -> Received or Rejected (AR. Reject)
      * CreditCard: automatically -> Processing (No Posting) -> Received (AR. Posted) or Rejected
      * Interac : As CC.
      * Echeck: automatically -> Processing (AR. Posted) , -> Received or Rejected (AR. Reject)
      * EFT: automatically -> Received (AR. Posted)
-     * 
+     *
+     * new:
+     * CreditCard: Submitted | Scheduled -> Queued (AR. Posted)
+     * Error Handling:
+     *
      * @param paymentBatchContext
      *            optional BatchContext
-     * 
+     *
      */
     PaymentRecord processPayment(PaymentRecord paymentId, PaymentBatchContext paymentBatchContext) throws PaymentException;
+
+    /**
+     * Called by Application User: real time post transactions
+     */
+    void processPaymentUnitOfWork(PaymentRecord paymentId, boolean cancelOnError);
+
+    boolean isCompleteTransactionRequired(PaymentRecord payment);
+
+    /**
+     * Used For CreditCards status 'Queued', Change to status: 'Received' or 'Rejected' (call AR. Reject)
+     */
+    PaymentRecord completeRealTimePayment(PaymentRecord paymentId);
 
     PaymentRecord cancel(PaymentRecord paymentId);
 
     PaymentRecord clear(PaymentRecord paymentId);
 
+    // User action
     PaymentRecord reject(PaymentRecord paymentId, boolean applyNSF);
+
+    // Application transaction management flow
+    PaymentRecord processReject(PaymentRecord paymentId, boolean applyNSF);
 
     // TODO Gap: Make Refunds
 

@@ -47,18 +47,23 @@ public enum PmcProcessType implements Serializable {
     @Translate("P 1 - Issue PreAuthorized Payments")
     paymentsIssue(PmcProcessOptions.RunForDay, PmcProcessOptions.RequiredDaily),
 
-    @Translate("P 3 - Process Scheduled eCheque Payments")
+    @Translate("P 3 - Post Scheduled eCheque Payments")
     paymentsScheduledEcheck(PmcProcessOptions.RunForDay, PmcProcessOptions.RequiredDaily),
 
-    @Translate("P 4 - Process Scheduled Cards Payments")
-    // TODO rename enum to remove redit
-    paymentsScheduledCreditCards(PmcProcessOptions.RunForDay, PmcProcessOptions.RequiredDaily),
+    @Translate("P 4 - Post Scheduled Cards Payments")
+    paymentsScheduledCards(PmcProcessOptions.RunForDay, PmcProcessOptions.RequiredDaily),
 
     @Translate("P 5A - Send eCheque(PAD) Funds Transfer to Caledon")
     paymentsPadSend,
 
     @Translate("P 5B - Send Direct Banking (BMO) Funds Transfer to Caledon")
     paymentsDbpSend,
+
+    @Translate("P 5C - Send Cards Payments to Caledon")
+    paymentsCardsSend,
+
+    @Translate("P 5D - Post rejected Cards Payments")
+    paymentsCardsPostRejected,
 
     @Translate("P 6A - Payments Receive Funds Transfer Acknowledgment from Caledon (PAD,DBP)")
     paymentsReceiveAcknowledgment(PmcProcessOptions.GlobalOnly),

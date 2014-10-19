@@ -107,11 +107,12 @@ class PaymentCreditCard {
             ServerSideFactory.create(NotificationFacade.class).paymentCleared(paymentRecord);
         } else {
             log.debug("ccTransaction rejected {}", saleResponse.code(), saleResponse.message());
-            paymentRecord.paymentStatus().setValue(PaymentRecord.PaymentStatus.Rejected);
+            paymentRecord.paymentStatus().setValue(PaymentRecord.PaymentStatus.ProcessingReject);
             paymentRecord.lastStatusChangeDate().setValue(SystemDateManager.getLogicalDate());
             paymentRecord.transactionAuthorizationNumber().setValue(saleResponse.code().getValue());
             paymentRecord.transactionErrorMessage().setValue(saleResponse.message().getValue());
         }
+        Persistence.service().persist(paymentRecord);
 
         if (saleResponse.success().getValue(false)) {
             UnitOfWork.addTransactionCompensationHandler(new CompensationHandler() {

@@ -239,13 +239,7 @@ class PaymentBatchPosting {
                 public Void execute() throws PaymentException {
 
                     PaymentRecord processedPaymentRecord = ServerSideFactory.create(PaymentFacade.class).processPayment(paymentRecord, paymentBatchContext);
-                    if (processedPaymentRecord.paymentStatus().getValue() == PaymentRecord.PaymentStatus.Rejected) {
-                        executionMonitor.addFailedEvent("PaymentRejected", processedPaymentRecord.amount().getValue(),
-                                SimpleMessageFormat.format("Payment {0} was rejected", paymentRecord.id()));
-                    } else {
-                        executionMonitor.addProcessedEvent("PaymentPosted", processedPaymentRecord.amount().getValue());
-                    }
-
+                    executionMonitor.addProcessedEvent("PaymentPosted", processedPaymentRecord.amount().getValue());
                     return null;
                 }
             });

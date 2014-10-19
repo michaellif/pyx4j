@@ -70,8 +70,7 @@ public class CreditCardPaymentTest extends LeaseFinancialTestBase {
             PaymentRecord paymentRecord = getDataModel(LeaseDataModel.class).createPaymentRecord(getLease(), paymentMethod, "100");
             Persistence.service().commit();
 
-            ServerSideFactory.create(PaymentFacade.class).processPayment(paymentRecord, null);
-            Persistence.service().commit();
+            ServerSideFactory.create(PaymentFacade.class).processPaymentUnitOfWork(paymentRecord, false);
 
             new PaymentRecordTester(getLease().billingAccount()).lastRecordStatus(PaymentStatus.Received);
         }
@@ -81,10 +80,9 @@ public class CreditCardPaymentTest extends LeaseFinancialTestBase {
             PaymentRecord paymentRecord = getDataModel(LeaseDataModel.class).createPaymentRecord(getLease(), paymentMethod, "15000");
             Persistence.service().commit();
 
-            ServerSideFactory.create(PaymentFacade.class).processPayment(paymentRecord, null);
-            Persistence.service().commit();
+            ServerSideFactory.create(PaymentFacade.class).processPaymentUnitOfWork(paymentRecord, true);
 
-            new PaymentRecordTester(getLease().billingAccount()).lastRecordStatus(PaymentStatus.Rejected);
+            new PaymentRecordTester(getLease().billingAccount()).lastRecordStatus(PaymentStatus.ProcessingReject);
         }
 
         assertEquals(ServerSideFactory.create(CreditCardMockFacade.class).getAccountBalance(paymentMethod), new BigDecimal("-100.00"));
@@ -108,9 +106,9 @@ public class CreditCardPaymentTest extends LeaseFinancialTestBase {
             paymentRecord.convenienceFee().setValue(fees.feeAmount().getValue());
             paymentRecord.convenienceFeeReferenceNumber().setValue(fees.transactionNumber().getValue());
             ServerSideFactory.create(PaymentFacade.class).persistPayment(paymentRecord);
-
-            ServerSideFactory.create(PaymentFacade.class).processPayment(paymentRecord, null);
             Persistence.service().commit();
+
+            ServerSideFactory.create(PaymentFacade.class).processPaymentUnitOfWork(paymentRecord, true);
 
             new PaymentRecordTester(getLease().billingAccount()).lastRecordStatus(PaymentStatus.Received);
 

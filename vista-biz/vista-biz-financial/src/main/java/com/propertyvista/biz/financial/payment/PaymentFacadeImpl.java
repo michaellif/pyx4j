@@ -34,7 +34,10 @@ import com.pyx4j.entity.core.AttachLevel;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.core.criterion.PropertyCriterion;
 import com.pyx4j.entity.server.CompensationHandler;
+import com.pyx4j.entity.server.ConnectionTarget;
+import com.pyx4j.entity.server.Executable;
 import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.entity.server.TransactionScopeOption;
 import com.pyx4j.entity.server.UnitOfWork;
 import com.pyx4j.gwt.server.deferred.AbstractDeferredProcess.RunningProcess;
 import com.pyx4j.i18n.shared.I18n;
@@ -293,19 +296,7 @@ public class PaymentFacadeImpl implements PaymentFacade {
             paymentRecord.paymentStatus().setValue(PaymentRecord.PaymentStatus.Received);
             break;
         case CreditCard:
-            boolean arOkWithThisTransaction = false;
-            try {
-                ServerSideFactory.create(ARFacade.class).validateCreditCardPayment(paymentRecord, paymentBatchContext);
-                arOkWithThisTransaction = true;
-            } catch (ARException e) {
-                log.error("can't process payment", e);
-                paymentRecord.paymentStatus().setValue(PaymentRecord.PaymentStatus.Canceled);
-                paymentRecord.transactionErrorMessage().setValue(e.getMessage());
-            }
-            if (arOkWithThisTransaction) {
-                // The credit card processing is done in new transaction and committed regardless of results
-                PaymentCreditCard.processPayment(paymentRecord);
-            }
+            paymentRecord.paymentStatus().setValue(PaymentRecord.PaymentStatus.Queued);
             break;
         case Echeck:
             paymentRecord.paymentStatus().setValue(PaymentRecord.PaymentStatus.Queued);
@@ -358,6 +349,86 @@ public class PaymentFacadeImpl implements PaymentFacade {
         }
 
         return paymentRecord;
+    }
+
+    @Override
+    public boolean isCompleteTransactionRequired(PaymentRecord paymentRecord) {
+        return (paymentRecord.paymentMethod().type().getValue() == PaymentType.CreditCard)
+                && (paymentRecord.paymentStatus().getValue() == PaymentRecord.PaymentStatus.Queued);
+    }
+
+    /**
+     * Used For CreditCards status 'Queued', Change to status: 'Received' or 'Rejected' (call AR. Reject)
+     */
+    @Override
+    public PaymentRecord completeRealTimePayment(PaymentRecord paymentId) {
+        final PaymentRecord paymentRecord = Persistence.service().retrieve(PaymentRecord.class, paymentId.getPrimaryKey(), AttachLevel.Attached, true);
+
+        if (!EnumSet.of(PaymentRecord.PaymentStatus.Queued).contains(paymentRecord.paymentStatus().getValue())) {
+            throw new IllegalArgumentException("paymentStatus:" + paymentRecord.paymentStatus().getValue());
+        }
+
+        switch (paymentRecord.paymentMethod().type().getValue()) {
+        case CreditCard:
+            PaymentCreditCard.processPayment(paymentRecord);
+            break;
+        default:
+            throw new IllegalArgumentException("paymentMethod:" + paymentRecord.paymentMethod().type().getStringView());
+        }
+
+        return paymentRecord;
+
+    }
+
+    @Override
+    public void processPaymentUnitOfWork(final PaymentRecord paymentId, final boolean cancelOnError) {
+        final PaymentRecord paymentRecord = paymentId;
+        new UnitOfWork(TransactionScopeOption.RequiresNew, ConnectionTarget.TransactionProcessing).execute(new Executable<Void, RuntimeException>() {
+            @Override
+            public Void execute() throws RuntimeException {
+                try {
+                    if (cancelOnError) {
+                        UnitOfWork.addTransactionCompensationHandler(new CompensationHandler() {
+                            @Override
+                            public Void execute() {
+                                cancel(paymentId);
+                                return null;
+                            }
+                        });
+                    }
+                    paymentRecord.set(processPayment(paymentId, null));
+                } catch (PaymentException e) {
+                    throw new UserRuntimeException(i18n.tr("Payment processing has failed!"), e);
+                }
+                return null;
+            }
+        });
+
+        if (isCompleteTransactionRequired(paymentRecord)) {
+            new UnitOfWork(TransactionScopeOption.RequiresNew, ConnectionTarget.TransactionProcessing).execute(new Executable<Void, RuntimeException>() {
+                @Override
+                public Void execute() throws RuntimeException {
+                    completeRealTimePayment(paymentRecord);
+                    return null;
+                }
+            });
+        }
+
+        if (paymentRecord.paymentStatus().getValue() == PaymentRecord.PaymentStatus.ProcessingReject) {
+            new UnitOfWork(TransactionScopeOption.RequiresNew, ConnectionTarget.TransactionProcessing).execute(new Executable<Void, RuntimeException>() {
+                @Override
+                public Void execute() throws RuntimeException {
+                    try {
+                        processReject(paymentRecord, false);
+                    } catch (UserRuntimeException e) {
+                        if (cancelOnError) {
+                            throw e;
+                        }
+                    }
+                    return null;
+                }
+            });
+        }
     }
 
     @Override
@@ -453,6 +524,35 @@ public class PaymentFacadeImpl implements PaymentFacade {
             throw new UserRuntimeException(i18n.tr("Payment can't be rejected"), e);
         }
         ServerSideFactory.create(AuditFacade.class).updated(paymentRecord, "Rejected");
+        return paymentRecord;
+    }
+
+    @Override
+    public PaymentRecord processReject(PaymentRecord paymentId, boolean applyNSF) {
+        PaymentRecord paymentRecord = Persistence.service().retrieve(PaymentRecord.class, paymentId.getPrimaryKey(), AttachLevel.Attached, true);
+        if (!EnumSet.of(PaymentRecord.PaymentStatus.ProcessingReject).contains(paymentRecord.paymentStatus().getValue())) {
+            throw new UserRuntimeException(i18n.tr("Processed payment can't be rejected"));
+        }
+        switch (paymentRecord.paymentMethod().type().getValue()) {
+        case Echeck:
+        case CreditCard:
+            break;
+        default:
+            throw new UnsupportedOperationException();
+        }
+
+        log.debug("Process Reject {} {}", paymentRecord.id().getValue(), paymentRecord.amount().getValue());
+
+        paymentRecord.paymentStatus().setValue(PaymentRecord.PaymentStatus.Rejected);
+        paymentRecord.lastStatusChangeDate().setValue(SystemDateManager.getLogicalDate());
+        paymentRecord.finalizedDate().setValue(SystemDateManager.getLogicalDate());
+        Persistence.service().merge(paymentRecord);
+
+        try {
+            ServerSideFactory.create(ARFacade.class).rejectPayment(paymentRecord, false);
+        } catch (ARException e) {
+            throw new UserRuntimeException(i18n.tr("Failed to post payment to AR while processing payment"), e);
+        }
         return paymentRecord;
     }
 

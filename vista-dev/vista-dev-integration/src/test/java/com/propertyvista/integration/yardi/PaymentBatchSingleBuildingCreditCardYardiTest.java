@@ -14,6 +14,7 @@
 package com.propertyvista.integration.yardi;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.junit.experimental.categories.Category;
@@ -107,9 +108,9 @@ public class PaymentBatchSingleBuildingCreditCardYardiTest extends PaymentYardiT
             }
         });
 
-        new PaymentRecordTester(lease11.billingAccount()).lastRecordStatus(PaymentStatus.Received);
-        new PaymentRecordTester(lease12.billingAccount()).lastRecordStatus(PaymentStatus.Received);
-        new PaymentRecordTester(lease13.billingAccount()).lastRecordStatus(PaymentStatus.Received);
+        new PaymentRecordTester(lease11.billingAccount()).lastRecordStatus(PaymentStatus.Queued);
+        new PaymentRecordTester(lease12.billingAccount()).lastRecordStatus(PaymentStatus.Queued);
+        new PaymentRecordTester(lease13.billingAccount()).lastRecordStatus(PaymentStatus.Queued);
 
         YardiResidentTransactionsService.getInstance().updateAll(getYardiCredential("prop123"), new ExecutionMonitor());
         Persistence.service().commit();
@@ -130,7 +131,8 @@ public class PaymentBatchSingleBuildingCreditCardYardiTest extends PaymentYardiT
         setSysDate("2011-01-02");
 
         //Run the batch process
-        SchedulerMock.runProcess(PmcProcessType.paymentsScheduledCreditCards, "2011-01-02");
+        SchedulerMock.runProcess(PmcProcessType.paymentsScheduledCards, "2011-01-02");
+        SchedulerMock.runProcess(PmcProcessType.paymentsCardsSend, (Date) null);
 
         new PaymentRecordTester(lease11.billingAccount()).lastRecordStatus(PaymentStatus.Received);
         new PaymentRecordTester(lease12.billingAccount()).lastRecordStatus(PaymentStatus.Received);
@@ -161,10 +163,11 @@ public class PaymentBatchSingleBuildingCreditCardYardiTest extends PaymentYardiT
         setSysDate("2011-01-02");
 
         //Run the batch process
-        SchedulerMock.runProcess(PmcProcessType.paymentsScheduledCreditCards, "2011-01-02");
+        SchedulerMock.runProcess(PmcProcessType.paymentsScheduledCards, "2011-01-02");
+        SchedulerMock.runProcess(PmcProcessType.paymentsCardsSend, (Date) null);
 
         new PaymentRecordTester(lease11.billingAccount()).lastRecordStatus(PaymentStatus.Received);
-        new PaymentRecordTester(lease12.billingAccount()).lastRecordStatus(PaymentStatus.Void);
+        new PaymentRecordTester(lease12.billingAccount()).lastRecordStatus(PaymentStatus.Scheduled);
         new PaymentRecordTester(lease13.billingAccount()).lastRecordStatus(PaymentStatus.Received);
 
         YardiResidentTransactionsService.getInstance().updateAll(getYardiCredential("prop123"), new ExecutionMonitor());
@@ -192,19 +195,17 @@ public class PaymentBatchSingleBuildingCreditCardYardiTest extends PaymentYardiT
         setSysDate("2011-01-02");
 
         //Run the batch process
-        SchedulerMock.runProcess(PmcProcessType.paymentsScheduledCreditCards, "2011-01-02");
+        SchedulerMock.runProcess(PmcProcessType.paymentsScheduledCards, "2011-01-02");
 
-        new PaymentRecordTester(lease11.billingAccount()).lastRecordStatus(PaymentStatus.Void).count(1);
-        new PaymentRecordTester(lease12.billingAccount()).lastRecordStatus(PaymentStatus.Void).count(1);
-        new PaymentRecordTester(lease13.billingAccount()).lastRecordStatus(PaymentStatus.Void).count(1);
+        new PaymentRecordTester(lease11.billingAccount()).lastRecordStatus(PaymentStatus.Scheduled).count(1);
+        new PaymentRecordTester(lease12.billingAccount()).lastRecordStatus(PaymentStatus.Scheduled).count(1);
+        new PaymentRecordTester(lease13.billingAccount()).lastRecordStatus(PaymentStatus.Scheduled).count(1);
 
         YardiResidentTransactionsService.getInstance().updateAll(getYardiCredential("prop123"), new ExecutionMonitor());
 
         new InvoiceLineItemTester(lease11).count(YardiPayment.class, 0);
         new InvoiceLineItemTester(lease12).count(YardiPayment.class, 0);
         new InvoiceLineItemTester(lease13).count(YardiPayment.class, 0);
-
-        // TODO Nothing happens!
 
         // Recover from Error and try again.
         {
@@ -214,17 +215,18 @@ public class PaymentBatchSingleBuildingCreditCardYardiTest extends PaymentYardiT
         }
 
         setSysDate("2011-01-03");
-        SchedulerMock.runProcess(PmcProcessType.paymentsScheduledCreditCards, "2011-01-03");
+        SchedulerMock.runProcess(PmcProcessType.paymentsScheduledCards, "2011-01-03");
+        SchedulerMock.runProcess(PmcProcessType.paymentsCardsSend, (Date) null);
 
-        new PaymentRecordTester(lease11.billingAccount()).lastRecordStatus(PaymentStatus.Void).count(1);
-        new PaymentRecordTester(lease12.billingAccount()).lastRecordStatus(PaymentStatus.Void).count(1);
-        new PaymentRecordTester(lease13.billingAccount()).lastRecordStatus(PaymentStatus.Void).count(1);
+        new PaymentRecordTester(lease11.billingAccount()).lastRecordStatus(PaymentStatus.Received).count(1);
+        new PaymentRecordTester(lease12.billingAccount()).lastRecordStatus(PaymentStatus.Received).count(1);
+        new PaymentRecordTester(lease13.billingAccount()).lastRecordStatus(PaymentStatus.Received).count(1);
 
-//        YardiResidentTransactionsService.getInstance().updateAll(getYardiCredential("prop123"), new ExecutionMonitor());
-//
-//        new InvoiceLineItemTester(lease11).count(YardiPayment.class, 1).lastRecordAmount(YardiPayment.class, "-101.00");
-//        new InvoiceLineItemTester(lease12).count(YardiPayment.class, 1).lastRecordAmount(YardiPayment.class, "-102.00");
-//        new InvoiceLineItemTester(lease13).count(YardiPayment.class, 1).lastRecordAmount(YardiPayment.class, "-103.00");
+        YardiResidentTransactionsService.getInstance().updateAll(getYardiCredential("prop123"), new ExecutionMonitor());
+
+        new InvoiceLineItemTester(lease11).count(YardiPayment.class, 1).lastRecordAmount(YardiPayment.class, "-101.00");
+        new InvoiceLineItemTester(lease12).count(YardiPayment.class, 1).lastRecordAmount(YardiPayment.class, "-102.00");
+        new InvoiceLineItemTester(lease13).count(YardiPayment.class, 1).lastRecordAmount(YardiPayment.class, "-103.00");
 
     }
 }

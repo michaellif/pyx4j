@@ -13,9 +13,7 @@
  */
 package com.propertyvista.portal.server.portal.resident.services.financial;
 
-import com.pyx4j.commons.UserRuntimeException;
 import com.pyx4j.config.server.ServerSideFactory;
-import com.pyx4j.entity.server.ConnectionTarget;
 import com.pyx4j.entity.server.Executable;
 import com.pyx4j.entity.server.TransactionScopeOption;
 import com.pyx4j.entity.server.UnitOfWork;
@@ -24,7 +22,6 @@ import com.pyx4j.gwt.server.deferred.DeferredProcessRegistry;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.server.contexts.ServerContext;
 
-import com.propertyvista.biz.financial.payment.PaymentException;
 import com.propertyvista.biz.financial.payment.PaymentFacade;
 import com.propertyvista.config.ThreadPoolNames;
 import com.propertyvista.domain.financial.PaymentRecord;
@@ -45,22 +42,19 @@ class PaymentDeferredProcess extends AbstractDeferredProcess {
 
     @Override
     public void execute() {
-        new UnitOfWork(TransactionScopeOption.RequiresNew, ConnectionTarget.TransactionProcessing).execute(new Executable<Void, RuntimeException>() {
+        new UnitOfWork(TransactionScopeOption.RequiresNew).execute(new Executable<Void, RuntimeException>() {
             @Override
             public Void execute() throws RuntimeException {
-                try {
-                    ServerSideFactory.create(PaymentFacade.class).persistPayment(paymentRecord);
-                    ServerSideFactory.create(PaymentFacade.class).processPayment(paymentRecord, null);
-                } catch (PaymentException e) {
-                    throw new UserRuntimeException(i18n.tr("Payment processing has failed!"), e);
-                }
-
-                if (VistaFeatures.instance().yardiIntegration()) {
-                    DeferredProcessRegistry.fork(new LeaseYardiUpdateDeferredProcess(paymentRecord), ThreadPoolNames.IMPORTS);
-                }
+                ServerSideFactory.create(PaymentFacade.class).persistPayment(paymentRecord);
                 return null;
             }
         });
+
+        ServerSideFactory.create(PaymentFacade.class).processPaymentUnitOfWork(paymentRecord, true);
+
+        if (VistaFeatures.instance().yardiIntegration()) {
+            DeferredProcessRegistry.fork(new LeaseYardiUpdateDeferredProcess(paymentRecord), ThreadPoolNames.IMPORTS);
+        }
 
 //        // delay for testing purpose:
 //        try {

@@ -84,8 +84,7 @@ public class PaymentHealthMonitorTest extends LeaseFinancialTestBase {
             PaymentRecord paymentRecord = getDataModel(LeaseDataModel.class).createPaymentRecord(getLease(), paymentMethod, "100");
             Persistence.service().commit();
 
-            ServerSideFactory.create(PaymentFacade.class).processPayment(paymentRecord, null);
-            Persistence.service().commit();
+            ServerSideFactory.create(PaymentFacade.class).processPaymentUnitOfWork(paymentRecord, true);
 
             new PaymentRecordTester(getLease().billingAccount()).lastRecordStatus(PaymentStatus.Received);
             paymentRecords.add(paymentRecord);

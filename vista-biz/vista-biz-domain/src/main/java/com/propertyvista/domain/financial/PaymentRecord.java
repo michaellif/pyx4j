@@ -94,7 +94,11 @@ public interface PaymentRecord extends IEntity, HasNotesAndAttachments {
 
         Cleared,
 
+        ProcessingReject,
+
         Rejected,
+
+        ProcessingReturn,
 
         Returned,
 
