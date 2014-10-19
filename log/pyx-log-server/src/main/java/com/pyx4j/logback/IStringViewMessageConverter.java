@@ -20,6 +20,9 @@
  */
 package com.pyx4j.logback;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 import org.slf4j.helpers.MessageFormatter;
 
 import ch.qos.logback.classic.pattern.ClassicConverter;
@@ -28,6 +31,7 @@ import ch.qos.logback.classic.spi.LoggingEvent;
 import ch.qos.logback.classic.spi.LoggingEventAccess;
 
 import com.pyx4j.commons.IStringView;
+import com.pyx4j.commons.LogicalDate;
 
 public class IStringViewMessageConverter extends ClassicConverter {
 
@@ -40,6 +44,12 @@ public class IStringViewMessageConverter extends ClassicConverter {
                 if (argumentArray[i] instanceof IStringView) {
                     argumentArray[i] = ((IStringView) argumentArray[i]).getStringView();
                     hasIStringView = true;
+                } else if (argumentArray[i] instanceof LogicalDate) {
+                    argumentArray[i] = new SimpleDateFormat("yyyy-MM-dd").format((LogicalDate) argumentArray[i]);
+                    hasIStringView = true;
+                } else if (argumentArray[i] instanceof Date) {
+                    argumentArray[i] = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss:SSS").format((Date) argumentArray[i]);
+                    hasIStringView = true;
                 }
             }
             if (hasIStringView) {
@@ -48,5 +58,4 @@ public class IStringViewMessageConverter extends ClassicConverter {
         }
         return event.getFormattedMessage();
     }
-
 }
