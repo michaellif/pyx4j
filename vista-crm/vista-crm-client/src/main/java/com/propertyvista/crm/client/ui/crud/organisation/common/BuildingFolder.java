@@ -33,24 +33,15 @@ import com.pyx4j.site.client.backoffice.ui.IPane;
 import com.propertyvista.common.client.ui.components.folders.VistaTableFolder;
 import com.propertyvista.common.client.ui.decorations.VistaTableFolderDecorator;
 import com.propertyvista.crm.client.ui.components.boxes.BuildingSelectorDialog;
-import com.propertyvista.crm.client.ui.crud.organisation.employee.EmployeeForm;
 import com.propertyvista.domain.property.asset.building.Building;
 
 public class BuildingFolder extends VistaTableFolder<Building> {
-
-    private EmployeeForm employeeForm;
 
     private final IPane parentView;
 
     public BuildingFolder(IPane parentView, boolean modifiable) {
         super(Building.class, modifiable);
         this.parentView = parentView;
-    }
-
-    public BuildingFolder(EmployeeForm employeeForm) {
-        super(Building.class, employeeForm.isEditable());
-        this.employeeForm = employeeForm;
-        parentView = employeeForm.getParentView();
     }
 
     @Override

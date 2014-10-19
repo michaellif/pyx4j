@@ -21,6 +21,7 @@ import com.pyx4j.entity.core.IList;
 import com.pyx4j.entity.core.IPrimitive;
 import com.pyx4j.site.shared.domain.reports.ReportTemplate;
 
+import com.propertyvista.domain.company.Portfolio;
 import com.propertyvista.domain.property.asset.building.Building;
 
 @Transient
@@ -30,8 +31,18 @@ public interface EftVarianceReportMetadata extends ReportTemplate {
     @NotNull
     IPrimitive<LogicalDate> billingCycleStartDate();
 
+    @Caption(name = "Filter by Portfolio")
+    IPrimitive<Boolean> filterByPortfolio();
+
+    IList<Portfolio> selectedPortfolios();
+
+    @Caption(name = "Filter by Complex")
+    IPrimitive<Boolean> filterByComplex();
+
+    IList<Portfolio> selectedComplexes();
+
+    @Caption(name = "Filter by Buildings")
     IPrimitive<Boolean> filterByBuildings();
 
-    IList<Building> buildings();
-
+    IList<Building> selectedBuildings();
 }

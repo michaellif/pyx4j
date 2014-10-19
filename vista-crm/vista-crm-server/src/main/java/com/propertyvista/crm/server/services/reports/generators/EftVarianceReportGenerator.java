@@ -23,7 +23,6 @@ import java.util.Vector;
 
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.config.server.ServerSideFactory;
-import com.pyx4j.entity.core.AttachLevel;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.server.Persistence;
@@ -35,34 +34,40 @@ import com.propertyvista.biz.financial.payment.PaymentReportFacade;
 import com.propertyvista.biz.financial.payment.PreauthorizedPaymentsReportCriteria;
 import com.propertyvista.crm.rpc.dto.reports.EftVarianceReportRecordDTO;
 import com.propertyvista.crm.rpc.dto.reports.EftVarianceReportRecordDetailsDTO;
+import com.propertyvista.crm.server.util.BuildingsCriteriaNormalizer;
+import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.financial.billing.BillingCycle;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.reports.EftVarianceReportMetadata;
 
 public class EftVarianceReportGenerator implements ReportGenerator {
 
+    private final BuildingsCriteriaNormalizer buildingCriteriaNormalizer;
+
+    public EftVarianceReportGenerator() {
+        buildingCriteriaNormalizer = new BuildingsCriteriaNormalizer(EntityFactory.getEntityPrototype(PaymentRecord.class).billingAccount().lease().unit()
+                .building());
+    }
+
     @Override
-    public Serializable generateReport(ReportTemplate reportMetadata) {
-        EftVarianceReportMetadata eftVarianceReportMetadata = (EftVarianceReportMetadata) reportMetadata;
+    public Serializable generateReport(ReportTemplate metadata) {
+        EftVarianceReportMetadata reportMetadata = (EftVarianceReportMetadata) metadata;
 
         Vector<EftVarianceReportRecordDTO> varianceReportRecord = new Vector<EftVarianceReportRecordDTO>();
 
-        Vector<Building> selectedBuildings;
-        {
-            EntityQueryCriteria<Building> criteria = EntityQueryCriteria.create(Building.class);
-            criteria.eq(criteria.proto().suspended(), false);
-            if (eftVarianceReportMetadata.filterByBuildings().getValue()) {
-                criteria.in(criteria.proto().id(), eftVarianceReportMetadata.buildings());
-            }
-            selectedBuildings = Persistence.secureQuery(criteria, AttachLevel.IdOnly);
-        }
+        List<Building> selectedBuildings = buildingCriteriaNormalizer.normalize(//@formatter:off
+                reportMetadata.filterByPortfolio().getValue(false) ? reportMetadata.selectedPortfolios() : null,
+                reportMetadata.filterByBuildings().getValue(false) ? reportMetadata.selectedBuildings() : null
+        );//@formatter:on
 
         // Find PadGenerationDate for each BillingCycle in system, they may be different
         Set<LogicalDate> padGenerationDays = new HashSet<LogicalDate>();
         {
             EntityQueryCriteria<BillingCycle> criteria = EntityQueryCriteria.create(BillingCycle.class);
-            criteria.eq(criteria.proto().billingCycleStartDate(), eftVarianceReportMetadata.billingCycleStartDate().getValue());
-            criteria.in(criteria.proto().building(), selectedBuildings);
+            criteria.eq(criteria.proto().billingCycleStartDate(), reportMetadata.billingCycleStartDate().getValue());
+            if (!selectedBuildings.isEmpty()) {
+                criteria.in(criteria.proto().building(), selectedBuildings);
+            }
             criteria.isNull(criteria.proto().actualAutopayExecutionDate());
             for (BillingCycle cycle : Persistence.secureQuery(criteria)) {
                 padGenerationDays.add(cycle.targetAutopayExecutionDate().getValue());

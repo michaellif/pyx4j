@@ -143,7 +143,7 @@ public class EftReportGenerator implements ReportExporter {
             List<Building> selectedBuildings = buildingCriteriaNormalizer.normalize(//@formatter:off
                     reportMetadata.filterByPortfolio().getValue(false) ? reportMetadata.selectedPortfolios() : null,
                     reportMetadata.filterByBuildings().getValue(false) ? reportMetadata.selectedBuildings() : null
-            );//formatter:on
+            );//@formatter:on
 
             for (LogicalDate padGenerationDate : padGenerationDays) {
                 PreauthorizedPaymentsReportCriteria reportCriteria = new PreauthorizedPaymentsReportCriteria(padGenerationDate, selectedBuildings);
@@ -155,17 +155,15 @@ public class EftReportGenerator implements ReportExporter {
                 paymentRecords.addAll(ServerSideFactory.create(PaymentReportFacade.class).reportPreauthorisedPayments(reportCriteria,
                         reportProgressStatusHolder.getExecutionMonitor()));
             }
-            
+
             for (PaymentRecord paymentRecord : paymentRecords) {
                 enhancePaymentRecord(paymentRecord);
                 reportData.eftReportRecords().add(dtoBinder.createTO(paymentRecord));
             }
 
             if (!reportMetadata.orderBy().isNull()) {
-                Collections.sort(
-                        paymentRecords,
-                        EntityComparatorFactory.createMemberComparator(dtoBinder.getBoundBOMemberPath(new Path(reportMetadata.orderBy().memberPath()
-                                .getValue()))));
+                Collections.sort(paymentRecords, EntityComparatorFactory.createMemberComparator(dtoBinder.getBoundBOMemberPath(new Path(reportMetadata
+                        .orderBy().memberPath().getValue()))));
             }
         } else {
             EntityQueryCriteria<PaymentRecord> criteria = makeCriteria(reportMetadata);
@@ -277,16 +275,6 @@ public class EftReportGenerator implements ReportExporter {
         paymentRecord.preauthorizedPayment().tenant().lease().unit().building().set(null);
         paymentRecord.preauthorizedPayment().tenant().lease().unit().building().setPrimaryKey(lease.unit().building().getPrimaryKey());
         paymentRecord.preauthorizedPayment().tenant().lease().unit().building().propertyCode().setValue(lease.unit().building().propertyCode().getValue());
-    }
-
-    private void normalizeBuildingsFilter(EftReportMetadata reportMetadata) {
-        List<Building> selectedBuildings = buildingCriteriaNormalizer.normalize(//@formatter:off
-                reportMetadata.filterByPortfolio().getValue(false) ? reportMetadata.selectedPortfolios() : null,
-                reportMetadata.filterByBuildings().getValue(false) ? reportMetadata.selectedBuildings() : null
-        );//@formatter:on
-        reportMetadata.filterByBuildings().setValue(!selectedBuildings.isEmpty());
-        reportMetadata.selectedBuildings().clear();
-        reportMetadata.selectedBuildings().addAll(selectedBuildings);
     }
 
 }

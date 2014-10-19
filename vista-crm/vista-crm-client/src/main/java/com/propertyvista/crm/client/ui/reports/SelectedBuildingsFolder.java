@@ -11,63 +11,59 @@
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.crm.client.ui.reports.eft;
+package com.propertyvista.crm.client.ui.reports;
 
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 
-import com.pyx4j.commons.css.IStyleName;
-import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.IObject;
 import com.pyx4j.forms.client.ui.CField;
 import com.pyx4j.forms.client.ui.CForm;
+import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.forms.client.ui.folder.CFolderRowEditor;
 import com.pyx4j.forms.client.ui.folder.FolderColumnDescriptor;
+import com.pyx4j.forms.client.ui.folder.IFolderDecorator;
 import com.pyx4j.site.client.backoffice.ui.IPane;
 
 import com.propertyvista.common.client.ui.components.folders.VistaTableFolder;
+import com.propertyvista.common.client.ui.decorations.VistaTableFolderDecorator;
 import com.propertyvista.crm.client.ui.components.boxes.BuildingSelectorDialog;
 import com.propertyvista.domain.property.asset.building.Building;
 
 public class SelectedBuildingsFolder extends VistaTableFolder<Building> {
 
-    public enum Styles implements IStyleName {
-
-        SelectedBuildingsFolder
-    }
-
-    private static List<FolderColumnDescriptor> COLUMNS;
-    static {
-        Building proto = EntityFactory.getEntityPrototype(Building.class);
-        COLUMNS = Arrays.asList(//@formatter:off
-                new FolderColumnDescriptor(proto.propertyCode(), "100px")
-        );//@formatter:on
-    }
-
     private final IPane parentView;
 
     public SelectedBuildingsFolder(IPane parentView) {
-        super(Building.class);
+        super(Building.class, true);
         this.parentView = parentView;
         setOrderable(false);
-        asWidget().addStyleName(Styles.SelectedBuildingsFolder.name());
     }
 
     @Override
     public List<FolderColumnDescriptor> columns() {
-        return COLUMNS;
+        return Arrays.asList(new FolderColumnDescriptor(proto().propertyCode(), "20em"));
     }
 
     @Override
     protected CForm<Building> createItemForm(IObject<?> member) {
-        return new CFolderRowEditor<Building>(Building.class, COLUMNS) {
+        return new CFolderRowEditor<Building>(Building.class, columns()) {
             @Override
             protected CField<?, ?> createCell(FolderColumnDescriptor column) {
                 if (column.getObject() == proto().propertyCode()) {
-                    return inject(proto().propertyCode());
+                    return inject(proto().propertyCode(), new CLabel<String>());
                 }
                 return super.createCell(column);
+            }
+        };
+    }
+
+    @Override
+    protected IFolderDecorator<Building> createFolderDecorator() {
+        return new VistaTableFolderDecorator<Building>(this, this.isEditable()) {
+            {
+                setShowHeader(false);
             }
         };
     }
@@ -78,12 +74,7 @@ public class SelectedBuildingsFolder extends VistaTableFolder<Building> {
             @Override
             public void onClickOk() {
                 for (Building building : getSelectedItems()) {
-                    Building b = EntityFactory.create(Building.class);
-                    b.setPrimaryKey(building.getPrimaryKey());
-                    for (FolderColumnDescriptor c : COLUMNS) {
-                        b.setValue(c.getObject().getPath(), building.getValue(c.getObject().getPath()));
-                    }
-                    addItem(b);
+                    addItem(building);
                 }
             }
         }.show();

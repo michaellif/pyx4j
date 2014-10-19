@@ -37,7 +37,8 @@ import com.pyx4j.site.client.backoffice.ui.IPane;
 import com.pyx4j.site.client.backoffice.ui.prime.form.FieldDecoratorBuilder;
 import com.pyx4j.site.shared.domain.reports.ReportOrderColumnMetadata;
 
-import com.propertyvista.crm.client.ui.crud.organisation.common.PortfolioFolder;
+import com.propertyvista.crm.client.ui.reports.SelectPortfolioFolder;
+import com.propertyvista.crm.client.ui.reports.SelectedBuildingsFolder;
 import com.propertyvista.crm.rpc.dto.reports.EftReportRecordDTO;
 import com.propertyvista.domain.financial.BillingAccount.BillingPeriod;
 import com.propertyvista.domain.reports.EftReportMetadata;
@@ -121,7 +122,7 @@ public class EftReportSettingsForm extends CForm<EftReportMetadata> {
 
         FlowPanel buildingFilterPanel = new FlowPanel();
         buildingFilterPanel.add(inject(proto().filterByPortfolio(), new FieldDecoratorBuilder().build()));
-        buildingFilterPanel.add(inject(proto().selectedPortfolios(), new PortfolioFolder(parentView, isEditable())));
+        buildingFilterPanel.add(inject(proto().selectedPortfolios(), new SelectPortfolioFolder(parentView)));
         get(proto().filterByPortfolio()).addValueChangeHandler(new ValueChangeHandler<Boolean>() {
             @Override
             public void onValueChange(ValueChangeEvent<Boolean> event) {

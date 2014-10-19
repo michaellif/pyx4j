@@ -207,7 +207,7 @@ public class EmployeeForm extends CrmEntityForm<EmployeeDTO> {
         });
 
         buildingsAccessPanel.h3(i18n.tr("Buildings"));
-        buildingsAccessPanel.append(Location.Dual, proto().buildingAccess(), new BuildingFolder(this));
+        buildingsAccessPanel.append(Location.Dual, proto().buildingAccess(), new BuildingFolder(getParentView(), isEditable()));
 
         buildingsAccessPanel.h3(i18n.tr("Portfolios"));
         buildingsAccessPanel.append(Location.Dual, proto().portfolios(), new PortfolioFolder(getParentView(), isEditable()));
@@ -291,7 +291,7 @@ public class EmployeeForm extends CrmEntityForm<EmployeeDTO> {
                 formPanel.append(Location.Left, proto().type(), new CEnumLabel()).decorate().componentWidth(200);
 
                 formPanel.h3(proto().buildings().getMeta().getCaption());
-                formPanel.append(Location.Dual, proto().buildings(), new BuildingFolder(EmployeeForm.this));
+                formPanel.append(Location.Dual, proto().buildings(), new BuildingFolder(EmployeeForm.this.getParentView(), EmployeeForm.this.isEditable()));
 
                 formPanel.h3(proto().portfolios().getMeta().getCaption());
                 formPanel.append(Location.Dual, proto().portfolios(), new PortfolioFolder(EmployeeForm.this.getParentView(), EmployeeForm.this.isEditable()));

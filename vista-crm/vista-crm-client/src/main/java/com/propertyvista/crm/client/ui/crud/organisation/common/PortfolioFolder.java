@@ -14,6 +14,7 @@
 package com.propertyvista.crm.client.ui.crud.organisation.common;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -31,7 +32,6 @@ import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.forms.client.ui.folder.CFolderRowEditor;
 import com.pyx4j.forms.client.ui.folder.FolderColumnDescriptor;
 import com.pyx4j.forms.client.ui.folder.IFolderDecorator;
-import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.backoffice.ui.IPane;
 
@@ -44,18 +44,17 @@ import com.propertyvista.domain.company.Portfolio;
 
 public class PortfolioFolder extends VistaTableFolder<Portfolio> {
 
-    private final static I18n i18n = I18n.get(PortfolioFolder.class);
-
     private final IPane parentView;
 
     public PortfolioFolder(IPane parentView, boolean isEditable) {
         super(Portfolio.class, isEditable);
         this.parentView = parentView;
+        setOrderable(false);
     }
 
     @Override
     public List<FolderColumnDescriptor> columns() {
-        return java.util.Arrays.asList(new FolderColumnDescriptor(proto().name(), "20em"), new FolderColumnDescriptor(proto().description(), "30em"));
+        return Arrays.asList(new FolderColumnDescriptor(proto().name(), "20em"), new FolderColumnDescriptor(proto().description(), "30em"));
     }
 
     @Override
@@ -95,10 +94,17 @@ public class PortfolioFolder extends VistaTableFolder<Portfolio> {
 
     @Override
     protected void addItem() {
-        new PortfolioSelectorDialogExtraFilters(parentView, new HashSet<>(getValue())).show();
+        new PortfolioSelectorDialogExtraFilters(parentView, new HashSet<>(getValue())) {
+            @Override
+            public void onClickOk() {
+                for (Portfolio selected : getSelectedItems()) {
+                    addItem(selected);
+                }
+            }
+        }.show();
     }
 
-    private class PortfolioSelectorDialogExtraFilters extends PortfolioSelectorDialog {
+    private abstract class PortfolioSelectorDialogExtraFilters extends PortfolioSelectorDialog {
 
         public PortfolioSelectorDialogExtraFilters(IPane parentView, Set<Portfolio> alreadySelected) {
             super(parentView, true, alreadySelected);
@@ -122,13 +128,6 @@ public class PortfolioFolder extends VistaTableFolder<Portfolio> {
                         addFilter(PropertyCriterion.isNull(EntityFactory.getEntityPrototype(Portfolio.class).id()));
                     }
                 }
-            }
-        }
-
-        @Override
-        public void onClickOk() {
-            for (Portfolio selected : getSelectedItems()) {
-                addItem(selected);
             }
         }
     }

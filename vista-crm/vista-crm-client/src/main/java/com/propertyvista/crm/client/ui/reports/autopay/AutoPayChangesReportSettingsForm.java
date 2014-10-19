@@ -26,7 +26,7 @@ import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.site.client.backoffice.ui.IPane;
 import com.pyx4j.site.client.backoffice.ui.prime.form.FieldDecoratorBuilder;
 
-import com.propertyvista.crm.client.ui.reports.eft.SelectedBuildingsFolder;
+import com.propertyvista.crm.client.ui.reports.SelectedBuildingsFolder;
 import com.propertyvista.domain.reports.AutoPayChangesReportMetadata;
 import com.propertyvista.domain.security.common.VistaBasicBehavior;
 
