@@ -47,7 +47,6 @@ import com.propertyvista.domain.communication.MessageCategory.CategoryType;
 import com.propertyvista.domain.communication.SystemEndpoint.SystemEndpointName;
 import com.propertyvista.domain.communication.ThreadPolicyHandle;
 import com.propertyvista.domain.company.Employee;
-import com.propertyvista.domain.security.CrmUser;
 import com.propertyvista.dto.CommunicationEndpointDTO;
 import com.propertyvista.dto.MessageDTO;
 
@@ -339,7 +338,7 @@ public class MessageCrudServiceImpl extends AbstractCrudServiceDtoImpl<Message, 
         messageDTO.status().set(thread.status());
         Persistence.ensureRetrieve(thread.owner(), AttachLevel.Attached);
         messageDTO.owner().set((communicationFacade.generateEndpointDTO(thread.owner())));
-        if (isForList && thread.owner().getInstanceValueClass().equals(CrmUser.class)) {
+        if (isForList && thread.owner().getInstanceValueClass().equals(Employee.class)) {
             messageDTO.ownerForList().set(thread.owner());
         }
         messageDTO.ownerForList();

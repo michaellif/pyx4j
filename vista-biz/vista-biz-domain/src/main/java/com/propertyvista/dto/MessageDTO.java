@@ -33,7 +33,7 @@ import com.pyx4j.entity.core.IPrimitive;
 import com.propertyvista.domain.communication.CommunicationThread.ThreadStatus;
 import com.propertyvista.domain.communication.Message;
 import com.propertyvista.domain.communication.MessageCategory;
-import com.propertyvista.domain.security.CrmUser;
+import com.propertyvista.domain.company.Employee;
 
 @Transient
 @ExtendsBO
@@ -55,7 +55,7 @@ public interface MessageDTO extends Message {
     CommunicationEndpointDTO owner();
 
     @Detached
-    CrmUser ownerForList();
+    Employee ownerForList();
 
     @ReadOnly
     IPrimitive<Boolean> allowedReply();
