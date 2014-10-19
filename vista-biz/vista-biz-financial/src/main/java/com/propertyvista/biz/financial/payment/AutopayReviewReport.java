@@ -55,10 +55,14 @@ class AutopayReviewReport {
         ICursorIterator<BillingAccount> billingAccountIterator;
         { //TODO->Closure
             EntityQueryCriteria<BillingAccount> criteria = EntityQueryCriteria.create(BillingAccount.class);
-            if (!reportCriteria.getSelectedBuildings().isEmpty()) {
-                criteria.in(criteria.proto().lease().unit().building(), reportCriteria.getSelectedBuildings());
+            if (reportCriteria.isBuildingsSelected()) {
+                if (reportCriteria.getSelectedBuildings().isEmpty()) {
+                    criteria.isNull(criteria.proto().lease().unit().building());
+                } else {
+                    criteria.in(criteria.proto().lease().unit().building(), reportCriteria.getSelectedBuildings());
+                }
             } else {
-                criteria.in(criteria.proto().lease().unit().building().suspended(), false);
+                criteria.eq(criteria.proto().lease().unit().building().suspended(), false);
             }
             criteria.eq(criteria.proto().lease().currentTerm().version().tenants().$().leaseParticipant().preauthorizedPayments().$().isDeleted(), false);
             criteria.isNotNull(criteria.proto().lease().currentTerm().version().tenants().$().leaseParticipant().preauthorizedPayments().$().updatedBySystem());

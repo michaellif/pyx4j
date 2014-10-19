@@ -38,7 +38,7 @@ public final class BuildingsCriteriaNormalizer {
 
     public <E extends IEntity> void addBuildingCriterion(EntityQueryCriteria<E> criteria, List<Portfolio> portfolios, List<Building> buildings) {
         List<Building> normalized = normalize(portfolios, buildings);
-        if (!normalized.isEmpty()) {
+        if (normalized != null) {
             criteria.in(buildingField, normalized);
         }
     }
@@ -47,6 +47,10 @@ public final class BuildingsCriteriaNormalizer {
      * @return <code>null</code> if there's no selection or list filled with buildings populated with ids
      */
     public List<Building> normalize(List<Portfolio> portfolios, List<Building> buildings) {
+        if (buildings == null && portfolios == null) {
+            return null;
+        }
+
         List<Building> selectedBuildings = new ArrayList<Building>();
 
         if (portfolios != null) {
@@ -85,5 +89,4 @@ public final class BuildingsCriteriaNormalizer {
         }
         return portfoliosBuildings;
     }
-
 }

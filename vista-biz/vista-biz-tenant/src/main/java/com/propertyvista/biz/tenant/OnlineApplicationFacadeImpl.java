@@ -269,7 +269,7 @@ public class OnlineApplicationFacadeImpl implements OnlineApplicationFacade {
             OnlineApplication app = it.next();
             Building building = getOnlineApplicationPolicyNode(app);
             Persistence.ensureRetrieve(building, AttachLevel.Attached);
-            if (building.suspended().isBooleanTrue()) {
+            if (building.suspended().getValue(false)) {
                 it.remove();
             }
         }

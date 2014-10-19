@@ -112,7 +112,7 @@ class DirectDebitReceiveProcessor {
                                 EntityQueryCriteria<Building> criteria = EntityQueryCriteria.create(Building.class);
                                 criteria.eq(criteria.proto().units().$().leases(), billingAccount.lease());
                                 Building building = Persistence.service().retrieve(criteria);
-                                if (building.suspended().getValue()) {
+                                if (building.suspended().getValue(false)) {
                                     billingAccount = null;
                                     addOperationsNotes(record, "Building " + building.propertyCode().getStringView() + " Suspended in PMC '"
                                             + record.pmc().name().getStringView() + "'");

@@ -101,7 +101,7 @@ class ScheduledPaymentsManager {
         {//TODO->Closure
             EntityQueryCriteria<BillingCycle> criteria = EntityQueryCriteria.create(BillingCycle.class);
             criteria.eq(criteria.proto().targetAutopayExecutionDate(), forDate);
-            criteria.in(criteria.proto().building().suspended(), false);
+            criteria.eq(criteria.proto().building().suspended(), false);
             billingCycleIterator = Persistence.service().query(null, criteria, AttachLevel.Attached);
         }
         try {

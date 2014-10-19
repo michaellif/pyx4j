@@ -36,8 +36,6 @@ public final class PreauthorizedPaymentsReportCriteria {
     private boolean trace;
 
     public PreauthorizedPaymentsReportCriteria(LogicalDate padGenerationDate, List<Building> selectedBuildings) {
-        assert (selectedBuildings != null);
-
         this.padGenerationDate = padGenerationDate;
         this.selectedBuildings = selectedBuildings;
 
@@ -78,6 +76,10 @@ public final class PreauthorizedPaymentsReportCriteria {
 
     public LogicalDate getPadGenerationDate() {
         return padGenerationDate;
+    }
+
+    public boolean isBuildingsSelected() {
+        return (selectedBuildings != null);
     }
 
     public List<Building> getSelectedBuildings() {
