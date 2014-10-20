@@ -21,7 +21,6 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.entity.security.DataModelPermission;
-import com.pyx4j.forms.client.ui.CDateLabel;
 import com.pyx4j.forms.client.ui.CEntityLabel;
 import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
@@ -54,7 +53,7 @@ public class PreauthorizedPaymentsForm extends CForm<PreauthorizedPaymentsDTO> {
         get(proto().tenantInfo()).asWidget().getElement().getStyle().setFontWeight(FontWeight.BOLD);
         get(proto().tenantInfo()).asWidget().getElement().getStyle().setFontSize(1.2, Unit.EM);
 
-        formPanel.append(Location.Right, proto().nextPaymentDate(), new CDateLabel()).decorate().labelWidth(200);
+        formPanel.append(Location.Right, proto().nextScheduledPaymentDate()).decorate().labelWidth(200);
 
         formPanel.h3(proto().preauthorizedPayments().getMeta().getCaption());
         formPanel.append(Location.Dual, proto().preauthorizedPayments(), new PapFolder() {

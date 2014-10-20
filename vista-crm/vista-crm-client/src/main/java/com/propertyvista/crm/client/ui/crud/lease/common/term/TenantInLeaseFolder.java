@@ -368,13 +368,14 @@ public class TenantInLeaseFolder extends LeaseTermParticipantFolder<LeaseTermTen
                 FormPanel formPanel = new FormPanel(this);
 
                 formPanel.append(Location.Left, proto().id(), new CNumberLabel()).decorate().componentWidth(120);
+                formPanel.append(Location.Left, proto().effectiveFrom()).decorate().componentWidth(120);
 
-                formPanel.append(Location.Left, proto().creationDate()).decorate().componentWidth(120);
                 formPanel.append(Location.Right, proto().createdBy(), new CEntityLabel<AbstractPmcUser>()).decorate();
-
-                formPanel.append(Location.Left, proto().paymentMethod()).decorate();
+                formPanel.append(Location.Right, proto().creationDate()).decorate().componentWidth(180);
+                formPanel.append(Location.Right, proto().updated()).decorate().componentWidth(180);
 
                 formPanel.append(Location.Dual, proto().coveredItems(), new PapCoveredItemFolder());
+                formPanel.append(Location.Dual, proto().comments()).decorate();
 
                 return formPanel;
             }
@@ -384,8 +385,11 @@ public class TenantInLeaseFolder extends LeaseTermParticipantFolder<LeaseTermTen
                 super.onValueSet(populate);
 
                 get(proto().id()).setVisible(!getValue().id().isNull());
-                get(proto().creationDate()).setVisible(!getValue().creationDate().isNull());
                 get(proto().createdBy()).setVisible(!getValue().createdBy().isNull());
+                get(proto().creationDate()).setVisible(!getValue().creationDate().isNull());
+                get(proto().updated()).setVisible(!getValue().updated().isNull());
+
+                get(proto().comments()).setVisible(!getValue().comments().isNull());
             }
         }
 

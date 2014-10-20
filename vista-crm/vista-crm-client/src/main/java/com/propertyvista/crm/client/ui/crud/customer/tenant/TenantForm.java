@@ -24,7 +24,6 @@ import com.pyx4j.entity.core.IList;
 import com.pyx4j.entity.security.DataModelPermission;
 import com.pyx4j.entity.shared.utils.EntityGraph;
 import com.pyx4j.forms.client.ui.CComponent;
-import com.pyx4j.forms.client.ui.CDateLabel;
 import com.pyx4j.forms.client.ui.CMoneyField.MoneyFormat;
 import com.pyx4j.forms.client.ui.CMoneyLabel;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
@@ -133,7 +132,7 @@ public class TenantForm extends LeaseParticipantForm<TenantDTO> {
     protected IsWidget createPreauthorizedPaymentsTab() {
         FormPanel formPanel = new FormPanel(this);
 
-        formPanel.append(Location.Left, proto().nextScheduledPaymentDate(), new CDateLabel()).decorate().labelWidth(200).componentWidth(120);
+        formPanel.append(Location.Left, proto().nextScheduledPaymentDate()).decorate().labelWidth(200).componentWidth(120);
         formPanel.h3(proto().preauthorizedPayments().getMeta().getCaption());
         formPanel.append(Location.Dual, proto().preauthorizedPayments(), new PapFolder() {
             @Override

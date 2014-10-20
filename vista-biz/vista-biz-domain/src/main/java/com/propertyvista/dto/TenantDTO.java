@@ -18,6 +18,7 @@ import java.math.BigDecimal;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Editor;
+import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.annotations.ExtendsBO;
 import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.SecurityEnabled;
@@ -49,6 +50,7 @@ public interface TenantDTO extends LeaseParticipantDTO<LeaseTermTenant> {
     @Caption(name = "Pre-Authorized Payments")
     IList<PreauthorizedPaymentDTO> preauthorizedPayments();
 
+    @Editor(type = EditorType.label)
     IPrimitive<LogicalDate> nextScheduledPaymentDate();
 
     IPrimitive<String> nextAutopayApplicabilityMessage();

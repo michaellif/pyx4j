@@ -56,6 +56,6 @@ public interface PreauthorizedPaymentsDTO extends IEntity {
     IList<LeasePaymentMethod> availablePaymentMethods();
 
     @Editor(type = EditorType.label)
-    IPrimitive<LogicalDate> nextPaymentDate();
+    IPrimitive<LogicalDate> nextScheduledPaymentDate();
 
 }

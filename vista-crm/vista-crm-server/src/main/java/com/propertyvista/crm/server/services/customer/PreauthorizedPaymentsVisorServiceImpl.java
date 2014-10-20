@@ -102,7 +102,7 @@ public class PreauthorizedPaymentsVisorServiceImpl implements PreauthorizedPayme
             to.tenantInfo().role().setValue(ltp.role().getValue());
         }
 
-        to.nextPaymentDate().setValue(ServerSideFactory.create(PaymentMethodFacade.class).getNextAutopayDate(to.tenant().lease()));
+        to.nextScheduledPaymentDate().setValue(ServerSideFactory.create(PaymentMethodFacade.class).getNextAutopayDate(to.tenant().lease()));
     }
 
     private void fillAvailablePaymentMethods(PreauthorizedPaymentsDTO to) {

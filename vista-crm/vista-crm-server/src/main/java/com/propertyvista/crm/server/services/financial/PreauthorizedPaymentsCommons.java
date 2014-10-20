@@ -60,6 +60,9 @@ public class PreauthorizedPaymentsCommons {
 
         fillCoveredItemsDto(papDto);
 
+        // note: tenant().lease() should be already retrieved here by call to fillCoveredItemsDto() ;)
+        papDto.effectiveFrom().setValue(ServerSideFactory.create(PaymentMethodFacade.class).getNextAutopayDate(papDto.tenant().lease()));
+
         return papDto;
     }
 
