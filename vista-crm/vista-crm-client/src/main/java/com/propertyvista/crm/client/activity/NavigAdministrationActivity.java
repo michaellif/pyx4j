@@ -14,10 +14,15 @@
 package com.propertyvista.crm.client.activity;
 
 import com.google.gwt.activity.shared.AbstractActivity;
+import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
+import com.pyx4j.rpc.client.DefaultAsyncCallback;
+import com.pyx4j.security.client.ClientContext;
+import com.pyx4j.security.rpc.AuthenticationResponse;
+import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.rpc.AppPlace;
 
 import com.propertyvista.crm.client.CrmSite;
@@ -30,9 +35,13 @@ public class NavigAdministrationActivity extends AbstractActivity implements Nav
 
     public NavigAdministrationActivity() {
         view = CrmSite.getViewFactory().getView(NavigAdministrationView.class);
+        view.setPresenter(this);
     }
 
     public void withPlace(Place place) {
+
+        view.updateUserName(ClientContext.getUserVisit().getName());
+
         if (place instanceof AppPlace) {
             view.select((AppPlace) place);
         }
@@ -41,6 +50,21 @@ public class NavigAdministrationActivity extends AbstractActivity implements Nav
     @Override
     public void start(AcceptsOneWidget panel, EventBus eventBus) {
         panel.setWidget(view);
+    }
+
+    @Override
+    public void logout() {
+        Scheduler.get().scheduleDeferred(new Scheduler.ScheduledCommand() {
+            @Override
+            public void execute() {
+                ClientContext.logout(new DefaultAsyncCallback<AuthenticationResponse>() {
+                    @Override
+                    public void onSuccess(AuthenticationResponse result) {
+                        AppSite.getPlaceController().goTo(AppPlace.NOWHERE);
+                    }
+                });
+            }
+        });
     }
 
 }

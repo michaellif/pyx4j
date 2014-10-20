@@ -104,8 +104,6 @@ public class NavigViewImpl extends Composite implements NavigView {
 
     private final SideMenuItem adminMenuItem;
 
-    private final SideMenuItem exitAdminMenuItem;
-
     private SideMenuList languagesMenuList;
 
     private SideMenuAppPlaceItem systemDashboard;
@@ -145,15 +143,6 @@ public class NavigViewImpl extends Composite implements NavigView {
                     return true;
                 }
             }, i18n.tr("Administration"), null));
-
-            sideMenuList.addMenuItem(exitAdminMenuItem = new SideMenuItem(new SideMenuCommand() {
-
-                @Override
-                public boolean execute() {
-                    AppSite.getPlaceController().goTo(CrmSite.getDefaultPlace());
-                    return true;
-                }
-            }, i18n.tr("Exit Administration"), null));
 
             sideMenuList.addMenuItem(new SideMenuItem(new SideMenuCommand() {
                 @Override
@@ -412,22 +401,11 @@ public class NavigViewImpl extends Composite implements NavigView {
         case phoneLandscape:
         case tabletPortrait:
             userMenuItem.setVisible(true);
-            if (presenter != null) {
-                if (presenter.isAdminPlace()) {
-                    exitAdminMenuItem.setVisible(true);
-                    adminMenuItem.setVisible(false);
-                } else {
-                    exitAdminMenuItem.setVisible(false);
-                    adminMenuItem.setVisible(true);
-                }
-            }
-
+            adminMenuItem.setVisible(true);
             break;
         default:
             userMenuItem.setVisible(false);
-            exitAdminMenuItem.setVisible(false);
             adminMenuItem.setVisible(false);
-
             break;
         }
 

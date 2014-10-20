@@ -153,11 +153,6 @@ public class NavigActivity extends AbstractActivity implements NavigPresenter {
         }
     }
 
-    @Override
-    public boolean isAdminPlace() {
-        return place.getClass().getName().contains(CrmSiteMap.Administration.class.getName());
-    }
-
     private void obtainAvailableLocales() {
         view.setAvailableLocales(ClientLocaleUtils.obtainAvailableLocales());
     }

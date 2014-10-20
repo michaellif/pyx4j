@@ -21,8 +21,15 @@ import com.pyx4j.site.rpc.AppPlace;
 public interface NavigAdministrationView extends IsWidget, IsView {
 
     public interface NavigAdministrationPresenter {
+
+        void logout();
+
     }
 
+    void setPresenter(NavigAdministrationPresenter presenter);
+
     void select(AppPlace appPlace);
+
+    void updateUserName(String name);
 
 }

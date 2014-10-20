@@ -30,8 +30,6 @@ public interface NavigView extends IsWidget, IsView {
 
     public interface NavigPresenter {
 
-        boolean isAdminPlace();
-
         void getSatisfaction();
 
         void logout();
