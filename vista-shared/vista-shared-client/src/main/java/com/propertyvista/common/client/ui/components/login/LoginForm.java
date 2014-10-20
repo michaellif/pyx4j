@@ -42,9 +42,9 @@ import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.essentials.client.crud.CrudDebugId;
 import com.pyx4j.forms.client.ui.CCaptcha;
 import com.pyx4j.forms.client.ui.CCheckBox;
+import com.pyx4j.forms.client.ui.CEmailField;
 import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.CPasswordTextField;
-import com.pyx4j.forms.client.ui.CTextField;
 import com.pyx4j.forms.client.ui.NFocusField;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.security.rpc.AuthenticationRequest;
@@ -74,7 +74,7 @@ public class LoginForm extends CForm<AuthenticationRequest> {
 
     private final List<DevLoginData> devLoginValues;
 
-    private CTextField emailField;
+    private CEmailField emailField;
 
     private int devCount = 0;
 
@@ -110,7 +110,7 @@ public class LoginForm extends CForm<AuthenticationRequest> {
         FlowPanel main = new FlowPanel();
         main.add(header);
 
-        emailField = inject(proto().email(), new CTextField(), new LoginPanelWidgetDecorator());
+        emailField = (CEmailField) inject(proto().email(), new LoginPanelWidgetDecorator());
         emailField.getNativeComponent().addKeyUpHandler(new EnterKeyHandler());
         main.add(emailField);
 

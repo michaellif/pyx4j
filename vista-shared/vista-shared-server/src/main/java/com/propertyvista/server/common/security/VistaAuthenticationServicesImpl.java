@@ -185,7 +185,7 @@ public abstract class VistaAuthenticationServicesImpl<U extends AbstractUser, V 
         if (users.size() != 1) {
             log.debug("Invalid log-in attempt {} rs {}", email, users.size());
             if (AbstractAntiBot.authenticationFailed(LoginType.accessToken, email)) {
-                throw new ChallengeVerificationRequired(i18n.tr("Too Many Failed Log In Attempts"));
+                throw new ChallengeVerificationRequired();
             } else {
                 throw new UserRuntimeException(true, AbstractAntiBot.GENERIC_LOGIN_FAILED_MESSAGE);
             }
@@ -271,7 +271,7 @@ public abstract class VistaAuthenticationServicesImpl<U extends AbstractUser, V 
         if (users.size() != 1) {
             log.debug("Invalid log-in attempt {} rs {}", email, users.size());
             if (AbstractAntiBot.authenticationFailed(LoginType.userLogin, email)) {
-                throw new ChallengeVerificationRequired(i18n.tr("Too Many Failed Log In Attempts"));
+                throw new ChallengeVerificationRequired();
             } else {
                 ServerSideFactory.create(AuditFacade.class).loginAttemptFailed(getVistaApplication(), email);
                 throw new UserRuntimeException(true, AbstractAntiBot.cannedLoginFailedMessage());
@@ -293,7 +293,7 @@ public abstract class VistaAuthenticationServicesImpl<U extends AbstractUser, V 
             if (!checkPassword(user, cr, email, request.password().getValue(), cr.credential().getValue())) {
                 log.info("Invalid password for user {}", email);
                 if (AbstractAntiBot.authenticationFailed(LoginType.userLogin, email)) {
-                    throw new ChallengeVerificationRequired(i18n.tr("Too Many Failed Log In Attempts"));
+                    throw new ChallengeVerificationRequired();
                 } else {
                     throw new UserRuntimeException(true, AbstractAntiBot.cannedLoginFailedMessage());
                 }

@@ -66,7 +66,7 @@ public class UserManagementFacadeImpl implements UserManagementFacade {
                 .checkUserPassword(request.currentPassword().getValue(), credential.credential().getValue())) {
             log.info("Invalid password for user {}", ServerContext.getVisit().getUserVisit().getEmail());
             if (AbstractAntiBot.authenticationFailed(LoginType.userLogin, ServerContext.getVisit().getUserVisit().getEmail())) {
-                throw new ChallengeVerificationRequired(i18n.tr("Too Many Failed Log In Attempts"));
+                throw new ChallengeVerificationRequired();
             } else {
                 throw new UserRuntimeException(true, AbstractAntiBot.GENERIC_LOGIN_FAILED_MESSAGE);
             }

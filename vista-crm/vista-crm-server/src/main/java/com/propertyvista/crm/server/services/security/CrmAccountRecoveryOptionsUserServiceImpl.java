@@ -64,7 +64,7 @@ public class CrmAccountRecoveryOptionsUserServiceImpl implements CrmAccountRecov
             if (!ServerSideFactory.create(PasswordEncryptorFacade.class).checkUserPassword(request.password().getValue(), credential.credential().getValue())) {
                 log.info("Invalid password for user {}", ServerContext.getVisit().getUserVisit().getEmail());
                 if (AbstractAntiBot.authenticationFailed(LoginType.userLogin, ServerContext.getVisit().getUserVisit().getEmail())) {
-                    throw new ChallengeVerificationRequired(i18n.tr("Too Many Failed Log In Attempts"));
+                    throw new ChallengeVerificationRequired();
                 } else {
                     throw new UserRuntimeException(AbstractAntiBot.GENERIC_LOGIN_FAILED_MESSAGE);
                 }
@@ -92,7 +92,7 @@ public class CrmAccountRecoveryOptionsUserServiceImpl implements CrmAccountRecov
             if (!ServerSideFactory.create(PasswordEncryptorFacade.class).checkUserPassword(request.password().getValue(), credentials.credential().getValue())) {
                 log.info("Invalid password for user {}", ServerContext.getVisit().getUserVisit().getEmail());
                 if (AbstractAntiBot.authenticationFailed(LoginType.userLogin, ServerContext.getVisit().getUserVisit().getEmail())) {
-                    throw new ChallengeVerificationRequired(i18n.tr("Too Many Failed Log In Attempts"));
+                    throw new ChallengeVerificationRequired();
                 } else {
                     throw new UserRuntimeException(AbstractAntiBot.GENERIC_LOGIN_FAILED_MESSAGE);
                 }
