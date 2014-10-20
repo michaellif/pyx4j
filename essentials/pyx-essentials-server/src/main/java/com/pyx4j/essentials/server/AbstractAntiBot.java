@@ -63,7 +63,7 @@ public abstract class AbstractAntiBot {
 
     /**
      * Verify if there are may login attempts with this email
-     *
+     * 
      * @param email
      * @param challengeResponse
      *            is optional
@@ -75,7 +75,7 @@ public abstract class AbstractAntiBot {
         }
         if (ab.isCaptchaRequired(loginType, email)) {
             if ((challengeResponse == null) || CommonsStringUtils.isEmpty(challengeResponse.getA()) || CommonsStringUtils.isEmpty(challengeResponse.getB())) {
-                throw new ChallengeVerificationRequired(i18n.tr("Too Many Failed Log In Attempts.\nHuman Verification Is Required"));
+                throw new ChallengeVerificationRequired();
             }
             ab.assertCaptcha(challengeResponse.getA(), challengeResponse.getB());
         }

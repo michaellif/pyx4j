@@ -21,15 +21,15 @@
 package com.pyx4j.security.rpc;
 
 import com.pyx4j.commons.UserRuntimeException;
+import com.pyx4j.i18n.shared.I18n;
 
 @SuppressWarnings("serial")
 public class ChallengeVerificationRequired extends UserRuntimeException {
 
+    private static final I18n i18n = I18n.get(ChallengeVerificationRequired.class);
+
     public ChallengeVerificationRequired() {
-        super();
+        super(true, i18n.tr("Too Many Failed Log In Attempts"));
     }
 
-    public ChallengeVerificationRequired(String message) {
-        super(true, message);
-    }
 }
