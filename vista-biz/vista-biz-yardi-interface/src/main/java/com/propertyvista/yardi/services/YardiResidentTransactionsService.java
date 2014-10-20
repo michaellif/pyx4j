@@ -639,10 +639,21 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
             String msg = SimpleMessageFormat.format("Unit pk={0}: got invalid address {1}", unit.getPrimaryKey(), addrErr);
             executionMonitor.addInfoEvent("ParseAddress", msg);
             log.warn(msg);
-        } else {
+        } else if (!sameAsBuildingAddress(ia, unit.building())) {
             unit.info().legalAddress().set(AddressRetriever.toLegalAddress(ia));
             unit.info().legalAddressOverride().setValue(true);
         }
+    }
+
+    private boolean sameAsBuildingAddress(InternationalAddress addr, Building building) {
+        Persistence.ensureRetrieve(building, AttachLevel.Attached);
+        InternationalAddress bAddr = building.info().address();
+        return bAddr.country().equals(addr.country()) && //
+                bAddr.province().equals(addr.province()) && //
+                bAddr.city().equals(addr.city()) && //
+                bAddr.streetNumber().equals(addr.streetNumber()) && //
+                bAddr.streetName().equals(addr.streetName()) && //
+                bAddr.postalCode().equals(addr.postalCode());
     }
 
     private void preProcessResidentTransactionsData(YardiResidentTransactionsData rtd, List<ResidentTransactions> transactions,
