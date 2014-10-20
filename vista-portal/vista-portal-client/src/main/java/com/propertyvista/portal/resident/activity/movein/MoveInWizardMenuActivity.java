@@ -49,12 +49,16 @@ public class MoveInWizardMenuActivity extends AbstractActivity implements MoveIn
         view.setUserName(ClientContext.getUserVisit().getName());
         panel.setWidget(view);
 
+        view.setMenuVisible(false);
+
         eventBus.addHandler(MoveInWizardStateChangeEvent.getType(), new MoveInWizardStateChangeHandler() {
 
             @Override
             public void onStateChange(MoveInWizardStateChangeEvent event) {
-                view.setMenuVisible(MoveInWizardManager.getMoveInWizardState() == MoveInWizardState.wizard
-                        || (MoveInWizardManager.getMoveInWizardState() == MoveInWizardState.confirmation && !(place instanceof ResidentPortalSiteMap.MoveIn.MoveInWizard)));
+                view.setMenuVisible(!(place instanceof ResidentPortalSiteMap.LeaseContextSelection) // not a LeaseContextSelection
+                        && (MoveInWizardManager.getMoveInWizardState() == MoveInWizardState.wizard // Wizard state
+                        || (MoveInWizardManager.getMoveInWizardState() == MoveInWizardState.confirmation // Usually last step confirmation place
+                        && !(place instanceof ResidentPortalSiteMap.MoveIn.MoveInWizard))));
                 view.updateState();
                 AppSite.getEventBus().fireEvent(new LayoutChangeRequestEvent(ChangeType.resizeComponents));
             }
