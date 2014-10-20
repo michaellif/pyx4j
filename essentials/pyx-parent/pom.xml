@@ -83,12 +83,11 @@
         </developer>
     </developers>
 
-<!--
     <repositories>
 
         <repository>
             <id>pyx4j-internal</id>
-            <url>http://repository.pyx4j.com/internal/maven2-internal</url>
+            <url>http://repository-m2.pyx4j.com</url>
             <snapshots>
                 <enabled>false</enabled>
             </snapshots>
@@ -101,9 +100,10 @@
 
     <pluginRepositories>
 
+        <!-- lifecycle-mapping -->
         <pluginRepository>
             <id>pyx4j-internal</id>
-            <url>http://repository.pyx4j.com/internal/maven2-internal</url>
+            <url>http://repository-m2.pyx4j.com</url>
             <snapshots>
                 <enabled>false</enabled>
             </snapshots>
@@ -113,7 +113,7 @@
         </pluginRepository>
 
     </pluginRepositories>
--->
+
     <properties>
         <buildLabel>${project.version}</buildLabel>
 
@@ -304,7 +304,7 @@
             <dependency>
                 <groupId>org.postgresql</groupId>
                 <artifactId>postgresql</artifactId>
-                <version>9.3-1102-jdbc41</version>
+                <version>9.3-1102-jdbc41-dls</version>
             </dependency>
 
             <dependency>
