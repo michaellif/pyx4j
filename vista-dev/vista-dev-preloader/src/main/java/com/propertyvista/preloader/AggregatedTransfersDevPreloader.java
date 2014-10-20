@@ -29,6 +29,7 @@ import com.propertyvista.domain.financial.CardsAggregatedTransfer;
 import com.propertyvista.domain.financial.EftAggregatedTransfer;
 import com.propertyvista.domain.financial.FundsTransferType;
 import com.propertyvista.domain.financial.PaymentRecord;
+import com.propertyvista.domain.payment.CreditCardInfo;
 import com.propertyvista.domain.payment.PaymentType;
 
 public class AggregatedTransfersDevPreloader extends BaseVistaDevDataPreloader {
@@ -38,107 +39,117 @@ public class AggregatedTransfersDevPreloader extends BaseVistaDevDataPreloader {
     @Override
     public String create() {
 
-        // Retrieve Echeck payment records
-        EntityQueryCriteria<PaymentRecord> eCheckePaymentsCriteria = EntityQueryCriteria.create(PaymentRecord.class);
-        eCheckePaymentsCriteria.eq(eCheckePaymentsCriteria.proto().paymentMethod().type(), PaymentType.Echeck);
-        eCheckePaymentsCriteria.asc(eCheckePaymentsCriteria.proto().createdDate());
-        List<PaymentRecord> eChequePayments = Persistence.service().query(eCheckePaymentsCriteria);
+        // Retrieve payment records
+        EntityQueryCriteria<PaymentRecord> criteria = EntityQueryCriteria.create(PaymentRecord.class);
+        criteria.eq(criteria.proto().paymentStatus(), PaymentRecord.PaymentStatus.Received);
+        criteria.asc(criteria.proto().paymentMethod().type());
+        criteria.asc(criteria.proto().createdDate());
+
+        List<PaymentRecord> eChequePayments = Persistence.service().query(criteria);
         log.info("There are {} payments of type 'eCheque'", eChequePayments.size());
 
-        // Retrieve Credit Card records
-        EntityQueryCriteria<PaymentRecord> cardPaymentsCriteria = EntityQueryCriteria.create(PaymentRecord.class);
-        cardPaymentsCriteria.eq(cardPaymentsCriteria.proto().paymentMethod().type(), PaymentType.CreditCard);
-        cardPaymentsCriteria.asc(cardPaymentsCriteria.proto().createdDate());
-        List<PaymentRecord> creditCardPayments = Persistence.service().query(cardPaymentsCriteria);
-        log.info("There are {} payments of type 'CreditCard'", creditCardPayments.size());
+        AggregatedTransfer aggregatedTransfer = null;
+        for (PaymentRecord paymentRecord : Persistence.service().query(criteria)) {
+            boolean createNew = (aggregatedTransfer == null) || belongsTo(paymentRecord, aggregatedTransfer);
+            if (createNew) {
+                if (aggregatedTransfer != null) {
+                    // Save updated values.
+                    Persistence.service().persist(aggregatedTransfer);
+                }
+                aggregatedTransfer = createAggregatedTransfer(paymentRecord);
+                Persistence.service().persist(aggregatedTransfer);
+            }
+            addPaymentRecord(aggregatedTransfer, paymentRecord);
 
-        // Based on results above, create a couple of Aggregated Transfers with first 2 payment records
-        // (they should be same lease, same date and same payment type according to lease preloading)
-        if (eChequePayments.size() >= 2) {
-            List<PaymentRecord> paymentsForEft = eChequePayments.subList(0, 2);
-            EftAggregatedTransfer eftAggTransfer = createEftAggregatedTransfer(paymentsForEft);
-            Persistence.service().persist(eftAggTransfer);
-            updatePaymentRecords(paymentsForEft, eftAggTransfer);
-            log.info("Created one EftAggregatedTrasnfer");
-        } else {
-            log.info("EftAggregatedTrasnfer no created. No enough payment records of type 'echeck' in db.");
         }
 
-        if (creditCardPayments.size() >= 2) {
-            List<PaymentRecord> paymentsForCard = creditCardPayments.subList(0, 2);
-            CardsAggregatedTransfer cardAggTransfer = createCardAggregatedTransfer(paymentsForCard);
-            Persistence.service().persist(cardAggTransfer);
-            updatePaymentRecords(paymentsForCard, cardAggTransfer);
-            log.info("Created one CardAggregatedTrasnfer");
-        } else {
-            log.info("CardAggregatedTrasnfer no created. No enough payment records of type 'credit card' in db.");
-        }
-
-        return "Aggregated transfers preloaded";
+        return null;
     }
 
-    public EftAggregatedTransfer createEftAggregatedTransfer(List<PaymentRecord> payments) {
-
-        // TODO FILL WITH REALISTIC DATA
-
-        BigDecimal netAmount = new BigDecimal(0.0);
-
-        // Any values must be aggregated before add to Aggregated Transfer??
-        for (PaymentRecord payment : payments) {
-            netAmount.add(payment.amount().getValue());
+    private boolean belongsTo(PaymentRecord paymentRecord, AggregatedTransfer aggregatedTransfer) {
+        if (!aggregatedTransfer.paymentDate().equals(paymentRecord.receivedDate())) {
+            return false;
         }
-
-        EftAggregatedTransfer at = EntityFactory.create(EftAggregatedTransfer.class);
-        at.status().setValue(AggregatedTransferStatus.Paid);
-        at.merchantAccount().set(payments.get(0).merchantAccount());
-        at.fundsTransferType().setValue(FundsTransferType.DirectBankingPayment);
-        at.paymentDate().set(payments.get(0).receivedDate());
-        at.grossPaymentAmount().set(payments.get(0).amount());
-        at.grossPaymentFee().set(payments.get(0).convenienceFee());
-
-        at.payments().addAll(payments);
-        at.netAmount().setValue(netAmount);
-
-        return at;
+        if ((aggregatedTransfer.fundsTransferType().getValue() == FundsTransferType.Cards)
+                && (!paymentRecord.paymentMethod().type().getValue().equals(PaymentType.CreditCard))) {
+            return false;
+        }
+        return true;
     }
 
-    public CardsAggregatedTransfer createCardAggregatedTransfer(List<PaymentRecord> payments) {
-
-        // TODO FILL WITH REALISTIC DATA
-
-        BigDecimal netAmount = new BigDecimal(0.0);
-
-        // Any values must be aggregated before add to Aggregated Transfer??
-        for (PaymentRecord payment : payments) {
-            netAmount.add(payment.amount().getValue());
+    private AggregatedTransfer createAggregatedTransfer(PaymentRecord paymentRecord) {
+        AggregatedTransfer at;
+        if (paymentRecord.paymentMethod().type().getValue().equals(PaymentType.CreditCard)) {
+            at = createCardAggregatedTransfer(paymentRecord);
+        } else {
+            at = createEftAggregatedTransfer(paymentRecord);
         }
-
-        CardsAggregatedTransfer at = EntityFactory.create(CardsAggregatedTransfer.class);
-        at.fundsTransferType().setValue(FundsTransferType.Cards);
         at.status().setValue(AggregatedTransferStatus.Paid);
-        at.paymentDate().setValue(payments.get(0).receivedDate().getValue());
-        at.merchantAccount().set(payments.get(0).merchantAccount());
+        at.paymentDate().setValue(paymentRecord.receivedDate().getValue());
+        at.merchantAccount().set(paymentRecord.merchantAccount());
+
         at.grossPaymentCount().setValue(0);
         at.grossPaymentAmount().setValue(BigDecimal.ZERO);
-        at.netAmount().setValue(netAmount);
-        at.grossPaymentFee().setValue(payments.get(0).convenienceFee().getValue(BigDecimal.ZERO));
+        at.grossPaymentFee().setValue(BigDecimal.ZERO);
+        at.netAmount().setValue(BigDecimal.ZERO);
 
-        at.payments().addAll(payments);
+        Persistence.service().persist(at);
+        return at;
+    }
 
-        // Card Specific Data
-//        at.visaDeposit().setValue(payments.get(0). getValue(BigDecimal.ZERO));
-//        at.visaFee().setValue(reconciliationRecord.visaFee().getValue(BigDecimal.ZERO));
-//        at.mastercardDeposit().setValue(reconciliationRecord.mastercardDeposit().getValue(BigDecimal.ZERO));
-//        at.mastercardFee().setValue(reconciliationRecord.mastercardFee().getValue(BigDecimal.ZERO));
+    public EftAggregatedTransfer createEftAggregatedTransfer(PaymentRecord paymentRecord) {
+        EftAggregatedTransfer at = EntityFactory.create(EftAggregatedTransfer.class);
+        at.fundsTransferType().setValue(FundsTransferType.PreAuthorizedDebit);
+
+        at.rejectItemsAmount().setValue(BigDecimal.ZERO);
+        at.rejectItemsFee().setValue(BigDecimal.ZERO);
+        at.rejectItemsCount().setValue(0);
+
+        at.returnItemsAmount().setValue(BigDecimal.ZERO);
+        at.returnItemsFee().setValue(BigDecimal.ZERO);
+        at.returnItemsCount().setValue(0);
+
+        //at.previousBalance().setValue(BigDecimal.ZERO);
+        //at.merchantBalance().setValue(BigDecimal.ZERO);
+        //at.fundsReleased().setValue(BigDecimal.ZERO);
 
         return at;
     }
 
-    private void updatePaymentRecords(List<PaymentRecord> eChequePayments, AggregatedTransfer aggTransfer) {
-        for (int i = 0; i < 2; i++) {
-            PaymentRecord payment = eChequePayments.get(i);
-            payment.aggregatedTransfer().set(aggTransfer);
-            Persistence.service().persist(payment);
+    public CardsAggregatedTransfer createCardAggregatedTransfer(PaymentRecord paymentRecord) {
+        CardsAggregatedTransfer at = EntityFactory.create(CardsAggregatedTransfer.class);
+        at.fundsTransferType().setValue(FundsTransferType.Cards);
+
+        at.visaDeposit().setValue(BigDecimal.ZERO);
+        at.visaFee().setValue(BigDecimal.ZERO);
+        at.mastercardDeposit().setValue(BigDecimal.ZERO);
+        at.mastercardFee().setValue(BigDecimal.ZERO);
+
+        return at;
+    }
+
+    private void addPaymentRecord(AggregatedTransfer at, PaymentRecord paymentRecord) {
+        at.netAmount().setValue(at.netAmount().getValue().add(paymentRecord.amount().getValue()));
+        at.grossPaymentCount().setValue(at.grossPaymentCount().getValue() + 1);
+        at.grossPaymentAmount().setValue(at.grossPaymentAmount().getValue().add(paymentRecord.amount().getValue()));
+        if (paymentRecord.paymentMethod().type().getValue().equals(PaymentType.CreditCard)) {
+            updateCardsTotals((CardsAggregatedTransfer) at, paymentRecord);
+        }
+
+        paymentRecord.aggregatedTransfer().set(at);
+        paymentRecord.paymentStatus().setValue(PaymentRecord.PaymentStatus.Cleared);
+        Persistence.service().persist(paymentRecord);
+    }
+
+    private void updateCardsTotals(CardsAggregatedTransfer at, PaymentRecord paymentRecord) {
+        switch (paymentRecord.paymentMethod().details().<CreditCardInfo> cast().cardType().getValue()) {
+        case MasterCard:
+            at.mastercardDeposit().setValue(at.mastercardDeposit().getValue().add(paymentRecord.amount().getValue()));
+            break;
+        case Visa:
+        case VisaDebit:
+            at.visaDeposit().setValue(at.visaDeposit().getValue().add(paymentRecord.amount().getValue()));
+            break;
         }
     }
 

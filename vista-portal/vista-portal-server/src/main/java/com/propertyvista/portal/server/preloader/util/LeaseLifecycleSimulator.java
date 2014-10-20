@@ -44,10 +44,10 @@ import com.pyx4j.entity.server.TransactionScopeOption;
 import com.pyx4j.entity.server.UnitOfWork;
 import com.pyx4j.gwt.server.DateUtils;
 
-import com.propertyvista.biz.financial.ar.ARException;
-import com.propertyvista.biz.financial.ar.ARFacade;
 import com.propertyvista.biz.financial.billing.BillingFacade;
 import com.propertyvista.biz.financial.maintenance.MaintenanceFacade;
+import com.propertyvista.biz.financial.payment.PaymentException;
+import com.propertyvista.biz.financial.payment.PaymentFacade;
 import com.propertyvista.biz.occupancy.OccupancyFacade;
 import com.propertyvista.biz.tenant.lease.LeaseFacade;
 import com.propertyvista.domain.financial.PaymentRecord;
@@ -441,14 +441,7 @@ public class LeaseLifecycleSimulator {
                 if (debug) {
                     log.info("" + now() + " paid " + amount);
                 }
-                PaymentRecord payment = receivePayment(amount);
-                if (payment != null) {
-                    try {
-                        ServerSideFactory.create(ARFacade.class).postPayment(payment, null);
-                    } catch (ARException e) {
-                        throw new Error(e);
-                    }
-                }
+                receivePayment(amount);
             }
         }
 
@@ -479,7 +472,7 @@ public class LeaseLifecycleSimulator {
                 paymentRecord.finalizedDate().setValue(currentRecordDate);
                 paymentRecord.lastStatusChangeDate().setValue(currentRecordDate);
                 paymentRecord.amount().setValue(amount);
-                paymentRecord.paymentStatus().setValue(PaymentRecord.PaymentStatus.Received);
+                paymentRecord.paymentStatus().setValue(PaymentRecord.PaymentStatus.Submitted);
                 paymentRecord.billingAccount().set(lease.billingAccount());
 
                 PaymentType defaultPayment = PaymentType.CreditCard;
@@ -493,6 +486,15 @@ public class LeaseLifecycleSimulator {
                 paymentRecord.leaseTermParticipant().set(lease.currentTerm().version().tenants().get(0));
 
                 Persistence.service().persist(paymentRecord.paymentMethod());
+                Persistence.service().persist(paymentRecord);
+
+                try {
+                    paymentRecord.set(ServerSideFactory.create(PaymentFacade.class).processPayment(paymentRecord, null));
+                } catch (PaymentException e) {
+                    throw new Error(e);
+                }
+
+                paymentRecord.paymentStatus().setValue(PaymentRecord.PaymentStatus.Received);
                 Persistence.service().persist(paymentRecord);
 
                 if (payments.containsKey(leaseKey)) {
