@@ -27,6 +27,7 @@ import com.pyx4j.site.rpc.AppPlace;
 
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.portal.resident.ResidentPortalSite;
+import com.propertyvista.portal.resident.activity.movein.MoveInWizardManager;
 import com.propertyvista.portal.resident.ui.LeaseContextSelectionView;
 import com.propertyvista.portal.rpc.portal.resident.dto.LeaseContextChoiceDTO;
 import com.propertyvista.portal.rpc.portal.resident.services.LeaseContextSelectionService;
@@ -61,6 +62,7 @@ public class LeaseContextSelectionActivity extends AbstractActivity implements L
     @Override
     public void setLeaseContext(Lease lease) {
         if (lease != null) {
+            MoveInWizardManager.reset();
             service.setLeaseContext(new DefaultAsyncCallback<VoidSerializable>() {
                 @Override
                 public void onSuccess(VoidSerializable result) {

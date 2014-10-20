@@ -93,6 +93,7 @@ public class MoveInWizardManager {
                     });
                 } else if (handlerRegistration != null && !SecurityController.check(PortalResidentBehavior.MoveInWizardCompletionRequired)) {
                     reset();
+                    moveInWizardState = MoveInWizardState.confirmation;
                 }
             }
 
@@ -178,15 +179,13 @@ public class MoveInWizardManager {
     }
 
     public static void reset() {
-        if (handlerRegistration != null) {
+        if (moveInWizardState != null) {
             handlerRegistration.removeHandler();
             handlerRegistration = null;
-            moveInWizardState = MoveInWizardState.confirmation;
-        } else {
             moveInWizardState = null;
+            wizardStatus = null;
+            currentStep = null;
         }
-        wizardStatus = null;
-        currentStep = null;
     }
 
 }
