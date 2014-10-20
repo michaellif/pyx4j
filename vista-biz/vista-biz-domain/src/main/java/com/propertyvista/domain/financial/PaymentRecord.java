@@ -114,7 +114,7 @@ public interface PaymentRecord extends IEntity, HasNotesAndAttachments {
         // state sets:
 
         public static Collection<PaymentStatus> failed() {
-            return EnumSet.of(Rejected, Returned, Void);
+            return EnumSet.of(Rejected, ProcessingReject, Returned, ProcessingReturn, Void, Canceled);
         }
 
         public static Collection<PaymentStatus> processed() {

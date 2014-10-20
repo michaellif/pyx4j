@@ -45,10 +45,11 @@ class PaymentDeferredProcess extends AbstractDeferredProcess {
         new UnitOfWork(TransactionScopeOption.RequiresNew).execute(new Executable<Void, RuntimeException>() {
             @Override
             public Void execute() throws RuntimeException {
-                ServerSideFactory.create(PaymentFacade.class).persistPayment(paymentRecord);
+                paymentRecord.set(ServerSideFactory.create(PaymentFacade.class).persistPayment(paymentRecord));
                 return null;
             }
         });
+        ServerContext.visit(ResidentUserVisit.class).setPaymentRecord(paymentRecord);
 
         ServerSideFactory.create(PaymentFacade.class).processPaymentUnitOfWork(paymentRecord, true);
 
@@ -63,7 +64,6 @@ class PaymentDeferredProcess extends AbstractDeferredProcess {
 //            Thread.currentThread().interrupt();
 //        }
 
-        ServerContext.visit(ResidentUserVisit.class).setPaymentRecord(paymentRecord);
         completed = true;
     }
 }
