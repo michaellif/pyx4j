@@ -95,8 +95,7 @@ public class CreditCardInfoEditor extends CForm<CreditCardInfo> {
         get(proto().cardType()).addValueChangeHandler(new ValueChangeHandler<CreditCardType>() {
             @Override
             public void onValueChange(ValueChangeEvent<CreditCardType> event) {
-                // imitate user input and revalidate
-                cardEditor.clear(true);
+                cardEditor.revalidate();
             }
         });
 
@@ -156,7 +155,15 @@ public class CreditCardInfoEditor extends CForm<CreditCardInfo> {
             }
         });
 
-        // set up async validation for credit card number:
+        // set up validation for credit card number:
+        // sync validation:
+        cardEditor.addComponentValidator(new CreditCardNumberTypeValidator(new CreditCardTypeProvider() {
+            @Override
+            public CreditCardType getCreditCardType() {
+                return get(proto().cardType()).getValue();
+            }
+        }));
+        // async validation:
         cardEditor.addComponentValidator(new AbstractComponentValidator<CreditCardNumberIdentity>() {
             @Override
             public BasicValidationError isValid() {
@@ -165,23 +172,13 @@ public class CreditCardInfoEditor extends CForm<CreditCardInfo> {
                         isCreditCardNumberCheckRecieved = false;
                         isCreditCardNumberCheckSent = false;
                         return isCreditCardNumberValid;
-                    } else if (!isCreditCardNumberCheckSent) {
-                        return CreditCardInfoEditor.this.validateCreditCardNumberAsync(getComponent(), getComponent().getValue());
                     } else {
-                        return new BasicValidationError(getComponent(), i18n.tr("Validation in progress"));
+                        return validateCreditCardNumberAsync(getComponent(), getComponent().getValue());
                     }
-                } else {
-                    return null;
                 }
+                return null;
             }
         });
-
-        cardEditor.addComponentValidator(new CreditCardNumberTypeValidator(new CreditCardTypeProvider() {
-            @Override
-            public CreditCardType getCreditCardType() {
-                return (get(proto().cardType()).getValue() == null ? null : get(proto().cardType()).getValue());
-            }
-        }));
 
         get(proto().expiryDate()).addComponentValidator(new FutureDateValidator());
 
@@ -196,50 +193,55 @@ public class CreditCardInfoEditor extends CForm<CreditCardInfo> {
                 }
             }
         });
-
     }
 
     protected Set<CreditCardType> getAllowedCardTypes() {
         return EnumSet.allOf(CreditCardType.class);
     }
 
-    private BasicValidationError validateCreditCardNumberAsync(final CComponent<?, ?, ?> component, CreditCardNumberIdentity value) {
-        if ((value != null) && CommonsStringUtils.isStringSet(value.newNumber().getValue())) {
-            if (ValidationUtils.isCreditCardNumberValid(value.newNumber().getValue())) {
-                if (getValue().cardType().getValue() != CreditCardType.VisaDebit) {
-                    return null;
-                } else {
-                    CreditCardInfo ccInfo = getValue().<CreditCardInfo> duplicate();
-                    ccInfo.card().newNumber().set(value.newNumber());
-                    GWT.<CreditCardValidationService> create(CreditCardValidationService.class).validate(new DefaultAsyncCallback<Boolean>() {
-                        @Override
-                        public void onSuccess(Boolean result) {
-                            setCreditCardNumberValidationResult(result ? null : new BasicValidationError(component, i18n.tr("Invalid Card Number")));
-                        }
+    private String[] retrieveCreditCardTypePatterns() {
+        return (get(proto().cardType()).isValueEmpty() ? null : get(proto().cardType()).getValue().iinsPatterns);
+    }
 
-                        @Override
-                        public void onFailure(Throwable caught) {
-                            isCreditCardNumberCheckRecieved = true;
-                            super.onFailure(caught);
-                        }
-                    }, ccInfo);
-                    isCreditCardNumberCheckSent = true;
-                    return new BasicValidationError(component, i18n.tr("Validation in progress"));
-                }
-            } else {
-                return new BasicValidationError(component, i18n.tr("Invalid Card Number"));
-            }
-        } else if (value != null && value.obfuscatedNumber().isNull()) {
-            return new BasicValidationError(component, i18n.tr("Invalid Card Number"));
-        } else {
-            return null;
+    private BasicValidationError validateCreditCardNumberAsync(final CComponent<?, ?, ?> component, CreditCardNumberIdentity value) {
+        if (isCreditCardNumberCheckSent) {
+            return new BasicValidationError(component, i18n.tr("Validation in progress"));
         }
+
+        if ((value != null) && CommonsStringUtils.isStringSet(value.newNumber().getValue())) {
+            if (ValidationUtils.isCreditCardNumberIinValid(retrieveCreditCardTypePatterns(), value.newNumber().getValue())) {
+                CreditCardInfo ccInfo = getValue().<CreditCardInfo> duplicate();
+                ccInfo.card().newNumber().set(value.newNumber());
+                GWT.<CreditCardValidationService> create(CreditCardValidationService.class).validate(new DefaultAsyncCallback<Boolean>() {
+                    @Override
+                    public void onSuccess(Boolean result) {
+                        setCreditCardNumberValidationResult(result ? null : new BasicValidationError(component, i18n.tr("Invalid Card Number")));
+                    }
+
+                    @Override
+                    public void onFailure(Throwable caught) {
+                        isCreditCardNumberCheckRecieved = true;
+                        super.onFailure(caught);
+                    }
+                }, ccInfo);
+                isCreditCardNumberCheckSent = true;
+                return new BasicValidationError(component, i18n.tr("Validation in progress"));
+            }
+        }
+
+        return null;
     }
 
     private void setCreditCardNumberValidationResult(BasicValidationError error) {
         isCreditCardNumberCheckRecieved = true;
         isCreditCardNumberValid = error;
         cardEditor.revalidate();
+    }
+
+    private void resetCreditCardNumberValidationResult() {
+        isCreditCardNumberCheckRecieved = false;
+        isCreditCardNumberCheckSent = false;
+        isCreditCardNumberValid = null;
     }
 
     @Override
