@@ -31,19 +31,23 @@ import com.propertyvista.server.common.util.StreetAddressParser.StreetAddress;
 
 public class AddressRetriever {
 
+    public static InternationalAddress getUnitAddress(AptUnit unit) {
+        Persistence.ensureRetrieve(unit.building(), AttachLevel.Attached);
+        InternationalAddress address = unit.building().info().address().duplicate();
+        address.suiteNumber().setValue(unit.info().number().getValue());
+        return address;
+    }
+
     // Legal Address:
 
     public static InternationalAddress getLeaseLegalAddress(Lease lease) {
         Persistence.ensureRetrieve(lease, AttachLevel.Attached);
-        return getUnitLegalAddress(lease.unit());
+        return getUnitAddress(lease.unit());
     }
 
     public static LegalAddress getUnitLegalAddress(AptUnit unit) {
         if (!unit.info().legalAddressOverride().getValue(false)) {
-            Persistence.ensureRetrieve(unit.building(), AttachLevel.Attached);
-            InternationalAddress address = unit.building().info().address().duplicate();
-            address.suiteNumber().setValue(unit.info().number().getValue());
-            return toLegalAddress(address);
+            return toLegalAddress(getUnitAddress(unit));
         } else {
             return unit.info().legalAddress();
         }
