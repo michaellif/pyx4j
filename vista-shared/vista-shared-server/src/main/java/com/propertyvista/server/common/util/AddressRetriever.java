@@ -31,7 +31,7 @@ import com.propertyvista.server.common.util.StreetAddressParser.StreetAddress;
 
 public class AddressRetriever {
 
-    public static InternationalAddress getUnitAddress(AptUnit unit) {
+    private static InternationalAddress getUnitAddress(AptUnit unit) {
         Persistence.ensureRetrieve(unit.building(), AttachLevel.Attached);
         InternationalAddress address = unit.building().info().address().duplicate();
         address.suiteNumber().setValue(unit.info().number().getValue());
@@ -42,7 +42,7 @@ public class AddressRetriever {
 
     public static InternationalAddress getLeaseLegalAddress(Lease lease) {
         Persistence.ensureRetrieve(lease, AttachLevel.Attached);
-        return getUnitAddress(lease.unit());
+        return toInternationalAddress(getUnitLegalAddress(lease.unit()));
     }
 
     public static LegalAddress getUnitLegalAddress(AptUnit unit) {
@@ -51,6 +51,28 @@ public class AddressRetriever {
         } else {
             return unit.info().legalAddress();
         }
+    }
+
+    public static InternationalAddress toInternationalAddress(LegalAddress address) {
+        InternationalAddress legal = EntityFactory.create(InternationalAddress.class);
+        legal.city().set(address.city());
+        legal.province().set(address.province());
+        legal.country().set(address.country());
+        legal.postalCode().set(address.postalCode());
+
+        legal.streetNumber().set(address.streetNumber());
+        legal.suiteNumber().set(address.suiteNumber());
+
+        StringBuilder streetName = new StringBuilder(address.streetName().getValue());
+        if (!address.streetType().isNull()) {
+            streetName.append(" ").append(address.streetType().getValue());
+        }
+        if (!address.streetDirection().isNull()) {
+            streetName.append(" ").append(address.streetDirection().getValue());
+        }
+        legal.streetName().setValue(streetName.toString());
+
+        return legal;
     }
 
     public static LegalAddress toLegalAddress(InternationalAddress address) {
