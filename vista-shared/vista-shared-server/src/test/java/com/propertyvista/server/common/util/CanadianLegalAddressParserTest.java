@@ -55,6 +55,15 @@ public class CanadianLegalAddressParserTest extends TestCase {
         assertNull(a.streetDirection);
     }
 
+    public void testStreetTypeUnknownSuffixDropped() {
+        a = parse("123 Main Avenue xyz", null);
+        assertNull(a.unitNumber);
+        assertEquals("123", a.streetNumber);
+        assertEquals("Main", a.streetName);
+        assertEquals("Avenue", a.streetType);
+        assertNull(a.streetDirection);
+    }
+
     public void testStreetTypeAbbreviation() {
 
         a = parse("1065 Eglinton Ave", null);
