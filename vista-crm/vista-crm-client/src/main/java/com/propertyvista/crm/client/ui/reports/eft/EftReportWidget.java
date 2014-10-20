@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011-2012 All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -39,6 +39,7 @@ import com.google.gwt.user.client.ui.HTML;
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.IEntity;
+import com.pyx4j.forms.client.ImageFactory;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.backoffice.ui.prime.report.AbstractReport;
@@ -266,10 +267,10 @@ public class EftReportWidget extends HTML implements IReportWidget {
         final int shortColumnWidth = Window.getClientWidth() >= 1200 ? 80 : 60;
 
         ITableColumnFormatter noticeTooltipColumnFormatter = new ITableColumnFormatter() {//@formatter:off
-            
+
             @Override
             public int getWidth() { return 50; }
-            
+
             @Override
             public SafeHtml formatHeader() {
                 return new SafeHtmlBuilder()
@@ -278,17 +279,21 @@ public class EftReportWidget extends HTML implements IReportWidget {
                     .appendHtmlConstant("</span>")
                     .toSafeHtml();
             }
-            
+
             @Override
-            public SafeHtml formatContent(IEntity entity) {                        
-                EftReportRecordDTO r = (EftReportRecordDTO) entity;                        
-                if (CommonsStringUtils.isStringSet(r.notice().getValue())) {                                                       
+            public SafeHtml formatContent(IEntity entity) {
+                EftReportRecordDTO r = (EftReportRecordDTO) entity;
+                if (CommonsStringUtils.isStringSet(r.notice().getValue())) {
+                    String noticeIcon =  CrmImages.INSTANCE.noticeWarning().getSafeUri().asString();
+                    if (!r.notice().getValue().startsWith("Important:") && r.hasComments().getValue()) {
+                        noticeIcon = ImageFactory.getImages().formTooltipInfo().getSafeUri().asString();
+                    }
                     return new SafeHtmlBuilder()
                             .appendHtmlConstant("<div style='text-align:center' class='" + AbstractReport.ReportPrintTheme.Styles.ReportNonPrintable.name() + "'>")
-                            .appendHtmlConstant("<img title='" + SafeHtmlUtils.htmlEscape(r.notice().getValue()) + "'" + 
-                                     " src='" + CrmImages.INSTANCE.noticeWarning().getSafeUri().asString() + "'" + 
+                            .appendHtmlConstant("<img title='" + SafeHtmlUtils.htmlEscape(r.notice().getValue()) + "'" +
+                                     " src='" + noticeIcon + "'" +
                                      " border='0' " +
-                                     " style='width:15px; height:15px;text-align:center'" + 
+                                     " style='width:15px; height:15px;text-align:center'" +
                                      ">")
                             .appendHtmlConstant("</div>")
                             .toSafeHtml();
@@ -322,7 +327,7 @@ public class EftReportWidget extends HTML implements IReportWidget {
                 }
                 return b.toSafeHtml();
             }
-        };//@formatter:off 
+        };//@formatter:off
         List<ITableColumnFormatter> columnDescriptors = Arrays.<ITableColumnFormatter> asList(//@formatter:off
                     noticeTooltipColumnFormatter,
                     noticeForPrintColumnFormatter,

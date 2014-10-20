@@ -90,6 +90,7 @@ public class EftReportGenerator implements ReportExporter {
                 bind(toProto.amount_().id(), boProto.id());
                 bind(toProto.paymentType(), boProto.paymentMethod().type());
                 bind(toProto.paymentStatus(), boProto.paymentStatus());
+                bind(toProto.hasComments(), boProto.hasComments());
             }
 
             @Override
