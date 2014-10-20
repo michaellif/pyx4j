@@ -49,8 +49,6 @@ public class MoveInWizardMenuActivity extends AbstractActivity implements MoveIn
         view.setUserName(ClientContext.getUserVisit().getName());
         panel.setWidget(view);
 
-        view.setMenuVisible(false);
-
         eventBus.addHandler(MoveInWizardStateChangeEvent.getType(), new MoveInWizardStateChangeHandler() {
 
             @Override
