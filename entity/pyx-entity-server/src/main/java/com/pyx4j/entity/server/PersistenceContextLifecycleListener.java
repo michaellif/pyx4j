@@ -38,7 +38,9 @@ public class PersistenceContextLifecycleListener implements LifecycleListener {
 
     @Override
     public void onRequestError() {
-        Persistence.service().rollback();
+        if (Persistence.service().getTransactionScopeOption() != null) {
+            Persistence.service().rollback();
+        }
     }
 
     @Override
