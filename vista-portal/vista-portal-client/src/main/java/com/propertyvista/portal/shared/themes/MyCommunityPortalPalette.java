@@ -21,7 +21,7 @@ public class MyCommunityPortalPalette extends VistaPalette {
 
     public MyCommunityPortalPalette() {
         super();
-        putThemeColor(ThemeColor.object1, "#d0d0d0");
+        putThemeColor(ThemeColor.object1, "#b0b0b0");
         putThemeColor(ThemeColor.object2, "#4f565a");
         putThemeColor(ThemeColor.contrast1, "#ffcb00");
         putThemeColor(ThemeColor.contrast2, "#f68308");
