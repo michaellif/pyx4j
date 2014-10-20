@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011-2012 All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -24,18 +24,25 @@ import com.google.gwt.core.client.Scheduler.ScheduledCommand;
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.i18n.client.NumberFormat;
+import com.google.gwt.safehtml.shared.SafeHtml;
 import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
+import com.google.gwt.safehtml.shared.SafeHtmlUtils;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.EventListener;
 import com.google.gwt.user.client.ui.HTML;
 
+import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.entity.core.EntityFactory;
+import com.pyx4j.entity.core.IEntity;
+import com.pyx4j.forms.client.ImageFactory;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.AppPlaceEntityMapper;
+import com.pyx4j.site.client.backoffice.ui.prime.report.AbstractReport;
 import com.pyx4j.site.client.backoffice.ui.prime.report.IReportWidget;
 import com.pyx4j.site.rpc.AppPlaceInfo;
 
+import com.propertyvista.crm.client.resources.CrmImages;
 import com.propertyvista.crm.client.ui.reports.Column;
 import com.propertyvista.crm.client.ui.reports.NoResultsHtml;
 import com.propertyvista.crm.client.ui.reports.ScrollBarPositionMemento;
@@ -75,6 +82,7 @@ public class EftVarianceReportWidget extends HTML implements IReportWidget {
         int[] LONG_COLUMN_WIDTHS = new int[] { 1200, 200, 150 };
         int[] VERY_LONG_COLUMN_WIDTHS = new int[] { 1200, 400, 350 };
         List<Column> columns = Arrays.asList(//@formatter:off
+                        new Column(i18n.tr("Notice"), null, VERY_SHORT_COLUMN_WIDTHS),
                         new Column(i18n.tr("Building"), null, VERY_SHORT_COLUMN_WIDTHS),
                         new Column(i18n.tr("Unit"), null, VERY_SHORT_COLUMN_WIDTHS),
                         new Column(i18n.tr("Lease ID"), null, SHORT_COLUMN_WIDTHS),
@@ -127,15 +135,20 @@ public class EftVarianceReportWidget extends HTML implements IReportWidget {
 
             builder.appendHtmlConstant("<tr>");
             builder.appendHtmlConstant("<td style='width: " + columns.get(0).getEffectiveWidth() + "px;'>");
-            builder.appendEscaped(record.building().getValue());
+            builder.append(getFormattedNotice(record));
+            builder.append(getFormattedNoticePrintable(record));
             builder.appendHtmlConstant("</td>");
 
             builder.appendHtmlConstant("<td style='width: " + columns.get(1).getEffectiveWidth() + "px;'>");
+            builder.appendEscaped(record.building().getValue());
+            builder.appendHtmlConstant("</td>");
+
+            builder.appendHtmlConstant("<td style='width: " + columns.get(2).getEffectiveWidth() + "px;'>");
             builder.appendEscaped(record.unit().getValue());
 
             builder.appendHtmlConstant("</td>");
 
-            builder.appendHtmlConstant("<td style='width: " + columns.get(2).getEffectiveWidth() + "px;'>");
+            builder.appendHtmlConstant("<td style='width: " + columns.get(3).getEffectiveWidth() + "px;'>");
 
             builder.appendHtmlConstant("<a href='"
                     + AppPlaceInfo.absoluteUrl(GWT.getModuleBaseURL(), false, AppPlaceEntityMapper.resolvePlace(Lease.class, record.leaseId_().getPrimaryKey()))
@@ -154,19 +167,19 @@ public class EftVarianceReportWidget extends HTML implements IReportWidget {
                     builder.appendHtmlConstant("<tr>");
                     builder.appendHtmlConstant("<td></td><td></td><td></td>");
                 }
-                builder.appendHtmlConstant("<td style='width: " + columns.get(3).getEffectiveWidth() + "px;'>");
+                builder.appendHtmlConstant("<td style='width: " + columns.get(4).getEffectiveWidth() + "px;'>");
                 builder.appendEscaped(details.tenantName().getStringView());
                 builder.appendHtmlConstant("</td>");
-                builder.appendHtmlConstant("<td style='width: " + columns.get(4).getEffectiveWidth() + "px;'>");
+                builder.appendHtmlConstant("<td style='width: " + columns.get(5).getEffectiveWidth() + "px;'>");
                 builder.appendEscaped(details.paymentMethod().getStringView());
                 builder.appendHtmlConstant("</td>");
-                builder.appendHtmlConstant("<td style='width: " + columns.get(5).getEffectiveWidth() + "px;'>");
+                builder.appendHtmlConstant("<td style='width: " + columns.get(6).getEffectiveWidth() + "px;'>");
                 builder.appendEscaped(details.totalEft().getStringView());
                 builder.appendHtmlConstant("</td>");
-                builder.appendHtmlConstant("<td style='width: " + columns.get(6).getEffectiveWidth() + "px;'>");
+                builder.appendHtmlConstant("<td style='width: " + columns.get(7).getEffectiveWidth() + "px;'>");
                 builder.appendEscaped(details.charges().getStringView());
                 builder.appendHtmlConstant("</td>");
-                builder.appendHtmlConstant("<td style='width: " + columns.get(7).getEffectiveWidth() + "px;'>");
+                builder.appendHtmlConstant("<td style='width: " + columns.get(8).getEffectiveWidth() + "px;'>");
                 builder.appendEscaped(details.difference().getStringView());
                 builder.appendHtmlConstant("</td>");
 
@@ -215,6 +228,33 @@ public class EftVarianceReportWidget extends HTML implements IReportWidget {
             }
         });
 
+    }
+
+    public SafeHtml getFormattedNotice(IEntity entity) {
+        EftVarianceReportRecordDTO r = (EftVarianceReportRecordDTO) entity;
+        if (CommonsStringUtils.isStringSet(r.notice().getValue())) {
+            String noticeIcon = CrmImages.INSTANCE.noticeWarning().getSafeUri().asString();
+            if (!r.notice().getValue().startsWith("Important:") && r.hasComments().getValue()) {
+                noticeIcon = ImageFactory.getImages().formTooltipInfo().getSafeUri().asString();
+            }
+            return new SafeHtmlBuilder()
+                    .appendHtmlConstant("<div style='text-align:center' class='" + AbstractReport.ReportPrintTheme.Styles.ReportNonPrintable.name() + "'>")
+                    .appendHtmlConstant(
+                            "<img title='" + SafeHtmlUtils.htmlEscape(r.notice().getValue()) + "'" + " src='" + noticeIcon + "'" + " border='0' "
+                                    + " style='width:15px; height:15px;text-align:center'" + ">").appendHtmlConstant("</div>").toSafeHtml();
+        } else {
+            return new SafeHtmlBuilder().toSafeHtml();
+        }
+    }
+
+    public SafeHtml getFormattedNoticePrintable(IEntity entity) {
+        EftVarianceReportRecordDTO r = (EftVarianceReportRecordDTO) entity;
+        SafeHtmlBuilder b = new SafeHtmlBuilder();
+        if (CommonsStringUtils.isStringSet(r.notice().getValue())) {
+            b.appendHtmlConstant("<span class='" + AbstractReport.ReportPrintTheme.Styles.ReportPrintableOnly.name() + "'>")
+                    .appendEscaped(r.notice().getValue()).appendHtmlConstant("</span>");
+        }
+        return b.toSafeHtml();
     }
 
     @Override
