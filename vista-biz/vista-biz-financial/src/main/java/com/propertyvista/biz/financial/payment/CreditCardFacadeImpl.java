@@ -26,6 +26,7 @@ import com.propertyvista.config.VistaDeployment;
 import com.propertyvista.domain.payment.CreditCardInfo;
 import com.propertyvista.domain.payment.CreditCardInfo.CreditCardType;
 import com.propertyvista.dto.payment.ConvenienceFeeCalculationResponseTO;
+import com.propertyvista.shared.rpc.CreditCardValidationResponce;
 
 public class CreditCardFacadeImpl implements CreditCardFacade {
 
@@ -112,6 +113,11 @@ public class CreditCardFacadeImpl implements CreditCardFacade {
     @Override
     public boolean isNetworkError(String responseCode) {
         return CreditCardProcessor.getPaymentProcessor().isNetworkError(responseCode);
+    }
+
+    @Override
+    public CreditCardValidationResponce validateCard(CreditCardInfo creditCardInfo) {
+        return CreditCardProcessor.validateCard(creditCardInfo);
     }
 
     @Override

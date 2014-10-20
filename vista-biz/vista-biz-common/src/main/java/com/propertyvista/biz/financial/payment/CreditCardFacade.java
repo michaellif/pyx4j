@@ -22,6 +22,7 @@ import com.pyx4j.entity.core.IPrimitive;
 import com.propertyvista.domain.payment.CreditCardInfo;
 import com.propertyvista.domain.payment.CreditCardInfo.CreditCardType;
 import com.propertyvista.dto.payment.ConvenienceFeeCalculationResponseTO;
+import com.propertyvista.shared.rpc.CreditCardValidationResponce;
 
 public interface CreditCardFacade {
 
@@ -84,6 +85,8 @@ public interface CreditCardFacade {
 
     public String completion(String merchantTerminalId, BigDecimal amount, ReferenceNumberPrefix uniquePrefix, IPrimitive<Key> referenceNumber,
             CreditCardInfo cc);
+
+    public CreditCardValidationResponce validateCard(CreditCardInfo creditCardInfo);
 
     public boolean validateCreditCard(CreditCardInfo creditCardInfo);
 

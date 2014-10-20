@@ -52,6 +52,7 @@ import com.propertyvista.operations.domain.eft.cards.to.PaymentRequest;
 import com.propertyvista.operations.domain.eft.cards.to.PaymentResponse;
 import com.propertyvista.operations.domain.eft.cards.to.TokenPaymentInstrument;
 import com.propertyvista.server.TaskRunner;
+import com.propertyvista.shared.rpc.CreditCardValidationResponce;
 
 class CreditCardProcessor {
 
@@ -158,6 +159,16 @@ class CreditCardProcessor {
             throw new UserRuntimeException(response.message().getValue());
         }
 
+    }
+
+    static CreditCardValidationResponce validateCard(CreditCardInfo creditCardInfo) {
+        // TODO Use new caledon card service validation
+        CreditCardValidationResponce responce = EntityFactory.create(CreditCardValidationResponce.class);
+        responce.validWithTypeProvided().setValue(validateCreditCard(creditCardInfo));
+        if (responce.validWithTypeProvided().getValue()) {
+            responce.validCardType().setValue(creditCardInfo.cardType().getValue());
+        }
+        return responce;
     }
 
     static boolean validateVisaDebit(CreditCardInfo cc) {
@@ -393,4 +404,5 @@ class CreditCardProcessor {
             throw new UserRuntimeException(i18n.tr("Card Fee Calculation failed {0}", response.message()));
         }
     }
+
 }

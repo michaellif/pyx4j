@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011- All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -50,6 +50,7 @@ import com.propertyvista.domain.payment.CreditCardNumberIdentity;
 import com.propertyvista.domain.util.ValidationUtils;
 import com.propertyvista.misc.CreditCardNumberGenerator;
 import com.propertyvista.portal.rpc.shared.services.CreditCardValidationService;
+import com.propertyvista.shared.rpc.CreditCardValidationResponce;
 import com.propertyvista.shared.util.CreditCardFormatter;
 
 public class CreditCardInfoEditor extends CForm<CreditCardInfo> {
@@ -212,10 +213,12 @@ public class CreditCardInfoEditor extends CForm<CreditCardInfo> {
             if (ValidationUtils.isCreditCardNumberIinValid(retrieveCreditCardTypePatterns(), value.newNumber().getValue())) {
                 CreditCardInfo ccInfo = getValue().<CreditCardInfo> duplicate();
                 ccInfo.card().newNumber().set(value.newNumber());
-                GWT.<CreditCardValidationService> create(CreditCardValidationService.class).validate(new DefaultAsyncCallback<Boolean>() {
+                GWT.<CreditCardValidationService> create(CreditCardValidationService.class).validate(new DefaultAsyncCallback<CreditCardValidationResponce>() {
                     @Override
-                    public void onSuccess(Boolean result) {
-                        setCreditCardNumberValidationResult(result ? null : new BasicValidationError(component, i18n.tr("Invalid Card Number")));
+                    public void onSuccess(CreditCardValidationResponce result) {
+                        //TODO use valid type validCardType
+                        setCreditCardNumberValidationResult(result.validWithTypeProvided().getValue(false) ? null : new BasicValidationError(component,
+                                i18n.tr("Invalid Card Number")));
                     }
 
                     @Override
