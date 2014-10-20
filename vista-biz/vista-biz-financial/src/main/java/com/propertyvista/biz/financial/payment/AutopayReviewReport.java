@@ -57,7 +57,7 @@ class AutopayReviewReport {
             EntityQueryCriteria<BillingAccount> criteria = EntityQueryCriteria.create(BillingAccount.class);
             if (reportCriteria.isBuildingsSelected()) {
                 if (reportCriteria.getSelectedBuildings().isEmpty()) {
-                    criteria.isNull(criteria.proto().id());
+                    criteria.isNull(criteria.proto().id()); // should not find anything!
                 } else {
                     criteria.in(criteria.proto().lease().unit().building(), reportCriteria.getSelectedBuildings());
                 }
