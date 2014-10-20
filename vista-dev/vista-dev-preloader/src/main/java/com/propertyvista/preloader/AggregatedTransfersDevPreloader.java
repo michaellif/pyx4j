@@ -50,7 +50,7 @@ public class AggregatedTransfersDevPreloader extends BaseVistaDevDataPreloader {
 
         AggregatedTransfer aggregatedTransfer = null;
         for (PaymentRecord paymentRecord : Persistence.service().query(criteria)) {
-            boolean createNew = (aggregatedTransfer == null) || belongsTo(paymentRecord, aggregatedTransfer);
+            boolean createNew = (aggregatedTransfer == null) || !belongsTo(paymentRecord, aggregatedTransfer);
             if (createNew) {
                 if (aggregatedTransfer != null) {
                     // Save updated values.
