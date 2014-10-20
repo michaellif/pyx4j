@@ -47,6 +47,7 @@ SET search_path = '_admin_';
         ALTER TABLE dev_card_service_simulation_transaction DROP CONSTRAINT dev_card_service_simulation_transaction_tp_e_ck;
         ALTER TABLE operations_alert DROP CONSTRAINT operations_alert_app_e_ck;
         ALTER TABLE scheduler_run_data DROP CONSTRAINT scheduler_run_data_status_e_ck;
+        ALTER TABLE scheduler_trigger DROP CONSTRAINT scheduler_trigger_trigger_type_e_ck;
         
 
         /**
@@ -233,6 +234,20 @@ SET search_path = '_admin_';
         
         UPDATE  admin_pmc_vista_features
         SET     white_label_portal = FALSE;
+        
+        -- scheduler_trigger
+        
+        INSERT INTO scheduler_trigger (id,trigger_type,name,population_type,schedule_suspended,created) VALUES 
+        (nextval('public.scheduler_trigger_seq'),'paymentsCardsSend','P 5C - Send Cards Payments to Caledon','allPmc',TRUE,
+        DATE_TRUNC('second',current_timestamp)::timestamp),
+        (nextval('public.scheduler_trigger_seq'),'paymentsCardsPostRejected','P 5D - Post rejected Cards Payments','allPmc',TRUE,
+        DATE_TRUNC('second',current_timestamp)::timestamp);
+        
+        UPDATE  scheduler_trigger
+        SET     trigger_type = 'paymentsScheduledCards'
+        WHERE   trigger_type = 'paymentsScheduledCreditCards';
+        
+
        
 
         /**
@@ -289,6 +304,17 @@ SET search_path = '_admin_';
             CHECK ((target) IN ('AutopayAgreementNotSetup', 'InsuranceMissing', 'Other'));
         ALTER TABLE scheduler_run_data ADD CONSTRAINT scheduler_run_data_status_e_ck 
             CHECK ((status) IN ('Canceled', 'Erred', 'Failed', 'NeverRan', 'PartiallyProcessed', 'Processed', 'Running', 'Terminated'));
+        ALTER TABLE scheduler_trigger ADD CONSTRAINT scheduler_trigger_trigger_type_e_ck 
+            CHECK ((trigger_type) IN ('billing', 'cleanup', 'depositInterestAdjustment', 'depositRefund', 'equifaxRetention', 'ilsEmailFeed', 
+            'ilsUpdate', 'initializeFutureBillingCycles', 'leaseActivation', 'leaseCompletion', 'leaseRenewal', 'paymentsBmoReceive', 
+            'paymentsCardsPostRejected', 'paymentsCardsSend', 'paymentsDbpProcess', 'paymentsDbpProcessAcknowledgment', 
+            'paymentsDbpProcessReconciliation', 'paymentsDbpSend', 'paymentsIssue', 'paymentsLastMonthSuspend', 'paymentsPadProcessAcknowledgment', 
+            'paymentsPadProcessReconciliation', 'paymentsPadSend', 'paymentsProcessCardsReconciliation', 'paymentsReceiveAcknowledgment', 
+            'paymentsReceiveCardsReconciliation', 'paymentsReceiveReconciliation', 'paymentsScheduledCards', 'paymentsScheduledEcheck', 
+            'paymentsTenantSure', 'tenantSureBusinessReport', 'tenantSureCancellation', 'tenantSureHQUpdate', 'tenantSureRenewal', 'tenantSureReports', 
+            'tenantSureTransactionReports', 'test', 'updateArrears', 'updatePaymentsSummary', 'vistaBusinessReport', 'vistaCaleonReport', 
+            'vistaHeathMonitor', 'yardiARDateVerification', 'yardiImportProcess'));
+
 
 
         /**

@@ -39,6 +39,8 @@ BEGIN
         ALTER TABLE maintenance_request_category DROP CONSTRAINT maintenance_request_category_type_e_ck;
         ALTER TABLE maintenance_request_priority DROP CONSTRAINT maintenance_request_priority_level_e_ck;
         ALTER TABLE online_application DROP CONSTRAINT online_application_role_e_ck;
+        ALTER TABLE payment_record DROP CONSTRAINT payment_record_payment_status_e_ck;
+        ALTER TABLE payments_summary DROP CONSTRAINT payments_summary_status_e_ck;
         ALTER TABLE pt_vehicle DROP CONSTRAINT pt_vehicle_province_e_ck;
         ALTER TABLE site_descriptor DROP CONSTRAINT site_descriptor_skin_e_ck;
 
@@ -114,6 +116,11 @@ BEGIN
         );
         
         ALTER TABLE aggregated_transfer_non_vista_transaction OWNER TO vista;
+        
+        -- apt_unit
+        
+        ALTER TABLE apt_unit    ADD COLUMN info_legal_address_street_direction VARCHAR(500),
+                                ADD COLUMN info_legal_address_street_type VARCHAR(500);
         
         -- billable_item
         
@@ -271,6 +278,11 @@ BEGIN
         -- restrictions_policy
         
         ALTER TABLE restrictions_policy ADD COLUMN years_to_forcing_previous_address INTEGER;
+        
+        
+        -- site_logo_image_resource
+        
+        ALTER TABLE site_logo_image_resource    ADD COLUMN logo_label BIGINT;
         
         -- site_palette
         
@@ -441,6 +453,8 @@ BEGIN
             REFERENCES id_assignment_policy(id)  DEFERRABLE INITIALLY DEFERRED;
         ALTER TABLE lease_participant_move_in_action ADD CONSTRAINT lease_participant_move_in_action_lease_participant_fk FOREIGN KEY(lease_participant) 
             REFERENCES lease_participant(id)  DEFERRABLE INITIALLY DEFERRED;
+        ALTER TABLE site_logo_image_resource ADD CONSTRAINT site_logo_image_resource_logo_label_fk FOREIGN KEY(logo_label) 
+            REFERENCES site_image_resource(id)  DEFERRABLE INITIALLY DEFERRED;
         ALTER TABLE yardi_payment_posting_batch ADD CONSTRAINT yardi_payment_posting_batch_building_fk FOREIGN KEY(building) 
             REFERENCES building(id)  DEFERRABLE INITIALLY DEFERRED;
         ALTER TABLE yardi_payment_posting_batch_record ADD CONSTRAINT yardi_payment_posting_batch_record_batch_fk FOREIGN KEY(batch) 
@@ -476,6 +490,12 @@ BEGIN
                             'MaintenanceRequest', 'YardiSynchronization'));
         ALTER TABLE online_application ADD CONSTRAINT online_application_participant_role_e_ck 
             CHECK ((participant_role) IN ('Applicant', 'CoApplicant', 'Dependent', 'Guarantor'));
+         ALTER TABLE payment_record ADD CONSTRAINT payment_record_payment_status_e_ck 
+            CHECK ((payment_status) IN ('Canceled', 'Cleared', 'PendingAction', 'Processing', 'ProcessingReject', 'ProcessingReturn', 'Queued', 'Received', 
+            'Rejected', 'Returned', 'Scheduled', 'Submitted', 'Void'));
+        ALTER TABLE payments_summary ADD CONSTRAINT payments_summary_status_e_ck 
+            CHECK ((status) IN ('Canceled', 'Cleared', 'PendingAction', 'Processing', 'ProcessingReject', 'ProcessingReturn', 'Queued', 'Received', 
+            'Rejected', 'Returned', 'Scheduled', 'Submitted', 'Void'));
         ALTER TABLE site_descriptor ADD CONSTRAINT site_descriptor_skin_e_ck 
             CHECK ((skin) IN ('skin1', 'skin2', 'skin3', 'skin4', 'skin5', 'skin6'));
         ALTER TABLE yardi_payment_posting_batch ADD CONSTRAINT yardi_payment_posting_batch_status_e_ck 
