@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011-2012 All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -28,6 +28,7 @@ import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.server.IEntityPersistenceService.ICursorIterator;
 import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.biz.financial.billing.BillingFacade;
 import com.propertyvista.biz.financial.billingcycle.BillingCycleFacade;
@@ -48,6 +49,8 @@ import com.propertyvista.dto.payment.AutoPayReviewPreauthorizedPaymentDTO;
 import com.propertyvista.shared.config.VistaFeatures;
 
 class AutopayReviewReport {
+
+    private static final I18n i18n = I18n.get(AutopayManager.class);
 
     List<AutoPayReviewLeaseDTO> reportPreauthorizedPaymentsRequiresReview(PreauthorizedPaymentsReportCriteria reportCriteria) {
         List<AutoPayReviewLeaseDTO> records = new ArrayList<AutoPayReviewLeaseDTO>();
@@ -104,7 +107,11 @@ class AutopayReviewReport {
     }
 
     private AutoPayReviewLeaseDTO createBillingAccountReview(BillingAccount billingAccount) {
+
         AutoPayReviewLeaseDTO leaseReview = EntityFactory.create(AutoPayReviewLeaseDTO.class);
+
+        // Set notice in case MerchanAccount is not setup properly
+        leaseReview.notice().setValue(getNotice(billingAccount));
 
         Persistence.ensureRetrieve(billingAccount.lease(), AttachLevel.Attached);
         Persistence.ensureRetrieve(billingAccount.lease().unit(), AttachLevel.Attached);
@@ -140,6 +147,14 @@ class AutopayReviewReport {
             }
             if (!papReview.previousCyclePap().isNull()) {
                 previousCycleRemovedPayments.add(papReview.previousCyclePap());
+            }
+
+            if (!preauthorizedPayment.comments().isNull()) {
+                System.out.println("COMMENT _> " + preauthorizedPayment.comments().getValue());
+                leaseReview.notice().setValue(preauthorizedPayment.comments().getValue());
+                leaseReview.hasComments().setValue(true);
+            } else {
+                leaseReview.hasComments().setValue(false);
             }
         }
 
@@ -341,7 +356,7 @@ class AutopayReviewReport {
             criteria.asc(criteria.proto().leaseParticipant().participantId());
             leaseParticipants = Persistence.service().query(criteria);
 
-            // Make Applicant first 
+            // Make Applicant first
             for (int i = 0; i < leaseParticipants.size(); i++) {
                 LeaseTermTenant leaseParticipant = leaseParticipants.get(i);
                 if (leaseParticipant.role().getValue() == LeaseTermParticipant.Role.Applicant) {
@@ -366,5 +381,14 @@ class AutopayReviewReport {
             records.addAll(preauthorizedPayments);
         }
         return records;
+    }
+
+    private String getNotice(BillingAccount billingAccount) {
+        StringBuilder m = new StringBuilder();
+        if (!PaymentUtils.isElectronicPaymentsSetup(billingAccount)) {
+            m.append("Important:" + i18n.tr("No active merchantAccount found to process the payment."));
+        }
+
+        return m.toString();
     }
 }

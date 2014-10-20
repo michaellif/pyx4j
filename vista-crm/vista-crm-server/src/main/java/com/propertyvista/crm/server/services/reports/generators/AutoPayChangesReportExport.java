@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011-2012 All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -84,6 +84,8 @@ public class AutoPayChangesReportExport {
     }
 
     private void createHeader(ReportTableXLSXFormatter formatter) {
+        formatter.header(i18n.tr("Notice"));
+        formatter.mergeCells(2, 1);
         formatter.header(i18n.tr("Building"));
         formatter.mergeCells(2, 1);
         formatter.header(i18n.tr("Unit"));
@@ -119,7 +121,7 @@ public class AutoPayChangesReportExport {
         formatter.mergeCells(2, 1);
         formatter.newRow();
 
-        formatter.cellsEmpty(5 + leaseInfoColumns, false);
+        formatter.cellsEmpty(6 + leaseInfoColumns, false);
         formatter.header(i18n.tr("Total Price"));
         formatter.header(i18n.tr("Payment"));
         formatter.header(i18n.tr("% of Total"));
@@ -133,6 +135,7 @@ public class AutoPayChangesReportExport {
     }
 
     private void reportEntity(ReportTableXLSXFormatter formatter, AutoPayReviewLeaseDTO reviewCase) {
+        formatter.cell(reviewCase.notice().isNull() ? "" : reviewCase.notice().getValue());
         formatter.cell(reviewCase.building().getValue());
         formatter.cell(reviewCase.unit().getValue());
         formatter.cell(reviewCase.leaseId().getValue());
@@ -147,14 +150,14 @@ public class AutoPayChangesReportExport {
             if (isFirstLine) {
                 isFirstLine = false;
             } else {
-                formatter.cellsEmpty(3 + leaseInfoColumns, false);
+                formatter.cellsEmpty(4 + leaseInfoColumns, false);
             }
             formatter.cell(reviewPap.tenantName().getValue());
 
             boolean isFirstCharge = true;
             for (AutoPayReviewChargeDTO charge : reviewPap.items()) {
                 if (!isFirstCharge) {
-                    formatter.cellsEmpty(4 + leaseInfoColumns, false);
+                    formatter.cellsEmpty(5 + leaseInfoColumns, false);
                 }
 
                 formatter.cell(charge.leaseCharge().getValue());
@@ -192,7 +195,7 @@ public class AutoPayChangesReportExport {
         formatter.cellsEmpty(2, false);
         formatter.header(i18n.tr("Total for lease:"));
         formatter.mergeCells(1, 3);
-        formatter.cellsEmpty(2 + leaseInfoColumns, true);
+        formatter.cellsEmpty(3 + leaseInfoColumns, true);
 
         formatter.cell(reviewCase.totalPrevious().totalPrice().getValue());
         formatter.cell(reviewCase.totalPrevious().payment().getValue());

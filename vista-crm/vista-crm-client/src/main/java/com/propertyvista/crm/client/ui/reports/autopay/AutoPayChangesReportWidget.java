@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011-2012 All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -24,6 +24,7 @@ import com.google.gwt.dom.client.Element;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ScrollEvent;
 import com.google.gwt.event.dom.client.ScrollHandler;
+import com.google.gwt.safehtml.shared.SafeHtml;
 import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
 import com.google.gwt.safehtml.shared.SafeHtmlUtils;
 import com.google.gwt.user.client.DOM;
@@ -31,10 +32,15 @@ import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.EventListener;
 import com.google.gwt.user.client.ui.HTML;
 
+import com.pyx4j.commons.CommonsStringUtils;
+import com.pyx4j.entity.core.IEntity;
+import com.pyx4j.forms.client.ImageFactory;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.site.client.backoffice.ui.prime.report.AbstractReport;
 import com.pyx4j.site.client.backoffice.ui.prime.report.IReportWidget;
 import com.pyx4j.site.rpc.AppPlaceInfo;
 
+import com.propertyvista.crm.client.resources.CrmImages;
 import com.propertyvista.crm.client.ui.reports.Column;
 import com.propertyvista.crm.client.ui.reports.ColumnGroup;
 import com.propertyvista.crm.client.ui.reports.NoResultsHtml;
@@ -76,6 +82,7 @@ public class AutoPayChangesReportWidget extends HTML implements IReportWidget {
         int[] SHORT_COLUMN_WIDTHS = new int[] { 1200, 100, 80 };
         int[] LONG_COLUMN_WIDTHS = new int[] { 1200, 150, 100 };
         List<Column> columns = Arrays.asList(//@formatter:off
+                        new Column(i18n.tr("Notice"), null, VERY_SHORT_COLUMN_WIDTHS),
                         new Column(i18n.tr("Building"), null, VERY_SHORT_COLUMN_WIDTHS),
                         new Column(i18n.tr("Unit"), null, VERY_SHORT_COLUMN_WIDTHS),
                         new Column(i18n.tr("Lease ID"), null, SHORT_COLUMN_WIDTHS),
@@ -152,18 +159,23 @@ public class AutoPayChangesReportWidget extends HTML implements IReportWidget {
             boolean isFirstLine = true;
             builder.appendHtmlConstant("<tr>");
 
-            builder.appendHtmlConstant("<td rowspan='" + numOfCaseRows + "' style='width: " + columns.get(0).getEffectiveWidth() + "px;'>"
-                    + SafeHtmlUtils.htmlEscape(reviewCase.building().getValue()) + "</td>");
+            builder.appendHtmlConstant("<td rowspan='" + numOfCaseRows + "' style='width: " + columns.get(0).getEffectiveWidth() + "px;'>");
+            builder.append(getFormattedNotice(reviewCase));
+            builder.append(getFormattedNoticePrintable(reviewCase));
+            builder.appendHtmlConstant("</td>");
 
             builder.appendHtmlConstant("<td rowspan='" + numOfCaseRows + "' style='width: " + columns.get(1).getEffectiveWidth() + "px;'>"
+                    + SafeHtmlUtils.htmlEscape(reviewCase.building().getValue()) + "</td>");
+
+            builder.appendHtmlConstant("<td rowspan='" + numOfCaseRows + "' style='width: " + columns.get(2).getEffectiveWidth() + "px;'>"
                     + SafeHtmlUtils.htmlEscape(reviewCase.unit().getValue()) + "</td>");
 
             String leaseUrl = AppPlaceInfo.absoluteUrl(GWT.getModuleBaseURL(), false,
                     new CrmSiteMap.Tenants.Lease().formViewerPlace(reviewCase.lease().getPrimaryKey()));
-            builder.appendHtmlConstant("<td rowspan='" + numOfCaseRows + "' style='width: " + columns.get(2).getEffectiveWidth() + "px;'>" + "<a href='"
+            builder.appendHtmlConstant("<td rowspan='" + numOfCaseRows + "' style='width: " + columns.get(3).getEffectiveWidth() + "px;'>" + "<a href='"
                     + leaseUrl + "'>" + SafeHtmlUtils.htmlEscape(reviewCase.leaseId().getValue()) + "</a>" + "</td>");
 
-            builder.appendHtmlConstant("<td rowspan='" + numOfCaseRows + "' style='width: " + columns.get(3).getEffectiveWidth() + "px;'>"
+            builder.appendHtmlConstant("<td rowspan='" + numOfCaseRows + "' style='width: " + columns.get(4).getEffectiveWidth() + "px;'>"
                     + reviewCase.lease().expectedMoveOut().getStringView() + "</td>");
 
             for (AutoPayReviewPreauthorizedPaymentDTO reviewPap : reviewCase.pap()) {
@@ -171,7 +183,7 @@ public class AutoPayChangesReportWidget extends HTML implements IReportWidget {
                 if (!isFirstLine) {
                     builder.appendHtmlConstant("<tr>");
                 }
-                builder.appendHtmlConstant("<td rowspan='" + numOfTenantRows + "' style='width: " + columns.get(4).getEffectiveWidth() + "px;'>"
+                builder.appendHtmlConstant("<td rowspan='" + numOfTenantRows + "' style='width: " + columns.get(5).getEffectiveWidth() + "px;'>"
                         + SafeHtmlUtils.htmlEscape(reviewPap.tenantName().getValue()) + "</td>");
                 boolean isFirstCharge = true;
                 for (AutoPayReviewChargeDTO charge : reviewPap.items()) {
@@ -180,25 +192,25 @@ public class AutoPayChangesReportWidget extends HTML implements IReportWidget {
                     } else {
                         isFirstCharge = false;
                     }
-                    builder.appendHtmlConstant("<td style='width: " + columns.get(5).getEffectiveWidth() + "px;'>"
-                            + SafeHtmlUtils.htmlEscape(charge.leaseCharge().getStringView()) + "</td>");
                     builder.appendHtmlConstant("<td style='width: " + columns.get(6).getEffectiveWidth() + "px;'>"
-                            + charge.previous().totalPrice().getStringView() + "</td>");
+                            + SafeHtmlUtils.htmlEscape(charge.leaseCharge().getStringView()) + "</td>");
                     builder.appendHtmlConstant("<td style='width: " + columns.get(7).getEffectiveWidth() + "px;'>"
-                            + charge.previous().payment().getStringView() + "</td>");
+                            + charge.previous().totalPrice().getStringView() + "</td>");
                     builder.appendHtmlConstant("<td style='width: " + columns.get(8).getEffectiveWidth() + "px;'>"
-                            + charge.previous().percent().getStringView() + "</td>");
+                            + charge.previous().payment().getStringView() + "</td>");
                     builder.appendHtmlConstant("<td style='width: " + columns.get(9).getEffectiveWidth() + "px;'>"
+                            + charge.previous().percent().getStringView() + "</td>");
+                    builder.appendHtmlConstant("<td style='width: " + columns.get(10).getEffectiveWidth() + "px;'>"
                             + charge.current().totalPrice().getStringView() + "</td>");
-                    builder.appendHtmlConstant("<td style='width: " + columns.get(11).getEffectiveWidth() + "px;'>"
-                            + charge.current().payment().getStringView() + "</td>");
                     builder.appendHtmlConstant("<td style='width: " + columns.get(12).getEffectiveWidth() + "px;'>"
+                            + charge.current().payment().getStringView() + "</td>");
+                    builder.appendHtmlConstant("<td style='width: " + columns.get(13).getEffectiveWidth() + "px;'>"
                             + charge.current().percent().getStringView() + "</td>");
                     String percentChange = SafeHtmlUtils.htmlEscape(charge.current().billableItem().isNull() ? i18n.tr("Removed") : charge.current()
                             .percentChange().isNull() ? i18n.tr("New") : charge.current().percentChange().getStringView());
-                    builder.appendHtmlConstant("<td style='width: " + columns.get(10).getEffectiveWidth() + "px;'>" + percentChange + "</td>");
+                    builder.appendHtmlConstant("<td style='width: " + columns.get(11).getEffectiveWidth() + "px;'>" + percentChange + "</td>");
                     if (isFirstLine) {
-                        builder.appendHtmlConstant("<td rowspan='" + (numOfCaseRows + 1) + "' style='width: " + columns.get(13).getEffectiveWidth() + "px;'>"
+                        builder.appendHtmlConstant("<td rowspan='" + (numOfCaseRows + 1) + "' style='width: " + columns.get(14).getEffectiveWidth() + "px;'>"
                                 + reviewCase.paymentDue().getStringView() + "</td>");
                     }
                     builder.appendHtmlConstant("</tr>");
@@ -214,7 +226,7 @@ public class AutoPayChangesReportWidget extends HTML implements IReportWidget {
             builder.appendHtmlConstant("<tr>");
             builder.appendHtmlConstant("<th colspan='6' style='text-align:right;'>" + i18n.tr("Total for lease:") + "</th>");
             builder.appendHtmlConstant("<td>" + reviewCase.totalPrevious().totalPrice().getStringView() + "</td>");
-            builder.appendHtmlConstant("<td>" + reviewCase.totalPrevious().payment().getStringView() + "</td>"); // payment 
+            builder.appendHtmlConstant("<td>" + reviewCase.totalPrevious().payment().getStringView() + "</td>"); // payment
             builder.appendHtmlConstant("<td>" + reviewCase.totalPrevious().percent().getStringView() + "</td>");
             builder.appendHtmlConstant("<td>" + reviewCase.totalCurrent().totalPrice().getStringView() + "</td>"); // totalPrice
             builder.appendHtmlConstant("<td>" + reviewCase.totalCurrent().payment().getStringView() + "</td>"); // payment
@@ -293,6 +305,33 @@ public class AutoPayChangesReportWidget extends HTML implements IReportWidget {
             rows += pap.items().size();
         }
         return rows;
+    }
+
+    public SafeHtml getFormattedNotice(IEntity entity) {
+        AutoPayReviewLeaseDTO r = (AutoPayReviewLeaseDTO) entity;
+        if (CommonsStringUtils.isStringSet(r.notice().getValue())) {
+            String noticeIcon = CrmImages.INSTANCE.noticeWarning().getSafeUri().asString();
+            if (!r.notice().getValue().startsWith("Important:") && r.hasComments().getValue()) {
+                noticeIcon = ImageFactory.getImages().formTooltipInfo().getSafeUri().asString();
+            }
+            return new SafeHtmlBuilder()
+                    .appendHtmlConstant("<div style='text-align:center' class='" + AbstractReport.ReportPrintTheme.Styles.ReportNonPrintable.name() + "'>")
+                    .appendHtmlConstant(
+                            "<img title='" + SafeHtmlUtils.htmlEscape(r.notice().getValue()) + "'" + " src='" + noticeIcon + "'" + " border='0' "
+                                    + " style='width:15px; height:15px;text-align:center'" + ">").appendHtmlConstant("</div>").toSafeHtml();
+        } else {
+            return new SafeHtmlBuilder().toSafeHtml();
+        }
+    }
+
+    public SafeHtml getFormattedNoticePrintable(IEntity entity) {
+        AutoPayReviewLeaseDTO r = (AutoPayReviewLeaseDTO) entity;
+        SafeHtmlBuilder b = new SafeHtmlBuilder();
+        if (CommonsStringUtils.isStringSet(r.notice().getValue())) {
+            b.appendHtmlConstant("<span class='" + AbstractReport.ReportPrintTheme.Styles.ReportPrintableOnly.name() + "'>")
+                    .appendEscaped(r.notice().getValue()).appendHtmlConstant("</span>");
+        }
+        return b.toSafeHtml();
     }
 
 }

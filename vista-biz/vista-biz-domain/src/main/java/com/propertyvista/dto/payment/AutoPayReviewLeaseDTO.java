@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011-2012 All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -27,6 +27,10 @@ import com.propertyvista.domain.tenant.lease.Lease;
 @I18n(strategy = I18n.I18nStrategy.IgnoreThis)
 public interface AutoPayReviewLeaseDTO extends IEntity {
 
+    IPrimitive<String> notice();
+
+    IPrimitive<Boolean> hasComments();
+
     IPrimitive<String> building();
 
     IPrimitive<String> unit();
@@ -34,7 +38,7 @@ public interface AutoPayReviewLeaseDTO extends IEntity {
     //TBD
     IPrimitive<String> leaseId();
 
-    // Make a link to this lease, And contains Lease dates values, Owned objects are not preserved 
+    // Make a link to this lease, And contains Lease dates values, Owned objects are not preserved
     @Detached
     Lease lease();
 
