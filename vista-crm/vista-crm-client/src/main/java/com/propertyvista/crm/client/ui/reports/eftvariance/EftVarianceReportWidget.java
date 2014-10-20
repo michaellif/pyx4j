@@ -230,7 +230,7 @@ public class EftVarianceReportWidget extends HTML implements IReportWidget {
 
     }
 
-    public SafeHtml getFormattedNotice(IEntity entity) {
+    private SafeHtml getFormattedNotice(IEntity entity) {
         EftVarianceReportRecordDTO r = (EftVarianceReportRecordDTO) entity;
         if (CommonsStringUtils.isStringSet(r.notice().getValue())) {
             String noticeIcon = CrmImages.INSTANCE.noticeWarning().getSafeUri().asString();
@@ -247,7 +247,7 @@ public class EftVarianceReportWidget extends HTML implements IReportWidget {
         }
     }
 
-    public SafeHtml getFormattedNoticePrintable(IEntity entity) {
+    private SafeHtml getFormattedNoticePrintable(IEntity entity) {
         EftVarianceReportRecordDTO r = (EftVarianceReportRecordDTO) entity;
         SafeHtmlBuilder b = new SafeHtmlBuilder();
         if (CommonsStringUtils.isStringSet(r.notice().getValue())) {

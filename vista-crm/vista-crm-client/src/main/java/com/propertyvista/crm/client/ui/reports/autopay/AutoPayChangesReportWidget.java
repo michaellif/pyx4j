@@ -307,7 +307,7 @@ public class AutoPayChangesReportWidget extends HTML implements IReportWidget {
         return rows;
     }
 
-    public SafeHtml getFormattedNotice(IEntity entity) {
+    private SafeHtml getFormattedNotice(IEntity entity) {
         AutoPayReviewLeaseDTO r = (AutoPayReviewLeaseDTO) entity;
         if (CommonsStringUtils.isStringSet(r.notice().getValue())) {
             String noticeIcon = CrmImages.INSTANCE.noticeWarning().getSafeUri().asString();
@@ -324,7 +324,7 @@ public class AutoPayChangesReportWidget extends HTML implements IReportWidget {
         }
     }
 
-    public SafeHtml getFormattedNoticePrintable(IEntity entity) {
+    private SafeHtml getFormattedNoticePrintable(IEntity entity) {
         AutoPayReviewLeaseDTO r = (AutoPayReviewLeaseDTO) entity;
         SafeHtmlBuilder b = new SafeHtmlBuilder();
         if (CommonsStringUtils.isStringSet(r.notice().getValue())) {
