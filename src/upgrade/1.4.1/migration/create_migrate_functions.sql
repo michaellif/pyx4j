@@ -362,6 +362,32 @@ BEGIN
                 ||'SET  aggregated_transfer_discriminator = t.id_discriminator '
                 ||'FROM     '||v_schema_name||'.aggregated_transfer AS t '
                 ||'WHERE    t.id = c.aggregated_transfer ';
+                
+        
+        /*
+        -- apt_unit 
+        
+        EXECUTE 'UPDATE '||v_schema_name||'.apt_unit AS a '
+                ||'SET  info_legal_address_suite_number = NULL, '
+                ||'     info_legal_address_street_number = NULL, '
+                ||'     info_legal_address_street_name = NULL, '
+                ||'     info_legal_address_city = NULL, '
+                ||'     info_legal_address_postal_code = NULL, '
+                ||'     info_legal_address_country = NULL, '
+                ||'     info_legal_address_province = NULL '
+                ||'FROM     '||v_schema_name||'.building b '
+                ||'WHERE    NOT info_legal_address_override '
+                ||'AND      a.building = b.id '
+                ||'AND      UPPER(COALESCE(a.info_legal_address_street_number,'''')||'
+                ||'         COALESCE(a.info_legal_address_street_name,'''')||'
+                ||'         COALESCE(a.info_legal_address_city,'''')||'
+                ||'         COALESCE(a.info_legal_address_province,'''')) = '
+                ||'         UPPER(COALESCE(b.info_address_street_number,'''')||'
+                ||'         COALESCE(b.info_address_street_name,'''')||'
+                ||'         COALESCE(b.info_address_city,'''')||'
+                ||'         COALESCE(b.info_address_province,'''')) ';
+                
+        */
         
         -- customer_screening_personal_asset
         
