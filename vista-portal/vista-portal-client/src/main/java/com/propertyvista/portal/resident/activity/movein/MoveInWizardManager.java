@@ -23,6 +23,8 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.shared.VoidSerializable;
 import com.pyx4j.security.client.BehaviorChangeEvent;
 import com.pyx4j.security.client.BehaviorChangeHandler;
+import com.pyx4j.security.client.ContextChangeEvent;
+import com.pyx4j.security.client.ContextChangeHandler;
 import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.site.client.AppSite;
 
@@ -56,49 +58,60 @@ public class MoveInWizardManager {
 
             @Override
             public void onBehaviorChange(BehaviorChangeEvent event) {
-
-                if (handlerRegistration == null && SecurityController.check(PortalResidentBehavior.MoveInWizardCompletionRequired)) {
-                    moveInWizardState = MoveInWizardState.preface;
-                    handlerRegistration = AppSite.getEventBus().addHandler(PlaceChangeEvent.TYPE, new PlaceChangeEvent.Handler() {
-                        @Override
-                        public void onPlaceChange(final PlaceChangeEvent event) {
-                            GWT.<MoveInWizardService> create(MoveInWizardService.class).obtainSteps(new AsyncCallback<MoveInWizardStatusTO>() {
-
-                                @Override
-                                public void onSuccess(MoveInWizardStatusTO result) {
-                                    wizardStatus = result;
-
-                                    if (event.getNewPlace() instanceof ResidentPortalSiteMap.MoveIn.MoveInWizard) {
-                                        nextStep();
-                                    }
-
-                                    if (isComplete()) {
-                                        moveInWizardState = MoveInWizardState.confirmation;
-                                    }
-
-                                    ClientEventBus.instance.fireEvent(new MoveInWizardStateChangeEvent());
-
-                                    if (moveInWizardState == MoveInWizardState.preface) {
-                                        moveInWizardState = MoveInWizardState.wizard;
-                                    }
-
-                                }
-
-                                @Override
-                                public void onFailure(Throwable caught) {
-                                    throw new Error(i18n.tr("Something went wrong! Try again later."));
-                                }
-                            });
-                        }
-                    });
-                } else if (handlerRegistration != null && !SecurityController.check(PortalResidentBehavior.MoveInWizardCompletionRequired)) {
-                    reset();
-                    moveInWizardState = MoveInWizardState.confirmation;
-                }
+                onUserSettingsChange();
             }
 
         });
 
+        AppSite.getEventBus().addHandler(ContextChangeEvent.getType(), new ContextChangeHandler() {
+
+            @Override
+            public void onContextChange(ContextChangeEvent event) {
+                onUserSettingsChange();
+            }
+        });
+
+    }
+
+    private static void onUserSettingsChange() {
+        if (handlerRegistration == null && SecurityController.check(PortalResidentBehavior.MoveInWizardCompletionRequired)) {
+            moveInWizardState = MoveInWizardState.preface;
+            handlerRegistration = AppSite.getEventBus().addHandler(PlaceChangeEvent.TYPE, new PlaceChangeEvent.Handler() {
+                @Override
+                public void onPlaceChange(final PlaceChangeEvent event) {
+                    GWT.<MoveInWizardService> create(MoveInWizardService.class).obtainSteps(new AsyncCallback<MoveInWizardStatusTO>() {
+
+                        @Override
+                        public void onSuccess(MoveInWizardStatusTO result) {
+                            wizardStatus = result;
+
+                            if (event.getNewPlace() instanceof ResidentPortalSiteMap.MoveIn.MoveInWizard) {
+                                nextStep();
+                            }
+
+                            if (isComplete()) {
+                                moveInWizardState = MoveInWizardState.confirmation;
+                            }
+
+                            ClientEventBus.instance.fireEvent(new MoveInWizardStateChangeEvent());
+
+                            if (moveInWizardState == MoveInWizardState.preface) {
+                                moveInWizardState = MoveInWizardState.wizard;
+                            }
+
+                        }
+
+                        @Override
+                        public void onFailure(Throwable caught) {
+                            throw new Error(i18n.tr("Something went wrong! Try again later."));
+                        }
+                    });
+                }
+            });
+        } else if (handlerRegistration != null && !SecurityController.check(PortalResidentBehavior.MoveInWizardCompletionRequired)) {
+            reset();
+            moveInWizardState = MoveInWizardState.confirmation;
+        }
     }
 
     public static boolean isStepComplete(MoveInWizardStep step) {
@@ -180,8 +193,10 @@ public class MoveInWizardManager {
 
     public static void reset() {
         if (moveInWizardState != null) {
-            handlerRegistration.removeHandler();
-            handlerRegistration = null;
+            if (handlerRegistration != null) {
+                handlerRegistration.removeHandler();
+                handlerRegistration = null;
+            }
             moveInWizardState = null;
             wizardStatus = null;
             currentStep = null;

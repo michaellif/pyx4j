@@ -45,6 +45,9 @@ public class ResidentPortalSiteDispatcher extends AbstractAppPlaceDispatcher {
     protected boolean isPlaceNavigable(AppPlace targetPlace) {
         if (targetPlace instanceof ResidentPortalSiteMap.LeaseContextSelection) {
             return SecurityController.check(PortalResidentBehavior.LeaseSelectionRequired, PortalResidentBehavior.HasMultipleLeases);
+        } else if (targetPlace instanceof ResidentPortalSiteMap.MoveIn.MoveInWizard) {
+            return SecurityController.check(PortalResidentBehavior.MoveInWizardCompletionRequired)
+                    || MoveInWizardManager.getMoveInWizardState() == MoveInWizardState.confirmation;
         } else {
             return true;
         }
