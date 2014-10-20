@@ -274,12 +274,14 @@ BEGIN
         
         -- site_palette
         
+        ALTER TABLE site_palette RENAME COLUMN background TO form_background;
+        
         ALTER TABLE site_palette    ADD COLUMN contrast3 INTEGER,
                                     ADD COLUMN contrast4 INTEGER,
                                     ADD COLUMN contrast5 INTEGER,
                                     ADD COLUMN contrast6 INTEGER,
-                                    ADD COLUMN form_background INTEGER,
                                     ADD COLUMN site_background INTEGER;
+                                    
                                     
         -- yardi_payment_posting_batch
         
@@ -360,6 +362,15 @@ BEGIN
         EXECUTE 'UPDATE '||v_schema_name||'.restrictions_policy '
                 ||'SET  years_to_forcing_previous_address = 3';
         
+        
+        -- site_palette
+        
+        EXECUTE 'UPDATE '||v_schema_name||'.site_palette '
+                ||'SET  contrast3 = 1, '
+                ||'     contrast4 = 1, '
+                ||'     contrast5 = 1, '
+                ||'     contrast6 = 1, '
+                ||'     site_background = 1 ';
         
         /**
         *** -------------------------------------------------------------------------------------
