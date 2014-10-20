@@ -44,7 +44,7 @@ class PaymentReportEftVariance {
             EntityQueryCriteria<BillingAccount> criteria = EntityQueryCriteria.create(BillingAccount.class);
             if (reportCriteria.isBuildingsSelected()) {
                 if (reportCriteria.getSelectedBuildings().isEmpty()) {
-                    criteria.isNull(criteria.proto().lease().unit().building());
+                    criteria.isNull(criteria.proto().id());
                 } else {
                     criteria.in(criteria.proto().lease().unit().building(), reportCriteria.getSelectedBuildings());
                 }
