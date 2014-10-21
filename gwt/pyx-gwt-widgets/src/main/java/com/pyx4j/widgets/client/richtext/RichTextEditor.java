@@ -33,9 +33,9 @@ import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.ui.DockPanel;
 
 import com.pyx4j.commons.IDebugId;
-import com.pyx4j.widgets.client.ITextWidget;
+import com.pyx4j.widgets.client.ITextBoxWidget;
 
-public class RichTextEditor extends DockPanel implements ITextWidget {
+public class RichTextEditor extends DockPanel implements ITextBoxWidget {
 
     private final RichTextArea richTextArea;
 

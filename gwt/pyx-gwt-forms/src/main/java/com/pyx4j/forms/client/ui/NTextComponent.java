@@ -25,10 +25,10 @@ import com.google.gwt.event.dom.client.KeyDownEvent;
 import com.google.gwt.event.dom.client.KeyDownHandler;
 import com.google.gwt.user.client.ui.HTML;
 
-import com.pyx4j.widgets.client.ITextWidget;
+import com.pyx4j.widgets.client.ITextBoxWidget;
 import com.pyx4j.widgets.client.IWatermarkWidget;
 
-public abstract class NTextComponent<DATA, WIDGET extends ITextWidget, CCOMP extends CTextComponent<DATA, ?>> extends NFocusField<DATA, WIDGET, CCOMP, HTML>
+public abstract class NTextComponent<DATA, WIDGET extends ITextBoxWidget, CCOMP extends CTextComponent<DATA, ?>> extends NFocusField<DATA, WIDGET, CCOMP, HTML>
         implements INativeTextComponent<DATA>, IWatermarkWidget {
 
     public NTextComponent(CCOMP cComponent) {

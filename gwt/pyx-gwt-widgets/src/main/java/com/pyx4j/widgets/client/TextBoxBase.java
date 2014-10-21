@@ -33,7 +33,6 @@ import com.google.gwt.event.dom.client.KeyDownHandler;
 import com.google.gwt.event.dom.client.KeyPressHandler;
 import com.google.gwt.event.dom.client.KeyUpHandler;
 import com.google.gwt.event.dom.client.MouseDownHandler;
-import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.resources.client.ImageResource;
 import com.google.gwt.user.client.Command;
@@ -49,7 +48,7 @@ import com.pyx4j.widgets.client.event.shared.PasteEvent;
 import com.pyx4j.widgets.client.event.shared.PasteHandler;
 import com.pyx4j.widgets.client.style.theme.WidgetTheme;
 
-public abstract class TextBoxBase extends Composite implements ITextWidget, IFocusGroup, HasPasteHandlers, IWatermarkWidget {
+public abstract class TextBoxBase extends Composite implements ITextBoxWidget, IFocusGroup, HasPasteHandlers, IWatermarkWidget {
 
     private TextWatermark watermark;
 
@@ -262,10 +261,6 @@ public abstract class TextBoxBase extends Composite implements ITextWidget, IFoc
         textBoxWidget.ensureDebugId(debugId.debugId());
     }
 
-    public HandlerRegistration addValueChangeHandler(ValueChangeHandler<String> handler) {
-        return textBoxWidget.addValueChangeHandler(handler);
-    }
-
     @Override
     public HandlerRegistration addChangeHandler(ChangeHandler handler) {
         return textBoxWidget.addChangeHandler(handler);
@@ -313,12 +308,6 @@ public abstract class TextBoxBase extends Composite implements ITextWidget, IFoc
     @Override
     public HandlerRegistration addKeyUpHandler(KeyUpHandler handler) {
         return textBoxWidget.addKeyUpHandler(handler);
-    }
-
-    @Deprecated
-    //TODO remove after reimplementing NDatePicker
-    public HandlerRegistration addMouseDownHandler(MouseDownHandler handler) {
-        return textBoxWidget.addMouseDownHandler(handler);
     }
 
     @Override

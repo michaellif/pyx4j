@@ -18,13 +18,9 @@
  * @author Michael
  * @version $Id$
  */
-package com.pyx4j.forms.client.ui;
+package com.pyx4j.widgets.client;
 
-import java.text.ParseException;
 import java.util.Date;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import com.google.gwt.event.dom.client.BlurHandler;
 import com.google.gwt.event.dom.client.FocusHandler;
@@ -37,32 +33,24 @@ import com.google.gwt.user.client.ui.Focusable;
 import com.google.gwt.user.datepicker.client.CalendarUtil;
 
 import com.pyx4j.commons.LogicalDate;
-import com.pyx4j.forms.client.ui.CDatePicker.DateParser;
-import com.pyx4j.widgets.client.DropDownPanel;
 import com.pyx4j.widgets.client.datepicker.DatePickerComposite;
 
 public class DatePickerDropDownPanel extends DropDownPanel implements Focusable {
-
-    private static final Logger log = LoggerFactory.getLogger(DatePickerDropDownPanel.class);
 
     private final DatePickerComposite picker;
 
     private final FocusPanel focusPanel;
 
-    private final NDatePicker nativeDatePicker;
+    private final DatePickerTextBox textBox;
 
-    private final DateParser dateParser;
-
-    public DatePickerDropDownPanel(final NDatePicker nativeDatePicker) {
-        this.nativeDatePicker = nativeDatePicker;
+    public DatePickerDropDownPanel(final DatePickerTextBox textBox) {
+        this.textBox = textBox;
         this.getElement().getStyle().setProperty("zIndex", "100");
 
         focusPanel = new FocusPanel();
         focusPanel.getElement().getStyle().setProperty("outline", "0");
 
         picker = new DatePickerComposite();
-
-        dateParser = new DateParser(CDatePicker.defaultDateFormat);
 
         focusPanel.setWidget(picker);
         setWidget(focusPanel);
@@ -75,8 +63,7 @@ public class DatePickerDropDownPanel extends DropDownPanel implements Focusable 
                     value = new LogicalDate(value.getYear(), value.getMonth(), value.getDate());
                 }
 
-                nativeDatePicker.setNativeValue(value);
-                nativeDatePicker.getCComponent().stopEditing();
+                textBox.setValue(value);
                 hideDatePicker();
             }
         });
@@ -86,20 +73,12 @@ public class DatePickerDropDownPanel extends DropDownPanel implements Focusable 
     }
 
     public void showDatePicker() {
-        Date selectedDate = null;
-        String value = nativeDatePicker.getNativeText();
-        if (value != null) {
-            try {
-                selectedDate = dateParser.parse(value.trim());
-            } catch (ParseException e) {
-                log.info("Cannot parse as date: " + value);
-            }
-        }
+        LogicalDate selectedDate = textBox.getValue();
         if (selectedDate == null) {
-            selectedDate = new Date();
+            selectedDate = new LogicalDate();
         }
         picker.setDate(selectedDate);
-        showRelativeTo(nativeDatePicker.getEditor());
+        showRelativeTo(textBox);
         focusPanel.setFocus(true);
 
     }

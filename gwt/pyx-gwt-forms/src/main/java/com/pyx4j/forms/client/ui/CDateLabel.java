@@ -13,12 +13,13 @@ import java.util.Date;
 import com.google.gwt.i18n.client.DateTimeFormat;
 
 import com.pyx4j.commons.IFormatter;
+import com.pyx4j.widgets.client.DatePickerTextBox;
 
 public class CDateLabel extends CLabel<Date> {
 
     public CDateLabel() {
         super();
-        setDateFormat(CDatePicker.defaultDateFormat);
+        setDateFormat(DatePickerTextBox.defaultDateFormat);
     }
 
     public void setDateFormat(final String format) {

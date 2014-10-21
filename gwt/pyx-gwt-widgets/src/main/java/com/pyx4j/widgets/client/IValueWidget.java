@@ -1,6 +1,6 @@
 /*
  * Pyx4j framework
- * Copyright (C) 2008-2011 pyx4j.com.
+ * Copyright (C) 2008-2013 pyx4j.com.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -14,22 +14,25 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on Jan 12, 2012
+ * Created on Oct 21, 2014
  * @author michaellif
  * @version $Id$
  */
 package com.pyx4j.widgets.client;
 
-import com.google.gwt.event.dom.client.ChangeHandler;
-import com.google.gwt.event.dom.client.HasAllKeyHandlers;
-import com.google.gwt.event.shared.HandlerRegistration;
+import com.pyx4j.commons.IFormatter;
+import com.pyx4j.commons.IParser;
 
-public interface ITextWidget extends IFocusWidget, HasAllKeyHandlers {
+public interface IValueWidget<E> extends ITextBoxWidget {
 
-    String getText();
+    E getValue();
 
-    void setText(String text);
+    void setValue(E value);
 
-    HandlerRegistration addChangeHandler(ChangeHandler handler);
+    void setParser(IParser<E> parser);
+
+    void setFormatter(IFormatter<E, String> formatter);
+
+    boolean isParsedOk();
 
 }

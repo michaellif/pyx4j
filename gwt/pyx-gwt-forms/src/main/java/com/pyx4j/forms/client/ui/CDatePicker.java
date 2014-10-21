@@ -20,24 +20,17 @@
  */
 package com.pyx4j.forms.client.ui;
 
-import java.text.ParseException;
 import java.util.Date;
 
-import com.google.gwt.i18n.client.DateTimeFormat;
-
-import com.pyx4j.commons.CommonsStringUtils;
-import com.pyx4j.commons.IFormatter;
-import com.pyx4j.commons.IParser;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.forms.client.validators.AbstractComponentValidator;
 import com.pyx4j.forms.client.validators.BasicValidationError;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.widgets.client.DatePickerTextBox;
 
 public class CDatePicker extends CTextFieldBase<LogicalDate, NDatePicker> {
 
     private static final I18n i18n = I18n.get(CDatePicker.class);
-
-    public static final String defaultDateFormat = i18n.tr("MM/dd/yyyy");
 
     private boolean pastDateSelectionAllowed = true;
 
@@ -47,15 +40,15 @@ public class CDatePicker extends CTextFieldBase<LogicalDate, NDatePicker> {
 
     public CDatePicker() {
         super();
-        setFormatter(new DateFormatter(defaultDateFormat));
-        setParser(new DateParser(defaultDateFormat));
+        setFormatter(new DatePickerTextBox.DateFormatter(DatePickerTextBox.defaultDateFormat));
+        setParser(new DatePickerTextBox.DateParser(DatePickerTextBox.defaultDateFormat));
         setWatermark("MM/DD/YYYY");
         setNativeComponent(new NDatePicker(this));
     }
 
     public void setDateFormat(String pattern) {
-        setFormatter(new DateFormatter(pattern));
-        setParser(new DateParser(pattern));
+        setFormatter(new DatePickerTextBox.DateFormatter(pattern));
+        setParser(new DatePickerTextBox.DateParser(pattern));
         setWatermark(pattern.toUpperCase());
     }
 
@@ -102,39 +95,4 @@ public class CDatePicker extends CTextFieldBase<LogicalDate, NDatePicker> {
 
     }
 
-    public static class DateFormatter implements IFormatter<LogicalDate, String> {
-
-        private final DateTimeFormat formatter;
-
-        DateFormatter(String format) {
-            formatter = DateTimeFormat.getFormat(format);
-        }
-
-        @Override
-        public String format(LogicalDate value) {
-            return formatter.format(value);
-        }
-
-    }
-
-    public static class DateParser implements IParser<LogicalDate> {
-
-        private final DateTimeFormat parser;
-
-        DateParser(String format) {
-            parser = DateTimeFormat.getFormat(format);
-        }
-
-        @Override
-        public LogicalDate parse(String string) throws ParseException {
-            if (CommonsStringUtils.isEmpty(string)) {
-                return null; // empty value case
-            }
-            try {
-                return new LogicalDate(parser.parseStrict(string));
-            } catch (IllegalArgumentException e) {
-                throw new ParseException(i18n.tr("Invalid date format. Use {0} format", parser.getPattern()), 0);
-            }
-        }
-    }
 }

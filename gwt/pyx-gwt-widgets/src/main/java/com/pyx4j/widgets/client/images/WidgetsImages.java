@@ -27,6 +27,8 @@ import com.google.gwt.resources.client.ImageResource.RepeatStyle;
 
 public interface WidgetsImages extends ClientBundle {
 
+    ImageResource datePicker();
+
     ImageResource expand();
 
     ImageResource collapse();

@@ -20,20 +20,15 @@
  */
 package com.pyx4j.forms.client.ui;
 
-import com.google.gwt.event.dom.client.MouseDownEvent;
-import com.google.gwt.event.dom.client.MouseDownHandler;
-import com.google.gwt.event.logical.shared.CloseEvent;
-import com.google.gwt.event.logical.shared.CloseHandler;
-import com.google.gwt.user.client.Command;
-import com.google.gwt.user.client.ui.PopupPanel;
+import com.google.gwt.event.logical.shared.ValueChangeEvent;
+import com.google.gwt.event.logical.shared.ValueChangeHandler;
 
+import com.pyx4j.commons.IFormatter;
+import com.pyx4j.commons.IParser;
 import com.pyx4j.commons.LogicalDate;
-import com.pyx4j.forms.client.ImageFactory;
-import com.pyx4j.widgets.client.TextBox;
+import com.pyx4j.widgets.client.DatePickerTextBox;
 
-public class NDatePicker extends NTextFieldBase<LogicalDate, TextBox, CDatePicker> implements INativeTextComponent<LogicalDate> {
-
-    private DatePickerDropDownPanel datePickerDropDown;
+public class NDatePicker extends NTextFieldBase<LogicalDate, DatePickerTextBox, CDatePicker> implements INativeTextComponent<LogicalDate> {
 
     public NDatePicker(CDatePicker cComponent) {
         super(cComponent);
@@ -41,66 +36,26 @@ public class NDatePicker extends NTextFieldBase<LogicalDate, TextBox, CDatePicke
     }
 
     @Override
-    protected TextBox createEditor() {
-        return new DatePickerTextBox();
-    }
+    protected DatePickerTextBox createEditor() {
+        DatePickerTextBox datePickerTextBox = new DatePickerTextBox() {
+            @Override
+            protected IParser<LogicalDate> getParser() {
+                return getCComponent().getParser();
+            }
 
-    class DatePickerTextBox extends TextBox {
-        public DatePickerTextBox() {
-            setAction(new Command() {
+            @Override
+            protected IFormatter<LogicalDate, String> getFormatter() {
+                return getCComponent().getFormatter();
+            }
+        };
+        datePickerTextBox.addValueChangeHandler(new ValueChangeHandler<LogicalDate>() {
 
-                @Override
-                public void execute() {
-                    if (datePickerDropDown == null) {
-                        datePickerDropDown = new DatePickerDropDownPanel(NDatePicker.this) {
-                            @Override
-                            public void hideDatePicker() {
-                                super.hideDatePicker();
-                                if (DatePickerTextBox.this.isActive()) {
-                                    DatePickerTextBox.this.toggleActive();
-                                }
-                            };
-
-                            @Override
-                            public void showDatePicker() {
-                                super.showDatePicker();
-                                if (!DatePickerTextBox.this.isActive()) {
-                                    DatePickerTextBox.this.toggleActive();
-                                }
-                            };
-                        };
-                        datePickerDropDown.addFocusHandler(getGroupFocusHandler());
-                        datePickerDropDown.addBlurHandler(getGroupFocusHandler());
-
-                        datePickerDropDown.addCloseHandler(new CloseHandler<PopupPanel>() {
-
-                            @Override
-                            public void onClose(CloseEvent<PopupPanel> event) {
-                                if (DatePickerTextBox.this.isActive()) {
-                                    DatePickerTextBox.this.toggleActive();
-                                }
-                            }
-                        });
-                    }
-
-                    if (DatePickerTextBox.this.isActive()) {
-                        datePickerDropDown.showDatePicker();
-                    } else {
-                        datePickerDropDown.hideDatePicker();
-                    }
-
-                }
-            }, ImageFactory.getImages().datePicker());
-
-            addMouseDownHandler(new MouseDownHandler() {
-                @Override
-                public void onMouseDown(MouseDownEvent event) {
-                    if (datePickerDropDown != null) {
-                        datePickerDropDown.hideDatePicker();
-                    }
-                }
-            });
-        }
+            @Override
+            public void onValueChange(ValueChangeEvent<LogicalDate> event) {
+                getCComponent().stopEditing();
+            }
+        });
+        return datePickerTextBox;
     }
 
 }

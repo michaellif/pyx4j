@@ -26,10 +26,10 @@ import com.google.gwt.event.dom.client.KeyUpEvent;
 import com.google.gwt.event.dom.client.KeyUpHandler;
 
 import com.pyx4j.forms.client.events.NValueChangeEvent;
-import com.pyx4j.widgets.client.ITextWidget;
+import com.pyx4j.widgets.client.ITextBoxWidget;
 import com.pyx4j.widgets.client.Label;
 
-public abstract class NTextFieldBase<DATA, WIDGET extends ITextWidget, CCOMP extends CTextFieldBase<DATA, ?>> extends NTextComponent<DATA, WIDGET, CCOMP>
+public abstract class NTextFieldBase<DATA, WIDGET extends ITextBoxWidget, CCOMP extends CTextFieldBase<DATA, ?>> extends NTextComponent<DATA, WIDGET, CCOMP>
         implements INativeTextComponent<DATA> {
 
     public NTextFieldBase(CCOMP cComponent) {
