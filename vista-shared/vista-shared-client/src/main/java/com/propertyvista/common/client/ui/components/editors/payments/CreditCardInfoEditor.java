@@ -214,7 +214,7 @@ public class CreditCardInfoEditor extends CForm<CreditCardInfo> {
 
                     @Override
                     public void onFailure(Throwable caught) {
-                        isCreditCardNumberCheckRecieved = true;
+                        setCreditCardNumberValidationResult(null);
                         super.onFailure(caught);
                     }
                 }, ccInfo);
