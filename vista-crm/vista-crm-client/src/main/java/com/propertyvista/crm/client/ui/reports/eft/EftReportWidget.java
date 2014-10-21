@@ -39,7 +39,6 @@ import com.google.gwt.user.client.ui.HTML;
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.IEntity;
-import com.pyx4j.forms.client.ImageFactory;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.backoffice.ui.prime.report.AbstractReport;
@@ -286,7 +285,7 @@ public class EftReportWidget extends HTML implements IReportWidget {
                 if (CommonsStringUtils.isStringSet(r.notice().getValue())) {
                     String noticeIcon =  CrmImages.INSTANCE.noticeWarning().getSafeUri().asString();
                     if (!r.notice().getValue().startsWith("Important:") && r.hasComments().getValue()) {
-                        noticeIcon = ImageFactory.getImages().formTooltipInfo().getSafeUri().asString();
+                        noticeIcon = CrmImages.INSTANCE.reportsInfo().getSafeUri().asString();
                     }
                     return new SafeHtmlBuilder()
                             .appendHtmlConstant("<div style='text-align:center' class='" + AbstractReport.ReportPrintTheme.Styles.ReportNonPrintable.name() + "'>")

@@ -226,6 +226,9 @@ public interface CrmImages extends VistaImages {
     @Source("no-star.png")
     ImageResource noStar();
 
+    @Source("info.png")
+    ImageResource reportsInfo();
+
     UserIconImages userIcon();
 
     public interface UserIconImages extends ButtonImages {
