@@ -278,6 +278,7 @@ public class VistaWebApplicationInitializer implements ServletContainerInitializ
             {
                 ServletRegistration.Dynamic sc = ctx.addServlet("LogViewServlet", VistaLogViewServlet.class);
                 sc.addMapping(urlPattern(VistaApplication.operations, "/log/*"));
+                sc.addMapping(urlPattern(VistaApplication.operations, "/logs/*"));
             }
             {
                 ServletRegistration.Dynamic sc = ctx.addServlet("DBResetServlet", DBResetServlet.class);
