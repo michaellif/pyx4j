@@ -60,6 +60,7 @@ import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.commons.Consts;
 import com.pyx4j.commons.HtmlUtils;
 import com.pyx4j.gwt.server.DateUtils;
+import com.pyx4j.gwt.server.ServletUtils;
 import com.pyx4j.log4j.LoggerConfig;
 import com.pyx4j.server.contexts.ServerContext;
 
@@ -133,7 +134,8 @@ public class LogViewServlet extends HttpServlet {
 
         if (path == null) {
             path = "/";
-            urlPrefix = request.getServletPath().substring(1) + "/";
+            // Make absolute URL
+            urlPrefix = "/" + ServletUtils.getRelativeServletPath(request, request.getServletPath()).substring(1) + "/";
         } else {
             // URL decode on Tomcat is not working properly
             path = path.replace("%20", " ");
@@ -203,12 +205,15 @@ public class LogViewServlet extends HttpServlet {
             @Override
             public int compare(File f1, File f2) {
                 // keep folders at the top of the list
-                if (f1.isDirectory() && !f2.isDirectory()) {
-                    return -1;
-                } else if (!f1.isDirectory() && f2.isDirectory()) {
-                    return 1;
+                if (f1.getParentFile() == f2.getParentFile()) {
+                    if (f1.isDirectory() && !f2.isDirectory()) {
+                        return -1;
+                    } else if (!f1.isDirectory() && f2.isDirectory()) {
+                        return 1;
+                    }
                 }
-                return f1.getName().compareTo(f2.getName());
+                return f1.getAbsolutePath().compareTo(f2.getAbsolutePath());
+
             }
         };
 
@@ -243,7 +248,7 @@ public class LogViewServlet extends HttpServlet {
             if (file.getParentFile() == dir) {
                 name = file.getName();
             } else {
-                name = Paths.get(dir.toURI()).relativize(Paths.get(file.toURI())).toString();
+                name = Paths.get(dir.toURI()).relativize(Paths.get(file.toURI())).toString().replace('\\', '/');
             }
             if (file.isDirectory()) {
                 name += "/";
