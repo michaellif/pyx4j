@@ -49,6 +49,7 @@ import com.pyx4j.widgets.client.Anchor;
 import com.propertyvista.crm.client.resources.CrmImages;
 import com.propertyvista.crm.client.themes.CommunicationCrmTheme;
 import com.propertyvista.crm.rpc.CrmSiteMap;
+import com.propertyvista.domain.communication.MessageCategory;
 import com.propertyvista.domain.communication.MessageCategory.CategoryType;
 import com.propertyvista.dto.MessageDTO;
 
@@ -158,7 +159,9 @@ public class CommunicationViewImpl extends FlowPanel implements CommunicationVie
         public MessagePanel(final MessageDTO message, boolean isDirect) {
             setStyleName(CommunicationCrmTheme.StyleName.CommMessage.name());
 
-            photoImage = new Image(isDirect ? CrmImages.INSTANCE.avatar() : CrmImages.INSTANCE.alertsOn());
+            photoImage = new Image(isDirect ? CrmImages.INSTANCE.userIcon().regular() : (message.category() == null
+                    || !MessageCategory.TicketType.Maintenance.equals(message.category().ticketType().getValue()) ? CrmImages.INSTANCE.alertsOn()
+                    : CrmImages.INSTANCE.reportsNormal()));
             subjectField = new Label(message.subject().getStringView());
             getElement().getStyle().setCursor(Cursor.POINTER);
             addClickHandler(new ClickHandler() {
