@@ -37,6 +37,7 @@ public class MessageCategoryPreloader extends AbstractDataPreloader {
         createCategory(CategoryType.Ticket, TicketType.Tenant, TicketType.Tenant.toString(), CrmRolesPreloader.getDefaultRole());
         createCategory(CategoryType.Ticket, TicketType.Landlord, TicketType.Landlord.toString(), CrmRolesPreloader.getDefaultRole());
         createCategory(CategoryType.Ticket, TicketType.Vendor, TicketType.Vendor.toString(), CrmRolesPreloader.getDefaultRole());
+        createCategory(CategoryType.Ticket, TicketType.Maintenance, TicketType.Maintenance.toString(), CrmRolesPreloader.getDefaultRole());
         createCategory(CategoryType.Message, TicketType.NotTicket, "General Message", CrmRolesPreloader.getDefaultRole());
         if (!isProduction && VistaTODO.ADDITIONAL_COMMUNICATION_FEATURES) {
             createCategory(CategoryType.IVR, TicketType.NotTicket, "General IVR", CrmRolesPreloader.getDefaultRole());

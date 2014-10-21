@@ -80,4 +80,7 @@ public interface CommunicationThread extends IEntity {
     @OrderBy(PrimaryKey.class)
     IList<ThreadPolicyHandle> userPolicy();
 
+    @Detached
+    CommunicationAssociation associated();
+
 }

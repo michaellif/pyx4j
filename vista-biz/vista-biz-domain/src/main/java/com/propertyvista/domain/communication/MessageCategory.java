@@ -74,7 +74,10 @@ public interface MessageCategory extends IEntity {
         Vendor,
 
         @Translate("NotTicket")
-        NotTicket;
+        NotTicket,
+
+        @Translate("Maintenance")
+        Maintenance;
 
         @Override
         public String toString() {

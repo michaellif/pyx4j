@@ -23,8 +23,11 @@ import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.server.mail.MailMessage;
 
 import com.propertyvista.biz.communication.CommunicationFacade;
+import com.propertyvista.biz.communication.CommunicationMessageFacade;
 import com.propertyvista.biz.financial.maintenance.MaintenanceAbstractManager;
 import com.propertyvista.biz.system.yardi.YardiMaintenanceFacade;
+import com.propertyvista.domain.communication.CommunicationEndpoint;
+import com.propertyvista.domain.company.Employee;
 import com.propertyvista.domain.maintenance.MaintenanceRequest;
 import com.propertyvista.domain.maintenance.MaintenanceRequestSchedule;
 import com.propertyvista.domain.maintenance.MaintenanceRequestStatus;
@@ -44,7 +47,7 @@ public class MaintenanceYardiManager extends MaintenanceAbstractManager {
     }
 
     @Override
-    public void postMaintenanceRequest(MaintenanceRequest request) {
+    public void postMaintenanceRequest(MaintenanceRequest request, Employee requestReporter) {
         if (!request.reporter().isNull()) {
             request.reporterName().setValue(request.reporter().customer().person().name().getStringView());
             // email and phone can be different
@@ -66,18 +69,23 @@ public class MaintenanceYardiManager extends MaintenanceAbstractManager {
         postRequest(request);
 
         if (isNewRequest) {
+            ServerSideFactory.create(CommunicationMessageFacade.class).association2Thread(request, requestReporter);
+            // TODO: send maintenance request mail from messaging system
+
             ServerSideFactory.create(CommunicationFacade.class).sendMaintenanceRequestCreatedPMC(request);
             ServerSideFactory.create(CommunicationFacade.class).sendMaintenanceRequestCreatedTenant(request);
         }
     }
 
     @Override
-    public void cancelMaintenanceRequest(MaintenanceRequest request) {
+    public void cancelMaintenanceRequest(MaintenanceRequest request, CommunicationEndpoint requestReporter) {
         MaintenanceRequestStatus status = getMaintenanceStatus(request.building(), StatusPhase.Cancelled);
         if (status != null) {
             request.status().set(status);
             postRequest(request);
 
+            ServerSideFactory.create(CommunicationMessageFacade.class).associationChange2Message(request, requestReporter);
+            // TODO: send maintenance request mail from messaging system
             ServerSideFactory.create(CommunicationFacade.class).sendMaintenanceRequestCancelled(request);
         }
     }
@@ -89,11 +97,14 @@ public class MaintenanceYardiManager extends MaintenanceAbstractManager {
     }
 
     @Override
-    public void sheduleMaintenanceRequest(MaintenanceRequest request, MaintenanceRequestSchedule schedule) {
+    public void sheduleMaintenanceRequest(MaintenanceRequest request, MaintenanceRequestSchedule schedule, Employee requestReporter) {
         MaintenanceRequestStatus status = getMaintenanceStatus(request.building(), StatusPhase.Scheduled);
         if (status != null) {
             request.workHistory().add(schedule);
             request.status().set(status);
+
+            ServerSideFactory.create(CommunicationMessageFacade.class).associationChange2Message(request, requestReporter);
+            // TODO: send maintenance request mail from messaging system
 
             if (!request.unit().isNull() && request.permissionToEnter().getValue(false)) {
                 // send notice of entry if permission to access unit is granted
@@ -111,11 +122,14 @@ public class MaintenanceYardiManager extends MaintenanceAbstractManager {
     }
 
     @Override
-    public void resolveMaintenanceRequest(MaintenanceRequest request) {
+    public void resolveMaintenanceRequest(MaintenanceRequest request, Employee requestReporter) {
         MaintenanceRequestStatus status = getMaintenanceStatus(request.building(), StatusPhase.Resolved);
         if (status != null) {
             request.status().set(status);
             postRequest(request);
+
+            ServerSideFactory.create(CommunicationMessageFacade.class).associationChange2Message(request, requestReporter);
+            // TODO: send maintenance request mail from messaging system
 
             ServerSideFactory.create(CommunicationFacade.class).sendMaintenanceRequestCompleted(request);
         }

@@ -35,6 +35,7 @@ import com.propertyvista.crm.rpc.CrmSiteMap.Communication.Message;
 import com.propertyvista.crm.rpc.services.MessageCrudService;
 import com.propertyvista.domain.communication.MessageCategory;
 import com.propertyvista.domain.communication.MessageCategory.CategoryType;
+import com.propertyvista.domain.communication.MessageCategory.TicketType;
 import com.propertyvista.dto.MessageDTO;
 
 public class MessageLister extends AbstractLister<MessageDTO> {
@@ -157,7 +158,11 @@ public class MessageLister extends AbstractLister<MessageDTO> {
                 criteria.eq(criteria.proto().category().categoryType(), category = (CategoryType) placeCriteria);
             } else {
                 MessageCategory mc = (MessageCategory) placeCriteria;
-                getDataTablePanel().getAddButton().setCaption(i18n.tr("New") + " " + (category = mc.categoryType().getValue()).toString());
+                if (TicketType.Maintenance.equals(mc.ticketType().getValue())) {
+                    getDataTablePanel().getAddButton().setVisible(false);
+                } else {
+                    getDataTablePanel().getAddButton().setCaption(i18n.tr("New") + " " + (category = mc.categoryType().getValue()).toString());
+                }
                 criteria.eq(criteria.proto().category(), mc);
             }
         }

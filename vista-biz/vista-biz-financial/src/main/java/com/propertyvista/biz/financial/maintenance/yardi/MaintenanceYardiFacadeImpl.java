@@ -17,6 +17,8 @@ import java.util.List;
 import java.util.Set;
 
 import com.propertyvista.biz.financial.maintenance.MaintenanceFacade;
+import com.propertyvista.domain.communication.CommunicationEndpoint;
+import com.propertyvista.domain.company.Employee;
 import com.propertyvista.domain.maintenance.MaintenanceRequest;
 import com.propertyvista.domain.maintenance.MaintenanceRequestMetadata;
 import com.propertyvista.domain.maintenance.MaintenanceRequestSchedule;
@@ -40,8 +42,8 @@ public class MaintenanceYardiFacadeImpl implements MaintenanceFacade {
     }
 
     @Override
-    public void postMaintenanceRequest(MaintenanceRequest maintenanceRequest) {
-        MaintenanceYardiManager.instance().postMaintenanceRequest(maintenanceRequest);
+    public void postMaintenanceRequest(MaintenanceRequest maintenanceRequest, Employee requestReporter) {
+        MaintenanceYardiManager.instance().postMaintenanceRequest(maintenanceRequest, requestReporter);
     }
 
     @Override
@@ -65,8 +67,8 @@ public class MaintenanceYardiFacadeImpl implements MaintenanceFacade {
     }
 
     @Override
-    public void cancelMaintenanceRequest(MaintenanceRequest request) {
-        MaintenanceYardiManager.instance().cancelMaintenanceRequest(request);
+    public void cancelMaintenanceRequest(MaintenanceRequest request, CommunicationEndpoint requestReporter) {
+        MaintenanceYardiManager.instance().cancelMaintenanceRequest(request, requestReporter);
     }
 
     @Override
@@ -75,13 +77,13 @@ public class MaintenanceYardiFacadeImpl implements MaintenanceFacade {
     }
 
     @Override
-    public void sheduleMaintenanceRequest(MaintenanceRequest request, MaintenanceRequestSchedule schedule) {
-        MaintenanceYardiManager.instance().sheduleMaintenanceRequest(request, schedule);
+    public void sheduleMaintenanceRequest(MaintenanceRequest request, MaintenanceRequestSchedule schedule, Employee requestReporter) {
+        MaintenanceYardiManager.instance().sheduleMaintenanceRequest(request, schedule, requestReporter);
     }
 
     @Override
-    public void resolveMaintenanceRequest(MaintenanceRequest request) {
-        MaintenanceYardiManager.instance().resolveMaintenanceRequest(request);
+    public void resolveMaintenanceRequest(MaintenanceRequest request, Employee requestReporter) {
+        MaintenanceYardiManager.instance().resolveMaintenanceRequest(request, requestReporter);
     }
 
     @Override

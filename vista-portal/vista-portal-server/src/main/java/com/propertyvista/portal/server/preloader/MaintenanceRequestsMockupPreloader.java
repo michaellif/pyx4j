@@ -70,7 +70,7 @@ public class MaintenanceRequestsMockupPreloader extends BaseVistaDevDataPreloade
             maintenanceRequest.petInstructions().setValue(CommonsGenerator.lipsum());
         }
 
-        ServerSideFactory.create(MaintenanceFacade.class).postMaintenanceRequest(maintenanceRequest);
+        ServerSideFactory.create(MaintenanceFacade.class).postMaintenanceRequest(maintenanceRequest, null);
     }
 
     private void setRandomMetadata(MaintenanceRequest mr) {

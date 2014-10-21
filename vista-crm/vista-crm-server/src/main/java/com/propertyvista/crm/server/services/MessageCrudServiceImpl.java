@@ -37,7 +37,6 @@ import com.pyx4j.server.contexts.ServerContext;
 import com.propertyvista.biz.communication.CommunicationMessageFacade;
 import com.propertyvista.crm.rpc.services.MessageCrudService;
 import com.propertyvista.crm.server.util.CrmAppContext;
-import com.propertyvista.domain.communication.CommunicationEndpoint.ContactType;
 import com.propertyvista.domain.communication.CommunicationThread;
 import com.propertyvista.domain.communication.CommunicationThread.ThreadStatus;
 import com.propertyvista.domain.communication.DeliveryHandle;
@@ -47,7 +46,6 @@ import com.propertyvista.domain.communication.MessageCategory.CategoryType;
 import com.propertyvista.domain.communication.SystemEndpoint.SystemEndpointName;
 import com.propertyvista.domain.communication.ThreadPolicyHandle;
 import com.propertyvista.domain.company.Employee;
-import com.propertyvista.dto.CommunicationEndpointDTO;
 import com.propertyvista.dto.MessageDTO;
 
 public class MessageCrudServiceImpl extends AbstractCrudServiceDtoImpl<Message, MessageDTO> implements MessageCrudService {
@@ -221,144 +219,12 @@ public class MessageCrudServiceImpl extends AbstractCrudServiceDtoImpl<Message, 
 
     @Override
     protected void enhanceRetrieved(Message bo, MessageDTO to, RetrieveTarget retrieveTarget) {
-        enhanceDbo(bo, to, false);
+        ServerSideFactory.create(CommunicationMessageFacade.class).enhanceMessageDbo(bo, to, false, CrmAppContext.getCurrentUserEmployee());
     }
 
     @Override
     protected void enhanceListRetrieved(Message entity, MessageDTO dto) {
-        enhanceDbo(entity, dto, true);
-    }
-
-    protected void enhanceDbo(Message bo, MessageDTO to, boolean isForList) {
-        EntityListCriteria<Message> visibleMessageCriteria = EntityListCriteria.create(Message.class);
-        visibleMessageCriteria.eq(visibleMessageCriteria.proto().thread(), bo.thread());
-        final Vector<Message> ms = Persistence.secureQuery(visibleMessageCriteria, AttachLevel.Attached);
-
-        Persistence.ensureRetrieve(bo.thread(), AttachLevel.Attached);
-        Persistence.ensureRetrieve(bo.thread().category(), AttachLevel.Attached);
-        Persistence.ensureRetrieve(bo.thread().owner(), AttachLevel.Attached);
-        Persistence.ensureRetrieve(bo.recipients(), AttachLevel.Attached);
-        Employee currentUser = CrmAppContext.getCurrentUserEmployee();
-        if (ms != null && ms.size() > 0) {
-            boolean star = false;
-            boolean isRead = true;
-            boolean isHighImportance = false;
-            boolean hasAttachment = false;
-            Message lastMessage = null;
-            CommunicationMessageFacade communicationFacade = ServerSideFactory.create(CommunicationMessageFacade.class);
-            for (Message m : ms) {
-                Persistence.ensureRetrieve(m.recipients(), AttachLevel.Attached);
-                Persistence.ensureRetrieve(m.sender(), AttachLevel.Attached);
-                if (!isForList || !hasAttachment) {
-                    Persistence.ensureRetrieve(m.attachments(), AttachLevel.Attached);
-                }
-                hasAttachment = hasAttachment || m.attachments().size() > 0;
-                MessageDTO currentDTO = copyChildDTO(bo.thread(), m, EntityFactory.create(MessageDTO.class), isForList, communicationFacade, currentUser);
-                to.content().add(currentDTO);
-                if (currentDTO.star().getValue(false)) {
-                    star = true;
-                }
-                if (!currentDTO.isRead().getValue(false)) {
-                    isRead = false;
-                }
-                if (!currentDTO.highImportance().getValue(false)) {
-                    isHighImportance = false;
-                }
-                if (to.id().equals(currentDTO.id())) {
-                    lastMessage = m;
-                } else if (isForList) {
-                    lastMessage = m;
-                }
-            }
-            copyChildDTO(bo.thread(), lastMessage, to, isForList, communicationFacade, currentUser);
-            if (isHighImportance) {
-                to.highImportance().setValue(true);
-            }
-            if (star) {
-                to.star().setValue(true);
-            }
-            if (!isRead) {
-                to.isRead().setValue(false);
-            }
-            to.hasAttachments().setValue(hasAttachment);
-
-            to.isDirect().setValue(!communicationFacade.isDispatchedThread(bo.thread().getPrimaryKey(), !isForList, currentUser));
-
-            evaluateHiddenProperty(bo, to, currentUser);
-        }
-    }
-
-    private void evaluateHiddenProperty(Message bo, MessageDTO to, Employee currentUser) {
-        EntityQueryCriteria<ThreadPolicyHandle> policyCriteria = EntityQueryCriteria.create(ThreadPolicyHandle.class);
-        policyCriteria.eq(policyCriteria.proto().thread(), bo.thread());
-
-        ThreadPolicyHandle ph = Persistence.secureRetrieve(policyCriteria);
-        to.hidden().setValue(ph != null && !ph.isNull() && ph.hidden().getValue(false));
-    }
-
-    private MessageDTO copyChildDTO(CommunicationThread thread, Message m, MessageDTO messageDTO, boolean isForList,
-            CommunicationMessageFacade communicationFacade, Employee currentUser) {
-        boolean star = false;
-        boolean isRead = true;
-
-        messageDTO.isInRecipients().setValue(false);
-        for (DeliveryHandle dh : m.recipients()) {
-            if (!isForList && !dh.generatedFromGroup().getValue(false)) {
-
-                Persistence.ensureRetrieve(dh.recipient(), AttachLevel.Attached);
-                CommunicationEndpointDTO ep = communicationFacade.generateEndpointDTO(dh.recipient());
-
-                if (dh.communicationGroup() != null && !dh.communicationGroup().isNull() && !dh.communicationGroup().isEmpty()) {
-                    Persistence.ensureRetrieve(dh.recipient(), AttachLevel.Attached);
-                    ep.type().setValue(
-                            dh.communicationGroup().portfolio() != null && !dh.communicationGroup().portfolio().isNull()
-                                    && !dh.communicationGroup().portfolio().isEmpty() ? ContactType.Portfolio : ContactType.Building);
-                    ep.name().set(
-                            dh.communicationGroup().portfolio() != null && !dh.communicationGroup().portfolio().isNull()
-                                    && !dh.communicationGroup().portfolio().isEmpty() ? dh.communicationGroup().portfolio().name() : dh.communicationGroup()
-                                    .building().propertyCode());
-                }
-                messageDTO.to().add(ep);
-            }
-            if (!currentUser.equals(dh.recipient())) {
-                continue;
-            }
-            if (dh.star().getValue(false)) {
-                star = true;
-            }
-            if (!dh.isRead().getValue(false)) {
-                isRead = false;
-            }
-            messageDTO.isInRecipients().setValue(true);
-        }
-
-        messageDTO.id().set(m.id());
-        messageDTO.subject().set(thread.subject());
-        messageDTO.allowedReply().set(thread.allowedReply());
-        messageDTO.status().set(thread.status());
-        Persistence.ensureRetrieve(thread.owner(), AttachLevel.Attached);
-        messageDTO.owner().set((communicationFacade.generateEndpointDTO(thread.owner())));
-        if (isForList && thread.owner().getInstanceValueClass().equals(Employee.class)) {
-            messageDTO.ownerForList().set(thread.owner());
-        }
-        messageDTO.ownerForList();
-
-        messageDTO.text().set(m.text());
-        messageDTO.date().set(m.date());
-        messageDTO.thread().setAttachLevel(AttachLevel.Attached);
-        messageDTO.thread().set(thread);
-        messageDTO.attachments().set(m.attachments());
-        messageDTO.hasAttachments().setValue(m.attachments().size() > 0);
-        messageDTO.highImportance().set(m.highImportance());
-        messageDTO.senderDTO().setAttachLevel(AttachLevel.Attached);
-        messageDTO.senderDTO().set((communicationFacade.generateEndpointDTO(m.sender())));
-        messageDTO.isRead().setValue(isRead);
-        messageDTO.star().setValue(star);
-        messageDTO.category().set(thread.category());
-        messageDTO.header().sender().setValue(communicationFacade.extractEndpointName(m.sender()));
-        messageDTO.header().date().set(m.date());
-
-        return messageDTO;
+        ServerSideFactory.create(CommunicationMessageFacade.class).enhanceMessageDbo(entity, dto, true, CrmAppContext.getCurrentUserEmployee());
     }
 
     @Override
@@ -369,34 +235,7 @@ public class MessageCrudServiceImpl extends AbstractCrudServiceDtoImpl<Message, 
     private void saveAndUpdate(AsyncCallback<MessageDTO> callback, MessageDTO message, ThreadStatus threadStatus, boolean updateOwner) {
         Employee currentUser = CrmAppContext.getCurrentUserEmployee();
         if (message.date().isNull()) {
-            CommunicationThread thread = Persistence.secureRetrieve(CommunicationThread.class, message.thread().id().getValue());
-            CommunicationMessageFacade communicationFacade = ServerSideFactory.create(CommunicationMessageFacade.class);
-            Message m = EntityFactory.create(Message.class);
-            if (threadStatus != null) {
-                message.status().setValue(threadStatus);
-                thread.status().setValue(threadStatus);
-                thread.owner().set(currentUser);
-
-                Persistence.service().persist(thread);
-                m.recipients().add(
-                        communicationFacade.createDeliveryHandle(communicationFacade.getSystemEndpointFromCache(SystemEndpointName.Unassigned), true));
-
-            } else {
-                if (updateOwner && CategoryType.Ticket.equals(message.category().categoryType().getValue())
-                        && thread.owner().equals(communicationFacade.getSystemEndpointFromCache(SystemEndpointName.Unassigned))) {
-                    thread.owner().set(currentUser);
-                    Persistence.service().persist(thread);
-                }
-                communicationFacade.buildRecipientList(m, message, thread);
-            }
-            m.thread().set(thread);
-            m.attachments().set(message.attachments());
-            m.date().setValue(SystemDateManager.getDate());
-            m.sender().set(currentUser);
-            m.text().set(message.text());
-            m.highImportance().setValue(false);
-            Persistence.service().persist(m);
-            Persistence.service().commit();
+            Message m = ServerSideFactory.create(CommunicationMessageFacade.class).saveMessage(message, threadStatus, currentUser, updateOwner);
             retrieve(callback, m.getPrimaryKey(), RetrieveTarget.View);
         } else {
             EntityQueryCriteria<DeliveryHandle> dhCriteria = EntityQueryCriteria.create(DeliveryHandle.class);

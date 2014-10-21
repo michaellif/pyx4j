@@ -31,6 +31,8 @@ import com.pyx4j.forms.client.ui.form.FormDecorator;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.site.client.AppSite;
+import com.pyx4j.widgets.client.Anchor;
 import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.RateIt;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
@@ -43,6 +45,7 @@ import com.propertyvista.domain.maintenance.MaintenanceRequestPicture;
 import com.propertyvista.domain.maintenance.MaintenanceRequestPriority;
 import com.propertyvista.domain.maintenance.MaintenanceRequestStatus.StatusPhase;
 import com.propertyvista.portal.resident.ui.maintenance.MaintenanceRequestPageView.MaintenanceRequestPagePresenter;
+import com.propertyvista.portal.rpc.portal.resident.ResidentPortalSiteMap;
 import com.propertyvista.portal.rpc.portal.resident.dto.maintenance.MaintenanceRequestDTO;
 import com.propertyvista.portal.rpc.portal.resident.services.maintenance.MaintenanceRequestPictureUploadPortalService;
 import com.propertyvista.portal.shared.themes.EntityViewTheme;
@@ -61,6 +64,8 @@ public class MaintenanceRequestPage extends CPortalEntityForm<MaintenanceRequest
     private FormPanel scheduledPanel;
 
     private RateIt rateIt;
+
+    private Anchor communicationLink;
 
     public MaintenanceRequestPage(MaintenanceRequestPageViewImpl view) {
         super(MaintenanceRequestDTO.class, view, "Maintenance Request", ThemeColor.contrast5);
@@ -150,6 +155,16 @@ public class MaintenanceRequestPage extends CPortalEntityForm<MaintenanceRequest
 
         formPanel.br();
 
+        communicationLink = new Anchor(i18n.tr("Associated Communication"), new Command() {
+
+            @Override
+            public void execute() {
+                AppSite.getPlaceController().goTo(new ResidentPortalSiteMap.Message.MessagePage(getValue().message().getPrimaryKey()));
+            }
+        });
+        formPanel.append(Location.Left, communicationLink);
+        formPanel.br();
+
         rateIt = new RateIt(5);
         rateIt.addValueChangeHandler(new ValueChangeHandler<Integer>() {
             @Override
@@ -166,7 +181,6 @@ public class MaintenanceRequestPage extends CPortalEntityForm<MaintenanceRequest
         formPanel.append(Location.Left, rateItHolder);
 
         formPanel.br();
-
         return formPanel;
     }
 
@@ -183,6 +197,8 @@ public class MaintenanceRequestPage extends CPortalEntityForm<MaintenanceRequest
     @Override
     protected void onValueSet(boolean populate) {
         MaintenanceRequestDTO mr = getValue();
+
+        communicationLink.setVisible(mr != null && mr.message() != null && !mr.message().isNull() && !mr.message().isPrototype());
 
         btnCancel.setVisible(mr != null && StatusPhase.open().contains(mr.status().phase().getValue()));
         if (mr == null) {

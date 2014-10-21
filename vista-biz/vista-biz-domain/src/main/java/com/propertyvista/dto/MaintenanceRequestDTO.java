@@ -25,6 +25,7 @@ import com.pyx4j.entity.annotations.SecurityEnabled;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.core.IPrimitive;
 
+import com.propertyvista.domain.communication.Message;
 import com.propertyvista.domain.maintenance.MaintenanceRequest;
 
 @Transient
@@ -46,4 +47,5 @@ public interface MaintenanceRequestDTO extends MaintenanceRequest {
     @Format("h:mm a")
     IPrimitive<Time> scheduledTimeTo();
 
+    Message message();
 }

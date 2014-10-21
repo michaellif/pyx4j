@@ -17,6 +17,8 @@ import java.util.List;
 import java.util.Set;
 
 import com.propertyvista.biz.financial.maintenance.MaintenanceFacade;
+import com.propertyvista.domain.communication.CommunicationEndpoint;
+import com.propertyvista.domain.company.Employee;
 import com.propertyvista.domain.maintenance.MaintenanceRequest;
 import com.propertyvista.domain.maintenance.MaintenanceRequestMetadata;
 import com.propertyvista.domain.maintenance.MaintenanceRequestSchedule;
@@ -40,13 +42,13 @@ public class MaintenanceInternalFacadeImpl implements MaintenanceFacade {
     }
 
     @Override
-    public void postMaintenanceRequest(MaintenanceRequest request) {
-        MaintenanceInternalManager.instance().postMaintenanceRequest(request);
+    public void postMaintenanceRequest(MaintenanceRequest request, Employee requestReporter) {
+        MaintenanceInternalManager.instance().postMaintenanceRequest(request, requestReporter);
     }
 
     @Override
-    public void cancelMaintenanceRequest(MaintenanceRequest request) {
-        MaintenanceInternalManager.instance().cancelMaintenanceRequest(request);
+    public void cancelMaintenanceRequest(MaintenanceRequest request, CommunicationEndpoint requestReporter) {
+        MaintenanceInternalManager.instance().cancelMaintenanceRequest(request, requestReporter);
     }
 
     @Override
@@ -75,13 +77,13 @@ public class MaintenanceInternalFacadeImpl implements MaintenanceFacade {
     }
 
     @Override
-    public void sheduleMaintenanceRequest(MaintenanceRequest request, MaintenanceRequestSchedule schedule) {
-        MaintenanceInternalManager.instance().sheduleMaintenanceRequest(request, schedule);
+    public void sheduleMaintenanceRequest(MaintenanceRequest request, MaintenanceRequestSchedule schedule, Employee requestReporter) {
+        MaintenanceInternalManager.instance().sheduleMaintenanceRequest(request, schedule, requestReporter);
     }
 
     @Override
-    public void resolveMaintenanceRequest(MaintenanceRequest request) {
-        MaintenanceInternalManager.instance().resolveMaintenanceRequest(request);
+    public void resolveMaintenanceRequest(MaintenanceRequest request, Employee requestReporter) {
+        MaintenanceInternalManager.instance().resolveMaintenanceRequest(request, requestReporter);
     }
 
     @Override

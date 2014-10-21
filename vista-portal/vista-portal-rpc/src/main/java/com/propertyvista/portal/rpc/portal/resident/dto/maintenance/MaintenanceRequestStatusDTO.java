@@ -21,6 +21,7 @@ import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.IPrimitive;
 
+import com.propertyvista.domain.communication.Message;
 import com.propertyvista.domain.maintenance.MaintenanceRequestPriority;
 import com.propertyvista.domain.maintenance.MaintenanceRequestStatus;
 import com.propertyvista.domain.maintenance.SurveyResponse;
@@ -43,4 +44,5 @@ public interface MaintenanceRequestStatusDTO extends IEntity {
 
     SurveyResponse surveyResponse();
 
+    Message message();
 }

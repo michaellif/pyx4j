@@ -26,9 +26,11 @@ import com.pyx4j.entity.server.AbstractCrudServiceDtoImpl;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.rpc.shared.VoidSerializable;
 
+import com.propertyvista.biz.communication.CommunicationMessageFacade;
 import com.propertyvista.biz.financial.maintenance.MaintenanceFacade;
 import com.propertyvista.config.VistaDeployment;
 import com.propertyvista.crm.rpc.services.maintenance.MaintenanceCrudService;
+import com.propertyvista.crm.server.util.CrmAppContext;
 import com.propertyvista.domain.maintenance.MaintenanceRequest;
 import com.propertyvista.domain.maintenance.MaintenanceRequestCategory;
 import com.propertyvista.domain.maintenance.MaintenanceRequestMetadata;
@@ -51,6 +53,7 @@ public class MaintenanceCrudServiceImpl extends AbstractCrudServiceDtoImpl<Maint
         Persistence.service().retrieveMember(bo.pictures());
         to.pictures().set(bo.pictures());
         enhanceAll(to);
+        to.message().set(ServerSideFactory.create(CommunicationMessageFacade.class).association2Message(bo));
     }
 
     @Override
@@ -61,7 +64,6 @@ public class MaintenanceCrudServiceImpl extends AbstractCrudServiceDtoImpl<Maint
     protected void enhanceAll(MaintenanceRequestDTO dto) {
         enhanceDbo(dto);
         dto.reportedForOwnUnit().setValue(dto.unit() != null && !dto.unit().isNull() && !dto.unit().isEmpty());
-
         // populate latest scheduled info
         if (!dto.workHistory().isEmpty()) {
             MaintenanceRequestSchedule latest = dto.workHistory().get(dto.workHistory().size() - 1);
@@ -109,7 +111,7 @@ public class MaintenanceCrudServiceImpl extends AbstractCrudServiceDtoImpl<Maint
         schedule.scheduledTimeFrom().set(scheduleDTO.scheduledTimeFrom());
         schedule.scheduledTimeTo().set(scheduleDTO.scheduledTimeTo());
         schedule.workDescription().set(scheduleDTO.workDescription());
-        ServerSideFactory.create(MaintenanceFacade.class).sheduleMaintenanceRequest(request, schedule);
+        ServerSideFactory.create(MaintenanceFacade.class).sheduleMaintenanceRequest(request, schedule, CrmAppContext.getCurrentUserEmployee());
         saveRequest(request, oldStatus);
         callback.onSuccess(null);
     }
@@ -130,7 +132,7 @@ public class MaintenanceCrudServiceImpl extends AbstractCrudServiceDtoImpl<Maint
         enhanceDbo(request);
         request.resolvedDate().setValue(resolvedOn);
         request.resolution().setValue(resolution);
-        ServerSideFactory.create(MaintenanceFacade.class).resolveMaintenanceRequest(request);
+        ServerSideFactory.create(MaintenanceFacade.class).resolveMaintenanceRequest(request, CrmAppContext.getCurrentUserEmployee());
         saveRequest(request, oldStatus);
         callback.onSuccess(null);
     }
@@ -150,7 +152,7 @@ public class MaintenanceCrudServiceImpl extends AbstractCrudServiceDtoImpl<Maint
         MaintenanceRequest request = Persistence.service().retrieve(MaintenanceRequest.class, entityId);
         MaintenanceRequestStatus oldStatus = request.status().duplicate();
         enhanceDbo(request);
-        ServerSideFactory.create(MaintenanceFacade.class).cancelMaintenanceRequest(request);
+        ServerSideFactory.create(MaintenanceFacade.class).cancelMaintenanceRequest(request, CrmAppContext.getCurrentUserEmployee());
         saveRequest(request, oldStatus);
         callback.onSuccess(null);
     }
@@ -199,8 +201,9 @@ public class MaintenanceCrudServiceImpl extends AbstractCrudServiceDtoImpl<Maint
 
     @Override
     protected boolean persist(MaintenanceRequest bo, MaintenanceRequestDTO to) {
-        ServerSideFactory.create(MaintenanceFacade.class).postMaintenanceRequest(bo);
+        ServerSideFactory.create(MaintenanceFacade.class).postMaintenanceRequest(bo, CrmAppContext.getCurrentUserEmployee());
         ServerSideFactory.create(MaintenanceFacade.class).addStatusHistoryRecord(bo, null);
+        to.message().set(ServerSideFactory.create(CommunicationMessageFacade.class).association2Message(bo));
         return true;
     }
 

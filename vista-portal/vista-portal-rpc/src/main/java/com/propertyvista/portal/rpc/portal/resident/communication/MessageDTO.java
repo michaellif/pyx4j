@@ -30,6 +30,7 @@ import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.IList;
 import com.pyx4j.entity.core.IPrimitive;
 
+import com.propertyvista.domain.communication.CommunicationAssociation;
 import com.propertyvista.domain.communication.CommunicationThread.ThreadStatus;
 import com.propertyvista.domain.communication.Message;
 import com.propertyvista.domain.communication.MessageCategory;
@@ -88,6 +89,9 @@ public interface MessageDTO extends Message {
     @ReadOnly
     @Editor(type = Editor.EditorType.label)
     MessageHeader header();
+
+    @Detached
+    CommunicationAssociation associated();
 
     @Transient
     @ToStringFormat("{0}; {1}")

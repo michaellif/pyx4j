@@ -42,6 +42,8 @@ public class MaintenanceRequestFolderItem extends CForm<MaintenanceRequestStatus
 
     private Anchor detailsLink;
 
+    private Anchor communicationLink;
+
     private RateIt rateIt;
 
     private final MaintenanceDashboardPresenter presenter;
@@ -61,6 +63,15 @@ public class MaintenanceRequestFolderItem extends CForm<MaintenanceRequestStatus
         formPanel.append(Location.Left, proto().status().phase(), new CLabel<StatusPhase>()).decorate().componentWidth(180);
         formPanel.append(Location.Left, proto().priority().level(), new CLabel<PriorityLevel>()).decorate().componentWidth(180);
         formPanel.append(Location.Left, proto().lastUpdated(), new CLabel<String>()).decorate().componentWidth(180);
+
+        communicationLink = new Anchor(i18n.tr("Associated Communication"), new Command() {
+
+            @Override
+            public void execute() {
+                AppSite.getPlaceController().goTo(new ResidentPortalSiteMap.Message.MessagePage(getValue().message().getPrimaryKey()));
+            }
+        });
+        formPanel.append(Location.Left, communicationLink);
 
         formPanel.br();
 
@@ -86,7 +97,6 @@ public class MaintenanceRequestFolderItem extends CForm<MaintenanceRequestStatus
             }
         });
         detailsLink.getElement().getStyle().setMarginTop(10, Unit.PX);
-
         formPanel.append(Location.Left, detailsLink);
 
         return formPanel;
@@ -99,5 +109,7 @@ public class MaintenanceRequestFolderItem extends CForm<MaintenanceRequestStatus
         if (!mr.surveyResponse().isNull() && !mr.surveyResponse().isEmpty() && !mr.surveyResponse().rating().isNull()) {
             rateIt.setRating(mr.surveyResponse().rating().getValue());
         }
+        communicationLink.setVisible(getValue() != null && getValue().message() != null && !getValue().message().isNull()
+                && !getValue().message().isPrototype());
     }
 }

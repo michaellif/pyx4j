@@ -16,6 +16,8 @@ package com.propertyvista.biz.financial.maintenance;
 import java.util.List;
 import java.util.Set;
 
+import com.propertyvista.domain.communication.CommunicationEndpoint;
+import com.propertyvista.domain.company.Employee;
 import com.propertyvista.domain.maintenance.MaintenanceRequest;
 import com.propertyvista.domain.maintenance.MaintenanceRequestMetadata;
 import com.propertyvista.domain.maintenance.MaintenanceRequestSchedule;
@@ -44,15 +46,15 @@ public interface MaintenanceFacade {
 
     MaintenanceRequest createNewRequestForTenant(Tenant tenant);
 
-    void postMaintenanceRequest(MaintenanceRequest request);
+    void postMaintenanceRequest(MaintenanceRequest request, Employee requestReporter);
 
-    void cancelMaintenanceRequest(MaintenanceRequest request);
+    void cancelMaintenanceRequest(MaintenanceRequest request, CommunicationEndpoint requestReporter);
 
     void rateMaintenanceRequest(MaintenanceRequest request, SurveyResponse rate);
 
-    void sheduleMaintenanceRequest(MaintenanceRequest request, MaintenanceRequestSchedule schedule);
+    void sheduleMaintenanceRequest(MaintenanceRequest request, MaintenanceRequestSchedule schedule, Employee requestReporter);
 
-    void resolveMaintenanceRequest(MaintenanceRequest request);
+    void resolveMaintenanceRequest(MaintenanceRequest request, Employee requestReporter);
 
     void beforeItemRequest(Building building);
 

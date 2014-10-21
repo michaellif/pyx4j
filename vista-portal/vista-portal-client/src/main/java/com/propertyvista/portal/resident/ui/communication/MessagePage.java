@@ -63,6 +63,7 @@ import com.propertyvista.common.client.ui.components.VistaViewersComponentFactor
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
 import com.propertyvista.domain.communication.DeliveryHandle;
 import com.propertyvista.domain.communication.MessageCategory;
+import com.propertyvista.domain.communication.MessageCategory.CategoryType;
 import com.propertyvista.misc.VistaTODO;
 import com.propertyvista.portal.resident.activity.PortalClientCommunicationManager;
 import com.propertyvista.portal.resident.events.CommunicationStatusUpdateEvent;
@@ -78,6 +79,8 @@ public class MessagePage extends CPortalEntityForm<MessageDTO> {
     private static final I18n i18n = I18n.get(MessagePage.class);
 
     private final OpenMessageFolder messagesFolder;
+
+    private Anchor associationLink;
 
     private final Button btnDelete;
 
@@ -116,6 +119,16 @@ public class MessagePage extends CPortalEntityForm<MessageDTO> {
         threadLabel.asWidget().setStylePrimaryName(CommunicationTheme.StyleName.CommunicationThreadName.name());
         formPanel.append(Location.Left, proto().subject(), threadLabel);
         formPanel.append(Location.Left, proto().content(), messagesFolder);
+        formPanel.br();
+        associationLink = new Anchor(i18n.tr("Associated Maintenance Request"), new Command() {
+
+            @Override
+            public void execute() {
+                AppSite.getPlaceController().goTo(
+                        new ResidentPortalSiteMap.Maintenance.MaintenanceRequestPage().formPlace(getValue().associated().getPrimaryKey()));
+            }
+        });
+        formPanel.append(Location.Left, associationLink);
         formPanel.br();
 
         return formPanel;
@@ -188,7 +201,7 @@ public class MessagePage extends CPortalEntityForm<MessageDTO> {
 
         @Override
         protected CForm<? extends MessageDTO> createItemForm(IObject<?> member) {
-            return new MessageFolderItem(this);
+            return new MessageFolderItem();
         }
 
     }
@@ -214,14 +227,11 @@ public class MessagePage extends CPortalEntityForm<MessageDTO> {
 
         MessageAttachmentFolder attachemnts;
 
-        private final OpenMessageFolder parent;
-
-        public MessageFolderItem(OpenMessageFolder parent) {
+        public MessageFolderItem() {
             super(MessageDTO.class, new VistaViewersComponentFactory());
             inheritEditable(false);
             inheritViewable(false);
             inheritEnabled(false);
-            this.parent = parent;
         }
 
         @Override
@@ -459,6 +469,7 @@ public class MessagePage extends CPortalEntityForm<MessageDTO> {
                 highImportnaceImage.setVisible(false);
                 get(proto().highImportance()).setVisible(true);
                 statusToolBar.asWidget().setVisible(false);
+                associationLink.setVisible(false);
             } else {
                 setViewable(true);
                 setEditable(false);
@@ -466,7 +477,6 @@ public class MessagePage extends CPortalEntityForm<MessageDTO> {
                 btnSend.setVisible(false);
                 btnCancel.setVisible(false);
                 btnReply.setVisible(getValue().allowedReply().getValue(true));
-                MessageDTO i = getValue();
                 get(proto().star()).setVisible(getValue().isInRecipients().getValue(false));
                 btnMarkAsUnread.setVisible(getValue().isInRecipients().getValue(false));
                 starImage.setVisible(getValue().isInRecipients().getValue(false));
@@ -478,6 +488,8 @@ public class MessagePage extends CPortalEntityForm<MessageDTO> {
                 highImportnaceImage.setVisible(getValue().highImportance().getValue(false));
                 get(proto().highImportance()).setVisible(false);
                 statusToolBar.asWidget().setVisible(starImage.isVisible() || highImportnaceImage.isVisible());
+                associationLink.setVisible(CategoryType.Ticket.equals(getValue().category().categoryType().getValue()) && getValue().associated() != null
+                        && !getValue().associated().isNull());
             }
         }
     }

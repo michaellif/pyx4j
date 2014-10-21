@@ -24,6 +24,7 @@ import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.core.IPrimitive;
 
+import com.propertyvista.domain.communication.Message;
 import com.propertyvista.domain.maintenance.MaintenanceRequest;
 
 @Transient
@@ -47,4 +48,7 @@ public interface MaintenanceRequestDTO extends MaintenanceRequest {
     IPrimitive<String> notePermissionToEnter();
 
     IPrimitive<Boolean> confirmedNoPermissionToEnter();
+
+    Message message();
+
 }

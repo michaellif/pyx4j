@@ -36,6 +36,7 @@ import com.pyx4j.entity.core.criterion.PropertyCriterion;
 import com.pyx4j.forms.client.images.FolderImages;
 import com.pyx4j.forms.client.ui.CComboBox;
 import com.pyx4j.forms.client.ui.CDateLabel;
+import com.pyx4j.forms.client.ui.CEntityHyperlink;
 import com.pyx4j.forms.client.ui.CEntityLabel;
 import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.CImageSlider;
@@ -48,6 +49,7 @@ import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.site.client.AppPlaceEntityMapper;
+import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.backoffice.ui.prime.CEntitySelectorHyperlink;
 import com.pyx4j.site.client.backoffice.ui.prime.form.IEditor;
 import com.pyx4j.site.client.backoffice.ui.prime.form.IForm;
@@ -66,6 +68,7 @@ import com.propertyvista.crm.client.ui.components.boxes.TenantSelectorDialog;
 import com.propertyvista.crm.client.ui.components.boxes.UnitSelectorDialog;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.crm.rpc.services.maintenance.MaintenanceRequestPictureUploadService;
+import com.propertyvista.domain.communication.Message;
 import com.propertyvista.domain.maintenance.MaintenanceRequest.ContactPhoneType;
 import com.propertyvista.domain.maintenance.MaintenanceRequestMetadata;
 import com.propertyvista.domain.maintenance.MaintenanceRequestPicture;
@@ -81,6 +84,7 @@ import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.security.common.AbstractPmcUser;
 import com.propertyvista.domain.tenant.lease.Tenant;
 import com.propertyvista.dto.MaintenanceRequestDTO;
+import com.propertyvista.dto.MessageDTO;
 import com.propertyvista.shared.config.VistaFeatures;
 
 public class MaintenanceRequestForm extends CrmEntityForm<MaintenanceRequestDTO> {
@@ -215,6 +219,7 @@ public class MaintenanceRequestForm extends CrmEntityForm<MaintenanceRequestDTO>
         panel.append(Location.Left, inject(proto().priority(), prioritySelector)).decorate();
         panel.append(Location.Dual, inject(proto().summary())).decorate();
         panel.append(Location.Dual, inject(proto().description())).decorate();
+        panel.append(Location.Dual, inject(proto().message(), new CAssociationLabel())).decorate().customLabel(i18n.tr("Associated"));
 
         // --------------------------------------------------------------------------------------------------------------------
         CImageSlider<MaintenanceRequestPicture> imageSlider = new CImageSlider<MaintenanceRequestPicture>(MaintenanceRequestPicture.class,
@@ -369,8 +374,36 @@ public class MaintenanceRequestForm extends CrmEntityForm<MaintenanceRequestDTO>
                 setMaintenanceRequestCategoryMeta();
             }
         });
+        panel.br();
 
         return panel;
+    }
+
+    public class CAssociationLabel extends CEntityHyperlink<Message> {
+
+        public CAssociationLabel() {
+            super();
+            setNavigationCommand(new Command() {
+                @Override
+                public void execute() {
+                    Message value = getValue();
+                    if (value != null && value.getPrimaryKey() != null) {
+                        AppSite.getPlaceController().goTo(AppPlaceEntityMapper.resolvePlace(MessageDTO.class).formViewerPlace(value.getPrimaryKey()));
+
+                    }
+                }
+            });
+        }
+
+        @Override
+        public String format(Message value) {
+            if (value == null) {
+                return "";
+            } else {
+
+                return i18n.tr("Communication");
+            }
+        }
     }
 
     @Override
@@ -453,6 +486,8 @@ public class MaintenanceRequestForm extends CrmEntityForm<MaintenanceRequestDTO>
         }
 
         MaintenanceRequestDTO mr = getValue();
+        get(proto().message()).setVisible(mr != null && mr.message() != null && !mr.message().isNull() && !mr.message().isPrototype());
+
         if (mr == null) {
             return;
         }

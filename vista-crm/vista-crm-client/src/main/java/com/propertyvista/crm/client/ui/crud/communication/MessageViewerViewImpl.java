@@ -39,6 +39,7 @@ import com.propertyvista.crm.rpc.CrmUserVisit;
 import com.propertyvista.domain.communication.CommunicationEndpoint.ContactType;
 import com.propertyvista.domain.communication.CommunicationThread.ThreadStatus;
 import com.propertyvista.domain.communication.MessageCategory.CategoryType;
+import com.propertyvista.domain.communication.MessageCategory.TicketType;
 import com.propertyvista.domain.company.Employee;
 import com.propertyvista.domain.company.EmployeeEnabledCriteria;
 import com.propertyvista.dto.MessageDTO;
@@ -155,7 +156,8 @@ public class MessageViewerViewImpl extends CrmViewerViewImplBase<MessageDTO> imp
     public void populate(MessageDTO value) {
         super.populate(value);
 
-        boolean invisible = !CategoryType.Ticket.equals(value.category().categoryType().getValue()) || value.isDirect().getValue(false).booleanValue();
+        boolean invisible = TicketType.Maintenance.equals(value.category().ticketType().getValue())
+                || !CategoryType.Ticket.equals(value.category().categoryType().getValue()) || value.isDirect().getValue(false).booleanValue();
         setActionVisible(assignOwnershipAction, !invisible);
         for (ThreadStatus status : threadStatusActions.keySet()) {
             MenuItem action = threadStatusActions.get(status);

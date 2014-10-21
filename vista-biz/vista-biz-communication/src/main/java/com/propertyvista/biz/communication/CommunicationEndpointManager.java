@@ -42,6 +42,7 @@ import com.propertyvista.domain.communication.ThreadPolicyHandle;
 import com.propertyvista.domain.company.Employee;
 import com.propertyvista.domain.company.Portfolio;
 import com.propertyvista.domain.property.asset.building.Building;
+import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.tenant.lease.Guarantor;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseParticipant;
@@ -255,6 +256,21 @@ public class CommunicationEndpointManager {
                 }
             }
         }
+    }
+
+    public void buildRecipientsList4UnitLeaseParticipants(Message message, AptUnit unit) {
+        EntityListCriteria<LeaseParticipant> criteria = createActiveLeaseCriteria();
+        criteria.eq(criteria.proto().lease().unit(), unit);
+        Vector<LeaseParticipant> tenants = Persistence.secureQuery(criteria, AttachLevel.IdOnly);
+        if (tenants != null) {
+            for (LeaseParticipant t : tenants) {
+                if (t.getInstanceValueClass().equals(Tenant.class)) {
+                    Tenant e = t.cast();
+                    message.recipients().add(createDeliveryHandle(e, false));
+                }
+            }
+        }
+
     }
 
     private void expandCommunicationEndpoint(HashMap<IEntity, Boolean> visited, CommunicationEndpointDTO ep) {

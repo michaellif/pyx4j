@@ -23,8 +23,10 @@ import com.pyx4j.entity.core.AttachLevel;
 import com.pyx4j.entity.core.criterion.EntityListCriteria;
 import com.pyx4j.entity.rpc.EntitySearchResult;
 
+import com.propertyvista.domain.communication.CommunicationAssociation;
 import com.propertyvista.domain.communication.CommunicationEndpoint;
 import com.propertyvista.domain.communication.CommunicationThread;
+import com.propertyvista.domain.communication.CommunicationThread.ThreadStatus;
 import com.propertyvista.domain.communication.DeliveryHandle;
 import com.propertyvista.domain.communication.Message;
 import com.propertyvista.domain.communication.MessageCategory;
@@ -32,38 +34,56 @@ import com.propertyvista.domain.communication.MessageCategory.TicketType;
 import com.propertyvista.domain.communication.SystemEndpoint;
 import com.propertyvista.domain.communication.SystemEndpoint.SystemEndpointName;
 import com.propertyvista.domain.company.Employee;
+import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.dto.CommunicationEndpointDTO;
 import com.propertyvista.dto.MessageDTO;
 
 public interface CommunicationMessageFacade {
 
-    public String buildForwardSubject(MessageDTO forwardedMessage);
+    // Communication text builder -----------------------------------------------------------------
+    String buildForwardSubject(MessageDTO forwardedMessage);
 
-    public String buildForwardText(MessageDTO forwardedMessage);
+    String buildForwardText(MessageDTO forwardedMessage);
 
-    public MessageCategory getMessageCategoryFromCache(TicketType mgCategory);
+    // Communication category management -------------------------------------------------------
+    MessageCategory getMessageCategoryFromCache(TicketType mgCategory);
 
-    public List<MessageCategory> getDispatchedMessageCategories(Employee employee, AttachLevel attachLevel);
+    List<MessageCategory> getDispatchedMessageCategories(Employee employee, AttachLevel attachLevel);
 
-    public SystemEndpoint getSystemEndpointFromCache(SystemEndpointName sep);
+    // Communication endpoint management -------------------------------------------------------
+    SystemEndpoint getSystemEndpointFromCache(SystemEndpointName sep);
 
-    public String extractEndpointName(CommunicationEndpoint entity);
+    String extractEndpointName(CommunicationEndpoint entity);
 
-    public DeliveryHandle createDeliveryHandle(CommunicationEndpoint endpoint, boolean generatedFromGroup);
+    DeliveryHandle createDeliveryHandle(CommunicationEndpoint endpoint, boolean generatedFromGroup);
 
-    public CommunicationEndpointDTO generateEndpointDTO(CommunicationEndpoint entity);
+    CommunicationEndpointDTO generateEndpointDTO(CommunicationEndpoint entity);
 
-    public String sendersAsStringView(ListOrderedSet<CommunicationEndpoint> senders);
+    String sendersAsStringView(ListOrderedSet<CommunicationEndpoint> senders);
 
-    public void buildRecipientList(Message bo, MessageDTO to, CommunicationThread thread);
+    void buildRecipientList(Message bo, MessageDTO to, CommunicationThread thread);
 
-    public EntitySearchResult<Message> query(EntityListCriteria<Message> criteria);
+    void buildRecipientsList4UnitLeaseParticipants(Message message, AptUnit unit);
 
-    public Serializable getCommunicationStatus();
+    // Communication entity common management -------------------------------------------------------
+    EntitySearchResult<Message> query(EntityListCriteria<Message> criteria);
+
+    Serializable getCommunicationStatus();
 
     boolean isDispatchedThread(Key threadKey, boolean includeByRoles, Employee e);
 
     List<CommunicationThread> getDirectThreads(CommunicationEndpoint e);
 
     List<CommunicationThread> getDispathcedThreads(Employee e);
+
+    void enhanceMessageDbo(Message bo, MessageDTO to, boolean isForList, CommunicationEndpoint currentUser);
+
+    Message saveMessage(MessageDTO message, ThreadStatus threadStatus, CommunicationEndpoint currentUser, boolean updateOwner);
+
+    // Communication associated entity management -------------------------------------------------------
+    CommunicationThread association2Thread(CommunicationAssociation ca, CommunicationEndpoint currentUser);
+
+    Message association2Message(CommunicationAssociation ca);
+
+    Message associationChange2Message(CommunicationAssociation ca, CommunicationEndpoint currentUser);
 }

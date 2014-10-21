@@ -33,7 +33,10 @@ import com.pyx4j.server.contexts.ServerContext;
 import com.pyx4j.server.mail.MailMessage;
 
 import com.propertyvista.biz.communication.CommunicationFacade;
+import com.propertyvista.biz.communication.CommunicationMessageFacade;
 import com.propertyvista.biz.policy.IdAssignmentFacade;
+import com.propertyvista.domain.communication.CommunicationEndpoint;
+import com.propertyvista.domain.company.Employee;
 import com.propertyvista.domain.maintenance.MaintenanceRequest;
 import com.propertyvista.domain.maintenance.MaintenanceRequest.ContactPhoneType;
 import com.propertyvista.domain.maintenance.MaintenanceRequestMetadata;
@@ -103,7 +106,7 @@ public abstract class MaintenanceAbstractManager {
         return request;
     }
 
-    public void postMaintenanceRequest(MaintenanceRequest request) {
+    public void postMaintenanceRequest(MaintenanceRequest request, Employee requestReporter) {
         request.updated().setValue(SystemDateManager.getDate());
         if (!request.reporter().isNull()) {
             if (request.reporterName().isNull()) {
@@ -126,15 +129,19 @@ public abstract class MaintenanceAbstractManager {
         Persistence.service().persist(request);
 
         if (isNewRequest) {
+            ServerSideFactory.create(CommunicationMessageFacade.class).association2Thread(request, requestReporter);
+            // TODO: send maintenance request mail from messaging system
             ServerSideFactory.create(CommunicationFacade.class).sendMaintenanceRequestCreatedPMC(request);
             ServerSideFactory.create(CommunicationFacade.class).sendMaintenanceRequestCreatedTenant(request);
         }
     }
 
-    public void cancelMaintenanceRequest(MaintenanceRequest request) {
+    public void cancelMaintenanceRequest(MaintenanceRequest request, CommunicationEndpoint requestReporter) {
         request.status().set(getMaintenanceStatus(request.building(), StatusPhase.Cancelled));
         Persistence.service().persist(request);
 
+        ServerSideFactory.create(CommunicationMessageFacade.class).associationChange2Message(request, requestReporter);
+        // TODO: send maintenance request mail from messaging system
         ServerSideFactory.create(CommunicationFacade.class).sendMaintenanceRequestCancelled(request);
     }
 
@@ -143,9 +150,12 @@ public abstract class MaintenanceAbstractManager {
         Persistence.service().persist(request);
     }
 
-    public void sheduleMaintenanceRequest(MaintenanceRequest request, MaintenanceRequestSchedule schedule) {
+    public void sheduleMaintenanceRequest(MaintenanceRequest request, MaintenanceRequestSchedule schedule, Employee requestReporter) {
         request.workHistory().add(schedule);
         request.status().set(getMaintenanceStatus(request.building(), StatusPhase.Scheduled));
+
+        ServerSideFactory.create(CommunicationMessageFacade.class).associationChange2Message(request, requestReporter);
+        // TODO: send maintenance request mail from messaging system
 
         if (!request.unit().isNull() && request.permissionToEnter().getValue(false)) {
             // send notice of entry if permission to access unit is granted
@@ -161,9 +171,12 @@ public abstract class MaintenanceAbstractManager {
         Persistence.service().persist(request);
     }
 
-    public void resolveMaintenanceRequest(MaintenanceRequest request) {
+    public void resolveMaintenanceRequest(MaintenanceRequest request, Employee requestReporter) {
         request.status().set(getMaintenanceStatus(request.building(), StatusPhase.Resolved));
         Persistence.service().persist(request);
+
+        ServerSideFactory.create(CommunicationMessageFacade.class).associationChange2Message(request, requestReporter);
+        // TODO: send maintenance request mail from messaging system
 
         ServerSideFactory.create(CommunicationFacade.class).sendMaintenanceRequestCompleted(request);
     }

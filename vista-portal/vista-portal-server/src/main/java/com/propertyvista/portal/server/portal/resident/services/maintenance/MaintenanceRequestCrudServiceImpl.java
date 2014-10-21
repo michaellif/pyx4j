@@ -26,6 +26,7 @@ import com.pyx4j.entity.server.AbstractCrudServiceDtoImpl;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.rpc.shared.VoidSerializable;
 
+import com.propertyvista.biz.communication.CommunicationMessageFacade;
 import com.propertyvista.biz.financial.maintenance.MaintenanceFacade;
 import com.propertyvista.biz.policy.PolicyFacade;
 import com.propertyvista.domain.maintenance.MaintenanceRequest;
@@ -86,15 +87,15 @@ public class MaintenanceRequestCrudServiceImpl extends AbstractCrudServiceDtoImp
     protected void enhanceRetrieved(MaintenanceRequest bo, MaintenanceRequestDTO to, RetrieveTarget retrieveTarget) {
         Persistence.service().retrieveMember(bo.pictures());
         to.pictures().set(bo.pictures());
-        enhanceAll(to);
+        enhanceAll(bo, to);
     }
 
     @Override
     protected void enhanceListRetrieved(MaintenanceRequest entity, MaintenanceRequestDTO dto) {
-        enhanceAll(dto);
+        enhanceAll(entity, dto);
     }
 
-    protected void enhanceAll(MaintenanceRequestDTO dto) {
+    protected void enhanceAll(MaintenanceRequest bo, MaintenanceRequestDTO dto) {
         enhanceDbo(dto);
         dto.reportedForOwnUnit().setValue(ResidentPortalContext.getUnit().id().equals(dto.unit().id()));
         setPermissionToEnterNote(dto);
@@ -106,6 +107,9 @@ public class MaintenanceRequestCrudServiceImpl extends AbstractCrudServiceDtoImp
             dto.scheduledTimeFrom().set(latest.scheduledTimeFrom());
             dto.scheduledTimeTo().set(latest.scheduledTimeTo());
         }
+
+        dto.message().set(ServerSideFactory.create(CommunicationMessageFacade.class).association2Message(bo));
+
     }
 
     protected void enhanceDbo(MaintenanceRequest dbo) {
@@ -128,9 +132,10 @@ public class MaintenanceRequestCrudServiceImpl extends AbstractCrudServiceDtoImp
             Persistence.ensureRetrieve(to.reporter().lease(), AttachLevel.Attached);
             bo.unit().set(to.reporter().lease().unit());
         }
-        ServerSideFactory.create(MaintenanceFacade.class).postMaintenanceRequest(bo);
+        ServerSideFactory.create(MaintenanceFacade.class).postMaintenanceRequest(bo, null);
         ServerSideFactory.create(MaintenanceFacade.class).addStatusHistoryRecord(bo, null);
 
+        to.message().set(ServerSideFactory.create(CommunicationMessageFacade.class).association2Message(bo));
         return true;
     }
 
@@ -139,7 +144,7 @@ public class MaintenanceRequestCrudServiceImpl extends AbstractCrudServiceDtoImp
         MaintenanceRequest request = Persistence.service().retrieve(MaintenanceRequest.class, requestId);
         MaintenanceRequestStatus oldStatus = request.status().duplicate();
         enhanceDbo(request);
-        ServerSideFactory.create(MaintenanceFacade.class).cancelMaintenanceRequest(request);
+        ServerSideFactory.create(MaintenanceFacade.class).cancelMaintenanceRequest(request, ResidentPortalContext.getLeaseTermTenant().leaseParticipant());
         saveRequest(request, oldStatus);
         callback.onSuccess(null);
     }
@@ -184,6 +189,7 @@ public class MaintenanceRequestCrudServiceImpl extends AbstractCrudServiceDtoImp
             statusDto.priority().set(mr.priority());
             statusDto.lastUpdated().set(mr.updated());
             statusDto.surveyResponse().set(mr.surveyResponse());
+            statusDto.message().set(ServerSideFactory.create(CommunicationMessageFacade.class).association2Message(mr));
             if (MaintenanceRequestStatus.StatusPhase.open().contains(mr.status().phase().getValue())) {
                 dto.openMaintenanceRequests().add(statusDto);
             } else {

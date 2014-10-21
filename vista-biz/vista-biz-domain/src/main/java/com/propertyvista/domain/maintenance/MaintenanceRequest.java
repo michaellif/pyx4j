@@ -41,6 +41,7 @@ import com.pyx4j.i18n.annotations.I18n;
 import com.pyx4j.i18n.annotations.Translate;
 import com.pyx4j.i18n.shared.I18nEnum;
 
+import com.propertyvista.domain.communication.CommunicationAssociation;
 import com.propertyvista.domain.note.HasNotesAndAttachments;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
@@ -48,7 +49,7 @@ import com.propertyvista.domain.security.common.AbstractPmcUser;
 import com.propertyvista.domain.tenant.lease.Tenant;
 
 @DiscriminatorValue("MaintenanceRequest")
-public interface MaintenanceRequest extends IEntity, HasNotesAndAttachments {
+public interface MaintenanceRequest extends IEntity, CommunicationAssociation, HasNotesAndAttachments {
     public enum ContactPhoneType {
         mobile, home, work
     }

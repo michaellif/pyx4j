@@ -42,6 +42,7 @@ import com.pyx4j.entity.core.IObject;
 import com.pyx4j.entity.core.IPrimitive;
 import com.pyx4j.entity.core.criterion.Criterion;
 import com.pyx4j.forms.client.ui.CCheckBox;
+import com.pyx4j.forms.client.ui.CEntityHyperlink;
 import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.forms.client.ui.CRichTextArea;
@@ -53,6 +54,7 @@ import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.security.client.ClientContext;
+import com.pyx4j.site.client.AppPlaceEntityMapper;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.backoffice.ui.prime.form.IForm;
 import com.pyx4j.site.rpc.CrudAppPlace;
@@ -74,6 +76,7 @@ import com.propertyvista.crm.client.ui.components.boxes.TenantSelectorDialog;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.crm.client.ui.crud.communication.selector.CommunicationEndpointSelector;
 import com.propertyvista.crm.rpc.CrmSiteMap;
+import com.propertyvista.domain.communication.CommunicationAssociation;
 import com.propertyvista.domain.communication.CommunicationEndpoint.ContactType;
 import com.propertyvista.domain.communication.CommunicationGroup;
 import com.propertyvista.domain.communication.DeliveryHandle;
@@ -81,6 +84,7 @@ import com.propertyvista.domain.communication.MessageCategory.CategoryType;
 import com.propertyvista.domain.company.Employee;
 import com.propertyvista.domain.company.EmployeeEnabledCriteria;
 import com.propertyvista.domain.company.Portfolio;
+import com.propertyvista.domain.maintenance.MaintenanceRequest;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.tenant.lease.Tenant;
 import com.propertyvista.dto.CommunicationEndpointDTO;
@@ -96,7 +100,7 @@ public class MessageForm extends CrmEntityForm<MessageDTO> {
     public MessageForm(IForm<MessageDTO> view) {
         super(MessageDTO.class, view);
         setTabBarVisible(false);
-        messagesFolder = new MessageFolder();
+        messagesFolder = new MessageFolder(this);
 
         selectTab(addTab(createGeneralForm(), i18n.tr("Communication")));
         inheritEditable(true);
@@ -124,6 +128,7 @@ public class MessageForm extends CrmEntityForm<MessageDTO> {
         formPanel.append(Location.Right, proto().category()).decorate();
         formPanel.append(Location.Left, proto().owner().name()).decorate().customLabel(i18n.tr("Owner"));
         formPanel.append(Location.Right, proto().status()).decorate();
+        formPanel.append(Location.Dual, proto().associated(), new CAssociationLabel()).decorate();
         formPanel.append(Location.Dual, proto().content(), messagesFolder);
         formPanel.br();
 
@@ -136,16 +141,61 @@ public class MessageForm extends CrmEntityForm<MessageDTO> {
         if (getValue() == null || getValue().isPrototype()) {
             get(proto().owner().name()).setVisible(false);
             get(proto().status()).setVisible(false);
-
+            get(proto().associated()).setVisible(false);
         } else {
             get(proto().owner().name()).setVisible(CategoryType.Ticket.equals(getValue().category().categoryType().getValue()));
             get(proto().status()).setVisible(CategoryType.Ticket.equals(getValue().category().categoryType().getValue()));
+            get(proto().associated()).setVisible(
+                    CategoryType.Ticket.equals(getValue().category().categoryType().getValue()) && getValue().associated() != null
+                            && !getValue().associated().isNull());
         }
     }
 
-    private class MessageFolder extends VistaBoxFolder<MessageDTO> {
-        public MessageFolder() {
+    public class CAssociationLabel extends CEntityHyperlink<CommunicationAssociation> {
+
+        public CAssociationLabel() {
+            super();
+            setNavigationCommand(new Command() {
+                @Override
+                public void execute() {
+                    CommunicationAssociation value = getValue();
+                    if (value != null && value.getPrimaryKey() != null) {
+                        if (value.getInstanceValueClass().equals(MaintenanceRequest.class)) {
+                            AppSite.getPlaceController().goTo(
+                                    AppPlaceEntityMapper.resolvePlace(MaintenanceRequest.class).formViewerPlace(value.getPrimaryKey()));
+                        }
+                    }
+                }
+            });
+        }
+
+        @Override
+        public String format(CommunicationAssociation value) {
+            if (value == null) {
+                return "";
+            } else {
+                StringBuilder result = new StringBuilder();
+
+                if (value.getInstanceValueClass().equals(MaintenanceRequest.class)) {
+                    result.append(i18n.tr("Maintenance Request"));
+                    //result.append(", ");
+                } else {
+                    result.append(value.getInstanceValueClass().getSimpleName());
+                }
+
+                //result.append(value.getPrimaryKey().toString());
+
+                return result.toString();
+            }
+        }
+    }
+
+    public static class MessageFolder extends VistaBoxFolder<MessageDTO> {
+        private final CrmEntityForm<? extends IEntity> parentForm;
+
+        public MessageFolder(CrmEntityForm<? extends IEntity> parentForm) {
             super(MessageDTO.class, false);
+            this.parentForm = parentForm;
             setAddable(true);
         }
 
@@ -200,12 +250,12 @@ public class MessageForm extends CrmEntityForm<MessageDTO> {
 
         @Override
         protected CForm<? extends MessageDTO> createItemForm(IObject<?> member) {
-            return new MessageFolderItem();
+            return new MessageFolderItem(parentForm, this);
         }
 
     }
 
-    public class MessageFolderItem extends CForm<MessageDTO> {
+    public static class MessageFolderItem extends CForm<MessageDTO> {
         private Anchor btnSend;
 
         private Anchor btnCancel;
@@ -230,8 +280,14 @@ public class MessageForm extends CrmEntityForm<MessageDTO> {
 
         private final CommunicationEndpointSelector communicationEndpointSelector = createCommunicationEndpointSelector();
 
-        public MessageFolderItem() {
+        private final CrmEntityForm<? extends IEntity> parentForm;
+
+        private final MessageFolder parentFolder;
+
+        public MessageFolderItem(CrmEntityForm<? extends IEntity> parentForm, MessageFolder parentFolder) {
             super(MessageDTO.class, new VistaViewersComponentFactory());
+            this.parentForm = parentForm;
+            this.parentFolder = parentFolder;
             actionsButton = new Button(i18n.tr("Select Recipients"));
             inheritEditable(false);
             inheritViewable(false);
@@ -265,7 +321,7 @@ public class MessageForm extends CrmEntityForm<MessageDTO> {
                     } else {
                         starImage.setResource(CrmImages.INSTANCE.noStar());
                     }
-                    ((MessageViewerActivity) MessageForm.this.getParentView().getPresenter()).saveMessage(m, null, false);
+                    ((MessageViewerActivity) parentForm.getParentView().getPresenter()).saveMessage(m, null, false);
                 }
 
             });
@@ -282,7 +338,7 @@ public class MessageForm extends CrmEntityForm<MessageDTO> {
             subMenu.addItem(new MenuItem(i18n.tr("Tenant"), new Command() {
                 @Override
                 public void execute() {
-                    new TenantSelectorDialog(MessageForm.this.getParentView(), true) {
+                    new TenantSelectorDialog(parentForm.getParentView(), true) {
                         @Override
                         public void onClickOk() {
                             onAdd(getSelectedItems());
@@ -293,7 +349,7 @@ public class MessageForm extends CrmEntityForm<MessageDTO> {
             subMenu.addItem(new MenuItem(i18n.tr("Corporate"), new Command() {
                 @Override
                 public void execute() {
-                    new EmployeeSelectorDialog(MessageForm.this.getParentView(), true) {
+                    new EmployeeSelectorDialog(parentForm.getParentView(), true) {
                         @Override
                         public void onClickOk() {
                             onAdd(getSelectedItems());
@@ -310,7 +366,7 @@ public class MessageForm extends CrmEntityForm<MessageDTO> {
             subMenu.addItem(new MenuItem(i18n.tr("Building"), new Command() {
                 @Override
                 public void execute() {
-                    BuildingSelectorDialog dialog = new BuildingSelectorDialog(MessageForm.this.getParentView(), true) {
+                    BuildingSelectorDialog dialog = new BuildingSelectorDialog(parentForm.getParentView(), true) {
                         @Override
                         public void onClickOk() {
                             onAdd(getSelectedItems());
@@ -323,7 +379,7 @@ public class MessageForm extends CrmEntityForm<MessageDTO> {
             subMenu.addItem(new MenuItem(i18n.tr("Portfolio"), new Command() {
                 @Override
                 public void execute() {
-                    new PortfolioSelectorDialog(MessageForm.this.getParentView(), true) {
+                    new PortfolioSelectorDialog(parentForm.getParentView(), true) {
                         @Override
                         public void onClickOk() {
                             onAdd(getSelectedItems());
@@ -418,7 +474,7 @@ public class MessageForm extends CrmEntityForm<MessageDTO> {
                 value.isRead().setValue(false);
 
                 if (!value.thread().hasValues()) {
-                    value.thread().set(MessageForm.this.getValue().thread());
+                    value.thread().set(((MessageDTO) parentForm.getValue()).thread());
                 }
             }
             return super.preprocessValue(value, fireEvent, populate);
@@ -451,16 +507,16 @@ public class MessageForm extends CrmEntityForm<MessageDTO> {
                         MessageDialog.error(i18n.tr("Error"), getValidationResults().getValidationMessage(true));
                     } else {
                         MessageDTO currentMessage = getCurrent();
-                        messagesFolder.addItem();
-                        CFolderItem<MessageDTO> newItem = messagesFolder.getItem(messagesFolder.getItemCount() - 1);
+                        parentFolder.addItem();
+                        CFolderItem<MessageDTO> newItem = parentFolder.getItem(parentFolder.getItemCount() - 1);
                         newItem.getValue().text().setValue(currentMessage == null ? null : "\nRe:\n" + currentMessage.text().getValue(""));
 
                         if (!ClientContext.getUserVisit().getName().equals(currentMessage.header().sender().getValue())) {
                             newItem.getValue().to().add(currentMessage.senderDTO());
                         }
 
-                        for (int i = 0; i < messagesFolder.getItemCount(); i++) {
-                            ((MessageFolderItem) messagesFolder.getItem(i).getEntityForm()).setCanReply(false);
+                        for (int i = 0; i < parentFolder.getItemCount(); i++) {
+                            ((MessageFolderItem) parentFolder.getItem(i).getEntityForm()).setCanReply(false);
                         }
                         newItem.refresh(false);
 
@@ -482,8 +538,8 @@ public class MessageForm extends CrmEntityForm<MessageDTO> {
                 @Override
                 public void execute() {
                     ((MessageFolder) getParent().getParent()).removeItem((CFolderItem<MessageDTO>) getParent());
-                    for (int i = 0; i < messagesFolder.getItemCount(); i++) {
-                        ((MessageFolderItem) messagesFolder.getItem(i).getEntityForm()).setCanReply(true);
+                    for (int i = 0; i < parentFolder.getItemCount(); i++) {
+                        ((MessageFolderItem) parentFolder.getItem(i).getEntityForm()).setCanReply(true);
                     }
                 }
             });
@@ -509,7 +565,7 @@ public class MessageForm extends CrmEntityForm<MessageDTO> {
         }
 
         public void saveMessage(MessageDTO m, boolean refresh) {
-            com.pyx4j.site.client.backoffice.ui.prime.IPrimePane.Presenter p = getParentView().getPresenter();
+            com.pyx4j.site.client.backoffice.ui.prime.IPrimePane.Presenter p = parentForm.getParentView().getPresenter();
             if (p instanceof MessageEditorView.Presenter) {
 
                 ((MessageEditorView.Presenter) p).saveMessage(new DefaultAsyncCallback<MessageDTO>() {
@@ -575,7 +631,6 @@ public class MessageForm extends CrmEntityForm<MessageDTO> {
                 highImportnaceImage.setVisible(getValue().highImportance().getValue(false));
                 get(proto().highImportance()).setVisible(false);
                 statusToolBar.asWidget().setVisible(starImage.isVisible() || highImportnaceImage.isVisible());
-
             }
         }
 

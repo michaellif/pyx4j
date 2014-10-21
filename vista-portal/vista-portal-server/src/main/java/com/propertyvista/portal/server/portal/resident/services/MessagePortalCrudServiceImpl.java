@@ -269,6 +269,7 @@ public class MessagePortalCrudServiceImpl extends AbstractCrudServiceDtoImpl<Mes
         messageDTO.header().sender().setValue(facade.extractEndpointName(m.sender()));
         messageDTO.header().date().set(m.date());
         messageDTO.category().set(thread.category());
+        messageDTO.associated().set(thread.associated());
 
         return messageDTO;
     }

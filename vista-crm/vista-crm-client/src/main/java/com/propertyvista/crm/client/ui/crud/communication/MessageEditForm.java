@@ -30,6 +30,7 @@ import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.crm.client.ui.crud.communication.selector.CommunicationEndpointSelector;
 import com.propertyvista.domain.communication.MessageCategory;
 import com.propertyvista.domain.communication.MessageCategory.CategoryType;
+import com.propertyvista.domain.communication.MessageCategory.TicketType;
 import com.propertyvista.dto.CommunicationEndpointDTO;
 import com.propertyvista.dto.MessageDTO;
 import com.propertyvista.misc.VistaTODO;
@@ -72,10 +73,12 @@ public class MessageEditForm extends CrmEntityForm<MessageDTO> {
                     if (categoryType == null) {
                         retriveOptionsPrivate(callback);
                     } else {
-                        final PropertyCriterion crit = PropertyCriterion.eq(proto().categoryType(), categoryType);
+                        final PropertyCriterion critType = PropertyCriterion.eq(proto().categoryType(), categoryType);
+                        final PropertyCriterion critTicketType = PropertyCriterion.ne(proto().ticketType(), TicketType.Maintenance);
 
                         resetCriteria();
-                        addCriterion(crit);
+                        addCriterion(critType);
+                        addCriterion(critTicketType);
 
                         resetOptions();
                         retriveOptionsPrivate(callback);
@@ -115,27 +118,15 @@ public class MessageEditForm extends CrmEntityForm<MessageDTO> {
 
     @Override
     protected MessageDTO preprocessValue(MessageDTO value, boolean fireEvent, boolean populate) {
-        setToVisible(true);
         if (value == null || value.getPrimaryKey() == null || value.getPrimaryKey().isDraft()) {
             MessageCategory mc = ((MessageEditorActivity) getParentView().getPresenter()).getCategory();
             if (mc != null && !mc.isNull()) {
                 get(proto().category()).setEditable(false);
-                if (CategoryType.Ticket.equals(mc.categoryType().getValue())) {
-                    setToVisible(false);
-                }
             } else {
                 get(proto().category()).setEditable(true);
             }
-            CategoryType mgc = ((MessageEditorActivity) getParentView().getPresenter()).getCategoryType();
-            if (mgc != null) {
-                setToVisible(!CategoryType.Ticket.equals(mgc));
-            }
         }
         return value;
-    }
-
-    private void setToVisible(boolean isVisible) {
-
     }
 
     public void reinit() {
