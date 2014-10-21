@@ -29,11 +29,11 @@ import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.commons.IFormatter;
 import com.pyx4j.commons.LogicalDate;
-import com.pyx4j.forms.client.ui.CDatePicker;
 import com.pyx4j.forms.client.ui.CViewer;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.widgets.client.DatePickerTextBox;
 import com.pyx4j.widgets.client.Label;
 
 import com.propertyvista.common.client.theme.TransactionHistoryViewerTheme;
@@ -123,7 +123,7 @@ public class TransactionHistoryViewerYardi extends CViewer<TransactionHistoryDTO
             panel.getCellFormatter().addStyleName(row, COL_TYPE, TransactionHistoryViewerTheme.StyleName.FinancialTransactionDataColumn.name());
             panel.getCellFormatter().addStyleName(row, COL_AMOUNT, TransactionHistoryViewerTheme.StyleName.FinancialTransactionMoneyColumn.name());
 
-            DateTimeFormat dateFormat = DateTimeFormat.getFormat(CDatePicker.defaultDateFormat);
+            DateTimeFormat dateFormat = DateTimeFormat.getFormat(DatePickerTextBox.defaultDateFormat);
 
             BigDecimal totalAmount = new BigDecimal("0.00");
 

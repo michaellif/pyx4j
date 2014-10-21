@@ -21,10 +21,10 @@ import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.commons.IFormatter;
-import com.pyx4j.forms.client.ui.CDatePicker;
 import com.pyx4j.forms.client.ui.CViewer;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.widgets.client.DatePickerTextBox;
 import com.pyx4j.widgets.client.Label;
 
 import com.propertyvista.common.client.ui.components.tenantinsurance.MoneyComboBox;
@@ -85,7 +85,7 @@ public class TenantSurePaymentViewer extends CViewer<TenantSurePaymentDTO> {
     }
 
     public TenantSurePaymentViewer() {
-        this(MoneyComboBox.CANADIAN_CURRENCY_DETAILED_FORMAT, DateTimeFormat.getFormat(CDatePicker.defaultDateFormat));
+        this(MoneyComboBox.CANADIAN_CURRENCY_DETAILED_FORMAT, DateTimeFormat.getFormat(DatePickerTextBox.defaultDateFormat));
     }
 
 }
