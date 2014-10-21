@@ -27,17 +27,21 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.nio.file.Paths;
 import java.sql.Time;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
+import java.util.Queue;
 import java.util.Scanner;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
@@ -65,6 +69,10 @@ public class LogViewServlet extends HttpServlet {
     protected File rootDirectory;
 
     protected boolean attachment = false;
+
+    protected boolean containerLogsEnabled = true;
+
+    private static String containerLogs = "container-logs";
 
     @Override
     public void init(ServletConfig config) throws ServletException {
@@ -141,8 +149,16 @@ public class LogViewServlet extends HttpServlet {
         }
     }
 
+    protected File getSpecialPath(String path) {
+        if (containerLogsEnabled && (path.startsWith("/" + containerLogs))) {
+            return new File(rootDirectory.getParentFile(), path.substring(containerLogs.length() + 2));
+        } else {
+            return new File(rootDirectory, path);
+        }
+    }
+
     private void listDirectory(HttpServletRequest request, String path, String urlPrefix, HttpServletResponse response) throws ServletException, IOException {
-        File dir = new File(rootDirectory, path);
+        File dir = getSpecialPath(path);
         if (!dir.isDirectory()) {
             response.setStatus(HttpServletResponse.SC_NOT_FOUND);
             //throw new ServletException("No such directory: " + dir);
@@ -175,13 +191,12 @@ public class LogViewServlet extends HttpServlet {
             out.println("</td><td>-</td></tr>");
         }
 
-        File files[];
+        List<File> files;
         if (searchEnabled()) {
             files = searchFile(request, dir);
         } else {
-            files = dir.listFiles();
+            files = Arrays.asList(dir.listFiles());
         }
-        List<File> filesSorted = Arrays.asList(files);
 
         Comparator<File> fileByNameComparator = new Comparator<File>() {
 
@@ -197,12 +212,23 @@ public class LogViewServlet extends HttpServlet {
             }
         };
 
-        Collections.sort(filesSorted, fileByNameComparator);
+        Collections.sort(files, fileByNameComparator);
+
+        if (containerLogsEnabled && (path.length() == 1)) {
+            out.println("<tr><td></td><td>");
+            out.print("<a href=\"");
+            out.print(urlPrefix);
+            out.print(containerLogs);
+            out.print("/\">");
+            out.print(containerLogs);
+            out.print("/</a>");
+            out.println("</td></tr>");
+        }
 
         SimpleDateFormat df = new SimpleDateFormat("yyyy.MM.dd HH:mm:ss.SSS z");
 
         int idx = 0;
-        for (File file : filesSorted) {
+        for (File file : files) {
             out.println("<tr><td>");
 
             if (file.isFile()) {
@@ -211,23 +237,28 @@ public class LogViewServlet extends HttpServlet {
 
             out.println("</td><td>");
 
-            out.println("<a href=\"");
-            out.println(urlPrefix);
-            String name = file.getName();
+            out.print("<a href=\"");
+            out.print(urlPrefix);
+            String name;
+            if (file.getParentFile() == dir) {
+                name = file.getName();
+            } else {
+                name = Paths.get(dir.toURI()).relativize(Paths.get(file.toURI())).toString();
+            }
             if (file.isDirectory()) {
                 name += "/";
             }
-            out.println(name);
-            out.println("\">");
-            out.println(name);
-            out.println("</a>");
-            out.println("</td><td align=\"right\">");
-            out.println(df.format(new Date(file.lastModified())));
-            out.println("</td><td align=\"right\">");
+            out.print(name);
+            out.print("\">");
+            out.print(name);
+            out.print("</a>");
+            out.print("</td><td align=\"right\">");
+            out.print(df.format(new Date(file.lastModified())));
+            out.print("</td><td align=\"right\">");
             if (file.isDirectory()) {
-                out.println("-");
+                out.print("-");
             } else {
-                out.println(formatSize(file.length()));
+                out.print(formatSize(file.length()));
             }
             out.println("</td></tr>");
         }
@@ -243,13 +274,15 @@ public class LogViewServlet extends HttpServlet {
 
     }
 
-    protected File[] searchFile(HttpServletRequest request, File dir) {
+    protected List<File> searchFile(HttpServletRequest request, File dir) {
         final String text = request.getParameter("text");
         final Time fromTime = timeValue(dateValue(request, "ft", "HH:mm"));
         final Time toTime = timeValue(dateValue(request, "tt", "HH:mm"));
 
         final Date fromDate = datePlusTime(dateValue(request, "fd", "yyyy-MM-dd"), fromTime, false);
         final Date toDate = datePlusTime(dateValue(request, "td", "yyyy-MM-dd"), toTime, true);
+
+        final boolean recursive = "true".equalsIgnoreCase(request.getParameter("recursive"));
 
         final Calendar fromTimeC = new GregorianCalendar();
         if (fromTime != null) {
@@ -261,43 +294,57 @@ public class LogViewServlet extends HttpServlet {
             DateUtils.setTime(toTimeC, toTime);
         }
 
-        return dir.listFiles(new FileFilter() {
+        List<File> allFiles = new ArrayList<>();
+        final Queue<File> dirs = new LinkedList<>();
+        dirs.add(dir);
+        while (!dirs.isEmpty()) {
+            File cdir = dirs.poll();
+            File[] files = cdir.listFiles(new FileFilter() {
 
-            @Override
-            public boolean accept(File file) {
-                Date fileDate = new Date(file.lastModified());
-                Calendar fileTimeC = new GregorianCalendar();
-                DateUtils.setTime(fileTimeC, new Time(fileDate.getTime()));
-
-                if (fromDate != null) {
-                    if (fileDate.before(fromDate)) {
-                        return false;
+                @Override
+                public boolean accept(File file) {
+                    if (recursive && file.isDirectory()) {
+                        dirs.add(file);
                     }
-                } else if (fromTime != null) {
-                    if (fileTimeC.before(fromTimeC)) {
-                        return false;
+
+                    Date fileDate = new Date(file.lastModified());
+                    Calendar fileTimeC = new GregorianCalendar();
+                    DateUtils.setTime(fileTimeC, new Time(fileDate.getTime()));
+
+                    if (fromDate != null) {
+                        if (fileDate.before(fromDate)) {
+                            return false;
+                        }
+                    } else if (fromTime != null) {
+                        if (fileTimeC.before(fromTimeC)) {
+                            return false;
+                        }
+                    }
+
+                    if (toDate != null) {
+                        if (fileDate.after(toDate)) {
+                            return false;
+                        }
+                    } else if (toTime != null) {
+                        if (fileTimeC.after(toTimeC)) {
+                            return false;
+                        }
+                    }
+
+                    if (file.isDirectory()) {
+                        return !CommonsStringUtils.isStringSet(text);
+                    } else if (CommonsStringUtils.isStringSet(text)) {
+                        return contains(file, text);
+                    } else {
+                        return true;
                     }
                 }
+            });
 
-                if (toDate != null) {
-                    if (fileDate.after(toDate)) {
-                        return false;
-                    }
-                } else if (toTime != null) {
-                    if (fileTimeC.after(toTimeC)) {
-                        return false;
-                    }
-                }
+            allFiles.addAll(Arrays.asList(files));
+        }
 
-                if (file.isDirectory()) {
-                    return true;
-                } else if (CommonsStringUtils.isStringSet(text)) {
-                    return contains(file, text);
-                } else {
-                    return true;
-                }
-            }
-        });
+        return allFiles;
 
     }
 
@@ -374,6 +421,7 @@ public class LogViewServlet extends HttpServlet {
         out.println(" To:<input name=\"td\" placeholder=\"yyyy-MM-dd\" type=\"date\" value=\"" + dateValue(request, "td") + "\" />");
         out.println("<input name=\"tt\" placeholder=\"HH:mm\" type=\"time\" value=\"" + timeValue(request, "tt") + "\" />");
         out.println(" Containing:<input name=\"text\" type=\"text\" value=\"" + textValue(request) + "\" />");
+        out.println("<input type=\"checkbox\" name=\"recursive\" value=\"true\"" + checkedValue(request, "recursive") + " />Recursive");
         out.println("<input type=\"submit\" value=\"Submit\" />");
         out.println("</form>");
     }
@@ -417,6 +465,15 @@ public class LogViewServlet extends HttpServlet {
         }
     }
 
+    private String checkedValue(HttpServletRequest request, String name) {
+        String text = request.getParameter(name);
+        if (text == null) {
+            return "";
+        } else {
+            return Boolean.valueOf(text) ? "checked" : "";
+        }
+    }
+
     private String formatSize(long length) {
         if (length < 1024) {
             return String.valueOf(length);
@@ -438,7 +495,7 @@ public class LogViewServlet extends HttpServlet {
 
     private void sendFilesZip(String path, HttpServletResponse response, String[] fileNameArrays) throws ServletException, IOException {
         List<String> filesNames = Arrays.asList(fileNameArrays);
-        File dir = new File(rootDirectory, path);
+        File dir = getSpecialPath(path);
         File[] files = dir.listFiles();
 
         response.setContentType("application/zip");
@@ -487,7 +544,7 @@ public class LogViewServlet extends HttpServlet {
     }
 
     private void sendFile(String path, HttpServletResponse response) throws ServletException, IOException {
-        File file = new File(rootDirectory, path);
+        File file = getSpecialPath(path);
         if (!file.canRead() || file.isDirectory()) {
             throw new ServletException("No such file: " + file);
         }
@@ -511,5 +568,4 @@ public class LogViewServlet extends HttpServlet {
             IOUtils.closeQuietly(out);
         }
     }
-
 }
