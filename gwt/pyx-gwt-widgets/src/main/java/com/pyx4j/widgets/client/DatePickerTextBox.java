@@ -21,7 +21,13 @@
 package com.pyx4j.widgets.client;
 
 import java.text.ParseException;
+import java.util.Date;
 
+import com.google.gwt.event.dom.client.BlurHandler;
+import com.google.gwt.event.dom.client.FocusHandler;
+import com.google.gwt.event.dom.client.KeyCodes;
+import com.google.gwt.event.dom.client.KeyDownEvent;
+import com.google.gwt.event.dom.client.KeyDownHandler;
 import com.google.gwt.event.dom.client.MouseDownEvent;
 import com.google.gwt.event.dom.client.MouseDownHandler;
 import com.google.gwt.event.logical.shared.CloseEvent;
@@ -32,13 +38,17 @@ import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.user.client.Command;
+import com.google.gwt.user.client.ui.FocusPanel;
+import com.google.gwt.user.client.ui.Focusable;
 import com.google.gwt.user.client.ui.PopupPanel;
+import com.google.gwt.user.datepicker.client.CalendarUtil;
 
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.commons.IFormatter;
 import com.pyx4j.commons.IParser;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.widgets.client.datepicker.DatePickerComposite;
 
 public class DatePickerTextBox extends TextBoxBase implements HasValueChangeHandlers<LogicalDate>, IValueWidget<LogicalDate> {
 
@@ -76,23 +86,7 @@ public class DatePickerTextBox extends TextBoxBase implements HasValueChangeHand
             @Override
             public void execute() {
                 if (datePickerDropDown == null) {
-                    datePickerDropDown = new DatePickerDropDownPanel(DatePickerTextBox.this) {
-                        @Override
-                        public void hideDatePicker() {
-                            super.hideDatePicker();
-                            if (DatePickerTextBox.this.isActive()) {
-                                DatePickerTextBox.this.toggleActive();
-                            }
-                        };
-
-                        @Override
-                        public void showDatePicker() {
-                            super.showDatePicker();
-                            if (!DatePickerTextBox.this.isActive()) {
-                                DatePickerTextBox.this.toggleActive();
-                            }
-                        };
-                    };
+                    datePickerDropDown = new DatePickerDropDownPanel();
                     datePickerDropDown.addFocusHandler(getGroupFocusHandler());
                     datePickerDropDown.addBlurHandler(getGroupFocusHandler());
 
@@ -140,7 +134,16 @@ public class DatePickerTextBox extends TextBoxBase implements HasValueChangeHand
         }
         this.parsedOk = true;
         this.value = value;
-        setText(getFormatter().format(value));
+        super.setText(getFormatter().format(value));
+    }
+
+    @Override
+    public void setText(String text) {
+        try {
+            setValue(getParser().parse(text));
+        } catch (ParseException e) {
+            setValue(null);
+        }
     }
 
     @Override
@@ -183,7 +186,7 @@ public class DatePickerTextBox extends TextBoxBase implements HasValueChangeHand
         this.value = value;
         this.parsedOk = parsedOk;
         if (parsedOk) {
-            setText(getFormatter().format(value));
+            super.setText(getFormatter().format(value));
         }
         ValueChangeEvent.fire(this, getValue());
 
@@ -230,4 +233,120 @@ public class DatePickerTextBox extends TextBoxBase implements HasValueChangeHand
 
     }
 
+    class DatePickerDropDownPanel extends DropDownPanel implements Focusable {
+
+        private final DatePickerComposite picker;
+
+        private final FocusPanel focusPanel;
+
+        public DatePickerDropDownPanel() {
+            this.getElement().getStyle().setProperty("zIndex", "100");
+
+            focusPanel = new FocusPanel();
+            focusPanel.getElement().getStyle().setProperty("outline", "0");
+
+            picker = new DatePickerComposite();
+
+            focusPanel.setWidget(picker);
+            setWidget(focusPanel);
+            picker.addDateChosenEventHandler(new DatePickerComposite.DateChosenEventHandler() {
+
+                @Override
+                public void onDateChosen(DatePickerComposite.DateChosenEvent event) {
+                    LogicalDate value = event.getChosenDate();
+                    if (value != null) { // Clone without time component!
+                        value = new LogicalDate(value.getYear(), value.getMonth(), value.getDate());
+                    }
+
+                    DatePickerTextBox.this.setValue(value, true);
+                    hideDatePicker();
+                }
+            });
+
+            setAnimationEnabled(false);
+            initializeKeyListener();
+        }
+
+        public void showDatePicker() {
+            LogicalDate selectedDate = DatePickerTextBox.this.getValue();
+            if (selectedDate == null) {
+                selectedDate = new LogicalDate();
+            }
+            picker.setDate(selectedDate);
+            showRelativeTo(DatePickerTextBox.this);
+            focusPanel.setFocus(true);
+            if (!DatePickerTextBox.this.isActive()) {
+                DatePickerTextBox.this.toggleActive();
+            }
+        }
+
+        public void hideDatePicker() {
+            hide();
+            if (DatePickerTextBox.this.isActive()) {
+                DatePickerTextBox.this.toggleActive();
+            }
+        }
+
+        @Override
+        public int getTabIndex() {
+            return focusPanel.getTabIndex();
+        }
+
+        @Override
+        public void setAccessKey(char key) {
+            focusPanel.setAccessKey(key);
+        }
+
+        @Override
+        public void setFocus(boolean focused) {
+            focusPanel.setFocus(focused);
+        }
+
+        @Override
+        public void setTabIndex(int index) {
+            focusPanel.setTabIndex(index);
+        }
+
+        public HandlerRegistration addBlurHandler(BlurHandler handler) {
+            return focusPanel.addBlurHandler(handler);
+        }
+
+        public HandlerRegistration addFocusHandler(FocusHandler handler) {
+            return focusPanel.addFocusHandler(handler);
+        }
+
+        private void initializeKeyListener() {
+            focusPanel.addKeyDownHandler(new KeyDownHandler() {
+
+                @Override
+                public void onKeyDown(KeyDownEvent event) {
+                    if (event.getNativeKeyCode() == KeyCodes.KEY_UP) {
+                        Date current = getCurrent();
+                        CalendarUtil.addMonthsToDate(current, 12);
+                        picker.setDate(current);
+                    } else if (event.getNativeKeyCode() == KeyCodes.KEY_DOWN) {
+                        Date current = getCurrent();
+                        CalendarUtil.addMonthsToDate(current, -12);
+                        picker.setDate(current);
+                    } else if (event.getNativeKeyCode() == KeyCodes.KEY_LEFT) {
+                        Date current = getCurrent();
+                        CalendarUtil.addMonthsToDate(current, -1);
+                        picker.setDate(current);
+                    } else if (event.getNativeKeyCode() == KeyCodes.KEY_RIGHT) {
+                        Date current = getCurrent();
+                        CalendarUtil.addMonthsToDate(current, 1);
+                        picker.setDate(current);
+                    }
+                    event.preventDefault();
+                }
+
+                private Date getCurrent() {
+                    Date newDate = new Date(picker.getDate().getTime());
+                    return newDate;
+                }
+
+            });
+        }
+
+    }
 }
