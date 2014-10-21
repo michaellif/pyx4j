@@ -171,11 +171,10 @@ public class CreditCardInfoEditor extends CForm<CreditCardInfo> {
                 if (getComponent().getValue() != null) {
                     if (isCreditCardNumberCheckRecieved) {
                         isCreditCardNumberCheckRecieved = false;
-                        isCreditCardNumberCheckSent = false;
-                        return isCreditCardNumberValid;
                     } else {
-                        return validateCreditCardNumberAsync(getComponent(), getComponent().getValue());
+                        validateCreditCardNumberAsync(getComponent(), getComponent().getValue());
                     }
+                    return isCreditCardNumberValid;
                 }
                 return null;
             }
@@ -200,13 +199,8 @@ public class CreditCardInfoEditor extends CForm<CreditCardInfo> {
         return EnumSet.allOf(CreditCardType.class);
     }
 
-    private BasicValidationError validateCreditCardNumberAsync(final CComponent<?, ?, ?> component, CreditCardNumberIdentity value) {
-        if (isCreditCardNumberCheckSent) {
-            cardEditor.setNote(i18n.tr("Validation in progress..."), NoteStyle.Warn);
-            return null;
-        }
-
-        if ((value != null) && CommonsStringUtils.isStringSet(value.newNumber().getValue())) {
+    private void validateCreditCardNumberAsync(final CComponent<?, ?, ?> component, CreditCardNumberIdentity value) {
+        if (!isCreditCardNumberCheckSent && value != null) {
             if (ValidationUtils.isCreditCardNumberIinValid(retrieveCreditCardTypePatterns(), value.newNumber().getValue())) {
                 CreditCardInfo ccInfo = getValue().<CreditCardInfo> duplicate();
                 ccInfo.card().newNumber().set(value.newNumber());
@@ -224,12 +218,11 @@ public class CreditCardInfoEditor extends CForm<CreditCardInfo> {
                         super.onFailure(caught);
                     }
                 }, ccInfo);
+
                 isCreditCardNumberCheckSent = true;
-                cardEditor.setNote(i18n.tr("Validation in progress..."), NoteStyle.Warn);
+                isCreditCardNumberValid = new BasicValidationError(component, i18n.tr("Validation in progress..."));
             }
         }
-
-        return null;
     }
 
     private String[] retrieveCreditCardTypePatterns() {
@@ -238,9 +231,9 @@ public class CreditCardInfoEditor extends CForm<CreditCardInfo> {
 
     private void setCreditCardNumberValidationResult(BasicValidationError error) {
         isCreditCardNumberCheckRecieved = true;
+        isCreditCardNumberCheckSent = false;
         isCreditCardNumberValid = error;
 
-        cardEditor.setNote(null);
         cardEditor.revalidate();
     }
 
@@ -248,8 +241,6 @@ public class CreditCardInfoEditor extends CForm<CreditCardInfo> {
         isCreditCardNumberCheckRecieved = false;
         isCreditCardNumberCheckSent = false;
         isCreditCardNumberValid = null;
-
-        cardEditor.setNote(null);
     }
 
     @Override

@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011- All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -15,6 +15,7 @@ package com.propertyvista.domain.util;
 
 import java.util.Date;
 
+import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.commons.TimeUtils;
 
 public class ValidationUtils extends com.pyx4j.commons.ValidationUtils {
@@ -37,22 +38,23 @@ public class ValidationUtils extends com.pyx4j.commons.ValidationUtils {
         return TimeUtils.isOlderThan(bithday, 18);
     }
 
-    public static boolean isSinValid(String value) {
-        if (value == null) {
-            return true;
+    public static boolean isSinValid(String sin) {
+        if (CommonsStringUtils.isStringSet(sin)) {
+            return sin.trim().replaceAll(" ", "").matches("^\\d{3}[\\s]*\\d{3}[\\s]*\\d{3}$") && isLuhnValid(sin.trim().replaceAll("\\s", ""));
         }
-        return value.trim().replaceAll(" ", "").matches("^\\d{3}[\\s]*\\d{3}[\\s]*\\d{3}$") && isLuhnValid(value.trim().replaceAll("\\s", ""));
+        return false;
     }
 
-    public static boolean isCreditCardNumberValid(String num) {
-        num = num.trim().replaceAll("\\s", "");
-        return num.matches("^\\d{13,19}$") && isLuhnValid(num);
+    public static boolean isCreditCardNumberValid(String ccNumber) {
+        if (CommonsStringUtils.isStringSet(ccNumber)) {
+            ccNumber = ccNumber.trim().replaceAll("\\s", "");
+            return ccNumber.matches("^\\d{13,19}$") && isLuhnValid(ccNumber);
+        }
+        return false;
     }
 
     public static boolean isCreditCardNumberIinValid(String[] iinPatterns, String ccNumber) {
-        if (ccNumber == null | iinPatterns == null) {
-            return false;
-        } else {
+        if (CommonsStringUtils.isStringSet(ccNumber) && iinPatterns != null) {
             ccNumber = ccNumber.trim().replaceAll("\\s", "");
             for (String pattern : iinPatterns) {
                 int prefixStart;
@@ -72,8 +74,8 @@ public class ValidationUtils extends com.pyx4j.commons.ValidationUtils {
                     }
                 }
             }
-            return false;
         }
+        return false;
     }
 
     public static boolean isCreditCardCodeValid(String num) {

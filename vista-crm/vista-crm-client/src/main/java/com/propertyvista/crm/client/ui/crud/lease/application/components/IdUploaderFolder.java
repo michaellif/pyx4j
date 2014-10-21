@@ -202,7 +202,7 @@ public class IdUploaderFolder extends VistaBoxFolder<IdentificationDocumentFolde
                     if (get(proto().idType()).getValue() != null && getComponent().getValue() != null) {
                         switch (get(proto().idType()).getValue().type().getValue()) {
                         case canadianSIN:
-                            if (!ValidationUtils.isSinValid(getComponent().getValue().trim().replaceAll(" ", ""))) {
+                            if (!ValidationUtils.isSinValid(getComponent().getValue())) {
                                 return new BasicValidationError(getComponent(), i18n.tr("Invalid SIN"));
                             }
                             break;
