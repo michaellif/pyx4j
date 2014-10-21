@@ -214,4 +214,9 @@ public class CEntityWizard<E extends IEntity> extends CForm<E> {
 
         }
     }
+
+    @Override
+    protected void onValueSet(boolean populate) {
+        showStep(0);
+    }
 }
