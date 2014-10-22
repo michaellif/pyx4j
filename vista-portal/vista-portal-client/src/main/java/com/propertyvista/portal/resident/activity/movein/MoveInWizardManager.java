@@ -23,6 +23,7 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.shared.VoidSerializable;
 import com.pyx4j.security.client.BehaviorChangeEvent;
 import com.pyx4j.security.client.BehaviorChangeHandler;
+import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.security.client.ContextChangeEvent;
 import com.pyx4j.security.client.ContextChangeHandler;
 import com.pyx4j.security.shared.SecurityController;
@@ -67,7 +68,11 @@ public class MoveInWizardManager {
 
             @Override
             public void onContextChange(ContextChangeEvent event) {
-                onUserSettingsChange();
+                if (ClientContext.isAuthenticated()) {
+                    onUserSettingsChange();
+                } else {
+                    reset();
+                }
             }
         });
 
