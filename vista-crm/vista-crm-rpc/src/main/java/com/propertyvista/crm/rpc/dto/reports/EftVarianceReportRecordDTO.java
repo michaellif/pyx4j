@@ -25,9 +25,7 @@ import com.propertyvista.domain.tenant.lease.Lease;
 @I18n(strategy = I18n.I18nStrategy.IgnoreThis)
 public interface EftVarianceReportRecordDTO extends IEntity {
 
-    IPrimitive<Boolean> hasComments();
-
-    IPrimitive<String> notice();
+    IPrimitive<String> comments();
 
     IPrimitive<String> building();
 

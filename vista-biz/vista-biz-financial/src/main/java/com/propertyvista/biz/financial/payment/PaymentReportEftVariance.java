@@ -24,6 +24,7 @@ import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.server.IEntityPersistenceService.ICursorIterator;
 import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.entity.shared.utils.EntityFromatUtils;
 
 import com.propertyvista.biz.financial.billing.BillingFacade;
 import com.propertyvista.biz.financial.payment.AutopayManager.PreauthorizedAmount;
@@ -112,8 +113,7 @@ class PaymentReportEftVariance {
             leaseRecord.leaseTotals().totalEft().setValue(leaseRecord.leaseTotals().totalEft().getValue().add(record.amount));
             leaseRecord.details().add(detail);
 
-            leaseRecord.hasComments().setValue(record.hasComments);
-            leaseRecord.notice().setValue(record.notice);
+            EntityFromatUtils.append(leaseRecord.comments(), "\n", record.preauthorizedPayment.comments().getValue());
         }
 
         // Calculate charges

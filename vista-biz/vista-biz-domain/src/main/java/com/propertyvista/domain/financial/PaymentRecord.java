@@ -288,8 +288,6 @@ public interface PaymentRecord extends IEntity, HasNotesAndAttachments {
 
     IPrimitive<String> notice();
 
-    IPrimitive<Boolean> hasComments();
-
     @Editor(type = EditorType.textarea)
     IPrimitive<String> notes();
 

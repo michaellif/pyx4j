@@ -19,7 +19,6 @@ import java.rmi.RemoteException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.commons.SimpleMessageFormat;
 import com.pyx4j.config.server.ServerSideFactory;
@@ -27,6 +26,7 @@ import com.pyx4j.config.server.SystemDateManager;
 import com.pyx4j.entity.core.AttachLevel;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.entity.shared.utils.EntityFromatUtils;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.biz.asset.BuildingFacade;
@@ -119,8 +119,7 @@ class ARYardiPaymentManager extends ARAbstractPaymentManager {
 
         /// Handle Sold buildings
         if (ServerSideFactory.create(BuildingFacade.class).isSuspend(billingCycle.building())) {
-            paymentRecord.notice().setValue(
-                    CommonsStringUtils.nvl_concat(paymentRecord.notice().getValue(), "Reversal was not posted to Yardi for suspended building", "\n"));
+            EntityFromatUtils.append(paymentRecord.notice(), "\n", i18n.tr("Reversal was not posted to Yardi for suspended building"));
             Persistence.service().merge(paymentRecord);
         } else {
 

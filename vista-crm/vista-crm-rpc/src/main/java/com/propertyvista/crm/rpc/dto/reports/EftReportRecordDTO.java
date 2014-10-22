@@ -34,9 +34,9 @@ import com.propertyvista.domain.tenant.lease.Tenant;
 /** The hyperlink entites have the same name but end with underscore */
 public interface EftReportRecordDTO extends IEntity {
 
-    IPrimitive<Boolean> hasComments();
-
     IPrimitive<String> notice();
+
+    IPrimitive<String> comments();
 
     IPrimitive<LogicalDate> billingCycleStartDate();
 

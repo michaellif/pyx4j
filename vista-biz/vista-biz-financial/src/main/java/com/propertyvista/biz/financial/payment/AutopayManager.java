@@ -66,7 +66,6 @@ class AutopayManager {
 
         String notice;
 
-        Boolean hasComments;
     }
 
     private boolean trace;
@@ -226,7 +225,6 @@ class AutopayManager {
             paymentRecord.preauthorizedPayment().set(record.preauthorizedPayment);
             paymentRecord._assert_autopayCoveredItemsChanges().addAll(record.preauthorizedPayment.coveredItems());
             paymentRecord.notice().setValue(record.notice);
-            paymentRecord.hasComments().setValue(record.hasComments);
             paymentRecord.padBillingCycle().set(billingCycle);
             paymentRecord.billingAccount().set(billingAccount);
             paymentRecord.targetDate().setValue(billingCycle.targetAutopayExecutionDate().getValue());
@@ -310,12 +308,6 @@ class AutopayManager {
                 PreauthorizedAmount record = new PreauthorizedAmount();
                 record.leaseTermTenant = leaseParticipant;
                 record.preauthorizedPayment = pap;
-                if (!pap.comments().isNull()) {
-                    record.notice = pap.comments().getValue();
-                    record.hasComments = true;
-                } else {
-                    record.hasComments = false;
-                }
 
                 record.amount = BigDecimal.ZERO;
                 for (AutopayAgreementCoveredItem item : pap.coveredItems()) {
@@ -333,7 +325,7 @@ class AutopayManager {
     private void createNoticeMessage(PaymentRecord paymentRecord, String calulationsNotice) {
         StringBuilder m = new StringBuilder();
         if (!PaymentUtils.isElectronicPaymentsSetup(paymentRecord.billingAccount())) {
-            m.append("Important:" + i18n.tr("No active merchantAccount found to process the payment."));
+            m.append(i18n.tr("No active merchantAccount found to process the payment."));
         }
         if (calulationsNotice != null) {
             if (m.length() > 0) {

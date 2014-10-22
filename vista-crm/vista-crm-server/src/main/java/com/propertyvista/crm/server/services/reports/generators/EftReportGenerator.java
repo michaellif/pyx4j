@@ -90,27 +90,27 @@ public class EftReportGenerator implements ReportExporter {
                 bind(toProto.amount_().id(), boProto.id());
                 bind(toProto.paymentType(), boProto.paymentMethod().type());
                 bind(toProto.paymentStatus(), boProto.paymentStatus());
-                bind(toProto.hasComments(), boProto.hasComments());
             }
 
             @Override
             public EftReportRecordDTO createTO(PaymentRecord paymentRecord) {
-                EftReportRecordDTO eftReportRecordDto = super.createTO(paymentRecord);
+                EftReportRecordDTO to = super.createTO(paymentRecord);
                 switch (paymentRecord.paymentMethod().type().getValue()) {
                 case Echeck:
                     EcheckInfo echeck = paymentRecord.paymentMethod().details().duplicate(EcheckInfo.class);
-                    eftReportRecordDto.bankId().setValue(echeck.bankId().getValue());
-                    eftReportRecordDto.transitNumber().setValue(echeck.branchTransitNumber().getValue());
+                    to.bankId().setValue(echeck.bankId().getValue());
+                    to.transitNumber().setValue(echeck.branchTransitNumber().getValue());
                     if (SecurityController.check(VistaBasicBehavior.PropertyVistaSupport)) {
-                        eftReportRecordDto.accountNumber().setValue(echeck.accountNo().number().getValue());
+                        to.accountNumber().setValue(echeck.accountNo().number().getValue());
                     } else {
-                        eftReportRecordDto.accountNumber().setValue(echeck.accountNo().obfuscatedNumber().getValue());
+                        to.accountNumber().setValue(echeck.accountNo().obfuscatedNumber().getValue());
                     }
                     break;
                 default:
                     break;
                 }
-                return eftReportRecordDto;
+                to.comments().setValue(paymentRecord.preauthorizedPayment().comments().getValue());
+                return to;
             }
         };
 

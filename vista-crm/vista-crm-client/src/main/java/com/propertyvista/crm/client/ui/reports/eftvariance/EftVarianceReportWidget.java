@@ -231,15 +231,12 @@ public class EftVarianceReportWidget extends HTML implements IReportWidget {
 
     private SafeHtml getFormattedNotice(IEntity entity) {
         EftVarianceReportRecordDTO r = (EftVarianceReportRecordDTO) entity;
-        if (CommonsStringUtils.isStringSet(r.notice().getValue())) {
-            String noticeIcon = CrmImages.INSTANCE.noticeWarning().getSafeUri().asString();
-            if (!r.notice().getValue().startsWith("Important:") && r.hasComments().getValue()) {
-                noticeIcon = CrmImages.INSTANCE.reportsInfo().getSafeUri().asString();
-            }
+        if (!r.comments().isNull()) {
+            String noticeIcon = CrmImages.INSTANCE.reportsInfo().getSafeUri().asString();
             return new SafeHtmlBuilder()
                     .appendHtmlConstant("<div style='text-align:center' class='" + AbstractReport.ReportPrintTheme.Styles.ReportNonPrintable.name() + "'>")
                     .appendHtmlConstant(
-                            "<img title='" + SafeHtmlUtils.htmlEscape(r.notice().getValue()) + "'" + " src='" + noticeIcon + "'" + " border='0' "
+                            "<img title='" + SafeHtmlUtils.htmlEscape(r.comments().getValue()) + "'" + " src='" + noticeIcon + "'" + " border='0' "
                                     + " style='width:15px; height:15px;text-align:center'" + ">").appendHtmlConstant("</div>").toSafeHtml();
         } else {
             return new SafeHtmlBuilder().toSafeHtml();
@@ -249,9 +246,9 @@ public class EftVarianceReportWidget extends HTML implements IReportWidget {
     private SafeHtml getFormattedNoticePrintable(IEntity entity) {
         EftVarianceReportRecordDTO r = (EftVarianceReportRecordDTO) entity;
         SafeHtmlBuilder b = new SafeHtmlBuilder();
-        if (CommonsStringUtils.isStringSet(r.notice().getValue())) {
+        if (CommonsStringUtils.isStringSet(r.comments().getValue())) {
             b.appendHtmlConstant("<span class='" + AbstractReport.ReportPrintTheme.Styles.ReportPrintableOnly.name() + "'>")
-                    .appendEscaped(r.notice().getValue()).appendHtmlConstant("</span>");
+                    .appendEscaped(r.comments().getValue()).appendHtmlConstant("</span>");
         }
         return b.toSafeHtml();
     }

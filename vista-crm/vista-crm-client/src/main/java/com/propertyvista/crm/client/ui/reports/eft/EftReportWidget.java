@@ -36,9 +36,9 @@ import com.google.gwt.user.client.EventListener;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.HTML;
 
-import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.IEntity;
+import com.pyx4j.entity.shared.utils.EntityFromatUtils;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.backoffice.ui.prime.report.AbstractReport;
@@ -265,53 +265,59 @@ public class EftReportWidget extends HTML implements IReportWidget {
         final int wideColumnWidth = Window.getClientWidth() >= 1200 ? 150 : 100;
         final int shortColumnWidth = Window.getClientWidth() >= 1200 ? 80 : 60;
 
-        ITableColumnFormatter noticeTooltipColumnFormatter = new ITableColumnFormatter() {//@formatter:off
+        ITableColumnFormatter noticeTooltipColumnFormatter = new ITableColumnFormatter() {
 
             @Override
-            public int getWidth() { return 50; }
+            public int getWidth() {
+                return 50;
+            }
 
             @Override
             public SafeHtml formatHeader() {
-                return new SafeHtmlBuilder()
-                    .appendHtmlConstant("<span class='" + AbstractReport.ReportPrintTheme.Styles.ReportNonPrintable.name() + "'>")
-                    .appendEscaped(i18n.tr("Notice"))
-                    .appendHtmlConstant("</span>")
-                    .toSafeHtml();
+                return new SafeHtmlBuilder() //
+                        .appendHtmlConstant("<span class='" + AbstractReport.ReportPrintTheme.Styles.ReportNonPrintable.name() + "'>") //
+                        .appendEscaped(i18n.tr("Notice")) //
+                        .appendHtmlConstant("</span>") //
+                        .toSafeHtml();
             }
 
             @Override
             public SafeHtml formatContent(IEntity entity) {
                 EftReportRecordDTO r = (EftReportRecordDTO) entity;
-                if (CommonsStringUtils.isStringSet(r.notice().getValue())) {
-                    String noticeIcon =  CrmImages.INSTANCE.noticeWarning().getSafeUri().asString();
-                    if (!r.notice().getValue().startsWith("Important:") && r.hasComments().getValue()) {
+                if (!r.notice().isNull() || !r.comments().isNull()) {
+                    String noticeIcon = CrmImages.INSTANCE.noticeWarning().getSafeUri().asString();
+                    if (r.notice().isNull()) {
                         noticeIcon = CrmImages.INSTANCE.reportsInfo().getSafeUri().asString();
                     }
+                    String textValue = EntityFromatUtils.nvl_concat(" ", r.notice(), r.comments());
                     return new SafeHtmlBuilder()
-                            .appendHtmlConstant("<div style='text-align:center' class='" + AbstractReport.ReportPrintTheme.Styles.ReportNonPrintable.name() + "'>")
-                            .appendHtmlConstant("<img title='" + SafeHtmlUtils.htmlEscape(r.notice().getValue()) + "'" +
-                                     " src='" + noticeIcon + "'" +
-                                     " border='0' " +
-                                     " style='width:15px; height:15px;text-align:center'" +
-                                     ">")
-                            .appendHtmlConstant("</div>")
-                            .toSafeHtml();
+                            .appendHtmlConstant(
+                                    "<div style='text-align:center' class='" + AbstractReport.ReportPrintTheme.Styles.ReportNonPrintable.name() + "'>")
+                            .appendHtmlConstant("<img title='" + SafeHtmlUtils.htmlEscape(textValue) + "'" //
+                                    + " src='" + noticeIcon + "'" //
+                                    + " border='0' " //
+                                    + " style='width:15px; height:15px;text-align:center'" //
+                                    + ">") //
+                            .appendHtmlConstant("</div>").toSafeHtml();
                 } else {
                     return new SafeHtmlBuilder().toSafeHtml();
                 }
             }
-        };//@formatter:on
-        ITableColumnFormatter noticeForPrintColumnFormatter = new ITableColumnFormatter() {//@formatter:off
+        };
+
+        ITableColumnFormatter noticeForPrintColumnFormatter = new ITableColumnFormatter() {
 
             @Override
-            public int getWidth() { return 50; }
+            public int getWidth() {
+                return 50;
+            }
 
             @Override
             public SafeHtml formatHeader() {
-                return new SafeHtmlBuilder()
-                        .appendHtmlConstant("<span class='" + AbstractReport.ReportPrintTheme.Styles.ReportPrintableOnly.name() + "'>")
-                        .appendEscaped(i18n.tr("Notice"))
-                        .appendHtmlConstant("</span>")
+                return new SafeHtmlBuilder() //
+                        .appendHtmlConstant("<span class='" + AbstractReport.ReportPrintTheme.Styles.ReportPrintableOnly.name() + "'>") //
+                        .appendEscaped(i18n.tr("Notice")) //
+                        .appendHtmlConstant("</span>") //
                         .toSafeHtml();
             }
 
@@ -319,14 +325,14 @@ public class EftReportWidget extends HTML implements IReportWidget {
             public SafeHtml formatContent(IEntity entity) {
                 EftReportRecordDTO r = (EftReportRecordDTO) entity;
                 SafeHtmlBuilder b = new SafeHtmlBuilder();
-                if (CommonsStringUtils.isStringSet(r.notice().getValue())) {
+                if (!r.notice().isNull() || !r.comments().isNull()) {
                     b.appendHtmlConstant("<span class='" + AbstractReport.ReportPrintTheme.Styles.ReportPrintableOnly.name() + "'>")
-                     .appendEscaped(r.notice().getValue())
-                     .appendHtmlConstant("</span>");
+                            .appendEscaped(EntityFromatUtils.nvl_concat(" ", r.notice(), r.comments())).appendHtmlConstant("</span>");
                 }
                 return b.toSafeHtml();
             }
-        };//@formatter:off
+        };
+
         List<ITableColumnFormatter> columnDescriptors = Arrays.<ITableColumnFormatter> asList(//@formatter:off
                     noticeTooltipColumnFormatter,
                     noticeForPrintColumnFormatter,
