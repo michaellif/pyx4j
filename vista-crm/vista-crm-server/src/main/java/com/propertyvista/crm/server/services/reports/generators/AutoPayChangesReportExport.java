@@ -39,7 +39,7 @@ import com.propertyvista.dto.payment.AutoPayReviewPreauthorizedPaymentDTO;
 
 public class AutoPayChangesReportExport {
 
-    private static final I18n i18n = I18n.get(EftReportExport.class);
+    private static final I18n i18n = I18n.get(AutoPayChangesReportExport.class);
 
     private Font redBoldFont;
 

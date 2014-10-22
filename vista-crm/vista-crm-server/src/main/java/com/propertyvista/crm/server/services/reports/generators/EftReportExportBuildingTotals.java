@@ -52,7 +52,7 @@ public class EftReportExportBuildingTotals extends ExportTotals<BigDecimal, EftR
 
         formatter.cell(total);
 
-        formatter.cellsEmpty(6, true);
+        formatter.cellsEmpty(7, true);
 
         Iterator<Cell> ci = formatter.getCurentRow().cellIterator();
         while (ci.hasNext()) {
@@ -76,7 +76,7 @@ public class EftReportExportBuildingTotals extends ExportTotals<BigDecimal, EftR
 
         formatter.cell(reportTotal);
 
-        formatter.cellsEmpty(6, true);
+        formatter.cellsEmpty(7, true);
 
         Iterator<Cell> ci = formatter.getCurentRow().cellIterator();
         while (ci.hasNext()) {
