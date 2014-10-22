@@ -16,11 +16,13 @@ package com.propertyvista.portal.rpc.portal.resident.services;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.rpc.shared.IService;
+import com.pyx4j.rpc.shared.ServiceExecution;
 
 import com.propertyvista.portal.rpc.portal.resident.dto.CommunityEventsGadgetDTO;
 
 public interface CommunityEventPortalCrudService extends IService {
 
+    @ServiceExecution(operationType = ServiceExecution.OperationType.NonBlocking)
     void retreiveCommunityEvents(AsyncCallback<CommunityEventsGadgetDTO> callback);
 
 }

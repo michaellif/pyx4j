@@ -43,14 +43,12 @@ public class WeatherActivity extends AbstractActivity implements WeatherPresente
     @Override
     public void start(AcceptsOneWidget panel, EventBus eventBus) {
         panel.setWidget(view);
-        AppSite.getEventBus().fireEvent(new LayoutChangeRequestEvent(ChangeType.resizeComponents));
-
         extraActivityService.retreiveWheather(new DefaultAsyncCallback<WeatherGadgetDTO>() {
 
             @Override
             public void onSuccess(WeatherGadgetDTO result) {
                 view.populateWeather(result);
-
+                AppSite.getEventBus().fireEvent(new LayoutChangeRequestEvent(ChangeType.resizeComponents));
             }
         });
 

@@ -44,12 +44,13 @@ public class CommunityEventsActivity extends AbstractActivity implements Communi
     public void start(AcceptsOneWidget panel, EventBus eventBus) {
         panel.setWidget(view);
         AppSite.getEventBus().fireEvent(new LayoutChangeRequestEvent(ChangeType.resizeComponents));
+
         communityEventService.retreiveCommunityEvents(new DefaultAsyncCallback<CommunityEventsGadgetDTO>() {
 
             @Override
             public void onSuccess(CommunityEventsGadgetDTO result) {
                 view.populateCommunityEvents(result);
-
+                AppSite.getEventBus().fireEvent(new LayoutChangeRequestEvent(ChangeType.resizeComponents));
             }
         });
     }
