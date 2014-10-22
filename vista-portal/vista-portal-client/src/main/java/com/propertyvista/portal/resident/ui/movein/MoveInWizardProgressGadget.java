@@ -32,15 +32,15 @@ public class MoveInWizardProgressGadget extends AbstractGadget<MoveInWizardView>
     private static final I18n i18n = I18n.get(TenantWelcomeGadget.class);
 
     public MoveInWizardProgressGadget(MoveInWizardView view) {
-        super(view, null, i18n.tr("Continue Move-In Wizard"), ThemeColor.contrast4, 1);
+        super(view, null, i18n.tr("Continue On-Line Registration"), ThemeColor.contrast4, 1);
         setActionsToolbar(new ActionsToolbar());
 
         SafeHtmlBuilder htmlBuilder = new SafeHtmlBuilder();
 
         htmlBuilder.appendHtmlConstant("<div style='text-align:left'><div><b>");
-        htmlBuilder.appendEscaped(i18n.tr("Your process is in PROGRESS."));
+        htmlBuilder.appendEscaped(i18n.tr("Your registration is currently incomplete."));
         htmlBuilder.appendHtmlConstant("</b></div><div>");
-        htmlBuilder.appendEscaped(i18n.tr("To complete the step by step process click on the button below."));
+        htmlBuilder.appendEscaped(i18n.tr("Please click the button below to complete your missing information."));
         htmlBuilder.appendHtmlConstant("</div></div>");
 
         HTMLPanel htmlPanel = new HTMLPanel(htmlBuilder.toSafeHtml());

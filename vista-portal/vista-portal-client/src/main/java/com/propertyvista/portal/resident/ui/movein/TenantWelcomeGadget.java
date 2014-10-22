@@ -33,20 +33,19 @@ public class TenantWelcomeGadget extends AbstractGadget<MoveInWizardView> {
     private static final I18n i18n = I18n.get(TenantWelcomeGadget.class);
 
     public TenantWelcomeGadget(MoveInWizardView view) {
-        super(view, null, i18n.tr("<b>Congratulations"), ThemeColor.contrast2, 1);
+        super(view, null, i18n.tr("<b>Congratulations!"), ThemeColor.contrast2, 1);
         setActionsToolbar(new ActionsToolbar());
 
         SafeHtmlBuilder htmlBuilder = new SafeHtmlBuilder();
 
         htmlBuilder.appendHtmlConstant("<div style='text-align:left'><div><b>");
-        htmlBuilder.appendEscaped(i18n.tr("Great News! Your lease application has been APPROVED."));
+        htmlBuilder.appendEscaped(i18n.tr("Your lease application has been APPROVED."));
         htmlBuilder.appendHtmlConstant("</b></div><div>");
-        htmlBuilder.appendEscaped(i18n
-                .tr("Getting your process finished and you to “move in ready” status can be 100% completed following our simple step-by-step online process."));
+        htmlBuilder.appendEscaped(i18n.tr("Please follow the instructions below to complete your application."));
         htmlBuilder.appendHtmlConstant("</div><br><div><b>");
         htmlBuilder.appendEscaped(i18n.tr("You will need about 10 minutes to complete all the steps."));
         htmlBuilder.appendHtmlConstant("</b></div><div>");
-        htmlBuilder.appendEscaped(i18n.tr("When you are ready simply click on the button below."));
+        htmlBuilder.appendEscaped(i18n.tr("When you are ready simply click the button below."));
         htmlBuilder.appendHtmlConstant("</div></div>");
 
         HTMLPanel htmlPanel = new HTMLPanel(htmlBuilder.toSafeHtml());
