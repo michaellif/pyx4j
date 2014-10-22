@@ -26,6 +26,7 @@ import org.apache.poi.ss.usermodel.Font;
 import org.apache.poi.ss.usermodel.IndexedColors;
 
 import com.pyx4j.commons.CommonsStringUtils;
+import com.pyx4j.entity.shared.utils.EntityFromatUtils;
 import com.pyx4j.essentials.server.report.ReportTableXLSXFormatter;
 import com.pyx4j.essentials.server.services.reports.ReportExporter.ExportedReport;
 import com.pyx4j.essentials.server.services.reports.ReportProgressStatus;
@@ -135,7 +136,8 @@ public class AutoPayChangesReportExport {
     }
 
     private void reportEntity(ReportTableXLSXFormatter formatter, AutoPayReviewLeaseDTO reviewCase) {
-        formatter.cell(reviewCase.notice().isNull() ? "" : reviewCase.notice().getValue());
+        formatter.cell((!reviewCase.notice().isNull()) || (!reviewCase.comments().isNull()) ? EntityFromatUtils.nvl_concat(" ", reviewCase.notice(),
+                reviewCase.comments()) : "");
         formatter.cell(reviewCase.building().getValue());
         formatter.cell(reviewCase.unit().getValue());
         formatter.cell(reviewCase.leaseId().getValue());

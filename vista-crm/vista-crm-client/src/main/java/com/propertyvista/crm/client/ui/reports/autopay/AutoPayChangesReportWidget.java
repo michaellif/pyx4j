@@ -32,7 +32,6 @@ import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.EventListener;
 import com.google.gwt.user.client.ui.HTML;
 
-import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.shared.utils.EntityFromatUtils;
 import com.pyx4j.i18n.shared.I18n;
@@ -328,9 +327,9 @@ public class AutoPayChangesReportWidget extends HTML implements IReportWidget {
     private SafeHtml getFormattedNoticePrintable(IEntity entity) {
         AutoPayReviewLeaseDTO r = (AutoPayReviewLeaseDTO) entity;
         SafeHtmlBuilder b = new SafeHtmlBuilder();
-        if (CommonsStringUtils.isStringSet(r.notice().getValue())) {
+        if (!r.notice().isNull() || !r.comments().isNull()) {
             b.appendHtmlConstant("<span class='" + AbstractReport.ReportPrintTheme.Styles.ReportPrintableOnly.name() + "'>")
-                    .appendEscaped(r.notice().getValue()).appendHtmlConstant("</span>");
+                    .appendEscaped(EntityFromatUtils.nvl_concat(" ", r.notice(), r.comments())).appendHtmlConstant("</span>");
         }
         return b.toSafeHtml();
     }
