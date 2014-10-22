@@ -143,8 +143,12 @@ public class EquifaxLongReportModelMapper {
                     CustomerCreditCheckLongReportDTO.AccountDTO account = EntityFactory.create(CustomerCreditCheckLongReportDTO.AccountDTO.class);
                     account.name().setValue(cnTrade.getCreditorId().getName());
                     account.number().setValue(cnTrade.getAccountNumber().getValue());
-                    account.creditAmount().setValue(cnTrade.getHighCreditAmount().getValue());
-                    account.balanceAmount().setValue(cnTrade.getBalanceAmount().getValue());
+                    if (cnTrade.getHighCreditAmount() != null) {
+                        account.creditAmount().setValue(cnTrade.getHighCreditAmount().getValue());
+                    }
+                    if (cnTrade.getBalanceAmount() != null) {
+                        account.balanceAmount().setValue(cnTrade.getBalanceAmount().getValue());
+                    }
                     account.lastPayment().setValue(
                             cnTrade.getDateLastActivityOrPayment() != null ? new LogicalDate(cnTrade.getDateLastActivityOrPayment().toGregorianCalendar()
                                     .getTime()) : null);
@@ -251,7 +255,7 @@ public class EquifaxLongReportModelMapper {
         if (EquifaxCreditCheck.riskCodeAmountPrcMapping.containsKey(codeString)) {
             return EquifaxCreditCheck.riskLevelMapping.get(codeString);
         } else {
-            log.debug("Risk Level Mapping does not contain the value ''{}'', returning null", codeString);
+            log.debug("Risk Level Percent Mapping does not contain the value '{}', assuming Decline", codeString);
             return null;
         }
     }
