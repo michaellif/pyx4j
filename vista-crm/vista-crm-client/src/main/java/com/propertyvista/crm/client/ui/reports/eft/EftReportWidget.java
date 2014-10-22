@@ -285,9 +285,9 @@ public class EftReportWidget extends HTML implements IReportWidget {
             public SafeHtml formatContent(IEntity entity) {
                 EftReportRecordDTO r = (EftReportRecordDTO) entity;
                 if (!r.notice().isNull() || !r.comments().isNull()) {
-                    String noticeIcon = CrmImages.INSTANCE.noticeWarning().getSafeUri().asString();
-                    if (r.notice().isNull()) {
-                        noticeIcon = CrmImages.INSTANCE.reportsInfo().getSafeUri().asString();
+                    String noticeIcon = CrmImages.INSTANCE.reportsInfo().getSafeUri().asString();
+                    if (!r.notice().isNull()) {
+                        noticeIcon = CrmImages.INSTANCE.noticeWarning().getSafeUri().asString();
                     }
                     String textValue = EntityFromatUtils.nvl_concat(" ", r.notice(), r.comments());
                     return new SafeHtmlBuilder()

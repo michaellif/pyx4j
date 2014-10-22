@@ -29,7 +29,7 @@ public interface AutoPayReviewLeaseDTO extends IEntity {
 
     IPrimitive<String> notice();
 
-    IPrimitive<Boolean> hasComments();
+    IPrimitive<String> comments();
 
     IPrimitive<String> building();
 

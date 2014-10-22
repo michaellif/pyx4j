@@ -34,6 +34,7 @@ import com.google.gwt.user.client.ui.HTML;
 
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.entity.core.IEntity;
+import com.pyx4j.entity.shared.utils.EntityFromatUtils;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.backoffice.ui.prime.report.AbstractReport;
 import com.pyx4j.site.client.backoffice.ui.prime.report.IReportWidget;
@@ -308,15 +309,16 @@ public class AutoPayChangesReportWidget extends HTML implements IReportWidget {
 
     private SafeHtml getFormattedNotice(IEntity entity) {
         AutoPayReviewLeaseDTO r = (AutoPayReviewLeaseDTO) entity;
-        if (CommonsStringUtils.isStringSet(r.notice().getValue())) {
-            String noticeIcon = CrmImages.INSTANCE.noticeWarning().getSafeUri().asString();
-            if (!r.notice().getValue().startsWith("Important:") && r.hasComments().getValue()) {
-                noticeIcon = CrmImages.INSTANCE.reportsInfo().getSafeUri().asString();
+        if (!r.notice().isNull() || !r.comments().isNull()) {
+            String noticeIcon = CrmImages.INSTANCE.reportsInfo().getSafeUri().asString();
+            if (!r.notice().isNull()) {
+                noticeIcon = CrmImages.INSTANCE.noticeWarning().getSafeUri().asString();
             }
+            String textValue = EntityFromatUtils.nvl_concat(" ", r.notice(), r.comments());
             return new SafeHtmlBuilder()
                     .appendHtmlConstant("<div style='text-align:center' class='" + AbstractReport.ReportPrintTheme.Styles.ReportNonPrintable.name() + "'>")
                     .appendHtmlConstant(
-                            "<img title='" + SafeHtmlUtils.htmlEscape(r.notice().getValue()) + "'" + " src='" + noticeIcon + "'" + " border='0' "
+                            "<img title='" + SafeHtmlUtils.htmlEscape(textValue) + "'" + " src='" + noticeIcon + "'" + " border='0' "
                                     + " style='width:15px; height:15px;text-align:center'" + ">").appendHtmlConstant("</div>").toSafeHtml();
         } else {
             return new SafeHtmlBuilder().toSafeHtml();

@@ -28,6 +28,7 @@ import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.server.IEntityPersistenceService.ICursorIterator;
 import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.entity.shared.utils.EntityFromatUtils;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.biz.financial.billing.BillingFacade;
@@ -150,11 +151,7 @@ class AutopayReviewReport {
             }
 
             if (!preauthorizedPayment.comments().isNull()) {
-                System.out.println("COMMENT _> " + preauthorizedPayment.comments().getValue());
-                leaseReview.notice().setValue(preauthorizedPayment.comments().getValue());
-                leaseReview.hasComments().setValue(true);
-            } else {
-                leaseReview.hasComments().setValue(false);
+                EntityFromatUtils.append(leaseReview.comments(), "\n", preauthorizedPayment.comments().getValue());
             }
         }
 
@@ -386,9 +383,8 @@ class AutopayReviewReport {
     private String getNotice(BillingAccount billingAccount) {
         StringBuilder m = new StringBuilder();
         if (!PaymentUtils.isElectronicPaymentsSetup(billingAccount)) {
-            m.append("Important:" + i18n.tr("No active merchantAccount found to process the payment."));
+            m.append(i18n.tr("No active merchantAccount found to process the payment."));
         }
-
         return m.toString();
     }
 }
