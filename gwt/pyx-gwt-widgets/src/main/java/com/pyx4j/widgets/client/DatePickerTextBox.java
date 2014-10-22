@@ -85,6 +85,7 @@ public class DatePickerTextBox extends TextBoxBase implements HasValueChangeHand
 
             @Override
             public void execute() {
+                setFocus(true);
                 if (datePickerDropDown == null) {
                     datePickerDropDown = new DatePickerDropDownPanel();
                     datePickerDropDown.addFocusHandler(getGroupFocusHandler());
