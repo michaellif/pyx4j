@@ -271,7 +271,6 @@ BEGIN
         
         ALTER TABLE payment_record RENAME COLUMN finalize_date TO finalized_date;
         
-        ALTER TABLE payment_record ADD COLUMN has_comments BOOLEAN;
         
         -- pt_vehicle
         
