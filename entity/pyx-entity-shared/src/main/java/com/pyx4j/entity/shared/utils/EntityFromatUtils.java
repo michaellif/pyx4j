@@ -38,4 +38,8 @@ public class EntityFromatUtils {
         }
         return b.toString();
     }
+
+    public static void append(IPrimitive<String> member, String sep, String text) {
+        member.setValue(CommonsStringUtils.nvl_concat(member.getValue(), text, sep));
+    }
 }
