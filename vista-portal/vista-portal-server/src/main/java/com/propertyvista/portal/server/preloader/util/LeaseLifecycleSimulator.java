@@ -457,8 +457,9 @@ public class LeaseLifecycleSimulator {
                     // If payments contains same lease, add 3 payments more for same date
                     if (payments.containsKey(leaseKey)) {
                         PaymentDone paymentDone = payments.get(leaseKey);
-                        if (paymentDone.getNPayments() <= 3) {
+                        if (paymentDone.getNPayments() <= 2) {
                             currentRecordDate = paymentDone.getReferenceDate();
+                            SystemDateManager.setDate(currentRecordDate);
                         } else {
                             lastLeasePaymentType = paymentDone.getPaymentType();
                         }

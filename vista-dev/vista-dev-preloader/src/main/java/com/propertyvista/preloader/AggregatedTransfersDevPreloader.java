@@ -19,10 +19,12 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.server.Persistence;
 
+import com.propertyvista.biz.system.Vista2PmcFacade;
 import com.propertyvista.domain.financial.AggregatedTransfer;
 import com.propertyvista.domain.financial.AggregatedTransfer.AggregatedTransferStatus;
 import com.propertyvista.domain.financial.CardsAggregatedTransfer;
@@ -31,10 +33,13 @@ import com.propertyvista.domain.financial.FundsTransferType;
 import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.payment.CreditCardInfo;
 import com.propertyvista.domain.payment.PaymentType;
+import com.propertyvista.domain.pmc.fee.AbstractPaymentFees;
 
 public class AggregatedTransfersDevPreloader extends BaseVistaDevDataPreloader {
 
     private static final Logger log = LoggerFactory.getLogger(AggregatedTransfersDevPreloader.class);
+
+    private static AbstractPaymentFees fees;
 
     @Override
     public String create() {
@@ -46,7 +51,10 @@ public class AggregatedTransfersDevPreloader extends BaseVistaDevDataPreloader {
         criteria.asc(criteria.proto().createdDate());
 
         List<PaymentRecord> eChequePayments = Persistence.service().query(criteria);
-        log.info("There are {} payments of type 'eCheque'", eChequePayments.size());
+        log.info("There are {} payment records", eChequePayments.size());
+
+        // Load fees
+        fees = ServerSideFactory.create(Vista2PmcFacade.class).getPaymentFees();
 
         AggregatedTransfer aggregatedTransfer = null;
         for (PaymentRecord paymentRecord : Persistence.service().query(criteria)) {
@@ -63,6 +71,9 @@ public class AggregatedTransfersDevPreloader extends BaseVistaDevDataPreloader {
 
         }
 
+        if (aggregatedTransfer != null) {
+            Persistence.service().persist(aggregatedTransfer);
+        }
         return null;
     }
 
@@ -132,8 +143,19 @@ public class AggregatedTransfersDevPreloader extends BaseVistaDevDataPreloader {
         at.netAmount().setValue(at.netAmount().getValue().add(paymentRecord.amount().getValue()));
         at.grossPaymentCount().setValue(at.grossPaymentCount().getValue() + 1);
         at.grossPaymentAmount().setValue(at.grossPaymentAmount().getValue().add(paymentRecord.amount().getValue()));
-        if (paymentRecord.paymentMethod().type().getValue().equals(PaymentType.CreditCard)) {
+
+        switch (paymentRecord.paymentMethod().type().getValue()) {
+        case CreditCard:
             updateCardsTotals((CardsAggregatedTransfer) at, paymentRecord);
+            break;
+        case Echeck:
+            updateGrossTotals(at, fees.eChequeFee().getValue());
+            break;
+        case DirectBanking:
+            updateGrossTotals(at, fees.directBankingFee().getValue());
+            break;
+        default:
+            throw new Error("Payment method not implemented yet");
         }
 
         paymentRecord.aggregatedTransfer().set(at);
@@ -142,15 +164,28 @@ public class AggregatedTransfersDevPreloader extends BaseVistaDevDataPreloader {
     }
 
     private void updateCardsTotals(CardsAggregatedTransfer at, PaymentRecord paymentRecord) {
+        BigDecimal cardFee = BigDecimal.ZERO;
         switch (paymentRecord.paymentMethod().details().<CreditCardInfo> cast().cardType().getValue()) {
         case MasterCard:
             at.mastercardDeposit().setValue(at.mastercardDeposit().getValue().add(paymentRecord.amount().getValue()));
+            cardFee = paymentRecord.amount().getValue().multiply(fees.ccMasterCardFee().getValue());
+            at.mastercardFee().setValue(at.mastercardFee().getValue().add(cardFee));
             break;
         case Visa:
         case VisaDebit:
             at.visaDeposit().setValue(at.visaDeposit().getValue().add(paymentRecord.amount().getValue()));
+            cardFee = paymentRecord.amount().getValue().multiply(fees.visaDebitFee().getValue());
+            at.visaFee().setValue(at.visaFee().getValue().add(cardFee));
             break;
         }
+
+        updateGrossTotals(at, cardFee);
+
+    }
+
+    private void updateGrossTotals(AggregatedTransfer at, BigDecimal oneTransactionFee) {
+        at.grossPaymentFee().setValue(at.grossPaymentFee().getValue().add(oneTransactionFee));
+        at.grossPaymentAmount().setValue(at.grossPaymentAmount().getValue().add(oneTransactionFee));
     }
 
     @Override

@@ -31,6 +31,7 @@ import com.propertyvista.config.tests.VistaDBTestBase;
 import com.propertyvista.domain.VistaNamespace;
 import com.propertyvista.misc.VistaDataPreloaderParameter;
 import com.propertyvista.misc.VistaDevPreloadConfig;
+import com.propertyvista.operations.server.preloader.V2BPreloader;
 import com.propertyvista.portal.server.preloader.PmcCreatorDev;
 import com.propertyvista.portal.server.preloader.VistaDataPreloaders;
 
@@ -49,6 +50,8 @@ public class VistaDBPreloadTest extends VistaDBTestBase {
         DataPreloaderCollection dp = new VistaDataPreloaders(VistaDevPreloadConfig.createTest());
         dp.setParameterValue(VistaDataPreloaderParameter.attachMedia.name(), Boolean.FALSE);
 
+        DataPreloaderCollection operationsData = new VistaOperationsDataForTesting();
+
         try {
             Lifecycle.startElevatedUserContext();
             NamespaceManager.setNamespace(VistaNamespace.operationsNamespace);
@@ -59,6 +62,9 @@ public class VistaDBPreloadTest extends VistaDBTestBase {
                     return null;
                 }
             });
+
+            // Add minimal OPERATINONS banking data for tests
+            operationsData.preloadAll();
 
             PmcCreatorDev.createPmc(VistaNamespace.demoNamespace, false);
             NamespaceManager.setNamespace(VistaNamespace.demoNamespace);
@@ -78,5 +84,12 @@ public class VistaDBPreloadTest extends VistaDBTestBase {
         }
 
         log.info("Preload time {}", TimeUtils.secSince(start));
+    }
+
+    // TODO Extract class to a file and use in the future?? Or remove class and invoke V2BPreloader.create() directly
+    public class VistaOperationsDataForTesting extends DataPreloaderCollection {
+        public VistaOperationsDataForTesting() {
+            add(new V2BPreloader());
+        }
     }
 }
