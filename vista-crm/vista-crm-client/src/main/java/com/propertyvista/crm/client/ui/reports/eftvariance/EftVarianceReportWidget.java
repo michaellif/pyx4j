@@ -163,8 +163,8 @@ public class EftVarianceReportWidget extends HTML implements IReportWidget {
                 if (isFirstLine) {
                     isFirstLine = false;
                 } else {
-                    builder.appendHtmlConstant("<tr>");
-                    builder.appendHtmlConstant("<td></td><td></td><td></td>");
+                    builder.appendHtmlConstant("<tr>"); // fill first 4 empty columns:
+                    builder.appendHtmlConstant("<td></td><td></td><td></td><td></td>");
                 }
                 builder.appendHtmlConstant("<td style='width: " + columns.get(4).getEffectiveWidth() + "px;'>");
                 builder.appendEscaped(details.tenantName().getStringView());

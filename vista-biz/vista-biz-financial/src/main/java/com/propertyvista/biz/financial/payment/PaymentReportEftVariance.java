@@ -44,11 +44,7 @@ class PaymentReportEftVariance {
         { //TODO->Closure
             EntityQueryCriteria<BillingAccount> criteria = EntityQueryCriteria.create(BillingAccount.class);
             if (reportCriteria.isBuildingsSelected()) {
-                if (reportCriteria.getSelectedBuildings().isEmpty()) {
-                    criteria.isNull(criteria.proto().id()); // should not find anything!
-                } else {
-                    criteria.in(criteria.proto().lease().unit().building(), reportCriteria.getSelectedBuildings());
-                }
+                criteria.in(criteria.proto().lease().unit().building(), reportCriteria.getSelectedBuildings());
             }
             criteria.eq(criteria.proto().lease().currentTerm().version().tenants().$().leaseParticipant().preauthorizedPayments().$().isDeleted(), false);
 

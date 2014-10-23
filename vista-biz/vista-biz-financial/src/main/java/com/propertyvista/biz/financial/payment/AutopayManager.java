@@ -90,11 +90,7 @@ class AutopayManager {
             criteria.eq(criteria.proto().targetAutopayExecutionDate(), runDate);
             criteria.isNull(criteria.proto().actualAutopayExecutionDate());
             if ((reportCriteria != null) && reportCriteria.isBuildingsSelected()) {
-                if (reportCriteria.getSelectedBuildings().isEmpty()) {
-                    criteria.isNull(criteria.proto().id()); // should not find anything!
-                } else {
-                    criteria.in(criteria.proto().building(), reportCriteria.getSelectedBuildings());
-                }
+                criteria.in(criteria.proto().building(), reportCriteria.getSelectedBuildings());
             } else {
                 criteria.eq(criteria.proto().building().suspended(), false);
             }
