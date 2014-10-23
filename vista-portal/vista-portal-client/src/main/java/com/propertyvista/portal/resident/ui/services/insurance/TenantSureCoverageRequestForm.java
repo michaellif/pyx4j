@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011-2012 All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -76,10 +76,10 @@ public class TenantSureCoverageRequestForm extends CForm<TenantSureCoverageDTO> 
     // look at @link TenantSureOrderWizardActivity.isValidForQuote() also!
     public boolean isReadyForQuote() {
         //@formatter:off
-        return (!getValue().personalLiabilityCoverage().isNull() && 
-                !getValue().contentsCoverage().isNull() && 
-                !getValue().deductible().isNull() && 
-                !getValue().smoker().isNull() && 
+        return (!getValue().personalLiabilityCoverage().isNull() &&
+                !getValue().contentsCoverage().isNull() &&
+                !getValue().deductible().isNull() &&
+                !getValue().smoker().isNull() &&
                 !getValue().numberOfPreviousClaims().isNull());
         //@formatter:on
     }
@@ -104,7 +104,7 @@ public class TenantSureCoverageRequestForm extends CForm<TenantSureCoverageDTO> 
                         return new BasicValidationError(getComponent(), i18n.tr("Maximum possible value for inception date is {0,short,date}",
                                 lastInceptionDate));
                     }
-                    if (getComponent().getValue() != null & getComponent().getValue().compareTo(new LogicalDate()) < 0) {
+                    if (getComponent().getValue() != null && getComponent().getValue().compareTo(new LogicalDate()) < 0) {
                         return new BasicValidationError(getComponent(), i18n.tr("This date cannot be in the past", lastInceptionDate));
                     }
                 }
