@@ -36,8 +36,10 @@ import ca.equifax.uat.from.EfxTransmit;
 import ca.equifax.uat.from.ParsedTelephone;
 
 import com.pyx4j.commons.LogicalDate;
+import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.core.EntityFactory;
 
+import com.propertyvista.biz.system.OperationsAlertFacade;
 import com.propertyvista.crm.rpc.dto.tenant.CustomerCreditCheckLongReportDTO;
 import com.propertyvista.crm.rpc.dto.tenant.CustomerCreditCheckLongReportDTO.RatingLevel;
 import com.propertyvista.crm.rpc.dto.tenant.CustomerCreditCheckLongReportDTO.RiskLevel;
@@ -54,16 +56,20 @@ public class EquifaxLongReportModelMapper {
     public static CustomerCreditCheckLongReportDTO createLongReport(EfxTransmit efxResponse, CustomerCreditCheck ccc) {
         CustomerCreditCheckLongReportDTO dto = EntityFactory.create(CustomerCreditCheckLongReportDTO.class);
 
-        if (efxResponse.getEfxReport() != null && efxResponse.getEfxReport().get(0).getCNConsumerCreditReports() != null) {
+        if (!efxResponse.getEfxReport().isEmpty() && efxResponse.getEfxReport().get(0).getCNConsumerCreditReports() != null
+                && !efxResponse.getEfxReport().get(0).getCNConsumerCreditReports().getCNConsumerCreditReport().isEmpty()) {
+
             CNConsumerCreditReportType report = efxResponse.getEfxReport().get(0).getCNConsumerCreditReports().getCNConsumerCreditReport().get(0);
 
             CNScoreType score = getCNScore(report.getCNScores().getCNScore(), "SCOR");
-            if (score.getRejectCodes() != null && score.getRejectCodes().getRejectCode() != null && !score.getRejectCodes().getRejectCode().isEmpty()) {
+            if (score.getRejectCodes() != null && !score.getRejectCodes().getRejectCode().isEmpty()) {
                 dto.percentOfRentCovered().setValue(getRejectCode(score.getRejectCodes().getRejectCode().get(0).getCode()));
                 dto.equifaxRiskLevel().setValue(getRiskLevel(score.getRejectCodes().getRejectCode().get(0).getCode()));
             }
+
             if (report.getCNTrades() != null) {
                 List<CNTradeType> cnTrades = report.getCNTrades().getCNTrade();
+
                 dto.totalAccounts().setValue(cnTrades.size());
                 dto.totalOutstandingBalance().setValue(getTotalCNTradesBalance(cnTrades));
                 dto.accountsWithNoLatePayments().setValue(countAccounts(cnTrades, "R1"));
@@ -90,7 +96,6 @@ public class EquifaxLongReportModelMapper {
             dto.numberOfLegalItems().setValue(report.getCNLegalItems() != null ? report.getCNLegalItems().getCNLegalItem().size() : 0);
             dto.outstandingCollectionsBalance().setValue(
                     getTotalCNCollectionsBalance(report.getCNCollections() != null ? report.getCNCollections().getCNCollection() : null));
-
             dto.landlordCollectionsFiled().setValue(report.getCNCollections() != null ? report.getCNCollections().getCNCollection().size() : 0);
 
             // TODO mapping says SCBC, error in mapping?
@@ -103,60 +108,71 @@ public class EquifaxLongReportModelMapper {
 
             // Identity
             CustomerCreditCheckLongReportDTO.IdentityDTO identity = EntityFactory.create(CustomerCreditCheckLongReportDTO.IdentityDTO.class);
-            if (report.getCNHeader().getSubject() != null) {
-                Subject subject = report.getCNHeader().getSubject();
-                Name identityName = EntityFactory.create(Name.class);
-                identityName.firstName().setValue(subject.getSubjectName().getFirstName());
-                identityName.lastName().setValue(subject.getSubjectName().getLastName());
-                identityName.middleName().setValue(subject.getSubjectName().getMiddleName());
-                identity.name().set(identityName);
-                if (subject.getSubjectId() != null) {
-                    identity.birthDate().setValue(
-                            getLogicalDateFromString(subject.getSubjectId().getDateOfBirth() != null ? subject.getSubjectId().getDateOfBirth().getValue()
-                                    : null));
-                    identity.SIN().setValue(subject.getSubjectId().getSocialInsuranceNumber());
-                    identity.deathDate().setValue(
-                            subject.getSubjectId().getDateOfDeath() != null ? new LogicalDate(subject.getSubjectId().getDateOfDeath().toGregorianCalendar()
-                                    .getTime()) : null);
-                    if (subject.getSubjectId().getMaritalStatus() != null) {
-                        identity.maritalStatus().setValue(subject.getSubjectId().getMaritalStatus().getDescription());
+            try {
+                if (report.getCNHeader().getSubject() != null) {
+                    Subject subject = report.getCNHeader().getSubject();
+
+                    Name identityName = EntityFactory.create(Name.class);
+                    identityName.firstName().setValue(subject.getSubjectName().getFirstName());
+                    identityName.lastName().setValue(subject.getSubjectName().getLastName());
+                    identityName.middleName().setValue(subject.getSubjectName().getMiddleName());
+                    identity.name().set(identityName);
+
+                    if (subject.getSubjectId() != null) {
+                        identity.birthDate().setValue(
+                                getLogicalDateFromString(subject.getSubjectId().getDateOfBirth() != null ? subject.getSubjectId().getDateOfBirth().getValue()
+                                        : null));
+                        identity.SIN().setValue(subject.getSubjectId().getSocialInsuranceNumber());
+                        identity.deathDate().setValue(
+                                subject.getSubjectId().getDateOfDeath() != null ? new LogicalDate(subject.getSubjectId().getDateOfDeath().toGregorianCalendar()
+                                        .getTime()) : null);
+                        if (subject.getSubjectId().getMaritalStatus() != null) {
+                            identity.maritalStatus().setValue(subject.getSubjectId().getMaritalStatus().getDescription());
+                        }
                     }
                 }
-
-            }
-            identity.currentAddress().set(createAddress(getCNAddress(report.getCNAddresses().getCNAddress(), "CA")));
-            identity.formerAddress().set(createAddress(getCNAddress(report.getCNAddresses().getCNAddress(), "FA")));
-            if (report.getCNEmployments() != null) {
-                identity.currentEmployer().setValue(
-                        getEmployer(getEmployment(report.getCNEmployments() != null ? report.getCNEmployments().getCNEmployment() : null, "ES")));
-                identity.currentOccupation().setValue(getOccupation(getEmployment(report.getCNEmployments().getCNEmployment(), "ES")));
-                identity.formerEmployer().setValue(getEmployer(getEmployment(report.getCNEmployments().getCNEmployment(), "EF")));
-                identity.formerOccupation().setValue(getOccupation(getEmployment(report.getCNEmployments().getCNEmployment(), "EF")));
+                identity.currentAddress().set(createAddress(getCNAddress(report.getCNAddresses().getCNAddress(), "CA")));
+                identity.formerAddress().set(createAddress(getCNAddress(report.getCNAddresses().getCNAddress(), "FA")));
+                if (report.getCNEmployments() != null) {
+                    identity.currentEmployer().setValue(
+                            getEmployer(getEmployment(report.getCNEmployments() != null ? report.getCNEmployments().getCNEmployment() : null, "ES")));
+                    identity.currentOccupation().setValue(getOccupation(getEmployment(report.getCNEmployments().getCNEmployment(), "ES")));
+                    identity.formerEmployer().setValue(getEmployer(getEmployment(report.getCNEmployments().getCNEmployment(), "EF")));
+                    identity.formerOccupation().setValue(getOccupation(getEmployment(report.getCNEmployments().getCNEmployment(), "EF")));
+                }
+            } catch (Throwable e) {
+                logIputDataProblem(e);
             }
 
             dto.identity().set(identity);
 
             // Accounts
             if (report.getCNTrades() != null) {
-                List<CNTradeType> cnTrades = report.getCNTrades().getCNTrade();
-                for (CNTradeType cnTrade : cnTrades) {
+                for (CNTradeType cnTrade : report.getCNTrades().getCNTrade()) {
                     CustomerCreditCheckLongReportDTO.AccountDTO account = EntityFactory.create(CustomerCreditCheckLongReportDTO.AccountDTO.class);
-                    account.name().setValue(cnTrade.getCreditorId().getName());
-                    account.number().setValue(cnTrade.getAccountNumber().getValue());
-                    if (cnTrade.getHighCreditAmount() != null) {
-                        account.creditAmount().setValue(cnTrade.getHighCreditAmount().getValue());
+
+                    try {
+                        account.name().setValue(cnTrade.getCreditorId().getName());
+                        account.number().setValue(cnTrade.getAccountNumber().getValue());
+                        if (cnTrade.getHighCreditAmount() != null) {
+                            account.creditAmount().setValue(cnTrade.getHighCreditAmount().getValue());
+                        }
+                        if (cnTrade.getBalanceAmount() != null) {
+                            account.balanceAmount().setValue(cnTrade.getBalanceAmount().getValue());
+                        }
+                        account.lastPayment().setValue(
+                                cnTrade.getDateLastActivityOrPayment() != null ? new LogicalDate(cnTrade.getDateLastActivityOrPayment().toGregorianCalendar()
+                                        .getTime()) : null);
+                        account.code().setValue(cnTrade.getPortfolioType().getCode() + cnTrade.getPaymentRate().getCode());
+                        account.type().setValue(cnTrade.getPortfolioType().getDescription());
+                        account.paymentRate().setValue(cnTrade.getPaymentRate().getDescription());
+                        if (!cnTrade.getNarratives().getNarrative().isEmpty()) {
+                            // TODO do we need all descriptions here or just first one?
+                            account.paymentType().setValue(cnTrade.getNarratives().getNarrative().get(0).getDescription());
+                        }
+                    } catch (Throwable e) {
+                        logIputDataProblem(e);
                     }
-                    if (cnTrade.getBalanceAmount() != null) {
-                        account.balanceAmount().setValue(cnTrade.getBalanceAmount().getValue());
-                    }
-                    account.lastPayment().setValue(
-                            cnTrade.getDateLastActivityOrPayment() != null ? new LogicalDate(cnTrade.getDateLastActivityOrPayment().toGregorianCalendar()
-                                    .getTime()) : null);
-                    account.code().setValue(cnTrade.getPortfolioType().getCode() + cnTrade.getPaymentRate().getCode());
-                    account.type().setValue(cnTrade.getPortfolioType().getDescription());
-                    account.paymentRate().setValue(cnTrade.getPaymentRate().getDescription());
-                    // TODO do we need all descriptions here or just first one?
-                    account.paymentType().setValue(cnTrade.getNarratives().getNarrative().get(0).getDescription());
 
                     dto.accounts().add(account);
                 }
@@ -165,19 +181,23 @@ public class EquifaxLongReportModelMapper {
             // Court Judgements
 
             if (report.getCNLegalItems() != null) {
-                List<CNLegalItemType> cnLegals = report.getCNLegalItems().getCNLegalItem();
-                for (CNLegalItemType cnLegal : cnLegals) {
+                for (CNLegalItemType cnLegal : report.getCNLegalItems().getCNLegalItem()) {
                     CustomerCreditCheckLongReportDTO.JudgementDTO judgement = EntityFactory.create(CustomerCreditCheckLongReportDTO.JudgementDTO.class);
-                    judgement.caseNumber().setValue(cnLegal.getCaseNumber());
-                    judgement.customerNumber().setValue(cnLegal.getCourtId().getCustomerNumber());
-                    judgement.customerName().setValue(cnLegal.getCourtId().getName());
-                    judgement.status().setValue(cnLegal.getStatus().getDescription());
-                    judgement.dateFiled().setValue(
-                            cnLegal.getDateFiled() != null ? new LogicalDate(cnLegal.getDateFiled().toGregorianCalendar().getTime()) : null);
-                    judgement.dateSatisfied().setValue(
-                            cnLegal.getDateSatisfied() != null ? new LogicalDate(cnLegal.getDateSatisfied().toGregorianCalendar().getTime()) : null);
-                    judgement.plaintiff().setValue(cnLegal.getPlaintiff().getValue());
-                    judgement.defendants().setValue(cnLegal.getDefendant());
+
+                    try {
+                        judgement.caseNumber().setValue(cnLegal.getCaseNumber());
+                        judgement.customerNumber().setValue(cnLegal.getCourtId().getCustomerNumber());
+                        judgement.customerName().setValue(cnLegal.getCourtId().getName());
+                        judgement.status().setValue(cnLegal.getStatus().getDescription());
+                        judgement.dateFiled().setValue(
+                                cnLegal.getDateFiled() != null ? new LogicalDate(cnLegal.getDateFiled().toGregorianCalendar().getTime()) : null);
+                        judgement.dateSatisfied().setValue(
+                                cnLegal.getDateSatisfied() != null ? new LogicalDate(cnLegal.getDateSatisfied().toGregorianCalendar().getTime()) : null);
+                        judgement.plaintiff().setValue(cnLegal.getPlaintiff().getValue());
+                        judgement.defendants().setValue(cnLegal.getDefendant());
+                    } catch (Throwable e) {
+                        logIputDataProblem(e);
+                    }
 
                     dto.judgements().add(judgement);
                 }
@@ -186,18 +206,23 @@ public class EquifaxLongReportModelMapper {
             // Proposals and Bankrupcies
 
             if (report.getCNBankruptciesOrActs() != null) {
-                List<CNBankruptcyOrActType> cnActs = report.getCNBankruptciesOrActs().getCNBankruptcyOrAct();
-                for (CNBankruptcyOrActType cnAct : cnActs) {
+                for (CNBankruptcyOrActType cnAct : report.getCNBankruptciesOrActs().getCNBankruptcyOrAct()) {
                     CustomerCreditCheckLongReportDTO.ProposalDTO proposal = EntityFactory.create(CustomerCreditCheckLongReportDTO.ProposalDTO.class);
-                    proposal.customerNumber().setValue(cnAct.getCourtId().getCustomerNumber());
-                    proposal.customerName().setValue(cnAct.getCourtId().getName());
-                    if (cnAct.getIntentOrDisposition() != null && cnAct.getIntentOrDisposition().getDate() != null) {
-                        proposal.dispositionDate().setValue(new LogicalDate(cnAct.getIntentOrDisposition().getDate().toGregorianCalendar().getTime()));
+
+                    try {
+                        proposal.customerNumber().setValue(cnAct.getCourtId().getCustomerNumber());
+                        proposal.customerName().setValue(cnAct.getCourtId().getName());
+                        if (cnAct.getIntentOrDisposition() != null && cnAct.getIntentOrDisposition().getDate() != null) {
+                            proposal.dispositionDate().setValue(new LogicalDate(cnAct.getIntentOrDisposition().getDate().toGregorianCalendar().getTime()));
+                        }
+                        proposal.liabilityAmount().setValue(cnAct.getLiabilityAmount() != null ? cnAct.getLiabilityAmount().getValue() : null);
+                        proposal.assetAmount().setValue(cnAct.getAssetAmount() != null ? cnAct.getAssetAmount().getValue() : null);
+                        proposal.caseNumberAndTrustee().setValue(cnAct.getCaseNumberAndTrustee());
+                        proposal.intentOrDisposition().setValue(cnAct.getIntentOrDisposition().getDescription());
+                    } catch (Throwable e) {
+                        logIputDataProblem(e);
                     }
-                    proposal.liabilityAmount().setValue(cnAct.getLiabilityAmount().getValue());
-                    proposal.assetAmount().setValue(cnAct.getAssetAmount() != null ? cnAct.getAssetAmount().getValue() : null);
-                    proposal.caseNumberAndTrustee().setValue(cnAct.getCaseNumberAndTrustee());
-                    proposal.intentOrDisposition().setValue(cnAct.getIntentOrDisposition().getDescription());
+
                     dto.proposals().add(proposal);
                 }
             }
@@ -209,18 +234,26 @@ public class EquifaxLongReportModelMapper {
             // Collections
 
             if (report.getCNCollections() != null) {
-                List<CNCollectionType> cnCollections = report.getCNCollections().getCNCollection();
-                for (CNCollectionType cnCollection : cnCollections) {
+                for (CNCollectionType cnCollection : report.getCNCollections().getCNCollection()) {
                     CustomerCreditCheckLongReportDTO.CollectionDTO collection = EntityFactory.create(CustomerCreditCheckLongReportDTO.CollectionDTO.class);
-                    collection.onBehalf().setValue(cnCollection.getCollectionCreditor().getAccountNumberAndOrName());
-                    collection.date().setValue(
-                            cnCollection.getAssignedDate() != null ? new LogicalDate(cnCollection.getAssignedDate().toGregorianCalendar().getTime()) : null);
-                    collection.lastActive().setValue(
-                            cnCollection.getDateOfLastPayment() != null ? new LogicalDate(cnCollection.getDateOfLastPayment().toGregorianCalendar().getTime())
-                                    : null);
-                    collection.originalAmount().setValue(cnCollection.getOriginalAmount().getValue().getValue());
-                    collection.balance().setValue(cnCollection.getBalanceAmount().getValue());
-                    collection.status().setValue(cnCollection.getDescription());
+
+                    try {
+                        collection.onBehalf().setValue(cnCollection.getCollectionCreditor().getAccountNumberAndOrName());
+                        collection
+                                .date()
+                                .setValue(
+                                        cnCollection.getAssignedDate() != null ? new LogicalDate(cnCollection.getAssignedDate().toGregorianCalendar().getTime())
+                                                : null);
+                        collection.lastActive().setValue(
+                                cnCollection.getDateOfLastPayment() != null ? new LogicalDate(cnCollection.getDateOfLastPayment().toGregorianCalendar()
+                                        .getTime()) : null);
+                        collection.originalAmount().setValue(cnCollection.getOriginalAmount().getValue().getValue());
+                        collection.balance().setValue(cnCollection.getBalanceAmount() != null ? cnCollection.getBalanceAmount().getValue() : null);
+                        collection.status().setValue(cnCollection.getDescription());
+                    } catch (Throwable e) {
+                        logIputDataProblem(e);
+                    }
+
                     dto.collections().add(collection);
                 }
             }
@@ -228,20 +261,26 @@ public class EquifaxLongReportModelMapper {
             // Inquiries
 
             if (report.getCNLocalInquiries() != null) {
-                List<CNLocalInquiryType> cnInquiries = report.getCNLocalInquiries().getCNLocalInquiry();
-                for (CNLocalInquiryType cnInquiry : cnInquiries) {
+                for (CNLocalInquiryType cnInquiry : report.getCNLocalInquiries().getCNLocalInquiry()) {
                     CustomerCreditCheckLongReportDTO.InquiryDTO inquiry = EntityFactory.create(CustomerCreditCheckLongReportDTO.InquiryDTO.class);
-                    inquiry.onBehalf().setValue(cnInquiry.getCustomerId().getName());
-                    inquiry.date().setValue(cnInquiry.getDate() != null ? new LogicalDate(cnInquiry.getDate().toGregorianCalendar().getTime()) : null);
-                    inquiry.customerNumber().setValue(cnInquiry.getCustomerId() != null ? cnInquiry.getCustomerId().getCustomerNumber() : null);
-                    if (cnInquiry.getCustomerId().getTelephone() != null) {
-                        ParsedTelephone cnPhone = cnInquiry.getCustomerId().getTelephone().getParsedTelephone();
-                        String phone = cnPhone.getAreaCode().toString() + "-" + cnPhone.getNumber();
-                        if (cnPhone.getExtension() != null) {
-                            phone = phone + " ex. " + cnPhone.getExtension().toString();
+
+                    try {
+                        inquiry.onBehalf().setValue(cnInquiry.getCustomerId().getName());
+                        inquiry.date().setValue(cnInquiry.getDate() != null ? new LogicalDate(cnInquiry.getDate().toGregorianCalendar().getTime()) : null);
+                        inquiry.customerNumber().setValue(
+                                cnInquiry.getCustomerId().getCustomerNumber() != null ? cnInquiry.getCustomerId().getCustomerNumber() : null);
+                        if (cnInquiry.getCustomerId().getTelephone() != null) {
+                            ParsedTelephone cnPhone = cnInquiry.getCustomerId().getTelephone().getParsedTelephone();
+                            String phone = cnPhone.getAreaCode().toString() + "-" + cnPhone.getNumber();
+                            if (cnPhone.getExtension() != null) {
+                                phone = phone + " ex. " + cnPhone.getExtension().toString();
+                            }
+                            inquiry.phone().setValue(phone);
                         }
-                        inquiry.phone().setValue(phone);
+                    } catch (Throwable e) {
+                        logIputDataProblem(e);
                     }
+
                     dto.inquiries().add(inquiry);
                 }
             }
@@ -249,6 +288,11 @@ public class EquifaxLongReportModelMapper {
             return dto;
         }
         return null;
+    }
+
+    private static void logIputDataProblem(Throwable e) {
+        log.debug("EquifaxLongReportModelMapper - input data problem: {}", e);
+        ServerSideFactory.create(OperationsAlertFacade.class).sendEmailAlert("EquifaxLongReportModelMapper", "Input data problem: {}", e);
     }
 
     private static RiskLevel getRiskLevel(String codeString) {
@@ -270,6 +314,7 @@ public class EquifaxLongReportModelMapper {
         } else if (score >= 359 && score < 620) {
             return RatingLevel.poor;
         }
+
         log.debug("Rating Level score is out of limits of 359-800 does not contain the value ''{}'', returning null", score);
         return null;
     }
