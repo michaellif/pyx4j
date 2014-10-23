@@ -135,7 +135,7 @@ public class CEntityWizard<E extends IEntity> extends CForm<E> {
     }
 
     public final void showStep(int index) {
-        if (allowLeavingCurrentStep()) {
+        if (getSelectedIndex() != index && allowLeavingCurrentStep()) {
             WizardStep previousStep = getSelectedStep();
             WizardStep step = wizardPanel.getStep(index);
             wizardPanel.showStep(step);
