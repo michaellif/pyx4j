@@ -155,7 +155,7 @@ public abstract class VistaAuthenticationServicesImpl<U extends AbstractUser, V 
         String sessionToken = beginSession(request);
         if (!isSessionValid()) {
             Lifecycle.endSession();
-            throw new UserRuntimeException(AbstractAntiBot.GENERIC_LOGIN_FAILED_MESSAGE);
+            throw new UserRuntimeException(AbstractAntiBot.cannedLoginFailedMessage());
         }
         log.info("authenticated {}; UserAgent {}", ServerContext.getVisit().getUserVisit().getEmail(), clientSystemInfo.getUserAgent());
         callback.onSuccess(createAuthenticationResponse(sessionToken));
@@ -174,7 +174,7 @@ public abstract class VistaAuthenticationServicesImpl<U extends AbstractUser, V 
         }
         AccessKey.TokenParser token = new AccessKey.TokenParser(accessToken);
         if (!EmailValidator.isValid(token.email)) {
-            throw new UserRuntimeException(true, AbstractAntiBot.GENERIC_LOGIN_FAILED_MESSAGE);
+            throw new UserRuntimeException(true, AbstractAntiBot.cannedLoginFailedMessage());
         }
         String email = EmailValidator.normalizeEmailAddress(token.email);
         AbstractAntiBot.assertLogin(LoginType.accessToken, email, null);
@@ -187,7 +187,7 @@ public abstract class VistaAuthenticationServicesImpl<U extends AbstractUser, V 
             if (AbstractAntiBot.authenticationFailed(LoginType.accessToken, email)) {
                 throw new ChallengeVerificationRequired();
             } else {
-                throw new UserRuntimeException(true, AbstractAntiBot.GENERIC_LOGIN_FAILED_MESSAGE);
+                throw new UserRuntimeException(true, AbstractAntiBot.cannedLoginFailedMessage());
             }
         }
         U user = users.get(0);
@@ -201,7 +201,7 @@ public abstract class VistaAuthenticationServicesImpl<U extends AbstractUser, V 
             }
             if (!cr.enabled().getValue(false)) {
                 log.warn("Invalid log-in attempt {} : disabled user", email);
-                throw new UserRuntimeException(true, AbstractAntiBot.GENERIC_LOGIN_FAILED_MESSAGE);
+                throw new UserRuntimeException(true, AbstractAntiBot.cannedLoginFailedMessage());
             }
 
             if (!token.accessKey.equals(cr.accessKey().getValue())) {
@@ -219,19 +219,19 @@ public abstract class VistaAuthenticationServicesImpl<U extends AbstractUser, V 
             }
         }
 
+        V visit = createUserVisit(user);
         Set<Behavior> behaviors = new HashSet<Behavior>();
         behaviors.add(getVistaApplication());
         if (token.behaviorPasswordChangeRequired) {
             behaviors.add(getPasswordChangeRequiredBehavior());
         } else {
-            behaviors.addAll(getBehaviors(cr, null));
+            behaviors.addAll(getBehaviors(cr, visit));
             behaviors.add(getApplicationAccessGrantedBehavior());
             // This is one time login, reset token
             cr.accessKey().setValue(null);
             Persistence.service().persist(cr);
             Persistence.service().commit();
         }
-        V visit = createUserVisit(user);
         log.info("authenticated {} as {}", user.email().getValue(), behaviors);
 
         String sessionToken = Lifecycle.beginSession(visit, behaviors);
@@ -371,7 +371,7 @@ public abstract class VistaAuthenticationServicesImpl<U extends AbstractUser, V 
     protected String beginApplicationSession(V visit, E credentials, Set<Behavior> behaviors, IEntity additionalConditions) {
         // Only default ApplicationBehavior assigned is error. User have no roles
         if (behaviors.isEmpty() || ((behaviors.size() == 1) && (behaviors.contains(getVistaApplication())))) {
-            throw new UserRuntimeException(AbstractAntiBot.GENERIC_LOGIN_FAILED_MESSAGE);
+            throw new UserRuntimeException(AbstractAntiBot.cannedLoginFailedMessage());
         }
         log.info("authenticated {} as {}", visit.getEmail(), behaviors);
         String token = Lifecycle.beginSession(visit, behaviors);
@@ -469,6 +469,9 @@ public abstract class VistaAuthenticationServicesImpl<U extends AbstractUser, V 
             }
             systemWallMessage.setMessage(CommonsStringUtils.nvl_concat(systemWallMessage.getMessage(), SystemMaintenance.getApplicationMaintenanceMessage(),
                     ".\n"));
+            break;
+        default:
+            break;
         }
 
         ar.setSystemWallMessage(systemWallMessage);
