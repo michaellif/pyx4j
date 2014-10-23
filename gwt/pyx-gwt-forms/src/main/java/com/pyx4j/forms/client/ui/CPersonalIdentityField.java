@@ -29,7 +29,6 @@ import com.pyx4j.commons.PersonalIdentityFormatter;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.shared.IPersonalIdentity;
 import com.pyx4j.forms.client.validators.RegexValidator;
-import com.pyx4j.forms.client.validators.TextBoxParserValidator;
 import com.pyx4j.i18n.shared.I18n;
 
 /**
@@ -78,6 +77,9 @@ public class CPersonalIdentityField<T extends IPersonalIdentity> extends CTextFi
 
     @Override
     public boolean isValueEmpty() {
+        if (!CommonsStringUtils.isEmpty(getNativeComponent().getNativeText())) {
+            return false;
+        }
         return getValue() == null || getValue().isNull();
     }
 
