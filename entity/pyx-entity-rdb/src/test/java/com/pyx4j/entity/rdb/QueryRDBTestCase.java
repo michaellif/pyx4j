@@ -107,7 +107,8 @@ public abstract class QueryRDBTestCase extends DatastoreTestBase {
             Assert.assertEquals("result set size", dataSize, empsRetrived.size());
         }
 
-        if (false) {
+        // Test IN Empty
+        {
             List<Employee> noEmps = Collections.emptyList();
             EntityQueryCriteria<Employee> criteria = EntityQueryCriteria.create(Employee.class);
             criteria.in(criteria.proto().id(), noEmps);
