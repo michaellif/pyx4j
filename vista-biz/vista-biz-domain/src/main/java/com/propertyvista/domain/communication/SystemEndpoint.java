@@ -34,6 +34,9 @@ public interface SystemEndpoint extends CommunicationEndpoint {
         @Translate("Group")
         Group,
 
+        @Translate("Archive")
+        Archive,
+
         @Translate("Ticket Dispatcher")
         Unassigned;
 

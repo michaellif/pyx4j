@@ -407,7 +407,8 @@ public class CommunicationManager {
                 thread.owner().set(currentUser);
             } else if (updateOwner && CategoryType.Ticket.equals(dto.category().categoryType().getValue())
                     && thread.owner().equals(communicationFacade.getSystemEndpointFromCache(SystemEndpointName.Unassigned))) {
-                thread.owner().set(communicationFacade.getSystemEndpointFromCache(SystemEndpointName.Unassigned));
+                thread.owner().set(communicationFacade.getSystemEndpointFromCache(SystemEndpointName.Archive));
+                thread.allowedReply().setValue(false);
             }
 
             Persistence.service().persist(thread);

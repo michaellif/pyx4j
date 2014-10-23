@@ -49,6 +49,9 @@ public interface CommunicationEndpoint extends IEntity {
 
         @Override
         public String toString() {
+            if (System.equals(this)) {
+                return "";
+            }
             return I18nEnum.toString(this);
         }
     }

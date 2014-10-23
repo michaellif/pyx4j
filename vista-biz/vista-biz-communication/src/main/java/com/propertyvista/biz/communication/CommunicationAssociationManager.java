@@ -199,8 +199,8 @@ public class CommunicationAssociationManager {
             dto.highImportance().setValue(false);
             dto.allowedReply().setValue(true);
             dto.text().setValue(association2Body(ca));
+            dto.category().set(communicationFacade.getMessageCategoryFromCache(TicketType.Maintenance));
 
-            //equest.reporter().isNull() ? requestReporter : request.reporter()
             Message newMessage = communicationFacade.saveMessage(dto, association2Status(ca), association2Sender(ca, currentUser), true);
             association2Recipient(newMessage, ca, currentUser);
             Persistence.service().persist(newMessage);
