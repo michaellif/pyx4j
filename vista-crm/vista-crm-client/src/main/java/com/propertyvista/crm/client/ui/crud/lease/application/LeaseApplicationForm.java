@@ -62,8 +62,8 @@ public class LeaseApplicationForm extends LeaseFormBase<LeaseApplicationDTO> {
         addTab(((LeaseApplicationViewerView) getParentView()).getPaymentListerView().asWidget(), i18n.tr("Payments"),
                 DataModelPermission.permissionRead(PaymentRecordDTO.class));
         addTab(createFinancialTab(), i18n.tr("Financial"), DataModelPermission.permissionRead(TenantFinancialDTO.class));
-        addTab(createApprovalTab(), i18n.tr("Summary"));
         addTab(createApplicationDocumentsTab(), i18n.tr("Application Documents"), DataModelPermission.permissionRead(LeaseApplicationDocument.class));
+        addTab(createApprovalTab(), i18n.tr("Summary"));
     }
 
     @Override
