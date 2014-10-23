@@ -201,6 +201,8 @@ public class CreditCardInfoEditor extends CForm<CreditCardInfo> {
 
     private void validateCreditCardNumberAsync(final CComponent<?, ?, ?> component, CreditCardNumberIdentity value) {
         if (!isCreditCardNumberCheckSent && value != null) {
+            resetCreditCardNumberValidationResult();
+
             if (ValidationUtils.isCreditCardNumberIinValid(retrieveCreditCardTypePatterns(), value.newNumber().getValue())) {
                 CreditCardInfo ccInfo = getValue().<CreditCardInfo> duplicate();
                 ccInfo.card().newNumber().set(value.newNumber());
@@ -220,9 +222,6 @@ public class CreditCardInfoEditor extends CForm<CreditCardInfo> {
                 }, ccInfo);
 
                 isCreditCardNumberCheckSent = true;
-                isCreditCardNumberValid = new BasicValidationError(component, i18n.tr("Validation in progress..."));
-            } else {
-                resetCreditCardNumberValidationResult();
             }
         }
     }
