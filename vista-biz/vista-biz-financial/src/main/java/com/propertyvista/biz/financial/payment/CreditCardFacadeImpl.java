@@ -122,7 +122,7 @@ public class CreditCardFacadeImpl implements CreditCardFacade {
 
     @Override
     public boolean validateCreditCard(CreditCardInfo creditCardInfo) {
-        return CreditCardProcessor.validateCreditCard(creditCardInfo);
+        return CreditCardProcessor.validateCreditCard(creditCardInfo, true);
     }
 
     @Override

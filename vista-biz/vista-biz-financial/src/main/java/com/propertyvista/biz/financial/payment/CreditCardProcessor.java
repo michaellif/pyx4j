@@ -164,7 +164,8 @@ class CreditCardProcessor {
     static CreditCardValidationResponce validateCard(CreditCardInfo creditCardInfo) {
         // TODO Use new caledon card service validation
         CreditCardValidationResponce responce = EntityFactory.create(CreditCardValidationResponce.class);
-        responce.validWithTypeProvided().setValue(validateCreditCard(creditCardInfo));
+        // TODO: note - temporary solution - do not validate expiry date:
+        responce.validWithTypeProvided().setValue(validateCreditCard(creditCardInfo, false));
         if (responce.validWithTypeProvided().getValue()) {
             responce.validCardType().setValue(creditCardInfo.cardType().getValue());
         }
@@ -187,8 +188,8 @@ class CreditCardProcessor {
         }
     }
 
-    static boolean validateCreditCard(CreditCardInfo cc) {
-        if (cc.card().newNumber().isNull() || cc.cardType().isNull() || cc.expiryDate().isNull()) {
+    static boolean validateCreditCard(CreditCardInfo cc, boolean validateDate) {
+        if (cc.card().newNumber().isNull() || cc.cardType().isNull() || (validateDate && cc.expiryDate().isNull())) {
             return false;
         } else if (!ValidationUtils.isCreditCardNumberIinValid(cc.cardType().getValue().iinsPatterns, cc.card().newNumber().getValue())) {
             return false;

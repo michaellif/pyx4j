@@ -221,6 +221,8 @@ public class CreditCardInfoEditor extends CForm<CreditCardInfo> {
 
                 isCreditCardNumberCheckSent = true;
                 isCreditCardNumberValid = new BasicValidationError(component, i18n.tr("Validation in progress..."));
+            } else {
+                resetCreditCardNumberValidationResult();
             }
         }
     }
