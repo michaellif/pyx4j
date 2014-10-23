@@ -17,6 +17,7 @@ import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.entity.core.IObject;
 import com.pyx4j.entity.security.DataModelPermission;
+import com.pyx4j.forms.client.ui.CEntityLabel;
 import com.pyx4j.forms.client.ui.CEnumLabel;
 import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.folder.BoxFolderItemDecorator;
@@ -33,6 +34,7 @@ import com.propertyvista.crm.client.ui.crud.lease.application.components.Financi
 import com.propertyvista.crm.client.ui.crud.lease.application.components.LeaseApplicationDocumentFolder;
 import com.propertyvista.crm.client.ui.crud.lease.application.components.TenantInfoViewForm;
 import com.propertyvista.crm.client.ui.crud.lease.common.LeaseFormBase;
+import com.propertyvista.domain.contact.LegalAddress;
 import com.propertyvista.domain.customizations.CountryOfOperation;
 import com.propertyvista.domain.policy.policies.ProspectPortalPolicy.FeePayment;
 import com.propertyvista.domain.tenant.lease.LeaseApplication;
@@ -60,7 +62,7 @@ public class LeaseApplicationForm extends LeaseFormBase<LeaseApplicationDTO> {
         addTab(((LeaseApplicationViewerView) getParentView()).getPaymentListerView().asWidget(), i18n.tr("Payments"),
                 DataModelPermission.permissionRead(PaymentRecordDTO.class));
         addTab(createFinancialTab(), i18n.tr("Financial"), DataModelPermission.permissionRead(TenantFinancialDTO.class));
-        addTab(createApprovalTab(), i18n.tr("Approval"));
+        addTab(createApprovalTab(), i18n.tr("Summary"));
         addTab(createApplicationDocumentsTab(), i18n.tr("Application Documents"), DataModelPermission.permissionRead(LeaseApplicationDocument.class));
     }
 
@@ -84,6 +86,9 @@ public class LeaseApplicationForm extends LeaseFormBase<LeaseApplicationDTO> {
 
         get(proto().leaseApplication().applicationId()).setVisible(true);
         get(proto().leaseApplication().yardiApplicationId()).setVisible(VistaFeatures.instance().yardiIntegration());
+
+        get(proto().applicationId()).setVisible(true);
+        get(proto().yardiApplicationId()).setVisible(VistaFeatures.instance().yardiIntegration());
 
         if (onlineStatusPanel != null) {
             onlineStatusPanel.setVisible(!getValue().leaseApplication().onlineApplication().isNull());
@@ -148,6 +153,11 @@ public class LeaseApplicationForm extends LeaseFormBase<LeaseApplicationDTO> {
 
     private IsWidget createApprovalTab() {
         FormPanel formPanel = new FormPanel(this);
+
+        formPanel.append(Location.Dual, proto().unit().info().legalAddress(), new CEntityLabel<LegalAddress>()).decorate();
+
+        formPanel.append(Location.Left, proto().applicationId()).decorate().componentWidth(120);
+        formPanel.append(Location.Right, proto().yardiApplicationId()).decorate().componentWidth(120);
 
         formPanel.append(Location.Left, proto().leaseApplication().status(), new CEnumLabel()).decorate().componentWidth(180);
 

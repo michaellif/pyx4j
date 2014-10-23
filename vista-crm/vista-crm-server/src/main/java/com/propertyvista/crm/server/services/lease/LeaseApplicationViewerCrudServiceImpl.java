@@ -70,6 +70,7 @@ import com.propertyvista.dto.LeaseApplicationDTO;
 import com.propertyvista.dto.LeaseParticipanApprovalDTO;
 import com.propertyvista.dto.TenantFinancialDTO;
 import com.propertyvista.dto.TenantInfoDTO;
+import com.propertyvista.server.common.util.AddressRetriever;
 import com.propertyvista.server.common.util.LeaseParticipantUtils;
 import com.propertyvista.server.common.util.TenantConverter;
 import com.propertyvista.shared.config.VistaFeatures;
@@ -142,6 +143,11 @@ public class LeaseApplicationViewerCrudServiceImpl extends LeaseViewerCrudServic
         } else {
             to.isYardiApproved().setValue(false);
         }
+
+        // additional/duplicate info for Approval tab:
+        to.applicationId().setValue(to.leaseApplication().applicationId().getValue());
+        to.yardiApplicationId().setValue(to.leaseApplication().yardiApplicationId().getValue());
+        to.unit().info().legalAddress().set(AddressRetriever.getUnitLegalAddress(lease.unit()));
     }
 
     private void enhanceRetrievedCommon(Lease in, LeaseApplicationDTO dto) {

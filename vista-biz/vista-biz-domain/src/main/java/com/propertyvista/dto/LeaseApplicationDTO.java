@@ -13,6 +13,8 @@
  */
 package com.propertyvista.dto;
 
+import com.pyx4j.entity.annotations.Editor;
+import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.annotations.ExtendsBO;
 import com.pyx4j.entity.annotations.SecurityEnabled;
 import com.pyx4j.entity.annotations.Transient;
@@ -51,4 +53,11 @@ public interface LeaseApplicationDTO extends LeaseDTO {
     IPrimitive<String> currentTermNote();
 
     IPrimitive<Boolean> isYardiApproved();
+
+    @Editor(type = EditorType.label)
+    IPrimitive<String> applicationId();
+
+    @Editor(type = EditorType.label)
+    IPrimitive<String> yardiApplicationId();
+
 }
