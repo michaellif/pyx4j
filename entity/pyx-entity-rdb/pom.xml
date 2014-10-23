@@ -431,6 +431,7 @@
                         <artifactId>maven-surefire-plugin</artifactId>
                         <configuration>
                             <excludes>
+                                <exclude>**/*LongTest.*</exclude>
                                 <exclude>**/oracle/*.*</exclude>
                             </excludes>
                         </configuration>
