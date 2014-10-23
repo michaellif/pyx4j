@@ -112,9 +112,6 @@ public class CEntityWizard<E extends IEntity> extends CForm<E> {
 
     public void addStep(WizardStep step) {
         wizardPanel.addStep(step);
-        if (wizardPanel.size() == 1) {
-            showStep(0);
-        }
     }
 
     public WizardStep getSelectedStep() {
