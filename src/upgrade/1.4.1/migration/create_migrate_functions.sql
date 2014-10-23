@@ -396,6 +396,11 @@ BEGIN
                 ||'SET  ownership = prcnt::numeric(18,2) ';
                 
         
+        -- employee_signature 
+        
+        EXECUTE 'DELETE FROM '||v_schema_name||'.employee_signature '
+                ||'WHERE    file_blob_key IS NULL ';
+        
         -- restrictions_policy
         
         EXECUTE 'UPDATE '||v_schema_name||'.restrictions_policy '
