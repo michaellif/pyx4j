@@ -27,7 +27,7 @@ import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.IPrimitive;
 
 @AbstractEntity
-@ToStringFormat(value = "{0,choice,null#Untitled|!null#{0}}", nil = "{0,choice,null#Untitled|!null#{0}}")
+@ToStringFormat(value = "{0,choice,null#Untitled|!null#{0}}", nil = "Report")
 public interface ReportTemplate extends IEntity {
 
     @ToString(index = 0)
