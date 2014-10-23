@@ -344,12 +344,13 @@ public class LeaseTermForm extends CrmEntityForm<LeaseTermDTO> {
         get(proto().termFrom()).addValueChangeHandler(new ValueChangeHandler<LogicalDate>() {
             @Override
             public void onValueChange(ValueChangeEvent<LogicalDate> event) {
-                LogicalDate endDate = new LogicalDate(event.getValue());
+                if (event.getValue() != null) {
+                    LogicalDate endDate = new LogicalDate(event.getValue());
+                    CalendarUtil.addMonthsToDate(endDate, 12);
+                    CalendarUtil.addDaysToDate(endDate, -1);
 
-                CalendarUtil.addMonthsToDate(endDate, 12);
-                CalendarUtil.addDaysToDate(endDate, -1);
-
-                get(proto().termTo()).setValue(endDate);
+                    get(proto().termTo()).setValue(endDate);
+                }
             }
         });
 
