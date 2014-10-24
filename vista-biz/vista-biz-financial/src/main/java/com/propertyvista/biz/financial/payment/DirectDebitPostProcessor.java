@@ -28,7 +28,7 @@ import com.pyx4j.entity.server.Executable;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.server.TransactionScopeOption;
 import com.pyx4j.entity.server.UnitOfWork;
-import com.pyx4j.entity.shared.utils.EntityFromatUtils;
+import com.pyx4j.entity.shared.utils.EntityFormatUtils;
 
 import com.propertyvista.biz.ExecutionMonitor;
 import com.propertyvista.config.VistaDeployment;
@@ -147,13 +147,13 @@ public class DirectDebitPostProcessor {
     private <E extends LeaseTermParticipant<? extends LeaseParticipant<?>>> E findParticipantByExactNameMatch(String customerName, List<E> participants) {
         for (E participant : participants) {
             Name name = participant.leaseParticipant().customer().person().name();
-            if (customerName.equals(normalizeName(EntityFromatUtils.nvl_concat(" ", name.firstName(), name.lastName())))) {
+            if (customerName.equals(normalizeName(EntityFormatUtils.nvl_concat(" ", name.firstName(), name.lastName())))) {
                 return participant;
             }
-            if (customerName.equals(normalizeName(EntityFromatUtils.nvl_concat(" ", name.firstName(), name.maidenName(), name.lastName())))) {
+            if (customerName.equals(normalizeName(EntityFormatUtils.nvl_concat(" ", name.firstName(), name.maidenName(), name.lastName())))) {
                 return participant;
             }
-            if (customerName.equals(normalizeName(EntityFromatUtils.nvl_concat(" ", name.lastName(), name.firstName())))) {
+            if (customerName.equals(normalizeName(EntityFormatUtils.nvl_concat(" ", name.lastName(), name.firstName())))) {
                 return participant;
             }
             if (customerName.equals(normalizeName(name.getStringView()))) {

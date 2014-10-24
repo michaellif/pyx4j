@@ -28,7 +28,7 @@ import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.server.IEntityPersistenceService.ICursorIterator;
 import com.pyx4j.entity.server.Persistence;
-import com.pyx4j.entity.shared.utils.EntityFromatUtils;
+import com.pyx4j.entity.shared.utils.EntityFormatUtils;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.biz.financial.billing.BillingFacade;
@@ -147,7 +147,7 @@ class AutopayReviewReport {
             }
 
             if (!preauthorizedPayment.comments().isNull()) {
-                EntityFromatUtils.append(leaseReview.comments(), "\n", preauthorizedPayment.comments().getValue());
+                EntityFormatUtils.append(leaseReview.comments(), "\n", preauthorizedPayment.comments().getValue());
             }
         }
 

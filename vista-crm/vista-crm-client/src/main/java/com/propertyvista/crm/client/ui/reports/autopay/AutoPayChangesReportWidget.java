@@ -33,7 +33,7 @@ import com.google.gwt.user.client.EventListener;
 import com.google.gwt.user.client.ui.HTML;
 
 import com.pyx4j.entity.core.IEntity;
-import com.pyx4j.entity.shared.utils.EntityFromatUtils;
+import com.pyx4j.entity.shared.utils.EntityFormatUtils;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.backoffice.ui.prime.report.AbstractReport;
 import com.pyx4j.site.client.backoffice.ui.prime.report.IReportWidget;
@@ -313,7 +313,7 @@ public class AutoPayChangesReportWidget extends HTML implements IReportWidget {
             if (!r.notice().isNull()) {
                 noticeIcon = CrmImages.INSTANCE.noticeWarning().getSafeUri().asString();
             }
-            String textValue = EntityFromatUtils.nvl_concat(" ", r.notice(), r.comments());
+            String textValue = EntityFormatUtils.nvl_concat(" ", r.notice(), r.comments());
             return new SafeHtmlBuilder()
                     .appendHtmlConstant("<div style='text-align:center' class='" + AbstractReport.ReportPrintTheme.Styles.ReportNonPrintable.name() + "'>")
                     .appendHtmlConstant(
@@ -329,7 +329,7 @@ public class AutoPayChangesReportWidget extends HTML implements IReportWidget {
         SafeHtmlBuilder b = new SafeHtmlBuilder();
         if (!r.notice().isNull() || !r.comments().isNull()) {
             b.appendHtmlConstant("<span class='" + AbstractReport.ReportPrintTheme.Styles.ReportPrintableOnly.name() + "'>")
-                    .appendEscaped(EntityFromatUtils.nvl_concat(" ", r.notice(), r.comments())).appendHtmlConstant("</span>");
+                    .appendEscaped(EntityFormatUtils.nvl_concat(" ", r.notice(), r.comments())).appendHtmlConstant("</span>");
         }
         return b.toSafeHtml();
     }

@@ -26,7 +26,7 @@ import com.pyx4j.config.server.SystemDateManager;
 import com.pyx4j.entity.core.AttachLevel;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.server.Persistence;
-import com.pyx4j.entity.shared.utils.EntityFromatUtils;
+import com.pyx4j.entity.shared.utils.EntityFormatUtils;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.biz.asset.BuildingFacade;
@@ -119,7 +119,7 @@ class ARYardiPaymentManager extends ARAbstractPaymentManager {
 
         /// Handle Sold buildings
         if (ServerSideFactory.create(BuildingFacade.class).isSuspend(billingCycle.building())) {
-            EntityFromatUtils.append(paymentRecord.notice(), "\n", i18n.tr("Reversal was not posted to Yardi for suspended building"));
+            EntityFormatUtils.append(paymentRecord.notice(), "\n", i18n.tr("Reversal was not posted to Yardi for suspended building"));
             Persistence.service().merge(paymentRecord);
         } else {
 
