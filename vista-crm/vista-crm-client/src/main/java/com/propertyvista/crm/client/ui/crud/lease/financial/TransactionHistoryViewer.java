@@ -40,7 +40,7 @@ import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.widgets.client.Anchor;
-import com.pyx4j.widgets.client.DatePickerTextBox;
+import com.pyx4j.widgets.client.DatePicker;
 
 import com.propertyvista.common.client.theme.TransactionHistoryViewerTheme;
 import com.propertyvista.crm.client.themes.CrmTheme;
@@ -140,7 +140,7 @@ public class TransactionHistoryViewer extends CViewer<TransactionHistoryDTO> {
             String balanceRespresentation = NUMBER_FORMAT.format(balance);
 
             // build row
-            lineItemsView.setHTML(row, COL_DATE, toSafeHtml(DateTimeFormat.getFormat(DatePickerTextBox.defaultDateFormat).format(item.postDate().getValue())));
+            lineItemsView.setHTML(row, COL_DATE, toSafeHtml(DateTimeFormat.getFormat(DatePicker.defaultDateFormat).format(item.postDate().getValue())));
             if (item instanceof InvoiceCredit) {
                 lineItemsView.setWidget(row, COL_ITEM, asAnchor(item.description().getValue(), new Command() {
                     @Override
