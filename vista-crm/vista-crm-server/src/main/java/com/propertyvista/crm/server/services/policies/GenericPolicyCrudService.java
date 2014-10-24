@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011- All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -80,7 +80,7 @@ public abstract class GenericPolicyCrudService<POLICY extends Policy, POLICY_DTO
             dbo.node().set(node);
         }
         if (node.isNull() || node.getPrimaryKey() == null) {
-            throw new Error("unable to persist policy, the scope (a node in organizatonal hierarchy) was not set");
+            throw new Error("unable to persist policy, the scope (a node in organizational hierarchy) was not set");
         }
 
         boolean isNewPolicy = in.getPrimaryKey() == null;
@@ -112,6 +112,7 @@ public abstract class GenericPolicyCrudService<POLICY extends Policy, POLICY_DTO
     @Override
     protected void delete(POLICY actualEntity) {
         super.delete(actualEntity);
+        ServerSideFactory.create(PolicyFacade.class).resetPolicyCache();
         ServerSideFactory.create(AuditFacade.class).delete(actualEntity);
     }
 }
