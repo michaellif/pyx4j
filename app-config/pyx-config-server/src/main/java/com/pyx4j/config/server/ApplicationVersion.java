@@ -50,7 +50,7 @@ public class ApplicationVersion {
 
     private static final String PATCH_NUMBER = "patch.number";
 
-    private static final String BUILD_TIME_FORMAT = "yyyy-MM-dd HH:mm";
+    private static final String BUILD_TIME_FORMAT = "yyyy-MM-dd HH:mm z";
 
     private static final String BUILD_TIMESTAMP = "build.timestamp";
 
@@ -197,7 +197,7 @@ public class ApplicationVersion {
 
     /**
      * Extract major part of version
-     * 
+     *
      * @param version
      *            String "1.2.3" or "1.2.3.4"
      * @return 1.2.3

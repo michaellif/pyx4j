@@ -117,7 +117,7 @@
     <properties>
         <buildLabel>${project.version}</buildLabel>
 
-        <maven.build.timestamp.format>yyyy-MM-dd HH:mm</maven.build.timestamp.format>
+        <maven.build.timestamp.format>yyyy-MM-dd HH:mm z</maven.build.timestamp.format>
         <timestamp>${maven.build.timestamp}</timestamp>
 
         <gwtVersion>2.6.1</gwtVersion>
