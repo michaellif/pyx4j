@@ -69,8 +69,6 @@ public interface LeaseViewerView extends LeaseViewerViewBase<LeaseDTO> {
          */
         void simpleLeaseRenew(LogicalDate leaseEndDate);
 
-        void onInsuredTenantClicked(Tenant tenantId);
-
         void issueN4(N4BatchRequestDTO n4GenerationQuery); // TODO move this to LegalStateVisor
 
         void viewApplication();

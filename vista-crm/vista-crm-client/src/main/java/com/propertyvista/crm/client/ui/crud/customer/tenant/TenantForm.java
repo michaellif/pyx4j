@@ -167,7 +167,7 @@ public class TenantForm extends LeaseParticipantForm<TenantDTO> {
         });
 
         formPanel.h1(i18n.tr("Insurance Certificates"));
-        formPanel.append(Location.Dual, proto().insuranceCertificates(), new TenantInsuranceCertificateFolder(null));
+        formPanel.append(Location.Dual, proto().insuranceCertificates(), new TenantInsuranceCertificateFolder(false));
 
         return formPanel;
     }

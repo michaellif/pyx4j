@@ -24,7 +24,6 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
-import com.propertyvista.crm.client.ui.crud.lease.insurance.TenantInsuranceCertificateForm.TenantOwnerClickHandler;
 import com.propertyvista.domain.tenant.insurance.GeneralInsuranceCertificate;
 import com.propertyvista.domain.tenant.insurance.InsuranceCertificate;
 import com.propertyvista.domain.tenant.insurance.PropertyVistaIntegratedInsurance;
@@ -33,18 +32,20 @@ public class TenantInsuranceCertificateFolder extends VistaBoxFolder<InsuranceCe
 
     private final I18n i18n = I18n.get(TenantInsuranceCertificateFolder.class);
 
-    private final TenantOwnerClickHandler tenantOwnerClickHanlder;
+    private final boolean displayTenantOwner;
 
-    public TenantInsuranceCertificateFolder(TenantOwnerClickHandler tenatOwnerClickHandler) {
+    public TenantInsuranceCertificateFolder(boolean displayTenantOwner) {
         super(InsuranceCertificate.class);
+
         setRemovable(true);
         setOrderable(false);
-        this.tenantOwnerClickHanlder = tenatOwnerClickHandler;
+
+        this.displayTenantOwner = displayTenantOwner;
     }
 
     @Override
     protected CForm<InsuranceCertificate> createItemForm(IObject<?> member) {
-        return new TenantInsuranceCertificateForm<InsuranceCertificate>(InsuranceCertificate.class, tenantOwnerClickHanlder != null, tenantOwnerClickHanlder);
+        return new TenantInsuranceCertificateForm<InsuranceCertificate>(InsuranceCertificate.class, displayTenantOwner);
     }
 
     @Override

@@ -91,7 +91,6 @@ import com.propertyvista.domain.tenant.lease.LeaseTerm;
 import com.propertyvista.domain.tenant.lease.LeaseTermGuarantor;
 import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
 import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
-import com.propertyvista.domain.tenant.lease.Tenant;
 import com.propertyvista.dto.DepositLifecycleDTO;
 import com.propertyvista.dto.LeaseApplicationDTO;
 import com.propertyvista.dto.LeaseDTO;
@@ -167,12 +166,7 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
         maintenanceLister = new ListerInternalViewImplBase<MaintenanceRequestDTO>(new MaintenanceRequestLister());
 
         // set main form here:
-        setForm(new LeaseForm(this) {
-            @Override
-            public void onTenantInsuranceOwnerClicked(Tenant tenantId) {
-                ((LeaseViewerView.Presenter) getPresenter()).onInsuredTenantClicked(tenantId);
-            }
-        });
+        setForm(new LeaseForm(this));
 
         // Buttons:
         leaseAgreementButton = new Button(i18n.tr("Lease Agreement"), new ActionPermission(LeaseAgreementSigning.class));

@@ -22,6 +22,7 @@ import com.pyx4j.entity.server.Persistence;
 import com.propertyvista.biz.financial.payment.PaymentMethodFacade;
 import com.propertyvista.biz.tenant.insurance.TenantInsuranceFacade;
 import com.propertyvista.domain.legal.LegalLetter;
+import com.propertyvista.domain.tenant.insurance.InsuranceCertificate;
 import com.propertyvista.domain.tenant.lease.BillableItem;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseTermGuarantor;
@@ -81,7 +82,7 @@ public abstract class LeaseCrudServiceBaseImpl<DTO extends LeaseDTO> extends Abs
      */
     protected abstract void loadCurrentTerm(DTO to);
 
-    protected void loadDetachedProducts(DTO dto) {
+    private void loadDetachedProducts(DTO dto) {
         Persistence.service().retrieve(dto.currentTerm().version().leaseProducts().serviceItem().item().product());
 
         for (BillableItem item : dto.currentTerm().version().leaseProducts().featureItems()) {
@@ -92,6 +93,10 @@ public abstract class LeaseCrudServiceBaseImpl<DTO extends LeaseDTO> extends Abs
     private void loadTenantInsurance(LeaseDTO lease, LeaseTermTenant tenant) {
         Tenant tenantId = tenant.leaseParticipant().<Tenant> createIdentityStub();
         lease.tenantInsuranceCertificates().addAll(ServerSideFactory.create(TenantInsuranceFacade.class).getInsuranceCertificates(tenantId, true));
+
+        for (InsuranceCertificate<?> certificate : lease.tenantInsuranceCertificates()) {
+            Persistence.ensureRetrieve(certificate.insurancePolicy().tenant().customer().person().name(), AttachLevel.ToStringMembers);
+        }
     }
 
     private void loadCommunicationLetters(LeaseDTO lease) {

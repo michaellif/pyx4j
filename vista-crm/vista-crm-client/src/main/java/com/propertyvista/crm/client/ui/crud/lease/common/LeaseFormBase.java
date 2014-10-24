@@ -37,7 +37,6 @@ import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.crm.client.ui.crud.lease.common.term.GuarantorInLeaseFolder;
 import com.propertyvista.crm.client.ui.crud.lease.common.term.TenantInLeaseFolder;
 import com.propertyvista.crm.client.ui.crud.lease.insurance.TenantInsuranceCertificateFolder;
-import com.propertyvista.crm.client.ui.crud.lease.insurance.TenantInsuranceCertificateForm.TenantOwnerClickHandler;
 import com.propertyvista.domain.property.asset.Floorplan;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.building.BuildingUtility;
@@ -45,7 +44,6 @@ import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.tenant.lease.BillableItem;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseTerm;
-import com.propertyvista.domain.tenant.lease.Tenant;
 import com.propertyvista.dto.LeaseDTO;
 import com.propertyvista.misc.VistaTODO;
 import com.propertyvista.shared.config.VistaFeatures;
@@ -120,9 +118,6 @@ public abstract class LeaseFormBase<DTO extends LeaseDTO> extends CrmEntityForm<
         super.onReset();
         // disable any Notes
         get(proto().unit()).setNote(null);
-    }
-
-    public void onTenantInsuranceOwnerClicked(Tenant tenantId) {
     }
 
     protected IsWidget createDetailsTab() {
@@ -206,12 +201,7 @@ public abstract class LeaseFormBase<DTO extends LeaseDTO> extends CrmEntityForm<
 
         // Insurance: --------------------------------------------------------------------------------------------------------------------------------
         formPanel.h1(i18n.tr("Tenant Insurance"));
-        formPanel.append(Location.Dual, proto().tenantInsuranceCertificates(), new TenantInsuranceCertificateFolder(new TenantOwnerClickHandler() {
-            @Override
-            public void onTenantOwnerClicked(Tenant tenantId) {
-                LeaseFormBase.this.onTenantInsuranceOwnerClicked(tenantId);
-            }
-        }));
+        formPanel.append(Location.Dual, proto().tenantInsuranceCertificates(), new TenantInsuranceCertificateFolder(true));
 
         return formPanel;
     }
