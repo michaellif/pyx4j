@@ -27,13 +27,17 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
+import com.itextpdf.text.BaseColor;
 import com.itextpdf.text.DocumentException;
+import com.itextpdf.text.Font;
 import com.itextpdf.text.Image;
+import com.itextpdf.text.Rectangle;
 import com.itextpdf.text.pdf.AcroFields;
 import com.itextpdf.text.pdf.AcroFields.FieldPosition;
 import com.itextpdf.text.pdf.PdfContentByte;
 import com.itextpdf.text.pdf.PdfReader;
 import com.itextpdf.text.pdf.PdfStamper;
+import com.itextpdf.text.pdf.TextField;
 
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.core.IEntity;
@@ -45,6 +49,11 @@ import com.propertyvista.biz.legal.forms.framework.mapping.Formatter;
 import com.propertyvista.biz.legal.forms.framework.mapping.PdfFieldDescriptor;
 import com.propertyvista.biz.legal.forms.framework.mapping.PdfFieldsMapping;
 
+/**
+ * Field name can be formated with a max size in form "FieldName{MaxSize}" (see N4FieldsMapping).
+ * Exceeding MaxSize will produce an error. MaxSize = 0 means ScaleToFit - when long lines are
+ * encountered, the font size will be adjusted (min size = 6pt) in an attempt to fit the box width.
+ */
 public class FormFillerImpl implements FormFiller {
 
     @Override
@@ -92,18 +101,25 @@ public class FormFillerImpl implements FormFiller {
             }
 
             String part = fieldDescriptor.partitioner() == null ? value : fieldDescriptor.partitioner().getPart(value, partIndex);
-            if (fieldLength != -1) {
-                if (part.length() > fieldLength) {
-                    throw new IllegalArgumentException("part '" + part + "' of field '" + fieldName + "' has greater length then allowed (allowed length is "
-                            + fieldLength + ")");
-                }
-                while (part.length() != fieldLength) {
+            if (fieldLength > 0) {
+                while (part.length() < fieldLength) {
                     part = " " + part;
                 }
+                if (part.length() > fieldLength) {
+                    part = part.substring(0, fieldLength);
+                }
+            } else if (fieldLength == 0 && fieldDescriptor.scaler() != null) {
+                TextField textField = new TextField(null, null, null);
+                fields.decodeGenericDictionary(fields.getFieldItem(fieldName).getMerged(0), textField);
+                Font font = new Font(textField.getFont(), textField.getFontSize(), 0, BaseColor.BLACK);
+                Rectangle rect = fields.getFieldPositions(fieldName).get(0).position;
+                // assume 10% horizontal margin to ensure fit
+                rect = new Rectangle(rect.getWidth() * 0.9f, rect.getHeight());
+                Float scaledSize = fieldDescriptor.scaler().scaleToFit(part, font, rect);
+                fields.setFieldProperty(fieldName, "textsize", scaledSize, null);
             }
             fields.setField(fieldName, part);
         }
-
     }
 
     private static void setEnumField(PdfFieldDescriptor fieldDescriptor, AcroFields fields, String value) throws IOException, DocumentException {

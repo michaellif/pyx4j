@@ -98,6 +98,8 @@ public abstract class PdfFieldsMapping<E extends IEntity> {
 
         private Partitioner partitioner = null;
 
+        private Scaler scaler = null;
+
         private List<String> states = Collections.emptyList();
 
         public PdfFieldDescriptorBuilder(IObject<?> field) {
@@ -124,13 +126,18 @@ public abstract class PdfFieldsMapping<E extends IEntity> {
             return this;
         }
 
+        public PdfFieldDescriptorBuilder scaleBy(Scaler scaler) {
+            this.scaler = scaler;
+            return this;
+        }
+
         public PdfFieldDescriptorBuilder states(String... states) {
             this.states = Arrays.asList(states);
             return this;
         }
 
         public void define() {
-            fieldsMapping.put(field.getFieldName(), new PdfFieldDescriptor(formatters, mappings, partitioner, states));
+            fieldsMapping.put(field.getFieldName(), new PdfFieldDescriptor(formatters, mappings, partitioner, states).setScaler(scaler));
         }
     }
 

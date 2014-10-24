@@ -24,6 +24,7 @@ import java.util.Arrays;
 
 import com.propertyvista.biz.legal.forms.ltbcommon.LtbFormFieldsMapping;
 import com.propertyvista.biz.legal.forms.ltbcommon.fieldadapters.partitioners.CanadianPostalCodePartitioner;
+import com.propertyvista.biz.legal.forms.ltbcommon.fieldadapters.scalers.AddressLabelScaler;
 import com.propertyvista.domain.legal.ltbcommon.LtbAgentContactInfo;
 import com.propertyvista.domain.legal.ltbcommon.LtbOwedRent;
 import com.propertyvista.domain.legal.ltbcommon.LtbRentalUnitAddress;
@@ -38,10 +39,11 @@ public class N4FieldsMapping extends LtbFormFieldsMapping<N4FormFieldsData> {
     }
 
     @Override
-    protected void configure() {//@formatter:off        
-        field(proto().to()).mapTo("Text1").define();
-        field(proto().from()).mapTo("Text2").define();
-        
+    protected void configure() {
+        // multi-line text - scale to fit
+        field(proto().to()).mapTo("Text1{0}").scaleBy(new AddressLabelScaler()).define();
+        field(proto().from()).mapTo("Text2{0}").scaleBy(new AddressLabelScaler()).define();
+
         mapping(proto().rentalUnitAddress(), new LtbFormFieldsMapping<LtbRentalUnitAddress>(LtbRentalUnitAddress.class) {
             @Override
             protected void configure() {
@@ -51,64 +53,77 @@ public class N4FieldsMapping extends LtbFormFieldsMapping<N4FormFieldsData> {
                 text(proto().direction()).mapTo("b12c96nfn4_app_street_direction").define();
                 text(proto().unit()).mapTo("b12c96nfn4_app_unit_no").define();
                 text(proto().municipality()).mapTo("b12c96nfn4_app_city").define();
-                text(proto().postalCode())
-                    .partitionBy(new CanadianPostalCodePartitioner())
-                    .mapTo("b12c96nfn4_app_postal_code_1{3}","@@b12c96nfn4_app_postal_code_2.0{3}").define();
+                text(proto().postalCode()).partitionBy(new CanadianPostalCodePartitioner())
+                        .mapTo("b12c96nfn4_app_postal_code_1{3}", "@@b12c96nfn4_app_postal_code_2.0{3}").define();
             }
         });
-        
+
         date(proto().terminationDate()).mapTo(datePartition("@@b12c96nfn4_termination_date_g")).define();
         money(proto().totalRentOwed()).mapTo(fieldsPartition("@@b12c96nfn4_total_rent_owed_g", 2, 3, 2)).define();
-        
-        mapping(proto().owedRent(), new LtbFormFieldsMapping<LtbOwedRent>(LtbOwedRent.class) { @SuppressWarnings("unchecked")
-        @Override protected void configure() {
-            table(proto().rentOwingBreakdown()).rowMapping(Arrays.<LtbFormFieldsMapping<RentOwingForPeriod>>asList(
-                    new LtbFormFieldsMapping<RentOwingForPeriod>(RentOwingForPeriod.class) { @Override protected void configure() {
-                        date(proto().from()).mapTo(datePartition("@@b12c96nfn4_a1_start")).define();
-                        date(proto().to()).mapTo(datePartition("@@b12c96nfn4_a1_end")).define();
-                        money(proto().rentCharged()).mapTo(fieldsPartition("@@b12c96nfn4_a1_charged", 1, 3, 2)).define();
-                        money(proto().rentPaid()).mapTo(fieldsPartition("@@b12c96nfn4_a1_paid", 1, 3, 2)).define();
-                        money(proto().rentOwing()).mapTo(fieldsPartition("@@b12c96nfn4_a1_owing", 1, 3, 2)).define();                            
-                    }},
-                    new LtbFormFieldsMapping<RentOwingForPeriod>(RentOwingForPeriod.class) { @Override protected void configure() {
-                        date(proto().from()).mapTo(datePartition("@@b12c96nfn4_a2_start")).define();
-                        date(proto().to()).mapTo(datePartition("@@b12c96nfn4_a2_end")).define();
-                        money(proto().rentCharged()).mapTo(fieldsPartition("@@b12c96nfn4_a2_charged", 1, 3, 2)).define();
-                        money(proto().rentPaid()).mapTo(fieldsPartition("@@b12c96nfn4_a2_paid", 1, 3, 2)).define();
-                        money(proto().rentOwing()).mapTo(fieldsPartition("@@b12c96nfn4_a2_owing", 1, 3, 2)).define();                            
-                    }},
-                    new LtbFormFieldsMapping<RentOwingForPeriod>(RentOwingForPeriod.class) { @Override protected void configure() {
-                        date(proto().from()).mapTo(datePartition("@@b12c96nfn4_a3_start")).define();
-                        date(proto().to()).mapTo(datePartition("@@b12c96nfn4_a3_end")).define();
-                        money(proto().rentCharged()).mapTo(fieldsPartition("@@b12c96nfn4_a3_charged", 1, 3, 2)).define();
-                        money(proto().rentPaid()).mapTo(fieldsPartition("@@b12c96nfn4_a3_paid", 1, 3, 2)).define();
-                        money(proto().rentOwing()).mapTo(fieldsPartition("@@b12c96nfn4_a3_owing", 1, 3, 2)).define();                            
-                    }}
-            )).define();
-            
-            money(proto().totalRentOwing()).mapTo(fieldsPartition("@@b12c96nfn4_total_rent_owed", 2, 3, 2)).define();
-            
-        }});
-        
-        mapping(proto().signature(), new LtbFormFieldsMapping<N4Signature>(N4Signature.class) { @Override protected void configure() {
-            field(proto().signedBy()).states("PL", "RA").mapTo("b12c96nfn4_signed_by").define();
-            field(proto().signature()).mapTo("b12c96nmn4_signature").define();
-            date(proto().signatureDate()).partitionBy(null).mapTo("Text3").define();
-        }});
-        
-        mapping(proto().landlordsContactInfo(), new LtbFormFieldsMapping<LtbAgentContactInfo>(LtbAgentContactInfo.class) { @Override protected void configure() {
-            text(proto().firstName()).mapTo("b12c96nfn4_personnel_first_name").define();
-            text(proto().lastName()).mapTo("b12c96nfn4_personnel_last_name").define();
-            text(proto().companyName()).mapTo("b12c96nfn4_org_name").define();
-            text(proto().mailingAddress()).mapTo("b12c96nfn4_org_address").define();
-            text(proto().unit()).mapTo("b12c96nfn4_org_unit_no").define();
-            text(proto().municipality()).mapTo("b12c96nfn4_org_city").define();
-            text(proto().province()).mapTo("b12c96nfn4_org_prov").define();
-            text(proto().postalCode()).mapTo("b12c96nfn4_org_postal").define();
-            phone(proto().phoneNumber()).mapTo(phonePartition("@@b12c96nfn4_personnel_phone")).define();
-            phone(proto().faxNumber()).mapTo(phonePartition("@@b12c96nfn4_personnel_fax_number")).define();
-            text(proto().email()).mapTo("b12c96nfn4_personnel_email").define();
-        }});        
-        
-    }//@formatter:on
+
+        mapping(proto().owedRent(), new LtbFormFieldsMapping<LtbOwedRent>(LtbOwedRent.class) {
+            @Override
+            protected void configure() {
+                table(proto().rentOwingBreakdown()).rowMapping(
+                        Arrays.<LtbFormFieldsMapping<RentOwingForPeriod>> asList(new LtbFormFieldsMapping<RentOwingForPeriod>(RentOwingForPeriod.class) {
+                            @Override
+                            protected void configure() {
+                                date(proto().from()).mapTo(datePartition("@@b12c96nfn4_a1_start")).define();
+                                date(proto().to()).mapTo(datePartition("@@b12c96nfn4_a1_end")).define();
+                                money(proto().rentCharged()).mapTo(fieldsPartition("@@b12c96nfn4_a1_charged", 1, 3, 2)).define();
+                                money(proto().rentPaid()).mapTo(fieldsPartition("@@b12c96nfn4_a1_paid", 1, 3, 2)).define();
+                                money(proto().rentOwing()).mapTo(fieldsPartition("@@b12c96nfn4_a1_owing", 1, 3, 2)).define();
+                            }
+                        }, new LtbFormFieldsMapping<RentOwingForPeriod>(RentOwingForPeriod.class) {
+                            @Override
+                            protected void configure() {
+                                date(proto().from()).mapTo(datePartition("@@b12c96nfn4_a2_start")).define();
+                                date(proto().to()).mapTo(datePartition("@@b12c96nfn4_a2_end")).define();
+                                money(proto().rentCharged()).mapTo(fieldsPartition("@@b12c96nfn4_a2_charged", 1, 3, 2)).define();
+                                money(proto().rentPaid()).mapTo(fieldsPartition("@@b12c96nfn4_a2_paid", 1, 3, 2)).define();
+                                money(proto().rentOwing()).mapTo(fieldsPartition("@@b12c96nfn4_a2_owing", 1, 3, 2)).define();
+                            }
+                        }, new LtbFormFieldsMapping<RentOwingForPeriod>(RentOwingForPeriod.class) {
+                            @Override
+                            protected void configure() {
+                                date(proto().from()).mapTo(datePartition("@@b12c96nfn4_a3_start")).define();
+                                date(proto().to()).mapTo(datePartition("@@b12c96nfn4_a3_end")).define();
+                                money(proto().rentCharged()).mapTo(fieldsPartition("@@b12c96nfn4_a3_charged", 1, 3, 2)).define();
+                                money(proto().rentPaid()).mapTo(fieldsPartition("@@b12c96nfn4_a3_paid", 1, 3, 2)).define();
+                                money(proto().rentOwing()).mapTo(fieldsPartition("@@b12c96nfn4_a3_owing", 1, 3, 2)).define();
+                            }
+                        })).define();
+
+                money(proto().totalRentOwing()).mapTo(fieldsPartition("@@b12c96nfn4_total_rent_owed", 2, 3, 2)).define();
+
+            }
+        });
+
+        mapping(proto().signature(), new LtbFormFieldsMapping<N4Signature>(N4Signature.class) {
+            @Override
+            protected void configure() {
+                field(proto().signedBy()).states("PL", "RA").mapTo("b12c96nfn4_signed_by").define();
+                field(proto().signature()).mapTo("b12c96nmn4_signature").define();
+                date(proto().signatureDate()).partitionBy(null).mapTo("Text3").define();
+            }
+        });
+
+        mapping(proto().landlordsContactInfo(), new LtbFormFieldsMapping<LtbAgentContactInfo>(LtbAgentContactInfo.class) {
+            @Override
+            protected void configure() {
+                text(proto().firstName()).mapTo("b12c96nfn4_personnel_first_name").define();
+                text(proto().lastName()).mapTo("b12c96nfn4_personnel_last_name").define();
+                text(proto().companyName()).mapTo("b12c96nfn4_org_name").define();
+                text(proto().mailingAddress()).mapTo("b12c96nfn4_org_address").define();
+                text(proto().unit()).mapTo("b12c96nfn4_org_unit_no").define();
+                text(proto().municipality()).mapTo("b12c96nfn4_org_city").define();
+                text(proto().province()).mapTo("b12c96nfn4_org_prov").define();
+                text(proto().postalCode()).mapTo("b12c96nfn4_org_postal").define();
+                phone(proto().phoneNumber()).mapTo(phonePartition("@@b12c96nfn4_personnel_phone")).define();
+                phone(proto().faxNumber()).mapTo(phonePartition("@@b12c96nfn4_personnel_fax_number")).define();
+                text(proto().email()).mapTo("b12c96nfn4_personnel_email").define();
+            }
+        });
+
+    }
 }

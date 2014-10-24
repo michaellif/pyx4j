@@ -59,10 +59,6 @@ import com.propertyvista.server.common.util.AddressRetriever;
 
 public class N4GenerationFacadeImpl implements N4GenerationFacade {
 
-    private static final int MAX_RECIPIENT_ADDRESS_BOX_LINE_LENGTH = 24; // only 24 captial 'M' letters can fit in to the 'to' box
-
-    private static final int MAX_RECIPIENT_ADDRESS_BOX_LINE_COUNT = 3; // only 3 lines can fit in to the 'to' box
-
     private static final String N4_FORM_FILE = "n4.pdf";
 
     private final InternalBillingInvoiceDebitFetcherImpl invoiceDebitFetcher;
@@ -87,7 +83,6 @@ public class N4GenerationFacadeImpl implements N4GenerationFacade {
     public N4FormFieldsData prepareFormData(N4LeaseData leaseData, N4BatchData batchData) throws FormFillError {
         N4FormFieldsData fieldsData = EntityFactory.create(N4FormFieldsData.class);
         fieldsData.to().setValue(formatTo(leaseData.leaseTenants(), leaseData.rentalUnitAddress()));
-        validateToField(fieldsData.to().getValue());
         fieldsData.from().setValue(
                 SimpleMessageFormat.format("{0}\n{1}", leaseData.landlordName().getValue(), formatBuildingOwnerAddress(leaseData.landlordAddress())));
 
@@ -169,27 +164,18 @@ public class N4GenerationFacadeImpl implements N4GenerationFacade {
 
     private String formatRecipients(Iterable<LeaseTermTenant> tenants) {
         StringBuilder lineBuilder = new StringBuilder();
+        // include all responsible
         for (LeaseTermTenant tenantIdStub : tenants) {
             LeaseTermTenant tenant = Persistence.service().retrieve(LeaseTermTenant.class, tenantIdStub.getPrimaryKey());
             Persistence.ensureRetrieve(tenant.leaseParticipant(), AttachLevel.Attached);
-            if (tenant.role().getValue() == Role.Applicant /* TODO add-co applicants? (|| tenant.role().getValue() == Role.CoApplicant) */) {
-                // some tenants from yardi have some crap information in their first name and last name
-
-                String sanitizedFirstName = tenant.leaseParticipant().customer().person().name().firstName().getStringView()
-                        .replaceAll("\\([a-zA-Z\\s\\d]*\\)", "");
-                String sanitizedLastName = tenant.leaseParticipant().customer().person().name().lastName().getStringView()
-                        .replaceAll("\\([a-zA-Z\\s\\d]*\\)", "");
-
+            if (Role.resposible().contains(tenant.role().getValue())) {
                 if (lineBuilder.length() > 0) {
                     lineBuilder.append(", ");
                 }
-                String formattedName = sanitizedFirstName + " " + sanitizedLastName;
 
-                // reduce the first name only to initial if the name is too long
-                if (formattedName.length() > MAX_RECIPIENT_ADDRESS_BOX_LINE_LENGTH) {
-                    formattedName = sanitizedFirstName.length() > 0 ? sanitizedFirstName.substring(0, 1) + ". " : "";
-                    formattedName += sanitizedLastName;
-                }
+                String firstName = tenant.leaseParticipant().customer().person().name().firstName().getStringView();
+                String lastName = tenant.leaseParticipant().customer().person().name().lastName().getStringView();
+                String formattedName = firstName + " " + lastName;
                 lineBuilder.append(formattedName);
             }
         }
@@ -261,28 +247,5 @@ public class N4GenerationFacadeImpl implements N4GenerationFacade {
 
         // TODO this is value for Yearly or Month-to-Month lease (we don't have other kinds of leases therefore it's fine now, but later can become a problem)
         return policy.terminationDateAdvanceDaysLongRentPeriod().getValue();
-    }
-
-    // We can fit to this field only three lines 
-    // TODO i think this kind of validation should be moved to N4FieldsMapping
-    private void validateToField(String toFieldString) throws FormFillError {
-
-        String[] lines = toFieldString.split("\n");
-        if (lines.length > MAX_RECIPIENT_ADDRESS_BOX_LINE_COUNT) {
-            throw new FormFillError("'to' field of N4 form won't fit too many lines (maximum : " + MAX_RECIPIENT_ADDRESS_BOX_LINE_COUNT + "):\n"
-                    + toFieldString);
-        }
-
-        boolean hasLongLine = false;
-        for (String line : lines) {
-            if (line.length() > MAX_RECIPIENT_ADDRESS_BOX_LINE_LENGTH) {
-                hasLongLine = true;
-                break;
-            }
-        }
-        if (hasLongLine) {
-            throw new FormFillError("'to' field of N4 form won't fit (line length exceeds maximum " + MAX_RECIPIENT_ADDRESS_BOX_LINE_LENGTH + "):\n"
-                    + toFieldString);
-        }
     }
 }

@@ -23,7 +23,6 @@ package com.propertyvista.biz.legal.forms.framework.mapping;
 import java.util.Collections;
 import java.util.List;
 
-
 public class PdfFieldDescriptor {
 
     private final List<Formatter> formatters;
@@ -33,6 +32,8 @@ public class PdfFieldDescriptor {
     private final Partitioner partitioner;
 
     private final List<String> states;
+
+    private Scaler scaler;
 
     public PdfFieldDescriptor(List<Formatter> formatters, List<String> mappedFields, Partitioner partitioner, List<String> states) {
         this.formatters = formatters;
@@ -47,6 +48,15 @@ public class PdfFieldDescriptor {
 
     public Partitioner partitioner() {
         return this.partitioner;
+    }
+
+    public PdfFieldDescriptor setScaler(Scaler scaler) {
+        this.scaler = scaler;
+        return this;
+    }
+
+    public Scaler scaler() {
+        return this.scaler;
     }
 
     public List<Formatter> formatters() {
