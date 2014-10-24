@@ -33,7 +33,6 @@ import com.propertyvista.common.client.ui.validators.ClientBusinessRules;
 import com.propertyvista.common.client.ui.validators.FutureDateIncludeTodayValidator;
 import com.propertyvista.common.client.ui.validators.PastDateIncludeTodayValidator;
 import com.propertyvista.common.client.ui.validators.PastDateValidator;
-import com.propertyvista.common.client.ui.validators.StartEndDateValidation;
 import com.propertyvista.common.client.ui.validators.StartEndDateWithinPeriodValidation;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.crm.client.ui.crud.lease.application.components.IdUploaderFolder;
@@ -97,9 +96,6 @@ public class CustomerScreeningForm extends CrmEntityForm<LeaseParticipantScreeni
 
         currentAF.get(currentAF.proto().moveInDate()).addComponentValidator(new PastDateIncludeTodayValidator());
         currentAF.get(currentAF.proto().moveOutDate()).addComponentValidator(new FutureDateIncludeTodayValidator());
-        new StartEndDateValidation(currentAF.get(currentAF.proto().moveInDate()), currentAF.get(currentAF.proto().moveOutDate()),
-                i18n.tr("Move In date must be before Move Out date"));
-
         currentAF.get(currentAF.proto().moveInDate()).addValueChangeHandler(new ValueChangeHandler<LogicalDate>() {
             @Override
             public void onValueChange(ValueChangeEvent<LogicalDate> event) {
@@ -113,8 +109,6 @@ public class CustomerScreeningForm extends CrmEntityForm<LeaseParticipantScreeni
 
         previousAF.get(previousAF.proto().moveInDate()).addComponentValidator(new PastDateValidator());
         previousAF.get(previousAF.proto().moveOutDate()).addComponentValidator(new PastDateValidator());
-        new StartEndDateValidation(previousAF.get(previousAF.proto().moveInDate()), previousAF.get(previousAF.proto().moveOutDate()),
-                i18n.tr("Move In date must be before Move Out date"));
 
         // ------------------------------------------------------------------------------------------------
         new StartEndDateWithinPeriodValidation(previousAF.get(previousAF.proto().moveOutDate()), currentAF.get(currentAF.proto().moveInDate()), 1, 0,
