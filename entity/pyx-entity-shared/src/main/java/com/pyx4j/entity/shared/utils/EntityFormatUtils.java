@@ -23,7 +23,7 @@ package com.pyx4j.entity.shared.utils;
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.entity.core.IPrimitive;
 
-public class EntityFromatUtils {
+public class EntityFormatUtils {
 
     @SafeVarargs
     public static String nvl_concat(String sep, IPrimitive<String>... values) {
