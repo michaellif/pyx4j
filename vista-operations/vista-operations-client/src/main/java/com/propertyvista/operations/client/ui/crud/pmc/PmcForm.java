@@ -215,6 +215,7 @@ public class PmcForm extends OperationsEntityForm<PmcDTO> {
         formPanel.append(Location.Right, proto().features().yardiMaintenance()).decorate();
 
         formPanel.append(Location.Left, proto().features().tenantSureIntegration()).decorate();
+        formPanel.append(Location.Right, proto().features().tenantEmailEnabled()).decorate();
 
         formPanel.h1(proto().dnsNameAliases().getMeta().getCaption());
         formPanel.append(Location.Dual, proto().dnsNameAliases(), new PmcDnsNameFolder(isEditable()));

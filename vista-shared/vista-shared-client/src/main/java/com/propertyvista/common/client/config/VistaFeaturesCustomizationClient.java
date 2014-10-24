@@ -62,6 +62,11 @@ public class VistaFeaturesCustomizationClient implements VistaFeaturesCustomizat
         return features.tenantSureIntegration().getValue(Boolean.FALSE);
     }
 
+    @Override
+    public boolean tenantEmailEnabled() {
+        return features.tenantEmailEnabled().getValue(Boolean.FALSE);
+    }
+
     public static void setVistaFeatures(PmcVistaFeatures features) {
         VistaFeaturesCustomizationClient.features = features;
     }

@@ -100,6 +100,7 @@ public class PmcRegistrationServiceImpl implements PmcRegistrationService {
                 pmc.features().whiteLabelPortal().setValue(Boolean.FALSE);
 
                 pmc.features().tenantSureIntegration().setValue(Boolean.TRUE);
+                pmc.features().tenantEmailEnabled().setValue(Boolean.TRUE);
 
                 ServerSideFactory.create(PmcFacade.class).create(pmc);
 

@@ -308,8 +308,7 @@ class MessageTemplatesCustomizable {
 
     private static MailMessage createTenantPayment(EmailTemplateType type, PaymentRecord paymentRecord) {
         Persistence.ensureRetrieve(paymentRecord.leaseTermParticipant(), AttachLevel.Attached);
-        Persistence.ensureRetrieve(paymentRecord.leaseTermParticipant().leaseParticipant().customer().user(), AttachLevel.Attached);
-        String customerEmail = paymentRecord.leaseTermParticipant().leaseParticipant().customer().user().email().getValue();
+        String customerEmail = TenantAccess.getActiveEmail(paymentRecord.leaseTermParticipant().leaseParticipant());
         if (customerEmail == null) {
             //Do not send payment email when there are no email in tenant profile
             return null;
@@ -366,10 +365,9 @@ class MessageTemplatesCustomizable {
 
     private static MailMessage createTenantAutopay(EmailTemplateType templateType, AutopayAgreement autopayAgreement) {
         Persistence.ensureRetrieve(autopayAgreement.tenant(), AttachLevel.Attached);
-        Persistence.ensureRetrieve(autopayAgreement.tenant().customer().user(), AttachLevel.Attached);
         Persistence.ensureRetrieve(autopayAgreement.tenant().lease().unit().building(), AttachLevel.Attached);
 
-        String customerEmail = autopayAgreement.tenant().customer().user().email().getValue();
+        String customerEmail = TenantAccess.getActiveEmail(autopayAgreement.tenant());
         if (customerEmail == null) {
             //Do not send payment email when there are no email in tenant profile
             return null;

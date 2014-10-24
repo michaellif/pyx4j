@@ -83,6 +83,7 @@ public class PmcCrudServiceImpl extends AbstractCrudServiceDtoImpl<Pmc, PmcDTO> 
         entity.features().yardiIntegration().setValue(Boolean.FALSE);
         entity.features().countryOfOperation().setValue(CountryOfOperation.Canada);
         entity.features().tenantSureIntegration().setValue(Boolean.TRUE);
+        entity.features().tenantEmailEnabled().setValue(Boolean.TRUE);
 
         return entity;
     }

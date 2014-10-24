@@ -20,9 +20,7 @@ import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.commons.UserRuntimeException;
 import com.pyx4j.config.server.IMailServiceConfigConfiguration;
 import com.pyx4j.config.server.ServerSideConfiguration;
-import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.core.AttachLevel;
-import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.server.mail.Mail;
@@ -30,7 +28,6 @@ import com.pyx4j.server.mail.MailAttachment;
 import com.pyx4j.server.mail.MailDeliveryStatus;
 import com.pyx4j.server.mail.MailMessage;
 
-import com.propertyvista.biz.asset.BuildingFacade;
 import com.propertyvista.biz.communication.NotificationFacade.BatchErrorType;
 import com.propertyvista.biz.communication.notifications.NotificationsUtils;
 import com.propertyvista.config.AbstractVistaServerSideConfiguration;
@@ -44,7 +41,6 @@ import com.propertyvista.domain.maintenance.MaintenanceRequestPicture;
 import com.propertyvista.domain.payment.AutopayAgreement;
 import com.propertyvista.domain.person.Person;
 import com.propertyvista.domain.pmc.Pmc;
-import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.security.CrmUser;
 import com.propertyvista.domain.security.CrmUserCredential;
 import com.propertyvista.domain.security.CustomerUser;
@@ -264,13 +260,9 @@ public class CommunicationFacadeImpl implements CommunicationFacade {
 
     @Override
     public void sendTenantPaymentRejected(PaymentRecord paymentRecord, boolean applyNSF) {
-        EntityQueryCriteria<Building> criteria = EntityQueryCriteria.create(Building.class);
-        criteria.eq(criteria.proto().units().$().leases().$().billingAccount(), paymentRecord.billingAccount());
-        if (!ServerSideFactory.create(BuildingFacade.class).isSuspend(criteria)) {
-            MailMessage m = MessageTemplatesCustomizable.createTenantPaymenttRejected(paymentRecord, applyNSF);
-            if (m != null) {
-                Mail.queue(m, null, null);
-            }
+        MailMessage m = MessageTemplatesCustomizable.createTenantPaymenttRejected(paymentRecord, applyNSF);
+        if (m != null) {
+            Mail.queue(m, null, null);
         }
     }
 
@@ -329,34 +321,30 @@ public class CommunicationFacadeImpl implements CommunicationFacade {
 
     @Override
     public void sendMaintenanceRequestCreatedTenant(MaintenanceRequest request) {
-        String sendTo = request.reporter().customer().person().email().getValue();
-        sendMaintenanceRequestEmail(sendTo, EmailTemplateType.MaintenanceRequestCreatedTenant, request);
+        sendMaintenanceRequestEmail(TenantAccess.getActiveEmail(request.reporter()), EmailTemplateType.MaintenanceRequestCreatedTenant, request);
     }
 
     @Override
     public void sendMaintenanceRequestUpdated(MaintenanceRequest request) {
-        String sendTo = request.reporter().customer().person().email().getValue();
-        sendMaintenanceRequestEmail(sendTo, EmailTemplateType.MaintenanceRequestUpdated, request);
+        sendMaintenanceRequestEmail(TenantAccess.getActiveEmail(request.reporter()), EmailTemplateType.MaintenanceRequestUpdated, request);
     }
 
     @Override
     public void sendMaintenanceRequestCompleted(MaintenanceRequest request) {
-        String sendTo = request.reporter().customer().person().email().getValue();
-        sendMaintenanceRequestEmail(sendTo, EmailTemplateType.MaintenanceRequestCompleted, request);
+        sendMaintenanceRequestEmail(TenantAccess.getActiveEmail(request.reporter()), EmailTemplateType.MaintenanceRequestCompleted, request);
     }
 
     @Override
     public void sendMaintenanceRequestCancelled(MaintenanceRequest request) {
-        String sendTo = request.reporter().customer().person().email().getValue();
-        sendMaintenanceRequestEmail(sendTo, EmailTemplateType.MaintenanceRequestCancelled, request);
+        sendMaintenanceRequestEmail(TenantAccess.getActiveEmail(request.reporter()), EmailTemplateType.MaintenanceRequestCancelled, request);
     }
 
     @Override
     public MailMessage sendMaintenanceRequestEntryNotice(MaintenanceRequest request) {
-        String sendTo = request.reporter().customer().person().email().getValue();
-        return sendMaintenanceRequestEmail(sendTo, EmailTemplateType.MaintenanceRequestEntryNotice, request);
+        return sendMaintenanceRequestEmail(TenantAccess.getActiveEmail(request.reporter()), EmailTemplateType.MaintenanceRequestEntryNotice, request);
     }
 
+    // TODO Stas, Igor : MOVE it away from class  to MaintenanceEmailManager or somthing....
     private MailMessage sendMaintenanceRequestEmail(String sendTo, EmailTemplateType emailType, MaintenanceRequest request) {
         if (sendTo == null) {
             return null;

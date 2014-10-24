@@ -45,6 +45,7 @@ public class PmcCreatorDev {
         pmc.features().whiteLabelPortal().setValue(pmcName.equals(DemoPmc.metcap.name()) || pmcName.equals(DemoPmc.timbercreek.name()));
         pmc.features().yardiIntegration().setValue(Boolean.FALSE);
         pmc.features().tenantSureIntegration().setValue(Boolean.TRUE);
+        pmc.features().tenantEmailEnabled().setValue(Boolean.TRUE);
 
         if (pmcName.equals(DemoPmc.gondor.name())) {
             pmc.features().countryOfOperation().setValue(CountryOfOperation.UK);

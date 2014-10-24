@@ -15,8 +15,8 @@ package com.propertyvista.server.config;
 
 import com.pyx4j.config.shared.ClientVersionMismatchError;
 import com.pyx4j.entity.core.EntityFactory;
-import com.pyx4j.server.contexts.ServerContext;
 import com.pyx4j.server.contexts.Lifecycle;
+import com.pyx4j.server.contexts.ServerContext;
 import com.pyx4j.server.contexts.Visit;
 
 import com.propertyvista.config.VistaDeployment;
@@ -98,6 +98,11 @@ public class VistaFeatures {
         @Override
         public boolean tenantSure() {
             return threadLocale.get().tenantSureIntegration().getValue(Boolean.FALSE);
+        }
+
+        @Override
+        public boolean tenantEmailEnabled() {
+            return threadLocale.get().tenantEmailEnabled().getValue(Boolean.FALSE);
         }
 
     }

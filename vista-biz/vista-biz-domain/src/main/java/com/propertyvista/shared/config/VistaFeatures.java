@@ -36,6 +36,8 @@ public class VistaFeatures {
 
         boolean yardiMaintenance();
 
+        boolean tenantEmailEnabled();
+
         int yardiInterfaces();
     }
 
