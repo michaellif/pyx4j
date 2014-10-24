@@ -1028,7 +1028,7 @@ public class EmailTemplatesPolicyPreloader extends AbstractPolicyPreloader<Email
                 "<b>Please sign in to your myCommunity account  [[{4}|here]] to re-submit your payment and to avoid any additional fees and/or legal action.</b><br/><br/>" +
                 "For your reference, your payment Reference number for this transaction is:<br/><br/>" +
                 "<div style=\"margin-left:80px\">#<b>{5}</b></div><br/><br/>" +
-                "You can review the status of your arrears on your myCommunity portal at anytime. To access your myCommunity Resident Portal click <b>[[{6}|here]]</b><br/><br/>" +
+                "You can review the status of your arrears on your myCommunity Resident Portal at anytime. To access your myCommunity portal click <b>[[{6}|here]]</b><br/><br/>" +
                 "Note: Additional administrative fees may apply as per your agreement.<br/><br/>" +
                 "Thank you for choosing {7}.",
                 /*{0}*/EmailTemplateManager.getVarname(tenantT.FirstName()),
