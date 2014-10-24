@@ -45,7 +45,7 @@ public class TenantInsuranceCertificateFolder extends VistaBoxFolder<InsuranceCe
 
     @Override
     protected CForm<InsuranceCertificate> createItemForm(IObject<?> member) {
-        return new TenantInsuranceCertificateForm<InsuranceCertificate>(InsuranceCertificate.class, displayTenantOwner);
+        return new TenantInsuranceCertificateForm<>(InsuranceCertificate.class, displayTenantOwner);
     }
 
     @Override
