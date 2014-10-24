@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011- All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -13,6 +13,14 @@
  */
 package com.propertyvista.server.security.openId;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.net.URLConnection;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -65,6 +73,7 @@ public class OpenId {
 
     static boolean requestNameAttributes = false;
 
+    @SuppressWarnings("unchecked")
     public static synchronized String getDestinationUrl(String userDomain, String mainApplicationURL) {
         try {
             if (manager == null) {
@@ -85,6 +94,13 @@ public class OpenId {
 
             // obtain a AuthRequest message to be sent to the OpenID provider
             List<?> discoveries = manager.discover(identifier);
+
+//			Create our own discovery inforamtion point
+//            org.openid4java.discovery.DiscoveryInformation discovery = new DiscoveryInformation(new URL("https://crowd-test.devpv.com/openidserver/op"));
+//            List<DiscoveryInformation> discoveries = new ArrayList<DiscoveryInformation>();
+//            discoveries.add(discovery);
+//
+//            printDiscoveryList(discoveries);
 
             // attempt to associate with the OpenID provider
             // and retrieve one service endpoint for authentication
@@ -161,7 +177,7 @@ public class OpenId {
 
     /**
      * Processing the authentication response
-     * 
+     *
      * @param request
      * @return E-mail
      */
@@ -228,6 +244,56 @@ public class OpenId {
         } catch (OpenIDException e) {
             log.error("Error", e);
             return null;
+        }
+    }
+
+    private static void printDiscoveryList(List<DiscoveryInformation> discoveries) throws IOException {
+        if (discoveries.size() > 0) {
+            int index = 0;
+            int responseCode = 0;
+            for (DiscoveryInformation discover : discoveries) {
+                URL url = discover.getOPEndpoint();
+                URLConnection uc = url.openConnection();
+//                InputStream is = new BufferedInputStream(uc.getInputStream());
+                HttpURLConnection httpConn = (HttpURLConnection) uc;
+
+                InputStream is;
+                if ((responseCode = httpConn.getResponseCode()) >= 400) {
+                    is = new BufferedInputStream(httpConn.getErrorStream());
+                } else {
+                    is = new BufferedInputStream(httpConn.getInputStream());
+                }
+
+                BufferedReader br = null;
+                StringBuilder sb = new StringBuilder();
+                String line;
+                try {
+
+                    br = new BufferedReader(new InputStreamReader(is));
+                    while ((line = br.readLine()) != null) {
+                        sb.append(line);
+                    }
+
+                    index++;
+
+                } catch (IOException e) {
+                    e.printStackTrace();
+                } finally {
+                    if (br != null) {
+                        try {
+                            br.close();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }
+
+                if (responseCode >= 400) {
+                    log.info("ERROR " + responseCode + ", file content (" + index + ") ->> " + sb.toString());
+                } else {
+                    log.info("file content (" + index + ") ->> " + sb.toString());
+                }
+            }
         }
     }
 }
