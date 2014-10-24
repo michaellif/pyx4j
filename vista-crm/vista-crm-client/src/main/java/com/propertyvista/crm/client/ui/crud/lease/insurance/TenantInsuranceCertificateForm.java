@@ -67,7 +67,8 @@ public class TenantInsuranceCertificateForm<E extends InsuranceCertificate<?>> e
         }
         contentPanel.append(Location.Left, proto().insuranceProvider()).decorate();
         contentPanel.append(Location.Left, proto().insuranceCertificateNumber()).decorate();
-        contentPanel.append(Location.Left, proto().liabilityCoverage()).decorate().componentWidth(200);
+        contentPanel.append(Location.Left, proto().liabilityCoverage()).decorate().componentWidth(150);
+
         contentPanel.append(Location.Right, proto().inceptionDate()).decorate().componentWidth(100);
         contentPanel.append(Location.Right, proto().expiryDate()).decorate().componentWidth(100);
 

@@ -19,10 +19,10 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.pyx4j.entity.core.IObject;
 import com.pyx4j.forms.client.ui.CFile;
 import com.pyx4j.forms.client.ui.CForm;
-import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
+import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
+import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.gwt.rpc.upload.UploadService;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.backoffice.ui.prime.form.FieldDecoratorBuilder;
 
 import com.propertyvista.common.client.VistaFileURLBuilder;
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
@@ -52,15 +52,14 @@ public class InsuranceCertificateDocFolder extends VistaBoxFolder<InsuranceCerti
 
         @Override
         protected IsWidget createContent() {
-            BasicFlexFormPanel content = new BasicFlexFormPanel();
-            int row = -1;
+            FormPanel content = new FormPanel(this);
 
-            content.setWidget(
-                    ++row,
-                    0,
+            content.append(
+                    Location.Dual,
                     inject(proto().file(), new CFile(GWT.<UploadService<?, ?>> create(InsuranceCertificateScanCrmUploadService.class), new VistaFileURLBuilder(
-                            InsuranceCertificateScan.class)), new FieldDecoratorBuilder().componentWidth("250px").build()));
-            content.setWidget(++row, 0, inject(proto().description(), new FieldDecoratorBuilder().componentWidth("300px").build()));
+                            InsuranceCertificateScan.class)))).decorate();
+            content.append(Location.Dual, inject(proto().description())).decorate();
+
             return content;
         }
     }
