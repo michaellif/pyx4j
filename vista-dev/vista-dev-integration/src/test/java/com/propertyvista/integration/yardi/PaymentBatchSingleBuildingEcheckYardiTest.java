@@ -108,6 +108,8 @@ public class PaymentBatchSingleBuildingEcheckYardiTest extends PaymentYardiTestB
         ServerSideFactory.create(PaymentFacade.class).cancel(paymentRecords.get(0));
         Persistence.service().commit();
 
+        YardiResidentTransactionsService.getInstance().updateAll(getYardiCredential("prop123"), new ExecutionMonitor());
+
         new InvoiceLineItemTester(lease11).count(YardiPayment.class, 0);
     }
 
@@ -142,6 +144,7 @@ public class PaymentBatchSingleBuildingEcheckYardiTest extends PaymentYardiTestB
         //N.B. The transaction will lock the InvoiceLineItem table in HSQLDB, There is a Hack in YardiMockResidentTransactionsStubImpl
         ServerSideFactory.create(PaymentFacade.class).cancel(paymentRecords.get(0));
         Persistence.service().commit();
+        YardiResidentTransactionsService.getInstance().updateAll(getYardiCredential("prop123"), new ExecutionMonitor());
 
         new InvoiceLineItemTester(lease11).count(YardiPayment.class, 0);
     }
@@ -180,6 +183,8 @@ public class PaymentBatchSingleBuildingEcheckYardiTest extends PaymentYardiTestB
         //N.B. The transaction will lock the InvoiceLineItem table in HSQLDB, There is a Hack in YardiMockResidentTransactionsStubImpl
         ServerSideFactory.create(PaymentFacade.class).cancel(paymentRecords.get(0));
         Persistence.service().commit();
+
+        YardiResidentTransactionsService.getInstance().updateAll(getYardiCredential("prop123"), new ExecutionMonitor());
 
         new InvoiceLineItemTester(lease11).count(YardiPayment.class, 0);
     }

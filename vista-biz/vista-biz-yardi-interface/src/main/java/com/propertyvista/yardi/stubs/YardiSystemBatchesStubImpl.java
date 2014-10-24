@@ -49,7 +49,7 @@ import com.propertyvista.yardi.YardiInterfaceType;
 class YardiSystemBatchesStubImpl extends AbstractYardiStub implements YardiSystemBatchesStub {
 
     @Override
-    public long openReceiptBatch(PmcYardiCredential yc, String propertyId) throws RemoteException {
+    public long openReceiptBatch(PmcYardiCredential yc, String propertyId) throws YardiServiceException, RemoteException {
         init(yc, Action.OpenReceiptBatch);
         validateWriteAccess(yc);
 
@@ -157,7 +157,7 @@ class YardiSystemBatchesStubImpl extends AbstractYardiStub implements YardiSyste
             init(yc, Action.Ping);
             PingResponse pr = getResidentTransactionsSysBatchService(yc).ping(new Ping());
             return pr.getPingResult();
-        } catch (RemoteException e) {
+        } catch (YardiServiceException | RemoteException e) {
             throw new Error(e);
         }
     }
@@ -173,7 +173,7 @@ class YardiSystemBatchesStubImpl extends AbstractYardiStub implements YardiSyste
             init(yc, Action.GetVersionNumber);
             GetVersionNumberResponse response = getResidentTransactionsSysBatchService(yc).getVersionNumber(new GetVersionNumber());
             return response.getGetVersionNumberResult();
-        } catch (RemoteException e) {
+        } catch (YardiServiceException | RemoteException e) {
             throw new Error(e);
         }
     }

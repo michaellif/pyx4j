@@ -27,6 +27,7 @@ import com.pyx4j.server.mail.MailMessage;
 import com.pyx4j.server.mail.MessageTemplate;
 import com.pyx4j.site.rpc.AppPlaceInfo;
 
+import com.propertyvista.biz.communication.NotificationFacade.BatchErrorType;
 import com.propertyvista.biz.communication.mail.template.MessageKeywords;
 import com.propertyvista.config.VistaDeployment;
 import com.propertyvista.crm.rpc.CrmSiteMap;
@@ -83,6 +84,19 @@ class MessageTemplatesCrmNotification {
 
         MessageTemplate template = new MessageTemplate();
         template.setBodyTemplate(message);
+
+        email.setHtmlBody(template.getWrappedBody(wrapperTextResourceName));
+        return email;
+    }
+
+    public static MailMessage sendUnableToPostPaymentBatchNotification(BatchErrorType batchErrorType, String batchId, String errorMessage) {
+        MailMessage email = new MailMessage();
+        email.setSender(getSender());
+        email.setSubject(i18n.tr("Yardi Processing Error: {0}", VistaDeployment.getCurrentPmc().name()));
+
+        MessageTemplate template = new MessageTemplate("email/notification/payment-batch-post-to-yardi-failed-" + batchErrorType.name() + ".html");
+        template.variable("${batchId}", batchId);
+        template.variable("${errorMessage}", errorMessage);
 
         email.setHtmlBody(template.getWrappedBody(wrapperTextResourceName));
         return email;

@@ -28,12 +28,12 @@ public class UnableToPostPaymentBatchNotification extends AbstractNotification {
 
     private final String batchId;
 
-    private final String message;
+    private final String errorMessage;
 
     public UnableToPostPaymentBatchNotification(BatchErrorType batchErrorType, String batchId, String errorMessage) {
         this.batchErrorType = batchErrorType;
         this.batchId = batchId;
-        this.message = errorMessage;
+        this.errorMessage = errorMessage;
     }
 
     @Override
@@ -49,6 +49,6 @@ public class UnableToPostPaymentBatchNotification extends AbstractNotification {
             emails.add("leonard@propertyvista.com");
             emails.add("support@propertyvista.com");
         }
-        ServerSideFactory.create(CommunicationFacade.class).sendYardiConfigurationNotification(emails, message);
+        ServerSideFactory.create(CommunicationFacade.class).sendUnableToPostPaymentBatchNotification(emails, batchErrorType, batchId, errorMessage);
     }
 }

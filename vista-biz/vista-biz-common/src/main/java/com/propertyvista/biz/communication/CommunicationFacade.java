@@ -20,6 +20,7 @@ import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.commons.UserRuntimeException;
 import com.pyx4j.server.mail.MailMessage;
 
+import com.propertyvista.biz.communication.NotificationFacade.BatchErrorType;
 import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.maintenance.MaintenanceRequest;
 import com.propertyvista.domain.payment.AutopayAgreement;
@@ -127,4 +128,6 @@ public interface CommunicationFacade {
     MailMessage sendMaintenanceRequestEntryNotice(MaintenanceRequest request);
 
     void sendYardiConfigurationNotification(List<String> sendTo, String message);
+
+    void sendUnableToPostPaymentBatchNotification(List<String> sendTo, BatchErrorType batchErrorType, String batchId, String errorMessage);
 }

@@ -175,7 +175,7 @@ public class YardiPaymentBatchContext implements PaymentBatchContext {
 
             // Error Notifications
 
-            if (!batch.cancelFailed().getValue(false)) {
+            if (batch.cancelFailed().getValue(false)) {
 
                 BatchErrorType batchErrorType = BatchErrorType.OnlinePaymentBatchCanceled;
                 switch (infoBatchType) {

@@ -151,7 +151,7 @@ class YardiMaintenanceRequestsStubImpl extends AbstractYardiStub implements Yard
             init(yc, Action.Ping);
             PingResponse response = getMaintenanceRequestsService(yc).ping(new Ping());
             return response.getPingResult();
-        } catch (RemoteException e) {
+        } catch (YardiServiceException | RemoteException e) {
             throw new Error(e);
         }
     }
@@ -162,7 +162,7 @@ class YardiMaintenanceRequestsStubImpl extends AbstractYardiStub implements Yard
             init(yc, Action.GetVersionNumber);
             GetVersionNumberResponse response = getMaintenanceRequestsService(yc).getVersionNumber(new GetVersionNumber());
             return response.getGetVersionNumberResult();
-        } catch (RemoteException e) {
+        } catch (YardiServiceException | RemoteException e) {
             throw new Error(e);
         }
     }

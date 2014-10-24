@@ -67,7 +67,7 @@ class YardiResidentTransactionsStubImpl extends AbstractYardiStub implements Yar
             init(yc, Action.Ping);
             PingResponse response = getResidentTransactionsService(yc).ping(new Ping());
             return response.getPingResult();
-        } catch (RemoteException e) {
+        } catch (YardiServiceException | RemoteException e) {
             throw new Error(e);
         }
     }
@@ -78,7 +78,7 @@ class YardiResidentTransactionsStubImpl extends AbstractYardiStub implements Yar
             init(yc, Action.GetVersionNumber);
             GetVersionNumberResponse response = getResidentTransactionsService(yc).getVersionNumber(new GetVersionNumber());
             return response.getGetVersionNumberResult();
-        } catch (RemoteException e) {
+        } catch (YardiServiceException | RemoteException e) {
             throw new Error(e);
         }
     }

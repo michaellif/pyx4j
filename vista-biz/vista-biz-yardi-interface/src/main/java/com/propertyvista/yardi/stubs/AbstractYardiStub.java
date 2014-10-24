@@ -88,7 +88,7 @@ abstract class AbstractYardiStub implements ExternalInterfaceLoggingStub {
         testSystemsUrl.add("http://192.168.50.10");
     }
 
-    protected void init(PmcYardiCredential yc, Action currentAction) {
+    protected void init(PmcYardiCredential yc, Action currentAction) throws YardiServiceException {
         // Assert interface availability,  allow to block individual interface in yardi in case of emergencies
         // Example:  add to configuration file  config.properties
         // yardiInterface.783.AddReceiptsReversalToBatch.blocked=true
@@ -96,7 +96,11 @@ abstract class AbstractYardiStub implements ExternalInterfaceLoggingStub {
         String key = yc.id().getStringView() + "." + currentAction.name() + ".blocked";
         boolean blocked = ServerSideConfiguration.instance(AbstractVistaServerSideConfiguration.class).yardiInterfaceProperties().getBooleanValue(key, false);
         if (blocked) {
-            throw new AssertionError("This Yardi function '" + currentAction + "' is temporary bloked");
+            if (ServerSideConfiguration.instance(AbstractVistaServerSideConfiguration.class).yardiInterfaceProperties().getBooleanValue("simulation", false)) {
+                throw new YardiServiceException("This is Yardi function '" + currentAction + "' error simulation");
+            } else {
+                throw new AssertionError("This Yardi function '" + currentAction + "' is temporary blocked");
+            }
         }
 
         this.transactionId = TransactionLog.getNextNumber();

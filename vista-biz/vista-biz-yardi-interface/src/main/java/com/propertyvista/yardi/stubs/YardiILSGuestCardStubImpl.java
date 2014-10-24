@@ -337,7 +337,7 @@ class YardiILSGuestCardStubImpl extends AbstractYardiStub implements YardiILSGue
             init(yc, Action.Ping);
             PingResponse response = getILSGuestCardService(yc).ping(new Ping());
             return response.getPingResult();
-        } catch (RemoteException e) {
+        } catch (YardiServiceException | RemoteException e) {
             throw new Error(e);
         }
 
@@ -355,7 +355,7 @@ class YardiILSGuestCardStubImpl extends AbstractYardiStub implements YardiILSGue
             init(yc, Action.GetVersionNumber);
             GetVersionNumberResponse response = getILSGuestCardService(yc).getVersionNumber(new GetVersionNumber());
             return response.getGetVersionNumberResult();
-        } catch (RemoteException e) {
+        } catch (YardiServiceException | RemoteException e) {
             throw new Error(e);
         }
     }

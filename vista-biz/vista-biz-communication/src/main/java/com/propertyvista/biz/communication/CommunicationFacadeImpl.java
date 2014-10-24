@@ -31,6 +31,7 @@ import com.pyx4j.server.mail.MailDeliveryStatus;
 import com.pyx4j.server.mail.MailMessage;
 
 import com.propertyvista.biz.asset.BuildingFacade;
+import com.propertyvista.biz.communication.NotificationFacade.BatchErrorType;
 import com.propertyvista.biz.communication.notifications.NotificationsUtils;
 import com.propertyvista.config.AbstractVistaServerSideConfiguration;
 import com.propertyvista.domain.blob.MaintenanceRequestPictureBlob;
@@ -384,6 +385,13 @@ public class CommunicationFacadeImpl implements CommunicationFacade {
     @Override
     public void sendYardiConfigurationNotification(List<String> sendTo, String message) {
         MailMessage m = MessageTemplatesCrmNotification.createYardiConfigurationNotificationEmail(message);
+        m.setTo(sendTo);
+        Mail.queueUofW(m, null, null);
+    }
+
+    @Override
+    public void sendUnableToPostPaymentBatchNotification(List<String> sendTo, BatchErrorType batchErrorType, String batchId, String errorMessage) {
+        MailMessage m = MessageTemplatesCrmNotification.sendUnableToPostPaymentBatchNotification(batchErrorType, batchId, errorMessage);
         m.setTo(sendTo);
         Mail.queueUofW(m, null, null);
     }
