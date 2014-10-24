@@ -113,8 +113,8 @@ public class FormFillerImpl implements FormFiller {
                 fields.decodeGenericDictionary(fields.getFieldItem(fieldName).getMerged(0), textField);
                 Font font = new Font(textField.getFont(), textField.getFontSize(), 0, BaseColor.BLACK);
                 Rectangle rect = fields.getFieldPositions(fieldName).get(0).position;
-                // assume 10% horizontal margin to ensure fit
-                rect = new Rectangle(rect.getWidth() * 0.9f, rect.getHeight());
+                // assume 10% margin to ensure fit
+                rect = new Rectangle(rect.getWidth() * 0.9f, rect.getHeight() * 0.9f);
                 Float scaledSize = fieldDescriptor.scaler().scaleToFit(part, font, rect);
                 fields.setFieldProperty(fieldName, "textsize", scaledSize, null);
             }

@@ -41,6 +41,7 @@ import com.propertyvista.biz.legal.forms.framework.filling.FormFillerImpl;
 import com.propertyvista.biz.legal.forms.n4.N4FieldsMapping;
 import com.propertyvista.biz.policy.PolicyFacade;
 import com.propertyvista.domain.contact.InternationalAddress;
+import com.propertyvista.domain.contact.LegalAddress;
 import com.propertyvista.domain.financial.ARCode;
 import com.propertyvista.domain.financial.billing.InvoiceDebit;
 import com.propertyvista.domain.legal.errors.FormFillError;
@@ -154,7 +155,7 @@ public class N4GenerationFacadeImpl implements N4GenerationFacade {
         return n4LeaseData;
     }
 
-    private String formatTo(IList<LeaseTermTenant> leaseTenants, InternationalAddress rentalUnitAddress) {
+    private String formatTo(IList<LeaseTermTenant> leaseTenants, LegalAddress rentalUnitAddress) {
         StringBuilder toField = new StringBuilder();
         toField.append(formatRecipients(leaseTenants));
         toField.append("\n");
@@ -183,9 +184,9 @@ public class N4GenerationFacadeImpl implements N4GenerationFacade {
     }
 
     /** Try to format according to Canada Post guidelines: <Suite>-<StreetNo> <StreetName> */
-    private String formatRentalAddress(InternationalAddress address) {
+    private String formatRentalAddress(LegalAddress address) {
         StringBuilder formattedAddress = new StringBuilder();
-        formattedAddress.append(formatStreetAddress(address));
+        formattedAddress.append(formatLegalAddress(address));
         formattedAddress.append("\n");
         formattedAddress.append(address.city().getValue());
         formattedAddress.append(" ");
@@ -197,6 +198,17 @@ public class N4GenerationFacadeImpl implements N4GenerationFacade {
 
     private String formatBuildingOwnerAddress(InternationalAddress address) {
         return address.getStringView(); // TODO maybe use same function as "format street address"
+    }
+
+    private String formatLegalAddress(LegalAddress address) {
+        return SimpleMessageFormat.format( //
+                "{0,choice,null#|!null#{0}-}{1} {2}{3,choice,null#|!null# {3}}{4,choice,null#|!null# {4}}", //
+                sanitzeSuiteNumber(address.suiteNumber().getValue("")), //
+                address.streetNumber().getValue(), //
+                address.streetName().getValue(), //
+                address.streetType().getValue(), //
+                address.streetDirection().getValue() //
+                );
     }
 
     private String formatStreetAddress(InternationalAddress address) {
