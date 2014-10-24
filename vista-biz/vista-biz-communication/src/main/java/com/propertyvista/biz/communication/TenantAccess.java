@@ -42,7 +42,7 @@ class TenantAccess {
 
         EntityQueryCriteria<Building> criteria = EntityQueryCriteria.create(Building.class);
         criteria.eq(criteria.proto().units().$().leases().$().leaseParticipants(), tenant);
-        if (!ServerSideFactory.create(BuildingFacade.class).isSuspend(criteria)) {
+        if (ServerSideFactory.create(BuildingFacade.class).isSuspend(criteria)) {
             log.info("Email will not be sent to LeaseParticipant {} because Building is Suspend", tenant.getPrimaryKey());
             return null;
         }
