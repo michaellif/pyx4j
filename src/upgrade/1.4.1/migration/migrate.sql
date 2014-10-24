@@ -34,6 +34,9 @@ BEGIN TRANSACTION;
     
 COMMIT;
 
+-- load tmp tables
+\i insert_tmp_emails.sql
+
 -- public schema migration
 \i migrate_public_schema.sql;
 
@@ -346,4 +349,5 @@ BEGIN TRANSACTION;
 COMMIT;
 
 DROP FUNCTION _dba_.migrate_pmc_141(text);
+DROP TABLE _dba_.tmp_emails;
 
