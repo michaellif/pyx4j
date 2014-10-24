@@ -26,9 +26,9 @@ import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.forms.client.validators.AbstractComponentValidator;
 import com.pyx4j.forms.client.validators.BasicValidationError;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.widgets.client.DatePickerTextBox;
+import com.pyx4j.widgets.client.DatePicker;
 
-public class CDatePicker extends CTextFieldBase<LogicalDate, NDatePicker> {
+public class CDatePicker extends CValueBoxBase<LogicalDate, NDatePicker> {
 
     private static final I18n i18n = I18n.get(CDatePicker.class);
 
@@ -40,13 +40,13 @@ public class CDatePicker extends CTextFieldBase<LogicalDate, NDatePicker> {
 
     public CDatePicker() {
         super();
-        setDateFormat(DatePickerTextBox.defaultDateFormat);
+        setDateFormat(DatePicker.defaultDateFormat);
         setNativeComponent(new NDatePicker(this));
     }
 
     public void setDateFormat(String pattern) {
-        setFormatter(new DatePickerTextBox.DateFormatter(pattern));
-        setParser(new DatePickerTextBox.DateParser(pattern));
+        setFormatter(new DatePicker.DateFormatter(pattern));
+        setParser(new DatePicker.DateParser(pattern));
         setWatermark(pattern.toUpperCase());
     }
 

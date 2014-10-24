@@ -26,9 +26,9 @@ import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.pyx4j.commons.IFormatter;
 import com.pyx4j.commons.IParser;
 import com.pyx4j.commons.LogicalDate;
-import com.pyx4j.widgets.client.DatePickerTextBox;
+import com.pyx4j.widgets.client.DatePicker;
 
-public class NDatePicker extends NTextFieldBase<LogicalDate, DatePickerTextBox, CDatePicker> implements INativeTextComponent<LogicalDate> {
+public class NDatePicker extends NValueBoxBase<LogicalDate, DatePicker, CDatePicker> {
 
     public NDatePicker(CDatePicker cComponent) {
         super(cComponent);
@@ -36,8 +36,8 @@ public class NDatePicker extends NTextFieldBase<LogicalDate, DatePickerTextBox, 
     }
 
     @Override
-    protected DatePickerTextBox createEditor() {
-        DatePickerTextBox datePickerTextBox = new DatePickerTextBox() {
+    protected DatePicker createEditor() {
+        DatePicker datePickerTextBox = new DatePicker() {
             @Override
             protected IParser<LogicalDate> getParser() {
                 return getCComponent().getParser();

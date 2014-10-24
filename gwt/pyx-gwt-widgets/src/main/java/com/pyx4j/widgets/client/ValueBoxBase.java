@@ -20,6 +20,8 @@
  */
 package com.pyx4j.widgets.client;
 
+import java.text.ParseException;
+
 import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.core.client.Scheduler.ScheduledCommand;
 import com.google.gwt.dom.client.Style.Position;
@@ -32,6 +34,9 @@ import com.google.gwt.event.dom.client.FocusHandler;
 import com.google.gwt.event.dom.client.KeyDownHandler;
 import com.google.gwt.event.dom.client.KeyPressHandler;
 import com.google.gwt.event.dom.client.KeyUpHandler;
+import com.google.gwt.event.logical.shared.HasValueChangeHandlers;
+import com.google.gwt.event.logical.shared.ValueChangeEvent;
+import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.resources.client.ImageResource;
 import com.google.gwt.user.client.Command;
@@ -42,18 +47,24 @@ import com.google.gwt.user.client.ui.SimplePanel;
 
 import com.pyx4j.commons.CompositeDebugId;
 import com.pyx4j.commons.IDebugId;
+import com.pyx4j.commons.IFormatter;
+import com.pyx4j.commons.IParser;
 import com.pyx4j.widgets.client.event.shared.HasPasteHandlers;
 import com.pyx4j.widgets.client.event.shared.PasteEvent;
 import com.pyx4j.widgets.client.event.shared.PasteHandler;
 import com.pyx4j.widgets.client.style.theme.WidgetTheme;
 
-/**
- * @deprecated Use ValueBoxBase
- */
-@Deprecated
-public abstract class TextBoxBase extends Composite implements ITextBoxWidget, IFocusGroup, HasPasteHandlers, IWatermarkWidget {
+public abstract class ValueBoxBase<E> extends Composite implements IValueWidget<E>, IFocusGroup, HasValueChangeHandlers<E>, HasPasteHandlers, IWatermarkWidget {
 
-    private TextWatermark watermark;
+    private E value;
+
+    private IParser<E> parser;
+
+    private IFormatter<E, String> formatter;
+
+    private boolean parsedOk = true;
+
+    private String parseExceptionMessage;
 
     private com.google.gwt.user.client.ui.TextBoxBase textBoxWidget;
 
@@ -63,11 +74,13 @@ public abstract class TextBoxBase extends Composite implements ITextBoxWidget, I
 
     private Button actionButton;
 
+    private TextWatermark watermark;
+
     private IDebugId debugId;
 
     private final GroupFocusHandler groupFocusHandler;
 
-    public TextBoxBase() {
+    public ValueBoxBase() {
         contentPanel = new FlowPanel();
         contentPanel.setStyleName(WidgetTheme.StyleName.TextBoxContainer.name());
         contentPanel.getElement().getStyle().setPosition(Position.RELATIVE);
@@ -79,18 +92,14 @@ public abstract class TextBoxBase extends Composite implements ITextBoxWidget, I
 
         sinkEvents(Event.ONPASTE);
 
-        initWidget(contentPanel);
-
         groupFocusHandler = new GroupFocusHandler(this);
 
-    }
+        initWidget(contentPanel);
 
-    @Override
-    public GroupFocusHandler getGroupFocusHandler() {
-        return groupFocusHandler;
     }
 
     protected void setTextBoxWidget(final com.google.gwt.user.client.ui.TextBoxBase textBoxWidget) {
+        assert this.textBoxWidget == null : "TextBox already set";
         this.textBoxWidget = textBoxWidget;
         if (this.debugId != null) {
             this.textBoxWidget.ensureDebugId(this.debugId.debugId());
@@ -116,6 +125,18 @@ public abstract class TextBoxBase extends Composite implements ITextBoxWidget, I
             }
         });
 
+        textBoxWidget.addValueChangeHandler(new ValueChangeHandler<String>() {
+
+            @Override
+            public void onValueChange(ValueChangeEvent<String> event) {
+                try {
+                    setValue(getParser().parse(event.getValue()), true, null);
+                } catch (ParseException e) {
+                    setValue(null, false, e.getMessage());
+                }
+            }
+        });
+
         textBoxHolder.setWidget(textBoxWidget);
 
         groupFocusHandler.addFocusable(textBoxWidget);
@@ -124,6 +145,81 @@ public abstract class TextBoxBase extends Composite implements ITextBoxWidget, I
 
     protected com.google.gwt.user.client.ui.TextBoxBase getTextBoxWidget() {
         return textBoxWidget;
+    }
+
+    @Override
+    public E getValue() {
+        return value;
+    }
+
+    @Override
+    public void setValue(E value) {
+        if (this.value == null && value == null) {
+            return;
+        } else if (this.value != null && this.value.equals(value)) {
+            return;
+        }
+        this.parsedOk = true;
+        this.value = value;
+        textBoxWidget.setText(getFormatter().format(value));
+        if (watermark != null) {
+            watermark.show();
+        }
+    }
+
+    protected void setValue(E value, boolean parsedOk, String parseExceptionMessage) {
+        if (this.parsedOk == parsedOk) {
+            if (this.value == null && value == null) {
+                return;
+            } else if (this.value != null && this.value.equals(value)) {
+                return;
+            }
+        }
+        this.value = value;
+        this.parsedOk = parsedOk;
+        if (parsedOk) {
+            textBoxWidget.setText(getFormatter().format(value));
+            this.parseExceptionMessage = null;
+        } else {
+            this.parseExceptionMessage = parseExceptionMessage;
+        }
+        if (watermark != null) {
+            watermark.show();
+        }
+        ValueChangeEvent.fire(this, getValue());
+    }
+
+    @Override
+    public void setParser(IParser<E> parser) {
+        this.parser = parser;
+    }
+
+    protected IParser<E> getParser() {
+        return parser;
+    }
+
+    @Override
+    public void setFormatter(IFormatter<E, String> formatter) {
+        this.formatter = formatter;
+    }
+
+    protected IFormatter<E, String> getFormatter() {
+        return formatter;
+    }
+
+    @Override
+    public boolean isParsedOk() {
+        return parsedOk;
+    }
+
+    @Override
+    public String getParseExceptionMessage() {
+        return parseExceptionMessage;
+    }
+
+    @Override
+    public GroupFocusHandler getGroupFocusHandler() {
+        return groupFocusHandler;
     }
 
     public void setAction(Command command, ImageResource imageResource) {
@@ -204,23 +300,6 @@ public abstract class TextBoxBase extends Composite implements ITextBoxWidget, I
     }
 
     @Override
-    public void setText(String text) {
-        textBoxWidget.setText(text);
-        if (watermark != null) {
-            watermark.show();
-        }
-    }
-
-    @Override
-    public String getText() {
-        if (watermark != null && watermark.isShown()) {
-            return "";
-        } else {
-            return textBoxWidget.getText();
-        }
-    }
-
-    @Override
     public void setEditable(boolean editable) {
         textBoxWidget.setReadOnly(!editable);
         if (actionButton != null) {
@@ -264,7 +343,6 @@ public abstract class TextBoxBase extends Composite implements ITextBoxWidget, I
         textBoxWidget.ensureDebugId(debugId.debugId());
     }
 
-    @Override
     public HandlerRegistration addChangeHandler(ChangeHandler handler) {
         return textBoxWidget.addChangeHandler(handler);
     }
@@ -333,7 +411,7 @@ public abstract class TextBoxBase extends Composite implements ITextBoxWidget, I
 
                 @Override
                 public void execute() {
-                    PasteEvent.fire(TextBoxBase.this);
+                    PasteEvent.fire(ValueBoxBase.this);
                 }
             });
 

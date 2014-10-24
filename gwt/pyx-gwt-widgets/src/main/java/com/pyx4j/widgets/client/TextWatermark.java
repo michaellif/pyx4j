@@ -27,9 +27,12 @@ import com.google.gwt.event.dom.client.FocusHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.ui.FocusWidget;
 
+import com.pyx4j.gwt.commons.css.CssVariable;
 import com.pyx4j.widgets.client.style.theme.WidgetTheme;
 
 public abstract class TextWatermark {
+
+    public static final String CSS_VAR_TEXT_WATERMARK = "TextWatermark";
 
     private final FocusWidget component;
 
@@ -91,15 +94,17 @@ public abstract class TextWatermark {
     void show(boolean show) {
         insideShowWatermark = true;
         if (show) {
-            if (isEmptyText() || getText().equals(watermark)) {
+            if (isEmptyText() || isShown()) {
                 setText(watermark);
                 component.addStyleDependentName(WidgetTheme.StyleDependent.watermark.name());
+                CssVariable.setVariable(component.getElement(), CSS_VAR_TEXT_WATERMARK, watermark);
             }
         } else {
             if (isShown()) {
                 setText(null);
             }
             component.removeStyleDependentName(WidgetTheme.StyleDependent.watermark.name());
+            CssVariable.removeVariable(component.getElement(), CSS_VAR_TEXT_WATERMARK);
         }
         insideShowWatermark = false;
     }
@@ -113,7 +118,7 @@ public abstract class TextWatermark {
     }
 
     public boolean isShown() {
-        return !getText().isEmpty() && (getText().contains("pyx:watermark") || getText().equals(watermark));
+        return CssVariable.getVariable(component.getElement(), CSS_VAR_TEXT_WATERMARK) != null;
     }
 
 }

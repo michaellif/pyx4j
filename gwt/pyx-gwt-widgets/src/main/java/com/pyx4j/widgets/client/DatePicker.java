@@ -50,36 +50,16 @@ import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.datepicker.DatePickerComposite;
 
-public class DatePickerTextBox extends TextBoxBase implements HasValueChangeHandlers<LogicalDate>, IValueWidget<LogicalDate> {
+public class DatePicker extends ValueBoxBase<LogicalDate> implements HasValueChangeHandlers<LogicalDate> {
 
-    private static final I18n i18n = I18n.get(DatePickerTextBox.class);
+    private static final I18n i18n = I18n.get(DatePicker.class);
 
     public static final String defaultDateFormat = i18n.tr("MM/dd/yyyy");
 
-    private LogicalDate value;
-
-    private IParser<LogicalDate> parser;
-
-    private IFormatter<LogicalDate, String> formatter;
-
-    private boolean parsedOk;
-
     private DatePickerDropDownPanel datePickerDropDown;
 
-    public DatePickerTextBox() {
+    public DatePicker() {
         setTextBoxWidget(new com.google.gwt.user.client.ui.TextBox());
-
-        getTextBoxWidget().addValueChangeHandler(new ValueChangeHandler<String>() {
-
-            @Override
-            public void onValueChange(ValueChangeEvent<String> event) {
-                try {
-                    setValue(getParser().parse(event.getValue()), true);
-                } catch (ParseException e) {
-                    setValue(null, false);
-                }
-            }
-        });
 
         setAction(new Command() {
 
@@ -95,14 +75,14 @@ public class DatePickerTextBox extends TextBoxBase implements HasValueChangeHand
 
                         @Override
                         public void onClose(CloseEvent<PopupPanel> event) {
-                            if (DatePickerTextBox.this.isActive()) {
-                                DatePickerTextBox.this.toggleActive();
+                            if (DatePicker.this.isActive()) {
+                                DatePicker.this.toggleActive();
                             }
                         }
                     });
                 }
 
-                if (DatePickerTextBox.this.isActive()) {
+                if (DatePicker.this.isActive()) {
                     datePickerDropDown.showDatePicker();
                 } else {
                     datePickerDropDown.hideDatePicker();
@@ -122,75 +102,19 @@ public class DatePickerTextBox extends TextBoxBase implements HasValueChangeHand
     }
 
     @Override
-    public LogicalDate getValue() {
-        return value;
-    }
-
-    @Override
-    public void setValue(LogicalDate value) {
-        if (this.value == null && value == null) {
-            return;
-        } else if (this.value != null && this.value.equals(value)) {
-            return;
-        }
-        this.parsedOk = true;
-        this.value = value;
-        super.setText(getFormatter().format(value));
-    }
-
-    @Override
-    public void setText(String text) {
-        try {
-            setValue(getParser().parse(text));
-        } catch (ParseException e) {
-            setValue(null);
-        }
-    }
-
-    @Override
-    public void setParser(IParser<LogicalDate> parser) {
-        this.parser = parser;
-    }
-
     protected IParser<LogicalDate> getParser() {
-        if (parser == null) {
-            parser = new DateParser(defaultDateFormat);
+        if (super.getParser() == null) {
+            setParser(new DateParser(defaultDateFormat));
         }
-        return parser;
+        return super.getParser();
     }
 
     @Override
-    public void setFormatter(IFormatter<LogicalDate, String> formatter) {
-        this.formatter = formatter;
-    }
-
     protected IFormatter<LogicalDate, String> getFormatter() {
-        if (formatter == null) {
-            formatter = new DateFormatter(defaultDateFormat);
+        if (super.getFormatter() == null) {
+            setFormatter(new DateFormatter(defaultDateFormat));
         }
-        return formatter;
-    }
-
-    @Override
-    public boolean isParsedOk() {
-        return parsedOk;
-    }
-
-    protected void setValue(LogicalDate value, boolean parsedOk) {
-        if (this.parsedOk == parsedOk) {
-            if (this.value == null && value == null) {
-                return;
-            } else if (this.value != null && this.value.equals(value)) {
-                return;
-            }
-        }
-        this.value = value;
-        this.parsedOk = parsedOk;
-        if (parsedOk) {
-            super.setText(getFormatter().format(value));
-        }
-        ValueChangeEvent.fire(this, getValue());
-
+        return super.getFormatter();
     }
 
     @Override
@@ -259,7 +183,7 @@ public class DatePickerTextBox extends TextBoxBase implements HasValueChangeHand
                         value = new LogicalDate(value.getYear(), value.getMonth(), value.getDate());
                     }
 
-                    DatePickerTextBox.this.setValue(value, true);
+                    DatePicker.this.setValue(value, true, null);
                     hideDatePicker();
                 }
             });
@@ -269,22 +193,22 @@ public class DatePickerTextBox extends TextBoxBase implements HasValueChangeHand
         }
 
         public void showDatePicker() {
-            LogicalDate selectedDate = DatePickerTextBox.this.getValue();
+            LogicalDate selectedDate = DatePicker.this.getValue();
             if (selectedDate == null) {
                 selectedDate = new LogicalDate();
             }
             picker.setDate(selectedDate);
-            showRelativeTo(DatePickerTextBox.this);
+            showRelativeTo(DatePicker.this);
             focusPanel.setFocus(true);
-            if (!DatePickerTextBox.this.isActive()) {
-                DatePickerTextBox.this.toggleActive();
+            if (!DatePicker.this.isActive()) {
+                DatePicker.this.toggleActive();
             }
         }
 
         public void hideDatePicker() {
             hide();
-            if (DatePickerTextBox.this.isActive()) {
-                DatePickerTextBox.this.toggleActive();
+            if (DatePicker.this.isActive()) {
+                DatePicker.this.toggleActive();
             }
         }
 
@@ -350,4 +274,5 @@ public class DatePickerTextBox extends TextBoxBase implements HasValueChangeHand
         }
 
     }
+
 }
