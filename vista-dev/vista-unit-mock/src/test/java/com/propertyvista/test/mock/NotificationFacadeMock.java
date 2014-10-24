@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011-2012 All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -76,11 +76,12 @@ public class NotificationFacadeMock implements NotificationFacade {
     }
 
     @Override
-    public void yardiUnableToPostPaymentBatch(String errorMessage) {
+    public void yardiConfigurationError(String errorMessage) {
     }
 
     @Override
-    public void yardiConfigurationError(String errorMessage) {
+    public void yardiUnableToPostPaymentBatch(BatchErrorType batchErrorType, String batchId, String errorMessage) {
+
     }
 
     @Override
