@@ -34,7 +34,7 @@ public class MoveInWizardCompletionConfirmationGadget extends AbstractGadget<Mov
     private static final I18n i18n = I18n.get(TenantWelcomeGadget.class);
 
     public MoveInWizardCompletionConfirmationGadget(MoveInWizardView view) {
-        super(view, null, i18n.tr("Move-In Wizard Complete"), ThemeColor.contrast4, 1);
+        super(view, null, i18n.tr("Application Complete"), ThemeColor.contrast4, 1);
         setActionsToolbar(new ActionsToolbar());
 
         setContent(new HTML(""));
@@ -42,9 +42,11 @@ public class MoveInWizardCompletionConfirmationGadget extends AbstractGadget<Mov
         SafeHtmlBuilder htmlBuilder = new SafeHtmlBuilder();
 
         htmlBuilder.appendHtmlConstant("<div style='text-align:left'><div><b>");
-        htmlBuilder.appendEscaped(i18n.tr("Congratulations! You're MOVE IN READY!"));
+        htmlBuilder.appendEscaped(i18n.tr("Congratulations! You’re now ready to move in."));
         htmlBuilder.appendHtmlConstant("</b></div><div>");
-        htmlBuilder.appendEscaped(i18n.tr("To continue to portal click on the \"Continue to Portal\" button or select \"Update Profile\" for changes."));
+        htmlBuilder
+                .appendEscaped(i18n
+                        .tr("Please familiarize yourself with the myCOMMUNITY online resident portal by selecting the link below. This online resource should be used for paying rent, submitting maintenance requests, purchasing tenant insurance and for participating in the buildings perks program. You can also update your profile information at any time directly from myCOMMUNITY."));
         htmlBuilder.appendHtmlConstant("</div></div>");
 
         HTMLPanel htmlPanel = new HTMLPanel(htmlBuilder.toSafeHtml());
@@ -55,7 +57,7 @@ public class MoveInWizardCompletionConfirmationGadget extends AbstractGadget<Mov
 
         public ActionsToolbar() {
 
-            Button continueButton = new Button(i18n.tr("Continue to Portal"), new Command() {
+            Button continueButton = new Button(i18n.tr("myCOMMUNITY"), new Command() {
                 @Override
                 public void execute() {
                     MoveInWizardManager.reset();
@@ -64,17 +66,6 @@ public class MoveInWizardCompletionConfirmationGadget extends AbstractGadget<Mov
             });
             continueButton.getElement().getStyle().setProperty("background", StyleManager.getPalette().getThemeColor(ThemeColor.contrast4, 1));
             addItem(continueButton);
-
-            Button updateProfileButton = new Button(i18n.tr("Update Profile"), new Command() {
-                @Override
-                public void execute() {
-                    MoveInWizardManager.reset();
-                    AppSite.getPlaceController().goTo(new ResidentPortalSiteMap.Profile());
-                }
-            });
-            updateProfileButton.getElement().getStyle().setProperty("background", StyleManager.getPalette().getThemeColor(ThemeColor.contrast4, 1));
-            addItem(updateProfileButton);
-
         }
     }
 
