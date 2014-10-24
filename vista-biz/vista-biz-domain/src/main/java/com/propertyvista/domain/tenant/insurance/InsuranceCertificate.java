@@ -30,6 +30,7 @@ import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.annotations.ReadOnly;
 import com.pyx4j.entity.annotations.ToString;
+import com.pyx4j.entity.annotations.ToStringFormat;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.core.AttachLevel;
 import com.pyx4j.entity.core.IEntity;
@@ -38,8 +39,7 @@ import com.pyx4j.entity.core.IPrimitive;
 
 @AbstractEntity
 @Inheritance(strategy = InheritanceStrategy.SINGLE_TABLE)
-// TODO this format fails during update of new instances of InsuranceCertificate via BoxFolder
-//@ToStringFormat("Provider: {0}, Certificate #: {1}, Liability Coverage: ${2,choice,null#|!null#,#,##0.00}, Expiry: {3}")
+@ToStringFormat("{0}, #: {1}, Coverage: {2,choice,null#empty|!null#${2}}{3,choice,null#|!null#, Expiry: {3}}")
 public interface InsuranceCertificate<INSURANCE_POLICY extends InsurancePolicy<?>> extends IEntity {
 
     @Owner
@@ -60,10 +60,10 @@ public interface InsuranceCertificate<INSURANCE_POLICY extends InsurancePolicy<?
     @Caption(name = "Certificate Number")
     IPrimitive<String> insuranceCertificateNumber();
 
-    @Editor(type = EditorType.money)
-    @Format("#,##0.00")
-    @ToString(index = 2)
     @NotNull
+    @ToString(index = 2)
+    @Format("#,##0.00")
+    @Editor(type = EditorType.money)
     IPrimitive<BigDecimal> liabilityCoverage();
 
     @NotNull
@@ -76,5 +76,4 @@ public interface InsuranceCertificate<INSURANCE_POLICY extends InsurancePolicy<?
     @Owned
     @OrderBy(PrimaryKey.class)
     IList<InsuranceCertificateScan> certificateDocs();
-
 }

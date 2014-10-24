@@ -419,7 +419,7 @@ public class TenantSureFacadeImpl implements TenantSureFacade {
         status.nextPaymentDetails().paymentDate().setValue(TenantSurePayments.getNextPaymentDate(insuranceTenantSure));
         BigDecimal thisMonthlyPayable = TenantSurePayments.getMonthlyPayable(insuranceTenantSure, status.nextPaymentDetails().paymentDate().getValue());
         status.nextPaymentDetails().paymentBreakdown().add(makePaymentItem(//@formatter:off
-                    i18n.tr("Premium + Tax"), 
+                    i18n.tr("Premium + Tax"),
                     thisMonthlyPayable,
                     new ArrayList<TenantSurePaymentItemTaxDTO>()
         ));//@formatter:on
@@ -560,7 +560,7 @@ public class TenantSureFacadeImpl implements TenantSureFacade {
     public void reinstate(Tenant tenantId) {
         TenantSureInsurancePolicy insuranceTenantSure = retrieveActiveInsuranceTenantSure(tenantId);
         if (insuranceTenantSure.status().getValue() != TenantSureStatus.PendingCancellation) {
-            throw new UserRuntimeException(i18n.tr("Cannot be reinstanted because it's not cancelled"));
+            throw new UserRuntimeException(i18n.tr("Cannot be reinstated because it's not cancelled"));
         }
         insuranceTenantSure.cancellationDate().setValue(null);
         insuranceTenantSure.status().setValue(TenantSureStatus.Active);
