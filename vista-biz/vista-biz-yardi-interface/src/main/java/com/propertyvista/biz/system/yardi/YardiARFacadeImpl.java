@@ -31,6 +31,7 @@ import com.propertyvista.biz.financial.ar.ARException;
 import com.propertyvista.biz.financial.payment.PaymentBatchContext;
 import com.propertyvista.biz.system.AbstractYardiFacadeImpl;
 import com.propertyvista.biz.system.YardiPaymentBatchContext;
+import com.propertyvista.biz.system.YardiPaymentBatchContext.InfoBatchType;
 import com.propertyvista.biz.tenant.lease.LeaseFacade;
 import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.financial.yardi.YardiPaymentPostingBatch;
@@ -102,7 +103,7 @@ public class YardiARFacadeImpl extends AbstractYardiFacadeImpl implements YardiA
     public PaymentBatchContext createPaymentBatchContext(Building building) throws RemoteException, YardiServiceException {
         assert VistaFeatures.instance().yardiIntegration();
 
-        YardiPaymentBatchContext paymentBatchContext = new YardiPaymentBatchContext();
+        YardiPaymentBatchContext paymentBatchContext = new YardiPaymentBatchContext(InfoBatchType.EFTBatch);
         paymentBatchContext.ensureOpenBatch(getPmcYardiCredential(building), building);
 
         return paymentBatchContext;

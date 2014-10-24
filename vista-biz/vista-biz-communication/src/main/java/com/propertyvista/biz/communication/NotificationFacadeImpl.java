@@ -29,6 +29,7 @@ import com.propertyvista.biz.communication.notifications.BillingAlertNotificatio
 import com.propertyvista.biz.communication.notifications.NotificationsAggregator;
 import com.propertyvista.biz.communication.notifications.PostToYardiFailedNotification;
 import com.propertyvista.biz.communication.notifications.RejectPaymentNotification;
+import com.propertyvista.biz.communication.notifications.UnableToPostPaymentBatchNotification;
 import com.propertyvista.biz.communication.notifications.YardiConfigurationNotification;
 import com.propertyvista.biz.system.OperationsAlertFacade;
 import com.propertyvista.biz.system.VistaContext;
@@ -92,8 +93,8 @@ public class NotificationFacadeImpl implements NotificationFacade {
     }
 
     @Override
-    public void yardiUnableToPostPaymentBatch(final String errorMessage) {
-        aggregateOrSend(new YardiConfigurationNotification(errorMessage));
+    public void yardiUnableToPostPaymentBatch(BatchErrorType batchErrorType, String batchId, String errorMessage) {
+        aggregateOrSend(new UnableToPostPaymentBatchNotification(batchErrorType, batchId, errorMessage));
     }
 
     @Override

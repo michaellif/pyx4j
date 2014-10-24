@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011-2012 All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -22,7 +22,7 @@ import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
 
 /**
  * CRM and Tenant Notifications.
- * 
+ *
  * Does decision if email should actually be sent.
  */
 public interface NotificationFacade {
@@ -35,9 +35,23 @@ public interface NotificationFacade {
 
     public void yardiUnableToRejectPayment(PaymentRecord paymentRecord, boolean applyNSF, String yardiErrorMessage);
 
-    public void yardiUnableToPostPaymentBatch(String errorMessage);
-
     public void yardiConfigurationError(String errorMessage);
+
+    public enum BatchErrorType {
+
+        RecoverablePaymentsBatchNotCanceled,
+
+        RecoverablePaymentsBatchCanceled,
+
+        OnlinePaymentBatchNotCanceled,
+
+        OnlinePaymentBatchCanceled,
+
+        PaymentRevesral,
+
+    }
+
+    public void yardiUnableToPostPaymentBatch(BatchErrorType batchErrorType, String batchId, String errorMessage);
 
     public void billingAlertNotification(Lease leaseId, String alert);
 

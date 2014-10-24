@@ -22,6 +22,7 @@ import com.yardi.entity.resident.ResidentTransactions;
 
 import com.propertyvista.biz.financial.ar.ARException;
 import com.propertyvista.biz.system.YardiPaymentBatchContext;
+import com.propertyvista.biz.system.YardiPaymentBatchContext.InfoBatchType;
 import com.propertyvista.biz.system.yardi.YardiServiceException;
 import com.propertyvista.domain.financial.yardi.YardiReceipt;
 import com.propertyvista.domain.financial.yardi.YardiReceiptReversal;
@@ -63,7 +64,7 @@ public class YardiSystemBatchesService extends YardiAbstractService {
 
         boolean singleTrasactionBatch = false;
         if (paymentBatchContext == null) {
-            paymentBatchContext = new YardiPaymentBatchContext();
+            paymentBatchContext = new YardiPaymentBatchContext(InfoBatchType.singlePaymentTransaction);
             singleTrasactionBatch = true;
         }
 
@@ -101,7 +102,7 @@ public class YardiSystemBatchesService extends YardiAbstractService {
 
         boolean singleTrasactionBatch = false;
         if (paymentBatchContext == null) {
-            paymentBatchContext = new YardiPaymentBatchContext();
+            paymentBatchContext = new YardiPaymentBatchContext(InfoBatchType.Reject);
             singleTrasactionBatch = true;
         }
 

@@ -19,6 +19,7 @@ import org.apache.commons.lang.Validate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.commons.SimpleMessageFormat;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.config.server.SystemDateManager;
@@ -30,6 +31,7 @@ import com.pyx4j.entity.server.TransactionScopeOption;
 import com.pyx4j.entity.server.UnitOfWork;
 
 import com.propertyvista.biz.communication.NotificationFacade;
+import com.propertyvista.biz.communication.NotificationFacade.BatchErrorType;
 import com.propertyvista.biz.financial.ar.ARException;
 import com.propertyvista.biz.financial.payment.PaymentBatchContext;
 import com.propertyvista.biz.system.yardi.YardiServiceException;
@@ -56,6 +58,21 @@ public class YardiPaymentBatchContext implements PaymentBatchContext {
     private int recordCount = 0;
 
     private YardiPaymentPostingBatch batch;
+
+    public enum InfoBatchType {
+
+        singlePaymentTransaction,
+
+        Reject,
+
+        EFTBatch
+    }
+
+    private InfoBatchType infoBatchType;
+
+    public YardiPaymentBatchContext(InfoBatchType infoBatchType) {
+        this.infoBatchType = infoBatchType;
+    }
 
     public boolean isOpen() {
         return this.batchId != null;
@@ -106,7 +123,6 @@ public class YardiPaymentBatchContext implements PaymentBatchContext {
                 throw new ARException(error, e);
             } finally {
                 if (error != null) {
-                    ServerSideFactory.create(NotificationFacade.class).yardiUnableToPostPaymentBatch(error);
                     batch.postFailedErrorMessage().setValue(error);
                 }
 
@@ -143,11 +159,7 @@ public class YardiPaymentBatchContext implements PaymentBatchContext {
             error = new SimpleMessageFormat("Unable to cancel Yardi Batch {0} ({1}): {2}").format(batchId, propertyCode, e.getMessage());
             throw new ARException(error, e);
         } finally {
-            if (error != null) {
-                ServerSideFactory.create(NotificationFacade.class).yardiUnableToPostPaymentBatch(error);
-                batch.cancelFailedErrorMessage().setValue(error);
-            }
-
+            batch.cancelFailedErrorMessage().setValue(error);
             if (batch.status().getValue() != YardiPostingStatus.Canceled) {
                 batch.cancelFailed().setValue(true);
             }
@@ -160,6 +172,41 @@ public class YardiPaymentBatchContext implements PaymentBatchContext {
                     return null;
                 }
             });
+
+            // Error Notifications
+
+            if (!batch.cancelFailed().getValue(false)) {
+
+                BatchErrorType batchErrorType = BatchErrorType.OnlinePaymentBatchCanceled;
+                switch (infoBatchType) {
+                case singlePaymentTransaction:
+                    batchErrorType = BatchErrorType.OnlinePaymentBatchNotCanceled;
+                    break;
+                case EFTBatch:
+                    batchErrorType = BatchErrorType.RecoverablePaymentsBatchNotCanceled;
+                    break;
+                case Reject:
+                    batchErrorType = BatchErrorType.PaymentRevesral;
+                }
+                ServerSideFactory.create(NotificationFacade.class).yardiUnableToPostPaymentBatch(batchErrorType, String.valueOf(batchId),
+                        CommonsStringUtils.nvl_concat(batch.postFailedErrorMessage().getValue(), "\n", error));
+            } else if (batch.postFailed().getValue(false)) {
+
+                BatchErrorType batchErrorType = BatchErrorType.OnlinePaymentBatchCanceled;
+                switch (infoBatchType) {
+                case singlePaymentTransaction:
+                    batchErrorType = BatchErrorType.OnlinePaymentBatchCanceled;
+                    break;
+                case EFTBatch:
+                    batchErrorType = BatchErrorType.RecoverablePaymentsBatchCanceled;
+                    break;
+                case Reject:
+                    batchErrorType = BatchErrorType.PaymentRevesral;
+                    break;
+                }
+                ServerSideFactory.create(NotificationFacade.class).yardiUnableToPostPaymentBatch(batchErrorType, String.valueOf(batchId),
+                        batch.postFailedErrorMessage().getValue());
+            }
         }
     }
 

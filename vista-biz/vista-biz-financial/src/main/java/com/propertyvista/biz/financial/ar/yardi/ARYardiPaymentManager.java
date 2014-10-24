@@ -141,12 +141,15 @@ class ARYardiPaymentManager extends ARAbstractPaymentManager {
                         paymentRecord.id(), paymentRecord.billingAccount().lease().leaseId()), e);
             }
 
-            try {
-                Persistence.service().retrieve(paymentRecord.billingAccount().lease());
-                ServerSideFactory.create(YardiARFacade.class).updateLease(paymentRecord.billingAccount().lease(), null);
-            } catch (Throwable ignoreDataRetrivalFromYardy) {
-                // We ignore error here because it will require unnecessary transaction reject
-                log.debug("ignoreDataRetrivalFromYardy", ignoreDataRetrivalFromYardy);
+            //TODO remove from all place
+            if (false) {
+                try {
+                    Persistence.service().retrieve(paymentRecord.billingAccount().lease());
+                    ServerSideFactory.create(YardiARFacade.class).updateLease(paymentRecord.billingAccount().lease(), null);
+                } catch (Throwable ignoreDataRetrivalFromYardy) {
+                    // We ignore error here because it will require unnecessary transaction reject
+                    log.debug("ignoreDataRetrivalFromYardy", ignoreDataRetrivalFromYardy);
+                }
             }
         }
     }
