@@ -56,7 +56,7 @@ public class TenantInsuranceFacadeImpl implements TenantInsuranceFacade {
             ownInsuranceCriteira.eq(ownInsuranceCriteira.proto().insurancePolicy().tenant().lease().leaseParticipants(), tenantId);
         }
         ownInsuranceCriteira.eq(ownInsuranceCriteira.proto().insurancePolicy().isDeleted(), Boolean.FALSE);
-        ownInsuranceCriteira.or(PropertyCriterion.gt(ownInsuranceCriteira.proto().expiryDate(), today),
+        ownInsuranceCriteira.or(PropertyCriterion.ge(ownInsuranceCriteira.proto().expiryDate(), today),
                 PropertyCriterion.isNull(ownInsuranceCriteira.proto().expiryDate()));
 
         List<InsuranceCertificate<?>> certificates = Persistence.service().query(ownInsuranceCriteira);

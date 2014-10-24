@@ -28,7 +28,7 @@ public class PastDateIncludeTodayValidator extends AbstractComponentValidator<Lo
     private final String message;
 
     public PastDateIncludeTodayValidator() {
-        this(i18n.tr("The Date Must Be Earlier Than Or Equal To Today's Date"));
+        this(i18n.tr("The Date must be earlier than or equal to Today's Date"));
     }
 
     public PastDateIncludeTodayValidator(String message) {

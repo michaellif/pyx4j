@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011- All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -18,7 +18,6 @@ import java.math.BigDecimal;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.IsWidget;
 
-import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.forms.client.ui.CEntityLabel;
 import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
@@ -27,6 +26,8 @@ import com.pyx4j.forms.client.validators.AbstractComponentValidator;
 import com.pyx4j.forms.client.validators.BasicValidationError;
 import com.pyx4j.i18n.shared.I18n;
 
+import com.propertyvista.common.client.ui.validators.FutureDateIncludeTodayValidator;
+import com.propertyvista.common.client.ui.validators.PastDateValidator;
 import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.domain.tenant.insurance.InsuranceCertificate;
 import com.propertyvista.domain.tenant.insurance.PropertyVistaIntegratedInsurance;
@@ -89,6 +90,25 @@ public class TenantInsuranceCertificateForm<E extends InsuranceCertificate<?>> e
         contentPanel.append(Location.Dual, proto().insuranceProvider()).decorate().componentWidth(100);
         contentPanel.append(Location.Dual, proto().insuranceCertificateNumber()).decorate().componentWidth(200);
         contentPanel.append(Location.Dual, proto().liabilityCoverage()).decorate().componentWidth(200);
+        contentPanel.append(Location.Dual, proto().inceptionDate()).decorate().componentWidth(100);
+        contentPanel.append(Location.Dual, proto().expiryDate()).decorate().componentWidth(100);
+        contentPanel.append(Location.Dual, proto().certificateDocs(), new InsuranceCertificateDocFolder());
+        return contentPanel;
+    }
+
+    public void setMinRequiredLiability(BigDecimal minRequiredLiability) {
+        this.minRequiredLiability = minRequiredLiability;
+    }
+
+    @Override
+    protected void onValueSet(boolean populate) {
+        super.onValueSet(populate);
+        setViewable(getValue() instanceof PropertyVistaIntegratedInsurance); // TODO this should not be controlled by the form itstelf
+    }
+
+    @Override
+    public void addValidations() {
+        super.addValidations();
         get(proto().liabilityCoverage()).addComponentValidator(new AbstractComponentValidator<BigDecimal>() {
             @Override
             public BasicValidationError isValid() {
@@ -108,40 +128,8 @@ public class TenantInsuranceCertificateForm<E extends InsuranceCertificate<?>> e
                 return null;
             }
         });
-        contentPanel.append(Location.Dual, proto().inceptionDate()).decorate().componentWidth(100);
 
-        get(proto().inceptionDate()).addComponentValidator(new AbstractComponentValidator<LogicalDate>() {
-            @Override
-            public BasicValidationError isValid() {
-                if (getComponent().getValue() != null && getComponent().getValue().compareTo(new LogicalDate()) > 0) {
-                    return new BasicValidationError(getComponent(), i18n.tr("Please provide a date less than or equal of today"));
-                }
-                return null;
-            }
-        });
-        contentPanel.append(Location.Dual, proto().expiryDate()).decorate().componentWidth(100);
-        get(proto().expiryDate()).addComponentValidator(new AbstractComponentValidator<LogicalDate>() {
-            @Override
-            public BasicValidationError isValid() {
-                if (getComponent().getValue() != null && getComponent().getValue().compareTo(new LogicalDate()) < 0) {
-                    return new BasicValidationError(getComponent(), i18n.tr("Please provide a date greater than or equal of today"));
-                }
-                return null;
-            }
-        });
-
-        contentPanel.append(Location.Dual, proto().certificateDocs(), new InsuranceCertificateDocFolder());
-        return contentPanel;
+        get(proto().inceptionDate()).addComponentValidator(new PastDateValidator());
+        get(proto().expiryDate()).addComponentValidator(new FutureDateIncludeTodayValidator());
     }
-
-    public void setMinRequiredLiability(BigDecimal minRequiredLiability) {
-        this.minRequiredLiability = minRequiredLiability;
-    }
-
-    @Override
-    protected void onValueSet(boolean populate) {
-        super.onValueSet(populate);
-        setViewable(getValue() instanceof PropertyVistaIntegratedInsurance); // TODO this should not be controlled by the form itstelf
-    }
-
 }

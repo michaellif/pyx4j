@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011-2012 All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -26,11 +26,13 @@ public class GeneralInsuranceFacadeImpl implements GeneralInsuranceFacade {
     @Override
     public void createGeneralTenantInsurance(Tenant tenantId, GeneralInsuranceCertificate certificate) {
         assertNewCertificate(certificate);
-        GeneralInsurancePolicy policy = EntityFactory.create(GeneralInsurancePolicy.class);
-        policy.tenant().set(tenantId);
 
+        GeneralInsurancePolicy policy = EntityFactory.create(GeneralInsurancePolicy.class);
+
+        policy.tenant().set(tenantId);
         policy.certificate().set(certificate);
         policy.isDeleted().setValue(false);
+
         Persistence.secureSave(policy);
     }
 
@@ -51,5 +53,4 @@ public class GeneralInsuranceFacadeImpl implements GeneralInsuranceFacade {
             throw new IllegalArgumentException("this certificate is not new: id=" + certificate.getPrimaryKey());
         }
     }
-
 }

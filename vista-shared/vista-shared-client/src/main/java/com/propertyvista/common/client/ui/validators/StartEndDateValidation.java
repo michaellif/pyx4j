@@ -30,7 +30,7 @@ public class StartEndDateValidation {
 
     public StartEndDateValidation(final CComponent<?, LogicalDate, ?> start, final CComponent<?, LogicalDate, ?> end, String message) {
         if (message == null) {
-            message = i18n.tr("The Start Date Must Be Earlier Than The End Date");
+            message = i18n.tr("The Start Date must be earlier than the End Date");
         }
         final String msg = message;
 

@@ -158,7 +158,7 @@ public class TenantForm extends LeaseParticipantForm<TenantDTO> {
         FormPanel formPanel = new FormPanel(this);
 
         formPanel.h1(i18n.tr("Requirements"));
-        formPanel.append(Location.Left, proto().minimumRequiredLiability(), new CMoneyLabel()).decorate().componentWidth(150);
+        formPanel.append(Location.Left, proto().minimumRequiredLiability(), new CMoneyLabel()).decorate().labelWidth(200).componentWidth(150);
         ((CMoneyLabel) get(proto().minimumRequiredLiability())).setFormatter(new MoneyFormat() {
             @Override
             public String format(BigDecimal value) {

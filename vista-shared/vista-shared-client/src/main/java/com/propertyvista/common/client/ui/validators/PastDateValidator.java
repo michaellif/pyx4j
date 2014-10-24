@@ -30,7 +30,7 @@ public class PastDateValidator extends AbstractComponentValidator<LogicalDate> {
     private final String message;
 
     public PastDateValidator() {
-        this(i18n.tr("The Date Must Be Earlier Than Today's Date"));
+        this(i18n.tr("The Date must be earlier than Today's Date"));
     }
 
     public PastDateValidator(String message) {
