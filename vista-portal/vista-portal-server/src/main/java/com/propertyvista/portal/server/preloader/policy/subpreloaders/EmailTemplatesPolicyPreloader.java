@@ -1020,25 +1020,25 @@ public class EmailTemplatesPolicyPreloader extends AbstractPolicyPreloader<Email
         template.useHeader().setValue(Boolean.TRUE);
         template.useFooter().setValue(Boolean.TRUE);
         template.type().setValue(type);
-        template.subject().setValue(i18n.tr("{0} - YOUR PAYMENT WAS NOT PROCESSED", EmailTemplateManager.getVarname(portalT.CompanyName())));
+        template.subject().setValue(i18n.tr("{0} - Your payment has not been processed", EmailTemplateManager.getVarname(portalT.CompanyName())));
         template.content().setValue(i18n.tr(//@formatter:off
                 "Dear {0},<br/><br/>" +
-                "Your payment of <b>{1}</b> on <b>{2}</b> was <b>not</b> successfully processed for the following reason:<br/><br/>" +
+                "Your payment of {1} on {2} has not been processed for the following reason:<br/><br/>" +
                 "<div style=\"margin-left:80px\"><b>{3}</b></div><br/><br/>" +
-                "Where applicable, an administrative fee has been added to your account for this payment reversal as per your agreement.<br/><br/>" +
-                "<b>Please sign in to your myCommunity account [[{4}|here]] to resubmit your payment to avoid any legal consequences.</b> <br/><br/>" +
+                "<b>Please sign in to your myCommunity account  [[{4}|here]] to re-submit your payment and to avoid any additional fees and/or legal action.</b><br/><br/>" +
                 "For your reference, your payment Reference number for this transaction is:<br/><br/>" +
                 "<div style=\"margin-left:80px\">#<b>{5}</b></div><br/><br/>" +
                 "You can review the status of your arrears on your myCommunity portal at anytime. To access your myCommunity Resident Portal click <b>[[{6}|here]]</b><br/><br/>" +
+                "Note: Additional administrative fees may apply as per your agreement.<br/><br/>" +
                 "Thank you for choosing {7}.",
-                EmailTemplateManager.getVarname(tenantT.FirstName()),
-                EmailTemplateManager.getVarname(paymentT.Amount()),
-                EmailTemplateManager.getVarname(paymentT.Date()),
-                EmailTemplateManager.getVarname(paymentT.RejectReason()),
-                EmailTemplateManager.getVarname(portalT.TenantPortalUrl()),
-                EmailTemplateManager.getVarname(paymentT.ReferenceNumber()),
-                EmailTemplateManager.getVarname(portalT.TenantPortalUrl()),
-                EmailTemplateManager.getVarname(portalT.CompanyName())
+                /*{0}*/EmailTemplateManager.getVarname(tenantT.FirstName()),
+                /*{1}*/EmailTemplateManager.getVarname(paymentT.Amount()),
+                /*{2}*/EmailTemplateManager.getVarname(paymentT.Date()),
+                /*{3}*/EmailTemplateManager.getVarname(paymentT.RejectReason()),
+                /*{4}*/EmailTemplateManager.getVarname(portalT.TenantPortalUrl()),
+                /*{5}*/EmailTemplateManager.getVarname(paymentT.ReferenceNumber()),
+                /*{6}*/EmailTemplateManager.getVarname(portalT.TenantPortalUrl()),
+                /*{7}*/EmailTemplateManager.getVarname(portalT.CompanyName())
         ));//@formatter:on
         return template;
     }
