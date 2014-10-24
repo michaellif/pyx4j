@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011-2012 All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -27,15 +27,16 @@ public class TenantSureLister extends AbstractLister<TenantSureDTO> {
         setDataTableModel(new DataTableModel<TenantSureDTO>(//@formatter:off
                     new MemberColumnDescriptor.Builder(proto().pmc()).build(),
                     new MemberColumnDescriptor.Builder(proto().pmc().namespace()).visible(false).build(),
-                    
-                    new MemberColumnDescriptor.Builder(proto().propertyCode()).searchable(false).build(),
+
+                    new MemberColumnDescriptor.Builder(proto().propertyCode()).searchable(false).sortable(false).build(),
+                    new MemberColumnDescriptor.Builder(proto().propertySuspended()).searchable(false).sortable(false).build(),
                     new MemberColumnDescriptor.Builder(proto().certificateNumber()).build(),
-                    
-                    new MemberColumnDescriptor.Builder(proto().policy().status()).searchable(false).build(),
-                    new MemberColumnDescriptor.Builder(proto().policy().cancellation()).searchable(false).build(),
-                    new MemberColumnDescriptor.Builder(proto().policy().cancellationDate()).searchable(false).build(),
-                    new MemberColumnDescriptor.Builder(proto().policy().certificate().inceptionDate()).searchable(false).build(),
-                    new MemberColumnDescriptor.Builder(proto().policy().tenant().customer().person().name()).searchable(false).build()
+
+                    new MemberColumnDescriptor.Builder(proto().policy().status()).searchable(false).sortable(false).build(),
+                    new MemberColumnDescriptor.Builder(proto().policy().cancellation()).searchable(false).sortable(false).build(),
+                    new MemberColumnDescriptor.Builder(proto().policy().cancellationDate()).searchable(false).sortable(false).build(),
+                    new MemberColumnDescriptor.Builder(proto().policy().certificate().inceptionDate()).searchable(false).sortable(false).build(),
+                    new MemberColumnDescriptor.Builder(proto().policy().tenant().customer().person().name()).searchable(false).sortable(false).build()
             ));//@formatter:on
     }
 }
