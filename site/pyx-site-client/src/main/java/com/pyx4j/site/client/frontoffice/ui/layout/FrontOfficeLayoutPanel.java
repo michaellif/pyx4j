@@ -278,7 +278,8 @@ public class FrontOfficeLayoutPanel extends ResponsiveLayoutPanel {
 
         switch (getLayoutType()) {
         case huge:
-            contentHolder.setWidth((centerPanel.getOffsetWidth() - inlineMenuHolder.getMenuWidth() - inlineExtraHolder.getOffsetWidth()) + "px");
+            int contentHolderWidth = centerPanel.getOffsetWidth() - inlineMenuHolder.getMenuWidth() - inlineExtraHolder.getOffsetWidth();
+            contentHolder.setWidth((contentHolderWidth > 0 ? --contentHolderWidth : 0) + "px");
             inlineExtraHolder.layout();
             break;
         default:
