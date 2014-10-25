@@ -127,7 +127,7 @@ public class FieldDecorator extends FlowPanel implements IFieldDecorator, ILayou
 
         infoImageHolder = new SimplePanel();
         infoImageHolder.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
-        infoImageHolder.getElement().getStyle().setVerticalAlign(VerticalAlign.MIDDLE);
+        infoImageHolder.getElement().getStyle().setVerticalAlign(VerticalAlign.TOP);
 
         mandatoryImageHolder = new SpaceHolder();
         mandatoryImageHolder.setStyleName(WidgetDecoratorMandatoryImage.name());

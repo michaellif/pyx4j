@@ -25,10 +25,14 @@ import java.text.ParseException;
 import com.google.gwt.event.dom.client.KeyUpEvent;
 import com.google.gwt.event.dom.client.KeyUpHandler;
 
-import com.pyx4j.forms.client.events.NValueChangeEvent;
+import com.pyx4j.forms.client.events.NativeValueChangeEvent;
 import com.pyx4j.widgets.client.ITextBoxWidget;
 import com.pyx4j.widgets.client.Label;
 
+/**
+ * @deprecated Use {@link NValueBoxBase}
+ */
+@Deprecated
 public abstract class NTextFieldBase<DATA, WIDGET extends ITextBoxWidget, CCOMP extends CTextFieldBase<DATA, ?>> extends NTextComponent<DATA, WIDGET, CCOMP>
         implements INativeTextComponent<DATA> {
 
@@ -47,7 +51,7 @@ public abstract class NTextFieldBase<DATA, WIDGET extends ITextBoxWidget, CCOMP 
         getEditor().addKeyUpHandler(new KeyUpHandler() {
             @Override
             public void onKeyUp(KeyUpEvent event) {
-                NValueChangeEvent.fire(getCComponent(), getEditor().getText());
+                NativeValueChangeEvent.fire(getCComponent(), getEditor().getText());
             }
         });
     }
@@ -62,7 +66,7 @@ public abstract class NTextFieldBase<DATA, WIDGET extends ITextBoxWidget, CCOMP 
                 getEditor().setText(newValue);
             }
         }
-        NValueChangeEvent.fire(getCComponent(), newValue);
+        NativeValueChangeEvent.fire(getCComponent(), newValue);
     }
 
     @Override

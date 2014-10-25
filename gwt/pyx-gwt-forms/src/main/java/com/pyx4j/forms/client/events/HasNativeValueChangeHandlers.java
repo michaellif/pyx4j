@@ -20,13 +20,11 @@
  */
 package com.pyx4j.forms.client.events;
 
-import com.google.gwt.event.shared.EventHandler;
+import com.google.gwt.event.shared.HandlerRegistration;
+import com.google.gwt.event.shared.HasHandlers;
 
-/**
- * Native component value change event handler, (Real Time) as opposite to CComponent
- */
-public interface NValueChangeHandler<T> extends EventHandler {
+public interface HasNativeValueChangeHandlers<T> extends HasHandlers {
 
-    void onNValueChange(NValueChangeEvent<T> event);
+    HandlerRegistration addNativeValueChangeHandler(NativeValueChangeHandler<T> handler);
 
 }

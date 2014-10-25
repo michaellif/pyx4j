@@ -54,7 +54,7 @@ import com.pyx4j.widgets.client.event.shared.PasteEvent;
 import com.pyx4j.widgets.client.event.shared.PasteHandler;
 import com.pyx4j.widgets.client.style.theme.WidgetTheme;
 
-public abstract class ValueBoxBase<E> extends Composite implements IValueWidget<E>, IFocusGroup, HasValueChangeHandlers<E>, HasPasteHandlers, IWatermarkWidget {
+public abstract class ValueBoxBase<E> extends Composite implements IValueBoxWidget<E>, IFocusGroup, HasValueChangeHandlers<E>, HasPasteHandlers {
 
     private E value;
 
@@ -431,4 +431,7 @@ public abstract class ValueBoxBase<E> extends Composite implements IValueWidget<
         }
     }
 
+    public boolean isTextBoxWidgetFocused() {
+        return textBoxWidgetFocused;
+    }
 }

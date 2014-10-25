@@ -26,21 +26,19 @@ import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.commons.IFormatter;
 import com.pyx4j.commons.IParser;
 import com.pyx4j.forms.client.validators.RegexValidator;
+import com.pyx4j.widgets.client.PasswordBox.PasswordStrengthRule;
 
-public class CPasswordTextField extends CValueBoxBase<String, NPasswordTextBox> {
+public class CPasswordBox extends CValueBoxBase<String, NPasswordBox> {
 
     private boolean unmasked;
 
-    public CPasswordTextField() {
+    private PasswordStrengthRule passwordStrengthRule;
+
+    public CPasswordBox() {
         super();
         super.setFormatter(new StringFormat());
         super.setParser(new StringParser());
-        setNativeComponent(new NPasswordTextBox(this));
-    }
-
-    public CPasswordTextField(boolean mandatory) {
-        this();
-        this.setMandatory(mandatory);
+        setNativeComponent(new NPasswordBox(this));
     }
 
     public void addRegexValidator(String regex, String regexValidationMessage) {
@@ -60,6 +58,17 @@ public class CPasswordTextField extends CValueBoxBase<String, NPasswordTextBox> 
         this.unmasked = unmasked;
         if (getNativeComponent().getEditor() != null) {
             getNativeComponent().getEditor().revealText(unmasked);
+        }
+    }
+
+    public PasswordStrengthRule getPasswordStrengthRule() {
+        return passwordStrengthRule;
+    }
+
+    public void setPasswordStrengthRule(PasswordStrengthRule rule) {
+        this.passwordStrengthRule = rule;
+        if (getNativeComponent().getEditor() != null) {
+            getNativeComponent().getEditor().setPasswordStrengthRule(passwordStrengthRule);
         }
     }
 
@@ -89,7 +98,7 @@ public class CPasswordTextField extends CValueBoxBase<String, NPasswordTextBox> 
         @Override
         public String parse(String string) throws ParseException {
             if (CommonsStringUtils.isEmpty(string)) {
-                return null; // empty value case
+                return null;
             }
             return string;
         }

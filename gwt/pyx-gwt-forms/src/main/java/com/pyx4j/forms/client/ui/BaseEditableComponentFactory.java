@@ -45,7 +45,7 @@ public class BaseEditableComponentFactory implements IEditableComponentFactory {
             case text:
                 return new CTextField();
             case password:
-                return new CPasswordTextField();
+                return new CPasswordBox();
             case textarea:
                 return new CTextArea();
             case richtextarea:

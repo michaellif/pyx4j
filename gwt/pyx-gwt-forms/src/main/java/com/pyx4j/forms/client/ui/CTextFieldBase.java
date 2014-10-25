@@ -30,13 +30,13 @@ import com.google.gwt.user.client.ui.FocusWidget;
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.commons.IFormatter;
 import com.pyx4j.commons.IParser;
-import com.pyx4j.forms.client.events.HasNValueChangeHandlers;
-import com.pyx4j.forms.client.events.NValueChangeEvent;
-import com.pyx4j.forms.client.events.NValueChangeHandler;
+import com.pyx4j.forms.client.events.HasNativeValueChangeHandlers;
+import com.pyx4j.forms.client.events.NativeValueChangeEvent;
+import com.pyx4j.forms.client.events.NativeValueChangeHandler;
 import com.pyx4j.forms.client.validators.TextBoxParserValidator;
 
 public abstract class CTextFieldBase<DATA, WIDGET extends INativeTextComponent<DATA>> extends CTextComponent<DATA, WIDGET> implements IAcceptsText,
-        HasNValueChangeHandlers<String> {
+        HasNativeValueChangeHandlers<String> {
 
     private IFormatter<DATA, String> formatter;
 
@@ -127,7 +127,7 @@ public abstract class CTextFieldBase<DATA, WIDGET extends INativeTextComponent<D
      * Native component value change event handler, (Real Time) as opposite to CComponent
      */
     @Override
-    public HandlerRegistration addNValueChangeHandler(NValueChangeHandler<String> handler) {
-        return addHandler(handler, NValueChangeEvent.getType());
+    public HandlerRegistration addNativeValueChangeHandler(NativeValueChangeHandler<String> handler) {
+        return addHandler(handler, NativeValueChangeEvent.getType());
     }
 }

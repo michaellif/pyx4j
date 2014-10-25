@@ -21,10 +21,10 @@ import com.pyx4j.commons.IDebugId;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.criterion.Criterion;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
-import com.pyx4j.forms.client.events.HasNValueChangeHandlers;
+import com.pyx4j.forms.client.events.HasNativeValueChangeHandlers;
 import com.pyx4j.forms.client.events.HasOptionsChangeHandlers;
-import com.pyx4j.forms.client.events.NValueChangeEvent;
-import com.pyx4j.forms.client.events.NValueChangeHandler;
+import com.pyx4j.forms.client.events.NativeValueChangeEvent;
+import com.pyx4j.forms.client.events.NativeValueChangeHandler;
 import com.pyx4j.forms.client.events.OptionsChangeEvent;
 import com.pyx4j.forms.client.events.OptionsChangeHandler;
 import com.pyx4j.forms.client.ui.AsyncOptionLoadingDelegate;
@@ -41,7 +41,7 @@ import com.pyx4j.widgets.client.ListBox;
 import com.pyx4j.widgets.client.TextBox;
 
 public abstract class CAddressStateComboBox<E, OPTION extends IEntity> extends CFocusComponent<E, NAddressStateBox<E, OPTION>> implements
-        HasOptionsChangeHandlers<List<OPTION>>, HasNValueChangeHandlers<E>, AsyncOptionsReadyCallback<OPTION> {
+        HasOptionsChangeHandlers<List<OPTION>>, HasNativeValueChangeHandlers<E>, AsyncOptionsReadyCallback<OPTION> {
 
     private static final I18n i18n = I18n.get(CAddressStateComboBox.class);
 
@@ -141,8 +141,8 @@ public abstract class CAddressStateComboBox<E, OPTION extends IEntity> extends C
     }
 
     @Override
-    public HandlerRegistration addNValueChangeHandler(NValueChangeHandler<E> handler) {
-        return addHandler(handler, NValueChangeEvent.getType());
+    public HandlerRegistration addNativeValueChangeHandler(NativeValueChangeHandler<E> handler) {
+        return addHandler(handler, NativeValueChangeEvent.getType());
     }
 
     static class NAddressStateBox<E, OPTION extends IEntity> extends NFocusField<E, IFocusWidget, CAddressStateComboBox<E, OPTION>, HTML> {
@@ -193,7 +193,7 @@ public abstract class CAddressStateComboBox<E, OPTION extends IEntity> extends C
                         getTextEditor().setText(textValue);
                     }
                 }
-                NValueChangeEvent.fire(getCComponent(), newValue);
+                NativeValueChangeEvent.fire(getCComponent(), newValue);
             } else {
                 value = newValue;
                 if (isViewable()) {

@@ -26,8 +26,9 @@ import java.util.Set;
 
 import com.pyx4j.forms.client.validators.AbstractComponentValidator;
 import com.pyx4j.forms.client.validators.BasicValidationError;
-import com.pyx4j.forms.client.validators.password.PasswordStrengthRule.PasswordStrengthVerdict;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.widgets.client.PasswordBox.PasswordStrengthRule;
+import com.pyx4j.widgets.client.PasswordBox.PasswordStrengthRule.PasswordStrengthVerdict;
 
 public class PasswordStrengthValueValidator extends AbstractComponentValidator<String> {
 
@@ -36,6 +37,10 @@ public class PasswordStrengthValueValidator extends AbstractComponentValidator<S
     private PasswordStrengthRule rule;
 
     private Collection<PasswordStrengthVerdict> acceptVerdict;
+
+    public PasswordStrengthValueValidator() {
+        this(null);
+    }
 
     public PasswordStrengthValueValidator(PasswordStrengthRule rule) {
         this(rule, EnumSet.of(PasswordStrengthVerdict.Fair, PasswordStrengthVerdict.Good, PasswordStrengthVerdict.Strong));

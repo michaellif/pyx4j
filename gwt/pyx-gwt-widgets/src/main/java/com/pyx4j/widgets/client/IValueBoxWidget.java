@@ -27,7 +27,7 @@ import com.google.gwt.event.shared.HandlerRegistration;
 import com.pyx4j.commons.IFormatter;
 import com.pyx4j.commons.IParser;
 
-public interface IValueWidget<E> extends IFocusWidget, HasAllKeyHandlers {
+public interface IValueBoxWidget<E> extends IFocusWidget, HasAllKeyHandlers, IWatermarkWidget {
 
     HandlerRegistration addValueChangeHandler(ValueChangeHandler<E> handler);
 

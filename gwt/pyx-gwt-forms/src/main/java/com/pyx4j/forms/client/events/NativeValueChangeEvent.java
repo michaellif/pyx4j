@@ -25,27 +25,27 @@ import com.google.gwt.event.shared.GwtEvent;
 /**
  * Native component value change event, (Real Time) as opposite to CComponent ValueChangeEvent
  */
-public class NValueChangeEvent<T> extends GwtEvent<NValueChangeHandler<T>> {
+public class NativeValueChangeEvent<T> extends GwtEvent<NativeValueChangeHandler<T>> {
 
-    private static Type<NValueChangeHandler<?>> TYPE;
+    private static Type<NativeValueChangeHandler<?>> TYPE;
 
-    public static <T> void fire(HasNValueChangeHandlers<T> source, T value) {
+    public static <T> void fire(HasNativeValueChangeHandlers<T> source, T value) {
         if (TYPE != null) {
-            NValueChangeEvent<T> event = new NValueChangeEvent<T>(value);
+            NativeValueChangeEvent<T> event = new NativeValueChangeEvent<T>(value);
             source.fireEvent(event);
         }
     }
 
-    public static Type<NValueChangeHandler<?>> getType() {
+    public static Type<NativeValueChangeHandler<?>> getType() {
         if (TYPE == null) {
-            TYPE = new Type<NValueChangeHandler<?>>();
+            TYPE = new Type<NativeValueChangeHandler<?>>();
         }
         return TYPE;
     }
 
     private final T value;
 
-    public NValueChangeEvent(T value) {
+    public NativeValueChangeEvent(T value) {
         this.value = value;
     }
 
@@ -59,13 +59,13 @@ public class NValueChangeEvent<T> extends GwtEvent<NValueChangeHandler<T>> {
     }
 
     @Override
-    protected void dispatch(NValueChangeHandler<T> handler) {
+    protected void dispatch(NativeValueChangeHandler<T> handler) {
         handler.onNValueChange(this);
     }
 
     @SuppressWarnings({ "rawtypes", "unchecked" })
     @Override
-    public Type<NValueChangeHandler<T>> getAssociatedType() {
+    public Type<NativeValueChangeHandler<T>> getAssociatedType() {
         return (Type) TYPE;
     }
 

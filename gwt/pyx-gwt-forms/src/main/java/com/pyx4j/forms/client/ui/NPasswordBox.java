@@ -20,21 +20,22 @@
  */
 package com.pyx4j.forms.client.ui;
 
-import com.pyx4j.widgets.client.PasswordTextBox;
+import com.pyx4j.widgets.client.PasswordBox;
 
-public class NPasswordTextBox extends NValueBoxBase<String, PasswordTextBox, CPasswordTextField> {
+public class NPasswordBox extends NValueBoxBase<String, PasswordBox, CPasswordBox> {
 
-    public NPasswordTextBox(final CPasswordTextField cTextField) {
+    public NPasswordBox(final CPasswordBox cTextField) {
         super(cTextField);
     }
 
     @Override
-    protected PasswordTextBox createEditor() {
-        PasswordTextBox passwordTextBox = new PasswordTextBox();
-        passwordTextBox.setParser(getCComponent().getParser());
-        passwordTextBox.setFormatter(getCComponent().getFormatter());
-        passwordTextBox.revealText(getCComponent().isUnmasked());
-        return passwordTextBox;
+    protected PasswordBox createEditor() {
+        PasswordBox passwordBox = new PasswordBox();
+        passwordBox.setParser(getCComponent().getParser());
+        passwordBox.setFormatter(getCComponent().getFormatter());
+        passwordBox.revealText(getCComponent().isUnmasked());
+        passwordBox.setPasswordStrengthRule(getCComponent().getPasswordStrengthRule());
+        return passwordBox;
     }
 
 }

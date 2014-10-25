@@ -25,12 +25,17 @@ import java.text.ParseException;
 import com.google.gwt.event.dom.client.KeyCodes;
 import com.google.gwt.event.dom.client.KeyDownEvent;
 import com.google.gwt.event.dom.client.KeyDownHandler;
+import com.google.gwt.event.dom.client.KeyUpEvent;
+import com.google.gwt.event.dom.client.KeyUpHandler;
+import com.google.gwt.event.logical.shared.ValueChangeEvent;
+import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.ui.HTML;
 
-import com.pyx4j.widgets.client.IValueWidget;
+import com.pyx4j.forms.client.events.NativeValueChangeEvent;
+import com.pyx4j.widgets.client.IValueBoxWidget;
 import com.pyx4j.widgets.client.IWatermarkWidget;
 
-public abstract class NValueBoxBase<DATA, WIDGET extends IValueWidget<DATA>, CCOMP extends CValueBoxBase<DATA, ?>> extends
+public abstract class NValueBoxBase<DATA, WIDGET extends IValueBoxWidget<DATA>, CCOMP extends CValueBoxBase<DATA, ?>> extends
         NFocusField<DATA, WIDGET, CCOMP, HTML> implements INativeValueBox<DATA>, IWatermarkWidget {
 
     public NValueBoxBase(CCOMP cComponent) {
@@ -52,6 +57,22 @@ public abstract class NValueBoxBase<DATA, WIDGET extends IValueWidget<DATA>, CCO
                 if (event.getNativeKeyCode() == KeyCodes.KEY_ENTER) {
                     getCComponent().stopEditing();
                 }
+            }
+        });
+        getEditor().addValueChangeHandler(new ValueChangeHandler<DATA>() {
+
+            @SuppressWarnings({ "rawtypes", "unchecked" })
+            @Override
+            public void onValueChange(ValueChangeEvent<DATA> event) {
+                NativeValueChangeEvent.fire((CValueBoxBase) getCComponent(), getEditor().getValue());
+            }
+        });
+        getEditor().addKeyUpHandler(new KeyUpHandler() {
+
+            @SuppressWarnings({ "rawtypes", "unchecked" })
+            @Override
+            public void onKeyUp(KeyUpEvent event) {
+                NativeValueChangeEvent.fire((CValueBoxBase) getCComponent(), getEditor().getValue());
             }
         });
         setWatermark(getCComponent().getWatermark());

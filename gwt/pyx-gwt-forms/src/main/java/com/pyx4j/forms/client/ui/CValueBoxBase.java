@@ -27,14 +27,14 @@ import com.google.gwt.event.shared.HandlerRegistration;
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.commons.IFormatter;
 import com.pyx4j.commons.IParser;
-import com.pyx4j.forms.client.events.HasNValueChangeHandlers;
-import com.pyx4j.forms.client.events.NValueChangeEvent;
-import com.pyx4j.forms.client.events.NValueChangeHandler;
+import com.pyx4j.forms.client.events.HasNativeValueChangeHandlers;
+import com.pyx4j.forms.client.events.NativeValueChangeEvent;
+import com.pyx4j.forms.client.events.NativeValueChangeHandler;
 import com.pyx4j.forms.client.validators.ValueBoxParserValidator;
 import com.pyx4j.widgets.client.IWatermarkWidget;
 
 public abstract class CValueBoxBase<DATA, WIDGET extends INativeValueBox<DATA>> extends CFocusComponent<DATA, WIDGET> implements IAcceptsText,
-        HasNValueChangeHandlers<String>, IAcceptsWatermark {
+        HasNativeValueChangeHandlers<String>, IAcceptsWatermark {
 
     private IFormatter<DATA, String> formatter;
 
@@ -115,8 +115,8 @@ public abstract class CValueBoxBase<DATA, WIDGET extends INativeValueBox<DATA>> 
      * Native component value change event handler, (Real Time) as opposite to CComponent
      */
     @Override
-    public HandlerRegistration addNValueChangeHandler(NValueChangeHandler<String> handler) {
-        return addHandler(handler, NValueChangeEvent.getType());
+    public HandlerRegistration addNativeValueChangeHandler(NativeValueChangeHandler<String> handler) {
+        return addHandler(handler, NativeValueChangeEvent.getType());
     }
 
     @Override
