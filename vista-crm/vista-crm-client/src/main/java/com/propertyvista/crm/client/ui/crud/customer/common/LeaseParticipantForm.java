@@ -116,9 +116,9 @@ public class LeaseParticipantForm<P extends LeaseParticipantDTO<?>> extends CrmE
         get(proto().customer().person().birthDate()).addComponentValidator(new AbstractComponentValidator<LogicalDate>() {
             @Override
             public BasicValidationError isValid() {
-                if (getComponent().getValue() != null && !getValue().ageOfMajority().isNull()) {
-                    if (!TimeUtils.isOlderThan(getComponent().getValue(), getValue().ageOfMajority().getValue())) {
-                        return new BasicValidationError(getComponent(), i18n.tr("This lease participant is too young: the minimum age required is {0}.",
+                if (getCComponent().getValue() != null && !getValue().ageOfMajority().isNull()) {
+                    if (!TimeUtils.isOlderThan(getCComponent().getValue(), getValue().ageOfMajority().getValue())) {
+                        return new BasicValidationError(getCComponent(), i18n.tr("This lease participant is too young: the minimum age required is {0}.",
                                 getValue().ageOfMajority().getValue()));
                     }
                 }

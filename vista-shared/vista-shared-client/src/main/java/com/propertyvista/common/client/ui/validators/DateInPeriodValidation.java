@@ -52,7 +52,7 @@ public class DateInPeriodValidation {
                     return null;
                 }
                 LogicalDate end = value3.getValue();
-                return (getComponent().getValue() != null) && !getComponent().getValue().after(end) ? null : new BasicValidationError(getComponent(), msg);
+                return (getCComponent().getValue() != null) && !getCComponent().getValue().after(end) ? null : new BasicValidationError(getCComponent(), msg);
             }
 
         });
@@ -64,7 +64,7 @@ public class DateInPeriodValidation {
                     return null;
                 }
                 LogicalDate start = value1.getValue();
-                return (getComponent().getValue() != null) && !getComponent().getValue().before(start) ? null : new BasicValidationError(getComponent(), msg);
+                return (getCComponent().getValue() != null) && !getCComponent().getValue().before(start) ? null : new BasicValidationError(getCComponent(), msg);
             }
 
         });

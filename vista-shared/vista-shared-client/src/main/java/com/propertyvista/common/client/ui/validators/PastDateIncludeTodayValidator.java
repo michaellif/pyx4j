@@ -42,8 +42,8 @@ public class PastDateIncludeTodayValidator extends AbstractComponentValidator<Lo
 
     @Override
     public BasicValidationError isValid() {
-        LogicalDate value = getComponent().getValue();
+        LogicalDate value = getCComponent().getValue();
         return (value == null) || !value.after(point != null ? point : new LogicalDate(ClientContext.getServerDate())) ? null : new BasicValidationError(
-                getComponent(), message);
+                getCComponent(), message);
     }
 }

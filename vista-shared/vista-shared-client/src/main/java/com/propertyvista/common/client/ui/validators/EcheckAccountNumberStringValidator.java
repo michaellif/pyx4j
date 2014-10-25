@@ -27,8 +27,8 @@ public class EcheckAccountNumberStringValidator extends AbstractComponentValidat
 
     @Override
     public AbstractValidationError isValid() {
-        if (CommonsStringUtils.isStringSet(getComponent().getValue())) {
-            return ValidationUtils.isAccountNumberValid(getComponent().getValue()) ? null : new BasicValidationError(getComponent(),
+        if (CommonsStringUtils.isStringSet(getCComponent().getValue())) {
+            return ValidationUtils.isAccountNumberValid(getCComponent().getValue()) ? null : new BasicValidationError(getCComponent(),
                     i18n.tr("Account Number should consist of up to 12 digits"));
         } else {
             return null;

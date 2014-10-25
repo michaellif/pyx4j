@@ -91,9 +91,9 @@ public class GeneralPolicyUploadWizard extends CPortalEntityWizard<GeneralInsura
         get(proto().certificate().liabilityCoverage()).addComponentValidator(new AbstractComponentValidator<BigDecimal>() {
             @Override
             public BasicValidationError isValid() {
-                if (GeneralPolicyUploadWizard.this.minRequiredLiability != null && getComponent().getValue() != null
-                        && getComponent().getValue().compareTo(minRequiredLiability) < 0) {
-                    return new BasicValidationError(getComponent(), i18n.tr("The minimum required liability is {0,number,#,##0.00}", minRequiredLiability));
+                if (GeneralPolicyUploadWizard.this.minRequiredLiability != null && getCComponent().getValue() != null
+                        && getCComponent().getValue().compareTo(minRequiredLiability) < 0) {
+                    return new BasicValidationError(getCComponent(), i18n.tr("The minimum required liability is {0,number,#,##0.00}", minRequiredLiability));
                 }
                 return null;
             }
@@ -101,8 +101,8 @@ public class GeneralPolicyUploadWizard extends CPortalEntityWizard<GeneralInsura
         get(proto().certificate().liabilityCoverage()).addComponentValidator(new AbstractComponentValidator<BigDecimal>() {
             @Override
             public BasicValidationError isValid() {
-                if (getComponent().getValue() != null && getComponent().getValue().compareTo(BigDecimal.ZERO) <= 0) {
-                    return new BasicValidationError(getComponent(), i18n.tr("Please enter a positive value"));
+                if (getCComponent().getValue() != null && getCComponent().getValue().compareTo(BigDecimal.ZERO) <= 0) {
+                    return new BasicValidationError(getCComponent(), i18n.tr("Please enter a positive value"));
                 }
                 return null;
             }
@@ -110,8 +110,8 @@ public class GeneralPolicyUploadWizard extends CPortalEntityWizard<GeneralInsura
         get(proto().certificate().inceptionDate()).addComponentValidator(new AbstractComponentValidator<LogicalDate>() {
             @Override
             public BasicValidationError isValid() {
-                if (getComponent().getValue() != null && getComponent().getValue().compareTo(new LogicalDate()) > 0) {
-                    return new BasicValidationError(getComponent(), i18n.tr("Please provide a date less than or equal of today"));
+                if (getCComponent().getValue() != null && getCComponent().getValue().compareTo(new LogicalDate()) > 0) {
+                    return new BasicValidationError(getCComponent(), i18n.tr("Please provide a date less than or equal of today"));
                 }
                 return null;
             }
@@ -119,8 +119,8 @@ public class GeneralPolicyUploadWizard extends CPortalEntityWizard<GeneralInsura
         get(proto().certificate().expiryDate()).addComponentValidator(new AbstractComponentValidator<LogicalDate>() {
             @Override
             public BasicValidationError isValid() {
-                if (getComponent().getValue() != null && getComponent().getValue().compareTo(new LogicalDate()) < 0) {
-                    return new BasicValidationError(getComponent(), i18n.tr("Please provide a date greater than or equal of today"));
+                if (getCComponent().getValue() != null && getCComponent().getValue().compareTo(new LogicalDate()) < 0) {
+                    return new BasicValidationError(getCComponent(), i18n.tr("Please provide a date greater than or equal of today"));
                 }
                 return null;
             }
@@ -128,8 +128,8 @@ public class GeneralPolicyUploadWizard extends CPortalEntityWizard<GeneralInsura
         get(proto().certificate().certificateDocs()).addComponentValidator(new AbstractComponentValidator<List<InsuranceCertificateScan>>() {
             @Override
             public BasicValidationError isValid() {
-                if (getComponent().getValue() != null && getComponent().getValue().isEmpty()) {
-                    return new BasicValidationError(getComponent(), i18n.tr("Please upload a scan of your insurance certificate"));
+                if (getCComponent().getValue() != null && getCComponent().getValue().isEmpty()) {
+                    return new BasicValidationError(getCComponent(), i18n.tr("Please upload a scan of your insurance certificate"));
                 }
                 return null;
             }

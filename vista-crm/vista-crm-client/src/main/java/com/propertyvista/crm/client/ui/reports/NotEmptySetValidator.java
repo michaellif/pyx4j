@@ -25,13 +25,13 @@ public class NotEmptySetValidator<DATA_TYPE> extends AbstractComponentValidator<
 
     @Override
     public BasicValidationError isValid() {
-        Set<DATA_TYPE> value = getComponent().getValue();
+        Set<DATA_TYPE> value = getCComponent().getValue();
         boolean isEmpty = value == null;
         if (value != null) {
             isEmpty = value.isEmpty();
         }
         if (isEmpty) {
-            return new BasicValidationError(getComponent(), i18n.tr("at least one status is required"));
+            return new BasicValidationError(getCComponent(), i18n.tr("at least one status is required"));
         } else {
             return null;
         }

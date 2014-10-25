@@ -27,8 +27,8 @@ public class EcheckBranchTransitValidator extends AbstractComponentValidator<Str
 
     @Override
     public AbstractValidationError isValid() {
-        if (CommonsStringUtils.isStringSet(getComponent().getValue())) {
-            return ValidationUtils.isBranchTransitNumberValid(getComponent().getValue()) ? null : new BasicValidationError(getComponent(),
+        if (CommonsStringUtils.isStringSet(getCComponent().getValue())) {
+            return ValidationUtils.isBranchTransitNumberValid(getCComponent().getValue()) ? null : new BasicValidationError(getCComponent(),
                     i18n.tr("Number should consist of 5 digits"));
         } else {
             return null;

@@ -81,11 +81,11 @@ public class IdUploaderFolder extends PortalBoxFolder<IdentificationDocumentFold
         addComponentValidator(new AbstractComponentValidator<IList<IdentificationDocumentFolder>>() {
             @Override
             public BasicValidationError isValid() {
-                if (getComponent().getValue() != null && documentationPolicy != null) {
+                if (getCComponent().getValue() != null && documentationPolicy != null) {
                     int requredDocsCount = documentationPolicy.numberOfRequiredIDs().getValue();
-                    int remainingDocsCount = requredDocsCount - getComponent().getValue().size();
+                    int remainingDocsCount = requredDocsCount - getCComponent().getValue().size();
                     if (remainingDocsCount > 0) {
-                        return new BasicValidationError(getComponent(), i18n.tr(
+                        return new BasicValidationError(getCComponent(), i18n.tr(
                                 "You have to provide {0} identification document(s), {1} more document(s) is/are required", requredDocsCount,
                                 remainingDocsCount));
                     }
@@ -94,7 +94,7 @@ public class IdUploaderFolder extends PortalBoxFolder<IdentificationDocumentFold
                     for (IdentificationDocumentType docType : documentationPolicy.allowedIDs()) {
                         if (docType.importance().getValue() == Importance.Required) {
                             boolean found = false;
-                            for (IdentificationDocumentFolder doc : getComponent().getValue()) {
+                            for (IdentificationDocumentFolder doc : getCComponent().getValue()) {
                                 if (doc.idType().equals(docType)) {
                                     found = true;
                                     break;
@@ -102,7 +102,7 @@ public class IdUploaderFolder extends PortalBoxFolder<IdentificationDocumentFold
                             }
 
                             if (!found) {
-                                return new BasicValidationError(getComponent(), i18n.tr("You have to provide {0} identification document which is required",
+                                return new BasicValidationError(getCComponent(), i18n.tr("You have to provide {0} identification document which is required",
                                         docType.getStringView()));
                             }
                         }
@@ -198,8 +198,8 @@ public class IdUploaderFolder extends PortalBoxFolder<IdentificationDocumentFold
                     if (get(proto().idType()).getValue() != null) {
                         switch (get(proto().idType()).getValue().type().getValue()) {
                         case canadianSIN:
-                            if (!ValidationUtils.isSinValid(getComponent().getValue())) {
-                                return new BasicValidationError(getComponent(), i18n.tr("Invalid SIN"));
+                            if (!ValidationUtils.isSinValid(getCComponent().getValue())) {
+                                return new BasicValidationError(getCComponent(), i18n.tr("Invalid SIN"));
                             }
                             break;
                         case citizenship:
@@ -227,8 +227,8 @@ public class IdUploaderFolder extends PortalBoxFolder<IdentificationDocumentFold
             folder.addComponentValidator(new AbstractComponentValidator<IList<IdentificationDocumentFile>>() {
                 @Override
                 public BasicValidationError isValid() {
-                    if (getComponent().getValue() != null && getComponent().getValue().size() < 1) {
-                        return new BasicValidationError(getComponent(), i18n.tr("At least one document file is required"));
+                    if (getCComponent().getValue() != null && getCComponent().getValue().size() < 1) {
+                        return new BasicValidationError(getCComponent(), i18n.tr("At least one document file is required"));
                     }
                     return null;
                 }

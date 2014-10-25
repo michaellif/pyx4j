@@ -76,9 +76,9 @@ public class ScopeDialog extends OkCancelDialog {
                 get(proto().renovationEndsOn()).addComponentValidator(new AbstractComponentValidator<LogicalDate>() {
                     @Override
                     public BasicValidationError isValid() {
-                        if (getComponent().getValue() != null) {
-                            if (getComponent().getValue().before(minRenoEndDay)) {
-                                return new BasicValidationError(getComponent(), i18n.tr("The minimal acceptable renovation date is {0}", minRenoEndDay));
+                        if (getCComponent().getValue() != null) {
+                            if (getCComponent().getValue().before(minRenoEndDay)) {
+                                return new BasicValidationError(getCComponent(), i18n.tr("The minimal acceptable renovation date is {0}", minRenoEndDay));
                             }
                         }
                         return null;

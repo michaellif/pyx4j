@@ -235,8 +235,8 @@ public class SignUpGadget extends AbstractGadget<SignUpView> {
                 @Override
                 public BasicValidationError isValid() {
                     String password = (get(proto().password())).getValue();
-                    if ((password == null && getComponent().getValue() != null) || (password != null && !password.equals(getComponent().getValue()))) {
-                        return new BasicValidationError(getComponent(), i18n.tr("Passwords don't match"));
+                    if ((password == null && getCComponent().getValue() != null) || (password != null && !password.equals(getCComponent().getValue()))) {
+                        return new BasicValidationError(getCComponent(), i18n.tr("Passwords don't match"));
                     }
                     return null;
                 }

@@ -86,9 +86,9 @@ public class PersonalIncomeFolder extends PortalBoxFolder<CustomerScreeningIncom
         this.addComponentValidator(new AbstractComponentValidator<IList<CustomerScreeningIncome>>() {
             @Override
             public AbstractValidationError isValid() {
-                if (getComponent().getValue() != null) {
-                    if (getComponent().getValue().size() == 1) {
-                        CustomerScreeningIncome income = getComponent().getValue().get(0);
+                if (getCComponent().getValue() != null) {
+                    if (getCComponent().getValue().size() == 1) {
+                        CustomerScreeningIncome income = getCComponent().getValue().get(0);
                         if (!income.details().isEmpty()) {
                             switch (income.incomeSource().getValue()) {
                             case fulltime:
@@ -97,13 +97,13 @@ public class PersonalIncomeFolder extends PortalBoxFolder<CustomerScreeningIncom
                                 if (!employer.ends().isNull() && !employer.starts().isNull()) {
                                     // valid, if more than 1 year, otherwise - more employment needed! 
                                     if (CalendarUtil.getDaysBetween(employer.starts().getValue(), employer.ends().getValue()) < 366) {
-                                        return new BasicValidationError(getComponent(), i18n.tr("You need to enter more employment information"));
+                                        return new BasicValidationError(getCComponent(), i18n.tr("You need to enter more employment information"));
                                     }
                                 }
                             }
                         }
-                    } else if (getComponent().getValue().size() > 3) {
-                        return new BasicValidationError(getComponent(), i18n.tr("No need to supply more than 3 items"));
+                    } else if (getCComponent().getValue().size() > 3) {
+                        return new BasicValidationError(getCComponent(), i18n.tr("No need to supply more than 3 items"));
                     }
                 }
                 return null;

@@ -87,17 +87,17 @@ public class ProfilePage extends CPortalEntityEditor<ResidentProfileDTO> {
         get(proto().emergencyContacts()).addComponentValidator(new AbstractComponentValidator<List<EmergencyContact>>() {
             @Override
             public BasicValidationError isValid() {
-                if (getComponent().getValue() == null || getValue() == null) {
+                if (getCComponent().getValue() == null || getValue() == null) {
                     return null;
                 }
 
                 if (!VistaFeatures.instance().yardiIntegration()) {
-                    if (getComponent().getValue().isEmpty()) {
-                        return new BasicValidationError(getComponent(), i18n.tr("Empty Emergency Contacts list"));
+                    if (getCComponent().getValue().isEmpty()) {
+                        return new BasicValidationError(getCComponent(), i18n.tr("Empty Emergency Contacts list"));
                     }
                 }
 
-                return !EntityGraph.hasBusinessDuplicates(getValue().emergencyContacts()) ? null : new BasicValidationError(getComponent(), i18n
+                return !EntityGraph.hasBusinessDuplicates(getValue().emergencyContacts()) ? null : new BasicValidationError(getCComponent(), i18n
                         .tr("Duplicate Emergency Contacts specified"));
             }
         });

@@ -410,17 +410,17 @@ public class LeaseTermForm extends CrmEntityForm<LeaseTermDTO> {
         get(proto().termFrom()).addComponentValidator(new AbstractComponentValidator<LogicalDate>() {
             @Override
             public AbstractValidationError isValid() {
-                if (getComponent().getValue() != null) {
+                if (getCComponent().getValue() != null) {
                     LogicalDate dateToCompare = getValue().lease().creationDate().isNull() ? new LogicalDate(ClientContext.getServerDate()) : getValue()
                             .lease().creationDate().getValue();
                     if (getValue().lease().status().getValue() == Lease.Status.Application) {
                         return new FutureDateIncludeTodayValidator(dateToCompare, i18n.tr("The Date Must Be Later Than Or Equal To Application Creation Date"))
-                                .isValid(getComponent());
+                                .isValid(getCComponent());
                     } else if (getValue().lease().status().getValue() == Lease.Status.NewLease) {
                         return new FutureDateIncludeTodayValidator(dateToCompare, i18n.tr("The Date Must Be Later Than Or Equal To Lease Creation Date"))
-                                .isValid(getComponent());
+                                .isValid(getCComponent());
                     } else if (getValue().lease().status().getValue() == Lease.Status.ExistingLease) {
-                        return new PastDateValidator(dateToCompare, i18n.tr("The Date Must Be Earlier Than Lease Creation Date")).isValid(getComponent());
+                        return new PastDateValidator(dateToCompare, i18n.tr("The Date Must Be Earlier Than Lease Creation Date")).isValid(getCComponent());
                     }
                 }
                 return null;

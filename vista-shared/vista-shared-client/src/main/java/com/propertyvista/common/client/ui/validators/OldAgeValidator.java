@@ -25,12 +25,12 @@ public class OldAgeValidator extends AbstractComponentValidator<LogicalDate> {
 
     @Override
     public BasicValidationError isValid() {
-        LogicalDate value = getComponent().getValue();
+        LogicalDate value = getCComponent().getValue();
         if (value == null) {
             return null;
         }
         LogicalDate current = new LogicalDate(ClientContext.getServerDate());
-        return current.getYear() - value.getYear() < 150 ? null : new BasicValidationError(getComponent(), i18n.tr("Age cannot be greater than 150 years"));
+        return current.getYear() - value.getYear() < 150 ? null : new BasicValidationError(getCComponent(), i18n.tr("Age cannot be greater than 150 years"));
     }
 
 }

@@ -64,8 +64,8 @@ public class FinancialViewForm extends CForm<TenantFinancialDTO> {
         this.addComponentValidator(new AbstractComponentValidator<TenantFinancialDTO>() {
             @Override
             public BasicValidationError isValid() {
-                return (getComponent().getValue().assets().size() > 0) || (getComponent().getValue().incomes().size() > 0) ? null : new BasicValidationError(
-                        getComponent(), i18n.tr("At least one source of income or one asset is required"));
+                return (getCComponent().getValue().assets().size() > 0) || (getCComponent().getValue().incomes().size() > 0) ? null : new BasicValidationError(
+                        getCComponent(), i18n.tr("At least one source of income or one asset is required"));
             }
         });
     }

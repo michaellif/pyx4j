@@ -141,8 +141,8 @@ public class OnlinePaymentWizardForm extends WizardForm<OnlinePaymentSetupDTO> {
         get(proto().propertyAccounts()).addComponentValidator(new AbstractComponentValidator<List<PropertyAccountInfo>>() {
             @Override
             public BasicValidationError isValid() {
-                if (getComponent().getValue() != null && getComponent().getValue().size() < 1) {
-                    return new BasicValidationError(getComponent(), i18n.tr("At least one property account is required"));
+                if (getCComponent().getValue() != null && getCComponent().getValue().size() < 1) {
+                    return new BasicValidationError(getCComponent(), i18n.tr("At least one property account is required"));
                 } else {
                     return null;
                 }

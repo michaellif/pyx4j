@@ -35,9 +35,9 @@ public class BirthdayDateValidator extends PastDateIncludeTodayValidator {
 
     @Override
     public BasicValidationError isValid() {
-        if (getComponent().getValue() != null
-                && getComponent().getValue().compareTo(new LogicalDate(System.currentTimeMillis() - 120L * 365 * 24 * 60 * 60 * 1000)) < 0) {
-            return new BasicValidationError(getComponent(), message2);
+        if (getCComponent().getValue() != null
+                && getCComponent().getValue().compareTo(new LogicalDate(System.currentTimeMillis() - 120L * 365 * 24 * 60 * 60 * 1000)) < 0) {
+            return new BasicValidationError(getCComponent(), message2);
         }
         return super.isValid();
     }

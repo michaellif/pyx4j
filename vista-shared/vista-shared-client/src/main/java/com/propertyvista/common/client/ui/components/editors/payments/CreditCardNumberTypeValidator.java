@@ -39,12 +39,12 @@ public class CreditCardNumberTypeValidator extends AbstractComponentValidator<Cr
 
     @Override
     public BasicValidationError isValid() {
-        if ((getComponent().getValue() == null) || getComponent().getValue().newNumber().isNull()) {
+        if ((getCComponent().getValue() == null) || getCComponent().getValue().newNumber().isNull()) {
             return null; // editing tokenized credit card.
         } else if (creditCardTypeProvider.getCreditCardType() == null
-                || !ValidationUtils.isCreditCardNumberIinValid(creditCardTypeProvider.getCreditCardType().iinsPatterns, getComponent().getValue().newNumber()
+                || !ValidationUtils.isCreditCardNumberIinValid(creditCardTypeProvider.getCreditCardType().iinsPatterns, getCComponent().getValue().newNumber()
                         .getValue())) {
-            return new BasicValidationError(getComponent(), i18n.tr("The credit card number doesn't match the credit card type"));
+            return new BasicValidationError(getCComponent(), i18n.tr("The credit card number doesn't match the credit card type"));
         } else {
             return null;
         }

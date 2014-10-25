@@ -48,9 +48,9 @@ public class PersonalAssetFolder extends VistaBoxFolder<CustomerScreeningPersona
         this.addComponentValidator(new AbstractComponentValidator<IList<CustomerScreeningPersonalAsset>>() {
             @Override
             public AbstractValidationError isValid() {
-                if (getComponent().getValue() != null) {
-                    if (getComponent().getValue().size() > 3) {
-                        return new BasicValidationError(getComponent(), i18n.tr("No need to supply more than 3 items"));
+                if (getCComponent().getValue() != null) {
+                    if (getCComponent().getValue().size() > 3) {
+                        return new BasicValidationError(getCComponent(), i18n.tr("No need to supply more than 3 items"));
                     }
                 }
                 return null;

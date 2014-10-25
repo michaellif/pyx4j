@@ -105,8 +105,8 @@ public class PeopleStep extends ApplicationWizardStep {
             this.addComponentValidator(new AbstractComponentValidator<IList<CoapplicantDTO>>() {
                 @Override
                 public AbstractValidationError isValid() {
-                    if (hasDuplicateEmails(getComponent().getValue())) {
-                        return new BasicValidationError(getComponent(), i18n.tr("Co-Applicants have the same email address"));
+                    if (hasDuplicateEmails(getCComponent().getValue())) {
+                        return new BasicValidationError(getCComponent(), i18n.tr("Co-Applicants have the same email address"));
                     }
                     return null;
                 }
@@ -247,10 +247,10 @@ public class PeopleStep extends ApplicationWizardStep {
                 get(proto().birthDate()).addComponentValidator(new AbstractComponentValidator<LogicalDate>() {
                     @Override
                     public BasicValidationError isValid() {
-                        if (getComponent().getValue() != null && getValue() != null) {
+                        if (getCComponent().getValue() != null && getValue() != null) {
                             if (maturedOccupantsAreApplicants()) {
-                                if (TimeUtils.isOlderThan(getComponent().getValue(), ageOfMajority())) {
-                                    return new BasicValidationError(getComponent(), i18n.tr(
+                                if (TimeUtils.isOlderThan(getCComponent().getValue(), ageOfMajority())) {
+                                    return new BasicValidationError(getCComponent(), i18n.tr(
                                             "According to internal regulations and age this person cannot be a Dependent. Age of majority is {0}",
                                             ageOfMajority()));
                                 }

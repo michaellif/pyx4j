@@ -42,7 +42,7 @@ public class FutureDateValidator extends AbstractComponentValidator<LogicalDate>
 
     @Override
     public BasicValidationError isValid() {
-        return (getComponent().getValue() == null) || getComponent().getValue().after(point != null ? point : new LogicalDate(ClientContext.getServerDate())) ? null
-                : new BasicValidationError(getComponent(), message);
+        return (getCComponent().getValue() == null) || getCComponent().getValue().after(point != null ? point : new LogicalDate(ClientContext.getServerDate())) ? null
+                : new BasicValidationError(getCComponent(), message);
     }
 }

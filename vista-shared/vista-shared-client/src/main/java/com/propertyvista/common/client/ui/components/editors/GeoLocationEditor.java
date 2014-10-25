@@ -65,8 +65,8 @@ public class GeoLocationEditor extends CForm<GeoLocation> {
         get(proto().latitude()).addComponentValidator(new AbstractComponentValidator<Double>() {
             @Override
             public BasicValidationError isValid() {
-                Double value = getComponent().getValue();
-                return (value == null || (value >= 0 && value <= 90)) ? null : new BasicValidationError(getComponent(), i18n
+                Double value = getCComponent().getValue();
+                return (value == null || (value >= 0 && value <= 90)) ? null : new BasicValidationError(getCComponent(), i18n
                         .tr("Latitude may be in range [0-90] degree"));
             }
         });
@@ -75,7 +75,7 @@ public class GeoLocationEditor extends CForm<GeoLocation> {
         get(proto().latitudeDirection()).addComponentValidator(new AbstractComponentValidator<LatitudeDirection>() {
             @Override
             public BasicValidationError isValid() {
-                return (getComponent().getValue() != null || get(proto().latitude()).getValue() == null) ? null : new BasicValidationError(getComponent(), i18n
+                return (getCComponent().getValue() != null || get(proto().latitude()).getValue() == null) ? null : new BasicValidationError(getCComponent(), i18n
                         .tr("Direction should be selected"));
             }
         });
@@ -87,8 +87,8 @@ public class GeoLocationEditor extends CForm<GeoLocation> {
         get(proto().longitude()).addComponentValidator(new AbstractComponentValidator<Double>() {
             @Override
             public BasicValidationError isValid() {
-                Double value = getComponent().getValue();
-                return (value == null || (value >= 0 && value <= 180)) ? null : new BasicValidationError(getComponent(), i18n
+                Double value = getCComponent().getValue();
+                return (value == null || (value >= 0 && value <= 180)) ? null : new BasicValidationError(getCComponent(), i18n
                         .tr("Longitude may be in range [0-180] degree"));
             }
         });
@@ -97,7 +97,7 @@ public class GeoLocationEditor extends CForm<GeoLocation> {
         get(proto().longitudeDirection()).addComponentValidator(new AbstractComponentValidator<LongitudeDirection>() {
             @Override
             public BasicValidationError isValid() {
-                return (getComponent().getValue() != null || get(proto().longitude()).getValue() == null) ? null : new BasicValidationError(getComponent(),
+                return (getCComponent().getValue() != null || get(proto().longitude()).getValue() == null) ? null : new BasicValidationError(getCComponent(),
                         i18n.tr("Direction should be selected"));
             }
         });

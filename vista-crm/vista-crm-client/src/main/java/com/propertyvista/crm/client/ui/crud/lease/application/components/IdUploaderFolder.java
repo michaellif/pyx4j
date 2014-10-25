@@ -92,10 +92,10 @@ public class IdUploaderFolder extends VistaBoxFolder<IdentificationDocumentFolde
             addComponentValidator(new AbstractComponentValidator<IList<IdentificationDocumentFolder>>() {
                 @Override
                 public BasicValidationError isValid() {
-                    if (getComponent().getValue() != null && documentationPolicy != null) {
+                    if (getCComponent().getValue() != null && documentationPolicy != null) {
                         int numOfRemainingDocs = documentationPolicy.numberOfRequiredIDs().getValue() - getValue().size();
                         if (numOfRemainingDocs > 0) {
-                            return new BasicValidationError(getComponent(), i18n.tr("{0} more document(s) is/are required", numOfRemainingDocs));
+                            return new BasicValidationError(getCComponent(), i18n.tr("{0} more document(s) is/are required", numOfRemainingDocs));
                         }
                     }
                     return null;
@@ -169,8 +169,8 @@ public class IdUploaderFolder extends VistaBoxFolder<IdentificationDocumentFolde
                 docPagesFolder.addComponentValidator(new AbstractComponentValidator<IList<IdentificationDocumentFile>>() {
                     @Override
                     public BasicValidationError isValid() {
-                        if (getComponent().getValue() != null && getComponent().getValue().size() < 1) {
-                            return new BasicValidationError(getComponent(), i18n.tr("At least one document file is required"));
+                        if (getCComponent().getValue() != null && getCComponent().getValue().size() < 1) {
+                            return new BasicValidationError(getCComponent(), i18n.tr("At least one document file is required"));
                         } else {
                             return null;
                         }
@@ -199,11 +199,11 @@ public class IdUploaderFolder extends VistaBoxFolder<IdentificationDocumentFolde
             get(proto().idNumber()).addComponentValidator(new AbstractComponentValidator<String>() {
                 @Override
                 public BasicValidationError isValid() {
-                    if (get(proto().idType()).getValue() != null && getComponent().getValue() != null) {
+                    if (get(proto().idType()).getValue() != null && getCComponent().getValue() != null) {
                         switch (get(proto().idType()).getValue().type().getValue()) {
                         case canadianSIN:
-                            if (!ValidationUtils.isSinValid(getComponent().getValue())) {
-                                return new BasicValidationError(getComponent(), i18n.tr("Invalid SIN"));
+                            if (!ValidationUtils.isSinValid(getCComponent().getValue())) {
+                                return new BasicValidationError(getCComponent(), i18n.tr("Invalid SIN"));
                             }
                             break;
                         case citizenship:

@@ -88,7 +88,7 @@ public class ConfirmationStep extends ApplicationWizardStep {
         cSignature.setSignatureCompletionValidator(new AbstractComponentValidator<ISignature>() {
             @Override
             public BasicValidationError isValid() {
-                return (getComponent().getValue() == null || !getComponent().getValue().agree().getValue(false) ? new BasicValidationError(getComponent(), i18n
+                return (getCComponent().getValue() == null || !getCComponent().getValue().agree().getValue(false) ? new BasicValidationError(getCComponent(), i18n
                         .tr("Please agree to all applicable Terms and Conditions and our Privacy Policy in order to submit your payment.")) : null);
             }
         });

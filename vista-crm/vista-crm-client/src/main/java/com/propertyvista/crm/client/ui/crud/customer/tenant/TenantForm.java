@@ -113,11 +113,11 @@ public class TenantForm extends LeaseParticipantForm<TenantDTO> {
         get(proto().customer().emergencyContacts()).addComponentValidator(new AbstractComponentValidator<List<EmergencyContact>>() {
             @Override
             public BasicValidationError isValid() {
-                if (getComponent().getValue() == null || getValue() == null) {
+                if (getCComponent().getValue() == null || getValue() == null) {
                     return null;
                 }
 
-                return !EntityGraph.hasBusinessDuplicates(getValue().customer().emergencyContacts()) ? null : new BasicValidationError(getComponent(), i18n
+                return !EntityGraph.hasBusinessDuplicates(getValue().customer().emergencyContacts()) ? null : new BasicValidationError(getCComponent(), i18n
                         .tr("Duplicate Emergency Contacts specified"));
             }
         });

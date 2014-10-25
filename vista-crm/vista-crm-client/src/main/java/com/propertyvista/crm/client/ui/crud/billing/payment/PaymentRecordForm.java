@@ -473,8 +473,8 @@ public class PaymentRecordForm extends CrmEntityForm<PaymentRecordDTO> {
         get(proto().amount()).addComponentValidator(new AbstractComponentValidator<BigDecimal>() {
             @Override
             public BasicValidationError isValid() {
-                if (getComponent().getValue() != null && getComponent().isVisited()) {
-                    return (getComponent().getValue().compareTo(BigDecimal.ZERO) > 0 ? null : new BasicValidationError(getComponent(), i18n
+                if (getCComponent().getValue() != null && getCComponent().isVisited()) {
+                    return (getCComponent().getValue().compareTo(BigDecimal.ZERO) > 0 ? null : new BasicValidationError(getCComponent(), i18n
                             .tr("Payment amount should be greater than zero!")));
                 }
                 return null;

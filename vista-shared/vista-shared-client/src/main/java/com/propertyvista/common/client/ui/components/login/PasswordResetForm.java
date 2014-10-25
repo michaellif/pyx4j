@@ -101,8 +101,8 @@ public class PasswordResetForm extends CForm<PasswordChangeRequest> {
         get(proto().newPasswordConfirm()).addComponentValidator(new AbstractComponentValidator<String>() {
             @Override
             public BasicValidationError isValid() {
-                if (getComponent().getValue() == null || !getComponent().getValue().equals(get(proto().newPassword()).getValue())) {
-                    return new BasicValidationError(getComponent(), i18n.tr("The passwords don't match."));
+                if (getCComponent().getValue() == null || !getCComponent().getValue().equals(get(proto().newPassword()).getValue())) {
+                    return new BasicValidationError(getCComponent(), i18n.tr("The passwords don't match."));
                 } else {
                     return null;
                 }

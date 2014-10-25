@@ -52,8 +52,8 @@ public class GuestFolder extends VistaBoxFolder<Guest> {
         this.addComponentValidator(new AbstractComponentValidator<IList<Guest>>() {
             @Override
             public BasicValidationError isValid() {
-                if (getComponent().getValue() != null) {
-                    return (getComponent().getValue().isEmpty() ? new BasicValidationError(getComponent(), i18n.tr("At least one guest data should be entered"))
+                if (getCComponent().getValue() != null) {
+                    return (getCComponent().getValue().isEmpty() ? new BasicValidationError(getCComponent(), i18n.tr("At least one guest data should be entered"))
                             : null);
                 }
                 return null;

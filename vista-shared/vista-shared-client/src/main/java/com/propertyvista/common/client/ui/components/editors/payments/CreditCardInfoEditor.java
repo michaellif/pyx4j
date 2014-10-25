@@ -168,11 +168,11 @@ public class CreditCardInfoEditor extends CForm<CreditCardInfo> {
         cardEditor.addComponentValidator(new AbstractComponentValidator<CreditCardNumberIdentity>() {
             @Override
             public BasicValidationError isValid() {
-                if (getComponent().getValue() != null) {
+                if (getCComponent().getValue() != null) {
                     if (isCreditCardNumberCheckRecieved) {
                         isCreditCardNumberCheckRecieved = false;
                     } else {
-                        validateCreditCardNumberAsync(getComponent(), getComponent().getValue());
+                        validateCreditCardNumberAsync(getCComponent(), getCComponent().getValue());
                     }
                     return isCreditCardNumberValid;
                 }
@@ -185,8 +185,8 @@ public class CreditCardInfoEditor extends CForm<CreditCardInfo> {
         get(proto().securityCode()).addComponentValidator(new AbstractComponentValidator<String>() {
             @Override
             public BasicValidationError isValid() {
-                if (CommonsStringUtils.isStringSet(getComponent().getValue())) {
-                    return ValidationUtils.isCreditCardCodeValid(getComponent().getValue()) ? null : new BasicValidationError(getComponent(), i18n
+                if (CommonsStringUtils.isStringSet(getCComponent().getValue())) {
+                    return ValidationUtils.isCreditCardCodeValid(getCComponent().getValue()) ? null : new BasicValidationError(getCComponent(), i18n
                             .tr("Security Code should consist of 3 to 4 digits"));
                 } else {
                     return null;

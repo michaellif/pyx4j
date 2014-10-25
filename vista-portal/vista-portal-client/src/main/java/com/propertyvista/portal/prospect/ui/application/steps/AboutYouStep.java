@@ -112,10 +112,10 @@ public class AboutYouStep extends ApplicationWizardStep {
         get(proto().applicantData().person().birthDate()).addComponentValidator(new AbstractComponentValidator<LogicalDate>() {
             @Override
             public BasicValidationError isValid() {
-                if (getComponent().getValue() != null && getValue() != null) {
+                if (getCComponent().getValue() != null && getValue() != null) {
                     if (enforceAgeOfMajority()) {
-                        if (!TimeUtils.isOlderThan(getComponent().getValue(), ageOfMajority())) {
-                            return new BasicValidationError(getComponent(), i18n.tr("The minimum age requirement is {0} years", ageOfMajority()));
+                        if (!TimeUtils.isOlderThan(getCComponent().getValue(), ageOfMajority())) {
+                            return new BasicValidationError(getCComponent(), i18n.tr("The minimum age requirement is {0} years", ageOfMajority()));
                         }
                     }
                 }
@@ -130,8 +130,8 @@ public class AboutYouStep extends ApplicationWizardStep {
         get(proto().applicantData().person().workPhone()).addComponentValidator(new AbstractComponentValidator<String>() {
             @Override
             public BasicValidationError isValid() {
-                if (getComponent().getValue() == null && hasNoOtherPhone(getWizard().getValue())) {
-                    return new BasicValidationError(getComponent(), i18n.tr("At least one phone number is required for applicant"));
+                if (getCComponent().getValue() == null && hasNoOtherPhone(getWizard().getValue())) {
+                    return new BasicValidationError(getCComponent(), i18n.tr("At least one phone number is required for applicant"));
                 }
 
                 return null;
@@ -146,11 +146,11 @@ public class AboutYouStep extends ApplicationWizardStep {
             @Override
             public BasicValidationError isValid() {
                 ApplicationDocumentationPolicy documentationPolicy = getValue().applicantData().documentsPolicy();
-                if (getComponent().getValue() != null && documentationPolicy != null) {
+                if (getCComponent().getValue() != null && documentationPolicy != null) {
                     int requredDocsCount = documentationPolicy.numberOfRequiredIDs().getValue();
-                    int remainingDocsCount = requredDocsCount - getComponent().getValue().size();
+                    int remainingDocsCount = requredDocsCount - getCComponent().getValue().size();
                     if (remainingDocsCount > 0) {
-                        return new BasicValidationError(getComponent(), i18n.tr(
+                        return new BasicValidationError(getCComponent(), i18n.tr(
                                 "You have to provide {0} identification document(s), {1} more document(s) is/are required", requredDocsCount,
                                 remainingDocsCount));
                     }
@@ -159,7 +159,7 @@ public class AboutYouStep extends ApplicationWizardStep {
                     for (IdentificationDocumentType docType : documentationPolicy.allowedIDs()) {
                         if (docType.importance().getValue() == Importance.Required) {
                             boolean found = false;
-                            for (IdentificationDocumentFolder doc : getComponent().getValue()) {
+                            for (IdentificationDocumentFolder doc : getCComponent().getValue()) {
                                 if (doc.idType().equals(docType)) {
                                     found = true;
                                     break;
@@ -167,7 +167,7 @@ public class AboutYouStep extends ApplicationWizardStep {
                             }
 
                             if (!found) {
-                                return new BasicValidationError(getComponent(), i18n.tr("You have to provide {0} identification document which is required",
+                                return new BasicValidationError(getCComponent(), i18n.tr("You have to provide {0} identification document which is required",
                                         docType.getStringView()));
                             }
                         }

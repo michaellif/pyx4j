@@ -55,9 +55,9 @@ public class ProofOfIncomeUploaderFolder extends PortalBoxFolder<ProofOfIncomeDo
         addComponentValidator(new AbstractComponentValidator<IList<ProofOfIncomeDocumentFolder>>() {
             @Override
             public BasicValidationError isValid() {
-                if (getComponent().getValue() != null && documentationPolicy != null) {
+                if (getCComponent().getValue() != null && documentationPolicy != null) {
                     if (documentationPolicy.mandatoryProofOfIncome().getValue(false) && getValue().isEmpty()) {
-                        return new BasicValidationError(getComponent(), i18n.tr("Proof of Income should be supplied!"));
+                        return new BasicValidationError(getCComponent(), i18n.tr("Proof of Income should be supplied!"));
                     }
                 }
                 return null;

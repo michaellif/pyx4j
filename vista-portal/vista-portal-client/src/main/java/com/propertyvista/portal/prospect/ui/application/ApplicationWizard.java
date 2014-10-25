@@ -158,20 +158,20 @@ public class ApplicationWizard extends CPortalEntityWizard<OnlineApplicationDTO>
         this.addComponentValidator(new AbstractComponentValidator<OnlineApplicationDTO>() {
             @Override
             public BasicValidationError isValid() {
-                if (getComponent().getValue() != null) {
-                    OnlineApplicationDTO value = getComponent().getValue();
+                if (getCComponent().getValue() != null) {
+                    OnlineApplicationDTO value = getCComponent().getValue();
 
                     if (hasDuplicateEmails0(value)) {
-                        return new BasicValidationError(getComponent(), i18n.tr("Applicant and Co-applicant have the same email address"));
+                        return new BasicValidationError(getCComponent(), i18n.tr("Applicant and Co-applicant have the same email address"));
                     }
 
                     if (hasDuplicateEmails1(value)) {
-                        return new BasicValidationError(getComponent(), i18n.tr("Tenant and Guarantor have the same email address"));
+                        return new BasicValidationError(getCComponent(), i18n.tr("Tenant and Guarantor have the same email address"));
                     }
                 }
 
                 EntityContainerValidator std = new EntityContainerValidator();
-                std.setComponent(getComponent());
+                std.setComponent(getCComponent());
                 return (BasicValidationError) std.isValid();
             }
 

@@ -146,16 +146,16 @@ public class ComplexBuildingFolder extends VistaTableFolder<Building> {
         this.addComponentValidator(new AbstractComponentValidator<IList<Building>>() {
             @Override
             public BasicValidationError isValid() {
-                if (getComponent().getValue() != null && !getComponent().getValue().isEmpty()) {
+                if (getCComponent().getValue() != null && !getCComponent().getValue().isEmpty()) {
                     boolean primaryFound = false;
-                    for (Building item : getComponent().getValue()) {
+                    for (Building item : getCComponent().getValue()) {
                         if (item.complexPrimary().getValue(false)) {
                             primaryFound = true;
                             break;
                         }
                     }
                     if (!primaryFound) {
-                        return new BasicValidationError(getComponent(), i18n.tr("Primary building should be selected"));
+                        return new BasicValidationError(getCComponent(), i18n.tr("Primary building should be selected"));
                     }
                 }
                 return null;

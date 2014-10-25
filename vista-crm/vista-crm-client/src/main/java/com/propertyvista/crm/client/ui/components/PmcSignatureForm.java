@@ -83,8 +83,8 @@ public class PmcSignatureForm extends CForm<PmcSignature> {
         get(proto().fullName()).addComponentValidator(new AbstractComponentValidator<String>() {
             @Override
             public BasicValidationError isValid() {
-                if (realFullName != null && getComponent().getValue() != null && !realFullName.equals(getComponent().getValue())) {
-                    return new BasicValidationError(getComponent(), i18n.tr("The signature doesn't match the name"));
+                if (realFullName != null && getCComponent().getValue() != null && !realFullName.equals(getCComponent().getValue())) {
+                    return new BasicValidationError(getCComponent(), i18n.tr("The signature doesn't match the name"));
                 } else {
                     return null;
                 }

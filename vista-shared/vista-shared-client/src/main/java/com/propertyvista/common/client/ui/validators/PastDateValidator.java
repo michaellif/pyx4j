@@ -44,9 +44,9 @@ public class PastDateValidator extends AbstractComponentValidator<LogicalDate> {
 
     @Override
     public BasicValidationError isValid() {
-        LogicalDate value = getComponent().getValue();
+        LogicalDate value = getCComponent().getValue();
         return (value == null) || value.before(point != null ? point : new LogicalDate(ClientContext.getServerDate())) ? null : new BasicValidationError(
-                getComponent(), message);
+                getCComponent(), message);
     }
 
     public AbstractValidationError isValid(CComponent<?, LogicalDate, ?> component) {

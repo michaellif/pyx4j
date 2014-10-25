@@ -222,10 +222,10 @@ public class FeatureFolder extends PortalBoxFolder<BillableItem> {
         addComponentValidator(new AbstractComponentValidator<IList<BillableItem>>() {
             @Override
             public BasicValidationError isValid() {
-                if (getComponent().getValue() == null || getMaxCount() < 0) {
+                if (getCComponent().getValue() == null || getMaxCount() < 0) {
                     return null;
                 }
-                return (getComponent().getValue().size() < getMaxCount()) ? null : new BasicValidationError(getComponent(), i18n.tr(
+                return (getCComponent().getValue().size() < getMaxCount()) ? null : new BasicValidationError(getCComponent(), i18n.tr(
                         "You cannot add more than {0} items here!", getMaxCount()));
             }
         });

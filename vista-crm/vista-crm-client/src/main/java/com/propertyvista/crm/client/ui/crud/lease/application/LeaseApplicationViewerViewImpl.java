@@ -512,8 +512,8 @@ public class LeaseApplicationViewerViewImpl extends LeaseViewerViewImplBase<Leas
                 class CheckValidator extends AbstractComponentValidator<Boolean> {
                     @Override
                     public AbstractValidationError isValid() {
-                        Boolean value = getComponent().getValue();
-                        return ((value == null || value == Boolean.FALSE) ? new BasicValidationError(getComponent(), i18n.tr("Should be marked!")) : null);
+                        Boolean value = getCComponent().getValue();
+                        return ((value == null || value == Boolean.FALSE) ? new BasicValidationError(getCComponent(), i18n.tr("Should be marked!")) : null);
                     }
                 }
             };

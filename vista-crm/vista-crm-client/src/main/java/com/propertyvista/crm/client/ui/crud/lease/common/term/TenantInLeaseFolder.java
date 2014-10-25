@@ -152,8 +152,8 @@ public class TenantInLeaseFolder extends LeaseTermParticipantFolder<LeaseTermTen
         this.addComponentValidator(new AbstractComponentValidator<IList<LeaseTermTenant>>() {
             @Override
             public BasicValidationError isValid() {
-                if (getComponent().getValue() != null && getComponent().getValue().isEmpty() && getComponent().isVisited()) {
-                    return new BasicValidationError(getComponent(), i18n.tr("At least one Person should be present!"));
+                if (getCComponent().getValue() != null && getCComponent().getValue().isEmpty() && getCComponent().isVisited()) {
+                    return new BasicValidationError(getCComponent(), i18n.tr("At least one Person should be present!"));
                 }
                 return null;
             }
@@ -162,19 +162,19 @@ public class TenantInLeaseFolder extends LeaseTermParticipantFolder<LeaseTermTen
         this.addComponentValidator(new AbstractComponentValidator<IList<LeaseTermTenant>>() {
             @Override
             public BasicValidationError isValid() {
-                if (getComponent().getValue() != null && !getComponent().getValue().isEmpty()) {
+                if (getCComponent().getValue() != null && !getCComponent().getValue().isEmpty()) {
                     boolean applicant = false;
-                    for (LeaseTermTenant item : getComponent().getValue()) {
+                    for (LeaseTermTenant item : getCComponent().getValue()) {
                         if (applicant) {
                             if (item.role().getValue() == LeaseTermParticipant.Role.Applicant) {
-                                return new BasicValidationError(getComponent(), i18n.tr("Just one person with role 'Tenant' could be selected!"));
+                                return new BasicValidationError(getCComponent(), i18n.tr("Just one person with role 'Tenant' could be selected!"));
                             }
                         } else {
                             applicant = (item.role().getValue() == LeaseTermParticipant.Role.Applicant);
                         }
                     }
                     if (!applicant) {
-                        return new BasicValidationError(getComponent(), i18n.tr("A person with role 'Tenant' should be present!"));
+                        return new BasicValidationError(getCComponent(), i18n.tr("A person with role 'Tenant' should be present!"));
                     }
                 }
                 return null;
@@ -280,21 +280,21 @@ public class TenantInLeaseFolder extends LeaseTermParticipantFolder<LeaseTermTen
             get(proto().role()).addComponentValidator(new AbstractComponentValidator<LeaseTermParticipant.Role>() {
                 @Override
                 public BasicValidationError isValid() {
-                    if (getComponent().getValue() != null && getValue() != null && !getValue().leaseParticipant().customer().person().birthDate().isNull()) {
+                    if (getCComponent().getValue() != null && getValue() != null && !getValue().leaseParticipant().customer().person().birthDate().isNull()) {
                         if (getEnforceAgeOfMajority()) {
-                            if (Role.resposible().contains(getComponent().getValue())) {
+                            if (Role.resposible().contains(getCComponent().getValue())) {
                                 if (!TimeUtils.isOlderThan(getValue().leaseParticipant().customer().person().birthDate().getValue(), getAgeOfMajority())) {
                                     return new BasicValidationError(
-                                            getComponent(),
+                                            getCComponent(),
                                             i18n.tr("This person is too young to be a tenant or a co-tenant: the minimum age required is {0}. Please mark the person as a Dependent instead",
                                                     getAgeOfMajority()));
                                 }
                             }
                         }
                         if (getMaturedOccupantsAreApplicants()) {
-                            if (Role.Dependent == getComponent().getValue()) {
+                            if (Role.Dependent == getCComponent().getValue()) {
                                 if (TimeUtils.isOlderThan(getValue().leaseParticipant().customer().person().birthDate().getValue(), getAgeOfMajority())) {
-                                    return new BasicValidationError(getComponent(), i18n
+                                    return new BasicValidationError(getCComponent(), i18n
                                             .tr("According to internal regulations and age this person cannot be a Dependent"));
                                 }
                             }

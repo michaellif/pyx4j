@@ -25,6 +25,7 @@ import com.pyx4j.forms.client.ui.RevalidationTrigger;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.forms.client.validators.AbstractComponentValidator;
+import com.pyx4j.forms.client.validators.AbstractValidationError;
 import com.pyx4j.forms.client.validators.BasicValidationError;
 import com.pyx4j.forms.client.validators.password.DefaultPasswordStrengthRule;
 import com.pyx4j.forms.client.validators.password.HasDescription;
@@ -86,34 +87,19 @@ public class PasswordChangeForm extends CForm<PasswordChangeRequest> {
         get(proto().newPasswordConfirm()).addComponentValidator(new AbstractComponentValidator<String>() {
             @Override
             public BasicValidationError isValid() {
-                if (getComponent().getValue() != null && !getComponent().getValue().equals(get(proto().newPassword()).getValue())) {
-                    return new BasicValidationError(getComponent(), i18n.tr("The passwords don't match."));
+                if (getCComponent().getValue() != null && !getCComponent().getValue().equals(get(proto().newPassword()).getValue())) {
+                    return new BasicValidationError(getCComponent(), i18n.tr("The passwords don't match."));
                 } else {
                     return null;
                 }
             }
         });
 
-//TODO
-//        ((CValueBoxBase<?, ?>) get(proto().newPassword())).addNativeValueChangeHandler(new NativeValueChangeHandler<String>() {
-//            @Override
-//            public void onNValueChange(NativeValueChangeEvent<String> event) {
-//                passwordStrengthWidget.ratePassword(event.getValue());
-//                if (event.getValue() != null && enforceRequireChangePasswordThreshold != null && passwordStrengthRule != null) {
-//                    PasswordStrengthVerdict verdict = passwordStrengthRule.getPasswordVerdict(event.getValue());
-//                    if (verdict != null && verdict.compareTo(enforceRequireChangePasswordThreshold) <= 0) {
-//                        requireChangePasswordOnNextSignInUserDefinedValue = get(proto().passwordChangeRequired()).getValue();
-//                        get(proto().passwordChangeRequired()).setValue(true);
-//                        get(proto().passwordChangeRequired()).setEnabled(false);
-//                    } else {
-//                        get(proto().passwordChangeRequired()).setValue(requireChangePasswordOnNextSignInUserDefinedValue);
-//                        get(proto().passwordChangeRequired()).setEnabled(true);
-//                    }
-//                }
-//            }
-//        });
         get(proto().newPassword()).addValueChangeHandler(new RevalidationTrigger<String>(get(proto().newPasswordConfirm())));
         get(proto().newPassword()).addComponentValidator(passwordStrengthValidator = new PasswordStrengthValueValidator());
+
+        get(proto().newPassword()).addValueChangeHandler(new RevalidationTrigger<String>(get(proto().passwordChangeRequired())));
+        get(proto().passwordChangeRequired()).addComponentValidator(new PasswordChangeRequiredValidator());
 
         setPasswordStrengthRule(new DefaultPasswordStrengthRule());
 
@@ -167,6 +153,24 @@ public class PasswordChangeForm extends CForm<PasswordChangeRequest> {
     public void setMaskPassword(boolean maskPassword) {
         get(proto().newPasswordConfirm()).setVisible(maskPassword);
         ((CPasswordBox) get(proto().newPassword())).setUnmasked(!maskPassword);
+    }
+
+    class PasswordChangeRequiredValidator extends AbstractComponentValidator<Boolean> {
+
+        @Override
+        public AbstractValidationError isValid() {
+            enforceRequireChangePasswordThreshold = PasswordStrengthVerdict.Good;
+            if (get(proto().newPassword()).getValue() != null && enforceRequireChangePasswordThreshold != null && passwordStrengthRule != null) {
+                PasswordStrengthVerdict verdict = passwordStrengthRule.getPasswordVerdict(get(proto().newPassword()).getValue());
+                if (getCComponent().getValue() != null && !getCComponent().getValue() && verdict != null
+                        && verdict.compareTo(enforceRequireChangePasswordThreshold) <= 0) {
+                    return new BasicValidationError(get(proto().passwordChangeRequired()),
+                            i18n.tr("Password is to weak. You should require to change password on next sign in."));
+                }
+            }
+            return null;
+        }
+
     }
 
 }

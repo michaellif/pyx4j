@@ -23,7 +23,7 @@ public class YouTubeVideoIdValidator extends AbstractComponentValidator<String> 
 
     @Override
     public BasicValidationError isValid() {
-        String value = getComponent().getValue();
+        String value = getCComponent().getValue();
         if (value == null) {
             return null;
         }
@@ -35,7 +35,7 @@ public class YouTubeVideoIdValidator extends AbstractComponentValidator<String> 
             }
         }
         value = value.trim();
-        return value.matches("[a-zA-Z0-9_-]{11}") ? null : new BasicValidationError(getComponent(), i18n.tr("This Is Not A Valid YouTube Video ID"));
+        return value.matches("[a-zA-Z0-9_-]{11}") ? null : new BasicValidationError(getCComponent(), i18n.tr("This Is Not A Valid YouTube Video ID"));
     }
 
 }

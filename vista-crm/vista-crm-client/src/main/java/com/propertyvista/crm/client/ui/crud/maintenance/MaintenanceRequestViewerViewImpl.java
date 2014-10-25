@@ -231,7 +231,7 @@ public class MaintenanceRequestViewerViewImpl extends CrmViewerViewImplBase<Main
                     datePicker.addComponentValidator(new AbstractComponentValidator<LogicalDate>() {
                         @Override
                         public BasicValidationError isValid() {
-                            return (getComponent().getValue().before(new LogicalDate(mr.submitted().getValue())) ? new BasicValidationError(getComponent(),
+                            return (getCComponent().getValue().before(new LogicalDate(mr.submitted().getValue())) ? new BasicValidationError(getCComponent(),
                                     i18n.tr("Request cannot be Resolved before it was Submitted")) : null);
                         }
                     });

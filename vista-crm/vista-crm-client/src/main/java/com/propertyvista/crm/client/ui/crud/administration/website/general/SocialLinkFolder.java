@@ -143,10 +143,10 @@ class SocialLinkFolder extends VistaBoxFolder<SocialLink> {
             get(proto().siteUrl()).addComponentValidator(new AbstractComponentValidator<String>() {
                 @Override
                 public BasicValidationError isValid() {
-                    if (getComponent().getValue() == null || getComponent().getValue().length() == 0) {
-                        return new BasicValidationError(getComponent(), i18n.tr("URL should not be empty"));
-                    } else if (!ValidationUtils.isCorrectUrl(getComponent().getValue())) {
-                        return new BasicValidationError(getComponent(), i18n.tr("Please use proper URL format"));
+                    if (getCComponent().getValue() == null || getCComponent().getValue().length() == 0) {
+                        return new BasicValidationError(getCComponent(), i18n.tr("URL should not be empty"));
+                    } else if (!ValidationUtils.isCorrectUrl(getCComponent().getValue())) {
+                        return new BasicValidationError(getCComponent(), i18n.tr("Please use proper URL format"));
                     }
                     return null;
                 }

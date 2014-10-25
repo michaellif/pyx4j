@@ -115,8 +115,8 @@ public class PmcAccountCreationRequestForm extends CForm<PmcAccountCreationReque
         get(proto().dnsName()).addComponentValidator(new AbstractComponentValidator<String>() {
             @Override
             public BasicValidationError isValid() {
-                if (getComponent().getValue() != null && !isDnsAvailable && isDnsCheckResponseRecieved) {
-                    return new BasicValidationError(getComponent(), i18n.tr("DNS is not available"));
+                if (getCComponent().getValue() != null && !isDnsAvailable && isDnsCheckResponseRecieved) {
+                    return new BasicValidationError(getCComponent(), i18n.tr("DNS is not available"));
                 } else {
                     return null;
                 }
@@ -127,8 +127,8 @@ public class PmcAccountCreationRequestForm extends CForm<PmcAccountCreationReque
             @Override
             public BasicValidationError isValid() {
                 String email = get(proto().email()).getValue();
-                if (email != null && !email.equals(getComponent().getValue())) {
-                    return new BasicValidationError(getComponent(), i18n.tr("Email and Email Confirmation don't match"));
+                if (email != null && !email.equals(getCComponent().getValue())) {
+                    return new BasicValidationError(getCComponent(), i18n.tr("Email and Email Confirmation don't match"));
                 } else {
                     return null;
                 }
@@ -139,8 +139,8 @@ public class PmcAccountCreationRequestForm extends CForm<PmcAccountCreationReque
             @Override
             public BasicValidationError isValid() {
                 String password = get(proto().password()).getValue();
-                if (password != null && !password.equals(getComponent().getValue())) {
-                    return new BasicValidationError(getComponent(), i18n.tr("Password and Password Confirmation don't match"));
+                if (password != null && !password.equals(getCComponent().getValue())) {
+                    return new BasicValidationError(getCComponent(), i18n.tr("Password and Password Confirmation don't match"));
                 } else {
                     return null;
                 }

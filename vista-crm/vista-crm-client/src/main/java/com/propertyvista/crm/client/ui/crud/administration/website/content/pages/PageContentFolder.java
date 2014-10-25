@@ -99,11 +99,11 @@ class PageContentFolder extends VistaBoxFolder<PageContent> {
         this.addComponentValidator(new AbstractComponentValidator<IList<PageContent>>() {
             @Override
             public BasicValidationError isValid() {
-                if (getComponent().getValue() == null) {
+                if (getCComponent().getValue() == null) {
                     return null;
                 }
-                return !getComponent().getValue().isEmpty() ? null
-                        : new BasicValidationError(getComponent(), i18n.tr("At least one content item is necessary"));
+                return !getCComponent().getValue().isEmpty() ? null
+                        : new BasicValidationError(getCComponent(), i18n.tr("At least one content item is necessary"));
             }
         });
     }

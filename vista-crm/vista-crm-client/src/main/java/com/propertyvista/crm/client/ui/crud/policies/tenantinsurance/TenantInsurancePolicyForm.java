@@ -54,11 +54,11 @@ public class TenantInsurancePolicyForm extends PolicyDTOTabPanelBasedForm<Tenant
                 // HARD CODED by request form Leonard and due to TenantSure max possible liability which is $5,000,000
                 // if we do it like that, we don't have to worry about what to do with TenantSure in portal if the policy sets the min liability is over 5 million
                 final BigDecimal MAX_FLOOR = new BigDecimal("5000000.00");
-                if (getComponent().getValue() != null && getComponent().getValue().compareTo(MAX_FLOOR) > 0) {
-                    return new BasicValidationError(getComponent(), i18n.tr("The maximum of minimum required liability is ${0,number,#,##0.00}", MAX_FLOOR));
+                if (getCComponent().getValue() != null && getCComponent().getValue().compareTo(MAX_FLOOR) > 0) {
+                    return new BasicValidationError(getCComponent(), i18n.tr("The maximum of minimum required liability is ${0,number,#,##0.00}", MAX_FLOOR));
                 }
-                if (getComponent().getValue() != null && getComponent().getValue().compareTo(BigDecimal.ZERO) < 0) {
-                    return new BasicValidationError(getComponent(), i18n.tr("Please provide a non-negative value"));
+                if (getCComponent().getValue() != null && getCComponent().getValue().compareTo(BigDecimal.ZERO) < 0) {
+                    return new BasicValidationError(getCComponent(), i18n.tr("Please provide a non-negative value"));
                 } else {
                     return null;
                 }

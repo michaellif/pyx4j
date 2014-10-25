@@ -93,9 +93,9 @@ public class TenantInsuranceCertificateForm<E extends InsuranceCertificate<?>> e
         get(proto().liabilityCoverage()).addComponentValidator(new AbstractComponentValidator<BigDecimal>() {
             @Override
             public BasicValidationError isValid() {
-                if (TenantInsuranceCertificateForm.this.minRequiredLiability != null && getComponent().getValue() != null
-                        && getComponent().getValue().compareTo(minRequiredLiability) < 0) {
-                    return new BasicValidationError(getComponent(), i18n.tr("The minimum required liability is {0,number,#,##0.00}", minRequiredLiability));
+                if (TenantInsuranceCertificateForm.this.minRequiredLiability != null && getCComponent().getValue() != null
+                        && getCComponent().getValue().compareTo(minRequiredLiability) < 0) {
+                    return new BasicValidationError(getCComponent(), i18n.tr("The minimum required liability is {0,number,#,##0.00}", minRequiredLiability));
                 }
                 return null;
             }
@@ -103,8 +103,8 @@ public class TenantInsuranceCertificateForm<E extends InsuranceCertificate<?>> e
         get(proto().liabilityCoverage()).addComponentValidator(new AbstractComponentValidator<BigDecimal>() {
             @Override
             public BasicValidationError isValid() {
-                if (getComponent().getValue() != null && getComponent().getValue().compareTo(BigDecimal.ZERO) <= 0) {
-                    return new BasicValidationError(getComponent(), i18n.tr("Please enter a positive value"));
+                if (getCComponent().getValue() != null && getCComponent().getValue().compareTo(BigDecimal.ZERO) <= 0) {
+                    return new BasicValidationError(getCComponent(), i18n.tr("Please enter a positive value"));
                 }
                 return null;
             }

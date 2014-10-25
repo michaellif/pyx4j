@@ -262,7 +262,7 @@ public class PaymentWizard extends CPortalEntityWizard<PaymentDTO> {
         cSignature.setSignatureCompletionValidator(new AbstractComponentValidator<ISignature>() {
             @Override
             public BasicValidationError isValid() {
-                return (getComponent().getValue() == null || !getComponent().getValue().agree().getValue(false) ? new BasicValidationError(getComponent(), i18n
+                return (getCComponent().getValue() == null || !getCComponent().getValue().agree().getValue(false) ? new BasicValidationError(getCComponent(), i18n
                         .tr("Please agree to all applicable Terms and Conditions and our Privacy Policy in order to submit your payment.")) : null);
             }
         });
@@ -284,8 +284,8 @@ public class PaymentWizard extends CPortalEntityWizard<PaymentDTO> {
         get(proto().amount()).addComponentValidator(new AbstractComponentValidator<BigDecimal>() {
             @Override
             public BasicValidationError isValid() {
-                if (getComponent().getValue() != null) {
-                    return (getComponent().getValue().compareTo(BigDecimal.ZERO) > 0 ? null : new BasicValidationError(getComponent(), i18n
+                if (getCComponent().getValue() != null) {
+                    return (getCComponent().getValue().compareTo(BigDecimal.ZERO) > 0 ? null : new BasicValidationError(getCComponent(), i18n
                             .tr("Payment amount should be greater than zero!")));
                 }
                 return null;
@@ -295,9 +295,9 @@ public class PaymentWizard extends CPortalEntityWizard<PaymentDTO> {
         profiledPaymentMethodsCombo.addComponentValidator(new AbstractComponentValidator<LeasePaymentMethod>() {
             @Override
             public BasicValidationError isValid() {
-                if (getComponent().getValue() != null) {
-                    return (paymentMethodEditor.getDefaultPaymentTypes().contains(getComponent().getValue().type().getValue()) ? null
-                            : new BasicValidationError(getComponent(), i18n.tr("Not allowed payment type!")));
+                if (getCComponent().getValue() != null) {
+                    return (paymentMethodEditor.getDefaultPaymentTypes().contains(getCComponent().getValue().type().getValue()) ? null
+                            : new BasicValidationError(getCComponent(), i18n.tr("Not allowed payment type!")));
                 }
                 return null;
             }

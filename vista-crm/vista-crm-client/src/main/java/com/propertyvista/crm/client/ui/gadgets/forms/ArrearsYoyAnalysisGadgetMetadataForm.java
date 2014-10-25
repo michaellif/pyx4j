@@ -41,14 +41,14 @@ public class ArrearsYoyAnalysisGadgetMetadataForm extends CForm<ArrearsYOYAnalys
         get(proto().yearsToCompare()).addComponentValidator(new AbstractComponentValidator<Integer>() {
             @Override
             public BasicValidationError isValid() {
-                if (getComponent().getValue() != null & getComponent().getValue() >= 0) {
-                    if (getComponent().getValue() > ArrearsReportService.YOY_ANALYSIS_CHART_MAX_YEARS_AGO) {
-                        return new BasicValidationError(getComponent(), i18n.tr("Please enter a value between 0 and {0}",
+                if (getCComponent().getValue() != null & getCComponent().getValue() >= 0) {
+                    if (getCComponent().getValue() > ArrearsReportService.YOY_ANALYSIS_CHART_MAX_YEARS_AGO) {
+                        return new BasicValidationError(getCComponent(), i18n.tr("Please enter a value between 0 and {0}",
                                 ArrearsReportService.YOY_ANALYSIS_CHART_MAX_YEARS_AGO));
                     }
                     return null;
                 } else {
-                    return new BasicValidationError(getComponent(), i18n.tr("Non-negative value expected"));
+                    return new BasicValidationError(getCComponent(), i18n.tr("Non-negative value expected"));
                 }
             }
         });

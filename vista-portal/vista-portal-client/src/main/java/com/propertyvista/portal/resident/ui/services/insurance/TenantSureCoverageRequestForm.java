@@ -100,12 +100,12 @@ public class TenantSureCoverageRequestForm extends CForm<TenantSureCoverageDTO> 
             @Override
             public AbstractValidationError isValid() {
                 if (TenantSureCoverageRequestForm.this.lastInceptionDate != null) {
-                    if (getComponent().getValue() != null && getComponent().getValue().compareTo(lastInceptionDate) > 0) {
-                        return new BasicValidationError(getComponent(), i18n.tr("Maximum possible value for inception date is {0,short,date}",
+                    if (getCComponent().getValue() != null && getCComponent().getValue().compareTo(lastInceptionDate) > 0) {
+                        return new BasicValidationError(getCComponent(), i18n.tr("Maximum possible value for inception date is {0,short,date}",
                                 lastInceptionDate));
                     }
-                    if (getComponent().getValue() != null && getComponent().getValue().compareTo(new LogicalDate()) < 0) {
-                        return new BasicValidationError(getComponent(), i18n.tr("This date cannot be in the past", lastInceptionDate));
+                    if (getCComponent().getValue() != null && getCComponent().getValue().compareTo(new LogicalDate()) < 0) {
+                        return new BasicValidationError(getCComponent(), i18n.tr("This date cannot be in the past", lastInceptionDate));
                     }
                 }
                 return null;

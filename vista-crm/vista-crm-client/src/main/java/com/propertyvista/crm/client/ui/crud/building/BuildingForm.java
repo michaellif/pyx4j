@@ -280,11 +280,11 @@ public class BuildingForm extends CrmEntityForm<BuildingDTO> {
         get(proto().contacts().website()).addComponentValidator(new AbstractComponentValidator<String>() {
             @Override
             public BasicValidationError isValid() {
-                if (getComponent().getValue() != null) {
-                    if (ValidationUtils.isSimpleUrl(getComponent().getValue())) {
+                if (getCComponent().getValue() != null) {
+                    if (ValidationUtils.isSimpleUrl(getCComponent().getValue())) {
                         return null;
                     } else {
-                        return new BasicValidationError(getComponent(), i18n.tr("Please use proper URL format, e.g. www.propertyvista.com"));
+                        return new BasicValidationError(getCComponent(), i18n.tr("Please use proper URL format, e.g. www.propertyvista.com"));
                     }
                 }
                 return null;

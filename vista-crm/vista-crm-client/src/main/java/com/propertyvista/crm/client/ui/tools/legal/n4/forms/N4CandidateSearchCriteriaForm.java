@@ -91,8 +91,8 @@ public class N4CandidateSearchCriteriaForm extends CForm<N4CandidateSearchCriter
         addComponentValidator(new AbstractComponentValidator<N4CandidateSearchCriteriaDTO>() {
             @Override
             public BasicValidationError isValid() {
-                if (getComponent().getValue() != null && !CommonsStringUtils.isEmpty(getComponent().getValue().n4PolicyErrors().getValue())) {
-                    return new BasicValidationError(getComponent(), getComponent().getValue().n4PolicyErrors().getValue());
+                if (getCComponent().getValue() != null && !CommonsStringUtils.isEmpty(getCComponent().getValue().n4PolicyErrors().getValue())) {
+                    return new BasicValidationError(getCComponent(), getCComponent().getValue().n4PolicyErrors().getValue());
                 }
                 return null;
             }

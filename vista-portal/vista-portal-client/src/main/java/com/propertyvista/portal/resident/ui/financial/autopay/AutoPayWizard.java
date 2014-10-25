@@ -312,9 +312,9 @@ public class AutoPayWizard extends CPortalEntityWizard<AutoPayDTO> {
         profiledPaymentMethodsCombo.addComponentValidator(new AbstractComponentValidator<LeasePaymentMethod>() {
             @Override
             public BasicValidationError isValid() {
-                if (getComponent().getValue() != null) {
-                    return (paymentMethodEditor.getDefaultPaymentTypes().contains(getComponent().getValue().type().getValue()) ? null
-                            : new BasicValidationError(getComponent(), i18n.tr("Not allowed payment type!")));
+                if (getCComponent().getValue() != null) {
+                    return (paymentMethodEditor.getDefaultPaymentTypes().contains(getCComponent().getValue().type().getValue()) ? null
+                            : new BasicValidationError(getCComponent(), i18n.tr("Not allowed payment type!")));
                 }
                 return null;
             }

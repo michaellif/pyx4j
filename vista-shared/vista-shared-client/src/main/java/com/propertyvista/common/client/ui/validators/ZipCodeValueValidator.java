@@ -46,8 +46,8 @@ public class ZipCodeValueValidator extends AbstractComponentValidator<String> {
 
     @Override
     public BasicValidationError isValid() {
-        String value = getComponent().getValue();
-        CComponent<?, String, ?> component = getComponent();
+        String value = getCComponent().getValue();
+        CComponent<?, String, ?> component = getCComponent();
         if (value == null) {
             return null;
         }

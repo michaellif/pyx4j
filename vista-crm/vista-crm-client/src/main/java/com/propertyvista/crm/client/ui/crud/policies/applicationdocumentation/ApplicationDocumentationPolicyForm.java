@@ -63,10 +63,10 @@ public class ApplicationDocumentationPolicyForm extends PolicyDTOTabPanelBasedFo
         get(proto().numberOfRequiredIDs()).addComponentValidator(new AbstractComponentValidator<Integer>() {
             @Override
             public BasicValidationError isValid() {
-                if (getComponent().getValue() == null || getComponent().getValue() == 0) {
-                    return new BasicValidationError(getComponent(), i18n.tr("At least one ID is required"));
-                } else if (getValue() != null && (getValue().allowedIDs().isEmpty() || getComponent().getValue() > getValue().allowedIDs().size())) {
-                    return new BasicValidationError(getComponent(), i18n.tr("The number of required IDs must not exceed the number of allowed IDs"));
+                if (getCComponent().getValue() == null || getCComponent().getValue() == 0) {
+                    return new BasicValidationError(getCComponent(), i18n.tr("At least one ID is required"));
+                } else if (getValue() != null && (getValue().allowedIDs().isEmpty() || getCComponent().getValue() > getValue().allowedIDs().size())) {
+                    return new BasicValidationError(getCComponent(), i18n.tr("The number of required IDs must not exceed the number of allowed IDs"));
                 } else {
                     return null;
                 }

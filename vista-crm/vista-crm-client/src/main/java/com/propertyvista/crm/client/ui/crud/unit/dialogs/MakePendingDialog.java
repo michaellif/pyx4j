@@ -57,8 +57,8 @@ public class MakePendingDialog extends OkCancelDialog {
                         validator = new AbstractComponentValidator<LogicalDate>() {
                             @Override
                             public BasicValidationError isValid() {
-                                if (getComponent().getValue() == null || getComponent().getValue().before(minMakeVacantStartDay)) {
-                                    return new BasicValidationError(getComponent(), i18n.tr("please enter a date greater or equal to {0,date,short}",
+                                if (getCComponent().getValue() == null || getCComponent().getValue().before(minMakeVacantStartDay)) {
+                                    return new BasicValidationError(getCComponent(), i18n.tr("please enter a date greater or equal to {0,date,short}",
                                             minMakeVacantStartDay));
                                 } else {
                                     return null;
@@ -69,9 +69,9 @@ public class MakePendingDialog extends OkCancelDialog {
                         validator = new AbstractComponentValidator<LogicalDate>() {
                             @Override
                             public BasicValidationError isValid() {
-                                if (getComponent().getValue() == null
-                                        || (getComponent().getValue().before(minMakeVacantStartDay) | getComponent().getValue().after(maxMakeVacantStartDay))) {
-                                    return new BasicValidationError(getComponent(), i18n.tr("please enter a date between {0,date,short} and {1,date,short}",
+                                if (getCComponent().getValue() == null
+                                        || (getCComponent().getValue().before(minMakeVacantStartDay) | getCComponent().getValue().after(maxMakeVacantStartDay))) {
+                                    return new BasicValidationError(getCComponent(), i18n.tr("please enter a date between {0,date,short} and {1,date,short}",
                                             minMakeVacantStartDay, maxMakeVacantStartDay));
                                 } else {
                                     return null;

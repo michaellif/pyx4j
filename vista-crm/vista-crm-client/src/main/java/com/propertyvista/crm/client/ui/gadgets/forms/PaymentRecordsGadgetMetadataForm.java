@@ -68,8 +68,8 @@ public class PaymentRecordsGadgetMetadataForm extends CForm<PaymentRecordsGadget
         paymentTypeSelector.addComponentValidator(new AbstractComponentValidator<Set<PaymentType>>() {
             @Override
             public BasicValidationError isValid() {
-                if (getComponent().getValue() != null && getComponent().getValue().isEmpty()) {
-                    return new BasicValidationError(getComponent(), i18n.tr("Please select at least one payment method option"));
+                if (getCComponent().getValue() != null && getCComponent().getValue().isEmpty()) {
+                    return new BasicValidationError(getCComponent(), i18n.tr("Please select at least one payment method option"));
                 } else {
                     return null;
                 }
@@ -83,8 +83,8 @@ public class PaymentRecordsGadgetMetadataForm extends CForm<PaymentRecordsGadget
         paymentStatusSelector.addComponentValidator(new AbstractComponentValidator<Set<PaymentRecord.PaymentStatus>>() {
             @Override
             public BasicValidationError isValid() {
-                if (getComponent().getValue() != null && getComponent().getValue().isEmpty()) {
-                    return new BasicValidationError(getComponent(), i18n.tr("Please select at least one payment status option"));
+                if (getCComponent().getValue() != null && getCComponent().getValue().isEmpty()) {
+                    return new BasicValidationError(getCComponent(), i18n.tr("Please select at least one payment status option"));
                 } else {
                     return null;
                 }

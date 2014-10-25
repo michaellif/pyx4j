@@ -27,8 +27,8 @@ public class EcheckBankIdValidator extends AbstractComponentValidator<String> {
 
     @Override
     public AbstractValidationError isValid() {
-        if (CommonsStringUtils.isStringSet(getComponent().getValue())) {
-            return ValidationUtils.isBankIdNumberValid(getComponent().getValue()) ? null : new BasicValidationError(getComponent(),
+        if (CommonsStringUtils.isStringSet(getCComponent().getValue())) {
+            return ValidationUtils.isBankIdNumberValid(getCComponent().getValue()) ? null : new BasicValidationError(getCComponent(),
                     i18n.tr("Number should consist of 3 digits"));
         } else {
             return null;

@@ -49,8 +49,8 @@ public class AgreementForm extends CForm<AgreementDTO> {
         get(proto().isAgreed()).addComponentValidator(new AbstractComponentValidator<Boolean>() {
             @Override
             public BasicValidationError isValid() {
-                if (getComponent().getValue() != null && !getComponent().getValue()) {
-                    return new BasicValidationError(getComponent(), i18n.tr("You must agree with the above terms to continue."));
+                if (getCComponent().getValue() != null && !getCComponent().getValue()) {
+                    return new BasicValidationError(getCComponent(), i18n.tr("You must agree with the above terms to continue."));
                 } else {
                     return null;
                 }

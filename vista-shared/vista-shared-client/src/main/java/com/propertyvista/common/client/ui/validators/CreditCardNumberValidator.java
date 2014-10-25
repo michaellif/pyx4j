@@ -27,9 +27,9 @@ public class CreditCardNumberValidator extends AbstractComponentValidator<Credit
 
     @Override
     public BasicValidationError isValid() {
-        CreditCardNumberIdentity value = getComponent().getValue();
+        CreditCardNumberIdentity value = getCComponent().getValue();
         if ((value != null) && CommonsStringUtils.isStringSet(value.newNumber().getValue())) {
-            return ValidationUtils.isCreditCardNumberValid(value.newNumber().getValue()) ? null : new BasicValidationError(getComponent(),
+            return ValidationUtils.isCreditCardNumberValid(value.newNumber().getValue()) ? null : new BasicValidationError(getCComponent(),
                     i18n.tr("Invalid Credit Card Number"));
         }
         return null;

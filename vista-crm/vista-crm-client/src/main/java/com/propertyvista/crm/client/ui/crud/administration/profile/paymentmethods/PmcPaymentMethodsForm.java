@@ -55,8 +55,8 @@ public class PmcPaymentMethodsForm extends CrmEntityForm<PmcPaymentMethodsDTO> {
         get(proto().paymentMethods()).addComponentValidator(new AbstractComponentValidator<List<PmcPaymentMethod>>() {
             @Override
             public BasicValidationError isValid() {
-                if (getComponent().getValue() != null && getComponent().getValue().isEmpty()) {
-                    return new BasicValidationError(getComponent(), i18n.tr("At least one payment method is required"));
+                if (getCComponent().getValue() != null && getCComponent().getValue().isEmpty()) {
+                    return new BasicValidationError(getCComponent(), i18n.tr("At least one payment method is required"));
                 } else {
                     return null;
                 }
@@ -66,16 +66,16 @@ public class PmcPaymentMethodsForm extends CrmEntityForm<PmcPaymentMethodsDTO> {
 
             @Override
             public BasicValidationError isValid() {
-                if (getComponent().getValue() != null) {
+                if (getCComponent().getValue() != null) {
                     boolean hasEquifaxMethod = false;
-                    for (PmcPaymentMethod pmcPaymentMethod : getComponent().getValue()) {
+                    for (PmcPaymentMethod pmcPaymentMethod : getCComponent().getValue()) {
                         if (pmcPaymentMethod.selectForEquifaxPayments().getValue(false)) {
                             hasEquifaxMethod = true;
                             break;
                         }
                     }
                     if (!hasEquifaxMethod) {
-                        return new BasicValidationError(getComponent(), i18n.tr("Please select a payment method for Equifax"));
+                        return new BasicValidationError(getCComponent(), i18n.tr("Please select a payment method for Equifax"));
                     } else {
                         return null;
                     }

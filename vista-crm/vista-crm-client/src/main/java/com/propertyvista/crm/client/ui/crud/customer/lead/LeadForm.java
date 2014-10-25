@@ -78,8 +78,8 @@ public class LeadForm extends CrmEntityForm<Lead> {
             @Override
             public BasicValidationError isValid() {
                 Boolean hasContact = false;
-                if (getComponent().getValue() != null) {
-                    for (Guest g : getComponent().getValue()) {
+                if (getCComponent().getValue() != null) {
+                    for (Guest g : getCComponent().getValue()) {
                         //@formatter:off
                         if (!g.person().email().isNull() || 
                             !g.person().homePhone().isNull() || 
@@ -91,7 +91,7 @@ public class LeadForm extends CrmEntityForm<Lead> {
                         }
                     }
                 }
-                return hasContact ? null : new BasicValidationError(getComponent(), i18n.tr("No contact information (email and/or phone #) has been provided"));
+                return hasContact ? null : new BasicValidationError(getCComponent(), i18n.tr("No contact information (email and/or phone #) has been provided"));
             }
         });
     }

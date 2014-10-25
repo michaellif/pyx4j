@@ -37,11 +37,11 @@ public class StartEndDateValidation {
         start.addComponentValidator(new AbstractComponentValidator<LogicalDate>() {
             @Override
             public BasicValidationError isValid() {
-                if (getComponent().getValue() == null || !end.isVisible() || end.getValue() == null) {
+                if (getCComponent().getValue() == null || !end.isVisible() || end.getValue() == null) {
                     return null;
                 }
                 LogicalDate endDate = end.getValue();
-                return (!getComponent().getValue().after(endDate) ? null : new BasicValidationError(getComponent(), msg));
+                return (!getCComponent().getValue().after(endDate) ? null : new BasicValidationError(getCComponent(), msg));
             }
         });
         start.addValueChangeHandler(new RevalidationTrigger<LogicalDate>(end));
@@ -49,11 +49,11 @@ public class StartEndDateValidation {
         end.addComponentValidator(new AbstractComponentValidator<LogicalDate>() {
             @Override
             public BasicValidationError isValid() {
-                if (getComponent().getValue() == null || !start.isVisible() || start.getValue() == null) {
+                if (getCComponent().getValue() == null || !start.isVisible() || start.getValue() == null) {
                     return null;
                 }
                 LogicalDate startDate = start.getValue();
-                return (!getComponent().getValue().before(startDate) ? null : new BasicValidationError(getComponent(), msg));
+                return (!getCComponent().getValue().before(startDate) ? null : new BasicValidationError(getCComponent(), msg));
             }
         });
         end.addValueChangeHandler(new RevalidationTrigger<LogicalDate>(start));

@@ -32,19 +32,19 @@ public class OriginalSignatureValidator extends AbstractComponentValidator<Custo
 
     @Override
     public BasicValidationError isValid() {
-        ISignature value = getComponent().getValue();
+        ISignature value = getCComponent().getValue();
         if (value != null) {
             SignatureFormat signatureFormat = value.signatureFormat().isNull() ? SignatureFormat.None : value.signatureFormat().getValue();
             switch (signatureFormat) {
             case AgreeBoxAndFullName:
             case FullName:
                 if (value.fullName().getValue() != null && !isSignatureOriginal(value.fullName().getValue())) {
-                    return new BasicValidationError(getComponent(), i18n.tr("You have to enter first name followed by last name"));
+                    return new BasicValidationError(getCComponent(), i18n.tr("You have to enter first name followed by last name"));
                 }
                 break;
             case Initials:
                 if (value.initials().getValue() != null && !isInitialsOriginal(value.initials().getValue())) {
-                    return new BasicValidationError(getComponent(), i18n.tr("You have to enter your initials without space"));
+                    return new BasicValidationError(getCComponent(), i18n.tr("You have to enter your initials without space"));
                 }
                 break;
             default:

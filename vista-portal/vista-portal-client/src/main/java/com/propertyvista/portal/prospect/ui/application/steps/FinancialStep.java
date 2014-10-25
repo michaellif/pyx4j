@@ -85,9 +85,9 @@ public class FinancialStep extends ApplicationWizardStep {
         get(proto().applicantData().incomes()).addComponentValidator(new AbstractComponentValidator<List<CustomerScreeningIncome>>() {
             @Override
             public BasicValidationError isValid() {
-                if (getComponent().getValue() != null) {
+                if (getCComponent().getValue() != null) {
                     return (getValue().applicantData().assets().size() > 0) || (getValue().applicantData().incomes().size() > 0) ? null
-                            : new BasicValidationError(getComponent(), i18n.tr("At least one source of income or one asset is required"));
+                            : new BasicValidationError(getCComponent(), i18n.tr("At least one source of income or one asset is required"));
                 }
                 return null;
             }
@@ -98,9 +98,9 @@ public class FinancialStep extends ApplicationWizardStep {
         get(proto().applicantData().assets()).addComponentValidator(new AbstractComponentValidator<List<CustomerScreeningPersonalAsset>>() {
             @Override
             public BasicValidationError isValid() {
-                if (getComponent().getValue() != null) {
+                if (getCComponent().getValue() != null) {
                     return (getValue().applicantData().assets().size() > 0) || (getValue().applicantData().incomes().size() > 0) ? null
-                            : new BasicValidationError(getComponent(), i18n.tr("At least one asset or one source of income is required"));
+                            : new BasicValidationError(getCComponent(), i18n.tr("At least one asset or one source of income is required"));
                 }
                 return null;
             }

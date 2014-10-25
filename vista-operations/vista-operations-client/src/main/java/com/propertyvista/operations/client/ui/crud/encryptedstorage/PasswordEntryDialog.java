@@ -49,8 +49,8 @@ public abstract class PasswordEntryDialog extends OkCancelDialog {
                 get(proto().passwordConfirm()).addComponentValidator(new AbstractComponentValidator<String>() {
                     @Override
                     public BasicValidationError isValid() {
-                        if (getComponent().getValue() != null && !getComponent().getValue().equals(get(proto().password()).getValue())) {
-                            return new BasicValidationError(getComponent(), "Password and Password confirmation don't match");
+                        if (getCComponent().getValue() != null && !getCComponent().getValue().equals(get(proto().password()).getValue())) {
+                            return new BasicValidationError(getCComponent(), "Password and Password confirmation don't match");
                         }
                         return null;
                     }

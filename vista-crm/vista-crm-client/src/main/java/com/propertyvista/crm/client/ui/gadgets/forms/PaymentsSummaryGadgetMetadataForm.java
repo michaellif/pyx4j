@@ -66,8 +66,8 @@ public class PaymentsSummaryGadgetMetadataForm extends CForm<PaymentsSummaryGadg
 
             @Override
             public BasicValidationError isValid() {
-                if (getComponent().getValue() != null && getComponent().getValue().isEmpty()) {
-                    return new BasicValidationError(getComponent(), i18n.tr("Please select at least one payment status option"));
+                if (getCComponent().getValue() != null && getCComponent().getValue().isEmpty()) {
+                    return new BasicValidationError(getCComponent(), i18n.tr("Please select at least one payment status option"));
                 } else {
                     return null;
                 }

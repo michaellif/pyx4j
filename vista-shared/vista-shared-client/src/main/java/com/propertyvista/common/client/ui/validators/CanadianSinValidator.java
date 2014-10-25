@@ -26,8 +26,8 @@ public class CanadianSinValidator extends AbstractComponentValidator<String> {
 
     @Override
     public BasicValidationError isValid() {
-        if (CommonsStringUtils.isStringSet(getComponent().getValue())) {
-            return ValidationUtils.isSinValid(getComponent().getValue()) ? null : new BasicValidationError(getComponent(), i18n.tr("Invalid SIN"));
+        if (CommonsStringUtils.isStringSet(getCComponent().getValue())) {
+            return ValidationUtils.isSinValid(getCComponent().getValue()) ? null : new BasicValidationError(getCComponent(), i18n.tr("Invalid SIN"));
         }
         return null;
     }
