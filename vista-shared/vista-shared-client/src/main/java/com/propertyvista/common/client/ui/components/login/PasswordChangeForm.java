@@ -23,7 +23,7 @@ import com.pyx4j.forms.client.events.NValueChangeEvent;
 import com.pyx4j.forms.client.events.NValueChangeHandler;
 import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.CPasswordTextField;
-import com.pyx4j.forms.client.ui.CTextFieldBase;
+import com.pyx4j.forms.client.ui.CValueBoxBase;
 import com.pyx4j.forms.client.ui.RevalidationTrigger;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.forms.client.ui.panels.FormPanel;
@@ -103,7 +103,7 @@ public class PasswordChangeForm extends CForm<PasswordChangeRequest> {
 
         get(proto().newPassword()).addValueChangeHandler(new RevalidationTrigger<String>(get(proto().newPasswordConfirm())));
 
-        ((CTextFieldBase<?, ?>) get(proto().newPassword())).addNValueChangeHandler(new NValueChangeHandler<String>() {
+        ((CValueBoxBase<?, ?>) get(proto().newPassword())).addNValueChangeHandler(new NValueChangeHandler<String>() {
             @Override
             public void onNValueChange(NValueChangeEvent<String> event) {
                 passwordStrengthWidget.ratePassword(event.getValue());

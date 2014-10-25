@@ -36,6 +36,7 @@ import com.pyx4j.forms.client.ui.CField;
 import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.CPasswordTextField;
 import com.pyx4j.forms.client.ui.CTextFieldBase;
+import com.pyx4j.forms.client.ui.CValueBoxBase;
 import com.pyx4j.forms.client.ui.RevalidationTrigger;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.forms.client.validators.AbstractComponentValidator;
@@ -289,7 +290,7 @@ public class SignUpGadget extends AbstractGadget<SignUpView> {
 
         @Override
         public void addValidations() {
-            ((CTextFieldBase<?, ?>) get(proto().password())).addNValueChangeHandler(new NValueChangeHandler<String>() {
+            ((CValueBoxBase<?, ?>) get(proto().password())).addNValueChangeHandler(new NValueChangeHandler<String>() {
 
                 @Override
                 public void onNValueChange(NValueChangeEvent<String> event) {

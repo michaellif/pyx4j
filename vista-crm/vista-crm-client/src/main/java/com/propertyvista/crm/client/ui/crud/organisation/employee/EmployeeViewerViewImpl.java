@@ -150,7 +150,7 @@ public class EmployeeViewerViewImpl extends CrmViewerViewImplBase<EmployeeDTO> i
 
         @Override
         public boolean onClickOk() {
-            ((EmployeeViewerView.Presenter) getPresenter()).goToAccountRecoveryOptions(passwordBox.getText());
+            ((EmployeeViewerView.Presenter) getPresenter()).goToAccountRecoveryOptions(passwordBox.getValue());
             return true;
         }
 
