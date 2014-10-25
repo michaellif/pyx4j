@@ -22,7 +22,7 @@ import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.rpc.shared.VoidSerializable;
 import com.pyx4j.security.shared.ActionPermission;
 import com.pyx4j.widgets.client.Button.SecureMenuItem;
-import com.pyx4j.widgets.client.PasswordTextBox;
+import com.pyx4j.widgets.client.PasswordBox;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 import com.pyx4j.widgets.client.dialog.OkCancelDialog;
 
@@ -140,11 +140,11 @@ public class EmployeeViewerViewImpl extends CrmViewerViewImplBase<EmployeeDTO> i
 
     private class GetPasswordDialog extends OkCancelDialog {
 
-        private final PasswordTextBox passwordBox;
+        private final PasswordBox passwordBox;
 
         public GetPasswordDialog() {
             super(i18n.tr("Your password is required to proceed"));
-            passwordBox = new PasswordTextBox();
+            passwordBox = new PasswordBox();
             setBody(passwordBox);
         }
 

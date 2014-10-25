@@ -44,7 +44,7 @@ import com.pyx4j.forms.client.ui.CCaptcha;
 import com.pyx4j.forms.client.ui.CCheckBox;
 import com.pyx4j.forms.client.ui.CEmailField;
 import com.pyx4j.forms.client.ui.CForm;
-import com.pyx4j.forms.client.ui.CPasswordTextField;
+import com.pyx4j.forms.client.ui.CPasswordBox;
 import com.pyx4j.forms.client.ui.NFocusField;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.security.rpc.AuthenticationRequest;
@@ -114,7 +114,7 @@ public class LoginForm extends CForm<AuthenticationRequest> {
         emailField.getNativeComponent().addKeyUpHandler(new EnterKeyHandler());
         main.add(emailField);
 
-        CPasswordTextField passwordField = inject(proto().password(), new CPasswordTextField(), new LoginPanelWidgetDecorator());
+        CPasswordBox passwordField = inject(proto().password(), new CPasswordBox(), new LoginPanelWidgetDecorator());
         passwordField.getNativeComponent().addKeyUpHandler(new EnterKeyHandler());
         main.add(passwordField);
 

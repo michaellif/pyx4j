@@ -20,10 +20,10 @@ import java.util.List;
 import com.google.gwt.event.shared.HandlerRegistration;
 
 import com.pyx4j.commons.CommonsStringUtils;
-import com.pyx4j.forms.client.events.HasNValueChangeHandlers;
+import com.pyx4j.forms.client.events.HasNativeValueChangeHandlers;
 import com.pyx4j.forms.client.events.HasOptionsChangeHandlers;
-import com.pyx4j.forms.client.events.NValueChangeEvent;
-import com.pyx4j.forms.client.events.NValueChangeHandler;
+import com.pyx4j.forms.client.events.NativeValueChangeEvent;
+import com.pyx4j.forms.client.events.NativeValueChangeHandler;
 import com.pyx4j.forms.client.events.OptionsChangeEvent;
 import com.pyx4j.forms.client.events.OptionsChangeHandler;
 import com.pyx4j.forms.client.ui.CComboBox.AsyncOptionsReadyCallback;
@@ -33,7 +33,7 @@ import com.propertyvista.domain.ref.ISOCountry;
 import com.propertyvista.domain.ref.ISOProvince;
 
 public class CProvinceComboBox extends CFocusComponent<String, NProvinceComboBox> implements HasOptionsChangeHandlers<List<ISOProvince>>,
-        HasNValueChangeHandlers<String> {
+        HasNativeValueChangeHandlers<String> {
 
     private final List<ISOProvince> options = new ArrayList<>();
 
@@ -113,7 +113,7 @@ public class CProvinceComboBox extends CFocusComponent<String, NProvinceComboBox
     }
 
     @Override
-    public HandlerRegistration addNValueChangeHandler(NValueChangeHandler<String> handler) {
-        return addHandler(handler, NValueChangeEvent.getType());
+    public HandlerRegistration addNativeValueChangeHandler(NativeValueChangeHandler<String> handler) {
+        return addHandler(handler, NativeValueChangeEvent.getType());
     }
 }

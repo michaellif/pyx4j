@@ -16,10 +16,7 @@ package com.propertyvista.portal.shared.ui.security;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.commons.css.ThemeColor;
-import com.pyx4j.forms.client.events.NValueChangeEvent;
-import com.pyx4j.forms.client.events.NValueChangeHandler;
-import com.pyx4j.forms.client.ui.CPasswordTextField;
-import com.pyx4j.forms.client.ui.CTextFieldBase;
+import com.pyx4j.forms.client.ui.CPasswordBox;
 import com.pyx4j.forms.client.ui.RevalidationTrigger;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.forms.client.ui.wizard.WizardDecorator;
@@ -27,7 +24,6 @@ import com.pyx4j.forms.client.validators.AbstractComponentValidator;
 import com.pyx4j.forms.client.validators.BasicValidationError;
 import com.pyx4j.forms.client.validators.password.HasDescription;
 import com.pyx4j.forms.client.validators.password.PasswordStrengthValueValidator;
-import com.pyx4j.forms.client.validators.password.PasswordStrengthWidget;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.security.rpc.PasswordChangeRequest;
@@ -39,8 +35,6 @@ import com.propertyvista.portal.shared.ui.LoginFormPanel;
 public class PasswordResetWizard extends CPortalEntityWizard<PasswordChangeRequest> {
 
     private final static I18n i18n = I18n.get(PasswordResetWizard.class);
-
-    private PasswordStrengthWidget passwordStrengthWidget;
 
     private final TenantPasswordStrengthRule passwordStrengthRule;
 
@@ -58,12 +52,12 @@ public class PasswordResetWizard extends CPortalEntityWizard<PasswordChangeReque
 
         LoginFormPanel formPanel = new LoginFormPanel(this);
 
-        passwordStrengthWidget = new PasswordStrengthWidget(passwordStrengthRule);
-        formPanel.append(Location.Left, proto().newPassword()).decorate().assistantWidget(passwordStrengthWidget);
+        formPanel.append(Location.Left, proto().newPassword()).decorate();
         formPanel.append(Location.Left, proto().newPasswordConfirm()).decorate();
 
-        ((CPasswordTextField) get(proto().newPassword())).setWatermark(get(proto().newPassword()).getTitle());
-        ((CPasswordTextField) get(proto().newPasswordConfirm())).setWatermark(get(proto().newPasswordConfirm()).getTitle());
+        ((CPasswordBox) get(proto().newPassword())).setPasswordStrengthRule(passwordStrengthRule);
+        ((CPasswordBox) get(proto().newPassword())).setWatermark(get(proto().newPassword()).getTitle());
+        ((CPasswordBox) get(proto().newPasswordConfirm())).setWatermark(get(proto().newPasswordConfirm()).getTitle());
 
         if ((passwordStrengthRule != null) && (passwordStrengthRule instanceof HasDescription)) {
             get(proto().newPassword()).setTooltip(((HasDescription) passwordStrengthRule).getDescription());
@@ -89,14 +83,6 @@ public class PasswordResetWizard extends CPortalEntityWizard<PasswordChangeReque
         });
 
         get(proto().newPassword()).addValueChangeHandler(new RevalidationTrigger<String>(get(proto().newPasswordConfirm())));
-
-        ((CTextFieldBase<?, ?>) get(proto().newPassword())).addNValueChangeHandler(new NValueChangeHandler<String>() {
-
-            @Override
-            public void onNValueChange(NValueChangeEvent<String> event) {
-                passwordStrengthWidget.ratePassword(event.getValue());
-            }
-        });
 
         get(proto().newPassword()).addComponentValidator(new PasswordStrengthValueValidator(passwordStrengthRule));
     }

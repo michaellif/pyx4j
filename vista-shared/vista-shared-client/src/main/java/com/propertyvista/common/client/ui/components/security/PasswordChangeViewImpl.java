@@ -30,12 +30,12 @@ import com.pyx4j.commons.HtmlUtils;
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.essentials.client.crud.CrudDebugId;
-import com.pyx4j.forms.client.validators.password.PasswordStrengthRule;
-import com.pyx4j.forms.client.validators.password.PasswordStrengthRule.PasswordStrengthVerdict;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.security.rpc.PasswordChangeRequest;
 import com.pyx4j.widgets.client.Anchor;
 import com.pyx4j.widgets.client.Button;
+import com.pyx4j.widgets.client.PasswordBox.PasswordStrengthRule;
+import com.pyx4j.widgets.client.PasswordBox.PasswordStrengthRule.PasswordStrengthVerdict;
 import com.pyx4j.widgets.client.Toolbar;
 
 import com.propertyvista.common.client.ui.components.login.PasswordChangeForm;

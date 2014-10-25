@@ -26,17 +26,15 @@ import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.commons.css.StyleManager;
 import com.pyx4j.commons.css.ThemeColor;
-import com.pyx4j.forms.client.events.NValueChangeEvent;
-import com.pyx4j.forms.client.events.NValueChangeHandler;
 import com.pyx4j.forms.client.ui.CForm;
-import com.pyx4j.forms.client.ui.CPasswordTextField;
+import com.pyx4j.forms.client.ui.CPasswordBox;
 import com.pyx4j.forms.client.ui.CTextFieldBase;
 import com.pyx4j.forms.client.ui.RevalidationTrigger;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.forms.client.validators.AbstractComponentValidator;
 import com.pyx4j.forms.client.validators.BasicValidationError;
+import com.pyx4j.forms.client.validators.password.HasDescription;
 import com.pyx4j.forms.client.validators.password.PasswordStrengthValueValidator;
-import com.pyx4j.forms.client.validators.password.PasswordStrengthWidget;
 import com.pyx4j.gwt.commons.layout.LayoutType;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.Button;
@@ -124,13 +122,8 @@ public class SignUpGadget extends AbstractGadget<SignUpViewImpl> {
 
         private Image signUpPersonalImage;
 
-        private PasswordStrengthWidget passwordStrengthWidget;
-
-        private final TenantPasswordStrengthRule passwordStrengthRule;
-
         public SignUpForm() {
             super(ProspectSignUpDTO.class);
-            this.passwordStrengthRule = new TenantPasswordStrengthRule(null, null);
         }
 
         @Override
@@ -167,17 +160,16 @@ public class SignUpGadget extends AbstractGadget<SignUpViewImpl> {
             formPanel.append(Location.Left, proto().middleName()).decorate();
             formPanel.append(Location.Left, proto().lastName()).decorate();
             formPanel.append(Location.Left, proto().email()).decorate();
-            formPanel.append(Location.Left, proto().password()).decorate().componentWidth(180)
-                    .assistantWidget(passwordStrengthWidget = new PasswordStrengthWidget(passwordStrengthRule));
+            formPanel.append(Location.Left, proto().password()).decorate().componentWidth(180);
             formPanel.append(Location.Left, proto().passwordConfirm()).decorate().componentWidth(180);
             formPanel.br();
 
             CTextFieldBase<?, ?> emailField = (CTextFieldBase<?, ?>) get(proto().email());
             emailField.setNote(i18n.tr("Please note: your email will be your user name"));
 
-            ((CPasswordTextField) get(proto().password())).setWatermark(i18n.tr("Create a Password"));
+            ((CPasswordBox) get(proto().password())).setWatermark(i18n.tr("Create a Password"));
 
-            ((CPasswordTextField) get(proto().passwordConfirm())).setWatermark(i18n.tr("Confirm Password"));
+            ((CPasswordBox) get(proto().passwordConfirm())).setWatermark(i18n.tr("Confirm Password"));
 
             get(proto().passwordConfirm()).addComponentValidator(new AbstractComponentValidator<String>() {
                 @Override
@@ -208,15 +200,15 @@ public class SignUpGadget extends AbstractGadget<SignUpViewImpl> {
 
         @Override
         public void addValidations() {
-            ((CTextFieldBase<?, ?>) get(proto().password())).addNValueChangeHandler(new NValueChangeHandler<String>() {
-
-                @Override
-                public void onNValueChange(NValueChangeEvent<String> event) {
-                    passwordStrengthWidget.ratePassword(event.getValue());
-                }
-            });
-
+            TenantPasswordStrengthRule passwordStrengthRule = new TenantPasswordStrengthRule(null, null);
+            ((CPasswordBox) get(proto().password())).setPasswordStrengthRule(passwordStrengthRule);
             get(proto().password()).addComponentValidator(new PasswordStrengthValueValidator(passwordStrengthRule));
+
+            if (passwordStrengthRule != null && (passwordStrengthRule instanceof HasDescription)) {
+                get(proto().password()).setTooltip(((HasDescription) passwordStrengthRule).getDescription());
+            } else {
+                get(proto().password()).setTooltip(null);
+            }
         }
 
     }

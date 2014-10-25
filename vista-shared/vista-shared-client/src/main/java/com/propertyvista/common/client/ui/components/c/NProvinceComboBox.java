@@ -28,7 +28,7 @@ import com.google.gwt.user.client.ui.SimplePanel;
 
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.commons.IDebugId;
-import com.pyx4j.forms.client.events.NValueChangeEvent;
+import com.pyx4j.forms.client.events.NativeValueChangeEvent;
 import com.pyx4j.forms.client.ui.NFocusField;
 import com.pyx4j.widgets.client.IFocusWidget;
 import com.pyx4j.widgets.client.ListBox;
@@ -89,7 +89,7 @@ public class NProvinceComboBox extends NFocusField<String, IFocusWidget, CProvin
                 setSelectedValue(value);
             }
         }
-        NValueChangeEvent.fire(getCComponent(), newValue);
+        NativeValueChangeEvent.fire(getCComponent(), newValue);
     }
 
     @Override

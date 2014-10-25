@@ -16,9 +16,9 @@ package com.propertyvista.common.client.ui.components.security;
 import java.util.Set;
 
 import com.pyx4j.commons.Key;
-import com.pyx4j.forms.client.validators.password.PasswordStrengthRule;
 import com.pyx4j.security.rpc.PasswordChangeRequest;
 import com.pyx4j.site.client.IsView;
+import com.pyx4j.widgets.client.PasswordBox.PasswordStrengthRule;
 
 public interface PasswordChangeView extends IsView {
 

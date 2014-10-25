@@ -19,11 +19,8 @@ import java.util.Set;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.client.ui.IsWidget;
 
-import com.pyx4j.forms.client.events.NValueChangeEvent;
-import com.pyx4j.forms.client.events.NValueChangeHandler;
 import com.pyx4j.forms.client.ui.CForm;
-import com.pyx4j.forms.client.ui.CPasswordTextField;
-import com.pyx4j.forms.client.ui.CValueBoxBase;
+import com.pyx4j.forms.client.ui.CPasswordBox;
 import com.pyx4j.forms.client.ui.RevalidationTrigger;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.forms.client.ui.panels.FormPanel;
@@ -31,20 +28,17 @@ import com.pyx4j.forms.client.validators.AbstractComponentValidator;
 import com.pyx4j.forms.client.validators.BasicValidationError;
 import com.pyx4j.forms.client.validators.password.DefaultPasswordStrengthRule;
 import com.pyx4j.forms.client.validators.password.HasDescription;
-import com.pyx4j.forms.client.validators.password.PasswordStrengthRule;
-import com.pyx4j.forms.client.validators.password.PasswordStrengthRule.PasswordStrengthVerdict;
 import com.pyx4j.forms.client.validators.password.PasswordStrengthValueValidator;
-import com.pyx4j.forms.client.validators.password.PasswordStrengthWidget;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.security.rpc.PasswordChangeRequest;
+import com.pyx4j.widgets.client.PasswordBox.PasswordStrengthRule;
+import com.pyx4j.widgets.client.PasswordBox.PasswordStrengthRule.PasswordStrengthVerdict;
 
 import com.propertyvista.common.client.theme.HorizontalAlignCenterMixin;
 
 public class PasswordChangeForm extends CForm<PasswordChangeRequest> {
 
     private final static I18n i18n = I18n.get(PasswordChangeForm.class);
-
-    private PasswordStrengthWidget passwordStrengthWidget;
 
     private PasswordStrengthRule passwordStrengthRule;
 
@@ -60,7 +54,6 @@ public class PasswordChangeForm extends CForm<PasswordChangeRequest> {
 
     public PasswordChangeForm(List<String> dictionary, boolean isCurrentPasswordRequired, boolean isRequireChangePasswordOnNextSignInRequired) {
         super(PasswordChangeRequest.class);
-        this.passwordStrengthRule = new DefaultPasswordStrengthRule();
         this.isCurrentPasswordRequired = isCurrentPasswordRequired;
         this.isRequireChangePasswordOnNextSignInRequired = isRequireChangePasswordOnNextSignInRequired;
         asWidget().setStyleName(HorizontalAlignCenterMixin.StyleName.HorizontalAlignCenter.name(), true);
@@ -80,8 +73,7 @@ public class PasswordChangeForm extends CForm<PasswordChangeRequest> {
 
         formPanel.append(Location.Left, proto().currentPassword()).decorate();
 
-        passwordStrengthWidget = new PasswordStrengthWidget(passwordStrengthRule);
-        formPanel.append(Location.Left, proto().newPassword()).decorate().assistantWidget(passwordStrengthWidget);
+        formPanel.append(Location.Left, proto().newPassword()).decorate();
         formPanel.append(Location.Left, proto().newPasswordConfirm()).decorate();
         formPanel.append(Location.Left, proto().passwordChangeRequired()).decorate().componentWidth(30);
 
@@ -90,6 +82,7 @@ public class PasswordChangeForm extends CForm<PasswordChangeRequest> {
 
     @Override
     public void addValidations() {
+
         get(proto().newPasswordConfirm()).addComponentValidator(new AbstractComponentValidator<String>() {
             @Override
             public BasicValidationError isValid() {
@@ -101,27 +94,29 @@ public class PasswordChangeForm extends CForm<PasswordChangeRequest> {
             }
         });
 
+//TODO
+//        ((CValueBoxBase<?, ?>) get(proto().newPassword())).addNativeValueChangeHandler(new NativeValueChangeHandler<String>() {
+//            @Override
+//            public void onNValueChange(NativeValueChangeEvent<String> event) {
+//                passwordStrengthWidget.ratePassword(event.getValue());
+//                if (event.getValue() != null && enforceRequireChangePasswordThreshold != null && passwordStrengthRule != null) {
+//                    PasswordStrengthVerdict verdict = passwordStrengthRule.getPasswordVerdict(event.getValue());
+//                    if (verdict != null && verdict.compareTo(enforceRequireChangePasswordThreshold) <= 0) {
+//                        requireChangePasswordOnNextSignInUserDefinedValue = get(proto().passwordChangeRequired()).getValue();
+//                        get(proto().passwordChangeRequired()).setValue(true);
+//                        get(proto().passwordChangeRequired()).setEnabled(false);
+//                    } else {
+//                        get(proto().passwordChangeRequired()).setValue(requireChangePasswordOnNextSignInUserDefinedValue);
+//                        get(proto().passwordChangeRequired()).setEnabled(true);
+//                    }
+//                }
+//            }
+//        });
         get(proto().newPassword()).addValueChangeHandler(new RevalidationTrigger<String>(get(proto().newPasswordConfirm())));
+        get(proto().newPassword()).addComponentValidator(passwordStrengthValidator = new PasswordStrengthValueValidator());
 
-        ((CValueBoxBase<?, ?>) get(proto().newPassword())).addNValueChangeHandler(new NValueChangeHandler<String>() {
-            @Override
-            public void onNValueChange(NValueChangeEvent<String> event) {
-                passwordStrengthWidget.ratePassword(event.getValue());
-                if (event.getValue() != null && enforceRequireChangePasswordThreshold != null && passwordStrengthRule != null) {
-                    PasswordStrengthVerdict verdict = passwordStrengthRule.getPasswordVerdict(event.getValue());
-                    if (verdict != null && verdict.compareTo(enforceRequireChangePasswordThreshold) <= 0) {
-                        requireChangePasswordOnNextSignInUserDefinedValue = get(proto().passwordChangeRequired()).getValue();
-                        get(proto().passwordChangeRequired()).setValue(true);
-                        get(proto().passwordChangeRequired()).setEnabled(false);
-                    } else {
-                        get(proto().passwordChangeRequired()).setValue(requireChangePasswordOnNextSignInUserDefinedValue);
-                        get(proto().passwordChangeRequired()).setEnabled(true);
-                    }
-                }
-            }
-        });
+        setPasswordStrengthRule(new DefaultPasswordStrengthRule());
 
-        get(proto().newPassword()).addComponentValidator(passwordStrengthValidator = new PasswordStrengthValueValidator(passwordStrengthRule));
     }
 
     public void setAskForCurrentPassword(boolean isCurrentPasswordRequired) {
@@ -154,8 +149,8 @@ public class PasswordChangeForm extends CForm<PasswordChangeRequest> {
 
     public void setPasswordStrengthRule(PasswordStrengthRule passwordStrengthRule) {
         this.passwordStrengthRule = passwordStrengthRule;
+        ((CPasswordBox) get(proto().newPassword())).setPasswordStrengthRule(passwordStrengthRule);
         this.passwordStrengthValidator.setPasswordStrengthRule(passwordStrengthRule);
-        this.passwordStrengthWidget.setPasswordStrengthRule(passwordStrengthRule);
 
         if ((passwordStrengthRule != null) && (passwordStrengthRule instanceof HasDescription)) {
             get(proto().newPassword()).setTooltip(((HasDescription) passwordStrengthRule).getDescription());
@@ -171,7 +166,7 @@ public class PasswordChangeForm extends CForm<PasswordChangeRequest> {
 
     public void setMaskPassword(boolean maskPassword) {
         get(proto().newPasswordConfirm()).setVisible(maskPassword);
-        ((CPasswordTextField) get(proto().newPassword())).setUnmasked(!maskPassword);
+        ((CPasswordBox) get(proto().newPassword())).setUnmasked(!maskPassword);
     }
 
 }

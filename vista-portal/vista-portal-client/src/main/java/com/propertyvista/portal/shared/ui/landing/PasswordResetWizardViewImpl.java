@@ -16,9 +16,9 @@ package com.propertyvista.portal.shared.ui.landing;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
-import com.pyx4j.forms.client.validators.password.PasswordStrengthRule;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.security.rpc.PasswordResetQuestion;
+import com.pyx4j.widgets.client.PasswordBox.PasswordStrengthRule;
 
 import com.propertyvista.common.client.ui.components.login.PasswordResetForm;
 import com.propertyvista.common.client.ui.components.security.PasswordResetView;

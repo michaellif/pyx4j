@@ -25,7 +25,6 @@ import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
 import com.pyx4j.commons.EqualsHelper;
 import com.pyx4j.commons.Key;
-import com.pyx4j.forms.client.validators.password.PasswordStrengthRule.PasswordStrengthVerdict;
 import com.pyx4j.gwt.commons.UnrecoverableClientError;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
@@ -34,6 +33,7 @@ import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.security.rpc.AbstractPasswordChangeService;
 import com.pyx4j.security.rpc.PasswordChangeRequest;
 import com.pyx4j.site.rpc.AppPlace;
+import com.pyx4j.widgets.client.PasswordBox.PasswordStrengthRule.PasswordStrengthVerdict;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 
 import com.propertyvista.common.client.ui.components.security.PasswordChangeView;

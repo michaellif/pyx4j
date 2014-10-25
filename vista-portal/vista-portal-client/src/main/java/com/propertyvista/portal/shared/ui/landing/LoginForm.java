@@ -24,7 +24,7 @@ import com.pyx4j.forms.client.ui.CCaptcha;
 import com.pyx4j.forms.client.ui.CCheckBox;
 import com.pyx4j.forms.client.ui.CEmailField;
 import com.pyx4j.forms.client.ui.CForm;
-import com.pyx4j.forms.client.ui.CPasswordTextField;
+import com.pyx4j.forms.client.ui.CPasswordBox;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.security.rpc.AuthenticationRequest;
@@ -59,8 +59,8 @@ public class LoginForm extends CForm<AuthenticationRequest> {
         emailField.setMandatoryValidationMessage(i18n.tr("Enter your email address"));
         emailField.getNativeComponent().addKeyUpHandler(new EnterKeyHandler());
 
-        formPanel.append(Location.Left, proto().password(), new CPasswordTextField()).decorate();
-        CPasswordTextField passwordField = (CPasswordTextField) get(proto().password());
+        formPanel.append(Location.Left, proto().password(), new CPasswordBox()).decorate();
+        CPasswordBox passwordField = (CPasswordBox) get(proto().password());
         passwordField.setMandatoryValidationMessage(i18n.tr("Enter your password"));
         passwordField.getNativeComponent().addKeyUpHandler(new EnterKeyHandler());
 

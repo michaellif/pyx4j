@@ -22,7 +22,7 @@ import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.forms.client.ui.CForm;
-import com.pyx4j.forms.client.ui.CPasswordTextField;
+import com.pyx4j.forms.client.ui.CPasswordBox;
 import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 
@@ -55,7 +55,7 @@ public class AccountRecoveryOptionsForm extends CForm<AccountRecoveryOptionsDTO>
 
         formPanel.append(Location.Left, proto().securityQuestion()).decorate();
         get(proto().securityQuestion()).setVisible(false);
-        formPanel.append(Location.Left, proto().securityAnswer(), new CPasswordTextField()).decorate();
+        formPanel.append(Location.Left, proto().securityAnswer(), new CPasswordBox()).decorate();
         get(proto().securityAnswer()).setVisible(false);
 
         return formPanel;

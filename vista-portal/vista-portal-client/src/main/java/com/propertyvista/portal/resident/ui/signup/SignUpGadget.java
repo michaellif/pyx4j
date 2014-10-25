@@ -30,19 +30,16 @@ import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.commons.css.StyleManager;
 import com.pyx4j.commons.css.ThemeColor;
-import com.pyx4j.forms.client.events.NValueChangeEvent;
-import com.pyx4j.forms.client.events.NValueChangeHandler;
 import com.pyx4j.forms.client.ui.CField;
 import com.pyx4j.forms.client.ui.CForm;
-import com.pyx4j.forms.client.ui.CPasswordTextField;
+import com.pyx4j.forms.client.ui.CPasswordBox;
 import com.pyx4j.forms.client.ui.CTextFieldBase;
-import com.pyx4j.forms.client.ui.CValueBoxBase;
 import com.pyx4j.forms.client.ui.RevalidationTrigger;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.forms.client.validators.AbstractComponentValidator;
 import com.pyx4j.forms.client.validators.BasicValidationError;
+import com.pyx4j.forms.client.validators.password.HasDescription;
 import com.pyx4j.forms.client.validators.password.PasswordStrengthValueValidator;
-import com.pyx4j.forms.client.validators.password.PasswordStrengthWidget;
 import com.pyx4j.gwt.commons.layout.LayoutType;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.Button;
@@ -157,15 +154,10 @@ public class SignUpGadget extends AbstractGadget<SignUpView> {
 
         private Image signUpSecurity;
 
-        private PasswordStrengthWidget passwordStrengthWidget;
-
-        private final TenantPasswordStrengthRule passwordStrengthRule;
-
         private HTML supportField;
 
         public SignUpForm() {
             super(ResidentSelfRegistrationDTO.class);
-            this.passwordStrengthRule = new TenantPasswordStrengthRule(null, null);
         }
 
         @SuppressWarnings("unchecked")
@@ -218,10 +210,9 @@ public class SignUpGadget extends AbstractGadget<SignUpView> {
             mainPanel.setWidget(2, 1, securityPanel);
 
             securityPanel.h4(i18n.tr("The Security Code is a secure identifier that is provided by your Property Manager specifically for you."));
-            securityPanel.append(Location.Left, proto().securityCode()).decorate().componentWidth(180);
-            securityPanel.append(Location.Left, proto().password()).decorate().componentWidth(180)
-                    .assistantWidget(passwordStrengthWidget = new PasswordStrengthWidget(passwordStrengthRule));
-            securityPanel.append(Location.Left, proto().passwordConfirm()).decorate().componentWidth(180);
+            securityPanel.append(Location.Left, proto().securityCode()).decorate().componentWidth(250);
+            securityPanel.append(Location.Left, proto().password()).decorate().componentWidth(250);
+            securityPanel.append(Location.Left, proto().passwordConfirm()).decorate().componentWidth(250);
 
             final CTextFieldBase<String, ?> securityCodeField = (CTextFieldBase<String, ?>) get(proto().securityCode());
             securityCodeField
@@ -237,7 +228,7 @@ public class SignUpGadget extends AbstractGadget<SignUpView> {
                 }
             });
 
-            ((CPasswordTextField) get(proto().password())).setWatermark(i18n.tr("Create a Password"));
+            ((CPasswordBox) get(proto().password())).setWatermark(i18n.tr("Create a Password"));
             get(proto().password()).addValueChangeHandler(new RevalidationTrigger<String>(get(proto().passwordConfirm())));
 
             get(proto().passwordConfirm()).addComponentValidator(new AbstractComponentValidator<String>() {
@@ -250,7 +241,7 @@ public class SignUpGadget extends AbstractGadget<SignUpView> {
                     return null;
                 }
             });
-            ((CPasswordTextField) get(proto().passwordConfirm())).setWatermark(i18n.tr("Confirm Password"));
+            ((CPasswordBox) get(proto().passwordConfirm())).setWatermark(i18n.tr("Confirm Password"));
 
             securityPanel.br();
 
@@ -290,15 +281,15 @@ public class SignUpGadget extends AbstractGadget<SignUpView> {
 
         @Override
         public void addValidations() {
-            ((CValueBoxBase<?, ?>) get(proto().password())).addNValueChangeHandler(new NValueChangeHandler<String>() {
-
-                @Override
-                public void onNValueChange(NValueChangeEvent<String> event) {
-                    passwordStrengthWidget.ratePassword(event.getValue());
-                }
-            });
-
+            TenantPasswordStrengthRule passwordStrengthRule = new TenantPasswordStrengthRule(null, null);
+            ((CPasswordBox) get(proto().password())).setPasswordStrengthRule(passwordStrengthRule);
             get(proto().password()).addComponentValidator(new PasswordStrengthValueValidator(passwordStrengthRule));
+
+            if (passwordStrengthRule != null && (passwordStrengthRule instanceof HasDescription)) {
+                get(proto().password()).setTooltip(((HasDescription) passwordStrengthRule).getDescription());
+            } else {
+                get(proto().password()).setTooltip(null);
+            }
         }
 
     }

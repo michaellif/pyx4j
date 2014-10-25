@@ -16,8 +16,8 @@ package com.propertyvista.common.client.ui.components.security;
 import com.google.gwt.core.shared.GWT;
 
 import com.pyx4j.forms.client.validators.password.HasDescription;
-import com.pyx4j.forms.client.validators.password.PasswordStrengthRule;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.widgets.client.PasswordBox.PasswordStrengthRule;
 
 public class TenantPasswordStrengthRule implements PasswordStrengthRule, HasDescription {
 
