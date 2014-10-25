@@ -74,7 +74,9 @@ public abstract class ValueBoxBase<E> extends Composite implements IValueWidget<
 
     private Button actionButton;
 
-    private TextWatermark watermark;
+    private String watermark;
+
+    private boolean textBoxWidgetFocused;
 
     private IDebugId debugId;
 
@@ -114,6 +116,8 @@ public abstract class ValueBoxBase<E> extends Composite implements IValueWidget<
             @Override
             public void onFocus(FocusEvent event) {
                 contentPanel.addStyleDependentName(WidgetTheme.StyleDependent.focused.name());
+                textBoxWidgetFocused = true;
+                updateTextBox();
             }
         });
 
@@ -122,6 +126,8 @@ public abstract class ValueBoxBase<E> extends Composite implements IValueWidget<
             @Override
             public void onBlur(BlurEvent event) {
                 contentPanel.removeStyleDependentName(WidgetTheme.StyleDependent.focused.name());
+                textBoxWidgetFocused = false;
+                updateTextBox();
             }
         });
 
@@ -161,10 +167,9 @@ public abstract class ValueBoxBase<E> extends Composite implements IValueWidget<
         }
         this.parsedOk = true;
         this.value = value;
-        textBoxWidget.setText(getFormatter().format(value));
-        if (watermark != null) {
-            watermark.show();
-        }
+
+        updateTextBox();
+
     }
 
     protected void setValue(E value, boolean parsedOk, String parseExceptionMessage) {
@@ -178,15 +183,29 @@ public abstract class ValueBoxBase<E> extends Composite implements IValueWidget<
         this.value = value;
         this.parsedOk = parsedOk;
         if (parsedOk) {
-            textBoxWidget.setText(getFormatter().format(value));
             this.parseExceptionMessage = null;
+            updateTextBox();
         } else {
             this.parseExceptionMessage = parseExceptionMessage;
         }
-        if (watermark != null) {
-            watermark.show();
-        }
+
         ValueChangeEvent.fire(this, getValue());
+    }
+
+    protected void updateTextBox() {
+        if (parsedOk) {
+            if (value != null) {
+                textBoxWidget.setText(getFormatter().format(value));
+                textBoxWidget.removeStyleDependentName(WidgetTheme.StyleDependent.watermark.name());
+            } else {
+                if (!textBoxWidgetFocused) {
+                    textBoxWidget.setText(watermark);
+                    textBoxWidget.addStyleDependentName(WidgetTheme.StyleDependent.watermark.name());
+                } else {
+                    textBoxWidget.setText(null);
+                }
+            }
+        }
     }
 
     @Override
@@ -272,31 +291,14 @@ public abstract class ValueBoxBase<E> extends Composite implements IValueWidget<
     }
 
     @Override
-    public void setWatermark(String text) {
-        if (watermark == null) {
-            watermark = createWatermark();
-        }
-        watermark.setWatermark(text);
-    }
-
-    protected TextWatermark createWatermark() {
-        return new TextWatermark(textBoxWidget) {
-
-            @Override
-            public String getText() {
-                return textBoxWidget.getText();
-            }
-
-            @Override
-            public void setText(String text) {
-                textBoxWidget.setText(text);
-            }
-        };
+    public void setWatermark(String watermark) {
+        this.watermark = watermark;
+        updateTextBox();
     }
 
     @Override
     public String getWatermark() {
-        return watermark.getWatermark();
+        return watermark;
     }
 
     @Override

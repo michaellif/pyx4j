@@ -25,16 +25,19 @@ import com.google.gwt.event.dom.client.BlurHandler;
 import com.google.gwt.event.dom.client.FocusEvent;
 import com.google.gwt.event.dom.client.FocusHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
-import com.google.gwt.user.client.ui.FocusWidget;
 
-import com.pyx4j.gwt.commons.css.CssVariable;
 import com.pyx4j.widgets.client.style.theme.WidgetTheme;
 
+/**
+ * 
+ * @deprecated Use {@link ValueBoxBase}
+ * 
+ */
+
+@Deprecated
 public abstract class TextWatermark {
 
-    public static final String CSS_VAR_TEXT_WATERMARK = "TextWatermark";
-
-    private final FocusWidget component;
+    private final com.google.gwt.user.client.ui.TextBoxBase component;
 
     private String watermark;
 
@@ -42,9 +45,9 @@ public abstract class TextWatermark {
 
     private HandlerRegistration blurHandlerRegistration;
 
-    private boolean insideShowWatermark = false;
+    private boolean shown = false;
 
-    public TextWatermark(FocusWidget component) {
+    public TextWatermark(com.google.gwt.user.client.ui.TextBoxBase component) {
         this.component = component;
     }
 
@@ -85,28 +88,23 @@ public abstract class TextWatermark {
     }
 
     public void show() {
-        if (insideShowWatermark) {
-            return;
-        }
         show(watermark != null && !watermark.isEmpty() && isEmptyText());
     }
 
     void show(boolean show) {
-        insideShowWatermark = true;
         if (show) {
             if (isEmptyText() || isShown()) {
                 setText(watermark);
                 component.addStyleDependentName(WidgetTheme.StyleDependent.watermark.name());
-                CssVariable.setVariable(component.getElement(), CSS_VAR_TEXT_WATERMARK, watermark);
+                shown = true;
             }
         } else {
             if (isShown()) {
                 setText(null);
             }
             component.removeStyleDependentName(WidgetTheme.StyleDependent.watermark.name());
-            CssVariable.removeVariable(component.getElement(), CSS_VAR_TEXT_WATERMARK);
+            shown = false;
         }
-        insideShowWatermark = false;
     }
 
     public abstract String getText();
@@ -118,7 +116,7 @@ public abstract class TextWatermark {
     }
 
     public boolean isShown() {
-        return CssVariable.getVariable(component.getElement(), CSS_VAR_TEXT_WATERMARK) != null;
+        return shown;
     }
 
 }
