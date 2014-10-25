@@ -185,23 +185,7 @@ BEGIN
         
         ALTER TABLE deposit_interest_adjustment RENAME COLUMN date TO collection_date;
         
-        -- email_template
-        
-        EXECUTE 'INSERT INTO '||v_schema_name||'.email_template (id,policy,'
-                ||'order_in_policy,subject,use_header,use_footer,content,template_type) '
-                ||'(SELECT  nextval(''public.email_template_seq'') AS id, '
-                ||'p.id AS policy, t.order_in_policy,t.subject,t.use_header,'
-                ||'t.use_footer,t.content,t. template_type '
-                ||'FROM     '||v_schema_name||'.email_templates_policy p, '
-                ||'         _dba_.tmp_emails t '
-                ||'WHERE    t.template_type = ''DirectDebitAccountChanged'')';
-                
-        EXECUTE 'UPDATE '||v_schema_name||'.email_template AS e '
-                ||'SET  content = t.content '
-                ||'FROM     _dba_.tmp_emails t '
-                ||'WHERE    e.template_type = ''PaymentReturned '' '
-                ||'AND      t.template_type = ''PaymentReturned'' ';
-        
+       
         -- email_templates_policy
         
         ALTER TABLE email_templates_policy RENAME COLUMN header TO hdr;
@@ -411,7 +395,24 @@ BEGIN
         
         EXECUTE 'UPDATE '||v_schema_name||'.customer_screening_personal_asset '
                 ||'SET  ownership = prcnt::numeric(18,2) ';
+        
+         -- email_template
+        
+        EXECUTE 'INSERT INTO '||v_schema_name||'.email_template (id,policy,'
+                ||'order_in_policy,subject,use_header,use_footer,content,template_type) '
+                ||'(SELECT  nextval(''public.email_template_seq'') AS id, '
+                ||'p.id AS policy, t.order_in_policy,t.subject,t.use_header,'
+                ||'t.use_footer,t.content,t. template_type '
+                ||'FROM     '||v_schema_name||'.email_templates_policy p, '
+                ||'         _dba_.tmp_emails t '
+                ||'WHERE    t.template_type = ''DirectDebitAccountChanged'')';
                 
+        EXECUTE 'UPDATE '||v_schema_name||'.email_template AS e '
+                ||'SET  content = t.content '
+                ||'FROM     _dba_.tmp_emails t '
+                ||'WHERE    e.template_type = ''PaymentReturned '' '
+                ||'AND      t.template_type = ''PaymentReturned'' ';
+        
         
         -- employee_signature 
         

@@ -85,7 +85,8 @@ SET search_path = '_admin_';
         
         -- admin_pmc_vista_features
         
-        ALTER TABLE admin_pmc_vista_features ADD COLUMN white_label_portal BOOLEAN;
+        ALTER TABLE admin_pmc_vista_features    ADD COLUMN white_label_portal BOOLEAN,
+                                                ADD COLUMN tenant_email_enabled BOOLEAN;
 
         -- admin_pmc_yardi_credential
         
@@ -233,7 +234,8 @@ SET search_path = '_admin_';
         -- admin_pmc_vista_features
         
         UPDATE  admin_pmc_vista_features
-        SET     white_label_portal = FALSE;
+        SET     white_label_portal = FALSE,
+                tenant_email_enabled = TRUE;
         
         -- scheduler_trigger
         
