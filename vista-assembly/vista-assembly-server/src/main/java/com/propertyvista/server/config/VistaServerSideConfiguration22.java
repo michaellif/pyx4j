@@ -15,6 +15,10 @@ package com.propertyvista.server.config;
 
 import com.pyx4j.config.server.IPersistenceConfiguration;
 
+import com.propertyvista.domain.security.common.VistaApplication;
+import com.propertyvista.operations.domain.dev.DevelopmentUser;
+import com.propertyvista.server.common.security.DevelopmentSecurity;
+
 public class VistaServerSideConfiguration22 extends VistaServerSideConfiguration {
 
     @Override
@@ -64,6 +68,17 @@ public class VistaServerSideConfiguration22 extends VistaServerSideConfiguration
     @Override
     public String getApplicationEmailSender() {
         return "\"Vista Support 22\" <support.www22@birchwoodsoftwaregroup.com>";
+    }
+
+    @Override
+    public boolean walkMeEnabled(VistaApplication application) {
+        DevelopmentUser developmentUser = DevelopmentSecurity.findDevelopmentUser();
+        if (developmentUser != null) {
+            if (developmentUser.walkMeDisabled().getValue(false)) {
+                return false;
+            }
+        }
+        return super.walkMeEnabled(application);
     }
 
 }
