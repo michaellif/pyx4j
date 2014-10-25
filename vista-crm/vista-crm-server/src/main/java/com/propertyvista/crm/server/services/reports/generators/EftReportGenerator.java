@@ -121,7 +121,6 @@ public class EftReportGenerator implements ReportExporter {
     @Override
     public Serializable generateReport(ReportTemplate metadata) {
         reportProgressStatusHolder = new ReportProgressStatusHolderExectutionMonitorAdapter();
-        reportProgressStatusHolder.set(new ReportProgressStatus(i18n.tr("Generating Report"), 1, 2, 0, 100));
 
         EftReportMetadata reportMetadata = (EftReportMetadata) metadata;
 
@@ -178,7 +177,7 @@ public class EftReportGenerator implements ReportExporter {
                     enhancePaymentRecord(paymentRecord);
                     reportData.eftReportRecords().add(dtoBinder.createTO(paymentRecord));
                     if (progress % 100 == 0) {
-                        reportProgressStatusHolder.set(new ReportProgressStatus(i18n.tr("Gathering Data"), 1, 2, progress, count));
+                        reportProgressStatusHolder.set(new ReportProgressStatus(i18n.tr("Gathering Data"), 1, 1, progress, count));
                     }
                     ++progress;
                 }

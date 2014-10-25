@@ -28,12 +28,14 @@ import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.essentials.server.services.reports.ReportGenerator;
 import com.pyx4j.essentials.server.services.reports.ReportProgressStatus;
+import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.shared.domain.reports.ReportTemplate;
 
 import com.propertyvista.biz.financial.payment.PaymentReportFacade;
 import com.propertyvista.biz.financial.payment.PreauthorizedPaymentsReportCriteria;
 import com.propertyvista.crm.rpc.dto.reports.EftVarianceReportRecordDTO;
 import com.propertyvista.crm.rpc.dto.reports.EftVarianceReportRecordDetailsDTO;
+import com.propertyvista.crm.server.services.reports.util.ReportProgressStatusHolderExectutionMonitorAdapter;
 import com.propertyvista.crm.server.util.BuildingsCriteriaNormalizer;
 import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.financial.billing.BillingCycle;
@@ -42,7 +44,11 @@ import com.propertyvista.domain.reports.EftVarianceReportMetadata;
 
 public class EftVarianceReportGenerator implements ReportGenerator {
 
+    private static final I18n i18n = I18n.get(EftVarianceReportGenerator.class);
+
     private final BuildingsCriteriaNormalizer buildingCriteriaNormalizer;
+
+    private volatile ReportProgressStatusHolderExectutionMonitorAdapter reportProgressStatusHolder;
 
     public EftVarianceReportGenerator() {
         buildingCriteriaNormalizer = new BuildingsCriteriaNormalizer(EntityFactory.getEntityPrototype(PaymentRecord.class).billingAccount().lease().unit()
@@ -51,6 +57,8 @@ public class EftVarianceReportGenerator implements ReportGenerator {
 
     @Override
     public Serializable generateReport(ReportTemplate metadata) {
+        reportProgressStatusHolder = new ReportProgressStatusHolderExectutionMonitorAdapter();
+
         EftVarianceReportMetadata reportMetadata = (EftVarianceReportMetadata) metadata;
 
         Vector<EftVarianceReportRecordDTO> varianceReportRecord = new Vector<EftVarianceReportRecordDTO>();
@@ -78,9 +86,12 @@ public class EftVarianceReportGenerator implements ReportGenerator {
             }
         }
 
+        int progress = 0;
+        int count = padGenerationDays.size();
         for (LogicalDate padGenerationDate : padGenerationDays) {
             PreauthorizedPaymentsReportCriteria reportCriteria = new PreauthorizedPaymentsReportCriteria(padGenerationDate, selectedBuildings);
             varianceReportRecord.addAll(ServerSideFactory.create(PaymentReportFacade.class).reportEftVariance(reportCriteria));
+            reportProgressStatusHolder.set(new ReportProgressStatus(i18n.tr("Gathering Data"), 1, 1, progress++, count));
         }
 
         return varianceReportRecord;
@@ -88,13 +99,12 @@ public class EftVarianceReportGenerator implements ReportGenerator {
 
     @Override
     public ReportProgressStatus getProgressStatus() {
-        // TODO
-        return null;
+        return reportProgressStatusHolder.get();
     }
 
     @Override
     public void abort() {
-        // TODO
+        reportProgressStatusHolder.requestTermination();
     }
 
     private List<EftVarianceReportRecordDTO> mockupData() {
