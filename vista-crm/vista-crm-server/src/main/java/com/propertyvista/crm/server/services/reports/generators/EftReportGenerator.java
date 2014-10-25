@@ -145,6 +145,8 @@ public class EftReportGenerator implements ReportExporter {
                     reportMetadata.filterByBuildings().getValue(false) ? reportMetadata.selectedBuildings() : null
             );//@formatter:on
 
+            int progress = 0;
+            int count = padGenerationDays.size();
             for (LogicalDate padGenerationDate : padGenerationDays) {
                 PreauthorizedPaymentsReportCriteria reportCriteria = new PreauthorizedPaymentsReportCriteria(padGenerationDate, selectedBuildings);
                 if (reportMetadata.filterByExpectedMoveOut().getValue(false)) {
@@ -154,11 +156,15 @@ public class EftReportGenerator implements ReportExporter {
                 reportCriteria.setTrace(reportMetadata.trace().getValue(false));
                 paymentRecords.addAll(ServerSideFactory.create(PaymentReportFacade.class).reportPreauthorisedPayments(reportCriteria,
                         reportProgressStatusHolder.getExecutionMonitor()));
+                reportProgressStatusHolder.set(new ReportProgressStatus(i18n.tr("Gathering Data"), 1, 2, progress++, count));
             }
 
+            progress = 0;
+            count = paymentRecords.size();
             for (PaymentRecord paymentRecord : paymentRecords) {
                 enhancePaymentRecord(paymentRecord);
                 reportData.eftReportRecords().add(dtoBinder.createTO(paymentRecord));
+                reportProgressStatusHolder.set(new ReportProgressStatus(i18n.tr("Gathering Data"), 2, 2, progress++, count));
             }
 
             if (!reportMetadata.orderBy().isNull()) {
@@ -167,9 +173,9 @@ public class EftReportGenerator implements ReportExporter {
             }
         } else {
             EntityQueryCriteria<PaymentRecord> criteria = makeCriteria(reportMetadata);
-            int count = Persistence.service().count(criteria);
-            int progress = 0;
 
+            int progress = 0;
+            int count = Persistence.service().count(criteria);
             ICursorIterator<PaymentRecord> paymentRecordsIter = Persistence.secureQuery(null, criteria, AttachLevel.Attached);
             try {
                 while (paymentRecordsIter.hasNext() & !reportProgressStatusHolder.isTerminationRequested()) {
