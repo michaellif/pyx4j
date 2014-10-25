@@ -398,6 +398,11 @@ BEGIN
         
          -- email_template
         
+        -- Delete first - in case DirectDebitAccountChanged tepmlate exists
+        
+        EXECUTE 'DELETE FROM '||v_schema_name||'.email_template '
+                ||'WHERE    template_type = ''DirectDebitAccountChanged'' ';
+        
         EXECUTE 'INSERT INTO '||v_schema_name||'.email_template (id,policy,'
                 ||'order_in_policy,subject,use_header,use_footer,content,template_type) '
                 ||'(SELECT  nextval(''public.email_template_seq'') AS id, '
@@ -405,7 +410,7 @@ BEGIN
                 ||'t.use_footer,t.content,t. template_type '
                 ||'FROM     '||v_schema_name||'.email_templates_policy p, '
                 ||'         _dba_.tmp_emails t '
-                ||'WHERE    t.template_type = ''DirectDebitAccountChanged'')';
+                ||'WHERE    t.template_type = '''')';
                 
         EXECUTE 'UPDATE '||v_schema_name||'.email_template AS e '
                 ||'SET  content = t.content '
