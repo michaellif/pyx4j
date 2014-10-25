@@ -20,43 +20,25 @@
  */
 package com.pyx4j.widgets.client;
 
-public class PasswordTextBox extends TextBoxBase {
+public class PasswordTextBox extends ValueBoxBase<String> {
 
-    private boolean revealText = false;
-
-    private TextWatermark watermark;
+    private boolean revealText;
 
     public PasswordTextBox() {
         setTextBoxWidget(new com.google.gwt.user.client.ui.PasswordTextBox());
+        revealText(false);
     }
 
     @Override
-    protected TextWatermark createWatermark() {
-        watermark = new TextWatermark(getTextBoxWidget()) {
-
-            @Override
-            public String getText() {
-                return getTextBoxWidget().getText();
+    protected void setText(String text, boolean watermark) {
+        if (!revealText) {
+            if (watermark) {
+                getTextBoxWidget().getElement().setAttribute("type", "text");
+            } else {
+                getTextBoxWidget().getElement().setAttribute("type", "password");
             }
-
-            @Override
-            public void setText(String text) {
-                getTextBoxWidget().setText(text);
-            }
-
-            @Override
-            void show(boolean show) {
-                super.show(show);
-                if (!revealText) {
-                    if (isShown()) {
-                        getTextBoxWidget().getElement().setAttribute("type", "text");
-                    } else {
-                        getTextBoxWidget().getElement().setAttribute("type", "password");
-                    }
-                }
-            }
-        };
-        return watermark;
+        }
+        super.setText(text, watermark);
     }
 
     public void revealText(boolean reveal) {
@@ -65,9 +47,6 @@ public class PasswordTextBox extends TextBoxBase {
             getElement().setAttribute("type", "text");
         } else {
             getElement().setAttribute("type", "password");
-            if (watermark != null) {
-                watermark.show();
-            }
         }
     }
 

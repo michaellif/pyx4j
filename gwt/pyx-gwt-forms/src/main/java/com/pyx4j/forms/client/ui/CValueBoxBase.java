@@ -80,7 +80,7 @@ public abstract class CValueBoxBase<DATA, WIDGET extends INativeValueBox<DATA>> 
         return format(getValue());
     }
 
-    public final void setParser(IParser<DATA> parser) {
+    public void setParser(IParser<DATA> parser) {
         this.parser = parser;
     }
 

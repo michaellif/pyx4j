@@ -22,7 +22,7 @@ package com.pyx4j.forms.client.ui;
 
 import com.pyx4j.widgets.client.PasswordTextBox;
 
-public class NPasswordTextBox extends NTextFieldBase<String, PasswordTextBox, CPasswordTextField> {
+public class NPasswordTextBox extends NValueBoxBase<String, PasswordTextBox, CPasswordTextField> {
 
     public NPasswordTextBox(final CPasswordTextField cTextField) {
         super(cTextField);
@@ -31,6 +31,8 @@ public class NPasswordTextBox extends NTextFieldBase<String, PasswordTextBox, CP
     @Override
     protected PasswordTextBox createEditor() {
         PasswordTextBox passwordTextBox = new PasswordTextBox();
+        passwordTextBox.setParser(getCComponent().getParser());
+        passwordTextBox.setFormatter(getCComponent().getFormatter());
         passwordTextBox.revealText(getCComponent().isUnmasked());
         return passwordTextBox;
     }

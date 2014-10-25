@@ -195,17 +195,22 @@ public abstract class ValueBoxBase<E> extends Composite implements IValueWidget<
     protected void updateTextBox() {
         if (parsedOk) {
             if (value != null) {
-                textBoxWidget.setText(getFormatter().format(value));
+                setText(getFormatter().format(value), false);
                 textBoxWidget.removeStyleDependentName(WidgetTheme.StyleDependent.watermark.name());
             } else {
                 if (!textBoxWidgetFocused) {
-                    textBoxWidget.setText(watermark);
+                    setText(watermark, true);
                     textBoxWidget.addStyleDependentName(WidgetTheme.StyleDependent.watermark.name());
                 } else {
-                    textBoxWidget.setText(null);
+                    setText(null, false);
+                    textBoxWidget.removeStyleDependentName(WidgetTheme.StyleDependent.watermark.name());
                 }
             }
         }
+    }
+
+    protected void setText(String text, boolean watermark) {
+        textBoxWidget.setText(text);
     }
 
     @Override
@@ -347,6 +352,11 @@ public abstract class ValueBoxBase<E> extends Composite implements IValueWidget<
 
     public HandlerRegistration addChangeHandler(ChangeHandler handler) {
         return textBoxWidget.addChangeHandler(handler);
+    }
+
+    @Override
+    public HandlerRegistration addValueChangeHandler(ValueChangeHandler<E> handler) {
+        return addHandler(handler, ValueChangeEvent.getType());
     }
 
     public void setNameProperty(String name) {
