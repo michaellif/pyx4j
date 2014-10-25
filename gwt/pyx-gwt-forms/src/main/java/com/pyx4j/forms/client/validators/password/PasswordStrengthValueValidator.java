@@ -53,14 +53,14 @@ public class PasswordStrengthValueValidator extends AbstractComponentValidator<S
 
     @Override
     public BasicValidationError isValid() {
-        if (rule == null || getComponent().getValue() == null || getComponent().getValue().isEmpty()) {
+        if (rule == null || getCComponent().getValue() == null || getCComponent().getValue().isEmpty()) {
             return null;
         }
-        PasswordStrengthVerdict verdict = rule.getPasswordVerdict(getComponent().getValue());
+        PasswordStrengthVerdict verdict = rule.getPasswordVerdict(getCComponent().getValue());
         if (acceptVerdict == null || acceptVerdict.contains(verdict)) {
             return null;
         } else {
-            return new BasicValidationError(getComponent(), i18n.tr("Password is {0}", verdict));
+            return new BasicValidationError(getCComponent(), i18n.tr("Password is {0}", verdict));
         }
     }
 

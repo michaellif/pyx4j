@@ -49,7 +49,7 @@ public class CSignature extends CFocusComponent<ISignature, NSignature> {
         setSignatureCompletionValidator(new AbstractComponentValidator<ISignature>() {
             @Override
             public BasicValidationError isValid() {
-                ISignature value = getComponent().getValue();
+                ISignature value = getCComponent().getValue();
                 if (value != null) {
                     SignatureFormat signatureFormat = value.signatureFormat().isNull() ? SignatureFormat.None : value.signatureFormat().getValue();
                     switch (signatureFormat) {
@@ -57,22 +57,22 @@ public class CSignature extends CFocusComponent<ISignature, NSignature> {
                         break;
                     case AgreeBox:
                         if (!value.agree().getValue(false)) {
-                            return new BasicValidationError(getComponent(), i18n.tr("You must agree to the Terms to continue"));
+                            return new BasicValidationError(getCComponent(), i18n.tr("You must agree to the Terms to continue"));
                         }
                         break;
                     case AgreeBoxAndFullName:
                         if (!value.agree().getValue(false)) {
-                            return new BasicValidationError(getComponent(), i18n.tr("You must agree to the Terms to continue"));
+                            return new BasicValidationError(getCComponent(), i18n.tr("You must agree to the Terms to continue"));
                         }
                     case FullName:
                         if (value.fullName().getValue() == null || value.fullName().getValue().trim().equals("")) {
-                            return new BasicValidationError(getComponent(),
+                            return new BasicValidationError(getCComponent(),
                                     i18n.tr("You must agree to the Terms by typing your First and Last name to continue"));
                         }
                         break;
                     case Initials:
                         if (value.initials().getValue() == null || value.initials().getValue().trim().equals("")) {
-                            return new BasicValidationError(getComponent(), i18n.tr("You must agree to the Terms by typing your Initials to continue"));
+                            return new BasicValidationError(getCComponent(), i18n.tr("You must agree to the Terms by typing your Initials to continue"));
                         }
                         break;
                     }

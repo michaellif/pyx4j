@@ -71,6 +71,9 @@ public class PasswordBox extends FlowPanel implements IValueBoxWidget<String> {
             passwordStrengthWidget = new PasswordStrengthWidget();
             add(passwordStrengthWidget);
         }
+        if (passwordStrengthWidget != null) {
+            passwordStrengthWidget.ratePassword();
+        }
     }
 
     public void revealText(boolean reveal) {
@@ -96,8 +99,10 @@ public class PasswordBox extends FlowPanel implements IValueBoxWidget<String> {
         }
 
         @Override
-        protected void updateTextBox() {
-            super.updateTextBox();
+        protected void reset() {
+            if (passwordStrengthWidget != null) {
+                passwordStrengthWidget.ratePassword();
+            }
         }
 
     }
@@ -172,7 +177,7 @@ public class PasswordBox extends FlowPanel implements IValueBoxWidget<String> {
         }
 
         public void ratePassword() {
-            this.setValue(passwordStrengthRule != null ? passwordStrengthRule.getPasswordVerdict(textBox.getTextBoxWidget().getText()) : null);
+            setValue(passwordStrengthRule != null ? passwordStrengthRule.getPasswordVerdict(textBox.getTextBoxWidget().getText()) : null);
         }
 
     }

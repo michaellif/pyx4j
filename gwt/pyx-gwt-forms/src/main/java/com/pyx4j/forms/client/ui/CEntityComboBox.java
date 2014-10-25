@@ -75,7 +75,7 @@ public class CEntityComboBox<E extends IEntity> extends CComboBox<E> implements 
         this.unavailableValidator = new AbstractComponentValidator<E>() {
             @Override
             public BasicValidationError isValid() {
-                return new BasicValidationError(getComponent(), i18n.tr("Reference data unavailable"));
+                return new BasicValidationError(getCComponent(), i18n.tr("Reference data unavailable"));
             }
         };
         retriveOptions(null);

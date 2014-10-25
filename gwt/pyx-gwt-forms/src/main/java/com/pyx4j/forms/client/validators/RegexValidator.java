@@ -34,9 +34,9 @@ public class RegexValidator<E> extends AbstractComponentValidator<E> {
 
     @Override
     public BasicValidationError isValid() {
-        E value = getComponent().getValue();
-        return (getComponent().isValueEmpty() && !getComponent().isMandatory()) || ((value != null) && (value.toString().matches(regex))) ? null
-                : new BasicValidationError(getComponent(), getValidationMessage());
+        E value = getCComponent().getValue();
+        return (getCComponent().isValueEmpty() && !getCComponent().isMandatory()) || ((value != null) && (value.toString().matches(regex))) ? null
+                : new BasicValidationError(getCComponent(), getValidationMessage());
     }
 
     private String getValidationMessage() {

@@ -73,7 +73,7 @@ public abstract class CTextComponent<DATA, WIDGET extends INativeFocusField<DATA
 
         @Override
         public BasicValidationError isValid() {
-            DATA value = getComponent().getValue();
+            DATA value = getCComponent().getValue();
             if (value == null) {
                 return null;
             }

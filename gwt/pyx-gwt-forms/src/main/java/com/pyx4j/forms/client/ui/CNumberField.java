@@ -64,9 +64,9 @@ public abstract class CNumberField<E extends Number> extends CTextFieldBase<E, N
 
         @Override
         public BasicValidationError isValid() {
-            if (getComponent().getValue() == null) {
+            if (getCComponent().getValue() == null) {
                 return null;
-            } else if (isInRange(getComponent().getValue(), from, to)) {
+            } else if (isInRange(getCComponent().getValue(), from, to)) {
                 return null;
             } else {
                 return new BasicValidationError(CNumberField.this, i18n.tr("{0} Should Be In The Range Between {1} And {2}", dataTypeName(), from, to));

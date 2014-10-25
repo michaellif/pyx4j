@@ -184,7 +184,7 @@ public class EntityIFormWithoutLists extends CForm<EntityI> {
             @Override
             public BasicValidationError isValid() {
                 return CommonsStringUtils.equals(get(proto().enterPassword()).getValue(), get(proto().confirmPassword()).getValue()) ? null
-                        : new BasicValidationError(getComponent(), "Passwords do not match.");
+                        : new BasicValidationError(getCComponent(), "Passwords do not match.");
             }
 
         };

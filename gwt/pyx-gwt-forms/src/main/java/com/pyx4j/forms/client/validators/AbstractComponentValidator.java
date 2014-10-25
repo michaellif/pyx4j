@@ -29,7 +29,7 @@ public abstract class AbstractComponentValidator<DATA_TYPE> implements IValidato
     public AbstractComponentValidator() {
     }
 
-    public CComponent<?, DATA_TYPE, ?> getComponent() {
+    public CComponent<?, DATA_TYPE, ?> getCComponent() {
         return component;
     }
 

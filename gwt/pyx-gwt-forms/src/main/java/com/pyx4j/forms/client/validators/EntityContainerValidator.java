@@ -35,10 +35,10 @@ public class EntityContainerValidator extends AbstractComponentValidator {
 
     @Override
     public AbstractValidationError isValid() {
-        if (!(getComponent() instanceof CContainer)) {
+        if (!(getCComponent() instanceof CContainer)) {
             throw new Error("EntityContainerValidator can be added only to CContainer");
         }
-        CContainer<?, ?, ?> container = (CContainer<?, ?, ?>) getComponent();
+        CContainer<?, ?, ?> container = (CContainer<?, ?, ?>) getCComponent();
         if (container.getComponents() != null) {
             for (CComponent<?, ?, ?> ccomponent : container.getComponents()) {
                 if (!ccomponent.isValid()) {

@@ -159,7 +159,8 @@ public abstract class ValueBoxBase<E> extends Composite implements IValueBoxWidg
     }
 
     @Override
-    public void setValue(E value) {
+    public final void setValue(E value) {
+        reset();
         if (this.value == null && value == null) {
             return;
         } else if (this.value != null && this.value.equals(value)) {
@@ -169,6 +170,10 @@ public abstract class ValueBoxBase<E> extends Composite implements IValueBoxWidg
         this.value = value;
 
         updateTextBox();
+
+    }
+
+    protected void reset() {
 
     }
 

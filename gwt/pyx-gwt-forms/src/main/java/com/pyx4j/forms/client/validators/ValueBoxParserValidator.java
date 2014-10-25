@@ -21,10 +21,10 @@ public class ValueBoxParserValidator<E> extends AbstractComponentValidator<E> {
     @SuppressWarnings({ "unchecked", "rawtypes" })
     @Override
     public BasicValidationError isValid() {
-        if (getComponent() instanceof CValueBoxBase) {
-            CValueBoxBase<E, ?> field = (CValueBoxBase) getComponent();
+        if (getCComponent() instanceof CValueBoxBase) {
+            CValueBoxBase<E, ?> field = (CValueBoxBase) getCComponent();
             if (!field.getNativeComponent().isParsedOk()) {
-                return new BasicValidationError(getComponent(), field.getNativeComponent().getParseExceptionMessage());
+                return new BasicValidationError(getCComponent(), field.getNativeComponent().getParseExceptionMessage());
             }
         }
         return null;

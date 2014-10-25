@@ -66,13 +66,13 @@ public class EmailListTextBoxValidator extends AbstractComponentValidator<String
 
     @Override
     public BasicValidationError isValid() {
-        EmailAddress[] adr = parse(getComponent().getValue());
+        EmailAddress[] adr = parse(getCComponent().getValue());
         if (adr == null) {
             return null;
         } else {
             for (EmailAddress a : adr) {
                 if (!a.valid) {
-                    return new BasicValidationError(getComponent(), getValidationMessage(getComponent().getValue()));
+                    return new BasicValidationError(getCComponent(), getValidationMessage(getCComponent().getValue()));
                 }
             }
             return null;
