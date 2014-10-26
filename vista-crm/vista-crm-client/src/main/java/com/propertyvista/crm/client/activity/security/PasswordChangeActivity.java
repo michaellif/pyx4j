@@ -129,8 +129,8 @@ public class PasswordChangeActivity extends AbstractActivity implements Password
         service.changePassword(new DefaultAsyncCallback<VoidSerializable>() {
             @Override
             public void onSuccess(VoidSerializable result) {
-                view.reset();
                 MessageDialog.info(i18n.tr("Password was changed successfully"));
+                view.reset();
                 History.back();
             }
 

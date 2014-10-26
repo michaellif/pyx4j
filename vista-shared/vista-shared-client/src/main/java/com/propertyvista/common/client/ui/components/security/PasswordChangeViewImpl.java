@@ -113,6 +113,7 @@ public class PasswordChangeViewImpl implements PasswordChangeView {
     public void initialize(Key userPk, String userName) {
         PasswordChangeRequest newRequest = EntityFactory.create(PasswordChangeRequest.class);
         newRequest.userPk().setValue(userPk);
+        newRequest.passwordChangeRequired().setValue(true);
         form.populate(newRequest);
 
         if (userName != null) {
