@@ -99,6 +99,7 @@ public class PasswordChangeForm extends CForm<PasswordChangeRequest> {
         get(proto().newPassword()).addComponentValidator(passwordStrengthValidator = new PasswordStrengthValueValidator());
 
         get(proto().newPassword()).addValueChangeHandler(new RevalidationTrigger<String>(get(proto().passwordChangeRequired())));
+        get(proto().newPassword()).addPropertyChangeHandler(new RevalidationTrigger<String>(get(proto().passwordChangeRequired())));
         get(proto().passwordChangeRequired()).addComponentValidator(new PasswordChangeRequiredValidator());
 
         setPasswordStrengthRule(new DefaultPasswordStrengthRule());
@@ -159,6 +160,9 @@ public class PasswordChangeForm extends CForm<PasswordChangeRequest> {
 
         @Override
         public AbstractValidationError isValid() {
+            if (get(proto().newPassword()).isEditingInProgress()) {
+                return null;
+            }
             enforceRequireChangePasswordThreshold = PasswordStrengthVerdict.Good;
             if (get(proto().newPassword()).getValue() != null && enforceRequireChangePasswordThreshold != null && passwordStrengthRule != null) {
                 PasswordStrengthVerdict verdict = passwordStrengthRule.getPasswordVerdict(get(proto().newPassword()).getValue());
