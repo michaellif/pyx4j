@@ -106,9 +106,9 @@ import com.propertyvista.yardi.stubs.YardiStubFactory;
 
 /**
  * Implementation functionality for updating properties/units/leases/tenants basing on getResidentTransactions from YARDI api
- * 
+ *
  * @author Mykola
- * 
+ *
  */
 public class YardiResidentTransactionsService extends YardiAbstractService {
 
@@ -141,7 +141,7 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
 
     /**
      * Updates/creates entities basing on data from YARDI System.
-     * 
+     *
      * @param yp
      *            the YARDI System connection parameters
      * @throws YardiServiceException
@@ -463,10 +463,11 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
             }
 
         } finally {
+            AtomicReference<Long> yardiTimeTotal = new AtomicReference<>();
             AtomicReference<Long> maxRequestTime = new AtomicReference<>();
-            long yardiTime = ServerSideFactory.create(YardiConfigurationFacade.class).stopYardiTimer(maxRequestTime);
+            ServerSideFactory.create(YardiConfigurationFacade.class).stopYardiTimer(yardiTimeTotal, maxRequestTime);
 
-            executionMonitor.addInfoEvent("yardiTime", new BigDecimal(yardiTime), TimeUtils.durationFormat(yardiTime));
+            executionMonitor.addInfoEvent("yardiTime", new BigDecimal(yardiTimeTotal.get()), TimeUtils.durationFormat(yardiTimeTotal.get()));
             executionMonitor.addInfoEvent("yardiMaxRequestTime", new BigDecimal(maxRequestTime.get()), TimeUtils.durationFormat(maxRequestTime.get()));
 
             ServerSideFactory.create(NotificationFacade.class).aggregatedNotificationsSend();
