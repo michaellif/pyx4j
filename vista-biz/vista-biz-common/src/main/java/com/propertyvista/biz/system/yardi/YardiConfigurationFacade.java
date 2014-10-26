@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011-2012 All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -45,12 +45,10 @@ public interface YardiConfigurationFacade {
     /** advance Yardi execution time */
     void incrementYardiTimer(long interval);
 
-    /** read Yardi execution time and remove the timer */
-    long stopYardiTimer();
-
     void yardiRequestCompleted(long interval);
 
-    long stopYardiTimer(AtomicReference<Long> maxTimeResult);
+    /** read Yardi execution time and remove the timer */
+    void stopYardiTimer(AtomicReference<Long> yardiTimeTotal, AtomicReference<Long> maxTimeResult);
 
     List<String> retrievePropertyCodes(PmcYardiCredential yc, ExecutionMonitor executionMonitor) throws YardiServiceException, RemoteException;
 

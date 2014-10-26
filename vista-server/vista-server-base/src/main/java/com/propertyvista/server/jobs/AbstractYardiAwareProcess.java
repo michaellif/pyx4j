@@ -41,12 +41,13 @@ public abstract class AbstractYardiAwareProcess implements PmcProcess {
         } finally {
             if (yardiIntegration) {
                 ServerSideFactory.create(YardiConfigurationFacade.class).clearYardiCredentialCache();
+                AtomicReference<Long> yardiTime = new AtomicReference<>();
                 AtomicReference<Long> maxRequestTime = new AtomicReference<>();
-                long yardiTime = ServerSideFactory.create(YardiConfigurationFacade.class).stopYardiTimer(maxRequestTime);
-                context.getExecutionMonitor().addInfoEvent("yardiTime", new BigDecimal(yardiTime), TimeUtils.durationFormat(yardiTime));
+                ServerSideFactory.create(YardiConfigurationFacade.class).stopYardiTimer(yardiTime, maxRequestTime);
+                context.getExecutionMonitor().addInfoEvent("yardiTime", new BigDecimal(yardiTime.get()), TimeUtils.durationFormat(yardiTime.get()));
                 context.getExecutionMonitor().addInfoEvent("yardiMaxRequestTime", new BigDecimal(maxRequestTime.get()),
                         TimeUtils.durationFormat(maxRequestTime.get()));
-                yardiRequestsTimeTotal += yardiTime;
+                yardiRequestsTimeTotal += yardiTime.get();
             }
         }
 

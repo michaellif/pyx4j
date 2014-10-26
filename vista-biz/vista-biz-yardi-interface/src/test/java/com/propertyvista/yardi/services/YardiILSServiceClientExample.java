@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011-2012 All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -14,6 +14,7 @@
 package com.propertyvista.yardi.services;
 
 import java.rmi.RemoteException;
+import java.util.concurrent.atomic.AtomicReference;
 
 import com.yardi.entity.guestcard40.MarketingSources;
 import com.yardi.entity.ils.PhysicalProperty;
@@ -64,8 +65,9 @@ public class YardiILSServiceClientExample {
                 System.out.println("Got " + properties.getProperty().size() + " properties");
             }
         }
-
-        long yardiTime = ServerSideFactory.create(YardiConfigurationFacade.class).stopYardiTimer();
-        System.out.println("yardiTime = " + yardiTime + " (" + TimeUtils.durationFormatSeconds((int) (yardiTime / Consts.SEC2MSEC)) + ")");
+        AtomicReference<Long> yardiTime = new AtomicReference<>();
+        AtomicReference<Long> maxRequestTime = new AtomicReference<>();
+        ServerSideFactory.create(YardiConfigurationFacade.class).stopYardiTimer(yardiTime, maxRequestTime);
+        System.out.println("yardiTime = " + yardiTime + " (" + TimeUtils.durationFormatSeconds((int) (yardiTime.get() / Consts.SEC2MSEC)) + ")");
     }
 }
