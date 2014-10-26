@@ -39,8 +39,6 @@ public class PasswordResetForm extends CForm<PasswordChangeRequest> {
 
     private final static I18n i18n = I18n.get(PasswordResetForm.class);
 
-    private PasswordStrengthRule passwordStrengthRule;
-
     private PasswordStrengthValueValidator passwordStrengthValidator;
 
     private final PasswordResetView view;
@@ -117,7 +115,6 @@ public class PasswordResetForm extends CForm<PasswordChangeRequest> {
     }
 
     public void setPasswordStrengthRule(PasswordStrengthRule passwordStrengthRule) {
-        this.passwordStrengthRule = passwordStrengthRule;
         ((CPasswordBox) get(proto().newPassword())).setPasswordStrengthRule(passwordStrengthRule);
 
         passwordStrengthValidator.setPasswordStrengthRule(passwordStrengthRule);
