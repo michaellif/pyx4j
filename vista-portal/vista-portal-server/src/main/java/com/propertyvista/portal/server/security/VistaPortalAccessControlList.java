@@ -207,6 +207,7 @@ public class VistaPortalAccessControlList extends UIAclBuilder {
         grant(PortalResidentBehavior.Resident, new IServiceExecutePermission(MaintenanceRequestCrudService.class));
 
         grant(PortalResidentBehavior.Resident, new IServiceExecutePermission(MoveInWizardService.class));
+        grant(PortalResidentBehavior.Guarantor, new IServiceExecutePermission(MoveInWizardService.class));
         grant(PortalResidentBehavior.LeaseAgreementSigningRequired, new IServiceExecutePermission(LeaseSigningCrudService.class));
         grant(PortalResidentBehavior.LeaseAgreementSigningRequired, new IServiceExecutePermission(LeaseTermBlankAgreementDocumentDownloadService.class));
         grant(PortalResidentBehavior.LeaseAgreementSigningRequired, new EntityPermission(AgreementDigitalSignatures.class, EntityPermission.CREATE));
@@ -230,6 +231,7 @@ public class VistaPortalAccessControlList extends UIAclBuilder {
         grant(PortalResidentBehavior.Resident, new EntityPermission(CustomerPicture.class, CRUD));
 
         grant(PortalResidentBehavior.Resident, new IServiceExecutePermission(QuickTipService.class));
+        grant(PortalResidentBehavior.Guarantor, new IServiceExecutePermission(QuickTipService.class));
 
         // ========================= communication
         grant(PortalResidentBehavior.Resident, new IServiceExecutePermission(MessageAttachmentUploadPortalService.class));

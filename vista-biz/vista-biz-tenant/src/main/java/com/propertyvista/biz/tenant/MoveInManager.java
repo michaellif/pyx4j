@@ -27,6 +27,7 @@ import com.pyx4j.entity.server.Persistence;
 import com.propertyvista.biz.financial.payment.PaymentMethodFacade;
 import com.propertyvista.biz.tenant.insurance.TenantInsuranceFacade;
 import com.propertyvista.domain.security.PortalResidentBehavior;
+import com.propertyvista.domain.tenant.lease.Guarantor;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseParticipant;
 import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
@@ -91,7 +92,7 @@ class MoveInManager {
         Collection<LeaseParticipantMoveInAction> r = new ArrayList<>();
         Map<MoveInActionType, LeaseParticipantMoveInAction> moveInActionsByType = getMoveInActionsByType(leaseParticipant);
 
-        {
+        if (!leaseParticipant.isAssignableFrom(Guarantor.class)) {
             LeaseParticipantMoveInAction a = getMoveInAction(moveInActionsByType, MoveInActionType.autoPay);
             if (ServerSideFactory.create(PaymentMethodFacade.class).isAutopayAgreementsPresent(leaseParticipant.lease())) {
                 a.status().setValue(MoveInActionStatus.completed);
