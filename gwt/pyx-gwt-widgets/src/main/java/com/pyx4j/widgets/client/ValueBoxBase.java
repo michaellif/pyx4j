@@ -74,6 +74,8 @@ public abstract class ValueBoxBase<E> extends Composite implements IValueBoxWidg
 
     private Button actionButton;
 
+    private boolean watermarkShown = false;
+
     private String watermark;
 
     private boolean textBoxWidgetFocused;
@@ -215,6 +217,7 @@ public abstract class ValueBoxBase<E> extends Composite implements IValueBoxWidg
     }
 
     protected void setText(String text, boolean watermark) {
+        this.watermarkShown = watermark;
         textBoxWidget.setText(text);
     }
 
@@ -309,6 +312,10 @@ public abstract class ValueBoxBase<E> extends Composite implements IValueBoxWidg
     @Override
     public String getWatermark() {
         return watermark;
+    }
+
+    public boolean isWatermarkShown() {
+        return watermarkShown;
     }
 
     @Override

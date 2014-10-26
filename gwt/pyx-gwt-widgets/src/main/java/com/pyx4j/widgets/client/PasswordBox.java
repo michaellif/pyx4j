@@ -34,6 +34,7 @@ import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.SimplePanel;
 
 import com.pyx4j.commons.IDebugId;
 import com.pyx4j.commons.IFormatter;
@@ -111,6 +112,8 @@ public class PasswordBox extends FlowPanel implements IValueBoxWidget<String> {
 
         private final Label label;
 
+        private final SimplePanel progressMarker;
+
         private PasswordStrengthWidget() {
             getElement().getStyle().setPosition(Position.RELATIVE);
             Label caption = new Label(i18n.tr("Password Strength:"));
@@ -121,6 +124,15 @@ public class PasswordBox extends FlowPanel implements IValueBoxWidget<String> {
             label.getElement().getStyle().setRight(0, Unit.PX);
             label.getElement().getStyle().setTop(0, Unit.PX);
             add(label);
+
+            SimplePanel progressHolder = new SimplePanel();
+            progressHolder.setWidth("100%");
+            progressHolder.getElement().getStyle().setProperty("backgroundColor", "#e0e0e0");
+            add(progressHolder);
+
+            progressMarker = new SimplePanel();
+            progressMarker.setHeight("4px");
+            progressHolder.setWidget(progressMarker);
 
             textBox.addKeyUpHandler(new KeyUpHandler() {
 
@@ -148,36 +160,46 @@ public class PasswordBox extends FlowPanel implements IValueBoxWidget<String> {
         public void setValue(PasswordStrengthVerdict verdict) {
             if (verdict == null) {
                 label.setText("");
+                progressMarker.setWidth("0%");
+                progressMarker.getElement().getStyle().setProperty("backgroundColor", "#e0e0e0");
             } else {
                 label.setText(verdict.toString());
                 String color = "red";
                 switch (verdict) {
                 case Invalid:
                     color = "#CC0000";
+                    progressMarker.setWidth("0%");
                     break;
                 case TooShort:
                     color = "#808080";
+                    progressMarker.setWidth("20%");
                     break;
                 case Weak:
                     color = "#da5301";
+                    progressMarker.setWidth("40%");
                     break;
                 case Fair:
                     color = "#ccbe00";
+                    progressMarker.setWidth("60%");
                     break;
                 case Good:
                     color = "#1e91ce";
+                    progressMarker.setWidth("80%");
                     break;
                 case Strong:
-                    color = "#1e91ce";
+                    color = "#008000";
+                    progressMarker.setWidth("100%");
                     break;
                 }
+                progressMarker.getElement().getStyle().setProperty("backgroundColor", color);
                 label.getElement().getStyle().setColor(color);
             }
 
         }
 
         public void ratePassword() {
-            setValue(passwordStrengthRule != null ? passwordStrengthRule.getPasswordVerdict(textBox.getTextBoxWidget().getText()) : null);
+            setValue(passwordStrengthRule != null ? passwordStrengthRule.getPasswordVerdict(textBox.isWatermarkShown() ? "" : textBox.getTextBoxWidget()
+                    .getText()) : null);
         }
 
     }
