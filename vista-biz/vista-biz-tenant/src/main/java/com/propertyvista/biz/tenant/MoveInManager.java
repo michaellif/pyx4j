@@ -100,7 +100,7 @@ class MoveInManager {
             r.add(a);
         }
 
-        {
+        if (!leaseParticipant.isAssignableFrom(Guarantor.class)) {
             LeaseParticipantMoveInAction a = getMoveInAction(moveInActionsByType, MoveInActionType.insurance);
             if (ServerSideFactory.create(TenantInsuranceFacade.class).isInsurancePresent(leaseParticipant.lease())) {
                 a.status().setValue(MoveInActionStatus.completed);
