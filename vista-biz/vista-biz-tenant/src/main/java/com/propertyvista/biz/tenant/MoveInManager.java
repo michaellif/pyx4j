@@ -30,6 +30,7 @@ import com.propertyvista.domain.security.PortalResidentBehavior;
 import com.propertyvista.domain.tenant.lease.Guarantor;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseParticipant;
+import com.propertyvista.domain.tenant.lease.LeaseTermGuarantor;
 import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
 import com.propertyvista.domain.tenant.marketing.LeaseParticipantMoveInAction;
 import com.propertyvista.domain.tenant.marketing.LeaseParticipantMoveInAction.MoveInActionStatus;
@@ -48,14 +49,14 @@ class MoveInManager {
 
             // If this grows bigger, change it to call to getActiveMoveInActions
 
-            if (!leaseBehaviors.contains(PortalResidentBehavior.AutopayAgreementPresent)) {
+            if ((!termParticipant.isAssignableFrom(LeaseTermGuarantor.class)) && !leaseBehaviors.contains(PortalResidentBehavior.AutopayAgreementPresent)) {
                 LeaseParticipantMoveInAction a = getActiveMoveInAction(moveInActionsByType, MoveInActionType.autoPay);
                 if (a != null) {
                     behaviors.add(PortalResidentBehavior.MoveInWizardCompletionRequired);
                 }
             }
 
-            if (!leaseBehaviors.contains(PortalResidentBehavior.InsurancePresent)) {
+            if ((!termParticipant.isAssignableFrom(LeaseTermGuarantor.class)) && !leaseBehaviors.contains(PortalResidentBehavior.InsurancePresent)) {
                 LeaseParticipantMoveInAction a = getActiveMoveInAction(moveInActionsByType, MoveInActionType.insurance);
                 if (a != null) {
                     behaviors.add(PortalResidentBehavior.MoveInWizardCompletionRequired);
