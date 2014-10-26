@@ -42,7 +42,8 @@ public class RevalidationTrigger<E> implements ValueChangeHandler<E>, PropertyCh
 
     @Override
     public void onPropertyChange(PropertyChangeEvent event) {
-        if (event.isEventOfType(PropertyName.enabled, PropertyName.editable, PropertyName.visible, PropertyName.viewable)) {
+        if (event.isEventOfType(PropertyName.enabled, PropertyName.editable, PropertyName.visible, PropertyName.viewable, PropertyName.valid,
+                PropertyName.editingInProgress)) {
             targetComponent.revalidate();
         }
     }
