@@ -20,11 +20,7 @@
  */
 package com.pyx4j.forms.client.ui;
 
-import java.text.ParseException;
-
 import com.pyx4j.commons.CommonsStringUtils;
-import com.pyx4j.commons.IFormatter;
-import com.pyx4j.commons.IParser;
 import com.pyx4j.forms.client.validators.RegexValidator;
 
 public class CTextField extends CTextFieldBase<String, NTextBox<String>> {
@@ -48,28 +44,6 @@ public class CTextField extends CTextFieldBase<String, NTextBox<String>> {
     @Override
     public boolean isValueEmpty() {
         return super.isValueEmpty() || CommonsStringUtils.isEmpty(getValue());
-    }
-
-    static class StringFormat implements IFormatter<String, String> {
-
-        @Override
-        public String format(String value) {
-            if (value == null) {
-                value = "";
-            }
-            return value;
-        }
-    }
-
-    static class StringParser implements IParser<String> {
-
-        @Override
-        public String parse(String string) throws ParseException {
-            if (CommonsStringUtils.isEmpty(string)) {
-                return null; // empty value case
-            }
-            return string;
-        }
     }
 
 }

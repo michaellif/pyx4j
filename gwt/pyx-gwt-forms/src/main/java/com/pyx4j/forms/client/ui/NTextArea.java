@@ -20,14 +20,13 @@
  */
 package com.pyx4j.forms.client.ui;
 
-import java.text.ParseException;
-
 import com.google.gwt.user.client.DOM;
-import com.google.gwt.user.client.ui.HTML;
 
+import com.pyx4j.commons.IFormatter;
+import com.pyx4j.commons.IParser;
 import com.pyx4j.widgets.client.TextArea;
 
-public class NTextArea extends NTextComponent<String, TextArea, CTextComponent<String, ?>> {
+public class NTextArea extends NValueBoxBase<String, TextArea, CTextComponent<String, ?>> {
 
     private Integer visibleLines;
 
@@ -37,13 +36,19 @@ public class NTextArea extends NTextComponent<String, TextArea, CTextComponent<S
 
     @Override
     protected TextArea createEditor() {
-        return new TextArea();
-    }
+        TextArea textArea = new TextArea() {
+            @Override
+            protected IParser<String> getParser() {
+                return getCComponent().getParser();
+            }
 
-    @Override
-    protected HTML createViewer() {
-        HTML viewer = super.createViewer();
-        return viewer;
+            @Override
+            protected IFormatter<String, String> getFormatter() {
+                return getCComponent().getFormatter();
+            }
+        };
+
+        return textArea;
     }
 
     @Override
@@ -52,15 +57,10 @@ public class NTextArea extends NTextComponent<String, TextArea, CTextComponent<S
         if (isViewable()) {
             getViewer().setText(newValue);
         } else {
-            if (!newValue.equals(getEditor().getText())) {
-                getEditor().setText(newValue);
+            if (!newValue.equals(getEditor().getValue())) {
+                getEditor().setValue(newValue);
             }
         }
-    }
-
-    @Override
-    public String getNativeValue() throws ParseException {
-        return getEditor().getText();
     }
 
     @Override

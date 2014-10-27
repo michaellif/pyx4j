@@ -162,20 +162,13 @@ public abstract class ValueBoxBase<E> extends Composite implements IValueBoxWidg
 
     @Override
     public final void setValue(E value) {
-        reset();
-        if (this.value == null && value == null) {
-            return;
-        } else if (this.value != null && this.value.equals(value)) {
+        if (this.value != null && this.value.equals(value)) {
             return;
         }
         this.parsedOk = true;
         this.value = value;
 
         updateTextBox();
-
-    }
-
-    protected void reset() {
 
     }
 

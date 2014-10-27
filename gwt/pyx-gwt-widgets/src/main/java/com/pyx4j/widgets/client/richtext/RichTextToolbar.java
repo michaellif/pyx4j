@@ -37,6 +37,7 @@ import com.pyx4j.widgets.client.CheckBox;
 import com.pyx4j.widgets.client.ImageFactory;
 import com.pyx4j.widgets.client.ImageFactory.WidgetsImageBundle;
 import com.pyx4j.widgets.client.ListBox;
+import com.pyx4j.widgets.client.StringBox;
 import com.pyx4j.widgets.client.TextBox;
 import com.pyx4j.widgets.client.Toolbar;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
@@ -639,7 +640,7 @@ public class RichTextToolbar extends FlowPanel {
     }
 
     private abstract class EditUrlDialog extends OkCancelDialog {
-        private TextBox inputTextBox;
+        private TextBox<String> inputTextBox;
 
         public EditUrlDialog(String labelText) {
             super(i18n.tr("Edit Link"));
@@ -651,15 +652,15 @@ public class RichTextToolbar extends FlowPanel {
             body.getElement().getStyle().setProperty("padding", "20px 10px");
             body.add(new HTML(labelText));
             body.add(new HTML("<br/>"));
-            inputTextBox = new TextBox();
-            inputTextBox.setText("http://");
+            inputTextBox = new StringBox();
+            inputTextBox.setValue("http://");
             body.add(inputTextBox);
 
             return body;
         }
 
         public String getInput() {
-            return inputTextBox.getText();
+            return inputTextBox.getValue();
         }
     }
 }

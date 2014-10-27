@@ -31,8 +31,6 @@ public class NPasswordBox extends NValueBoxBase<String, PasswordBox, CPasswordBo
     @Override
     protected PasswordBox createEditor() {
         PasswordBox passwordBox = new PasswordBox();
-        passwordBox.setParser(getCComponent().getParser());
-        passwordBox.setFormatter(getCComponent().getFormatter());
         passwordBox.revealText(getCComponent().isUnmasked());
         passwordBox.setPasswordStrengthRule(getCComponent().getPasswordStrengthRule());
         return passwordBox;

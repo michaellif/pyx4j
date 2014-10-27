@@ -33,68 +33,12 @@ import com.pyx4j.commons.IParser;
 import com.pyx4j.forms.client.events.HasNativeValueChangeHandlers;
 import com.pyx4j.forms.client.events.NativeValueChangeEvent;
 import com.pyx4j.forms.client.events.NativeValueChangeHandler;
-import com.pyx4j.forms.client.validators.TextBoxParserValidator;
 
-public abstract class CTextFieldBase<DATA, WIDGET extends INativeTextComponent<DATA>> extends CTextComponent<DATA, WIDGET> implements IAcceptsText,
+public abstract class CTextFieldBase<DATA, WIDGET extends INativeValueBox<DATA>> extends CTextComponent<DATA, WIDGET> implements IAcceptsText,
         HasNativeValueChangeHandlers<String> {
-
-    private IFormatter<DATA, String> formatter;
-
-    private IParser<DATA> parser;
 
     public CTextFieldBase() {
         super();
-        addComponentValidator(new TextBoxParserValidator<DATA>());
-    }
-
-    public void setFormatter(IFormatter<DATA, String> formatter) {
-        this.formatter = formatter;
-    }
-
-    public final IFormatter<DATA, String> getFormatter() {
-        if (formatter == null) {
-            setFormatter(new IFormatter<DATA, String>() {
-                @Override
-                public String format(DATA value) {
-                    if (value == null) {
-                        return null;
-                    } else {
-                        return value.toString();
-                    }
-                }
-            });
-        }
-        return formatter;
-    }
-
-    public final String format(DATA value) {
-        String text = null;
-        try {
-            text = getFormatter().format(value);
-        } catch (Exception ignore) {
-        }
-        return text == null ? "" : text;
-    }
-
-    public String getFormattedValue() {
-        return format(getValue());
-    }
-
-    public final void setParser(IParser<DATA> parser) {
-        this.parser = parser;
-    }
-
-    public final IParser<DATA> getParser() {
-        return parser;
-    }
-
-    @Override
-    public void setValueByString(String name) {
-        try {
-            setValue(getParser().parse(name));
-        } catch (ParseException e) {
-            // TODO : log something here?..
-        }
     }
 
     public void requestFocus() {
@@ -110,14 +54,6 @@ public abstract class CTextFieldBase<DATA, WIDGET extends INativeTextComponent<D
     }
 
     @Override
-    public boolean isValueEmpty() {
-        if (!CommonsStringUtils.isEmpty(getNativeComponent().getNativeText())) {
-            return false;
-        }
-        return super.isValueEmpty() || ((getValue() instanceof String) && CommonsStringUtils.isEmpty((String) getValue()));
-    }
-
-    @Override
     public boolean isValuesEqual(DATA value1, DATA value2) {
         //This takes in consideration that 2 values can be null but actual state of component is not empty after failed parsing
         return value1 != null && value1 == value2;
@@ -130,4 +66,5 @@ public abstract class CTextFieldBase<DATA, WIDGET extends INativeTextComponent<D
     public HandlerRegistration addNativeValueChangeHandler(NativeValueChangeHandler<String> handler) {
         return addHandler(handler, NativeValueChangeEvent.getType());
     }
+
 }

@@ -73,9 +73,9 @@ public class CaptchaComposite extends SimplePanel implements IFocusWidget {
 
     private final SimplePanel recaptchaImage;
 
-    private final TextBox response;
+    private final StringBox response;
 
-    private final TextBox responseInternal;
+    private final StringBox responseInternal;
 
     private final Image toText;
 
@@ -165,12 +165,12 @@ public class CaptchaComposite extends SimplePanel implements IFocusWidget {
         });
 
         divHolder.add(images);
-        response = new TextBox();
+        response = new StringBox();
         response.addChangeHandler(new ChangeHandler() {
 
             @Override
             public void onChange(ChangeEvent event) {
-                responseInternal.setText(response.getText());
+                responseInternal.setValue(response.getValue());
             }
         });
         response.getElement().getStyle().setProperty("padding", "2px 5px");
@@ -180,7 +180,7 @@ public class CaptchaComposite extends SimplePanel implements IFocusWidget {
         response.getElement().getStyle().setWidth(100, Unit.PCT);
         divHolder.add(response);
 
-        responseInternal = new TextBox();
+        responseInternal = new StringBox();
         responseInternal.setVisible(false);
         divHolder.add(responseInternal);
 
@@ -227,7 +227,7 @@ public class CaptchaComposite extends SimplePanel implements IFocusWidget {
     }-*/;
 
     public String getValueResponse() {
-        return response.getText();
+        return response.getValue();
     }
 
     public HandlerRegistration addResponseValueChangeHandler(ValueChangeHandler<String> handler) {
@@ -313,7 +313,7 @@ public class CaptchaComposite extends SimplePanel implements IFocusWidget {
     }-*/;
 
     public void createNewChallenge() {
-        response.setText(null);
+        response.setValue(null);
         if (isVisible() && created) {
             createNewChallengeImpl();
         }

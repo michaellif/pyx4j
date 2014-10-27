@@ -43,7 +43,7 @@ import com.pyx4j.widgets.client.GroupFocusHandler;
 import com.pyx4j.widgets.client.IFocusGroup;
 import com.pyx4j.widgets.client.IWatermarkWidget;
 import com.pyx4j.widgets.client.ImageFactory;
-import com.pyx4j.widgets.client.TextBox;
+import com.pyx4j.widgets.client.StringBox;
 import com.pyx4j.widgets.client.event.shared.PasteHandler;
 import com.pyx4j.widgets.client.style.theme.WidgetTheme;
 
@@ -53,7 +53,7 @@ public class SelectorListBoxValuePanel<E> extends FocusPanel implements ISelecto
 
     private final IFormatter<E, String> valueFormatter;
 
-    private final TextBox queryBox;
+    private final StringBox queryBox;
 
     private Button actionButton;
 
@@ -74,7 +74,7 @@ public class SelectorListBoxValuePanel<E> extends FocusPanel implements ISelecto
         this.valueFormatter = valueFormatter;
         cellsPanel = new FlowPanel();
 
-        queryBox = new TextBox();
+        queryBox = new StringBox();
         cellsPanel.add(queryBox);
 
         contentPanel.add(cellsPanel);
@@ -107,12 +107,12 @@ public class SelectorListBoxValuePanel<E> extends FocusPanel implements ISelecto
             }
         }
 
-        queryBox.setText("");
+        queryBox.setValue("");
     }
 
     @Override
     public String getQuery() {
-        return queryBox.getText();
+        return queryBox.getValue();
     }
 
     @Override
@@ -209,7 +209,7 @@ public class SelectorListBoxValuePanel<E> extends FocusPanel implements ISelecto
     }
 
     public void setText(String value) {
-        queryBox.setText(value);
+        queryBox.setValue(value);
     }
 
     public final void removeItem(E item) {

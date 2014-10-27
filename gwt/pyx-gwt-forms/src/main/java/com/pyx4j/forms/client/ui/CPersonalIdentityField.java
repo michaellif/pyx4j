@@ -77,7 +77,7 @@ public class CPersonalIdentityField<T extends IPersonalIdentity> extends CTextFi
 
     @Override
     public boolean isValueEmpty() {
-        if (!CommonsStringUtils.isEmpty(getNativeComponent().getNativeText())) {
+        if (!getNativeComponent().isParsedOk()) {
             return false;
         }
         return getValue() == null || getValue().isNull();
@@ -86,12 +86,12 @@ public class CPersonalIdentityField<T extends IPersonalIdentity> extends CTextFi
     @Override
     public boolean isValidatable() {
         // see also if native editor has any user input
-        return super.isValidatable() || !getNativeComponent().getEditor().getText().isEmpty();
+        return super.isValidatable() || !getNativeComponent().getEditor().getValue().isEmpty();
     }
 
     @Override
     public void onEditingStop() {
-        if (!getNativeComponent().getEditor().getText().isEmpty() && getValue() != null) {
+        if (!getNativeComponent().getEditor().getValue().isEmpty() && getValue() != null) {
             // clear obfuscated value to indicate user input
             getValue().obfuscatedNumber().setValue(null);
         }
@@ -114,7 +114,7 @@ public class CPersonalIdentityField<T extends IPersonalIdentity> extends CTextFi
 
     public void clear(boolean clearNative) {
         if (clearNative) {
-            getNativeComponent().getEditor().setText("");
+            getNativeComponent().getEditor().setValue(null);
         }
         if (getValue() != null) {
             getValue().newNumber().setValue(null);

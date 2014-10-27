@@ -48,6 +48,7 @@ import com.pyx4j.site.rpc.ReportsAppPlace;
 import com.pyx4j.site.shared.domain.reports.ExportableReport;
 import com.pyx4j.site.shared.domain.reports.ReportTemplate;
 import com.pyx4j.widgets.client.Button;
+import com.pyx4j.widgets.client.StringBox;
 import com.pyx4j.widgets.client.TextBox;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 import com.pyx4j.widgets.client.dialog.OkCancelDialog;
@@ -240,16 +241,16 @@ public abstract class AbstractReport<R extends ReportTemplate> extends AbstractP
 
     private void saveSettingsAs() {
         new OkCancelDialog(i18n.tr("Save current report settings as:")) {
-            private TextBox reportMetadataIdTextBox;
+            private StringBox reportMetadataIdTextBox;
 
             {
-                setBody(reportMetadataIdTextBox = new TextBox());
+                setBody(reportMetadataIdTextBox = new StringBox());
             }
 
             @Override
             public boolean onClickOk() {
-                if (!reportMetadataIdTextBox.getText().isEmpty()) {
-                    reportControlPanel.getReportSettings().reportTemplateName().setValue(reportMetadataIdTextBox.getText());
+                if (!reportMetadataIdTextBox.getValue().isEmpty()) {
+                    reportControlPanel.getReportSettings().reportTemplateName().setValue(reportMetadataIdTextBox.getValue());
                     presenter.saveAsReportMetadata();
                     return true;
                 } else {

@@ -22,20 +22,23 @@ package com.pyx4j.widgets.client.richtext;
 
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.BlurHandler;
-import com.google.gwt.event.dom.client.ChangeHandler;
 import com.google.gwt.event.dom.client.FocusHandler;
 import com.google.gwt.event.dom.client.KeyDownHandler;
 import com.google.gwt.event.dom.client.KeyPressHandler;
 import com.google.gwt.event.dom.client.KeyUpHandler;
+import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.ui.DockPanel;
 
 import com.pyx4j.commons.IDebugId;
-import com.pyx4j.widgets.client.ITextBoxWidget;
+import com.pyx4j.commons.IFormatter;
+import com.pyx4j.commons.IParser;
+import com.pyx4j.widgets.client.IValueBoxWidget;
+import com.pyx4j.widgets.client.NotImplementedException;
 
-public class RichTextEditor extends DockPanel implements ITextBoxWidget {
+public class RichTextEditor extends DockPanel implements IValueBoxWidget<String> {
 
     private final RichTextArea richTextArea;
 
@@ -206,12 +209,12 @@ public class RichTextEditor extends DockPanel implements ITextBoxWidget {
     }
 
     @Override
-    public String getText() {
+    public String getValue() {
         return trimHtml(toolbar.isHtmlMode() ? richTextArea.getHTML() : richTextArea.getText());
     }
 
     @Override
-    public void setText(String html) {
+    public void setValue(String html) {
         if (toolbar.isHtmlMode()) {
             richTextArea.setHTML(html);
         } else {
@@ -225,8 +228,38 @@ public class RichTextEditor extends DockPanel implements ITextBoxWidget {
     }
 
     @Override
-    public HandlerRegistration addChangeHandler(ChangeHandler handler) {
-        // TODO Auto-generated method stub
+    public void setWatermark(String watermark) {
+
+    }
+
+    @Override
+    public String getWatermark() {
         return null;
     }
+
+    @Override
+    public HandlerRegistration addValueChangeHandler(ValueChangeHandler<String> handler) {
+        throw new NotImplementedException();
+    }
+
+    @Override
+    public void setParser(IParser<String> parser) {
+        throw new NotImplementedException();
+    }
+
+    @Override
+    public void setFormatter(IFormatter<String, String> formatter) {
+        throw new NotImplementedException();
+    }
+
+    @Override
+    public boolean isParsedOk() {
+        return false;
+    }
+
+    @Override
+    public String getParseExceptionMessage() {
+        return null;
+    }
+
 }

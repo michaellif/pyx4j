@@ -20,19 +20,10 @@
  */
 package com.pyx4j.widgets.client;
 
-import com.google.gwt.event.logical.shared.HasValueChangeHandlers;
-import com.google.gwt.event.logical.shared.ValueChangeHandler;
-import com.google.gwt.event.shared.HandlerRegistration;
-
-public class TextBox extends TextBoxBase implements HasValueChangeHandlers<String> {
+public class TextBox<E> extends ValueBoxBase<E> {
 
     public TextBox() {
         setTextBoxWidget(new com.google.gwt.user.client.ui.TextBox());
-    }
-
-    @Override
-    public HandlerRegistration addValueChangeHandler(ValueChangeHandler<String> handler) {
-        return getTextBoxWidget().addValueChangeHandler(handler);
     }
 
 }

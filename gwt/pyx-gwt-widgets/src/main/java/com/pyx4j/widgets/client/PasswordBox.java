@@ -20,6 +20,8 @@
  */
 package com.pyx4j.widgets.client;
 
+import java.text.ParseException;
+
 import com.google.gwt.dom.client.Style.Position;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.BlurHandler;
@@ -36,6 +38,7 @@ import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.SimplePanel;
 
+import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.commons.IDebugId;
 import com.pyx4j.commons.IFormatter;
 import com.pyx4j.commons.IParser;
@@ -87,6 +90,32 @@ public class PasswordBox extends FlowPanel implements IValueBoxWidget<String> {
     }
 
     private class PasswordTextBox extends ValueBoxBase<String> {
+
+        public PasswordTextBox() {
+            setFormatter(new IFormatter<String, String>() {
+
+                @Override
+                public String format(String value) {
+                    if (value == null) {
+                        value = "";
+                    }
+                    return value;
+                }
+            });
+
+            setParser(new IParser<String>() {
+
+                @Override
+                public String parse(String string) throws ParseException {
+                    if (CommonsStringUtils.isEmpty(string)) {
+                        return null;
+                    }
+                    return string;
+                }
+
+            });
+        }
+
         @Override
         protected void setText(String text, boolean watermark) {
             if (!revealText) {
@@ -100,7 +129,8 @@ public class PasswordBox extends FlowPanel implements IValueBoxWidget<String> {
         }
 
         @Override
-        protected void reset() {
+        protected void updateTextBox() {
+            super.updateTextBox();
             if (passwordStrengthWidget != null) {
                 passwordStrengthWidget.ratePassword();
             }

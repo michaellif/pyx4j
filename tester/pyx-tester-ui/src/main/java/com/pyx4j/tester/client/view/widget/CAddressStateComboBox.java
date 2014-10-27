@@ -38,6 +38,7 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.tester.client.view.widget.CAddressStateComboBox.NAddressStateBox;
 import com.pyx4j.widgets.client.IFocusWidget;
 import com.pyx4j.widgets.client.ListBox;
+import com.pyx4j.widgets.client.StringBox;
 import com.pyx4j.widgets.client.TextBox;
 
 public abstract class CAddressStateComboBox<E, OPTION extends IEntity> extends CFocusComponent<E, NAddressStateBox<E, OPTION>> implements
@@ -165,7 +166,7 @@ public abstract class CAddressStateComboBox<E, OPTION extends IEntity> extends C
             return comboEditor == null ? comboEditor = new ComboEditor() : comboEditor;
         }
 
-        private TextBox getTextEditor() {
+        private TextBox<String> getTextEditor() {
             return ensureEditor().textBox;
         }
 
@@ -189,8 +190,8 @@ public abstract class CAddressStateComboBox<E, OPTION extends IEntity> extends C
                 if (isViewable()) {
                     getViewer().setText(textValue);
                 } else {
-                    if (!textValue.equals(getTextEditor().getText())) {
-                        getTextEditor().setText(textValue);
+                    if (!textValue.equals(getTextEditor().getValue())) {
+                        getTextEditor().setValue(textValue);
                     }
                 }
                 NativeValueChangeEvent.fire(getCComponent(), newValue);
@@ -214,7 +215,7 @@ public abstract class CAddressStateComboBox<E, OPTION extends IEntity> extends C
                 assert false : "getNativeValue() shouldn't be called in viewable mode";
             } else if (textMode) {
                 // trim user input before parsing
-                value = getCComponent().parseValue(getTextEditor().getText().trim());
+                value = getCComponent().parseValue(getTextEditor().getValue().trim());
             } else {
                 value = getValueByNativeOptionIndex(getComboEditor().getSelectedIndex());
             }
@@ -269,7 +270,7 @@ public abstract class CAddressStateComboBox<E, OPTION extends IEntity> extends C
         }
 
         static class ComboEditor extends SimplePanel implements IFocusWidget {
-            private TextBox textBox;
+            private StringBox textBox;
 
             private ListBox listBox;
 
@@ -285,9 +286,9 @@ public abstract class CAddressStateComboBox<E, OPTION extends IEntity> extends C
                 setTextMode(textMode);
             }
 
-            private TextBox ensureTextBox() {
+            private StringBox ensureTextBox() {
                 if (textBox == null) {
-                    textBox = new TextBox();
+                    textBox = new StringBox();
                     textBox.setWidth("100%");
                 }
                 return textBox;

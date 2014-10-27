@@ -28,6 +28,9 @@ public class CTextArea extends CTextComponent<String, NTextArea> {
 
     public CTextArea() {
         super();
+        setFormatter(new StringFormat());
+        setParser(new StringParser());
+
         NTextArea nativeTextArea = new NTextArea(this);
         nativeTextArea.setVisibleLines(getRows());
         setNativeComponent(nativeTextArea);

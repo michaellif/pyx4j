@@ -39,7 +39,7 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.CheckBox;
 import com.pyx4j.widgets.client.IFocusWidget;
 import com.pyx4j.widgets.client.Label;
-import com.pyx4j.widgets.client.TextBox;
+import com.pyx4j.widgets.client.StringBox;
 
 public class NSignature extends NFocusField<ISignature, SignaturePanel, CSignature, Label> {
 
@@ -75,7 +75,7 @@ public class NSignature extends NFocusField<ISignature, SignaturePanel, CSignatu
             signature = null;
             if (getEditor() != null) {
                 getEditor().checkBox.setValue(null);
-                getEditor().textBox.setText(null);
+                getEditor().textBox.setValue(null);
                 getEditor().init(SignatureFormat.None);
             }
             if (getViewer() != null) {
@@ -88,14 +88,14 @@ public class NSignature extends NFocusField<ISignature, SignaturePanel, CSignatu
                 switch (signature.signatureFormat().getValue()) {
                 case AgreeBox:
                 case None:
-                    getEditor().textBox.setText(null);
+                    getEditor().textBox.setValue(null);
                     break;
                 case AgreeBoxAndFullName:
                 case FullName:
-                    getEditor().textBox.setText(signature.fullName().getValue());
+                    getEditor().textBox.setValue(signature.fullName().getValue());
                     break;
                 case Initials:
-                    getEditor().textBox.setText(signature.initials().getValue());
+                    getEditor().textBox.setValue(signature.initials().getValue());
                     break;
                 }
             }
@@ -138,11 +138,11 @@ public class NSignature extends NFocusField<ISignature, SignaturePanel, CSignatu
                     break;
                 case AgreeBoxAndFullName:
                 case FullName:
-                    signature.fullName().setValue(getEditor().textBox.getText());
+                    signature.fullName().setValue(getEditor().textBox.getValue());
                     signature.initials().setValue(null);
                     break;
                 case Initials:
-                    signature.initials().setValue(getEditor().textBox.getText());
+                    signature.initials().setValue(getEditor().textBox.getValue());
                     signature.fullName().setValue(null);
                     break;
                 }
@@ -156,7 +156,7 @@ public class NSignature extends NFocusField<ISignature, SignaturePanel, CSignatu
                     break;
                 case FullName:
                 case Initials:
-                    signature.agree().setValue(!getEditor().textBox.getText().isEmpty());
+                    signature.agree().setValue(!getEditor().textBox.getValue().isEmpty());
                     break;
                 }
             }
@@ -186,7 +186,7 @@ public class NSignature extends NFocusField<ISignature, SignaturePanel, CSignatu
 
         private final CheckBox checkBox;
 
-        private final TextBox textBox;
+        private final StringBox textBox;
 
         private final SimplePanel descriptionWidgetHolder;
 
@@ -194,7 +194,7 @@ public class NSignature extends NFocusField<ISignature, SignaturePanel, CSignatu
 
             setStyleName(CComponentTheme.StyleName.Signature.name());
 
-            textBox = new TextBox();
+            textBox = new StringBox();
             add(textBox, DockPanel.SOUTH);
 
             checkBox = new CheckBox();

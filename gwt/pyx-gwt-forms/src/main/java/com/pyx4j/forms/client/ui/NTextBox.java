@@ -20,17 +20,31 @@
  */
 package com.pyx4j.forms.client.ui;
 
+import com.pyx4j.commons.IFormatter;
+import com.pyx4j.commons.IParser;
 import com.pyx4j.widgets.client.TextBox;
 
-public class NTextBox<DATA> extends NTextFieldBase<DATA, TextBox, CTextFieldBase<DATA, ?>> implements INativeTextComponent<DATA> {
+public class NTextBox<DATA> extends NValueBoxBase<DATA, TextBox<DATA>, CTextFieldBase<DATA, ?>> {
 
     public NTextBox(CTextFieldBase<DATA, ?> cComponent) {
         super(cComponent);
     }
 
     @Override
-    protected TextBox createEditor() {
-        return new TextBox();
+    protected TextBox<DATA> createEditor() {
+        TextBox<DATA> textBox = new TextBox<DATA>() {
+            @Override
+            protected IParser<DATA> getParser() {
+                return getCComponent().getParser();
+            }
+
+            @Override
+            protected IFormatter<DATA, String> getFormatter() {
+                return getCComponent().getFormatter();
+            }
+        };
+
+        return textBox;
     }
 
 }

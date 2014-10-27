@@ -5,12 +5,31 @@ import com.google.gwt.event.dom.client.BlurHandler;
 import com.google.gwt.event.dom.client.FocusEvent;
 import com.google.gwt.event.dom.client.FocusHandler;
 
+import com.pyx4j.commons.IFormatter;
+import com.pyx4j.commons.IParser;
 import com.pyx4j.entity.shared.IPersonalIdentity;
+import com.pyx4j.widgets.client.TextBox;
 
-public class NPersonalIdentityField<E extends IPersonalIdentity> extends NTextBox<E> {
+public class NPersonalIdentityField<E extends IPersonalIdentity> extends NValueBoxBase<E, TextBox<E>, CPersonalIdentityField<E>> {
 
     public NPersonalIdentityField(CPersonalIdentityField<E> cComponent) {
         super(cComponent);
+    }
+
+    @Override
+    protected TextBox<E> createEditor() {
+        TextBox<E> textBox = new TextBox<E>() {
+            @Override
+            protected IParser<E> getParser() {
+                return getCComponent().getParser();
+            }
+
+            @Override
+            protected IFormatter<E, String> getFormatter() {
+                return getCComponent().getFormatter();
+            }
+        };
+        return textBox;
     }
 
     @Override
@@ -21,7 +40,7 @@ public class NPersonalIdentityField<E extends IPersonalIdentity> extends NTextBo
             public void onFocus(FocusEvent event) {
                 // clear value for new input
                 if (isEditable() && getCComponent().getValue() != null && !getCComponent().getValue().obfuscatedNumber().isNull()) {
-                    getEditor().setText("");
+                    getEditor().setValue(null);
                 }
             }
         });
@@ -45,7 +64,8 @@ public class NPersonalIdentityField<E extends IPersonalIdentity> extends NTextBo
 
     @Override
     protected void onViewerInit() {
-        ((CPersonalIdentityField) getCComponent()).postprocess();
+        getCComponent().postprocess();
         super.onViewerInit();
     }
+
 }

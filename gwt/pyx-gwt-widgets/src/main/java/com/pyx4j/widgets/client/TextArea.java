@@ -20,7 +20,7 @@
  */
 package com.pyx4j.widgets.client;
 
-public class TextArea extends TextBoxBase {
+public class TextArea extends ValueBoxBase<String> {
 
     private final com.google.gwt.user.client.ui.TextArea textBoxWidget;
 

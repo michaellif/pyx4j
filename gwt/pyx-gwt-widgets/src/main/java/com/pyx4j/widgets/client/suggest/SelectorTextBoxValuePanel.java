@@ -21,9 +21,9 @@
 package com.pyx4j.widgets.client.suggest;
 
 import com.pyx4j.commons.IFormatter;
-import com.pyx4j.widgets.client.TextBox;
+import com.pyx4j.widgets.client.StringBox;
 
-public class SelectorTextBoxValuePanel<E> extends TextBox implements ISelectorValuePanel {
+public class SelectorTextBoxValuePanel<E> extends StringBox implements ISelectorValuePanel {
 
     private final IFormatter<E, String> valueFormatter;
 
@@ -32,12 +32,12 @@ public class SelectorTextBoxValuePanel<E> extends TextBox implements ISelectorVa
     }
 
     public void showValue(E value) {
-        setText(valueFormatter.format(value));
+        setValue(valueFormatter.format(value));
     }
 
     @Override
     public String getQuery() {
-        return getText();
+        return getValue();
     }
 
 }

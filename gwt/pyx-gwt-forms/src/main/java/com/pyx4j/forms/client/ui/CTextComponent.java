@@ -20,15 +20,17 @@
  */
 package com.pyx4j.forms.client.ui;
 
+import java.text.ParseException;
+
+import com.pyx4j.commons.CommonsStringUtils;
+import com.pyx4j.commons.IFormatter;
+import com.pyx4j.commons.IParser;
 import com.pyx4j.forms.client.validators.AbstractComponentValidator;
 import com.pyx4j.forms.client.validators.BasicValidationError;
-import com.pyx4j.widgets.client.IWatermarkWidget;
 
-public abstract class CTextComponent<DATA, WIDGET extends INativeFocusField<DATA>> extends CFocusComponent<DATA, WIDGET> implements IAcceptsWatermark {
+public abstract class CTextComponent<DATA, WIDGET extends INativeValueBox<DATA>> extends CValueBoxBase<DATA, WIDGET> {
 
     private TextComponentLengthValidator validator;
-
-    private String watermark;
 
     public CTextComponent() {
         super();
@@ -38,19 +40,6 @@ public abstract class CTextComponent<DATA, WIDGET extends INativeFocusField<DATA
         removeComponentValidator(validator);
         validator = new TextComponentLengthValidator(length);
         addComponentValidator(validator);
-    }
-
-    @Override
-    public void setWatermark(String watermark) {
-        this.watermark = watermark;
-        if (asWidget() instanceof IWatermarkWidget) {
-            ((IWatermarkWidget) asWidget()).setWatermark(watermark);
-        }
-    }
-
-    @Override
-    public String getWatermark() {
-        return watermark;
     }
 
     @Override
@@ -85,4 +74,25 @@ public abstract class CTextComponent<DATA, WIDGET extends INativeFocusField<DATA
         }
     }
 
+    static class StringFormat implements IFormatter<String, String> {
+
+        @Override
+        public String format(String value) {
+            if (value == null) {
+                value = "";
+            }
+            return value;
+        }
+    }
+
+    static class StringParser implements IParser<String> {
+
+        @Override
+        public String parse(String string) throws ParseException {
+            if (CommonsStringUtils.isEmpty(string)) {
+                return null; // empty value case
+            }
+            return string;
+        }
+    }
 }

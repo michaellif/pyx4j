@@ -18,10 +18,15 @@
  * @author Michael
  * @version $Id$
  */
-package com.pyx4j.forms.client.ui;
+package com.pyx4j.widgets.client;
 
-public interface INativeTextComponent<DATA> extends INativeFocusField<DATA> {
+public class NotImplementedException extends RuntimeException {
 
-    public String getNativeText();
+    private static final long serialVersionUID = 1L;
+
+    //TODO find method call and print it
+    public NotImplementedException() {
+        super("Method is not implemented");
+    }
 
 }

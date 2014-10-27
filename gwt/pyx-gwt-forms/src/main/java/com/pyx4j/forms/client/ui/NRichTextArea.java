@@ -26,7 +26,7 @@ import com.google.gwt.user.client.ui.HTML;
 import com.pyx4j.widgets.client.richtext.RichTextEditor;
 import com.pyx4j.widgets.client.richtext.RichTextImageProvider;
 
-public class NRichTextArea extends NTextComponent<String, RichTextEditor, CRichTextArea> {
+public class NRichTextArea extends NValueBoxBase<String, RichTextEditor, CRichTextArea> {
 
     public NRichTextArea(CRichTextArea textArea) {
         super(textArea);
@@ -77,17 +77,7 @@ public class NRichTextArea extends NTextComponent<String, RichTextEditor, CRichT
             }
             getViewer().setHTML(v);
         } else {
-            getEditor().setText(value);
-        }
-    }
-
-    @Override
-    public String getNativeValue() {
-        if (isViewable()) {
-            assert false : "getNativeValue() shouldn't be called in viewable mode";
-            return null;
-        } else {
-            return getEditor().getText();
+            getEditor().setValue(value);
         }
     }
 

@@ -79,6 +79,12 @@ public abstract class NValueBoxBase<DATA, WIDGET extends IValueBoxWidget<DATA>, 
     }
 
     @Override
+    protected void onViewerCreate() {
+        getViewer().setWidth("100%");
+        super.onViewerCreate();
+    }
+
+    @Override
     public void setNativeValue(DATA value) {
         if (isViewable()) {
             getViewer().setText(getCComponent().format(value));
@@ -88,7 +94,7 @@ public abstract class NValueBoxBase<DATA, WIDGET extends IValueBoxWidget<DATA>, 
     }
 
     @Override
-    public DATA getNativeValue() throws ParseException {
+    public DATA getNativeValue() {
         if (isViewable()) {
             assert false : "getNativeValue() shouldn't be called in viewable mode";
             return null;

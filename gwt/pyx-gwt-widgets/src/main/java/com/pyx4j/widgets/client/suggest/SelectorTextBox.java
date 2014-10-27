@@ -83,9 +83,9 @@ public class SelectorTextBox<E> extends AbstractSelectorWidget<E> implements Has
     public void setValue(E value) {
         this.value = value;
         if (value == null) {
-            textBox.setText("");
+            textBox.setValue("");
         } else {
-            textBox.setText(valueFormatter.format(value));
+            textBox.setValue(valueFormatter.format(value));
         }
     }
 

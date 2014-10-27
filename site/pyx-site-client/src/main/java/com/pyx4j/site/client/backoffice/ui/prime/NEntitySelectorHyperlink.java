@@ -26,15 +26,15 @@ import com.google.gwt.user.client.Command;
 
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.forms.client.ImageFactory;
-import com.pyx4j.forms.client.ui.INativeTextComponent;
 import com.pyx4j.forms.client.ui.NFocusField;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.rpc.AppPlace;
 import com.pyx4j.widgets.client.Anchor;
 import com.pyx4j.widgets.client.Button;
+import com.pyx4j.widgets.client.StringBox;
 import com.pyx4j.widgets.client.TextBox;
 
-class NEntitySelectorHyperlink<E extends IEntity> extends NFocusField<E, TextBox, CEntitySelectorHyperlink<E>, Anchor> implements INativeTextComponent<E> {
+class NEntitySelectorHyperlink<E extends IEntity> extends NFocusField<E, TextBox, CEntitySelectorHyperlink<E>, Anchor> {
 
     public NEntitySelectorHyperlink(CEntitySelectorHyperlink<E> cComponent) {
         super(cComponent);
@@ -53,8 +53,8 @@ class NEntitySelectorHyperlink<E extends IEntity> extends NFocusField<E, TextBox
     }
 
     @Override
-    protected TextBox createEditor() {
-        TextBox editor = new TextBox() {
+    protected StringBox createEditor() {
+        StringBox editor = new StringBox() {
             {
                 super.setEditable(false); // edit box is always non-editable! 
             }
@@ -108,19 +108,13 @@ class NEntitySelectorHyperlink<E extends IEntity> extends NFocusField<E, TextBox
         if (isViewable()) {
             getViewer().setText(nValue);
         } else {
-            getEditor().setText(nValue);
+            getEditor().setValue(nValue);
         }
     }
 
     @Override
     public E getNativeValue() {
         return getCComponent().getValue();
-    }
-
-    @Override
-    public String getNativeText() {
-        E value = getNativeValue();
-        return (value == null ? "" : value.getStringView());
     }
 
 }

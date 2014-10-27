@@ -29,7 +29,6 @@ import com.google.gwt.i18n.client.NumberFormat;
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.commons.IFormatter;
 import com.pyx4j.commons.IParser;
-import com.pyx4j.forms.client.validators.TextBoxParserValidator;
 import com.pyx4j.i18n.annotations.I18nContext;
 import com.pyx4j.i18n.shared.I18n;
 

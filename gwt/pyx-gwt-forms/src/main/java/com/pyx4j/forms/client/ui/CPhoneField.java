@@ -25,7 +25,6 @@ import java.text.ParseException;
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.commons.IFormatter;
 import com.pyx4j.commons.IParser;
-import com.pyx4j.forms.client.validators.TextBoxParserValidator;
 import com.pyx4j.i18n.shared.I18n;
 
 public class CPhoneField extends CTextFieldBase<String, NTextBox<String>> {
