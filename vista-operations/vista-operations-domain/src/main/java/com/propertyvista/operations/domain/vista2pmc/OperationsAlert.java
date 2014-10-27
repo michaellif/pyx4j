@@ -19,6 +19,7 @@ import com.pyx4j.commons.Key;
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.Editor.EditorType;
+import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.Indexed;
 import com.pyx4j.entity.annotations.Length;
 import com.pyx4j.entity.annotations.MemberColumn;
@@ -58,6 +59,7 @@ public interface OperationsAlert extends IEntity {
     @Caption(name = "When")
     @Timestamp(Timestamp.Update.Created)
     @Editor(type = EditorType.label)
+    @Format("yyyy-MM-dd HH:mm")
     IPrimitive<Date> created();
 
     @Editor(type = EditorType.label)
