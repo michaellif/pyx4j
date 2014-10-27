@@ -14,11 +14,12 @@
 package com.propertyvista.biz.communication.mail.template;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.collections4.map.HashedMap;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.server.mail.MailMessage;
@@ -31,6 +32,8 @@ import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseParticipant;
 
 public class MessageKeywords {
+
+    private static final Logger log = LoggerFactory.getLogger(MessageKeywords.class);
 
     private final static Map<Class<? extends IEntity>, String> entityKeywords;
 
@@ -58,59 +61,55 @@ public class MessageKeywords {
     }
 
     @SuppressWarnings("unchecked")
-    public static <E extends IEntity> void addToKeywords(MailMessage email, E... entity) {
-        List<E> entities = Arrays.asList(entity);
+    public static <E extends IEntity> void addToKeywords(MailMessage email, E... entities) {
         for (E entityElem : entities) {
             addToKeywords(email, entityElem);
         }
     }
 
     public static <E extends IEntity> void addToKeywords(MailMessage email, E entity) {
-        if (entity == null)
+        if (entity == null) {
             return;
-
-        List<String> keywords = new ArrayList<String>();
-        String keyword = getAbbr(entity);
+        }
+        try {
+            List<String> keywords = new ArrayList<String>();
+            String prefix = getAbbr(entity);
 
 // Building
-        if (entity instanceof Building) {
-            keyword += ((Building) entity).propertyCode().getStringView();
-            keywords.add(keyword);
+            if (entity instanceof Building) {
+                keywords.add(prefix + ((Building) entity).propertyCode().getStringView());
 
 // Lease
-        } else if (entity instanceof Lease) {
-            keyword += ((Lease) entity).id().getStringView();
-            keywords.add(keyword);
-
-            keyword = ((Lease) entity).leaseId().getStringView();
-            keywords.add(keyword);
+            } else if (entity instanceof Lease) {
+                keywords.add(prefix + ((Lease) entity).getPrimaryKey());
+                keywords.add(prefix + ((Lease) entity).leaseId().getStringView());
 
 // AutopayAgreement
-        } else if (entity instanceof AutopayAgreement) {
-            keyword += ((AutopayAgreement) entity).id().getStringView();
-            keywords.add(keyword);
+            } else if (entity instanceof AutopayAgreement) {
+                keywords.add(prefix + ((AutopayAgreement) entity).getPrimaryKey());
 
 // EmailTemplate
-        } else if (entity instanceof EmailTemplate) {
-            keyword += ((EmailTemplate) entity).type().getStringView();
-            keywords.add(keyword);
+            } else if (entity instanceof EmailTemplate) {
+                keywords.add(prefix + ((EmailTemplate) entity).type().getStringView());
 
 // PaymentRecord
-        } else if (entity instanceof PaymentRecord) {
-            keyword += ((PaymentRecord) entity).id().getStringView();
-            keywords.add(keyword);
+            } else if (entity instanceof PaymentRecord) {
+                keywords.add(prefix + ((PaymentRecord) entity).getPrimaryKey());
 
 // LeaseParticipant
-        } else if (entity instanceof LeaseParticipant) {
-            keyword += ((PaymentRecord) entity).id().getStringView();
-            keywords.add(keyword);
+            } else if (entity instanceof LeaseParticipant) {
+                keywords.add(prefix + ((LeaseParticipant<?>) entity).id().getStringView());
+                keywords.add(prefix + ((LeaseParticipant<?>) entity).participantId().getStringView());
 
 // Default
-        } else {
-            keyword += entity.getPrimaryKey().toString();
-            keywords.add(keyword);
+            } else {
+                keywords.add(prefix + entity.getPrimaryKey());
+            }
+
+            email.addKeywords(keywords);
+        } catch (Throwable e) {
+            log.error("(TODO report a bug): MessageKeywords infrastructure failed", e);
         }
 
-        email.addKeywords(keywords.toArray(new String[keywords.size()]));
     }
 }
