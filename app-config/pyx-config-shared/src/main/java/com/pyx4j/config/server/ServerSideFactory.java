@@ -110,12 +110,13 @@ public class ServerSideFactory {
     }
 
     @SuppressWarnings("unchecked")
-    public static <T> T createEmptyImplementation(Class<T> interfaceCalss) {
+    public static <T> T createEmptyImplementation(final Class<T> interfaceCalss) {
         try {
             return (T) Proxy.newProxyInstance(Thread.currentThread().getContextClassLoader(), new Class[] { interfaceCalss }, new InvocationHandler() {
 
                 @Override
                 public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
+                    log.debug("called empty implementation stub of {}.{}", interfaceCalss.getClass().getSimpleName(), method.getName());
                     return null;
                 }
             });
