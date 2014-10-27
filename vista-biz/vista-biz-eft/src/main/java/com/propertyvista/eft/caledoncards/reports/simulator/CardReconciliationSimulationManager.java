@@ -65,7 +65,7 @@ public class CardReconciliationSimulationManager {
 
     private static final Logger log = LoggerFactory.getLogger(CardReconciliationSimulationManager.class);
 
-    public String createReports(CardServiceSimulationCompany company, LogicalDate from, LogicalDate to) {
+    public String createReports(final CardServiceSimulationCompany company, LogicalDate from, LogicalDate to) {
         log.debug("create CardReconciliation Company:{} from:{} to:{}", company, from, to);
         EntityQueryCriteria<CardServiceSimulationTransaction> criteria = EntityQueryCriteria.create(CardServiceSimulationTransaction.class);
         criteria.in(criteria.proto().transactionType(), SimulationTransactionType.Sale, SimulationTransactionType.Completion, SimulationTransactionType.Return);
@@ -81,7 +81,7 @@ public class CardReconciliationSimulationManager {
 
             @Override
             public Void execute() {
-                createReportFiles(transactions, records);
+                createReportFiles(company.companyId().getStringView(), transactions, records);
                 Persistence.service().persist(records);
                 return null;
             }
@@ -316,7 +316,8 @@ public class CardReconciliationSimulationManager {
         }
     }
 
-    private void createReportFiles(List<CardServiceSimulationTransaction> transactions, Collection<CardServiceSimulationReconciliationRecord> records) {
+    private void createReportFiles(String cardsReconciliationId, List<CardServiceSimulationTransaction> transactions,
+            Collection<CardServiceSimulationReconciliationRecord> records) {
 
         String fileId = new SimpleDateFormat("yyyMMdd").format(new Date());
         int fileNo = 1;
@@ -337,9 +338,6 @@ public class CardReconciliationSimulationManager {
         }
 
         CardsReconciliationTO to = createReconciliationTO(records);
-
-        String cardsReconciliationId = ServerSideConfiguration.instance(AbstractVistaServerSideConfiguration.class).getCaledonFundsTransferConfiguration()
-                .getCardsReconciliationId();
 
         createMerchantTotalsFile(cardsReconciliationId, fileId, to.merchantTotals());
         createCardTotalsFile(cardsReconciliationId, fileId, to.cardTotals());
