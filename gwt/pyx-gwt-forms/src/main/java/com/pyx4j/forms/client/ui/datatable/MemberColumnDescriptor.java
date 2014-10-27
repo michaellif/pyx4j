@@ -20,8 +20,10 @@
  */
 package com.pyx4j.forms.client.ui.datatable;
 
+import java.util.Date;
 import java.util.EnumSet;
 
+import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.IList;
 import com.pyx4j.entity.core.IObject;
@@ -31,6 +33,8 @@ import com.pyx4j.entity.core.ISet;
 import com.pyx4j.entity.core.ObjectClassType;
 import com.pyx4j.entity.core.Path;
 import com.pyx4j.entity.core.meta.MemberMeta;
+import com.pyx4j.entity.shared.IUserPreferences;
+import com.pyx4j.security.shared.Context;
 
 public class MemberColumnDescriptor extends ColumnDescriptor {
 
@@ -80,21 +84,27 @@ public class MemberColumnDescriptor extends ColumnDescriptor {
 
         @Override
         public ColumnDescriptor build() {
-            ColumnDescriptor cd = null;
             MemberMeta mm = member.getMeta();
             if (mm.isEntity()) {
-                cd = new MemberEntityColumnDescriptor(this);
+                return new MemberEntityColumnDescriptor(this);
             } else if ((member instanceof ISet<?>) || (member instanceof IList<?>)) {
-                cd = new MemberEntityCollectionColumnDescriptor(this);
+                return new MemberEntityCollectionColumnDescriptor(this);
             } else if (member instanceof IPrimitiveSet<?>) {
-                cd = new MemberCollectionColumnDescriptor(this);
+                return new MemberCollectionColumnDescriptor(this);
             } else if (member instanceof IPrimitive<?>) {
-                cd = new MemberPrimitiveColumnDescriptor(this);
+                if (mm.getValueClass().equals(LogicalDate.class)) {
+                    if (!Context.userPreferences(IUserPreferences.class).logicalDateFormat().isNull()) {
+                        return new MemberPrimitiveDateColumnDescriptor(this, Context.userPreferences(IUserPreferences.class).logicalDateFormat().getValue());
+                    }
+                } else if (mm.getValueClass().equals(Date.class)) {
+                    if (!Context.userPreferences(IUserPreferences.class).dateTimeFormat().isNull()) {
+                        return new MemberPrimitiveDateColumnDescriptor(this, Context.userPreferences(IUserPreferences.class).dateTimeFormat().getValue());
+                    }
+                }
+                return new MemberPrimitiveColumnDescriptor(this);
             } else {
-                cd = new MemberColumnDescriptor(this);
+                return new MemberColumnDescriptor(this);
             }
-            return cd;
         }
-
     }
 }
