@@ -15,6 +15,9 @@ package com.propertyvista.server.common.util;
 
 import java.text.ParseException;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.pyx4j.entity.core.AttachLevel;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.server.Persistence;
@@ -30,6 +33,8 @@ import com.propertyvista.domain.tenant.prospect.OnlineApplication;
 import com.propertyvista.server.common.util.StreetAddressParser.StreetAddress;
 
 public class AddressRetriever {
+
+    private static Logger log = LoggerFactory.getLogger(AddressRetriever.class);
 
     private static InternationalAddress getUnitAddress(AptUnit unit) {
         Persistence.ensureRetrieve(unit.building(), AttachLevel.Attached);
@@ -97,6 +102,7 @@ public class AddressRetriever {
                 legal.streetType().setValue(sa.streetType);
                 legal.streetDirection().setValue(sa.streetDirection);
             } catch (ParseException ignore) {
+                log.debug("Could not parse address", ignore);
             }
         }
 

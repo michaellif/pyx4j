@@ -81,6 +81,20 @@ public class CanadianLegalAddressParserTest extends TestCase {
         assertNull(a.streetDirection);
     }
 
+    public void testAddressWithUnit() {
+        a = parse("10-1065 Main Street North", null);
+        assertEquals("10", a.unitNumber);
+        assertEquals("1065", a.streetNumber);
+        assertEquals("Main", a.streetName);
+
+        try { // no dash expected inside street number
+            a = parser.parse("10-11-65 Main Street North", null);
+            assertTrue("Parsing failure expected", false);
+        } catch (ParseException e) {
+            assertEquals(e.getMessage(), "Parsed address validation failed: Invalid Street Number: 11-65");
+        }
+    }
+
     public void testComplexStreetName() {
         a = parse("10-1065 Wild Wild West Street North", null);
         assertEquals("Wild Wild West", a.streetName);
@@ -187,21 +201,21 @@ public class CanadianLegalAddressParserTest extends TestCase {
             a = parser.parse("457 - 499 Albert Street", null);
             assertTrue("Parsing failure expected", false);
         } catch (ParseException e) {
-            assertEquals(e.getMessage(), "Parsed address validation failed");
+            assertEquals(e.getMessage(), "Parsed address validation failed: Invalid Street Name: - 499 Albert");
         }
 
         try {
             a = parser.parse("211-Baseline Road W", "Unit 00211");
             assertTrue("Parsing failure expected", false);
         } catch (ParseException e) {
-            assertEquals(e.getMessage(), "Parsed address validation failed");
+            assertEquals(e.getMessage(), "Parsed address validation failed: Invalid Street Number: Baseline");
         }
 
         try {
             a = parser.parse("3000,3015 and 3017 Baseline Road W", null);
             assertTrue("Parsing failure expected", false);
         } catch (ParseException e) {
-            assertEquals(e.getMessage(), "Parsed address validation failed");
+            assertEquals(e.getMessage(), "Parsed address validation failed: Invalid Street Number: 3000,3015");
         }
     }
 

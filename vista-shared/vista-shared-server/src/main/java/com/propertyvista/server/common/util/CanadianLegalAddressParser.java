@@ -230,10 +230,7 @@ public class CanadianLegalAddressParser implements StreetAddressParser {
         String streetNumber = addressTokens[0];
         String unitNumber = null;
         if (streetNumber.contains("-")) {
-            String[] streetNumberAndUnitNumber = addressTokens[0].split("-");
-            if (streetNumberAndUnitNumber.length != 2) {
-                new ParseException("Failed to parse street address and unit number from `" + addressTokens[0] + "` for address : `" + address1 + "`", 0);
-            }
+            String[] streetNumberAndUnitNumber = addressTokens[0].split("-", 2);
             unitNumber = streetNumberAndUnitNumber[0];
             streetNumber = streetNumberAndUnitNumber[1];
         }
@@ -322,9 +319,18 @@ public class CanadianLegalAddressParser implements StreetAddressParser {
             throw new ParseException("Cannot extract street type", streetAddressPartLowerBound);
         }
 
-        if ((unitNumber != null && unitNumber.contains(",")) || streetNumber == null || !streetNumber.matches("(\\d)+\\s*([a-zA-Z]*|\\d+/\\d+)")
-                || streetName.startsWith("-")) {
-            throw new ParseException("Parsed address validation failed", addressTokens.length);
+        String failedToken = null;
+        if (unitNumber != null && unitNumber.contains(",")) {
+            failedToken = "Invalid Unit: " + unitNumber;
+        } else if (streetNumber == null) {
+            failedToken = "Missing Street Number";
+        } else if (!streetNumber.matches("(\\d)+\\s*([a-zA-Z]*|\\d+/\\d+)")) {
+            failedToken = "Invalid Street Number: " + streetNumber;
+        } else if (streetName.startsWith("-")) {
+            failedToken = "Invalid Street Name: " + streetName;
+        }
+        if (failedToken != null) {
+            throw new ParseException("Parsed address validation failed: " + failedToken, addressTokens.length);
         }
 
         return new StreetAddress(unitNumber, streetNumber, streetName.toString(), streetType, streetDirection);
