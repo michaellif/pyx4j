@@ -80,7 +80,8 @@ public class TenantSureCoverageRequestForm extends CForm<TenantSureCoverageDTO> 
                 !getValue().contentsCoverage().isNull() &&
                 !getValue().deductible().isNull() &&
                 !getValue().smoker().isNull() &&
-                !getValue().numberOfPreviousClaims().isNull());
+                !getValue().numberOfPreviousClaims().isNull()&&
+                this.isValid());
         //@formatter:on
     }
 
