@@ -84,12 +84,6 @@ public class CPersonalIdentityField<T extends IPersonalIdentity> extends CTextFi
     }
 
     @Override
-    public boolean isValidatable() {
-        // see also if native editor has any user input
-        return super.isValidatable() || !getNativeComponent().getEditor().getValue().isEmpty();
-    }
-
-    @Override
     public void onEditingStop() {
         if (!getNativeComponent().getEditor().getValue().isEmpty() && getValue() != null) {
             // clear obfuscated value to indicate user input
