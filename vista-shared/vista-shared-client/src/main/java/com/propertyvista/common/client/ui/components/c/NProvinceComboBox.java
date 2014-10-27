@@ -32,6 +32,7 @@ import com.pyx4j.forms.client.events.NativeValueChangeEvent;
 import com.pyx4j.forms.client.ui.NFocusField;
 import com.pyx4j.widgets.client.IFocusWidget;
 import com.pyx4j.widgets.client.ListBox;
+import com.pyx4j.widgets.client.StringBox;
 import com.pyx4j.widgets.client.TextBox;
 
 public class NProvinceComboBox extends NFocusField<String, IFocusWidget, CProvinceComboBox, HTML> {
@@ -54,7 +55,7 @@ public class NProvinceComboBox extends NFocusField<String, IFocusWidget, CProvin
         return comboEditor == null ? comboEditor = new ComboEditor() : comboEditor;
     }
 
-    private TextBox getTextEditor() {
+    private TextBox<String> getTextEditor() {
         return ensureEditor().textBox;
     }
 
@@ -79,8 +80,8 @@ public class NProvinceComboBox extends NFocusField<String, IFocusWidget, CProvin
             getViewer().setText(textValue);
         } else {
             // set text editor value
-            if (!textValue.equals(getTextEditor().getText())) {
-                getTextEditor().setText(textValue);
+            if (!textValue.equals(getTextEditor().getValue())) {
+                getTextEditor().setValue(textValue);
             }
             // set combo editor value
             if (value != null && !isTextMode() && ((getCComponent().getOptions() == null) || !getCComponent().getOptions().contains(value))) {
@@ -98,7 +99,7 @@ public class NProvinceComboBox extends NFocusField<String, IFocusWidget, CProvin
             assert false : "getNativeValue() shouldn't be called in viewable mode";
         } else if (textMode) {
             // trim user input before parsing
-            value = getCComponent().parseValue(getTextEditor().getText().trim());
+            value = getCComponent().parseValue(getTextEditor().getValue().trim());
         } else {
             value = getValueByNativeOptionIndex(getComboEditor().getSelectedIndex());
         }
@@ -154,7 +155,7 @@ public class NProvinceComboBox extends NFocusField<String, IFocusWidget, CProvin
 
     static class ComboEditor extends SimplePanel implements IFocusWidget {
 
-        private TextBox textBox;
+        private StringBox textBox;
 
         private ListBox listBox;
 
@@ -170,9 +171,9 @@ public class NProvinceComboBox extends NFocusField<String, IFocusWidget, CProvin
             setTextMode(textMode);
         }
 
-        private TextBox ensureTextBox() {
+        private StringBox ensureTextBox() {
             if (textBox == null) {
-                textBox = new TextBox();
+                textBox = new StringBox();
                 textBox.setWidth("100%");
             }
             return textBox;
