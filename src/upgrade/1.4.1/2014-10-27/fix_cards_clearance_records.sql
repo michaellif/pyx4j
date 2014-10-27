@@ -10,11 +10,11 @@
 
 BEGIN TRANSACTION;
 
-    UPDATE  _admin_.card_clearance_record 
+    UPDATE  _admin_.cards_clearance_record
     SET     card_type = 'VISA'
     WHERE   id = 777;
     
-    UPDATE  _admin_.card_clearance_record 
+    UPDATE  _admin_.cards_clearance_record 
     SET     card_type = 'MCRD'
     WHERE   id = 778;
     
