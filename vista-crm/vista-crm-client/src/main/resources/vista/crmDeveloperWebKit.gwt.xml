@@ -5,5 +5,4 @@
     <inherits name='com.propertyvista.crm.Client'/>
     <set-property name="locale" value="en_US"/>
     <set-property name="user.agent" value="safari"/>
-    <inherits name='com.google.gwt.user.Debug'/>
 </module>

@@ -5,5 +5,4 @@
     <inherits name='com.propertyvista.portal.ProspectPortal'/>
 
     <set-property name="user.agent" value="safari"/>
-	<inherits name='com.google.gwt.user.Debug'/>
 </module>

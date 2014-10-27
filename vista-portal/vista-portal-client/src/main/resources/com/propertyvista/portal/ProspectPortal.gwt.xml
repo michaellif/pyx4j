@@ -24,5 +24,8 @@
 
     <extend-configuration-property name="rpc.blacklist" value="com.propertyvista.portal.shared.*" />
     <extend-configuration-property name="rpc.blacklist" value="com.propertyvista.portal.prospect.*" />
+    
+    <!-- Required for WalkMe -->
+    <inherits name='com.google.gwt.user.Debug'/>
 
 </module>
