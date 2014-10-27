@@ -37,10 +37,8 @@ public class MoveInWizardProgressGadget extends AbstractGadget<MoveInWizardView>
 
         SafeHtmlBuilder htmlBuilder = new SafeHtmlBuilder();
 
-        htmlBuilder.appendHtmlConstant("<div style='text-align:left'><div><b>");
-        htmlBuilder.appendEscaped(i18n.tr("Your registration is currently incomplete."));
-        htmlBuilder.appendHtmlConstant("</b></div><div>");
-        htmlBuilder.appendEscaped(i18n.tr("Please click the button below to complete your missing information."));
+        htmlBuilder.appendHtmlConstant("<div style='text-align:left'><div>");
+        htmlBuilder.appendEscaped(i18n.tr("Please review our services. Thank You!"));
         htmlBuilder.appendHtmlConstant("</div></div>");
 
         HTMLPanel htmlPanel = new HTMLPanel(htmlBuilder.toSafeHtml());
