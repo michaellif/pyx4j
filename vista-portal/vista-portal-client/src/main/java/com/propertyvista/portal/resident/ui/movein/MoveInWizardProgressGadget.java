@@ -32,7 +32,7 @@ public class MoveInWizardProgressGadget extends AbstractGadget<MoveInWizardView>
     private static final I18n i18n = I18n.get(MoveInWizardProgressGadget.class);
 
     public MoveInWizardProgressGadget(MoveInWizardView view) {
-        super(view, null, i18n.tr("Continue On-Line Registration"), ThemeColor.contrast4, 1);
+        super(view, null, i18n.tr("Welcome to myCommunity!"), ThemeColor.contrast4, 1);
         setActionsToolbar(new ActionsToolbar());
 
         SafeHtmlBuilder htmlBuilder = new SafeHtmlBuilder();

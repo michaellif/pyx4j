@@ -34,16 +34,14 @@ public class MoveInWizardCompletionConfirmationGadget extends AbstractGadget<Mov
     private static final I18n i18n = I18n.get(MoveInWizardCompletionConfirmationGadget.class);
 
     public MoveInWizardCompletionConfirmationGadget(MoveInWizardView view) {
-        super(view, null, i18n.tr("Application Complete"), ThemeColor.contrast4, 1);
+        super(view, null, i18n.tr("Welcome to myCommunity!"), ThemeColor.contrast4, 1);
         setActionsToolbar(new ActionsToolbar());
 
         setContent(new HTML(""));
 
         SafeHtmlBuilder htmlBuilder = new SafeHtmlBuilder();
 
-        htmlBuilder.appendHtmlConstant("<div style='text-align:left'><div><b>");
-        htmlBuilder.appendEscaped(i18n.tr("Congratulations! You’re now ready to move in."));
-        htmlBuilder.appendHtmlConstant("</b></div><div>");
+        htmlBuilder.appendHtmlConstant("<div style='text-align:left'><div>");
         htmlBuilder
                 .appendEscaped(i18n
                         .tr("Please familiarize yourself with the myCOMMUNITY online resident portal by selecting the link below. This online resource should be used for paying rent, submitting maintenance requests, purchasing tenant insurance and for participating in the buildings perks program. You can also update your profile information at any time directly from myCOMMUNITY."));

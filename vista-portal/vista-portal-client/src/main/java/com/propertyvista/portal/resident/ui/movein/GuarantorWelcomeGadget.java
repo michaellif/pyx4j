@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011- All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -56,7 +56,7 @@ public class GuarantorWelcomeGadget extends AbstractGadget<MoveInWizardView> {
                         0,
                         1,
                         new HTML(
-                                i18n.tr("<b>Congratulations. The application you are the Guarantor for has been Approved!</b><p/><div style=text-align:left>To finalize the Lease you have guaranteed, you will need to sign the Lease by following a few short steps.</div>")));
+                                i18n.tr("<b>Congratulations! The application you are the Guarantor for has been approved.</b><p/><div style=text-align:left>To finalize the Lease you have guaranteed, you will need to sign the Lease by following a few short steps.</div>")));
 
         setContent(welcomePanel);
     }
