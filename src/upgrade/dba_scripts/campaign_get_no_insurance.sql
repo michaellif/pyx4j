@@ -46,7 +46,6 @@ BEGIN
                 ||'                     WHERE   tenant = lp.id) '
                 ||'AND  l.status = ''Active'' '
                 ||'AND NOT b.suspended '
-                ||'AND  c.person_email IS NOT NULL '
                 ||'ORDER BY 1, 4, 3 ';
                 
     RETURN QUERY EXECUTE v_sql;
