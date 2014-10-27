@@ -34,7 +34,7 @@ import com.propertyvista.portal.shared.ui.GadgetToolbar;
 
 public class MoveInWizardInsurancePreviewGadget extends AbstractGadget<MoveInWizardView> {
 
-    private static final I18n i18n = I18n.get(TenantWelcomeGadget.class);
+    private static final I18n i18n = I18n.get(MoveInWizardInsurancePreviewGadget.class);
 
     public MoveInWizardInsurancePreviewGadget(MoveInWizardView view) {
         super(view, null, i18n.tr("Renters Insurance"), ThemeColor.contrast3, 1);

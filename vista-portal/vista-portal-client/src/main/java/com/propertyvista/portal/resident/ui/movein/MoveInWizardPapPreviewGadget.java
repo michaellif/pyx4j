@@ -34,7 +34,7 @@ import com.propertyvista.portal.shared.ui.GadgetToolbar;
 
 public class MoveInWizardPapPreviewGadget extends AbstractGadget<MoveInWizardView> {
 
-    private static final I18n i18n = I18n.get(TenantWelcomeGadget.class);
+    private static final I18n i18n = I18n.get(MoveInWizardPapPreviewGadget.class);
 
     public MoveInWizardPapPreviewGadget(MoveInWizardView view) {
         super(view, null, i18n.tr("AutoPay Setup (Pre-Authorized Payments)"), ThemeColor.contrast4, 1);
