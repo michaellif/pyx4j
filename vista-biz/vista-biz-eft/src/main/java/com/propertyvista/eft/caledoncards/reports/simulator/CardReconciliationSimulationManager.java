@@ -66,6 +66,7 @@ public class CardReconciliationSimulationManager {
     private static final Logger log = LoggerFactory.getLogger(CardReconciliationSimulationManager.class);
 
     public String createReports(CardServiceSimulationCompany company, LogicalDate from, LogicalDate to) {
+        log.debug("create CardReconciliation Company:{} from:{} to:{}", company, from, to);
         EntityQueryCriteria<CardServiceSimulationTransaction> criteria = EntityQueryCriteria.create(CardServiceSimulationTransaction.class);
         criteria.in(criteria.proto().transactionType(), SimulationTransactionType.Sale, SimulationTransactionType.Completion, SimulationTransactionType.Return);
         criteria.eq(criteria.proto().merchant().company(), company);
@@ -391,6 +392,7 @@ public class CardReconciliationSimulationManager {
             out = new FileOutputStream(file);
             out.write(formatter.getBinaryData());
             out.flush();
+            log.debug("DailyReport file created {}", file);
         } catch (Throwable e) {
             log.error("Unable write to file {}", file.getAbsolutePath(), e);
             throw new Error(e);
@@ -416,6 +418,7 @@ public class CardReconciliationSimulationManager {
             out = new FileOutputStream(file);
             out.write(formatter.getBinaryData());
             out.flush();
+            log.debug("MerchantTotals file created {}", file);
         } catch (Throwable e) {
             log.error("Unable write to file {}", file.getAbsolutePath(), e);
             throw new Error(e);
@@ -441,6 +444,7 @@ public class CardReconciliationSimulationManager {
             out = new FileOutputStream(file);
             out.write(formatter.getBinaryData());
             out.flush();
+            log.debug("CardTotals file created {}", file);
         } catch (Throwable e) {
             log.error("Unable write to file {}", file.getAbsolutePath(), e);
             throw new Error(e);
