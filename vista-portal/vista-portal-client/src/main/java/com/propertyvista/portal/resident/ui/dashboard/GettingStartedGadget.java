@@ -30,7 +30,6 @@ import com.propertyvista.portal.resident.ui.utils.PortalHidablePreferenceManager
 import com.propertyvista.portal.rpc.portal.resident.ResidentPortalSiteMap;
 import com.propertyvista.portal.shared.themes.DashboardTheme;
 import com.propertyvista.portal.shared.ui.AbstractGadget;
-import com.propertyvista.shared.config.VistaFeatures;
 
 public class GettingStartedGadget extends AbstractGadget<MainDashboardViewImpl> {
 
@@ -109,19 +108,17 @@ public class GettingStartedGadget extends AbstractGadget<MainDashboardViewImpl> 
 
     class NavigationBar extends FlowPanel {
         public NavigationBar() {
-            if (!VistaFeatures.instance().yardiIntegration()) {
 
-                Anchor anchor = new Anchor(i18n.tr("Hide Getting Started"), new Command() {
+            Anchor anchor = new Anchor(i18n.tr("Hide Getting Started"), new Command() {
 
-                    @Override
-                    public void execute() {
-                        PortalHidablePreferenceManager.updatePreference(CustomerPreferencesPortalHidable.Type.GettingStartedGadget, true);
-                    }
-                });
-                anchor.setTitle(i18n.tr("You can use setting menu to show Getting Started again."));
-                add(anchor);
+                @Override
+                public void execute() {
+                    PortalHidablePreferenceManager.updatePreference(CustomerPreferencesPortalHidable.Type.GettingStartedGadget, true);
+                }
+            });
+            anchor.setTitle(i18n.tr("You can use setting menu to show Getting Started again."));
+            add(anchor);
 
-            }
         }
     }
 
