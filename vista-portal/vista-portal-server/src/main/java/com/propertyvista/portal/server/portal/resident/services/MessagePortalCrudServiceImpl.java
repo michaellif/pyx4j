@@ -195,7 +195,8 @@ public class MessagePortalCrudServiceImpl extends AbstractCrudServiceDtoImpl<Mes
                 Persistence.ensureRetrieve(m.recipients(), AttachLevel.Attached);
                 Persistence.ensureRetrieve(m.attachments(), AttachLevel.Attached);
                 Persistence.ensureRetrieve(m.sender(), AttachLevel.Attached);
-                if (!lp.equals(m.sender()) && !isRecipientOf(m, lp)) {
+                if (!lp.equals(m.sender()) && !isRecipientOf(m, lp) && !lp.equals(m.onBehalf())
+                        && (lp.equals(m.onBehalf()) && !m.onBehalfVisible().getValue(false))) {
                     continue;
                 }
                 hasAttachment = hasAttachment || m.attachments().size() > 0;

@@ -191,6 +191,8 @@ public class MessageCrudServiceImpl extends AbstractCrudServiceDtoImpl<Message, 
         bo.attachments().set(to.attachments());
         bo.date().setValue(SystemDateManager.getDate());
         bo.sender().set(CrmAppContext.getCurrentUserEmployee());
+        bo.onBehalf().set(to.onBehalf());
+        bo.onBehalfVisible().set(to.onBehalfVisible());
         bo.text().set(to.text());
         bo.highImportance().set(to.highImportance());
         if (to.category().isValueDetached()) {

@@ -44,6 +44,11 @@ public interface Message extends IEntity {
     @MemberColumn(notNull = true)
     CommunicationEndpoint sender();
 
+    @Detached
+    CommunicationEndpoint onBehalf();
+
+    IPrimitive<Boolean> onBehalfVisible();
+
     @Length(48000)
     @Editor(type = Editor.EditorType.richtextarea)
     IPrimitive<String> text();

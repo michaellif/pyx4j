@@ -32,6 +32,7 @@ import com.pyx4j.entity.rpc.EntitySearchResult;
 import com.pyx4j.entity.security.EntityPermission;
 import com.pyx4j.entity.server.IEntityPersistenceService.ICursorIterator;
 import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.security.shared.Context;
 import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.server.contexts.ServerContext;
@@ -60,6 +61,8 @@ import com.propertyvista.portal.rpc.shared.dto.communication.PortalCommunication
 import com.propertyvista.shared.VistaUserVisit;
 
 public class CommunicationManager {
+
+    private final static I18n i18n = I18n.get(CommunicationManager.class);
 
     private static class SingletonHolder {
         public static final CommunicationManager INSTANCE = new CommunicationManager();
@@ -279,6 +282,8 @@ public class CommunicationManager {
             for (Message m : ms) {
                 Persistence.ensureRetrieve(m.recipients(), AttachLevel.Attached);
                 Persistence.ensureRetrieve(m.sender(), AttachLevel.Attached);
+                Persistence.ensureRetrieve(m.onBehalf(), AttachLevel.Attached);
+
                 if (!isForList || !hasAttachment) {
                     Persistence.ensureRetrieve(m.attachments(), AttachLevel.Attached);
                 }
@@ -391,7 +396,10 @@ public class CommunicationManager {
             messageDTO.associated().set(thread.associated());
         }
         messageDTO.header().date().set(m.date());
-
+        if (m.onBehalf() != null && !m.onBehalf().isNull()) {
+            messageDTO.header().onBehalf().setValue(communicationFacade.extractEndpointName(m.onBehalf()));
+            messageDTO.header().onBehalfVisible().setValue(m.onBehalfVisible().getValue(false) ? "" : i18n.tr("hidden from tenant"));
+        }
         return messageDTO;
     }
 
@@ -424,6 +432,8 @@ public class CommunicationManager {
             communicationFacade.buildRecipientList(dbo, dto, thread);
         }
         dbo.thread().set(thread);
+        dbo.onBehalf().set(dto.onBehalf());
+        dbo.onBehalfVisible().set(dto.onBehalfVisible());
         dbo.attachments().set(dto.attachments());
         dbo.date().setValue(SystemDateManager.getDate());
         dbo.sender().set(currentUser);

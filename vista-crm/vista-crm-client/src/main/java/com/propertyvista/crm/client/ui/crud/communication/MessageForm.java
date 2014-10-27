@@ -15,7 +15,6 @@ package com.propertyvista.crm.client.ui.crud.communication;
 
 import java.util.Collection;
 import java.util.Date;
-import java.util.List;
 
 import com.google.gwt.dom.client.Style.Overflow;
 import com.google.gwt.dom.client.Style.TextOverflow;
@@ -29,7 +28,6 @@ import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Label;
-import com.google.gwt.user.client.ui.MenuItem;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.commons.HtmlUtils;
@@ -40,7 +38,6 @@ import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.IObject;
 import com.pyx4j.entity.core.IPrimitive;
-import com.pyx4j.entity.core.criterion.Criterion;
 import com.pyx4j.forms.client.ui.CCheckBox;
 import com.pyx4j.forms.client.ui.CEntityHyperlink;
 import com.pyx4j.forms.client.ui.CForm;
@@ -56,11 +53,12 @@ import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.site.client.AppPlaceEntityMapper;
 import com.pyx4j.site.client.AppSite;
+import com.pyx4j.site.client.backoffice.ui.prime.CEntitySelectorHyperlink;
 import com.pyx4j.site.client.backoffice.ui.prime.form.IForm;
+import com.pyx4j.site.rpc.AppPlace;
 import com.pyx4j.site.rpc.CrudAppPlace;
 import com.pyx4j.site.rpc.CrudAppPlace.Type;
 import com.pyx4j.widgets.client.Anchor;
-import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.Toolbar;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 
@@ -69,9 +67,6 @@ import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
 import com.propertyvista.crm.client.activity.crud.communication.MessageViewerActivity;
 import com.propertyvista.crm.client.resources.CrmImages;
 import com.propertyvista.crm.client.themes.CommunicationCrmTheme;
-import com.propertyvista.crm.client.ui.components.boxes.BuildingSelectorDialog;
-import com.propertyvista.crm.client.ui.components.boxes.EmployeeSelectorDialog;
-import com.propertyvista.crm.client.ui.components.boxes.PortfolioSelectorDialog;
 import com.propertyvista.crm.client.ui.components.boxes.TenantSelectorDialog;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.crm.client.ui.crud.communication.selector.CommunicationEndpointSelector;
@@ -82,7 +77,6 @@ import com.propertyvista.domain.communication.CommunicationGroup;
 import com.propertyvista.domain.communication.DeliveryHandle;
 import com.propertyvista.domain.communication.MessageCategory.CategoryType;
 import com.propertyvista.domain.company.Employee;
-import com.propertyvista.domain.company.EmployeeEnabledCriteria;
 import com.propertyvista.domain.company.Portfolio;
 import com.propertyvista.domain.maintenance.MaintenanceRequest;
 import com.propertyvista.domain.property.asset.building.Building;
@@ -274,10 +268,6 @@ public class MessageForm extends CrmEntityForm<MessageDTO> {
 
         MessageAttachmentFolder attachemnts;
 
-        private Button.ButtonMenuBar subMenu;
-
-        private final Button actionsButton;
-
         private final CommunicationEndpointSelector communicationEndpointSelector = createCommunicationEndpointSelector();
 
         private final CrmEntityForm<? extends IEntity> parentForm;
@@ -288,7 +278,6 @@ public class MessageForm extends CrmEntityForm<MessageDTO> {
             super(MessageDTO.class, new VistaViewersComponentFactory());
             this.parentForm = parentForm;
             this.parentFolder = parentFolder;
-            actionsButton = new Button(i18n.tr("Select Recipients"));
             inheritEditable(false);
             inheritViewable(false);
             inheritEnabled(false);
@@ -334,65 +323,11 @@ public class MessageForm extends CrmEntityForm<MessageDTO> {
             formPanel.append(Location.Dual, proto().header()).decorate().labelWidth(0).customLabel("").useLabelSemicolon(false).assistantWidget(statusToolBar);
             formPanel.br();
 
-            subMenu = new Button.ButtonMenuBar();
-            subMenu.addItem(new MenuItem(i18n.tr("Tenant"), new Command() {
-                @Override
-                public void execute() {
-                    new TenantSelectorDialog(parentForm.getParentView(), true) {
-                        @Override
-                        public void onClickOk() {
-                            onAdd(getSelectedItems());
-                        }
-                    }.show();
-                }
-            }));
-            subMenu.addItem(new MenuItem(i18n.tr("Corporate"), new Command() {
-                @Override
-                public void execute() {
-                    new EmployeeSelectorDialog(parentForm.getParentView(), true) {
-                        @Override
-                        public void onClickOk() {
-                            onAdd(getSelectedItems());
-                        }
-
-                        @Override
-                        protected void setFilters(List<Criterion> filters) {
-                            super.setFilters(filters);
-                            addFilter(new EmployeeEnabledCriteria(true));
-                        }
-                    }.show();
-                }
-            }));
-            subMenu.addItem(new MenuItem(i18n.tr("Building"), new Command() {
-                @Override
-                public void execute() {
-                    BuildingSelectorDialog dialog = new BuildingSelectorDialog(parentForm.getParentView(), true) {
-                        @Override
-                        public void onClickOk() {
-                            onAdd(getSelectedItems());
-                        }
-                    };
-                    dialog.getCancelButton().setVisible(true);
-                    dialog.show();
-                }
-            }));
-            subMenu.addItem(new MenuItem(i18n.tr("Portfolio"), new Command() {
-                @Override
-                public void execute() {
-                    new PortfolioSelectorDialog(parentForm.getParentView(), true) {
-                        @Override
-                        public void onClickOk() {
-                            onAdd(getSelectedItems());
-                        }
-                    }.show();
-                }
-            }));
-
-            actionsButton.setMenu(subMenu);
             formPanel.append(Location.Dual, proto().to(), communicationEndpointSelector).decorate().labelWidth(20);
-            if (false) {
-                formPanel.append(Location.Dual, actionsButton);
-            }
+            formPanel.br();
+
+            formPanel.append(Location.Left, proto().onBehalf(), new TenantSelector()).decorate();
+            formPanel.append(Location.Right, proto().onBehalfVisible()).decorate().customLabel(i18n.tr("Is Visible For Tenant"));
             formPanel.br();
 
             formPanel.append(Location.Dual, proto().highImportance(), new CCheckBox()).decorate();
@@ -608,14 +543,12 @@ public class MessageForm extends CrmEntityForm<MessageDTO> {
                 highImportnaceImage.setVisible(false);
                 get(proto().highImportance()).setVisible(true);
                 statusToolBar.asWidget().setVisible(false);
-                subMenu.setVisible(true);
-                actionsButton.setVisible(true);
+                get(proto().onBehalf()).setVisible(true);
+                get(proto().onBehalfVisible()).setVisible(true);
             } else {
                 setViewable(true);
                 setEditable(false);
                 setEnabled(false);
-                subMenu.setVisible(false);
-                actionsButton.setVisible(false);
                 btnSend.setVisible(false);
                 btnCancel.setVisible(false);
                 btnReply.setVisible(getValue().allowedReply().getValue(true));
@@ -631,6 +564,8 @@ public class MessageForm extends CrmEntityForm<MessageDTO> {
                 highImportnaceImage.setVisible(getValue().highImportance().getValue(false));
                 get(proto().highImportance()).setVisible(false);
                 statusToolBar.asWidget().setVisible(starImage.isVisible() || highImportnaceImage.isVisible());
+                get(proto().onBehalf()).setVisible(false);
+                get(proto().onBehalfVisible()).setVisible(false);
             }
         }
 
@@ -644,6 +579,26 @@ public class MessageForm extends CrmEntityForm<MessageDTO> {
 
         public void removeToItem(CommunicationEndpointDTO item) {
             getValue().to().remove(item);
+        }
+
+        class TenantSelector extends CEntitySelectorHyperlink<Tenant> {
+            @Override
+            protected AppPlace getTargetPlace() {
+                return AppPlaceEntityMapper.resolvePlace(Tenant.class, getValue().getPrimaryKey());
+            }
+
+            @Override
+            protected TenantSelectorDialog getSelectorDialog() {
+                return new TenantSelectorDialog(parentForm.getParentView()) {
+
+                    @Override
+                    public void onClickOk() {
+                        if (getSelectedItems().size() == 1) {
+                            setValue(getSelectedItems().toArray(new Tenant[] {})[0]);
+                        }
+                    }
+                };
+            }
         }
     }
 }

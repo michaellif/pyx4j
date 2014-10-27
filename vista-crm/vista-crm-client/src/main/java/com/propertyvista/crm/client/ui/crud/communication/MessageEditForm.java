@@ -23,14 +23,19 @@ import com.pyx4j.forms.client.ui.CRichTextArea;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.site.client.AppPlaceEntityMapper;
+import com.pyx4j.site.client.backoffice.ui.prime.CEntitySelectorHyperlink;
 import com.pyx4j.site.client.backoffice.ui.prime.form.IForm;
+import com.pyx4j.site.rpc.AppPlace;
 
 import com.propertyvista.crm.client.activity.crud.communication.MessageEditorActivity;
+import com.propertyvista.crm.client.ui.components.boxes.TenantSelectorDialog;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.crm.client.ui.crud.communication.selector.CommunicationEndpointSelector;
 import com.propertyvista.domain.communication.MessageCategory;
 import com.propertyvista.domain.communication.MessageCategory.CategoryType;
 import com.propertyvista.domain.communication.MessageCategory.TicketType;
+import com.propertyvista.domain.tenant.lease.Tenant;
 import com.propertyvista.dto.CommunicationEndpointDTO;
 import com.propertyvista.dto.MessageDTO;
 import com.propertyvista.misc.VistaTODO;
@@ -101,6 +106,8 @@ public class MessageEditForm extends CrmEntityForm<MessageDTO> {
 
         get(proto().category());
 
+        formPanel.append(Location.Left, proto().onBehalf(), new TenantSelector()).decorate();
+        formPanel.append(Location.Right, proto().onBehalfVisible()).decorate().customLabel(i18n.tr("Is Visible For Tenant"));
         formPanel.append(Location.Left, proto().allowedReply()).decorate();
         formPanel.append(Location.Right, proto().highImportance()).decorate();
         formPanel.br();
@@ -150,4 +157,23 @@ public class MessageEditForm extends CrmEntityForm<MessageDTO> {
         return new CommunicationEndpointSelector();
     }
 
+    class TenantSelector extends CEntitySelectorHyperlink<Tenant> {
+        @Override
+        protected AppPlace getTargetPlace() {
+            return AppPlaceEntityMapper.resolvePlace(Tenant.class, getValue().getPrimaryKey());
+        }
+
+        @Override
+        protected TenantSelectorDialog getSelectorDialog() {
+            return new TenantSelectorDialog(MessageEditForm.this.getParentView()) {
+
+                @Override
+                public void onClickOk() {
+                    if (getSelectedItems().size() == 1) {
+                        setValue(getSelectedItems().toArray(new Tenant[] {})[0]);
+                    }
+                }
+            };
+        }
+    }
 }

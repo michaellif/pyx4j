@@ -133,6 +133,10 @@ public class CommunicationAssociationManager {
                         facade.buildRecipientsList4UnitLeaseParticipants(message, unit);
                     } else if (t != null && !t.isNull()) {
                         message.recipients().add(facade.createDeliveryHandle(t, false));
+                        if (MaintenanceRequestStatus.StatusPhase.Submitted.equals(mr.status().phase().getValue())) {
+                            message.onBehalf().set(t);
+                            message.onBehalfVisible().setValue(true);
+                        }
                     }
                 }
             }

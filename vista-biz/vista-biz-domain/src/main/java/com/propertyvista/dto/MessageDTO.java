@@ -109,7 +109,7 @@ public interface MessageDTO extends Message {
     CommunicationAssociation associated();
 
     @Transient
-    @ToStringFormat("{0}; {1}")
+    @ToStringFormat("{0}; {1} {2,choice,null#|!null# on behalf of {2}} {3,choice,null#|!null#{3}}")
     public interface MessageHeader extends IEntity {
         @NotNull
         @ToString(index = 1)
@@ -121,5 +121,13 @@ public interface MessageDTO extends Message {
         @Format("MM/dd/yyyy, HH:mm:ss")
         @ReadOnly
         IPrimitive<Date> date();
+
+        @ToString(index = 2)
+        @ReadOnly
+        IPrimitive<String> onBehalf();
+
+        @ToString(index = 3)
+        @ReadOnly
+        IPrimitive<String> onBehalfVisible();
     }
 }
