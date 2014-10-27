@@ -231,6 +231,13 @@ public class MailMessage implements Serializable {
         this.keywords = keywords;
     }
 
+    public void addKeywords(Collection<String> keywords) {
+        if (this.keywords == null) {
+            this.keywords = new ArrayList<>();
+        }
+        this.keywords.addAll(keywords);
+    }
+
     public void addKeywords(String... keyword) {
         if (this.keywords == null) {
             this.keywords = new ArrayList<>();
