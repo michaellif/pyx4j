@@ -354,11 +354,11 @@ public class PMSiteApplication extends AuthenticatedWebApplication {
 
             @Override
             public String encodeRedirectURL(CharSequence url) {
+                log.debug("URL received: {}", url);
                 // This logic deals with the rules from HttpServletResponse#sendRedirect(url)
                 String urlStr = url.toString();
-                if (urlStr.startsWith("http")) {
-                    return urlStr;
-                } else {
+                // if already absolute URL - return as is, otherwise convert to absolute site URL
+                if (!urlStr.startsWith("http")) {
                     HttpServletRequest httpRequest = (HttpServletRequest) webRequest.getContainerRequest();
                     String pathBase = httpRequest.getServletPath().replaceAll("/[^/]*$", "/");
                     if (urlStr.startsWith(pathBase)) {
@@ -366,10 +366,15 @@ public class PMSiteApplication extends AuthenticatedWebApplication {
                     }
                     String urlPath = ServletUtils.getRelativeServletPath(httpRequest, pathBase + urlStr);
                     String urlBase = VistaDeployment.getBaseApplicationURL(VistaApplication.site, httpRequest.isSecure());
-                    // strip off the path portion
-                    urlBase = urlBase.substring(0, urlBase.indexOf('/', 8));
-                    return urlBase + urlPath;
+                    // strip off the path portion if found
+                    int pathIdx = urlBase.indexOf('/', 8);
+                    if (pathIdx > -1) {
+                        urlBase = urlBase.substring(0, pathIdx);
+                    }
+                    urlStr = urlBase + urlPath;
                 }
+                log.debug("URL returned: {}", urlStr);
+                return urlStr;
             }
         };
     }
