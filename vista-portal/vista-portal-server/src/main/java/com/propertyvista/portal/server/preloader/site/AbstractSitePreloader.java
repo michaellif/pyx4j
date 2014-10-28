@@ -141,24 +141,24 @@ public abstract class AbstractSitePreloader extends AbstractVistaDataPreloader {
             siteLocale.add(li);
         }
 
-        SiteDescriptor site = EntityFactory.create(SiteDescriptor.class);
-        site._updateFlag().updated().setValue(new Date());
+        SiteDescriptor descriptor = EntityFactory.create(SiteDescriptor.class);
+        descriptor._updateFlag().updated().setValue(new Date());
 
-        site.skin().setValue(skin());
-        site.sitePalette().object1().setValue(object1());
-        site.sitePalette().object2().setValue(object2());
-        site.sitePalette().contrast1().setValue(contrast1());
-        site.sitePalette().contrast2().setValue(contrast2());
-        site.sitePalette().contrast3().setValue(contrast3());
-        site.sitePalette().contrast4().setValue(contrast4());
-        site.sitePalette().contrast5().setValue(contrast5());
-        site.sitePalette().contrast6().setValue(contrast6());
-        site.sitePalette().formBackground().setValue(formBackground());
-        site.sitePalette().siteBackground().setValue(siteBackground());
-        site.sitePalette().foreground().setValue(foreground());
+        descriptor.skin().setValue(skin());
+        descriptor.sitePalette().object1().setValue(object1());
+        descriptor.sitePalette().object2().setValue(object2());
+        descriptor.sitePalette().contrast1().setValue(contrast1());
+        descriptor.sitePalette().contrast2().setValue(contrast2());
+        descriptor.sitePalette().contrast3().setValue(contrast3());
+        descriptor.sitePalette().contrast4().setValue(contrast4());
+        descriptor.sitePalette().contrast5().setValue(contrast5());
+        descriptor.sitePalette().contrast6().setValue(contrast6());
+        descriptor.sitePalette().formBackground().setValue(formBackground());
+        descriptor.sitePalette().siteBackground().setValue(siteBackground());
+        descriptor.sitePalette().foreground().setValue(foreground());
 
-        site.enabled().setValue(Boolean.TRUE);
-        site.disableMapView().setValue(Boolean.FALSE);
+        descriptor.enabled().setValue(Boolean.TRUE);
+        descriptor.disableMapView().setValue(Boolean.FALSE);
 
         {
             for (LocaleInfo li : siteLocale) {
@@ -172,7 +172,7 @@ public abstract class AbstractSitePreloader extends AbstractVistaDataPreloader {
 
                 titles.sitePromoTitle().setValue(li.i18n.tr("Featured Apartments"));
 
-                site.siteTitles().add(titles);
+                descriptor.siteTitles().add(titles);
 
                 // meta tags
                 String title = li.i18n.tr("Apartments for Rent Across Canada - {0}", pmcName());
@@ -180,7 +180,7 @@ public abstract class AbstractSitePreloader extends AbstractVistaDataPreloader {
                         + "Our commitment to providing the best customer experience and highest standards "
                         + "for our properties is what sets us apart on the Canadian market.", pmcName());
                 String keywords = li.i18n.tr("apartments for rent, rental apartments");
-                site.metaTags().add(createMeta(li.aLocale, title, description, keywords));
+                descriptor.metaTags().add(createMeta(li.aLocale, title, description, keywords));
 
                 // pmc info
                 HtmlContent pmcInfo = EntityFactory.create(HtmlContent.class);
@@ -188,7 +188,7 @@ public abstract class AbstractSitePreloader extends AbstractVistaDataPreloader {
                 pmcInfo.html().setValue(
                         "<div>" + pmcName() + "<br/>Contact us: " + DataGenerator.randomPhone() + "<br/>" + RandomUtil.randomInt(10000) + " "
                                 + RandomUtil.random(PreloadData.STREETS) + "</div>");
-                site.pmcInfo().add(pmcInfo);
+                descriptor.pmcInfo().add(pmcInfo);
             }
         }
 
@@ -213,19 +213,19 @@ public abstract class AbstractSitePreloader extends AbstractVistaDataPreloader {
                 }
                 link.socialSite().setValue(soc);
                 link.siteUrl().setValue(url);
-                site.socialLinks().add(link);
+                descriptor.socialLinks().add(link);
             }
         }
 
         // home page gadgets
         {
-            createQuickSearchGadget(site, siteLocale);
+            createQuickSearchGadget(descriptor, siteLocale);
 
-            createPromoGadget(site, siteLocale);
+            createPromoGadget(descriptor, siteLocale);
 
-            createTestimonialGadget(site, siteLocale);
+            createTestimonialGadget(descriptor, siteLocale);
 
-            createNewsGadget(site, siteLocale);
+            createNewsGadget(descriptor, siteLocale);
         }
 
         // site pages
@@ -237,7 +237,7 @@ public abstract class AbstractSitePreloader extends AbstractVistaDataPreloader {
                 addCaption(page, li.i18n.tr(caption), li.aLocale);
                 addEmptyContent(page, li.aLocale);
             }
-            site.childPages().add(page);
+            descriptor.childPages().add(page);
         }
 
         {
@@ -248,20 +248,20 @@ public abstract class AbstractSitePreloader extends AbstractVistaDataPreloader {
                 addCaption(page, li.i18n.tr(caption), li.aLocale);
                 addEmptyContent(page, li.aLocale);
             }
-            site.childPages().add(page);
+            descriptor.childPages().add(page);
         }
 
-        site.residentPortalEnabled().setValue(true);
+        descriptor.residentPortalEnabled().setValue(true);
 
-        createStaticPages(site, siteLocale);
+        createStaticPages(descriptor, siteLocale);
 
-        createLogo(site, siteLocale);
+        createLogo(descriptor, siteLocale);
 
-        createCrmLogo(site);
+        createCrmLogo(descriptor);
 
-        createPortalBanner(site, siteLocale);
+        createPortalBanner(descriptor, siteLocale);
 
-        Persistence.service().persist(site);
+        Persistence.service().persist(descriptor);
         return null;
     }
 
