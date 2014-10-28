@@ -32,6 +32,11 @@ import org.slf4j.LoggerFactory;
 
 import com.pyx4j.commons.IFormatter;
 
+/*
+ * http://exceptional-code.blogspot.ca/2011/07/coding-up-trie-prefix-tree.html
+ * http://en.wikipedia.org/wiki/Trie
+ */
+
 public class MultyWordSuggestTrie<E> {
 
     private static final Logger log = LoggerFactory.getLogger(MultyWordSuggestTrie.class);
