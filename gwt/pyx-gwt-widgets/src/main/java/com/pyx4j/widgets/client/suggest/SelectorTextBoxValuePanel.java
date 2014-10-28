@@ -20,8 +20,13 @@
  */
 package com.pyx4j.widgets.client.suggest;
 
+import com.google.gwt.event.dom.client.KeyUpEvent;
+import com.google.gwt.event.dom.client.KeyUpHandler;
+
 import com.pyx4j.commons.IFormatter;
 import com.pyx4j.widgets.client.StringBox;
+import com.pyx4j.widgets.client.event.shared.PasteEvent;
+import com.pyx4j.widgets.client.event.shared.PasteHandler;
 
 public class SelectorTextBoxValuePanel<E> extends StringBox implements ISelectorValuePanel {
 
@@ -29,6 +34,22 @@ public class SelectorTextBoxValuePanel<E> extends StringBox implements ISelector
 
     public SelectorTextBoxValuePanel(IFormatter<E, String> valueFormatter) {
         this.valueFormatter = valueFormatter;
+
+        addKeyUpHandler(new KeyUpHandler() {
+
+            @Override
+            public void onKeyUp(KeyUpEvent event) {
+                setValue(getTextBoxWidget().getText(), true, null);
+            }
+        });
+
+        addPasteHandler(new PasteHandler() {
+
+            @Override
+            public void onPaste(PasteEvent event) {
+                setValue(getTextBoxWidget().getText(), true, null);
+            }
+        });
     }
 
     public void showValue(E value) {

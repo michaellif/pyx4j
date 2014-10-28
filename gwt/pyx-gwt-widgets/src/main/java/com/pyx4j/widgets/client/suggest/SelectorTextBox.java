@@ -20,8 +20,6 @@
  */
 package com.pyx4j.widgets.client.suggest;
 
-import com.google.gwt.event.dom.client.KeyUpEvent;
-import com.google.gwt.event.dom.client.KeyUpHandler;
 import com.google.gwt.event.logical.shared.HasValueChangeHandlers;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
@@ -31,8 +29,6 @@ import com.google.gwt.user.client.Command;
 import com.pyx4j.commons.IFormatter;
 import com.pyx4j.widgets.client.IWatermarkWidget;
 import com.pyx4j.widgets.client.ImageFactory;
-import com.pyx4j.widgets.client.event.shared.PasteEvent;
-import com.pyx4j.widgets.client.event.shared.PasteHandler;
 
 public class SelectorTextBox<E> extends AbstractSelectorWidget<E> implements HasValueChangeHandlers<E>, IWatermarkWidget {
 
@@ -46,26 +42,19 @@ public class SelectorTextBox<E> extends AbstractSelectorWidget<E> implements Has
 
     private final IPickerPanel<E> picker;
 
+    @SuppressWarnings("unchecked")
     public SelectorTextBox(final IOptionsGrabber<E> optionsGrabber, IFormatter<E, String> valueFormatter, IFormatter<E, String[]> optionPathFormatter) {
-        super(new SelectorTextBoxValuePanel(valueFormatter));
+        super(new SelectorTextBoxValuePanel<E>(valueFormatter));
         this.valueFormatter = valueFormatter;
         this.optionPathFormatter = optionPathFormatter;
         textBox = (SelectorTextBoxValuePanel<E>) getViewerPanel();
 
         picker = new TreePickerPanel<E>(optionsGrabber, valueFormatter, null);
 
-        textBox.addKeyUpHandler(new KeyUpHandler() {
+        textBox.addValueChangeHandler(new ValueChangeHandler<String>() {
 
             @Override
-            public void onKeyUp(KeyUpEvent event) {
-                showSuggestPicker();
-            }
-        });
-
-        textBox.addPasteHandler(new PasteHandler() {
-
-            @Override
-            public void onPaste(PasteEvent event) {
+            public void onValueChange(ValueChangeEvent<String> event) {
                 showSuggestPicker();
             }
         });
@@ -83,7 +72,7 @@ public class SelectorTextBox<E> extends AbstractSelectorWidget<E> implements Has
     public void setValue(E value) {
         this.value = value;
         if (value == null) {
-            textBox.setValue("");
+            textBox.setValue(null);
         } else {
             textBox.setValue(valueFormatter.format(value));
         }

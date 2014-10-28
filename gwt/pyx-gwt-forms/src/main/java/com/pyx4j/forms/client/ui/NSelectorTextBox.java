@@ -63,7 +63,11 @@ public class NSelectorTextBox<E extends IEntity> extends NFocusField<E, Selector
         if (isViewable()) {
             getViewer().setText(getCComponent().getFormatter().format(value));
         } else {
-            getEditor().setValue(value);
+            if (getCComponent().isValueEmpty()) {
+                getEditor().setValue(null);
+            } else {
+                getEditor().setValue(value);
+            }
         }
     }
 
