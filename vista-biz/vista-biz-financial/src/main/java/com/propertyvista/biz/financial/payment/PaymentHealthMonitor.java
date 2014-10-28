@@ -223,7 +223,7 @@ class PaymentHealthMonitor {
         }
         {
             Date reportSince = DateUtils.addMonths(forDate, -2);
-            Date reportBefore = DateUtils.addDays(forDate, -4);
+            Date reportBefore = DateUtils.addDays(forDate, -5); // This is From Thursday to Monday. Alert on Tuesday
             EntityQueryCriteria<PaymentRecord> criteria = EntityQueryCriteria.create(PaymentRecord.class);
             criteria.ge(criteria.proto().finalizedDate(), reportSince);
             criteria.le(criteria.proto().finalizedDate(), reportBefore);
