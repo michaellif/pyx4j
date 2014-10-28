@@ -297,17 +297,26 @@ public class EftVarianceReportWidget extends HTML implements IReportWidget {
 
         builder.appendHtmlConstant("<tr>");
         builder.appendHtmlConstant("<td colspan='5'></td>");
-        builder.appendHtmlConstant("<td style='text-align:center;'>");
-        builder.appendEscaped(i18n.tr("Total $ for lease:"));
+        builder.appendHtmlConstant("<td style='text-align:right;'>");
+        builder.appendHtmlConstant("<b>");
+        builder.appendEscaped(i18n.tr("Total for lease $"));
+        builder.appendHtmlConstant("&nbsp&nbsp&nbsp&nbsp");
+        builder.appendHtmlConstant("</b>");
         builder.appendHtmlConstant("</td>");
         builder.appendHtmlConstant("<td>");
+        builder.appendHtmlConstant("<b>");
         builder.appendEscaped(totalFormat.format(totalEft));
+        builder.appendHtmlConstant("</b>");
         builder.appendHtmlConstant("</td>");
         builder.appendHtmlConstant("<td>");
+        builder.appendHtmlConstant("<b>");
         builder.appendEscaped(totalFormat.format(totalCharges));
+        builder.appendHtmlConstant("</b>");
         builder.appendHtmlConstant("</td>");
         builder.appendHtmlConstant("<td>");
+        builder.appendHtmlConstant("<b>");
         builder.appendEscaped(totalFormat.format(totalDifference));
+        builder.appendHtmlConstant("</b>");
         builder.appendHtmlConstant("</td>");
         builder.appendHtmlConstant("</tr>");
     }
@@ -317,17 +326,26 @@ public class EftVarianceReportWidget extends HTML implements IReportWidget {
 
         builder.appendHtmlConstant("<tr>");
         builder.appendHtmlConstant("<td colspan='5'></td>");
-        builder.appendHtmlConstant("<td style='text-align:center;'>");
-        builder.appendEscaped(i18n.tr("Total $ for Building {0}:", buildingId));
+        builder.appendHtmlConstant("<td style='text-align:right;'>");
+        builder.appendHtmlConstant("<b>");
+        builder.appendEscaped(i18n.tr("Total for Building {0} $", buildingId));
+        builder.appendHtmlConstant("&nbsp&nbsp&nbsp&nbsp");
+        builder.appendHtmlConstant("</b>");
         builder.appendHtmlConstant("</td>");
         builder.appendHtmlConstant("<td>");
+        builder.appendHtmlConstant("<b>");
         builder.appendEscaped(totalFormat.format(totalEft));
+        builder.appendHtmlConstant("</b>");
         builder.appendHtmlConstant("</td>");
         builder.appendHtmlConstant("<td>");
+        builder.appendHtmlConstant("<b>");
         builder.appendEscaped(totalFormat.format(totalCharges));
+        builder.appendHtmlConstant("</b>");
         builder.appendHtmlConstant("</td>");
         builder.appendHtmlConstant("<td>");
+        builder.appendHtmlConstant("<b>");
         builder.appendEscaped(totalFormat.format(totalDifference));
+        builder.appendHtmlConstant("</b>");
         builder.appendHtmlConstant("</td>");
         builder.appendHtmlConstant("</tr>");
     }

@@ -138,7 +138,7 @@ public class EftReportWidget extends HTML implements IReportWidget {
                         if (eftReportData.agregateByBuildings().getValue(false)) {
                             if (!currentPropertyCode.equals(paymentRecord.building().getValue())) {
                                 appendBreak(builder);
-                                appendRenderedTotalRow(builder, currencyFormat, i18n.tr("Total $ for Building {0}:", currentPropertyCode), propertyCodeTotal);
+                                appendRenderedTotalRow(builder, currencyFormat, i18n.tr("Total for Building {0} $", currentPropertyCode), propertyCodeTotal);
                                 appendBreak(builder);
 
                                 currentPropertyCode = paymentRecord.building().getValue();
@@ -164,12 +164,12 @@ public class EftReportWidget extends HTML implements IReportWidget {
 
                     if (eftReportData.agregateByBuildings().getValue(false)) {
                         appendBreak(builder);
-                        appendRenderedTotalRow(builder, currencyFormat, i18n.tr("Total $ for Building {0}:", currentPropertyCode), propertyCodeTotal);
+                        appendRenderedTotalRow(builder, currencyFormat, i18n.tr("Total for Building {0} $", currentPropertyCode), propertyCodeTotal);
                     }
                     appendBreak(builder);
                     appendRenderedTotalRow(builder, NumberFormat.getFormat("#,##0"), i18n.tr("Total # of Payment Records:"),
                             new BigDecimal(paymentRecords.size()));
-                    appendRenderedTotalRow(builder, currencyFormat, i18n.tr("Total $:"), overallTotal);
+                    appendRenderedTotalRow(builder, currencyFormat, i18n.tr("Total $"), overallTotal);
 
                     builder.appendHtmlConstant("</tbody>");
                     builder.appendHtmlConstant("</table>");
@@ -262,8 +262,8 @@ public class EftReportWidget extends HTML implements IReportWidget {
 
     private final static List<ITableColumnFormatter> initColumnDescriptors() {
         final EftReportRecordDTO proto = EntityFactory.getEntityPrototype(EftReportRecordDTO.class);
-        final int wideColumnWidth = Window.getClientWidth() >= 1200 ? 150 : 100;
-        final int shortColumnWidth = Window.getClientWidth() >= 1200 ? 80 : 60;
+        final int wideColumnWidth = Window.getClientWidth() >= 1200 ? 200 : 150;
+        final int shortColumnWidth = Window.getClientWidth() >= 1200 ? 100 : 80;
 
         ITableColumnFormatter noticeTooltipColumnFormatter = new ITableColumnFormatter() {
 
@@ -360,12 +360,15 @@ public class EftReportWidget extends HTML implements IReportWidget {
     private final void appendRenderedTotalRow(SafeHtmlBuilder builder, NumberFormat totalFormat, String totalLineDescription, BigDecimal total) {
         builder.appendHtmlConstant("<tr>");
         builder.appendHtmlConstant("<td colspan='9' style='text-align:right'>");
+        builder.appendHtmlConstant("<b>");
         builder.appendEscaped(totalLineDescription);
+        builder.appendHtmlConstant("&nbsp");
+        builder.appendHtmlConstant("</b>");
         builder.appendHtmlConstant("</td>");
-        builder.appendHtmlConstant("<td style='text-align:right'>");
+        builder.appendHtmlConstant("<td style='text-align:left'>");
+        builder.appendHtmlConstant("<b>");
         builder.appendEscaped(totalFormat.format(total));
-        builder.appendHtmlConstant("</td>");
-        builder.appendHtmlConstant("<td colspan='2'>");
+        builder.appendHtmlConstant("</b>");
         builder.appendHtmlConstant("</td>");
         builder.appendHtmlConstant("</tr>");
     }
