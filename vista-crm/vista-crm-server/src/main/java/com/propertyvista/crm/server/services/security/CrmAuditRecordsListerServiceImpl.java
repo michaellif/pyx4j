@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011-2012 All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -21,13 +21,14 @@ import com.pyx4j.commons.Key;
 import com.pyx4j.entity.core.criterion.EntityListCriteria;
 import com.pyx4j.entity.rpc.EntitySearchResult;
 import com.pyx4j.entity.server.AbstractListServiceDtoImpl;
-import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.server.CrudEntityBinder;
+import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.server.contexts.NamespaceManager;
 
 import com.propertyvista.biz.system.VistaContext;
 import com.propertyvista.crm.rpc.services.security.CrmAuditRecordsListerService;
 import com.propertyvista.domain.security.common.AbstractUser;
+import com.propertyvista.domain.security.common.VistaUserType;
 import com.propertyvista.dto.AuditRecordDTO;
 import com.propertyvista.operations.domain.security.AuditRecord;
 import com.propertyvista.server.TaskRunner;
@@ -74,11 +75,25 @@ public class CrmAuditRecordsListerServiceImpl extends AbstractListServiceDtoImpl
     }
 
     @Override
-    protected void enhanceListRetrieved(AuditRecord entity, AuditRecordDTO dto) {
-        if (!entity.user().isNull()) {
-            AbstractUser user = Persistence.service().retrieve(VistaContext.getVistaUserClass(entity.userType().getValue()), entity.user().getValue());
-            if (user != null) {
-                dto.userName().setValue(user.getStringView());
+    protected void enhanceListRetrieved(final AuditRecord bo, final AuditRecordDTO to) {
+        if (!bo.user().isNull()) {
+            final Class<? extends AbstractUser> userClass = VistaContext.getVistaUserClass(bo.userType().getValue());
+            if (bo.userType().getValue() == VistaUserType.operations) {
+                TaskRunner.runInOperationsNamespace(new Callable<Void>() {
+                    @Override
+                    public Void call() {
+                        AbstractUser user = Persistence.service().retrieve(userClass, bo.user().getValue());
+                        if (user != null) {
+                            to.userName().setValue(user.email().getValue());
+                        }
+                        return null;
+                    }
+                });
+            } else {
+                AbstractUser user = Persistence.service().retrieve(userClass, bo.user().getValue());
+                if (user != null) {
+                    to.userName().setValue(user.getStringView());
+                }
             }
         }
     }
