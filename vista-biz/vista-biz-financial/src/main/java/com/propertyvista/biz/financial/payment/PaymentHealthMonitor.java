@@ -135,7 +135,7 @@ class PaymentHealthMonitor {
             criteria.ge(criteria.proto().recordReceivedDate(), reportSince);
             criteria.le(criteria.proto().recordReceivedDate(), reportBefore);
             // Ignore TenantSure and Equifax payment gracefully for now
-            criteria.isNull(criteria.proto().merchantAccount());
+            criteria.isNotNull(criteria.proto().merchantAccount());
             int count = Persistence.service().count(criteria);
             if (count > 0) {
                 CardsClearanceRecord instance = Persistence.service().retrieve(criteria);
@@ -152,7 +152,7 @@ class PaymentHealthMonitor {
             criteria.ge(criteria.proto().recordReceivedDate(), reportSince);
             criteria.le(criteria.proto().recordReceivedDate(), reportBefore);
             // Ignore TenantSure and Equifax payment gracefully for now
-            criteria.isNull(criteria.proto().merchantAccount());
+            criteria.isNotNull(criteria.proto().merchantAccount());
             int count = Persistence.service().count(criteria);
             if (count > 0) {
                 CardsReconciliationRecord instance = Persistence.service().retrieve(criteria);
