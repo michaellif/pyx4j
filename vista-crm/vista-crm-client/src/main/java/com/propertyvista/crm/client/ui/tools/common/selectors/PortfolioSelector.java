@@ -14,19 +14,19 @@
 package com.propertyvista.crm.client.ui.tools.common.selectors;
 
 import com.pyx4j.commons.IFormatter;
-import com.pyx4j.widgets.client.selector.SuggestiveSelector;
+import com.pyx4j.widgets.client.suggest.SelectorListBox;
 
 import com.propertyvista.crm.rpc.dto.selections.PortfolioForSelectionDTO;
 
-public class PortfolioSelector extends SuggestiveSelector<PortfolioForSelectionDTO> {
+public class PortfolioSelector extends SelectorListBox<PortfolioForSelectionDTO> {
 
     public PortfolioSelector() {
-        super(new IFormatter<PortfolioForSelectionDTO, String>() {
+        super(new PortfolioOptionsGrabber(), new IFormatter<PortfolioForSelectionDTO, String>() {
             @Override
             public String format(PortfolioForSelectionDTO value) {
                 return value.name().getValue();
             }
-        }, new PortfolioSuggestionsProvider(), new PortfolioForSelectionCell(), true);
+        }, null);
     }
 
 }

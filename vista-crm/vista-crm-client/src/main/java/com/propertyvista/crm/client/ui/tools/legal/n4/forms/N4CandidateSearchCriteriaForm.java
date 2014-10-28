@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011-2012 All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -110,36 +110,45 @@ public class N4CandidateSearchCriteriaForm extends CForm<N4CandidateSearchCriter
     }
 
     private IsWidget createPortfolioSelector() {
-        return new PortfolioSelector() {//@formatter:off
-            @Override protected void onItemAdded(PortfolioForSelectionDTO item) {
-                super.onItemAdded(item);
-                N4CandidateSearchCriteriaDTO searchCriteria = N4CandidateSearchCriteriaForm.this.getValue(); 
-                searchCriteria.portfolios().add(item);
-                N4CandidateSearchCriteriaForm.this.setValue(searchCriteria, true, false);                
-            }
+        return new PortfolioSelector() {
+
             @Override
-            protected void onItemRemoved(PortfolioForSelectionDTO item) {
-                N4CandidateSearchCriteriaDTO searchCriteria = N4CandidateSearchCriteriaForm.this.getValue(); 
-                searchCriteria.portfolios().remove(item);
-                N4CandidateSearchCriteriaForm.this.setValue(searchCriteria, true, false);            
+            public void setSelection(PortfolioForSelectionDTO item) {
+                super.setSelection(item);
+                N4CandidateSearchCriteriaDTO searchCriteria = N4CandidateSearchCriteriaForm.this.getValue();
+                searchCriteria.portfolios().add(item);
+                N4CandidateSearchCriteriaForm.this.setValue(searchCriteria, true, false);
             }
-            
-        };//@formatter:on
+
+            @Override
+            public void removeItem(PortfolioForSelectionDTO item) {
+                super.removeItem(item);
+                N4CandidateSearchCriteriaDTO searchCriteria = N4CandidateSearchCriteriaForm.this.getValue();
+                searchCriteria.portfolios().remove(item);
+                N4CandidateSearchCriteriaForm.this.setValue(searchCriteria, true, false);
+            }
+
+        };
+
     }
 
     private IsWidget createBuildingSelector() {
-        return new BuildingSelector() {//@formatter:off
-            @Override protected void onItemAdded(BuildingForSelectionDTO item) {
-                super.onItemAdded(item);
-                N4CandidateSearchCriteriaDTO searchCriteria = N4CandidateSearchCriteriaForm.this.getValue(); 
+        return new BuildingSelector() {
+            @Override
+            public void setSelection(BuildingForSelectionDTO item) {
+                super.setSelection(item);
+                N4CandidateSearchCriteriaDTO searchCriteria = N4CandidateSearchCriteriaForm.this.getValue();
                 searchCriteria.buildings().add(item);
                 N4CandidateSearchCriteriaForm.this.setValue(searchCriteria, true, false);
-            }            
-            @Override protected void onItemRemoved(BuildingForSelectionDTO item) {
-                N4CandidateSearchCriteriaDTO  searchCriteria = N4CandidateSearchCriteriaForm.this.getValue();
+            }
+
+            @Override
+            public void removeItem(BuildingForSelectionDTO item) {
+                super.removeItem(item);
+                N4CandidateSearchCriteriaDTO searchCriteria = N4CandidateSearchCriteriaForm.this.getValue();
                 searchCriteria.buildings().remove(item);
                 N4CandidateSearchCriteriaForm.this.setValue(searchCriteria, true, false);
             }
-        };//@formatter:on
+        };
     }
 }

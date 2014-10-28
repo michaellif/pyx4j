@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011-2012 All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -81,38 +81,46 @@ public class MoneyInCandidateSearchCriteriaForm extends CForm<MoneyInCandidateSe
     }
 
     private IsWidget createPortfolioSelector() {
-        return portfolioSelector = new PortfolioSelector() {//@formatter:off
-            @Override protected void onItemAdded(PortfolioForSelectionDTO item) {
-                super.onItemAdded(item);
-                MoneyInCandidateSearchCriteriaModel searchCriteria = MoneyInCandidateSearchCriteriaForm.this.getValue(); 
-                searchCriteria.portfolios().add(item);
-                MoneyInCandidateSearchCriteriaForm.this.setValue(searchCriteria, true, false);                
-            }
+        return portfolioSelector = new PortfolioSelector() {
             @Override
-            protected void onItemRemoved(PortfolioForSelectionDTO item) {
-                MoneyInCandidateSearchCriteriaModel searchCriteria = MoneyInCandidateSearchCriteriaForm.this.getValue(); 
-                searchCriteria.portfolios().remove(item);
-                MoneyInCandidateSearchCriteriaForm.this.setValue(searchCriteria, true, false);            
+            public void setSelection(PortfolioForSelectionDTO item) {
+                super.setSelection(item);
+                MoneyInCandidateSearchCriteriaModel searchCriteria = MoneyInCandidateSearchCriteriaForm.this.getValue();
+                searchCriteria.portfolios().add(item);
+                MoneyInCandidateSearchCriteriaForm.this.setValue(searchCriteria, true, false);
             }
-            
+
+            @Override
+            public void removeItem(PortfolioForSelectionDTO item) {
+                super.removeItem(item);
+                MoneyInCandidateSearchCriteriaModel searchCriteria = MoneyInCandidateSearchCriteriaForm.this.getValue();
+                searchCriteria.portfolios().remove(item);
+                MoneyInCandidateSearchCriteriaForm.this.setValue(searchCriteria, true, false);
+            }
+
         };//@formatter:on
+
     }
 
     private IsWidget createBuildingSelector() {
-        return buildingSelector = new BuildingSelector() {//@formatter:off
-            @Override protected void onItemAdded(BuildingForSelectionDTO item) {
-                super.onItemAdded(item);
-                MoneyInCandidateSearchCriteriaModel searchCriteria = MoneyInCandidateSearchCriteriaForm.this.getValue(); 
+        return buildingSelector = new BuildingSelector() {
+            @Override
+            public void setSelection(BuildingForSelectionDTO item) {
+                super.setSelection(item);
+                MoneyInCandidateSearchCriteriaModel searchCriteria = MoneyInCandidateSearchCriteriaForm.this.getValue();
                 searchCriteria.buildings().add(item);
                 MoneyInCandidateSearchCriteriaForm.this.setValue(searchCriteria, true, false);
-            }            
-            @Override protected void onItemRemoved(BuildingForSelectionDTO item) {
+            }
+
+            @Override
+            public void removeItem(BuildingForSelectionDTO item) {
+                super.removeItem(item);
                 MoneyInCandidateSearchCriteriaModel searchCriteria = MoneyInCandidateSearchCriteriaForm.this.getValue();
                 searchCriteria.buildings().remove(item);
                 MoneyInCandidateSearchCriteriaForm.this.setValue(searchCriteria, true, false);
             }
 
-        };//@formatter:on
+        };
     }
 
     private void setTextBoxHeightFieldsHack() {
@@ -127,7 +135,7 @@ public class MoneyInCandidateSearchCriteriaForm extends CForm<MoneyInCandidateSe
                         setTextBoxHeightFieldHack(get(proto().tenant()).getDecorator().asWidget().getElement().getElementsByTagName("input").getItem(0));
                     }
                 } catch (Throwable e) {
-                    // this is a hack, hence it should suffer silently 
+                    // this is a hack, hence it should suffer silently
                 }
             }
         });

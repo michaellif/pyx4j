@@ -14,23 +14,19 @@
 package com.propertyvista.crm.client.ui.tools.common.selectors;
 
 import com.pyx4j.commons.IFormatter;
-import com.pyx4j.widgets.client.selector.SuggestiveSelector;
+import com.pyx4j.widgets.client.suggest.SelectorListBox;
 
 import com.propertyvista.crm.rpc.dto.selections.BuildingForSelectionDTO;
 
-public class BuildingSelector extends SuggestiveSelector<BuildingForSelectionDTO> {
+public class BuildingSelector extends SelectorListBox<BuildingForSelectionDTO> {
 
     public BuildingSelector() {
-        super(new IFormatter<BuildingForSelectionDTO, String>() {
+        super(new BuildingOptionsGrabber(), new IFormatter<BuildingForSelectionDTO, String>() {
             @Override
             public String format(BuildingForSelectionDTO value) {
-                if (!value.name().isNull()) {
-                    return value.propertyCode().getValue() + " (" + value.name().getValue() + ")";
-                } else {
-                    return value.propertyCode().getValue();
-                }
+                return value.name().getValue();
             }
-        }, new BuildingSuggestionsProvider(), new BuildingForSelectionCell(), true);
+        }, null);
     }
 
 }
