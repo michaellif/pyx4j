@@ -97,8 +97,8 @@ public class PaymentWizardServiceImpl extends AbstractCrudServiceDtoImpl<Payment
 
         // calculate current balance:
         dto.amount().setValue(ServerSideFactory.create(ARFacade.class).getCurrentBalance(lease.billingAccount()));
-        if (dto.amount().isNull() || dto.amount().getValue().signum() == -1) {
-            dto.amount().setValue(new BigDecimal("0.00"));
+        if (!dto.amount().isNull() && dto.amount().getValue().compareTo(BigDecimal.ZERO) <= 0) {
+            dto.amount().setValue(null);
         }
 
         dto.currentAutoPayments().addAll(BillingServiceImpl.retrieveCurrentAutoPayments(lease));
