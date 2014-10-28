@@ -29,6 +29,7 @@ import com.google.gwt.event.dom.client.FocusEvent;
 import com.google.gwt.event.dom.client.FocusHandler;
 import com.google.gwt.event.dom.client.KeyDownHandler;
 import com.google.gwt.event.dom.client.KeyPressHandler;
+import com.google.gwt.event.dom.client.KeyUpEvent;
 import com.google.gwt.event.dom.client.KeyUpHandler;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
@@ -44,6 +45,7 @@ import com.pyx4j.widgets.client.IFocusGroup;
 import com.pyx4j.widgets.client.IWatermarkWidget;
 import com.pyx4j.widgets.client.ImageFactory;
 import com.pyx4j.widgets.client.StringBox;
+import com.pyx4j.widgets.client.event.shared.PasteEvent;
 import com.pyx4j.widgets.client.event.shared.PasteHandler;
 import com.pyx4j.widgets.client.style.theme.WidgetTheme;
 
@@ -53,7 +55,7 @@ public class SelectorListBoxValuePanel<E> extends FocusPanel implements ISelecto
 
     private final IFormatter<E, String> valueFormatter;
 
-    private final StringBox queryBox;
+    private final QueryBox queryBox;
 
     private Button actionButton;
 
@@ -74,7 +76,7 @@ public class SelectorListBoxValuePanel<E> extends FocusPanel implements ISelecto
         this.valueFormatter = valueFormatter;
         cellsPanel = new FlowPanel();
 
-        queryBox = new StringBox();
+        queryBox = new QueryBox();
         cellsPanel.add(queryBox);
 
         contentPanel.add(cellsPanel);
@@ -259,6 +261,26 @@ public class SelectorListBoxValuePanel<E> extends FocusPanel implements ISelecto
     @Override
     public GroupFocusHandler getGroupFocusHandler() {
         return groupFocusHandler;
+    }
+
+    class QueryBox extends StringBox {
+        public QueryBox() {
+            addKeyUpHandler(new KeyUpHandler() {
+
+                @Override
+                public void onKeyUp(KeyUpEvent event) {
+                    setValue(getTextBoxWidget().getText(), true, null);
+                }
+            });
+
+            addPasteHandler(new PasteHandler() {
+
+                @Override
+                public void onPaste(PasteEvent event) {
+                    setValue(getTextBoxWidget().getText(), true, null);
+                }
+            });
+        }
     }
 
 }
