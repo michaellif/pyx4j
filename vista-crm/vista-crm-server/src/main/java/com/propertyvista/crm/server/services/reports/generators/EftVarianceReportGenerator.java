@@ -72,11 +72,13 @@ public class EftVarianceReportGenerator implements ReportGenerator {
         Set<LogicalDate> padGenerationDays = new HashSet<LogicalDate>();
         {
             EntityQueryCriteria<BillingCycle> criteria = EntityQueryCriteria.create(BillingCycle.class);
-            criteria.eq(criteria.proto().billingCycleStartDate(), reportMetadata.billingCycleStartDate().getValue());
+
             if (selectedBuildings != null) {
                 criteria.in(criteria.proto().building(), selectedBuildings);
             }
+            criteria.eq(criteria.proto().billingCycleStartDate(), reportMetadata.billingCycleStartDate());
             criteria.isNull(criteria.proto().actualAutopayExecutionDate());
+
             for (BillingCycle cycle : Persistence.secureQuery(criteria)) {
                 padGenerationDays.add(cycle.targetAutopayExecutionDate().getValue());
             }

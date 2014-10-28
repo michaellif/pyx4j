@@ -296,7 +296,7 @@ public class EftVarianceReportWidget extends HTML implements IReportWidget {
     private void addLeaseTotals(SafeHtmlBuilder builder, NumberFormat totalFormat, BigDecimal totalEft, BigDecimal totalCharges, BigDecimal totalDifference) {
 
         builder.appendHtmlConstant("<tr>");
-        builder.appendHtmlConstant("<td colspan='4'></td>");
+        builder.appendHtmlConstant("<td colspan='5'></td>");
         builder.appendHtmlConstant("<td style='text-align:center;'>");
         builder.appendEscaped(i18n.tr("Total $ for lease:"));
         builder.appendHtmlConstant("</td>");
@@ -316,7 +316,7 @@ public class EftVarianceReportWidget extends HTML implements IReportWidget {
             BigDecimal totalDifference) {
 
         builder.appendHtmlConstant("<tr>");
-        builder.appendHtmlConstant("<td colspan='4'></td>");
+        builder.appendHtmlConstant("<td colspan='5'></td>");
         builder.appendHtmlConstant("<td style='text-align:center;'>");
         builder.appendEscaped(i18n.tr("Total $ for Building {0}:", buildingId));
         builder.appendHtmlConstant("</td>");

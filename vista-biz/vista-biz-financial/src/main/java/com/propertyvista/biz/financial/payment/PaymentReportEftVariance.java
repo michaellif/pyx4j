@@ -40,28 +40,26 @@ class PaymentReportEftVariance {
     public List<EftVarianceReportRecordDTO> reportEftVariance(PreauthorizedPaymentsReportCriteria reportCriteria) {
         List<EftVarianceReportRecordDTO> records = new ArrayList<EftVarianceReportRecordDTO>();
 
-        ICursorIterator<BillingAccount> billingAccountIterator;
-        { //TODO->Closure
-            EntityQueryCriteria<BillingAccount> criteria = EntityQueryCriteria.create(BillingAccount.class);
-            if (reportCriteria.isBuildingsSelected()) {
-                criteria.in(criteria.proto().lease().unit().building(), reportCriteria.getSelectedBuildings());
-            }
-            criteria.eq(criteria.proto().lease().currentTerm().version().tenants().$().leaseParticipant().preauthorizedPayments().$().isDeleted(), false);
-
-            if (reportCriteria.isLeasesOnNoticeOnly()) {
-                criteria.eq(criteria.proto().lease().completion(), Lease.CompletionType.Notice);
-            }
-
-            if (reportCriteria.hasExpectedMoveOutFilter()) {
-                criteria.ge(criteria.proto().lease().expectedMoveOut(), reportCriteria.getMinExpectedMoveOut());
-                criteria.le(criteria.proto().lease().expectedMoveOut(), reportCriteria.getMaxExpectedMoveOut());
-            }
-
-            criteria.asc(criteria.proto().lease().unit().building().propertyCode());
-            criteria.asc(criteria.proto().lease().leaseId());
-
-            billingAccountIterator = Persistence.secureQuery(null, criteria, AttachLevel.Attached);
+        //TODO->Closure
+        EntityQueryCriteria<BillingAccount> criteria = EntityQueryCriteria.create(BillingAccount.class);
+        if (reportCriteria.isBuildingsSelected()) {
+            criteria.in(criteria.proto().lease().unit().building(), reportCriteria.getSelectedBuildings());
         }
+        criteria.eq(criteria.proto().lease().currentTerm().version().tenants().$().leaseParticipant().preauthorizedPayments().$().isDeleted(), false);
+
+        if (reportCriteria.isLeasesOnNoticeOnly()) {
+            criteria.eq(criteria.proto().lease().completion(), Lease.CompletionType.Notice);
+        }
+
+        if (reportCriteria.hasExpectedMoveOutFilter()) {
+            criteria.ge(criteria.proto().lease().expectedMoveOut(), reportCriteria.getMinExpectedMoveOut());
+            criteria.le(criteria.proto().lease().expectedMoveOut(), reportCriteria.getMaxExpectedMoveOut());
+        }
+
+        criteria.asc(criteria.proto().lease().unit().building().propertyCode());
+        criteria.asc(criteria.proto().lease().leaseId());
+
+        ICursorIterator<BillingAccount> billingAccountIterator = Persistence.secureQuery(null, criteria, AttachLevel.Attached);
         try {
             while (billingAccountIterator.hasNext()) {
                 EftVarianceReportRecordDTO leaseRecord = createEftVarianceRecord(billingAccountIterator.next());
@@ -77,8 +75,6 @@ class PaymentReportEftVariance {
     }
 
     private EftVarianceReportRecordDTO createEftVarianceRecord(BillingAccount billingAccount) {
-        Persistence.ensureRetrieve(billingAccount.lease(), AttachLevel.Attached);
-        Persistence.ensureRetrieve(billingAccount.lease().unit(), AttachLevel.Attached);
         Persistence.ensureRetrieve(billingAccount.lease().unit().building(), AttachLevel.Attached);
 
         BillingCycle billingCycle = ServerSideFactory.create(PaymentMethodFacade.class).getNextAutopayBillingCycle(billingAccount.lease());
@@ -88,8 +84,10 @@ class PaymentReportEftVariance {
         }
 
         EftVarianceReportRecordDTO leaseRecord = EntityFactory.create(EftVarianceReportRecordDTO.class);
+
         leaseRecord.building().setValue(billingAccount.lease().unit().building().propertyCode().getValue());
         leaseRecord.unit().setValue(billingAccount.lease().unit().info().number().getValue());
+
         leaseRecord.leaseId().setValue(billingAccount.lease().leaseId().getValue());
         leaseRecord.leaseId_().set(billingAccount.lease().createIdentityStub());
 
@@ -100,12 +98,13 @@ class PaymentReportEftVariance {
         for (PreauthorizedAmount record : preauthorizedRecords) {
             EftVarianceReportRecordDetailsDTO detail = EntityFactory.create(EftVarianceReportRecordDetailsDTO.class);
 
-            Persistence.ensureRetrieve(record.preauthorizedPayment.tenant(), AttachLevel.Attached);
+            Persistence.ensureRetrieve(record.preauthorizedPayment.tenant().customer().person().name(), AttachLevel.ToStringMembers);
             detail.tenantName().setValue(record.preauthorizedPayment.tenant().customer().person().name().getStringView());
 
             detail.paymentMethod().setValue(record.preauthorizedPayment.paymentMethod().getStringView());
 
             detail.totalEft().setValue(record.amount);
+
             leaseRecord.leaseTotals().totalEft().setValue(leaseRecord.leaseTotals().totalEft().getValue().add(record.amount));
             leaseRecord.details().add(detail);
 
@@ -121,6 +120,7 @@ class PaymentReportEftVariance {
 
         leaseRecord.leaseTotals().difference()
                 .setValue(leaseRecord.leaseTotals().totalEft().getValue().subtract(leaseRecord.leaseTotals().charges().getValue()));
+
         return leaseRecord;
     }
 }
