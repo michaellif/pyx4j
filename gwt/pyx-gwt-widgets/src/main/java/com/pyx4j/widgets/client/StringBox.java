@@ -47,7 +47,7 @@ public class StringBox extends TextBox<String> {
         return super.getFormatter();
     }
 
-    static class StringFormat implements IFormatter<String, String> {
+    private static class StringFormat implements IFormatter<String, String> {
 
         @Override
         public String format(String value) {
@@ -58,7 +58,7 @@ public class StringBox extends TextBox<String> {
         }
     }
 
-    static class StringParser implements IParser<String> {
+    private static class StringParser implements IParser<String> {
 
         @Override
         public String parse(String string) throws ParseException {

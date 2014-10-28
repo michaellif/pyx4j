@@ -20,6 +20,8 @@
  */
 package com.pyx4j.widgets.client.richtext;
 
+import java.text.ParseException;
+
 import com.google.gwt.event.dom.client.BlurHandler;
 import com.google.gwt.event.dom.client.FocusHandler;
 import com.google.gwt.event.dom.client.KeyDownHandler;
@@ -44,6 +46,14 @@ public class RichTextEditor extends FlowPanel implements IValueBoxWidget<String>
     private final RichTextToolbar toolbar;
 
     private boolean editable;
+
+    private IParser<String> parser;
+
+    private IFormatter<String, String> formatter;
+
+    private boolean parsedOk = true;
+
+    private String parseExceptionMessage;
 
     public RichTextEditor() {
         super();
@@ -71,41 +81,6 @@ public class RichTextEditor extends FlowPanel implements IValueBoxWidget<String>
         //Workaround for initiation of "scrollHeight" - keep next line!!!
         DOM.getElementPropertyInt(getElement(), "scrollHeight");
         DOM.setElementPropertyInt(getElement(), "scrollTop", Integer.MAX_VALUE);
-    }
-
-    static String trimHtml(String html) {
-        while (html.startsWith("<br>")) {
-            html = html.substring(4).trim();
-        }
-        while (html.endsWith("<br>")) {
-            html = html.substring(0, html.length() - 4).trim();
-        }
-        // make all tags lower case as in JTidy
-        StringBuilder b = new StringBuilder();
-        boolean tag = false;
-        boolean cr = false;
-        for (char part : html.toCharArray()) {
-            if (part == '<') {
-                tag = true;
-                cr = false;
-            } else if (tag) {
-                if (((part >= 'A') && (part <= 'Z')) || (part == '/')) {
-                    part = Character.toLowerCase(part);
-                } else {
-                    tag = false;
-                }
-                cr = false;
-            } else if ((part == '\r') || (part == '\n')) {
-                cr = true;
-                continue;
-            } else if (cr && (part != ' ')) {
-                b.append(' ');
-                cr = false;
-            }
-            b.append(part);
-        }
-        html = b.toString();
-        return html.replaceAll("<br>", "<br />");
     }
 
     public void setTemplateAction(RichTextTemplateAction action) {
@@ -206,15 +181,24 @@ public class RichTextEditor extends FlowPanel implements IValueBoxWidget<String>
 
     @Override
     public String getValue() {
-        return trimHtml(toolbar.isHtmlMode() ? richTextArea.getHTML() : richTextArea.getText());
+        try {
+            String value = getParser().parse(toolbar.isHtmlMode() ? richTextArea.getHTML() : richTextArea.getText());
+            parsedOk = true;
+            parseExceptionMessage = null;
+            return value;
+        } catch (ParseException e) {
+            parsedOk = false;
+            parseExceptionMessage = e.getMessage();
+            return null;
+        }
     }
 
     @Override
     public void setValue(String html) {
         if (toolbar.isHtmlMode()) {
-            richTextArea.setHTML(html);
+            richTextArea.setHTML(getFormatter().format(html));
         } else {
-            richTextArea.setText(html);
+            richTextArea.setText(getFormatter().format(html));
         }
     }
 
@@ -240,26 +224,90 @@ public class RichTextEditor extends FlowPanel implements IValueBoxWidget<String>
 
     @Override
     public void setParser(IParser<String> parser) {
-
+        this.parser = parser;
     }
 
     @Override
     public void setFormatter(IFormatter<String, String> formatter) {
+        this.formatter = formatter;
+    }
 
+    protected IParser<String> getParser() {
+        if (parser == null) {
+            setParser(new RichTextParser());
+        }
+        return parser;
+    }
+
+    protected IFormatter<String, String> getFormatter() {
+        if (formatter == null) {
+            setFormatter(new RichTextFormat());
+        }
+        return formatter;
     }
 
     @Override
     public boolean isParsedOk() {
-        return false;
+        return parsedOk;
     }
 
     @Override
     public String getParseExceptionMessage() {
-        return null;
+        return parseExceptionMessage;
     }
 
     public void setAreaHeight(String string) {
         richTextArea.setHeight(string);
+    }
+
+    public static class RichTextFormat implements IFormatter<String, String> {
+
+        @Override
+        public String format(String value) {
+            if (value == null) {
+                value = "";
+            }
+            return value;
+        }
+    }
+
+    public static class RichTextParser implements IParser<String> {
+
+        @Override
+        public String parse(String html) throws ParseException {
+            while (html.startsWith("<br>")) {
+                html = html.substring(4).trim();
+            }
+            while (html.endsWith("<br>")) {
+                html = html.substring(0, html.length() - 4).trim();
+            }
+            // make all tags lower case as in JTidy
+            StringBuilder b = new StringBuilder();
+            boolean tag = false;
+            boolean cr = false;
+            for (char part : html.toCharArray()) {
+                if (part == '<') {
+                    tag = true;
+                    cr = false;
+                } else if (tag) {
+                    if (((part >= 'A') && (part <= 'Z')) || (part == '/')) {
+                        part = Character.toLowerCase(part);
+                    } else {
+                        tag = false;
+                    }
+                    cr = false;
+                } else if ((part == '\r') || (part == '\n')) {
+                    cr = true;
+                    continue;
+                } else if (cr && (part != ' ')) {
+                    b.append(' ');
+                    cr = false;
+                }
+                b.append(part);
+            }
+            html = b.toString();
+            return html.replaceAll("<br>", "<br />");
+        }
     }
 
 }

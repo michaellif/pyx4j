@@ -20,6 +20,12 @@
  */
 package com.pyx4j.widgets.client;
 
+import java.text.ParseException;
+
+import com.pyx4j.commons.CommonsStringUtils;
+import com.pyx4j.commons.IFormatter;
+import com.pyx4j.commons.IParser;
+
 public class TextArea extends ValueBoxBase<String> {
 
     private final com.google.gwt.user.client.ui.TextArea textBoxWidget;
@@ -34,4 +40,41 @@ public class TextArea extends ValueBoxBase<String> {
         textBoxWidget.setVisibleLines(visibleLines);
     }
 
+    @Override
+    protected IParser<String> getParser() {
+        if (super.getParser() == null) {
+            setParser(new StringParser());
+        }
+        return super.getParser();
+    }
+
+    @Override
+    protected IFormatter<String, String> getFormatter() {
+        if (super.getFormatter() == null) {
+            setFormatter(new StringFormat());
+        }
+        return super.getFormatter();
+    }
+
+    private class StringFormat implements IFormatter<String, String> {
+
+        @Override
+        public String format(String value) {
+            if (value == null) {
+                value = "";
+            }
+            return value;
+        }
+    }
+
+    private class StringParser implements IParser<String> {
+
+        @Override
+        public String parse(String string) throws ParseException {
+            if (CommonsStringUtils.isEmpty(string)) {
+                return null; // empty value case
+            }
+            return string;
+        }
+    }
 }
