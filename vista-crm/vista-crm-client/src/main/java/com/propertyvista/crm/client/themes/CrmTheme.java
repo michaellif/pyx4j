@@ -32,8 +32,6 @@ import com.pyx4j.widgets.client.dashboard.DashboardTheme;
 import com.pyx4j.widgets.client.datepicker.DatePickerTheme;
 import com.pyx4j.widgets.client.dialog.DialogTheme;
 import com.pyx4j.widgets.client.richtext.RichTextEditorTheme;
-import com.pyx4j.widgets.client.selector.SelectedItemHolder;
-import com.pyx4j.widgets.client.selector.SuggestiveSelector;
 import com.pyx4j.widgets.client.style.theme.WidgetTheme;
 import com.pyx4j.widgets.client.tabpanel.TabTheme;
 
@@ -758,44 +756,6 @@ public class CrmTheme extends VistaTheme {
         // Specialized Data Type related styles
         style = new Style("." + VistaDataGridStyles.VistaMoneyCell.name());
         style.addProperty("text-align", "right");
-        addStyle(style);
-
-        // This is for 'Super Selector' used in bulk operation search criteria forms:
-        style = new Style("." + SuggestiveSelector.Styles.SuperSelectorStyle.name()); // should be similar to a regular text box
-        style.addProperty("color", ThemeColor.foreground);
-        style.addProperty("background-color", "white");
-
-        style.addProperty("padding", "2px 5px");
-        style.addProperty("line-height", "2em");
-
-        style.addProperty("border-width", "1px");
-        style.addProperty("border-style", "solid");
-        style.addProperty("border-color", ThemeColor.foreground, 0.5);// TODO i don't really know
-        addStyle(style);
-
-        // remove 'clear field' X mark that appears in IE10
-        style = new Style("." + SuggestiveSelector.Styles.SuperSelectorStyle.name() + " input::-ms-clear");
-        style.addProperty("width", "0px");
-        style.addProperty("height", "0px");
-        style.addProperty("display", "none");
-        addStyle(style);
-        // remove orange outline from chrome
-        style = new Style("." + SuggestiveSelector.Styles.SuperSelectorStyle.name() + " input:focus");
-        style.addProperty("outline", "0px");
-        addStyle(style);
-
-        style = new Style("." + SelectedItemHolder.Styles.SuperSelectedItemHolder.name()); // should be similar to a regular text box
-        style.addProperty("display", "inline-block");
-        style.addProperty("padding", "0 2px");
-        style.addProperty("cursor", "default");
-        addStyle(style);
-
-        style = new Style("." + SuggestiveSelector.Styles.SuggestionsPopup.name());
-        style.addProperty("background-color", ThemeColor.formBackground);
-        style.addProperty("padding", "5px");
-        style.addProperty("border-color", ThemeColor.foreground);
-        style.addProperty("border-width", "1px");
-        style.addProperty("border-style", "outset");
         addStyle(style);
 
     }
