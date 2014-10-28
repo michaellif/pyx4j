@@ -70,4 +70,23 @@ CREATE VIEW _dba_.greenwin_no_insurance AS
                                                     email TEXT, address1 TEXT, address2 TEXT, city TEXT,
                                                     province TEXT, postal_code TEXT)
 );
+
+/*
+
+COPY (WITH t AS ( SELECT  property_code, lease_id,
+                    first_name, last_name,
+                    email, address1, address2, city, province ,
+                    postal_code ,
+                    row_number() OVER (PARTITION BY lease_id ORDER BY COALESCE(first_name, 'ZZZZ')) AS rnum
+            FROM    _dba_.greenwin_no_insurance 
+            WHERE   property_code IN ('rich0675','base0297','base0301','regi0300','univ0137')
+            ORDER BY    property_code, lease_id)
+SELECT  property_code, lease_id,
+        first_name, last_name,
+        email, address1, address2, city, province ,
+        postal_code 
+FROM t 
+WHERE   rnum = 1) TO '/tmp/no_insurance.csv' CSV HEADER ;
+
+*/
                                                     
