@@ -485,6 +485,7 @@ public class WidgetTheme extends Theme {
 
         style = new Style(".", StyleName.SelectorListBoxValuePanel);
         style.addProperty("position", "relative");
+        style.addProperty("text-align", "left");
         addStyle(style);
 
         style = new Style(".", StyleName.SelectorListBoxValuePanel, "-", StyleDependent.focused);
