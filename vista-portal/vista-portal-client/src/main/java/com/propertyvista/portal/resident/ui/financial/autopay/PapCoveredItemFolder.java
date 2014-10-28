@@ -57,8 +57,8 @@ public class PapCoveredItemFolder extends PortalBoxFolder<AutopayAgreement.Autop
         decor.setCaptionFormatter(new IFormatter<AutopayAgreementCoveredItem, SafeHtml>() {
             @Override
             public SafeHtml format(AutopayAgreementCoveredItem value) {
-                return SafeHtmlUtils.fromString(SimpleMessageFormat.format("RENT: ${0}, Amount Paid: ${1}", value.billableItem().agreedPrice().getStringView(),
-                        value.amount().getStringView()));
+                return SafeHtmlUtils.fromString(SimpleMessageFormat.format("RENT: ${0}, Amount Submitted: ${1}", value.billableItem().agreedPrice()
+                        .getStringView(), value.amount().getStringView()));
             }
         });
 
