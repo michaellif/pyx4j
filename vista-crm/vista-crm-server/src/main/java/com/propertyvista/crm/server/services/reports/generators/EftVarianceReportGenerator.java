@@ -74,11 +74,7 @@ public class EftVarianceReportGenerator implements ReportGenerator {
             EntityQueryCriteria<BillingCycle> criteria = EntityQueryCriteria.create(BillingCycle.class);
             criteria.eq(criteria.proto().billingCycleStartDate(), reportMetadata.billingCycleStartDate().getValue());
             if (selectedBuildings != null) {
-                if (selectedBuildings.isEmpty()) {
-                    criteria.isNull(criteria.proto().building());
-                } else {
-                    criteria.in(criteria.proto().building(), selectedBuildings);
-                }
+                criteria.in(criteria.proto().building(), selectedBuildings);
             }
             criteria.isNull(criteria.proto().actualAutopayExecutionDate());
             for (BillingCycle cycle : Persistence.secureQuery(criteria)) {
