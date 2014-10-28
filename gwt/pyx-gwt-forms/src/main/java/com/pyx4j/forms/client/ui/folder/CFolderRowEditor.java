@@ -39,8 +39,8 @@ import com.pyx4j.forms.client.events.PropertyChangeHandler;
 import com.pyx4j.forms.client.ui.CField;
 import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.IEditableComponentFactory;
-import com.pyx4j.forms.client.ui.decorators.WidgetDecoratorTheme;
 import com.pyx4j.forms.client.ui.decorators.IFieldDecorator;
+import com.pyx4j.forms.client.ui.decorators.WidgetDecoratorTheme;
 
 public class CFolderRowEditor<E extends IEntity> extends CForm<E> {
 

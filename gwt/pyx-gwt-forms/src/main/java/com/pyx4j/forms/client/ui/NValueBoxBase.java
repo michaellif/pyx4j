@@ -31,6 +31,8 @@ import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.ui.HTML;
 
+import com.pyx4j.commons.IFormatter;
+import com.pyx4j.commons.IParser;
 import com.pyx4j.forms.client.events.NativeValueChangeEvent;
 import com.pyx4j.widgets.client.IValueBoxWidget;
 import com.pyx4j.widgets.client.IWatermarkWidget;
@@ -76,6 +78,22 @@ public abstract class NValueBoxBase<DATA, WIDGET extends IValueBoxWidget<DATA>, 
             }
         });
         setWatermark(getCComponent().getWatermark());
+
+        getEditor().setFormatter(new IFormatter<DATA, String>() {
+
+            @Override
+            public String format(DATA value) {
+                return getCComponent().getFormatter().format(value);
+            }
+        });
+
+        getEditor().setParser(new IParser<DATA>() {
+
+            @Override
+            public DATA parse(String value) throws ParseException {
+                return getCComponent().getParser().parse(value);
+            }
+        });
     }
 
     @Override

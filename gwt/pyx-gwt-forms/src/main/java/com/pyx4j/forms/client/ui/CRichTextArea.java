@@ -21,6 +21,7 @@
 package com.pyx4j.forms.client.ui;
 
 import com.pyx4j.commons.HtmlUtils;
+import com.pyx4j.forms.client.validators.IValidator;
 import com.pyx4j.widgets.client.richtext.RichTextImageProvider;
 
 public class CRichTextArea extends CTextComponent<String, NRichTextArea> {
@@ -30,6 +31,8 @@ public class CRichTextArea extends CTextComponent<String, NRichTextArea> {
     private RichTextImageProvider imageProvider;
 
     public CRichTextArea() {
+        setFormatter(new StringFormat());
+        setParser(new StringParser());
         setNativeComponent(new NRichTextArea(this));
     }
 
@@ -61,4 +64,8 @@ public class CRichTextArea extends CTextComponent<String, NRichTextArea> {
         return super.isValueEmpty() || HtmlUtils.isEmpty(getValue());
     }
 
+    @Override
+    public void addComponentValidator(IValidator<String> validator) {
+        super.addComponentValidator(validator);
+    }
 }

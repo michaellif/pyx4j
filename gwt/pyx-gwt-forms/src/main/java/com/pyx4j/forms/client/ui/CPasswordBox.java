@@ -20,6 +20,8 @@
  */
 package com.pyx4j.forms.client.ui;
 
+import java.text.ParseException;
+
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.commons.IFormatter;
 import com.pyx4j.commons.IParser;
@@ -35,6 +37,28 @@ public class CPasswordBox extends CValueBoxBase<String, NPasswordBox> {
 
     public CPasswordBox() {
         super();
+        super.setFormatter(new IFormatter<String, String>() {
+
+            @Override
+            public String format(String value) {
+                if (value == null) {
+                    value = "";
+                }
+                return value;
+            }
+        });
+
+        super.setParser(new IParser<String>() {
+
+            @Override
+            public String parse(String string) throws ParseException {
+                if (CommonsStringUtils.isEmpty(string)) {
+                    return null;
+                }
+                return string;
+            }
+
+        });
         setNativeComponent(new NPasswordBox(this));
     }
 

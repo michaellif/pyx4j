@@ -20,16 +20,11 @@
  */
 package com.pyx4j.forms.client.ui;
 
-import java.text.ParseException;
-
 import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.core.client.Scheduler.ScheduledCommand;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.ui.FocusWidget;
 
-import com.pyx4j.commons.CommonsStringUtils;
-import com.pyx4j.commons.IFormatter;
-import com.pyx4j.commons.IParser;
 import com.pyx4j.forms.client.events.HasNativeValueChangeHandlers;
 import com.pyx4j.forms.client.events.NativeValueChangeEvent;
 import com.pyx4j.forms.client.events.NativeValueChangeHandler;

@@ -30,7 +30,6 @@ import java.util.HashSet;
 
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.widgets.client.PasswordBox.PasswordStrengthRule;
-import com.pyx4j.widgets.client.PasswordBox.PasswordStrengthRule.PasswordStrengthVerdict;
 
 public class DefaultPasswordStrengthRule implements PasswordStrengthRule {
 

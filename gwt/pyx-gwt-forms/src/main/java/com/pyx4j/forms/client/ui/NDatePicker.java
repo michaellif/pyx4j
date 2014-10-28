@@ -20,11 +20,6 @@
  */
 package com.pyx4j.forms.client.ui;
 
-import com.google.gwt.event.logical.shared.ValueChangeEvent;
-import com.google.gwt.event.logical.shared.ValueChangeHandler;
-
-import com.pyx4j.commons.IFormatter;
-import com.pyx4j.commons.IParser;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.widgets.client.DatePicker;
 
@@ -37,25 +32,7 @@ public class NDatePicker extends NValueBoxBase<LogicalDate, DatePicker, CDatePic
 
     @Override
     protected DatePicker createEditor() {
-        DatePicker datePickerTextBox = new DatePicker() {
-            @Override
-            protected IParser<LogicalDate> getParser() {
-                return getCComponent().getParser();
-            }
-
-            @Override
-            protected IFormatter<LogicalDate, String> getFormatter() {
-                return getCComponent().getFormatter();
-            }
-        };
-        datePickerTextBox.addValueChangeHandler(new ValueChangeHandler<LogicalDate>() {
-
-            @Override
-            public void onValueChange(ValueChangeEvent<LogicalDate> event) {
-                getCComponent().stopEditing();
-            }
-        });
-        return datePickerTextBox;
+        return new DatePicker();
     }
 
 }

@@ -45,7 +45,7 @@ public class NRichTextArea extends NValueBoxBase<String, RichTextEditor, CRichTe
     @Override
     protected RichTextEditor createEditor() {
         RichTextEditor area = new RichTextEditor();
-        area.setHeight("20em");
+        area.setAreaHeight("20em");
         return area;
     }
 

@@ -20,25 +20,24 @@
  */
 package com.pyx4j.widgets.client.richtext;
 
-import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.BlurHandler;
 import com.google.gwt.event.dom.client.FocusHandler;
 import com.google.gwt.event.dom.client.KeyDownHandler;
 import com.google.gwt.event.dom.client.KeyPressHandler;
 import com.google.gwt.event.dom.client.KeyUpHandler;
+import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Event;
-import com.google.gwt.user.client.ui.DockPanel;
+import com.google.gwt.user.client.ui.FlowPanel;
 
 import com.pyx4j.commons.IDebugId;
 import com.pyx4j.commons.IFormatter;
 import com.pyx4j.commons.IParser;
 import com.pyx4j.widgets.client.IValueBoxWidget;
-import com.pyx4j.widgets.client.NotImplementedException;
 
-public class RichTextEditor extends DockPanel implements IValueBoxWidget<String> {
+public class RichTextEditor extends FlowPanel implements IValueBoxWidget<String> {
 
     private final RichTextArea richTextArea;
 
@@ -53,15 +52,12 @@ public class RichTextEditor extends DockPanel implements IValueBoxWidget<String>
 
         richTextArea = new RichTextArea();
         richTextArea.setWidth("100%");
-        richTextArea.setHeight("100%");
+        richTextArea.setHeight("15em");
 
         toolbar = new RichTextToolbar(richTextArea);
-        toolbar.getElement().getStyle().setMarginLeft(2, Unit.PX);
 
-        add(toolbar, NORTH);
-        add(richTextArea, EAST);
-        setCellHeight(richTextArea, "100%");
-        setCellWidth(richTextArea, "100%");
+        add(toolbar);
+        add(richTextArea);
 
         toolbar.getElement().getStyle().setOpacity(0.3);
 
@@ -239,17 +235,17 @@ public class RichTextEditor extends DockPanel implements IValueBoxWidget<String>
 
     @Override
     public HandlerRegistration addValueChangeHandler(ValueChangeHandler<String> handler) {
-        throw new NotImplementedException();
+        return addHandler(handler, ValueChangeEvent.getType());
     }
 
     @Override
     public void setParser(IParser<String> parser) {
-        throw new NotImplementedException();
+
     }
 
     @Override
     public void setFormatter(IFormatter<String, String> formatter) {
-        throw new NotImplementedException();
+
     }
 
     @Override
@@ -260,6 +256,10 @@ public class RichTextEditor extends DockPanel implements IValueBoxWidget<String>
     @Override
     public String getParseExceptionMessage() {
         return null;
+    }
+
+    public void setAreaHeight(String string) {
+        richTextArea.setHeight(string);
     }
 
 }

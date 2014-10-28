@@ -5,8 +5,6 @@ import com.google.gwt.event.dom.client.BlurHandler;
 import com.google.gwt.event.dom.client.FocusEvent;
 import com.google.gwt.event.dom.client.FocusHandler;
 
-import com.pyx4j.commons.IFormatter;
-import com.pyx4j.commons.IParser;
 import com.pyx4j.entity.shared.IPersonalIdentity;
 import com.pyx4j.widgets.client.TextBox;
 
@@ -18,18 +16,7 @@ public class NPersonalIdentityField<E extends IPersonalIdentity> extends NValueB
 
     @Override
     protected TextBox<E> createEditor() {
-        TextBox<E> textBox = new TextBox<E>() {
-            @Override
-            protected IParser<E> getParser() {
-                return getCComponent().getParser();
-            }
-
-            @Override
-            protected IFormatter<E, String> getFormatter() {
-                return getCComponent().getFormatter();
-            }
-        };
-        return textBox;
+        return new TextBox<E>();
     }
 
     @Override

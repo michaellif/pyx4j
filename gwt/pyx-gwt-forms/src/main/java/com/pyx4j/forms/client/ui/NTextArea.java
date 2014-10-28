@@ -22,11 +22,9 @@ package com.pyx4j.forms.client.ui;
 
 import com.google.gwt.user.client.DOM;
 
-import com.pyx4j.commons.IFormatter;
-import com.pyx4j.commons.IParser;
 import com.pyx4j.widgets.client.TextArea;
 
-public class NTextArea extends NValueBoxBase<String, TextArea, CTextComponent<String, ?>> {
+public class NTextArea extends NValueBoxBase<String, TextArea, CTextArea> {
 
     private Integer visibleLines;
 
@@ -36,19 +34,7 @@ public class NTextArea extends NValueBoxBase<String, TextArea, CTextComponent<St
 
     @Override
     protected TextArea createEditor() {
-        TextArea textArea = new TextArea() {
-            @Override
-            protected IParser<String> getParser() {
-                return getCComponent().getParser();
-            }
-
-            @Override
-            protected IFormatter<String, String> getFormatter() {
-                return getCComponent().getFormatter();
-            }
-        };
-
-        return textArea;
+        return new TextArea();
     }
 
     @Override

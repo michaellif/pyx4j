@@ -47,9 +47,9 @@ import com.google.gwt.user.client.ui.Widget;
 import com.pyx4j.commons.CompositeDebugId;
 import com.pyx4j.commons.IDebugId;
 import com.pyx4j.widgets.client.Button;
-import com.pyx4j.widgets.client.WidgetDebugId;
 import com.pyx4j.widgets.client.GroupFocusHandler;
 import com.pyx4j.widgets.client.IWidget;
+import com.pyx4j.widgets.client.WidgetDebugId;
 import com.pyx4j.widgets.client.style.theme.WidgetTheme;
 
 public abstract class NField<DATA_TYPE, EDITOR extends IWidget, CCOMP extends CField<DATA_TYPE, ?>, VIEWER extends Widget> extends NComponent<DATA_TYPE, CCOMP>
