@@ -86,7 +86,7 @@ public abstract class AbstractReportsService<R extends ReportTemplate> implement
                     if (error instanceof UserRuntimeException) {
                         r.setErrorStatusMessage(error.getMessage());
                     } else {
-                        r.setErrorStatusMessage(i18n.tr("A server side error occured during report generation."));
+                        r.setErrorStatusMessage(i18n.tr("A server side error occurred during report generation."));
                     }
                 } else if (status != null) {
                     r.setMessage(status.stage);
