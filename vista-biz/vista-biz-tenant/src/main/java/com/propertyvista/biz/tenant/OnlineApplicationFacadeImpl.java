@@ -138,7 +138,7 @@ public class OnlineApplicationFacadeImpl implements OnlineApplicationFacade {
         masterApplication.ilsBuilding().set(building);
         masterApplication.ilsFloorplan().set(floorplan);
         initOnlineApplicationFeeData(masterApplication);
-        Persistence.service().persist(masterApplication);
+        Persistence.service().merge(masterApplication);
 
         for (LeaseTermTenant tenant : masterApplication.leaseApplication().lease().currentTerm().version().tenants()) {
             Persistence.ensureRetrieve(tenant, AttachLevel.Attached);
@@ -154,7 +154,7 @@ public class OnlineApplicationFacadeImpl implements OnlineApplicationFacade {
                 } else {
                     ServerSideFactory.create(CommunicationFacade.class).sendApplicantApplicationInvitation(tenant);
                 }
-                Persistence.service().persist(tenant);
+                Persistence.service().merge(tenant);
                 return;
             }
         }
@@ -167,7 +167,7 @@ public class OnlineApplicationFacadeImpl implements OnlineApplicationFacade {
 
         if (!masterApplication.status().isNull()) {
             masterApplication.status().setValue(MasterOnlineApplication.Status.Approved);
-            Persistence.service().persist(masterApplication);
+            Persistence.service().merge(masterApplication);
         }
     }
 
@@ -216,12 +216,8 @@ public class OnlineApplicationFacadeImpl implements OnlineApplicationFacade {
         MasterOnlineApplication masterApplication = application.masterOnlineApplication();
         Persistence.service().retrieve(masterApplication);
         Persistence.service().retrieve(masterApplication.leaseApplication().lease());
-        masterApplication
-                .leaseApplication()
-                .lease()
-                .currentTerm()
-                .set(Persistence.service().retrieve(LeaseTerm.class,
-                        masterApplication.leaseApplication().lease().currentTerm().getPrimaryKey().asDraftKey()));
+        masterApplication.leaseApplication().lease().currentTerm()
+                .set(Persistence.service().retrieve(LeaseTerm.class, masterApplication.leaseApplication().lease().currentTerm().getPrimaryKey().asDraftKey()));
 
         // Invite customers:
         switch (application.role().getValue()) {
@@ -473,7 +469,7 @@ public class OnlineApplicationFacadeImpl implements OnlineApplicationFacade {
                 }
                 tenant.application().set(createOnlineApplication(lease.leaseApplication().onlineApplication(), tenant, LeaseTermParticipant.Role.CoApplicant));
                 ServerSideFactory.create(CommunicationFacade.class).sendCoApplicantApplicationInvitation(tenant);
-                Persistence.service().persist(tenant);
+                Persistence.service().merge(tenant);
             }
         }
     }
@@ -488,29 +484,29 @@ public class OnlineApplicationFacadeImpl implements OnlineApplicationFacade {
                 guarantor.application().set(
                         createOnlineApplication(lease.leaseApplication().onlineApplication(), guarantor, LeaseTermParticipant.Role.Guarantor));
                 ServerSideFactory.create(CommunicationFacade.class).sendGuarantorApplicationInvitation(guarantor);
-                Persistence.service().persist(guarantor);
+                Persistence.service().merge(guarantor);
             }
         }
     }
 
     private OnlineApplication createOnlineApplication(MasterOnlineApplication masterApplication, LeaseTermParticipant<?> participant,
             LeaseTermParticipant.Role role) {
-        OnlineApplication app = EntityFactory.create(OnlineApplication.class);
+        OnlineApplication application = EntityFactory.create(OnlineApplication.class);
 
-        app.masterOnlineApplication().set(masterApplication);
-        app.status().setValue(OnlineApplication.Status.Invited);
-        app.customer().set(participant.leaseParticipant().customer());
-        app.role().setValue(role);
+        application.masterOnlineApplication().set(masterApplication);
+        application.status().setValue(OnlineApplication.Status.Invited);
+        application.customer().set(participant.leaseParticipant().customer());
+        application.role().setValue(role);
 
-        Persistence.service().persist(app);
+        Persistence.service().persist(application);
 
         // ensure participant screening is present:
         if (participant.screening().isNull()) {
             participant.screening().set(EntityFactory.create(CustomerScreening.class));
-            Persistence.service().persist(participant);
+            Persistence.service().merge(participant);
         }
 
-        return app;
+        return application;
     }
 
     private List<OnlineApplication> retrieveActiveApplications(MasterOnlineApplication masterApplication) {
