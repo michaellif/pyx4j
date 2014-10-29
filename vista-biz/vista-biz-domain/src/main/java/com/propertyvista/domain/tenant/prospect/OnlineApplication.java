@@ -50,7 +50,9 @@ public interface OnlineApplication extends IEntity {
 
         InformationRequested,
 
-        Submitted;
+        Submitted,
+
+        Cancelled;
 
         @Override
         public String toString() {

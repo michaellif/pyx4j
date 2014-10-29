@@ -131,24 +131,25 @@ public class OnlineApplicationFacadeImpl implements OnlineApplicationFacade {
     }
 
     @Override
-    public void createMasterOnlineApplication(MasterOnlineApplication masterOnlineApplication, Building building, Floorplan floorplan) {
-        Persistence.ensureRetrieve(masterOnlineApplication, AttachLevel.Attached);
+    public void createMasterOnlineApplication(MasterOnlineApplication masterApplication, Building building, Floorplan floorplan) {
+        Persistence.ensureRetrieve(masterApplication, AttachLevel.Attached);
 
-        masterOnlineApplication.status().setValue(MasterOnlineApplication.Status.Incomplete);
-        masterOnlineApplication.ilsBuilding().set(building);
-        masterOnlineApplication.ilsFloorplan().set(floorplan);
-        initOnlineApplicationFeeData(masterOnlineApplication);
-        Persistence.service().persist(masterOnlineApplication);
+        masterApplication.status().setValue(MasterOnlineApplication.Status.Incomplete);
+        masterApplication.ilsBuilding().set(building);
+        masterApplication.ilsFloorplan().set(floorplan);
+        initOnlineApplicationFeeData(masterApplication);
+        Persistence.service().persist(masterApplication);
 
-        for (LeaseTermTenant tenant : masterOnlineApplication.leaseApplication().lease().currentTerm().version().tenants()) {
-            Persistence.service().retrieve(tenant);
+        for (LeaseTermTenant tenant : masterApplication.leaseApplication().lease().currentTerm().version().tenants()) {
+            Persistence.ensureRetrieve(tenant, AttachLevel.Attached);
+
             if (LeaseTermParticipant.Role.Applicant == tenant.role().getValue()) {
                 if (tenant.leaseParticipant().customer().user().isNull()) {
                     throw new UserRuntimeException(i18n.tr("Primary applicant must have an e-mail to start Online Application."));
                 }
-                tenant.application().set(createOnlineApplication(masterOnlineApplication, tenant, LeaseTermParticipant.Role.Applicant));
+                tenant.application().set(createOnlineApplication(masterApplication, tenant, LeaseTermParticipant.Role.Applicant));
 
-                if (masterOnlineApplication.leaseApplication().lease().unit().isNull()) {
+                if (masterApplication.leaseApplication().lease().unit().isNull()) {
                     ServerSideFactory.create(CommunicationFacade.class).sendProspectWelcome(tenant);
                 } else {
                     ServerSideFactory.create(CommunicationFacade.class).sendApplicantApplicationInvitation(tenant);
@@ -161,24 +162,27 @@ public class OnlineApplicationFacadeImpl implements OnlineApplicationFacade {
     }
 
     @Override
-    public void approveMasterOnlineApplication(MasterOnlineApplication masterOnlineApplication) {
-        Persistence.ensureRetrieve(masterOnlineApplication, AttachLevel.Attached);
+    public void approveMasterOnlineApplication(MasterOnlineApplication masterApplication) {
+        Persistence.ensureRetrieve(masterApplication, AttachLevel.Attached);
 
-        if (!masterOnlineApplication.status().isNull()) {
-            masterOnlineApplication.status().setValue(MasterOnlineApplication.Status.Approved);
-
-            Persistence.service().persist(masterOnlineApplication);
+        if (!masterApplication.status().isNull()) {
+            masterApplication.status().setValue(MasterOnlineApplication.Status.Approved);
+            Persistence.service().persist(masterApplication);
         }
     }
 
     @Override
-    public void cancelMasterOnlineApplication(MasterOnlineApplication masterOnlineApplication) {
-        Persistence.ensureRetrieve(masterOnlineApplication, AttachLevel.Attached);
+    public void cancelMasterOnlineApplication(MasterOnlineApplication masterApplication) {
+        Persistence.ensureRetrieve(masterApplication, AttachLevel.Attached);
 
-        if (!masterOnlineApplication.status().isNull()) {
-            masterOnlineApplication.status().setValue(MasterOnlineApplication.Status.Cancelled);
+        if (!masterApplication.status().isNull()) {
+            masterApplication.status().setValue(MasterOnlineApplication.Status.Cancelled);
+            Persistence.service().persist(masterApplication);
 
-            Persistence.service().persist(masterOnlineApplication);
+            for (OnlineApplication application : retrieveActiveApplications(masterApplication)) {
+                application.status().setValue(OnlineApplication.Status.Cancelled);
+                Persistence.service().merge(application);
+            }
         }
     }
 
@@ -209,50 +213,51 @@ public class OnlineApplicationFacadeImpl implements OnlineApplicationFacade {
         //        }
         //            Persistence.service().persist(credential);
 
-        MasterOnlineApplication ma = application.masterOnlineApplication();
-        Persistence.service().retrieve(ma);
-        Persistence.service().retrieve(ma.leaseApplication().lease());
-        ma.leaseApplication().lease().currentTerm()
-                .set(Persistence.service().retrieve(LeaseTerm.class, ma.leaseApplication().lease().currentTerm().getPrimaryKey().asDraftKey()));
+        MasterOnlineApplication masterApplication = application.masterOnlineApplication();
+        Persistence.service().retrieve(masterApplication);
+        Persistence.service().retrieve(masterApplication.leaseApplication().lease());
+        masterApplication
+                .leaseApplication()
+                .lease()
+                .currentTerm()
+                .set(Persistence.service().retrieve(LeaseTerm.class,
+                        masterApplication.leaseApplication().lease().currentTerm().getPrimaryKey().asDraftKey()));
 
         // Invite customers:
         switch (application.role().getValue()) {
         case Applicant:
-            inviteCoApplicants(ma.leaseApplication().lease());
-            inviteGuarantors(ma.leaseApplication().lease(), application.customer());
+            inviteCoApplicants(masterApplication.leaseApplication().lease());
+            inviteGuarantors(masterApplication.leaseApplication().lease(), application.customer());
             break;
         case CoApplicant:
-            inviteGuarantors(ma.leaseApplication().lease(), application.customer());
+            inviteGuarantors(masterApplication.leaseApplication().lease(), application.customer());
             break;
         case Guarantor:
             break;
         }
 
         // check application completeness:
-        // Load again since new applications may have been added.
-        Persistence.service().retrieve(ma);
-        boolean allApplicationsSubmited = true;
-        Persistence.service().retrieve(ma.applications());
 
-        for (OnlineApplication app : ma.applications()) {
+        boolean allApplicationsSubmited = true;
+        for (OnlineApplication app : retrieveActiveApplications(masterApplication)) {
             if (app.status().getValue() != OnlineApplication.Status.Submitted) {
                 allApplicationsSubmited = false;
                 break;
             }
         }
-        if (allApplicationsSubmited) {
-            ma.status().setValue(MasterOnlineApplication.Status.Submitted);
-            Persistence.service().merge(ma);
 
-            ma.leaseApplication().status().setValue(LeaseApplication.Status.Submitted);
-            Persistence.service().merge(ma.leaseApplication());
+        if (allApplicationsSubmited) {
+            masterApplication.status().setValue(MasterOnlineApplication.Status.Submitted);
+            Persistence.service().merge(masterApplication);
+
+            masterApplication.leaseApplication().status().setValue(LeaseApplication.Status.Submitted);
+            Persistence.service().merge(masterApplication.leaseApplication());
         }
     }
 
     @Override
-    public void resendInvitationEmail(LeaseTermParticipant leaseParticipant) {
+    public void resendInvitationEmail(LeaseTermParticipant<?> leaseParticipant) {
         // TODO Auto-generated method stub
-
     }
 
     @Override
@@ -261,9 +266,13 @@ public class OnlineApplicationFacadeImpl implements OnlineApplicationFacade {
 
         // See if active Application exists
         EntityQueryCriteria<OnlineApplication> criteria = EntityQueryCriteria.create(OnlineApplication.class);
+
         criteria.eq(criteria.proto().customer().user(), customerUser);
+        criteria.ne(criteria.proto().status(), OnlineApplication.Status.Cancelled);
         criteria.ne(criteria.proto().masterOnlineApplication().status(), MasterOnlineApplication.Status.Cancelled);
+
         List<OnlineApplication> applications = Persistence.service().query(criteria);
+
         // Check for suspended building.
         for (Iterator<OnlineApplication> it = applications.iterator(); it.hasNext();) {
             OnlineApplication app = it.next();
@@ -273,6 +282,7 @@ public class OnlineApplicationFacadeImpl implements OnlineApplicationFacade {
                 it.remove();
             }
         }
+
         return applications;
     }
 
@@ -317,15 +327,15 @@ public class OnlineApplicationFacadeImpl implements OnlineApplicationFacade {
     }
 
     @Override
-    public List<SignedOnlineApplicationLegalTerm> getOnlineApplicationLegalTerms(OnlineApplication app) {
-        Building policyNode = getOnlineApplicationPolicyNode(app);
+    public List<SignedOnlineApplicationLegalTerm> getOnlineApplicationLegalTerms(OnlineApplication application) {
+        Building policyNode = getOnlineApplicationPolicyNode(application);
 
         LeaseApplicationLegalPolicy leaseApplicationPolicy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(policyNode,
                 LeaseApplicationLegalPolicy.class);
         List<SignedOnlineApplicationLegalTerm> terms = new ArrayList<SignedOnlineApplicationLegalTerm>();
         for (LeaseApplicationLegalTerm term : leaseApplicationPolicy.legalTerms()) {
             TargetRole termRole = term.applyToRole().getValue();
-            if (termRole.matchesApplicationRole(app.role().getValue())) {
+            if (termRole.matchesApplicationRole(application.role().getValue())) {
                 SignedOnlineApplicationLegalTerm signedTerm = EntityFactory.create(SignedOnlineApplicationLegalTerm.class);
                 signedTerm.term().set(term);
                 signedTerm.signature().signatureFormat().set(term.signatureFormat());
@@ -336,8 +346,8 @@ public class OnlineApplicationFacadeImpl implements OnlineApplicationFacade {
     }
 
     @Override
-    public List<SignedOnlineApplicationConfirmationTerm> getOnlineApplicationConfirmationTerms(OnlineApplication app) {
-        Building building = getOnlineApplicationPolicyNode(app);
+    public List<SignedOnlineApplicationConfirmationTerm> getOnlineApplicationConfirmationTerms(OnlineApplication application) {
+        Building building = getOnlineApplicationPolicyNode(application);
 
         List<SignedOnlineApplicationConfirmationTerm> terms = new ArrayList<SignedOnlineApplicationConfirmationTerm>();
 
@@ -345,7 +355,7 @@ public class OnlineApplicationFacadeImpl implements OnlineApplicationFacade {
                 LeaseApplicationLegalPolicy.class);
         for (LeaseApplicationConfirmationTerm term : leaseApplicationPolicy.confirmationTerms()) {
             TargetRole termRole = term.applyToRole().getValue();
-            if (termRole.matchesApplicationRole(app.role().getValue())) {
+            if (termRole.matchesApplicationRole(application.role().getValue())) {
                 SignedOnlineApplicationConfirmationTerm signedTerm = EntityFactory.create(SignedOnlineApplicationConfirmationTerm.class);
                 signedTerm.term().set(term);
                 signedTerm.signature().signatureFormat().set(term.signatureFormat());
@@ -356,59 +366,56 @@ public class OnlineApplicationFacadeImpl implements OnlineApplicationFacade {
     }
 
     @Override
-    public Building getOnlineApplicationPolicyNode(OnlineApplication app) {
+    public Building getOnlineApplicationPolicyNode(OnlineApplication application) {
         Building building;
         {
             EntityQueryCriteria<Building> criteria = EntityQueryCriteria.create(Building.class);
-            criteria.eq(criteria.proto().units().$().leases().$().leaseApplication().onlineApplication(), app.masterOnlineApplication());
+            criteria.eq(criteria.proto().units().$().leases().$().leaseApplication().onlineApplication(), application.masterOnlineApplication());
             building = Persistence.service().retrieve(criteria, AttachLevel.IdOnly);
         }
         if (building != null) {
             return building;
         } else {
             // Case of ILS link
-            Persistence.ensureRetrieve(app.masterOnlineApplication(), AttachLevel.Attached);
-            return app.masterOnlineApplication().ilsBuilding();
+            Persistence.ensureRetrieve(application.masterOnlineApplication(), AttachLevel.Attached);
+            return application.masterOnlineApplication().ilsBuilding();
         }
     }
 
     @Override
-    public MasterOnlineApplicationStatus calculateOnlineApplicationStatus(MasterOnlineApplication moa) {
-        if (moa == null) {
-            return null;
+    public MasterOnlineApplicationStatus calculateOnlineApplicationStatus(MasterOnlineApplication masterApplication) {
+        if (masterApplication == null) {
+            return null; // no online application was run!..
         }
 
-        if (moa.isValueDetached()) {
-            Persistence.service().retrieve(moa);
-        }
+        Persistence.ensureRetrieve(masterApplication, AttachLevel.Attached);
+        List<OnlineApplication> applications = retrieveActiveApplications(masterApplication);
 
         MasterOnlineApplicationStatus moaStatus = EntityFactory.create(MasterOnlineApplicationStatus.class);
+
+        moaStatus.status().setValue(masterApplication.status().getValue());
+
         BigDecimal progressSum = new BigDecimal("0.0");
-
-        moaStatus.status().setValue(moa.status().getValue());
-
-        for (OnlineApplication app : moa.applications()) {
-            if (app.isValueDetached()) {
-                Persistence.service().retrieve(app);
-            }
+        for (OnlineApplication application : applications) {
+            Persistence.ensureRetrieve(application, AttachLevel.Attached);
 
             OnlineApplicationStatus status = EntityFactory.create(OnlineApplicationStatus.class);
 
-            status.status().setValue(app.status().getValue());
-            status.customer().set(app.customer());
-            status.role().setValue(app.role().getValue());
+            status.status().setValue(application.status().getValue());
+            status.customer().set(application.customer());
+            status.role().setValue(application.role().getValue());
 
             // calculate progress:
-            status.progress().setValue(calculateProgress(app));
-            status.daysOpen().setValue((SystemDateManager.getLogicalDate().getTime() - app.createDate().getValue().getTime()) / (1000 * 60 * 60 * 24));
+            status.progress().setValue(calculateProgress(application));
+            status.daysOpen().setValue((SystemDateManager.getLogicalDate().getTime() - application.createDate().getValue().getTime()) / (1000 * 60 * 60 * 24));
 
             moaStatus.individualApplications().add(status);
 
             progressSum = progressSum.add(status.progress().getValue());
         }
 
-        if (!moa.applications().isEmpty()) {
-            moaStatus.progress().setValue(progressSum.divide(new BigDecimal(moa.applications().size()), 2, RoundingMode.HALF_UP));
+        if (!applications.isEmpty()) {
+            moaStatus.progress().setValue(progressSum.divide(new BigDecimal(applications.size()), 2, RoundingMode.HALF_UP));
         }
 
         return moaStatus;
@@ -417,37 +424,37 @@ public class OnlineApplicationFacadeImpl implements OnlineApplicationFacade {
     // implementation internals
 
     @Override
-    public void initOnlineApplicationFeeData(MasterOnlineApplication masterOnlineApplication) {
-        Building building = masterOnlineApplication.ilsBuilding().duplicate();
+    public void initOnlineApplicationFeeData(MasterOnlineApplication masterApplication) {
+        Building building = masterApplication.ilsBuilding().duplicate();
 
         if (building.isNull()) {
-            Persistence.ensureRetrieve(masterOnlineApplication.leaseApplication().lease().unit().building(), AttachLevel.IdOnly);
-            building = masterOnlineApplication.leaseApplication().lease().unit().building();
+            Persistence.ensureRetrieve(masterApplication.leaseApplication().lease().unit().building(), AttachLevel.IdOnly);
+            building = masterApplication.leaseApplication().lease().unit().building();
         }
         if (!building.isNull()) {
             ProspectPortalPolicy policy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(building, ProspectPortalPolicy.class);
-            masterOnlineApplication.feePayment().setValue(policy.feePayment().getValue());
-            masterOnlineApplication.feeAmount().setValue(policy.feeAmount().getValue());
+            masterApplication.feePayment().setValue(policy.feePayment().getValue());
+            masterApplication.feeAmount().setValue(policy.feeAmount().getValue());
         }
     }
 
-    private BigDecimal calculateProgress(OnlineApplication app) {
-        switch (app.status().getValue()) {
+    private BigDecimal calculateProgress(OnlineApplication application) {
+        switch (application.status().getValue()) {
         case Invited:
             return BigDecimal.ZERO;
         case Incomplete:
-            if (app.stepsStatuses().isNull()) {
+            if (application.stepsStatuses().isNull()) {
                 return BigDecimal.ZERO;
             }
             BigDecimal sum = BigDecimal.ZERO;
-            for (OnlineApplicationWizardStepStatus stepStatus : app.stepsStatuses()) {
+            for (OnlineApplicationWizardStepStatus stepStatus : application.stepsStatuses()) {
                 if (stepStatus.completed().getValue(false)) {
                     sum = sum.add(new BigDecimal(1));
                 } else if (stepStatus.visited().getValue(false)) {
                     sum = sum.add(new BigDecimal(0.5));
                 }
             }
-            return sum.divide(new BigDecimal(app.stepsStatuses().size()), 2, RoundingMode.CEILING);
+            return sum.divide(new BigDecimal(application.stepsStatuses().size()), 2, RoundingMode.CEILING);
         case InformationRequested:
             return new BigDecimal(1);
         case Submitted:
@@ -486,23 +493,32 @@ public class OnlineApplicationFacadeImpl implements OnlineApplicationFacade {
         }
     }
 
-    private OnlineApplication createOnlineApplication(MasterOnlineApplication masterOnlineApplication, LeaseTermParticipant<?> participant,
+    private OnlineApplication createOnlineApplication(MasterOnlineApplication masterApplication, LeaseTermParticipant<?> participant,
             LeaseTermParticipant.Role role) {
         OnlineApplication app = EntityFactory.create(OnlineApplication.class);
+
+        app.masterOnlineApplication().set(masterApplication);
         app.status().setValue(OnlineApplication.Status.Invited);
-
-        // create empty new screening if null:
-        if (participant.screening().isNull()) {
-            participant.screening().set(EntityFactory.create(CustomerScreening.class));
-            Persistence.service().persist(participant);
-        }
-
-        app.masterOnlineApplication().set(masterOnlineApplication);
         app.customer().set(participant.leaseParticipant().customer());
         app.role().setValue(role);
 
         Persistence.service().persist(app);
 
+        // ensure participant screening is present:
+        if (participant.screening().isNull()) {
+            participant.screening().set(EntityFactory.create(CustomerScreening.class));
+            Persistence.service().persist(participant);
+        }
+
         return app;
+    }
+
+    private List<OnlineApplication> retrieveActiveApplications(MasterOnlineApplication masterApplication) {
+        EntityQueryCriteria<OnlineApplication> criteria = EntityQueryCriteria.create(OnlineApplication.class);
+
+        criteria.eq(criteria.proto().masterOnlineApplication(), masterApplication);
+        criteria.ne(criteria.proto().status(), OnlineApplication.Status.Cancelled);
+
+        return Persistence.service().query(criteria);
     }
 }
