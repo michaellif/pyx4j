@@ -42,6 +42,7 @@ import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.commons.IDebugId;
 import com.pyx4j.commons.IFormatter;
 import com.pyx4j.commons.IParser;
+import com.pyx4j.gwt.commons.BrowserType;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.i18n.shared.I18nEnum;
 import com.pyx4j.widgets.client.PasswordBox.PasswordStrengthRule.PasswordStrengthVerdict;
@@ -120,7 +121,7 @@ public class PasswordBox extends FlowPanel implements IValueBoxWidget<String> {
         @Override
         protected void setText(String text, boolean watermark) {
             if (!revealText) {
-                if (watermark) {
+                if (watermark && !BrowserType.isIE8()) {
                     getTextBoxWidget().getElement().setAttribute("type", "text");
                 } else {
                     getTextBoxWidget().getElement().setAttribute("type", "password");
