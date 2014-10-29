@@ -29,12 +29,12 @@ import com.pyx4j.forms.client.images.FolderImages;
 import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.CImageSlider;
 import com.pyx4j.forms.client.ui.CLabel;
-import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
+import com.pyx4j.forms.client.ui.panels.FormFieldDecoratorOptions;
+import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.tester.client.domain.test.EntityI;
 import com.pyx4j.tester.client.images.Images;
-import com.pyx4j.tester.client.ui.FormDecoratorBuilder;
 import com.pyx4j.tester.domain.TFile;
 import com.pyx4j.tester.shared.file.TFileUploadService;
 
@@ -63,9 +63,9 @@ public class EntityIImageForm extends CForm<EntityI> {
             @Override
             public Widget getImageEntryView(CForm<TFile> entryForm) {
                 VerticalPanel infoPanel = new VerticalPanel();
-                infoPanel.add(entryForm.inject(entryForm.proto().file().fileName(), new CLabel<String>(), new FormDecoratorBuilder().build()));
-                infoPanel.add(entryForm.inject(entryForm.proto().caption(), new FormDecoratorBuilder().build()));
-                infoPanel.add(entryForm.inject(entryForm.proto().description(), new FormDecoratorBuilder().build()));
+                infoPanel.add(entryForm.inject(entryForm.proto().file().fileName(), new CLabel<String>(), new FormFieldDecoratorOptions().build()));
+                infoPanel.add(entryForm.inject(entryForm.proto().caption(), new FormFieldDecoratorOptions().build()));
+                infoPanel.add(entryForm.inject(entryForm.proto().description(), new FormFieldDecoratorOptions().build()));
                 return infoPanel;
             }
         };

@@ -150,6 +150,14 @@ public abstract class AbstractFormPanel {
 
     protected abstract void append(IsWidget widget);
 
+    protected FormFieldDecoratorOptions createFieldDecoratorOptions() {
+        return new FormFieldDecoratorOptions();
+    }
+
+    protected FieldDecorator createFieldDecorator(final FormFieldDecoratorOptions options) {
+        return new FormFieldDecorator(options);
+    }
+
     public class CompOptions {
 
         private final CField<?, ?> comp;
@@ -164,13 +172,5 @@ public abstract class AbstractFormPanel {
             comp.setDecorator(createFieldDecorator(options));
             return options;
         }
-    }
-
-    protected FormFieldDecoratorOptions createFieldDecoratorOptions() {
-        return new FormFieldDecoratorOptions();
-    }
-
-    protected FieldDecorator createFieldDecorator(final FormFieldDecoratorOptions options) {
-        return new FormFieldDecorator(options);
     }
 }

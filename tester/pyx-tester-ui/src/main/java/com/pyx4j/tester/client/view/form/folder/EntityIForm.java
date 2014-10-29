@@ -37,15 +37,15 @@ import com.pyx4j.forms.client.ui.folder.IFolderDecorator;
 import com.pyx4j.forms.client.ui.folder.IFolderItemDecorator;
 import com.pyx4j.forms.client.ui.folder.TableFolderDecorator;
 import com.pyx4j.forms.client.ui.folder.TableFolderItemDecorator;
-import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
+import com.pyx4j.forms.client.ui.panels.FormFieldDecoratorOptions;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.tester.client.domain.test.EntityI;
 import com.pyx4j.tester.client.domain.test.EntityII;
 import com.pyx4j.tester.client.domain.test.EntityIII;
 import com.pyx4j.tester.client.domain.test.EntityIV;
 import com.pyx4j.tester.client.images.Images;
-import com.pyx4j.tester.client.ui.FormDecoratorBuilder;
+import com.pyx4j.tester.client.view.form.TesterFormPanel;
 
 public class EntityIForm extends CForm<EntityI> {
 
@@ -57,7 +57,7 @@ public class EntityIForm extends CForm<EntityI> {
 
     @Override
     protected IsWidget createContent() {
-        FormPanel formPanel = new FormPanel(this);
+        TesterFormPanel formPanel = new TesterFormPanel(this);
 
         formPanel.h1(i18n.tr("Main Form"));
         formPanel.append(Location.Left, proto().textBox()).decorate();
@@ -103,7 +103,7 @@ public class EntityIForm extends CForm<EntityI> {
 
         @Override
         protected IsWidget createContent() {
-            FormPanel formPanel = new FormPanel(this);
+            TesterFormPanel formPanel = new TesterFormPanel(this);
 
             formPanel.append(Location.Left, proto().optionalTextI()).decorate();
             formPanel.append(Location.Left, proto().optionalInteger()).decorate();
@@ -148,8 +148,8 @@ public class EntityIForm extends CForm<EntityI> {
         @Override
         protected IsWidget createContent() {
             FlowPanel main = new FlowPanel();
-            main.add(inject(proto().stringMember(), new FormDecoratorBuilder().build()));
-            main.add(inject(proto().integerMember(), new FormDecoratorBuilder().build()));
+            main.add(inject(proto().stringMember(), new FormFieldDecoratorOptions().build()));
+            main.add(inject(proto().integerMember(), new FormFieldDecoratorOptions().build()));
             return main;
         }
     }
