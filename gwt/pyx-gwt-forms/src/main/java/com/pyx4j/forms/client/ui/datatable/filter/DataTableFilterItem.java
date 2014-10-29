@@ -53,6 +53,8 @@ import com.pyx4j.forms.client.images.FolderImages;
 import com.pyx4j.forms.client.ui.CComboBox;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CComponentTheme;
+import com.pyx4j.forms.client.ui.CField;
+import com.pyx4j.forms.client.ui.CFocusComponent;
 import com.pyx4j.forms.client.ui.INativeField;
 import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.forms.client.ui.datatable.DataTableTheme;
@@ -70,7 +72,7 @@ public class DataTableFilterItem<E extends IEntity> extends FlowPanel {
     protected final CComboBox<Operator> operandsList;
 
     @SuppressWarnings("rawtypes")
-    protected CComponent valueComponent;
+    protected CField valueComponent;
 
     protected final SimplePanel valueHolder;
 
@@ -288,6 +290,8 @@ public class DataTableFilterItem<E extends IEntity> extends FlowPanel {
         } else {
             operandsList.setValue(Operator.is);
         }
+
+        operandsList.setFocus(true);
     }
 
     private static Collection<Operator> getOperators(IObject<?> member) {
