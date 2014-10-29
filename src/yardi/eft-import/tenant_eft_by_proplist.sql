@@ -1,5 +1,4 @@
-SELECT
-                'false' AS "Ignore",
+SELECT			'false' AS "Ignore",
                 p.scode AS "Property Code",
                 t.SUNITCODE AS "Unit Number",
                 t.SCODE AS "Lease Id",
@@ -22,10 +21,11 @@ JOIN	ACHDATA e ON (t.HMYPERSON = e.HPERSON)
 LEFT JOIN ACHAllocation a ON (a.hCamRule = c.HMY AND a.hACHData = e.Hmy)
 JOIN tenstatus ts ON (t.ISTATUS = ts.istatus)
 LEFT JOIN PERSON r ON (e.hRoommate = r.HMY)
-WHERE	(ISNULL(c.dtto,'01-JAN-2020') >= '01-NOV-2014' AND c.DTFROM <= '01-NOV-2014')
+WHERE	(ISNULL(c.dtto,'01-JAN-2020') >= CONVERT(datetime, 'INSERT_EFT_DATE_HERE')
+								 AND c.DTFROM <= CONVERT(datetime, 'INSERT_EFT_DATE_HERE'))
 AND		ts.status IN ('Current','Notice')
-/*AND		pl.SADDR1 LIKE '%Vista%'*/
-/*AND     pl.SCODE LIKE '.pvgreen' */
-AND     p.scode = 'gran0002'
+AND p.hMy  IN (	SELECT	hproperty from listprop2 lp 
+				JOIN	property p ON (p.hmy = lp.hproplist) 
+				WHERE	p.scode = 'INSERT_PROPERTY_LIST_CODE_HERE')  
 AND		e.SACCT NOT IN ('0','1')
 ORDER BY    p.scode,t.sunitcode;
