@@ -105,13 +105,17 @@ public class YardiLeaseProcessor {
                     removeLease(nonProcessedLeases, leaseId);
                 }
 
-                new UnitOfWork(TransactionScopeOption.RequiresNew).execute(new Executable<Void, YardiServiceException>() {
-                    @Override
-                    public Void execute() throws YardiServiceException {
-                        processLease(propertyCode, leaseId, rtd.getData(propertyCode).getData(leaseId));
-                        return null;
-                    }
-                });
+                try {
+                    new UnitOfWork(TransactionScopeOption.RequiresNew).execute(new Executable<Void, YardiServiceException>() {
+                        @Override
+                        public Void execute() throws YardiServiceException {
+                            processLease(propertyCode, leaseId, rtd.getData(propertyCode).getData(leaseId));
+                            return null;
+                        }
+                    });
+                } catch (Exception e) {
+                    log.error(e.getMessage());
+                }
 
                 if (rtd.getExecutionMonitor().isTerminationRequested()) {
                     break;
@@ -140,8 +144,11 @@ public class YardiLeaseProcessor {
     }
 
     private Lease createLease(String propertyCode, String leaseId, LeaseTransactionData ltd) throws YardiServiceException {
+        if (ltd.getResident() == null) {
+            throw new IllegalArgumentException("createLease: Resident data for lease '" + leaseId + "' is null!");
+        }
         if (StringUtils.isEmpty(ltd.getResident().getCustomerID())) {
-            throw new IllegalStateException("Illegal LeaseID. Can not be empty or null");
+            throw new IllegalArgumentException("createLease: Resident data for lease '" + leaseId + "' has null/empty CustomerID!");
         }
 
         String unitNumber = YardiARIntegrationAgent.getUnitId(ltd.getResident());
@@ -161,7 +168,6 @@ public class YardiLeaseProcessor {
             ServerSideFactory.create(LeaseFacade.class).setPackage(lease.currentTerm(), unit, null, Collections.<BillableItem> emptyList());
         }
 
-        assert (ltd.getResident() != null);
         List<YardiCustomer> yardiCustomers = ltd.getResident().getCustomers().getCustomer();
         YardiLease yardiLease = yardiCustomers.get(0).getLease();
 
@@ -248,7 +254,7 @@ public class YardiLeaseProcessor {
             lease.currentTerm().yardiLeasePk().setValue(getYardiLeasePk(yardiCustomers));
             Persistence.service().merge(lease.currentTerm()); // just memorize yardiLeasePk for older leases (before feature was introduced)
         } else if (!EqualsHelper.equals(lease.currentTerm().yardiLeasePk().getValue(), getYardiLeasePk(yardiCustomers))) {
-            // it seems we are moving by Yardi Unit Transfer method!.. 
+            // it seems we are moving by Yardi Unit Transfer method!..
             previousTerm = lease.currentTerm().duplicate();
             yardiUnitTransfer = true;
             log.info("- Lease {} Moving...", lease.leaseId().getStringView());
@@ -294,7 +300,7 @@ public class YardiLeaseProcessor {
         if (new TenantMerger(rtd.getExecutionMonitor()).isChanged(yardiCustomers, lease)) {
             new TenantMerger(rtd.getExecutionMonitor()).updateTenants(yardiCustomers, lease, previousTerm);
             if (yardiUnitTransfer) {
-                // TODO: hack to update newly created tenants with old customers:  
+                // TODO: hack to update newly created tenants with old customers:
                 ServerSideFactory.create(LeaseFacade.class).persist(lease.currentTerm());
                 new TenantMerger(rtd.getExecutionMonitor()).updateTenants(yardiCustomers, lease, previousTerm);
             }
@@ -453,7 +459,7 @@ public class YardiLeaseProcessor {
 
         AptUnit unit = Persistence.service().retrieve(criteria);
         if (unit == null) {
-            throw new Error("Unit " + unitNumber + " not found in building " + propertyCode);
+            throw new Error("Unit '" + unitNumber + "' not found in building '" + propertyCode + "'");
         }
         return unit;
     }
