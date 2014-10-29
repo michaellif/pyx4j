@@ -56,7 +56,7 @@ public class WebDriverWrapper implements WebDriver {
             case Chrome:
                 driver = new ChromeDriver();
                 break;
-            case Friefox:
+            case Firefox:
                 DesiredCapabilities capabilities = null;
                 ProxyConfig proxyConfig = testConfig.getProxyConfig();
                 if (proxyConfig != null) {
@@ -83,7 +83,7 @@ public class WebDriverWrapper implements WebDriver {
             case Chrome:
                 capabilities = DesiredCapabilities.chrome();
                 break;
-            case Friefox:
+            case Firefox:
                 capabilities = DesiredCapabilities.firefox();
                 break;
             case IE:

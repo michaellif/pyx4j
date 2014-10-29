@@ -28,7 +28,7 @@ public interface ISeleniumTestConfiguration {
 
         Chrome,
 
-        Friefox,
+        Firefox,
 
         IE,
     }
