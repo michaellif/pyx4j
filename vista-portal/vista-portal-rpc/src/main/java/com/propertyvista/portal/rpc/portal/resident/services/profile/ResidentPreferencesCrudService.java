@@ -13,10 +13,13 @@
  */
 package com.propertyvista.portal.rpc.portal.resident.services.profile;
 
-import com.pyx4j.entity.rpc.AbstractCrudService;
+import com.google.gwt.user.client.rpc.AsyncCallback;
+
+import com.pyx4j.commons.Key;
+import com.pyx4j.rpc.shared.IService;
 
 import com.propertyvista.domain.tenant.CustomerPreferences;
 
-public interface ResidentPreferencesCrudService extends AbstractCrudService<CustomerPreferences> {
-
+public interface ResidentPreferencesCrudService extends IService {
+    void persist(AsyncCallback<Key> callback, CustomerPreferences bo);
 }

@@ -48,7 +48,6 @@ import com.propertyvista.domain.security.CustomerUserCredential;
 import com.propertyvista.domain.security.PortalResidentBehavior;
 import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.domain.tenant.CustomerAcceptedTerms;
-import com.propertyvista.domain.tenant.CustomerPreferences;
 import com.propertyvista.domain.tenant.ResidentSelfRegistration;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseApplication;
@@ -90,10 +89,6 @@ public class CustomerFacadeImpl implements CustomerFacade {
                 Persistence.service().merge(customer.user());
             } else {
                 Persistence.service().persist(customer.user());
-                CustomerPreferences preferences = EntityFactory.create(CustomerPreferences.class);
-                preferences.customerUser().set(customer.user());
-                Persistence.service().persist(preferences);
-
                 newUser = true;
 
                 CustomerUserCredential credential = EntityFactory.create(CustomerUserCredential.class);

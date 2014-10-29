@@ -15,36 +15,31 @@ package com.propertyvista.portal.server.portal.resident.services.profile;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
-import com.pyx4j.entity.core.criterion.EntityListCriteria;
-import com.pyx4j.entity.rpc.EntitySearchResult;
-import com.pyx4j.entity.server.AbstractCrudServiceImpl;
+import com.pyx4j.commons.Key;
+import com.pyx4j.entity.core.EntityFactory;
+import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.security.shared.Context;
 
 import com.propertyvista.domain.tenant.CustomerPreferences;
 import com.propertyvista.portal.rpc.portal.CustomerUserVisit;
 import com.propertyvista.portal.rpc.portal.resident.services.profile.ResidentPreferencesCrudService;
+import com.propertyvista.portal.server.portal.resident.ResidentPortalContext;
 
-public class ResidentPreferencesCrudServiceImpl extends AbstractCrudServiceImpl<CustomerPreferences> implements ResidentPreferencesCrudService {
-
-    public ResidentPreferencesCrudServiceImpl() {
-        super(CustomerPreferences.class);
-    }
+public class ResidentPreferencesCrudServiceImpl implements ResidentPreferencesCrudService {
 
     @Override
-    protected boolean persist(CustomerPreferences bo, CustomerPreferences to) {
-        boolean rc = super.persist(bo, to);
+    public void persist(AsyncCallback<Key> callback, CustomerPreferences bo) {
+        if (!Persistence.service().retrieve(bo)) {
+            CustomerPreferences cp = EntityFactory.create(CustomerPreferences.class);
+            cp.customerUser().set(ResidentPortalContext.getCurrentUser());
+            cp.hiddenPortalElements().set(bo.hiddenPortalElements());
+            bo = cp;
+        }
+
+        Persistence.secureSave(bo);
+        Persistence.service().commit();
+
         Context.visit(CustomerUserVisit.class).setPreferences(bo);
-        return rc;
+        callback.onSuccess(bo.getPrimaryKey());
     }
-
-    @Override
-    protected CustomerPreferences init(com.pyx4j.entity.rpc.AbstractCrudService.InitializationData initializationData) {
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
-    public void list(AsyncCallback<EntitySearchResult<CustomerPreferences>> callback, EntityListCriteria<CustomerPreferences> dtoCriteria) {
-        throw new UnsupportedOperationException();
-    }
-
 }

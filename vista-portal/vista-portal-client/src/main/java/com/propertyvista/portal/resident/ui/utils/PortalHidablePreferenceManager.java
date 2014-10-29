@@ -41,12 +41,14 @@ public class PortalHidablePreferenceManager {
                 cp.hiddenPortalElements().remove(preference);
             }
         }
-        ((ResidentPreferencesCrudService) GWT.create(ResidentPreferencesCrudService.class)).save(new DefaultAsyncCallback<Key>() {
+
+        ((ResidentPreferencesCrudService) GWT.create(ResidentPreferencesCrudService.class)).persist(new DefaultAsyncCallback<Key>() {
             @Override
             public void onSuccess(Key result) {
                 AppSite.getEventBus().fireEvent(new PortalHidableEvent(preferenceType, preferenceValue));
             }
         }, cp);
+
     }
 
     private static CustomerPreferencesPortalHidable getGettingStarted(CustomerPreferences cp) {
