@@ -51,6 +51,12 @@ public class AuditFacadeImpl implements AuditFacade {
     }
 
     @Override
+    public void openIdLogin(VistaApplication application, String email) {
+        AuditRecord record = loginOpenId(application, "Browser: {0}, Email: {1}", getLoginUserDetails(), email);
+        record(record);
+    }
+
+    @Override
     public void logout(VistaApplication application) {
         record(AuditRecordEventType.Logout, null, null);
     }
@@ -131,6 +137,28 @@ public class AuditFacadeImpl implements AuditFacade {
         record(record);
     }
 
+    private AuditRecord loginOpenId(VistaApplication application, String format, Object... args) {
+        AuditRecord record = EntityFactory.create(AuditRecord.class);
+        record.event().setValue(AuditRecordEventType.OpenIdLogin);
+        record.namespace().setValue(NamespaceManager.getNamespace());
+        record.app().setValue(application);
+        record.remoteAddr().setValue(getRequestRemoteAddr());
+        record.details().setValue((format == null) ? null : truncDetails(SimpleMessageFormat.format(format, args)));
+        return record;
+    }
+
+    private AuditRecord loginFail(VistaApplication application, AbstractUser user) {
+        AuditRecord record = EntityFactory.create(AuditRecord.class);
+        record.event().setValue(AuditRecordEventType.LoginFailed);
+        record.namespace().setValue(NamespaceManager.getNamespace());
+        record.app().setValue(application);
+        record.remoteAddr().setValue(getRequestRemoteAddr());
+        if (user != null) {
+            setPrincipalUser(record, user);
+        }
+        return record;
+    }
+
     private static String truncDetails(String details) {
         if ((details != null) && (details.length() > details_length)) {
             return details.substring(0, details_length) + "...";
@@ -202,18 +230,6 @@ public class AuditFacadeImpl implements AuditFacade {
             info.append("User-Agent: ").append(ServerContext.getRequest().getHeader("User-Agent"));
             return info.toString();
         }
-    }
-
-    private AuditRecord loginFail(VistaApplication application, AbstractUser user) {
-        AuditRecord record = EntityFactory.create(AuditRecord.class);
-        record.event().setValue(AuditRecordEventType.LoginFailed);
-        record.namespace().setValue(NamespaceManager.getNamespace());
-        record.app().setValue(application);
-        record.remoteAddr().setValue(getRequestRemoteAddr());
-        if (user != null) {
-            setPrincipalUser(record, user);
-        }
-        return record;
     }
 
 }

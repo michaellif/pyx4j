@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011- All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -27,10 +27,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.pyx4j.config.server.ServerSideConfiguration;
+import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.gwt.server.IOUtils;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.server.contexts.DevSession;
 
+import com.propertyvista.biz.system.AuditFacade;
+import com.propertyvista.biz.system.VistaContext;
 import com.propertyvista.config.AbstractVistaServerSideConfiguration;
 import com.propertyvista.server.common.security.DevelopmentSecurity;
 import com.propertyvista.server.common.security.VistaAuthenticationServicesImpl;
@@ -73,8 +76,11 @@ public class OpenIdServlet extends HttpServlet {
                 } else if (openIdResponse.email.endsWith("pyx4j.com")) {
                     VistaAuthenticationServicesImpl.setVistaEmployeeCookie();
                 }
-
             }
+
+            ServerSideFactory.create(AuditFacade.class).openIdLogin(VistaContext.getVistaApplication(),
+                    openIdResponse.email != null ? openIdResponse.email : "email not available");
+
             createResponsePage(request, response, false, receivingURL);
         }
     }

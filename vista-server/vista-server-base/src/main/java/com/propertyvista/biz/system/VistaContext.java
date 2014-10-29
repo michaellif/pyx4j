@@ -24,6 +24,7 @@ import com.pyx4j.server.contexts.ServerContext;
 import com.propertyvista.domain.security.CrmUser;
 import com.propertyvista.domain.security.CustomerUser;
 import com.propertyvista.domain.security.common.AbstractUser;
+import com.propertyvista.domain.security.common.VistaApplication;
 import com.propertyvista.domain.security.common.VistaUserType;
 import com.propertyvista.operations.domain.security.OperationsUser;
 import com.propertyvista.shared.VistaUserVisit;
@@ -83,6 +84,10 @@ public class VistaContext {
         } else {
             throw new IllegalArgumentException();
         }
+    }
+
+    public static VistaApplication getVistaApplication() {
+        return (VistaApplication) ServerContext.getRequest().getAttribute(VistaApplication.class.getName());
     }
 
 }

@@ -23,6 +23,8 @@ public interface AuditFacade {
 
     public void login(VistaApplication application);
 
+    public void openIdLogin(VistaApplication application, String email);
+
     public void logout(VistaApplication application);
 
     public void loginFailed(VistaApplication application, AbstractUser user);
