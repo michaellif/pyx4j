@@ -33,6 +33,7 @@ import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxProfile;
 import org.openqa.selenium.ie.InternetExplorerDriver;
+import org.openqa.selenium.remote.CapabilityType;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.remote.RemoteWebDriver;
 import org.slf4j.Logger;
@@ -56,17 +57,19 @@ public class WebDriverWrapper implements WebDriver {
                 driver = new ChromeDriver();
                 break;
             case Friefox:
-                FirefoxProfile profile = null;
+                DesiredCapabilities capabilities = null;
                 ProxyConfig proxyConfig = testConfig.getProxyConfig();
                 if (proxyConfig != null) {
-                    profile = new FirefoxProfile();
+                    FirefoxProfile profile = new FirefoxProfile();
                     Proxy proxy = new Proxy();
                     proxy.setProxyType(Proxy.ProxyType.MANUAL);
                     proxy.setHttpProxy(proxyConfig.getHost() + ":" + proxyConfig.getPort());
                     proxy.setNoProxy("localhost");
-                    profile.setProxyPreferences(proxy);
+                    capabilities = DesiredCapabilities.firefox();
+                    capabilities.setCapability(FirefoxDriver.PROFILE, profile);
+                    capabilities.setCapability(CapabilityType.PROXY, proxy);
                 }
-                driver = new FirefoxDriver(profile);
+                driver = new FirefoxDriver(capabilities);
                 break;
             case IE:
                 driver = new InternetExplorerDriver();

@@ -67,7 +67,7 @@ public class DefaultSeleniumTestConfiguration implements ISeleniumTestConfigurat
         if (CommonsStringUtils.isStringSet(sysProperty)) {
             return Driver.valueOf(sysProperty);
         } else {
-            return Driver.Friefox;
+            return Driver.Chrome;
         }
     }
 

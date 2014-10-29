@@ -28,7 +28,7 @@ import org.junit.Assert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.internal.seleniumemulation.JavascriptLibrary;
+import com.thoughtworks.selenium.webdriven.JavascriptLibrary;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.helpers.FormattingTuple;
