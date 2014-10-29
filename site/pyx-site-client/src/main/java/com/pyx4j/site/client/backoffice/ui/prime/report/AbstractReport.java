@@ -49,7 +49,6 @@ import com.pyx4j.site.shared.domain.reports.ExportableReport;
 import com.pyx4j.site.shared.domain.reports.ReportTemplate;
 import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.StringBox;
-import com.pyx4j.widgets.client.TextBox;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 import com.pyx4j.widgets.client.dialog.OkCancelDialog;
 
@@ -108,7 +107,7 @@ public abstract class AbstractReport<R extends ReportTemplate> extends AbstractP
 
         viewPanel.add(reportWidget);
 
-        addHeaderToolbarItem(new Button(i18n.tr("Customise..."), new Command() {
+        addHeaderToolbarItem(new Button(i18n.tr("Customize..."), new Command() {
             @Override
             public void execute() {
                 presenter.loadAvailableTemplates();
@@ -202,7 +201,7 @@ public abstract class AbstractReport<R extends ReportTemplate> extends AbstractP
 
     @Override
     public void onReportMetadataSaveSucceed() {
-        MessageDialog.info(i18n.tr("Report settings were saved successfuly!"));
+        MessageDialog.info(i18n.tr("Report settings were saved successfully!"));
         resetCaption();
     }
 
