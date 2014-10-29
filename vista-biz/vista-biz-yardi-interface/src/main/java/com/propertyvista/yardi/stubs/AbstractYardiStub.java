@@ -248,7 +248,7 @@ abstract class AbstractYardiStub implements ExternalInterfaceLoggingStub {
     protected <R> R ensureResult(String xml, Class<R> resultType) throws YardiServiceException {
         final List<String> errorTags = Arrays.asList("ErrorMessage", "ErrorMessages");
         try {
-            final XMLStreamReader xsr = XMLInputFactory.newInstance().createXMLStreamReader(new StringReader(xml));
+            final XMLStreamReader xsr = XMLInputFactory.newFactory().createXMLStreamReader(new StringReader(xml));
             Unmarshaller um = JAXBContext.newInstance(resultType).createUnmarshaller();
             um.setEventHandler(new ValidationEventHandler() {
                 @Override
