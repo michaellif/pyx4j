@@ -60,7 +60,6 @@ public class EftVarianceReportGenerator implements ReportGenerator {
         reportProgressStatusHolder = new ReportProgressStatusHolderExectutionMonitorAdapter();
 
         EftVarianceReportMetadata reportMetadata = (EftVarianceReportMetadata) metadata;
-
         Vector<EftVarianceReportRecordDTO> varianceReportRecord = new Vector<EftVarianceReportRecordDTO>();
 
         List<Building> selectedBuildings = buildingCriteriaNormalizer.normalize(//@formatter:off
@@ -70,7 +69,7 @@ public class EftVarianceReportGenerator implements ReportGenerator {
 
         // Find PadGenerationDate for each BillingCycle in system, they may be different
         Set<LogicalDate> padGenerationDays = new HashSet<LogicalDate>();
-        {
+        if (!reportProgressStatusHolder.isTerminationRequested()) {
             EntityQueryCriteria<BillingCycle> criteria = EntityQueryCriteria.create(BillingCycle.class);
 
             if (selectedBuildings != null) {
@@ -80,18 +79,25 @@ public class EftVarianceReportGenerator implements ReportGenerator {
             criteria.isNull(criteria.proto().actualAutopayExecutionDate());
 
             for (BillingCycle cycle : Persistence.secureQuery(criteria)) {
+                if (reportProgressStatusHolder.isTerminationRequested()) {
+                    break;
+                }
                 padGenerationDays.add(cycle.targetAutopayExecutionDate().getValue());
             }
         }
 
-        int progress = 0;
-        int count = padGenerationDays.size();
-        for (LogicalDate padGenerationDate : padGenerationDays) {
-            PreauthorizedPaymentsReportCriteria reportCriteria = new PreauthorizedPaymentsReportCriteria(padGenerationDate, selectedBuildings);
-            varianceReportRecord.addAll(ServerSideFactory.create(PaymentReportFacade.class).reportEftVariance(reportCriteria));
-            reportProgressStatusHolder.set(new ReportProgressStatus(i18n.tr("Gathering Data"), 1, 1, progress++, count));
+        if (!reportProgressStatusHolder.isTerminationRequested()) {
+            int progress = 0;
+            int count = padGenerationDays.size();
+            for (LogicalDate padGenerationDate : padGenerationDays) {
+                if (reportProgressStatusHolder.isTerminationRequested()) {
+                    break;
+                }
+                PreauthorizedPaymentsReportCriteria reportCriteria = new PreauthorizedPaymentsReportCriteria(padGenerationDate, selectedBuildings);
+                varianceReportRecord.addAll(ServerSideFactory.create(PaymentReportFacade.class).reportEftVariance(reportCriteria));
+                reportProgressStatusHolder.set(new ReportProgressStatus(i18n.tr("Gathering Data"), 1, 1, progress++, count));
+            }
         }
-
         return varianceReportRecord;
     }
 

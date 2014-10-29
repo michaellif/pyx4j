@@ -123,62 +123,79 @@ public class EftReportGenerator implements ReportExporter {
         reportProgressStatusHolder = new ReportProgressStatusHolderExectutionMonitorAdapter();
 
         EftReportMetadata reportMetadata = (EftReportMetadata) metadata;
-
         EftReportDataDTO reportData = EntityFactory.create(EftReportDataDTO.class);
 
         if (reportMetadata.forthcomingEft().getValue(false)) {
             reportProgressStatusHolder.setExecutionMonitor(new ExecutionMonitor());
-            // Create forthcoming payment records here
+
+            Set<LogicalDate> padGenerationDays = new HashSet<LogicalDate>();
             Vector<PaymentRecord> paymentRecords = new Vector<PaymentRecord>();
 
-            // Find PadGenerationDate for each BillingCycle in system, they may be different
-            Set<LogicalDate> padGenerationDays = new HashSet<LogicalDate>();
-            EntityQueryCriteria<BillingCycle> criteria = EntityQueryCriteria.create(BillingCycle.class);
-            criteria.eq(criteria.proto().billingCycleStartDate(), reportMetadata.billingCycleStartDate().getValue());
-            criteria.isNull(criteria.proto().actualAutopayExecutionDate());
-            for (BillingCycle cycle : Persistence.secureQuery(criteria)) {
-                padGenerationDays.add(cycle.targetAutopayExecutionDate().getValue());
-            }
-
-            List<Building> selectedBuildings = buildingCriteriaNormalizer.normalize(//@formatter:off
-                    reportMetadata.filterByPortfolio().getValue(false) ? reportMetadata.selectedPortfolios() : null,
-                    reportMetadata.filterByBuildings().getValue(false) ? reportMetadata.selectedBuildings() : null
-            );//@formatter:on
-
-            int progress = 0;
-            int count = padGenerationDays.size();
-            for (LogicalDate padGenerationDate : padGenerationDays) {
-                PreauthorizedPaymentsReportCriteria reportCriteria = new PreauthorizedPaymentsReportCriteria(padGenerationDate, selectedBuildings);
-                if (reportMetadata.filterByExpectedMoveOut().getValue(false)) {
-                    reportCriteria.setExpectedMoveOutCriteris(reportMetadata.minimum().getValue(), reportMetadata.maximum().getValue());
+            if (!reportProgressStatusHolder.isTerminationRequested()) {
+                // Find PadGenerationDate for each BillingCycle in system, they may be different
+                EntityQueryCriteria<BillingCycle> criteria = EntityQueryCriteria.create(BillingCycle.class);
+                criteria.eq(criteria.proto().billingCycleStartDate(), reportMetadata.billingCycleStartDate().getValue());
+                criteria.isNull(criteria.proto().actualAutopayExecutionDate());
+                for (BillingCycle cycle : Persistence.secureQuery(criteria)) {
+                    if (reportProgressStatusHolder.isTerminationRequested()) {
+                        break;
+                    }
+                    padGenerationDays.add(cycle.targetAutopayExecutionDate().getValue());
                 }
-                reportCriteria.setLeasesOnNoticeOnly(reportMetadata.leasesOnNoticeOnly().getValue(false));
-                reportCriteria.setTrace(reportMetadata.trace().getValue(false));
-                paymentRecords.addAll(ServerSideFactory.create(PaymentReportFacade.class).reportPreauthorisedPayments(reportCriteria,
-                        reportProgressStatusHolder.getExecutionMonitor()));
-                reportProgressStatusHolder.set(new ReportProgressStatus(i18n.tr("Gathering Data"), 1, 2, progress++, count));
             }
 
-            progress = 0;
-            count = paymentRecords.size();
-            for (PaymentRecord paymentRecord : paymentRecords) {
-                enhancePaymentRecord(paymentRecord);
-                reportData.eftReportRecords().add(dtoBinder.createTO(paymentRecord));
-                reportProgressStatusHolder.set(new ReportProgressStatus(i18n.tr("Gathering Data"), 2, 2, progress++, count));
+            if (!reportProgressStatusHolder.isTerminationRequested()) {
+                List<Building> selectedBuildings = buildingCriteriaNormalizer.normalize( //
+                        reportMetadata.filterByPortfolio().getValue(false) ? reportMetadata.selectedPortfolios() : null, //
+                        reportMetadata.filterByBuildings().getValue(false) ? reportMetadata.selectedBuildings() : null);
+
+                int progress = 0;
+                int count = padGenerationDays.size();
+                for (LogicalDate padGenerationDate : padGenerationDays) {
+                    if (reportProgressStatusHolder.isTerminationRequested()) {
+                        break;
+                    }
+                    PreauthorizedPaymentsReportCriteria reportCriteria = new PreauthorizedPaymentsReportCriteria(padGenerationDate, selectedBuildings);
+                    if (reportMetadata.filterByExpectedMoveOut().getValue(false)) {
+                        reportCriteria.setExpectedMoveOutCriteris(reportMetadata.minimum().getValue(), reportMetadata.maximum().getValue());
+                    }
+                    reportCriteria.setLeasesOnNoticeOnly(reportMetadata.leasesOnNoticeOnly().getValue(false));
+                    reportCriteria.setTrace(reportMetadata.trace().getValue(false));
+                    paymentRecords.addAll(ServerSideFactory.create(PaymentReportFacade.class).reportPreauthorisedPayments(reportCriteria,
+                            reportProgressStatusHolder.getExecutionMonitor()));
+                    reportProgressStatusHolder.set(new ReportProgressStatus(i18n.tr("Gathering Data"), 1, 2, progress++, count));
+                }
             }
 
-            if (!reportMetadata.orderBy().isNull()) {
-                Collections.sort(paymentRecords, EntityComparatorFactory.createMemberComparator(dtoBinder.getBoundBOMemberPath(new Path(reportMetadata
-                        .orderBy().memberPath().getValue()))));
+            if (!reportProgressStatusHolder.isTerminationRequested()) {
+                int progress = 0;
+                int count = padGenerationDays.size();
+                for (PaymentRecord paymentRecord : paymentRecords) {
+                    if (reportProgressStatusHolder.isTerminationRequested()) {
+                        break;
+                    }
+                    enhancePaymentRecord(paymentRecord);
+                    reportData.eftReportRecords().add(dtoBinder.createTO(paymentRecord));
+                    reportProgressStatusHolder.set(new ReportProgressStatus(i18n.tr("Gathering Data"), 2, 2, progress++, count));
+                }
             }
-        } else {
+
+            if (!reportProgressStatusHolder.isTerminationRequested()) {
+                if (!reportMetadata.orderBy().isNull()) {
+                    Collections.sort(
+                            paymentRecords,
+                            EntityComparatorFactory.createMemberComparator(dtoBinder.getBoundBOMemberPath(new Path(reportMetadata.orderBy().memberPath()
+                                    .getValue()))));
+                }
+            }
+        } else if (!reportProgressStatusHolder.isTerminationRequested()) {
             EntityQueryCriteria<PaymentRecord> criteria = makeCriteria(reportMetadata);
 
             int progress = 0;
             int count = Persistence.service().count(criteria);
             ICursorIterator<PaymentRecord> paymentRecordsIter = Persistence.secureQuery(null, criteria, AttachLevel.Attached);
             try {
-                while (paymentRecordsIter.hasNext() & !reportProgressStatusHolder.isTerminationRequested()) {
+                while (paymentRecordsIter.hasNext() && !reportProgressStatusHolder.isTerminationRequested()) {
                     PaymentRecord paymentRecord = paymentRecordsIter.next();
                     enhancePaymentRecord(paymentRecord);
                     reportData.eftReportRecords().add(dtoBinder.createTO(paymentRecord));
@@ -190,14 +207,15 @@ public class EftReportGenerator implements ReportExporter {
             } finally {
                 IOUtils.closeQuietly(paymentRecordsIter);
             }
-
         }
 
-        reportData.agregateByBuildings().setValue(
-                reportMetadata.orderBy().isEmpty()
-                        || reportMetadata.orderBy().memberPath().getValue()
-                                .equals(EntityFactory.getEntityPrototype(EftReportRecordDTO.class).building().getPath().toString()));
+        if (!reportProgressStatusHolder.isTerminationRequested()) {
+            reportData.agregateByBuildings().setValue(
+                    reportMetadata.orderBy().isEmpty()
+                            || reportMetadata.orderBy().memberPath().getValue()
+                                    .equals(EntityFactory.getEntityPrototype(EftReportRecordDTO.class).building().getPath().toString()));
 
+        }
         return reportData;
     }
 
