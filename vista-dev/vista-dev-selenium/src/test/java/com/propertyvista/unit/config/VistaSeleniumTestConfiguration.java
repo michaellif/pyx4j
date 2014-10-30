@@ -109,7 +109,7 @@ public class VistaSeleniumTestConfiguration extends DefaultSeleniumTestConfigura
 
     @Override
     public boolean reuseBrowser() {
-        return false;
+        return true;
     }
 
     @Override
@@ -145,4 +145,5 @@ public class VistaSeleniumTestConfiguration extends DefaultSeleniumTestConfigura
             //return "10.1.1.152";
         }
     }
+
 }
