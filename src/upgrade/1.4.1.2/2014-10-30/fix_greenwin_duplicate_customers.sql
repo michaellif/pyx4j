@@ -72,6 +72,8 @@ CREATE TABLE  _dba_.tmp_tenant_data AS
 (SELECT     t.id, c.id AS customer_id, 
             c.registered_in_portal, c.person_name_first_name,
             c.person_name_last_name, c.person_email, 
+            c.person_home_phone, c.person_mobile_phone,
+            c.person_work_phone, 
             l.lease_id, lp.participant_id,
             aa.id AS pap, pm.id AS payment_method
  FROM   greenwin.lease_participant lp
@@ -126,8 +128,6 @@ BEGIN TRANSACTION;
 COMMIT;
 */
 
-\i tmp_tenant_data.sql
-
 CREATE OR REPLACE FUNCTION _dba_.fix_greenwin_duplicates() RETURNS VOID AS
 $$
 DECLARE     
@@ -179,6 +179,14 @@ BEGIN
     FROM    _dba_.tmp_tenant_data t 
     WHERE   c.id = t.customer_id;
     **/
+    
+    UPDATE  greenwin.customer AS c
+    SET     person_home_phone = t.person_home_phone,
+            person_mobile_phone = t.person_mobile_phone,
+            person_work_phone = t.person_work_phone
+    FROM    _dba_.tmp_tenant_data t 
+    WHERE   c.id = t.customer_id;
+    
 END;
 $$
 LANGUAGE plpgsql VOLATILE;
