@@ -52,7 +52,8 @@ public class AuditFacadeImpl implements AuditFacade {
 
     @Override
     public void openIdLogin(VistaApplication application, String email) {
-        AuditRecord record = loginOpenId(application, "Browser: {0}, Email: {1}", getLoginUserDetails(), email);
+        AuditRecord record = getLoginRecord(AuditRecordEventType.OpenIdLogin, application, null);
+        record.details().setValue("Email: '" + email + "'");
         record(record);
     }
 
@@ -74,13 +75,13 @@ public class AuditFacadeImpl implements AuditFacade {
 
     @Override
     public void loginFailed(VistaApplication application, AbstractUser user) {
-        AuditRecord record = loginFail(application, user);
+        AuditRecord record = getLoginRecord(AuditRecordEventType.LoginFailed, application, user);
         record(record);
     }
 
     @Override
     public void loginAttemptFailed(VistaApplication application, String email) {
-        AuditRecord record = loginFail(application, null);
+        AuditRecord record = getLoginRecord(AuditRecordEventType.LoginFailed, application, null);
         record.details().setValue("No such user: '" + email + "'");
         record(record);
     }
@@ -137,19 +138,9 @@ public class AuditFacadeImpl implements AuditFacade {
         record(record);
     }
 
-    private AuditRecord loginOpenId(VistaApplication application, String format, Object... args) {
+    private AuditRecord getLoginRecord(AuditRecordEventType eventType, VistaApplication application, AbstractUser user) {
         AuditRecord record = EntityFactory.create(AuditRecord.class);
-        record.event().setValue(AuditRecordEventType.OpenIdLogin);
-        record.namespace().setValue(NamespaceManager.getNamespace());
-        record.app().setValue(application);
-        record.remoteAddr().setValue(getRequestRemoteAddr());
-        record.details().setValue((format == null) ? null : truncDetails(SimpleMessageFormat.format(format, args)));
-        return record;
-    }
-
-    private AuditRecord loginFail(VistaApplication application, AbstractUser user) {
-        AuditRecord record = EntityFactory.create(AuditRecord.class);
-        record.event().setValue(AuditRecordEventType.LoginFailed);
+        record.event().setValue(eventType);
         record.namespace().setValue(NamespaceManager.getNamespace());
         record.app().setValue(application);
         record.remoteAddr().setValue(getRequestRemoteAddr());
