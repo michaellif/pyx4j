@@ -851,8 +851,8 @@ public class CrmTheme extends VistaTheme {
 
         style = new Style("." + PapReviewsHolderForm.Styles.AutoPaySuperCaptionsPanel.name());
         style.addProperty("position", "relative");
-        style.addProperty("left", "280px");
-        style.addProperty("width", "780px");
+        style.addProperty("left", "0px");
+        style.addProperty("width", "1060px");
         style.addProperty("border-top", "1px dotted");
         style.addProperty("border-right", "1px dotted");
         style.addProperty("background", ThemeColor.object1, 0.3);
@@ -870,17 +870,21 @@ public class CrmTheme extends VistaTheme {
         addStyle(style);
 
         style = new Style("." + PapReviewsHolderForm.Styles.AutoPaySuperCaptionsPanel.name() + " div:nth-child(1)");
-        style.addProperty("width", "314px");
+        style.addProperty("width", "275px");
         addStyle(style);
 
         style = new Style("." + PapReviewsHolderForm.Styles.AutoPaySuperCaptionsPanel.name() + " div:nth-child(2)");
+        style.addProperty("width", "314px");
+        addStyle(style);
+
+        style = new Style("." + PapReviewsHolderForm.Styles.AutoPaySuperCaptionsPanel.name() + " div:nth-child(3)");
         style.addProperty("width", "350px");
         addStyle(style);
 
         style = new Style("." + PapReviewsHolderForm.Styles.AutoPayCaptionsPanel.name());
         style.addProperty("position", "relative");
-        style.addProperty("left", "280px");
-        style.addProperty("width", "780px");
+        style.addProperty("left", "0px");
+        style.addProperty("width", "1060px");
         style.addProperty("border-top", "1px dotted");
         style.addProperty("border-right", "1px dotted");
         style.addProperty("border-bottom", "1px dotted");
@@ -898,6 +902,7 @@ public class CrmTheme extends VistaTheme {
         style = new Style("." + PapReviewsHolderForm.Styles.AutoPayCaptionsPanel.name() + " div div");
         style.addProperty("border-left", "none");
         addStyle(style);
+
     }
 
     private void initN4GenerationToolStyles() {
