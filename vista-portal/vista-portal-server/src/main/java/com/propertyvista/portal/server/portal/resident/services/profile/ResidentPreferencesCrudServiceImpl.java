@@ -29,13 +29,13 @@ public class ResidentPreferencesCrudServiceImpl implements ResidentPreferencesCr
 
     @Override
     public void persist(AsyncCallback<Key> callback, CustomerPreferences bo) {
-        if (bo.getPrimaryKey() == null || Persistence.secureRetrieve(CustomerPreferences.class, bo.getPrimaryKey()) == null) {
+        if (bo.getPrimaryKey() == null) {
             CustomerPreferences cp = EntityFactory.create(CustomerPreferences.class);
-            cp.customerUser().set(ResidentPortalContext.getCurrentUser());
             cp.hiddenPortalElements().set(bo.hiddenPortalElements());
             bo = cp;
         }
-
+        // Force ownership security
+        bo.customerUser().set(ResidentPortalContext.getCurrentUser());
         Persistence.secureSave(bo);
         Persistence.service().commit();
 

@@ -21,5 +21,7 @@ import com.pyx4j.rpc.shared.IService;
 import com.propertyvista.domain.tenant.CustomerPreferences;
 
 public interface ResidentPreferencesCrudService extends IService {
+
     void persist(AsyncCallback<Key> callback, CustomerPreferences bo);
+
 }
