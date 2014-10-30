@@ -64,9 +64,9 @@ public class CrmAccountRecoveryOptionsUserServiceImpl implements CrmAccountRecov
             if (!ServerSideFactory.create(PasswordEncryptorFacade.class).checkUserPassword(request.password().getValue(), credential.credential().getValue())) {
                 log.info("Invalid password for user {}", ServerContext.getVisit().getUserVisit().getEmail());
                 if (AbstractAntiBot.authenticationFailed(LoginType.userLogin, ServerContext.getVisit().getUserVisit().getEmail())) {
-                    throw new ChallengeVerificationRequired();
+                    throw new ChallengeVerificationRequired(AbstractAntiBot.cannedLoginFailedMessage());
                 } else {
-                    throw new UserRuntimeException(AbstractAntiBot.GENERIC_LOGIN_FAILED_MESSAGE);
+                    throw new UserRuntimeException(AbstractAntiBot.cannedLoginFailedMessage());
                 }
             }
         }
@@ -92,9 +92,9 @@ public class CrmAccountRecoveryOptionsUserServiceImpl implements CrmAccountRecov
             if (!ServerSideFactory.create(PasswordEncryptorFacade.class).checkUserPassword(request.password().getValue(), credentials.credential().getValue())) {
                 log.info("Invalid password for user {}", ServerContext.getVisit().getUserVisit().getEmail());
                 if (AbstractAntiBot.authenticationFailed(LoginType.userLogin, ServerContext.getVisit().getUserVisit().getEmail())) {
-                    throw new ChallengeVerificationRequired();
+                    throw new ChallengeVerificationRequired(AbstractAntiBot.cannedLoginFailedMessage());
                 } else {
-                    throw new UserRuntimeException(AbstractAntiBot.GENERIC_LOGIN_FAILED_MESSAGE);
+                    throw new UserRuntimeException(AbstractAntiBot.cannedLoginFailedMessage());
                 }
             }
         }
