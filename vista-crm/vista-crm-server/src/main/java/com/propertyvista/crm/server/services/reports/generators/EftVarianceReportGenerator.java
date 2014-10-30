@@ -14,8 +14,6 @@
 package com.propertyvista.crm.server.services.reports.generators;
 
 import java.io.Serializable;
-import java.math.BigDecimal;
-import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -34,7 +32,6 @@ import com.pyx4j.site.shared.domain.reports.ReportTemplate;
 import com.propertyvista.biz.financial.payment.PaymentReportFacade;
 import com.propertyvista.biz.financial.payment.PreauthorizedPaymentsReportCriteria;
 import com.propertyvista.crm.rpc.dto.reports.EftVarianceReportRecordDTO;
-import com.propertyvista.crm.rpc.dto.reports.EftVarianceReportRecordDetailsDTO;
 import com.propertyvista.crm.server.services.reports.util.ReportProgressStatusHolderExectutionMonitorAdapter;
 import com.propertyvista.crm.server.util.BuildingsCriteriaNormalizer;
 import com.propertyvista.domain.financial.PaymentRecord;
@@ -62,41 +59,36 @@ public class EftVarianceReportGenerator implements ReportGenerator {
         EftVarianceReportMetadata reportMetadata = (EftVarianceReportMetadata) metadata;
         Vector<EftVarianceReportRecordDTO> varianceReportRecord = new Vector<EftVarianceReportRecordDTO>();
 
-        List<Building> selectedBuildings = buildingCriteriaNormalizer.normalize(//@formatter:off
-                reportMetadata.filterByPortfolio().getValue(false) ? reportMetadata.selectedPortfolios() : null,
-                reportMetadata.filterByBuildings().getValue(false) ? reportMetadata.selectedBuildings() : null
-        );//@formatter:on
+        List<Building> selectedBuildings = buildingCriteriaNormalizer.normalize(//
+                reportMetadata.filterByPortfolio().getValue(false) ? reportMetadata.selectedPortfolios() : null, //
+                reportMetadata.filterByBuildings().getValue(false) ? reportMetadata.selectedBuildings() : null);
 
         // Find PadGenerationDate for each BillingCycle in system, they may be different
         Set<LogicalDate> padGenerationDays = new HashSet<LogicalDate>();
-        if (!reportProgressStatusHolder.isTerminationRequested()) {
-            EntityQueryCriteria<BillingCycle> criteria = EntityQueryCriteria.create(BillingCycle.class);
+        EntityQueryCriteria<BillingCycle> criteria = EntityQueryCriteria.create(BillingCycle.class);
 
-            if (selectedBuildings != null) {
-                criteria.in(criteria.proto().building(), selectedBuildings);
-            }
-            criteria.eq(criteria.proto().billingCycleStartDate(), reportMetadata.billingCycleStartDate());
-            criteria.isNull(criteria.proto().actualAutopayExecutionDate());
+        if (selectedBuildings != null) {
+            criteria.in(criteria.proto().building(), selectedBuildings);
+        }
+        criteria.eq(criteria.proto().billingCycleStartDate(), reportMetadata.billingCycleStartDate());
+        criteria.isNull(criteria.proto().actualAutopayExecutionDate());
 
-            for (BillingCycle cycle : Persistence.secureQuery(criteria)) {
-                if (reportProgressStatusHolder.isTerminationRequested()) {
-                    break;
-                }
-                padGenerationDays.add(cycle.targetAutopayExecutionDate().getValue());
+        for (BillingCycle cycle : Persistence.secureQuery(criteria)) {
+            if (reportProgressStatusHolder.isTerminationRequested()) {
+                break;
             }
+            padGenerationDays.add(cycle.targetAutopayExecutionDate().getValue());
         }
 
-        if (!reportProgressStatusHolder.isTerminationRequested()) {
-            int progress = 0;
-            int count = padGenerationDays.size();
-            for (LogicalDate padGenerationDate : padGenerationDays) {
-                if (reportProgressStatusHolder.isTerminationRequested()) {
-                    break;
-                }
-                PreauthorizedPaymentsReportCriteria reportCriteria = new PreauthorizedPaymentsReportCriteria(padGenerationDate, selectedBuildings);
-                varianceReportRecord.addAll(ServerSideFactory.create(PaymentReportFacade.class).reportEftVariance(reportCriteria));
-                reportProgressStatusHolder.set(new ReportProgressStatus(i18n.tr("Gathering Data"), 1, 1, progress++, count));
+        int progress = 0;
+        int count = padGenerationDays.size();
+        for (LogicalDate padGenerationDate : padGenerationDays) {
+            if (reportProgressStatusHolder.isTerminationRequested()) {
+                break;
             }
+            PreauthorizedPaymentsReportCriteria reportCriteria = new PreauthorizedPaymentsReportCriteria(padGenerationDate, selectedBuildings);
+            varianceReportRecord.addAll(ServerSideFactory.create(PaymentReportFacade.class).reportEftVariance(reportCriteria));
+            reportProgressStatusHolder.set(new ReportProgressStatus(i18n.tr("Gathering Data"), 1, 1, progress++, count));
         }
         return varianceReportRecord;
     }
@@ -111,35 +103,4 @@ public class EftVarianceReportGenerator implements ReportGenerator {
         reportProgressStatusHolder.requestTermination();
     }
 
-    private List<EftVarianceReportRecordDTO> mockupData() {
-        EftVarianceReportRecordDTO record = EntityFactory.create(EftVarianceReportRecordDTO.class);
-        record.building().setValue("bath1234");
-        record.unit().setValue("101");
-        record.leaseId().setValue("t000012356");
-
-        {
-            EftVarianceReportRecordDetailsDTO details = record.details().$();
-            details.tenantName().setValue("Peter Petechkyin");
-            details.paymentMethod().setValue("blalba");
-            details.totalEft().setValue(new BigDecimal("1000.5"));
-            details.charges().setValue(new BigDecimal("500.00"));
-            details.difference().setValue(new BigDecimal("500.5"));
-            record.details().add(details);
-        }
-
-        {
-            EftVarianceReportRecordDetailsDTO details = record.details().$();
-            details.tenantName().setValue("Vasya Vasechkin");
-            details.paymentMethod().setValue("12355adf5551");
-            details.totalEft().setValue(new BigDecimal("2000.5"));
-            details.charges().setValue(new BigDecimal("1000.00"));
-            details.difference().setValue(new BigDecimal("1000.5"));
-            record.details().add(details);
-        }
-        record.leaseTotals().totalEft().setValue(new BigDecimal("3001"));
-        record.leaseTotals().charges().setValue(new BigDecimal("1500"));
-        record.leaseTotals().difference().setValue(new BigDecimal("1501"));
-
-        return Arrays.asList(record);
-    }
 }
