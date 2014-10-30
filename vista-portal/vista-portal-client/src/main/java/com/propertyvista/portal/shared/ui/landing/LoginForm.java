@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011-2012 All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -78,9 +78,10 @@ public class LoginForm extends CForm<AuthenticationRequest> {
         });
         formPanel.append(Location.Left, resetPassword);
 
-        formPanel.append(Location.Left, proto().captcha());
+        formPanel.append(Location.Left, proto().captcha()).decorate();
         captchaField = (CCaptcha) get(proto().captcha());
         captchaField.setWatermark(i18n.tr("Enter both security words above"));
+        captchaField.setMandatoryValidationMessage(i18n.tr("Captcha code is required"));
         captchaField.getNativeComponent().addKeyUpHandler(new EnterKeyHandler());
 
         setCaptchaEnabled(false);
@@ -91,6 +92,8 @@ public class LoginForm extends CForm<AuthenticationRequest> {
     }
 
     public final void setCaptchaEnabled(boolean isEnabled) {
+        captchaField.setMandatory(isEnabled);
+        captchaField.setVisited(!isEnabled);
         captchaField.setVisible(isEnabled);
         if (isEnabled) {
             captchaField.createNewChallenge();

@@ -25,6 +25,7 @@ import com.pyx4j.commons.css.StyleManager;
 import com.pyx4j.commons.css.ThemeColor;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.Button;
+import com.pyx4j.widgets.client.dialog.MessageDialog;
 
 import com.propertyvista.common.client.ui.components.login.LoginView.DevLoginCredentials;
 import com.propertyvista.domain.legal.TermsAndPoliciesType;
@@ -90,7 +91,13 @@ public class LoginGadget extends AbstractGadget<LandingViewImpl> implements ILog
         loginForm.setVisitedRecursive();
         if (loginForm.isValid()) {
             presenter.login(loginForm.getValue());
+        } else {
+            showValidationDialog();
         }
+    }
+
+    protected void showValidationDialog() {
+        MessageDialog.error(i18n.tr("Error"), loginForm.getValidationResults().getValidationMessage(true));
     }
 
     @Override
