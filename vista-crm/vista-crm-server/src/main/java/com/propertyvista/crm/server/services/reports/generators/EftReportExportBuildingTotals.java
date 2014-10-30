@@ -29,8 +29,13 @@ public class EftReportExportBuildingTotals extends ExportTotals<BigDecimal, EftR
 
     private BigDecimal reportTotal = BigDecimal.ZERO;
 
+    private int nRecordsTotal = 0;
+
+    private int nRecordsPartial = 0;
+
     @Override
     protected BigDecimal add(BigDecimal total, EftReportExportModel entity) {
+        nRecordsPartial++;
         reportTotal = reportTotal.add(entity.amount().getValue());
 
         BigDecimal newTotal;
@@ -46,9 +51,13 @@ public class EftReportExportBuildingTotals extends ExportTotals<BigDecimal, EftR
     @Override
     protected void exportTotal(ReportTableXLSXFormatter formatter, String key, BigDecimal total) {
         formatter.cellsEmpty(1, true);
-        formatter.header(i18n.tr("Building {0} Total:", key));
-        formatter.mergeCells(1, 9);
-        formatter.cellsEmpty(8, true);
+        formatter.header(i18n.tr("Building {0} Total Records:", key));
+        formatter.cell(nRecordsPartial);
+        formatter.cellsEmpty(2, true);
+        formatter.header(i18n.tr("Total Amount:"));
+
+        formatter.mergeCells(1, 5);
+        formatter.cellsEmpty(4, true);
 
         formatter.cell(total);
 
@@ -64,15 +73,23 @@ public class EftReportExportBuildingTotals extends ExportTotals<BigDecimal, EftR
             cell.setCellStyle(style);
         }
         formatter.newRow();
+
+        nRecordsTotal += nRecordsPartial;
+        nRecordsPartial = 0;
+
     }
 
     @Override
     public void reportLastTotal(ReportTableXLSXFormatter formatter) {
         super.reportLastTotal(formatter);
 
-        formatter.header(i18n.tr("Total:"));
-        formatter.mergeCells(1, 10);
-        formatter.cellsEmpty(9, true);
+        formatter.header(i18n.tr("Total Records:"));
+        formatter.cell(nRecordsTotal);
+
+        formatter.cellsEmpty(2, true);
+        formatter.header(i18n.tr("Total Amount:"));
+        formatter.mergeCells(1, 6);
+        formatter.cellsEmpty(5, true);
 
         formatter.cell(reportTotal);
 

@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011-2012 All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -29,17 +29,23 @@ public class EftReportOverallTotals extends ExportTotals<BigDecimal, EftReportEx
 
     private BigDecimal reportTotal = BigDecimal.ZERO;
 
+    private int nRecordsTotal = 0;
+
     @Override
     protected BigDecimal add(BigDecimal total, EftReportExportModel entity) {
+        nRecordsTotal++;
         reportTotal = reportTotal.add(entity.amount().getValue());
         return reportTotal;
     }
 
     @Override
     protected void exportTotal(ReportTableXLSXFormatter formatter, String key, BigDecimal total) {
-        formatter.header(i18n.tr("Total:"));
-        formatter.mergeCells(1, 10);
-        formatter.cellsEmpty(9, true);
+        formatter.header(i18n.tr("Total Records:"));
+        formatter.cell(nRecordsTotal);
+        formatter.cellsEmpty(4, true);
+        formatter.header(i18n.tr("Total Amount:"));
+        formatter.mergeCells(1, 4);
+        formatter.cellsEmpty(3, true);
 
         formatter.cell(reportTotal);
 
