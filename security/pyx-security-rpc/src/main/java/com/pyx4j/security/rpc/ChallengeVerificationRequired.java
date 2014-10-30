@@ -32,4 +32,8 @@ public class ChallengeVerificationRequired extends UserRuntimeException {
         super(true, i18n.tr("Too Many Failed Log In Attempts"));
     }
 
+    public ChallengeVerificationRequired(String message) {
+        super(true, message);
+    }
+
 }
