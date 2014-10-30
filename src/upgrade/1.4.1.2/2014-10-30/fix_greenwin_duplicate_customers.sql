@@ -42,6 +42,8 @@ ORDER BY 1;
 
 -- still 470
 
+*/
+
 -- Executed on db-ro 
 /*
 COPY (  SELECT  lp.id
@@ -87,6 +89,7 @@ pg_dump -U akinareevski -h localhost -O -t _dba_.tmp_tenant_data vista_copy > tm
 
 \i tmp_tenant_data.sql
 
+/*
 BEGIN TRANSACTION;
 
     -- DELETE payment_methods
@@ -121,5 +124,80 @@ BEGIN TRANSACTION;
     
     
 COMMIT;
+*/
+
+\i tmp_tenant_data.sql
+
+CREATE OR REPLACE FUNCTION _dba_.fix_greenwin_duplicates() RETURNS VOID AS
+$$
+DECLARE     
+            v_lp_id         BIGINT;
+            v_cust_id       BIGINT;
+            v_nextval       BIGINT;
+BEGIN
+
+    FOR     v_lp_id IN 
+    SELECT  id 
+    FROM    greenwin.lease_participant 
+    WHERE   customer IN (SELECT customer_id FROM _dba_.tmp_tenant_data) 
+    AND     id NOT IN (SELECT id FROM _dba_.tmp_tenant_data) 
+    LOOP
     
+        SELECT  number + 1 INTO v_cust_id
+        FROM    greenwin.id_assignment_sequence
+        WHERE   target = 'customer';
+        
+        SELECT  nextval('public.customer_seq') INTO v_nextval;
+        
+        INSERT INTO greenwin.customer (id,customer_id,created) 
+        VALUES (v_nextval,v_cust_id,DATE_TRUNC('second',current_timestamp)::timestamp);
+        
+        UPDATE  greenwin.id_assignment_sequence
+        SET     number = v_cust_id 
+        WHERE   target = 'customer';
+        
+        UPDATE  greenwin.lease_participant
+        SET     customer = v_nextval
+        WHERE   id = v_lp_id;
+        
+        UPDATE  greenwin.payment_method AS pm
+        SET     customer = v_nextval
+        FROM    greenwin.lease_participant lp
+        JOIN    greenwin.autopay_agreement aa ON (lp.id = aa.tenant)
+        JOIN    greenwin.payment_method pm0 ON (pm0.id = aa.payment_method) 
+        WHERE   pm.id = pm0.id 
+        AND     lp.id = v_lp_id;
+        
+    END LOOP;
     
+    /**
+    -- Just in case I would want to update existing customers
+    UPDATE  greenwin.customer AS c
+    SET     person_name_first_name = t.person_name_first_name,
+            person_name_last_name = t.person_name_last_name,
+            person_email = t.person_email
+    FROM    _dba_.tmp_tenant_data t 
+    WHERE   c.id = t.customer_id;
+    **/
+END;
+$$
+LANGUAGE plpgsql VOLATILE;
+
+BEGIN TRANSACTION;
+
+    SELECT * FROM _dba_.fix_greenwin_duplicates();
+    
+    SELECT  COUNT(lp.id)
+    FROM    greenwin.lease_participant lp
+    JOIN    greenwin.lease l ON (l.id = lp.lease)
+    WHERE   l.integration_system_id = 6
+    AND  EXISTS (SELECT customer FROM greenwin.lease_participant lp2
+                 JOIN   greenwin.lease l2 ON (l2.id = lp2.lease)
+                 WHERE  l2.integration_system_id != 6
+                 AND    lp.customer = lp2.customer);
+    
+
+COMMIT;
+
+DROP FUNCTION _dba_.fix_greenwin_duplicates();
+DROP TABLE _dba_.tmp_tenant_data ;
