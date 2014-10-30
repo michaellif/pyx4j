@@ -15,17 +15,17 @@ package com.propertyvista.yardi.processors;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Iterator;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.apache.commons.collections4.map.CaseInsensitiveMap;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -94,15 +94,17 @@ public class YardiLeaseProcessor {
     // Public interface:
 
     public void process() throws YardiServiceException {
-        List<Lease> nonProcessedLeases = Collections.emptyList();
+        Map<String, Lease> nonProcessedLeases = new CaseInsensitiveMap<>();
         if (rtd.isCloseNonProcessedLeases()) {
-            nonProcessedLeases = new LinkedList<>(retrieveActiveLeases(rtd.getYardiInterfaceId()));
+            for (Lease lease : retrieveActiveLeases(rtd.getYardiInterfaceId())) {
+                nonProcessedLeases.put(lease.leaseId().getValue(), lease);
+            }
         }
 
         for (final String propertyCode : rtd.getKeySet()) {
             for (final String leaseId : rtd.getData(propertyCode).getKeySet()) {
                 if (rtd.isCloseNonProcessedLeases()) {
-                    removeLease(nonProcessedLeases, leaseId);
+                    nonProcessedLeases.remove(leaseId);
                 }
 
                 try {
@@ -113,8 +115,8 @@ public class YardiLeaseProcessor {
                             return null;
                         }
                     });
-                } catch (Exception e) {
-                    log.error(e.getMessage());
+                } catch (Throwable e) {
+                    log.error("Lease {} Processing error {}", leaseId, e);
                 }
 
                 if (rtd.getExecutionMonitor().isTerminationRequested()) {
@@ -129,7 +131,7 @@ public class YardiLeaseProcessor {
 
         if (!rtd.getExecutionMonitor().isTerminationRequested()) {
             if (rtd.isCloseNonProcessedLeases()) {
-                closeLeases(nonProcessedLeases);
+                closeLeases(nonProcessedLeases.values());
             }
         }
     }
@@ -144,12 +146,8 @@ public class YardiLeaseProcessor {
     }
 
     private Lease createLease(String propertyCode, String leaseId, LeaseTransactionData ltd) throws YardiServiceException {
-        if (ltd.getResident() == null) {
-            throw new IllegalArgumentException("createLease: Resident data for lease '" + leaseId + "' is null!");
-        }
-        if (StringUtils.isEmpty(ltd.getResident().getCustomerID())) {
-            throw new IllegalArgumentException("createLease: Resident data for lease '" + leaseId + "' has null/empty CustomerID!");
-        }
+        Validate.notNull(ltd.getResident(), "createLease: Resident data for lease {0} is null!", leaseId);
+        Validate.isFalse(StringUtils.isEmpty(ltd.getResident().getCustomerID()), "createLease: Resident data for lease {0} has null/empty CustomerID!", leaseId);
 
         String unitNumber = YardiARIntegrationAgent.getUnitId(ltd.getResident());
         Validate.isTrue(CommonsStringUtils.isStringSet(unitNumber), "Unit number required");
@@ -701,7 +699,7 @@ public class YardiLeaseProcessor {
     private static Lease completeLease(Lease lease, YardiLease yardiLease) {
         // check the building for suspension first:
         Persistence.ensureRetrieve(lease.unit().building(), AttachLevel.Attached);
-        if (lease.unit().building().suspended().isBooleanTrue()) {
+        if (lease.unit().building().suspended().getValue(false)) {
             log.debug("        Lease {} Completion ignored because of suspended building {}", lease.leaseId().getValue(), lease.unit().building()
                     .propertyCode().getValue());
             return lease;
@@ -742,17 +740,7 @@ public class YardiLeaseProcessor {
         return Persistence.service().query(criteria);
     }
 
-    private void removeLease(List<Lease> leases, final String leaseId) {
-        Iterator<Lease> it = leases.iterator();
-        while (it.hasNext()) {
-            if (getLeaseID(leaseId).equals(it.next().leaseId().getValue())) {
-                it.remove();
-                break;
-            }
-        }
-    }
-
-    private void closeLeases(List<Lease> leases) {
+    private void closeLeases(Collection<Lease> leases) {
         for (final Lease lease : leases) {
             new UnitOfWork(TransactionScopeOption.RequiresNew).execute(new Executable<Void, RuntimeException>() {
                 @Override
