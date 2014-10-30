@@ -26,6 +26,8 @@ import com.yardi.entity.mits.Phone;
 import com.yardi.entity.mits.YardiCustomer;
 
 import com.pyx4j.commons.CommonsStringUtils;
+import com.pyx4j.commons.Key;
+import com.pyx4j.entity.core.AttachLevel;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.IPrimitive;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
@@ -90,7 +92,8 @@ public class TenantMapper {
 
         boolean isEmailAlreadyUsed = isEmailAlreadyUsed(getYardiCustomerEmail(yardiCustomer), lease.currentTerm().version().tenants());
 
-        Customer customer = findCustomer(yardiCustomer, isEmailAlreadyUsed, previousTerm);
+        Persistence.ensureRetrieve(lease, AttachLevel.Attached);
+        Customer customer = findCustomer(lease.integrationSystemId().getValue(), yardiCustomer, isEmailAlreadyUsed, previousTerm);
         if (customer == null) {
             customer = EntityFactory.create(Customer.class);
         }
@@ -195,7 +198,7 @@ public class TenantMapper {
         return false;
     }
 
-    private Customer findCustomer(YardiCustomer yardiCustomer, boolean doNotUseEmail, LeaseTerm previousTerm) {
+    private Customer findCustomer(Key yardiInterfaceId, YardiCustomer yardiCustomer, boolean doNotUseEmail, LeaseTerm previousTerm) {
         Customer customer = null;
 
         // try to by e-mail first:
@@ -216,6 +219,7 @@ public class TenantMapper {
         {
             @SuppressWarnings("rawtypes")
             EntityQueryCriteria<LeaseParticipant> criteria = EntityQueryCriteria.create(LeaseParticipant.class);
+            criteria.eq(criteria.proto().lease().integrationSystemId(), yardiInterfaceId);
             criteria.eq(criteria.proto().participantId(), getCustomerID(yardiCustomer));
             LeaseParticipant<?> participant = Persistence.service().retrieve(criteria);
             if (participant != null) {
