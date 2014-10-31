@@ -323,7 +323,7 @@ public class EmailTemplateRootObjectLoader {
             MaintenanceRequestSchedule wo = mr.workHistory().get(mr.workHistory().size() - 1);
             Persistence.ensureRetrieve(wo, AttachLevel.Attached);
             t.scheduledDate().setValue(wo.scheduledDate().getStringView());
-            t.scheduledTimeSlot().setValue(i18n.tr("between {0} and {1}", wo.scheduledTimeFrom().getStringView(), wo.scheduledTimeTo().getStringView()));
+            t.scheduledTimeSlot().setValue(i18n.tr("between {0} and {1}", wo.scheduledTime().timeFrom().getStringView(), wo.scheduledTime().timeTo().getStringView()));
             t.workDescription().set(wo.workDescription());
         } else if (tObj instanceof AutopayAgreementT) {
             AutopayAgreementT t = (AutopayAgreementT) tObj;

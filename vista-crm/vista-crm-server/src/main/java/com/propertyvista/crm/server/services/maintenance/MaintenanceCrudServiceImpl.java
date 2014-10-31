@@ -68,8 +68,7 @@ public class MaintenanceCrudServiceImpl extends AbstractCrudServiceDtoImpl<Maint
         if (!dto.workHistory().isEmpty()) {
             MaintenanceRequestSchedule latest = dto.workHistory().get(dto.workHistory().size() - 1);
             dto.scheduledDate().set(latest.scheduledDate());
-            dto.scheduledTimeFrom().set(latest.scheduledTimeFrom());
-            dto.scheduledTimeTo().set(latest.scheduledTimeTo());
+            dto.scheduledTime().set(latest.scheduledTime());
         }
     }
 
@@ -108,8 +107,8 @@ public class MaintenanceCrudServiceImpl extends AbstractCrudServiceDtoImpl<Maint
         enhanceDbo(request);
         MaintenanceRequestSchedule schedule = EntityFactory.create(MaintenanceRequestSchedule.class);
         schedule.scheduledDate().set(scheduleDTO.scheduledDate());
-        schedule.scheduledTimeFrom().set(scheduleDTO.scheduledTimeFrom());
-        schedule.scheduledTimeTo().set(scheduleDTO.scheduledTimeTo());
+        schedule.scheduledTime().timeFrom().set(scheduleDTO.scheduledTime().timeFrom());
+        schedule.scheduledTime().timeTo().set(scheduleDTO.scheduledTime().timeTo());
         schedule.workDescription().set(scheduleDTO.workDescription());
         ServerSideFactory.create(MaintenanceFacade.class).sheduleMaintenanceRequest(request, schedule, CrmAppContext.getCurrentUserEmployee());
         saveRequest(request, oldStatus);

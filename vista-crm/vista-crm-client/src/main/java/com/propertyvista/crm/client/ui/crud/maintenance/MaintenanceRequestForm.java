@@ -288,8 +288,8 @@ public class MaintenanceRequestForm extends CrmEntityForm<MaintenanceRequestDTO>
         scheduledPanel = new FormPanel(this);
 
         scheduledPanel.append(Location.Left, inject(proto().scheduledDate(), new CDateLabel())).decorate().componentWidth(100);
-        scheduledPanel.append(Location.Left, inject(proto().scheduledTimeFrom(), new CTimeLabel())).decorate().componentWidth(100);
-        scheduledPanel.append(Location.Left, inject(proto().scheduledTimeTo(), new CTimeLabel())).decorate().componentWidth(100);
+        scheduledPanel.append(Location.Left, inject(proto().scheduledTime().timeFrom(), new CTimeLabel())).decorate().componentWidth(100);
+        scheduledPanel.append(Location.Left, inject(proto().scheduledTime().timeTo(), new CTimeLabel())).decorate().componentWidth(100);
 
         // --------------------------------------------------------------------------------------------------------------------
         resolvedPanel = new FormPanel(this);
@@ -696,7 +696,7 @@ public class MaintenanceRequestForm extends CrmEntityForm<MaintenanceRequestDTO>
                                     protected IsWidget createContent() {
                                         FormPanel main = new FormPanel(this);
 
-                                        main.append(Location.Left, inject(proto().scheduledDate(), new CDateLabel())).decorate().componentWidth(100);
+                                        main.append(Location.Left, inject(proto().scheduledDate(), new CDateLabel())).decorate().componentWidth(120);
                                         main.append(Location.Dual, inject(proto().workDescription(), new CLabel<String>())).decorate();
                                         main.append(Location.Dual, inject(proto().progressNote())).decorate();
 
@@ -741,10 +741,10 @@ public class MaintenanceRequestForm extends CrmEntityForm<MaintenanceRequestDTO>
             protected IsWidget createContent() {
                 FormPanel content = new FormPanel(this);
                 content.h1(i18n.tr("Work Order"));
-                content.append(Location.Left, inject(proto().scheduledDate())).decorate().componentWidth(100);
-                content.append(Location.Left, inject(proto().scheduledTimeFrom())).decorate().componentWidth(100);
-                content.append(Location.Left, inject(proto().scheduledTimeTo())).decorate().componentWidth(100);
-                content.append(Location.Left, inject(proto().workDescription())).decorate().componentWidth(100);
+                content.append(Location.Left, inject(proto().scheduledDate())).decorate().componentWidth(120);
+                content.append(Location.Left, inject(proto().scheduledTime().timeFrom())).decorate().componentWidth(120);
+                content.append(Location.Left, inject(proto().scheduledTime().timeTo())).decorate().componentWidth(120);
+                content.append(Location.Left, inject(proto().workDescription())).decorate().componentWidth(200);
                 content.append(Location.Dual, inject(proto().progressNote())).decorate();
 
                 content.append(Location.Dual, inject(proto().noticeOfEntry(), new NoticeOfEntryViewer()));

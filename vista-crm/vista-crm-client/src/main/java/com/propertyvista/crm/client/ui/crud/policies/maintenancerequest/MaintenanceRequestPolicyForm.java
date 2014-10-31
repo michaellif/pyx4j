@@ -13,8 +13,11 @@
  */
 package com.propertyvista.crm.client.ui.crud.policies.maintenancerequest;
 
+import com.google.gwt.event.logical.shared.ValueChangeEvent;
+import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.ui.IsWidget;
 
+import com.pyx4j.entity.core.IObject;
 import com.pyx4j.forms.client.ui.CEntityLabel;
 import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
@@ -22,8 +25,11 @@ import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.backoffice.ui.prime.form.IForm;
 
+import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
 import com.propertyvista.crm.client.ui.components.boxes.LocalizedContentFolderBase;
 import com.propertyvista.crm.client.ui.crud.policies.common.PolicyDTOTabPanelBasedForm;
+import com.propertyvista.domain.TimeWindow;
+import com.propertyvista.domain.maintenance.MaintenanceRequestWindow;
 import com.propertyvista.domain.maintenance.PermissionToEnterNote;
 import com.propertyvista.domain.policy.dto.MaintenanceRequestPolicyDTO;
 import com.propertyvista.domain.site.AvailableLocale;
@@ -41,9 +47,35 @@ public class MaintenanceRequestPolicyForm extends PolicyDTOTabPanelBasedForm<Mai
         FormPanel formPanel = new FormPanel(this);
 
         formPanel.h1(proto().permissionToEnterNote().getMeta().getCaption());
-        formPanel.append(Location.Left, proto().permissionToEnterNote(), new PermissionToEnterNoteFolder(isEditable()));
+        formPanel.append(Location.Dual, proto().permissionToEnterNote(), new PermissionToEnterNoteFolder(isEditable()));
 
+        formPanel.h1(i18n.tr("Tenant Preferred Time Windows"));
+        formPanel.append(Location.Dual, proto().tenantPreferredWindows(), new PreferredWindowsFolder(isEditable()));
+
+        formPanel.h1(i18n.tr("Scheduling"));
+        formPanel.append(Location.Dual, proto().schedulingMaxAllowedWindow()).decorate().componentWidth(40).labelWidth(200);
+        formPanel.append(Location.Dual, proto().schedulingAllowedAnyTime()).decorate().labelWidth(200);
+        formPanel.append(Location.Dual, proto().schedulingAllowedTime(), new TimeWindowEditor<TimeWindow>(TimeWindow.class));
+
+        get(proto().schedulingAllowedAnyTime()).addValueChangeHandler(new ValueChangeHandler<Boolean>() {
+
+            @Override
+            public void onValueChange(ValueChangeEvent<Boolean> event) {
+                get(proto().schedulingAllowedTime()).setVisible(!event.getValue());
+            }
+        });
         return formPanel;
+    }
+
+    @Override
+    public void onValueSet(boolean populate) {
+        super.onValueSet(populate);
+
+        MaintenanceRequestPolicyDTO value = getValue();
+
+        if (value != null) {
+            get(proto().schedulingAllowedTime()).setVisible(!value.schedulingAllowedAnyTime().getValue(false));
+        }
     }
 
     class PermissionToEnterNoteFolder extends LocalizedContentFolderBase<PermissionToEnterNote> {
@@ -61,5 +93,36 @@ public class MaintenanceRequestPolicyForm extends PolicyDTOTabPanelBasedForm<Mai
 
             return formPanel;
         }
+    }
+
+    class PreferredWindowsFolder extends VistaBoxFolder<MaintenanceRequestWindow> {
+
+        public PreferredWindowsFolder(boolean modifiable) {
+            super(MaintenanceRequestWindow.class, modifiable);
+        }
+
+        @Override
+        protected CForm<? extends MaintenanceRequestWindow> createItemForm(IObject<?> member) {
+            return new TimeWindowEditor<MaintenanceRequestWindow>(MaintenanceRequestWindow.class);
+        }
+
+    }
+
+    class TimeWindowEditor<E extends TimeWindow> extends CForm<E> {
+
+        public TimeWindowEditor(Class<E> entityClass) {
+            super(entityClass);
+        }
+
+        @Override
+        protected IsWidget createContent() {
+            FormPanel content = new FormPanel(this);
+
+            content.append(Location.Left, proto().timeFrom()).decorate().labelWidth(40);
+            content.append(Location.Right, proto().timeTo()).decorate().labelWidth(40);
+
+            return content;
+        }
+
     }
 }

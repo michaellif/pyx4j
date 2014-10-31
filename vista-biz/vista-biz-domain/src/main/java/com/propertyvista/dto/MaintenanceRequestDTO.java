@@ -13,18 +13,17 @@
  */
 package com.propertyvista.dto;
 
-import java.sql.Time;
-
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.Editor.EditorType;
+import com.pyx4j.entity.annotations.EmbeddedEntity;
 import com.pyx4j.entity.annotations.ExtendsBO;
-import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.SecurityEnabled;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.core.IPrimitive;
 
+import com.propertyvista.domain.TimeWindow;
 import com.propertyvista.domain.communication.Message;
 import com.propertyvista.domain.maintenance.MaintenanceRequest;
 
@@ -39,13 +38,8 @@ public interface MaintenanceRequestDTO extends MaintenanceRequest {
 
     IPrimitive<LogicalDate> scheduledDate();
 
-    @Editor(type = EditorType.timepicker)
-    @Format("h:mm a")
-    IPrimitive<Time> scheduledTimeFrom();
-
-    @Editor(type = EditorType.timepicker)
-    @Format("h:mm a")
-    IPrimitive<Time> scheduledTimeTo();
+    @EmbeddedEntity
+    TimeWindow scheduledTime();
 
     Message message();
 }

@@ -169,9 +169,9 @@ public class MaintenanceRequestViewerViewImpl extends CrmViewerViewImplBase<Main
                 protected IsWidget createContent() {
                     FormPanel main = new FormPanel(this);
 
-                    main.append(Location.Dual, inject(proto().scheduledDate())).decorate().componentWidth(100);
-                    main.append(Location.Dual, inject(proto().scheduledTimeFrom())).decorate().componentWidth(100);
-                    main.append(Location.Dual, inject(proto().scheduledTimeTo())).decorate().componentWidth(100);
+                    main.append(Location.Dual, inject(proto().scheduledDate())).decorate().componentWidth(120);
+                    main.append(Location.Dual, inject(proto().scheduledTime().timeFrom())).decorate().componentWidth(120);
+                    main.append(Location.Dual, inject(proto().scheduledTime().timeTo())).decorate().componentWidth(120);
                     main.append(Location.Dual, inject(proto().workDescription())).decorate().componentWidth(200);
 
                     get(proto().scheduledDate()).addComponentValidator(new FutureDateIncludeTodayValidator());

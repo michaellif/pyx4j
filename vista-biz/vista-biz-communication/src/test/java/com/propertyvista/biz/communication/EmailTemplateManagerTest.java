@@ -55,7 +55,6 @@ import com.propertyvista.domain.communication.EmailTemplateType;
 import com.propertyvista.domain.financial.BillingAccount;
 import com.propertyvista.domain.financial.BillingAccount.BillingPeriod;
 import com.propertyvista.domain.maintenance.MaintenanceRequest;
-import com.propertyvista.domain.maintenance.MaintenanceRequest.DayTime;
 import com.propertyvista.domain.maintenance.MaintenanceRequestCategory;
 import com.propertyvista.domain.maintenance.MaintenanceRequestPriority;
 import com.propertyvista.domain.maintenance.MaintenanceRequestPriority.PriorityLevel;
@@ -1010,7 +1009,7 @@ public class EmailTemplateManagerTest extends VistaDBTestBase {
                         mr.building().marketing().name().getValue(),
                         mr.building().info().address().getStringView(),
                         mr.workHistory().get(0).scheduledDate().getStringView(),
-                        "between " + mr.workHistory().get(0).scheduledTimeFrom().getStringView() + " and " + mr.workHistory().get(0).scheduledTimeTo().getStringView(),
+                        "between " + mr.workHistory().get(0).scheduledTime().timeFrom().getStringView() + " and " + mr.workHistory().get(0).scheduledTime().timeTo().getStringView(),
                         mr.workHistory().get(0).workDescription().getValue()
                 };
                 fmtArgs = args;
@@ -1261,7 +1260,8 @@ public class EmailTemplateManagerTest extends VistaDBTestBase {
         mr.permissionToEnter().setValue(true);
         mr.petInstructions().setValue("just a friendly crocodile");
         mr.preferredDate1().setValue(SystemDateManager.getLogicalDate());
-        mr.preferredTime1().setValue(DayTime.Afternoon);
+        mr.preferredTime1().timeFrom().setValue(Time.valueOf("12:00:00"));
+        mr.preferredTime1().timeTo().setValue(Time.valueOf("15:00:00"));
         // -- mr priority
         MaintenanceRequestPriority priority = EntityFactory.create(MaintenanceRequestPriority.class);
         priority.level().setValue(PriorityLevel.STANDARD);
@@ -1275,8 +1275,8 @@ public class EmailTemplateManagerTest extends VistaDBTestBase {
         // -- mr schedule
         MaintenanceRequestSchedule schedule = EntityFactory.create(MaintenanceRequestSchedule.class);
         schedule.scheduledDate().setValue(SystemDateManager.getLogicalDate());
-        schedule.scheduledTimeFrom().setValue(Time.valueOf("11:00:00"));
-        schedule.scheduledTimeTo().setValue(Time.valueOf("13:00:00"));
+        schedule.scheduledTime().timeFrom().setValue(Time.valueOf("11:00:00"));
+        schedule.scheduledTime().timeTo().setValue(Time.valueOf("13:00:00"));
         schedule.workDescription().setValue("planting trees");
         mr.workHistory().add(schedule);
         // mr resolution info

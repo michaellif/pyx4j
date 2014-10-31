@@ -22,7 +22,6 @@ import com.pyx4j.entity.annotations.DiscriminatorValue;
 import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.annotations.EmbeddedEntity;
-import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.Indexed;
 import com.pyx4j.entity.annotations.JoinColumn;
 import com.pyx4j.entity.annotations.Length;
@@ -41,6 +40,7 @@ import com.pyx4j.i18n.annotations.I18n;
 import com.pyx4j.i18n.annotations.Translate;
 import com.pyx4j.i18n.shared.I18nEnum;
 
+import com.propertyvista.domain.TimeWindow;
 import com.propertyvista.domain.communication.CommunicationAssociation;
 import com.propertyvista.domain.note.HasNotesAndAttachments;
 import com.propertyvista.domain.property.asset.building.Building;
@@ -150,13 +150,13 @@ public interface MaintenanceRequest extends IEntity, CommunicationAssociation, H
 
     IPrimitive<LogicalDate> preferredDate1();
 
-    @Format("h:mm a")
-    IPrimitive<DayTime> preferredTime1();
+    @EmbeddedEntity
+    TimeWindow preferredTime1();
 
     IPrimitive<LogicalDate> preferredDate2();
 
-    @Format("h:mm a")
-    IPrimitive<DayTime> preferredTime2();
+    @EmbeddedEntity
+    TimeWindow preferredTime2();
 
     // --------------------------------------
 

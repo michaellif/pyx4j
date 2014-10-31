@@ -13,10 +13,16 @@
  */
 package com.propertyvista.domain.policy.policies;
 
+import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.DiscriminatorValue;
+import com.pyx4j.entity.annotations.EmbeddedEntity;
 import com.pyx4j.entity.annotations.Owned;
+import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.core.IList;
+import com.pyx4j.entity.core.IPrimitive;
 
+import com.propertyvista.domain.TimeWindow;
+import com.propertyvista.domain.maintenance.MaintenanceRequestWindow;
 import com.propertyvista.domain.maintenance.PermissionToEnterNote;
 import com.propertyvista.domain.policy.framework.LowestApplicableNode;
 import com.propertyvista.domain.policy.framework.Policy;
@@ -26,6 +32,25 @@ import com.propertyvista.domain.property.asset.building.Building;
 @LowestApplicableNode(value = Building.class)
 public interface MaintenanceRequestPolicy extends Policy {
 
+    /** This text is used next to the permission check box */
     @Owned
     IList<PermissionToEnterNote> permissionToEnterNote();
+
+    //------- Tenant Preferences ---------
+
+    @Owned
+    IList<MaintenanceRequestWindow> tenantPreferredWindows();
+
+    //------- Scheduling ------------
+
+    /** If true, allowed time is ignored */
+    @Caption(name = "Allow to schedule any time")
+    IPrimitive<Boolean> schedulingAllowedAnyTime();
+
+    @EmbeddedEntity
+    TimeWindow schedulingAllowedTime();
+
+    @NotNull
+    @Caption(name = "Max allowed hour window")
+    IPrimitive<Integer> schedulingMaxAllowedWindow();
 }

@@ -13,14 +13,11 @@
  */
 package com.propertyvista.domain.maintenance;
 
-import java.sql.Time;
-
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.annotations.EmbeddedEntity;
-import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.Indexed;
 import com.pyx4j.entity.annotations.JoinColumn;
 import com.pyx4j.entity.annotations.MemberColumn;
@@ -29,6 +26,8 @@ import com.pyx4j.entity.annotations.ReadOnly;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.IPrimitive;
+
+import com.propertyvista.domain.TimeWindow;
 
 public interface MaintenanceRequestSchedule extends IEntity {
 
@@ -44,15 +43,8 @@ public interface MaintenanceRequestSchedule extends IEntity {
     @NotNull
     IPrimitive<LogicalDate> scheduledDate();
 
-    @Editor(type = EditorType.timepicker)
-    @Format("h:mm a")
-    @NotNull
-    IPrimitive<Time> scheduledTimeFrom();
-
-    @Editor(type = EditorType.timepicker)
-    @Format("h:mm a")
-    @NotNull
-    IPrimitive<Time> scheduledTimeTo();
+    @EmbeddedEntity
+    TimeWindow scheduledTime();
 
     @NotNull
     @Editor(type = EditorType.textarea)

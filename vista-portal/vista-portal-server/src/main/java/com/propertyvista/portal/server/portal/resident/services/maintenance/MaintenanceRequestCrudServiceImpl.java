@@ -104,8 +104,8 @@ public class MaintenanceRequestCrudServiceImpl extends AbstractCrudServiceDtoImp
         if (!dto.workHistory().isEmpty()) {
             MaintenanceRequestSchedule latest = dto.workHistory().get(dto.workHistory().size() - 1);
             dto.scheduledDate().set(latest.scheduledDate());
-            dto.scheduledTimeFrom().set(latest.scheduledTimeFrom());
-            dto.scheduledTimeTo().set(latest.scheduledTimeTo());
+            dto.scheduledTimeFrom().set(latest.scheduledTime().timeFrom());
+            dto.scheduledTimeTo().set(latest.scheduledTime().timeTo());
         }
 
         dto.message().set(ServerSideFactory.create(CommunicationMessageFacade.class).association2Message(bo));
