@@ -49,7 +49,7 @@ public class EftReportOverallTotals extends ExportTotals<BigDecimal, EftReportEx
 
         formatter.cell(reportTotal);
 
-        formatter.cellsEmpty(5, true);
+        formatter.cellsEmpty(7, true);
 
         Iterator<Cell> ci = formatter.getCurentRow().cellIterator();
         while (ci.hasNext()) {
