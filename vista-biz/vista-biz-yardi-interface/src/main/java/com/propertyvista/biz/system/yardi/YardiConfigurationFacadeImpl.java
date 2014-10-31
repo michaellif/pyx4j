@@ -110,10 +110,10 @@ public class YardiConfigurationFacadeImpl implements YardiConfigurationFacade {
                             // - building/list has been moved - the building/list will be suspended after we continue
                             continue;
                         }
-                        // Can't continue on YardiInterfaceNotConfiguredException because the entire list will be suspended
-                        // Stop processing here...
-                        throw t;
                     }
+                    // Can't continue on YardiInterfaceNotConfiguredException because the entire list will be suspended
+                    // Stop processing here...
+                    throw t;
                 }
             }
         }
