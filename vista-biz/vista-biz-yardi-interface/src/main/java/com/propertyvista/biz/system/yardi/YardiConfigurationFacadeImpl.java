@@ -97,6 +97,7 @@ public class YardiConfigurationFacadeImpl implements YardiConfigurationFacade {
                     String error = "Error processing '" + propertyListCode + "': " + t.getMessage();
                     // report configuration issues
                     executionMonitor.addErredEvent("YardiConfig", error);
+                    // expected checked exceptions: YardiServiceException, RemoteException; see if we need to interfere...
                     if (t instanceof YardiServiceException) {
                         // Two possible cases are known:
                         // 1. YardiPropertyNoAccessException - non-existent propertyListCode
@@ -110,9 +111,9 @@ public class YardiConfigurationFacadeImpl implements YardiConfigurationFacade {
                             // - building/list has been moved - the building/list will be suspended after we continue
                             continue;
                         }
+                        // Can't continue on YardiInterfaceNotConfiguredException because the entire list will be suspended
                     }
-                    // Can't continue on YardiInterfaceNotConfiguredException because the entire list will be suspended
-                    // Stop processing here...
+                    // Everything else, including RemoteException, must be handled by the callers.
                     throw t;
                 }
             }
