@@ -20,7 +20,6 @@ BEGIN TRANSACTION;
     AND     DATE_TRUNC('day', a.created) = '30-OCT-2014'
     AND     a.entity_class = 'Building'
     AND     a.details = 'Suspended'
-    AND     a.entity_id = b.id 
-    ORDER BY created DESC;
+    AND     a.entity_id = b.id ;
     
 COMMIT;
