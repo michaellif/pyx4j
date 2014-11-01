@@ -24,11 +24,13 @@ import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
 import org.junit.Assert;
-
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.interactions.Actions;
+
 import com.thoughtworks.selenium.webdriven.JavascriptLibrary;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.helpers.FormattingTuple;
@@ -401,12 +403,17 @@ public class SeleniumExtended extends WebDriverWrapper {
         focusOnGetValue = focus;
     }
 
-    /**
-     * This function may not work as expected in firefox!
-     */
-    private void focus(WebElement element) {
-        //driver.switchTo().window("");
-        //new JavascriptLibrary().executeScript(driver, "\"document.getElementById('" + element.getAttribute("id") + "').focus()\"");
+    public void focus(WebElement element) {
+        if ("input".equals(element.getTagName())) {
+            element.sendKeys("");
+        } else {
+            new Actions(driver).moveToElement(element).perform();
+
+        }
+    }
+
+    public void focus(String paramString) {
+        focus(driver.findElement(elementLocator(paramString)));
     }
 
     /**
