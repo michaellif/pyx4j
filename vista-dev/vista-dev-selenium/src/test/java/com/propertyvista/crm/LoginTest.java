@@ -18,6 +18,7 @@ public class LoginTest extends CrmSeleniumTestBase {
     public void testLogin() throws InterruptedException {
         selenium.type("id=gwt-debug-AuthenticationRequest-email", "m001@pyx4j.com");
         selenium.type("id=gwt-debug-AuthenticationRequest-password", "m001@pyx4j.com");
+        selenium.focus("id=gwt-debug-Criteria_Submit");
         selenium.click("id=gwt-debug-Criteria_Submit");
     }
 
