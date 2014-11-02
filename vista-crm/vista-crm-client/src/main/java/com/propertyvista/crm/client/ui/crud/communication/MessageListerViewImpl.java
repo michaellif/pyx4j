@@ -60,7 +60,7 @@ public class MessageListerViewImpl extends CrmListerViewImplBase<MessageDTO> imp
                             break;
                         }
                     }
-                } else {
+                } else if (placeCriteria instanceof MessageCategory) {
                     MessageCategory mc = (MessageCategory) placeCriteria;
                     caption = mc.category().getValue();
                 }

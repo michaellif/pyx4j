@@ -37,6 +37,7 @@ import com.pyx4j.server.contexts.ServerContext;
 import com.propertyvista.biz.communication.CommunicationMessageFacade;
 import com.propertyvista.crm.rpc.services.MessageCrudService;
 import com.propertyvista.crm.server.util.CrmAppContext;
+import com.propertyvista.domain.communication.CommunicationEndpoint;
 import com.propertyvista.domain.communication.CommunicationThread;
 import com.propertyvista.domain.communication.CommunicationThread.ThreadStatus;
 import com.propertyvista.domain.communication.DeliveryHandle;
@@ -171,6 +172,13 @@ public class MessageCrudServiceImpl extends AbstractCrudServiceDtoImpl<Message, 
             }
             if (data.messageCategory() != null && !data.messageCategory().isNull()) {
                 dto.category().set(data.messageCategory());
+            }
+
+            if (data.recipients() != null && data.recipients().size() > 0) {
+                for (CommunicationEndpoint t : data.recipients()) {
+                    dto.to().add(communicationFacade.generateEndpointDTO(t));
+                }
+
             }
         }
         return dto;

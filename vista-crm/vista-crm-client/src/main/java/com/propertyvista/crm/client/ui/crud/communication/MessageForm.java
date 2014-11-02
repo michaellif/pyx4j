@@ -13,7 +13,6 @@
  */
 package com.propertyvista.crm.client.ui.crud.communication;
 
-import java.util.Collection;
 import java.util.Date;
 
 import com.google.gwt.dom.client.Style.Overflow;
@@ -34,7 +33,6 @@ import com.pyx4j.commons.HtmlUtils;
 import com.pyx4j.commons.IFormatter;
 import com.pyx4j.commons.SimpleMessageFormat;
 import com.pyx4j.commons.TimeUtils;
-import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.IObject;
 import com.pyx4j.entity.core.IPrimitive;
@@ -72,14 +70,9 @@ import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.crm.client.ui.crud.communication.selector.CommunicationEndpointSelector;
 import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.domain.communication.CommunicationAssociation;
-import com.propertyvista.domain.communication.CommunicationEndpoint.ContactType;
-import com.propertyvista.domain.communication.CommunicationGroup;
 import com.propertyvista.domain.communication.DeliveryHandle;
 import com.propertyvista.domain.communication.MessageCategory.CategoryType;
-import com.propertyvista.domain.company.Employee;
-import com.propertyvista.domain.company.Portfolio;
 import com.propertyvista.domain.maintenance.MaintenanceRequest;
-import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.tenant.lease.Tenant;
 import com.propertyvista.dto.CommunicationEndpointDTO;
 import com.propertyvista.dto.MessageDTO;
@@ -344,45 +337,6 @@ public class MessageForm extends CrmEntityForm<MessageDTO> {
             formPanel.append(Location.Dual, createLowerToolbar());
 
             return formPanel;
-        }
-
-        private void onAdd(Collection<? extends IEntity> eps) {
-            if (eps != null && eps.size() > 0) {
-                for (IEntity selected : eps) {
-                    if (!ClientContext.getUserVisit().getPrincipalPrimaryKey().equals(selected.getPrimaryKey())) {
-                        addRecipient(selected);
-                    }
-                }
-            }
-        }
-
-        private void addRecipient(IEntity selected) {
-            CommunicationEndpointDTO proto = EntityFactory.create(CommunicationEndpointDTO.class);
-            Class<? extends IEntity> epType = selected.getInstanceValueClass();
-            if (epType.equals(Building.class)) {
-                proto.name().set(((Building) selected).propertyCode());
-                proto.type().setValue(ContactType.Building);
-                CommunicationGroup cg = EntityFactory.create(CommunicationGroup.class);
-                cg.building().set(selected);
-                proto.endpoint().set(cg);
-            } else if (epType.equals(Portfolio.class)) {
-                proto.name().set(((Portfolio) selected).name());
-                proto.type().setValue(ContactType.Portfolio);
-                CommunicationGroup cg = EntityFactory.create(CommunicationGroup.class);
-                cg.portfolio().set(selected);
-                proto.endpoint().set(cg);
-            } else if (epType.equals(Employee.class)) {
-                proto.name().setValue(((Employee) selected).name().getStringView());
-                proto.type().setValue(ContactType.Employee);
-                proto.endpoint().set(selected);
-            } else if (epType.equals(Tenant.class)) {
-                proto.name().setValue(((Tenant) selected).customer().person().name().getStringView());
-                proto.type().setValue(ContactType.Tenant);
-                proto.endpoint().set(selected);
-            }
-
-            getValue().to().add(proto);
-            updateSelector(communicationEndpointSelector, getValue());
         }
 
         private void updateSelector(CommunicationEndpointSelector selector, MessageDTO value) {

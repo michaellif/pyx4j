@@ -130,7 +130,7 @@ public class CommunicationAssociationManager {
                 AptUnit unit = mr.unit();
                 if (currentUser != null && currentUser instanceof Employee) {
                     if (unit != null && !unit.isNull() && MaintenanceRequestStatus.StatusPhase.Scheduled.equals(mr.status().phase().getValue())) {
-                        facade.buildRecipientsList4UnitLeaseParticipants(message, unit);
+                        facade.buildRecipientsList4UnitLeaseParticipants(message, unit, false);
                     } else if (t != null && !t.isNull()) {
                         message.recipients().add(facade.createDeliveryHandle(t, false));
                         if (MaintenanceRequestStatus.StatusPhase.Submitted.equals(mr.status().phase().getValue())) {

@@ -94,8 +94,8 @@ public class CommunicationMessageFacadeImpl implements CommunicationMessageFacad
     }
 
     @Override
-    public void buildRecipientsList4UnitLeaseParticipants(Message message, AptUnit unit) {
-        CommunicationEndpointManager.instance().buildRecipientsList4UnitLeaseParticipants(message, unit);
+    public void buildRecipientsList4UnitLeaseParticipants(Message message, AptUnit unit, boolean includeGuarantors) {
+        CommunicationEndpointManager.instance().buildRecipientsList4UnitLeaseParticipants(message, unit, includeGuarantors);
     }
 
     // Communication entity common management -------------------------------------------------------

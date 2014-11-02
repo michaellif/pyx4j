@@ -258,7 +258,7 @@ public class CommunicationEndpointManager {
         }
     }
 
-    public void buildRecipientsList4UnitLeaseParticipants(Message message, AptUnit unit) {
+    public void buildRecipientsList4UnitLeaseParticipants(Message message, AptUnit unit, boolean includeGuarantors) {
         EntityListCriteria<LeaseParticipant> criteria = createActiveLeaseCriteria();
         criteria.eq(criteria.proto().lease().unit(), unit);
         Vector<LeaseParticipant> tenants = Persistence.secureQuery(criteria, AttachLevel.IdOnly);
@@ -266,6 +266,9 @@ public class CommunicationEndpointManager {
             for (LeaseParticipant t : tenants) {
                 if (t.getInstanceValueClass().equals(Tenant.class)) {
                     Tenant e = t.cast();
+                    message.recipients().add(createDeliveryHandle(e, false));
+                } else if (includeGuarantors && t.getInstanceValueClass().equals(Guarantor.class)) {
+                    Guarantor e = t.cast();
                     message.recipients().add(createDeliveryHandle(e, false));
                 }
             }

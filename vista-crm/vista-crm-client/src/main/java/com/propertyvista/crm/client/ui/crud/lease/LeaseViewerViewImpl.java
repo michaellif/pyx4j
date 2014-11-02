@@ -64,6 +64,7 @@ import com.propertyvista.crm.client.ui.components.boxes.LeaseTermSelectorDialog;
 import com.propertyvista.crm.client.ui.components.boxes.ReasonBox;
 import com.propertyvista.crm.client.ui.crud.billing.adjustments.LeaseAdjustmentLister;
 import com.propertyvista.crm.client.ui.crud.billing.bill.BillLister;
+import com.propertyvista.crm.client.ui.crud.communication.MessageReportDialog;
 import com.propertyvista.crm.client.ui.crud.lease.common.LeaseViewerViewBase;
 import com.propertyvista.crm.client.ui.crud.lease.common.LeaseViewerViewImplBase;
 import com.propertyvista.crm.client.ui.crud.lease.financial.deposit.DepositLifecycleLister;
@@ -144,6 +145,8 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
     private final MenuItem cancelAction;
 
     private final MenuItem renewAction;
+
+    private final MenuItem showCommunicationAction;
 
     private final MenuItem legalStateAction;
 
@@ -408,6 +411,15 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
                 addAction(renewAction);
             }
         }
+
+        showCommunicationAction = new MenuItem(i18n.tr("View Communication Report"), new Command() {
+            @Override
+            public void execute() {
+                (new MessageReportDialog(LeaseViewerViewImpl.this, ((LeaseViewerView.Presenter) getPresenter()).getAllLeaseParticipants())).show();
+            }
+        });
+        addAction(showCommunicationAction);
+
     }
 
     private void viewHistoricTermsExecuter() {
@@ -945,5 +957,4 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
             return (endLeaseDate.getValue() != null ? new LogicalDate(endLeaseDate.getValue()) : null);
         }
     }
-
 }

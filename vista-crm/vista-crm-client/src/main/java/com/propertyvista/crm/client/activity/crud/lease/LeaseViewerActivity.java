@@ -14,6 +14,7 @@
 package com.propertyvista.crm.client.activity.crud.lease;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -62,9 +63,12 @@ import com.propertyvista.domain.payment.AutopayAgreement;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseAdjustment;
+import com.propertyvista.domain.tenant.lease.LeaseParticipant;
 import com.propertyvista.domain.tenant.lease.LeaseTerm.Type;
+import com.propertyvista.domain.tenant.lease.LeaseTermGuarantor;
 import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
 import com.propertyvista.domain.tenant.lease.LeaseTermParticipant.Role;
+import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
 import com.propertyvista.domain.tenant.lease.Tenant;
 import com.propertyvista.dto.DepositLifecycleDTO;
 import com.propertyvista.dto.LeaseDTO;
@@ -375,4 +379,22 @@ public class LeaseViewerActivity extends LeaseViewerActivityBase<LeaseDTO> imple
                 participants).show();
     }
 
+    @Override
+    public List<LeaseParticipant<?>> getAllLeaseParticipants() {
+        ArrayList<LeaseParticipant<?>> allLeaseParticipants = new ArrayList<LeaseParticipant<?>>();
+        if (currentValue == null) {
+            return null;
+        }
+        if (currentValue.currentTerm().version().tenants().size() > 0) {
+            for (LeaseTermTenant t : currentValue.currentTerm().version().tenants()) {
+                allLeaseParticipants.add(t.leaseParticipant());
+            }
+        }
+        if (currentValue.currentTerm().version().guarantors().size() > 0) {
+            for (LeaseTermGuarantor g : currentValue.currentTerm().version().guarantors()) {
+                allLeaseParticipants.add(g.leaseParticipant());
+            }
+        }
+        return allLeaseParticipants;
+    }
 }

@@ -17,10 +17,12 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.core.IEntity;
+import com.pyx4j.entity.core.IList;
 import com.pyx4j.entity.core.IPrimitive;
 import com.pyx4j.entity.rpc.AbstractCrudService;
 import com.pyx4j.entity.rpc.EntitySearchResult;
 
+import com.propertyvista.domain.communication.CommunicationEndpoint;
 import com.propertyvista.domain.communication.CommunicationThread.ThreadStatus;
 import com.propertyvista.domain.communication.MessageCategory;
 import com.propertyvista.domain.communication.MessageCategory.CategoryType;
@@ -44,5 +46,7 @@ public interface MessageCrudService extends AbstractCrudService<MessageDTO> {
         MessageCategory messageCategory();
 
         IPrimitive<CategoryType> categoryType();
+
+        IList<CommunicationEndpoint> recipients();
     }
 }

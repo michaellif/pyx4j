@@ -28,6 +28,7 @@ import com.propertyvista.crm.rpc.dto.occupancy.opconstraints.CancelMoveOutConstr
 import com.propertyvista.domain.communication.EmailTemplateType;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseAdjustment;
+import com.propertyvista.domain.tenant.lease.LeaseParticipant;
 import com.propertyvista.domain.tenant.lease.LeaseTerm;
 import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
 import com.propertyvista.domain.tenant.lease.Tenant;
@@ -82,6 +83,8 @@ public interface LeaseViewerView extends LeaseViewerViewBase<LeaseDTO> {
         void signingProgressOrUploadAgreement();
 
         void legalState();
+
+        List<LeaseParticipant<?>> getAllLeaseParticipants();
     }
 
     ILister<DepositLifecycleDTO> getDepositListerView();

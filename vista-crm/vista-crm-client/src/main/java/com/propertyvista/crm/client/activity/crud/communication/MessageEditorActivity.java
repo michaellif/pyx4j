@@ -17,6 +17,7 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.entity.core.EntityFactory;
+import com.pyx4j.entity.core.IList;
 import com.pyx4j.entity.rpc.AbstractCrudService.InitializationData;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
@@ -26,6 +27,7 @@ import com.propertyvista.crm.client.ui.crud.communication.MessageEditorView;
 import com.propertyvista.crm.rpc.CrmSiteMap.Communication.Message;
 import com.propertyvista.crm.rpc.services.MessageCrudService;
 import com.propertyvista.crm.rpc.services.MessageCrudService.MessageInitializationData;
+import com.propertyvista.domain.communication.CommunicationEndpoint;
 import com.propertyvista.domain.communication.MessageCategory;
 import com.propertyvista.domain.communication.MessageCategory.CategoryType;
 import com.propertyvista.dto.MessageDTO;
@@ -38,12 +40,16 @@ public class MessageEditorActivity extends CrmEditorActivity<MessageDTO> impleme
 
     private CategoryType mgc;
 
+    private IList<CommunicationEndpoint> recipients;
+
     public MessageEditorActivity(CrudAppPlace place) {
         super(MessageDTO.class, place, CrmSite.getViewFactory().getView(MessageEditorView.class), GWT.<MessageCrudService> create(MessageCrudService.class));
         this.place = place;
         InitializationData data = place.getInitializationData();
         if (data != null && data instanceof MessageInitializationData) {
             MessageInitializationData mid = (MessageInitializationData) data;
+            recipients = mid.recipients();
+
             mc = mid.messageCategory();
             mgc = mid.categoryType() == null || mid.categoryType().isNull() ? null : mid.categoryType().getValue();
         } else {
@@ -70,6 +76,9 @@ public class MessageEditorActivity extends CrmEditorActivity<MessageDTO> impleme
         MessageInitializationData initData = EntityFactory.create(MessageInitializationData.class);
         MessageDTO fm = place instanceof Message ? ((Message) place).getForwardedMessage() : null;
         initData.forwardedMessage().set(fm);
+        if (recipients != null) {
+            initData.recipients().set(recipients);
+        }
 
         if (mc != null) {
             initData.messageCategory().set(mc);

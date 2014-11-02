@@ -63,7 +63,7 @@ public interface CommunicationMessageFacade {
 
     void buildRecipientList(Message bo, MessageDTO to, CommunicationThread thread);
 
-    void buildRecipientsList4UnitLeaseParticipants(Message message, AptUnit unit);
+    void buildRecipientsList4UnitLeaseParticipants(Message message, AptUnit unit, boolean includeGuarantors);
 
     // Communication entity common management -------------------------------------------------------
     EntitySearchResult<Message> query(EntityListCriteria<Message> criteria);

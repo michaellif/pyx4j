@@ -18,8 +18,10 @@ import java.util.List;
 import com.google.gwt.user.client.Command;
 
 import com.pyx4j.entity.core.EntityFactory;
+import com.pyx4j.entity.core.criterion.AndCriterion;
 import com.pyx4j.entity.core.criterion.Criterion;
 import com.pyx4j.entity.core.criterion.EntityListCriteria;
+import com.pyx4j.entity.core.criterion.OrCriterion;
 import com.pyx4j.entity.core.criterion.PropertyCriterion;
 import com.pyx4j.entity.security.DataModelPermission;
 import com.pyx4j.forms.client.images.FolderImages;
@@ -33,6 +35,7 @@ import com.pyx4j.widgets.client.Button;
 
 import com.propertyvista.crm.rpc.CrmSiteMap.Communication.Message;
 import com.propertyvista.crm.rpc.services.MessageCrudService;
+import com.propertyvista.domain.communication.CommunicationEndpoint;
 import com.propertyvista.domain.communication.MessageCategory;
 import com.propertyvista.domain.communication.MessageCategory.CategoryType;
 import com.propertyvista.domain.communication.MessageCategory.TicketType;
@@ -44,6 +47,13 @@ public class MessageLister extends AbstractLister<MessageDTO> {
     private Button newMessage;
 
     private Button newTicket;
+
+    private List<? extends CommunicationEndpoint> recipientScope;
+
+    public MessageLister(List<? extends CommunicationEndpoint> recipientScope) {
+        this();
+        this.recipientScope = recipientScope;
+    }
 
     public MessageLister() {
         super(MessageDTO.class, true);
@@ -149,6 +159,16 @@ public class MessageLister extends AbstractLister<MessageDTO> {
             newMessage.setVisible(true);
             newTicket.setVisible(true);
             getDataTablePanel().getAddButton().setVisible(false);
+            if (recipientScope != null) {
+                OrCriterion senderOrRecipientCriteria = new OrCriterion(PropertyCriterion.in(criteria.proto().sender(), recipientScope), PropertyCriterion.in(
+                        criteria.proto().recipients().$().recipient(), recipientScope));
+
+                AndCriterion onBehalfCriteria = new AndCriterion(PropertyCriterion.in(criteria.proto().onBehalf(), recipientScope), PropertyCriterion.eq(
+                        criteria.proto().onBehalfVisible(), true));
+
+                criteria.or(senderOrRecipientCriteria, onBehalfCriteria);
+
+            }
         } else {
             newMessage.setVisible(false);
             newTicket.setVisible(false);
@@ -156,7 +176,7 @@ public class MessageLister extends AbstractLister<MessageDTO> {
             if (placeCriteria instanceof CategoryType) {
                 getDataTablePanel().getAddButton().setCaption(i18n.tr("New") + " " + placeCriteria.toString());
                 criteria.eq(criteria.proto().category().categoryType(), category = (CategoryType) placeCriteria);
-            } else {
+            } else if (placeCriteria instanceof MessageCategory) {
                 MessageCategory mc = (MessageCategory) placeCriteria;
                 if (TicketType.Maintenance.equals(mc.ticketType().getValue())) {
                     getDataTablePanel().getAddButton().setVisible(false);
@@ -225,6 +245,9 @@ public class MessageLister extends AbstractLister<MessageDTO> {
             initData.messageCategory().set((MessageCategory) placeCriteria);
         } else if (placeCriteria instanceof CategoryType) {
             initData.categoryType().setValue((CategoryType) placeCriteria);
+        }
+        if (recipientScope != null && recipientScope.size() > 0) {
+            initData.recipients().addAll(recipientScope);
         }
         getPresenter().editNew(Message.class, initData);
     }
