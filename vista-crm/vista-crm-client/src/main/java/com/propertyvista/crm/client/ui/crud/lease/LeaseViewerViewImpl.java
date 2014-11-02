@@ -412,13 +412,13 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
             }
         }
 
-        showCommunicationAction = new MenuItem(i18n.tr("View Communication Report"), new Command() {
+        showCommunicationAction = new MenuItem(i18n.tr("Communication Report"), new Command() {
             @Override
             public void execute() {
                 (new MessageReportDialog(LeaseViewerViewImpl.this, ((LeaseViewerView.Presenter) getPresenter()).getAllLeaseParticipants())).show();
             }
         });
-        addAction(showCommunicationAction);
+        addView(showCommunicationAction);
 
     }
 
