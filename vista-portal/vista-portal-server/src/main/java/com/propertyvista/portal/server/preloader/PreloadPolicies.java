@@ -25,6 +25,7 @@ import com.propertyvista.portal.server.preloader.policy.subpreloaders.LeaseAgree
 import com.propertyvista.portal.server.preloader.policy.subpreloaders.LeaseApplicationPolicyPreloader;
 import com.propertyvista.portal.server.preloader.policy.subpreloaders.LeaseBillingPolicyPreloader;
 import com.propertyvista.portal.server.preloader.policy.subpreloaders.LegalTermsPolicyPreloader;
+import com.propertyvista.portal.server.preloader.policy.subpreloaders.MaintenanceRequestPolicyPreloader;
 import com.propertyvista.portal.server.preloader.policy.subpreloaders.MockupDepositPolicyPreloader;
 import com.propertyvista.portal.server.preloader.policy.subpreloaders.MockupLeaseAdjustmentPolicyPreloader;
 import com.propertyvista.portal.server.preloader.policy.subpreloaders.MockupLeaseBillingPolicyPreloader;
@@ -46,6 +47,7 @@ public class PreloadPolicies extends AbstractPoliciesPreloader {
     public PreloadPolicies(boolean isProduction) {
         add(new OrganizationPoliciesNodePreloader());
         add(new ARPolicyPreloader());
+        add(new MaintenanceRequestPolicyPreloader());
         add(new ApplicationDocumentationPolicyPreloader());
         add(new EmailTemplatesPolicyPreloader());
         add(new IdAssignmentPolicyPreloader());

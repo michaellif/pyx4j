@@ -13,10 +13,24 @@
  */
 package com.propertyvista.crm.client.ui.crud.maintenance;
 
+import java.util.Arrays;
+import java.util.List;
+import java.util.Vector;
+
+import com.google.gwt.core.client.GWT;
+
 import com.pyx4j.entity.core.EntityFactory;
+import com.pyx4j.entity.rpc.AbstractListCrudService;
+import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
+import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
+import com.pyx4j.rpc.client.DefaultAsyncCallback;
+import com.pyx4j.site.client.ui.dialogs.EntitySelectorTableDialog;
 
 import com.propertyvista.crm.client.ui.crud.CrmEditorViewImplBase;
+import com.propertyvista.crm.rpc.services.selections.SelectBuildingListService;
+import com.propertyvista.domain.TimeWindow;
 import com.propertyvista.domain.maintenance.MaintenanceRequestCategory;
+import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.dto.MaintenanceRequestDTO;
 
 public class MaintenanceRequestEditorViewImpl extends CrmEditorViewImplBase<MaintenanceRequestDTO> implements MaintenanceRequestEditorView {
@@ -26,10 +40,56 @@ public class MaintenanceRequestEditorViewImpl extends CrmEditorViewImplBase<Main
     }
 
     @Override
+    public void populate(MaintenanceRequestDTO value) {
+        super.populate(value);
+        // ensure building
+        if (value != null && value.building().isNull()) {
+            EntitySelectorTableDialog<Building> buildingDialog = new EntitySelectorTableDialog<Building>(Building.class, false, "Select Building") {
+                @Override
+                public boolean onClickOk() {
+                    if (getSelectedItems().size() == 1) {
+                        Building building = getSelectedItems().iterator().next();
+                        getValue().building().set(building);
+                        // set window options
+                        ((MaintenanceRequestEditorView.Presenter) getPresenter()).getPreferredWindowOptions(new DefaultAsyncCallback<Vector<TimeWindow>>() {
+                            @Override
+                            public void onSuccess(Vector<TimeWindow> result) {
+                                getValue().preferredWindowOptions().addAll(result);
+                                getForm().refresh(true);
+                            }
+                        }, building.getPrimaryKey());
+                    }
+                    return true;
+                }
+
+                @Override
+                protected List<ColumnDescriptor> defineColumnDescriptors() {
+                    return Arrays.asList( //                    
+                            new MemberColumnDescriptor.Builder(proto().propertyCode(), true).build(), //
+                            new MemberColumnDescriptor.Builder(proto().info().name(), true).build(), //
+                            new MemberColumnDescriptor.Builder(proto().info().address().streetNumber(), false).build(), //
+                            new MemberColumnDescriptor.Builder(proto().info().address().streetName(), false).build(), //
+                            new MemberColumnDescriptor.Builder(proto().info().address().city(), true).build(), //
+                            new MemberColumnDescriptor.Builder(proto().info().address().province(), true).build(), //
+                            new MemberColumnDescriptor.Builder(proto().info().address().country(), false).build() //
+                            );
+                }
+
+                @Override
+                protected AbstractListCrudService<Building> getSelectService() {
+                    return GWT.<AbstractListCrudService<Building>> create(SelectBuildingListService.class);
+                }
+            };
+            buildingDialog.getCancelButton().setVisible(false);
+            buildingDialog.show();
+        }
+    }
+
+    @Override
     public MaintenanceRequestDTO getValue() {
         // don't want all the attached info back over the wire
         MaintenanceRequestDTO value = super.getValue();
-        if (!value.category().isNull()) {
+        if (value != null && !value.category().isNull()) {
             MaintenanceRequestCategory newCat = EntityFactory.createIdentityStub(MaintenanceRequestCategory.class, value.category().getPrimaryKey());
             value.category().set(newCat);
         }

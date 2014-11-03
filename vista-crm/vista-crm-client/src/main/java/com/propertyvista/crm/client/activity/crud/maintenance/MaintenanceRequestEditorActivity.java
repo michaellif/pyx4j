@@ -13,19 +13,21 @@
  */
 package com.propertyvista.crm.client.activity.crud.maintenance;
 
+import java.util.Vector;
+
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.rpc.AbstractCrudService.InitializationData;
-import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
 import com.propertyvista.crm.client.CrmSite;
 import com.propertyvista.crm.client.activity.crud.CrmEditorActivity;
 import com.propertyvista.crm.client.ui.crud.maintenance.MaintenanceRequestEditorView;
 import com.propertyvista.crm.rpc.services.maintenance.MaintenanceCrudService;
+import com.propertyvista.domain.TimeWindow;
 import com.propertyvista.domain.maintenance.MaintenanceRequestMetadata;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.dto.MaintenanceRequestDTO;
@@ -34,7 +36,7 @@ public class MaintenanceRequestEditorActivity extends CrmEditorActivity<Maintena
 
     public MaintenanceRequestEditorActivity(CrudAppPlace place) {
         super(MaintenanceRequestDTO.class, place, CrmSite.getViewFactory().getView(MaintenanceRequestEditorView.class), GWT
-                        .<MaintenanceCrudService> create(MaintenanceCrudService.class));
+                .<MaintenanceCrudService> create(MaintenanceCrudService.class));
     }
 
     @Override
@@ -50,11 +52,11 @@ public class MaintenanceRequestEditorActivity extends CrmEditorActivity<Maintena
 
     @Override
     public void getCategoryMeta(final AsyncCallback<MaintenanceRequestMetadata> callback, Key buildingId) {
-        ((MaintenanceCrudService) getService()).getCategoryMeta(new DefaultAsyncCallback<MaintenanceRequestMetadata>() {
-            @Override
-            public void onSuccess(MaintenanceRequestMetadata result) {
-                callback.onSuccess(result);
-            }
-        }, false, buildingId);
+        ((MaintenanceCrudService) getService()).getCategoryMeta(callback, false, buildingId);
+    }
+
+    @Override
+    public void getPreferredWindowOptions(AsyncCallback<Vector<TimeWindow>> callback, Key buildingId) {
+        ((MaintenanceCrudService) getService()).getPreferredWindowOptions(callback, buildingId);
     }
 }

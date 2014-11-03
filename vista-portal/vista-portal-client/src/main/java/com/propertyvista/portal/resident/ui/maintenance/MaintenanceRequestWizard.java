@@ -27,6 +27,7 @@ import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.commons.EnglishGrammar;
+import com.pyx4j.commons.IFormatter;
 import com.pyx4j.commons.css.ThemeColor;
 import com.pyx4j.forms.client.images.FolderImages;
 import com.pyx4j.forms.client.ui.CComboBox;
@@ -47,6 +48,7 @@ import com.propertyvista.common.client.VistaFileURLBuilder;
 import com.propertyvista.common.client.policy.ClientPolicyManager;
 import com.propertyvista.common.client.resources.VistaImages;
 import com.propertyvista.common.client.ui.components.MaintenanceRequestCategoryChoice;
+import com.propertyvista.domain.TimeWindow;
 import com.propertyvista.domain.maintenance.IssueElementType;
 import com.propertyvista.domain.maintenance.MaintenanceRequestCategory;
 import com.propertyvista.domain.maintenance.MaintenanceRequestMetadata;
@@ -76,6 +78,10 @@ public class MaintenanceRequestWizard extends CPortalEntityWizard<MaintenanceReq
     private FormPanel statusPanel;
 
     private final PrioritySelector prioritySelector = new PrioritySelector();
+
+    private final PreferredTimeSelector preferredTimeSelector1 = new PreferredTimeSelector();
+
+    private final PreferredTimeSelector preferredTimeSelector2 = new PreferredTimeSelector();
 
     private FormPanel imagePanel;
 
@@ -170,9 +176,9 @@ public class MaintenanceRequestWizard extends CPortalEntityWizard<MaintenanceReq
         // schedule panel
         FormPanel schedulePanel = new FormPanel(this);
         schedulePanel.append(Location.Left, inject(proto().preferredDate1())).decorate().componentWidth(120);
-        schedulePanel.append(Location.Left, inject(proto().preferredTime1())).decorate().componentWidth(120);
+        schedulePanel.append(Location.Left, inject(proto().preferredTime1(), preferredTimeSelector1)).decorate().componentWidth(120);
         schedulePanel.append(Location.Left, inject(proto().preferredDate2())).decorate().componentWidth(120);
-        schedulePanel.append(Location.Left, inject(proto().preferredTime2())).decorate().componentWidth(120);
+        schedulePanel.append(Location.Left, inject(proto().preferredTime2(), preferredTimeSelector2)).decorate().componentWidth(120);
         // past dates not allowed
         ((CDatePicker) get(proto().preferredDate1())).setPastDateSelectionAllowed(false);
         ((CDatePicker) get(proto().preferredDate2())).setPastDateSelectionAllowed(false);
@@ -267,6 +273,9 @@ public class MaintenanceRequestWizard extends CPortalEntityWizard<MaintenanceReq
 
         if (isEditable()) {
             ClientPolicyManager.setIdComponentEditabilityByPolicy(IdTarget.maintenance, get(proto().requestId()), getValue().getPrimaryKey());
+
+            preferredTimeSelector1.setOptions(getValue().preferredWindowOptions());
+            preferredTimeSelector2.setOptions(getValue().preferredWindowOptions());
         }
 
         // set notes
@@ -360,6 +369,19 @@ public class MaintenanceRequestWizard extends CPortalEntityWizard<MaintenanceReq
         protected String getDebugInfo() {
             // to avoid large meta tree dump
             return "value=" + (getValue() == null ? "null" : getValue().getStringView()) + ";";
+        }
+    }
+
+    class PreferredTimeSelector extends CComboBox<TimeWindow> {
+
+        public PreferredTimeSelector() {
+            super(NotInOptionsPolicy.DISCARD, new IFormatter<TimeWindow, String>() {
+
+                @Override
+                public String format(TimeWindow value) {
+                    return value == null ? "" : value.getStringView();
+                }
+            });
         }
     }
 }

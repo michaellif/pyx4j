@@ -13,6 +13,8 @@
  */
 package com.propertyvista.crm.server.services.maintenance;
 
+import java.util.Vector;
+
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.commons.Key;
@@ -28,15 +30,18 @@ import com.pyx4j.rpc.shared.VoidSerializable;
 
 import com.propertyvista.biz.communication.CommunicationMessageFacade;
 import com.propertyvista.biz.financial.maintenance.MaintenanceFacade;
+import com.propertyvista.biz.policy.PolicyFacade;
 import com.propertyvista.config.VistaDeployment;
 import com.propertyvista.crm.rpc.services.maintenance.MaintenanceCrudService;
 import com.propertyvista.crm.server.util.CrmAppContext;
+import com.propertyvista.domain.TimeWindow;
 import com.propertyvista.domain.maintenance.MaintenanceRequest;
 import com.propertyvista.domain.maintenance.MaintenanceRequestCategory;
 import com.propertyvista.domain.maintenance.MaintenanceRequestMetadata;
 import com.propertyvista.domain.maintenance.MaintenanceRequestSchedule;
 import com.propertyvista.domain.maintenance.MaintenanceRequestStatus;
 import com.propertyvista.domain.maintenance.SurveyResponse;
+import com.propertyvista.domain.policy.policies.MaintenanceRequestPolicy;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.dto.MaintenanceRequestDTO;
 import com.propertyvista.dto.MaintenanceRequestScheduleDTO;
@@ -196,6 +201,13 @@ public class MaintenanceCrudServiceImpl extends AbstractCrudServiceDtoImpl<Maint
             meta.rootCategory().subCategories().setAttachLevel(AttachLevel.Detached);
         }
         callback.onSuccess(meta);
+    }
+
+    @Override
+    public void getPreferredWindowOptions(AsyncCallback<Vector<TimeWindow>> callback, Key buildingId) {
+        Building building = Persistence.secureRetrieve(Building.class, buildingId);
+        MaintenanceRequestPolicy mrPolicy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(building, MaintenanceRequestPolicy.class);
+        callback.onSuccess(new Vector<TimeWindow>(mrPolicy.tenantPreferredWindows()));
     }
 
     @Override

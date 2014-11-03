@@ -21,6 +21,7 @@ import com.pyx4j.entity.annotations.EmbeddedEntity;
 import com.pyx4j.entity.annotations.ExtendsBO;
 import com.pyx4j.entity.annotations.SecurityEnabled;
 import com.pyx4j.entity.annotations.Transient;
+import com.pyx4j.entity.core.IList;
 import com.pyx4j.entity.core.IPrimitive;
 
 import com.propertyvista.domain.TimeWindow;
@@ -42,4 +43,7 @@ public interface MaintenanceRequestDTO extends MaintenanceRequest {
     TimeWindow scheduledTime();
 
     Message message();
+
+    IList<TimeWindow> preferredWindowOptions();
+
 }

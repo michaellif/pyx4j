@@ -60,24 +60,26 @@ public class MaintenanceRequestCrudServiceImpl extends AbstractCrudServiceDtoImp
         MaintenanceRequest maintenanceRequest = ServerSideFactory.create(MaintenanceFacade.class).createNewRequestForTenant(
                 ResidentPortalContext.getLeaseTermTenant().leaseParticipant());
         MaintenanceRequestDTO dto = binder.createTO(maintenanceRequest);
-        setPermissionToEnterNote(dto);
+        setPolicyData(dto);
 
         return dto;
     }
 
-    private void setPermissionToEnterNote(MaintenanceRequestDTO dto) {
-        // add PermissionToEnter wording
+    private void setPolicyData(MaintenanceRequestDTO dto) {
         LeaseTermTenant tenant = ResidentPortalContext.getLeaseTermTenant();
         Persistence.ensureRetrieve(tenant.leaseParticipant().lease().unit().building(), AttachLevel.IdOnly);
         try {
             MaintenanceRequestPolicy mrPolicy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(
                     tenant.leaseParticipant().lease().unit().building(), MaintenanceRequestPolicy.class);
+            // add PermissionToEnter wording
             for (PermissionToEnterNote note : mrPolicy.permissionToEnterNote()) {
                 if (note.locale().lang().getValue().name().startsWith(CompiledLocale.en.name())) {
                     dto.notePermissionToEnter().set(note.text());
                     break;
                 }
             }
+            // add preferredWindowOptions
+            dto.preferredWindowOptions().addAll(mrPolicy.tenantPreferredWindows());
         } catch (PolicyNotFoundException e) {
             // ignore
         }
@@ -98,7 +100,7 @@ public class MaintenanceRequestCrudServiceImpl extends AbstractCrudServiceDtoImp
     protected void enhanceAll(MaintenanceRequest bo, MaintenanceRequestDTO dto) {
         enhanceDbo(dto);
         dto.reportedForOwnUnit().setValue(ResidentPortalContext.getUnit().id().equals(dto.unit().id()));
-        setPermissionToEnterNote(dto);
+        setPolicyData(dto);
 
         // populate latest scheduled info
         if (!dto.workHistory().isEmpty()) {

@@ -14,6 +14,7 @@
 package com.propertyvista.crm.client.ui.crud.maintenance;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -30,9 +31,11 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.commons.EnglishGrammar;
+import com.pyx4j.commons.IFormatter;
 import com.pyx4j.entity.core.IObject;
 import com.pyx4j.entity.core.criterion.Criterion;
 import com.pyx4j.entity.core.criterion.PropertyCriterion;
+import com.pyx4j.entity.rpc.AbstractListCrudService;
 import com.pyx4j.forms.client.images.FolderImages;
 import com.pyx4j.forms.client.ui.CComboBox;
 import com.pyx4j.forms.client.ui.CDateLabel;
@@ -42,6 +45,8 @@ import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.CImageSlider;
 import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.forms.client.ui.CTimeLabel;
+import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
+import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.forms.client.ui.folder.CFolderItem;
 import com.pyx4j.forms.client.ui.folder.ItemActionsBar.ActionType;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
@@ -53,6 +58,7 @@ import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.backoffice.ui.prime.CEntitySelectorHyperlink;
 import com.pyx4j.site.client.backoffice.ui.prime.form.IEditor;
 import com.pyx4j.site.client.backoffice.ui.prime.form.IForm;
+import com.pyx4j.site.client.ui.dialogs.EntitySelectorTableDialog;
 import com.pyx4j.site.rpc.AppPlace;
 import com.pyx4j.widgets.client.dialog.OkCancelDialog;
 import com.pyx4j.widgets.client.images.HelperImages;
@@ -63,11 +69,11 @@ import com.propertyvista.common.client.resources.VistaImages;
 import com.propertyvista.common.client.ui.components.MaintenanceRequestCategoryChoice;
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
 import com.propertyvista.common.client.ui.validators.FutureDateValidator;
-import com.propertyvista.crm.client.ui.components.boxes.BuildingSelectorDialog;
-import com.propertyvista.crm.client.ui.components.boxes.TenantSelectorDialog;
-import com.propertyvista.crm.client.ui.components.boxes.UnitSelectorDialog;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.crm.rpc.services.maintenance.MaintenanceRequestPictureUploadService;
+import com.propertyvista.crm.rpc.services.selections.SelectTenantListService;
+import com.propertyvista.crm.rpc.services.selections.SelectUnitListService;
+import com.propertyvista.domain.TimeWindow;
 import com.propertyvista.domain.communication.Message;
 import com.propertyvista.domain.maintenance.MaintenanceRequest.ContactPhoneType;
 import com.propertyvista.domain.maintenance.MaintenanceRequestMetadata;
@@ -105,13 +111,15 @@ public class MaintenanceRequestForm extends CrmEntityForm<MaintenanceRequestDTO>
 
     private FormPanel surveyPanel;
 
-    private final BuildingSelector buildingSelector = new BuildingSelector();
-
     private final TenantSelector reporterSelector = new TenantSelector();
 
     private final UnitSelector unitSelector = new UnitSelector();
 
     private final PrioritySelector prioritySelector = new PrioritySelector();
+
+    private final PreferredTimeSelector preferredTimeSelector1 = new PreferredTimeSelector();
+
+    private final PreferredTimeSelector preferredTimeSelector2 = new PreferredTimeSelector();
 
     private MaintenanceRequestMetadata meta;
 
@@ -129,20 +137,6 @@ public class MaintenanceRequestForm extends CrmEntityForm<MaintenanceRequestDTO>
         selectTab(addTab(createGeneralTab(), i18n.tr("General")));
         addTab(createWorkHistoryTab(), proto().workHistory().getMeta().getCaption());
         addTab(createStatusHistoryTab(), proto().statusHistory().getMeta().getCaption());
-    }
-
-    private void ensureBuilding() {
-        if (getValue() == null) {
-            return;
-        }
-
-        Building building = getValue().building();
-        if (building.isNull() && VistaFeatures.instance().yardiInterfaces() > 1) {
-            // for multiple yardi interfaces ask to select building first
-            buildingSelector.getSelectorDialog(false).show();
-        } else {
-            setMaintenanceRequestCategoryMeta();
-        }
     }
 
     private void setMaintenanceRequestCategoryMeta() {
@@ -177,9 +171,9 @@ public class MaintenanceRequestForm extends CrmEntityForm<MaintenanceRequestDTO>
 
         panel.h1(i18n.tr("Issue Location"));
 
+        panel.append(Location.Left, inject(proto().building(), new CEntityLabel<Building>())).decorate().componentWidth(200);
         panel.append(Location.Left, inject(proto().reportedForOwnUnit())).decorate().componentWidth(200);
         panel.append(Location.Left, inject(proto().unit(), unitSelector)).decorate().componentWidth(200);
-        panel.append(Location.Left, inject(proto().building(), buildingSelector)).decorate().componentWidth(200);
 
         panel.append(Location.Right, inject(proto().reporter(), reporterSelector)).decorate().componentWidth(200);
         panel.append(Location.Right, inject(proto().reporterName())).decorate().componentWidth(200);
@@ -264,8 +258,8 @@ public class MaintenanceRequestForm extends CrmEntityForm<MaintenanceRequestDTO>
 
         accessPanel.append(Location.Left, inject(proto().preferredDate1())).decorate().componentWidth(120);
         accessPanel.append(Location.Left, inject(proto().preferredDate2())).decorate().componentWidth(120);
-        accessPanel.append(Location.Right, inject(proto().preferredTime1())).decorate().componentWidth(120);
-        accessPanel.append(Location.Right, inject(proto().preferredTime2())).decorate().componentWidth(120);
+        accessPanel.append(Location.Right, inject(proto().preferredTime1(), preferredTimeSelector1)).decorate().componentWidth(120);
+        accessPanel.append(Location.Right, inject(proto().preferredTime2(), preferredTimeSelector2)).decorate().componentWidth(120);
         get(proto().preferredDate1()).addComponentValidator(new FutureDateValidator());
         get(proto().preferredDate2()).addComponentValidator(new FutureDateValidator());
 
@@ -320,29 +314,12 @@ public class MaintenanceRequestForm extends CrmEntityForm<MaintenanceRequestDTO>
                 valueChangeScope.setScope(unitSelector);
                 AptUnit unit = event.getValue();
                 if (unit != null) {
-                    if (!valueChangeScope.inScope(buildingSelector)) {
-                        buildingSelector.setValue(unit.building());
-                    }
                     if (!valueChangeScope.inScope(reporterSelector)) {
                         reporterSelector.setValue(null);
                     }
-                    setMaintenanceRequestCategoryMeta();
+//-->>              setMaintenanceRequestCategoryMeta();
                 }
                 valueChangeScope.clearScope(unitSelector);
-            }
-        });
-        buildingSelector.addValueChangeHandler(new ValueChangeHandler<Building>() {
-            @Override
-            public void onValueChange(ValueChangeEvent<Building> event) {
-                valueChangeScope.setScope(buildingSelector);
-                if (!valueChangeScope.inScope(unitSelector)) {
-                    unitSelector.setValue(null);
-                }
-                if (!valueChangeScope.inScope(reporterSelector)) {
-                    reporterSelector.setValue(null);
-                }
-                setMaintenanceRequestCategoryMeta();
-                valueChangeScope.clearScope(buildingSelector);
             }
         });
         reporterSelector.addValueChangeHandler(new ValueChangeHandler<Tenant>() {
@@ -354,7 +331,7 @@ public class MaintenanceRequestForm extends CrmEntityForm<MaintenanceRequestDTO>
                     if (!valueChangeScope.inScope(unitSelector)) {
                         unitSelector.setValue(tenant.lease().unit());
                     }
-                    setMaintenanceRequestCategoryMeta();
+//-->>              setMaintenanceRequestCategoryMeta();
                 }
                 valueChangeScope.clearScope(reporterSelector);
             }
@@ -371,7 +348,7 @@ public class MaintenanceRequestForm extends CrmEntityForm<MaintenanceRequestDTO>
                 unitAccessPanel.setVisible(event.getValue().booleanValue());
                 getValue().category().set(null);
                 accessPanel.setVisible(getValue().permissionToEnter().getValue(false) && event.getValue().booleanValue());
-                setMaintenanceRequestCategoryMeta();
+//-->>          setMaintenanceRequestCategoryMeta();
             }
         });
         panel.br();
@@ -488,65 +465,41 @@ public class MaintenanceRequestForm extends CrmEntityForm<MaintenanceRequestDTO>
         MaintenanceRequestDTO mr = getValue();
         get(proto().message()).setVisible(mr != null && mr.message() != null && !mr.message().isNull() && !mr.message().isPrototype());
 
-        if (mr == null) {
-            return;
+        if (mr != null) {
+            if (isEditable()) {
+                preferredTimeSelector1.setOptions(getValue().preferredWindowOptions());
+                preferredTimeSelector2.setOptions(getValue().preferredWindowOptions());
+            }
+
+            if (VistaFeatures.instance().yardiIntegration() && !mr.id().isNull()) {
+                // if reporter (tenant) not set (Yardi-originated requests), we just show the name
+                get(proto().reporter()).setVisible(!mr.reporter().isNull());
+                get(proto().reporterName()).setVisible(mr.reporter().isNull());
+            }
+
+            get(proto().reportedDate()).setEditable(mr.id().isNull());
+
+            get(proto().submitted()).setVisible(!mr.submitted().isNull());
+            get(proto().updated()).setVisible(!mr.updated().isNull());
+            get(proto().status()).setVisible(!mr.submitted().isNull());
+
+            get(proto().pictures()).setVisible(isEditable() || !mr.pictures().isEmpty());
+
+            StatusPhase phase = mr.status().phase().getValue();
+
+            scheduledPanel.setVisible(phase == StatusPhase.Scheduled);
+            resolvedPanel.setVisible(phase == StatusPhase.Resolved);
+
+            statusPanel.setVisible(!mr.id().isNull());
+            surveyPanel.setVisible(phase == StatusPhase.Resolved);
+
+            unitSelector.setVisible(mr.reportedForOwnUnit().getValue(false));
+            unitAccessPanel.setVisible(mr.reportedForOwnUnit().getValue(false));
+            accessPanel.setVisible(mr.permissionToEnter().getValue(false) && getValue().reportedForOwnUnit().getValue(false));
         }
-
-        if (VistaFeatures.instance().yardiIntegration() && !mr.id().isNull()) {
-            // if reporter (tenant) not set (Yardi-originated requests), we just show the name
-            get(proto().reporter()).setVisible(!mr.reporter().isNull());
-            get(proto().reporterName()).setVisible(mr.reporter().isNull());
-        }
-
-        get(proto().reportedDate()).setEditable(mr.id().isNull());
-
-        get(proto().submitted()).setVisible(!mr.submitted().isNull());
-        get(proto().updated()).setVisible(!mr.updated().isNull());
-        get(proto().status()).setVisible(!mr.submitted().isNull());
-
-        get(proto().pictures()).setVisible(isEditable() || !mr.pictures().isEmpty());
-
-        StatusPhase phase = mr.status().phase().getValue();
-
-        scheduledPanel.setVisible(phase == StatusPhase.Scheduled);
-        resolvedPanel.setVisible(phase == StatusPhase.Resolved);
-
-        statusPanel.setVisible(!mr.id().isNull());
-        surveyPanel.setVisible(phase == StatusPhase.Resolved);
-
-        unitSelector.setVisible(mr.reportedForOwnUnit().getValue(false));
-        unitAccessPanel.setVisible(mr.reportedForOwnUnit().getValue(false));
-        accessPanel.setVisible(mr.permissionToEnter().getValue(false) && getValue().reportedForOwnUnit().getValue(false));
 
         // to support yardi mode with multiple interfaces; will also call setMaintenanceRequestCategoryMeta()
-        ensureBuilding();
-    }
-
-    class BuildingSelector extends CEntitySelectorHyperlink<Building> {
-        @Override
-        protected AppPlace getTargetPlace() {
-            return AppPlaceEntityMapper.resolvePlace(Building.class, getValue().getPrimaryKey());
-        }
-
-        @Override
-        protected BuildingSelectorDialog getSelectorDialog() {
-            return getSelectorDialog(true);
-        }
-
-        public BuildingSelectorDialog getSelectorDialog(boolean allowCancel) {
-            BuildingSelectorDialog buildingDialog = new BuildingSelectorDialog(MaintenanceRequestForm.this.getParentView()) {
-                @Override
-                public void onClickOk() {
-                    if (getSelectedItems().size() == 1) {
-                        setValue(getSelectedItems().toArray(new Building[] {})[0]);
-                        setMaintenanceRequestCategoryMeta();
-                    }
-                }
-            };
-            buildingDialog.getCancelButton().setVisible(allowCancel);
-
-            return buildingDialog;
-        }
+        setMaintenanceRequestCategoryMeta();
     }
 
     class UnitSelector extends CEntitySelectorHyperlink<AptUnit> {
@@ -556,14 +509,15 @@ public class MaintenanceRequestForm extends CrmEntityForm<MaintenanceRequestDTO>
         }
 
         @Override
-        protected UnitSelectorDialog getSelectorDialog() {
-            return new UnitSelectorDialog(MaintenanceRequestForm.this.getParentView()) {
+        protected EntitySelectorTableDialog<AptUnit> getSelectorDialog() {
+            return new EntitySelectorTableDialog<AptUnit>(AptUnit.class, false, i18n.tr("Select Unit")) {
 
                 @Override
-                public void onClickOk() {
+                public boolean onClickOk() {
                     if (getSelectedItems().size() == 1) {
                         setValue(getSelectedItems().toArray(new AptUnit[] {})[0]);
                     }
+                    return true;
                 }
 
                 @Override
@@ -576,6 +530,27 @@ public class MaintenanceRequestForm extends CrmEntityForm<MaintenanceRequestDTO>
                         addFilter(PropertyCriterion.eq(proto().building(), building));
                     }
                 }
+
+                @Override
+                protected List<ColumnDescriptor> defineColumnDescriptors() {
+                    return Arrays.asList( //
+                            // building data                
+                            new MemberColumnDescriptor.Builder(proto().building().propertyCode(), true).build(), //
+                            // unit data
+                            new MemberColumnDescriptor.Builder(proto().info().number(), true).build(), //
+                            new MemberColumnDescriptor.Builder(proto().info().floor(), false).build(), //
+                            new MemberColumnDescriptor.Builder(proto().info().area()).build(), //
+                            new MemberColumnDescriptor.Builder(proto().info()._bedrooms()).build(), //
+                            new MemberColumnDescriptor.Builder(proto().info()._bathrooms()).build(), //
+                            new MemberColumnDescriptor.Builder(proto().availability().availableForRent()).build(), //
+                            new MemberColumnDescriptor.Builder(proto().financial()._marketRent()).build() //
+                            );
+                }
+
+                @Override
+                protected AbstractListCrudService<AptUnit> getSelectService() {
+                    return GWT.<AbstractListCrudService<AptUnit>> create(SelectUnitListService.class);
+                }
             };
         }
     }
@@ -587,14 +562,15 @@ public class MaintenanceRequestForm extends CrmEntityForm<MaintenanceRequestDTO>
         }
 
         @Override
-        protected TenantSelectorDialog getSelectorDialog() {
-            return new TenantSelectorDialog(MaintenanceRequestForm.this.getParentView()) {
+        protected EntitySelectorTableDialog<Tenant> getSelectorDialog() {
+            return new EntitySelectorTableDialog<Tenant>(Tenant.class, false, i18n.tr("Select Tenant")) {
 
                 @Override
-                public void onClickOk() {
+                public boolean onClickOk() {
                     if (getSelectedItems().size() == 1) {
-                        setValue(getSelectedItems().toArray(new Tenant[] {})[0]);
+                        setValue(getSelectedItems().iterator().next());
                     }
+                    return true;
                 }
 
                 @Override
@@ -611,6 +587,29 @@ public class MaintenanceRequestForm extends CrmEntityForm<MaintenanceRequestDTO>
                             addFilter(PropertyCriterion.eq(proto().lease().unit().building(), building));
                         }
                     }
+                }
+
+                @Override
+                protected List<ColumnDescriptor> defineColumnDescriptors() {
+                    return Arrays.asList( //
+                            new MemberColumnDescriptor.Builder(proto().lease().unit()).searchable(false).build(), //
+                            new MemberColumnDescriptor.Builder(proto().customer().person().name()).searchable(false).build(), //
+                            new MemberColumnDescriptor.Builder(proto().customer().person().name().firstName()).searchableOnly().build(), //
+                            new MemberColumnDescriptor.Builder(proto().customer().person().name().lastName()).searchableOnly().build(), //
+                            new MemberColumnDescriptor.Builder(proto().customer().person().sex()).visible(false).build(), //
+                            new MemberColumnDescriptor.Builder(proto().customer().person().birthDate(), false).build(), //
+                            new MemberColumnDescriptor.Builder(proto().customer().person().email(), false).build(), //
+                            new MemberColumnDescriptor.Builder(proto().customer().person().homePhone()).build(), //
+                            new MemberColumnDescriptor.Builder(proto().customer().person().mobilePhone()).build(), //
+                            new MemberColumnDescriptor.Builder(proto().customer().person().workPhone()).build(), //
+
+                            new MemberColumnDescriptor.Builder(proto().lease().leaseId()).searchableOnly().build() //
+                            );
+                }
+
+                @Override
+                protected AbstractListCrudService<Tenant> getSelectService() {
+                    return GWT.<SelectTenantListService> create(SelectTenantListService.class);
                 }
             };
         }
@@ -666,6 +665,19 @@ public class MaintenanceRequestForm extends CrmEntityForm<MaintenanceRequestDTO>
         @Override
         protected String getDebugInfo() {
             return "value=" + (getValue() == null ? "null" : getValue().getStringView()) + ";";
+        }
+    }
+
+    class PreferredTimeSelector extends CComboBox<TimeWindow> {
+
+        public PreferredTimeSelector() {
+            super(NotInOptionsPolicy.DISCARD, new IFormatter<TimeWindow, String>() {
+
+                @Override
+                public String format(TimeWindow value) {
+                    return value == null ? "" : value.getStringView();
+                }
+            });
         }
     }
 

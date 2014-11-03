@@ -53,15 +53,15 @@ public class MaintenanceRequestPolicyForm extends PolicyDTOTabPanelBasedForm<Mai
         formPanel.append(Location.Dual, proto().tenantPreferredWindows(), new PreferredWindowsFolder(isEditable()));
 
         formPanel.h1(i18n.tr("Scheduling"));
-        formPanel.append(Location.Dual, proto().schedulingMaxAllowedWindow()).decorate().componentWidth(40).labelWidth(200);
-        formPanel.append(Location.Dual, proto().schedulingAllowedAnyTime()).decorate().labelWidth(200);
-        formPanel.append(Location.Dual, proto().schedulingAllowedTime(), new TimeWindowEditor<TimeWindow>(TimeWindow.class));
+        formPanel.append(Location.Dual, proto().maxAllowedWindowHours()).decorate().componentWidth(40).labelWidth(200);
+        formPanel.append(Location.Dual, proto().allow24HourSchedule()).decorate().labelWidth(200);
+        formPanel.append(Location.Dual, proto().schedulingWindow(), new TimeWindowEditor<TimeWindow>(TimeWindow.class));
 
-        get(proto().schedulingAllowedAnyTime()).addValueChangeHandler(new ValueChangeHandler<Boolean>() {
+        get(proto().allow24HourSchedule()).addValueChangeHandler(new ValueChangeHandler<Boolean>() {
 
             @Override
             public void onValueChange(ValueChangeEvent<Boolean> event) {
-                get(proto().schedulingAllowedTime()).setVisible(!event.getValue());
+                get(proto().schedulingWindow()).setVisible(!event.getValue());
             }
         });
         return formPanel;
@@ -74,7 +74,7 @@ public class MaintenanceRequestPolicyForm extends PolicyDTOTabPanelBasedForm<Mai
         MaintenanceRequestPolicyDTO value = getValue();
 
         if (value != null) {
-            get(proto().schedulingAllowedTime()).setVisible(!value.schedulingAllowedAnyTime().getValue(false));
+            get(proto().schedulingWindow()).setVisible(!value.allow24HourSchedule().getValue(false));
         }
     }
 

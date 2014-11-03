@@ -13,11 +13,14 @@
  */
 package com.propertyvista.crm.client.ui.crud.maintenance;
 
+import java.util.Vector;
+
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.site.client.backoffice.ui.prime.form.IEditor;
 
+import com.propertyvista.domain.TimeWindow;
 import com.propertyvista.domain.maintenance.MaintenanceRequestMetadata;
 import com.propertyvista.dto.MaintenanceRequestDTO;
 
@@ -26,5 +29,7 @@ public interface MaintenanceRequestEditorView extends IEditor<MaintenanceRequest
     interface Presenter extends IEditor.Presenter {
 
         void getCategoryMeta(AsyncCallback<MaintenanceRequestMetadata> callback, Key buildingId);
+
+        void getPreferredWindowOptions(AsyncCallback<Vector<TimeWindow>> callback, Key buildingId);
     }
 }

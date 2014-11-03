@@ -13,6 +13,8 @@
  */
 package com.propertyvista.crm.rpc.services.maintenance;
 
+import java.util.Vector;
+
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.commons.Key;
@@ -24,6 +26,7 @@ import com.pyx4j.security.annotations.AccessControl;
 
 import com.propertyvista.crm.rpc.services.maintenance.ac.Resolve;
 import com.propertyvista.crm.rpc.services.maintenance.ac.Schedule;
+import com.propertyvista.domain.TimeWindow;
 import com.propertyvista.domain.maintenance.MaintenanceRequestMetadata;
 import com.propertyvista.domain.maintenance.SurveyResponse;
 import com.propertyvista.domain.property.asset.building.Building;
@@ -58,4 +61,6 @@ public interface MaintenanceCrudService extends AbstractCrudService<MaintenanceR
     void cancelAction(AsyncCallback<VoidSerializable> callback, Key entityId);
 
     void getCategoryMeta(AsyncCallback<MaintenanceRequestMetadata> callback, boolean labelsOnly, Key buildingId);
+
+    void getPreferredWindowOptions(AsyncCallback<Vector<TimeWindow>> callback, Key buildingId);
 }

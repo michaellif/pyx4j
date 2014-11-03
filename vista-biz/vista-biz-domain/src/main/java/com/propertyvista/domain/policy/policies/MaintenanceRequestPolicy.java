@@ -44,13 +44,12 @@ public interface MaintenanceRequestPolicy extends Policy {
     //------- Scheduling ------------
 
     /** If true, allowed time is ignored */
-    @Caption(name = "Allow to schedule any time")
-    IPrimitive<Boolean> schedulingAllowedAnyTime();
+    @Caption(name = "Allow 24 hour schedule")
+    IPrimitive<Boolean> allow24HourSchedule();
 
     @EmbeddedEntity
-    TimeWindow schedulingAllowedTime();
+    TimeWindow schedulingWindow();
 
     @NotNull
-    @Caption(name = "Max allowed hour window")
-    IPrimitive<Integer> schedulingMaxAllowedWindow();
+    IPrimitive<Integer> maxAllowedWindowHours();
 }
