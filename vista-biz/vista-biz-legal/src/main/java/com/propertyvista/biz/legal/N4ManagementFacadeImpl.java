@@ -36,9 +36,8 @@ import java.util.concurrent.atomic.AtomicInteger;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.google.gwt.rpc.server.Pair;
-
 import com.pyx4j.commons.LogicalDate;
+import com.pyx4j.commons.Pair;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.config.server.SystemDateManager;
 import com.pyx4j.entity.core.AttachLevel;
@@ -136,7 +135,7 @@ public class N4ManagementFacadeImpl implements N4ManagementFacade {
 
     @Override
     public List<Pair<Lease, Exception>> issueN4(final N4BatchRequestDTO batchRequest, AtomicInteger progress) throws IllegalStateException, FormFillError {
-        // TODO fix this: policy should be applied on lease level, right now n4 policy can be set up for Organization so it should be fine        
+        // TODO fix this: policy should be applied on lease level, right now n4 policy can be set up for Organization so it should be fine
         N4Policy n4policy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(EntityFactory.create(OrganizationPoliciesNode.class),
                 N4Policy.class);
         final Collection<ARCode> relevantArCodes = new HashSet<ARCode>(n4policy.relevantARCodes());

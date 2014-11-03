@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011-2012 All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -18,9 +18,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import com.google.gwt.rpc.server.Pair;
-
 import com.pyx4j.commons.LogicalDate;
+import com.pyx4j.commons.Pair;
 
 import com.propertyvista.biz.ExecutionMonitor;
 import com.propertyvista.crm.rpc.dto.legal.n4.N4BatchRequestDTO;
@@ -39,7 +38,7 @@ public interface N4ManagementFacade {
 
     /**
      * Prepare N4 letters for <code>delinguqentLeases</code> as if signed by the given <code>employee</code>.
-     * 
+     *
      * @throws IllegalStateException
      *             if one of the given leases doesn't owe any money.
      * @return failed leases along with exceptions
