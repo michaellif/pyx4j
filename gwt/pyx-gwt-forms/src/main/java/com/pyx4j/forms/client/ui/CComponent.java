@@ -382,10 +382,6 @@ public abstract class CComponent<SELF_TYPE extends CComponent<SELF_TYPE, DATA_TY
         accessAdapters.remove(adapter);
     }
 
-    public boolean containsAccessAdapter(IAccessAdapter adapter) {
-        return accessAdapters.contains(adapter);
-    }
-
     public String getTooltip() {
         return tooltip;
     }

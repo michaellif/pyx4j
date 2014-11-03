@@ -20,14 +20,13 @@
  */
 package com.pyx4j.widgets.client;
 
-import com.google.gwt.event.dom.client.HasAllKeyHandlers;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
 
 import com.pyx4j.commons.IFormatter;
 import com.pyx4j.commons.IParser;
 
-public interface IValueBoxWidget<E> extends IFocusWidget, HasAllKeyHandlers, IWatermarkWidget {
+public interface IValueBoxWidget<E> extends IFocusWidget, IWatermarkWidget {
 
     HandlerRegistration addValueChangeHandler(ValueChangeHandler<E> handler);
 
