@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011-2012 All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -19,8 +19,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.google.gwt.rpc.server.Pair;
-
+import com.pyx4j.commons.Pair;
 import com.pyx4j.commons.UserRuntimeException;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.Persistence;
@@ -111,7 +110,7 @@ public class N4GenerationDeferredProcess extends AbstractDeferredProcess {
             //@formatter:off
             report.append("Lease ").append(lease.leaseId().getStringView())
                   .append(", Unit ").append(lease.unit().getStringView())
-                  .append(":\r\n");                   
+                  .append(":\r\n");
             //@formatter:on
             for (String errorMessageLine : errorMessage(erredLease.getB()).split("\n")) {
                 report.append("\t").append(errorMessageLine).append("\r\n");
