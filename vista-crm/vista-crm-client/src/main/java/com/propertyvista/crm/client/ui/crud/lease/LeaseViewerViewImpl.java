@@ -610,8 +610,6 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
 
         setViewVisible(viewApplication, !value.leaseApplication().isNull());
 
-        setViewVisible(showCommunicationAction, status == Status.Active);
-
         setActionVisible(sendMailAction, status.isCurrent());
         setActionVisible(runBillAction, status.isCurrent());
         setActionVisible(deletedPapsAction, status.isCurrent());
