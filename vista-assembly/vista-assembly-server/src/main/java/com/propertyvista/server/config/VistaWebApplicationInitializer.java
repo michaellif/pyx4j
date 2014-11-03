@@ -71,6 +71,7 @@ import com.propertyvista.server.ci.EnvLinksServlet;
 import com.propertyvista.server.ci.TestTimeoutServlet;
 import com.propertyvista.server.ci.VistaStatusServlet;
 import com.propertyvista.server.ci.bugs.WSServletContextListenerFix;
+import com.propertyvista.server.config.filter.VistaApplicationDispatcherFilter;
 import com.propertyvista.server.oapi.OAPIFilter;
 import com.propertyvista.server.security.RobotsFilter;
 import com.propertyvista.server.security.idp.IdpEndpointServlet;

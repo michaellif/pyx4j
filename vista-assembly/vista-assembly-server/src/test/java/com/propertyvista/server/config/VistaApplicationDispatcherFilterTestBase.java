@@ -29,6 +29,8 @@ import com.pyx4j.unit.server.mock.filter.MockFilterChain;
 import com.pyx4j.unit.server.mock.filter.MockHttpServletRequestFilter;
 
 import com.propertyvista.domain.security.common.VistaApplication;
+import com.propertyvista.server.config.filter.VistaApplicationDispatcherFilter;
+import com.propertyvista.server.config.filter.VistaURIDataResolver;
 
 public class VistaApplicationDispatcherFilterTestBase {
 
@@ -78,7 +80,7 @@ public class VistaApplicationDispatcherFilterTestBase {
         resp = new MockHttpServletResponse();
 
         Assert.assertTrue("Redirection " + (redirectExpected ? "expected" : "not expected") + " for url '" + url + "'",
-                filterUnderTest.isHttpsRedirectionNeeded(req) == redirectExpected);
+                new VistaURIDataResolver(req).isHttpsRedirectionNeeded() == redirectExpected);
 
     }
 
