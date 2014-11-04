@@ -28,7 +28,7 @@ import com.pyx4j.commons.css.Theme;
 import com.pyx4j.commons.css.ThemeColor;
 import com.pyx4j.commons.css.ThemeId;
 import com.pyx4j.forms.client.ui.CComponentTheme;
-import com.pyx4j.widgets.client.style.theme.WidgetTheme;
+import com.pyx4j.widgets.client.style.theme.WidgetsTheme;
 
 public abstract class WidgetDecoratorTheme extends Theme {
 
@@ -116,7 +116,7 @@ public abstract class WidgetDecoratorTheme extends Theme {
 
         style = new Style(".", StyleName.WidgetDecoratorInfoImage);
         style.addProperty("padding-left", "5px");
-        style.addProperty("line-height", "0");
+        style.addProperty("line-height", "2em");
         style.addProperty("vertical-align", "middle");
         addStyle(style);
 
@@ -137,14 +137,14 @@ public abstract class WidgetDecoratorTheme extends Theme {
         style.addProperty("word-wrap", "break-word");
         addStyle(style);
 
-        style = new Style(".", StyleName.WidgetDecoratorContent, "-", StyleDependent.invalid, " .", WidgetTheme.StyleName.TextBox);
+        style = new Style(".", StyleName.WidgetDecoratorContent, "-", StyleDependent.invalid, " .", WidgetsTheme.StyleName.TextBox);
         style.addProperty("border-width", "1px");
         style.addProperty("border-style", "solid");
         style.addProperty("border-color", "#f79494");
         style.addProperty("background-color", "#f8d8d8");
         addStyle(style);
 
-        style = new Style(".", StyleName.WidgetDecoratorContent, "-", StyleDependent.invalid, " .", WidgetTheme.StyleName.ListBox);
+        style = new Style(".", StyleName.WidgetDecoratorContent, "-", StyleDependent.invalid, " .", WidgetsTheme.StyleName.ListBox);
         style.addProperty("border-width", "1px");
         style.addProperty("border-style", "solid");
         style.addProperty("border-color", "#f79494");

@@ -27,7 +27,7 @@ import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.security.shared.AccessControlContext;
-import com.pyx4j.widgets.client.style.theme.WidgetTheme;
+import com.pyx4j.widgets.client.style.theme.WidgetsTheme;
 
 public class Toolbar implements IsWidget, HasSecureConcern {
 
@@ -37,7 +37,7 @@ public class Toolbar implements IsWidget, HasSecureConcern {
 
     public Toolbar() {
         panel = new FlowPanel();
-        panel.setStyleName(WidgetTheme.StyleName.Toolbar.name());
+        panel.setStyleName(WidgetsTheme.StyleName.Toolbar.name());
     }
 
     public void addItem(IsWidget widget) {
@@ -46,7 +46,7 @@ public class Toolbar implements IsWidget, HasSecureConcern {
 
     public void insertItem(IsWidget widget, int beforeIndex) {
         SimplePanel itemHolder = new SimplePanel();
-        itemHolder.setStyleName(WidgetTheme.StyleName.ToolbarItem.name());
+        itemHolder.setStyleName(WidgetsTheme.StyleName.ToolbarItem.name());
 
         itemHolder.setWidget(widget);
         panel.insert(itemHolder, beforeIndex);

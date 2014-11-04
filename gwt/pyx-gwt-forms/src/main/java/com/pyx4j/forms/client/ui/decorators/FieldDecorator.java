@@ -77,7 +77,7 @@ public class FieldDecorator extends FlowPanel implements IFieldDecorator, ILayou
 
     private Label label;
 
-    private SpaceHolder mandatoryImageHolder;
+    private SimplePanel mandatoryImageHolder;
 
     private SimplePanel infoImageHolder;
 
@@ -129,7 +129,7 @@ public class FieldDecorator extends FlowPanel implements IFieldDecorator, ILayou
         infoImageHolder.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
         infoImageHolder.getElement().getStyle().setVerticalAlign(VerticalAlign.TOP);
 
-        mandatoryImageHolder = new SpaceHolder();
+        mandatoryImageHolder = new SimplePanel();
         mandatoryImageHolder.setStyleName(WidgetDecoratorMandatoryImage.name());
 
         FlowPanel labelContent = new FlowPanel();
@@ -183,7 +183,7 @@ public class FieldDecorator extends FlowPanel implements IFieldDecorator, ILayou
 
         final INativeField<?> nativeComponent = component.getNativeComponent();
 
-        Widget content = nativeComponent.getContent().asWidget();
+        Widget content = nativeComponent.asWidget();
 
         content.addStyleName(WidgetDecoratorContent.name());
         content.getElement().getStyle().setProperty("textAlign", builder.componentAlignment.name());
@@ -342,7 +342,7 @@ public class FieldDecorator extends FlowPanel implements IFieldDecorator, ILayou
 
             infoImageHolder.ensureDebugId(CompositeDebugId.debugId(component.getDebugId(), DebugIds.InfoImageHolder));
             infoImage.ensureDebugId(CompositeDebugId.debugId(component.getDebugId(), new CompositeDebugId(DebugIds.InfoImageHolder, DebugIds.InfoImage)));
-            infoImageHolder.setWidget(new SpaceHolder(infoImage));
+            infoImageHolder.setWidget(infoImage);
             infoImageHolder.getWidget().setStyleName(WidgetDecoratorInfoImage.name());
         } else {
             infoImageHolder.clear();

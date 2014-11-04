@@ -26,7 +26,7 @@ import com.pyx4j.commons.css.Style;
 import com.pyx4j.commons.css.Theme;
 import com.pyx4j.commons.css.ThemeColor;
 import com.pyx4j.commons.css.ThemeId;
-import com.pyx4j.widgets.client.style.theme.WidgetTheme;
+import com.pyx4j.widgets.client.style.theme.WidgetsTheme;
 
 public class PaneTheme extends Theme {
 
@@ -132,7 +132,7 @@ public class PaneTheme extends Theme {
         style.addProperty("border-top-color", ThemeColor.foreground, 0.3);
         addStyle(style);
 
-        style = new Style(".", StyleName.FooterToolbar, " .", WidgetTheme.StyleName.Toolbar);
+        style = new Style(".", StyleName.FooterToolbar, " .", WidgetsTheme.StyleName.Toolbar);
         style.addProperty("padding", "2px");
         style.addProperty("float", "right");
         addStyle(style);
@@ -190,11 +190,11 @@ public class PaneTheme extends Theme {
         style.addProperty("-moz-border-radius", "5px");
         addStyle(style);
 
-        style = new Style(selector, " .", StyleName.HighlightedButton, "-", WidgetTheme.StyleDependent.hover);
+        style = new Style(selector, " .", StyleName.HighlightedButton, "-", WidgetsTheme.StyleDependent.hover);
         style.addProperty("border-color", ThemeColor.foreground, 0.3);
         addStyle(style);
 
-        style = new Style(selector, " .", StyleName.HighlightedButton, "-", WidgetTheme.StyleDependent.disabled);
+        style = new Style(selector, " .", StyleName.HighlightedButton, "-", WidgetsTheme.StyleDependent.disabled);
         style.addProperty("color", ThemeColor.foreground, 0);
         style.addGradient(ThemeColor.foreground, 0.4, ThemeColor.foreground, 0.4);
         addStyle(style);
@@ -206,7 +206,7 @@ public class PaneTheme extends Theme {
     }
 
     private void initButtonStyles(String selector) {
-        Style style = new Style(selector, " .", WidgetTheme.StyleName.Button);
+        Style style = new Style(selector, " .", WidgetsTheme.StyleName.Button);
         style.addProperty("border", "1px solid");
         style.addProperty("border-color", ThemeColor.foreground, 0.05);
         style.addProperty("color", ThemeColor.foreground, 0);
@@ -219,11 +219,11 @@ public class PaneTheme extends Theme {
         style.addProperty("-moz-border-radius", "5px");
         addStyle(style);
 
-        style = new Style(selector, " .", WidgetTheme.StyleName.Button, "-", WidgetTheme.StyleDependent.hover);
+        style = new Style(selector, " .", WidgetsTheme.StyleName.Button, "-", WidgetsTheme.StyleDependent.hover);
         style.addProperty("border-color", ThemeColor.foreground, 0.3);
         addStyle(style);
 
-        style = new Style(selector, " .", WidgetTheme.StyleName.Button, "-", WidgetTheme.StyleDependent.disabled);
+        style = new Style(selector, " .", WidgetsTheme.StyleName.Button, "-", WidgetsTheme.StyleDependent.disabled);
         style.addProperty("color", ThemeColor.foreground, 0);
         style.addGradient(ThemeColor.foreground, 0.4, ThemeColor.foreground, 0.4);
         addStyle(style);

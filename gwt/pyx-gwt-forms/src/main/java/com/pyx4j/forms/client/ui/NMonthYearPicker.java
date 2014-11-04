@@ -29,7 +29,7 @@ import com.google.gwt.view.client.Range;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.MonthYearPicker;
-import com.pyx4j.widgets.client.style.theme.WidgetTheme;
+import com.pyx4j.widgets.client.style.theme.WidgetsTheme;
 
 public class NMonthYearPicker extends NFocusField<LogicalDate, MonthYearPicker, CMonthYearPicker, HTML> implements INativeFocusField<LogicalDate> {
 
@@ -90,15 +90,15 @@ public class NMonthYearPicker extends NFocusField<LogicalDate, MonthYearPicker, 
         super.setEnabled(enabled);
         if (getEditor() != null) {
             if (enabled) {
-                getEditor().getYearSelector().removeStyleDependentName(WidgetTheme.StyleDependent.disabled.name());
+                getEditor().getYearSelector().removeStyleDependentName(WidgetsTheme.StyleDependent.disabled.name());
             } else {
-                getEditor().getYearSelector().addStyleDependentName(WidgetTheme.StyleDependent.disabled.name());
+                getEditor().getYearSelector().addStyleDependentName(WidgetsTheme.StyleDependent.disabled.name());
             }
             if (!getCComponent().isYearOnly()) {
                 if (enabled) {
-                    getEditor().getMonthSelector().removeStyleDependentName(WidgetTheme.StyleDependent.disabled.name());
+                    getEditor().getMonthSelector().removeStyleDependentName(WidgetsTheme.StyleDependent.disabled.name());
                 } else {
-                    getEditor().getMonthSelector().addStyleDependentName(WidgetTheme.StyleDependent.disabled.name());
+                    getEditor().getMonthSelector().addStyleDependentName(WidgetsTheme.StyleDependent.disabled.name());
                 }
             }
         }
@@ -109,15 +109,15 @@ public class NMonthYearPicker extends NFocusField<LogicalDate, MonthYearPicker, 
         super.setEditable(editable);
         if (getEditor() != null) {
             if (editable) {
-                getEditor().getYearSelector().removeStyleDependentName(WidgetTheme.StyleDependent.readonly.name());
+                getEditor().getYearSelector().removeStyleDependentName(WidgetsTheme.StyleDependent.readonly.name());
             } else {
-                getEditor().getYearSelector().addStyleDependentName(WidgetTheme.StyleDependent.readonly.name());
+                getEditor().getYearSelector().addStyleDependentName(WidgetsTheme.StyleDependent.readonly.name());
             }
             if (!getCComponent().isYearOnly()) {
                 if (editable) {
-                    getEditor().getMonthSelector().removeStyleDependentName(WidgetTheme.StyleDependent.readonly.name());
+                    getEditor().getMonthSelector().removeStyleDependentName(WidgetsTheme.StyleDependent.readonly.name());
                 } else {
-                    getEditor().getMonthSelector().addStyleDependentName(WidgetTheme.StyleDependent.readonly.name());
+                    getEditor().getMonthSelector().addStyleDependentName(WidgetsTheme.StyleDependent.readonly.name());
                 }
             }
         }

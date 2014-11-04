@@ -47,7 +47,7 @@ import com.pyx4j.widgets.client.ImageFactory;
 import com.pyx4j.widgets.client.StringBox;
 import com.pyx4j.widgets.client.event.shared.PasteEvent;
 import com.pyx4j.widgets.client.event.shared.PasteHandler;
-import com.pyx4j.widgets.client.style.theme.WidgetTheme;
+import com.pyx4j.widgets.client.style.theme.WidgetsTheme;
 
 public class SelectorListBoxValuePanel<E> extends FocusPanel implements ISelectorValuePanel, IFocusGroup, IWatermarkWidget {
 
@@ -67,8 +67,8 @@ public class SelectorListBoxValuePanel<E> extends FocusPanel implements ISelecto
 
     public SelectorListBoxValuePanel(IFormatter<E, String> valueFormatter) {
 
-        setStyleName(WidgetTheme.StyleName.SelectorListBoxValuePanel.name());
-        addStyleName(WidgetTheme.StyleName.ListBox.name());
+        setStyleName(WidgetsTheme.StyleName.SelectorListBoxValuePanel.name());
+        addStyleName(WidgetsTheme.StyleName.ListBox.name());
 
         contentPanel = new FlowPanel();
         setWidget(contentPanel);

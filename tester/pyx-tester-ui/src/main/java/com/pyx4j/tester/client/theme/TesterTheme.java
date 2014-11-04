@@ -37,7 +37,7 @@ import com.pyx4j.site.client.backoffice.ui.PaneTheme;
 import com.pyx4j.widgets.client.ImageFactory;
 import com.pyx4j.widgets.client.datepicker.DatePickerTheme;
 import com.pyx4j.widgets.client.dialog.DialogTheme;
-import com.pyx4j.widgets.client.style.theme.WidgetTheme;
+import com.pyx4j.widgets.client.style.theme.WidgetsTheme;
 
 public class TesterTheme extends Theme {
 
@@ -60,7 +60,7 @@ public class TesterTheme extends Theme {
             }
         });
 
-        addTheme(new WidgetTheme());
+        addTheme(new WidgetsTheme());
 
         addTheme(new WidgetDecoratorTheme() {
             @Override

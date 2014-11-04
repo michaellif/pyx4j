@@ -32,7 +32,7 @@ import com.google.gwt.event.dom.client.MouseOutHandler;
 import com.google.gwt.event.shared.GwtEvent;
 import com.google.gwt.user.client.Window;
 
-import com.pyx4j.widgets.client.style.theme.WidgetTheme;
+import com.pyx4j.widgets.client.style.theme.WidgetsTheme;
 
 public class RichTextArea extends com.google.gwt.user.client.ui.RichTextArea {
     private boolean ignoreBlur;
@@ -51,13 +51,13 @@ public class RichTextArea extends com.google.gwt.user.client.ui.RichTextArea {
             addIEMouseHandlers();
         }
 
-        setStyleName(WidgetTheme.StyleName.TextBoxContainer.name());
+        setStyleName(WidgetsTheme.StyleName.TextBoxContainer.name());
 
         addFocusHandler(new FocusHandler() {
 
             @Override
             public void onFocus(FocusEvent event) {
-                addStyleDependentName(WidgetTheme.StyleDependent.focused.name());
+                addStyleDependentName(WidgetsTheme.StyleDependent.focused.name());
             }
         });
 
@@ -65,7 +65,7 @@ public class RichTextArea extends com.google.gwt.user.client.ui.RichTextArea {
 
             @Override
             public void onBlur(BlurEvent event) {
-                removeStyleDependentName(WidgetTheme.StyleDependent.focused.name());
+                removeStyleDependentName(WidgetsTheme.StyleDependent.focused.name());
             }
         });
 

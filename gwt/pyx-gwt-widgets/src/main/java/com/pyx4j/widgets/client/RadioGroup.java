@@ -44,7 +44,7 @@ import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
 import com.pyx4j.commons.IDebugId;
-import com.pyx4j.widgets.client.style.theme.WidgetTheme;
+import com.pyx4j.widgets.client.style.theme.WidgetsTheme;
 
 public class RadioGroup<E> extends SimplePanel implements IFocusWidget, HasValueChangeHandlers<E> {
 
@@ -90,7 +90,7 @@ public class RadioGroup<E> extends SimplePanel implements IFocusWidget, HasValue
 
         focusHandlerManager = new GroupFocusHandler(this);
 
-        setStyleName(WidgetTheme.StyleName.RadioGroup.name());
+        setStyleName(WidgetsTheme.StyleName.RadioGroup.name());
     }
 
     public void setOptions(List<E> options) {
@@ -99,7 +99,7 @@ public class RadioGroup<E> extends SimplePanel implements IFocusWidget, HasValue
 
         for (final E option : options) {
             OptionRadioButton button = new OptionRadioButton(groupName, format(option));
-            button.setStyleName(WidgetTheme.StyleName.RadioGroupItem.name());
+            button.setStyleName(WidgetsTheme.StyleName.RadioGroupItem.name());
             buttons.put(option, button);
             button.addValueChangeHandler(new ValueChangeHandler<Boolean>() {
 
@@ -170,9 +170,9 @@ public class RadioGroup<E> extends SimplePanel implements IFocusWidget, HasValue
             button.optionEnabled = enabled;
             button.setEnabled(enabled);
             if (enabled) {
-                button.removeStyleDependentName(WidgetTheme.StyleDependent.disabled.name());
+                button.removeStyleDependentName(WidgetsTheme.StyleDependent.disabled.name());
             } else {
-                button.addStyleDependentName(WidgetTheme.StyleDependent.disabled.name());
+                button.addStyleDependentName(WidgetsTheme.StyleDependent.disabled.name());
             }
         }
     }
@@ -180,9 +180,9 @@ public class RadioGroup<E> extends SimplePanel implements IFocusWidget, HasValue
     private void applySelectionStyles() {
         for (RadioButton button : buttons.values()) {
             if (button.getValue()) {
-                button.addStyleDependentName(WidgetTheme.StyleDependent.active.name());
+                button.addStyleDependentName(WidgetsTheme.StyleDependent.active.name());
             } else {
-                button.removeStyleDependentName(WidgetTheme.StyleDependent.active.name());
+                button.removeStyleDependentName(WidgetsTheme.StyleDependent.active.name());
             }
         }
     }

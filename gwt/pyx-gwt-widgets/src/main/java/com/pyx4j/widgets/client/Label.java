@@ -23,7 +23,7 @@ package com.pyx4j.widgets.client;
 import com.google.gwt.user.client.ui.HTML;
 
 import com.pyx4j.commons.IDebugId;
-import com.pyx4j.widgets.client.style.theme.WidgetTheme;
+import com.pyx4j.widgets.client.style.theme.WidgetsTheme;
 
 public class Label extends HTML implements IWidget {
 
@@ -33,7 +33,7 @@ public class Label extends HTML implements IWidget {
     }
 
     public Label() {
-        setStyleName(WidgetTheme.StyleName.Label.name());
+        setStyleName(WidgetsTheme.StyleName.Label.name());
     }
 
     @Override

@@ -51,6 +51,9 @@ public class CTabbedEntityForm<E extends IEntity> extends CForm<E> {
 
     public CTabbedEntityForm(Class<E> rootClass, IEditableComponentFactory factory) {
         super(rootClass, factory);
+
+        getNativeComponent().setSize("100%", "100%");
+
         tabPanel = new TabPanel();
         tabPanel.setSize("100%", "100%");
 

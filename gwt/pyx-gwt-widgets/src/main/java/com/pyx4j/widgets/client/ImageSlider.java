@@ -30,7 +30,7 @@ import com.pyx4j.commons.IDebugId;
 import com.pyx4j.gwt.shared.Dimension;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.ImageViewport.ScaleMode;
-import com.pyx4j.widgets.client.style.theme.WidgetTheme;
+import com.pyx4j.widgets.client.style.theme.WidgetsTheme;
 
 public class ImageSlider extends LayoutPanel implements IWidget {
 
@@ -64,7 +64,7 @@ public class ImageSlider extends LayoutPanel implements IWidget {
 
     public ImageSlider(Dimension dimension, final ImageSliderDataProvider imageList) {
 
-        setStyleName(WidgetTheme.StyleName.ImageSlider.name());
+        setStyleName(WidgetsTheme.StyleName.ImageSlider.name());
 
         this.imageList = imageList;
         this.editable = false;
@@ -72,7 +72,7 @@ public class ImageSlider extends LayoutPanel implements IWidget {
         slideshow = new Slideshow(0, false);
 
         editButton = new Button(i18n.tr("Edit"));
-        editButton.setStyleName(WidgetTheme.StyleName.ImageSliderEditAction.name());
+        editButton.setStyleName(WidgetsTheme.StyleName.ImageSliderEditAction.name());
 
         add(slideshow);
         add(editButton);

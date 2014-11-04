@@ -30,7 +30,7 @@ import com.google.gwt.user.client.ui.FocusPanel;
 import com.google.gwt.user.client.ui.Focusable;
 
 import com.pyx4j.widgets.client.DropDownPanel;
-import com.pyx4j.widgets.client.style.theme.WidgetTheme;
+import com.pyx4j.widgets.client.style.theme.WidgetsTheme;
 
 public class PickerPopup<E> extends DropDownPanel implements Focusable, HasAllFocusHandlers {
 
@@ -43,7 +43,7 @@ public class PickerPopup<E> extends DropDownPanel implements Focusable, HasAllFo
     public PickerPopup(final ISelectorWidget<E> parent) {
         super();
         this.selectorWidget = parent;
-        addStyleName(WidgetTheme.StyleName.SuggestBoxPopup.name());
+        addStyleName(WidgetsTheme.StyleName.SuggestBoxPopup.name());
 
         focusPanel = new FocusPanel();
 

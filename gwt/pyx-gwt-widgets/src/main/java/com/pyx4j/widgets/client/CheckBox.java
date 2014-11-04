@@ -24,7 +24,7 @@ import com.google.gwt.dom.client.InputElement;
 import com.google.gwt.dom.client.LabelElement;
 
 import com.pyx4j.commons.IDebugId;
-import com.pyx4j.widgets.client.style.theme.WidgetTheme;
+import com.pyx4j.widgets.client.style.theme.WidgetsTheme;
 
 public class CheckBox extends com.google.gwt.user.client.ui.CheckBox implements IFocusWidget {
 
@@ -34,7 +34,7 @@ public class CheckBox extends com.google.gwt.user.client.ui.CheckBox implements 
 
     public CheckBox() {
         super();
-        setStyleName(WidgetTheme.StyleName.CheckBox.name());
+        setStyleName(WidgetsTheme.StyleName.CheckBox.name());
     }
 
     public CheckBox(String label) {

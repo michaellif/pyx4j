@@ -40,6 +40,8 @@ import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.event.shared.HasHandlers;
 import com.google.gwt.event.shared.SimpleEventBus;
 import com.google.gwt.user.client.ui.IsWidget;
+import com.google.gwt.user.client.ui.SimplePanel;
+import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.commons.CompositeDebugId;
 import com.pyx4j.commons.GWTJava5Helper;
@@ -60,7 +62,7 @@ import com.pyx4j.forms.client.validators.MandatoryValidator;
 import com.pyx4j.forms.client.validators.ValidationResults;
 import com.pyx4j.i18n.shared.I18n;
 
-public abstract class CComponent<SELF_TYPE extends CComponent<SELF_TYPE, DATA_TYPE, DECORATOR_TYPE>, DATA_TYPE, DECORATOR_TYPE extends IDecorator<? super SELF_TYPE>>
+public abstract class CComponent<SELF_TYPE extends CComponent<SELF_TYPE, DATA_TYPE, WIDGET_TYPE, DECORATOR_TYPE>, DATA_TYPE, WIDGET_TYPE extends INativeComponent<DATA_TYPE>, DECORATOR_TYPE extends IDecorator<? super SELF_TYPE>>
         implements HasHandlers, HasPropertyChangeHandlers, IsWidget, HasValueChangeHandlers<DATA_TYPE> {
 
     private static final I18n i18n = I18n.get(CComponent.class);
@@ -84,6 +86,12 @@ public abstract class CComponent<SELF_TYPE extends CComponent<SELF_TYPE, DATA_TY
         }
     }
 
+    private WIDGET_TYPE nativeComponent;
+
+    private EventBus eventBus;
+
+    private SimplePanel holder;
+
     private String title;
 
     private String tooltip;
@@ -99,8 +107,6 @@ public abstract class CComponent<SELF_TYPE extends CComponent<SELF_TYPE, DATA_TY
     private ComponentAccessAdapter componentAccessAdapter;
 
     private ContainerAccessAdapter containerAccessAdapter;
-
-    private EventBus eventBus;
 
     private IDebugId debugId;
 
@@ -130,6 +136,10 @@ public abstract class CComponent<SELF_TYPE extends CComponent<SELF_TYPE, DATA_TY
 
     public CComponent(String title) {
         this.title = title;
+
+        holder = new SimplePanel();
+        holder.setStyleName(CComponentTheme.StyleName.ComponentHolder.name());
+
         componentAccessAdapter = new ComponentAccessAdapter();
         containerAccessAdapter = new ContainerAccessAdapter();
         addAccessAdapter(componentAccessAdapter);
@@ -158,10 +168,15 @@ public abstract class CComponent<SELF_TYPE extends CComponent<SELF_TYPE, DATA_TY
         }
     }
 
+    @Override
+    public Widget asWidget() {
+        return holder;
+    }
+
     /**
      * Basic information would be available in server log
      */
-    public static String runtimeCrashInfo(CComponent<?, ?, ?> component) {
+    public static String runtimeCrashInfo(CComponent<?, ?, ?, ?> component) {
         if (component == null) {
             return "n/a";
         }
@@ -719,11 +734,29 @@ public abstract class CComponent<SELF_TYPE extends CComponent<SELF_TYPE, DATA_TY
         return info.toString();
     }
 
+    protected void setNativeComponent(WIDGET_TYPE nativeComponent) {
+        this.nativeComponent = nativeComponent;
+        if (decorator == null) {
+            holder.setWidget(getNativeComponent());
+        } else {
+            holder.setWidget(decorator);
+            decorator.setContent(getNativeComponent());
+            Scheduler.get().scheduleDeferred(new ScheduledCommand() {
+                @Override
+                public void execute() {
+                    decorator.init((SELF_TYPE) CComponent.this);
+                }
+            });
+        }
+    }
+
+    public final WIDGET_TYPE getNativeComponent() {
+        return nativeComponent;
+    }
+
     protected abstract void setEditorValue(DATA_TYPE value);
 
     protected abstract DATA_TYPE getEditorValue() throws ParseException;
-
-    public abstract INativeComponent<DATA_TYPE> getNativeComponent();
 
     public DECORATOR_TYPE getDecorator() {
         return decorator;
@@ -733,10 +766,10 @@ public abstract class CComponent<SELF_TYPE extends CComponent<SELF_TYPE, DATA_TY
     public void setDecorator(final DECORATOR_TYPE decorator) {
         this.decorator = decorator;
         if (decorator == null) {
-            getNativeComponent().getContentHolder().setWidget(getNativeComponent().getContent());
+            holder.setWidget(getNativeComponent());
         } else {
-            getNativeComponent().getContentHolder().setWidget(decorator);
-            decorator.setContent(getNativeComponent().getContent());
+            holder.setWidget(decorator);
+            decorator.setContent(getNativeComponent());
             Scheduler.get().scheduleDeferred(new ScheduledCommand() {
                 @Override
                 public void execute() {

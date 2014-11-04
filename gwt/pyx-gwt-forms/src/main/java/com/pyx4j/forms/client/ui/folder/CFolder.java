@@ -56,7 +56,7 @@ import com.pyx4j.security.shared.SecurityController;
 /**
  * This component represents list of IEntities
  */
-public abstract class CFolder<E extends IEntity> extends CContainer<CFolder<E>, IList<E>, IFolderDecorator<E>> {
+public abstract class CFolder<DATA_TYPE extends IEntity> extends CContainer<CFolder<DATA_TYPE>, IList<DATA_TYPE>, IFolderDecorator<DATA_TYPE>> {
 
     private static final Logger log = LoggerFactory.getLogger(CFolder.class);
 
@@ -74,17 +74,17 @@ public abstract class CFolder<E extends IEntity> extends CContainer<CFolder<E>, 
 
     private int currentRowDebugId = 0;
 
-    private final List<CFolderItem<E>> itemsList;
+    private final List<CFolderItem<DATA_TYPE>> itemsList;
 
-    private final E entityPrototype;
+    private final DATA_TYPE entityPrototype;
 
-    private final Class<E> entityClass;
+    private final Class<DATA_TYPE> entityClass;
 
-    public CFolder(Class<E> entityClass) {
+    public CFolder(Class<DATA_TYPE> entityClass) {
         assert (entityClass != null);
         this.entityClass = entityClass;
         asWidget().setStyleName(FolderTheme.StyleName.CFolder.name());
-        itemsList = new ArrayList<CFolderItem<E>>();
+        itemsList = new ArrayList<CFolderItem<DATA_TYPE>>();
 
         container = new FlowPanel();
 
@@ -103,10 +103,10 @@ public abstract class CFolder<E extends IEntity> extends CContainer<CFolder<E>, 
             }
         });
 
-        addValueChangeHandler(new ValueChangeHandler<IList<E>>() {
+        addValueChangeHandler(new ValueChangeHandler<IList<DATA_TYPE>>() {
 
             @Override
-            public void onValueChange(ValueChangeEvent<IList<E>> event) {
+            public void onValueChange(ValueChangeEvent<IList<DATA_TYPE>> event) {
                 calculateActionsState();
             }
         });
@@ -156,7 +156,7 @@ public abstract class CFolder<E extends IEntity> extends CContainer<CFolder<E>, 
         if (getDecorator() instanceof IFolderDecorator) {
             ((IFolderDecorator<?>) getDecorator()).setAddButtonVisible(addable);
         }
-        for (CFolderItem<E> item : itemsList) {
+        for (CFolderItem<DATA_TYPE> item : itemsList) {
             item.calculateActionsState();
         }
     }
@@ -164,11 +164,11 @@ public abstract class CFolder<E extends IEntity> extends CContainer<CFolder<E>, 
     /**
      * This mainly use for columns creation when TableFolderDecorator is used
      */
-    public final E proto() {
+    public final DATA_TYPE proto() {
         return entityPrototype;
     }
 
-    public final Class<E> getEntityClass() {
+    public final Class<DATA_TYPE> getEntityClass() {
         return entityClass;
     }
 
@@ -180,34 +180,34 @@ public abstract class CFolder<E extends IEntity> extends CContainer<CFolder<E>, 
         return contentPanel;
     }
 
-    protected abstract IFolderItemDecorator<E> createItemDecorator();
+    protected abstract IFolderItemDecorator<DATA_TYPE> createItemDecorator();
 
-    protected abstract CForm<? extends E> createItemForm(IObject<?> member);
+    protected abstract CForm<? extends DATA_TYPE> createItemForm(IObject<?> member);
 
-    protected CFolderItem<E> createItem(boolean first) {
-        return new CFolderItem<E>(entityClass) {
+    protected CFolderItem<DATA_TYPE> createItem(boolean first) {
+        return new CFolderItem<DATA_TYPE>(entityClass) {
             @Override
-            public IFolderItemDecorator<E> createItemDecorator() {
+            public IFolderItemDecorator<DATA_TYPE> createItemDecorator() {
                 return CFolder.this.createItemDecorator();
             }
 
             @Override
-            protected CForm<? extends E> createItemForm(IObject<?> member) {
+            protected CForm<? extends DATA_TYPE> createItemForm(IObject<?> member) {
                 return CFolder.this.createItemForm(null);
             }
 
         };
     }
 
-    private CFolderItem<E> createItemPrivate() {
+    private CFolderItem<DATA_TYPE> createItemPrivate() {
         return createItem(container.getWidgetCount() == 0);
     }
 
-    protected abstract IFolderDecorator<E> createFolderDecorator();
+    protected abstract IFolderDecorator<DATA_TYPE> createFolderDecorator();
 
     @Override
-    protected final IFolderDecorator<E> createDecorator() {
-        IFolderDecorator<E> folderDecorator = createFolderDecorator();
+    protected final IFolderDecorator<DATA_TYPE> createDecorator() {
+        IFolderDecorator<DATA_TYPE> folderDecorator = createFolderDecorator();
         folderDecorator.setAddButtonVisible(addable);
 
         addValueChangeHandler(folderDecorator);
@@ -224,21 +224,21 @@ public abstract class CFolder<E extends IEntity> extends CContainer<CFolder<E>, 
     }
 
     protected void addItem() {
-        createNewEntity(new DefaultAsyncCallback<E>() {
+        createNewEntity(new DefaultAsyncCallback<DATA_TYPE>() {
             @Override
-            public void onSuccess(E result) {
+            public void onSuccess(DATA_TYPE result) {
                 addItem(result);
             }
         });
     }
 
-    protected void addItem(E newEntity) {
+    protected void addItem(DATA_TYPE newEntity) {
         if (getValue() == null) {
             log.warn("Request to add item has been issued before the form populated with value");
             return;
         }
 
-        final CFolderItem<E> item = createItemPrivate();
+        final CFolderItem<DATA_TYPE> item = createItemPrivate();
 
         adopt(item);
         getValue().add(newEntity);
@@ -254,7 +254,7 @@ public abstract class CFolder<E extends IEntity> extends CContainer<CFolder<E>, 
 
     }
 
-    protected void removeItem(CFolderItem<E> item) {
+    protected void removeItem(CFolderItem<DATA_TYPE> item) {
         abandon(item);
         getValue().remove(item.getValue());
         setVisited(true);
@@ -263,15 +263,15 @@ public abstract class CFolder<E extends IEntity> extends CContainer<CFolder<E>, 
 
     }
 
-    protected void moveUpItem(CFolderItem<E> item) {
+    protected void moveUpItem(CFolderItem<DATA_TYPE> item) {
         moveItem(item, true);
     }
 
-    protected void moveDownItem(CFolderItem<E> item) {
+    protected void moveDownItem(CFolderItem<DATA_TYPE> item) {
         moveItem(item, false);
     }
 
-    protected void moveItem(CFolderItem<E> item, boolean up) {
+    protected void moveItem(CFolderItem<DATA_TYPE> item, boolean up) {
         int indexBefore = getValue().indexOf(item.getValue());
         int indexAfter = indexBefore + (up ? -1 : +1);
         if (indexAfter < 0 || indexAfter > getValue().size()) {
@@ -299,16 +299,16 @@ public abstract class CFolder<E extends IEntity> extends CContainer<CFolder<E>, 
      * @param callback
      */
     @SuppressWarnings("unchecked")
-    protected void createNewEntity(AsyncCallback<E> callback) {
-        callback.onSuccess((E) EntityFactory.create(entityPrototype.getValueClass()));
+    protected void createNewEntity(AsyncCallback<DATA_TYPE> callback) {
+        callback.onSuccess((DATA_TYPE) EntityFactory.create(entityPrototype.getValueClass()));
     }
 
     @Override
-    protected void setComponentsValue(IList<E> value, boolean fireEvent, boolean populate) {
+    protected void setComponentsValue(IList<DATA_TYPE> value, boolean fireEvent, boolean populate) {
 
-        ArrayList<CFolderItem<E>> previousList = new ArrayList<CFolderItem<E>>(itemsList);
+        ArrayList<CFolderItem<DATA_TYPE>> previousList = new ArrayList<CFolderItem<DATA_TYPE>>(itemsList);
 
-        for (CFolderItem<E> item : previousList) {
+        for (CFolderItem<DATA_TYPE> item : previousList) {
             abandon(item);
         }
 
@@ -316,9 +316,9 @@ public abstract class CFolder<E extends IEntity> extends CContainer<CFolder<E>, 
 
         if (value != null) {
 
-            for (E entity : value) {
-                CFolderItem<E> item = null;
-                for (CFolderItem<E> itemFromCahe : previousList) {
+            for (DATA_TYPE entity : value) {
+                CFolderItem<DATA_TYPE> item = null;
+                for (CFolderItem<DATA_TYPE> itemFromCahe : previousList) {
                     if (itemFromCahe.getValue().equals(entity)) {
                         previousList.remove(itemFromCahe);
                         item = itemFromCahe;
@@ -336,7 +336,7 @@ public abstract class CFolder<E extends IEntity> extends CContainer<CFolder<E>, 
 
         }
 
-        for (CFolderItem<E> item : itemsList) {
+        for (CFolderItem<DATA_TYPE> item : itemsList) {
             item.calculateActionsState();
         }
 
@@ -346,8 +346,8 @@ public abstract class CFolder<E extends IEntity> extends CContainer<CFolder<E>, 
     }
 
     @Override
-    public void adopt(final CComponent<?, ?, ?> component) {
-        itemsList.add((CFolderItem<E>) component);
+    public void adopt(final CComponent<?, ?, ?, ?> component) {
+        itemsList.add((CFolderItem<DATA_TYPE>) component);
         container.add(component);
 
         IDebugId rowDebugId = new CompositeDebugId(IDebugId.ROW_PREFIX, currentRowDebugId);
@@ -361,7 +361,7 @@ public abstract class CFolder<E extends IEntity> extends CContainer<CFolder<E>, 
     }
 
     @Override
-    public void abandon(final CComponent<?, ?, ?> component) {
+    public void abandon(final CComponent<?, ?, ?, ?> component) {
         super.abandon(component);
         container.remove(component);
         itemsList.remove(component);
@@ -371,7 +371,7 @@ public abstract class CFolder<E extends IEntity> extends CContainer<CFolder<E>, 
     }
 
     @Override
-    public List<CFolderItem<E>> getComponents() {
+    public List<CFolderItem<DATA_TYPE>> getComponents() {
         return itemsList;
     }
 
@@ -379,11 +379,11 @@ public abstract class CFolder<E extends IEntity> extends CContainer<CFolder<E>, 
         return itemsList.size();
     }
 
-    public int getItemIndex(CFolderItem<E> item) {
+    public int getItemIndex(CFolderItem<DATA_TYPE> item) {
         return itemsList.indexOf(item);
     }
 
-    public CFolderItem<E> getItem(int index) {
+    public CFolderItem<DATA_TYPE> getItem(int index) {
         if (itemsList.size() > 0 && index > -1 && index < itemsList.size()) {
             return itemsList.get(index);
         } else {
@@ -393,7 +393,7 @@ public abstract class CFolder<E extends IEntity> extends CContainer<CFolder<E>, 
 
     @Override
     protected void onReset() {
-        for (CComponent<?, ?, ?> component : new ArrayList<CComponent<?, ?, ?>>(getComponents())) {
+        for (CComponent<?, ?, ?, ?> component : new ArrayList<CComponent<?, ?, ?, ?>>(getComponents())) {
             abandon(component);
         }
         container.clear();

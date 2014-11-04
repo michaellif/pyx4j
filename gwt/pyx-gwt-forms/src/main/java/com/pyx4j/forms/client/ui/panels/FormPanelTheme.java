@@ -99,18 +99,18 @@ public abstract class FormPanelTheme extends Theme {
         style.addProperty("text-align", "center");
         addStyle(style);
 
-        style = new Style(".", StyleName.FormPanelCell, "-", StyleDependent.left, ">.", CComponentTheme.StyleName.FieldPanel, " .",
-                WidgetDecoratorTheme.StyleName.WidgetDecoratorContainerPanel);
+        style = new Style(".", StyleName.FormPanelCell, "-", StyleDependent.left, ">.", CComponentTheme.StyleName.ComponentHolder, ">.",
+                WidgetDecoratorTheme.StyleName.WidgetDecorator, ">.", WidgetDecoratorTheme.StyleName.WidgetDecoratorContainerPanel);
         style.addProperty("width", getSingleColumnWidth() + "px");
         addStyle(style);
 
-        style = new Style(".", StyleName.FormPanelCell, "-", StyleDependent.right, ">.", CComponentTheme.StyleName.FieldPanel, " .",
-                WidgetDecoratorTheme.StyleName.WidgetDecoratorContainerPanel);
+        style = new Style(".", StyleName.FormPanelCell, "-", StyleDependent.right, ">.", CComponentTheme.StyleName.ComponentHolder, ">.",
+                WidgetDecoratorTheme.StyleName.WidgetDecorator, ">.", WidgetDecoratorTheme.StyleName.WidgetDecoratorContainerPanel);
         style.addProperty("width", getSingleColumnWidth() + "px");
         addStyle(style);
 
-        style = new Style(".", StyleName.FormPanelCell, "-", StyleDependent.dual, ">.", CComponentTheme.StyleName.FieldPanel, " .",
-                WidgetDecoratorTheme.StyleName.WidgetDecoratorContainerPanel);
+        style = new Style(".", StyleName.FormPanelCell, "-", StyleDependent.dual, ">.", CComponentTheme.StyleName.ComponentHolder, ">.",
+                WidgetDecoratorTheme.StyleName.WidgetDecorator, ">.", WidgetDecoratorTheme.StyleName.WidgetDecoratorContainerPanel);
         style.addProperty("width", getDualColumnWidth() + "px");
         addStyle(style);
 
@@ -209,7 +209,7 @@ public abstract class FormPanelTheme extends Theme {
         addStyle(style);
 
         style = new Style(".", StyleName.FluidPanel, "-", StyleDependent.collapsed, " .", StyleName.FormPanelCell, "-", StyleDependent.dual, ">.",
-                CComponentTheme.StyleName.FieldPanel, " .", WidgetDecoratorTheme.StyleName.WidgetDecoratorContainerPanel);
+                CComponentTheme.StyleName.ComponentHolder, " .", WidgetDecoratorTheme.StyleName.WidgetDecoratorContainerPanel);
         style.addProperty("width", getSingleColumnWidth() + "px");
         addStyle(style);
     }

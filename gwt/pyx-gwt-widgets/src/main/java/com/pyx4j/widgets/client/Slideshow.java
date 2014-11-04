@@ -37,7 +37,7 @@ import com.google.gwt.user.client.ui.LayoutPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.gwt.commons.BrowserType;
-import com.pyx4j.widgets.client.style.theme.WidgetTheme;
+import com.pyx4j.widgets.client.style.theme.WidgetsTheme;
 
 public class Slideshow extends LayoutPanel {
 
@@ -82,7 +82,7 @@ public class Slideshow extends LayoutPanel {
         setWidgetHorizontalPosition(controlPanel, Alignment.END);
         setWidgetVerticalPosition(controlPanel, Alignment.END);
 
-        setStyleName(WidgetTheme.StyleName.Slideshow.name());
+        setStyleName(WidgetsTheme.StyleName.Slideshow.name());
 
     }
 
@@ -242,7 +242,7 @@ public class Slideshow extends LayoutPanel {
         ControlPanel() {
             leftAction = new Action();
             leftAction.setTitle("Back");
-            leftAction.addStyleDependentName(WidgetTheme.StyleDependent.left.name());
+            leftAction.addStyleDependentName(WidgetsTheme.StyleDependent.left.name());
             leftAction.addClickHandler(new ClickHandler() {
                 @Override
                 public void onClick(ClickEvent event) {
@@ -262,7 +262,7 @@ public class Slideshow extends LayoutPanel {
             add(itemActionsHolder);
 
             startStopAction = new Action();
-            startStopAction.addStyleDependentName(WidgetTheme.StyleDependent.paused.name());
+            startStopAction.addStyleDependentName(WidgetsTheme.StyleDependent.paused.name());
 
             startStopAction.addClickHandler(new ClickHandler() {
                 @Override
@@ -278,7 +278,7 @@ public class Slideshow extends LayoutPanel {
 
             rightAction = new Action();
             rightAction.setTitle("Next");
-            rightAction.addStyleDependentName(WidgetTheme.StyleDependent.right.name());
+            rightAction.addStyleDependentName(WidgetsTheme.StyleDependent.right.name());
             rightAction.addClickHandler(new ClickHandler() {
                 @Override
                 public void onClick(ClickEvent event) {
@@ -315,12 +315,12 @@ public class Slideshow extends LayoutPanel {
 
         public void play(boolean flag) {
             if (flag) {
-                startStopAction.removeStyleDependentName(WidgetTheme.StyleDependent.paused.name());
-                startStopAction.addStyleDependentName(WidgetTheme.StyleDependent.playing.name());
+                startStopAction.removeStyleDependentName(WidgetsTheme.StyleDependent.paused.name());
+                startStopAction.addStyleDependentName(WidgetsTheme.StyleDependent.playing.name());
                 startStopAction.setTitle("Stop");
             } else {
-                startStopAction.removeStyleDependentName(WidgetTheme.StyleDependent.playing.name());
-                startStopAction.addStyleDependentName(WidgetTheme.StyleDependent.paused.name());
+                startStopAction.removeStyleDependentName(WidgetsTheme.StyleDependent.playing.name());
+                startStopAction.addStyleDependentName(WidgetsTheme.StyleDependent.paused.name());
                 startStopAction.setTitle("Play");
             }
         }
@@ -341,9 +341,9 @@ public class Slideshow extends LayoutPanel {
         public void setSelectedItem(int currentIndex) {
             for (int i = 0; i < itemActionList.size(); i++) {
                 if (i == currentIndex) {
-                    itemActionList.get(i).addStyleDependentName(WidgetTheme.StyleDependent.selected.name());
+                    itemActionList.get(i).addStyleDependentName(WidgetsTheme.StyleDependent.selected.name());
                 } else {
-                    itemActionList.get(i).removeStyleDependentName(WidgetTheme.StyleDependent.selected.name());
+                    itemActionList.get(i).removeStyleDependentName(WidgetsTheme.StyleDependent.selected.name());
                 }
             }
         }
@@ -362,16 +362,16 @@ public class Slideshow extends LayoutPanel {
 
             public Action(String text) {
                 super(text);
-                setStyleName(WidgetTheme.StyleName.SlideshowAction.name());
+                setStyleName(WidgetsTheme.StyleName.SlideshowAction.name());
                 setEnabled(true);
             }
 
             public void setEnabled(boolean flag) {
                 this.enabled = flag;
                 if (flag) {
-                    removeStyleDependentName(WidgetTheme.StyleDependent.disabled.name());
+                    removeStyleDependentName(WidgetsTheme.StyleDependent.disabled.name());
                 } else {
-                    addStyleDependentName(WidgetTheme.StyleDependent.disabled.name());
+                    addStyleDependentName(WidgetsTheme.StyleDependent.disabled.name());
                 }
             }
 

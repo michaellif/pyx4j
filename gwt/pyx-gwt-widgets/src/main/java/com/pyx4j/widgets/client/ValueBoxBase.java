@@ -52,7 +52,7 @@ import com.pyx4j.commons.IParser;
 import com.pyx4j.widgets.client.event.shared.HasPasteHandlers;
 import com.pyx4j.widgets.client.event.shared.PasteEvent;
 import com.pyx4j.widgets.client.event.shared.PasteHandler;
-import com.pyx4j.widgets.client.style.theme.WidgetTheme;
+import com.pyx4j.widgets.client.style.theme.WidgetsTheme;
 
 public abstract class ValueBoxBase<E> extends Composite implements IValueBoxWidget<E>, IFocusGroup, HasValueChangeHandlers<E>, HasPasteHandlers {
 
@@ -86,7 +86,7 @@ public abstract class ValueBoxBase<E> extends Composite implements IValueBoxWidg
 
     public ValueBoxBase() {
         contentPanel = new FlowPanel();
-        contentPanel.setStyleName(WidgetTheme.StyleName.TextBoxContainer.name());
+        contentPanel.setStyleName(WidgetsTheme.StyleName.TextBoxContainer.name());
         contentPanel.getElement().getStyle().setPosition(Position.RELATIVE);
 
         textBoxHolder = new SimplePanel();
@@ -108,16 +108,16 @@ public abstract class ValueBoxBase<E> extends Composite implements IValueBoxWidg
         if (this.debugId != null) {
             this.textBoxWidget.ensureDebugId(this.debugId.debugId());
         }
-        textBoxWidget.setStyleName(WidgetTheme.StyleName.TextBox.name());
+        textBoxWidget.setStyleName(WidgetsTheme.StyleName.TextBox.name());
         if (textBoxWidget instanceof com.google.gwt.user.client.ui.TextBox) {
-            contentPanel.addStyleDependentName(WidgetTheme.StyleDependent.singleLine.name());
+            contentPanel.addStyleDependentName(WidgetsTheme.StyleDependent.singleLine.name());
         }
 
         textBoxWidget.addFocusHandler(new FocusHandler() {
 
             @Override
             public void onFocus(FocusEvent event) {
-                contentPanel.addStyleDependentName(WidgetTheme.StyleDependent.focused.name());
+                contentPanel.addStyleDependentName(WidgetsTheme.StyleDependent.focused.name());
                 textBoxWidgetFocused = true;
                 updateTextBox();
             }
@@ -127,7 +127,7 @@ public abstract class ValueBoxBase<E> extends Composite implements IValueBoxWidg
 
             @Override
             public void onBlur(BlurEvent event) {
-                contentPanel.removeStyleDependentName(WidgetTheme.StyleDependent.focused.name());
+                contentPanel.removeStyleDependentName(WidgetsTheme.StyleDependent.focused.name());
                 textBoxWidgetFocused = false;
                 updateTextBox();
             }
@@ -196,14 +196,14 @@ public abstract class ValueBoxBase<E> extends Composite implements IValueBoxWidg
         if (parsedOk) {
             if (value != null) {
                 setText(getFormatter().format(value), false);
-                textBoxWidget.removeStyleDependentName(WidgetTheme.StyleDependent.watermark.name());
+                textBoxWidget.removeStyleDependentName(WidgetsTheme.StyleDependent.watermark.name());
             } else {
                 if (!textBoxWidgetFocused) {
                     setText(watermark, true);
-                    textBoxWidget.addStyleDependentName(WidgetTheme.StyleDependent.watermark.name());
+                    textBoxWidget.addStyleDependentName(WidgetsTheme.StyleDependent.watermark.name());
                 } else {
                     setText(null, false);
-                    textBoxWidget.removeStyleDependentName(WidgetTheme.StyleDependent.watermark.name());
+                    textBoxWidget.removeStyleDependentName(WidgetsTheme.StyleDependent.watermark.name());
                 }
             }
         }
@@ -269,7 +269,7 @@ public abstract class ValueBoxBase<E> extends Composite implements IValueBoxWidg
             actionButton.getElement().getStyle().setTop(0, Unit.PX);
             actionButton.getElement().getStyle().setRight(0, Unit.PX);
 
-            actionButton.setStyleName(WidgetTheme.StyleName.TextBoxActionButton.name());
+            actionButton.setStyleName(WidgetsTheme.StyleName.TextBoxActionButton.name());
 
             groupFocusHandler.addFocusable(actionButton);
 
@@ -317,7 +317,7 @@ public abstract class ValueBoxBase<E> extends Composite implements IValueBoxWidg
         if (actionButton != null) {
             actionButton.setEnabled(isEditable() && isEnabled());
         }
-        contentPanel.setStyleDependentName(WidgetTheme.StyleDependent.readonly.name(), !editable);
+        contentPanel.setStyleDependentName(WidgetsTheme.StyleDependent.readonly.name(), !editable);
     }
 
     @Override
@@ -331,7 +331,7 @@ public abstract class ValueBoxBase<E> extends Composite implements IValueBoxWidg
         if (actionButton != null) {
             actionButton.setEnabled(isEditable() && isEnabled());
         }
-        contentPanel.setStyleDependentName(WidgetTheme.StyleDependent.disabled.name(), !enabled);
+        contentPanel.setStyleDependentName(WidgetsTheme.StyleDependent.disabled.name(), !enabled);
     }
 
     @Override

@@ -210,7 +210,7 @@ public class NImageSlider<E extends IHasFile<?>> extends NField<IList<E>, ImageS
 
         @SuppressWarnings("unchecked")
         public void clear() {
-            for (CComponent<?, ?, ?> item : new ArrayList<CComponent<?, ?, ?>>(getComponents())) {
+            for (CComponent<?, ?, ?, ?> item : new ArrayList<CComponent<?, ?, ?, ?>>(getComponents())) {
                 removeItem((CFolderItem<E>) item);
             }
         }

@@ -28,7 +28,7 @@ import com.pyx4j.commons.css.Theme;
 import com.pyx4j.commons.css.ThemeColor;
 import com.pyx4j.commons.css.ThemeId;
 import com.pyx4j.forms.client.ui.CComponentTheme;
-import com.pyx4j.widgets.client.style.theme.WidgetTheme;
+import com.pyx4j.widgets.client.style.theme.WidgetsTheme;
 
 public class DataTableTheme extends Theme {
 
@@ -127,12 +127,12 @@ public class DataTableTheme extends Theme {
         style.addProperty("background-color", ThemeColor.foreground, 0.05);
         addStyle(style);
 
-        style = new Style("." + StyleName.DataTableToolBar, " .", WidgetTheme.StyleName.ToolbarItem);
+        style = new Style("." + StyleName.DataTableToolBar, " .", WidgetsTheme.StyleName.ToolbarItem);
         style.addProperty("float", "left");
         style.addProperty("display", "inline-block");
         addStyle(style);
 
-        style = new Style(".", StyleName.DataTableActionsBar, " .", WidgetTheme.StyleName.Button);
+        style = new Style(".", StyleName.DataTableActionsBar, " .", WidgetsTheme.StyleName.Button);
         style.addProperty("vertical-align", "middle");
         style.addProperty("border-color", ThemeColor.foreground, 0.4);
         style.addProperty("color", ThemeColor.foreground, 0.9);
@@ -142,15 +142,15 @@ public class DataTableTheme extends Theme {
         style.addGradient(ThemeColor.foreground, 0, ThemeColor.foreground, 0.2);
         addStyle(style);
 
-        style = new Style(".", StyleName.DataTableActionsBar, " .", WidgetTheme.StyleName.ButtonText);
+        style = new Style(".", StyleName.DataTableActionsBar, " .", WidgetsTheme.StyleName.ButtonText);
         style.addProperty("line-height", "21px");
         addStyle(style);
 
-        style = new Style(".", StyleName.DataTableActionsBar, " .", WidgetTheme.StyleName.Button, "-", WidgetTheme.StyleDependent.hover);
+        style = new Style(".", StyleName.DataTableActionsBar, " .", WidgetsTheme.StyleName.Button, "-", WidgetsTheme.StyleDependent.hover);
         style.addGradient(ThemeColor.foreground, 0.2, ThemeColor.foreground, 0);
         addStyle(style);
 
-        style = new Style(".", StyleName.DataTableActionsBar, " .", WidgetTheme.StyleName.Button, "-", WidgetTheme.StyleDependent.disabled);
+        style = new Style(".", StyleName.DataTableActionsBar, " .", WidgetsTheme.StyleName.Button, "-", WidgetsTheme.StyleDependent.disabled);
         style.addGradient(ThemeColor.foreground, 0.2, ThemeColor.foreground, 0.2);
         addStyle(style);
 
@@ -168,11 +168,11 @@ public class DataTableTheme extends Theme {
         style.addProperty("float", "right");
         addStyle(style);
 
-        style = new Style(".", StyleName.DataTablePageNavigBar, " .", WidgetTheme.StyleName.Anchor);
+        style = new Style(".", StyleName.DataTablePageNavigBar, " .", WidgetsTheme.StyleName.Anchor);
         style.addProperty("color", ThemeColor.foreground, 0.9);
         addStyle(style);
 
-        style = new Style(".", StyleName.DataTablePageNavigBar, " .", WidgetTheme.StyleName.Anchor, "-", WidgetTheme.StyleDependent.disabled);
+        style = new Style(".", StyleName.DataTablePageNavigBar, " .", WidgetsTheme.StyleName.Anchor, "-", WidgetsTheme.StyleDependent.disabled);
         style.addProperty("color", ThemeColor.foreground, 0.5);
         style.addProperty("cursor", "default");
         addStyle(style);

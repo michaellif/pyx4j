@@ -33,7 +33,6 @@ import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.resources.client.ImageResource;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.IsWidget;
-import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.commons.IDebugId;
 import com.pyx4j.config.shared.ApplicationMode;
@@ -47,25 +46,23 @@ import com.pyx4j.forms.client.ui.decorators.IDecorator;
 import com.pyx4j.forms.client.validators.EntityContainerValidator;
 import com.pyx4j.widgets.client.Button;
 
-public abstract class CContainer<SELF_TYPE extends CComponent<SELF_TYPE, DATA_TYPE, DECORATOR_TYPE>, DATA_TYPE extends IObject<?>, DECORATOR_TYPE extends IDecorator<? super SELF_TYPE>>
-        extends CComponent<SELF_TYPE, DATA_TYPE, DECORATOR_TYPE> implements IEditableComponentFactory {
+public abstract class CContainer<SELF_TYPE extends CComponent<SELF_TYPE, DATA_TYPE, NContainer<DATA_TYPE>, DECORATOR_TYPE>, DATA_TYPE extends IObject<?>, DECORATOR_TYPE extends IDecorator<? super SELF_TYPE>>
+        extends CComponent<SELF_TYPE, DATA_TYPE, NContainer<DATA_TYPE>, DECORATOR_TYPE> implements IEditableComponentFactory {
 
     private static final Logger log = LoggerFactory.getLogger(CContainer.class);
 
-    private final HashMap<CComponent<?, ?, ?>, HandlerRegistration> propertyChangeHandlerRegistrations = new HashMap<CComponent<?, ?, ?>, HandlerRegistration>();
+    private final HashMap<CComponent<?, ?, ?, ?>, HandlerRegistration> propertyChangeHandlerRegistrations = new HashMap<CComponent<?, ?, ?, ?>, HandlerRegistration>();
 
-    private final HashMap<CComponent<?, ?, ?>, HandlerRegistration> valueChangeHandlerRegistrations = new HashMap<CComponent<?, ?, ?>, HandlerRegistration>();
+    private final HashMap<CComponent<?, ?, ?, ?>, HandlerRegistration> valueChangeHandlerRegistrations = new HashMap<CComponent<?, ?, ?, ?>, HandlerRegistration>();
 
     private ImageResource icon;
 
     private boolean initiated = false;
 
-    private final NContainer<DATA_TYPE> nativeComponent;
-
     @SuppressWarnings("unchecked")
     public CContainer() {
 
-        nativeComponent = new NContainer<DATA_TYPE>(this);
+        setNativeComponent(new NContainer<DATA_TYPE>(this));
 
         if (false) {
             Button debugButton = new Button("Debug", new Command() {
@@ -76,8 +73,8 @@ public abstract class CContainer<SELF_TYPE extends CComponent<SELF_TYPE, DATA_TY
                 }
             });
             debugButton.getElement().getStyle().setProperty("display", "inline-block");
-            nativeComponent.add(debugButton);
-            nativeComponent.getElement().getStyle().setProperty("border", "red solid 1px");
+            getNativeComponent().add(debugButton);
+            getNativeComponent().getElement().getStyle().setProperty("border", "red solid 1px");
         }
 
         applyAccessibilityRules();
@@ -85,7 +82,7 @@ public abstract class CContainer<SELF_TYPE extends CComponent<SELF_TYPE, DATA_TY
         addComponentValidator(new EntityContainerValidator());
     }
 
-    public abstract Collection<? extends CComponent<?, ?, ?>> getComponents();
+    public abstract Collection<? extends CComponent<?, ?, ?, ?>> getComponents();
 
     protected abstract void setComponentsValue(DATA_TYPE value, boolean fireEvent, boolean populate);
 
@@ -105,12 +102,12 @@ public abstract class CContainer<SELF_TYPE extends CComponent<SELF_TYPE, DATA_TY
         return null;
     }
 
-    protected <T> void updateContainer(CComponent<?, T, ?> component) {
+    protected <T> void updateContainer(CComponent<?, T, ?, ?> component) {
 
     }
 
     @SuppressWarnings({ "unchecked", "rawtypes" })
-    public void adopt(final CComponent<?, ?, ?> component) {
+    public void adopt(final CComponent<?, ?, ?, ?> component) {
 
         propertyChangeHandlerRegistrations.put(component, component.addPropertyChangeHandler(new PropertyChangeHandler() {
 
@@ -136,7 +133,7 @@ public abstract class CContainer<SELF_TYPE extends CComponent<SELF_TYPE, DATA_TY
         component.onAdopt(this);
     }
 
-    public void abandon(CComponent<?, ?, ?> component) {
+    public void abandon(CComponent<?, ?, ?, ?> component) {
         propertyChangeHandlerRegistrations.remove(component).removeHandler();
         valueChangeHandlerRegistrations.remove(component).removeHandler();
         component.onAbandon();
@@ -144,7 +141,7 @@ public abstract class CContainer<SELF_TYPE extends CComponent<SELF_TYPE, DATA_TY
 
     public void setVisitedRecursive() {
         if (getComponents() != null) {
-            for (CComponent<?, ?, ?> ccomponent : getComponents()) {
+            for (CComponent<?, ?, ?, ?> ccomponent : getComponents()) {
                 if (ccomponent instanceof CField) {
                     ((CField<?, ?>) ccomponent).setVisited(true);
                 } else if (ccomponent instanceof CContainer) {
@@ -163,7 +160,7 @@ public abstract class CContainer<SELF_TYPE extends CComponent<SELF_TYPE, DATA_TY
     @Override
     protected void onReset() {
         if (getComponents() != null) {
-            for (CComponent<?, ?, ?> ccomponent : getComponents()) {
+            for (CComponent<?, ?, ?, ?> ccomponent : getComponents()) {
                 ccomponent.reset();
             }
         }
@@ -175,7 +172,7 @@ public abstract class CContainer<SELF_TYPE extends CComponent<SELF_TYPE, DATA_TY
         super.applyVisibilityRules();
         asWidget().setVisible(isVisible());
         if (getComponents() != null) {
-            for (CComponent<?, ?, ?> component : getComponents()) {
+            for (CComponent<?, ?, ?, ?> component : getComponents()) {
                 component.applyVisibilityRules();
             }
         }
@@ -189,7 +186,7 @@ public abstract class CContainer<SELF_TYPE extends CComponent<SELF_TYPE, DATA_TY
     public void applyViewabilityRules() {
         super.applyViewabilityRules();
         if (getComponents() != null) {
-            for (CComponent<?, ?, ?> component : getComponents()) {
+            for (CComponent<?, ?, ?, ?> component : getComponents()) {
                 component.applyViewabilityRules();
             }
         }
@@ -203,7 +200,7 @@ public abstract class CContainer<SELF_TYPE extends CComponent<SELF_TYPE, DATA_TY
     public void applyEnablingRules() {
         super.applyEnablingRules();
         if (getComponents() != null) {
-            for (CComponent<?, ?, ?> component : getComponents()) {
+            for (CComponent<?, ?, ?, ?> component : getComponents()) {
                 component.applyEnablingRules();
             }
         }
@@ -217,7 +214,7 @@ public abstract class CContainer<SELF_TYPE extends CComponent<SELF_TYPE, DATA_TY
     public void applyEditabilityRules() {
         super.applyEditabilityRules();
         if (getComponents() != null) {
-            for (CComponent<?, ?, ?> component : getComponents()) {
+            for (CComponent<?, ?, ?, ?> component : getComponents()) {
                 component.applyEditabilityRules();
             }
         }
@@ -230,11 +227,6 @@ public abstract class CContainer<SELF_TYPE extends CComponent<SELF_TYPE, DATA_TY
     protected void setDebugId(IDebugId debugId) {
         asWidget().ensureDebugId(debugId == null ? null : debugId.debugId());
 
-    }
-
-    @Override
-    public Widget asWidget() {
-        return nativeComponent;
     }
 
     protected abstract IsWidget createContent();
@@ -252,7 +244,7 @@ public abstract class CContainer<SELF_TYPE extends CComponent<SELF_TYPE, DATA_TY
         if (!initiated) {
             asWidget();
 
-            nativeComponent.setContent(createContent());
+            getNativeComponent().setContent(createContent());
 
             DECORATOR_TYPE decorator = createDecorator();
             if (decorator != null) {
@@ -294,11 +286,6 @@ public abstract class CContainer<SELF_TYPE extends CComponent<SELF_TYPE, DATA_TY
 
     public final HandlerRegistration addDevShortcutHandler(DevShortcutHandler handler) {
         return addHandler(handler, DevShortcutEvent.getType());
-    }
-
-    @Override
-    public final INativeComponent<DATA_TYPE> getNativeComponent() {
-        return nativeComponent;
     }
 
     public void setIcon(ImageResource icon) {

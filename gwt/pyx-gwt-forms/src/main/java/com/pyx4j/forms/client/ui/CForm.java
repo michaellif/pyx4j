@@ -65,9 +65,9 @@ public abstract class CForm<E extends IEntity> extends CContainer<CForm<E>, E, I
     private E origEntity;
 
     // Bidirectional map CComponent to Path
-    private final Map<Path, CComponent<?, ?, ?>> components = new HashMap<Path, CComponent<?, ?, ?>>();
+    private final Map<Path, CComponent<?, ?, ?, ?>> components = new HashMap<Path, CComponent<?, ?, ?, ?>>();
 
-    private final Map<CComponent<?, ?, ?>, Path> binding = new HashMap<CComponent<?, ?, ?>, Path>();
+    private final Map<CComponent<?, ?, ?, ?>, Path> binding = new HashMap<CComponent<?, ?, ?, ?>, Path>();
 
     public CForm(Class<E> clazz) {
         this(clazz, null);
@@ -95,7 +95,7 @@ public abstract class CForm<E extends IEntity> extends CContainer<CForm<E>, E, I
         }
     }
 
-    public final <T extends CComponent<?, ?, ?>> T inject(IObject<?> member, T comp) {
+    public final <T extends CComponent<?, ?, ?, ?>> T inject(IObject<?> member, T comp) {
         bind(comp, member);
         return comp;
     }
@@ -118,17 +118,17 @@ public abstract class CForm<E extends IEntity> extends CContainer<CForm<E>, E, I
     }
 
     @SuppressWarnings("unchecked")
-    public <T extends IEntity> CComponent<?, T, ?> get(T member) {
+    public <T extends IEntity> CComponent<?, T, ?, ?> get(T member) {
         return getRaw((IObject<?>) member);
     }
 
     @SuppressWarnings("unchecked")
-    public <T extends IEntity> CComponent<?, List<T>, ?> get(IList<T> member) {
+    public <T extends IEntity> CComponent<?, List<T>, ?, ?> get(IList<T> member) {
         return getRaw((IObject<?>) member);
     }
 
     @SuppressWarnings("unchecked")
-    public <T> CComponent<?, T, ?> get(IObject<T> member) {
+    public <T> CComponent<?, T, ?, ?> get(IObject<T> member) {
         return getRaw(member);
     }
 
@@ -146,10 +146,10 @@ public abstract class CForm<E extends IEntity> extends CContainer<CForm<E>, E, I
         return components.containsKey(member.getPath());
     }
 
-    public void bind(CComponent<?, ?, ?> component, IObject<?> member) {
+    public void bind(CComponent<?, ?, ?, ?> component, IObject<?> member) {
         // verify that member actually exists in entity.
         assert (proto().getMember(member.getPath()) != null);
-        CComponent<?, ?, ?> alreadyBound = components.get(member.getPath());
+        CComponent<?, ?, ?, ?> alreadyBound = components.get(member.getPath());
         if (alreadyBound != null) {
             throw new Error("Path '" + member.getPath() + "' already bound");
         }
@@ -159,7 +159,7 @@ public abstract class CForm<E extends IEntity> extends CContainer<CForm<E>, E, I
     }
 
     public void unbind(IObject<?> member) {
-        CComponent<?, ?, ?> component = components.get(member.getPath());
+        CComponent<?, ?, ?, ?> component = components.get(member.getPath());
         if (component != null) {
             binding.remove(component);
             abandon(component);
@@ -172,7 +172,7 @@ public abstract class CForm<E extends IEntity> extends CContainer<CForm<E>, E, I
     }
 
     @Override
-    public void adopt(CComponent<?, ?, ?> component) {
+    public void adopt(CComponent<?, ?, ?, ?> component) {
         Path path = binding.get(component);
         if (path != null) {
             IObject<?> member = proto().getMember(path);
@@ -250,7 +250,7 @@ public abstract class CForm<E extends IEntity> extends CContainer<CForm<E>, E, I
 //    }
 
     @Override
-    public Collection<? extends CComponent<?, ?, ?>> getComponents() {
+    public Collection<? extends CComponent<?, ?, ?, ?>> getComponents() {
         if (binding != null) {
             return binding.keySet();
         }
@@ -422,7 +422,7 @@ public abstract class CForm<E extends IEntity> extends CContainer<CForm<E>, E, I
     }
 
     @Override
-    protected final <T> void updateContainer(CComponent<?, T, ?> component) {
+    protected final <T> void updateContainer(CComponent<?, T, ?, ?> component) {
         T value = component.getValue();
         Path memberPath = binding.get(component);
         if ((memberPath != null) && (getValue() != null)) {

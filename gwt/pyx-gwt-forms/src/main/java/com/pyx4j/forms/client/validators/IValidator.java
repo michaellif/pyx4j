@@ -29,6 +29,6 @@ public interface IValidator<DATA_TYPE> {
 
     public AbstractValidationError isValid();
 
-    void setComponent(CComponent<?, DATA_TYPE, ?> component);
+    void setComponent(CComponent<?, DATA_TYPE, ?, ?> component);
 
 }

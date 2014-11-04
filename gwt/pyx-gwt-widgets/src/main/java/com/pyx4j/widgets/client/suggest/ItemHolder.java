@@ -28,7 +28,7 @@ import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.Label;
 
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.widgets.client.style.theme.WidgetTheme;
+import com.pyx4j.widgets.client.style.theme.WidgetsTheme;
 
 public class ItemHolder<E> extends Composite {
 
@@ -38,14 +38,14 @@ public class ItemHolder<E> extends Composite {
         super();
 
         FlowPanel panel = new FlowPanel();
-        panel.setStyleName(WidgetTheme.StyleName.SelectedItemHolder.name());
+        panel.setStyleName(WidgetsTheme.StyleName.SelectedItemHolder.name());
         Label lbl = new Label(label);
         lbl.getElement().getStyle().setDisplay(Display.INLINE);
         panel.add(lbl);
 
         Label deleteItemAction = new Label("\u2716");
         deleteItemAction.setTitle(i18n.tr("Remove"));
-        deleteItemAction.setStyleName(WidgetTheme.StyleName.SelectedItemClose.name());
+        deleteItemAction.setStyleName(WidgetsTheme.StyleName.SelectedItemClose.name());
         deleteItemAction.addClickHandler(new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {

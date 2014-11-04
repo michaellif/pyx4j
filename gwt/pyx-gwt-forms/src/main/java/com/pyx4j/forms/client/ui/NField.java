@@ -40,7 +40,6 @@ import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.ui.FlowPanel;
-import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 
@@ -50,7 +49,7 @@ import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.GroupFocusHandler;
 import com.pyx4j.widgets.client.IWidget;
 import com.pyx4j.widgets.client.WidgetDebugId;
-import com.pyx4j.widgets.client.style.theme.WidgetTheme;
+import com.pyx4j.widgets.client.style.theme.WidgetsTheme;
 
 public abstract class NField<DATA_TYPE, EDITOR extends IWidget, CCOMP extends CField<DATA_TYPE, ?>, VIEWER extends Widget> extends NComponent<DATA_TYPE, CCOMP>
         implements INativeField<DATA_TYPE> {
@@ -58,8 +57,6 @@ public abstract class NField<DATA_TYPE, EDITOR extends IWidget, CCOMP extends CF
     private EDITOR editor;
 
     private VIEWER viewer;
-
-    private final SimplePanel contentPanel;
 
     private boolean viewable;
 
@@ -77,18 +74,6 @@ public abstract class NField<DATA_TYPE, EDITOR extends IWidget, CCOMP extends CF
 
     public NField(CCOMP cComponent) {
         super(cComponent);
-        setStyleName(CComponentTheme.StyleName.FieldPanel.name());
-        setWidget(contentPanel = new SimplePanel());
-    }
-
-    @Override
-    public SimplePanel getContentHolder() {
-        return this;
-    }
-
-    @Override
-    public final IsWidget getContent() {
-        return contentPanel;
     }
 
     public final EDITOR getEditor() {
@@ -167,7 +152,7 @@ public abstract class NField<DATA_TYPE, EDITOR extends IWidget, CCOMP extends CF
                 viewerPanel = new ViewerPanel();
             }
             onViewerInit();
-            contentPanel.setWidget(viewerPanel);
+            setWidget(viewerPanel);
         } else {
             if (editor == null) {
                 editor = createEditor();
@@ -175,7 +160,7 @@ public abstract class NField<DATA_TYPE, EDITOR extends IWidget, CCOMP extends CF
                 editorPanel = new EditorPanel();
             }
             onEditorInit();
-            contentPanel.setWidget(editorPanel);
+            setWidget(editorPanel);
         }
     }
 
@@ -198,9 +183,9 @@ public abstract class NField<DATA_TYPE, EDITOR extends IWidget, CCOMP extends CF
             editor.setEnabled(enabled);
             editorPanel.setEnabled(isEditable() && enabled);
             if (enabled) {
-                editor.removeStyleDependentName(WidgetTheme.StyleDependent.disabled.name());
+                editor.removeStyleDependentName(WidgetsTheme.StyleDependent.disabled.name());
             } else {
-                editor.addStyleDependentName(WidgetTheme.StyleDependent.disabled.name());
+                editor.addStyleDependentName(WidgetsTheme.StyleDependent.disabled.name());
             }
         }
     }
@@ -220,9 +205,9 @@ public abstract class NField<DATA_TYPE, EDITOR extends IWidget, CCOMP extends CF
             editor.setEditable(editable);
             editorPanel.setEnabled(isEnabled() && editable);
             if (editable) {
-                editor.removeStyleDependentName(WidgetTheme.StyleDependent.readonly.name());
+                editor.removeStyleDependentName(WidgetsTheme.StyleDependent.readonly.name());
             } else {
-                editor.addStyleDependentName(WidgetTheme.StyleDependent.readonly.name());
+                editor.addStyleDependentName(WidgetsTheme.StyleDependent.readonly.name());
             }
         }
     }
@@ -507,7 +492,7 @@ public abstract class NField<DATA_TYPE, EDITOR extends IWidget, CCOMP extends CF
             public Link() {
                 super(DOM.createAnchor());
                 AnchorElement.as(getElement()).setHref(DEFAULT_HREF);
-                setStylePrimaryName(WidgetTheme.StyleName.Anchor.name());
+                setStylePrimaryName(WidgetsTheme.StyleName.Anchor.name());
             }
         }
 

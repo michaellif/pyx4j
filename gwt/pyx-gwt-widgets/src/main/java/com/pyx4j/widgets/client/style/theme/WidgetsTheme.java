@@ -29,7 +29,7 @@ import com.pyx4j.commons.css.ThemeColor;
 import com.pyx4j.commons.css.ThemeId;
 import com.pyx4j.widgets.client.ImageFactory;
 
-public class WidgetTheme extends Theme {
+public class WidgetsTheme extends Theme {
 
     public static enum StyleName implements IStyleName {
         TextBox, TextBoxContainer, TextBoxActionButton,
@@ -73,7 +73,7 @@ public class WidgetTheme extends Theme {
         watermark, hover, focused, readonly, disabled, active, semitransparent, singleLine, selected, playing, paused, left, right
     }
 
-    public WidgetTheme() {
+    public WidgetsTheme() {
         initStyles();
     }
 
@@ -174,7 +174,7 @@ public class WidgetTheme extends Theme {
         style.addProperty("user-select", "none");
         addStyle(style);
 
-        style = new Style(".", StyleName.TextBoxActionButton, "-", WidgetTheme.StyleDependent.disabled);
+        style = new Style(".", StyleName.TextBoxActionButton, "-", WidgetsTheme.StyleDependent.disabled);
         style.addGradient(ThemeColor.foreground, 0.1, ThemeColor.foreground, 0.1);
         style.addProperty("cursor", "default");
         style.addProperty("opacity", "0.4");
@@ -255,11 +255,11 @@ public class WidgetTheme extends Theme {
         style.addProperty("padding", "0 3px");
         addStyle(style);
 
-        style = new Style(".", StyleName.Button, "-", WidgetTheme.StyleDependent.hover);
+        style = new Style(".", StyleName.Button, "-", WidgetsTheme.StyleDependent.hover);
         style.addGradient(ThemeColor.foreground, 0.2, ThemeColor.foreground, 0);
         addStyle(style);
 
-        style = new Style(".", StyleName.Button, "-", WidgetTheme.StyleDependent.disabled);
+        style = new Style(".", StyleName.Button, "-", WidgetsTheme.StyleDependent.disabled);
         style.addGradient(ThemeColor.foreground, 0.1, ThemeColor.foreground, 0.1);
         style.addProperty("cursor", "default");
         style.addProperty("opacity", "0.4");
@@ -346,10 +346,10 @@ public class WidgetTheme extends Theme {
         style.addProperty("padding-left", "5px");
         addStyle(style);
 
-        style = new Style(".", StyleName.RadioGroupItem, "-", WidgetTheme.StyleDependent.active);
+        style = new Style(".", StyleName.RadioGroupItem, "-", WidgetsTheme.StyleDependent.active);
         addStyle(style);
 
-        style = new Style(".", StyleName.RadioGroupItem, "-", WidgetTheme.StyleDependent.disabled);
+        style = new Style(".", StyleName.RadioGroupItem, "-", WidgetsTheme.StyleDependent.disabled);
         style.addProperty("color", ThemeColor.foreground, 0.3);
         addStyle(style);
 
@@ -369,7 +369,7 @@ public class WidgetTheme extends Theme {
         style.addProperty("border-radius", "5px 5px 5px 5px");
         addStyle(style);
 
-        style = new Style(".", StyleName.GlassPanel, "-", WidgetTheme.StyleDependent.semitransparent);
+        style = new Style(".", StyleName.GlassPanel, "-", WidgetsTheme.StyleDependent.semitransparent);
         style.addProperty("background-color", "#000");
         style.addProperty("opacity", "0.2");
         style.addProperty("filter", "alpha(opacity=20)");
@@ -405,7 +405,7 @@ public class WidgetTheme extends Theme {
         style.addProperty("border-color", ThemeColor.foreground, 0.3);
         addStyle(style);
 
-        style = new Style(".", WidgetTheme.StyleName.SlideshowAction);
+        style = new Style(".", WidgetsTheme.StyleName.SlideshowAction);
         style.addProperty("background", "url('" + ImageFactory.getImages().slideshowItem().getSafeUri().asString() + "') no-repeat");
         style.addProperty("width", "17px");
         style.addProperty("height", "16px");
@@ -413,27 +413,27 @@ public class WidgetTheme extends Theme {
         style.addProperty("cursor", "hand");
         addStyle(style);
 
-        style = new Style(".", WidgetTheme.StyleName.SlideshowAction, "-", WidgetTheme.StyleDependent.disabled);
+        style = new Style(".", WidgetsTheme.StyleName.SlideshowAction, "-", WidgetsTheme.StyleDependent.disabled);
         style.addProperty("cursor", "default");
         addStyle(style);
 
-        style = new Style(".", WidgetTheme.StyleName.SlideshowAction, "-", WidgetTheme.StyleDependent.left);
+        style = new Style(".", WidgetsTheme.StyleName.SlideshowAction, "-", WidgetsTheme.StyleDependent.left);
         style.addProperty("background", "url('" + ImageFactory.getImages().slideshowLeft().getSafeUri().asString() + "') no-repeat");
         addStyle(style);
 
-        style = new Style(".", WidgetTheme.StyleName.SlideshowAction, "-", WidgetTheme.StyleDependent.right);
+        style = new Style(".", WidgetsTheme.StyleName.SlideshowAction, "-", WidgetsTheme.StyleDependent.right);
         style.addProperty("background", "url('" + ImageFactory.getImages().slideshowRight().getSafeUri().asString() + "') no-repeat");
         addStyle(style);
 
-        style = new Style(".", WidgetTheme.StyleName.SlideshowAction, "-", WidgetTheme.StyleDependent.selected);
+        style = new Style(".", WidgetsTheme.StyleName.SlideshowAction, "-", WidgetsTheme.StyleDependent.selected);
         style.addProperty("background", "url('" + ImageFactory.getImages().slideshowSelectedItem().getSafeUri().asString() + "') no-repeat");
         addStyle(style);
 
-        style = new Style(".", WidgetTheme.StyleName.SlideshowAction, "-", WidgetTheme.StyleDependent.playing);
+        style = new Style(".", WidgetsTheme.StyleName.SlideshowAction, "-", WidgetsTheme.StyleDependent.playing);
         style.addProperty("background", "url('" + ImageFactory.getImages().slideshowPause().getSafeUri().asString() + "') no-repeat");
         addStyle(style);
 
-        style = new Style(".", WidgetTheme.StyleName.SlideshowAction, "-", WidgetTheme.StyleDependent.paused);
+        style = new Style(".", WidgetsTheme.StyleName.SlideshowAction, "-", WidgetsTheme.StyleDependent.paused);
         style.addProperty("background", "url('" + ImageFactory.getImages().slideshowPlay().getSafeUri().asString() + "') no-repeat");
         addStyle(style);
     }
@@ -501,7 +501,7 @@ public class WidgetTheme extends Theme {
         style.addProperty("width", "80px");
         addStyle(style);
 
-        style = new Style(".", StyleName.SelectorListBoxValuePanel, " .", WidgetTheme.StyleName.Button);
+        style = new Style(".", StyleName.SelectorListBoxValuePanel, " .", WidgetsTheme.StyleName.Button);
         style.addProperty("margin", "4px");
         addStyle(style);
 

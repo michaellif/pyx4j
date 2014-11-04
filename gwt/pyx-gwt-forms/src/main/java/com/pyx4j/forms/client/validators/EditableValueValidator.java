@@ -36,6 +36,6 @@ public interface EditableValueValidator<E> {
      * 
      * null if valid, validation message if not
      */
-    public BasicValidationError isValid(CComponent<?, ?, ?> component, E value);
+    public BasicValidationError isValid(CComponent<?, ?, ?, ?> component, E value);
 
 }

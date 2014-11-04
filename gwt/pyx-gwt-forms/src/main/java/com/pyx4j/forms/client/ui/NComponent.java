@@ -24,7 +24,7 @@ import com.google.gwt.user.client.ui.SimplePanel;
 
 import com.pyx4j.forms.client.validators.ValidationResults;
 
-public abstract class NComponent<DATA_TYPE, COMP_TYPE extends CComponent<?, ?, ?>> extends SimplePanel implements INativeComponent<DATA_TYPE> {
+public abstract class NComponent<DATA_TYPE, COMP_TYPE extends CComponent<?, ?, ?, ?>> extends SimplePanel implements INativeComponent<DATA_TYPE> {
 
     private final COMP_TYPE cComponent;
 

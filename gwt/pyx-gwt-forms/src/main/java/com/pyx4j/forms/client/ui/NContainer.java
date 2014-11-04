@@ -23,27 +23,19 @@ package com.pyx4j.forms.client.ui;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.ProvidesResize;
 import com.google.gwt.user.client.ui.RequiresResize;
-import com.google.gwt.user.client.ui.SimplePanel;
+import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.entity.core.IObject;
 import com.pyx4j.forms.client.ui.decorators.IDecorator;
 
 public class NContainer<DATA_TYPE extends IObject<?>> extends NComponent<DATA_TYPE, CContainer<?, DATA_TYPE, ?>> implements RequiresResize, ProvidesResize {
 
-    private IsWidget content;
-
     public NContainer(CContainer<?, DATA_TYPE, ?> cComponent) {
         super(cComponent);
     }
 
-    @Override
-    public IsWidget getContent() {
-        return content;
-    }
-
     @SuppressWarnings("rawtypes")
     public void setContent(IsWidget content) {
-        this.content = content;
         if (getWidget() instanceof IDecorator) {
             ((IDecorator) getWidget()).setContent(content);
         } else {
@@ -52,23 +44,19 @@ public class NContainer<DATA_TYPE extends IObject<?>> extends NComponent<DATA_TY
     }
 
     @Override
-    public SimplePanel getContentHolder() {
-        return this;
-    }
-
-    @Override
     public void onResize() {
-        if (content instanceof RequiresResize) {
-            ((RequiresResize) content).onResize();
+        if (getWidget() instanceof RequiresResize) {
+            ((RequiresResize) getWidget()).onResize();
         }
     }
 
     @Override
     public void showErrors(boolean show) {
-        for (CComponent<?, ?, ?> component : getCComponent().getComponents()) {
+        for (CComponent<?, ?, ?, ?> component : getCComponent().getComponents()) {
             if (component.getNativeComponent() != null) {
                 component.getNativeComponent().showErrors(show);
             }
         }
     }
+
 }

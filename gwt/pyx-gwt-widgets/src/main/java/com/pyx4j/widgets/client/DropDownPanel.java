@@ -25,7 +25,7 @@ import com.google.gwt.event.logical.shared.ResizeHandler;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Widget;
 
-import com.pyx4j.widgets.client.style.theme.WidgetTheme;
+import com.pyx4j.widgets.client.style.theme.WidgetsTheme;
 
 public class DropDownPanel extends PopupPanel {
 
@@ -36,7 +36,7 @@ public class DropDownPanel extends PopupPanel {
      */
     public DropDownPanel() {
         super(true, false);
-        setStyleName(WidgetTheme.StyleName.DropDownPanel.name());
+        setStyleName(WidgetsTheme.StyleName.DropDownPanel.name());
         setPreviewingAllNativeEvents(true);
         Window.addResizeHandler(new ResizeHandler() {
             @Override

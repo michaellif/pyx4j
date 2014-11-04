@@ -28,7 +28,7 @@ import com.pyx4j.commons.css.Theme;
 import com.pyx4j.commons.css.ThemeColor;
 import com.pyx4j.commons.css.ThemeId;
 import com.pyx4j.forms.client.ui.CComponentTheme;
-import com.pyx4j.widgets.client.style.theme.WidgetTheme;
+import com.pyx4j.widgets.client.style.theme.WidgetsTheme;
 
 public abstract class FolderTheme extends Theme {
 
@@ -120,7 +120,7 @@ public abstract class FolderTheme extends Theme {
         style.addProperty("opacity", "1");
         addStyle(style);
 
-        style = new Style(".", StyleName.CFolderAddButton, ".", WidgetTheme.StyleName.Button);
+        style = new Style(".", StyleName.CFolderAddButton, ".", WidgetsTheme.StyleName.Button);
         style.addProperty("display", "inline-block");
         style.addProperty("margin", "6px");
         style.addProperty("color", ThemeColor.object1, 0.8);
@@ -132,7 +132,7 @@ public abstract class FolderTheme extends Theme {
         style.addProperty("background", "transparent");
         addStyle(style);
 
-        style = new Style(".", StyleName.CFolderAddButton, " .", WidgetTheme.StyleName.ButtonText);
+        style = new Style(".", StyleName.CFolderAddButton, " .", WidgetsTheme.StyleName.ButtonText);
         style.addProperty("color", ThemeColor.foreground, 0.5);
         addStyle(style);
 

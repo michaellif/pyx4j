@@ -39,7 +39,7 @@ public class MessagePannel extends FlowPanel {
 
     private final Label noteLabel;
 
-    private CComponent<?, ?, ?> component;
+    private CComponent<?, ?, ?, ?> component;
 
     public MessagePannel(Location location) {
 
@@ -65,7 +65,7 @@ public class MessagePannel extends FlowPanel {
 
     }
 
-    public void init(CComponent<?, ?, ?> component) {
+    public void init(CComponent<?, ?, ?, ?> component) {
         this.component = component;
     }
 

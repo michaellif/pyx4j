@@ -24,11 +24,11 @@ import com.pyx4j.forms.client.ui.CComponent;
 
 public class BasicValidationError extends AbstractValidationError {
 
-    private final CComponent<?, ?, ?> originator;
+    private final CComponent<?, ?, ?, ?> originator;
 
     private String message;
 
-    public BasicValidationError(CComponent<?, ?, ?> originator, String message) {
+    public BasicValidationError(CComponent<?, ?, ?, ?> originator, String message) {
         this.originator = originator;
         this.message = message;
     }
@@ -43,7 +43,7 @@ public class BasicValidationError extends AbstractValidationError {
     }
 
     @Override
-    public CComponent<?, ?, ?> getOriginator() {
+    public CComponent<?, ?, ?, ?> getOriginator() {
         return originator;
     }
 

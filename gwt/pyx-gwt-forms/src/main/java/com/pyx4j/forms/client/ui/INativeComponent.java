@@ -21,15 +21,11 @@
 package com.pyx4j.forms.client.ui;
 
 import com.google.gwt.user.client.ui.IsWidget;
-import com.google.gwt.user.client.ui.SimplePanel;
 
 import com.pyx4j.forms.client.validators.IValidatable;
 
 public interface INativeComponent<E> extends IsWidget, IValidatable {
 
-    CComponent<?, ?, ?> getCComponent();
+    CComponent<?, ?, ?, ?> getCComponent();
 
-    SimplePanel getContentHolder();
-
-    IsWidget getContent();
 }

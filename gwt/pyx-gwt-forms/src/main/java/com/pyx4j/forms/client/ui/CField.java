@@ -25,7 +25,6 @@ import java.text.ParseException;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.Command;
-import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.commons.IDebugId;
 import com.pyx4j.config.shared.ApplicationMode;
@@ -33,9 +32,7 @@ import com.pyx4j.forms.client.events.PropertyChangeEvent;
 import com.pyx4j.forms.client.ui.decorators.IFieldDecorator;
 
 public abstract class CField<DATA_TYPE, WIDGET_TYPE extends INativeField<DATA_TYPE>> extends
-        CComponent<CField<DATA_TYPE, WIDGET_TYPE>, DATA_TYPE, IFieldDecorator> {
-
-    private WIDGET_TYPE nativeComponent;
+        CComponent<CField<DATA_TYPE, WIDGET_TYPE>, DATA_TYPE, WIDGET_TYPE, IFieldDecorator> {
 
     private Command navigationCommand;
 
@@ -57,15 +54,15 @@ public abstract class CField<DATA_TYPE, WIDGET_TYPE extends INativeField<DATA_TY
 
     @Override
     protected void setEditorValue(DATA_TYPE value) {
-        if (nativeComponent != null) {
-            nativeComponent.setNativeValue(value);
+        if (getNativeComponent() != null) {
+            getNativeComponent().setNativeValue(value);
         }
     }
 
     @Override
     protected DATA_TYPE getEditorValue() throws ParseException {
-        if (nativeComponent != null) {
-            return nativeComponent.getNativeValue();
+        if (getNativeComponent() != null) {
+            return getNativeComponent().getNativeValue();
         } else {
             return null;
         }
@@ -73,7 +70,7 @@ public abstract class CField<DATA_TYPE, WIDGET_TYPE extends INativeField<DATA_TY
 
     public void setNavigationCommand(Command navigationCommand) {
         this.navigationCommand = navigationCommand;
-        nativeComponent.setNavigationCommand(navigationCommand);
+        getNativeComponent().setNavigationCommand(navigationCommand);
 
     }
 
@@ -82,21 +79,8 @@ public abstract class CField<DATA_TYPE, WIDGET_TYPE extends INativeField<DATA_TY
     }
 
     @Override
-    public Widget asWidget() {
-        if (nativeComponent == null) {
-            return null;
-        } else {
-            return nativeComponent.asWidget();
-        }
-    }
-
-    @Override
-    public final WIDGET_TYPE getNativeComponent() {
-        return nativeComponent;
-    }
-
     protected final void setNativeComponent(WIDGET_TYPE nativeComponent) {
-        this.nativeComponent = nativeComponent;
+        super.setNativeComponent(nativeComponent);
         nativeComponent.init();
         applyAccessibilityRules();
 
@@ -104,7 +88,6 @@ public abstract class CField<DATA_TYPE, WIDGET_TYPE extends INativeField<DATA_TY
         if (getDebugId() != null) {
             nativeComponent.setDebugId(getDebugId());
         }
-
     }
 
     @Override
@@ -116,8 +99,8 @@ public abstract class CField<DATA_TYPE, WIDGET_TYPE extends INativeField<DATA_TY
     public void applyVisibilityRules() {
         super.applyVisibilityRules();
         boolean visible = isVisible();
-        if (nativeComponent.isVisible() != visible) {
-            nativeComponent.setVisible(visible);
+        if (getNativeComponent().isVisible() != visible) {
+            getNativeComponent().setVisible(visible);
             PropertyChangeEvent.fire(this, PropertyChangeEvent.PropertyName.visible);
         }
     }
@@ -126,8 +109,8 @@ public abstract class CField<DATA_TYPE, WIDGET_TYPE extends INativeField<DATA_TY
     public void applyEnablingRules() {
         super.applyEnablingRules();
         boolean enabled = isEnabled();
-        if (nativeComponent.isEnabled() != enabled) {
-            nativeComponent.setEnabled(enabled);
+        if (getNativeComponent().isEnabled() != enabled) {
+            getNativeComponent().setEnabled(enabled);
             PropertyChangeEvent.fire(this, PropertyChangeEvent.PropertyName.enabled);
         }
     }
@@ -136,8 +119,8 @@ public abstract class CField<DATA_TYPE, WIDGET_TYPE extends INativeField<DATA_TY
     public void applyEditabilityRules() {
         super.applyEditabilityRules();
         boolean editable = isEditable();
-        if (nativeComponent.isEditable() != editable) {
-            nativeComponent.setEditable(editable);
+        if (getNativeComponent().isEditable() != editable) {
+            getNativeComponent().setEditable(editable);
             PropertyChangeEvent.fire(this, PropertyChangeEvent.PropertyName.editable);
         }
 
@@ -147,15 +130,15 @@ public abstract class CField<DATA_TYPE, WIDGET_TYPE extends INativeField<DATA_TY
     public void applyViewabilityRules() {
         super.applyViewabilityRules();
         boolean viewable = isViewable();
-        if (nativeComponent.isViewable() != viewable) {
-            nativeComponent.setViewable(viewable);
+        if (getNativeComponent().isViewable() != viewable) {
+            getNativeComponent().setViewable(viewable);
             PropertyChangeEvent.fire(this, PropertyChangeEvent.PropertyName.viewable);
         }
     }
 
     @Override
     protected void setDebugId(IDebugId debugId) {
-        nativeComponent.setDebugId(debugId);
+        getNativeComponent().setDebugId(debugId);
     }
 
     @Override

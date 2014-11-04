@@ -38,7 +38,7 @@ import com.pyx4j.widgets.client.event.shared.HasToggleHandlers;
 import com.pyx4j.widgets.client.event.shared.ToggleEvent;
 import com.pyx4j.widgets.client.event.shared.ToggleHandler;
 import com.pyx4j.widgets.client.images.WidgetsImages;
-import com.pyx4j.widgets.client.style.theme.WidgetTheme;
+import com.pyx4j.widgets.client.style.theme.WidgetsTheme;
 
 public class CollapsablePanel extends FlowPanel implements HasToggleHandlers, AcceptsOneWidget {
 
@@ -55,7 +55,7 @@ public class CollapsablePanel extends FlowPanel implements HasToggleHandlers, Ac
     public CollapsablePanel(WidgetsImages images) {
         this.images = images;
 
-        setStyleName(WidgetTheme.StyleName.CollapsablePanel.name());
+        setStyleName(WidgetsTheme.StyleName.CollapsablePanel.name());
 
         getElement().getStyle().setPosition(Position.RELATIVE);
 
@@ -75,7 +75,7 @@ public class CollapsablePanel extends FlowPanel implements HasToggleHandlers, Ac
         });
 
         SimplePanel collapseImageHolder = new SimplePanel(collapseImage);
-        collapseImageHolder.setStyleName(WidgetTheme.StyleName.CollapsablePanelImage.name());
+        collapseImageHolder.setStyleName(WidgetsTheme.StyleName.CollapsablePanelImage.name());
 
         collapseImageHolder.getElement().getStyle().setPosition(Position.ABSOLUTE);
         collapseImageHolder.getElement().getStyle().setDisplay(Display.INLINE);

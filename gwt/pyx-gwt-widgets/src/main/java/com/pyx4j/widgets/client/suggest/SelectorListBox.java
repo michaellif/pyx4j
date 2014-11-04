@@ -37,7 +37,7 @@ import com.google.gwt.user.client.Command;
 import com.pyx4j.commons.IFormatter;
 import com.pyx4j.widgets.client.IFocusWidget;
 import com.pyx4j.widgets.client.IWatermarkWidget;
-import com.pyx4j.widgets.client.style.theme.WidgetTheme;
+import com.pyx4j.widgets.client.style.theme.WidgetsTheme;
 
 public class SelectorListBox<E> extends AbstractSelectorWidget<E> implements HasValueChangeHandlers<Collection<E>>, IFocusWidget, IWatermarkWidget {
 
@@ -93,7 +93,7 @@ public class SelectorListBox<E> extends AbstractSelectorWidget<E> implements Has
 
             @Override
             public void onFocus(FocusEvent event) {
-                listBox.addStyleDependentName(WidgetTheme.StyleDependent.focused.name());
+                listBox.addStyleDependentName(WidgetsTheme.StyleDependent.focused.name());
             }
         });
 
@@ -101,7 +101,7 @@ public class SelectorListBox<E> extends AbstractSelectorWidget<E> implements Has
 
             @Override
             public void onBlur(BlurEvent event) {
-                listBox.removeStyleDependentName(WidgetTheme.StyleDependent.focused.name());
+                listBox.removeStyleDependentName(WidgetsTheme.StyleDependent.focused.name());
             }
         });
 

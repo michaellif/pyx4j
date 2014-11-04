@@ -35,7 +35,7 @@ import com.google.gwt.user.client.ui.Tree;
 import com.google.gwt.user.client.ui.TreeItem;
 
 import com.pyx4j.commons.IFormatter;
-import com.pyx4j.widgets.client.style.theme.WidgetTheme;
+import com.pyx4j.widgets.client.style.theme.WidgetsTheme;
 
 public class TreePickerPanel<E> extends ScrollPanel implements IPickerPanel<E> {
 
@@ -57,7 +57,7 @@ public class TreePickerPanel<E> extends ScrollPanel implements IPickerPanel<E> {
         this.optionsGrabber = optionsGrabber;
         this.optionFormatter = optionFormatter;
 
-        setStyleName(WidgetTheme.StyleName.SelectionPickerPanel.name());
+        setStyleName(WidgetsTheme.StyleName.SelectionPickerPanel.name());
 
         if (optionFormatter == null) {
             tree = new PickerTree(images, true);
@@ -174,14 +174,14 @@ public class TreePickerPanel<E> extends ScrollPanel implements IPickerPanel<E> {
                 super();
                 this.value = value;
                 label = new HTML(optionFormatter.format(value));
-                label.setStyleName(WidgetTheme.StyleName.SelectionPickerPanelItem.name());
+                label.setStyleName(WidgetsTheme.StyleName.SelectionPickerPanelItem.name());
                 setWidget(label);
             }
 
             @Override
             public void setSelected(boolean selected) {
                 super.setSelected(selected);
-                label.setStyleDependentName(WidgetTheme.StyleDependent.selected.name(), selected);
+                label.setStyleDependentName(WidgetsTheme.StyleDependent.selected.name(), selected);
             }
 
             public E getValue() {

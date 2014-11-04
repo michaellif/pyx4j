@@ -40,7 +40,7 @@ import com.google.gwt.user.client.ui.SimplePanel;
 
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.config.shared.ApplicationMode;
-import com.pyx4j.widgets.client.style.theme.WidgetTheme;
+import com.pyx4j.widgets.client.style.theme.WidgetsTheme;
 
 /**
  * Block access to GUI elements while service is running.
@@ -82,7 +82,7 @@ public class GlassPanel extends AbsolutePanel implements ResizeHandler {
 
         glass = new SimplePanel();
 
-        glass.setStyleName(WidgetTheme.StyleName.GlassPanel.name());
+        glass.setStyleName(WidgetsTheme.StyleName.GlassPanel.name());
 
         glass.ensureDebugId("GlassPanel");
         glass.setSize("100%", "100%");
@@ -101,7 +101,7 @@ public class GlassPanel extends AbsolutePanel implements ResizeHandler {
         }
 
         label = new HTML();
-        label.setStyleName(WidgetTheme.StyleName.GlassPanelLabel.name());
+        label.setStyleName(WidgetsTheme.StyleName.GlassPanelLabel.name());
         add(label, 0, 0);
 
     }
@@ -122,10 +122,10 @@ public class GlassPanel extends AbsolutePanel implements ResizeHandler {
             DOM.setCapture(glassPanel.getElement());
             switch (glassStyle) {
             case Transparent:
-                glassPanel.glass.removeStyleDependentName(WidgetTheme.StyleDependent.semitransparent.name());
+                glassPanel.glass.removeStyleDependentName(WidgetsTheme.StyleDependent.semitransparent.name());
                 break;
             case SemiTransparent:
-                glassPanel.glass.addStyleDependentName(WidgetTheme.StyleDependent.semitransparent.name());
+                glassPanel.glass.addStyleDependentName(WidgetsTheme.StyleDependent.semitransparent.name());
                 break;
             }
 

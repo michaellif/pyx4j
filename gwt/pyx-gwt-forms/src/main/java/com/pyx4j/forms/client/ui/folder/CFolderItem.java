@@ -43,7 +43,7 @@ import com.pyx4j.forms.client.validators.ValidationResults;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.images.ButtonImages;
 
-public abstract class CFolderItem<E extends IEntity> extends CContainer<CFolderItem<E>, E, IFolderItemDecorator<E>> {
+public abstract class CFolderItem<DATA_TYPE extends IEntity> extends CContainer<CFolderItem<DATA_TYPE>, DATA_TYPE, IFolderItemDecorator<DATA_TYPE>> {
 
     private static final I18n i18n = I18n.get(CFolderItem.class);
 
@@ -57,17 +57,17 @@ public abstract class CFolderItem<E extends IEntity> extends CContainer<CFolderI
 
     private HandlerRegistration folderHandlerRegistration;
 
-    private CForm<E> entityForm;
+    private CForm<DATA_TYPE> entityForm;
 
-    private final Class<E> clazz;
+    private final Class<DATA_TYPE> clazz;
 
     private ItemActionsBar actionsBar;
 
-    public CFolderItem(Class<E> clazz) {
+    public CFolderItem(Class<DATA_TYPE> clazz) {
         this(clazz, true, true);
     }
 
-    public CFolderItem(Class<E> clazz, boolean movable, boolean removable) {
+    public CFolderItem(Class<DATA_TYPE> clazz, boolean movable, boolean removable) {
         super();
         this.clazz = clazz;
         this.movable = movable;
@@ -75,7 +75,7 @@ public abstract class CFolderItem<E extends IEntity> extends CContainer<CFolderI
 
         actionsBar = new ItemActionsBar(removable);
 
-        IFolderItemDecorator<E> decorator = createItemDecorator();
+        IFolderItemDecorator<DATA_TYPE> decorator = createItemDecorator();
 
         FolderImages images = decorator.getImages();
 
@@ -89,7 +89,7 @@ public abstract class CFolderItem<E extends IEntity> extends CContainer<CFolderI
 
     }
 
-    protected abstract IFolderItemDecorator<E> createItemDecorator();
+    protected abstract IFolderItemDecorator<DATA_TYPE> createItemDecorator();
 
     public boolean isFirst() {
         return first;
@@ -117,16 +117,16 @@ public abstract class CFolderItem<E extends IEntity> extends CContainer<CFolderI
 
     @Override
     protected IsWidget createContent() {
-        entityForm = (CForm<E>) createItemForm(EntityFactory.getEntityPrototype(clazz));
+        entityForm = (CForm<DATA_TYPE>) createItemForm(EntityFactory.getEntityPrototype(clazz));
         adopt(entityForm);
         return entityForm;
     }
 
-    public CForm<E> getEntityForm() {
+    public CForm<DATA_TYPE> getEntityForm() {
         return entityForm;
     }
 
-    protected abstract CForm<? extends E> createItemForm(IObject<?> member);
+    protected abstract CForm<? extends DATA_TYPE> createItemForm(IObject<?> member);
 
     public void addAction(ActionType action, String title, ButtonImages images, Command command) {
         actionsBar.addAction(action, title, images, command);
@@ -158,12 +158,12 @@ public abstract class CFolderItem<E extends IEntity> extends CContainer<CFolderI
     public void onAdopt(final CContainer<?, ?, ?> parent) {
         super.onAdopt(parent);
 
-        final CFolder<E> folder = (CFolder<E>) parent;
+        final CFolder<DATA_TYPE> folder = (CFolder<DATA_TYPE>) parent;
 
-        folderHandlerRegistration = folder.addValueChangeHandler(new ValueChangeHandler<IList<E>>() {
+        folderHandlerRegistration = folder.addValueChangeHandler(new ValueChangeHandler<IList<DATA_TYPE>>() {
 
             @Override
-            public void onValueChange(ValueChangeEvent<IList<E>> event) {
+            public void onValueChange(ValueChangeEvent<IList<DATA_TYPE>> event) {
                 calculateActionsState();
             }
         });
@@ -198,7 +198,7 @@ public abstract class CFolderItem<E extends IEntity> extends CContainer<CFolderI
             actionsBar.setDefaultActionsState(false, false, false);
         } else {
 
-            CFolder<E> parent = ((CFolder<E>) getParent());
+            CFolder<DATA_TYPE> parent = ((CFolder<DATA_TYPE>) getParent());
             int index = parent.getItemIndex(CFolderItem.this);
 
             first = index == 0;
@@ -214,21 +214,21 @@ public abstract class CFolderItem<E extends IEntity> extends CContainer<CFolderI
     }
 
     @Override
-    protected void setComponentsValue(E entity, boolean fireEvent, boolean populate) {
+    protected void setComponentsValue(DATA_TYPE entity, boolean fireEvent, boolean populate) {
         entityForm.setValue(entity, fireEvent, populate);
     }
 
     @Override
-    public Collection<CComponent<?, ?, ?>> getComponents() {
+    public Collection<CComponent<?, ?, ?, ?>> getComponents() {
         if (entityForm == null) {
             return null;
         }
-        return Arrays.asList(new CComponent<?, ?, ?>[] { entityForm });
+        return Arrays.asList(new CComponent<?, ?, ?, ?>[] { entityForm });
     }
 
     public ValidationResults getComponentsValidationResults() {
         ValidationResults results = new ValidationResults();
-        for (CComponent<?, ?, ?> component : entityForm.getComponents()) {
+        for (CComponent<?, ?, ?, ?> component : entityForm.getComponents()) {
             if (!component.isValid()) {
                 results.appendValidationResults(component.getValidationResults());
             }

@@ -169,10 +169,10 @@ public class BasicFlexFormPanel extends FlexTable implements IValidatable {
         setWidget(row, column, asWidgetOrNull(widget));
     }
 
-    private List<CComponent<?, ?, ?>> locateCComponents(Widget widget) {
-        List<CComponent<?, ?, ?>> components = new ArrayList<CComponent<?, ?, ?>>();
+    private List<CComponent<?, ?, ?, ?>> locateCComponents(Widget widget) {
+        List<CComponent<?, ?, ?, ?>> components = new ArrayList<CComponent<?, ?, ?, ?>>();
         if (widget instanceof INativeComponent) {
-            CComponent<?, ?, ?> comp = ((INativeComponent<?>) widget).getCComponent();
+            CComponent<?, ?, ?, ?> comp = ((INativeComponent<?>) widget).getCComponent();
             components.add(comp);
         }
         if (widget instanceof HasWidgets) {
@@ -186,7 +186,7 @@ public class BasicFlexFormPanel extends FlexTable implements IValidatable {
     @Override
     public ValidationResults getValidationResults() {
         ValidationResults results = new ValidationResults();
-        for (CComponent<?, ?, ?> component : locateCComponents(this)) {
+        for (CComponent<?, ?, ?, ?> component : locateCComponents(this)) {
             if (!component.isValid()) {
                 results.appendValidationResults(component.getValidationResults());
             }
@@ -196,7 +196,7 @@ public class BasicFlexFormPanel extends FlexTable implements IValidatable {
 
     @Override
     public void showErrors(boolean show) {
-        for (CComponent<?, ?, ?> component : locateCComponents(this)) {
+        for (CComponent<?, ?, ?, ?> component : locateCComponents(this)) {
             component.setVisited(show);
         }
     }

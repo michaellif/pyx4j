@@ -27,7 +27,7 @@ import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.Event;
 
 import com.pyx4j.commons.IDebugId;
-import com.pyx4j.widgets.client.style.theme.WidgetTheme;
+import com.pyx4j.widgets.client.style.theme.WidgetsTheme;
 
 public class Anchor extends com.google.gwt.user.client.ui.Anchor implements IFocusWidget {
 
@@ -53,16 +53,16 @@ public class Anchor extends com.google.gwt.user.client.ui.Anchor implements IFoc
 
     public Anchor(String text, boolean asHTML, String href) {
         super(text, asHTML, href);
-        setStylePrimaryName(getElement(), WidgetTheme.StyleName.Anchor.name());
+        setStylePrimaryName(getElement(), WidgetsTheme.StyleName.Anchor.name());
     }
 
     @Override
     public void setEnabled(boolean enabled) {
         super.setEnabled(enabled);
         if (enabled) {
-            removeStyleDependentName(WidgetTheme.StyleDependent.disabled.name());
+            removeStyleDependentName(WidgetsTheme.StyleDependent.disabled.name());
         } else {
-            addStyleDependentName(WidgetTheme.StyleDependent.disabled.name());
+            addStyleDependentName(WidgetsTheme.StyleDependent.disabled.name());
         }
     }
 
