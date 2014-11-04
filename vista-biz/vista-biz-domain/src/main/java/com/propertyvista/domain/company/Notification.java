@@ -36,7 +36,7 @@ public interface Notification extends IEntity {
     @I18n
     public static enum NotificationType implements Serializable {
 
-        @Translate("Electronic Payment Rejected (NSF)")
+        @Translate("Electronic Payment Rejected")
         ElectronicPaymentRejectedNsf,
 
         AutoPayReviewRequired,
