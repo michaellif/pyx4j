@@ -110,7 +110,7 @@ public class BuildingViewerViewImpl extends CrmViewerViewImplBase<BuildingDTO> i
 
         floorplanLister = new ListerInternalViewImplBase<FloorplanDTO>(new FloorplanLister());
 
-        unitLister = new ListerInternalViewImplBase<AptUnitDTO>(new BuildingUnitLister(this, true));
+        unitLister = new ListerInternalViewImplBase<AptUnitDTO>(new BuildingUnitLister(true));
 
         elevatorLister = new ListerInternalViewImplBase<ElevatorDTO>(new ElevatorLister());
         boilerLister = new ListerInternalViewImplBase<BoilerDTO>(new BoilerLister());

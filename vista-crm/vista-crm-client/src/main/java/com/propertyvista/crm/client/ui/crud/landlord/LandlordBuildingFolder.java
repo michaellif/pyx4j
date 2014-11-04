@@ -28,25 +28,18 @@ import com.pyx4j.forms.client.ui.CField;
 import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.folder.CFolderRowEditor;
 import com.pyx4j.forms.client.ui.folder.FolderColumnDescriptor;
-import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.AppPlaceEntityMapper;
 import com.pyx4j.site.client.AppSite;
 
 import com.propertyvista.common.client.ui.components.folders.VistaTableFolder;
 import com.propertyvista.crm.client.ui.components.boxes.BuildingSelectionDialog;
-import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.building.BuildingInfo;
 
 public class LandlordBuildingFolder extends VistaTableFolder<Building> {
 
-    private static final I18n i18n = I18n.get(LandlordBuildingFolder.class);
-
-    private final CrmEntityForm<?> parentForm;
-
-    public LandlordBuildingFolder(CrmEntityForm<?> parentForm) {
-        super(Building.class, parentForm.isEditable());
-        this.parentForm = parentForm;
+    public LandlordBuildingFolder(boolean editable) {
+        super(Building.class, editable);
     }
 
     @Override
@@ -65,7 +58,7 @@ public class LandlordBuildingFolder extends VistaTableFolder<Building> {
 
     @Override
     protected void addItem() {
-        new BuildingSelectionDialog(new HashSet<>(getValue())) {
+        new BuildingSelectionDialog(true, new HashSet<>(getValue())) {
             @Override
             protected void setFilters(List<Criterion> filters) {
                 super.setFilters(filters);

@@ -22,7 +22,6 @@ import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.forms.client.ui.datatable.DataTableModel;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.backoffice.ui.IPane;
 import com.pyx4j.site.client.backoffice.ui.prime.lister.AbstractLister;
 
 import com.propertyvista.crm.client.ui.components.boxes.BuildingSelectionDialog;
@@ -35,16 +34,12 @@ public class UnitLister extends AbstractLister<AptUnitDTO> {
 
     public static final I18n i18n = I18n.get(UnitLister.class);
 
-    private final IPane parentView;
-
-    public UnitLister(IPane parentView) {
-        this(parentView, true);
+    public UnitLister() {
+        this(true);
     }
 
-    public UnitLister(IPane parentView, boolean allowAddNew) {
+    public UnitLister(boolean allowAddNew) {
         super(AptUnitDTO.class, !VistaFeatures.instance().yardiIntegration() ? allowAddNew : false);
-
-        this.parentView = parentView;
 
         if (getDataTablePanel().getAddButton() != null) {
             getDataTablePanel().getAddButton().setCaption(i18n.tr("New Unit"));
@@ -85,7 +80,7 @@ public class UnitLister extends AbstractLister<AptUnitDTO> {
         final Key parentBuildingPk = getPresenter().getParent();
         final UnitCrudService.UnitInitializationdata id = EntityFactory.create(UnitCrudService.UnitInitializationdata.class);
         if (parentBuildingPk == null) {
-            new BuildingSelectionDialog(null) {
+            new BuildingSelectionDialog() {
                 @Override
                 public boolean onClickOk() {
                     if (!getSelectedItem().isNull()) {

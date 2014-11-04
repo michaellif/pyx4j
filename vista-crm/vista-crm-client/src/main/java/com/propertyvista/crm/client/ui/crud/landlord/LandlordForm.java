@@ -80,7 +80,7 @@ public class LandlordForm extends CrmEntityForm<LandlordDTO> {
 
     private IsWidget createBuildingsPanel() {
         FormPanel formPanel = new FormPanel(this);
-        formPanel.append(Location.Dual, proto().buildings(), new LandlordBuildingFolder(this));
+        formPanel.append(Location.Dual, proto().buildings(), new LandlordBuildingFolder(isEditable()));
         return formPanel;
     }
 

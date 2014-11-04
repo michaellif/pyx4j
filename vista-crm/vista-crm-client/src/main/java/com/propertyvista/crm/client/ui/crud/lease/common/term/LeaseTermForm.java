@@ -145,7 +145,7 @@ public class LeaseTermForm extends CrmEntityForm<LeaseTermDTO> {
 
             @Override
             protected IShowable getSelectorDialog() {
-                return new BuildingSelectionDialog(null) {
+                return new BuildingSelectionDialog() {
                     @Override
                     protected void setFilters(List<Criterion> filters) {
                         assert (filters != null);

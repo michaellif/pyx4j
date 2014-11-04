@@ -34,7 +34,7 @@ public class CardServiceSimulationCardEditorViewImpl extends OperationsEditorVie
 
             @Override
             public boolean onClickOk() {
-                getPresenter().addTransaction(getSelectedItems().iterator().next());
+                getPresenter().addTransaction(getSelectedItem());
                 return true;
             }
         }.show();

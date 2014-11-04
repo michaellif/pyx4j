@@ -19,19 +19,18 @@ import java.util.List;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.forms.client.ui.datatable.DataTableModel;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
-import com.pyx4j.site.client.backoffice.ui.IPane;
 
 import com.propertyvista.crm.client.ui.crud.unit.UnitLister;
 import com.propertyvista.dto.AptUnitDTO;
 
 public class BuildingUnitLister extends UnitLister {
 
-    public BuildingUnitLister(IPane parentView) {
-        this(parentView, true);
+    public BuildingUnitLister() {
+        this(true);
     }
 
-    public BuildingUnitLister(IPane parentView, boolean allowAddNew) {
-        super(parentView, allowAddNew);
+    public BuildingUnitLister(boolean allowAddNew) {
+        super(allowAddNew);
     }
 
     @Override

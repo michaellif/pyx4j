@@ -28,7 +28,6 @@ import com.pyx4j.forms.client.ui.folder.FolderColumnDescriptor;
 import com.pyx4j.forms.client.ui.folder.IFolderDecorator;
 import com.pyx4j.site.client.AppPlaceEntityMapper;
 import com.pyx4j.site.client.AppSite;
-import com.pyx4j.site.client.backoffice.ui.IPane;
 
 import com.propertyvista.common.client.ui.components.folders.VistaTableFolder;
 import com.propertyvista.common.client.ui.decorations.VistaTableFolderDecorator;
@@ -37,11 +36,8 @@ import com.propertyvista.domain.property.asset.building.Building;
 
 public class BuildingFolder extends VistaTableFolder<Building> {
 
-    private final IPane parentView;
-
-    public BuildingFolder(IPane parentView, boolean modifiable) {
+    public BuildingFolder(boolean modifiable) {
         super(Building.class, modifiable);
-        this.parentView = parentView;
     }
 
     @Override

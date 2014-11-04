@@ -66,7 +66,7 @@ public class SelectedBuildingsFolder extends VistaTableFolder<Building> {
 
     @Override
     protected void addItem() {
-        new BuildingSelectionDialog(new HashSet<>(getValue())) {
+        new BuildingSelectionDialog(true, new HashSet<>(getValue())) {
             @Override
             public boolean onClickOk() {
                 for (Building building : getSelectedItems()) {
