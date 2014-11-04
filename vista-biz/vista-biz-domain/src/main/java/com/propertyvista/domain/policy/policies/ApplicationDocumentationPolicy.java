@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011- All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -41,4 +41,11 @@ public interface ApplicationDocumentationPolicy extends Policy, TenantsAccessibl
     @Editor(type = EditorType.radiogroup)
     @Caption(description = "Is the proof of income documents are mandatory")
     IPrimitive<Boolean> mandatoryProofOfIncome();
+
+// TODO: VISTA-4538
+//
+//    @Owned
+//    @NotNull
+//    @Caption(description = "Documentations that accepted as valid financial ")
+//    IList<FinancialDocumentType> allowedFinancialDocs();
 }

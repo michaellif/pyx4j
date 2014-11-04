@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011-2012 All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -37,8 +37,8 @@ import com.propertyvista.common.client.ui.validators.BirthdayDateValidator;
 import com.propertyvista.domain.media.IdentificationDocumentFolder;
 import com.propertyvista.domain.person.Name;
 import com.propertyvista.domain.policy.policies.ApplicationDocumentationPolicy;
+import com.propertyvista.domain.policy.policies.domain.ApplicationDocumentType.Importance;
 import com.propertyvista.domain.policy.policies.domain.IdentificationDocumentType;
-import com.propertyvista.domain.policy.policies.domain.IdentificationDocumentType.Importance;
 import com.propertyvista.domain.tenant.CustomerPicture;
 import com.propertyvista.domain.tenant.prospect.OnlineApplicationWizardStepMeta;
 import com.propertyvista.portal.prospect.ui.application.ApplicationWizardStep;

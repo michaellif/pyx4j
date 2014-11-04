@@ -41,17 +41,29 @@ public class ApplicationDocumentationPolicyForm extends PolicyDTOTabPanelBasedFo
 
     public ApplicationDocumentationPolicyForm(IForm<ApplicationDocumentationPolicyDTO> view) {
         super(ApplicationDocumentationPolicyDTO.class, view);
-        addTab(createEdtorFormTab(), i18n.tr("Settings"));
+
+        addTab(createIdentificationDocsTab(), i18n.tr("Required IDs"));
+        addTab(createFinancialDocsTab(), i18n.tr("Financial Docs"));
     }
 
-    private IsWidget createEdtorFormTab() {
+    private IsWidget createIdentificationDocsTab() {
         FormPanel formPanel = new FormPanel(this);
 
         formPanel.append(Location.Left, proto().numberOfRequiredIDs()).decorate().labelWidth(200).componentWidth(50);
-        formPanel.append(Location.Left, proto().mandatoryProofOfIncome()).decorate().labelWidth(200).componentWidth(110);
 
         formPanel.h3(proto().allowedIDs().getMeta().getCaption());
         formPanel.append(Location.Dual, proto().allowedIDs(), new IdentificationDocumentFolder());
+
+        return formPanel;
+    }
+
+    private IsWidget createFinancialDocsTab() {
+        FormPanel formPanel = new FormPanel(this);
+
+        formPanel.append(Location.Left, proto().mandatoryProofOfIncome()).decorate().labelWidth(200).componentWidth(110);
+
+//        formPanel.h3(proto().allowedFinancialDocs().getMeta().getCaption());
+//        formPanel.append(Location.Dual, proto().allowedIDs(), new IdentificationDocumentFolder());
 
         return formPanel;
     }
@@ -85,7 +97,7 @@ public class ApplicationDocumentationPolicyForm extends PolicyDTOTabPanelBasedFo
         @Override
         public List<FolderColumnDescriptor> columns() {
             return Arrays.asList(//@formatter:off
-                                new FolderColumnDescriptor(proto().type(), "15em", true),                    
+                                new FolderColumnDescriptor(proto().type(), "15em", true),
                                 new FolderColumnDescriptor(proto().name(), "30em"),
                                 new FolderColumnDescriptor(proto().importance(), "10em")
                                 );//@formatter:on

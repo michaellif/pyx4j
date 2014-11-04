@@ -7,8 +7,8 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Dec 16, 2011
- * @author ArtyomB
+ * Created on Nov 4, 2014
+ * @author vladlouk
  * @version $Id$
  */
 package com.propertyvista.domain.policy.policies.domain;
@@ -22,23 +22,19 @@ import com.pyx4j.entity.core.IPrimitive;
 import com.pyx4j.i18n.annotations.I18n;
 import com.pyx4j.i18n.shared.I18nEnum;
 
-public interface IdentificationDocumentType extends ApplicationDocumentType {
+public interface FinancialDocumentType extends ApplicationDocumentType {
 
     @I18n
-    @XmlType(name = "IdentificationDocumentType")
+    @XmlType(name = "FinancialDocumentType")
     public enum Type {
 
-        passport,
+        ProofOfEmployement,
 
-        canadianSIN,
+        BenefitOrSocialAssistance,
 
-        citizenship,
+        StudentLoanConfirmation,
 
-        immigration,
-
-        license,
-
-        other;
+        Other;
 
         @Override
         public String toString() {
@@ -47,7 +43,7 @@ public interface IdentificationDocumentType extends ApplicationDocumentType {
     }
 
     @NotNull
-    @Caption(name = "ID Type")
+    @Caption(name = "Document Type")
     @MemberColumn(name = "idType")
     IPrimitive<Type> type();
 }
