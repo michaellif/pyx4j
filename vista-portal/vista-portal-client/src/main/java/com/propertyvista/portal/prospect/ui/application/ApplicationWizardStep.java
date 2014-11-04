@@ -78,7 +78,7 @@ public abstract class ApplicationWizardStep extends WizardStep {
         return getWizard().proto();
     }
 
-    public CComponent<?, ?, ?> inject(IObject<?> member) {
+    public CComponent<?, ?, ?, ?> inject(IObject<?> member) {
         return getWizard().inject(member);
     }
 
@@ -86,7 +86,7 @@ public abstract class ApplicationWizardStep extends WizardStep {
         return getWizard().inject(member, decorator);
     }
 
-    public <T extends CComponent<?, ?, ?>> T inject(IObject<?> member, T comp) {
+    public <T extends CComponent<?, ?, ?, ?>> T inject(IObject<?> member, T comp) {
         return getWizard().inject(member, comp);
     }
 
@@ -134,15 +134,15 @@ public abstract class ApplicationWizardStep extends WizardStep {
         return inject(member, comp, new FieldDecoratorBuilder(labelWidth).build());
     }
 
-    public <T extends IEntity> CComponent<?, T, ?> get(T member) {
+    public <T extends IEntity> CComponent<?, T, ?, ?> get(T member) {
         return getWizard().get(member);
     }
 
-    public <T extends IEntity> CComponent<?, List<T>, ?> get(IList<T> member) {
+    public <T extends IEntity> CComponent<?, List<T>, ?, ?> get(IList<T> member) {
         return getWizard().get(member);
     }
 
-    public <T> CComponent<?, T, ?> get(IObject<T> member) {
+    public <T> CComponent<?, T, ?, ?> get(IObject<T> member) {
         return getWizard().get(member);
     }
 

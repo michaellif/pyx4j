@@ -127,7 +127,7 @@ public class ComplexBuildingFolder extends VistaTableFolder<Building> {
                 public void onValueChange(ValueChangeEvent<Boolean> event) {
                     if (event.getValue().booleanValue()) {
                         for (int i = 0; i < ComplexBuildingFolder.this.getItemCount(); ++i) {
-                            for (CComponent<?, ?, ?> comp : ComplexBuildingFolder.this.getItem(i).getComponents()) {
+                            for (CComponent<?, ?, ?, ?> comp : ComplexBuildingFolder.this.getItem(i).getComponents()) {
                                 if (comp instanceof ComplexBuildingEditor && !comp.equals(ComplexBuildingEditor.this)) {
                                     ((ComplexBuildingEditor) comp).get(proto().complexPrimary()).setValue(false);
                                 }

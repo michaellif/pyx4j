@@ -209,7 +209,7 @@ public class LeaseParticipantForm<P extends LeaseParticipantDTO<?>> extends CrmE
         formPanel.append(Location.Dual, proto().paymentMethods(), new PaymentMethodFolder(isEditable()) {
             @SuppressWarnings("unchecked")
             @Override
-            protected void onBillingAddressSameAsCurrentOne(boolean set, final CComponent<?, InternationalAddress, ?> comp) {
+            protected void onBillingAddressSameAsCurrentOne(boolean set, final CComponent<?, InternationalAddress, ?, ?> comp) {
                 if (set) {
                     ((LeaseParticipantEditorPresenter<P>) ((IEditor<P>) getParentView()).getPresenter())
                             .getCurrentAddress(new DefaultAsyncCallback<InternationalAddress>() {

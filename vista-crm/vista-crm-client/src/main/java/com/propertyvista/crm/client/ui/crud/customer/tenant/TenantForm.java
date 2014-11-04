@@ -180,7 +180,7 @@ public class TenantForm extends LeaseParticipantForm<TenantDTO> {
 
     @Override
     protected void onPaymentMethodRemove(LeasePaymentMethod lpm) {
-        PapFolder ppf = ((PapFolder) (CComponent<?, ?, ?>) get(proto().preauthorizedPayments()));
+        PapFolder ppf = ((PapFolder) (CComponent<?, ?, ?, ?>) get(proto().preauthorizedPayments()));
         IList<PreauthorizedPaymentDTO> items = ppf.getValue();
         Iterator<PreauthorizedPaymentDTO> it = items.iterator();
         while (it.hasNext()) {

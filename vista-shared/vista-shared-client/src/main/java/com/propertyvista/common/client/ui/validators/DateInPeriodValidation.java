@@ -28,8 +28,8 @@ public class DateInPeriodValidation {
      * outputs default error message
      */
 
-    public DateInPeriodValidation(final CComponent<?, LogicalDate, ?> value1, final CComponent<?, LogicalDate, ?> value2,
-            final CComponent<?, LogicalDate, ?> value3) {
+    public DateInPeriodValidation(final CComponent<?, LogicalDate, ?, ?> value1, final CComponent<?, LogicalDate, ?, ?> value2,
+            final CComponent<?, LogicalDate, ?, ?> value3) {
         this(value1, value2, value3, null);
     }
 
@@ -38,8 +38,8 @@ public class DateInPeriodValidation {
      * outputs provided String <code>message</code>
      */
 
-    public DateInPeriodValidation(final CComponent<?, LogicalDate, ?> value1, final CComponent<?, LogicalDate, ?> value2,
-            final CComponent<?, LogicalDate, ?> value3, String message) {
+    public DateInPeriodValidation(final CComponent<?, LogicalDate, ?, ?> value1, final CComponent<?, LogicalDate, ?, ?> value2,
+            final CComponent<?, LogicalDate, ?, ?> value3, String message) {
         if (message == null) {
             message = i18n.tr("The date entered is not within the range specified");
         }
@@ -64,7 +64,8 @@ public class DateInPeriodValidation {
                     return null;
                 }
                 LogicalDate start = value1.getValue();
-                return (getCComponent().getValue() != null) && !getCComponent().getValue().before(start) ? null : new BasicValidationError(getCComponent(), msg);
+                return (getCComponent().getValue() != null) && !getCComponent().getValue().before(start) ? null
+                        : new BasicValidationError(getCComponent(), msg);
             }
 
         });

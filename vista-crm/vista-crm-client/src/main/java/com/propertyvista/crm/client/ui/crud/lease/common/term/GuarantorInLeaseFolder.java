@@ -107,7 +107,7 @@ public class GuarantorInLeaseFolder extends LeaseTermParticipantFolder<LeaseTerm
     }
 
     void updateTenantList() {
-        for (CComponent<?, ?, ?> comp : getComponents()) {
+        for (CComponent<?, ?, ?, ?> comp : getComponents()) {
             ((GuarantorInLeaseEditor) ((CFolderItem<?>) comp).getComponents().iterator().next()).updateTenantList();
         }
     }

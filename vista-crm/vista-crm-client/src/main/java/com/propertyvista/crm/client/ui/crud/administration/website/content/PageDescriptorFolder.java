@@ -89,7 +89,7 @@ class PageDescriptorFolder extends VistaTableFolder<PageDescriptor> {
     }
 
     @Override
-    public void adopt(final CComponent<?, ?, ?> component) {
+    public void adopt(final CComponent<?, ?, ?, ?> component) {
         // first two items are not editable
         if (this.getItemCount() < 2) {
             @SuppressWarnings("unchecked")

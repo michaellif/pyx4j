@@ -382,7 +382,7 @@ public class PaymentMethodEditor<E extends AbstractPaymentMethod> extends CForm<
         get(proto().billingAddress()).setValue(address);
     }
 
-    protected void onBillingAddressSameAsCurrentOne(boolean set, CComponent<?, InternationalAddress, ?> comp) {
+    protected void onBillingAddressSameAsCurrentOne(boolean set, CComponent<?, InternationalAddress, ?, ?> comp) {
         // Implements meaningful in derived classes...
     }
 

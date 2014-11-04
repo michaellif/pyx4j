@@ -46,6 +46,7 @@ import com.pyx4j.forms.client.ui.CEmailField;
 import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.CPasswordBox;
 import com.pyx4j.forms.client.ui.NFocusField;
+import com.pyx4j.forms.client.ui.NTextBox;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.security.rpc.AuthenticationRequest;
 import com.pyx4j.security.rpc.SystemWallMessage;
@@ -276,7 +277,7 @@ public class LoginForm extends CForm<AuthenticationRequest> {
                 devCount = (devCount % val.user.getDefaultMax()) + 1;
                 get(proto().email()).setValue(val.user.getEmail(devCount));
                 get(proto().password()).setValue(val.user.getEmail(devCount));
-                ((NFocusField) get(proto().email()).asWidget()).setFocus(true);
+                ((NTextBox) get(proto().email()).getNativeComponent()).setFocus(true);
                 return true;
             }
         }

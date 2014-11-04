@@ -20,11 +20,11 @@ import com.propertyvista.crm.client.ui.board.events.BuildingSelectionChangedEven
 import com.propertyvista.crm.client.ui.gadgets.common.GadgetInstanceBase;
 import com.propertyvista.domain.dashboard.gadgets.type.base.GadgetMetadata;
 
-public abstract class BuildingGadgetBase<G extends GadgetMetadata> extends GadgetInstanceBase<G> {
+public abstract class BuildingGadgetBase<T extends GadgetMetadata> extends GadgetInstanceBase<T> {
 
     protected IBuildingFilterContainer buildingsFilterContainer;
 
-    public BuildingGadgetBase(GadgetMetadata metadata, Class<G> metadataClass, CContainer<?, G, ?> setupForm) {
+    public BuildingGadgetBase(GadgetMetadata metadata, Class<T> metadataClass, CContainer<?, T, ?> setupForm) {
         super(metadata, metadataClass, setupForm);
     }
 

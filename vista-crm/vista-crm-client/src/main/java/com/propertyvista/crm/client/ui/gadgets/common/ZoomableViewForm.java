@@ -53,7 +53,7 @@ public abstract class ZoomableViewForm<E extends IEntity> extends CForm<E> {
 
     @SuppressWarnings("rawtypes")
     @Override
-    public void bind(CComponent<?, ?, ?> component, final IObject<?> member) {
+    public void bind(CComponent<?, ?, ?, ?> component, final IObject<?> member) {
         super.bind(component, member);
         if (zoomInHandler != null) {
             if (isZoomable(member)) {

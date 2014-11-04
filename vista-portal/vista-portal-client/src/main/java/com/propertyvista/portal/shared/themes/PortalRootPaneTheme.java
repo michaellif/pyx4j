@@ -20,7 +20,7 @@ import com.pyx4j.commons.css.Style;
 import com.pyx4j.commons.css.Theme;
 import com.pyx4j.commons.css.ThemeColor;
 import com.pyx4j.commons.css.ThemeId;
-import com.pyx4j.widgets.client.style.theme.WidgetTheme;
+import com.pyx4j.widgets.client.style.theme.WidgetsTheme;
 
 import com.propertyvista.portal.shared.resources.PortalImages;
 
@@ -76,18 +76,18 @@ public class PortalRootPaneTheme extends Theme {
         style.addProperty("height", "60px");
         addStyle(style);
 
-        style = new Style(".", StyleName.MainToolbar, " .", WidgetTheme.StyleName.Toolbar);
+        style = new Style(".", StyleName.MainToolbar, " .", WidgetsTheme.StyleName.Toolbar);
         style.addProperty("margin", "9px 10px 0 8px");
         style.addProperty("display", "inline-block");
         style.addProperty("vertical-align", "top");
         addStyle(style);
 
-        style = new Style(".", StyleName.MainToolbar, " .", WidgetTheme.StyleName.ToolbarItem);
+        style = new Style(".", StyleName.MainToolbar, " .", WidgetsTheme.StyleName.ToolbarItem);
         style.addProperty("font-size", "1em");
         style.addProperty("vertical-align", "top");
         addStyle(style);
 
-        style = new Style(".", StyleName.MainToolbar, " .", WidgetTheme.StyleName.Button);
+        style = new Style(".", StyleName.MainToolbar, " .", WidgetsTheme.StyleName.Button);
         style.addProperty("background", ThemeColor.object2, 0.7);
         addStyle(style);
 
@@ -238,11 +238,11 @@ public class PortalRootPaneTheme extends Theme {
         style.addProperty("padding-bottom", "30px");
         addStyle(style);
 
-        style = new Style(".", StyleName.PageFooter, " .", WidgetTheme.StyleName.Anchor);
+        style = new Style(".", StyleName.PageFooter, " .", WidgetsTheme.StyleName.Anchor);
         style.addProperty("color", ThemeColor.foreground, 0.01);
         addStyle(style);
 
-        style = new Style(".", StyleName.PageFooter, " .", WidgetTheme.StyleName.Toolbar, " .", WidgetTheme.StyleName.Anchor);
+        style = new Style(".", StyleName.PageFooter, " .", WidgetsTheme.StyleName.Toolbar, " .", WidgetsTheme.StyleName.Anchor);
         style.addProperty("color", ThemeColor.foreground, 0.01);
         addStyle(style);
 
@@ -250,7 +250,7 @@ public class PortalRootPaneTheme extends Theme {
         style.addProperty("padding", "10px 0");
         addStyle(style);
 
-        style = new Style(".", StyleName.PageFooterFollowUs, " .", WidgetTheme.StyleName.Button);
+        style = new Style(".", StyleName.PageFooterFollowUs, " .", WidgetsTheme.StyleName.Button);
         style.addProperty("color", ThemeColor.foreground, 0.01);
         style.addProperty("background", "transparent");
         style.addProperty("border", "none");
@@ -353,7 +353,7 @@ public class PortalRootPaneTheme extends Theme {
         style.addProperty("position", "relative");
         addStyle(style);
 
-        style = new Style(".", StyleName.AllertButton, " .", WidgetTheme.StyleName.ButtonText);
+        style = new Style(".", StyleName.AllertButton, " .", WidgetsTheme.StyleName.ButtonText);
         style.addProperty("background", "none repeat scroll 0 0 #FF0000");
         style.addProperty("border-radius", "5px");
         style.addProperty("font-size", "11px");
@@ -367,7 +367,7 @@ public class PortalRootPaneTheme extends Theme {
         style.addProperty("display", "none");
         addStyle(style);
 
-        style = new Style(".", StyleName.AllertButton, "-", StyleDependent.alertOn, " .", WidgetTheme.StyleName.ButtonText);
+        style = new Style(".", StyleName.AllertButton, "-", StyleDependent.alertOn, " .", WidgetsTheme.StyleName.ButtonText);
         style.addProperty("display", "inline");
         addStyle(style);
 

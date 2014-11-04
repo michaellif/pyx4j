@@ -87,7 +87,7 @@ public abstract class AbstractSectionPanel extends CollapsablePanel {
         setExpended(false);
     }
 
-    protected void addComponent(IObject<?> member, CComponent<?, ?, ?> component) {
+    protected void addComponent(IObject<?> member, CComponent<?, ?, ?, ?> component) {
         contentPanel.append(Location.Left, member, component);
     }
 

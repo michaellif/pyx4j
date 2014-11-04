@@ -222,7 +222,7 @@ public class IdUploaderFolder extends PortalBoxFolder<IdentificationDocumentFold
             });
 
             @SuppressWarnings("unchecked")
-            CFolder<IdentificationDocumentFile> folder = ((CFolder<IdentificationDocumentFile>) ((CComponent<?, ?, ?>) get(proto().files())));
+            CFolder<IdentificationDocumentFile> folder = ((CFolder<IdentificationDocumentFile>) ((CComponent<?, ?, ?, ?>) get(proto().files())));
             folder.setNoDataLabel(i18n.tr("Please provide at least one document file"));
             folder.addComponentValidator(new AbstractComponentValidator<IList<IdentificationDocumentFile>>() {
                 @Override

@@ -95,7 +95,7 @@ public class TenantSurePaymentMethodForm extends PortalPaymentMethodEditor<Insur
     }
 
     @Override
-    protected void onBillingAddressSameAsCurrentOne(boolean set, CComponent<?, InternationalAddress, ?> comp) {
+    protected void onBillingAddressSameAsCurrentOne(boolean set, CComponent<?, InternationalAddress, ?, ?> comp) {
         if (set) {
             onSameAsCurrentAddressSelected.execute();
         }

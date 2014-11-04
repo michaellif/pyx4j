@@ -64,7 +64,7 @@ public abstract class InternationalAddressEditorBase<A extends InternationalAddr
     public void addValidations() {
         super.addValidations();
 
-        CComponent<?, ISOCountry, ?> country = get(proto().country());
+        CComponent<?, ISOCountry, ?, ?> country = get(proto().country());
         CTextField postalCode = (CTextField) get(proto().postalCode());
 
         postalCode.setFormatter(new PostalCodeFormatter(new CountryContextCComponentProvider(country)));

@@ -320,8 +320,8 @@ public class PersonalIncomeEditor extends CForm<CustomerScreeningIncome> {
                 formPanel.append(Location.Left, proto().monthlyAmount()).decorate().componentWidth(160);
                 formPanel.append(Location.Left, proto().ends()).decorate().componentWidth(160);
 
-                CComponent<?, ?, ?> name = get(proto().name());
-                CComponent<?, ?, ?> ends = get(proto().ends());
+                CComponent<?, ?, ?, ?> name = get(proto().name());
+                CComponent<?, ?, ?, ?> ends = get(proto().ends());
 
                 // some tune-up:
                 switch (incomeSource) {

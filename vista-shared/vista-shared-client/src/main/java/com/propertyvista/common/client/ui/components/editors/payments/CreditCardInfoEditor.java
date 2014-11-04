@@ -199,7 +199,7 @@ public class CreditCardInfoEditor extends CForm<CreditCardInfo> {
         return EnumSet.allOf(CreditCardType.class);
     }
 
-    private void validateCreditCardNumberAsync(final CComponent<?, ?, ?> component, CreditCardNumberIdentity value) {
+    private void validateCreditCardNumberAsync(final CComponent<?, ?, ?, ?> component, CreditCardNumberIdentity value) {
         if (!isCreditCardNumberCheckSent && value != null) {
             resetCreditCardNumberValidationResult();
 

@@ -93,9 +93,9 @@ public class BillableItemEditor extends CForm<BillableItem> {
 
     private final LeaseTermEditorView leaseTermEditorView;
 
-    private CComponent<?, LogicalDate, ?> itemEffectiveDateEditor;
+    private CComponent<?, LogicalDate, ?, ?> itemEffectiveDateEditor;
 
-    private CComponent<?, LogicalDate, ?> itemExpirationDateEditor;
+    private CComponent<?, LogicalDate, ?, ?> itemExpirationDateEditor;
 
     public BillableItemEditor(CForm<LeaseTermDTO> leaseTerm, LeaseTermEditorView leaseTermEditorView) {
         super(BillableItem.class);
@@ -241,7 +241,7 @@ public class BillableItemEditor extends CForm<BillableItem> {
                             item.inheritViewable(false);
 
                             // compensate the fact that item.setViewable DOESN'T call kids' setViewable!?
-                            for (CComponent<?, ?, ?> comp : item.getComponents()) {
+                            for (CComponent<?, ?, ?, ?> comp : item.getComponents()) {
                                 comp.setViewable(true);
                             }
                         }

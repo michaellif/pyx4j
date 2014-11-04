@@ -32,7 +32,7 @@ import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.Button.ButtonMenuBar;
 import com.pyx4j.widgets.client.Button.SecureMenuItem;
 import com.pyx4j.widgets.client.Toolbar;
-import com.pyx4j.widgets.client.style.theme.WidgetTheme;
+import com.pyx4j.widgets.client.style.theme.WidgetsTheme;
 
 import com.propertyvista.common.client.ClientLocaleUtils;
 import com.propertyvista.common.client.theme.SiteViewTheme;
@@ -207,7 +207,7 @@ public class HeaderViewImpl extends FlowPanel implements HeaderView {
             communicationButton.setPermission(DataModelPermission.permissionRead(MessageDTO.class));
 
             communicationButton.setStyleName(CommunicationCrmTheme.StyleName.AllertButton.name());
-            communicationButton.addStyleName(WidgetTheme.StyleName.Button.name());
+            communicationButton.addStyleName(WidgetsTheme.StyleName.Button.name());
 
             exitAdminButton = new Button(i18n.tr("Exit Administration"), new Command() {
                 @Override

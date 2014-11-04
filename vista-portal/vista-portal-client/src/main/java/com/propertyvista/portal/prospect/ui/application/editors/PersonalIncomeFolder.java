@@ -56,7 +56,7 @@ public class PersonalIncomeFolder extends PortalBoxFolder<CustomerScreeningIncom
     public void setDocumentsPolicy(ApplicationDocumentationPolicy policy) {
         this.documentationPolicy = policy;
 
-        for (CComponent<?, ?, ?> item : getComponents()) {
+        for (CComponent<?, ?, ?, ?> item : getComponents()) {
             ((PersonalIncomeEditor) ((CFolderItem<?>) item).getComponents().iterator().next()).setDocumentsPolicy(documentationPolicy);
         }
     }

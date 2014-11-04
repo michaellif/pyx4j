@@ -80,7 +80,7 @@ public class CustomerScreeningForm extends CrmEntityForm<LeaseParticipantScreeni
 
         if (isEditable()) {
             fileUpload.setPolicyEntity(getPolicyEntity());
-            ((PersonalIncomeFolder) (CComponent<?, ?, ?>) get(proto().screening().version().incomes())).setPolicyEntity(getPolicyEntity());
+            ((PersonalIncomeFolder) (CComponent<?, ?, ?, ?>) get(proto().screening().version().incomes())).setPolicyEntity(getPolicyEntity());
         }
 
         enablePreviousAddress();

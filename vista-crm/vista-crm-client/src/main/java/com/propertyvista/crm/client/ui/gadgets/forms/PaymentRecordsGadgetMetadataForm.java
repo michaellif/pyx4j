@@ -64,7 +64,7 @@ public class PaymentRecordsGadgetMetadataForm extends CForm<PaymentRecordsGadget
         });
         formPanel.append(Location.Left, new HTML("&nbsp"));
 
-        CComponent<?, Set<PaymentType>, ?> paymentTypeSelector = new CEnumSubsetSelector<PaymentType>(PaymentType.class, Layout.Horizontal);
+        CComponent<?, Set<PaymentType>, ?, ?> paymentTypeSelector = new CEnumSubsetSelector<PaymentType>(PaymentType.class, Layout.Horizontal);
         paymentTypeSelector.addComponentValidator(new AbstractComponentValidator<Set<PaymentType>>() {
             @Override
             public BasicValidationError isValid() {
@@ -78,7 +78,7 @@ public class PaymentRecordsGadgetMetadataForm extends CForm<PaymentRecordsGadget
         formPanel.append(Location.Left, proto().paymentMethodFilter(), paymentTypeSelector);
 
         // TODO we don't use PaymentStatus.Processing that's why we choose this constructor
-        CComponent<?, Set<PaymentStatus>, ?> paymentStatusSelector = new CEnumSubsetSelector<PaymentStatus>(EnumSet.complementOf(EnumSet
+        CComponent<?, Set<PaymentStatus>, ?, ?> paymentStatusSelector = new CEnumSubsetSelector<PaymentStatus>(EnumSet.complementOf(EnumSet
                 .of(PaymentStatus.Processing)), Layout.Horizontal);
         paymentStatusSelector.addComponentValidator(new AbstractComponentValidator<Set<PaymentRecord.PaymentStatus>>() {
             @Override

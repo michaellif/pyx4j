@@ -91,7 +91,7 @@ public class PaymentMethodWizard extends CPortalEntityWizard<PaymentMethodDTO> {
         };
 
         @Override
-        public void onBillingAddressSameAsCurrentOne(boolean set, final CComponent<?, InternationalAddress, ?> comp) {
+        public void onBillingAddressSameAsCurrentOne(boolean set, final CComponent<?, InternationalAddress, ?, ?> comp) {
             if (set) {
                 assert (getView().getPresenter() != null);
                 ((PaymentMethodWizardView.Presenter) getView().getPresenter()).getCurrentAddress(new DefaultAsyncCallback<InternationalAddress>() {

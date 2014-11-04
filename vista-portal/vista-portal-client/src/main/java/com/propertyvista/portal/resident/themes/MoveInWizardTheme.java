@@ -19,7 +19,7 @@ import com.pyx4j.commons.css.Style;
 import com.pyx4j.commons.css.Theme;
 import com.pyx4j.commons.css.ThemeColor;
 import com.pyx4j.commons.css.ThemeId;
-import com.pyx4j.widgets.client.style.theme.WidgetTheme;
+import com.pyx4j.widgets.client.style.theme.WidgetsTheme;
 
 public class MoveInWizardTheme extends Theme {
 
@@ -39,14 +39,14 @@ public class MoveInWizardTheme extends Theme {
     }
 
     public void initTheme() {
-        Style style = new Style(".", WidgetTheme.StyleName.Button, ".", MoveInWizardTheme.StyleName.DoItLaterButton.name());
+        Style style = new Style(".", WidgetsTheme.StyleName.Button, ".", MoveInWizardTheme.StyleName.DoItLaterButton.name());
         style.addProperty("color", ThemeColor.foreground, 0.7);
         style.addProperty("width", "auto");
         style.addProperty("font-size", "0.9em");
         style.addProperty("font-style", "italic");
         addStyle(style);
 
-        style = new Style(".", WidgetTheme.StyleName.Button, "-hover", ".", MoveInWizardTheme.StyleName.DoItLaterButton.name());
+        style = new Style(".", WidgetsTheme.StyleName.Button, "-hover", ".", MoveInWizardTheme.StyleName.DoItLaterButton.name());
         style.addProperty("color", ThemeColor.foreground, 0.9);
         style.addProperty("text-decoration", "underline");
         addStyle(style);

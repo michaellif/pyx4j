@@ -19,7 +19,7 @@ import com.pyx4j.commons.css.Style;
 import com.pyx4j.commons.css.Theme;
 import com.pyx4j.commons.css.ThemeColor;
 import com.pyx4j.commons.css.ThemeId;
-import com.pyx4j.widgets.client.style.theme.WidgetTheme;
+import com.pyx4j.widgets.client.style.theme.WidgetsTheme;
 
 public class SummaryStepTheme extends Theme {
 
@@ -37,7 +37,7 @@ public class SummaryStepTheme extends Theme {
         style.addProperty("text-align", "left");
         addStyle(style);
 
-        style = new Style(".", StyleName.SummaryStepSection, ">.", WidgetTheme.StyleName.CollapsablePanelImage);
+        style = new Style(".", StyleName.SummaryStepSection, ">.", WidgetsTheme.StyleName.CollapsablePanelImage);
         style.addProperty("height", "50px");
         addStyle(style);
 

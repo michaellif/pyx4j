@@ -96,7 +96,7 @@ public class PapReviewFolder extends BulkItemsFolder<PapReviewDTO> {
             });
             isSelectedAndCaptionHolderPanel.add(isSelected);
 
-            CComponent<?, ?, ?> caption = inject(proto().caption(), new PapReviewCaptionViewer());
+            CComponent<?, ?, ?, ?> caption = inject(proto().caption(), new PapReviewCaptionViewer());
             caption.asWidget().getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
             caption.asWidget().getElement().getStyle().setVerticalAlign(VerticalAlign.MIDDLE);
             isSelectedAndCaptionHolderPanel.add(caption);

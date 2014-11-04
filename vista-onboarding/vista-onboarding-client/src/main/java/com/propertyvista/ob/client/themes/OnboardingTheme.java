@@ -30,7 +30,7 @@ import com.pyx4j.site.client.backoffice.ui.PaneTheme;
 import com.pyx4j.widgets.client.datepicker.DatePickerTheme;
 import com.pyx4j.widgets.client.dialog.DialogTheme;
 import com.pyx4j.widgets.client.richtext.RichTextEditorTheme;
-import com.pyx4j.widgets.client.style.theme.WidgetTheme;
+import com.pyx4j.widgets.client.style.theme.WidgetsTheme;
 import com.pyx4j.widgets.client.tabpanel.TabTheme;
 
 import com.propertyvista.ob.client.forms.PmcAccountCreationRequestForm;
@@ -49,7 +49,7 @@ public class OnboardingTheme extends Theme {
 
     public OnboardingTheme() {
 
-        addTheme(new WidgetTheme());
+        addTheme(new WidgetsTheme());
         addTheme(new WidgetDecoratorTheme() {
             @Override
             protected ThemeColor getBackgroundColor() {

@@ -20,7 +20,7 @@ import com.pyx4j.commons.css.Style;
 import com.pyx4j.commons.css.Theme;
 import com.pyx4j.commons.css.ThemeColor;
 import com.pyx4j.commons.css.ThemeId;
-import com.pyx4j.widgets.client.style.theme.WidgetTheme;
+import com.pyx4j.widgets.client.style.theme.WidgetsTheme;
 
 public class CommunicationCrmTheme extends Theme {
     public static enum StyleName implements IStyleName {
@@ -95,7 +95,7 @@ public class CommunicationCrmTheme extends Theme {
         style.addProperty("position", "relative");
         addStyle(style);
 
-        style = new Style(".", StyleName.AllertButton, " .", WidgetTheme.StyleName.ButtonText);
+        style = new Style(".", StyleName.AllertButton, " .", WidgetsTheme.StyleName.ButtonText);
         style.addProperty("background", "none repeat scroll 0 0 #FF0000");
         style.addProperty("border-radius", "5px");
         style.addProperty("font-size", "9px");
@@ -109,7 +109,7 @@ public class CommunicationCrmTheme extends Theme {
         style.addProperty("display", "none");
         addStyle(style);
 
-        style = new Style(".", StyleName.AllertButton, "-", StyleDependent.alertOn, " .", WidgetTheme.StyleName.ButtonText);
+        style = new Style(".", StyleName.AllertButton, "-", StyleDependent.alertOn, " .", WidgetsTheme.StyleName.ButtonText);
         style.addProperty("display", "inline");
         addStyle(style);
 

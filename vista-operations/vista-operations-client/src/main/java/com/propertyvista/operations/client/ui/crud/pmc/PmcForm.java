@@ -220,8 +220,8 @@ public class PmcForm extends OperationsEntityForm<PmcDTO> {
         formPanel.h1(proto().dnsNameAliases().getMeta().getCaption());
         formPanel.append(Location.Dual, proto().dnsNameAliases(), new PmcDnsNameFolder(isEditable()));
 
-        final CComponent<?, Boolean, ?> yardiIntegrationSwitch = get(proto().features().yardiIntegration());
-        final CComponent<?, Boolean, ?> yardiMaintenanceSwitch = get(proto().features().yardiMaintenance());
+        final CComponent<?, Boolean, ?, ?> yardiIntegrationSwitch = get(proto().features().yardiIntegration());
+        final CComponent<?, Boolean, ?, ?> yardiMaintenanceSwitch = get(proto().features().yardiMaintenance());
         yardiIntegrationSwitch.addValueChangeHandler(new ValueChangeHandler<Boolean>() {
             @Override
             public void onValueChange(ValueChangeEvent<Boolean> event) {

@@ -41,8 +41,8 @@ public class PmcFeaturesForm extends CForm<PmcVistaFeatures> {
         formPanel.append(Location.Left, proto().yardiMaintenance()).decorate().componentWidth(90);
         formPanel.append(Location.Left, proto().tenantSureIntegration()).decorate().componentWidth(90);
 
-        final CComponent<?, Boolean, ?> yardiIntegrationSwitch = get(proto().yardiIntegration());
-        final CComponent<?, Boolean, ?> yardiMaintenanceSwitch = get(proto().yardiMaintenance());
+        final CComponent<?, Boolean, ?, ?> yardiIntegrationSwitch = get(proto().yardiIntegration());
+        final CComponent<?, Boolean, ?, ?> yardiMaintenanceSwitch = get(proto().yardiMaintenance());
         yardiIntegrationSwitch.addValueChangeHandler(new ValueChangeHandler<Boolean>() {
             @Override
             public void onValueChange(ValueChangeEvent<Boolean> event) {

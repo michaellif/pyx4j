@@ -119,7 +119,7 @@ public class PaymentWizard extends CPortalEntityWizard<PaymentDTO> {
         };
 
         @Override
-        public void onBillingAddressSameAsCurrentOne(boolean set, final CComponent<?, InternationalAddress, ?> comp) {
+        public void onBillingAddressSameAsCurrentOne(boolean set, final CComponent<?, InternationalAddress, ?, ?> comp) {
             if (set) {
                 assert (getView().getPresenter() != null);
                 ((PaymentWizardView.Presenter) getView().getPresenter()).getCurrentAddress(new DefaultAsyncCallback<InternationalAddress>() {
@@ -262,8 +262,8 @@ public class PaymentWizard extends CPortalEntityWizard<PaymentDTO> {
         cSignature.setSignatureCompletionValidator(new AbstractComponentValidator<ISignature>() {
             @Override
             public BasicValidationError isValid() {
-                return (getCComponent().getValue() == null || !getCComponent().getValue().agree().getValue(false) ? new BasicValidationError(getCComponent(), i18n
-                        .tr("Please agree to all applicable Terms and Conditions and our Privacy Policy in order to submit your payment.")) : null);
+                return (getCComponent().getValue() == null || !getCComponent().getValue().agree().getValue(false) ? new BasicValidationError(getCComponent(),
+                        i18n.tr("Please agree to all applicable Terms and Conditions and our Privacy Policy in order to submit your payment.")) : null);
             }
         });
         cSignature.setDecorator(new SignatureDecorator());

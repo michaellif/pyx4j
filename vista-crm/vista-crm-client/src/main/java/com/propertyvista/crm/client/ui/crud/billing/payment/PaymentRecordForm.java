@@ -112,7 +112,7 @@ public class PaymentRecordForm extends CrmEntityForm<PaymentRecordDTO> {
         };
 
         @Override
-        public void onBillingAddressSameAsCurrentOne(boolean set, final CComponent<?, InternationalAddress, ?> comp) {
+        public void onBillingAddressSameAsCurrentOne(boolean set, final CComponent<?, InternationalAddress, ?, ?> comp) {
             if (set) {
                 ((PaymentRecordEditorView.Presenter) ((PaymentRecordEditorView) getParentView()).getPresenter()).getCurrentAddress(
                         new DefaultAsyncCallback<InternationalAddress>() {
@@ -217,8 +217,8 @@ public class PaymentRecordForm extends CrmEntityForm<PaymentRecordDTO> {
                         PaymentRecordForm.this.getValue().participants()) {
                     @Override
                     public boolean onClickOk() {
-                        CComponent<?, ?, ?> comp = get(PaymentRecordForm.this.proto().leaseTermParticipant());
-                        ((CComponent<?, LeaseTermParticipant<? extends LeaseParticipant<?>>, ?>) comp).setValue(getSelectedItems().get(0));
+                        CComponent<?, ?, ?, ?> comp = get(PaymentRecordForm.this.proto().leaseTermParticipant());
+                        ((CComponent<?, LeaseTermParticipant<? extends LeaseParticipant<?>>, ?, ?>) comp).setValue(getSelectedItems().get(0));
                         changeLeaseParticipant();
                         return true;
                     }

@@ -41,7 +41,7 @@ import com.pyx4j.site.rpc.AppPlace;
 import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.Button.ButtonMenuBar;
 import com.pyx4j.widgets.client.Toolbar;
-import com.pyx4j.widgets.client.style.theme.WidgetTheme;
+import com.pyx4j.widgets.client.style.theme.WidgetsTheme;
 
 import com.propertyvista.common.client.ClientLocaleUtils;
 import com.propertyvista.common.client.WalkMe;
@@ -187,7 +187,7 @@ public class ToolbarViewImpl extends FlowPanel implements ToolbarView, RequiresS
             }
         });
         communicationButton.setStyleName(PortalRootPaneTheme.StyleName.AllertButton.name());
-        communicationButton.addStyleName(WidgetTheme.StyleName.Button.name());
+        communicationButton.addStyleName(WidgetsTheme.StyleName.Button.name());
 
         rightToolbar.addItem(loginButton);
         rightToolbar.addItem(helpButton);
