@@ -263,7 +263,7 @@ public class EmployeeForm extends CrmEntityForm<EmployeeDTO> {
                 }
             }
 
-            new SelectEnumDialog<NotificationType>(i18n.tr("Select Notification Type"), types) {
+            new SelectEnumDialog<NotificationType>(i18n.tr("Select Alert Type"), types) {
                 @Override
                 public boolean onClickOk() {
                     Notification item = EntityFactory.create(Notification.class);
