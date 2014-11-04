@@ -247,8 +247,8 @@ public class OpenId {
 
             // Why did you Slava want protocol here?? Protocol at line below can not be replaced with this because
             // claimed_id protocol uses to be 'http' (at least in google open id) and identifier protocol uses to be 'https'
-            if ((claimed_id != null) && (claimed_id.startsWith("http://" + userDomain + "/openid?id="))
-                    || (claimed_id.startsWith("http://" + userDomain + "/openidserver"))) {
+            if ((claimed_id != null)
+                    && (claimed_id.startsWith("http://" + userDomain + "/openid?id=") || claimed_id.startsWith("http://" + userDomain + "/openidserver"))) {
                 discovered = new DiscoveryInformation(discovered.getOPEndpoint(), new UrlIdentifier(claimed_id));
             }
 
