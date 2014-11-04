@@ -26,7 +26,7 @@ public class PortfolioSelector extends SelectorListBox<PortfolioForSelectionDTO>
             public String format(PortfolioForSelectionDTO value) {
                 return value.name().getValue();
             }
-        }, null);
+        }, new PortfolioSelectorOptionFormatter());
     }
 
 }

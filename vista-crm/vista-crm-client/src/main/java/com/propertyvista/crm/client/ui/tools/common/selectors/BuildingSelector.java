@@ -26,7 +26,7 @@ public class BuildingSelector extends SelectorListBox<BuildingForSelectionDTO> {
             public String format(BuildingForSelectionDTO value) {
                 return value.name().getValue();
             }
-        }, null);
+        }, new BuildingSelectorOptionFormatter());
     }
 
 }
