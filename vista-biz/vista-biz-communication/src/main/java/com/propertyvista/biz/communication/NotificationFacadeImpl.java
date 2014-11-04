@@ -13,6 +13,7 @@
  */
 package com.propertyvista.biz.communication;
 
+import java.util.EnumSet;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -35,6 +36,7 @@ import com.propertyvista.biz.system.OperationsAlertFacade;
 import com.propertyvista.biz.system.VistaContext;
 import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.payment.AutopayAgreement;
+import com.propertyvista.domain.payment.PaymentType;
 import com.propertyvista.domain.security.CustomerUser;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
@@ -83,7 +85,9 @@ public class NotificationFacadeImpl implements NotificationFacade {
 
     @Override
     public void rejectPayment(PaymentRecord paymentRecord, boolean applyNSF) {
-        aggregateOrSend(new RejectPaymentNotification(paymentRecord, applyNSF));
+        if (EnumSet.of(PaymentType.Echeck, PaymentType.Check).contains(paymentRecord.paymentMethod().type().getValue())) {
+            aggregateOrSend(new RejectPaymentNotification(paymentRecord, applyNSF));
+        }
         ServerSideFactory.create(CommunicationFacade.class).sendTenantPaymentRejected(paymentRecord, applyNSF);
     }
 
