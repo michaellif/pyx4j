@@ -181,7 +181,12 @@ public class LeaseApplicationViewerViewImpl extends LeaseViewerViewImplBase<Leas
         cancelOnlineApplication = new SecureMenuItem(i18n.tr("Cancel Online Application"), new Command() {
             @Override
             public void execute() {
-                ((LeaseApplicationViewerView.Presenter) getPresenter()).cancelOnlineApplication();
+                MessageDialog.confirm(i18n.tr("Please confirm"), i18n.tr("Do you really want to cancel Online Application?"), new Command() {
+                    @Override
+                    public void execute() {
+                        ((LeaseApplicationViewerView.Presenter) getPresenter()).cancelOnlineApplication();
+                    }
+                });
             }
         }, new ActionPermission(ApplicationOnlineApplication.class));
         if (VistaFeatures.instance().onlineApplication()) {

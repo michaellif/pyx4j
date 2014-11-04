@@ -39,6 +39,7 @@ import com.propertyvista.domain.customizations.CountryOfOperation;
 import com.propertyvista.domain.policy.policies.ProspectPortalPolicy.FeePayment;
 import com.propertyvista.domain.tenant.lease.LeaseApplication;
 import com.propertyvista.domain.tenant.prospect.LeaseApplicationDocument;
+import com.propertyvista.domain.tenant.prospect.MasterOnlineApplication;
 import com.propertyvista.dto.LeaseApplicationDTO;
 import com.propertyvista.dto.PaymentRecordDTO;
 import com.propertyvista.dto.TenantFinancialDTO;
@@ -48,6 +49,8 @@ import com.propertyvista.shared.config.VistaFeatures;
 public class LeaseApplicationForm extends LeaseFormBase<LeaseApplicationDTO> {
 
     private FormPanel onlineStatusPanel;
+
+    private FormPanel onlineIndividualAppPanel;
 
     private FormPanel onlineAppFeePanel;
 
@@ -91,8 +94,12 @@ public class LeaseApplicationForm extends LeaseFormBase<LeaseApplicationDTO> {
         get(proto().yardiApplicationId()).setVisible(VistaFeatures.instance().yardiIntegration());
 
         if (onlineStatusPanel != null) {
+            boolean isAppCancelled = MasterOnlineApplication.Status.Cancelled.equals(getValue().leaseApplication().onlineApplication().status().getValue());
+
             onlineStatusPanel.setVisible(!getValue().leaseApplication().onlineApplication().isNull());
-            onlineAppFeePanel.setVisible(!FeePayment.none.equals(getValue().leaseApplication().onlineApplication().feePayment().getValue()));
+            get(proto().masterApplicationStatus().progress()).setVisible(isAppCancelled);
+            onlineIndividualAppPanel.setVisible(!isAppCancelled);
+            onlineAppFeePanel.setVisible(!FeePayment.none.equals(getValue().leaseApplication().onlineApplication().feePayment().getValue()) && !isAppCancelled);
         }
 
         // show processing result:
@@ -197,8 +204,10 @@ public class LeaseApplicationForm extends LeaseFormBase<LeaseApplicationDTO> {
         formPanel.append(Location.Left, proto().leaseApplication().onlineApplication().status()).decorate();
         formPanel.append(Location.Left, proto().masterApplicationStatus().progress()).decorate();
 
-        formPanel.h4(i18n.tr("Status Details per customer"));
-        formPanel.append(Location.Dual, proto().masterApplicationStatus().individualApplications(), new ApplicationStatusFolder());
+        onlineIndividualAppPanel = new FormPanel(this);
+        onlineIndividualAppPanel.h4(i18n.tr("Status Details per customer"));
+        onlineIndividualAppPanel.append(Location.Dual, proto().masterApplicationStatus().individualApplications(), new ApplicationStatusFolder());
+        formPanel.append(Location.Dual, onlineIndividualAppPanel);
 
         onlineAppFeePanel = new FormPanel(this);
         onlineAppFeePanel.h4(i18n.tr("Application Fee to check"));
