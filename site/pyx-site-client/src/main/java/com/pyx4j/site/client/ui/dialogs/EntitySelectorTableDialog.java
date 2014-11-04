@@ -129,6 +129,14 @@ public abstract class EntitySelectorTableDialog<E extends IEntity> extends Abstr
         return lister.getSelectedItems();
     }
 
+    protected E getSelectedItem() {
+        if (getSelectedItems().size() == 1) {
+            return getSelectedItems().iterator().next();
+        } else {
+            return null;
+        }
+    }
+
     protected E proto() {
         return EntityFactory.getEntityPrototype(entityClass);
     }
