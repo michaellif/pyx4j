@@ -68,6 +68,7 @@ public class VistaNamespaceResolver implements NamespaceResolver {
 //        testSystemDnsBase.add("residentportal.info");
 //        testSystemDnsBase.add("prospectportal.info");
 
+        mapToNoNamespace.add("env");
         mapToNoNamespace.add("static");
         mapToNoNamespace.add("operations");
         mapToNoNamespace.add("h");

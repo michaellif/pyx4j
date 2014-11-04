@@ -13,15 +13,10 @@
  */
 package com.propertyvista.server.security.openId;
 
-import java.io.BufferedInputStream;
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
 import java.net.URL;
-import java.net.URLConnection;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -43,6 +38,8 @@ import org.openid4java.message.ax.AxMessage;
 import org.openid4java.message.ax.FetchRequest;
 import org.openid4java.message.ax.FetchResponse;
 import org.openid4java.message.pape.PapeRequest;
+import org.openid4java.message.sreg.SRegRequest;
+import org.openid4java.message.sreg.SRegResponse;
 import org.openid4java.server.RealmVerifierFactory;
 import org.openid4java.util.HttpClientFactory;
 import org.openid4java.util.HttpFetcherFactory;
@@ -90,17 +87,28 @@ public class OpenId {
                 manager.setNonceVerifier(new TimeShiftInMemoryNonceVerifier());
             }
 
-            String identifier = ((AbstractVistaServerSideConfiguration) ServerSideConfiguration.instance()).openIdDomainIdentifier(userDomain);
+            String identifier = getDomainIdentifier(userDomain);
 
-            // obtain a AuthRequest message to be sent to the OpenID provider
-            List<?> discoveries = manager.discover(identifier);
-
-//			Create our own discovery inforamtion point
-//            org.openid4java.discovery.DiscoveryInformation discovery = new DiscoveryInformation(new URL("https://crowd-test.devpv.com/openidserver/op"));
-//            List<DiscoveryInformation> discoveries = new ArrayList<DiscoveryInformation>();
-//            discoveries.add(discovery);
+//            List<DiscoveryInformation> discoveries;
+//            if (isCrowdIdentification(identifier)) {
+//                // Create our own discovery information point when working with production and problem with http - https
+//                // since server response with 301 ERROR, resouce moved to https
+//                org.openid4java.discovery.DiscoveryInformation discovery = new DiscoveryInformation(new URL("https://crowd-test.devpv.com/openidserver/op"));
+//                org.openid4java.discovery.DiscoveryInformation discovery = new DiscoveryInformation(new URL("http://localhost:8095/openidserver/op"));
+//                org.openid4java.discovery.DiscoveryInformation discovery = new DiscoveryInformation(new URL(identifier));
+//                discoveries = new ArrayList<DiscoveryInformation>();
+//                discoveries.add(discovery);
+//                printDiscoveryList(discoveries);
 //
-//            printDiscoveryList(discoveries);
+//                discoveries = manager.discover(identifier);
+//                printDiscoveryList(discoveries);
+//
+//            } else {
+//                // obtain a AuthRequest message to be sent to the OpenID provider
+//                discoveries = manager.discover(identifier);
+//            }
+
+            List<DiscoveryInformation> discoveries = manager.discover(identifier);
 
             // attempt to associate with the OpenID provider
             // and retrieve one service endpoint for authentication
@@ -120,15 +128,38 @@ public class OpenId {
             AuthRequest authReq = manager.authenticate(discovered, mainApplicationURL + returnServletPath);
 
             if (requestNameAttributes || requestEmailAttributes) {
-                FetchRequest fetch = FetchRequest.createFetchRequest();
-                if (requestEmailAttributes) {
-                    fetch.addAttribute("email", "http://schema.openid.net/contact/email", true);
+                if (isCrowdIdentification(identifier)) {
+                    SRegRequest sregReq = SRegRequest.createFetchRequest();
+
+                    if (requestEmailAttributes) {
+                        sregReq.addAttribute("email", true);
+                    }
+
+                    if (requestNameAttributes) {
+                        sregReq.addAttribute("firstname", true);
+                        sregReq.addAttribute("lastname", true);
+                    }
+
+                    if (!sregReq.getAttributes().isEmpty()) {
+                        log.info("Adding SREG attributes to the authentication request");
+                        authReq.addExtension(sregReq);
+                    }
+
+                } else {
+                    FetchRequest fetch = FetchRequest.createFetchRequest();
+
+                    if (requestEmailAttributes) {
+                        fetch.addAttribute("email", "http://schema.openid.net/contact/email", true);
+                        fetch.addAttribute("email", true);
+                    }
+
+                    if (requestNameAttributes) {
+                        fetch.addAttribute("firstname", "http://axschema.org/namePerson/first", true);
+                        fetch.addAttribute("lastname", "http://axschema.org/namePerson/last", true);
+                    }
+
+                    authReq.addExtension(fetch);
                 }
-                if (requestNameAttributes) {
-                    fetch.addAttribute("firstname", "http://axschema.org/namePerson/first", true);
-                    fetch.addAttribute("lastname", "http://axschema.org/namePerson/last", true);
-                }
-                authReq.addExtension(fetch);
             }
 
             PapeRequest pape = PapeRequest.createPapeRequest();
@@ -209,8 +240,13 @@ public class OpenId {
 
             String claimed_id = responsePrams.getParameterValue("openid.claimed_id");
             log.info("verify openid.claimed_id {}", claimed_id);
+
             // Hack for extended discovery
-            if (claimed_id.startsWith("http://" + userDomain + "/openid?id=")) {
+            String identifier = getDomainIdentifier(userDomain);
+            String protocol = getProtocol(identifier);
+
+            if ((claimed_id != null) && (claimed_id.startsWith(protocol + "://" + userDomain + "/openid?id="))
+                    || (claimed_id.startsWith(protocol + "://" + userDomain + "/openidserver"))) {
                 discovered = new DiscoveryInformation(discovered.getOPEndpoint(), new UrlIdentifier(claimed_id));
             }
 
@@ -223,17 +259,37 @@ public class OpenId {
             if (verified != null) {
                 AuthSuccess authSuccess = (AuthSuccess) verification.getAuthResponse();
                 if (requestNameAttributes || requestEmailAttributes) {
-                    if (authSuccess.hasExtension(AxMessage.OPENID_NS_AX)) {
-                        FetchResponse fetchResp = (FetchResponse) authSuccess.getExtension(AxMessage.OPENID_NS_AX);
-                        OpenIdResponse openIdResponse = new OpenIdResponse();
-                        openIdResponse.email = fetchResp.getAttributeValue("email");
-                        openIdResponse.name = CommonsStringUtils.nvl_concat(fetchResp.getAttributeValue("firstname"), fetchResp.getAttributeValue("lastname"),
-                                " ");
-                        // success
-                        return openIdResponse;
+                    if (isCrowdIdentification(identifier)) {
+                        if (authSuccess.hasExtension("http://openid.net/sreg/1.0")) {
+                            SRegResponse sregResponse = (SRegResponse) authSuccess.getExtension("http://openid.net/sreg/1.0");
+                            OpenIdResponse openIdResponse = new OpenIdResponse();
+                            Map<String, String> attributes = sregResponse.getAttributes();
+                            if (attributes.containsKey("email")) {
+                                openIdResponse.email = attributes.get("email");
+                            }
+
+                            if (attributes.containsKey("firstname") || attributes.containsKey("lastname")) {
+                                openIdResponse.name = CommonsStringUtils.nvl_concat(attributes.get("firstname"), attributes.get("lastname"), " ");
+                            }
+                            // success
+                            return openIdResponse;
+                        } else {
+                            return null;
+                        }
                     } else {
-                        return null;
+                        if (authSuccess.hasExtension(AxMessage.OPENID_NS_AX)) {
+                            FetchResponse fetchResp = (FetchResponse) authSuccess.getExtension(AxMessage.OPENID_NS_AX);
+                            OpenIdResponse openIdResponse = new OpenIdResponse();
+                            openIdResponse.email = fetchResp.getAttributeValue("email");
+                            openIdResponse.name = CommonsStringUtils.nvl_concat(fetchResp.getAttributeValue("firstname"),
+                                    fetchResp.getAttributeValue("lastname"), " ");
+                            // success
+                            return openIdResponse;
+                        } else {
+                            return null;
+                        }
                     }
+
                 } else {
                     return new OpenIdResponse();
                 }
@@ -247,53 +303,26 @@ public class OpenId {
         }
     }
 
-    private static void printDiscoveryList(List<DiscoveryInformation> discoveries) throws IOException {
-        if (discoveries.size() > 0) {
-            int index = 0;
-            int responseCode = 0;
-            for (DiscoveryInformation discover : discoveries) {
-                URL url = discover.getOPEndpoint();
-                URLConnection uc = url.openConnection();
-//                InputStream is = new BufferedInputStream(uc.getInputStream());
-                HttpURLConnection httpConn = (HttpURLConnection) uc;
-
-                InputStream is;
-                if ((responseCode = httpConn.getResponseCode()) >= 400) {
-                    is = new BufferedInputStream(httpConn.getErrorStream());
-                } else {
-                    is = new BufferedInputStream(httpConn.getInputStream());
-                }
-
-                BufferedReader br = null;
-                StringBuilder sb = new StringBuilder();
-                String line;
-                try {
-
-                    br = new BufferedReader(new InputStreamReader(is));
-                    while ((line = br.readLine()) != null) {
-                        sb.append(line);
-                    }
-
-                    index++;
-
-                } catch (IOException e) {
-                    e.printStackTrace();
-                } finally {
-                    if (br != null) {
-                        try {
-                            br.close();
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                }
-
-                if (responseCode >= 400) {
-                    log.info("ERROR " + responseCode + ", file content (" + index + ") ->> " + sb.toString());
-                } else {
-                    log.info("file content (" + index + ") ->> " + sb.toString());
-                }
-            }
+    private static boolean isCrowdIdentification(String identifier) {
+        if (identifier.contains("crowd") || identifier.contains("localhost")) { // localhost to try it locally
+            return true;
         }
+        return false;
     }
+
+    private static String getDomainIdentifier(String userDomain) {
+        return ((AbstractVistaServerSideConfiguration) ServerSideConfiguration.instance()).openIdDomainIdentifier(userDomain);
+    }
+
+    private static String getProtocol(String url) {
+        String defaultProtocol = "https";
+        try {
+            defaultProtocol = new URL(url).getProtocol();
+        } catch (MalformedURLException e) {
+            log.error("Error getting protocol for URL \"{}\". Returning default 'https'.", url, e);
+        }
+
+        return defaultProtocol;
+    }
+
 }

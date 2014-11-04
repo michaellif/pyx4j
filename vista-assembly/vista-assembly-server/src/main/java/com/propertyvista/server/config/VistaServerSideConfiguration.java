@@ -408,7 +408,11 @@ public class VistaServerSideConfiguration extends AbstractVistaServerSideConfigu
     public String openIdDomainIdentifier(String userDomain) {
         if (CommonsStringUtils.isStringSet(userDomain)) {
             if (userDomain.equals("devpv.com")) {
-                return "http://ldap-test.devpv.com/openidserver/op";
+                //return "http://ldap-test.devpv.com/openidserver/op";
+                return "https://crowd-test.devpv.com/openidserver/op";
+            } else if (userDomain.equals("localhost:8095")) {
+                //return "http://crowd.local.devpv.com:8095/openidserver/op";
+                return "http://localhost:8095/openidserver/op";
             } else if (userDomain.equals("dev.birchwoodsoftwaregroup.com")) {
                 return "http://static.dev.birchwoodsoftwaregroup.com:8888/vista/static/accounts/idp";
             } else if (userDomain.equals("static.propertyvista.com")) {
