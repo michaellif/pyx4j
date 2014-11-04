@@ -19,6 +19,8 @@ import javax.servlet.http.HttpServletRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.pyx4j.config.server.ServerSideConfiguration;
+
 import com.propertyvista.domain.security.common.VistaApplication;
 
 public class VistaURIDataResolver extends URIDataResolver<VistaApplication> {
@@ -40,7 +42,7 @@ public class VistaURIDataResolver extends URIDataResolver<VistaApplication> {
 
     public VistaURIData initilizeURLInfo() {
         VistaApplication app = getApplication();
-        String namespace = getNamespace(null);
+        String namespace = getNamespace(this.httpRequest);
 
         return new VistaURIData(app, namespace);
     }
@@ -50,8 +52,7 @@ public class VistaURIDataResolver extends URIDataResolver<VistaApplication> {
      */
     @Override
     public String getNamespace(HttpServletRequest httpRequest) {
-        // TODO implement
-        return "";
+        return ServerSideConfiguration.instance().getNamespaceResolver().getNamespace(httpRequest);
     }
 
     /**
@@ -247,8 +248,6 @@ public class VistaURIDataResolver extends URIDataResolver<VistaApplication> {
     }
 
     public String getCompleteURL(boolean returnWithContextPath) {
-        log.info("requestUri -> " + httpRequest.getRequestURI());
-        log.info("contextPath -> " + httpRequest.getContextPath());
         String requestUri = httpRequest.getRequestURI();
         if (!returnWithContextPath && requestUri != null) {
             String contextPath = httpRequest.getContextPath();

@@ -73,11 +73,10 @@ public class VistaApplicationDispatcherFilter implements Filter {
 
         HttpServletRequest httprequest = (HttpServletRequest) request;
 
-        log.info("Complete URL Request -> {}", vistaURLDataResolver.getCompleteURLWithContextPath());
-        log.info("Complete URL Request without context -> {}", vistaURLDataResolver.getCompleteURLNoContextPath());
+//        log.info("Complete URL Request -> {}", vistaURLDataResolver.getCompleteURLWithContextPath());
+//        log.info("Complete URL Request without context -> {}", vistaURLDataResolver.getCompleteURLNoContextPath());
 
-        // sample url -> http://vista-crm.dev.birchwoodsoftwaregroup.com:8888/vista/crm/tip.png?width=23
-
+        // For sample url -> http://vista-crm.dev.birchwoodsoftwaregroup.com:8888/vista/crm/tip.png?width=23
         String requestUri = httprequest.getRequestURI(); // sample: /vista/crm/tip.png
         String requestParams = httprequest.getQueryString(); // sample: width=23
         String requestPath = httprequest.getServletPath(); // sample: /crm/tip.png
@@ -88,18 +87,20 @@ public class VistaApplicationDispatcherFilter implements Filter {
 
         //TODO BASED ON PMC and APP, DO FORWARD OR REDIRECT
 
+        log.info(">>>>>>>>>>>>>>>>>>>> NAMESPACE: {} <<<<<<<<<<<<<<<<< ", vistaURLDataResolver.getVistaNamespace());
+
         if (app == null) {
             log.info("***ADF*** NOT forwarding");
             chain.doFilter(request, response);
         } else if (isDeploymentHttps && vistaURLDataResolver.isHttpsRedirectionNeeded()) {
             // TODO Redo and redirect only with information about PMC and APP
             String httpsUrl = vistaURLDataResolver.getHttpsUrl();
-            log.info("***ADF*** redirecting. Sending redirect from 'http' to '{}' to browser", httpsUrl);
+            log.info("***ADF*** redirecting. Change protocol from 'http' to 'https'. Sending redirect to \"{}\" to browser", httpsUrl);
             ((HttpServletResponse) response).sendRedirect(httpsUrl);
             return;
         } else if (app == VistaApplication.prospect && vistaURLDataResolver.isRootAppRequest()) {
             String urlToForward = vistaURLDataResolver.getCompleteURLToForward();
-            log.info("***ADF*** redirecting. Sending redirect from '/prospect' to  to '{}' to browser", urlToForward);
+            log.info("***ADF*** redirecting. Sending redirect from '/prospect' to \"{}\" to browser", urlToForward);
             ((HttpServletResponse) response).sendRedirect(urlToForward);
             return;
         } else {
