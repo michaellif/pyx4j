@@ -24,6 +24,7 @@ import com.google.gwt.event.logical.shared.HasValueChangeHandlers;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
+import com.google.gwt.safehtml.shared.SafeHtml;
 import com.google.gwt.user.client.Command;
 
 import com.pyx4j.commons.IFormatter;
@@ -38,18 +39,18 @@ public class SelectorTextBox<E> extends AbstractSelectorWidget<E> implements Has
 
     private final IFormatter<E, String> valueFormatter;
 
-    private final IFormatter<E, String[]> optionPathFormatter;
+    private final IFormatter<E, SafeHtml> optionFormatter;
 
     private final IPickerPanel<E> picker;
 
     @SuppressWarnings("unchecked")
-    public SelectorTextBox(final IOptionsGrabber<E> optionsGrabber, IFormatter<E, String> valueFormatter, IFormatter<E, String[]> optionPathFormatter) {
+    public SelectorTextBox(final IOptionsGrabber<E> optionsGrabber, IFormatter<E, String> valueFormatter, IFormatter<E, SafeHtml> optionFormatter) {
         super(new SelectorTextBoxValuePanel<E>(valueFormatter));
         this.valueFormatter = valueFormatter;
-        this.optionPathFormatter = optionPathFormatter;
+        this.optionFormatter = optionFormatter;
         textBox = (SelectorTextBoxValuePanel<E>) getViewerPanel();
 
-        picker = new TreePickerPanel<E>(optionsGrabber, valueFormatter, null);
+        picker = new TreePickerPanel<E>(optionsGrabber, optionFormatter);
 
         textBox.addValueChangeHandler(new ValueChangeHandler<String>() {
 

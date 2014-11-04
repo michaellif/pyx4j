@@ -22,6 +22,7 @@ package com.pyx4j.forms.client.ui;
 
 import java.text.ParseException;
 
+import com.google.gwt.safehtml.shared.SafeHtml;
 import com.google.gwt.user.client.ui.HTML;
 
 import com.pyx4j.commons.IFormatter;
@@ -49,10 +50,10 @@ public class NSelectorTextBox<E extends IEntity> extends NFocusField<E, Selector
             public String format(E value) {
                 return getCComponent().getFormatter().format(value);
             }
-        }, new IFormatter<E, String[]>() {
+        }, new IFormatter<E, SafeHtml>() {
 
             @Override
-            public String[] format(E value) {
+            public SafeHtml format(E value) {
                 return getCComponent().getOptionPathFormatter().format(value);
             }
         });

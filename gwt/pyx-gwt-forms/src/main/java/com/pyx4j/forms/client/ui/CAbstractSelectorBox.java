@@ -23,6 +23,8 @@ package com.pyx4j.forms.client.ui;
 import java.util.List;
 
 import com.google.gwt.event.shared.HandlerRegistration;
+import com.google.gwt.safehtml.shared.SafeHtml;
+import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
 
 import com.pyx4j.commons.IFormatter;
 import com.pyx4j.entity.core.IEntity;
@@ -41,16 +43,16 @@ public abstract class CAbstractSelectorBox<DATA, TYPE extends IEntity, WIDGET ex
 
     private final IOptionsGrabber<TYPE> optionsGrabber;
 
-    private IFormatter<TYPE, String[]> optionPathFormatter;
+    private IFormatter<TYPE, SafeHtml> optionPathFormatter;
 
     public CAbstractSelectorBox(IOptionsGrabber<TYPE> optionsGrabber) {
         this.optionsGrabber = optionsGrabber;
 
-        setOptionPathFormatter(new IFormatter<TYPE, String[]>() {
-
+        setOptionPathFormatter(new IFormatter<TYPE, SafeHtml>() {
             @Override
-            public String[] format(TYPE value) {
-                return null;
+            public SafeHtml format(TYPE value) {
+                SafeHtmlBuilder builder = new SafeHtmlBuilder();
+                return builder.appendHtmlConstant(value.getStringView()).toSafeHtml();
             }
         });
     }
@@ -79,11 +81,11 @@ public abstract class CAbstractSelectorBox<DATA, TYPE extends IEntity, WIDGET ex
         return optionsGrabber;
     }
 
-    public IFormatter<TYPE, String[]> getOptionPathFormatter() {
+    public IFormatter<TYPE, SafeHtml> getOptionPathFormatter() {
         return optionPathFormatter;
     }
 
-    public void setOptionPathFormatter(IFormatter<TYPE, String[]> formatter) {
+    public void setOptionPathFormatter(IFormatter<TYPE, SafeHtml> formatter) {
         this.optionPathFormatter = formatter;
     }
 

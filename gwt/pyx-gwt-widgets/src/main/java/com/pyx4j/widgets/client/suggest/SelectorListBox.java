@@ -31,6 +31,7 @@ import com.google.gwt.event.logical.shared.HasValueChangeHandlers;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
+import com.google.gwt.safehtml.shared.SafeHtml;
 import com.google.gwt.user.client.Command;
 
 import com.pyx4j.commons.IFormatter;
@@ -46,14 +47,14 @@ public class SelectorListBox<E> extends AbstractSelectorWidget<E> implements Has
 
     private final IFormatter<E, String> valueFormatter;
 
-    private final IFormatter<E, String[]> optionPathFormatter;
+    private final IFormatter<E, SafeHtml> optionFormatter;
 
     private final IPickerPanel<E> picker;
 
     private Command addItemCommand;
 
-    public SelectorListBox(final IOptionsGrabber<E> optionsGrabber, IFormatter<E, String> valueFormatter, IFormatter<E, String[]> optionPathFormatter) {
-        this(optionsGrabber, null, valueFormatter, optionPathFormatter);
+    public SelectorListBox(final IOptionsGrabber<E> optionsGrabber, IFormatter<E, String> valueFormatter, IFormatter<E, SafeHtml> optionFormatter) {
+        this(optionsGrabber, null, valueFormatter, optionFormatter);
         addItemCommand = new Command() {
             @Override
             public void execute() {
@@ -64,19 +65,19 @@ public class SelectorListBox<E> extends AbstractSelectorWidget<E> implements Has
 
     @SuppressWarnings("unchecked")
     public SelectorListBox(final IOptionsGrabber<E> optionsGrabber, Command addItemCommand, IFormatter<E, String> valueFormatter,
-            IFormatter<E, String[]> optionPathFormatter) {
+            IFormatter<E, SafeHtml> optionFormatter) {
         super(new SelectorListBoxValuePanel<E>(valueFormatter));
 
         this.valueFormatter = valueFormatter;
 
-        this.optionPathFormatter = optionPathFormatter;
+        this.optionFormatter = optionFormatter;
 
         listBox = (SelectorListBoxValuePanel<E>) getViewerPanel();
         listBox.setParent(this);
 
         value = new ArrayList<>();
 
-        picker = new TreePickerPanel<E>(optionsGrabber, valueFormatter, null);
+        picker = new TreePickerPanel<E>(optionsGrabber, optionFormatter);
 
         listBox.addValueChangeHandler(new ValueChangeHandler<String>() {
 

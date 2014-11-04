@@ -25,6 +25,7 @@ import java.util.Collection;
 
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
+import com.google.gwt.safehtml.shared.SafeHtml;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.HTML;
 
@@ -62,10 +63,10 @@ public class NSelectorListBox<E extends IEntity> extends NFocusField<Collection<
             public String format(E value) {
                 return getCComponent().getFormatter().format(value);
             }
-        }, new IFormatter<E, String[]>() {
+        }, new IFormatter<E, SafeHtml>() {
 
             @Override
-            public String[] format(E value) {
+            public SafeHtml format(E value) {
                 return getCComponent().getOptionPathFormatter().format(value);
             }
         });

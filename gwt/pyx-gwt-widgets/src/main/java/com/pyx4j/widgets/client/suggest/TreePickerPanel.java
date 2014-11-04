@@ -28,6 +28,7 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.logical.shared.SelectionEvent;
 import com.google.gwt.event.logical.shared.SelectionHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
+import com.google.gwt.safehtml.shared.SafeHtml;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.Tree;
@@ -44,9 +45,7 @@ public class TreePickerPanel<E> extends ScrollPanel implements IPickerPanel<E> {
 
     private final IOptionsGrabber<E> optionsGrabber;
 
-    private final IFormatter<E, String> optionsFormatter;
-
-    private final IFormatter<E, String[]> optionPathFormatter;
+    private final IFormatter<E, SafeHtml> optionFormatter;
 
     private final int limit = 20;
 
@@ -54,14 +53,13 @@ public class TreePickerPanel<E> extends ScrollPanel implements IPickerPanel<E> {
 
     private final PickerTree tree;
 
-    public TreePickerPanel(IOptionsGrabber<E> optionsGrabber, IFormatter<E, String> optionsFormatter, IFormatter<E, String[]> optionPathFormatter) {
+    public TreePickerPanel(IOptionsGrabber<E> optionsGrabber, IFormatter<E, SafeHtml> optionFormatter) {
         this.optionsGrabber = optionsGrabber;
-        this.optionsFormatter = optionsFormatter;
-        this.optionPathFormatter = optionPathFormatter;
+        this.optionFormatter = optionFormatter;
 
         setStyleName(WidgetTheme.StyleName.SelectionPickerPanel.name());
 
-        if (optionPathFormatter == null) {
+        if (optionFormatter == null) {
             tree = new PickerTree(images, true);
         } else {
             tree = new PickerTree();
@@ -175,7 +173,7 @@ public class TreePickerPanel<E> extends ScrollPanel implements IPickerPanel<E> {
             public PickerTreeItem(E value) {
                 super();
                 this.value = value;
-                label = new HTML(optionsFormatter.format(value));
+                label = new HTML(optionFormatter.format(value));
                 label.setStyleName(WidgetTheme.StyleName.SelectionPickerPanelItem.name());
                 setWidget(label);
             }
