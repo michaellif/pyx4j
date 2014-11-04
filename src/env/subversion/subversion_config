@@ -174,4 +174,5 @@ Makefile = svn:mime-type=text/plain;svn:eol-style=native;svn:keywords=Author Dat
 *.cfg = svn:mime-type=text/plain;svn:eol-style=native;svn:keywords=Author Date Id Revision
 *.tld = svn:mime-type=text/plain;svn:eol-style=native;svn:keywords=Author Date Id Revision
 *.sql = svn:mime-type=text/plain;svn:eol-style=native;svn:keywords=Author Date Id Revision
-
+*.pom = svn:mime-type=text/plain;svn:eol-style=LF
+*.md5 = svn:mime-type=text/plain;svn:eol-style=LF
