@@ -23,10 +23,9 @@ import com.google.gwt.user.client.Command;
 import com.pyx4j.entity.core.IObject;
 import com.pyx4j.entity.core.criterion.Criterion;
 import com.pyx4j.entity.core.criterion.PropertyCriterion;
-import com.pyx4j.forms.client.ui.CComponent;
-import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.CEntityLabel;
 import com.pyx4j.forms.client.ui.CField;
+import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.folder.CFolderRowEditor;
 import com.pyx4j.forms.client.ui.folder.FolderColumnDescriptor;
 import com.pyx4j.i18n.shared.I18n;
@@ -34,7 +33,7 @@ import com.pyx4j.site.client.AppPlaceEntityMapper;
 import com.pyx4j.site.client.AppSite;
 
 import com.propertyvista.common.client.ui.components.folders.VistaTableFolder;
-import com.propertyvista.crm.client.ui.components.boxes.BuildingSelectorDialog;
+import com.propertyvista.crm.client.ui.components.boxes.BuildingSelectionDialog;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.building.BuildingInfo;
@@ -66,7 +65,7 @@ public class LandlordBuildingFolder extends VistaTableFolder<Building> {
 
     @Override
     protected void addItem() {
-        new BuildingSelectorDialog(parentForm.getParentView(), new HashSet<>(getValue())) {
+        new BuildingSelectionDialog(new HashSet<>(getValue())) {
             @Override
             protected void setFilters(List<Criterion> filters) {
                 super.setFilters(filters);
@@ -74,10 +73,11 @@ public class LandlordBuildingFolder extends VistaTableFolder<Building> {
             }
 
             @Override
-            public void onClickOk() {
+            public boolean onClickOk() {
                 for (Building selected : getSelectedItems()) {
                     addItem(selected);
                 }
+                return true;
             }
         }.show();
     }

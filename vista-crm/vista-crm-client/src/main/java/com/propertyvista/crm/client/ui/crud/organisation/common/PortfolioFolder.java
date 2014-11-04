@@ -37,7 +37,7 @@ import com.pyx4j.site.client.backoffice.ui.IPane;
 
 import com.propertyvista.common.client.ui.components.folders.VistaTableFolder;
 import com.propertyvista.common.client.ui.decorations.VistaTableFolderDecorator;
-import com.propertyvista.crm.client.ui.components.boxes.PortfolioSelectorDialog;
+import com.propertyvista.crm.client.ui.components.boxes.PortfolioSelectionDialog;
 import com.propertyvista.crm.client.ui.crud.organisation.employee.EmployeeForm;
 import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.domain.company.Portfolio;
@@ -94,20 +94,21 @@ public class PortfolioFolder extends VistaTableFolder<Portfolio> {
 
     @Override
     protected void addItem() {
-        new PortfolioSelectorDialogExtraFilters(parentView, new HashSet<>(getValue())) {
+        new PortfolioSelectorDialogExtraFilters(new HashSet<>(getValue())) {
             @Override
-            public void onClickOk() {
+            public boolean onClickOk() {
                 for (Portfolio selected : getSelectedItems()) {
                     addItem(selected);
                 }
+                return true;
             }
         }.show();
     }
 
-    private abstract class PortfolioSelectorDialogExtraFilters extends PortfolioSelectorDialog {
+    private abstract class PortfolioSelectorDialogExtraFilters extends PortfolioSelectionDialog {
 
-        public PortfolioSelectorDialogExtraFilters(IPane parentView, Set<Portfolio> alreadySelected) {
-            super(parentView, true, alreadySelected);
+        public PortfolioSelectorDialogExtraFilters(Set<Portfolio> alreadySelected) {
+            super(true, alreadySelected);
         }
 
         @Override

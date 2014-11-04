@@ -65,7 +65,7 @@ import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
 import com.propertyvista.crm.client.activity.crud.communication.MessageViewerActivity;
 import com.propertyvista.crm.client.resources.CrmImages;
 import com.propertyvista.crm.client.themes.CommunicationCrmTheme;
-import com.propertyvista.crm.client.ui.components.boxes.TenantSelectorDialog;
+import com.propertyvista.crm.client.ui.components.boxes.TenantSelectionDialog;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.crm.client.ui.crud.communication.selector.CommunicationEndpointSelector;
 import com.propertyvista.crm.rpc.CrmSiteMap;
@@ -542,14 +542,13 @@ public class MessageForm extends CrmEntityForm<MessageDTO> {
             }
 
             @Override
-            protected TenantSelectorDialog getSelectorDialog() {
-                return new TenantSelectorDialog(parentForm.getParentView()) {
+            protected TenantSelectionDialog getSelectorDialog() {
+                return new TenantSelectionDialog() {
 
                     @Override
-                    public void onClickOk() {
-                        if (getSelectedItems().size() == 1) {
-                            setValue(getSelectedItems().toArray(new Tenant[] {})[0]);
-                        }
+                    public boolean onClickOk() {
+                        setValue(getSelectedItem());
+                        return true;
                     }
                 };
             }

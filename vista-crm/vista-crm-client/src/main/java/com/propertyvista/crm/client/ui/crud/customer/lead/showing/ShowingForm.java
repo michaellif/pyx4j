@@ -33,7 +33,7 @@ import com.pyx4j.site.client.backoffice.ui.prime.form.IForm;
 import com.pyx4j.site.client.ui.IShowable;
 import com.pyx4j.site.rpc.AppPlace;
 
-import com.propertyvista.crm.client.ui.components.boxes.UnitSelectorDialog;
+import com.propertyvista.crm.client.ui.components.boxes.UnitSelectionDialog;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.crm.rpc.dto.tenant.ShowingDTO;
 import com.propertyvista.domain.property.asset.Floorplan;
@@ -91,12 +91,13 @@ public class ShowingForm extends CrmEntityForm<ShowingDTO> {
 
             @Override
             protected IShowable getSelectorDialog() {
-                return new UnitSelectorDialog(getParentView()) {
+                return new UnitSelectionDialog() {
                     @Override
-                    public void onClickOk() {
+                    public boolean onClickOk() {
                         if (!getSelectedItem().isNull()) {
                             ((ShowingEditorView.Presenter) ((ShowingEditorView) getParentView()).getPresenter()).setSelectedUnit(getSelectedItem());
                         }
+                        return true;
                     }
 
                     @Override

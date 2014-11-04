@@ -55,14 +55,13 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.site.client.AppPlaceEntityMapper;
 import com.pyx4j.site.client.AppSite;
-import com.pyx4j.site.client.backoffice.activity.EntitySelectorTableVisorController;
-import com.pyx4j.site.client.backoffice.ui.IPane;
 import com.pyx4j.site.client.backoffice.ui.prime.CEntityCrudHyperlink;
 import com.pyx4j.site.client.backoffice.ui.prime.CEntitySelectorHyperlink;
 import com.pyx4j.site.client.backoffice.ui.prime.form.FieldDecoratorBuilder;
 import com.pyx4j.site.client.backoffice.ui.prime.form.IEditor;
 import com.pyx4j.site.client.backoffice.ui.prime.form.IForm;
 import com.pyx4j.site.client.ui.IShowable;
+import com.pyx4j.site.client.ui.dialogs.EntitySelectorTableDialog;
 import com.pyx4j.site.rpc.AppPlace;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 
@@ -73,8 +72,8 @@ import com.propertyvista.common.client.ui.validators.FutureDateIncludeTodayValid
 import com.propertyvista.common.client.ui.validators.FutureDateValidator;
 import com.propertyvista.common.client.ui.validators.PastDateValidator;
 import com.propertyvista.common.client.ui.validators.StartEndDateValidation;
-import com.propertyvista.crm.client.ui.components.boxes.BuildingSelectorDialog;
-import com.propertyvista.crm.client.ui.components.boxes.UnitSelectorDialog;
+import com.propertyvista.crm.client.ui.components.boxes.BuildingSelectionDialog;
+import com.propertyvista.crm.client.ui.components.boxes.UnitSelectionDialog;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.crm.rpc.services.selections.SelectBuildingUtilityListService;
@@ -146,7 +145,7 @@ public class LeaseTermForm extends CrmEntityForm<LeaseTermDTO> {
 
             @Override
             protected IShowable getSelectorDialog() {
-                return new BuildingSelectorDialog(LeaseTermForm.this.getParentView()) {
+                return new BuildingSelectionDialog(null) {
                     @Override
                     protected void setFilters(List<Criterion> filters) {
                         assert (filters != null);
@@ -188,10 +187,11 @@ public class LeaseTermForm extends CrmEntityForm<LeaseTermDTO> {
 
                     @SuppressWarnings("unchecked")
                     @Override
-                    public void onClickOk() {
+                    public boolean onClickOk() {
                         if (!getSelectedItem().isNull()) {
                             ((LeaseTermEditorView.Presenter) ((IEditor<LeaseTermDTO>) getParentView()).getPresenter()).setSelectedBuilding(getSelectedItem());
                         }
+                        return true;
                     }
                 };
             }
@@ -206,7 +206,7 @@ public class LeaseTermForm extends CrmEntityForm<LeaseTermDTO> {
 
             @Override
             protected IShowable getSelectorDialog() {
-                return new UnitSelectorDialog(LeaseTermForm.this.getParentView()) {
+                return new UnitSelectionDialog() {
                     @Override
                     protected void setFilters(List<Criterion> filters) {
                         assert (filters != null);
@@ -241,10 +241,11 @@ public class LeaseTermForm extends CrmEntityForm<LeaseTermDTO> {
 
                     @SuppressWarnings("unchecked")
                     @Override
-                    public void onClickOk() {
+                    public boolean onClickOk() {
                         if (!getSelectedItem().isNull()) {
                             ((LeaseTermEditorView.Presenter) ((IEditor<LeaseTermDTO>) getParentView()).getPresenter()).setSelectedUnit(getSelectedItem());
                         }
+                        return true;
                     }
                 };
             }
@@ -507,7 +508,7 @@ public class LeaseTermForm extends CrmEntityForm<LeaseTermDTO> {
             if (LeaseTermForm.this.getValue().unit().isNull()) {
                 MessageDialog.warn(i18n.tr("Warning"), i18n.tr("You Must Select A Unit First"));
             } else {
-                new BuildingUtilitySelectorDialog(LeaseTermForm.this.getParentView()).show();
+                new BuildingUtilitySelectorDialog().show();
             }
         }
 
@@ -519,20 +520,21 @@ public class LeaseTermForm extends CrmEntityForm<LeaseTermDTO> {
             }
         }
 
-        private class BuildingUtilitySelectorDialog extends EntitySelectorTableVisorController<BuildingUtility> {
+        private class BuildingUtilitySelectorDialog extends EntitySelectorTableDialog<BuildingUtility> {
 
-            public BuildingUtilitySelectorDialog(IPane parentView) {
-                super(parentView, BuildingUtility.class, true, new HashSet<>(getValue()), i18n.tr("Select Building Utility"));
+            public BuildingUtilitySelectorDialog() {
+                super(BuildingUtility.class, true, new HashSet<>(getValue()), i18n.tr("Select Building Utility"));
                 setParentFiltering(LeaseTermForm.this.getValue().unit().building().getPrimaryKey());
             }
 
             @Override
-            public void onClickOk() {
+            public boolean onClickOk() {
                 if (!getSelectedItems().isEmpty()) {
                     for (BuildingUtility selected : getSelectedItems()) {
                         addItem(selected);
                     }
                 }
+                return true;
             }
 
             @Override

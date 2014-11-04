@@ -33,7 +33,7 @@ import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.widgets.client.dialog.OkCancelDialog;
 
 import com.propertyvista.common.client.PrintUtils;
-import com.propertyvista.crm.client.ui.components.boxes.EmployeeSelectorDialog;
+import com.propertyvista.crm.client.ui.components.boxes.EmployeeSelectionDialog;
 import com.propertyvista.crm.client.ui.crud.CrmViewerViewImplBase;
 import com.propertyvista.crm.rpc.CrmUserVisit;
 import com.propertyvista.domain.communication.CommunicationEndpoint.ContactType;
@@ -79,12 +79,13 @@ public class MessageViewerViewImpl extends CrmViewerViewImplBase<MessageDTO> imp
         assignOwnershipAction = new MenuItem(i18n.tr("Assign Owner"), new Command() {
             @Override
             public void execute() {
-                new EmployeeSelectorDialog(form.getParentView(), false) {
+                new EmployeeSelectionDialog() {
                     @Override
-                    public void onClickOk() {
+                    public boolean onClickOk() {
                         for (Employee selected : getSelectedItems()) {
                             assignEmployee(getSelectedItem());
                         }
+                        return true;
                     }
 
                     @Override

@@ -15,7 +15,6 @@ package com.propertyvista.operations.client.ui.crud.scheduler.trigger;
 
 import java.util.Arrays;
 import java.util.HashSet;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
@@ -28,7 +27,7 @@ import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.forms.client.ui.folder.FolderColumnDescriptor;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.backoffice.activity.EntitySelectorTableVisorController;
+import com.pyx4j.site.client.ui.dialogs.EntitySelectorTableDialog;
 
 import com.propertyvista.common.client.ui.components.folders.VistaTableFolder;
 import com.propertyvista.domain.pmc.Pmc;
@@ -54,15 +53,16 @@ public class PopulationFolder extends VistaTableFolder<TriggerPmc> {
 
     @Override
     protected void addItem() {
-        new EntitySelectorTableVisorController<Pmc>(parentForm.getParentView(), Pmc.class, true, getAlreadySelected(), i18n.tr("Select Pmc")) {
+        new EntitySelectorTableDialog<Pmc>(Pmc.class, true, getAlreadySelected(), i18n.tr("Select Pmc")) {
 
             @Override
-            public void onClickOk() {
+            public boolean onClickOk() {
                 for (Pmc item : getSelectedItems()) {
                     TriggerPmc tPmc = EntityFactory.create(TriggerPmc.class);
                     tPmc.pmc().set(item);
                     addItem(tPmc);
                 }
+                return true;
             }
 
             @Override

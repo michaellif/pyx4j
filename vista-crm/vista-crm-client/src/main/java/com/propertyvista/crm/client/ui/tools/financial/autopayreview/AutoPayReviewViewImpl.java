@@ -26,7 +26,7 @@ public class AutoPayReviewViewImpl extends BulkOperationToolViewImpl<AutoPayChan
 
     public AutoPayReviewViewImpl() {
         super(i18n.tr("Auto Pays Review"), PapReviewsHolder.class, new PapReviewsHolderForm());
-        setSettingsForm(new AutoPayChangesReportSettingsForm(this));
+        setSettingsForm(new AutoPayChangesReportSettingsForm());
     }
 
 }

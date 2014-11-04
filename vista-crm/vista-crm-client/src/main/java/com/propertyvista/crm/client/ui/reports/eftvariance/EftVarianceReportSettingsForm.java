@@ -20,7 +20,6 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.forms.client.ui.panels.FormPanel;
-import com.pyx4j.site.client.backoffice.ui.IPane;
 
 import com.propertyvista.crm.client.ui.reports.SelectPortfolioFolder;
 import com.propertyvista.crm.client.ui.reports.SelectedBuildingsFolder;
@@ -28,11 +27,8 @@ import com.propertyvista.domain.reports.EftVarianceReportMetadata;
 
 public class EftVarianceReportSettingsForm extends CForm<EftVarianceReportMetadata> {
 
-    private final IPane parentView;
-
-    public EftVarianceReportSettingsForm(IPane parentView) {
+    public EftVarianceReportSettingsForm() {
         super(EftVarianceReportMetadata.class);
-        this.parentView = parentView;
     }
 
     @Override
@@ -41,10 +37,10 @@ public class EftVarianceReportSettingsForm extends CForm<EftVarianceReportMetada
         formPanel.append(Location.Left, proto().billingCycleStartDate()).decorate().componentWidth(120);
 
         formPanel.append(Location.Right, proto().filterByPortfolio()).decorate();
-        formPanel.append(Location.Right, proto().selectedPortfolios(), new SelectPortfolioFolder(parentView));
+        formPanel.append(Location.Right, proto().selectedPortfolios(), new SelectPortfolioFolder());
 
         formPanel.append(Location.Right, proto().filterByBuildings()).decorate();
-        formPanel.append(Location.Right, proto().selectedBuildings(), new SelectedBuildingsFolder(parentView));
+        formPanel.append(Location.Right, proto().selectedBuildings(), new SelectedBuildingsFolder());
 
         // tweaks:
         get(proto().filterByPortfolio()).addValueChangeHandler(new ValueChangeHandler<Boolean>() {

@@ -60,7 +60,7 @@ import com.pyx4j.widgets.client.dialog.OkCancelDialog;
 import com.propertyvista.common.client.ui.MiscUtils;
 import com.propertyvista.common.client.ui.validators.DateInPeriodValidation;
 import com.propertyvista.common.client.ui.validators.StartEndDateValidation;
-import com.propertyvista.crm.client.ui.components.boxes.LeaseTermSelectorDialog;
+import com.propertyvista.crm.client.ui.components.boxes.LeaseTermSelectionDialog;
 import com.propertyvista.crm.client.ui.components.boxes.ReasonBox;
 import com.propertyvista.crm.client.ui.crud.billing.adjustments.LeaseAdjustmentLister;
 import com.propertyvista.crm.client.ui.crud.billing.bill.BillLister;
@@ -423,17 +423,18 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
     }
 
     private void viewHistoricTermsExecuter() {
-        new LeaseTermSelectorDialog(this) {
+        new LeaseTermSelectionDialog() {
             {
                 setParentFiltering(getForm().getValue().getPrimaryKey());
                 addFilter(PropertyCriterion.eq(proto().status(), LeaseTerm.Status.Historic));
             }
 
             @Override
-            public void onClickOk() {
+            public boolean onClickOk() {
                 if (!getSelectedItem().isNull()) {
                     ((LeaseViewerViewBase.Presenter) getPresenter()).viewTerm(getSelectedItem());
                 }
+                return true;
             }
         }.show();
     }
@@ -534,17 +535,18 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
     }
 
     private void viewOfferedTermsExecuter() {
-        new LeaseTermSelectorDialog(LeaseViewerViewImpl.this) {
+        new LeaseTermSelectionDialog() {
             {
                 setParentFiltering(getForm().getValue().getPrimaryKey());
                 addFilter(PropertyCriterion.eq(proto().status(), LeaseTerm.Status.Offer));
             }
 
             @Override
-            public void onClickOk() {
+            public boolean onClickOk() {
                 if (!getSelectedItem().isNull()) {
                     ((LeaseViewerView.Presenter) getPresenter()).viewTerm(getSelectedItem());
                 }
+                return true;
             }
         }.show();
     }

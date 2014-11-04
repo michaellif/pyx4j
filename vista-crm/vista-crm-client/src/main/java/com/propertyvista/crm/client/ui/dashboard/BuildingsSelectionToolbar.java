@@ -38,7 +38,7 @@ import com.pyx4j.widgets.client.Button;
 
 import com.propertyvista.crm.client.ui.board.events.BuildingSelectionChangedEvent;
 import com.propertyvista.crm.client.ui.board.events.BuildingSelectionChangedEventHandler;
-import com.propertyvista.crm.client.ui.components.boxes.BuildingSelectorDialog;
+import com.propertyvista.crm.client.ui.components.boxes.BuildingSelectionDialog;
 import com.propertyvista.crm.client.ui.gadgets.common.IGadgetInstance;
 import com.propertyvista.crm.client.ui.gadgets.commonMk2.dashboard.AbstractDashboard;
 import com.propertyvista.crm.client.ui.gadgets.commonMk2.dashboard.IBuildingFilterContainer;
@@ -119,12 +119,12 @@ final class BuildingsSelectionToolbar extends Composite implements IBuildingFilt
     }
 
     private void selectBuildings() {
-        new BuildingSelectorDialog(parentView, buildings) {
+        new BuildingSelectionDialog(buildings) {
             @Override
-            public void onClickOk() {
+            public boolean onClickOk() {
                 updateSelection(getSelectedItems());
+                return true;
             }
-
         }.show();
     }
 

@@ -31,9 +31,8 @@ import com.pyx4j.forms.client.ui.folder.TableFolderDecorator;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.backoffice.activity.EntitySelectorTableVisorController;
-import com.pyx4j.site.client.backoffice.ui.IPane;
 import com.pyx4j.site.client.backoffice.ui.prime.form.IForm;
+import com.pyx4j.site.client.ui.dialogs.EntitySelectorTableDialog;
 
 import com.propertyvista.common.client.ui.components.folders.VistaTableFolder;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
@@ -123,13 +122,13 @@ public class CrmRoleForm extends CrmEntityForm<CrmRole> {
 
         @Override
         protected void addItem() {
-            new CrmPermissionSelectorDialog(CrmRoleForm.this.getParentView()).show();
+            new CrmPermissionSelectorDialog().show();
         }
 
-        public class CrmPermissionSelectorDialog extends EntitySelectorTableVisorController<VistaCrmBehaviorDTO> {
+        public class CrmPermissionSelectorDialog extends EntitySelectorTableDialog<VistaCrmBehaviorDTO> {
 
-            public CrmPermissionSelectorDialog(IPane parentView) {
-                super(parentView, VistaCrmBehaviorDTO.class, false, true, new HashSet<>(getValue()), i18n.tr("Select Permissions"));
+            public CrmPermissionSelectorDialog() {
+                super(VistaCrmBehaviorDTO.class, false, true, new HashSet<>(getValue()), i18n.tr("Select Permissions"));
             }
 
             @Override
@@ -145,10 +144,11 @@ public class CrmRoleForm extends CrmEntityForm<CrmRole> {
             }
 
             @Override
-            protected void onClickOk() {
+            public boolean onClickOk() {
                 for (VistaCrmBehaviorDTO item : getSelectedItems()) {
                     addItem(item);
                 }
+                return true;
             }
 
         }

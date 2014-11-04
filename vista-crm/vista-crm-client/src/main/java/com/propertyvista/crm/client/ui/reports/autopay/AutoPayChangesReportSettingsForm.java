@@ -23,7 +23,6 @@ import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.security.shared.SecurityController;
-import com.pyx4j.site.client.backoffice.ui.IPane;
 import com.pyx4j.site.client.backoffice.ui.prime.form.FieldDecoratorBuilder;
 
 import com.propertyvista.crm.client.ui.reports.SelectedBuildingsFolder;
@@ -32,11 +31,8 @@ import com.propertyvista.domain.security.common.VistaBasicBehavior;
 
 public class AutoPayChangesReportSettingsForm extends CForm<AutoPayChangesReportMetadata> {
 
-    private final IPane parentView;
-
-    public AutoPayChangesReportSettingsForm(IPane parentView) {
+    public AutoPayChangesReportSettingsForm() {
         super(AutoPayChangesReportMetadata.class);
-        this.parentView = parentView;
     }
 
     @Override
@@ -74,7 +70,7 @@ public class AutoPayChangesReportSettingsForm extends CForm<AutoPayChangesReport
             }
         });
 
-        buildingFilterPanel.add(inject(proto().buildings(), new SelectedBuildingsFolder(parentView)));
+        buildingFilterPanel.add(inject(proto().buildings(), new SelectedBuildingsFolder()));
         get(proto().buildings()).setVisible(false);
 
         formPanel.append(Location.Left, leftSidePanel);

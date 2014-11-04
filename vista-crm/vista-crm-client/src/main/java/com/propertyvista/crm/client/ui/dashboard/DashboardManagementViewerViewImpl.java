@@ -25,8 +25,7 @@ import com.pyx4j.entity.rpc.AbstractListCrudService;
 import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.backoffice.activity.EntitySelectorTableVisorController;
-import com.pyx4j.site.client.backoffice.ui.IPane;
+import com.pyx4j.site.client.ui.dialogs.EntitySelectorTableDialog;
 import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 
@@ -39,14 +38,14 @@ public class DashboardManagementViewerViewImpl extends CrmViewerViewImplBase<Das
 
     private static final I18n i18n = I18n.get(DashboardManagementViewerViewImpl.class);
 
-    public class NewDashboardOwnerSelectionDialog extends EntitySelectorTableVisorController<CrmUser> {
+    public class NewDashboardOwnerSelectionDialog extends EntitySelectorTableDialog<CrmUser> {
 
-        public NewDashboardOwnerSelectionDialog(IPane parentView) {
-            super(parentView, CrmUser.class, false, new HashSet<CrmUser>(), i18n.tr("Choose a new dashboard owner"));
+        public NewDashboardOwnerSelectionDialog() {
+            super(CrmUser.class, false, new HashSet<CrmUser>(), i18n.tr("Choose a new dashboard owner"));
         }
 
         @Override
-        public void onClickOk() {
+        public boolean onClickOk() {
             if (!getSelectedItems().isEmpty()) {
                 MessageDialog.confirm("", i18n.tr("Are you sure you want to pass your dashboard to {0}?", getSelectedItem().getStringView()), new Command() {
                     @Override
@@ -56,6 +55,7 @@ public class DashboardManagementViewerViewImpl extends CrmViewerViewImplBase<Das
                     }
                 });
             }
+            return true;
         }
 
         @Override
@@ -93,7 +93,7 @@ public class DashboardManagementViewerViewImpl extends CrmViewerViewImplBase<Das
         addHeaderToolbarItem(changeOwnershipButton = new Button(i18n.tr("Change Ownership"), new Command() {
             @Override
             public void execute() {
-                new NewDashboardOwnerSelectionDialog(DashboardManagementViewerViewImpl.this).show();
+                new NewDashboardOwnerSelectionDialog().show();
             }
         }));
     }

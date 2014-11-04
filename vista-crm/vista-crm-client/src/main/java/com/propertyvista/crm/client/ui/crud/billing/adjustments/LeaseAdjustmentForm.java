@@ -35,7 +35,7 @@ import com.pyx4j.site.client.ui.IShowable;
 import com.pyx4j.site.rpc.AppPlace;
 
 import com.propertyvista.common.client.ui.validators.FutureDateIncludeTodayValidator;
-import com.propertyvista.crm.client.ui.components.boxes.LeaseAdjustmentReasonSelectorDialog;
+import com.propertyvista.crm.client.ui.components.boxes.LeaseAdjustmentReasonSelectionDialog;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.domain.financial.ARCode;
 import com.propertyvista.domain.tenant.lease.LeaseAdjustment;
@@ -58,13 +58,14 @@ public class LeaseAdjustmentForm extends CrmEntityForm<LeaseAdjustment> {
 
             @Override
             protected IShowable getSelectorDialog() {
-                return new LeaseAdjustmentReasonSelectorDialog(getParentView()) {
+                return new LeaseAdjustmentReasonSelectionDialog() {
                     @Override
-                    public void onClickOk() {
+                    public boolean onClickOk() {
                         if (!getSelectedItem().isNull()) {
                             get(LeaseAdjustmentForm.this.proto().code()).setValue(getSelectedItem());
                             recalculateTaxesAndTotal();
                         }
+                        return true;
                     }
                 };
             }

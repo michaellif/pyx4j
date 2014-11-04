@@ -19,11 +19,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.client.ui.FlowPanel;
-import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.Label;
-import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.forms.client.ui.CRadioGroupEnum;
@@ -34,7 +31,7 @@ import com.pyx4j.widgets.client.RadioGroup;
 import com.pyx4j.widgets.client.dialog.OkCancelDialog;
 
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
-import com.propertyvista.crm.client.ui.components.boxes.CustomerSelectorDialog;
+import com.propertyvista.crm.client.ui.components.boxes.CustomerSelectionDialog;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
@@ -91,12 +88,13 @@ public abstract class LeaseTermParticipantFolder<E extends LeaseTermParticipant<
             public boolean onClickOk() {
                 switch (getSelection()) {
                 case Existing:
-                    new CustomerSelectorDialog(parentForm.getParentView(), retrieveExistingCustomers()) {
+                    new CustomerSelectionDialog(retrieveExistingCustomers()) {
                         @Override
-                        public void onClickOk() {
+                        public boolean onClickOk() {
                             if (!getSelectedItems().isEmpty()) {
                                 addParticipants(new ArrayList<>(getSelectedItems()));
                             }
+                            return true;
                         }
                     }.show();
                     break;

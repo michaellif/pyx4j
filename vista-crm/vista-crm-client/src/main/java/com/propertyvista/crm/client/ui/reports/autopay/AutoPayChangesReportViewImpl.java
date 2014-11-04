@@ -20,7 +20,7 @@ import com.propertyvista.domain.reports.AutoPayChangesReportMetadata;
 public class AutoPayChangesReportViewImpl extends AbstractReport<AutoPayChangesReportMetadata> implements AutoPayChangesReportView {
 
     public AutoPayChangesReportViewImpl() {
-        setReportWidget(new AutoPayChangesReportWidget(), null, new AutoPayChangesReportSettingsForm(this));
+        setReportWidget(new AutoPayChangesReportWidget(), null, new AutoPayChangesReportSettingsForm());
     }
 
 }

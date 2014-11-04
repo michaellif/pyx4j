@@ -32,7 +32,6 @@ import com.pyx4j.forms.client.ui.CComboBox;
 import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.security.shared.SecurityController;
-import com.pyx4j.site.client.backoffice.ui.IPane;
 import com.pyx4j.site.client.backoffice.ui.prime.form.FieldDecoratorBuilder;
 import com.pyx4j.site.shared.domain.reports.ReportOrderColumnMetadata;
 
@@ -48,11 +47,8 @@ public class EftReportSettingsForm extends CForm<EftReportMetadata> {
 
     private static final I18n i18n = I18n.get(EftReportSettingsForm.class);
 
-    private final IPane parentView;
-
-    public EftReportSettingsForm(IPane parentView) {
+    public EftReportSettingsForm() {
         super(EftReportMetadata.class);
-        this.parentView = parentView;
     }
 
     @Override
@@ -116,9 +112,9 @@ public class EftReportSettingsForm extends CForm<EftReportMetadata> {
         FlexTable column3 = new FlexTable();
         column3.getElement().getStyle().setMarginLeft(1, Unit.EM);
         column3.setWidget(row++, 0, inject(proto().filterByPortfolio(), new FieldDecoratorBuilder(INPUT_WIDTH, INPUT_WIDTH).build()));
-        column3.setWidget(row++, 0, inject(proto().selectedPortfolios(), new SelectPortfolioFolder(parentView)));
+        column3.setWidget(row++, 0, inject(proto().selectedPortfolios(), new SelectPortfolioFolder()));
         column3.setWidget(row++, 0, inject(proto().filterByBuildings(), new FieldDecoratorBuilder(INPUT_WIDTH, INPUT_WIDTH).build()));
-        column3.setWidget(row++, 0, inject(proto().selectedBuildings(), new SelectedBuildingsFolder(parentView)));
+        column3.setWidget(row++, 0, inject(proto().selectedBuildings(), new SelectedBuildingsFolder()));
 
         get(proto().filterByPortfolio()).addValueChangeHandler(new ValueChangeHandler<Boolean>() {
             @Override

@@ -20,6 +20,6 @@ import com.propertyvista.domain.reports.EftVarianceReportMetadata;
 public class EftVarianceReportViewImpl extends AbstractReport<EftVarianceReportMetadata> implements EftVarianceReportView {
 
     public EftVarianceReportViewImpl() {
-        setReportWidget(new EftVarianceReportWidget(), null, new EftVarianceReportSettingsForm(this));
+        setReportWidget(new EftVarianceReportWidget(), null, new EftVarianceReportSettingsForm());
     }
 }

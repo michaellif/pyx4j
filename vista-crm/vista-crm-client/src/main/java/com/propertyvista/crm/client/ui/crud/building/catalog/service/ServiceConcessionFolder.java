@@ -33,7 +33,7 @@ import com.pyx4j.forms.client.ui.folder.FolderColumnDescriptor;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.AppPlaceEntityMapper;
 import com.pyx4j.site.client.AppSite;
-import com.pyx4j.site.client.backoffice.activity.EntitySelectorTableVisorController;
+import com.pyx4j.site.client.ui.dialogs.EntitySelectorTableDialog;
 
 import com.propertyvista.common.client.ui.components.folders.VistaTableFolder;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
@@ -102,20 +102,21 @@ class ServiceConcessionFolder extends VistaTableFolder<Concession> {
         new ConcessionSelectorDialog().show();
     }
 
-    private class ConcessionSelectorDialog extends EntitySelectorTableVisorController<Concession> {
+    private class ConcessionSelectorDialog extends EntitySelectorTableDialog<Concession> {
 
         public ConcessionSelectorDialog() {
-            super(parent.getParentView(), Concession.class, true, new HashSet<>(getValue()), i18n.tr("Select Concession"));
+            super(Concession.class, true, new HashSet<>(getValue()), i18n.tr("Select Concession"));
             setParentFiltering(parent.getValue().catalog().getPrimaryKey());
         }
 
         @Override
-        public void onClickOk() {
+        public boolean onClickOk() {
             if (!getSelectedItems().isEmpty()) {
                 for (Concession selected : getSelectedItems()) {
                     addItem(selected);
                 }
             }
+            return true;
         }
 
         @Override

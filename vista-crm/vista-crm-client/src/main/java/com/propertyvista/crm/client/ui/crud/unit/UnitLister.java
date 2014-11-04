@@ -25,7 +25,7 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.backoffice.ui.IPane;
 import com.pyx4j.site.client.backoffice.ui.prime.lister.AbstractLister;
 
-import com.propertyvista.crm.client.ui.components.boxes.BuildingSelectorDialog;
+import com.propertyvista.crm.client.ui.components.boxes.BuildingSelectionDialog;
 import com.propertyvista.crm.rpc.services.unit.UnitCrudService;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.dto.AptUnitDTO;
@@ -85,13 +85,14 @@ public class UnitLister extends AbstractLister<AptUnitDTO> {
         final Key parentBuildingPk = getPresenter().getParent();
         final UnitCrudService.UnitInitializationdata id = EntityFactory.create(UnitCrudService.UnitInitializationdata.class);
         if (parentBuildingPk == null) {
-            new BuildingSelectorDialog(parentView) {
+            new BuildingSelectionDialog(null) {
                 @Override
-                public void onClickOk() {
+                public boolean onClickOk() {
                     if (!getSelectedItem().isNull()) {
                         id.parent().set(getSelectedItem());
                         getPresenter().editNew(getItemOpenPlaceClass(), id);
                     }
+                    return true;
                 }
             }.show();
         } else {

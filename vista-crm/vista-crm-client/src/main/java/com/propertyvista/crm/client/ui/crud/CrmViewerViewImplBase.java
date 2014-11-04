@@ -348,10 +348,11 @@ public class CrmViewerViewImplBase<E extends IEntity> extends AbstractViewer<E> 
         selectVersion = new MenuItem(i18n.tr("Select Version"), new Command() {
             @Override
             public void execute() {
-                new VersionSelectorDialog<V>(CrmViewerViewImplBase.this, entityVersionClass, getForm().getValue().getPrimaryKey()) {
+                new VersionSelectorDialog<V>(entityVersionClass, getForm().getValue().getPrimaryKey()) {
                     @Override
-                    public void onClickOk() {
+                    public boolean onClickOk() {
                         getPresenter().view(getSelectedVersionId());
+                        return true;
                     }
 
                     @Override
@@ -374,10 +375,11 @@ public class CrmViewerViewImplBase<E extends IEntity> extends AbstractViewer<E> 
         revisionsButton.setCommand(new Command() {
             @Override
             public void execute() {
-                new VersionSelectorDialog<V>(CrmViewerViewImplBase.this, entityVersionClass, getForm().getValue().getPrimaryKey()) {
+                new VersionSelectorDialog<V>(entityVersionClass, getForm().getValue().getPrimaryKey()) {
                     @Override
-                    public void onClickOk() {
+                    public boolean onClickOk() {
                         getPresenter().view(getSelectedVersionId());
+                        return true;
                     }
 
                     @Override

@@ -34,8 +34,7 @@ import com.pyx4j.forms.client.ui.folder.FolderColumnDescriptor;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.AppPlaceEntityMapper;
 import com.pyx4j.site.client.AppSite;
-import com.pyx4j.site.client.backoffice.activity.EntitySelectorTableVisorController;
-import com.pyx4j.site.client.backoffice.ui.IPane;
+import com.pyx4j.site.client.ui.dialogs.EntitySelectorTableDialog;
 
 import com.propertyvista.common.client.ui.components.folders.VistaTableFolder;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
@@ -103,13 +102,13 @@ class ServiceFeatureFolder extends VistaTableFolder<Feature> {
 
     @Override
     protected void addItem() {
-        new FeatureSelectorDialog(parent.getParentView()).show();
+        new FeatureSelectorDialog().show();
     }
 
-    private class FeatureSelectorDialog extends EntitySelectorTableVisorController<Feature> {
+    private class FeatureSelectorDialog extends EntitySelectorTableDialog<Feature> {
 
-        public FeatureSelectorDialog(IPane parentView) {
-            super(parentView, Feature.class, true, new HashSet<>(getValue()), i18n.tr("Select Feature"));
+        public FeatureSelectorDialog() {
+            super(Feature.class, true, new HashSet<>(getValue()), i18n.tr("Select Feature"));
             setParentFiltering(parent.getValue().catalog().getPrimaryKey());
             if (!VistaTODO.VISTA_2256_Default_Product_Catalog_Show) {
                 addFilter(PropertyCriterion.eq(proto().defaultCatalogItem(), Boolean.FALSE));
@@ -117,10 +116,11 @@ class ServiceFeatureFolder extends VistaTableFolder<Feature> {
         }
 
         @Override
-        public void onClickOk() {
+        public boolean onClickOk() {
             for (Feature selected : getSelectedItems()) {
                 addItem(selected);
             }
+            return true;
         }
 
         @Override

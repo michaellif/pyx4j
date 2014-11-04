@@ -24,20 +24,16 @@ import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.forms.client.ui.folder.CFolderRowEditor;
 import com.pyx4j.forms.client.ui.folder.FolderColumnDescriptor;
 import com.pyx4j.forms.client.ui.folder.IFolderDecorator;
-import com.pyx4j.site.client.backoffice.ui.IPane;
 
 import com.propertyvista.common.client.ui.components.folders.VistaTableFolder;
 import com.propertyvista.common.client.ui.decorations.VistaTableFolderDecorator;
-import com.propertyvista.crm.client.ui.components.boxes.PortfolioSelectorDialog;
+import com.propertyvista.crm.client.ui.components.boxes.PortfolioSelectionDialog;
 import com.propertyvista.domain.company.Portfolio;
 
 public class SelectPortfolioFolder extends VistaTableFolder<Portfolio> {
 
-    private final IPane parentView;
-
-    public SelectPortfolioFolder(IPane parentView) {
+    public SelectPortfolioFolder() {
         super(Portfolio.class, true);
-        this.parentView = parentView;
         setOrderable(false);
     }
 
@@ -70,12 +66,13 @@ public class SelectPortfolioFolder extends VistaTableFolder<Portfolio> {
 
     @Override
     protected void addItem() {
-        new PortfolioSelectorDialog(parentView, new HashSet<>(getValue())) {
+        new PortfolioSelectionDialog(new HashSet<>(getValue())) {
             @Override
-            public void onClickOk() {
+            public boolean onClickOk() {
                 for (Portfolio selected : getSelectedItems()) {
                     addItem(selected);
                 }
+                return true;
             }
         }.show();
     }

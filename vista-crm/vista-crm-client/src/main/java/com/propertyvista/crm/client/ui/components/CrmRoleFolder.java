@@ -32,7 +32,7 @@ import com.pyx4j.forms.client.ui.folder.CFolderRowEditor;
 import com.pyx4j.forms.client.ui.folder.FolderColumnDescriptor;
 import com.pyx4j.forms.client.ui.folder.IFolderDecorator;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.backoffice.activity.EntitySelectorTableVisorController;
+import com.pyx4j.site.client.ui.dialogs.EntitySelectorTableDialog;
 
 import com.propertyvista.common.client.ui.components.folders.VistaTableFolder;
 import com.propertyvista.common.client.ui.decorations.VistaTableFolderDecorator;
@@ -82,17 +82,18 @@ public class CrmRoleFolder extends VistaTableFolder<CrmRole> {
         new CrmRoleSelectorDialog().show();
     }
 
-    private class CrmRoleSelectorDialog extends EntitySelectorTableVisorController<CrmRole> {
+    private class CrmRoleSelectorDialog extends EntitySelectorTableDialog<CrmRole> {
 
         public CrmRoleSelectorDialog() {
-            super(parent.getParentView(), CrmRole.class, true, new HashSet<>(getValue()), i18n.tr("Select roles"));
+            super(CrmRole.class, true, new HashSet<>(getValue()), i18n.tr("Select roles"));
         }
 
         @Override
-        public void onClickOk() {
+        public boolean onClickOk() {
             for (CrmRole selected : getSelectedItems()) {
                 addItem(selected);
             }
+            return true;
         }
 
         @Override

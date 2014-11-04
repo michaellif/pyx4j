@@ -39,8 +39,8 @@ import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.ui.IShowable;
 
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
-import com.propertyvista.crm.client.ui.components.boxes.LockerAreaSelectorDialog;
-import com.propertyvista.crm.client.ui.components.boxes.ParkingSelectorDialog;
+import com.propertyvista.crm.client.ui.components.boxes.LockerAreaSelectionDialog;
+import com.propertyvista.crm.client.ui.components.boxes.ParkingSelectionDialog;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.domain.financial.offering.Feature;
 import com.propertyvista.domain.financial.offering.ProductItem;
@@ -93,7 +93,7 @@ class FeatureItemFolder extends VistaBoxFolder<ProductItem> {
                     alreadySelectedParking.add((Parking) item.element().cast());
                 }
             }
-            buildingElementSelectionBox = new ParkingSelectorDialog(parent.getParentView(), alreadySelectedParking) {
+            buildingElementSelectionBox = new ParkingSelectionDialog(true, alreadySelectedParking) {
                 @Override
                 protected void setFilters(List<Criterion> filters) {
                     super.setFilters(filters);
@@ -101,12 +101,13 @@ class FeatureItemFolder extends VistaBoxFolder<ProductItem> {
                 }
 
                 @Override
-                public void onClickOk() {
+                public boolean onClickOk() {
                     for (BuildingElement element : getSelectedItems()) {
                         ProductItem item = EntityFactory.create(ProductItem.class);
                         item.element().set(element);
                         addItem(item);
                     }
+                    return true;
                 }
             };
             break;
@@ -118,7 +119,7 @@ class FeatureItemFolder extends VistaBoxFolder<ProductItem> {
                     alreadySelectedLockerArea.add((LockerArea) item.element().cast());
                 }
             }
-            buildingElementSelectionBox = new LockerAreaSelectorDialog(parent.getParentView(), alreadySelectedLockerArea) {
+            buildingElementSelectionBox = new LockerAreaSelectionDialog(true, alreadySelectedLockerArea) {
                 @Override
                 protected void setFilters(List<Criterion> filters) {
                     super.setFilters(filters);
@@ -126,12 +127,13 @@ class FeatureItemFolder extends VistaBoxFolder<ProductItem> {
                 }
 
                 @Override
-                public void onClickOk() {
+                public boolean onClickOk() {
                     for (BuildingElement element : getSelectedItems()) {
                         ProductItem item = EntityFactory.create(ProductItem.class);
                         item.element().set(element);
                         addItem(item);
                     }
+                    return true;
                 }
             };
             break;

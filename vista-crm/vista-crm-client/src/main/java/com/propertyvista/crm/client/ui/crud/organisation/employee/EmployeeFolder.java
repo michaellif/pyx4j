@@ -14,6 +14,7 @@
 package com.propertyvista.crm.client.ui.crud.organisation.employee;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import com.google.gwt.user.client.Command;
@@ -27,12 +28,10 @@ import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.forms.client.ui.folder.CFolderRowEditor;
 import com.pyx4j.forms.client.ui.folder.FolderColumnDescriptor;
-import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.AppSite;
-import com.pyx4j.site.client.backoffice.ui.IPane;
 
 import com.propertyvista.common.client.ui.components.folders.VistaTableFolder;
-import com.propertyvista.crm.client.ui.components.boxes.EmployeeSelectorDialog;
+import com.propertyvista.crm.client.ui.components.boxes.EmployeeSelectionDialog;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.domain.company.Employee;
@@ -41,17 +40,12 @@ import com.propertyvista.domain.person.Name;
 
 public class EmployeeFolder extends VistaTableFolder<Employee> {
 
-    private static final I18n i18n = I18n.get(EmployeeFolder.class);
-
-    private final CrmEntityForm<?> parent;
-
     private final ParentEmployeeGetter parentEmployeeGetter;
 
     public final boolean askForActiveOnlyEmployees;
 
     public EmployeeFolder(CrmEntityForm<?> parent, ParentEmployeeGetter parentEmployeeGetter, boolean askForActiveOnlyEmployees) {
         super(Employee.class, parent.isEditable());
-        this.parent = parent;
         this.parentEmployeeGetter = parentEmployeeGetter;
         this.askForActiveOnlyEmployees = askForActiveOnlyEmployees;
     }
@@ -94,13 +88,13 @@ public class EmployeeFolder extends VistaTableFolder<Employee> {
 
     @Override
     protected void addItem() {
-        new EmployeeSelectorDialogExcludeCurrent(parent.getParentView()).show();
+        new EmployeeSelectorDialogExcludeCurrent().show();
     }
 
-    private class EmployeeSelectorDialogExcludeCurrent extends EmployeeSelectorDialog {
+    private class EmployeeSelectorDialogExcludeCurrent extends EmployeeSelectionDialog {
 
-        public EmployeeSelectorDialogExcludeCurrent(IPane parentView) {
-            super(parentView, true);
+        public EmployeeSelectorDialogExcludeCurrent() {
+            super(true, Collections.<Employee> emptySet());
 
             // add restriction for papa/mama employee, so that he/she won't be able manage himself :)
             // FIXME: somehow we need to forbid circular references. maybe only server side (if someone wants to be a smart ass)
@@ -112,10 +106,11 @@ public class EmployeeFolder extends VistaTableFolder<Employee> {
         }
 
         @Override
-        public void onClickOk() {
+        public boolean onClickOk() {
             for (Employee selected : getSelectedItems()) {
                 addItem(selected);
             }
+            return true;
         }
     }
 

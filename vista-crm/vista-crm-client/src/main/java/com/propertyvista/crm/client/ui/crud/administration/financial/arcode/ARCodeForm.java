@@ -22,7 +22,7 @@ import com.pyx4j.site.client.backoffice.ui.prime.form.IForm;
 import com.pyx4j.site.client.ui.IShowable;
 import com.pyx4j.site.rpc.AppPlace;
 
-import com.propertyvista.crm.client.ui.components.boxes.GlCodeSelectorDialog;
+import com.propertyvista.crm.client.ui.components.boxes.GlCodeSelectionDialog;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.domain.financial.ARCode;
 import com.propertyvista.domain.financial.GlCode;
@@ -48,12 +48,13 @@ public class ARCodeForm extends CrmEntityForm<ARCode> implements HasYardiIntegra
 
             @Override
             protected IShowable getSelectorDialog() {
-                return new GlCodeSelectorDialog(getParentView()) {
+                return new GlCodeSelectionDialog() {
                     @Override
-                    public void onClickOk() {
+                    public boolean onClickOk() {
                         if (!getSelectedItem().isNull()) {
                             get(ARCodeForm.this.proto().glCode()).setValue(getSelectedItem());
                         }
+                        return true;
                     }
                 };
             }

@@ -29,7 +29,7 @@ import com.pyx4j.site.client.backoffice.ui.prime.form.IForm;
 import com.pyx4j.site.rpc.AppPlace;
 
 import com.propertyvista.crm.client.activity.crud.communication.MessageEditorActivity;
-import com.propertyvista.crm.client.ui.components.boxes.TenantSelectorDialog;
+import com.propertyvista.crm.client.ui.components.boxes.TenantSelectionDialog;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.crm.client.ui.crud.communication.selector.CommunicationEndpointSelector;
 import com.propertyvista.domain.communication.MessageCategory;
@@ -164,14 +164,13 @@ public class MessageEditForm extends CrmEntityForm<MessageDTO> {
         }
 
         @Override
-        protected TenantSelectorDialog getSelectorDialog() {
-            return new TenantSelectorDialog(MessageEditForm.this.getParentView()) {
+        protected TenantSelectionDialog getSelectorDialog() {
+            return new TenantSelectionDialog() {
 
                 @Override
-                public void onClickOk() {
-                    if (getSelectedItems().size() == 1) {
-                        setValue(getSelectedItems().toArray(new Tenant[] {})[0]);
-                    }
+                public boolean onClickOk() {
+                    setValue(getSelectedItem());
+                    return true;
                 }
             };
         }

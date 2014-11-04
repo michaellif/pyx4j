@@ -32,7 +32,7 @@ import com.pyx4j.site.client.backoffice.ui.IPane;
 
 import com.propertyvista.common.client.ui.components.folders.VistaTableFolder;
 import com.propertyvista.common.client.ui.decorations.VistaTableFolderDecorator;
-import com.propertyvista.crm.client.ui.components.boxes.BuildingSelectorDialog;
+import com.propertyvista.crm.client.ui.components.boxes.BuildingSelectionDialog;
 import com.propertyvista.domain.property.asset.building.Building;
 
 public class BuildingFolder extends VistaTableFolder<Building> {
@@ -81,12 +81,13 @@ public class BuildingFolder extends VistaTableFolder<Building> {
 
     @Override
     protected void addItem() {
-        new BuildingSelectorDialog(parentView, new HashSet<>(getValue())) {
+        new BuildingSelectionDialog(new HashSet<>(getValue())) {
             @Override
-            public void onClickOk() {
+            public boolean onClickOk() {
                 for (Building selected : getSelectedItems()) {
                     addItem(selected);
                 }
+                return true;
             }
         }.show();
     }

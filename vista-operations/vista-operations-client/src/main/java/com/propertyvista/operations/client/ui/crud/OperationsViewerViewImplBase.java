@@ -103,10 +103,11 @@ public class OperationsViewerViewImplBase<E extends IEntity> extends AbstractVie
         selectVersion = new Button(i18n.tr("Select Version"), new Command() {
             @Override
             public void execute() {
-                new VersionSelectorDialog<V>(OperationsViewerViewImplBase.this, entityVersionClass, getForm().getValue().getPrimaryKey()) {
+                new VersionSelectorDialog<V>(entityVersionClass, getForm().getValue().getPrimaryKey()) {
                     @Override
-                    public void onClickOk() {
+                    public boolean onClickOk() {
                         getPresenter().view(getSelectedVersionId());
+                        return true;
                     }
 
                     @Override

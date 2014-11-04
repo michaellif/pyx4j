@@ -39,7 +39,7 @@ import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.ui.IShowable;
 
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
-import com.propertyvista.crm.client.ui.components.boxes.UnitSelectorDialog;
+import com.propertyvista.crm.client.ui.components.boxes.UnitSelectionDialog;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.domain.financial.ARCode;
 import com.propertyvista.domain.financial.offering.ProductItem;
@@ -92,7 +92,7 @@ class ServiceItemFolder extends VistaBoxFolder<ProductItem> {
                     alreadySelected.add((AptUnit) item.element().cast());
                 }
             }
-            buildingElementSelectionBox = new UnitSelectorDialog(parent.getParentView(), alreadySelected) {
+            buildingElementSelectionBox = new UnitSelectionDialog(alreadySelected) {
                 @Override
                 protected void setFilters(List<Criterion> filters) {
                     super.setFilters(filters);
@@ -100,12 +100,13 @@ class ServiceItemFolder extends VistaBoxFolder<ProductItem> {
                 }
 
                 @Override
-                public void onClickOk() {
+                public boolean onClickOk() {
                     for (BuildingElement element : getSelectedItems()) {
                         ProductItem item = EntityFactory.create(ProductItem.class);
                         item.element().set(element);
                         addItem(item);
                     }
+                    return true;
                 }
             };
         }

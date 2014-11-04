@@ -25,16 +25,16 @@ import com.pyx4j.entity.core.criterion.PropertyCriterion;
 import com.pyx4j.entity.rpc.AbstractListCrudService;
 import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
-import com.pyx4j.site.client.backoffice.activity.EntitySelectorTableVisorController;
 import com.pyx4j.site.client.backoffice.ui.IPane;
+import com.pyx4j.site.client.ui.dialogs.EntitySelectorTableDialog;
 
 import com.propertyvista.crm.rpc.services.selections.SelectProductCodeListService;
 import com.propertyvista.domain.financial.ARCode;
 
-public abstract class ProductCodeSelectorDialog extends EntitySelectorTableVisorController<ARCode> {
+public abstract class ProductCodeSelectorDialog extends EntitySelectorTableDialog<ARCode> {
 
     public ProductCodeSelectorDialog(IPane parentView, EnumSet<ARCode.Type> productTypes, String caption) {
-        super(parentView, ARCode.class, false, caption);
+        super(ARCode.class, false, caption);
         addFilter(PropertyCriterion.in(EntityFactory.getEntityPrototype(ARCode.class).type(), productTypes));
     }
 

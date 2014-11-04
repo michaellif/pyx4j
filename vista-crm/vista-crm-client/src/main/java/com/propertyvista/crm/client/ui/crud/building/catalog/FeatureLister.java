@@ -90,11 +90,12 @@ public class FeatureLister extends AbstractLister<Feature> {
     protected void onItemNew() {
         new ProductCodeSelectorDialog(parentView, ARCode.Type.features(), i18n.tr("Select Feature ARCode")) {
             @Override
-            public void onClickOk() {
+            public boolean onClickOk() {
                 FeatureInitializationData id = EntityFactory.create(FeatureInitializationData.class);
                 id.parent().set(EntityFactory.createIdentityStub(ProductCatalog.class, getPresenter().getParent()));
                 id.code().set(getSelectedItem());
                 getPresenter().editNew(getItemOpenPlaceClass(), id);
+                return true;
             }
         }.show();
     }

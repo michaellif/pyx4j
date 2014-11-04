@@ -33,12 +33,11 @@ import com.pyx4j.forms.client.validators.AbstractComponentValidator;
 import com.pyx4j.forms.client.validators.BasicValidationError;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.AppPlaceEntityMapper;
-import com.pyx4j.site.client.backoffice.activity.EntitySelectorTableVisorController;
-import com.pyx4j.site.client.backoffice.ui.IPane;
 import com.pyx4j.site.client.backoffice.ui.prime.CEntityCrudHyperlink;
 import com.pyx4j.site.client.backoffice.ui.prime.CEntitySelectorHyperlink;
 import com.pyx4j.site.client.backoffice.ui.prime.form.IForm;
 import com.pyx4j.site.client.ui.IShowable;
+import com.pyx4j.site.client.ui.dialogs.EntitySelectorTableDialog;
 import com.pyx4j.site.rpc.AppPlace;
 import com.pyx4j.widgets.client.tabpanel.Tab;
 
@@ -75,6 +74,8 @@ public class LeadForm extends CrmEntityForm<Lead> {
 
         get(proto().guests()).addComponentValidator(new AbstractComponentValidator<List<Guest>>() {
 
+
+
             @Override
             public BasicValidationError isValid() {
                 Boolean hasContact = false;
@@ -91,7 +92,8 @@ public class LeadForm extends CrmEntityForm<Lead> {
                         }
                     }
                 }
-                return hasContact ? null : new BasicValidationError(getCComponent(), i18n.tr("No contact information (email and/or phone #) has been provided"));
+                return hasContact ? null
+                        : new BasicValidationError(getCComponent(), i18n.tr("No contact information (email and/or phone #) has been provided"));
             }
         });
     }
@@ -131,7 +133,7 @@ public class LeadForm extends CrmEntityForm<Lead> {
 
             @Override
             protected IShowable getSelectorDialog() {
-                return new FloorplanSelectorDialogDialog(getParentView());
+                return new FloorplanSelectorDialogDialog();
             }
         }).decorate().componentWidth(200);
 
@@ -177,15 +179,16 @@ public class LeadForm extends CrmEntityForm<Lead> {
         return new HTML(); // just stub - not necessary for editing mode!..
     }
 
-    private class FloorplanSelectorDialogDialog extends EntitySelectorTableVisorController<Floorplan> {
+    private class FloorplanSelectorDialogDialog extends EntitySelectorTableDialog<Floorplan> {
 
-        public FloorplanSelectorDialogDialog(IPane parentView) {
-            super(parentView, Floorplan.class, false, Collections.<Floorplan> emptySet(), i18n.tr("Building/Floorplan Selection"));
+        public FloorplanSelectorDialogDialog() {
+            super(Floorplan.class, false, Collections.<Floorplan> emptySet(), i18n.tr("Building/Floorplan Selection"));
         }
 
         @Override
-        public void onClickOk() {
+        public boolean onClickOk() {
             ((LeadEditorView.Presenter) ((LeadEditorView) getParentView()).getPresenter()).setSelectedFloorplan(getSelectedItem());
+            return true;
         }
 
         @Override

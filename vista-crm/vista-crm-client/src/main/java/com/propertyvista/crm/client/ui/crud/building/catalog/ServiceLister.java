@@ -86,11 +86,12 @@ public class ServiceLister extends AbstractLister<Service> {
     protected void onItemNew() {
         new ProductCodeSelectorDialog(parentView, ARCode.Type.services(), i18n.tr("Select Service ARCode")) {
             @Override
-            public void onClickOk() {
+            public boolean onClickOk() {
                 ServiceInitializationdata id = EntityFactory.create(ServiceInitializationdata.class);
                 id.parent().set(EntityFactory.createIdentityStub(ProductCatalog.class, getPresenter().getParent()));
                 id.code().set(getSelectedItem());
                 getPresenter().editNew(getItemOpenPlaceClass(), id);
+                return true;
             }
         }.show();
     }

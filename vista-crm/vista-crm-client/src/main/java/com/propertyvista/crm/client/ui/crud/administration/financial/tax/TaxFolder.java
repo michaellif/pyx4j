@@ -36,8 +36,7 @@ import com.pyx4j.forms.client.ui.folder.IFolderItemDecorator;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.backoffice.activity.EntitySelectorTableVisorController;
-import com.pyx4j.site.client.backoffice.ui.IPane;
+import com.pyx4j.site.client.ui.dialogs.EntitySelectorTableDialog;
 
 import com.propertyvista.common.client.resources.VistaImages;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
@@ -72,7 +71,7 @@ public class TaxFolder extends CFolder<Tax> {
 
     @Override
     protected void addItem() {
-        new TaxSelectorDialog(parentForm.getParentView()).show();
+        new TaxSelectorDialog().show();
     }
 
     private class TaxInfoEditor extends CForm<Tax> {
@@ -99,17 +98,18 @@ public class TaxFolder extends CFolder<Tax> {
 
     }
 
-    private class TaxSelectorDialog extends EntitySelectorTableVisorController<Tax> {
+    private class TaxSelectorDialog extends EntitySelectorTableDialog<Tax> {
 
-        public TaxSelectorDialog(IPane parentView) {
-            super(parentView, Tax.class, true, new HashSet<>(getValue()), i18n.tr("Select Tax"));
+        public TaxSelectorDialog() {
+            super(Tax.class, true, new HashSet<>(getValue()), i18n.tr("Select Tax"));
         }
 
         @Override
-        public void onClickOk() {
+        public boolean onClickOk() {
             for (Tax selected : getSelectedItems()) {
                 addItem(selected);
             }
+            return true;
         }
 
         @Override

@@ -27,7 +27,7 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.backoffice.ui.prime.form.IForm;
 
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
-import com.propertyvista.crm.client.ui.components.boxes.LeaseAdjustmentReasonSelectorDialog;
+import com.propertyvista.crm.client.ui.components.boxes.LeaseAdjustmentReasonSelectionDialog;
 import com.propertyvista.crm.client.ui.crud.administration.financial.tax.TaxFolder;
 import com.propertyvista.crm.client.ui.crud.policies.common.PolicyDTOTabPanelBasedForm;
 import com.propertyvista.domain.financial.ARCode;
@@ -70,14 +70,15 @@ public class LeaseAdjustmentPolicyForm extends PolicyDTOTabPanelBasedForm<LeaseA
                 }
             }
 
-            new LeaseAdjustmentReasonSelectorDialog(LeaseAdjustmentPolicyForm.this.getParentView()) {
+            new LeaseAdjustmentReasonSelectionDialog() {
                 @Override
-                public void onClickOk() {
+                public boolean onClickOk() {
                     for (ARCode selected : getSelectedItems()) {
                         LeaseAdjustmentPolicyItem item = EntityFactory.create(LeaseAdjustmentPolicyItem.class);
                         item.code().set(selected);
                         addItem(item);
                     }
+                    return true;
                 }
             }.show();
         }
