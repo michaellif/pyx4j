@@ -13,6 +13,8 @@
  */
 package com.propertyvista.biz.financial.payment;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
 import java.util.EnumSet;
 import java.util.concurrent.Callable;
@@ -31,6 +33,7 @@ import com.propertyvista.biz.financial.payment.CreditCardFacade.ReferenceNumberP
 import com.propertyvista.biz.system.OperationsAlertFacade;
 import com.propertyvista.config.VistaDeployment;
 import com.propertyvista.domain.financial.PaymentRecord;
+import com.propertyvista.domain.financial.PaymentRecord.PaymentStatus;
 import com.propertyvista.domain.payment.PaymentType;
 import com.propertyvista.domain.pmc.Pmc;
 import com.propertyvista.operations.domain.eft.caledoneft.FundsTransferBatch;
@@ -240,6 +243,10 @@ class PaymentHealthMonitor {
         }
 
         {
+            // This should not have TransactionRecord
+            Collection<PaymentStatus> processedPaymentStatuses = new ArrayList<>(EnumSet.allOf(PaymentStatus.class));
+            processedPaymentStatuses.removeAll(PaymentStatus.cancelable());
+
             Date reportSince = DateUtils.addMonths(forDate, -2);
             EntityQueryCriteria<PaymentRecord> criteria = EntityQueryCriteria.create(PaymentRecord.class);
             criteria.ge(criteria.proto().createdDate(), reportSince);
@@ -250,9 +257,11 @@ class PaymentHealthMonitor {
                     PaymentRecord paymentRecord = iterator.next();
                     CardTransactionRecord cardTransactionRecord = getCardTransactionRecord(pmc, paymentRecord);
                     if (cardTransactionRecord == null) {
-                        ServerSideFactory.create(OperationsAlertFacade.class).record(paymentRecord, "{0} Card Payment Record do not have TransactionRecord",
-                                paymentRecord.id());
-                        executionMonitor.addFailedEvent("CardTransaction", paymentRecord.amount().getValue());
+                        if (!processedPaymentStatuses.contains(paymentRecord.paymentStatus().getValue())) {
+                            ServerSideFactory.create(OperationsAlertFacade.class).record(paymentRecord,
+                                    "{0} Card Payment Record do not have TransactionRecord", paymentRecord.id());
+                            executionMonitor.addFailedEvent("CardTransaction", paymentRecord.amount().getValue());
+                        }
                     } else {
                         boolean statusMismatch = false;
                         if (EnumSet.of(PaymentRecord.PaymentStatus.Cleared, PaymentRecord.PaymentStatus.Received).contains(
