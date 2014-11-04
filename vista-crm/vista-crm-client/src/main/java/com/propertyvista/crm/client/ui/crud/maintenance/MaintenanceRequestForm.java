@@ -58,7 +58,6 @@ import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.backoffice.ui.prime.CEntitySelectorHyperlink;
 import com.pyx4j.site.client.backoffice.ui.prime.form.IEditor;
 import com.pyx4j.site.client.backoffice.ui.prime.form.IForm;
-import com.pyx4j.site.client.ui.dialogs.EntitySelectorTableDialog;
 import com.pyx4j.site.rpc.AppPlace;
 import com.pyx4j.widgets.client.dialog.OkCancelDialog;
 import com.pyx4j.widgets.client.images.HelperImages;
@@ -69,9 +68,10 @@ import com.propertyvista.common.client.resources.VistaImages;
 import com.propertyvista.common.client.ui.components.MaintenanceRequestCategoryChoice;
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
 import com.propertyvista.common.client.ui.validators.FutureDateValidator;
+import com.propertyvista.crm.client.ui.components.boxes.TenantSelectionDialog;
+import com.propertyvista.crm.client.ui.components.boxes.UnitSelectionDialog;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.crm.rpc.services.maintenance.MaintenanceRequestPictureUploadService;
-import com.propertyvista.crm.rpc.services.selections.SelectTenantListService;
 import com.propertyvista.crm.rpc.services.selections.SelectUnitListService;
 import com.propertyvista.domain.TimeWindow;
 import com.propertyvista.domain.communication.Message;
@@ -509,8 +509,8 @@ public class MaintenanceRequestForm extends CrmEntityForm<MaintenanceRequestDTO>
         }
 
         @Override
-        protected EntitySelectorTableDialog<AptUnit> getSelectorDialog() {
-            return new EntitySelectorTableDialog<AptUnit>(AptUnit.class, false, i18n.tr("Select Unit")) {
+        protected UnitSelectionDialog getSelectorDialog() {
+            return new UnitSelectionDialog() {
 
                 @Override
                 public boolean onClickOk() {
@@ -562,8 +562,8 @@ public class MaintenanceRequestForm extends CrmEntityForm<MaintenanceRequestDTO>
         }
 
         @Override
-        protected EntitySelectorTableDialog<Tenant> getSelectorDialog() {
-            return new EntitySelectorTableDialog<Tenant>(Tenant.class, false, i18n.tr("Select Tenant")) {
+        protected TenantSelectionDialog getSelectorDialog() {
+            return new TenantSelectionDialog() {
 
                 @Override
                 public boolean onClickOk() {
@@ -605,11 +605,6 @@ public class MaintenanceRequestForm extends CrmEntityForm<MaintenanceRequestDTO>
 
                             new MemberColumnDescriptor.Builder(proto().lease().leaseId()).searchableOnly().build() //
                             );
-                }
-
-                @Override
-                protected AbstractListCrudService<Tenant> getSelectService() {
-                    return GWT.<SelectTenantListService> create(SelectTenantListService.class);
                 }
             };
         }

@@ -24,8 +24,8 @@ import com.pyx4j.entity.rpc.AbstractListCrudService;
 import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
-import com.pyx4j.site.client.ui.dialogs.EntitySelectorTableDialog;
 
+import com.propertyvista.crm.client.ui.components.boxes.BuildingSelectionDialog;
 import com.propertyvista.crm.client.ui.crud.CrmEditorViewImplBase;
 import com.propertyvista.crm.rpc.services.selections.SelectBuildingListService;
 import com.propertyvista.domain.TimeWindow;
@@ -44,7 +44,7 @@ public class MaintenanceRequestEditorViewImpl extends CrmEditorViewImplBase<Main
         super.populate(value);
         // ensure building
         if (value != null && value.building().isNull()) {
-            EntitySelectorTableDialog<Building> buildingDialog = new EntitySelectorTableDialog<Building>(Building.class, false, "Select Building") {
+            BuildingSelectionDialog buildingDialog = new BuildingSelectionDialog() {
                 @Override
                 public boolean onClickOk() {
                     if (getSelectedItems().size() == 1) {
@@ -65,13 +65,14 @@ public class MaintenanceRequestEditorViewImpl extends CrmEditorViewImplBase<Main
                 @Override
                 protected List<ColumnDescriptor> defineColumnDescriptors() {
                     return Arrays.asList( //                    
-                            new MemberColumnDescriptor.Builder(proto().propertyCode(), true).build(), //
-                            new MemberColumnDescriptor.Builder(proto().info().name(), true).build(), //
-                            new MemberColumnDescriptor.Builder(proto().info().address().streetNumber(), false).build(), //
-                            new MemberColumnDescriptor.Builder(proto().info().address().streetName(), false).build(), //
-                            new MemberColumnDescriptor.Builder(proto().info().address().city(), true).build(), //
-                            new MemberColumnDescriptor.Builder(proto().info().address().province(), true).build(), //
-                            new MemberColumnDescriptor.Builder(proto().info().address().country(), false).build() //
+                            new MemberColumnDescriptor.Builder(proto().propertyCode()).build(), //
+                            new MemberColumnDescriptor.Builder(proto().info().name()).build(), //
+                            new MemberColumnDescriptor.Builder(proto().info().address()).width("50%").build(), //
+                            new MemberColumnDescriptor.Builder(proto().info().address().streetNumber()).searchableOnly().build(), //
+                            new MemberColumnDescriptor.Builder(proto().info().address().streetName()).searchableOnly().build(), //
+                            new MemberColumnDescriptor.Builder(proto().info().address().city()).searchableOnly().build(), //
+                            new MemberColumnDescriptor.Builder(proto().info().address().province()).searchableOnly().build(), //
+                            new MemberColumnDescriptor.Builder(proto().info().address().country()).searchableOnly().build() //
                             );
                 }
 
