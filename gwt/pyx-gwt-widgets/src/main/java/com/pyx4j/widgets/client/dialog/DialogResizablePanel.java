@@ -22,6 +22,7 @@ package com.pyx4j.widgets.client.dialog;
 
 import com.google.gwt.dom.client.Document;
 import com.google.gwt.dom.client.NativeEvent;
+import com.google.gwt.dom.client.Style.Cursor;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.MouseDownEvent;
 import com.google.gwt.event.dom.client.MouseDownHandler;
@@ -124,7 +125,8 @@ public class DialogResizablePanel extends PopupPanel implements ProvidesResize, 
         updateClientWindowPosition();
 
         container = new DockPanel();
-        DOM.setStyleAttribute(container.getElement(), "cursor", "default");
+        container.getElement().getStyle().setCursor(Cursor.DEFAULT);
+
         captionPanel = new CaptionPanel();
         container.add(captionPanel, DockPanel.NORTH);
 
@@ -295,9 +297,9 @@ public class DialogResizablePanel extends PopupPanel implements ProvidesResize, 
 
     private void setCursor(DragZoneType dragZoneType) {
         if (DragZoneType.MOVE.equals(dragZoneType)) {
-            DOM.setStyleAttribute(captionPanel.getElement(), "cursor", dragZoneType.getCursor());
+            captionPanel.getElement().getStyle().setProperty("cursor", dragZoneType.getCursor());
         } else {
-            DOM.setStyleAttribute(this.getElement(), "cursor", dragZoneType.getCursor());
+            getElement().getStyle().setProperty("cursor", dragZoneType.getCursor());
         }
     }
 

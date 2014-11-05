@@ -22,7 +22,6 @@ package com.pyx4j.site.client.place;
 
 import java.util.HashMap;
 
-import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.rpc.AppPlace;
 import com.pyx4j.site.rpc.AppPlaceInfo;
 import com.pyx4j.site.shared.meta.SiteMap;
@@ -34,8 +33,6 @@ public abstract class AppPlaceListingImplBase implements AppPlaceListing {
     protected final HashMap<Class<? extends AppPlace>, AppPlaceFactory<?>> placesFactories = new HashMap<>();
 
     protected final HashMap<Class<? extends AppPlace>, AppPlaceInfo> placesInfo = new HashMap<>();
-
-    protected static final I18n i18n = I18n.get(AppPlace.class);
 
     AppPlaceListingImplBase() {
     }

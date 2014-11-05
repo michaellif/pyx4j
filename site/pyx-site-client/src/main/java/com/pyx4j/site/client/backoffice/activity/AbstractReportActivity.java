@@ -48,7 +48,7 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.rpc.shared.VoidSerializable;
 import com.pyx4j.site.client.ReportDialog;
-import com.pyx4j.site.client.backoffice.ui.IPane;
+import com.pyx4j.site.client.backoffice.ui.prime.IPrimePane;
 import com.pyx4j.site.client.backoffice.ui.prime.report.IReport;
 import com.pyx4j.site.client.backoffice.ui.prime.report.ReportSettingsManagementVizor;
 import com.pyx4j.site.rpc.AppPlace;
@@ -64,7 +64,7 @@ public abstract class AbstractReportActivity<R extends ReportTemplate> extends A
 
         private final ReportSettingsManagementVizor visor;
 
-        public ReportSettingsManagementVizorController(IPane parentView, final IReport.Presenter<R> presenter) {
+        public ReportSettingsManagementVizorController(IPrimePane parentView, final IReport.Presenter<R> presenter) {
             super(parentView);
             visor = new ReportSettingsManagementVizor(this) {
 
