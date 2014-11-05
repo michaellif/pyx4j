@@ -29,7 +29,7 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.security.shared.BasicPermission;
 import com.pyx4j.security.shared.Permission;
-import com.pyx4j.site.client.backoffice.ui.prime.lister.ILister;
+import com.pyx4j.site.client.backoffice.ui.prime.lister.IPrimeLister;
 import com.pyx4j.site.client.backoffice.ui.prime.lister.ListerInternalViewImplBase;
 import com.pyx4j.site.client.ui.dialogs.EntitySelectorListDialog;
 import com.pyx4j.widgets.client.Button;
@@ -57,7 +57,7 @@ public class LeaseViewerViewImplBase<DTO extends LeaseDTO> extends CrmViewerView
 
     private final MenuItem viewParticipants;
 
-    protected final ILister<PaymentRecordDTO> paymentLister;
+    protected final IPrimeLister<PaymentRecordDTO> paymentLister;
 
     protected final Button termsButton;
 
@@ -224,7 +224,7 @@ public class LeaseViewerViewImplBase<DTO extends LeaseDTO> extends CrmViewerView
     }
 
     @Override
-    public ILister<PaymentRecordDTO> getPaymentListerView() {
+    public IPrimeLister<PaymentRecordDTO> getPaymentListerView() {
         return paymentLister;
     }
 

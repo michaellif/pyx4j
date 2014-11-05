@@ -13,10 +13,10 @@
  */
 package com.propertyvista.crm.client.ui.crud.administration.merchantaccount;
 
-import com.pyx4j.site.client.backoffice.ui.prime.lister.ILister;
+import com.pyx4j.site.client.backoffice.ui.prime.lister.IPrimeLister;
 
 import com.propertyvista.domain.financial.MerchantAccount;
 
-public interface MerchantAccountListerView extends ILister<MerchantAccount> {
+public interface MerchantAccountListerView extends IPrimeLister<MerchantAccount> {
 
 }

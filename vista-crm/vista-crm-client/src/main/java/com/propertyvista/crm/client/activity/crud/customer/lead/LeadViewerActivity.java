@@ -23,7 +23,7 @@ import com.pyx4j.commons.Key;
 import com.pyx4j.gwt.commons.UnrecoverableClientError;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.rpc.shared.VoidSerializable;
-import com.pyx4j.site.client.backoffice.ui.prime.lister.ILister;
+import com.pyx4j.site.client.backoffice.ui.prime.lister.IPrimeLister;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
 import com.propertyvista.crm.client.CrmSite;
@@ -37,7 +37,7 @@ import com.propertyvista.domain.tenant.lead.Lead.ConvertToLeaseAppraisal;
 
 public class LeadViewerActivity extends CrmViewerActivity<Lead> implements LeadViewerView.Presenter {
 
-    private final ILister.Presenter<Appointment> appointmentsLister;
+    private final IPrimeLister.Presenter<Appointment> appointmentsLister;
 
     public LeadViewerActivity(CrudAppPlace place) {
         super(Lead.class, place, CrmSite.getViewFactory().getView(LeadViewerView.class), GWT.<LeadCrudService> create(LeadCrudService.class));

@@ -13,10 +13,10 @@
  */
 package com.propertyvista.crm.client.ui.crud.policies.tenantinsurance;
 
-import com.pyx4j.site.client.backoffice.ui.prime.lister.ILister;
+import com.pyx4j.site.client.backoffice.ui.prime.lister.IPrimeLister;
 
 import com.propertyvista.domain.policy.dto.TenantInsurancePolicyDTO;
 
-public interface TenantInsurancePolicyListerView extends ILister<TenantInsurancePolicyDTO> {
+public interface TenantInsurancePolicyListerView extends IPrimeLister<TenantInsurancePolicyDTO> {
 
 }

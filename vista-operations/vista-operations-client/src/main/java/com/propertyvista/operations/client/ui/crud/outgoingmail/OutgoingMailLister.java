@@ -15,11 +15,11 @@ package com.propertyvista.operations.client.ui.crud.outgoingmail;
 
 import com.pyx4j.forms.client.ui.datatable.DataTableModel;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
-import com.pyx4j.site.client.backoffice.ui.prime.lister.AbstractLister;
+import com.pyx4j.site.client.backoffice.ui.prime.lister.AbstractPrimeLister;
 
 import com.propertyvista.operations.rpc.dto.OutgoingMailQueueDTO;
 
-public class OutgoingMailLister extends AbstractLister<OutgoingMailQueueDTO> {
+public class OutgoingMailLister extends AbstractPrimeLister<OutgoingMailQueueDTO> {
 
     public OutgoingMailLister() {
         super(OutgoingMailQueueDTO.class, false, false);

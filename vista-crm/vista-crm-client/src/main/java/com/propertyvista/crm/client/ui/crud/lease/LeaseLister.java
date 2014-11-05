@@ -30,7 +30,7 @@ import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor.Builder;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.security.shared.ActionPermission;
 import com.pyx4j.security.shared.SecurityController;
-import com.pyx4j.site.client.backoffice.ui.prime.lister.AbstractLister;
+import com.pyx4j.site.client.backoffice.ui.prime.lister.AbstractPrimeLister;
 import com.pyx4j.widgets.client.Button;
 
 import com.propertyvista.crm.client.ui.crud.lease.common.LeaseDataDialog;
@@ -41,7 +41,7 @@ import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.dto.LeaseDTO;
 import com.propertyvista.shared.config.VistaFeatures;
 
-public class LeaseLister extends AbstractLister<LeaseDTO> {
+public class LeaseLister extends AbstractPrimeLister<LeaseDTO> {
 
     private final static I18n i18n = I18n.get(LeaseLister.class);
 

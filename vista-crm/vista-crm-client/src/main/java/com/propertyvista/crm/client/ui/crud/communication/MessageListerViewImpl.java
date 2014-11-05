@@ -14,7 +14,7 @@
 package com.propertyvista.crm.client.ui.crud.communication;
 
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.backoffice.ui.prime.lister.ILister;
+import com.pyx4j.site.client.backoffice.ui.prime.lister.IPrimeLister;
 import com.pyx4j.site.rpc.AppPlace;
 
 import com.propertyvista.crm.client.ui.crud.CrmListerViewImplBase;
@@ -31,7 +31,7 @@ public class MessageListerViewImpl extends CrmListerViewImplBase<MessageDTO> imp
     }
 
     @Override
-    public void setPresenter(ILister.Presenter<MessageDTO> presenter) {
+    public void setPresenter(IPrimeLister.Presenter<MessageDTO> presenter) {
         super.setPresenter(presenter);
         if (presenter != null && presenter.getPlace() != null) {
             AppPlace place = presenter.getPlace();

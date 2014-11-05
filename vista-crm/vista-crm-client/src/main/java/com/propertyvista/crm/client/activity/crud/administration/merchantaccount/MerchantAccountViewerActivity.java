@@ -19,7 +19,7 @@ import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.criterion.PropertyCriterion;
 import com.pyx4j.entity.rpc.AbstractCrudService;
 import com.pyx4j.entity.rpc.AbstractListCrudService;
-import com.pyx4j.site.client.backoffice.ui.prime.lister.ILister.Presenter;
+import com.pyx4j.site.client.backoffice.ui.prime.lister.IPrimeLister.Presenter;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
 import com.propertyvista.crm.client.CrmSite;

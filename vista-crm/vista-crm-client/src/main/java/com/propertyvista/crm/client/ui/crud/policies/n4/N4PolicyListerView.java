@@ -13,10 +13,10 @@
  */
 package com.propertyvista.crm.client.ui.crud.policies.n4;
 
-import com.pyx4j.site.client.backoffice.ui.prime.lister.ILister;
+import com.pyx4j.site.client.backoffice.ui.prime.lister.IPrimeLister;
 
 import com.propertyvista.domain.policy.dto.N4PolicyDTO;
 
-public interface N4PolicyListerView extends ILister<N4PolicyDTO> {
+public interface N4PolicyListerView extends IPrimeLister<N4PolicyDTO> {
 
 }

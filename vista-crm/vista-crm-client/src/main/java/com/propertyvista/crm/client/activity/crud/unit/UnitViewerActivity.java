@@ -21,7 +21,7 @@ import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.rpc.shared.VoidSerializable;
 import com.pyx4j.site.client.AppSite;
-import com.pyx4j.site.client.backoffice.ui.prime.lister.ILister;
+import com.pyx4j.site.client.backoffice.ui.prime.lister.IPrimeLister;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
 import com.propertyvista.crm.client.CrmSite;
@@ -43,9 +43,9 @@ import com.propertyvista.dto.AptUnitDTO;
 
 public class UnitViewerActivity extends CrmViewerActivity<AptUnitDTO> implements UnitViewerView.Presenter {
 
-    private final ILister.Presenter<?> unitItemsLister;
+    private final IPrimeLister.Presenter<?> unitItemsLister;
 
-    private final ILister.Presenter<?> occupanciesLister;
+    private final IPrimeLister.Presenter<?> occupanciesLister;
 
     private final UnitOccupancyManagerService occupancyManagerService;
 

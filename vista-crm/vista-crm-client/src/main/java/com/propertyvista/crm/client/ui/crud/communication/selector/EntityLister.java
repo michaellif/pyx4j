@@ -31,11 +31,11 @@ import com.pyx4j.entity.core.criterion.PropertyCriterion;
 import com.pyx4j.forms.client.ui.CRadioGroupEnum;
 import com.pyx4j.forms.client.ui.datatable.DataItem;
 import com.pyx4j.forms.client.ui.datatable.DataTableModel;
-import com.pyx4j.site.client.backoffice.activity.EntitySelectorTableVisorController.VersionDisplayMode;
-import com.pyx4j.site.client.backoffice.ui.prime.lister.AbstractLister;
+import com.pyx4j.i18n.shared.I18nEnum;
+import com.pyx4j.site.client.backoffice.ui.prime.lister.AbstractPrimeLister;
 import com.pyx4j.widgets.client.RadioGroup.Layout;
 
-public class EntityLister<E extends IEntity> extends AbstractLister<E> {
+public class EntityLister<E extends IEntity> extends AbstractPrimeLister<E> {
 
     private VersionDisplayMode versionDisplayMode = VersionDisplayMode.displayFinal;
 
@@ -172,5 +172,15 @@ public class EntityLister<E extends IEntity> extends AbstractLister<E> {
     private void removeItems(Collection<E> removeItems) {
         alreadySelected.removeAll(removeItems);
         parent.removeSelected((Collection<IEntity>) removeItems, entityClass);
+    }
+
+    @com.pyx4j.i18n.annotations.I18n(context = "Version Display Mode")
+    public enum VersionDisplayMode {
+        displayDraft, displayFinal;
+
+        @Override
+        public String toString() {
+            return I18nEnum.toString(this);
+        }
     }
 }

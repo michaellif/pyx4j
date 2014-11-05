@@ -15,11 +15,11 @@ package com.propertyvista.operations.client.ui.crud.pmc.mercantaccount;
 
 import com.pyx4j.forms.client.ui.datatable.DataTableModel;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
-import com.pyx4j.site.client.backoffice.ui.prime.lister.AbstractLister;
+import com.pyx4j.site.client.backoffice.ui.prime.lister.AbstractPrimeLister;
 
 import com.propertyvista.operations.rpc.dto.PmcMerchantAccountDTO;
 
-public class MerchantAccountLister extends AbstractLister<PmcMerchantAccountDTO> {
+public class MerchantAccountLister extends AbstractPrimeLister<PmcMerchantAccountDTO> {
 
     public MerchantAccountLister() {
         super(PmcMerchantAccountDTO.class, false, false);

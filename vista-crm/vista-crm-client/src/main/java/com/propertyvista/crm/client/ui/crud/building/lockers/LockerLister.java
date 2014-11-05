@@ -19,11 +19,11 @@ import java.util.List;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.forms.client.ui.datatable.DataTableModel;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
-import com.pyx4j.site.client.backoffice.ui.prime.lister.AbstractLister;
+import com.pyx4j.site.client.backoffice.ui.prime.lister.AbstractPrimeLister;
 
 import com.propertyvista.domain.property.asset.Locker;
 
-public class LockerLister extends AbstractLister<Locker> {
+public class LockerLister extends AbstractPrimeLister<Locker> {
 
     public LockerLister() {
         super(Locker.class, true);

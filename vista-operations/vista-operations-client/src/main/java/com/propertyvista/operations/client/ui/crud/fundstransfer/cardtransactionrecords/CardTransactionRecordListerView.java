@@ -13,10 +13,10 @@
  */
 package com.propertyvista.operations.client.ui.crud.fundstransfer.cardtransactionrecords;
 
-import com.pyx4j.site.client.backoffice.ui.prime.lister.ILister;
+import com.pyx4j.site.client.backoffice.ui.prime.lister.IPrimeLister;
 
 import com.propertyvista.operations.domain.eft.cards.CardTransactionRecord;
 
-public interface CardTransactionRecordListerView extends ILister<CardTransactionRecord> {
+public interface CardTransactionRecordListerView extends IPrimeLister<CardTransactionRecord> {
 
 }

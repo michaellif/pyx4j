@@ -16,7 +16,7 @@ package com.propertyvista.crm.client.activity.crud.building;
 import com.google.gwt.core.client.GWT;
 
 import com.pyx4j.site.client.backoffice.activity.ListerController;
-import com.pyx4j.site.client.backoffice.ui.prime.lister.ILister;
+import com.pyx4j.site.client.backoffice.ui.prime.lister.IPrimeLister;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
 import com.propertyvista.crm.client.CrmSite;
@@ -29,7 +29,7 @@ import com.propertyvista.dto.ParkingDTO;
 
 public class ParkingViewerActivity extends CrmViewerActivity<ParkingDTO> implements ParkingViewerView.Presenter {
 
-    private final ILister.Presenter<ParkingSpot> spotLister;
+    private final IPrimeLister.Presenter<ParkingSpot> spotLister;
 
     public ParkingViewerActivity(CrudAppPlace place) {
         super(ParkingDTO.class, place, CrmSite.getViewFactory().getView(ParkingViewerView.class), GWT.<ParkingCrudService> create(ParkingCrudService.class));

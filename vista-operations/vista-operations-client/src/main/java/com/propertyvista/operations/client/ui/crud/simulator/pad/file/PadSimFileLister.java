@@ -15,11 +15,11 @@ package com.propertyvista.operations.client.ui.crud.simulator.pad.file;
 
 import com.pyx4j.forms.client.ui.datatable.DataTableModel;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
-import com.pyx4j.site.client.backoffice.ui.prime.lister.AbstractLister;
+import com.pyx4j.site.client.backoffice.ui.prime.lister.AbstractPrimeLister;
 
 import com.propertyvista.operations.domain.eft.caledoneft.simulator.PadSimFile;
 
-public class PadSimFileLister extends AbstractLister<PadSimFile> {
+public class PadSimFileLister extends AbstractPrimeLister<PadSimFile> {
 
     public PadSimFileLister() {
         super(PadSimFile.class, false);

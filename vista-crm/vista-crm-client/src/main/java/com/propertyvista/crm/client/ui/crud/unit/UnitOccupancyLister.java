@@ -18,13 +18,13 @@ import com.pyx4j.forms.client.ui.datatable.DataTableModel;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.site.client.AppPlaceEntityMapper;
 import com.pyx4j.site.client.AppSite;
-import com.pyx4j.site.client.backoffice.ui.prime.lister.AbstractLister;
+import com.pyx4j.site.client.backoffice.ui.prime.lister.AbstractPrimeLister;
 
 import com.propertyvista.domain.property.asset.unit.occupancy.AptUnitOccupancySegment;
 import com.propertyvista.domain.property.asset.unit.occupancy.AptUnitOccupancySegment.Status;
 import com.propertyvista.domain.tenant.lease.Lease;
 
-public class UnitOccupancyLister extends AbstractLister<AptUnitOccupancySegment> {
+public class UnitOccupancyLister extends AbstractPrimeLister<AptUnitOccupancySegment> {
 
     public UnitOccupancyLister() {
         super(AptUnitOccupancySegment.class, false);

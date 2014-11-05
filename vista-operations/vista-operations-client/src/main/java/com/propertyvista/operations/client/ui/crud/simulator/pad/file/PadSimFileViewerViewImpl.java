@@ -16,7 +16,7 @@ package com.propertyvista.operations.client.ui.crud.simulator.pad.file;
 import com.google.gwt.user.client.Command;
 
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.backoffice.ui.prime.lister.ILister;
+import com.pyx4j.site.client.backoffice.ui.prime.lister.IPrimeLister;
 import com.pyx4j.site.client.backoffice.ui.prime.lister.ListerInternalViewImplBase;
 import com.pyx4j.widgets.client.Button;
 
@@ -29,7 +29,7 @@ public class PadSimFileViewerViewImpl extends OperationsViewerViewImplBase<PadSi
 
     private static final I18n i18n = I18n.get(PadSimFileEditorViewImpl.class);
 
-    private final ILister<PadSimBatch> batchLister;
+    private final IPrimeLister<PadSimBatch> batchLister;
 
     Button replyAcknowledgment;
 
@@ -79,7 +79,7 @@ public class PadSimFileViewerViewImpl extends OperationsViewerViewImplBase<PadSi
     }
 
     @Override
-    public ILister<PadSimBatch> getBatchListerView() {
+    public IPrimeLister<PadSimBatch> getBatchListerView() {
         return batchLister;
     }
 

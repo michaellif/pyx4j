@@ -19,7 +19,7 @@ import java.util.List;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.forms.client.ui.datatable.DataTableModel;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
-import com.pyx4j.site.client.backoffice.ui.prime.lister.AbstractLister;
+import com.pyx4j.site.client.backoffice.ui.prime.lister.AbstractPrimeLister;
 
 import com.propertyvista.crm.client.ui.crud.CrmListerViewImplBase;
 import com.propertyvista.crm.rpc.dto.account.LoginAttemptDTO;
@@ -30,7 +30,7 @@ public class LoginAttemptsListerViewImpl extends CrmListerViewImplBase<LoginAtte
         setLister(new LoginAttemptsLister());
     }
 
-    public static class LoginAttemptsLister extends AbstractLister<LoginAttemptDTO> {
+    public static class LoginAttemptsLister extends AbstractPrimeLister<LoginAttemptDTO> {
 
         public LoginAttemptsLister() {
             super(LoginAttemptDTO.class);

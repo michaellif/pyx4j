@@ -37,7 +37,7 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.rpc.shared.VoidSerializable;
 import com.pyx4j.security.shared.ActionPermission;
-import com.pyx4j.site.client.backoffice.ui.prime.lister.ILister;
+import com.pyx4j.site.client.backoffice.ui.prime.lister.IPrimeLister;
 import com.pyx4j.site.client.backoffice.ui.prime.lister.ListerInternalViewImplBase;
 import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.Button.ButtonMenuBar;
@@ -82,27 +82,27 @@ public class BuildingViewerViewImpl extends CrmViewerViewImplBase<BuildingDTO> i
 
     private static final I18n i18n = I18n.get(BuildingViewerViewImpl.class);
 
-    private final ILister<FloorplanDTO> floorplanLister;
+    private final IPrimeLister<FloorplanDTO> floorplanLister;
 
-    private final ILister<AptUnitDTO> unitLister;
+    private final IPrimeLister<AptUnitDTO> unitLister;
 
-    private final ILister<ElevatorDTO> elevatorLister;
+    private final IPrimeLister<ElevatorDTO> elevatorLister;
 
-    private final ILister<BoilerDTO> boilerLister;
+    private final IPrimeLister<BoilerDTO> boilerLister;
 
-    private final ILister<RoofDTO> roofLister;
+    private final IPrimeLister<RoofDTO> roofLister;
 
-    private final ILister<ParkingDTO> parkingLister;
+    private final IPrimeLister<ParkingDTO> parkingLister;
 
-    private final ILister<LockerAreaDTO> lockerAreaLister;
+    private final IPrimeLister<LockerAreaDTO> lockerAreaLister;
 
-    private final ILister<Service> serviceLister;
+    private final IPrimeLister<Service> serviceLister;
 
-    private final ILister<Feature> featureLister;
+    private final IPrimeLister<Feature> featureLister;
 
-    private final ILister<Concession> concessionLister;
+    private final IPrimeLister<Concession> concessionLister;
 
-    private final ILister<BillingCycleDTO> billingCycleLister;
+    private final IPrimeLister<BillingCycleDTO> billingCycleLister;
 
     private final ButtonMenuBar dashboardsMenu;
 
@@ -179,57 +179,57 @@ public class BuildingViewerViewImpl extends CrmViewerViewImplBase<BuildingDTO> i
     }
 
     @Override
-    public ILister<FloorplanDTO> getFloorplanListerView() {
+    public IPrimeLister<FloorplanDTO> getFloorplanListerView() {
         return floorplanLister;
     }
 
     @Override
-    public ILister<AptUnitDTO> getUnitListerView() {
+    public IPrimeLister<AptUnitDTO> getUnitListerView() {
         return unitLister;
     }
 
     @Override
-    public ILister<ElevatorDTO> getElevatorListerView() {
+    public IPrimeLister<ElevatorDTO> getElevatorListerView() {
         return elevatorLister;
     }
 
     @Override
-    public ILister<BoilerDTO> getBoilerListerView() {
+    public IPrimeLister<BoilerDTO> getBoilerListerView() {
         return boilerLister;
     }
 
     @Override
-    public ILister<RoofDTO> getRoofListerView() {
+    public IPrimeLister<RoofDTO> getRoofListerView() {
         return roofLister;
     }
 
     @Override
-    public ILister<ParkingDTO> getParkingListerView() {
+    public IPrimeLister<ParkingDTO> getParkingListerView() {
         return parkingLister;
     }
 
     @Override
-    public ILister<LockerAreaDTO> getLockerAreaListerView() {
+    public IPrimeLister<LockerAreaDTO> getLockerAreaListerView() {
         return lockerAreaLister;
     }
 
     @Override
-    public ILister<Service> getServiceListerView() {
+    public IPrimeLister<Service> getServiceListerView() {
         return serviceLister;
     }
 
     @Override
-    public ILister<Feature> getFeatureListerView() {
+    public IPrimeLister<Feature> getFeatureListerView() {
         return featureLister;
     }
 
     @Override
-    public ILister<Concession> getConcessionListerView() {
+    public IPrimeLister<Concession> getConcessionListerView() {
         return concessionLister;
     }
 
     @Override
-    public ILister<BillingCycleDTO> getBillingCycleListerView() {
+    public IPrimeLister<BillingCycleDTO> getBillingCycleListerView() {
         return billingCycleLister;
     }
 

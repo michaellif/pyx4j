@@ -21,12 +21,12 @@ import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.entity.core.criterion.PropertyCriterion;
 import com.pyx4j.forms.client.ui.datatable.DataTableModel;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor.Builder;
-import com.pyx4j.site.client.backoffice.ui.prime.lister.AbstractLister;
+import com.pyx4j.site.client.backoffice.ui.prime.lister.AbstractPrimeLister;
 
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.dto.LeaseDTO;
 
-public class BillingCycleLeaseLister extends AbstractLister<LeaseDTO> {
+public class BillingCycleLeaseLister extends AbstractPrimeLister<LeaseDTO> {
 
     public BillingCycleLeaseLister() {
         super(LeaseDTO.class, false);

@@ -20,11 +20,11 @@ import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.forms.client.ui.datatable.DataTableModel;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
-import com.pyx4j.site.client.backoffice.ui.prime.lister.AbstractLister;
+import com.pyx4j.site.client.backoffice.ui.prime.lister.AbstractPrimeLister;
 
 import com.propertyvista.operations.domain.scheduler.RunData;
 
-public class RunDataLister extends AbstractLister<RunData> {
+public class RunDataLister extends AbstractPrimeLister<RunData> {
 
     public RunDataLister() {
         this(false);

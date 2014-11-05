@@ -13,7 +13,7 @@
  */
 package com.propertyvista.crm.client.ui.crud.administration.merchantaccount;
 
-import com.pyx4j.site.client.backoffice.ui.prime.lister.ILister;
+import com.pyx4j.site.client.backoffice.ui.prime.lister.IPrimeLister;
 import com.pyx4j.site.client.backoffice.ui.prime.lister.ListerInternalViewImplBase;
 
 import com.propertyvista.crm.client.ui.crud.CrmViewerViewImplBase;
@@ -22,7 +22,7 @@ import com.propertyvista.domain.property.asset.building.Building;
 
 public class MerchantAccountViewerViewImpl extends CrmViewerViewImplBase<MerchantAccount> implements MerchantAccountViewerView {
 
-    private final ILister<Building> buildingLister;
+    private final IPrimeLister<Building> buildingLister;
 
     public MerchantAccountViewerViewImpl() {
         buildingLister = new ListerInternalViewImplBase<Building>(new BuildingLister());
@@ -31,7 +31,7 @@ public class MerchantAccountViewerViewImpl extends CrmViewerViewImplBase<Merchan
     }
 
     @Override
-    public ILister<Building> getBuildingListerView() {
+    public IPrimeLister<Building> getBuildingListerView() {
         return buildingLister;
     }
 }

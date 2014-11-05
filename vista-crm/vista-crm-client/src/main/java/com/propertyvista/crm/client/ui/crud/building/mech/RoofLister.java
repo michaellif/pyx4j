@@ -19,11 +19,11 @@ import java.util.List;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.forms.client.ui.datatable.DataTableModel;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
-import com.pyx4j.site.client.backoffice.ui.prime.lister.AbstractLister;
+import com.pyx4j.site.client.backoffice.ui.prime.lister.AbstractPrimeLister;
 
 import com.propertyvista.dto.RoofDTO;
 
-public class RoofLister extends AbstractLister<RoofDTO> {
+public class RoofLister extends AbstractPrimeLister<RoofDTO> {
 
     public RoofLister() {
         super(RoofDTO.class, true);

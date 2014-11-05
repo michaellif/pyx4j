@@ -13,7 +13,7 @@
  */
 package com.propertyvista.crm.client.ui.crud.building.lockers;
 
-import com.pyx4j.site.client.backoffice.ui.prime.lister.ILister;
+import com.pyx4j.site.client.backoffice.ui.prime.lister.IPrimeLister;
 import com.pyx4j.site.client.backoffice.ui.prime.lister.ListerInternalViewImplBase;
 
 import com.propertyvista.crm.client.ui.crud.CrmViewerViewImplBase;
@@ -22,7 +22,7 @@ import com.propertyvista.dto.LockerAreaDTO;
 
 public class LockerAreaViewerViewImpl extends CrmViewerViewImplBase<LockerAreaDTO> implements LockerAreaViewerView {
 
-    private final ILister<Locker> lockerLister;
+    private final IPrimeLister<Locker> lockerLister;
 
     public LockerAreaViewerViewImpl() {
         lockerLister = new ListerInternalViewImplBase<Locker>(new LockerLister());
@@ -32,7 +32,7 @@ public class LockerAreaViewerViewImpl extends CrmViewerViewImplBase<LockerAreaDT
     }
 
     @Override
-    public ILister<Locker> getLockerView() {
+    public IPrimeLister<Locker> getLockerView() {
         return lockerLister;
     }
 }

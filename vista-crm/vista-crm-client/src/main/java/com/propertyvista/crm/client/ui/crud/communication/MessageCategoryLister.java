@@ -25,14 +25,14 @@ import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.forms.client.ui.datatable.DataTableModel;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.backoffice.ui.prime.lister.AbstractLister;
+import com.pyx4j.site.client.backoffice.ui.prime.lister.AbstractPrimeLister;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 
 import com.propertyvista.domain.communication.MessageCategory;
 import com.propertyvista.domain.communication.MessageCategory.CategoryType;
 import com.propertyvista.misc.VistaTODO;
 
-public class MessageCategoryLister extends AbstractLister<MessageCategory> {
+public class MessageCategoryLister extends AbstractPrimeLister<MessageCategory> {
 
     private static final I18n i18n = I18n.get(MessageCategoryLister.class);
 

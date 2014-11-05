@@ -19,7 +19,7 @@ import java.util.List;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.forms.client.ui.datatable.DataTableModel;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
-import com.pyx4j.site.client.backoffice.ui.prime.lister.AbstractLister;
+import com.pyx4j.site.client.backoffice.ui.prime.lister.AbstractPrimeLister;
 
 import com.propertyvista.crm.client.ui.crud.CrmListerViewImplBase;
 import com.propertyvista.crm.rpc.dto.financial.moneyin.batch.MoneyInBatchDTO;
@@ -30,7 +30,7 @@ public class MoneyInBatchListerViewImpl extends CrmListerViewImplBase<MoneyInBat
         setLister(new MoneyInBatchLister());
     }
 
-    private static class MoneyInBatchLister extends AbstractLister<MoneyInBatchDTO> {
+    private static class MoneyInBatchLister extends AbstractPrimeLister<MoneyInBatchDTO> {
 
         public MoneyInBatchLister() {
             super(MoneyInBatchDTO.class, false, false);

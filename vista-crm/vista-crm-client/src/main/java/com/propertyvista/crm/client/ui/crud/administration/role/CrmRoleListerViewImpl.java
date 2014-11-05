@@ -19,7 +19,7 @@ import java.util.List;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.forms.client.ui.datatable.DataTableModel;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
-import com.pyx4j.site.client.backoffice.ui.prime.lister.AbstractLister;
+import com.pyx4j.site.client.backoffice.ui.prime.lister.AbstractPrimeLister;
 
 import com.propertyvista.crm.client.ui.crud.CrmListerViewImplBase;
 import com.propertyvista.domain.security.CrmRole;
@@ -30,7 +30,7 @@ public class CrmRoleListerViewImpl extends CrmListerViewImplBase<CrmRole> implem
         setLister(new CrmRoleLister());
     }
 
-    public static class CrmRoleLister extends AbstractLister<CrmRole> {
+    public static class CrmRoleLister extends AbstractPrimeLister<CrmRole> {
 
         public CrmRoleLister() {
             super(CrmRole.class, true);

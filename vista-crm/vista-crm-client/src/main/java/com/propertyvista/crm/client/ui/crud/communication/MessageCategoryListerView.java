@@ -13,10 +13,10 @@
  */
 package com.propertyvista.crm.client.ui.crud.communication;
 
-import com.pyx4j.site.client.backoffice.ui.prime.lister.ILister;
+import com.pyx4j.site.client.backoffice.ui.prime.lister.IPrimeLister;
 
 import com.propertyvista.domain.communication.MessageCategory;
 
-public interface MessageCategoryListerView extends ILister<MessageCategory> {
+public interface MessageCategoryListerView extends IPrimeLister<MessageCategory> {
 
 }

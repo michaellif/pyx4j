@@ -21,7 +21,7 @@ import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.security.DataModelPermission;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.security.shared.ActionPermission;
-import com.pyx4j.site.client.backoffice.ui.prime.lister.ILister;
+import com.pyx4j.site.client.backoffice.ui.prime.lister.IPrimeLister;
 import com.pyx4j.site.client.backoffice.ui.prime.lister.ListerInternalViewImplBase;
 import com.pyx4j.widgets.client.Button.SecureMenuItem;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
@@ -46,9 +46,9 @@ public class UnitViewerViewImpl extends CrmViewerViewImplBase<AptUnitDTO> implem
 
     private final static I18n i18n = I18n.get(UnitViewerViewImpl.class);
 
-    private final ILister<AptUnitItem> unitItemsLister;
+    private final IPrimeLister<AptUnitItem> unitItemsLister;
 
-    private final ILister<AptUnitOccupancySegment> occupanciesLister;
+    private final IPrimeLister<AptUnitOccupancySegment> occupanciesLister;
 
     private final MenuItem existingLeaseAction;
 
@@ -176,12 +176,12 @@ public class UnitViewerViewImpl extends CrmViewerViewImplBase<AptUnitDTO> implem
     }
 
     @Override
-    public ILister<AptUnitItem> getUnitItemsListerView() {
+    public IPrimeLister<AptUnitItem> getUnitItemsListerView() {
         return unitItemsLister;
     }
 
     @Override
-    public ILister<AptUnitOccupancySegment> getOccupanciesListerView() {
+    public IPrimeLister<AptUnitOccupancySegment> getOccupanciesListerView() {
         return occupanciesLister;
     }
 

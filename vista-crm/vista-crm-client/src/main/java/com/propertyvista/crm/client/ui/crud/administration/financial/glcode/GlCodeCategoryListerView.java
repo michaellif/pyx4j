@@ -13,10 +13,10 @@
  */
 package com.propertyvista.crm.client.ui.crud.administration.financial.glcode;
 
-import com.pyx4j.site.client.backoffice.ui.prime.lister.ILister;
+import com.pyx4j.site.client.backoffice.ui.prime.lister.IPrimeLister;
 
 import com.propertyvista.domain.financial.GlCodeCategory;
 
-public interface GlCodeCategoryListerView extends ILister<GlCodeCategory> {
+public interface GlCodeCategoryListerView extends IPrimeLister<GlCodeCategory> {
 
 }

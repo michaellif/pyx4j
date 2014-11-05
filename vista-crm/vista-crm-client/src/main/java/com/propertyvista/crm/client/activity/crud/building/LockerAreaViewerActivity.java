@@ -16,7 +16,7 @@ package com.propertyvista.crm.client.activity.crud.building;
 import com.google.gwt.core.client.GWT;
 
 import com.pyx4j.site.client.backoffice.activity.ListerController;
-import com.pyx4j.site.client.backoffice.ui.prime.lister.ILister;
+import com.pyx4j.site.client.backoffice.ui.prime.lister.IPrimeLister;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
 import com.propertyvista.crm.client.CrmSite;
@@ -29,7 +29,7 @@ import com.propertyvista.dto.LockerAreaDTO;
 
 public class LockerAreaViewerActivity extends CrmViewerActivity<LockerAreaDTO> implements LockerAreaViewerView.Presenter {
 
-    private final ILister.Presenter<?> lockerLister;
+    private final IPrimeLister.Presenter<?> lockerLister;
 
     public LockerAreaViewerActivity(CrudAppPlace place) {
         super(LockerAreaDTO.class, place, CrmSite.getViewFactory().getView(LockerAreaViewerView.class), GWT

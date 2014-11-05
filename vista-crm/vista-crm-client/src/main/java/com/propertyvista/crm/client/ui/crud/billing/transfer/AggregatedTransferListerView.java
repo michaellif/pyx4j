@@ -13,13 +13,13 @@
  */
 package com.propertyvista.crm.client.ui.crud.billing.transfer;
 
-import com.pyx4j.site.client.backoffice.ui.prime.lister.ILister;
+import com.pyx4j.site.client.backoffice.ui.prime.lister.IPrimeLister;
 
 import com.propertyvista.domain.financial.AggregatedTransfer;
 
-public interface AggregatedTransferListerView extends ILister<AggregatedTransfer> {
+public interface AggregatedTransferListerView extends IPrimeLister<AggregatedTransfer> {
 
-    public interface Presenter extends ILister.Presenter<AggregatedTransfer> {
+    public interface Presenter extends IPrimeLister.Presenter<AggregatedTransfer> {
 
         void downloadAggregatedTransferFile();
 
