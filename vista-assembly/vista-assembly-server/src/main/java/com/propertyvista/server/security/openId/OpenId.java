@@ -13,8 +13,6 @@
  */
 package com.propertyvista.server.security.openId;
 
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.List;
 import java.util.Map;
 
@@ -243,12 +241,6 @@ public class OpenId {
 
             // Hack for extended discovery
             String identifier = getDomainIdentifier(userDomain);
-            String protocol = getProtocol(identifier);
-
-            // Why did you Slava want protocol here?? Protocol at line below can not be replaced with this because
-            // claimed_id protocol uses to be 'http' (at least in google open id) and identifier protocol uses to be 'https'
-
-            // v.s.  Because I was thinking that claimed_id will be the same HTTPS as DomainIdentifier. e.g.  it works with  crowd.
 
             if ((claimed_id != null) //
                     && (claimed_id.startsWith("http://" + userDomain + "/openid?id=")//
@@ -319,17 +311,6 @@ public class OpenId {
 
     private static String getDomainIdentifier(String userDomain) {
         return ((AbstractVistaServerSideConfiguration) ServerSideConfiguration.instance()).openIdDomainIdentifier(userDomain);
-    }
-
-    private static String getProtocol(String url) {
-        String defaultProtocol = "https";
-        try {
-            defaultProtocol = new URL(url).getProtocol();
-        } catch (MalformedURLException e) {
-            log.error("Error getting protocol for URL \"{}\". Returning default 'https'.", url, e);
-        }
-
-        return defaultProtocol;
     }
 
 }
