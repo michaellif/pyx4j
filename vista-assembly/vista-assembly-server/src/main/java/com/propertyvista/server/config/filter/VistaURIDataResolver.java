@@ -191,7 +191,6 @@ public class VistaURIDataResolver extends URIDataResolver<VistaApplication> {
      */
     public String getNewURLRequest() {
         String requestPath = httpRequest.getServletPath();
-        log.info("requestPath \"{}\"  ", requestPath);
         VistaApplication app = getVistaApplication();
 
         String subRequestPath = "";
