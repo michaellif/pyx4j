@@ -31,7 +31,7 @@ public class VistaServerSideConfigurationDev extends VistaServerSideConfiguratio
 
     public static String devContextPath = "/vista";
 
-    public static boolean devContextLess = false;
+    public static boolean devContextLess = true;
 
     public static boolean devTestHttps = false;
 
@@ -133,7 +133,7 @@ public class VistaServerSideConfigurationDev extends VistaServerSideConfiguratio
 
     @Override
     public boolean isDepoymentUseNewDevDomains() {
-        return false;
+        return true;
     }
 
     @Override
