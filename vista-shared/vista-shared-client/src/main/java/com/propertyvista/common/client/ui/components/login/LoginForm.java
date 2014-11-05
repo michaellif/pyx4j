@@ -45,7 +45,6 @@ import com.pyx4j.forms.client.ui.CCheckBox;
 import com.pyx4j.forms.client.ui.CEmailField;
 import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.CPasswordBox;
-import com.pyx4j.forms.client.ui.NFocusField;
 import com.pyx4j.forms.client.ui.NTextBox;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.security.rpc.AuthenticationRequest;
@@ -53,8 +52,8 @@ import com.pyx4j.security.rpc.SystemWallMessage;
 import com.pyx4j.widgets.client.Anchor;
 import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.dialog.Dialog;
+import com.pyx4j.widgets.client.style.theme.HorizontalAlignCenterMixin;
 
-import com.propertyvista.common.client.theme.HorizontalAlignCenterMixin;
 import com.propertyvista.common.client.ui.components.login.AbstractLoginViewImpl.DevLoginData;
 import com.propertyvista.domain.DemoData;
 import com.propertyvista.shared.config.VistaDemo;

@@ -31,9 +31,9 @@ import com.pyx4j.site.client.ui.layout.ResponsiveLayoutTheme;
 import com.pyx4j.widgets.client.datepicker.DatePickerTheme;
 import com.pyx4j.widgets.client.dialog.DialogTheme;
 import com.pyx4j.widgets.client.richtext.RichTextEditorTheme;
+import com.pyx4j.widgets.client.style.theme.HorizontalAlignCenterMixin;
 import com.pyx4j.widgets.client.style.theme.WidgetsTheme;
 
-import com.propertyvista.common.client.theme.HorizontalAlignCenterMixin;
 import com.propertyvista.common.client.theme.TransactionHistoryViewerTheme;
 import com.propertyvista.common.client.theme.VistaTheme.StyleName;
 import com.propertyvista.domain.site.SiteDescriptor.Skin;

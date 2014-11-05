@@ -32,12 +32,12 @@ import com.pyx4j.widgets.client.dashboard.DashboardTheme;
 import com.pyx4j.widgets.client.datepicker.DatePickerTheme;
 import com.pyx4j.widgets.client.dialog.DialogTheme;
 import com.pyx4j.widgets.client.richtext.RichTextEditorTheme;
+import com.pyx4j.widgets.client.style.theme.HorizontalAlignCenterMixin;
 import com.pyx4j.widgets.client.style.theme.WidgetsTheme;
 import com.pyx4j.widgets.client.tabpanel.TabTheme;
 
 import com.propertyvista.common.client.theme.BillingTheme;
 import com.propertyvista.common.client.theme.DraggerMixin;
-import com.propertyvista.common.client.theme.HorizontalAlignCenterMixin;
 import com.propertyvista.common.client.theme.SiteViewTheme;
 import com.propertyvista.common.client.theme.TransactionHistoryViewerTheme;
 import com.propertyvista.common.client.theme.VistaTheme;

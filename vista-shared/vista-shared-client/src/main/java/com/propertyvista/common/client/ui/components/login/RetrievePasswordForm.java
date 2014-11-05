@@ -26,8 +26,7 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.security.rpc.PasswordRetrievalRequest;
 import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.CaptchaComposite;
-
-import com.propertyvista.common.client.theme.HorizontalAlignCenterMixin;
+import com.pyx4j.widgets.client.style.theme.HorizontalAlignCenterMixin;
 
 public class RetrievePasswordForm extends CForm<PasswordRetrievalRequest> {
 

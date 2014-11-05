@@ -34,8 +34,7 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.security.rpc.PasswordChangeRequest;
 import com.pyx4j.widgets.client.PasswordBox.PasswordStrengthRule;
 import com.pyx4j.widgets.client.PasswordBox.PasswordStrengthRule.PasswordStrengthVerdict;
-
-import com.propertyvista.common.client.theme.HorizontalAlignCenterMixin;
+import com.pyx4j.widgets.client.style.theme.HorizontalAlignCenterMixin;
 
 public class PasswordChangeForm extends CForm<PasswordChangeRequest> {
 

@@ -31,8 +31,8 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.security.rpc.PasswordChangeRequest;
 import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.PasswordBox.PasswordStrengthRule;
+import com.pyx4j.widgets.client.style.theme.HorizontalAlignCenterMixin;
 
-import com.propertyvista.common.client.theme.HorizontalAlignCenterMixin;
 import com.propertyvista.common.client.ui.components.security.PasswordResetView;
 
 public class PasswordResetForm extends CForm<PasswordChangeRequest> {

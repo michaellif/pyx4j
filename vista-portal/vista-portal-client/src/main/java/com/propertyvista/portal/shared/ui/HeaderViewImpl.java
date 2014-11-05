@@ -23,8 +23,8 @@ import com.pyx4j.gwt.commons.layout.LayoutChangeRequestEvent;
 import com.pyx4j.gwt.commons.layout.LayoutChangeRequestEvent.ChangeType;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.frontoffice.ui.layout.RequiresScroll;
+import com.pyx4j.widgets.client.style.theme.HorizontalAlignCenterMixin;
 
-import com.propertyvista.common.client.theme.HorizontalAlignCenterMixin;
 import com.propertyvista.common.client.ui.components.MediaUtils;
 import com.propertyvista.portal.shared.PortalSite;
 import com.propertyvista.portal.shared.themes.PortalRootPaneTheme;
