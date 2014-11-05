@@ -130,7 +130,9 @@ public class OpenIdFilter implements Filter {
                     // If contextLessDeployment, remove context from receivingURL
                     if (ServerSideConfiguration.instance(AbstractVistaServerSideConfiguration.class).isAppsContextlessDepoyment()
                             && !httprequest.getContextPath().equalsIgnoreCase("")) {
-                        receivingURL = receivingURL.substring(0, receivingURL.length() - httprequest.getContextPath().length());
+                        if (receivingURL.endsWith(httprequest.getContextPath())) {
+                            receivingURL = receivingURL.substring(0, receivingURL.length() - httprequest.getContextPath().length());
+                        }
                     }
 
                     String query = httprequest.getQueryString();
