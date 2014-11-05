@@ -91,9 +91,20 @@ public class MockHttpServletRequest implements HttpServletRequest {
         setContextPath(context);
     }
 
+    public MockHttpServletRequest(String context, String servletPath, String url) {
+        splitUrl(url);
+        setContextPath(context);
+        setServletPath(servletPath);
+    }
+
     public void setContextPath(String context) {
         this.contextPath = context;
         updateServletPath();
+    }
+
+    private void setServletPath(String servletPath) {
+        this.pathInfo = this.servletPath.substring(servletPath.length());
+        this.servletPath = servletPath;
     }
 
     protected void splitUrl(String url) {
@@ -348,7 +359,8 @@ public class MockHttpServletRequest implements HttpServletRequest {
 
     @Override
     public String getPathInfo() {
-        throw new UnsupportedOperationException();
+        assert (url != null) : "URL for this mock request has not been set yet";
+        return pathInfo;
     }
 
     @Override
