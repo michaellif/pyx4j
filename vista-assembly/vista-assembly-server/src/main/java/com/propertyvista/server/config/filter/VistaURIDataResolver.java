@@ -19,8 +19,6 @@ import javax.servlet.http.HttpServletRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.pyx4j.config.server.ServerSideConfiguration;
-
 import com.propertyvista.domain.security.common.VistaApplication;
 
 public class VistaURIDataResolver extends URIDataResolver<VistaApplication> {
@@ -52,7 +50,8 @@ public class VistaURIDataResolver extends URIDataResolver<VistaApplication> {
      */
     @Override
     public String getNamespace(HttpServletRequest httpRequest) {
-        return ServerSideConfiguration.instance().getNamespaceResolver().getNamespace(httpRequest);
+        return "";
+        //return ServerSideConfiguration.instance().getNamespaceResolver().getNamespace(httpRequest);
     }
 
     /**
