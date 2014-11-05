@@ -115,10 +115,11 @@ public class VistaServerSideConfigurationDev extends VistaServerSideConfiguratio
 
     @Override
     public String openIdDomain() {
+        //return "crowd.devpv.com";
         //return "dev.birchwoodsoftwaregroup.com";
         //return "propertyvista.com";
         //return "localhost:8095";
-        return "devpv.com";
+        return "crowd-test.devpv.com";
 
         // For this to work you need to import GD certificates http://drcs.ca/blog/adding-godaddy-intermediate-certificates-to-java-jdk/
         //return "static.propertyvista.com";
