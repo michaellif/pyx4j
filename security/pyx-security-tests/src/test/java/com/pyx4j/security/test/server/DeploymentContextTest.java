@@ -45,9 +45,9 @@ public class DeploymentContextTest {
 
     @Test
     public void testJettyContextLessontext() {
-        HttpServletRequest r = request("http://localhost:8080/warContext/appContext/srvc").jettyContextLess(true).build();
+        HttpServletRequest r = request("http://localhost:8080/appContext/srvc").jettyContextLess(true).build();
         Assert.assertEquals("/warContext", r.getContextPath());
-        Assert.assertEquals("/warContext/appContext/srvc", r.getRequestURI());
+        Assert.assertEquals("/appContext/srvc", r.getRequestURI());
         Assert.assertEquals("/appContext/srvc", r.getServletPath());
         Assert.assertEquals("http://localhost:8080/appContext/srvc", r.getRequestURL().toString());
         Assert.assertEquals("/appContext/bob", ServletUtils.getRelativeServletPath(r, "/appContext/bob"));
@@ -61,7 +61,7 @@ public class DeploymentContextTest {
         Assert.assertEquals("/warContext", r.getContextPath());
         Assert.assertEquals("/warContext/appContext/srvc", r.getRequestURI());
         Assert.assertEquals("/appContext/srvc", r.getServletPath());
-        Assert.assertEquals("http://localhost:8080/warContext/srvc", r.getRequestURL().toString());
+        Assert.assertEquals("http://localhost:8080/srvc", r.getRequestURL().toString());
         Assert.assertEquals("/warContext/bob", ServletUtils.getRelativeServletPath(r, "/appContext/bob"));
 
         Assert.assertEquals("http://h:80/warContext/appContext/srvc", ServletUtils.toServletContainerInternalURL(r, "http://h:80/warContext/srvc"));

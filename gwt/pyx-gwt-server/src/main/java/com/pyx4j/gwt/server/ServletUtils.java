@@ -102,12 +102,12 @@ public class ServletUtils {
 
             String forwardedContext = request.getHeader(ServletUtils.x_forwarded_context); // "/warContext/appContext"
             if (forwardedContext != null) {
-                assert uri.startsWith(forwardedContext);
+                assert uri.startsWith(forwardedContext) : uri + " Should start with " + forwardedContext;
                 uri = uri.substring(forwardedContext.length());
             } else {
                 // Local development
-                assert uri.startsWith(request.getContextPath());
-                if (request.getAttribute(ServletUtils.x_jetty_contextLess) != null) {
+                if (request.getAttribute(ServletUtils.x_jetty_contextLess) == null) {
+                    assert uri.startsWith(request.getContextPath()) : uri + " Should start with " + request.getContextPath();
                     uri = uri.substring(request.getContextPath().length()); // + "/warContext"
                 }
             }
