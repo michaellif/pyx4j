@@ -32,14 +32,14 @@ import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.site.client.backoffice.ui.prime.IMemento;
 import com.pyx4j.site.client.ui.visor.IVisor;
 
-public class ListerInternalViewImplBase<E extends IEntity> extends SimplePanel implements ILister<E> {
+public class ListerInternalViewImplBase<E extends IEntity> extends SimplePanel implements IPrimeLister<E> {
 
-    protected AbstractLister<E> lister = null;
+    protected AbstractPrimeLister<E> lister = null;
 
     public ListerInternalViewImplBase() {
     }
 
-    public ListerInternalViewImplBase(AbstractLister<E> lister) {
+    public ListerInternalViewImplBase(AbstractPrimeLister<E> lister) {
         this();
         setLister(lister);
     }
@@ -47,7 +47,7 @@ public class ListerInternalViewImplBase<E extends IEntity> extends SimplePanel i
     /*
      * Should be called by descendant upon initialisation.
      */
-    protected void setLister(AbstractLister<E> lister) {
+    protected void setLister(AbstractPrimeLister<E> lister) {
         if (this.lister == lister) {
             return; // already!?.
         }
@@ -56,7 +56,7 @@ public class ListerInternalViewImplBase<E extends IEntity> extends SimplePanel i
     }
 
     @Override
-    public AbstractLister<E> getLister() {
+    public AbstractPrimeLister<E> getLister() {
         assert (lister != null);
         return lister;
     }

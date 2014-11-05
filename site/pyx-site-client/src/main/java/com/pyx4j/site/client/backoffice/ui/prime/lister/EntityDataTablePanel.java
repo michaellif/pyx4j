@@ -56,7 +56,7 @@ import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.site.client.backoffice.ui.PaneTheme;
 import com.pyx4j.site.client.backoffice.ui.prime.IMemento;
 import com.pyx4j.site.client.backoffice.ui.prime.MementoImpl;
-import com.pyx4j.site.client.backoffice.ui.prime.lister.AbstractLister.ItemSelectionHandler;
+import com.pyx4j.site.client.backoffice.ui.prime.lister.AbstractPrimeLister.ItemSelectionHandler;
 
 public class EntityDataTablePanel<E extends IEntity> extends ScrollPanel {
 

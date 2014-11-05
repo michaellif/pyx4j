@@ -33,9 +33,9 @@ import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.backoffice.ui.AbstractPane;
 import com.pyx4j.site.client.backoffice.ui.prime.IMemento;
 
-public class ListerViewImplBase<E extends IEntity> extends AbstractPane implements ILister<E> {
+public class ListerViewImplBase<E extends IEntity> extends AbstractPane implements IPrimeLister<E> {
 
-    protected AbstractLister<E> lister = null;
+    protected AbstractPrimeLister<E> lister = null;
 
     public ListerViewImplBase() {
         super();
@@ -44,7 +44,7 @@ public class ListerViewImplBase<E extends IEntity> extends AbstractPane implemen
     /*
      * Should be called by descendant upon initialisation.
      */
-    protected void setLister(AbstractLister<E> lister) {
+    protected void setLister(AbstractPrimeLister<E> lister) {
         if (getContentPane() == null) { // finalise UI here:
             setContentPane(new LayoutPanel());
             setSize("100%", "100%");
@@ -58,19 +58,19 @@ public class ListerViewImplBase<E extends IEntity> extends AbstractPane implemen
     }
 
     @Override
-    public AbstractLister<E> getLister() {
+    public AbstractPrimeLister<E> getLister() {
         assert (lister != null);
         return lister;
     }
 
     @Override
-    public void setPresenter(ILister.Presenter<E> presenter) {
+    public void setPresenter(IPrimeLister.Presenter<E> presenter) {
         getLister().setPresenter(presenter);
         setCaption(presenter != null && presenter.getPlace() != null ? AppSite.getHistoryMapper().getPlaceInfo(presenter.getPlace()).getCaption() : "");
     }
 
     @Override
-    public ILister.Presenter<E> getPresenter() {
+    public IPrimeLister.Presenter<E> getPresenter() {
         return getLister().getPresenter();
     }
 

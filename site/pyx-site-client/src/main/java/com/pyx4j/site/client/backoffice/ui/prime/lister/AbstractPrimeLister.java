@@ -34,9 +34,9 @@ import com.pyx4j.site.client.ui.visor.IVisor;
 import com.pyx4j.site.rpc.CrudAppPlace;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 
-public abstract class AbstractLister<E extends IEntity> extends EntityDataTablePanel<E> implements ILister<E> {
+public abstract class AbstractPrimeLister<E extends IEntity> extends EntityDataTablePanel<E> implements IPrimeLister<E> {
 
-    private static final I18n i18n = I18n.get(AbstractLister.class);
+    private static final I18n i18n = I18n.get(AbstractPrimeLister.class);
 
     public interface ItemSelectionHandler<E> {
         void onSelect(E selectedItem);
@@ -48,19 +48,19 @@ public abstract class AbstractLister<E extends IEntity> extends EntityDataTableP
 
     private boolean openEditor;
 
-    public AbstractLister(Class<E> clazz) {
+    public AbstractPrimeLister(Class<E> clazz) {
         super(clazz);
     }
 
-    public AbstractLister(Class<E> clazz, boolean allowAddNew) {
+    public AbstractPrimeLister(Class<E> clazz, boolean allowAddNew) {
         this(clazz, allowAddNew, false);
     }
 
-    public AbstractLister(Class<E> clazz, boolean allowAddNew, boolean allowDelete) {
+    public AbstractPrimeLister(Class<E> clazz, boolean allowAddNew, boolean allowDelete) {
         this(clazz, null, allowAddNew, allowDelete);
     }
 
-    public AbstractLister(Class<E> clazz, ICriteriaForm<E> criteriaForm, boolean allowAddNew, boolean allowDelete) {
+    public AbstractPrimeLister(Class<E> clazz, ICriteriaForm<E> criteriaForm, boolean allowAddNew, boolean allowDelete) {
         super(clazz, criteriaForm, allowAddNew, allowDelete);
         this.itemOpenPlaceClass = AppPlaceEntityMapper.resolvePlaceClass(clazz);
         setItemZoomInCommand(new ItemZoomInCommand<E>() {
@@ -133,7 +133,7 @@ public abstract class AbstractLister<E extends IEntity> extends EntityDataTableP
     }
 
     @Override
-    public AbstractLister<E> getLister() {
+    public AbstractPrimeLister<E> getLister() {
         return this;
     }
 

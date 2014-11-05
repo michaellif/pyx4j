@@ -37,17 +37,17 @@ import com.pyx4j.gwt.commons.UnrecoverableClientError;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.site.client.AppSite;
-import com.pyx4j.site.client.backoffice.ui.prime.lister.ILister;
+import com.pyx4j.site.client.backoffice.ui.prime.lister.IPrimeLister;
 import com.pyx4j.site.client.backoffice.ui.prime.lister.ListerDataSource;
 import com.pyx4j.site.rpc.AppPlace;
 import com.pyx4j.site.rpc.CrudAppPlace;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 
-public class ListerController<E extends IEntity> implements ILister.Presenter<E> {
+public class ListerController<E extends IEntity> implements IPrimeLister.Presenter<E> {
 
     private static final I18n i18n = I18n.get(ListerController.class);
 
-    private final ILister<E> view;
+    private final IPrimeLister<E> view;
 
     private final ListerDataSource<E> dataSource;
 
@@ -57,7 +57,7 @@ public class ListerController<E extends IEntity> implements ILister.Presenter<E>
 
     private Class<? extends IEntity> parentClass;
 
-    public ListerController(Class<E> entityClass, ILister<E> view, AbstractListCrudService<E> service) {
+    public ListerController(Class<E> entityClass, IPrimeLister<E> view, AbstractListCrudService<E> service) {
         // development correctness checks:
         assert (entityClass != null);
         assert (view != null);
@@ -70,7 +70,7 @@ public class ListerController<E extends IEntity> implements ILister.Presenter<E>
         view.setPresenter(this);
     }
 
-    public ILister<E> getView() {
+    public IPrimeLister<E> getView() {
         return view;
     }
 

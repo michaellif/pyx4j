@@ -24,11 +24,11 @@ import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.rpc.AbstractListCrudService;
 import com.pyx4j.entity.security.DataModelPermission;
 import com.pyx4j.security.shared.SecurityController;
-import com.pyx4j.site.client.backoffice.ui.prime.lister.ILister;
+import com.pyx4j.site.client.backoffice.ui.prime.lister.IPrimeLister;
 
 public class SecureListerController<E extends IEntity> extends ListerController<E> {
 
-    public SecureListerController(Class<E> entityClass, ILister<E> view, AbstractListCrudService<E> service) {
+    public SecureListerController(Class<E> entityClass, IPrimeLister<E> view, AbstractListCrudService<E> service) {
         super(entityClass, view, service);
     }
 
