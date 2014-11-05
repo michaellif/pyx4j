@@ -126,6 +126,13 @@ public class OpenIdFilter implements Filter {
                     ((HttpServletResponse) response).setStatus(HttpServletResponse.SC_UNAUTHORIZED);
                 } else {
                     String receivingURL = httprequest.getRequestURL().toString();
+
+                    // If contextLessDeployment, remove context from receivingURL
+                    if (ServerSideConfiguration.instance(AbstractVistaServerSideConfiguration.class).isAppsContextlessDepoyment()
+                            && !httprequest.getContextPath().equalsIgnoreCase("")) {
+                        receivingURL = receivingURL.substring(0, receivingURL.length() - httprequest.getContextPath().length());
+                    }
+
                     String query = httprequest.getQueryString();
                     if (query != null && query.length() > 0) {
                         receivingURL += "?" + query;

@@ -230,7 +230,15 @@ public class OpenId {
 
             // extract the receiving URL from the HTTP request
             String receivingURL = request.getRequestURL().toString();
+
+            // If contextLessDeployment, remove context from receivingURL
+            if (ServerSideConfiguration.instance(AbstractVistaServerSideConfiguration.class).isAppsContextlessDepoyment()
+                    && !request.getContextPath().equalsIgnoreCase("")) {
+                receivingURL = receivingURL.replace(request.getContextPath() + "/" + returnServletPath, "/" + returnServletPath);
+            }
+
             String query = request.getQueryString();
+
             if (query != null && query.length() > 0) {
                 receivingURL += "?" + query;
             }
