@@ -87,7 +87,7 @@ public class VistaApplicationDispatcherFilter implements Filter {
 
         //TODO BASED ON PMC and APP, DO FORWARD OR REDIRECT
 
-        log.info(">>>>>>>>>>>>>>>>>>>> NAMESPACE: {} <<<<<<<<<<<<<<<<< ", vistaURLDataResolver.getVistaNamespace());
+        //log.info(">>>>>>>>>>>>>>>>>>>> NAMESPACE: {} <<<<<<<<<<<<<<<<< ", vistaURLDataResolver.getVistaNamespace());
 
         if (app == null) {
             log.info("***ADF*** NOT forwarding");
