@@ -395,7 +395,7 @@ public class VistaServerSideConfiguration extends AbstractVistaServerSideConfigu
 
     @Override
     public String openIdDomain() {
-        String configDomain = System.getProperty("com.propertyvista.dev.domain");
+        String configDomain = getConfigProperties().getValue("vista.depoymentDevOpenIdDomain", System.getProperty("com.propertyvista.dev.domain"));
         if (CommonsStringUtils.isStringSet(configDomain)) {
             return configDomain;
         } else {
