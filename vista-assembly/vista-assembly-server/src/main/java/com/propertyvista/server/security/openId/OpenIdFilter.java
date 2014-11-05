@@ -39,6 +39,7 @@ import com.propertyvista.config.AbstractVistaServerSideConfiguration;
 import com.propertyvista.domain.security.common.VistaApplication;
 import com.propertyvista.portal.rpc.DeploymentConsts;
 import com.propertyvista.server.common.security.DevelopmentSecurity;
+import com.propertyvista.server.config.VistaServerSideConfiguration;
 
 public class OpenIdFilter implements Filter {
 
@@ -130,7 +131,6 @@ public class OpenIdFilter implements Filter {
                     // If contextLessDeployment, remove context from receivingURL
                     if (ServerSideConfiguration.instance(AbstractVistaServerSideConfiguration.class).isAppsContextlessDepoyment()
                             && !httprequest.getContextPath().equalsIgnoreCase("")) {
-                        String contextPath = httprequest.getContextPath();
                         if (receivingURL.endsWith(httprequest.getContextPath()) || receivingURL.endsWith(httprequest.getContextPath() + "/")) {
                             receivingURL = receivingURL.substring(0, receivingURL.length() - httprequest.getContextPath().length());
                         }
@@ -151,12 +151,13 @@ public class OpenIdFilter implements Filter {
                             devSession.setAttribute(REQUESTED_URL_ATTRIBUTE, receivingURL);
                         }
                     }
-                    OpenIdServlet.createResponsePage(
-                            httprequest,
-                            (HttpServletResponse) response,
-                            true,
+
+                    log.info("http://env" + ((VistaServerSideConfiguration) ServerSideConfiguration.instance()).getApplicationURLNamespace(true));
+
+                    OpenIdServlet.createResponsePage(httprequest, (HttpServletResponse) response, true,
                             OpenId.getDestinationUrl(ServerSideConfiguration.instance(AbstractVistaServerSideConfiguration.class).openIdDomain(),
-                                    ServletUtils.getRequestWarBaseURL(httprequest)));
+                            //ServletUtils.getRequestWarBaseURL(httprequest)));
+                                    getCommonURLBase4OpenId(httprequest)));
 
                 }
             }
@@ -172,5 +173,18 @@ public class OpenIdFilter implements Filter {
             }
         }
 
+    }
+
+    public static String getCommonURLBase4OpenId(HttpServletRequest request) {
+        if (((VistaServerSideConfiguration) ServerSideConfiguration.instance()).isDevelopmentBehavior()) {
+            StringBuffer url = new StringBuffer();
+            url.append(request.getScheme());
+            url.append("://");
+            url.append("env"); // Question: Where can I get "env" from??
+            url.append(((VistaServerSideConfiguration) ServerSideConfiguration.instance()).getApplicationURLNamespace(true));
+            return url.toString();
+        } else {
+            return ServletUtils.getRequestWarBaseURL(request);
+        }
     }
 }
