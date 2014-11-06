@@ -314,6 +314,7 @@ public class PortalRootPaneTheme extends Theme {
         style.addProperty("vertical-align", "top");
         style.addProperty("color", ThemeColor.foreground, 0.1);
         style.addProperty("font-weight", "bold");
+        style.addProperty("text-decoration", "underline");
         style.addProperty("color", ThemeColor.foreground, 0.1);
         addStyle(style);
 
