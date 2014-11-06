@@ -19,7 +19,7 @@ public class VistaServerSideConfiguration44 extends VistaServerSideConfiguration
 
     @Override
     public IPersistenceConfiguration getPersistenceConfiguration() {
-        return new VistaConfigurationMySQL() {
+        return new VistaConfigurationPostgreSQL() {
             @Override
             public String dbName() {
                 return "vista44";
@@ -45,6 +45,16 @@ public class VistaServerSideConfiguration44 extends VistaServerSideConfiguration
     @Override
     public boolean isVistaDemo() {
         return true;
+    }
+
+    @Override
+    public int interfaceSSHDPort() {
+        return 8826;
+    }
+
+    @Override
+    protected String getApplicationDeploymentProtocol() {
+        return "https";
     }
 
     @Override
