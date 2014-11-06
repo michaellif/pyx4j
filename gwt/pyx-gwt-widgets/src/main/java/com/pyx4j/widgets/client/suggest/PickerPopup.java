@@ -89,7 +89,7 @@ public class PickerPopup<E> extends DropDownPanel implements Focusable, HasAllFo
     }
 
     public void pickSelection() {
-        if (pickerPanel != null) {
+        if (pickerPanel != null && pickerPanel.getSelection() != null) {
             selectorWidget.setSelection(pickerPanel.getSelection());
 
             //Wait for focus to be set on selectorWidget
