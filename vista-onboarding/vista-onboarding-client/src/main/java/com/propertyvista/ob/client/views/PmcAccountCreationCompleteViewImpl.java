@@ -13,13 +13,12 @@
  */
 package com.propertyvista.ob.client.views;
 
-import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.SimplePanel;
 
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.backoffice.ui.prime.IMemento;
+import com.pyx4j.site.client.memento.Memento;
 import com.pyx4j.site.client.ui.visor.IVisor;
 import com.pyx4j.widgets.client.Anchor;
 import com.pyx4j.widgets.client.Label;
@@ -86,21 +85,12 @@ public class PmcAccountCreationCompleteViewImpl extends Composite implements Pmc
     }
 
     @Override
-    public IMemento getMemento() {
-        // TODO Auto-generated method stub
+    public Memento getMemento() {
         return null;
     }
 
     @Override
-    public void storeState(Place place) {
-        // TODO Auto-generated method stub
-
-    }
-
-    @Override
-    public void restoreState() {
-        // TODO Auto-generated method stub
-
+    public void setMemento(Memento memento) {
     }
 
     @Override

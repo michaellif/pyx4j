@@ -15,7 +15,6 @@ package com.propertyvista.portal.resident.ui;
 
 import java.util.List;
 
-import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.ui.DockPanel;
 import com.google.gwt.user.client.ui.Widget;
 
@@ -23,9 +22,9 @@ import com.pyx4j.commons.Key;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.criterion.Criterion;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
-import com.pyx4j.site.client.backoffice.ui.prime.IMemento;
 import com.pyx4j.site.client.backoffice.ui.prime.lister.AbstractPrimeLister;
 import com.pyx4j.site.client.backoffice.ui.prime.lister.IPrimeLister;
+import com.pyx4j.site.client.memento.Memento;
 import com.pyx4j.site.client.ui.visor.IVisor;
 
 public class ListerViewImplBasePanel<E extends IEntity> extends DockPanel implements IPrimeLister<E> {
@@ -119,18 +118,13 @@ public class ListerViewImplBasePanel<E extends IEntity> extends DockPanel implem
     }
 
     @Override
-    public IMemento getMemento() {
+    public Memento getMemento() {
         return getLister().getMemento();
     }
 
     @Override
-    public void storeState(Place place) {
-        getLister().storeState(place);
-    }
-
-    @Override
-    public void restoreState() {
-        getLister().restoreState();
+    public void setMemento(Memento memento) {
+        getLister().setMemento(memento);
     }
 
     @Override

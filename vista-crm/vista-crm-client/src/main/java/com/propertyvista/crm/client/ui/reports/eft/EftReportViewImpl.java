@@ -22,4 +22,5 @@ public class EftReportViewImpl extends AbstractReport<EftReportMetadata> impleme
     public EftReportViewImpl() {
         setReportWidget(new EftReportWidget(), null, new EftReportSettingsForm());
     }
+
 }

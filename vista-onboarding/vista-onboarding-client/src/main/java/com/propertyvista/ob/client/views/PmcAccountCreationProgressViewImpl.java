@@ -17,11 +17,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.google.gwt.dom.client.Style.Unit;
-import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FlowPanel;
 
-import com.pyx4j.site.client.backoffice.ui.prime.IMemento;
+import com.pyx4j.site.client.memento.Memento;
 import com.pyx4j.site.client.ui.visor.IVisor;
 
 import com.propertyvista.ob.client.forms.StepStatusIndicator;
@@ -86,19 +85,12 @@ public class PmcAccountCreationProgressViewImpl extends Composite implements Pmc
     }
 
     @Override
-    public IMemento getMemento() {
-        // TODO Auto-generated method stub
+    public Memento getMemento() {
         return null;
     }
 
     @Override
-    public void storeState(Place place) {
-        // TODO Auto-generated method stub
-    }
-
-    @Override
-    public void restoreState() {
-        // TODO Auto-generated method stub
+    public void setMemento(Memento memento) {
     }
 
     @Override

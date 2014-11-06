@@ -78,6 +78,5 @@ public class RunDataForm extends OperationsEntityForm<RunData> {
         get(proto().errorMessage()).setVisible(!getValue().errorMessage().isNull());
 
         reportSectionLister.getDataSource().setParentFiltering(getValue().executionReport().getPrimaryKey(), ExecutionReport.class);
-        reportSectionLister.restoreState();
     }
 }

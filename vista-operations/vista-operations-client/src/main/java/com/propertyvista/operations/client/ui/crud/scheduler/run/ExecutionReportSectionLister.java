@@ -52,7 +52,6 @@ public class ExecutionReportSectionLister extends EntityDataTablePanel<Execution
             @Override
             public void execute(ExecutionReportSection item) {
                 messageLister.getDataSource().setParentFiltering(item.getPrimaryKey(), ExecutionReportSection.class);
-                messageLister.restoreState();
                 messageDialog.show();
             }
         });
