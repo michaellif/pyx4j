@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011- All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -425,7 +425,7 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
                 cap.name().set(ltt.leaseParticipant().customer().person().name());
                 cap.email().setValue(ltt.leaseParticipant().customer().person().email().getValue());
 
-                // remember corresponding tenant: 
+                // remember corresponding tenant:
                 cap.set(cap.tenantId(), ltt);
                 cap.tenantId().setAttachLevel(AttachLevel.IdOnly);
 
@@ -438,7 +438,7 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
                 dep.name().set(ltt.leaseParticipant().customer().person().name());
                 dep.birthDate().setValue(ltt.leaseParticipant().customer().person().birthDate().getValue());
 
-                // remember corresponding tenant: 
+                // remember corresponding tenant:
                 dep.set(dep.tenantId(), ltt);
                 dep.tenantId().setAttachLevel(AttachLevel.IdOnly);
 
@@ -548,7 +548,7 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
             grnt.name().setValue(ltg.leaseParticipant().customer().person().name().getValue());
             grnt.email().setValue(ltg.leaseParticipant().customer().person().email().getValue());
 
-            // remember corresponding customer: 
+            // remember corresponding customer:
             grnt.set(grnt.guarantorId(), ltg);
             grnt.guarantorId().setAttachLevel(AttachLevel.IdOnly);
 
@@ -613,7 +613,7 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
         ltg.tenant().set(ProspectPortalContext.getTenant());
     }
 
-    // Removes duplicate emails in guarantors: 
+    // Removes duplicate emails in guarantors:
     private void validateGuarantors(OnlineApplication bo, OnlineApplicationDTO to) {
         LeaseTerm leaseTerm = bo.masterOnlineApplication().leaseApplication().lease().currentTerm();
 
@@ -640,17 +640,11 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
             Lease lease = bo.masterOnlineApplication().leaseApplication().lease();
 
             if (!lease.unit().isNull()) {
-                Persistence.ensureRetrieve(lease.unit().floorplan(), AttachLevel.Attached);
-                Persistence.ensureRetrieve(lease.unit().building(), AttachLevel.ToStringMembers);
-
                 unitSelection.selectedUnit().set(createUnitDTO(lease.unit()));
                 unitSelection.building().set(lease.unit().building());
                 unitSelection.floorplan().set(lease.unit().floorplan());
                 unitSelection.moveIn().setValue(lease.leaseFrom().getValue());
             } else {
-                Persistence.ensureRetrieve(moa.ilsFloorplan(), AttachLevel.Attached);
-                Persistence.ensureRetrieve(moa.ilsBuilding(), AttachLevel.ToStringMembers);
-
                 unitSelection.building().set(moa.ilsBuilding());
                 unitSelection.floorplan().set(moa.ilsFloorplan());
                 unitSelection.moveIn().setValue(SystemDateManager.getLogicalDate());
@@ -671,6 +665,7 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
     }
 
     private void updateBedsDensBaths(UnitSelectionDTO unitSelection) {
+        Persistence.ensureRetrieve(unitSelection.floorplan(), AttachLevel.Attached);
 
         switch (unitSelection.floorplan().bedrooms().getValue()) {
         case 0:
@@ -930,7 +925,7 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
         switch (bo.role().getValue()) {
         case Applicant:
             if (!to.unitSelection().isNull()) {
-                // from lease term of 1 year from entered move in date:  
+                // from lease term of 1 year from entered move in date:
                 leaseTerm.termFrom().setValue(to.unitSelection().moveIn().getValue());
 
                 leaseTerm.termTo().setValue(new LogicalDate(DateUtils.yearsAdd(leaseTerm.termFrom().getValue(), 1)));
@@ -1162,7 +1157,7 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
         criteria.eq(criteria.proto().productItems().$().product().holder().defaultCatalogItem(), Boolean.FALSE);
         criteria.eq(criteria.proto().productItems().$().product().holder().version().availableOnline(), Boolean.TRUE);
         criteria.isCurrent(criteria.proto().productItems().$().product().holder().version());
-        // availability: 
+        // availability:
         criteria.add(ServerSideFactory.create(OccupancyFacade.class).buildAvalableCriteria(criteria.proto(), AptUnitOccupancySegment.Status.available, moveIn,
                 availabilityDeadline));
 
@@ -1206,7 +1201,7 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
         criteria.eq(criteria.proto().productItems().$().product().holder().defaultCatalogItem(), Boolean.FALSE);
         criteria.eq(criteria.proto().productItems().$().product().holder().version().availableOnline(), Boolean.TRUE);
         criteria.isCurrent(criteria.proto().productItems().$().product().holder().version());
-        // availability: 
+        // availability:
         criteria.add(ServerSideFactory.create(OccupancyFacade.class).buildAvalableCriteria(criteria.proto(), AptUnitOccupancySegment.Status.available,
                 availabilityRightBound, availabilityDeadline));
         criteria.sort(new Sort(criteria.proto().availability().availableForRent(), false));

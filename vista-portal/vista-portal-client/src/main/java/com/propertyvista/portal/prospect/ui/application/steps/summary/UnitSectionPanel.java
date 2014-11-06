@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011-2012 All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -24,6 +24,7 @@ public class UnitSectionPanel extends AbstractSectionPanel {
 
     public UnitSectionPanel(int index, SummaryForm form, UnitStep step) {
         super(index, OnlineApplicationWizardStepMeta.Unit.toString(), form, step);
+
         addCaption(i18n.tr("Unit"));
         addField(proto().unit().info().number());
         addField(proto().unit().building().info().address());

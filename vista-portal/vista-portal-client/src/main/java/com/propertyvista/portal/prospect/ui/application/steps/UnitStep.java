@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011-2012 All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -37,7 +37,6 @@ import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.Label;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 
-import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.tenant.prospect.OnlineApplicationWizardStepMeta;
 import com.propertyvista.portal.prospect.events.ApplicationWizardStateChangeEvent;
 import com.propertyvista.portal.prospect.themes.ApplicationWizardTheme;
@@ -48,6 +47,7 @@ import com.propertyvista.portal.rpc.portal.prospect.dto.UnitSelectionDTO.Bathroo
 import com.propertyvista.portal.rpc.portal.prospect.dto.UnitSelectionDTO.BedroomNumber;
 import com.propertyvista.portal.rpc.portal.prospect.dto.UnitSelectionDTO.UnitTO;
 import com.propertyvista.portal.shared.resources.PortalImages;
+import com.propertyvista.portal.shared.ui.util.CBuildingLabel;
 import com.propertyvista.portal.shared.ui.util.PortalBoxFolder;
 
 public class UnitStep extends ApplicationWizardStep {
@@ -89,7 +89,7 @@ public class UnitStep extends ApplicationWizardStep {
     public IsWidget createStepContent() {
         FormPanel formPanel = new FormPanel(getWizard());
 
-        formPanel.append(Location.Left, proto().unitSelection().building(), new CEntityLabel<Building>()).decorate();
+        formPanel.append(Location.Left, proto().unitSelection().building(), new CBuildingLabel()).decorate();
         formPanel.append(Location.Left, proto().unitSelection().moveIn()).decorate().componentWidth(120);
         formPanel.append(Location.Left, proto().unitSelection().bedrooms(), bedroomSelector).decorate().componentWidth(120);
         formPanel.append(Location.Left, proto().unitSelection().bathrooms(), bathroomSelector).decorate().componentWidth(120);
