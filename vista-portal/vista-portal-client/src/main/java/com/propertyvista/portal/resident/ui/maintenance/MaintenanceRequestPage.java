@@ -45,7 +45,7 @@ import com.propertyvista.domain.maintenance.MaintenanceRequestPicture;
 import com.propertyvista.domain.maintenance.MaintenanceRequestPriority;
 import com.propertyvista.domain.maintenance.MaintenanceRequestStatus.StatusPhase;
 import com.propertyvista.portal.resident.ui.maintenance.MaintenanceRequestPageView.MaintenanceRequestPagePresenter;
-import com.propertyvista.portal.rpc.portal.resident.ResidentPortalSiteMap;
+import com.propertyvista.portal.rpc.portal.PortalSiteMap;
 import com.propertyvista.portal.rpc.portal.resident.dto.maintenance.MaintenanceRequestDTO;
 import com.propertyvista.portal.rpc.portal.resident.services.maintenance.MaintenanceRequestPictureUploadPortalService;
 import com.propertyvista.portal.shared.themes.EntityViewTheme;
@@ -159,7 +159,7 @@ public class MaintenanceRequestPage extends CPortalEntityForm<MaintenanceRequest
 
             @Override
             public void execute() {
-                AppSite.getPlaceController().goTo(new ResidentPortalSiteMap.Message.MessagePage(getValue().message().getPrimaryKey()));
+                AppSite.getPlaceController().goTo(new PortalSiteMap.Message.MessagePage(getValue().message().getPrimaryKey()));
             }
         });
         formPanel.append(Location.Left, communicationLink);

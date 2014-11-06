@@ -11,23 +11,23 @@
  * @author VladL
  * @version $Id$
  */
-package com.propertyvista.portal.resident.activity.communication;
+package com.propertyvista.portal.shared.activity.communication;
 
 import com.google.gwt.core.client.GWT;
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.rpc.AppPlace;
 import com.pyx4j.site.shared.domain.Notification;
 import com.pyx4j.site.shared.domain.Notification.NotificationType;
 
-import com.propertyvista.portal.resident.ResidentPortalSite;
-import com.propertyvista.portal.resident.ui.communication.MessageWizardView;
-import com.propertyvista.portal.resident.ui.communication.MessageWizardView.MessageWizardPresenter;
-import com.propertyvista.portal.rpc.portal.resident.ResidentPortalSiteMap;
+import com.propertyvista.portal.rpc.portal.PortalSiteMap;
 import com.propertyvista.portal.rpc.portal.resident.communication.MessageDTO;
 import com.propertyvista.portal.rpc.portal.resident.services.MessagePortalCrudService;
 import com.propertyvista.portal.shared.activity.AbstractWizardCrudActivity;
+import com.propertyvista.portal.shared.ui.communication.MessageWizardView;
+import com.propertyvista.portal.shared.ui.communication.MessageWizardView.MessageWizardPresenter;
 
 public class MessageWizardActivity extends AbstractWizardCrudActivity<MessageDTO, MessageWizardView> implements MessageWizardPresenter {
 
@@ -40,6 +40,6 @@ public class MessageWizardActivity extends AbstractWizardCrudActivity<MessageDTO
     @Override
     protected void onFinish(Key result) {
         Notification message = new Notification(null, i18n.tr("Message submitted Successfully!"), NotificationType.INFO);
-        ResidentPortalSite.getPlaceController().showNotification(message, new ResidentPortalSiteMap.Message.MessageView());
+        AppSite.getPlaceController().showNotification(message, new PortalSiteMap.Message.MessageView());
     }
 }

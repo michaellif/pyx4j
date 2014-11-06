@@ -49,7 +49,7 @@ import com.propertyvista.domain.security.PortalResidentBehavior;
 import com.propertyvista.domain.tenant.lease.LeaseParticipant;
 import com.propertyvista.portal.rpc.portal.resident.communication.MessageDTO;
 import com.propertyvista.portal.rpc.portal.resident.services.MessagePortalCrudService;
-import com.propertyvista.portal.server.portal.resident.ResidentPortalContext;
+import com.propertyvista.portal.server.portal.shared.PortalVistaContext;
 
 public class MessagePortalCrudServiceImpl extends AbstractCrudServiceDtoImpl<Message, MessageDTO> implements MessagePortalCrudService {
 
@@ -92,7 +92,7 @@ public class MessagePortalCrudServiceImpl extends AbstractCrudServiceDtoImpl<Mes
         PropertyCriterion recipientCiteria = toCriteria.getCriterion(toCriteria.proto().thread().content().$().recipients().$().recipient());
         if (recipientCiteria != null) {
             toCriteria.getFilters().remove(recipientCiteria);
-            boCriteria.eq(boCriteria.proto().recipients().$().recipient(), ResidentPortalContext.getLeaseParticipant());
+            boCriteria.eq(boCriteria.proto().recipients().$().recipient(), PortalVistaContext.getLeaseParticipant());
         }
         super.enhanceListCriteria(boCriteria, toCriteria);
     }
@@ -103,7 +103,7 @@ public class MessagePortalCrudServiceImpl extends AbstractCrudServiceDtoImpl<Mes
         dto.isRead().setValue(false);
         dto.highImportance().setValue(false);
         dto.allowedReply().setValue(true);
-        dto.sender().set(ResidentPortalContext.getLeaseParticipant());
+        dto.sender().set(PortalVistaContext.getLeaseParticipant());
         if (initializationData instanceof MessageInitializationData) {
             dto.text().set(((MessageInitializationData) initializationData).initalizedText());
         }
@@ -120,7 +120,7 @@ public class MessagePortalCrudServiceImpl extends AbstractCrudServiceDtoImpl<Mes
 
         bo.attachments().set(to.attachments());
         bo.date().setValue(SystemDateManager.getDate());
-        bo.sender().set(ResidentPortalContext.getLeaseParticipant());
+        bo.sender().set(PortalVistaContext.getLeaseParticipant());
         bo.text().set(to.text());
         bo.highImportance().set(to.highImportance());
         CommunicationMessageFacade communicationFacade = ServerSideFactory.create(CommunicationMessageFacade.class);
@@ -142,7 +142,7 @@ public class MessagePortalCrudServiceImpl extends AbstractCrudServiceDtoImpl<Mes
     public void listForHeader(AsyncCallback<EntitySearchResult<MessageDTO>> callback) {
         CommunicationMessageFacade communicationFacade = ServerSideFactory.create(CommunicationMessageFacade.class);
 
-        List<CommunicationThread> directThreads = communicationFacade.getDirectThreads(ResidentPortalContext.getLeaseParticipant());
+        List<CommunicationThread> directThreads = communicationFacade.getDirectThreads(PortalVistaContext.getLeaseParticipant());
 
         EntityListCriteria<MessageDTO> messageCriteria = EntityListCriteria.create(MessageDTO.class);
         if (directThreads != null && directThreads.size() > 0) {
@@ -190,7 +190,7 @@ public class MessagePortalCrudServiceImpl extends AbstractCrudServiceDtoImpl<Mes
             int messagesInThread = 0;
             CommunicationMessageFacade facade = ServerSideFactory.create(CommunicationMessageFacade.class);
             ListOrderedSet<CommunicationEndpoint> senders = new ListOrderedSet<CommunicationEndpoint>();
-            LeaseParticipant<?> lp = ResidentPortalContext.getLeaseParticipant();
+            LeaseParticipant<?> lp = PortalVistaContext.getLeaseParticipant();
             for (Message m : ms) {
                 Persistence.ensureRetrieve(m.recipients(), AttachLevel.Attached);
                 Persistence.ensureRetrieve(m.attachments(), AttachLevel.Attached);
@@ -239,7 +239,7 @@ public class MessagePortalCrudServiceImpl extends AbstractCrudServiceDtoImpl<Mes
         boolean isRead = true;
 
         messageDTO.isInRecipients().setValue(false);
-        LeaseParticipant<?> lp = ResidentPortalContext.getLeaseParticipant();
+        LeaseParticipant<?> lp = PortalVistaContext.getLeaseParticipant();
         for (DeliveryHandle dh : m.recipients()) {
             if (!lp.equals(dh.recipient())) {
                 continue;
@@ -284,7 +284,7 @@ public class MessagePortalCrudServiceImpl extends AbstractCrudServiceDtoImpl<Mes
             m.thread().set(thread);
             m.attachments().set(message.attachments());
             m.date().setValue(SystemDateManager.getDate());
-            m.sender().set(ResidentPortalContext.getLeaseParticipant());
+            m.sender().set(PortalVistaContext.getLeaseParticipant());
             m.text().set(message.text());
             m.highImportance().set(message.highImportance());
             if (message.recipients() != null && message.recipients().size() > 0) {
@@ -295,7 +295,7 @@ public class MessagePortalCrudServiceImpl extends AbstractCrudServiceDtoImpl<Mes
             Persistence.service().persist(m);
         } else {
             EntityQueryCriteria<DeliveryHandle> dhCriteria = EntityQueryCriteria.create(DeliveryHandle.class);
-            dhCriteria.eq(dhCriteria.proto().recipient(), ResidentPortalContext.getLeaseParticipant());
+            dhCriteria.eq(dhCriteria.proto().recipient(), PortalVistaContext.getLeaseParticipant());
             dhCriteria.eq(dhCriteria.proto().message(), message);
             DeliveryHandle dh = Persistence.retrieveUnique(dhCriteria, AttachLevel.Attached);
             dh.isRead().set(message.isRead());
@@ -319,7 +319,7 @@ public class MessagePortalCrudServiceImpl extends AbstractCrudServiceDtoImpl<Mes
             return;
         }
 
-        LeaseParticipant<?> currentUser = ResidentPortalContext.getLeaseParticipant();
+        LeaseParticipant<?> currentUser = PortalVistaContext.getLeaseParticipant();
         EntityQueryCriteria<ThreadPolicyHandle> policyCriteria = EntityQueryCriteria.create(ThreadPolicyHandle.class);
 
         policyCriteria.add(PropertyCriterion.in(policyCriteria.proto().thread(), thread));

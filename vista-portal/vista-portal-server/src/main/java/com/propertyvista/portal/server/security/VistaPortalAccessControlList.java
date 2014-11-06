@@ -223,8 +223,7 @@ public class VistaPortalAccessControlList extends UIAclBuilder {
 
         grant(new IServiceExecutePermission(ExtraActivityPortalService.class));
         grant(new IServiceExecutePermission(CommunityEventPortalCrudService.class));
-        grant(PortalResidentBehavior.Resident, new IServiceExecutePermission(MessagePortalCrudService.class));
-        grant(PortalResidentBehavior.Guarantor, new IServiceExecutePermission(MessagePortalCrudService.class));
+        grant(new IServiceExecutePermission(MessagePortalCrudService.class));
 
         grant(PortalResidentBehavior.Resident, new IServiceExecutePermission(DeferredProcessService.class));
 
@@ -236,6 +235,7 @@ public class VistaPortalAccessControlList extends UIAclBuilder {
         // ========================= communication
         grant(PortalResidentBehavior.Resident, new IServiceExecutePermission(MessageAttachmentUploadPortalService.class));
         grant(PortalResidentBehavior.Guarantor, new IServiceExecutePermission(MessageAttachmentUploadPortalService.class));
+        grant(PortalProspectBehavior.Prospect, new IServiceExecutePermission(MessageAttachmentUploadPortalService.class));
 
         grant(PortalResidentBehavior.Resident, new EntityPermission(CustomerPreferences.class, CRUD));
         grant(PortalResidentBehavior.Resident, new EntityPermission(DeliveryHandle.class, CRUD));
@@ -254,6 +254,13 @@ public class VistaPortalAccessControlList extends UIAclBuilder {
         grant(PortalResidentBehavior.Guarantor, new EntityPermission(MaintenanceRequestPicture.class, CRUD));
         grant(PortalResidentBehavior.Guarantor, new EntityPermission(MessageCategory.class, CRUD));
         grant(PortalResidentBehavior.Guarantor, new EntityPermission(ThreadPolicyHandle.class, CRUD));
+
+        grant(PortalProspectBehavior.Prospect, new EntityPermission(DeliveryHandle.class, CRUD));
+        grant(PortalProspectBehavior.Prospect, new EntityPermission(MessageAttachment.class, CRUD));
+        grant(PortalProspectBehavior.Prospect, new EntityPermission(CommunicationThread.class, EntityPermission.READ));
+        grant(PortalProspectBehavior.Prospect, new EntityPermission(Message.class, CRUD));
+        grant(PortalProspectBehavior.Prospect, new EntityPermission(MessageCategory.class, EntityPermission.READ));
+        grant(PortalProspectBehavior.Prospect, new EntityPermission(ThreadPolicyHandle.class, CRUD));
 
         //========================= Prospect Portal
 
@@ -342,6 +349,8 @@ public class VistaPortalAccessControlList extends UIAclBuilder {
         grant(VistaDataAccessBehavior.ProspectInPortal, new ProofOfAssetDocumentFileProspectDatasetAccessRule(), ProofOfAssetDocumentFile.class);
         grant(VistaDataAccessBehavior.ProspectInPortal, new LeasePaymentMethodProspectDatasetAccessRule(), LeasePaymentMethod.class);
         grant(VistaDataAccessBehavior.ProspectInPortal, new LeaseTermTenantProspectDatasetAccessRule(), LeaseTermTenant.class);
+        grant(VistaDataAccessBehavior.ProspectInPortal, new MessagePortalAccessRule(), Message.class);
+        grant(VistaDataAccessBehavior.ProspectInPortal, new CommunicationThreadPortalAccessRule(), CommunicationThread.class);
 
         grant(new IServiceExecutePermission(PortalContentService.class));
         freeze();

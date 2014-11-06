@@ -16,12 +16,13 @@ package com.propertyvista.portal.prospect.ui;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.layout.ResponsiveLayoutPanel.DisplayType;
 
+import com.propertyvista.portal.prospect.mvp.CommunicationActivityMapper;
 import com.propertyvista.portal.prospect.mvp.ContentActivityMapper;
 import com.propertyvista.portal.prospect.mvp.MenuActivityMapper;
 import com.propertyvista.portal.prospect.mvp.RentChargesActivityMapper;
 import com.propertyvista.portal.prospect.mvp.RentDetailsActivityMapper;
-import com.propertyvista.portal.prospect.mvp.ToolbarActivityMapper;
 import com.propertyvista.portal.prospect.mvp.SiteFeedbackMapper;
+import com.propertyvista.portal.prospect.mvp.ToolbarActivityMapper;
 import com.propertyvista.portal.shared.mvp.FooterActivityMapper;
 import com.propertyvista.portal.shared.mvp.HeaderActivityMapper;
 import com.propertyvista.portal.shared.mvp.NotificationActivityMapper;
@@ -43,6 +44,7 @@ public class ProspectPortalRootPane extends PortalRootPane {
         bind(new RentChargesActivityMapper(), asWidget().getDisplay(DisplayType.extra2));
         bind(new SiteFeedbackMapper(), asWidget().getDisplay(DisplayType.extra4));
         bind(new NotificationActivityMapper(), asWidget().getDisplay(DisplayType.notification));
+        bind(new CommunicationActivityMapper(), asWidget().getDisplay(DisplayType.communication));
     }
 
 }

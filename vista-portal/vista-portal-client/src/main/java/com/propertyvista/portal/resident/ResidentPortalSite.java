@@ -21,7 +21,6 @@ import com.pyx4j.site.rpc.NotificationAppPlace;
 import com.pyx4j.site.shared.domain.Notification;
 
 import com.propertyvista.domain.security.common.VistaApplication;
-import com.propertyvista.portal.resident.activity.PortalClientCommunicationManager;
 import com.propertyvista.portal.resident.activity.movein.MoveInWizardManager;
 import com.propertyvista.portal.resident.themes.ResidentPortalTheme;
 import com.propertyvista.portal.resident.ui.ResidentPortalRootPane;
@@ -29,6 +28,7 @@ import com.propertyvista.portal.rpc.portal.PortalSiteMap;
 import com.propertyvista.portal.rpc.portal.resident.ResidentPortalSiteMap;
 import com.propertyvista.portal.rpc.portal.resident.services.ResidentAuthenticationService;
 import com.propertyvista.portal.shared.PortalSite;
+import com.propertyvista.portal.shared.activity.PortalClientCommunicationManager;
 
 public class ResidentPortalSite extends PortalSite {
 

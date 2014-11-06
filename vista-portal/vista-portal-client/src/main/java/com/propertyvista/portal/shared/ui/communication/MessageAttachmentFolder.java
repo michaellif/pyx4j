@@ -11,7 +11,7 @@
  * @author smolka
  * @version $Id$
  */
-package com.propertyvista.portal.resident.ui.communication;
+package com.propertyvista.portal.shared.ui.communication;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.ui.IsWidget;

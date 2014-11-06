@@ -55,8 +55,7 @@ import com.propertyvista.domain.security.common.VistaApplication;
 import com.propertyvista.domain.tenant.lease.LeaseParticipant;
 import com.propertyvista.dto.CommunicationEndpointDTO;
 import com.propertyvista.dto.MessageDTO;
-import com.propertyvista.portal.rpc.portal.CustomerUserVisit;
-import com.propertyvista.portal.rpc.portal.resident.ResidentUserVisit;
+import com.propertyvista.portal.rpc.portal.PortalUserVisit;
 import com.propertyvista.portal.rpc.shared.dto.communication.PortalCommunicationSystemNotification;
 import com.propertyvista.shared.VistaUserVisit;
 
@@ -142,7 +141,8 @@ public class CommunicationManager {
         if (isCRM) {
             return new CrmCommunicationSystemNotification(directMessages == null ? 0 : directMessages.size(), dispatchedMessages == null ? 0
                     : dispatchedMessages.size());
-        } else if (VistaApplication.resident.equals(Context.visit(VistaUserVisit.class).getApplication())) {
+        } else if (VistaApplication.resident.equals(Context.visit(VistaUserVisit.class).getApplication())
+                || VistaApplication.prospect.equals(Context.visit(VistaUserVisit.class).getApplication())) {
             return new PortalCommunicationSystemNotification(directMessages == null ? 0 : directMessages.size());
         }
 
@@ -248,12 +248,10 @@ public class CommunicationManager {
 
     @SuppressWarnings("rawtypes")
     private CommunicationEndpoint getCurrentUserAsEndpoint() {
-        if (VistaApplication.resident.equals(Context.visit(VistaUserVisit.class).getApplication())) {
+        if (VistaApplication.resident.equals(Context.visit(VistaUserVisit.class).getApplication())
+                || VistaApplication.prospect.equals(Context.visit(VistaUserVisit.class).getApplication())) {
 
-            EntityQueryCriteria<LeaseParticipant> criteria = EntityQueryCriteria.create(LeaseParticipant.class);
-            criteria.eq(criteria.proto().lease(), ServerContext.visit(ResidentUserVisit.class).getLeaseId());
-            criteria.eq(criteria.proto().customer().user(), ServerContext.visit(CustomerUserVisit.class).getCurrentUser());
-            return Persistence.service().retrieve(criteria);
+            return Persistence.service().retrieve(LeaseParticipant.class, ServerContext.visit(PortalUserVisit.class).getLeaseParticipantId().getPrimaryKey());
 
         } else if (VistaApplication.crm.equals(Context.visit(VistaUserVisit.class).getApplication())) {
             EntityQueryCriteria<Employee> criteria = EntityQueryCriteria.create(Employee.class);

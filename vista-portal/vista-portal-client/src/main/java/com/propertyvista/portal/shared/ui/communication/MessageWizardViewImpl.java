@@ -11,7 +11,7 @@
  * @author michaellif
  * @version $Id$
  */
-package com.propertyvista.portal.resident.ui.communication;
+package com.propertyvista.portal.shared.ui.communication;
 
 import com.propertyvista.portal.rpc.portal.resident.communication.MessageDTO;
 import com.propertyvista.portal.shared.ui.AbstractWizardView;

@@ -43,8 +43,11 @@ import com.pyx4j.widgets.client.Toolbar;
 import com.propertyvista.common.client.ClientLocaleUtils;
 import com.propertyvista.common.client.ui.components.MediaUtils;
 import com.propertyvista.portal.rpc.portal.prospect.ProspectPortalSiteMap;
+import com.propertyvista.portal.rpc.shared.dto.communication.PortalCommunicationSystemNotification;
 import com.propertyvista.portal.shared.PortalSite;
+import com.propertyvista.portal.shared.activity.PortalClientCommunicationManager;
 import com.propertyvista.portal.shared.resources.PortalImages;
+import com.propertyvista.portal.shared.themes.CommunicationTheme;
 import com.propertyvista.portal.shared.themes.PortalRootPaneTheme;
 import com.propertyvista.shared.i18n.CompiledLocale;
 
@@ -79,6 +82,8 @@ public class ToolbarViewImpl extends FlowPanel implements ToolbarView, RequiresS
     private boolean hideLoginButton = false;
 
     private boolean loggedIn = false;
+
+    private final Button communicationButton;
 
     public ToolbarViewImpl() {
         setStyleName(PortalRootPaneTheme.StyleName.MainToolbar.name());
@@ -124,6 +129,25 @@ public class ToolbarViewImpl extends FlowPanel implements ToolbarView, RequiresS
 
         languageButton = new Button(ClientLocaleUtils.getCurrentLocale().toString());
 
+        communicationButton = new Button(PortalImages.INSTANCE.alertsOff(), new Command() {
+            @Override
+            public void execute() {
+                switch (layoutType) {
+                case phonePortrait:
+                case phoneLandscape:
+                    AppSite.getEventBus().fireEvent(new LayoutChangeRequestEvent(ChangeType.toggleSideComm));
+                    break;
+                default:
+                    AppSite.getEventBus().fireEvent(new LayoutChangeRequestEvent(communicationButton));
+                    break;
+                }
+
+                presenter.loadMessages();
+            }
+        });
+        communicationButton.setStyleName(PortalRootPaneTheme.StyleName.AllertButton.name());
+        communicationButton.addStyleName(CommunicationTheme.StyleName.Button.name());
+
         rightToolbar.addItem(loginButton);
         rightToolbar.addItem(residentButton);
 
@@ -132,6 +156,7 @@ public class ToolbarViewImpl extends FlowPanel implements ToolbarView, RequiresS
             rightToolbar.addItem(languageButton);
         }
 
+        rightToolbar.addItem(communicationButton);
         rightToolbar.getElement().getStyle().setPosition(Position.ABSOLUTE);
         rightToolbar.getElement().getStyle().setProperty("right", "0");
 
@@ -269,6 +294,8 @@ public class ToolbarViewImpl extends FlowPanel implements ToolbarView, RequiresS
             break;
         }
         loginButton.setVisible(!loggedIn && !hideLoginButton);
+        updateCommunicationMessagesCount(PortalClientCommunicationManager.instance().getLatestCommunicationNotification());
+        communicationButton.setVisible(loggedIn);
 
         switch (layoutType) {
         case monitor:
@@ -280,6 +307,21 @@ public class ToolbarViewImpl extends FlowPanel implements ToolbarView, RequiresS
             brandLabel.setVisible(false);
             break;
         }
+    }
+
+    @Override
+    public void updateCommunicationMessagesCount(PortalCommunicationSystemNotification communicationStatus) {
+        int count = communicationStatus == null ? 0 : communicationStatus.numberOfNewDirectMessages;
+        if (count > 0) {
+            communicationButton.setImage(PortalImages.INSTANCE.alertsOn());
+            communicationButton.setTextLabel(String.valueOf(count));
+            communicationButton.addStyleDependentName(PortalRootPaneTheme.StyleDependent.alertOn.name());
+        } else {
+            communicationButton.setImage(PortalImages.INSTANCE.alertsOff());
+            communicationButton.setTextLabel("");
+            communicationButton.removeStyleDependentName(PortalRootPaneTheme.StyleDependent.alertOn.name());
+        }
+
     }
 
     @Override

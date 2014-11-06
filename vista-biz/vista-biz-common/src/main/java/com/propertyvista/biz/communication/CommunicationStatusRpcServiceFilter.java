@@ -23,8 +23,8 @@ import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.server.contexts.ServerContext;
 
 import com.propertyvista.domain.security.VistaDataAccessBehavior;
-import com.propertyvista.domain.security.common.VistaApplication;
 import com.propertyvista.domain.security.common.VistaAccessGrantedBehavior;
+import com.propertyvista.domain.security.common.VistaApplication;
 import com.propertyvista.shared.VistaUserVisit;
 
 public class CommunicationStatusRpcServiceFilter implements IServiceFilter {
@@ -49,7 +49,7 @@ public class CommunicationStatusRpcServiceFilter implements IServiceFilter {
                 if (!SecurityController.check(VistaAccessGrantedBehavior.CRM)) {
                     return response;
                 }
-            } else {
+            } else if (!VistaApplication.prospect.equals(Context.visit(VistaUserVisit.class).getApplication())) {
                 return response;
             }
             if (!isCached()) {

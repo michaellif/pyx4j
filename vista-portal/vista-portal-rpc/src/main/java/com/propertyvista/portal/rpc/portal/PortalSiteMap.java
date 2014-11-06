@@ -13,6 +13,7 @@
  */
 package com.propertyvista.portal.rpc.portal;
 
+import com.pyx4j.commons.Key;
 import com.pyx4j.site.rpc.AppPlace;
 import com.pyx4j.site.rpc.NotificationAppPlace;
 import com.pyx4j.site.rpc.annotations.PlaceProperties;
@@ -90,6 +91,27 @@ public class PortalSiteMap implements SiteMap {
         }
 
         public static class DirectBankingInstruction extends AppPlace implements PublicPlace {
+        }
+    }
+
+    @PlaceProperties(navigLabel = "My Messages")
+    public static class Message extends AppPlace {
+        public static class MessageWizard extends AppPlace {
+        }
+
+        public static class MessagePage extends AppPlace {
+            public MessagePage(Key threadId) {
+                formPlace(threadId);
+            }
+
+            public MessagePage() {
+            }
+        }
+
+        public static class MessageView extends AppPlace {
+        }
+
+        public static class CommunicationMessage extends AppPlace {
         }
     }
 }

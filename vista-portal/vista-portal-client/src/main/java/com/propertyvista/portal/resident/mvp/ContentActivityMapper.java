@@ -26,9 +26,6 @@ import com.propertyvista.portal.resident.activity.LandingActivity;
 import com.propertyvista.portal.resident.activity.LeaseContextSelectionActivity;
 import com.propertyvista.portal.resident.activity.PortalTermsActivity;
 import com.propertyvista.portal.resident.activity.SignUpActivity;
-import com.propertyvista.portal.resident.activity.communication.MessagePageActivity;
-import com.propertyvista.portal.resident.activity.communication.MessageViewActivity;
-import com.propertyvista.portal.resident.activity.communication.MessageWizardActivity;
 import com.propertyvista.portal.resident.activity.dashboard.MainDashboardActivity;
 import com.propertyvista.portal.resident.activity.financial.autopay.AutoPayActivity;
 import com.propertyvista.portal.resident.activity.financial.autopay.AutoPayConfirmationActivity;
@@ -74,6 +71,9 @@ import com.propertyvista.portal.rpc.portal.resident.ResidentPortalSiteMap.LeaseC
 import com.propertyvista.portal.rpc.portal.resident.ResidentPortalSiteMap.Registration;
 import com.propertyvista.portal.rpc.portal.resident.ResidentPortalSiteMap.ResidentPortalTerms;
 import com.propertyvista.portal.shared.activity.NotificationPageActivity;
+import com.propertyvista.portal.shared.activity.communication.MessagePageActivity;
+import com.propertyvista.portal.shared.activity.communication.MessageViewActivity;
+import com.propertyvista.portal.shared.activity.communication.MessageWizardActivity;
 import com.propertyvista.portal.shared.activity.login.LoginWithTokenActivity;
 import com.propertyvista.portal.shared.activity.login.LogoutActivity;
 import com.propertyvista.portal.shared.activity.login.PasswordResetRequestWizardActivity;
@@ -167,17 +167,17 @@ public class ContentActivityMapper implements AppActivityMapper {
                     } else if (place instanceof ResidentPortalSiteMap.MoveIn.MoveInWizard) {
                         activity = new MoveInWizardActivity(appPlace);
 
-// LeaseSigning                        
+// LeaseSigning
                     } else if (place instanceof ResidentPortalSiteMap.LeaseSigning.LeaseSigningWizard) {
                         activity = new LeaseSigningWizardActivity(appPlace);
                     } else if (place instanceof ResidentPortalSiteMap.LeaseSigning.LeaseSigningWizardConfirmation) {
                         activity = new LeaseSigningConfirmationActivity(appPlace);
 // Communication
-                    } else if (place instanceof ResidentPortalSiteMap.Message.MessageWizard) {
+                    } else if (place instanceof PortalSiteMap.Message.MessageWizard) {
                         activity = new MessageWizardActivity(appPlace);
-                    } else if (place instanceof ResidentPortalSiteMap.Message.MessagePage) {
+                    } else if (place instanceof PortalSiteMap.Message.MessagePage) {
                         activity = new MessagePageActivity(appPlace);
-                    } else if (place instanceof ResidentPortalSiteMap.Message.MessageView) {
+                    } else if (place instanceof PortalSiteMap.Message.MessageView) {
                         activity = new MessageViewActivity();
 // Internals
                     } else if (place instanceof Login) {
@@ -203,14 +203,14 @@ public class ContentActivityMapper implements AppActivityMapper {
                     } else if (place instanceof ResidentPortalTerms.PreauthorizedPaymentTerms
                             || place instanceof ResidentPortalTerms.TenantSurePreAuthorizedPaymentTerms
                             || place instanceof ResidentPortalTerms.CreditCardPolicy
-                            
+
                             || place instanceof PortalSiteMap.PortalTerms.BillingTerms
                             || place instanceof PortalSiteMap.PortalTerms.WebPaymentFeeTerms
                             || place instanceof PortalSiteMap.PortalTerms.DirectBankingInstruction
-                            
+
                             || place instanceof PortalSiteMap.PortalTerms.VistaTermsAndConditions
                             || place instanceof PortalSiteMap.PortalTerms.VistaPrivacyPolicy
-                            
+
                             || place instanceof PortalSiteMap.PortalTerms.PmcTermsAndConditions
                             || place instanceof PortalSiteMap.PortalTerms.PmcPrivacyPolicy) {
                         activity = new PortalTermsActivity(place);

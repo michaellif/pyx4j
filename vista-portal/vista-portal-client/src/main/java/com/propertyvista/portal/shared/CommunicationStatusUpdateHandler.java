@@ -7,18 +7,15 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on May 15, 2011
- * @author Dad
+ * Created on Feb 15, 2011
+ * @author michaellif
  * @version $Id$
  */
-package com.propertyvista.portal.resident.ui.communication;
+package com.propertyvista.portal.shared;
 
-import com.propertyvista.portal.rpc.portal.resident.communication.MessageDTO;
-import com.propertyvista.portal.shared.ui.AbstractEditorView;
+import com.google.gwt.event.shared.EventHandler;
 
-public class MessagePageViewImpl extends AbstractEditorView<MessageDTO> implements MessagePageView {
+public interface CommunicationStatusUpdateHandler extends EventHandler {
 
-    public MessagePageViewImpl() {
-        setForm(new MessagePage(this));
-    }
+    void onStatusUpdate(CommunicationStatusUpdateEvent event);
 }

@@ -11,7 +11,7 @@
  * @author Mykola
  * @version $Id$
  */
-package com.propertyvista.portal.resident.ui.communication;
+package com.propertyvista.portal.shared.ui.communication;
 
 import java.util.Vector;
 
@@ -46,7 +46,7 @@ import com.pyx4j.site.client.AppSite;
 import com.pyx4j.widgets.client.Anchor;
 
 import com.propertyvista.domain.security.PortalResidentBehavior;
-import com.propertyvista.portal.rpc.portal.resident.ResidentPortalSiteMap;
+import com.propertyvista.portal.rpc.portal.PortalSiteMap;
 import com.propertyvista.portal.rpc.portal.resident.communication.MessageDTO;
 import com.propertyvista.portal.shared.resources.PortalImages;
 import com.propertyvista.portal.shared.themes.PortalRootPaneTheme;
@@ -154,7 +154,7 @@ public class CommunicationViewImpl extends FlowPanel implements CommunicationVie
                 @Override
                 public void onClick(ClickEvent event) {
                     doToggleHandler();
-                    AppSite.getPlaceController().goTo(new ResidentPortalSiteMap.Message.MessagePage(message.getPrimaryKey()));
+                    AppSite.getPlaceController().goTo(new PortalSiteMap.Message.MessagePage(message.getPrimaryKey()));
                 }
             });
 
@@ -201,7 +201,7 @@ public class CommunicationViewImpl extends FlowPanel implements CommunicationVie
                 @Override
                 public void execute() {
                     doToggleHandler();
-                    AppSite.getPlaceController().goTo(new ResidentPortalSiteMap.Message.MessageView());
+                    AppSite.getPlaceController().goTo(new PortalSiteMap.Message.MessageView());
                 }
             });
             messagesAnchor.setStyleName(PortalRootPaneTheme.StyleName.CommHeaderTitle.name());
@@ -215,7 +215,7 @@ public class CommunicationViewImpl extends FlowPanel implements CommunicationVie
                 @Override
                 public void onClick(ClickEvent event) {
                     doToggleHandler();
-                    AppSite.getPlaceController().goTo(new ResidentPortalSiteMap.Message.MessageWizard());
+                    AppSite.getPlaceController().goTo(new PortalSiteMap.Message.MessageWizard());
                 }
             });
             add(messagesAnchor);

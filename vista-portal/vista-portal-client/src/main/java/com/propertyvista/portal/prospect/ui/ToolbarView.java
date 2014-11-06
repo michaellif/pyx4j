@@ -17,6 +17,7 @@ import java.util.List;
 
 import com.pyx4j.site.client.IsView;
 
+import com.propertyvista.portal.rpc.shared.dto.communication.PortalCommunicationSystemNotification;
 import com.propertyvista.shared.i18n.CompiledLocale;
 
 public interface ToolbarView extends IsView {
@@ -30,6 +31,8 @@ public interface ToolbarView extends IsView {
         void showApplications();
 
         void setLocale(CompiledLocale locale);
+
+        void loadMessages();
     }
 
     void setPresenter(ToolbarPresenter presenter);
@@ -41,5 +44,7 @@ public interface ToolbarView extends IsView {
     void setAvailableLocales(List<CompiledLocale> locales);
 
     void setApplicationsSelectorEnabled(boolean enabled);
+
+    void updateCommunicationMessagesCount(PortalCommunicationSystemNotification communicationStatus);
 
 }

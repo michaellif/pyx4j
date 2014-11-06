@@ -27,6 +27,7 @@ import com.pyx4j.widgets.client.Anchor;
 import com.propertyvista.domain.tenant.CustomerPreferencesPortalHidable;
 import com.propertyvista.portal.resident.ui.ContentLink;
 import com.propertyvista.portal.resident.ui.utils.PortalHidablePreferenceManager;
+import com.propertyvista.portal.rpc.portal.PortalSiteMap;
 import com.propertyvista.portal.rpc.portal.resident.ResidentPortalSiteMap;
 import com.propertyvista.portal.shared.themes.DashboardTheme;
 import com.propertyvista.portal.shared.ui.AbstractGadget;
@@ -62,7 +63,7 @@ public class GettingStartedGadget extends AbstractGadget<MainDashboardViewImpl> 
 
             @Override
             public void execute() {
-                AppSite.getPlaceController().goTo(new ResidentPortalSiteMap.Message.MessageView());
+                AppSite.getPlaceController().goTo(new PortalSiteMap.Message.MessageView());
             }
         }), communicationId);
 

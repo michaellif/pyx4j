@@ -11,7 +11,7 @@
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.portal.resident.ui.communication;
+package com.propertyvista.portal.shared.ui.communication;
 
 import java.util.Arrays;
 import java.util.List;
@@ -23,12 +23,14 @@ import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.forms.client.ui.datatable.DataTableModel;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.backoffice.ui.prime.lister.AbstractPrimeLister.ItemSelectionHandler;
 import com.pyx4j.site.client.backoffice.ui.prime.lister.EntityDataTablePanel;
 import com.pyx4j.site.client.backoffice.ui.prime.lister.ListerDataSource;
 
-import com.propertyvista.portal.rpc.portal.resident.ResidentPortalSiteMap;
+import com.propertyvista.domain.security.PortalResidentBehavior;
+import com.propertyvista.portal.rpc.portal.PortalSiteMap;
 import com.propertyvista.portal.rpc.portal.resident.communication.MessageDTO;
 import com.propertyvista.portal.shared.themes.DashboardTheme;
 import com.propertyvista.portal.shared.ui.AbstractGadget;
@@ -71,7 +73,7 @@ public class MessageViewImpl extends SimplePanel implements MessageView {
             lister.addItemSelectionHandler(new ItemSelectionHandler<MessageDTO>() {
                 @Override
                 public void onSelect(MessageDTO selectedItem) {
-                    AppSite.getPlaceController().goTo(new ResidentPortalSiteMap.Message.MessagePage(selectedItem.getPrimaryKey()));
+                    AppSite.getPlaceController().goTo(new PortalSiteMap.Message.MessagePage(selectedItem.getPrimaryKey()));
 
                 }
             });
@@ -84,7 +86,7 @@ public class MessageViewImpl extends SimplePanel implements MessageView {
     private static class MessageLister extends EntityDataTablePanel<MessageDTO> {
 
         public MessageLister() {
-            super(MessageDTO.class, true, false);
+            super(MessageDTO.class, SecurityController.check(PortalResidentBehavior.CommunicationCreateMessages), false);
             getDataTablePanel().setFilteringEnabled(false);
             //getDataTablePanel().getAddButton().asWidget().setStyleName(DataTableTheme.StyleName.ListerButton.name());
             // No filtering work for it
@@ -104,7 +106,7 @@ public class MessageViewImpl extends SimplePanel implements MessageView {
 
         @Override
         protected void onItemNew() {
-            AppSite.getPlaceController().goTo(new ResidentPortalSiteMap.Message.MessageWizard());
+            AppSite.getPlaceController().goTo(new PortalSiteMap.Message.MessageWizard());
 
         }
 

@@ -11,7 +11,7 @@
  * @author vlads
  * @version $Id$
  */
-package com.propertyvista.portal.resident.activity;
+package com.propertyvista.portal.shared.activity;
 
 import com.pyx4j.rpc.client.RPCManager;
 import com.pyx4j.rpc.client.SystemNotificationEvent;

@@ -11,7 +11,7 @@
  * @author Dad
  * @version $Id$
  */
-package com.propertyvista.portal.resident.ui.communication;
+package com.propertyvista.portal.shared.ui.communication;
 
 import java.util.Date;
 
@@ -65,14 +65,15 @@ import com.propertyvista.domain.communication.DeliveryHandle;
 import com.propertyvista.domain.communication.MessageCategory;
 import com.propertyvista.domain.communication.MessageCategory.CategoryType;
 import com.propertyvista.misc.VistaTODO;
-import com.propertyvista.portal.resident.activity.PortalClientCommunicationManager;
-import com.propertyvista.portal.resident.events.CommunicationStatusUpdateEvent;
-import com.propertyvista.portal.resident.themes.CommunicationTheme;
-import com.propertyvista.portal.resident.ui.communication.MessagePageView.MessagePagePresenter;
+import com.propertyvista.portal.rpc.portal.PortalSiteMap;
 import com.propertyvista.portal.rpc.portal.resident.ResidentPortalSiteMap;
 import com.propertyvista.portal.rpc.portal.resident.communication.MessageDTO;
+import com.propertyvista.portal.shared.CommunicationStatusUpdateEvent;
+import com.propertyvista.portal.shared.activity.PortalClientCommunicationManager;
 import com.propertyvista.portal.shared.resources.PortalImages;
+import com.propertyvista.portal.shared.themes.CommunicationTheme;
 import com.propertyvista.portal.shared.ui.CPortalEntityForm;
+import com.propertyvista.portal.shared.ui.communication.MessagePageView.MessagePagePresenter;
 
 public class MessagePage extends CPortalEntityForm<MessageDTO> {
 
@@ -321,7 +322,7 @@ public class MessagePage extends CPortalEntityForm<MessageDTO> {
                         ((MessagePagePresenter) MessagePage.this.getView().getPresenter()).saveMessageItem(new DefaultAsyncCallback<MessageDTO>() {
                             @Override
                             public void onSuccess(MessageDTO result) {
-                                AppSite.getPlaceController().goTo(new ResidentPortalSiteMap.Message.MessageView());
+                                AppSite.getPlaceController().goTo(new PortalSiteMap.Message.MessageView());
                             }
                         }, getValue());
 
@@ -386,7 +387,7 @@ public class MessagePage extends CPortalEntityForm<MessageDTO> {
                         public void onSuccess(MessageDTO result) {
                             ClientEventBus.fireEvent(new CommunicationStatusUpdateEvent(PortalClientCommunicationManager.instance()
                                     .getLatestCommunicationNotification()));
-                            AppSite.getPlaceController().goTo(new ResidentPortalSiteMap.Message.MessageView());
+                            AppSite.getPlaceController().goTo(new PortalSiteMap.Message.MessageView());
                         }
                     }, m);
                 }

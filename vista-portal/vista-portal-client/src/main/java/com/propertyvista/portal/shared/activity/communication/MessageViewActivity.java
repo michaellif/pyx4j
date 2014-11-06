@@ -11,16 +11,16 @@
  * @author michaellif
  * @version $Id$
  */
-package com.propertyvista.portal.resident.activity.communication;
+package com.propertyvista.portal.shared.activity.communication;
 
 import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
-import com.propertyvista.portal.resident.ResidentPortalSite;
-import com.propertyvista.portal.resident.ui.communication.MessageView;
 import com.propertyvista.portal.rpc.portal.resident.services.MessagePortalCrudService;
+import com.propertyvista.portal.shared.PortalSite;
+import com.propertyvista.portal.shared.ui.communication.MessageView;
 
 public class MessageViewActivity extends AbstractActivity implements MessageView.Presenter {
 
@@ -30,7 +30,7 @@ public class MessageViewActivity extends AbstractActivity implements MessageView
 
     public MessageViewActivity() {
         this.service = GWT.<MessagePortalCrudService> create(MessagePortalCrudService.class);
-        this.view = ResidentPortalSite.getViewFactory().getView(MessageView.class);
+        this.view = PortalSite.getViewFactory().getView(MessageView.class);
         this.view.setPresenter(this);
     }
 

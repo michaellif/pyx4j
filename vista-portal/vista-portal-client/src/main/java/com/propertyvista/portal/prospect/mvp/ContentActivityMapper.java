@@ -34,6 +34,9 @@ import com.propertyvista.portal.rpc.portal.prospect.ProspectPortalSiteMap;
 import com.propertyvista.portal.rpc.portal.prospect.ProspectPortalSiteMap.ApplicationContextSelection;
 import com.propertyvista.portal.rpc.portal.prospect.ProspectPortalSiteMap.Registration;
 import com.propertyvista.portal.shared.activity.NotificationPageActivity;
+import com.propertyvista.portal.shared.activity.communication.MessagePageActivity;
+import com.propertyvista.portal.shared.activity.communication.MessageViewActivity;
+import com.propertyvista.portal.shared.activity.communication.MessageWizardActivity;
 import com.propertyvista.portal.shared.activity.login.LoginWithTokenActivity;
 import com.propertyvista.portal.shared.activity.login.LogoutActivity;
 import com.propertyvista.portal.shared.activity.login.PasswordResetRequestWizardActivity;
@@ -48,6 +51,7 @@ public class ContentActivityMapper implements AppActivityMapper {
     @Override
     public void obtainActivity(final Place place, final AsyncCallback<Activity> callback) {
         GWT.runAsync(new RunAsyncCallback() {
+
 
 
 
@@ -90,14 +94,23 @@ public class ContentActivityMapper implements AppActivityMapper {
                     } else if (place instanceof PortalSiteMap.PortalTerms.BillingTerms
                             || place instanceof PortalSiteMap.PortalTerms.WebPaymentFeeTerms
                             || place instanceof PortalSiteMap.PortalTerms.DirectBankingInstruction
-                            
+
                             || place instanceof PortalSiteMap.PortalTerms.VistaTermsAndConditions
                             || place instanceof PortalSiteMap.PortalTerms.VistaPrivacyPolicy
-                            
+
                             || place instanceof PortalSiteMap.PortalTerms.PmcTermsAndConditions
                             || place instanceof PortalSiteMap.PortalTerms.PmcPrivacyPolicy) {
                         activity = new PortalTermsActivity(place);
                  // @formatter:on
+                    }
+                    // Communication
+                    else if (place instanceof PortalSiteMap.Message.MessageWizard) {
+                        activity = new MessageWizardActivity(appPlace);
+                    } else if (place instanceof PortalSiteMap.Message.MessagePage) {
+                        activity = new MessagePageActivity(appPlace);
+                    } else if (place instanceof PortalSiteMap.Message.MessageView) {
+                        activity = new MessageViewActivity();
+//Internals
                     }
 
                     callback.onSuccess(activity);

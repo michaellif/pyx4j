@@ -14,6 +14,7 @@
 package com.propertyvista.portal.resident.themes;
 
 import com.propertyvista.domain.site.SiteDescriptor.Skin;
+import com.propertyvista.portal.shared.themes.CommunicationTheme;
 import com.propertyvista.portal.shared.themes.PortalRootPaneTheme;
 import com.propertyvista.portal.shared.themes.PortalTheme;
 

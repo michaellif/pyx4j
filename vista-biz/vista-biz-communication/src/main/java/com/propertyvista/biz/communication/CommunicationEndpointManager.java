@@ -277,7 +277,8 @@ public class CommunicationEndpointManager {
     }
 
     private void expandCommunicationEndpoint(HashMap<IEntity, Boolean> visited, CommunicationEndpointDTO ep) {
-        EntityListCriteria<LeaseParticipant> criteria = createActiveLeaseCriteria();
+        EntityListCriteria<LeaseParticipant> criteria = ContactType.Tenant.equals(ep.type().getValue()) ? EntityListCriteria.create(LeaseParticipant.class)
+                : createActiveLeaseCriteria();
 
         switch (ep.type().getValue()) {
         case Building: {

@@ -33,6 +33,7 @@ import com.pyx4j.widgets.client.RateIt;
 import com.propertyvista.domain.maintenance.MaintenanceRequestPriority.PriorityLevel;
 import com.propertyvista.domain.maintenance.MaintenanceRequestStatus.StatusPhase;
 import com.propertyvista.portal.resident.ui.maintenance.MaintenanceDashboardView.MaintenanceDashboardPresenter;
+import com.propertyvista.portal.rpc.portal.PortalSiteMap;
 import com.propertyvista.portal.rpc.portal.resident.ResidentPortalSiteMap;
 import com.propertyvista.portal.rpc.portal.resident.dto.maintenance.MaintenanceRequestStatusDTO;
 
@@ -68,7 +69,7 @@ public class MaintenanceRequestFolderItem extends CForm<MaintenanceRequestStatus
 
             @Override
             public void execute() {
-                AppSite.getPlaceController().goTo(new ResidentPortalSiteMap.Message.MessagePage(getValue().message().getPrimaryKey()));
+                AppSite.getPlaceController().goTo(new PortalSiteMap.Message.MessagePage(getValue().message().getPrimaryKey()));
             }
         });
         formPanel.append(Location.Left, communicationLink);

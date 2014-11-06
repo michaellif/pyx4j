@@ -31,19 +31,20 @@ import com.propertyvista.common.client.ClientLocaleUtils;
 import com.propertyvista.domain.security.PortalResidentBehavior;
 import com.propertyvista.domain.tenant.CustomerPreferencesPortalHidable;
 import com.propertyvista.portal.resident.ResidentPortalSite;
-import com.propertyvista.portal.resident.events.CommunicationStatusUpdateEvent;
-import com.propertyvista.portal.resident.events.CommunicationStatusUpdateHandler;
 import com.propertyvista.portal.resident.events.PortalHidableEvent;
 import com.propertyvista.portal.resident.events.PortalHidableHandler;
 import com.propertyvista.portal.resident.ui.ToolbarView;
 import com.propertyvista.portal.resident.ui.ToolbarView.ToolbarPresenter;
-import com.propertyvista.portal.resident.ui.communication.CommunicationView;
 import com.propertyvista.portal.resident.ui.utils.PortalHidablePreferenceManager;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
 import com.propertyvista.portal.rpc.portal.resident.ResidentPortalSiteMap;
 import com.propertyvista.portal.rpc.portal.resident.communication.MessageDTO;
 import com.propertyvista.portal.rpc.portal.resident.services.MessagePortalCrudService;
 import com.propertyvista.portal.rpc.shared.dto.communication.PortalCommunicationSystemNotification;
+import com.propertyvista.portal.shared.CommunicationStatusUpdateEvent;
+import com.propertyvista.portal.shared.CommunicationStatusUpdateHandler;
+import com.propertyvista.portal.shared.activity.PortalClientCommunicationManager;
+import com.propertyvista.portal.shared.ui.communication.CommunicationView;
 import com.propertyvista.shared.i18n.CompiledLocale;
 
 public class ToolbarActivity extends AbstractActivity implements ToolbarPresenter {

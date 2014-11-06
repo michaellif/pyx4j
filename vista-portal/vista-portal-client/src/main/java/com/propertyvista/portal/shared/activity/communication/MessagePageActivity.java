@@ -11,7 +11,7 @@
  * @author michaellif
  * @version $Id$
  */
-package com.propertyvista.portal.resident.activity.communication;
+package com.propertyvista.portal.shared.activity.communication;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.shared.EventBus;
@@ -23,12 +23,12 @@ import com.pyx4j.rpc.shared.VoidSerializable;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.rpc.AppPlace;
 
-import com.propertyvista.portal.resident.ui.communication.MessagePageView;
-import com.propertyvista.portal.resident.ui.communication.MessagePageView.MessagePagePresenter;
-import com.propertyvista.portal.rpc.portal.resident.ResidentPortalSiteMap;
+import com.propertyvista.portal.rpc.portal.PortalSiteMap;
 import com.propertyvista.portal.rpc.portal.resident.communication.MessageDTO;
 import com.propertyvista.portal.rpc.portal.resident.services.MessagePortalCrudService;
 import com.propertyvista.portal.shared.activity.AbstractEditorActivity;
+import com.propertyvista.portal.shared.ui.communication.MessagePageView;
+import com.propertyvista.portal.shared.ui.communication.MessagePageView.MessagePagePresenter;
 
 public class MessagePageActivity extends AbstractEditorActivity<MessageDTO> implements MessagePagePresenter {
 
@@ -53,7 +53,7 @@ public class MessagePageActivity extends AbstractEditorActivity<MessageDTO> impl
         ((MessagePortalCrudService) getService()).hideThread(new DefaultAsyncCallback<VoidSerializable>() {
             @Override
             public void onSuccess(VoidSerializable result) {
-                AppSite.getPlaceController().goTo(new ResidentPortalSiteMap.Message.MessageView());
+                AppSite.getPlaceController().goTo(new PortalSiteMap.Message.MessageView());
             }
         }, getEntityId());
 

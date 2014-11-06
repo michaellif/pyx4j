@@ -11,7 +11,7 @@
  * @author michaellif
  * @version $Id$
  */
-package com.propertyvista.portal.resident.events;
+package com.propertyvista.portal.shared;
 
 import com.google.gwt.event.shared.GwtEvent;
 

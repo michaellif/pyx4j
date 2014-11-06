@@ -21,7 +21,7 @@ import com.pyx4j.entity.security.DatasetAccessRule;
 
 import com.propertyvista.domain.communication.CommunicationThread;
 import com.propertyvista.domain.tenant.lease.LeaseParticipant;
-import com.propertyvista.portal.server.portal.resident.ResidentPortalContext;
+import com.propertyvista.portal.server.portal.shared.PortalVistaContext;
 
 public class CommunicationThreadPortalAccessRule implements DatasetAccessRule<CommunicationThread> {
 
@@ -29,7 +29,7 @@ public class CommunicationThreadPortalAccessRule implements DatasetAccessRule<Co
 
     @Override
     public void applyRule(EntityQueryCriteria<CommunicationThread> criteria) {
-        LeaseParticipant<?> lp = ResidentPortalContext.getLeaseParticipant();
+        LeaseParticipant<?> lp = PortalVistaContext.getLeaseParticipant();
         OrCriterion senderOrRecipientCriteria = new OrCriterion(PropertyCriterion.eq(criteria.proto().content().$().sender(), lp), PropertyCriterion.eq(
                 criteria.proto().content().$().recipients().$().recipient(), lp));
 
@@ -42,5 +42,4 @@ public class CommunicationThreadPortalAccessRule implements DatasetAccessRule<Co
                 .proto().userPolicy().$().policyConsumer(), lp));
         criteria.notExists(criteria.proto().userPolicy(), hiddenCriteria);
     }
-
 }

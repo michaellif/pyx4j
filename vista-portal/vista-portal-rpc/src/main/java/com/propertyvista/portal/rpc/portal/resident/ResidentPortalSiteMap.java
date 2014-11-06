@@ -51,27 +51,6 @@ public class ResidentPortalSiteMap extends PortalSiteMap {
     public static class Profile extends AppPlace {
     }
 
-    @PlaceProperties(navigLabel = "My Messages")
-    public static class Message extends AppPlace {
-        public static class MessageWizard extends AppPlace {
-        }
-
-        public static class MessagePage extends AppPlace {
-            public MessagePage(Key threadId) {
-                formPlace(threadId);
-            }
-
-            public MessagePage() {
-            }
-        }
-
-        public static class MessageView extends AppPlace {
-        }
-
-        public static class CommunicationMessage extends AppPlace {
-        }
-    }
-
     @PlaceProperties(navigLabel = "My Account")
     public static class Account extends AppPlace {
     }
