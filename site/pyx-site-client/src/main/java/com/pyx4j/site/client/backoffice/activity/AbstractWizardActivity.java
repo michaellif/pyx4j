@@ -61,7 +61,6 @@ public abstract class AbstractWizardActivity<E extends IEntity> extends Abstract
         this.service = service;
         this.entityClass = entityClass;
 
-        view.getMemento().setCurrentPlace(place);
     }
 
     public IWizard<E> getView() {

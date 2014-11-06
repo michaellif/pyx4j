@@ -58,6 +58,8 @@ public interface IReport<R extends ReportTemplate> extends IPrimePane {
 
     void setError(String errorMessage);
 
+    void reset();
+
     void onReportMetadataSaveSucceed();
 
     void onReportMetadataSaveFailed(String errorMessage);

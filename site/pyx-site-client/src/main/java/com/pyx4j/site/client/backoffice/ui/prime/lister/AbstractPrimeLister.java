@@ -123,8 +123,12 @@ public abstract class AbstractPrimeLister<E extends IEntity> extends EntityDataT
     @Override
     public void setPresenter(Presenter<E> presenter) {
         this.presenter = presenter;
-        setDataSource(presenter.getDataSource());
-        updateActionsState();
+        if (presenter == null) {
+            setDataSource(null);
+        } else {
+            setDataSource(presenter.getDataSource());
+            updateActionsState();
+        }
     }
 
     @Override

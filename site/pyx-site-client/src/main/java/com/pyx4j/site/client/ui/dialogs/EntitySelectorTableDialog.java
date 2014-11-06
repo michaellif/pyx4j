@@ -99,12 +99,6 @@ public abstract class EntitySelectorTableDialog<E extends IEntity> extends Abstr
         setBody(createBody());
     }
 
-    @Override
-    public void show() {
-        lister.restoreState(); // populate lister...
-        // super.show(); will be called in lister.onObtainSuccess() 
-    }
-
     protected abstract List<ColumnDescriptor> defineColumnDescriptors();
 
     protected abstract AbstractListCrudService<E> getSelectService();

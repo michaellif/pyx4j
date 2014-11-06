@@ -58,9 +58,9 @@ public class ReferenceDataManager {
 
     private static final Logger log = LoggerFactory.getLogger(ReferenceDataManager.class);
 
-    private static final Map<EntityQueryCriteria<?>, List<? extends IEntity>> cache = new HashMap<EntityQueryCriteria<?>, List<? extends IEntity>>();
+    private static final Map<EntityQueryCriteria<?>, List<? extends IEntity>> cache = new HashMap<>();
 
-    private static final Map<EntityQueryCriteria<?>, List<AsyncLoadingHandler>> concurrentLoad = new HashMap<EntityQueryCriteria<?>, List<AsyncLoadingHandler>>();
+    private static final Map<EntityQueryCriteria<?>, List<AsyncLoadingHandler>> concurrentLoad = new HashMap<>();
 
     private static EventBus eventBus;
 
@@ -75,13 +75,7 @@ public class ReferenceDataManager {
 
     @SuppressWarnings({ "unchecked", "rawtypes" })
     public static <T extends IEntity> AsyncLoadingHandler obtain(EntityQueryCriteria<T> criteria, AsyncCallback<List<T>> handlingCallback, boolean background) {
-        return obtainImpl(criteria, new AsyncLoadingHandler((AsyncCallback) handlingCallback), background);
-    }
-
-    /**
-     * The second function to avoid Generics problem
-     */
-    private static AsyncLoadingHandler obtainImpl(EntityQueryCriteria<?> criteria, AsyncLoadingHandler handler, boolean background) {
+        AsyncLoadingHandler handler = new AsyncLoadingHandler((AsyncCallback) handlingCallback);
         final boolean inCache = cache.containsKey(criteria);
         if (!inCache) {
             final EntityQueryCriteria<?> originalCriteria = criteria.iclone();

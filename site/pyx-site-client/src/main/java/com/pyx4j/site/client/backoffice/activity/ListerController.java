@@ -131,7 +131,6 @@ public class ListerController<E extends IEntity> implements IPrimeLister.Present
 
     @Override
     public void populate() {
-        view.getLister().restoreState();
     }
 
     // TODO : check this optimization (in retrieveData):

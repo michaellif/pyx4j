@@ -22,7 +22,6 @@ package com.pyx4j.site.client.backoffice.ui.prime.lister;
 
 import java.util.List;
 
-import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.ui.LayoutPanel;
 
 import com.pyx4j.commons.Key;
@@ -31,7 +30,7 @@ import com.pyx4j.entity.core.criterion.Criterion;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.backoffice.ui.AbstractPane;
-import com.pyx4j.site.client.backoffice.ui.prime.IMemento;
+import com.pyx4j.site.client.memento.Memento;
 
 public class ListerViewImplBase<E extends IEntity> extends AbstractPane implements IPrimeLister<E> {
 
@@ -105,18 +104,13 @@ public class ListerViewImplBase<E extends IEntity> extends AbstractPane implemen
     }
 
     @Override
-    public IMemento getMemento() {
+    public void setMemento(Memento memento) {
+        getLister().setMemento(memento);
+    }
+
+    @Override
+    public Memento getMemento() {
         return getLister().getMemento();
-    }
-
-    @Override
-    public void storeState(Place place) {
-        getLister().storeState(place);
-    }
-
-    @Override
-    public void restoreState() {
-        getLister().restoreState();
     }
 
     @Override

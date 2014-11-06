@@ -20,20 +20,20 @@
  */
 package com.pyx4j.site.client.backoffice.ui.prime;
 
-import com.google.gwt.place.shared.Place;
-
 import com.pyx4j.site.client.backoffice.ui.IPane;
+import com.pyx4j.site.client.memento.Memento;
 import com.pyx4j.site.rpc.AppPlace;
 
 public interface IPrimePane extends IPane {
 
     public interface Presenter extends IPane.Presenter {
+
         AppPlace getPlace();
+
     }
 
-    IMemento getMemento();
+    void setMemento(Memento memento);
 
-    void storeState(Place place);
+    Memento getMemento();
 
-    void restoreState();
 }

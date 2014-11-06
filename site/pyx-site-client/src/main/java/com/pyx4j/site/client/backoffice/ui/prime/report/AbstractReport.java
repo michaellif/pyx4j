@@ -23,7 +23,6 @@ package com.pyx4j.site.client.backoffice.ui.prime.report;
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.dom.client.Style.Display;
 import com.google.gwt.dom.client.Style.Position;
-import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.Label;
@@ -44,7 +43,7 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.backoffice.ui.PaneTheme;
 import com.pyx4j.site.client.backoffice.ui.prime.AbstractPrimePane;
 import com.pyx4j.site.client.backoffice.ui.prime.form.PrimeEntityForm;
-import com.pyx4j.site.rpc.ReportsAppPlace;
+import com.pyx4j.site.client.memento.Memento;
 import com.pyx4j.site.shared.domain.reports.ExportableReport;
 import com.pyx4j.site.shared.domain.reports.ReportTemplate;
 import com.pyx4j.widgets.client.Button;
@@ -206,24 +205,20 @@ public abstract class AbstractReport<R extends ReportTemplate> extends AbstractP
     }
 
     @Override
-    public void storeState(Place place) {
-        getMemento().setCurrentPlace(place);
-        getMemento().putObject(MementoKeys.ReportMetadata.name(), reportControlPanel.getReportSettings());
-        getMemento().putObject(MementoKeys.ReportWidget.name(), reportWidget.getMemento());
+    @SuppressWarnings("unchecked")
+    public void setMemento(Memento memento) {
+        R reportMetadata = (R) memento.getObject(MementoKeys.ReportMetadata.name());
+        setReportMetadata(reportMetadata);
+        Object reportMemento = memento.getObject(MementoKeys.ReportWidget.name());
+        reportWidget.setMemento(reportMemento);
     }
 
     @Override
-    public void restoreState() {
-        if (getMemento().mayRestore()) {
-            R reportMetadata = (R) getMemento().getObject(MementoKeys.ReportMetadata.name());
-            setReportMetadata(reportMetadata);
-
-            Object reportMemento = getMemento().getObject(MementoKeys.ReportWidget.name());
-
-            reportWidget.setMemento(reportMemento);
-        } else {
-            setReportMetadata((R) ((ReportsAppPlace<?>) getMemento().getCurrentPlace()).getReportMetadata());
-        }
+    public Memento getMemento() {
+        Memento memento = new Memento();
+        memento.putObject(MementoKeys.ReportMetadata.name(), reportControlPanel.getReportSettings());
+        memento.putObject(MementoKeys.ReportWidget.name(), reportWidget.getMemento());
+        return memento;
     }
 
     private void populateSettingsForm(R reportSettings) {
@@ -361,6 +356,10 @@ public abstract class AbstractReport<R extends ReportTemplate> extends AbstractP
             }
             return printTheme;
         }
+    }
+
+    @Override
+    public void reset() {
     }
 
 }

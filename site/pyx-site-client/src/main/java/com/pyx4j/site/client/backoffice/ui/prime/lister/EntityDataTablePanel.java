@@ -31,7 +31,6 @@ import org.slf4j.LoggerFactory;
 import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.core.client.Scheduler.ScheduledCommand;
 import com.google.gwt.dom.client.Style.Unit;
-import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.Widget;
@@ -54,9 +53,8 @@ import com.pyx4j.forms.client.ui.datatable.DataTablePanel;
 import com.pyx4j.forms.client.ui.datatable.criteria.ICriteriaForm;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.site.client.backoffice.ui.PaneTheme;
-import com.pyx4j.site.client.backoffice.ui.prime.IMemento;
-import com.pyx4j.site.client.backoffice.ui.prime.MementoImpl;
 import com.pyx4j.site.client.backoffice.ui.prime.lister.AbstractPrimeLister.ItemSelectionHandler;
+import com.pyx4j.site.client.memento.Memento;
 
 public class EntityDataTablePanel<E extends IEntity> extends ScrollPanel {
 
@@ -79,8 +77,6 @@ public class EntityDataTablePanel<E extends IEntity> extends ScrollPanel {
     private List<ItemSelectionHandler<E>> itemSelectionHandlers;
 
     private final Class<E> clazz;
-
-    private final IMemento memento = new MementoImpl();
 
     private List<Criterion> externalFilters;
 
@@ -357,10 +353,6 @@ public class EntityDataTablePanel<E extends IEntity> extends ScrollPanel {
         dataTablePanel.discard();
     }
 
-    public IMemento getMemento() {
-        return memento;
-    }
-
     /**
      * Do not store and restore filters set on this lister.
      * The lister filter is created by navigation link, e.g. parent filter
@@ -369,28 +361,29 @@ public class EntityDataTablePanel<E extends IEntity> extends ScrollPanel {
         this.externalFilters = externalFilters;
     }
 
-    public void storeState(Place place) {
-        getMemento().setCurrentPlace(place);
-
+    public Memento getMemento() {
+        Memento memento = new Memento();
         if (externalFilters == null) {
-            getMemento().clear();
-
-            getMemento().putInteger(MementoKeys.page.name(), getPageNumber());
-            getMemento().putObject(MementoKeys.filterData.name(), getFilters());
-            getMemento().putObject(MementoKeys.sortingData.name(), getSorting());
+            memento.putInteger(MementoKeys.page.name(), getPageNumber());
+            memento.putObject(MementoKeys.filterData.name(), getFilters());
+            memento.putObject(MementoKeys.sortingData.name(), getSorting());
         }
+        return memento;
     }
 
     @SuppressWarnings("unchecked")
-    public void restoreState() {
-        int pageNumber = 0;
+    public void setMemento(Memento memento) {
+        if (memento == null) {
+            return;
+        }
+        Integer pageNumber = 0;
         List<Criterion> filters = getDefaultFilters();
         List<Sort> sorts = getDefaultSorting();
 
-        if (getMemento().mayRestore() && externalFilters == null) {
-            pageNumber = getMemento().getInteger(MementoKeys.page.name());
-            filters = (List<Criterion>) getMemento().getObject(MementoKeys.filterData.name());
-            sorts = (List<Sort>) getMemento().getObject(MementoKeys.sortingData.name());
+        if (externalFilters == null) {
+            pageNumber = memento.getInteger(MementoKeys.page.name());
+            filters = (List<Criterion>) memento.getObject(MementoKeys.filterData.name());
+            sorts = (List<Sort>) memento.getObject(MementoKeys.sortingData.name());
         } else if (externalFilters != null) {
             filters = externalFilters;
         }
@@ -399,7 +392,7 @@ public class EntityDataTablePanel<E extends IEntity> extends ScrollPanel {
         setSorting(sorts);
 
         // should be called last:
-        obtain(pageNumber);
+        obtain(pageNumber == null ? 0 : pageNumber);
     }
 
     public DataTablePanel<E> getDataTablePanel() {

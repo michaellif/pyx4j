@@ -80,8 +80,6 @@ public abstract class AbstractEditorActivity<E extends IEntity> extends Abstract
         parentClassName = null;
         tabIndex = -1;
 
-        view.getMemento().setCurrentPlace(place);
-
         String val;
         if ((val = place.getFirstArg(CrudAppPlace.ARG_NAME_ID)) != null) {
             entityId = new Key(val);

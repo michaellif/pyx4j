@@ -51,6 +51,7 @@ import com.pyx4j.site.client.ReportDialog;
 import com.pyx4j.site.client.backoffice.ui.prime.IPrimePane;
 import com.pyx4j.site.client.backoffice.ui.prime.report.IReport;
 import com.pyx4j.site.client.backoffice.ui.prime.report.ReportSettingsManagementVizor;
+import com.pyx4j.site.client.memento.MementoManager;
 import com.pyx4j.site.rpc.AppPlace;
 import com.pyx4j.site.rpc.ReportsAppPlace;
 import com.pyx4j.site.rpc.customization.CustomizationOverwriteAttemptException;
@@ -136,6 +137,10 @@ public abstract class AbstractReportActivity<R extends ReportTemplate> extends A
         this.downloadServletPath = dowloadServletPath;
     }
 
+    public IReport<R> getView() {
+        return view;
+    }
+
     public ReportSettingsManagementVizorController getReportSettingsManagementVizorController() {
         if (reportSettingsManagementVizorController == null) {
             reportSettingsManagementVizorController = new ReportSettingsManagementVizorController(view, this);
@@ -159,10 +164,8 @@ public abstract class AbstractReportActivity<R extends ReportTemplate> extends A
                 place.define(createDefaultReportMetadata());
             }
         }
-        view.getMemento().setCurrentPlace(place);
-        view.restoreState();
+        view.setMemento(MementoManager.retrieveMemento(place, getView()));
         onReportMetadataSet((R) place.getReportMetadata());
-
     }
 
     @Override
@@ -315,10 +318,19 @@ public abstract class AbstractReportActivity<R extends ReportTemplate> extends A
 
     }
 
+    public void onDiscard() {
+        MementoManager.storeMemento(getView().getMemento(), place, getView());
+        getView().reset();
+    }
+
+    @Override
+    public void onCancel() {
+        onDiscard();
+    }
+
     @Override
     public void onStop() {
-        super.onStop();
-        view.storeState(place);
+        onDiscard();
     }
 
     @Override

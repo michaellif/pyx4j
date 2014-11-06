@@ -34,6 +34,7 @@ import com.pyx4j.entity.core.criterion.Criterion;
 import com.pyx4j.entity.core.criterion.EntityFiltersBuilder;
 import com.pyx4j.entity.rpc.AbstractListCrudService;
 import com.pyx4j.site.client.backoffice.ui.prime.lister.IPrimeLister;
+import com.pyx4j.site.client.memento.MementoManager;
 import com.pyx4j.site.rpc.AppPlace;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
@@ -49,8 +50,6 @@ public abstract class AbstractListerActivity<E extends IEntity> extends ListerCo
         super(entityClass, view, service);
 
         this.place = (AppPlace) place;
-
-        getView().getMemento().setCurrentPlace(place);
 
         EntityFiltersBuilder<E> filters = EntityFiltersBuilder.create(entityClass);
         parseExternalFilters((AppPlace) place, entityClass, filters);
@@ -82,10 +81,14 @@ public abstract class AbstractListerActivity<E extends IEntity> extends ListerCo
             populate();
         }
         containerWidget.setWidget(getView());
+        getView().setMemento(MementoManager.retrieveMemento(place, getView()));
     }
 
     public void onDiscard() {
+        MementoManager.storeMemento(getView().getMemento(), place, getView());
         getView().discard();
+        getView().setPresenter(null);
+
     }
 
     @Override
@@ -95,7 +98,6 @@ public abstract class AbstractListerActivity<E extends IEntity> extends ListerCo
 
     @Override
     public void onStop() {
-        getView().storeState(getView().getMemento().getCurrentPlace());
         onDiscard();
     }
 

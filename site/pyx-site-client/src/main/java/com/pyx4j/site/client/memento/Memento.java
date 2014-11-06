@@ -18,63 +18,33 @@
  * @author Vlad
  * @version $Id$
  */
-package com.pyx4j.site.client.backoffice.ui.prime;
+package com.pyx4j.site.client.memento;
 
 import java.util.HashMap;
 
-import com.google.gwt.place.shared.Place;
-
-public class MementoImpl implements IMemento {
+public class Memento {
 
     private final HashMap<String, Object> values = new HashMap<>();
 
-    private Place currentPlace;
-
-    private Place previousPlace;
-
-    public MementoImpl() {
+    public Memento() {
     }
 
-    @Override
-    public void setCurrentPlace(Place place) {
-        previousPlace = currentPlace;
-        currentPlace = place;
-    }
-
-    @Override
-    public Place getCurrentPlace() {
-        return currentPlace;
-    }
-
-    @Override
-    public boolean mayRestore() {
-        if (currentPlace != null && previousPlace != null) {
-            return (!isEmpty() && currentPlace.equals(previousPlace));
-        }
-        return false;
-    }
-
-    @Override
     public boolean isEmpty() {
         return values.isEmpty();
     }
 
-    @Override
     public void clear() {
         values.clear();
     }
 
-    @Override
     public String[] getAttributeKeys() {
         return (String[]) values.keySet().toArray();
     }
 
-    @Override
     public void putString(String key, String value) {
         values.put(key, value);
     }
 
-    @Override
     public Boolean getBoolean(String key) {
         if (values.containsKey(key)) {
             return (Boolean) values.get(key);
@@ -82,12 +52,10 @@ public class MementoImpl implements IMemento {
         return null;
     }
 
-    @Override
     public void putBoolean(String key, boolean value) {
         values.put(key, value);
     }
 
-    @Override
     public Integer getInteger(String key) {
         if (values.containsKey(key)) {
             return (Integer) values.get(key);
@@ -95,12 +63,10 @@ public class MementoImpl implements IMemento {
         return null;
     }
 
-    @Override
     public void putInteger(String key, int value) {
         values.put(key, value);
     }
 
-    @Override
     public Float getFloat(String key) {
         if (values.containsKey(key)) {
             return (Float) values.get(key);
@@ -108,12 +74,10 @@ public class MementoImpl implements IMemento {
         return null;
     }
 
-    @Override
     public void putFloat(String key, float value) {
         values.put(key, value);
     }
 
-    @Override
     public String getString(String key) {
         if (values.containsKey(key)) {
             return (String) values.get(key);
@@ -121,7 +85,6 @@ public class MementoImpl implements IMemento {
         return null;
     }
 
-    @Override
     public Object getObject(String key) {
         if (values.containsKey(key)) {
             return values.get(key);
@@ -129,7 +92,6 @@ public class MementoImpl implements IMemento {
         return null;
     }
 
-    @Override
     public void putObject(String key, Object value) {
         values.put(key, value);
     }

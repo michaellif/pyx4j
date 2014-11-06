@@ -37,6 +37,7 @@ import com.pyx4j.rpc.shared.VoidSerializable;
 import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.backoffice.ui.prime.form.IViewer;
+import com.pyx4j.site.client.memento.Memento;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
 public abstract class AbstractViewerActivity<E extends IEntity> extends AbstractActivity implements IViewer.Presenter {
@@ -67,8 +68,6 @@ public abstract class AbstractViewerActivity<E extends IEntity> extends Abstract
 
         entityId = null;
         tabIndex = -1;
-
-        view.getMemento().setCurrentPlace(place);
 
         String val;
         if ((val = place.getFirstArg(CrudAppPlace.ARG_NAME_ID)) != null) {
@@ -114,6 +113,7 @@ public abstract class AbstractViewerActivity<E extends IEntity> extends Abstract
     }
 
     protected void onDiscard() {
+        Memento memento = getView().getMemento();
         this.populatedValue = null;
         view.reset();
         view.setPresenter(null);
@@ -128,7 +128,6 @@ public abstract class AbstractViewerActivity<E extends IEntity> extends Abstract
 
     @Override
     public void onStop() {
-        view.storeState(view.getMemento().getCurrentPlace());
         onDiscard();
         super.onStop();
     }

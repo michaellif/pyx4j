@@ -20,32 +20,27 @@
  */
 package com.pyx4j.site.client.backoffice.ui.prime;
 
-import com.google.gwt.place.shared.Place;
-
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel;
 import com.pyx4j.gwt.commons.css.CssVariable;
 import com.pyx4j.gwt.commons.layout.LayoutType;
 import com.pyx4j.site.client.backoffice.ui.AbstractPane;
+import com.pyx4j.site.client.memento.Memento;
 
 public class AbstractPrimePane extends AbstractPane implements IPrimePane {
-
-    private final IMemento memento = new MementoImpl();
 
     public AbstractPrimePane() {
         CssVariable.setVariable(getElement(), DualColumnFluidPanel.CSS_VAR_FORM_COLLAPSING_LAYOUT_TYPE, LayoutType.tabletLandscape.name());
     }
 
     @Override
-    public IMemento getMemento() {
-        return memento;
+    public void setMemento(Memento memento) {
+        // TODO Auto-generated method stub
+
     }
 
     @Override
-    public void storeState(Place place) {
-        memento.setCurrentPlace(place);
-    }
-
-    @Override
-    public void restoreState() {
+    public Memento getMemento() {
+        // TODO Auto-generated method stub
+        return null;
     }
 }
