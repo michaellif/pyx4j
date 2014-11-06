@@ -89,7 +89,7 @@ public class OpenIdServlet extends HttpServlet {
         String message;
         if (signIn) {
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-            message = VistaDemo.isDemo() ? i18n.tr("Login using your PropertyVista account") : i18n.tr("Login via Google Apps");
+            message = VistaDemo.isDemo() ? i18n.tr("Login using your PropertyVista CRM account") : i18n.tr("Login via PropertyVista Crowd account");
         } else {
             message = i18n.tr("Login successful Continue to application");
         }
