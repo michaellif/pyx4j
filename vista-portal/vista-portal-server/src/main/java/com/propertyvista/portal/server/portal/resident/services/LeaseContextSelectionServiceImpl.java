@@ -25,6 +25,7 @@ import com.pyx4j.server.contexts.ServerContext;
 
 import com.propertyvista.biz.tenant.CustomerFacade;
 import com.propertyvista.domain.tenant.lease.Lease;
+import com.propertyvista.portal.rpc.portal.resident.ResidentUserVisit;
 import com.propertyvista.portal.rpc.portal.resident.dto.LeaseContextChoiceDTO;
 import com.propertyvista.portal.rpc.portal.resident.services.LeaseContextSelectionService;
 import com.propertyvista.portal.server.portal.resident.ResidentPortalContext;
@@ -55,7 +56,7 @@ public class LeaseContextSelectionServiceImpl implements LeaseContextSelectionSe
 
     @Override
     public void setLeaseContext(AsyncCallback<VoidSerializable> callback, Lease leaseStub) {
-        ResidentPortalContext.setLease(leaseStub);
+        ResidentPortalContext.setLease(ServerContext.visit(ResidentUserVisit.class), leaseStub);
         ServerContext.getVisit().setAclRevalidationRequired();
         callback.onSuccess(null);
     }

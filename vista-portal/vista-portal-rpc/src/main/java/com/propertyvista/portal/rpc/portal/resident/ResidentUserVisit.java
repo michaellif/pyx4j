@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011-2012 All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -16,13 +16,10 @@ package com.propertyvista.portal.rpc.portal.resident;
 import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.security.CustomerUser;
 import com.propertyvista.domain.security.common.VistaApplication;
-import com.propertyvista.domain.tenant.lease.Lease;
-import com.propertyvista.portal.rpc.portal.CustomerUserVisit;
+import com.propertyvista.portal.rpc.portal.PortalUserVisit;
 
 @SuppressWarnings("serial")
-public class ResidentUserVisit extends CustomerUserVisit {
-
-    private Lease selectedLeaseId;
+public class ResidentUserVisit extends PortalUserVisit {
 
     private String paymentDeferredCorrelationId;
 
@@ -40,19 +37,6 @@ public class ResidentUserVisit extends CustomerUserVisit {
     @Override
     public String toString() {
         return "Resident " + super.toString();
-    }
-
-    public Lease getLeaseId() {
-        return selectedLeaseId;
-    }
-
-    public void setLease(Lease lease) {
-        if (lease != null) {
-            this.selectedLeaseId = lease.createIdentityStub();
-        } else {
-            this.selectedLeaseId = null;
-        }
-        setChanged();
     }
 
     public String getPaymentDeferredCorrelationId() {

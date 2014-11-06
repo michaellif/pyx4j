@@ -13,15 +13,16 @@
  */
 package com.propertyvista.portal.server.portal.prospect;
 
+import com.pyx4j.entity.core.AttachLevel;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.server.contexts.ServerContext;
 
 import com.propertyvista.domain.tenant.lease.Guarantor;
 import com.propertyvista.domain.tenant.lease.Lease;
+import com.propertyvista.domain.tenant.lease.LeaseParticipant;
 import com.propertyvista.domain.tenant.lease.LeaseTermGuarantor;
 import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
-import com.propertyvista.domain.tenant.lease.Tenant;
 import com.propertyvista.domain.tenant.prospect.MasterOnlineApplication;
 import com.propertyvista.domain.tenant.prospect.OnlineApplication;
 import com.propertyvista.portal.rpc.portal.prospect.ProspectUserVisit;
@@ -29,8 +30,22 @@ import com.propertyvista.portal.server.portal.shared.PortalVistaContext;
 
 public class ProspectPortalContext extends PortalVistaContext {
 
-    public static void setOnlineApplication(OnlineApplication application) {
-        ServerContext.visit(ProspectUserVisit.class).setOnlineApplication(application);
+    public static void setOnlineApplication(ProspectUserVisit visit, OnlineApplication application) {
+        Lease leaseId = null;
+        if (application != null) {
+            EntityQueryCriteria<Lease> criteria = EntityQueryCriteria.create(Lease.class);
+            criteria.eq(criteria.proto().leaseApplication().onlineApplication().applications(), application);
+            leaseId = Persistence.service().retrieve(criteria, AttachLevel.IdOnly);
+        }
+        LeaseParticipant<?> leaseParticipantId = null;
+        if (application != null) {
+            @SuppressWarnings("rawtypes")
+            EntityQueryCriteria<LeaseParticipant> criteria = EntityQueryCriteria.create(LeaseParticipant.class);
+            criteria.eq(criteria.proto().lease().leaseApplication().onlineApplication().applications(), application);
+            criteria.eq(criteria.proto().customer().user(), visit.getCurrentUser());
+            leaseParticipantId = Persistence.service().retrieve(criteria, AttachLevel.IdOnly);
+        }
+        visit.setOnlineApplication(application, leaseId, leaseParticipantId);
     }
 
     public static OnlineApplication getOnlineApplicationIdStub() {
@@ -47,19 +62,6 @@ public class ProspectPortalContext extends PortalVistaContext {
         return Persistence.service().retrieve(criteria);
     }
 
-    public static Lease getLease() {
-        EntityQueryCriteria<Lease> criteria = EntityQueryCriteria.create(Lease.class);
-        criteria.eq(criteria.proto().leaseApplication().onlineApplication().applications(), getOnlineApplicationIdStub());
-        return Persistence.service().retrieve(criteria);
-    }
-
-    public static Tenant getTenant() {
-        EntityQueryCriteria<Tenant> criteria = EntityQueryCriteria.create(Tenant.class);
-        criteria.eq(criteria.proto().lease().leaseApplication().onlineApplication().applications(), getOnlineApplicationIdStub());
-        criteria.eq(criteria.proto().customer(), getCustomer());
-        return Persistence.service().retrieve(criteria);
-    }
-
     public static LeaseTermTenant getLeaseTermTenant() {
         EntityQueryCriteria<LeaseTermTenant> criteria = EntityQueryCriteria.create(LeaseTermTenant.class);
         criteria.eq(criteria.proto().leaseParticipant().customer(), getCustomer());
@@ -70,10 +72,7 @@ public class ProspectPortalContext extends PortalVistaContext {
     }
 
     public static Guarantor getGuarantor() {
-        EntityQueryCriteria<Guarantor> criteria = EntityQueryCriteria.create(Guarantor.class);
-        criteria.eq(criteria.proto().lease().leaseApplication().onlineApplication().applications(), getOnlineApplicationIdStub());
-        criteria.eq(criteria.proto().customer(), getCustomer());
-        return Persistence.service().retrieve(criteria);
+        return (Guarantor) getLeaseParticipant().cast();
     }
 
     public static LeaseTermGuarantor getLeaseTermGuarantor() {

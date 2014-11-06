@@ -44,6 +44,7 @@ import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.domain.tenant.prospect.OnlineApplication;
 import com.propertyvista.portal.rpc.portal.prospect.ProspectUserVisit;
 import com.propertyvista.portal.rpc.portal.prospect.services.ProspectAuthenticationService;
+import com.propertyvista.portal.server.portal.prospect.ProspectPortalContext;
 import com.propertyvista.server.common.security.VistaAuthenticationServicesImpl;
 import com.propertyvista.shared.exceptions.LoginTokenExpiredUserRuntimeException;
 
@@ -95,7 +96,7 @@ public class ProspectAuthenticationServiceImpl extends VistaAuthenticationServic
             // Auto Select first, But do not auto switch to this lease if such condition will occur
             selectedApplicationId = applications.get(0);
         }
-        visit.setOnlineApplication(selectedApplicationId);
+        ProspectPortalContext.setOnlineApplication(visit, selectedApplicationId);
 
         if (selectedApplicationId != null) {
             Collection<PortalProspectBehavior> applicationBehaviors = ServerSideFactory.create(OnlineApplicationFacade.class).getOnlineApplicationBehavior(

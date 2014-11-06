@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011- All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -32,6 +32,7 @@ import com.pyx4j.rpc.shared.IService;
 import com.pyx4j.rpc.shared.IServiceExecutePermission;
 import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.security.shared.UserVisit;
+import com.pyx4j.server.contexts.ServerContext;
 import com.pyx4j.unit.server.mock.TestLifecycle;
 
 import com.propertyvista.config.tests.VistaTestDBSetup;
@@ -42,6 +43,7 @@ import com.propertyvista.domain.security.PortalProspectBehavior;
 import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
 import com.propertyvista.domain.tenant.prospect.OnlineApplication;
 import com.propertyvista.dto.TenantFinancialDTO;
+import com.propertyvista.portal.rpc.portal.prospect.ProspectUserVisit;
 import com.propertyvista.portal.rpc.ptapp.dto.TenantInLeaseListDTO;
 import com.propertyvista.portal.server.portal.prospect.ProspectPortalContext;
 
@@ -126,7 +128,7 @@ public class VistaAccessControlListTest {
 
         OnlineApplication application = EntityFactory.create(OnlineApplication.class);
         application.setPrimaryKey(new Key(-251));
-        ProspectPortalContext.setOnlineApplication(application);
+        ProspectPortalContext.setOnlineApplication(ServerContext.visit(ProspectUserVisit.class), application);
 
         assertEntityPermission(true, ProofOfIncomeDocumentFile.class, application);
         assertEntityPermission(true, ProofOfAssetDocumentFile.class, application);

@@ -25,6 +25,7 @@ import com.pyx4j.server.contexts.ServerContext;
 
 import com.propertyvista.biz.tenant.OnlineApplicationFacade;
 import com.propertyvista.domain.tenant.prospect.OnlineApplication;
+import com.propertyvista.portal.rpc.portal.prospect.ProspectUserVisit;
 import com.propertyvista.portal.rpc.portal.prospect.dto.OnlineApplicationContextChoiceDTO;
 import com.propertyvista.portal.rpc.portal.prospect.services.ApplicationContextSelectionService;
 import com.propertyvista.portal.server.portal.prospect.ProspectPortalContext;
@@ -52,7 +53,7 @@ public class ApplicationContextSelectionServiceImpl implements ApplicationContex
 
     @Override
     public void setApplicationContext(AsyncCallback<VoidSerializable> callback, OnlineApplication applicationStub) {
-        ProspectPortalContext.setOnlineApplication(applicationStub);
+        ProspectPortalContext.setOnlineApplication(ServerContext.visit(ProspectUserVisit.class), applicationStub);
         ServerContext.getVisit().setAclRevalidationRequired();
         callback.onSuccess(null);
     }

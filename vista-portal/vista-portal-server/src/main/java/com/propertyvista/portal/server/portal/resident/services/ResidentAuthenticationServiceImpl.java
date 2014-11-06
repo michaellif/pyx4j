@@ -62,6 +62,7 @@ import com.propertyvista.domain.tenant.CustomerPreferences;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.portal.rpc.portal.resident.ResidentUserVisit;
 import com.propertyvista.portal.rpc.portal.resident.services.ResidentAuthenticationService;
+import com.propertyvista.portal.server.portal.resident.ResidentPortalContext;
 import com.propertyvista.server.common.security.VistaAuthenticationServicesImpl;
 import com.propertyvista.shared.exceptions.LoginTokenExpiredUserRuntimeException;
 
@@ -158,7 +159,7 @@ public class ResidentAuthenticationServiceImpl extends VistaAuthenticationServic
             }
         }
 
-        visit.setLease(selectedLeaseId);
+        ResidentPortalContext.setLease(visit, selectedLeaseId);
 
         if (selectedLeaseId != null) {
             Collection<PortalResidentBehavior> leaseBehaviors = ServerSideFactory.create(CustomerFacade.class).getLeaseBehavior(user, selectedLeaseId);

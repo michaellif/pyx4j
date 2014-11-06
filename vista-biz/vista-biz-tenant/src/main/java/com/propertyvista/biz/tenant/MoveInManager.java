@@ -27,11 +27,11 @@ import com.pyx4j.entity.server.Persistence;
 import com.propertyvista.biz.financial.payment.PaymentMethodFacade;
 import com.propertyvista.biz.tenant.insurance.TenantInsuranceFacade;
 import com.propertyvista.domain.security.PortalResidentBehavior;
-import com.propertyvista.domain.tenant.lease.Guarantor;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseParticipant;
-import com.propertyvista.domain.tenant.lease.LeaseTermGuarantor;
 import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
+import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
+import com.propertyvista.domain.tenant.lease.Tenant;
 import com.propertyvista.domain.tenant.marketing.LeaseParticipantMoveInAction;
 import com.propertyvista.domain.tenant.marketing.LeaseParticipantMoveInAction.MoveInActionStatus;
 import com.propertyvista.domain.tenant.marketing.LeaseParticipantMoveInAction.MoveInActionType;
@@ -49,14 +49,14 @@ class MoveInManager {
 
             // If this grows bigger, change it to call to getActiveMoveInActions
 
-            if ((!termParticipant.isAssignableFrom(LeaseTermGuarantor.class)) && !leaseBehaviors.contains(PortalResidentBehavior.AutopayAgreementPresent)) {
+            if ((termParticipant.isInstanceOf(LeaseTermTenant.class)) && !leaseBehaviors.contains(PortalResidentBehavior.AutopayAgreementPresent)) {
                 LeaseParticipantMoveInAction a = getActiveMoveInAction(moveInActionsByType, MoveInActionType.autoPay);
                 if (a != null) {
                     behaviors.add(PortalResidentBehavior.MoveInWizardCompletionRequired);
                 }
             }
 
-            if ((!termParticipant.isAssignableFrom(LeaseTermGuarantor.class)) && !leaseBehaviors.contains(PortalResidentBehavior.InsurancePresent)) {
+            if ((termParticipant.isInstanceOf(LeaseTermTenant.class)) && !leaseBehaviors.contains(PortalResidentBehavior.InsurancePresent)) {
                 LeaseParticipantMoveInAction a = getActiveMoveInAction(moveInActionsByType, MoveInActionType.insurance);
                 if (a != null) {
                     behaviors.add(PortalResidentBehavior.MoveInWizardCompletionRequired);
@@ -93,7 +93,7 @@ class MoveInManager {
         Collection<LeaseParticipantMoveInAction> r = new ArrayList<>();
         Map<MoveInActionType, LeaseParticipantMoveInAction> moveInActionsByType = getMoveInActionsByType(leaseParticipant);
 
-        if (!leaseParticipant.isAssignableFrom(Guarantor.class)) {
+        if (leaseParticipant.isInstanceOf(Tenant.class)) {
             LeaseParticipantMoveInAction a = getMoveInAction(moveInActionsByType, MoveInActionType.autoPay);
             if (ServerSideFactory.create(PaymentMethodFacade.class).isAutopayAgreementsPresent(leaseParticipant.lease())) {
                 a.status().setValue(MoveInActionStatus.completed);
@@ -101,7 +101,7 @@ class MoveInManager {
             r.add(a);
         }
 
-        if (!leaseParticipant.isAssignableFrom(Guarantor.class)) {
+        if (leaseParticipant.isInstanceOf(Tenant.class)) {
             LeaseParticipantMoveInAction a = getMoveInAction(moveInActionsByType, MoveInActionType.insurance);
             if (ServerSideFactory.create(TenantInsuranceFacade.class).isInsurancePresent(leaseParticipant.lease())) {
                 a.status().setValue(MoveInActionStatus.completed);
