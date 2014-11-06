@@ -51,11 +51,8 @@ import com.pyx4j.forms.client.events.PropertyChangeEvent.PropertyName;
 import com.pyx4j.forms.client.events.PropertyChangeHandler;
 import com.pyx4j.forms.client.images.FolderImages;
 import com.pyx4j.forms.client.ui.CComboBox;
-import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CComponentTheme;
 import com.pyx4j.forms.client.ui.CField;
-import com.pyx4j.forms.client.ui.CFocusComponent;
-import com.pyx4j.forms.client.ui.INativeField;
 import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.forms.client.ui.datatable.DataTableTheme;
 import com.pyx4j.forms.client.ui.decorators.WidgetDecoratorTheme;
@@ -239,14 +236,14 @@ public class DataTableFilterItem<E extends IEntity> extends FlowPanel {
         this.parent = parent;
     }
 
-    @SuppressWarnings("rawtypes")
     public PropertyCriterion getFilterData() {
         String path = null;
         if (fieldsList.getValue() != null) {
             path = fieldsList.getValue().getPath();
         }
         Operator operand = operandsList.getValue();
-        Serializable value = (Serializable) ((CComponent) ((INativeField<?>) valueHolder.getWidget()).getCComponent()).getValue();
+
+        Serializable value = (Serializable) valueComponent.getValue();
 
         return new PropertyCriterion(path, operand.getCriterion(), value);
     }
