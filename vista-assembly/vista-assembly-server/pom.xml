@@ -198,8 +198,8 @@
         <warSourceExcludes>**/*.symbolMap,gwt-unitCache/**</warSourceExcludes>
 
         <tomcatDeployServerId>tomcat-dev.birchwoodsoftwaregroup.com</tomcatDeployServerId>
-        <vista-tomcat-url>http://dev.birchwoodsoftwaregroup.com</vista-tomcat-url>
-        <vista-app-ping-url>http://www22.birchwoodsoftwaregroup.com</vista-app-ping-url>
+        <vista-tomcat-url>https://dev.devpv.com</vista-tomcat-url>
+        <vista-app-ping-url>https://env-22.devpv.com</vista-app-ping-url>
     </properties>
 
     <build>
@@ -481,7 +481,7 @@
             <id>deploy-target-env-11</id>
             <properties>
                 <deployContext>vista11</deployContext>
-                <vista-app-ping-url>http://env-11.birchwoodsoftwaregroup.com</vista-app-ping-url>
+                <vista-app-ping-url>https://env-11.devpv.com</vista-app-ping-url>
             </properties>
         </profile>
 
@@ -489,7 +489,16 @@
             <id>deploy-target-env-22</id>
             <properties>
                 <deployContext>vista22</deployContext>
-                <vista-app-ping-url>http://env-22.birchwoodsoftwaregroup.com</vista-app-ping-url>
+                <vista-app-ping-url>https://env-22.devpv.com</vista-app-ping-url>
+            </properties>
+        </profile>
+
+        <profile>
+            <id>deploy-target-www44</id>
+            <properties>
+                <deployContext>vista44</deployContext>
+                <vista-tomcat-url>https://devD.devpv.com</vista-tomcat-url>
+                <vista-app-ping-url>https://env-44.devpv.com</vista-app-ping-url>
             </properties>
         </profile>
 
@@ -497,7 +506,7 @@
             <id>deploy-target-env-66</id>
             <properties>
                 <deployContext>vista66</deployContext>
-                <vista-app-ping-url>http://env-66.birchwoodsoftwaregroup.com/</vista-app-ping-url>
+                <vista-app-ping-url>https://env-66.devpv.com/</vista-app-ping-url>
             </properties>
         </profile>
 
@@ -505,7 +514,7 @@
             <id>deploy-target-env-88</id>
             <properties>
                 <deployContext>vista88</deployContext>
-                <vista-app-ping-url>http://env-88.birchwoodsoftwaregroup.com/</vista-app-ping-url>
+                <vista-app-ping-url>https://env-88.devpv.com/</vista-app-ping-url>
             </properties>
         </profile>
 
@@ -515,15 +524,6 @@
                 <deployContext>vista33</deployContext>
                 <vista-tomcat-url>http://qa.birchwoodsoftwaregroup.com</vista-tomcat-url>
                 <vista-app-ping-url>http://env-33.birchwoodsoftwaregroup.com</vista-app-ping-url>
-            </properties>
-        </profile>
-
-        <profile>
-            <id>deploy-target-www44</id>
-            <properties>
-                <deployContext>vista44</deployContext>
-                <vista-tomcat-url>http://devD.birchwoodsoftwaregroup.com</vista-tomcat-url>
-                <vista-app-ping-url>http://www44.birchwoodsoftwaregroup.com</vista-app-ping-url>
             </properties>
         </profile>
 

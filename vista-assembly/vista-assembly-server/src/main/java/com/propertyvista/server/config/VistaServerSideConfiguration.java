@@ -167,12 +167,12 @@ public class VistaServerSideConfiguration extends AbstractVistaServerSideConfigu
 
     @Override
     public boolean isDepoymentApplicationDispatcher() {
-        return getConfigProperties().getBooleanValue("vista.depoymentApplicationDispatcher", false);
+        return getConfigProperties().getBooleanValue("vista.depoymentApplicationDispatcher", true);
     }
 
     @Override
     public boolean isDepoymentUseNewDevDomains() {
-        return getConfigProperties().getBooleanValue("vista.depoymentUseNewDevDomains", false);
+        return getConfigProperties().getBooleanValue("vista.depoymentUseNewDevDomains", true);
     }
 
     @Override
@@ -399,8 +399,9 @@ public class VistaServerSideConfiguration extends AbstractVistaServerSideConfigu
         if (CommonsStringUtils.isStringSet(configDomain)) {
             return configDomain;
         } else {
-            return "propertyvista.com";
-            //return "dev.birchwoodsoftwaregroup.com";
+            return "crowd.devpv.com";
+            //return "propertyvista.com"; // Google
+            //return "dev.birchwoodsoftwaregroup.com"; // Vista itself
         }
     }
 
