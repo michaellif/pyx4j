@@ -16,6 +16,8 @@ package com.propertyvista.domain.policy.dto;
 import com.pyx4j.entity.annotations.ExtendsBO;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.core.IList;
+import com.pyx4j.entity.core.IPrimitive;
+import com.pyx4j.i18n.annotations.I18n;
 
 import com.propertyvista.domain.policy.framework.PolicyDTOBase;
 import com.propertyvista.domain.policy.policies.IdAssignmentPolicy;
@@ -28,6 +30,10 @@ public interface IdAssignmentPolicyDTO extends PolicyDTOBase, IdAssignmentPolicy
 
     IList<IdAssignmentItem> editableItems();
 
+    @I18n(strategy = I18n.I18nStrategy.IgnoreMember)
     IdAssignmentPaymentType paymentTypesDefaults();
+
+    @I18n(strategy = I18n.I18nStrategy.IgnoreMember)
+    IPrimitive<Integer> yardiDocumentNumberLenght();
 
 }

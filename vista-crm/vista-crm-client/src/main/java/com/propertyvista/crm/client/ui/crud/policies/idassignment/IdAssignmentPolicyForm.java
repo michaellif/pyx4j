@@ -14,20 +14,25 @@
 package com.propertyvista.crm.client.ui.crud.policies.idassignment;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.entity.core.IObject;
+import com.pyx4j.entity.core.IPrimitive;
 import com.pyx4j.forms.client.ui.CComboBox;
 import com.pyx4j.forms.client.ui.CEnumLabel;
 import com.pyx4j.forms.client.ui.CField;
 import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.CTextComponent;
+import com.pyx4j.forms.client.ui.RevalidationTrigger;
 import com.pyx4j.forms.client.ui.folder.CFolderRowEditor;
 import com.pyx4j.forms.client.ui.folder.FolderColumnDescriptor;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.forms.client.ui.panels.FormPanel;
+import com.pyx4j.forms.client.validators.AbstractComponentValidator;
+import com.pyx4j.forms.client.validators.BasicValidationError;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.backoffice.ui.prime.form.IForm;
 
@@ -75,11 +80,72 @@ public class IdAssignmentPolicyForm extends PolicyDTOTabPanelBasedForm<IdAssignm
         return formPanel;
     }
 
+    class YardiDocumentNumberLenghtValidator extends AbstractComponentValidator<String> {
+
+        private IPrimitive<String> protoMember;
+
+        public YardiDocumentNumberLenghtValidator(IPrimitive<String> protoMember) {
+            this.protoMember = protoMember;
+        }
+
+        @Override
+        public BasicValidationError isValid() {
+            String value1 = getCComponent().getValue();
+            if (value1 == null) {
+                value1 = ((CTextComponent<?, ?>) getCComponent()).getWatermark();
+            }
+            if (value1 == null) {
+                value1 = "";
+            }
+
+            String value2 = get(protoMember).getValue();
+            if (value2 == null) {
+                value2 = ((CTextComponent<?, ?>) get(protoMember)).getWatermark();
+            }
+            if (value2 == null) {
+                value2 = "";
+            }
+
+            if (value1.length() + value2.length() > getValue().yardiDocumentNumberLenght().getValue()) {
+                String message = i18n.tr("Yardi Check # \"{0}{1}:123456\" exceeds maximum Yardy field lenght {2}", value1, value2, getValue()
+                        .yardiDocumentNumberLenght().getValue() + 7);
+                return new BasicValidationError(getCComponent(), message);
+            } else {
+                return null;
+            }
+        }
+    };
+
+    @Override
+    public void addValidations() {
+
+        if (VistaFeatures.instance().yardiIntegration()) {
+            for (IObject<String> member : Arrays.asList(proto().paymentTypes().cashPrefix(),//
+                    proto().paymentTypes().checkPrefix(), //
+                    proto().paymentTypes().echeckPrefix(), //
+                    proto().paymentTypes().directBankingPrefix(), //
+                    proto().paymentTypes().creditCardVisaPrefix(), //
+                    proto().paymentTypes().creditCardMasterCardPrefix(), //
+                    proto().paymentTypes().visaDebitPrefix())) {
+
+                get(member).addComponentValidator(new YardiDocumentNumberLenghtValidator(proto().paymentTypes().autopayPrefix()));
+                get(member).addComponentValidator(new YardiDocumentNumberLenghtValidator(proto().paymentTypes().oneTimePrefix()));
+
+                get(member).addValueChangeHandler(new RevalidationTrigger<String>(get(proto().paymentTypes().autopayPrefix())));
+                get(member).addValueChangeHandler(new RevalidationTrigger<String>(get(proto().paymentTypes().oneTimePrefix())));
+                get(proto().paymentTypes().autopayPrefix()).addValueChangeHandler(new RevalidationTrigger<String>(get(member)));
+                get(proto().paymentTypes().oneTimePrefix()).addValueChangeHandler(new RevalidationTrigger<String>(get(member)));
+
+            }
+        }
+
+    }
+
     @Override
     protected void onValueSet(boolean populate) {
         super.onValueSet(populate);
 
-        if (VistaFeatures.instance().yardiIntegration() && isEditable()) {
+        if (VistaFeatures.instance().yardiIntegration()) {
             IdAssignmentPaymentType defaults = getValue().paymentTypesDefaults();
 
             ((CTextComponent<?, ?>) get(proto().paymentTypes().cashPrefix())).setWatermark(defaults.cashPrefix().getValue());

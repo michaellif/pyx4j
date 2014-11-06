@@ -17,11 +17,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.pyx4j.config.server.ServerSideFactory;
+import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.shared.utils.EntityGraph;
 
 import com.propertyvista.biz.policy.IdAssignmentFacade;
+import com.propertyvista.config.VistaDeployment;
 import com.propertyvista.crm.rpc.services.policies.policy.IdAssignmentPolicyCrudService;
 import com.propertyvista.crm.server.services.policies.GenericPolicyCrudService;
+import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.policy.dto.IdAssignmentPolicyDTO;
 import com.propertyvista.domain.policy.policies.IdAssignmentPolicy;
 import com.propertyvista.domain.policy.policies.domain.IdAssignmentItem;
@@ -46,6 +49,11 @@ public class IdAssignmentPolicyCrudServiceImpl extends GenericPolicyCrudService<
                 }
             }
             to.paymentTypesDefaults().set(ServerSideFactory.create(IdAssignmentFacade.class).getPaymentTypesDefaults());
+
+            to.yardiDocumentNumberLenght().setValue(EntityFactory.getEntityPrototype(PaymentRecord.class).yardiDocumentNumber().getMeta().getLength() - 1 - 6);
+            if (!VistaDeployment.isVistaProduction()) {
+                to.yardiDocumentNumberLenght().setValue(to.yardiDocumentNumberLenght().getValue() - 4);
+            }
 
             if (retrieveTarget == RetrieveTarget.View) {
                 EntityGraph.setDefaults(to.paymentTypesDefaults(), to.paymentTypes()//
