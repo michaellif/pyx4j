@@ -37,7 +37,7 @@ import com.google.gwt.user.client.ui.TreeItem;
 import com.pyx4j.commons.IFormatter;
 import com.pyx4j.widgets.client.style.theme.WidgetsTheme;
 
-public class TreePickerPanel<E> extends ScrollPanel implements IPickerPanel<E> {
+public class SimplePickerPanel<E> extends ScrollPanel implements IPickerPanel<E> {
 
     private static TreeImages images = GWT.create(TreeImages.class);
 
@@ -53,7 +53,7 @@ public class TreePickerPanel<E> extends ScrollPanel implements IPickerPanel<E> {
 
     private final PickerTree tree;
 
-    public TreePickerPanel(IOptionsGrabber<E> optionsGrabber, IFormatter<E, SafeHtml> optionFormatter) {
+    public SimplePickerPanel(IOptionsGrabber<E> optionsGrabber, IFormatter<E, SafeHtml> optionFormatter) {
         this.optionsGrabber = optionsGrabber;
         this.optionFormatter = optionFormatter;
 
@@ -147,7 +147,7 @@ public class TreePickerPanel<E> extends ScrollPanel implements IPickerPanel<E> {
             clear();
 
             for (E option : options) {
-                PickerTreeItem treeItem = new PickerTreeItem(option);
+                PickerTreeItem treeItem = new PickerTreeItem(option, query);
                 addItem(treeItem);
                 treeItem.setUserObject(option);
             }
@@ -170,10 +170,11 @@ public class TreePickerPanel<E> extends ScrollPanel implements IPickerPanel<E> {
 
             private final HTML label;
 
-            public PickerTreeItem(E value) {
+            public PickerTreeItem(E value, String query) {
                 super();
                 this.value = value;
-                label = new HTML(optionFormatter.format(value));
+                SafeHtml formattedValue = optionFormatter.format(value);
+                label = new HTML((query.equals("") ? formattedValue : OptionQueryHighlighter.highlight(formattedValue, query)));
                 label.setStyleName(WidgetsTheme.StyleName.SelectionPickerPanelItem.name());
                 setWidget(label);
             }
@@ -190,5 +191,4 @@ public class TreePickerPanel<E> extends ScrollPanel implements IPickerPanel<E> {
 
         }
     }
-
 }

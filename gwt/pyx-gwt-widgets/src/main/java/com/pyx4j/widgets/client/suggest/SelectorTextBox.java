@@ -50,7 +50,7 @@ public class SelectorTextBox<E> extends AbstractSelectorWidget<E> implements Has
         this.optionFormatter = optionFormatter;
         textBox = (SelectorTextBoxValuePanel<E>) getViewerPanel();
 
-        picker = new TreePickerPanel<E>(optionsGrabber, optionFormatter);
+        picker = new SimplePickerPanel<E>(optionsGrabber, optionFormatter);
 
         textBox.addValueChangeHandler(new ValueChangeHandler<String>() {
 

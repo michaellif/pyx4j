@@ -77,7 +77,7 @@ public class SelectorListBox<E> extends AbstractSelectorWidget<E> implements Has
 
         value = new ArrayList<>();
 
-        picker = new TreePickerPanel<E>(optionsGrabber, optionFormatter);
+        picker = new SimplePickerPanel<E>(optionsGrabber, optionFormatter);
 
         listBox.addValueChangeHandler(new ValueChangeHandler<String>() {
 

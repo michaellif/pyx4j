@@ -27,6 +27,7 @@ import com.google.gwt.safehtml.shared.SafeHtml;
 import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
 
 import com.pyx4j.commons.IFormatter;
+import com.pyx4j.commons.SimpleMessageFormat;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.forms.client.events.HasOptionsChangeHandlers;
 import com.pyx4j.forms.client.events.OptionsChangeEvent;
@@ -52,7 +53,8 @@ public abstract class CAbstractSelectorBox<DATA, TYPE extends IEntity, WIDGET ex
             @Override
             public SafeHtml format(TYPE value) {
                 SafeHtmlBuilder builder = new SafeHtmlBuilder();
-                return builder.appendHtmlConstant(value.getStringView()).toSafeHtml();
+                return builder.appendHtmlConstant(SimpleMessageFormat.format("<div style=\"padding:5px;\"><div>{0}</div></div>", value.getStringView()))
+                        .toSafeHtml();
             }
         });
     }
