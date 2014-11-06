@@ -49,7 +49,7 @@ public class VistaServerSideConfiguration44 extends VistaServerSideConfiguration
 
     @Override
     public int interfaceSSHDPort() {
-        return 8826;
+        return 8824;
     }
 
     @Override
