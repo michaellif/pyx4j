@@ -39,7 +39,7 @@ import com.propertyvista.crm.rpc.services.admin.TaxCrudService;
 import com.propertyvista.crm.rpc.services.admin.ac.CrmAdministrationAccess;
 import com.propertyvista.crm.rpc.services.admin.ac.GlobalTenantSecurity;
 import com.propertyvista.crm.rpc.services.customer.EmailToTenantsService;
-import com.propertyvista.crm.rpc.services.customer.ExportTenantsService;
+import com.propertyvista.crm.rpc.services.customer.ExportTenantsSecurityCodesService;
 import com.propertyvista.crm.rpc.services.security.CrmAuditRecordsListerService;
 import com.propertyvista.crm.rpc.services.selections.SelectGlCodeListService;
 import com.propertyvista.crm.rpc.services.vista2pmc.CreditCheckStatusCrudService;
@@ -87,7 +87,7 @@ class VistaCrmAdministrationAccessControlList extends UIAclBuilder {
         grant(AdminGeneral, CrmRole.class, ALL);
 
         grant(AdminGeneral, GlobalTenantSecurity.class);
-        grant(AdminGeneral, new IServiceExecutePermission(ExportTenantsService.class));
+        grant(AdminGeneral, new IServiceExecutePermission(ExportTenantsSecurityCodesService.class));
         grant(AdminGeneral, new IServiceExecutePermission(EmailToTenantsService.class));
 
         grant(AdminGeneral, new IServiceExecutePermission(AvailableCrmReportAdminCrudService.class));

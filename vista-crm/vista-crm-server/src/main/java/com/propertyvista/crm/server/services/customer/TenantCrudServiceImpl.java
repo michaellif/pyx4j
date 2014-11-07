@@ -130,7 +130,7 @@ public class TenantCrudServiceImpl extends LeaseParticipantCrudServiceBaseImpl<T
         Tenant tenant = Persistence.secureRetrieve(Tenant.class, tenantId.getPrimaryKey());
         Persistence.service().retrieveMember(tenant.lease());
         Persistence.service().retrieveMember(tenant.lease().unit().building());
-        TenantPortalAccessInformationDTO dto = ExportTenantsPortalSecretsDeferredProcess.convert(tenant);
+        TenantPortalAccessInformationDTO dto = ExportTenantsSecurityCodesDeferredProcess.convert(tenant);
         callback.onSuccess(dto);
     }
 

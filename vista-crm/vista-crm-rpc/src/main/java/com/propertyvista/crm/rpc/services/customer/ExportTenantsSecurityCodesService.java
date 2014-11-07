@@ -16,7 +16,7 @@ package com.propertyvista.crm.rpc.services.customer;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.essentials.rpc.report.ReportService;
 
-public interface ExportTenantsService extends ReportService<IEntity> {
+public interface ExportTenantsSecurityCodesService extends ReportService<IEntity> {
 
     public static String PARAM_REPORT_TYPE = "selected-buildings";
 

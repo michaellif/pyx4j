@@ -42,7 +42,7 @@ import com.propertyvista.domain.tenant.lease.Tenant;
 import com.propertyvista.dto.TenantPortalAccessInformationDTO;
 import com.propertyvista.server.common.util.AddressRetriever;
 
-public class ExportTenantsPortalSecretsDeferredProcess extends AbstractDeferredProcess {
+public class ExportTenantsSecurityCodesDeferredProcess extends AbstractDeferredProcess {
 
     private static final long serialVersionUID = 5026863365365592547L;
 
@@ -54,7 +54,7 @@ public class ExportTenantsPortalSecretsDeferredProcess extends AbstractDeferredP
 
     private String fileName;
 
-    public ExportTenantsPortalSecretsDeferredProcess(PortalAccessSecutiryCodeReportType type) {
+    public ExportTenantsSecurityCodesDeferredProcess(PortalAccessSecutiryCodeReportType type) {
         this.reportType = type;
     }
 
@@ -104,7 +104,7 @@ public class ExportTenantsPortalSecretsDeferredProcess extends AbstractDeferredP
             Lease currentLease = null;
             TenantPortalAccessInformationPerLeaseDTO currentReportEntity = null;
 
-            ICursorIterator<Tenant> tenants = Persistence.service().query(null, criteria, AttachLevel.Attached);
+            ICursorIterator<Tenant> tenants = Persistence.secureQuery(null, criteria, AttachLevel.Attached);
             try {
                 while (tenants.hasNext()) {
                     Tenant tenant = tenants.next();

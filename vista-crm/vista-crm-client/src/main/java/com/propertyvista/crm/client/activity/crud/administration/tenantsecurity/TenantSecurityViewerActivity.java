@@ -34,7 +34,7 @@ import com.pyx4j.widgets.client.dialog.MessageDialog;
 import com.propertyvista.crm.client.CrmSite;
 import com.propertyvista.crm.client.ui.crud.administration.tenantsecurity.TenantSecurityView;
 import com.propertyvista.crm.rpc.services.customer.EmailToTenantsService;
-import com.propertyvista.crm.rpc.services.customer.ExportTenantsService;
+import com.propertyvista.crm.rpc.services.customer.ExportTenantsSecurityCodesService;
 import com.propertyvista.domain.communication.EmailTemplateType;
 import com.propertyvista.domain.tenant.access.PortalAccessSecutiryCodeReportType;
 import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
@@ -62,8 +62,8 @@ public class TenantSecurityViewerActivity extends AbstractActivity implements Te
         d.setDownloadServletPath(GWT.getModuleBaseURL() + DeploymentConsts.downloadServletMapping);
 
         HashMap<String, Serializable> parameters = new HashMap<String, Serializable>();
-        parameters.put(ExportTenantsService.PARAM_REPORT_TYPE, type);
-        d.start(GWT.<ReportService<?>> create(ExportTenantsService.class), null, parameters);
+        parameters.put(ExportTenantsSecurityCodesService.PARAM_REPORT_TYPE, type);
+        d.start(GWT.<ReportService<?>> create(ExportTenantsSecurityCodesService.class), null, parameters);
     }
 
     @Override
