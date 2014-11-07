@@ -13,8 +13,8 @@
  */
 package com.propertyvista.operations.client.ui.crud.pmc;
 
+import com.pyx4j.forms.client.ui.datatable.ListerDataSource;
 import com.pyx4j.site.client.backoffice.ui.prime.form.IViewer;
-import com.pyx4j.site.client.backoffice.ui.prime.lister.ListerDataSource;
 
 import com.propertyvista.crm.rpc.dto.ScheduleDataDTO;
 import com.propertyvista.operations.domain.eft.cards.CardTransactionRecord;

@@ -18,8 +18,8 @@ import java.util.List;
 
 import com.google.gwt.user.client.Command;
 
+import com.pyx4j.forms.client.ui.datatable.ListerDataSource;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.backoffice.ui.prime.lister.ListerDataSource;
 import com.pyx4j.site.client.ui.visor.AbstractVisorPane;
 import com.pyx4j.site.client.ui.visor.IVisor;
 import com.pyx4j.widgets.client.Button;
