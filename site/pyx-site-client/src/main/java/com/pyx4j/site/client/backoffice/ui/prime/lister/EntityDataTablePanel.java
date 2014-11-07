@@ -25,41 +25,30 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import com.google.gwt.core.client.Scheduler;
-import com.google.gwt.core.client.Scheduler.ScheduledCommand;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.Widget;
 
-import com.pyx4j.commons.GWTJava5Helper;
 import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.criterion.Criterion;
 import com.pyx4j.entity.core.criterion.EntityListCriteria;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
-import com.pyx4j.entity.core.criterion.PropertyCriterion;
-import com.pyx4j.entity.rpc.EntitySearchResult;
 import com.pyx4j.forms.client.ui.IEditableComponentFactory;
 import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.forms.client.ui.datatable.DataTable;
-import com.pyx4j.forms.client.ui.datatable.ListerDataSource;
 import com.pyx4j.forms.client.ui.datatable.DataTable.ItemZoomInCommand;
 import com.pyx4j.forms.client.ui.datatable.DataTable.SortChangeHandler;
 import com.pyx4j.forms.client.ui.datatable.DataTableModel;
 import com.pyx4j.forms.client.ui.datatable.DataTablePanel;
+import com.pyx4j.forms.client.ui.datatable.ListerDataSource;
 import com.pyx4j.forms.client.ui.datatable.criteria.ICriteriaForm;
-import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.site.client.backoffice.ui.PaneTheme;
 import com.pyx4j.site.client.backoffice.ui.prime.lister.AbstractPrimeLister.ItemSelectionHandler;
 import com.pyx4j.site.client.memento.Memento;
 
 public class EntityDataTablePanel<E extends IEntity> extends ScrollPanel {
-
-    private static final Logger log = LoggerFactory.getLogger(EntityDataTablePanel.class);
 
     public static enum MementoKeys {
         page, filterData, sortingData
@@ -73,11 +62,7 @@ public class EntityDataTablePanel<E extends IEntity> extends ScrollPanel {
 
     private final DataTablePanel<E> dataTablePanel;
 
-    private ListerDataSource<E> dataSource;
-
     private List<ItemSelectionHandler<E>> itemSelectionHandlers;
-
-    private final Class<E> clazz;
 
     private List<Criterion> externalFilters;
 
@@ -94,10 +79,15 @@ public class EntityDataTablePanel<E extends IEntity> extends ScrollPanel {
     }
 
     public EntityDataTablePanel(Class<E> clazz, ICriteriaForm<E> criteriaForm, boolean allowAddNew, boolean allowDelete) {
-        this.clazz = clazz;
         setStyleName(PaneTheme.StyleName.Lister.name());
         setSize("100%", "100%");
-        dataTablePanel = new DataTablePanel<E>(clazz, criteriaForm);
+        dataTablePanel = new DataTablePanel<E>(clazz, criteriaForm) {
+            @Override
+            protected void onObtainSuccess() {
+                EntityDataTablePanel.this.onObtainSuccess();
+                super.onObtainSuccess();
+            }
+        };
         dataTablePanel.getElement().getStyle().setPaddingBottom(40, Unit.PX);
 
         dataTablePanel.setFilterApplyCommand(new Command() {
@@ -190,38 +180,17 @@ public class EntityDataTablePanel<E extends IEntity> extends ScrollPanel {
     }
 
     public void setDataSource(ListerDataSource<E> dataSource) {
-        this.dataSource = dataSource;
+        dataTablePanel.setDataSource(dataSource);
     }
 
     public ListerDataSource<E> getDataSource() {
-        return dataSource;
+        return dataTablePanel.getDataSource();
     }
 
     public void obtain(final int pageNumber) {
-        assert dataSource != null : "dataSource is not installed";
-
-        EntityListCriteria<E> criteria = EntityListCriteria.create(clazz);
-        criteria.setPageNumber(pageNumber);
-        criteria.setPageSize(dataTablePanel.getPageSize());
-        criteria.setSorts(getSorting());
-
-        dataSource.obtain(updateCriteria(criteria), new DefaultAsyncCallback<EntitySearchResult<E>>() {
-            @Override
-            public void onSuccess(final EntitySearchResult<E> result) {
-                log.trace("dataTable {} data received {}", GWTJava5Helper.getSimpleName(clazz), result.getData().size());
-                // Separate RPC serialization and table painting
-                Scheduler.get().scheduleFinally(new ScheduledCommand() {
-                    @Override
-                    public void execute() {
-                        dataTablePanel.populateData(result.getData(), pageNumber, result.hasMoreData(), result.getTotalRows());
-                        onObtainSuccess();
-                    }
-                });
-            }
-        });
+        dataTablePanel.obtain(pageNumber);
     }
 
-    //TODO Misha rename to populate
     protected void onObtainSuccess() {
     }
 
@@ -313,11 +282,11 @@ public class EntityDataTablePanel<E extends IEntity> extends ScrollPanel {
         return null;
     }
 
-    public List<Sort> getSorting() {
+    public List<Sort> getSortCriteria() {
         return dataTablePanel.getDataTableModel().getSortCriteria();
     }
 
-    public void setSorting(List<Sort> sorts) {
+    public void setSortCriteria(List<Sort> sorts) {
         dataTablePanel.getDataTableModel().setSortColumn(null);
         dataTablePanel.getDataTableModel().setSecondarySortColumn(null);
 
@@ -338,7 +307,7 @@ public class EntityDataTablePanel<E extends IEntity> extends ScrollPanel {
     }
 
     public void resetSorting() {
-        setSorting(getDefaultSorting());
+        setSortCriteria(getDefaultSorting());
     }
 
     /**
@@ -367,7 +336,7 @@ public class EntityDataTablePanel<E extends IEntity> extends ScrollPanel {
         if (externalFilters == null) {
             memento.putInteger(MementoKeys.page.name(), getPageNumber());
             memento.putObject(MementoKeys.filterData.name(), getFilters());
-            memento.putObject(MementoKeys.sortingData.name(), getSorting());
+            memento.putObject(MementoKeys.sortingData.name(), getSortCriteria());
         }
         return memento;
     }
@@ -387,7 +356,7 @@ public class EntityDataTablePanel<E extends IEntity> extends ScrollPanel {
         }
 
         setFilters(filters);
-        setSorting(sorts);
+        setSortCriteria(sorts);
 
         // should be called last:
         obtain(pageNumber == null ? 0 : pageNumber);
@@ -398,19 +367,7 @@ public class EntityDataTablePanel<E extends IEntity> extends ScrollPanel {
     }
 
     protected EntityListCriteria<E> updateCriteria(EntityListCriteria<E> criteria) {
-        if (getFilters() != null) {
-            for (Criterion fd : getFilters()) {
-                if (fd instanceof PropertyCriterion) {
-                    if (((PropertyCriterion) fd).isValid()) {
-                        criteria.add(fd);
-                    }
-                } else {
-                    criteria.add(fd);
-                }
-            }
-        }
-
-        return criteria;
+        return dataTablePanel.updateCriteria(criteria);
     }
 
 }

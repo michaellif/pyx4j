@@ -23,16 +23,25 @@ package com.pyx4j.forms.client.ui.datatable;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.google.gwt.core.client.Scheduler;
+import com.google.gwt.core.client.Scheduler.ScheduledCommand;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.RequiresResize;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.Widget;
 
+import com.pyx4j.commons.GWTJava5Helper;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.criterion.Criterion;
+import com.pyx4j.entity.core.criterion.EntityListCriteria;
+import com.pyx4j.entity.core.criterion.PropertyCriterion;
 import com.pyx4j.entity.core.meta.EntityMeta;
+import com.pyx4j.entity.rpc.EntitySearchResult;
 import com.pyx4j.forms.client.images.FolderImages;
 import com.pyx4j.forms.client.ui.IEditableComponentFactory;
 import com.pyx4j.forms.client.ui.datatable.DataTable.ItemSelectionHandler;
@@ -43,10 +52,13 @@ import com.pyx4j.forms.client.ui.datatable.filter.CriteriaEditableComponentFacto
 import com.pyx4j.forms.client.ui.datatable.filter.DataTableFilterItem;
 import com.pyx4j.forms.client.ui.datatable.filter.DataTableFilterPanel;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.images.WidgetsImages;
 
 public class DataTablePanel<E extends IEntity> extends FlowPanel implements RequiresResize {
+
+    private static final Logger log = LoggerFactory.getLogger(DataTablePanel.class);
 
     private static final I18n i18n = I18n.get(DataTableFilterItem.class);
 
@@ -75,6 +87,8 @@ public class DataTablePanel<E extends IEntity> extends FlowPanel implements Requ
     private Button filterButton;
 
     private final Class<E> clazz;
+
+    private ListerDataSource<E> dataSource;
 
     public DataTablePanel(Class<E> clazz) {
         this(clazz, null, FolderImages.INSTANCE);
@@ -306,6 +320,58 @@ public class DataTablePanel<E extends IEntity> extends FlowPanel implements Requ
     @Override
     public void onResize() {
         dataTableScroll.updateColumnVizibility();
+    }
+
+    public void setDataSource(ListerDataSource<E> dataSource) {
+        this.dataSource = dataSource;
+    }
+
+    public ListerDataSource<E> getDataSource() {
+        return dataSource;
+    }
+
+    public void obtain(final int pageNumber) {
+        assert dataSource != null : "dataSource is not installed";
+
+        EntityListCriteria<E> criteria = EntityListCriteria.create(clazz);
+        criteria.setPageNumber(pageNumber);
+        criteria.setPageSize(getPageSize());
+        criteria.setSorts(getDataTableModel().getSortCriteria());
+
+        dataSource.obtain(updateCriteria(criteria), new DefaultAsyncCallback<EntitySearchResult<E>>() {
+            @Override
+            public void onSuccess(final EntitySearchResult<E> result) {
+                log.trace("dataTable {} data received {}", GWTJava5Helper.getSimpleName(clazz), result.getData().size());
+                // Separate RPC serialization and table painting
+                Scheduler.get().scheduleFinally(new ScheduledCommand() {
+                    @Override
+                    public void execute() {
+                        populateData(result.getData(), pageNumber, result.hasMoreData(), result.getTotalRows());
+                        onObtainSuccess();
+                    }
+                });
+            }
+        });
+    }
+
+    //TODO Misha rename to populate
+    protected void onObtainSuccess() {
+    }
+
+    public EntityListCriteria<E> updateCriteria(EntityListCriteria<E> criteria) {
+        if (getFilters() != null) {
+            for (Criterion fd : getFilters()) {
+                if (fd instanceof PropertyCriterion) {
+                    if (((PropertyCriterion) fd).isValid()) {
+                        criteria.add(fd);
+                    }
+                } else {
+                    criteria.add(fd);
+                }
+            }
+        }
+
+        return criteria;
     }
 
     class DataTableScrollPanel extends ScrollPanel {

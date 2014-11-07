@@ -90,9 +90,9 @@ public interface ILister<E extends IEntity> extends IPane {
 
     void setFilters(List<Criterion> filterData);
 
-    List<Sort> getSorting();
+    List<Sort> getSortCriteria();
 
-    void setSorting(List<Sort> sorts);
+    void setSortCriteria(List<Sort> sorts);
 
     void onDeleted(Key itemID, boolean isSuccessful);
 }
