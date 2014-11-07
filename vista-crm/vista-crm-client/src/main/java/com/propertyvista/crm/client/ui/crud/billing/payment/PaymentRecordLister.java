@@ -38,7 +38,8 @@ public class PaymentRecordLister extends AbstractPrimeLister<PaymentRecordDTO> {
         cd.add(new MemberColumnDescriptor.Builder(proto().id()).build());
         if (VistaFeatures.instance().yardiIntegration()) {
             cd.add(new MemberColumnDescriptor.Builder(proto().yardiDocumentNumber(), false).build());
-            cd.add(new MemberColumnDescriptor.Builder(proto().yardiBatches().$().externalBatchNumber()).searchableOnly().build());
+            cd.add(new MemberColumnDescriptor.Builder(proto().externalBatchNumber(), false).sortable(false).searchable(false).build());
+            cd.add(new MemberColumnDescriptor.Builder(proto().externalBatchNumberReversal(), false).sortable(false).searchable(false).build());
         }
         cd.add(new MemberColumnDescriptor.Builder(proto().billingAccount().lease().unit().building().propertyCode()).columnTitle(i18n.tr("Property Code"))
                 .visible(true).build());

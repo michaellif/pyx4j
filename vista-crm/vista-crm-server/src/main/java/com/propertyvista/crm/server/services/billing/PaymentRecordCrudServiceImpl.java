@@ -124,6 +124,11 @@ public class PaymentRecordCrudServiceImpl extends AbstractCrudServiceDtoImpl<Pay
         if (!bo.invoicePaymentBackOut().isNull()) {
             to.rejectedWithNSF().setValue(bo.invoicePaymentBackOut().applyNSF().getValue());
         }
+
+        if (VistaFeatures.instance().yardiIntegration()) {
+            to.externalBatchNumber().setValue(ServerSideFactory.create(YardiARFacade.class).getExternalBatchNumber(bo, false));
+            to.externalBatchNumberReversal().setValue(ServerSideFactory.create(YardiARFacade.class).getExternalBatchNumber(bo, true));
+        }
     }
 
     @Override
