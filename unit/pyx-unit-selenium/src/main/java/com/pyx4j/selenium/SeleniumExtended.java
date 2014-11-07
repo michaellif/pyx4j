@@ -28,14 +28,13 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
-
-import com.thoughtworks.selenium.webdriven.JavascriptLibrary;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.helpers.FormattingTuple;
 import org.slf4j.helpers.MessageFormatter;
 import org.slf4j.spi.LocationAwareLogger;
+
+import com.thoughtworks.selenium.webdriven.JavascriptLibrary;
 
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.commons.CompositeDebugId;
@@ -167,6 +166,8 @@ public class SeleniumExtended extends WebDriverWrapper {
                 return By.name(text);
             } else if (prams[0].equals("css")) {
                 return By.cssSelector(text);
+            } else if (prams[0].equals("class")) {
+                return By.className(text);
             } else if (prams[0].equals("xpath")) {
                 return By.xpath(text);
             } else {
