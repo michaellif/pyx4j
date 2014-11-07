@@ -31,7 +31,7 @@ import com.pyx4j.commons.css.ThemeId;
 public class DialogTheme extends Theme {
 
     public static enum StyleName implements IStyleName {
-        Dialog, DialogCaption, DialogResizer, DialogContent,
+        Dialog, DialogCaption, DialogContent,
 
         DialogButtonsPanel, DialogDefaultButtonsToolbar, DialogCustomButtonsToolbar
     }
@@ -54,7 +54,7 @@ public class DialogTheme extends Theme {
         Style style = new Style(".", StyleName.Dialog);
         style.addProperty("box-shadow", "10px 10px 5px rgba(0, 0, 0, 0.3)");
         style.addProperty("border", "5px solid");
-        style.addProperty("border-color", ThemeColor.object1, 1);
+        style.addProperty("border-color", ThemeColor.object2, 1);
         addStyle(style);
 
         style = new Style(".", StyleName.DialogCaption);
@@ -66,14 +66,8 @@ public class DialogTheme extends Theme {
         style.addProperty("padding-left", "10px");
         addStyle(style);
 
-        style = new Style(".", StyleName.DialogResizer);
-        style.addProperty("background", ThemeColor.object1, 0.8);
-        style.addProperty("filter", "alpha(opacity=95)");
-        style.addProperty("opacity", "0.95");
-        addStyle(style);
-
         style = new Style(".", StyleName.DialogContent);
-        style.addProperty("background-color", ThemeColor.formBackground);
+        style.addProperty("background-color", ThemeColor.formBackground, 0.1);
         style.addProperty("width", "100%");
         style.addProperty("height", "100%");
         addStyle(style);
