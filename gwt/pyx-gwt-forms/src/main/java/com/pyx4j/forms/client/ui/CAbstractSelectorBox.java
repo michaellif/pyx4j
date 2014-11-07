@@ -38,7 +38,7 @@ import com.pyx4j.widgets.client.suggest.IOptionsGrabber;
 public abstract class CAbstractSelectorBox<DATA, TYPE extends IEntity, WIDGET extends INativeFocusField<DATA>> extends CFocusComponent<DATA, WIDGET> implements
         IAcceptsWatermark, HasOptionsChangeHandlers<List<TYPE>> {
 
-    private IFormatter<TYPE, String> formatter;
+    private IFormatter<TYPE, String> valueformatter;
 
     private String watermark;
 
@@ -48,6 +48,14 @@ public abstract class CAbstractSelectorBox<DATA, TYPE extends IEntity, WIDGET ex
 
     public CAbstractSelectorBox(IOptionsGrabber<TYPE> optionsGrabber) {
         this.optionsGrabber = optionsGrabber;
+
+        setFormatter(new IFormatter<TYPE, String>() {
+
+            @Override
+            public String format(TYPE value) {
+                return value.getStringView();
+            }
+        });
 
         setOptionPathFormatter(new IFormatter<TYPE, SafeHtml>() {
             @Override
@@ -60,11 +68,11 @@ public abstract class CAbstractSelectorBox<DATA, TYPE extends IEntity, WIDGET ex
     }
 
     public void setFormatter(IFormatter<TYPE, String> formatter) {
-        this.formatter = formatter;
+        this.valueformatter = formatter;
     }
 
     public final IFormatter<TYPE, String> getFormatter() {
-        if (formatter == null) {
+        if (valueformatter == null) {
             setFormatter(new IFormatter<TYPE, String>() {
                 @Override
                 public String format(TYPE value) {
@@ -76,7 +84,7 @@ public abstract class CAbstractSelectorBox<DATA, TYPE extends IEntity, WIDGET ex
                 }
             });
         }
-        return formatter;
+        return valueformatter;
     }
 
     public IOptionsGrabber<TYPE> getOptionsGrabber() {
