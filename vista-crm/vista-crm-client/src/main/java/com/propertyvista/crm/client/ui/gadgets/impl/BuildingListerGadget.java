@@ -105,7 +105,7 @@ public class BuildingListerGadget extends GadgetInstanceBase<BuildingListerGadge
             })
             .init();//@formatter:on    
 
-        lister.setSorting(Arrays.asList(new Sort(EntityFactory.getEntityPrototype(BuildingDTO.class).propertyCode(), false)));
+        lister.setSortCriteria(Arrays.asList(new Sort(EntityFactory.getEntityPrototype(BuildingDTO.class).propertyCode(), false)));
         return lister;
     }
 

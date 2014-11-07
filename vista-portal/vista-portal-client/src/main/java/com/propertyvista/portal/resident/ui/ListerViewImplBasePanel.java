@@ -108,13 +108,13 @@ public class ListerViewImplBasePanel<E extends IEntity> extends DockPanel implem
     }
 
     @Override
-    public List<Sort> getSorting() {
-        return getLister().getSorting();
+    public List<Sort> getSortCriteria() {
+        return getLister().getSortCriteria();
     }
 
     @Override
-    public void setSorting(List<Sort> sorts) {
-        getLister().setSorting(sorts);
+    public void setSortCriteria(List<Sort> sorts) {
+        getLister().setSortCriteria(sorts);
     }
 
     @Override

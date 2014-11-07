@@ -32,6 +32,7 @@ import com.pyx4j.entity.core.AttachLevel;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.Path;
 import com.pyx4j.entity.core.criterion.Criterion;
+import com.pyx4j.entity.core.criterion.EntityListCriteria;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.entity.rpc.EntitySearchResult;
@@ -88,6 +89,14 @@ public class ArrearsReportServiceImpl implements ArrearsReportService {
         }
     };
 
+    @Override
+    public void list(AsyncCallback<EntitySearchResult<LeaseArrearsSnapshotDTO>> callback, EntityListCriteria<LeaseArrearsSnapshotDTO> criteria) {
+        EntitySearchResult<LeaseArrearsSnapshotDTO> result = new EntitySearchResult<LeaseArrearsSnapshotDTO>();
+        //TODO Convert leaseArrearsRoster()
+        callback.onSuccess(result);
+    }
+
+    @Deprecated
     @Override
     public void leaseArrearsRoster(AsyncCallback<EntitySearchResult<LeaseArrearsSnapshotDTO>> callback, Vector<Building> buildingsFilter, LogicalDate asOf,
             ARCode.Type arrearsCategory, Vector<Sort> sortingCriteria, int pageNumber, int pageSize) {
@@ -228,4 +237,5 @@ public class ArrearsReportServiceImpl implements ArrearsReportService {
         return new EntityDto2DboCriteriaConverter<LeaseArrearsSnapshot, LeaseArrearsSnapshotDTO>(LeaseArrearsSnapshot.class, LeaseArrearsSnapshotDTO.class,
                 makeMapper(dtoBinder), bucketMapper);
     }
+
 }

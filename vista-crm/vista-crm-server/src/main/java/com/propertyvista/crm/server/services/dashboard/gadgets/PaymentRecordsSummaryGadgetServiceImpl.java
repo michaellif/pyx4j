@@ -52,6 +52,14 @@ import com.propertyvista.domain.property.asset.building.Building;
 public class PaymentRecordsSummaryGadgetServiceImpl implements PaymentRecordsSummaryGadgetService {
 
     @Override
+    public void list(AsyncCallback<EntitySearchResult<PaymentsSummary>> callback, EntityListCriteria<PaymentsSummary> criteria) {
+        EntitySearchResult<PaymentsSummary> result = new EntitySearchResult<PaymentsSummary>();
+        //TODO Convert paymentRecordsSummary()
+        callback.onSuccess(result);
+    }
+
+    @Deprecated
+    @Override
     public void paymentRecordsSummary(AsyncCallback<EntitySearchResult<PaymentsSummary>> callback, Vector<Building> buildingsFilter, LogicalDate targetDate,
             Vector<PaymentStatus> paymentStatusCriteria, int pageNumber, int pageSize, Vector<Sort> sortingCriteria) {
 
@@ -67,7 +75,8 @@ public class PaymentRecordsSummaryGadgetServiceImpl implements PaymentRecordsSum
         try {
             if (PaymentsSummary.summaryByBuilding) {
                 while (buildingIterator.hasNext()) {
-                    Building building = Persistence.service().retrieve(Building.class, buildingIterator.next().getPrimaryKey(), AttachLevel.ToStringMembers, false);
+                    Building building = Persistence.service().retrieve(Building.class, buildingIterator.next().getPrimaryKey(), AttachLevel.ToStringMembers,
+                            false);
                     for (PaymentStatus paymentStatus : paymentStatusCriteria) {
                         PaymentsSummary summary = summaryHelper.calculateSummary(building, paymentStatus, targetDate);
                         if (summaryHelper.hasPayments(summary)) {

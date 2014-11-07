@@ -19,15 +19,15 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
+import com.pyx4j.entity.rpc.AbstractListService;
 import com.pyx4j.entity.rpc.EntitySearchResult;
-import com.pyx4j.rpc.shared.IService;
 
 import com.propertyvista.domain.dashboard.gadgets.arrears.ArrearsYOYComparisonDataDTO;
 import com.propertyvista.domain.dashboard.gadgets.arrears.LeaseArrearsSnapshotDTO;
 import com.propertyvista.domain.financial.ARCode;
 import com.propertyvista.domain.property.asset.building.Building;
 
-public interface ArrearsReportService extends IService {
+public interface ArrearsReportService extends AbstractListService<LeaseArrearsSnapshotDTO> {
 
     static int YOY_ANALYSIS_CHART_MAX_YEARS_AGO = 10;
 

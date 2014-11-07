@@ -43,7 +43,7 @@ public class AggregatedTransferListerActivity extends AbstractListerActivity<Agg
     @Override
     public void downloadAggregatedTransferFile() {
         EntityListCriteria<AggregatedTransfer> criteria = EntityListCriteria.create(AggregatedTransfer.class);
-        criteria.setSorts(getView().getSorting());
+        criteria.setSorts(getView().getSortCriteria());
 
         if (getView().getFilters() != null) {
             for (Criterion fd : getView().getFilters()) {
