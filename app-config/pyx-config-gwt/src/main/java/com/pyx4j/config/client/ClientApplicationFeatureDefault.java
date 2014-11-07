@@ -22,7 +22,7 @@ package com.pyx4j.config.client;
 
 import com.pyx4j.config.shared.ApplicationMode;
 
-public class ClientApplicationFeatureDefault extends ClientApplicationFeature {
+public class ClientApplicationFeatureDefault implements ClientApplicationFeature {
 
     @Override
     public boolean developmentShortcutsEnabled() {
