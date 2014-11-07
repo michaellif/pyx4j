@@ -11,8 +11,8 @@
 	<replace-with class="com.propertyvista.common.client.config.demo.VistaDemoConfigurationDemo">
          <when-type-is class="com.propertyvista.shared.config.VistaDemo.VistaDemoConfiguration"/>
     </replace-with>
-    <replace-with class="com.pyx4j.config.rebind.ClientApplicationFeature">
-         <when-type-is class="com.propertyvista.common.client.config.demo.VistaClientApplicationFeatureDemo"/>
+    <replace-with class="com.propertyvista.common.client.config.demo.VistaClientApplicationFeatureDemo">
+         <when-type-is class="com.pyx4j.config.rebind.ClientApplicationFeature"/>
     </replace-with>
     
     <set-configuration-property name="pyx.ElideServiceNamesFromRPC" value="obfuscated" />
