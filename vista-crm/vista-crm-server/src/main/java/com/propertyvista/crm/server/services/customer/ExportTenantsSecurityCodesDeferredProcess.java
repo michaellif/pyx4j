@@ -111,8 +111,8 @@ public class ExportTenantsSecurityCodesDeferredProcess extends AbstractDeferredP
                     Persistence.service().retrieveMember(tenant.lease());
 
                     // Exclude Move Out
-                    if (moveOutNextMonthCutOff.le(tenant.lease().expectedMoveOut().getValue())
-                            || moveOutNextMonthCutOff.le(tenant.lease().actualMoveOut().getValue())) {
+                    if (moveOutNextMonthCutOff.gt(tenant.lease().expectedMoveOut().getValue())
+                            || moveOutNextMonthCutOff.gt(tenant.lease().actualMoveOut().getValue())) {
                         continue;
                     }
 
