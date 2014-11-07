@@ -24,10 +24,8 @@ package com.pyx4j.config.client;
  * Compile time customizable features of GWT application
  *
  */
-public class ClientApplicationFeature {
+public interface ClientApplicationFeature {
 
-    public boolean developmentShortcutsEnabled() {
-        return false;
-    }
+    public boolean developmentShortcutsEnabled();
 
 }
