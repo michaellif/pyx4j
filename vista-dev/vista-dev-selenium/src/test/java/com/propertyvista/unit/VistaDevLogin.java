@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011- All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -36,9 +36,11 @@ public class VistaDevLogin {
 
         selenium.click("id=googleSignIn");
 
-        selenium.type("id=Email", credentials.userName);
-        selenium.type("id=Passwd", credentials.password);
-        selenium.click("id=signIn");
+        selenium.type("id=username", credentials.userName);
+        selenium.type("id=password", credentials.password);
+        selenium.click("class=button");
+
+        selenium.waitForText("id=signup_name", "Access Granted", 30);
 
         selenium.click("id=continue");
 
