@@ -27,6 +27,7 @@ import java.util.HashMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.gwt.core.shared.GWT;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
@@ -36,7 +37,7 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.commons.IDebugId;
-import com.pyx4j.config.shared.ApplicationMode;
+import com.pyx4j.config.client.ClientApplicationFeature;
 import com.pyx4j.entity.core.IObject;
 import com.pyx4j.forms.client.events.DevShortcutEvent;
 import com.pyx4j.forms.client.events.DevShortcutHandler;
@@ -180,7 +181,7 @@ public abstract class CContainer<SELF_TYPE extends CComponent<SELF_TYPE, DATA_TY
             }
         }
 
-        //TODO Workaround to fire event for container - that should be reviewed - event should be fired 
+        //TODO Workaround to fire event for container - that should be reviewed - event should be fired
         //on accessibility adapters change
         PropertyChangeEvent.fire(this, PropertyChangeEvent.PropertyName.visible);
     }
@@ -193,7 +194,7 @@ public abstract class CContainer<SELF_TYPE extends CComponent<SELF_TYPE, DATA_TY
                 component.applyViewabilityRules();
             }
         }
-        //TODO Workaround to fire event for container - that should be reviewed - event should be fired 
+        //TODO Workaround to fire event for container - that should be reviewed - event should be fired
         //on accessibility adapters change
         PropertyChangeEvent.fire(this, PropertyChangeEvent.PropertyName.viewable);
 
@@ -207,7 +208,7 @@ public abstract class CContainer<SELF_TYPE extends CComponent<SELF_TYPE, DATA_TY
                 component.applyEnablingRules();
             }
         }
-        //TODO Workaround to fire event for container - that should be reviewed - event should be fired 
+        //TODO Workaround to fire event for container - that should be reviewed - event should be fired
         //on accessibility adapters change
         PropertyChangeEvent.fire(this, PropertyChangeEvent.PropertyName.enabled);
 
@@ -221,7 +222,7 @@ public abstract class CContainer<SELF_TYPE extends CComponent<SELF_TYPE, DATA_TY
                 component.applyEditabilityRules();
             }
         }
-        //TODO Workaround to fire editable event for container - that should be reviewed - event should be fired 
+        //TODO Workaround to fire editable event for container - that should be reviewed - event should be fired
         //on accessibility adapters change
         PropertyChangeEvent.fire(this, PropertyChangeEvent.PropertyName.editable);
     }
@@ -261,7 +262,7 @@ public abstract class CContainer<SELF_TYPE extends CComponent<SELF_TYPE, DATA_TY
 
             addValidations();
 
-            if (ApplicationMode.isDevelopment()) {
+            if (GWT.<ClientApplicationFeature> create(ClientApplicationFeature.class).developmentShortcutsEnabled()) {
                 DevelopmentShortcutUtil.attachDevelopmentShortcuts(asWidget(), this);
             }
 

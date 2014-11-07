@@ -24,4 +24,8 @@
         <when-type-assignable class="com.pyx4j.config.client.ClientApplicationVersion"/>
     </generate-with>
     
+    <generate-with class="com.pyx4j.config.rebind.ClientApplicationFeature">
+        <when-type-assignable class="com.pyx4j.config.client.ClientApplicationFeatureDefault"/>
+    </generate-with>
+    
 </module>
