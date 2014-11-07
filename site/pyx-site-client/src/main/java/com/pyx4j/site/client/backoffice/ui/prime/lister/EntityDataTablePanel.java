@@ -373,14 +373,11 @@ public class EntityDataTablePanel<E extends IEntity> extends ScrollPanel {
 
     @SuppressWarnings("unchecked")
     public void setMemento(Memento memento) {
-        if (memento == null) {
-            return;
-        }
         Integer pageNumber = 0;
         List<Criterion> filters = getDefaultFilters();
         List<Sort> sorts = getDefaultSorting();
 
-        if (externalFilters == null) {
+        if (memento != null && externalFilters == null) {
             pageNumber = memento.getInteger(MementoKeys.page.name());
             filters = (List<Criterion>) memento.getObject(MementoKeys.filterData.name());
             sorts = (List<Sort>) memento.getObject(MementoKeys.sortingData.name());
