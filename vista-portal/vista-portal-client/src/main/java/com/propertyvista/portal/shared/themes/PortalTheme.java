@@ -296,13 +296,7 @@ public class PortalTheme extends Theme {
                 super.initStyles();
 
                 Style style = new Style(".", StyleName.Dialog);
-                style.addProperty("border", "5px solid");
-                style.addProperty("border-radius", "5px");
                 style.addProperty("background-color", ThemeColor.foreground, 1);
-                addStyle(style);
-
-                style = new Style(".", StyleName.DialogCaption);
-                style.addProperty("background-color", ThemeColor.foreground, 0.9);
                 addStyle(style);
             }
         });

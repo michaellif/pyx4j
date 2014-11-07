@@ -23,7 +23,7 @@ public class CrmPalette extends VistaPalette {
     public CrmPalette(SiteDefinitionsDTO siteDefinitions) {
         super(new Builder(siteDefinitions)//
                 .addColor(ThemeColor.object1, 30, 70)//
-                .addColor(ThemeColor.object2, 10, 98)//
+                .addColor(ThemeColor.object2, 30, 60)//
                 .addColor(ThemeColor.contrast1, 100, 100)//
                 .addColor(ThemeColor.contrast2, 100, 100)//
                 .addColor(ThemeColor.foreground, 0, 40)//
