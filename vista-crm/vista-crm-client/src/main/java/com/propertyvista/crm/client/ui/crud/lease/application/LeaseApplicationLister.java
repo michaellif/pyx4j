@@ -74,7 +74,7 @@ public class LeaseApplicationLister extends AbstractPrimeLister<LeaseApplication
 
     @Override
     public List<Sort> getDefaultSorting() {
-        return Arrays.asList(new Sort(proto().leaseId(), false));
+        return Arrays.asList(new Sort(proto().leaseApplication().applicationId(), true));
     }
 
     @Override
