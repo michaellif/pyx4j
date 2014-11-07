@@ -11,7 +11,7 @@
  * @author vladlouk
  * @version $Id$
  */
-package com.pyx4j.site.client.backoffice.ui.prime.lister;
+package com.pyx4j.forms.client.ui.datatable;
 
 import java.io.Serializable;
 import java.util.LinkedList;

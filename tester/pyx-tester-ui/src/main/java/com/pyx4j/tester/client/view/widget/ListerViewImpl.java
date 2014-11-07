@@ -33,11 +33,11 @@ import com.pyx4j.entity.rpc.EntitySearchResult;
 import com.pyx4j.forms.client.ui.AsyncLoadingHandler;
 import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.forms.client.ui.datatable.DataTableModel;
+import com.pyx4j.forms.client.ui.datatable.ListerDataSource;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.site.client.backoffice.ui.prime.lister.EntityDataTablePanel;
-import com.pyx4j.site.client.backoffice.ui.prime.lister.ListerDataSource;
 import com.pyx4j.tester.client.domain.test.DomainFactory;
 import com.pyx4j.tester.client.domain.test.ListerDataItem;
 
