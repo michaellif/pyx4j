@@ -53,6 +53,7 @@ import com.propertyvista.biz.financial.billingcycle.BillingCycleFacade;
 import com.propertyvista.biz.policy.PolicyFacade;
 import com.propertyvista.biz.system.AuditFacade;
 import com.propertyvista.biz.system.VistaContext;
+import com.propertyvista.biz.tenant.lease.LeaseFacade;
 import com.propertyvista.crm.rpc.dto.financial.autopayreview.ReviewedAutopayAgreementDTO;
 import com.propertyvista.crm.rpc.dto.financial.autopayreview.ReviewedPapChargeDTO;
 import com.propertyvista.domain.financial.BillingAccount;
@@ -294,7 +295,8 @@ class AutopayAgreementMananger {
     }
 
     public String getNextAutopayApplicabilityMessage(Lease lease) {
-        AutoPayPolicy autoPayPolicy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(lease.unit().building(), AutoPayPolicy.class);
+        AutoPayPolicy autoPayPolicy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(
+                ServerSideFactory.create(LeaseFacade.class).getLeasePolicyNode(lease), AutoPayPolicy.class);
         BillingCycle nextCycle = ServerSideFactory.create(PaymentMethodFacade.class).getNextAutopayBillingCycle(lease);
         StringBuilder trace = new StringBuilder();
         if (!isPreauthorizedPaymentsApplicableForBillingCycle(lease, nextCycle, autoPayPolicy, trace)) {
