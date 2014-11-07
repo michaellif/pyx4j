@@ -40,10 +40,10 @@ public class VistaSeleniumTestConfiguration extends DefaultSeleniumTestConfigura
 
     public VistaSeleniumTestConfiguration(ApplicationId appID) {
         // Comment/uncomment lines here during development.  Never commit this file to SVN
-        this(appID, VistaDeploymentId.env11);
+        //this(appID, VistaDeploymentId.env11);
         //this(appID, VistaDeploymentId.env22);
         //this(appID, VistaDeploymentId.env66);
-        //this(appID, VistaDeploymentId.local);
+        this(appID, VistaDeploymentId.local);
     }
 
     private VistaSeleniumTestConfiguration(ApplicationId appID, VistaDeploymentId deploymentId) {
