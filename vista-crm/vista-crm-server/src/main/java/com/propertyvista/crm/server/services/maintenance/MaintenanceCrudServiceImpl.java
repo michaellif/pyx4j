@@ -13,8 +13,6 @@
  */
 package com.propertyvista.crm.server.services.maintenance;
 
-import java.util.Vector;
-
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.commons.Key;
@@ -34,7 +32,6 @@ import com.propertyvista.biz.policy.PolicyFacade;
 import com.propertyvista.config.VistaDeployment;
 import com.propertyvista.crm.rpc.services.maintenance.MaintenanceCrudService;
 import com.propertyvista.crm.server.util.CrmAppContext;
-import com.propertyvista.domain.TimeWindow;
 import com.propertyvista.domain.maintenance.MaintenanceRequest;
 import com.propertyvista.domain.maintenance.MaintenanceRequestCategory;
 import com.propertyvista.domain.maintenance.MaintenanceRequestMetadata;
@@ -58,6 +55,7 @@ public class MaintenanceCrudServiceImpl extends AbstractCrudServiceDtoImpl<Maint
         Persistence.service().retrieveMember(bo.pictures());
         to.pictures().set(bo.pictures());
         enhanceAll(to);
+        to.policy().set(ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(bo.building(), MaintenanceRequestPolicy.class));
         to.message().set(ServerSideFactory.create(CommunicationMessageFacade.class).association2Message(bo));
     }
 
@@ -178,7 +176,10 @@ public class MaintenanceCrudServiceImpl extends AbstractCrudServiceDtoImpl<Maint
         if (bo == null) {
             bo = ServerSideFactory.create(MaintenanceFacade.class).createNewRequest();
         }
-        return binder.createTO(bo);
+        MaintenanceRequestDTO to = binder.createTO(bo);
+        to.policy().set(ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(bo.building(), MaintenanceRequestPolicy.class));
+
+        return to;
     }
 
     @Override
@@ -201,13 +202,6 @@ public class MaintenanceCrudServiceImpl extends AbstractCrudServiceDtoImpl<Maint
             meta.rootCategory().subCategories().setAttachLevel(AttachLevel.Detached);
         }
         callback.onSuccess(meta);
-    }
-
-    @Override
-    public void getPreferredWindowOptions(AsyncCallback<Vector<TimeWindow>> callback, Key buildingId) {
-        Building building = Persistence.secureRetrieve(Building.class, buildingId);
-        MaintenanceRequestPolicy mrPolicy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(building, MaintenanceRequestPolicy.class);
-        callback.onSuccess(new Vector<TimeWindow>(mrPolicy.tenantPreferredWindows()));
     }
 
     @Override

@@ -35,7 +35,6 @@ import com.pyx4j.commons.IFormatter;
 import com.pyx4j.entity.core.IObject;
 import com.pyx4j.entity.core.criterion.Criterion;
 import com.pyx4j.entity.core.criterion.PropertyCriterion;
-import com.pyx4j.entity.rpc.AbstractListCrudService;
 import com.pyx4j.forms.client.images.FolderImages;
 import com.pyx4j.forms.client.ui.CComboBox;
 import com.pyx4j.forms.client.ui.CDateLabel;
@@ -72,7 +71,6 @@ import com.propertyvista.crm.client.ui.components.boxes.TenantSelectionDialog;
 import com.propertyvista.crm.client.ui.components.boxes.UnitSelectionDialog;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.crm.rpc.services.maintenance.MaintenanceRequestPictureUploadService;
-import com.propertyvista.crm.rpc.services.selections.SelectUnitListService;
 import com.propertyvista.domain.TimeWindow;
 import com.propertyvista.domain.communication.Message;
 import com.propertyvista.domain.maintenance.MaintenanceRequest.ContactPhoneType;
@@ -317,7 +315,6 @@ public class MaintenanceRequestForm extends CrmEntityForm<MaintenanceRequestDTO>
                     if (!valueChangeScope.inScope(reporterSelector)) {
                         reporterSelector.setValue(null);
                     }
-//-->>              setMaintenanceRequestCategoryMeta();
                 }
                 valueChangeScope.clearScope(unitSelector);
             }
@@ -331,7 +328,6 @@ public class MaintenanceRequestForm extends CrmEntityForm<MaintenanceRequestDTO>
                     if (!valueChangeScope.inScope(unitSelector)) {
                         unitSelector.setValue(tenant.lease().unit());
                     }
-//-->>              setMaintenanceRequestCategoryMeta();
                 }
                 valueChangeScope.clearScope(reporterSelector);
             }
@@ -348,7 +344,6 @@ public class MaintenanceRequestForm extends CrmEntityForm<MaintenanceRequestDTO>
                 unitAccessPanel.setVisible(event.getValue().booleanValue());
                 getValue().category().set(null);
                 accessPanel.setVisible(getValue().permissionToEnter().getValue(false) && event.getValue().booleanValue());
-//-->>          setMaintenanceRequestCategoryMeta();
             }
         });
         panel.br();
@@ -466,9 +461,17 @@ public class MaintenanceRequestForm extends CrmEntityForm<MaintenanceRequestDTO>
         get(proto().message()).setVisible(mr != null && mr.message() != null && !mr.message().isNull() && !mr.message().isPrototype());
 
         if (mr != null) {
-            if (isEditable()) {
-                preferredTimeSelector1.setOptions(getValue().preferredWindowOptions());
-                preferredTimeSelector2.setOptions(getValue().preferredWindowOptions());
+            boolean hasPreferredTime = !mr.policy().tenantPreferredWindows().isEmpty();
+            get(proto().preferredDate1()).setVisible(hasPreferredTime);
+            get(proto().preferredDate2()).setVisible(hasPreferredTime);
+            get(proto().preferredTime1()).setVisible(hasPreferredTime);
+            get(proto().preferredTime2()).setVisible(hasPreferredTime);
+
+            if (isEditable() && hasPreferredTime) {
+                List<TimeWindow> opts = new ArrayList<>();
+                opts.addAll(getValue().policy().tenantPreferredWindows());
+                preferredTimeSelector1.setOptions(opts);
+                preferredTimeSelector2.setOptions(opts);
             }
 
             if (VistaFeatures.instance().yardiIntegration() && !mr.id().isNull()) {
@@ -514,9 +517,7 @@ public class MaintenanceRequestForm extends CrmEntityForm<MaintenanceRequestDTO>
 
                 @Override
                 public boolean onClickOk() {
-                    if (getSelectedItems().size() == 1) {
-                        setValue(getSelectedItems().toArray(new AptUnit[] {})[0]);
-                    }
+                    setValue(getSelectedItem());
                     return true;
                 }
 
@@ -546,11 +547,6 @@ public class MaintenanceRequestForm extends CrmEntityForm<MaintenanceRequestDTO>
                             new MemberColumnDescriptor.Builder(proto().financial()._marketRent()).build() //
                             );
                 }
-
-                @Override
-                protected AbstractListCrudService<AptUnit> getSelectService() {
-                    return GWT.<AbstractListCrudService<AptUnit>> create(SelectUnitListService.class);
-                }
             };
         }
     }
@@ -567,9 +563,7 @@ public class MaintenanceRequestForm extends CrmEntityForm<MaintenanceRequestDTO>
 
                 @Override
                 public boolean onClickOk() {
-                    if (getSelectedItems().size() == 1) {
-                        setValue(getSelectedItems().iterator().next());
-                    }
+                    setValue(getSelectedItem());
                     return true;
                 }
 

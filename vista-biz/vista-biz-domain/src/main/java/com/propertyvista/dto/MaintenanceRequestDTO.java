@@ -21,12 +21,12 @@ import com.pyx4j.entity.annotations.EmbeddedEntity;
 import com.pyx4j.entity.annotations.ExtendsBO;
 import com.pyx4j.entity.annotations.SecurityEnabled;
 import com.pyx4j.entity.annotations.Transient;
-import com.pyx4j.entity.core.IList;
 import com.pyx4j.entity.core.IPrimitive;
 
 import com.propertyvista.domain.TimeWindow;
 import com.propertyvista.domain.communication.Message;
 import com.propertyvista.domain.maintenance.MaintenanceRequest;
+import com.propertyvista.domain.policy.policies.MaintenanceRequestPolicy;
 
 @Transient
 @ExtendsBO
@@ -44,6 +44,6 @@ public interface MaintenanceRequestDTO extends MaintenanceRequest {
 
     Message message();
 
-    IList<TimeWindow> preferredWindowOptions();
+    MaintenanceRequestPolicy policy();
 
 }

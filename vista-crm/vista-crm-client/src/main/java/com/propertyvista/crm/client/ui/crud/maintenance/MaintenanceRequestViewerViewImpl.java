@@ -13,6 +13,7 @@
  */
 package com.propertyvista.crm.client.ui.crud.maintenance;
 
+import java.sql.Time;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -29,6 +30,7 @@ import com.pyx4j.forms.client.ui.CNumberField;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.forms.client.validators.AbstractComponentValidator;
+import com.pyx4j.forms.client.validators.AbstractValidationError;
 import com.pyx4j.forms.client.validators.BasicValidationError;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.Button.SecureMenuItem;
@@ -43,6 +45,7 @@ import com.propertyvista.crm.rpc.services.maintenance.ac.Resolve;
 import com.propertyvista.crm.rpc.services.maintenance.ac.Schedule;
 import com.propertyvista.domain.maintenance.MaintenanceRequestStatus.StatusPhase;
 import com.propertyvista.domain.maintenance.SurveyResponse;
+import com.propertyvista.domain.policy.policies.MaintenanceRequestPolicy;
 import com.propertyvista.dto.MaintenanceRequestDTO;
 import com.propertyvista.dto.MaintenanceRequestScheduleDTO;
 
@@ -83,7 +86,7 @@ public class MaintenanceRequestViewerViewImpl extends CrmViewerViewImplBase<Main
         transitionActions.put(StatusPhase.Scheduled, new SecureMenuItem(i18n.tr("Schedule..."), new Command() {
             @Override
             public void execute() {
-                new ScheduleBox() {
+                new ScheduleBox(getForm().getValue().policy()) {
                     @Override
                     public boolean onClickOk() {
                         if (validate()) {
@@ -156,8 +159,11 @@ public class MaintenanceRequestViewerViewImpl extends CrmViewerViewImplBase<Main
 
         private CForm<MaintenanceRequestScheduleDTO> content;
 
-        public ScheduleBox() {
+        private final MaintenanceRequestPolicy policy;
+
+        public ScheduleBox(MaintenanceRequestPolicy policy) {
             super(i18n.tr("Schedule"));
+            this.policy = policy;
             setBody(createBody());
         }
 
@@ -176,13 +182,56 @@ public class MaintenanceRequestViewerViewImpl extends CrmViewerViewImplBase<Main
 
                     get(proto().scheduledDate()).addComponentValidator(new FutureDateIncludeTodayValidator());
 
+                    if (!policy.allow24HourSchedule().getValue(false) && !policy.schedulingWindow().isEmpty()) {
+                        get(proto().scheduledTime().timeFrom()).setTooltip(policy.schedulingWindow().getStringView());
+                        // add "From within window" validator
+                        get(proto().scheduledTime().timeFrom()).addComponentValidator(new AbstractComponentValidator<Time>() {
+
+                            @Override
+                            public AbstractValidationError isValid() {
+                                Time from = getCComponent().getValue();
+                                if (from != null && (from.before(policy.schedulingWindow().timeFrom().getValue()) || //
+                                        from.after(policy.schedulingWindow().timeTo().getValue()))) {
+                                    return new BasicValidationError(getCComponent(), i18n.tr("Time outside of allowed window {0}", policy.schedulingWindow()
+                                            .getStringView()));
+                                }
+                                return null;
+                            }
+                        });
+                        // add "To after From" validator
+                        get(proto().scheduledTime().timeTo()).addComponentValidator(new AbstractComponentValidator<Time>() {
+
+                            @Override
+                            public AbstractValidationError isValid() {
+                                Time to = getCComponent().getValue();
+                                Time from = get(proto().scheduledTime().timeFrom()).getValue();
+                                if (to != null && from != null && to.before(from)) {
+                                    return new BasicValidationError(getCComponent(), i18n.tr("Time should be after 'From' time"));
+                                }
+                                return null;
+                            }
+                        });
+                        if (!policy.maxAllowedWindowHours().isNull()) {
+                            // - add "To within window" validator
+                            get(proto().scheduledTime().timeTo()).setTooltip(i18n.tr("Limit window to {0} hours", policy.maxAllowedWindowHours().getValue()));
+                            get(proto().scheduledTime().timeTo()).addComponentValidator(new AbstractComponentValidator<Time>() {
+
+                                @Override
+                                public AbstractValidationError isValid() {
+                                    Time to = getCComponent().getValue();
+                                    Time from = get(proto().scheduledTime().timeFrom()).getValue();
+                                    int deltaMills = policy.maxAllowedWindowHours().getValue() * 3600 * 1000;
+                                    if (to != null && from != null && to.getTime() > from.getTime() + deltaMills) {
+                                        return new BasicValidationError(getCComponent(), i18n.tr("Time window exceeds {0} hours", policy
+                                                .maxAllowedWindowHours().getValue()));
+                                    }
+                                    return null;
+                                }
+                            });
+                        }
+                    }
+
                     return main;
-                }
-
-                @Override
-                public void addValidations() {
-                    super.addValidations();
-
                 }
             };
 

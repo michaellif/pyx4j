@@ -106,9 +106,9 @@ import com.propertyvista.yardi.stubs.YardiStubFactory;
 
 /**
  * Implementation functionality for updating properties/units/leases/tenants basing on getResidentTransactions from YARDI api
- *
+ * 
  * @author Mykola
- *
+ * 
  */
 public class YardiResidentTransactionsService extends YardiAbstractService {
 
@@ -141,7 +141,7 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
 
     /**
      * Updates/creates entities basing on data from YARDI System.
-     *
+     * 
      * @param yp
      *            the YARDI System connection parameters
      * @throws YardiServiceException
@@ -430,6 +430,7 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
             if (!executionMonitor.isTerminationRequested()) {
                 // Attempt to sync application status in case approval fails
                 // TODO - may need a common way to sync Yardi state
+                // TODO - use yardiInterfaceId to select lease apps
                 syncPendingApplications(executionMonitor);
             }
 

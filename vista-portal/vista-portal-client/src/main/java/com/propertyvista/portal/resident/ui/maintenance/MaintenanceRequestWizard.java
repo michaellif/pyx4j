@@ -271,11 +271,19 @@ public class MaintenanceRequestWizard extends CPortalEntityWizard<MaintenanceReq
             return;
         }
 
+        boolean hasPreferredTime = !getValue().preferredWindowOptions().isEmpty();
+        get(proto().preferredDate1()).setVisible(hasPreferredTime);
+        get(proto().preferredDate2()).setVisible(hasPreferredTime);
+        get(proto().preferredTime1()).setVisible(hasPreferredTime);
+        get(proto().preferredTime2()).setVisible(hasPreferredTime);
+
         if (isEditable()) {
             ClientPolicyManager.setIdComponentEditabilityByPolicy(IdTarget.maintenance, get(proto().requestId()), getValue().getPrimaryKey());
 
-            preferredTimeSelector1.setOptions(getValue().preferredWindowOptions());
-            preferredTimeSelector2.setOptions(getValue().preferredWindowOptions());
+            if (hasPreferredTime) {
+                preferredTimeSelector1.setOptions(getValue().preferredWindowOptions());
+                preferredTimeSelector2.setOptions(getValue().preferredWindowOptions());
+            }
         }
 
         // set notes
