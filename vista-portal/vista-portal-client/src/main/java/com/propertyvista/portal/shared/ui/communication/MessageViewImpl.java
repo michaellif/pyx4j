@@ -20,13 +20,13 @@ import com.google.gwt.user.client.ui.SimplePanel;
 
 import com.pyx4j.commons.css.ThemeColor;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
+import com.pyx4j.forms.client.ui.datatable.DataTable.ItemSelectionHandler;
 import com.pyx4j.forms.client.ui.datatable.DataTableModel;
 import com.pyx4j.forms.client.ui.datatable.ListerDataSource;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.site.client.AppSite;
-import com.pyx4j.site.client.backoffice.ui.prime.lister.AbstractPrimeLister.ItemSelectionHandler;
 import com.pyx4j.site.client.backoffice.ui.prime.lister.EntityDataTablePanel;
 
 import com.propertyvista.domain.security.PortalResidentBehavior;
@@ -65,17 +65,18 @@ public class MessageViewImpl extends SimplePanel implements MessageView {
 
     class MessageGadget extends AbstractGadget<MessageViewImpl> {
 
-        MessageGadget(MessageLister lister) {
+        MessageGadget(final MessageLister lister) {
             super(MessageViewImpl.this, null, i18n.tr("Tenant Communication"), ThemeColor.foreground, 0.3);
             lister.setWidth("100%");
             lister.showColumnSelector(true);
 
-            lister.addItemSelectionHandler(new ItemSelectionHandler<MessageDTO>() {
+            lister.addItemSelectionHandler(new ItemSelectionHandler() {
                 @Override
-                public void onSelect(MessageDTO selectedItem) {
-                    AppSite.getPlaceController().goTo(new PortalSiteMap.Message.MessagePage(selectedItem.getPrimaryKey()));
+                public void onChange() {
+                    AppSite.getPlaceController().goTo(new PortalSiteMap.Message.MessagePage(lister.getSelectedItem().getPrimaryKey()));
 
                 }
+
             });
 
             setContent(lister);

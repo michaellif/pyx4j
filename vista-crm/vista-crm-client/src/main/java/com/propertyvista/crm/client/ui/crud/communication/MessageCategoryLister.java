@@ -22,6 +22,7 @@ import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.criterion.EntityListCriteria;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
+import com.pyx4j.forms.client.ui.datatable.DataTable.ItemSelectionHandler;
 import com.pyx4j.forms.client.ui.datatable.DataTableModel;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.i18n.shared.I18n;
@@ -38,13 +39,15 @@ public class MessageCategoryLister extends AbstractPrimeLister<MessageCategory> 
 
     public MessageCategoryLister() {
         super(MessageCategory.class, true, true);
-        addItemSelectionHandler(new ItemSelectionHandler<MessageCategory>() {
+        addItemSelectionHandler(new ItemSelectionHandler() {
+
             @Override
-            public void onSelect(MessageCategory selectedItem) {
-                if (selectedItem != null && CategoryType.Ticket.equals(selectedItem.categoryType().getValue())) {
+            public void onChange() {
+                if (getSelectedItem() != null && CategoryType.Ticket.equals(getSelectedItem().categoryType().getValue())) {
                     MessageDialog.warn(i18n.tr("Error"), i18n.tr("No delete operation is allowed for predefined message categories"));
                 }
             }
+
         });
         setDataTableModel(new DataTableModel<MessageCategory>(createColumnDescriptors()));
     }

@@ -30,6 +30,7 @@ import com.pyx4j.entity.core.criterion.EntityQueryCriteria.VersionedCriteria;
 import com.pyx4j.entity.core.criterion.PropertyCriterion;
 import com.pyx4j.forms.client.ui.CRadioGroupEnum;
 import com.pyx4j.forms.client.ui.datatable.DataItem;
+import com.pyx4j.forms.client.ui.datatable.DataTable.ItemSelectionHandler;
 import com.pyx4j.forms.client.ui.datatable.DataTableModel;
 import com.pyx4j.i18n.shared.I18nEnum;
 import com.pyx4j.site.client.backoffice.ui.prime.lister.AbstractPrimeLister;
@@ -70,9 +71,10 @@ public class EntityLister<E extends IEntity> extends AbstractPrimeLister<E> {
             getDataTablePanel().addUpperActionItem(displayModeButton.asWidget());
         }
 
-        addItemSelectionHandler(new ItemSelectionHandler<E>() {
+        addItemSelectionHandler(new ItemSelectionHandler() {
+
             @Override
-            public void onSelect(E selectedItem) {
+            public void onChange() {
                 identifySelected();
             }
         });

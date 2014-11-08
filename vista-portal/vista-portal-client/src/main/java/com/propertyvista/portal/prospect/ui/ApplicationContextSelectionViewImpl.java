@@ -21,11 +21,11 @@ import com.google.gwt.user.client.ui.SimplePanel;
 import com.pyx4j.commons.css.StyleManager;
 import com.pyx4j.commons.css.ThemeColor;
 import com.pyx4j.entity.rpc.InMemeoryListService;
+import com.pyx4j.forms.client.ui.datatable.DataTable.ItemSelectionHandler;
 import com.pyx4j.forms.client.ui.datatable.DataTableModel;
 import com.pyx4j.forms.client.ui.datatable.ListerDataSource;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.backoffice.ui.prime.lister.AbstractPrimeLister.ItemSelectionHandler;
 import com.pyx4j.site.client.backoffice.ui.prime.lister.EntityDataTablePanel;
 import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.Label;
@@ -91,10 +91,10 @@ public class ApplicationContextSelectionViewImpl extends SimplePanel implements 
                 });
 
                 continueButton.setEnabled(false);
-                lister.addItemSelectionHandler(new ItemSelectionHandler<OnlineApplicationContextChoiceDTO>() {
+                lister.addItemSelectionHandler(new ItemSelectionHandler() {
                     @Override
-                    public void onSelect(OnlineApplicationContextChoiceDTO selectedItem) {
-                        continueButton.setEnabled(selectedItem != null);
+                    public void onChange() {
+                        continueButton.setEnabled(lister.getSelectedItem() != null);
                     }
                 });
                 continueButton.getElement().getStyle().setProperty("background", StyleManager.getPalette().getThemeColor(ThemeColor.foreground, 0.4));
