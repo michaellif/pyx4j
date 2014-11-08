@@ -17,7 +17,6 @@ import com.google.gwt.user.client.Command;
 
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.backoffice.ui.prime.lister.IPrimeLister;
-import com.pyx4j.site.client.backoffice.ui.prime.lister.ListerInternalViewImplBase;
 import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 
@@ -38,7 +37,7 @@ public class RunViewerViewImpl extends OperationsViewerViewImplBase<Run> impleme
     public RunViewerViewImpl() {
         super(true);
 
-        runDataLister = new ListerInternalViewImplBase<RunData>(new RunDataLister(true));
+        runDataLister = new RunDataLister(true);
 
         setForm(new RunForm(this));
 

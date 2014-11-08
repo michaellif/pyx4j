@@ -22,7 +22,6 @@ import com.pyx4j.entity.security.DataModelPermission;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.security.shared.ActionPermission;
 import com.pyx4j.site.client.backoffice.ui.prime.lister.IPrimeLister;
-import com.pyx4j.site.client.backoffice.ui.prime.lister.ListerInternalViewImplBase;
 import com.pyx4j.widgets.client.Button.SecureMenuItem;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 import com.pyx4j.widgets.client.dialog.MessageDialog.Type;
@@ -81,8 +80,8 @@ public class UnitViewerViewImpl extends CrmViewerViewImplBase<AptUnitDTO> implem
     }
 
     public UnitViewerViewImpl() {
-        unitItemsLister = new ListerInternalViewImplBase<AptUnitItem>(new UnitItemLister());
-        occupanciesLister = new ListerInternalViewImplBase<AptUnitOccupancySegment>(new UnitOccupancyLister());
+        unitItemsLister = new UnitItemLister();
+        occupanciesLister = new UnitOccupancyLister();
 
         // set main main form here:
         setForm(new UnitForm(this));

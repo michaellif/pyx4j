@@ -41,4 +41,5 @@ public class AppointmentLister extends AbstractPrimeLister<Appointment> {
     public List<Sort> getDefaultSorting() {
         return Arrays.asList(new Sort(proto().date(), false), new Sort(proto().time(), false));
     }
+
 }

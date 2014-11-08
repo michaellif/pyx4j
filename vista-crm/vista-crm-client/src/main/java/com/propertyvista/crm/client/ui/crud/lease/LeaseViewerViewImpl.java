@@ -47,7 +47,6 @@ import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.security.shared.ActionPermission;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.backoffice.ui.prime.lister.IPrimeLister;
-import com.pyx4j.site.client.backoffice.ui.prime.lister.ListerInternalViewImplBase;
 import com.pyx4j.site.client.ui.dialogs.EntitySelectorListDialog;
 import com.pyx4j.site.client.ui.dialogs.SelectEnumDialog;
 import com.pyx4j.site.rpc.CrudAppPlace;
@@ -163,10 +162,10 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
     private final MenuItem yardiImportAction;
 
     public LeaseViewerViewImpl() {
-        depositLister = new ListerInternalViewImplBase<DepositLifecycleDTO>(new DepositLifecycleLister());
-        billLister = new ListerInternalViewImplBase<BillDataDTO>(new BillLister());
-        adjustmentLister = new ListerInternalViewImplBase<LeaseAdjustment>(new LeaseAdjustmentLister());
-        maintenanceLister = new ListerInternalViewImplBase<MaintenanceRequestDTO>(new MaintenanceRequestLister());
+        depositLister = new DepositLifecycleLister();
+        billLister = new BillLister();
+        adjustmentLister = new LeaseAdjustmentLister();
+        maintenanceLister = new MaintenanceRequestLister();
 
         // set main form here:
         setForm(new LeaseForm(this));

@@ -13,14 +13,13 @@
  */
 package com.propertyvista.crm.client.ui.crud.customer.lead.showing;
 
-import com.pyx4j.site.client.backoffice.ui.prime.lister.ListerInternalViewImplBase;
-
+import com.propertyvista.crm.client.ui.crud.CrmListerViewImplBase;
 import com.propertyvista.crm.rpc.dto.tenant.ShowingDTO;
 
-public class ShowingListerViewImpl extends ListerInternalViewImplBase<ShowingDTO> implements ShowingListerView {
+public class ShowingListerViewImpl extends CrmListerViewImplBase<ShowingDTO> implements ShowingListerView {
 
     public ShowingListerViewImpl() {
-        super(new ShowingLister());
+        setLister(new ShowingLister());
     }
 
     @Override

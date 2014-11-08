@@ -17,7 +17,6 @@ import com.google.gwt.user.client.ui.ScrollPanel;
 
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.backoffice.ui.prime.lister.IPrimeLister;
-import com.pyx4j.site.client.backoffice.ui.prime.lister.ListerInternalViewImplBase;
 import com.pyx4j.site.client.ui.visor.AbstractVisorPane;
 
 import com.propertyvista.crm.client.ui.crud.maintenance.MaintenanceRequestLister;
@@ -31,7 +30,7 @@ public class MaintenanceRequestVisorView extends AbstractVisorPane {
 
     public MaintenanceRequestVisorView(MaintenanceRequestVisorController controller) {
         super(controller);
-        this.lister = new ListerInternalViewImplBase<MaintenanceRequestDTO>(new MaintenanceRequestLister());
+        this.lister = new MaintenanceRequestLister();
 
         // UI:
         setCaption(i18n.tr("Maintenance Requests"));

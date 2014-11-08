@@ -13,14 +13,13 @@
  */
 package com.propertyvista.crm.client.ui.crud.customer.lead.appointment;
 
-import com.pyx4j.site.client.backoffice.ui.prime.lister.ListerInternalViewImplBase;
-
+import com.propertyvista.crm.client.ui.crud.CrmListerViewImplBase;
 import com.propertyvista.domain.tenant.lead.Appointment;
 
-public class AppointmentListerViewImpl extends ListerInternalViewImplBase<Appointment> implements AppointmentListerView {
+public class AppointmentListerViewImpl extends CrmListerViewImplBase<Appointment> implements AppointmentListerView {
 
     public AppointmentListerViewImpl() {
-        super(new AppointmentLister());
+        setLister(new AppointmentLister());
     }
 
     @Override

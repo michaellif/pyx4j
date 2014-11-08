@@ -17,7 +17,6 @@ import com.google.gwt.user.client.Command;
 
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.backoffice.ui.prime.lister.IPrimeLister;
-import com.pyx4j.site.client.backoffice.ui.prime.lister.ListerInternalViewImplBase;
 import com.pyx4j.widgets.client.Button;
 
 import com.propertyvista.operations.client.ui.crud.OperationsViewerViewImplBase;
@@ -40,7 +39,7 @@ public class PadSimFileViewerViewImpl extends OperationsViewerViewImplBase<PadSi
     Button replyReturns;
 
     public PadSimFileViewerViewImpl() {
-        batchLister = new ListerInternalViewImplBase<PadSimBatch>(new PadSimBatchLister());
+        batchLister = new PadSimBatchLister();
 
         setForm(new PadSimFileForm(this));
 

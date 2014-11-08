@@ -17,7 +17,6 @@ import com.google.gwt.user.client.Command;
 
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.backoffice.ui.prime.lister.IPrimeLister;
-import com.pyx4j.site.client.backoffice.ui.prime.lister.ListerInternalViewImplBase;
 import com.pyx4j.widgets.client.Button;
 
 import com.propertyvista.operations.client.ui.crud.OperationsViewerViewImplBase;
@@ -37,7 +36,7 @@ public class TriggerViewerViewImpl extends OperationsViewerViewImplBase<TriggerD
     private final Button runForDate;
 
     public TriggerViewerViewImpl() {
-        runLister = new ListerInternalViewImplBase<Run>(new RunLister(true));
+        runLister = new RunLister(true);
 
         setForm(new TriggerForm(this));
 

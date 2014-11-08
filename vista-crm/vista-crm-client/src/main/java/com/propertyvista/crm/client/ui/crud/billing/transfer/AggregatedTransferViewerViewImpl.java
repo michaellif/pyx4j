@@ -19,7 +19,6 @@ import com.google.gwt.user.client.ui.MenuItem;
 import com.pyx4j.entity.security.DataModelPermission;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.backoffice.ui.prime.lister.IPrimeLister;
-import com.pyx4j.site.client.backoffice.ui.prime.lister.ListerInternalViewImplBase;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 
 import com.propertyvista.crm.client.ui.crud.CrmViewerViewImplBase;
@@ -44,9 +43,9 @@ public class AggregatedTransferViewerViewImpl extends CrmViewerViewImplBase<Aggr
     public AggregatedTransferViewerViewImpl() {
         super(true);
 
-        paymentLister = new ListerInternalViewImplBase<PaymentRecordDTO>(new PaymentRecordLister());
-        returnedPaymentLister = new ListerInternalViewImplBase<PaymentRecordDTO>(new PaymentRecordLister());
-        rejectedBatchPaymentsLister = new ListerInternalViewImplBase<PaymentRecordDTO>(new PaymentRecordLister());
+        paymentLister = new PaymentRecordLister();
+        returnedPaymentLister = new PaymentRecordLister();
+        rejectedBatchPaymentsLister = new PaymentRecordLister();
 
         setForm(new AggregatedTransferForm(this));
 

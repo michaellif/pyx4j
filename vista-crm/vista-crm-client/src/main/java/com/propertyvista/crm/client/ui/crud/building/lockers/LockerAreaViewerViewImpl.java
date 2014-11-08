@@ -14,7 +14,6 @@
 package com.propertyvista.crm.client.ui.crud.building.lockers;
 
 import com.pyx4j.site.client.backoffice.ui.prime.lister.IPrimeLister;
-import com.pyx4j.site.client.backoffice.ui.prime.lister.ListerInternalViewImplBase;
 
 import com.propertyvista.crm.client.ui.crud.CrmViewerViewImplBase;
 import com.propertyvista.domain.property.asset.Locker;
@@ -25,7 +24,7 @@ public class LockerAreaViewerViewImpl extends CrmViewerViewImplBase<LockerAreaDT
     private final IPrimeLister<Locker> lockerLister;
 
     public LockerAreaViewerViewImpl() {
-        lockerLister = new ListerInternalViewImplBase<Locker>(new LockerLister());
+        lockerLister = new LockerLister();
 
         // set main form here:
         setForm(new LockerAreaForm(this));

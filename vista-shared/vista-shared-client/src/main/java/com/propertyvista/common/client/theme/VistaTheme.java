@@ -50,6 +50,7 @@ public class VistaTheme extends Theme {
 
         style = new Style("table");
         style.addProperty("border-collapse", "collapse");
+        style.addProperty("border-spacing", "0");
         addStyle(style);
 
         style = new Style("td");

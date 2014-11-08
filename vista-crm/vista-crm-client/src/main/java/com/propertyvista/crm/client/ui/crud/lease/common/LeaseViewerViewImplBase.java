@@ -30,7 +30,6 @@ import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.security.shared.BasicPermission;
 import com.pyx4j.security.shared.Permission;
 import com.pyx4j.site.client.backoffice.ui.prime.lister.IPrimeLister;
-import com.pyx4j.site.client.backoffice.ui.prime.lister.ListerInternalViewImplBase;
 import com.pyx4j.site.client.ui.dialogs.EntitySelectorListDialog;
 import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.Button.ButtonMenuBar;
@@ -76,7 +75,7 @@ public class LeaseViewerViewImplBase<DTO extends LeaseDTO> extends CrmViewerView
     public LeaseViewerViewImplBase() {
         super(true);
 
-        paymentLister = new ListerInternalViewImplBase<PaymentRecordDTO>(new PaymentLister());
+        paymentLister = new PaymentLister();
 
         // Buttons:
 

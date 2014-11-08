@@ -38,7 +38,6 @@ import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.rpc.shared.VoidSerializable;
 import com.pyx4j.security.shared.ActionPermission;
 import com.pyx4j.site.client.backoffice.ui.prime.lister.IPrimeLister;
-import com.pyx4j.site.client.backoffice.ui.prime.lister.ListerInternalViewImplBase;
 import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.Button.ButtonMenuBar;
 import com.pyx4j.widgets.client.Button.SecureMenuItem;
@@ -108,22 +107,22 @@ public class BuildingViewerViewImpl extends CrmViewerViewImplBase<BuildingDTO> i
 
     public BuildingViewerViewImpl() {
 
-        floorplanLister = new ListerInternalViewImplBase<FloorplanDTO>(new FloorplanLister());
+        floorplanLister = new FloorplanLister();
 
-        unitLister = new ListerInternalViewImplBase<AptUnitDTO>(new BuildingUnitLister(true));
+        unitLister = new BuildingUnitLister(true);
 
-        elevatorLister = new ListerInternalViewImplBase<ElevatorDTO>(new ElevatorLister());
-        boilerLister = new ListerInternalViewImplBase<BoilerDTO>(new BoilerLister());
-        roofLister = new ListerInternalViewImplBase<RoofDTO>(new RoofLister());
+        elevatorLister = new ElevatorLister();
+        boilerLister = new BoilerLister();
+        roofLister = new RoofLister();
 
-        parkingLister = new ListerInternalViewImplBase<ParkingDTO>(new ParkingLister());
-        lockerAreaLister = new ListerInternalViewImplBase<LockerAreaDTO>(new LockerAreaLister());
+        parkingLister = new ParkingLister();
+        lockerAreaLister = new LockerAreaLister();
 
-        serviceLister = new ListerInternalViewImplBase<Service>(new ServiceLister(this));
-        featureLister = new ListerInternalViewImplBase<Feature>(new FeatureLister(this));
-        concessionLister = new ListerInternalViewImplBase<Concession>(new ConcessionLister());
+        serviceLister = new ServiceLister(this);
+        featureLister = new FeatureLister(this);
+        concessionLister = new ConcessionLister();
 
-        billingCycleLister = new ListerInternalViewImplBase<BillingCycleDTO>(new BillingCycleLister());
+        billingCycleLister = new BillingCycleLister();
 
         // set main form here:
         setForm(new BuildingForm(this));

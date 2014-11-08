@@ -14,19 +14,19 @@
 package com.propertyvista.operations.client.ui.crud.fundstransfer.fundsreconciliationfile;
 
 import com.pyx4j.site.client.backoffice.ui.prime.lister.IPrimeLister;
-import com.pyx4j.site.client.backoffice.ui.prime.lister.ListerInternalViewImplBase;
 
 import com.propertyvista.operations.client.ui.crud.OperationsViewerViewImplBase;
 import com.propertyvista.operations.rpc.dto.FundsReconciliationFileDTO;
 import com.propertyvista.operations.rpc.dto.FundsReconciliationSummaryDTO;
 
-public class FundsReconciliationFileViewerViewImpl extends OperationsViewerViewImplBase<FundsReconciliationFileDTO> implements FundsReconciliationFileViewerView {
+public class FundsReconciliationFileViewerViewImpl extends OperationsViewerViewImplBase<FundsReconciliationFileDTO> implements
+        FundsReconciliationFileViewerView {
 
     private final IPrimeLister<FundsReconciliationSummaryDTO> summaryLister;
 
     public FundsReconciliationFileViewerViewImpl() {
         super(true);
-        summaryLister = new ListerInternalViewImplBase<FundsReconciliationSummaryDTO>(new FundsReconciliationSummaryLister());
+        summaryLister = new FundsReconciliationSummaryLister();
         setForm(new FundsReconciliationFileForm(this));
     }
 

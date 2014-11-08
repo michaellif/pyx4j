@@ -14,7 +14,6 @@
 package com.propertyvista.crm.client.ui.crud.building.parking;
 
 import com.pyx4j.site.client.backoffice.ui.prime.lister.IPrimeLister;
-import com.pyx4j.site.client.backoffice.ui.prime.lister.ListerInternalViewImplBase;
 
 import com.propertyvista.crm.client.ui.crud.CrmViewerViewImplBase;
 import com.propertyvista.domain.property.asset.ParkingSpot;
@@ -25,7 +24,7 @@ public class ParkingViewerViewImpl extends CrmViewerViewImplBase<ParkingDTO> imp
     private final IPrimeLister<ParkingSpot> spotLister;
 
     public ParkingViewerViewImpl() {
-        spotLister = new ListerInternalViewImplBase<ParkingSpot>(new ParkingSpotLister());
+        spotLister = new ParkingSpotLister();
 
         // set main form here:
         setForm(new ParkingForm(this));
