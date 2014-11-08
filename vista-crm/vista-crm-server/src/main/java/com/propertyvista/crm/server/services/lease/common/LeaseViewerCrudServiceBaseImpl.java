@@ -55,7 +55,7 @@ public abstract class LeaseViewerCrudServiceBaseImpl<DTO extends LeaseDTO> exten
             }
         }
 
-        if (!to.unit().isNull()) {
+        if (Lease.Status.isApplicationUnitSelected(to)) {
             Persistence.service().retrieveMember(to.unit().floorplan(), AttachLevel.ToStringMembers);
 
             Pair<Date, Lease> result = ServerSideFactory.create(OccupancyFacade.class).isReserved(to.unit().getPrimaryKey());

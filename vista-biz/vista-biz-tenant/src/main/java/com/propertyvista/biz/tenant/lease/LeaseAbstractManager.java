@@ -66,6 +66,7 @@ import com.propertyvista.domain.financial.offering.Feature;
 import com.propertyvista.domain.financial.offering.ProductItem;
 import com.propertyvista.domain.financial.offering.Service;
 import com.propertyvista.domain.note.NotesAndAttachments;
+import com.propertyvista.domain.policy.framework.OrganizationPoliciesNode;
 import com.propertyvista.domain.policy.framework.PolicyNode;
 import com.propertyvista.domain.policy.policies.AutoPayPolicy;
 import com.propertyvista.domain.policy.policies.LeaseAgreementLegalPolicy;
@@ -842,7 +843,7 @@ public abstract class LeaseAbstractManager {
                 throw new IllegalStateException(SimpleMessageFormat.format("Invalid Lease Status (\"{0}\")", lease.status().getValue()));
             }
 // TODO - review deposits lifecycle management!
-//            // clear current deposits: 
+//            // clear current deposits:
 //            EntityQueryCriteria<DepositLifecycle> criteria = EntityQueryCriteria.create(DepositLifecycle.class);
 //            criteria.eq(criteria.proto().billingAccount(), lease.billingAccount());
 //            Persistence.service().delete(criteria);
@@ -1085,7 +1086,7 @@ public abstract class LeaseAbstractManager {
             E leaseParticipant = null;
 
             if (!newCustomer) {
-                // Find returning Lease Participant (if exist): 
+                // Find returning Lease Participant (if exist):
                 EntityQueryCriteria<E> criteria = EntityQueryCriteria.create(leaseParticipantClass);
                 criteria.eq(criteria.proto().lease(), leaseTerm.lease());
                 criteria.eq(criteria.proto().customer(), leaseTermParticipant.leaseParticipant().customer());
@@ -1318,11 +1319,17 @@ public abstract class LeaseAbstractManager {
     }
 
     public PolicyNode getLeasePolicyNode(Lease leaseId) {
+        if (leaseId.unit().isNull()) {
+            // no unit selected still - return organization node for policy queries:
+            return Persistence.service().retrieve(EntityQueryCriteria.create(OrganizationPoliciesNode.class));
+        }
         return getLeaseBuilding(leaseId);
     }
 
     public Building getLeaseBuilding(Lease leaseId) {
-        if (!leaseId.unit().building().isValueDetached()) {
+        if (leaseId.unit().isNull()) {
+            return null; // no unit selected still!..
+        } else if (!leaseId.unit().building().isValueDetached()) {
             return leaseId.unit().building();
         } else {
             Building building;
@@ -1337,7 +1344,6 @@ public abstract class LeaseAbstractManager {
 
             // OnlineApplication, Case of ILS link, see  OnlineApplicationFacadeImpl.getOnlineApplicationPolicyNode
             {
-
                 EntityQueryCriteria<MasterOnlineApplication> criteria = EntityQueryCriteria.create(MasterOnlineApplication.class);
                 criteria.eq(criteria.proto().leaseApplication().lease(), leaseId);
                 MasterOnlineApplication masterOnlineApplication = Persistence.service().retrieve(criteria);
@@ -1345,12 +1351,11 @@ public abstract class LeaseAbstractManager {
                     building = masterOnlineApplication.ilsBuilding();
                 }
             }
-            if (building != null) {
+            if (building == null) {
                 return building;
             }
 
             throw new Error();
-
         }
     }
 }

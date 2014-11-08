@@ -442,6 +442,12 @@ public class OnlineApplicationFacadeImpl implements OnlineApplicationFacade {
             if (application.stepsStatuses().isNull()) {
                 return BigDecimal.ZERO;
             }
+
+            Persistence.ensureRetrieve(application.masterOnlineApplication().leaseApplication().lease(), AttachLevel.Attached);
+            if (!Lease.Status.isApplicationUnitSelected(application.masterOnlineApplication().leaseApplication().lease())) {
+                return BigDecimal.ZERO;
+            }
+
             BigDecimal sum = BigDecimal.ZERO;
             for (OnlineApplicationWizardStepStatus stepStatus : application.stepsStatuses()) {
                 if (stepStatus.completed().getValue(false)) {

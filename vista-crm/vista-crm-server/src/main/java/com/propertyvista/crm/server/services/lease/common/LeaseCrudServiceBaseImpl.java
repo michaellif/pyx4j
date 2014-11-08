@@ -53,7 +53,9 @@ public abstract class LeaseCrudServiceBaseImpl<DTO extends LeaseDTO> extends Abs
             fillPreauthorizedPayments(item);
             loadTenantInsurance(to, item);
         }
-        to.nextAutopayApplicabilityMessage().setValue(ServerSideFactory.create(PaymentMethodFacade.class).getNextAutopayApplicabilityMessage(bo));
+        if (Lease.Status.isApplicationUnitSelected(to)) {
+            to.nextAutopayApplicabilityMessage().setValue(ServerSideFactory.create(PaymentMethodFacade.class).getNextAutopayApplicabilityMessage(bo));
+        }
 
         for (LeaseTermGuarantor item : to.currentTerm().version().guarantors()) {
             Persistence.service().retrieve(item.screening(), AttachLevel.ToStringMembers, false);
