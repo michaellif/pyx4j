@@ -38,6 +38,9 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.backoffice.ui.prime.report.AbstractReport;
 import com.pyx4j.site.client.backoffice.ui.prime.report.IReportWidget;
 import com.pyx4j.site.rpc.AppPlaceInfo;
+import com.pyx4j.widgets.client.memento.IMementoAware;
+import com.pyx4j.widgets.client.memento.IMementoInput;
+import com.pyx4j.widgets.client.memento.IMementoOutput;
 
 import com.propertyvista.crm.client.resources.CrmImages;
 import com.propertyvista.crm.client.ui.reports.Column;
@@ -49,7 +52,7 @@ import com.propertyvista.dto.payment.AutoPayReviewChargeDTO;
 import com.propertyvista.dto.payment.AutoPayReviewLeaseDTO;
 import com.propertyvista.dto.payment.AutoPayReviewPreauthorizedPaymentDTO;
 
-public class AutoPayChangesReportWidget extends HTML implements IReportWidget {
+public class AutoPayChangesReportWidget extends HTML implements IReportWidget, IMementoAware {
 
     private static final I18n i18n = I18n.get(AutoPayChangesReportWidget.class);
 
@@ -268,34 +271,36 @@ public class AutoPayChangesReportWidget extends HTML implements IReportWidget {
     }
 
     @Override
-    public Object getMemento() {
-        return new Object[] { getHTML(), new ScrollBarPositionMemento[] { reportScrollBarPositionMemento, tableBodyScrollBarPositionMemento } };
+    public void saveState(IMementoOutput memento) {
+        memento.write(getHTML());
+        memento.write(reportScrollBarPositionMemento);
+        memento.write(tableBodyScrollBarPositionMemento);
     }
 
     @Override
-    public void setMemento(final Object memento) {
-        if (memento != null) {
-            String html = (String) (((Object[]) memento)[0]);
-            setHTML(html);
-            Scheduler.get().scheduleDeferred(new ScheduledCommand() {
-                @Override
-                public void execute() {
-                    final Element tableBody = getElement().getElementsByTagName("tbody").getItem(0);
-                    if (tableBody == null) {
-                        return;
-                    }
-                    ScrollBarPositionMemento[] scrollBarPositionMementi = (ScrollBarPositionMemento[]) (((Object[]) memento)[1]);
-                    if (scrollBarPositionMementi[0] != null) {
-                        getElement().setScrollLeft(scrollBarPositionMementi[0].posX);
-                        getElement().setScrollTop(scrollBarPositionMementi[0].posY);
-                    }
-                    if (scrollBarPositionMementi[1] != null) {
-                        tableBody.setScrollLeft(scrollBarPositionMementi[1].posX);
-                        tableBody.setScrollTop(scrollBarPositionMementi[1].posY);
-                    }
+    public void restoreState(IMementoInput memento) {
+        String html = (String) (memento.read());
+        reportScrollBarPositionMemento = (ScrollBarPositionMemento) memento.read();
+        tableBodyScrollBarPositionMemento = (ScrollBarPositionMemento) memento.read();
+
+        setHTML(html);
+        Scheduler.get().scheduleDeferred(new ScheduledCommand() {
+            @Override
+            public void execute() {
+                final Element tableBody = getElement().getElementsByTagName("tbody").getItem(0);
+                if (tableBody == null) {
+                    return;
                 }
-            });
-        }
+                if (reportScrollBarPositionMemento != null) {
+                    getElement().setScrollLeft(reportScrollBarPositionMemento.posX);
+                    getElement().setScrollTop(reportScrollBarPositionMemento.posY);
+                }
+                if (tableBodyScrollBarPositionMemento != null) {
+                    tableBody.setScrollLeft(tableBodyScrollBarPositionMemento.posX);
+                    tableBody.setScrollTop(tableBodyScrollBarPositionMemento.posY);
+                }
+            }
+        });
     }
 
     private int caseRows(AutoPayReviewLeaseDTO reviewCase) {

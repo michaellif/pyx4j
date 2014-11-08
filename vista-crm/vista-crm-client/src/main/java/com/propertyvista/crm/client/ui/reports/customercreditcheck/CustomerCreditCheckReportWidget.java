@@ -24,13 +24,16 @@ import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.backoffice.ui.prime.report.IReportWidget;
+import com.pyx4j.widgets.client.memento.IMementoAware;
+import com.pyx4j.widgets.client.memento.IMementoInput;
+import com.pyx4j.widgets.client.memento.IMementoOutput;
 
 import com.propertyvista.crm.client.ui.reports.NoResultsHtml;
 import com.propertyvista.crm.client.ui.reports.ScrollBarPositionMemento;
 import com.propertyvista.crm.rpc.dto.reports.CustomerCreditCheckReportDataDTO;
 import com.propertyvista.domain.tenant.CustomerCreditCheck;
 
-public class CustomerCreditCheckReportWidget extends HTML implements IReportWidget {
+public class CustomerCreditCheckReportWidget extends HTML implements IReportWidget, IMementoAware {
 
     private static final I18n i18n = I18n.get(CustomerCreditCheckReportWidget.class);
 
@@ -108,27 +111,26 @@ public class CustomerCreditCheckReportWidget extends HTML implements IReportWidg
     }
 
     @Override
-    public Object getMemento() {
-        return new Object[] { getHTML(), scrollBarPositionMemento };
+    public void saveState(IMementoOutput memento) {
+        memento.write(getHTML());
+        memento.write(scrollBarPositionMemento);
     }
 
     @Override
-    public void setMemento(final Object memento) {
-        if (memento != null) {
-            String html = (String) (((Object[]) memento)[0]);
-            setHTML(html);
-            Scheduler.get().scheduleDeferred(new Scheduler.ScheduledCommand() {
-                @Override
-                public void execute() {
-                    ScrollBarPositionMemento scrollBarPosition = (ScrollBarPositionMemento) (((Object[]) memento)[1]);
-                    if (scrollBarPosition != null) {
-                        getElement().setScrollLeft(scrollBarPosition.posX);
-                        getElement().setScrollTop(scrollBarPosition.posY);
-                    }
-                }
-            });
+    public void restoreState(IMementoInput memento) {
+        String html = (String) (memento.read());
+        scrollBarPositionMemento = (ScrollBarPositionMemento) memento.read();
 
-        }
+        setHTML(html);
+        Scheduler.get().scheduleDeferred(new Scheduler.ScheduledCommand() {
+            @Override
+            public void execute() {
+                if (scrollBarPositionMemento != null) {
+                    getElement().setScrollLeft(scrollBarPositionMemento.posX);
+                    getElement().setScrollTop(scrollBarPositionMemento.posY);
+                }
+            }
+        });
     }
 
     private void cell(SafeHtmlBuilder bb, String data) {

@@ -60,7 +60,7 @@ public class ApplicationContextSelectionViewImpl extends SimplePanel implements 
     @Override
     public void populate(List<OnlineApplicationContextChoiceDTO> leaseChoices) {
         lister.setDataSource(new ApplicationDataSource(leaseChoices));
-        lister.obtain(0);
+        lister.populate(0);
     }
 
     class ApplicationContextSelectionGadget extends AbstractGadget<ApplicationContextSelectionViewImpl> {

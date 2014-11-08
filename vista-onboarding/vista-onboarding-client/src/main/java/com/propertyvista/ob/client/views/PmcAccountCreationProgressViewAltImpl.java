@@ -24,7 +24,6 @@ import com.google.gwt.user.client.ui.FlowPanel;
 
 import com.pyx4j.commons.css.IStyleName;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.memento.Memento;
 import com.pyx4j.site.client.ui.visor.IVisor;
 import com.pyx4j.widgets.client.Label;
 
@@ -201,15 +200,6 @@ public class PmcAccountCreationProgressViewAltImpl extends Composite implements 
     public void setCrmSiteUrl(OnboardingCrmURL url) {
         pleaseWait.setHTML("&nbsp;");
         pmcCreatedPanel.setCrmSiteUrl(url);
-    }
-
-    @Override
-    public Memento getMemento() {
-        return null;
-    }
-
-    @Override
-    public void setMemento(Memento memento) {
     }
 
     @Override

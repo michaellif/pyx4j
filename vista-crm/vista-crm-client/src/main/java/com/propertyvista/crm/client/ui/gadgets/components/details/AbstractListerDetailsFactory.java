@@ -147,7 +147,7 @@ public abstract class AbstractListerDetailsFactory<E extends IEntity, F extends 
                     listerDataSource.clearPreDefinedFilters();
                 }
                 lister.setDataSource(listerDataSource);
-                lister.obtain(0);
+                lister.populate(0);
 
                 panel.setWidget(lister);
             }

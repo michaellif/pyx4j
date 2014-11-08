@@ -43,6 +43,9 @@ import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.backoffice.ui.prime.report.AbstractReport;
 import com.pyx4j.site.client.backoffice.ui.prime.report.IReportWidget;
+import com.pyx4j.widgets.client.memento.IMementoAware;
+import com.pyx4j.widgets.client.memento.IMementoInput;
+import com.pyx4j.widgets.client.memento.IMementoOutput;
 
 import com.propertyvista.crm.client.resources.CrmImages;
 import com.propertyvista.crm.client.ui.reports.ColumnDescriptorAnchorTableColumnFormatter;
@@ -53,7 +56,7 @@ import com.propertyvista.crm.client.ui.reports.ScrollBarPositionMemento;
 import com.propertyvista.crm.rpc.dto.reports.EftReportDataDTO;
 import com.propertyvista.crm.rpc.dto.reports.EftReportRecordDTO;
 
-public class EftReportWidget extends HTML implements IReportWidget {
+public class EftReportWidget extends HTML implements IReportWidget, IMementoAware {
 
     private final static I18n i18n = I18n.get(EftReportWidget.class);
 
@@ -184,42 +187,40 @@ public class EftReportWidget extends HTML implements IReportWidget {
     }
 
     @Override
-    public Object getMemento() {
+    public void saveState(IMementoOutput memento) {
         if (isTableReady) {
-            return new Object[] { getHTML(), new ScrollBarPositionMemento[] { reportScrollBarPositionMemento, tableBodyScrollBarPositionMemento } };
-        } else {
-            return null;
+            memento.write(getHTML());
+            memento.write(reportScrollBarPositionMemento);
+            memento.write(tableBodyScrollBarPositionMemento);
         }
     }
 
     @Override
-    public void setMemento(final Object memento) {
+    public void restoreState(IMementoInput memento) {
+        String html = (String) (memento.read());
+        reportScrollBarPositionMemento = (ScrollBarPositionMemento) memento.read();
+        tableBodyScrollBarPositionMemento = (ScrollBarPositionMemento) memento.read();
+
         isTableReady = false;
-        if (memento != null) {
-            String html = (String) (((Object[]) memento)[0]);
-            setReportTable(html, new Command() {
-                @Override
-                public void execute() {
-                    Scheduler.get().scheduleDeferred(new ScheduledCommand() {
-                        @Override
-                        public void execute() {
-                            final Element tableBody = getElement().getElementsByTagName("tbody").getItem(0);
-                            ScrollBarPositionMemento[] scrollBarPositionMementi = (ScrollBarPositionMemento[]) (((Object[]) memento)[1]);
-                            if (scrollBarPositionMementi[0] != null) {
-                                getElement().setScrollLeft(scrollBarPositionMementi[0].posX);
-                                getElement().setScrollTop(scrollBarPositionMementi[0].posY);
-                            }
-                            if (scrollBarPositionMementi[1] != null) {
-                                tableBody.setScrollLeft(scrollBarPositionMementi[1].posX);
-                                tableBody.setScrollTop(scrollBarPositionMementi[1].posY);
-                            }
+        setReportTable(html, new Command() {
+            @Override
+            public void execute() {
+                Scheduler.get().scheduleDeferred(new ScheduledCommand() {
+                    @Override
+                    public void execute() {
+                        final Element tableBody = getElement().getElementsByTagName("tbody").getItem(0);
+                        if (reportScrollBarPositionMemento != null) {
+                            getElement().setScrollLeft(reportScrollBarPositionMemento.posX);
+                            getElement().setScrollTop(reportScrollBarPositionMemento.posY);
                         }
-                    });
-                }
-            });
-        } else {
-            setData(null);
-        }
+                        if (tableBodyScrollBarPositionMemento != null) {
+                            tableBody.setScrollLeft(tableBodyScrollBarPositionMemento.posX);
+                            tableBody.setScrollTop(tableBodyScrollBarPositionMemento.posY);
+                        }
+                    }
+                });
+            }
+        });
     }
 
     private void setReportTable(String safeHtmlReportTable, final Command onSetComplete) {

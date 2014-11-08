@@ -100,7 +100,7 @@ public class PaymentRecordsGadget extends GadgetInstanceBase<PaymentRecordsGadge
                         .getValue())));
                 lister.getDataSource().setPreDefinedFilters(criteria);
 
-                lister.obtain(0);
+                lister.populate(0);
                 redrawTitle();
                 populateSucceded();
             }

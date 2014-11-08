@@ -18,7 +18,6 @@ import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.SimplePanel;
 
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.memento.Memento;
 import com.pyx4j.site.client.ui.visor.IVisor;
 import com.pyx4j.widgets.client.Anchor;
 import com.pyx4j.widgets.client.Label;
@@ -82,15 +81,6 @@ public class PmcAccountCreationCompleteViewImpl extends Composite implements Pmc
     @Override
     public void setCrmSiteUrl(OnboardingCrmURL crimeSiteUrl) {
         this.completionPanel.setCrmSiteUrl(crimeSiteUrl);
-    }
-
-    @Override
-    public Memento getMemento() {
-        return null;
-    }
-
-    @Override
-    public void setMemento(Memento memento) {
     }
 
     @Override

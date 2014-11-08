@@ -108,13 +108,13 @@ public class PmcForm extends OperationsEntityForm<PmcDTO> {
             Pmc listerPmcContext = EntityFactory.createIdentityStub(Pmc.class, getValue().getPrimaryKey());
 
             onboardingMerchantAccountsLister.setParentPmc(listerPmcContext);
-            onboardingMerchantAccountsLister.obtain(0);
+            onboardingMerchantAccountsLister.populate(0);
 
             cardTransactionRecordLister.setParentPmc(listerPmcContext);
-            cardTransactionRecordLister.obtain(0);
+            cardTransactionRecordLister.populate(0);
 
             directDebitRecordLister.setParentPmc(listerPmcContext);
-            directDebitRecordLister.obtain(0);
+            directDebitRecordLister.populate(0);
         }
 
         approvalLink.setVisible(true || !isEditable() & getValue().equifaxInfo().status().getValue() == PmcEquifaxStatus.PendingVistaApproval);

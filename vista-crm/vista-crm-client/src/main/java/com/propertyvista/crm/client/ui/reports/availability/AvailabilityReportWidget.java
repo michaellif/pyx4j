@@ -26,12 +26,15 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.backoffice.ui.prime.report.IReportWidget;
 import com.pyx4j.site.client.backoffice.ui.prime.report.ReportTable;
 import com.pyx4j.site.client.backoffice.ui.prime.report.ReportTable.CellFormatter;
+import com.pyx4j.widgets.client.memento.IMementoAware;
+import com.pyx4j.widgets.client.memento.IMementoInput;
+import com.pyx4j.widgets.client.memento.IMementoOutput;
 
 import com.propertyvista.crm.client.ui.reports.NoResultsHtml;
 import com.propertyvista.crm.client.ui.reports.ScrollBarPositionMemento;
 import com.propertyvista.crm.rpc.dto.reports.AvailabilityReportDataDTO;
 
-public class AvailabilityReportWidget extends FlowPanel implements IReportWidget {
+public class AvailabilityReportWidget extends FlowPanel implements IReportWidget, IMementoAware {
 
     private static final I18n i18n = I18n.get(AvailabilityReportWidget.class);
 
@@ -73,17 +76,15 @@ public class AvailabilityReportWidget extends FlowPanel implements IReportWidget
     }
 
     @Override
-    public Object getMemento() {
-        return scrollBarPositionMemento;
+    public void saveState(IMementoOutput memento) {
+        memento.write(scrollBarPositionMemento);
     }
 
     @Override
-    public void setMemento(Object memento) {
-        if (memento != null) {
-            ScrollBarPositionMemento scrollBarPosition = (ScrollBarPositionMemento) memento;
-            getElement().setScrollLeft(scrollBarPosition.posX);
-            getElement().setScrollTop(scrollBarPosition.posY);
-        }
+    public void restoreState(IMementoInput memento) {
+        ScrollBarPositionMemento scrollBarPosition = (ScrollBarPositionMemento) memento.read();
+        getElement().setScrollLeft(scrollBarPosition.posX);
+        getElement().setScrollTop(scrollBarPosition.posY);
     }
 
 }

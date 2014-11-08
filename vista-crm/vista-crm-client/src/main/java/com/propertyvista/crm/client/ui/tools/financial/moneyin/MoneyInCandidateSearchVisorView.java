@@ -59,7 +59,7 @@ public class MoneyInCandidateSearchVisorView extends AbstractVisorPane {
     }
 
     public void populateLister() {
-        candidateLister.obtain(0);
+        candidateLister.populate(0);
     }
 
 }

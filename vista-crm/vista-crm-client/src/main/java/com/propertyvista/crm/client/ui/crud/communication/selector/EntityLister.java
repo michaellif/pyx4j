@@ -90,7 +90,7 @@ public class EntityLister<E extends IEntity> extends AbstractPrimeLister<E> {
 
     protected void onVersionDisplayModeChange(VersionDisplayMode mode) {
         versionDisplayMode = mode;
-        obtain(0);
+        populate(0);
     }
 
     @Override

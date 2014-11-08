@@ -135,7 +135,7 @@ public class UnitAvailabilityGadget extends GadgetInstanceBase<UnitAvailabilityG
                     break;
                 }
 
-                lister.obtain(0);
+                lister.populate(0);
 
                 redrawFilterDisplayPanel();
                 redrawAsOfBannerPanel();

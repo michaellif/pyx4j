@@ -20,7 +20,6 @@ import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FlowPanel;
 
-import com.pyx4j.site.client.memento.Memento;
 import com.pyx4j.site.client.ui.visor.IVisor;
 
 import com.propertyvista.ob.client.forms.StepStatusIndicator;
@@ -82,15 +81,6 @@ public class PmcAccountCreationProgressViewImpl extends Composite implements Pmc
     @Override
     public void setCrmSiteUrl(OnboardingCrmURL url) {
         pmcCreatedPanel.setCrmSiteUrl(url);
-    }
-
-    @Override
-    public Memento getMemento() {
-        return null;
-    }
-
-    @Override
-    public void setMemento(Memento memento) {
     }
 
     @Override

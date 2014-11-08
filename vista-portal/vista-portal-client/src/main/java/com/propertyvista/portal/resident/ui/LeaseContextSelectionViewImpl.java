@@ -61,7 +61,7 @@ public class LeaseContextSelectionViewImpl extends SimplePanel implements LeaseC
     @Override
     public void populate(List<LeaseContextChoiceDTO> leaseChoices) {
         lister.setDataSource(new LeaseDataSource(leaseChoices));
-        lister.obtain(0);
+        lister.populate(0);
     }
 
     class LeaseContextSelectionGadget extends AbstractGadget<LeaseContextSelectionViewImpl> {

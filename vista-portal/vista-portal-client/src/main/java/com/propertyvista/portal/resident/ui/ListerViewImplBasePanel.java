@@ -24,7 +24,6 @@ import com.pyx4j.entity.core.criterion.Criterion;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.site.client.backoffice.ui.prime.lister.AbstractPrimeLister;
 import com.pyx4j.site.client.backoffice.ui.prime.lister.IPrimeLister;
-import com.pyx4j.site.client.memento.Memento;
 import com.pyx4j.site.client.ui.visor.IVisor;
 
 public class ListerViewImplBasePanel<E extends IEntity> extends DockPanel implements IPrimeLister<E> {
@@ -115,16 +114,6 @@ public class ListerViewImplBasePanel<E extends IEntity> extends DockPanel implem
     @Override
     public void setSortCriteria(List<Sort> sorts) {
         getLister().setSortCriteria(sorts);
-    }
-
-    @Override
-    public Memento getMemento() {
-        return getLister().getMemento();
-    }
-
-    @Override
-    public void setMemento(Memento memento) {
-        getLister().setMemento(memento);
     }
 
     @Override

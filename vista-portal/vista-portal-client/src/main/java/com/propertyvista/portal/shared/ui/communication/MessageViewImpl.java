@@ -60,7 +60,7 @@ public class MessageViewImpl extends SimplePanel implements MessageView {
     @Override
     public void populate() {
         lister.setDataSource(new ListerDataSource<MessageDTO>(MessageDTO.class, presenter.getService()));
-        lister.obtain(0);
+        lister.populate(0);
     }
 
     class MessageGadget extends AbstractGadget<MessageViewImpl> {

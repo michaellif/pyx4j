@@ -69,7 +69,7 @@ public class BuildingResidentInsuranceCoverageGadget extends GadgetInstanceBase<
                             PropertyCriterion.in(lister.proto().buildingFilter(), containerBoard.getSelectedBuildingsStubs()));
                 }
 
-                lister.obtain(0);
+                lister.populate(0);
                 populateSucceded();
             }
         });
