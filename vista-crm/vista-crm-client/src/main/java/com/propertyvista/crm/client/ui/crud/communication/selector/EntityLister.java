@@ -30,6 +30,7 @@ import com.pyx4j.entity.core.criterion.EntityQueryCriteria.VersionedCriteria;
 import com.pyx4j.entity.core.criterion.PropertyCriterion;
 import com.pyx4j.forms.client.ui.CRadioGroupEnum;
 import com.pyx4j.forms.client.ui.datatable.DataItem;
+import com.pyx4j.forms.client.ui.datatable.DataTablePanel;
 import com.pyx4j.forms.client.ui.datatable.DataTable.ItemSelectionHandler;
 import com.pyx4j.forms.client.ui.datatable.DataTableModel;
 import com.pyx4j.i18n.shared.I18nEnum;
@@ -66,7 +67,7 @@ public class EntityLister<E extends IEntity> extends AbstractPrimeLister<E> {
         this.selectedOnTab = new ArrayList<E>();
         this.alreadySelected = (alreadySelected != null ? alreadySelected : new ArrayList<E>());
 
-        getDataTablePanel().setPageSizeOptions(Arrays.asList(new Integer[] { PAGESIZE_SMALL, PAGESIZE_MEDIUM }));
+        getDataTablePanel().setPageSizeOptions(Arrays.asList(new Integer[] { DataTablePanel.PAGESIZE_SMALL, DataTablePanel.PAGESIZE_MEDIUM }));
         if (isVersioned) {
             getDataTablePanel().addUpperActionItem(displayModeButton.asWidget());
         }
@@ -121,8 +122,8 @@ public class EntityLister<E extends IEntity> extends AbstractPrimeLister<E> {
     }
 
     @Override
-    protected void onObtainSuccess() {
-        super.onObtainSuccess();
+    protected void onPopulate() {
+        super.onPopulate();
         setRowsSelected();
         setOnTabSelected();
     }

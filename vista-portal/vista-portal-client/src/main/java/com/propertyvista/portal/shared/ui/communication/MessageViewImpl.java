@@ -22,12 +22,12 @@ import com.pyx4j.commons.css.ThemeColor;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.forms.client.ui.datatable.DataTable.ItemSelectionHandler;
 import com.pyx4j.forms.client.ui.datatable.DataTableModel;
+import com.pyx4j.forms.client.ui.datatable.DataTablePanel;
 import com.pyx4j.forms.client.ui.datatable.ListerDataSource;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.site.client.AppSite;
-import com.pyx4j.site.client.backoffice.ui.prime.lister.EntityDataTablePanel;
 
 import com.propertyvista.domain.security.PortalResidentBehavior;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
@@ -60,7 +60,7 @@ public class MessageViewImpl extends SimplePanel implements MessageView {
     @Override
     public void populate() {
         lister.setDataSource(new ListerDataSource<MessageDTO>(MessageDTO.class, presenter.getService()));
-        lister.populate(0);
+        lister.populate();
     }
 
     class MessageGadget extends AbstractGadget<MessageViewImpl> {
@@ -68,7 +68,7 @@ public class MessageViewImpl extends SimplePanel implements MessageView {
         MessageGadget(final MessageLister lister) {
             super(MessageViewImpl.this, null, i18n.tr("Tenant Communication"), ThemeColor.foreground, 0.3);
             lister.setWidth("100%");
-            lister.showColumnSelector(true);
+            lister.getDataTable().setColumnSelectorVisible(true);
 
             lister.addItemSelectionHandler(new ItemSelectionHandler() {
                 @Override
@@ -84,14 +84,14 @@ public class MessageViewImpl extends SimplePanel implements MessageView {
 
     }
 
-    private static class MessageLister extends EntityDataTablePanel<MessageDTO> {
+    private static class MessageLister extends DataTablePanel<MessageDTO> {
 
         public MessageLister() {
             super(MessageDTO.class, SecurityController.check(PortalResidentBehavior.CommunicationCreateMessages), false);
-            getDataTablePanel().setFilteringEnabled(false);
+            setFilteringEnabled(false);
             //getDataTablePanel().getAddButton().asWidget().setStyleName(DataTableTheme.StyleName.ListerButton.name());
             // No filtering work for it
-            getDataTablePanel().getDataTable().setHasColumnClickSorting(false);
+            getDataTable().setHasColumnClickSorting(false);
             //@formatter:off
             setDataTableModel(
                     new DataTableModel<MessageDTO>(new MemberColumnDescriptor.Builder(proto().isRead()).build(),

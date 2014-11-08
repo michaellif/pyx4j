@@ -20,6 +20,7 @@ import com.google.gwt.core.client.GWT;
 import com.pyx4j.entity.rpc.AbstractListCrudService;
 import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.forms.client.ui.datatable.DataTableModel;
+import com.pyx4j.forms.client.ui.datatable.DataTablePanel;
 import com.pyx4j.forms.client.ui.datatable.ListerDataSource;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
 
@@ -52,7 +53,7 @@ public class SelectorDialogPortfolioLister extends EntityLister<Portfolio> {
 
     public void setDataTableModel() {
         DataTableModel<Portfolio> dataTableModel = new DataTableModel<Portfolio>(defineColumnDescriptors());
-        dataTableModel.setPageSize(PAGESIZE_SMALL);
+        dataTableModel.setPageSize(DataTablePanel.PAGESIZE_SMALL);
         dataTableModel.setMultipleSelection(true);
         setDataTableModel(dataTableModel);
     }

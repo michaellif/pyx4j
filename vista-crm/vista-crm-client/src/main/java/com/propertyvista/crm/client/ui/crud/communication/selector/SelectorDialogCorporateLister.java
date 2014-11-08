@@ -21,6 +21,7 @@ import com.pyx4j.entity.core.criterion.EntityListCriteria;
 import com.pyx4j.entity.rpc.AbstractListCrudService;
 import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.forms.client.ui.datatable.DataTableModel;
+import com.pyx4j.forms.client.ui.datatable.DataTablePanel;
 import com.pyx4j.forms.client.ui.datatable.ListerDataSource;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
 
@@ -55,7 +56,7 @@ public class SelectorDialogCorporateLister extends EntityLister<Employee> {
 
     public void setDataTableModel() {
         DataTableModel<Employee> dataTableModel = new DataTableModel<Employee>(defineColumnDescriptors());
-        dataTableModel.setPageSize(PAGESIZE_SMALL);
+        dataTableModel.setPageSize(DataTablePanel.PAGESIZE_SMALL);
         dataTableModel.setMultipleSelection(true);
         setDataTableModel(dataTableModel);
     }

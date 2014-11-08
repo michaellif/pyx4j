@@ -17,13 +17,13 @@ import com.pyx4j.forms.client.ui.datatable.DataTable.ItemZoomInCommand;
 import com.pyx4j.forms.client.ui.datatable.DataTableModel;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.site.client.AppSite;
-import com.pyx4j.site.client.backoffice.ui.prime.lister.EntityDataTablePanel;
+import com.pyx4j.site.client.backoffice.ui.prime.lister.AbstractPrimeLister;
 
 import com.propertyvista.domain.pmc.Pmc;
 import com.propertyvista.operations.rpc.OperationsSiteMap;
 import com.propertyvista.operations.rpc.dto.PmcMerchantAccountDTO;
 
-public class MerchantAccountsLister extends EntityDataTablePanel<PmcMerchantAccountDTO> {
+public class MerchantAccountsLister extends AbstractPrimeLister<PmcMerchantAccountDTO> {
 
     private Pmc parentPmc;
 

@@ -18,6 +18,7 @@ import java.util.List;
 
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.forms.client.ui.datatable.DataTableModel;
+import com.pyx4j.forms.client.ui.datatable.DataTablePanel;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.site.client.backoffice.ui.prime.lister.AbstractPrimeLister;
 
@@ -38,7 +39,7 @@ public class TriggerLister extends AbstractPrimeLister<TriggerDTO> {
             new MemberColumnDescriptor.Builder(proto().populationType(), false).build(),
             new MemberColumnDescriptor.Builder(proto().created()).build()
         );//@formatter:on
-        dataTableModel.setPageSize(PAGESIZE_LARGE);
+        dataTableModel.setPageSize(DataTablePanel.PAGESIZE_LARGE);
         setDataTableModel(dataTableModel);
 
     }

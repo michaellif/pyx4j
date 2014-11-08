@@ -18,6 +18,7 @@ import java.util.List;
 
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.forms.client.ui.datatable.DataTableModel;
+import com.pyx4j.forms.client.ui.datatable.DataTablePanel;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.site.client.backoffice.ui.prime.lister.AbstractPrimeLister;
 
@@ -33,7 +34,7 @@ public class SelectServiceItemLister extends AbstractPrimeLister<ProductItem> {
                 new MemberColumnDescriptor.Builder(proto().price()).build(),
                 new MemberColumnDescriptor.Builder(proto().description()).build()
         );//@formatter:on
-        dataTableModel.setPageSize(PAGESIZE_SMALL);
+        dataTableModel.setPageSize(DataTablePanel.PAGESIZE_SMALL);
 
         setDataTableModel(dataTableModel);
     }
