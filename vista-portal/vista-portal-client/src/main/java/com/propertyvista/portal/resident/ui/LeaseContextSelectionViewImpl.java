@@ -23,10 +23,10 @@ import com.pyx4j.commons.css.ThemeColor;
 import com.pyx4j.entity.rpc.InMemeoryListService;
 import com.pyx4j.forms.client.ui.datatable.DataTable.ItemSelectionHandler;
 import com.pyx4j.forms.client.ui.datatable.DataTableModel;
+import com.pyx4j.forms.client.ui.datatable.DataTablePanel;
 import com.pyx4j.forms.client.ui.datatable.ListerDataSource;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.backoffice.ui.prime.lister.EntityDataTablePanel;
 import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.Label;
 
@@ -61,7 +61,7 @@ public class LeaseContextSelectionViewImpl extends SimplePanel implements LeaseC
     @Override
     public void populate(List<LeaseContextChoiceDTO> leaseChoices) {
         lister.setDataSource(new LeaseDataSource(leaseChoices));
-        lister.populate(0);
+        lister.populate();
     }
 
     class LeaseContextSelectionGadget extends AbstractGadget<LeaseContextSelectionViewImpl> {
@@ -71,8 +71,8 @@ public class LeaseContextSelectionViewImpl extends SimplePanel implements LeaseC
 
             lister.setWidth("100%");
 
-            lister.showColumnSelector(false);
-            lister.addActionItem(new Label(i18n.tr("Please select the Lease you want to manage and click \"Continue\"")));
+            lister.getDataTable().setColumnSelectorVisible(false);
+            lister.addUpperActionItem(new Label(i18n.tr("Please select the Lease you want to manage and click \"Continue\"")));
             setContent(lister);
             setActionsToolbar(new ApplicationContextSelectionToolbar());
         }
@@ -84,7 +84,7 @@ public class LeaseContextSelectionViewImpl extends SimplePanel implements LeaseC
 
                     @Override
                     public void execute() {
-                        LeaseContextChoiceDTO choice = lister.getSelectedItem();
+                        LeaseContextChoiceDTO choice = lister.getDataTable().getSelectedItem();
                         if (choice != null) {
                             presenter.setLeaseContext((Lease) choice.leaseId().duplicate());
                         }
@@ -96,7 +96,7 @@ public class LeaseContextSelectionViewImpl extends SimplePanel implements LeaseC
 
                     @Override
                     public void onChange() {
-                        continueButton.setEnabled(lister.getSelectedItem() != null);
+                        continueButton.setEnabled(lister.getDataTable().getSelectedItem() != null);
                     }
                 });
                 continueButton.getElement().getStyle().setProperty("background", StyleManager.getPalette().getThemeColor(ThemeColor.foreground, 0.4));
@@ -105,11 +105,11 @@ public class LeaseContextSelectionViewImpl extends SimplePanel implements LeaseC
         }
     }
 
-    private static class LeaseLister extends EntityDataTablePanel<LeaseContextChoiceDTO> {
+    private static class LeaseLister extends DataTablePanel<LeaseContextChoiceDTO> {
 
         public LeaseLister() {
             super(LeaseContextChoiceDTO.class, false, false);
-            getDataTablePanel().setFilteringEnabled(false);
+            setFilteringEnabled(false);
             setDataTableModel(new DataTableModel<LeaseContextChoiceDTO>(//
                     new MemberColumnDescriptor.Builder(proto().leasedUnitAddress()).build(),//
                     new MemberColumnDescriptor.Builder(proto().leaseFrom()).build(),//

@@ -246,13 +246,10 @@ public class CommunicationManager {
         return Persistence.service().query(groupCriteria, AttachLevel.IdOnly);
     }
 
-    @SuppressWarnings("rawtypes")
     private CommunicationEndpoint getCurrentUserAsEndpoint() {
         if (VistaApplication.resident.equals(Context.visit(VistaUserVisit.class).getApplication())
                 || VistaApplication.prospect.equals(Context.visit(VistaUserVisit.class).getApplication())) {
-
             return Persistence.service().retrieve(LeaseParticipant.class, ServerContext.visit(PortalUserVisit.class).getLeaseParticipantId().getPrimaryKey());
-
         } else if (VistaApplication.crm.equals(Context.visit(VistaUserVisit.class).getApplication())) {
             EntityQueryCriteria<Employee> criteria = EntityQueryCriteria.create(Employee.class);
             criteria.add(PropertyCriterion.eq(criteria.proto().user(), Context.visit(VistaUserVisit.class).getCurrentUser()));

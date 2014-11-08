@@ -23,10 +23,10 @@ import com.pyx4j.commons.css.ThemeColor;
 import com.pyx4j.entity.rpc.InMemeoryListService;
 import com.pyx4j.forms.client.ui.datatable.DataTable.ItemSelectionHandler;
 import com.pyx4j.forms.client.ui.datatable.DataTableModel;
+import com.pyx4j.forms.client.ui.datatable.DataTablePanel;
 import com.pyx4j.forms.client.ui.datatable.ListerDataSource;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.backoffice.ui.prime.lister.EntityDataTablePanel;
 import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.Label;
 
@@ -60,7 +60,7 @@ public class ApplicationContextSelectionViewImpl extends SimplePanel implements 
     @Override
     public void populate(List<OnlineApplicationContextChoiceDTO> leaseChoices) {
         lister.setDataSource(new ApplicationDataSource(leaseChoices));
-        lister.populate(0);
+        lister.populate();
     }
 
     class ApplicationContextSelectionGadget extends AbstractGadget<ApplicationContextSelectionViewImpl> {
@@ -70,8 +70,8 @@ public class ApplicationContextSelectionViewImpl extends SimplePanel implements 
 
             lister.setWidth("100%");
 
-            lister.showColumnSelector(false);
-            lister.addActionItem(new Label(i18n.tr("Please select the Application you want to manage and click \"Continue\"")));
+            lister.getDataTable().setColumnSelectorVisible(false);
+            lister.addUpperActionItem(new Label(i18n.tr("Please select the Application you want to manage and click \"Continue\"")));
             setContent(lister);
             setActionsToolbar(new ApplicationContextSelectionToolbar());
         }
@@ -83,7 +83,7 @@ public class ApplicationContextSelectionViewImpl extends SimplePanel implements 
 
                     @Override
                     public void execute() {
-                        OnlineApplicationContextChoiceDTO choice = lister.getSelectedItem();
+                        OnlineApplicationContextChoiceDTO choice = lister.getDataTable().getSelectedItem();
                         if (choice != null) {
                             presenter.setApplicationContext((OnlineApplication) choice.onlineApplication().duplicate());
                         }
@@ -94,7 +94,7 @@ public class ApplicationContextSelectionViewImpl extends SimplePanel implements 
                 lister.addItemSelectionHandler(new ItemSelectionHandler() {
                     @Override
                     public void onChange() {
-                        continueButton.setEnabled(lister.getSelectedItem() != null);
+                        continueButton.setEnabled(lister.getDataTable().getSelectedItem() != null);
                     }
                 });
                 continueButton.getElement().getStyle().setProperty("background", StyleManager.getPalette().getThemeColor(ThemeColor.foreground, 0.4));
@@ -103,11 +103,11 @@ public class ApplicationContextSelectionViewImpl extends SimplePanel implements 
         }
     }
 
-    private static class ApplicationLister extends EntityDataTablePanel<OnlineApplicationContextChoiceDTO> {
+    private static class ApplicationLister extends DataTablePanel<OnlineApplicationContextChoiceDTO> {
 
         public ApplicationLister() {
             super(OnlineApplicationContextChoiceDTO.class, false, false);
-            getDataTablePanel().setFilteringEnabled(false);
+            setFilteringEnabled(false);
             setDataTableModel(new DataTableModel<OnlineApplicationContextChoiceDTO>(
                     new MemberColumnDescriptor.Builder(proto().leaseApplicationUnitAddress()).build()));
         }
