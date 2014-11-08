@@ -63,6 +63,7 @@ public class DataTableTheme extends Theme {
         style = new Style(".", StyleName.DataTableHolder);
         style.addProperty("border-left", "1px solid");
         style.addProperty("border-right", "1px solid");
+        style.addProperty("min-height", "100px");
         style.addProperty("border-left-color", ThemeColor.foreground, 0.4);
         style.addProperty("border-right-color", ThemeColor.foreground, 0.4);
         addStyle(style);
