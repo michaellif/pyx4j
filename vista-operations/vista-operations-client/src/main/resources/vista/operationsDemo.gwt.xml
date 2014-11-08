@@ -4,14 +4,6 @@
 <module rename-to="operations">
     <inherits name='vista.operations'/>
     <set-property name="user.agent" value="safari,gecko1_8,ie9"/>
-    <replace-with class="com.pyx4j.config.shared.ApplicationMode.ProductionMode">
-        <when-type-is class="com.pyx4j.config.shared.ApplicationMode.Mode"/>
-    </replace-with>
-    <replace-with class="com.propertyvista.common.client.config.demo.VistaDemoConfigurationDemo">
-         <when-type-is class="com.propertyvista.shared.config.VistaDemo.VistaDemoConfiguration"/>
-    </replace-with>
-    <replace-with class="com.propertyvista.common.client.config.demo.VistaClientApplicationFeatureDemo">
-         <when-type-is class="com.pyx4j.config.rebind.ClientApplicationFeature"/>
-    </replace-with>
+    <inherits name='com.propertyvista.common.VistaDemoCommonConfig'/>
     <set-configuration-property name="pyx.ElideServiceNamesFromRPC" value="obfuscated" />
 </module>
