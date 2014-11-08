@@ -39,6 +39,7 @@ import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.criterion.Criterion;
 import com.pyx4j.entity.core.criterion.EntityListCriteria;
+import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.entity.core.criterion.PropertyCriterion;
 import com.pyx4j.entity.core.meta.EntityMeta;
 import com.pyx4j.entity.rpc.EntitySearchResult;
@@ -46,8 +47,6 @@ import com.pyx4j.forms.client.images.FolderImages;
 import com.pyx4j.forms.client.ui.IEditableComponentFactory;
 import com.pyx4j.forms.client.ui.datatable.DataTable.ItemSelectionHandler;
 import com.pyx4j.forms.client.ui.datatable.DataTable.ItemZoomInCommand;
-import com.pyx4j.forms.client.ui.datatable.criteria.DataTableCriteriaPanel;
-import com.pyx4j.forms.client.ui.datatable.criteria.ICriteriaForm;
 import com.pyx4j.forms.client.ui.datatable.filter.CriteriaEditableComponentFactory;
 import com.pyx4j.forms.client.ui.datatable.filter.DataTableFilterItem;
 import com.pyx4j.forms.client.ui.datatable.filter.DataTableFilterPanel;
@@ -55,8 +54,11 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.images.WidgetsImages;
+import com.pyx4j.widgets.client.memento.IMementoAware;
+import com.pyx4j.widgets.client.memento.IMementoInput;
+import com.pyx4j.widgets.client.memento.IMementoOutput;
 
-public class DataTablePanel<E extends IEntity> extends FlowPanel implements RequiresResize {
+public class DataTablePanel<E extends IEntity> extends FlowPanel implements RequiresResize, IMementoAware {
 
     private static final Logger log = LoggerFactory.getLogger(DataTablePanel.class);
 
@@ -66,13 +68,13 @@ public class DataTablePanel<E extends IEntity> extends FlowPanel implements Requ
 
     private final DataTable<E> dataTable;
 
+    private int pageNumber = 0;
+
     private DataTableScrollPanel dataTableScroll;
 
     private final DataTableActionsBar topActionsBar;
 
     private final DataTableActionsBar bottomActionsBar;
-
-    private DataTableCriteriaPanel<E> criteriaPanel;
 
     private final DataTableFilterPanel<E> filterPanel;
 
@@ -90,23 +92,16 @@ public class DataTablePanel<E extends IEntity> extends FlowPanel implements Requ
 
     private ListerDataSource<E> dataSource;
 
+    private List<Criterion> externalFilters;
+
     public DataTablePanel(Class<E> clazz) {
-        this(clazz, null, FolderImages.INSTANCE);
+        this(clazz, FolderImages.INSTANCE);
     }
 
-    public DataTablePanel(Class<E> clazz, ICriteriaForm<E> criteriaForm) {
-        this(clazz, criteriaForm, FolderImages.INSTANCE);
-    }
-
-    public DataTablePanel(Class<E> clazz, ICriteriaForm<E> criteriaForm, WidgetsImages images) {
+    public DataTablePanel(Class<E> clazz, WidgetsImages images) {
         this.clazz = clazz;
         this.images = images;
         entityPrototype = EntityFactory.getEntityPrototype(clazz);
-
-        if (criteriaForm != null) {
-            criteriaPanel = new DataTableCriteriaPanel<E>(this, criteriaForm);
-            add(criteriaPanel);
-        }
 
         topActionsBar = new DataTableActionsBar();
         add(topActionsBar);
@@ -204,9 +199,6 @@ public class DataTablePanel<E extends IEntity> extends FlowPanel implements Requ
 
     public void setFilterApplyCommand(Command filterActionCommand) {
         filterPanel.setFilterApplyCommand(filterActionCommand);
-        if (criteriaPanel != null) {
-            criteriaPanel.setFilterApplyCommand(filterActionCommand);
-        }
     }
 
     public void setFirstActionHandler(Command firstActionCommand) {
@@ -282,11 +274,11 @@ public class DataTablePanel<E extends IEntity> extends FlowPanel implements Requ
     }
 
     public int getPageNumber() {
-        if (getDataTableModel() != null) {
-            return getDataTableModel().getPageNumber();
-        } else {
-            throw new RuntimeException("dataTableModel is not set");
-        }
+        return pageNumber;
+    }
+
+    public void setPageNumber(int pageNumber) {
+        this.pageNumber = pageNumber;
     }
 
     public WidgetsImages getImages() {
@@ -294,23 +286,19 @@ public class DataTablePanel<E extends IEntity> extends FlowPanel implements Requ
     }
 
     public List<Criterion> getFilters() {
-        ArrayList<Criterion> filters = new ArrayList<Criterion>();
-        filters.addAll(filterPanel.getFilters());
-        if (criteriaPanel != null && criteriaPanel.getFilters() != null) {
-            filters.addAll(criteriaPanel.getFilters());
-        }
-        return filters;
+        return filterPanel.getFilters();
     }
 
     public void setFilters(List<Criterion> filters) {
-        filterPanel.setFilters(filters);
-        if (criteriaPanel != null) {
-            criteriaPanel.setFilters(filters);
+        if (filters == null || filters.isEmpty()) {
+            filterPanel.resetFilters();
+        } else {
+            filterPanel.setFilters(filters);
         }
     }
 
     public void resetFilters() {
-        filterPanel.resetFilters();
+        setFilters(getDefaultFilters());
     }
 
     public void setFilteringEnabled(boolean enabled) {
@@ -330,12 +318,12 @@ public class DataTablePanel<E extends IEntity> extends FlowPanel implements Requ
         return dataSource;
     }
 
-    public void obtain(final int pageNumber) {
+    public void populate() {
         assert dataSource != null : "dataSource is not installed";
 
         EntityListCriteria<E> criteria = EntityListCriteria.create(clazz);
         criteria.setPageNumber(pageNumber);
-        criteria.setPageSize(getPageSize());
+        criteria.setPageSize(getDataTableModel().getPageSize());
         criteria.setSorts(getDataTableModel().getSortCriteria());
 
         dataSource.obtain(updateCriteria(criteria), new DefaultAsyncCallback<EntitySearchResult<E>>() {
@@ -347,15 +335,54 @@ public class DataTablePanel<E extends IEntity> extends FlowPanel implements Requ
                     @Override
                     public void execute() {
                         populateData(result.getData(), pageNumber, result.hasMoreData(), result.getTotalRows());
-                        onObtainSuccess();
+                        onPopulate();
                     }
                 });
             }
         });
     }
 
-    //TODO Misha rename to populate
-    protected void onObtainSuccess() {
+    protected void onPopulate() {
+    }
+
+    @Override
+    public void saveState(IMementoOutput memento) {
+        memento.write(pageNumber);
+        memento.write(getFilters());
+        memento.write(getDataTableModel().getSortCriteria());
+    }
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public void restoreState(IMementoInput memento) {
+        Integer pageNumber = 0;
+        List<Criterion> filters = getDefaultFilters();
+        List<Sort> sorts = getDefaultSorting();
+
+        if (externalFilters == null) {
+            pageNumber = (Integer) memento.read();
+            filters = (List<Criterion>) memento.read();
+            sorts = (List<Sort>) memento.read();
+        } else if (externalFilters != null) {
+            filters = externalFilters;
+        }
+
+        setFilters(filters);
+        getDataTableModel().setSortCriteria(sorts);
+        pageNumber = pageNumber == null ? 0 : pageNumber;
+
+    }
+
+    public List<Criterion> getDefaultFilters() {
+        return null;
+    }
+
+    public List<Sort> getDefaultSorting() {
+        return null;
+    }
+
+    public void setExternalFilters(List<Criterion> externalFilters) {
+        this.externalFilters = externalFilters;
     }
 
     public EntityListCriteria<E> updateCriteria(EntityListCriteria<E> criteria) {
@@ -370,7 +397,6 @@ public class DataTablePanel<E extends IEntity> extends FlowPanel implements Requ
                 }
             }
         }
-
         return criteria;
     }
 
@@ -384,4 +410,5 @@ public class DataTablePanel<E extends IEntity> extends FlowPanel implements Requ
             dataTable.updateColumnVizibility(getContainerElement().getOffsetWidth(), getMaximumHorizontalScrollPosition() > 0);
         }
     }
+
 }

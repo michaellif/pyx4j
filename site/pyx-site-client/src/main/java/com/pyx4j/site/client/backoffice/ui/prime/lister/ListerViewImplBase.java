@@ -30,7 +30,6 @@ import com.pyx4j.entity.core.criterion.Criterion;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.backoffice.ui.AbstractPane;
-import com.pyx4j.site.client.memento.Memento;
 
 public class ListerViewImplBase<E extends IEntity> extends AbstractPane implements IPrimeLister<E> {
 
@@ -101,16 +100,6 @@ public class ListerViewImplBase<E extends IEntity> extends AbstractPane implemen
     @Override
     public void setSortCriteria(List<Sort> sorts) {
         getLister().setSortCriteria(sorts);
-    }
-
-    @Override
-    public void setMemento(Memento memento) {
-        getLister().setMemento(memento);
-    }
-
-    @Override
-    public Memento getMemento() {
-        return getLister().getMemento();
     }
 
     @Override

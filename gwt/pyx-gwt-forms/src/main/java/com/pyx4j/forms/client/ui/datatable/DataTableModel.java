@@ -201,6 +201,26 @@ public class DataTableModel<E extends IEntity> {
         return sorting;
     }
 
+    public void setSortCriteria(List<Sort> sorts) {
+        setSortColumn(null);
+        setSecondarySortColumn(null);
+
+        if (sorts != null) {
+            if (sorts.size() > 0) {
+                Sort sort = sorts.get(0);
+                ColumnDescriptor column = getColumnDescriptor(sort.getPropertyPath());
+                setSortColumn(column);
+                setSortAscending(!sort.isDescending());
+            }
+            if (sorts.size() > 1) {
+                Sort sort = sorts.get(1);
+                ColumnDescriptor column = getColumnDescriptor(sort.getPropertyPath());
+                setSecondarySortColumn(column);
+                setSecondarySortAscending(!sort.isDescending());
+            }
+        }
+    }
+
     public ArrayList<DataItem<E>> getData() {
         return data;
     }

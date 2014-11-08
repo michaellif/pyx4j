@@ -164,7 +164,7 @@ public abstract class AbstractReportActivity<R extends ReportTemplate> extends A
                 place.define(createDefaultReportMetadata());
             }
         }
-        view.setMemento(MementoManager.retrieveMemento(place, getView()));
+        MementoManager.restoreState(getView(), place);
         onReportMetadataSet((R) place.getReportMetadata());
     }
 
@@ -319,7 +319,7 @@ public abstract class AbstractReportActivity<R extends ReportTemplate> extends A
     }
 
     public void onDiscard() {
-        MementoManager.storeMemento(getView().getMemento(), place, getView());
+        MementoManager.saveState(getView(), place);
         getView().reset();
     }
 

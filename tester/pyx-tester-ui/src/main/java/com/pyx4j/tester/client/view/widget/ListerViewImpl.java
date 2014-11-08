@@ -81,7 +81,7 @@ public class ListerViewImpl extends ScrollPanel implements ListerView {
             }
             setDataTableModel(new DataTableModel<ListerDataItem>(columns));
             setDataSource(new TestListerDataSource(cols, rows));
-            obtain(0);
+            populate(0);
         }
     }
 

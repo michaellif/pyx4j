@@ -21,21 +21,28 @@
 package com.pyx4j.site.client.memento;
 
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
+
+import com.google.gwt.user.client.ui.HasWidgets;
+import com.google.gwt.user.client.ui.IsWidget;
+import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.security.client.BehaviorChangeEvent;
 import com.pyx4j.security.client.BehaviorChangeHandler;
 import com.pyx4j.security.client.ClientSecurityController;
 import com.pyx4j.site.rpc.AppPlace;
+import com.pyx4j.widgets.client.memento.IMementoAware;
 
 public class MementoManager {
 
     @SuppressWarnings("serial")
-    private static final LinkedHashMap<AppPlace, Map<Object, Memento>> cache = new LinkedHashMap<AppPlace, Map<Object, Memento>>() {
+    private static final LinkedHashMap<AppPlace, Map<IsWidget, List<?>>> cache = new LinkedHashMap<AppPlace, Map<IsWidget, List<?>>>() {
 
         @Override
-        protected boolean removeEldestEntry(Map.Entry<AppPlace, Map<Object, Memento>> eldest) {
+        protected boolean removeEldestEntry(Map.Entry<AppPlace, Map<IsWidget, List<?>>> eldest) {
             return size() > 20;
         }
     };
@@ -49,28 +56,54 @@ public class MementoManager {
         });
     }
 
-    public static Memento retrieveMemento(AppPlace place, Object component) {
+    public static void saveState(IsWidget widget, AppPlace place) {
+        if (widget instanceof IMementoAware) {
+            SiteMementoInput mementoInput = new SiteMementoInput();
+            ((IMementoAware) widget).saveState(mementoInput);
+            storeMemento(mementoInput.getState(), place, widget);
+        }
+        if (widget instanceof HasWidgets) {
+            for (Iterator<Widget> iterator = ((HasWidgets) widget).iterator(); iterator.hasNext();) {
+                saveState(iterator.next(), place);
+            }
+        }
+    }
+
+    public static void restoreState(IsWidget widget, AppPlace place) {
+        if (widget instanceof IMementoAware) {
+            List<?> state = retrieveMemento(place, widget);
+            SiteMementoOutput mementoOutput = new SiteMementoOutput(state);
+            ((IMementoAware) widget).restoreState(mementoOutput);
+        }
+        if (widget instanceof HasWidgets) {
+            for (Iterator<Widget> iterator = ((HasWidgets) widget).iterator(); iterator.hasNext();) {
+                restoreState(iterator.next(), place);
+            }
+        }
+    }
+
+    private static void storeMemento(List<?> memento, AppPlace place, IsWidget widget) {
+        assert memento != null;
+        assert place != null;
+        assert widget != null;
+
+        if (!cache.containsKey(place)) {
+            cache.put(place, new HashMap<IsWidget, List<?>>());
+        }
+        cache.get(place).put(widget, memento);
+    }
+
+    private static List<?> retrieveMemento(AppPlace place, IsWidget widget) {
         if (cache.containsKey(place)) {
-            Map<Object, Memento> mementos = cache.get(place);
-            if (mementos.containsKey(component)) {
-                return mementos.get(component);
+            Map<IsWidget, List<?>> mementos = cache.get(place);
+            if (mementos.containsKey(widget)) {
+                return mementos.get(widget);
             }
         }
         return null;
     }
 
-    public static void storeMemento(Memento memento, AppPlace place, Object component) {
-        assert memento != null;
-        assert place != null;
-        assert component != null;
-
-        if (!cache.containsKey(place)) {
-            cache.put(place, new HashMap<Object, Memento>());
-        }
-        cache.get(place).put(component, memento);
-    }
-
-    public static void invalidate() {
+    private static void invalidate() {
         cache.clear();
     }
 

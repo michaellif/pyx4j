@@ -229,7 +229,7 @@ public abstract class EntitySelectorTableDialog<E extends IEntity> extends Abstr
 
         protected void onVersionDisplayModeChange(VersionDisplayMode mode) {
             versionDisplayMode = mode;
-            obtain(0);
+            populate(0);
         }
 
         @Override

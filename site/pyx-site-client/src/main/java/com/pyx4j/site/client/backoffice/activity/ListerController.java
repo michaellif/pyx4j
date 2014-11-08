@@ -131,29 +131,12 @@ public class ListerController<E extends IEntity> implements IPrimeLister.Present
 
     @Override
     public void populate() {
-    }
-
-    // TODO : check this optimization (in retrieveData):
-//    protected boolean isFilterCreateEmptyDataSet() {
-//        return (parentFiltering != null) && (getParent() == null);
-//    }
-
-    @Override
-    public void retrieveData(int pageNumber) {
-
-        // TODO : check this optimization:
-        // Fix/Optimization for new parent Entity. e.g. Do not go to server to get empty list
-//        if (isFilterCreateEmptyDataSet()) {
-//            view.populateData(new Vector<E>(), pageNumber, false, 0);
-//            return;
-//        }
-
-        view.getLister().obtain(pageNumber);
+        view.getLister().populate();
     }
 
     @Override
     public void refresh() {
-        retrieveData(view.getPageNumber());
+        view.getLister().populate();
     }
 
     @Override
@@ -203,7 +186,7 @@ public class ListerController<E extends IEntity> implements IPrimeLister.Present
             @Override
             public void onSuccess(Boolean result) {
                 onDeleted(itemID, true);
-                retrieveData(view.getPageNumber());
+                populate();
             }
 
             @Override
@@ -226,4 +209,5 @@ public class ListerController<E extends IEntity> implements IPrimeLister.Present
     public AppPlace getPlace() {
         return null;
     }
+
 }

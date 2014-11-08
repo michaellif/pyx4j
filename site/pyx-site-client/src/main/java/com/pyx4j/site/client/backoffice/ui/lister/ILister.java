@@ -54,8 +54,6 @@ public interface ILister<E extends IEntity> extends IPane {
 
         void clearPreDefinedFilters();
 
-        void retrieveData(int pageNumber);
-
         void view(Class<? extends CrudAppPlace> openPlaceClass, Key itemID);
 
         void edit(Class<? extends CrudAppPlace> openPlaceClass, Key itemID);
@@ -70,9 +68,6 @@ public interface ILister<E extends IEntity> extends IPane {
         boolean canCreateNewItem();
 
         void delete(Key itemID);
-
-        @Override
-        void refresh();
 
     }
 

@@ -1,6 +1,6 @@
 /*
  * Pyx4j framework
- * Copyright (C) 2008-2011 pyx4j.com.
+ * Copyright (C) 2008-2013 pyx4j.com.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -14,17 +14,18 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on Jul 31, 2012
- * @author ArtyomB
+ * Created on Nov 7, 2014
+ * @author michaellif
  * @version $Id$
  */
-package com.pyx4j.site.client.backoffice.ui.prime.report;
+package com.pyx4j.widgets.client.memento;
 
 import com.google.gwt.user.client.ui.IsWidget;
 
-public interface IReportWidget extends IsWidget {
+public interface IMementoAware extends IsWidget {
 
-    /** has to accept <code>null</code>, which means that the widget must reset it's state, i.e. clear everything */
-    void setData(Object data);
+    void saveState(IMementoOutput memento);
+
+    void restoreState(IMementoInput memento);
 
 }

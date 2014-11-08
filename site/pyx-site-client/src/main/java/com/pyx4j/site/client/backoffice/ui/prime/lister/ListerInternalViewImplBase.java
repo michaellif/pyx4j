@@ -28,7 +28,6 @@ import com.pyx4j.commons.Key;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.criterion.Criterion;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
-import com.pyx4j.site.client.memento.Memento;
 import com.pyx4j.site.client.ui.visor.IVisor;
 
 public class ListerInternalViewImplBase<E extends IEntity> extends SimplePanel implements IPrimeLister<E> {
@@ -98,16 +97,6 @@ public class ListerInternalViewImplBase<E extends IEntity> extends SimplePanel i
     @Override
     public void setSortCriteria(List<Sort> sorts) {
         getLister().setSortCriteria(sorts);
-    }
-
-    @Override
-    public void setMemento(Memento memento) {
-        getLister().setMemento(memento);
-    }
-
-    @Override
-    public Memento getMemento() {
-        return getLister().getMemento();
     }
 
     @Override

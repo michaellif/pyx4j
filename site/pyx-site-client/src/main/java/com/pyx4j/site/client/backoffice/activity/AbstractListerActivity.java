@@ -77,15 +77,15 @@ public abstract class AbstractListerActivity<E extends IEntity> extends ListerCo
         getView().discard();
         getView().getLister().setExternalFilters(externalFilters);
         getView().setPresenter(this);
+        MementoManager.restoreState(getView(), place);
         if (populateOnStart) {
             populate();
         }
         containerWidget.setWidget(getView());
-        getView().setMemento(MementoManager.retrieveMemento(place, getView()));
     }
 
     public void onDiscard() {
-        MementoManager.storeMemento(getView().getMemento(), place, getView());
+        MementoManager.saveState(getView(), place);
         getView().discard();
         getView().setPresenter(null);
 

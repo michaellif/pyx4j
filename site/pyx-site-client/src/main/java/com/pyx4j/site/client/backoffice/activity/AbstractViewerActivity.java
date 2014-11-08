@@ -37,7 +37,7 @@ import com.pyx4j.rpc.shared.VoidSerializable;
 import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.backoffice.ui.prime.form.IViewer;
-import com.pyx4j.site.client.memento.Memento;
+import com.pyx4j.site.client.memento.MementoManager;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
 public abstract class AbstractViewerActivity<E extends IEntity> extends AbstractActivity implements IViewer.Presenter {
@@ -110,10 +110,11 @@ public abstract class AbstractViewerActivity<E extends IEntity> extends Abstract
         view.setPresenter(this);
         populate();
         panel.setWidget(view);
+        MementoManager.restoreState(getView(), place);
     }
 
     protected void onDiscard() {
-        Memento memento = getView().getMemento();
+        MementoManager.saveState(getView(), place);
         this.populatedValue = null;
         view.reset();
         view.setPresenter(null);

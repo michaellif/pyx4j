@@ -1,6 +1,6 @@
 /*
  * Pyx4j framework
- * Copyright (C) 2008-2011 pyx4j.com.
+ * Copyright (C) 2008-2013 pyx4j.com.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -14,26 +14,13 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on May 28, 2013
+ * Created on Nov 7, 2014
  * @author michaellif
  * @version $Id$
  */
-package com.pyx4j.forms.client.ui.datatable.criteria;
+package com.pyx4j.widgets.client.memento;
 
-import java.util.List;
+public interface IMementoOutput {
 
-import com.google.gwt.user.client.ui.HasVisibility;
-import com.google.gwt.user.client.ui.IsWidget;
-
-import com.pyx4j.entity.core.IEntity;
-import com.pyx4j.entity.core.criterion.Criterion;
-
-public interface ICriteriaForm<E extends IEntity> extends IsWidget, HasVisibility {
-
-    void setFilters(List<Criterion> filters);
-
-    List<Criterion> getFilters();
-
-    void resetCriteria();
-
+    void write(Object obj);
 }

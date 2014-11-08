@@ -21,7 +21,6 @@
 package com.pyx4j.site.client.backoffice.ui.prime;
 
 import com.pyx4j.site.client.backoffice.ui.IPane;
-import com.pyx4j.site.client.memento.Memento;
 import com.pyx4j.site.rpc.AppPlace;
 
 public interface IPrimePane extends IPane {
@@ -31,9 +30,5 @@ public interface IPrimePane extends IPane {
         AppPlace getPlace();
 
     }
-
-    void setMemento(Memento memento);
-
-    Memento getMemento();
 
 }

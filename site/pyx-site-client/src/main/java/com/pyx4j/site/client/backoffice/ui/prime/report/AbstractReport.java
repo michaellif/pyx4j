@@ -43,7 +43,6 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.backoffice.ui.PaneTheme;
 import com.pyx4j.site.client.backoffice.ui.prime.AbstractPrimePane;
 import com.pyx4j.site.client.backoffice.ui.prime.form.PrimeEntityForm;
-import com.pyx4j.site.client.memento.Memento;
 import com.pyx4j.site.shared.domain.reports.ExportableReport;
 import com.pyx4j.site.shared.domain.reports.ReportTemplate;
 import com.pyx4j.widgets.client.Button;
@@ -52,12 +51,6 @@ import com.pyx4j.widgets.client.dialog.MessageDialog;
 import com.pyx4j.widgets.client.dialog.OkCancelDialog;
 
 public abstract class AbstractReport<R extends ReportTemplate> extends AbstractPrimePane implements IReport<R> {
-
-    private enum MementoKeys {
-
-        ReportMetadata, HasReportData, HorizontalScrollPosition, VerticalScrollPosition, ReportWidget
-
-    }
 
     private static final I18n i18n = I18n.get(AbstractReport.class);
 
@@ -202,23 +195,6 @@ public abstract class AbstractReport<R extends ReportTemplate> extends AbstractP
     public void onReportMetadataSaveSucceed() {
         MessageDialog.info(i18n.tr("Report settings were saved successfully!"));
         resetCaption();
-    }
-
-    @Override
-    @SuppressWarnings("unchecked")
-    public void setMemento(Memento memento) {
-        R reportMetadata = (R) memento.getObject(MementoKeys.ReportMetadata.name());
-        setReportMetadata(reportMetadata);
-        Object reportMemento = memento.getObject(MementoKeys.ReportWidget.name());
-        reportWidget.setMemento(reportMemento);
-    }
-
-    @Override
-    public Memento getMemento() {
-        Memento memento = new Memento();
-        memento.putObject(MementoKeys.ReportMetadata.name(), reportControlPanel.getReportSettings());
-        memento.putObject(MementoKeys.ReportWidget.name(), reportWidget.getMemento());
-        return memento;
     }
 
     private void populateSettingsForm(R reportSettings) {

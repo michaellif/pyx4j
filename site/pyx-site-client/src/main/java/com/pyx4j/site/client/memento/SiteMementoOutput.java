@@ -1,6 +1,6 @@
 /*
  * Pyx4j framework
- * Copyright (C) 2008-2011 pyx4j.com.
+ * Copyright (C) 2008-2013 pyx4j.com.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -14,21 +14,34 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on Mar 14, 2013
+ * Created on Nov 7, 2014
  * @author michaellif
  * @version $Id$
  */
-package com.pyx4j.site.client.backoffice.ui.prime;
+package com.pyx4j.site.client.memento;
 
-import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel;
-import com.pyx4j.gwt.commons.css.CssVariable;
-import com.pyx4j.gwt.commons.layout.LayoutType;
-import com.pyx4j.site.client.backoffice.ui.AbstractPane;
+import java.util.Iterator;
+import java.util.List;
 
-public class AbstractPrimePane extends AbstractPane implements IPrimePane {
+import com.pyx4j.widgets.client.memento.IMementoInput;
 
-    public AbstractPrimePane() {
-        CssVariable.setVariable(getElement(), DualColumnFluidPanel.CSS_VAR_FORM_COLLAPSING_LAYOUT_TYPE, LayoutType.tabletLandscape.name());
+public class SiteMementoOutput implements IMementoInput {
+
+    private Iterator<?> iterator;
+
+    SiteMementoOutput(List<?> state) {
+        if (state != null) {
+            iterator = state.iterator();
+        }
+    }
+
+    @Override
+    public Object read() {
+        if (iterator != null && iterator.hasNext()) {
+            return iterator.next();
+        } else {
+            return null;
+        }
     }
 
 }

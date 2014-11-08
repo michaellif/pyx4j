@@ -27,7 +27,6 @@ import com.google.gwt.user.client.Command;
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.forms.client.ui.datatable.DataTable.ItemZoomInCommand;
-import com.pyx4j.forms.client.ui.datatable.criteria.ICriteriaForm;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.AppPlaceEntityMapper;
 import com.pyx4j.site.client.ui.visor.IVisor;
@@ -57,11 +56,7 @@ public abstract class AbstractPrimeLister<E extends IEntity> extends EntityDataT
     }
 
     public AbstractPrimeLister(Class<E> clazz, boolean allowAddNew, boolean allowDelete) {
-        this(clazz, null, allowAddNew, allowDelete);
-    }
-
-    public AbstractPrimeLister(Class<E> clazz, ICriteriaForm<E> criteriaForm, boolean allowAddNew, boolean allowDelete) {
-        super(clazz, criteriaForm, allowAddNew, allowDelete);
+        super(clazz, allowAddNew, allowDelete);
         this.itemOpenPlaceClass = AppPlaceEntityMapper.resolvePlaceClass(clazz);
         setItemZoomInCommand(new ItemZoomInCommand<E>() {
             @Override
