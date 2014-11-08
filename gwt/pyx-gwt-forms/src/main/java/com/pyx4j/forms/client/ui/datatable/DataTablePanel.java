@@ -141,6 +141,10 @@ public class DataTablePanel<E extends IEntity> extends FlowPanel implements Requ
         }
     }
 
+    public void addItemSelectionHandler(ItemSelectionHandler handler) {
+        dataTable.addItemSelectionHandler(handler);
+    }
+
     public void setItemZoomInCommand(ItemZoomInCommand<E> itemZoomInCommand) {
         dataTable.setItemZoomInCommand(itemZoomInCommand);
     }

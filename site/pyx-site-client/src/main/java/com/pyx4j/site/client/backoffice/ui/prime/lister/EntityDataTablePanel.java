@@ -20,7 +20,6 @@
  */
 package com.pyx4j.site.client.backoffice.ui.prime.lister;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
@@ -36,20 +35,15 @@ import com.pyx4j.entity.core.criterion.Criterion;
 import com.pyx4j.entity.core.criterion.EntityListCriteria;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.forms.client.ui.IEditableComponentFactory;
-import com.pyx4j.forms.client.ui.datatable.DataTable;
+import com.pyx4j.forms.client.ui.datatable.DataTable.ItemSelectionHandler;
 import com.pyx4j.forms.client.ui.datatable.DataTable.ItemZoomInCommand;
 import com.pyx4j.forms.client.ui.datatable.DataTable.SortChangeHandler;
 import com.pyx4j.forms.client.ui.datatable.DataTableModel;
 import com.pyx4j.forms.client.ui.datatable.DataTablePanel;
 import com.pyx4j.forms.client.ui.datatable.ListerDataSource;
 import com.pyx4j.site.client.backoffice.ui.PaneTheme;
-import com.pyx4j.site.client.backoffice.ui.prime.lister.AbstractPrimeLister.ItemSelectionHandler;
 
 public class EntityDataTablePanel<E extends IEntity> extends ScrollPanel {
-
-    public static enum MementoKeys {
-        page, filterData, sortingData
-    };
 
     public static int PAGESIZE_SMALL = 10;
 
@@ -58,8 +52,6 @@ public class EntityDataTablePanel<E extends IEntity> extends ScrollPanel {
     public static int PAGESIZE_LARGE = 50;
 
     private final DataTablePanel<E> dataTablePanel;
-
-    private List<ItemSelectionHandler<E>> itemSelectionHandlers;
 
     public EntityDataTablePanel(Class<E> clazz) {
         this(clazz, false, false);
@@ -225,22 +217,8 @@ public class EntityDataTablePanel<E extends IEntity> extends ScrollPanel {
         return dataTablePanel.getDataTable().getSelectedItem();
     }
 
-    public void addItemSelectionHandler(ItemSelectionHandler<E> handler) {
-        if (itemSelectionHandlers == null) {
-            itemSelectionHandlers = new ArrayList<>(2);
-        }
-
-        itemSelectionHandlers.add(handler);
-        dataTablePanel.getDataTable().addItemSelectionHandler(new DataTable.ItemSelectionHandler() {
-            @Override
-            public void onChange() {
-                if (itemSelectionHandlers != null) {
-                    for (ItemSelectionHandler<E> handler : itemSelectionHandlers) {
-                        handler.onSelect(dataTablePanel.getDataTable().getSelectedItem());
-                    }
-                }
-            }
-        });
+    public void addItemSelectionHandler(ItemSelectionHandler handler) {
+        dataTablePanel.addItemSelectionHandler(handler);
     }
 
     public Collection<E> getSelectedItems() {

@@ -37,15 +37,9 @@ public abstract class AbstractPrimeLister<E extends IEntity> extends EntityDataT
 
     private static final I18n i18n = I18n.get(AbstractPrimeLister.class);
 
-    public interface ItemSelectionHandler<E> {
-        void onSelect(E selectedItem);
-    }
-
     private Presenter<E> presenter;
 
     private Class<? extends CrudAppPlace> itemOpenPlaceClass;
-
-    private boolean openEditor;
 
     public AbstractPrimeLister(Class<E> clazz) {
         super(clazz);
@@ -62,22 +56,10 @@ public abstract class AbstractPrimeLister<E extends IEntity> extends EntityDataT
             @Override
             public void execute(E item) {
                 if (itemOpenPlaceClass != null) {
-                    if (openEditor) {
-                        getPresenter().edit(itemOpenPlaceClass, item.getPrimaryKey());
-                    } else {
-                        getPresenter().view(itemOpenPlaceClass, item.getPrimaryKey());
-                    }
+                    getPresenter().view(itemOpenPlaceClass, item.getPrimaryKey());
                 }
             }
         });
-    }
-
-    public boolean isOpenEditor() {
-        return openEditor;
-    }
-
-    public void setOpenEditor(boolean openEditor) {
-        this.openEditor = openEditor;
     }
 
     // Actions:
