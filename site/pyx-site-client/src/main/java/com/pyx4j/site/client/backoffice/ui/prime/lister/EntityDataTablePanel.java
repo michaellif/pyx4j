@@ -80,6 +80,16 @@ public class EntityDataTablePanel<E extends IEntity> extends ScrollPanel {
             public List<Sort> getDefaultSorting() {
                 return EntityDataTablePanel.this.getDefaultSorting();
             }
+
+            @Override
+            protected void onItemNew() {
+                EntityDataTablePanel.this.onItemNew();
+            }
+
+            @Override
+            protected void onItemsDelete(Collection<E> items) {
+                EntityDataTablePanel.this.onItemsDelete(items);
+            }
         };
         dataTablePanel.getElement().getStyle().setPaddingBottom(40, Unit.PX);
 
@@ -148,28 +158,11 @@ public class EntityDataTablePanel<E extends IEntity> extends ScrollPanel {
     }
 
     protected void setAllowDelete(boolean allowDelete) {
-        // delete items stuff:
-        if (allowDelete) {
-            dataTablePanel.setDelActionCommand(new Command() {
-                @Override
-                public void execute() {
-                    onItemsDelete(getDataTablePanel().getDataTable().getSelectedItems());
-                }
-            });
-        }
+        dataTablePanel.setDeleteActionEnabled(allowDelete);
     }
 
     protected void setAllowAddNew(boolean allowAddNew) {
-        // new item stuff:
-        if (allowAddNew) {
-            dataTablePanel.setAddActionCommand(new Command() {
-                @Override
-                public void execute() {
-                    onItemNew();
-                }
-            });
-        }
-
+        dataTablePanel.setAddNewActionEnabled(allowAddNew);
     }
 
     public void setDataSource(ListerDataSource<E> dataSource) {

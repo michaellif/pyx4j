@@ -21,6 +21,7 @@
 package com.pyx4j.forms.client.ui.datatable;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -95,10 +96,14 @@ public class DataTablePanel<E extends IEntity> extends FlowPanel implements Requ
     private List<Criterion> externalFilters;
 
     public DataTablePanel(Class<E> clazz) {
-        this(clazz, FolderImages.INSTANCE);
+        this(clazz, false, false);
     }
 
-    public DataTablePanel(Class<E> clazz, WidgetsImages images) {
+    public DataTablePanel(Class<E> clazz, boolean allowAddNew, boolean allowDelete) {
+        this(clazz, FolderImages.INSTANCE, allowAddNew, allowDelete);
+    }
+
+    public DataTablePanel(Class<E> clazz, WidgetsImages images, boolean allowAddNew, boolean allowDelete) {
         this.clazz = clazz;
         this.images = images;
         entityPrototype = EntityFactory.getEntityPrototype(clazz);
@@ -126,6 +131,8 @@ public class DataTablePanel<E extends IEntity> extends FlowPanel implements Requ
         });
         topActionsBar.getToolbar().addItem(filterButton);
 
+        setAddNewActionEnabled(allowAddNew);
+        setDeleteActionEnabled(allowDelete);
     }
 
     public Class<E> getEntityClass() {
@@ -169,28 +176,49 @@ public class DataTablePanel<E extends IEntity> extends FlowPanel implements Requ
         return compFactory;
     }
 
-    public void setAddActionCommand(Command addActionCommand) {
-        topActionsBar.getToolbar().insertItem(
-                addButton = new Button(FolderImages.INSTANCE.addButton().hover(), i18n.tr("New {0}", entityPrototype.getEntityMeta().getCaption()),
-                        addActionCommand), 0);
+    public void setDeleteActionEnabled(boolean enabled) {
+        if (enabled) {
+            topActionsBar.getToolbar().insertItem(delButton = new Button(FolderImages.INSTANCE.delButton().hover(), i18n.tr("Delete Checked"), new Command() {
+                @Override
+                public void execute() {
+                    onItemsDelete(getDataTable().getSelectedItems());
+                }
+            }), 1);
+
+            delButton.setEnabled(getDataTableModel() != null && getDataTableModel().isAnyRowSelected());
+
+            if (getDataTable().getDataTableModel() != null) {
+                getDataTable().getDataTableModel().setMultipleSelection(true);
+            }
+
+            getDataTable().addItemSelectionHandler(new ItemSelectionHandler() {
+                @Override
+                public void onChange() {
+                    delButton.setEnabled(getDataTable().getDataTableModel().isAnyRowSelected());
+                }
+            });
+
+        }
     }
 
-    public void setDelActionCommand(Command delActionCommand) {
-        topActionsBar.getToolbar()
-                .insertItem(delButton = new Button(FolderImages.INSTANCE.delButton().hover(), i18n.tr("Delete Checked"), delActionCommand), 1);
-
-        delButton.setEnabled(getDataTableModel() != null && getDataTableModel().isAnyRowSelected());
-
-        if (getDataTable().getDataTableModel() != null) {
-            getDataTable().getDataTableModel().setMultipleSelection(true);
+    public void setAddNewActionEnabled(boolean enabled) {
+        if (enabled) {
+            topActionsBar.getToolbar().insertItem(
+                    addButton = new Button(FolderImages.INSTANCE.addButton().hover(), i18n.tr("New {0}", entityPrototype.getEntityMeta().getCaption()),
+                            new Command() {
+                                @Override
+                                public void execute() {
+                                    onItemNew();
+                                }
+                            }), 0);
         }
 
-        getDataTable().addItemSelectionHandler(new ItemSelectionHandler() {
-            @Override
-            public void onChange() {
-                delButton.setEnabled(getDataTable().getDataTableModel().isAnyRowSelected());
-            }
-        });
+    }
+
+    protected void onItemNew() {
+    }
+
+    protected void onItemsDelete(Collection<E> items) {
     }
 
     public Button getAddButton() {
