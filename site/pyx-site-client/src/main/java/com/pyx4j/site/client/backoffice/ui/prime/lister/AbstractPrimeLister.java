@@ -85,7 +85,7 @@ public abstract class AbstractPrimeLister<E extends IEntity> extends EntityDataT
     }
 
     @Override
-    protected void onObtainSuccess() {
+    protected void onPopulate() {
         updateActionsState();
     }
 

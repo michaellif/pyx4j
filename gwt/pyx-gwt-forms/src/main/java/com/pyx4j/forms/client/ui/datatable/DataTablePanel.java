@@ -65,6 +65,12 @@ public class DataTablePanel<E extends IEntity> extends FlowPanel implements Requ
 
     private static final I18n i18n = I18n.get(DataTableFilterItem.class);
 
+    public static int PAGESIZE_SMALL = 10;
+
+    public static int PAGESIZE_MEDIUM = 25;
+
+    public static int PAGESIZE_LARGE = 50;
+
     private final E entityPrototype;
 
     private final DataTable<E> dataTable;
@@ -343,6 +349,7 @@ public class DataTablePanel<E extends IEntity> extends FlowPanel implements Requ
     }
 
     public void setDataSource(ListerDataSource<E> dataSource) {
+        setPageNumber(0);
         this.dataSource = dataSource;
     }
 
@@ -415,6 +422,14 @@ public class DataTablePanel<E extends IEntity> extends FlowPanel implements Requ
 
     public void setExternalFilters(List<Criterion> externalFilters) {
         this.externalFilters = externalFilters;
+    }
+
+    public E getSelectedItem() {
+        return dataTable.getSelectedItem();
+    }
+
+    public Collection<E> getSelectedItems() {
+        return dataTable.getSelectedItems();
     }
 
     public EntityListCriteria<E> updateCriteria(EntityListCriteria<E> criteria) {

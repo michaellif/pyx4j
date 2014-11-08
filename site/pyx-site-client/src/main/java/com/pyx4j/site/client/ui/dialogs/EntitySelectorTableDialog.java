@@ -42,12 +42,12 @@ import com.pyx4j.entity.core.criterion.PropertyCriterion;
 import com.pyx4j.entity.rpc.AbstractListCrudService;
 import com.pyx4j.forms.client.ui.CRadioGroupEnum;
 import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
-import com.pyx4j.forms.client.ui.datatable.ListerDataSource;
 import com.pyx4j.forms.client.ui.datatable.DataTable.ItemSelectionHandler;
 import com.pyx4j.forms.client.ui.datatable.DataTableModel;
+import com.pyx4j.forms.client.ui.datatable.DataTablePanel;
+import com.pyx4j.forms.client.ui.datatable.ListerDataSource;
 import com.pyx4j.i18n.annotations.I18n;
 import com.pyx4j.i18n.shared.I18nEnum;
-import com.pyx4j.site.client.backoffice.ui.prime.lister.EntityDataTablePanel;
 import com.pyx4j.site.client.ui.IShowable;
 import com.pyx4j.widgets.client.RadioGroup.Layout;
 
@@ -79,15 +79,15 @@ public abstract class EntitySelectorTableDialog<E extends IEntity> extends Abstr
         this.alreadySelected = (alreadySelected != null ? alreadySelected : Collections.<E> emptyList());
         this.lister = new SelectEntityLister(this.entityClass, isVersioned) {
             @Override
-            protected void onObtainSuccess() {
-                super.onObtainSuccess();
+            protected void onPopulate() {
+                super.onPopulate();
                 EntitySelectorTableDialog.super.show();
             }
         };
-        lister.getDataTablePanel().getDataTable().addItemSelectionHandler(new ItemSelectionHandler() {
+        lister.getDataTable().addItemSelectionHandler(new ItemSelectionHandler() {
             @Override
             public void onChange() {
-                getOkButton().setEnabled(lister.getDataTablePanel().getDataTable().getDataTableModel().isAnyRowSelected());
+                getOkButton().setEnabled(lister.getDataTable().getDataTableModel().isAnyRowSelected());
             }
         });
 
@@ -184,7 +184,7 @@ public abstract class EntitySelectorTableDialog<E extends IEntity> extends Abstr
         }
     }
 
-    protected class SelectEntityLister extends EntityDataTablePanel<E> {
+    protected class SelectEntityLister extends DataTablePanel<E> {
 
         private VersionDisplayMode versionDisplayMode = VersionDisplayMode.displayFinal;
 
@@ -203,9 +203,9 @@ public abstract class EntitySelectorTableDialog<E extends IEntity> extends Abstr
         public SelectEntityLister(Class<E> clazz, boolean isVersioned) {
             super(clazz);
 
-            getDataTablePanel().setPageSizeOptions(Arrays.asList(new Integer[] { PAGESIZE_SMALL, PAGESIZE_MEDIUM }));
+            setPageSizeOptions(Arrays.asList(new Integer[] { PAGESIZE_SMALL, PAGESIZE_MEDIUM }));
             if (isVersioned) {
-                getDataTablePanel().addUpperActionItem(displayModeButton.asWidget());
+                addUpperActionItem(displayModeButton.asWidget());
             }
 
             DataTableModel<E> dataTableModel = new DataTableModel<E>(EntitySelectorTableDialog.this.defineColumnDescriptors());
@@ -229,11 +229,12 @@ public abstract class EntitySelectorTableDialog<E extends IEntity> extends Abstr
 
         protected void onVersionDisplayModeChange(VersionDisplayMode mode) {
             versionDisplayMode = mode;
-            populate(0);
+            setPageNumber(0);
+            populate();
         }
 
         @Override
-        protected EntityListCriteria<E> updateCriteria(EntityListCriteria<E> criteria) {
+        public EntityListCriteria<E> updateCriteria(EntityListCriteria<E> criteria) {
             switch (getVersionDisplayMode()) {
             case displayDraft:
                 criteria.setVersionedCriteria(VersionedCriteria.onlyDraft);

@@ -45,12 +45,6 @@ import com.pyx4j.site.client.backoffice.ui.PaneTheme;
 
 public class EntityDataTablePanel<E extends IEntity> extends ScrollPanel {
 
-    public static int PAGESIZE_SMALL = 10;
-
-    public static int PAGESIZE_MEDIUM = 25;
-
-    public static int PAGESIZE_LARGE = 50;
-
     private final DataTablePanel<E> dataTablePanel;
 
     public EntityDataTablePanel(Class<E> clazz) {
@@ -67,7 +61,7 @@ public class EntityDataTablePanel<E extends IEntity> extends ScrollPanel {
         dataTablePanel = new DataTablePanel<E>(clazz) {
             @Override
             protected void onPopulate() {
-                EntityDataTablePanel.this.onObtainSuccess();
+                EntityDataTablePanel.this.onPopulate();
                 super.onPopulate();
             }
 
@@ -142,7 +136,8 @@ public class EntityDataTablePanel<E extends IEntity> extends ScrollPanel {
 
         showColumnSelector(true);
 
-        dataTablePanel.setPageSizeOptions(Arrays.asList(new Integer[] { PAGESIZE_SMALL, PAGESIZE_MEDIUM, PAGESIZE_LARGE }));
+        dataTablePanel.setPageSizeOptions(Arrays.asList(new Integer[] { DataTablePanel.PAGESIZE_SMALL, DataTablePanel.PAGESIZE_MEDIUM,
+                DataTablePanel.PAGESIZE_LARGE }));
 
         dataTablePanel.setStyleName(PaneTheme.StyleName.ListerListPanel.name());
 
@@ -182,7 +177,7 @@ public class EntityDataTablePanel<E extends IEntity> extends ScrollPanel {
         dataTablePanel.populate();
     }
 
-    protected void onObtainSuccess() {
+    protected void onPopulate() {
     }
 
     protected void onItemNew() {
@@ -192,7 +187,7 @@ public class EntityDataTablePanel<E extends IEntity> extends ScrollPanel {
     }
 
     public void setDataTableModel(DataTableModel<E> dataTableModel) {
-        dataTableModel.setPageSize(ApplicationMode.isDevelopment() ? PAGESIZE_SMALL : PAGESIZE_MEDIUM);
+        dataTableModel.setPageSize(ApplicationMode.isDevelopment() ? DataTablePanel.PAGESIZE_SMALL : DataTablePanel.PAGESIZE_MEDIUM);
         dataTablePanel.setDataTableModel(dataTableModel);
     }
 

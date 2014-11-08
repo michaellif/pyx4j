@@ -33,11 +33,11 @@ import com.pyx4j.entity.rpc.EntitySearchResult;
 import com.pyx4j.forms.client.ui.AsyncLoadingHandler;
 import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.forms.client.ui.datatable.DataTableModel;
+import com.pyx4j.forms.client.ui.datatable.DataTablePanel;
 import com.pyx4j.forms.client.ui.datatable.ListerDataSource;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.forms.client.ui.panels.FormPanel;
-import com.pyx4j.site.client.backoffice.ui.prime.lister.EntityDataTablePanel;
 import com.pyx4j.tester.client.domain.test.DomainFactory;
 import com.pyx4j.tester.client.domain.test.ListerDataItem;
 
@@ -61,7 +61,7 @@ public class ListerViewImpl extends ScrollPanel implements ListerView {
         add(formPanel);
     }
 
-    class TestLister extends EntityDataTablePanel<ListerDataItem> {
+    class TestLister extends DataTablePanel<ListerDataItem> {
         final int MAX_COLS = 10;
 
         public TestLister() {
@@ -81,7 +81,7 @@ public class ListerViewImpl extends ScrollPanel implements ListerView {
             }
             setDataTableModel(new DataTableModel<ListerDataItem>(columns));
             setDataSource(new TestListerDataSource(cols, rows));
-            populate(0);
+            populate();
         }
     }
 
