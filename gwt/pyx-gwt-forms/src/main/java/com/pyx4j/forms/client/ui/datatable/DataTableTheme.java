@@ -63,7 +63,7 @@ public class DataTableTheme extends Theme {
         style = new Style(".", StyleName.DataTableHolder);
         style.addProperty("border-left", "1px solid");
         style.addProperty("border-right", "1px solid");
-        style.addProperty("min-height", "100px");
+        style.addProperty("min-height", "60px");
         style.addProperty("border-left-color", ThemeColor.foreground, 0.4);
         style.addProperty("border-right-color", ThemeColor.foreground, 0.4);
         addStyle(style);
@@ -71,6 +71,7 @@ public class DataTableTheme extends Theme {
         style = new Style(".", StyleName.DataTableHeader);
         style.addProperty("background-color", ThemeColor.foreground, 0.4);
         style.addProperty("color", ThemeColor.foreground, 0);
+        style.addProperty("line-height", "1.5em");
         style.addProperty("font-weight", "bold");
         style.addProperty("cursor", "pointer");
         addStyle(style);
@@ -104,12 +105,17 @@ public class DataTableTheme extends Theme {
         style.addProperty("line-height", "1.5em");
         addStyle(style);
 
+        style = new Style(".", StyleName.DataTableRow, " td");
+        style.addProperty("border-bottom", "1px solid");
+        style.addProperty("border-color", ThemeColor.foreground, 0.1);
+        addStyle(style);
+
         style = new Style(".", StyleName.DataTableRow, "-", StyleDependent.even);
         style.addProperty("background-color", ThemeColor.foreground, 0.05);
         addStyle(style);
 
         style = new Style(".", StyleName.DataTableRow, "-", StyleDependent.odd);
-        style.addProperty("background-color", "white");
+        style.addProperty("background-color", ThemeColor.foreground, 0.01);
         addStyle(style);
 
         style = new Style(".", StyleName.DataTableRow, "-", StyleDependent.nodetails);
