@@ -22,7 +22,7 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.backoffice.activity.AbstractVisorController;
 import com.pyx4j.site.client.backoffice.activity.SecureListerController;
 import com.pyx4j.site.client.backoffice.ui.IPane;
-import com.pyx4j.site.client.backoffice.ui.prime.lister.IPrimeLister.Presenter;
+import com.pyx4j.site.client.backoffice.ui.prime.lister.ILister.Presenter;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
 import com.propertyvista.crm.rpc.services.maintenance.MaintenanceCrudService;

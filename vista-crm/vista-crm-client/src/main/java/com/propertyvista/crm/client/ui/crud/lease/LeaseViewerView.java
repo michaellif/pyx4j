@@ -19,7 +19,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.commons.UserRuntimeException;
-import com.pyx4j.site.client.backoffice.ui.prime.lister.IPrimeLister;
+import com.pyx4j.site.client.backoffice.ui.prime.lister.ILister;
 
 import com.propertyvista.crm.client.ui.crud.lease.common.LeaseViewerViewBase;
 import com.propertyvista.crm.rpc.dto.billing.BillDataDTO;
@@ -87,13 +87,13 @@ public interface LeaseViewerView extends LeaseViewerViewBase<LeaseDTO> {
         List<LeaseParticipant<?>> getAllLeaseParticipants();
     }
 
-    IPrimeLister<DepositLifecycleDTO> getDepositListerView();
+    ILister<DepositLifecycleDTO> getDepositListerView();
 
-    IPrimeLister<BillDataDTO> getBillListerView();
+    ILister<BillDataDTO> getBillListerView();
 
-    IPrimeLister<LeaseAdjustment> getLeaseAdjustmentListerView();
+    ILister<LeaseAdjustment> getLeaseAdjustmentListerView();
 
-    IPrimeLister<MaintenanceRequestDTO> getMaintenanceListerView();
+    ILister<MaintenanceRequestDTO> getMaintenanceListerView();
 
     void reportSendMailActionResult(String message);
 

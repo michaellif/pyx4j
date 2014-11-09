@@ -13,13 +13,13 @@
  */
 package com.propertyvista.operations.client.ui.crud.simulator.dbp;
 
-import com.pyx4j.site.client.backoffice.ui.prime.lister.IPrimeLister;
+import com.pyx4j.site.client.backoffice.ui.prime.lister.ILister;
 
 import com.propertyvista.operations.domain.eft.dbp.simulator.DirectDebitSimFile;
 
-public interface DirectDebitSimFileListerView extends IPrimeLister<DirectDebitSimFile> {
+public interface DirectDebitSimFileListerView extends ILister<DirectDebitSimFile> {
 
-    interface Presenter extends IPrimeLister.Presenter<DirectDebitSimFile> {
+    interface Presenter extends ILister.Presenter<DirectDebitSimFile> {
 
     }
 }

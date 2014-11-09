@@ -16,13 +16,13 @@ package com.propertyvista.crm.client.ui.crud.communication.selector;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.rpc.AbstractListCrudService;
 import com.pyx4j.site.client.backoffice.activity.ListerController;
-import com.pyx4j.site.client.backoffice.ui.prime.lister.IPrimeLister;
+import com.pyx4j.site.client.backoffice.ui.prime.lister.ILister;
 
 import com.propertyvista.domain.company.Portfolio;
 
 public class SelectorDialogPortfolioListerController extends ListerController<Portfolio> {
 
-    public SelectorDialogPortfolioListerController(IPrimeLister<Portfolio> view, AbstractListCrudService<Portfolio> service) {
+    public SelectorDialogPortfolioListerController(ILister<Portfolio> view, AbstractListCrudService<Portfolio> service) {
         super(Portfolio.class, view, service);
         this.populate();
     }

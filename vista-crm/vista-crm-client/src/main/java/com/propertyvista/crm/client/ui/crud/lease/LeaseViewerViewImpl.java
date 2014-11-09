@@ -46,7 +46,7 @@ import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.security.shared.ActionPermission;
 import com.pyx4j.site.client.AppSite;
-import com.pyx4j.site.client.backoffice.ui.prime.lister.IPrimeLister;
+import com.pyx4j.site.client.backoffice.ui.prime.lister.ILister;
 import com.pyx4j.site.client.ui.dialogs.EntitySelectorListDialog;
 import com.pyx4j.site.client.ui.dialogs.SelectEnumDialog;
 import com.pyx4j.site.rpc.CrudAppPlace;
@@ -103,13 +103,13 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
 
     private static final I18n i18n = I18n.get(LeaseViewerViewImpl.class);
 
-    private final IPrimeLister<DepositLifecycleDTO> depositLister;
+    private final ILister<DepositLifecycleDTO> depositLister;
 
-    private final IPrimeLister<BillDataDTO> billLister;
+    private final ILister<BillDataDTO> billLister;
 
-    private final IPrimeLister<LeaseAdjustment> adjustmentLister;
+    private final ILister<LeaseAdjustment> adjustmentLister;
 
-    private final IPrimeLister<MaintenanceRequestDTO> maintenanceLister;
+    private final ILister<MaintenanceRequestDTO> maintenanceLister;
 
     private final MenuItem viewFutureTerm;
 
@@ -647,22 +647,22 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
     }
 
     @Override
-    public IPrimeLister<DepositLifecycleDTO> getDepositListerView() {
+    public ILister<DepositLifecycleDTO> getDepositListerView() {
         return depositLister;
     }
 
     @Override
-    public IPrimeLister<BillDataDTO> getBillListerView() {
+    public ILister<BillDataDTO> getBillListerView() {
         return billLister;
     }
 
     @Override
-    public IPrimeLister<LeaseAdjustment> getLeaseAdjustmentListerView() {
+    public ILister<LeaseAdjustment> getLeaseAdjustmentListerView() {
         return adjustmentLister;
     }
 
     @Override
-    public IPrimeLister<MaintenanceRequestDTO> getMaintenanceListerView() {
+    public ILister<MaintenanceRequestDTO> getMaintenanceListerView() {
         return maintenanceLister;
     }
 

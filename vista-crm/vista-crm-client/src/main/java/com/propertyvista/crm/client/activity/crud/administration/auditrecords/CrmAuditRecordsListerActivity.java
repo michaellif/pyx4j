@@ -17,7 +17,7 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.place.shared.Place;
 
 import com.pyx4j.site.client.backoffice.activity.AbstractListerActivity;
-import com.pyx4j.site.client.backoffice.ui.prime.lister.IPrimeLister;
+import com.pyx4j.site.client.backoffice.ui.prime.lister.ILister;
 
 import com.propertyvista.crm.client.CrmSite;
 import com.propertyvista.crm.client.ui.crud.administration.auditrecord.CrmAuditRecordListerView;
@@ -27,7 +27,7 @@ import com.propertyvista.dto.AuditRecordDTO;
 public class CrmAuditRecordsListerActivity extends AbstractListerActivity<AuditRecordDTO> {
 
     public CrmAuditRecordsListerActivity(Place place) {
-        super(AuditRecordDTO.class, place, (IPrimeLister<AuditRecordDTO>)  CrmSite.getViewFactory().getView(CrmAuditRecordListerView.class), GWT
+        super(AuditRecordDTO.class, place, (ILister<AuditRecordDTO>)  CrmSite.getViewFactory().getView(CrmAuditRecordListerView.class), GWT
                         .<CrmAuditRecordsListerService> create(CrmAuditRecordsListerService.class));
     }
 

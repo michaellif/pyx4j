@@ -33,7 +33,7 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.rpc.shared.VoidSerializable;
 import com.pyx4j.site.client.ReportDialog;
-import com.pyx4j.site.client.backoffice.ui.prime.lister.IPrimeLister.Presenter;
+import com.pyx4j.site.client.backoffice.ui.prime.lister.ILister.Presenter;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
 import com.propertyvista.common.client.ui.components.UploadDialogBase;

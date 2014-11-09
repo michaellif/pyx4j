@@ -13,7 +13,7 @@
  */
 package com.propertyvista.operations.client.ui.crud.fundstransfer.fundsreconciliationfile;
 
-import com.pyx4j.site.client.backoffice.ui.prime.lister.IPrimeLister;
+import com.pyx4j.site.client.backoffice.ui.prime.lister.ILister;
 
 import com.propertyvista.operations.client.ui.crud.OperationsViewerViewImplBase;
 import com.propertyvista.operations.rpc.dto.FundsReconciliationFileDTO;
@@ -22,7 +22,7 @@ import com.propertyvista.operations.rpc.dto.FundsReconciliationSummaryDTO;
 public class FundsReconciliationFileViewerViewImpl extends OperationsViewerViewImplBase<FundsReconciliationFileDTO> implements
         FundsReconciliationFileViewerView {
 
-    private final IPrimeLister<FundsReconciliationSummaryDTO> summaryLister;
+    private final ILister<FundsReconciliationSummaryDTO> summaryLister;
 
     public FundsReconciliationFileViewerViewImpl() {
         super(true);
@@ -31,7 +31,7 @@ public class FundsReconciliationFileViewerViewImpl extends OperationsViewerViewI
     }
 
     @Override
-    public IPrimeLister<FundsReconciliationSummaryDTO> getSummaryListerView() {
+    public ILister<FundsReconciliationSummaryDTO> getSummaryListerView() {
         return summaryLister;
     }
 }

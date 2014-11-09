@@ -18,7 +18,7 @@ import com.google.gwt.core.client.GWT;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.rpc.shared.VoidSerializable;
-import com.pyx4j.site.client.backoffice.ui.prime.lister.IPrimeLister;
+import com.pyx4j.site.client.backoffice.ui.prime.lister.ILister;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
 import com.propertyvista.crm.client.CrmSite;
@@ -30,7 +30,7 @@ import com.propertyvista.domain.tenant.lead.Appointment;
 
 public class AppointmentViewerActivity extends CrmViewerActivity<Appointment> implements AppointmentViewerView.Presenter {
 
-    private final IPrimeLister.Presenter<ShowingDTO> showingsLister;
+    private final ILister.Presenter<ShowingDTO> showingsLister;
 
     public AppointmentViewerActivity(CrudAppPlace place) {
         super(Appointment.class, place, CrmSite.getViewFactory().getView(AppointmentViewerView.class), GWT

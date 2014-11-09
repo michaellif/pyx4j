@@ -13,13 +13,13 @@
  */
 package com.propertyvista.crm.client.ui.crud.lease;
 
-import com.pyx4j.site.client.backoffice.ui.prime.lister.IPrimeLister;
+import com.pyx4j.site.client.backoffice.ui.prime.lister.ILister;
 
 import com.propertyvista.dto.LeaseDTO;
 
-public interface LeaseListerView extends IPrimeLister<LeaseDTO> {
+public interface LeaseListerView extends ILister<LeaseDTO> {
 
-    public interface Presenter extends IPrimeLister.Presenter<LeaseDTO> {
+    public interface Presenter extends ILister.Presenter<LeaseDTO> {
 
         void uploadPadFile();
 

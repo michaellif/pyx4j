@@ -13,10 +13,10 @@
  */
 package com.propertyvista.crm.client.ui.crud.lease.financial.deposit;
 
-import com.pyx4j.site.client.backoffice.ui.prime.lister.IPrimeLister;
+import com.pyx4j.site.client.backoffice.ui.prime.lister.ILister;
 
 import com.propertyvista.dto.DepositLifecycleDTO;
 
-public interface DepositListerPresenter extends IPrimeLister.Presenter<DepositLifecycleDTO> {
+public interface DepositListerPresenter extends ILister.Presenter<DepositLifecycleDTO> {
 
 }

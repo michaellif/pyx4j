@@ -38,7 +38,7 @@ import com.pyx4j.site.client.AppPlaceEntityMapper;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.ReportDialog;
 import com.pyx4j.site.client.backoffice.activity.SecureListerController;
-import com.pyx4j.site.client.backoffice.ui.prime.lister.IPrimeLister;
+import com.pyx4j.site.client.backoffice.ui.prime.lister.ILister;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
 import com.propertyvista.crm.client.CrmSite;
@@ -79,13 +79,13 @@ public class LeaseViewerActivity extends LeaseViewerActivityBase<LeaseDTO> imple
 
     private static final I18n i18n = I18n.get(LeaseViewerActivity.class);
 
-    private final IPrimeLister.Presenter<DepositLifecycleDTO> depositLister;
+    private final ILister.Presenter<DepositLifecycleDTO> depositLister;
 
-    private final IPrimeLister.Presenter<BillDataDTO> billLister;
+    private final ILister.Presenter<BillDataDTO> billLister;
 
-    private final IPrimeLister.Presenter<LeaseAdjustment> leaseAdjustmentLister;
+    private final ILister.Presenter<LeaseAdjustment> leaseAdjustmentLister;
 
-    private final IPrimeLister.Presenter<MaintenanceRequestDTO> maintenanceLister;
+    private final ILister.Presenter<MaintenanceRequestDTO> maintenanceLister;
 
     private boolean isFormerLease = false;
 

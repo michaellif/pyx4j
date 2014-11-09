@@ -18,14 +18,14 @@ import com.google.gwt.place.shared.Place;
 import com.pyx4j.entity.core.criterion.EntityFiltersBuilder;
 import com.pyx4j.entity.rpc.AbstractListCrudService;
 import com.pyx4j.site.client.backoffice.activity.AbstractListerActivity;
-import com.pyx4j.site.client.backoffice.ui.prime.lister.IPrimeLister;
+import com.pyx4j.site.client.backoffice.ui.prime.lister.ILister;
 import com.pyx4j.site.rpc.AppPlace;
 
 import com.propertyvista.dto.LeaseDTO;
 
 public class LeaseListerActivityBase<DTO extends LeaseDTO> extends AbstractListerActivity<DTO> {
 
-    public LeaseListerActivityBase(Place place, IPrimeLister<DTO> view, AbstractListCrudService<DTO> service, Class<DTO> entityClass) {
+    public LeaseListerActivityBase(Place place, ILister<DTO> view, AbstractListCrudService<DTO> service, Class<DTO> entityClass) {
         super(entityClass, place, view, service);
     }
 

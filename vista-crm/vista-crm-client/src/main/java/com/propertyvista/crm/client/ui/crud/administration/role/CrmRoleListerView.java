@@ -13,10 +13,10 @@
  */
 package com.propertyvista.crm.client.ui.crud.administration.role;
 
-import com.pyx4j.site.client.backoffice.ui.prime.lister.IPrimeLister;
+import com.pyx4j.site.client.backoffice.ui.prime.lister.ILister;
 
 import com.propertyvista.domain.security.CrmRole;
 
-public interface CrmRoleListerView extends IPrimeLister<CrmRole> {
+public interface CrmRoleListerView extends ILister<CrmRole> {
 
 }

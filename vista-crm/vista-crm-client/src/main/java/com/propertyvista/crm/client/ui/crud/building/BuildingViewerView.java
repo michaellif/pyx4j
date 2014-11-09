@@ -19,7 +19,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.rpc.shared.VoidSerializable;
 import com.pyx4j.site.client.backoffice.ui.prime.form.IViewer;
-import com.pyx4j.site.client.backoffice.ui.prime.lister.IPrimeLister;
+import com.pyx4j.site.client.backoffice.ui.prime.lister.ILister;
 
 import com.propertyvista.crm.client.visor.communityevent.CommunityEventVisorController;
 import com.propertyvista.crm.client.visor.dashboard.IDashboardVisorController;
@@ -59,27 +59,27 @@ public interface BuildingViewerView extends IViewer<BuildingDTO> {
         void exportBuildingData();
     }
 
-    IPrimeLister<FloorplanDTO> getFloorplanListerView();
+    ILister<FloorplanDTO> getFloorplanListerView();
 
-    IPrimeLister<AptUnitDTO> getUnitListerView();
+    ILister<AptUnitDTO> getUnitListerView();
 
-    IPrimeLister<ElevatorDTO> getElevatorListerView();
+    ILister<ElevatorDTO> getElevatorListerView();
 
-    IPrimeLister<BoilerDTO> getBoilerListerView();
+    ILister<BoilerDTO> getBoilerListerView();
 
-    IPrimeLister<RoofDTO> getRoofListerView();
+    ILister<RoofDTO> getRoofListerView();
 
-    IPrimeLister<ParkingDTO> getParkingListerView();
+    ILister<ParkingDTO> getParkingListerView();
 
-    IPrimeLister<LockerAreaDTO> getLockerAreaListerView();
+    ILister<LockerAreaDTO> getLockerAreaListerView();
 
-    IPrimeLister<Service> getServiceListerView();
+    ILister<Service> getServiceListerView();
 
-    IPrimeLister<Feature> getFeatureListerView();
+    ILister<Feature> getFeatureListerView();
 
-    IPrimeLister<Concession> getConcessionListerView();
+    ILister<Concession> getConcessionListerView();
 
-    IPrimeLister<BillingCycleDTO> getBillingCycleListerView();
+    ILister<BillingCycleDTO> getBillingCycleListerView();
 
     void selectMerchantAccount();
 }

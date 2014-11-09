@@ -17,11 +17,11 @@ import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.rpc.AbstractListCrudService;
 import com.pyx4j.site.client.backoffice.activity.ListerController;
 import com.pyx4j.site.client.backoffice.activity.SecureListerController;
-import com.pyx4j.site.client.backoffice.ui.prime.lister.IPrimeLister;
+import com.pyx4j.site.client.backoffice.ui.prime.lister.ILister;
 
 public class ListerControllerFactory {
 
-    public static <E extends IEntity> ListerController<E> create(final Class<E> entityClass, IPrimeLister<E> view, AbstractListCrudService<E> service) {
+    public static <E extends IEntity> ListerController<E> create(final Class<E> entityClass, ILister<E> view, AbstractListCrudService<E> service) {
         return new SecureListerController<E>(entityClass, view, service);
     }
 }

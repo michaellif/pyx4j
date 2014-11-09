@@ -26,7 +26,7 @@ import com.pyx4j.rpc.shared.VoidSerializable;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.backoffice.activity.SecureListerController;
 import com.pyx4j.site.client.backoffice.ui.prime.form.IViewer;
-import com.pyx4j.site.client.backoffice.ui.prime.lister.IPrimeLister;
+import com.pyx4j.site.client.backoffice.ui.prime.lister.ILister;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
 import com.propertyvista.crm.client.activity.crud.CrmViewerActivity;
@@ -49,7 +49,7 @@ public abstract class LeaseViewerActivityBase<DTO extends LeaseDTO> extends CrmV
 
     private static final I18n i18n = I18n.get(LeaseViewerActivityBase.class);
 
-    private final IPrimeLister.Presenter<PaymentRecordDTO> paymentLister;
+    private final ILister.Presenter<PaymentRecordDTO> paymentLister;
 
     private final ReturnBehaviour returnBehaviour;
 

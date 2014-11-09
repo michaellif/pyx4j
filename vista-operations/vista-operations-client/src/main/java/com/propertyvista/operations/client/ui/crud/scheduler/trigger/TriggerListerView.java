@@ -13,10 +13,10 @@
  */
 package com.propertyvista.operations.client.ui.crud.scheduler.trigger;
 
-import com.pyx4j.site.client.backoffice.ui.prime.lister.IPrimeLister;
+import com.pyx4j.site.client.backoffice.ui.prime.lister.ILister;
 
 import com.propertyvista.operations.rpc.dto.TriggerDTO;
 
-public interface TriggerListerView extends IPrimeLister<TriggerDTO> {
+public interface TriggerListerView extends ILister<TriggerDTO> {
 
 }

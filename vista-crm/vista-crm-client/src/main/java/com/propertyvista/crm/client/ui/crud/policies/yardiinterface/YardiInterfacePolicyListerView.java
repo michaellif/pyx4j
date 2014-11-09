@@ -13,10 +13,10 @@
  */
 package com.propertyvista.crm.client.ui.crud.policies.yardiinterface;
 
-import com.pyx4j.site.client.backoffice.ui.prime.lister.IPrimeLister;
+import com.pyx4j.site.client.backoffice.ui.prime.lister.ILister;
 
 import com.propertyvista.domain.policy.dto.YardiInterfacePolicyDTO;
 
-public interface YardiInterfacePolicyListerView extends IPrimeLister<YardiInterfacePolicyDTO> {
+public interface YardiInterfacePolicyListerView extends ILister<YardiInterfacePolicyDTO> {
 
 }

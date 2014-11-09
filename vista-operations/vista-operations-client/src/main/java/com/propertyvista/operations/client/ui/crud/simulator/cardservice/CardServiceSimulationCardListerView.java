@@ -13,10 +13,10 @@
  */
 package com.propertyvista.operations.client.ui.crud.simulator.cardservice;
 
-import com.pyx4j.site.client.backoffice.ui.prime.lister.IPrimeLister;
+import com.pyx4j.site.client.backoffice.ui.prime.lister.ILister;
 
 import com.propertyvista.operations.domain.eft.cards.simulator.CardServiceSimulationCard;
 
-public interface CardServiceSimulationCardListerView extends IPrimeLister<CardServiceSimulationCard> {
+public interface CardServiceSimulationCardListerView extends ILister<CardServiceSimulationCard> {
 
 }

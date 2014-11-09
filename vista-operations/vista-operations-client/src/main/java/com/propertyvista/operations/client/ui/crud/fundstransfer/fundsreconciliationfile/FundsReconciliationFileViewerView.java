@@ -14,12 +14,12 @@
 package com.propertyvista.operations.client.ui.crud.fundstransfer.fundsreconciliationfile;
 
 import com.pyx4j.site.client.backoffice.ui.prime.form.IViewer;
-import com.pyx4j.site.client.backoffice.ui.prime.lister.IPrimeLister;
+import com.pyx4j.site.client.backoffice.ui.prime.lister.ILister;
 
 import com.propertyvista.operations.rpc.dto.FundsReconciliationFileDTO;
 import com.propertyvista.operations.rpc.dto.FundsReconciliationSummaryDTO;
 
 public interface FundsReconciliationFileViewerView extends IViewer<FundsReconciliationFileDTO> {
 
-    IPrimeLister<FundsReconciliationSummaryDTO> getSummaryListerView();
+    ILister<FundsReconciliationSummaryDTO> getSummaryListerView();
 }

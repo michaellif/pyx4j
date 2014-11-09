@@ -13,10 +13,10 @@
  */
 package com.propertyvista.crm.client.ui.crud.policies.autopaychangepolicy;
 
-import com.pyx4j.site.client.backoffice.ui.prime.lister.IPrimeLister;
+import com.pyx4j.site.client.backoffice.ui.prime.lister.ILister;
 
 import com.propertyvista.domain.policy.dto.AutoPayPolicyDTO;
 
-public interface AutoPayChangePolicyListerView extends IPrimeLister<AutoPayPolicyDTO> {
+public interface AutoPayChangePolicyListerView extends ILister<AutoPayPolicyDTO> {
 
 }

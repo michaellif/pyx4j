@@ -23,10 +23,10 @@ import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.criterion.Criterion;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.site.client.backoffice.ui.prime.lister.EntityDataTablePanel;
-import com.pyx4j.site.client.backoffice.ui.prime.lister.IPrimeLister;
+import com.pyx4j.site.client.backoffice.ui.prime.lister.ILister;
 import com.pyx4j.site.client.ui.visor.IVisor;
 
-public class ListerViewImplBasePanel<E extends IEntity> extends DockPanel implements IPrimeLister<E> {
+public class ListerViewImplBasePanel<E extends IEntity> extends DockPanel implements ILister<E> {
 
     protected EntityDataTablePanel<E> lister = null;
 

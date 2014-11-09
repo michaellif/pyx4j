@@ -13,10 +13,10 @@
  */
 package com.propertyvista.operations.client.ui.crud.fundstransfer.fundstransferbatch;
 
-import com.pyx4j.site.client.backoffice.ui.prime.lister.IPrimeLister;
+import com.pyx4j.site.client.backoffice.ui.prime.lister.ILister;
 
 import com.propertyvista.operations.rpc.dto.FundsTransferBatchDTO;
 
-public interface FundsTransferBatchListerView extends IPrimeLister<FundsTransferBatchDTO> {
+public interface FundsTransferBatchListerView extends ILister<FundsTransferBatchDTO> {
 
 }

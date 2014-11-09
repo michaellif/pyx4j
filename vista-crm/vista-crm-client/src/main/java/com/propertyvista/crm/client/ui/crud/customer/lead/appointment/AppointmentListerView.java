@@ -13,11 +13,11 @@
  */
 package com.propertyvista.crm.client.ui.crud.customer.lead.appointment;
 
-import com.pyx4j.site.client.backoffice.ui.prime.lister.IPrimeLister;
+import com.pyx4j.site.client.backoffice.ui.prime.lister.ILister;
 
 import com.propertyvista.domain.tenant.lead.Appointment;
 
-public interface AppointmentListerView extends IPrimeLister<Appointment> {
+public interface AppointmentListerView extends ILister<Appointment> {
 
     void setAddNewVisible(boolean visible);
 }

@@ -34,7 +34,7 @@ import com.google.gwt.user.client.ui.SimplePanel;
 
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.IEntity;
-import com.pyx4j.site.client.backoffice.ui.prime.lister.IPrimeLister;
+import com.pyx4j.site.client.backoffice.ui.prime.lister.ILister;
 import com.pyx4j.widgets.client.RadioGroup;
 
 import com.propertyvista.domain.communication.CommunicationEndpoint.ContactType;
@@ -53,7 +53,7 @@ public class SelectRecipientsDialogForm extends HorizontalPanel {
 
     private SimplePanel leftMenuPanel;
 
-    private IPrimeLister lister;
+    private ILister lister;
 
     private SelectorDialogTenantListerController tenantListerController;
 

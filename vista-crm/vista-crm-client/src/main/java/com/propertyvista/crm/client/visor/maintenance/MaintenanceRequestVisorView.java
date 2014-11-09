@@ -16,7 +16,7 @@ package com.propertyvista.crm.client.visor.maintenance;
 import com.google.gwt.user.client.ui.ScrollPanel;
 
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.backoffice.ui.prime.lister.IPrimeLister;
+import com.pyx4j.site.client.backoffice.ui.prime.lister.ILister;
 import com.pyx4j.site.client.ui.visor.AbstractVisorPane;
 
 import com.propertyvista.crm.client.ui.crud.maintenance.MaintenanceRequestLister;
@@ -26,7 +26,7 @@ public class MaintenanceRequestVisorView extends AbstractVisorPane {
 
     private static final I18n i18n = I18n.get(MaintenanceRequestVisorView.class);
 
-    private final IPrimeLister<MaintenanceRequestDTO> lister;
+    private final ILister<MaintenanceRequestDTO> lister;
 
     public MaintenanceRequestVisorView(MaintenanceRequestVisorController controller) {
         super(controller);
@@ -38,7 +38,7 @@ public class MaintenanceRequestVisorView extends AbstractVisorPane {
         getElement().getStyle().setProperty("padding", "6px");
     }
 
-    public IPrimeLister<MaintenanceRequestDTO> getLister() {
+    public ILister<MaintenanceRequestDTO> getLister() {
         return lister;
     }
 }

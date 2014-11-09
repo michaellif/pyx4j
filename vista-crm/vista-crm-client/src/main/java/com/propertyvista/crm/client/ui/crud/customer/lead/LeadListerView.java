@@ -13,10 +13,10 @@
  */
 package com.propertyvista.crm.client.ui.crud.customer.lead;
 
-import com.pyx4j.site.client.backoffice.ui.prime.lister.IPrimeLister;
+import com.pyx4j.site.client.backoffice.ui.prime.lister.ILister;
 
 import com.propertyvista.domain.tenant.lead.Lead;
 
-public interface LeadListerView extends IPrimeLister<Lead> {
+public interface LeadListerView extends ILister<Lead> {
 
 }

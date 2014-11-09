@@ -18,7 +18,7 @@ import com.google.gwt.core.client.GWT;
 import com.pyx4j.entity.rpc.AbstractCrudService;
 import com.pyx4j.site.client.backoffice.activity.AbstractViewerActivity;
 import com.pyx4j.site.client.backoffice.activity.ListerController;
-import com.pyx4j.site.client.backoffice.ui.prime.lister.IPrimeLister;
+import com.pyx4j.site.client.backoffice.ui.prime.lister.ILister;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
 import com.propertyvista.operations.client.OperationsSite;
@@ -31,7 +31,7 @@ import com.propertyvista.operations.rpc.services.PadReconciliationFileCrudServic
 public class FundsReconciliationFileViewerActivity extends AbstractViewerActivity<FundsReconciliationFileDTO> implements
         FundsReconciliationFileViewerView.Presenter {
 
-    private final IPrimeLister.Presenter<?> summaryLister;
+    private final ILister.Presenter<?> summaryLister;
 
     public FundsReconciliationFileViewerActivity(CrudAppPlace place) {
         super(FundsReconciliationFileDTO.class, place, OperationsSite.getViewFactory().getView(FundsReconciliationFileViewerView.class), GWT
