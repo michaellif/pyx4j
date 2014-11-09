@@ -25,7 +25,7 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.backoffice.activity.AbstractVisorController;
 import com.pyx4j.site.client.backoffice.activity.ListerController;
-import com.pyx4j.site.client.backoffice.ui.IPane;
+import com.pyx4j.site.client.backoffice.ui.prime.IPrimePane;
 import com.pyx4j.site.client.ui.visor.AbstractVisorPane;
 import com.pyx4j.site.rpc.CrudAppPlace;
 import com.pyx4j.site.rpc.CrudAppPlace.Type;
@@ -44,11 +44,11 @@ public class MessageReportDialog extends AbstractVisorController {
 
     private final AbstractVisorPane entityListVisorView;
 
-    public MessageReportDialog(IPane parentView, List<LeaseParticipant<?>> recipientScope) {
+    public MessageReportDialog(IPrimePane parentView, List<LeaseParticipant<?>> recipientScope) {
         this(parentView, i18n.tr("Communication Report"), recipientScope);
     }
 
-    public MessageReportDialog(IPane parentView, final String caption, List<LeaseParticipant<?>> recipientScope) {
+    public MessageReportDialog(IPrimePane parentView, final String caption, List<LeaseParticipant<?>> recipientScope) {
         super(parentView);
 
         lister = new MessageLister(recipientScope);

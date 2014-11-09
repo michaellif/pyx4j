@@ -21,12 +21,11 @@ import com.pyx4j.commons.Key;
 import com.pyx4j.entity.core.criterion.EntityListCriteria;
 import com.pyx4j.entity.rpc.AbstractCrudService.RetrieveTarget;
 import com.pyx4j.entity.rpc.EntitySearchResult;
-import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.security.shared.AccessControlContext;
 import com.pyx4j.security.shared.Permission;
 import com.pyx4j.site.client.backoffice.activity.AbstractVisorController;
-import com.pyx4j.site.client.backoffice.ui.IPane;
+import com.pyx4j.site.client.backoffice.ui.prime.IPrimePane;
 
 import com.propertyvista.crm.rpc.services.notes.NotesAndAttachmentsCrudService;
 import com.propertyvista.domain.note.HasNotesAndAttachments;
@@ -34,15 +33,13 @@ import com.propertyvista.domain.note.NotesAndAttachments;
 
 public class NotesAndAttachmentsVisorController extends AbstractVisorController {
 
-    private static final I18n i18n = I18n.get(NotesAndAttachmentsVisorController.class);
-
     private final NotesAndAttachmentsCrudService service;
 
     private final NotesAndAttachmentsVisorView visor;
 
     private final HasNotesAndAttachments notesParentId;
 
-    public NotesAndAttachmentsVisorController(IPane parentView, HasNotesAndAttachments notesParentId) {
+    public NotesAndAttachmentsVisorController(IPrimePane parentView, HasNotesAndAttachments notesParentId) {
         super(parentView);
         service = GWT.<NotesAndAttachmentsCrudService> create(NotesAndAttachmentsCrudService.class);
         visor = new NotesAndAttachmentsVisorView(this);

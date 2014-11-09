@@ -22,11 +22,10 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.core.EntityFactory;
-import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.rpc.shared.VoidSerializable;
 import com.pyx4j.site.client.backoffice.activity.AbstractVisorController;
-import com.pyx4j.site.client.backoffice.ui.IPane;
+import com.pyx4j.site.client.backoffice.ui.prime.IPrimePane;
 import com.pyx4j.site.client.ui.visor.IVisorEditor;
 
 import com.propertyvista.crm.rpc.dto.tenant.PreauthorizedPaymentsDTO;
@@ -37,15 +36,13 @@ import com.propertyvista.dto.PreauthorizedPaymentDTO;
 
 public class PreauthorizedPaymentsVisorController extends AbstractVisorController implements IVisorEditor.Controller {
 
-    private static final I18n i18n = I18n.get(PreauthorizedPaymentsVisorController.class);
-
     private final PreauthorizedPaymentsVisorView visor;
 
     private final PreauthorizedPaymentsVisorService service;
 
     private final Key tenantId;
 
-    public PreauthorizedPaymentsVisorController(IPane parentView, Key tenantId) {
+    public PreauthorizedPaymentsVisorController(IPrimePane parentView, Key tenantId) {
         super(parentView);
         this.tenantId = tenantId;
         visor = new PreauthorizedPaymentsVisorView(this);

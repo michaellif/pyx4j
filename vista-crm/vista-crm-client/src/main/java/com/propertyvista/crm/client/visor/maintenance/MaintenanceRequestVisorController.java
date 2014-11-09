@@ -18,10 +18,9 @@ import com.google.gwt.core.client.GWT;
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.criterion.PropertyCriterion;
-import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.backoffice.activity.AbstractVisorController;
 import com.pyx4j.site.client.backoffice.activity.SecureListerController;
-import com.pyx4j.site.client.backoffice.ui.IPane;
+import com.pyx4j.site.client.backoffice.ui.prime.IPrimePane;
 import com.pyx4j.site.client.backoffice.ui.prime.lister.ILister.Presenter;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
@@ -32,17 +31,15 @@ import com.propertyvista.dto.MaintenanceRequestDTO;
 
 public class MaintenanceRequestVisorController extends AbstractVisorController {
 
-    private static final I18n i18n = I18n.get(MaintenanceRequestVisorController.class);
-
     private final MaintenanceRequestVisorView visor;
 
     private final Presenter<MaintenanceRequestDTO> lister;
 
-    public MaintenanceRequestVisorController(IPane parentView, Key buildingId) {
+    public MaintenanceRequestVisorController(IPrimePane parentView, Key buildingId) {
         this(parentView, buildingId, null);
     }
 
-    public MaintenanceRequestVisorController(IPane parentView, final Key buildingId, final Key tenantId) {
+    public MaintenanceRequestVisorController(IPrimePane parentView, final Key buildingId, final Key tenantId) {
         super(parentView);
         visor = new MaintenanceRequestVisorView(this);
         lister = new SecureListerController<MaintenanceRequestDTO>(MaintenanceRequestDTO.class, visor.getLister(),

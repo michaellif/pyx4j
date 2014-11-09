@@ -18,7 +18,7 @@ import com.google.gwt.core.client.GWT;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.rpc.shared.VoidSerializable;
-import com.pyx4j.site.client.backoffice.ui.IPane;
+import com.pyx4j.site.client.backoffice.ui.prime.IPrimePane;
 import com.pyx4j.site.client.ui.visor.IVisor;
 
 import com.propertyvista.crm.client.ui.crud.lease.legal.LeaseLegalStateVisor;
@@ -37,9 +37,9 @@ public class LeaseLegalStateController implements IVisor.Controller {
 
     private final Lease leaseId;
 
-    private final IPane parentView;
+    private final IPrimePane parentView;
 
-    public LeaseLegalStateController(IPane parentView, Lease leaseId) {
+    public LeaseLegalStateController(IPrimePane parentView, Lease leaseId) {
         this.parentView = parentView;
         this.legalStateVisor = new LeaseLegalStateVisor(this);
         this.service = GWT.<LeaseViewerCrudService> create(LeaseViewerCrudService.class);

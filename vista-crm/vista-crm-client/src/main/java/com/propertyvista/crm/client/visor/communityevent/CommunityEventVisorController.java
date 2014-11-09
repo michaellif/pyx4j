@@ -21,7 +21,7 @@ import com.pyx4j.entity.core.criterion.EntityListCriteria;
 import com.pyx4j.entity.rpc.EntitySearchResult;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.site.client.backoffice.activity.AbstractVisorController;
-import com.pyx4j.site.client.backoffice.ui.IPane;
+import com.pyx4j.site.client.backoffice.ui.prime.IPrimePane;
 
 import com.propertyvista.crm.rpc.services.building.communityevent.CommunityEventCrudService;
 import com.propertyvista.domain.property.asset.CommunityEvent;
@@ -35,7 +35,7 @@ public class CommunityEventVisorController extends AbstractVisorController {
 
     private final Building building;
 
-    public CommunityEventVisorController(IPane parentView, Building building) {
+    public CommunityEventVisorController(IPrimePane parentView, Building building) {
         super(parentView);
         service = GWT.<CommunityEventCrudService> create(CommunityEventCrudService.class);
         visor = new CommunityEventVisorView(this);

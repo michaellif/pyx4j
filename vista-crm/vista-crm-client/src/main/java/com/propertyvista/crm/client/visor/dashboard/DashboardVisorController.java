@@ -22,7 +22,7 @@ import com.pyx4j.gwt.commons.UnrecoverableClientError;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.site.client.backoffice.activity.AbstractVisorController;
-import com.pyx4j.site.client.backoffice.ui.IPane;
+import com.pyx4j.site.client.backoffice.ui.prime.IPrimePane;
 
 import com.propertyvista.crm.client.ui.gadgets.commonMk2.dashboard.DashboardPrinterDialog;
 import com.propertyvista.crm.rpc.services.dashboard.DashboardMetadataService;
@@ -41,7 +41,7 @@ public class DashboardVisorController extends AbstractVisorController implements
 
     private final List<Building> buildings;
 
-    public DashboardVisorController(IPane parentView, DashboardMetadata dashboardMetadataStringViewStub, List<Building> buildingStringViewStubs) {
+    public DashboardVisorController(IPrimePane parentView, DashboardMetadata dashboardMetadataStringViewStub, List<Building> buildingStringViewStubs) {
         super(parentView);
         service = GWT.create(DashboardMetadataService.class);
         dashboardStub = dashboardMetadataStringViewStub;
@@ -79,7 +79,7 @@ public class DashboardVisorController extends AbstractVisorController implements
         DashboardPrinterDialog.print(visor.getDashboardMetadata(), visor.getSelectedBuildingsStubs());
     }
 
-    private void populate(final IPane parentView) {
+    private void populate(final IPrimePane parentView) {
         service.retrieveMetadata(new AsyncCallback<DashboardMetadata>() {
             @Override
             public void onSuccess(DashboardMetadata dashboardMetadata) {
