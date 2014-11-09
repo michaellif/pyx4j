@@ -27,9 +27,12 @@ import com.pyx4j.widgets.client.memento.IMementoInput;
 
 public class SiteMementoOutput implements IMementoInput {
 
+    private final List<?> state;
+
     private Iterator<?> iterator;
 
     SiteMementoOutput(List<?> state) {
+        this.state = state;
         if (state != null) {
             iterator = state.iterator();
         }
@@ -44,4 +47,8 @@ public class SiteMementoOutput implements IMementoInput {
         }
     }
 
+    @Override
+    public String toString() {
+        return state == null ? null : state.toString();
+    };
 }

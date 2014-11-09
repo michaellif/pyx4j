@@ -398,12 +398,13 @@ public class DataTablePanel<E extends IEntity> extends FlowPanel implements Requ
     @SuppressWarnings("unchecked")
     @Override
     public void restoreState(IMementoInput memento) {
-        Integer pageNumber = 0;
+
         List<Criterion> filters = getDefaultFilters();
         List<Sort> sorts = getDefaultSorting();
 
         if (externalFilters == null) {
-            pageNumber = (Integer) memento.read();
+            Integer pageNumberInteger = (Integer) memento.read();
+            pageNumber = pageNumberInteger == null ? 0 : pageNumberInteger;
             filters = (List<Criterion>) memento.read();
             sorts = (List<Sort>) memento.read();
         } else if (externalFilters != null) {
@@ -412,8 +413,6 @@ public class DataTablePanel<E extends IEntity> extends FlowPanel implements Requ
 
         setFilters(filters);
         getDataTableModel().setSortCriteria(sorts);
-        pageNumber = pageNumber == null ? 0 : pageNumber;
-
     }
 
     public List<Criterion> getDefaultFilters() {

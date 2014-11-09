@@ -41,4 +41,10 @@ public class SiteMementoInput implements IMementoOutput {
     public List<Object> getState() {
         return state;
     }
+
+    @Override
+    public String toString() {
+        return state.toString();
+    }
+
 }
