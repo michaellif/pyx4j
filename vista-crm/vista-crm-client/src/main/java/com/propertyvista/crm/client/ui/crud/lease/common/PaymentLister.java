@@ -21,12 +21,12 @@ import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.forms.client.ui.datatable.DataTableModel;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
-import com.pyx4j.site.client.backoffice.ui.prime.lister.AbstractPrimeLister;
+import com.pyx4j.site.client.backoffice.ui.prime.lister.EntityDataTablePanel;
 
 import com.propertyvista.dto.PaymentRecordDTO;
 import com.propertyvista.shared.config.VistaFeatures;
 
-public class PaymentLister extends AbstractPrimeLister<PaymentRecordDTO> {
+public class PaymentLister extends EntityDataTablePanel<PaymentRecordDTO> {
 
     public PaymentLister() {
         super(PaymentRecordDTO.class, false);

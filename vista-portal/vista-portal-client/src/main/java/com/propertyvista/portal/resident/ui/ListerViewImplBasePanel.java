@@ -22,13 +22,13 @@ import com.pyx4j.commons.Key;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.criterion.Criterion;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
-import com.pyx4j.site.client.backoffice.ui.prime.lister.AbstractPrimeLister;
+import com.pyx4j.site.client.backoffice.ui.prime.lister.EntityDataTablePanel;
 import com.pyx4j.site.client.backoffice.ui.prime.lister.IPrimeLister;
 import com.pyx4j.site.client.ui.visor.IVisor;
 
 public class ListerViewImplBasePanel<E extends IEntity> extends DockPanel implements IPrimeLister<E> {
 
-    protected AbstractPrimeLister<E> lister = null;
+    protected EntityDataTablePanel<E> lister = null;
 
     private Widget header = null;
 
@@ -37,7 +37,7 @@ public class ListerViewImplBasePanel<E extends IEntity> extends DockPanel implem
         setSize("100%", "100%");
     }
 
-    public ListerViewImplBasePanel(AbstractPrimeLister<E> lister) {
+    public ListerViewImplBasePanel(EntityDataTablePanel<E> lister) {
         this();
         setLister(lister);
     }
@@ -58,7 +58,7 @@ public class ListerViewImplBasePanel<E extends IEntity> extends DockPanel implem
     /*
      * Should be called by descendant upon initialization.
      */
-    protected void setLister(AbstractPrimeLister<E> lister) {
+    protected void setLister(EntityDataTablePanel<E> lister) {
         if (this.lister != null) {
             this.lister.removeFromParent();
         }
@@ -66,7 +66,7 @@ public class ListerViewImplBasePanel<E extends IEntity> extends DockPanel implem
     }
 
     @Override
-    public AbstractPrimeLister<E> getLister() {
+    public EntityDataTablePanel<E> getLister() {
         assert (lister != null);
         return lister;
     }

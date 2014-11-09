@@ -21,12 +21,12 @@ import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.entity.core.criterion.PropertyCriterion;
 import com.pyx4j.forms.client.ui.datatable.DataTableModel;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
-import com.pyx4j.site.client.backoffice.ui.prime.lister.AbstractPrimeLister;
+import com.pyx4j.site.client.backoffice.ui.prime.lister.EntityDataTablePanel;
 
 import com.propertyvista.domain.pmc.Pmc;
 import com.propertyvista.operations.domain.eft.cards.CardTransactionRecord;
 
-public class CardTransactionRecordLister extends AbstractPrimeLister<CardTransactionRecord> {
+public class CardTransactionRecordLister extends EntityDataTablePanel<CardTransactionRecord> {
 
     public CardTransactionRecordLister(boolean addPmcColumn) {
         super(CardTransactionRecord.class, false, false);

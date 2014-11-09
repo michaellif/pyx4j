@@ -20,11 +20,11 @@ import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.forms.client.ui.datatable.DataTableModel;
 import com.pyx4j.forms.client.ui.datatable.DataTablePanel;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
-import com.pyx4j.site.client.backoffice.ui.prime.lister.AbstractPrimeLister;
+import com.pyx4j.site.client.backoffice.ui.prime.lister.EntityDataTablePanel;
 
 import com.propertyvista.domain.financial.offering.ProductItem;
 
-public class SelectServiceItemLister extends AbstractPrimeLister<ProductItem> {
+public class SelectServiceItemLister extends EntityDataTablePanel<ProductItem> {
 
     public SelectServiceItemLister() {
         super(ProductItem.class);

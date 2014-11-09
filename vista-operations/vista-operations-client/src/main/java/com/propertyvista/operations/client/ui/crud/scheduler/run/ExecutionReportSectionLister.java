@@ -30,7 +30,7 @@ import com.pyx4j.forms.client.ui.datatable.ListerDataSource;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor.Builder;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.backoffice.ui.prime.lister.AbstractPrimeLister;
+import com.pyx4j.site.client.backoffice.ui.prime.lister.EntityDataTablePanel;
 import com.pyx4j.widgets.client.dialog.Dialog;
 import com.pyx4j.widgets.client.dialog.OkDialog;
 
@@ -39,7 +39,7 @@ import com.propertyvista.operations.domain.scheduler.ExecutionReportSection;
 import com.propertyvista.operations.rpc.services.scheduler.ExecutionReportMessageService;
 import com.propertyvista.operations.rpc.services.scheduler.ExecutionReportSectionService;
 
-public class ExecutionReportSectionLister extends AbstractPrimeLister<ExecutionReportSection> {
+public class ExecutionReportSectionLister extends EntityDataTablePanel<ExecutionReportSection> {
     private static final I18n i18n = I18n.get(ExecutionReportSectionLister.class);
 
     private final ExecutionReportMessageLister messageLister;

@@ -28,14 +28,14 @@ import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.criterion.PropertyCriterion;
 import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
-import com.pyx4j.forms.client.ui.datatable.ListerDataSource;
 import com.pyx4j.forms.client.ui.datatable.DataTable.ItemZoomInCommand;
+import com.pyx4j.forms.client.ui.datatable.DataTablePanel;
+import com.pyx4j.forms.client.ui.datatable.ListerDataSource;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.site.client.AppPlaceEntityMapper;
 import com.pyx4j.site.client.AppSite;
-import com.pyx4j.site.client.backoffice.ui.prime.lister.EntityDataTablePanel;
 import com.pyx4j.widgets.client.Label;
 
 import com.propertyvista.crm.client.ui.board.events.BuildingSelectionChangedEvent;
@@ -97,14 +97,14 @@ public class UnitAvailabilityGadget extends GadgetInstanceBase<UnitAvailabilityG
 
     private Label asOf;
 
-    private EntityDataTablePanel<UnitAvailabilityStatusDTO> lister;
+    private DataTablePanel<UnitAvailabilityStatusDTO> lister;
 
     public UnitAvailabilityGadget(UnitAvailabilityGadgetMetadata gmd) {
         super(gmd, UnitAvailabilityGadgetMetadata.class, new UnitAvailabilityGadgetMetatadaForm());
         setDefaultPopulator(new Populator() {
             @Override
             public void populate() {
-                lister.getDataTablePanel().getDataTableModel().setPageSize(getMetadata().unitStatusListerSettings().pageSize().getValue());
+                lister.getDataTableModel().setPageSize(getMetadata().unitStatusListerSettings().pageSize().getValue());
 
                 lister.getDataSource().clearPreDefinedFilters();
 
@@ -135,7 +135,7 @@ public class UnitAvailabilityGadget extends GadgetInstanceBase<UnitAvailabilityG
                     break;
                 }
 
-                lister.populate(0);
+                lister.populate();
 
                 redrawFilterDisplayPanel();
                 redrawAsOfBannerPanel();
@@ -162,10 +162,10 @@ public class UnitAvailabilityGadget extends GadgetInstanceBase<UnitAvailabilityG
         gadgetPanel.add(initAsOfBannerPanel());
         gadgetPanel.add(initFilterDisplayPanel());
 
-        lister = new EntityDataTablePanel<UnitAvailabilityStatusDTO>(UnitAvailabilityStatusDTO.class);
+        lister = new DataTablePanel<UnitAvailabilityStatusDTO>(UnitAvailabilityStatusDTO.class);
         lister.setDataSource(new ListerDataSource<UnitAvailabilityStatusDTO>(UnitAvailabilityStatusDTO.class, GWT
                 .<UnitAvailabilityStatusListService> create(UnitAvailabilityStatusListService.class)));
-        ListerUtils.bind(lister.getDataTablePanel())//@formatter:off
+        ListerUtils.bind(lister)//@formatter:off
             .columnDescriptors(DEFAULT_COLUMN_DESCRIPTORS)
             .setupable(ClientContext.getUserVisit().getPrincipalPrimaryKey().equals(getMetadata().ownerUser().getPrimaryKey()))
             .userSettingsProvider(new Provider<ListerUserSettings>() {

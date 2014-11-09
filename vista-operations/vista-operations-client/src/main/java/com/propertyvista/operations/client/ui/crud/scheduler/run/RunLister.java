@@ -22,11 +22,11 @@ import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.forms.client.ui.datatable.DataTableModel;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
-import com.pyx4j.site.client.backoffice.ui.prime.lister.AbstractPrimeLister;
+import com.pyx4j.site.client.backoffice.ui.prime.lister.EntityDataTablePanel;
 
 import com.propertyvista.operations.domain.scheduler.Run;
 
-public class RunLister extends AbstractPrimeLister<Run> {
+public class RunLister extends EntityDataTablePanel<Run> {
 
     private static List<ColumnDescriptor> INLINE_VIEW_COLUMN_DESCRIPTORS = createInlineViewColumnDescriptors();
 

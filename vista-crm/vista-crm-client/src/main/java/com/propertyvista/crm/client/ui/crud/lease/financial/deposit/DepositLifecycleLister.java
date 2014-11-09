@@ -20,11 +20,11 @@ import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.forms.client.ui.datatable.DataTableModel;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.backoffice.ui.prime.lister.AbstractPrimeLister;
+import com.pyx4j.site.client.backoffice.ui.prime.lister.EntityDataTablePanel;
 
 import com.propertyvista.dto.DepositLifecycleDTO;
 
-public class DepositLifecycleLister extends AbstractPrimeLister<DepositLifecycleDTO> {
+public class DepositLifecycleLister extends EntityDataTablePanel<DepositLifecycleDTO> {
 
     private final static I18n i18n = I18n.get(DepositLifecycleLister.class);
 

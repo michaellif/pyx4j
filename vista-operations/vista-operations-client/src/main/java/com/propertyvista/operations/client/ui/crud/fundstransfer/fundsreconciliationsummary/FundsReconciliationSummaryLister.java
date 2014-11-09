@@ -15,11 +15,11 @@ package com.propertyvista.operations.client.ui.crud.fundstransfer.fundsreconcili
 
 import com.pyx4j.forms.client.ui.datatable.DataTableModel;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
-import com.pyx4j.site.client.backoffice.ui.prime.lister.AbstractPrimeLister;
+import com.pyx4j.site.client.backoffice.ui.prime.lister.EntityDataTablePanel;
 
 import com.propertyvista.operations.rpc.dto.FundsReconciliationSummaryDTO;
 
-public class FundsReconciliationSummaryLister extends AbstractPrimeLister<FundsReconciliationSummaryDTO> {
+public class FundsReconciliationSummaryLister extends EntityDataTablePanel<FundsReconciliationSummaryDTO> {
 
     public FundsReconciliationSummaryLister() {
         super(FundsReconciliationSummaryDTO.class, false, false);

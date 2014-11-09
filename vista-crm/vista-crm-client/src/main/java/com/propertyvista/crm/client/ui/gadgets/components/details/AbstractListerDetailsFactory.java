@@ -29,11 +29,11 @@ import com.pyx4j.entity.core.criterion.Criterion;
 import com.pyx4j.entity.core.criterion.EntityListCriteria;
 import com.pyx4j.entity.rpc.AbstractListCrudService;
 import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
-import com.pyx4j.forms.client.ui.datatable.ListerDataSource;
 import com.pyx4j.forms.client.ui.datatable.DataTable.ItemZoomInCommand;
+import com.pyx4j.forms.client.ui.datatable.DataTablePanel;
+import com.pyx4j.forms.client.ui.datatable.ListerDataSource;
 import com.pyx4j.site.client.AppPlaceEntityMapper;
 import com.pyx4j.site.client.AppSite;
-import com.pyx4j.site.client.backoffice.ui.prime.lister.EntityDataTablePanel;
 
 import com.propertyvista.crm.client.ui.gadgets.common.CounterGadgetInstanceBase.CounterDetailsFactory;
 import com.propertyvista.crm.client.ui.gadgets.util.ListerUtils;
@@ -44,7 +44,7 @@ public abstract class AbstractListerDetailsFactory<E extends IEntity, F extends 
 
     private final SimplePanel panel;
 
-    private final EntityDataTablePanel<E> lister;
+    private final DataTablePanel<E> lister;
 
     private final ICriteriaProvider<E, F> criteriaProvider;
 
@@ -69,7 +69,7 @@ public abstract class AbstractListerDetailsFactory<E extends IEntity, F extends 
     public AbstractListerDetailsFactory(Class<E> dataClass, List<ColumnDescriptor> defaultColumnDescriptors, AbstractListCrudService<E> listerService,
             IFilterDataProvider<F> filterDataProvider, ICriteriaProvider<E, F> criteriaProvider, Proxy<ListerUserSettings> listerSettingsProxy) {
         this.panel = new SimplePanel();
-        this.lister = new EntityDataTablePanel<E>(dataClass);
+        this.lister = new DataTablePanel<E>(dataClass);
         this.listerService = listerService;
 
         this.dataClass = dataClass;
@@ -104,7 +104,7 @@ public abstract class AbstractListerDetailsFactory<E extends IEntity, F extends 
             this.listerSettingsProxy = listerSettingsProxy;
         }
 
-        ListerUtils.bind(lister.getDataTablePanel())//@formatter:off
+        ListerUtils.bind(lister)//@formatter:off
             .columnDescriptors(defaultColumnDescriptors)            
             .setupable(this.listerSettingsProxy.isModifiable())
             .userSettingsProvider(this.listerSettingsProxy)
@@ -147,7 +147,7 @@ public abstract class AbstractListerDetailsFactory<E extends IEntity, F extends 
                     listerDataSource.clearPreDefinedFilters();
                 }
                 lister.setDataSource(listerDataSource);
-                lister.populate(0);
+                lister.populate();
 
                 panel.setWidget(lister);
             }

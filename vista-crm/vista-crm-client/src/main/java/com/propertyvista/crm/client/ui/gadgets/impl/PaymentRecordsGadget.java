@@ -32,14 +32,14 @@ import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.criterion.Criterion;
 import com.pyx4j.entity.core.criterion.PropertyCriterion;
 import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
-import com.pyx4j.forms.client.ui.datatable.ListerDataSource;
 import com.pyx4j.forms.client.ui.datatable.DataTable.ItemZoomInCommand;
+import com.pyx4j.forms.client.ui.datatable.DataTablePanel;
+import com.pyx4j.forms.client.ui.datatable.ListerDataSource;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.site.client.AppPlaceEntityMapper;
 import com.pyx4j.site.client.AppSite;
-import com.pyx4j.site.client.backoffice.ui.prime.lister.EntityDataTablePanel;
 
 import com.propertyvista.crm.client.ui.board.events.BuildingSelectionChangedEvent;
 import com.propertyvista.crm.client.ui.board.events.BuildingSelectionChangedEventHandler;
@@ -79,14 +79,14 @@ public class PaymentRecordsGadget extends GadgetInstanceBase<PaymentRecordsGadge
 
     private HTML titlePanel;
 
-    private EntityDataTablePanel<PaymentRecordForReportDTO> lister;
+    private DataTablePanel<PaymentRecordForReportDTO> lister;
 
     public PaymentRecordsGadget(PaymentRecordsGadgetMetadata gadgetMetadata) {
         super(gadgetMetadata, PaymentRecordsGadgetMetadata.class, new PaymentRecordsGadgetMetadataForm());
         setDefaultPopulator(new Populator() {
             @Override
             public void populate() {
-                lister.getDataTablePanel().getDataTableModel().setPageSize(getMetadata().paymentRecordsListerSettings().pageSize().getValue());
+                lister.getDataTableModel().setPageSize(getMetadata().paymentRecordsListerSettings().pageSize().getValue());
 
                 lister.getDataSource().clearPreDefinedFilters();
                 List<Criterion> criteria = new ArrayList<Criterion>();
@@ -100,7 +100,7 @@ public class PaymentRecordsGadget extends GadgetInstanceBase<PaymentRecordsGadge
                         .getValue())));
                 lister.getDataSource().setPreDefinedFilters(criteria);
 
-                lister.populate(0);
+                lister.populate();
                 redrawTitle();
                 populateSucceded();
             }
@@ -125,10 +125,10 @@ public class PaymentRecordsGadget extends GadgetInstanceBase<PaymentRecordsGadge
 
         contentPanel.add(initTitleWidget());
 
-        lister = new EntityDataTablePanel<PaymentRecordForReportDTO>(PaymentRecordForReportDTO.class);
+        lister = new DataTablePanel<PaymentRecordForReportDTO>(PaymentRecordForReportDTO.class);
         lister.setDataSource(new ListerDataSource<PaymentRecordForReportDTO>(PaymentRecordForReportDTO.class, GWT
                 .<PaymentRecordsGadgetListService> create(PaymentRecordsGadgetListService.class)));
-        ListerUtils.bind(lister.getDataTablePanel())//@formatter:off
+        ListerUtils.bind(lister)//@formatter:off
         .columnDescriptors(DEFAULT_COLUMN_DESCRIPTORS)
         .setupable(ClientContext.getUserVisit().getPrincipalPrimaryKey().equals(getMetadata().ownerUser().getPrimaryKey()))
         .userSettingsProvider(new Provider<ListerUserSettings>() {

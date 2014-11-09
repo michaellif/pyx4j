@@ -23,8 +23,9 @@ import com.google.gwt.user.client.ui.Widget;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
-import com.pyx4j.forms.client.ui.datatable.ListerDataSource;
 import com.pyx4j.forms.client.ui.datatable.DataTable.ItemZoomInCommand;
+import com.pyx4j.forms.client.ui.datatable.DataTablePanel;
+import com.pyx4j.forms.client.ui.datatable.ListerDataSource;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.security.client.ClientContext;
@@ -63,15 +64,15 @@ public class BuildingListerGadget extends GadgetInstanceBase<BuildingListerGadge
         );//@formatter:on
     }
 
-    private EntityDataTablePanel<BuildingDTO> lister;
+    private DataTablePanel<BuildingDTO> lister;
 
     public BuildingListerGadget(BuildingListerGadgetMetadata metadata) {
         super(metadata, BuildingListerGadgetMetadata.class, new BuildingListerGadgetMetadataForm());
         setDefaultPopulator(new Populator() {
             @Override
             public void populate() {
-                lister.getDataTablePanel().getDataTableModel().setPageSize(getMetadata().buildingListerSettings().pageSize().getValue());
-                lister.populate(0);
+                lister.getDataTableModel().setPageSize(getMetadata().buildingListerSettings().pageSize().getValue());
+                lister.populate();
                 populateSucceded();
             }
         });
@@ -79,10 +80,10 @@ public class BuildingListerGadget extends GadgetInstanceBase<BuildingListerGadge
 
     @Override
     protected Widget initContentPanel() {
-        lister = new EntityDataTablePanel<BuildingDTO>(BuildingDTO.class, false, false);
+        lister = new DataTablePanel<BuildingDTO>(BuildingDTO.class, false, false);
         lister.setSize("100%", "100%");
         lister.setDataSource(new ListerDataSource<BuildingDTO>(BuildingDTO.class, GWT.<BuildingCrudService> create(BuildingCrudService.class)));
-        ListerUtils.bind(lister.getDataTablePanel())//@formatter:off
+        ListerUtils.bind(lister)//@formatter:off
             .columnDescriptors(DEFAULT_COLUMN_DESCRIPTORS)            
             .setupable(ClientContext.getUserVisit().getPrincipalPrimaryKey().equals(getMetadata().ownerUser().getPrimaryKey()))
             .userSettingsProvider(new Provider<ListerUserSettings>() {

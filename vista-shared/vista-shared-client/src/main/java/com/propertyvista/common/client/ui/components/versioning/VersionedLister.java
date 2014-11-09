@@ -26,10 +26,10 @@ import com.pyx4j.entity.core.criterion.EntityQueryCriteria.VersionedCriteria;
 import com.pyx4j.forms.client.ui.CRadioGroupEnum;
 import com.pyx4j.i18n.annotations.I18n;
 import com.pyx4j.i18n.shared.I18nEnum;
-import com.pyx4j.site.client.backoffice.ui.prime.lister.AbstractPrimeLister;
+import com.pyx4j.site.client.backoffice.ui.prime.lister.EntityDataTablePanel;
 import com.pyx4j.widgets.client.RadioGroup.Layout;
 
-public abstract class VersionedLister<E extends IVersionedEntity<?>> extends AbstractPrimeLister<E> {
+public abstract class VersionedLister<E extends IVersionedEntity<?>> extends EntityDataTablePanel<E> {
 
     @I18n(context = "Version Display Mode")
     public enum VersionDisplayMode {

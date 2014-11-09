@@ -20,11 +20,11 @@ import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.forms.client.ui.datatable.DataTableModel;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.backoffice.ui.prime.lister.AbstractPrimeLister;
+import com.pyx4j.site.client.backoffice.ui.prime.lister.EntityDataTablePanel;
 
 import com.propertyvista.crm.rpc.dto.tenant.CustomerCreditCheckDTO;
 
-public class CustomerCreditCheckLister extends AbstractPrimeLister<CustomerCreditCheckDTO> {
+public class CustomerCreditCheckLister extends EntityDataTablePanel<CustomerCreditCheckDTO> {
 
     private static final I18n i18n = I18n.get(CustomerCreditCheckLister.class);
 

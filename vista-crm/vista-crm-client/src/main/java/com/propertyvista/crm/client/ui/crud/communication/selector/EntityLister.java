@@ -34,10 +34,10 @@ import com.pyx4j.forms.client.ui.datatable.DataTablePanel;
 import com.pyx4j.forms.client.ui.datatable.DataTable.ItemSelectionHandler;
 import com.pyx4j.forms.client.ui.datatable.DataTableModel;
 import com.pyx4j.i18n.shared.I18nEnum;
-import com.pyx4j.site.client.backoffice.ui.prime.lister.AbstractPrimeLister;
+import com.pyx4j.site.client.backoffice.ui.prime.lister.EntityDataTablePanel;
 import com.pyx4j.widgets.client.RadioGroup.Layout;
 
-public class EntityLister<E extends IEntity> extends AbstractPrimeLister<E> {
+public class EntityLister<E extends IEntity> extends EntityDataTablePanel<E> {
 
     private VersionDisplayMode versionDisplayMode = VersionDisplayMode.displayFinal;
 

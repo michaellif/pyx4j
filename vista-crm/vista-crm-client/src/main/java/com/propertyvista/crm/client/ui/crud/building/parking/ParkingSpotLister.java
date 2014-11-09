@@ -19,11 +19,11 @@ import java.util.List;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.forms.client.ui.datatable.DataTableModel;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
-import com.pyx4j.site.client.backoffice.ui.prime.lister.AbstractPrimeLister;
+import com.pyx4j.site.client.backoffice.ui.prime.lister.EntityDataTablePanel;
 
 import com.propertyvista.domain.property.asset.ParkingSpot;
 
-public class ParkingSpotLister extends AbstractPrimeLister<ParkingSpot> {
+public class ParkingSpotLister extends EntityDataTablePanel<ParkingSpot> {
 
     public ParkingSpotLister() {
         super(ParkingSpot.class, true);

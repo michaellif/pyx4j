@@ -23,12 +23,12 @@ import com.pyx4j.entity.core.criterion.PropertyCriterion;
 import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.forms.client.ui.datatable.DataTableModel;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
-import com.pyx4j.site.client.backoffice.ui.prime.lister.AbstractPrimeLister;
+import com.pyx4j.site.client.backoffice.ui.prime.lister.EntityDataTablePanel;
 
 import com.propertyvista.domain.pmc.Pmc;
 import com.propertyvista.operations.domain.eft.dbp.DirectDebitRecord;
 
-public class DirectDebitRecordLister extends AbstractPrimeLister<DirectDebitRecord> {
+public class DirectDebitRecordLister extends EntityDataTablePanel<DirectDebitRecord> {
 
     public DirectDebitRecordLister(boolean addPmcColumn) {
         super(DirectDebitRecord.class, false, false);

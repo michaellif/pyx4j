@@ -23,11 +23,11 @@ import com.google.gwt.user.client.ui.Widget;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.criterion.PropertyCriterion;
 import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
-import com.pyx4j.forms.client.ui.datatable.ListerDataSource;
 import com.pyx4j.forms.client.ui.datatable.DataTable.ItemZoomInCommand;
+import com.pyx4j.forms.client.ui.datatable.DataTablePanel;
+import com.pyx4j.forms.client.ui.datatable.ListerDataSource;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.security.client.ClientContext;
-import com.pyx4j.site.client.backoffice.ui.prime.lister.EntityDataTablePanel;
 
 import com.propertyvista.crm.client.ui.board.events.BuildingSelectionChangedEvent;
 import com.propertyvista.crm.client.ui.board.events.BuildingSelectionChangedEventHandler;
@@ -54,14 +54,14 @@ public class BuildingResidentInsuranceCoverageGadget extends GadgetInstanceBase<
         );//@formatter:on
     }
 
-    private EntityDataTablePanel<BuildingResidentInsuranceCoverageDTO> lister;
+    private DataTablePanel<BuildingResidentInsuranceCoverageDTO> lister;
 
     public BuildingResidentInsuranceCoverageGadget(BuildingResidentInsuranceCoverageGadgetMetadata metadata) {
         super(metadata, BuildingResidentInsuranceCoverageGadgetMetadata.class);
         setDefaultPopulator(new Populator() {
             @Override
             public void populate() {
-                lister.getDataTablePanel().getDataTableModel().setPageSize(getMetadata().buildingInsuranceCoverageListerSettings().pageSize().getValue());
+                lister.getDataTableModel().setPageSize(getMetadata().buildingInsuranceCoverageListerSettings().pageSize().getValue());
 
                 lister.getDataSource().clearPreDefinedFilters();
                 if (!containerBoard.getSelectedBuildingsStubs().isEmpty()) {
@@ -69,7 +69,7 @@ public class BuildingResidentInsuranceCoverageGadget extends GadgetInstanceBase<
                             PropertyCriterion.in(lister.proto().buildingFilter(), containerBoard.getSelectedBuildingsStubs()));
                 }
 
-                lister.populate(0);
+                lister.populate();
                 populateSucceded();
             }
         });
@@ -88,10 +88,10 @@ public class BuildingResidentInsuranceCoverageGadget extends GadgetInstanceBase<
 
     @Override
     protected Widget initContentPanel() {
-        lister = new EntityDataTablePanel<BuildingResidentInsuranceCoverageDTO>(BuildingResidentInsuranceCoverageDTO.class);
+        lister = new DataTablePanel<BuildingResidentInsuranceCoverageDTO>(BuildingResidentInsuranceCoverageDTO.class);
         lister.setDataSource(new ListerDataSource<BuildingResidentInsuranceCoverageDTO>(BuildingResidentInsuranceCoverageDTO.class, GWT
                 .<BuildingResidentInsuranceListService> create(BuildingResidentInsuranceListService.class)));
-        ListerUtils.bind(lister.getDataTablePanel())//@formatter:off
+        ListerUtils.bind(lister)//@formatter:off
             .columnDescriptors(COLUMN_DESCRIPTORS)
             .setupable(ClientContext.getUserVisit().getPrincipalPrimaryKey().equals(getMetadata().ownerUser().getPrimaryKey()))
             .userSettingsProvider(new Provider<ListerUserSettings>() {
