@@ -72,7 +72,11 @@ public class ProspectPortalContext extends PortalVistaContext {
     }
 
     public static Guarantor getGuarantor() {
-        return (Guarantor) getLeaseParticipant().cast();
+        LeaseParticipant<?> lp = getLeaseParticipant();
+        if (lp == null) {
+            return null;
+        }
+        return (Guarantor) lp.cast();
     }
 
     public static LeaseTermGuarantor getLeaseTermGuarantor() {

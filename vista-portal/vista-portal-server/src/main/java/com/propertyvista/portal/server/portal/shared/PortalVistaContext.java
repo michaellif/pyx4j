@@ -52,11 +52,16 @@ public class PortalVistaContext extends VistaContext {
     }
 
     public static LeaseParticipant<?> getLeaseParticipant() {
-        return Persistence.service().retrieve(LeaseParticipant.class, ServerContext.visit(PortalUserVisit.class).getLeaseParticipantId().getPrimaryKey());
+        LeaseParticipant<?> lp = ServerContext.visit(PortalUserVisit.class).getLeaseParticipantId();
+        return lp == null ? null : Persistence.service().retrieve(LeaseParticipant.class, lp.getPrimaryKey());
     }
 
     public static Tenant getTenant() {
-        return (Tenant) getLeaseParticipant().cast();
+        LeaseParticipant<?> lp = getLeaseParticipant();
+        if (lp == null) {
+            return null;
+        }
+        return (Tenant) lp.cast();
     }
 
 }

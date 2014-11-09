@@ -139,6 +139,9 @@ public class VistaPortalAccessControlList extends UIAclBuilder {
         // Old TODO remove
         grant(new IServiceExecutePermission(ReferenceDataService.class));
         grant(new EntityPermission(City.class, EntityPermission.READ));
+        grant(new EntityPermission(CommunicationThread.class, EntityPermission.READ));
+        grant(new EntityPermission(Message.class, EntityPermission.READ));
+
         grant(new EntityPermission(CountryPolicyNode.class, EntityPermission.READ));
         grant(new EntityPermission(ProvincePolicyNode.class, EntityPermission.READ));
 
@@ -257,7 +260,7 @@ public class VistaPortalAccessControlList extends UIAclBuilder {
 
         grant(PortalProspectBehavior.Prospect, new EntityPermission(DeliveryHandle.class, CRUD));
         grant(PortalProspectBehavior.Prospect, new EntityPermission(MessageAttachment.class, CRUD));
-        grant(PortalProspectBehavior.Prospect, new EntityPermission(CommunicationThread.class, EntityPermission.READ));
+        grant(PortalProspectBehavior.Prospect, new EntityPermission(CommunicationThread.class, EntityPermission.READ | EntityPermission.UPDATE));
         grant(PortalProspectBehavior.Prospect, new EntityPermission(Message.class, CRUD));
         grant(PortalProspectBehavior.Prospect, new EntityPermission(MessageCategory.class, EntityPermission.READ));
         grant(PortalProspectBehavior.Prospect, new EntityPermission(ThreadPolicyHandle.class, CRUD));
