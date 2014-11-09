@@ -108,7 +108,7 @@ public class LeaseLister extends EntityDataTablePanel<LeaseDTO> {
 
         if (!VistaFeatures.instance().yardiIntegration()) {
             Button createLease;
-            addActionItem(createLease = new Button(FolderImages.INSTANCE.addButton().hover(), i18n.tr("New Lease"), new Command() {
+            addUpperActionItem(createLease = new Button(FolderImages.INSTANCE.addButton().hover(), i18n.tr("New Lease"), new Command() {
                 @Override
                 public void execute() {
                     new LeaseDataDialog(LeaseDataDialog.Type.New).show();
@@ -119,7 +119,7 @@ public class LeaseLister extends EntityDataTablePanel<LeaseDTO> {
 
         if (!VistaFeatures.instance().yardiIntegration()) {
             Button createLease;
-            addActionItem(createLease = new Button(FolderImages.INSTANCE.addButton().hover(), i18n.tr("Current Lease"), new Command() {
+            addUpperActionItem(createLease = new Button(FolderImages.INSTANCE.addButton().hover(), i18n.tr("Current Lease"), new Command() {
                 @Override
                 public void execute() {
                     new LeaseDataDialog(LeaseDataDialog.Type.Current).show();
@@ -128,14 +128,14 @@ public class LeaseLister extends EntityDataTablePanel<LeaseDTO> {
             createLease.setPermission(DataModelPermission.permissionCreate(LeaseDTO.class));
         }
 
-        addActionItem(new Button(i18n.tr("Upload PAD File"), new Command() {
+        addUpperActionItem(new Button(i18n.tr("Upload PAD File"), new Command() {
             @Override
             public void execute() {
                 onPadFileUpload();
             }
         }, new ActionPermission(PadFileUpload.class)));
 
-        addActionItem(new Button(i18n.tr("Download PAD File"), new Command() {
+        addUpperActionItem(new Button(i18n.tr("Download PAD File"), new Command() {
             @Override
             public void execute() {
                 onPadFileDownload();

@@ -24,6 +24,6 @@ public class ShowingListerViewImpl extends CrmListerViewImplBase<ShowingDTO> imp
 
     @Override
     public void setAddNewVisible(boolean visible) {
-        getLister().getDataTablePanel().getAddButton().setVisible(visible);
+        getLister().getAddButton().setVisible(visible);
     }
 }

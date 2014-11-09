@@ -41,7 +41,7 @@ public class FeatureLister extends EntityDataTablePanel<Feature> {
     public FeatureLister(IPane parentView) {
         super(Feature.class, !VistaFeatures.instance().yardiIntegration(), !VistaFeatures.instance().yardiIntegration());
         this.parentView = parentView;
-        getDataTablePanel().setFilteringEnabled(false);
+        setFilteringEnabled(false);
 
         if (VistaTODO.VISTA_2256_Default_Product_Catalog_Show) {
             setDataTableModel(new DataTableModel<Feature>(//@formatter:off

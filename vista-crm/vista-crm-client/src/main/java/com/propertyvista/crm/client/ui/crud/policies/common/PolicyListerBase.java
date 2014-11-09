@@ -37,15 +37,16 @@ public abstract class PolicyListerBase<P extends PolicyDTOBase> extends EntityDa
 
     public PolicyListerBase(Class<P> clazz) {
         super(clazz, true, true);
-        getDataTablePanel().setFilteringEnabled(false);
+        setFilteringEnabled(false);
     }
 
+    @Override
     public Button getAddButton() {
-        return getDataTablePanel().getAddButton();
+        return getAddButton();
     }
 
     public Button getDeleteButton() {
-        return getDataTablePanel().getDelButton();
+        return getDelButton();
     }
 
     @Override

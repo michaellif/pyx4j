@@ -53,7 +53,7 @@ public class PmcLister extends EntityDataTablePanel<PmcDTO> {
             new MemberColumnDescriptor.Builder(proto().equifaxInfo().reportType()).visible(false).build()
         ));//@formatter:on
 
-        addActionItem(new Button(i18n.tr("Upload Merchant Accounts"), new Command() {
+        addUpperActionItem(new Button(i18n.tr("Upload Merchant Accounts"), new Command() {
             @Override
             public void execute() {
                 ((PmcListerView.Presenter) getPresenter()).uploadMerchantAccounts();

@@ -54,7 +54,7 @@ public class AggregatedTransferLister extends EntityDataTablePanel<AggregatedTra
                 new MemberColumnDescriptor.Builder(proto().returnedPayments().$().id()).searchableOnly().columnTitle(i18n.tr("Returned Payment Id")).build()
         ));
 
-        addActionItem(new Button(i18n.tr("Export"), new Command() {
+        addUpperActionItem(new Button(i18n.tr("Export"), new Command() {
             @Override
             public void execute() {
                 onAggregateTransferDownload();

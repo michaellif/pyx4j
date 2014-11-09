@@ -35,6 +35,6 @@ public class PadSimFileListerViewImpl extends OperationsListerViewImplBase<PadSi
                 ((PadSimFileListerView.Presenter) getPresenter()).loadPadFile();
             }
         });
-        getLister().addActionItem(loadPadFile.asWidget());
+        getLister().addUpperActionItem(loadPadFile.asWidget());
     }
 }

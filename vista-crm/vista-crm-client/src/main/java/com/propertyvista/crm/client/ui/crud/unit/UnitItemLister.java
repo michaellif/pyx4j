@@ -27,7 +27,7 @@ public class UnitItemLister extends EntityDataTablePanel<AptUnitItem> {
 
     public UnitItemLister() {
         super(AptUnitItem.class, true);
-        getDataTablePanel().setFilteringEnabled(false);
+        setFilteringEnabled(false);
 
         setDataTableModel(new DataTableModel<AptUnitItem>(//@formatter:off
             new MemberColumnDescriptor.Builder(proto().type()).build(),

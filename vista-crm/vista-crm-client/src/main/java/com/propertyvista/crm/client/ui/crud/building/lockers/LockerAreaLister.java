@@ -27,7 +27,7 @@ public class LockerAreaLister extends EntityDataTablePanel<LockerAreaDTO> {
 
     public LockerAreaLister() {
         super(LockerAreaDTO.class, true);
-        getDataTablePanel().setFilteringEnabled(false);
+        setFilteringEnabled(false);
 
         setDataTableModel(new DataTableModel<LockerAreaDTO>(//@formatter:off
             new MemberColumnDescriptor.Builder(proto().name()).build(),

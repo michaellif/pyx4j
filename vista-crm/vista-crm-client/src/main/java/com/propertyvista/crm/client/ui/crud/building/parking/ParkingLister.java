@@ -27,7 +27,7 @@ public class ParkingLister extends EntityDataTablePanel<ParkingDTO> {
 
     public ParkingLister() {
         super(ParkingDTO.class, true);
-        getDataTablePanel().setFilteringEnabled(false);
+        setFilteringEnabled(false);
 
         setDataTableModel(new DataTableModel<ParkingDTO>(//@formatter:off
             new MemberColumnDescriptor.Builder(proto().name()).build(),

@@ -27,7 +27,7 @@ public class RoofLister extends EntityDataTablePanel<RoofDTO> {
 
     public RoofLister() {
         super(RoofDTO.class, true);
-        getDataTablePanel().setFilteringEnabled(false);
+        setFilteringEnabled(false);
 
         setDataTableModel(new DataTableModel<RoofDTO>( //@formatter:off
                 new MemberColumnDescriptor.Builder(proto().type()).build(),

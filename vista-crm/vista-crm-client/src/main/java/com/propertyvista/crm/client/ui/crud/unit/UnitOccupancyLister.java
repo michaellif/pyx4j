@@ -28,7 +28,7 @@ public class UnitOccupancyLister extends EntityDataTablePanel<AptUnitOccupancySe
 
     public UnitOccupancyLister() {
         super(AptUnitOccupancySegment.class, false);
-        getDataTablePanel().setFilteringEnabled(false);
+        setFilteringEnabled(false);
         setItemZoomInCommand(new ItemZoomInCommand<AptUnitOccupancySegment>() {
             @Override
             public void execute(AptUnitOccupancySegment item) {

@@ -41,7 +41,7 @@ public class ServiceLister extends EntityDataTablePanel<Service> {
     public ServiceLister(IPane parentView) {
         super(Service.class, !VistaFeatures.instance().yardiIntegration(), !VistaFeatures.instance().yardiIntegration());
         this.parentView = parentView;
-        getDataTablePanel().setFilteringEnabled(false);
+        setFilteringEnabled(false);
 
         if (VistaTODO.VISTA_2256_Default_Product_Catalog_Show) {
             setDataTableModel(new DataTableModel<Service>(//@formatter:off

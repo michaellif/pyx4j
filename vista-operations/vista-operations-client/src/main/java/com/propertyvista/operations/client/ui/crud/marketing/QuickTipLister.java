@@ -39,7 +39,7 @@ public class QuickTipLister extends EntityDataTablePanel<PortalResidentMarketing
                 new MemberColumnDescriptor.Builder(proto().content()).visible(false).build()
             ));//@formatter:on
 
-        setAllowDelete(true);
+        setDeleteActionEnabled(true);
 
     }
 

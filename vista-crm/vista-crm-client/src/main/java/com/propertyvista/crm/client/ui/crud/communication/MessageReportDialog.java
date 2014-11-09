@@ -67,10 +67,10 @@ public class MessageReportDialog extends AbstractVisorController {
         };
         // add OK button control
 
-        lister.getDataTablePanel().getDataTable().addItemSelectionHandler(new ItemSelectionHandler() {
+        lister.getDataTable().addItemSelectionHandler(new ItemSelectionHandler() {
             @Override
             public void onChange() {
-                if (lister.getDataTablePanel().getDataTable().getDataTableModel().isAnyRowSelected()) {
+                if (lister.getDataTable().getDataTableModel().isAnyRowSelected()) {
                     CrudAppPlace place = new CrmSiteMap.Communication.Message();
                     place.setType(Type.viewer);
                     AppSite.getPlaceController().goTo(place.formViewerPlace(getSelectedItem().getPrimaryKey()));

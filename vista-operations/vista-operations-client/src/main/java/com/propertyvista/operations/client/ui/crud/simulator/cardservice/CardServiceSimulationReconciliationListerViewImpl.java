@@ -68,7 +68,7 @@ public class CardServiceSimulationReconciliationListerViewImpl extends Operation
                         .show();
             }
         });
-        getLister().addActionItem(loadPadFile.asWidget());
+        getLister().addUpperActionItem(loadPadFile.asWidget());
     }
 
 }

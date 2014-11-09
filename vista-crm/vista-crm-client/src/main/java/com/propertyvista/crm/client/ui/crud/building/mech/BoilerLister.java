@@ -27,7 +27,7 @@ public class BoilerLister extends EntityDataTablePanel<BoilerDTO> {
 
     public BoilerLister() {
         super(BoilerDTO.class, true);
-        getDataTablePanel().setFilteringEnabled(false);
+        setFilteringEnabled(false);
 
         setDataTableModel(new DataTableModel<BoilerDTO>(//@formatter:off
             new MemberColumnDescriptor.Builder(proto().type()).build(),

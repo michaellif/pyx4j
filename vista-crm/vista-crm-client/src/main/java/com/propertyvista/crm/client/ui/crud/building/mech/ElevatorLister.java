@@ -27,7 +27,7 @@ public class ElevatorLister extends EntityDataTablePanel<ElevatorDTO> {
 
     public ElevatorLister() {
         super(ElevatorDTO.class, true);
-        getDataTablePanel().setFilteringEnabled(false);
+        setFilteringEnabled(false);
 
         setDataTableModel(new DataTableModel<ElevatorDTO>(//@formatter:off
             new MemberColumnDescriptor.Builder(proto().type()).build(),

@@ -60,17 +60,17 @@ public class MessageLister extends EntityDataTablePanel<MessageDTO> {
 
         setDataTableModel(new DataTableModel<MessageDTO>(createColumnDescriptors(CategoryType.Message)));
 
-        getDataTablePanel().setFilteringEnabled(true);
+        setFilteringEnabled(true);
         // No sorting work for it
-        getDataTablePanel().getDataTable().setHasColumnClickSorting(false);
+        getDataTable().setHasColumnClickSorting(false);
 
-        addActionItem(newMessage = new Button(FolderImages.INSTANCE.addButton().hover(), i18n.tr("New Message"), new Command() {
+        addUpperActionItem(newMessage = new Button(FolderImages.INSTANCE.addButton().hover(), i18n.tr("New Message"), new Command() {
             @Override
             public void execute() {
                 editNewEntity(CategoryType.Message);
             }
         }));
-        addActionItem(newTicket = new Button(FolderImages.INSTANCE.addButton().hover(), i18n.tr("New Ticket"), new Command() {
+        addUpperActionItem(newTicket = new Button(FolderImages.INSTANCE.addButton().hover(), i18n.tr("New Ticket"), new Command() {
             @Override
             public void execute() {
                 editNewEntity(CategoryType.Ticket);
@@ -158,7 +158,7 @@ public class MessageLister extends EntityDataTablePanel<MessageDTO> {
         if (placeCriteria == null) {
             newMessage.setVisible(true);
             newTicket.setVisible(true);
-            getDataTablePanel().getAddButton().setVisible(false);
+            getAddButton().setVisible(false);
             if (recipientScope != null) {
                 OrCriterion senderOrRecipientCriteria = new OrCriterion(PropertyCriterion.in(criteria.proto().sender(), recipientScope), PropertyCriterion.in(
                         criteria.proto().recipients().$().recipient(), recipientScope));
@@ -172,16 +172,16 @@ public class MessageLister extends EntityDataTablePanel<MessageDTO> {
         } else {
             newMessage.setVisible(false);
             newTicket.setVisible(false);
-            getDataTablePanel().getAddButton().setVisible(true);
+            getAddButton().setVisible(true);
             if (placeCriteria instanceof CategoryType) {
-                getDataTablePanel().getAddButton().setCaption(i18n.tr("New") + " " + placeCriteria.toString());
+                getAddButton().setCaption(i18n.tr("New") + " " + placeCriteria.toString());
                 criteria.eq(criteria.proto().category().categoryType(), category = (CategoryType) placeCriteria);
             } else if (placeCriteria instanceof MessageCategory) {
                 MessageCategory mc = (MessageCategory) placeCriteria;
                 if (TicketType.Maintenance.equals(mc.ticketType().getValue())) {
-                    getDataTablePanel().getAddButton().setVisible(false);
+                    getAddButton().setVisible(false);
                 } else {
-                    getDataTablePanel().getAddButton().setCaption(i18n.tr("New") + " " + (category = mc.categoryType().getValue()).toString());
+                    getAddButton().setCaption(i18n.tr("New") + " " + (category = mc.categoryType().getValue()).toString());
                 }
                 criteria.eq(criteria.proto().category(), mc);
             }

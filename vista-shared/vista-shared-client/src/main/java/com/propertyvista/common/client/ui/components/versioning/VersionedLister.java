@@ -56,17 +56,17 @@ public abstract class VersionedLister<E extends IVersionedEntity<?>> extends Ent
 
     public VersionedLister(Class<E> clazz) {
         super(clazz);
-        getDataTablePanel().addUpperActionItem(displayModeButton.asWidget());
+        addUpperActionItem(displayModeButton.asWidget());
     }
 
     public VersionedLister(Class<E> clazz, boolean allowAddNew) {
         super(clazz, allowAddNew);
-        getDataTablePanel().addUpperActionItem(displayModeButton.asWidget());
+        addUpperActionItem(displayModeButton.asWidget());
     }
 
     public VersionedLister(Class<E> clazz, boolean allowAddNew, boolean allowDelete) {
         super(clazz, allowAddNew, allowDelete);
-        getDataTablePanel().addUpperActionItem(displayModeButton.asWidget());
+        addUpperActionItem(displayModeButton.asWidget());
     }
 
     public VersionDisplayMode getVersionDisplayMode() {

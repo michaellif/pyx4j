@@ -25,6 +25,7 @@ public class AggregatedTransferListerViewImpl extends CrmListerViewImplBase<Aggr
                 ((AggregatedTransferListerView.Presenter) getPresenter()).downloadAggregatedTransferFile();
             }
         });
+
     }
 
 }

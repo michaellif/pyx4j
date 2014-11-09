@@ -30,7 +30,7 @@ public class ConcessionLister extends VersionedLister<Concession> {
 
     public ConcessionLister() {
         super(Concession.class, true, true);
-        getDataTablePanel().setFilteringEnabled(false);
+        setFilteringEnabled(false);
 
         setDataTableModel(new DataTableModel<Concession>(//@formatter:off
             new MemberColumnDescriptor.Builder(proto().version().versionNumber()).build(),
