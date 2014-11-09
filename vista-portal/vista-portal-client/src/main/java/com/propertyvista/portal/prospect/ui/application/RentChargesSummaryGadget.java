@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011-2012 All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -72,9 +72,11 @@ public class RentChargesSummaryGadget extends FlowPanel {
                 contentBuilder.append(formatCharge(billableItem.agreedPrice().getValue(BigDecimal.ZERO), billableItem.item().name().getStringView()));
             }
 
-            if (onlineApplication.leaseChargesData().totalMonthlyCharge().getValue().compareTo(BigDecimal.ZERO) > 0) {
-                contentBuilder.append(formatCharge(onlineApplication.leaseChargesData().totalMonthlyCharge().getValue(), onlineApplication.leaseChargesData()
-                        .totalMonthlyCharge().getMeta().getCaption(), true));
+            if (!onlineApplication.leaseChargesData().totalMonthlyCharge().isNull()) {
+                if (onlineApplication.leaseChargesData().totalMonthlyCharge().getValue().compareTo(BigDecimal.ZERO) > 0) {
+                    contentBuilder.append(formatCharge(onlineApplication.leaseChargesData().totalMonthlyCharge().getValue(), onlineApplication
+                            .leaseChargesData().totalMonthlyCharge().getMeta().getCaption(), true));
+                }
             }
         }
 
@@ -91,9 +93,11 @@ public class RentChargesSummaryGadget extends FlowPanel {
                         .getStringView())));
             }
 
-            if (onlineApplication.leaseChargesData().totalDeposits().getValue().compareTo(BigDecimal.ZERO) > 0) {
-                contentBuilder.append(formatCharge(onlineApplication.leaseChargesData().totalDeposits().getValue(), onlineApplication.leaseChargesData()
-                        .totalDeposits().getMeta().getCaption(), true));
+            if (!onlineApplication.leaseChargesData().totalDeposits().isNull()) {
+                if (onlineApplication.leaseChargesData().totalDeposits().getValue().compareTo(BigDecimal.ZERO) > 0) {
+                    contentBuilder.append(formatCharge(onlineApplication.leaseChargesData().totalDeposits().getValue(), onlineApplication.leaseChargesData()
+                            .totalDeposits().getMeta().getCaption(), true));
+                }
             }
         }
 
