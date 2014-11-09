@@ -131,12 +131,12 @@ public class ListerController<E extends IEntity> implements ILister.Presenter<E>
 
     @Override
     public void populate() {
-        view.getLister().populate();
+        view.getDataTablePanel().populate();
     }
 
     @Override
     public void refresh() {
-        view.getLister().populate();
+        view.getDataTablePanel().populate();
     }
 
     @Override

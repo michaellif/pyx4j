@@ -182,7 +182,7 @@ public abstract class EntityDataTablePanel<E extends IEntity> extends DataTableP
     }
 
     @Override
-    public EntityDataTablePanel<E> getLister() {
+    public EntityDataTablePanel<E> getDataTablePanel() {
         return this;
     }
 

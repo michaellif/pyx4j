@@ -75,7 +75,7 @@ public abstract class AbstractListerActivity<E extends IEntity> extends ListerCo
     @Override
     public void start(AcceptsOneWidget containerWidget, EventBus eventBus) {
         getView().discard();
-        getView().getLister().setExternalFilters(externalFilters);
+        getView().getDataTablePanel().setExternalFilters(externalFilters);
         getView().setPresenter(this);
         MementoManager.restoreState(getView(), place);
         if (populateOnStart) {

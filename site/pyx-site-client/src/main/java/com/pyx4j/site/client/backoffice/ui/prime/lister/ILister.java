@@ -73,7 +73,7 @@ public interface ILister<E extends IEntity> extends IPrimePane {
 
     Presenter<E> getPresenter();
 
-    EntityDataTablePanel<E> getLister();
+    EntityDataTablePanel<E> getDataTablePanel();
 
     int getPageSize();
 
