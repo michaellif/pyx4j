@@ -22,7 +22,9 @@ package com.pyx4j.site.client.backoffice.ui.prime.lister;
 
 import java.util.List;
 
+import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.client.ui.LayoutPanel;
+import com.google.gwt.user.client.ui.ScrollPanel;
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.core.IEntity;
@@ -37,6 +39,7 @@ public class AbstractLister<E extends IEntity> extends AbstractPane implements I
 
     public AbstractLister() {
         super();
+
     }
 
     /*
@@ -44,7 +47,7 @@ public class AbstractLister<E extends IEntity> extends AbstractPane implements I
      */
     protected void setLister(EntityDataTablePanel<E> lister) {
         if (getContentPane() == null) { // finalise UI here:
-            setContentPane(new LayoutPanel());
+            setContentPane(new ScrollPanel());
             setSize("100%", "100%");
         }
 
@@ -52,7 +55,9 @@ public class AbstractLister<E extends IEntity> extends AbstractPane implements I
             return; // already!?.
         }
 
-        ((LayoutPanel) getContentPane()).add(this.lister = lister);
+        lister.getElement().getStyle().setPaddingBottom(40, Unit.PX);
+
+        ((ScrollPanel) getContentPane()).add(this.lister = lister);
     }
 
     @Override

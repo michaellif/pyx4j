@@ -436,7 +436,7 @@ public class DataTablePanel<E extends IEntity> extends FlowPanel implements Requ
         return dataTable.getSelectedItems();
     }
 
-    public EntityListCriteria<E> updateCriteria(EntityListCriteria<E> criteria) {
+    protected EntityListCriteria<E> updateCriteria(EntityListCriteria<E> criteria) {
         if (getFilters() != null) {
             for (Criterion fd : getFilters()) {
                 if (fd instanceof PropertyCriterion) {

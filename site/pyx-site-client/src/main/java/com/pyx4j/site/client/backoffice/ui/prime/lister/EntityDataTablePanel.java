@@ -26,22 +26,16 @@ import java.util.List;
 
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.client.Command;
-import com.google.gwt.user.client.ui.ScrollPanel;
-import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.criterion.Criterion;
-import com.pyx4j.entity.core.criterion.EntityListCriteria;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
-import com.pyx4j.forms.client.ui.IEditableComponentFactory;
-import com.pyx4j.forms.client.ui.datatable.DataTable.ItemSelectionHandler;
 import com.pyx4j.forms.client.ui.datatable.DataTable.ItemZoomInCommand;
 import com.pyx4j.forms.client.ui.datatable.DataTable.SortChangeHandler;
 import com.pyx4j.forms.client.ui.datatable.DataTableModel;
 import com.pyx4j.forms.client.ui.datatable.DataTablePanel;
-import com.pyx4j.forms.client.ui.datatable.ListerDataSource;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.AppPlaceEntityMapper;
 import com.pyx4j.site.client.backoffice.ui.PaneTheme;
@@ -49,15 +43,13 @@ import com.pyx4j.site.client.ui.visor.IVisor;
 import com.pyx4j.site.rpc.CrudAppPlace;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 
-public abstract class EntityDataTablePanel<E extends IEntity> extends ScrollPanel implements ILister<E> {
+public abstract class EntityDataTablePanel<E extends IEntity> extends DataTablePanel<E> implements ILister<E> {
 
     private static final I18n i18n = I18n.get(EntityDataTablePanel.class);
 
     private Presenter<E> presenter;
 
     private Class<? extends CrudAppPlace> itemOpenPlaceClass;
-
-    private final DataTablePanel<E> dataTablePanel;
 
     public EntityDataTablePanel(Class<E> clazz) {
         this(clazz, false);
@@ -68,80 +60,51 @@ public abstract class EntityDataTablePanel<E extends IEntity> extends ScrollPane
     }
 
     public EntityDataTablePanel(Class<E> clazz, boolean allowAddNew, boolean allowDelete) {
-        super();
+        super(clazz);
 
         setStyleName(PaneTheme.StyleName.Lister.name());
-        setSize("100%", "100%");
-        dataTablePanel = new DataTablePanel<E>(clazz) {
-            @Override
-            protected void onPopulate() {
-                EntityDataTablePanel.this.onPopulate();
-                super.onPopulate();
-            }
 
-            @Override
-            public List<Criterion> getDefaultFilters() {
-                return EntityDataTablePanel.this.getDefaultFilters();
-            }
-
-            @Override
-            public List<Sort> getDefaultSorting() {
-                return EntityDataTablePanel.this.getDefaultSorting();
-            }
-
-            @Override
-            protected void onItemNew() {
-                EntityDataTablePanel.this.onItemNew();
-            }
-
-            @Override
-            protected void onItemsDelete(Collection<E> items) {
-                EntityDataTablePanel.this.onItemsDelete(items);
-            }
-        };
-        dataTablePanel.getElement().getStyle().setPaddingBottom(40, Unit.PX);
-
-        dataTablePanel.setFilterApplyCommand(new Command() {
+        setFilterApplyCommand(new Command() {
             @Override
             public void execute() {
                 populate(0);
             }
         });
 
-        dataTablePanel.setFirstActionHandler(new Command() {
+        setFirstActionHandler(new Command() {
             @Override
             public void execute() {
                 populate(0);
             }
         });
-        dataTablePanel.setPrevActionHandler(new Command() {
+        setPrevActionHandler(new Command() {
             @Override
             public void execute() {
-                populate(dataTablePanel.getDataTableModel().getPageNumber() - 1);
+                populate(getDataTableModel().getPageNumber() - 1);
             }
         });
-        dataTablePanel.setNextActionHandler(new Command() {
+        setNextActionHandler(new Command() {
             @Override
             public void execute() {
-                populate(dataTablePanel.getDataTableModel().getPageNumber() + 1);
+                populate(getDataTableModel().getPageNumber() + 1);
             }
         });
-        dataTablePanel.setLastActionHandler(new Command() {
+        setLastActionHandler(new Command() {
             @Override
             public void execute() {
-                populate((dataTablePanel.getDataTableModel().getTotalRows() - 1) / dataTablePanel.getDataTableModel().getPageSize());
+                populate((getDataTableModel().getTotalRows() - 1) / getDataTableModel().getPageSize());
             }
         });
 
-        dataTablePanel.setPageSizeActionHandler(new Command() {
+        setPageSizeActionHandler(new Command() {
             @Override
             public void execute() {
                 populate(0);
             }
         });
 
-        dataTablePanel.getDataTable().setHasColumnClickSorting(true);
-        dataTablePanel.getDataTable().addSortChangeHandler(new SortChangeHandler<E>() {
+        getDataTable().setHasColumnClickSorting(true);
+        getDataTable().addSortChangeHandler(new SortChangeHandler<E>() {
             @Override
             public void onChange() {
                 populate(getPageNumber());
@@ -150,15 +113,12 @@ public abstract class EntityDataTablePanel<E extends IEntity> extends ScrollPane
 
         showColumnSelector(true);
 
-        dataTablePanel.setPageSizeOptions(Arrays.asList(new Integer[] { DataTablePanel.PAGESIZE_SMALL, DataTablePanel.PAGESIZE_MEDIUM,
-                DataTablePanel.PAGESIZE_LARGE }));
+        setPageSizeOptions(Arrays.asList(new Integer[] { DataTablePanel.PAGESIZE_SMALL, DataTablePanel.PAGESIZE_MEDIUM, DataTablePanel.PAGESIZE_LARGE }));
 
-        dataTablePanel.setStyleName(PaneTheme.StyleName.ListerListPanel.name());
+        setStyleName(PaneTheme.StyleName.ListerListPanel.name());
 
-        setWidget(dataTablePanel);
-
-        setAllowAddNew(allowAddNew);
-        setAllowDelete(allowDelete);
+        setAddNewActionEnabled(allowAddNew);
+        setDeleteActionEnabled(allowDelete);
 
         this.itemOpenPlaceClass = AppPlaceEntityMapper.resolvePlaceClass(clazz);
         setItemZoomInCommand(new ItemZoomInCommand<E>() {
@@ -176,10 +136,12 @@ public abstract class EntityDataTablePanel<E extends IEntity> extends ScrollPane
     /**
      * Override in derived class for your own new item creation procedure.
      */
+    @Override
     protected void onItemNew() {
         getPresenter().editNew(itemOpenPlaceClass);
     }
 
+    @Override
     protected void onItemsDelete(final Collection<E> items) {
         MessageDialog.confirm(i18n.tr("Confirm"), i18n.tr("Do you really want to delete checked items?"), new Command() {
             @Override
@@ -191,13 +153,14 @@ public abstract class EntityDataTablePanel<E extends IEntity> extends ScrollPane
         });
     }
 
+    @Override
     protected void onPopulate() {
         updateActionsState();
     }
 
     protected void updateActionsState() {
-        if (getDataTablePanel().getAddButton() != null) {
-            getDataTablePanel().getAddButton().setEnabled(getPresenter().canCreateNewItem());
+        if (getAddButton() != null) {
+            getAddButton().setEnabled(getPresenter().canCreateNewItem());
         }
     }
 
@@ -251,92 +214,31 @@ public abstract class EntityDataTablePanel<E extends IEntity> extends ScrollPane
         return false;
     }
 
-    public void setItemZoomInCommand(ItemZoomInCommand<E> itemZoomInCommand) {
-        dataTablePanel.setItemZoomInCommand(itemZoomInCommand);
-    }
-
-    protected void setAllowDelete(boolean allowDelete) {
-        dataTablePanel.setDeleteActionEnabled(allowDelete);
-    }
-
-    protected void setAllowAddNew(boolean allowAddNew) {
-        dataTablePanel.setAddNewActionEnabled(allowAddNew);
-    }
-
-    public void setDataSource(ListerDataSource<E> dataSource) {
-        dataTablePanel.setDataSource(dataSource);
-    }
-
-    public ListerDataSource<E> getDataSource() {
-        return dataTablePanel.getDataSource();
-    }
-
     public void populate(final int pageNumber) {
-        dataTablePanel.setPageNumber(pageNumber);
-        dataTablePanel.populate();
+        setPageNumber(pageNumber);
+        super.populate();
     }
 
-    public void populate() {
-        dataTablePanel.populate();
-    }
-
+    @Override
     public void setDataTableModel(DataTableModel<E> dataTableModel) {
         dataTableModel.setPageSize(ApplicationMode.isDevelopment() ? DataTablePanel.PAGESIZE_SMALL : DataTablePanel.PAGESIZE_MEDIUM);
-        dataTablePanel.setDataTableModel(dataTableModel);
-    }
-
-    public E proto() {
-        return dataTablePanel.proto();
+        super.setDataTableModel(dataTableModel);
     }
 
     public void showColumnSelector(boolean show) {
-        dataTablePanel.getDataTable().setColumnSelectorVisible(show);
+        getDataTable().setColumnSelectorVisible(show);
     }
 
     // selection/checking stuff:
 
+    @Override
     public E getSelectedItem() {
-        return dataTablePanel.getDataTable().getSelectedItem();
+        return getDataTable().getSelectedItem();
     }
 
-    public void addItemSelectionHandler(ItemSelectionHandler handler) {
-        dataTablePanel.addItemSelectionHandler(handler);
-    }
-
+    @Override
     public Collection<E> getSelectedItems() {
-        return dataTablePanel.getDataTable().getSelectedItems();
-    }
-
-    @Override
-    public int getPageSize() {
-        return dataTablePanel.getPageSize();
-    }
-
-    @Override
-    public int getPageNumber() {
-        return dataTablePanel.getPageNumber();
-    }
-
-    public void addActionItem(Widget widget) {
-        dataTablePanel.addUpperActionItem(widget);
-    }
-
-    @Override
-    public List<Criterion> getFilters() {
-        return dataTablePanel.getFilters();
-    }
-
-    @Override
-    public void setFilters(List<Criterion> filters) {
-        dataTablePanel.setFilters(filters);
-    }
-
-    public void resetFilters() {
-        dataTablePanel.resetFilters();
-    }
-
-    public void setFilterComponentFactory(IEditableComponentFactory compFactory) {
-        dataTablePanel.setFilterComponentFactory(compFactory);
+        return getDataTable().getSelectedItems();
     }
 
     /**
@@ -344,18 +246,14 @@ public abstract class EntityDataTablePanel<E extends IEntity> extends ScrollPane
      * 
      * @return default filter list (null);
      */
+    @Override
     public List<Criterion> getDefaultFilters() {
         return null;
     }
 
     @Override
     public List<Sort> getSortCriteria() {
-        return dataTablePanel.getDataTableModel().getSortCriteria();
-    }
-
-    @Override
-    public void setSortCriteria(List<Sort> sorts) {
-        dataTablePanel.setSortCriteria(sorts);
+        return getDataTableModel().getSortCriteria();
     }
 
     public void resetSorting() {
@@ -367,28 +265,9 @@ public abstract class EntityDataTablePanel<E extends IEntity> extends ScrollPane
      * 
      * @return default sorting list (null);
      */
+    @Override
     public List<Sort> getDefaultSorting() {
         return null;
     }
 
-    @Override
-    public void discard() {
-        dataTablePanel.discard();
-    }
-
-    /**
-     * Do not store and restore filters set on this lister.
-     * The lister filter is created by navigation link, e.g. parent filter
-     */
-    public void setExternalFilters(List<Criterion> externalFilters) {
-        dataTablePanel.setExternalFilters(externalFilters);
-    }
-
-    public DataTablePanel<E> getDataTablePanel() {
-        return dataTablePanel;
-    }
-
-    protected EntityListCriteria<E> updateCriteria(EntityListCriteria<E> criteria) {
-        return dataTablePanel.updateCriteria(criteria);
-    }
 }
