@@ -23,7 +23,6 @@ package com.pyx4j.site.client.backoffice.ui.prime.lister;
 import java.util.List;
 
 import com.google.gwt.dom.client.Style.Unit;
-import com.google.gwt.user.client.ui.LayoutPanel;
 import com.google.gwt.user.client.ui.ScrollPanel;
 
 import com.pyx4j.commons.Key;
@@ -31,9 +30,9 @@ import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.criterion.Criterion;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.site.client.AppSite;
-import com.pyx4j.site.client.backoffice.ui.AbstractPane;
+import com.pyx4j.site.client.backoffice.ui.prime.AbstractPrimePane;
 
-public class AbstractLister<E extends IEntity> extends AbstractPane implements ILister<E> {
+public class AbstractLister<E extends IEntity> extends AbstractPrimePane implements ILister<E> {
 
     protected EntityDataTablePanel<E> lister = null;
 
