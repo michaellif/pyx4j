@@ -50,7 +50,7 @@ public class MerchantAccountsLister extends EntityDataTablePanel<PmcMerchantAcco
 
     public void setParentPmc(Pmc parentPmc) {
         this.parentPmc = parentPmc;
-        this.getDataSource().setParentFiltering(parentPmc.getPrimaryKey());
+        this.getDataSource().setParentEntityId(parentPmc.getPrimaryKey());
     }
 
     @Override

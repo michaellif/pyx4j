@@ -50,7 +50,6 @@ import com.propertyvista.crm.rpc.dto.ImportBuildingDataParametersDTO;
 import com.propertyvista.crm.rpc.dto.billing.BillingCycleDTO;
 import com.propertyvista.crm.rpc.services.billing.BillingCycleCrudService;
 import com.propertyvista.crm.rpc.services.building.BuildingCrudService;
-import com.propertyvista.crm.rpc.services.building.FloorplanCrudService;
 import com.propertyvista.crm.rpc.services.building.LockerAreaCrudService;
 import com.propertyvista.crm.rpc.services.building.ParkingCrudService;
 import com.propertyvista.crm.rpc.services.building.catalog.ConcessionCrudService;
@@ -72,7 +71,6 @@ import com.propertyvista.dto.AptUnitDTO;
 import com.propertyvista.dto.BoilerDTO;
 import com.propertyvista.dto.BuildingDTO;
 import com.propertyvista.dto.ElevatorDTO;
-import com.propertyvista.dto.FloorplanDTO;
 import com.propertyvista.dto.LockerAreaDTO;
 import com.propertyvista.dto.ParkingDTO;
 import com.propertyvista.dto.RoofDTO;
@@ -81,8 +79,6 @@ import com.propertyvista.portal.rpc.DeploymentConsts;
 public class BuildingViewerActivity extends CrmViewerActivity<BuildingDTO> implements BuildingViewerView.BuildingViewerPresenter {
 
     private static final I18n i18n = I18n.get(BuildingViewerActivity.class);
-
-    private final Presenter<FloorplanDTO> floorplanLister;
 
     private final Presenter<AptUnitDTO> unitLister;
 
@@ -113,9 +109,6 @@ public class BuildingViewerActivity extends CrmViewerActivity<BuildingDTO> imple
     public BuildingViewerActivity(CrudAppPlace place) {
         super(BuildingDTO.class, place, CrmSite.getViewFactory().getView(BuildingViewerView.class), GWT
                 .<AbstractCrudService<BuildingDTO>> create(BuildingCrudService.class));
-
-        floorplanLister = ListerControllerFactory.create(FloorplanDTO.class, ((BuildingViewerView) getView()).getFloorplanListerView(),
-                GWT.<AbstractCrudService<FloorplanDTO>> create(FloorplanCrudService.class));
 
         unitLister = ListerControllerFactory.create(AptUnitDTO.class, ((BuildingViewerView) getView()).getUnitListerView(),
                 GWT.<AbstractCrudService<AptUnitDTO>> create(UnitCrudService.class));
@@ -168,9 +161,6 @@ public class BuildingViewerActivity extends CrmViewerActivity<BuildingDTO> imple
         currentBuildingId = result.id().getValue();
 
         // -------------------------------------------------------
-
-        floorplanLister.setParent(result.getPrimaryKey());
-        floorplanLister.populate();
 
         unitLister.setParent(result.getPrimaryKey());
         unitLister.populate();

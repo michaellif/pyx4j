@@ -70,7 +70,6 @@ import com.propertyvista.dto.AptUnitDTO;
 import com.propertyvista.dto.BoilerDTO;
 import com.propertyvista.dto.BuildingDTO;
 import com.propertyvista.dto.ElevatorDTO;
-import com.propertyvista.dto.FloorplanDTO;
 import com.propertyvista.dto.LockerAreaDTO;
 import com.propertyvista.dto.MaintenanceRequestDTO;
 import com.propertyvista.dto.ParkingDTO;
@@ -81,7 +80,7 @@ public class BuildingViewerViewImpl extends CrmViewerViewImplBase<BuildingDTO> i
 
     private static final I18n i18n = I18n.get(BuildingViewerViewImpl.class);
 
-    private final ILister<FloorplanDTO> floorplanLister;
+    private final FloorplanLister floorplanLister;
 
     private final ILister<AptUnitDTO> unitLister;
 
@@ -178,7 +177,7 @@ public class BuildingViewerViewImpl extends CrmViewerViewImplBase<BuildingDTO> i
     }
 
     @Override
-    public ILister<FloorplanDTO> getFloorplanListerView() {
+    public FloorplanLister getFloorplanListerView() {
         return floorplanLister;
     }
 
@@ -252,6 +251,8 @@ public class BuildingViewerViewImpl extends CrmViewerViewImplBase<BuildingDTO> i
     public void populate(BuildingDTO value) {
         super.populate(value);
 
+        floorplanLister.getDataSource().setParentEntityId(value.getPrimaryKey());
+        floorplanLister.populate();
         populateDashboardsMenu(value.dashboards().iterator());
     }
 

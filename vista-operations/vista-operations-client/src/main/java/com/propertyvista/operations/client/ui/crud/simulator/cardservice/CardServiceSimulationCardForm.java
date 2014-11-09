@@ -104,7 +104,7 @@ class CardServiceSimulationCardForm extends OperationsEntityForm<CardServiceSimu
     @Override
     protected void onValueSet(boolean populate) {
         super.onValueSet(populate);
-        transactionLister.getDataSource().setParentFiltering(getValue().getPrimaryKey());
+        transactionLister.getDataSource().setParentEntityId(getValue().getPrimaryKey());
         transactionLister.populate(0);
     }
 

@@ -52,7 +52,7 @@ public class ExecutionReportSectionLister extends EntityDataTablePanel<Execution
         setItemZoomInCommand(new ItemZoomInCommand<ExecutionReportSection>() {
             @Override
             public void execute(ExecutionReportSection item) {
-                messageLister.getDataSource().setParentFiltering(item.getPrimaryKey(), ExecutionReportSection.class);
+                messageLister.getDataSource().setParentEntityId(item.getPrimaryKey(), ExecutionReportSection.class);
                 messageDialog.show();
             }
         });

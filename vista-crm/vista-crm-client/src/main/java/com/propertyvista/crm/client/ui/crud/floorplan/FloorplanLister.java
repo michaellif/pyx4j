@@ -16,18 +16,23 @@ package com.propertyvista.crm.client.ui.crud.floorplan;
 import java.util.Arrays;
 import java.util.List;
 
+import com.google.gwt.core.client.GWT;
+
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
+import com.pyx4j.entity.rpc.AbstractCrudService;
 import com.pyx4j.forms.client.ui.datatable.DataTableModel;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
-import com.pyx4j.site.client.backoffice.ui.prime.lister.EntityDataTablePanel;
+import com.pyx4j.site.client.ui.SiteDataTablePanel;
 
+import com.propertyvista.crm.rpc.services.building.FloorplanCrudService;
 import com.propertyvista.dto.FloorplanDTO;
 import com.propertyvista.shared.config.VistaFeatures;
 
-public class FloorplanLister extends EntityDataTablePanel<FloorplanDTO> {
+public class FloorplanLister extends SiteDataTablePanel<FloorplanDTO> {
 
     public FloorplanLister() {
-        super(FloorplanDTO.class, !VistaFeatures.instance().yardiIntegration() ? true : false);
+        super(FloorplanDTO.class, GWT.<AbstractCrudService<FloorplanDTO>> create(FloorplanCrudService.class),
+                !VistaFeatures.instance().yardiIntegration() ? true : false);
 
         setDataTableModel(new DataTableModel<FloorplanDTO>(//@formatter:off
             new MemberColumnDescriptor.Builder(proto().name()).build(),
