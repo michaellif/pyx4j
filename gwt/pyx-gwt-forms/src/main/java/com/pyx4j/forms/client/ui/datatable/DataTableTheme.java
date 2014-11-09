@@ -210,6 +210,10 @@ public class DataTableTheme extends Theme {
         style.addProperty("max-width", "700px");
         addStyle(style);
 
+        style = new Style(".", StyleName.DataTableFilterItem, " .", CComponentTheme.StyleName.ComponentHolder);
+        style.addProperty("display", "inline-block");
+        addStyle(style);
+
         style = new Style(".", StyleName.DataTableFilterItem, " .", CComponentTheme.StyleName.FieldEditorPanel);
         style.addProperty("line-height", "2em");
         addStyle(style);
