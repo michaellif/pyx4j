@@ -21,6 +21,7 @@
 package com.pyx4j.site.client.backoffice.ui.prime;
 
 import com.pyx4j.site.client.backoffice.ui.IPane;
+import com.pyx4j.site.client.ui.visor.IVisor;
 import com.pyx4j.site.rpc.AppPlace;
 
 public interface IPrimePane extends IPane {
@@ -31,4 +32,9 @@ public interface IPrimePane extends IPane {
 
     }
 
+    void showVisor(IVisor visor);
+
+    void hideVisor();
+
+    boolean isVisorShown();
 }

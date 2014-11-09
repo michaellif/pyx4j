@@ -27,6 +27,8 @@ import com.google.gwt.event.dom.client.MouseOutHandler;
 import com.google.gwt.event.dom.client.MouseOverEvent;
 import com.google.gwt.event.dom.client.MouseOverHandler;
 import com.google.gwt.user.client.ui.Image;
+import com.google.gwt.user.client.ui.IsWidget;
+import com.google.gwt.user.client.ui.LayoutPanel;
 
 import com.pyx4j.site.client.backoffice.ui.AbstractPane;
 import com.pyx4j.site.client.backoffice.ui.IPane;
@@ -39,9 +41,15 @@ public abstract class AbstractVisorPane extends AbstractPane implements IVisor {
 
     private final Controller controller;
 
+    private final LayoutPanel contentHolder;
+
     public AbstractVisorPane(final Controller controller) {
         super();
         this.controller = controller;
+
+        contentHolder = new LayoutPanel();
+        add(contentHolder);
+
         setStyleName(PaneTheme.StyleName.Visor.name());
 
         final Image closeImage = new Image(ImageFactory.getImages().closeTab());
@@ -71,6 +79,17 @@ public abstract class AbstractVisorPane extends AbstractPane implements IVisor {
         closeImage.setTitle("Close");
 
         getHeaderCaption().add(closeImage);
+    }
+
+    protected IsWidget getContentPane() {
+        if (contentHolder.getWidgetCount() == 0) {
+            return null;
+        }
+        return contentHolder.getWidget(0);
+    }
+
+    protected void setContentPane(IsWidget widget) {
+        contentHolder.add(widget);
     }
 
     @Override

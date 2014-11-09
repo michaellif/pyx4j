@@ -26,21 +26,16 @@ import java.util.Collection;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.client.ui.DockLayoutPanel;
 import com.google.gwt.user.client.ui.FlowPanel;
-import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 
-import com.pyx4j.site.client.backoffice.ui.prime.PrimePaneContentHolder;
-import com.pyx4j.site.client.ui.visor.IVisor;
 import com.pyx4j.widgets.client.HasSecureConcern;
 import com.pyx4j.widgets.client.Toolbar;
 
 public abstract class AbstractPane extends DockLayoutPanel implements IPane {
 
     private static final double TOOLBAR_DEFAULT_HEIGHT = 34;
-
-    private final PrimePaneContentHolder contentHolder;
 
     private final Label captionLabel;
 
@@ -89,8 +84,6 @@ public abstract class AbstractPane extends DockLayoutPanel implements IPane {
         footerToolbarHolder.setWidget(footerToolbar);
         addSouth(footerToolbarHolder, 0);
 
-        contentHolder = new PrimePaneContentHolder(this);
-        add(contentHolder);
     }
 
     protected Collection<HasSecureConcern> secureConcerns() {
@@ -99,33 +92,6 @@ public abstract class AbstractPane extends DockLayoutPanel implements IPane {
 
     protected FlowPanel getHeaderCaption() {
         return headerCaption;
-    }
-
-    protected IsWidget getContentPane() {
-        if (contentHolder.getWidgetCount() == 0) {
-            return null;
-        }
-        return contentHolder.getWidget(0);
-    }
-
-    protected void setContentPane(IsWidget widget) {
-        assert contentHolder.getWidgetCount() == 0 : "Content Pane is already set";
-        contentHolder.setContentPane(widget);
-    }
-
-    @Override
-    public void showVisor(IVisor visor) {
-        contentHolder.showVisorPane(visor);
-    }
-
-    @Override
-    public void hideVisor() {
-        contentHolder.hideVisorPane();
-    }
-
-    @Override
-    public boolean isVisorShown() {
-        return contentHolder.isVisorShown();
     }
 
     public void setCaption(String caption) {

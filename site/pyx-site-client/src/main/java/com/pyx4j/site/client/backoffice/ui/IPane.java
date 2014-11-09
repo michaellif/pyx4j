@@ -21,7 +21,6 @@
 package com.pyx4j.site.client.backoffice.ui;
 
 import com.pyx4j.site.client.IsView;
-import com.pyx4j.site.client.ui.visor.IVisor;
 
 public interface IPane extends IsView {
 
@@ -31,11 +30,5 @@ public interface IPane extends IsView {
 
         void refresh();
     }
-
-    void showVisor(IVisor visor);
-
-    void hideVisor();
-
-    boolean isVisorShown();
 
 }

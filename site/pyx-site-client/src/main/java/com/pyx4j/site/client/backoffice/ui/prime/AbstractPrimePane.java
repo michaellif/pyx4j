@@ -20,15 +20,48 @@
  */
 package com.pyx4j.site.client.backoffice.ui.prime;
 
+import com.google.gwt.user.client.ui.IsWidget;
+
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel;
 import com.pyx4j.gwt.commons.css.CssVariable;
 import com.pyx4j.gwt.commons.layout.LayoutType;
 import com.pyx4j.site.client.backoffice.ui.AbstractPane;
+import com.pyx4j.site.client.ui.visor.IVisor;
 
 public class AbstractPrimePane extends AbstractPane implements IPrimePane {
 
+    private final PrimePaneContentHolder contentHolder;
+
     public AbstractPrimePane() {
+        contentHolder = new PrimePaneContentHolder(this);
+        add(contentHolder);
+
         CssVariable.setVariable(getElement(), DualColumnFluidPanel.CSS_VAR_FORM_COLLAPSING_LAYOUT_TYPE, LayoutType.tabletLandscape.name());
     }
 
+    protected IsWidget getContentPane() {
+        if (contentHolder.getWidgetCount() == 0) {
+            return null;
+        }
+        return contentHolder.getWidget(0);
+    }
+
+    protected void setContentPane(IsWidget widget) {
+        contentHolder.setContentPane(widget);
+    }
+
+    @Override
+    public void showVisor(IVisor visor) {
+        contentHolder.showVisorPane(visor);
+    }
+
+    @Override
+    public void hideVisor() {
+        contentHolder.hideVisorPane();
+    }
+
+    @Override
+    public boolean isVisorShown() {
+        return contentHolder.isVisorShown();
+    }
 }
