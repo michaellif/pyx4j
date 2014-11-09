@@ -29,7 +29,7 @@ import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.entity.rpc.AbstractCrudService.InitializationData;
 import com.pyx4j.forms.client.ui.datatable.ListerDataSource;
 import com.pyx4j.site.client.backoffice.ui.IPane;
-import com.pyx4j.site.client.backoffice.ui.prime.lister.AbstractPrimeLister;
+import com.pyx4j.site.client.backoffice.ui.prime.lister.EntityDataTablePanel;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
 public interface ILister<E extends IEntity> extends IPane {
@@ -73,7 +73,7 @@ public interface ILister<E extends IEntity> extends IPane {
 
     Presenter<E> getPresenter();
 
-    AbstractPrimeLister<E> getLister();
+    EntityDataTablePanel<E> getLister();
 
     int getPageSize();
 

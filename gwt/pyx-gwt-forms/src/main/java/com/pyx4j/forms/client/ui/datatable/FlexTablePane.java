@@ -197,6 +197,7 @@ public class FlexTablePane<E extends IEntity> implements ITablePane<E> {
                 headerText.append("&nbsp;&nbsp;&nbsp;");
             }
             flexTable.setHTML(0, colIndex, headerText.toString());
+            flexTable.getCellFormatter().setStyleName(0, colIndex, DataTableTheme.StyleName.DataTableHeaderItem.name());
 
             String width = columnDescriptor.getWidth();
             if (width != null) {

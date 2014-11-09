@@ -33,7 +33,7 @@ import com.pyx4j.widgets.client.style.theme.WidgetsTheme;
 public class DataTableTheme extends Theme {
 
     public static enum StyleName implements IStyleName {
-        DataTable, DataTableHolder, DataTableRow, DataTableHeader, DataTableActionsBar, DataTableActionsBarContent, DataTableToolBar, DataTablePageNavigBar, DataTableColumnSelector, DataTableColumnMenu,
+        DataTable, DataTableHolder, DataTableRow, DataTableHeader, DataTableHeaderItem, DataTableActionsBar, DataTableActionsBarContent, DataTableToolBar, DataTablePageNavigBar, DataTableColumnSelector, DataTableColumnMenu,
 
         DataTableFilter, DataTableFilterMain, DataTableFilterHeader, DataTableFilterFooter, DataTableFilterItem,
 
@@ -64,8 +64,7 @@ public class DataTableTheme extends Theme {
         style.addProperty("border-left", "1px solid");
         style.addProperty("border-right", "1px solid");
         style.addProperty("min-height", "60px");
-        style.addProperty("border-left-color", ThemeColor.foreground, 0.4);
-        style.addProperty("border-right-color", ThemeColor.foreground, 0.4);
+        style.addProperty("border-color", ThemeColor.foreground, 0.4);
         addStyle(style);
 
         style = new Style(".", StyleName.DataTableHeader);
@@ -74,6 +73,11 @@ public class DataTableTheme extends Theme {
         style.addProperty("line-height", "1.5em");
         style.addProperty("font-weight", "bold");
         style.addProperty("cursor", "pointer");
+        addStyle(style);
+
+        style = new Style(".", StyleName.DataTableHeaderItem);
+        style.addProperty("border-right", "1px solid");
+        style.addProperty("border-color", ThemeColor.foreground, 0.01);
         addStyle(style);
 
         style = new Style(".", StyleName.DataTableColumnSelector);

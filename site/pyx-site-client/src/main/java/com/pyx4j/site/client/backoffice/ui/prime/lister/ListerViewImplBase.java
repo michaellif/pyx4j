@@ -33,7 +33,7 @@ import com.pyx4j.site.client.backoffice.ui.AbstractPane;
 
 public class ListerViewImplBase<E extends IEntity> extends AbstractPane implements IPrimeLister<E> {
 
-    protected AbstractPrimeLister<E> lister = null;
+    protected EntityDataTablePanel<E> lister = null;
 
     public ListerViewImplBase() {
         super();
@@ -42,7 +42,7 @@ public class ListerViewImplBase<E extends IEntity> extends AbstractPane implemen
     /*
      * Should be called by descendant upon initialisation.
      */
-    protected void setLister(AbstractPrimeLister<E> lister) {
+    protected void setLister(EntityDataTablePanel<E> lister) {
         if (getContentPane() == null) { // finalise UI here:
             setContentPane(new LayoutPanel());
             setSize("100%", "100%");
@@ -56,7 +56,7 @@ public class ListerViewImplBase<E extends IEntity> extends AbstractPane implemen
     }
 
     @Override
-    public AbstractPrimeLister<E> getLister() {
+    public EntityDataTablePanel<E> getLister() {
         assert (lister != null);
         return lister;
     }

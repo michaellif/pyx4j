@@ -384,6 +384,10 @@ public class DataTablePanel<E extends IEntity> extends FlowPanel implements Requ
     protected void onPopulate() {
     }
 
+    public void setSortCriteria(List<Sort> sorts) {
+        getDataTableModel().setSortCriteria(sorts);
+    }
+
     @Override
     public void saveState(IMementoOutput memento) {
         memento.write(pageNumber);
