@@ -1,6 +1,6 @@
 /*
  * Pyx4j framework
- * Copyright (C) 2008-2013 pyx4j.com.
+ * Copyright (C) 2006-2010 pyx4j.com.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -13,12 +13,12 @@
  * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
  * License for the specific language governing permissions and limitations under
  * the License.
- *
- * Created on Nov 5, 2014
- * @author michaellif
+ * 
+ * Created on 2011-05-03
+ * @author Vlad
  * @version $Id$
  */
-package com.pyx4j.site.client.backoffice.ui.lister;
+package com.pyx4j.site.client.backoffice.ui.prime.lister;
 
 import java.util.List;
 
@@ -28,13 +28,12 @@ import com.pyx4j.entity.core.criterion.Criterion;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.entity.rpc.AbstractCrudService.InitializationData;
 import com.pyx4j.forms.client.ui.datatable.ListerDataSource;
-import com.pyx4j.site.client.backoffice.ui.IPane;
-import com.pyx4j.site.client.backoffice.ui.prime.lister.EntityDataTablePanel;
+import com.pyx4j.site.client.backoffice.ui.prime.IPrimePane;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
-public interface ILister<E extends IEntity> extends IPane {
+public interface ILister<E extends IEntity> extends IPrimePane {
 
-    public interface Presenter<E extends IEntity> extends IPane.Presenter {
+    public interface Presenter<E extends IEntity> extends IPrimePane.Presenter {
 
         public ListerDataSource<E> getDataSource();
 
@@ -68,8 +67,9 @@ public interface ILister<E extends IEntity> extends IPane {
         boolean canCreateNewItem();
 
         void delete(Key itemID);
-
     }
+
+    void setPresenter(Presenter<E> presenter);
 
     Presenter<E> getPresenter();
 
@@ -90,4 +90,5 @@ public interface ILister<E extends IEntity> extends IPane {
     void setSortCriteria(List<Sort> sorts);
 
     void onDeleted(Key itemID, boolean isSuccessful);
+
 }

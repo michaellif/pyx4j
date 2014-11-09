@@ -31,11 +31,11 @@ import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.backoffice.ui.AbstractPane;
 
-public class ListerViewImplBase<E extends IEntity> extends AbstractPane implements IPrimeLister<E> {
+public class AbstractLister<E extends IEntity> extends AbstractPane implements ILister<E> {
 
     protected EntityDataTablePanel<E> lister = null;
 
-    public ListerViewImplBase() {
+    public AbstractLister() {
         super();
     }
 
@@ -62,13 +62,13 @@ public class ListerViewImplBase<E extends IEntity> extends AbstractPane implemen
     }
 
     @Override
-    public void setPresenter(IPrimeLister.Presenter<E> presenter) {
+    public void setPresenter(ILister.Presenter<E> presenter) {
         getLister().setPresenter(presenter);
         setCaption(presenter != null && presenter.getPlace() != null ? AppSite.getHistoryMapper().getPlaceInfo(presenter.getPlace()).getCaption() : "");
     }
 
     @Override
-    public IPrimeLister.Presenter<E> getPresenter() {
+    public ILister.Presenter<E> getPresenter() {
         return getLister().getPresenter();
     }
 

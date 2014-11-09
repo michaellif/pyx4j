@@ -33,7 +33,7 @@ import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.criterion.Criterion;
 import com.pyx4j.entity.core.criterion.EntityFiltersBuilder;
 import com.pyx4j.entity.rpc.AbstractListCrudService;
-import com.pyx4j.site.client.backoffice.ui.prime.lister.IPrimeLister;
+import com.pyx4j.site.client.backoffice.ui.prime.lister.ILister;
 import com.pyx4j.site.client.memento.MementoManager;
 import com.pyx4j.site.rpc.AppPlace;
 import com.pyx4j.site.rpc.CrudAppPlace;
@@ -46,7 +46,7 @@ public abstract class AbstractListerActivity<E extends IEntity> extends ListerCo
 
     private boolean populateOnStart = true;
 
-    public AbstractListerActivity(Class<E> entityClass, Place place, IPrimeLister<E> view, AbstractListCrudService<E> service) {
+    public AbstractListerActivity(Class<E> entityClass, Place place, ILister<E> view, AbstractListCrudService<E> service) {
         super(entityClass, view, service);
 
         this.place = (AppPlace) place;

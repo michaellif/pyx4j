@@ -49,7 +49,7 @@ import com.pyx4j.site.client.ui.visor.IVisor;
 import com.pyx4j.site.rpc.CrudAppPlace;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 
-public abstract class EntityDataTablePanel<E extends IEntity> extends ScrollPanel implements IPrimeLister<E> {
+public abstract class EntityDataTablePanel<E extends IEntity> extends ScrollPanel implements ILister<E> {
 
     private static final I18n i18n = I18n.get(EntityDataTablePanel.class);
 
