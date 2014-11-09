@@ -106,7 +106,7 @@ public class ListerController<E extends IEntity> implements ILister.Presenter<E>
     public void setParent(Key parentID, Class<? extends IEntity> parentClass) {
         this.parentId = parentID; // save parent id for newItem creation...
         this.parentClass = parentClass; // save parent class for polymorphic queries...
-        dataSource.setParentFiltering(parentID, parentClass);
+        dataSource.setParentEntityId(parentID, parentClass);
     }
 
     @Override

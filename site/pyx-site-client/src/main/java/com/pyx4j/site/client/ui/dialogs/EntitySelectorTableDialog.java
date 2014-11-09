@@ -148,11 +148,11 @@ public abstract class EntitySelectorTableDialog<E extends IEntity> extends Abstr
     }
 
     protected void setParentFiltering(Key parentID) {
-        dataSource.setParentFiltering(parentID);
+        dataSource.setParentEntityId(parentID);
     }
 
     protected void setParentFiltering(Key parentID, Class<? extends IEntity> parentClass) {
-        dataSource.setParentFiltering(parentID, parentClass);
+        dataSource.setParentEntityId(parentID, parentClass);
     }
 
     protected void addFilter(Criterion filter) {

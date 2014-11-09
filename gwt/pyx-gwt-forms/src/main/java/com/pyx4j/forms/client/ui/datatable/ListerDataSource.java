@@ -46,6 +46,10 @@ public class ListerDataSource<E extends IEntity> implements EntityDataSource<E> 
 
     private List<Criterion> preDefinedFilters = new LinkedList<Criterion>();
 
+    private Key parentEntityID;
+
+    private Class<? extends IEntity> parentEntityClass;
+
     public ListerDataSource(Class<E> entityClass, AbstractListService<E> service) {
         this.entityClass = entityClass;
         this.service = service;
@@ -70,11 +74,13 @@ public class ListerDataSource<E extends IEntity> implements EntityDataSource<E> 
 
     // filtering mechanics:
 
-    public void setParentFiltering(Key parentID) {
-        setParentFiltering(parentID, null);
+    public void setParentEntityId(Key parentID) {
+        setParentEntityId(parentID, null);
     }
 
-    public void setParentFiltering(Key parentID, Class<? extends IEntity> parentClass) {
+    public void setParentEntityId(Key parentID, Class<? extends IEntity> parentClass) {
+        this.parentEntityID = parentID;
+        this.parentEntityClass = parentClass;
         String ownerMemberName = EntityFactory.getEntityMeta(entityClass).getOwnerMemberName();
         assert (ownerMemberName != null) : "No @Owner in " + entityClass;
 
@@ -87,6 +93,14 @@ public class ListerDataSource<E extends IEntity> implements EntityDataSource<E> 
         }
 
         parentFiltering = new PropertyCriterion(new Path(entityClass, ownerMemberName), Restriction.EQUAL, searchBy);
+    }
+
+    public Key getParentEntityId() {
+        return parentEntityID;
+    }
+
+    public Class<? extends IEntity> getParentEntityClass() {
+        return parentEntityClass;
     }
 
     public void clearParentFiltering() {

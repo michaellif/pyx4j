@@ -25,17 +25,29 @@ import java.util.Collection;
 import java.util.List;
 
 import com.google.gwt.user.client.Command;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 
+import com.pyx4j.commons.Key;
 import com.pyx4j.config.shared.ApplicationMode;
+import com.pyx4j.entity.annotations.SecurityEnabled;
+import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.criterion.Criterion;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
+import com.pyx4j.entity.rpc.AbstractListCrudService;
+import com.pyx4j.entity.rpc.AbstractCrudService.InitializationData;
+import com.pyx4j.entity.security.DataModelPermission;
+import com.pyx4j.entity.shared.IntegrityConstraintUserRuntimeException;
 import com.pyx4j.forms.client.ui.datatable.DataTable.ItemZoomInCommand;
 import com.pyx4j.forms.client.ui.datatable.DataTable.SortChangeHandler;
 import com.pyx4j.forms.client.ui.datatable.DataTableModel;
 import com.pyx4j.forms.client.ui.datatable.DataTablePanel;
+import com.pyx4j.forms.client.ui.datatable.ListerDataSource;
+import com.pyx4j.gwt.commons.UnrecoverableClientError;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.site.client.AppPlaceEntityMapper;
+import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.backoffice.ui.PaneTheme;
 import com.pyx4j.site.rpc.CrudAppPlace;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
@@ -46,16 +58,20 @@ public abstract class SiteDataTablePanel<E extends IEntity> extends DataTablePan
 
     private Class<? extends CrudAppPlace> itemOpenPlaceClass;
 
-    public SiteDataTablePanel(Class<E> clazz) {
-        this(clazz, false);
+    private AbstractListCrudService<E> service;
+
+    public SiteDataTablePanel(Class<E> entityClass, AbstractListCrudService<E> service) {
+        this(entityClass, service, false);
     }
 
-    public SiteDataTablePanel(Class<E> clazz, boolean allowAddNew) {
-        this(clazz, allowAddNew, false);
+    public SiteDataTablePanel(Class<E> entityClass, AbstractListCrudService<E> service, boolean allowAddNew) {
+        this(entityClass, service, allowAddNew, false);
     }
 
-    public SiteDataTablePanel(Class<E> clazz, boolean allowAddNew, boolean allowDelete) {
-        super(clazz);
+    public SiteDataTablePanel(Class<E> entityClass, AbstractListCrudService<E> service, boolean allowAddNew, boolean allowDelete) {
+        super(entityClass);
+
+        this.service = service;
 
         setStyleName(PaneTheme.StyleName.Lister.name());
 
@@ -115,13 +131,74 @@ public abstract class SiteDataTablePanel<E extends IEntity> extends DataTablePan
         setAddNewActionEnabled(allowAddNew);
         setDeleteActionEnabled(allowDelete);
 
-        this.itemOpenPlaceClass = AppPlaceEntityMapper.resolvePlaceClass(clazz);
+        this.itemOpenPlaceClass = AppPlaceEntityMapper.resolvePlaceClass(entityClass);
         setItemZoomInCommand(new ItemZoomInCommand<E>() {
             @Override
             public void execute(E item) {
-                //TODO
+                view(itemOpenPlaceClass, item.getPrimaryKey());
             }
         });
+
+        setDataSource(new ListerDataSource<E>(entityClass, service));
+    }
+
+    public void view(Class<? extends CrudAppPlace> openPlaceClass, Key itemID) {
+        AppSite.getPlaceController().goTo(AppSite.getHistoryMapper().createPlace(openPlaceClass).formViewerPlace(itemID));
+    }
+
+    public void edit(Class<? extends CrudAppPlace> openPlaceClass, Key itemID) {
+        AppSite.getPlaceController().goTo(AppSite.getHistoryMapper().createPlace(openPlaceClass).formEditorPlace(itemID));
+    }
+
+    public void editNew(Class<? extends CrudAppPlace> openPlaceClass) {
+        if (canCreateNewItem()) {
+            if (getDataSource().getParentEntityClass() != null) {
+                AppSite.getPlaceController().goTo(
+                        AppSite.getHistoryMapper().createPlace(openPlaceClass)
+                                .formNewItemPlace(getDataSource().getParentEntityId(), getDataSource().getParentEntityClass()));
+            } else {
+                AppSite.getPlaceController().goTo(AppSite.getHistoryMapper().createPlace(openPlaceClass).formNewItemPlace(getDataSource().getParentEntityId()));
+            }
+        }
+    }
+
+    public void editNew(Class<? extends CrudAppPlace> openPlaceClass, InitializationData initializationData) {
+        if (canCreateNewItem()) {
+            AppSite.getPlaceController().goTo(AppSite.getHistoryMapper().createPlace(openPlaceClass).formNewItemPlace(initializationData));
+        }
+    }
+
+    public boolean canCreateNewItem() {
+        if (EntityFactory.getEntityMeta(getEntityClass()).isAnnotationPresent(SecurityEnabled.class)) {
+            return SecurityController.check(DataModelPermission.permissionCreate(getEntityClass()));
+        } else {
+            return true;
+        }
+    }
+
+    public void delete(final Key itemID) {
+        service.delete(new AsyncCallback<Boolean>() {
+
+            @Override
+            public void onSuccess(Boolean result) {
+                onDeleted(itemID, true);
+                populate();
+            }
+
+            @Override
+            public void onFailure(Throwable caught) {
+                onDeleted(itemID, false);
+                if (caught instanceof IntegrityConstraintUserRuntimeException) {
+                    MessageDialog.error(i18n.tr("Item Deletion"), caught.getMessage());
+                } else {
+                    throw new UnrecoverableClientError(caught);
+                }
+            }
+        }, itemID);
+    }
+
+    public void onDeleted(Key itemID, boolean isSuccessful) {
+
     }
 
     @Override
@@ -141,8 +218,10 @@ public abstract class SiteDataTablePanel<E extends IEntity> extends DataTablePan
     }
 
     public void populate(final int pageNumber) {
-        setPageNumber(pageNumber);
-        super.populate();
+        if (SecurityController.check(DataModelPermission.permissionRead(getEntityClass()))) {
+            setPageNumber(pageNumber);
+            super.populate();
+        }
     }
 
     @Override
